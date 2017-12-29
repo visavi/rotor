@@ -68,6 +68,14 @@ class User extends BaseModel
     protected $guarded = [];
 
     /**
+     * Связь с таблицей online
+     */
+    public function online()
+    {
+        return $this->belongsTo(Online::class, 'id', 'user_id')->withDefault();
+    }
+
+    /**
      * Возвращает пол пользователя
      *
      * @return string пол пользователя

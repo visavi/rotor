@@ -4,6 +4,7 @@ namespace App\Controllers\Admin;
 
 use App\Classes\Request;
 use App\Classes\Validator;
+use App\Models\Online;
 use App\Models\User;
 
 class DeliveryController extends AdminController
@@ -36,58 +37,48 @@ class DeliveryController extends AdminController
                 ->length($msg, 5, 1000, ['msg' => 'Слишком длинный или короткий текст комментария!'])
                 ->between($type, 1, 4, 'Вы не выбрали получаетелей рассылки!');
 
-
-
-
-            exit;
             // Рассылка пользователям, которые в онлайне
-            if ($rec==1){
-                $query = DB::select("SELECT `user` FROM `visit` WHERE `nowtime`>?;", [SITETIME-600]);
-                $arrusers = $query -> fetchAll(PDO::FETCH_COLUMN);
+            if ($type == 1) {
+                $users = User::query()->whereHas('online')->get();
             }
 
             // Рассылка активным пользователям, которые посещали сайт менее недели назад
-            if ($rec==2){
-                $query = DB::select("SELECT `login` FROM `users` WHERE `timelastlogin`>?;", [SITETIME - (86400 * 7)]);
-                $arrusers = $query->fetchAll(PDO::FETCH_COLUMN);
+            if ($type == 2) {
+                $users = User::query()->where('timelastlogin', '>', SITETIME - (86400 * 7))->get();
             }
 
             // Рассылка администрации
-            if ($rec==3){
-                $query = DB::select("SELECT `login` FROM `users` WHERE `level`>=? AND `level`<=?;", [101, 105]);
-                $arrusers = $query->fetchAll(PDO::FETCH_COLUMN);
+            if ($type == 3){
+                $users = User::query()->whereIn('level', User::ADMIN_GROUPS)->get();
             }
 
             // Рассылка всем пользователям сайта
-            if ($rec==4){
-                $query = DB::select("SELECT `login` FROM `users`;");
-                $arrusers = $query->fetchAll(PDO::FETCH_COLUMN);
+            if ($type == 4){
+                $users = User::query()->whereIn('level', User::USER_GROUPS)->get();
             }
 
-            $arrusers = array_diff($arrusers, [getUser('login')]);
-            $total = count($arrusers);
+            $users = $users->filter(function ($value, $key) {
+                return $value->id != getUser('id');
+            });
 
-            // Рассылка сообщений с подготовкой запросов
-            if ($total>0){
+            if ($users->isEmpty()) {
+                $validator->addError('Отсутствуют получатели рассылки!');
+            }
 
-                $updateusers = DB::run() -> prepare("UPDATE `users` SET `newprivat`=`newprivat`+1 WHERE `login`=? LIMIT 1;");
+            if ($validator->isValid()) {
+
+                foreach ($users as $user) {
+var_dump($user->id);
+    /*              $updateusers = DB::run() -> prepare("UPDATE `users` SET `newprivat`=`newprivat`+1 WHERE `login`=? LIMIT 1;");
                 $insertprivat = DB::run() -> prepare("INSERT INTO `inbox` (`user`, `author`, `text`, `time`) VALUES (?, ?, ?, ?);");
 
                 foreach ($arrusers as $uzval){
                     $updateusers -> execute($uzval);
                     $insertprivat -> execute($uzval, getUser('login'), $msg, SITETIME);
+                }*/
+
                 }
-
-                setFlash('success', 'Сообщение успешно разослано! (Отправлено: '.$total.')');
-                redirect("/admin/delivery");
-
-            } else {
-                showError('Ошибка! Отсутствуют получатели рассылки!');
-            }
-
-
-
-            if ($validator->isValid()) {
+exit;
                 setFlash('success', 'Сообщение успешно разослано!');
                 redirect('/admin/delivery');
             } else {
