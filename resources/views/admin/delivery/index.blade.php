@@ -19,11 +19,11 @@
             </div>
 
             Отправить:<br>
-
-            <label><input name="rec" type="radio" value="1" checked> В онлайне</label><br>
-            <label><input name="rec" type="radio" value="1"> Активным</label><br>
-            <label><input name="rec" type="radio" value="1"> Администрации</label><br>
-            <label><input name="rec" type="radio" value="1"> Всем пользователям</label><br>
+            <?php $inputType = getInput('type', 1); ?>
+            <label><input name="type" type="radio" value="1"{{ $inputType == 1 ? ' checked' : '' }}> В онлайне</label><br>
+            <label><input name="type" type="radio" value="2"{{ $inputType == 2 ? ' checked' : '' }}> Активным</label><br>
+            <label><input name="type" type="radio" value="3"{{ $inputType == 3 ? ' checked' : '' }}> Администрации</label><br>
+            <label><input name="type" type="radio" value="4"{{ $inputType == 4 ? ' checked' : '' }}> Всем пользователям</label><br>
 
             <button class="btn btn-primary">Разослать</button>
         </form>

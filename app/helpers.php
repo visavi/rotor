@@ -243,6 +243,17 @@ function check($msg)
 }
 
 /**
+ * Преобразует в положительное число
+ *
+ * @param  string $string число
+ * @return int            обработанные данные
+ */
+function int($string)
+{
+    return (int) abs($string);
+}
+
+/**
  * Преобразует все элементы массива в int
  *
  * @param  mixed $string массив или число
@@ -253,7 +264,7 @@ function intar($string)
     if (is_array($string)) {
         $newString = array_map('intval', $string);
     } else {
-        $newString = [(int) abs($string)];
+        $newString = [(int) $string];
     }
 
     return $newString;
