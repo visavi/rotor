@@ -787,9 +787,9 @@ function statsBlacklist()
         ->pluck('total', 'type')
         ->all();
 
-    $list = $blacklist + array_fill(1, 3, 0);
+    $list = $blacklist + ['login' => 0, 'email' => 0, 'domain' => 0];
 
-    return $list[1].'/'.$list[2].'/'.$list[3];
+    return $list['login'].'/'.$list['email'].'/'.$list['domain'];
 }
 
 /**

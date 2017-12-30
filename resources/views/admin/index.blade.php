@@ -27,9 +27,9 @@
         <i class="fa fa-circle fa-lg text-muted"></i> <a href="/admin/adminlist">Список старших</a> ({{ statsAdmins() }})<br>
         <i class="fa fa-circle fa-lg text-muted"></i> <a href="/admin/reglist">Список ожидающих</a> ({{ statsRegList() }})<br>
         <i class="fa fa-circle fa-lg text-muted"></i> <a href="/admin/votes">Голосования</a> ({{ statVotes() }})<br>
-        <i class="far fa-circle fa-lg text-muted"></i> <a href="/admin/antimat">Управление антиматом</a> (<?=statsAntimat()?>)<br>
-        <i class="fa fa-circle fa-lg text-muted"></i> <a href="/admin/banhist">История банов</a> (<?=statsBanHist()?>)<br>
-        <i class="fa fa-circle fa-lg text-muted"></i> <a href="/admin/invitations">Приглашения</a> (<?=statsInvite()?>)<br>
+        <i class="far fa-circle fa-lg text-muted"></i> <a href="/admin/antimat">Управление антиматом</a> ({{ statsAntimat() }})<br>
+        <i class="fa fa-circle fa-lg text-muted"></i> <a href="/admin/banhist">История банов</a> ({{ statsBanHist() }})<br>
+        <i class="fa fa-circle fa-lg text-muted"></i> <a href="/admin/invitations">Приглашения</a> ({{ statsInvite() }})<br>
         <i class="fa fa-circle fa-lg text-muted"></i> <a href="/admin/transfers">Денежные операции</a><br>
     @endif
 
@@ -42,9 +42,9 @@
         <i class="far fa-circle fa-lg text-muted"></i> <a href="/admin/phpinfo">PHP-информация</a> ({{ parseVersion(PHP_VERSION) }})<br>
         <i class="fa fa-circle fa-lg text-muted"></i> <a href="/admin/load">Загруз-центр</a> ({{ statsLoad() }})<br>
         <i class="far fa-circle fa-lg text-muted"></i> <a href="/admin/log">Ошибки / Автобаны</a><br>
-        <i class="fa fa-circle fa-lg text-muted"></i> <a href="/admin/blacklist">Черный список</a> (<?=statsBlacklist()?>)<br>
-        <i class="fa fa-circle fa-lg text-muted"></i> <a href="/admin/offers">Предложения / Проблемы</a> (<?=statsOffers()?>)<br>
-        <i class="fa fa-circle fa-lg text-muted"></i> <a href="/admin/smiles">Управление смайлами</a> (<?=statsSmiles()?>)<br>
+        <i class="fa fa-circle fa-lg text-muted"></i> <a href="/admin/blacklist">Черный список</a> ({{ statsBlacklist() }})<br>
+        <i class="fa fa-circle fa-lg text-muted"></i> <a href="/admin/offers">Предложения / Проблемы</a> ({{ statsOffers() }})<br>
+        <i class="fa fa-circle fa-lg text-muted"></i> <a href="/admin/smiles">Управление смайлами</a> ({{ statsSmiles() }})<br>
         <i class="far fa-circle fa-lg text-muted"></i> <a href="/admin/status">Статусы пользователей</a><br>
     @endif
 
@@ -53,9 +53,9 @@
         <i class="far fa-circle fa-lg text-muted"></i> <a href="/admin/setting">Настройки сайта</a><br>
         <i class="far fa-circle fa-lg text-muted"></i> <a href="/admin/cache">Очистка кэша</a><br>
         <i class="far fa-circle fa-lg text-muted"></i> <a href="/admin/backup">Backup-панель</a><br>
-        <i class="far fa-circle fa-lg text-muted"></i> <a href="/admin/checker">Сканирование сайта</a> (<?=statsChecker()?>)<br>
+        <i class="far fa-circle fa-lg text-muted"></i> <a href="/admin/checker">Сканирование сайта</a> ({{ statsChecker() }})<br>
         <i class="far fa-circle fa-lg text-muted"></i> <a href="/admin/delivery">Приват-рассылка</a><br>
-        <i class="fa fa-circle fa-lg text-muted"></i> <a href="/admin/logadmin">Логи посещений</a><br>
+        <i class="far fa-circle fa-lg text-muted"></i> <a href="/admin/logadmin">Логи посещений</a><br>
         <i class="fa fa-circle fa-lg text-muted"></i> <a href="/admin/notice">Шаблоны писем</a><br>
         <i class="fa fa-circle fa-lg text-muted"></i> <a href="/admin/files">Редактирование файлов</a><br>
         <i class="fa fa-circle fa-lg text-muted"></i> <a href="/admin/delusers">Чистка юзеров</a><br>

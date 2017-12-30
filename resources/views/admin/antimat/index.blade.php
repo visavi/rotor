@@ -45,9 +45,9 @@
             <input type="hidden" name="token" value="{{ $_SESSION['token'] }}">
 
             <div class="input-group">
-                <span class="input-group-addon">
-                    <i class="fa fa-pencil-alt"></i>
-                </span>
+                <div class="input-group-prepend">
+                    <span class="input-group-text"><i class="fa fa-pencil-alt"></i></span>
+                </div>
 
                 <input type="text" class="form-control" name="word" placeholder="Введите слово" required>
 
