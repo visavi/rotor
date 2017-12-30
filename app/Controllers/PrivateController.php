@@ -172,7 +172,7 @@ class PrivateController extends BaseController
         $token = check(Request::input('token'));
         $type  = check(Request::input('type'));
         $del   = intar(Request::input('del'));
-        $page  = abs(intval(Request::input('page', 1)));
+        $page  = int(Request::input('page', 1));
 
         $validator = new Validator();
         $validator->equal($token, $_SESSION['token'], 'Неверный идентификатор сессии, повторите действие!')
@@ -208,7 +208,7 @@ class PrivateController extends BaseController
     {
         $token = check(Request::input('token'));
         $type  = check(Request::input('type'));
-        $page  = abs(intval(Request::input('page', 1)));
+        $page  = int(Request::input('page', 1));
 
         $validator = new Validator();
         $validator->equal($token, $_SESSION['token'], 'Неверный идентификатор сессии, повторите действие!')

@@ -64,7 +64,7 @@ class AntimatController extends AdminController
     public function delete()
     {
         $token = check(Request::input('token'));
-        $id    = abs(intval(Request::input('id')));
+        $id    = int(Request::input('id'));
 
         $validator = new Validator();
         $validator->equal($token, $_SESSION['token'], 'Неверный идентификатор сессии, повторите действие!');

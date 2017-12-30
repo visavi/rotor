@@ -2,7 +2,7 @@
 view(setting('themes').'/index');
 
 $act = check(Request::input('act', 'index'));
-$id  = abs(intval(Request::input('id', 0)));
+$id  = int(Request::input('id', 0));
 
 if (isAdmin([101, 102])) {
     //show_title('Управление новостями');
@@ -79,7 +79,7 @@ break;
 ##                          Подготовка к редактированию новости                           ##
 ############################################################################################
 case 'edit':
-    $page  = abs(intval(Request::input('page', 1)));
+    $page  = int(Request::input('page', 1));
 
     $datanews = DB::run() -> queryFetch("SELECT * FROM `news` WHERE `id`=? LIMIT 1;", [$id]);
 
@@ -128,7 +128,7 @@ case 'change':
     $title = (isset($_POST['title'])) ? check($_POST['title']) : '';
     $closed = (empty($_POST['closed'])) ? 0 : 1;
     $top = (empty($_POST['top'])) ? 0 : 1;
-    $page = abs(intval(Request::input('page', 1)));
+    $page = int(Request::input('page', 1));
 
     $datanews = DB::run() -> queryFetch("SELECT * FROM `news` WHERE `id`=? LIMIT 1;", [$id]);
 
@@ -285,7 +285,7 @@ case 'del':
 
     $token = check(Request::input('token'));
     $del = intar(Request::input('del'));
-    $page  = abs(intval(Request::input('page', 1)));
+    $page  = int(Request::input('page', 1));
 
     if ($token == $_SESSION['token']) {
         if (!empty($del)) {

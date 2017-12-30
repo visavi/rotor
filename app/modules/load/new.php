@@ -2,7 +2,7 @@
 view(setting('themes').'/index');
 
 $act = isset($_GET['act']) ? check($_GET['act']) : 'files';
-$page = abs(intval(Request::input('page', 1)));
+$page = int((Request::input('page', 1));
 
 switch ($action):
 ############################################################################################

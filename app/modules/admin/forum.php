@@ -16,7 +16,7 @@ if (isset($_GET['tid'])) {
 } else {
     $tid = 0;
 }
-$page = abs(intval(Request::input('page', 1)));
+$page = int(Request::input('page', 1));
 
 if (isAdmin()) {
     //show_title('Управление форумом');
@@ -920,7 +920,7 @@ if (isAdmin()) {
         ############################################################################################
         case 'addeditpost':
 
-            $pid     = abs(intval(Request::input('pid')));
+            $pid     = int(Request::input('pid'));
             $token   = check(Request::input('token'));
             $msg     = check(Request::input('msg'));
             $delfile = intar(Request::input('delfile'));

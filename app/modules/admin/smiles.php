@@ -3,7 +3,7 @@ view(setting('themes').'/index');
 
 $act = (isset($_GET['act'])) ? check($_GET['act']) : 'index';
 $id = (isset($_GET['id'])) ? abs(intval($_GET['id'])) : 0;
-$page = abs(intval(Request::input('page', 1)));
+$page = int(Request::input('page', 1));
 
 if (! isAdmin([101, 102])) redirect('/admin/');
 

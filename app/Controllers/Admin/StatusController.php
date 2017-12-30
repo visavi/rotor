@@ -38,8 +38,8 @@ class StatusController extends AdminController
     {
         if (Request::isMethod('post')) {
             $token   = check(Request::input('token'));
-            $topoint = abs(intval(Request::input('topoint')));
-            $point   = abs(intval(Request::input('point')));
+            $topoint = int(Request::input('topoint'));
+            $point   = int(Request::input('point'));
             $name    = check(Request::input('name'));
             $color   = check(Request::input('color'));
 
@@ -74,7 +74,7 @@ class StatusController extends AdminController
      */
     public function edit()
     {
-        $id = abs(intval(Request::input('id')));
+        $id = int(Request::input('id'));
 
         $status = Status::query()->find($id);
 
@@ -84,8 +84,8 @@ class StatusController extends AdminController
 
         if (Request::isMethod('post')) {
             $token   = check(Request::input('token'));
-            $topoint = abs(intval(Request::input('topoint')));
-            $point   = abs(intval(Request::input('point')));
+            $topoint = int(Request::input('topoint'));
+            $point   = int(Request::input('point'));
             $name    = check(Request::input('name'));
             $color   = check(Request::input('color'));
 
@@ -121,7 +121,7 @@ class StatusController extends AdminController
     public function delete()
     {
         $token = check(Request::input('token'));
-        $id    = abs(intval(Request::input('id')));
+        $id    = int(Request::input('id'));
 
         $validator = new Validator();
         $validator->equal($token, $_SESSION['token'], 'Неверный идентификатор сессии, повторите действие!');

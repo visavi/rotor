@@ -51,7 +51,7 @@ class AjaxController extends BaseController
     {
         $path  = null;
         $data  = false;
-        $id    = abs(intval(Request::input('id')));
+        $id    = int(Request::input('id'));
         $type  = check(Request::input('type'));
         $page  = check(Request::input('page'));
         $token = check(Request::input('token'));
@@ -155,8 +155,8 @@ class AjaxController extends BaseController
 
         $token = check(Request::input('token'));
         $type  = check(Request::input('type'));
-        $rid   = abs(intval(Request::input('rid')));
-        $id    = abs(intval(Request::input('id')));
+        $rid   = int(Request::input('rid'));
+        $id    = int(Request::input('id'));
 
         $validator = new Validator();
         $validator->equal($token, $_SESSION['token'], 'Неверный идентификатор сессии, повторите действие!');
@@ -194,7 +194,7 @@ class AjaxController extends BaseController
             Offer::class,
         ];
 
-        $id    = abs(intval(Request::input('id')));
+        $id    = int(Request::input('id'));
         $type  = check(Request::input('type'));
         $vote  = check(Request::input('vote'));
         $token = check(Request::input('token'));

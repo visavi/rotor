@@ -2,8 +2,8 @@
 view(setting('themes').'/index');
 
 $act = check(Request::input('act', 'index'));
-$page = abs(intval(Request::input('page')));
-$id = abs(intval(Request::input('id')));
+$page = int(Request::input('page'));
+$id = int(Request::input('id'));
 
 if (isAdmin()) {
     //show_title('Управление гостевой');

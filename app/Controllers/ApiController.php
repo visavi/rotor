@@ -74,7 +74,7 @@ class ApiController extends BaseController
         header('Content-Disposition: inline; filename="private.json";');
 
         $token = check(Request::input('token'));
-        $count = abs(intval(Request::input('count', 10)));
+        $count = int(Request::input('count', 10));
 
         if (! $token) {
             echo json_encode(['error'=>'no token']);
@@ -127,7 +127,7 @@ class ApiController extends BaseController
         header('Content-Disposition: inline; filename="forum.json";');
 
         $token = check(Request::input('token'));
-        $id    = abs(intval(Request::input('id')));
+        $id    = int(Request::input('id'));
 
         if (! $token) {
             echo json_encode(['error'=>'no token']);

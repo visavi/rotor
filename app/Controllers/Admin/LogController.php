@@ -26,7 +26,7 @@ class LogController extends AdminController
      */
     public function index()
     {
-        $code = abs(intval(Request::input('code', '404')));
+        $code = int(Request::input('code', '404'));
         $list = [404 => 'Ошибки 404', 403 => 'Ошибки 403', 666 => 'Автобаны'];
 
         if (! array_key_exists($code, $list)) {

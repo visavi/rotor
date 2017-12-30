@@ -2,7 +2,7 @@
 view(setting('themes').'/index');
 
 $act = check(Request::input('act', 'index'));
-$page = abs(intval(Request::input('page', 1)));
+$page = int(Request::input('page', 1));
 
 if (isAdmin()) {
     //show_title('Управление галереей');
@@ -68,7 +68,7 @@ if (isAdmin()) {
         ############################################################################################
         case 'edit':
 
-            $gid = abs(intval(Request::input('gid')));
+            $gid = int(Request::input('gid'));
 
             $photo = DB::run() -> queryFetch("SELECT * FROM `photo` WHERE `id`=? LIMIT 1;", [$gid]);
 
@@ -98,7 +98,7 @@ if (isAdmin()) {
         case 'change':
 
             $token = check(Request::input('token'));
-            $gid = abs(intval(Request::input('gid')));
+            $gid = int(Request::input('gid'));
             $title = check(Request::input('title'));
             $text = check(Request::input('text'));
             $closed = Request::has('closed') ? 1 : 0;

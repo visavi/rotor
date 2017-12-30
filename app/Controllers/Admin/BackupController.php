@@ -50,7 +50,7 @@ class BackupController extends AdminController
             $token  = check(Request::input('token'));
             $sheets = check(Request::input('sheets'));
             $method = check(Request::input('method'));
-            $level  = (int) Request::input('level');
+            $level  = int(Request::input('level'));
 
             $validator = new Validator();
             $validator->equal($token, $_SESSION['token'], 'Неверный идентификатор сессии, повторите действие!')

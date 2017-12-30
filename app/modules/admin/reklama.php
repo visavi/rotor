@@ -6,7 +6,7 @@ if (isset($_GET['act'])) {
 } else {
     $act = 'index';
 }
-$page = abs(intval(Request::input('page', 1)));
+$page = int(Request::input('page', 1));
 
 if (isAdmin()) {
     //show_title('Пользовательская реклама');

@@ -40,7 +40,7 @@ class TransferController extends BaseController
      */
     public function send()
     {
-        $money = abs(intval(Request::input('money')));
+        $money = int(Request::input('money'));
         $msg   = check(Request::input('msg'));
         $token = check(Request::input('token'));
 

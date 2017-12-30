@@ -3,7 +3,7 @@ view(setting('themes').'/index');
 
 $act = (isset($_GET['act'])) ? check($_GET['act']) : 'index';
 $used = (!empty($_GET['used'])) ? 1  : 0;
-$page = abs(intval(Request::input('page', 1)));
+$page = int(Request::input('page', 1));
 
 if (isAdmin([101, 102, 103])) {
     //show_title('Приглашения');

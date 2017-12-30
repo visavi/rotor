@@ -141,7 +141,7 @@ class BlogController extends BaseController
         if (Request::isMethod('post')) {
 
             $token = check(Request::input('token'));
-            $cid   = abs(intval(Request::input('cid')));
+            $cid   = int(Request::input('cid'));
             $title = check(Request::input('title'));
             $text  = check(Request::input('text'));
             $tags  = check(Request::input('tags'));
@@ -223,7 +223,7 @@ class BlogController extends BaseController
      */
     public function create()
     {
-        $cid = abs(intval(Request::input('cid')));
+        $cid = int(Request::input('cid'));
 
         if (! getUser()) {
             abort(403, 'Для публикации новой статьи необходимо авторизоваться');
@@ -369,7 +369,7 @@ class BlogController extends BaseController
      */
     public function editComment($id, $cid)
     {
-        $page = abs(intval(Request::input('page', 1)));
+        $page = int(Request::input('page', 1));
 
         if (! getUser()) {
             abort(403, 'Для редактирования комментариев небходимо авторизоваться!');
@@ -392,7 +392,7 @@ class BlogController extends BaseController
         if (Request::isMethod('post')) {
             $token = check(Request::input('token'));
             $msg   = check(Request::input('msg'));
-            $page  = abs(intval(Request::input('page', 1)));
+            $page  = int(Request::input('page', 1));
 
             $validator = new Validator();
             $validator
@@ -721,8 +721,8 @@ class BlogController extends BaseController
     public function search()
     {
         $find    = check(Request::input('find'));
-        $type    = abs(intval(Request::input('type')));
-        $where   = abs(intval(Request::input('where')));
+        $type    = int(Request::input('type'));
+        $where   = int(Request::input('where'));
 
         if (! getUser()) {
             abort(403, 'Чтобы использовать поиск, необходимо авторизоваться');

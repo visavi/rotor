@@ -253,7 +253,7 @@ class OfferController extends BaseController
      */
     public function editComment($id, $cid)
     {
-        $page = abs(intval(Request::input('page', 1)));
+        $page = int(Request::input('page', 1));
 
         if (! getUser()) {
             abort(403, 'Для редактирования комментариев небходимо авторизоваться!');
@@ -276,7 +276,7 @@ class OfferController extends BaseController
         if (Request::isMethod('post')) {
             $token = check(Request::input('token'));
             $msg   = check(Request::input('msg'));
-            $page  = abs(intval(Request::input('page', 1)));
+            $page  = int(Request::input('page', 1));
 
             $validator = new Validator();
             $validator

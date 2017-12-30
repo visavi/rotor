@@ -4,7 +4,7 @@ view(setting('themes').'/index');
 $id = isset($_GET['id']) ? abs(intval($_GET['id'])) : 0;
 $cid = isset($_GET['cid']) ? abs(intval($_GET['cid'])) : 0;
 $act = isset($_GET['act']) ? check($_GET['act']) : 'index';
-$page = abs(intval(Request::input('page', 1)));
+$page = int(Request::input('page', 1));
 
 if (isAdmin([101, 102])) {
 //show_title('Управление загрузками');

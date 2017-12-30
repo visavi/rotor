@@ -66,7 +66,7 @@ class ForumController extends BaseController
      */
     public function create()
     {
-        $fid = abs(intval(Request::input('fid')));
+        $fid = int(Request::input('fid'));
 
         $forums = Forum::query()
             ->where('parent_id', 0)
@@ -201,10 +201,10 @@ class ForumController extends BaseController
     {
         $fid     = check(Request::input('fid'));
         $find    = check(Request::input('find'));
-        $type    = abs(intval(Request::input('type')));
-        $where   = abs(intval(Request::input('where')));
-        $period  = abs(intval(Request::input('period')));
-        $section = abs(intval(Request::input('section')));
+        $type    = int(Request::input('type'));
+        $where   = int(Request::input('where'));
+        $period  = int(Request::input('period'));
+        $section = int(Request::input('section'));
 
         if (empty($find)) {
 

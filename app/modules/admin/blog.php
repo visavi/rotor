@@ -16,7 +16,7 @@ if (isset($_GET['cid'])) {
 } else {
     $cid = 0;
 }
-$page = abs(intval(Request::input('page', 1)));
+$page = int(Request::input('page', 1));
 
 if (isAdmin()) {
     //show_title('Управление блогами');

@@ -113,7 +113,7 @@ class WallController extends BaseController
      */
     public function delete($login)
     {
-        $id    = abs(intval(Request::input('id')));
+        $id    = int(Request::input('id'));
         $token = check(Request::input('token'));
 
         $user = User::query()->where('login', $login)->first();

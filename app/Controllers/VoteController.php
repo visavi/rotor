@@ -61,7 +61,7 @@ class VoteController extends BaseController
 
         if (Request::isMethod('post')) {
             $token = check(Request::input('token'));
-            $poll  = abs(intval(Request::input('poll')));
+            $poll  = int(Request::input('poll'));
 
             $validator = new Validator();
             $validator->equal($token, $_SESSION['token'], 'Неверный идентификатор сессии, повторите действие!')

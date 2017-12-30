@@ -50,7 +50,7 @@ class BookmarkController extends BaseController
         if (! Request::ajax()) redirect('/');
 
         $token = check(Request::input('token'));
-        $tid   = abs(intval(Request::input('tid')));
+        $tid   = int(Request::input('tid'));
 
         $validator = new Validator();
         $validator->equal($token, $_SESSION['token'], 'Неверный идентификатор сессии, повторите действие!');
@@ -88,7 +88,7 @@ class BookmarkController extends BaseController
     {
         $token    = check(Request::input('token'));
         $topicIds = intar(Request::input('del'));
-        $page     = abs(intval(Request::input('page')));
+        $page     = int(Request::input('page'));
 
         $validator = new Validator();
         $validator->equal($token, $_SESSION['token'], 'Неверный идентификатор сессии, повторите действие!')

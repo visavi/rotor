@@ -93,7 +93,7 @@ class ActiveController extends BaseController
         }
 
         $token = check(Request::input('token'));
-        $tid = abs(intval(Request::input('tid')));
+        $tid   = int(Request::input('tid'));
 
         $validator = new Validator();
         $validator->equal($token, $_SESSION['token'], 'Неверный идентификатор сессии, повторите действие!');

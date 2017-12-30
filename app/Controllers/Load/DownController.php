@@ -54,7 +54,7 @@ class DownController extends BaseController
      */
     public function create()
     {
-        $cid = abs(intval(Request::input('cid')));
+        $cid = int(Request::input('cid'));
 
         if (! setting('downupload')) {
             abort('default', 'Загрузка файлов запрещена администрацией сайта!');
@@ -182,7 +182,7 @@ class DownController extends BaseController
     public function vote($id)
     {
         $token = check(Request::input('token'));
-        $score = abs(intval(Request::input('score')));
+        $score = int(Request::input('score'));
 
         $down = Down::query()->find($id);
 
@@ -357,7 +357,7 @@ class DownController extends BaseController
      */
     public function editComment($id, $cid)
     {
-        $page = abs(intval(Request::input('page', 1)));
+        $page = int(Request::input('page', 1));
 
         if (! getUser()) {
             abort(403, 'Для редактирования комментариев небходимо авторизоваться!');
@@ -380,7 +380,7 @@ class DownController extends BaseController
         if (Request::isMethod('post')) {
             $token = check(Request::input('token'));
             $msg   = check(Request::input('msg'));
-            $page  = abs(intval(Request::input('page', 1)));
+            $page  = int(Request::input('page', 1));
 
             $validator = new Validator();
             $validator

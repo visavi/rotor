@@ -11,7 +11,7 @@ if (isset($_GET['id'])) {
 } else {
     $id = 0;
 }
-$page = abs(intval(Request::input('page', 1)));
+$page = int(Request::input('page', 1));
 
 if (isAdmin([101, 102, 103])) {
     //show_title('Управление голосованием');

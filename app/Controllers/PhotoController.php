@@ -119,7 +119,7 @@ class PhotoController extends BaseController
      */
     public function edit($gid)
     {
-        $page = abs(intval(Request::input('page', 1)));
+        $page = int(Request::input('page', 1));
 
         if (! getUser()) {
             abort(403, 'Авторизуйтесь для редактирования фотографии!');
@@ -242,7 +242,7 @@ class PhotoController extends BaseController
      */
     public function editComment($gid, $id)
     {
-        $page = abs(intval(Request::input('page', 1)));
+        $page = int(Request::input('page', 1));
 
         if (!getUser()) {
             abort(403, 'Для редактирования комментариев небходимо авторизоваться!');
@@ -300,7 +300,7 @@ class PhotoController extends BaseController
      */
     public function delete($gid)
     {
-        $page = abs(intval(Request::input('page', 1)));
+        $page = int(Request::input('page', 1));
 
         $token = check(Request::input('token'));
 

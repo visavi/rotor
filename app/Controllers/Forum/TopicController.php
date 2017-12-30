@@ -277,7 +277,7 @@ class TopicController extends BaseController
     {
         $token = check(Request::input('token'));
         $del   = intar(Request::input('del'));
-        $page  = abs(intval(Request::input('page')));
+        $page  = int(Request::input('page'));
 
         $topic = Topic::query()->find($tid);
 
@@ -438,7 +438,7 @@ class TopicController extends BaseController
      */
     public function editPost($tid, $id)
     {
-        $page = abs(intval(Request::input('page')));
+        $page = int(Request::input('page'));
 
         if (! getUser()) {
             abort(403, 'Авторизуйтесь для изменения сообщения!');
@@ -536,8 +536,8 @@ class TopicController extends BaseController
         }
 
         $token = check(Request::input('token'));
-        $poll  = abs(intval(Request::input('poll')));
-        $page  = abs(intval(Request::input('page')));
+        $poll  = int(Request::input('poll'));
+        $page  = int(Request::input('page'));
 
         $validator = new Validator();
         $validator->equal($token, $_SESSION['token'], 'Неверный идентификатор сессии, повторите действие!');

@@ -2,8 +2,8 @@
 view(setting('themes').'/index');
 
 $act = check(Request::input('act', 'index'));
-$id = abs(intval(Request::input('id')));
-$page = abs(intval(Request::input('page', 1)));
+$id = int(Request::input('id'));
+$page = int(Request::input('page', 1));
 
 if (isAdmin()) {
     //show_title('Просмотр новых файлов');

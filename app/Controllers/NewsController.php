@@ -142,7 +142,7 @@ class NewsController extends BaseController
      */
     public function editComment($nid, $id)
     {
-        $page = abs(intval(Request::input('page', 1)));
+        $page = int(Request::input('page', 1));
 
         if (!getUser()) {
             abort(403, 'Для редактирования комментариев небходимо авторизоваться!');

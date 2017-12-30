@@ -12,7 +12,7 @@ if (isset($_GET['main'])) {
 } else {
     $main = 'mail';
 }
-$page = abs(intval(Request::input('page', 1)));
+$page = int(Request::input('page', 1));
 
 if (isAdmin([101, 102])) {
     //show_title('Черный список');

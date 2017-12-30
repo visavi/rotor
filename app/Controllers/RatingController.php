@@ -165,7 +165,7 @@ class RatingController extends BaseController
      */
     public function delete()
     {
-        $id    = abs(intval(Request::input('id')));
+        $id    = int(Request::input('id'));
         $token = check(Request::input('token'));
 
         $validator = new Validator();

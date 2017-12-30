@@ -3,7 +3,7 @@ view(setting('themes').'/index');
 
 $uz = empty($_GET['uz']) ? check(getUser('login')) : check($_GET['uz']);
 $act = isset($_GET['act']) ? check($_GET['act']) : 'files';
-$page = abs(intval(Request::input('page', 1)));
+$page = int(Request::input('page', 1));
 
 switch ($action):
 ############################################################################################
