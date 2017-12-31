@@ -246,6 +246,10 @@ $routes = [
     ['GET',      '/admin/logadmin', 'Admin\LogAdminController@index'],
     ['GET',      '/admin/logadmin/clear', 'Admin\LogAdminController@clear'],
 
+    ['GET',      '/admin/notice', 'Admin\NoticeController@index'],
+    ['GET|POST', '/admin/notice/create', 'Admin\NoticeController@create'],
+    ['GET|POST', '/admin/notice/edit/[i:id]', 'Admin\NoticeController@edit'],
+    ['GET',      '/admin/notice/delete/[i:id]', 'Admin\NoticeController@delete'],
 
     ['GET|POST', '/admin/book', 'admin/book.php'],
     ['GET|POST', '/admin/blog', 'admin/blog.php'],
@@ -270,7 +274,6 @@ $routes = [
     ['GET|POST', '/admin/blacklist', 'admin/blacklist.php'],
     ['GET|POST', '/admin/offers', 'admin/offers.php'],
     ['GET|POST', '/admin/smiles', 'admin/smiles.php'],
-    ['GET|POST', '/admin/notice', 'admin/notice.php'],
     ['GET|POST', '/admin/files', 'admin/files.php'],
     ['GET|POST', '/admin/delusers', 'admin/delusers.php'],
 

@@ -4,7 +4,6 @@ namespace App\Controllers\Admin;
 
 use App\Classes\Request;
 use App\Classes\Validator;
-use App\Models\Online;
 use App\Models\User;
 
 class DeliveryController extends AdminController
