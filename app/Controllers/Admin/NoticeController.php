@@ -100,18 +100,12 @@ class NoticeController extends AdminController
 
             $validator = new Validator();
             $validator->equal($token, $_SESSION['token'], 'Неверный идентификатор сессии, повторите действие!')
-                ->regex($type, '|^[a-z0-9_\-]+$|i', ['type' => 'Недопустимое название типа шаблона!'])
-                ->length($type, 3, 20, ['type' => 'Слишком длинный или короткий тип шаблона!'])
                 ->length($name, 5, 100, ['name' => 'Слишком длинное или короткое название шаблона!'])
                 ->length($text, 10, 65000, ['text' => 'Слишком длинный или короткий текст шаблона!']);
-
-            $duplicate = Notice::query()->where('id', '<>', $notice->id)->where('type', $type)->first();
-            $validator->empty($duplicate, ['type' => 'Данный тип уже имеетеся в списке!']);
 
             if ($validator->isValid()) {
 
                 $notice->update([
-                    'type'       => $type,
                     'name'       => $name,
                     'text'       => $text,
                     'user_id'    => getUser('id'),

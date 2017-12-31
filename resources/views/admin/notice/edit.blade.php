@@ -8,15 +8,17 @@
 
     <h1>Редактирование шаблона</h1>
 
+    @if ($notice->protect)
+        <div class="info">
+            <i class="fa fa-exclamation-circle"></i> <b>Вы редактируете системный шаблон</b>
+        </div><br>
+    @endif
+
+    <span class="badge badge-info">Тип шаблона: {{ $notice->type }}</span><br>
+
     <div class="form">
         <form action="/admin/notice/edit/{{ $notice->id }}" method="post">
             <input type="hidden" name="token" value="{{ $_SESSION['token'] }}">
-
-            <div class="form-group{{ hasError('type') }}">
-                <label for="type">Тип (a-z0-9_-):</label>
-                <input type="text" class="form-control" id="type" name="type" maxlength="20" value="{{ getInput('type', $notice->type) }}" required>
-                {!! textError('type') !!}
-            </div>
 
             <div class="form-group{{ hasError('name') }}">
                 <label for="name">Название:</label>
