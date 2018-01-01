@@ -92,11 +92,11 @@ class PageController extends BaseController
         }
 
         if (strtotime(date('d.m.Y')) > strtotime($surprise['requiredDate'].'.'.date('Y'))) {
-            abort('default', 'Срок получения сюрприза уже закончился!');
+            abort('default', 'Срок получения сюрприза еще не начался или уже закончился!');
         }
 
         if ($user->point < $surprise['requiredPoint']) {
-            abort('default', 'Для того получения сюрприза необходимо '.plural($surprise['requiredPoint'], setting('scorename')).'!');
+            abort('default', 'Чтобы получить сюрприз необходимо '.plural($surprise['requiredPoint'], setting('scorename')).'!');
         }
 
         $existSurprise = Surprise::query()
@@ -105,7 +105,7 @@ class PageController extends BaseController
             ->first();
 
         if ($existSurprise) {
-            abort('default', 'Сюрприз уже получен');
+            abort('default', 'В этом году сюрприз уже получен');
         }
 
         $user->update([

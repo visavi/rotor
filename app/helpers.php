@@ -88,25 +88,6 @@ function dateFixed($timestamp, $format = 'd.m.y / H:i')
 }
 
 /**
- * Удаляет изображение и превью
- *
- * @param string $dir   директория с изображение
- * @param string $image имя изображения
- */
-function deleteImage($dir, $image)
-{
-    $path = str_replace('/', '_', $dir.$image);
-
-    if (file_exists(HOME.'/'.$dir.$image)) {
-        unlink(HOME.'/'.$dir.$image);
-    }
-
-    if (file_exists(UPLOADS.'/thumbnail/'.$path)) {
-        unlink(UPLOADS.'/thumbnail/'.$path);
-    }
-}
-
-/**
  * Удаляет записи пользователя из всех таблиц
  *
  * @param  User $user объект пользователя
@@ -115,8 +96,8 @@ function deleteImage($dir, $image)
  */
 function deleteUser(User $user)
 {
-    deleteImage('uploads/photos/', $user['picture']);
-    deleteImage('uploads/avatars/', $user['avatar']);
+    deleteImage('uploads/photos/', $user->picture);
+    deleteImage('uploads/avatars/', $user->avatar);
 
     Inbox::query()->where('user_id', $user->id)->delete();
     Outbox::query()->where('user_id', $user->id)->delete();
@@ -157,6 +138,33 @@ function deleteAlbum(User $user)
             deleteImage('uploads/pictures/', $photo->link);
         }
     }
+}
+
+/**
+ * Удаляет изображение и превью
+ *
+ * @param string $dir   директория с изображение
+ * @param string $image имя изображения
+ * @return bool
+ */
+function deleteImage($dir, $image)
+{
+
+    if (! $image) {
+        return true;
+    }
+
+    $path = str_replace('/', '_', $dir.$image);
+
+    if (file_exists(HOME.'/'.$dir.$image)) {
+        unlink(HOME.'/'.$dir.$image);
+    }
+
+    if (file_exists(UPLOADS.'/thumbnail/'.$path)) {
+        unlink(UPLOADS.'/thumbnail/'.$path);
+    }
+
+    return true;
 }
 
 /**

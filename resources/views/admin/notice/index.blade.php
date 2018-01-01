@@ -26,7 +26,7 @@
         </div>
 
         <div>
-            Тип шаблона: {{ $notice->type }}<br>
+            <span class="badge badge-info">Тип шаблона: {{ $notice->type }}</span><br>
             Изменено: {!! profile($notice->user) !!}
             ({{ dateFixed($notice->updated_at) }})
         </div>
