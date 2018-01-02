@@ -254,6 +254,10 @@ $routes = [
     ['GET|POST', '/admin/delusers', 'Admin\DelUserController@index'],
     ['POST',     '/admin/delusers/clear', 'Admin\DelUserController@clear'],
 
+    ['GET',      '/admin/files', 'Admin\FilesController@index'],
+    ['GET|POST', '/admin/files/edit', 'Admin\FilesController@edit'],
+    ['GET|POST', '/admin/files/create', 'Admin\FilesController@create'],
+
     ['GET|POST', '/admin/book', 'admin/book.php'],
     ['GET|POST', '/admin/blog', 'admin/blog.php'],
     ['GET|POST', '/admin/chat', 'admin/chat.php'],
@@ -277,8 +281,6 @@ $routes = [
     ['GET|POST', '/admin/blacklist', 'admin/blacklist.php'],
     ['GET|POST', '/admin/offers', 'admin/offers.php'],
     ['GET|POST', '/admin/smiles', 'admin/smiles.php'],
-    ['GET|POST', '/admin/files', 'admin/files.php'],
-
 
     ['GET', '/search', function() {
         return view('search/index');

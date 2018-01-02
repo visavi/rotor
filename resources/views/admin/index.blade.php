@@ -57,7 +57,7 @@
         <i class="far fa-circle fa-lg text-muted"></i> <a href="/admin/delivery">Приват-рассылка</a><br>
         <i class="far fa-circle fa-lg text-muted"></i> <a href="/admin/logadmin">Логи посещений</a><br>
         <i class="far fa-circle fa-lg text-muted"></i> <a href="/admin/notice">Шаблоны писем</a><br>
-        <i class="fa fa-circle fa-lg text-muted"></i> <a href="/admin/files">Редактирование файлов</a><br>
+        <i class="far fa-circle fa-lg text-muted"></i> <a href="/admin/files">Редактирование файлов</a><br>
         <i class="far fa-circle fa-lg text-muted"></i> <a href="/admin/delusers">Чистка пользователей</a><br>
     @endif
 

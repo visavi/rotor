@@ -35,7 +35,6 @@ class LogAdminController extends AdminController
             ->with('user')
             ->get();
 
-
         return view('admin/logadmin/index', compact('logs', 'page'));
     }
 

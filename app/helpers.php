@@ -408,25 +408,28 @@ function saveStatus($time = 0)
 {
     if (empty($time) || @filemtime(STORAGE.'/temp/status.dat') < time() - $time) {
 
-    $users = User::query()
+    $users =  User::query()
         ->select('users.id', 'users.status', 'status.name', 'status.color')
-        ->leftJoin('status', 'users.point', 'between', DB::raw('status.topoint and status.point'))
+        ->leftJoin('status', function($join) {
+            $join->whereRaw('users.point between status.topoint and status.point');
+        })
         ->where('users.point', '>', 0)
         ->get();
 
         $statuses = [];
         foreach ($users as $user) {
-            if (! empty($user['status'])) {
-                $statuses[$user['id']] = '<span style="color:#ff0000">'.$user['status'].'</span>';
+
+            if ($user->status) {
+                $statuses[$user->id] = '<span style="color:#ff0000">'.$user->status.'</span>';
                 continue;
             }
 
-            if (! empty($user['color'])) {
-                $statuses[$user['id']] = '<span style="color:'.$user['color'].'">'.$user['name'].'</span>';
+            if ($user->color) {
+                $statuses[$user->id] = '<span style="color:'.$user->color.'">'.$user->name.'</span>';
                 continue;
             }
 
-            $statuses[$user['id']] = $user['name'];
+            $statuses[$user->id] = $user->name;
         }
 
         file_put_contents(STORAGE.'/temp/status.dat', json_encode($statuses, JSON_UNESCAPED_UNICODE), LOCK_EX);
