@@ -257,6 +257,7 @@ $routes = [
     ['GET',      '/admin/files', 'Admin\FilesController@index'],
     ['GET|POST', '/admin/files/edit', 'Admin\FilesController@edit'],
     ['GET|POST', '/admin/files/create', 'Admin\FilesController@create'],
+    ['GET',      '/admin/files/delete', 'Admin\FilesController@delete'],
 
     ['GET|POST', '/admin/book', 'admin/book.php'],
     ['GET|POST', '/admin/blog', 'admin/blog.php'],

@@ -16,7 +16,7 @@
                 @if (is_dir(RESOURCES.'/views/'.$path.$file))
                     <li class="list-group-item">
                         <div class="float-right">
-                            <a href="/admin/files/delete?path={{ $path }}&amp;file={{ $file }}&amp;type=dir&amp;token={{ $_SESSION['token'] }}" onclick="return confirm('Вы действительно хотите удалить эту директорию')"><i class="fa fa-times"></i></a>
+                            <a href="/admin/files/delete?path={{ $path }}&amp;dirname={{ $file }}&amp;token={{ $_SESSION['token'] }}" onclick="return confirm('Вы действительно хотите удалить эту директорию')"><i class="fa fa-times"></i></a>
                         </div>
 
                         <i class="fa fa-folder"></i> <b><a href="/admin/files?path={{ $path.$file }}/">{{ $file }}</a></b><br>
@@ -29,7 +29,7 @@
 
                     <li class="list-group-item">
                         <div class="float-right">
-                            <a href="/admin/files/delete?path={{ $path }}&amp;file={{ basename($file, '.blade.php') }}&amp;token={{ $_SESSION['token'] }}" onclick="return confirm('Вы действительно хотите удалить этот файл')"><i class="fa fa-times"></i></a>
+                            <a href="/admin/files/delete?path={{ $path }}&amp;filename={{ basename($file, '.blade.php') }}&amp;token={{ $_SESSION['token'] }}" onclick="return confirm('Вы действительно хотите удалить этот файл')"><i class="fa fa-times"></i></a>
                         </div>
 
                         <i class="fa fa-file"></i>
@@ -41,7 +41,7 @@
             @endforeach
         </ul>
     @else
-        {{ showError('Файлов нет!') }}
+        {!! showError('Файлов нет!') !!}
     @endif
 
     @if ($path)

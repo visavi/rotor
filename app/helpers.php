@@ -408,7 +408,7 @@ function saveStatus($time = 0)
 {
     if (empty($time) || @filemtime(STORAGE.'/temp/status.dat') < time() - $time) {
 
-    $users =  User::query()
+    $users = User::query()
         ->select('users.id', 'users.status', 'status.name', 'status.color')
         ->leftJoin('status', function($join) {
             $join->whereRaw('users.point between status.topoint and status.point');
