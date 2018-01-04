@@ -29,7 +29,8 @@
         "jenssegers/blade": "^1.1",
         "visavi/cleanup": "^1.1",
         "visavi/crontask":  "^1.1",
-        "nelexa/zip": "^3.0"
+        "nelexa/zip": "^3.0",
+        "intervention/image": "^2.4"
     },
     "require-dev": {
         "filp/whoops": "^2.1",
