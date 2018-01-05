@@ -101,7 +101,44 @@ class SmileController extends AdminController
      */
     public function edit($id)
     {
+        $page = int(Request::input('page', 1));
 
+        $smile = Smile::query()->find($id);
+
+        if (! $smile) {
+            abort(404, 'Данного смайла не существует!');
+        }
+
+        if (Request::isMethod('post')) {
+
+            $token = check(Request::input('token'));
+            $code  = check(utfLower(Request::input('code')));
+
+            $validator = new Validator();
+            $validator->equal($token, $_SESSION['token'], 'Неверный идентификатор сессии, повторите действие!')
+                ->length($code, 2, 20, ['code' => 'Слишком длинный или короткий код смайла!'])
+                ->regex($code, '|^:+[a-яa-z0-9_\-/\(\)]+$|i', ['code' => 'Код смайла должен начинаться с двоеточия. Разрешены буквы, цифры и дефис!']);
+
+            $duplicate = Smile::query()->where('code', $code)->where('id', '<>', $smile->id)->first();
+            $validator->empty($duplicate, ['code' => 'Смайл с данным кодом уже имеется в списке!']);
+
+            if ($validator->isValid()) {
+
+                $smile->update([
+                    'code' => $code,
+                ]);
+
+                clearCache();
+
+                setFlash('success', 'Смайл успешно отредактирован!');
+                redirect('/admin/smiles?page=' . $page);
+            } else {
+                setInput(Request::all());
+                setFlash('danger', $validator->getErrors());
+            }
+        }
+
+        return view('admin/smile/edit', compact('smile', 'page'));
     }
 
     /**
@@ -109,6 +146,38 @@ class SmileController extends AdminController
      */
     public function delete()
     {
+        if (! is_writable(UPLOADS.'/smiles')){
+            abort('default', 'Директория со смайлами недоступна для записи!');
+        }
 
+        $page  = int(Request::input('page', 1));
+        $token = check(Request::input('token'));
+        $del   = intar(Request::input('del'));
+
+        $validator = new Validator();
+        $validator->equal($token, $_SESSION['token'], 'Неверный идентификатор сессии, повторите действие!')
+            ->true($del, 'Ошибка удаления! Отсутствуют выбранные смайлы!');
+
+        if ($validator->isValid()) {
+
+            $smiles = Smile::query()
+                ->whereIn('id', $del)
+                ->get();
+
+            if ($smiles->isNotEmpty()) {
+                foreach ($smiles as $smile) {
+                    deleteImage(UPLOADS.'/smiles/', $smile->name);
+                    $smile->delete();
+                }
+            }
+
+            clearCache();
+
+            setFlash('success', 'Выбранные пользователи успешно удалены!');
+        } else {
+            setFlash('danger', $validator->getErrors());
+        }
+
+        redirect('/admin/smiles?page=' . $page);
     }
 }

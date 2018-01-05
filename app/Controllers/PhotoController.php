@@ -304,13 +304,13 @@ class PhotoController extends BaseController
 
         $token = check(Request::input('token'));
 
-        if (!getUser()) {
+        if (! getUser()) {
             abort(403, 'Для удаления фотографий небходимо авторизоваться!');
         }
 
         $photo = Photo::query()->where('user_id', getUser('id'))->find($gid);
 
-        if (!$photo) {
+        if (! $photo) {
             abort(404, 'Выбранное вами фото не найдено или вы не автор этой фотографии!');
         }
 
@@ -318,10 +318,10 @@ class PhotoController extends BaseController
         $validator
             ->equal($token, $_SESSION['token'], 'Неверный идентификатор сессии, повторите действие!')
             ->true(is_writable(HOME . '/uploads/pictures'), ['Не установлены атрибуты доступа на дирекоторию с фотографиями!'])
-            ->empty($photo['comments'], 'Запрещено удалять фотографии к которым имеются комментарии!');
+            ->empty($photo->comments, 'Запрещено удалять фотографии к которым имеются комментарии!');
 
         if ($validator->isValid()) {
-            deleteImage('uploads/pictures/', $photo['link']);
+            deleteImage('uploads/pictures/', $photo->link);
 
             Comment::query()
                 ->where('relate_type', Photo::class)

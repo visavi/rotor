@@ -176,7 +176,7 @@ class PrivateController extends BaseController
 
         $validator = new Validator();
         $validator->equal($token, $_SESSION['token'], 'Неверный идентификатор сессии, повторите действие!')
-            ->true($del, 'Ошибка удаления! Отсутствуют выбранные сообщения');
+            ->true($del, 'Ошибка удаления! Отсутствуют выбранные сообщения!');
 
         if ($validator->isValid()) {
 

@@ -133,7 +133,7 @@ class ContactController extends BaseController
 
         $validator = new Validator();
         $validator->equal($token, $_SESSION['token'], 'Неверный идентификатор сессии, повторите действие!')
-            ->true($del, 'Ошибка удаления! Отсутствуют выбранные пользователи');
+            ->true($del, 'Ошибка удаления! Отсутствуют выбранные пользователи!');
 
         if ($validator->isValid()) {
 

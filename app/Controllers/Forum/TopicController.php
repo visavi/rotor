@@ -304,8 +304,8 @@ class TopicController extends BaseController
 
             if ($files->isNotEmpty()) {
                 foreach ($files as $file) {
-                    $file->delete();
                     deleteImage('uploads/forum/', $topic->id . '/' . $file->hash);
+                    $file->delete();
                 }
             }
 
@@ -498,8 +498,8 @@ class TopicController extends BaseController
 
                     if ($files->isNotEmpty()) {
                         foreach ($files as $file) {
-                            $file->delete();
                             deleteImage('uploads/forum/', $post->topic_id . '/' . $file->hash);
+                            $file->delete();
                         }
                     }
                 }
