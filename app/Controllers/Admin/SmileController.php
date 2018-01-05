@@ -2,7 +2,6 @@
 
 namespace App\Controllers\Admin;
 
-use App\Classes\FileUpload;
 use App\Classes\Request;
 use App\Classes\Validator;
 use App\Models\Smile;

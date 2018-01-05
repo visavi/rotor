@@ -264,6 +264,8 @@ $routes = [
     ['GET|POST', '/admin/smiles/edit/[i:id]', 'Admin\SmileController@edit'],
     ['POST',     '/admin/smiles/delete', 'Admin\SmileController@delete'],
 
+    ['GET|POST', '/admin/ipban', 'Admin\IpBanController@index'],
+
     ['GET|POST', '/admin/book', 'admin/book.php'],
     ['GET|POST', '/admin/blog', 'admin/blog.php'],
     ['GET|POST', '/admin/chat', 'admin/chat.php'],
@@ -276,7 +278,6 @@ $routes = [
     ['GET|POST', '/admin/ban', 'admin/ban.php'],
     ['GET|POST', '/admin/banhist', 'admin/banhist.php'],
     ['GET|POST', '/admin/banlist', 'admin/banlist.php'],
-    ['GET|POST', '/admin/ipban', 'admin/ipban.php'],
     ['GET|POST', '/admin/adminlist', 'admin/adminlist.php'],
     ['GET|POST', '/admin/users', 'admin/users.php'],
     ['GET|POST', '/admin/reglist', 'admin/reglist.php'],
