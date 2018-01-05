@@ -1,10 +1,14 @@
 <?php
 
 use App\Classes\Validator;
+use Illuminate\Http\UploadedFile;
 use PHPUnit\Framework\TestCase;
 
 class ValidatorTest extends TestCase
 {
+    /**
+     * @var Validator
+     */
     private $validator;
 
     public function setUp()
@@ -388,5 +392,24 @@ class ValidatorTest extends TestCase
 
         $this->validator->clearErrors();
         $this->assertTrue($this->validator->isValid());
+    }
+
+    /**
+     * Тестирует изображение
+     */
+    public function testImage()
+    {
+        $image = UploadedFile::fake()->image('avatar.jpg');
+        $image2 = UploadedFile::fake()->image('avatar.jpg', 100, 100);
+
+        $rules = [
+            'maxweight' => 50,
+        ];
+
+        $this->validator->image($image, $rules, 'error');
+        $this->assertTrue($this->validator->isValid());
+
+        $this->validator->image($image2, $rules, 'error');
+        $this->assertFalse($this->validator->isValid());
     }
 }
