@@ -85,7 +85,6 @@ class SmileController extends AdminController
 
                 setFlash('success', 'Смайл успешно загружен!');
                 redirect('/admin/smiles');
-
             } else {
                 setInput(Request::all());
                 setFlash('danger', $validator->getErrors());

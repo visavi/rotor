@@ -231,51 +231,53 @@ function isUtf($str)
 /**
  * Преобразует специальные символы в HTML-сущности
  *
- * @param  mixed $msg строка или массив строк
- * @return mixed      обработанные данные
+ * @param  mixed $string строка или массив строк
+ * @return mixed         обработанные данные
  */
-function check($msg)
+function check($string)
 {
-    if (is_array($msg)) {
-        foreach($msg as $key => $val) {
-            $msg[$key] = check($val);
+    if (is_array($string)) {
+        foreach($string as $key => $val) {
+            $string[$key] = check($val);
         }
     } else {
-        $msg =  htmlspecialchars($msg, ENT_QUOTES);
+        $string =  htmlspecialchars($string, ENT_QUOTES);
         $search = [chr(0), "\x00", "\x1A", chr(226) . chr(128) . chr(174)];
 
-        $msg = trim(str_replace($search, [], $msg));
+        $string = trim(str_replace($search, [], $string));
     }
 
-    return $msg;
+    return $string;
 }
 
 /**
  * Преобразует в положительное число
  *
- * @param  string $string число
- * @return int            обработанные данные
+ * @param  string $num число
+ * @return int         обработанные данные
  */
-function int($string)
+function int($num)
 {
-    return (int) abs($string);
+    return (int) abs($num);
 }
 
 /**
  * Преобразует все элементы массива в int
  *
- * @param  mixed $string массив или число
- * @return array         обработанные данные
+ * @param  mixed $numbers массив или число
+ * @return array          обработанные данные
  */
-function intar($string)
+function intar($numbers)
 {
-    if (is_array($string)) {
-        $newString = array_map('intval', $string);
-    } else {
-        $newString = [(int) $string];
+    if ($numbers) {
+        if (is_array($numbers)) {
+            $numbers = array_map('intval', $numbers);
+        } else {
+            $numbers = [(int) $numbers];
+        }
     }
 
-    return $newString;
+    return $numbers;
 }
 
 /**

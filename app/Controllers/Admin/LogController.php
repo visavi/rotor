@@ -56,7 +56,7 @@ class LogController extends AdminController
         $validator = new Validator();
         $validator
             ->equal($token, $_SESSION['token'], 'Неверный идентификатор сессии, повторите действие!')
-            ->true(isAdmin('boss'), 'Очищать логи может только владелец!');
+            ->true(isAdmin(User::BOSS), 'Очищать логи может только владелец!');
 
         if ($validator->isValid()) {
 
