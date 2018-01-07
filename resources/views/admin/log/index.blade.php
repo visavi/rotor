@@ -13,7 +13,7 @@
     @endif
 
     <ol class="breadcrumb">
-        @foreach ($list as $key => $value)
+        @foreach ($lists as $key => $value)
             <li class="breadcrumb-item">
                 @if ($key == $code)
                     <b>{{ $value }}</b>

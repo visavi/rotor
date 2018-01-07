@@ -33,7 +33,7 @@
                 </div>
             @endforeach
 
-            <button class="btn btn-primary">Удалить выбранное</button>
+            <button class="btn btn-sm btn-danger">Удалить выбранное</button>
         </form>
 
         {!! pagination($page) !!}

@@ -169,7 +169,7 @@
 
     @if ($topic->isModer)
         <span class="float-right">
-            <button class="btn btn-danger">Удалить выбранное</button>
+            <button class="btn btn-sm btn-danger">Удалить выбранное</button>
         </span>
         </form>
     @endif

@@ -10,6 +10,16 @@ use App\Models\User;
 class LogController extends AdminController
 {
     /**
+     * @var array
+     */
+    private $lists;
+
+    /**
+     * @var int
+     */
+    private $code;
+
+    /**
      * Конструктор
      */
     public function __construct()
@@ -19,6 +29,13 @@ class LogController extends AdminController
         if (! isAdmin(User::BOSS)) {
             abort(403, 'Доступ запрещен!');
         }
+
+        $this->code  = int(Request::input('code', 404));
+        $this->lists = [404 => 'Ошибки 404', 403 => 'Ошибки 403', 666 => 'Автобаны'];
+
+        if (! isset($this->lists[$this->code])) {
+            abort('default', 'Указанный лог-файл не существует!');
+        }
     }
 
     /**
@@ -26,12 +43,8 @@ class LogController extends AdminController
      */
     public function index()
     {
-        $code = int(Request::input('code', '404'));
-        $list = [404 => 'Ошибки 404', 403 => 'Ошибки 403', 666 => 'Автобаны'];
-
-        if (! array_key_exists($code, $list)) {
-            abort('default', 'Указанный лог-файл не существует!');
-        }
+        $lists = $this->lists;
+        $code  = $this->code;
 
         $total = Log::query()->where('code', $code)->count();
         $page = paginate(setting('loglist'), $total);
@@ -41,9 +54,10 @@ class LogController extends AdminController
             ->orderBy('created_at', 'desc')
             ->offset($page['offset'])
             ->limit($page['limit'])
+            ->with('user')
             ->get();
 
-        return view('admin/log/index', compact('logs', 'page', 'code', 'list'));
+        return view('admin/log/index', compact('logs', 'page', 'code', 'lists'));
     }
 
     /**

@@ -2505,9 +2505,15 @@ function siteDomain($url)
     return $url;
 }
 
+/**
+ * Получает версию
+ *
+ * @param  string $version
+ * @return string
+ */
 function parseVersion($version)
 {
     $version = explode('.', strtok($version, '-'));
 
-    return $version[0] . '.' . $version[1] . '.' . $version[2] ?? '0';
+    return $version[0] . '.' . $version[1] . '.' . $version[2] ?? 0;
 }

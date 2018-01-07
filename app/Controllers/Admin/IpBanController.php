@@ -6,7 +6,6 @@ use App\Classes\Request;
 use App\Classes\Validator;
 use App\Models\Ban;
 use App\Models\User;
-use Illuminate\Database\Capsule\Manager as DB;
 
 class IpBanController extends AdminController
 {
@@ -80,7 +79,7 @@ class IpBanController extends AdminController
 
         $validator = new Validator();
         $validator->equal($token, $_SESSION['token'], 'Неверный идентификатор сессии, повторите действие!')
-            ->true($del, 'Ошибка удаления! Отсутствуют выбранные ip!');
+            ->true($del, 'Отсутствуют выбранные ip для удаления!');
 
         if ($validator->isValid()) {
 

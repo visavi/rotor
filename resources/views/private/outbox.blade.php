@@ -32,7 +32,8 @@
                     <a href="/private/history?user={{ $data->recipient->login }}">История</a></div>
             @endforeach
 
-            <br><input type="submit" value="Удалить выбранное"></form>
+            <button class="btn btn-sm btn-danger">Удалить выбранное</button>
+        </form>
 
         {!! pagination($page) !!}
 

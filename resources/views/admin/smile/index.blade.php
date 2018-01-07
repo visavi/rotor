@@ -13,12 +13,12 @@
             <input type="hidden" name="token" value="{{ $_SESSION['token'] }}">
 
             @foreach($smiles as $smile)
-            <img src="/uploads/smiles/{{ $smile->name }}" alt=""> — <b>{{ $smile->code }}</b><br>
+                <img src="/uploads/smiles/{{ $smile->name }}" alt=""> — <b>{{ $smile->code }}</b><br>
 
-            <input type="checkbox" name="del[]" value="{{ $smile->id }}"> <a href="/admin/smiles/edit/{{ $smile->id }}?page={{ $page['current'] }}">Редактировать</a><br>
+                <input type="checkbox" name="del[]" value="{{ $smile->id }}"> <a href="/admin/smiles/edit/{{ $smile->id }}?page={{ $page['current'] }}">Редактировать</a><br>
             @endforeach
 
-            <button class="btn btn-primary">Удалить выбранное</button>
+            <button class="btn btn-sm btn-danger">Удалить выбранное</button>
         </form>
 
         {!! pagination($page) !!}

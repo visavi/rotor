@@ -21,12 +21,12 @@ class SpamController extends AdminController
     /**
      * @var array
      */
-    public $types;
+    private $types;
 
     /**
      * @var array
      */
-    public $total = [];
+    private $total = [];
 
     public function __construct()
     {

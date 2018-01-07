@@ -133,7 +133,7 @@ class IgnoreController extends BaseController
 
         $validator = new Validator();
         $validator->equal($token, $_SESSION['token'], 'Неверный идентификатор сессии, повторите действие!')
-            ->true($del, 'Ошибка удаления! Отсутствуют выбранные пользователи!');
+            ->true($del, 'Отсутствуют выбранные пользователи для удаления!');
 
         if ($validator->isValid()) {
 

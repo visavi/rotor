@@ -29,8 +29,7 @@
                 </div>
             @endforeach
 
-            <br>
-            <input type="submit" value="Удалить выбранное">
+            <button class="btn btn-sm btn-danger">Удалить выбранное</button>
         </form>
 
         {!! pagination($page) !!}

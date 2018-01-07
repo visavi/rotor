@@ -154,7 +154,7 @@ class SmileController extends AdminController
 
         $validator = new Validator();
         $validator->equal($token, $_SESSION['token'], 'Неверный идентификатор сессии, повторите действие!')
-            ->true($del, 'Ошибка удаления! Отсутствуют выбранные смайлы!');
+            ->true($del, 'Отсутствуют выбранные смайлы для удаления!');
 
         if ($validator->isValid()) {
 
