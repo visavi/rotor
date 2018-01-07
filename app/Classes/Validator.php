@@ -387,7 +387,7 @@ class Validator
 
         if (isset($rules['minweight'])) {
             if ($width < $rules['minweight'] || $height < $rules['minweight']) {
-                $this->addError([$key => 'Минимальный размер файла ' . $rules['maxweight'] . 'px!']);
+                $this->addError([$key => 'Минимальный размер файла ' . $rules['minweight'] . 'px!']);
             }
         }
 

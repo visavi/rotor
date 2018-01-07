@@ -4,6 +4,7 @@ namespace App\Controllers;
 
 use App\Classes\Request;
 use App\Classes\Validator;
+use Intervention\Image\ImageManagerStatic as Image;
 
 class PictureController extends BaseController
 {
@@ -28,20 +29,22 @@ class PictureController extends BaseController
     {
         if (Request::isMethod('post')) {
 
-            $newName = uniqid();
-            $token   = check(Request::input('token'));
+            $token = check(Request::input('token'));
+            $photo = Request::file('photo');
 
             $validator = new Validator();
             $validator->equal($token, $_SESSION['token'], ['photo' => 'Неверный идентификатор сессии, повторите действие!']);
 
-            $handle = uploadImage($_FILES['photo'], setting('filesize'), setting('fileupfoto'), $newName);
-            if (! $handle) {
-                $validator->addError(['photo' => 'Не удалось загрузить фотографию!']);
-            }
+            $rules = [
+                'maxsize'   => setting('filesize'),
+                'maxweight' => setting('fileupfoto'),
+                'minweight' => 100,
+            ];
+            $validator->image($photo, $rules, ['photo' => 'Не удалось загрузить фотографию!']);
 
             if ($validator->isValid()) {
-                //-------- Удаляем старую фотку и аватар ----------//
 
+                //-------- Удаляем старую фотку и аватар ----------//
                 if ($this->user->picture) {
                     deleteImage('uploads/photos/', $this->user->picture);
                     deleteImage('uploads/avatars/', $this->user->avatar);
@@ -51,36 +54,35 @@ class PictureController extends BaseController
                     $this->user->save();
                 }
 
+                $name    = uniqid();
+                $picture = $name . '.' . $photo->getClientOriginalExtension();
+                $avatar  = $name . '.png';
+
+                $img = Image::make($photo);
+                $img->backup();
+
+                $img->resize(setting('screensize'), setting('screensize'), function ($constraint) {
+                    $constraint->aspectRatio();
+                    $constraint->upsize();
+                });
+
+                $img->insert(HOME.'/assets/img/images/watermark.png', 'bottom-right', 10, 10);
+                $img->save(UPLOADS.'/photos/' . $picture);
+
                 //-------- Генерируем аватар ----------//
-                $handle->process(UPLOADS.'/photos/');
+                $img->reset();
+                $img->resize(48, null, function ($constraint) {
+                    $constraint->aspectRatio();
+                });
+                $img->crop(48, 48);
+                $img->save(UPLOADS.'/avatars/' . $avatar);
 
-                if ($handle->processed) {
-                    $picture = $handle->file_dst_name;
+                $this->user->picture = $picture;
+                $this->user->avatar = $avatar;
+                $this->user->save();
 
-                    $handle->file_new_name_body = $newName;
-                    $handle->image_resize = true;
-                    $handle->image_ratio_crop = true;
-                    $handle->image_y = 48;
-                    $handle->image_x = 48;
-                    $handle->image_watermark = false;
-                    $handle->image_convert = 'png';
-                    $handle->file_overwrite = true;
-
-                    $handle->process(HOME . '/uploads/avatars/');
-                    $avatar = $handle->file_dst_name;
-
-                    if ($handle->processed) {
-
-                        $this->user->picture = $picture;
-                        $this->user->avatar = $avatar;
-                        $this->user->save();
-                    }
-
-                    setFlash('success', 'Фотография успешно загружена!');
-                    redirect('/profile');
-                } else {
-                    $validator->addError(['photo' => $handle->error]);
-                }
+                setFlash('success', 'Фотография успешно загружена!');
+                redirect('/profile');
             }
 
             setInput(Request::all());

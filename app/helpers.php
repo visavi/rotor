@@ -1565,26 +1565,26 @@ function uploadImage($file, $weight, $size, $newName = false)
         $handle -> image_x = setting('screensize');
         $handle -> file_overwrite = true;
 
-        if ($handle->file_src_name_ext === 'png' ||
+       /* if ($handle->file_src_name_ext === 'png' ||
             $handle->file_src_name_ext === 'bmp') {
             $handle->image_convert = 'jpg';
-        }
+        }*/
 
-        if ($newName) {
+        /*if ($newName) {
             $handle -> file_new_name_body = $newName;
-        }
+        }*/
 
-        if (setting('copyfoto')) {
+        /*if (setting('copyfoto')) {
             $handle -> image_watermark = HOME.'/assets/img/images/watermark.png';
             $handle -> image_watermark_position = 'BR';
-        }
+        }*/
 
-        $handle->ext_check = ['jpg', 'jpeg', 'gif', 'png', 'bmp'];
+        /*$handle->ext_check = ['jpg', 'jpeg', 'gif', 'png', 'bmp'];
         $handle->file_max_size = $weight;  // byte
         $handle->image_max_width = $size;  // px
         $handle->image_max_height = $size; // px
         $handle->image_min_width = 100;    // px
-        $handle->image_min_height = 100;   // px
+        $handle->image_min_height = 100;   // px*/
 
         return $handle;
     }

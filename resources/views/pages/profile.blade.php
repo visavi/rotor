@@ -71,10 +71,10 @@
                             @if ($user->picture && file_exists(UPLOADS.'/photos/'.$user->picture))
                                 <a class="gallery" href="/uploads/photos/{{ getUser('picture') }}">
                                     {!! resizeImage('uploads/photos/', getUser('picture'), setting('previewsize'), ['alt' => $user->login, 'class' => 'img-fluid rounded']) !!}
-                                </a>
+                                </a><br>
                                 <a href="/pictures">Изменить</a> / <a href="/pictures/delete?token={{ $_SESSION['token'] }}">Удалить</a>
                             @else
-                                <img class="img-fluid rounded" src="/assets/img/images/photo.jpg" alt="Фото">
+                                <img class="img-fluid rounded" src="/assets/img/images/photo.jpg" alt="Фото"><br>
                                 <a href="/pictures">Загрузить фото</a>
                             @endif
                         </div>
