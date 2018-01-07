@@ -37,7 +37,7 @@ if (isAdmin()) {
                     echo '<input type="checkbox" name="del[]" value="'.$data['id'].'"> <a href="/admin/gallery?act=edit&amp;page='.$page['current'].'&amp;gid='.$data['id'].'">Редактировать</a>';
                     echo '</div>';
 
-                    echo '<div><a href="/gallery?act=view&amp;gid='.$data['id'].'&amp;page='.$page['current'].'">'.resizeImage('uploads/pictures/', $data['link'], setting('previewsize'), ['alt' => $data['title']]).'</a><br>';
+                    echo '<div><a href="/gallery?act=view&amp;gid='.$data['id'].'&amp;page='.$page['current'].'">'.resizeImage('uploads/pictures/', $data['link'], ['alt' => $data['title']]).'</a><br>';
 
                     if (!empty($data['text'])){
                         echo bbCode($data['text']).'<br>';

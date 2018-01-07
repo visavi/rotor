@@ -1,7 +1,6 @@
 <?php
 
 use App\Classes\BBCode;
-use App\Classes\FileUpload;
 use App\Classes\Registry;
 use App\Classes\Request;
 use App\Models\Antimat;
@@ -41,6 +40,8 @@ use App\Models\User;
 use App\Models\Vote;
 use App\Models\Wall;
 use Illuminate\Database\Capsule\Manager as DB;
+use Illuminate\Http\UploadedFile;
+use Intervention\Image\ImageManagerStatic as Image;
 use Jenssegers\Blade\Blade;
 
 /**
@@ -1328,9 +1329,9 @@ function recentPhotos($show = 5)
 
     $photos = json_decode(file_get_contents(STORAGE.'/temp/recentphotos.dat'));
 
-    if ($photos->isNotEmpty()) {
+    if ($photos) {
         foreach ($photos as $data) {
-            echo '<a href="/gallery/'.$data['id'].'">'.resizeImage('uploads/pictures/', $data->link, setting('previewsize'), ['alt' => $data->title, 'class' => 'rounded', 'style' => 'width: 100px; height: 100px;']).'</a>';
+            echo '<a href="/gallery/'.$data->id.'">'.resizeImage('uploads/pictures/', $data->link, ['alt' => $data->title, 'class' => 'rounded', 'style' => 'width: 100px; height: 100px;']).'</a>';
         }
 
         echo '<br>';
@@ -1524,72 +1525,29 @@ function formatNum($num)
 }
 
 /**
- * Конвертирует объект в массив
- *
- * @param Illuminate\Http\UploadedFile $file
- * @return array
- */
-function convertToFile(Illuminate\Http\UploadedFile $file)
-{
-    return [
-        'name'     => $file->getClientOriginalName(),
-        'type'     => $file->getMimeType(),
-        'tmp_name' => $file->getPathname(),
-        'error'    => $file->getError(),
-        'size'     => $file->getClientSize(),
-    ];
-}
-
-/**
  * Загружает изображение
  *
- * @param  string $file    путь изображения
- * @param  int    $weight  вес изображения
- * @param  int    $size    размер изображения
- * @param  bool   $newName новое имя изображения
- * @return FileUpload|bool результат загрузки
+ * @param  UploadedFile $file путь изображения
+ * @param  int          $path путь сохранения изображения
+ * @return string             имя загруженного файла
  */
-function uploadImage($file, $weight, $size, $newName = false)
+function uploadImage(UploadedFile $file, $path)
 {
-    if (is_object($file)) {
-        $file = convertToFile($file);
+    $picture = uniqid() . '.' . $file->getClientOriginalExtension();
+
+    $img = Image::make($file);
+    $img->resize(setting('screensize'), setting('screensize'), function ($constraint) {
+        $constraint->aspectRatio();
+        $constraint->upsize();
+    });
+
+    if (setting('copyfoto')) {
+        $img->insert(HOME . '/assets/img/images/watermark.png', 'bottom-right', 10, 10);
     }
 
-    $handle = new FileUpload($file);
+    $img->save($path . $picture);
 
-    if ($handle->uploaded) {
-        $handle -> image_resize = true;
-        $handle -> image_ratio = true;
-        $handle -> image_ratio_no_zoom_in = true;
-        $handle -> image_y = setting('screensize');
-        $handle -> image_x = setting('screensize');
-        $handle -> file_overwrite = true;
-
-       /* if ($handle->file_src_name_ext === 'png' ||
-            $handle->file_src_name_ext === 'bmp') {
-            $handle->image_convert = 'jpg';
-        }*/
-
-        /*if ($newName) {
-            $handle -> file_new_name_body = $newName;
-        }*/
-
-        /*if (setting('copyfoto')) {
-            $handle -> image_watermark = HOME.'/assets/img/images/watermark.png';
-            $handle -> image_watermark_position = 'BR';
-        }*/
-
-        /*$handle->ext_check = ['jpg', 'jpeg', 'gif', 'png', 'bmp'];
-        $handle->file_max_size = $weight;  // byte
-        $handle->image_max_width = $size;  // px
-        $handle->image_max_height = $size; // px
-        $handle->image_min_width = 100;    // px
-        $handle->image_min_height = 100;   // px*/
-
-        return $handle;
-    }
-
-    return false;
+    return $img->basename;
 }
 
 /**
@@ -1597,22 +1555,26 @@ function uploadImage($file, $weight, $size, $newName = false)
  *
  * @param  string $dir    путь изображения
  * @param  string $name   имя уменьшенного изображения
- * @param  int    $size   размер изображения
  * @param  array  $params параметры изображения
  * @return string         уменьшенное изображение
  */
-function resizeImage($dir, $name, $size, array $params = [])
+function resizeImage($dir, $name, array $params = [])
 {
     if (!empty($name) && file_exists(HOME.'/'.$dir.$name)){
 
-        $prename = str_replace('/', '_', $dir.$name);
-        $newname = substr($prename, 0, strrpos($prename, '.'));
-        $imgsize = getimagesize(HOME.'/'.$dir.$name);
+        $prepareName = str_replace('/', '_', $dir.$name);
+        list($width, $height) = getimagesize(HOME.'/'.$dir.$name);
 
-        if (empty($params['alt'])) $params['alt'] = $name;
+        if (empty($params['alt'])) {
+            $params['alt'] = $name;
+        }
 
-        if (! isset($params['class'])) {
+        if (empty($params['class'])) {
             $params['class'] = 'img-fluid';
+        }
+
+        if (empty($params['size'])) {
+            $params['size'] = setting('previewsize');
         }
 
         $strParams = [];
@@ -1622,25 +1584,22 @@ function resizeImage($dir, $name, $size, array $params = [])
 
         $strParams = implode(' ', $strParams);
 
-        if ($imgsize[0] <= $size && $imgsize[1] <= $size) {
+        if ($width <= $params['size'] && $height <= $params['size']) {
             return '<img src="/'.$dir.$name.'"'.$strParams.'>';
         }
 
-        if (!file_exists(UPLOADS.'/thumbnail/'.$prename) || filesize(UPLOADS.'/thumbnail/'.$prename) < 18) {
-            $handle = new upload(HOME.'/'.$dir.$name);
+        if (! file_exists(UPLOADS.'/thumbnail/'.$prepareName)) {
 
-            if ($handle -> uploaded) {
-                $handle -> file_new_name_body = $newname;
-                $handle -> image_resize = true;
-                $handle -> image_ratio = true;
-                $handle -> image_ratio_no_zoom_in = true;
-                $handle -> image_y = $size;
-                $handle -> image_x = $size;
-                $handle -> file_overwrite = true;
-                $handle -> process(UPLOADS.'/thumbnail/');
-            }
+            $img = Image::make(HOME.'/'.$dir.$name);
+            $img->resize($params['size'], $params['size'], function ($constraint) {
+                $constraint->aspectRatio();
+                $constraint->upsize();
+            });
+
+            $img->save(UPLOADS . '/thumbnail/' . $prepareName);
         }
-        return '<img src="/uploads/thumbnail/'.$prename.'"'.$strParams.'>';
+
+        return '<img src="/uploads/thumbnail/'.$prepareName.'"'.$strParams.'>';
     }
 
     return '<img src="/assets/img/images/photo.jpg" alt="nophoto">';

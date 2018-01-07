@@ -21,10 +21,10 @@
                 @endif
             </div>
             <div>
-                <a href="/gallery/{{ $data->id }}">{!! resizeImage('uploads/pictures/', $data->link, setting('previewsize'), ['alt' => $data->title]) !!}</a><br>
+                <a href="/gallery/{{ $data->id }}">{!! resizeImage('uploads/pictures/', $data->link, ['alt' => $data->title]) !!}</a><br>
 
                 @if ($data->text)
-                   {{ bbCode($data->text) }}<br>
+                   {!! bbCode($data->text) !!}<br>
                 @endif
 
                 Добавлено: {!! profile($data->user) !!} ({{ dateFixed($data->created_at) }})<br>

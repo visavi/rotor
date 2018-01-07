@@ -41,7 +41,7 @@ case 'index':
             echo '<a href="/admin/news?act=edit&amp;id='.$data['id'].'&amp;page='.$page['current'].'">Редактировать</a></div>';
 
             if (!empty($data['image'])) {
-                echo '<div class="img"><a href="/uploads/news/'.$data['image'].'">'.resizeImage('uploads/news/', $data['image'], 75, ['alt' => $data['title']]).'</a></div>';
+                echo '<div class="img"><a href="/uploads/news/'.$data['image'].'">'.resizeImage('uploads/news/', $data['image'], ['size' => 75, 'alt' => $data['title']]).'</a></div>';
             }
 
             if (!empty($data['top'])){
@@ -96,7 +96,7 @@ case 'edit':
 
         if (!empty($datanews['image']) && file_exists(UPLOADS.'/news/'.$datanews['image'])){
 
-            echo '<a href="/uploads/news/'.$datanews['image'].'">'.resizeImage('uploads/news/', $datanews['image'], 75, ['alt' => $datanews['title']]).'</a><br>';
+            echo '<a href="/uploads/news/'.$datanews['image'].'">'.resizeImage('uploads/news/', $datanews['image'], ['size' => 75, 'alt' => $datanews['title']]).'</a><br>';
             echo '<b>'.$datanews['image'].'</b> ('.formatFileSize(UPLOADS.'/news/'.$datanews['image']).')<br><br>';
         }
 

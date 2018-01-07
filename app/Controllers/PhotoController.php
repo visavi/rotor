@@ -67,6 +67,7 @@ class PhotoController extends BaseController
             $token  = check(Request::input('token'));
             $title  = check(Request::input('title'));
             $text   = check(Request::input('text'));
+            $photo  = Request::file('photo');
             $closed = Request::has('closed') ? 1 : 0;
 
             $validator = new Validator();
@@ -75,40 +76,32 @@ class PhotoController extends BaseController
                 ->length($text, 0, 1000, ['text' => 'Слишком длинное описание!'])
                 ->true(Flood::isFlood(), ['text' => 'Антифлуд! Разрешается отправлять сообщения раз в ' . Flood::getPeriod() . ' секунд!']);
 
-            $handle = uploadImage(
-                $_FILES['photo'],
-                setting('filesize'),
-                setting('fileupfoto'),
-                uniqid()
-            );
-
-            if (! $handle) {
-                $validator->addError(['photo' => 'Не удалось загрузить фотографию!']);
-            }
+            $rules = [
+                'maxsize'   => setting('filesize'),
+                'maxweight' => setting('fileupfoto'),
+                'minweight' => 100,
+            ];
+            $validator->image($photo, $rules, ['photo' => 'Не удалось загрузить фотографию!']);
 
             if ($validator->isValid()) {
 
-                $handle->process(HOME . '/uploads/pictures/');
-                if ($handle->processed) {
+                $link = uploadImage($photo, UPLOADS.'/pictures/');
 
-                    $photo = Photo::query()->create([
-                        'user_id'    => getUser('id'),
-                        'title'      => $title,
-                        'text'       => antimat($text),
-                        'link'       => $handle->file_dst_name,
-                        'created_at' => SITETIME,
-                        'closed'     => $closed,
-                    ]);
+                $photo = Photo::query()->create([
+                    'user_id'    => getUser('id'),
+                    'title'      => $title,
+                    'text'       => antimat($text),
+                    'link'       => $link,
+                    'created_at' => SITETIME,
+                    'closed'     => $closed,
+                ]);
 
-                    setFlash('success', 'Фотография успешно загружена!');
-                    redirect('/gallery/' . $photo->id);
-                } else {
-                    $validator->addError(['photo' => $handle->error]);
-                }
+                setFlash('success', 'Фотография успешно загружена!');
+                redirect('/gallery/' . $photo->id);
+            } else {
+                setInput(Request::all());
+                setFlash('danger', $validator->getErrors());
             }
-
-            setInput(Request::all());
-            setFlash('danger', $validator->getErrors());
         }
 
         return view('gallery/create');

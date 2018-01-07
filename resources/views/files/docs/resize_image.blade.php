@@ -25,7 +25,7 @@
 
 <?php
 echo bbCode(check('[code]<?php
-echo resizeImage(\'/uploads/pictures/\', $data[\'link\'], $config[\'previewsize\'], [\'alt\' = $data[\'title\']]);
+echo resizeImage(\'/uploads/pictures/\', $data[\'link\'], [\'alt\' = $data[\'title\']]);
  /* Функция вернет уменьшенную картинку <img src="/uploads/thumbnail/upload_pictures_1350.jpg" alt="Название"/> */
 ?>[/code]'));
 ?>

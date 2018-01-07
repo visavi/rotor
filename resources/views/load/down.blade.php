@@ -35,14 +35,14 @@
     @endif
 
     @if (in_array($ext, ['jpg', 'jpeg', 'gif', 'png'])) {
-        <a href="/uploads/files/{{ $down->folder }}{{ $down->link }}" class="gallery">{{ resizeImage('uploads/files/'.$down->folder, $down->link, setting('previewsize'), ['alt' => $down->title]) }}</a><br>
+        <a href="/uploads/files/{{ $down->folder }}{{ $down->link }}" class="gallery">{{ resizeImage('uploads/files/'.$down->folder, $down->link, ['alt' => $down->title]) }}</a><br>
     @endif
 
     <div class="message">{!! bbCode($down->text) !!}</div><br>
 
     @if ($down->files->isNotEmpty())
         @foreach ($down->files as $screen)
-            <a href="/uploads/screen/{{ $down->folder }}{{ $screen->hash }}" class="gallery">{!! resizeImage('uploads/screen/'.$down->folder, $screen->hash, setting('previewsize'), ['alt' => $down->title]) !!}</a>
+            <a href="/uploads/screen/{{ $down->folder }}{{ $screen->hash }}" class="gallery">{!! resizeImage('uploads/screen/'.$down->folder, $screen->hash, ['alt' => $down->title]) !!}</a>
         @endforeach
     @endif
     <br>
@@ -53,7 +53,7 @@
 
         @if ($ext != 'mp4')
             Скриншот:<br>
-            <a href="/uploads/screen/{{ $down->folder }}{{ $down->screen }}" class="gallery">{{ resizeImage('uploads/screen/'.$down->folder, $down->screen, setting('previewsize'), ['alt' => $down->title]) }}</a><br><br>
+            <a href="/uploads/screen/{{ $down->folder }}{{ $down->screen }}" class="gallery">{{ resizeImage('uploads/screen/'.$down->folder, $down->screen, ['alt' => $down->title]) }}</a><br><br>
         @endif
     @endif
 

@@ -32,7 +32,7 @@
                 <b><a href="/gallery/{{ $data->id }}">{{ $data->title }}</a></b> ({{ formatFileSize(UPLOADS.'/pictures/'.$data->link) }}) ({!! formatNum($data->rating) !!})
             </div>
 
-            <div><a href="/gallery/{{ $data->id }}">{!! resizeImage('uploads/pictures/', $data->link, setting('previewsize'), ['alt' => $data->title]) !!}</a>
+            <div><a href="/gallery/{{ $data->id }}">{!! resizeImage('uploads/pictures/', $data->link, ['alt' => $data->title]) !!}</a>
 
                 <br>{!! bbCode($data->text) !!}<br>
 

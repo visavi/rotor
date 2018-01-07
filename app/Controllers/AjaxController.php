@@ -265,7 +265,7 @@ class AjaxController extends BaseController
     /**
      * Загрузка фотографии
      */
-    public function uploadImage()
+/*    public function uploadImage()
     {
         $image = Request::file('image');
 
@@ -273,5 +273,5 @@ class AjaxController extends BaseController
 
         exit(json_encode(['status' => 'success']));
 
-    }
+    }*/
 }

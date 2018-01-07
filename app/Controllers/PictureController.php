@@ -54,28 +54,16 @@ class PictureController extends BaseController
                     $this->user->save();
                 }
 
-                $name    = uniqid();
-                $picture = $name . '.' . $photo->getClientOriginalExtension();
-                $avatar  = $name . '.png';
-
-                $img = Image::make($photo);
-                $img->backup();
-
-                $img->resize(setting('screensize'), setting('screensize'), function ($constraint) {
-                    $constraint->aspectRatio();
-                    $constraint->upsize();
-                });
-
-                $img->insert(HOME.'/assets/img/images/watermark.png', 'bottom-right', 10, 10);
-                $img->save(UPLOADS.'/photos/' . $picture);
+                $picture = uploadImage($photo, UPLOADS.'/photos/');
+                $avatar  = uniqid() . '.png';
 
                 //-------- Генерируем аватар ----------//
-                $img->reset();
+                $img = Image::make($photo);
                 $img->resize(48, null, function ($constraint) {
                     $constraint->aspectRatio();
                 });
                 $img->crop(48, 48);
-                $img->save(UPLOADS.'/avatars/' . $avatar);
+                $img->save(UPLOADS . '/avatars/' . $avatar);
 
                 $this->user->picture = $picture;
                 $this->user->avatar = $avatar;

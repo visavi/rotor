@@ -812,7 +812,7 @@ case 'editdown':
                     echo '<input value="Загрузить" type="submit"></form></div><br>';
                 } else {
                     echo '<i class="fa fa-image"></i> <b><a href="/uploads/screen/'.$folder.$new['screen'].'">'.$new['screen'].'</a></b> ('.formatFileSize(UPLOADS.'/screen/'.$folder.$new['screen']).') (<a href="/admin/load?act=delscreen&amp;id='.$id.'" onclick="return confirm(\'Вы действительно хотите удалить данный скриншот?\')">Удалить</a>)<br><br>';
-                    echo resizeImage('uploads/screen/'.$folder, $new['screen'], setting('previewsize')).'<br>';
+                    echo resizeImage('uploads/screen/'.$folder, $new['screen']).'<br>';
                 }
             }
         }

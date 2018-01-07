@@ -21,7 +21,7 @@
         <div class="form">
             <b><span style="color:#ff0000">Внимание, пользователь забанен!</span></b><br>
             До окончания бана осталось {{ formatTime($user['timeban'] - SITETIME) }}<br>
-            Причина: {{ bbCode($user['reasonban']) }}
+            Причина: {!! bbCode($user['reasonban']) !!}
         </div>
     @endif
 
@@ -94,9 +94,9 @@
             </div>
 
             <div class="col-md-6">
-                @if (!empty($user['picture']) && file_exists(UPLOADS.'/photos/'.$user['picture']))
-                    <a class="gallery" href="/uploads/photos/{{ $user['picture'] }}">
-                        {!! resizeImage('uploads/photos/', $user['picture'], setting('previewsize'), ['alt' => $user['login'], 'class' => 'float-right img-fluid rounded']) !!}</a>
+                @if (!empty($user->picture) && file_exists(UPLOADS.'/photos/'.$user->picture))
+                    <a class="gallery" href="/uploads/photos/{{ $user->picture }}">
+                        {!! resizeImage('uploads/photos/', $user->picture, ['alt' => $user->login, 'class' => 'float-right img-fluid rounded']) !!}</a>
                 @else
                     <img src="/assets/img/images/photo.jpg" alt="Фото" class="float-right img-fluid rounded">
                 @endif
