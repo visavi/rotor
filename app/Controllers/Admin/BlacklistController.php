@@ -4,7 +4,6 @@ namespace App\Controllers\Admin;
 
 use App\Classes\Request;
 use App\Classes\Validator;
-use App\Models\Ban;
 use App\Models\BlackList;
 use App\Models\User;
 

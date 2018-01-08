@@ -271,11 +271,12 @@ $routes = [
     ['GET|POST', '/admin/blacklist', 'Admin\BlacklistController@index'],
     ['POST',     '/admin/blacklist/delete', 'Admin\BlacklistController@delete'],
 
+    ['GET',      '/admin/news', 'Admin\NewsController@index'],
+
     ['GET|POST', '/admin/book', 'admin/book.php'],
     ['GET|POST', '/admin/blog', 'admin/blog.php'],
     ['GET|POST', '/admin/chat', 'admin/chat.php'],
     ['GET|POST', '/admin/forum', 'admin/forum.php'],
-    ['GET|POST', '/admin/news', 'admin/news.php'],
     ['GET|POST', '/admin/gallery', 'admin/gallery.php'],
     ['GET|POST', '/admin/load', 'admin/load.php'],
     ['GET|POST', '/admin/newload', 'admin/newload.php'],

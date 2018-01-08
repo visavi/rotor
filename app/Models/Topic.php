@@ -40,12 +40,14 @@ class Topic extends BaseModel
      */
     public function getIcon()
     {
-        if ($this->closed)
+        if ($this->closed) {
             $icon = 'fa-lock';
-        elseif ($this->locked)
+        } elseif ($this->locked) {
             $icon = 'fa-thumbtack';
-        else
+        } else {
             $icon = 'fa-folder-open';
+        }
+
         return $icon;
     }
 

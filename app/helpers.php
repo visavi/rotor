@@ -1560,7 +1560,7 @@ function uploadImage(UploadedFile $file, $path)
  */
 function resizeImage($dir, $name, array $params = [])
 {
-    if (!empty($name) && file_exists(HOME.'/'.$dir.$name)){
+    if (! empty($name) && file_exists(HOME.'/'.$dir.$name)) {
 
         $prepareName = str_replace('/', '_', $dir.$name);
         list($width, $height) = getimagesize(HOME.'/'.$dir.$name);
@@ -1591,8 +1591,8 @@ function resizeImage($dir, $name, array $params = [])
         if (! file_exists(UPLOADS.'/thumbnail/'.$prepareName)) {
 
             $img = Image::make(HOME.'/'.$dir.$name);
-            $img->resize($params['size'], $params['size'], function ($constraint) {
-                $constraint->aspectRatio();
+
+            $img->fit($params['size'], $params['size'], function ($constraint) {
                 $constraint->upsize();
             });
 

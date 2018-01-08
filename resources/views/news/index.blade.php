@@ -15,7 +15,7 @@
     @if ($news->isNotEmpty())
         @foreach ($news as $data)
             <div class="b">
-                {!! $data->closed == 0 ? '<i class="fa fa-plus-square"></i> ' : '<i class="fa fa-minus-square"></i>' !!}
+                <i class="fa fa-file-alt fa-lg text-muted"></i>
                 <b><a href="/news/{{ $data->id }}">{{ $data->title }}</a></b><small> ({{ dateFixed($data->created_at) }})</small>
             </div>
 
@@ -25,14 +25,8 @@
                 </div>
             @endif
 
-            @if (stristr($data->text, '[cut]'))
-                @php
-                 $data->text = current(explode('[cut]', $data->text)).' <a href="/news/'.$data->id.'">Читать далее &raquo;</a>';
-                @endphp
-            @endif
-
-            <div>{!! bbCode($data->text) !!}</div>
-            <div style="clear:both;">
+            <div>{!! bbCode($data->shortText()) !!}</div>
+            <div>
                 Добавлено: {!! profile($data->user) !!}<br>
                 <a href="/news/{{ $data->id }}/comments">Комментарии</a> ({{ $data->comments }})
                 <a href="/news/{{ $data->id }}/end">&raquo;</a>
