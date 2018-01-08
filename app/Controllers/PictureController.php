@@ -59,10 +59,7 @@ class PictureController extends BaseController
 
                 //-------- Генерируем аватар ----------//
                 $img = Image::make($photo);
-                $img->resize(48, null, function ($constraint) {
-                    $constraint->aspectRatio();
-                });
-                $img->crop(48, 48);
+                $img->fit(48);
                 $img->save(UPLOADS . '/avatars/' . $avatar);
 
                 $this->user->picture = $picture;

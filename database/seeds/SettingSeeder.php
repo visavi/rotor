@@ -50,7 +50,7 @@ class SettingSeeder extends AbstractSeed
             ['name'  => 'editstatuspoint', 'value' => 1000],
             ['name'  => 'errorlog', 'value' => 1],
             ['name'  => 'filesize', 'value' => 5242880],
-            ['name'  => 'fileupfoto', 'value' => 3000],
+            ['name'  => 'fileupfoto', 'value' => 5000],
             ['name'  => 'fileupload', 'value' => 33554432],
             ['name'  => 'floodstime', 'value' => 30],
             ['name'  => 'forumextload', 'value' => 'zip,rar,txt,jpg,jpeg,gif,png,mp3,mp4,3gp,wav,pdf'],
