@@ -1990,21 +1990,24 @@ function getExtension($filename)
 /**
  * Возвращает размер файла
  *
- * @param  string  $filename путь к файлу
- * @param  integer $decimals кол. чисел после запятой
- * @return string            форматированный вывод размера
+ * @param  string  $filename  путь к файлу
+ * @param  integer $precision кол. чисел после запятой
+ * @return string             форматированный вывод размера
  */
-function sizeFormat($filename, $decimals = 1)
+function sizeFormat($filename, $precision = 1)
 {
     if (! file_exists($filename)) {
         return 0;
     }
 
-    $bytes  = filesize($filename);
-    $size   = ['B','kB','MB','GB','TB'];
-    $factor = floor((strlen($bytes) - 1) / 3);
-    $unit   = $size[$factor] ?? '';
-    return sprintf("%.{$decimals}f", $bytes / (1024 ** $factor)).$unit;
+    $bytes = filesize($filename);
+    $units = ['B','kB','MB','GB','TB'];
+    $pow   = floor(($bytes ? log($bytes) : 0) / log(1024));
+    $pow   = min($pow, count($units) - 1);
+
+    $bytes /= (1 << (10 * $pow));
+
+    return round($bytes, $precision) . $units[$pow];
 }
 
 /**

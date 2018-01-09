@@ -16,7 +16,7 @@
 
             <div class="form-group{{ hasError('site') }}">
                 <label for="site">Адрес сайта</label>
-                <input name="site" class="form-control" id="site" maxlength="50" placeholder="Адрес сайта" value="{{ getInput('site') }}" required>
+                <input name="site" class="form-control" id="site" maxlength="100" placeholder="Адрес сайта" value="{{ getInput('site') }}" required>
                 {!! textError('site') !!}
             </div>
 
