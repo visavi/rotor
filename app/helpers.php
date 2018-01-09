@@ -284,22 +284,19 @@ function intar($numbers)
 /**
  * Возвращает размер в человекочитаемом формате
  *
- * @param  string $fileSize размер в байтах
- * @return string           размер в читаемом формате
+ * @param  string  $bytes     размер в байтах
+ * @param  integer $precision кол. символов после запятой
+ * @return string             форматированный вывод размера
  */
-function formatSize($fileSize)
+function formatSize($bytes, $precision = 2)
 {
-    if ($fileSize >= 1048576000) {
-        $fileSize = round($fileSize / 1073741824, 2).' Gb';
-    } elseif ($fileSize >= 1024000) {
-        $fileSize = round($fileSize / 1048576, 2).' Mb';
-    } elseif ($fileSize >= 1000) {
-        $fileSize = round($fileSize / 1024, 2).' Kb';
-    } else {
-        $fileSize = round($fileSize).' byte';
-    }
+    $units = ['byte','Kb','Mb','Gb','Tb'];
+    $pow   = floor(($bytes ? log($bytes) : 0) / log(1000));
+    $pow   = min($pow, count($units) - 1);
 
-    return $fileSize;
+    $bytes /= (1 << (10 * $pow));
+
+    return round($bytes, $precision) . $units[$pow];
 }
 
 /**
@@ -318,25 +315,32 @@ function formatFileSize($file)
 }
 
 /**
- * Возвращает секунды в человекочитаемом формате
+ * Возвращает время в человекочитаемом формате
  *
- * @param  string $fileTime кол. секунд timestamp
- * @param  int    $round    кол. символов после запятой
- * @return string           время в читаемом формате
+ * @param  string $time  кол. секунд timestamp
+ * @return string        время в читаемом формате
  */
-function formatTime($fileTime, $round = 1)
+function formatTime($time)
 {
-    if ($fileTime >= 86400) {
-        $fileTime = round((($fileTime / 60) / 60) / 24, $round).' дн.';
-    } elseif ($fileTime >= 3600) {
-        $fileTime = round(($fileTime / 60) / 60, $round).' час.';
-    } elseif ($fileTime >= 60) {
-        $fileTime = round($fileTime / 60).' мин.';
-    } else {
-        $fileTime = round($fileTime).' сек.';
+    $units = [
+        'год,года,лет'           => 365 * 24 * 60 * 60,
+        'месяц,месяца,месяцев'   => 30 * 24 * 60 * 60,
+        'неделя,недели,недель'   => 7 * 24 * 60 * 60,
+        'день,дня,дней'          => 24 * 60 * 60,
+        'час,часа,часов'         => 60 * 60,
+        'минута,минуты,минут'    => 60,
+        'секунда,секунды,секунд' => 1,
+    ];
+
+    foreach ($units as $unit => $seconds) {
+        $format = $time / $seconds;
+
+        if ($format >= 1) {
+            return plural(round($format), $unit);
+        }
     }
 
-    return $fileTime;
+    return 0;
 }
 
 /**
@@ -1985,29 +1989,6 @@ function sendMail($to, $subject, $body, array $params = [])
 function getExtension($filename)
 {
     return pathinfo($filename, PATHINFO_EXTENSION);
-}
-
-/**
- * Возвращает размер файла
- *
- * @param  string  $filename  путь к файлу
- * @param  integer $precision кол. чисел после запятой
- * @return string             форматированный вывод размера
- */
-function sizeFormat($filename, $precision = 1)
-{
-    if (! file_exists($filename)) {
-        return 0;
-    }
-
-    $bytes = filesize($filename);
-    $units = ['B','kB','MB','GB','TB'];
-    $pow   = floor(($bytes ? log($bytes) : 0) / log(1024));
-    $pow   = min($pow, count($units) - 1);
-
-    $bytes /= (1 << (10 * $pow));
-
-    return round($bytes, $precision) . $units[$pow];
 }
 
 /**
