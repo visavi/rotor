@@ -133,7 +133,12 @@ class TopicController extends BaseController
 
             $msg = antimat($msg);
 
-            if (getUser('id') == $post->user_id && $post->created_at + 600 > SITETIME && (utfStrlen($msg) + utfStrlen($post->text) <= setting('forumtextlength'))) {
+            if (
+                $post &&
+                getUser('id') == $post->user_id &&
+                $post->created_at + 600 > SITETIME &&
+                (utfStrlen($msg) + utfStrlen($post->text) <= setting('forumtextlength'))
+            ) {
 
                 $newpost = $post->text . "\n\n" . '[i][size=1]Добавлено через ' . makeTime(SITETIME - $post->created_at) . ' сек.[/size][/i]' . "\n" . $msg;
 
