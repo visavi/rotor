@@ -4,11 +4,9 @@ namespace App\Controllers\Admin;
 
 use App\Classes\Request;
 use App\Classes\Validator;
-use App\Models\Comment;
 use App\Models\News;
 use App\Models\Setting;
 use App\Models\User;
-use Illuminate\Database\Capsule\Manager as DB;
 class NewsController extends AdminController
 {
     /**
