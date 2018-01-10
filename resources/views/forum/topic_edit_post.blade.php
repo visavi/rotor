@@ -10,7 +10,7 @@
     <i class="fa fa-pencil-alt"></i> <b>{{ $post->user->login }}</b> <small>({{ dateFixed($post->created_at) }})</small><br><br>
 
     <div class="form">
-        <form action="/topic/{{ $post->topic_id }}/{{ $post->id }}/edit?page={{ $page }}" method="post">
+        <form action="/topic/edit/{{ $post->topic_id }}/{{ $post->id }}?page={{ $page }}" method="post">
             <input type="hidden" name="token" value="{{ $_SESSION['token'] }}">
 
             <div class="form-group{{ hasError('msg') }}">

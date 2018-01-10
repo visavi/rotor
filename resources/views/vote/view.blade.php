@@ -40,7 +40,7 @@
         @if (! empty($show))
             <i class="fa fa-chart-bar"></i> <a href="/votes/{{ $vote->id }}">К вариантам</a><br>
         @endif
-        <i class="fa fa-users"></i> <a href="/votes/{{ $vote->id }}/voters">Проголосовавшие</a><br>
+        <i class="fa fa-users"></i> <a href="/votes/voters/{{ $vote->id }}">Проголосовавшие</a><br>
     @endif
 
     <i class="fa fa-arrow-circle-up"></i> <a href="/votes">К голосованиям</a><br>

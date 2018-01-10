@@ -16,8 +16,8 @@
             </div>
 
             <div>Автор: {!! profile($data->user) !!} ({{ dateFixed($data->time) }})<br>
-                <i class="fa fa-comment"></i> <a href="/article/{{ $data->id }}/comments">Комментарии</a> ({{ $data->comments }})
-                <a href="/article/{{ $data->id }}/end">&raquo;</a>
+                <i class="fa fa-comment"></i> <a href="/article/comments/{{ $data->id }}">Комментарии</a> ({{ $data->comments }})
+                <a href="/article/end/{{ $data->id }}">&raquo;</a>
             </div>
         @endforeach
 

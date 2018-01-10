@@ -7,7 +7,7 @@
 @section('content')
     <h1><a href="/article/{{ $blog->id }}">{{ $blog->title }}</a> - Комментарии</h1>
 
-    <a href="/article/{{ $blog->id }}/rss">RSS-лента</a><hr>
+    <a href="/article/rss/{{ $blog->id }}">RSS-лента</a><hr>
 
     @if ($comments->isNotEmpty())
         @foreach ($comments as $data)
@@ -25,7 +25,7 @@
                         @endif
 
                         @if (getUser('id') == $data->user->id && $data->created_at + 600 > SITETIME)
-                            <a href="/article/{{ $blog->id }}/{{ $data->id }}/edit?page={{ $page['current'] }}"><i class="fa fa-pencil-alt text-muted"></i></a>
+                            <a href="/article/edit/{{ $blog->id }}/{{ $data->id }}?page={{ $page['current'] }}"><i class="fa fa-pencil-alt text-muted"></i></a>
                         @endif
 
                         @if (isAdmin())
@@ -53,7 +53,7 @@
 
     @if (getUser())
         <div class="form">
-            <form action="/article/{{ $blog->id }}/comments" method="post">
+            <form action="/article/comments/{{ $blog->id }}" method="post">
                 <input type="hidden" name="token" value="{{ $_SESSION['token'] }}">
 
                 <div class="form-group{{ hasError('msg') }}">

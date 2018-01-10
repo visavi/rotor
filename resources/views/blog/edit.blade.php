@@ -13,7 +13,7 @@
     <a href="/blog/blogs">Все статьи</a><hr>
 
     <div class="form next">
-        <form action="/article/{{ $blog->id }}/edit" method="post">
+        <form action="/article/edit/{{ $blog->id }}" method="post">
             <input type="hidden" name="token" value="{{ $_SESSION['token'] }}">
 
             <div class="form-group{{ hasError('cid') }}">

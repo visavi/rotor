@@ -9,7 +9,7 @@
     <h1>Редактирование записи</h1>
 
     <div class="form">
-        <form action="/offers/{{ $offer->id }}/edit" method="post">
+        <form action="/offers/edit/{{ $offer->id }}" method="post">
             <input type="hidden" name="token" value="{{ $_SESSION['token'] }}">
             Тип:<br>
             <select name="type">

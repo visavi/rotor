@@ -21,7 +21,7 @@
                 {!! icons($ext) !!}
 
                 @if (in_array($ext, $viewExt))
-                    <a href="/down/{{ $down->id }}/{{ $key }}/zip">{{ $file->getName() }}</a>
+                    <a href="/down/zip/{{ $down->id }}/{{ $key }}">{{ $file->getName() }}</a>
                 @else
                     {{ $file->getName() }}
                 @endif

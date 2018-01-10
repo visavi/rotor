@@ -16,8 +16,8 @@
                 <b><a href="/gallery/{{ $data->id }}">{{ $data->title }}</a></b> ({{ formatFileSize(UPLOADS.'/pictures/'.$data->link) }})<br>
 
                 @if ($moder)
-                    <a href="/gallery/{{ $data->id }}/edit?page={{ $page['current'] }}">Редактировать</a> /
-                    <a href="/gallery/{{ $data->id }}/delete?page={{ $page['current'] }}&amp;token={{ $_SESSION['token'] }}" onclick="return confirm('Вы подтверждаете удаление изображения?')">Удалить</a>
+                    <a href="/gallery/edit/{{ $data->id }}?page={{ $page['current'] }}">Редактировать</a> /
+                    <a href="/gallery/delete/{{ $data->id }}?page={{ $page['current'] }}&amp;token={{ $_SESSION['token'] }}" onclick="return confirm('Вы подтверждаете удаление изображения?')">Удалить</a>
                 @endif
             </div>
             <div>
@@ -28,7 +28,7 @@
                 @endif
 
                 Добавлено: {!! profile($data->user) !!} ({{ dateFixed($data->created_at) }})<br>
-                <a href="/gallery/{{ $data->id }}/comments">Комментарии</a> ({{ $data->comments }})
+                <a href="/gallery/comments/{{ $data->id }}">Комментарии</a> ({{ $data->comments }})
             </div>
         @endforeach
 

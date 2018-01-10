@@ -62,7 +62,7 @@ class AjaxController extends BaseController
                     ->where('relate_type', $type)
                     ->where('id', $id)
                     ->first();
-                $path = '/news/'.$data->relate_id.'/comments?page='.$page;
+                $path = '/news/comments/' . $data->relate_id . '?page='.$page;
                 break;
 
             case Blog::class:
@@ -70,7 +70,7 @@ class AjaxController extends BaseController
                     ->where('relate_type', $type)
                     ->where('id', $id)
                     ->first();
-                $path = '/blog?page='.$page;
+                $path = '/blog?page=' . $page;
                 break;
 
             case Photo::class:
@@ -78,7 +78,7 @@ class AjaxController extends BaseController
                     ->where('relate_type', $type)
                     ->where('id', $id)
                     ->first();
-                $path = '/gallery/'.$data->relate_id.'/comments?page='.$page;
+                $path = '/gallery/comments/' . $data->relate_id . '?page='.$page;
                 break;
 
             case Offer::class:
@@ -86,7 +86,7 @@ class AjaxController extends BaseController
                     ->where('relate_type', $type)
                     ->where('id', $id)
                     ->first();
-                $path = '/offers/'.$data->relate_id.'/comments?page='.$page;
+                $path = '/offers/comments/' . $data->relate_id . '?page='.$page;
                 break;
 
             case Guest::class:
@@ -96,7 +96,7 @@ class AjaxController extends BaseController
 
             case Post::class:
                 $data = $type::query()->find($id);
-                $path = '/topic/'.$data->topic_id.'?page='.$page;
+                $path = '/topic/' . $data->topic_id . '?page='.$page;
                 break;
 
             case Inbox::class:
@@ -105,7 +105,7 @@ class AjaxController extends BaseController
 
             case Wall::class:
                 $data = $type::query()->find($id);
-                $path = '/wall/'.$data->user->login.'?page='.$page;
+                $path = '/wall/' . $data->user->login . '?page='.$page;
                 break;
 
             case Down::class:
@@ -113,7 +113,7 @@ class AjaxController extends BaseController
                     ->where('relate_type', $type)
                     ->where('id', $id)
                     ->first();
-                $path = '/down/'.$data->relate_id.'?page='.$page;
+                $path = '/down/' . $data->relate_id . '?page='.$page;
                 break;
         endswitch;
 

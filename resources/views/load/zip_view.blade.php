@@ -15,7 +15,7 @@
         {!! showError('Данный файл пустой!') !!}
     @endif
 
-    <i class="fa fa-arrow-circle-left"></i> <a href="/down/{{ $down->id }}/zip">Вернуться</a><br>
+    <i class="fa fa-arrow-circle-left"></i> <a href="/down/zip/{{ $down->id }}">Вернуться</a><br>
     <i class="fa fa-arrow-circle-up"></i> <a href="/down/{{ $down->id }}">К файлу</a><br>
     <i class="fa fa-arrow-circle-up"></i> <a href="/load">Категории</a><br>
 @stop

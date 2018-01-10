@@ -38,7 +38,7 @@
 
             @if ($child->lastTopic)
                 <div>
-                    Тема: <a href="/topic/{{ $child->lastTopic->id }}/end">{{ $child->lastTopic->title }}</a><br>
+                    Тема: <a href="/topic/end/{{ $child->lastTopic->id }}">{{ $child->lastTopic->title }}</a><br>
                     @if ($child->lastTopic->lastPost)
                         Сообщение: {{ $child->lastTopic->lastPost->user->login }} ({{ dateFixed($child->lastTopic->lastPost->created_at) }})
                     @endif

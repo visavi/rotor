@@ -56,7 +56,7 @@ class BookmarkController extends BaseController
         $validator->equal($token, $_SESSION['token'], 'Неверный идентификатор сессии, повторите действие!');
 
         $topic = Topic::query()->find($tid);
-        $validator->true($topic, 'Ошибка! Данной темы не существует!');
+        $validator->true($topic, 'Данной темы не существует!');
 
         if ($validator->isValid()) {
 

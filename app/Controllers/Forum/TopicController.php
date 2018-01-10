@@ -21,14 +21,11 @@ class TopicController extends BaseController
     /**
      * Главная страница
      */
-    public function index($tid)
+    public function index($id)
     {
-        $total = Post::query()->where('topic_id', $tid)->count();
-        $page = paginate(setting('forumpost'), $total);
-
         $topic = Topic::query()
             ->select('topics.*', 'bookmarks.posts as bookmark_posts')
-            ->where('topics.id', $tid)
+            ->where('topics.id', $id)
             ->leftJoin('bookmarks', function ($join) {
                 $join->on('topics.id', '=', 'bookmarks.topic_id')
                     ->where('bookmarks.user_id', '=', getUser('id'));
@@ -36,9 +33,16 @@ class TopicController extends BaseController
             ->with('forum.parent')
             ->first();
 
+        if (! $topic) {
+            abort(404, 'Данной темы не существует!');
+        }
+
+        $total = Post::query()->where('topic_id', $topic->id)->count();
+        $page = paginate(setting('forumpost'), $total);
+
         $posts = Post::query()
             ->select('posts.*', 'pollings.vote')
-            ->where('topic_id', $tid)
+            ->where('topic_id', $topic->id)
             ->leftJoin('pollings', function ($join) {
                 $join->on('posts.id', '=', 'pollings.relate_id')
                     ->where('pollings.relate_type', Post::class)
@@ -50,14 +54,10 @@ class TopicController extends BaseController
             ->orderBy('created_at', 'asc')
             ->get();
 
-        if (!$topic) {
-            abort('default', 'Данной темы не существует!');
-        }
-
         if (getUser()) {
             if ($topic['posts'] > $topic['bookmark_posts']) {
                 Bookmark::query()
-                    ->where('topic_id', $tid)
+                    ->where('topic_id', $topic->id)
                     ->where('user_id', getUser('id'))
                     ->update(['posts' => $topic['posts']]);
             }
@@ -70,7 +70,7 @@ class TopicController extends BaseController
         }
 
         // Голосование
-        $vote = Vote::query()->where('topic_id', $tid)->first();
+        $vote = Vote::query()->where('topic_id', $topic->id)->first();
 
         if ($vote) {
             $vote['poll'] = VotePoll::query()
@@ -103,7 +103,7 @@ class TopicController extends BaseController
     /**
      * Создание сообщения
      */
-    public function create($tid)
+    public function create($id)
     {
         $msg   = check(Request::input('msg'));
         $token = check(Request::input('token'));
@@ -114,7 +114,7 @@ class TopicController extends BaseController
 
         $topic = Topic::query()
             ->select('topics.*', 'forums.parent_id')
-            ->where('topics.id', $tid)
+            ->where('topics.id', $id)
             ->leftJoin('forums', 'topics.forum_id', '=', 'forums.id')
             ->first();
 
@@ -272,25 +272,25 @@ class TopicController extends BaseController
             setFlash('danger', $validator->getErrors());
         }
 
-        redirect('/topic/' . $topic->id . '/end');
+        redirect('/topic/end/' . $topic->id);
     }
 
     /**
      * Удаление сообщений
      */
-    public function delete($tid)
+    public function delete($id)
     {
         $token = check(Request::input('token'));
         $del   = intar(Request::input('del'));
         $page  = int(Request::input('page'));
 
-        $topic = Topic::query()->find($tid);
+        $topic = Topic::query()->find($id);
 
-        if ( $topic) {
+        if (! $topic) {
             abort(404, 'Данной темы не существует!');
         }
 
-        $isModer = in_array(getUser('id'), explode(',', $topic->moderators), true) ? true : false;
+        $isModer = in_array(getUser('id'), explode(',', $topic->moderators)) ? true : false;
 
         $validator = new Validator();
         $validator->equal($token, $_SESSION['token'], 'Неверный идентификатор сессии, повторите действие!')
@@ -324,17 +324,17 @@ class TopicController extends BaseController
             setFlash('danger', $validator->getErrors());
         }
 
-        redirect('/topic/' . $tid . '?page=' . $page);
+        redirect('/topic/' . $topic->id . '?page=' . $page);
     }
 
     /**
      * Закрытие темы
      */
-    public function close($tid)
+    public function close($id)
     {
         $token = check(Request::input('token'));
 
-        $topic = Topic::query()->find($tid);
+        $topic = Topic::query()->find($id);
 
         $validator = new Validator();
         $validator->equal($token, $_SESSION['token'], 'Неверный идентификатор сессии, повторите действие!')
@@ -348,7 +348,7 @@ class TopicController extends BaseController
 
             $topic->update(['closed' => 1]);
 
-            $vote = Vote::query()->where('topic_id', $tid)->first();
+            $vote = Vote::query()->where('topic_id', $topic->id)->first();
             if ($vote) {
 
                 $vote->closed = 1;
@@ -362,13 +362,13 @@ class TopicController extends BaseController
             setFlash('danger', $validator->getErrors());
         }
 
-        redirect('/topic/' . $tid);
+        redirect('/topic/' . $topic->id);
     }
 
     /**
      * Редактирование темы
      */
-    public function edit($tid)
+    public function edit($id)
     {
         if (! getUser()) {
             abort(403, 'Авторизуйтесь для изменения темы!');
@@ -378,7 +378,7 @@ class TopicController extends BaseController
             abort('default', 'У вас недостаточно актива для изменения темы!');
         }
 
-        $topic = Topic::query()->find($tid);
+        $topic = Topic::query()->find($id);
 
         if (empty($topic)) {
             abort('default', 'Выбранная вами тема не существует, возможно она была удалена!');
@@ -392,7 +392,7 @@ class TopicController extends BaseController
             abort('default', ' Изменение невозможно, данная тема закрыта!');
         }
 
-        $post = Post::query()->where('topic_id', $tid)
+        $post = Post::query()->where('topic_id', $topic->id)
             ->orderBy('id')
             ->first();
 
@@ -427,7 +427,7 @@ class TopicController extends BaseController
                 }
 
                 setFlash('success', 'Тема успешно изменена!');
-                redirect('/topic/' . $tid);
+                redirect('/topic/' . $topic->id);
 
             } else {
                 setInput(Request::all());
@@ -441,7 +441,7 @@ class TopicController extends BaseController
     /**
      * Редактирование сообщения
      */
-    public function editPost($tid, $id)
+    public function editPost($id, $pid)
     {
         $page = int(Request::input('page'));
 
@@ -452,10 +452,10 @@ class TopicController extends BaseController
         $post = Post::query()
             ->select('posts.*', 'moderators', 'closed')
             ->leftJoin('topics', 'posts.topic_id', '=', 'topics.id')
-            ->where('posts.id', $id)
+            ->where('posts.id', $pid)
             ->first();
 
-        $isModer = in_array(getUser('id'), explode(',', $post->moderators, true)) ? true : false;
+        $isModer = in_array(getUser('id'), explode(',', $post->moderators)) ? true : false;
 
         if (! $post) {
             abort('default', 'Данного сообщения не существует!');
@@ -510,7 +510,7 @@ class TopicController extends BaseController
                 }
 
                 setFlash('success', 'Сообщение успешно отредактировано!');
-                redirect('/topic/' . $tid . '?page=' . $page);
+                redirect('/topic/' . $post->topic_id . '?page=' . $page);
             } else {
                 setInput(Request::all());
                 setFlash('danger', $validator->getErrors());
@@ -519,7 +519,7 @@ class TopicController extends BaseController
 
         $files = File::query()
             ->where('relate_type', Post::class)
-            ->where('relate_id', $id)
+            ->where('relate_id', $post->id)
             ->get();
 
         return view('forum/topic_edit_post', compact('post', 'files', 'page'));
@@ -529,13 +529,14 @@ class TopicController extends BaseController
     /**
      * Голосование
      */
-    public function vote($tid)
+    public function vote($id)
     {
         if (! getUser()) {
             abort(403, 'Авторизуйтесь для голосования!');
         }
 
-        $vote = Vote::query()->where('topic_id', $tid)->first();
+        $vote = Vote::query()->where('topic_id', $id)->first();
+
         if (! $vote) {
             abort(404, 'Голосование не найдено!');
         }
@@ -585,22 +586,22 @@ class TopicController extends BaseController
             setFlash('danger', $validator->getErrors());
         }
 
-        redirect('/topic/' . $tid . '?page=' . $page);
+        redirect('/topic/' . $vote->topic_id . '?page=' . $page);
     }
 
     /**
      * Печать темы
      */
-    public function print($tid)
+    public function print($id)
     {
-        $topic = Topic::query()->find($tid);
+        $topic = Topic::query()->find($id);
 
         if (! $topic) {
-            abort('default', 'Данной темы не существует!');
+            abort(404, 'Данной темы не существует!');
         }
 
         $posts = Post::query()
-            ->where('topic_id', $tid)
+            ->where('topic_id', $topic->id)
             ->with('user')
             ->orderBy('created_at')
             ->get();
@@ -611,11 +612,11 @@ class TopicController extends BaseController
     /**
      * Переход к сообщению
      */
-    public function viewpost($tid, $id)
+    public function viewpost($id, $pid)
     {
         $countTopics = Post::query()
-            ->where('id', '<=', $id)
-            ->where('topic_id', $tid)
+            ->where('id', '<=', $pid)
+            ->where('topic_id', $id)
             ->count();
 
         if (! $countTopics) {
@@ -623,21 +624,21 @@ class TopicController extends BaseController
         }
 
         $end = ceil($countTopics / setting('forumpost'));
-        redirect('/topic/' . $tid . '?page=' . $end . '#post_' . $id);
+        redirect('/topic/' . $id . '?page=' . $end . '#post_' . $pid);
     }
 
     /**
      * Переадресация к последнему сообщению
      */
-    public function end($tid)
+    public function end($id)
     {
-        $topic = Topic::query()->find($tid);
+        $topic = Topic::query()->find($id);
 
         if (! $topic) {
             abort(404, 'Выбранная вами тема не существует, возможно она была удалена!');
         }
 
         $end = ceil($topic['posts'] / setting('forumpost'));
-        redirect('/topic/' . $tid . '?page=' . $end);
+        redirect('/topic/' . $topic->id . '?page=' . $end);
     }
 }

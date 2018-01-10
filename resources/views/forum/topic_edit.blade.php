@@ -11,7 +11,7 @@
     <i class="fa fa-pencil-alt"></i> <b>{{ $post->user->login }}</b> <small>({{ dateFixed($post->time) }})</small><br><br>
 
     <div class="form">
-        <form action="/topic/{{ $topic->id }}/edit" method="post">
+        <form action="/topic/edit/{{ $topic->id }}" method="post">
             <input type="hidden" name="token" value="{{ $_SESSION['token'] }}">
 
 

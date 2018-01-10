@@ -10,7 +10,7 @@
     <i class="fa fa-pencil-alt"></i> <b>{{ $comment->user->login }}</b> <small>({{ dateFixed($comment->created_at) }})</small><br><br>
 
     <div class="form">
-        <form action="/offers/{{ $comment->relate_id }}/{{ $comment->id }}/edit?page={{ $page }}" method="post">
+        <form action="/offers/edit/{{ $comment->relate_id }}/{{ $comment->id }}?page={{ $page }}" method="post">
             <input type="hidden" name="token" value="{{ $_SESSION['token'] }}">
 
             <div class="form-group{{ hasError('msg') }}">
@@ -23,5 +23,5 @@
         </form>
     </div><br>
 
-    <i class="fa fa-arrow-circle-left"></i> <a href="/offers/{{ $comment->relate_id }}/comments?page={{ $page }}">Вернуться</a><br>
+    <i class="fa fa-arrow-circle-left"></i> <a href="/offers/comments/{{ $comment->relate_id }}?page={{ $page }}">Вернуться</a><br>
 @stop

@@ -1112,8 +1112,8 @@ function lastNews()
                 echo '<i class="far fa-circle fa-lg text-muted"></i> <a href="/news/'.$data->id.'">'.$data->title.'</a> ('.$data->comments.') <i class="fa fa-caret-down news-title"></i><br>';
 
                 echo '<div class="news-text" style="display: none;">'.bbCode($data->text).'<br>';
-                echo '<a href="/news/'.$data->id.'/comments">Комментарии</a> ';
-                echo '<a href="/news/'.$data->id.'/end">&raquo;</a></div>';
+                echo '<a href="/news/comments/'.$data->id.'">Комментарии</a> ';
+                echo '<a href="/news/end/'.$data->id.'">&raquo;</a></div>';
             }
         }
     }
@@ -1360,7 +1360,7 @@ function recentTopics($show = 5)
     if ($topics) {
         foreach ($topics as $topic) {
             echo '<i class="far fa-circle fa-lg text-muted"></i>  <a href="/topic/'.$topic->id.'">'.$topic->title.'</a> ('.$topic->posts.')';
-            echo '<a href="/topic/'.$topic->id.'/end">&raquo;</a><br>';
+            echo '<a href="/topic/end/' . $topic->id . '">&raquo;</a><br>';
         }
     }
 }

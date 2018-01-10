@@ -22,7 +22,7 @@
 
         @if (in_array($offer->status, ['wait', 'process']) && getUser('id') === $offer->user_id)
             <div class="float-right">
-                <a title="Редактировать" href="/offers/{{ $offer->id }}/edit"><i class="fa fa-pencil-alt text-muted"></i></a>
+                <a title="Редактировать" href="/offers/edit/{{ $offer->id }}"><i class="fa fa-pencil-alt text-muted"></i></a>
             </div>
         @endif
     </div>
@@ -72,8 +72,8 @@
         @endforeach
 
         <div class="act">
-            <b><a href="/offers/{{ $offer->id }}/comments">Все комментарии</a></b> ({{ $offer->comments }})
-            <a href="/offers/{{ $offer->id }}/end">&raquo;</a>
+            <b><a href="/offers/comments/{{ $offer->id }}">Все комментарии</a></b> ({{ $offer->comments }})
+            <a href="/offers/end/{{ $offer->id }}">&raquo;</a>
         </div><br>
 
     @else
@@ -83,7 +83,7 @@
     @if (getUser())
         @if (! $offer->closed)
             <div class="form">
-                <form action="/offers/{{ $offer->id }}/comments" method="post">
+                <form action="/offers/comments/{{ $offer->id }}" method="post">
                     <input type="hidden" name="token" value="{{ $_SESSION['token'] }}">
 
                     <div class="form-group{{ hasError('msg') }}">

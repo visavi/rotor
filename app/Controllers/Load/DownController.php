@@ -327,7 +327,7 @@ class DownController extends BaseController
                 $down->increment('comments');
 
                 setFlash('success', 'Комментарий успешно добавлен!');
-                redirect('/down/' . $down->id . '/end');
+                redirect('/down/end/' . $down->id);
             } else {
                 setInput(Request::all());
                 setFlash('danger', $validator->getErrors());
@@ -395,7 +395,7 @@ class DownController extends BaseController
                 ]);
 
                 setFlash('success', 'Комментарий успешно отредактирован!');
-                redirect('/down/' . $id . '/comments?page=' . $page);
+                redirect('/down/comments/' . $id . '?page=' . $page);
             } else {
                 setInput(Request::all());
                 setFlash('danger', $validator->getErrors());
@@ -422,7 +422,7 @@ class DownController extends BaseController
             ->count();
 
         $end = ceil($total / setting('downcomm'));
-        redirect('/down/' . $down->id . '/comments?page=' . $end);
+        redirect('/down/comments/' . $down->id . '?page=' . $end);
     }
 
     /**

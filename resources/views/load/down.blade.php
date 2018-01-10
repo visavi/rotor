@@ -24,7 +24,7 @@
 
         <li class="breadcrumb-item"><a href="/load/{{ $down->category_id }}">{{ $down->category->name }}</a></li>
         <li class="breadcrumb-item active">{{ $down->title }}</li>
-        <li class="breadcrumb-item"><a href="/down/{{ $down->id }}/rss">RSS-лента</a></li>
+        <li class="breadcrumb-item"><a href="/down/rss/{{ $down->id }}">RSS-лента</a></li>
     </ol>
 
     @if (! $down->active && $down->user_id == getUser('id'))
@@ -38,7 +38,9 @@
         <a href="/uploads/files/{{ $down->folder }}{{ $down->link }}" class="gallery">{{ resizeImage('uploads/files/'.$down->folder, $down->link, ['alt' => $down->title]) }}</a><br>
     @endif
 
-    <div class="message">{!! bbCode($down->text) !!}</div><br>
+    <div class="message">
+        {!! bbCode($down->text) !!}
+    </div><br>
 
     @if ($down->files->isNotEmpty())
         @foreach ($down->files as $screen)
@@ -73,17 +75,17 @@
         @endif
 
         @if ($ext == 'zip')
-            <i class="fa fa-archive"></i> <b><a href="/down/{{ $down->id }}/zip">Просмотреть архив</a></b><br>
+            <i class="fa fa-archive"></i> <b><a href="/down/zip/{{ $down->id }}">Просмотреть архив</a></b><br>
         @endif
 
         @if (getUser())
-            <i class="fa fa-download"></i> <b><a href="/down/{{ $down->id }}/download">Скачать</a></b> ({{ $filesize }})<br>
+            <i class="fa fa-download"></i> <b><a href="/down/download/{{ $down->id }}">Скачать</a></b> ({{ $filesize }})<br>
         @else
             <div class="form">
                 <label for="protect">Проверочный код:</label><br>
                 <img src="/captcha" onclick="this.src='/captcha?'+Math.random()" class="rounded" style="cursor: pointer;" alt=""><br>
 
-            <form class="form-inline" action="/down/{{ $down->id }}/download" method="post">
+            <form class="form-inline" action="/down/download/{{ $down->id }}" method="post">
                 <div class="form-group{{ hasError('protect') }}">
                     <input class="form-control" id="protect" name="protect" size="6" maxlength="6" required>
                     <button class="btn btn-primary">Скачать ({{ $filesize }})</button>
@@ -94,8 +96,8 @@
             <em>Чтобы не вводить код при каждом скачивании, советуем <a href="/register">зарегистрироваться</a></em></div><br>
         @endif
 
-        <i class="fa fa-comment"></i> <b><a href="/down/{{ $down->id }}/comments">Комментарии</a></b> ({{ $down->comments }})
-        <a href="/down/{{ $down->id }}/end">&raquo;</a><br>
+        <i class="fa fa-comment"></i> <b><a href="/down/comments/{{ $down->id }}">Комментарии</a></b> ({{ $down->comments }})
+        <a href="/down/end/{{ $down->id }}">&raquo;</a><br>
 
         <br>Рейтинг: {!! ratingVote($rating) !!}<br>
         Всего голосов: <b>{{ $down->rated }}</b><br>
@@ -104,7 +106,7 @@
         @if (getUser() && getUser('id') != $down->user_id)
 
             <label for="score">Проверочный код:</label><br>
-            <form class="form-inline" action="/down/{{ $down->id }}/vote" method="post">
+            <form class="form-inline" action="/down/vote/{{ $down->id }}" method="post">
                 <input type="hidden" name="token" value="{{ $_SESSION['token'] }}">
 
                 <div class="form-group{{ hasError('score') }}">

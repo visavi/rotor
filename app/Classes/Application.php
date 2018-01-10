@@ -95,11 +95,11 @@ class Application
                 }
 
                 if ($parse['path'] == '/forum/print.php' && isset($output['tid']) && is_numeric($output['tid'])){
-                    redirect('/topic/'.$output['tid'].'/print', true);
+                    redirect('/topic/print/'.$output['tid'], true);
                 }
 
                 if ($parse['path'] == '/forum/rss.php' && isset($output['tid']) && is_numeric($output['tid'])){
-                    redirect('/topic/'.$output['tid'].'/rss', true);
+                    redirect('/topic/rss/'.$output['tid'], true);
                 }
 
                 if (

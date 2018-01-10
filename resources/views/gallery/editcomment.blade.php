@@ -24,5 +24,5 @@
         </form>
     </div><br>
 
-    <i class="fa fa-arrow-circle-left"></i> <a href="/gallery/{{ $comment->relate_id }}/comments?page={{ $page }}">Вернуться</a><br>
+    <i class="fa fa-arrow-circle-left"></i> <a href="/gallery/comments/{{ $comment->relate_id }}?page={{ $page }}">Вернуться</a><br>
 @stop

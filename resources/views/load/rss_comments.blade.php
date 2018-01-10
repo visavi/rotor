@@ -12,12 +12,12 @@
 
         <item>
             <title>{{ $data->text }}</title>
-            <link>{{ siteUrl() }}/down/{{ $down->id }}/comments</link>
+            <link>{{ siteUrl() }}/down/comments/{{ $down->id }}</link>
             <description>{{ $down->title }}</description>
             <author>{{ $data->user->login }}</author>
             <pubDate>{{ date('r', $data->created_at) }}</pubDate>
             <category>Комментарии</category>
-            <guid>{{ siteUrl() }}/down/{{ $down->id }}/comments?pid={{ $data->id }}</guid>
+            <guid>{{ siteUrl() }}/down/comments/{{ $down->id }}?pid={{ $data->id }}</guid>
         </item>
     @endforeach
 @stop

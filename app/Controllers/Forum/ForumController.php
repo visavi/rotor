@@ -37,20 +37,20 @@ class ForumController extends BaseController
     /**
      * Страница списка тем
      */
-    public function forum($fid)
+    public function forum($id)
     {
-        $forum = Forum::query()->with('parent', 'children.lastTopic.lastPost.user')->find($fid);
+        $forum = Forum::query()->with('parent', 'children.lastTopic.lastPost.user')->find($id);
 
         if (! $forum) {
-            abort('default', 'Данного раздела не существует!');
+            abort(404, 'Данного раздела не существует!');
         }
 
-        $total = Topic::query()->where('forum_id', $fid)->count();
+        $total = Topic::query()->where('forum_id', $forum->id)->count();
 
         $page = paginate(setting('forumtem'), $total);
 
         $topics = Topic::query()
-            ->where('forum_id', $fid)
+            ->where('forum_id', $forum->id)
             ->orderBy('locked', 'desc')
             ->orderBy('updated_at', 'desc')
             ->offset($page['offset'])
@@ -364,16 +364,16 @@ class ForumController extends BaseController
     /**
      * RSS постов
      */
-    public function rssPosts($tid)
+    public function rssPosts($id)
     {
-        $topic = Topic::query()->find($tid);
+        $topic = Topic::query()->find($id);
 
         if (empty($topic)) {
-            abort('default', 'Данной темы не существует!');
+            abort(404, 'Данной темы не существует!');
         }
 
         $posts = Post::query()
-            ->where('topic_id', $tid)
+            ->where('topic_id', $topic->id)
             ->orderBy('created_at', 'desc')
             ->with('user')
             ->limit(15)

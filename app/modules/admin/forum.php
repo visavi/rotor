@@ -67,7 +67,7 @@ if (isAdmin()) {
 
                     <?php if ($data->lastTopic->lastPost): ?>
 
-                        Тема: <a href="/topic/<?= $data->lastTopic->id ?>/end"><?= $data->lastTopic->title ?></a>
+                        Тема: <a href="/topic/end/<?= $data->lastTopic->id ?>"><?= $data->lastTopic->title ?></a>
                         <br/>
                         Сообщение: <?php $data->lastTopic->lastPost->user->login ?> (<?= dateFixed($data->lastTopic->lastPost->created_at) ?>)
                     <?php else: ?>
@@ -806,7 +806,7 @@ if (isAdmin()) {
 
                     if (empty($topic['closed'])) {
                         echo '<div class="form" id="form">';
-                        echo '<form action="/topic/'.$tid.'/create" method="post" enctype="multipart/form-data">';
+                        echo '<form action="/topic/create/'.$tid.'" method="post" enctype="multipart/form-data">';
                         echo '<input type="hidden" name="token" value="'.$_SESSION['token'].'">';
 
                         echo 'Сообщение:<br>';

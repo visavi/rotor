@@ -81,8 +81,8 @@
             <?php $rating = $data->rated ? round($data->rating / $data->rated, 1) : 0; ?>
 
             Рейтинг: <b>{{ $rating }}</b> (Голосов: {{ $data->rated }})<br>
-            <a href="/down/{{ $data->id }}/comments">Комментарии</a> ({{ $data->comments }})
-            <a href="/down/{{ $data->id }}/end">&raquo;</a></div>
+            <a href="/down/comments/{{ $data->id }}">Комментарии</a> ({{ $data->comments }})
+            <a href="/down/end/{{ $data->id }}">&raquo;</a></div>
         @endforeach
 
         {!! pagination($page) !!}

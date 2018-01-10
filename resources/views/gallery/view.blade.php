@@ -15,8 +15,8 @@
         @endif
 
         @if ($photo->user->id == getUser('id') && ! isAdmin())
-            <li class="breadcrumb-item"><a href="/gallery/{{ $photo->id }}/edit">Редактировать</a></li>
-            <li class="breadcrumb-item"><a href="/gallery/{{ $photo->id }}/delete?token={{ $_SESSION['token'] }}" onclick="return confirm('Вы подтверждаете удаление изображения?')">Удалить</a></li>
+            <li class="breadcrumb-item"><a href="/gallery/edit/{{ $photo->id }}">Редактировать</a></li>
+            <li class="breadcrumb-item"><a href="/gallery/delete/{{ $photo->id }}?token={{ $_SESSION['token'] }}" onclick="return confirm('Вы подтверждаете удаление изображения?')">Удалить</a></li>
         @endif
     </ol>
 
@@ -39,8 +39,8 @@
 
         Размер: {{ formatFileSize(UPLOADS.'/pictures/'.$photo->link) }}<br>
         Добавлено: {!! profile($photo->user) !!} ({{ dateFixed($photo->time) }})<br>
-        <a href="/gallery/{{ $photo->id }}/comments">Комментарии</a> ({{ $photo->comments }})
-        <a href="/gallery/{{ $photo->id }}/end">&raquo;</a>
+        <a href="/gallery/comments/{{ $photo->id }}">Комментарии</a> ({{ $photo->comments }})
+        <a href="/gallery/end/{{ $photo->id }}">&raquo;</a>
     </div>
     <br>
 

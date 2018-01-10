@@ -27,7 +27,7 @@
                             @endif
 
                             @if ($data->user_id == getUser('id') && $data->created_at + 600 > SITETIME)
-                                <a title="Редактировать" href="/gallery/{{ $photo->id }}/{{ $data->id }}/edit?page={{ $page['current'] }}"><i class="fa fa-pencil-alt text-muted"></i></a>
+                                <a title="Редактировать" href="/gallery/edit/{{ $photo->id }}/{{ $data->id }}?page={{ $page['current'] }}"><i class="fa fa-pencil-alt text-muted"></i></a>
                             @endif
 
                             @if (isAdmin())
@@ -60,7 +60,7 @@
 
         @if (getUser())
             <div class="form">
-                <form action="/gallery/{{ $photo->id }}/comments" method="post">
+                <form action="/gallery/comments/{{ $photo->id }}" method="post">
                     <input type="hidden" name="token" value="{{ $_SESSION['token'] }}">
 
                     <div class="form-group{{ hasError('msg') }}">

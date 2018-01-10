@@ -339,7 +339,7 @@ class BlogController extends BaseController
                 $blog->increment('comments');
 
                 setFlash('success', 'Комментарий успешно добавлен!');
-                redirect('/article/' . $blog->id . '/end');
+                redirect('/article/end/' . $blog->id);
             } else {
                 setInput(Request::all());
                 setFlash('danger', $validator->getErrors());
@@ -407,7 +407,7 @@ class BlogController extends BaseController
                 ]);
 
                 setFlash('success', 'Комментарий успешно отредактирован!');
-                redirect('/article/' . $id . '/comments?page=' . $page);
+                redirect('/article/comments/' . $id . '?page=' . $page);
             } else {
                 setInput(Request::all());
                 setFlash('danger', $validator->getErrors());
@@ -434,7 +434,7 @@ class BlogController extends BaseController
             ->count();
 
         $end = ceil($total / setting('blogpost'));
-        redirect('/article/' . $id . '/comments?page=' . $end);
+        redirect('/article/comments/' . $id . '?page=' . $end);
     }
 
     /**
@@ -678,10 +678,10 @@ class BlogController extends BaseController
 
         if ($total) {
             $end = ceil($total / setting('blogpost'));
-            redirect('/article/' . $id . '/comments?page=' . $end);
+            redirect('/article/comments/' . $id . '?page=' . $end);
         } else {
             setFlash('success', 'Комментариев к данной статье не существует!');
-            redirect('/article/' . $id . '/comments');
+            redirect('/article/comments/' . $id);
         }
     }
 

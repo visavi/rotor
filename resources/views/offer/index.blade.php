@@ -63,8 +63,8 @@
 
             <div>{!! bbCode($data->text) !!}<br>
             Добавлено: {!! profile($data->user) !!} ({{ dateFixed($data->created_at) }})<br>
-            <a href="/offers/{{ $data->id }}/comments">Комментарии</a> ({{ $data->comments }})
-            <a href="/offers/{{ $data['id'] }}/end">&raquo;</a></div>
+            <a href="/offers/comments/{{ $data->id }}">Комментарии</a> ({{ $data->comments }})
+            <a href="/offers/end/{{ $data['id'] }}">&raquo;</a></div>
         @endforeach
 
         {!! pagination($page) !!}

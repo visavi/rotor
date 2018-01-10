@@ -33,11 +33,11 @@ class PhotoController extends BaseController
     /**
      * Просмотр полной фотографии
      */
-    public function view($gid)
+    public function view($id)
     {
         $photo = Photo::query()
             ->select('photo.*', 'pollings.vote')
-            ->where('photo.id', $gid)
+            ->where('photo.id', $id)
             ->leftJoin('pollings', function ($join) {
                 $join->on('photo.id', '=', 'pollings.relate_id')
                     ->where('pollings.relate_type', Photo::class)
@@ -110,7 +110,7 @@ class PhotoController extends BaseController
     /**
      * Редактирование фото
      */
-    public function edit($gid)
+    public function edit($id)
     {
         $page = int(Request::input('page', 1));
 
@@ -118,7 +118,7 @@ class PhotoController extends BaseController
             abort(403, 'Авторизуйтесь для редактирования фотографии!');
         }
 
-        $photo = Photo::query()->where('user_id', getUser('id'))->find($gid);
+        $photo = Photo::query()->where('user_id', getUser('id'))->find($id);
 
         if (! $photo) {
             abort(404, 'Выбранное вами фото не найдено или вы не автор этой фотографии!');
@@ -160,9 +160,9 @@ class PhotoController extends BaseController
     /**
      * Список комментариев
      */
-    public function comments($gid)
+    public function comments($id)
     {
-        $photo = Photo::query()->find($gid);
+        $photo = Photo::query()->find($id);
 
         if (! $photo) {
             abort('default', 'Фотография не найдена');
@@ -205,7 +205,7 @@ class PhotoController extends BaseController
                 ]);
 
                 setFlash('success', 'Комментарий успешно добавлен!');
-                redirect('/gallery/' . $photo->id . '/end');
+                redirect('/gallery/end/' . $photo->id);
             } else {
                 setInput(Request::all());
                 setFlash('danger', $validator->getErrors());
@@ -214,13 +214,13 @@ class PhotoController extends BaseController
 
         $total = Comment::query()
             ->where('relate_type', Photo::class)
-            ->where('relate_id', $gid)
+            ->where('relate_id', $id)
             ->count();
         $page = paginate(setting('postgallery'), $total);
 
         $comments = Comment::query()
             ->where('relate_type', Photo::class)
-            ->where('relate_id', $gid)
+            ->where('relate_id', $id)
             ->offset($page['offset'])
             ->limit($page['limit'])
             ->orderBy('created_at')
@@ -233,7 +233,7 @@ class PhotoController extends BaseController
     /**
      * Редактирование комментария
      */
-    public function editComment($gid, $id)
+    public function editComment($id, $cid)
     {
         $page = int(Request::input('page', 1));
 
@@ -244,7 +244,7 @@ class PhotoController extends BaseController
         $comment = Comment::query()
             ->select('comments.*', 'photo.closed')
             ->where('relate_type', Photo::class)
-            ->where('comments.id', $id)
+            ->where('comments.id', $cid)
             ->where('comments.user_id', getUser('id'))
             ->leftJoin('photo', 'comments.relate_id', '=', 'photo.id')
             ->first();
@@ -279,7 +279,7 @@ class PhotoController extends BaseController
                 ]);
 
                 setFlash('success', 'Комментарий успешно отредактирован!');
-                redirect('/gallery/' . $gid . '/comments?page=' . $page);
+                redirect('/gallery/comments/' . $id . '?page=' . $page);
             } else {
                 setInput(Request::all());
                 setFlash('danger', $validator->getErrors());
@@ -291,7 +291,7 @@ class PhotoController extends BaseController
     /**
      * Удаление фотографий
      */
-    public function delete($gid)
+    public function delete($id)
     {
         $page = int(Request::input('page', 1));
 
@@ -301,7 +301,7 @@ class PhotoController extends BaseController
             abort(403, 'Для удаления фотографий небходимо авторизоваться!');
         }
 
-        $photo = Photo::query()->where('user_id', getUser('id'))->find($gid);
+        $photo = Photo::query()->where('user_id', getUser('id'))->find($id);
 
         if (! $photo) {
             abort(404, 'Выбранное вами фото не найдено или вы не автор этой фотографии!');
@@ -335,9 +335,9 @@ class PhotoController extends BaseController
     /**
      * Переадресация на последнюю страницу
      */
-    public function end($gid)
+    public function end($id)
     {
-        $photo = Photo::query()->find($gid);
+        $photo = Photo::query()->find($id);
 
         if (empty($photo)) {
             abort(404, 'Выбранное вами фото не найдено, возможно оно было удалено!');
@@ -345,11 +345,11 @@ class PhotoController extends BaseController
 
         $total = Comment::query()
             ->where('relate_type', Photo::class)
-            ->where('relate_id', $gid)
+            ->where('relate_id', $id)
             ->count();
 
         $end = ceil($total / setting('postgallery'));
-        redirect('/gallery/' . $gid . '/comments?page=' . $end);
+        redirect('/gallery/comments/' . $id . '?page=' . $end);
     }
 
     /**
@@ -492,19 +492,19 @@ class PhotoController extends BaseController
     /**
      * Переход к сообщению
      */
-    public function viewComment($gid, $id)
+    public function viewComment($id, $cid)
     {
         $total = Comment::query()
             ->where('relate_type', Photo::class)
-            ->where('relate_id', $gid)
-            ->where('id', '<=', $id)
+            ->where('relate_id', $id)
+            ->where('id', '<=', $cid)
             ->orderBy('created_at')
             ->count();
 
         if ($total) {
             $end = ceil($total / setting('postgallery'));
 
-            redirect('/gallery/' . $gid . '/comments?page=' . $end);
+            redirect('/gallery/comments/' . $id . '?page=' . $end);
         } else {
             setFlash('success', 'Комментариев к данному изображению не существует!');
             redirect('/gallery/comments');

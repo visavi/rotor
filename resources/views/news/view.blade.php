@@ -51,8 +51,8 @@
 
         @if ($news->comments > 5)
             <div class="act">
-                <b><a href="/news/{{ $news->id }}/comments">Все комментарии</a></b> ({{ $news->comments }})
-                <a href="/news/{{ $news->id }}/end">&raquo;</a>
+                <b><a href="/news/comments/{{ $news->id }}">Все комментарии</a></b> ({{ $news->comments }})
+                <a href="/news/end/{{ $news->id }}">&raquo;</a>
             </div><br>
         @endif
     @endif
@@ -64,7 +64,7 @@
 
         @if (getUser())
             <div class="form">
-                <form action="/news/{{ $news->id }}/comments?read=1" method="post">
+                <form action="/news/comments/{{ $news->id }}?read=1" method="post">
                     <input type="hidden" name="token" value="{{ $_SESSION['token'] }}">
 
                     <div class="form-group{{ hasError('msg') }}">

@@ -15,12 +15,12 @@
     @endif
 
     <a href="/forum/{{ $topic->forum->id }}">{{ $topic->forum->title }}</a> /
-    <a href="/topic/{{ $topic->id }}/print">Печать</a> / <a href="/topic/{{ $topic->id }}/rss">RSS-лента</a>
+    <a href="/topic/print/{{ $topic->id }}">Печать</a> / <a href="/topic/rss/{{ $topic->id }}">RSS-лента</a>
 
     @if (getUser())
         @if ($topic->user->id == getUser('id') && empty($topic->closed) && getUser('point') >= setting('editforumpoint'))
-           / <a href="/topic/{{ $topic->id }}/close?token={{ $_SESSION['token'] }}">Закрыть</a>
-           / <a href="/topic/{{ $topic->id }}/edit">Изменить</a>
+           / <a href="/topic/close/{{ $topic->id }}?token={{ $_SESSION['token'] }}">Закрыть</a>
+           / <a href="/topic/edit/{{ $topic->id }}">Изменить</a>
         @endif
 
         <?php $bookmark = $topic->bookmark_posts ? 'Из закладок' : 'В закладки'; ?>
@@ -76,7 +76,7 @@
                 {!! progressBar($maxproc, $proc.'%') !!}
             @endforeach
         @else
-            <form action="/topic/{{ $topic->id }}/vote?page={{ $page['current'] }}" method="post">
+            <form action="/topic/vote/{{ $topic->id }}?page={{ $page['current'] }}" method="post">
                 <input type="hidden" name="token" value="{{ $_SESSION['token'] }}">
                 @foreach ($vote->answers as $answer)
                     <label><input name="poll" type="radio" value="{{ $answer->id }}"> {{ $answer->answer }}</label><br>
@@ -89,7 +89,7 @@
     @endif
 
     @if ($topic->isModer)
-        <form action="/topic/{{ $topic->id }}/delete?page={{ $page['current'] }}" method="post">
+        <form action="/topic/delete/{{ $topic->id }}?page={{ $page['current'] }}" method="post">
             <input type="hidden" name="token" value="{{ $_SESSION['token'] }}">
         @endif
 
@@ -110,7 +110,7 @@
                         @endif
 
                         @if ((getUser('id') == $data->user_id && $data->created_at + 600 > SITETIME) || $topic->isModer)
-                            <a href="/topic/{{ $topic->id }}/{{ $data->id }}/edit?page={{ $page['current'] }}" title="Редактировать"><i class="fa fa-pencil-alt text-muted"></i></a>
+                            <a href="/topic/edit/{{ $topic->id }}/{{ $data->id }}?page={{ $page['current'] }}" title="Редактировать"><i class="fa fa-pencil-alt text-muted"></i></a>
                             @if ($topic->isModer)
                                 <input type="checkbox" name="del[]" value="{{ $data->id }}">
                             @endif
@@ -179,7 +179,7 @@
     @if (getUser())
         @if (empty($topic->closed))
             <div class="form">
-                <form action="/topic/{{ $topic->id }}/create" method="post" enctype="multipart/form-data">
+                <form action="/topic/create/{{ $topic->id }}" method="post" enctype="multipart/form-data">
                     <input type="hidden" name="token" value="{{ $_SESSION['token'] }}">
 
                     <div class="form-group{{ hasError('msg') }}">

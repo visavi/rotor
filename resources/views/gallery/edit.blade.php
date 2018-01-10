@@ -9,7 +9,7 @@
     <h1>Редактирование фотографии</h1>
 
     <div class="form">
-        <form action="/gallery/{{ $photo->id }}/edit?page={{ $page }}" method="post">
+        <form action="/gallery/edit/{{ $photo->id }}?page={{ $page }}" method="post">
             <input type="hidden" name="token" value="{{ $_SESSION['token'] }}">
 
             <div class="form-group{{ hasError('title') }}">

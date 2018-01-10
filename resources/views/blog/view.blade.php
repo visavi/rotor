@@ -16,7 +16,7 @@
 
     @if ($blog->user->id == getUser('id'))
         <div class="float-right">
-            <a class="btn btn-success" href="/article/{{ $blog->id }}/edit">Изменить</a>
+            <a class="btn btn-success" href="/article/edit/{{ $blog->id }}">Изменить</a>
         </div>
     @endif
 
@@ -31,8 +31,8 @@
 
         <li class="breadcrumb-item"><a href="/blog/{{ $blog->category_id }}">{{ $blog->category->name }}</a></li>
         <li class="breadcrumb-item active">{{ $blog->title }}</li>
-        <li class="breadcrumb-item"><a href="/article/{{ $blog->id }}/print">Печать</a></li>
-        <li class="breadcrumb-item"><a href="/article/{{ $blog->id }}/rss">RSS-лента</a></li>
+        <li class="breadcrumb-item"><a href="/article/print/{{ $blog->id }}">Печать</a></li>
+        <li class="breadcrumb-item"><a href="/article/rss/{{ $blog->id }}">RSS-лента</a></li>
     </ol>
 
     @if (isAdmin())
@@ -61,6 +61,6 @@
     </div>
 
     <i class="fa fa-eye"></i> Просмотров: {{ $blog->visits }}<br>
-    <i class="fa fa-comment"></i> <a href="/article/{{ $blog->id }}/comments">Комментарии</a> ({{  $blog->comments }})
-    <a href="/article/{{ $blog->id }}/end">&raquo;</a><br><br>
+    <i class="fa fa-comment"></i> <a href="/article/comments/{{ $blog->id }}">Комментарии</a> ({{  $blog->comments }})
+    <a href="/article/end/{{ $blog->id }}">&raquo;</a><br><br>
 @stop

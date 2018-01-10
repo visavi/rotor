@@ -26,7 +26,7 @@
                             @endif
 
                             @if ($data->user_id == getUser('id') && $data->created_at + 600 > SITETIME)
-                                <a title="Редактировать" href="/news/{{ $news->id }}/{{ $data->id }}/edit?page={{ $page['current'] }}"><i class="fa fa-pencil-alt text-muted"></i></a>
+                                <a title="Редактировать" href="/news/edit/{{ $news->id }}/{{ $data->id }}?page={{ $page['current'] }}"><i class="fa fa-pencil-alt text-muted"></i></a>
                             @endif
 
                             @if (isAdmin())
@@ -42,11 +42,11 @@
 
                 <div class="message">
                     {!! bbCode($data->text) !!}<br>
-
-                    @if (isAdmin())
-                        <span class="data">({{ $data->brow }}, {{ $data->ip }})</span>
-                    @endif
                 </div>
+
+                @if (isAdmin())
+                    <span class="data">({{ $data->brow }}, {{ $data->ip }})</span>
+                @endif
             </div>
         @endforeach
 
@@ -61,7 +61,7 @@
 
         @if (getUser())
             <div class="form">
-                <form action="/news/{{ $news->id }}/comments" method="post">
+                <form action="/news/comments/{{ $news->id }}" method="post">
                     <input type="hidden" name="token" value="{{ $_SESSION['token'] }}">
 
                     <div class="form-group{{ hasError('msg') }}">

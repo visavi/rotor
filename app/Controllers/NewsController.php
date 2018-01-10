@@ -110,7 +110,7 @@ class NewsController extends BaseController
                     redirect('/news/' . $news->id);
                 }
 
-                redirect('/news/' . $news->id . '/end');
+                redirect('/news/end/' . $news->id . '');
 
             } else {
                 setInput(Request::all());
@@ -140,7 +140,7 @@ class NewsController extends BaseController
     /**
      * Редактирование комментария
      */
-    public function editComment($nid, $id)
+    public function editComment($id, $cid)
     {
         $page = int(Request::input('page', 1));
 
@@ -150,7 +150,7 @@ class NewsController extends BaseController
 
         $comment = Comment::query()
             ->where('relate_type', News::class)
-            ->where('comments.id', $id)
+            ->where('comments.id', $cid)
             ->where('comments.user_id', getUser('id'))
             ->first();
 
@@ -179,7 +179,7 @@ class NewsController extends BaseController
                 ]);
 
                 setFlash('success', 'Комментарий успешно отредактирован!');
-                redirect('/news/' . $nid . '/comments?page=' . $page);
+                redirect('/news/comments/' . $id . '?page=' . $page);
             } else {
                 setInput(Request::all());
                 setFlash('danger', $validator->getErrors());
@@ -200,7 +200,7 @@ class NewsController extends BaseController
         }
 
         $end = ceil($news['comments'] / setting('postnews'));
-        redirect('/news/' . $id . '/comments?page=' . $end);
+        redirect('/news/comments/' . $id . '?page=' . $end);
     }
 
     /**
@@ -262,6 +262,6 @@ class NewsController extends BaseController
             ->count();
 
         $end = ceil($total / setting('postnews'));
-        redirect('/news/' . $id . '/comments?page=' . $end . '#comment_' . $cid);
+        redirect('/news/comments/' . $id . '?page=' . $end . '#comment_' . $cid);
     }
 }

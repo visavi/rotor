@@ -37,7 +37,9 @@
                     <b>{!! profile($data->author) !!}</b> <small>({{ dateFixed($data->created_at) }})</small><br>
                     {!! userStatus($data->author) !!} {!! userOnline($data->author) !!}
                 </div>
-                <div class="message">{!! bbCode($data->text) !!}</div>
+                <div class="message">
+                    {!! bbCode($data->text) !!}
+                </div>
             </div>
         @endforeach
 

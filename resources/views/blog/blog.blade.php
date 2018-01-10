@@ -37,8 +37,8 @@
             <div>
                 Автор: {!! profile($data->user) !!} ({{ dateFixed($data->created_at) }})<br>
                 Просмотров: {{ $data->visits }}<br>
-                <a href="/article/{{ $data->id }}/comments">Комментарии</a> ({{ $data->comments }})
-                <a href="/article/{{ $data->id }}/end">&raquo;</a>
+                <a href="/article/comments/{{ $data->id }}">Комментарии</a> ({{ $data->comments }})
+                <a href="/article/end/{{ $data->id }}">&raquo;</a>
             </div>
         @endforeach
 

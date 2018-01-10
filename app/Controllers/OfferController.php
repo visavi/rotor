@@ -223,7 +223,7 @@ class OfferController extends BaseController
                 $offer->increment('comments');
 
                 setFlash('success', 'Комментарий успешно добавлен!');
-                redirect('/offers/' . $offer->id . '/end');
+                redirect('/offers/end/' . $offer->id);
             } else {
                 setInput(Request::all());
                 setFlash('danger', $validator->getErrors());
@@ -291,7 +291,7 @@ class OfferController extends BaseController
                 ]);
 
                 setFlash('success', 'Комментарий успешно отредактирован!');
-                redirect('/offers/' . $id . '/comments?page=' . $page);
+                redirect('/offers/comments/' . $id . '?page=' . $page);
             } else {
                 setInput(Request::all());
                 setFlash('danger', $validator->getErrors());
@@ -318,6 +318,6 @@ class OfferController extends BaseController
             ->count();
 
         $end = ceil($total / setting('postcommoffers'));
-        redirect('/offers/' . $offer->id . '/comments?page=' . $end);
+        redirect('/offers/comments/' . $offer->id . '?page=' . $end);
     }
 }
