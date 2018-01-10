@@ -50,7 +50,7 @@ if (isAdmin([101, 102, 103])) {
             echo '<i class="fa fa-briefcase"></i> <a href="/admin/votes?act=history">История голосований</a><br>';
 
             if (isAdmin([101])) {
-                echo '<i class="fa fa-arrow-circle-up"></i> <a href="/admin/votes?act=rest&amp;uid='.$_SESSION['token'].'">Пересчитать</a><br>';
+                echo '<i class="fa fa-sync"></i> <a href="/admin/votes?act=rest&amp;uid='.$_SESSION['token'].'">Пересчитать</a><br>';
             }
 
         break;

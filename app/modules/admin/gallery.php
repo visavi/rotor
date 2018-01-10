@@ -59,7 +59,7 @@ if (isAdmin()) {
             }
 
             if (isAdmin([101])) {
-                echo '<i class="fa fa-arrow-circle-up"></i> <a href="/admin/gallery?act=restatement&amp;token='.$_SESSION['token'].'">Пересчитать</a><br>';
+                echo '<i class="fa fa-sync"></i> <a href="/admin/gallery?act=restatement&amp;token='.$_SESSION['token'].'">Пересчитать</a><br>';
             }
         break;
 

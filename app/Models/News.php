@@ -19,6 +19,14 @@ class News extends BaseModel
     protected $guarded = [];
 
     /**
+     * Возвращает комментарии новостей
+     */
+    public function comments()
+    {
+        return $this->morphMany(Comment::class, 'relate');
+    }
+
+    /**
      * Возвращает иконку в зависимости от статуса
      * @return string иконка новостей
      */

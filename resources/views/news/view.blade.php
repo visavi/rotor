@@ -19,7 +19,7 @@
 
     @if ($news->image)
         <div class="img">
-            <a href="/uploads/news/{{ $news->image }}">{!! resizeImage('uploads/news/', $news->image, ['size' => 75, 'alt' => $news->title]) !!}</a></div>
+            <a href="/uploads/news/{{ $news->image }}">{!! resizeImage('uploads/news/', $news->image, ['size' => 100, 'alt' => $news->title]) !!}</a></div>
     @endif
 
     <div>{!! bbCode($news->text) !!}</div>
@@ -85,7 +85,7 @@
             {!! showError('Для добавления сообщения необходимо авторизоваться') !!}
         @endif
     @else
-        {{  showError('Комментирование данной новости закрыто!') }}
+        {!! showError('Комментирование данной новости закрыто!') !!}
     @endif
 
 

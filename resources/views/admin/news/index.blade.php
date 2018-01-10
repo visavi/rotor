@@ -6,13 +6,17 @@
 
 @section('content')
 
-    <h1>Управление новостями</h1>
+    <div class="float-right">
+        <a class="btn btn-success" href="/admin/news/create">Добавить новость</a>
+    </div>
+
+    <h1>Управление новостями</h1><br>
 
     <div class="form"><a href="/news">Обзор новостей</a></div>
 
     @if ($news->isNotEmpty())
 
-        <form action="/admin/news?act=del&amp;page='.$page['current'].'" method="post">
+        <form action="/admin/news/delete?page={{ $page['current']}} " method="post">
             <input type="hidden" name="token" value="{{ $_SESSION['token'] }}">
 
             @foreach ($news as $data)
@@ -33,11 +37,11 @@
 
                 @if ($data->image)
                     <div class="img">
-                        <a href="/uploads/news/{{ $data->image }}">{!! resizeImage('uploads/news/', $data->image, ['size' => 75, 'alt' => $data->title]) !!}</a>
+                        <a href="/uploads/news/{{ $data->image }}">{!! resizeImage('uploads/news/', $data->image, ['size' => 100, 'alt' => $data->title]) !!}</a>
                     </div>
                 @endif
 
-                <div>{!! bbCode($data->shortText()) !!}</div>
+                <div class="clearfix">{!! bbCode($data->shortText()) !!}</div>
 
                 <div>Добавлено: {!! profile($data->user) !!}<br>
                     <a href="/news/comments/{{  $data->id }}">Комментарии</a> ({{ $data->comments }})
@@ -55,10 +59,8 @@
         {!! showError('Новостей еще нет!') !!}
     @endif
 
-    <i class="fa fa-check"></i> <a href="/admin/news?act=add">Добавить</a><br>
-
     @if (isAdmin('boss'))
-        <i class="fa fa-arrow-circle-up"></i> <a href="/admin/news/restatement?token={{ $_SESSION['token'] }}">Пересчитать</a><br>
+        <i class="fa fa-sync"></i> <a href="/admin/news/restatement?token={{ $_SESSION['token'] }}">Пересчитать</a><br>
     @endif
 
     <i class="fa fa-wrench"></i> <a href="/admin">В админку</a><br>

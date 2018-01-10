@@ -71,7 +71,7 @@ case 'index':
         echo '<input type="submit" value="Создать раздел"></form></div><br>';
 
         echo '<i class="fa fa-cloud-upload-alt"></i> <a href="/admin/load?act=newimport">FTP-импорт</a><br>';
-        echo '<i class="fa fa-arrow-circle-up"></i> <a href="/admin/load?act=restatement&amp;uid='.$_SESSION['token'].'">Пересчитать</a><br>';
+        echo '<i class="fa fa-sync"></i> <a href="/admin/load?act=restatement&amp;uid='.$_SESSION['token'].'">Пересчитать</a><br>';
     }
 
     echo '<i class="fa fa-check"></i> <a href="/admin/load?act=newfile">Добавить</a><br>';

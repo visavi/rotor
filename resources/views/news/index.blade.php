@@ -21,11 +21,11 @@
 
             @if ($data->image)
                 <div class="img">
-                    <a href="/uploads/news/{{ $data->image }}">{!! resizeImage('uploads/news/', $data->image, ['size' => 75, 'alt' => $data->title]) !!}</a>
+                    <a href="/uploads/news/{{ $data->image }}">{!! resizeImage('uploads/news/', $data->image, ['size' => 100, 'alt' => $data->title]) !!}</a>
                 </div>
             @endif
 
-            <div>{!! bbCode($data->shortText()) !!}</div>
+            <div class="clearfix">{!! bbCode($data->shortText()) !!}</div>
             <div>
                 Добавлено: {!! profile($data->user) !!}<br>
                 <a href="/news/{{ $data->id }}/comments">Комментарии</a> ({{ $data->comments }})

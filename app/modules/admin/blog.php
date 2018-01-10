@@ -52,7 +52,7 @@ if (isAdmin()) {
                 echo '<input type="text" name="name" maxlength="50">';
                 echo '<input type="submit" value="Создать раздел"></form></div><br>';
 
-                echo '<i class="fa fa-arrow-circle-up"></i> <a href="/admin/blog?act=restatement&amp;uid='.$_SESSION['token'].'">Пересчитать</a><br>';
+                echo '<i class="fa fa-sync"></i> <a href="/admin/blog?act=restatement&amp;uid='.$_SESSION['token'].'">Пересчитать</a><br>';
             }
         break;
 

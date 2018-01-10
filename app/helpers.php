@@ -1457,20 +1457,20 @@ function restatement($mode)
 
         case 'blog':
             DB::update('update categories set count = (select count(*) from blogs where categories.id = blogs.category_id)');
-            DB::update('update blogs set comments = (select count(*) from comments where relate_type = "'.Blog::class.'" and blogs.id = comments.relate_id)');
+            DB::update('update blogs set comments = (select count(*) from comments where relate_type = "'.addslashes(Blog::class).'" and blogs.id = comments.relate_id)');
             break;
 
         case 'load':
             DB::update('update loads set count = (select count(*) from downs where loads.id = downs.category_id and active = ?)', [1]);
-            DB::update('update downs set comments = (select count(*) from comments where relate_type = "'.Down::class.'" and downs.id = comments.relate_id)');
+            DB::update('update downs set comments = (select count(*) from comments where relate_type = "'.addslashes(Down::class).'" and downs.id = comments.relate_id)');
             break;
 
         case 'news':
-            DB::update('update news set comments = (select count(*) from comments where relate_type = "'.News::class.'" and news.id = comments.relate_id)');
+            DB::update('update news set comments = (select count(*) from comments where relate_type = "'.addslashes(News::class).'" and news.id = comments.relate_id)');
             break;
 
         case 'photo':
-            DB::update('update photo set comments = (select count(*) from comments where relate_type=  "'.Photo::class.'" and photo.id = comments.relate_id)');
+            DB::update('update photo set comments = (select count(*) from comments where relate_type=  "'.addslashes(Photo::class).'" and photo.id = comments.relate_id)');
             break;
     }
 }

@@ -272,6 +272,10 @@ $routes = [
     ['POST',     '/admin/blacklist/delete', 'Admin\BlacklistController@delete'],
 
     ['GET',      '/admin/news', 'Admin\NewsController@index'],
+    ['GET|POST', '/admin/news/edit/[i:id]', 'Admin\NewsController@edit'],
+    ['GET|POST', '/admin/news/create', 'Admin\NewsController@create'],
+    ['GET',      '/admin/news/restatement', 'Admin\NewsController@restatement'],
+    ['POST',     '/admin/news/delete', 'Admin\NewsController@delete'],
 
     ['GET|POST', '/admin/book', 'admin/book.php'],
     ['GET|POST', '/admin/blog', 'admin/blog.php'],
