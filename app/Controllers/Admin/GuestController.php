@@ -157,7 +157,7 @@ class GuestController extends AdminController
 
             Guest::query()->truncate();
 
-            setFlash('success', 'Гостевая книга успешно очищен!');
+            setFlash('success', 'Гостевая книга успешно очищена!');
         } else {
             setFlash('danger', $validator->getErrors());
         }

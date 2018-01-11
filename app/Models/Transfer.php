@@ -17,4 +17,12 @@ class Transfer extends BaseModel
      * @var array
      */
     protected $guarded = [];
+
+    /**
+     * Возвращает связь пользователей
+     */
+    public function recipientUser()
+    {
+        return $this->belongsTo(User::class, 'recipient_id')->withDefault();
+    }
 }

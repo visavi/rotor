@@ -284,6 +284,9 @@ $routes = [
     ['GET|POST', '/admin/book/edit/[i:id]', 'Admin\GuestController@edit'],
     ['GET|POST', '/admin/book/reply/[i:id]', 'Admin\GuestController@reply'],
     ['POST',     '/admin/book/delete', 'Admin\GuestController@delete'],
+    ['GET',      '/admin/book/clear', 'Admin\GuestController@clear'],
+
+    ['GET',      '/admin/transfers', 'Admin\TransferController@index'],
 
     ['GET|POST', '/admin/blog', 'admin/blog.php'],
     ['GET|POST', '/admin/chat', 'admin/chat.php'],
@@ -300,7 +303,7 @@ $routes = [
     ['GET|POST', '/admin/reglist', 'admin/reglist.php'],
     ['GET|POST', '/admin/votes', 'admin/votes.php'],
     ['GET|POST', '/admin/invitations', 'admin/invitations.php'],
-    ['GET|POST', '/admin/transfers', 'admin/transfers.php'],
+
     ['GET|POST', '/admin/users', 'admin/users.php'],
     ['GET|POST', '/admin/offers', 'admin/offers.php'],
 

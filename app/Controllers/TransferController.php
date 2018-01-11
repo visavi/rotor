@@ -23,7 +23,7 @@ class TransferController extends BaseController
             abort(403, 'Для совершения операций необходимо авторизоваться');
         }
 
-        $login = check(Request::input('user'));
+        $login      = check(Request::input('user'));
         $this->user = User::query()->where('login', $login)->first();
     }
 
@@ -74,8 +74,8 @@ class TransferController extends BaseController
 
                 // Запись логов
                 Transfer::query()->create([
-                    'user_id'      => $this->user->id,
-                    'recipient_id' => getUser('id'),
+                    'user_id'      => getUser('id'),
+                    'recipient_id' => $this->user->id,
                     'text'         => $comment,
                     'total'        => $money,
                     'created_at'   => SITETIME

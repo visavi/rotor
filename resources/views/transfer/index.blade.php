@@ -33,8 +33,8 @@
                 </div>
 
                 <div class="form-group{{ hasError('msg') }}">
-                    <label for="inputText">Комментарий:</label>
-                    <textarea class="form-control" id="inputText" rows="5" name="msg" placeholder="Комментарий">{{ getInput('msg') }}</textarea>
+                    <label for="markItUp">Комментарий:</label>
+                    <textarea class="form-control" id="markItUp" rows="5" name="msg" placeholder="Комментарий">{{ getInput('msg') }}</textarea>
                     {!! textError('msg') !!}
                 </div>
 

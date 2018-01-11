@@ -7,49 +7,7 @@ if (isAdmin([101, 102, 103])) {
     //show_title('Денежные операции');
 
     switch ($action):
-    ############################################################################################
-    ##                                    Главная страница                                    ##
-    ############################################################################################
-        case 'index':
 
-            $total = DB::run() -> querySingle("SELECT COUNT(*) FROM `transfers`;");
-            $page = paginate(setting('listtransfers'), $total);
-
-            if ($total > 0) {
-
-                $querytrans = DB::select("SELECT * FROM `transfers` ORDER BY `time` DESC LIMIT ".$page['offset'].", ".setting('listtransfers').";");
-
-                while ($data = $querytrans -> fetch()) {
-                    echo '<div class="b">';
-                    echo '<div class="img">'.userAvatar($data['user']).'</div>';
-                    echo '<b>'.profile($data['user']).'</b> '.userOnline($data['user']).' ';
-
-                    echo '<small>('.dateFixed($data['time']).')</small><br>';
-
-                    echo '<a href="/admin/transfers?act=view&amp;uz='.$data['user'].'">Все переводы</a></div>';
-
-                    echo '<div>';
-                    echo 'Кому: '.profile($data['login']).'<br>';
-                    echo 'Сумма: '.plural($data['summ'], setting('moneyname')).'<br>';
-                    echo 'Комментарий: '.$data['text'].'<br>';
-                    echo '</div>';
-                }
-
-                pagination($page);
-
-                echo '<div class="form">';
-                echo '<b>Поиск по пользователю:</b><br>';
-                echo '<form action="/admin/transfers?act=view" method="get">';
-                echo '<input type="hidden" name="act" value="view">';
-                echo '<input type="text" name="uz">';
-                echo '<input type="submit" value="Искать"></form></div><br>';
-
-                echo 'Всего операций: <b>'.$total.'</b><br><br>';
-
-            } else {
-                showError('Истории операций еще нет!');
-            }
-        break;
 
         ############################################################################################
         ##                                Просмотр по пользователям                               ##
