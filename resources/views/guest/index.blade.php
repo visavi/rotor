@@ -1,12 +1,12 @@
 @extends('layout')
 
 @section('title')
-    {{ trans('book.title', ['page' => $page['current']]) }}
+    {{ trans('guest.title', ['page' => $page['current']]) }}
 @stop
 
 @section('content')
 
-    <h1>{{ trans('book.header') }}</h1>
+    <h1>{{ trans('guest.header') }}</h1>
 
     <a href="/rules">{{ trans('common.rules') }}</a> /
     <a href="/smiles">{{ trans('common.smiles') }}</a> /
@@ -40,18 +40,18 @@
 
                     <div class="img">{!! userAvatar($data->user) !!}</div>
 
-                    @if (empty($data->user_id))
-                        <b>{{ setting('guestsuser') }}</b> <small>({{ dateFixed($data->created_at) }})</small>
-                    @else
+                    @if ($data->user_id)
                         <b>{!! profile($data->user) !!}</b> <small>({{ dateFixed($data->created_at) }})</small><br>
                         {!! userStatus($data->user) !!} {!! userOnline($data->user) !!}
+                    @else
+                        <b>{{ setting('guestsuser') }}</b> <small>({{ dateFixed($data->created_at) }})</small>
                     @endif
                 </div>
 
                 <div class="message">{!! bbCode($data->text) !!}</div>
 
                 @if ($data->edit_user_id)
-                    <small><i class="fa fa-exclamation-circle text-danger"></i> {{ trans('book.edited') }}: {{ $data->editUser->login }} ({{ dateFixed($data->updated_at) }})</small><br>
+                    <small><i class="fa fa-exclamation-circle text-danger"></i> {{ trans('guest.edited') }}: {{ $data->editUser->login }} ({{ dateFixed($data->updated_at) }})</small><br>
                 @endif
 
                 @if (isAdmin())
@@ -59,7 +59,7 @@
                 @endif
 
                 @if ($data->reply))
-                    <br><span style="color:#ff0000">{{ trans('book.answer') }}: {!! bbCode($data->reply) !!}</span>
+                    <br><span style="color:#ff0000">{{ trans('guest.answer') }}: {!! bbCode($data->reply) !!}</span>
                 @endif
             </div>
         @endforeach
@@ -67,7 +67,7 @@
         {!! pagination($page) !!}
 
     @else
-        {!! showError(trans('book.empty_messages')) !!}
+        {!! showError(trans('guest.empty_messages')) !!}
     @endif
 
     @if (getUser())
@@ -75,12 +75,12 @@
             <form action="/book/add" method="post">
                 <input type="hidden" name="token" value="{{ $_SESSION['token'] }}">
                 <div class="form-group{{ hasError('msg') }}">
-                    <label for="markItUp">{{ trans('book.message') }}:</label>
-                    <textarea class="form-control" id="markItUp" rows="5" name="msg" placeholder="{{ trans('book.message_text') }}" required>{{ getInput('msg') }}</textarea>
+                    <label for="markItUp">{{ trans('guest.message') }}:</label>
+                    <textarea class="form-control" id="markItUp" rows="5" name="msg" placeholder="{{ trans('guest.message_text') }}" required>{{ getInput('msg') }}</textarea>
                     {!! textError('msg') !!}
                 </div>
 
-                <button class="btn btn-primary">{{ trans('book.write') }}</button>
+                <button class="btn btn-primary">{{ trans('guest.write') }}</button>
             </form>
         </div><br>
 
@@ -91,8 +91,8 @@
                 <input type="hidden" name="token" value="{{ $_SESSION['token'] }}">
 
                 <div class="form-group{{ hasError('msg') }}">
-                    <label for="inputText">{{ trans('book.message') }}:</label>
-                    <textarea class="form-control" id="inputText" rows="5" name="msg" placeholder="{{ trans('book.message_text') }}" required>{{ getInput('msg') }}</textarea>
+                    <label for="inputText">{{ trans('guest.message') }}:</label>
+                    <textarea class="form-control" id="inputText" rows="5" name="msg" placeholder="{{ trans('guest.message_text') }}" required>{{ getInput('msg') }}</textarea>
                     {!! textError('msg') !!}
                 </div>
 
@@ -103,11 +103,11 @@
                     {!! textError('protect') !!}
                 </div>
 
-                <button class="btn btn-primary">{{ trans('book.write') }}</button>
+                <button class="btn btn-primary">{{ trans('guest.write') }}</button>
             </form>
         </div><br>
 
     @else
-        {!! showError(trans('book.not_authorized')) !!}
+        {!! showError(trans('guest.not_authorized')) !!}
     @endif
 @stop

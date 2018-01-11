@@ -11,9 +11,9 @@ $routes = [
     ['GET',      '/closed', 'HomeController@closed'],
     ['GET|POST', '/banip', 'HomeController@banip'],
 
-    ['GET',      '/book', 'BookController@index', 'book'],
-    ['POST',     '/book/add', 'BookController@add'],
-    ['GET|POST', '/book/edit/[i:id]', 'BookController@edit'],
+    ['GET',      '/book', 'GuestController@index', 'book'],
+    ['POST',     '/book/add', 'GuestController@add'],
+    ['GET|POST', '/book/edit/[i:id]', 'GuestController@edit'],
 
     ['GET',      '/sitemap.xml', 'SitemapController@index'],
     ['GET',      '/sitemap/[a:action].xml', 'SitemapController'],
@@ -280,7 +280,11 @@ $routes = [
     ['GET',      '/admin/news/restatement', 'Admin\NewsController@restatement'],
     ['POST',     '/admin/news/delete', 'Admin\NewsController@delete'],
 
-    ['GET|POST', '/admin/book', 'admin/book.php'],
+    ['GET',      '/admin/book', 'Admin\GuestController@index'],
+    ['GET|POST', '/admin/book/edit/[i:id]', 'Admin\GuestController@edit'],
+    ['GET|POST', '/admin/book/reply/[i:id]', 'Admin\GuestController@reply'],
+    ['POST',     '/admin/book/delete', 'Admin\GuestController@delete'],
+
     ['GET|POST', '/admin/blog', 'admin/blog.php'],
     ['GET|POST', '/admin/chat', 'admin/chat.php'],
     ['GET|POST', '/admin/forum', 'admin/forum.php'],

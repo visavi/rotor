@@ -7,6 +7,7 @@ use App\Classes\Validator;
 use App\Models\News;
 use App\Models\Setting;
 use App\Models\User;
+
 class NewsController extends AdminController
 {
     /**

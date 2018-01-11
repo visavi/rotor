@@ -9,7 +9,7 @@ use App\Models\Guest;
 use App\Models\User;
 use Illuminate\Database\Capsule\Manager as DB;
 
-class BookController extends BaseController
+class GuestController extends BaseController
 {
     /**
      * Главная страница
@@ -26,7 +26,7 @@ class BookController extends BaseController
             ->with('user', 'editUser')
             ->get();
 
-        return view('book/index', compact('posts', 'page'));
+        return view('guest/index', compact('posts', 'page'));
     }
 
     /**
@@ -129,6 +129,6 @@ class BookController extends BaseController
             }
         }
 
-        return view('book/edit', compact('post'));
+        return view('guest/edit', compact('post'));
     }
 }
