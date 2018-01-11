@@ -16,10 +16,7 @@
     <a href="/admin/blacklist?type=domain" class="badge badge-{{ $active }}">Домены</a>
     <br><br>
 
-
-
     @if ($lists->isNotEmpty())
-
 
         <form action="/admin/blacklist/delete?type={{ $type }}&amp;page={{ $page['current'] }}" method="post">
             <input type="hidden" name="token" value="{{ $_SESSION['token'] }}">

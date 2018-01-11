@@ -19,48 +19,6 @@ if (isAdmin([101, 102])) {
     //show_title('Управление пользователями');
 
     switch ($action):
-    ############################################################################################
-    ##                                    Главная страница                                    ##
-    ############################################################################################
-        case 'index':
-
-            echo '<div class="form">';
-            echo 'Логин пользователя:<br>';
-            echo '<form action="/admin/users?act=edit" method="post">';
-            echo '<input type="text" name="uz" maxlength="20">';
-            echo '<input value="Редактировать" type="submit"></form></div><br>';
-
-            echo '<a href="/admin/users?act=sort&amp;q=1">0-9</a> / <a href="/admin/users?act=sort&amp;q=a">A</a> / <a href="/admin/users?act=sort&amp;q=b">B</a> / <a href="/admin/users?act=sort&amp;q=c">C</a> / <a href="/admin/users?act=sort&amp;q=d">D</a> / <a href="/admin/users?act=sort&amp;q=e">E</a> / <a href="/admin/users?act=sort&amp;q=f">F</a> / <a href="/admin/users?act=sort&amp;q=g">G</a> / <a href="/admin/users?act=sort&amp;q=h">H</a> / <a href="/admin/users?act=sort&amp;q=i">I</a> / <a href="/admin/users?act=sort&amp;q=j">J</a> / <a href="/admin/users?act=sort&amp;q=k">K</a> / <a href="/admin/users?act=sort&amp;q=l">L</a> / <a href="/admin/users?act=sort&amp;q=m">M</a> / <a href="/admin/users?act=sort&amp;q=n">N</a> / <a href="/admin/users?act=sort&amp;q=o">O</a> / <a href="/admin/users?act=sort&amp;q=p">P</a> / <a href="/admin/users?act=sort&amp;q=q">Q</a> / <a href="/admin/users?act=sort&amp;q=r">R</a> / <a href="/admin/users?act=sort&amp;q=s">S</a> / <a href="/admin/users?act=sort&amp;q=t">T</a> / <a href="/admin/users?act=sort&amp;q=u">U</a> / <a href="/admin/users?act=sort&amp;q=v">V</a> / <a href="/admin/users?act=sort&amp;q=w">W</a> / <a href="/admin/users?act=sort&amp;q=x">X</a> / <a href="/admin/users?act=sort&amp;q=y">Y</a> / <a href="/admin/users?act=sort&amp;q=z">Z</a><br>';
-
-            echo 'Введите логин пользователя который необходимо отредактировать<br><br>';
-
-            echo '<b>Cписок последних зарегистрированных</b><br>';
-
-            $total = DB::run() -> querySingle("SELECT count(*) FROM `users`;");
-            $page = paginate(setting('userlist'), $total);
-
-            if ($total > 0) {
-
-                $queryusers = DB::select("SELECT * FROM `users` ORDER BY `joined` DESC LIMIT ".$page['offset'].", ".setting('userlist').";");
-
-                while ($data = $queryusers -> fetch()) {
-                    if (empty($data['email'])) {
-                        $data['email'] = 'Не указан';
-                    }
-
-                    echo '<hr><div>'.userGender($data['login']).' <b><a href="/admin/users?act=edit&amp;uz='.$data['login'].'">'.$data['login'].'</a></b> (email: '.$data['email'].')<br>';
-
-                    echo 'Зарегистрирован: '.dateFixed($data['joined']).'</div>';
-                }
-
-                pagination($page);
-
-
-            } else {
-                showError('Пользователей еще нет!');
-            }
-            echo '<br><br>';
-        break;
 
         ############################################################################################
         ##                                  Сортировка профилей                                   ##
