@@ -1,12 +1,12 @@
 @extends('layout')
 
 @section('title')
-    Денежные операции
+    Денежные операции {{ $user->login }}
 @stop
 
 @section('content')
 
-    <h1>Денежные операции</h1>
+    <h1>Денежные операции {{ $user->login }}</h1>
 
     @if ($transfers->isNotEmpty())
 
@@ -16,8 +16,6 @@
                 <b>{!! profile($data->user) !!}</b> {!! userOnline($data->user) !!}
 
                 <small>({{ dateFixed($data->created_at) }})</small><br>
-
-                <a href="/admin/transfers/view?user={{ $data->user->login }}">Все переводы</a>
             </div>
 
             <div>
@@ -29,24 +27,12 @@
 
         {!! pagination($page) !!}
 
-        <div class="form">
-            <form action="/admin/transfers/view" method="get">
-                <div class="form-inline">
-                    <div class="form-group{{ hasError('user') }}">
-                        <input type="text" class="form-control" id="user" name="user" maxlength="20" value="{{ getInput('user') }}" placeholder="Логин пользователя" required>
-                    </div>
-
-                    <button class="btn btn-primary">Найти</button>
-                </div>
-                {!! textError('ip') !!}
-            </form>
-        </div>
-
-        Всего операций: <b>{{ $page['total'] }}</b><br><br>
+    Всего операций: <b>{{ $page['total'] }}</b><br><br>
 
     @else
         {!! showError('Истории операций еще нет!') !!}
     @endif
 
+    <i class="fa fa-arrow-circle-left"></i> <a href="/admin/transfers">Вернуться</a><br>
     <i class="fa fa-wrench"></i> <a href="/admin">В админку</a><br>
 @stop

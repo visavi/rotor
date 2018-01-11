@@ -10,14 +10,6 @@ use App\Models\User;
 class GuestController extends AdminController
 {
     /**
-     * Конструктор
-     */
-    public function __construct()
-    {
-        parent::__construct();
-    }
-
-    /**
      * Главная страница
      */
     public function index()

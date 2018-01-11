@@ -287,6 +287,7 @@ $routes = [
     ['GET',      '/admin/book/clear', 'Admin\GuestController@clear'],
 
     ['GET',      '/admin/transfers', 'Admin\TransferController@index'],
+    ['GET',      '/admin/transfers/view', 'Admin\TransferController@view'],
 
     ['GET|POST', '/admin/blog', 'admin/blog.php'],
     ['GET|POST', '/admin/chat', 'admin/chat.php'],
