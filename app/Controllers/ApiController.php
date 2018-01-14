@@ -51,7 +51,7 @@ class ApiController extends BaseController
             'icq'       => $user->icq,
             'skype'     => $user->skype,
             'gender'    => $user->gender,
-            'birthday'  => $user->birthday,
+            'birthday'  => date('d.m.Y', strtotime($user->birthday)),
             'newwall'   => $user->newwall,
             'point'     => $user->point,
             'money'     => $user->money,

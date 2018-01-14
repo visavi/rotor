@@ -53,11 +53,11 @@
                 @endif
 
                 @if (!empty($user->birthday))
-                    Дата рождения: {{  $user->birthday }}<br>
+                    Дата рождения: {{ date('d.m.Y', strtotime($user->birthday)) }}<br>
                 @endif
 
                 @if (!empty($user->icq))
-                    ICQ: {{  $user->icq }}<br>
+                    ICQ: {{ $user->icq }}<br>
                 @endif
 
                 @if (!empty($user->skype))
@@ -74,7 +74,7 @@
                 @if ($user->themes)
                     Используемый скин: {{ $user->themes }}<br>
                 @endif
-                Дата регистрации: {{ dateFixed($user->joined, 'j F Y') }}<br>
+                Дата регистрации: {{ date('d.m.Y', strtotime($user->joined)) }}<br>
 
                 @if ($invite)
                     Зарегистрирован по приглашению: {!! profile($invite->user) !!}<br>

@@ -180,7 +180,7 @@ class UserController extends BaseController
                         'login'         => $logs,
                         'password'      => password_hash($pars, PASSWORD_BCRYPT),
                         'email'         => $meil,
-                        'joined'        => SITETIME,
+                        'joined'        => date('Y-m-d', SITETIME),
                         'level'         => $level,
                         'gender'        => $gender,
                         'themes'        => 0,
@@ -323,7 +323,7 @@ class UserController extends BaseController
                     'icq'      => $icq,
                     'skype'    => $skype,
                     'site'     => $site,
-                    'birthday' => $birthday,
+                    'birthday' => date('Y-m-d', strtotime($birthday)),
                     'info'     => $info,
                 ]);
 
@@ -670,11 +670,11 @@ class UserController extends BaseController
             ->get();
 
         $birthdays = User::query()
-            ->whereRaw('substr(birthday, 1, 5) = ?', date('d.m', SITETIME))
+            ->whereRaw('substr(birthday, 6, 10) = ?', date('m-d', SITETIME))
             ->get();
 
         $novices = User::query()
-            ->where('joined', '>', SITETIME - 86400)
+            ->where('joined', '>', date('Y-m-d', SITETIME - 86400))
             ->get();
 
         return view('user/who', compact('online', 'birthdays', 'novices'));

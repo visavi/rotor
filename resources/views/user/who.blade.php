@@ -44,7 +44,7 @@
             {!! $value->getGender() !!} <b>{!! profile($value) !!}</b>
         @endforeach
 
-        <br>Всего новичков: {{ $novice->count() }} чел.<br><br>
+        <br>Всего новичков: {{ $novices->count() }} чел.<br><br>
     @else
         {!! showError('Новичков пока нет!') !!}
     @endif

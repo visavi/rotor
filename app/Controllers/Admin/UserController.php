@@ -94,24 +94,35 @@ class UserController extends AdminController
 
             if ($validator->isValid()) {
 
+                if ($password) {
+                    $text     = '<br>Новый пароль пользователя: ' . $password;
+                    $password = password_hash($password, PASSWORD_BCRYPT);
+                } else {
+                    $text     = null;
+                    $password = $user->password;
+                }
+
                 $name    = utfSubstr($name, 0, 20);
                 $country = utfSubstr($country, 0, 30);
                 $city    = utfSubstr($city, 0, 50);
+                $rating  = $posrating - $negrating;
 
                 $user->update([
+                    'password'  => $password,
                     'level'     => $level,
                     'email'     => $email,
                     'name'      => $name,
                     'country'   => $country,
                     'city'      => $city,
                     'site'      => $site,
-                    'joined'    => $joined,
-                    'birthday'  => $birthday,
+                    'joined'    => date('Y-m-d', strtotime($joined)),
+                    'birthday'  => date('Y-m-d', strtotime($birthday)),
                     'icq'       => $icq,
                     'skype'     => $skype,
                     'point'     => $point,
                     'money'     => $money,
                     'status'    => $status,
+                    'rating'    => $rating,
                     'posrating' => $posrating,
                     'negrating' => $negrating,
                     'themes'    => $themes,
@@ -121,7 +132,7 @@ class UserController extends AdminController
 
                 saveStatus();
 
-                setFlash('success', 'Ваш профиль успешно изменен!');
+                setFlash('success', 'Данные пользователя успешно изменены!' . $text);
                 redirect('/admin/users/edit?user=' . $user->login);
 
             } else {

@@ -26,7 +26,7 @@
 
             <div>
                 Плюсов: {{ $data->posrating }} / Минусов: {{ $data->negrating }}<br>
-                Дата регистрации: {{ dateFixed($data->joined, 'j F Y') }}
+                Дата регистрации: {{ date('d.m.Y', strtotime($data->joined)) }}
             </div>
         @endforeach
 

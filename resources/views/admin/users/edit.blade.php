@@ -70,13 +70,13 @@
 
             <div class="form-group{{ hasError('joined') }}">
                 <label for="joined">Зарегистрирован:</label>
-                <input type="text" class="form-control" id="joined" name="joined" maxlength="10" value="{{ getInput('joined', dateFixed($user->joined, 'd.m.Y')) }}" required>
+                <input type="text" class="form-control" id="joined" name="joined" maxlength="10" value="{{ getInput('joined', date('d.m.Y', strtotime($user->joined))) }}" required>
                 {!! textError('joined') !!}
             </div>
 
             <div class="form-group{{ hasError('birthday') }}">
                 <label for="birthday">Дата рождения:</label>
-                <input type="text" class="form-control" id="birthday" name="birthday" maxlength="10" value="{{ getInput('birthday', $user->birthday) }}">
+                <input type="text" class="form-control" id="birthday" name="birthday" maxlength="10" value="{{ getInput('birthday', date('d.m.Y', strtotime($user->birthday))) }}">
                 {!! textError('birthday') !!}
             </div>
 

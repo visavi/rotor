@@ -27,7 +27,7 @@
                 Форум: {{ $data->allforum }} | Гостевая: {{ $data->allguest }} | Коммент: {{ $data->allcomments }}<br>
                 Посещений: {{ $data->visits }}<br>
                 Деньги: {{ $data->money }}<br>
-                Дата регистрации: {{ dateFixed($data->joined, 'j F Y') }}
+                Дата регистрации: {{ date('d.m.Y', strtotime($data->joined)) }}
             </div>
         @endforeach
 
