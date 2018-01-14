@@ -28,7 +28,7 @@ class User extends BaseModel
     ];
 
     /**
-     * Администраторы
+     * Участники
      */
     const USER_GROUPS = [
         self::BOSS,

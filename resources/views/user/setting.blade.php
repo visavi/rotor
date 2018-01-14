@@ -21,35 +21,41 @@
             <div class="form-group{{ hasError('themes') }}">
                 <label for="themes">Тема:</label>
 
+                <?php $inputThemes = getInput('themes', $user->themes); ?>
                 <select class="form-control" name="themes" id="themes">
                     <option value="0">Автоматически</option>
 
                     @foreach ($setting['themes'] as $theme)
-                        <option value="{{ basename($theme) }}"{{ getUser('themes') == basename($theme) ? 'selected' : '' }}>{{ basename($theme) }}</option>
+                        <?php $selected = ($theme == $inputThemes) ? ' selected' : ''; ?>
+                        <option value="{{ $theme }}"{{ $selected }}>{{ $theme }}</option>
                     @endforeach
                 </select>
 
                 {!! textError('themes') !!}
             </div>
 
+            <?php $inputLang = getInput('lang', $user->lang); ?>
             <div class="form-group{{ hasError('lang') }}">
                 <label for="lang">Язык:</label>
 
                 <select class="form-control" name="lang" id="lang">
                     @foreach ($setting['languages'] as $lang)
-                        <option value="{{ basename($lang) }}"{{ getUser('lang') == basename($lang) ? 'selected' : '' }}>{{ $setting['langShort'][basename($lang)] }}</option>
+                        <?php $selected = ($lang == $inputLang) ? ' selected' : ''; ?>
+                        <option value="{{ $lang }}"{{ $selected }}>{{ $lang }}</option>
                     @endforeach
                 </select>
 
                 {!! textError('lang') !!}
             </div>
 
+            <?php $inputTimezone = getInput('timezone', $user->timezone); ?>
             <div class="form-group{{ hasError('timezone') }}">
                 <label for="timezone">Временной сдвиг {{ dateFixed(SITETIME, 'H:i') }}:</label>
 
                 <select class="form-control" name="timezone" id="timezone">';
                     @foreach($setting['timezones'] as $timezone)
-                        <option value="{{ $timezone }}"{{ getUser('timezone') == $timezone ? ' selected' : '' }}>{{ $timezone }}</option>
+                        <?php $selected = ($timezone == $inputTimezone) ? ' selected' : ''; ?>
+                        <option value="{{ $timezone }}"{{ $selected }}>{{ $timezone }}</option>
                     @endforeach
                 </select>
 
@@ -58,13 +64,15 @@
 
             <div class="checkbox">
                 <label data-toggle="tooltip" title="Уведомления об ответах будут приходить в личные сообщения">
-                    <input name="notify" type="checkbox" value="1"{{ getUser('notify') ? ' checked' : '' }}> Получать уведомления об ответах
+                    <input type="hidden" value="0" name="notify">
+                    <input name="notify" type="checkbox" value="1"{{ getInput('notify', $user->notify) ? ' checked' : '' }}> Получать уведомления об ответах
                 </label>
             </div>
 
             <div class="checkbox">
                 <label data-toggle="tooltip" title="Получение информационных писем с сайта на email">
-                    <input name="subscribe" type="checkbox" value="1"{{ getUser('subscribe') ? ' checked' : '' }}> Получать информационные письма
+                    <input type="hidden" value="0" name="subscribe">
+                    <input name="subscribe" type="checkbox" value="1"{{ getInput('subscribe', $user->subscribe) ? ' checked' : '' }}> Получать информационные письма
                 </label>
             </div>
 

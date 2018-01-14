@@ -290,6 +290,7 @@ $routes = [
     ['GET',      '/admin/transfers/view', 'Admin\TransferController@view'],
 
     ['GET',      '/admin/users', 'Admin\UserController@index'],
+    ['GET|POST', '/admin/users/edit', 'Admin\UserController@edit'],
 
     ['GET|POST', '/admin/blog', 'admin/blog.php'],
     ['GET|POST', '/admin/chat', 'admin/chat.php'],

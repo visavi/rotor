@@ -386,21 +386,27 @@ class UserController extends BaseController
             abort(403, 'Для изменения настроек необходимо авторизоваться!');
         }
 
+        $setting['themes']    = array_map('basename', glob(HOME."/themes/*", GLOB_ONLYDIR));
+        $setting['languages'] = array_map('basename', glob(RESOURCES."/lang/*", GLOB_ONLYDIR));
+        $setting['timezones'] = range(-12, 12);
+
         if (Request::isMethod('post')) {
 
             $token     = check(Request::input('token'));
             $themes    = check(Request::input('themes'));
             $timezone  = check(Request::input('timezone', 0));
             $lang      = check(Request::input('lang'));
-            $notify    = Request::has('notify') ? 1 : 0;
-            $subscribe = Request::has('subscribe') ? str_random(32) : null;
+            $notify    = Request::input('notify') == 1 ? 1 : 0;
+            $subscribe = Request::input('subscribe') == 1 ? str_random(32) : null;
+
+
 
             $validator = new Validator();
             $validator->equal($token, $_SESSION['token'], 'Неверный идентификатор сессии, повторите действие!')
                 ->regex($themes, '|^[a-z0-9_\-]+$|i', ['themes' => 'Недопустимое название темы!'])
-                ->true((file_exists(HOME.'/themes/'.$themes) || empty($themes)), ['themes' => 'Данная тема не установлена на сайте!'])
+                ->true(in_array($themes, $setting['themes']) || empty($themes), ['themes' => 'Данная тема не установлена на сайте!'])
                 ->regex($lang, '|^[a-z]+$|', ['lang' => 'Недопустимое название языка!'])
-                ->true((file_exists(RESOURCES.'/lang/'.$lang) || empty($lang)), ['lang' => 'Данный язык не установлен на сайте!'])
+                ->in($lang, $setting['languages'], ['lang' => 'Данный язык не установлен на сайте!'])
                 ->regex($timezone, '|^[\-\+]{0,1}[0-9]{1,2}$|', ['timezone' => 'Недопустимое значение временного сдвига. (Допустимый диапазон -12 — +12 часов)!']);
 
             if ($validator->isValid()) {
@@ -420,16 +426,6 @@ class UserController extends BaseController
                 setFlash('danger', $validator->getErrors());
             }
         }
-
-        $setting['themes']    = glob(HOME."/themes/*", GLOB_ONLYDIR);
-        $setting['languages'] = glob(RESOURCES."/lang/*", GLOB_ONLYDIR);
-
-        $setting['langShort'] = [
-            'ru' => 'русский',
-            'en' => 'english',
-        ];
-
-        $setting['timezones'] = range(-12, 12);
 
         return view('user/setting', compact('user', 'setting'));
     }
@@ -608,7 +604,6 @@ class UserController extends BaseController
             ->true(password_verify($oldpass, $user->password), 'Введенный пароль не совпадает с данными в профиле!')
             ->equal($newpass, $newpass2, 'Новые пароли не одинаковые!')
             ->length($newpass, 6, 20, 'Слишком длинный или короткий новый пароль!')
-            ->regex($newpass, '|^[a-z0-9\-]+$|i', 'Недопустимые символы в пароле, разрешены знаки латинского алфавита, цифры и дефис!')
             ->notEqual(getUser('login'), $newpass, 'Пароль и логин должны отличаться друг от друга!');
 
         if (ctype_digit($newpass)) {

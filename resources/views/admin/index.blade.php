@@ -37,7 +37,7 @@
         <div class="b"><i class="fa fa-cog fa-lg text-muted"></i> <b>Администратор</b></div>
         <i class="far fa-circle fa-lg text-muted"></i> <a href="/admin/rules">Правила сайта</a><br>
         <i class="far fa-circle fa-lg text-muted"></i> <a href="/admin/news">Новости</a> ({{ statsNews() }})<br>
-        <i class="fa fa-circle fa-lg text-muted"></i> <a href="/admin/users">Пользователи</a> ({{ statsUsers() }})<br>
+
         <i class="far fa-circle fa-lg text-muted"></i> <a href="/admin/ipban">IP-бан панель</a> ({{ statsIpBanned() }})<br>
         <i class="far fa-circle fa-lg text-muted"></i> <a href="/admin/phpinfo">PHP-информация</a> ({{ parseVersion(PHP_VERSION) }})<br>
         <i class="fa fa-circle fa-lg text-muted"></i> <a href="/admin/load">Загруз-центр</a> ({{ statsLoad() }})<br>
@@ -51,6 +51,7 @@
     @if (isAdmin('boss'))
         <div class="b"><i class="fa fa-cog fa-lg text-muted"></i> <b>Босс</b></div>
         <i class="far fa-circle fa-lg text-muted"></i> <a href="/admin/setting">Настройки сайта</a><br>
+        <i class="far fa-circle fa-lg text-muted"></i> <a href="/admin/users">Пользователи</a> ({{ statsUsers() }})<br>
         <i class="far fa-circle fa-lg text-muted"></i> <a href="/admin/cache">Очистка кэша</a><br>
         <i class="far fa-circle fa-lg text-muted"></i> <a href="/admin/backup">Backup-панель</a><br>
         <i class="far fa-circle fa-lg text-muted"></i> <a href="/admin/checker">Сканирование сайта</a> ({{ statsChecker() }})<br>

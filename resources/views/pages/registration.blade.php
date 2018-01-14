@@ -73,15 +73,17 @@
                 </div>
             @endif
 
-            <label for="inputGender">Пол:</label>
+            <?php $inputGender = getInput('gender', 1); ?>
+            Пол:
             <div class="form-group{{ hasError('gender') }}">
-
-                <?php $inputGender = getInput('gender', 1); ?>
-                <input type="radio" name="gender" id="inputGenderMale" value="1"{{ $inputGender == 1 ? ' checked' : '' }}>
-                <label for="inputGenderMale">Мужской</label>
-
-                <input type="radio" name="gender" id="inputGenderFemale" value="2"{{ $inputGender == 2 ? ' checked' : '' }}>
-                <label for="inputGenderFemale">Женский</label>
+                <div class="custom-control custom-radio">
+                    <input class="custom-control-input" type="radio" id="inputGenderMale" name="gender" value="1"{{ $inputGender == 1 ? ' checked' : '' }}>
+                    <label class="custom-control-label" for="inputGenderMale">Мужской</label>
+                </div>
+                <div class="custom-control custom-radio">
+                    <input class="custom-control-input" type="radio" id="inputGenderFemale" name="gender" value="2"{{ $inputGender == 2 ? ' checked' : '' }}>
+                    <label class="custom-control-label" for="inputGenderFemale">Женский</label>
+                </div>
                 {!! textError('gender') !!}
             </div>
 
