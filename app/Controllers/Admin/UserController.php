@@ -39,6 +39,28 @@ class UserController extends AdminController
     }
 
     /**
+     * Поиск пользователей
+     */
+    public function search()
+    {
+        $q = check(Request::input('q'));
+
+        $search = $q == 1 ? "RLIKE '^[-0-9]'" : "LIKE '$q%'";
+
+        $total = User::query()->whereRaw('lower(login) ' . $search)->count();
+        $page = paginate(setting('usersearch'), $total);
+
+        $users = User::query()
+            ->whereRaw('lower(login) ' . $search)
+            ->offset($page['offset'])
+            ->limit($page['limit'])
+            ->orderBy('point', 'desc')
+            ->get();
+
+        return view('admin/users/search', compact('users', 'page'));
+    }
+
+    /**
      * Редактирование
      */
     public function edit()

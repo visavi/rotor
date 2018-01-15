@@ -20,49 +20,7 @@ if (isAdmin([101, 102])) {
 
     switch ($action):
 
-        ############################################################################################
-        ##                                  Сортировка профилей                                   ##
-        ############################################################################################
-        case 'sort':
-            if (isset($_POST['q'])) {
-                $q = check(strtolower($_POST['q']));
-            } else {
-                $q = check(strtolower($_GET['q']));
-            }
 
-            if (!empty($q)) {
-                if ($q == 1) {
-                    $search = "RLIKE '^[-0-9]'";
-                } else {
-                    $search = "LIKE '$q%'";
-                }
-
-                $total = DB::run() -> querySingle("SELECT count(*) FROM `users` WHERE LOWER(`login`) ".$search.";");
-                $page = paginate(setting('usersearch'), $total);
-
-                if ($total > 0) {
-
-                    $queryuser = DB::select("SELECT `login`, `point` FROM `users` WHERE LOWER(`login`) ".$search." ORDER BY `point` DESC LIMIT ".$page['offset'].", ".setting('usersearch').";");
-
-                    while ($data = $queryuser -> fetch()) {
-
-                        echo userGender($data['login']).' <b><a href="/admin/users?act=edit&amp;uz='.$data['login'].'">'.$data['login'].'</a></b> ';
-
-                        echo userOnline($data['login']).' ('.plural($data['point'], setting('scorename')).')<br>';
-                    }
-
-                    pagination($page);
-
-                    echo 'Найдено совпадений: '.$total.'<br><br>';
-                } else {
-                    showError('Совпадений не найдено!');
-                }
-            } else {
-                showError('Ошибка! Не выбраны критерии поиска пользователей!');
-            }
-
-            echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/users">Вернуться</a><br>';
-        break;
 
 
         ############################################################################################
