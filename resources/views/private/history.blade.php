@@ -16,7 +16,7 @@
 
         @foreach ($messages as $data)
             <div class="b">
-                {!! userAvatar($data->author) !!}
+                <div class="img">{!! userAvatar($data->author) !!}</div>
                 <b>{!! profile($data->author) !!}</b> {!! userOnline($data->author) !!}
                 ({{  dateFixed($data->created_at) }})
             </div>

@@ -17,7 +17,7 @@
 
                 <button class="btn btn-primary">Редактировать</button>
             </div>
-            {!! textError('ip') !!}
+            {!! textError('user') !!}
         </form>
     </div>
     <br>

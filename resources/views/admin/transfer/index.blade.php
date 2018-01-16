@@ -38,7 +38,7 @@
 
                     <button class="btn btn-primary">Найти</button>
                 </div>
-                {!! textError('ip') !!}
+                {!! textError('user') !!}
             </form>
         </div>
 

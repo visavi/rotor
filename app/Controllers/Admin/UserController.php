@@ -245,6 +245,7 @@ class UserController extends AdminController
                     File::query()->where('relate_type', Post::class)->whereIn('relate_id', $posts)->delete();
                     Post::query()->whereIn('topic_id', $topics)->delete();
                     Topic::query()->where('user_id', $user->id)->delete();
+                    restatement('forum');
                 }
 
                 // Удаление постов форума
@@ -265,6 +266,7 @@ class UserController extends AdminController
                     }
 
                     Post::query()->where('user_id', $user->id)->delete();
+                    restatement('forum');
                 }
 
                 // Удаление комментариев
