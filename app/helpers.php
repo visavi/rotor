@@ -150,7 +150,6 @@ function deleteAlbum(User $user)
  */
 function deleteImage($dir, $image)
 {
-
     if (! $image) {
         return true;
     }
@@ -1470,6 +1469,10 @@ function restatement($mode)
         case 'photo':
             DB::update('update photo set comments = (select count(*) from comments where relate_type=  "'.addslashes(Photo::class).'" and photo.id = comments.relate_id)');
             break;
+
+        case 'offer':
+            DB::update('update offers set comments = (select count(*) from comments where relate_type=  "'.addslashes(Offer::class).'" and offer.id = comments.relate_id)');
+            break;
     }
 }
 
@@ -1659,7 +1662,7 @@ function isIgnore(User $user, User $ignoreUser)
 function removeDir($dir)
 {
     if (file_exists($dir)){
-        if ($files = glob($dir.'/*')) {
+        if ($files = glob($dir . '/*')) {
             foreach($files as $file) {
                 is_dir($file) ? removeDir($file) : unlink($file);
             }

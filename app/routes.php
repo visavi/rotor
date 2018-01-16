@@ -292,6 +292,7 @@ $routes = [
     ['GET',      '/admin/users', 'Admin\UserController@index'],
     ['GET',      '/admin/users/search', 'Admin\UserController@search'],
     ['GET|POST', '/admin/users/edit', 'Admin\UserController@edit'],
+    ['GET|POST', '/admin/users/delete', 'Admin\UserController@delete'],
 
     ['GET|POST', '/admin/blog', 'admin/blog.php'],
     ['GET|POST', '/admin/chat', 'admin/chat.php'],

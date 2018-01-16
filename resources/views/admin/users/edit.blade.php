@@ -1,14 +1,14 @@
 @extends('layout')
 
 @section('title')
-    Редактирование пользователя
+    Редактирование пользователя {{ $user->login }}
 @stop
 
 @section('content')
 
-    <h1>Редактирование пользователя</h1>
+    <h1>Редактирование пользователя {{ $user->login }}</h1>
 
-    <h3>{!! profile($user) !!} #{{ $user->id }}</h3>
+    <h3>{!! profile($user) !!} {{ $user->login }} #{{ $user->id }}</h3>
 
     @if ($user->id == getUser('id'))
         <b><span style="color:#ff0000">Внимание! Вы редактируете cобственный аккаунт!</span></b><br><br>
@@ -32,9 +32,10 @@
             </div>
 
             <div class="form-group{{ hasError('password') }}">
-                <label for="password">Новый пароль: (Oставьте пустым если не надо менять):</label>
+                <label for="password">Новый пароль:</label>
                 <input type="text" class="form-control" id="password" name="password" maxlength="50" value="{{ getInput('password') }}">
                 {!! textError('password') !!}
+                <p class="text-muted font-italic">Oставьте пустым если не нужно менять</p>
             </div>
 
             <div class="form-group{{ hasError('email') }}">
@@ -185,7 +186,7 @@
     Последний визит: {{ dateFixed($user->timelastlogin, 'j F Y / H:i') }}<br><br>
 
     @if (! in_array($user->level, $adminGroups))
-        <a class="btn btn-danger" href="/admin/users/delete?user={{ $user->login }}" onclick="return confirm('Вы действительно хотите удалить данного пользователя?')"><i class="fa fa-times"></i> Удалить профиль</a><br>
+        <i class="fa fa-times"></i> <a href="/admin/users/delete?user={{ $user->login }}">Удалить профиль</a><br>
     @endif
 
     <i class="fa fa-arrow-circle-left"></i> <a href="/admin/users">Вернуться</a><br>

@@ -51,49 +51,49 @@ class TopicController extends BaseController
             ->with('files', 'user', 'editUser')
             ->offset($page['offset'])
             ->limit(setting('forumpost'))
-            ->orderBy('created_at', 'asc')
+            ->orderBy('created_at')
             ->get();
 
         if (getUser()) {
-            if ($topic['posts'] > $topic['bookmark_posts']) {
+            if ($topic->posts > $topic->bookmark_posts) {
                 Bookmark::query()
                     ->where('topic_id', $topic->id)
                     ->where('user_id', getUser('id'))
-                    ->update(['posts' => $topic['posts']]);
+                    ->update(['posts' => $topic->posts]);
             }
         }
 
         // --------------------------------------------------------------//
-        if (!empty($topic['moderators'])) {
-            $topic['curators'] = User::query()->whereIn('id', explode(',', $topic['moderators']))->get();
-            $topic['isModer'] = $topic['curators']->where('id', getUser('id'))->isNotEmpty();
+        if ($topic->moderators) {
+            $topic->curators = User::query()->whereIn('id', explode(',', $topic->moderators))->get();
+            $topic->isModer = $topic->curators->where('id', getUser('id'))->isNotEmpty();
         }
 
         // Голосование
         $vote = Vote::query()->where('topic_id', $topic->id)->first();
 
         if ($vote) {
-            $vote['poll'] = VotePoll::query()
+            $vote->poll = VotePoll::query()
                 ->where('vote_id', $vote['id'])
                 ->where('user_id', getUser('id'))
                 ->first();
 
-            $vote['answers'] = VoteAnswer::query()
+            $vote->answers = VoteAnswer::query()
                 ->where('vote_id', $vote['id'])
                 ->orderBy('id')
                 ->get();
 
-            if ($vote['answers']) {
+            if ($vote->answers) {
 
                 $results = array_pluck($vote['answers'], 'result', 'answer');
                 $max = max($results);
 
                 arsort($results);
 
-                $vote['voted'] = $results;
+                $vote->voted = $results;
 
-                $vote['sum'] = ($vote['count'] > 0) ? $vote['count'] : 1;
-                $vote['max'] = ($max > 0) ? $max : 1;
+                $vote->sum = ($vote->count > 0) ? $vote->count : 1;
+                $vote->max = ($max > 0) ? $max : 1;
             }
         }
 
@@ -118,9 +118,12 @@ class TopicController extends BaseController
             ->leftJoin('forums', 'topics.forum_id', '=', 'forums.id')
             ->first();
 
+        if (! $topic) {
+            abort(404, 'Выбранная вами тема не существует, возможно она была удалена!');
+        }
+
         $validator = new Validator();
         $validator->equal($token, $_SESSION['token'], ['msg' => 'Неверный идентификатор сессии, повторите действие!'])
-            ->notEmpty($topic, ['msg' => 'Выбранная вами тема не существует, возможно она была удалена!'])
             ->empty($topic->closed, ['msg' => 'Запрещено писать в закрытую тему!'])
             ->equal(Flood::isFlood(), true, ['msg' => 'Антифлуд! Разрешается отправлять сообщения раз в ' . Flood::getPeriod() . ' сек!'])
             ->length($msg, 5, setting('forumtextlength'), ['msg' => 'Слишком длинное или короткое сообщение!']);
@@ -222,7 +225,7 @@ class TopicController extends BaseController
                                     $filename = utfSubstr($filename, 0, 45) . '.' . $ext;
                                 }
 
-                                if (!file_exists(HOME . '/uploads/forum/' . $topic->id)) {
+                                if (! file_exists(HOME . '/uploads/forum/' . $topic->id)) {
                                     $old = umask(0);
                                     mkdir(HOME . '/uploads/forum/' . $topic->id, 0777, true);
                                     umask($old);
@@ -524,7 +527,6 @@ class TopicController extends BaseController
 
         return view('forum/topic_edit_post', compact('post', 'files', 'page'));
     }
-
 
     /**
      * Голосование

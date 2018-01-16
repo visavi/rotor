@@ -5,6 +5,11 @@ namespace App\Controllers\Admin;
 use App\Classes\Request;
 use App\Classes\Validator;
 use App\Models\Banhist;
+use App\Models\BlackList;
+use App\Models\Comment;
+use App\Models\File;
+use App\Models\Post;
+use App\Models\Topic;
 use App\Models\User;
 
 class UserController extends AdminController
@@ -61,7 +66,7 @@ class UserController extends AdminController
     }
 
     /**
-     * Редактирование
+     * Редактирование пользователя
      */
     public function edit()
     {
@@ -170,5 +175,129 @@ class UserController extends AdminController
             ->first();
 
         return view('admin/users/edit', compact('user', 'banhist', 'allThemes', 'allGroups', 'adminGroups'));
+    }
+
+    /**
+     * Удаление пользователя
+     *
+     * @throws \Exception
+     */
+    public function delete()
+    {
+        $login = check(Request::input('user'));
+
+        $user = User::query()->whereRaw('lower(login) = ?', [strtolower($login)])->first();
+
+        if (! $user) {
+            abort('default', 'Пользователь не найден!');
+        }
+
+        if (Request::isMethod('post')) {
+
+            $token         = check(Request::input('token'));
+            $loginblack    = Request::has('loginblack') ? 1 : 0;
+            $mailblack     = Request::has('mailblack') ? 1 : 0;
+            $deltopics     = Request::has('deltopics') ? 1 : 0;
+            $delposts      = Request::has('delposts') ? 1 : 0;
+            $delcomments   = Request::has('delcomments') ? 1 : 0;
+            $delimages     = Request::has('delimages') ? 1 : 0;
+
+            $validator = new Validator();
+            $validator->equal($token, $_SESSION['token'], 'Неверный идентификатор сессии, повторите действие!')
+                ->notIn($user->level, User::ADMIN_GROUPS, 'Запрещено удалять пользователей из группы администраторов!');
+
+            if ($validator->isValid()) {
+
+                if ($loginblack) {
+                    $duplicate = BlackList::query()->where('type', 'login')->where('value', $user->login)->first();
+                    if (! $duplicate) {
+                        BlackList::query()->create([
+                            'type'       => 'login',
+                            'value'      => $user->login,
+                            'user_id'    => getUser('id'),
+                            'created_at' => SITETIME,
+                        ]);
+                    }
+                }
+
+                if ($mailblack) {
+                    $duplicate = BlackList::query()->where('type', 'email')->where('value', $user->email)->first();
+                    if (! $duplicate) {
+                        BlackList::query()->create([
+                            'type'       => 'email',
+                            'value'      => $user->email,
+                            'user_id'    => getUser('id'),
+                            'created_at' => SITETIME,
+                        ]);
+                    }
+                }
+
+                // Удаление тем форума
+                if ($deltopics) {
+                    $topics = Topic::query()->where('user_id', $user->id)->pluck('id')->all();
+                    $posts  = Post::query()->whereIn('topic_id', $topics)->pluck('id')->all();
+
+                    // Удаление загруженных файлов
+                    foreach ($topics as $topic) {
+                        removeDir(UPLOADS . '/forum/' . $topic);
+                    }
+
+                    File::query()->where('relate_type', Post::class)->whereIn('relate_id', $posts)->delete();
+                    Post::query()->whereIn('topic_id', $topics)->delete();
+                    Topic::query()->where('user_id', $user->id)->delete();
+                }
+
+                // Удаление постов форума
+                if ($delposts) {
+
+                    $posts  = Post::query()->where('user_id', $user->id)->pluck('topic_id', 'id')->all();
+
+                    $files = File::query()
+                        ->where('relate_type', Post::class)
+                        ->whereIn('relate_id', array_keys($posts))
+                        ->get();
+
+                    if ($files->isNotEmpty()) {
+                        foreach ($files as $file) {
+                            deleteImage('uploads/forum/', $posts[$file['relate_id']] . '/' . $file->hash);
+                            $file->delete();
+                        }
+                    }
+
+                    Post::query()->where('user_id', $user->id)->delete();
+                }
+
+                // Удаление комментариев
+                if ($delcomments) {
+
+                    $deletes = Comment::query()
+                        ->where('user_id', $user->id)
+                        ->delete();
+
+                    if ($deletes) {
+                        restatement('blog');
+                        restatement('load');
+                        restatement('news');
+                        restatement('photo');
+                        restatement('offer');
+                    }
+                }
+
+                // Удаление фотографий в галерее
+                if ($delimages) {
+                    deleteAlbum($user);
+                }
+
+                deleteUser($user);
+
+                setFlash('success', 'Пользователь успешно удален!');
+                redirect('/admin/users');
+            } else {
+                setInput(Request::all());
+                setFlash('danger', $validator->getErrors());
+            }
+        }
+
+        return view('admin/users/delete', compact('user'));
     }
 }

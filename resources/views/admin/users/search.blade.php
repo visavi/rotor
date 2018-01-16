@@ -11,7 +11,7 @@
     @if ($users->isNotEmpty())
 
         @foreach ($users as $user)
-            {!! $user->getGender() !!} {!! profile($user) !!}
+            {!! $user->getGender() !!} <a href="/admin/users/edit?user={{ $user->login }}">{{ $user->login }}</a>
             {!! userOnline($user) !!}  ({{ plural($user->point, setting('scorename')) }})<br>
         @endforeach
 
