@@ -21,7 +21,7 @@ class ApiController extends BaseController
     /**
      * Api пользователей
      */
-    public function getUser()
+    public function user()
     {
         header('Content-type: application/json');
         header('Content-Disposition: inline; filename="user.json";');
@@ -58,8 +58,8 @@ class ApiController extends BaseController
             'allprivat' => userMail($user),
             'newprivat' => $user->newprivat,
             'status'    => userStatus($user),
-            'avatar'    => siteUrl().'/uploads/avatars/'.$user->avatar,
-            'picture'   => siteUrl().'/uploads/photos/'.$user->picture,
+            'avatar'    => siteUrl(true).'/uploads/avatars/'.$user->avatar,
+            'picture'   => siteUrl(true).'/uploads/photos/'.$user->picture,
             'rating'    => $user->rating,
             'lastlogin' => $user->timelastlogin,
         ]);

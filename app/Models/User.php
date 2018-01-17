@@ -103,7 +103,7 @@ class User extends BaseModel
 
         if (!empty($login) && !empty($password)) {
 
-            $user = self::query()->whereRaw('LOWER(login) = ?', [$login])->first();
+            $user = self::query()->where('login', $login)->first();
 
             /* Миграция старых паролей */
             if (preg_match('/^[a-f0-9]{32}$/', $user['password']))

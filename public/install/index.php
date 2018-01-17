@@ -289,7 +289,7 @@ header("Content-type:text/html; charset=utf-8");
             if (preg_match('#^([a-z0-9_\-\.])+\@([a-z0-9_\-\.])+(\.([a-z0-9])+)+$#', $email)) {
 
             // Проверка логина на существование
-            $checkLogin = User::query()->whereRaw('lower(login) = ?', [strtolower($login)])->count();
+            $checkLogin = User::query()->where('login', $login)->count();
             if (! $checkLogin) {
 
             // Проверка email на существование

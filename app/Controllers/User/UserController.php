@@ -11,6 +11,7 @@ use App\Models\Invite;
 use App\Models\Note;
 use App\Models\Online;
 use App\Models\User;
+use Illuminate\Database\Capsule\Manager as DB;
 
 class UserController extends BaseController
 {
@@ -124,7 +125,7 @@ class UserController extends BaseController
 
                 if (! empty($logs)) {
                     // Проверка логина на существование
-                    $checkLogin = User::query()->whereRaw('lower(login) = ?', [strtolower($logs)])->count();
+                    $checkLogin = User::query()->where('login', $logs)->count();
                     $validator->empty($checkLogin, ['logs' => 'Пользователь с данным логином уже зарегистрирован!']);
 
                     // Проверка логина в черном списке
@@ -565,7 +566,7 @@ class UserController extends BaseController
             ->length($status, 3, 20, 'Слишком длинный или короткий статус!', false);
 
         if ($status) {
-            $checkStatus = User::query()->whereRaw('lower(status) = ?', [utfLower($status)])->count();
+            $checkStatus = User::query()->where('status', $status)->count();
             $validator->empty($checkStatus, 'Выбранный вами статус уже используется на сайте!');
         }
 
@@ -644,8 +645,6 @@ class UserController extends BaseController
         $token = check(Request::input('token'));
 
         if ($token == $_SESSION['token']) {
-
-            $key = str_random();
 
             $user->update([
                 'apikey' => md5(getUser('login').str_random()),

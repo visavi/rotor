@@ -21,7 +21,7 @@ class SearchController extends BaseController
      */
     public function search()
     {
-        $find = check(strtolower(Request::input('find')));
+        $find = check(Request::input('find'));
 
         if (utfStrlen($find) < 3 || utfStrlen($find) > 20) {
             setInput(Request::all());
@@ -30,8 +30,8 @@ class SearchController extends BaseController
         }
 
         $users = User::query()
-            ->whereRaw('lower(login) LIKE "%' . $find . '%"')
-            ->orWhereRaw('lower(name) LIKE "%' . $find . '%"')
+            ->where('login LIKE "%' . $find . '%"')
+            ->orWhere('name LIKE "%' . $find . '%"')
             ->orderBy('point', 'desc')
             ->limit(setting('usersearch'))
             ->get();
@@ -44,18 +44,16 @@ class SearchController extends BaseController
      */
     public function sort($letter)
     {
-        $letter = strtolower($letter);
-
         $search = is_numeric($letter) ? "RLIKE '^[-0-9]'" : "LIKE '$letter%'";
 
         $total = User::query()
-            ->whereRaw('lower(login) ' . $search)
+            ->whereRaw('login ' . $search)
             ->count();
 
         $page = paginate(setting('usersearch'), $total);
 
         $users = User::query()
-            ->whereRaw('lower(login) ' . $search)
+            ->whereRaw('login ' . $search)
             ->orderBy('point', 'desc')
             ->offset($page['offset'])
             ->limit($page['limit'])

@@ -52,11 +52,11 @@ class UserController extends AdminController
 
         $search = $q == 1 ? "RLIKE '^[-0-9]'" : "LIKE '$q%'";
 
-        $total = User::query()->whereRaw('lower(login) ' . $search)->count();
+        $total = User::query()->whereRaw('login ' . $search)->count();
         $page = paginate(setting('usersearch'), $total);
 
         $users = User::query()
-            ->whereRaw('lower(login) ' . $search)
+            ->whereRaw('login ' . $search)
             ->offset($page['offset'])
             ->limit($page['limit'])
             ->orderBy('point', 'desc')
@@ -72,7 +72,7 @@ class UserController extends AdminController
     {
         $login = check(Request::input('user'));
 
-        $user = User::query()->whereRaw('lower(login) = ?', [strtolower($login)])->first();
+        $user = User::query()->where('login', $login)->first();
 
         if (! $user) {
             abort('default', 'Пользователь не найден!');
@@ -184,7 +184,7 @@ class UserController extends AdminController
     {
         $login = check(Request::input('user'));
 
-        $user = User::query()->whereRaw('lower(login) = ?', [strtolower($login)])->first();
+        $user = User::query()->where('login', $login)->first();
 
         if (! $user) {
             abort('default', 'Пользователь не найден!');

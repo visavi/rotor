@@ -136,12 +136,12 @@ class InvitationController extends AdminController
             sendPrivate($user, null, $text);
 
             setFlash('success', 'Ключи успешно отправлены!');
+            redirect('/admin/invitations');
         } else {
             setInput(Request::all());
             setFlash('danger', $validator->getErrors());
+            redirect('/admin/invitations/create');
         }
-
-        redirect('/admin/invitations');
     }
 
     /**
@@ -179,12 +179,12 @@ class InvitationController extends AdminController
             }
 
             setFlash('success', 'Ключи успешно отправлены! ('. $users->count() .')');
+            redirect('/admin/invitations');
         } else {
             setInput(Request::all());
             setFlash('danger', $validator->getErrors());
+            redirect('/admin/invitations/create');
         }
-
-        redirect('/admin/invitations');
     }
 
     /**
