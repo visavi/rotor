@@ -24,7 +24,7 @@
         <i class="fa fa-circle fa-lg text-muted"></i> <a href="/admin/ban">Бан / Разбан</a><br>
         <i class="fa fa-circle fa-lg text-muted"></i> <a href="/admin/banlist">Список забаненых</a> ({{ statsBanned() }})<br>
         <i class="far fa-circle fa-lg text-muted"></i> <a href="/admin/spam">Список жалоб</a> ({{ statsSpam() }})<br>
-        <i class="fa fa-circle fa-lg text-muted"></i> <a href="/admin/adminlist">Список старших</a> ({{ statsAdmins() }})<br>
+        <i class="far fa-circle fa-lg text-muted"></i> <a href="/admin/adminlist">Список старших</a> ({{ statsAdmins() }})<br>
         <i class="fa fa-circle fa-lg text-muted"></i> <a href="/admin/reglist">Список ожидающих</a> ({{ statsRegList() }})<br>
         <i class="fa fa-circle fa-lg text-muted"></i> <a href="/admin/votes">Голосования</a> ({{ statVotes() }})<br>
         <i class="far fa-circle fa-lg text-muted"></i> <a href="/admin/antimat">Управление антиматом</a> ({{ statsAntimat() }})<br>

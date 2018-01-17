@@ -179,8 +179,6 @@ class UserController extends AdminController
 
     /**
      * Удаление пользователя
-     *
-     * @throws \Exception
      */
     public function delete()
     {
@@ -194,13 +192,13 @@ class UserController extends AdminController
 
         if (Request::isMethod('post')) {
 
-            $token         = check(Request::input('token'));
-            $loginblack    = Request::has('loginblack') ? 1 : 0;
-            $mailblack     = Request::has('mailblack') ? 1 : 0;
-            $deltopics     = Request::has('deltopics') ? 1 : 0;
-            $delposts      = Request::has('delposts') ? 1 : 0;
-            $delcomments   = Request::has('delcomments') ? 1 : 0;
-            $delimages     = Request::has('delimages') ? 1 : 0;
+            $token       = check(Request::input('token'));
+            $loginblack  = Request::has('loginblack') ? 1 : 0;
+            $mailblack   = Request::has('mailblack') ? 1 : 0;
+            $deltopics   = Request::has('deltopics') ? 1 : 0;
+            $delposts    = Request::has('delposts') ? 1 : 0;
+            $delcomments = Request::has('delcomments') ? 1 : 0;
+            $delimages   = Request::has('delimages') ? 1 : 0;
 
             $validator = new Validator();
             $validator->equal($token, $_SESSION['token'], 'Неверный идентификатор сессии, повторите действие!')
