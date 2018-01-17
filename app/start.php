@@ -63,7 +63,7 @@ if (empty($_SESSION['token'])) {
     $_SESSION['token'] = str_random(8);
 }
 if (empty($_SESSION['protect'])) {
-    $_SESSION['protect'] = mt_rand(1000, 99999);
+    $_SESSION['protect'] = random_int(1000, 99999);
 }
 
 /**

@@ -29,7 +29,7 @@
         <i class="fa fa-circle fa-lg text-muted"></i> <a href="/admin/votes">Голосования</a> ({{ statVotes() }})<br>
         <i class="far fa-circle fa-lg text-muted"></i> <a href="/admin/antimat">Управление антиматом</a> ({{ statsAntimat() }})<br>
         <i class="fa fa-circle fa-lg text-muted"></i> <a href="/admin/banhist">История банов</a> ({{ statsBanHist() }})<br>
-        <i class="fa fa-circle fa-lg text-muted"></i> <a href="/admin/invitations">Приглашения</a> ({{ statsInvite() }})<br>
+        <i class="far fa-circle fa-lg text-muted"></i> <a href="/admin/invitations">Приглашения</a> ({{ statsInvite() }})<br>
         <i class="far fa-circle fa-lg text-muted"></i> <a href="/admin/transfers">Денежные операции</a><br>
     @endif
 

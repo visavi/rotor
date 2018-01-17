@@ -475,7 +475,7 @@ class UserController extends BaseController
 
         if ($validator->isValid()) {
 
-            $genkey = str_random(rand(15,20));
+            $genkey = str_random(random_int(15,20));
 
             $subject = 'Изменение email на сайте '.setting('title');
             $message = 'Здравствуйте, '.$user->login.'<br>Вами была произведена операция по изменению адреса электронной почты<br><br>Для того, чтобы изменить email, необходимо подтвердить новый адрес почты<br>Перейдите по данной ссылке:<br><br><a href="'.siteUrl(true).'/account/editmail?key='.$genkey.'">'.siteUrl(true).'/account/editmail?key='.$genkey.'</a><br><br>Ссылка будет дейстительной в течение суток до '.date('j.m.y / H:i', SITETIME + 86400).'<br>Для изменения адреса необходимо быть авторизованным на сайте<br>Если это сообщение попало к вам по ошибке или вы не собираетесь менять email, то просто проигнорируйте данное письмо';

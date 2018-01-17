@@ -82,9 +82,9 @@ class PageController extends BaseController
         $surprise['requiredPoint'] = 50;
         $surprise['requiredDate']  = '10.01';
 
-        $surpriseMoney  = mt_rand(10000, 20000);
-        $surprisePoint  = mt_rand(150, 250);
-        $surpriseRating = mt_rand(3, 7);
+        $surpriseMoney  = random_int(10000, 20000);
+        $surprisePoint  = random_int(150, 250);
+        $surpriseRating = random_int(3, 7);
         $currentYear    = date('Y');
 
         if (! $user = getUser()) {

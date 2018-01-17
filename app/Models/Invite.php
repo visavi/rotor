@@ -24,4 +24,12 @@ class Invite extends BaseModel
      * @var array
      */
     protected $guarded = [];
+
+    /**
+     * Возвращает связь пользователей
+     */
+    public function inviteUser()
+    {
+        return $this->belongsTo(User::class, 'invite_user_id')->withDefault();
+    }
 }
