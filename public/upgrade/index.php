@@ -17,7 +17,7 @@ $wrap = new Phinx\Wrapper\TextWrapper($app);
 $app->setName('RotorCMS by Vantuz - http://visavi.net');
 $app->setVersion(VERSION);
 
-$wrap->setOption('configuration', DIR.'/phinx.php');
+$wrap->setOption('configuration', DIR.'/app/migration.php');
 $wrap->setOption('parser', 'php');
 $wrap->setOption('environment', 'default');
 
@@ -40,22 +40,16 @@ header("Content-type:text/html; charset=utf-8");
     <a href="/"><img src="/assets/img/images/logo.png"></a>
 </div>
 <div class="site">
-    <pre>
-        <span class="inner-pre" style="font-size: 11px">
-            <?php if (empty($_GET['act'])): ?>
-
-                <p style="font-size: 20px">Список доступных миграций</p>
-
-                <?= $wrap->getStatus(); ?>
-                <a style="font-size: 18px" href="?act=upgrade">Перейти к обновлению</a>
-            <?php elseif($_GET['act'] == 'rollback'): ?>
-                <?= $wrap->getRollback(); ?>
-            <?php else: ?>
-                <?= $wrap->getMigrate(); ?>
-                <p style="font-size: 20px">Удалите директории install и upgrade</p>
-            <?php endif; ?>
-        </span>
-    </pre>
+    <?php if (empty($_GET['act'])): ?>
+        <p style="font-size: 20px">Список доступных миграций</p>
+        <?= nl2br($wrap->getStatus()); ?>
+        <a style="font-size: 18px" href="?act=upgrade">Перейти к обновлению</a>
+    <?php elseif($_GET['act'] === 'rollback'): ?>
+        <?= nl2br($wrap->getRollback()); ?>
+    <?php else: ?>
+        <?= nl2br($wrap->getMigrate()); ?>
+        <p style="font-size: 20px">Удалите директории install и upgrade</p>
+    <?php endif; ?>
 </div>
 </body>
 </html>

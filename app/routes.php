@@ -303,6 +303,8 @@ $routes = [
     ['POST',     '/admin/invitations/mail', 'Admin\InvitationController@mail'],
     ['POST',     '/admin/invitations/delete', 'Admin\InvitationController@delete'],
 
+    ['GET',      '/admin/reglist', 'admin/Admin\ReglistController@index'],
+
     ['GET|POST', '/admin/blog', 'admin/blog.php'],
     ['GET|POST', '/admin/chat', 'admin/chat.php'],
     ['GET|POST', '/admin/forum', 'admin/forum.php'],
@@ -313,7 +315,6 @@ $routes = [
     ['GET|POST', '/admin/ban', 'admin/ban.php'],
     ['GET|POST', '/admin/banhist', 'admin/banhist.php'],
     ['GET|POST', '/admin/banlist', 'admin/banlist.php'],
-    ['GET|POST', '/admin/reglist', 'admin/reglist.php'],
     ['GET|POST', '/admin/votes', 'admin/votes.php'],
     ['GET|POST', '/admin/users', 'admin/users.php'],
     ['GET|POST', '/admin/offers', 'admin/offers.php'],

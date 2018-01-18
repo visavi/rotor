@@ -71,7 +71,7 @@ $wrap = new Phinx\Wrapper\TextWrapper($app);
 $app->setName('RotorCMS by Vantuz - http://visavi.net');
 $app->setVersion(VERSION);
 
-$wrap->setOption('configuration', DIR.'/phinx.php');
+$wrap->setOption('configuration', DIR.'/app/migration.php');
 $wrap->setOption('parser', 'php');
 $wrap->setOption('environment', 'default');
 

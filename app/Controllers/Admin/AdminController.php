@@ -56,7 +56,7 @@ Class AdminController extends BaseController
         $app->setName('RotorCMS by Vantuz - http://visavi.net');
         $app->setVersion(VERSION);
 
-        $wrap->setOption('configuration', BASEDIR.'/phinx.php');
+        $wrap->setOption('configuration', BASEDIR.'/app/migration.php');
         $wrap->setOption('parser', 'php');
         $wrap->setOption('environment', 'default');
 

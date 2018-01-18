@@ -1,6 +1,12 @@
 #!/usr/bin/env php
 <?php
-require __DIR__.'/app/bootstrap.php';
+
+use Phinx\Config\Config;
+use Symfony\Component\Console\Event\ConsoleCommandEvent;
+use Symfony\Component\Console\ConsoleEvents;
+use Symfony\Component\EventDispatcher\EventDispatcher;
+
+require __DIR__ . '/app/bootstrap.php';
 
 $app = new Phinx\Console\PhinxApplication();
 $app->setName('RotorCMS by Vantuz - http://visavi.net');
@@ -12,4 +18,15 @@ $app->addCommands([
     new \App\Commands\CacheClear(),
 ]);
 
+
+$dispatcher = new EventDispatcher();
+$dispatcher->addListener(ConsoleEvents::COMMAND, function (ConsoleCommandEvent $event) {
+    $command = $event->getCommand();
+
+    if ($command instanceof Phinx\Console\Command\AbstractCommand) {
+        $command->setConfig(new Config(require APP . '/migration.php'));
+    }
+});
+
+$app->setDispatcher($dispatcher);
 $app->run();
