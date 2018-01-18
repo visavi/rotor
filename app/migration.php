@@ -3,7 +3,7 @@ return [
     'paths' => [
         'migrations' => [
             BASEDIR . '/database/migrations',
-            HOME . '/upgrade/migrations',
+            BASEDIR . '/database/upgrades',
         ],
         'seeds' => BASEDIR.'/database/seeds',
     ],
