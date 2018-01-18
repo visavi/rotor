@@ -58,7 +58,7 @@
             <hr>
             <div>
                 {!! $user->getGender() !!} <b><a href="/admin/users/edit?user={{ $user->login }}">{{ $user->login }}</a></b> (email: {{ $user->email }})<br>
-                Зарегистрирован: {{ date('d.m.Y', strtotime($user->joined))}}
+                Зарегистрирован: {{ date('d.m.Y', strtotime($user->joined)) }}
             </div>
         @endforeach
 

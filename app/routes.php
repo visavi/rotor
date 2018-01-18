@@ -303,7 +303,7 @@ $routes = [
     ['POST',     '/admin/invitations/mail', 'Admin\InvitationController@mail'],
     ['POST',     '/admin/invitations/delete', 'Admin\InvitationController@delete'],
 
-    ['GET',      '/admin/reglist', 'admin/Admin\ReglistController@index'],
+    ['GET|POST', '/admin/reglist', 'Admin\ReglistController@index'],
 
     ['GET|POST', '/admin/blog', 'admin/blog.php'],
     ['GET|POST', '/admin/chat', 'admin/chat.php'],
