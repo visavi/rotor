@@ -2,14 +2,14 @@
 
 namespace App\Models;
 
-class Queue extends BaseModel
+class Mailing extends BaseModel
 {
     /**
      * The table associated with the model.
      *
      * @var string
      */
-    protected $table = 'queue';
+    protected $table = 'mailings';
 
     /**
      * Indicates if the model should be timestamped.

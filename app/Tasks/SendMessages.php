@@ -2,7 +2,7 @@
 
 namespace App\Tasks;
 
-use App\Models\Queue;
+use App\Models\Mailing;
 use Crontask\Tasks\Task;
 
 class SendMessages extends Task
@@ -12,7 +12,7 @@ class SendMessages extends Task
      */
     public function run()
     {
-        $queues = Queue::query()
+        $queues = Mailing::query()
             ->where('sent', 0)
             ->limit(setting('sendmailpacket'))
             ->get();

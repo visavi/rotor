@@ -2,7 +2,7 @@
 
 namespace App\Tasks;
 
-use App\Models\Queue;
+use App\Models\Mailing;
 use App\Models\User;
 use Crontask\Tasks\Task;
 
@@ -23,7 +23,6 @@ class AddSubscribers extends Task
             ->limit(100)
             ->get();
 
-
         if ($deliveryUsers->isNotEmpty()) {
             foreach ($deliveryUsers as $user) {
 
@@ -33,7 +32,7 @@ class AddSubscribers extends Task
 
                 $body = view('mailer.default', compact('subject', 'message'));
 
-                Queue::query()->create([
+                Mailing::query()->create([
                     'user_id'    => $user->id,
                     'type'       => 'private',
                     'subject'    => $subject,
