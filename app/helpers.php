@@ -384,20 +384,17 @@ function userLevel($level)
         case User::MODER:
             $status = $name[2];
             break;
-        case User::MANAGER:
+        case User::EDITOR:
             $status = $name[3];
             break;
-        case User::EDITOR:
+        case User::USER:
             $status = $name[4];
             break;
-        case User::USER:
+        case User::PENDED:
             $status = $name[5];
             break;
-        case User::PENDED:
-            $status = $name[6];
-            break;
         case User::BANNED:
-            $status = $name[7];
+            $status = $name[6];
             break;
         default: $status = setting('statusdef');
     }

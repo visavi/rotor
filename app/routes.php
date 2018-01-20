@@ -305,8 +305,9 @@ $routes = [
 
     ['GET|POST', '/admin/reglist', 'Admin\ReglistController@index'],
 
+    ['GET',      '/admin/chat', 'Admin\ChatController@index'],
+
     ['GET|POST', '/admin/blog', 'admin/blog.php'],
-    ['GET|POST', '/admin/chat', 'admin/chat.php'],
     ['GET|POST', '/admin/forum', 'admin/forum.php'],
     ['GET|POST', '/admin/gallery', 'admin/gallery.php'],
     ['GET|POST', '/admin/load', 'admin/load.php'],

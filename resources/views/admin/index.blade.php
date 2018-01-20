@@ -11,7 +11,7 @@
     <i class="fa fa-key fa-lg"></i> <b><a href="/admin/upgrade">Версия {{ VERSION }}.{{ setting('buildversion') }}</a></b><br><br>
 
     <div class="b"><i class="fa fa-cog fa-lg text-muted"></i> <b>Редактор</b></div>
-    <i class="fa fa-circle fa-lg text-muted"></i> <a href="/admin/chat">Админ-чат</a> ({{ statsChat() }})<br>
+    <i class="far fa-circle fa-lg text-muted"></i> <a href="/admin/chat">Админ-чат</a> ({{ statsChat() }})<br>
     <i class="far fa-circle fa-lg text-muted"></i> <a href="/admin/book">Гостевая книга</a> ({{ statsGuest() }})<br>
     <i class="fa fa-circle fa-lg text-muted"></i> <a href="/admin/forum">Форум</a> ({{ statsForum() }})<br>
     <i class="fa fa-circle fa-lg text-muted"></i> <a href="/admin/gallery">Галерея</a> ({{ statsGallery() }})<br>

@@ -10,7 +10,6 @@ class User extends BaseModel
     const BOSS    = 'boss';    // Владелец
     const ADMIN   = 'admin';   // Админ
     const MODER   = 'moder';   // Модератор
-    const MANAGER = 'manager'; // Менеджер
     const EDITOR  = 'editor';  // Редактор
     const USER    = 'user';    // Пользователь
     const PENDED  = 'pended';  // Ожидающий
@@ -23,7 +22,6 @@ class User extends BaseModel
         self::BOSS,
         self::ADMIN,
         self::MODER,
-        self::MANAGER,
         self::EDITOR,
     ];
 
@@ -34,7 +32,6 @@ class User extends BaseModel
         self::BOSS,
         self::ADMIN,
         self::MODER,
-        self::MANAGER,
         self::EDITOR,
         self::USER,
     ];
@@ -46,7 +43,6 @@ class User extends BaseModel
         self::BOSS,
         self::ADMIN,
         self::MODER,
-        self::MANAGER,
         self::EDITOR,
         self::USER,
         self::PENDED,
@@ -150,14 +146,6 @@ class User extends BaseModel
                         'created_at' => SITETIME,
                         'type' => 1,
                     ]);
-
-                    DB::delete('
-                        delete from login where created_at < (
-                            select min(created_at) from (
-                                select created_at from guest order by created_at desc limit 50
-                            ) as del
-                        );'
-                    );
                 }
 
                 $user->update([

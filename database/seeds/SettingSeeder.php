@@ -118,7 +118,7 @@ class SettingSeeder extends AbstractSeed
             ['name'  => 'smileminweight', 'value' => 16],
             ['name'  => 'spamlist', 'value' => 10],
             ['name'  => 'statusdef', 'value' => 'Дух'],
-            ['name'  => 'statusname', 'value' => 'Владелец,Админ,Модератор,Менеджер,Редактор,Пользователь,Ожидающий,Забаненный'],
+            ['name'  => 'statusname', 'value' => 'Владелец,Админ,Модератор,Редактор,Пользователь,Ожидающий,Забаненный'],
             ['name'  => 'themes', 'value' => 'default'],
             ['name'  => 'timeonline', 'value' => 600],
             ['name'  => 'timezone', 'value' => 'Europe/Moscow'],
