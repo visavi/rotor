@@ -128,4 +128,4 @@ Phone: +79167407574
 
 ### License
 
-The Rotor is open-sourced software licensed under the [GPL-3.0-only license](http://opensource.org/licenses/GPL-3.0)
+The Rotor is open-sourced software licensed under the [GPL-3.0 license](http://opensource.org/licenses/GPL-3.0)

@@ -3,7 +3,7 @@
     "description": "RotorCMS",
     "keywords": ["cms", "wap", "rotor"],
     "homepage": "http://visavi.net",
-    "license": "GPL-3.0-only",
+    "license": "GPL-3.0",
     "authors": [
         {
             "name": "Alexander Grigorev",

@@ -28,7 +28,7 @@
   "site": "http://pizdec.ru",
   "icq": "364466",
   "skype": "vantuzilla",
-  "gender": 1,
+  "gender": "male",
   "birthday": "11.12.1981",
   "newwall": 0,
   "point": 8134,

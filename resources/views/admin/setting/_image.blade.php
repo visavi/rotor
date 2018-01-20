@@ -9,9 +9,9 @@
         {!! textError('sets[filesize]') !!}
 
         <input type="hidden" value="1048576" name="mods[filesize]">
+        <span class="text-muted font-italic">Ограничение сервера: {{ ini_get('upload_max_filesize') }}</span>
     </div>
 
-    <p class="text-muted font-italic">Ограничение сервера: {{ ini_get('upload_max_filesize') }}</p>
 
     <div class="form-group{{ hasError('sets[fileupfoto]') }}">
         <label for="fileupfoto">Максимальный размер фото (px):</label>

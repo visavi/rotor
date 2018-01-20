@@ -101,7 +101,7 @@ class UserController extends BaseController
                 $invite      = setting('invite') ? check(Request::input('invite')) : '';
                 $meil        = strtolower(check(Request::input('meil')));
                 $domain      = utfSubstr(strrchr($meil, '@'), 1);
-                $gender      = Request::input('gender') == 1 ? 1 : 2;
+                $gender      = Request::input('gender') == 'male' ? 'male' : 'female';
                 $activateKey = null;
                 $level       = User::USER;
 
@@ -324,7 +324,7 @@ class UserController extends BaseController
                     'icq'      => $icq,
                     'skype'    => $skype,
                     'site'     => $site,
-                    'birthday' => date('Y-m-d', strtotime($birthday)),
+                    'birthday' => $birthday ? date('Y-m-d', strtotime($birthday)) : null,
                     'info'     => $info,
                 ]);
 

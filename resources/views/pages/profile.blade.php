@@ -61,7 +61,7 @@
 
                         <div class="form-group{{ hasError('birthday') }}">
                             <label for="inputBirthday">Дата рождения (дд.мм.гггг):</label>
-                            <input class="form-control" id="inputBirthday" name="birthday" maxlength="10" value="{{ getInput('birthday', date('d.m.Y', strtotime($user->birthday))) }}">
+                            <input class="form-control" id="inputBirthday" name="birthday" maxlength="10" value="{{ getInput('birthday', $user->birthday ? date('d.m.Y', strtotime($user->birthday)) : null) }}">
                             {!! textError('birthday') !!}
                         </div>
                     </div>

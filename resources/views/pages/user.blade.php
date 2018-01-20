@@ -36,7 +36,7 @@
 
                 {!! $user->getGender() !!}
                 Пол:
-                {{  ($user->gender == 1) ? 'Мужской' : 'Женский' }}<br>
+                {{  ($user->gender == 'male') ? 'Мужской' : 'Женский' }}<br>
 
                 Логин: <b>{{ $user->login }}</b><br>
 

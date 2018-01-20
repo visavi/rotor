@@ -62,18 +62,16 @@
                 {!! textError('timezone') !!}
             </div>
 
-            <div class="checkbox">
-                <label data-toggle="tooltip" title="Уведомления об ответах будут приходить в личные сообщения">
-                    <input type="hidden" value="0" name="notify">
-                    <input name="notify" type="checkbox" value="1"{{ getInput('notify', $user->notify) ? ' checked' : '' }}> Получать уведомления об ответах
-                </label>
+            <div class="custom-control custom-checkbox">
+                <input type="hidden" value="0" name="notify">
+                <input type="checkbox" class="custom-control-input" value="1" name="notify" id="notify"{{ getInput('notify', $user->notify) ? ' checked' : '' }}>
+                <label data-toggle="tooltip" title="Уведомления об ответах будут приходить в личные сообщения" class="custom-control-label" for="notify">Получать уведомления об ответах</label>
             </div>
 
-            <div class="checkbox">
-                <label data-toggle="tooltip" title="Получение информационных писем с сайта на email">
-                    <input type="hidden" value="0" name="subscribe">
-                    <input name="subscribe" type="checkbox" value="1"{{ getInput('subscribe', $user->subscribe) ? ' checked' : '' }}> Получать информационные письма
-                </label>
+            <div class="custom-control custom-checkbox">
+                <input type="hidden" value="0" name="subscribe">
+                <input type="checkbox" class="custom-control-input" value="1" name="subscribe" id="subscribe"{{ getInput('subscribe', $user->subscribe) ? ' checked' : '' }}>
+                <label data-toggle="tooltip" title="Получение информационных писем с сайта на email" class="custom-control-label" for="subscribe">Получать информационные письма</label>
             </div>
 
             <button class="btn btn-primary">Изменить</button>

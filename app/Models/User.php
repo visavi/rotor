@@ -78,7 +78,7 @@ class User extends BaseModel
      */
     public function getGender()
     {
-        if ($this->gender == 2) {
+        if ($this->gender == 'female') {
             return '<i class="fa fa-female fa-lg"></i>';
         }
 

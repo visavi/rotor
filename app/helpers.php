@@ -1761,7 +1761,7 @@ function clearCache()
  */
 function returnUrl($url = null)
 {
-    if (Request::is('/', 'login', 'register', 'recovery', 'ban', 'closed')) {
+    if (Request::is('/', 'login', 'register', 'recovery', 'restore', 'ban', 'closed')) {
         return false;
     }
     $query = Request::has('return') ? Request::input('return') : Request::path();

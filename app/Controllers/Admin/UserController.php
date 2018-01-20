@@ -102,7 +102,7 @@ class UserController extends AdminController
             $posrating = int(Request::input('posrating'));
             $negrating = int(Request::input('negrating'));
             $themes    = check(Request::input('themes'));
-            $gender    = Request::input('gender') == 1 ? 1 : 2;
+            $gender    = Request::input('gender') == 'male' ? 'male' : 'female';
             $info      = check(Request::input('info'));
 
             $validator = new Validator();

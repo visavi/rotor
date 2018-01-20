@@ -44,13 +44,14 @@
                 <label for="inputLogin">Логин:</label>
                 <input class="form-control" name="logs" id="inputLogin" maxlength="20" value="{{ getInput('logs') }}" required>
                 {!! textError('logs') !!}
+                <span class="text-muted font-italic">Только символы латинского алфавита и цифры</span>
             </div>
 
             <div class="form-group{{ hasError('pars') }}">
                 <label for="inputPassword">Пароль:</label>
                 <input class="form-control" name="pars" type="password" id="inputPassword" maxlength="20" required>
                 {!! textError('pars') !!}
-                <span class="help-block">Минимальная длина пароля 6 символов</span>
+                <span class="text-muted font-italic">Минимальная длина пароля 6 символов</span>
             </div>
 
             <div class="form-group{{ hasError('pars2') }}">
@@ -73,15 +74,15 @@
                 </div>
             @endif
 
-            <?php $inputGender = getInput('gender', 1); ?>
+            <?php $inputGender = getInput('gender', 'male'); ?>
             Пол:
             <div class="form-group{{ hasError('gender') }}">
                 <div class="custom-control custom-radio">
-                    <input class="custom-control-input" type="radio" id="inputGenderMale" name="gender" value="1"{{ $inputGender == 1 ? ' checked' : '' }}>
+                    <input class="custom-control-input" type="radio" id="inputGenderMale" name="gender" value="male"{{ $inputGender == 'male' ? ' checked' : '' }}>
                     <label class="custom-control-label" for="inputGenderMale">Мужской</label>
                 </div>
                 <div class="custom-control custom-radio">
-                    <input class="custom-control-input" type="radio" id="inputGenderFemale" name="gender" value="2"{{ $inputGender == 2 ? ' checked' : '' }}>
+                    <input class="custom-control-input" type="radio" id="inputGenderFemale" name="gender" value="female"{{ $inputGender == 'female' ? ' checked' : '' }}>
                     <label class="custom-control-label" for="inputGenderFemale">Женский</label>
                 </div>
                 {!! textError('gender') !!}

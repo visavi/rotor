@@ -26,16 +26,17 @@
     <div class="form">
         <form method="post">
 
-
             <div class="form-group">
                 <label for="inputLogin">Логин:</label>
                 <input class="form-control" name="login" id="inputLogin" maxlength="20" value="{{ getInput('login') }}" required>
 
                 <label for="inputPassword">Пароль:</label>
                 <input class="form-control" name="pass" type="password" id="inputPassword" maxlength="20" required>
-                <label>
-                    <input name="remember" type="checkbox" value="1" checked="checked"> Запомнить меня
-                </label>
+            </div>
+
+            <div class="custom-control custom-checkbox">
+                <input type="checkbox" class="custom-control-input" value="1" name="remember" id="remember">
+                <label class="custom-control-label" for="remember">Запомнить меня</label>
             </div>
 
             <button class="btn btn-primary">Войти</button>

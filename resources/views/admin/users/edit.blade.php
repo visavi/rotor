@@ -35,7 +35,7 @@
                 <label for="password">Новый пароль:</label>
                 <input type="text" class="form-control" id="password" name="password" maxlength="50" value="{{ getInput('password') }}">
                 {!! textError('password') !!}
-                <p class="text-muted font-italic">Oставьте пустым если не нужно менять</p>
+                <span class="text-muted font-italic">Oставьте пустым если не нужно менять</span>
             </div>
 
             <div class="form-group{{ hasError('email') }}">
@@ -143,11 +143,11 @@
             Пол:
             <div class="form-group{{ hasError('gender') }}">
                 <div class="custom-control custom-radio">
-                    <input class="custom-control-input" type="radio" id="inputGenderMale" name="gender" value="1"{{ $inputGender == 1 ? ' checked' : '' }}>
+                    <input class="custom-control-input" type="radio" id="inputGenderMale" name="gender" value="male"{{ $inputGender == 'male' ? ' checked' : '' }}>
                     <label class="custom-control-label" for="inputGenderMale">Мужской</label>
                 </div>
                 <div class="custom-control custom-radio">
-                    <input class="custom-control-input" type="radio" id="inputGenderFemale" name="gender" value="2"{{ $inputGender == 2 ? ' checked' : '' }}>
+                    <input class="custom-control-input" type="radio" id="inputGenderFemale" name="gender" value="female"{{ $inputGender == 'female' ? ' checked' : '' }}>
                     <label class="custom-control-label" for="inputGenderFemale">Женский</label>
                 </div>
                 {!! textError('gender') !!}

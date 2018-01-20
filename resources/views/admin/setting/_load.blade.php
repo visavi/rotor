@@ -35,9 +35,8 @@
         {!! textError('sets[screenupload]') !!}
 
         <input type="hidden" value="1048576" name="mods[screenupload]">
+        <span class="text-muted font-italic">Ограничение сервера: {{ ini_get('upload_max_filesize') }}</span>
     </div>
-
-    <p class="text-muted font-italic">Ограничение сервера: {{ ini_get('upload_max_filesize') }}</p>
 
     <div class="form-group{{ hasError('sets[screenupsize]') }}">
         <label for="screenupsize">Максимальный размер скриншота (px):</label>
