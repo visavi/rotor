@@ -138,8 +138,8 @@ class TopicController extends BaseController
 
             if (
                 $post &&
-                getUser('id') == $post->user_id &&
                 $post->created_at + 600 > SITETIME &&
+                getUser('id') === $post->user_id &&
                 (utfStrlen($msg) + utfStrlen($post->text) <= setting('forumtextlength'))
             ) {
 

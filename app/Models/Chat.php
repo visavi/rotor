@@ -24,4 +24,12 @@ class Chat extends BaseModel
      * @var array
      */
     protected $guarded = [];
+
+    /**
+     * Возвращает связь пользователей
+     */
+    public function editUser()
+    {
+        return $this->belongsTo(User::class, 'edit_user_id')->withDefault();
+    }
 }

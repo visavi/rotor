@@ -43,7 +43,7 @@ class GuestController extends BaseController
             ->true(Flood::isFlood(), ['msg' => 'Антифлуд! Разрешается отправлять сообщения раз в ' . Flood::getPeriod() . ' секунд!']);
 
         /* Проерка для гостей */
-        if (!getUser() && setting('bookadds')) {
+        if (! getUser() && setting('bookadds')) {
             $protect = check(strtolower(Request::input('protect')));
             $validator->equal($protect, $_SESSION['protect'], ['protect' => 'Проверочное число не совпало с данными на картинке!']);
         } else {
@@ -85,7 +85,7 @@ class GuestController extends BaseController
     }
 
     /**
-     * Подготовка к редактированию
+     * Редактирование сообщения
      */
     public function edit($id)
     {
@@ -116,10 +116,11 @@ class GuestController extends BaseController
 
                 $msg = antimat($msg);
 
-                $post->text = $msg;
-                $post->edit_user_id = getUser('id');
-                $post->updated_at = SITETIME;
-                $post->save();
+                $post->update([
+                    'text'         => $msg,
+                    'edit_user_id' => getUser('id'),
+                    'updated_at'   => SITETIME,
+                ]);
 
                 setFlash('success', 'Сообщение успешно отредактировано!');
                 redirect('/book');
