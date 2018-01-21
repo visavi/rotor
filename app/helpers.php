@@ -985,7 +985,7 @@ function statsChat()
  */
 function statsNewChat()
 {
-    return (int) Chat::query()->max('created_at');
+    return Chat::query()->max('created_at');
 }
 
 /**
