@@ -40,33 +40,33 @@
     <div class="form">
         <form action="/register" method="post">
 
-            <div class="form-group{{ hasError('logs') }}">
+            <div class="form-group{{ hasError('login') }}">
                 <label for="inputLogin">Логин:</label>
-                <input class="form-control" name="logs" id="inputLogin" maxlength="20" value="{{ getInput('logs') }}" required>
-                {!! textError('logs') !!}
+                <input class="form-control" name="login" id="inputLogin" maxlength="20" value="{{ getInput('login') }}" required>
+                {!! textError('login') !!}
                 <span class="text-muted font-italic">Только символы латинского алфавита и цифры</span>
             </div>
 
-            <div class="form-group{{ hasError('pars') }}">
+            <div class="form-group{{ hasError('password') }}">
                 <label for="inputPassword">Пароль:</label>
-                <input class="form-control" name="pars" type="password" id="inputPassword" maxlength="20" required>
-                {!! textError('pars') !!}
+                <input class="form-control" name="password" type="password" id="inputPassword" maxlength="20" required>
+                {!! textError('password') !!}
                 <span class="text-muted font-italic">Минимальная длина пароля 6 символов</span>
             </div>
 
-            <div class="form-group{{ hasError('pars2') }}">
+            <div class="form-group{{ hasError('password2') }}">
                 <label for="inputPassword2">Повтор пароля:</label>
-                <input class="form-control" name="pars2" type="password" id="inputPassword2" maxlength="20" required>
-                {!! textError('pars2') !!}
+                <input class="form-control" name="password2" type="password" id="inputPassword2" maxlength="20" required>
+                {!! textError('password2') !!}
             </div>
 
-            <div class="form-group{{ hasError('meil') }}">
+            <div class="form-group{{ hasError('email') }}">
                 <label for="inputEmail">Email:</label>
-                <input class="form-control" name="meil" id="inputEmail" maxlength="50" value="{{ getInput('meil') }}" required>
-                {!! textError('meil') !!}
+                <input class="form-control" name="email" id="inputEmail" maxlength="50" value="{{ getInput('email') }}" required>
+                {!! textError('email') !!}
             </div>
 
-            @if (!empty(setting('invite')))
+            @if (setting('invite'))
                 <div class="form-group{{ hasError('invite') }}">
                     <label for="inputInvite">Пригласительный ключ:</label>
                     <input class="form-control" name="invite" id="inputInvite" maxlength="32" value="{{ getInput('invite') }}" required>

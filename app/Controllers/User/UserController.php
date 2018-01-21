@@ -29,7 +29,7 @@ class UserController extends BaseController
 
         $adminGroups = User::ADMIN_GROUPS;
 
-        return view('pages/user', compact('user', 'invite', 'note', 'adminGroups'));
+        return view('user/user', compact('user', 'invite', 'note', 'adminGroups'));
     }
 
     /**
@@ -76,7 +76,7 @@ class UserController extends BaseController
             }
         }
 
-        return view('pages/user_note', compact('note', 'user'));
+        return view('user/note', compact('note', 'user'));
     }
 
     /**
@@ -93,66 +93,66 @@ class UserController extends BaseController
         }
 
         if (Request::isMethod('post')) {
-            if (Request::has('logs') && Request::has('pars')) {
-                $logs        = check(Request::input('logs'));
-                $pars        = trim(Request::input('pars'));
-                $pars2       = trim(Request::input('pars2'));
+            if (Request::has('login') && Request::has('password')) {
+                $login       = check(Request::input('login'));
+                $password    = trim(Request::input('password'));
+                $password2   = trim(Request::input('password2'));
                 $protect     = check(strtolower(Request::input('protect')));
                 $invite      = setting('invite') ? check(Request::input('invite')) : '';
-                $meil        = strtolower(check(Request::input('meil')));
-                $domain      = utfSubstr(strrchr($meil, '@'), 1);
+                $email       = strtolower(check(Request::input('email')));
+                $domain      = utfSubstr(strrchr($email, '@'), 1);
                 $gender      = Request::input('gender') == 'male' ? 'male' : 'female';
                 $activateKey = null;
                 $level       = User::USER;
 
                 $validator = new Validator();
                 $validator->equal($protect, $_SESSION['protect'], ['protect' => 'Проверочное число не совпало с данными на картинке!'])
-                    ->regex($logs, '|^[a-z0-9\-]+$|i', ['logs' => 'Недопустимые символы в логине. Разрешены знаки латинского алфавита, цифры и дефис!'])
-                    ->regex(utfSubstr($logs, 0, 1), '|^[a-z0-9]+$|i', ['logs' => 'Логин должен начинаться с буквы или цифры!'])
-                    ->email($meil, ['meil' => 'Вы ввели неверный адрес email, необходим формат name@site.domen!'])
+                    ->regex($login, '|^[a-z0-9\-]+$|i', ['login' => 'Недопустимые символы в логине. Разрешены знаки латинского алфавита, цифры и дефис!'])
+                    ->regex(utfSubstr($login, 0, 1), '|^[a-z0-9]+$|i', ['login' => 'Логин должен начинаться с буквы или цифры!'])
+                    ->email($email, ['email' => 'Вы ввели неверный адрес email, необходим формат name@site.domen!'])
                     ->length($invite, 12, 15, ['invite' => 'Слишком длинный или короткий пригласительный ключ!'], setting('invite'))
-                    ->length($logs, 3, 20, ['logs' => 'Слишком длинный или короткий логин!'])
-                    ->length($pars, 6, 20, ['pars' => 'Слишком длинный или короткий пароль!'])
-                    ->equal($pars, $pars2, ['pars2' => 'Ошибка! Введенные пароли отличаются друг от друга!']);
+                    ->length($login, 3, 20, ['login' => 'Слишком длинный или короткий логин!'])
+                    ->length($password, 6, 20, ['password' => 'Слишком длинный или короткий пароль!'])
+                    ->equal($password, $password2, ['password2' => 'Ошибка! Введенные пароли отличаются друг от друга!']);
 
-                if (ctype_digit($pars)) {
-                    $validator->addError(['pars' => 'Запрещен пароль состоящий только из цифр, используйте буквы!']);
+                if (ctype_digit($password)) {
+                    $validator->addError(['password' => 'Запрещен пароль состоящий только из цифр, используйте буквы!']);
                 }
 
-                if (substr_count($logs, '-') > 2) {
-                    $validator->addError(['logs' => 'Запрещено использовать в логине слишком много дефисов!']);
+                if (substr_count($login, '-') > 2) {
+                    $validator->addError(['login' => 'Запрещено использовать в логине слишком много дефисов!']);
                 }
 
-                if (! empty($logs)) {
+                if (! empty($login)) {
                     // Проверка логина на существование
-                    $checkLogin = User::query()->where('login', $logs)->count();
-                    $validator->empty($checkLogin, ['logs' => 'Пользователь с данным логином уже зарегистрирован!']);
+                    $checkLogin = User::query()->where('login', $login)->count();
+                    $validator->empty($checkLogin, ['login' => 'Пользователь с данным логином уже зарегистрирован!']);
 
                     // Проверка логина в черном списке
                     $blackLogin = Blacklist::query()
                         ->where('type', 2)
-                        ->where('value', strtolower($logs))
+                        ->where('value', strtolower($login))
                         ->count();
-                    $validator->empty($blackLogin, ['logs' => 'Выбранный вами логин занесен в черный список!']);
+                    $validator->empty($blackLogin, ['login' => 'Выбранный вами логин занесен в черный список!']);
                 }
 
                 // Проверка email на существование
-                $checkMail = User::query()->where('email', $meil)->count();
-                $validator->empty($checkMail, ['meil' => 'Указанный вами адрес email уже используется в системе!']);
+                $checkMail = User::query()->where('email', $email)->count();
+                $validator->empty($checkMail, ['email' => 'Указанный вами адрес email уже используется в системе!']);
 
                 // Проверка домена от email в черном списке
                 $blackDomain = Blacklist::query()
                     ->where('type', 3)
                     ->where('value', $domain)
                     ->count();
-                $validator->empty($blackDomain, ['meil' => 'Домен от вашего адреса email занесен в черный список!']);
+                $validator->empty($blackDomain, ['email' => 'Домен от вашего адреса email занесен в черный список!']);
 
                 // Проверка email в черном списке
                 $blackMail = Blacklist::query()
                     ->where('type', 1)
-                    ->where('value', $meil)
+                    ->where('value', $email)
                     ->count();
-                $validator->empty($blackMail, ['meil' => 'Указанный вами адрес email занесен в черный список!']);
+                $validator->empty($blackMail, ['email' => 'Указанный вами адрес email занесен в черный список!']);
 
                 // Проверка пригласительного ключа
                 if (setting('invite')) {
@@ -169,7 +169,7 @@ class UserController extends BaseController
                 if ($validator->isValid()) {
 
                     // --- Уведомление о регистрации на email ---//
-                    $message = 'Добро пожаловать, ' . $logs . '<br>Теперь вы зарегистрированный пользователь сайта <a href="' . siteUrl(true) . '">' . setting('title') . '</a> , сохраните ваш пароль и логин в надежном месте, они вам еще пригодятся. <br>Ваши данные для входа на сайт <br><b>Логин: ' . $logs . '</b><br><b>Пароль: ' . $pars . '</b><br><br>';
+                    $message = 'Добро пожаловать, ' . $login . '<br>Теперь вы зарегистрированный пользователь сайта <a href="' . siteUrl(true) . '">' . setting('title') . '</a> , сохраните ваш пароль и логин в надежном месте, они вам еще пригодятся. <br>Ваши данные для входа на сайт <br><b>Логин: ' . $login . '</b><br><b>Пароль: ' . $password . '</b><br><br>';
 
                     if (setting('regkeys')) {
                         $activateKey  = str_random();
@@ -178,9 +178,9 @@ class UserController extends BaseController
                     }
 
                     $user = User::query()->create([
-                        'login'         => $logs,
-                        'password'      => password_hash($pars, PASSWORD_BCRYPT),
-                        'email'         => $meil,
+                        'login'         => $login,
+                        'password'      => password_hash($password, PASSWORD_BCRYPT),
+                        'email'         => $email,
                         'joined'        => date('Y-m-d', SITETIME),
                         'level'         => $level,
                         'gender'        => $gender,
@@ -202,16 +202,16 @@ class UserController extends BaseController
                     }
 
                     // ----- Уведомление в приват ----//
-                    $textNotice = textNotice('register', ['%USERNAME%' => $logs, '%SITENAME%' => siteUrl()]);
+                    $textNotice = textNotice('register', ['%USERNAME%' => $login, '%SITENAME%' => siteUrl()]);
                     sendPrivate($user, null, $textNotice);
 
                     $subject = 'Регистрация на сайте ' . setting('title');
                     $body = view('mailer.register', compact('subject', 'message', 'activateKey', 'activateLink'));
-                    sendMail($meil, $subject, $body);
+                    sendMail($email, $subject, $body);
 
-                    User::auth($logs, $pars);
+                    User::auth($login, $password);
 
-                    setFlash('success', 'Добро пожаловать, ' . $logs . '!');
+                    setFlash('success', 'Добро пожаловать, ' . $login . '!');
                     redirect('/');
 
                 } else {
@@ -225,7 +225,7 @@ class UserController extends BaseController
             }
         }
 
-        return view('pages/registration');
+        return view('user/registration');
     }
 
     /**
@@ -264,7 +264,7 @@ class UserController extends BaseController
             }
         }
 
-        return view('pages/login', compact('cooklog'));
+        return view('user/login', compact('cooklog'));
     }
 
     /**
@@ -339,7 +339,7 @@ class UserController extends BaseController
             }
         }
 
-        return view('pages/profile', compact('user'));
+        return view('user/profile', compact('user'));
     }
 
     /*
@@ -377,7 +377,7 @@ class UserController extends BaseController
             }
         }
 
-        return view('pages/key');
+        return view('user/key');
     }
 
     /*
