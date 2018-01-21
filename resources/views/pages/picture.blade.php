@@ -20,8 +20,9 @@
 
             <div class="form-group{{ hasError('photo') }}">
                 <label class="btn btn-sm btn-secondary" for="inputPhoto">
-                    <input id="inputPhoto" type="file" name="photo"  style="display:none;" onchange="$('#upload-file-info').html($(this).val().replace('C:\\fakepath\\', ''));">
-                    Прикрепить фото
+
+                    <input id="inputPhoto" type="file" name="photo" onchange="$('#upload-file-info').html(this.files[0].name);" hidden>
+                    Прикрепить фото&hellip;
                 </label>
                 <span class="badge badge-info" id="upload-file-info"></span>
             </div>

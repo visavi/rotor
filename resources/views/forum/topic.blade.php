@@ -192,8 +192,8 @@
                         <div class="js-attach-form" style="display: none;">
 
                             <label class="btn btn-sm btn-secondary" for="inputFile">
-                                <input id="inputFile" type="file" name="file" style="display:none;" onchange="$('#upload-file-info').html($(this).val().replace('C:\\fakepath\\', ''));">
-                                Выбрать файл
+                                <input id="inputFile" type="file" name="file" onchange="$('#upload-file-info').html(this.files[0].name);" hidden>
+                                Файл&hellip;
                             </label>
                             <span class="badge badge-info" id="upload-file-info"></span>
 
