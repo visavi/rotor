@@ -21,11 +21,11 @@ case "index":
     echo '<input type="text" name="find"><br>';
 
     echo 'Искать:<br>';
-    echo '<input name="where" type="radio" value="0" checked="checked"> В названии<br>';
+    echo '<input name="where" type="radio" value="0" checked> В названии<br>';
     echo '<input name="where" type="radio" value="1"> В описании<br><br>';
 
     echo 'Тип запроса:<br>';
-    echo '<input name="type" type="radio" value="0" checked="checked"> И<br>';
+    echo '<input name="type" type="radio" value="0" checked> И<br>';
     echo '<input name="type" type="radio" value="1"> Или<br>';
     echo '<input name="type" type="radio" value="2"> Полный<br><br>';
 

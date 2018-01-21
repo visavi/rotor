@@ -64,6 +64,20 @@
                             <input class="form-control" id="inputBirthday" name="birthday" maxlength="10" value="{{ getInput('birthday', $user->birthday ? date('d.m.Y', strtotime($user->birthday)) : null) }}">
                             {!! textError('birthday') !!}
                         </div>
+
+                        <?php $inputGender = getInput('gender', $user->gender); ?>
+                        Пол:
+                        <div class="form-group{{ hasError('gender') }}">
+                            <div class="custom-control custom-radio">
+                                <input class="custom-control-input" type="radio" id="inputGenderMale" name="gender" value="male"{{ $inputGender == 'male' ? ' checked' : '' }}>
+                                <label class="custom-control-label" for="inputGenderMale">Мужской</label>
+                            </div>
+                            <div class="custom-control custom-radio">
+                                <input class="custom-control-input" type="radio" id="inputGenderFemale" name="gender" value="female"{{ $inputGender == 'female' ? ' checked' : '' }}>
+                                <label class="custom-control-label" for="inputGenderFemale">Женский</label>
+                            </div>
+                            {!! textError('gender') !!}
+                        </div>
                     </div>
 
                     <div class="col-md-6">

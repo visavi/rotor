@@ -302,6 +302,7 @@ class UserController extends BaseController
             $skype    = check(strtolower(Request::input('skype')));
             $site     = check(Request::input('site'));
             $birthday = check(Request::input('birthday'));
+            $gender   = Request::input('gender') == 'male' ? 'male' : 'female';
 
             $validator = new Validator();
             $validator->equal($token, $_SESSION['token'], 'Неверный идентификатор сессии, повторите действие!')
@@ -319,6 +320,7 @@ class UserController extends BaseController
 
                 $user->update([
                     'name'     => $name,
+                    'gender'   => $gender,
                     'country'  => $country,
                     'city'     => $city,
                     'icq'      => $icq,
@@ -453,21 +455,21 @@ class UserController extends BaseController
         }
 
         $token    = check(Request::input('token'));
-        $meil     = strtolower(check(Request::input('meil')));
-        $provpass = check(Request::input('provpass'));
+        $email    = check(strtolower(Request::input('email')));
+        $password = check(Request::input('password'));
 
         $validator = new Validator();
         $validator->equal($token, $_SESSION['token'], 'Неверный идентификатор сессии, повторите действие!')
-            ->notEqual($meil, $user->email, 'Новый адрес email должен отличаться от текущего!')
-            ->email($meil, 'Неправильный адрес email, необходим формат name@site.domen!')
-            ->true(password_verify($provpass, $user->password), 'Введенный пароль не совпадает с данными в профиле!');
+            ->notEqual($email, $user->email, ['email' => 'Новый адрес email должен отличаться от текущего!'])
+            ->email($email, ['email' => 'Неправильный адрес email, необходим формат name@site.domen!'])
+            ->true(password_verify($password, $user->password), ['password' => 'Введенный пароль не совпадает с данными в профиле!']);
 
-        $regMail = User::query()->where('email', $meil)->first();
-        $validator->empty($regMail, 'Указанный вами адрес email уже используется в системе!');
+        $regMail = User::query()->where('email', $email)->first();
+        $validator->empty($regMail, ['email' => 'Указанный вами адрес email уже используется в системе!']);
 
         // Проверка email в черном списке
-        $blackMail = BlackList::query()->where('type', 'email')->where('value', $meil)->first();
-        $validator->empty($blackMail, 'Указанный вами адрес email занесен в черный список!');
+        $blackMail = BlackList::query()->where('type', 'email')->where('value', $email)->first();
+        $validator->empty($blackMail, ['email' => 'Указанный вами адрес email занесен в черный список!']);
 
         ChangeMail::query()->where('created_at', '<', SITETIME)->delete();
 
@@ -482,17 +484,18 @@ class UserController extends BaseController
             $message = 'Здравствуйте, '.$user->login.'<br>Вами была произведена операция по изменению адреса электронной почты<br><br>Для того, чтобы изменить email, необходимо подтвердить новый адрес почты<br>Перейдите по данной ссылке:<br><br><a href="'.siteUrl(true).'/account/editmail?key='.$genkey.'">'.siteUrl(true).'/account/editmail?key='.$genkey.'</a><br><br>Ссылка будет дейстительной в течение суток до '.date('j.m.y / H:i', SITETIME + 86400).'<br>Для изменения адреса необходимо быть авторизованным на сайте<br>Если это сообщение попало к вам по ошибке или вы не собираетесь менять email, то просто проигнорируйте данное письмо';
 
             $body = view('mailer.default', compact('subject', 'message'));
-            sendMail($meil, $subject, $body);
+            sendMail($email, $subject, $body);
 
             changeMail::query()->create([
                 'user_id'    => $user->id,
-                'mail'       => $meil,
+                'mail'       => $email,
                 'hash'       => $genkey,
                 'created_at' => SITETIME + 86400,
             ]);
 
             setFlash('success', 'На новый адрес почты отправлено письмо для подтверждения!');
         } else {
+            setInput(Request::all());
             setFlash('danger', $validator->getErrors());
         }
 
@@ -559,15 +562,15 @@ class UserController extends BaseController
 
         $validator = new Validator();
         $validator->equal($token, $_SESSION['token'], 'Неверный идентификатор сессии, повторите действие!')
-            ->empty($user->ban, 'Для изменения статуса у вас не должно быть нарушений!')
-            ->notEqual($status, $user->status, 'Новый статус должен отличаться от текущего!')
-            ->gte($user->point, setting('editstatuspoint'), 'У вас недостаточно актива для изменения статуса!')
-            ->gte($user->money, setting('editstatusmoney'), 'У вас недостаточно денег для изменения статуса!')
-            ->length($status, 3, 20, 'Слишком длинный или короткий статус!', false);
+            ->empty($user->ban, ['status' => 'Для изменения статуса у вас не должно быть нарушений!'])
+            ->notEqual($status, $user->status, ['status' => 'Новый статус должен отличаться от текущего!'])
+            ->gte($user->point, setting('editstatuspoint'), ['status' => 'У вас недостаточно актива для изменения статуса!'])
+            ->gte($user->money, setting('editstatusmoney'), ['status' => 'У вас недостаточно денег для изменения статуса!'])
+            ->length($status, 3, 20, ['status' => 'Слишком длинный или короткий статус!'], false);
 
         if ($status) {
             $checkStatus = User::query()->where('status', $status)->count();
-            $validator->empty($checkStatus, 'Выбранный вами статус уже используется на сайте!');
+            $validator->empty($checkStatus, ['status' => 'Выбранный вами статус уже используется на сайте!']);
         }
 
         if ($validator->isValid()) {
@@ -580,6 +583,7 @@ class UserController extends BaseController
 
             setFlash('success', 'Ваш статус успешно изменен!');
         } else {
+            setInput(Request::all());
             setFlash('danger', $validator->getErrors());
         }
 
@@ -602,13 +606,13 @@ class UserController extends BaseController
 
         $validator = new Validator();
         $validator->equal($token, $_SESSION['token'], 'Неверный идентификатор сессии, повторите действие!')
-            ->true(password_verify($oldpass, $user->password), 'Введенный пароль не совпадает с данными в профиле!')
-            ->equal($newpass, $newpass2, 'Новые пароли не одинаковые!')
-            ->length($newpass, 6, 20, 'Слишком длинный или короткий новый пароль!')
-            ->notEqual(getUser('login'), $newpass, 'Пароль и логин должны отличаться друг от друга!');
+            ->true(password_verify($oldpass, $user->password), ['oldpass' => 'Введенный пароль не совпадает с данными в профиле!'])
+            ->length($newpass, 6, 20, ['newpass' => 'Слишком длинный или короткий новый пароль!'])
+            ->notEqual(getUser('login'), $newpass, ['newpass' => 'Пароль и логин должны отличаться друг от друга!'])
+            ->equal($newpass, $newpass2, ['newpass2' => 'Новые пароли не одинаковые!']);
 
         if (ctype_digit($newpass)) {
-            $validator->addError('Запрещен пароль состоящий только из цифр, используйте буквы!');
+            $validator->addError(['newpass' => 'Запрещен пароль состоящий только из цифр, используйте буквы!']);
         }
 
         if ($validator->isValid()) {
@@ -628,6 +632,7 @@ class UserController extends BaseController
             setFlash('success', 'Пароль успешно изменен!');
             redirect('/login');
         } else {
+            setInput(Request::all());
             setFlash('danger', $validator->getErrors());
             redirect('/account');
         }

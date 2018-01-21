@@ -63,7 +63,7 @@ if (isAdmin([101, 102, 103])) {
                             echo '<form method="post" action="/admin/ban?act=zaban&amp;uz='.$uz.'&amp;uid='.$_SESSION['token'].'">';
                             echo '<b>Время бана:</b><br><input name="bantime"><br>';
 
-                            echo '<input name="bantype" type="radio" value="min" checked="checked"> Минут<br>';
+                            echo '<input name="bantype" type="radio" value="min" checked> Минут<br>';
                             echo '<input name="bantype" type="radio" value="chas"> Часов<br>';
                             echo '<input name="bantype" type="radio" value="sut"> Суток<br>';
 

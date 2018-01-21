@@ -126,7 +126,7 @@ header("Content-type:text/html; charset=utf-8");
                         Логин:<br><input name="login"><br>
                         Пароль:<br><input name="pass" type="password"><br>
                         Запомнить меня:
-                        <input name="remember" type="checkbox" value="1" checked="checked"><br>
+                        <input name="remember" type="checkbox" value="1" checked><br>
 
                         <input value="Войти" type="submit"></form>
 
