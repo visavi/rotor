@@ -102,9 +102,9 @@ if (isAdmin([101, 102, 103])) {
                         }
 
                         switch ($data['type']) {
-                            case '1': $stat = '<span style="color:#ff0000">Забанил</span>:';
+                            case 'unban': $stat = '<span style="color:#ff0000">Забанил</span>:';
                                 break;
-                            case '2': $stat = '<span style="color:#ffa500">Изменил</span>:';
+                            case 'change': $stat = '<span style="color:#ffa500">Изменил</span>:';
                                 break;
                             default: $stat = '<span style="color:#00cc00">Разбанил</span>:';
                         }

@@ -72,13 +72,24 @@ class User extends BaseModel
     }
 
     /**
+     * Возвращает последний бан
+     */
+    public function lastBan()
+    {
+        return $this->hasOne(Banhist::class, 'user_id', 'id')
+            ->whereIn('type', ['ban', 'change'])
+            ->orderBy('created_at', 'desc')
+            ->withDefault();
+    }
+
+    /**
      * Возвращает пол пользователя
      *
      * @return string пол пользователя
      */
     public function getGender()
     {
-        if ($this->gender == 'female') {
+        if ($this->gender === 'female') {
             return '<i class="fa fa-female fa-lg"></i>';
         }
 
@@ -164,6 +175,7 @@ class User extends BaseModel
      * Авторизует через социальные сети
      *
      * @param string $token идентификатор Ulogin
+     * @return void
      */
     public static function socialAuth($token)
     {

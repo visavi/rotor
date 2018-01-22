@@ -2,7 +2,7 @@
 
 use Phinx\Migration\AbstractMigration;
 
-class ChangeJoinedInUsers extends AbstractMigration
+class ChangeBirthdayInUsers extends AbstractMigration
 {
     /**
      * Migrate Up.

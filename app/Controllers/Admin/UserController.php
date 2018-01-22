@@ -170,7 +170,7 @@ class UserController extends AdminController
 
         $banhist = Banhist::query()
             ->where('user_id', $user->id)
-            ->whereIn('type', [1, 2])
+            ->whereIn('type', ['ban', 'change'])
             ->orderBy('created_at', 'desc')
             ->first();
 

@@ -22,7 +22,7 @@
     @if (isAdmin('moder'))
         <div class="b"><i class="fa fa-cog fa-lg text-muted"></i> <b>Модератор</b></div>
         <i class="fa fa-circle fa-lg text-muted"></i> <a href="/admin/ban">Бан / Разбан</a><br>
-        <i class="fa fa-circle fa-lg text-muted"></i> <a href="/admin/banlist">Список забаненых</a> ({{ statsBanned() }})<br>
+        <i class="far fa-circle fa-lg text-muted"></i> <a href="/admin/banlist">Список забаненых</a> ({{ statsBanned() }})<br>
         <i class="far fa-circle fa-lg text-muted"></i> <a href="/admin/spam">Список жалоб</a> ({{ statsSpam() }})<br>
         <i class="far fa-circle fa-lg text-muted"></i> <a href="/admin/adminlist">Список старших</a> ({{ statsAdmins() }})<br>
         <i class="far fa-circle fa-lg text-muted"></i> <a href="/admin/reglist">Список ожидающих</a> ({{ statsRegList() }})<br>

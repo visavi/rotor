@@ -309,6 +309,8 @@ $routes = [
     ['GET|POST', '/admin/chat/edit/[i:id]', 'Admin\ChatController@edit'],
     ['GET',      '/admin/chat/clear', 'Admin\ChatController@clear'],
 
+    ['GET',      '/admin/banlist', 'Admin\BanlistController@index'],
+
     ['GET|POST', '/admin/blog', 'admin/blog.php'],
     ['GET|POST', '/admin/forum', 'admin/forum.php'],
     ['GET|POST', '/admin/gallery', 'admin/gallery.php'],
@@ -317,7 +319,6 @@ $routes = [
     ['GET|POST', '/admin/reklama', 'admin/reklama.php'],
     ['GET|POST', '/admin/ban', 'admin/ban.php'],
     ['GET|POST', '/admin/banhist', 'admin/banhist.php'],
-    ['GET|POST', '/admin/banlist', 'admin/banlist.php'],
     ['GET|POST', '/admin/votes', 'admin/votes.php'],
     ['GET|POST', '/admin/users', 'admin/users.php'],
     ['GET|POST', '/admin/offers', 'admin/offers.php'],
