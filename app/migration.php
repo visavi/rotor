@@ -1,11 +1,9 @@
 <?php
+
 return [
     'paths' => [
-        'migrations' => [
-            BASEDIR . '/database/migrations',
-            BASEDIR . '/database/upgrades',
-        ],
-        'seeds' => BASEDIR.'/database/seeds',
+        'migrations' => BASEDIR . '/database/' . (env('APP_NEW') ? 'migrations' : 'upgrades'),
+        'seeds'      => BASEDIR . '/database/seeds',
     ],
     'environments' => [
         'default_migration_table' => 'migrations',
