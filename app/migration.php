@@ -1,8 +1,14 @@
 <?php
 
+if (env('APP_ENV') === 'testing') {
+    $migrations = BASEDIR . '/database/{migrations,upgrades}';
+} else {
+    $migrations = BASEDIR . '/database/' . (env('APP_NEW') ? 'migrations' : 'upgrades');
+}
+
 return [
     'paths' => [
-        'migrations' => BASEDIR . '/database/' . (env('APP_NEW') ? 'migrations' : 'upgrades'),
+        'migrations' => $migrations,
         'seeds'      => BASEDIR . '/database/seeds',
     ],
     'environments' => [
