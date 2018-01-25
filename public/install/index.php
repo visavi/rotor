@@ -311,17 +311,17 @@ header("Content-type:text/html; charset=utf-8");
                 if (! $checkMail) {
 
                     $user = User::query()->create([
-                        'login'    => $login,
-                        'password' => password_hash($password, PASSWORD_BCRYPT),
-                        'email'    => $email,
-                        'joined'   => date('Y-m-d', SITETIME),
-                        'level'    => 'boss',
-                        'gender'   => 'male',
-                        'themes'   => 0,
-                        'point'    => 500,
-                        'money'    => 100000,
-                        'info'     => 'Администратор сайта',
-                        'status'   => 'Босс',
+                        'login'      => $login,
+                        'password'   => password_hash($password, PASSWORD_BCRYPT),
+                        'email'      => $email,
+                        'level'      => 'boss',
+                        'gender'     => 'male',
+                        'themes'     => 0,
+                        'point'      => 500,
+                        'money'      => 100000,
+                        'info'       => 'Администратор сайта',
+                        'status'     => 'Босс',
+                        'created_at' => SITETIME,
                     ]);
 
                     // -------------- Приват ---------------//

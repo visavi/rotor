@@ -69,7 +69,7 @@ class ReglistController extends AdminController
 
         $users = User::query()
             ->where('level', User::PENDED)
-            ->orderBy('joined', 'desc')
+            ->orderBy('created_at', 'desc')
             ->offset($page['offset'])
             ->limit($page['limit'])
             ->get();

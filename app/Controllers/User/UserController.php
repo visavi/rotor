@@ -181,16 +181,16 @@ class UserController extends BaseController
                         'login'         => $login,
                         'password'      => password_hash($password, PASSWORD_BCRYPT),
                         'email'         => $email,
-                        'joined'        => date('Y-m-d', SITETIME),
                         'level'         => $level,
                         'gender'        => $gender,
                         'themes'        => 0,
                         'point'         => 0,
                         'money'         => setting('registermoney'),
-                        'timelastlogin' => SITETIME,
                         'confirmregkey' => $activateKey,
                         'subscribe'     => str_random(32),
                         'lang'          => setting('lang'),
+                        'updated_at'    => SITETIME,
+                        'created_at'    => SITETIME,
                     ]);
 
                     // Активация пригласительного ключа
@@ -326,7 +326,7 @@ class UserController extends BaseController
                     'icq'      => $icq,
                     'skype'    => $skype,
                     'site'     => $site,
-                    'birthday' => $birthday ? date('Y-m-d', strtotime($birthday)) : null,
+                    'birthday' => $birthday,
                     'info'     => $info,
                 ]);
 
@@ -674,11 +674,11 @@ class UserController extends BaseController
             ->get();
 
         $birthdays = User::query()
-            ->whereRaw('substr(birthday, 6, 10) = ?', date('m-d', SITETIME))
+            ->whereRaw('substr(birthday, 1, 5) = ?', date('d.m', SITETIME))
             ->get();
 
         $novices = User::query()
-            ->where('joined', '>', date('Y-m-d', SITETIME - 86400))
+            ->where('created_at', '>', SITETIME - 86400)
             ->get();
 
         return view('user/who', compact('online', 'birthdays', 'novices'));

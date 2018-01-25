@@ -36,7 +36,7 @@ class DelUserController extends AdminController
             }
 
             $users = User::query()
-                ->where('timelastlogin', '<', SITETIME - ($period * 24 * 3600))
+                ->where('updated_at', '<', SITETIME - ($period * 24 * 3600))
                 ->where('point', '<=', $point)
                 ->get();
 
@@ -65,7 +65,7 @@ class DelUserController extends AdminController
             ->gte($period, 180, 'Указанно недопустимое время для удаления!');
 
         $users = User::query()
-            ->where('timelastlogin', '<', SITETIME - ($period * 24 * 3600))
+            ->where('updated_at', '<', SITETIME - ($period * 24 * 3600))
             ->where('point', '<=', $point)
             ->get();
 

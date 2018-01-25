@@ -71,13 +71,13 @@
 
             <div class="form-group{{ hasError('joined') }}">
                 <label for="joined">Зарегистрирован:</label>
-                <input type="text" class="form-control" id="joined" name="joined" maxlength="10" value="{{ getInput('joined', date('d.m.Y', strtotime($user->joined))) }}" required>
+                <input type="text" class="form-control" id="joined" name="joined" maxlength="10" value="{{ getInput('joined', dateFixed($user->created_at, 'd.m.Y')) }}" required>
                 {!! textError('joined') !!}
             </div>
 
             <div class="form-group{{ hasError('birthday') }}">
                 <label for="birthday">Дата рождения:</label>
-                <input type="text" class="form-control" id="birthday" name="birthday" maxlength="10" value="{{ getInput('birthday', date('d.m.Y', strtotime($user->birthday))) }}">
+                <input type="text" class="form-control" id="birthday" name="birthday" maxlength="10" value="{{ getInput('birthday', $user->birthday) }}">
                 {!! textError('birthday') !!}
             </div>
 
@@ -183,7 +183,7 @@
     @endif
 
     Строгих банов: <b>{{  $user->totalban }}</b><br>
-    Последний визит: {{ dateFixed($user->timelastlogin, 'j F Y / H:i') }}<br><br>
+    Последний визит: {{ dateFixed($user->updated_at, 'j F Y / H:i') }}<br><br>
 
     @if (! in_array($user->level, $adminGroups))
         <i class="fa fa-times"></i> <a href="/admin/users/delete?user={{ $user->login }}">Удалить профиль</a><br>

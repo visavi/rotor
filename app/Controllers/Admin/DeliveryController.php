@@ -43,7 +43,7 @@ class DeliveryController extends AdminController
 
             // Рассылка активным пользователям, которые посещали сайт менее недели назад
             if ($type == 2) {
-                $users = User::query()->where('timelastlogin', '>', SITETIME - (86400 * 7))->get();
+                $users = User::query()->where('updated_at', '>', SITETIME - (86400 * 7))->get();
             }
 
             // Рассылка администрации

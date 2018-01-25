@@ -31,7 +31,7 @@
                    (email: {{ $user->email }})
                </div>
 
-               <div>Зарегистрирован: {{ date('d.m.Y', strtotime($user->joined)) }}</div>
+               <div>Зарегистрирован: {{ dateFixed($user->created_at, 'd.m.Y') }}</div>
             @endforeach
 
            <?php $inputAction = getInput('action'); ?>

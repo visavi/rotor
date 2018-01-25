@@ -155,7 +155,7 @@ class InvitationController extends AdminController
         $validator->equal($token, $_SESSION['token'], 'Неверный идентификатор сессии, повторите действие!')
             ->true(isAdmin(User::BOSS), 'Рассылать ключи может только владелец');
 
-        $users = User::query()->where('timelastlogin', '>', SITETIME - (86400 * 7))->get();
+        $users = User::query()->where('updated_at', '>', SITETIME - (86400 * 7))->get();
 
         $users = $users->filter(function ($value, $key) {
             return $value->id != getUser('id');

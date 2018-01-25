@@ -672,8 +672,10 @@ function statsUsers()
 {
     if (@filemtime(STORAGE.'/temp/statusers.dat') < time() - 3600) {
 
+        $startDay = mktime(0, 0, 0, dateFixed(SITETIME, 'n'));
+
         $stat = User::query()->count();
-        $new  = User::query()->where('joined', '>', date('Y-m-01'))->count();
+        $new  = User::query()->where('created_at', '>', $startDay)->count();
 
         if ($new) {
             $stat = $stat.'/+'.$new;

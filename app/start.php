@@ -49,7 +49,7 @@ if (empty($_SESSION['id']) && empty($_SESSION['password'])) {
 
                 $user->update([
                     'visits'        => DB::raw('visits + 1'),
-                    'timelastlogin' => SITETIME
+                    'updated_at' => SITETIME
                 ]);
             }
         }

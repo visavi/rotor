@@ -16,7 +16,7 @@ class DeletePending extends Task
 
             $users = User::query()
                 ->where('level', User::PENDED)
-                ->where('joined', '<', date('Y-m-d', strtotime('-1 day', SITETIME)))
+                ->where('created_at', '<', strtotime('-1 day', SITETIME))
                 ->get();
 
             foreach($users as $user) {

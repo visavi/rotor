@@ -161,7 +161,7 @@ class User extends BaseModel
 
                 $user->update([
                     'visits' => DB::raw('visits + 1'),
-                    'timelastlogin' => SITETIME
+                    'updated_at' => SITETIME
                 ]);
 
                 return $user;

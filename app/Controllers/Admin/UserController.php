@@ -35,7 +35,7 @@ class UserController extends AdminController
         $page = paginate(setting('userlist'), $total);
 
         $users = User::query()
-            ->orderBy('joined', 'desc')
+            ->orderBy('created_at', 'desc')
             ->offset($page['offset'])
             ->limit($page['limit'])
             ->get();
@@ -92,7 +92,6 @@ class UserController extends AdminController
             $country   = check(Request::input('country'));
             $city      = check(Request::input('city'));
             $site      = check(Request::input('site'));
-            $joined    = check(Request::input('joined'));
             $birthday  = check(Request::input('birthday'));
             $icq       = check(str_replace('-', '', Request::input('icq')));
             $skype     = check(strtolower(Request::input('skype')));
@@ -102,8 +101,9 @@ class UserController extends AdminController
             $posrating = int(Request::input('posrating'));
             $negrating = int(Request::input('negrating'));
             $themes    = check(Request::input('themes'));
-            $gender    = Request::input('gender') == 'male' ? 'male' : 'female';
+            $gender    = Request::input('gender') === 'male' ? 'male' : 'female';
             $info      = check(Request::input('info'));
+            $joined    = check(Request::input('joined'));
 
             $validator = new Validator();
             $validator->equal($token, $_SESSION['token'], 'Неверный идентификатор сессии, повторите действие!')
@@ -135,26 +135,26 @@ class UserController extends AdminController
                 $rating  = $posrating - $negrating;
 
                 $user->update([
-                    'password'  => $password,
-                    'level'     => $level,
-                    'email'     => $email,
-                    'name'      => $name,
-                    'country'   => $country,
-                    'city'      => $city,
-                    'site'      => $site,
-                    'joined'    => date('Y-m-d', strtotime($joined)),
-                    'birthday'  => date('Y-m-d', strtotime($birthday)),
-                    'icq'       => $icq,
-                    'skype'     => $skype,
-                    'point'     => $point,
-                    'money'     => $money,
-                    'status'    => $status,
-                    'rating'    => $rating,
-                    'posrating' => $posrating,
-                    'negrating' => $negrating,
-                    'themes'    => $themes,
-                    'gender'    => $gender,
-                    'info'      => $info,
+                    'password'   => $password,
+                    'level'      => $level,
+                    'email'      => $email,
+                    'name'       => $name,
+                    'country'    => $country,
+                    'city'       => $city,
+                    'site'       => $site,
+                    'birthday'   => $birthday,
+                    'icq'        => $icq,
+                    'skype'      => $skype,
+                    'point'      => $point,
+                    'money'      => $money,
+                    'status'     => $status,
+                    'rating'     => $rating,
+                    'posrating'  => $posrating,
+                    'negrating'  => $negrating,
+                    'themes'     => $themes,
+                    'gender'     => $gender,
+                    'info'       => $info,
+                    'created_at' => $joined,
                 ]);
 
                 saveStatus();

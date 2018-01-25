@@ -51,7 +51,7 @@ class ApiController extends BaseController
             'icq'       => $user->icq,
             'skype'     => $user->skype,
             'gender'    => $user->gender,
-            'birthday'  => date('d.m.Y', strtotime($user->birthday)),
+            'birthday'  => $user->birthday,
             'newwall'   => $user->newwall,
             'point'     => $user->point,
             'money'     => $user->money,
@@ -61,7 +61,7 @@ class ApiController extends BaseController
             'avatar'    => siteUrl(true).'/uploads/avatars/'.$user->avatar,
             'picture'   => siteUrl(true).'/uploads/photos/'.$user->picture,
             'rating'    => $user->rating,
-            'lastlogin' => $user->timelastlogin,
+            'lastlogin' => $user->updated_at,
         ]);
     }
 

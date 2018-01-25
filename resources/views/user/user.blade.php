@@ -53,7 +53,7 @@
                 @endif
 
                 @if (!empty($user->birthday))
-                    Дата рождения: {{ date('d.m.Y', strtotime($user->birthday)) }}<br>
+                    Дата рождения: {{ $user->birthday }}<br>
                 @endif
 
                 @if (!empty($user->icq))
@@ -74,13 +74,13 @@
                 @if ($user->themes)
                     Используемый скин: {{ $user->themes }}<br>
                 @endif
-                Дата регистрации: {{ date('d.m.Y', strtotime($user->joined)) }}<br>
+                Дата регистрации: {{ dateFixed($user->created_at, 'd.m.Y') }}<br>
 
                 @if ($invite)
                     Зарегистрирован по приглашению: {!! profile($invite->user) !!}<br>
                 @endif
 
-                Последняя авторизация: {{ dateFixed($user->timelastlogin) }}<br>
+                Последняя визит: {{ dateFixed($user->updated_at) }}<br>
 
                 <a href="/banhist?user={{ $user->login }}">Строгих нарушений: {{ $user->totalban }}</a><br>
 
