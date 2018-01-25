@@ -13,15 +13,18 @@
         </h1>
     </div>
 
-    @if ($user->level == 'pended')
+    @if ($user->level === 'pended')
         <b><span style="color:#ff0000">Внимание, аккаунт требует подтверждение регистрации!</span></b><br>
     @endif
 
-    @if ($user->level == 'banned' && $user->timeban > SITETIME)
+    @if ($user->level === 'banned' && $user->timeban > SITETIME)
         <div class="form">
             <b><span style="color:#ff0000">Внимание, пользователь забанен!</span></b><br>
             До окончания бана осталось: {{ formatTime($user->timeban - SITETIME) }}<br>
-            Причина: {!! bbCode($user->reasonban) !!}
+
+            @if ($user->lastBan->id)
+                Причина: {!! bbCode($user->lastBan->reason) !!}<br>
+            @endif
         </div>
     @endif
 
@@ -36,7 +39,7 @@
 
                 {!! $user->getGender() !!}
                 Пол:
-                {{  ($user->gender == 'male') ? 'Мужской' : 'Женский' }}<br>
+                {{  ($user->gender === 'male') ? 'Мужской' : 'Женский' }}<br>
 
                 Логин: <b>{{ $user->login }}</b><br>
 

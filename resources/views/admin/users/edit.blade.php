@@ -35,7 +35,7 @@
                 <label for="password">Новый пароль:</label>
                 <input type="text" class="form-control" id="password" name="password" maxlength="50" value="{{ getInput('password') }}">
                 {!! textError('password') !!}
-                <span class="text-muted font-italic">Oставьте пустым если не нужно менять</span>
+                <span class="text-muted font-italic">Оставьте пустым если не нужно менять</span>
             </div>
 
             <div class="form-group{{ hasError('email') }}">
@@ -69,10 +69,10 @@
                 {!! textError('site') !!}
             </div>
 
-            <div class="form-group{{ hasError('joined') }}">
-                <label for="joined">Зарегистрирован:</label>
-                <input type="text" class="form-control" id="joined" name="joined" maxlength="10" value="{{ getInput('joined', dateFixed($user->created_at, 'd.m.Y')) }}" required>
-                {!! textError('joined') !!}
+            <div class="form-group{{ hasError('created') }}">
+                <label for="created">Зарегистрирован:</label>
+                <input type="text" class="form-control" id="created" name="created" maxlength="10" value="{{ getInput('created', dateFixed($user->created_at, 'd.m.Y')) }}" required>
+                {!! textError('created') !!}
             </div>
 
             <div class="form-group{{ hasError('birthday') }}">

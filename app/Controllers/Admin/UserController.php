@@ -103,7 +103,7 @@ class UserController extends AdminController
             $themes    = check(Request::input('themes'));
             $gender    = Request::input('gender') === 'male' ? 'male' : 'female';
             $info      = check(Request::input('info'));
-            $joined    = check(Request::input('joined'));
+            $created   = check(Request::input('created'));
 
             $validator = new Validator();
             $validator->equal($token, $_SESSION['token'], 'Неверный идентификатор сессии, повторите действие!')
@@ -112,7 +112,7 @@ class UserController extends AdminController
                 ->email($email, ['email' => 'Вы ввели неверный адрес email, необходим формат name@site.domen!'])
                 ->regex($site, '#^https?://([а-яa-z0-9_\-\.])+(\.([а-яa-z0-9\/])+)+$#u', ['site' => 'Недопустимый адрес сайта, необходим формата http://my_site.domen!'], false)
                 ->regex($birthday, '#^[0-9]{2}+\.[0-9]{2}+\.[0-9]{4}$#', ['birthday' => 'Недопустимая дата рождения, необходим формат дд.мм.гггг!'], false)
-                ->regex($joined, '#^[0-9]{2}+\.[0-9]{2}+\.[0-9]{4}$#', ['joined' => 'Недопустимая дата регистрации, необходим формат (дд.мм.гггг)!'], false)
+                ->regex($created, '#^[0-9]{2}+\.[0-9]{2}+\.[0-9]{4}$#', ['created' => 'Недопустимая дата регистрации, необходим формат (дд.мм.гггг)!'], false)
                 ->regex($icq, '#^[0-9]{5,10}$#', ['icq' => 'Недопустимый формат ICQ, только цифры от 5 до 10 символов!'], false)
                 ->regex($skype, '#^[a-z]{1}[0-9a-z\_\.\-]{5,31}$#', ['skype' => 'Недопустимый формат Skype, только латинские символы от 6 до 32!'], false)
                 ->length($status, 3, 20, ['status' => 'Слишком длинный или короткий статус!'], false)
@@ -154,7 +154,7 @@ class UserController extends AdminController
                     'themes'     => $themes,
                     'gender'     => $gender,
                     'info'       => $info,
-                    'created_at' => $joined,
+                    'created_at' => strtotime($created),
                 ]);
 
                 saveStatus();

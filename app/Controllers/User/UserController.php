@@ -5,6 +5,7 @@ namespace App\Controllers\User;
 use App\Classes\Request;
 use App\Classes\Validator;
 use App\Controllers\BaseController;
+use App\Models\Banhist;
 use App\Models\BlackList;
 use App\Models\ChangeMail;
 use App\Models\Invite;
@@ -24,8 +25,9 @@ class UserController extends BaseController
             abort('default', 'Пользователя с данным логином не существует!');
         }
 
-        $note   = Note::query()->where('user_id', $user->id)->first();
-        $invite = Invite::query()->where('invite_user_id', $user->id)->first();
+        $note    = Note::query()->where('user_id', $user->id)->first();
+        $invite  = Invite::query()->where('invite_user_id', $user->id)->first();
+        $user->load('lastBan');
 
         $adminGroups = User::ADMIN_GROUPS;
 
