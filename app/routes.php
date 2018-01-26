@@ -311,13 +311,15 @@ $routes = [
 
     ['GET',      '/admin/banlist', 'Admin\BanlistController@index'],
 
+    ['GET',      '/admin/ban', 'Admin\BanController@index'],
+    ['GET|POST', '/admin/ban/edit', 'Admin\BanController@edit'],
+
     ['GET|POST', '/admin/blog', 'admin/blog.php'],
     ['GET|POST', '/admin/forum', 'admin/forum.php'],
     ['GET|POST', '/admin/gallery', 'admin/gallery.php'],
     ['GET|POST', '/admin/load', 'admin/load.php'],
     ['GET|POST', '/admin/newload', 'admin/newload.php'],
     ['GET|POST', '/admin/reklama', 'admin/reklama.php'],
-    ['GET|POST', '/admin/ban', 'admin/ban.php'],
     ['GET|POST', '/admin/banhist', 'admin/banhist.php'],
     ['GET|POST', '/admin/votes', 'admin/votes.php'],
     ['GET|POST', '/admin/users', 'admin/users.php'],
