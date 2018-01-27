@@ -9,8 +9,8 @@ $(function() {
         "positionClass": "toast-top-full-width"
     };
 
-    $('#markItUp').markItUp(mySettings);
-    $('#markItUpHtml').markItUp(myHtmlSettings);
+    $('.markItUp').markItUp(mySettings);
+    $('.markItUpHtml').markItUp(myHtmlSettings);
 
     $('[data-toggle="tooltip"]').tooltip();
     $('[data-toggle="popover"]').popover();
@@ -39,22 +39,20 @@ $(function() {
 
     $('video,audio').mediaelementplayer();
 
-    $('a.gallery').colorbox({rel: function(){
-        return $(this).data('group');
-    },
-        current: 'Фото {current} из {total}',
-    });
-
     $("a.gallery").colorbox({
-        maxWidth: '95%',
-        maxHeight: '95%',
+        maxWidth: '100%',
+        maxHeight: '100%',
         onComplete : function() {
             $(this).colorbox.resize();
         }
+    }).colorbox({rel: function(){
+            return $(this).data('group');
+        },
+        current: 'Фото {current} из {total}',
     });
 
     $(window).resize(function() {
-        $.colorbox.resize({width:"95%"});
+        $.colorbox.resize({width:'100%'});
     });
 });
 

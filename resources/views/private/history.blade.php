@@ -34,9 +34,8 @@
         <form action="/private/send?user={{ $user->login }}" method="post">
             <input type="hidden" name="token" value="{{ $_SESSION['token'] }}">
 
-            <label for="markItUp">Сообщение:</label>
-            <textarea class="form-control" id="markItUp" rows="5" name="msg" placeholder="Текст сообщения" required></textarea>
-
+            <label for="msg">Сообщение:</label>
+            <textarea class="form-control markItUp" id="msg" rows="5" name="msg" placeholder="Текст сообщения" required></textarea>
 
             @if (getUser('point') < setting('privatprotect'))
                 Проверочный код:<br>

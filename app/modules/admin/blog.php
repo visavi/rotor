@@ -297,7 +297,7 @@ if (isAdmin()) {
                 echo 'Заголовок:<br>';
                 echo '<input type="text" name="title" size="50" maxlength="50" value="'.$blogs['title'].'"><br>';
                 echo 'Текст:<br>';
-                echo '<textarea id="markItUp" cols="25" rows="15" name="text">'.$blogs['text'].'</textarea><br>';
+                echo '<textarea class="markItUp" cols="25" rows="15" name="text">'.$blogs['text'].'</textarea><br>';
                 echo 'Автор:<br>';
                 echo '<input type="text" name="user" maxlength="20" value="'.$blogs['user'].'"><br>';
                 echo 'Метки:<br>';

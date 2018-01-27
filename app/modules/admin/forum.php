@@ -385,7 +385,7 @@ if (isAdmin()) {
                 echo '<input type="text" name="moderators" size="50" maxlength="100" value="'.$topics['moderators'].'"><br>';
 
                 echo 'Объявление:<br>';
-                echo '<textarea id="markItUp" cols="25" rows="5" name="note">'.$topics['note'].'</textarea><br>';
+                echo '<textarea class="markItUp" cols="25" rows="5" name="note">'.$topics['note'].'</textarea><br>';
 
                 echo 'Закрепить тему: ';
                 $checked = ($topics['locked'] == 1) ? ' checked' : '';
@@ -810,7 +810,7 @@ if (isAdmin()) {
                         echo '<input type="hidden" name="token" value="'.$_SESSION['token'].'">';
 
                         echo 'Сообщение:<br>';
-                        echo '<textarea id="markItUp" cols="25" rows="5" name="msg"></textarea><br>';
+                        echo '<textarea class="markItUp" cols="25" rows="5" name="msg"></textarea><br>';
 
                         echo '<div class="js-attach-form" style="display: none;">
                             Прикрепить файл:<br><input type="file" name="file"><br>
@@ -896,7 +896,7 @@ if (isAdmin()) {
                 echo '<div class="form" id="form">';
                 echo '<form action="/admin/forum?act=addeditpost&amp;tid='.$post['topic_id'].'&amp;pid='.$pid.'&amp;page='.$page.'&amp;token='.$_SESSION['token'].'" method="post">';
                 echo 'Редактирование сообщения:<br>';
-                echo '<textarea id="markItUp" cols="25" rows="10" name="msg">'.$post['text'].'</textarea><br>';
+                echo '<textarea class="markItUp" cols="25" rows="10" name="msg">'.$post['text'].'</textarea><br>';
 
                 if ($post->files->isNotEmpty()){
                     echo '<i class="fa fa-paperclip"></i> <b>Удаление файлов:</b><br>';

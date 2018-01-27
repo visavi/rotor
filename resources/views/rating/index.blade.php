@@ -20,8 +20,8 @@
             </select>
 
             <div class="form-group{{ hasError('text') }}">
-                <label for="markItUp">Комментарий:</label>
-                <textarea class="form-control" id="markItUp" cols="25" rows="5" name="text">{{ getInput('text') }}</textarea>
+                <label for="text">Комментарий:</label>
+                <textarea class="form-control markItUp" id="text" cols="25" rows="5" name="text">{{ getInput('text') }}</textarea>
                 {!! textError('text') !!}
             </div>
 

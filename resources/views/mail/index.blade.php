@@ -28,8 +28,8 @@
             @endif
 
             <div class="form-group{{ hasError('message') }}">
-                <label for="markItUp">Сообщение:</label>
-                <textarea class="form-control" id="markItUp" rows="5" name="message" required>{{ getInput('message') }}</textarea>
+                <label for="message">Сообщение:</label>
+                <textarea class="form-control markItUp" id="message" rows="5" name="message" required>{{ getInput('message') }}</textarea>
                 {!! textError('message') !!}
             </div>
 

@@ -13,8 +13,8 @@
             <input type="hidden" name="token" value="{{ $_SESSION['token'] }}">
 
             <div class="form-group{{ hasError('msg') }}">
-                <label for="markItUp">Заметка:</label>
-                <textarea class="form-control" id="markItUp" rows="5" name="msg">{{ getInput('msg', $contact->text) }}</textarea>
+                <label for="msg">Заметка:</label>
+                <textarea class="form-control markItUp" id="msg" rows="5" name="msg">{{ getInput('msg', $contact->text) }}</textarea>
                 {!! textError('msg') !!}
             </div>
 

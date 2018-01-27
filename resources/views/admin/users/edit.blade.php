@@ -154,8 +154,8 @@
             </div>
 
             <div class="form-group{{ hasError('info') }}">
-                <label for="markItUp">О себе:</label>
-                <textarea class="form-control" id="markItUp" rows="5" name="info">{{ getInput('info', $user->info) }}</textarea>
+                <label for="info">О себе:</label>
+                <textarea class="form-control markItUp" id="info" rows="5" name="info">{{ getInput('info', $user->info) }}</textarea>
                 {!! textError('info') !!}
             </div>
 

@@ -96,8 +96,8 @@
 
                     <div class="col-md-12">
                         <div class="form-group{{ hasError('info') }}">
-                            <label for="markItUp">О себе:</label>
-                            <textarea class="form-control" id="markItUp" cols="25" rows="5" name="info">{{ getInput('info', $user->info) }}</textarea>
+                            <label for="info">О себе:</label>
+                            <textarea class="form-control markItUp" id="info" cols="25" rows="5" name="info">{{ getInput('info', $user->info) }}</textarea>
                             {!! textError('info') !!}
                         </div>
                         <button class="btn btn-primary">Изменить</button>

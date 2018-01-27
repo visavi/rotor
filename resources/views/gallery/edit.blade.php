@@ -19,8 +19,8 @@
             </div>
 
             <div class="form-group{{ hasError('text') }}">
-                <label for="markItUp">Подпись к фото:</label>
-                <textarea class="form-control" id="markItUp" rows="5" name="text">{{ getInput('text', $photo->text) }}</textarea>
+                <label for="text">Подпись к фото:</label>
+                <textarea class="form-control markItUp" id="text" rows="5" name="text">{{ getInput('text', $photo->text) }}</textarea>
                 {!! textError('text') !!}
             </div>
 

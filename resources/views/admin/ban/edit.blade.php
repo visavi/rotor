@@ -11,8 +11,9 @@
     <h3>{!! $user->getGender() !!} {!! profile($user) !!}</h3>
 
     @if ($user->lastBan->id)
-        Срок: {{ formatTime($user->lastBan->term) }}<br>
+        Последний бан: {{ dateFixed($user->lastBan->created_at) }}<br>
         Забанил: <b>{!! profile($user->lastBan->sendUser) !!}</b><br>
+        Срок: {{ formatTime($user->lastBan->term) }}<br>
         Причина: {!! bbCode($user->lastBan->reason) !!}<br>
     @endif
 
@@ -59,14 +60,14 @@
                     </div>
 
                     <div class="form-group{{ hasError('reason') }}">
-                        <label for="markItUp">Причина бана:</label>
-                        <textarea class="form-control" id="markItUp" rows="5" name="reason" required>{{ getInput('reason') }}</textarea>
+                        <label for="reason">Причина бана:</label>
+                        <textarea class="form-control markItUp" id="reason" rows="5" name="reason" required>{{ getInput('reason') }}</textarea>
                         {!! textError('reason') !!}
                     </div>
 
                     <div class="form-group{{ hasError('note') }}">
-                        <label for="markItUp">Заметка:</label>
-                        <textarea class="form-control" id="markItUp" rows="5" name="note" required>{{ getInput('note', $note) }}</textarea>
+                        <label for="note">Заметка:</label>
+                        <textarea class="form-control markItUp" id="note" rows="5" name="note" required>{{ getInput('note', $note) }}</textarea>
                         {!! textError('note') !!}
                     </div>
 

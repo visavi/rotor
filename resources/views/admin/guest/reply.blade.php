@@ -18,8 +18,8 @@
             <input type="hidden" name="token" value="{{ $_SESSION['token'] }}">
 
             <div class="form-group{{ hasError('reply') }}">
-                <label for="markItUp">Сообщение:</label>
-                <textarea class="form-control" id="markItUp" rows="5" name="reply" required>{{ getInput('reply', $post->reply) }}</textarea>
+                <label for="reply">Сообщение:</label>
+                <textarea class="form-control markItUp" id="reply" rows="5" name="reply" required>{{ getInput('reply', $post->reply) }}</textarea>
                 {!! textError('reply') !!}
             </div>
 
