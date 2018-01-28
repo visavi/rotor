@@ -43,7 +43,7 @@ class Note extends BaseModel
     {
         if (! $note) {
             $note = new self();
-            $note->insert($record);
+            $note->create($record);
         } else {
             $note->update($record);
         }

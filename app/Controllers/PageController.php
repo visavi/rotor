@@ -46,11 +46,7 @@ class PageController extends BaseController
         $rules = Rule::query()->first();
 
         if ($rules) {
-            $rules['text'] = str_replace(
-                ['%SITENAME%', '%MAXBAN%'],
-                [setting('title'), round(setting('maxbantime') / 1440)],
-                $rules['text']
-            );
+            $rules['text'] = str_replace('%SITENAME%', setting('title'), $rules['text']);
         }
 
         return view('pages/rules', compact('rules'));

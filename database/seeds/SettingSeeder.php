@@ -79,7 +79,6 @@ class SettingSeeder extends AbstractSeed
             ['name'  => 'loglist', 'value' => 10],
             ['name'  => 'logos', 'value' => 'Сайт на движке RotorCMS'],
             ['name'  => 'logotip', 'value' => '/assets/img/images/logo.png'],
-            ['name'  => 'maxbantime', 'value' => 43200],
             ['name'  => 'maxblogpost', 'value' => 50000],
             ['name'  => 'moneyname', 'value' => 'рубль,рубля,рублей'],
             ['name'  => 'nocheck', 'value' => 'txt,dat,gif,jpg,jpeg,png,zip'],

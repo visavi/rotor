@@ -30,7 +30,6 @@ class RulesController extends AdminController
 
         $replace = [
             '%SITENAME%' => setting('title'),
-            '%MAXBAN%'   => round(setting('maxbantime') / 1440),
         ];
 
         if ($rules) {

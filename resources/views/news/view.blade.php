@@ -88,7 +88,5 @@
         {!! showError('Комментирование данной новости закрыто!') !!}
     @endif
 
-
     <i class="fa fa-arrow-circle-left"></i> <a href="/news">К новостям</a><br>
-
 @stop

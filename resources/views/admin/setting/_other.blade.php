@@ -29,14 +29,6 @@
         {!! textError('sets[nocheck]') !!}
     </div>
 
-    <div class="form-group{{ hasError('sets[maxbantime]') }}">
-        <label for="maxbantime">Максимальное время бана (суток):</label>
-        <input type="text" class="form-control" id="maxbantime" name="sets[maxbantime]" maxlength="2" value="{{ getInput('sets[maxbantime]', round($settings['maxbantime'] / 1440)) }}" required>
-        {!! textError('sets[maxbantime]') !!}
-
-        <input type="hidden" value="1440" name="mods[maxbantime]">
-    </div>
-
     <div class="form-group{{ hasError('sets[moneyname]') }}">
         <label for="moneyname">Название денег:</label>
         <input type="text" class="form-control" id="moneyname" name="sets[moneyname]" maxlength="100" value="{{ getInput('sets[moneyname]', $settings['moneyname']) }}" required>

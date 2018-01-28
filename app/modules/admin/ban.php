@@ -149,18 +149,7 @@ if (isAdmin([101, 102, 103])) {
         ############################################################################################
         case 'zaban':
 
-            $uid = check($_GET['uid']);
-            $bantime = abs(round($_POST['bantime'], 1));
-            $bantype = check($_POST['bantype']);
-            $reasonban = check($_POST['reasonban']);
-            $notice = check($_POST['note']);
 
-            if ($uid == $_SESSION['token']) {
-                $user = DB::run() -> queryFetch("SELECT * FROM `users` WHERE `login`=? LIMIT 1;", [$uz]);
-
-                if (!empty($user)) {
-                    if ($user['level'] != User::BANNED || $user['timeban'] < SITETIME) {
-                        if ($user['level'] < 101 || $user['level'] > 105) {
                             if ($bantype == 'min') {
                                 $bantotaltime = $bantime;
                             }
@@ -186,19 +175,7 @@ if (isAdmin([101, 102, 103])) {
 
                                             DB::insert("INSERT INTO `banhist` (`user`, `send`, `type`, `reason`, `term`, `time`) VALUES (?, ?, ?, ?, ?, ?);", [$uz, getUser('login'), 1, $reasonban, $bantotaltime * 60, SITETIME]);
 
-                                            $note = Note::query()->where('user', $uz)->find_one();
 
-                                            $record = [
-                                                'user' => $uz,
-                                                'text' => $notice,
-                                                'edit' => getUser('login'),
-                                                'time' => SITETIME,
-                                            ];
-
-                                            Note::saveNote($note, $record);
-
-                                            setFlash('success', 'Аккаунт успешно заблокирован!');
-                                            redirect("/admin/ban?act=edit&uz=$uz");
                                         } else {
                                             showError('Ошибка! Слишком большая заметка, не более 1000 символов!');
                                         }
@@ -211,20 +188,9 @@ if (isAdmin([101, 102, 103])) {
                             } else {
                                 showError('Ошибка! Вы не указали время бана!');
                             }
-                        } else {
-                            showError('Ошибка! Запрещено банить админов и модеров сайта!');
-                        }
-                    } else {
-                        showError('Ошибка! Данный аккаунт уже заблокирован!');
-                    }
-                } else {
-                    showError('Ошибка! Пользователя с данным логином не существует!');
-                }
-            } else {
-                showError('Ошибка! Неверный идентификатор сессии, повторите действие!');
-            }
 
-            echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/ban?act=edit&amp;uz='.$uz.'">Вернуться</a><br>';
+
+
         break;
 
         ############################################################################################

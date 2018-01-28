@@ -23,8 +23,7 @@
 
     <b>Внутренние переменные:</b><br>
 
-    %SITENAME% - Название сайта<br>
-    %MAXBAN% - Максимальное время бана<br><br>
+    %SITENAME% - Название сайта<br><br>
 
     <i class="fa fa-arrow-circle-left"></i> <a href="/admin/rules">Вернуться</a><br>
     <i class="fa fa-wrench"></i> <a href="/admin">В админку</a><br>
