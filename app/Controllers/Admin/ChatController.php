@@ -26,7 +26,7 @@ class ChatController extends AdminController
 
             $validator = new Validator();
             $validator->equal($token, $_SESSION['token'], ['msg' => 'Неверный идентификатор сессии, повторите действие!'])
-                ->length($msg, 5, 1500, ['msg' => 'Ошибка! Слишком длинное или короткое сообщение!']);
+                ->length($msg, 5, 1500, ['msg' => 'Слишком длинное или короткое сообщение!']);
 
             if ($validator->isValid()) {
 
@@ -104,7 +104,7 @@ class ChatController extends AdminController
 
             $validator = new Validator();
             $validator->equal($token, $_SESSION['token'], ['msg' => 'Неверный идентификатор сессии, повторите действие!'])
-                ->length($msg, 5, 1500, ['msg' => 'Ошибка! Слишком длинное или короткое сообщение!']);
+                ->length($msg, 5, 1500, ['msg' => 'Слишком длинное или короткое сообщение!']);
 
             if ($validator->isValid()) {
 

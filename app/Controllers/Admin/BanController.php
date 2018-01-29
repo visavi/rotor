@@ -54,9 +54,41 @@ class BanController extends AdminController
 
             $validator = new Validator();
             $validator->equal($token, $_SESSION['token'], 'Неверный идентификатор сессии, повторите действие!')
-                ->false($user->level == User::BANNED && $user->timeban > SITETIME, 'Данный аккаунт уже заблокирован!');
+                ->false($user->level == User::BANNED && $user->timeban > SITETIME, 'Данный аккаунт уже заблокирован!')
+                ->gt($time, 0, ['time' => 'Вы не указали время бана!'])
+                ->in($type, ['minutes', 'hours', 'days'], ['type', 'Не выбрано время бана!'])
+                ->length($reason, 5, 1000, ['reason' => 'Слишком длинная или короткая причина бана!'])
+                ->length($notice, 0, 1000, ['notice' => 'Слишком большая заметка, не более 1000 символов!']);
 
             if ($validator->isValid()) {
+
+                /*
+
+                            if ($bantype == 'min') {
+                                $bantotaltime = $bantime;
+                            }
+                            if ($bantype == 'chas') {
+                                $bantotaltime = round($bantime * 60);
+                            }
+                            if ($bantype == 'sut') {
+                                $bantotaltime = round($bantime * 1440);
+                            }
+
+
+
+
+                                            if ($bantotaltime > 720) {
+                                                $bancount = 1;
+                                            } else {
+                                                $bancount = 0;
+                                            }
+
+                                            DB::update("UPDATE `users` SET `ban`=?, `timeban`=?, `timelastban`=?, `reasonban`=?, `loginsendban`=?, `totalban`=`totalban`+?, `explainban`=? WHERE `login`=? LIMIT 1;", [1, SITETIME + ($bantotaltime * 60), SITETIME, $reasonban, getUser('login'), $bancount, 1, $uz]);
+
+                                            DB::insert("INSERT INTO `banhist` (`user`, `send`, `type`, `reason`, `term`, `time`) VALUES (?, ?, ?, ?, ?, ?);", [$uz, getUser('login'), 1, $reasonban, $bantotaltime * 60, SITETIME]);
+
+                */
+
 
 /*                $record = [
                     'user_id'      => $user->id,

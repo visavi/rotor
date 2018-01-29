@@ -39,7 +39,7 @@ class GuestController extends BaseController
 
         $validator = new Validator();
         $validator->equal($token, $_SESSION['token'], ['msg' => 'Неверный идентификатор сессии, повторите действие!'])
-            ->length($msg, 5, setting('guesttextlength'), ['msg' => 'Ошибка! Слишком длинное или короткое сообщение!'])
+            ->length($msg, 5, setting('guesttextlength'), ['msg' => 'Слишком длинное или короткое сообщение!'])
             ->true(Flood::isFlood(), ['msg' => 'Антифлуд! Разрешается отправлять сообщения раз в ' . Flood::getPeriod() . ' секунд!']);
 
         /* Проерка для гостей */
@@ -110,7 +110,7 @@ class GuestController extends BaseController
 
             $validator = new Validator();
             $validator->equal($token, $_SESSION['token'], ['msg' => 'Неверный идентификатор сессии, повторите действие!'])
-                ->length($msg, 5, setting('guesttextlength'), ['msg' => 'Ошибка! Слишком длинное или короткое сообщение!']);
+                ->length($msg, 5, setting('guesttextlength'), ['msg' => 'Слишком длинное или короткое сообщение!']);
 
             if ($validator->isValid()) {
 

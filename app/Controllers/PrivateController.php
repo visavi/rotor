@@ -99,8 +99,8 @@ class PrivateController extends BaseController
 
             $validator = new Validator();
             $validator->equal($token, $_SESSION['token'], ['msg' => 'Неверный идентификатор сессии, повторите действие!'])
-                ->true($user, ['user' => 'Ошибка! Пользователь не найден!'])
-                ->length($msg, 5, 1000, ['msg' => 'Ошибка! Слишком длинное или короткое сообщение!'])
+                ->true($user, ['user' => 'Пользователь не найден!'])
+                ->length($msg, 5, 1000, ['msg' => 'Слишком длинное или короткое сообщение!'])
                 ->equal(Flood::isFlood(), true, 'Антифлуд! Разрешается отправлять сообщения раз в ' . Flood::getPeriod() . ' сек!');
 
             if ($user) {

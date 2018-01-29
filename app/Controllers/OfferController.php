@@ -90,8 +90,8 @@ class OfferController extends BaseController
 
             $validator = new Validator();
             $validator->equal($token, $_SESSION['token'], ['Неверный идентификатор сессии, повторите действие!'])
-                ->length($title, 5, 50, ['title' => 'Ошибка! Слишком длинный или короткий заголовок!'])
-                ->length($text, 5, 1000, ['text' => 'Ошибка! Слишком длинное или короткое описание!'])
+                ->length($title, 5, 50, ['title' => 'Слишком длинный или короткий заголовок!'])
+                ->length($text, 5, 1000, ['text' => 'Слишком длинное или короткое описание!'])
                 ->true(Flood::isFlood(), ['text' => 'Антифлуд! Разрешается добавлять записи раз в ' . Flood::getPeriod() . ' секунд!'])
                 ->in($type, ['offer', 'issue'], ['type' => 'Выбран неверный тип записи! (Необходимо предложение или проблема)'])
                 ->gte(getUser('point'), setting('addofferspoint'), ['Для добавления предложения или проблемы вам необходимо набрать ' . plural(setting('addofferspoint'), setting('scorename')) . '!']);
@@ -153,8 +153,8 @@ class OfferController extends BaseController
 
             $validator = new Validator();
             $validator->equal($token, $_SESSION['token'], ['Неверный идентификатор сессии, повторите действие!'])
-                ->length($title, 5, 50, ['title' => 'Ошибка! Слишком длинный или короткий заголовок!'])
-                ->length($text, 5, 1000, ['text' => 'Ошибка! Слишком длинное или короткое описание!'])
+                ->length($title, 5, 50, ['title' => 'Слишком длинный или короткий заголовок!'])
+                ->length($text, 5, 1000, ['text' => 'Слишком длинное или короткое описание!'])
                 ->true(Flood::isFlood(), ['text' => 'Антифлуд! Разрешается добавлять записи раз в ' . Flood::getPeriod() . ' секунд!'])
                 ->in($type, ['offer', 'issue'], ['type' => 'Выбран неверный тип записи! (Необходимо предложение или проблема)'])
                 ->gte(getUser('point'), setting('addofferspoint'), ['Для добавления предложения или проблемы вам необходимо набрать ' . plural(setting('addofferspoint'), setting('scorename')) . '!']);

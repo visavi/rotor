@@ -44,8 +44,8 @@
                     <?php $inputType = getInput('type'); ?>
                     <div class="form-group{{ hasError('type') }}">
                         <div class="custom-control custom-radio">
-                            <input class="custom-control-input" type="radio" id="inputTypeMins" name="type" value="minutes"{{ $inputType === 'minutes' ? ' checked' : '' }}>
-                            <label class="custom-control-label" for="inputTypeMins">Минут</label>
+                            <input class="custom-control-input" type="radio" id="inputTypeMinutes" name="type" value="minutes"{{ $inputType === 'minutes' ? ' checked' : '' }}>
+                            <label class="custom-control-label" for="inputTypeMinutes">Минут</label>
                         </div>
                         <div class="custom-control custom-radio">
                             <input class="custom-control-input" type="radio" id="inputTypeHours" name="type" value="hours"{{ $inputType === 'hours' ? ' checked' : '' }}>

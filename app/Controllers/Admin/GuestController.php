@@ -46,7 +46,7 @@ class GuestController extends AdminController
 
             $validator = new Validator();
             $validator->equal($token, $_SESSION['token'], ['msg' => 'Неверный идентификатор сессии, повторите действие!'])
-                ->length($msg, 5, setting('guesttextlength'), ['msg' => 'Ошибка! Слишком длинное или короткое сообщение!']);
+                ->length($msg, 5, setting('guesttextlength'), ['msg' => 'Слишком длинное или короткое сообщение!']);
 
             if ($validator->isValid()) {
 
@@ -88,7 +88,7 @@ class GuestController extends AdminController
 
             $validator = new Validator();
             $validator->equal($token, $_SESSION['token'], ['msg' => 'Неверный идентификатор сессии, повторите действие!'])
-                ->length($reply, 5, setting('guesttextlength'), ['msg' => 'Ошибка! Слишком длинный или короткий ответ!']);
+                ->length($reply, 5, setting('guesttextlength'), ['msg' => 'Слишком длинный или короткий ответ!']);
 
             if ($validator->isValid()) {
 

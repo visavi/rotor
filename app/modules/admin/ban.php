@@ -144,54 +144,6 @@ if (isAdmin([101, 102, 103])) {
             echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/ban?act=editban&amp;uz='.$uz.'">Вернуться</a><br>';
         break;
 
-        ############################################################################################
-        ##                                     Бан пользователя                                   ##
-        ############################################################################################
-        case 'zaban':
-
-
-                            if ($bantype == 'min') {
-                                $bantotaltime = $bantime;
-                            }
-                            if ($bantype == 'chas') {
-                                $bantotaltime = round($bantime * 60);
-                            }
-                            if ($bantype == 'sut') {
-                                $bantotaltime = round($bantime * 1440);
-                            }
-
-                            if ($bantotaltime > 0) {
-                                if ($bantotaltime <= setting('maxbantime')) {
-                                    if (utfStrlen($reasonban) >= 5 && utfStrlen($reasonban) <= 1000) {
-                                        if (utfStrlen($notice) <= 1000) {
-
-                                            if ($bantotaltime > 720) {
-                                                $bancount = 1;
-                                            } else {
-                                                $bancount = 0;
-                                            }
-
-                                            DB::update("UPDATE `users` SET `ban`=?, `timeban`=?, `timelastban`=?, `reasonban`=?, `loginsendban`=?, `totalban`=`totalban`+?, `explainban`=? WHERE `login`=? LIMIT 1;", [1, SITETIME + ($bantotaltime * 60), SITETIME, $reasonban, getUser('login'), $bancount, 1, $uz]);
-
-                                            DB::insert("INSERT INTO `banhist` (`user`, `send`, `type`, `reason`, `term`, `time`) VALUES (?, ?, ?, ?, ?, ?);", [$uz, getUser('login'), 1, $reasonban, $bantotaltime * 60, SITETIME]);
-
-
-                                        } else {
-                                            showError('Ошибка! Слишком большая заметка, не более 1000 символов!');
-                                        }
-                                    } else {
-                                        showError('Ошибка! Слишком длинная или короткая причина бана!');
-                                    }
-                                } else {
-                                    showError('Ошибка! Максимальное время бана '.round(setting('maxbantime') / 1440).' суток!');
-                                }
-                            } else {
-                                showError('Ошибка! Вы не указали время бана!');
-                            }
-
-
-
-        break;
 
         ############################################################################################
         ##                                    Разбан пользователя                                 ##
