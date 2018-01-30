@@ -105,8 +105,8 @@ class BBCode
             'callback' => 'hiddenText',
         ],
         'youtube' => [
-            'pattern' => '/(?<=\[youtube\])(.*youtu\.be\/|.*youtube\.com\/.*(vi?\/?=?|embed\/))([\w-_]{11}).*(?=\[\/youtube\])/',
-            'replace' => '<div class="embed-responsive embed-responsive-16by9"><iframe class="embed-responsive-item" src="//www.youtube.com/embed/$3" allowfullscreen></iframe></div>',
+            'pattern' => '/\[youtube\](.*youtu\.be\/|.*youtube\.com\/.*(?:vi?\/?=?|embed\/))([\w-]{11}).*\[\/youtube\]/',
+            'replace' => '<div class="embed-responsive embed-responsive-16by9"><iframe class="embed-responsive-item" src="//www.youtube.com/embed/$2" allowfullscreen></iframe></div>',
         ],
     ];
 
