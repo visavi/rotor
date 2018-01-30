@@ -16,22 +16,18 @@
         @foreach ($messages as $data)
             <div class="post">
                 <div class="b">
-
-                    @if (isAdmin() || $user->id == getUser('id'))
-                        <div class="float-right">
-                            <a href="#" onclick="return deleteWall(this)" data-id="{{ $data->id }}" data-login="{{ $data->user->login }}" data-token="{{ $_SESSION['token'] }}" data-toggle="tooltip" title="Удалить"><i class="fa fa-times text-muted"></i></a>
-                        </div>
-                    @endif
-
-                    @if (getUser() && getUser('id') != $data->author_id)
-                        <div class="float-right">
+                    <div class="float-right">
+                        @if (getUser() && getUser('id') != $data->author_id)
                             <a href="#" onclick="return postReply(this)" title="Ответить"><i class="fa fa-reply text-muted"></i></a>
                             <a href="#" onclick="return postQuote(this)" title="Цитировать"><i class="fa fa-quote-right text-muted"></i></a>
 
                             <a href="#" onclick="return sendComplaint(this)" data-type="{{ App\Models\Wall::class }}" data-id="{{ $data->id }}" data-token="{{ $_SESSION['token'] }}" data-page="{{ $page['current'] }}" rel="nofollow" title="Жалоба"><i class="fa fa-bell text-muted"></i></a>
-                        </div>
-                    @endif
+                        @endif
 
+                        @if (isAdmin() || $user->id == getUser('id'))
+                            <a href="#" onclick="return deleteWall(this)" data-id="{{ $data->id }}" data-login="{{ $data->user->login }}" data-token="{{ $_SESSION['token'] }}" data-toggle="tooltip" title="Удалить"><i class="fa fa-times text-muted"></i></a>
+                        @endif
+                    </div>
                     <div class="img">{!! userAvatar($data->author) !!}</div>
 
                     <b>{!! profile($data->author) !!}</b> <small>({{ dateFixed($data->created_at) }})</small><br>
