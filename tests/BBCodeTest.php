@@ -254,10 +254,10 @@ class BBCodeTest extends TestCase
      */
     public function testYoutube()
     {
-        $text      = '[youtube]85bkCmaOh4o[/youtube]';
+        $text      = '[youtube]https://www.youtube.com/watch?v=85bkCmaOh4o[/youtube]';
         $parseText = bbCode($text);
 
-        $this->assertEquals($parseText, '<div class="embed-responsive embed-responsive-16by9"><iframe class="embed-responsive-item" src="//www.youtube.com/embed/85bkCmaOh4o"></iframe></div>');
+        $this->assertEquals($parseText, '<div class="embed-responsive embed-responsive-16by9"><iframe class="embed-responsive-item" src="//www.youtube.com/embed/85bkCmaOh4o" allowfullscreen></iframe></div>');
     }
 
     /**

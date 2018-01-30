@@ -15,7 +15,7 @@ mySettings = {
 
         {title:'Изображение', name:'<i class="fa fa-image"></i>', className:"bb-image", openWith:'[img][![URL изображения:!:http://]!]', closeWith:'[/img]'},
 
-        {title:'Видео', name:'<i class="fab fa-youtube"></i>', className:"bb-youtube", openWith:'[youtube][![Код видео с youtube]!]', closeWith:'[/youtube]'},
+        {title:'Видео', name:'<i class="fab fa-youtube"></i>', className:"bb-youtube", openWith:'[youtube][![Ссылка на видео с youtube]!]', closeWith:'[/youtube]'},
         {title:'Цвет', name:'<i class="fa fa-th"></i>', className:"bb-color", openWith:'[color=[![Код цвета]!]]', closeWith:'[/color]',
         dropMenu: [
             {name:'Yellow',	openWith:'[color=#ffd700]', closeWith:'[/color]', className:"col1-1" },
