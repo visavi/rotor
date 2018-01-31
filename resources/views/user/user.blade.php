@@ -20,7 +20,7 @@
     @if ($user->level === 'banned' && $user->timeban > SITETIME)
         <div class="form">
             <b><span style="color:#ff0000">Внимание, данный пользователь заблокирован!</span></b><br>
-            До окончания бана осталось: {{ formatTime($user->timeban - SITETIME) }}<br>
+            До окончания бана: {{ formatTime($user->timeban - SITETIME) }}<br>
 
             @if ($user->lastBan->id)
                 Причина: {!! bbCode($user->lastBan->reason) !!}<br>
@@ -121,9 +121,9 @@
     <div class="alert alert-success">
         <i class="fa fa-thumbtack"></i> <b>Заметка:</b> (<a href="/user/{{ $user->login }}/note">Изменить</a>)<br>
 
-        @if (!empty($note->text))
-            {!! bbCode($note->text) !!}<br>
-            Изменено: {!! profile($note->editUser) !!} ({{ dateFixed($note->updated_at) }})<br>
+        @if (! empty($user->note->text))
+            {!! bbCode($user->note->text) !!}<br>
+            Изменено: {!! profile($user->note->editUser) !!} ({{ dateFixed($user->note->updated_at) }})<br>
         @else
             Записей еще нет!<br>
         @endif

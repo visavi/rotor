@@ -172,7 +172,7 @@
     @if ($user->level == 'banned' && $user->timeban > SITETIME)
         <div class="form">
             <b><span style="color:#ff0000">Внимание, данный пользователь заблокирован!</span></b><br>
-            До окончания бана осталось: {{ formatTime($user->timeban - SITETIME) }}<br>
+            До окончания бана: {{ formatTime($user->timeban - SITETIME) }}<br>
 
             @if ($banhist)
                 Срок: {{ formatTime($banhist->term) }}<br>

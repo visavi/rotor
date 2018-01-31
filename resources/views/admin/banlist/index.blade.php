@@ -19,7 +19,7 @@
             </div>
 
             <div>
-                До окончания бана осталось {{ formatTime($user->timeban - SITETIME) }}<br>
+                До окончания бана: {{ formatTime($user->timeban - SITETIME) }}<br>
 
                 @if ($user->lastBan->id)
                     Забанил: <b>{!! profile($user->lastBan->sendUser) !!}</b><br>

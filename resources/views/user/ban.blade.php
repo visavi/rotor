@@ -30,7 +30,7 @@
         @endif
     @endif
 
-    До окончания бана осталось <b>{{ formatTime($user->timeban - SITETIME) }}</b><br><br>
+    До окончания бана: <b>{{ formatTime($user->timeban - SITETIME) }}</b><br><br>
 
     Чтобы не терять время зря, рекомендуем вам ознакомиться с <b><a href="/rules">Правилами сайта</a></b><br><br>
 

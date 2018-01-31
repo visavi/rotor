@@ -32,22 +32,4 @@ class Note extends BaseModel
     {
         return $this->belongsTo(User::class, 'edit_user_id')->withDefault();
     }
-
-    /**
-     * Сохраняет заметку для пользоватля
-     * @param  object  $note   заметка
-     * @param  array   $record массив данных
-     * @return integer id затронутой записи
-     */
-    public static function saveNote($note, array $record)
-    {
-        if (! $note) {
-            $note = new self();
-            $note->create($record);
-        } else {
-            $note->update($record);
-        }
-
-        return $note->id;
-    }
 }

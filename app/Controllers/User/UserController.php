@@ -5,11 +5,9 @@ namespace App\Controllers\User;
 use App\Classes\Request;
 use App\Classes\Validator;
 use App\Controllers\BaseController;
-use App\Models\Banhist;
 use App\Models\BlackList;
 use App\Models\ChangeMail;
 use App\Models\Invite;
-use App\Models\Note;
 use App\Models\Online;
 use App\Models\User;
 use Illuminate\Database\Capsule\Manager as DB;
@@ -17,7 +15,7 @@ use Illuminate\Database\Capsule\Manager as DB;
 class UserController extends BaseController
 {
     /**
-     * Главная страница
+     * Анкета пользователя
      */
     public function index($login)
     {
@@ -25,13 +23,12 @@ class UserController extends BaseController
             abort('default', 'Пользователя с данным логином не существует!');
         }
 
-        $note    = Note::query()->where('user_id', $user->id)->first();
         $invite  = Invite::query()->where('invite_user_id', $user->id)->first();
         $user->load('lastBan');
 
         $adminGroups = User::ADMIN_GROUPS;
 
-        return view('user/user', compact('user', 'invite', 'note', 'adminGroups'));
+        return view('user/user', compact('user', 'invite', 'adminGroups'));
     }
 
     /**
@@ -47,8 +44,6 @@ class UserController extends BaseController
             abort('default', 'Пользователя с данным логином не существует!');
         }
 
-        $note = Note::query()->where('user_id', $user->id)->first();
-
         if (Request::isMethod('post')) {
 
             $notice = check(Request::input('notice'));
@@ -60,14 +55,11 @@ class UserController extends BaseController
 
             if ($validator->isValid()) {
 
-                $record = [
-                    'user_id'      => $user->id,
+                $user->note()->updateOrCreate([], [
                     'text'         => $notice,
                     'edit_user_id' => getUser('id'),
                     'updated_at'   => SITETIME,
-                ];
-
-                Note::saveNote($note, $record);
+                ]);
 
                 setFlash('success', 'Заметка успешно сохранена!');
                 redirect('/user/'.$user->login);
@@ -78,7 +70,7 @@ class UserController extends BaseController
             }
         }
 
-        return view('user/note', compact('note', 'user'));
+        return view('user/note', compact('user'));
     }
 
     /**
@@ -666,7 +658,7 @@ class UserController extends BaseController
     }
 
     /**
-     * Пользователь онлайн
+     * Пользователи онлайн
      */
     public function who()
     {

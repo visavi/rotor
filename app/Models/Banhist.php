@@ -26,6 +26,13 @@ class Banhist extends BaseModel
     protected $guarded = [];
 
     /**
+     * Типы банов
+     */
+    const BAN    = 'ban';    // Бан
+    const UNBAN  = 'unban';  // Разбан
+    const CHANGE = 'change'; // Изменение
+
+    /**
      * Возвращает связь пользователей
      */
     public function sendUser()

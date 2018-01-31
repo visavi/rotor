@@ -23,7 +23,7 @@
     @if ($user->level === 'banned' && $user->timeban > SITETIME)
         <div class="form">
             <b><span style="color:#ff0000">Внимание, данный пользователь заблокирован!</span></b><br>
-            До окончания бана осталось: {{ formatTime($user->timeban - SITETIME) }}<br>
+            До окончания бана: {{ formatTime($user->timeban - SITETIME) }}<br>
         </div>
 
         <i class="fa fa-pencil-alt"></i> <a href="/admin/ban?act=editban&amp;user={{ $user->login }}">Изменить</a><br>
@@ -66,7 +66,7 @@
 
                     <div class="form-group{{ hasError('note') }}">
                         <label for="notice">Заметка:</label>
-                        <textarea class="form-control markItUp" id="notice" rows="5" name="notice">{{ getInput('notice', $note->text) }}</textarea>
+                        <textarea class="form-control markItUp" id="notice" rows="5" name="notice">{{ getInput('notice', $user->note->text) }}</textarea>
                         {!! textError('notice') !!}
                     </div>
 

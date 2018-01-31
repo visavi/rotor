@@ -4,8 +4,9 @@ namespace App\Controllers\Admin;
 
 use App\Classes\Request;
 use App\Classes\Validator;
-use App\Models\Note;
+use App\Models\Banhist;
 use App\Models\User;
+use Illuminate\Database\Capsule\Manager as DB;
 
 class BanController extends AdminController
 {
@@ -38,12 +39,10 @@ class BanController extends AdminController
         if (! $user) {
             abort('default', 'Пользователь не найден!');
         }
-/*
+
         if (in_array($user->level, User::ADMIN_GROUPS)) {
             abort('default', 'Запрещено банить администрацию сайта!');
-        }*/
-
-        $note = Note::query()->where('user_id', $user->id)->first();
+        }
 
         if (Request::isMethod('post')) {
             $token  = check(Request::input('token'));
@@ -62,42 +61,36 @@ class BanController extends AdminController
 
             if ($validator->isValid()) {
 
-                /*
+                if ($type === 'days') {
+                    $time = $time * 3600 * 24;
+                } elseif ($type === 'hours') {
+                    $time = $time * 3600;
+                } else {
+                    $time = $time * 60;
+                }
 
-                            if ($bantype == 'min') {
-                                $bantotaltime = $bantime;
-                            }
-                            if ($bantype == 'chas') {
-                                $bantotaltime = round($bantime * 60);
-                            }
-                            if ($bantype == 'sut') {
-                                $bantotaltime = round($bantime * 1440);
-                            }
+                $bancount = ($time > 3600 * 12) ? 1 : 0;
 
+                $user->update([
+                    'level'    => User::BANNED,
+                    'timeban'  => SITETIME + $time,
+                    'totalban' => DB::raw('totalban + ' . $bancount),
+                ]);
 
-
-
-                                            if ($bantotaltime > 720) {
-                                                $bancount = 1;
-                                            } else {
-                                                $bancount = 0;
-                                            }
-
-                                            DB::update("UPDATE `users` SET `ban`=?, `timeban`=?, `timelastban`=?, `reasonban`=?, `loginsendban`=?, `totalban`=`totalban`+?, `explainban`=? WHERE `login`=? LIMIT 1;", [1, SITETIME + ($bantotaltime * 60), SITETIME, $reasonban, getUser('login'), $bancount, 1, $uz]);
-
-                                            DB::insert("INSERT INTO `banhist` (`user`, `send`, `type`, `reason`, `term`, `time`) VALUES (?, ?, ?, ?, ?, ?);", [$uz, getUser('login'), 1, $reasonban, $bantotaltime * 60, SITETIME]);
-
-                */
-
-
-/*                $record = [
+                Banhist::query()->create([
                     'user_id'      => $user->id,
+                    'send_user_id' => getUser('id'),
+                    'type'         => Banhist::BAN,
+                    'reason'       => $reason,
+                    'term'         => $time,
+                    'created_at'   => SITETIME,
+                ]);
+
+                $user->note()->updateOrCreate([], [
                     'text'         => $notice,
                     'edit_user_id' => getUser('id'),
                     'updated_at'   => SITETIME,
-                ];
-
-                Note::saveNote($note, $record);*/
+                ]);
 
                 setFlash('success', 'Пользователь успешно заблокирован!');
                 redirect('/admin/ban/edit?user=' . $user->login);
@@ -107,7 +100,6 @@ class BanController extends AdminController
             }
         }
 
-
-        return view('admin/ban/edit', compact('user', 'note'));
+        return view('admin/ban/edit', compact('user'));
     }
 }

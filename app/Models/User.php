@@ -83,6 +83,14 @@ class User extends BaseModel
     }
 
     /**
+     * Возвращает заметку пользователя
+     */
+    public function note()
+    {
+        return $this->hasOne(Note::class)->withDefault();
+    }
+
+    /**
      * Возвращает пол пользователя
      *
      * @return string пол пользователя

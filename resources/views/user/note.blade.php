@@ -13,7 +13,7 @@
 
             <div class="form-group{{ hasError('notice') }}">
                 <label for="notice">Сообщение:</label>
-                <textarea class="form-control markItUp" id="notice" rows="5" name="notice" required>{{ getInput('notice', $note['text']) }}</textarea>
+                <textarea class="form-control markItUp" id="notice" rows="5" name="notice" required>{{ getInput('notice', $user->note->text) }}</textarea>
                 {!! textError('notice') !!}
             </div>
 
