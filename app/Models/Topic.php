@@ -36,6 +36,7 @@ class Topic extends BaseModel
 
     /**
      * Возвращает иконку в зависимости от статуса
+     *
      * @return string иконка топика
      */
     public function getIcon()
@@ -53,6 +54,7 @@ class Topic extends BaseModel
 
     /**
      * Генерирует постраничную навигация для форума
+     *
      * @return string сформированный блок
      */
     public function pagination()
