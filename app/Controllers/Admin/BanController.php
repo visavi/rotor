@@ -112,10 +112,6 @@ class BanController extends AdminController
             abort('default', 'Пользователь не найден!');
         }
 
-        if (in_array($user->level, User::ADMIN_GROUPS)) {
-            abort('default', 'Запрещено банить администрацию сайта!');
-        }
-
         if ($user->level !== User::BANNED || $user->timeban < SITETIME) {
             abort('default', 'Данный пользователь не забанен!');
         }
@@ -130,7 +126,7 @@ class BanController extends AdminController
 
             $validator = new Validator();
             $validator->equal($token, $_SESSION['token'], 'Неверный идентификатор сессии, повторите действие!')
-                ->gt($term, 0, ['timeban' => 'Слишком короткое время бана!'])
+                ->gt($term, 0, ['timeban' => 'Слишком маленькое время бана!'])
                 ->length($reason, 5, 1000, ['reason' => 'Слишком длинная или короткая причина бана!']);
 
             if ($validator->isValid()) {
@@ -158,5 +154,48 @@ class BanController extends AdminController
         }
 
         return view('admin/ban/change', compact('user'));
+    }
+
+    /**
+     * Снятие бана
+     */
+    public function unban()
+    {
+        $token = check(Request::input('token'));
+        $login = check(Request::input('user'));
+
+        $user = User::query()->where('login', $login)->with('lastBan')->first();
+
+        if (! $user) {
+            abort('default', 'Пользователь не найден!');
+        }
+
+        if ($user->level !== User::BANNED || $user->timeban < SITETIME) {
+            abort('default', 'Данный пользователь не забанен!');
+        }
+
+        $validator = new Validator();
+        $validator->equal($token, $_SESSION['token'], 'Неверный идентификатор сессии, повторите действие!');
+
+        if ($validator->isValid()) {
+
+            $user->update([
+                'level'   => User::USER,
+                'timeban' => null,
+            ]);
+
+            Banhist::query()->create([
+                'user_id'      => $user->id,
+                'send_user_id' => getUser('id'),
+                'type'         => Banhist::UNBAN,
+                'created_at'   => SITETIME,
+            ]);
+
+            setFlash('success', 'Пользователь успешно разбанен!');
+        } else {
+            setFlash('danger', $validator->getErrors());
+        }
+
+        redirect('/admin/ban/edit?user=' . $user->login);
     }
 }

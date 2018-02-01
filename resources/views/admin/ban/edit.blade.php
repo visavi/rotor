@@ -26,7 +26,7 @@
         </div>
 
         <i class="fa fa-pencil-alt"></i> <a href="/admin/ban/change?user={{ $user->login }}">Изменить</a><br>
-        <i class="fa fa-check-circle"></i> <a href="/admin/ban/unban?user={{ $user->login }}&amp;token={{ $_SESSION['token'] }}">Разбанить</a><hr>
+        <i class="fa fa-check-circle"></i> <a href="/admin/ban/unban?user={{ $user->login }}&amp;token={{ $_SESSION['token'] }}" onclick="return confirm('Вы действительно хотите разбанить пользователя?')">Разбанить</a><hr>
     @else
         <div class="form">
             <form method="post" action="/admin/ban/edit?user={{ $user->login }}">

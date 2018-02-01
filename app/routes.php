@@ -312,6 +312,7 @@ $routes = [
     ['GET',      '/admin/ban', 'Admin\BanController@index'],
     ['GET|POST', '/admin/ban/edit', 'Admin\BanController@edit'],
     ['GET|POST', '/admin/ban/change', 'Admin\BanController@change'],
+    ['GET',      '/admin/ban/unban', 'Admin\BanController@unban'],
 
     ['GET',      '/admin/banhist', 'Admin\BanhistController@index'],
     ['GET',      '/admin/banhist/view', 'Admin\BanhistController@view'],
