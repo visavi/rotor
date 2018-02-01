@@ -17,7 +17,7 @@
         Причина: {!! bbCode($user->lastBan->reason) !!}<br>
     @endif
 
-    <i class="fa fa-history"></i> <b><a href="/admin/banhist?user={{ $user->login }}">История банов</a></b><br><br>
+    <i class="fa fa-history"></i> <b><a href="/admin/banhist/view?user={{ $user->login }}">История банов</a></b><br><br>
 
     @if ($user->level === 'banned' && $user->timeban > SITETIME)
         <div class="form">
@@ -25,8 +25,8 @@
             До окончания бана: {{ formatTime($user->timeban - SITETIME) }}<br>
         </div>
 
-        <i class="fa fa-pencil-alt"></i> <a href="/admin/ban?act=editban&amp;user={{ $user->login }}">Изменить</a><br>
-        <i class="fa fa-arrow-circle-up"></i> <a href="/admin/ban?act=razban&amp;user={{ $user->login }}&amp;token={{ $_SESSION['token'] }}">Разбанить</a><hr>
+        <i class="fa fa-pencil-alt"></i> <a href="/admin/ban/change?user={{ $user->login }}">Изменить</a><br>
+        <i class="fa fa-check-circle"></i> <a href="/admin/ban/unban?user={{ $user->login }}&amp;token={{ $_SESSION['token'] }}">Разбанить</a><hr>
     @else
         <div class="form">
             <form method="post" action="/admin/ban/edit?user={{ $user->login }}">

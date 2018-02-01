@@ -69,8 +69,8 @@ class BanController extends AdminController
                 }
 
                 $user->update([
-                    'level'    => User::BANNED,
-                    'timeban'  => SITETIME + $time,
+                    'level'   => User::BANNED,
+                    'timeban' => SITETIME + $time,
                 ]);
 
                 Banhist::query()->create([
@@ -106,7 +106,7 @@ class BanController extends AdminController
     {
         $login = check(Request::input('user'));
 
-        $user = User::query()->where('login', $login)->first();
+        $user = User::query()->where('login', $login)->with('lastBan')->first();
 
         if (! $user) {
             abort('default', 'Пользователь не найден!');
@@ -114,6 +114,47 @@ class BanController extends AdminController
 
         if (in_array($user->level, User::ADMIN_GROUPS)) {
             abort('default', 'Запрещено банить администрацию сайта!');
+        }
+
+        if ($user->level !== User::BANNED || $user->timeban < SITETIME) {
+            abort('default', 'Данный пользователь не забанен!');
+        }
+
+        if (Request::isMethod('post')) {
+            $token   = check(Request::input('token'));
+            $timeban = check(Request::input('timeban'));
+            $reason  = check(Request::input('reason'));
+
+            $timeban = strtotime($timeban);
+            $term    = $timeban - SITETIME;
+
+            $validator = new Validator();
+            $validator->equal($token, $_SESSION['token'], 'Неверный идентификатор сессии, повторите действие!')
+                ->gt($term, 0, ['timeban' => 'Слишком короткое время бана!'])
+                ->length($reason, 5, 1000, ['reason' => 'Слишком длинная или короткая причина бана!']);
+
+            if ($validator->isValid()) {
+
+                $user->update([
+                    'level'   => User::BANNED,
+                    'timeban' => $timeban,
+                ]);
+
+                Banhist::query()->create([
+                    'user_id'      => $user->id,
+                    'send_user_id' => getUser('id'),
+                    'type'         => Banhist::CHANGE,
+                    'reason'       => $reason,
+                    'term'         => $term,
+                    'created_at'   => SITETIME,
+                ]);
+
+                setFlash('success', 'Данные успешно изменены!');
+                redirect('/admin/ban/edit?user=' . $user->login);
+            } else {
+                setInput(Request::all());
+                setFlash('danger', $validator->getErrors());
+            }
         }
 
         return view('admin/ban/change', compact('user'));
