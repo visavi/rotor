@@ -35,7 +35,6 @@ if (isAdmin([101, 102, 103])) {
                             echo 'Последний бан: '.dateFixed($user['timelastban'], 'j F Y / H:i').'<br>';
                             echo 'Забанил: '.profile($user['loginsendban']).'<br>';
                         }
-                        echo 'Строгих нарушений: <b>'.$user['totalban'].'</b><br>';
                         echo 'До окончания бана: '.formatTime($user['timeban'] - SITETIME).'<br><br>';
 
                         if ($user['timeban'] - SITETIME >= 86400) {

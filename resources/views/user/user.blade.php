@@ -85,8 +85,6 @@
 
                 Последняя визит: {{ dateFixed($user->updated_at) }}<br>
 
-                <a href="/banhist?user={{ $user->login }}">Строгих нарушений: {{ $user->totalban }}</a><br>
-
                 <a href="/rating/{{ $user->login }}">Репутация: <b>{!! formatNum($user->rating) !!}</b> (+{{  $user->posrating }}/-{{  $user->negrating }})</a><br>
 
                 @if (getUser() && getUser('login') != $user->login)
@@ -151,6 +149,7 @@
                     <i class="fa fa-ban"></i> <a href="/admin/invitations/send?user={{ $user->login }}&amp;token={{ $_SESSION['token'] }}">Отправить инвайт</a><br>
                 @endif
             <i class="fa fa-ban"></i> <a href="/admin/ban/edit?user={{ $user->login }}">Бан / Разбан</a><br>
+            <i class="fa fa-history"></i> <a href="/banhist/view?user={{ $user->login }}">История банов</a><br>
             @endif
 
             @if (isAdmin('admin'))

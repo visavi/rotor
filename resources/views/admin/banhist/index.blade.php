@@ -15,15 +15,18 @@
 
         @foreach ($records as $data)
             <div class="b">
+
+                <div class="float-right">
+                    <a href="/admin/ban/change?user={{ $data->user->login }}" data-toggle="tooltip" title="Изменить"><i class="fa fa-pencil-alt"></i></a>
+                    <a href="/admin/banhist/view?user={{ $data->user->login }}" data-toggle="tooltip" title="История"><i class="fa fa-history"></i></a>
+                    <input type="checkbox" name="del[]" value="{{ $data->id }}">
+                </div>
+
                 <div class="img">{!! userAvatar($data->user) !!}</div>
                 <b>{!! profile($data->user) !!}</b> {!! userOnline($data->user) !!}
 
                 <small>({{ dateFixed($data->created_at) }})</small><br>
-
-                <input type="checkbox" name="del[]" value="{{ $data->id }}">
-
-                <a href="/admin/ban/change?user={{ $data->user->login }}">Изменить</a> / <a href="/admin/banhist/view?user={{ $data->user->login }}">Все изменения</a></div>
-
+            </div>
             <div>
                 @if ($data->type !== 'unban')
                     Причина: {!! bbCode($data->reason) !!}<br>
@@ -35,7 +38,9 @@
             </div>
         @endforeach
 
-        <button class="btn btn-sm btn-danger">Удалить выбранное</button>
+        <div class="float-right">
+            <button class="btn btn-sm btn-danger">Удалить выбранное</button>
+        </div>
     </form>
 
     {!! pagination($page) !!}

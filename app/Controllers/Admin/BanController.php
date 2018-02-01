@@ -6,7 +6,6 @@ use App\Classes\Request;
 use App\Classes\Validator;
 use App\Models\Banhist;
 use App\Models\User;
-use Illuminate\Database\Capsule\Manager as DB;
 
 class BanController extends AdminController
 {
@@ -28,7 +27,7 @@ class BanController extends AdminController
     }
 
     /**
-     * Редактирование пользователя
+     * Бан пользователя
      */
     public function edit()
     {
@@ -69,12 +68,9 @@ class BanController extends AdminController
                     $time = $time * 60;
                 }
 
-                $bancount = ($time > 3600 * 12) ? 1 : 0;
-
                 $user->update([
                     'level'    => User::BANNED,
                     'timeban'  => SITETIME + $time,
-                    'totalban' => DB::raw('totalban + ' . $bancount),
                 ]);
 
                 Banhist::query()->create([
@@ -101,5 +97,25 @@ class BanController extends AdminController
         }
 
         return view('admin/ban/edit', compact('user'));
+    }
+
+    /**
+     * Изменение бана
+     */
+    public function change()
+    {
+        $login = check(Request::input('user'));
+
+        $user = User::query()->where('login', $login)->first();
+
+        if (! $user) {
+            abort('default', 'Пользователь не найден!');
+        }
+
+        if (in_array($user->level, User::ADMIN_GROUPS)) {
+            abort('default', 'Запрещено банить администрацию сайта!');
+        }
+
+        return view('admin/ban/change', compact('user'));
     }
 }

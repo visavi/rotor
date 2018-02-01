@@ -182,7 +182,6 @@
         </div>
     @endif
 
-    Строгих банов: <b>{{  $user->totalban }}</b><br>
     Последний визит: {{ dateFixed($user->updated_at, 'j F Y / H:i') }}<br><br>
 
     @if (! in_array($user->level, $adminGroups))
