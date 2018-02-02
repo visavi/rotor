@@ -22,7 +22,7 @@ class VoteController extends BaseController
             ->where('closed', 0)
             ->orderBy('created_at', 'desc')
             ->offset($page['offset'])
-            ->limit(setting('allvotes'))
+            ->limit($page['limit'])
             ->get();
 
         return view('vote/index', compact('votes', 'page'));
@@ -137,7 +137,7 @@ class VoteController extends BaseController
             ->where('closed', 1)
             ->orderBy('created_at', 'desc')
             ->offset($page['offset'])
-            ->limit(setting('allvotes'))
+            ->limit($page['limit'])
             ->get();
 
         return view('vote/history', compact('votes', 'page'));

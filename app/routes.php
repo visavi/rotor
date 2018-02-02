@@ -318,13 +318,17 @@ $routes = [
     ['GET',      '/admin/banhist/view', 'Admin\BanhistController@view'],
     ['POST',     '/admin/banhist/delete', 'Admin\BanhistController@delete'],
 
+    ['GET',      '/admin/votes', 'Admin\VoteController@index'],
+    ['GET|POST', '/admin/votes/edit/[i:id]', 'Admin\VoteController@edit'],
+    ['GET',      '/admin/votes/close/[i:id]', 'Admin\VoteController@close'],
+    ['GET',      '/admin/votes/delete/[i:id]', 'Admin\VoteController@delete'],
+
     ['GET|POST', '/admin/blog', 'admin/blog.php'],
     ['GET|POST', '/admin/forum', 'admin/forum.php'],
     ['GET|POST', '/admin/gallery', 'admin/gallery.php'],
     ['GET|POST', '/admin/load', 'admin/load.php'],
     ['GET|POST', '/admin/newload', 'admin/newload.php'],
     ['GET|POST', '/admin/reklama', 'admin/reklama.php'],
-    ['GET|POST', '/admin/votes', 'admin/votes.php'],
     ['GET|POST', '/admin/users', 'admin/users.php'],
     ['GET|POST', '/admin/offers', 'admin/offers.php'],
 

@@ -32,4 +32,12 @@ class Vote extends BaseModel
     {
         return $this->belongsTo(Topic::class, 'topic_id')->withDefault();
     }
+
+    /**
+     * Возвращает варианты ответов
+     */
+    public function answers()
+    {
+        return $this->hasMany(VoteAnswer::class, 'vote_id')->orderBy('id');
+    }
 }
