@@ -71,9 +71,11 @@ class VoteController extends AdminController
 
             if ($validator->isValid()) {
 
-                $vote->update([
+/*                $vote->update([
                     'title'      => $title,
-                ]);
+                ]);*/
+
+                //var_dump(Request::all()); exit;
 
 /*                $prepareAnswers = [];
                 foreach ($answers as $answer) {

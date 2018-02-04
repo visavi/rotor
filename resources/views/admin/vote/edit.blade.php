@@ -20,20 +20,22 @@
 
             <div class="form-group{{ hasError('answers') }}">
 
-                <?php $answers = array_diff((array) getInput('answers'), ['']) ?>
+                <?php $answers = getInput('answers', $vote->answers->pluck('answer')->all()) ?>
+                <?php $answers = array_pad($answers, 10, ''); ?>
 
-                @for ($i = 0; $i < 10; $i++)
+                <?php var_dump($answers) ?>
 
 
-                    <?php var_dump($vote->answers[$i]->id);  ?>
-                    @if (! isset($vote->answers[$i]->answer))
-                        <label for="inputAnswers{{ $i }}">Ответ {{ $i + 1 }}</label>
-                        <input type="text" name="answers[{{ $vote->answers[$i]->id }}]" class="form-control" id="inputAnswers{{ $i }}" value="{{ $answers[$i] ?? $vote->answers[$i]->answer }}" maxlength="50">
-                    @else
+            @foreach ($answers as $key => $answer)
+
+                   {{--@if (isset($vote->answers[$i]))
                         <label for="inputAnswers{{ $i }}"><span class="text-danger">Ответ {{ $i + 1 }}</span></label>
-                        <input type="text" name="newanswers[]" class="form-control" id="inputAnswers{{ $i }}" value="{{ $answers[$i] ?? '' }}" maxlength="50">
-                    @endif
-                @endfor
+                        <input type="text" name="answers[{{ $vote->answers[$i]->id }}]" class="form-control" id="inputAnswers{{ $i }}" value="{{ $answers[$i] ?? $vote->answers[$i]->answer }}" maxlength="50">
+                    @else--}}
+                        <label for="inputAnswers{{ $key }}">Ответ {{ $key + 1 }}</label>
+                        <input type="text" name="answers[]" class="form-control" id="inputAnswers{{ $key }}" value="{{ $answer }}" maxlength="50">
+                    {{--@endif--}}
+                @endforeach
                 {!! textError('answers') !!}
             </div>
 
