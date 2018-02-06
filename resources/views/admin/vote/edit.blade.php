@@ -19,19 +19,18 @@
             </div>
 
             <div class="form-group{{ hasError('answers') }}">
-
-                <?php $answers = getInput('answers', $vote->answers->pluck('answer', 'id')->all()) ?>
-                <?php $answers = array_slice(($answers + array_fill(0, 10, "")), 0, 10, true); ?>
+                <?php $answers = getInput('answers', $getAnswers); ?>
+                <?php $answers = array_slice($answers + array_fill(0, 10, ""), 0, 10, true); ?>
 
                 @foreach ($answers as $key => $answer)
-
-                   @if (! $vote->answers->has($key))
-                        <label for="inputAnswers{{ $key }}"><span class="text-danger">Ответ {{ $key + 1 }}:</span></label>
-                        <input type="text" name="answers[{{ $key }}]" class="form-control" id="inputAnswers{{ $key }}" value="{{ $answer }}" maxlength="50">
-                    @else
-                        <label for="inputAnswers{{ $key }}">Ответ {{ $key + 1 }}:</label>
-                        <input type="text" name="answers[]" class="form-control" id="inputAnswers{{ $key }}" value="" maxlength="50">
-                    @endif
+                    <label for="inputAnswers{{ $key }}">
+                        @if (isset($getAnswers[$key]))
+                            <span class="text-danger">Ответ {{ $loop->iteration }}:</span>
+                        @else
+                            Ответ {{ $loop->iteration }}:
+                        @endif
+                    </label>
+                   <input type="text" name="answers[{{ $key }}]" class="form-control" id="inputAnswers{{ $key }}" value="{{ $answer }}" maxlength="50">
                 @endforeach
                 {!! textError('answers') !!}
             </div>
