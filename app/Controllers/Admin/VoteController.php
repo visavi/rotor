@@ -6,6 +6,7 @@ use App\Classes\Request;
 use App\Classes\Validator;
 use App\Models\User;
 use App\Models\Vote;
+use Illuminate\Database\Capsule\Manager as DB;
 
 class VoteController extends AdminController
 {
@@ -47,7 +48,6 @@ class VoteController extends AdminController
             abort(404, 'Данного голосования не существует!');
         }
 
-
         if (Request::isMethod('post')) {
 
             $token   = check(Request::input('token'));
@@ -71,21 +71,16 @@ class VoteController extends AdminController
 
             if ($validator->isValid()) {
 
-/*                $vote->update([
-                    'title'      => $title,
-                ]);*/
+                $vote->update([
+                    'title' => $title,
+                ]);
 
-                //var_dump(Request::all()); exit;
-
-/*                $prepareAnswers = [];
-                foreach ($answers as $answer) {
-                    $prepareAnswers[] = [
-                        'vote_id' => $vote->id,
-                        'answer'  => $answer
-                    ];
-                }*/
-
-                //VoteAnswer::query()->insert($prepareAnswers);
+                foreach ($answers as $answerId => $answer) {
+                    $vote->answers()
+                        ->updateOrCreate(['id' => $answerId], [
+                            'answer' => $answer
+                        ]);
+                }
 
                 setFlash('success', 'Голосование успешно изменено!');
                 redirect('/admin/votes/edit/'.$vote->id);
@@ -98,5 +93,71 @@ class VoteController extends AdminController
         $getAnswers = $vote->answers->pluck('answer', 'id')->all();
 
         return view('admin/vote/edit', compact('vote', 'getAnswers'));
+    }
+
+    /**
+     * Удаление голосования
+     */
+    public function delete($id)
+    {
+        $token = check(Request::input('token'));
+        $vote  = Vote::query()->where('id', $id)->first();
+
+        if (! $vote) {
+            abort(404, 'Данного голосования не существует!');
+        }
+
+        if (! isAdmin(User::BOSS)) {
+            abort(404, 'Доступ запрещен!');
+        }
+
+        if ($token === $_SESSION['token']) {
+
+            DB::transaction(function () use ($vote) {
+                $vote->delete();
+                $vote->answers()->delete();
+                $vote->polls()->delete();
+            });
+
+            setFlash('success', 'Голосование успешно удалено!');
+        } else {
+            setFlash('danger', 'Ошибка! Неверный идентификатор сессии, повторите действие!');
+        }
+
+        redirect('/admin/votes');
+    }
+
+    /**
+     * Открытие-закрытие голосования
+     */
+    public function close($id)
+    {
+        $token = check(Request::input('token'));
+        $vote  = Vote::query()->where('id', $id)->first();
+
+        if (! $vote) {
+            abort(404, 'Данного голосования не существует!');
+        }
+
+        if ($token === $_SESSION['token']) {
+
+            $closed = $vote->closed ^ 1;
+
+            $vote->update([
+                'closed' => $closed,
+            ]);
+
+            $type = $closed ? 'закрыто' : 'открыто';
+
+            setFlash('success', 'Голосование успешно ' . $type . '!');
+        } else {
+            setFlash('danger', 'Ошибка! Неверный идентификатор сессии, повторите действие!');
+        }
+
+        if ($closed) {
+            redirect('/admin/votes/history');
+        }  else {
+            redirect('/admin/votes');
+        }
     }
 }

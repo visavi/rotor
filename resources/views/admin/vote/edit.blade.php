@@ -25,7 +25,7 @@
                 @foreach ($answers as $key => $answer)
                     <label for="inputAnswers{{ $key }}">
                         @if (isset($getAnswers[$key]))
-                            <span class="text-danger">Ответ {{ $loop->iteration }}:</span>
+                            <span class="text-success">Ответ {{ $loop->iteration }}:</span>
                         @else
                             Ответ {{ $loop->iteration }}:
                         @endif
@@ -39,7 +39,7 @@
         </form>
     </div><br>
 
-    <p class="text-muted font-italic">Поля отмеченные красным цветом обязательны для заполнения!</p>
+    <p class="text-muted font-italic">Поля отмеченные зеленым цветом обязательны для заполнения!</p>
 
     <i class="fa fa-arrow-circle-left"></i> <a href="/admin/votes">Вернуться</a><br>
     <i class="fa fa-wrench"></i> <a href="/admin">В админку</a><br>

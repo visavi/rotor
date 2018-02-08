@@ -40,4 +40,12 @@ class Vote extends BaseModel
     {
         return $this->hasMany(VoteAnswer::class, 'vote_id')->orderBy('id');
     }
+
+    /**
+     * Возвращает голосования
+     */
+    public function polls()
+    {
+        return $this->hasMany(VotePoll::class, 'vote_id');
+    }
 }
