@@ -15,7 +15,7 @@
                 <b><a href="/votes/history/{{ $vote->id }}">{{ $vote->title }}</a></b>
             </div>
             <div>
-                @if ($vote->topic)
+                @if ($vote->topic->id)
                     Тема: <a href="/topic/{{ $vote->topic->id }}">{{ $vote->topic->title }}</a><br>
                 @endif
 

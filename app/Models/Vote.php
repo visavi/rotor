@@ -42,10 +42,10 @@ class Vote extends BaseModel
     }
 
     /**
-     * Возвращает голосования
+     * Возвращает связь с голосованиями
      */
-    public function polls()
+    public function pollings()
     {
-        return $this->hasMany(VotePoll::class, 'vote_id');
+        return $this->morphOne(Polling::class, 'relate');
     }
 }

@@ -134,7 +134,7 @@ class VoteController extends AdminController
             DB::transaction(function () use ($vote) {
                 $vote->delete();
                 $vote->answers()->delete();
-                $vote->polls()->delete();
+                $vote->pollings()->delete();
             });
 
             setFlash('success', 'Голосование успешно удалено!');
@@ -167,7 +167,7 @@ class VoteController extends AdminController
             ]);
 
             if ($closed) {
-                $vote->polls()->delete();
+                $vote->pollings()->delete();
                 $type = 'закрыто' ;
             }
 

@@ -4,9 +4,9 @@ namespace App\Controllers;
 
 use App\Classes\Request;
 use App\Classes\Validator;
+use App\Models\Polling;
 use App\Models\Vote;
 use App\Models\VoteAnswer;
-use App\Models\VotePoll;
 
 class VoteController extends BaseController
 {
@@ -41,21 +41,20 @@ class VoteController extends BaseController
             abort(404, 'Данного голосования не существует!');
         }
 
-        if ($vote['closed']) {
+        if ($vote->closed) {
             abort('default', 'Данный опрос закрыт для голосования!');
         }
 
-        $vote['answers'] = VoteAnswer::query()
-            ->where('vote_id', $vote['id'])
+        $vote->answers = VoteAnswer::query()
+            ->where('vote_id', $vote->id)
             ->orderBy('id')
             ->get();
 
-        if ($vote['answers']->isEmpty()) {
+        if ($vote->answers->isEmpty()) {
             abort('default', 'Для данного голосования не созданы варианты ответов');
         }
 
-        $vote['poll'] = VotePoll::query()
-            ->where('vote_id', $vote['id'])
+        $vote->poll = $vote->pollings()
             ->where('user_id', getUser('id'))
             ->first();
 
@@ -65,7 +64,7 @@ class VoteController extends BaseController
 
             $validator = new Validator();
             $validator->equal($token, $_SESSION['token'], 'Неверный идентификатор сессии, повторите действие!')
-                ->empty($vote['poll'], 'Вы уже проголосовали в этом опросе!')
+                ->empty($vote->poll, 'Вы уже проголосовали в этом опросе!')
                 ->notEmpty($poll, 'Вы не выбрали вариант ответа!');
 
             $answer = VoteAnswer::query()->where('id', $poll)->where('vote_id', $vote->id)->first();
@@ -78,10 +77,12 @@ class VoteController extends BaseController
                 $vote->increment('count');
                 $answer->increment('result');
 
-                VotePoll::query()->create([
-                    'vote_id'    => $vote->id,
-                    'user_id'    => getUser('id'),
-                    'created_at' => SITETIME,
+                Polling::query()->create([
+                    'relate_type' => Vote::class,
+                    'relate_id'   => $vote->id,
+                    'user_id'     => getUser('id'),
+                    'vote'        => '+',
+                    'created_at'  => SITETIME,
                 ]);
 
                 setFlash('success', 'Ваш голос успешно принят!');
@@ -92,15 +93,15 @@ class VoteController extends BaseController
             }
         }
 
-        $results = array_pluck($vote['answers'], 'result', 'answer');
+        $results = array_pluck($vote->answers, 'result', 'answer');
         $max = max($results);
 
         arsort($results);
 
-        $vote['voted'] = $results;
+        $vote->voted = $results;
 
-        $vote['sum'] = ($vote['count'] > 0) ? $vote['count'] : 1;
-        $vote['max'] = ($max > 0) ? $max : 1;
+        $vote->sum = ($vote->count > 0) ? $vote->count : 1;
+        $vote->max = ($max > 0) ? $max : 1;
 
         return view('vote/view', compact('vote', 'show'));
     }
@@ -116,9 +117,9 @@ class VoteController extends BaseController
             abort(404, 'Данного голосования не существует!');
         }
 
-        $voters = VotePoll::query()
-            ->where('vote_id', $vote['id'])
-            ->orderBy('created_at', 'desc')
+        $voters = Polling::query()
+            ->where('relate_type', Vote::class)
+            ->where('relate_id', $vote->id)
             ->limit(50)
             ->get();
 
@@ -154,28 +155,28 @@ class VoteController extends BaseController
             abort(404, 'Данного голосования не существует!');
         }
 
-        if (! $vote['closed']) {
+        if (! $vote->closed) {
             abort('default', 'Данный опрос еще не в архиве!');
         }
 
-        $vote['answers'] = VoteAnswer::query()
-            ->where('vote_id', $vote['id'])
+        $vote->answers = VoteAnswer::query()
+            ->where('vote_id', $vote->id)
             ->orderBy('id')
             ->get();
 
-        if ($vote['answers']->isEmpty()) {
+        if ($vote->answers->isEmpty()) {
             abort('default', 'Для данного голосования не созданы варианты ответов');
         }
 
-        $results = array_pluck($vote['answers'], 'result', 'answer');
+        $results = array_pluck($vote->answers, 'result', 'answer');
         $max = max($results);
 
         arsort($results);
 
-        $vote['voted'] = $results;
+        $vote->voted = $results;
 
-        $vote['sum'] = ($vote['count'] > 0) ? $vote['count'] : 1;
-        $vote['max'] = ($max > 0) ? $max : 1;
+        $vote->sum = ($vote->count > 0) ? $vote->count : 1;
+        $vote->max = ($max > 0) ? $max : 1;
 
         return view('vote/view_history', compact('vote'));
     }

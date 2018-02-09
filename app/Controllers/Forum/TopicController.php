@@ -4,13 +4,12 @@ namespace App\Controllers\Forum;
 
 use App\Controllers\BaseController;
 use App\Models\File;
+use App\Models\Polling;
 use App\Models\Post;
 use App\Models\Bookmark;
 use App\Models\Topic;
 use App\Models\User;
 use App\Models\Vote;
-use App\Models\VoteAnswer;
-use App\Models\VotePoll;
 use App\Models\Flood;
 use App\Classes\Request;
 use App\Classes\Validator;
@@ -73,19 +72,13 @@ class TopicController extends BaseController
         $vote = Vote::query()->where('topic_id', $topic->id)->first();
 
         if ($vote) {
-            $vote->poll = VotePoll::query()
-                ->where('vote_id', $vote['id'])
+            $vote->poll = $vote->pollings()
                 ->where('user_id', getUser('id'))
                 ->first();
 
-            $vote->answers = VoteAnswer::query()
-                ->where('vote_id', $vote['id'])
-                ->orderBy('id')
-                ->get();
+            if ($vote->answers->isNotEmpty()) {
 
-            if ($vote->answers) {
-
-                $results = array_pluck($vote['answers'], 'result', 'answer');
+                $results = array_pluck($vote->answers, 'result', 'answer');
                 $max = max($results);
 
                 arsort($results);
@@ -357,7 +350,7 @@ class TopicController extends BaseController
                 $vote->closed = 1;
                 $vote->save();
 
-                VotePoll::query()->where('vote_id', $vote['id'])->delete();
+                $vote->pollings()->delete();
             }
 
             setFlash('success', 'Тема успешно закрыта!');
@@ -554,21 +547,20 @@ class TopicController extends BaseController
             $validator->addError('Данное голосование закрыто!');
         }
 
-        $votePoll = VotePoll::query()
-            ->where('vote_id', $vote['id'])
+        $polling = $vote->pollings()
             ->where('user_id', getUser('id'))
             ->first();
 
-        if ($votePoll) {
+        if ($polling) {
             $validator->addError('Вы уже проголосовали в этом опросе!');
         }
 
-        $voteAnswer = VoteAnswer::query()
+        $voteAnswer = $vote->answers()
             ->where('id', $poll)
-            ->where('vote_id', $vote['id'])
+            ->where('vote_id', $vote->id)
             ->first();
 
-        if (!$voteAnswer) {
+        if (! $voteAnswer) {
             $validator->addError('Вы не выбрали вариант ответа!');
         }
 
@@ -577,10 +569,12 @@ class TopicController extends BaseController
             $vote->increment('count');
             $voteAnswer->increment('result');
 
-            VotePoll::query()->create([
-                'vote_id'    => $vote['id'],
-                'user_id'    => getUser('id'),
-                'created_at' => SITETIME,
+            Polling::query()->create([
+                'relate_type' => Vote::class,
+                'relate_id'   => $vote->id,
+                'user_id'     => getUser('id'),
+                'vote'        => '+',
+                'created_at'  => SITETIME,
             ]);
 
             setFlash('success', 'Ваш голос успешно принят!');
