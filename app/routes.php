@@ -319,10 +319,12 @@ $routes = [
     ['POST',     '/admin/banhist/delete', 'Admin\BanhistController@delete'],
 
     ['GET',      '/admin/votes', 'Admin\VoteController@index'],
+    ['GET',      '/admin/votes/history', 'Admin\VoteController@history'],
     ['GET|POST', '/admin/votes/edit/[i:id]', 'Admin\VoteController@edit'],
     ['GET',      '/admin/votes/close/[i:id]', 'Admin\VoteController@close'],
     ['GET',      '/admin/votes/delete/[i:id]', 'Admin\VoteController@delete'],
     ['GET',      '/admin/votes/close/[i:id]', 'Admin\VoteController@change'],
+    ['GET',      '/admin/votes/restatement', 'Admin\VoteController@restatement'],
 
     ['GET|POST', '/admin/blog', 'admin/blog.php'],
     ['GET|POST', '/admin/forum', 'admin/forum.php'],
@@ -331,7 +333,6 @@ $routes = [
     ['GET|POST', '/admin/newload', 'admin/newload.php'],
     ['GET|POST', '/admin/reklama', 'admin/reklama.php'],
     ['GET|POST', '/admin/offers', 'admin/offers.php'],
-
     ['GET', '/search', function() {
         return view('search/index');
     }],

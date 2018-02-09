@@ -38,6 +38,24 @@ class VoteController extends AdminController
     }
 
     /**
+     * Архив голосований
+     */
+    public function history()
+    {
+        $total = Vote::query()->where('closed', 0)->count();
+        $page = paginate(setting('allvotes'), $total);
+
+        $votes = Vote::query()
+            ->where('closed', 1)
+            ->orderBy('created_at', 'desc')
+            ->offset($page['offset'])
+            ->limit($page['limit'])
+            ->get();
+
+        return view('admin/vote/history', compact('votes', 'page'));
+    }
+
+    /**
      * Редактирование голосования
      */
     public function edit($id)
@@ -141,13 +159,17 @@ class VoteController extends AdminController
 
         if ($token === $_SESSION['token']) {
 
+            $type   = 'открыто';
             $closed = $vote->closed ^ 1;
 
             $vote->update([
                 'closed' => $closed,
             ]);
 
-            $type = $closed ? 'закрыто' : 'открыто';
+            if ($closed) {
+                $vote->polls()->delete();
+                $type = 'закрыто' ;
+            }
 
             setFlash('success', 'Голосование успешно ' . $type . '!');
         } else {
@@ -159,5 +181,29 @@ class VoteController extends AdminController
         }  else {
             redirect('/admin/votes');
         }
+    }
+
+
+    /**
+     * Пересчет голосов
+     */
+    public function restatement()
+    {
+        if (! isAdmin(User::BOSS)) {
+            abort(403, 'Доступ запрещен!');
+        }
+
+        $token = check(Request::input('token'));
+
+        if ($token == $_SESSION['token']) {
+
+            DB::update('update vote set count = (select SUM(result) from voteanswer where vote.id = voteanswer.vote_id)');
+
+            setFlash('success', 'Голосования успешно пересчитаны!');
+        } else {
+            setFlash('danger', 'Ошибка! Неверный идентификатор сессии, повторите действие!');
+        }
+
+        redirect('/admin/votes');
     }
 }
