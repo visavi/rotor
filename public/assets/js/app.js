@@ -52,7 +52,7 @@ $(function() {
     });
 
     $(window).resize(function() {
-        $.colorbox.resize({width:'100%'});
+        $.colorbox.resize();
     });
 });
 
