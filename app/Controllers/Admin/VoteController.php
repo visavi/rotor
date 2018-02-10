@@ -32,6 +32,7 @@ class VoteController extends AdminController
             ->orderBy('created_at', 'desc')
             ->offset($page['offset'])
             ->limit($page['limit'])
+            ->with('topic')
             ->get();
 
         return view('admin/vote/index', compact('votes', 'page'));
@@ -50,6 +51,7 @@ class VoteController extends AdminController
             ->orderBy('created_at', 'desc')
             ->offset($page['offset'])
             ->limit($page['limit'])
+            ->with('topic')
             ->get();
 
         return view('admin/vote/history', compact('votes', 'page'));

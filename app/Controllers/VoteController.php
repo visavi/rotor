@@ -23,6 +23,7 @@ class VoteController extends BaseController
             ->orderBy('created_at', 'desc')
             ->offset($page['offset'])
             ->limit($page['limit'])
+            ->with('topic')
             ->get();
 
         return view('vote/index', compact('votes', 'page'));
@@ -121,6 +122,7 @@ class VoteController extends BaseController
             ->where('relate_type', Vote::class)
             ->where('relate_id', $vote->id)
             ->limit(50)
+            ->with('user')
             ->get();
 
         return view('vote/voters', compact('vote', 'voters'));
@@ -139,6 +141,7 @@ class VoteController extends BaseController
             ->orderBy('created_at', 'desc')
             ->offset($page['offset'])
             ->limit($page['limit'])
+            ->with('topic')
             ->get();
 
         return view('vote/history', compact('votes', 'page'));
