@@ -46,6 +46,6 @@ class Vote extends BaseModel
      */
     public function pollings()
     {
-        return $this->morphOne(Polling::class, 'relate');
+        return $this->morphMany(Polling::class, 'relate');
     }
 }
