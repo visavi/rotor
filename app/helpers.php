@@ -1785,6 +1785,8 @@ function view($view, array $params = [])
         HOME.'/themes',
     ], STORAGE.'/cache');
 
+    $blade->compiler()->withoutDoubleEncoding();
+
     return $blade->render($view, $params);
 }
 

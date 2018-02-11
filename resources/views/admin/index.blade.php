@@ -43,7 +43,7 @@
         <i class="fa fa-circle fa-lg text-muted"></i> <a href="/admin/load">Загруз-центр</a> ({{ statsLoad() }})<br>
         <i class="far fa-circle fa-lg text-muted"></i> <a href="/admin/log">Ошибки / Автобаны</a><br>
         <i class="far fa-circle fa-lg text-muted"></i> <a href="/admin/blacklist">Черный список</a> ({{ statsBlacklist() }})<br>
-        <i class="fa fa-circle fa-lg text-muted"></i> <a href="/admin/offers">Предложения / Проблемы</a> ({{ statsOffers() }})<br>
+        <i class="far fa-circle fa-lg text-muted"></i> <a href="/admin/offers">Предложения / Проблемы</a> ({{ statsOffers() }})<br>
         <i class="far fa-circle fa-lg text-muted"></i> <a href="/admin/smiles">Управление смайлами</a> ({{ statsSmiles() }})<br>
         <i class="far fa-circle fa-lg text-muted"></i> <a href="/admin/status">Статусы пользователей</a><br>
     @endif

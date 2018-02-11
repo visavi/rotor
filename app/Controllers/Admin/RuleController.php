@@ -7,7 +7,7 @@ use App\Classes\Validator;
 use App\Models\Rule;
 use App\Models\User;
 
-class RulesController extends AdminController
+class RuleController extends AdminController
 {
     /**
      * Конструктор

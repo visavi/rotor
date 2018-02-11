@@ -225,8 +225,8 @@ $routes = [
     ['GET|POST', '/admin/status/[create|edit:action]', 'Admin\StatusController'],
     ['GET',      '/admin/status/delete', 'Admin\StatusController@delete'],
 
-    ['GET',      '/admin/rules', 'Admin\RulesController@index'],
-    ['GET|POST', '/admin/rules/edit', 'Admin\RulesController@edit'],
+    ['GET',      '/admin/rules', 'Admin\RuleController@index'],
+    ['GET|POST', '/admin/rules/edit', 'Admin\RuleController@edit'],
 
     ['GET',      '/admin/upgrade', 'Admin\AdminController@upgrade'],
     ['GET',      '/admin/phpinfo', 'Admin\AdminController@phpinfo'],

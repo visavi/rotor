@@ -12,13 +12,13 @@
         }
     ],
     "require": {
-        "php": ">=7.0.0",
+        "php": ">=7.1.3",
         "altorouter/altorouter": "~1.2",
         "cbschuld/browser.php": "dev-master",
         "gregwar/captcha": "^1.1",
-        "illuminate/http": "~5.5",
-        "illuminate/translation": "~5.5",
-        "illuminate/database": "~5.5",
+        "illuminate/http": "~5.6",
+        "illuminate/translation": "~5.6",
+        "illuminate/database": "~5.6",
         "mobiledetect/mobiledetectlib": "^2.8",
         "php-ffmpeg/php-ffmpeg": "~0.11",
         "swiftmailer/swiftmailer": "~6.0",

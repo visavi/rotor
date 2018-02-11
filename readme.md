@@ -1,7 +1,7 @@
 Rotor 7.0
 =========
 
-[![Php Version](https://img.shields.io/badge/php-%3E%3D%207.0-brightgreen.svg)](https://php.net)
+[![Php Version](https://img.shields.io/badge/php-%3E%3D%207.1.3-brightgreen.svg)](https://php.net)
 [![Latest Stable Version](https://poser.pugx.org/visavi/rotor/v/stable)](https://packagist.org/packages/visavi/rotor)
 [![Total Downloads](https://poser.pugx.org/visavi/rotor/downloads)](https://packagist.org/packages/visavi/rotor)
 [![Latest Unstable Version](https://poser.pugx.org/visavi/rotor/v/unstable)](https://packagist.org/packages/visavi/rotor)
@@ -56,7 +56,7 @@ composer create-project --stability=dev visavi/rotor .
 
 ### Требования
 
-Минимальная версия PHP необходимая для работы движка PHP 7.0.0 и MySQL 5.5.3
+Минимальная версия PHP необходимая для работы движка PHP 7.1.3 и MySQL 5.5.3
 
 Если версия MySQL ниже 5.5.3, то необходимо в файле .env уставновить
 `DB_COLLATION=utf8_unicode_ci`
