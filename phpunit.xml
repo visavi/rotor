@@ -3,20 +3,19 @@
     <php>
         <server name="SERVER_NAME" value="rotor.ll" />
     </php>
-    <testsuites>
-        <testsuite name="RotorCMS Test Suite">
-            <directory>./tests/</directory>
-        </testsuite>
-    </testsuites>
     <filter>
         <whitelist processUncoveredFilesFromWhitelist="true">
-            <directory suffix=".php">src</directory>
+            <directory suffix=".php">/app</directory>
         </whitelist>
     </filter>
-
     <logging>
         <log type="coverage-html" target="build/coverage" title="coverage" charset="utf-8" yui="true" highlight="true"    lowupperbound="35" highlowerbound="70"/>
         <log type="coverage-clover" target="build/logs/clover.xml"/>
         <log type="junit" target="build/logs/junit.xml" logincompleteskipped="false"/>
     </logging>
+    <testsuites>
+        <testsuite name="RotorCMS Test Suite">
+            <directory>/tests/</directory>
+        </testsuite>
+    </testsuites>
 </phpunit>
