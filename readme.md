@@ -9,6 +9,7 @@ Rotor 7.0
 [![License](https://poser.pugx.org/visavi/rotor/license)](https://packagist.org/packages/visavi/rotor)
 [![Dependency Status](https://www.versioneye.com/user/projects/588f6be5760ce60041d80429/badge.svg)](https://www.versioneye.com/user/projects/588f6be5760ce60041d80429)
 [![Code Climate](https://codeclimate.com/github/visavi/rotor/badges/gpa.svg)](https://codeclimate.com/github/visavi/rotor)
+[![Coverage Status](https://coveralls.io/repos/github/visavi/rotor/badge.svg?branch=master)](https://coveralls.io/github/visavi/rotor?branch=master)
 
 Добро пожаловать!
 Мы благодарим Вас за то, что Вы решили использовать наш скрипт для своего сайта. Rotor - функционально законченная система управления контентом с открытым кодом написанная на PHP. Она использует базу данных MySQL для хранения содержимого вашего сайта.
