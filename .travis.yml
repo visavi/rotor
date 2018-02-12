@@ -10,7 +10,7 @@ cache:
     - $HOME/.cache/composer/files
 
 before_script:
-  - travis_retry composer install --no-interaction --prefer-dist
+  - travis_retry composer install --no-interaction --prefer-source
   - if [[ "$DB_DRIVER" == "pgsql" ]]; then psql -c "DROP DATABASE IF EXISTS test;" -U postgres; fi
   - if [[ "$DB_DRIVER" == "pgsql" ]]; then psql -c "create database test;" -U postgres; fi
   - if [[ "$DB_DRIVER" == "mysql" ]]; then mysql -e "create database IF NOT EXISTS test;" -uroot; fi
@@ -19,7 +19,7 @@ before_script:
 
 script:
   - mkdir -p build/logs
-  - vendor/bin/phpunit
+  - vendor/bin/phpunit --coverage-clover build/logs/clover.xml
 
 env:
   global:
