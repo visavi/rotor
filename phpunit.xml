@@ -15,7 +15,7 @@
     </logging>
     <testsuites>
         <testsuite name="RotorCMS Test Suite">
-            <directory>/tests/</directory>
+            <directory>/tests</directory>
         </testsuite>
     </testsuites>
 </phpunit>
