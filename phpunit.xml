@@ -4,8 +4,8 @@
         <server name="SERVER_NAME" value="rotor.ll" />
     </php>
     <filter>
-        <whitelist processUncoveredFilesFromWhitelist="true">
-            <directory suffix=".php">/app</directory>
+        <whitelist addUncoveredFilesFromWhitelist="true">
+            <directory suffix=".php">.</directory>
         </whitelist>
     </filter>
     <logging>
@@ -15,7 +15,7 @@
     </logging>
     <testsuites>
         <testsuite name="RotorCMS Test Suite">
-            <directory>/tests</directory>
+            <directory>./tests</directory>
         </testsuite>
     </testsuites>
 </phpunit>
