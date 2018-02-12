@@ -13,6 +13,7 @@ before_script:
   - php rotor seed:run
 
 script:
+  - mkdir -p build/logs
   - vendor/bin/phpunit --coverage-clover build/logs/clover.xml
 
 env:
