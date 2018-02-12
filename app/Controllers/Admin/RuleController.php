@@ -36,7 +36,7 @@ class RuleController extends AdminController
             $rules->text = str_replace(array_keys($replace), $replace, $rules->text);
         }
 
-        return view('admin/rules/index', compact('rules'));
+        return view('admin/rule/index', compact('rules'));
     }
 
     /**
@@ -71,6 +71,6 @@ class RuleController extends AdminController
             }
         }
 
-        return view('admin/rules/edit', compact('rules'));
+        return view('admin/rule/edit', compact('rules'));
     }
 }
