@@ -3,8 +3,13 @@
 use PHPUnit\Framework\TestCase;
 use App\Models\Guest;
 
-class GuestTest extends TestCase
+class GuestControllerTest extends TestCase
 {
+    public function testIndex()
+    {
+        $this->assertTrue(true);
+    }
+
     public function testGuest()
     {
         $guest = new Guest();
