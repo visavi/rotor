@@ -378,8 +378,10 @@ class ValidatorTest extends TestCase
     public function testAddError()
     {
         $this->validator->addError(['key' => 'error']);
+        $this->validator->addError(['key' => 'error']);
         $this->validator->addError(['key2' => 'error']);
         $this->assertFalse($this->validator->isValid());
+        $this->assertArrayHasKey(0, $this->validator->getErrors());
         $this->assertArrayHasKey('key', $this->validator->getErrors());
         $this->assertArrayHasKey('key2', $this->validator->getErrors());
     }
@@ -404,15 +406,37 @@ class ValidatorTest extends TestCase
     {
         $image = UploadedFile::fake()->image('avatar.jpg');
         $image2 = UploadedFile::fake()->image('avatar.jpg', 100, 100);
+        $image3 = UploadedFile::fake()->image('avatar.tiff');
 
         $rules = [
             'maxweight' => 50,
         ];
 
+        $this->validator->image(null, $rules, 'error', false);
+        $this->assertTrue($this->validator->isValid());
+
+
         $this->validator->image($image, $rules, 'error');
         $this->assertTrue($this->validator->isValid());
 
         $this->validator->image($image2, $rules, 'error');
+        $this->assertFalse($this->validator->isValid());
+
+        $this->validator->image($image3, $rules, 'error');
+        $this->assertFalse($this->validator->isValid());
+
+        $rules = [
+            'maxsize' => 1,
+        ];
+
+        $this->validator->image($image, $rules, 'error');
+        $this->assertFalse($this->validator->isValid());
+
+        $rules = [
+            'minsize' => 1000,
+        ];
+
+        $this->validator->image($image, $rules, 'error');
         $this->assertFalse($this->validator->isValid());
     }
 }
