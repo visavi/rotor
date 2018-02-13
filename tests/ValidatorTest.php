@@ -28,6 +28,9 @@ class ValidatorTest extends TestCase
         $this->validator->length('', 5, 10, 'error', false);
         $this->assertTrue($this->validator->isValid());
 
+        $this->validator->length('test', 5, 10, 'error');
+        $this->assertFalse($this->validator->isValid());
+
         $this->validator->length('testtesttest', 0, 10, ['key' => 'error']);
         $this->assertFalse($this->validator->isValid());
         $this->assertArrayHasKey('key', $this->validator->getErrors());
