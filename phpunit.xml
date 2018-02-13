@@ -5,7 +5,7 @@
     </php>
     <filter>
         <whitelist addUncoveredFilesFromWhitelist="true">
-            <directory suffix=".php">.</directory>
+            <directory suffix=".php">./app</directory>
         </whitelist>
     </filter>
     <testsuites>
