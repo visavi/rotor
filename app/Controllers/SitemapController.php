@@ -26,7 +26,7 @@ class SitemapController extends BaseController
 
         foreach ($pages as $page) {
             $locs[] = [
-                'loc'     => siteUrl() . '/sitemap/' . $page,
+                'loc'     => siteUrl(true) . '/sitemap/' . $page,
                 'lastmod' => date('c', SITETIME),
             ];
         }
@@ -58,7 +58,7 @@ class SitemapController extends BaseController
             $new = (SITETIME < $changeTime + 3600 * 24 * 30) ? true : false;
 
             $locs[] = [
-                'loc'        => siteUrl() . '/article/' . $blog->id,
+                'loc'        => siteUrl(true) . '/article/' . $blog->id,
                 'lastmod'    => date('c', $changeTime),
                 'changefreq' => $new ? 'weekly' : 'monthly',
                 'priority'   => $new ? '1.0' : '0.5',
@@ -90,7 +90,7 @@ class SitemapController extends BaseController
             $new = (SITETIME < $changeTime + 3600 * 24 * 30) ? true : false;
 
             $locs[] = [
-                'loc'        => siteUrl() . '/news/' . $news->id,
+                'loc'        => siteUrl(true) . '/news/' . $news->id,
                 'lastmod'    => date('c', $changeTime),
                 'changefreq' => $new ? 'weekly' : 'monthly',
                 'priority'   => $new ? '1.0' : '0.5',
@@ -113,7 +113,7 @@ class SitemapController extends BaseController
             $new = (SITETIME < $topic->updated_at + 3600 * 24 * 30) ? true : false;
 
             $locs[] = [
-                'loc'        => siteUrl() . '/topic/' . $topic->id,
+                'loc'        => siteUrl(true) . '/topic/' . $topic->id,
                 'lastmod'    => date('c', $topic->updated_at),
                 'changefreq' => $new ? 'weekly' : 'monthly',
                 'priority'   => $new ? '1.0' : '0.5',
@@ -146,7 +146,7 @@ class SitemapController extends BaseController
             $new = (SITETIME < $changeTime + 3600 * 24 * 30) ? true : false;
 
             $locs[] = [
-                'loc'        => siteUrl() . '/down/' . $down->id,
+                'loc'        => siteUrl(true) . '/down/' . $down->id,
                 'lastmod'    => date('c', $changeTime),
                 'changefreq' => $new ? 'weekly' : 'monthly',
                 'priority'   => $new ? '1.0' : '0.5',
