@@ -438,5 +438,13 @@ class ValidatorTest extends TestCase
 
         $this->validator->image($image, $rules, 'error');
         $this->assertFalse($this->validator->isValid());
+
+        $rules = [
+            'minweight' =>1333333,
+        ];
+
+        $this->validator->image($image, $rules, 'error');
+        var_dump($this->validator->isValid());
+        $this->assertFalse($this->validator->isValid());
     }
 }
