@@ -404,9 +404,10 @@ class ValidatorTest extends TestCase
      */
     public function testImage()
     {
-        $image = UploadedFile::fake()->image('avatar.jpg');
+        $image  = UploadedFile::fake()->image('avatar.jpg');
         $image2 = UploadedFile::fake()->image('avatar.jpg', 100, 100);
         $image3 = UploadedFile::fake()->image('avatar.tiff');
+        $image4 = new StdClass();
 
         $rules = [
             'maxweight' => 50,
@@ -422,6 +423,7 @@ class ValidatorTest extends TestCase
         $this->validator->image($image2, $rules, 'error');
         $this->assertFalse($this->validator->isValid());
 
+        $this->validator->clearErrors();
         $this->validator->image($image3, $rules, 'error');
         $this->assertFalse($this->validator->isValid());
 
@@ -429,22 +431,20 @@ class ValidatorTest extends TestCase
             'maxsize' => 1,
         ];
 
+        $this->validator->clearErrors();
         $this->validator->image($image, $rules, 'error');
         $this->assertFalse($this->validator->isValid());
 
         $rules = [
-            'minsize' => 1000,
+            'minweight' => 50,
         ];
 
+        $this->validator->clearErrors();
         $this->validator->image($image, $rules, 'error');
         $this->assertFalse($this->validator->isValid());
 
-        $rules = [
-            'minweight' =>1333333,
-        ];
-
-        $this->validator->image($image, $rules, 'error');
-        var_dump($this->validator->isValid());
+        $this->validator->clearErrors();
+        $this->validator->image($image4, $rules, 'error');
         $this->assertFalse($this->validator->isValid());
     }
 }
