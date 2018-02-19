@@ -280,7 +280,7 @@ class ForumController extends BaseController
                             ->with('lastPost.user')
                             ->orderBy('updated_at', 'desc')
                             ->offset($page['offset'])
-                            ->limit(setting('forumtem'))
+                            ->limit($page['limit'])
                             ->get();
 
                         return view('forum/search_topics', compact('topics', 'page', 'find', 'type', 'where', 'section', 'period'));
@@ -322,7 +322,7 @@ class ForumController extends BaseController
                             ->with('user', 'topic')
                             ->orderBy('created_at', 'desc')
                             ->offset($page['offset'])
-                            ->limit(setting('forumpost'))
+                            ->limit($page['limit'])
                             ->get();
 
                         return view('forum/search_posts', compact('posts', 'page', 'find', 'type', 'where', 'section', 'period'));
@@ -398,7 +398,7 @@ class ForumController extends BaseController
         $topics = Topic::query()
             ->where('closed', 0)
             ->orderBy('posts', 'desc')
-            ->limit(setting('forumtem'))
+            ->limit($page['limit'])
             ->offset($page['offset'])
             ->with('forum', 'user', 'lastPost.user')
             ->get();
@@ -421,7 +421,7 @@ class ForumController extends BaseController
 
         $posts = Post::query()
             ->orderBy('rating', 'desc')
-            ->limit(setting('forumpost'))
+            ->limit($page['limit'])
             ->offset($page['offset'])
             ->with('topic', 'user')
             ->get();

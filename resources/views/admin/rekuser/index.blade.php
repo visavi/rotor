@@ -6,7 +6,11 @@
 
 @section('content')
 
-    <h1>Пользовательская реклама</h1>
+    <div class="float-right">
+        <a class="btn btn-success" href="/reklama/create">Разместить рекламу</a>
+    </div>
+
+    <h1>Пользовательская реклама</h1><br>
 
     @if ($records->isNotEmpty())
 
@@ -26,13 +30,13 @@
 
                 Истекает: {{ dateFixed($data->deleted_at) }}<br>
 
-                @if (!empty($data->color))
+                @if ($data->color)
                     Цвет: <span style="color:{{ $data->color }}">{{ $data->color }}</span>,
                 @else
                     Цвет: нет,
                 @endif
 
-                @if (!empty($data->bold))
+                @if ($data->bold)
                     Жирность: есть<br>
                 @else
                     Жирность: нет<br>
@@ -48,7 +52,7 @@
 
         Всего ссылок: <b>{{ $total }}</b><br><br>
     @else
-        {!! showError('Пользовательская рекламы еще нет!') !!}
+        {!! showError('В данный момент рекламных ссылок еще нет!') !!}
     @endif
 
     <i class="fa fa-wrench"></i> <a href="/admin">В админку</a><br>

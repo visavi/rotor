@@ -21,7 +21,7 @@ class OnlineController extends BaseController
             ->with('user')
             ->orderBy('updated_at', 'desc')
             ->offset($page['offset'])
-            ->limit(setting('onlinelist'))
+            ->limit($page['limit'])
             ->get();
 
         return view('pages/online', compact('online', 'page', 'all'));

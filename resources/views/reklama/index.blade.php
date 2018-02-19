@@ -6,7 +6,11 @@
 
 @section('content')
 
-    <h1>Реклама на сайте</h1>
+    <div class="float-right">
+        <a class="btn btn-success" href="/reklama/create">Разместить рекламу</a>
+    </div>
+
+    <h1>Реклама на сайте</h1><br>
 
     @if ($adverts->isNotEmpty())
         @foreach($adverts as $data)
@@ -36,7 +40,4 @@
     @else
         {!! showError('В данный момент рекламных ссылок еще нет!') !!}
     @endif
-
-    <i class="fa fa-money-bill-alt"></i> <a href="/reklama/create">Купить рекламу</a><br>
-
 @stop

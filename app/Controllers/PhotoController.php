@@ -23,7 +23,7 @@ class PhotoController extends BaseController
         $photos = Photo::query()
             ->orderBy('created_at', 'desc')
             ->offset($page['offset'])
-            ->limit(setting('fotolist'))
+            ->limit($page['limit'])
             ->with('user')
             ->get();
 
@@ -429,7 +429,7 @@ class PhotoController extends BaseController
         $photos = Photo::query()
             ->orderBy($order, 'desc')
             ->offset($page['offset'])
-            ->limit(setting('fotolist'))
+            ->limit($page['limit'])
             ->with('user')
             ->get();
 
