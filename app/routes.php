@@ -333,7 +333,11 @@ $routes = [
     ['GET|POST', '/admin/gallery', 'admin/gallery.php'],
     ['GET|POST', '/admin/load', 'admin/load.php'],
     ['GET|POST', '/admin/newload', 'admin/newload.php'],
-    ['GET|POST', '/admin/reklama', 'admin/reklama.php'],
+
+    ['GET|POST', '/admin/reklama', 'Admin\RekUserController@index'],
+    ['GET|POST', '/admin/reklama/edit/[i:id]', 'Admin\RekUserController@edit'],
+    ['POST',     '/admin/reklama/delete', 'Admin\RekUserController@delete'],
+
     ['GET', '/search', function() {
         return view('search/index');
     }],
