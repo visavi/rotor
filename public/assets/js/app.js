@@ -54,10 +54,6 @@ $(function() {
     $(window).resize(function() {
         $.colorbox.resize();
     });
-
-    $(function () {
-        $('#mycp').colorpicker();
-    });
 });
 
 /* Вывод уведомлений */

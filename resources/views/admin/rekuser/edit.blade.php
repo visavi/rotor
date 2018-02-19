@@ -14,13 +14,13 @@
 
             <div class="form-group{{ hasError('site') }}">
                 <label for="site">Адрес сайта:</label>
-                <input class="form-control" id="site" name="site" type="text" value="{{ $link->site }}" maxlength="50">
+                <input class="form-control" id="site" name="site" type="text" value="{{ $link->site }}" maxlength="50" required>
                 {!! textError('site') !!}
             </div>
 
             <div class="form-group{{ hasError('name') }}">
                 <label for="name">Название ссылки:</label>
-                <input class="form-control" id="name" name="name" type="text" maxlength="35" value="{{ $link->name }}">
+                <input class="form-control" id="name" name="name" type="text" maxlength="35" value="{{ $link->name }}" required>
                 {!! textError('name') !!}
             </div>
 
