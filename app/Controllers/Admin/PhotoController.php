@@ -26,11 +26,11 @@ class PhotoController extends AdminController
      */
     public function index()
     {
-        $total = Photo::count();
-        $page = paginate(setting('fotolist'), $total);
+        $total  = Photo::count();
+        $page   = paginate(setting('fotolist'), $total);
         $photos = Photo::orderBy('created_at', 'desc')
             ->offset($page['offset'])
-            ->limit(setting('fotolist'))
+            ->limit($page['limit'])
             ->with('user')
             ->get();
 
@@ -46,24 +46,25 @@ class PhotoController extends AdminController
         $photo = Photo::query()->find($id);
 
         if (!$photo) {
-            abort('default', 'Ошибка! Данной фотографии не существует!');
+            abort('default', 'Данной фотографии не существует!');
         }
 
         if (Request::isMethod('post')) {
-            $token = check(Request::input('token'));
-            $title = check(Request::input('title'));
-            $text = check(Request::input('text'));
-            $closed = Request::has('closed') ? 1 : 0;
+            $token     = check(Request::input('token'));
+            $title     = check(Request::input('title'));
+            $text      = check(Request::input('text'));
+            $closed    = Request::has('closed') ? 1 : 0;
             $validator = new Validator();
             $validator->equal($token, $_SESSION['token'], 'Неверный идентификатор сессии, повторите действие!')
                 ->length($title, 5, 50, ['title' => 'Слишком длинное или короткое название!'])
                 ->length($text, 0, 1000, ['text' => 'Слишком длинное описание (Необходимо до 1000 символов)!']);
 
             if ($validator->isValid()) {
-                $photo->title = $title;
-                $photo->text = $text;;
-                $photo->closed = $closed;
-                $photo->save();
+                $photo->update([
+                    'title' => $title,
+                    'text' => $text,
+                    'closed' => $closed
+                ]);
 
                 setFlash('success', 'Фотография успешно отредактирована!');
                 redirect('/admin/gallery?page=' . $page);
@@ -81,9 +82,9 @@ class PhotoController extends AdminController
      */
     public function delete()
     {
-        $page = int(Request::input('page', 1));
-        $token = check(Request::input('token'));
-        $del = intar(Request::input('del'));
+        $page      = int(Request::input('page', 1));
+        $token     = check(Request::input('token'));
+        $del       = intar(Request::input('del'));
         $validator = new Validator();
         $validator->equal($token, $_SESSION['token'], 'Неверный идентификатор сессии, повторите действие!')
             ->true($del, 'Отсутствуют выбранные фотографии!');

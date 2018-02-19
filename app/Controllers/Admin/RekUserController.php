@@ -26,11 +26,11 @@ class RekUserController extends AdminController
      */
     public function index()
     {
-        $total = RekUser::query()->where('deleted_at', '>', SITETIME)->count();
-        $page = paginate(setting('rekuserpost'), $total);
+        $total   = RekUser::query()->where('deleted_at', '>', SITETIME)->count();
+        $page    = paginate(setting('rekuserpost'), $total);
         $records = RekUser::query()
             ->where('deleted_at', '>', SITETIME)
-            ->limit(setting('rekuserpost'))
+            ->limit($page['limit'])
             ->offset($page['offset'])
             ->orderBy('deleted_at', 'desc')
             ->get();
@@ -47,28 +47,29 @@ class RekUserController extends AdminController
         $link = RekUser::query()->find($id);
 
         if (!$link) {
-            abort('default', 'Ошибка! Данной ссылки не существует!');
+            abort('default', 'Данной ссылки не существует!');
         }
 
         if (Request::isMethod('post')) {
-            $token = check(Request::input('token'));
-            $site = check(Request::input('site'));
-            $name = check(Request::input('name'));
-            $color = check(Request::input('color'));
-            $bold = Request::has('bold') ? 1 : 0;
+            $token     = check(Request::input('token'));
+            $site      = check(Request::input('site'));
+            $name      = check(Request::input('name'));
+            $color     = check(Request::input('color'));
+            $bold      = Request::has('bold') ? 1 : 0;
             $validator = new Validator();
             $validator->equal($token, $_SESSION['token'], 'Неверный идентификатор сессии, повторите действие!')
                 ->regex($site, '|^https?://([а-яa-z0-9_\-\.])+(\.([а-яa-z0-9\/\-?_=#])+)+$|iu', ['site' => 'Недопустимый адрес сайта!. Разрешены символы [а-яa-z0-9_-.?=#/]!'])
-                ->length($site, 5, 100, ['site' => 'Слишком длинный или короткий адрес ссылки!'])
+                ->length($site, 5, 50, ['site' => 'Слишком длинный или короткий адрес ссылки!'])
                 ->length($name, 5, 35, ['name' => 'Слишком длинное или короткое название ссылки!'])
                 ->regex($color, '|^#+[A-f0-9]{6}$|', ['color' => 'Недопустимый формат цвета ссылки! (пример #ff0000)'], false);
 
             if ($validator->isValid()) {
-                $link->site = $site;
-                $link->name = $name;
-                $link->color = $color;
-                $link->bold = $bold;
-                $link->save();
+                $link->update([
+                    'site' => $site,
+                    'name' => $name,
+                    'color' => $color,
+                    'bold' => $bold
+                ]);
 
                 saveAdvertUser();
                 setFlash('success', 'Рекламная ссылка успешно изменена!');
@@ -87,9 +88,9 @@ class RekUserController extends AdminController
      */
     public function delete()
     {
-        $page = int(Request::input('page', 1));
-        $token = check(Request::input('token'));
-        $del = intar(Request::input('del'));
+        $page      = int(Request::input('page', 1));
+        $token     = check(Request::input('token'));
+        $del       = intar(Request::input('del'));
         $validator = new Validator();
         $validator->equal($token, $_SESSION['token'], 'Неверный идентификатор сессии, повторите действие!')
             ->true($del, 'Отсутствуют выбранные записи для удаления!');
