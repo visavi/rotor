@@ -36,7 +36,7 @@ class BookmarkController extends BaseController
             ->with('topic.user', 'topic.lastPost.user')
             ->orderBy('updated_at', 'desc')
             ->offset($page['offset'])
-            ->limit(setting('forumtem'))
+            ->limit($page['limit'])
             ->get();
 
         return view('forum/bookmark', compact('topics', 'page'));

@@ -46,7 +46,7 @@ class ActiveController extends BaseController
         $topics = Topic::query()
             ->where('user_id', $user->id)
             ->orderBy('updated_at', 'desc')
-            ->limit(setting('forumtem'))
+            ->limit($page['limit'])
             ->offset($page['offset'])
             ->with('forum', 'user', 'lastPost.user')
             ->get();
@@ -71,7 +71,7 @@ class ActiveController extends BaseController
         $posts = Post::query()
             ->where('user_id', $user->id)
             ->orderBy('created_at', 'desc')
-            ->limit(setting('forumpost'))
+            ->limit($page['limit'])
             ->offset($page['offset'])
             ->with('topic', 'user')
             ->get();

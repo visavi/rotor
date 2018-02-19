@@ -26,7 +26,7 @@ if (isAdmin()) {
                 echo '<input type="hidden" name="token" value="'.$_SESSION['token'].'">';
                 $photos = Photo::orderBy('created_at', 'desc')
                     ->offset($page['offset'])
-                    ->limit(setting('fotolist'))
+                    ->limit($page['limit'])
                     ->with('user')
                     ->get();
 

@@ -49,7 +49,7 @@ class TopicController extends BaseController
             })
             ->with('files', 'user', 'editUser')
             ->offset($page['offset'])
-            ->limit(setting('forumpost'))
+            ->limit($page['limit'])
             ->orderBy('created_at')
             ->get();
 

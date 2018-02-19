@@ -27,7 +27,7 @@ class NewController extends BaseController
 
         $topics = Topic::query()
             ->orderBy('updated_at', 'desc')
-            ->limit(setting('forumtem'))
+            ->limit($page['limit'])
             ->offset($page['offset'])
             ->with('forum', 'user', 'lastPost.user')
             ->get();
@@ -54,7 +54,7 @@ class NewController extends BaseController
 
         $posts = Post::query()
             ->orderBy('created_at', 'desc')
-            ->limit(setting('forumpost'))
+            ->limit($page['limit'])
             ->offset($page['offset'])
             ->with('topic', 'user')
             ->get();

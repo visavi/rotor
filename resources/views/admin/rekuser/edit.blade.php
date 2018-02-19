@@ -25,11 +25,7 @@
             </div>
 
             <div class="form-group{{ hasError('color') }}">
-                <label for="color">Код цвета:
-                    @if (file_exists(BASEDIR.'/modules/services/colors.php'))
-                        <a href="/services/colors">(?)</a>
-                    @endif
-                </label>
+                <label for="color">Код цвета:</label>
                 <input class="form-control" id="color" name="color" type="text" maxlength="7" value="{{ $link->color }}">
                 {!! textError('color') !!}
             </div>

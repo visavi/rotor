@@ -321,7 +321,7 @@ if (isAdmin()) {
                     ->where('forum_id', $fid)
                     ->orderBy('locked', 'desc')
                     ->orderBy('updated_at', 'desc')
-                    ->limit(setting('forumtem'))
+                    ->limit($page['limit'])
                     ->offset($page['offset'])
                     ->with('lastPost.user')
                     ->get();
@@ -751,7 +751,7 @@ if (isAdmin()) {
                             })
                             ->with('files', 'user', 'editUser')
                             ->offset($page['offset'])
-                            ->limit(setting('forumpost'))
+                            ->limit($page['limit'])
                             ->orderBy('created_at', 'asc')
                             ->get();
 

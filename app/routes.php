@@ -334,7 +334,7 @@ $routes = [
     ['GET|POST', '/admin/load', 'admin/load.php'],
     ['GET|POST', '/admin/newload', 'admin/newload.php'],
 
-    ['GET|POST', '/admin/reklama', 'Admin\RekUserController@index'],
+    ['GET',      '/admin/reklama', 'Admin\RekUserController@index'],
     ['GET|POST', '/admin/reklama/edit/[i:id]', 'Admin\RekUserController@edit'],
     ['POST',     '/admin/reklama/delete', 'Admin\RekUserController@delete'],
 

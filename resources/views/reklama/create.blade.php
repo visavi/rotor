@@ -15,19 +15,19 @@
             <input type="hidden" name="token" value="{{ $_SESSION['token'] }}">
 
             <div class="form-group{{ hasError('site') }}">
-                <label for="site">Адрес сайта</label>
+                <label for="site">Адрес сайта:</label>
                 <input name="site" class="form-control" id="site" maxlength="100" placeholder="Адрес сайта" value="{{ getInput('site') }}" required>
                 {!! textError('site') !!}
             </div>
 
             <div class="form-group{{ hasError('name') }}">
-                <label for="name">Название</label>
+                <label for="name">Название:</label>
                 <input name="name" class="form-control" id="name" maxlength="35" placeholder="Название" value="{{ getInput('name') }}" required>
                 {!! textError('name') !!}
             </div>
 
             <div class="form-group{{ hasError('color') }}">
-                <label for="color">Код цвета</label>
+                <label for="color">Код цвета:</label>
                 <input name="color" class="form-control js-color" id="color" maxlength="7" placeholder="Код цвета" value="{{ getInput('color') }}">
                 {!! textError('color') !!}
             </div>

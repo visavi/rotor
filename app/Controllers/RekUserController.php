@@ -31,9 +31,10 @@ class RekUserController extends BaseController
 
         $adverts = RekUser::query()
             ->where('deleted_at', '>', SITETIME)
-            ->limit(setting('rekuserpost'))
+            ->limit($page['limit'])
             ->offset($page['offset'])
             ->orderBy('deleted_at', 'desc')
+            ->with('user')
             ->get();
 
         return view('reklama/index', compact('adverts', 'page'));
