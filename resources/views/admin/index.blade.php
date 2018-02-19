@@ -14,10 +14,10 @@
     <i class="far fa-circle fa-lg text-muted"></i> <a href="/admin/chat">Админ-чат</a> ({{ statsChat() }})<br>
     <i class="far fa-circle fa-lg text-muted"></i> <a href="/admin/book">Гостевая книга</a> ({{ statsGuest() }})<br>
     <i class="fa fa-circle fa-lg text-muted"></i> <a href="/admin/forum">Форум</a> ({{ statsForum() }})<br>
-    <i class="fa fa-circle fa-lg text-muted"></i> <a href="/admin/gallery">Галерея</a> ({{ statsGallery() }})<br>
+    <i class="far fa-circle fa-lg text-muted"></i> <a href="/admin/gallery">Галерея</a> ({{ statsGallery() }})<br>
     <i class="fa fa-circle fa-lg text-muted"></i> <a href="/admin/blog">Блоги</a> ({{ statsBlog() }})<br>
     <i class="fa fa-circle fa-lg text-muted"></i> <a href="/admin/newload">Новые публикации</a> ({{  statsNewLoad() }})<br>
-    <i class="fa fa-circle fa-lg text-muted"></i> <a href="/admin/reklama">Пользовательская реклама</a><br>
+    <i class="far fa-circle fa-lg text-muted"></i> <a href="/admin/reklama">Пользовательская реклама</a><br>
 
     @if (isAdmin('moder'))
         <div class="b"><i class="fa fa-cog fa-lg text-muted"></i> <b>Модератор</b></div>
