@@ -1,8 +1,8 @@
 <?php
 
 use App\Controllers\GuestController;
-use PHPUnit\Framework\TestCase;
 use App\Models\Guest;
+use PHPUnit\Framework\TestCase;
 
 class GuestControllerTest extends TestCase
 {
