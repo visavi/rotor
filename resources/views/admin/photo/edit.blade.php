@@ -32,4 +32,6 @@
             <button class="btn btn-primary">Изменить</button>
         </form>
     </div>
+
+    <i class="fa fa-wrench"></i> <a href="/admin">В админку</a><br>
 @stop

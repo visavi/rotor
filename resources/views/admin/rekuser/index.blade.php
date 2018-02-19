@@ -50,4 +50,6 @@
     @else
         {!! showError('Пользовательская рекламы еще нет!') !!}
     @endif
+
+    <i class="fa fa-wrench"></i> <a href="/admin">В админку</a><br>
 @stop
