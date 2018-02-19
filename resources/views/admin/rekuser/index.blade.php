@@ -50,7 +50,7 @@
 
         {!! pagination($page) !!}
 
-        Всего ссылок: <b>{{ $total }}</b><br><br>
+        Всего ссылок: <b>{{ $page['total'] }}</b><br><br>
     @else
         {!! showError('В данный момент рекламных ссылок еще нет!') !!}
     @endif

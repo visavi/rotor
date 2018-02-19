@@ -24,4 +24,12 @@ class Photo extends BaseModel
      * @var array
      */
     protected $guarded = [];
+
+    /**
+     * Возвращает комментарии фотографий
+     */
+    public function comments()
+    {
+        return $this->morphMany(Comment::class, 'relate');
+    }
 }

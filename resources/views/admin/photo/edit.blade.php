@@ -14,7 +14,7 @@
 
             <div class="form-group{{ hasError('title') }}">
                 <label for="title">Название:</label>
-                <input class="form-control" id="title" name="title" type="text" value="{{ $photo->title }}" maxlength="50">
+                <input class="form-control" id="title" name="title" type="text" value="{{ $photo->title }}" maxlength="50" required>
                 {!! textError('title') !!}
             </div>
 
@@ -33,5 +33,6 @@
         </form>
     </div>
 
+    <i class="fa fa-arrow-circle-left"></i> <a href="/admin/gallery?page={{ $page }}">Вернуться</a><br>
     <i class="fa fa-wrench"></i> <a href="/admin">В админку</a><br>
 @stop

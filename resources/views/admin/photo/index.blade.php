@@ -30,8 +30,8 @@
 
                 <div>
                     <a href="/gallery/{{ $data->id }}">{!! resizeImage('uploads/pictures/', $data->link, ['alt' => $data->title]) !!}</a><br>
-                    @if (!empty($data['text']))
-                        {!! bbCode($data['text']) !!}<br>
+                    @if ($data->text)
+                        {!! bbCode($data->text) !!}<br>
                     @endif
 
                     Добавлено: {!! profile($data->user) !!} ({{ dateFixed($data->created_at) }})<br>
@@ -47,9 +47,9 @@
 
         {!! pagination($page) !!}
 
-        Всего фотографий: <b>{{ $total }}</b><br><br>
+        Всего фотографий: <b>{{ $page['total'] }}</b><br><br>
 
-        @if (isAdmin(\App\Models\User::BOSS))
+        @if (isAdmin('boss'))
             <i class="fa fa-sync"></i> <a href="/admin/gallery/restatement?token={{ $_SESSION['token'] }}">Пересчитать</a><br>
         @endif
     @else
