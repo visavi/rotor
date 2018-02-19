@@ -54,4 +54,6 @@
     @else
         {!! showError('В данный момент рекламных ссылок еще нет!') !!}
     @endif
+
+    <i class="fa fa-wrench"></i> <a href="/admin">В админку</a><br>
 @stop
