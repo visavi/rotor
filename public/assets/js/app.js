@@ -48,11 +48,16 @@ $(function() {
     }).colorbox({rel: function(){
             return $(this).data('group');
         },
-        current: 'Фото {current} из {total}',
+        current: 'Фото {current} из {total}'
     });
 
     $(window).resize(function() {
         $.colorbox.resize();
+    });
+
+    $('.picker').colorpicker({
+        useAlpha: false,
+        format: 'hex'
     });
 });
 

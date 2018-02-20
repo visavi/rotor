@@ -28,7 +28,14 @@
 
             <div class="form-group{{ hasError('color') }}">
                 <label for="color">Код цвета:</label>
-                <input name="color" class="form-control js-color" id="color" maxlength="7" placeholder="Код цвета" value="{{ getInput('color') }}">
+
+                <div class="input-group picker">
+                    <input class="form-control col-sm-4 js-color" id="color" name="color" type="text" maxlength="7" placeholder="Код цвета" value="{{ getInput('color') }}">
+                    <div class="input-group-append">
+                        <span class="input-group-text input-group-addon"><i></i></span>
+                    </div>
+                </div>
+
                 {!! textError('color') !!}
             </div>
 
