@@ -66,36 +66,26 @@
 
     @push('scripts')
         <script>
-            var opt   = <?= setting('rekuseroptprice'); ?>;
-            var price = $('.js-price');
-            var bold  = $('.js-bold');
-            var color = $('.js-color');
-
             $(document).ready(function() {
+                var rekuserprice    = <?= setting('rekuserprice'); ?>;
+                var rekuseroptprice = <?= setting('rekuseroptprice'); ?>;
+                var price           = $('.js-price');
+                var bold            = $('.js-bold');
+                var color           = $('.js-color');
+                var recount = function() {
+                    var newprice = parseInt(rekuserprice);
 
-                if (bold.is(':checked')) {
-                    price.html(parseInt(price.text()) + opt);
-                }
-
-                bold.change(function() {
-                    if (this.checked) {
-                        price.html(parseInt(price.text()) + opt);
-                    } else {
-                        price.html(parseInt(price.text()) - opt);
+                    if (bold.is(':checked')) {
+                        newprice += parseInt(rekuseroptprice);
                     }
-                });
-
-                if (color.val().length) {
-                    price.html(parseInt(price.text()) + opt);
-                }
-
-                color.change(function() {
-                    if ($('.js-color').val().length) {
-                        price.html(parseInt(price.text()) + opt);
-                    } else {
-                        price.html(parseInt(price.text()) - opt);
+                    if (color.val().length) {
+                        newprice += parseInt(rekuseroptprice);
                     }
-                });
+                    price.html(newprice);
+                };
+                recount();
+                bold.on('change', recount);
+                color.on('input change', recount);
             });
         </script>
     @endpush
