@@ -55,7 +55,7 @@ $(function() {
         $.colorbox.resize();
     });
 
-    $('.picker').colorpicker({
+    $('.colorpick').colorpicker({
         useAlpha: false,
         format: 'hex'
     });
