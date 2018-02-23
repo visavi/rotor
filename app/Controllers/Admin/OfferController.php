@@ -4,7 +4,9 @@ namespace App\Controllers\Admin;
 
 use App\Classes\Request;
 use App\Classes\Validator;
+use App\Models\Comment;
 use App\Models\Offer;
+use App\Models\Polling;
 use App\Models\User;
 
 class OfferController extends AdminController
@@ -160,8 +162,6 @@ class OfferController extends AdminController
                     'updated_at'    => SITETIME,
                 ]);
 
-                // TODO при закрытии или выполнении предложения возможно нужно удалять все голоса и закрывать голосования
-
                 setFlash('success', 'Ответ успешно добавлен!');
                 redirect('/admin/offers/' . $offer->id);
             } else {
@@ -196,5 +196,41 @@ class OfferController extends AdminController
         }
 
         redirect('/admin/offers');
+    }
+
+    /**
+     * Удаление записей
+     */
+    public function delete()
+    {
+        $page  = int(Request::input('page', 1));
+        $token = check(Request::input('token'));
+        $del   = intar(Request::input('del'));
+        $type  = Request::input('type') == Offer::OFFER ? Offer::OFFER : Offer::ISSUE;
+
+        $validator = new Validator();
+        $validator->equal($token, $_SESSION['token'], 'Неверный идентификатор сессии, повторите действие!')
+            ->true($del, 'Отсутствуют выбранные записи для удаления!');
+
+        if ($validator->isValid()) {
+
+            Offer::query()->whereIn('id', $del)->delete();
+
+            Polling::query()
+                ->where('relate_type', Offer::class)
+                ->whereIn('relate_id', $del)
+                ->delete();
+
+            Comment::query()
+                ->where('relate_type', Offer::class)
+                ->whereIn('relate_id', $del)
+                ->delete();
+
+            setFlash('success', 'Выбранные записи успешно удалены!');
+        } else {
+            setFlash('danger', $validator->getErrors());
+        }
+
+        redirect('/admin/offers/' . $type . '?page=' . $page);
     }
 }

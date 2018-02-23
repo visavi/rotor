@@ -19,15 +19,10 @@
         <div class="float-right">
             <a href="/admin/offers/reply/{{ $offer->id }}"><i class="fas fa-reply text-muted"></i></a>
             <a href="/admin/offers/edit/{{ $offer->id }}"><i class="fas fa-pencil-alt text-muted"></i></a>
+            <a href="/admin/offers/delete?del={{ $offer->id }}&amp;token={{ $_SESSION['token'] }}"><i class="fas fa-times text-muted"></i></a>
         </div>
 
         {!! $offer->getStatus() !!}
-
-        @if (in_array($offer->status, ['wait', 'process']) && getUser('id') === $offer->user_id)
-            <div class="float-right">
-                <a title="Редактировать" href="/offers/edit/{{ $offer->id }}"><i class="fa fa-pencil-alt text-muted"></i></a>
-            </div>
-        @endif
     </div>
 
     <div>
@@ -55,8 +50,6 @@
             {!! profile($offer->replyUser) !!} ({{ dateFixed($offer->updated_at) }})
         </div><br>
     @endif
-
-
 
     <i class="fa fa-arrow-circle-left"></i> <a href="/admin/offers/{{ $offer->type }}">Вернуться</a><br>
     <i class="fa fa-wrench"></i> <a href="/admin">В админку</a><br>

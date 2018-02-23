@@ -327,11 +327,11 @@ $routes = [
     ['GET',      '/admin/votes/restatement', 'Admin\VoteController@restatement'],
 
     ['GET',      '/admin/offers/[offer|issue:type]?', 'Admin\OfferController@index'],
-    ['GET',      '/admin/offers/restatement', 'Admin\OfferController@restatement'],
-    ['POST',     '/admin/offers/delete', 'Admin\OfferController@delete'],
     ['GET',      '/admin/offers/[i:id]', 'Admin\OfferController@view'],
     ['GET|POST', '/admin/offers/edit/[i:id]', 'Admin\OfferController@edit'],
     ['GET|POST', '/admin/offers/reply/[i:id]', 'Admin\OfferController@reply'],
+    ['GET',      '/admin/offers/restatement', 'Admin\OfferController@restatement'],
+    ['GET|POST', '/admin/offers/delete', 'Admin\OfferController@delete'],
 
     ['GET',      '/admin/gallery', 'Admin\PhotoController@index'],
     ['GET',      '/admin/gallery/restatement', 'Admin\PhotoController@restatement'],
