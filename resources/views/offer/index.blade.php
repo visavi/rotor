@@ -1,7 +1,7 @@
 @extends('layout')
 
 @section('title')
-    Предложения и проблемы
+    Предложения / Проблемы
 @stop
 
 @section('content')
@@ -12,7 +12,7 @@
         </div>
     @endif
 
-    <h1>Предложения и проблемы</h1>
+    <h1>Предложения / Проблемы</h1>
 
     <i class="fa fa-book"></i>
 

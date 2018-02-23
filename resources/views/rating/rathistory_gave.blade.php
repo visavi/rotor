@@ -34,7 +34,7 @@
 
         {!! pagination($page) !!}
     @else
-        {{  showError('В истории еще ничего нет!') }}
+        {!! showError('В истории еще ничего нет!') !!}
     @endif
 
     <br>

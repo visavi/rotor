@@ -326,22 +326,26 @@ $routes = [
     ['GET',      '/admin/votes/close/[i:id]', 'Admin\VoteController@change'],
     ['GET',      '/admin/votes/restatement', 'Admin\VoteController@restatement'],
 
-    ['GET',      '/admin/offers', 'Admin\OfferController@index'],
-
-    ['GET|POST', '/admin/blog', 'admin/blog.php'],
-    ['GET|POST', '/admin/forum', 'admin/forum.php'],
+    ['GET',      '/admin/offers/[offer|issue:type]?', 'Admin\OfferController@index'],
+    ['GET',      '/admin/offers/restatement', 'Admin\OfferController@restatement'],
+    ['POST',     '/admin/offers/delete', 'Admin\OfferController@delete'],
+    ['GET',      '/admin/offers/[i:id]', 'Admin\OfferController@view'],
+    ['GET|POST', '/admin/offers/edit/[i:id]', 'Admin\OfferController@edit'],
+    ['GET|POST', '/admin/offers/reply/[i:id]', 'Admin\OfferController@reply'],
 
     ['GET',      '/admin/gallery', 'Admin\PhotoController@index'],
     ['GET',      '/admin/gallery/restatement', 'Admin\PhotoController@restatement'],
     ['GET|POST', '/admin/gallery/edit/[i:id]', 'Admin\PhotoController@edit'],
     ['POST',     '/admin/gallery/delete', 'Admin\PhotoController@delete'],
 
-    ['GET|POST', '/admin/load', 'admin/load.php'],
-    ['GET|POST', '/admin/newload', 'admin/newload.php'],
-
     ['GET',      '/admin/reklama', 'Admin\RekUserController@index'],
     ['GET|POST', '/admin/reklama/edit/[i:id]', 'Admin\RekUserController@edit'],
     ['POST',     '/admin/reklama/delete', 'Admin\RekUserController@delete'],
+
+    ['GET|POST', '/admin/load', 'admin/load.php'],
+    ['GET|POST', '/admin/newload', 'admin/newload.php'],
+    ['GET|POST', '/admin/blog', 'admin/blog.php'],
+    ['GET|POST', '/admin/forum', 'admin/forum.php'],
 
     ['GET', '/search', function() {
         return view('search/index');

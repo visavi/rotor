@@ -16,7 +16,7 @@ class OfferController extends BaseController
      */
     public function index($type = 'offer')
     {
-        $otherType = $type == 'offer' ? 'issue' : 'offer';
+        $otherType = $type == Offer::OFFER ? Offer::ISSUE : Offer::OFFER;
 
         $sort = check(Request::input('sort'));
 
@@ -93,7 +93,7 @@ class OfferController extends BaseController
                 ->length($title, 5, 50, ['title' => 'Слишком длинный или короткий заголовок!'])
                 ->length($text, 5, 1000, ['text' => 'Слишком длинное или короткое описание!'])
                 ->true(Flood::isFlood(), ['text' => 'Антифлуд! Разрешается добавлять записи раз в ' . Flood::getPeriod() . ' секунд!'])
-                ->in($type, ['offer', 'issue'], ['type' => 'Выбран неверный тип записи! (Необходимо предложение или проблема)'])
+                ->in($type, array_keys(Offer::TYPES), ['type' => 'Выбран неверный тип записи! (Необходимо предложение или проблема)'])
                 ->gte(getUser('point'), setting('addofferspoint'), ['Для добавления предложения или проблемы вам необходимо набрать ' . plural(setting('addofferspoint'), setting('scorename')) . '!']);
 
             if ($validator->isValid()) {
@@ -155,9 +155,7 @@ class OfferController extends BaseController
             $validator->equal($token, $_SESSION['token'], ['Неверный идентификатор сессии, повторите действие!'])
                 ->length($title, 5, 50, ['title' => 'Слишком длинный или короткий заголовок!'])
                 ->length($text, 5, 1000, ['text' => 'Слишком длинное или короткое описание!'])
-                ->true(Flood::isFlood(), ['text' => 'Антифлуд! Разрешается добавлять записи раз в ' . Flood::getPeriod() . ' секунд!'])
-                ->in($type, ['offer', 'issue'], ['type' => 'Выбран неверный тип записи! (Необходимо предложение или проблема)'])
-                ->gte(getUser('point'), setting('addofferspoint'), ['Для добавления предложения или проблемы вам необходимо набрать ' . plural(setting('addofferspoint'), setting('scorename')) . '!']);
+                ->in($type, array_keys(Offer::TYPES), ['type' => 'Выбран неверный тип записи! (Необходимо предложение или проблема)']);
 
             if ($validator->isValid()) {
 

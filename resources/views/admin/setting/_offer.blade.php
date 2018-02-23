@@ -1,4 +1,4 @@
-<h3>Предложения и проблемы</h3>
+<h3>Предложения / Проблемы</h3>
 
 <form action="/admin/setting?act=offer" method="post">
     <input type="hidden" name="token" value="{{ $_SESSION['token'] }}">

@@ -27,7 +27,7 @@
                     <a class="nav-link" href="/admin/setting?act=advert" id="advert">Реклама на сайте</a>
                     <a class="nav-link" href="/admin/setting?act=image" id="image">Загрузка изображений</a>
                     <a class="nav-link" href="/admin/setting?act=smile" id="smile">Смайлы</a>
-                    <a class="nav-link" href="/admin/setting?act=offer" id="offer">Предложения и проблемы</a>
+                    <a class="nav-link" href="/admin/setting?act=offer" id="offer">Предложения / Проблемы</a>
                 </div>
             </div>
             <div class="col-md-8">

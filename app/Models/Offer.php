@@ -4,6 +4,33 @@ namespace App\Models;
 
 class Offer extends BaseModel
 {
+    const DONE    = 'done';
+    const WAIT    = 'wait';
+    const CANCEL  = 'cancel';
+    const PROCESS = 'process';
+
+    /**
+     * Статусы
+     */
+    const STATUSES = [
+        self::DONE    => 'Выполнено',
+        self::WAIT    => 'Под вопросом',
+        self::CANCEL  => 'Закрыто',
+        self::PROCESS => 'В процессе',
+    ];
+
+    const OFFER = 'offer';
+    const ISSUE = 'issue';
+
+    /**
+     * Типы
+     */
+    const TYPES = [
+        self::OFFER => 'Предложение',
+        self::ISSUE => 'Проблема',
+    ];
+
+
     /**
      * Indicates if the model should be timestamped.
      *

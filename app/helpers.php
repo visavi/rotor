@@ -1470,7 +1470,7 @@ function restatement($mode)
             break;
 
         case 'offer':
-            DB::update('update offers set comments = (select count(*) from comments where relate_type=  "'.addslashes(Offer::class).'" and offer.id = comments.relate_id)');
+            DB::update('update offers set comments = (select count(*) from comments where relate_type=  "'.addslashes(Offer::class).'" and offers.id = comments.relate_id)');
             break;
     }
 }
