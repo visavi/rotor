@@ -17,35 +17,38 @@
     Новые: <a href="/forum/new/themes">темы</a>, <a href="/forum/new/posts">сообщения</a>
     <hr/>
 
-    @foreach ($forums as $forum)
-        <div class="b">
-            <i class="fa fa-file-alt fa-lg text-muted"></i>
-            <b><a href="/forum/{{ $forum->id }}">{{ $forum->title }}</a></b>
-            ({{ $forum->topics }}/{{ $forum->posts }})
+    @if ($forums->isNotEmpty())
+        @foreach ($forums as $forum)
+            <div class="b">
+                <i class="fa fa-file-alt fa-lg text-muted"></i>
+                <b><a href="/forum/{{ $forum->id }}">{{ $forum->title }}</a></b>
+                ({{ $forum->topics }}/{{ $forum->posts }})
 
-            @if (!empty($forum->desc))
-                <br/>
-                <small>{{ $forum->desc }}</small>
-            @endif
-        </div>
+                @if (!empty($forum->desc))
+                    <p><small>{{ $forum->desc }}</small></p>
+                @endif
+            </div>
 
-        <div>
-            @if ($forum->children->isNotEmpty())
-                @foreach ($forum->children as $child)
-                    <i class="fa fa-copy text-muted"></i> <b><a href="/forum/{{ $child->id }}">{{ $child->title }}</a></b>
-                    ({{ $child->topics }}/{{ $child->posts }})<br/>
-                @endforeach
-            @endif
+            <div>
+                @if ($forum->children->isNotEmpty())
+                    @foreach ($forum->children as $child)
+                        <i class="fa fa-copy text-muted"></i> <b><a href="/forum/{{ $child->id }}">{{ $child->title }}</a></b>
+                        ({{ $child->topics }}/{{ $child->posts }})<br/>
+                    @endforeach
+                @endif
 
-            @if ($forum->lastTopic->lastPost->id)
-                Тема: <a href="/topic/end/{{ $forum->lastTopic->id }}">{{ $forum->lastTopic->title }}</a>
-                <br/>
-                Сообщение: {{ $forum->lastTopic->lastPost->user->login }} ({{ dateFixed($forum->lastTopic->lastPost->created_at) }})
-            @else
-                Темы еще не созданы!
-            @endif
-        </div>
-    @endforeach
+                @if ($forum->lastTopic->lastPost->id)
+                    Тема: <a href="/topic/end/{{ $forum->lastTopic->id }}">{{ $forum->lastTopic->title }}</a>
+                    <br/>
+                    Сообщение: {{ $forum->lastTopic->lastPost->user->login }} ({{ dateFixed($forum->lastTopic->lastPost->created_at) }})
+                @else
+                    Темы еще не созданы!
+                @endif
+            </div>
+        @endforeach
+    @else
+        {!! showError('Разделы форума еще не созданы!') !!}
+    @endif
 
     <br/><a href="/rules">Правила</a> / <a href="/forum/top/themes">Топ тем</a> / <a href="/forum/top/posts">Топ постов</a> / <a href="/forum/search">Поиск</a> / <a href="/forum/rss">RSS</a><br/>
 @stop

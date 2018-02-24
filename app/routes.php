@@ -334,8 +334,8 @@ $routes = [
     ['GET|POST', '/admin/offers/delete', 'Admin\OfferController@delete'],
 
     ['GET',      '/admin/gallery', 'Admin\PhotoController@index'],
-    ['GET',      '/admin/gallery/restatement', 'Admin\PhotoController@restatement'],
     ['GET|POST', '/admin/gallery/edit/[i:id]', 'Admin\PhotoController@edit'],
+    ['GET',      '/admin/gallery/restatement', 'Admin\PhotoController@restatement'],
     ['POST',     '/admin/gallery/delete', 'Admin\PhotoController@delete'],
 
     ['GET',      '/admin/reklama', 'Admin\RekUserController@index'],
@@ -343,6 +343,7 @@ $routes = [
     ['POST',     '/admin/reklama/delete', 'Admin\RekUserController@delete'],
 
     ['GET',      '/admin/forum', 'Admin\ForumController@index'],
+    ['GET',      '/admin/forum/restatement', 'Admin\ForumController@restatement'],
 
     ['GET|POST', '/admin/load', 'admin/load.php'],
     ['GET|POST', '/admin/newload', 'admin/newload.php'],
