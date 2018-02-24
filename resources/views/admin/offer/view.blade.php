@@ -19,7 +19,7 @@
         <div class="float-right">
             <a href="/admin/offers/reply/{{ $offer->id }}"><i class="fas fa-reply text-muted"></i></a>
             <a href="/admin/offers/edit/{{ $offer->id }}"><i class="fas fa-pencil-alt text-muted"></i></a>
-            <a href="/admin/offers/delete?del={{ $offer->id }}&amp;token={{ $_SESSION['token'] }}"><i class="fas fa-times text-muted"></i></a>
+            <a href="/admin/offers/delete?del={{ $offer->id }}&amp;token={{ $_SESSION['token'] }}" onclick="return confirm('Вы подтверждаете удаление записи?')"><i class="fas fa-times text-muted"></i></a>
         </div>
 
         {!! $offer->getStatus() !!}

@@ -16,6 +16,6 @@
 
     Сссылка на документацию по созданию поиска:<br>
     <a href="https://site.yandex.ru">Yandex - поиск для сайта</a><br>
-    <a href="https://cse.google.ru">Google - Пользовательский поиск</a><br>
+    <a href="https://cse.google.ru">Google - пользовательский поиск</a><br>
 
 @stop

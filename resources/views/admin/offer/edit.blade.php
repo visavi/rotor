@@ -46,5 +46,5 @@
         </form>
     </div><br>
 
-    <i class="fa fa-arrow-circle-left"></i> <a href="/offers/{{ $offer->id }}">Вернуться</a><br>
+    <i class="fa fa-arrow-circle-left"></i> <a href="/admin/offers/{{ $offer->id }}">Вернуться</a><br>
 @stop
