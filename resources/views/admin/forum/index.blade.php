@@ -23,7 +23,7 @@
 
                 @if (isAdmin('boss'))
                     <div class="float-right">
-                        <a href="/admin/forum?act=editforum&amp;fid={{ $forum->id }}"><i class="fa fa-pencil-alt"></i></a>
+                        <a href="/admin/forum/edit/{{ $forum->id }}"><i class="fa fa-pencil-alt"></i></a>
                         <a href="/admin/forum?act=delforum&amp;fid={{ $forum->id }}&amp;token={{ $_SESSION['token'] }}" onclick="return confirm('Вы уверены что хотите удалить данный раздел?')"><i class="fa fa-times"></i></a>
                     </div>
                 @endif
@@ -36,8 +36,8 @@
                         ({{ $child->topics }}/{{ $child->posts }})
 
                         @if (isAdmin('boss'))
-                            <a href="/admin/forum?act=editforum&amp;fid={{ $forum->id }}"><i class="fa fa-pencil-alt"></i></a>
-                            <a href="/admin/forum?act=delforum&amp;fid={{ $forum->id }}&amp;token={{ $_SESSION['token'] }}" onclick="return confirm('Вы уверены что хотите удалить данный раздел?')"><i class="fa fa-times"></i></a>
+                            <a href="/admin/forum/edit/{{ $child->id }}"><i class="fa fa-pencil-alt"></i></a>
+                            <a href="/admin/forum?act=delforum&amp;fid={{ $child->id }}&amp;token={{ $_SESSION['token'] }}" onclick="return confirm('Вы уверены что хотите удалить данный раздел?')"><i class="fa fa-times"></i></a>
                         @endif
                         <br/>
                     @endforeach
