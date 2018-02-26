@@ -1,12 +1,12 @@
 @extends('layout')
 
 @section('title')
-    Редактирование раздела
+    Редактирование раздела {{ $forum->title }}
 @stop
 
 @section('content')
 
-    <h1>Редактирование раздела</h1>
+    <h1>Редактирование раздела {{ $forum->title }}</h1>
 
     <div action="/admin/forum/edit/{{ $forum->id }}" class="form mb-3">
         <form method="post">

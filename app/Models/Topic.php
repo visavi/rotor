@@ -55,44 +55,46 @@ class Topic extends BaseModel
     /**
      * Генерирует постраничную навигация для форума
      *
+     * @param  string url                 $url
      * @return string сформированный блок
      */
-    public function pagination()
+    public function pagination($url = '/topic')
     {
-        if ($this->posts) {
+        if (! $this->posts) {
+            return null;
+        }
 
-            $pages = [];
-            $link = '/topic/'.$this->id;
+        $pages = [];
+        $link = $url . '/' . $this->id;
 
-            $pg_cnt = ceil($this->posts / setting('forumpost'));
+        $pg_cnt = ceil($this->posts / setting('forumpost'));
 
-            for ($i = 1; $i <= 5; $i++) {
-                if ($i <= $pg_cnt) {
-                    $pages[] = [
-                        'page' => $i,
-                        'title' => $i.' страница',
-                        'name' => $i,
-                    ];
-                }
+        for ($i = 1; $i <= 5; $i++) {
+            if ($i <= $pg_cnt) {
+                $pages[] = [
+                    'page' => $i,
+                    'title' => $i.' страница',
+                    'name' => $i,
+                ];
             }
+        }
 
-            if (5 < $pg_cnt) {
+        if (5 < $pg_cnt) {
 
-                if (6 < $pg_cnt) {
-                    $pages[] = array(
-                        'separator' => true,
-                        'name' => ' ... ',
-                    );
-                }
-
+            if (6 < $pg_cnt) {
                 $pages[] = array(
-                    'page' => $pg_cnt,
-                    'title' => $pg_cnt.' страница',
-                    'name' => $pg_cnt,
+                    'separator' => true,
+                    'name' => ' ... ',
                 );
             }
 
-            return view('forum/_pagination', compact('pages', 'link'));
+            $pages[] = array(
+                'page' => $pg_cnt,
+                'title' => $pg_cnt.' страница',
+                'name' => $pg_cnt,
+            );
         }
+
+        return view('forum/_pagination', compact('pages', 'link'));
     }
 }

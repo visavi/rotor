@@ -23,7 +23,7 @@
     / {{ $forum->title }}
 
     @if (isAdmin())
-        / <a href="/admin/forum?act=forum&amp;fid={{  $forum->id  }}&amp;page={{ $page['current'] }}">Управление</a>
+        / <a href="/admin/forum/{{  $forum->id  }}?page={{ $page['current'] }}">Управление</a>
     @endif
 
     <hr>

@@ -14,7 +14,7 @@
         @foreach ($forums as $forum)
             <div class="b">
                 <i class="fa fa-file-alt fa-lg text-muted"></i>
-                <b><a href="/forum/{{ $forum->id }}">{{ $forum->title }}</a></b>
+                <b><a href="/admin/forum/{{ $forum->id }}">{{ $forum->title }}</a></b>
                 ({{ $forum->topics }}/{{ $forum->posts }})
 
                 @if (!empty($forum->description))
@@ -24,7 +24,7 @@
                 @if (isAdmin('boss'))
                     <div class="float-right">
                         <a href="/admin/forum/edit/{{ $forum->id }}"><i class="fa fa-pencil-alt"></i></a>
-                        <a href="/admin/forum?act=delforum&amp;fid={{ $forum->id }}&amp;token={{ $_SESSION['token'] }}" onclick="return confirm('Вы уверены что хотите удалить данный раздел?')"><i class="fa fa-times"></i></a>
+                        <a href="/admin/forum/delete/{{ $forum->id }}?token={{ $_SESSION['token'] }}" onclick="return confirm('Вы уверены что хотите удалить данный раздел?')"><i class="fa fa-times"></i></a>
                     </div>
                 @endif
             </div>
@@ -32,12 +32,12 @@
             <div>
                 @if ($forum->children->isNotEmpty())
                     @foreach ($forum->children as $child)
-                        <i class="fa fa-copy text-muted"></i> <b><a href="/forum/{{ $child->id }}">{{ $child->title }}</a></b>
+                        <i class="fa fa-copy text-muted"></i> <b><a href="/admin/forum/{{ $child->id }}">{{ $child->title }}</a></b>
                         ({{ $child->topics }}/{{ $child->posts }})
 
                         @if (isAdmin('boss'))
                             <a href="/admin/forum/edit/{{ $child->id }}"><i class="fa fa-pencil-alt"></i></a>
-                            <a href="/admin/forum?act=delforum&amp;fid={{ $child->id }}&amp;token={{ $_SESSION['token'] }}" onclick="return confirm('Вы уверены что хотите удалить данный раздел?')"><i class="fa fa-times"></i></a>
+                            <a href="/admin/forum/delete/{{ $child->id }}?token={{ $_SESSION['token'] }}" onclick="return confirm('Вы уверены что хотите удалить данный раздел?')"><i class="fa fa-times"></i></a>
                         @endif
                         <br/>
                     @endforeach

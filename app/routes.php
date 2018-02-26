@@ -64,7 +64,7 @@ $routes = [
     ['GET|POST', '/gallery/top', 'PhotoController@top'],
 
     ['GET',      '/forum', 'Forum\ForumController@index', 'forum'],
-    ['GET',      '/forum/[i:fid]', 'Forum\ForumController@forum'],
+    ['GET',      '/forum/[i:id]', 'Forum\ForumController@forum'],
     ['GET|POST', '/forum/create', 'Forum\ForumController@create'],
     ['GET',      '/topic/[i:id]', 'Forum\TopicController@index'],
     ['GET',      '/topic/[i:id]/[i:pid]', 'Forum\TopicController@viewpost'],
@@ -343,9 +343,13 @@ $routes = [
     ['POST',     '/admin/reklama/delete', 'Admin\RekUserController@delete'],
 
     ['GET',      '/admin/forum', 'Admin\ForumController@index'],
-    ['GET',      '/admin/forum/restatement', 'Admin\ForumController@restatement'],
-    ['GET|POST', '/admin/forum/edit/[i:id]', 'Admin\ForumController@edit'],
     ['POST',     '/admin/forum/create', 'Admin\ForumController@create'],
+    ['GET|POST', '/admin/forum/edit/[i:id]', 'Admin\ForumController@edit'],
+    ['GET',      '/admin/forum/delete/[i:id]', 'Admin\ForumController@delete'],
+    ['GET',      '/admin/forum/restatement', 'Admin\ForumController@restatement'],
+    ['GET',      '/admin/forum/[i:id]', 'Admin\ForumController@forum'],
+    ['GET|POST', '/admin/topic/edit/[i:id]', 'Admin\ForumController@editTopic'],
+
 
     ['GET|POST', '/admin/load', 'admin/load.php'],
     ['GET|POST', '/admin/newload', 'admin/newload.php'],
