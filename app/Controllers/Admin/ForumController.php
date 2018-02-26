@@ -4,6 +4,7 @@ namespace App\Controllers\Admin;
 
 use App\Classes\Request;
 use App\Classes\Validator;
+use App\Models\ChangeMail;
 use App\Models\Forum;
 use App\Models\User;
 
@@ -29,6 +30,41 @@ class ForumController extends AdminController
     }
 
     /**
+     * Создание раздела
+     */
+    public function create()
+    {
+        if (! isAdmin(User::BOSS)) {
+            abort(403, 'Доступ запрещен!');
+        }
+
+        $token  = check(Request::input('token'));
+        $title = check(Request::input('title'));
+
+        $validator = new Validator();
+        $validator->equal($token, $_SESSION['token'], 'Неверный идентификатор сессии, повторите действие!')
+            ->length($title, 5, 50, ['title' => 'Слишком длинное или короткое название раздела!']);
+
+        if ($validator->isValid()) {
+
+            $max = Forum::query()->max('sort') + 1;
+
+            $forum = Forum::query()->create([
+                'title' => $title,
+                'sort'  => $max,
+            ]);
+
+            setFlash('success', 'Новый раздел успешно добавлен!');
+            redirect('/admin/forum/edit/' . $forum->id);
+        } else {
+            setInput(Request::all());
+            setFlash('danger', $validator->getErrors());
+        }
+
+        redirect('/admin/forum');
+    }
+
+    /**
      * Редактирование форума
      */
     public function edit($id)
@@ -49,17 +85,17 @@ class ForumController extends AdminController
             ->get();
 
         if (Request::isMethod('post')) {
-            $token  = check(Request::input('token'));
-            $parent = int(Request::input('parent'));
-            $title  = check(Request::input('title'));
-            $desc   = check(Request::input('desc'));
-            $sort   = check(Request::input('sort'));
-            $closed = empty(Request::input('closed')) ? 0 : 1;
+            $token       = check(Request::input('token'));
+            $parent      = int(Request::input('parent'));
+            $title       = check(Request::input('title'));
+            $description = check(Request::input('description'));
+            $sort        = check(Request::input('sort'));
+            $closed      = empty(Request::input('closed')) ? 0 : 1;
 
             $validator = new Validator();
             $validator->equal($token, $_SESSION['token'], 'Неверный идентификатор сессии, повторите действие!')
                 ->length($title, 5, 50, ['title' => 'Слишком длинное или короткое название раздела!'])
-                ->length($desc, 0, 100, ['desc' => 'Слишком длинное описания раздела!'])
+                ->length($description, 0, 100, ['description' => 'Слишком длинное описания раздела!'])
                 ->notEqual($parent, $forum->id, ['parent' => 'Недопустимый выбор родительского раздела!']);
 
 
@@ -70,11 +106,11 @@ class ForumController extends AdminController
             if ($validator->isValid()) {
 
                 $forum->update([
-                    'parent_id' => $parent,
-                    'title'     => $title,
-                    'desc'      => $desc,
-                    'sort'      => $sort,
-                    'closed'    => $closed,
+                    'parent_id'   => $parent,
+                    'title'       => $title,
+                    'description' => $description,
+                    'sort'        => $sort,
+                    'closed'      => $closed,
                 ]);
 
                 setFlash('success', 'Раздел успешно отредактирован!');

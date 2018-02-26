@@ -3,36 +3,6 @@
 
     switch ($action):
 
-        ############################################################################################
-        ##                                    Добавление разделов                                 ##
-        ############################################################################################
-        case 'addforum':
-
-            $token = check($_POST['token']);
-            $title = check($_POST['title']);
-
-            if (isAdmin([101])) {
-                if ($token == $_SESSION['token']) {
-                    if (utfStrlen($title) >= 3 && utfStrlen($title) <= 50) {
-                        $maxorder = DB::run() -> querySingle("SELECT IFNULL(MAX(sort),0)+1 FROM `forums`;");
-                        DB::insert("INSERT INTO `forums` (sort, `title`) VALUES (?, ?);", [$maxorder, $title]);
-
-                        setFlash('success', 'Новый раздел успешно добавлен!');
-                        redirect("/admin/forum");
-
-                    } else {
-                        showError('Ошибка! Слишком длинное или короткое название раздела!');
-                    }
-                } else {
-                    showError('Ошибка! Неверный идентификатор сессии, повторите действие!');
-                }
-            } else {
-                showError('Ошибка! Добавлять разделы могут только суперадмины!');
-            }
-
-            echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/forum">Вернуться</a><br>';
-        break;
-
 
 
         ############################################################################################

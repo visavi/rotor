@@ -40,10 +40,10 @@
                 {!! textError('title') !!}
             </div>
 
-            <div class="form-group{{ hasError('desc') }}">
-                <label for="desc">Описание:</label>
-                <input class="form-control" name="desc" id="desc" maxlength="100" value="{{ getInput('desc', $forum->desc) }}">
-                {!! textError('desc') !!}
+            <div class="form-group{{ hasError('description') }}">
+                <label for="description">Описание:</label>
+                <input class="form-control" name="description" id="description" maxlength="100" value="{{ getInput('description', $forum->description) }}">
+                {!! textError('description') !!}
             </div>
 
             <div class="form-group{{ hasError('sort') }}">

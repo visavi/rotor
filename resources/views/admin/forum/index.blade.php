@@ -17,8 +17,8 @@
                 <b><a href="/forum/{{ $forum->id }}">{{ $forum->title }}</a></b>
                 ({{ $forum->topics }}/{{ $forum->posts }})
 
-                @if (!empty($forum->desc))
-                    <p><small>{{ $forum->desc }}</small></p>
+                @if (!empty($forum->description))
+                    <p><small>{{ $forum->description }}</small></p>
                 @endif
 
                 @if (isAdmin('boss'))
