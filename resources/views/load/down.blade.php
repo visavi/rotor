@@ -82,16 +82,10 @@
             <i class="fa fa-download"></i> <b><a href="/down/download/{{ $down->id }}">Скачать</a></b> ({{ $filesize }})<br>
         @else
             <div class="form">
-                {!! view('app/_captcha') !!}
-                <form class="form-inline" action="/down/download/{{ $down->id }}" method="post">
-                    <div class="form-group{{ hasError('protect') }}">
-                        <input class="form-control" id="protect" name="protect" size="6" maxlength="6" required>
-                        <button class="btn btn-primary">Скачать ({{ $filesize }})</button>
-                    </div>
+                <form action="/down/download/{{ $down->id }}" method="post">
+                    {!! view('app/_captcha') !!}
+                    <button class="btn btn-primary">Скачать ({{ $filesize }})</button>
                 </form>
-                {!! textError('protect') !!}
-
-                <em>Чтобы не вводить код при каждом скачивании, советуем <a href="/register">зарегистрироваться</a></em>
             </div><br>
         @endif
 

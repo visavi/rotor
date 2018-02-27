@@ -27,5 +27,7 @@
 
             <button class="btn btn-primary">Подтвердить</button>
         </form>
+
+        <script src="https://www.google.com/recaptcha/api.js"></script>
     @endif
 @stop
