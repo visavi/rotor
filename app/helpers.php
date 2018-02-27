@@ -43,6 +43,7 @@ use Illuminate\Database\Capsule\Manager as DB;
 use Illuminate\Http\UploadedFile;
 use Intervention\Image\ImageManagerStatic as Image;
 use Jenssegers\Blade\Blade;
+use ReCaptcha\ReCaptcha;
 
 /**
  * Форматирует вывод времени из секунд
@@ -1910,9 +1911,8 @@ function setInput(array $data)
  */
 function getInput($name, $default = null)
 {
-    if (isset($_SESSION['input'][$name])) {
-        $input = $_SESSION['input'][$name];
-        unset($_SESSION['input'][$name]);
+    if ($input = array_get($_SESSION['input'], $name)) {
+        array_forget($_SESSION['input'], $name);
     }
 
     return $input ?? $default;
@@ -2461,4 +2461,20 @@ function parseVersion($version)
     $version = explode('.', strtok($version, '-'));
 
     return $version[0] . '.' . $version[1] . '.' . $version[2] ?? 0;
+}
+
+/**
+ * Проверяет captcha
+ *
+ * @return bool
+ */
+function captchaVerify()
+{
+    if (setting('recaptcha_public') && setting('recaptcha_private')) {
+        $recaptcha = new ReCaptcha(setting('recaptcha_private'));
+        $response = $recaptcha->verify(Request::input('g-recaptcha-response'), getIp());
+        return $response->isSuccess();
+    }
+
+    return check(strtolower(Request::input('protect'))) === $_SESSION['protect'];
 }

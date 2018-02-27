@@ -33,9 +33,7 @@
                     <textarea cols="25" rows="5" name="msg"></textarea><br>
 
                     @if (getUser('point') < setting('privatprotect'))
-                        Проверочный код:<br>
-                        <img src="/captcha" alt=""><br>
-                        <input name="protect" size="6" maxlength="6"><br>
+                        {!! view('app/_captcha') !!}
                     @endif
 
                     <button class="btn btn-primary">Отправить</button>

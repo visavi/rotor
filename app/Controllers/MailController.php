@@ -18,7 +18,6 @@ class MailController extends BaseController
             $message = nl2br(check(Request::input('message')));
             $name    = check(Request::input('name'));
             $email   = check(Request::input('email'));
-            $protect = check(Request::input('protect'));
 
             if (getUser()) {
                 $name = getUser('login');
@@ -26,7 +25,7 @@ class MailController extends BaseController
             }
 
             $validator = new Validator();
-            $validator->equal($protect, $_SESSION['protect'], ['protect' => 'Проверочное число не совпало с данными на картинке!'])
+            $validator->true(captchaVerify(), ['protect' => 'Не удалось пройти проверку captcha!'])
                 ->length($name, 5, 100, ['name' => 'Слишком длинное или короткое имя'])
                 ->length($message, 5, 50000, ['message' => 'Слишком длинное или короткое сообшение'])
                 ->email($email, ['email' => 'Неправильный адрес email, необходим формат name@site.domen!']);
@@ -63,7 +62,6 @@ class MailController extends BaseController
 
         if (Request::isMethod('post')) {
             $login = check(Request::input('user'));
-            $protect = check(Request::input('protect'));
 
             $user = User::query()->where('login', $login)->orWhere('email', $login)->first();
             if (! $user) {
@@ -71,7 +69,7 @@ class MailController extends BaseController
             }
 
             $validator = new Validator();
-            $validator->equal($protect, $_SESSION['protect'], ['protect' => 'Проверочное число не совпало с данными на картинке!'])
+            $validator->true(captchaVerify(), ['protect' => 'Не удалось пройти проверку captcha!'])
                 ->lte($user['timepasswd'], SITETIME, ['user' => 'Восстанавливать пароль можно не чаще чем раз в 12 часов!']);
 
             if ($validator->isValid()) {

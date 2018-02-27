@@ -43,12 +43,7 @@
                 <input name="bold" class="js-bold" type="checkbox" value="1" {{ getInput('bold') == 1 ? ' checked' : '' }}> Жирность
             </label>
 
-            <div class="form-group{{ hasError('protect') }}">
-                <label for="protect">Проверочный код:</label>
-                <img src="/captcha" id="captcha" onclick="this.src='/captcha?'+Math.random()" class="rounded" alt="" style="cursor: pointer;">
-                <input class="form-control" name="protect" id="protect" maxlength="6" required>
-                {!! textError('protect') !!}
-            </div>
+            {!! view('app/_captcha') !!}
 
             <button class="btn btn-primary">Купить за <span class="js-price">{{ setting('rekuserprice') }}</span></button>
         </form>

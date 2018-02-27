@@ -93,7 +93,6 @@ class NoticeController extends AdminController
 
         if (Request::isMethod('post')) {
             $token   = check(Request::input('token'));
-            $type    = check(Request::input('type'));
             $name    = check(Request::input('name'));
             $text    = check(Request::input('text'));
             $protect = Request::has('protect') ? 1 : 0;

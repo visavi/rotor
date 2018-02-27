@@ -38,9 +38,7 @@
             <textarea class="form-control markItUp" id="msg" rows="5" name="msg" placeholder="Текст сообщения" required></textarea>
 
             @if (getUser('point') < setting('privatprotect'))
-                Проверочный код:<br>
-                <img src="/captcha" alt=""><br>
-                <input name="protect" size="6" maxlength="6"><br>
+                {!! view('app/_captcha') !!}
             @endif
 
             <button class="btn btn-primary">Быстрый ответ</button></form></div><br>

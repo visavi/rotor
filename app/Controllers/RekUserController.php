@@ -73,7 +73,6 @@ class RekUserController extends BaseController
             $name    = check(Request::input('name'));
             $color   = check(Request::input('color'));
             $bold    = Request::has('bold') ? 1 : 0;
-            $protect = check(strtolower(Request::input('protect')));
 
             $price = setting('rekuserprice');
 
@@ -88,7 +87,7 @@ class RekUserController extends BaseController
             $validator = new Validator();
             $validator->equal($token, $_SESSION['token'], 'Неверный идентификатор сессии, повторите действие!')
                 ->gte(getUser('point'), 50, 'Для покупки рекламы вам необходимо набрать '.plural(50, setting('scorename')).'!')
-                ->equal($protect, $_SESSION['protect'], ['protect' => 'Проверочное число не совпало с данными на картинке!'])
+                ->true(captchaVerify(), ['protect' => 'Не удалось пройти проверку captcha!'])
                 ->regex($site, '|^https?://([а-яa-z0-9_\-\.])+(\.([а-яa-z0-9\/\-?_=#])+)+$|iu', ['site' => 'Недопустимый адрес сайта!. Разрешены символы [а-яa-z0-9_-.?=#/]!'])
                 ->length($site, 5, 100, ['site' => 'Слишком длинный или короткий адрес ссылки!'])
                 ->length($name, 5, 35, ['name' => 'Слишком длинное или короткое название ссылки!'])

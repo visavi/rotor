@@ -36,6 +36,7 @@ class SettingController extends AdminController
 
             $sets  = check(Request::input('sets'));
             $mods  = check(Request::input('mods'));
+            $opt   = check(Request::input('opt'));
             $token = check(Request::input('token'));
 
             $validator = new Validator();
@@ -43,7 +44,9 @@ class SettingController extends AdminController
                 ->notEmpty($sets, ['sets' => 'Ошибка! Не переданы настройки сайта']);
 
             foreach ($sets as $name => $value) {
-                $validator->length($sets[$name], 1, 255, ['sets['.$name.']' => 'Поле '. check($name) .' обязательно для заполнения']);
+                if (empty($opt[$name]) || ! empty($sets[$name])) {
+                    $validator->length($sets[$name], 1, 255, ['sets['.$name.']' => 'Поле '. check($name) .' обязательно для заполнения']);
+                }
             }
 
             if ($validator->isValid()) {

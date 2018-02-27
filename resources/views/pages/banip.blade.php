@@ -23,9 +23,7 @@
     @if ($ban)
         <form method="post">
 
-            <label for="inputProtect">Докажите что вы не робот:</label><br>
-            <img src="/captcha" id="captcha" onclick="this.src='/captcha?'+Math.random()" class="rounded" alt="" style="cursor: pointer;"><br>
-            <input name="protect" id="inputProtect" maxlength="6" required><br>
+            {!! view('app/_captcha') !!}
 
             <button class="btn btn-primary">Подтвердить</button>
         </form>

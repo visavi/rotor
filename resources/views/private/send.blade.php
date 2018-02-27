@@ -28,13 +28,7 @@
                 </div>
 
                 @if (getUser('point') < setting('privatprotect'))
-                    <div class="form-group{{ hasError('protect') }}">
-                        <label for="inputProtect">Проверочный код:</label><br>
-                        <img src="/captcha" onclick="this.src='/captcha?'+Math.random()" class="rounded" alt="" style="cursor: pointer;" alt=""><br>
-
-                        <input type="text" class="form-control" id="inputProtect" name="protect" maxlength="6" required>
-                        {!! textError('protect') !!}
-                    </div>
+                    {!! view('app/_captcha') !!}
                 @endif
 
                 <button class="btn btn-primary">Отправить</button>
@@ -72,13 +66,7 @@
                 </div>
 
                 @if (getUser('point') < setting('privatprotect'))
-                    <div class="form-group{{ hasError('protect') }}">
-                        <label for="inputProtect">Проверочный код:</label><br>
-                        <img src="/captcha" onclick="this.src='/captcha?'+Math.random()" class="rounded" alt="" style="cursor: pointer;" alt=""><br>
-
-                        <input type="text" class="form-control" id="inputProtect" name="protect" maxlength="6" required>
-                        {!! textError('protect') !!}
-                    </div>
+                    {!! view('app/_captcha') !!}
                 @endif
 
                 <button class="btn btn-primary">Отправить</button>

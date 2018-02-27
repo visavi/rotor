@@ -91,7 +91,6 @@ class UserController extends BaseController
                 $login       = check(Request::input('login'));
                 $password    = trim(Request::input('password'));
                 $password2   = trim(Request::input('password2'));
-                $protect     = check(strtolower(Request::input('protect')));
                 $invite      = setting('invite') ? check(Request::input('invite')) : '';
                 $email       = strtolower(check(Request::input('email')));
                 $domain      = utfSubstr(strrchr($email, '@'), 1);
@@ -100,7 +99,7 @@ class UserController extends BaseController
                 $level       = User::USER;
 
                 $validator = new Validator();
-                $validator->equal($protect, $_SESSION['protect'], ['protect' => 'Проверочное число не совпало с данными на картинке!'])
+                $validator->true(captchaVerify(), ['protect' => 'Не удалось пройти проверку captcha!'])
                     ->regex($login, '|^[a-z0-9\-]+$|i', ['login' => 'Недопустимые символы в логине. Разрешены знаки латинского алфавита, цифры и дефис!'])
                     ->regex(utfSubstr($login, 0, 1), '|^[a-z0-9]+$|i', ['login' => 'Логин должен начинаться с буквы или цифры!'])
                     ->email($email, ['email' => 'Вы ввели неверный адрес email, необходим формат name@site.domen!'])

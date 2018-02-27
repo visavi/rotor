@@ -44,8 +44,7 @@ class GuestController extends BaseController
 
         /* Проерка для гостей */
         if (! getUser() && setting('bookadds')) {
-            $protect = check(strtolower(Request::input('protect')));
-            $validator->equal($protect, $_SESSION['protect'], ['protect' => 'Проверочное число не совпало с данными на картинке!']);
+            $validator->true(captchaVerify(), ['protect' => 'Не удалось пройти проверку captcha!']);
         } else {
             $validator->true(getUser(), ['msg' => 'Для добавления сообщения необходимо авторизоваться']);
         }

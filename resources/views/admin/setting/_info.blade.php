@@ -3,7 +3,7 @@
 <form action="/admin/setting?act=info" method="post">
     <input type="hidden" name="token" value="{{ $_SESSION['token'] }}">
 
-    <?php $inputSite = getInput('sets[incount]', $settings['incount']); ?>
+    <?php $inputSite = getInput('sets.incount', $settings['incount']); ?>
     <?php $statsite = ['Выключить', 'Хосты | Хосты всего', 'Хиты | Хиты всего', 'Хиты | Хосты', 'Хиты всего | Хосты всего', 'Графический']; ?>
 
     <div class="form-group{{ hasError('sets[incount]') }}">
@@ -22,7 +22,7 @@
     <div class="form-check">
         <label class="form-check-label">
             <input type="hidden" value="0" name="sets[performance]">
-            <input name="sets[performance]" class="form-check-input" type="checkbox" value="1"{{ getInput('sets[performance]', $settings['performance']) ? ' checked' : '' }}>
+            <input name="sets[performance]" class="form-check-input" type="checkbox" value="1"{{ getInput('sets.performance', $settings['performance']) ? ' checked' : '' }}>
             Производительность
         </label>
     </div>
@@ -30,14 +30,14 @@
     <div class="form-check">
         <label class="form-check-label">
             <input type="hidden" value="0" name="sets[onlines]">
-            <input name="sets[onlines]" class="form-check-input" type="checkbox" value="1"{{ getInput('sets[onlines]', $settings['onlines']) ? ' checked' : '' }}>
+            <input name="sets[onlines]" class="form-check-input" type="checkbox" value="1"{{ getInput('sets.onlines', $settings['onlines']) ? ' checked' : '' }}>
             Онлайн
         </label>
     </div>
 
     <div class="form-group{{ hasError('sets[timeonline]') }}">
         <label for="timeonline">Время подсчета онлайн (минут):</label>
-        <input type="number" class="form-control" id="timeonline" name="sets[timeonline]" maxlength="3" value="{{ getInput('sets[timeonline]', round($settings['timeonline'] / 60)) }}" required>
+        <input type="number" class="form-control" id="timeonline" name="sets[timeonline]" maxlength="3" value="{{ getInput('sets.timeonline', round($settings['timeonline'] / 60)) }}" required>
         {!! textError('sets[timeonline]') !!}
 
         <input type="hidden" value="60" name="mods[timeonline]">

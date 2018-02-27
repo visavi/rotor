@@ -43,9 +43,7 @@ class HomeController extends BaseController
 
         if (Request::isMethod('post')) {
 
-            $protect = check(Request::input('protect'));
-
-            if ($ban && $protect == $_SESSION['protect']) {
+            if ($ban && captchaVerify()) {
 
                 $ban->delete();
 

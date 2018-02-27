@@ -88,12 +88,7 @@
                 {!! textError('gender') !!}
             </div>
 
-            <div class="form-group{{ hasError('protect') }}">
-                <label for="inputProtect">Проверочный код:</label>
-                <img src="/captcha" id="captcha" onclick="this.src='/captcha?'+Math.random()" class="rounded" alt="" style="cursor: pointer;">
-                <input class="form-control" name="protect" id="inputProtect" maxlength="6" required>
-                {!! textError('protect') !!}
-            </div>
+            {!! view('app/_captcha') !!}
 
             <button class="btn btn-primary">Регистрация</button>
         </form>

@@ -63,18 +63,18 @@
 
     @if ($down->link && file_exists(UPLOADS.'/files/'.$down->folder.$down->link))
 
-        @if ($ext == 'mp3' || $ext == 'mp4')
+        @if ($ext === 'mp3' || $ext === 'mp4')
 
-            @if ($ext == 'mp3')
+            @if ($ext === 'mp3')
                 <audio src="/uploads/files/{{ $down->folder }}{{ $down->link }}"></audio><br/>
             @endif
 
-            @if ($ext == 'mp4')
+            @if ($ext === 'mp4')
                 <video width="640" height="360" style="width: 100%; height: 100%;" src="/uploads/files/{{ $down->folder }}{{ $down->link }}" {!! $poster !!}></video>
             @endif
         @endif
 
-        @if ($ext == 'zip')
+        @if ($ext === 'zip')
             <i class="fa fa-archive"></i> <b><a href="/down/zip/{{ $down->id }}">Просмотреть архив</a></b><br>
         @endif
 
@@ -82,18 +82,17 @@
             <i class="fa fa-download"></i> <b><a href="/down/download/{{ $down->id }}">Скачать</a></b> ({{ $filesize }})<br>
         @else
             <div class="form">
-                <label for="protect">Проверочный код:</label><br>
-                <img src="/captcha" onclick="this.src='/captcha?'+Math.random()" class="rounded" style="cursor: pointer;" alt=""><br>
+                {!! view('app/_captcha') !!}
+                <form class="form-inline" action="/down/download/{{ $down->id }}" method="post">
+                    <div class="form-group{{ hasError('protect') }}">
+                        <input class="form-control" id="protect" name="protect" size="6" maxlength="6" required>
+                        <button class="btn btn-primary">Скачать ({{ $filesize }})</button>
+                    </div>
+                </form>
+                {!! textError('protect') !!}
 
-            <form class="form-inline" action="/down/download/{{ $down->id }}" method="post">
-                <div class="form-group{{ hasError('protect') }}">
-                    <input class="form-control" id="protect" name="protect" size="6" maxlength="6" required>
-                    <button class="btn btn-primary">Скачать ({{ $filesize }})</button>
-                </div>
-            </form>
-            {!! textError('protect') !!}
-
-            <em>Чтобы не вводить код при каждом скачивании, советуем <a href="/register">зарегистрироваться</a></em></div><br>
+                <em>Чтобы не вводить код при каждом скачивании, советуем <a href="/register">зарегистрироваться</a></em>
+            </div><br>
         @endif
 
         <i class="fa fa-comment"></i> <b><a href="/down/comments/{{ $down->id }}">Комментарии</a></b> ({{ $down->comments }})

@@ -91,17 +91,12 @@
                 <input type="hidden" name="token" value="{{ $_SESSION['token'] }}">
 
                 <div class="form-group{{ hasError('msg') }}">
-                    <label for="inputText">{{ trans('guest.message') }}:</label>
-                    <textarea class="form-control" id="inputText" rows="5" name="msg" placeholder="{{ trans('guest.message_text') }}" required>{{ getInput('msg') }}</textarea>
+                    <label for="msg">{{ trans('guest.message') }}:</label>
+                    <textarea class="form-control" id="msg" rows="5" name="msg" placeholder="{{ trans('guest.message_text') }}" required>{{ getInput('msg') }}</textarea>
                     {!! textError('msg') !!}
                 </div>
 
-                <div class="form-group{{ hasError('protect') }}">
-                    <label for="inputProtect">{{ trans('common.verification_code') }}:</label>
-                    <img src="/captcha" id="captcha" onclick="this.src='/captcha?'+Math.random()" class="rounded" alt="" style="cursor: pointer;">
-                    <input class="form-control" name="protect" id="inputProtect" maxlength="6" required>
-                    {!! textError('protect') !!}
-                </div>
+                {!! view('app/_captcha') !!}
 
                 <button class="btn btn-primary">{{ trans('guest.write') }}</button>
             </form>

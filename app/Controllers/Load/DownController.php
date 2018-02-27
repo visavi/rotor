@@ -243,8 +243,6 @@ class DownController extends BaseController
      */
     public function download($id)
     {
-        $protect = check(Request::input('protect'));
-
         $down = Down::query()->find($id);
 
         if (! $down) {
@@ -254,7 +252,7 @@ class DownController extends BaseController
         $validator = new Validator();
         $validator
             ->true(file_exists(UPLOADS . '/files/' . $down->folder . $down->link), 'Файла для скачивания не существует!')
-            ->true(getUser() || $protect === $_SESSION['protect'], ['protect' => 'Проверочное число не совпало с данными на картинке!'])
+            ->true(getUser() || captchaVerify(), ['protect' => 'Не удалось пройти проверку captcha!'])
             ->notEmpty($down->active, 'Данный файл еще не проверен модератором!');
 
         if ($validator->isValid()) {
