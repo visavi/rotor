@@ -107,7 +107,7 @@ class PrivateController extends BaseController
                 $validator->notEqual($user->id, getUser('id'), ['user' => 'Нельзя отправлять письмо самому себе!']);
 
                 if (getUser('point') < setting('privatprotect') && ! captchaVerify()) {
-                    $validator->addError(['protect' => 'Проверочное число не совпало с данными на картинке!']);
+                    $validator->addError(['protect' => 'Не удалось пройти проверку captcha!']);
                 }
 
                 // лимит ящика

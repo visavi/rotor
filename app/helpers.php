@@ -1911,8 +1911,8 @@ function setInput(array $data)
  */
 function getInput($name, $default = null)
 {
-    if ($input = array_get($_SESSION['input'], $name)) {
-        array_forget($_SESSION['input'], $name);
+    if ($input = array_get($_SESSION, 'input.' . $name)) {
+        array_forget($_SESSION, 'input.' . $name);
     }
 
     return $input ?? $default;
