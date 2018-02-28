@@ -349,6 +349,7 @@ $routes = [
     ['GET',      '/admin/forum/restatement', 'Admin\ForumController@restatement'],
     ['GET',      '/admin/forum/[i:id]', 'Admin\ForumController@forum'],
     ['GET|POST', '/admin/topic/edit/[i:id]', 'Admin\ForumController@editTopic'],
+    ['GET|POST', '/admin/topic/move/[i:id]', 'Admin\ForumController@moveTopic'],
 
 
     ['GET|POST', '/admin/load', 'admin/load.php'],

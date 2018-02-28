@@ -247,7 +247,6 @@ class ForumController extends AdminController
                     'moderators' => $moderators,
                     'locked'     => $locked,
                     'closed'     => $closed,
-                    'updated_at' => SITETIME,
                 ]);
 
                 setFlash('success', 'Тема успешно отредактирована!');
@@ -262,10 +261,77 @@ class ForumController extends AdminController
     }
 
     /**
-     * Перемещение темы
+     * Перенос темы
      */
     public function moveTopic($id)
     {
+        $topic = Topic::query()->find($id);
 
+        if (! $topic) {
+            abort(404, 'Данной темы не существует!');
+        }
+
+        if (Request::isMethod('post')) {
+            $token = check(Request::input('token'));
+            $fid   = int(Request::input('fid'));
+
+            $validator = new Validator();
+            $validator->equal($token, $_SESSION['token'], 'Неверный идентификатор сессии, повторите действие!');
+
+            $forum = Forum::find($fid);
+
+            if ($forum) {
+                if ($forum->closed) {
+                    $validator->addError(['forum' => 'В закрытый раздел запрещено перемещать темы!']);
+                }
+
+                if ($topic->forum_id == $forum->id) {
+                    $validator->addError(['forum' => 'Нельзя переносить тему в этот же раздел!']);
+                }
+            } else {
+                $validator->addError(['forum' => 'Выбранного раздела не существует!']);
+            }
+
+            if ($validator->isValid()) {
+
+                var_dump($topic->toArray());
+
+                $topic->update([
+                    'forum_id' => $forum->id,
+                ]);
+
+
+                var_dump($topic->toArray(), $topic->getOriginal('forum_id')); exit;
+
+/*                $topic->forum()->update([
+                    'last_topic_id' => '',
+                ]);
+
+
+                // Ищем последние темы в форумах для обновления списка последних тем
+                $oldlast = DB::run() -> queryFetch("SELECT * FROM `topics` WHERE `forum_id`=? ORDER BY `updated_at` DESC LIMIT 1;", [$topics['forum_id']]);
+                $newlast = DB::run() -> queryFetch("SELECT * FROM `topics` WHERE `forum_id`=? ORDER BY `updated_at` DESC LIMIT 1;", [$section]);
+
+                DB::update("UPDATE `forums` SET `last_topic_id`=? WHERE `id`=?;", [$oldlast['id'], $oldlast['forum_id']]);
+
+                DB::update("UPDATE `forums` SET `last_topic_id`=? WHERE `id`=?;", [$newlast['id'], $newlast['forum_id']]);*/
+
+
+
+                setFlash('success', 'Тема успешно перенесена!');
+                redirect('/admin/forum/' . $topic->forum_id);
+            } else {
+                setInput(Request::all());
+                setFlash('danger', $validator->getErrors());
+            }
+        }
+
+        $forums = Forum::query()
+            ->where('parent_id', 0)
+            ->with('children')
+            ->orderBy('sort')
+            ->get();
+
+        return view('admin/forum/move_topic', compact('forums', 'topic'));
     }
 }

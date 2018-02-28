@@ -58,10 +58,10 @@
             <a href="/admin/forum?act=acttopic&amp;do=unlocked&amp;tid={{ $topic->id }}&amp;page={{ $page['current'] }}&amp;token={{ $_SESSION['token'] }}">Открепить</a> /
         @endif
 
-        <a href="/admin/forum?act=edittopic&amp;tid={{ $topic->id }}&amp;page={{ $page['current'] }}">Изменить</a> /
-        <a href="/admin/forum?act=movetopic&amp;tid={{ $topic->id }}">Переместить</a> /
-        <a href="/admin/forum?act=deltopics&amp;fid={{ $topic->forum_id }}&amp;del={{ $topic->id }}&amp;token={{ $_SESSION['token'] }}" onclick="return confirm('Вы действительно хотите удалить данную тему?')">Удалить</a> /
-        <a href="/admin/forum?act=topic&amp;tid={{ $topic->id }}&amp;page={{ $page['current'] }}">Управление</a><br>
+        <a href="/admin/topic/edit/{{ $topic->id }}&amp;page={{ $page['current'] }}">Изменить</a> /
+        <a href="/admin/topic/move/{{ $topic->id }}">Переместить</a> /
+        <a href="/admin/topic/delete/{{ $topic->id }}?token={{ $_SESSION['token'] }}" onclick="return confirm('Вы действительно хотите удалить данную тему?')">Удалить</a> /
+        <a href="/admin/topic/{{ $topic->id }}?page={{ $page['current'] }}">Управление</a><br>
     @endif
 
     @if ($vote)
