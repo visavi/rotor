@@ -7,6 +7,7 @@ use App\Classes\Validator;
 use App\Models\Forum;
 use App\Models\Topic;
 use App\Models\User;
+use Illuminate\Database\Capsule\Manager as DB;
 
 class ForumController extends AdminController
 {
@@ -278,7 +279,7 @@ class ForumController extends AdminController
             $validator = new Validator();
             $validator->equal($token, $_SESSION['token'], 'Неверный идентификатор сессии, повторите действие!');
 
-            $forum = Forum::find($fid);
+            $forum = Forum::query()->find($fid);
 
             if ($forum) {
                 if ($forum->closed) {
@@ -294,32 +295,29 @@ class ForumController extends AdminController
 
             if ($validator->isValid()) {
 
-                var_dump($topic->toArray());
+                $oldForumId = $topic->forum_id;
 
                 $topic->update([
                     'forum_id' => $forum->id,
                 ]);
 
-
-                var_dump($topic->toArray(), $topic->getOriginal('forum_id')); exit;
-
-/*                $topic->forum()->update([
-                    'last_topic_id' => '',
+                // Ищем последние темы в форумах для обновления списка последних тем
+                $newTopic = Topic::query()->where('forum_id', $forum->id)->orderBy('updated_at', 'desc')->first();
+                $topic->forum()->update([
+                    'last_topic_id' => $newTopic ? $newTopic->id : 0,
+                    'topics'        => DB::raw('topics + 1'),
+                    'posts'         => DB::raw('posts + ' . $topic->posts),
                 ]);
 
-
-                // Ищем последние темы в форумах для обновления списка последних тем
-                $oldlast = DB::run() -> queryFetch("SELECT * FROM `topics` WHERE `forum_id`=? ORDER BY `updated_at` DESC LIMIT 1;", [$topics['forum_id']]);
-                $newlast = DB::run() -> queryFetch("SELECT * FROM `topics` WHERE `forum_id`=? ORDER BY `updated_at` DESC LIMIT 1;", [$section]);
-
-                DB::update("UPDATE `forums` SET `last_topic_id`=? WHERE `id`=?;", [$oldlast['id'], $oldlast['forum_id']]);
-
-                DB::update("UPDATE `forums` SET `last_topic_id`=? WHERE `id`=?;", [$newlast['id'], $newlast['forum_id']]);*/
-
-
+                $oldTopic = Topic::query()->where('forum_id', $oldForumId)->orderBy('updated_at', 'desc')->first();
+                Forum::query()->where('id', $oldForumId)->update([
+                    'last_topic_id' => $oldTopic ? $oldTopic->id : 0,
+                    'topics'        => $oldTopic ? DB::raw('topics - 1') : 0,
+                    'posts'         => $oldTopic ? DB::raw('posts - ' . $oldTopic->posts) : 0,
+                ]);
 
                 setFlash('success', 'Тема успешно перенесена!');
-                redirect('/admin/forum/' . $topic->forum_id);
+                //redirect('/admin/forum/' . $topic->forum_id);
             } else {
                 setInput(Request::all());
                 setFlash('danger', $validator->getErrors());

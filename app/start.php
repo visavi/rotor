@@ -29,7 +29,7 @@ if (empty($_SESSION['id']) && empty($_SESSION['password'])) {
             if ($cookLogin == $user->login && $cookPass == md5($user->password.env('APP_KEY'))) {
                 session_regenerate_id(1);
 
-                $_SESSION['id'] = $user->id;
+                $_SESSION['id']       = $user->id;
                 $_SESSION['password'] = md5(env('APP_KEY').$user->password);
 
                 $authorization = Login::query()
@@ -40,15 +40,15 @@ if (empty($_SESSION['id']) && empty($_SESSION['password'])) {
                 if (! $authorization) {
 
                     Login::query()->create([
-                        'user_id' => $user->id,
-                        'ip'      => getIp(),
-                        'brow'    => getBrowser(),
+                        'user_id'    => $user->id,
+                        'ip'         => getIp(),
+                        'brow'       => getBrowser(),
                         'created_at' => SITETIME,
                     ]);
                 }
 
                 $user->update([
-                    'visits'        => DB::raw('visits + 1'),
+                    'visits'     => DB::raw('visits + 1'),
                     'updated_at' => SITETIME
                 ]);
             }

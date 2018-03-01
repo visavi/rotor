@@ -52,7 +52,7 @@
         <hr>
     @endif
 
-    @if ($topics)
+    @if ($topics->isNotEmpty())
         @foreach ($topics as $topic)
             <div class="b" id="topic_{{ $topic->id }}">
                 <i class="fa {{ $topic->getIcon() }} text-muted"></i>
@@ -68,12 +68,11 @@
 
         {!! pagination($page) !!}
 
-    @elseif ($forums->closed)
+    @elseif ($forum->closed)
         {!! showError('В данном разделе запрещено создавать темы!') !!}
     @else
         {!! showError('Тем еще нет, будь первым!') !!}
     @endif
-
 
     <a href="/rules">Правила</a> /
     <a href="/forum/top/themes">Топ тем</a> /
