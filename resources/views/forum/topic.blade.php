@@ -46,21 +46,21 @@
     <hr>
 
     @if (isAdmin())
-        @if (empty($topic->closed))
-            <a href="/admin/forum?act=acttopic&amp;do=closed&amp;tid={{ $topic->id }}&amp;page={{ $page['current'] }}&amp;token={{ $_SESSION['token'] }}">Закрыть</a> /
+        @if ($topic->closed)
+            <a href="/admin/topic/action/{{ $topic->id }}?type=open&amp;page={{ $page['current'] }}&amp;token={{ $_SESSION['token'] }}">Открыть</a> /
         @else
-            <a href="/admin/forum?act=acttopic&amp;do=open&amp;tid={{ $topic->id }}&amp;page={{ $page['current'] }}&amp;token={{ $_SESSION['token'] }}">Открыть</a> /
+            <a href="/admin/topic/action/{{ $topic->id }}?type=closed&amp;page={{ $page['current'] }}&amp;token={{ $_SESSION['token'] }}">Закрыть</a> /
         @endif
 
-        @if (empty($topic->locked))
-            <a href="/admin/forum?act=acttopic&amp;do=locked&amp;tid={{ $topic->id }}&amp;page={{ $page['current'] }}&amp;token={{ $_SESSION['token'] }}">Закрепить</a> /
+        @if ($topic->locked)
+            <a href="/admin/topic/action/{{ $topic->id }}?type=unlocked&amp;page={{ $page['current'] }}&amp;token={{ $_SESSION['token'] }}">Открепить</a> /
         @else
-            <a href="/admin/forum?act=acttopic&amp;do=unlocked&amp;tid={{ $topic->id }}&amp;page={{ $page['current'] }}&amp;token={{ $_SESSION['token'] }}">Открепить</a> /
+            <a href="/admin/topic/action/{{ $topic->id }}?type=locked&amp;page={{ $page['current'] }}&amp;token={{ $_SESSION['token'] }}">Закрепить</a> /
         @endif
 
-        <a href="/admin/topic/edit/{{ $topic->id }}&amp;page={{ $page['current'] }}">Изменить</a> /
+        <a href="/admin/topic/edit/{{ $topic->id }}">Изменить</a> /
         <a href="/admin/topic/move/{{ $topic->id }}">Переместить</a> /
-        <a href="/admin/topic/delete/{{ $topic->id }}?token={{ $_SESSION['token'] }}" onclick="return confirm('Вы действительно хотите удалить данную тему?')">Удалить</a> /
+        <a href="/admin/topic/delete?del={{ $topic->id }}&amp;token={{ $_SESSION['token'] }}" onclick="return confirm('Вы действительно хотите удалить данную тему?')">Удалить</a> /
         <a href="/admin/topic/{{ $topic->id }}?page={{ $page['current'] }}">Управление</a><br>
     @endif
 

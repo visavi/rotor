@@ -340,6 +340,68 @@ class ForumController extends AdminController
     }
 
     /**
+     * Закрытие и закрепление тем
+     */
+    public function actionTopic($id)
+    {
+        $page  = int(Request::input('page', 1));
+        $token = check(Request::input('token'));
+        $type  = check(Request::input('type'));
+
+        $topic = Topic::query()->find($id);
+
+        if (! $topic) {
+            abort(404, 'Данной темы не существует!');
+        }
+
+        if ($token == $_SESSION['token']) {
+
+            switch ($type):
+                case 'closed':
+                    $topic->update(['closed' => 1]);
+
+                    $vote = Vote::query()->where('topic_id', $topic->id)->first();
+                    if ($vote) {
+                        $vote->update(['closed' => 1]);
+                        $vote->pollings()->delete();
+                    }
+
+                    setFlash('success', 'Тема успешно закрыта!');
+                    break;
+
+                case 'open':
+                    $topic->update(['closed' => 0]);
+
+                    $vote = Vote::query()->where('topic_id', $topic->id)->first();
+                    if ($vote) {
+                        $vote->update(['closed' => 0]);
+                    }
+
+                    setFlash('success', 'Тема успешно открыта!');
+                    break;
+
+                case 'locked':
+                    $topic->update(['locked' => 1]);
+                    setFlash('success', 'Тема успешно закреплена!');
+                    break;
+
+                case 'unlocked':
+                    $topic->update(['locked' => 0]);
+                    setFlash('success', 'Тема успешно откреплена!');
+                    break;
+
+                default:
+                    setFlash('danger', 'Не выбрано действие для темы!');
+            endswitch;
+
+        } else {
+            setFlash('danger', 'Ошибка! Неверный идентификатор сессии, повторите действие!');
+        }
+
+        redirect('/admin/topic/' . $topic->id . '?page=' . $page);
+    }
+
+    /**
      * Удаление тем
      */
     public function deleteTopic()
