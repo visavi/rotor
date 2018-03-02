@@ -4,9 +4,15 @@ namespace App\Controllers\Admin;
 
 use App\Classes\Request;
 use App\Classes\Validator;
+use App\Models\Bookmark;
+use App\Models\File;
 use App\Models\Forum;
+use App\Models\Polling;
+use App\Models\Post;
 use App\Models\Topic;
 use App\Models\User;
+use App\Models\Vote;
+use App\Models\VoteAnswer;
 use Illuminate\Database\Capsule\Manager as DB;
 
 class ForumController extends AdminController
@@ -304,20 +310,20 @@ class ForumController extends AdminController
                 // Ищем последние темы в форумах для обновления списка последних тем
                 $newTopic = Topic::query()->where('forum_id', $forum->id)->orderBy('updated_at', 'desc')->first();
                 $topic->forum()->update([
-                    'last_topic_id' => $newTopic ? $newTopic->id : 0,
                     'topics'        => DB::raw('topics + 1'),
                     'posts'         => DB::raw('posts + ' . $topic->posts),
+                    'last_topic_id' => $newTopic ? $newTopic->id : 0,
                 ]);
 
                 $oldTopic = Topic::query()->where('forum_id', $oldForumId)->orderBy('updated_at', 'desc')->first();
                 Forum::query()->where('id', $oldForumId)->update([
-                    'last_topic_id' => $oldTopic ? $oldTopic->id : 0,
                     'topics'        => $oldTopic ? DB::raw('topics - 1') : 0,
                     'posts'         => $oldTopic ? DB::raw('posts - ' . $oldTopic->posts) : 0,
+                    'last_topic_id' => $oldTopic ? $oldTopic->id : 0,
                 ]);
 
                 setFlash('success', 'Тема успешно перенесена!');
-                //redirect('/admin/forum/' . $topic->forum_id);
+                redirect('/admin/forum/' . $topic->forum_id);
             } else {
                 setInput(Request::all());
                 setFlash('danger', $validator->getErrors());
@@ -331,5 +337,86 @@ class ForumController extends AdminController
             ->get();
 
         return view('admin/forum/move_topic', compact('forums', 'topic'));
+    }
+
+    /**
+     * Удаление тем
+     */
+    public function deleteTopic()
+    {
+        $page  = int(Request::input('page', 1));
+        $token = check(Request::input('token'));
+        $del   = intar(Request::input('del'));
+        $fid   = int(Request::input('fid'));
+
+        $forum = Forum::query()->with('parent')->find($fid);
+
+        if (! $forum) {
+            abort(404, 'Выбран несуществующий раздел!');
+        }
+
+        $validator = new Validator();
+        $validator->equal($token, $_SESSION['token'], 'Неверный идентификатор сессии, повторите действие!')
+            ->true($del, 'Отсутствуют выбранные записи для удаления!');
+
+        if ($validator->isValid()) {
+
+            // Удаление загруженных файлов
+            foreach ($del as $topicId) {
+
+                removeDir(UPLOADS . '/forum/' . $topicId);
+                array_map('unlink', glob(UPLOADS.'/thumbnail/uploads_forum_'.$topicId.'_*.{jpg,jpeg,png,gif}', GLOB_BRACE));
+
+                // Выбирает files.id только если они есть в posts
+                $delPosts = Post::query()
+                    ->where('topic_id', $topicId)
+                    ->join('files', function($join) {
+                        $join->on('posts.id', 'files.relate_id')
+                            ->where('files.relate_type', Post::class);
+                    })
+                    ->pluck('files.id')
+                    ->all();
+
+                if ($delPosts) {
+                    File::query()->whereIn('id', $delPosts)->delete();
+                }
+            }
+
+            // Удаление голосований
+            $votesIds = Vote::query()->whereIn('topic_id', $del)->pluck('id')->all();
+
+            if ($votesIds) {
+                Vote::query()->whereIn('id', $votesIds)->delete();
+                VoteAnswer::query()->whereIn('vote_id', $votesIds)->delete();
+                Polling::query()->where('relate_type', Vote::class)->whereIn('relate_id', $votesIds)->delete();
+            }
+
+            // Удаление закладок
+            Bookmark::query()->whereIn('topic_id', $del)->delete();
+            $deltopics = Topic::query()->whereIn('id', $del)->delete();
+            $delposts  = Post::query()->whereIn('topic_id', $del)->delete();
+
+
+            // Обновление счетчиков
+            $lastTopic = Topic::query()->where('forum_id', $forum->id)->orderBy('updated_at', 'desc')->first();
+            Forum::query()->where('id', $forum->id)->update([
+                'topics'        => $lastTopic ? DB::raw('topics - ' . $deltopics) : 0,
+                'posts'         => $lastTopic ? DB::raw('posts - ' . $delposts) : 0,
+                'last_topic_id' => $lastTopic ? $lastTopic->id : 0,
+            ]);
+
+            // Обновление родительского форума
+            if ($forum->parent) {
+                $forum->parent->update([
+                    'last_topic_id' => $lastTopic ? $lastTopic->id : 0
+                ]);
+            }
+
+            setFlash('success', 'Выбранные темы успешно удалены!');
+        } else {
+            setFlash('danger', $validator->getErrors());
+        }
+
+        redirect('/admin/forum/' . $forum->id . '?page=' . $page);
     }
 }

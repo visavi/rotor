@@ -350,7 +350,7 @@ $routes = [
     ['GET',      '/admin/forum/[i:id]', 'Admin\ForumController@forum'],
     ['GET|POST', '/admin/topic/edit/[i:id]', 'Admin\ForumController@editTopic'],
     ['GET|POST', '/admin/topic/move/[i:id]', 'Admin\ForumController@moveTopic'],
-
+    ['GET|POST', '/admin/topic/delete', 'Admin\ForumController@deleteTopic'],
 
     ['GET|POST', '/admin/load', 'admin/load.php'],
     ['GET|POST', '/admin/newload', 'admin/newload.php'],

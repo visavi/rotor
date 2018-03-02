@@ -24,7 +24,7 @@
 
     @if ($topics->isNotEmpty())
 
-        <form action="/admin/topic/delete?page={{ $page['current'] }}" method="post">
+        <form action="/admin/topic/delete?fid={{ $forum->id }}&amp;page={{ $page['current'] }}" method="post">
             <input type="hidden" name="token" value="{{ $_SESSION['token'] }}">
             <div class="form text-right">
                 <label for="all">Отметить все</label>
