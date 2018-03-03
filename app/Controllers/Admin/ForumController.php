@@ -232,8 +232,8 @@ class ForumController extends AdminController
 
         if (Request::isMethod('post')) {
 
-            $token = check(Request::input('token'));
-            $title       = check(Request::input('title'));
+            $token      = check(Request::input('token'));
+            $title      = check(Request::input('title'));
             $note       = check(Request::input('note'));
             $moderators = check(Request::input('moderators'));
             $locked     = empty(Request::input('locked')) ? 0 : 1;
@@ -457,7 +457,6 @@ class ForumController extends AdminController
             Bookmark::query()->whereIn('topic_id', $del)->delete();
             $deltopics = Topic::query()->whereIn('id', $del)->delete();
             $delposts  = Post::query()->whereIn('topic_id', $del)->delete();
-
 
             // Обновление счетчиков
             $lastTopic = Topic::query()->where('forum_id', $forum->id)->orderBy('updated_at', 'desc')->first();
