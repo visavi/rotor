@@ -36,10 +36,10 @@
             <div class="b"><i class="fa fa-file-alt fa-lg text-muted"></i>
             <b><a href="/forum/{{ $child->id }}">{{ $child->title }}</a></b> ({{ $child->topics }}/{{ $child->posts }})</div>
 
-            @if ($child->lastTopic)
+            @if ($child->lastTopic->id)
                 <div>
                     Тема: <a href="/topic/end/{{ $child->lastTopic->id }}">{{ $child->lastTopic->title }}</a><br>
-                    @if ($child->lastTopic->lastPost)
+                    @if ($child->lastTopic->lastPost->id)
                         Сообщение: {{ $child->lastTopic->lastPost->user->login }} ({{ dateFixed($child->lastTopic->lastPost->created_at) }})
                     @endif
                 </div>

@@ -170,7 +170,7 @@ class TopicController extends BaseController
                 ]);
 
                 // Обновление родительского форума
-                if ($topic->parent_id) {
+                if ($topic->forum->parent_id) {
                     $topic->forum->parent->update([
                         'last_topic_id' => $topic->id,
                     ]);
@@ -181,7 +181,6 @@ class TopicController extends BaseController
             $parseText = preg_replace('|\[quote(.*?)\](.*?)\[/quote\]|s', '', $msg);
 
             preg_match_all('|\[b\](.*?)\[\/b\]|s', $parseText, $matches);
-
 
             if (isset($matches[1])) {
                 $usersAnswer = array_unique($matches[1]);

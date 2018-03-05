@@ -19,6 +19,14 @@ class Topic extends BaseModel
     protected $guarded = [];
 
     /**
+     * Возвращает сообщения
+     */
+    public function posts()
+    {
+        return $this->hasMany(Post::class, 'topic_id');
+    }
+
+    /**
      * Возвращает последнее сообщение
      */
     public function lastPost()
@@ -82,17 +90,17 @@ class Topic extends BaseModel
         if (5 < $pg_cnt) {
 
             if (6 < $pg_cnt) {
-                $pages[] = array(
+                $pages[] = [
                     'separator' => true,
                     'name' => ' ... ',
-                );
+                ];
             }
 
-            $pages[] = array(
+            $pages[] = [
                 'page' => $pg_cnt,
                 'title' => $pg_cnt.' страница',
                 'name' => $pg_cnt,
-            );
+            ];
         }
 
         return view('forum/_pagination', compact('pages', 'link'));
