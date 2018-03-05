@@ -60,7 +60,7 @@
 
         <a href="/admin/topic/edit/{{ $topic->id }}">Изменить</a> /
         <a href="/admin/topic/move/{{ $topic->id }}">Переместить</a> /
-        <a href="/admin/topic/delete?del={{ $topic->id }}&amp;token={{ $_SESSION['token'] }}" onclick="return confirm('Вы действительно хотите удалить данную тему?')">Удалить</a> /
+        <a href="/admin/topic/delete?fid={{ $topic->forum->id }}&amp;del={{ $topic->id }}&amp;token={{ $_SESSION['token'] }}" onclick="return confirm('Вы действительно хотите удалить данную тему?')">Удалить</a> /
         <a href="/admin/topic/{{ $topic->id }}?page={{ $page['current'] }}">Управление</a><br>
     @endif
 
