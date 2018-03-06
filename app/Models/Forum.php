@@ -60,8 +60,8 @@ class Forum extends BaseModel
             ->first();
 
         $this->update([
-            'topics'        => $lastTopic ? (int) $topic->topics : 0,
-            'posts'         => $lastTopic ? (int) $topic->posts : 0,
+            'count_topics'  => $lastTopic ? (int) $topic->count_topics : 0,
+            'count_posts'   => $lastTopic ? (int) $topic->count_posts : 0,
             'last_topic_id' => $lastTopic ? $lastTopic->id : 0,
         ]);
 

@@ -218,7 +218,7 @@ class OfferController extends BaseController
                     'brow'        => getBrowser(),
                 ]);
 
-                $offer->increment('comments');
+                $offer->increment('count_comments');
 
                 setFlash('success', 'Комментарий успешно добавлен!');
                 redirect('/offers/end/' . $offer->id);

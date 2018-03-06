@@ -108,8 +108,8 @@ class ActiveController extends BaseController
         if ($validator->isValid()) {
 
             $post->delete();
-            $post->topic->decrement('posts');
-            $post->topic->forum->decrement('posts');
+            $post->topic->decrement('count_posts');
+            $post->topic->forum->decrement('count_posts');
 
             exit(json_encode(['status' => 'success']));
         } else {

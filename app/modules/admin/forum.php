@@ -183,7 +183,7 @@
                     // ------ Удаление загруженных файлов -------//
 
                     $delposts = DB::run() -> exec("DELETE FROM `posts` WHERE `id` IN (".$del.") AND `topic_id`=".$tid.";");
-                    DB::update("UPDATE `topics` SET posts2=posts2-? WHERE `id`=?;", [$delposts, $tid]);
+                    DB::update("UPDATE `topics` SET posts=posts-? WHERE `id`=?;", [$delposts, $tid]);
                     DB::update("UPDATE `forums` SET `posts`=`posts`-? WHERE `id`=?;", [$delposts, $topics['forum_id']]);
 
                     setFlash('success', 'Выбранные сообщения успешно удалены!');

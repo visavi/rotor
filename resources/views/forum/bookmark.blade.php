@@ -18,7 +18,7 @@
 
                     <i class="fa {{ $topic->topic->getIcon() }} text-muted"></i>
                     <b><a href="/topic/{{ $topic->id }}">{{ $topic->title }}</a></b>
-                    ({{ $topic->posts }}{!! ($topic->posts > $topic->book_posts) ? '/<span style="color:#00cc00">+' . ($topic->posts - $topic->book_posts) . '</span>' : '' !!})
+                    ({{ $topic->count_posts }}{!! ($topic->count_posts > $topic->bookmark_posts) ? '/<span style="color:#00cc00">+' . ($topic->count_posts - $topic->bookmark_posts) . '</span>' : '' !!})
                 </div>
 
                 <div>

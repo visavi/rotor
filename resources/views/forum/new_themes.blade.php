@@ -12,7 +12,7 @@
     @foreach ($topics as $data)
         <div class="b">
             <i class="fa {{ $data->getIcon() }} text-muted"></i>
-            <b><a href="/topic/{{ $data->id }}">{{ $data->title }}</a></b> ({{ $data->posts }})
+            <b><a href="/topic/{{ $data->id }}">{{ $data->title }}</a></b> ({{ $data->count_posts }})
         </div>
 
         <div>

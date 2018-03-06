@@ -34,7 +34,7 @@
         @foreach ($forum->children as $child)
 
             <div class="b"><i class="fa fa-file-alt fa-lg text-muted"></i>
-            <b><a href="/forum/{{ $child->id }}">{{ $child->title }}</a></b> ({{ $child->topics }}/{{ $child->posts }})</div>
+            <b><a href="/forum/{{ $child->id }}">{{ $child->title }}</a></b> ({{ $child->count_topics }}/{{ $child->count_posts }})</div>
 
             @if ($child->lastTopic->id)
                 <div>
@@ -56,7 +56,7 @@
         @foreach ($topics as $topic)
             <div class="b" id="topic_{{ $topic->id }}">
                 <i class="fa {{ $topic->getIcon() }} text-muted"></i>
-                <b><a href="/topic/{{ $topic->id }}">{{ $topic->title }}</a></b> ({{ $topic->posts }})
+                <b><a href="/topic/{{ $topic->id }}">{{ $topic->title }}</a></b> ({{ $topic->count_posts }})
             </div>
             <div>
                 @if ($topic->lastPost)

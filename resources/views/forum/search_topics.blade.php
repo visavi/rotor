@@ -13,7 +13,7 @@
     @foreach ($topics as $topic)
         <div class="b">
             <i class="fa {{ $topic->getIcon() }} text-muted"></i>
-            <b><a href="/topic/{{ $topic->id }}">{{ $topic->title }}</a></b> ({{ $topic->posts }})
+            <b><a href="/topic/{{ $topic->id }}">{{ $topic->title }}</a></b> ({{ $topic->count_posts }})
         </div>
         <div>
             {!! $topic->pagination() !!}

@@ -1000,7 +1000,7 @@ function statsLoad()
 {
     if (@filemtime(STORAGE.'/temp/statload.dat') < time() - 900) {
 
-        $totalLoads = Load::query()->sum('count');
+        $totalLoads = Load::query()->sum('count_downs');
 
         $totalNew = Down::query()->where('active', 1)
             ->where('created_at', '>', SITETIME - 86400 * 5)
@@ -1106,7 +1106,7 @@ function lastNews()
         if ($total > 0) {
             foreach ($news as $data) {
                 $data['text'] = str_replace('[cut]', '', $data->text);
-                echo '<i class="far fa-circle fa-lg text-muted"></i> <a href="/news/'.$data->id.'">'.$data->title.'</a> ('.$data->comments.') <i class="fa fa-caret-down news-title"></i><br>';
+                echo '<i class="far fa-circle fa-lg text-muted"></i> <a href="/news/'.$data->id.'">'.$data->title.'</a> ('.$data->count_comments.') <i class="fa fa-caret-down news-title"></i><br>';
 
                 echo '<div class="news-text" style="display: none;">'.bbCode($data->text).'<br>';
                 echo '<a href="/news/comments/'.$data->id.'">Комментарии</a> ';
@@ -1356,7 +1356,7 @@ function recentTopics($show = 5)
 
     if ($topics) {
         foreach ($topics as $topic) {
-            echo '<i class="far fa-circle fa-lg text-muted"></i>  <a href="/topic/'.$topic->id.'">'.$topic->title.'</a> ('.$topic->posts.')';
+            echo '<i class="far fa-circle fa-lg text-muted"></i>  <a href="/topic/'.$topic->id.'">'.$topic->title.'</a> ('.$topic->count_posts.')';
             echo '<a href="/topic/end/' . $topic->id . '">&raquo;</a><br>';
         }
     }
@@ -1414,7 +1414,7 @@ function recentBlogs($show = 5)
 
     if ($blogs) {
         foreach ($blogs as $blog) {
-            echo '<i class="far fa-circle fa-lg text-muted"></i> <a href="/article/'.$blog->id.'">'.$blog->title.'</a> ('.$blog->comments.')<br>';
+            echo '<i class="far fa-circle fa-lg text-muted"></i> <a href="/article/'.$blog->id.'">'.$blog->title.'</a> ('.$blog->count_comments.')<br>';
         }
     }
 }
@@ -1447,31 +1447,31 @@ function restatement($mode)
 {
     switch ($mode) {
         case 'forum':
-            DB::update('update topics set posts2 = (select count(*) from posts where topics.id = posts.topic_id)');
-            DB::update('update forums set topics = (select count(*) from topics where forums.id = topics.forum_id)');
-            DB::update('update forums set posts = (select IFNULL(SUM(posts), 0) from topics where forums.id = topics.forum_id)');
+            DB::update('update topics set count_posts = (select count(*) from count_posts where topics.id = posts.topic_id)');
+            DB::update('update forums set count_topics = (select count(*) from count_topics where forums.id = topics.forum_id)');
+            DB::update('update forums set count_posts = (select ifnull(sum(count_posts), 0) from topics where forums.id = topics.forum_id)');
             break;
 
         case 'blog':
-            DB::update('update categories set count = (select count(*) from blogs where categories.id = blogs.category_id)');
-            DB::update('update blogs set comments = (select count(*) from comments where relate_type = "'.addslashes(Blog::class).'" and blogs.id = comments.relate_id)');
+            DB::update('update categories set count_blogs = (select count(*) from blogs where categories.id = blogs.category_id)');
+            DB::update('update blogs set count_comments = (select count(*) from comments where relate_type = "'.addslashes(Blog::class).'" and blogs.id = comments.relate_id)');
             break;
 
         case 'load':
-            DB::update('update loads set count = (select count(*) from downs where loads.id = downs.category_id and active = ?)', [1]);
-            DB::update('update downs set comments = (select count(*) from comments where relate_type = "'.addslashes(Down::class).'" and downs.id = comments.relate_id)');
+            DB::update('update loads set count_downs = (select count(*) from downs where loads.id = downs.category_id and active = ?)', [1]);
+            DB::update('update downs set count_comments = (select count(*) from comments where relate_type = "'.addslashes(Down::class).'" and downs.id = comments.relate_id)');
             break;
 
         case 'news':
-            DB::update('update news set comments = (select count(*) from comments where relate_type = "'.addslashes(News::class).'" and news.id = comments.relate_id)');
+            DB::update('update news set count_comments = (select count(*) from comments where relate_type = "'.addslashes(News::class).'" and news.id = comments.relate_id)');
             break;
 
         case 'photo':
-            DB::update('update photo set comments = (select count(*) from comments where relate_type=  "'.addslashes(Photo::class).'" and photo.id = comments.relate_id)');
+            DB::update('update photo set count_comments = (select count(*) from comments where relate_type=  "'.addslashes(Photo::class).'" and photo.id = comments.relate_id)');
             break;
 
         case 'offer':
-            DB::update('update offers set comments = (select count(*) from comments where relate_type=  "'.addslashes(Offer::class).'" and offers.id = comments.relate_id)');
+            DB::update('update offers set count_comments = (select count(*) from comments where relate_type=  "'.addslashes(Offer::class).'" and offers.id = comments.relate_id)');
             break;
     }
 }

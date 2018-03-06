@@ -23,7 +23,7 @@ class TopicController extends BaseController
     public function index($id)
     {
         $topic = Topic::query()
-            ->select('topics.*', 'bookmarks.posts as bookmark_posts')
+            ->select('topics.*', 'bookmarks.count_posts as bookmark_posts')
             ->where('topics.id', $id)
             ->leftJoin('bookmarks', function ($join) {
                 $join->on('topics.id', '=', 'bookmarks.topic_id')
@@ -43,7 +43,7 @@ class TopicController extends BaseController
             ->select('posts.*', 'pollings.vote')
             ->where('topic_id', $topic->id)
             ->leftJoin('pollings', function ($join) {
-                $join->on('posts.id', '=', 'pollings.relate_id')
+                $join->on('posts.id', 'pollings.relate_id')
                     ->where('pollings.relate_type', Post::class)
                     ->where('pollings.user_id', getUser('id'));
             })
@@ -54,11 +54,11 @@ class TopicController extends BaseController
             ->get();
 
         if (getUser()) {
-            if ($topic->posts > $topic->bookmark_posts) {
+            if ($topic->count_posts > $topic->bookmark_posts) {
                 Bookmark::query()
                     ->where('topic_id', $topic->id)
                     ->where('user_id', getUser('id'))
-                    ->update(['posts' => $topic->posts]);
+                    ->update(['count_posts' => $topic->count_posts]);
             }
         }
 
@@ -159,13 +159,13 @@ class TopicController extends BaseController
                 ]);
 
                 $topic->update([
-                    'posts'        => DB::raw('posts + 1'),
+                    'count_posts'  => DB::raw('count_posts + 1'),
                     'last_post_id' => $post->id,
                     'updated_at'   => SITETIME,
                 ]);
 
                 $topic->forum->update([
-                    'posts'         => DB::raw('posts + 1'),
+                    'count_posts'   => DB::raw('count_posts + 1'),
                     'last_topic_id' => $topic->id,
                 ]);
 
@@ -311,8 +311,8 @@ class TopicController extends BaseController
 
             $delPosts = Post::query()->whereIn('id', $del)->delete();
 
-            $topic->decrement('posts', $delPosts);
-            $topic->forum->decrement('posts', $delPosts);
+            $topic->decrement('count_posts', $delPosts);
+            $topic->forum->decrement('count_posts', $delPosts);
 
             setFlash('success', 'Выбранные сообщения успешно удалены!');
         } else {
@@ -633,7 +633,7 @@ class TopicController extends BaseController
             abort(404, 'Выбранная вами тема не существует, возможно она была удалена!');
         }
 
-        $end = ceil($topic['posts'] / setting('forumpost'));
+        $end = ceil($topic->count_posts / setting('forumpost'));
         redirect('/topic/' . $topic->id . '?page=' . $end);
     }
 }

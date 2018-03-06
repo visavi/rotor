@@ -166,7 +166,7 @@ class BlogController extends BaseController
                 // Обновление счетчиков
                 if ($blog->category_id != $category->id) {
                     $category->increment('count');
-                    Category::query()->where('id', $blog->category_id)->decrement('count');
+                    Category::query()->where('id', $blog->category_id)->decrement('count_blogs');
                 }
 
                 $blog->update([
@@ -274,7 +274,7 @@ class BlogController extends BaseController
                     'created_at'  => SITETIME,
                 ]);
 
-                $category->increment('count');
+                $category->increment('count_blogs');
 
                 $user = User::query()->where('id', getUser('id'));
                 $user->update([
@@ -336,7 +336,7 @@ class BlogController extends BaseController
                     'money'       => DB::raw('money + 5'),
                 ]);
 
-                $blog->increment('comments');
+                $blog->increment('count_comments');
 
                 setFlash('success', 'Комментарий успешно добавлен!');
                 redirect('/article/end/' . $blog->id);
@@ -594,7 +594,7 @@ class BlogController extends BaseController
         $page = paginate(setting('blogpost'), $total);
 
         $comments = Comment::query()
-            ->select('comments.*', 'title', 'comments')
+            ->select('comments.*', 'title', 'count_comments')
             ->where('relate_type', Blog::class)
             ->leftJoin('blogs', 'comments.relate_id', '=', 'blogs.id')
             ->offset($page['offset'])
@@ -651,7 +651,7 @@ class BlogController extends BaseController
         $page = paginate(setting('blogpost'), $total);
 
         $comments = Comment::query()
-            ->select('comments.*', 'title', 'comments')
+            ->select('comments.*', 'title', 'count_comments')
             ->where('relate_type', Blog::class)
             ->where('comments.user_id', $user->id)
             ->leftJoin('blogs', 'comments.relate_id', '=', 'blogs.id')

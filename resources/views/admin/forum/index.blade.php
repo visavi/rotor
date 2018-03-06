@@ -15,7 +15,7 @@
             <div class="b">
                 <i class="fa fa-file-alt fa-lg text-muted"></i>
                 <b><a href="/admin/forum/{{ $forum->id }}">{{ $forum->title }}</a></b>
-                ({{ $forum->topics }}/{{ $forum->posts }})
+                ({{ $forum->count_topics }}/{{ $forum->count_posts }})
 
                 @if (!empty($forum->description))
                     <p><small>{{ $forum->description }}</small></p>
@@ -33,7 +33,7 @@
                 @if ($forum->children->isNotEmpty())
                     @foreach ($forum->children as $child)
                         <i class="fa fa-copy text-muted"></i> <b><a href="/admin/forum/{{ $child->id }}">{{ $child->title }}</a></b>
-                        ({{ $child->topics }}/{{ $child->posts }})
+                        ({{ $child->count_topics }}/{{ $child->count_posts }})
 
                         @if (isAdmin('boss'))
                             <a href="/admin/forum/edit/{{ $child->id }}"><i class="fa fa-pencil-alt"></i></a>

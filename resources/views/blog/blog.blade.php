@@ -12,7 +12,7 @@
         </div>
     @endif
 
-    <h1>{{ $category->name }} <small>(Статей: {{ $category->count }})</small></h1><br>
+    <h1>{{ $category->name }} <small>(Статей: {{ $category->count_blogs }})</small></h1><br>
 
     <ol class="breadcrumb">
         <li class="breadcrumb-item"><a href="/blog">Блоги</a></li>
@@ -37,7 +37,7 @@
             <div>
                 Автор: {!! profile($data->user) !!} ({{ dateFixed($data->created_at) }})<br>
                 Просмотров: {{ $data->visits }}<br>
-                <a href="/article/comments/{{ $data->id }}">Комментарии</a> ({{ $data->comments }})
+                <a href="/article/comments/{{ $data->id }}">Комментарии</a> ({{ $data->count_comments }})
                 <a href="/article/end/{{ $data->id }}">&raquo;</a>
             </div>
         @endforeach

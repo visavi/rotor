@@ -30,7 +30,7 @@ class BookmarkController extends BaseController
         $page  = paginate(setting('forumtem'), $total);
 
         $topics = Bookmark::query()
-            ->select('bookmarks.posts as book_posts', 'bookmarks.topic_id', 'topics.*')
+            ->select('bookmarks.count_posts as bookmark_posts', 'bookmarks.topic_id', 'topics.*')
             ->where('bookmarks.user_id', getUser('id'))
             ->leftJoin('topics', 'bookmarks.topic_id', '=', 'topics.id')
             ->with('topic.user', 'topic.lastPost.user')
@@ -70,9 +70,9 @@ class BookmarkController extends BaseController
                 exit(json_encode(['status' => 'deleted', 'message' => 'Тема успешно удалена из закладок!']));
             } else {
                 Bookmark::query()->create([
-                    'user_id'  => getUser('id'),
-                    'topic_id' => $tid,
-                    'posts'    => $topic['posts'],
+                    'user_id'     => getUser('id'),
+                    'topic_id'    => $tid,
+                    'count_posts' => $topic->count_posts,
                 ]);
                 exit(json_encode(['status' => 'added', 'message' => 'Тема успешно добавлена в закладки!']));
             }

@@ -169,7 +169,7 @@ class AjaxController extends BaseController
                 ->delete();
 
             if ($delComments) {
-                $type::query()->find($rid)->decrement('comments');
+                $type::query()->find($rid)->decrement('count_comments');
             }
 
             echo json_encode(['status' => 'success']);

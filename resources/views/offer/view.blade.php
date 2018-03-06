@@ -72,7 +72,7 @@
         @endforeach
 
         <div class="act">
-            <b><a href="/offers/comments/{{ $offer->id }}">Все комментарии</a></b> ({{ $offer->comments }})
+            <b><a href="/offers/comments/{{ $offer->id }}">Все комментарии</a></b> ({{ $offer->count_comments }})
             <a href="/offers/end/{{ $offer->id }}">&raquo;</a>
         </div><br>
 

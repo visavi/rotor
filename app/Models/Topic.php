@@ -84,14 +84,14 @@ class Topic extends BaseModel
      */
     public function pagination($url = '/topic')
     {
-        if (! $this->posts) {
+        if (! $this->count_posts) {
             return null;
         }
 
         $pages = [];
         $link = $url . '/' . $this->id;
 
-        $pg_cnt = ceil($this->posts / setting('forumpost'));
+        $pg_cnt = ceil($this->count_posts / setting('forumpost'));
 
         for ($i = 1; $i <= 5; $i++) {
             if ($i <= $pg_cnt) {

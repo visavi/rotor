@@ -132,12 +132,12 @@ class ForumController extends BaseController
                 ]);
 
                 $topic = Topic::query()->create([
-                    'forum_id'   => $forum->id,
-                    'title'      => $title,
-                    'user_id'    => getUser('id'),
-                    'posts'      => 1,
-                    'created_at' => SITETIME,
-                    'updated_at' => SITETIME,
+                    'forum_id'    => $forum->id,
+                    'title'       => $title,
+                    'user_id'     => getUser('id'),
+                    'count_posts' => 1,
+                    'created_at'  => SITETIME,
+                    'updated_at'  => SITETIME,
                 ]);
 
                 $post = Post::query()->create([
@@ -152,8 +152,8 @@ class ForumController extends BaseController
                 Topic::query()->where('id', $topic->id)->update(['last_post_id' => $post->id]);
 
                 $forum->update([
-                    'topics'        => DB::raw('topics + 1'),
-                    'posts'         => DB::raw('posts + 1'),
+                    'count_topics'  => DB::raw('count_topics + 1'),
+                    'count_posts'   => DB::raw('count_posts + 1'),
                     'last_topic_id' => $topic->id,
                 ]);
 
@@ -397,7 +397,7 @@ class ForumController extends BaseController
 
         $topics = Topic::query()
             ->where('closed', 0)
-            ->orderBy('posts', 'desc')
+            ->orderBy('count_posts', 'desc')
             ->limit($page['limit'])
             ->offset($page['offset'])
             ->with('forum', 'user', 'lastPost.user')

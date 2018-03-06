@@ -25,9 +25,9 @@
             <i class="fa fa-folder-open"></i>
             <b><a href="/load/{{ $category->id }}">{{ $category->name }}</a></b>
             @if ($category->new)
-                ({{ $category->count }}/<span style="color:#ff0000">+{{ $category->new->count }}</span>)<br>
+                ({{ $category->count_downs }}/<span style="color:#ff0000">+{{ $category->new->count_downs }}</span>)<br>
             @else
-                ({{ $category->count }})<br>
+                ({{ $category->count_downs }})<br>
             @endif
         </div>
 
@@ -36,9 +36,9 @@
                 @foreach ($category->children as $child)
                     <i class="fa fa-angle-right"></i> <b><a href="/load/{{ $child->id }}">{{ $child['name'] }}</a></b>
                     @if ($child->new)
-                        ({{ $child->count }}/<span style="color:#ff0000">+{{ $child->new->count }}</span>)<br>
+                        ({{ $child->count_downs }}/<span style="color:#ff0000">+{{ $child->new->count_downs }}</span>)<br>
                     @else
-                        ({{ $child->count }})<br>
+                        ({{ $child->count_downs }})<br>
                     @endif
                 @endforeach
             @endif

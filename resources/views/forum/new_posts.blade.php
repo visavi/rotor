@@ -12,7 +12,7 @@
     @foreach ($posts as $data)
         <div class="b">
             <i class="fa fa-file-alt"></i> <b><a href="/topic/{{ $data->topic_id }}/{{ $data->id }}">{{ $data->topic->title }}</a></b>
-            ({{ $data->topic->posts }})
+            ({{ $data->topic->count_posts }})
         </div>
         <div>
             {!! bbCode($data->text) !!}<br>

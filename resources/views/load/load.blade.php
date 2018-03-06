@@ -59,7 +59,7 @@
             @foreach ($category->children as $child)
                 <div class="b">
                     <i class="fa fa-folder-open"></i>
-                    <b><a href="/load/{{ $child->id }}">{{ $child->name }}</a></b> ({{ $child->count }})</div>
+                    <b><a href="/load/{{ $child->id }}">{{ $child->name }}</a></b> ({{ $child->count_downs }})</div>
             @endforeach
         </div>
         <hr>
@@ -81,7 +81,7 @@
             <?php $rating = $data->rated ? round($data->rating / $data->rated, 1) : 0; ?>
 
             Рейтинг: <b>{{ $rating }}</b> (Голосов: {{ $data->rated }})<br>
-            <a href="/down/comments/{{ $data->id }}">Комментарии</a> ({{ $data->comments }})
+            <a href="/down/comments/{{ $data->id }}">Комментарии</a> ({{ $data->count_comments }})
             <a href="/down/end/{{ $data->id }}">&raquo;</a></div>
         @endforeach
 

@@ -310,15 +310,15 @@ class ForumController extends AdminController
                 // Ищем последние темы в форумах для обновления списка последних тем
                 $newTopic = Topic::query()->where('forum_id', $forum->id)->orderBy('updated_at', 'desc')->first();
                 $topic->forum()->update([
-                    'topics'        => DB::raw('topics + 1'),
-                    'posts'         => DB::raw('posts + ' . $topic->posts),
+                    'count_topics'  => DB::raw('count_topics + 1'),
+                    'count_posts'   => DB::raw('count_posts + ' . $topic->count_posts),
                     'last_topic_id' => $newTopic ? $newTopic->id : 0,
                 ]);
 
                 $oldTopic = Topic::query()->where('forum_id', $oldForumId)->orderBy('updated_at', 'desc')->first();
                 Forum::query()->where('id', $oldForumId)->update([
-                    'topics'        => $oldTopic ? DB::raw('topics - 1') : 0,
-                    'posts'         => $oldTopic ? DB::raw('posts - ' . $oldTopic->posts) : 0,
+                    'count_topics'  => $oldTopic ? DB::raw('count_topics - 1') : 0,
+                    'count_posts'   => $oldTopic ? DB::raw('count_posts - ' . $oldTopic->posts) : 0,
                     'last_topic_id' => $oldTopic ? $oldTopic->id : 0,
                 ]);
 

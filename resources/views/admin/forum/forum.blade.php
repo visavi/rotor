@@ -34,7 +34,7 @@
                     </div>
 
                     <i class="fa {{ $topic->getIcon() }} text-muted"></i>
-                    <b><a href="/admin/topic/{{ $topic->id }}">{{ $topic->title }}</a></b> ({{ $topic->posts }})
+                    <b><a href="/admin/topic/{{ $topic->id }}">{{ $topic->title }}</a></b> ({{ $topic->count_posts }})
                 </div>
                 <div>
                     @if ($topic->lastPost)

@@ -34,7 +34,7 @@
             <span>{!! formatNum($offer->rating) !!}</span><br>
         </div>
 
-        <a href="/offers/comments/{{ $offer->id }}">Комментарии</a> ({{ $offer->comments }})
+        <a href="/offers/comments/{{ $offer->id }}">Комментарии</a> ({{ $offer->count_comments }})
         <a href="/offers/end/{{ $offer->id }}">&raquo;</a><br>
 
         @if ($offer->closed)

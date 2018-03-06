@@ -322,7 +322,7 @@ class DownController extends BaseController
                     'brow'        => getBrowser(),
                 ]);
 
-                $down->increment('comments');
+                $down->increment('count_comments');
 
                 setFlash('success', 'Комментарий успешно добавлен!');
                 redirect('/down/end/' . $down->id);

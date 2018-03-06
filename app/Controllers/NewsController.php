@@ -101,7 +101,7 @@ class NewsController extends BaseController
                 ]);
 
                 $news->update([
-                    'comments' => DB::raw('comments + 1'),
+                    'count_comments' => DB::raw('count_comments + 1'),
                 ]);
 
                 setFlash('success', 'Комментарий успешно добавлен!');
@@ -199,7 +199,7 @@ class NewsController extends BaseController
             abort(404, 'Ошибка! Данной новости не существует!');
         }
 
-        $end = ceil($news['comments'] / setting('postnews'));
+        $end = ceil($news->count_comments / setting('postnews'));
         redirect('/news/comments/' . $id . '?page=' . $end);
     }
 
@@ -231,7 +231,7 @@ class NewsController extends BaseController
         $page = paginate(setting('postnews'), $total);
 
         $comments = Comment::query()
-            ->select('comments.*', 'title', 'comments')
+            ->select('comments.*', 'title', 'count_comments')
             ->where('relate_type', News::class)
             ->leftJoin('news', 'comments.relate_id', '=', 'news.id')
             ->offset($page['offset'])

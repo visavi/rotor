@@ -49,9 +49,9 @@
             </div>
         @endforeach
 
-        @if ($news->comments > 5)
+        @if ($news->count_comments > 5)
             <div class="act">
-                <b><a href="/news/comments/{{ $news->id }}">Все комментарии</a></b> ({{ $news->comments }})
+                <b><a href="/news/comments/{{ $news->id }}">Все комментарии</a></b> ({{ $news->count_comments }})
                 <a href="/news/end/{{ $news->id }}">&raquo;</a>
             </div><br>
         @endif

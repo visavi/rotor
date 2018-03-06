@@ -11,7 +11,7 @@
     @if ($comments->isNotEmpty())
         @foreach ($comments as $data)
             <div class="b">
-                <i class="fa fa-comment"></i> <b><a href="/news/{{ $data->relate_id }}/{{ $data->id }}">{{ $data->title }}</a></b> ({{ $data->comments }})
+                <i class="fa fa-comment"></i> <b><a href="/news/{{ $data->relate_id }}/{{ $data->id }}">{{ $data->title }}</a></b> ({{ $data->count_comments }})
             </div>
 
             <div>

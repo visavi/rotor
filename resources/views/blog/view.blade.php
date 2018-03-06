@@ -61,6 +61,6 @@
     </div>
 
     <i class="fa fa-eye"></i> Просмотров: {{ $blog->visits }}<br>
-    <i class="fa fa-comment"></i> <a href="/article/comments/{{ $blog->id }}">Комментарии</a> ({{  $blog->comments }})
+    <i class="fa fa-comment"></i> <a href="/article/comments/{{ $blog->id }}">Комментарии</a> ({{  $blog->count_comments }})
     <a href="/article/end/{{ $blog->id }}">&raquo;</a><br><br>
 @stop

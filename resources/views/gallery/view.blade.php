@@ -39,7 +39,7 @@
 
         Размер: {{ formatFileSize(UPLOADS.'/pictures/'.$photo->link) }}<br>
         Добавлено: {!! profile($photo->user) !!} ({{ dateFixed($photo->time) }})<br>
-        <a href="/gallery/comments/{{ $photo->id }}">Комментарии</a> ({{ $photo->comments }})
+        <a href="/gallery/comments/{{ $photo->id }}">Комментарии</a> ({{ $photo->count_comments }})
         <a href="/gallery/end/{{ $photo->id }}">&raquo;</a>
     </div>
     <br>

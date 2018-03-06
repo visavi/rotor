@@ -11,7 +11,7 @@
     @if ($blogs->isNotEmpty())
         @foreach ($blogs as $data)
             <i class="fa fa-pencil-alt"></i>
-            <b><a href="/blog/active/articles?user={{ $data->login }}">{{ $data->login }}</a></b> ({{ $data->cnt }} cтатей / {{ $data->comments }} комм.)<br>
+            <b><a href="/blog/active/articles?user={{ $data->login }}">{{ $data->login }}</a></b> ({{ $data->cnt }} cтатей / {{ $data->count_comments }} комм.)<br>
         @endforeach
 
         {!! pagination($page) !!}

@@ -9,7 +9,7 @@
     <h1>Перенос темы {{ $topic->title }}</h1>
 
     Автор темы: {!! profile($topic->user) !!}<br>
-    Сообщений: {{ $topic->posts }}<br>
+    Сообщений: {{ $topic->count_posts }}<br>
     Создан: {{ dateFixed($topic->created_at) }}<br>
 
     <div class="form mb-3">

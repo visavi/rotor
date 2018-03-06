@@ -201,7 +201,7 @@ class PhotoController extends BaseController
                 ]);
 
                 $photo->update([
-                    'comments' => DB::raw('comments + 1'),
+                    'count_comments' => DB::raw('count_comments + 1'),
                 ]);
 
                 setFlash('success', 'Комментарий успешно добавлен!');
@@ -311,7 +311,7 @@ class PhotoController extends BaseController
         $validator
             ->equal($token, $_SESSION['token'], 'Неверный идентификатор сессии, повторите действие!')
             ->true(is_writable(HOME . '/uploads/pictures'), ['Не установлены атрибуты доступа на дирекоторию с фотографиями!'])
-            ->empty($photo->comments, 'Запрещено удалять фотографии к которым имеются комментарии!');
+            ->empty($photo->count_comments, 'Запрещено удалять фотографии к которым имеются комментарии!');
 
         if ($validator->isValid()) {
             deleteImage('uploads/pictures/', $photo->link);

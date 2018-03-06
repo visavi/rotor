@@ -89,7 +89,7 @@
             </div><br>
         @endif
 
-        <i class="fa fa-comment"></i> <b><a href="/down/comments/{{ $down->id }}">Комментарии</a></b> ({{ $down->comments }})
+        <i class="fa fa-comment"></i> <b><a href="/down/comments/{{ $down->id }}">Комментарии</a></b> ({{ $down->count_comments }})
         <a href="/down/end/{{ $down->id }}">&raquo;</a><br>
 
         <br>Рейтинг: {!! ratingVote($rating) !!}<br>

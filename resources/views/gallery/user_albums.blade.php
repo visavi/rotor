@@ -28,7 +28,7 @@
                 @endif
 
                 Добавлено: {!! profile($data->user) !!} ({{ dateFixed($data->created_at) }})<br>
-                <a href="/gallery/comments/{{ $data->id }}">Комментарии</a> ({{ $data->comments }})
+                <a href="/gallery/comments/{{ $data->id }}">Комментарии</a> ({{ $data->count_comments }})
             </div>
         @endforeach
 
