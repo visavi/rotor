@@ -41,4 +41,34 @@ class Forum extends BaseModel
     {
         return $this->belongsTo(Topic::class, 'last_topic_id')->withDefault();
     }
+
+    /**
+     * Пересчет раздела
+     *
+     * @return void
+     */
+    public function restatement(): void
+    {
+        $lastTopic = Topic::query()
+            ->where('forum_id', $this->id)
+            ->orderBy('updated_at', 'desc')
+            ->first();
+
+        $topic = Topic::query()
+            ->selectRaw('count(*) as topics, sum(posts) as posts')
+            ->where('forum_id', $this->id)
+            ->first();
+
+        $this->update([
+            'topics'        => $lastTopic ? (int) $topic->topics : 0,
+            'posts'         => $lastTopic ? (int) $topic->posts : 0,
+            'last_topic_id' => $lastTopic ? $lastTopic->id : 0,
+        ]);
+
+        if ($this->parent) {
+            $this->parent()->update([
+                'last_topic_id' => $lastTopic ? $lastTopic->id : 0
+            ]);
+        }
+    }
 }

@@ -27,6 +27,22 @@ class Topic extends BaseModel
     }
 
     /**
+     * Возвращает закладки
+     */
+    public function bookmarks()
+    {
+        return $this->hasMany(Bookmark::class, 'topic_id');
+    }
+
+    /**
+     * Возвращает голосование
+     */
+    public function vote()
+    {
+        return $this->hasOne(Vote::class, 'topic_id');
+    }
+
+    /**
      * Возвращает последнее сообщение
      */
     public function lastPost()

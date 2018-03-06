@@ -23,14 +23,6 @@
     <hr>
 
     @if ($topics->isNotEmpty())
-
-        <form action="/admin/topic/delete?fid={{ $forum->id }}&amp;page={{ $page['current'] }}" method="post">
-            <input type="hidden" name="token" value="{{ $_SESSION['token'] }}">
-            <div class="form text-right">
-                <label for="all">Отметить все</label>
-                <input type="checkbox" id="all" onchange="var o=this.form.elements;for(var i=0;i&lt;o.length;i++)o[i].checked=this.checked">
-            </div>
-
             @foreach ($topics as $topic)
                 <div class="b" id="topic_{{ $topic->id }}">
 
@@ -38,7 +30,7 @@
 
                         <a href="/admin/topic/edit/{{ $topic->id }}" title="Редактировать"><i class="fa fa-pencil-alt text-muted"></i></a>
                         <a href="/admin/topic/move/{{ $topic->id }}" title="Перенести"><i class="fa fa-arrows-alt text-muted"></i></a>
-                        <input type="checkbox" name="del[]" value="{{ $topic->id }}">
+                        <a href="/admin/topic/delete/{{ $topic->id }}" title="Удалить"><i class="fa fa-times text-muted"></i></a>
                     </div>
 
                     <i class="fa {{ $topic->getIcon() }} text-muted"></i>
@@ -51,12 +43,6 @@
                     @endif
                 </div>
             @endforeach
-
-            <div class="float-right">
-                <button class="btn btn-sm btn-danger">Удалить выбранное</button>
-            </div>
-        </form>
-
         {!! pagination($page) !!}
 
     @elseif ($forum->closed)

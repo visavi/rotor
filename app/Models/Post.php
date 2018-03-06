@@ -41,4 +41,22 @@ class Post extends BaseModel
     {
         return $this->morphMany(File::class, 'relate');
     }
+
+    /**
+     * Удаление загруженных файлов
+     *
+     * @return bool|null
+     * @throws \Exception
+     */
+    public function delete()
+    {
+        if ($this->files->isNotEmpty()) {
+            foreach ($this->files as $file) {
+                deleteImage('uploads/forum/', $this->topic_id . '/' . $file->hash);
+                $file->delete();
+            }
+        }
+
+        return parent::delete();
+    }
 }

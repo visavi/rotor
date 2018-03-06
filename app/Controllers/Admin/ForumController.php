@@ -404,80 +404,52 @@ class ForumController extends AdminController
     /**
      * Удаление тем
      */
-    public function deleteTopic()
+    public function deleteTopic($id)
     {
         $page  = int(Request::input('page', 1));
         $token = check(Request::input('token'));
-        $del   = intar(Request::input('del'));
-        $fid   = int(Request::input('fid'));
 
-        $forum = Forum::query()->with('parent')->find($fid);
+        $topic = Topic::query()->find($id);
 
-        if (! $forum) {
-            abort(404, 'Выбран несуществующий раздел!');
+        if (! $topic) {
+            abort(404, 'Данной темы не существует!');
         }
 
         $validator = new Validator();
-        $validator->equal($token, $_SESSION['token'], 'Неверный идентификатор сессии, повторите действие!')
-            ->true($del, 'Отсутствуют выбранные записи для удаления!');
+        $validator->equal($token, $_SESSION['token'], 'Неверный идентификатор сессии, повторите действие!');
 
         if ($validator->isValid()) {
 
             // Удаление загруженных файлов
-            foreach ($del as $topicId) {
+            removeDir(UPLOADS . '/forum/' . $topic->id);
 
-                removeDir(UPLOADS . '/forum/' . $topicId);
-                array_map('unlink', glob(UPLOADS.'/thumbnail/uploads_forum_'.$topicId.'_*.{jpg,jpeg,png,gif}', GLOB_BRACE));
+            $filtered = $topic->posts->load('files')->filter(function ($post) {
+                return $post->files->isNotEmpty();
+            });
 
-                // Выбирает files.id только если они есть в posts
-                $delPosts = Post::query()
-                    ->where('topic_id', $topicId)
-                    ->join('files', function($join) {
-                        $join->on('posts.id', 'files.relate_id')
-                            ->where('files.relate_type', Post::class);
-                    })
-                    ->pluck('files.id')
-                    ->all();
-
-                if ($delPosts) {
-                    File::query()->whereIn('id', $delPosts)->delete();
-                }
-            }
+            $filtered->each(function($post){
+                $post->delete();
+            });
 
             // Удаление голосований
-            $votesIds = Vote::query()->whereIn('topic_id', $del)->pluck('id')->all();
-
-            if ($votesIds) {
-                Vote::query()->whereIn('id', $votesIds)->delete();
-                VoteAnswer::query()->whereIn('vote_id', $votesIds)->delete();
-                Polling::query()->where('relate_type', Vote::class)->whereIn('relate_id', $votesIds)->delete();
-            }
+            $topic->vote->delete();
+            $topic->vote->answers()->delete();
+            $topic->vote->pollings()->delete();
 
             // Удаление закладок
-            Bookmark::query()->whereIn('topic_id', $del)->delete();
-            $deltopics = Topic::query()->whereIn('id', $del)->delete();
-            $delposts  = Post::query()->whereIn('topic_id', $del)->delete();
+            $topic->bookmarks()->delete();
+
+            $topic->posts()->delete();
+            $topic->delete();
 
             // Обновление счетчиков
-            $lastTopic = Topic::query()->where('forum_id', $forum->id)->orderBy('updated_at', 'desc')->first();
-            Forum::query()->where('id', $forum->id)->update([
-                'topics'        => $lastTopic ? DB::raw('topics - ' . $deltopics) : 0,
-                'posts'         => $lastTopic ? DB::raw('posts - ' . $delposts) : 0,
-                'last_topic_id' => $lastTopic ? $lastTopic->id : 0,
-            ]);
-
-            // Обновление родительского форума
-            if ($forum->parent) {
-                $forum->parent->update([
-                    'last_topic_id' => $lastTopic ? $lastTopic->id : 0
-                ]);
-            }
+            $topic->forum->restatement();
 
             setFlash('success', 'Выбранные темы успешно удалены!');
         } else {
             setFlash('danger', $validator->getErrors());
         }
 
-        redirect('/admin/forum/' . $forum->id . '?page=' . $page);
+        redirect('/admin/forum/' . $topic->forum->id . '?page=' . $page);
     }
 }
