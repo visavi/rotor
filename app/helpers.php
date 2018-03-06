@@ -1447,8 +1447,8 @@ function restatement($mode)
 {
     switch ($mode) {
         case 'forum':
-            DB::update('update topics set count_posts = (select count(*) from count_posts where topics.id = posts.topic_id)');
-            DB::update('update forums set count_topics = (select count(*) from count_topics where forums.id = topics.forum_id)');
+            DB::update('update topics set count_posts = (select count(*) from posts where topics.id = posts.topic_id)');
+            DB::update('update forums set count_topics = (select count(*) from topics where forums.id = topics.forum_id)');
             DB::update('update forums set count_posts = (select ifnull(sum(count_posts), 0) from topics where forums.id = topics.forum_id)');
             break;
 
