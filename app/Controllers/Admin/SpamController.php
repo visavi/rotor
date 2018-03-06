@@ -14,7 +14,6 @@ use App\Models\Post;
 use App\Models\Spam;
 use App\Models\User;
 use App\Models\Wall;
-use Illuminate\Database\Capsule\Manager as DB;
 
 class SpamController extends AdminController
 {
@@ -48,7 +47,7 @@ class SpamController extends AdminController
         ];
 
         $spam = Spam::query()
-            ->select('relate_type', DB::raw('count(*) as total'))
+            ->selectRaw('relate_type, count(*) as total')
             ->groupBy('relate_type')
             ->pluck('total', 'relate_type')
             ->all();

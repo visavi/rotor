@@ -100,9 +100,7 @@ class NewsController extends BaseController
                     'money'       => DB::raw('money + 5'),
                 ]);
 
-                $news->update([
-                    'count_comments' => DB::raw('count_comments + 1'),
-                ]);
+                $news->increment('count_comments');
 
                 setFlash('success', 'Комментарий успешно добавлен!');
 

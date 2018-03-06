@@ -797,7 +797,7 @@ function statsNews()
 function statsBlacklist()
 {
     $blacklist = BlackList::query()
-        ->select('type', DB::raw('count(*) as total'))
+        ->selectRaw('type, count(*) as total')
         ->groupBy('type')
         ->pluck('total', 'type')
         ->all();

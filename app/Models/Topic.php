@@ -39,7 +39,7 @@ class Topic extends BaseModel
      */
     public function vote()
     {
-        return $this->hasOne(Vote::class, 'topic_id');
+        return $this->hasOne(Vote::class, 'topic_id')->withDefault();
     }
 
     /**

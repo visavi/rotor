@@ -94,7 +94,7 @@ if ($user = checkAuth()) {
     if ($user->timebonus < SITETIME - 82800) {
         $user->update([
             'timebonus' => SITETIME,
-            'money' => DB::raw('money + '.setting('bonusmoney')),
+            'money'     => DB::raw('money + '.setting('bonusmoney')),
         ]);
 
         setFlash('success', 'Получен ежедневный бонус '.plural(setting('bonusmoney'), setting('moneyname')).'!');

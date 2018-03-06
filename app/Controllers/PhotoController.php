@@ -200,9 +200,7 @@ class PhotoController extends BaseController
                     'money'       => DB::raw('money + 5'),
                 ]);
 
-                $photo->update([
-                    'count_comments' => DB::raw('count_comments + 1'),
-                ]);
+                $photo->increment('count_comments');
 
                 setFlash('success', 'Комментарий успешно добавлен!');
                 redirect('/gallery/end/' . $photo->id);

@@ -55,7 +55,7 @@ class Forum extends BaseModel
             ->first();
 
         $topic = Topic::query()
-            ->selectRaw('count(*) as topics, sum(posts) as posts')
+            ->selectRaw('count(*) as count_topics, sum(count_posts) as count_posts')
             ->where('forum_id', $this->id)
             ->first();
 

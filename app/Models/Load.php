@@ -2,8 +2,6 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Capsule\Manager as DB;
-
 class Load extends BaseModel
 {
     /**
@@ -44,7 +42,7 @@ class Load extends BaseModel
     public function new()
     {
         return $this->hasOne(Down::class, 'category_id')
-            ->select('category_id', DB::raw('count(*) as count_downs'))
+            ->selectRaw('category_id, count(*) as count_downs')
             ->where('created_at', '>', SITETIME - 86400 * 3)
             ->groupBy('category_id');
     }

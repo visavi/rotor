@@ -27,10 +27,9 @@
                 <div class="b" id="topic_{{ $topic->id }}">
 
                     <div class="float-right">
-
                         <a href="/admin/topic/edit/{{ $topic->id }}" title="Редактировать"><i class="fa fa-pencil-alt text-muted"></i></a>
                         <a href="/admin/topic/move/{{ $topic->id }}" title="Перенести"><i class="fa fa-arrows-alt text-muted"></i></a>
-                        <a href="/admin/topic/delete/{{ $topic->id }}" title="Удалить"><i class="fa fa-times text-muted"></i></a>
+                        <a href="/admin/topic/delete/{{ $topic->id }}?page={{ $page['current'] }}&amp;token={{ $_SESSION['token'] }}" onclick="return confirm('Вы действительно хотите удалить данную тему?')" title="Удалить"><i class="fa fa-times text-muted"></i></a>
                     </div>
 
                     <i class="fa {{ $topic->getIcon() }} text-muted"></i>

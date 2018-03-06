@@ -168,7 +168,7 @@ class User extends BaseModel
                 }
 
                 $user->update([
-                    'visits' => DB::raw('visits + 1'),
+                    'visits'     => DB::raw('visits + 1'),
                     'updated_at' => SITETIME
                 ]);
 

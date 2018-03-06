@@ -4,15 +4,10 @@ namespace App\Controllers\Admin;
 
 use App\Classes\Request;
 use App\Classes\Validator;
-use App\Models\Bookmark;
-use App\Models\File;
 use App\Models\Forum;
-use App\Models\Polling;
-use App\Models\Post;
 use App\Models\Topic;
 use App\Models\User;
 use App\Models\Vote;
-use App\Models\VoteAnswer;
 use Illuminate\Database\Capsule\Manager as DB;
 
 class ForumController extends AdminController
@@ -445,7 +440,7 @@ class ForumController extends AdminController
             // Обновление счетчиков
             $topic->forum->restatement();
 
-            setFlash('success', 'Выбранные темы успешно удалены!');
+            setFlash('success', 'Тема успешно удалена!');
         } else {
             setFlash('danger', $validator->getErrors());
         }

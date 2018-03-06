@@ -6,7 +6,6 @@ use App\Models\Blog;
 use App\Models\Down;
 use App\Models\News;
 use App\Models\Topic;
-use Illuminate\Database\Capsule\Manager as DB;
 
 class SitemapController extends BaseController
 {
@@ -40,7 +39,7 @@ class SitemapController extends BaseController
     public function blogs()
     {
         $blogs = Blog::query()
-            ->select('blogs.*', DB::raw('MAX(c.created_at) as last_time'))
+            ->selectRaw('blogs.*, max(c.created_at) as last_time')
             ->leftJoin('comments as c', function($join){
                 $join->on('blogs.id', '=', 'c.relate_id')
                     ->where('relate_type', '=', Blog::class);
@@ -72,7 +71,7 @@ class SitemapController extends BaseController
     public function news()
     {
         $newses = News::query()
-            ->select('news.*', DB::raw('MAX(c.created_at) as last_time'))
+            ->selectRaw('news.*, max(c.created_at) as last_time')
             ->leftJoin('comments as c', function($join){
                 $join->on('news.id', '=', 'c.relate_id')
                     ->where('relate_type', '=', News::class);
@@ -128,7 +127,7 @@ class SitemapController extends BaseController
     public function downs()
     {
         $downs = Down::query()
-            ->select('downs.*', DB::raw('MAX(c.created_at) as last_time'))
+            ->selectRaw('downs.*, max(c.created_at) as last_time')
             ->leftJoin('comments as c', function($join){
                 $join->on('downs.id', '=', 'c.relate_id')
                     ->where('relate_type', '=', Down::class);
