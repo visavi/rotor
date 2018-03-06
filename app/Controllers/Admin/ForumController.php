@@ -100,7 +100,6 @@ class ForumController extends AdminController
                 ->length($description, 0, 100, ['description' => 'Слишком длинное описания раздела!'])
                 ->notEqual($parent, $forum->id, ['parent' => 'Недопустимый выбор родительского раздела!']);
 
-
             if (! empty($parent) && $forum->children->isNotEmpty()) {
                 $validator->addError(['parent' => 'Текущий раздел имеет подфорумы!']);
             }
@@ -296,26 +295,15 @@ class ForumController extends AdminController
 
             if ($validator->isValid()) {
 
-                $oldForumId = $topic->forum_id;
+                $oldTopic = $topic->replicate();
 
                 $topic->update([
                     'forum_id' => $forum->id,
                 ]);
 
-                // Ищем последние темы в форумах для обновления списка последних тем
-                $newTopic = Topic::query()->where('forum_id', $forum->id)->orderBy('updated_at', 'desc')->first();
-                $topic->forum()->update([
-                    'count_topics'  => DB::raw('count_topics + 1'),
-                    'count_posts'   => DB::raw('count_posts + ' . $topic->count_posts),
-                    'last_topic_id' => $newTopic ? $newTopic->id : 0,
-                ]);
-
-                $oldTopic = Topic::query()->where('forum_id', $oldForumId)->orderBy('updated_at', 'desc')->first();
-                Forum::query()->where('id', $oldForumId)->update([
-                    'count_topics'  => $oldTopic ? DB::raw('count_topics - 1') : 0,
-                    'count_posts'   => $oldTopic ? DB::raw('count_posts - ' . $oldTopic->posts) : 0,
-                    'last_topic_id' => $oldTopic ? $oldTopic->id : 0,
-                ]);
+                // Обновление счетчиков
+                $topic->forum->restatement();
+                $oldTopic->forum->restatement();
 
                 setFlash('success', 'Тема успешно перенесена!');
                 redirect('/admin/forum/' . $topic->forum_id);
