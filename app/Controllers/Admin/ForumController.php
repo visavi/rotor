@@ -5,6 +5,7 @@ namespace App\Controllers\Admin;
 use App\Classes\Request;
 use App\Classes\Validator;
 use App\Models\Forum;
+use App\Models\Post;
 use App\Models\Topic;
 use App\Models\User;
 use App\Models\Vote;
@@ -434,5 +435,58 @@ class ForumController extends AdminController
         }
 
         redirect('/admin/forum/' . $topic->forum->id . '?page=' . $page);
+    }
+
+    /**
+     * Просмотр темы
+     */
+    public function topic($id)
+    {
+        $topic = Topic::query()->where('id', $id)->with('forum.parent')->first();
+
+        if (! $topic) {
+            abort(404, 'Данной темы не существует!');
+        }
+
+        $total = Post::query()->where('topic_id', $topic->id)->count();
+        $page = paginate(setting('forumpost'), $total);
+
+        $posts = Post::query()
+            ->select('posts.*', 'pollings.vote')
+            ->where('topic_id', $topic->id)
+            ->leftJoin('pollings', function ($join) {
+                $join->on('posts.id', 'pollings.relate_id')
+                    ->where('pollings.relate_type', Post::class)
+                    ->where('pollings.user_id', getUser('id'));
+            })
+            ->with('files', 'user', 'editUser')
+            ->offset($page['offset'])
+            ->limit($page['limit'])
+            ->orderBy('created_at')
+            ->get();
+
+        // Голосование
+        $vote = Vote::query()->where('topic_id', $topic->id)->first();
+
+        if ($vote) {
+            $vote->poll = $vote->pollings()
+                ->where('user_id', getUser('id'))
+                ->first();
+
+            if ($vote->answers->isNotEmpty()) {
+
+                $results = array_pluck($vote->answers, 'result', 'answer');
+                $max = max($results);
+
+                arsort($results);
+
+                $vote->voted = $results;
+
+                $vote->sum = ($vote->count > 0) ? $vote->count : 1;
+                $vote->max = ($max > 0) ? $max : 1;
+            }
+        }
+
+        return view('admin/forum/topic', compact('topic', 'posts', 'page', 'vote'));
     }
 }

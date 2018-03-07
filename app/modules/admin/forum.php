@@ -7,55 +7,7 @@
         ##                                     Просмотр сообщений                                 ##
         ############################################################################################
         case 'topic':
-            if (!empty($tid)) {
-                $topic = DB::run() -> queryFetch("SELECT `t`.*, `f`.`title` forum_title, `f`.parent_id FROM `topics` t LEFT JOIN `forums` f ON `t`.`forum_id`=`f`.`id` WHERE t.`id`=? LIMIT 1;", [$tid]);
 
-                if (!empty($topic)) {
-                    echo '<a href="/admin/forum">Форум</a> / ';
-
-                    if (!empty($topic['parent'])) {
-                        $forums = DB::run() -> queryFetch("SELECT `id`, `title` FROM `forums` WHERE `id`=? LIMIT 1;", [$topic['parent']]);
-                        echo '<a href="/admin/forum?fid='.$forums['id'].'">'.$forums['title'].'</a> / ';
-                    }
-
-                    echo '<a href="/admin/forum?act=forum&amp;fid='.$topic['forum_id'].'">'.$topic['forum_title'].'</a> / ';
-                    echo '<a href="/topic/'.$tid.'?page='.$page.'">Обзор темы</a><br><br>';
-
-                    echo '<i class="fab fa-forumbee fa-lg text-muted"></i> <b>'.$topic['title'].'</b>';
-
-                    if (!empty($topic['moderators'])) {
-                        $moderators = User::query()->whereIn('id', explode(',', $topic['moderators']))->get();
-
-                        echo '<br>Кураторы темы: ';
-                        foreach ($moderators as $mkey => $mval) {
-                            $comma = (empty($mkey)) ? '' : ', ';
-                            echo $comma . profile($mval);
-                        }
-                    }
-
-                    if (!empty($topic['note'])){
-                        echo '<div class="info">'.bbCode($topic['note']).'</div>';
-                    }
-
-                    echo '<hr>';
-
-                    if (empty($topic['closed'])) {
-                        echo '<a href="/admin/forum?act=acttopic&amp;do=closed&amp;tid='.$tid.'&amp;page='.$page.'&amp;token='.$_SESSION['token'].'">Закрыть</a> / ';
-                    } else {
-                        echo '<a href="/admin/forum?act=acttopic&amp;do=open&amp;tid='.$tid.'&amp;page='.$page.'&amp;token='.$_SESSION['token'].'">Открыть</a> / ';
-                    }
-
-                    if (empty($topic['locked'])) {
-                        echo '<a href="/admin/forum?act=acttopic&amp;do=locked&amp;tid='.$tid.'&amp;page='.$page.'&amp;token='.$_SESSION['token'].'">Закрепить</a> / ';
-                    } else {
-                        echo '<a href="/admin/forum?act=acttopic&amp;do=unlocked&amp;tid='.$tid.'&amp;page='.$page.'&amp;token='.$_SESSION['token'].'">Открепить</a> / ';
-                    }
-
-                    echo '<a href="/admin/forum?act=edittopic&amp;tid='.$tid.'&amp;page='.$page.'">Изменить</a> / ';
-                    echo '<a href="/admin/forum?act=movetopic&amp;tid='.$tid.'">Переместить</a> / ';
-                    echo '<a href="/admin/forum?act=deltopics&amp;fid='.$topic['id'].'&amp;del='.$tid.'&amp;token='.$_SESSION['token'].'" onclick="return confirm(\'Вы действительно хотите удалить данную тему?\')">Удалить</a><br>';
-
-                    $total = DB::run() -> querySingle("SELECT count(*) FROM `posts` WHERE `topic_id`=?;", [$tid]);
 
                     if ($total > 0) {
                         $page = paginate(setting('forumpost'), $total);
@@ -147,13 +99,7 @@
                     } else {
                         showError('Данная тема закрыта для обсуждения!');
                     }
-                } else {
-                    showError('Ошибка! Данной темы не существует!');
-                }
-            } else {
-                showError('Ошибка! Не выбрана тема!');
-            }
-            echo '<i class="fa fa-arrow-circle-up"></i> <a href="/admin/forum">К форумам</a><br>';
+
         break;
 
         ############################################################################################

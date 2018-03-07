@@ -43,7 +43,7 @@ class Post extends BaseModel
     }
 
     /**
-     * Удаление загруженных файлов
+     * Удаление поста и загруженных файлов
      *
      * @return bool|null
      * @throws \Exception
