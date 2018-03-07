@@ -60,12 +60,21 @@ class Forum extends BaseModel
             ->first();
 
         $this->update([
-            'count_topics'  => $lastTopic ? (int) $topic->count_topics : 0,
-            'count_posts'   => $lastTopic ? (int) $topic->count_posts : 0,
+            'count_topics'  => $topic ? (int) $topic->count_topics : 0,
+            'count_posts'   => $topic ? (int) $topic->count_posts : 0,
             'last_topic_id' => $lastTopic ? $lastTopic->id : 0,
         ]);
 
-        if ($this->parent) {
+        if ($this->parent->id) {
+
+            $forumIds = $this->parent->children->pluck('id')->all();
+            $forumIds[] = $this->parent->id;
+
+            $lastTopic = Topic::query()
+                ->whereIn('forum_id', $forumIds)
+                ->orderBy('updated_at', 'desc')
+                ->first();
+
             $this->parent()->update([
                 'last_topic_id' => $lastTopic ? $lastTopic->id : 0
             ]);
