@@ -1476,18 +1476,21 @@ function restatement($mode)
     }
 }
 
-// ------------------- Функция подсчета строк в файле--------------------//
-function counterString($files)
+/**
+ * Возвращает количество строк в файле
+ *
+ * @param  string $file путь к файлу
+ * @return int          количество строк
+ */
+function counterString($file)
 {
-    $count_lines = 0;
-    if (file_exists($files)) {
-        $lines = file($files);
-        $count_lines = count($lines);
+    $countLines = 0;
+    if (file_exists($file)) {
+        $countLines = count(file($file));
     }
-    return $count_lines;
+    return $countLines;
 }
 
-// ------------- Функция вывода ссылки на анкету -------------//
 /**
  * Возвращает ссылку на профиль пользователя
  *
@@ -1609,7 +1612,6 @@ function resizeImage($dir, $name, array $params = [])
 
     return '<img src="/assets/img/images/photo.jpg" alt="nophoto">';
 }
-
 
 /**
  * Возвращает находится ли пользователь в контакатх
