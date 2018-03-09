@@ -89,7 +89,7 @@ function postReply(el)
 
     var post = $(el).closest('.post');
     var author = post.find('b').text();
-    var field = $("#markItUp");
+    var field = $('.markItUp');
 
     separ = field.val().length ? '\n' : '';
     field.focus().val(field.val() + separ + '[b]' + author + '[/b], ');
@@ -102,7 +102,7 @@ function postQuote(el)
 {
     postJump();
 
-    var field = $("#markItUp");
+    var field = $('.markItUp');
     var post = $(el).closest('.post');
     var top = post.find('.b');
     var author = top.find('b').text();
