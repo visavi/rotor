@@ -29,7 +29,7 @@
 
     @if ($topic->curators)
        <div>
-            <span class="label label-info">
+            <span class="badge badge-warning">
                 <i class="fa fa-wrench"></i> Кураторы темы:
                 @foreach ($topic->curators as $key => $curator)
                     <?php $comma = (empty($key)) ? '' : ', '; ?>
@@ -94,8 +94,8 @@
     @endif
 
     @if ($posts->isNotEmpty())
-        @foreach ($posts as $key=>$data)
-            <?php $num = ($page['offset'] + $key + 1); ?>
+        @foreach ($posts as $data)
+            <?php $num = ($page['offset'] + $loop->iteration ); ?>
             <div class="post">
                 <div class="b" id="post_{{ $data->id }}">
                     <div class="float-right text-right">

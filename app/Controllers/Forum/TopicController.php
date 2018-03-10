@@ -62,7 +62,7 @@ class TopicController extends BaseController
             }
         }
 
-        // --------------------------------------------------------------//
+        // Кураторы
         if ($topic->moderators) {
             $topic->curators = User::query()->whereIn('id', explode(',', $topic->moderators))->get();
             $topic->isModer = $topic->curators->where('id', getUser('id'))->isNotEmpty();

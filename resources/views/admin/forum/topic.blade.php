@@ -18,7 +18,7 @@
 
     @if ($topic->curators)
        <div>
-            <span class="label label-info">
+            <span class="badge badge-warning">
                 <i class="fa fa-wrench"></i> Кураторы темы:
                 @foreach ($topic->curators as $key => $curator)
                     <?php $comma = (empty($key)) ? '' : ', '; ?>
@@ -76,7 +76,7 @@
         Всего проголосовало: {{ $vote->count }}
     @endif
 
-    <form action="/topic/delete/{{ $topic->id }}?page={{ $page['current'] }}" method="post">
+    <form action="/admin/topic/delete/{{ $topic->id }}?page={{ $page['current'] }}" method="post">
         <input type="hidden" name="token" value="{{ $_SESSION['token'] }}">
 
         <div class="form text-right">
@@ -85,8 +85,8 @@
         </div>
 
         @if ($posts->isNotEmpty())
-            @foreach ($posts as $key=>$data)
-                <?php $num = ($page['offset'] + $key + 1); ?>
+            @foreach ($posts as $data)
+                <?php $num = ($page['offset'] + $loop->iteration ); ?>
                 <div class="post">
                     <div class="b" id="post_{{ $data->id }}">
                         <div class="float-right text-right">
@@ -99,7 +99,7 @@
                                     <a href="#" onclick="return sendComplaint(this)" data-type="{{ App\Models\Post::class }}" data-id="{{ $data->id }}" data-token="{{ $_SESSION['token'] }}" data-page="{{ $page['current'] }}" rel="nofollow" title="Жалоба"><i class="fa fa-bell text-muted"></i></a>
                                 @endif
 
-                                <a href="/topic/edit/{{ $topic->id }}/{{ $data->id }}?page={{ $page['current'] }}" title="Редактировать"><i class="fa fa-pencil-alt text-muted"></i></a>
+                                <a href="/admin/topic/edit/{{ $topic->id }}/{{ $data->id }}?page={{ $page['current'] }}" title="Редактировать"><i class="fa fa-pencil-alt text-muted"></i></a>
 
                                 <input type="checkbox" name="del[]" value="{{ $data->id }}">
                             @endif

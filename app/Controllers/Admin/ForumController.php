@@ -465,6 +465,11 @@ class ForumController extends AdminController
             ->orderBy('created_at')
             ->get();
 
+        // Кураторы
+        if ($topic->moderators) {
+            $topic->curators = User::query()->whereIn('id', explode(',', $topic->moderators))->get();
+        }
+
         // Голосование
         $vote = Vote::query()->where('topic_id', $topic->id)->first();
 
