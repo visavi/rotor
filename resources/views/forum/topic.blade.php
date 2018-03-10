@@ -27,7 +27,7 @@
         / <a href="#" onclick="return bookmark(this)" data-tid="{{ $topic->id }}" data-token="{{ $_SESSION['token'] }}">{{ $bookmark }}</a>
     @endif
 
-    @if (!empty($topic->curators))
+    @if ($topic->curators)
        <div>
             <span class="label label-info">
                 <i class="fa fa-wrench"></i> Кураторы темы:
@@ -39,7 +39,7 @@
         </div>
     @endif
 
-    @if (!empty($topic->note))
+    @if ($topic->note)
         <div class="info">{!! bbCode($topic->note) !!}</div>
     @endif
 
@@ -91,7 +91,7 @@
     @if ($topic->isModer)
         <form action="/topic/delete/{{ $topic->id }}?page={{ $page['current'] }}" method="post">
             <input type="hidden" name="token" value="{{ $_SESSION['token'] }}">
-        @endif
+    @endif
 
     @if ($posts->isNotEmpty())
         @foreach ($posts as $key=>$data)
@@ -166,9 +166,9 @@
     @endif
 
     @if ($topic->isModer)
-        <span class="float-right">
-            <button class="btn btn-sm btn-danger">Удалить выбранное</button>
-        </span>
+            <span class="float-right">
+                <button class="btn btn-sm btn-danger">Удалить выбранное</button>
+            </span>
         </form>
     @endif
 

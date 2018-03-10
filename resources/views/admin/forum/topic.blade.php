@@ -16,7 +16,7 @@
 
     <a href="/forum/{{ $topic->forum->id }}">{{ $topic->forum->title }}</a>
 
-    @if (!empty($topic->curators))
+    @if ($topic->curators)
        <div>
             <span class="label label-info">
                 <i class="fa fa-wrench"></i> Кураторы темы:
@@ -28,7 +28,7 @@
         </div>
     @endif
 
-    @if (!empty($topic->note))
+    @if ($topic->note)
         <div class="info">{!! bbCode($topic->note) !!}</div>
     @endif
 
@@ -76,89 +76,87 @@
         Всего проголосовало: {{ $vote->count }}
     @endif
 
-    @if ($topic->isModer)
-        <form action="/topic/delete/{{ $topic->id }}?page={{ $page['current'] }}" method="post">
-            <input type="hidden" name="token" value="{{ $_SESSION['token'] }}">
+    <form action="/topic/delete/{{ $topic->id }}?page={{ $page['current'] }}" method="post">
+        <input type="hidden" name="token" value="{{ $_SESSION['token'] }}">
+
+        <div class="form text-right">
+            <label for="all">Отметить все</label>
+            <input type="checkbox" id="all" onchange="var o=this.form.elements;for(var i=0;i&lt;o.length;i++)o[i].checked=this.checked">
+        </div>
+
+        @if ($posts->isNotEmpty())
+            @foreach ($posts as $key=>$data)
+                <?php $num = ($page['offset'] + $key + 1); ?>
+                <div class="post">
+                    <div class="b" id="post_{{ $data->id }}">
+                        <div class="float-right text-right">
+                            @if (getUser())
+                                @if (getUser('id') != $data->user_id)
+                                    <a href="#" onclick="return postReply(this)" title="Ответить"><i class="fa fa-reply text-muted"></i></a>
+
+                                    <a href="#" onclick="return postQuote(this)" title="Цитировать"><i class="fa fa-quote-right text-muted"></i></a>
+
+                                    <a href="#" onclick="return sendComplaint(this)" data-type="{{ App\Models\Post::class }}" data-id="{{ $data->id }}" data-token="{{ $_SESSION['token'] }}" data-page="{{ $page['current'] }}" rel="nofollow" title="Жалоба"><i class="fa fa-bell text-muted"></i></a>
+                                @endif
+
+                                <a href="/topic/edit/{{ $topic->id }}/{{ $data->id }}?page={{ $page['current'] }}" title="Редактировать"><i class="fa fa-pencil-alt text-muted"></i></a>
+
+                                <input type="checkbox" name="del[]" value="{{ $data->id }}">
+                            @endif
+
+                            <div class="js-rating">
+                                @if (getUser() && getUser('id') != $data->user_id)
+                                    <a class="post-rating-down{{ $data->vote == '-' ? ' active' : '' }}" href="#" onclick="return changeRating(this);" data-id="{{ $data->id }}" data-type="{{ App\Models\Post::class }}" data-vote="-" data-token="{{ $_SESSION['token'] }}"><i class="fa fa-minus"></i></a>
+                                @endif
+                                <span>{!! formatNum($data->rating) !!}</span>
+                                @if (getUser() && getUser('id') != $data->user_id)
+                                    <a class="post-rating-up{{ $data->vote == '+' ? ' active' : '' }}" href="#" onclick="return changeRating(this);" data-id="{{ $data->id }}" data-type="{{ App\Models\Post::class }}" data-vote="+" data-token="{{ $_SESSION['token'] }}"><i class="fa fa-plus"></i></a>
+                                @endif
+                            </div>
+                        </div>
+
+                        <div class="img">{!! userAvatar($data->user) !!}</div>
+
+                        {{ $num }}. <b>{!! profile($data->user) !!}</b> <small>({{ dateFixed($data->created_at) }})</small><br>
+                        {!! userStatus($data->user) !!} {!! userOnline($data->user) !!}
+                    </div>
+
+                    <div class="message">
+                        {!! bbCode($data->text) !!}
+                    </div>
+
+                    @if ($data->files->isNotEmpty())
+                        <div class="hiding"><i class="fa fa-paperclip"></i> <b>Прикрепленные файлы:</b><br>
+                        @foreach ($data->files as $file)
+                            <?php $ext = getExtension($file->hash); ?>
+
+                            {!! icons($ext) !!}
+                            <a href="/uploads/forum/{{ $topic->id }}/{{ $file->hash }}">{{ $file->name }}</a> ({{ formatSize($file->size) }})<br>
+                            @if (in_array($ext, ['jpg', 'jpeg', 'gif', 'png']))
+                                <a href="/uploads/forum/{{ $topic->id }}/{{ $file->hash }}" class="gallery" data-group="{{ $data->id }}">{!! resizeImage('uploads/forum/', $topic->id.'/'.$file->hash, ['alt' => $file->name]) !!}</a><br>
+                            @endif
+                        @endforeach
+                        </div>
+                    @endif
+
+                    @if ($data->edit_user_id)
+                        <small><i class="fa fa-exclamation-circle text-danger"></i> Отредактировано: {{ $data->editUser->login }} ({{ dateFixed($data->updated_at) }})</small><br>
+                    @endif
+
+                    @if (isAdmin())
+                        <span class="data">({{ $data->brow }}, {{ $data->ip }})</span>
+                    @endif
+                </div>
+            @endforeach
+
+        @else
+            {!! showError('Сообщений еще нет, будь первым!') !!}
         @endif
 
-    @if ($posts->isNotEmpty())
-        @foreach ($posts as $key=>$data)
-            <?php $num = ($page['offset'] + $key + 1); ?>
-            <div class="post">
-                <div class="b" id="post_{{ $data->id }}">
-                    <div class="float-right text-right">
-                        @if (getUser())
-                            @if (getUser('id') != $data->user_id)
-                                <a href="#" onclick="return postReply(this)" title="Ответить"><i class="fa fa-reply text-muted"></i></a>
-
-                                <a href="#" onclick="return postQuote(this)" title="Цитировать"><i class="fa fa-quote-right text-muted"></i></a>
-
-                                <a href="#" onclick="return sendComplaint(this)" data-type="{{ App\Models\Post::class }}" data-id="{{ $data->id }}" data-token="{{ $_SESSION['token'] }}" data-page="{{ $page['current'] }}" rel="nofollow" title="Жалоба"><i class="fa fa-bell text-muted"></i></a>
-                            @endif
-
-                            @if ((getUser('id') == $data->user_id && $data->created_at + 600 > SITETIME) || $topic->isModer)
-                                <a href="/topic/edit/{{ $topic->id }}/{{ $data->id }}?page={{ $page['current'] }}" title="Редактировать"><i class="fa fa-pencil-alt text-muted"></i></a>
-                                @if ($topic->isModer)
-                                    <input type="checkbox" name="del[]" value="{{ $data->id }}">
-                                @endif
-                            @endif
-                        @endif
-
-                        <div class="js-rating">
-                            @if (getUser() && getUser('id') != $data->user_id)
-                                <a class="post-rating-down{{ $data->vote == '-' ? ' active' : '' }}" href="#" onclick="return changeRating(this);" data-id="{{ $data->id }}" data-type="{{ App\Models\Post::class }}" data-vote="-" data-token="{{ $_SESSION['token'] }}"><i class="fa fa-minus"></i></a>
-                            @endif
-                            <span>{!! formatNum($data->rating) !!}</span>
-                            @if (getUser() && getUser('id') != $data->user_id)
-                                <a class="post-rating-up{{ $data->vote == '+' ? ' active' : '' }}" href="#" onclick="return changeRating(this);" data-id="{{ $data->id }}" data-type="{{ App\Models\Post::class }}" data-vote="+" data-token="{{ $_SESSION['token'] }}"><i class="fa fa-plus"></i></a>
-                            @endif
-                        </div>
-                    </div>
-
-                    <div class="img">{!! userAvatar($data->user) !!}</div>
-
-                    {{ $num }}. <b>{!! profile($data->user) !!}</b> <small>({{ dateFixed($data->created_at) }})</small><br>
-                    {!! userStatus($data->user) !!} {!! userOnline($data->user) !!}
-                </div>
-
-                <div class="message">
-                    {!! bbCode($data->text) !!}
-                </div>
-
-                @if ($data->files->isNotEmpty())
-                    <div class="hiding"><i class="fa fa-paperclip"></i> <b>Прикрепленные файлы:</b><br>
-                    @foreach ($data->files as $file)
-                        <?php $ext = getExtension($file->hash); ?>
-
-                        {!! icons($ext) !!}
-                        <a href="/uploads/forum/{{ $topic->id }}/{{ $file->hash }}">{{ $file->name }}</a> ({{ formatSize($file->size) }})<br>
-                        @if (in_array($ext, ['jpg', 'jpeg', 'gif', 'png']))
-                            <a href="/uploads/forum/{{ $topic->id }}/{{ $file->hash }}" class="gallery" data-group="{{ $data->id }}">{!! resizeImage('uploads/forum/', $topic->id.'/'.$file->hash, ['alt' => $file->name]) !!}</a><br>
-                        @endif
-                    @endforeach
-                    </div>
-                @endif
-
-                @if ($data->edit_user_id)
-                    <small><i class="fa fa-exclamation-circle text-danger"></i> Отредактировано: {{ $data->editUser->login }} ({{ dateFixed($data->updated_at) }})</small><br>
-                @endif
-
-                @if (isAdmin())
-                    <span class="data">({{ $data->brow }}, {{ $data->ip }})</span>
-                @endif
-            </div>
-        @endforeach
-
-    @else
-        {!! showError('Сообщений еще нет, будь первым!') !!}
-    @endif
-
-    @if ($topic->isModer)
         <span class="float-right">
             <button class="btn btn-sm btn-danger">Удалить выбранное</button>
         </span>
-        </form>
-    @endif
+    </form>
 
     {!! pagination($page) !!}
 
