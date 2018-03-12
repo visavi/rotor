@@ -436,7 +436,7 @@ class TopicController extends BaseController
     /**
      * Редактирование сообщения
      */
-    public function editPost($id, $pid)
+    public function editPost($id)
     {
         $page = int(Request::input('page'));
 
@@ -447,7 +447,7 @@ class TopicController extends BaseController
         $post = Post::query()
             ->select('posts.*', 'moderators', 'closed')
             ->leftJoin('topics', 'posts.topic_id', '=', 'topics.id')
-            ->where('posts.id', $pid)
+            ->where('posts.id', $id)
             ->first();
 
         $isModer = in_array(getUser('id'), explode(',', $post->moderators)) ? true : false;
@@ -512,12 +512,7 @@ class TopicController extends BaseController
             }
         }
 
-        $files = File::query()
-            ->where('relate_type', Post::class)
-            ->where('relate_id', $post->id)
-            ->get();
-
-        return view('forum/topic_edit_post', compact('post', 'files', 'page'));
+        return view('forum/topic_edit_post', compact('post', 'page'));
     }
 
     /**

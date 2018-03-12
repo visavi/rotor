@@ -158,7 +158,7 @@ class ForumController extends BaseController
                 ]);
 
                 // Обновление родительского форума
-                if ($forum->parent) {
+                if ($forum->parent->id) {
                     $forum->parent->update([
                         'last_topic_id' => $topic->id
                     ]);
@@ -220,125 +220,117 @@ class ForumController extends BaseController
 
             return view('forum/search', compact('forums', 'fid'));
 
-        } else {
+        }
+        $find = str_replace(['@', '+', '-', '*', '~', '<', '>', '(', ')', '"', "'"], '', $find);
+        if (!isUtf($find)) {
+            $find = winToUtf($find);
+        }
+        if (utfStrlen($find) >= 3 && utfStrlen($find) <= 50) {
 
-            $find = str_replace(['@', '+', '-', '*', '~', '<', '>', '(', ')', '"', "'"], '', $find);
+            $findmewords = explode(' ', utfLower($find));
 
-            if (!isUtf($find)) {
-                $find = winToUtf($find);
+            $arrfind = [];
+            foreach ($findmewords as $val) {
+                if (utfStrlen($val) >= 3) {
+                    $arrfind[] = (empty($type)) ? '+' . $val . '*' : $val . '*';
+                }
             }
 
-            if (utfStrlen($find) >= 3 && utfStrlen($find) <= 50) {
+            $findme = implode(" ", $arrfind);
 
-                $findmewords = explode(' ', utfLower($find));
+            if ($type == 2 && count($findmewords) > 1) {
+                $findme = "\"$find\"";
+            }
 
-                $arrfind = [];
-                foreach ($findmewords as $val) {
-                    if (utfStrlen($val) >= 3) {
-                        $arrfind[] = (empty($type)) ? '+' . $val . '*' : $val . '*';
-                    }
+            $wheres = (empty($where)) ? 'topics' : 'posts';
+
+            $forumfind = ($type . $wheres . $period . $section . $find);
+
+            // Поиск в темах
+            if ($wheres === 'topics') {
+
+                if (empty($_SESSION['forumfindres']) || $forumfind != $_SESSION['forumfind']) {
+
+                    $searchsec = ($section > 0) ? "forum_id = " . $section . " AND" : '';
+                    $searchper = ($period > 0) ? "updated_at > " . (SITETIME - ($period * 24 * 60 * 60)) . " AND" : '';
+
+                    $result = Topic::query()
+                        ->select('id')
+                        ->whereRaw($searchsec . ' ' . $searchper . ' MATCH (`title`) AGAINST (? IN BOOLEAN MODE)', [$findme])
+                        ->limit(100)
+                        ->pluck('id')
+                        ->all();
+
+                    $_SESSION['forumfind'] = $forumfind;
+                    $_SESSION['forumfindres'] = $result;
                 }
 
-                $findme = implode(" ", $arrfind);
+                $total = count($_SESSION['forumfindres']);
 
-                if ($type == 2 && count($findmewords) > 1) {
-                    $findme = "\"$find\"";
+                if ($total > 0) {
+                    $page = paginate(setting('forumtem'), $total);
+
+                    $topics = Topic::query()
+                        ->whereIn('id', $_SESSION['forumfindres'])
+                        ->with('lastPost.user')
+                        ->orderBy('updated_at', 'desc')
+                        ->offset($page['offset'])
+                        ->limit($page['limit'])
+                        ->get();
+
+                    return view('forum/search_topics', compact('topics', 'page', 'find', 'type', 'where', 'section', 'period'));
                 }
 
-                //setting('newtitle') = $find . ' - Результаты поиска';
-
-                $wheres = (empty($where)) ? 'topics' : 'posts';
-
-                $forumfind = ($type . $wheres . $period . $section . $find);
-
-                // ----------------------------- Поиск в темах -------------------------------//
-                if ($wheres == 'topics') {
-
-                    if (empty($_SESSION['forumfindres']) || $forumfind != $_SESSION['forumfind']) {
-
-                        $searchsec = ($section > 0) ? "forum_id = " . $section . " AND" : '';
-                        $searchper = ($period > 0) ? "updated_at > " . (SITETIME - ($period * 24 * 60 * 60)) . " AND" : '';
-
-                        $result = Topic::query()
-                            ->select('id')
-                            ->whereRaw($searchsec . ' ' . $searchper . ' MATCH (`title`) AGAINST (? IN BOOLEAN MODE)', [$findme])
-                            ->limit(100)
-                            ->pluck('id')
-                            ->all();
-
-                        $_SESSION['forumfind'] = $forumfind;
-                        $_SESSION['forumfindres'] = $result;
-                    }
-
-                    $total = count($_SESSION['forumfindres']);
-
-                    if ($total > 0) {
-                        $page = paginate(setting('forumtem'), $total);
-
-                        $topics = Topic::query()
-                            ->whereIn('id', $_SESSION['forumfindres'])
-                            ->with('lastPost.user')
-                            ->orderBy('updated_at', 'desc')
-                            ->offset($page['offset'])
-                            ->limit($page['limit'])
-                            ->get();
-
-                        return view('forum/search_topics', compact('topics', 'page', 'find', 'type', 'where', 'section', 'period'));
-
-                    } else {
-                        setInput(Request::all());
-                        setFlash('danger', 'По вашему запросу ничего не найдено!');
-                        redirect('/forum/search');
-                    }
-                }
-
-                // --------------------------- Поиск в сообщениях -------------------------------//
-                if ($wheres == 'posts') {
-
-                    if (empty($_SESSION['forumfindres']) || $forumfind != $_SESSION['forumfind']) {
-
-                        $searchsec = ($section > 0) ? "topics.forum_id = " . $section . " AND" : '';
-                        $searchper = ($period > 0) ? "created_at > " . (SITETIME - ($period * 24 * 60 * 60)) . " AND" : '';
-
-                        $result = Post::query()
-                            ->select('posts.id')
-                            ->leftJoin('topics', 'posts.topic_id', 'topics.id')
-                            ->whereRaw($searchsec . ' ' . $searchper . ' MATCH (`text`) AGAINST (? IN BOOLEAN MODE)', [$findme])
-                            ->limit(100)
-                            ->pluck('id')
-                            ->all();
-
-                        $_SESSION['forumfind'] = $forumfind;
-                        $_SESSION['forumfindres'] = $result;
-                    }
-
-                    $total = count($_SESSION['forumfindres']);
-
-                    if ($total > 0) {
-                        $page = paginate(setting('forumpost'), $total);
-
-                        $posts = Post::query()
-                            ->whereIn('id', $_SESSION['forumfindres'])
-                            ->with('user', 'topic')
-                            ->orderBy('created_at', 'desc')
-                            ->offset($page['offset'])
-                            ->limit($page['limit'])
-                            ->get();
-
-                        return view('forum/search_posts', compact('posts', 'page', 'find', 'type', 'where', 'section', 'period'));
-
-                    } else {
-                        setInput(Request::all());
-                        setFlash('danger', 'По вашему запросу ничего не найдено!');
-                        redirect('/forum/search');
-                    }
-                }
-
-            } else {
                 setInput(Request::all());
-                setFlash('danger', ['find' => 'Запрос должен содержать от 3 до 50 символов!']);
+                setFlash('danger', 'По вашему запросу ничего не найдено!');
                 redirect('/forum/search');
             }
+
+            // Поиск в сообщениях
+            if ($wheres === 'posts') {
+
+                if (empty($_SESSION['forumfindres']) || $forumfind != $_SESSION['forumfind']) {
+
+                    $searchsec = ($section > 0) ? "topics.forum_id = " . $section . " AND" : '';
+                    $searchper = ($period > 0) ? "created_at > " . (SITETIME - ($period * 24 * 60 * 60)) . " AND" : '';
+
+                    $result = Post::query()
+                        ->select('posts.id')
+                        ->leftJoin('topics', 'posts.topic_id', 'topics.id')
+                        ->whereRaw($searchsec . ' ' . $searchper . ' MATCH (`text`) AGAINST (? IN BOOLEAN MODE)', [$findme])
+                        ->limit(100)
+                        ->pluck('id')
+                        ->all();
+
+                    $_SESSION['forumfind'] = $forumfind;
+                    $_SESSION['forumfindres'] = $result;
+                }
+
+                $total = count($_SESSION['forumfindres']);
+
+                if ($total > 0) {
+                    $page = paginate(setting('forumpost'), $total);
+
+                    $posts = Post::query()
+                        ->whereIn('id', $_SESSION['forumfindres'])
+                        ->with('user', 'topic')
+                        ->orderBy('created_at', 'desc')
+                        ->offset($page['offset'])
+                        ->limit($page['limit'])
+                        ->get();
+
+                    return view('forum/search_posts', compact('posts', 'page', 'find', 'type', 'where', 'section', 'period'));
+                }
+
+                setInput(Request::all());
+                setFlash('danger', 'По вашему запросу ничего не найдено!');
+                redirect('/forum/search');
+            }
+
+        } else {
+            setInput(Request::all());
+            setFlash('danger', ['find' => 'Запрос должен содержать от 3 до 50 символов!']);
+            redirect('/forum/search');
         }
     }
 

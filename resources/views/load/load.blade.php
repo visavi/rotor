@@ -18,7 +18,7 @@
     <ol class="breadcrumb">
         <li class="breadcrumb-item"><a href="/load">Загрузки</a></li>
 
-        @if ($category->parent)
+        @if ($category->parent->id)
             <li class="breadcrumb-item"><a href="/load/{{ $category->parent->id }}">{{ $category->parent->name }}</a></li>
         @endif
 

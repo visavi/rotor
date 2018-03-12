@@ -23,7 +23,7 @@ class Load extends BaseModel
      */
     public function parent()
     {
-        return $this->belongsTo(Load::class, 'parent_id');
+        return $this->belongsTo(Load::class, 'parent_id')->withDefault();
     }
 
     /**

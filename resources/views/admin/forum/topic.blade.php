@@ -10,7 +10,7 @@
     <h1>{{ $topic->title }}</h1>
     <a href="/forum">Форум</a> /
 
-    @if ($topic->forum->parent)
+    @if ($topic->forum->parent->id)
         <a href="/forum/{{ $topic->forum->parent->id }}">{{ $topic->forum->parent->title }}</a> /
     @endif
 
@@ -76,7 +76,7 @@
         Всего проголосовало: {{ $vote->count }}
     @endif
 
-    <form action="/admin/topic/delete/{{ $topic->id }}?page={{ $page['current'] }}" method="post">
+    <form action="/admin/post/delete?tid={{ $topic->id }}&amp;page={{ $page['current'] }}" method="post">
         <input type="hidden" name="token" value="{{ $_SESSION['token'] }}">
 
         <div class="form text-right">
@@ -99,7 +99,7 @@
                                     <a href="#" onclick="return sendComplaint(this)" data-type="{{ App\Models\Post::class }}" data-id="{{ $data->id }}" data-token="{{ $_SESSION['token'] }}" data-page="{{ $page['current'] }}" rel="nofollow" title="Жалоба"><i class="fa fa-bell text-muted"></i></a>
                                 @endif
 
-                                <a href="/admin/topic/edit/{{ $topic->id }}/{{ $data->id }}?page={{ $page['current'] }}" title="Редактировать"><i class="fa fa-pencil-alt text-muted"></i></a>
+                                <a href="/admin/post/edit/{{ $data->id }}?page={{ $page['current'] }}" title="Редактировать"><i class="fa fa-pencil-alt text-muted"></i></a>
 
                                 <input type="checkbox" name="del[]" value="{{ $data->id }}">
                             @endif

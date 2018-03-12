@@ -16,7 +16,7 @@
 
     <a href="/forum">Форум</a>
 
-    @if ($forum->parent)
+    @if ($forum->parent->id)
         / <a href="/forum/{{ $forum->parent->id }}">{{ $forum->parent->title }}</a>
     @endif
 

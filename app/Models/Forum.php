@@ -23,7 +23,7 @@ class Forum extends BaseModel
      */
     public function parent()
     {
-        return $this->belongsTo(Forum::class, 'parent_id');
+        return $this->belongsTo(Forum::class, 'parent_id')->withDefault();
     }
 
     /**

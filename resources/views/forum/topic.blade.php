@@ -10,7 +10,7 @@
     <h1>{{ $topic->title }}</h1>
     <a href="/forum">Форум</a> /
 
-    @if ($topic->forum->parent)
+    @if ($topic->forum->parent->id)
         <a href="/forum/{{ $topic->forum->parent->id }}">{{ $topic->forum->parent->title }}</a> /
     @endif
 
@@ -109,7 +109,7 @@
                             @endif
 
                             @if ((getUser('id') == $data->user_id && $data->created_at + 600 > SITETIME) || $topic->isModer)
-                                <a href="/topic/edit/{{ $topic->id }}/{{ $data->id }}?page={{ $page['current'] }}" title="Редактировать"><i class="fa fa-pencil-alt text-muted"></i></a>
+                                <a href="/post/edit/{{ $data->id }}?page={{ $page['current'] }}" title="Редактировать"><i class="fa fa-pencil-alt text-muted"></i></a>
                                 @if ($topic->isModer)
                                     <input type="checkbox" name="del[]" value="{{ $data->id }}">
                                 @endif

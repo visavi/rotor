@@ -25,7 +25,7 @@
     <ol class="breadcrumb">
         <li class="breadcrumb-item"><a href="/blog">Блоги</a></li>
 
-        @if ($blog->category->parent)
+        @if ($blog->category->parent->id)
             <li class="breadcrumb-item"><a href="/blog/{{ $blog->category->parent->id }}">{{ $blog->category->parent->name }}</a></li>
         @endif
 

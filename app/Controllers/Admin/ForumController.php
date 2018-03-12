@@ -4,6 +4,7 @@ namespace App\Controllers\Admin;
 
 use App\Classes\Request;
 use App\Classes\Validator;
+use App\Models\File;
 use App\Models\Forum;
 use App\Models\Post;
 use App\Models\Topic;
@@ -411,7 +412,7 @@ class ForumController extends AdminController
                 return $post->files->isNotEmpty();
             });
 
-            $filtered->each(function($post){
+            $filtered->each(function($post) {
                 $post->delete();
             });
 
@@ -493,5 +494,122 @@ class ForumController extends AdminController
         }
 
         return view('admin/forum/topic', compact('topic', 'posts', 'page', 'vote'));
+    }
+
+    /**
+     * Редактирование сообщения
+     */
+    public function editPost($id)
+    {
+        $page = int(Request::input('page', 1));
+
+        $post = Post::query()->find($id);
+
+        if (! $post) {
+            abort(404, 'Данного сообщения не существует!');
+        }
+
+        if (Request::isMethod('post')) {
+
+            $token   = check(Request::input('token'));
+            $msg     = check(Request::input('msg'));
+            $delfile = intar(Request::input('delfile'));
+
+
+            $validator = new Validator();
+            $validator->equal($token, $_SESSION['token'], 'Неверный идентификатор сессии, повторите действие!')
+                ->length($msg, 5, setting('forumtextlength'), ['msg' => 'Слишком длинное или короткое сообщение!']);
+
+            if ($validator->isValid()) {
+
+                $msg = antimat($msg);
+
+                $post->update([
+                    'text'         => $msg,
+                    'edit_user_id' => getUser('id'),
+                    'updated_at'   => SITETIME,
+                ]);
+
+                // ------ Удаление загруженных файлов -------//
+                if ($delfile) {
+                    $files = File::query()
+                        ->where('relate_type', Post::class)
+                        ->where('relate_id', $post->id)
+                        ->whereIn('id', $delfile)
+                        ->get();
+
+                    if ($files->isNotEmpty()) {
+                        foreach ($files as $file) {
+                            deleteImage('uploads/forum/', $post->topic_id . '/' . $file->hash);
+                            $file->delete();
+                        }
+                    }
+                }
+
+                setFlash('success', 'Сообщение успешно отредактировано!');
+                redirect('/admin/topic/' . $post->topic_id . '?page=' . $page);
+            } else {
+                setInput(Request::all());
+                setFlash('danger', $validator->getErrors());
+            }
+        }
+
+        return view('admin/forum/edit_post', compact('post', 'page'));
+    }
+
+    /**
+     * Удаление тем
+     */
+    public function deletePosts()
+    {
+        $tid   = int(Request::input('tid'));
+        $page  = int(Request::input('page', 1));
+        $token = check(Request::input('token'));
+        $del   = intar(Request::input('del'));
+
+        $topic = Topic::query()->where('id', $tid)->first();
+
+        if (! $topic) {
+            abort(404, 'Данной темы не существует!');
+        }
+
+        $validator = new Validator();
+        $validator->equal($token, $_SESSION['token'], 'Неверный идентификатор сессии, повторите действие!')
+            ->true($del, 'Отсутствуют выбранные сообщения для удаления!');
+
+        if ($validator->isValid()) {
+
+            $posts = Post::query()
+                ->whereIn('id', $del)
+                ->get();
+
+            $posts->each(function($post) {
+                $post->delete();
+            });
+
+            // Обновление счетчиков
+            $topic->restatement();
+
+            setFlash('success', 'Выбранные сообщения успешно удалены!');
+        } else {
+            setFlash('danger', $validator->getErrors());
+        }
+
+        redirect('/admin/topic/' . $topic->id . '?page=' . $page);
+    }
+
+    /**
+     * Переадресация к последнему сообщению
+     */
+    public function end($id)
+    {
+        $topic = Topic::query()->find($id);
+
+        if (! $topic) {
+            abort(404, 'Выбранная вами тема не существует, возможно она была удалена!');
+        }
+
+        $end = ceil($topic->count_posts / setting('forumpost'));
+        redirect('/admin/topic/' . $topic->id . '?page=' . $end);
     }
 }

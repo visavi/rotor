@@ -44,7 +44,7 @@
                 @endif
 
                 @if ($forum->lastTopic->lastPost->id)
-                    Тема: <a href="/topic/end/{{ $forum->lastTopic->id }}">{{ $forum->lastTopic->title }}</a>
+                    Тема: <a href="/admin/topic/end/{{ $forum->lastTopic->id }}">{{ $forum->lastTopic->title }}</a>
                     <br/>
                     Сообщение: {{ $forum->lastTopic->lastPost->user->login }} ({{ dateFixed($forum->lastTopic->lastPost->created_at) }})
                 @else

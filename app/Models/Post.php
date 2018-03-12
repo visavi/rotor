@@ -50,12 +50,10 @@ class Post extends BaseModel
      */
     public function delete()
     {
-        if ($this->files->isNotEmpty()) {
-            foreach ($this->files as $file) {
-                deleteImage('uploads/forum/', $this->topic_id . '/' . $file->hash);
-                $file->delete();
-            }
-        }
+        $this->files->each(function($file) {
+            deleteImage('uploads/forum/', $this->topic_id . '/' . $file->hash);
+            $file->delete();
+        });
 
         return parent::delete();
     }

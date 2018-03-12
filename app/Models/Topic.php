@@ -121,4 +121,26 @@ class Topic extends BaseModel
 
         return view('forum/_pagination', compact('pages', 'link'));
     }
+
+    /**
+     * Пересчет темы
+     *
+     * @return void
+     */
+    public function restatement(): void
+    {
+        $lastPost = Post::query()
+            ->where('topic_id', $this->id)
+            ->orderBy('updated_at', 'desc')
+            ->first();
+
+        $countPosts = Post::query()->where('topic_id', $this->id)->count();
+
+        $this->update([
+            'count_posts'  => $countPosts,
+            'last_post_id' => $lastPost ? $lastPost->id : 0,
+        ]);
+
+        $this->forum->restatement();
+    }
 }
