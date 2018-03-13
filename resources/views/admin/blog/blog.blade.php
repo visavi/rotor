@@ -15,16 +15,16 @@
     <h1>{{ $category->name }} <small>(Статей: {{ $category->count_blogs }})</small></h1><br>
 
     <ol class="breadcrumb">
-        <li class="breadcrumb-item"><a href="/blog">Блоги</a></li>
+        <li class="breadcrumb-item"><a href="/admin/blog">Блоги</a></li>
 
         @if ($category->parent->id)
-            <li class="breadcrumb-item"><a href="/blog/{{ $category->parent->id }}">{{ $category->parent->name }}</a></li>
+            <li class="breadcrumb-item"><a href="/admin/blog/{{ $category->parent->id }}">{{ $category->parent->name }}</a></li>
         @endif
 
         <li class="breadcrumb-item active">{{ $category->name }}</li>
 
         @if (isAdmin())
-            <li class="breadcrumb-item"><a href="/admin/blog/{{ $category->id }}?page={{ $page['current'] }}">Управление</a></li>
+            <li class="breadcrumb-item"><a href="/blog/{{ $category->id }}?page={{ $page['current'] }}">Обзор</a></li>
         @endif
     </ol>
 
@@ -33,6 +33,12 @@
             <div class="b">
                 <i class="fa fa-pencil-alt"></i>
                 <b><a href="/article/{{ $data->id }}">{{ $data->title }}</a></b> ({!! formatNum($data->rating) !!})
+
+                <div class="float-right">
+                    <a href="/admin/article/edit/{{ $data->id }}" title="Редактировать"><i class="fa fa-pencil-alt text-muted"></i></a>
+                    <a href="/admin/article/delete/{{ $data->id }}?page={{ $page['current'] }}&amp;token={{ $_SESSION['token'] }}" onclick="return confirm('Вы действительно хотите удалить данную статью?')" title="Удалить"><i class="fa fa-times text-muted"></i></a>
+                </div>
+
             </div>
             <div>
                 Автор: {!! profile($data->user) !!} ({{ dateFixed($data->created_at) }})<br>
@@ -46,9 +52,4 @@
     @else
         {!! showError('Статей еще нет, будь первым!') !!}
     @endif
-
-    <a href="/blog/top">Топ статей</a> /
-    <a href="/blog/tags">Облако тегов</a> /
-    <a href="/blog/search">Поиск</a> /
-    <a href="/blog/blogs">Все статьи</a>
 @stop

@@ -36,9 +36,8 @@
     </ol>
 
     @if (isAdmin())
-        <a href="/admin/blog?act=editblog&amp;cid={{ $blog->category_id }}&amp;id={{ $blog->id }}">Редактировать</a> /
-        <a href="/admin/blog?act=moveblog&amp;cid={{ $blog->category_id }}&amp;id={{ $blog->id }}">Переместить</a> /
-        <a href="/admin/blog?act=delblog&amp;cid={{ $blog->category_id }}&amp;del={{ $blog->id }}&amp;uid={{ $_SESSION['token'] }}" onclick="return confirm('Вы действительно хотите удалить данную статью?')">Удалить</a>
+        <a href="/admin/article/edit/{{ $blog->id }}">Редактировать</a> /
+        <a href="/admin/article/delete/{{ $blog->id }}?token={{ $_SESSION['token'] }}" onclick="return confirm('Вы действительно хотите удалить данную статью?')">Удалить</a>
     @endif
     <hr>
 

@@ -20,6 +20,14 @@ class Blog extends BaseModel
     protected $guarded = [];
 
     /**
+     * Возвращает комментарии блогов
+     */
+    public function comments()
+    {
+        return $this->morphMany(Comment::class, 'relate');
+    }
+
+    /**
      * Возвращает последнии комментарии к статье
      *
      * @param int $limit

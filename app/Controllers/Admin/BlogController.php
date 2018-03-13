@@ -179,4 +179,127 @@ class BlogController extends AdminController
 
         redirect('/admin/blog');
     }
+
+    /**
+     * Список блогов
+     */
+    public function blog($id)
+    {
+        $category = Category::query()->with('parent')->find($id);
+
+        if (! $category) {
+            abort('default', 'Данного раздела не существует!');
+        }
+
+        $total = Blog::query()->where('category_id', $id)->count();
+
+        $page = paginate(setting('blogpost'), $total);
+
+        $blogs = Blog::query()
+            ->where('category_id', $id)
+            ->orderBy('created_at', 'desc')
+            ->offset($page['offset'])
+            ->limit($page['limit'])
+            ->with('user')
+            ->get();
+
+        return view('admin/blog/blog', compact('blogs', 'category', 'page'));
+    }
+
+    /**
+     * Редактирование статьи
+     */
+    public function editBlog($id)
+    {
+        $blog = Blog::query()->find($id);
+
+        if (! $blog) {
+            abort(404, 'Данной статьи не существует!');
+        }
+
+        if (Request::isMethod('post')) {
+
+            $token = check(Request::input('token'));
+            $cid   = int(Request::input('cid'));
+            $title = check(Request::input('title'));
+            $text  = check(Request::input('text'));
+            $tags  = check(Request::input('tags'));
+
+            $category = Category::query()->find($cid);
+
+            $validator = new Validator();
+            $validator
+                ->equal($token, $_SESSION['token'], 'Неверный идентификатор сессии, повторите действие!')
+                ->length($title, 5, 50, ['title' => 'Слишком длинный или короткий заголовок!'])
+                ->length($text, 100, setting('maxblogpost'), ['text' => 'Слишком длинный или короткий текст статьи!'])
+                ->length($tags, 2, 50, ['tags' => 'Слишком длинные или короткие метки статьи!'])
+                ->notEmpty($category, ['cid' => 'Категории для статьи не существует или она закрыта!']);
+
+            if ($category) {
+                $validator->empty($category->closed, ['cid' => 'В данном разделе запрещено создавать статьи!']);
+            }
+
+            if ($validator->isValid()) {
+
+                // Обновление счетчиков
+                if ($blog->category_id != $category->id) {
+                    $category->increment('count_blogs');
+                    Category::query()->where('id', $blog->category_id)->decrement('count_blogs');
+                }
+
+                $blog->update([
+                    'category_id' => $category->id,
+                    'title'       => $title,
+                    'text'        => $text,
+                    'tags'        => $tags,
+                ]);
+
+                setFlash('success', 'Статья успешно отредактирована!');
+                redirect('/article/'.$blog->id);
+            } else {
+                setInput(Request::all());
+                setFlash('danger', $validator->getErrors());
+            }
+        }
+
+        $categories = Category::query()
+            ->where('parent_id', 0)
+            ->with('children')
+            ->orderBy('sort')
+            ->get();
+
+        return view('admin/blog/edit_blog', compact('blog', 'categories'));
+    }
+
+    /**
+     * Удаление тем
+     */
+    public function deleteBlog($id)
+    {
+        $page  = int(Request::input('page', 1));
+        $token = check(Request::input('token'));
+
+        $blog = Blog::query()->find($id);
+
+        if (! $blog) {
+            abort(404, 'Данной статьи не существует!');
+        }
+
+        $validator = new Validator();
+        $validator->equal($token, $_SESSION['token'], 'Неверный идентификатор сессии, повторите действие!');
+
+        if ($validator->isValid()) {
+
+            $blog->comments()->delete();
+            $blog->delete();
+
+            $blog->category->decrement('count_blogs');
+
+            setFlash('success', 'Статья успешно удалена!');
+        } else {
+            setFlash('danger', $validator->getErrors());
+        }
+
+        redirect('/admin/blog/' . $blog->category_id . '?page=' . $page);
+    }
 }

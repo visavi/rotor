@@ -19,7 +19,7 @@ $routes = [
     ['GET',      '/sitemap/[a:action].xml', 'SitemapController'],
 
     ['GET',      '/blog', 'BlogController@index', 'blog'],
-    ['GET',      '/blog/[i:cid]', 'BlogController@blog'],
+    ['GET',      '/blog/[i:id]', 'BlogController@blog'],
     ['GET',      '/article/[i:id]', 'BlogController@view'],
     ['GET|POST', '/article/edit/[i:id]', 'BlogController@edit'],
     ['GET',      '/article/print/[i:id]', 'BlogController@print'],
@@ -362,6 +362,9 @@ $routes = [
     ['GET',      '/admin/blog/restatement', 'Admin\BlogController@restatement'],
     ['GET|POST', '/admin/blog/edit/[i:id]', 'Admin\BlogController@edit'],
     ['GET',      '/admin/blog/delete/[i:id]', 'Admin\BlogController@delete'],
+    ['GET',      '/admin/blog/[i:id]', 'Admin\BlogController@blog'],
+    ['GET|POST', '/admin/article/edit/[i:id]', 'Admin\BlogController@editBlog'],
+    ['GET',      '/admin/article/delete/[i:id]', 'Admin\BlogController@deleteBlog'],
 
     ['GET|POST', '/admin/load', 'admin/load.php'],
     ['GET|POST', '/admin/newload', 'admin/newload.php'],

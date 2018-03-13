@@ -35,20 +35,20 @@ class BlogController extends BaseController
     /**
      * Список блогов
      */
-    public function blog($cid)
+    public function blog($id)
     {
-        $category = Category::query()->with('parent')->find($cid);
+        $category = Category::query()->with('parent')->find($id);
 
         if (! $category) {
             abort('default', 'Данного раздела не существует!');
         }
 
-        $total = Blog::query()->where('category_id', $cid)->count();
+        $total = Blog::query()->where('category_id', $id)->count();
 
         $page = paginate(setting('blogpost'), $total);
 
         $blogs = Blog::query()
-            ->where('category_id', $cid)
+            ->where('category_id', $id)
             ->orderBy('created_at', 'desc')
             ->offset($page['offset'])
             ->limit($page['limit'])
@@ -154,8 +154,7 @@ class BlogController extends BaseController
                 ->length($title, 5, 50, ['title' => 'Слишком длинный или короткий заголовок!'])
                 ->length($text, 100, setting('maxblogpost'), ['text' => 'Слишком длинный или короткий текст статьи!'])
                 ->length($tags, 2, 50, ['tags' => 'Слишком длинные или короткие метки статьи!'])
-                ->true(Flood::isFlood(), ['text' => 'Антифлуд! Разрешается добавлять статьи раз в ' . Flood::getPeriod() . ' секунд!'])
-                ->notEmpty($category, ['cid' => 'Категории для статьи не существует!']);
+                ->notEmpty($category, ['cid' => 'Категории для статьи не существует или она закрыта!']);
 
             if ($category) {
                 $validator->empty($category->closed, ['cid' => 'В данном разделе запрещено создавать статьи!']);
@@ -165,7 +164,7 @@ class BlogController extends BaseController
 
                 // Обновление счетчиков
                 if ($blog->category_id != $category->id) {
-                    $category->increment('count');
+                    $category->increment('count_blogs');
                     Category::query()->where('id', $blog->category_id)->decrement('count_blogs');
                 }
 
@@ -184,13 +183,13 @@ class BlogController extends BaseController
             }
         }
 
-        $cats = Category::query()
+        $categories = Category::query()
             ->where('parent_id', 0)
             ->with('children')
             ->orderBy('sort')
             ->get();
 
-        return view('blog/edit', compact('blog', 'cats'));
+        return view('blog/edit', compact('blog', 'categories'));
     }
 
     /**
@@ -255,7 +254,7 @@ class BlogController extends BaseController
                 ->length($text, 100, setting('maxblogpost'), ['text' => 'Слишком длинный или короткий текст статьи!'])
                 ->length($tags, 2, 50, ['tags' => 'Слишком длинные или короткие метки статьи!'])
                 ->true(Flood::isFlood(), ['text' => 'Антифлуд! Разрешается добавлять статьи раз в ' . Flood::getPeriod() . ' секунд!'])
-                ->notEmpty($category, ['cid' => 'Категории для новой статьи не существует!']);
+                ->notEmpty($category, ['cid' => 'Категории для новой статьи не существует или она закрыта!']);
 
             if ($category) {
                 $validator->empty($category->closed, ['cid' => 'В данном разделе запрещено создавать статьи!']);
