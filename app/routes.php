@@ -358,7 +358,10 @@ $routes = [
     ['GET',      '/admin/topic/end/[i:id]', 'Admin\ForumController@end'],
 
     ['GET',      '/admin/blog', 'Admin\BlogController@index'],
+    ['POST',     '/admin/blog/create', 'Admin\BlogController@create'],
     ['GET',      '/admin/blog/restatement', 'Admin\BlogController@restatement'],
+    ['GET|POST', '/admin/blog/edit/[i:id]', 'Admin\BlogController@edit'],
+    ['GET',      '/admin/blog/delete/[i:id]', 'Admin\BlogController@delete'],
 
     ['GET|POST', '/admin/load', 'admin/load.php'],
     ['GET|POST', '/admin/newload', 'admin/newload.php'],

@@ -58,7 +58,7 @@ class ForumController extends AdminController
                 'sort'  => $max,
             ]);
 
-            setFlash('success', 'Новый раздел успешно добавлен!');
+            setFlash('success', 'Новый раздел успешно создан!');
             redirect('/admin/forum/edit/' . $forum->id);
         } else {
             setInput(Request::all());

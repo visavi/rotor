@@ -41,6 +41,7 @@
                         <a href="/admin/blog/edit/{{ $child->id }}"><i class="fa fa-pencil-alt"></i></a>
                         <a href="/admin/blog/delete/{{ $child->id }}?token={{ $_SESSION['token'] }}" onclick="return confirm('Вы уверены что хотите удалить данный раздел?')"><i class="fa fa-times"></i></a>
                     @endif
+                    <br/>
                 @endforeach
             @endif
         </div>
