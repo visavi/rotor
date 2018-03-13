@@ -14,26 +14,26 @@
 
     Новые: <a href="/blog/new/articles">статьи</a>, <a href="/blog/new/comments">комментарии</a><hr>
 
-    @foreach ($blogs as $key => $data)
+    @foreach ($categories as $key => $data)
 
         <div class="b">
             <i class="fa fa-folder-open"></i> <b><a href="/blog/{{ $data->id }}">{{ $data->name }}</a></b>
 
             @if ($data->new)
-                ({{ $data->count_blogs }}/<span style="color:#ff0000">+{{ $data->new->count_blogs }}</span>)<br>
+                ({{ $data->count_blogs }}/<span style="color:#ff0000">+{{ $data->new->count_blogs }}</span>)
             @else
-                ({{ $data->count_blogs }})<br>
+                ({{ $data->count_blogs }})
             @endif
         </div>
 
         <div>
             @if ($data->children->isNotEmpty())
                 @foreach ($data->children as $child)
-                    <i class="fa fa-angle-right"></i> <b><a href="/blog/{{ $child->id }}">{{ $child['name'] }}</a></b>
+                    <i class="fa fa-angle-right"></i> <b><a href="/blog/{{ $child->id }}">{{ $child->name }}</a></b>
                     @if ($child->new)
-                        ({{ $child->count_blogs }}/<span style="color:#ff0000">+{{ $child->new->count_blogs }}</span>)<br>
+                        ({{ $child->count_blogs }}/<span style="color:#ff0000">+{{ $child->new->count_blogs }}</span>)
                     @else
-                        ({{ $child->count_blogs }})<br>
+                        ({{ $child->count_blogs }})
                     @endif
                 @endforeach
             @endif

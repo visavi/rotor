@@ -1,84 +1,9 @@
 <?php
-view(setting('themes').'/index');
 
-if (isset($_GET['act'])) {
-    $act = check($_GET['act']);
-} else {
-    $act = 'index';
-}
-if (isset($_GET['id'])) {
-    $id = abs(intval($_GET['id']));
-} else {
-    $id = 0;
-}
-if (isset($_GET['cid'])) {
-    $cid = abs(intval($_GET['cid']));
-} else {
-    $cid = 0;
-}
-$page = int(Request::input('page', 1));
-
-if (isAdmin()) {
-    //show_title('Управление блогами');
 
     switch ($action):
-    ############################################################################################
-    ##                                    Главная страница                                    ##
-    ############################################################################################
-        case 'index':
 
-            $queryblog = DB::select("SELECT * FROM `catsblog` ORDER BY sort ASC;");
-            $blogs = $queryblog -> fetchAll();
 
-            if (count($blogs) > 0) {
-                foreach($blogs as $data) {
-                    echo '<i class="fa fa-folder-open"></i> ';
-                    echo '<b>'.$data['sort'].'. <a href="/admin/blog?act=blog&amp;cid='.$data['id'].'">'.$data['name'].'</a></b> ('.$data['count'].')<br>';
-
-                    if (isAdmin([101])) {
-                        echo '<a href="/admin/blog?act=editcats&amp;cid='.$data['id'].'">Редактировать</a> / ';
-                        echo '<a href="/admin/blog?act=prodelcats&amp;cid='.$data['id'].'">Удалить</a>';
-                    }
-                    echo '<br>';
-                }
-            } else {
-                showError('Разделы блогов еще не созданы!');
-            }
-
-            if (isAdmin([101])) {
-                echo '<br><div class="form">';
-                echo '<form action="/admin/blog?act=addcats&amp;uid='.$_SESSION['token'].'" method="post">';
-                echo '<b>Заголовок:</b><br>';
-                echo '<input type="text" name="name" maxlength="50">';
-                echo '<input type="submit" value="Создать раздел"></form></div><br>';
-
-                echo '<i class="fa fa-sync"></i> <a href="/admin/blog?act=restatement&amp;uid='.$_SESSION['token'].'">Пересчитать</a><br>';
-            }
-        break;
-
-        ############################################################################################
-        ##                                    Пересчет счетчиков                                  ##
-        ############################################################################################
-        case 'restatement':
-
-            $uid = check($_GET['uid']);
-
-            if (isAdmin([101])) {
-                if ($uid == $_SESSION['token']) {
-                    restatement('blog');
-
-                    setFlash('success', 'Все данные успешно пересчитаны!');
-                    redirect("/admin/blog");
-
-                } else {
-                    showError('Ошибка! Неверный идентификатор сессии, повторите действие!');
-                }
-            } else {
-                showError('Ошибка! Пересчитывать сообщения могут только суперадмины!');
-            }
-
-            echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/blog">Вернуться</a><br>';
-        break;
 
         ############################################################################################
         ##                                    Добавление разделов                                 ##
@@ -473,11 +398,3 @@ if (isAdmin()) {
         break;
 
     endswitch;
-
-    echo '<i class="fa fa-wrench"></i> <a href="/admin">В админку</a><br>';
-
-} else {
-    redirect('/');
-}
-
-view(setting('themes').'/foot');

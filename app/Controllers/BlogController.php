@@ -19,17 +19,17 @@ class BlogController extends BaseController
      */
     public function index()
     {
-        $blogs = Category::query()
+        $categories = Category::query()
             ->where('parent_id', 0)
             ->orderBy('sort')
             ->with('children', 'new', 'children.new')
             ->get();
 
-        if (! $blogs) {
+        if (! $categories) {
             abort('default', 'Разделы блогов еще не созданы!');
         }
 
-        return view('blog/index', compact('blogs'));
+        return view('blog/index', compact('categories'));
     }
 
     /**

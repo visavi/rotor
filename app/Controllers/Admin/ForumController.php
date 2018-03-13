@@ -166,7 +166,7 @@ class ForumController extends AdminController
     }
 
     /**
-     * Пересчет сообщений
+     * Пересчет данных
      */
     public function restatement()
     {
@@ -180,7 +180,7 @@ class ForumController extends AdminController
 
             restatement('forum');
 
-            setFlash('success', 'Сообщения успешно пересчитаны!');
+            setFlash('success', 'Данные успешно пересчитаны!');
         } else {
             setFlash('danger', 'Ошибка! Неверный идентификатор сессии, повторите действие!');
         }

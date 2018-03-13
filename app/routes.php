@@ -357,9 +357,11 @@ $routes = [
     ['POST',     '/admin/post/delete', 'Admin\ForumController@deletePosts'],
     ['GET',      '/admin/topic/end/[i:id]', 'Admin\ForumController@end'],
 
+    ['GET',      '/admin/blog', 'Admin\BlogController@index'],
+    ['GET',      '/admin/blog/restatement', 'Admin\BlogController@restatement'],
+
     ['GET|POST', '/admin/load', 'admin/load.php'],
     ['GET|POST', '/admin/newload', 'admin/newload.php'],
-    ['GET|POST', '/admin/blog', 'admin/blog.php'],
 
     ['GET', '/search', function() {
         return view('search/index');

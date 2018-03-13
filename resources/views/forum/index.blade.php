@@ -24,7 +24,7 @@
                 <b><a href="/forum/{{ $forum->id }}">{{ $forum->title }}</a></b>
                 ({{ $forum->count_topics }}/{{ $forum->count_posts }})
 
-                @if (!empty($forum->description))
+                @if ($forum->description)
                     <p><small>{{ $forum->description }}</small></p>
                 @endif
             </div>
