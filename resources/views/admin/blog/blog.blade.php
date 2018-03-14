@@ -6,7 +6,7 @@
 
 @section('content')
 
-    @if (getUser())
+    @if (getUser() && ! $category->closed)
         <div class="float-right">
             <a class="btn btn-success" href="/blog/create?cid={{ $category->id }}">Добавить статью</a>
         </div>
@@ -36,6 +36,7 @@
 
                 <div class="float-right">
                     <a href="/admin/article/edit/{{ $data->id }}" title="Редактировать"><i class="fa fa-pencil-alt text-muted"></i></a>
+                    <a href="/admin/article/move/{{ $data->id }}" title="Перенести"><i class="fa fa-arrows-alt text-muted"></i></a>
                     <a href="/admin/article/delete/{{ $data->id }}?page={{ $page['current'] }}&amp;token={{ $_SESSION['token'] }}" onclick="return confirm('Вы действительно хотите удалить данную статью?')" title="Удалить"><i class="fa fa-times text-muted"></i></a>
                 </div>
 

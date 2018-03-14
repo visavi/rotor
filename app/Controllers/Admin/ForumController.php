@@ -278,21 +278,15 @@ class ForumController extends AdminController
             $token = check(Request::input('token'));
             $fid   = int(Request::input('fid'));
 
-            $validator = new Validator();
-            $validator->equal($token, $_SESSION['token'], 'Неверный идентификатор сессии, повторите действие!');
-
             $forum = Forum::query()->find($fid);
 
-            if ($forum) {
-                if ($forum->closed) {
-                    $validator->addError(['forum' => 'В закрытый раздел запрещено перемещать темы!']);
-                }
+            $validator = new Validator();
+            $validator->equal($token, $_SESSION['token'], 'Неверный идентификатор сессии, повторите действие!')
+                ->notEmpty($forum, ['forum' => 'Выбранного раздела не существует!']);
 
-                if ($topic->forum_id == $forum->id) {
-                    $validator->addError(['forum' => 'Нельзя переносить тему в этот же раздел!']);
-                }
-            } else {
-                $validator->addError(['forum' => 'Выбранного раздела не существует!']);
+            if ($forum) {
+                $validator->empty($forum->closed, ['forum' => 'В закрытый раздел запрещено перемещать темы!']);
+                $validator->notEqual($topic->forum_id, $forum->id, ['forum' => 'Нельзя переносить тему в этот же раздел!']);
             }
 
             if ($validator->isValid()) {

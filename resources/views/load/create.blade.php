@@ -24,11 +24,11 @@
             <select class="form-control" id="inputCategory" name="category">
                 @foreach ($loads as $data)
 
-                    <option value="{{ $data->id }}"{{ ($cid == $data->id) ? ' selected' : '' }}{{ !empty($data->closed) ? ' disabled' : '' }}>{{ $data->name }}</option>
+                    <option value="{{ $data->id }}"{{ ($cid == $data->id && ! $data->closed) ? ' selected' : '' }}{{ $data->closed ? ' disabled' : '' }}>{{ $data->name }}</option>
 
                     @if ($data->children->isNotEmpty())
                         @foreach($data->children as $datasub)
-                            <option value="{{ $datasub->id }}"{{ $cid == $datasub->id ? ' selected' : '' }}{{ !empty($datasub->closed) ? ' disabled' : '' }}>– {{ $datasub->name }}</option>
+                            <option value="{{ $datasub->id }}"{{ $cid == $datasub->id && ! $datasub->closed ? ' selected' : '' }}{{ $datasub->closed ? ' disabled' : '' }}>– {{ $datasub->name }}</option>
                         @endforeach
                     @endif
                 @endforeach

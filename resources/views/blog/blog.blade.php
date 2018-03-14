@@ -6,7 +6,7 @@
 
 @section('content')
 
-    @if (getUser())
+    @if (getUser() && ! $category->closed)
         <div class="float-right">
             <a class="btn btn-success" href="/blog/create?cid={{ $category->id }}">Добавить статью</a>
         </div>

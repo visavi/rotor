@@ -37,6 +37,7 @@
 
     @if (isAdmin())
         <a href="/admin/article/edit/{{ $blog->id }}">Редактировать</a> /
+        <a href="/admin/article/move/{{ $blog->id }}">Перенести</a> /
         <a href="/admin/article/delete/{{ $blog->id }}?token={{ $_SESSION['token'] }}" onclick="return confirm('Вы действительно хотите удалить данную статью?')">Удалить</a>
     @endif
     <hr>

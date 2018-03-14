@@ -220,35 +220,20 @@ class BlogController extends AdminController
         if (Request::isMethod('post')) {
 
             $token = check(Request::input('token'));
-            $cid   = int(Request::input('cid'));
             $title = check(Request::input('title'));
             $text  = check(Request::input('text'));
             $tags  = check(Request::input('tags'));
-
-            $category = Category::query()->find($cid);
 
             $validator = new Validator();
             $validator
                 ->equal($token, $_SESSION['token'], 'Неверный идентификатор сессии, повторите действие!')
                 ->length($title, 5, 50, ['title' => 'Слишком длинный или короткий заголовок!'])
                 ->length($text, 100, setting('maxblogpost'), ['text' => 'Слишком длинный или короткий текст статьи!'])
-                ->length($tags, 2, 50, ['tags' => 'Слишком длинные или короткие метки статьи!'])
-                ->notEmpty($category, ['cid' => 'Категории для статьи не существует или она закрыта!']);
-
-            if ($category) {
-                $validator->empty($category->closed, ['cid' => 'В данном разделе запрещено создавать статьи!']);
-            }
+                ->length($tags, 2, 50, ['tags' => 'Слишком длинные или короткие метки статьи!']);
 
             if ($validator->isValid()) {
 
-                // Обновление счетчиков
-                if ($blog->category_id != $category->id) {
-                    $category->increment('count_blogs');
-                    Category::query()->where('id', $blog->category_id)->decrement('count_blogs');
-                }
-
                 $blog->update([
-                    'category_id' => $category->id,
                     'title'       => $title,
                     'text'        => $text,
                     'tags'        => $tags,
@@ -269,6 +254,61 @@ class BlogController extends AdminController
             ->get();
 
         return view('admin/blog/edit_blog', compact('blog', 'categories'));
+    }
+
+    /**
+     * Перенос статьи
+     */
+    public function moveBlog($id)
+    {
+        $blog = Blog::query()->find($id);
+
+        if (! $blog) {
+            abort(404, 'Данной статьи не существует!');
+        }
+
+        if (Request::isMethod('post')) {
+
+            $token = check(Request::input('token'));
+            $cid   = int(Request::input('cid'));
+
+            $category = Category::query()->find($cid);
+
+            $validator = new Validator();
+            $validator
+                ->equal($token, $_SESSION['token'], 'Неверный идентификатор сессии, повторите действие!')
+                ->notEmpty($category, ['cid' => 'Категории для статьи не существует!']);
+
+            if ($category) {
+                $validator->empty($category->closed, ['cid' => 'В данном разделе запрещено создавать статьи!']);
+                $validator->notEqual($blog->category_id, $category->id, ['cid' => 'Нельзя переносить статью в этот же раздел!']);
+            }
+
+            if ($validator->isValid()) {
+
+                // Обновление счетчиков
+                $category->increment('count_blogs');
+                Category::query()->where('id', $blog->category_id)->decrement('count_blogs');
+
+                $blog->update([
+                    'category_id' => $category->id,
+                ]);
+
+                setFlash('success', 'Статья успешно перенесена!');
+                redirect('/article/'.$blog->id);
+            } else {
+                setInput(Request::all());
+                setFlash('danger', $validator->getErrors());
+            }
+        }
+
+        $categories = Category::query()
+            ->where('parent_id', 0)
+            ->with('children')
+            ->orderBy('sort')
+            ->get();
+
+        return view('admin/blog/move_blog', compact('blog', 'categories'));
     }
 
     /**

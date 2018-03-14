@@ -364,6 +364,7 @@ $routes = [
     ['GET',      '/admin/blog/delete/[i:id]', 'Admin\BlogController@delete'],
     ['GET',      '/admin/blog/[i:id]', 'Admin\BlogController@blog'],
     ['GET|POST', '/admin/article/edit/[i:id]', 'Admin\BlogController@editBlog'],
+    ['GET|POST', '/admin/article/move/[i:id]', 'Admin\BlogController@moveBlog'],
     ['GET',      '/admin/article/delete/[i:id]', 'Admin\BlogController@deleteBlog'],
 
     ['GET|POST', '/admin/load', 'admin/load.php'],

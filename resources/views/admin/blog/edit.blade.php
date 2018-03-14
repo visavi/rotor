@@ -26,7 +26,7 @@
                             @continue
                         @endif
 
-                        <option value="{{ $data->id }}"{{ ($inputParent == $data->id) ? ' selected' : '' }}{{ !empty($data->closed) ? ' disabled' : '' }}>{{ $data->name }}</option>
+                        <option value="{{ $data->id }}"{{ ($inputParent == $data->id && ! $data->closed) ? ' selected' : '' }}{{ $data->closed ? ' disabled' : '' }}>{{ $data->name }}</option>
                     @endforeach
 
                 </select>
