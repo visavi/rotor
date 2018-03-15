@@ -345,6 +345,7 @@ class DownController extends BaseController
             ->orderBy('created_at')
             ->offset($page['offset'])
             ->limit($page['limit'])
+            ->with('user')
             ->get();
 
         return view('load/comments', compact('down', 'comments', 'page'));
