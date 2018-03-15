@@ -12,7 +12,7 @@
         Мои: <a href="/load/active?act=files">файлы</a>, <a href="/load/active?act=comments">комментарии</a> /
     @endif
 
-    Новые: <a href="/load/new?act=files">файлы</a>, <a href="/load/new?act=comments">комментарии</a>
+    Новые: <a href="/down/new/files">файлы</a>, <a href="/down/new/comments">комментарии</a>
     <hr>
 
     <div class="b">

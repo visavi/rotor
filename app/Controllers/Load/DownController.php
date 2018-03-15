@@ -463,6 +463,7 @@ class DownController extends BaseController
     public function zipView($id, $fid)
     {
         $down = Down::query()->find($id);
+
         if (! $down) {
             abort(404, 'Данного файла не существует!');
         }
@@ -516,9 +517,31 @@ class DownController extends BaseController
         $down = Down::query()->where('id', $id)->with('lastComments')->first();
 
         if (! $down) {
-            abort('default', 'Данного файла не существует!');
+            abort(404, 'Данного файла не существует!');
         }
 
         return view('load/rss_comments', compact('down'));
+    }
+
+    /**
+     * Переход к сообщению
+     */
+    public function viewComment($id, $cid)
+    {
+        $down = Down::query()->find($id);
+
+        if (! $down) {
+            abort(404, 'Данного файла не существует!');
+        }
+
+        $total = Comment::query()
+            ->where('relate_type', Down::class)
+            ->where('relate_id', $id)
+            ->where('id', '<=', $cid)
+            ->orderBy('created_at')
+            ->count();
+
+        $end = ceil($total / setting('downcomm'));
+        redirect('/down/comments/' . $id . '?page=' . $end . '#comment_' . $cid);
     }
 }

@@ -50,7 +50,7 @@ class PhotoController extends BaseController
             abort(404, 'Фотография не найдена');
         }
 
-        return view('gallery/view', compact('photo', 'page'));
+        return view('gallery/view', compact('photo'));
     }
 
     /**
@@ -165,7 +165,7 @@ class PhotoController extends BaseController
         $photo = Photo::query()->find($id);
 
         if (! $photo) {
-            abort('default', 'Фотография не найдена');
+            abort('default', 'Фотография не найдена!');
         }
 
         if (Request::isMethod('post')) {
@@ -382,7 +382,7 @@ class PhotoController extends BaseController
     {
         $user = User::query()->where('login', $login)->first();
 
-        if (!$user) {
+        if (! $user) {
             abort('default', 'Пользователь не найден!');
         }
 
@@ -462,7 +462,7 @@ class PhotoController extends BaseController
     {
         $user = User::query()->where('login', $login)->first();
 
-        if (!$user) {
+        if (! $user) {
             abort('default', 'Пользователь не найден!');
         }
 
@@ -492,6 +492,12 @@ class PhotoController extends BaseController
      */
     public function viewComment($id, $cid)
     {
+        $photo = Photo::query()->find($id);
+
+        if (! $photo) {
+            abort(404, 'Фотография не найдена!');
+        }
+
         $total = Comment::query()
             ->where('relate_type', Photo::class)
             ->where('relate_id', $id)
@@ -499,13 +505,7 @@ class PhotoController extends BaseController
             ->orderBy('created_at')
             ->count();
 
-        if ($total) {
-            $end = ceil($total / setting('postgallery'));
-
-            redirect('/gallery/comments/' . $id . '?page=' . $end);
-        } else {
-            setFlash('success', 'Комментариев к данному изображению не существует!');
-            redirect('/gallery/comments');
-        }
+        $end = ceil($total / setting('postgallery'));
+        redirect('/gallery/comments/' . $id . '?page=' . $end . '#comment_' . $cid);
     }
 }

@@ -5,39 +5,6 @@ $act = isset($_GET['act']) ? check($_GET['act']) : 'files';
 $page = int(Request::input('page', 1));
 
 switch ($action):
-############################################################################################
-##                                        Вывод тем                                       ##
-############################################################################################
-case 'files':
-    //show_title('Список новых файлов');
-
-    $total = DB::run() -> querySingle("SELECT count(*) FROM `downs` WHERE `active`=?;", [1]);
-    if ($total > 100) {
-        $total = 100;
-    }
-    $page = paginate(setting('downlist'), $total);
-
-    if ($total > 0) {
-        $querydown = DB::select("SELECT `downs`.*, `name`, folder FROM `downs` LEFT JOIN `cats` ON `downs`.`category_id`=`cats`.`id` WHERE `active`=? ORDER BY `time` DESC LIMIT ".$page['offset'].", ".setting('downlist').";", [1]);
-
-        while ($data = $querydown -> fetch()) {
-            $folder = $data['folder'] ? $data['folder'].'/' : '';
-
-            $filesize = (!empty($data['link'])) ? formatFileSize(UPLOADS.'/files/'.$folder.$data['link']) : 0;
-
-            echo '<div class="b"><i class="fa fa-file"></i> ';
-            echo '<b><a href="/load/down?act=view&amp;id='.$data['id'].'">'.$data['title'].'</a></b> ('.$filesize.')</div>';
-
-            echo '<div>Категория: <a href="/load/down?cid='.$data['category_id'].'">'.$data['name'].'</a><br>';
-            echo 'Скачиваний: '.$data['loads'].'<br>';
-            echo 'Добавил: '.profile($data['user']).' ('.dateFixed($data['time']).')</div>';
-        }
-
-        pagination($page);
-    } else {
-        showError('Опубликованных файлов еще нет!');
-    }
-break;
 
 ############################################################################################
 ##                                     Вывод сообщений                                    ##

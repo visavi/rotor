@@ -30,25 +30,25 @@
     </ol>
 
     Сортировать:
-    @if ($order == 'created_at')
+    @if ($order === 'created_at')
         <b>По дате</b> /
     @else
         <a href="/load/{{ $category->id }}?sort=time">По дате</a> /
     @endif
 
-    @if ($order == 'loads')
+    @if ($order === 'loads')
         <b>Скачивания</b> /
     @else
         <a href="/load/{{ $category->id }}?sort=loads">Скачивания</a> /
     @endif
 
-    @if ($order == 'rated')
+    @if ($order === 'rated')
         <b>Оценки</b> /
     @else
         <a href="/load/{{ $category->id }}?sort=rated">Оценки</a> /
     @endif
 
-    @if ($order == 'comments')
+    @if ($order === 'comments')
         <b>Комментарии</b>
     @else
         <a href="/load/{{ $category->id }}?sort=comments">Комментарии</a>
@@ -73,16 +73,18 @@
 
             <div class="b">
                 <i class="fa fa-file"></i>
-                <b><a href="/down/{{ $data->id }}">{{ $data->title }}</a></b> ({{ $filesize }})</div>
+                <b><a href="/down/{{ $data->id }}">{{ $data->title }}</a></b> ({{ $filesize }})
+            </div>
+
             <div>
+                Скачиваний: {{ $data->loads }}<br>
 
-            Скачиваний: {{ $data->loads }}<br>
+                <?php $rating = $data->rated ? round($data->rating / $data->rated, 1) : 0; ?>
 
-            <?php $rating = $data->rated ? round($data->rating / $data->rated, 1) : 0; ?>
-
-            Рейтинг: <b>{{ $rating }}</b> (Голосов: {{ $data->rated }})<br>
-            <a href="/down/comments/{{ $data->id }}">Комментарии</a> ({{ $data->count_comments }})
-            <a href="/down/end/{{ $data->id }}">&raquo;</a></div>
+                Рейтинг: <b>{{ $rating }}</b> (Голосов: {{ $data->rated }})<br>
+                <a href="/down/comments/{{ $data->id }}">Комментарии</a> ({{ $data->count_comments }})
+                <a href="/down/end/{{ $data->id }}">&raquo;</a>
+            </div>
         @endforeach
 
         {!! pagination($page) !!}

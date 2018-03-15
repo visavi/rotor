@@ -201,11 +201,13 @@ $routes = [
     ['GET',      '/down/rss/[i:id]', 'Load\DownController@rss'],
     ['GET',      '/down/zip/[i:id]', 'Load\DownController@zip'],
     ['GET',      '/down/zip/[i:id]/[i:fid]', 'Load\DownController@zipView'],
+    ['GET',      '/down/new/files', 'Load\NewController@files'],
+    ['GET',      '/down/new/comments', 'Load\NewController@comments'],
+    ['GET',      '/down/comment/[i:id]/[i:cid]', 'Load\DownController@viewComment'],
 
     ['GET|POST', '/load/active', 'load/active.php'],
     ['GET|POST', '/load/add', 'load/add.php'],
     ['GET|POST', '/load/fresh', 'load/fresh.php'],
-    ['GET|POST', '/load/new', 'load/new.php'],
     ['GET|POST', '/load/search', 'load/search.php'],
     ['GET|POST', '/load/top', 'load/top.php'],
 

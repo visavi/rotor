@@ -1,11 +1,11 @@
 @extends('layout')
 
 @section('title')
-    Список новых тем
+    Форум - Новые темы (Стр. {{ $page['current'] }})
 @stop
 
 @section('content')
-    <h1>Список новых тем</h1>
+    <h1>Новые темы</h1>
 
     <a href="/forum">Форум</a>
 

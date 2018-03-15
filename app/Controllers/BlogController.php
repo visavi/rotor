@@ -666,22 +666,23 @@ class BlogController extends BaseController
     /**
      * Переход к сообщению
      */
-    public function viewComment($id, $сid)
+    public function viewComment($id, $cid)
     {
+        $blog = Blog::query()->find($id);
+
+        if (! $blog) {
+            abort(404, 'Данной статьи не существует!');
+        }
+
         $total = Comment::query()
             ->where('relate_type', Blog::class)
             ->where('relate_id', $id)
-            ->where('id', '<=', $сid)
+            ->where('id', '<=', $cid)
             ->orderBy('created_at')
             ->count();
 
-        if ($total) {
-            $end = ceil($total / setting('blogpost'));
-            redirect('/article/comments/' . $id . '?page=' . $end);
-        } else {
-            setFlash('success', 'Комментариев к данной статье не существует!');
-            redirect('/article/comments/' . $id);
-        }
+        $end = ceil($total / setting('blogpost'));
+        redirect('/article/comments/' . $id . '?page=' . $end . '#comment_' . $cid);
     }
 
     /**

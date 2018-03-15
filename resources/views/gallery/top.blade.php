@@ -36,7 +36,7 @@
 
                 <br>{!! bbCode($data->text) !!}<br>
 
-                Добавлено: {!! profile($data->user) !!} ({{ dateFixed($data->time) }})<br>
+                Добавлено: {!! profile($data->user) !!} ({{ dateFixed($data->created_at) }})<br>
                 <a href="/gallery/comments/{{ $data->id }}">Комментарии</a> ({{ $data->count_comments }})
                 <a href="/gallery/end/{{ $data->id }}">&raquo;</a>
             </div>

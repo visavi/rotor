@@ -248,7 +248,7 @@ class NewsController extends BaseController
     {
         $news = News::query()->find($id);
 
-        if (empty($news)) {
+        if (! $news) {
             abort(404, 'Ошибка! Данной новости не существует!');
         }
 

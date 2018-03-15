@@ -1,7 +1,7 @@
 @extends('layout')
 
 @section('title')
-    Блоги - Новые комментарии (Стр. {{ $page['current'] }})
+    Загрузки - Новые комментарии (Стр. {{ $page['current'] }})
 @stop
 
 @section('content')
@@ -11,7 +11,7 @@
     @if ($comments->isNotEmpty())
         @foreach ($comments as $data)
             <div class="b">
-                <i class="fa fa-comment"></i> <b><a href="/article/comments/{{ $data->relate_id }}">{{ $data->title }}</a></b> ({{ $data->count_comments }})
+                <i class="fa fa-comment"></i> <b><a href="/down/comment/{{ $data->relate_id }}/{{ $data->id }}">{{ $data->title }}</a></b> ({{ $data->count_comments }})
             </div>
 
             <div>

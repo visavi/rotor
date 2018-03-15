@@ -1,12 +1,12 @@
 @extends('layout')
 
 @section('title')
-    Список всех комментариев {{ $user->login }} (Стр. {{ $page['current'] }})
+    Блоги - Список комментариев {{ $user->login }} (Стр. {{ $page['current'] }})
 @stop
 
 @section('content')
 
-    <h1>Список всех комментариев {{ $user->login }}</h1>
+    <h1>Список комментариев {{ $user->login }}</h1>
 
     @if ($comments->isNotEmpty())
         @foreach ($comments as $data)
@@ -27,7 +27,7 @@
                     {!! bbCode($data->text) !!}
                     <br>
 
-                    Написал: {!! profile($data->user) !!} <small>({{ dateFixed($data->time) }})</small><br>
+                    Написал: {!! profile($data->user) !!} <small>({{ dateFixed($data->created_at) }})</small><br>
                     @if (isAdmin())
                         <span class="data">({{ $data->brow }}, {{ $data->ip }})</span>
                     @endif

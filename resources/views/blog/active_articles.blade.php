@@ -1,12 +1,12 @@
 @extends('layout')
 
 @section('title')
-    Список всех статей {{ $user->login }} (Стр. {{ $page['current'] }})
+    Блоги - Список статей {{ $user->login }} (Стр. {{ $page['current'] }})
 @stop
 
 @section('content')
 
-    <h1>Список всех статей {{ $user->login }}</h1>
+    <h1>Список статей {{ $user->login }}</h1>
 
     @if ($blogs->isNotEmpty())
         @foreach ($blogs as $data)
@@ -15,7 +15,7 @@
                 <b><a href="/article/{{ $data->id }}">{{ $data->title }}</a></b> ({!! formatNum($data->rating) !!})
             </div>
 
-            <div>Автор: {!! profile($data->user) !!} ({{ dateFixed($data->time) }})<br>
+            <div>Автор: {!! profile($data->user) !!} ({{ dateFixed($data->created_at) }})<br>
                 <i class="fa fa-comment"></i> <a href="/article/comments/{{ $data->id }}">Комментарии</a> ({{ $data->count_comments }})
                 <a href="/article/end/{{ $data->id }}">&raquo;</a>
             </div>

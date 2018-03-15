@@ -1,7 +1,7 @@
 @extends('layout')
 
 @section('title')
-    Список сообщений {{ $user->login }}
+    Форум - Список сообщений {{ $user->login }} (Стр. {{ $page['current'] }})
 @stop
 
 @section('content')
