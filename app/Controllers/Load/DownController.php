@@ -14,6 +14,7 @@ use App\Models\Flood;
 use App\Models\Read;
 use App\Models\Polling;
 use Illuminate\Database\Capsule\Manager as DB;
+use Illuminate\Database\Query\JoinClause;
 use PhpZip\ZipFile;
 
 class DownController extends BaseController
@@ -26,7 +27,7 @@ class DownController extends BaseController
         $down = Down::query()
             ->select('downs.*', 'pollings.vote')
             ->where('downs.id', $id)
-            ->leftJoin('pollings', function ($join) {
+            ->leftJoin('pollings', function (JoinClause $join) {
                 $join->on('downs.id', '=', 'pollings.relate_id')
                     ->where('pollings.relate_type', Down::class)
                     ->where('pollings.user_id', getUser('id'));

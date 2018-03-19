@@ -40,6 +40,7 @@ use App\Models\User;
 use App\Models\Vote;
 use App\Models\Wall;
 use Illuminate\Database\Capsule\Manager as DB;
+use Illuminate\Database\Query\JoinClause;
 use Illuminate\Http\UploadedFile;
 use Intervention\Image\ImageManagerStatic as Image;
 use Jenssegers\Blade\Blade;
@@ -414,7 +415,7 @@ function saveStatus($time = 0)
 
     $users = User::query()
         ->select('users.id', 'users.status', 'status.name', 'status.color')
-        ->leftJoin('status', function($join) {
+        ->leftJoin('status', function (JoinClause $join) {
             $join->whereRaw('users.point between status.topoint and status.point');
         })
         ->where('users.point', '>', 0)
@@ -1385,7 +1386,7 @@ function recentFiles($show = 5)
     $files = json_decode(file_get_contents(STORAGE.'/temp/recentfiles.dat'));
 
     if ($files) {
-        foreach ($files as $file){
+        foreach ($files as $file) {
             $folder = $file->category->folder ? $file->category->folder.'/' : null;
             $filesize = $file->link ? formatFileSize(UPLOADS.'/files/'.$folder.$file->link) : 0;
             echo '<i class="far fa-circle fa-lg text-muted"></i>  <a href="/down/'.$file->id.'">'.$file->title.'</a> ('.$filesize.')<br>';
@@ -1500,10 +1501,10 @@ function counterString($file)
  */
 function profile(User $user, $color = null)
 {
-    if ($user->id){
+    if ($user->id) {
         $name = empty($user->name) ? $user->login : $user->name;
 
-        if ($color){
+        if ($color) {
             return '<a href="/user/'.$user->login.'"><span style="color:'.$color.'">'.$name.'</span></a>';
         }
 
@@ -1663,7 +1664,7 @@ function isIgnore(User $user, User $ignoreUser)
  */
 function removeDir($dir)
 {
-    if (file_exists($dir)){
+    if (file_exists($dir)) {
         if ($files = glob($dir . '/*')) {
             foreach($files as $file) {
                 is_dir($file) ? removeDir($file) : unlink($file);
@@ -1724,7 +1725,7 @@ function textNotice($type, array $replace = [])
  */
 function performance()
 {
-    if (isAdmin() && setting('performance')){
+    if (isAdmin() && setting('performance')) {
 
         $queries = env('APP_DEBUG') ? getQueryLog() : [];
         return view('app/_performance', compact('queries'));
@@ -1746,7 +1747,7 @@ function clearCache()
         STORAGE.'/temp/counter7.dat'
     ]);
 
-    if ($files){
+    if ($files) {
         foreach ($files as $file) {
             unlink ($file);
         }
@@ -1849,7 +1850,7 @@ function redirect($url, $permanent = false)
         $_SESSION['captcha'] = null;
     }
 
-    if ($permanent){
+    if ($permanent) {
         header($_SERVER['SERVER_PROTOCOL'].' 301 Moved Permanently');
     }
 
@@ -2283,7 +2284,7 @@ function imageBase64($path, array $params = [])
  */
 function progressBar($percent, $title = false)
 {
-    if (! $title){
+    if (! $title) {
         $title = $percent.'%';
     }
 

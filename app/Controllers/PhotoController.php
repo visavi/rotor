@@ -9,6 +9,7 @@ use App\Models\Flood;
 use App\Models\Photo;
 use App\Models\User;
 use Illuminate\Database\Capsule\Manager as DB;
+use Illuminate\Database\Query\JoinClause;
 
 class PhotoController extends BaseController
 {
@@ -38,7 +39,7 @@ class PhotoController extends BaseController
         $photo = Photo::query()
             ->select('photo.*', 'pollings.vote')
             ->where('photo.id', $id)
-            ->leftJoin('pollings', function ($join) {
+            ->leftJoin('pollings', function (JoinClause $join) {
                 $join->on('photo.id', '=', 'pollings.relate_id')
                     ->where('pollings.relate_type', Photo::class)
                     ->where('pollings.user_id', getUser('id'));

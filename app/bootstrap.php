@@ -26,7 +26,7 @@ if (! env('APP_ENV')) {
 if (env('APP_DEBUG')) {
     $whoops = new Run();
 
-    if (Whoops\Util\Misc::isCommandLine()){
+    if (Whoops\Util\Misc::isCommandLine()) {
         $whoops->pushHandler(new PlainTextHandler);
     } else {
         $whoops->pushHandler(new PrettyPageHandler);

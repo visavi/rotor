@@ -8,6 +8,7 @@ use App\Models\Comment;
 use App\Models\Flood;
 use App\Models\Offer;
 use App\Models\Polling;
+use Illuminate\Database\Query\JoinClause;
 
 class OfferController extends BaseController
 {
@@ -58,7 +59,7 @@ class OfferController extends BaseController
         $offer = Offer::query()
             ->select('offers.*', 'pollings.vote')
             ->where('offers.id', $id)
-            ->leftJoin('pollings', function ($join) {
+            ->leftJoin('pollings', function (JoinClause $join) {
                 $join->on('offers.id', '=', 'pollings.relate_id')
                     ->where('pollings.relate_type', Offer::class)
                     ->where('pollings.user_id', getUser('id'));

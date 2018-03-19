@@ -11,6 +11,7 @@ use App\Models\Flood;
 use App\Models\Read;
 use App\Models\User;
 use Illuminate\Database\Capsule\Manager as DB;
+use Illuminate\Database\Query\JoinClause;
 
 class BlogController extends BaseController
 {
@@ -66,7 +67,7 @@ class BlogController extends BaseController
         $blog = Blog::query()
             ->select('blogs.*', 'pollings.vote')
             ->where('blogs.id', $id)
-            ->leftJoin('pollings', function ($join) {
+            ->leftJoin('pollings', function (JoinClause $join) {
                 $join->on('blogs.id', '=', 'pollings.relate_id')
                     ->where('pollings.relate_type', Blog::class)
                     ->where('pollings.user_id', getUser('id'));

@@ -14,6 +14,7 @@ use App\Models\Flood;
 use App\Classes\Request;
 use App\Classes\Validator;
 use Illuminate\Database\Capsule\Manager as DB;
+use Illuminate\Database\Query\JoinClause;
 
 class TopicController extends BaseController
 {
@@ -25,7 +26,7 @@ class TopicController extends BaseController
         $topic = Topic::query()
             ->select('topics.*', 'bookmarks.count_posts as bookmark_posts')
             ->where('topics.id', $id)
-            ->leftJoin('bookmarks', function ($join) {
+            ->leftJoin('bookmarks', function (JoinClause $join) {
                 $join->on('topics.id', '=', 'bookmarks.topic_id')
                     ->where('bookmarks.user_id', '=', getUser('id'));
             })
@@ -42,7 +43,7 @@ class TopicController extends BaseController
         $posts = Post::query()
             ->select('posts.*', 'pollings.vote')
             ->where('topic_id', $topic->id)
-            ->leftJoin('pollings', function ($join) {
+            ->leftJoin('pollings', function (JoinClause $join) {
                 $join->on('posts.id', 'pollings.relate_id')
                     ->where('pollings.relate_type', Post::class)
                     ->where('pollings.user_id', getUser('id'));

@@ -11,6 +11,7 @@ use App\Models\Topic;
 use App\Models\User;
 use App\Models\Vote;
 use Illuminate\Database\Capsule\Manager as DB;
+use Illuminate\Database\Query\JoinClause;
 
 class ForumController extends AdminController
 {
@@ -449,7 +450,7 @@ class ForumController extends AdminController
         $posts = Post::query()
             ->select('posts.*', 'pollings.vote')
             ->where('topic_id', $topic->id)
-            ->leftJoin('pollings', function ($join) {
+            ->leftJoin('pollings', function (JoinClause $join) {
                 $join->on('posts.id', 'pollings.relate_id')
                     ->where('pollings.relate_type', Post::class)
                     ->where('pollings.user_id', getUser('id'));
