@@ -10,18 +10,27 @@
 
     @if ($comments->isNotEmpty())
         @foreach ($comments as $data)
-            <div class="b">
-                <i class="fa fa-comment"></i>
-                <b><a href="/down/comment/{{ $data->relate_id }}/{{ $data->id }}">{{ $data->title }}</a></b> ({{ $data->count_comments }})
-            </div>
+            <div class="post">
+                <div class="b">
+                    <i class="fa fa-comment"></i>
+                    <b><a href="/down/comment/{{ $data->relate_id }}/{{ $data->id }}">{{ $data->title }}</a></b> ({{ $data->count_comments }})
 
-            <div>
-                {!! bbCode($data->text) !!}<br>
-                Написал: {!! profile($data->user) !!} <small>({{ dateFixed($data->created_at) }})</small><br>
+                    <div class="float-right">
+                        @if (isAdmin())
+                            <a href="#" onclick="return deleteComment(this)" data-rid="{{ $data->relate_id }}" data-id="{{ $data->id }}" data-type="{{ App\Models\Down::class }}" data-token="{{ $_SESSION['token'] }}" data-toggle="tooltip" title="Удалить"><i class="fa fa-times text-muted"></i></a>
+                        @endif
+                    </div>
+                </div>
 
-                @if (isAdmin())
-                    <span class="data">({{ $data->brow }}, {{ $data->ip }})</span>
-                @endif
+                <div>
+                    {!! bbCode($data->text) !!}
+                    <br>
+
+                    Написал: {!! profile($data->user) !!} <small>({{ dateFixed($data->created_at) }})</small><br>
+                    @if (isAdmin())
+                        <span class="data">({{ $data->brow }}, {{ $data->ip }})</span>
+                    @endif
+                </div>
             </div>
         @endforeach
 
