@@ -23,8 +23,7 @@
                 </div>
 
                 <div>
-                    {!! bbCode($data->text) !!}
-                    <br>
+                    {!! bbCode($data->text) !!}<br>
 
                     Написал: {!! profile($data->user) !!} <small>({{ dateFixed($data->created_at) }})</small><br>
                     @if (isAdmin())
