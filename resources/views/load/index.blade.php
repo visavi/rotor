@@ -9,7 +9,7 @@
     <h1>Загрузки</h1>
 
     @if (getUser())
-        Мои: <a href="/load/active?act=files">файлы</a>, <a href="/load/active?act=comments">комментарии</a> /
+        Мои: <a href="/down/active/files">файлы</a>, <a href="/down/active/comments">комментарии</a> /
     @endif
 
     Новые: <a href="/down/new/files">файлы</a>, <a href="/down/new/comments">комментарии</a>

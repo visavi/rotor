@@ -15,7 +15,7 @@
                     <i class="fa fa-comment"></i> <b><a href="/gallery/comment/{{ $data->relate_id }}/{{ $data->id }}">{{ $data->title }}</a></b>
 
                     @if (isAdmin())
-                        <a href="#" class="float-right" onclick="return deleteComment(this)" data-rid="{{ $data->relate_id }}" data-id="{{ $data->id }}" data-type="{{ Photo::class }}" data-token="{{ $_SESSION['token'] }}" data-toggle="tooltip" title="Удалить"><i class="fa fa-times"></i></a>
+                        <a href="#" class="float-right" onclick="return deleteComment(this)" data-rid="{{ $data->relate_id }}" data-id="{{ $data->id }}" data-type="{{ App\Models\Photo::class }}" data-token="{{ $_SESSION['token'] }}" data-toggle="tooltip" title="Удалить"><i class="fa fa-times"></i></a>
                     @endif
                 </div>
 
