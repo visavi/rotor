@@ -53,7 +53,7 @@ class LoadController extends BaseController
                 $order = 'rated';
                 break;
             case 'comments':
-                $order = 'comments';
+                $order = 'count_comments';
                 break;
             case 'loads':
                 $order = 'loads';

@@ -30,29 +30,19 @@
     </ol>
 
     Сортировать:
-    @if ($order === 'created_at')
-        <b>По дате</b> /
-    @else
-        <a href="/load/{{ $category->id }}?sort=time">По дате</a> /
-    @endif
 
-    @if ($order === 'loads')
-        <b>Скачивания</b> /
-    @else
-        <a href="/load/{{ $category->id }}?sort=loads">Скачивания</a> /
-    @endif
+    <?php $active = ($order === 'created_at') ? 'success' : 'light'; ?>
+    <a href="/load/{{ $category->id }}?sort=time" class="badge badge-{{ $active }}">По дате</a>
 
-    @if ($order === 'rated')
-        <b>Оценки</b> /
-    @else
-        <a href="/load/{{ $category->id }}?sort=rated">Оценки</a> /
-    @endif
+    <?php $active = ($order === 'loads') ? 'success' : 'light'; ?>
+    <a href="/load/{{ $category->id }}?sort=loads" class="badge badge-{{ $active }}">Скачивания</a>
 
-    @if ($order === 'comments')
-        <b>Комментарии</b>
-    @else
-        <a href="/load/{{ $category->id }}?sort=comments">Комментарии</a>
-    @endif
+    <?php $active = ($order === 'rated') ? 'success' : 'light'; ?>
+    <a href="/load/{{ $category->id }}?sort=rated" class="badge badge-{{ $active }}">Оценки</a>
+
+    <?php $active = ($order === 'count_comments') ? 'success' : 'light'; ?>
+    <a href="/load/{{ $category->id }}?sort=comments" class="badge badge-{{ $active }}">Комментарии</a>
+    <hr>
 
     @if ($category->children->isNotEmpty() && $page['current'] == 1)
         <div class="act">
@@ -98,6 +88,6 @@
         {!! showError('В данной категории запрещена загрузка файлов!') !!}
     @endif
 
-    <a href="/load/top">Топ файлов</a> /
-    <a href="/load/search">Поиск</a>
+    <a href="/down/top">Топ файлов</a> /
+    <a href="/down/search">Поиск</a>
 @stop

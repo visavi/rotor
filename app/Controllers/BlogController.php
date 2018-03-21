@@ -696,7 +696,7 @@ class BlogController extends BaseController
         switch ($sort) {
             case 'rated': $order = 'rating';
                 break;
-            case 'comm': $order = 'comments';
+            case 'comments': $order = 'count_comments';
                 break;
             default: $order = 'visits';
         }

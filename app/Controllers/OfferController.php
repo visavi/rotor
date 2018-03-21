@@ -34,7 +34,7 @@ class OfferController extends BaseController
                 $order = 'status';
                 break;
             case 'comments':
-                $order = 'comments';
+                $order = 'count_comments';
                 break;
             default:
                 $order = 'rating';

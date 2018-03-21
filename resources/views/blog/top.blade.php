@@ -10,14 +10,14 @@
 
     Сортировать:
 
-    <?php $active = ($order == 'visits') ? 'success' : 'light'; ?>
+    <?php $active = ($order === 'visits') ? 'success' : 'light'; ?>
     <a href="/blog/top?sort=visits" class="badge badge-{{ $active }}">Просмотры</a>
 
-    <?php $active = ($order == 'rating') ? 'success' : 'light'; ?>
+    <?php $active = ($order === 'rating') ? 'success' : 'light'; ?>
     <a href="/blog/top?sort=rated" class="badge badge-{{ $active }}">Оценки</a>
 
-    <?php $active = ($order == 'comments') ? 'success' : 'light'; ?>
-    <a href="/blog/top?sort=comm" class="badge badge-{{ $active }}">Комментарии</a>
+    <?php $active = ($order === 'count_comments') ? 'success' : 'light'; ?>
+    <a href="/blog/top?sort=comments" class="badge badge-{{ $active }}">Комментарии</a>
     <hr>
 
     @if ($blogs->isNotEmpty())

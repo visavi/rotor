@@ -11,20 +11,13 @@
     @if ($photos->isNotEmpty())
 
         Сортировать:
+        <?php $active = ($order === 'rating') ? 'success' : 'light'; ?>
+        <a href="/gallery/top?sort=rating" class="badge badge-{{ $active }}">Оценки</a>
 
-        @if ($order == 'rating')
-            <b><a href="/gallery/top?sort=rating">Оценки</a></b>,
-        @else
-            <a href="/gallery/top?sort=rating">Оценки</a>,
-        @endif
-
-        @if ($order == 'comments')
-            <b><a href="/gallery/top?sort=comments">Комментарии</a></b>
-        @else
-            <a href="/gallery/top?sort=comments">Комментарии</a>
-        @endif
-
+        <?php $active = ($order === 'count_comments') ? 'success' : 'light'; ?>
+        <a href="/gallery/top?sort=comments" class="badge badge-{{ $active }}">Комментарии</a>
         <hr>
+
 
         @foreach ($photos as $data)
             <div class="b">

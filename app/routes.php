@@ -206,11 +206,12 @@ $routes = [
     ['GET',      '/down/new/comments', 'Load\NewController@comments'],
     ['GET',      '/down/active/files', 'Load\ActiveController@files'],
     ['GET',      '/down/active/comments', 'Load\ActiveController@comments'],
+    ['GET',      '/down/top', 'Load\TopController@index'],
 
     ['GET|POST', '/load/add', 'load/add.php'],
     ['GET|POST', '/load/fresh', 'load/fresh.php'],
     ['GET|POST', '/load/search', 'load/search.php'],
-    ['GET|POST', '/load/top', 'load/top.php'],
+
 
     ['GET',      '/api', 'ApiController@index'],
     ['GET',      '/api/user', 'ApiController@user'],

@@ -412,11 +412,8 @@ class PhotoController extends BaseController
         $sort = check(Request::input('sort', 'rating'));
 
         switch ($sort) {
-            case 'rating':
-                $order = 'rating';
-                break;
             case 'comments':
-                $order = 'comments';
+                $order = 'count_comments';
                 break;
             default:
                 $order = 'rating';

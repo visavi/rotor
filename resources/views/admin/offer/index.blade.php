@@ -27,29 +27,17 @@
     @endif
 
     <br>Сортировать:
-    @if ($order == 'rating')
-        <b>Голоса</b> /
-    @else
-        <a href="/admin/offers/{{ $type }}?sort=rating">Голоса</a> /
-    @endif
+    <?php $active = ($order === 'rating') ? 'success' : 'light'; ?>
+    <a href="/admin/offers/{{ $type }}?sort=rating" class="badge badge-{{ $active }}">Голоса</a>
 
-    @if ($order == 'created_at')
-        <b>Дата</b> /
-    @else
-        <a href="/admin/offers/{{ $type }}?sort=time">Дата</a> /
-    @endif
+    <?php $active = ($order === 'created_at') ? 'success' : 'light'; ?>
+    <a href="/admin/offers/{{ $type }}?sort=time" class="badge badge-{{ $active }}">Дата</a>
 
-    @if ($order == 'status')
-        <b>Статус</b> /
-    @else
-        <a href="/admin/offers/{{ $type }}?sort=status">Статус</a> /
-    @endif
+    <?php $active = ($order === 'status') ? 'success' : 'light'; ?>
+    <a href="/admin/offers/{{ $type }}?sort=status" class="badge badge-{{ $active }}">Статус</a>
 
-    @if ($order == 'comments')
-        <b>Комментарии</b>
-    @else
-        <a href="/admin/offers/{{ $type }}?sort=comments">Комментарии</a>
-    @endif
+    <?php $active = ($order === 'count_comments') ? 'success' : 'light'; ?>
+    <a href="/admin/offers/{{ $type }}?sort=comments" class="badge badge-{{ $active }}">Комментарии</a>
     <hr>
 
     @if ($offers->isNotEmpty())
