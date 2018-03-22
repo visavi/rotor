@@ -4,9 +4,7 @@ namespace App\Controllers\Load;
 
 use App\Classes\Request;
 use App\Controllers\BaseController;
-use App\Models\Comment;
 use App\Models\Down;
-use App\Models\User;
 
 class TopController extends BaseController
 {

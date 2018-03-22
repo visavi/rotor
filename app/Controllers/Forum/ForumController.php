@@ -206,8 +206,7 @@ class ForumController extends BaseController
         $period  = int(Request::input('period'));
         $section = int(Request::input('section'));
 
-        if (empty($find)) {
-
+        if (! $find) {
             $forums = Forum::query()
                 ->where('parent_id', 0)
                 ->with('children')
@@ -221,10 +220,13 @@ class ForumController extends BaseController
             return view('forum/search', compact('forums', 'fid'));
 
         }
+
         $find = str_replace(['@', '+', '-', '*', '~', '<', '>', '(', ')', '"', "'"], '', $find);
-        if (!isUtf($find)) {
+
+        if (! isUtf($find)) {
             $find = winToUtf($find);
         }
+
         if (utfStrlen($find) >= 3 && utfStrlen($find) <= 50) {
 
             $findmewords = explode(' ', utfLower($find));

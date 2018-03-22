@@ -40,6 +40,7 @@
             </div>
 
             <div>
+                Категория: <a href="/load/{{ $data->category->id }}">{{ $data->category->name }}</a><br>
                 Скачиваний: {{ $data->loads }}<br>
 
                 <?php $rating = $data->rated ? round($data->rating / $data->rated, 1) : 0; ?>
@@ -53,7 +54,7 @@
         {!! pagination($page) !!}
     @else
         @if (! $category->closed)
-            {!! showError('В данной категории еще нет файлов!') !!}
+            {!! showError('Файлы не найдены!') !!}
         @endif
     @endif
 @stop

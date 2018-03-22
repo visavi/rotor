@@ -192,6 +192,7 @@ $routes = [
     ['GET',      '/load/rss', 'Load\LoadController@rss'],
     ['GET',      '/load/[i:id]', 'Load\LoadController@load'],
     ['GET',      '/load/top', 'Load\TopController@index'],
+    ['GET',      '/load/search', 'Load\SearchController@index'],
     ['GET|POST', '/down/create', 'Load\DownController@create'],
     ['GET',      '/down/[i:id]', 'Load\DownController@index'],
     ['POST',     '/down/vote/[i:id]', 'Load\DownController@vote'],
@@ -210,8 +211,6 @@ $routes = [
 
     ['GET|POST', '/load/add', 'load/add.php'],
     ['GET|POST', '/load/fresh', 'load/fresh.php'],
-    ['GET|POST', '/load/search', 'load/search.php'],
-
 
     ['GET',      '/api', 'ApiController@index'],
     ['GET',      '/api/user', 'ApiController@user'],

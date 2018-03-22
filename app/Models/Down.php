@@ -65,6 +65,21 @@ class Down extends BaseModel
     }
 
     /**
+     * Обрезает текст
+     *
+     * @return string
+     */
+    public function cutText()
+    {
+        if (utfStrlen($this->text) > 300) {
+            $this->text = strip_tags(bbCode($this->text), '<br>');
+            $this->text = str_limit($this->text, 300);
+        }
+
+        return $this->text;
+    }
+
+    /**
      * Возвращает массив доступных расширений для просмотра в архиве
      *
      * @return array
