@@ -46,8 +46,7 @@
     @endforeach
 
     <br>
-    <a href="/down/top">Топ файлов</a> /
-    <a href="/down/search">Поиск</a> /
-    <a href="/down/add">Добавить файл</a> /
-    <a href="/down/rss">RSS</a><br>
+    <a href="/load/top">Топ файлов</a> /
+    <a href="/load/search">Поиск</a> /
+    <a href="/load/rss">RSS</a><br>
 @stop

@@ -12,10 +12,10 @@
         </div>
     @endif
 
-    <h1>{{ $category->name }}</h1>
+    <h1>{{ $category->name }}</h1><br>
 
-    <br>
     <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
         <li class="breadcrumb-item"><a href="/load">Загрузки</a></li>
 
         @if ($category->parent->id)
@@ -88,6 +88,6 @@
         {!! showError('В данной категории запрещена загрузка файлов!') !!}
     @endif
 
-    <a href="/down/top">Топ файлов</a> /
-    <a href="/down/search">Поиск</a>
+    <a href="/load/top">Топ файлов</a> /
+    <a href="/load/search">Поиск</a>
 @stop

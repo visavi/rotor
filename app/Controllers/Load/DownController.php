@@ -357,6 +357,12 @@ class DownController extends BaseController
      */
     public function editComment($id, $cid)
     {
+        $down = Down::query()->find($id);
+
+        if (! $down) {
+            abort(404, 'Данного файла не существует!');
+        }
+
         $page = int(Request::input('page', 1));
 
         if (! getUser()) {
@@ -402,7 +408,7 @@ class DownController extends BaseController
             }
         }
 
-        return view('load/editcomment', compact('comment', 'page'));
+        return view('load/editcomment', compact('down', 'comment', 'page'));
     }
 
     /**

@@ -6,7 +6,13 @@
 
 @section('content')
 
-    <h1>Список комментариев {{ $user->login }}</h1>
+    <h1>Комментарии {{ $user->login }}</h1>
+
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
+        <li class="breadcrumb-item"><a href="/load">Загрузки</a></li>
+        <li class="breadcrumb-item active">Комментарии {{ $user->login }}</li>
+    </ol>
 
     @if ($comments->isNotEmpty())
         @foreach ($comments as $data)

@@ -16,7 +16,8 @@
     @endif
 
     <ol class="breadcrumb">
-        <li class="breadcrumb-item"><a href="/load">Категории</a></li>
+        <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
+        <li class="breadcrumb-item"><a href="/load">Загрузки</a></li>
 
         @if ($down->category->parent->id)
             <li class="breadcrumb-item"><a href="/load/{{ $down->category->parent->id }}">{{ $down->category->parent->name }}</a></li>
@@ -121,6 +122,4 @@
     @else
         {!! showError('Файл еще не загружен!') !!}
     @endif
-
-    <i class="fa fa-arrow-circle-up"></i> <a href="/load">Категории</a><br>
 @stop

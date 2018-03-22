@@ -9,7 +9,8 @@
     <h1>Публикация нового файла</h1>
 
     <ol class="breadcrumb">
-        <li class="breadcrumb-item"><a href="/load">Категории</a></li>
+        <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
+        <li class="breadcrumb-item"><a href="/load">Загрузки</a></li>
         <li class="breadcrumb-item active">Публикация</li>
         <li class="breadcrumb-item"><a href="/load/add?act=waiting">Ожидающие</a></li>
         <li class="breadcrumb-item"><a href="/load/active">Проверенные</a></li>
@@ -74,6 +75,4 @@
         Файл и скриншот вы сможете загрузить после добавления описания<br>
         Если вы ошиблись в названии или описании файла, вы всегда можете его отредактировать
     </div>
-
-    <i class="fa fa-arrow-circle-left"></i> <a href="/load">Категории</a><br>
 @stop

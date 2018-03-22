@@ -5,7 +5,13 @@
 @stop
 
 @section('content')
-    <h1>Список файлов {{ $user->login }}</h1>
+    <h1>Файлы {{ $user->login }}</h1>
+
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
+        <li class="breadcrumb-item"><a href="/load">Загрузки</a></li>
+        <li class="breadcrumb-item active">Файлы {{ $user->login }}</li>
+    </ol>
 
     <?php /*
     echo '<i class="fa fa-book"></i> ';
