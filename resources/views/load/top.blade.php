@@ -8,11 +8,13 @@
 
     <h1>Топ популярных файлов</h1>
 
-    <ol class="breadcrumb">
-        <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
-        <li class="breadcrumb-item"><a href="/load">Загрузки</a></li>
-        <li class="breadcrumb-item active">Топ файлов</li>
-    </ol>
+    <nav>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
+            <li class="breadcrumb-item"><a href="/load">Загрузки</a></li>
+            <li class="breadcrumb-item active">Топ файлов</li>
+        </ol>
+    </nav>
 
     Сортировать:
 

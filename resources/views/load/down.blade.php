@@ -15,18 +15,20 @@
         <a href="/admin/load?act=movedown&amp;cid={{ $down->category_id }}&amp;id={{ $down->id }}">Переместить</a>
     @endif
 
-    <ol class="breadcrumb">
-        <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
-        <li class="breadcrumb-item"><a href="/load">Загрузки</a></li>
+    <nav>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
+            <li class="breadcrumb-item"><a href="/load">Загрузки</a></li>
 
-        @if ($down->category->parent->id)
-            <li class="breadcrumb-item"><a href="/load/{{ $down->category->parent->id }}">{{ $down->category->parent->name }}</a></li>
-        @endif
+            @if ($down->category->parent->id)
+                <li class="breadcrumb-item"><a href="/load/{{ $down->category->parent->id }}">{{ $down->category->parent->name }}</a></li>
+            @endif
 
-        <li class="breadcrumb-item"><a href="/load/{{ $down->category_id }}">{{ $down->category->name }}</a></li>
-        <li class="breadcrumb-item active">{{ $down->title }}</li>
-        <li class="breadcrumb-item"><a href="/down/rss/{{ $down->id }}">RSS-лента</a></li>
-    </ol>
+            <li class="breadcrumb-item"><a href="/load/{{ $down->category_id }}">{{ $down->category->name }}</a></li>
+            <li class="breadcrumb-item active">{{ $down->title }}</li>
+            <li class="breadcrumb-item"><a href="/down/rss/{{ $down->id }}">RSS-лента</a></li>
+        </ol>
+    </nav>
 
     @if (! $down->active && $down->user_id == getUser('id'))
         <div class="info">

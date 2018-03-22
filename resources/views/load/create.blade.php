@@ -8,13 +8,15 @@
 
     <h1>Публикация нового файла</h1>
 
-    <ol class="breadcrumb">
-        <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
-        <li class="breadcrumb-item"><a href="/load">Загрузки</a></li>
-        <li class="breadcrumb-item active">Публикация</li>
-        <li class="breadcrumb-item"><a href="/load/add?act=waiting">Ожидающие</a></li>
-        <li class="breadcrumb-item"><a href="/load/active">Проверенные</a></li>
-    </ol>
+    <nav>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
+            <li class="breadcrumb-item"><a href="/load">Загрузки</a></li>
+            <li class="breadcrumb-item active">Публикация</li>
+            <li class="breadcrumb-item"><a href="/load/add?act=waiting">Ожидающие</a></li>
+            <li class="breadcrumb-item"><a href="/load/active">Проверенные</a></li>
+        </ol>
+    </nav>
 
     <form action="/down/create" method="post" enctype="multipart/form-data">
         <input type="hidden" name="token" value="{{ $_SESSION['token'] }}">

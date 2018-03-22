@@ -7,11 +7,13 @@
 @section('content')
     <h1>Файлы {{ $user->login }}</h1>
 
-    <ol class="breadcrumb">
-        <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
-        <li class="breadcrumb-item"><a href="/load">Загрузки</a></li>
-        <li class="breadcrumb-item active">Файлы {{ $user->login }}</li>
-    </ol>
+    <nav>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
+            <li class="breadcrumb-item"><a href="/load">Загрузки</a></li>
+            <li class="breadcrumb-item active">Файлы {{ $user->login }}</li>
+        </ol>
+    </nav>
 
     <?php /*
     echo '<i class="fa fa-book"></i> ';

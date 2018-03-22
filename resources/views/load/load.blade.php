@@ -14,20 +14,22 @@
 
     <h1>{{ $category->name }}</h1><br>
 
-    <ol class="breadcrumb">
-        <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
-        <li class="breadcrumb-item"><a href="/load">Загрузки</a></li>
+    <nav>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
+            <li class="breadcrumb-item"><a href="/load">Загрузки</a></li>
 
-        @if ($category->parent->id)
-            <li class="breadcrumb-item"><a href="/load/{{ $category->parent->id }}">{{ $category->parent->name }}</a></li>
-        @endif
+            @if ($category->parent->id)
+                <li class="breadcrumb-item"><a href="/load/{{ $category->parent->id }}">{{ $category->parent->name }}</a></li>
+            @endif
 
-        <li class="breadcrumb-item active">{{ $category->name }}</li>
+            <li class="breadcrumb-item active">{{ $category->name }}</li>
 
-        @if (isAdmin('admin'))
-            <li class="breadcrumb-item"><a href="/admin/load?act=down&amp;cid={{ $category->id }}&amp;page={{ $page['current'] }}">Управление</a></li>
-        @endif
-    </ol>
+            @if (isAdmin('admin'))
+                <li class="breadcrumb-item"><a href="/admin/load?act=down&amp;cid={{ $category->id }}&amp;page={{ $page['current'] }}">Управление</a></li>
+            @endif
+        </ol>
+    </nav>
 
     Сортировать:
 
