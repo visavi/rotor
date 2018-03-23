@@ -15,11 +15,6 @@
     Новые: <a href="/down/new/files">файлы</a>, <a href="/down/new/comments">комментарии</a>
     <hr>
 
-    <div class="b">
-        <i class="fa fa-folder-open"></i>
-        <b><a href="/load/fresh">Свежие загрузки</a></b> ({{ $new }})<br>
-    </div>
-
     @foreach ($cats as $category)
         <div class="b">
             <i class="fa fa-folder-open"></i>
