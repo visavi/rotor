@@ -14,17 +14,17 @@ class LoadController extends BaseController
      */
     public function index()
     {
-        $cats = Load::query()
+        $categories = Load::query()
             ->where('parent_id', 0)
             ->with('children', 'new', 'children.new')
             ->orderBy('sort')
             ->get();
 
-        if ($cats->isEmpty()) {
+        if ($categories->isEmpty()) {
             abort('default', 'Разделы загрузок еще не созданы!');
         }
 
-        return view('load/index', compact('cats'));
+        return view('load/index', compact('categories'));
     }
 
     /**

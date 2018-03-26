@@ -209,7 +209,7 @@ $routes = [
     ['GET',      '/down/active/files', 'Load\ActiveController@files'],
     ['GET',      '/down/active/comments', 'Load\ActiveController@comments'],
 
-    ['GET|POST', '/load/add', 'load/add.php'],
+    ['GET',      '/admin/load', 'Admin\LoadController@index'],
 
     ['GET',      '/api', 'ApiController@index'],
     ['GET',      '/api/user', 'ApiController@user'],
@@ -369,12 +369,12 @@ $routes = [
     ['GET|POST', '/admin/article/move/[i:id]', 'Admin\BlogController@moveBlog'],
     ['GET',      '/admin/article/delete/[i:id]', 'Admin\BlogController@deleteBlog'],
 
-    ['GET|POST', '/admin/load', 'admin/load.php'],
-    ['GET|POST', '/admin/newload', 'admin/newload.php'],
-
     ['GET', '/search', function() {
         return view('search/index');
     }],
+
+    ['GET|POST', '/admin/newload', 'admin/newload.php'],
+    ['GET|POST', '/load/add', 'load/add.php'],
 ];
 
 $router->addRoutes($routes);
