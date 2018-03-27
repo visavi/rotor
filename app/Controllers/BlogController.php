@@ -200,15 +200,15 @@ class BlogController extends BaseController
     {
         $total = Blog::query()
             ->distinct()
-            ->join('users', 'blogs.user_id', '=', 'users.id')
+            ->join('users', 'blogs.user_id', 'users.id')
             ->count('user_id');
 
         $page = paginate(setting('bloggroup'), $total);
 
         $blogs = Blog::query()
             ->select('user_id', 'login')
-            ->selectRaw('count(*) as cnt, sum(comments) as comments')
-            ->join('users', 'blogs.user_id', '=', 'users.id')
+            ->selectRaw('count(*) as cnt, sum(count_comments) as count_comments')
+            ->join('users', 'blogs.user_id', 'users.id')
             ->offset($page['offset'])
             ->limit($page['limit'])
             ->groupBy('user_id')
@@ -536,15 +536,14 @@ class BlogController extends BaseController
 
         if (@filemtime(STORAGE."/temp/tagcloud.dat") < time() - 3600) {
 
-            $allTags =  Blog::query()
+            $allTags = Blog::query()
                 ->select('tags')
                 ->pluck('tags')
                 ->all();
 
             $stingTag = implode(',', $allTags);
-
-            $dumptags = preg_split('/[\s]*[,][\s]*/s', $stingTag);
-            $allTags = array_count_values(array_map('utfLower', $dumptags));
+            $dumptags = preg_split('/[\s]*[,][\s]*/s', $stingTag, -1, PREG_SPLIT_NO_EMPTY);
+            $allTags  = array_count_values(array_map('utfLower', $dumptags));
 
             arsort($allTags);
             array_splice($allTags, 100);

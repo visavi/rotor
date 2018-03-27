@@ -7,14 +7,22 @@
 @section('content')
     <h1>Облако тегов</h1>
 
+    <nav>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
+            <li class="breadcrumb-item"><a href="/blog">Блоги</a></li>
+            <li class="breadcrumb-item active">Облако тегов</li>
+        </ol>
+    </nav>
+
     <div style="text-align:center">
         @foreach ($tags as $key => $val)
 
-            <?php $fontsize = ($min != $max) ? round((($val - $min) / ($max - $min)) * 110 + 100) : 100; ?>
+            <?php
+            $fontsize = App\Models\Blog::logTagSize($val, $min, $max);
+            ?>
 
-            <a href="/blog/tags/{{ urlencode($key) }}"><span style="font-size:{{ $fontsize }}%">{{ $key }}</span></a>
+            <a href="/blog/tags/{{ urlencode($key) }}"><span style="font-size:{{ $fontsize }}pt">{{ $key }}</span></a>
         @endforeach
     </div><br>
-
-    <i class="fa fa-arrow-circle-left"></i> <a href="/blog">К блогам</a><br>
 @stop
