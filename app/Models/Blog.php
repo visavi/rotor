@@ -60,16 +60,12 @@ class Blog extends BaseModel
      * @param int $maxCount
      * @param int $minSize
      * @param int $maxSize
-     * @return float|int
+     * @return int
      */
-    public static function logTagSize($count, $minCount, $maxCount, $minSize = 10, $maxSize = 20)
+    public static function logTagSize($count, $minCount, $maxCount, $minSize = 10, $maxSize = 30)
     {
         $minCount = log($minCount + 1);
         $maxCount = log($maxCount + 1);
-
-        if ($count == 0) {
-            return 0;
-        }
 
         $diffSize  = $maxSize - $minSize;
         $diffCount = $maxCount - $minCount;
