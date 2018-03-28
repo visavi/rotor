@@ -8,6 +8,13 @@
 
     <h1>Загрузки</h1>
 
+    <nav>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
+            <li class="breadcrumb-item active">Загрузки</li>
+        </ol>
+    </nav>
+
     @if (getUser())
         Мои: <a href="/down/active/files">файлы</a>, <a href="/down/active/comments">комментарии</a> /
     @endif

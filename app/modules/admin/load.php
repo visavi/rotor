@@ -10,72 +10,7 @@ if (isAdmin([101, 102])) {
 //show_title('Управление загрузками');
 
 switch ($action):
-############################################################################################
-##                                    Главная страница                                    ##
-############################################################################################
-case 'index':
 
-    $querydown = DB::select("SELECT `c`.*, (SELECT SUM(`count`) FROM `cats` WHERE `parent`=`c`.`id`) AS `subcnt`, (SELECT COUNT(*) FROM `downs` WHERE `category_id`=`id` AND `active`=? AND `time` > ?) AS `new` FROM `cats` `c` ORDER BY sort ASC;", [1, SITETIME-86400 * 5]);
-    $downs = $querydown -> fetchAll();
-
-    if (count($downs) > 0) {
-        $output = [];
-
-        foreach ($downs as $row) {
-            $id = $row['id'];
-            $fp = $row['parent'];
-            $output[$fp][$id] = $row;
-        }
-
-        foreach($output[0] as $key => $data) {
-            echo '<i class="fa fa-folder-open"></i> ';
-            echo $data['sort'].'. <b><a href="/admin/load?act=down&amp;cid='.$data['id'].'">'.$data['name'].'</a></b> ';
-
-            $subcnt = (empty($data['subcnt'])) ? '' : '/'.$data['subcnt'];
-            $new = (empty($data['new'])) ? '' : '/<span style="color:#ff0000">+'.$data['new'].'</span>';
-
-            echo '('.$data['count'] . $subcnt . $new.')<br>';
-
-            if (isAdmin([101])) {
-                echo '<a href="/admin/load?act=editcats&amp;cid='.$data['id'].'">Редактировать</a> / ';
-                echo '<a href="/admin/load?act=prodelcats&amp;cid='.$data['id'].'">Удалить</a><br>';
-            }
-            // ----------------------------------------------------//
-            if (isset($output[$key])) {
-                foreach($output[$key] as $odata) {
-                    echo '<i class="fa fa-angle-right"></i> ';
-                    echo $odata['sort'].'. <b><a href="/admin/load?act=down&amp;cid='.$odata['id'].'">'.$odata['name'].'</a></b> ';
-
-                    $subcnt = (empty($odata['subcnt'])) ? '' : '/'.$odata['subcnt'];
-                    $new = (empty($odata['new'])) ? '' : '/<span style="color:#ff0000">+'.$odata['new'].'</span>';
-
-                    echo '('.$odata['count'] . $subcnt . $new.')';
-
-                    if (isAdmin([101])) {
-                        echo ' (<a href="/admin/load?act=editcats&amp;cid='.$odata['id'].'">Редактировать</a> / ';
-                        echo '<a href="/admin/load?act=prodelcats&amp;cid='.$odata['id'].'">Удалить</a>)';
-                    }
-                    echo '<br>';
-                }
-            }
-        }
-    } else {
-        showError('Разделы загрузок еще не созданы!');
-    }
-
-    if (isAdmin([101])) {
-        echo '<br><div class="form">';
-        echo '<form action="/admin/load?act=addcats&amp;uid='.$_SESSION['token'].'" method="post">';
-        echo '<b>Раздел:</b><br>';
-        echo '<input type="text" name="name" maxlength="50">';
-        echo '<input type="submit" value="Создать раздел"></form></div><br>';
-
-        echo '<i class="fa fa-cloud-upload-alt"></i> <a href="/admin/load?act=newimport">FTP-импорт</a><br>';
-        echo '<i class="fa fa-sync"></i> <a href="/admin/load?act=restatement&amp;uid='.$_SESSION['token'].'">Пересчитать</a><br>';
-    }
-
-    echo '<i class="fa fa-check"></i> <a href="/admin/load?act=newfile">Добавить</a><br>';
-break;
 
 ############################################################################################
 ##                                      FTP-импорт                                        ##

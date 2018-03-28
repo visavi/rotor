@@ -32,10 +32,6 @@ class LoadController extends AdminController
             ->orderBy('sort')
             ->get();
 
-        if ($categories->isEmpty()) {
-            abort('default', 'Разделы загрузок еще не созданы!');
-        }
-
         return view('admin/load/index', compact('categories'));
     }
 }
