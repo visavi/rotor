@@ -4,6 +4,7 @@ namespace App\Controllers\Admin;
 
 use App\Classes\Request;
 use App\Classes\Validator;
+use App\Models\Down;
 use App\Models\Load;
 use App\Models\User;
 
@@ -124,5 +125,107 @@ class LoadController extends AdminController
         }
 
         return view('admin/load/edit', compact('loads', 'load'));
+    }
+
+    /**
+     * Удаление раздела
+     */
+    public function delete($id)
+    {
+        if (! isAdmin(User::BOSS)) {
+            abort(403, 'Доступ запрещен!');
+        }
+
+        $load = Load::query()->with('children')->find($id);
+
+        if (! $load) {
+            abort(404, 'Данного раздела не существует!');
+        }
+
+        $token = check(Request::input('token'));
+
+        $validator = new Validator();
+        $validator->equal($token, $_SESSION['token'], 'Неверный идентификатор сессии, повторите действие!')
+            ->true($load->children->isEmpty(), 'Удаление невозможно! Данный раздел имеет подразделы!');
+
+        $down = Down::query()->where('category_id', $load->id)->first();
+        if ($down) {
+            $validator->addError('Удаление невозможно! В данном разделе имеются загрузки!');
+        }
+
+        if ($validator->isValid()) {
+
+            $load->delete();
+
+            setFlash('success', 'Раздел успешно удален!');
+        } else {
+            setFlash('danger', $validator->getErrors());
+        }
+
+        redirect('/admin/load');
+    }
+
+    /**
+     * Пересчет данных
+     */
+    public function restatement()
+    {
+        if (! isAdmin(User::BOSS)) {
+            abort(403, 'Доступ запрещен!');
+        }
+
+        $token = check(Request::input('token'));
+
+        if ($token == $_SESSION['token']) {
+
+            restatement('load');
+
+            setFlash('success', 'Данные успешно пересчитаны!');
+        } else {
+            setFlash('danger', 'Ошибка! Неверный идентификатор сессии, повторите действие!');
+        }
+
+        redirect('/admin/load');
+    }
+
+    /**
+     * Просмотр загрузок раздела
+     */
+    public function load($id)
+    {
+        $category = Load::query()->with('parent')->find($id);
+
+        if (! $category) {
+            abort(404, 'Данной категории не существует!');
+        }
+
+        $total = Down::query()->where('category_id', $category->id)->where('active', 1)->count();
+        $page = paginate(setting('downlist'), $total);
+
+        $sort = check(Request::input('sort'));
+
+        switch ($sort) {
+            case 'rated':
+                $order = 'rated';
+                break;
+            case 'comments':
+                $order = 'count_comments';
+                break;
+            case 'loads':
+                $order = 'loads';
+                break;
+            default:
+                $order = 'created_at';
+        }
+
+        $downs = Down::query()
+            ->where('category_id', $category->id)
+            ->where('active', 1)
+            ->orderBy($order, 'desc')
+            ->offset($page['offset'])
+            ->limit($page['limit'])
+            ->get();
+
+        return view('admin/load/load', compact('category', 'downs', 'page', 'order'));
     }
 }

@@ -17,16 +17,17 @@
     <nav>
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
-            <li class="breadcrumb-item"><a href="/load">Загрузки</a></li>
+            <li class="breadcrumb-item"><a href="/admin">Панель</a></li>
+            <li class="breadcrumb-item"><a href="/admin/load">Загрузки</a></li>
 
             @if ($category->parent->id)
-                <li class="breadcrumb-item"><a href="/load/{{ $category->parent->id }}">{{ $category->parent->name }}</a></li>
+                <li class="breadcrumb-item"><a href="/admin/load/{{ $category->parent->id }}">{{ $category->parent->name }}</a></li>
             @endif
 
             <li class="breadcrumb-item active">{{ $category->name }}</li>
 
             @if (isAdmin('admin'))
-                <li class="breadcrumb-item"><a href="/admin/load/{{ $category->id }}?page={{ $page['current'] }}">Управление</a></li>
+                <li class="breadcrumb-item"><a href="/load/{{ $category->id }}?page={{ $page['current'] }}">Обзор</a></li>
             @endif
         </ol>
     </nav>
@@ -64,6 +65,16 @@
             <div class="b">
                 <i class="fa fa-file"></i>
                 <b><a href="/down/{{ $data->id }}">{{ $data->title }}</a></b> ({{ $filesize }})
+
+
+                <div class="float-right">
+                    <a href="/admin/down/edit/{{ $data->id }}" title="Редактироватьь"><i class="fa fa-pencil-alt"></i></a>
+                    <a href="/admin/down/move/{{ $data->id }}" title="Перенести"><i class="fa fa-arrows-alt"></i></a>
+
+                @if (isAdmin('boss'))
+                            <a href="/admin/down/delete/{{ $data->id }}?token={{ $_SESSION['token'] }}" onclick="return confirm('Вы уверены что хотите удалить данную загрузку?')"><i class="fa fa-times"></i></a>
+                    @endif
+                </div>
             </div>
 
             <div>
@@ -87,7 +98,4 @@
     @if ($category->closed)
         {!! showError('В данной категории запрещена загрузка файлов!') !!}
     @endif
-
-    <a href="/load/top">Топ файлов</a> /
-    <a href="/load/search">Поиск</a>
 @stop

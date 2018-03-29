@@ -73,7 +73,6 @@
             </form>
         </div>
 
-        <i class="fa fa-cloud-upload-alt"></i> <a href="/admin/load/import">FTP-импорт</a><br>
         <i class="fa fa-sync"></i> <a href="/admin/load/restatement?token={{ $_SESSION['token'] }}">Пересчитать</a><br>
     @endif
 
