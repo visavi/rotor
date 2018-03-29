@@ -1387,8 +1387,7 @@ function recentFiles($show = 5)
 
     if ($files) {
         foreach ($files as $file) {
-            $folder = $file->category->folder ? $file->category->folder.'/' : null;
-            $filesize = $file->link ? formatFileSize(UPLOADS.'/files/'.$folder.$file->link) : 0;
+            $filesize = $file->link ? formatFileSize(UPLOADS.'/files/'.$file->link) : 0;
             echo '<i class="far fa-circle fa-lg text-muted"></i>  <a href="/down/'.$file->id.'">'.$file->title.'</a> ('.$filesize.')<br>';
         }
     }

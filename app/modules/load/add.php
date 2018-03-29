@@ -89,7 +89,7 @@ case 'view':
 
                     } else {
 
-                        echo '<i class="fa fa-download"></i> <b><a href="/uploads/files/'.$folder.$new['link'].'">'.$new['link'].'</a></b> ('.formatFileSize(UPLOADS.'/files/'.$folder.$new['link']).') (<a href="/load/add?act=delfile&amp;id='.$id.'" onclick="return confirm(\'Вы действительно хотите удалить данный файл?\')">Удалить</a>)<br>';
+                        echo '<i class="fa fa-download"></i> <b><a href="/uploads/files/'.$new['link'].'">'.$new['link'].'</a></b> ('.formatFileSize(UPLOADS.'/files/'.$folder.$new['link']).') (<a href="/load/add?act=delfile&amp;id='.$id.'" onclick="return confirm(\'Вы действительно хотите удалить данный файл?\')">Удалить</a>)<br>';
 
                         $ext = getExtension($new['link']);
                         if ($ext != 'jpg' && $ext != 'jpeg' && $ext != 'gif' && $ext != 'png') {
@@ -104,8 +104,8 @@ case 'view':
                                 echo 'Требуемый размер скриншота: от 100 до '.setting('screenupsize').' px</div><br><br>';
 
                             } else {
-                                echo '<i class="fa fa-image"></i> <b><a href="/uploads/screen/'.$folder.$new['screen'].'">'.$new['screen'].'</a></b> ('.formatFileSize(UPLOADS.'/screen/'.$folder.$new['screen']).') (<a href="/load/add?act=delscreen&amp;id='.$id.'" onclick="return confirm(\'Вы действительно хотите удалить данный скриншот?\')">Удалить</a>)<br><br>';
-                                echo resizeImage('uploads/screen/'.$folder, $new['screen']).'<br>';
+                                echo '<i class="fa fa-image"></i> <b><a href="/uploads/screen/'.$new['screen'].'">'.$new['screen'].'</a></b> ('.formatFileSize(UPLOADS.'/screen/'.$folder.$new['screen']).') (<a href="/load/add?act=delscreen&amp;id='.$id.'" onclick="return confirm(\'Вы действительно хотите удалить данный скриншот?\')">Удалить</a>)<br><br>';
+                                echo resizeImage('uploads/screen/', $new['screen']).'<br>';
                             }
                         }
                     }

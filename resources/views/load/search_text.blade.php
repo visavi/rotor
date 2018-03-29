@@ -19,8 +19,7 @@
     Найдено совпадений в описании: <b>{{ $page['total'] }}</b><br><br>
 
     @foreach ($downs as $data)
-        <?php $folder = $data->category->folder ? $data->category->folder.'/' : '' ?>
-        <?php $filesize = $data->link ? formatFileSize(UPLOADS.'/files/'.$folder.$data->link) : 0; ?>
+        <?php $filesize = $data->link ? formatFileSize(UPLOADS.'/files/'.$data->link) : 0; ?>
 
         <div class="b">
             <i class="fa fa-file"></i>

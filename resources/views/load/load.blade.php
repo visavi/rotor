@@ -58,10 +58,8 @@
     @endif
 
     @if ($downs->isNotEmpty())
-        <?php $folder = $category->folder ? $category->folder.'/' : '' ?>
-
         @foreach ($downs as $data)
-            <?php $filesize = $data->link ? formatFileSize(UPLOADS.'/files/'.$folder.$data->link) : 0; ?>
+            <?php $filesize = $data->link ? formatFileSize(UPLOADS.'/files/'.$data->link) : 0; ?>
 
             <div class="b">
                 <i class="fa fa-file"></i>

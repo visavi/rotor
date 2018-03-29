@@ -55,16 +55,6 @@ class Down extends BaseModel
     }
 
     /**
-     * Возвращает директорию категории
-     *
-     * @return string
-     */
-    public function getFolderAttribute()
-    {
-        return $this->category->folder ? $this->category->folder.'/' : '';
-    }
-
-    /**
      * Обрезает текст
      *
      * @return string

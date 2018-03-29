@@ -20,7 +20,7 @@
         @foreach ($categories as $category)
             <div class="b">
                 <i class="fa fa-folder-open"></i>
-                <b><a href="/load/{{ $category->id }}">{{ $category->name }}</a></b>
+                <b><a href="/admin/load/{{ $category->id }}">{{ $category->name }}</a></b>
                 @if ($category->new)
                     ({{ $category->count_downs }}/<span style="color:#ff0000">+{{ $category->new->count_downs }}</span>)
                 @else
@@ -29,8 +29,8 @@
 
                 @if (isAdmin('boss'))
                     <div class="float-right">
-                        <a href="/admin/forum/edit/{{ $category->id }}"><i class="fa fa-pencil-alt"></i></a>
-                        <a href="/admin/forum/delete/{{ $category->id }}?token={{ $_SESSION['token'] }}" onclick="return confirm('Вы уверены что хотите удалить данный раздел?')"><i class="fa fa-times"></i></a>
+                        <a href="/admin/load/edit/{{ $category->id }}"><i class="fa fa-pencil-alt"></i></a>
+                        <a href="/admin/load/delete/{{ $category->id }}?token={{ $_SESSION['token'] }}" onclick="return confirm('Вы уверены что хотите удалить данный раздел?')"><i class="fa fa-times"></i></a>
                     </div>
                 @endif
             </div>
@@ -38,7 +38,7 @@
             <div>
                 @if ($category->children->isNotEmpty())
                     @foreach ($category->children as $child)
-                        <i class="fa fa-angle-right"></i> <b><a href="/load/{{ $child->id }}">{{ $child['name'] }}</a></b>
+                        <i class="fa fa-angle-right"></i> <b><a href="/admin/load/{{ $child->id }}">{{ $child['name'] }}</a></b>
                         @if ($child->new)
                             ({{ $child->count_downs }}/<span style="color:#ff0000">+{{ $child->new->count_downs }}</span>)
                         @else
@@ -46,8 +46,8 @@
                         @endif
 
                         @if (isAdmin('boss'))
-                                <a href="/admin/forum/edit/{{ $child->id }}"><i class="fa fa-pencil-alt"></i></a>
-                                <a href="/admin/forum/delete/{{ $child->id }}?token={{ $_SESSION['token'] }}" onclick="return confirm('Вы уверены что хотите удалить данный раздел?')"><i class="fa fa-times"></i></a>
+                                <a href="/admin/load/edit/{{ $child->id }}"><i class="fa fa-pencil-alt"></i></a>
+                                <a href="/admin/load/delete/{{ $child->id }}?token={{ $_SESSION['token'] }}" onclick="return confirm('Вы уверены что хотите удалить данный раздел?')"><i class="fa fa-times"></i></a>
                         @endif
                         <br>
                     @endforeach

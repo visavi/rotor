@@ -19,20 +19,19 @@
     Сортировать:
 
     <?php $active = ($order === 'loads') ? 'success' : 'light'; ?>
-    <a href="/down/top?sort=loads" class="badge badge-{{ $active }}">Скачивания</a>
+    <a href="/load/top?sort=loads" class="badge badge-{{ $active }}">Скачивания</a>
 
     <?php $active = ($order === 'rated') ? 'success' : 'light'; ?>
-    <a href="/down/top?sort=rated" class="badge badge-{{ $active }}">Оценки</a>
+    <a href="/load/top?sort=rated" class="badge badge-{{ $active }}">Оценки</a>
 
     <?php $active = ($order === 'count_comments') ? 'success' : 'light'; ?>
-    <a href="/down/top?sort=comments" class="badge badge-{{ $active }}">Комментарии</a>
+    <a href="/load/top?sort=comments" class="badge badge-{{ $active }}">Комментарии</a>
     <hr>
 
     @if ($downs->isNotEmpty())
 
         @foreach ($downs as $data)
-            <?php $folder = $data->category->folder ? $data->category->folder.'/' : '' ?>
-            <?php $filesize = $data->link ? formatFileSize(UPLOADS.'/files/'.$folder.$data->link) : 0; ?>
+            <?php $filesize = $data->link ? formatFileSize(UPLOADS.'/files/'.$data->link) : 0; ?>
 
             <div class="b">
                 <i class="fa fa-file"></i>

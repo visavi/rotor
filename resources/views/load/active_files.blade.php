@@ -24,9 +24,7 @@
 
     @if ($downs->isNotEmpty())
         @foreach ($downs as $down)
-
-            <?php $folder = $down->category->folder ? $down->category->folder.'/' : '' ?>
-            <?php $filesize = $down->link ? formatFileSize(UPLOADS.'/files/'.$folder.$down->link) : 0; ?>
+            <?php $filesize = $down->link ? formatFileSize(UPLOADS.'/files/'.$down->link) : 0; ?>
 
             <div class="b">
                 <i class="fa fa-file"></i>

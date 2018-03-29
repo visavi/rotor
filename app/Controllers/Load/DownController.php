@@ -44,7 +44,7 @@ class DownController extends BaseController
         }
 
         $ext      = getExtension($down->link);
-        $filesize = $down->link ? formatFileSize(UPLOADS . '/files/' . $down->folder . $down->link) : 0;
+        $filesize = $down->link ? formatFileSize(UPLOADS . '/files/' . $down->link) : 0;
         $rating   = $down->rated ? round($down->rating / $down->rated, 1) : 0;
 
         return view('load/down', compact('down', 'ext', 'filesize', 'rating'));
@@ -116,7 +116,7 @@ class DownController extends BaseController
             if ($validator->isValid()) {
 
                 $fileName = uniqid() . '.' . $file->getClientOriginalExtension();
-                $file->move(UPLOADS . '/files/' . $category->folder, $fileName);
+                $file->move(UPLOADS . '/files/', $fileName);
 
                 $down = Down::query()->create([
                     'category_id' => $category->id,
@@ -132,7 +132,7 @@ class DownController extends BaseController
                     $handle = uploadImage($screen, setting('screenupload'), setting('screenupsize'),  uniqid());
                     $validator->true($handle, ['screen' => $handle->error]);
 
-                    $handle->process(UPLOADS.'/screen/'.$category->folder);
+                    $handle->process(UPLOADS.'/screen/');
                     if ($handle->processed) {
 
                         File::query()->create([
@@ -162,7 +162,7 @@ class DownController extends BaseController
                 foreach ($screens as $key => $screen) {
 
                     $screenName = uniqid() . '.' . $screen->getClientOriginalExtension();
-                    $screen->move(UPLOADS . '/screen/' . $category->folder, $screenName);*/
+                    $screen->move(UPLOADS . '/screen/', $screenName);*/
 
                 /*}*/
 
@@ -252,7 +252,7 @@ class DownController extends BaseController
 
         $validator = new Validator();
         $validator
-            ->true(file_exists(UPLOADS . '/files/' . $down->folder . $down->link), 'Файла для скачивания не существует!')
+            ->true(file_exists(UPLOADS . '/files/' . $down->link), 'Файла для скачивания не существует!')
             ->true(getUser() || captchaVerify(), ['protect' => 'Не удалось пройти проверку captcha!'])
             ->notEmpty($down->active, 'Данный файл еще не проверен модератором!');
 
@@ -275,7 +275,7 @@ class DownController extends BaseController
                 $down->increment('loads');
             }
 
-            redirect('/uploads/files/' . $down->folder . $down->link);
+            redirect('/uploads/files/' . $down->link);
         } else {
             setFlash('danger', $validator->getErrors());
             redirect('/down/' . $down->id);
@@ -451,7 +451,7 @@ class DownController extends BaseController
 
         try {
             $archive = new ZipFile();
-            $archive->openFile(UPLOADS . '/files/' . $down->folder . $down->link);
+            $archive->openFile(UPLOADS . '/files/' . $down->link);
         } catch (Exception $e) {
             abort('default', 'Не удалось открыть архив!');
         }
@@ -486,7 +486,7 @@ class DownController extends BaseController
 
         try {
             $archive = new ZipFile();
-            $archive->openFile(UPLOADS . '/files/' . $down->folder . $down->link);
+            $archive->openFile(UPLOADS . '/files/' . $down->link);
         } catch (Exception $e) {
             abort('default', 'Не удалось открыть архив!');
         }

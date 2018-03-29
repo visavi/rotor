@@ -38,7 +38,7 @@
     @endif
 
     @if (in_array($ext, ['jpg', 'jpeg', 'gif', 'png'])) {
-        <a href="/uploads/files/{{ $down->folder }}{{ $down->link }}" class="gallery">{{ resizeImage('uploads/files/'.$down->folder, $down->link, ['alt' => $down->title]) }}</a><br>
+        <a href="/uploads/files/{{ $down->link }}" class="gallery">{{ resizeImage('uploads/files/', $down->link, ['alt' => $down->title]) }}</a><br>
     @endif
 
     <div class="message">
@@ -47,33 +47,33 @@
 
     @if ($down->files->isNotEmpty())
         @foreach ($down->files as $screen)
-            <a href="/uploads/screen/{{ $down->folder }}{{ $screen->hash }}" class="gallery">{!! resizeImage('uploads/screen/'.$down->folder, $screen->hash, ['alt' => $down->title]) !!}</a>
+            <a href="/uploads/screen/{{ $screen->hash }}" class="gallery">{!! resizeImage('uploads/screen/', $screen->hash, ['alt' => $down->title]) !!}</a>
         @endforeach
     @endif
     <br>
 
     <?php $poster = ''; ?>
-    @if ($down->screen && file_exists(UPLOADS.'/screen/'.$down->folder.$down->screen))
-        <?php $poster = ' poster="/uploads/screen/'.$down->folder.$down->screen.'"'; ?>
+    @if ($down->screen && file_exists(UPLOADS.'/screen/'.$down->screen))
+        <?php $poster = ' poster="/uploads/screen/'.$down->screen.'"'; ?>
 
         @if ($ext != 'mp4')
             Скриншот:<br>
-            <a href="/uploads/screen/{{ $down->folder }}{{ $down->screen }}" class="gallery">{{ resizeImage('uploads/screen/'.$down->folder, $down->screen, ['alt' => $down->title]) }}</a><br><br>
+            <a href="/uploads/screen/{{ $down->screen }}" class="gallery">{{ resizeImage('uploads/screen/', $down->screen, ['alt' => $down->title]) }}</a><br><br>
         @endif
     @endif
 
     Добавлено: {!! profile($down->user) !!} ({{ dateFixed($down->created_at) }})<hr>
 
-    @if ($down->link && file_exists(UPLOADS.'/files/'.$down->folder.$down->link))
+    @if ($down->link && file_exists(UPLOADS.'/files/'.$down->link))
 
         @if ($ext === 'mp3' || $ext === 'mp4')
 
             @if ($ext === 'mp3')
-                <audio src="/uploads/files/{{ $down->folder }}{{ $down->link }}"></audio><br/>
+                <audio src="/uploads/files/{{ $down->link }}"></audio><br/>
             @endif
 
             @if ($ext === 'mp4')
-                <video width="640" height="360" style="width: 100%; height: 100%;" src="/uploads/files/{{ $down->folder }}{{ $down->link }}" {!! $poster !!}></video>
+                <video width="640" height="360" style="width: 100%; height: 100%;" src="/uploads/files/{{ $down->link }}" {!! $poster !!}></video>
             @endif
         @endif
 
@@ -119,7 +119,7 @@
             </form>
 
             {{--<br><label for="text">Скопировать адрес:</label><br>
-            <input class="form-control" name="text" id="text" value="{{ siteUrl(true) }}/uploads/files/{{ $down->folder }}{{ $down->link }}"><br>--}}
+            <input class="form-control" name="text" id="text" value="{{ siteUrl(true) }}/uploads/files/{{ $down->link }}"><br>--}}
         @endif
     @else
         {!! showError('Файл еще не загружен!') !!}
