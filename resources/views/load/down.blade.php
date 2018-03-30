@@ -11,8 +11,8 @@
     <h1>{{ $down->title }}</h1>
 
     @if (isAdmin('admin'))
-        <a href="/admin/load?act=editdown&amp;cid={{ $down->category_id }}&amp;id={{ $down->id }}">Редактировать</a> /
-        <a href="/admin/load?act=movedown&amp;cid={{ $down->category_id }}&amp;id={{ $down->id }}">Переместить</a>
+        <a href="/admin/down/edit/{{ $down->id }}">Редактировать</a> /
+        <a href="/admin/down/move/{{ $down->id }}">Переместить</a>
     @endif
 
     <nav>

@@ -228,4 +228,43 @@ class LoadController extends AdminController
 
         return view('admin/load/load', compact('category', 'downs', 'page', 'order'));
     }
+
+    /**
+     * Редактирование загрузки
+     */
+    public function editDown($id)
+    {
+        $down = Down::query()->find($id);
+
+        if (! $down) {
+            abort(404, 'Данного файла не существует!');
+        }
+
+        if (Request::isMethod('post')) {
+            $token = check(Request::input('token'));
+            $title = check(Request::input('title'));
+            $text  = check(Request::input('text'));
+
+            $validator = new Validator();
+            $validator->equal($token, $_SESSION['token'], 'Неверный идентификатор сессии, повторите действие!')
+                ->length($title, 5, 50, ['title' => 'Слишком длинное или короткое название!'])
+                ->length($text, 10, 5000, ['text' => 'Слишком длинное или короткое описание!']);
+
+            if ($validator->isValid()) {
+
+                $down->update([
+                    'title' => $title,
+                    'text'  => $text,
+                ]);
+
+                setFlash('success', 'Загрузка успешно отредактирована!');
+                redirect('/down/' . $down->id);
+            } else {
+                setInput(Request::all());
+                setFlash('danger', $validator->getErrors());
+            }
+        }
+
+        return view('admin/load/edit_down', compact('down'));
+    }
 }

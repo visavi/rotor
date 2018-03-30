@@ -8,8 +8,8 @@
 
     <h1>Редактирование темы {{ $topic->title }}</h1>
 
-    <div action="/admin/topic/edit/{{ $topic->id }}" class="form mb-3">
-        <form method="post">
+    <div class="form mb-3">
+        <form action="/admin/topic/edit/{{ $topic->id }}" method="post">
             <input type="hidden" name="token" value="{{ $_SESSION['token'] }}">
 
             <div class="form-group{{ hasError('title') }}">

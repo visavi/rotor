@@ -56,8 +56,7 @@ class GuestController extends BaseController
             if (getUser()) {
                 $bookscores = (setting('bookscores')) ? 1 : 0;
 
-                $user = User::query()->where('id', getUser('id'));
-                $user->update([
+                getUser()->update([
                     'allguest' => DB::raw('allguest + 1'),
                     'point'    => DB::raw('point + ' . $bookscores),
                     'money'    => DB::raw('money + 5'),

@@ -18,9 +18,8 @@
         </ol>
     </nav>
 
-
-    <div action="/admin/load/edit/{{ $load->id }}" class="form mb-3">
-        <form method="post">
+    <div class="form mb-3">
+        <form action="/admin/load/edit/{{ $load->id }}" method="post">
             <input type="hidden" name="token" value="{{ $_SESSION['token'] }}">
 
             <div class="form-group{{ hasError('parent') }}">
