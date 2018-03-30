@@ -70,6 +70,16 @@ class Down extends BaseModel
     }
 
     /**
+     * Возвращает расширение файла
+     *
+     * @return string
+     */
+    public function getExtAttribute()
+    {
+        return getExtension($this->link);
+    }
+
+    /**
      * Возвращает массив доступных расширений для просмотра в архиве
      *
      * @return array
