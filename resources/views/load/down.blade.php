@@ -37,7 +37,7 @@
         </div><br>
     @endif
 
-    @if (in_array($ext, ['jpg', 'jpeg', 'gif', 'png'])) {
+    @if (in_array($down->extension, ['jpg', 'jpeg', 'gif', 'png'])) {
         <a href="/uploads/files/{{ $down->link }}" class="gallery">{{ resizeImage('uploads/files/', $down->link, ['alt' => $down->title]) }}</a><br>
     @endif
 
@@ -56,7 +56,7 @@
     @if ($down->screen && file_exists(UPLOADS.'/screen/'.$down->screen))
         <?php $poster = ' poster="/uploads/screen/'.$down->screen.'"'; ?>
 
-        @if ($ext != 'mp4')
+        @if ($down->extension != 'mp4')
             Скриншот:<br>
             <a href="/uploads/screen/{{ $down->screen }}" class="gallery">{{ resizeImage('uploads/screen/', $down->screen, ['alt' => $down->title]) }}</a><br><br>
         @endif
@@ -66,18 +66,18 @@
 
     @if ($down->link && file_exists(UPLOADS.'/files/'.$down->link))
 
-        @if ($ext === 'mp3' || $ext === 'mp4')
+        @if ($down->extension === 'mp3' || $down->extension === 'mp4')
 
-            @if ($ext === 'mp3')
+            @if ($down->extension === 'mp3')
                 <audio src="/uploads/files/{{ $down->link }}"></audio><br/>
             @endif
 
-            @if ($ext === 'mp4')
+            @if ($down->extension === 'mp4')
                 <video width="640" height="360" style="width: 100%; height: 100%;" src="/uploads/files/{{ $down->link }}" {!! $poster !!}></video>
             @endif
         @endif
 
-        @if ($ext === 'zip')
+        @if ($down->extension === 'zip')
             <i class="fa fa-archive"></i> <b><a href="/down/zip/{{ $down->id }}">Просмотреть архив</a></b><br>
         @endif
 

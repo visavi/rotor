@@ -42,7 +42,7 @@
                 <br>
             @endif
 
-            @if (! in_array($down->ext, ['jpg', 'jpeg', 'gif', 'png']))
+            @if (! in_array($down->extension, ['jpg', 'jpeg', 'gif', 'png']))
 
                 @if ($down->screen)
                     <i class="fa fa-image"></i> <b><a href="/uploads/screen/{{ $down->screen }}">{{ $down->screen }}</a></b> ({{ formatFileSize(UPLOADS.'/screen/' . $down->screen ) }}) (<a href="/admin/load?act=delscreen" onclick="return confirm('Вы действительно хотите удалить данный скриншот?')">Удалить</a>)<br><br>

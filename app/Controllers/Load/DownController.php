@@ -43,11 +43,10 @@ class DownController extends BaseController
             abort('default', 'Данный файл еще не проверен модератором!');
         }
 
-        $ext      = getExtension($down->link);
         $filesize = $down->link ? formatFileSize(UPLOADS . '/files/' . $down->link) : 0;
         $rating   = $down->rated ? round($down->rating / $down->rated, 1) : 0;
 
-        return view('load/down', compact('down', 'ext', 'filesize', 'rating'));
+        return view('load/down', compact('down', 'filesize', 'rating'));
     }
 
     /**
@@ -445,7 +444,7 @@ class DownController extends BaseController
             abort('default', 'Данный файл еще не проверен модератором!');
         }
 
-        if (getExtension($down->link) !== 'zip') {
+        if ($down->extension !== 'zip') {
             abort('default', 'Просматривать можно только ZIP архивы!');
         }
 
@@ -480,7 +479,7 @@ class DownController extends BaseController
             abort('default', 'Данный файл еще не проверен модератором!');
         }
 
-        if (getExtension($down->link) != 'zip') {
+        if ($down->extentsion !== 'zip') {
             abort('default', 'Просматривать можно только ZIP архивы!');
         }
 

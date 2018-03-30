@@ -74,7 +74,7 @@ class Down extends BaseModel
      *
      * @return string
      */
-    public function getExtAttribute()
+    public function getExtensionAttribute()
     {
         return getExtension($this->link);
     }
