@@ -19,10 +19,6 @@ Class AdminController extends BaseController
             abort(403, 'Доступ запрещен!');
         }
 
-        Admlog::query()
-            ->where('created_at', '<', SITETIME - 3600 * 24 * 10)
-            ->delete();
-
         Admlog::query()->create([
             'user_id'    => getUser('id'),
             'request'    => server('REQUEST_URI'),

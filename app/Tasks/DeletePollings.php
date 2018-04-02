@@ -13,7 +13,7 @@ class DeletePollings extends Task
     public function run()
     {
         Polling::query()
-            ->where('created_at', '<', SITETIME - 3600 * 24 * 365)
+            ->where('created_at', '<', strtotime('-1 year', SITETIME))
             ->delete();
     }
 }

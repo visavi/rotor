@@ -17,7 +17,7 @@ class AddSubscribers extends Task
             ->where('sendprivatmail', 0)
             ->whereIn('level', User::USER_GROUPS)
             ->where('newprivat', '>', 0)
-            ->where('updated_at', '<', SITETIME - 86400 * setting('sendprivatmailday'))
+            ->where('updated_at', '<', strtotime('-' . setting('sendprivatmailday') . ' days', SITETIME))
             ->whereNotNull('subscribe')
             ->groupBy('users.id')
             ->limit(100)

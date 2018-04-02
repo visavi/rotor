@@ -43,7 +43,7 @@ class Category extends BaseModel
     {
         return $this->hasOne(Blog::class, 'category_id')
             ->selectRaw('category_id, count(*) as count_blogs')
-            ->where('created_at', '>', SITETIME - 86400 * 3)
+            ->where('created_at', '>', strtotime('-3 day', SITETIME))
             ->groupBy('category_id');
     }
 }

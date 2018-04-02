@@ -35,7 +35,7 @@ class Load extends BaseModel
     }
 
     /**
-     * Возвращает количество загрузок за последние 5 дней
+     * Возвращает количество загрузок за последние 3 дней
      *
      * @return mixed
      */
@@ -43,7 +43,7 @@ class Load extends BaseModel
     {
         return $this->hasOne(Down::class, 'category_id')
             ->selectRaw('category_id, count(*) as count_downs')
-            ->where('created_at', '>', SITETIME - 86400 * 3)
+            ->where('created_at', '>', strtotime('-3 day', SITETIME))
             ->groupBy('category_id');
     }
 }

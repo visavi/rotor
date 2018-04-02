@@ -768,7 +768,7 @@ function statsGallery()
 {
     if (@filemtime(STORAGE.'/temp/statgallery.dat') < time() - 900) {
         $stat     = Photo::query()->count();
-        $totalNew = Photo::query()->where('created_at', '>', SITETIME - 86400 * 3)->count();
+        $totalNew = Photo::query()->where('created_at', '>', Sstrtotime('-3 day', SITETIME))->count();
 
         if ($totalNew) {
             $stat = $stat.'/+'.$totalNew;
@@ -925,7 +925,7 @@ function statsBlog()
     if (@filemtime(STORAGE.'/temp/statblogblog.dat') < time() - 900) {
 
         $stat      = Blog::query()->count();
-        $totalnew  = Blog::query()->where('created_at', '>', SITETIME - 86400 * 3)->count();
+        $totalnew  = Blog::query()->where('created_at', '>', strtotime('-3 day', SITETIME))->count();
 
         if ($totalnew) {
             $stat = $stat.'/+'.$totalnew;
@@ -1004,7 +1004,7 @@ function statsLoad()
         $totalLoads = Load::query()->sum('count_downs');
 
         $totalNew = Down::query()->where('active', 1)
-            ->where('created_at', '>', SITETIME - 86400 * 5)
+            ->where('created_at', '>', strtotime('-3 day', SITETIME))
             ->count();
 
         $stat = $totalNew ? $totalLoads.'/+'.$totalNew : $totalLoads;
