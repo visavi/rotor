@@ -27,9 +27,7 @@ class NewsController extends BaseController
             ->with('user')
             ->get();
 
-        $isModer = isAdmin(User::MODER);
-
-        return view('news/index', compact('news', 'page', 'isModer'));
+        return view('news/index', compact('news', 'page'));
     }
 
     /**
@@ -141,8 +139,13 @@ class NewsController extends BaseController
     public function editComment($id, $cid)
     {
         $page = int(Request::input('page', 1));
+        $news = News::query()->find($id);
 
-        if (!getUser()) {
+        if (! $news) {
+            abort(404, 'Новость не существует, возможно она была удалена!');
+        }
+
+        if (! getUser()) {
             abort(403, 'Для редактирования комментариев небходимо авторизоваться!');
         }
 
@@ -177,13 +180,13 @@ class NewsController extends BaseController
                 ]);
 
                 setFlash('success', 'Комментарий успешно отредактирован!');
-                redirect('/news/comments/' . $id . '?page=' . $page);
+                redirect('/news/comments/' . $news->id . '?page=' . $page);
             } else {
                 setInput(Request::all());
                 setFlash('danger', $validator->getErrors());
             }
         }
-        return view('news/editcomment', compact('comment', 'page'));
+        return view('news/editcomment', compact('news', 'comment', 'page'));
     }
 
     /**

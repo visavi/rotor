@@ -8,9 +8,16 @@
 
     <h1>Новости сайта</h1>
 
-    @if ($isModer)
-        <div class="form"><a href="/admin/news">Управление новостями</a></div>
-    @endif
+    <nav>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
+            <li class="breadcrumb-item active">Новости сайта</li>
+
+            @if (isAdmin('moder'))
+                <li class="breadcrumb-item"><a href="/admin/news">Управление</a></li>
+            @endif
+        </ol>
+    </nav>
 
     @if ($news->isNotEmpty())
         @foreach ($news as $data)

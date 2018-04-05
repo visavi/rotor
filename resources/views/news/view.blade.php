@@ -10,12 +10,18 @@
 
     <h1>{{ $news->title }} <small> ({{ dateFixed($news->created_at) }})</small></h1>
 
-    @if (isAdmin())
-        <div class="form">
-            <a href="/admin/news?act=edit&amp;id={{ $news->id }}">Редактировать</a> /
-            <a href="/admin/news?act=del&amp;del={{ $news->id }}&amp;token={{ $_SESSION['token'] }}" onclick="return confirm('Вы действительно хотите удалить данную новость?')">Удалить</a>
-        </div>
-    @endif
+    <nav>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
+            <li class="breadcrumb-item"><a href="/news">Новости сайта</a></li>
+            <li class="breadcrumb-item active">{{ $news->title }}</li>
+
+            @if (isAdmin())
+                <li class="breadcrumb-item"><a href="/admin/news/edit/{{ $news->id }}">Редактировать</a></li>
+                <li class="breadcrumb-item"><a href="/admin/news/delete/{{ $news->id }}?token={{ $_SESSION['token'] }}" onclick="return confirm('Вы действительно хотите удалить данную новость?')">Удалить</a></li>
+            @endif
+        </ol>
+    </nav>
 
     @if ($news->image)
         <div class="img">
@@ -87,6 +93,4 @@
     @else
         {!! showError('Комментирование данной новости закрыто!') !!}
     @endif
-
-    <i class="fa fa-arrow-circle-left"></i> <a href="/news">К новостям</a><br>
 @stop

@@ -8,7 +8,14 @@
 
     <h1>Админ-чат</h1>
 
-    <a href="/admin/chat?rand='.mt_rand(100, 999).'">Обновить</a> /
+    <nav>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
+            <li class="breadcrumb-item"><a href="/admin">Панель</a></li>
+            <li class="breadcrumb-item active">Админ-чат</li>
+        </ol>
+    </nav>
+
     <a href="/smiles">Смайлы</a> /
     <a href="/tags">Теги</a><hr>
 
@@ -68,5 +75,4 @@
         <i class="fa fa-times"></i> <a href="/admin/chat/clear?token={{ $_SESSION['token'] }}" onclick="return confirm('Вы действительно хотите очистить админ-чат?')">Очистить чат</a><br>
     @endif
 
-    <i class="fa fa-wrench"></i> <a href="/admin">В админку</a><br>
 @stop

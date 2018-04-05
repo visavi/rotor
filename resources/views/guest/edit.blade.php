@@ -7,6 +7,14 @@
 @section('content')
     <h1>{{ trans('guest.title_edit') }}</h1>
 
+    <nav>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
+            <li class="breadcrumb-item"><a href="/">{{ trans('guest.header') }}</a></li>
+            <li class="breadcrumb-item active">{{ trans('guest.title_edit') }}</li>
+        </ol>
+    </nav>
+
     <i class="fa fa-pencil-alt text-muted"></i> <b>{!! $post->user->login !!}</b> ({{ dateFixed($post->created_at) }})<br><br>
 
     <div class="form">
@@ -22,6 +30,4 @@
             <button class="btn btn-primary">{{ trans('guest.edit') }}</button>
         </form>
     </div><br>
-
-    <i class="fa fa-arrow-circle-left"></i> <a href="/book">{{ trans('guest.return') }}</a><br>
 @stop

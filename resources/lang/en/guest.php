@@ -13,5 +13,4 @@ return [
 
     'title_edit'     => 'Editing message',
     'edit'           => 'Edit',
-    'return'         => 'Return',
 ];

@@ -8,6 +8,14 @@
 
     <h1>Последние комментарии</h1>
 
+    <nav>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
+            <li class="breadcrumb-item"><a href="/news">Новости сайта</a></li>
+            <li class="breadcrumb-item active">Последние комментарии</li>
+        </ol>
+    </nav>
+
     @if ($comments->isNotEmpty())
         @foreach ($comments as $data)
             <div class="b">
@@ -28,5 +36,4 @@
     @else
         {!! showError('Комментарии не найдены!') !!}
     @endif
-    <i class="fa fa-arrow-circle-up"></i> <a href="/news">К новостям</a><br>
 @stop

@@ -6,7 +6,16 @@
 
 @section('content')
 
-    <h1><a href="/news/{{ $news->id }}">{{ $news->title }}</a></h1>
+    <h1>Комментарии {{ $news->title }}</h1>
+
+    <nav>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
+            <li class="breadcrumb-item"><a href="/news">Новости сайта</a></li>
+            <li class="breadcrumb-item"><a href="/news/{{ $news->id }}">{{ $news->title }}</a></li>
+            <li class="breadcrumb-item active">Комментарии</li>
+        </ol>
+    </nav>
 
     @if ($comments->isNotEmpty())
         @foreach ($comments as $data)
@@ -83,6 +92,4 @@
     @else
         {!! showError('Комментирование данной новости закрыто!') !!}
     @endif
-
-    <i class="fa fa-arrow-circle-left"></i> <a href="/news">К новостям</a><br>
 @stop

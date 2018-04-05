@@ -7,6 +7,15 @@
 @section('content')
     <h1>Редактирование сообщения </h1>
 
+    <nav>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
+            <li class="breadcrumb-item"><a href="/admin">Панель</a></li>
+            <li class="breadcrumb-item"><a href="/admin/chat">Админ-чат</a></li>
+            <li class="breadcrumb-item active">Редактирование</li>
+        </ol>
+    </nav>
+
     <i class="fa fa-pencil-alt text-muted"></i> <b>{!! $post->user->login !!}</b> ({{ dateFixed($post->created_at) }})<br><br>
 
     <div class="form">
@@ -22,6 +31,4 @@
             <button class="btn btn-primary">Изменить</button>
         </form>
     </div><br>
-
-    <i class="fa fa-arrow-circle-left"></i> <a href="/admin/chat?page={{ $page }}">Вернуться</a><br>
 @stop

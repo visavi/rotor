@@ -8,6 +8,13 @@
 
     <h1>{{ trans('guest.header') }}</h1>
 
+    <nav>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
+            <li class="breadcrumb-item active">{{ trans('guest.header') }}</li>
+        </ol>
+    </nav>
+
     <a href="/rules">{{ trans('common.rules') }}</a> /
     <a href="/smiles">{{ trans('common.smiles') }}</a> /
     <a href="/tags">{{ trans('common.tags') }}</a>
