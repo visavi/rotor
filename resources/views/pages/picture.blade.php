@@ -8,6 +8,13 @@
 
     <h1>Загрузка фотографии</h1>
 
+    <nav>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
+            <li class="breadcrumb-item active">Загрузка фотографии</li>
+        </ol>
+    </nav>
+
     <div class="form">
         @if (!empty($user['picture']) && file_exists(UPLOADS.'/photos/'.$user['picture']))
             {!! resizeImage('uploads/photos/', $user['picture'], ['alt' => $user['login'], 'class' => 'img-fluid rounded']) !!}

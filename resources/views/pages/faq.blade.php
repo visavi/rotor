@@ -8,6 +8,13 @@
 
     <h1>FAQ по сайту</h1>
 
+    <nav>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
+            <li class="breadcrumb-item active">FAQ по сайту</li>
+        </ol>
+    </nav>
+
     <b>Для чего регистрироваться</b><br>
     Регистрация предназначена для тех, кто намерен часто заходить на сайт и иметь полный доступ ко все разделам сайта<br>
     После регистрации у вас появятся новые возможности:<br>
