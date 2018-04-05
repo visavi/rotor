@@ -8,6 +8,14 @@
 
     <h1>Список всех комментариев {{ $user->login }}</h1>
 
+    <nav>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
+            <li class="breadcrumb-item"><a href="/gallery">Галерея</a></li>
+            <li class="breadcrumb-item active">Список всех комментариев {{ $user->login }}</li>
+        </ol>
+    </nav>
+
     @if ($comments->isNotEmpty())
         @foreach ($comments as $data)
             <div class="post">
@@ -35,6 +43,4 @@
     @else
         {!! showError('Комментариев еще нет!') !!}
     @endif
-
-    <i class="fa fa-arrow-circle-left"></i> <a href="/gallery">В галерею</a><br>
 @stop

@@ -8,6 +8,14 @@
 
     <h1>Добавление фотографии</h1>
 
+    <nav>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
+            <li class="breadcrumb-item"><a href="/gallery">Галерея</a></li>
+            <li class="breadcrumb-item active">Добавление фотографии</li>
+        </ol>
+    </nav>
+
     <div class="form">
         <form action="/gallery/create" method="post" enctype="multipart/form-data">
             <input type="hidden" name="token" value="{{  $_SESSION['token'] }}">
@@ -39,6 +47,4 @@
 
     Разрешается добавлять фотки с расширением jpg, jpeg, gif и png<br>
     Весом не более {{ formatSize(setting('filesize')) }} и размером от 100 до {{ setting('fileupfoto') }} px<br><br>
-
-    <i class="fa fa-arrow-circle-left"></i> <a href="/gallery">В галерею</a><br>
 @stop

@@ -8,17 +8,24 @@
 
     <h1>{{ $photo->title }}</h1>
 
-    <ol class="breadcrumb">
-        @if (isAdmin())
-            <li class="breadcrumb-item"><a href="/admin/gallery?act=edit&amp;gid={{ $photo->id }}">Редактировать</a></li>
-            <li class="breadcrumb-item"><a href="/admin/gallery?act=del&amp;del={{ $photo->id }}&amp;uid={{ $_SESSION['token'] }}" onclick="return confirm('Вы подтверждаете удаление изображения?')">Удалить</a></li>
-        @endif
+    <nav>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
+            <li class="breadcrumb-item"><a href="/gallery">Галерея</a></li>
+            <li class="breadcrumb-item"><a href="/gallery/album/{{ $photo->user->login }}">Альбом</a></li>
+            <li class="breadcrumb-item active">{{ $photo->title }}</li>
+        </ol>
+    </nav>
 
-        @if ($photo->user->id == getUser('id') && ! isAdmin())
-            <li class="breadcrumb-item"><a href="/gallery/edit/{{ $photo->id }}">Редактировать</a></li>
-            <li class="breadcrumb-item"><a href="/gallery/delete/{{ $photo->id }}?token={{ $_SESSION['token'] }}" onclick="return confirm('Вы подтверждаете удаление изображения?')">Удалить</a></li>
-        @endif
-    </ol>
+    @if (isAdmin())
+        <a href="/admin/gallery/edit/{{ $photo->id }}">Редактировать</a> /
+       <a href="/admin/gallery/delete/{{ $photo->id }}?token={{ $_SESSION['token'] }}" onclick="return confirm('Вы подтверждаете удаление изображения?')">Удалить</a>
+    @endif
+
+    @if ($photo->user->id == getUser('id') && ! isAdmin())
+        <a href="/gallery/edit/{{ $photo->id }}">Редактировать</a> /
+        <a href="/gallery/delete/{{ $photo->id }}?token={{ $_SESSION['token'] }}" onclick="return confirm('Вы подтверждаете удаление изображения?')">Удалить</a>
+    @endif
 
     <div>
         <a href="/uploads/pictures/{{ $photo->link }}" class="gallery"><img  class="img-fluid" src="/uploads/pictures/{{ $photo->link }}" alt="image"></a><br>
@@ -57,7 +64,4 @@
             @endif
         </div>
     @endif
-
-    <i class="fa fa-arrow-circle-up"></i> <a href="/gallery/album/{{ $photo->user->login }}">В альбом</a><br>
-    <i class="fa fa-arrow-circle-left"></i> <a href="/gallery">В галерею</a><br>
 @stop

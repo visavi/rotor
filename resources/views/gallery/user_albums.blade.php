@@ -1,12 +1,20 @@
 @extends('layout')
 
 @section('title')
-    Список всех фотографий {{ $user->login }} (Стр. {{ $page['current'] }})
+    Альбом {{ $user->login }} (Стр. {{ $page['current'] }})
 @stop
 
 @section('content')
 
-    <h1>Список всех фотографий {{ $user->login }}</h1>
+    <h1>Альбом {{ $user->login }}</h1>
+
+    <nav>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
+            <li class="breadcrumb-item"><a href="/gallery">Галерея</a></li>
+            <li class="breadcrumb-item active">Альбом {{ $user->login }}</li>
+        </ol>
+    </nav>
 
     @if ($photos->isNotEmpty())
 
@@ -38,7 +46,4 @@
     @else
         {!! showError('Фотографий в альбоме еще нет!') !!}
     @endif
-
-    <i class="fa fa-arrow-circle-up"></i> <a href="/gallery/albums">Альбомы</a><br>
-    <i class="fa fa-arrow-circle-left"></i> <a href="/gallery">В галерею</a><br>
 @stop

@@ -8,6 +8,14 @@
 
     <h1>Альбомы пользователей</h1>
 
+    <nav>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
+            <li class="breadcrumb-item"><a href="/gallery">Галерея</a></li>
+            <li class="breadcrumb-item active">Альбомы пользователей</li>
+        </ol>
+    </nav>
+
     @if ($albums->isNotEmpty())
         @foreach ($albums as $data)
 
@@ -22,6 +30,4 @@
     @else
         {!! showError('Альбомов еще нет!') !!}
     @endif
-
-    <i class="fa fa-arrow-circle-left"></i> <a href="/gallery">В галерею</a><br>
 @stop

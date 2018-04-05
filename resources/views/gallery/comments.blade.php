@@ -8,7 +8,14 @@
 
     <h1>{{ $photo->title }}</h1>
 
-    <i class="fa fa-image"></i> <b><a href="/gallery/{{ $photo->id }}">К фото</a></b><hr>
+    <nav>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
+            <li class="breadcrumb-item"><a href="/gallery">Галерея</a></li>
+            <li class="breadcrumb-item"><a href="/gallery/{{ $photo->id }}">{{ $photo->title }}</a></li>
+            <li class="breadcrumb-item active">Комментарии</li>
+        </ol>
+    </nav>
 
     @if ($comments->isNotEmpty())
         @foreach ($comments as $data)
@@ -82,7 +89,4 @@
     @else
         {!! showError('Комментирование данной фотографии закрыто!') !!}
     @endif
-
-    <i class="fa fa-arrow-circle-up"></i> <a href="/gallery/album/{{ $photo->user->login }}">Альбом</a><br>
-    <i class="fa fa-arrow-circle-left"></i> <a href="/gallery">В галерею</a><br>
 @stop

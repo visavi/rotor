@@ -4,6 +4,13 @@
 
 <h1>Статистика сайта</h1>
 
+<nav>
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
+        <li class="breadcrumb-item active">Статистика сайта</li>
+    </ol>
+</nav>
+
 <i class="far fa-circle fa-lg text-muted"></i> <a href="/ratinglist">Рейтинг толстосумов</a><br>
 <i class="far fa-circle fa-lg text-muted"></i> <a href="/authoritylist">Рейтинг репутации</a><br>
 <i class="far fa-circle fa-lg text-muted"></i> <a href="/statusfaq">Статусы юзеров</a><br>

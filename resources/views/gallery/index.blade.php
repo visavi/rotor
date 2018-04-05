@@ -9,27 +9,32 @@
     @if (getUser())
         <div class="float-right">
             <a class="btn btn-success" href="/gallery/create">Добавить фото</a><br>
-        </div>
+        </div><br>
     @endif
 
     <h1>Галерея сайта</h1>
 
-    <br>
-    <ol class="breadcrumb">
+    <nav>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
+            <li class="breadcrumb-item active">Галерея сайта</li>
 
-        @if (getUser())
-            <li class="breadcrumb-item"><a href="/gallery/album/{{ getUser('login') }}">Мои альбом</a></li>
-            <li class="breadcrumb-item"><a href="/gallery/comments/{{ getUser('login') }}">Мои комментарии</a></li>
-        @endif
-
-        <li class="breadcrumb-item"><a href="/gallery/albums">Все альбомы</a></li>
-        <li class="breadcrumb-item"><a href="/gallery/comments">Все комментарии</a></li>
-        <li class="breadcrumb-item"><a href="/gallery/top">Топ фото</a></li>
-
-        @if (isAdmin())
+            @if (isAdmin())
                 <li class="breadcrumb-item"><a href="/admin/gallery?page={{ $page['current'] }}">Управление</a></li>
-        @endif
-    </ol>
+            @endif
+        </ol>
+    </nav>
+
+    @if (getUser())
+        Мои:
+        <a href="/gallery/album/{{ getUser('login') }}">фото</a>,
+        <a href="/gallery/comments/{{ getUser('login') }}">комментарии</a> /
+    @endif
+
+    Все:
+    <a href="/gallery/albums">альбомы</a>,
+    <a href="/gallery/comments">комментарии</a> /
+    <a href="/gallery/top">Топ фото</a>
 
     @if ($photos->isNotEmpty())
         @foreach ($photos as $data)

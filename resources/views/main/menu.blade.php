@@ -4,6 +4,13 @@
 
 <h1>Мое меню</h1>
 
+<nav>
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
+        <li class="breadcrumb-item active">Мое меню</li>
+    </ol>
+</nav>
+
 <div class="b"><i class="fa fa-envelope fa-lg text-muted"></i> <b>Почта / Контакты</b></div>
 <i class="far fa-circle fa-lg text-muted"></i> <a href="/private">Сообщения</a> ({{ userMail(getUser()) }})<br>
 <i class="far fa-circle fa-lg text-muted"></i> <a href="/private/send">Отправить письмо</a><br>

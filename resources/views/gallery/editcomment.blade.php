@@ -8,6 +8,16 @@
 
     <h1>Редактирование комментария</h1>
 
+    <nav>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
+            <li class="breadcrumb-item"><a href="/gallery">Галерея</a></li>
+            <li class="breadcrumb-item"><a href="/gallery/{{ $photo->id }}">{{ $photo->title }}</a></li>
+            <li class="breadcrumb-item"><a href="/gallery/comments/{{ $photo->id }}">Комментариии</a></li>
+            <li class="breadcrumb-item active">Редактирование фотографии</li>
+        </ol>
+    </nav>
+
     <i class="fa fa-pencil-alt"></i> <b>{{ $comment->user->login }}</b> <small>({{ dateFixed($comment->created_at) }})</small><br><br>
 
     <div class="form">
@@ -23,6 +33,4 @@
             <button class="btn btn-success">Редактировать</button>
         </form>
     </div><br>
-
-    <i class="fa fa-arrow-circle-left"></i> <a href="/gallery/comments/{{ $comment->relate_id }}?page={{ $page }}">Вернуться</a><br>
 @stop

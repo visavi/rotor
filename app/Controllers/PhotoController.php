@@ -235,8 +235,13 @@ class PhotoController extends BaseController
     public function editComment($id, $cid)
     {
         $page = int(Request::input('page', 1));
+        $photo = Photo::query()->find($id);
 
-        if (!getUser()) {
+        if (! $photo) {
+            abort('default', 'Фотография не найдена!');
+        }
+
+        if (! getUser()) {
             abort(403, 'Для редактирования комментариев небходимо авторизоваться!');
         }
 
@@ -278,13 +283,13 @@ class PhotoController extends BaseController
                 ]);
 
                 setFlash('success', 'Комментарий успешно отредактирован!');
-                redirect('/gallery/comments/' . $id . '?page=' . $page);
+                redirect('/gallery/comments/' . $photo->id . '?page=' . $page);
             } else {
                 setInput(Request::all());
                 setFlash('danger', $validator->getErrors());
             }
         }
-        return view('gallery/editcomment', compact('comment', 'page'));
+        return view('gallery/editcomment', compact('photo', 'comment', 'page'));
     }
 
     /**
@@ -365,7 +370,7 @@ class PhotoController extends BaseController
 
         $albums = Photo::query()
             ->select('user_id', 'login')
-            ->selectRaw('count(*) as cnt, sum(comments) as comments')
+            ->selectRaw('count(*) as cnt, sum(count_comments) as count_comments')
             ->join('users', 'photo.user_id', '=', 'users.id')
             ->offset($page['offset'])
             ->limit($page['limit'])

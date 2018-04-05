@@ -8,6 +8,14 @@
 
     <h1>Топ популярных фотографий</h1>
 
+    <nav>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
+            <li class="breadcrumb-item"><a href="/gallery">Галерея</a></li>
+            <li class="breadcrumb-item active">Топ популярных фотографий</li>
+        </ol>
+    </nav>
+
     @if ($photos->isNotEmpty())
 
         Сортировать:
@@ -39,6 +47,4 @@
     @else
         {!! showError('Загруженных фотографий еще нет!') !!}
     @endif
-
-    <i class="fa fa-arrow-circle-left"></i> <a href="/gallery">В галерею</a><br>
 @stop
