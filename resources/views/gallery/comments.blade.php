@@ -30,11 +30,11 @@
 
                                 <a href="#" onclick="return postQuote(this)" title="Цитировать"><i class="fa fa-quote-right text-muted"></i></a>
 
-                                <a href="#" onclick="return sendComplaint(this)" data-type="{{ App\Models\Photo::class }}" data-id="{{ $data->id }}" data-token="{{ $_SESSION['token'] }}" data-page="{{ $page['current'] }}" rel="nofollow" title="Жалоба"><i class="fa fa-bell text-muted"></i></a>
+                                <a href="#" onclick="return sendComplaint(this)" data-type="{{ App\Models\Photo::class }}" data-id="{{ $data->id }}" data-token="{{ $_SESSION['token'] }}" data-page="{{ $page->current }}" rel="nofollow" title="Жалоба"><i class="fa fa-bell text-muted"></i></a>
                             @endif
 
                             @if ($data->user_id == getUser('id') && $data->created_at + 600 > SITETIME)
-                                <a title="Редактировать" href="/gallery/edit/{{ $photo->id }}/{{ $data->id }}?page={{ $page['current'] }}"><i class="fa fa-pencil-alt text-muted"></i></a>
+                                <a title="Редактировать" href="/gallery/edit/{{ $photo->id }}/{{ $data->id }}?page={{ $page->current }}"><i class="fa fa-pencil-alt text-muted"></i></a>
                             @endif
 
                             @if (isAdmin())
@@ -61,7 +61,7 @@
 
     @if (empty($photo->closed))
 
-        @if (empty($page['total']))
+        @if (empty($page->total))
             {!! showError('Комментариев еще нет!') !!}
         @endif
 

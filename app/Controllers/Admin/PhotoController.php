@@ -30,8 +30,8 @@ class PhotoController extends AdminController
         $page  = paginate(setting('fotolist'), $total);
 
         $photos = Photo::orderBy('created_at', 'desc')
-            ->offset($page['offset'])
-            ->limit($page['limit'])
+            ->offset($page->offset)
+            ->limit($page->limit)
             ->with('user')
             ->get();
 
@@ -54,7 +54,7 @@ class PhotoController extends AdminController
             $token  = check(Request::input('token'));
             $title  = check(Request::input('title'));
             $text   = check(Request::input('text'));
-            $closed = Request::has('closed') ? 1 : 0;
+            $closed = empty(Request::input('closed')) ? 0 : 1;
 
             $validator = new Validator();
             $validator->equal($token, $_SESSION['token'], 'Неверный идентификатор сессии, повторите действие!')

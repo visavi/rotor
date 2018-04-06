@@ -1,7 +1,7 @@
 @extends('layout')
 
 @section('title')
-    Блоги - Список комментариев {{ $user->login }} (Стр. {{ $page['current'] }})
+    Блоги - Список комментариев {{ $user->login }} (Стр. {{ $page->current }})
 @stop
 
 @section('content')

@@ -32,8 +32,8 @@ class NewsController extends AdminController
 
         $news = News::query()
             ->orderBy('created_at', 'desc')
-            ->offset($page['offset'])
-            ->limit($page['limit'])
+            ->offset($page->offset)
+            ->limit($page->limit)
             ->with('user')
             ->get();
 
@@ -57,8 +57,8 @@ class NewsController extends AdminController
             $title  = check(Request::input('title'));
             $text   = check(Request::input('text'));
             $image  = Request::file('image');
-            $closed = Request::has('closed') ? 1 : 0;
-            $top    = Request::has('top') ? 1 : 0;
+            $closed = empty(Request::input('closed')) ? 0 : 1;
+            $top    = empty(Request::input('top')) ? 0 : 1;
 
             $validator = new Validator();
             $validator->equal($token, $_SESSION['token'], 'Неверный идентификатор сессии, повторите действие!')
@@ -110,8 +110,8 @@ class NewsController extends AdminController
             $title  = check(Request::input('title'));
             $text   = check(Request::input('text'));
             $image  = Request::file('image');
-            $closed = Request::has('closed') ? 1 : 0;
-            $top    = Request::has('top') ? 1 : 0;
+            $closed = empty(Request::input('closed')) ? 0 : 1;
+            $top    = empty(Request::input('top')) ? 0 : 1;
 
             $validator = new Validator();
             $validator->equal($token, $_SESSION['token'], 'Неверный идентификатор сессии, повторите действие!')

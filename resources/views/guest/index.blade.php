@@ -1,7 +1,7 @@
 @extends('layout')
 
 @section('title')
-    {{ trans('guest.title', ['page' => $page['current']]) }}
+    {{ trans('guest.title', ['page' => $page->current]) }}
 @stop
 
 @section('content')
@@ -20,7 +20,7 @@
     <a href="/tags">{{ trans('common.tags') }}</a>
 
     @if (isAdmin())
-        / <a href="/admin/book?page={{ $page['current'] }}">{{ trans('common.management') }}</a>
+        / <a href="/admin/book?page={{ $page->current }}">{{ trans('common.management') }}</a>
     @endif
     <hr>
 
@@ -35,7 +35,7 @@
                             <a href="#" onclick="return postReply(this)" data-toggle="tooltip" title="{{ trans('common.reply') }}"><i class="fa fa-reply text-muted"></i></a>
                             <a href="#" onclick="return postQuote(this)" data-toggle="tooltip" title="{{ trans('common.quote') }}"><i class="fa fa-quote-right text-muted"></i></a>
 
-                            <a href="#" onclick="return sendComplaint(this)" data-type="{{ App\Models\Guest::class }}" data-id="{{ $data->id }}" data-token="{{ $_SESSION['token'] }}" data-page="{{ $page['current'] }}" rel="nofollow" data-toggle="tooltip" title="{{ trans('common.complain') }}"><i class="fa fa-bell text-muted"></i></a>
+                            <a href="#" onclick="return sendComplaint(this)" data-type="{{ App\Models\Guest::class }}" data-id="{{ $data->id }}" data-token="{{ $_SESSION['token'] }}" data-page="{{ $page->current }}" rel="nofollow" data-toggle="tooltip" title="{{ trans('common.complain') }}"><i class="fa fa-bell text-muted"></i></a>
                         </div>
                     @endif
 

@@ -74,8 +74,8 @@ class ContactController extends BaseController
         $contacts = Contact::query()
             ->where('user_id', getUser('id'))
             ->orderBy('created_at', 'desc')
-            ->offset($page['offset'])
-            ->limit($page['limit'])
+            ->offset($page->offset)
+            ->limit($page->limit)
             ->with('contactor')
             ->get();
 

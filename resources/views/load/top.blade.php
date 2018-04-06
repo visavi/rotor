@@ -1,7 +1,7 @@
 @extends('layout')
 
 @section('title')
-    Топ популярных файлов (Стр. {{ $page['current'] }})
+    Топ популярных файлов (Стр. {{ $page->current }})
 @stop
 
 @section('content')

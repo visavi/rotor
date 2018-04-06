@@ -1,7 +1,7 @@
 @extends('layout')
 
 @section('title')
-    Загрузки - Новые комментарии (Стр. {{ $page['current'] }})
+    Загрузки - Новые комментарии (Стр. {{ $page->current }})
 @stop
 
 @section('content')

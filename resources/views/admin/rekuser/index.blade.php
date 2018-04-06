@@ -14,7 +14,7 @@
 
     @if ($records->isNotEmpty())
 
-        <form action="/admin/reklama/delete?page={{ $page['current'] }}" method="post">
+        <form action="/admin/reklama/delete?page={{ $page->current }}" method="post">
             <input type="hidden" name="token" value="{{ $_SESSION['token'] }}">
 
             @foreach ($records as $data)
@@ -23,7 +23,7 @@
                     <b><a href="{{ $data->site }}">{{ $data->name }}</a></b> ({!! profile($data->user) !!})
 
                     <div class="float-right">
-                        <a href="/admin/reklama/edit/{{ $data->id }}?page={{ $page['current'] }}"><i class="fas fa-pencil-alt text-muted"></i></a>
+                        <a href="/admin/reklama/edit/{{ $data->id }}?page={{ $page->current }}"><i class="fas fa-pencil-alt text-muted"></i></a>
                         <input type="checkbox" name="del[]" value="{{ $data->id }}">
                     </div>
                 </div>
@@ -50,7 +50,7 @@
 
         {!! pagination($page) !!}
 
-        Всего ссылок: <b>{{ $page['total'] }}</b><br><br>
+        Всего ссылок: <b>{{ $page->total }}</b><br><br>
     @else
         {!! showError('В данный момент рекламных ссылок еще нет!') !!}
     @endif

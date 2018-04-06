@@ -17,13 +17,13 @@
     <i class="fa fa-book"></i>
 
     @if ($type == 'offer')
-        <b>Предложения</b> ({{ $page['total'] }}) / <a href="/offers/issue">Проблемы</a> ({{ $page['otherTotal'] }})
+        <b>Предложения</b> ({{ $page->total }}) / <a href="/offers/issue">Проблемы</a> ({{ $page['otherTotal'] }})
     @else
-        <a href="/offers/offer">Предложения</a> ({{ $page['otherTotal'] }}) / <b>Проблемы</b> ({{ $page['total'] }})
+        <a href="/offers/offer">Предложения</a> ({{ $page['otherTotal'] }}) / <b>Проблемы</b> ({{ $page->total }})
     @endif
 
     @if (isAdmin('admin'))
-        / <a href="/admin/offers/{{ $type }}?page={{ $page['current'] }}">Управление</a>
+        / <a href="/admin/offers/{{ $type }}?page={{ $page->current }}">Управление</a>
     @endif
 
     <br>Сортировать:
@@ -57,7 +57,7 @@
 
         {!! pagination($page) !!}
 
-        Всего записей: <b>{{ $page['total'] }}</b><br><br>
+        Всего записей: <b>{{ $page->total }}</b><br><br>
     @else
         {!! showError('Записей еще нет!') !!}
     @endif

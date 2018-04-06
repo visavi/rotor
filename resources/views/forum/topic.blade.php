@@ -1,10 +1,10 @@
 @extends('layout')
 
 @section('title')
-    {{ $topic->title }} (Стр. {{ $page['current'] }})
+    {{ $topic->title }} (Стр. {{ $page->current }})
 @stop
 
-@section('description', 'Обсуждение темы: '.$topic->title.' (Стр. '.$page['current'].')')
+@section('description', 'Обсуждение темы: '.$topic->title.' (Стр. '.$page->current.')')
 
 @section('content')
     <h1>{{ $topic->title }}</h1>
@@ -55,21 +55,21 @@
 
     @if (isAdmin())
         @if ($topic->closed)
-            <a href="/admin/topic/action/{{ $topic->id }}?type=open&amp;page={{ $page['current'] }}&amp;token={{ $_SESSION['token'] }}">Открыть</a> /
+            <a href="/admin/topic/action/{{ $topic->id }}?type=open&amp;page={{ $page->current }}&amp;token={{ $_SESSION['token'] }}">Открыть</a> /
         @else
-            <a href="/admin/topic/action/{{ $topic->id }}?type=closed&amp;page={{ $page['current'] }}&amp;token={{ $_SESSION['token'] }}">Закрыть</a> /
+            <a href="/admin/topic/action/{{ $topic->id }}?type=closed&amp;page={{ $page->current }}&amp;token={{ $_SESSION['token'] }}">Закрыть</a> /
         @endif
 
         @if ($topic->locked)
-            <a href="/admin/topic/action/{{ $topic->id }}?type=unlocked&amp;page={{ $page['current'] }}&amp;token={{ $_SESSION['token'] }}">Открепить</a> /
+            <a href="/admin/topic/action/{{ $topic->id }}?type=unlocked&amp;page={{ $page->current }}&amp;token={{ $_SESSION['token'] }}">Открепить</a> /
         @else
-            <a href="/admin/topic/action/{{ $topic->id }}?type=locked&amp;page={{ $page['current'] }}&amp;token={{ $_SESSION['token'] }}">Закрепить</a> /
+            <a href="/admin/topic/action/{{ $topic->id }}?type=locked&amp;page={{ $page->current }}&amp;token={{ $_SESSION['token'] }}">Закрепить</a> /
         @endif
 
         <a href="/admin/topic/edit/{{ $topic->id }}">Изменить</a> /
         <a href="/admin/topic/move/{{ $topic->id }}">Переместить</a> /
         <a href="/admin/topic/delete/{{ $topic->id }}?token={{ $_SESSION['token'] }}" onclick="return confirm('Вы действительно хотите удалить данную тему?')">Удалить</a> /
-        <a href="/admin/topic/{{ $topic->id }}?page={{ $page['current'] }}">Управление</a><br>
+        <a href="/admin/topic/{{ $topic->id }}?page={{ $page->current }}">Управление</a><br>
     @endif
 
     @if ($vote)
@@ -84,7 +84,7 @@
                 {!! progressBar($maxproc, $proc.'%') !!}
             @endforeach
         @else
-            <form action="/topic/vote/{{ $topic->id }}?page={{ $page['current'] }}" method="post">
+            <form action="/topic/vote/{{ $topic->id }}?page={{ $page->current }}" method="post">
                 <input type="hidden" name="token" value="{{ $_SESSION['token'] }}">
                 @foreach ($vote->answers as $answer)
                     <label><input name="poll" type="radio" value="{{ $answer->id }}"> {{ $answer->answer }}</label><br>
@@ -97,13 +97,13 @@
     @endif
 
     @if ($topic->isModer)
-        <form action="/topic/delete/{{ $topic->id }}?page={{ $page['current'] }}" method="post">
+        <form action="/topic/delete/{{ $topic->id }}?page={{ $page->current }}" method="post">
             <input type="hidden" name="token" value="{{ $_SESSION['token'] }}">
     @endif
 
     @if ($posts->isNotEmpty())
         @foreach ($posts as $data)
-            <?php $num = ($page['offset'] + $loop->iteration ); ?>
+            <?php $num = ($page->offset + $loop->iteration ); ?>
             <div class="post">
                 <div class="b" id="post_{{ $data->id }}">
                     <div class="float-right text-right">
@@ -113,11 +113,11 @@
 
                                 <a href="#" onclick="return postQuote(this)" title="Цитировать"><i class="fa fa-quote-right text-muted"></i></a>
 
-                                <a href="#" onclick="return sendComplaint(this)" data-type="{{ App\Models\Post::class }}" data-id="{{ $data->id }}" data-token="{{ $_SESSION['token'] }}" data-page="{{ $page['current'] }}" rel="nofollow" title="Жалоба"><i class="fa fa-bell text-muted"></i></a>
+                                <a href="#" onclick="return sendComplaint(this)" data-type="{{ App\Models\Post::class }}" data-id="{{ $data->id }}" data-token="{{ $_SESSION['token'] }}" data-page="{{ $page->current }}" rel="nofollow" title="Жалоба"><i class="fa fa-bell text-muted"></i></a>
                             @endif
 
                             @if ((getUser('id') == $data->user_id && $data->created_at + 600 > SITETIME) || $topic->isModer)
-                                <a href="/post/edit/{{ $data->id }}?page={{ $page['current'] }}" title="Редактировать"><i class="fa fa-pencil-alt text-muted"></i></a>
+                                <a href="/post/edit/{{ $data->id }}?page={{ $page->current }}" title="Редактировать"><i class="fa fa-pencil-alt text-muted"></i></a>
                                 @if ($topic->isModer)
                                     <input type="checkbox" name="del[]" value="{{ $data->id }}">
                                 @endif

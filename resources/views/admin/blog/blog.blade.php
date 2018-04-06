@@ -1,7 +1,7 @@
 @extends('layout')
 
 @section('title')
-    {{ $category->name }} (Стр. {{ $page['current'] }})
+    {{ $category->name }} (Стр. {{ $page->current }})
 @stop
 
 @section('content')
@@ -24,7 +24,7 @@
         <li class="breadcrumb-item active">{{ $category->name }}</li>
 
         @if (isAdmin())
-            <li class="breadcrumb-item"><a href="/blog/{{ $category->id }}?page={{ $page['current'] }}">Обзор</a></li>
+            <li class="breadcrumb-item"><a href="/blog/{{ $category->id }}?page={{ $page->current }}">Обзор</a></li>
         @endif
     </ol>
 
@@ -37,7 +37,7 @@
                 <div class="float-right">
                     <a href="/admin/article/edit/{{ $data->id }}" title="Редактировать"><i class="fa fa-pencil-alt text-muted"></i></a>
                     <a href="/admin/article/move/{{ $data->id }}" title="Перенести"><i class="fa fa-arrows-alt text-muted"></i></a>
-                    <a href="/admin/article/delete/{{ $data->id }}?page={{ $page['current'] }}&amp;token={{ $_SESSION['token'] }}" onclick="return confirm('Вы действительно хотите удалить данную статью?')" title="Удалить"><i class="fa fa-times text-muted"></i></a>
+                    <a href="/admin/article/delete/{{ $data->id }}?page={{ $page->current }}&amp;token={{ $_SESSION['token'] }}" onclick="return confirm('Вы действительно хотите удалить данную статью?')" title="Удалить"><i class="fa fa-times text-muted"></i></a>
                 </div>
 
             </div>

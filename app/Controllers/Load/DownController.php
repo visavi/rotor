@@ -343,8 +343,8 @@ class DownController extends BaseController
             ->where('relate_type', Down::class)
             ->where('relate_id', $id)
             ->orderBy('created_at')
-            ->offset($page['offset'])
-            ->limit($page['limit'])
+            ->offset($page->offset)
+            ->limit($page->limit)
             ->with('user')
             ->get();
 
@@ -459,7 +459,7 @@ class DownController extends BaseController
         $getFiles = array_values($archive->getAllInfo());
 
         $viewExt = Down::getViewExt();
-        $files = array_slice($getFiles, $page['offset'], $page['limit'], true);
+        $files = array_slice($getFiles, $page->offset, $page->limit, true);
 
         return view('load/zip', compact('down', 'files', 'page', 'viewExt', 'archive'));
     }

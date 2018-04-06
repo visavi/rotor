@@ -10,7 +10,7 @@
 
     @if ($ignores->isNotEmpty())
 
-        <form action="/ignore/delete?page={{ $page['current'] }}" method="post">
+        <form action="/ignore/delete?page={{ $page->current }}" method="post">
             <input type="hidden" name="token" value="{{ $_SESSION['token'] }}">
 
             @foreach ($ignores as $data)
@@ -42,7 +42,7 @@
 
         {!! pagination($page) !!}
 
-        Всего в игноре: <b>{{ $page['total'] }}</b><br>
+        Всего в игноре: <b>{{ $page->total }}</b><br>
     @else
         {!! showError('Игнор-лист пуст!') !!}
     @endif

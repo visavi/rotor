@@ -44,7 +44,7 @@ class NoticeController extends AdminController
             $type    = check(Request::input('type'));
             $name    = check(Request::input('name'));
             $text    = check(Request::input('text'));
-            $protect = Request::has('protect') ? 1 : 0;
+            $protect = empty(Request::input('protect')) ? 0 : 1;
 
             $validator = new Validator();
             $validator->equal($token, $_SESSION['token'], 'Неверный идентификатор сессии, повторите действие!')
@@ -95,7 +95,7 @@ class NoticeController extends AdminController
             $token   = check(Request::input('token'));
             $name    = check(Request::input('name'));
             $text    = check(Request::input('text'));
-            $protect = Request::has('protect') ? 1 : 0;
+            $protect = empty(Request::input('protect')) ? 0 : 1;
 
             $validator = new Validator();
             $validator->equal($token, $_SESSION['token'], 'Неверный идентификатор сессии, повторите действие!')

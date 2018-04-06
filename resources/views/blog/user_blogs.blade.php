@@ -16,7 +16,7 @@
 
         {!! pagination($page) !!}
 
-        Всего пользователей: <b>{{ $page['total'] }}</b><br><br>
+        Всего пользователей: <b>{{ $page->total }}</b><br><br>
     @else
         {!! showError('Статей еще нет!') !!}
     @endif

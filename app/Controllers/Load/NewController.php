@@ -24,8 +24,8 @@ class NewController extends BaseController
         $downs = Down::query()
             ->where('active', 1)
             ->orderBy('created_at', 'desc')
-            ->limit($page['limit'])
-            ->offset($page['offset'])
+            ->limit($page->limit)
+            ->offset($page->offset)
             ->with('category', 'user')
             ->get();
 
@@ -49,8 +49,8 @@ class NewController extends BaseController
             ->select('comments.*', 'title', 'count_comments')
             ->where('relate_type', Down::class)
             ->leftJoin('downs', 'comments.relate_id', '=', 'downs.id')
-            ->offset($page['offset'])
-            ->limit($page['limit'])
+            ->offset($page->offset)
+            ->limit($page->limit)
             ->orderBy('comments.created_at', 'desc')
             ->with('user')
             ->get();

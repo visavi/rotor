@@ -12,7 +12,7 @@
 
     @if ($logs->isNotEmpty())
 
-        <form action="/admin/ipban/delete?page={{ $page['current'] }}" method="post">
+        <form action="/admin/ipban/delete?page={{ $page->current }}" method="post">
             <input type="hidden" name="token" value="{{ $_SESSION['token'] }}">
 
             @foreach ($logs as $log)
@@ -38,7 +38,7 @@
 
         {!! pagination($page) !!}
 
-        Всего заблокировано: <b>{{ $page['total'] }}</b><br><br>
+        Всего заблокировано: <b>{{ $page->total }}</b><br><br>
     @else
         {!! showError('В бан-листе пока пусто!') !!}
     @endif

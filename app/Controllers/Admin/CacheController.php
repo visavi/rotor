@@ -34,7 +34,7 @@ class CacheController extends AdminController
             $images = glob(UPLOADS.'/thumbnail/*.{gif,png,jpg,jpeg}', GLOB_BRACE);
             $page   = paginate(20, count($images));
 
-            $images = array_slice($images, $page['offset'], $page['limit']);
+            $images = array_slice($images, $page->offset, $page->limit);
 
             $view = view('admin/cache/images', compact('images', 'page'));
         }

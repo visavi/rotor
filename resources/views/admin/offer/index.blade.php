@@ -17,13 +17,13 @@
     <i class="fa fa-book"></i>
 
     @if ($type == 'offer')
-        <b>Предложения</b> ({{ $page['total'] }}) / <a href="/admin/offers/issue">Проблемы</a> ({{ $page['otherTotal'] }})
+        <b>Предложения</b> ({{ $page->total }}) / <a href="/admin/offers/issue">Проблемы</a> ({{ $page['otherTotal'] }})
     @else
-        <a href="/admin/offers/offer">Предложения</a> ({{ $page['otherTotal'] }}) / <b>Проблемы</b> ({{ $page['total'] }})
+        <a href="/admin/offers/offer">Предложения</a> ({{ $page['otherTotal'] }}) / <b>Проблемы</b> ({{ $page->total }})
     @endif
 
     @if (isAdmin('admin'))
-        / <a href="/offers/{{ $type }}?page={{ $page['current'] }}">Обзор</a>
+        / <a href="/offers/{{ $type }}?page={{ $page->current }}">Обзор</a>
     @endif
 
     <br>Сортировать:
@@ -42,7 +42,7 @@
 
     @if ($offers->isNotEmpty())
 
-        <form action="/admin/offers/delete?type={{ $type }}&amp;page={{ $page['current'] }}" method="post">
+        <form action="/admin/offers/delete?type={{ $type }}&amp;page={{ $page->current }}" method="post">
             <input type="hidden" name="token" value="{{ $_SESSION['token'] }}">
 
                 @foreach ($offers as $data)
@@ -71,7 +71,7 @@
 
         {!! pagination($page) !!}
 
-        Всего записей: <b>{{ $page['total'] }}</b><br><br>
+        Всего записей: <b>{{ $page->total }}</b><br><br>
     @else
         {!! showError('Записей еще нет!') !!}
     @endif

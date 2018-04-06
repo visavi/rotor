@@ -1,7 +1,7 @@
 @extends('layout')
 
 @section('title')
-    Альбом {{ $user->login }} (Стр. {{ $page['current'] }})
+    Альбом {{ $user->login }} (Стр. {{ $page->current }})
 @stop
 
 @section('content')
@@ -24,8 +24,8 @@
                 <b><a href="/gallery/{{ $data->id }}">{{ $data->title }}</a></b> ({{ formatFileSize(UPLOADS.'/pictures/'.$data->link) }})<br>
 
                 @if ($moder)
-                    <a href="/gallery/edit/{{ $data->id }}?page={{ $page['current'] }}">Редактировать</a> /
-                    <a href="/gallery/delete/{{ $data->id }}?page={{ $page['current'] }}&amp;token={{ $_SESSION['token'] }}" onclick="return confirm('Вы подтверждаете удаление изображения?')">Удалить</a>
+                    <a href="/gallery/edit/{{ $data->id }}?page={{ $page->current }}">Редактировать</a> /
+                    <a href="/gallery/delete/{{ $data->id }}?page={{ $page->current }}&amp;token={{ $_SESSION['token'] }}" onclick="return confirm('Вы подтверждаете удаление изображения?')">Удалить</a>
                 @endif
             </div>
             <div>
@@ -42,7 +42,7 @@
 
         {!! pagination($page) !!}
 
-        Всего фотографий: <b>{{ $page['total'] }}</b><br><br>
+        Всего фотографий: <b>{{ $page->total }}</b><br><br>
     @else
         {!! showError('Фотографий в альбоме еще нет!') !!}
     @endif

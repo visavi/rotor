@@ -1,7 +1,7 @@
 @extends('layout')
 
 @section('title')
-    Новости сайта (Стр. {{ $page['current']}})
+    Новости сайта (Стр. {{ $page->current}})
 @stop
 
 @section('content')

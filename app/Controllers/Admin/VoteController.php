@@ -30,8 +30,8 @@ class VoteController extends AdminController
         $votes = Vote::query()
             ->where('closed', 0)
             ->orderBy('created_at', 'desc')
-            ->offset($page['offset'])
-            ->limit($page['limit'])
+            ->offset($page->offset)
+            ->limit($page->limit)
             ->with('topic')
             ->get();
 
@@ -49,8 +49,8 @@ class VoteController extends AdminController
         $votes = Vote::query()
             ->where('closed', 1)
             ->orderBy('created_at', 'desc')
-            ->offset($page['offset'])
-            ->limit($page['limit'])
+            ->offset($page->offset)
+            ->limit($page->limit)
             ->with('topic')
             ->get();
 

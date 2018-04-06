@@ -1,7 +1,7 @@
 @extends('layout')
 
 @section('title')
-    Голосования (Стр. {{ $page['current'] }})
+    Голосования (Стр. {{ $page->current }})
 @stop
 
 @section('content')

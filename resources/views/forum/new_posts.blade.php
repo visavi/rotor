@@ -1,7 +1,7 @@
 @extends('layout')
 
 @section('title')
-    Форум - Новые сообщения (Стр. {{ $page['current'] }})
+    Форум - Новые сообщения (Стр. {{ $page->current }})
 @stop
 
 @section('content')

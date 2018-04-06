@@ -22,7 +22,7 @@
 
         {!! pagination($page) !!}
 
-        Всего cмайлов: <b>{{ $page['total'] }}</b><br><br>
+        Всего cмайлов: <b>{{ $page->total }}</b><br><br>
     @else
         {!! showError('Смайлы не найдены!') !!}
     @endif

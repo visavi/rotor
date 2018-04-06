@@ -37,8 +37,8 @@ class TopController extends BaseController
         $downs = Down::query()
             ->where('active', 1)
             ->orderBy($order, 'desc')
-            ->limit($page['limit'])
-            ->offset($page['offset'])
+            ->limit($page->limit)
+            ->offset($page->offset)
             ->with('category', 'user')
             ->get();
 

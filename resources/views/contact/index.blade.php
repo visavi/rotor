@@ -10,7 +10,7 @@
 
     @if ($contacts->isNotEmpty())
 
-        <form action="/contact/delete?page={{ $page['current'] }}" method="post">
+        <form action="/contact/delete?page={{ $page->current }}" method="post">
             <input type="hidden" name="token" value="{{ $_SESSION['token'] }}">
 
             @foreach ($contacts as $contact)
@@ -41,7 +41,7 @@
 
         {!! pagination($page) !!}
 
-        Всего в контактах: <b>{{ $page['total'] }}</b><br>
+        Всего в контактах: <b>{{ $page->total }}</b><br>
     @else
         {!! showError('Контакт-лист пуст!') !!}
     @endif

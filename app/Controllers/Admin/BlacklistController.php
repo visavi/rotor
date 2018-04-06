@@ -92,8 +92,8 @@ class BlacklistController extends AdminController
         $lists = BlackList::query()
             ->where('type', $type)
             ->orderBy('created_at', 'desc')
-            ->limit($page['limit'])
-            ->offset($page['offset'])
+            ->limit($page->limit)
+            ->offset($page->offset)
             ->with('user')
             ->get();
 

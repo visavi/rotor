@@ -2141,42 +2141,42 @@ function getUser($key = null)
 /**
  * Генерирует постраничную навигация
  *
- * @param  array $page массив данных
- * @return string        сформированный блок
+ * @param  object $page данные страниц
+ * @return string       сформированный блок
  */
 function pagination($page)
 {
-    if (empty($page['total'])) {
+    if (empty($page->total)) {
         return null;
     }
 
-    if (empty($page['crumbs'])) {
-        $page['crumbs'] = 3;
+    if (empty($page->crumbs)) {
+        $page->crumbs = 3;
     }
 
     $url     = array_except($_GET, 'page');
     $request = $url ? '&'.http_build_query($url) : null;
 
     $pages   = [];
-    $pg_cnt  = ceil($page['total'] / $page['limit']);
-    $idx_fst = max($page['current'] - $page['crumbs'], 1);
-    $idx_lst = min($page['current'] + $page['crumbs'], $pg_cnt);
+    $pg_cnt  = (int) ceil($page->total / $page->limit);
+    $idx_fst = max($page->current - $page->crumbs, 1);
+    $idx_lst = min($page->current + $page->crumbs, $pg_cnt);
 
-    if ($page['current'] != 1) {
+    if ($page->current !== 1) {
         $pages[] = [
-            'page'  => $page['current'] - 1,
+            'page'  => $page->current - 1,
             'title' => 'Предыдущая',
             'name'  => '«',
         ];
     }
 
-    if ($page['current'] > $page['crumbs'] + 1) {
+    if ($page->current > $page->crumbs + 1) {
         $pages[] = [
             'page'  => 1,
             'title' => '1 страница',
             'name'  => 1,
         ];
-        if ($page['current'] != $page['crumbs'] + 2) {
+        if ($page->current !== $page->crumbs + 2) {
             $pages[] = [
                 'separator' => true,
                 'name'      => ' ... ',
@@ -2185,7 +2185,7 @@ function pagination($page)
     }
 
     for ($i = $idx_fst; $i <= $idx_lst; $i++) {
-        if ($i == $page['current']) {
+        if ($i === $page->current) {
             $pages[] = [
                 'current' => true,
                 'name'    => $i,
@@ -2199,8 +2199,8 @@ function pagination($page)
         }
     }
 
-    if ($page['current'] < $pg_cnt - $page['crumbs']) {
-        if ($page['current'] != $pg_cnt - $page['crumbs'] - 1) {
+    if ($page->current < $pg_cnt - $page->crumbs) {
+        if ($page->current !== $pg_cnt - $page->crumbs - 1) {
             $pages[] = [
                 'separator' => true,
                 'name'      => ' ... ',
@@ -2213,9 +2213,9 @@ function pagination($page)
         ];
     }
 
-    if ($page['current'] != $pg_cnt) {
+    if ($page->current !== $pg_cnt) {
         $pages[] = [
-            'page'  => $page['current'] + 1,
+            'page'  => $page->current + 1,
             'title' => 'Следующая',
             'name'  => '»',
         ];
@@ -2229,11 +2229,11 @@ function pagination($page)
  *
  * @param  integer $limit элементов на страницу
  * @param  integer $total всего элементов
- * @return array          массив подготовленных данных
+ * @return object         массив подготовленных данных
  */
-function paginate($limit, $total)
+function paginate(int $limit, int $total)
 {
-    $current = (int) Request::input('page');
+    $current = int(Request::input('page'));
 
     if ($current < 1) {
         $current = 1;
@@ -2243,9 +2243,9 @@ function paginate($limit, $total)
         $current = (int) ceil($total / $limit);
     }
 
-    $offset = (int) ($current * $limit) - $limit;
+    $offset = $current * $limit - $limit;
 
-    return compact('current', 'offset', 'limit', 'total');
+    return (object) compact('current', 'offset', 'limit', 'total');
 }
 
 /**

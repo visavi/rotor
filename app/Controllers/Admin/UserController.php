@@ -36,8 +36,8 @@ class UserController extends AdminController
 
         $users = User::query()
             ->orderBy('created_at', 'desc')
-            ->offset($page['offset'])
-            ->limit($page['limit'])
+            ->offset($page->offset)
+            ->limit($page->limit)
             ->get();
 
         return view('admin/users/index', compact('users', 'page'));
@@ -57,8 +57,8 @@ class UserController extends AdminController
 
         $users = User::query()
             ->whereRaw('login ' . $search)
-            ->offset($page['offset'])
-            ->limit($page['limit'])
+            ->offset($page->offset)
+            ->limit($page->limit)
             ->orderBy('point', 'desc')
             ->get();
 
@@ -193,12 +193,12 @@ class UserController extends AdminController
         if (Request::isMethod('post')) {
 
             $token       = check(Request::input('token'));
-            $loginblack  = Request::has('loginblack') ? 1 : 0;
-            $mailblack   = Request::has('mailblack') ? 1 : 0;
-            $deltopics   = Request::has('deltopics') ? 1 : 0;
-            $delposts    = Request::has('delposts') ? 1 : 0;
-            $delcomments = Request::has('delcomments') ? 1 : 0;
-            $delimages   = Request::has('delimages') ? 1 : 0;
+            $loginblack  = empty(Request::input('loginblack')) ? 0 : 1;
+            $mailblack   = empty(Request::input('mailblack')) ? 0 : 1;
+            $deltopics   = empty(Request::input('deltopics')) ? 0 : 1;
+            $delposts    = empty(Request::input('delposts')) ? 0 : 1;
+            $delcomments = empty(Request::input('delcomments')) ? 0 : 1;
+            $delimages   = empty(Request::input('delimages')) ? 0 : 1;
 
             $validator = new Validator();
             $validator->equal($token, $_SESSION['token'], 'Неверный идентификатор сессии, повторите действие!')

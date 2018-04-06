@@ -21,7 +21,7 @@
 
     @if ($users->isNotEmpty())
 
-       <form action="/admin/reglist?page={{ $page['current'] }}" method="post">
+       <form action="/admin/reglist?page={{ $page->current }}" method="post">
            <input type="hidden" name="token" value="{{ $_SESSION['token'] }}">
 
             @foreach ($users as $user)
@@ -51,7 +51,7 @@
 
         {!! pagination($page) !!}
 
-       Всего ожидающих: <b>{{ $page['total'] }}</b><br><br>
+       Всего ожидающих: <b>{{ $page->total }}</b><br><br>
 
     @else
         {!! showError('Нет пользователей требующих подтверждения регистрации!!') !!}

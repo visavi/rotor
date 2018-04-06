@@ -23,8 +23,8 @@ class PhotoController extends BaseController
 
         $photos = Photo::query()
             ->orderBy('created_at', 'desc')
-            ->offset($page['offset'])
-            ->limit($page['limit'])
+            ->offset($page->offset)
+            ->limit($page->limit)
             ->with('user')
             ->get();
 
@@ -69,7 +69,7 @@ class PhotoController extends BaseController
             $title  = check(Request::input('title'));
             $text   = check(Request::input('text'));
             $photo  = Request::file('photo');
-            $closed = Request::has('closed') ? 1 : 0;
+            $closed = empty(Request::input('closed')) ? 0 : 1;
 
             $validator = new Validator();
             $validator->equal($token, $_SESSION['token'], 'Неверный идентификатор сессии, повторите действие!')
@@ -129,7 +129,7 @@ class PhotoController extends BaseController
             $token  = check(Request::input('token'));
             $title  = check(Request::input('title'));
             $text   = check(Request::input('text'));
-            $closed = Request::has('closed') ? 1 : 0;
+            $closed = empty(Request::input('closed')) ? 0 : 1;
 
             $validator = new Validator();
             $validator->equal($token, $_SESSION['token'], 'Неверный идентификатор сессии, повторите действие!')
@@ -220,8 +220,8 @@ class PhotoController extends BaseController
         $comments = Comment::query()
             ->where('relate_type', Photo::class)
             ->where('relate_id', $id)
-            ->offset($page['offset'])
-            ->limit($page['limit'])
+            ->offset($page->offset)
+            ->limit($page->limit)
             ->orderBy('created_at')
             ->with('user')
             ->get();
@@ -372,8 +372,8 @@ class PhotoController extends BaseController
             ->select('user_id', 'login')
             ->selectRaw('count(*) as cnt, sum(count_comments) as count_comments')
             ->join('users', 'photo.user_id', '=', 'users.id')
-            ->offset($page['offset'])
-            ->limit($page['limit'])
+            ->offset($page->offset)
+            ->limit($page->limit)
             ->groupBy('user_id')
             ->orderBy('cnt', 'desc')
             ->get();
@@ -398,8 +398,8 @@ class PhotoController extends BaseController
 
         $photos = Photo::query()
             ->where('user_id', $user->id)
-            ->offset($page['offset'])
-            ->limit($page['limit'])
+            ->offset($page->offset)
+            ->limit($page->limit)
             ->orderBy('created_at', 'desc')
             ->with('user')
             ->get();
@@ -429,8 +429,8 @@ class PhotoController extends BaseController
 
         $photos = Photo::query()
             ->orderBy($order, 'desc')
-            ->offset($page['offset'])
-            ->limit($page['limit'])
+            ->offset($page->offset)
+            ->limit($page->limit)
             ->with('user')
             ->get();
 
@@ -449,8 +449,8 @@ class PhotoController extends BaseController
             ->select('comments.*', 'title')
             ->where('relate_type', Photo::class)
             ->leftJoin('photo', 'comments.relate_id', '=', 'photo.id')
-            ->offset($page['offset'])
-            ->limit($page['limit'])
+            ->offset($page->offset)
+            ->limit($page->limit)
             ->orderBy('comments.created_at', 'desc')
             ->with('user')
             ->get();
@@ -481,8 +481,8 @@ class PhotoController extends BaseController
             ->where('relate_type', Photo::class)
             ->where('comments.user_id', $user->id)
             ->leftJoin('photo', 'comments.relate_id', '=', 'photo.id')
-            ->offset($page['offset'])
-            ->limit($page['limit'])
+            ->offset($page->offset)
+            ->limit($page->limit)
             ->orderBy('comments.created_at', 'desc')
             ->with('user')
             ->get();

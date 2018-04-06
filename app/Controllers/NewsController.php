@@ -22,8 +22,8 @@ class NewsController extends BaseController
 
         $news = News::query()
             ->orderBy('created_at', 'desc')
-            ->offset($page['offset'])
-            ->limit($page['limit'])
+            ->offset($page->offset)
+            ->limit($page->limit)
             ->with('user')
             ->get();
 
@@ -124,8 +124,8 @@ class NewsController extends BaseController
         $comments = Comment::query()
             ->where('relate_type', News::class)
             ->where('relate_id', $id)
-            ->offset($page['offset'])
-            ->limit($page['limit'])
+            ->offset($page->offset)
+            ->limit($page->limit)
             ->orderBy('created_at')
             ->with('user')
             ->get();
@@ -235,8 +235,8 @@ class NewsController extends BaseController
             ->select('comments.*', 'title', 'count_comments')
             ->where('relate_type', News::class)
             ->leftJoin('news', 'comments.relate_id', '=', 'news.id')
-            ->offset($page['offset'])
-            ->limit($page['limit'])
+            ->offset($page->offset)
+            ->limit($page->limit)
             ->orderBy('created_at', 'desc')
             ->with('user')
             ->get();

@@ -55,8 +55,8 @@ class SearchController extends BaseController
         $users = User::query()
             ->whereRaw('login ' . $search)
             ->orderBy('point', 'desc')
-            ->offset($page['offset'])
-            ->limit($page['limit'])
+            ->offset($page->offset)
+            ->limit($page->limit)
             ->get();
 
         return view('user/search_sort', compact('users', 'page'));

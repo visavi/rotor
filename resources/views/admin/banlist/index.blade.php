@@ -32,7 +32,7 @@
 
         {!! pagination($page) !!}
 
-        Всего забанено: <b>{{ $page['total'] }}</b><br><br>
+        Всего забанено: <b>{{ $page->total }}</b><br><br>
 
     @else
         {!! showError('Пользователей еще нет!') !!}

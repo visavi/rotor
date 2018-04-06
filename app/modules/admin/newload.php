@@ -19,9 +19,9 @@ if (isAdmin()) {
 
             if ($total > 0) {
 
-                $querynew = DB::select("SELECT `downs`.*, `name` FROM `downs` LEFT JOIN `cats` ON `downs`.`category_id`=`cats`.`id` WHERE `active`=? ORDER BY `app` DESC, `time` DESC  LIMIT ".$page['offset'].", ".setting('downlist').";", [0]);
+                $querynew = DB::select("SELECT `downs`.*, `name` FROM `downs` LEFT JOIN `cats` ON `downs`.`category_id`=`cats`.`id` WHERE `active`=? ORDER BY `app` DESC, `time` DESC  LIMIT ".$page->offset.", ".setting('downlist').";", [0]);
 
-                echo '<form action="/admin/newload?act=deldown&amp;page='.$page['current'].'&amp;uid='.$_SESSION['token'].'" method="post">';
+                echo '<form action="/admin/newload?act=deldown&amp;page='.$page->current.'&amp;uid='.$_SESSION['token'].'" method="post">';
 
                 while ($data = $querynew -> fetch()) {
                     echo '<div class="b">';

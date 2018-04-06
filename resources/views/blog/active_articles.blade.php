@@ -1,7 +1,7 @@
 @extends('layout')
 
 @section('title')
-    Блоги - Список статей {{ $user->login }} (Стр. {{ $page['current'] }})
+    Блоги - Список статей {{ $user->login }} (Стр. {{ $page->current }})
 @stop
 
 @section('content')
@@ -23,7 +23,7 @@
 
         {!! pagination($page) !!}
 
-        Всего статей: <b>{{ $page['total'] }}</b><br>
+        Всего статей: <b>{{ $page->total }}</b><br>
     @else
         {!! showError('Статей еще нет!') !!}
     @endif

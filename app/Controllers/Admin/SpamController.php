@@ -70,8 +70,8 @@ class SpamController extends AdminController
         $records = Spam::query()
             ->where('relate_type', $this->types[$type])
             ->orderBy('created_at', 'desc')
-            ->offset($page['offset'])
-            ->limit($page['limit'])
+            ->offset($page->offset)
+            ->limit($page->limit)
             ->with('relate.user', 'user')
             ->get();
 

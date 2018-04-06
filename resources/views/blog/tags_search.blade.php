@@ -8,7 +8,7 @@
     <h1>Поиск по тегам</h1>
 
     <h3>Поиск запроса &quot;{{ $tag }}&quot; в метках</h3>
-    Найдено совпадений: <b>{{ $page['total'] }}</b><br>
+    Найдено совпадений: <b>{{ $page->total }}</b><br>
 
     <?php foreach($blogs as $data): ?>
 

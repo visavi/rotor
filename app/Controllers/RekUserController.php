@@ -31,8 +31,8 @@ class RekUserController extends BaseController
 
         $adverts = RekUser::query()
             ->where('deleted_at', '>', SITETIME)
-            ->limit($page['limit'])
-            ->offset($page['offset'])
+            ->limit($page->limit)
+            ->offset($page->offset)
             ->orderBy('deleted_at', 'desc')
             ->with('user')
             ->get();
@@ -72,7 +72,7 @@ class RekUserController extends BaseController
             $site    = check(Request::input('site'));
             $name    = check(Request::input('name'));
             $color   = check(Request::input('color'));
-            $bold    = Request::has('bold') ? 1 : 0;
+            $bold    = empty(Request::input('bold')) ? 0 : 1;
 
             $price = setting('rekuserprice');
 

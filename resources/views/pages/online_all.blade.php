@@ -15,7 +15,7 @@
         </ol>
     </nav>
 
-    Всего на сайте: <b>{{ $page['total'] }}</b><br>
+    Всего на сайте: <b>{{ $page->total }}</b><br>
     Зарегистрированных:  <b>{{ $registered }}</b><br><br>
 
     @if ($online->isNotEmpty())

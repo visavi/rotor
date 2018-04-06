@@ -1,7 +1,7 @@
 @extends('layout')
 
 @section('title')
-    {{ $category->name }} (Стр. {{ $page['current'] }})
+    {{ $category->name }} (Стр. {{ $page->current }})
 @stop
 
 @section('content')
@@ -26,7 +26,7 @@
             <li class="breadcrumb-item active">{{ $category->name }}</li>
 
             @if (isAdmin('admin'))
-                <li class="breadcrumb-item"><a href="/admin/load/{{ $category->id }}?page={{ $page['current'] }}">Управление</a></li>
+                <li class="breadcrumb-item"><a href="/admin/load/{{ $category->id }}?page={{ $page->current }}">Управление</a></li>
             @endif
         </ol>
     </nav>
@@ -46,7 +46,7 @@
     <a href="/load/{{ $category->id }}?sort=comments" class="badge badge-{{ $active }}">Комментарии</a>
     <hr>
 
-    @if ($category->children->isNotEmpty() && $page['current'] == 1)
+    @if ($category->children->isNotEmpty() && $page->current == 1)
         <div class="act">
             @foreach ($category->children as $child)
                 <div class="b">

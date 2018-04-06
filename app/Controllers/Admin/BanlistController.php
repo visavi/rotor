@@ -27,8 +27,8 @@ class BanlistController extends AdminController
             ->where('level', User::BANNED)
             ->where('timeban', '>', SITETIME)
             ->orderBy('timeban')
-            ->limit($page['limit'])
-            ->offset($page['offset'])
+            ->limit($page->limit)
+            ->offset($page->offset)
             ->with('lastBan')
             ->get();
 

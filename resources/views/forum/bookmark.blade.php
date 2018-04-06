@@ -16,7 +16,7 @@
     </nav>
 
     @if ($topics->isNotEmpty())
-        <form action="/forum/bookmark/delete?page={{ $page['current'] }}" method="post">
+        <form action="/forum/bookmark/delete?page={{ $page->current }}" method="post">
             <input type="hidden" name="token" value="{{ $_SESSION['token'] }}">
             @foreach ($topics as $topic)
                 <div class="b">

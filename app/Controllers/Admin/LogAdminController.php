@@ -30,8 +30,8 @@ class LogAdminController extends AdminController
 
         $logs = Admlog::query()
             ->orderBy('created_at', 'desc')
-            ->limit($page['limit'])
-            ->offset($page['offset'])
+            ->limit($page->limit)
+            ->offset($page->offset)
             ->with('user')
             ->get();
 

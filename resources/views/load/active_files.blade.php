@@ -1,7 +1,7 @@
 @extends('layout')
 
 @section('title')
-    Загрузки - Список файлов {{ $user->login }} (Стр. {{ $page['current'] }})
+    Загрузки - Список файлов {{ $user->login }} (Стр. {{ $page->current }})
 @stop
 
 @section('content')

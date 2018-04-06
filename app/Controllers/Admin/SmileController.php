@@ -34,8 +34,8 @@ class SmileController extends AdminController
         $smiles = Smile::query()
             ->orderBy(DB::raw('CHAR_LENGTH(`code`)'))
             ->orderBy('name')
-            ->limit($page['limit'])
-            ->offset($page['offset'])
+            ->limit($page->limit)
+            ->offset($page->offset)
             ->get();
 
         return view('admin/smile/index', compact('smiles', 'page'));

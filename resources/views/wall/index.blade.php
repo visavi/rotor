@@ -21,7 +21,7 @@
                             <a href="#" onclick="return postReply(this)" title="Ответить"><i class="fa fa-reply text-muted"></i></a>
                             <a href="#" onclick="return postQuote(this)" title="Цитировать"><i class="fa fa-quote-right text-muted"></i></a>
 
-                            <a href="#" onclick="return sendComplaint(this)" data-type="{{ App\Models\Wall::class }}" data-id="{{ $data->id }}" data-token="{{ $_SESSION['token'] }}" data-page="{{ $page['current'] }}" rel="nofollow" title="Жалоба"><i class="fa fa-bell text-muted"></i></a>
+                            <a href="#" onclick="return sendComplaint(this)" data-type="{{ App\Models\Wall::class }}" data-id="{{ $data->id }}" data-token="{{ $_SESSION['token'] }}" data-page="{{ $page->current }}" rel="nofollow" title="Жалоба"><i class="fa fa-bell text-muted"></i></a>
                         @endif
 
                         @if (isAdmin() || $user->id == getUser('id'))
@@ -64,5 +64,5 @@
         {!! showError('Для добавления сообщения необходимо авторизоваться') !!}
     @endif
 
-    Всего записей: <b>{{ $page['total'] }}</b><br><br>
+    Всего записей: <b>{{ $page->total }}</b><br><br>
 @stop

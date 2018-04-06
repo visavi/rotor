@@ -1,7 +1,7 @@
 @extends('layout')
 
 @section('title')
-    Форум - Список тем {{ $user->login }} (Стр. {{ $page['current'] }})
+    Форум - Список тем {{ $user->login }} (Стр. {{ $page->current }})
 @stop
 
 @section('content')

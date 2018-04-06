@@ -208,8 +208,8 @@ class ForumController extends AdminController
             ->where('forum_id', $forum->id)
             ->orderBy('locked', 'desc')
             ->orderBy('updated_at', 'desc')
-            ->offset($page['offset'])
-            ->limit($page['limit'])
+            ->offset($page->offset)
+            ->limit($page->limit)
             ->with('lastPost.user')
             ->get();
 
@@ -456,8 +456,8 @@ class ForumController extends AdminController
                     ->where('pollings.user_id', getUser('id'));
             })
             ->with('files', 'user', 'editUser')
-            ->offset($page['offset'])
-            ->limit($page['limit'])
+            ->offset($page->offset)
+            ->limit($page->limit)
             ->orderBy('created_at')
             ->get();
 

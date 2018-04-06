@@ -52,8 +52,8 @@ class LogController extends AdminController
         $logs = Log::query()
             ->where('code', $code)
             ->orderBy('created_at', 'desc')
-            ->offset($page['offset'])
-            ->limit($page['limit'])
+            ->offset($page->offset)
+            ->limit($page->limit)
             ->with('user')
             ->get();
 

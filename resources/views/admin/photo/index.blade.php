@@ -9,12 +9,12 @@
     <h1>Управление галереей</h1>
 
     <a href="/gallery/create">Добавить фото</a> /
-    <a href="/gallery?page={{ $page['current'] }}">Обзор</a>
+    <a href="/gallery?page={{ $page->current }}">Обзор</a>
     <hr>
 
     @if ($photos->isNotEmpty())
 
-        <form action="/admin/gallery/delete?page={{ $page['current'] }}" method="post">
+        <form action="/admin/gallery/delete?page={{ $page->current }}" method="post">
             <input type="hidden" name="token" value="{{ $_SESSION['token'] }}">
 
             @foreach ($photos as $data)
@@ -23,7 +23,7 @@
                     <b><a href="">{{ $data->title }}</a></b> ({{ formatFileSize(UPLOADS.'/pictures/'.$data->link) }})
 
                     <div class="float-right">
-                        <a href="/admin/gallery/edit/{{ $data->id }}?page={{ $page['current'] }}"><i class="fas fa-pencil-alt text-muted"></i></a>
+                        <a href="/admin/gallery/edit/{{ $data->id }}?page={{ $page->current }}"><i class="fas fa-pencil-alt text-muted"></i></a>
                         <input type="checkbox" name="del[]" value="{{ $data->id }}">
                     </div>
                 </div>
@@ -47,7 +47,7 @@
 
         {!! pagination($page) !!}
 
-        Всего фотографий: <b>{{ $page['total'] }}</b><br><br>
+        Всего фотографий: <b>{{ $page->total }}</b><br><br>
 
         @if (isAdmin('boss'))
             <i class="fa fa-sync"></i> <a href="/admin/gallery/restatement?token={{ $_SESSION['token'] }}">Пересчитать</a><br>

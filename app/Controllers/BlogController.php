@@ -51,8 +51,8 @@ class BlogController extends BaseController
         $blogs = Blog::query()
             ->where('category_id', $id)
             ->orderBy('created_at', 'desc')
-            ->offset($page['offset'])
-            ->limit($page['limit'])
+            ->offset($page->offset)
+            ->limit($page->limit)
             ->with('user')
             ->get();
 
@@ -84,7 +84,7 @@ class BlogController extends BaseController
         $total = count($text);
         $page = paginate(1, $total);
 
-        if ($page['current'] == 1) {
+        if ($page->current == 1) {
             $reads = Read::query()
                 ->where('relate_type', Blog::class)
                 ->where('relate_id', $blog->id)
@@ -103,9 +103,9 @@ class BlogController extends BaseController
             }
         }
 
-        $end = ($total < $page['offset'] + 1) ? $total : $page['offset'] + 1;
+        $end = ($total < $page->offset + 1) ? $total : $page->offset + 1;
 
-        for ($i = $page['offset']; $i < $end; $i++) {
+        for ($i = $page->offset; $i < $end; $i++) {
             $blog['text'] = bbCode($text[$i]) . '<br>';
         }
 
@@ -209,8 +209,8 @@ class BlogController extends BaseController
             ->select('user_id', 'login')
             ->selectRaw('count(*) as cnt, sum(count_comments) as count_comments')
             ->join('users', 'blogs.user_id', 'users.id')
-            ->offset($page['offset'])
-            ->limit($page['limit'])
+            ->offset($page->offset)
+            ->limit($page->limit)
             ->groupBy('user_id')
             ->orderBy('cnt', 'desc')
             ->get();
@@ -357,8 +357,8 @@ class BlogController extends BaseController
             ->where('relate_type', Blog::class)
             ->where('relate_id', $id)
             ->orderBy('created_at')
-            ->offset($page['offset'])
-            ->limit($page['limit'])
+            ->offset($page->offset)
+            ->limit($page->limit)
             ->get();
 
         return view('blog/comments', compact('blog', 'comments', 'page'));
@@ -525,8 +525,8 @@ class BlogController extends BaseController
                 ->whereIn('blogs.id', $_SESSION['findresult'])
                 ->join('categories', 'blogs.category_id', '=', 'categories.id')
                 ->orderBy('created_at', 'desc')
-                ->offset($page['offset'])
-                ->limit($page['limit'])
+                ->offset($page->offset)
+                ->limit($page->limit)
                 ->with('user')
                 ->get();
 
@@ -572,8 +572,8 @@ class BlogController extends BaseController
 
         $blogs = Blog::query()
             ->orderBy('created_at', 'desc')
-            ->offset($page['offset'])
-            ->limit($page['limit'])
+            ->offset($page->offset)
+            ->limit($page->limit)
             ->with('user')
             ->get();
 
@@ -596,8 +596,8 @@ class BlogController extends BaseController
             ->select('comments.*', 'title', 'count_comments')
             ->where('relate_type', Blog::class)
             ->leftJoin('blogs', 'comments.relate_id', '=', 'blogs.id')
-            ->offset($page['offset'])
-            ->limit($page['limit'])
+            ->offset($page->offset)
+            ->limit($page->limit)
             ->orderBy('comments.created_at', 'desc')
             ->with('user')
             ->get();
@@ -622,8 +622,8 @@ class BlogController extends BaseController
         $page  = paginate(setting('blogpost'), $total);
 
         $blogs = Blog::query()->where('user_id', $user->id)
-            ->offset($page['offset'])
-            ->limit($page['limit'])
+            ->offset($page->offset)
+            ->limit($page->limit)
             ->orderBy('created_at', 'desc')
             ->get();
 
@@ -654,8 +654,8 @@ class BlogController extends BaseController
             ->where('relate_type', Blog::class)
             ->where('comments.user_id', $user->id)
             ->leftJoin('blogs', 'comments.relate_id', '=', 'blogs.id')
-            ->offset($page['offset'])
-            ->limit($page['limit'])
+            ->offset($page->offset)
+            ->limit($page->limit)
             ->orderBy('comments.created_at', 'desc')
             ->with('user')
             ->get();
@@ -706,8 +706,8 @@ class BlogController extends BaseController
         $blogs = Blog::query()
             ->select('blogs.*', 'categories.name')
             ->leftJoin('categories', 'blogs.category_id', '=', 'categories.id')
-            ->offset($page['offset'])
-            ->limit($page['limit'])
+            ->offset($page->offset)
+            ->limit($page->limit)
             ->orderBy($order, 'desc')
             ->with('user')
             ->get();
@@ -784,8 +784,8 @@ class BlogController extends BaseController
                                 ->whereIn('blogs.id', $_SESSION['blogfindres'])
                                 ->join('categories', 'blogs.category_id', '=', 'categories.id')
                                 ->orderBy('created_at', 'desc')
-                                ->offset($page['offset'])
-                                ->limit($page['limit'])
+                                ->offset($page->offset)
+                                ->limit($page->limit)
                                 ->with('user')
                                 ->get();
 
@@ -827,8 +827,8 @@ class BlogController extends BaseController
                                 ->whereIn('blogs.id', $_SESSION['blogfindres'])
                                 ->join('categories', 'blogs.category_id', '=', 'categories.id')
                                 ->orderBy('created_at', 'desc')
-                                ->offset($page['offset'])
-                                ->limit($page['limit'])
+                                ->offset($page->offset)
+                                ->limit($page->limit)
                                 ->with('user')
                                 ->get();
 

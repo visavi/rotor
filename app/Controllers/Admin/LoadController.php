@@ -222,8 +222,8 @@ class LoadController extends AdminController
             ->where('category_id', $category->id)
             ->where('active', 1)
             ->orderBy($order, 'desc')
-            ->offset($page['offset'])
-            ->limit($page['limit'])
+            ->offset($page->offset)
+            ->limit($page->limit)
             ->get();
 
         return view('admin/load/load', compact('category', 'downs', 'page', 'order'));

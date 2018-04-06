@@ -43,8 +43,8 @@ class OfferController extends BaseController
         $offers = Offer::query()
             ->where('type', $type)
             ->orderBy($order, 'desc')
-            ->offset($page['offset'])
-            ->limit($page['limit'])
+            ->offset($page->offset)
+            ->limit($page->limit)
             ->with('user')
             ->get();
 
@@ -240,8 +240,8 @@ class OfferController extends BaseController
             ->where('relate_type', Offer::class)
             ->where('relate_id', $id)
             ->orderBy('created_at')
-            ->offset($page['offset'])
-            ->limit($page['limit'])
+            ->offset($page->offset)
+            ->limit($page->limit)
             ->get();
 
         return view('offer/comments', compact('offer', 'comments', 'page'));

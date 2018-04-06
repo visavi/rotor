@@ -20,8 +20,8 @@ class OnlineController extends BaseController
             ->whereNotNull('user_id')
             ->with('user')
             ->orderBy('updated_at', 'desc')
-            ->offset($page['offset'])
-            ->limit($page['limit'])
+            ->offset($page->offset)
+            ->limit($page->limit)
             ->get();
 
         return view('pages/online', compact('online', 'page', 'all'));
@@ -39,8 +39,8 @@ class OnlineController extends BaseController
 
         $online = Online::with('user')
             ->orderBy('updated_at', 'desc')
-            ->offset($page['offset'])
-            ->limit($page['limit'])
+            ->offset($page->offset)
+            ->limit($page->limit)
             ->get();
 
         return view('pages/online_all', compact('online', 'page', 'registered'));

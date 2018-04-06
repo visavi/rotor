@@ -10,7 +10,7 @@
 
     @if ($banhist->isNotEmpty())
 
-        <form action="/admin/banhist/delete?user={{ $user->login }}&amp;page={{ $page['current'] }}" method="post">
+        <form action="/admin/banhist/delete?user={{ $user->login }}&amp;page={{ $page->current }}" method="post">
             <input type="hidden" name="token" value="{{ $_SESSION['token'] }}">
 
             @foreach ($banhist as $data)

@@ -1,7 +1,7 @@
 @extends('layout')
 
 @section('title')
-    Загрузки - Новые файлы (Стр. {{ $page['current'] }})
+    Загрузки - Новые файлы (Стр. {{ $page->current }})
 @stop
 
 @section('content')

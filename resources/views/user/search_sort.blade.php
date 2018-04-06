@@ -18,7 +18,7 @@
         <br>
         {!! pagination($page) !!}
 
-        Найдено совпадений: {{ $page['total'] }}<br><br>
+        Найдено совпадений: {{ $page->total }}<br><br>
 
     @else
         {!! showError('Совпадений не найдено!') !!}

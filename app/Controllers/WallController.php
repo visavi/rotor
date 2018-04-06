@@ -29,8 +29,8 @@ class WallController extends BaseController
 
         $messages = Wall::query()
             ->where('user_id', $user->id)
-            ->offset($page['offset'])
-            ->limit($page['limit'])
+            ->offset($page->offset)
+            ->limit($page->limit)
             ->orderBy('created_at', 'desc')
             ->with('user', 'author')
             ->get();

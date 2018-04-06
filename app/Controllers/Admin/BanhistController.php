@@ -28,8 +28,8 @@ class BanhistController extends AdminController
 
         $records = Banhist::query()
             ->orderBy('created_at', 'desc')
-            ->limit($page['limit'])
-            ->offset($page['offset'])
+            ->limit($page->limit)
+            ->offset($page->offset)
             ->with('user', 'sendUser')
             ->get();
 
@@ -55,8 +55,8 @@ class BanhistController extends AdminController
         $banhist = Banhist::query()
             ->where('user_id', $user->id)
             ->orderBy('created_at', 'desc')
-            ->offset($page['offset'])
-            ->limit($page['limit'])
+            ->offset($page->offset)
+            ->limit($page->limit)
             ->with('user', 'sendUser')
             ->get();
 

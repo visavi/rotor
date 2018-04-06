@@ -21,8 +21,8 @@ class GuestController extends BaseController
 
         $posts = Guest::query()
             ->orderBy('created_at', 'desc')
-            ->limit($page['limit'])
-            ->offset($page['offset'])
+            ->limit($page->limit)
+            ->offset($page->offset)
             ->with('user', 'editUser')
             ->get();
 

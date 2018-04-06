@@ -16,7 +16,7 @@
 
     @if ($news->isNotEmpty())
 
-        <form action="/admin/news/delete?page={{ $page['current']}} " method="post">
+        <form action="/admin/news/delete?page={{ $page->current}} " method="post">
             <input type="hidden" name="token" value="{{ $_SESSION['token'] }}">
 
             @foreach ($news as $data)
@@ -32,7 +32,7 @@
 
                     <b><a href="/news/{{ $data->id }}">{{ $data->title }}</a></b><small> ({{ dateFixed($data->created_at) }})</small><br>
                     <input type="checkbox" name="del[]" value="{{ $data->id }}">
-                    <a href="/admin/news/edit/{{ $data->id }}?page={{ $page['current'] }}">Редактировать</a>
+                    <a href="/admin/news/edit/{{ $data->id }}?page={{ $page->current }}">Редактировать</a>
                 </div>
 
                 @if ($data->image)

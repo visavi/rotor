@@ -1,7 +1,7 @@
 @extends('layout')
 
 @section('title')
-    {{ $forum->title }} (Стр. {{ $page['current'] }})
+    {{ $forum->title }} (Стр. {{ $page->current }})
 @stop
 
 @section('content')
@@ -26,12 +26,12 @@
             <li class="breadcrumb-item active">{{ $forum->title }}</li>
 
             @if (isAdmin())
-                <li class="breadcrumb-item"><a href="/admin/forum/{{  $forum->id  }}?page={{ $page['current'] }}">Управление</a></li>
+                <li class="breadcrumb-item"><a href="/admin/forum/{{  $forum->id  }}?page={{ $page->current }}">Управление</a></li>
             @endif
         </ol>
     </nav>
 
-    @if ($forum->children->isNotEmpty() && $page['current'] == 1)
+    @if ($forum->children->isNotEmpty() && $page->current == 1)
         <div class="act">
 
         @foreach ($forum->children as $child)

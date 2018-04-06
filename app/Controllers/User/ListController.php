@@ -19,8 +19,8 @@ class ListController extends BaseController
         $users = User::query()
             ->orderBy('point', 'desc')
             ->orderBy('login')
-            ->offset($page['offset'])
-            ->limit($page['limit'])
+            ->offset($page->offset)
+            ->limit($page->limit)
             ->get();
 
         $user = check(Request::input('user', getUser('login')));
@@ -37,7 +37,7 @@ class ListController extends BaseController
 
             if (isset($position)) {
                 $position += 1;
-                $end = ceil($position / $page['limit']);
+                $end = ceil($position / $page->limit);
 
                 setFlash('success', 'Позиция в рейтинге: '.$position);
                 redirect('/userlist?page='.$end.'&user='.$user);
@@ -71,8 +71,8 @@ class ListController extends BaseController
         $users = User::query()
             ->orderBy('rating', 'desc')
             ->orderBy('login')
-            ->offset($page['offset'])
-            ->limit($page['limit'])
+            ->offset($page->offset)
+            ->limit($page->limit)
             ->get();
 
         $user = check(Request::input('user', getUser('login')));
@@ -89,7 +89,7 @@ class ListController extends BaseController
 
             if (isset($position)) {
                 $position += 1;
-                $end = ceil($position / $page['limit']);
+                $end = ceil($position / $page->limit);
 
                 setFlash('success', 'Позиция в рейтинге: '.$position);
                 redirect('/authoritylist?page='.$end.'&user='.$user);
@@ -110,8 +110,8 @@ class ListController extends BaseController
         $users = User::query()
             ->orderBy('money', 'desc')
             ->orderBy('login')
-            ->offset($page['offset'])
-            ->limit($page['limit'])
+            ->offset($page->offset)
+            ->limit($page->limit)
             ->get();
 
         $user = check(Request::input('user', getUser('login')));
@@ -128,7 +128,7 @@ class ListController extends BaseController
 
             if (isset($position)) {
                 $position += 1;
-                $end = ceil($position / $page['limit']);
+                $end = ceil($position / $page->limit);
 
                 setFlash('success', 'Позиция в рейтинге: '.$position);
                 redirect('/ratinglist?page='.$end.'&user='.$user);

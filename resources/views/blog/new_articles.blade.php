@@ -1,7 +1,7 @@
 @extends('layout')
 
 @section('title')
-    Блоги - Новые статьи (Стр. {{ $page['current'] }})
+    Блоги - Новые статьи (Стр. {{ $page->current }})
 @stop
 
 @section('content')

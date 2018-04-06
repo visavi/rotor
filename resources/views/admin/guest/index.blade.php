@@ -8,10 +8,10 @@
 
     <h1>Управление гостевой</h1>
 
-    <a href="/book?page={{ $page['current'] }}">Обзор</a><br><hr>
+    <a href="/book?page={{ $page->current }}">Обзор</a><br><hr>
 
     @if ($posts->isNotEmpty())
-        <form action="/admin/book/delete?page={{ $page['current'] }}" method="post">
+        <form action="/admin/book/delete?page={{ $page->current }}" method="post">
             <input type="hidden" name="token" value="{{ $_SESSION['token'] }}">
 
             @foreach($posts as $data)
@@ -20,8 +20,8 @@
                     <div class="img">{!! userAvatar($data->user) !!}</div>
 
                     <div class="float-right">
-                        <a href="/admin/book/reply/{{ $data->id }}?page={{ $page['current'] }}"><i class="fa fa-reply text-muted"></i></a>
-                        <a href="/admin/book/edit/{{ $data->id }}?page={{ $page['current'] }}"><i class="fas fa-pencil-alt text-muted"></i></a>
+                        <a href="/admin/book/reply/{{ $data->id }}?page={{ $page->current }}"><i class="fa fa-reply text-muted"></i></a>
+                        <a href="/admin/book/edit/{{ $data->id }}?page={{ $page->current }}"><i class="fas fa-pencil-alt text-muted"></i></a>
                         <input type="checkbox" name="del[]" value="{{ $data->id }}">
                     </div>
 
@@ -55,7 +55,7 @@
 
         {!! pagination($page) !!}
 
-        Всего сообщений: <b>{{ $page['total'] }}</b><br><br>
+        Всего сообщений: <b>{{ $page->total }}</b><br><br>
 
         @if (isAdmin('boss'))
             <i class="fa fa-times"></i> <a href="/admin/book/clear?token={{ $_SESSION['token'] }}" onclick="return confirm('Вы уверены что хотите удалить все сообщения?')">Очистить</a><br>

@@ -46,8 +46,8 @@ class ActiveController extends BaseController
             ->where('active', 1)
             ->where('user_id', $user->id)
             ->orderBy('created_at', 'desc')
-            ->limit($page['limit'])
-            ->offset($page['offset'])
+            ->limit($page->limit)
+            ->offset($page->offset)
             ->with('category', 'user')
             ->get();
 
@@ -73,8 +73,8 @@ class ActiveController extends BaseController
             ->where('relate_type', Down::class)
             ->where('comments.user_id', $user->id)
             ->leftJoin('downs', 'comments.relate_id', '=', 'downs.id')
-            ->offset($page['offset'])
-            ->limit($page['limit'])
+            ->offset($page->offset)
+            ->limit($page->limit)
             ->orderBy('comments.created_at', 'desc')
             ->with('user')
             ->get();

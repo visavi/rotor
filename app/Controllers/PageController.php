@@ -63,8 +63,8 @@ class PageController extends BaseController
         $smiles = Smile::query()
             ->orderBy(DB::raw('CHAR_LENGTH(`code`)'))
             ->orderBy('name')
-            ->limit($page['limit'])
-            ->offset($page['offset'])
+            ->limit($page->limit)
+            ->offset($page->offset)
             ->get();
 
         return view('pages/smiles', compact('smiles', 'page'));

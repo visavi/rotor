@@ -1,7 +1,7 @@
 @extends('layout')
 
 @section('title')
-    {{ $forum->title }} (Стр. {{ $page['current'] }})
+    {{ $forum->title }} (Стр. {{ $page->current }})
 @stop
 
 @section('content')
@@ -19,7 +19,7 @@
     @endif
 
     / {{ $forum->title }}
-    / <a href="/forum/{{ $forum->id  }}?page={{ $page['current'] }}">Обзор</a>
+    / <a href="/forum/{{ $forum->id  }}?page={{ $page->current }}">Обзор</a>
     <hr>
 
     @if ($topics->isNotEmpty())
@@ -29,7 +29,7 @@
                     <div class="float-right">
                         <a href="/admin/topic/edit/{{ $topic->id }}" title="Редактировать"><i class="fa fa-pencil-alt text-muted"></i></a>
                         <a href="/admin/topic/move/{{ $topic->id }}" title="Перенести"><i class="fa fa-arrows-alt text-muted"></i></a>
-                        <a href="/admin/topic/delete/{{ $topic->id }}?page={{ $page['current'] }}&amp;token={{ $_SESSION['token'] }}" onclick="return confirm('Вы действительно хотите удалить данную тему?')" title="Удалить"><i class="fa fa-times text-muted"></i></a>
+                        <a href="/admin/topic/delete/{{ $topic->id }}?page={{ $page->current }}&amp;token={{ $_SESSION['token'] }}" onclick="return confirm('Вы действительно хотите удалить данную тему?')" title="Удалить"><i class="fa fa-times text-muted"></i></a>
                     </div>
 
                     <i class="fa {{ $topic->getIcon() }} text-muted"></i>

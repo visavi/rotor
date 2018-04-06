@@ -20,7 +20,7 @@
 
     @if ($invites->isNotEmpty())
 
-        <form action="/admin/invitations/delete?used={{ $used }}&amp;page={{ $page['current'] }}" method="post">
+        <form action="/admin/invitations/delete?used={{ $used }}&amp;page={{ $page->current }}" method="post">
             <input type="hidden" name="token" value="{{ $_SESSION['token'] }}">
             @foreach ($invites as $invite)
                 <div class="b">
@@ -44,7 +44,7 @@
 
     {!! pagination($page) !!}
 
-    Всего ключей: <b>{{ $page['total'] }}</b><br><br>
+    Всего ключей: <b>{{ $page->total }}</b><br><br>
 
     @else
         {!! showError('Приглашений еще нет!') !!}

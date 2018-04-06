@@ -33,7 +33,7 @@
 
                     @if (getUser('id') == $post->user_id && $post->created_at + 600 > SITETIME)
                         <div class="float-right">
-                            <a href="/admin/chat/edit/{{ $post->id }}?page={{ $page['current'] }}" title="Редактировать"><i class="fas fa-pencil-alt text-muted"></i></a>
+                            <a href="/admin/chat/edit/{{ $post->id }}?page={{ $page->current }}" title="Редактировать"><i class="fas fa-pencil-alt text-muted"></i></a>
                         </div>
                     @endif
 
@@ -71,7 +71,7 @@
         </form>
     </div><br>
 
-    @if (isAdmin('boss') && $page['total'] > 0)
+    @if (isAdmin('boss') && $page->total > 0)
         <i class="fa fa-times"></i> <a href="/admin/chat/clear?token={{ $_SESSION['token'] }}" onclick="return confirm('Вы действительно хотите очистить админ-чат?')">Очистить чат</a><br>
     @endif
 

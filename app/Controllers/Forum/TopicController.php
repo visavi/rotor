@@ -49,8 +49,8 @@ class TopicController extends BaseController
                     ->where('pollings.user_id', getUser('id'));
             })
             ->with('files', 'user', 'editUser')
-            ->offset($page['offset'])
-            ->limit($page['limit'])
+            ->offset($page->offset)
+            ->limit($page->limit)
             ->orderBy('created_at')
             ->get();
 

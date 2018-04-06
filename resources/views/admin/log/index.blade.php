@@ -40,7 +40,7 @@
 
         {!! pagination($page) !!}
 
-        Всего записей: <b>{{ $page['total'] }}</b><br><br>
+        Всего записей: <b>{{ $page->total }}</b><br><br>
 
         @if (isAdmin('boss'))
             <i class="fa fa-trash-alt"></i> <a href="/admin/log/clear?token={{ $_SESSION['token'] }}">Очистить</a><br>

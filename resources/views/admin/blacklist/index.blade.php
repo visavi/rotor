@@ -18,7 +18,7 @@
 
     @if ($lists->isNotEmpty())
 
-        <form action="/admin/blacklist/delete?type={{ $type }}&amp;page={{ $page['current'] }}" method="post">
+        <form action="/admin/blacklist/delete?type={{ $type }}&amp;page={{ $page->current }}" method="post">
             <input type="hidden" name="token" value="{{ $_SESSION['token'] }}">
 
             @foreach ($lists as $list)
@@ -57,7 +57,7 @@
         </form>
     </div><br>
 
-    Всего в списке: <b>{{ $page['total'] }}</b><br><br>
+    Всего в списке: <b>{{ $page->total }}</b><br><br>
 
     <i class="fa fa-wrench"></i> <a href="/admin">В админку</a><br>
 @stop

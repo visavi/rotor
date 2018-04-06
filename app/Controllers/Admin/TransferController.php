@@ -17,8 +17,8 @@ class TransferController extends AdminController
 
         $transfers = Transfer::query()
             ->orderBy('created_at', 'desc')
-            ->limit($page['limit'])
-            ->offset($page['offset'])
+            ->limit($page->limit)
+            ->offset($page->offset)
             ->with('user', 'recipientUser')
             ->get();
 
@@ -42,8 +42,8 @@ class TransferController extends AdminController
         $transfers = Transfer::query()
             ->where('user_id', $user->id)
             ->orderBy('created_at', 'desc')
-            ->limit($page['limit'])
-            ->offset($page['offset'])
+            ->limit($page->limit)
+            ->offset($page->offset)
             ->with('user', 'recipientUser')
             ->get();
 

@@ -198,8 +198,8 @@ class BlogController extends AdminController
         $blogs = Blog::query()
             ->where('category_id', $id)
             ->orderBy('created_at', 'desc')
-            ->offset($page['offset'])
-            ->limit($page['limit'])
+            ->offset($page->offset)
+            ->limit($page->limit)
             ->with('user')
             ->get();
 

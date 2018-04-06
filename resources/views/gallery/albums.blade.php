@@ -1,7 +1,7 @@
 @extends('layout')
 
 @section('title')
-    Альбомы пользователей (Стр. {{ $page['current'] }})
+    Альбомы пользователей (Стр. {{ $page->current }})
 @stop
 
 @section('content')
@@ -26,7 +26,7 @@
 
         {!! pagination($page) !!}
 
-        Всего альбомов: <b>{{ $page['total'] }}</b><br><br>
+        Всего альбомов: <b>{{ $page->total }}</b><br><br>
     @else
         {!! showError('Альбомов еще нет!') !!}
     @endif

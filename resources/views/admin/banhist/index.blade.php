@@ -10,7 +10,7 @@
 
     @if ($records->isNotEmpty())
 
-    <form action="/admin/banhist/delete?page={{ $page['current'] }}" method="post">
+    <form action="/admin/banhist/delete?page={{ $page->current }}" method="post">
         <input type="hidden" name="token" value="{{ $_SESSION['token'] }}">
 
         @foreach ($records as $data)

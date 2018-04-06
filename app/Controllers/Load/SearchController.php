@@ -88,8 +88,8 @@ class SearchController extends BaseController
                     $downs = Down::query()
                         ->whereIn('id', $_SESSION['loadfindres'])
                         ->orderBy('created_at', 'desc')
-                        ->offset($page['offset'])
-                        ->limit($page['limit'])
+                        ->offset($page->offset)
+                        ->limit($page->limit)
                         ->with('user', 'category')
                         ->get();
 
@@ -128,8 +128,8 @@ class SearchController extends BaseController
                     $downs = Down::query()
                         ->whereIn('id', $_SESSION['loadfindres'])
                         ->orderBy('created_at', 'desc')
-                        ->offset($page['offset'])
-                        ->limit($page['limit'])
+                        ->offset($page->offset)
+                        ->limit($page->limit)
                         ->with('user', 'category')
                         ->get();
 

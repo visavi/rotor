@@ -27,7 +27,7 @@
 
         {!! pagination($page) !!}
 
-    Всего операций: <b>{{ $page['total'] }}</b><br><br>
+    Всего операций: <b>{{ $page->total }}</b><br><br>
 
     @else
         {!! showError('Истории операций еще нет!') !!}

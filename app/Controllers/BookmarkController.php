@@ -35,8 +35,8 @@ class BookmarkController extends BaseController
             ->leftJoin('topics', 'bookmarks.topic_id', '=', 'topics.id')
             ->with('topic.user', 'topic.lastPost.user')
             ->orderBy('updated_at', 'desc')
-            ->offset($page['offset'])
-            ->limit($page['limit'])
+            ->offset($page->offset)
+            ->limit($page->limit)
             ->get();
 
         return view('forum/bookmark', compact('topics', 'page'));

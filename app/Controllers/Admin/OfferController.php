@@ -54,8 +54,8 @@ class OfferController extends AdminController
         $offers = Offer::query()
             ->where('type', $type)
             ->orderBy($order, 'desc')
-            ->offset($page['offset'])
-            ->limit($page['limit'])
+            ->offset($page->offset)
+            ->limit($page->limit)
             ->with('user')
             ->get();
 

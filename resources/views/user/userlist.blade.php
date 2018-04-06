@@ -1,7 +1,7 @@
 @extends('layout')
 
 @section('title')
-    Список пользователей (Стр. {{ $page['current'] }})
+    Список пользователей (Стр. {{ $page->current }})
 @stop
 
 @section('content')
@@ -15,9 +15,9 @@
                 <div class="img">{!! userAvatar($data) !!}</div>
 
                 @if ($user == $data->login)
-                    {{ ($page['offset'] + $key + 1) }}. <b>{!! profile($data, '#ff0000') !!}</b>
+                    {{ ($page->offset + $key + 1) }}. <b>{!! profile($data, '#ff0000') !!}</b>
                 @else
-                    {{ ($page['offset'] + $key + 1) }}. <b>{!! profile($data) !!}</b>
+                    {{ ($page->offset + $key + 1) }}. <b>{!! profile($data) !!}</b>
                 @endif
                 ({{ plural($data->point, setting('scorename')) }})<br>
                 {!! userStatus($data) !!} {!! userOnline($data) !!}
@@ -42,7 +42,7 @@
         </div>
         <br>
 
-        Всего пользователей: <b>{{ $page['total'] }}</b><br><br>
+        Всего пользователей: <b>{{ $page->total }}</b><br><br>
     @else
         {!! showError('Пользователей еще нет!') !!}
     @endif

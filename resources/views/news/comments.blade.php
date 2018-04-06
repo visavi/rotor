@@ -1,7 +1,7 @@
 @extends('layout')
 
 @section('title')
-    {{ $news->title }} - Комментарии (Стр. {{ $page['current']}})
+    {{ $news->title }} - Комментарии (Стр. {{ $page->current}})
 @stop
 
 @section('content')
@@ -30,12 +30,12 @@
 
                                 <a href="#" onclick="return postQuote(this)" title="Цитировать"><i class="fa fa-quote-right text-muted"></i></a>
 
-                                <a href="#" onclick="return sendComplaint(this)" data-type="{{ App\Models\News::class }}" data-id="{{ $data['id'] }}" data-token="{{ $_SESSION['token'] }}" data-page="{{ $page['current'] }}" rel="nofollow" title="Жалоба"><i class="fa fa-bell text-muted"></i></a>
+                                <a href="#" onclick="return sendComplaint(this)" data-type="{{ App\Models\News::class }}" data-id="{{ $data['id'] }}" data-token="{{ $_SESSION['token'] }}" data-page="{{ $page->current }}" rel="nofollow" title="Жалоба"><i class="fa fa-bell text-muted"></i></a>
 
                             @endif
 
                             @if ($data->user_id == getUser('id') && $data->created_at + 600 > SITETIME)
-                                <a title="Редактировать" href="/news/edit/{{ $news->id }}/{{ $data->id }}?page={{ $page['current'] }}"><i class="fa fa-pencil-alt text-muted"></i></a>
+                                <a title="Редактировать" href="/news/edit/{{ $news->id }}/{{ $data->id }}?page={{ $page->current }}"><i class="fa fa-pencil-alt text-muted"></i></a>
                             @endif
 
                             @if (isAdmin())

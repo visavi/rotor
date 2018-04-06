@@ -29,8 +29,8 @@ class LoginController extends BaseController
         $logins = Login::query()
             ->where('user_id', getUser('id'))
             ->orderBy('created_at', 'desc')
-            ->offset($page['offset'])
-            ->limit($page['limit'])
+            ->offset($page->offset)
+            ->limit($page->limit)
             ->get();
 
         return view('login/index', compact('logins', 'page'));

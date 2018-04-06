@@ -39,8 +39,8 @@ class PrivateController extends BaseController
         $messages = Inbox::query()
             ->where('user_id', getUser('id'))
             ->orderBy('created_at', 'desc')
-            ->offset($page['offset'])
-            ->limit($page['limit'])
+            ->offset($page->offset)
+            ->limit($page->limit)
             ->with('author')
             ->get();
 
@@ -68,8 +68,8 @@ class PrivateController extends BaseController
         $messages = Outbox::query()
             ->where('user_id', getUser('id'))
             ->orderBy('created_at', 'desc')
-            ->offset($page['offset'])
-            ->limit($page['limit'])
+            ->offset($page->offset)
+            ->limit($page->limit)
             ->with('recipient')
             ->get();
 
@@ -262,8 +262,8 @@ class PrivateController extends BaseController
             ->where('author_id', $user->id)
             ->unionAll($outbox)
             ->orderBy('created_at', 'desc')
-            ->offset($page['offset'])
-            ->limit($page['limit'])
+            ->offset($page->offset)
+            ->limit($page->limit)
             ->with('author')
             ->get();
 

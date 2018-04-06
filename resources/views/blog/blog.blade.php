@@ -1,7 +1,7 @@
 @extends('layout')
 
 @section('title')
-    {{ $category->name }} (Стр. {{ $page['current'] }})
+    {{ $category->name }} (Стр. {{ $page->current }})
 @stop
 
 @section('content')
@@ -24,7 +24,7 @@
         <li class="breadcrumb-item active">{{ $category->name }}</li>
 
         @if (isAdmin())
-            <li class="breadcrumb-item"><a href="/admin/blog/{{ $category->id }}?page={{ $page['current'] }}">Управление</a></li>
+            <li class="breadcrumb-item"><a href="/admin/blog/{{ $category->id }}?page={{ $page->current }}">Управление</a></li>
         @endif
     </ol>
 

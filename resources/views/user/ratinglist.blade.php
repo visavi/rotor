@@ -1,7 +1,7 @@
 @extends('layout')
 
 @section('title')
-    Рейтинг толстосумов (Стр. {{ $page['current'] }})
+    Рейтинг толстосумов (Стр. {{ $page->current }})
 @stop
 
 @section('content')
@@ -13,7 +13,7 @@
             <div class="b">
                 <div class="img">{!! userAvatar($data) !!}</div>
 
-                {{ ($page['offset'] + $key + 1) }}.
+                {{ ($page->offset + $key + 1) }}.
 
                 @if ($user == $data->login)
                     <b>{!! profile($data, '#ff0000') !!}</b>
@@ -41,7 +41,7 @@
         </div>
         <br>
 
-        Всего пользователей: <b>{{ $page['total'] }}</b><br><br>
+        Всего пользователей: <b>{{ $page->total }}</b><br><br>
     @else
         {!! showError('Пользователей еще нет!') !!}
     @endif

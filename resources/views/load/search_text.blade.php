@@ -16,7 +16,7 @@
         </ol>
     </nav>
 
-    Найдено совпадений в описании: <b>{{ $page['total'] }}</b><br><br>
+    Найдено совпадений в описании: <b>{{ $page->total }}</b><br><br>
 
     @foreach ($downs as $data)
         <?php $filesize = $data->link ? formatFileSize(UPLOADS.'/files/'.$data->link) : 0; ?>

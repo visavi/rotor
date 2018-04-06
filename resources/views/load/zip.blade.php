@@ -22,7 +22,7 @@
         </ol>
     </nav>
 
-    Всего файлов: {{ $page['total'] }}<hr>
+    Всего файлов: {{ $page->total }}<hr>
 
     @if ($files)
         @foreach ($files as $key => $file)

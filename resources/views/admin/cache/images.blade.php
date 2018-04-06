@@ -26,7 +26,7 @@
             </form>
         </div>
 
-        Всего изображений: {{ $page['total'] }}<br><br>
+        Всего изображений: {{ $page->total }}<br><br>
     @else
         {!! showError('Изображений еще нет!') !!}
     @endif

@@ -1,7 +1,7 @@
 @extends('layout')
 
 @section('title')
-    Галерея сайта (Стр. {{ $page['current'] }})
+    Галерея сайта (Стр. {{ $page->current }})
 @stop
 
 @section('content')
@@ -20,7 +20,7 @@
             <li class="breadcrumb-item active">Галерея сайта</li>
 
             @if (isAdmin())
-                <li class="breadcrumb-item"><a href="/admin/gallery?page={{ $page['current'] }}">Управление</a></li>
+                <li class="breadcrumb-item"><a href="/admin/gallery?page={{ $page->current }}">Управление</a></li>
             @endif
         </ol>
     </nav>
@@ -59,7 +59,7 @@
 
         {!! pagination($page) !!}
 
-        Всего фотографий: <b>{{ $page['total'] }}</b><br><br>
+        Всего фотографий: <b>{{ $page->total }}</b><br><br>
 
     @else
         {!! showError('Фотографий нет, будь первым!') !!}
