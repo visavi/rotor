@@ -16,7 +16,7 @@
         </ol>
     </nav>
 
-    @if ($vote->topic)
+    @if ($vote->topic->id)
         Тема: <a href="/topic/{{ $vote->topic->id }}">{{ $vote->topic->title }}</a><br><br>
     @endif
 

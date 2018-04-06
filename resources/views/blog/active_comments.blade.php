@@ -8,6 +8,14 @@
 
     <h1>Список комментариев {{ $user->login }}</h1>
 
+    <nav>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
+            <li class="breadcrumb-item"><a href="/blog">Блоги</a></li>
+            <li class="breadcrumb-item active">Список комментариев {{ $user->login }}</li>
+        </ol>
+    </nav>
+
     @if ($comments->isNotEmpty())
         @foreach ($comments as $data)
             <div class="post">

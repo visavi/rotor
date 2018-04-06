@@ -17,26 +17,29 @@
     @if ($blog->user->id == getUser('id'))
         <div class="float-right">
             <a class="btn btn-success" href="/article/edit/{{ $blog->id }}">Изменить</a>
-        </div>
+        </div><br>
     @endif
 
-    <h1>{{ $blog->title }} <small>(Оценка: {!! formatNum($blog->rating) !!})</small></h1><br>
+    <h1>{{ $blog->title }} <small>(Оценка: {!! formatNum($blog->rating) !!})</small></h1>
 
-    <ol class="breadcrumb">
-        <li class="breadcrumb-item"><a href="/blog">Блоги</a></li>
+    <nav>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
+            <li class="breadcrumb-item"><a href="/blog">Блоги</a></li>
 
-        @if ($blog->category->parent->id)
-            <li class="breadcrumb-item"><a href="/blog/{{ $blog->category->parent->id }}">{{ $blog->category->parent->name }}</a></li>
-        @endif
+            @if ($blog->category->parent->id)
+                <li class="breadcrumb-item"><a href="/blog/{{ $blog->category->parent->id }}">{{ $blog->category->parent->name }}</a></li>
+            @endif
+            <li class="breadcrumb-item"><a href="/blog/{{ $blog->category_id }}">{{ $blog->category->name }}</a></li>
+            <li class="breadcrumb-item active">{{ $blog->title }}</li>
+        </ol>
+    </nav>
 
-        <li class="breadcrumb-item"><a href="/blog/{{ $blog->category_id }}">{{ $blog->category->name }}</a></li>
-        <li class="breadcrumb-item active">{{ $blog->title }}</li>
-        <li class="breadcrumb-item"><a href="/article/print/{{ $blog->id }}">Печать</a></li>
-        <li class="breadcrumb-item"><a href="/article/rss/{{ $blog->id }}">RSS-лента</a></li>
-    </ol>
+    <a href="/article/print/{{ $blog->id }}">Печать</a> /
+    <a href="/article/rss/{{ $blog->id }}">RSS-лента</a>
 
     @if (isAdmin())
-        <a href="/admin/article/edit/{{ $blog->id }}">Редактировать</a> /
+        / <a href="/admin/article/edit/{{ $blog->id }}">Редактировать</a> /
         <a href="/admin/article/move/{{ $blog->id }}">Перенести</a> /
         <a href="/admin/article/delete/{{ $blog->id }}?token={{ $_SESSION['token'] }}" onclick="return confirm('Вы действительно хотите удалить данную статью?')">Удалить</a>
     @endif

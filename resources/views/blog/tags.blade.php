@@ -24,5 +24,5 @@
 
             <a href="/blog/tags/{{ urlencode($key) }}"><span style="font-size:{{ $fontsize }}pt">{{ $key }}</span></a>
         @endforeach
-    </div><br>
+    </div>
 @stop

@@ -7,6 +7,15 @@
 @section('content')
     <h1>Поиск по тегам</h1>
 
+    <nav>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
+            <li class="breadcrumb-item"><a href="/blog">Блоги</a></li>
+            <li class="breadcrumb-item"><a href="/blog/tags">Облако тегов</a></li>
+            <li class="breadcrumb-item active">Поиск по тегам</li>
+        </ol>
+    </nav>
+
     <h3>Поиск запроса &quot;{{ $tag }}&quot; в метках</h3>
     Найдено совпадений: <b>{{ $page->total }}</b><br>
 
@@ -26,7 +35,4 @@
     <?php endforeach; ?>
 
     {!! pagination($page) !!}
-
-    <i class="fa fa-arrow-circle-up"></i> <a href="/blog">К блогам</a><br>
-    <i class="fa fa-arrow-circle-left"></i> <a href="/blog/tags">Облако</a><br>
 @stop

@@ -7,6 +7,22 @@
 @section('content')
     <h1>Редактирование комментария</h1>
 
+    <nav>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
+            <li class="breadcrumb-item"><a href="/blog">Блоги</a></li>
+
+            @if ($blog->category->parent->id)
+                <li class="breadcrumb-item"><a href="/blog/{{ $blog->category->parent->id }}">{{ $blog->category->parent->name }}</a></li>
+            @endif
+
+            <li class="breadcrumb-item"><a href="/blog/{{ $blog->category->id }}">{{ $blog->category->name }}</a></li>
+            <li class="breadcrumb-item"><a href="/article/{{ $blog->id }}">{{ $blog->title }}</a></li>
+            <li class="breadcrumb-item"><a href="/article/comments/{{ $blog->id }}">Комментарии</a></li>
+            <li class="breadcrumb-item active">Редактирование</li>
+        </ol>
+    </nav>
+
     <i class="fa fa-pencil-alt"></i> <b>{{ $comment->user->login }}</b> <small>({{ dateFixed($comment->created_at) }})</small><br><br>
 
     <div class="form">
@@ -22,6 +38,4 @@
             <button class="btn btn-primary">Редактировать</button>
         </form>
     </div><br>
-
-    <i class="fa fa-arrow-circle-left"></i> <a href="/article/comments/{{ $comment->relate_id }}?page={{ $page }}">Вернуться</a><br>
 @stop

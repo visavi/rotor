@@ -8,6 +8,21 @@
 
     <h1>Редактирование статьи</h1>
 
+    <nav>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
+            <li class="breadcrumb-item"><a href="/blog">Блоги</a></li>
+
+            @if ($blog->category->parent->id)
+                <li class="breadcrumb-item"><a href="/blog/{{ $blog->category->parent->id }}">{{ $blog->category->parent->name }}</a></li>
+            @endif
+
+            <li class="breadcrumb-item"><a href="/blog/{{ $blog->category->id }}">{{ $blog->category->name }}</a></li>
+            <li class="breadcrumb-item"><a href="/article/{{ $blog->id }}">{{ $blog->title }}</a></li>
+            <li class="breadcrumb-item active">Редактирование</li>
+        </ol>
+    </nav>
+
     <a href="/blog">Блоги</a> /
     <a href="/blog/search">Поиск</a> /
     <a href="/blog/blogs">Все статьи</a><hr>
@@ -61,7 +76,4 @@
     <a href="/rules">Правила</a> /
     <a href="/smiles">Смайлы</a> /
     <a href="/tags">Теги</a><br><br>
-
-    <i class="fa fa-arrow-circle-up"></i> <a href="/blog">К блогам</a><br>
-    <i class="fa fa-arrow-circle-left"></i> <a href="/article/{{ $blog->id }}">Вернуться</a><br>
 @stop

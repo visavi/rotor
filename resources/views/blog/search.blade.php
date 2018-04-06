@@ -8,25 +8,55 @@
 
     <h1>Поиск в блогах</h1>
 
-        <div class="form">
+    <nav>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
+            <li class="breadcrumb-item"><a href="/blog">Блоги</a></li>
+            <li class="breadcrumb-item active">Поиск в блогах</li>
+        </ol>
+    </nav>
+
+    <div class="form">
         <form action="/blog/search">
-            <input type="hidden" name="act" value="search">
+            <div class="form-group{{ hasError('find') }}">
+                <label for="inputFind">Запрос</label>
+                <input name="find" class="form-control" id="inputFind" maxlength="50" placeholder="Введите запрос" value="{{ getInput('find') }}" required>
+                {!! textError('find') !!}
+            </div>
 
-            Запрос:<br>
-            <input name="find" size="50"><br>
+            Искать:
+            <?php $inputWhere = getInput('where'); ?>
+            <div class="form-group{{ hasError('where') }}">
+                <div class="custom-control custom-radio">
+                    <input class="custom-control-input" type="radio" id="inputWhere0" name="where" value="0"{{ $inputWhere == 0 ? ' checked' : '' }}>
+                    <label class="custom-control-label" for="inputWhere0">В темах</label>
+                </div>
+                <div class="custom-control custom-radio">
+                    <input class="custom-control-input" type="radio" id="inputWhere1" name="where" value="1"{{ $inputWhere == 1 ? ' checked' : '' }}>
+                    <label class="custom-control-label" for="inputWhere1">В сообщениях</label>
+                </div>
+                {!! textError('where') !!}
+            </div>
 
-            Искать:<br>
-            <input name="where" type="radio" value="0" checked> В заголовке<br>
-            <input name="where" type="radio" value="1"> В тексте<br><br>
-
-            Тип запроса:<br>
-            <input name="type" type="radio" value="0" checked> И<br>
-            <input name="type" type="radio" value="1"> Или<br>
-            <input name="type" type="radio" value="2"> Полный<br><br>
+            Тип запроса:
+            <?php $inputType = getInput('type'); ?>
+            <div class="form-group{{ hasError('type') }}">
+                <div class="custom-control custom-radio">
+                    <input class="custom-control-input" type="radio" id="inputType0" name="type" value="0"{{ $inputType == 0 ? ' checked' : '' }}>
+                    <label class="custom-control-label" for="inputType0">И</label>
+                </div>
+                <div class="custom-control custom-radio">
+                    <input class="custom-control-input" type="radio" id="inputType1" name="type" value="1"{{ $inputType == 1 ? ' checked' : '' }}>
+                    <label class="custom-control-label" for="inputType1">Или</label>
+                </div>
+                <div class="custom-control custom-radio">
+                    <input class="custom-control-input" type="radio" id="inputType2" name="type" value="2"{{ $inputType == 2 ? ' checked' : '' }}>
+                    <label class="custom-control-label" for="inputType2">Полный</label>
+                </div>
+                {!! textError('type') !!}
+            </div>
 
             <button class="btn btn-primary">Поиск</button>
         </form>
-    </div><br>
-
-    <i class="fa fa-arrow-circle-up"></i> <a href="/blog">К блогам</a><br>
+    </div>
 @stop

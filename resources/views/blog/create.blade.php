@@ -8,9 +8,13 @@
 
     <h1>Публикация новой статьи</h1>
 
-    <a href="/blog">Блоги</a> /
-    <a href="/blog/search">Поиск</a> /
-    <a href="/blog/blogs">Все статьи</a><hr>
+    <nav>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
+            <li class="breadcrumb-item"><a href="/blog">Блоги</a></li>
+            <li class="breadcrumb-item active">Публикация новой статьи</li>
+        </ol>
+    </nav>
 
     <div class="form next">
         <form action="/blog/create" method="post">

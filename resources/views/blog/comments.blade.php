@@ -5,7 +5,22 @@
 @stop
 
 @section('content')
-    <h1><a href="/article/{{ $blog->id }}">{{ $blog->title }}</a> - Комментарии</h1>
+    <h1>{{ $blog->title }} - Комментарии</h1>
+
+    <nav>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
+            <li class="breadcrumb-item"><a href="/blog">Блоги</a></li>
+
+            @if ($blog->category->parent->id)
+                <li class="breadcrumb-item"><a href="/blog/{{ $blog->category->parent->id }}">{{ $blog->category->parent->name }}</a></li>
+            @endif
+
+            <li class="breadcrumb-item"><a href="/blog/{{ $blog->category->id }}">{{ $blog->category->name }}</a></li>
+            <li class="breadcrumb-item"><a href="/article/{{ $blog->id }}">{{ $blog->title }}</a></li>
+            <li class="breadcrumb-item active">Комментарии</li>
+        </ol>
+    </nav>
 
     <a href="/article/rss/{{ $blog->id }}">RSS-лента</a><hr>
 
@@ -73,7 +88,4 @@
     @else
         {!! showError('Для добавления сообщения необходимо авторизоваться') !!}
     @endif
-
-    <i class="fa fa-arrow-circle-up"></i> <a href="/blog">К блогам</a><br>
-    <i class="fa fa-arrow-circle-left"></i> <a href="/article/{{ $blog->id }}">Вернуться</a><br>
 @stop

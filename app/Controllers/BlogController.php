@@ -370,6 +370,11 @@ class BlogController extends BaseController
     public function editComment($id, $cid)
     {
         $page = int(Request::input('page', 1));
+        $blog = Blog::query()->find($id);
+
+        if (! $blog) {
+            abort(404, 'Данной статьи не существует!');
+        }
 
         if (! getUser()) {
             abort(403, 'Для редактирования комментариев небходимо авторизоваться!');
@@ -407,14 +412,14 @@ class BlogController extends BaseController
                 ]);
 
                 setFlash('success', 'Комментарий успешно отредактирован!');
-                redirect('/article/comments/' . $id . '?page=' . $page);
+                redirect('/article/comments/' . $blog->id . '?page=' . $page);
             } else {
                 setInput(Request::all());
                 setFlash('danger', $validator->getErrors());
             }
         }
 
-        return view('blog/editcomment', compact('comment', 'page'));
+        return view('blog/editcomment', compact('blog', 'comment', 'page'));
     }
 
     /**

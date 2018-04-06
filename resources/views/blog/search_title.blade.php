@@ -8,6 +8,15 @@
 
     <h1>Результаты поиска</h1>
 
+    <nav>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
+            <li class="breadcrumb-item"><a href="/blog">Блоги</a></li>
+            <li class="breadcrumb-item"><a href="/blog/search">Поиск</a></li>
+            <li class="breadcrumb-item active">Результаты поиска</li>
+        </ol>
+    </nav>
+
     <h3>Поиск запроса &quot;{{ $find }}&quot; в заголовке</h3>
     Найдено совпадений: <b>{{ $page->total }}</b><br><br>
 
@@ -26,7 +35,4 @@
     @endforeach
 
     {!! pagination($page) !!}
-
-    <i class="fa fa-arrow-circle-up"></i> <a href="/blog">К блогам</a><br>
-    <i class="fa fa-arrow-circle-left"></i> <a href="/blog/search">Вернуться</a><br>
 @stop
