@@ -164,10 +164,10 @@ blockquote small:before {
   display: block;
   border: none !important;
 }
-.avatar-box__avatar{
+.avatar-box_image {
   float: left;
 }
-.avatar-box__login{
+.avatar-box_login{
   float: left;
   margin-left: 10px;
 }

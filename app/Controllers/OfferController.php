@@ -24,7 +24,7 @@ class OfferController extends BaseController
         $total = Offer::query()->where('type', $type)->count();
         $page = paginate(setting('postoffers'), $total);
 
-        $page['otherTotal'] = Offer::query()->where('type', $otherType)->count();
+        $page->otherTotal = Offer::query()->where('type', $otherType)->count();
 
         switch ($sort) {
             case 'time':
@@ -253,6 +253,11 @@ class OfferController extends BaseController
     public function editComment($id, $cid)
     {
         $page = int(Request::input('page', 1));
+        $offer = Offer::query()->find($id);
+
+        if (! $offer) {
+            abort(404, 'Данного предложения или проблемы не существует!');
+        }
 
         if (! getUser()) {
             abort(403, 'Для редактирования комментариев небходимо авторизоваться!');
@@ -290,14 +295,14 @@ class OfferController extends BaseController
                 ]);
 
                 setFlash('success', 'Комментарий успешно отредактирован!');
-                redirect('/offers/comments/' . $id . '?page=' . $page);
+                redirect('/offers/comments/' . $offer->id . '?page=' . $page);
             } else {
                 setInput(Request::all());
                 setFlash('danger', $validator->getErrors());
             }
         }
 
-        return view('offer/editcomment', compact('comment', 'page'));
+        return view('offer/editcomment', compact('offer', 'comment', 'page'));
     }
 
     /**

@@ -8,6 +8,15 @@
 
     <h1>Добавление записи</h1>
 
+    <nav>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
+            <li class="breadcrumb-item"><a href="/offers/offer">Предложения</a></li>
+            <li class="breadcrumb-item"><a href="/offers/issue">Проблемы</a></li>
+            <li class="breadcrumb-item active">Добавление</li>
+        </ol>
+    </nav>
+
     @if (getUser('point') >= setting('addofferspoint'))
         <div class="form">
             <form action="/offers/create" method="post">
@@ -43,6 +52,4 @@
     @else
         {!! showError('Ошибка! Для добавления предложения или проблемы вам необходимо набрать '.plural(setting('addofferspoint'), setting('scorename')).'!') !!}
     @endif
-
-    <i class="fa fa-arrow-circle-left"></i> <a href="/offers">Вернуться</a><br>
 @stop

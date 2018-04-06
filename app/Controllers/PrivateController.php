@@ -34,7 +34,7 @@ class PrivateController extends BaseController
         $total = Inbox::query()->where('user_id', getUser('id'))->count();
         $page  = paginate(setting('privatpost'), $total);
 
-        $page['totalOutbox'] = Outbox::query()->where('user_id', getUser('id'))->count();
+        $page->totalOutbox = Outbox::query()->where('user_id', getUser('id'))->count();
 
         $messages = Inbox::query()
             ->where('user_id', getUser('id'))
@@ -73,7 +73,7 @@ class PrivateController extends BaseController
             ->with('recipient')
             ->get();
 
-        $page['totalInbox'] = Inbox::query()->where('user_id', getUser('id'))->count();
+        $page->totalInbox = Inbox::query()->where('user_id', getUser('id'))->count();
 
         return view('private/outbox', compact('messages', 'page'));
     }

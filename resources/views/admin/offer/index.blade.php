@@ -17,9 +17,9 @@
     <i class="fa fa-book"></i>
 
     @if ($type == 'offer')
-        <b>Предложения</b> ({{ $page->total }}) / <a href="/admin/offers/issue">Проблемы</a> ({{ $page['otherTotal'] }})
+        <b>Предложения</b> ({{ $page->total }}) / <a href="/admin/offers/issue">Проблемы</a> ({{ $page->otherTotal }})
     @else
-        <a href="/admin/offers/offer">Предложения</a> ({{ $page['otherTotal'] }}) / <b>Проблемы</b> ({{ $page->total }})
+        <a href="/admin/offers/offer">Предложения</a> ({{ $page->otherTotal }}) / <b>Проблемы</b> ({{ $page->total }})
     @endif
 
     @if (isAdmin('admin'))

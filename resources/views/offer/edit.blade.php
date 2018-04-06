@@ -8,6 +8,15 @@
 
     <h1>Редактирование записи</h1>
 
+    <nav>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
+            <li class="breadcrumb-item"><a href="/offers/offer">Предложения</a></li>
+            <li class="breadcrumb-item"><a href="/offers/issue">Проблемы</a></li>
+            <li class="breadcrumb-item active">Редактирование</li>
+        </ol>
+    </nav>
+
     <div class="form">
         <form action="/offers/edit/{{ $offer->id }}" method="post">
             <input type="hidden" name="token" value="{{ $_SESSION['token'] }}">
@@ -38,7 +47,5 @@
 
             <button class="btn btn-primary">Изменить</button>
         </form>
-    </div><br>
-
-    <i class="fa fa-arrow-circle-left"></i> <a href="/offers/{{ $offer->id }}">Вернуться</a><br>
+    </div>
 @stop

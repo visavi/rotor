@@ -35,7 +35,7 @@ class OfferController extends AdminController
         $total = Offer::query()->where('type', $type)->count();
         $page = paginate(setting('postoffers'), $total);
 
-        $page['otherTotal'] = Offer::query()->where('type', $otherType)->count();
+        $page->otherTotal = Offer::query()->where('type', $otherType)->count();
 
         switch ($sort) {
             case 'time':

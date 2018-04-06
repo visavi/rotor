@@ -8,7 +8,7 @@
 
     <h1>Отправленные сообщения</h1>
 
-    <i class="fa fa-envelope"></i> <a href="/private">Входящие ({{ $page['totalInbox'] }})</a> /
+    <i class="fa fa-envelope"></i> <a href="/private">Входящие ({{ $page->totalInbox }})</a> /
     <b>Отправленные ({{ $page->total }})</b>
     <hr>
 

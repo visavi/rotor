@@ -7,6 +7,17 @@
 @section('content')
     <h1>Редактирование комментария</h1>
 
+    <nav>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
+            <li class="breadcrumb-item"><a href="/offers/offer">Предложения</a></li>
+            <li class="breadcrumb-item"><a href="/offers/issue">Проблемы</a></li>
+            <li class="breadcrumb-item"><a href="/offers/{{ $offer->id }}">{{ $offer->title }}</a></li>
+            <li class="breadcrumb-item"><a href="/offers/comments/{{ $offer->id }}">Комментарии</a></li>
+            <li class="breadcrumb-item active">Редактирование</li>
+        </ol>
+    </nav>
+
     <i class="fa fa-pencil-alt"></i> <b>{{ $comment->user->login }}</b> <small>({{ dateFixed($comment->created_at) }})</small><br><br>
 
     <div class="form">
@@ -21,7 +32,5 @@
 
             <button class="btn btn-primary">Редактировать</button>
         </form>
-    </div><br>
-
-    <i class="fa fa-arrow-circle-left"></i> <a href="/offers/comments/{{ $comment->relate_id }}?page={{ $page }}">Вернуться</a><br>
+    </div>
 @stop

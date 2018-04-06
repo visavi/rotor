@@ -7,11 +7,18 @@
 @section('content')
 
     <div class="avatar-box">
-        <div class="avatar-box__avatar">{!! userAvatar($user) !!} </div>
-        <h1 class="avatar-box__login">
+        <div class="avatar-box_image">{!! userAvatar($user) !!}</div>
+        <h1 class="avatar-box_login">
             {{ $user->login }} <small>#{{ $user->id }}</small>
         </h1>
     </div>
+
+    <nav>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
+            <li class="breadcrumb-item active">Анкета {{ getUser('login') }}</li>
+        </ol>
+    </nav>
 
     @if ($user->level === 'pended')
         <b><span style="color:#ff0000">Внимание, аккаунт требует подтверждение регистрации!</span></b><br>

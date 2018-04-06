@@ -23,10 +23,6 @@
         </ol>
     </nav>
 
-    <a href="/blog">Блоги</a> /
-    <a href="/blog/search">Поиск</a> /
-    <a href="/blog/blogs">Все статьи</a><hr>
-
     <div class="form next">
         <form action="/article/edit/{{ $blog->id }}" method="post">
             <input type="hidden" name="token" value="{{ $_SESSION['token'] }}">

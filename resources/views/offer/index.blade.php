@@ -8,25 +8,31 @@
 
     @if (getUser())
         <div class="float-right">
-            <a class="btn btn-success" href="/offers/create">Добавить</a><br>
-        </div>
+            <a class="btn btn-success" href="/offers/create">Добавить</a>
+        </div><br>
     @endif
 
     <h1>Предложения / Проблемы</h1>
 
-    <i class="fa fa-book"></i>
+    <nav>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
 
-    @if ($type == 'offer')
-        <b>Предложения</b> ({{ $page->total }}) / <a href="/offers/issue">Проблемы</a> ({{ $page['otherTotal'] }})
-    @else
-        <a href="/offers/offer">Предложения</a> ({{ $page['otherTotal'] }}) / <b>Проблемы</b> ({{ $page->total }})
-    @endif
+            @if ($type === 'offer')
+                <li class="breadcrumb-item"><a href="/offers/issue">Проблемы</a> ({{ $page->otherTotal }})</li>
+                <li class="breadcrumb-item active">Предложения({{ $page->total }})</li>
+            @else
+                <li class="breadcrumb-item"><a href="/offers/offer">Предложения</a> ({{ $page->otherTotal }})</li>
+                <li class="breadcrumb-item active">Проблемы ({{ $page->total }})</li>
+            @endif
 
-    @if (isAdmin('admin'))
-        / <a href="/admin/offers/{{ $type }}?page={{ $page->current }}">Управление</a>
-    @endif
+            @if (isAdmin('admin'))
+                <li class="breadcrumb-item"><a href="/admin/offers/{{ $type }}?page={{ $page->current }}">Управление</a></li>
+            @endif
+        </ol>
+    </nav>
 
-    <br>Сортировать:
+    Сортировать:
     <?php $active = ($order === 'rating') ? 'success' : 'light'; ?>
     <a href="/offers/{{ $type }}?sort=rating" class="badge badge-{{ $active }}">Голоса</a>
 

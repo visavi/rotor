@@ -6,11 +6,17 @@
 
 @section('content')
 
-    <h1><a href="/offers/{{ $offer->id }}">{{ $offer->title }}</a> - Комментарии</h1>
+    <h1>{{ $offer->title }} - Комментарии</h1>
 
-    <i class="fa fa-book"></i>
-    <a href="/offers/offer">Предложения</a> /
-    <a href="/offers/issue">Проблемы</a>
+    <nav>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
+            <li class="breadcrumb-item"><a href="/offers/offer">Предложения</a></li>
+            <li class="breadcrumb-item"><a href="/offers/issue">Проблемы</a></li>
+            <li class="breadcrumb-item"><a href="/offers/{{ $offer->id }}">{{ $offer->title }}</a></li>
+            <li class="breadcrumb-item active">Комментарии</li>
+        </ol>
+    </nav>
 
     @if ($comments->isNotEmpty())
         @foreach ($comments as $data)
@@ -82,8 +88,4 @@
     @else
         {!! showError('Для добавления сообщения необходимо авторизоваться') !!}
     @endif
-
-    <i class="fa fa-arrow-circle-up"></i> <a href="/offers">К записям</a><br>
-    <i class="fa fa-arrow-circle-left"></i> <a href="/offers/{{ $offer->id }}">Вернуться</a><br>
-
 @stop

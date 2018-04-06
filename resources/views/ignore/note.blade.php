@@ -8,6 +8,15 @@
 
     <h1>Заметка для {{ $ignore->ignoring->login }}</h1>
 
+    <nav>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
+            <li class="breadcrumb-item"><a href="/user/{{ getUser('login') }}">{{ getUser('login') }}</a></li>
+            <li class="breadcrumb-item"><a href="/contact">Игнор-лист</a></li>
+            <li class="breadcrumb-item active">Заметка</li>
+        </ol>
+    </nav>
+
     <div class="form">
         <form method="post" action="/ignore/note/{{ $ignore->id }}">
             <input type="hidden" name="token" value="{{ $_SESSION['token'] }}">

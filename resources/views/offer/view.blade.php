@@ -8,14 +8,18 @@
 
     <h1>{{ $offer->title }}</h1>
 
-    <i class="fa fa-book"></i>
-    <a href="/offers/offer">Предложения</a> /
-    <a href="/offers/issue">Проблемы</a>
+    <nav>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
+            <li class="breadcrumb-item"><a href="/offers/offer">Предложения</a></li>
+            <li class="breadcrumb-item"><a href="/offers/issue">Проблемы</a></li>
+            <li class="breadcrumb-item active">{{ $offer->title }}</li>
 
-    @if (isAdmin('admin'))
-        / <a href="/admin/offers/{{ $offer->id }}">Управление</a>
-    @endif
-    <hr>
+            @if (isAdmin('admin'))
+                <li class="breadcrumb-item"><a href="/admin/offers/{{ $offer->id }}">Управление</a></li>
+            @endif
+        </ol>
+    </nav>
 
     <div class="b">
         {!! $offer->getStatus() !!}
@@ -105,7 +109,4 @@
     @else
         {!! showError('Для добавления сообщения необходимо авторизоваться') !!}
     @endif
-
-    <i class="fa fa-arrow-circle-left"></i> <a href="/offers/{{ $offer->type }}">Вернуться</a><br>
-
 @stop
