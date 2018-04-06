@@ -1541,7 +1541,7 @@ function formatNum($num)
  */
 function uploadImage(UploadedFile $file, $path)
 {
-    $picture = uniqid() . '.' . $file->getClientOriginalExtension();
+    $picture = uniqueName($file->getClientOriginalExtension());
 
     $img = Image::make($file);
     $img->resize(setting('screensize'), setting('screensize'), function ($constraint) {
@@ -2470,7 +2470,7 @@ function parseVersion($version)
  *
  * @return bool
  */
-function captchaVerify()
+function captchaVerify(): bool
 {
     if (setting('recaptcha_public') && setting('recaptcha_private')) {
         $recaptcha = new ReCaptcha(setting('recaptcha_private'));
@@ -2479,4 +2479,20 @@ function captchaVerify()
     }
 
     return check(strtolower(Request::input('protect'))) === $_SESSION['protect'];
+}
+
+/**
+ * Возвращает уникальное имя
+ *
+ * @param string $extension
+ * @return string
+ *
+ */
+function uniqueName(string $extension = null): string
+{
+    if ($extension) {
+        $extension = '.' . $extension;
+    }
+
+    return str_replace('.', '', uniqid('', true)) . $extension;
 }

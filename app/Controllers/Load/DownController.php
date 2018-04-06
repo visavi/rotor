@@ -80,7 +80,7 @@ class DownController extends BaseController
             $category = check(Request::input('category'));
             $title    = check(Request::input('title'));
             $text     = check(Request::input('text'));
-            $file     = Request::file('file', 1);
+            $file     = Request::file('file');
             $screens  = Request::file('screen');
 
             $category = Load::query()->find($category);
@@ -107,14 +107,14 @@ class DownController extends BaseController
                     $validator->lt($file->getClientSize(), setting('fileupload'), ['file' => 'Ошибка! Максимальный размер загружаемого файла ' . formatSize(setting('fileupload')) . '!']);
                 }
 
-                if ($screens) {
+             /*   if ($screens) {
                     $validator->lte(count($screens), 10, ['screen' => 'Разрешено загружать не более 10 скриншотов']);
-                }
+                }*/
             }
 
             if ($validator->isValid()) {
 
-                $fileName = uniqid() . '.' . $file->getClientOriginalExtension();
+                $fileName = uniqueName($file->getClientOriginalExtension());
                 $file->move(UPLOADS . '/files/', $fileName);
 
                 $down = Down::query()->create([

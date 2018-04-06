@@ -73,7 +73,7 @@ class SmileController extends AdminController
 
             if ($validator->isValid()) {
 
-                $newName = uniqid() . '.' . $smile->getClientOriginalExtension();
+                $newName = uniqueName($smile->getClientOriginalExtension());
                 Image::make($smile)->save(UPLOADS.'/smiles/' . $newName);
 
                 Smile::query()->create([

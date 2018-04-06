@@ -55,7 +55,7 @@ class PictureController extends BaseController
                 }
 
                 $picture = uploadImage($photo, UPLOADS.'/photos/');
-                $avatar  = uniqid() . '.png';
+                $avatar  = uniqueName('png');
 
                 //-------- Генерируем аватар ----------//
                 $img = Image::make($photo);
