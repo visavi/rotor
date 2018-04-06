@@ -8,6 +8,13 @@
 
     <h1>Регистрация</h1>
 
+    <nav>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
+            <li class="breadcrumb-item active">Регистрация</li>
+        </ol>
+    </nav>
+
     Регистрация на сайте означает что вы ознакомлены и согласны с <b><a href="/rules">правилами</a></b> нашего сайта<br>
     Длина логина должна быть от 3 до 20 символов<br>
     Логин должен состоять только из знаков латинского алфавита и цифр, допустим знак дефиса!<br>
@@ -23,11 +30,11 @@
     <br>
 
     @if (isset($_SESSION['social']))
-        <div class="bg-success padding">
-            <img class="img-circle border" alt="photo" src="{{ $_SESSION['social']->photo }}" style="width: 48px; height: 48px;">
+        <div class="bg-success text-light p-1">
+            <img class="rounded-circle border" alt="photo" src="{{ $_SESSION['social']->photo }}" style="width: 48px; height: 48px;">
             <span class="badge badge-primary">{{ $_SESSION['social']->network }}</span> {{ $_SESSION['social']->first_name }} {{ $_SESSION['social']->last_name }} {{ isset($_SESSION['social']->nickname) ? '('.$_SESSION['social']->nickname.')' : '' }}
         </div>
-        <div class="bg-info padding" style="margin-bottom: 30px;">
+        <div class="bg-info text-light p-1 mb-3" style="margin-bottom: 30px;">
             Профиль не связан с какой-либо учетной записью на сайте. Войдите на сайт или зарегистирируйтесь, чтобы связать свою учетную запись с профилем социальной сети.<br>
             Или выберите другую социальную сеть для входа.
         </div>
