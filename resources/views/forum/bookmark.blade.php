@@ -7,7 +7,13 @@
 @section('content')
     <h1>Мои закладки</h1>
 
-    <a href="/forum">Форум</a>
+    <nav>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
+            <li class="breadcrumb-item"><a href="/forum">Форум</a></li>
+            <li class="breadcrumb-item active">Мои закладки</li>
+        </ol>
+    </nav>
 
     @if ($topics->isNotEmpty())
         <form action="/forum/bookmark/delete?page={{ $page['current'] }}" method="post">

@@ -7,6 +7,22 @@
 @section('content')
     <h1>Изменение сообщения</h1>
 
+    <nav>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
+            <li class="breadcrumb-item"><a href="/forum">Форум</a></li>
+
+            @if ($post->topic->forum->parent->id)
+                <li class="breadcrumb-item"><a href="/forum/{{ $post->topic->forum->parent->id }}">{{ $post->topic->forum->parent->title }}</a></li>
+            @endif
+
+            <li class="breadcrumb-item"><a href="/forum/{{ $post->topic->forum->id }}">{{ $post->topic->forum->title }}</a></li>
+
+            <li class="breadcrumb-item"><a href="/topic/{{ $post->topic->id }}">{{ $post->topic->title }}</a></li>
+            <li class="breadcrumb-item active">Изменение сообщения</li>
+        </ol>
+    </nav>
+
     <i class="fa fa-pencil-alt"></i> <b>{{ $post->user->login }}</b> <small>({{ dateFixed($post->created_at) }})</small><br><br>
 
     <div class="form">
@@ -31,5 +47,4 @@
             <button class="btn btn-primary">Редактировать</button>
         </form>
     </div>
-    <br>
 @stop

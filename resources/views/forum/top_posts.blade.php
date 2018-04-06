@@ -7,7 +7,13 @@
 @section('content')
     <h1>Топ популярных постов</h1>
 
-    <a href="/forum">Форум</a>
+    <nav>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
+            <li class="breadcrumb-item"><a href="/forum">Форум</a></li>
+            <li class="breadcrumb-item active">Топ популярных постов</li>
+        </ol>
+    </nav>
 
     @if ($posts->isNotEmpty())
         @foreach ($posts as $data)

@@ -7,6 +7,15 @@
 @section('content')
 
     <h1>Создание новой темы</h1>
+
+    <nav>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
+            <li class="breadcrumb-item"><a href="/forum">Форум</a></li>
+            <li class="breadcrumb-item active">Создание новой темы</li>
+        </ol>
+    </nav>
+
     <div class="form">
         <form action="/forum/create" method="post">
             <input type="hidden" name="token" value="{{ $_SESSION['token'] }}">
@@ -78,5 +87,4 @@
     Также убедись что такой темы нет, чтобы не создавать одинаковые, для этого введи ключевое слово в поиске<br>
     <a href="/forum/search">Поиск по форуму</a><br>
     И если после этого вы уверены, что ваша тема будет интересна другим пользователям, то можете ее создать<br><br>
-
 @stop

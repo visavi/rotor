@@ -8,7 +8,13 @@
 
     <h1>Список сообщений {{ $user->login }}</h1>
 
-    <a href="/forum">Форум</a>
+    <nav>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
+            <li class="breadcrumb-item"><a href="/forum">Форум</a></li>
+            <li class="breadcrumb-item active">Список сообщений {{ $user->login }}</li>
+        </ol>
+    </nav>
 
     @foreach ($posts as $data)
         <div class="post">

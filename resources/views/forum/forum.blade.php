@@ -9,24 +9,27 @@
     @if (getUser() && ! $forum->closed)
         <div class="float-right">
             <a class="btn btn-success" href="/forum/create?fid={{ $forum->id }}">Создать тему</a>
-        </div>
+        </div><br>
     @endif
 
     <h1>{{ $forum->title }}</h1>
 
-    <a href="/forum">Форум</a>
+    <nav>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
+            <li class="breadcrumb-item"><a href="/forum">Форум</a></li>
 
-    @if ($forum->parent->id)
-        / <a href="/forum/{{ $forum->parent->id }}">{{ $forum->parent->title }}</a>
-    @endif
+            @if ($forum->parent->id)
+                <li class="breadcrumb-item"><a href="/forum/{{ $forum->parent->id }}">{{ $forum->parent->title }}</a></li>
+            @endif
 
-    / {{ $forum->title }}
+            <li class="breadcrumb-item active">{{ $forum->title }}</li>
 
-    @if (isAdmin())
-        / <a href="/admin/forum/{{  $forum->id  }}?page={{ $page['current'] }}">Управление</a>
-    @endif
-
-    <hr>
+            @if (isAdmin())
+                <li class="breadcrumb-item"><a href="/admin/forum/{{  $forum->id  }}?page={{ $page['current'] }}">Управление</a></li>
+            @endif
+        </ol>
+    </nav>
 
     @if ($forum->children->isNotEmpty() && $page['current'] == 1)
         <div class="act">

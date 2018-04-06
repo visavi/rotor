@@ -8,6 +8,22 @@
 
     <h1>Изменение темы</h1>
 
+    <nav>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
+            <li class="breadcrumb-item"><a href="/forum">Форум</a></li>
+
+            @if ($topic->forum->parent->id)
+                <li class="breadcrumb-item"><a href="/forum/{{ $topic->forum->parent->id }}">{{ $topic->forum->parent->title }}</a></li>
+            @endif
+
+            <li class="breadcrumb-item"><a href="/forum/{{ $topic->forum->id }}">{{ $topic->forum->title }}</a></li>
+
+            <li class="breadcrumb-item"><a href="/topic/{{ $topic->id }}">{{ $topic->title }}</a></li>
+            <li class="breadcrumb-item active">Изменение темы</li>
+        </ol>
+    </nav>
+
     <i class="fa fa-pencil-alt"></i> <b>{{ $post->user->login }}</b> <small>({{ dateFixed($post->created_at) }})</small><br><br>
 
     <div class="form">
@@ -31,5 +47,5 @@
 
             <button class="btn btn-primary">Редактировать</button>
         </form>
-    </div><br>
+    </div>
 @stop

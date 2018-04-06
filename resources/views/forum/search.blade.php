@@ -7,6 +7,14 @@
 @section('content')
     <h1>Поиск по форуму</h1>
 
+    <nav>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
+            <li class="breadcrumb-item"><a href="/forum">Форум</a></li>
+            <li class="breadcrumb-item active">Поиск по форуму</li>
+        </ol>
+    </nav>
+
     <div class="form">
         <form action="/forum/search">
             <div class="form-group{{ hasError('find') }}">

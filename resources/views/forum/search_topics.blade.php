@@ -8,6 +8,15 @@
 
     <h1>Поиск запроса {{ $find }}</h1>
 
+    <nav>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
+            <li class="breadcrumb-item"><a href="/forum">Форум</a></li>
+            <li class="breadcrumb-item"><a href="/forum/search">Поиск</a></li>
+            <li class="breadcrumb-item active">Поиск запроса</li>
+        </ol>
+    </nav>
+
     <p>Найдено совпадений в темах: {{ $page['total'] }}</p>
 
     @foreach ($topics as $topic)
@@ -23,6 +32,4 @@
     @endforeach
 
     {!! pagination($page) !!}
-
-    <i class="fa fa-arrow-circle-left"></i> <a href="/forum/search">Вернуться</a>
 @stop

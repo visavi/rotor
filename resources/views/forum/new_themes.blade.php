@@ -7,7 +7,13 @@
 @section('content')
     <h1>Новые темы</h1>
 
-    <a href="/forum">Форум</a>
+    <nav>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
+            <li class="breadcrumb-item"><a href="/forum">Форум</a></li>
+            <li class="breadcrumb-item active">Новые темы</li>
+        </ol>
+    </nav>
 
     @foreach ($topics as $data)
         <div class="b">
