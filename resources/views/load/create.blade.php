@@ -52,18 +52,24 @@
             {!! textError('text') !!}
         </div>
 
-        <label class="btn btn-sm btn-secondary" for="inputFile">
-            <input id="inputFile" type="file" name="file" onchange="$('#upload-file-info').html(this.files[0].name);" hidden>
-            Файл&hellip;
+        Прикрепить файл ({{ setting('allowextload') }}):<br>
+        <label class="btn btn-sm btn-secondary" for="file">
+            <input id="file" type="file" name="file" onchange="$('#upload-file-info').html(this.files[0].name);" hidden>
+            Прикрепить файл&hellip;
         </label>
         <span class="badge badge-info" id="upload-file-info"></span>
+        {!! textError('file') !!}
         <br>
 
-        <label for="inputScreen">
-            <input onchange="return submitImage(this);" id="inputScreen" type="file" name="screen">
+        Прикрепить скрин (jpg,jpeg,gif,png)<br>
+        <label class="btn btn-sm btn-secondary" for="screen">
+            <input id="screen" type="file" name="screen" onchange="$('#upload-screen-info').html(this.files[0].name);" hidden>
+            Прикрепить картинку&hellip;
         </label>
+        <span class="badge badge-info" id="upload-screen-info"></span>
+        {!! textError('screen') !!}
         <br>
-        <div class="js-image"></div>
+
         <button class="btn btn-primary">Загрузить</button>
     </form>
 
