@@ -9,11 +9,17 @@
     @if (getUser())
         <div class="float-right">
             <a class="btn btn-success" href="/votes/create">Создать голосование</a><br>
-        </div>
+        </div><br>
     @endif
 
     <h1>Голосования</h1>
-    <br>
+
+    <nav>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
+            <li class="breadcrumb-item active">Голосования</li>
+        </ol>
+    </nav>
 
     @if ($votes->isNotEmpty())
         @foreach ($votes as $vote)

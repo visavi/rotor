@@ -8,6 +8,14 @@
 
     <h1>Создание голосования</h1>
 
+    <nav>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
+            <li class="breadcrumb-item"><a href="/votes">Голосования</a></li>
+            <li class="breadcrumb-item active">Создание голосования</li>
+        </ol>
+    </nav>
+
     <div class="form">
         <form action="/votes/create" method="post">
             <input type="hidden" name="token" value="{{ $_SESSION['token'] }}">
@@ -32,7 +40,5 @@
 
             <button class="btn btn-primary">Создать голосование</button>
         </form>
-    </div><br>
-
-    <i class="fa fa-arrow-circle-up"></i> <a href="/votes">К голосованиям</a><br>
+    </div>
 @stop

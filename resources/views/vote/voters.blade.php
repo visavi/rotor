@@ -1,12 +1,21 @@
 @extends('layout')
 
 @section('title')
-    Последние проголосовавшие
+    Голосования {{ $vote->title }}
 @stop
 
 @section('content')
 
-    <h1>{{ $vote->title }}</h1>
+    <h1>Голосования {{ $vote->title }}</h1>
+
+    <nav>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
+            <li class="breadcrumb-item"><a href="/votes">Голосования</a></li>
+            <li class="breadcrumb-item"><a href="/votes/{{ $vote->id }}">{{ $vote->title }}</a></li>
+            <li class="breadcrumb-item active">Голосования</li>
+        </ol>
+    </nav>
 
     <i class="fa fa-chart-bar"></i> Голосов: {{ $vote->count }}<br><br>
 
@@ -17,7 +26,4 @@
     @else
         {!! showError('В голосовании никто не участвовал!') !!}
     @endif
-    <br>
-    <i class="fa fa-arrow-circle-left"></i> <a href="/votes/{{ $vote->id }}">Вернуться</a><br>
-    <i class="fa fa-arrow-circle-up"></i> <a href="/votes">К голосованиям</a><br>
 @stop
