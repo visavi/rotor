@@ -41,52 +41,59 @@
         {!! bbCode($down->text) !!}
     </div><br>
 
-    @if ($down->files->isNotEmpty())
-        @foreach ($down->files as $file)
-            <a href="/uploads/files/{{ $file->hash }}" class="gallery">{!! resizeImage('uploads/files/', $file->hash, ['alt' => $down->title]) !!}</a>
+    @if ($files || $images)
+        @foreach ($files as $file)
+{{--
+            <?php $poster = ''; ?>
+            @if ($down->screen && file_exists(UPLOADS.'/screen/'.$down->screen))
+                <?php $poster = ' poster="/uploads/screen/'.$down->screen.'"'; ?>
+
+                @if ($down->extension != 'mp4')
+                    Скриншот:<br>
+                    <a href="/uploads/screen/{{ $down->screen }}" class="gallery">{!! resizeImage('uploads/screen/', $down->screen, ['alt' => $down->title]) !!}</a><br><br>
+                @endif
+            @endif
+--}}
+
+            Добавлено: {!! profile($down->user) !!} ({{ dateFixed($down->created_at) }})<hr>
+
+            @if ($down->link && file_exists(UPLOADS.'/files/'.$down->link))
+
+                @if ($down->extension === 'mp3' || $down->extension === 'mp4')
+
+                    @if ($down->extension === 'mp3')
+                        <audio src="/uploads/files/{{ $down->link }}"></audio><br/>
+                    @endif
+
+                    @if ($down->extension === 'mp4')
+                        <video width="640" height="360" style="width: 100%; height: 100%;" src="/uploads/files/{{ $down->link }}" {!! $poster !!}></video>
+                    @endif
+                @endif
+
+                @if ($file->extension === 'zip')
+                    <i class="fa fa-archive"></i> <b><a href="/down/zip/{{ $down->id }}">Просмотреть архив</a></b><br>
+                @endif
+
+                @if (getUser())
+                    <i class="fa fa-download"></i> <b><a href="/down/download/{{ $down->id }}">Скачать</a></b> ({{ $filesize }})<br>
+                @else
+                    <div class="form">
+                        <form action="/down/download/{{ $down->id }}" method="post">
+                            {!! view('app/_captcha') !!}
+                            <button class="btn btn-primary">Скачать ({{ $filesize }})</button>
+                        </form>
+                    </div><br>
+                @endif
+            @endif
         @endforeach
-    @endif
-    <br>
 
-    <?php $poster = ''; ?>
-    @if ($down->screen && file_exists(UPLOADS.'/screen/'.$down->screen))
-        <?php $poster = ' poster="/uploads/screen/'.$down->screen.'"'; ?>
 
-        @if ($down->extension != 'mp4')
-            Скриншот:<br>
-            <a href="/uploads/screen/{{ $down->screen }}" class="gallery">{!! resizeImage('uploads/screen/', $down->screen, ['alt' => $down->title]) !!}</a><br><br>
+        @if ($images)
+            @foreach ($images as $image)
+                <a href="/uploads/files/{{ $image->hash }}" class="gallery">{!! resizeImage('uploads/files/', $image->hash, ['alt' => $down->title]) !!}</a>
+            @endforeach
         @endif
-    @endif
-
-    Добавлено: {!! profile($down->user) !!} ({{ dateFixed($down->created_at) }})<hr>
-
-    @if ($down->link && file_exists(UPLOADS.'/files/'.$down->link))
-
-        @if ($down->extension === 'mp3' || $down->extension === 'mp4')
-
-            @if ($down->extension === 'mp3')
-                <audio src="/uploads/files/{{ $down->link }}"></audio><br/>
-            @endif
-
-            @if ($down->extension === 'mp4')
-                <video width="640" height="360" style="width: 100%; height: 100%;" src="/uploads/files/{{ $down->link }}" {!! $poster !!}></video>
-            @endif
-        @endif
-
-        @if ($down->extension === 'zip')
-            <i class="fa fa-archive"></i> <b><a href="/down/zip/{{ $down->id }}">Просмотреть архив</a></b><br>
-        @endif
-
-        @if (getUser())
-            <i class="fa fa-download"></i> <b><a href="/down/download/{{ $down->id }}">Скачать</a></b> ({{ $filesize }})<br>
-        @else
-            <div class="form">
-                <form action="/down/download/{{ $down->id }}" method="post">
-                    {!! view('app/_captcha') !!}
-                    <button class="btn btn-primary">Скачать ({{ $filesize }})</button>
-                </form>
-            </div><br>
-        @endif
+        <br>
 
         <i class="fa fa-comment"></i> <b><a href="/down/comments/{{ $down->id }}">Комментарии</a></b> ({{ $down->count_comments }})
         <a href="/down/end/{{ $down->id }}">&raquo;</a><br>
@@ -118,6 +125,6 @@
             <input class="form-control" name="text" id="text" value="{{ siteUrl(true) }}/uploads/files/{{ $down->link }}"><br>--}}
         @endif
     @else
-        {!! showError('Файл еще не загружен!') !!}
+        {!! showError('Файлы еще не загружены!') !!}
     @endif
 @stop

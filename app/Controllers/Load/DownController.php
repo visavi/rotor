@@ -43,10 +43,24 @@ class DownController extends BaseController
             abort('default', 'Данный файл еще не проверен модератором!');
         }
 
-        $filesize = $down->link ? formatFileSize(UPLOADS . '/files/' . $down->link) : 0;
-        $rating   = $down->rated ? round($down->rating / $down->rated, 1) : 0;
+        $rating = $down->rated ? round($down->rating / $down->rated, 1) : 0;
 
-        return view('load/down', compact('down', 'filesize', 'rating'));
+        if ($down->files->isNotEmpty()) {
+
+            $files  = [];
+            $images = [];
+
+            foreach ($down->files as $file) {
+
+                if ($file->where('hash', 'like','.png%')) {
+                    $images[] = $file;
+                } else {
+                    $files[] = $file;
+                }
+            }
+        }
+
+        return view('load/down', compact('down', 'rating', 'files', 'images'));
     }
 
     /**
@@ -80,7 +94,7 @@ class DownController extends BaseController
             $category = check(Request::input('category'));
             $title    = check(Request::input('title'));
             $text     = check(Request::input('text'));
-            $files    = Request::file('file');
+            $files    = (array) Request::file('files');
 
             $category = Load::query()->find($category);
 

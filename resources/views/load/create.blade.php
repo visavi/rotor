@@ -52,12 +52,12 @@
             {!! textError('text') !!}
         </div>
 
-        <label class="btn btn-sm btn-secondary" for="file">
-            <input id="file" type="file" name="file[]" onchange="$('#upload-file-info').html((this.files.length > 1) ? this.files.length + ' файлов' : this.files[0].name);" hidden multiple>
+        <label class="btn btn-sm btn-secondary" for="files">
+            <input type="file" id="files" name="files[]" onchange="$('#upload-file-info').html((this.files.length > 1) ? this.files.length + ' файлов' : this.files[0].name);" hidden multiple>
             Прикрепить файлы&hellip;
         </label>
         <span class="badge badge-info" id="upload-file-info"></span>
-        {!! textError('file') !!}
+        {!! textError('files') !!}
         <br>
 
         <p class="text-muted font-italic">
