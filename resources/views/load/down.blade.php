@@ -32,13 +32,13 @@
 
     @if (! $down->active && $down->user_id == getUser('id'))
         <div class="info">
-            <b>Внимание!</b> Данная загрузка добавлена, но еще требует модераторской проверки<br>
+            <b>Внимание!</b> Данная загрузка ожидвает проверки модератором!<br>
             <i class="fa fa-pencil-alt"></i> <a href="/load/add?act=view&amp;id={{ $down->id }}">Перейти к редактированию</a>
         </div><br>
     @endif
 
-    @if (in_array($down->extension, ['jpg', 'jpeg', 'gif', 'png'])) {
-        <a href="/uploads/files/{{ $down->link }}" class="gallery">{{ resizeImage('uploads/files/', $down->link, ['alt' => $down->title]) }}</a><br>
+    @if (in_array($down->extension, ['jpg', 'jpeg', 'gif', 'png']))
+        <a href="/uploads/files/{{ $down->link }}" class="gallery">{!! resizeImage('uploads/files/', $down->link, ['alt' => $down->title]) !!}</a><br>
     @endif
 
     <div class="message">
@@ -58,7 +58,7 @@
 
         @if ($down->extension != 'mp4')
             Скриншот:<br>
-            <a href="/uploads/screen/{{ $down->screen }}" class="gallery">{{ resizeImage('uploads/screen/', $down->screen, ['alt' => $down->title]) }}</a><br><br>
+            <a href="/uploads/screen/{{ $down->screen }}" class="gallery">{!! resizeImage('uploads/screen/', $down->screen, ['alt' => $down->title]) !!}</a><br><br>
         @endif
     @endif
 

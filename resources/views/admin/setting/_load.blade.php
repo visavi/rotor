@@ -27,14 +27,6 @@
         {!! textError('sets[fileupload]') !!}
 
         <input type="hidden" value="1048576" name="mods[fileupload]">
-    </div>
-
-    <div class="form-group{{ hasError('sets[screenupload]') }}">
-        <label for="screenupload">Максимальный вес скриншота (Mb):</label>
-        <input type="number" class="form-control" id="screenupload" name="sets[screenupload]" maxlength="3" value="{{ getInput('sets.screenupload', round($settings['screenupload'] / 1048576)) }}" required>
-        {!! textError('sets[screenupload]') !!}
-
-        <input type="hidden" value="1048576" name="mods[screenupload]">
         <span class="text-muted font-italic">Ограничение сервера: {{ ini_get('upload_max_filesize') }}</span>
     </div>
 

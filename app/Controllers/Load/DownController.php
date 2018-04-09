@@ -81,7 +81,6 @@ class DownController extends BaseController
             $title    = check(Request::input('title'));
             $text     = check(Request::input('text'));
             $file     = Request::file('file');
-            $screens  = Request::file('screen');
 
             $category = Load::query()->find($category);
 
@@ -101,69 +100,44 @@ class DownController extends BaseController
             }
 
             if ($validator->isValid()) {
-                if ($file) {
-                    $validator->true($file->isValid(), ['file' => 'Не удалось загрузить файл!']);
-                    $validator->in($file->getClientOriginalExtension(), explode(',', setting('allowextload')), ['file' => 'Недопустимое расширение файла!']);
-                    $validator->lt($file->getClientSize(), setting('fileupload'), ['file' => 'Ошибка! Максимальный размер загружаемого файла ' . formatSize(setting('fileupload')) . '!']);
-                }
+                $rules = [
+                    'maxsize'    => setting('fileupload'),
+                    'extensions' => explode(',', setting('allowextload')),
+                    'maxweight'  => setting('screenupsize'),
+                    'minweight'  => 100,
+                ];
 
-             /*   if ($screens) {
-                    $validator->lte(count($screens), 10, ['screen' => 'Разрешено загружать не более 10 скриншотов']);
-                }*/
+                $validator->file($file, $rules, ['file' => 'Не удалось загрузить файл!']);
             }
+
+            //$validator->lte(count($file), 10, ['file' => 'Разрешено загружать не более 10 файлов']);
 
             if ($validator->isValid()) {
 
-                $fileName = uniqueName($file->getClientOriginalExtension());
-                $file->move(UPLOADS . '/files/', $fileName);
+                if (in_array($file->getClientOriginalExtension(), ['jpg', 'jpeg', 'gif', 'png'], true)) {
+                    $fileName = uploadImage($file, UPLOADS.'/screen/');
+                } else {
+                    $fileName = uniqueName($file->getClientOriginalExtension());
+                    $file->move(UPLOADS . '/files/', $fileName);
+                }
 
                 $down = Down::query()->create([
                     'category_id' => $category->id,
                     'title'       => $title,
                     'text'        => $text,
-                    'link'        => $fileName,
                     'user_id'     => $user->id,
                     'created_at'  => SITETIME,
                 ]);
 
-                foreach ($screens as $key => $screen) {
-
-                    $handle = uploadImage($screen, setting('screenupload'), setting('screenupsize'),  uniqid());
-                    $validator->true($handle, ['screen' => $handle->error]);
-
-                    $handle->process(UPLOADS.'/screen/');
-                    if ($handle->processed) {
-
-                        File::query()->create([
-                            'relate_type' => Down::class,
-                            'relate_id'   => $down->id,
-                            'hash'        => $handle->file_dst_name,
-                            'name'        => 'Скриншот ' . ($key + 1),
-                            'size'        => $handle->file_src_size,
-                            'user_id'     => $user->id,
-                            'created_at'  => SITETIME,
-                        ]);
-
-
-                    } else {
-                        var_dump($handle, $handle->error);
-                    }
-
-
-                    //$validator->true($screen->isValid(), ['screen' => 'Не удалось загрузить скриншот!']);
-                    //$validator->in($screen->getClientOriginalExtension(), ['jpg', 'jpeg', 'png', 'gif'], ['screen' => 'Недопустимое расширение скриншота!']);
-                    //$validator->lte($screen->getClientSize(), setting('screenupload'), ['screen' => 'Ошибка! Максимальный размер загружаемого скриншота' . formatSize(setting('screenupload')) . '!']);
-
-                }
-                exit;
-
-/*
-                foreach ($screens as $key => $screen) {
-
-                    $screenName = uniqid() . '.' . $screen->getClientOriginalExtension();
-                    $screen->move(UPLOADS . '/screen/', $screenName);*/
-
-                /*}*/
+                File::query()->create([
+                    'relate_id'   => $down->id,
+                    'relate_type' => Down::class,
+                    'hash'        => $fileName,
+                    'name'        => $file->getClientOriginalName(),
+                    'size'        => $file->getClientSize(),
+                    'user_id'     => $user->id,
+                    'created_at'  => SITETIME,
+                ]);
 
                 setFlash('success', 'Файл успешно загружен!');
                 redirect('/down/' . $down->id);

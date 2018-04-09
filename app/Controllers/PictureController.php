@@ -40,7 +40,7 @@ class PictureController extends BaseController
                 'maxweight' => setting('fileupfoto'),
                 'minweight' => 100,
             ];
-            $validator->image($photo, $rules, ['photo' => 'Не удалось загрузить фотографию!']);
+            $validator->file($photo, $rules, ['photo' => 'Не удалось загрузить фотографию!']);
 
             if ($validator->isValid()) {
 

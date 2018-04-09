@@ -106,7 +106,6 @@ class SettingSeeder extends AbstractSeed
             ['name'  => 'rekusertotal', 'value' => 10],
             ['name'  => 'scorename', 'value' => 'балл,балла,баллов'],
             ['name'  => 'screensize', 'value' => 1000],
-            ['name'  => 'screenupload', 'value' => 2097152],
             ['name'  => 'screenupsize', 'value' => 5000],
             ['name'  => 'sendmailpacket', 'value' => 3],
             ['name'  => 'sendmoneypoint', 'value' => 150],

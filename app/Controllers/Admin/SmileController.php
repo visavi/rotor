@@ -69,7 +69,7 @@ class SmileController extends AdminController
                 'minweight' => setting('smileminweight'),
             ];
 
-            $validator->image($smile, $rules, ['smile' => 'Не удалось загрузить изображение!']);
+            $validator->file($smile, $rules, ['smile' => 'Не удалось загрузить изображение!']);
 
             if ($validator->isValid()) {
 

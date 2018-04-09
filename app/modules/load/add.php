@@ -100,7 +100,7 @@ case 'view':
                                 echo 'Прикрепить скрин (jpg,jpeg,gif,png):<br><input type="file" name="screen"><br>';
                                 echo '<input value="Загрузить" type="submit"></form><br>';
 
-                                echo 'Максимальный вес скриншота: '.formatSize(setting('screenupload')).'<br>';
+
                                 echo 'Требуемый размер скриншота: от 100 до '.setting('screenupsize').' px</div><br><br>';
 
                             } else {

@@ -71,7 +71,7 @@ class NewsController extends AdminController
                 'minweight' => 100,
             ];
 
-            $validator->image($image, $rules, ['image' => 'Не удалось загрузить фотографию!'], false);
+            $validator->file($image, $rules, ['image' => 'Не удалось загрузить фотографию!'], false);
 
             if ($validator->isValid()) {
 
@@ -124,7 +124,7 @@ class NewsController extends AdminController
                 'minweight' => 100,
             ];
 
-            $validator->image($image, $rules, ['image' => 'Не удалось загрузить фотографию!'], false);
+            $validator->file($image, $rules, ['image' => 'Не удалось загрузить фотографию!'], false);
 
             if ($validator->isValid()) {
 

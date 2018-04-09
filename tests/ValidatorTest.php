@@ -402,7 +402,7 @@ class ValidatorTest extends TestCase
     /**
      * Тестирует изображение
      */
-    public function testImage()
+    public function testFile()
     {
         $image  = UploadedFile::fake()->image('avatar.jpg');
         $image2 = UploadedFile::fake()->image('avatar.jpg', 100, 100);
@@ -413,18 +413,18 @@ class ValidatorTest extends TestCase
             'maxweight' => 50,
         ];
 
-        $this->validator->image(null, $rules, 'error', false);
+        $this->validator->file(null, $rules, 'error', false);
         $this->assertTrue($this->validator->isValid());
 
 
-        $this->validator->image($image, $rules, 'error');
+        $this->validator->file($image, $rules, 'error');
         $this->assertTrue($this->validator->isValid());
 
-        $this->validator->image($image2, $rules, 'error');
+        $this->validator->file($image2, $rules, 'error');
         $this->assertFalse($this->validator->isValid());
 
         $this->validator->clearErrors();
-        $this->validator->image($image3, $rules, 'error');
+        $this->validator->file($image3, $rules, 'error');
         $this->assertFalse($this->validator->isValid());
 
         $rules = [
@@ -432,7 +432,7 @@ class ValidatorTest extends TestCase
         ];
 
         $this->validator->clearErrors();
-        $this->validator->image($image, $rules, 'error');
+        $this->validator->file($image, $rules, 'error');
         $this->assertFalse($this->validator->isValid());
 
         $rules = [
@@ -440,11 +440,11 @@ class ValidatorTest extends TestCase
         ];
 
         $this->validator->clearErrors();
-        $this->validator->image($image, $rules, 'error');
+        $this->validator->file($image, $rules, 'error');
         $this->assertFalse($this->validator->isValid());
 
         $this->validator->clearErrors();
-        $this->validator->image($image4, $rules, 'error');
+        $this->validator->file($image4, $rules, 'error');
         $this->assertFalse($this->validator->isValid());
     }
 }

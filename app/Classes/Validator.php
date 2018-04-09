@@ -29,7 +29,7 @@ class Validator
      */
     public function length($input, $min, $max, $label, $required = true)
     {
-        if ($required == false && mb_strlen($input, 'utf-8') === 0) {
+        if ($required == false && blank($input)) {
             return $this;
         }
 
@@ -271,7 +271,7 @@ class Validator
      */
     public function regex($input, $pattern, $label, $required = true)
     {
-        if ($required == false && mb_strlen($input, 'utf-8') === 0) {
+        if ($required === false && blank($input)) {
             return $this;
         }
 
@@ -292,7 +292,7 @@ class Validator
      */
     public function float($input, $label, $required = true)
     {
-        if ($required == false && mb_strlen($input, 'utf-8') === 0) {
+        if ($required == false && blank($input)) {
             return $this;
         }
 
@@ -313,7 +313,7 @@ class Validator
      */
     public function url($input, $label, $required = true)
     {
-        if ($required == false && mb_strlen($input, 'utf-8') === 0) {
+        if ($required == false && blank($input)) {
             return $this;
         }
 
@@ -334,7 +334,7 @@ class Validator
      */
     public function email($input, $label, $required = true)
     {
-        if ($required == false && mb_strlen($input, 'utf-8') === 0) {
+        if ($required === false && blank($input)) {
             return $this;
         }
 
@@ -346,7 +346,7 @@ class Validator
     }
 
     /**
-     * Проверяет изображение
+     * Проверяет файл
      *
      * @param \Illuminate\Http\UploadedFile|null $input
      * @param array                              $rules
@@ -354,9 +354,9 @@ class Validator
      * @param bool                               $required
      * @return Validator
      */
-    public function image($input, $rules, $label, $required = true)
+    public function file($input, $rules, $label, $required = true)
     {
-        if ($required == false && ! $input) {
+        if ($required === false && blank($input)) {
             return $this;
         }
 
@@ -367,7 +367,11 @@ class Validator
 
         $key = is_array($label) ? key($label) : 0;
 
-        if (! in_array($input->getClientOriginalExtension(), ['jpg', 'jpeg', 'gif', 'png'], true)) {
+        if (empty($rules['extensions'])) {
+            $rules['extensions'] = ['jpg', 'jpeg', 'gif', 'png'];
+        }
+
+        if (! in_array($input->getClientOriginalExtension(), $rules['extensions'], true)) {
             $this->addError([$key => 'Недопустимое расширение файла!']);
         }
 
@@ -377,17 +381,19 @@ class Validator
             }
         }
 
-        list($width, $height) = getimagesize($input);
+        if (in_array($input->getClientOriginalExtension(), ['jpg', 'jpeg', 'gif', 'png'], true)) {
+            list($width, $height) = getimagesize($input);
 
-        if (isset($rules['maxweight'])) {
-            if ($width > $rules['maxweight'] || $height > $rules['maxweight']) {
-                $this->addError([$key => 'Максимальный размер файла '. $rules['maxweight'] . 'px!']);
+            if (isset($rules['maxweight'])) {
+                if ($width > $rules['maxweight'] || $height > $rules['maxweight']) {
+                    $this->addError([$key => 'Максимальный размер файла '. $rules['maxweight'] . 'px!']);
+                }
             }
-        }
 
-        if (isset($rules['minweight'])) {
-            if ($width < $rules['minweight'] || $height < $rules['minweight']) {
-                $this->addError([$key => 'Минимальный размер файла ' . $rules['minweight'] . 'px!']);
+            if (isset($rules['minweight'])) {
+                if ($width < $rules['minweight'] || $height < $rules['minweight']) {
+                    $this->addError([$key => 'Минимальный размер файла ' . $rules['minweight'] . 'px!']);
+                }
             }
         }
 

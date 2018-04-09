@@ -1387,8 +1387,8 @@ function recentFiles($show = 5)
 
     if ($files) {
         foreach ($files as $file) {
-            $filesize = $file->link ? formatFileSize(UPLOADS.'/files/'.$file->link) : 0;
-            echo '<i class="far fa-circle fa-lg text-muted"></i>  <a href="/down/'.$file->id.'">'.$file->title.'</a> ('.$filesize.')<br>';
+            $rating = $file->rated ? round($file->rating / $file->rated, 1) : 0;
+            echo '<i class="far fa-circle fa-lg text-muted"></i>  <a href="/down/'.$file->id.'">'.$file->title.'</a> (⭐ '.$rating.')<br>';
         }
     }
 }
@@ -1522,11 +1522,11 @@ function profile(User $user, $color = null)
 function formatNum($num)
 {
     if ($num > 0) {
-        return '<span style="color:#00aa00">+'.$num.'</span>';
+        return '<span style="color:#00aa00">+' . $num . '</span>';
     }
 
     if ($num < 0) {
-        return '<span style="color:#ff0000">'.$num.'</span>';
+        return '<span style="color:#ff0000">' . $num . '</span>';
     }
 
     return '<span>0</span>';

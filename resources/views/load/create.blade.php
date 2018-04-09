@@ -52,35 +52,21 @@
             {!! textError('text') !!}
         </div>
 
-        Прикрепить файл ({{ setting('allowextload') }}):<br>
         <label class="btn btn-sm btn-secondary" for="file">
             <input id="file" type="file" name="file" onchange="$('#upload-file-info').html(this.files[0].name);" hidden>
-            Прикрепить файл&hellip;
+            Прикрепить файлы&hellip;
         </label>
         <span class="badge badge-info" id="upload-file-info"></span>
         {!! textError('file') !!}
         <br>
 
-        Прикрепить скрин (jpg,jpeg,gif,png)<br>
-        <label class="btn btn-sm btn-secondary" for="screen">
-            <input id="screen" type="file" name="screen" onchange="$('#upload-screen-info').html(this.files[0].name);" hidden>
-            Прикрепить картинку&hellip;
-        </label>
-        <span class="badge badge-info" id="upload-screen-info"></span>
-        {!! textError('screen') !!}
-        <br>
+        <p class="text-muted font-italic">
+            Можно загрузить до 10 файлов<br>
+            Максимальный вес файла: <b>{{ round(setting('fileupload') / 1024 / 1024) }}</b> Mb<br>
+            Допустимые расширения файлов: {{ str_replace(',', ', ', setting('allowextload')) }}<br>
+            Допустимые размеры картинок: от 100px до {{ setting('screenupsize') }}px
+        </p>
 
         <button class="btn btn-primary">Загрузить</button>
     </form>
-
-    <div class="info">
-        Максимальный вес файла: <b>{{ round(setting('fileupload') / 1024 / 1024) }}</b> Mb<br>
-        Допустимые расширения файла: {{ str_replace(',', ', ', setting('allowextload')) }}<br>
-        Допустимые расширения скриншотов: jpg,jpeg,gif,png
-    </div><br>
-
-    <div>
-        Файл и скриншот вы сможете загрузить после добавления описания<br>
-        Если вы ошиблись в названии или описании файла, вы всегда можете его отредактировать
-    </div>
 @stop
