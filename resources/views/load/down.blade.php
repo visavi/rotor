@@ -32,13 +32,9 @@
 
     @if (! $down->active && $down->user_id == getUser('id'))
         <div class="info">
-            <b>Внимание!</b> Данная загрузка ожидвает проверки модератором!<br>
+            <b>Внимание!</b> Данная загрузка ожидает проверки модератором!<br>
             <i class="fa fa-pencil-alt"></i> <a href="/load/add?act=view&amp;id={{ $down->id }}">Перейти к редактированию</a>
         </div><br>
-    @endif
-
-    @if (in_array($down->extension, ['jpg', 'jpeg', 'gif', 'png']))
-        <a href="/uploads/files/{{ $down->link }}" class="gallery">{!! resizeImage('uploads/files/', $down->link, ['alt' => $down->title]) !!}</a><br>
     @endif
 
     <div class="message">
@@ -46,8 +42,8 @@
     </div><br>
 
     @if ($down->files->isNotEmpty())
-        @foreach ($down->files as $screen)
-            <a href="/uploads/screen/{{ $screen->hash }}" class="gallery">{!! resizeImage('uploads/screen/', $screen->hash, ['alt' => $down->title]) !!}</a>
+        @foreach ($down->files as $file)
+            <a href="/uploads/files/{{ $file->hash }}" class="gallery">{!! resizeImage('uploads/files/', $file->hash, ['alt' => $down->title]) !!}</a>
         @endforeach
     @endif
     <br>

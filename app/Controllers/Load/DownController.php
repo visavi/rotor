@@ -80,7 +80,7 @@ class DownController extends BaseController
             $category = check(Request::input('category'));
             $title    = check(Request::input('title'));
             $text     = check(Request::input('text'));
-            $file     = Request::file('file');
+            $files    = Request::file('file');
 
             $category = Load::query()->find($category);
 
@@ -99,6 +99,8 @@ class DownController extends BaseController
                 $validator->false($downCount, ['title' => 'Файл с аналогичный названием уже имеется в загрузках!']);
             }
 
+            $validator->lte(count($files), 10, ['file' => 'Разрешено загружать не более 10 файлов']);
+
             if ($validator->isValid()) {
                 $rules = [
                     'maxsize'    => setting('fileupload'),
@@ -107,19 +109,12 @@ class DownController extends BaseController
                     'minweight'  => 100,
                 ];
 
-                $validator->file($file, $rules, ['file' => 'Не удалось загрузить файл!']);
+                foreach ($files as $file) {
+                    $validator->file($file, $rules, ['file' => 'Не удалось загрузить файл!']);
+                }
             }
 
-            //$validator->lte(count($file), 10, ['file' => 'Разрешено загружать не более 10 файлов']);
-
             if ($validator->isValid()) {
-
-                if (in_array($file->getClientOriginalExtension(), ['jpg', 'jpeg', 'gif', 'png'], true)) {
-                    $fileName = uploadImage($file, UPLOADS.'/screen/');
-                } else {
-                    $fileName = uniqueName($file->getClientOriginalExtension());
-                    $file->move(UPLOADS . '/files/', $fileName);
-                }
 
                 $down = Down::query()->create([
                     'category_id' => $category->id,
@@ -129,15 +124,26 @@ class DownController extends BaseController
                     'created_at'  => SITETIME,
                 ]);
 
-                File::query()->create([
-                    'relate_id'   => $down->id,
-                    'relate_type' => Down::class,
-                    'hash'        => $fileName,
-                    'name'        => $file->getClientOriginalName(),
-                    'size'        => $file->getClientSize(),
-                    'user_id'     => $user->id,
-                    'created_at'  => SITETIME,
-                ]);
+                foreach ($files as $file) {
+
+                    if (in_array($file->getClientOriginalExtension(), ['jpg', 'jpeg', 'gif', 'png'], true)) {
+                        $fileName = uploadImage($file, UPLOADS . '/files/');
+                    } else {
+                        $fileName = uniqueName($file->getClientOriginalExtension());
+                        $file->move(UPLOADS . '/files/', $fileName);
+                    }
+
+
+                    File::query()->create([
+                        'relate_id'   => $down->id,
+                        'relate_type' => Down::class,
+                        'hash'        => $fileName,
+                        'name'        => $file->getClientOriginalName(),
+                        'size'        => $file->getClientSize(),
+                        'user_id'     => $user->id,
+                        'created_at'  => SITETIME,
+                    ]);
+                }
 
                 setFlash('success', 'Файл успешно загружен!');
                 redirect('/down/' . $down->id);

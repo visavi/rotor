@@ -53,7 +53,7 @@
         </div>
 
         <label class="btn btn-sm btn-secondary" for="file">
-            <input id="file" type="file" name="file" onchange="$('#upload-file-info').html(this.files[0].name);" hidden>
+            <input id="file" type="file" name="file[]" onchange="$('#upload-file-info').html((this.files.length > 1) ? this.files.length + ' файлов' : this.files[0].name);" hidden multiple>
             Прикрепить файлы&hellip;
         </label>
         <span class="badge badge-info" id="upload-file-info"></span>
