@@ -2059,8 +2059,9 @@ function bbCode($text, $parse = true)
  */
 function getIp()
 {
-    $ip = Request::ip();
-    return $ip === '::1' ? '127.0.0.1' : $ip;
+    //$ip = Request::ip();
+    //return $ip === '::1' ? '127.0.0.1' : $ip;
+    return '';
 }
 
 /**

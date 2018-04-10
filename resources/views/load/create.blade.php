@@ -52,16 +52,24 @@
             {!! textError('text') !!}
         </div>
 
-        <label class="btn btn-sm btn-secondary" for="files">
-            <input type="file" id="files" name="files[]" onchange="$('#upload-file-info').html((this.files.length > 1) ? this.files.length + ' файлов' : this.files[0].name);" hidden multiple>
-            Прикрепить файлы&hellip;
+        <label class="btn btn-sm btn-secondary" for="file">
+            <input type="file" id="file" name="file" onchange="$('#upload-file-info').html(this.files[0].name);" hidden>
+            Прикрепить файл&hellip;
         </label>
         <span class="badge badge-info" id="upload-file-info"></span>
         {!! textError('files') !!}
         <br>
 
+        <label class="btn btn-sm btn-secondary" for="images">
+            <input type="file" id="images" name="images[]" onchange="$('#upload-image-info').html((this.files.length > 1) ? this.files.length + ' файлов' : this.files[0].name);" hidden multiple>
+            Прикрепить скриншоты&hellip;
+        </label>
+        <span class="badge badge-info" id="upload-image-info"></span>
+        {!! textError('images') !!}
+        <br>
+
         <p class="text-muted font-italic">
-            Можно загрузить до 5 файлов<br>
+            Можно загрузить до 5 скриншотов<br>
             Максимальный вес файла: <b>{{ round(setting('fileupload') / 1024 / 1024) }}</b> Mb<br>
             Допустимые расширения файлов: {{ str_replace(',', ', ', setting('allowextload')) }}<br>
             Допустимые размеры картинок: от 100px до {{ setting('screenupsize') }}px
