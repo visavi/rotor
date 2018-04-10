@@ -33,7 +33,7 @@
     @if (! $down->active && $down->user_id == getUser('id'))
         <div class="info">
             <b>Внимание!</b> Данная загрузка ожидает проверки модератором!<br>
-            <i class="fa fa-pencil-alt"></i> <a href="/load/add?act=view&amp;id={{ $down->id }}">Перейти к редактированию</a>
+            <i class="fa fa-pencil-alt"></i> <a href="/down/edit/{{ $down->id }}">Перейти к редактированию</a>
         </div><br>
     @endif
 
@@ -44,19 +44,9 @@
     @if ($files || $images)
         @foreach ($files as $file)
 
-            @if (file_exists(UPLOADS.'/files/'.$file->hash))
+            @if ($file->hash && file_exists(UPLOADS.'/files/'.$file->hash))
 
-                @if (getUser())
-                    <i class="fa fa-download"></i> <b><a href="/down/download/{{ $file->id }}">{{ $file->name }}</a></b> ({{ formatSize($file->size) }})
-                @else
-                    <div class="form">
-                        <form action="/down/download/{{ $file->id }}" method="post">
-                            {!! view('app/_captcha') !!}
-                            <button class="btn btn-primary">{{ $file->name }} ({{ formatSize($file->size) }})</button>
-                        </form>
-                    </div><br>
-                @endif
-
+                {!! icons($file->extension) !!} <b><a href="/down/download/{{ $file->id }}">{{ $file->name }}</a></b> ({{ formatSize($file->size) }})
 
                 @if ($file->extension === 'mp3')
                     <audio preload="none" controls style="max-width:100%;">
@@ -67,7 +57,7 @@
                 @if ($file->extension === 'mp4')
                     <?php $poster = $images ? '/uploads/files/' . current($images)->hash : null; ?>
 
-                   <video id="player1" width="640" height="360" style="max-width:100%;" poster="{{ $poster }}" preload="none" controls playsinline webkit-playsinline>
+                   <video width="640" height="360" style="max-width:100%;" poster="{{ $poster }}" preload="none" controls playsinline>
                        <source src="/uploads/files/{{ $file->hash }}" type="video/mp4">
                    </video>
                 @endif
@@ -78,25 +68,22 @@
             @endif
         @endforeach
 
-        <hr>
-
         @if ($images)
+            <hr>
             @foreach ($images as $image)
-                <a href="/uploads/files/{{ $image->hash }}" class="gallery">{!! resizeImage('uploads/files/', $image->hash, ['alt' => $down->title]) !!}</a>
+                <a href="/uploads/files/{{ $image->hash }}" class="gallery" data-group="{{ $down->id }}">{!! resizeImage('uploads/files/', $image->hash, ['alt' => $down->title]) !!}</a>
             @endforeach
         @endif
-        <br>
-
     @else
         {!! showError('Файлы еще не загружены!') !!}
     @endif
-    <hr>
 
+    <div>
+        <i class="fa fa-comment"></i> <b><a href="/down/comments/{{ $down->id }}">Комментарии</a></b> ({{ $down->count_comments }})
+        <a href="/down/end/{{ $down->id }}">&raquo;</a><br><br>
+    </div>
 
-    <i class="fa fa-comment"></i> <b><a href="/down/comments/{{ $down->id }}">Комментарии</a></b> ({{ $down->count_comments }})
-    <a href="/down/end/{{ $down->id }}">&raquo;</a><br>
-
-    <br>Рейтинг: {!! ratingVote($rating) !!}<br>
+    Рейтинг: {!! ratingVote($rating) !!}<br>
     Всего голосов: <b>{{ $down->rated }}</b><br>
     Всего скачиваний: <b>{{ $down->loads }}</b><br>
     Добавлено: {!! profile($down->user) !!} ({{ dateFixed($down->created_at) }})<br><br>

@@ -39,7 +39,7 @@ class DownController extends BaseController
             abort(404, 'Данная загрузка не найдена!');
         }
 
-        if (! $down->active && $down->user_id != getUser('id')) {
+        if (! $down->active && $down->user_id !== getUser('id')) {
             abort('default', 'Данный файл еще не проверен модератором!');
         }
 
@@ -245,7 +245,6 @@ class DownController extends BaseController
         $validator = new Validator();
         $validator
             ->true(file_exists(UPLOADS . '/files/' . $file->hash), 'Файла для скачивания не существует!')
-            ->true(getUser() || captchaVerify(), ['protect' => 'Не удалось пройти проверку captcha!'])
             ->notEmpty($file->relate->active, 'Данный файл еще не проверен модератором!');
 
         if ($validator->isValid()) {
