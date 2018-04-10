@@ -107,7 +107,6 @@ form {
     vertical-align : middle;
 }
 .mcontentwide {
-    padding : 5px 30px;
     line-height : 1.5em;
 }
 .rcontent {
@@ -117,11 +116,11 @@ form {
     line-height : 1.3em;
 }
 .bcontent {
+    margin : 0 30px;
     background-color : #ffffff;
     text-align : left;
-    padding : 4px 4px 0 4px;
-    margin-left : 6px;
-    margin-right : 6px;
+    padding : 10px 4px 0 4px;
+
 }
 .fdivider {
     clear : both;

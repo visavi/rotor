@@ -113,7 +113,7 @@ class DownController extends BaseController
                 $validator->false($downCount, ['title' => 'Файл с аналогичный названием уже имеется в загрузках!']);
             }
 
-            $validator->lte(count($files), 10, ['file' => 'Разрешено загружать не более 10 файлов']);
+            $validator->lte(count($files), 5, ['file' => 'Разрешено загружать не более 5 файлов']);
 
             if ($validator->isValid()) {
                 $rules = [
@@ -146,7 +146,6 @@ class DownController extends BaseController
                         $fileName = uniqueName($file->getClientOriginalExtension());
                         $file->move(UPLOADS . '/files/', $fileName);
                     }
-
 
                     File::query()->create([
                         'relate_id'   => $down->id,

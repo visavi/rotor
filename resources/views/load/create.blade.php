@@ -61,7 +61,7 @@
         <br>
 
         <p class="text-muted font-italic">
-            Можно загрузить до 10 файлов<br>
+            Можно загрузить до 5 файлов<br>
             Максимальный вес файла: <b>{{ round(setting('fileupload') / 1024 / 1024) }}</b> Mb<br>
             Допустимые расширения файлов: {{ str_replace(',', ', ', setting('allowextload')) }}<br>
             Допустимые размеры картинок: от 100px до {{ setting('screenupsize') }}px

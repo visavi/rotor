@@ -30,12 +30,14 @@ header("Content-type:text/html; charset=utf-8");
 </div>
 
 <div class="site">
-    @yield('advertTop')
-    @yield('advertUser')
-    @yield('note')
-    @yield('flash')
-    @yield('layout')
-    @yield('advertBottom')
+    <div class="content">
+        @yield('advertTop')
+        @yield('advertUser')
+        @yield('note')
+        @yield('flash')
+        @yield('layout')
+        @yield('advertBottom')
+    </div>
 </div>
 
 <div class="lol" id="down">
