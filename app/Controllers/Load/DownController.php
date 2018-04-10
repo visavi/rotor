@@ -52,7 +52,7 @@ class DownController extends BaseController
 
             foreach ($down->files as $file) {
 
-                if ($file->where('hash', 'like','.png%')) {
+                if ($file->isImage()) {
                     $images[] = $file;
                 } else {
                     $files[] = $file;
@@ -237,41 +237,41 @@ class DownController extends BaseController
      */
     public function download($id)
     {
-        $down = Down::query()->find($id);
+        $file = File::query()->where('relate_type', Down::class)->find($id);
 
-        if (! $down) {
+        if (! $file || ! $file->relate) {
             abort(404, 'Данного файла не существует!');
         }
 
         $validator = new Validator();
         $validator
-            ->true(file_exists(UPLOADS . '/files/' . $down->link), 'Файла для скачивания не существует!')
+            ->true(file_exists(UPLOADS . '/files/' . $file->hash), 'Файла для скачивания не существует!')
             ->true(getUser() || captchaVerify(), ['protect' => 'Не удалось пройти проверку captcha!'])
-            ->notEmpty($down->active, 'Данный файл еще не проверен модератором!');
+            ->notEmpty($file->relate->active, 'Данный файл еще не проверен модератором!');
 
         if ($validator->isValid()) {
 
             $reads = Read::query()
                 ->where('relate_type', Down::class)
-                ->where('relate_id', $down->id)
+                ->where('relate_id', $file->relate->id)
                 ->where('ip', getIp())
                 ->first();
 
             if (! $reads) {
                 Read::query()->create([
                     'relate_type' => Down::class,
-                    'relate_id'   => $down->id,
+                    'relate_id'   => $file->relate->id,
                     'ip'          => getIp(),
                     'created_at'  => SITETIME,
                 ]);
 
-                $down->increment('loads');
+                $file->relate->increment('loads');
             }
 
-            redirect('/uploads/files/' . $down->link);
+            redirect('/uploads/files/' . $file->hash);
         } else {
             setFlash('danger', $validator->getErrors());
-            redirect('/down/' . $down->id);
+            redirect('/down/' . $file->relate->id);
         }
     }
 
@@ -429,33 +429,34 @@ class DownController extends BaseController
      */
     public function zip($id)
     {
-        $down = Down::query()->find($id);
-        if (! $down) {
+        $file = File::query()->where('relate_type', Down::class)->find($id);
+
+        if (! $file || ! $file->relate) {
             abort(404, 'Данного файла не существует!');
         }
 
-        if (! $down->active) {
+        if (! $file->relate->active) {
             abort('default', 'Данный файл еще не проверен модератором!');
         }
 
-        if ($down->extension !== 'zip') {
+        if ($file->extension !== 'zip') {
             abort('default', 'Просматривать можно только ZIP архивы!');
         }
 
         try {
             $archive = new ZipFile();
-            $archive->openFile(UPLOADS . '/files/' . $down->link);
+            $archive->openFile(UPLOADS . '/files/' . $file->hash);
         } catch (Exception $e) {
             abort('default', 'Не удалось открыть архив!');
         }
 
-        $page = paginate(setting('ziplist'), $archive->count());
-        $getFiles = array_values($archive->getAllInfo());
+        $page         = paginate(setting('ziplist'), $archive->count());
+        $getDocuments = array_values($archive->getAllInfo());
 
-        $viewExt = Down::getViewExt();
-        $files = array_slice($getFiles, $page->offset, $page->limit, true);
+        $viewExt   = Down::getViewExt();
+        $documents = array_slice($getDocuments, $page->offset, $page->limit, true);
 
-        return view('load/zip', compact('down', 'files', 'page', 'viewExt', 'archive'));
+        return view('load/zip', compact('file', 'documents', 'page', 'viewExt'));
     }
 
     /**
@@ -463,43 +464,43 @@ class DownController extends BaseController
      */
     public function zipView($id, $fid)
     {
-        $down = Down::query()->find($id);
+        $file = File::query()->where('relate_type', Down::class)->find($id);
 
-        if (! $down) {
+        if (! $file || ! $file->relate) {
             abort(404, 'Данного файла не существует!');
         }
 
-        if (! $down->active) {
+        if (! $file->relate->active) {
             abort('default', 'Данный файл еще не проверен модератором!');
         }
 
-        if ($down->extentsion !== 'zip') {
+        if ($file->extension !== 'zip') {
             abort('default', 'Просматривать можно только ZIP архивы!');
         }
 
         try {
             $archive = new ZipFile();
-            $archive->openFile(UPLOADS . '/files/' . $down->link);
+            $archive->openFile(UPLOADS . '/files/' . $file->hash);
         } catch (Exception $e) {
             abort('default', 'Не удалось открыть архив!');
         }
 
-        $getFiles = array_values($archive->getAllInfo());
-        $file     = $getFiles[$fid] ?? null;
+        $getDocuments = array_values($archive->getAllInfo());
+        $document     = $getDocuments[$fid] ?? null;
 
-        if (! $file) {
+        if (! $document) {
             abort('default', 'Не удалось вывести содержимое файла');
         }
 
-        $content = $archive[$file->getName()];
+        $content = $archive[$document->getName()];
 
-        if (preg_match("/\.(gif|png|bmp|jpg|jpeg)$/", $file->getName()) && $file->getSize() > 0) {
+        if (preg_match("/\.(gif|png|bmp|jpg|jpeg)$/", $document->getName()) && $document->getSize() > 0) {
 
-            $ext = getExtension($file->getName());
+            $ext = getExtension($document->getName());
 
             header('Content-type: image/' . $ext);
             header('Content-Length: ' . strlen($content));
-            header('Content-Disposition: inline; filename="' . $file->getName() . '";');
+            header('Content-Disposition: inline; filename="' . $document->getName() . '";');
             exit($content);
         }
 
@@ -507,7 +508,7 @@ class DownController extends BaseController
             $content = winToUtf($content);
         }
 
-        return view('load/zip_view', compact('down', 'file', 'content'));
+        return view('load/zip_view', compact('file', 'document', 'content'));
     }
 
     /**

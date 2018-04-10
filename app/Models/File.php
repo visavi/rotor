@@ -17,4 +17,32 @@ class File extends BaseModel
      * @var array
      */
     protected $guarded = [];
+
+    /**
+     * Возвращает связанные модели
+     */
+    public function relate()
+    {
+        return $this->morphTo('relate');
+    }
+
+    /**
+     * Возвращает расширение файла
+     *
+     * @return string
+     */
+    public function getExtensionAttribute()
+    {
+        return getExtension($this->hash);
+    }
+
+    /**
+     * Возвращает является ли файл картинкой
+     *
+     * @return string
+     */
+    public function isImage()
+    {
+        return in_array($this->extension, ['jpg', 'jpeg', 'gif', 'png']);
+    }
 }

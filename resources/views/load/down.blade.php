@@ -55,32 +55,29 @@
             @endif
 --}}
 
-            Добавлено: {!! profile($down->user) !!} ({{ dateFixed($down->created_at) }})<hr>
-
-            @if ($down->link && file_exists(UPLOADS.'/files/'.$down->link))
-
-                @if ($down->extension === 'mp3' || $down->extension === 'mp4')
+            @if (file_exists(UPLOADS.'/files/'.$file->hash))
+                @if (in_array($file->extension, ['mp3', 'mp4']))
 
                     @if ($down->extension === 'mp3')
-                        <audio src="/uploads/files/{{ $down->link }}"></audio><br/>
+                        <audio src="/uploads/files/{{ $file->hash }}"></audio><br/>
                     @endif
 
                     @if ($down->extension === 'mp4')
-                        <video width="640" height="360" style="width: 100%; height: 100%;" src="/uploads/files/{{ $down->link }}" {!! $poster !!}></video>
+                        <video width="640" height="360" style="width: 100%; height: 100%;" src="/uploads/files/{{ $file->hash }}" {!! $poster !!}></video>
                     @endif
                 @endif
 
                 @if ($file->extension === 'zip')
-                    <i class="fa fa-archive"></i> <b><a href="/down/zip/{{ $down->id }}">Просмотреть архив</a></b><br>
+                    <i class="fa fa-archive"></i> <b><a href="/down/zip/{{ $file->id }}">Просмотреть архив</a></b><br>
                 @endif
 
                 @if (getUser())
-                    <i class="fa fa-download"></i> <b><a href="/down/download/{{ $down->id }}">Скачать</a></b> ({{ $filesize }})<br>
+                    <i class="fa fa-download"></i> <b><a href="/down/download/{{ $file->id }}">Скачать</a></b> ({{ $file->size }})<br>
                 @else
                     <div class="form">
-                        <form action="/down/download/{{ $down->id }}" method="post">
+                        <form action="/down/download/{{ $file->id }}" method="post">
                             {!! view('app/_captcha') !!}
-                            <button class="btn btn-primary">Скачать ({{ $filesize }})</button>
+                            <button class="btn btn-primary">Скачать ({{ $file->size }})</button>
                         </form>
                     </div><br>
                 @endif
@@ -95,36 +92,39 @@
         @endif
         <br>
 
-        <i class="fa fa-comment"></i> <b><a href="/down/comments/{{ $down->id }}">Комментарии</a></b> ({{ $down->count_comments }})
-        <a href="/down/end/{{ $down->id }}">&raquo;</a><br>
-
-        <br>Рейтинг: {!! ratingVote($rating) !!}<br>
-        Всего голосов: <b>{{ $down->rated }}</b><br>
-        Всего скачиваний: <b>{{ $down->loads }}</b><br><br>
-
-        @if (getUser() && getUser('id') != $down->user_id)
-
-            <label for="score">Проверочный код:</label><br>
-            <form class="form-inline" action="/down/vote/{{ $down->id }}" method="post">
-                <input type="hidden" name="token" value="{{ $_SESSION['token'] }}">
-
-                <div class="form-group{{ hasError('score') }}">
-                    <select class="form-control" id="score" name="score">
-                        <option value="5" {{ $down->vote == 5 ? ' selected' : '' }}>Отлично</option>
-                        <option value="4" {{ $down->vote == 4 ? ' selected' : '' }}>Хорошо</option>
-                        <option value="3" {{ $down->vote == 3 ? ' selected' : '' }}>Нормально</option>
-                        <option value="2" {{ $down->vote == 2 ? ' selected' : '' }}>Плохо</option>
-                        <option value="1" {{ $down->vote == 1 ? ' selected' : '' }}>Отстой</option>
-                    </select>
-                    {!! textError('protect') !!}
-                </div>
-                <button class="btn btn-primary">Оценить</button>
-            </form>
-
-            {{--<br><label for="text">Скопировать адрес:</label><br>
-            <input class="form-control" name="text" id="text" value="{{ siteUrl(true) }}/uploads/files/{{ $down->link }}"><br>--}}
-        @endif
     @else
         {!! showError('Файлы еще не загружены!') !!}
+    @endif
+
+    Добавлено: {!! profile($down->user) !!} ({{ dateFixed($down->created_at) }})<hr>
+
+    <i class="fa fa-comment"></i> <b><a href="/down/comments/{{ $down->id }}">Комментарии</a></b> ({{ $down->count_comments }})
+    <a href="/down/end/{{ $down->id }}">&raquo;</a><br>
+
+    <br>Рейтинг: {!! ratingVote($rating) !!}<br>
+    Всего голосов: <b>{{ $down->rated }}</b><br>
+    Всего скачиваний: <b>{{ $down->loads }}</b><br><br>
+
+    @if (getUser() && getUser('id') != $down->user_id)
+
+        <label for="score">Проверочный код:</label><br>
+        <form class="form-inline" action="/down/vote/{{ $down->id }}" method="post">
+            <input type="hidden" name="token" value="{{ $_SESSION['token'] }}">
+
+            <div class="form-group{{ hasError('score') }}">
+                <select class="form-control" id="score" name="score">
+                    <option value="5" {{ $down->vote == 5 ? ' selected' : '' }}>Отлично</option>
+                    <option value="4" {{ $down->vote == 4 ? ' selected' : '' }}>Хорошо</option>
+                    <option value="3" {{ $down->vote == 3 ? ' selected' : '' }}>Нормально</option>
+                    <option value="2" {{ $down->vote == 2 ? ' selected' : '' }}>Плохо</option>
+                    <option value="1" {{ $down->vote == 1 ? ' selected' : '' }}>Отстой</option>
+                </select>
+                {!! textError('protect') !!}
+            </div>
+            <button class="btn btn-primary">Оценить</button>
+        </form>
+
+        {{--<br><label for="text">Скопировать адрес:</label><br>
+        <input class="form-control" name="text" id="text" value="{{ siteUrl(true) }}/uploads/files/{{ $down->link }}"><br>--}}
     @endif
 @stop
