@@ -86,7 +86,7 @@ class PhotoController extends BaseController
 
             if ($validator->isValid()) {
 
-                $link = uploadImage($photo, UPLOADS.'/pictures/');
+                $link = uploadFile($photo, UPLOADS.'/pictures/');
 
                 $photo = Photo::query()->create([
                     'user_id'    => getUser('id'),

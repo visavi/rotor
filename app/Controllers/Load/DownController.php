@@ -45,22 +45,13 @@ class DownController extends BaseController
 
         $rating = $down->rated ? round($down->rating / $down->rated, 1) : 0;
 
-        if ($down->files->isNotEmpty()) {
+        $file = $down->getFile();
 
-            $files  = [];
-            $images = [];
+        $images = $down->files->filter(function ($value, $key) {
+            return $value->isImage();
+        });
 
-            foreach ($down->files as $file) {
-
-                if ($file->isImage()) {
-                    $images[] = $file;
-                } else {
-                    $files[] = $file;
-                }
-            }
-        }
-
-        return view('load/down', compact('down', 'rating', 'files', 'images'));
+        return view('load/down', compact('down', 'rating', 'file', 'images'));
     }
 
     /**
@@ -120,16 +111,18 @@ class DownController extends BaseController
                 $rules = [
                     'maxsize'    => setting('fileupload'),
                     'extensions' => explode(',', setting('allowextload')),
-                    'maxweight'  => setting('screenupsize'),
-                    'minweight'  => 100,
                 ];
 
                 $validator->file($file, $rules, ['file' => 'Не удалось загрузить файл!']);
 
-                if ($images) {
-                    foreach ($images as $image) {
-                        $validator->file($image, $rules, ['images' => 'Не удалось загрузить файл!']);
-                    }
+                $rules = [
+                    'maxsize'    => setting('fileupload'),
+                    'maxweight'  => setting('screenupsize'),
+                    'minweight'  => 100,
+                ];
+
+                foreach ($images as $image) {
+                    $validator->file($image, $rules, ['images' => 'Не удалось загрузить файл!']);
                 }
             }
 
@@ -143,33 +136,20 @@ class DownController extends BaseController
                     'created_at'  => SITETIME,
                 ]);
 
-                $fileName = uniqueName($file->getClientOriginalExtension());
-                $file->move(UPLOADS . '/files/', $fileName);
+                $files = array_merge(array_wrap($file), $images);
 
-                File::query()->create([
-                    'relate_id'   => $down->id,
-                    'relate_type' => Down::class,
-                    'hash'        => $fileName,
-                    'name'        => $file->getClientOriginalName(),
-                    'size'        => $file->getClientSize(),
-                    'user_id'     => $user->id,
-                    'created_at'  => SITETIME,
-                ]);
+                foreach ($files as $file) {
+                    $fileName = uploadFile($file, UPLOADS . '/files/');
 
-                if ($images) {
-                    foreach ($images as $image) {
-                        $fileName = uploadImage($image, UPLOADS . '/files/');
-
-                        File::query()->create([
-                            'relate_id'   => $down->id,
-                            'relate_type' => Down::class,
-                            'hash'        => $fileName,
-                            'name'        => $image->getClientOriginalName(),
-                            'size'        => $image->getClientSize(),
-                            'user_id'     => $user->id,
-                            'created_at'  => SITETIME,
-                        ]);
-                    }
+                    File::query()->create([
+                        'relate_id'   => $down->id,
+                        'relate_type' => Down::class,
+                        'hash'        => $fileName,
+                        'name'        => $file->getClientOriginalName(),
+                        'size'        => $file->getClientSize(),
+                        'user_id'     => $user->id,
+                        'created_at'  => SITETIME,
+                    ]);
                 }
 
                 setFlash('success', 'Файл успешно загружен!');
@@ -250,40 +230,48 @@ class DownController extends BaseController
      */
     public function download($id)
     {
-        $file = File::query()->where('relate_type', Down::class)->find($id);
+        $down = Down::query()->find($id);
 
-        if (! $file || ! $file->relate) {
+        if (! $down) {
             abort(404, 'Данного файла не существует!');
+        }
+
+        if (! $down->active) {
+            abort('default', 'Данный файл еще не проверен модератором!');
+        }
+
+        if (! $file = $down->getFile()) {
+            abort('default', 'Файла не существует!');
         }
 
         $validator = new Validator();
         $validator
             ->true(file_exists(UPLOADS . '/files/' . $file->hash), 'Файла для скачивания не существует!')
-            ->notEmpty($file->relate->active, 'Данный файл еще не проверен модератором!');
+            ->true(getUser() || captchaVerify(), ['protect' => 'Не удалось пройти проверку captcha!']);
 
         if ($validator->isValid()) {
 
             $reads = Read::query()
                 ->where('relate_type', Down::class)
-                ->where('relate_id', $file->relate->id)
+                ->where('relate_id', $down->id)
                 ->where('ip', getIp())
                 ->first();
 
             if (! $reads) {
                 Read::query()->create([
                     'relate_type' => Down::class,
-                    'relate_id'   => $file->relate->id,
+                    'relate_id'   => $down->id,
                     'ip'          => getIp(),
                     'created_at'  => SITETIME,
                 ]);
 
-                $file->relate->increment('loads');
+                $down->increment('loads');
             }
 
             redirect('/uploads/files/' . $file->hash);
         } else {
             setFlash('danger', $validator->getErrors());
-            redirect('/down/' . $file->relate->id);
+            redirect('/down/' . $down->id);
         }
     }
 
@@ -441,14 +429,18 @@ class DownController extends BaseController
      */
     public function zip($id)
     {
-        $file = File::query()->where('relate_type', Down::class)->find($id);
+        $down = Down::query()->find($id);
 
-        if (! $file || ! $file->relate) {
+        if (! $down) {
             abort(404, 'Данного файла не существует!');
         }
 
-        if (! $file->relate->active) {
+        if (! $down->active) {
             abort('default', 'Данный файл еще не проверен модератором!');
+        }
+
+        if (! $file = $down->getFile()) {
+            abort('default', 'Файла не существует!');
         }
 
         if ($file->extension !== 'zip') {
@@ -468,7 +460,7 @@ class DownController extends BaseController
         $viewExt   = Down::getViewExt();
         $documents = array_slice($getDocuments, $page->offset, $page->limit, true);
 
-        return view('load/zip', compact('file', 'documents', 'page', 'viewExt'));
+        return view('load/zip', compact('down', 'documents', 'page', 'viewExt'));
     }
 
     /**
@@ -476,14 +468,18 @@ class DownController extends BaseController
      */
     public function zipView($id, $fid)
     {
-        $file = File::query()->where('relate_type', Down::class)->find($id);
+        $down = Down::query()->find($id);
 
-        if (! $file || ! $file->relate) {
+        if (! $down) {
             abort(404, 'Данного файла не существует!');
         }
 
-        if (! $file->relate->active) {
+        if (! $down->active) {
             abort('default', 'Данный файл еще не проверен модератором!');
+        }
+
+        if (! $file = $down->getFile()) {
+            abort('default', 'Файла не существует!');
         }
 
         if ($file->extension !== 'zip') {
@@ -520,7 +516,7 @@ class DownController extends BaseController
             $content = winToUtf($content);
         }
 
-        return view('load/zip_view', compact('file', 'document', 'content'));
+        return view('load/zip_view', compact('down', 'document', 'content'));
     }
 
     /**

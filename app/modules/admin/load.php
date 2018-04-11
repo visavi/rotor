@@ -212,7 +212,7 @@ case 'loadscreen':
             if (is_uploaded_file($_FILES['screen']['tmp_name'])) {
 
                 // ------------------------------------------------------//
-                $handle = uploadImage($_FILES['screen'], setting('screenupload'), setting('screenupsize'), $down['link']);
+                $handle = uploadFile($_FILES['screen'], setting('screenupload'), setting('screenupsize'), $down['link']);
                 if ($handle) {
                     $folder = $down['folder'] ? $down['folder'].'/' : '';
 

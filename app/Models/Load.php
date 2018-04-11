@@ -43,6 +43,7 @@ class Load extends BaseModel
     {
         return $this->hasOne(Down::class, 'category_id')
             ->selectRaw('category_id, count(*) as count_downs')
+            ->where('active', 1)
             ->where('created_at', '>', strtotime('-3 day', SITETIME))
             ->groupBy('category_id');
     }

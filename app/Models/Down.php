@@ -55,6 +55,16 @@ class Down extends BaseModel
     }
 
     /**
+     * Возвращает главный файл
+     */
+    public function getFile()
+    {
+        return $this->files->first(function ($value, $key) {
+            return ! $value->isImage();
+        });
+    }
+
+    /**
      * Обрезает текст
      *
      * @return string

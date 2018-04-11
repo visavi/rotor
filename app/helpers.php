@@ -1536,12 +1536,18 @@ function formatNum($num)
  * Загружает изображение
  *
  * @param  UploadedFile $file путь изображения
- * @param  int          $path путь сохранения изображения
+ * @param  string       $path путь сохранения изображения
  * @return string             имя загруженного файла
  */
-function uploadImage(UploadedFile $file, $path)
+function uploadFile(UploadedFile $file, $path)
 {
-    $picture = uniqueName($file->getClientOriginalExtension());
+    $extension = $file->getClientOriginalExtension();
+    $fileName  = uniqueName($extension);
+
+    if (! in_array($extension, ['jpg', 'jpeg', 'gif', 'png'])) {
+        $file = $file->move(UPLOADS . '/files/', $fileName);
+        return $file->getFilename();
+    }
 
     $img = Image::make($file);
     $img->resize(setting('screensize'), setting('screensize'), function ($constraint) {
@@ -1553,7 +1559,7 @@ function uploadImage(UploadedFile $file, $path)
         $img->insert(HOME . '/assets/img/images/watermark.png', 'bottom-right', 10, 10);
     }
 
-    $img->save($path . $picture);
+    $img->save($path . $fileName);
 
     return $img->basename;
 }
@@ -2061,7 +2067,6 @@ function getIp()
 {
     $ip = Request::ip();
     return $ip === '::1' ? '127.0.0.1' : $ip;
-    return '';
 }
 
 /**

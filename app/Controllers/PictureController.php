@@ -54,7 +54,7 @@ class PictureController extends BaseController
                     $this->user->save();
                 }
 
-                $picture = uploadImage($photo, UPLOADS.'/photos/');
+                $picture = uploadFile($photo, UPLOADS.'/photos/');
                 $avatar  = uniqueName('png');
 
                 //-------- Генерируем аватар ----------//

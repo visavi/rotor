@@ -57,6 +57,10 @@ a:hover {
     text-decoration: none;
 }
 
+a.btn {
+    color: #fff;
+}
+
 .content {
 
 }
@@ -67,8 +71,6 @@ a:hover {
 }
 
 .site a {
-    padding : 1px;
-    line-height: 20px;
     border-bottom: 1px solid #e6e5e5;
 }
 

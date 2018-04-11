@@ -41,12 +41,21 @@
         {!! bbCode($down->text) !!}
     </div><br>
 
-    @if ($files || $images)
-        @foreach ($files as $file)
+    @if ($down->files->isNotEmpty())
 
-            @if ($file->hash && file_exists(UPLOADS.'/files/'.$file->hash))
+        @if ($file)
+            @if (file_exists(UPLOADS.'/files/'.$file->hash))
 
-                {!! icons($file->extension) !!} <b><a href="/down/download/{{ $file->id }}">{{ $file->name }}</a></b> ({{ formatSize($file->size) }})
+                @if (getUser())
+                    <i class="fa fa-download"></i> <b><a href="/down/download/{{ $down->id }}">{{ $file->name }}</a></b> ({{ formatSize($file->size) }})<br>
+                @else
+                    <div class="form">
+                        <form action="/down/download/{{ $file->id }}" method="post">
+                            {!! view('app/_captcha') !!}
+                            <button class="btn btn-primary">{{ $file->name }} ({{ formatSize($file->size) }})</button>
+                        </form>
+                    </div><br>
+                @endif
 
                 @if ($file->extension === 'mp3')
                     <audio preload="none" controls style="max-width:100%;">
@@ -63,30 +72,31 @@
                 @endif
 
                 @if ($file->extension === 'zip')
-                    <a href="/down/zip/{{ $file->id }}">Просмотреть архив</a><br>
+                    <i class="fa fa-archive"></i> <b><a href="/down/zip/{{ $down->id }}">Просмотреть архив</a></b><br>
                 @endif
+
+                <i class="fa fa-comment"></i> <b><a href="/down/comments/{{ $down->id }}">Комментарии</a></b> ({{ $down->count_comments }})
+                <a href="/down/end/{{ $down->id }}">&raquo;</a><br>
             @endif
-        @endforeach
+        @endif
 
         @if ($images)
-            <hr>
-            @foreach ($images as $image)
-                <a href="/uploads/files/{{ $image->hash }}" class="gallery" data-group="{{ $down->id }}">{!! resizeImage('uploads/files/', $image->hash, ['alt' => $down->title]) !!}</a>
-            @endforeach
+            <div class="mt-3">
+                @foreach ($images as $image)
+                    <a href="/uploads/files/{{ $image->hash }}" class="gallery" data-group="{{ $down->id }}">{!! resizeImage('uploads/files/', $image->hash, ['alt' => $down->title]) !!}</a>
+                @endforeach
+            </div>
         @endif
     @else
         {!! showError('Файлы еще не загружены!') !!}
     @endif
 
-    <div>
-        <i class="fa fa-comment"></i> <b><a href="/down/comments/{{ $down->id }}">Комментарии</a></b> ({{ $down->count_comments }})
-        <a href="/down/end/{{ $down->id }}">&raquo;</a><br><br>
+    <div class="mt-3">
+        Рейтинг: {!! ratingVote($rating) !!}<br>
+        Всего голосов: <b>{{ $down->rated }}</b><br>
+        Всего скачиваний: <b>{{ $down->loads }}</b><br>
+        Добавлено: {!! profile($down->user) !!} ({{ dateFixed($down->created_at) }})<br><br>
     </div>
-
-    Рейтинг: {!! ratingVote($rating) !!}<br>
-    Всего голосов: <b>{{ $down->rated }}</b><br>
-    Всего скачиваний: <b>{{ $down->loads }}</b><br>
-    Добавлено: {!! profile($down->user) !!} ({{ dateFixed($down->created_at) }})<br><br>
 
     @if (getUser() && getUser('id') != $down->user_id)
 
