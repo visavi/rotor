@@ -265,6 +265,13 @@ class LoadController extends AdminController
             }
         }
 
-        return view('admin/load/edit_down', compact('down'));
+        $file = $down->getFile();
+
+        $images = $down->files->filter(function ($value, $key) {
+            return $value->isImage();
+        });
+
+
+        return view('admin/load/edit_down', compact('down', 'file', 'images'));
     }
 }

@@ -28,37 +28,6 @@
         <form action="/admin/down/edit/{{ $down->id }}" method="post" enctype="multipart/form-data">
             <input type="hidden" name="token" value="{{ $_SESSION['token'] }}">
 
-            @if ($down->link)
-                <i class="fa fa-download"></i>
-                <b><a href="/uploads/files/{{ $down->link }}">{{ $down->link }}</a></b> ({{ formatFileSize(UPLOADS . '/files/' . $down->link) }}) (<a href="/admin/load?act=delfile" onclick="return confirm('Вы действительно хотите удалить данный файл?')">Удалить</a>)<br>
-            @else
-                Прикрепить файл ({{ setting('allowextload') }}):<br>
-                <label class="btn btn-sm btn-secondary" for="file">
-                    <input id="file" type="file" name="file" onchange="$('#upload-file-info').html(this.files[0].name);" hidden>
-                    Прикрепить файл&hellip;
-                </label>
-                <span class="badge badge-info" id="upload-file-info"></span>
-                {!! textError('file') !!}
-                <br>
-            @endif
-
-            @if (! in_array($down->extension, ['jpg', 'jpeg', 'gif', 'png']))
-
-                @if ($down->screen)
-                    <i class="fa fa-image"></i> <b><a href="/uploads/screen/{{ $down->screen }}">{{ $down->screen }}</a></b> ({{ formatFileSize(UPLOADS.'/screen/' . $down->screen ) }}) (<a href="/admin/load?act=delscreen" onclick="return confirm('Вы действительно хотите удалить данный скриншот?')">Удалить</a>)<br><br>
-                    {!! resizeImage('uploads/screen/', $down->screen) !!}<br>
-                @else
-                    Прикрепить скрин (jpg,jpeg,gif,png)<br>
-                    <label class="btn btn-sm btn-secondary" for="screen">
-                        <input id="screen" type="file" name="screen" onchange="$('#upload-screen-info').html(this.files[0].name);" hidden>
-                        Прикрепить картинку&hellip;
-                    </label>
-                    <span class="badge badge-info" id="upload-screen-info"></span>
-                    {!! textError('screen') !!}
-                    <br>
-                @endif
-            @endif
-
             <div class="form-group{{ hasError('title') }}">
                 <label for="title">Название:</label>
                 <input class="form-control" name="title" id="title" maxlength="50" value="{{ getInput('title', $down->title) }}" required>
@@ -70,6 +39,44 @@
                 <textarea class="form-control markItUp" id="text" name="text" rows="5">{{ getInput('note', $down->text) }}</textarea>
                 {!! textError('text') !!}
             </div>
+
+            @if ($file)
+                <i class="fa fa-download"></i>
+                <b><a href="/uploads/files/{{ $file->hash }}">{{ $file->name }}</a></b> ({{ formatSize($file->size) }}) (<a href="/admin/load/delete/{{ $file->id }}" onclick="return confirm('Вы действительно хотите удалить данный файл?')">Удалить</a>)<br><br>
+            @else
+                Прикрепить файл ({{ setting('allowextload') }}):<br>
+                <label class="btn btn-sm btn-secondary" for="file">
+                    <input id="file" type="file" name="file" onchange="$('#upload-file-info').html(this.files[0].name);" hidden>
+                    Прикрепить файл&hellip;
+                </label>
+                <span class="badge badge-info" id="upload-file-info"></span>
+                {!! textError('file') !!}
+                <br>
+            @endif
+
+            @if ($images)
+                @foreach ($images as $image)
+                    {!! resizeImage('uploads/files/', $image->hash) !!}<br>
+                    <i class="fa fa-image"></i> <b><a href="/uploads/files/{{ $image->hash }}">{{ $image->name }}</a></b> ({{ formatSize($image->size ) }}) (<a href="/admin/load/delete/{{ $image->id }}" onclick="return confirm('Вы действительно хотите удалить данный скриншот?')">Удалить</a>)<br><br>
+                @endforeach
+            @endif
+
+            @if (count($images) < 5)
+                <label class="btn btn-sm btn-secondary" for="images">
+                    <input type="file" id="images" name="images[]" onchange="$('#upload-image-info').html((this.files.length > 1) ? this.files.length + ' файлов' : this.files[0].name);" hidden multiple>
+                    Прикрепить скриншоты&hellip;
+                </label>
+                <span class="badge badge-info" id="upload-image-info"></span>
+                {!! textError('images') !!}
+                <br>
+            @endif
+
+            <p class="text-muted font-italic">
+                Можно загрузить до 5 скриншотов<br>
+                Максимальный вес файла: <b>{{ round(setting('fileupload') / 1024 / 1024) }}</b> Mb<br>
+                Допустимые расширения файлов: {{ str_replace(',', ', ', setting('allowextload')) }}<br>
+                Допустимые размеры картинок: от 100px до {{ setting('screenupsize') }}px
+            </p>
 
             <button class="btn btn-primary">Сохранить</button>
         </form>
