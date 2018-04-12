@@ -153,9 +153,9 @@ class DownController extends BaseController
         }
 
         if ($file->isImage()) {
-            deleteImage('upload/screen/', $file->hash);
+            deleteImage('uploads/screen/', $file->hash);
         } else {
-            if (file_exists('upload/files/' . $file->hash)) {
+            if (file_exists('uploads/files/' . $file->hash)) {
                 unlink(UPLOADS . '/files/' . $file->hash);
             }
         }
