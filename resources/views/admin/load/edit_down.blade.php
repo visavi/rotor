@@ -57,7 +57,7 @@
             @if ($images)
                 @foreach ($images as $image)
                     {!! resizeImage('uploads/files/', $image->hash) !!}<br>
-                    <i class="fa fa-image"></i> <b><a href="/uploads/files/{{ $image->hash }}">{{ $image->name }}</a></b> ({{ formatSize($image->size ) }}) (<a href="/admin/load/delete/{{ $image->id }}" onclick="return confirm('Вы действительно хотите удалить данный скриншот?')">Удалить</a>)<br><br>
+                    <i class="fa fa-image"></i> <b><a href="/uploads/screen/{{ $image->hash }}">{{ $image->name }}</a></b> ({{ formatSize($image->size ) }}) (<a href="/admin/load/delete/{{ $image->id }}" onclick="return confirm('Вы действительно хотите удалить данный скриншот?')">Удалить</a>)<br><br>
                 @endforeach
             @endif
 

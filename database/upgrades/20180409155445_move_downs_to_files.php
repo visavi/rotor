@@ -36,7 +36,7 @@ class MoveDownsToFiles extends AbstractMigration
                     $filesize = filesize($file);
                     $newName  = uniqueName(getExtension($file));
 
-                    rename($file, UPLOADS.'/files/'.$newName);
+                    rename($file, UPLOADS.'/screen/'.$newName);
                 } else {
                     $filesize = 0;
                     $newName  = '';

@@ -1545,7 +1545,7 @@ function uploadFile(UploadedFile $file, $path)
     $fileName  = uniqueName($extension);
 
     if (! in_array($extension, ['jpg', 'jpeg', 'gif', 'png'])) {
-        $file = $file->move(UPLOADS . '/files/', $fileName);
+        $file = $file->move($path . $fileName);
         return $file->getFilename();
     }
 

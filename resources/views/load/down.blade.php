@@ -83,7 +83,7 @@
         @if ($images)
             <div class="mt-3">
                 @foreach ($images as $image)
-                    <a href="/uploads/files/{{ $image->hash }}" class="gallery" data-group="{{ $down->id }}">{!! resizeImage('uploads/files/', $image->hash, ['alt' => $down->title]) !!}</a>
+                    <a href="/uploads/screen/{{ $image->hash }}" class="gallery" data-group="{{ $down->id }}">{!! resizeImage('uploads/screen/', $image->hash, ['alt' => $down->title]) !!}</a>
                 @endforeach
             </div>
         @endif

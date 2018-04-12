@@ -116,9 +116,9 @@ class DownController extends BaseController
                 $validator->file($file, $rules, ['file' => 'Не удалось загрузить файл!']);
 
                 $rules = [
-                    'maxsize'    => setting('fileupload'),
-                    'maxweight'  => setting('screenupsize'),
-                    'minweight'  => 100,
+                    'maxsize'   => setting('fileupload'),
+                    'maxweight' => setting('screenupsize'),
+                    'minweight' => 100,
                 ];
 
                 foreach ($images as $image) {
@@ -139,7 +139,12 @@ class DownController extends BaseController
                 $files = array_merge(array_wrap($file), $images);
 
                 foreach ($files as $file) {
-                    $fileName = uploadFile($file, UPLOADS . '/files/');
+
+                    if (in_array($file->getClientOriginalExtension(), ['jpg', 'jpeg', 'gif', 'png'])) {
+                        $fileName = uploadFile($file, UPLOADS . '/screen/');
+                    } else {
+                        $fileName = uploadFile($file, UPLOADS . '/files/');
+                    }
 
                     File::query()->create([
                         'relate_id'   => $down->id,
