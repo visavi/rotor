@@ -164,7 +164,7 @@ class SmileController extends AdminController
 
             if ($smiles->isNotEmpty()) {
                 foreach ($smiles as $smile) {
-                    deleteImage(UPLOADS.'/smiles/', $smile->name);
+                    deleteImage('upload/smiles/', $smile->name);
                     $smile->delete();
                 }
             }

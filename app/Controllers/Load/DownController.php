@@ -55,6 +55,118 @@ class DownController extends BaseController
     }
 
     /**
+     * Редактирование загрузки
+     */
+    public function edit($id)
+    {
+        $down = Down::query()->where('user_id', getUser('id'))->find($id);
+
+        if (! $down) {
+            abort(404, 'Файла не существует или вы не автор данной загрузки!');
+        }
+
+        if ($down->active) {
+            abort('default', 'Данный файл уже проверен модератором!');
+        }
+
+        if (Request::isMethod('post')) {
+            $token  = check(Request::input('token'));
+            $title  = check(Request::input('title'));
+            $text   = check(Request::input('text'));
+            $file   = Request::file('file');
+            $images = (array) Request::file('images');
+
+            $validator = new Validator();
+            $validator->equal($token, $_SESSION['token'], 'Неверный идентификатор сессии, повторите действие!')
+                ->length($title, 5, 50, ['title' => 'Слишком длинное или короткое название!'])
+                ->length($text, 50, 5000, ['text' => 'Слишком длинное или короткое описание!']);
+
+            $duplicate = Down::query()->where('title', $title)->where('id', '<>', $down->id)->count();
+            $validator->empty($duplicate, ['title' => 'Загрузка с аналогичный названием уже существует!']);
+
+            $validator->lte(count($images), 5, ['file' => 'Разрешено загружать не более 5 скриншотов']);
+
+            if ($validator->isValid()) {
+
+
+                $xxx = (bool) array_intersect(['jpg', 'jpeg', 'gif', 'png'], explode(',', setting('allowextload')));
+
+
+                if (! $down->getFile()) {
+                    $rules = [
+                        'maxsize'    => setting('fileupload'),
+                        'extensions' => explode(',', setting('allowextload')),
+                    ];
+
+                    $validator->file($file, $rules, ['file' => 'Не удалось загрузить файл!']);
+                }
+
+                $rules = [
+                    'maxsize'   => setting('fileupload'),
+                    'maxweight' => setting('screenupsize'),
+                    'minweight' => 100,
+                ];
+
+                foreach ($images as $image) {
+                    $validator->file($image, $rules, ['images' => 'Не удалось загрузить файл!']);
+                }
+            }
+
+            if ($validator->isValid()) {
+
+                $down->update([
+                    'title' => $title,
+                    'text'  => $text,
+                ]);
+
+                setFlash('success', 'Загрузка успешно отредактирована!');
+                redirect('/down/' . $down->id);
+            } else {
+                setInput(Request::all());
+                setFlash('danger', $validator->getErrors());
+            }
+        }
+
+        $file   = $down->getFile();
+        $images = $down->files->filter(function ($value, $key) {
+            return $value->isImage();
+        });
+
+        return view('load/edit', compact('down', 'file', 'images'));
+    }
+
+    /**
+     * Удаление файла
+     */
+    public function deleteFile($id, $fid)
+    {
+        $down = Down::query()->where('user_id', getUser('id'))->find($id);
+
+        if (! $down) {
+            abort(404, 'Файла не существует или вы не автор данной загрузки!');
+        }
+
+        $file = File::query()->where('relate_id', $down->id)->find($fid);
+
+        if (! $file) {
+            abort('default', 'Файла не существует!');
+        }
+
+        if ($file->isImage()) {
+            deleteImage('upload/screen/', $file->hash);
+        } else {
+            if (file_exists('upload/files/' . $file->hash)) {
+                unlink(UPLOADS . '/files/' . $file->hash);
+            }
+        }
+
+        setFlash('success', 'Файл успешно удален!');
+        $file->delete();
+
+        redirect('/down/edit/' . $down->id);
+    }
+
+    /**
      * Создание загрузки
      */
     public function create()
@@ -99,10 +211,10 @@ class DownController extends BaseController
                 ->notEmpty($category, ['category' => 'Категории для данного файла не существует!']);
 
             if ($category) {
-                $validator->empty($category->closed, ['category' => 'В данный раздел запрещено загружать файлы!']);
+                $validator->empty($category->closed, ['category' => 'В данный раздел запрещено публиковать файлы!']);
 
-                $downCount = Down::query()->where('title', $title)->count();
-                $validator->false($downCount, ['title' => 'Файл с аналогичный названием уже имеется в загрузках!']);
+                $duplicate = Down::query()->where('title', $title)->count();
+                $validator->empty($duplicate, ['title' => 'Загрузка с аналогичный названием уже существует!']);
             }
 
             $validator->lte(count($images), 5, ['file' => 'Разрешено загружать не более 5 скриншотов']);

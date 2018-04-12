@@ -248,7 +248,10 @@ class LoadController extends AdminController
             $validator = new Validator();
             $validator->equal($token, $_SESSION['token'], 'Неверный идентификатор сессии, повторите действие!')
                 ->length($title, 5, 50, ['title' => 'Слишком длинное или короткое название!'])
-                ->length($text, 10, 5000, ['text' => 'Слишком длинное или короткое описание!']);
+                ->length($text, 50, 5000, ['text' => 'Слишком длинное или короткое описание!']);
+
+            $duplicate = Down::query()->where('title', $title)->where('id', '<>', $down->id)->count();
+            $validator->empty($duplicate, ['title' => 'Загрузка с аналогичный названием уже существует!']);
 
             if ($validator->isValid()) {
 
@@ -265,12 +268,10 @@ class LoadController extends AdminController
             }
         }
 
-        $file = $down->getFile();
-
+        $file   = $down->getFile();
         $images = $down->files->filter(function ($value, $key) {
             return $value->isImage();
         });
-
 
         return view('admin/load/edit_down', compact('down', 'file', 'images'));
     }

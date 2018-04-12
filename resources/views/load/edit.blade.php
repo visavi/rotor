@@ -1,31 +1,34 @@
 @extends('layout')
 
 @section('title')
-    Редактирование загрузки {{ $down->title }}
+    Редактирование загрузки
 @stop
 
 @section('content')
-
-    <h1>Редактирование загрузки {{ $down->title }}</h1>
+    <h1>Редактирование загрузки</h1>
 
     <nav>
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
-            <li class="breadcrumb-item"><a href="/admin">Панель</a></li>
-            <li class="breadcrumb-item"><a href="/admin/load">Загрузки</a></li>
+            <li class="breadcrumb-item"><a href="/load">Загрузки</a></li>
 
             @if ($down->category->parent->id)
-                <li class="breadcrumb-item"><a href="/admin/load/{{ $down->category->parent->id }}">{{ $down->category->parent->name }}</a></li>
+                <li class="breadcrumb-item"><a href="/load/{{ $down->category->parent->id }}">{{ $down->category->parent->name }}</a></li>
             @endif
 
-            <li class="breadcrumb-item"><a href="/admin/load/{{ $down->category->id }}">{{ $down->category->name }}</a></li>
-            <li class="breadcrumb-item active">Редактирование</li>
-            <li class="breadcrumb-item"><a href="/down/{{ $down->id }}">Обзор загрузки</a></li>
+            <li class="breadcrumb-item"><a href="/load/{{ $down->category->id }}">{{ $down->category->name }}</a></li>
+            <li class="breadcrumb-item"><a href="/down/{{ $down->id }}">{{ $down->title }}</a></li>
+            <li class="breadcrumb-item active">Редактирование загрузки</li>
         </ol>
     </nav>
 
+    <div class="info">
+        <b>Внимание!</b> Данная загрузка ожидает проверки модератором!<br>
+        После проверки вы не сможете отредактировать описание и загрузить файл или скриншот
+    </div><br>
+
     <div class="form mb-3">
-        <form action="/admin/down/edit/{{ $down->id }}" method="post" enctype="multipart/form-data">
+        <form action="/down/edit/{{ $down->id }}" method="post" enctype="multipart/form-data">
             <input type="hidden" name="token" value="{{ $_SESSION['token'] }}">
 
             <div class="form-group{{ hasError('title') }}">
@@ -42,7 +45,7 @@
 
             @if ($file)
                 <i class="fa fa-download"></i>
-                <b><a href="/uploads/files/{{ $file->hash }}">{{ $file->name }}</a></b> ({{ formatSize($file->size) }}) (<a href="/admin/load/delete/{{ $file->id }}" onclick="return confirm('Вы действительно хотите удалить данный файл?')">Удалить</a>)<br><br>
+                <b><a href="/uploads/files/{{ $file->hash }}">{{ $file->name }}</a></b> ({{ formatSize($file->size) }}) (<a href="/down/delete/{{ $down->id }}/{{ $file->id }}" onclick="return confirm('Вы действительно хотите удалить данный файл?')">Удалить</a>)<br><br>
             @else
                 Прикрепить файл ({{ setting('allowextload') }}):<br>
                 <label class="btn btn-sm btn-secondary" for="file">
@@ -57,7 +60,7 @@
             @if ($images)
                 @foreach ($images as $image)
                     {!! resizeImage('uploads/screen/', $image->hash) !!}<br>
-                    <i class="fa fa-image"></i> <b><a href="/uploads/screen/{{ $image->hash }}">{{ $image->name }}</a></b> ({{ formatSize($image->size ) }}) (<a href="/admin/load/delete/{{ $image->id }}" onclick="return confirm('Вы действительно хотите удалить данный скриншот?')">Удалить</a>)<br><br>
+                    <i class="fa fa-image"></i> <b><a href="/uploads/screen/{{ $image->hash }}">{{ $image->name }}</a></b> ({{ formatSize($image->size ) }}) (<a href="/down/delete/{{ $down->id }}/{{ $image->id }}" onclick="return confirm('Вы действительно хотите удалить данный скриншот?')">Удалить</a>)<br><br>
                 @endforeach
             @endif
 
