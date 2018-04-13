@@ -1033,7 +1033,7 @@ function cryptMail($mail)
     $symbols = str_split($mail);
 
     foreach ($symbols as $symbol) {
-        $output  . = '&#' . ord($symbol) . ';';
+        $output  .= '&#' . ord($symbol) . ';';
     }
 
     return $output;
