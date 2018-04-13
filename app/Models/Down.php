@@ -2,6 +2,8 @@
 
 namespace App\Models;
 
+use Illuminate\Http\UploadedFile;
+
 class Down extends BaseModel
 {
     /**
@@ -55,12 +57,22 @@ class Down extends BaseModel
     }
 
     /**
-     * Возвращает главный файл
+     * Возвращает файлы
      */
-    public function getFile()
+    public function getFiles()
     {
-        return $this->files->first(function ($value, $key) {
+        return $this->files->filter(function ($value, $key) {
             return ! $value->isImage();
+        });
+    }
+
+    /**
+     * Возвращает картинки
+     */
+    public function getImages()
+    {
+        return $this->files->filter(function ($value, $key) {
+            return $value->isImage();
         });
     }
 
@@ -87,5 +99,27 @@ class Down extends BaseModel
     public static function getViewExt()
     {
         return self::$viewExt;
+    }
+
+    /**
+     * Загружает файл
+     *
+     * @param UploadedFile $file
+     * @return void
+     */
+    public function uploadFile(UploadedFile $file)
+    {
+        $path = in_array($file->getClientOriginalExtension(), ['jpg', 'jpeg', 'gif', 'png']) ? 'screen' : 'files';
+        $fileName = uploadFile($file, UPLOADS . '/' . $path . '/');
+
+        File::query()->create([
+            'relate_id'   => $this->id,
+            'relate_type' => self::class,
+            'hash'        => $fileName,
+            'name'        => $file->getClientOriginalName(),
+            'size'        => $file->getClientSize(),
+            'user_id'     => getUser('id'),
+            'created_at'  => SITETIME,
+        ]);
     }
 }

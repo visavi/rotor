@@ -91,7 +91,7 @@ if (isAdmin()) {
 
                         if (!empty($new['screen'])) {
                             echo '<i class="fa fa-image"></i> <b><a href="/uploads/screen/'.$folder.$new['screen'].'">'.$new['screen'].'</a></b> ('.formatFileSize(UPLOADS.'/screen/'.$folder.$new['screen']).') (<a href="/admin/newload?act=delscreen&amp;id='.$id.'" onclick="return confirm(\'Вы действительно хотите удалить данный скриншот?\')">Удалить</a>)<br><br>';
-                            echo resizeImage('uploads/screen/'.$folder, $new['screen']).'<br>';
+                            echo resizeImage(UPLOADS . '/screen/' . $folder, $new['screen']).'<br>';
                         } else {
                             echo '<i class="fa fa-image"></i> <b>Не загружен</b><br>';
                         }
@@ -218,7 +218,7 @@ if (isAdmin()) {
 
                                                                         $screen = $link.'.'.getExtension($new['screen']);
                                                                         rename(UPLOADS.'/screen/'.$folder.$new['screen'], UPLOADS.'/screen/'.$screen);
-                                                                        deleteImage('uploads/screen/'.$folder, $new['screen']);
+                                                                        deleteFile(UPLOADS . '/screen/' . $new['screen']);
                                                                     }
                                                                     DB::update("UPDATE `downs` SET `link`=?, `screen`=? WHERE `id`=?;", [$link, $screen, $id]);
                                                                 }
@@ -345,7 +345,7 @@ if (isAdmin()) {
                         unlink(UPLOADS.'/files/'.$folder.$link['link']);
                     }
 
-                    deleteImage('uploads/screen/'.$folder, $link['screen']);
+                    deleteFile(UPLOADS . '/screen/' . $link['screen']);
 
                     DB::update("UPDATE `downs` SET `link`=?, `screen`=? WHERE `id`=?;", ['', '', $id]);
 
@@ -374,7 +374,7 @@ if (isAdmin()) {
             if (!empty($screen)) {
                 if (empty($screen['active'])) {
 
-                    deleteImage('uploads/screen/'.$folder, $screen['screen']);
+                    deleteFile(UPLOADS . '/screen/' . $screen['screen']);
 
                     DB::update("UPDATE `downs` SET `screen`=? WHERE `id`=?;", ['', $id]);
 
@@ -422,7 +422,7 @@ if (isAdmin()) {
                             unlink(UPLOADS.'/files/'.$folder.$delfile['link']);
                         }
 
-                        deleteImage('uploads/screen/'.$folder, $delfile['screen']);
+                        deleteFile(UPLOADS . '/screen/' . $delfile['screen']);
                     }
 
                     setFlash('success', 'Выбранные файлы успешно удалены!');

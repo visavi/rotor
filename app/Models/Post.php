@@ -51,7 +51,7 @@ class Post extends BaseModel
     public function delete()
     {
         $this->files->each(function($file) {
-            deleteImage('uploads/forum/', $this->topic_id . '/' . $file->hash);
+            deleteFile(UPLOADS . '/forum/' . $this->topic_id . '/' . $file->hash);
             $file->delete();
         });
 

@@ -99,8 +99,8 @@ function dateFixed($timestamp, $format = 'd.m.y / H:i')
  */
 function deleteUser(User $user)
 {
-    deleteImage('uploads/photos/', $user->picture);
-    deleteImage('uploads/avatars/', $user->avatar);
+    deleteFile(UPLOADS . '/photos/' . $user->picture);
+    deleteFile(UPLOADS . '/avatars/' . $user->avatar);
 
     Inbox::query()->where('user_id', $user->id)->delete();
     Outbox::query()->where('user_id', $user->id)->delete();
@@ -138,36 +138,32 @@ function deleteAlbum(User $user)
 
             Photo::query()->where('id', $photo->id)->delete();
 
-            deleteImage('uploads/pictures/', $photo->link);
+            deleteFile(UPLOADS . '/pictures/' . $photo->link);
         }
     }
 }
 
 /**
- * Удаляет изображение и превью
+ * Удаляет файл и превью
  *
- * @param string $dir   директория с изображение
- * @param string $image имя изображения
+ * @param string $path путь к файлу
  * @return bool
  */
-function deleteImage($dir, $image)
+function deleteFile($path)
 {
-    if (! $image) {
-        return true;
+    if (file_exists($path)) {
+        unlink($path);
     }
 
-    $path = str_replace('/', '_', $dir.$image);
+    $thumb = ltrim(str_replace([HOME, '/'], ['', '_'], $path), '_');
 
-    if (file_exists(HOME.'/'.$dir.$image)) {
-        unlink(HOME.'/'.$dir.$image);
-    }
-
-    if (file_exists(UPLOADS.'/thumbnail/'.$path)) {
-        unlink(UPLOADS.'/thumbnail/'.$path);
+    if (file_exists(UPLOADS.'/thumbnail/' . $thumb)) {
+        unlink(UPLOADS.'/thumbnail/' . $thumb);
     }
 
     return true;
 }
+
 
 /**
  * Конвертирует строку в кодировку utf-8
@@ -1333,7 +1329,7 @@ function recentPhotos($show = 5)
 
     if ($photos) {
         foreach ($photos as $data) {
-            echo '<a href="/gallery/'.$data->id.'">'.resizeImage('uploads/pictures/', $data->link, ['alt' => $data->title, 'class' => 'rounded', 'style' => 'width: 100px; height: 100px;']).'</a>';
+            echo '<a href="/gallery/'.$data->id.'">'.resizeImage(UPLOADS . '/pictures/' . $data->link, ['alt' => $data->title, 'class' => 'rounded', 'style' => 'width: 100px; height: 100px;']).'</a>';
         }
 
         echo '<br>';
@@ -1545,8 +1541,8 @@ function uploadFile(UploadedFile $file, $path)
     $fileName  = uniqueName($extension);
 
     if (! in_array($extension, ['jpg', 'jpeg', 'gif', 'png'])) {
-        $file = $file->move($path . $fileName);
-        return $file->getFilename();
+        $file->move($path, $fileName);
+        return $fileName;
     }
 
     $img = Image::make($file);
@@ -1567,57 +1563,57 @@ function uploadFile(UploadedFile $file, $path)
 /**
  * Выполняет уменьшение и кеширование изображений
  *
- * @param  string $dir    путь изображения
- * @param  string $name   имя уменьшенного изображения
+ * @param  string $path   путь к изображению
  * @param  array  $params параметры изображения
  * @return string         уменьшенное изображение
  */
-function resizeImage($dir, $name, array $params = [])
+function resizeImage($path, array $params = [])
 {
-    if (! empty($name) && file_exists(HOME.'/'.$dir.$name)) {
-
-        $prepareName = str_replace('/', '_', $dir.$name);
-        list($width, $height) = getimagesize(HOME.'/'.$dir.$name);
-
-        if (empty($params['alt'])) {
-            $params['alt'] = $name;
-        }
-
-        if (empty($params['class'])) {
-            $params['class'] = 'img-fluid';
-        }
-
-        if (empty($params['size'])) {
-            $params['size'] = setting('previewsize');
-        }
-
-        $strParams = [];
-        foreach ($params as $key => $param) {
-            $strParams[] = $key.'="'.$param.'"';
-        }
-
-        $strParams = implode(' ', $strParams);
-
-        if ($width <= $params['size'] && $height <= $params['size']) {
-            return '<img src="/'.$dir.$name.'"'.$strParams.'>';
-        }
-
-        if (! file_exists(UPLOADS.'/thumbnail/'.$prepareName)) {
-
-            $img = Image::make(HOME.'/'.$dir.$name);
-
-            $img->fit($params['size'], $params['size'], function ($constraint) {
-                $constraint->upsize();
-            });
-
-            $img->save(UPLOADS . '/thumbnail/' . $prepareName);
-        }
-
-        return '<img src="/uploads/thumbnail/'.$prepareName.'"'.$strParams.'>';
+    if (! file_exists($path)) {
+        return '<img src="/assets/img/images/photo.jpg" alt="nophoto">';
     }
 
-    return '<img src="/assets/img/images/photo.jpg" alt="nophoto">';
+    if (empty($params['alt'])) {
+        $params['alt'] = basename($path);
+    }
+
+    if (empty($params['class'])) {
+        $params['class'] = 'img-fluid';
+    }
+
+    if (empty($params['size'])) {
+        $params['size'] = setting('previewsize');
+    }
+
+    $strParams = [];
+    foreach ($params as $key => $param) {
+        $strParams[] = $key . '="' . $param . '"';
+    }
+
+    $strParams = implode(' ', $strParams);
+
+    list($width, $height) = getimagesize($path);
+
+    if ($width <= $params['size'] && $height <= $params['size']) {
+        return '<img src="/' . $path . '"' . $strParams . '>';
+    }
+
+    $thumb = ltrim(str_replace([HOME, '/'], ['', '_'], $path), '_');
+
+    if (! file_exists(UPLOADS . '/thumbnail/' . $thumb)) {
+
+        $img = Image::make($path);
+
+        $img->fit($params['size'], $params['size'], function ($constraint) {
+            $constraint->upsize();
+        });
+
+        $img->save(UPLOADS . '/thumbnail/' . $thumb);
+    }
+
+    return '<img src="/uploads/thumbnail/' . $thumb . '" ' . $strParams . '>';
 }
+
 
 /**
  * Возвращает находится ли пользователь в контакатх

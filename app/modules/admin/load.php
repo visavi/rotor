@@ -257,7 +257,7 @@ case 'delfile':
             unlink(UPLOADS.'/files/'.$folder.$link['link']);
         }
 
-        deleteImage('uploads/screen/'.$folder, $link['screen']);
+        deleteFile(UPLOADS . '/screen/' . $link['screen']);
 
         DB::update("UPDATE `downs` SET `link`=?, `screen`=? WHERE `id`=?;", ['', '', $id]);
 
@@ -279,7 +279,7 @@ case 'delscreen':
     if (!empty($screen)) {
         $folder = $screen['folder'] ? $screen['folder'].'/' : '';
 
-        deleteImage('uploads/screen/'.$folder, $screen['screen']);
+        deleteFile(UPLOADS . '/screen/' . $screen['screen']);
 
         DB::update("UPDATE `downs` SET `screen`=? WHERE `id`=?;", ['', $id]);
 
@@ -426,7 +426,7 @@ case 'deldown':
                             unlink(UPLOADS.'/files/'.$folder.$delfile['link']);
                         }
 
-                        deleteImage('uploads/screen/'.$folder, $delfile['screen']);
+                        deleteFile(UPLOADS . '/screen/' . $delfile['screen']);
                     }
 
                     setFlash('success', 'Выбранные файлы успешно удалены!');

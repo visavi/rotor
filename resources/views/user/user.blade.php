@@ -104,7 +104,7 @@
             <div class="col-md-6">
                 @if (!empty($user->picture) && file_exists(UPLOADS.'/photos/'.$user->picture))
                     <a class="gallery" href="/uploads/photos/{{ $user->picture }}">
-                        {!! resizeImage('uploads/photos/', $user->picture, ['alt' => $user->login, 'class' => 'float-right img-fluid rounded']) !!}</a>
+                        {!! resizeImage(UPLOADS . '/photos/' . $user->picture, ['alt' => $user->login, 'class' => 'float-right img-fluid rounded']) !!}</a>
                 @else
                     <img src="/assets/img/images/photo.jpg" alt="Фото" class="float-right img-fluid rounded">
                 @endif

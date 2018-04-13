@@ -258,7 +258,7 @@ class UserController extends AdminController
 
                     if ($files->isNotEmpty()) {
                         foreach ($files as $file) {
-                            deleteImage('uploads/forum/', $posts[$file['relate_id']] . '/' . $file->hash);
+                            deleteFile(UPLOADS . '/forum/' . $posts[$file['relate_id']] . '/' . $file->hash);
                             $file->delete();
                         }
                     }

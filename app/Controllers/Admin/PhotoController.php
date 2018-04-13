@@ -108,7 +108,7 @@ class PhotoController extends AdminController
 
             if ($photos->isNotEmpty()) {
                 foreach ($photos as $photo) {
-                    deleteImage('uploads/pictures/', $photo->link);
+                    deleteFile(UPLOADS . '/pictures/' . $photo->link);
 
                     $photo->comments()->delete();
                     $photo->delete();

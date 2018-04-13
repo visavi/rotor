@@ -43,47 +43,38 @@
 
     @if ($down->files->isNotEmpty())
 
-        @if ($file)
-            @if (file_exists(UPLOADS.'/files/'.$file->hash))
+        @if ($files)
+            @foreach ($files as $file)
+                @if (file_exists(UPLOADS.'/files/'.$file->hash))
+                    <div class="mt-3">
+                        <i class="fa fa-download"></i> <b><a href="/down/download/{{ $file->id }}">{{ $file->name }}</a></b> ({{ formatSize($file->size) }})
 
-                @if (getUser())
-                    <i class="fa fa-download"></i> <b><a href="/down/download/{{ $down->id }}">{{ $file->name }}</a></b> ({{ formatSize($file->size) }})<br>
-                @else
-                    <div class="form">
-                        <form action="/down/download/{{ $file->id }}" method="post">
-                            {!! view('app/_captcha') !!}
-                            <button class="btn btn-primary">{{ $file->name }} ({{ formatSize($file->size) }})</button>
-                        </form>
-                    </div><br>
+                        @if ($file->extension === 'mp3')
+                            <audio preload="none" controls style="max-width:100%;">
+                                <source src="/uploads/files/{{ $file->hash }}" type="audio/mp3">
+                            </audio>
+                        @endif
+
+                        @if ($file->extension === 'mp4')
+                            <?php $poster = $images->isNotEmpty() ? '/uploads/screen/' . $images->first()->hash : null; ?>
+
+                           <video width="640" height="360" style="max-width:100%;" poster="{{ $poster }}" preload="none" controls playsinline>
+                               <source src="/uploads/files/{{ $file->hash }}" type="video/mp4">
+                           </video>
+                        @endif
+
+                        @if ($file->extension === 'zip')
+                            <a href="/down/zip/{{ $file->id }}">Просмотреть архив</a><br>
+                        @endif
+                    </div>
                 @endif
-
-                @if ($file->extension === 'mp3')
-                    <audio preload="none" controls style="max-width:100%;">
-                        <source src="/uploads/files/{{ $file->hash }}" type="audio/mp3">
-                    </audio><br/>
-                @endif
-
-                @if ($file->extension === 'mp4')
-                    <?php $poster = $images ? '/uploads/files/' . current($images)->hash : null; ?>
-
-                   <video width="640" height="360" style="max-width:100%;" poster="{{ $poster }}" preload="none" controls playsinline>
-                       <source src="/uploads/files/{{ $file->hash }}" type="video/mp4">
-                   </video>
-                @endif
-
-                @if ($file->extension === 'zip')
-                    <i class="fa fa-archive"></i> <b><a href="/down/zip/{{ $down->id }}">Просмотреть архив</a></b><br>
-                @endif
-
-                <i class="fa fa-comment"></i> <b><a href="/down/comments/{{ $down->id }}">Комментарии</a></b> ({{ $down->count_comments }})
-                <a href="/down/end/{{ $down->id }}">&raquo;</a><br>
-            @endif
+            @endforeach
         @endif
 
         @if ($images)
             <div class="mt-3">
                 @foreach ($images as $image)
-                    <a href="/uploads/screen/{{ $image->hash }}" class="gallery" data-group="{{ $down->id }}">{!! resizeImage('uploads/screen/', $image->hash, ['alt' => $down->title]) !!}</a>
+                    <a href="/uploads/screen/{{ $image->hash }}" class="gallery" data-group="{{ $down->id }}">{!! resizeImage(UPLOADS . '/screen/' . $image->hash, ['alt' => $down->title]) !!}</a><br>
                 @endforeach
             </div>
         @endif
@@ -92,6 +83,9 @@
     @endif
 
     <div class="mt-3">
+        <i class="fa fa-comment"></i> <a href="/down/comments/{{ $down->id }}">Комментарии</a> ({{ $down->count_comments }})
+        <a href="/down/end/{{ $down->id }}">&raquo;</a><br>
+
         Рейтинг: {!! ratingVote($rating) !!}<br>
         Всего голосов: <b>{{ $down->rated }}</b><br>
         Всего скачиваний: <b>{{ $down->loads }}</b><br>
