@@ -110,7 +110,7 @@ class Down extends BaseModel
     public function uploadFile(UploadedFile $file)
     {
         $path = in_array($file->getClientOriginalExtension(), ['jpg', 'jpeg', 'gif', 'png']) ? 'screen' : 'files';
-        $fileName = uploadFile($file, UPLOADS . '/' . $path . '/');
+        $fileName = uploadFile($file, UPLOADS . '/' . $path);
 
         File::query()->create([
             'relate_id'   => $this->id,

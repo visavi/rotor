@@ -158,7 +158,7 @@ function deleteFile($path)
     $thumb = ltrim(str_replace([HOME, '/'], ['', '_'], $path), '_');
 
     if (file_exists(UPLOADS.'/thumbnail/' . $thumb)) {
-        unlink(UPLOADS.'/thumbnail/' . $thumb);
+        unlink(UPLOADS . '/thumbnail/' . $thumb);
     }
 
     return true;
@@ -355,7 +355,7 @@ function antimat($str)
 
     if ($words) {
         foreach($words as $word) {
-            $str = preg_replace('|'.preg_quote($word).'|iu', '***', $str);
+            $str = preg_replace('|' . preg_quote($word) . '|iu', '***', $str);
         }
     }
 
@@ -407,7 +407,7 @@ function userLevel($level)
  */
 function saveStatus($time = 0)
 {
-    if (empty($time) || @filemtime(STORAGE.'/temp/status.dat') < time() - $time) {
+    if (empty($time) || @filemtime(STORAGE . '/temp/status.dat') < time() - $time) {
 
     $users = User::query()
         ->select('users.id', 'users.status', 'status.name', 'status.color')
@@ -421,19 +421,19 @@ function saveStatus($time = 0)
         foreach ($users as $user) {
 
             if ($user->status) {
-                $statuses[$user->id] = '<span style="color:#ff0000">'.$user->status.'</span>';
+                $statuses[$user->id] = '<span style="color:#ff0000">' . $user->status . '</span>';
                 continue;
             }
 
             if ($user->color) {
-                $statuses[$user->id] = '<span style="color:'.$user->color.'">'.$user->name.'</span>';
+                $statuses[$user->id] = '<span style="color:' . $user->color . '">' . $user->name . '</span>';
                 continue;
             }
 
             $statuses[$user->id] = $user->name;
         }
 
-        file_put_contents(STORAGE.'/temp/status.dat', json_encode($statuses, JSON_UNESCAPED_UNICODE), LOCK_EX);
+        file_put_contents(STORAGE . '/temp/status.dat', json_encode($statuses, JSON_UNESCAPED_UNICODE), LOCK_EX);
     }
 }
 
@@ -453,7 +453,7 @@ function userStatus(User $user)
 
     if (! $status) {
         saveStatus(3600);
-        $status = json_decode(file_get_contents(STORAGE.'/temp/status.dat'));
+        $status = json_decode(file_get_contents(STORAGE . '/temp/status.dat'));
     }
 
     return $status->{$user->id} ?? setting('statusdef');
@@ -536,10 +536,10 @@ function userMail(User $user)
 function defaultAvatar(User $user)
 {
     $name   = empty($user->name) ? $user->login : $user->name;
-    $color  = '#'.substr(dechex(crc32($user->login)), 0, 6);
+    $color  = '#' . substr(dechex(crc32($user->login)), 0, 6);
     $letter = mb_strtoupper(utfSubstr($name, 0, 1), 'utf-8');
 
-    return '<div class="avatar" style="background:'.$color.'"><a href="/user/'.$user->login.'">'.$letter.'</a></div>';
+    return '<div class="avatar" style="background:' . $color . '"><a href="/user/' . $user->login . '">' . $letter . '</a></div>';
 }
 
 /**
@@ -554,12 +554,12 @@ function userAvatar(User $user)
         return '<img src="/assets/img/images/avatar_guest.png" alt=""> ';
     }
 
-    if ($user->avatar && file_exists(UPLOADS.'/avatars/'.$user->avatar)) {
-        return '<a href="/user/'.$user->login.'"><img src="/uploads/avatars/'.$user->avatar.'" alt=""></a> ';
+    if ($user->avatar && file_exists(UPLOADS . '/avatars/' . $user->avatar)) {
+        return '<a href="/user/' . $user->login . '"><img src="/uploads/avatars/' . $user->avatar . '" alt=""></a> ';
     }
 
     return defaultAvatar($user);
-    //return '<a href="/user/'.$user->login.'"><img src="/assets/img/images/avatar_default.png" alt=""></a> ';
+    //return '<a href="/user/' . $user->login . '"><img src="/assets/img/images/avatar_default.png" alt=""></a> ';
 }
 
 /**
@@ -603,17 +603,17 @@ function userWall(User $user)
  */
 function statsOnline($cache = 30)
 {
-    if (@filemtime(STORAGE.'/temp/online.dat') < time() - $cache) {
+    if (@filemtime(STORAGE . '/temp/online.dat') < time() - $cache) {
 
         $online[] = Online::query()->whereNotNull('user_id')->count();
         $online[] = Online::query()->count();
 
-        include_once APP.'/Includes/count.php';
+        include_once APP . '/Includes/count.php';
 
-        file_put_contents(STORAGE.'/temp/online.dat', json_encode($online), LOCK_EX);
+        file_put_contents(STORAGE . '/temp/online.dat', json_encode($online), LOCK_EX);
     }
 
-    return json_decode(file_get_contents(STORAGE.'/temp/online.dat'));
+    return json_decode(file_get_contents(STORAGE . '/temp/online.dat'));
 }
 
 /**
@@ -637,12 +637,12 @@ function showOnline()
  */
 function statsCounter()
 {
-    if (@filemtime(STORAGE.'/temp/counter.dat') < time() - 10) {
+    if (@filemtime(STORAGE . '/temp/counter.dat') < time() - 10) {
         $counts = Counter::query()->first();
-        file_put_contents(STORAGE.'/temp/counter.dat', json_encode($counts), LOCK_EX);
+        file_put_contents(STORAGE . '/temp/counter.dat', json_encode($counts), LOCK_EX);
     }
 
-    return json_decode(file_get_contents(STORAGE.'/temp/counter.dat'));
+    return json_decode(file_get_contents(STORAGE . '/temp/counter.dat'));
 }
 
 /**
@@ -652,7 +652,7 @@ function statsCounter()
  */
 function showCounter()
 {
-    include_once APP.'/Includes/counters.php';
+    include_once APP . '/Includes/counters.php';
 
     if (setting('incount') > 0) {
         return view('app/_counter', ['count' => statsCounter()]);
@@ -668,7 +668,7 @@ function showCounter()
  */
 function statsUsers()
 {
-    if (@filemtime(STORAGE.'/temp/statusers.dat') < time() - 3600) {
+    if (@filemtime(STORAGE . '/temp/statusers.dat') < time() - 3600) {
 
         $startDay = mktime(0, 0, 0, dateFixed(SITETIME, 'n'));
 
@@ -676,13 +676,13 @@ function statsUsers()
         $new  = User::query()->where('created_at', '>', $startDay)->count();
 
         if ($new) {
-            $stat = $stat.'/+'.$new;
+            $stat = $stat . '/+' . $new;
         }
 
-        file_put_contents(STORAGE.'/temp/statusers.dat', $stat, LOCK_EX);
+        file_put_contents(STORAGE . '/temp/statusers.dat', $stat, LOCK_EX);
     }
 
-    return file_get_contents(STORAGE.'/temp/statusers.dat');
+    return file_get_contents(STORAGE . '/temp/statusers.dat');
 }
 
 /**
@@ -692,14 +692,14 @@ function statsUsers()
  */
 function statsAdmins()
 {
-    if (@filemtime(STORAGE.'/temp/statadmins.dat') < time() - 3600) {
+    if (@filemtime(STORAGE . '/temp/statadmins.dat') < time() - 3600) {
 
         $total = User::query()->whereIn('level', User::ADMIN_GROUPS)->count();
 
-        file_put_contents(STORAGE.'/temp/statadmins.dat', $total, LOCK_EX);
+        file_put_contents(STORAGE . '/temp/statadmins.dat', $total, LOCK_EX);
     }
 
-    return file_get_contents(STORAGE.'/temp/statadmins.dat');
+    return file_get_contents(STORAGE . '/temp/statadmins.dat');
 }
 
 /**
@@ -762,18 +762,18 @@ function statsIpBanned()
  */
 function statsGallery()
 {
-    if (@filemtime(STORAGE.'/temp/statgallery.dat') < time() - 900) {
+    if (@filemtime(STORAGE . '/temp/statgallery.dat') < time() - 900) {
         $stat     = Photo::query()->count();
         $totalNew = Photo::query()->where('created_at', '>', strtotime('-3 day', SITETIME))->count();
 
         if ($totalNew) {
-            $stat = $stat.'/+'.$totalNew;
+            $stat = $stat . '/+' . $totalNew;
         }
 
-        file_put_contents(STORAGE.'/temp/statgallery.dat', $stat, LOCK_EX);
+        file_put_contents(STORAGE . '/temp/statgallery.dat', $stat, LOCK_EX);
     }
 
-    return file_get_contents(STORAGE.'/temp/statgallery.dat');
+    return file_get_contents(STORAGE . '/temp/statgallery.dat');
 }
 
 /**
@@ -801,7 +801,7 @@ function statsBlacklist()
 
     $list = $blacklist + ['login' => 0, 'email' => 0, 'domain' => 0];
 
-    return $list['login'].'/'.$list['email'].'/'.$list['domain'];
+    return $list['login'] . '/' . $list['email'] . '/' . $list['domain'];
 }
 
 /**
@@ -831,8 +831,8 @@ function statsSmiles()
  */
 function statsChecker()
 {
-    if (file_exists(STORAGE.'/temp/checker.dat')) {
-        return dateFixed(filemtime(STORAGE.'/temp/checker.dat'), 'j.m.y');
+    if (file_exists(STORAGE . '/temp/checker.dat')) {
+        return dateFixed(filemtime(STORAGE . '/temp/checker.dat'), 'j.m.y');
     }
 
     return 0;
@@ -848,7 +848,7 @@ function statsInvite()
     $invited     = Invite::query()->where('used', 0)->count();
     $usedInvited = Invite::query()->where('used', 1)->count();
 
-    return $invited.'/'.$usedInvited;
+    return $invited . '/' . $usedInvited;
 }
 
 /**
@@ -864,17 +864,17 @@ function userOnline(User $user)
     $online = '<i class="fa fa-asterisk text-danger"></i>';
 
     if (! $visits) {
-        if (@filemtime(STORAGE.'/temp/visit.dat') < time() - 10) {
+        if (@filemtime(STORAGE . '/temp/visit.dat') < time() - 10) {
 
             $onlines = Online::query()
                 ->whereNotNull('user_id')
                 ->pluck('user_id', 'user_id')
                 ->all();
 
-            file_put_contents(STORAGE.'/temp/visit.dat', json_encode($onlines), LOCK_EX);
+            file_put_contents(STORAGE . '/temp/visit.dat', json_encode($onlines), LOCK_EX);
         }
 
-        $visits = json_decode(file_get_contents(STORAGE.'/temp/visit.dat'));
+        $visits = json_decode(file_get_contents(STORAGE . '/temp/visit.dat'));
     }
 
     if (isset($visits->{$user->id})) {
@@ -918,19 +918,19 @@ function photoNavigation($id)
  */
 function statsBlog()
 {
-    if (@filemtime(STORAGE.'/temp/statblogblog.dat') < time() - 900) {
+    if (@filemtime(STORAGE . '/temp/statblogblog.dat') < time() - 900) {
 
         $stat      = Blog::query()->count();
         $totalnew  = Blog::query()->where('created_at', '>', strtotime('-3 day', SITETIME))->count();
 
         if ($totalnew) {
-            $stat = $stat.'/+'.$totalnew;
+            $stat = $stat . '/+' . $totalnew;
         }
 
-        file_put_contents(STORAGE.'/temp/statblog.dat', $stat, LOCK_EX);
+        file_put_contents(STORAGE . '/temp/statblog.dat', $stat, LOCK_EX);
     }
 
-    return file_get_contents(STORAGE.'/temp/statblog.dat');
+    return file_get_contents(STORAGE . '/temp/statblog.dat');
 }
 
 /**
@@ -940,15 +940,15 @@ function statsBlog()
  */
 function statsForum()
 {
-    if (@filemtime(STORAGE.'/temp/statforum.dat') < time() - 600) {
+    if (@filemtime(STORAGE . '/temp/statforum.dat') < time() - 600) {
 
         $topics = Topic::query()->count();
         $posts  = Post::query()->count();
 
-        file_put_contents(STORAGE.'/temp/statforum.dat', $topics.'/'.$posts, LOCK_EX);
+        file_put_contents(STORAGE . '/temp/statforum.dat', $topics . '/' . $posts, LOCK_EX);
     }
 
-    return file_get_contents(STORAGE.'/temp/statforum.dat');
+    return file_get_contents(STORAGE . '/temp/statforum.dat');
 }
 
 /**
@@ -958,14 +958,14 @@ function statsForum()
  */
 function statsGuest()
 {
-    if (@filemtime(STORAGE.'/temp/statguest.dat') < time() - 600) {
+    if (@filemtime(STORAGE . '/temp/statguest.dat') < time() - 600) {
 
         $total = Guest::query()->count();
 
-        file_put_contents(STORAGE.'/temp/statguest.dat', $total, LOCK_EX);
+        file_put_contents(STORAGE . '/temp/statguest.dat', $total, LOCK_EX);
     }
 
-    return file_get_contents(STORAGE.'/temp/statguest.dat');
+    return file_get_contents(STORAGE . '/temp/statguest.dat');
 }
 
 /**
@@ -995,7 +995,7 @@ function statsNewChat()
  */
 function statsLoad()
 {
-    if (@filemtime(STORAGE.'/temp/statload.dat') < time() - 900) {
+    if (@filemtime(STORAGE . '/temp/statload.dat') < time() - 900) {
 
         $totalLoads = Load::query()->sum('count_downs');
 
@@ -1003,12 +1003,12 @@ function statsLoad()
             ->where('created_at', '>', strtotime('-3 day', SITETIME))
             ->count();
 
-        $stat = $totalNew ? $totalLoads.'/+'.$totalNew : $totalLoads;
+        $stat = $totalNew ? $totalLoads . '/+' . $totalNew : $totalLoads;
 
-        file_put_contents(STORAGE.'/temp/statload.dat', $stat, LOCK_EX);
+        file_put_contents(STORAGE . '/temp/statload.dat', $stat, LOCK_EX);
     }
 
-    return file_get_contents(STORAGE.'/temp/statload.dat');
+    return file_get_contents(STORAGE . '/temp/statload.dat');
 }
 
 /**
@@ -1033,7 +1033,7 @@ function cryptMail($mail)
     $symbols = str_split($mail);
 
     foreach ($symbols as $symbol) {
-        $output .= '&#'.ord($symbol).';';
+        $output  . = '&#' . ord($symbol) . ';';
     }
 
     return $output;
@@ -1047,17 +1047,17 @@ function cryptMail($mail)
  */
 function statVotes()
 {
-    if (@filemtime(STORAGE.'/temp/statvote.dat') < time() - 900) {
+    if (@filemtime(STORAGE . '/temp/statvote.dat') < time() - 900) {
 
         $votes = Vote::query()
             ->selectRaw('count(*) AS cnt, ifnull(sum(count), 0) AS sum')
             ->where('closed', 0)
             ->first();
 
-        file_put_contents(STORAGE.'/temp/statvote.dat', $votes->cnt.'/'.$votes->sum, LOCK_EX);
+        file_put_contents(STORAGE . '/temp/statvote.dat', $votes->cnt . '/' . $votes->sum, LOCK_EX);
     }
 
-    return file_get_contents(STORAGE.'/temp/statvote.dat');
+    return file_get_contents(STORAGE . '/temp/statvote.dat');
 }
 
 /**
@@ -1068,7 +1068,7 @@ function statVotes()
  */
 function statsNewsDate()
 {
-    if (@filemtime(STORAGE.'/temp/statnews.dat') < time() - 900) {
+    if (@filemtime(STORAGE . '/temp/statnews.dat') < time() - 900) {
         $stat = 0;
 
         $news = News::query()->orderBy('created_at', 'desc')->first();
@@ -1077,10 +1077,10 @@ function statsNewsDate()
             $stat = dateFixed($news->created_at, 'd.m.y');
         }
 
-        file_put_contents(STORAGE.'/temp/statnews.dat', $stat, LOCK_EX);
+        file_put_contents(STORAGE . '/temp/statnews.dat', $stat, LOCK_EX);
     }
 
-    return file_get_contents(STORAGE.'/temp/statnews.dat');
+    return file_get_contents(STORAGE . '/temp/statnews.dat');
 }
 
 /**
@@ -1103,11 +1103,11 @@ function lastNews()
         if ($total > 0) {
             foreach ($news as $data) {
                 $data['text'] = str_replace('[cut]', '', $data->text);
-                echo '<i class="far fa-circle fa-lg text-muted"></i> <a href="/news/'.$data->id.'">'.$data->title.'</a> ('.$data->count_comments.') <i class="fa fa-caret-down news-title"></i><br>';
+                echo '<i class="far fa-circle fa-lg text-muted"></i> <a href="/news/' . $data->id . '">' . $data->title . '</a> (' . $data->count_comments . ') <i class="fa fa-caret-down news-title"></i><br>';
 
-                echo '<div class="news-text" style="display: none;">'.bbCode($data->text).'<br>';
-                echo '<a href="/news/comments/'.$data->id.'">Комментарии</a> ';
-                echo '<a href="/news/end/'.$data->id.'">&raquo;</a></div>';
+                echo '<div class="news-text" style="display: none;">' . bbCode($data->text) . '<br>';
+                echo '<a href="/news/comments/' . $data->id . '">Комментарии</a> ';
+                echo '<a href="/news/end/' . $data->id . '">&raquo;</a></div>';
             }
         }
     }
@@ -1124,7 +1124,7 @@ function checkAuth()
 
         $user = User::query()->find($_SESSION['id']);
 
-        if ($user && $_SESSION['password'] === md5(env('APP_KEY').$user->password)) {
+        if ($user && $_SESSION['password'] === md5(env('APP_KEY') . $user->password)) {
             return $user;
         }
     }
@@ -1218,7 +1218,7 @@ function icons($ext)
             break;
         default: $ico = 'file';
     }
-    return '<i class="far fa-'.$ico.'"></i>';
+    return '<i class="far fa-' . $ico . '"></i>';
 }
 
 /**
@@ -1261,11 +1261,11 @@ function stripString($str, $words = 20) {
 function getAdvertUser()
 {
     if (setting('rekusershow')) {
-        if (@filemtime(STORAGE.'/temp/rekuser.dat') < time() - 1800) {
+        if (@filemtime(STORAGE . '/temp/rekuser.dat') < time() - 1800) {
             saveAdvertUser();
         }
 
-        $datafile = json_decode(file_get_contents(STORAGE.'/temp/rekuser.dat'));
+        $datafile = json_decode(file_get_contents(STORAGE . '/temp/rekuser.dat'));
 
         if ($datafile) {
 
@@ -1294,20 +1294,20 @@ function saveAdvertUser()
     if ($data->isNotEmpty()) {
         foreach ($data as $val) {
             if ($val['color']) {
-                $val['name'] = '<span style="color:'.$val->color.'">'.$val->name.'</span>';
+                $val['name'] = '<span style="color:' . $val->color . '">' . $val->name . '</span>';
             }
 
-            $link = '<a href="'.$val->site.'" target="_blank" rel="nofollow">'.$val->name.'</a>';
+            $link = '<a href="' . $val->site . '" target="_blank" rel="nofollow">' . $val->name . '</a>';
 
             if ($val->bold) {
-                $link = '<b>'.$link.'</b>';
+                $link = '<b>' . $link . '</b>';
             }
 
             $links[] = $link;
         }
     }
 
-    file_put_contents(STORAGE.'/temp/rekuser.dat', json_encode($links, JSON_UNESCAPED_UNICODE), LOCK_EX);
+    file_put_contents(STORAGE . '/temp/rekuser.dat', json_encode($links, JSON_UNESCAPED_UNICODE), LOCK_EX);
 }
 
 /**
@@ -1318,18 +1318,18 @@ function saveAdvertUser()
  */
 function recentPhotos($show = 5)
 {
-    if (@filemtime(STORAGE.'/temp/recentphotos.dat') < time() - 1800) {
+    if (@filemtime(STORAGE . '/temp/recentphotos.dat') < time() - 1800) {
 
         $recent = Photo::query()->orderBy('created_at', 'desc')->limit($show)->get();
 
-        file_put_contents(STORAGE.'/temp/recentphotos.dat', json_encode($recent, JSON_UNESCAPED_UNICODE), LOCK_EX);
+        file_put_contents(STORAGE . '/temp/recentphotos.dat', json_encode($recent, JSON_UNESCAPED_UNICODE), LOCK_EX);
     }
 
-    $photos = json_decode(file_get_contents(STORAGE.'/temp/recentphotos.dat'));
+    $photos = json_decode(file_get_contents(STORAGE . '/temp/recentphotos.dat'));
 
     if ($photos) {
         foreach ($photos as $data) {
-            echo '<a href="/gallery/'.$data->id.'">'.resizeImage(UPLOADS . '/pictures/' . $data->link, ['alt' => $data->title, 'class' => 'rounded', 'style' => 'width: 100px; height: 100px;']).'</a>';
+            echo '<a href="/gallery/' . $data->id . '">' . resizeImage(UPLOADS . '/pictures/' . $data->link, ['alt' => $data->title, 'class' => 'rounded', 'style' => 'width: 100px; height: 100px;']) . '</a>';
         }
 
         echo '<br>';
@@ -1344,16 +1344,16 @@ function recentPhotos($show = 5)
  */
 function recentTopics($show = 5)
 {
-    if (@filemtime(STORAGE.'/temp/recenttopics.dat') < time() - 180) {
+    if (@filemtime(STORAGE . '/temp/recenttopics.dat') < time() - 180) {
         $lastTopics = Topic::query()->orderBy('updated_at', 'desc')->limit($show)->get();
-        file_put_contents(STORAGE.'/temp/recenttopics.dat', json_encode($lastTopics, JSON_UNESCAPED_UNICODE), LOCK_EX);
+        file_put_contents(STORAGE . '/temp/recenttopics.dat', json_encode($lastTopics, JSON_UNESCAPED_UNICODE), LOCK_EX);
     }
 
-    $topics = json_decode(file_get_contents(STORAGE.'/temp/recenttopics.dat'));
+    $topics = json_decode(file_get_contents(STORAGE . '/temp/recenttopics.dat'));
 
     if ($topics) {
         foreach ($topics as $topic) {
-            echo '<i class="far fa-circle fa-lg text-muted"></i>  <a href="/topic/'.$topic->id.'">'.$topic->title.'</a> ('.$topic->count_posts.')';
+            echo '<i class="far fa-circle fa-lg text-muted"></i>  <a href="/topic/' . $topic->id . '">' . $topic->title . '</a> (' . $topic->count_posts . ')';
             echo '<a href="/topic/end/' . $topic->id . '">&raquo;</a><br>';
         }
     }
@@ -1367,7 +1367,7 @@ function recentTopics($show = 5)
  */
 function recentFiles($show = 5)
 {
-    if (@filemtime(STORAGE.'/temp/recentfiles.dat') < time() - 600) {
+    if (@filemtime(STORAGE . '/temp/recentfiles.dat') < time() - 600) {
 
         $lastFiles = Down::query()
             ->where('active', 1)
@@ -1376,15 +1376,15 @@ function recentFiles($show = 5)
             ->with('category')
             ->get();
 
-        file_put_contents(STORAGE.'/temp/recentfiles.dat', json_encode($lastFiles, JSON_UNESCAPED_UNICODE), LOCK_EX);
+        file_put_contents(STORAGE . '/temp/recentfiles.dat', json_encode($lastFiles, JSON_UNESCAPED_UNICODE), LOCK_EX);
     }
 
-    $files = json_decode(file_get_contents(STORAGE.'/temp/recentfiles.dat'));
+    $files = json_decode(file_get_contents(STORAGE . '/temp/recentfiles.dat'));
 
     if ($files) {
         foreach ($files as $file) {
             $rating = $file->rated ? round($file->rating / $file->rated, 1) : 0;
-            echo '<i class="far fa-circle fa-lg text-muted"></i>  <a href="/down/'.$file->id.'">'.$file->title.'</a> (⭐ '.$rating.')<br>';
+            echo '<i class="far fa-circle fa-lg text-muted"></i>  <a href="/down/' . $file->id . '">' . $file->title . '</a> (⭐ ' . $rating . ')<br>';
         }
     }
 }
@@ -1397,20 +1397,20 @@ function recentFiles($show = 5)
  */
 function recentBlogs($show = 5)
 {
-    if (@filemtime(STORAGE.'/temp/recentblog.dat') < time() - 600) {
+    if (@filemtime(STORAGE . '/temp/recentblog.dat') < time() - 600) {
         $lastBlogs = Blog::query()
             ->orderBy('created_at', 'desc')
             ->limit($show)
             ->get();
 
-        file_put_contents(STORAGE.'/temp/recentblog.dat', json_encode($lastBlogs, JSON_UNESCAPED_UNICODE), LOCK_EX);
+        file_put_contents(STORAGE . '/temp/recentblog.dat', json_encode($lastBlogs, JSON_UNESCAPED_UNICODE), LOCK_EX);
     }
 
-    $blogs = json_decode(file_get_contents(STORAGE.'/temp/recentblog.dat'));
+    $blogs = json_decode(file_get_contents(STORAGE . '/temp/recentblog.dat'));
 
     if ($blogs) {
         foreach ($blogs as $blog) {
-            echo '<i class="far fa-circle fa-lg text-muted"></i> <a href="/article/'.$blog->id.'">'.$blog->title.'</a> ('.$blog->count_comments.')<br>';
+            echo '<i class="far fa-circle fa-lg text-muted"></i> <a href="/article/' . $blog->id . '">' . $blog->title . '</a> (' . $blog->count_comments . ')<br>';
         }
     }
 }
@@ -1422,15 +1422,15 @@ function recentBlogs($show = 5)
  */
 function statsOffers()
 {
-    if (@filemtime(STORAGE.'/temp/offers.dat') < time() - 10800) {
+    if (@filemtime(STORAGE . '/temp/offers.dat') < time() - 10800) {
 
         $offers   = Offer::query()->where('type', 'offer')->count();
         $problems = Offer::query()->where('type', 'issue')->count();
 
-        file_put_contents(STORAGE.'/temp/offers.dat', $offers.'/'.$problems, LOCK_EX);
+        file_put_contents(STORAGE . '/temp/offers.dat', $offers . '/' . $problems, LOCK_EX);
     }
 
-    return file_get_contents(STORAGE.'/temp/offers.dat');
+    return file_get_contents(STORAGE . '/temp/offers.dat');
 }
 
 /**
@@ -1450,24 +1450,24 @@ function restatement($mode)
 
         case 'blog':
             DB::update('update categories set count_blogs = (select count(*) from blogs where categories.id = blogs.category_id)');
-            DB::update('update blogs set count_comments = (select count(*) from comments where relate_type = "'.addslashes(Blog::class).'" and blogs.id = comments.relate_id)');
+            DB::update('update blogs set count_comments = (select count(*) from comments where relate_type = "' . addslashes(Blog::class) . '" and blogs.id = comments.relate_id)');
             break;
 
         case 'load':
             DB::update('update loads set count_downs = (select count(*) from downs where loads.id = downs.category_id and active = ?)', [1]);
-            DB::update('update downs set count_comments = (select count(*) from comments where relate_type = "'.addslashes(Down::class).'" and downs.id = comments.relate_id)');
+            DB::update('update downs set count_comments = (select count(*) from comments where relate_type = "' . addslashes(Down::class) . '" and downs.id = comments.relate_id)');
             break;
 
         case 'news':
-            DB::update('update news set count_comments = (select count(*) from comments where relate_type = "'.addslashes(News::class).'" and news.id = comments.relate_id)');
+            DB::update('update news set count_comments = (select count(*) from comments where relate_type = "' . addslashes(News::class) . '" and news.id = comments.relate_id)');
             break;
 
         case 'photo':
-            DB::update('update photo set count_comments = (select count(*) from comments where relate_type=  "'.addslashes(Photo::class).'" and photo.id = comments.relate_id)');
+            DB::update('update photo set count_comments = (select count(*) from comments where relate_type=  "' . addslashes(Photo::class) . '" and photo.id = comments.relate_id)');
             break;
 
         case 'offer':
-            DB::update('update offers set count_comments = (select count(*) from comments where relate_type=  "'.addslashes(Offer::class).'" and offers.id = comments.relate_id)');
+            DB::update('update offers set count_comments = (select count(*) from comments where relate_type=  "' . addslashes(Offer::class) . '" and offers.id = comments.relate_id)');
             break;
     }
 }
@@ -1500,10 +1500,10 @@ function profile(User $user, $color = null)
         $name = empty($user->name) ? $user->login : $user->name;
 
         if ($color) {
-            return '<a href="/user/'.$user->login.'"><span style="color:'.$color.'">'.$name.'</span></a>';
+            return '<a href="/user/' . $user->login . '"><span style="color:' . $color . '">' . $name . '</span></a>';
         }
 
-        return '<a href="/user/'.$user->login.'">'.$name.'</a>';
+        return '<a href="/user/' . $user->login . '">' . $name . '</a>';
     }
 
     return setting('guestsuser');
@@ -1555,7 +1555,7 @@ function uploadFile(UploadedFile $file, $path)
         $img->insert(HOME . '/assets/img/images/watermark.png', 'bottom-right', 10, 10);
     }
 
-    $img->save($path . $fileName);
+    $img->save($path . '/' . $fileName);
 
     return $img->basename;
 }
@@ -1742,10 +1742,10 @@ function performance()
  */
 function clearCache()
 {
-    $files = glob(STORAGE.'/temp/*.dat');
+    $files = glob(STORAGE . '/temp/*.dat');
     $files = array_diff($files, [
-        STORAGE.'/temp/checker.dat',
-        STORAGE.'/temp/counter7.dat'
+        STORAGE . '/temp/checker.dat',
+        STORAGE . '/temp/counter7.dat'
     ]);
 
     if ($files) {
@@ -1772,7 +1772,7 @@ function returnUrl($url = null)
         return false;
     }
     $query = Request::has('return') ? Request::input('return') : Request::path();
-    return '?return='.urlencode(! $url ? $query : $url);
+    return '?return=' . urlencode(! $url ? $query : $url);
 }
 
 /**
@@ -1785,10 +1785,10 @@ function returnUrl($url = null)
 function view($view, array $params = [])
 {
     $blade = new Blade([
-        HOME.'/themes/'.setting('themes').'/views',
-        RESOURCES.'/views',
-        HOME.'/themes',
-    ], STORAGE.'/cache');
+        HOME . '/themes/' . setting('themes') . '/views',
+        RESOURCES . '/views',
+        HOME . '/themes',
+    ], STORAGE . '/cache');
 
     $blade->compiler()->withoutDoubleEncoding();
 
@@ -1805,11 +1805,11 @@ function view($view, array $params = [])
 function abort($code, $message = null)
 {
     if ($code === 403) {
-        header($_SERVER['SERVER_PROTOCOL'].' 403 Forbidden');
+        header($_SERVER['SERVER_PROTOCOL'] . ' 403 Forbidden');
     }
 
     if ($code === 404) {
-        header($_SERVER['SERVER_PROTOCOL'].' 404 Not Found');
+        header($_SERVER['SERVER_PROTOCOL'] . ' 404 Not Found');
     }
 
     if (setting('errorlog') && in_array($code, [403, 404])) {
@@ -1826,7 +1826,7 @@ function abort($code, $message = null)
     }
 
     if (Request::ajax()) {
-        header($_SERVER['SERVER_PROTOCOL'].' 200 OK');
+        header($_SERVER['SERVER_PROTOCOL'] . ' 200 OK');
 
         exit(json_encode([
             'status' => 'error',
@@ -1835,7 +1835,7 @@ function abort($code, $message = null)
     }
 
     $referer = Request::header('referer') ?? null;
-    exit(view('errors/'.$code, compact('message', 'referer')));
+    exit(view('errors/' . $code, compact('message', 'referer')));
 }
 
 /**
@@ -1852,10 +1852,10 @@ function redirect($url, $permanent = false)
     }
 
     if ($permanent) {
-        header($_SERVER['SERVER_PROTOCOL'].' 301 Moved Permanently');
+        header($_SERVER['SERVER_PROTOCOL'] . ' 301 Moved Permanently');
     }
 
-    header('Location: '.$url);
+    header('Location: ' . $url);
     exit();
 }
 
@@ -1945,7 +1945,7 @@ function textError($field)
 
     if (isset($_SESSION['flash']['danger'][$field])) {
         $error = $_SESSION['flash']['danger'][$field];
-        $text = '<div class="text-danger">'.$error.'</div>';
+        $text = '<div class="text-danger">' . $error . '</div>';
     }
 
     return $text;
@@ -2011,13 +2011,13 @@ function plural($num, $forms)
     }
 
     if (count($forms) === 1) {
-        return $num.' '.$forms[0];
+        return $num . ' ' . $forms[0];
     }
 
-    if ($num % 100 > 10 &&  $num % 100 < 15) return $num.' '.$forms[2];
-    if ($num % 10 === 1) return $num.' '.$forms[0];
-    if ($num % 10 > 1 && $num %10 < 5) return $num.' '.$forms[1];
-    return $num.' '.$forms[2];
+    if ($num % 100 > 10 &&  $num % 100 < 15) return $num . ' ' . $forms[2];
+    if ($num % 10 === 1) return $num . ' ' . $forms[0];
+    if ($num % 10 > 1 && $num %10 < 5) return $num . ' ' . $forms[1];
+    return $num . ' ' . $forms[2];
 }
 
 /**
@@ -2080,7 +2080,7 @@ function getBrowser($userAgent = null)
 
     $brow = $browser->getBrowser();
     $version = implode('.', array_slice(explode('.', $browser->getVersion()), 0, 2));
-    return mb_substr($version === 'unknown' ? $brow : $brow.' '.$version, 0, 25, 'utf-8');
+    return mb_substr($version === 'unknown' ? $brow : $brow . ' ' . $version, 0, 25, 'utf-8');
 }
 
 /**
@@ -2157,7 +2157,7 @@ function pagination($page)
     }
 
     $url     = array_except($_GET, 'page');
-    $request = $url ? '&'.http_build_query($url) : null;
+    $request = $url ? '&' . http_build_query($url) : null;
 
     $pages   = [];
     $pg_cnt  = (int) ceil($page->total / $page->limit);
@@ -2195,7 +2195,7 @@ function pagination($page)
         } else {
             $pages[] = [
                 'page'  => $i,
-                'title' => $i.' страница',
+                'title' => $i . ' страница',
                 'name'  => $i,
             ];
         }
@@ -2268,12 +2268,12 @@ function imageBase64($path, array $params = [])
 
     $strParams = [];
     foreach ($params as $key => $param) {
-        $strParams[] = $key.'="'.$param.'"';
+        $strParams[] = $key . '="' . $param . '"';
     }
 
     $strParams = implode(' ', $strParams);
 
-    return '<img src="data:image/'.$type.';base64,'.base64_encode($data).'"'.$strParams.'>';
+    return '<img src="data:image/' . $type . ';base64,' . base64_encode($data) . '"' . $strParams . '>';
 }
 
 /**
@@ -2286,7 +2286,7 @@ function imageBase64($path, array $params = [])
 function progressBar($percent, $title = false)
 {
     if (! $title) {
-        $title = $percent.'%';
+        $title = $percent . '%';
     }
 
     return view('app/_progressbar', compact('percent', 'title'));
@@ -2303,7 +2303,7 @@ function translator($fallback = 'en')
     $translator = new \Illuminate\Translation\Translator(
         new \Illuminate\Translation\FileLoader(
             new \Illuminate\Filesystem\Filesystem(),
-            RESOURCES.'/lang'
+            RESOURCES . '/lang'
         ),
         setting('lang')
     );
@@ -2367,11 +2367,11 @@ function getQueryLog()
  */
 function ipBan($save = false)
 {
-    if (! $save && file_exists(STORAGE.'/temp/ipban.dat')) {
-        $ipBan = json_decode(file_get_contents(STORAGE.'/temp/ipban.dat'));
+    if (! $save && file_exists(STORAGE . '/temp/ipban.dat')) {
+        $ipBan = json_decode(file_get_contents(STORAGE . '/temp/ipban.dat'));
     } else {
         $ipBan = Ban::query()->pluck('ip')->all();
-        file_put_contents(STORAGE.'/temp/ipban.dat', json_encode($ipBan), LOCK_EX);
+        file_put_contents(STORAGE . '/temp/ipban.dat', json_encode($ipBan), LOCK_EX);
     }
 
     return $ipBan;
@@ -2387,11 +2387,11 @@ function setting($key = null)
 {
     if (! Registry::has('setting')) {
 
-        if (! file_exists(STORAGE.'/temp/setting.dat')) {
+        if (! file_exists(STORAGE . '/temp/setting.dat')) {
             saveSetting();
         }
 
-        $setting = json_decode(file_get_contents(STORAGE.'/temp/setting.dat'), true);
+        $setting = json_decode(file_get_contents(STORAGE . '/temp/setting.dat'), true);
 
         Registry::set('setting', $setting);
     }
@@ -2419,7 +2419,7 @@ function setSetting($setting)
  */
 function saveSetting() {
     $setting = Setting::query()->pluck('value', 'name')->all();
-    file_put_contents(STORAGE.'/temp/setting.dat', json_encode($setting, JSON_UNESCAPED_UNICODE), LOCK_EX);
+    file_put_contents(STORAGE . '/temp/setting.dat', json_encode($setting, JSON_UNESCAPED_UNICODE), LOCK_EX);
 }
 
 /**
