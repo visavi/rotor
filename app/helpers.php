@@ -1329,7 +1329,7 @@ function recentPhotos($show = 5)
 
     if ($photos) {
         foreach ($photos as $data) {
-            echo '<a href="/gallery/' . $data->id . '">' . resizeImage(UPLOADS . '/pictures/' . $data->link, ['alt' => $data->title, 'class' => 'rounded', 'style' => 'width: 100px; height: 100px;']) . '</a>';
+            echo '<a href="/gallery/' . $data->id . '">' . resizeImage('/uploads/pictures/' . $data->link, ['alt' => $data->title, 'class' => 'rounded', 'style' => 'width: 100px; height: 100px;']) . '</a>';
         }
 
         echo '<br>';
@@ -1569,7 +1569,7 @@ function uploadFile(UploadedFile $file, $path)
  */
 function resizeImage($path, array $params = [])
 {
-    if (! file_exists($path)) {
+    if (! file_exists(HOME . $path)) {
         return '<img src="/assets/img/images/photo.jpg" alt="nophoto">';
     }
 
@@ -1592,17 +1592,17 @@ function resizeImage($path, array $params = [])
 
     $strParams = implode(' ', $strParams);
 
-    list($width, $height) = getimagesize($path);
+    list($width, $height) = getimagesize(HOME . $path);
 
     if ($width <= $params['size'] && $height <= $params['size']) {
         return '<img src="/' . $path . '"' . $strParams . '>';
     }
 
-    $thumb = ltrim(str_replace([HOME, '/'], ['', '_'], $path), '_');
+    $thumb = ltrim(str_replace('/', '_', $path), '_');
 
     if (! file_exists(UPLOADS . '/thumbnail/' . $thumb)) {
 
-        $img = Image::make($path);
+        $img = Image::make(HOME . $path);
 
         $img->fit($params['size'], $params['size'], function ($constraint) {
             $constraint->upsize();

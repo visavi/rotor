@@ -133,7 +133,7 @@
                             {!! icons($ext) !!}
                             <a href="/uploads/forum/{{ $topic->id }}/{{ $file->hash }}">{{ $file->name }}</a> ({{ formatSize($file->size) }})<br>
                             @if (in_array($ext, ['jpg', 'jpeg', 'gif', 'png']))
-                                <a href="/uploads/forum/{{ $topic->id }}/{{ $file->hash }}" class="gallery" data-group="{{ $data->id }}">{!! resizeImage(UPLOADS . '/forum/' . $topic->id.'/'.$file->hash, ['alt' => $file->name]) !!}</a><br>
+                                <a href="/uploads/forum/{{ $topic->id }}/{{ $file->hash }}" class="gallery" data-group="{{ $data->id }}">{!! resizeImage('/uploads/forum/' . $topic->id.'/'.$file->hash, ['alt' => $file->name]) !!}</a><br>
                             @endif
                         @endforeach
                         </div>

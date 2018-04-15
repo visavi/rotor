@@ -26,7 +26,7 @@
 
             @if ($news->image && file_exists(UPLOADS.'/news/'.$news->image))
 
-                <a href="/uploads/news/{{ $news->image }}">{!! resizeImage(UPLOADS . '/news/' . $news->image, ['size' => 100, 'alt' => $news['title']]) !!}</a><br>
+                <a href="/uploads/news/{{ $news->image }}">{!! resizeImage('/uploads/news/' . $news->image, ['size' => 100, 'alt' => $news['title']]) !!}</a><br>
                 <b>{{ $news->image }}</b> ({{ formatFileSize(UPLOADS.'/news/'.$news->image) }})<br><br>
             @endif
 
