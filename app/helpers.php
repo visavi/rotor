@@ -1054,6 +1054,10 @@ function statVotes()
             ->where('closed', 0)
             ->first();
 
+        if (! $votes) {
+            $votes->cnt = $votes->sum = 0;
+        }
+
         file_put_contents(STORAGE . '/temp/statvote.dat', $votes->cnt . '/' . $votes->sum, LOCK_EX);
     }
 
@@ -1595,7 +1599,7 @@ function resizeImage($path, array $params = [])
     list($width, $height) = getimagesize(HOME . $path);
 
     if ($width <= $params['size'] && $height <= $params['size']) {
-        return '<img src="/' . $path . '"' . $strParams . '>';
+        return '<img src="' . $path . '"' . $strParams . '>';
     }
 
     $thumb = ltrim(str_replace('/', '_', $path), '_');

@@ -244,6 +244,7 @@ class LoadController extends AdminController
             $token = check(Request::input('token'));
             $title = check(Request::input('title'));
             $text  = check(Request::input('text'));
+            $files = (array) Request::file('files');
 
             $validator = new Validator();
             $validator->equal($token, $_SESSION['token'], 'Неверный идентификатор сессии, повторите действие!')
@@ -253,6 +254,23 @@ class LoadController extends AdminController
             $duplicate = Down::query()->where('title', $title)->where('id', '<>', $down->id)->count();
             $validator->empty($duplicate, ['title' => 'Загрузка с аналогичный названием уже существует!']);
 
+            $existFiles = $down->files ? $down->files->count() : 0;
+            $validator->lte(count($files) + $existFiles, 5, ['files' => 'Разрешено загружать не более 5 файлов']);
+
+            if ($validator->isValid()) {
+
+                $rules = [
+                    'maxsize'    => setting('fileupload'),
+                    'extensions' => explode(',', setting('allowextload')),
+                    'maxweight'  => setting('screenupsize'),
+                    'minweight'  => 100,
+                ];
+
+                foreach ($files as $file) {
+                    $validator->file($file, $rules, ['files' => 'Не удалось загрузить файл!']);
+                }
+            }
+
             if ($validator->isValid()) {
 
                 $down->update([
@@ -260,17 +278,18 @@ class LoadController extends AdminController
                     'text'  => $text,
                 ]);
 
+                foreach ($files as $file) {
+                    $down->uploadFile($file);
+                }
+
                 setFlash('success', 'Загрузка успешно отредактирована!');
-                redirect('/down/' . $down->id);
+                redirect('/admin/down/edit/' . $down->id);
             } else {
                 setInput(Request::all());
                 setFlash('danger', $validator->getErrors());
             }
         }
 
-        $files  = $down->getFiles();
-        $images = $down->getImages();
-
-        return view('admin/load/edit_down', compact('down', 'files', 'images'));
+        return view('admin/load/edit_down', compact('down'));
     }
 }

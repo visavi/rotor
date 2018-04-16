@@ -80,6 +80,7 @@ class SettingSeeder extends AbstractSeed
             ['name'  => 'logos', 'value' => 'Сайт на движке RotorCMS'],
             ['name'  => 'logotip', 'value' => '/assets/img/images/logo.png'],
             ['name'  => 'maxblogpost', 'value' => 50000],
+            ['name'  => 'maxfiles', 'value' => 5],
             ['name'  => 'moneyname', 'value' => 'рубль,рубля,рублей'],
             ['name'  => 'nocheck', 'value' => 'txt,dat,gif,jpg,jpeg,png,zip'],
             ['name'  => 'onlinelist', 'value' => 10],

@@ -40,8 +40,8 @@
                 {!! textError('text') !!}
             </div>
 
-            @if ($files)
-                @foreach ($images as $image)
+            @if ($down->getFiles()->isNotEmpty())
+                @foreach ($down->getFiles() as $file)
                 <i class="fa fa-download"></i>
                 <b><a href="/uploads/files/{{ $file->hash }}">{{ $file->name }}</a></b> ({{ formatSize($file->size) }}) (<a href="/admin/load/delete/{{ $file->id }}" onclick="return confirm('Вы действительно хотите удалить данный файл?')">Удалить</a>)<br>
                 @endforeach
@@ -56,25 +56,25 @@
                 <br>
             @endif
 
-            @if ($images)
-                @foreach ($images as $image)
+            @if ($down->getImages()->isNotEmpty())
+                @foreach ($down->getImages() as $image)
                     {!! resizeImage('/uploads/screen/' . $image->hash) !!}<br>
                     <i class="fa fa-image"></i> <b><a href="/uploads/screen/{{ $image->hash }}">{{ $image->name }}</a></b> ({{ formatSize($image->size ) }}) (<a href="/admin/load/delete/{{ $image->id }}" onclick="return confirm('Вы действительно хотите удалить данный скриншот?')">Удалить</a>)<br><br>
                 @endforeach
             @endif
 
-            @if (count($images) < 5)
-                <label class="btn btn-sm btn-secondary" for="images">
-                    <input type="file" id="images" name="images[]" onchange="$('#upload-image-info').html((this.files.length > 1) ? this.files.length + ' файлов' : this.files[0].name);" hidden multiple>
-                    Прикрепить скриншоты&hellip;
+            @if ($down->files->count() < setting('maxfiles'))
+                <label class="btn btn-sm btn-secondary" for="files">
+                    <input type="file" id="files" name="files[]" onchange="$('#upload-file-info').html((this.files.length > 1) ? this.files.length + ' файлов' : this.files[0].name);" hidden multiple>
+                    Прикрепить файлы&hellip;
                 </label>
-                <span class="badge badge-info" id="upload-image-info"></span>
-                {!! textError('images') !!}
+                <span class="badge badge-info" id="upload-file-info"></span>
+                {!! textError('files') !!}
                 <br>
             @endif
 
             <p class="text-muted font-italic">
-                Можно загрузить до 5 скриншотов<br>
+                Можно загрузить до {{ setting('maxfiles') }} файлов<br>
                 Максимальный вес файла: <b>{{ round(setting('fileupload') / 1024 / 1024) }}</b> Mb<br>
                 Допустимые расширения файлов: {{ str_replace(',', ', ', setting('allowextload')) }}<br>
                 Допустимые размеры картинок: от 100px до {{ setting('screenupsize') }}px

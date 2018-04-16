@@ -3,6 +3,13 @@
 <form action="/admin/setting?act=load" method="post">
     <input type="hidden" name="token" value="{{ $_SESSION['token'] }}">
 
+    <div class="form-group{{ hasError('sets[maxfiles]') }}">
+        <label for="maxfiles">Одновременно загружаемое кол. файлов:</label>
+        <input type="number" class="form-control" id="maxfiles" name="sets[maxfiles]" maxlength="2" value="{{ getInput('sets.maxfiles', $settings['maxfiles']) }}" required>
+        {!! textError('sets[maxfiles]') !!}
+    </div>
+
+
     <div class="form-group{{ hasError('sets[downlist]') }}">
         <label for="downlist">Файлов в загрузках:</label>
         <input type="number" class="form-control" id="downlist" name="sets[downlist]" maxlength="2" value="{{ getInput('sets.downlist', $settings['downlist']) }}" required>

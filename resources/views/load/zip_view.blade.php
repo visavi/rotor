@@ -18,7 +18,7 @@
 
             <li class="breadcrumb-item"><a href="/load/{{ $down->category->id }}">{{ $down->category->name }}</a></li>
             <li class="breadcrumb-item"><a href="/down/{{ $down->id }}">{{ $down->title }}</a></li>
-            <li class="breadcrumb-item"><a href="/down/zip/{{ $down->id }}">Архив</a></li>
+            <li class="breadcrumb-item"><a href="/down/zip/{{ $file->id }}">Архив</a></li>
             <li class="breadcrumb-item active">Просмотр файла</li>
         </ol>
     </nav>

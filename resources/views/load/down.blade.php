@@ -43,8 +43,8 @@
 
     @if ($down->files->isNotEmpty())
 
-        @if ($files)
-            @foreach ($files as $file)
+        @if ($down->getFiles()->isNotEmpty())
+            @foreach ($down->getFiles() as $file)
                 @if (file_exists(UPLOADS.'/files/'.$file->hash))
                     <div class="mt-3">
                         <i class="fa fa-download"></i> <b><a href="/down/download/{{ $file->id }}">{{ $file->name }}</a></b> ({{ formatSize($file->size) }})
@@ -56,7 +56,7 @@
                         @endif
 
                         @if ($file->extension === 'mp4')
-                            <?php $poster = $images->isNotEmpty() ? '/uploads/screen/' . $images->first()->hash : null; ?>
+                            <?php $poster = file_exists(UPLOADS . '/screen/' . $file->hash . '.jpg') ? '/uploads/screen/' . $file->hash . '.jpg' : null; ?>
 
                            <video width="640" height="360" style="max-width:100%;" poster="{{ $poster }}" preload="none" controls playsinline>
                                <source src="/uploads/files/{{ $file->hash }}" type="video/mp4">
@@ -71,9 +71,9 @@
             @endforeach
         @endif
 
-        @if ($images)
+        @if ($down->getImages()->isNotEmpty())
             <div class="mt-3">
-                @foreach ($images as $image)
+                @foreach ($down->getImages() as $image)
                     <a href="/uploads/screen/{{ $image->hash }}" class="gallery" data-group="{{ $down->id }}">{!! resizeImage('/uploads/screen/' . $image->hash, ['alt' => $down->title]) !!}</a><br>
                 @endforeach
             </div>

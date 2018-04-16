@@ -2,6 +2,10 @@
 
 namespace App\Models;
 
+use FFMpeg\Coordinate\TimeCode;
+use FFMpeg\FFMpeg;
+use FFMpeg\FFProbe;
+use FFMpeg\Format\Video\X264;
 use Illuminate\Http\UploadedFile;
 
 class Down extends BaseModel
@@ -112,6 +116,8 @@ class Down extends BaseModel
         $path = in_array($file->getClientOriginalExtension(), ['jpg', 'jpeg', 'gif', 'png']) ? 'screen' : 'files';
         $fileName = uploadFile($file, UPLOADS . '/' . $path);
 
+        $this->convertVideo($file, $fileName);
+
         File::query()->create([
             'relate_id'   => $this->id,
             'relate_type' => self::class,
@@ -121,5 +127,60 @@ class Down extends BaseModel
             'user_id'     => getUser('id'),
             'created_at'  => SITETIME,
         ]);
+    }
+
+    /**
+     * @param UploadedFile $file
+     */
+    public function convertVideo(UploadedFile  $file, $fileName)
+    {
+        $isVideo = strpos($file->getClientMimeType(), 'video/') !== false ? true : false;
+
+        // Обработка видео
+        if ($isVideo && env('FFMPEG_ENABLED')) {
+
+            $ffconfig = [
+                'ffmpeg.binaries'  => env('FFMPEG_PATH'),
+                'ffprobe.binaries' => env('FFPROBE_PATH'),
+                'timeout'          => env('FFMPEG_TIMEOUT'),
+                'ffmpeg.threads'   => env('FFMPEG_THREADS'),
+            ];
+
+            $ffmpeg = FFMpeg::create($ffconfig);
+
+            $video = $ffmpeg->open(UPLOADS . '/files/' . $fileName);
+
+            // Сохраняем скрин с 5 секунды
+            $frame = $video->frame(TimeCode::fromSeconds(5));
+            $frame->save(UPLOADS . '/screen/' . $fileName . '.jpg');
+
+            File::query()->create([
+                'relate_id'   => $this->id,
+                'relate_type' => self::class,
+                'hash'        => $fileName . '.jpg',
+                'name'        => 'screenshot.jpg',
+                'size'        => filesize(UPLOADS . '/screen/' . $fileName . '.jpg'),
+                'user_id'     => getUser('id'),
+                'created_at'  => SITETIME,
+            ]);
+
+            // Перекодируем видео в h264
+            $ffprobe = FFProbe::create($ffconfig);
+            $codec = $ffprobe
+                ->streams(UPLOADS . '/files/' . $fileName)
+                ->videos()
+                ->first()
+                ->get('codec_name');
+
+            if ($file->getClientOriginalExtension() === 'mp4' && $codec !== 'h264') {
+                $format = new X264('libmp3lame', 'libx264');
+                $video->save($format, UPLOADS . '/files/convert-' . $fileName);
+
+                rename(
+                    UPLOADS . '/files/convert-' . $fileName,
+                    UPLOADS . '/files/' . $fileName
+                );
+            }
+        }
     }
 }

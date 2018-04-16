@@ -45,10 +45,7 @@ class DownController extends BaseController
 
         $rating = $down->rated ? round($down->rating / $down->rated, 1) : 0;
 
-        $files  = $down->getFiles();
-        $images = $down->getImages();
-
-        return view('load/down', compact('down', 'rating', 'files', 'images'));
+        return view('load/down', compact('down', 'rating'));
     }
 
     /**
@@ -82,15 +79,15 @@ class DownController extends BaseController
 
             $existFiles = $down->files ? $down->files->count() : 0;
             $validator->notEmpty(count($files) + $existFiles, ['files' => 'Необходимо загрузить хотя бы 1 файл']);
-            $validator->lte(count($files) + $existFiles, 5, ['files' => 'Разрешено загружать не более 5 файлов']);
+            $validator->lte(count($files) + $existFiles, setting('maxfiles'), ['files' => 'Разрешено загружать не более ' . setting('maxfiles') . ' файлов']);
 
             if ($validator->isValid()) {
 
                 $rules = [
                     'maxsize'    => setting('fileupload'),
                     'extensions' => explode(',', setting('allowextload')),
-                    'maxweight' => setting('screenupsize'),
-                    'minweight' => 100,
+                    'maxweight'  => setting('screenupsize'),
+                    'minweight'  => 100,
                 ];
 
                 foreach ($files as $file) {
@@ -117,10 +114,7 @@ class DownController extends BaseController
             }
         }
 
-        $files  = $down->getFiles();
-        $images = $down->getImages();
-
-        return view('load/edit', compact('down', 'files', 'images'));
+        return view('load/edit', compact('down'));
     }
 
     /**
@@ -203,14 +197,14 @@ class DownController extends BaseController
             }
 
             $validator->notEmpty($files, ['files' => 'Необходимо загрузить хотя бы 1 файл']);
-            $validator->lte(count($files), 5, ['files' => 'Разрешено загружать не более 5 файлов']);
+            $validator->lte(count($files), setting('maxfiles'), ['files' => 'Разрешено загружать не более ' . setting('maxfiles') . ' файлов']);
 
             if ($validator->isValid()) {
                 $rules = [
                     'maxsize'    => setting('fileupload'),
                     'extensions' => explode(',', setting('allowextload')),
-                    'maxweight' => setting('screenupsize'),
-                    'minweight' => 100,
+                    'maxweight'  => setting('screenupsize'),
+                    'minweight'  => 100,
                 ];
 
                 foreach ($files as $file) {
@@ -504,18 +498,14 @@ class DownController extends BaseController
      */
     public function zip($id)
     {
-        $down = Down::query()->find($id);
+        $file = File::query()->where('relate_type', Down::class)->find($id);
 
-        if (! $down) {
+        if (! $file || ! $file->relate) {
             abort(404, 'Данного файла не существует!');
         }
 
-        if (! $down->active) {
+        if (! $file->relate->active) {
             abort('default', 'Данный файл еще не проверен модератором!');
-        }
-
-        if (! $file = $down->getFile()) {
-            abort('default', 'Файла не существует!');
         }
 
         if ($file->extension !== 'zip') {
@@ -529,13 +519,14 @@ class DownController extends BaseController
             abort('default', 'Не удалось открыть архив!');
         }
 
+        $down         = $file->relate;
         $page         = paginate(setting('ziplist'), $archive->count());
         $getDocuments = array_values($archive->getAllInfo());
 
         $viewExt   = Down::getViewExt();
         $documents = array_slice($getDocuments, $page->offset, $page->limit, true);
 
-        return view('load/zip', compact('down', 'documents', 'page', 'viewExt'));
+        return view('load/zip', compact('down', 'file', 'documents', 'page', 'viewExt'));
     }
 
     /**
@@ -543,18 +534,14 @@ class DownController extends BaseController
      */
     public function zipView($id, $fid)
     {
-        $down = Down::query()->find($id);
+        $file = File::query()->where('relate_type', Down::class)->find($id);
 
-        if (! $down) {
+        if (! $file || ! $file->relate) {
             abort(404, 'Данного файла не существует!');
         }
 
-        if (! $down->active) {
+        if (! $file->relate->active) {
             abort('default', 'Данный файл еще не проверен модератором!');
-        }
-
-        if (! $file = $down->getFile()) {
-            abort('default', 'Файла не существует!');
         }
 
         if ($file->extension !== 'zip') {
@@ -591,7 +578,9 @@ class DownController extends BaseController
             $content = winToUtf($content);
         }
 
-        return view('load/zip_view', compact('down', 'document', 'content'));
+        $down = $file->relate;
+
+        return view('load/zip_view', compact('down', 'file', 'document', 'content'));
     }
 
     /**
