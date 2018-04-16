@@ -45,21 +45,12 @@
                 <i class="fa fa-download"></i>
                 <b><a href="/uploads/files/{{ $file->hash }}">{{ $file->name }}</a></b> ({{ formatSize($file->size) }}) (<a href="/admin/load/delete/{{ $file->id }}" onclick="return confirm('Вы действительно хотите удалить данный файл?')">Удалить</a>)<br>
                 @endforeach
-            @else
-                Прикрепить файл ({{ setting('allowextload') }}):<br>
-                <label class="btn btn-sm btn-secondary" for="file">
-                    <input id="file" type="file" name="file" onchange="$('#upload-file-info').html(this.files[0].name);" hidden>
-                    Прикрепить файл&hellip;
-                </label>
-                <span class="badge badge-info" id="upload-file-info"></span>
-                {!! textError('file') !!}
-                <br>
             @endif
 
             @if ($down->getImages()->isNotEmpty())
                 @foreach ($down->getImages() as $image)
                     {!! resizeImage('/uploads/screen/' . $image->hash) !!}<br>
-                    <i class="fa fa-image"></i> <b><a href="/uploads/screen/{{ $image->hash }}">{{ $image->name }}</a></b> ({{ formatSize($image->size ) }}) (<a href="/admin/load/delete/{{ $image->id }}" onclick="return confirm('Вы действительно хотите удалить данный скриншот?')">Удалить</a>)<br><br>
+                    <i class="fa fa-image"></i> <b><a href="/uploads/screen/{{ $image->hash }}">{{ $image->name }}</a></b> ({{ formatSize($image->size ) }}) (<a href="/admin/down/delete/{{ $down->id }}/{{ $image->id }}" onclick="return confirm('Вы действительно хотите удалить данный скриншот?')">Удалить</a>)<br><br>
                 @endforeach
             @endif
 

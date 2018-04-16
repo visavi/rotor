@@ -5,6 +5,7 @@ namespace App\Controllers\Admin;
 use App\Classes\Request;
 use App\Classes\Validator;
 use App\Models\Down;
+use App\Models\File;
 use App\Models\Load;
 use App\Models\User;
 
@@ -291,5 +292,34 @@ class LoadController extends AdminController
         }
 
         return view('admin/load/edit_down', compact('down'));
+    }
+
+    /**
+     * Удаление файла
+     */
+    public function deleteFile($id, $fid)
+    {
+        $down = Down::query()->find($id);
+
+        if (! $down) {
+            abort(404, 'Файла не существует!');
+        }
+
+        $file = File::query()->where('relate_id', $down->id)->find($fid);
+
+        if (! $file) {
+            abort('default', 'Файла не существует!');
+        }
+
+        if ($file->isImage()) {
+            deleteFile(UPLOADS . '/screen/' . $file->hash);
+        } else {
+            deleteFile(UPLOADS . '/files/' . $file->hash);
+        }
+
+        setFlash('success', 'Файл успешно удален!');
+        $file->delete();
+
+        redirect('/admin/down/edit/' . $down->id);
     }
 }
