@@ -151,14 +151,14 @@ function deleteAlbum(User $user)
  */
 function deleteFile($path)
 {
-    if (file_exists($path)) {
+    if (file_exists($path) && is_file($path)) {
         unlink($path);
     }
 
-    $thumb = ltrim(str_replace([HOME, '/'], ['', '_'], $path), '_');
+    $thumb = UPLOADS.'/thumbnail/' . ltrim(str_replace([HOME, '/'], ['', '_'], $path), '_');
 
-    if (file_exists(UPLOADS.'/thumbnail/' . $thumb)) {
-        unlink(UPLOADS . '/thumbnail/' . $thumb);
+    if (file_exists($thumb) && is_file($thumb)) {
+        unlink($thumb);
     }
 
     return true;

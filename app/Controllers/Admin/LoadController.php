@@ -242,15 +242,19 @@ class LoadController extends AdminController
         }
 
         if (Request::isMethod('post')) {
-            $token = check(Request::input('token'));
-            $title = check(Request::input('title'));
-            $text  = check(Request::input('text'));
-            $files = (array) Request::file('files');
+            $token    = check(Request::input('token'));
+            $category = check(Request::input('category'));
+            $title    = check(Request::input('title'));
+            $text     = check(Request::input('text'));
+            $files    = (array) Request::file('files');
+
+            $category = Load::query()->find($category);
 
             $validator = new Validator();
             $validator->equal($token, $_SESSION['token'], 'Неверный идентификатор сессии, повторите действие!')
                 ->length($title, 5, 50, ['title' => 'Слишком длинное или короткое название!'])
-                ->length($text, 50, 5000, ['text' => 'Слишком длинное или короткое описание!']);
+                ->length($text, 50, 5000, ['text' => 'Слишком длинное или короткое описание!'])
+                ->notEmpty($category, ['category' => 'Категории для данного файла не существует!']);
 
             $duplicate = Down::query()->where('title', $title)->where('id', '<>', $down->id)->count();
             $validator->empty($duplicate, ['title' => 'Загрузка с аналогичный названием уже существует!']);
@@ -274,10 +278,18 @@ class LoadController extends AdminController
 
             if ($validator->isValid()) {
 
+                $oldDown = $down->replicate();
+
                 $down->update([
-                    'title' => $title,
-                    'text'  => $text,
+                    'category_id' => $category->id,
+                    'title'       => $title,
+                    'text'        => $text,
                 ]);
+
+                if ($down->category->id != $oldDown->category->id && $down->active) {
+                    $down->category->increment('count_downs');
+                    $oldDown->category->decrement('count_downs');
+                }
 
                 foreach ($files as $file) {
                     $down->uploadFile($file);
@@ -291,7 +303,13 @@ class LoadController extends AdminController
             }
         }
 
-        return view('admin/load/edit_down', compact('down'));
+        $categories = Load::query()
+            ->where('parent_id', 0)
+            ->with('children', 'new', 'children.new')
+            ->orderBy('sort')
+            ->get();
+
+        return view('admin/load/edit_down', compact('categories', 'down'));
     }
 
     /**

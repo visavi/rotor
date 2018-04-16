@@ -28,6 +28,26 @@
         <form action="/admin/down/edit/{{ $down->id }}" method="post" enctype="multipart/form-data">
             <input type="hidden" name="token" value="{{ $_SESSION['token'] }}">
 
+            <div class="form-group{{ hasError('category') }}">
+                <label for="inputCategory">Категория</label>
+
+                <?php $inputCategory = getInput('category', $down->category_id); ?>
+                <select class="form-control" id="inputCategory" name="category">
+                    @foreach ($categories as $category)
+
+                        <option value="{{ $category->id }}"{{ ($inputCategory == $category->id && ! $category->closed) ? ' selected' : '' }}{{ $category->closed ? ' disabled' : '' }}>{{ $category->name }}</option>
+
+                        @if ($category->children->isNotEmpty())
+                            @foreach($category->children as $datasub)
+                                <option value="{{ $datasub->id }}"{{ $inputCategory == $datasub->id && ! $datasub->closed ? ' selected' : '' }}{{ $datasub->closed ? ' disabled' : '' }}>– {{ $datasub->name }}</option>
+                            @endforeach
+                        @endif
+                    @endforeach
+
+                </select>
+                {!! textError('category') !!}
+            </div>
+
             <div class="form-group{{ hasError('title') }}">
                 <label for="title">Название:</label>
                 <input class="form-control" name="title" id="title" maxlength="50" value="{{ getInput('title', $down->title) }}" required>
@@ -36,14 +56,14 @@
 
             <div class="form-group{{ hasError('text') }}">
                 <label for="text">Описание:</label>
-                <textarea class="form-control markItUp" id="text" name="text" rows="5">{{ getInput('note', $down->text) }}</textarea>
+                <textarea class="form-control markItUp" id="text" name="text" rows="5">{{ getInput('text', $down->text) }}</textarea>
                 {!! textError('text') !!}
             </div>
 
             @if ($down->getFiles()->isNotEmpty())
                 @foreach ($down->getFiles() as $file)
                 <i class="fa fa-download"></i>
-                <b><a href="/uploads/files/{{ $file->hash }}">{{ $file->name }}</a></b> ({{ formatSize($file->size) }}) (<a href="/admin/load/delete/{{ $file->id }}" onclick="return confirm('Вы действительно хотите удалить данный файл?')">Удалить</a>)<br>
+                <b><a href="/uploads/files/{{ $file->hash }}">{{ $file->name }}</a></b> ({{ formatSize($file->size) }}) (<a href="/admin/down/delete/{{ $down->id }}/{{ $file->id }}" onclick="return confirm('Вы действительно хотите удалить данный файл?')">Удалить</a>)<br>
                 @endforeach
             @endif
 
