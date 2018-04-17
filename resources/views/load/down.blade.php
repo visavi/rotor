@@ -10,11 +10,6 @@
 
     <h1>{{ $down->title }}</h1>
 
-    @if (isAdmin('admin'))
-        <a href="/admin/down/edit/{{ $down->id }}">Редактировать</a> /
-        <a href="/admin/down/move/{{ $down->id }}">Переместить</a>
-    @endif
-
     <nav>
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
@@ -27,6 +22,10 @@
             <li class="breadcrumb-item"><a href="/load/{{ $down->category_id }}">{{ $down->category->name }}</a></li>
             <li class="breadcrumb-item active">{{ $down->title }}</li>
             <li class="breadcrumb-item"><a href="/down/rss/{{ $down->id }}">RSS-лента</a></li>
+
+            @if (isAdmin('admin'))
+                <li class="breadcrumb-item"><a href="/admin/down/edit/{{ $down->id }}">Редактировать</a></li>
+            @endif
         </ol>
     </nav>
 

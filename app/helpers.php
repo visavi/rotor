@@ -155,7 +155,8 @@ function deleteFile($path)
         unlink($path);
     }
 
-    $thumb = UPLOADS.'/thumbnail/' . ltrim(str_replace([HOME, '/'], ['', '_'], $path), '_');
+    $thumb = ltrim(str_replace([HOME, '/'], ['', '_'], $path), '_');
+    $thumb = UPLOADS . '/thumbnail/' . $thumb;
 
     if (file_exists($thumb) && is_file($thumb)) {
         unlink($thumb);

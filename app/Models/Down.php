@@ -40,6 +40,14 @@ class Down extends BaseModel
     }
 
     /**
+     * Возвращает комментарии
+     */
+    public function comments()
+    {
+        return $this->morphMany(Comment::class, 'relate');
+    }
+
+    /**
      * Возвращает последнии комментарии к файлу
      *
      * @param int $limit
@@ -182,5 +190,27 @@ class Down extends BaseModel
                 );
             }
         }
+    }
+
+    /**
+     * Удаление загрузки и загруженных файлов
+     *
+     * @return bool|null
+     * @throws \Exception
+     */
+    public function delete()
+    {
+        $this->files->each(function($file) {
+
+            if ($file->isImage()) {
+                deleteFile(UPLOADS . '/screen/' . $file->hash);
+            } else {
+                deleteFile(UPLOADS . '/files/' . $file->hash);
+            }
+
+            $file->delete();
+        });
+
+        return parent::delete();
     }
 }

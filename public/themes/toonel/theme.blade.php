@@ -28,7 +28,7 @@ header("Content-type:text/html; charset=utf-8");
         <td class="t3">
             <a title="Центр общения" class="menu" href="/forum">Форум</a> |
             <a title="Гостевая комната" class="menu" href="/book">Гостевая</a> |
-            <a title="Скрипты для wap-мастеров" class="menu" href="/load">Скрипты</a> |
+            <a title="Загрузки" class="menu" href="/load">Загрузки</a> |
             @if (getUser())
                 <a title="Управление настройками" class="menu" href="/menu">Меню</a> |
                 <a title="Выход" class="menu" href="/logout"

@@ -8,6 +8,7 @@ use App\Models\Down;
 use App\Models\File;
 use App\Models\Load;
 use App\Models\User;
+use Illuminate\Database\Capsule\Manager as DB;
 
 class LoadController extends AdminController
 {
@@ -317,7 +318,32 @@ class LoadController extends AdminController
      */
     public function deleteDown($id)
     {
+        $token = check(Request::input('token'));
+        $down  = Down::query()->find($id);
 
+        if (! $down) {
+            abort(404, 'Файла не существует!');
+        }
+
+        if (! isAdmin(User::BOSS)) {
+            abort(403, 'Доступ запрещен!');
+        }
+
+        if ($token === $_SESSION['token']) {
+
+            if ($down->active) {
+                $down->category->decrement('count_downs');
+            }
+
+            $down->comments()->delete();
+            $down->delete();
+
+            setFlash('success', 'Загрузка успешно удалена!');
+        } else {
+            setFlash('danger', 'Ошибка! Неверный идентификатор сессии, повторите действие!');
+        }
+
+        redirect('/admin/load/' . $down->category_id);
     }
 
     /**
