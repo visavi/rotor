@@ -24,6 +24,18 @@
         </ol>
     </nav>
 
+    @if (isAdmin('boss'))
+        <i class="fa fa-pencil-alt"></i>
+
+        @if ($down->active)
+            <a href="/admin/down/publish/{{ $down->id }}?token={{ $_SESSION['token'] }}" onclick="return confirm('Вы действительно хотите снять с публикации данную загрузку?')">Снять с публикации</a> /
+        @else
+            <a href="/admin/down/publish/{{ $down->id }}?token={{ $_SESSION['token'] }}" onclick="return confirm('Вы действительно хотите опубликовать данную загрузку?')">Опубликовать</a> /
+        @endif
+
+        <a href="/admin/down/delete/{{ $down->id }}?token={{ $_SESSION['token'] }}" onclick="return confirm('Вы действительно хотите удалить данную загрузку?')">Удалить</a><br>
+    @endif
+
     <div class="form mb-3">
         <form action="/admin/down/edit/{{ $down->id }}" method="post" enctype="multipart/form-data">
             <input type="hidden" name="token" value="{{ $_SESSION['token'] }}">

@@ -68,10 +68,10 @@
 
 
                 <div class="float-right">
-                    <a href="/admin/down/edit/{{ $data->id }}" title="Редактироватьь"><i class="fa fa-pencil-alt"></i></a>
+                    <a href="/admin/down/edit/{{ $data->id }}" title="Редактировать"><i class="fa fa-pencil-alt"></i></a>
 
-                @if (isAdmin('boss'))
-                            <a href="/admin/down/delete/{{ $data->id }}?token={{ $_SESSION['token'] }}" onclick="return confirm('Вы уверены что хотите удалить данную загрузку?')"><i class="fa fa-times"></i></a>
+                    @if (isAdmin('boss'))
+                        <a href="/admin/down/delete/{{ $data->id }}?token={{ $_SESSION['token'] }}" onclick="return confirm('Вы уверены что хотите удалить данную загрузку?')"><i class="fa fa-times"></i></a>
                     @endif
                 </div>
             </div>

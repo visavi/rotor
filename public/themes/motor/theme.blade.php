@@ -37,7 +37,7 @@ header('Content-type:text/html; charset=utf-8');
                     <a href="/forum">Форум</a> &bull;
                     <a href="/book">Гостевая</a> &bull;
                     <a href="/news">Новости</a> &bull;
-                    <a href="/load">Загрузка</a> &bull;
+                    <a href="/load">Загрузки</a> &bull;
                     <a href="/blog">Блоги</a>
 
                     <span class="mright">

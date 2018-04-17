@@ -48,7 +48,7 @@
     @endif
 
     @if ($topic->note)
-        <div class="info">{!! bbCode($topic->note) !!}</div>
+        <div class="p-1 bg-info text-white">{!! bbCode($topic->note) !!}</div>
     @endif
 
     <hr>
@@ -203,7 +203,7 @@
                             </label>
                             <span class="badge badge-info" id="upload-file-info"></span>
 
-                            <div class="info">
+                            <div class="p-1 bg-info text-white">
                                 Максимальный вес файла: <b>{{ round(setting('forumloadsize') / 1024 / 1024) }}</b> Mb<br>
                                 Допустимые расширения: {{ str_replace(',', ', ', setting('forumextload')) }}
                             </div><br>

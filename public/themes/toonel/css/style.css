@@ -259,14 +259,6 @@ input[type="submit"] {
 	font-size: x-small;
 }
 
-.info {
-	color: #992a2a;
-	background: #f2dddd;
-	border: 1px solid #e3c0c0;
-	padding: 3px;
-	margin: 1px 0 1px 0;
-}
-
 .act {
 	color: #888888;
 	background: #e4eaf2;

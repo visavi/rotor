@@ -9,7 +9,7 @@
     <h1>Редактирование шаблона</h1>
 
     @if ($notice->protect)
-        <div class="info">
+        <div class="p-1 bg-warning text-dark">
             <i class="fa fa-exclamation-circle"></i> <b>Вы редактируете системный шаблон</b>
         </div><br>
     @endif

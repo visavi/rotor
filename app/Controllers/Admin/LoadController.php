@@ -296,6 +296,11 @@ class LoadController extends AdminController
                     $down->uploadFile($file);
                 }
 
+                if (! $down->active) {
+                    $text = 'Уведомеление об изменении файла.'.PHP_EOL.'Ваш файл [b][url='.siteUrl().'/down/'.$down->id.']'.$down->title.'[/url][/b] был отредактирован модератором, возможно от вас потребуются дополнительные исправления!';
+                    sendPrivate($down->user, null, $text);
+                }
+
                 setFlash('success', 'Загрузка успешно отредактирована!');
                 redirect('/admin/down/edit/' . $down->id);
             } else {
@@ -371,6 +376,69 @@ class LoadController extends AdminController
 
         setFlash('success', 'Файл успешно удален!');
         $file->delete();
+
+        redirect('/admin/down/edit/' . $down->id);
+    }
+
+    /**
+     * Новые публикации
+     */
+    public function new()
+    {
+        $total = Down::query()->where('active', 0)->count();
+        $page = paginate(setting('downlist'), $total);
+
+        $downs = Down::query()
+            ->where('active', 0)
+            ->orderBy('created_at', 'desc')
+            ->offset($page->offset)
+            ->limit($page->limit)
+            ->with('user', 'category', 'files')
+            ->get();
+
+        return view('admin/load/new', compact('downs', 'page'));
+    }
+
+    /**
+     * Публикация загрузки
+     */
+    public function publish($id)
+    {
+        $token = check(Request::input('token'));
+        $down  = Down::query()->find($id);
+
+        if (! $down) {
+            abort(404, 'Данного файла не существует!');
+        }
+
+        if ($token === $_SESSION['token']) {
+
+            $active = $down->active ^ 1;
+
+            $down->update([
+                'active'    => $active,
+                'updated_at' => SITETIME,
+            ]);
+
+            if ($active) {
+                $type = 'опубликована' ;
+                $down->category->increment('count_downs');
+
+                $text = 'Уведомеление о публикации файла.'.PHP_EOL.'Ваш файл [b][url='.siteUrl().'/down/'.$down->id.']'.$down->title.'[/url][/b] успешно прошел проверку и добавлен в загрузки';
+                sendPrivate($down->user, null, $text);
+
+            } else {
+                $type = 'снята с публикации';
+                $down->category->decrement('count_downs');
+
+                $text = 'Уведомеление о cнятии с публикации.'.PHP_EOL.'Ваш файл [b][url='.siteUrl().'/down/'.$down->id.']'.$down->title.'[/url][/b] снят с публикации из загрузок';
+                sendPrivate($down->user, null, $text);
+            }
+
+            setFlash('success', 'Загрузка успешно ' . $type . '!');
+        } else {
+            setFlash('danger', 'Ошибка! Неверный идентификатор сессии, повторите действие!');
+        }
 
         redirect('/admin/down/edit/' . $down->id);
     }

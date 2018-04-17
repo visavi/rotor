@@ -4,6 +4,7 @@ namespace App\Controllers\Load;
 
 use App\Models\File;
 use App\Models\Load;
+use App\Models\User;
 use Exception;
 use App\Classes\Request;
 use App\Classes\Validator;
@@ -39,7 +40,7 @@ class DownController extends BaseController
             abort(404, 'Данная загрузка не найдена!');
         }
 
-        if (! $down->active && $down->user_id !== getUser('id')) {
+        if (! isAdmin(User::ADMIN) && (! $down->active && $down->user_id !== getUser('id'))) {
             abort('default', 'Данный файл еще не проверен модератором!');
         }
 

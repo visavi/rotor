@@ -368,28 +368,3 @@ function showVoteForm()
 
     return false;
 }
-
-/* Загрузка изображения */
-function submitImage(el)
-{
-    var form = new FormData();
-    form.append('image', el.files[0]);
-
-    $.ajax({
-        data: form,
-        type: 'post',
-        contentType: false,
-        processData: false,
-        dataType: 'json',
-        url: '/ajax/image',
-        success: function(data) {
-            notify('success', 'Запись успешно удалена');
-            $('.js-image').html($(data));
-
-        }
-    });
-
-    console.log(data);
-
-    return false;
-}

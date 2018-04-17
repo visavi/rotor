@@ -127,7 +127,6 @@ $routes = [
     ['POST',     '/ajax/rating', 'AjaxController@rating'],
     ['POST',     '/ajax/vote', 'AjaxController@vote'],
     ['POST',     '/ajax/complaint', 'AjaxController@complaint'],
-    ['POST',     '/ajax/image', 'AjaxController@uploadImage'],
 
     ['GET',      '/wall/[user:login]', 'WallController@index', 'wall'],
     ['POST',     '/wall/[user:login]/create', 'WallController@create'],
@@ -220,6 +219,9 @@ $routes = [
     ['GET|POST', '/admin/down/edit/[i:id]', 'Admin\LoadController@editDown'],
     ['GET|POST', '/admin/down/delete/[i:id]', 'Admin\LoadController@deleteDown'],
     ['GET',      '/admin/down/delete/[i:id]/[i:fid]', 'Admin\LoadController@deleteFile'],
+
+    ['GET',      '/admin/down/new', 'Admin\LoadController@new'],
+    ['GET',      '/admin/down/publish/[i:id]', 'Admin\LoadController@publish'],
 
     ['GET',      '/api', 'ApiController@index'],
     ['GET',      '/api/user', 'ApiController@user'],
