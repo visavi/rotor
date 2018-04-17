@@ -19,11 +19,11 @@
     Найдено совпадений в описании: <b>{{ $page->total }}</b><br><br>
 
     @foreach ($downs as $data)
-        <?php $filesize = $data->link ? formatFileSize(UPLOADS.'/files/'.$data->link) : 0; ?>
+        <?php $rating = $data->rated ? round($data->rating / $data->rated, 1) : 0; ?>
 
         <div class="b">
             <i class="fa fa-file"></i>
-            <b><a href="/down/{{ $data->id }}">{{ $data->title }}</a></b> ({{ $filesize }})
+            <b><a href="/down/{{ $data->id }}">{{ $data->title }}</a></b> ({{ $rating }})
         </div>
 
         <div>

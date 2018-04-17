@@ -15,28 +15,25 @@
         </ol>
     </nav>
 
-    <?php /*
-    echo '<i class="fa fa-book"></i> ';
-    echo '<a href="/load/add">Публикация</a> / ';
-    echo '<a href="/load/add?act=waiting">Ожидающие</a> / ';
-    echo '<b>Проверенные</b><hr>';
-*/ ?>
+    @if ($user->id == getUser('id'))
+        <?php $type = ($active == 1) ? 'success' : 'light'; ?>
+        <a href="/down/active/files?active=1" class="badge badge-{{ $type }}">Проверенные</a>
+
+        <?php $type = ($active == 0) ? 'success' : 'light'; ?>
+        <a href="/down/active/files?active=0" class="badge badge-{{ $type }}">Ожидающие</a>
+    @endif
 
     @if ($downs->isNotEmpty())
         @foreach ($downs as $down)
-            <?php $filesize = $down->link ? formatFileSize(UPLOADS.'/files/'.$down->link) : 0; ?>
+            <?php $rating = $down->rated ? round($down->rating / $down->rated, 1) : 0; ?>
 
             <div class="b">
                 <i class="fa fa-file"></i>
-                <b><a href="/down/{{ $down->id }}">{{ $down->title }}</a></b> ({{ $filesize }})
+                <b><a href="/down/{{ $down->id }}">{{ $down->title }}</a></b> ({{ $rating }})
             </div>
             <div>
                 Категория: <a href="/load/{{ $down->category->id }}">{{ $down->category->name }}</a><br>
                 Скачиваний: {{ $down->loads }}<br>
-
-                <?php $rating = $down->rated ? round($down->rating / $down->rated, 1) : 0; ?>
-
-                Рейтинг: <b>{{ $rating }}</b> (Голосов: {{ $down->rated }})<br>
                 Автор: {!! profile($down->user) !!} ({{ dateFixed($down->created_at) }})
             </div>
 

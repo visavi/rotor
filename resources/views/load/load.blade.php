@@ -59,19 +59,15 @@
 
     @if ($downs->isNotEmpty())
         @foreach ($downs as $data)
-            <?php $filesize = $data->link ? formatFileSize(UPLOADS.'/files/'.$data->link) : 0; ?>
+            <?php $rating = $data->rated ? round($data->rating / $data->rated, 1) : 0; ?>
 
             <div class="b">
                 <i class="fa fa-file"></i>
-                <b><a href="/down/{{ $data->id }}">{{ $data->title }}</a></b> ({{ $filesize }})
+                <b><a href="/down/{{ $data->id }}">{{ $data->title }}</a></b> ({{ $rating }})
             </div>
 
             <div>
                 Скачиваний: {{ $data->loads }}<br>
-
-                <?php $rating = $data->rated ? round($data->rating / $data->rated, 1) : 0; ?>
-
-                Рейтинг: <b>{{ $rating }}</b> (Голосов: {{ $data->rated }})<br>
                 <a href="/down/comments/{{ $data->id }}">Комментарии</a> ({{ $data->count_comments }})
                 <a href="/down/end/{{ $data->id }}">&raquo;</a>
             </div>

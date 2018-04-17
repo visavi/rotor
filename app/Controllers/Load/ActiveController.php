@@ -33,8 +33,14 @@ class ActiveController extends BaseController
      */
     public function files()
     {
-        $user  = $this->user;
-        $total = Down::query()->where('active', 1)->where('user_id', $user->id)->count();
+        $active = check(Request::input('active', 1));
+        $user   = $this->user;
+
+        if ($user->id != getUser('id')) {
+            $active = 1;
+        }
+
+        $total = Down::query()->where('active', $active)->where('user_id', $user->id)->count();
 
         if ($total > 500) {
             $total = 500;
@@ -43,7 +49,7 @@ class ActiveController extends BaseController
         $page = paginate(setting('downlist'), $total);
 
         $downs = Down::query()
-            ->where('active', 1)
+            ->where('active', $active)
             ->where('user_id', $user->id)
             ->orderBy('created_at', 'desc')
             ->limit($page->limit)
@@ -51,7 +57,7 @@ class ActiveController extends BaseController
             ->with('category', 'user')
             ->get();
 
-        return view('load/active_files', compact('downs', 'page', 'user'));
+        return view('load/active_files', compact('downs', 'page', 'user', 'active'));
     }
 
     /**
