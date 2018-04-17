@@ -69,7 +69,6 @@
 
                 <div class="float-right">
                     <a href="/admin/down/edit/{{ $data->id }}" title="Редактироватьь"><i class="fa fa-pencil-alt"></i></a>
-                    <a href="/admin/down/move/{{ $data->id }}" title="Перенести"><i class="fa fa-arrows-alt"></i></a>
 
                 @if (isAdmin('boss'))
                             <a href="/admin/down/delete/{{ $data->id }}?token={{ $_SESSION['token'] }}" onclick="return confirm('Вы уверены что хотите удалить данную загрузку?')"><i class="fa fa-times"></i></a>

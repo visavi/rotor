@@ -313,6 +313,14 @@ class LoadController extends AdminController
     }
 
     /**
+     * Удаление загрузки
+     */
+    public function deleteDown($id)
+    {
+
+    }
+
+    /**
      * Удаление файла
      */
     public function deleteFile($id, $fid)

@@ -218,6 +218,7 @@ $routes = [
     ['GET',      '/admin/load/restatement', 'Admin\LoadController@restatement'],
     ['GET',      '/admin/load/[i:id]', 'Admin\LoadController@load'],
     ['GET|POST', '/admin/down/edit/[i:id]', 'Admin\LoadController@editDown'],
+    ['GET|POST', '/admin/down/delete/[i:id]', 'Admin\LoadController@deleteDown'],
     ['GET',      '/admin/down/delete/[i:id]/[i:fid]', 'Admin\LoadController@deleteFile'],
 
     ['GET',      '/api', 'ApiController@index'],
