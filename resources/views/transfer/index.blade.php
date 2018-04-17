@@ -8,6 +8,14 @@
 
     <h1>Перевод денег</h1>
 
+    <nav>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
+            <li class="breadcrumb-item"><a href="/menu">Мое меню</a></li>
+            <li class="breadcrumb-item active">Перевод денег</li>
+        </ol>
+    </nav>
+
     В наличии: {{ plural(getUser('money'), setting('moneyname')) }}<br><br>
 
     @if (getUser('point') >= setting('sendmoneypoint'))

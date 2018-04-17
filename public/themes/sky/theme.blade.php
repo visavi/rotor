@@ -156,7 +156,7 @@ header("Content-type:text/html; charset=utf-8");
                                     <div class="art-BlockContent-body">
                                         <div>
                                             <div class="divb">Календарь</div>
-                                            <?php include (APP.'/Includes/calendar.php'); ?>
+                                            {!! getCalendar() !!}
                                         </div>
                                     </div>
                                 </div>

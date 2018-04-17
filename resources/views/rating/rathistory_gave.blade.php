@@ -8,6 +8,15 @@
 
     <h1>Отданные голоса {{ $user->login }}</h1>
 
+    <nav>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
+            <li class="breadcrumb-item"><a href="/user/{{ $user->login }}">{{ $user->login }}</a></li>
+            <li class="breadcrumb-item"><a href="/user/{{ $user->login }}/rating">Изменения репутации</a></li>
+            <li class="breadcrumb-item active">Отданные голоса</li>
+        </ol>
+    </nav>
+
     <i class="fa fa-thumbs-up"></i> <a href="/rating/{{ $user->login }}/received">Полученные</a> / <b>Отданные</b><hr>
 
     @if ($ratings->isNotEmpty())
@@ -36,7 +45,4 @@
     @else
         {!! showError('В истории еще ничего нет!') !!}
     @endif
-
-    <br>
-    <i class="fa fa-arrow-circle-up"></i> <a href="/user/{{  $user->login }}">В анкету</a><br>
 @stop

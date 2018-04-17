@@ -12,6 +12,14 @@
 
     <h1>Реклама на сайте</h1><br>
 
+    <nav>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
+            <li class="breadcrumb-item"><a href="/menu">Мое меню</a></li>
+            <li class="breadcrumb-item active">Реклама на сайте</li>
+        </ol>
+    </nav>
+
     @if ($adverts->isNotEmpty())
         @foreach($adverts as $data)
             <div class="b">

@@ -8,6 +8,14 @@
 
     <h1>Изменения репутации пользователя {{ $user->login }}</h1>
 
+    <nav>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
+            <li class="breadcrumb-item"><a href="/user/{{ $user->login }}">{{ $user->login }}</a></li>
+            <li class="breadcrumb-item active">Изменения репутации</li>
+        </ol>
+    </nav>
+
     <div class="form">
         <form method="post">
             <input type="hidden" name="token" value="{{ $_SESSION['token'] }}">
@@ -30,5 +38,4 @@
     </div><br>
 
     <i class="fa fa-briefcase"></i> <a href="/rating/{{ $user->login }}">История</a><br>
-    <i class="fa fa-arrow-circle-left"></i> <a href="/user/{{ $user->login }}">Вернуться</a><br>
 @stop

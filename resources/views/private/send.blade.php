@@ -8,6 +8,15 @@
 
     <h1>Новое сообщение</h1>
 
+    <nav>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
+            <li class="breadcrumb-item"><a href="/menu">Мое меню</a></li>
+            <li class="breadcrumb-item"><a href="/private">Приватные сообщения</a></li>
+            <li class="breadcrumb-item active">Новое сообщение</li>
+        </ol>
+    </nav>
+
     @if ($user)
 
         <i class="fa fa-envelope"></i> Сообщение для <b>{!! profile($user) !!}</b>:<br>

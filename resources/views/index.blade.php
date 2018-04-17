@@ -51,12 +51,12 @@
     <div class="b">
         <i class="fa fa-chart-line fa-lg text-muted"></i> <b>Курсы валют</b>
     </div>
-    <?php include_once(APP.'/Includes/courses.php') ?>
+    {!! getCourses() !!}
 
     <div class="b">
         <i class="fa fa-calendar-alt fa-lg text-muted"></i> <b>Календарь</b>
     </div>
-    <?php include_once(APP.'/Includes/calendar.php') ?>
+    {!! getCalendar() !!}
 
     @include('advert/_bottom')
 @stop

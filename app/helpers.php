@@ -1,6 +1,7 @@
 <?php
 
 use App\Classes\BBCode;
+use App\Classes\Metrika;
 use App\Classes\Registry;
 use App\Classes\Request;
 use App\Models\Antimat;
@@ -39,6 +40,7 @@ use App\Models\Topic;
 use App\Models\User;
 use App\Models\Vote;
 use App\Models\Wall;
+use Curl\Curl;
 use Illuminate\Database\Capsule\Manager as DB;
 use Illuminate\Database\Query\JoinClause;
 use Illuminate\Http\UploadedFile;
@@ -518,6 +520,36 @@ function makeCalendar($month, $year)
 }
 
 /**
+ * Возвращает календарь
+ *
+ * @return string календарь
+ */
+function getCalendar()
+{
+    $date['day']  = dateFixed(SITETIME, "j");
+    $date['mon']  = dateFixed(SITETIME, "n");
+    $date['year'] = dateFixed(SITETIME, "Y");
+    $startMonth   = mktime(0, 0, 0, $date['mon'], 1);
+
+    $newsDays = [];
+    $newsIds  = [];
+
+    $news = News::query()->where('created_at', '>', $startMonth)->get();
+
+    if ($news->isNotEmpty()) {
+        foreach ($news as $data) {
+            $curDay           = dateFixed($data->created_at, 'j');
+            $newsDays[]       = $curDay;
+            $newsIds[$curDay] = $data->id;
+        }
+    }
+
+    $calendar = makeCalendar($date['mon'], $date['year']);
+
+    return view('app/_calendar', compact('calendar', 'date', 'newsDays', 'newsIds'));
+}
+
+/**
  * Возвращает количество писем пользователя
  *
  * @param  User $user объект пользователя
@@ -609,7 +641,8 @@ function statsOnline($cache = 30)
         $online[] = Online::query()->whereNotNull('user_id')->count();
         $online[] = Online::query()->count();
 
-        include_once APP . '/Includes/count.php';
+        $metrika = new Metrika();
+        $metrika->count($online);
 
         file_put_contents(STORAGE . '/temp/online.dat', json_encode($online), LOCK_EX);
     }
@@ -2493,7 +2526,6 @@ function captchaVerify(): bool
  *
  * @param string $extension
  * @return string
- *
  */
 function uniqueName(string $extension = null): string
 {
@@ -2502,4 +2534,36 @@ function uniqueName(string $extension = null): string
     }
 
     return str_replace('.', '', uniqid('', true)) . $extension;
+}
+
+/**
+ * Возвращает курсы валют
+ *
+ * @return string
+ */
+function getCourses()
+{
+    if (@filemtime(STORAGE."/temp/courses.dat") < time() - 3600 || @filesize(STORAGE."/temp/courses.dat") == 0) {
+        $curl = new Curl();
+
+        if ($xml = $curl->get('http://www.cbr.ru/scripts/XML_daily.asp')){
+
+            $courses = [];
+            $courses['Date'] = (string) $xml->attributes()->Date;
+            foreach ($xml->Valute as $item) {
+
+                $courses[(string) $item->CharCode] = [
+                    'name' => (string) $item->Name,
+                    'value' => (string) $item->Value,
+                    'nominal' => (string) $item->Nominal,
+                ];
+            }
+
+            file_put_contents(STORAGE."/temp/courses.dat", json_encode($courses), LOCK_EX);
+        }
+    }
+
+    $courses = @json_decode(file_get_contents(STORAGE."/temp/courses.dat"));
+
+    return view('app/_courses', compact('courses'));
 }

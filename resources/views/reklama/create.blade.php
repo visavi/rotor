@@ -8,6 +8,15 @@
 
     <h1>Размещение рекламы</h1>
 
+    <nav>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
+            <li class="breadcrumb-item"><a href="/menu">Мое меню</a></li>
+            <li class="breadcrumb-item"><a href="/reklama">Реклама на сайте</a></li>
+            <li class="breadcrumb-item active">Размещение рекламы</li>
+        </ol>
+    </nav>
+
     У вас в наличии: <b>{{ plural(getUser('money'), setting('moneyname')) }}</b><br><br>
 
     <div class="form">
@@ -56,8 +65,6 @@
     Адрес ссылки не должен направлять на прямое скачивание какого-либо контента<br>
     Запрещены ссылки на сайты с алярмами и порно<br>
     За нарушение правил предусмотрено наказание в виде бана<br><br>
-
-    <i class="fa fa-arrow-circle-left"></i> <a href="/reklama">Вернуться</a><br>
 
     @push('scripts')
         <script>

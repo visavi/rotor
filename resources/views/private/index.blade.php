@@ -8,6 +8,14 @@
 
     <h1>Приватные сообщения</h1>
 
+    <nav>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
+            <li class="breadcrumb-item"><a href="/menu">Мое меню</a></li>
+            <li class="breadcrumb-item active">Входящие</li>
+        </ol>
+    </nav>
+
     @if ($newprivat > 0)
         <div style="text-align:center"><b><span style="color:#ff0000">Получено новых писем: {{ getUser('newprivat') }}</span></b></div>
     @endif

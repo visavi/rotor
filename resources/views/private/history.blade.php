@@ -8,6 +8,15 @@
 
     <h1>История переписки</h1>
 
+    <nav>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
+            <li class="breadcrumb-item"><a href="/menu">Мое меню</a></li>
+            <li class="breadcrumb-item"><a href="/private">Приватные сообщения</a></li>
+            <li class="breadcrumb-item active">История переписки</li>
+        </ol>
+    </nav>
+
     <i class="fa fa-envelope"></i> <a href="/private">Входящие</a> /
     <a href="/private/outbox">Отправленные</a>
     <hr>
@@ -48,5 +57,4 @@
     <i class="fa fa-search"></i> <a href="/searchuser">Поиск контактов</a><br>
     <i class="fa fa-envelope"></i> <a href="/private/send">Написать письмо</a><br>
     <i class="fa fa-address-book"></i> <a href="/contact">Контакт</a> / <a href="/ignore">Игнор</a><br>
-
 @stop
