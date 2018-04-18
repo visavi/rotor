@@ -8,6 +8,14 @@
 
     <h1>Чистка пользователей</h1>
 
+    <nav>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
+            <li class="breadcrumb-item"><a href="/admin">Панель</a></li>
+            <li class="breadcrumb-item active">Чистка пользователей</li>
+        </ol>
+    </nav>
+
     @if ($users->isEmpty())
         Удалить пользователей которые не посещали сайт:<br>
 

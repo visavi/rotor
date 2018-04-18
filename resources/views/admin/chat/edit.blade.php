@@ -30,5 +30,5 @@
 
             <button class="btn btn-primary">Изменить</button>
         </form>
-    </div><br>
+    </div>
 @stop

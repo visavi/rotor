@@ -8,6 +8,14 @@
 
     <h1>Очистка кэша</h1>
 
+    <nav>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
+            <li class="breadcrumb-item"><a href="/admin">Панель</a></li>
+            <li class="breadcrumb-item active">Очистка кэша</li>
+        </ol>
+    </nav>
+
     <i class="fa fa-eraser fa-2x"></i> <a href="/admin/cache">Файлы</a> / <b>Изображения</b><br><br>
 
     @if ($images)
@@ -30,6 +38,4 @@
     @else
         {!! showError('Изображений еще нет!') !!}
     @endif
-
-    <i class="fa fa-wrench"></i> <a href="/admin">В админку</a><br>
 @stop

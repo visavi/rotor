@@ -8,6 +8,19 @@
 
     <h1>{{ $path ?? 'Редактирование страниц' }}</h1>
 
+    <nav>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
+            <li class="breadcrumb-item"><a href="/admin">Панель</a></li>
+
+            @if ($path)
+                <li class="breadcrumb-item"><a href="/admin/files?path={{ ltrim(dirname($path), '.') }}/">{{ ltrim(dirname($path), '.') }}/</a></li>
+            @endif
+
+            <li class="breadcrumb-item active">{{ $path ?? 'Редактирование страниц' }}</li>
+        </ol>
+    </nav>
+
     @if ($files)
 
         <ul class="list-group">
@@ -44,10 +57,5 @@
         {!! showError('Файлов нет!') !!}
     @endif
 
-    @if ($path)
-        <i class="fa fa-arrow-circle-left"></i> <a href="/admin/files?path={{ ltrim(dirname($path), '.') }}/">Вернуться</a><br>
-    @endif
-
     <i class="fa fa-plus"></i> <a href="/admin/files/create?path={{ $path }}">Создать</a><br>
-    <i class="fa fa-wrench"></i> <a href="/admin">В админку</a><br>
 @stop

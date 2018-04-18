@@ -8,6 +8,14 @@
 
     <h1>Сканирование сайта</h1>
 
+    <nav>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
+            <li class="breadcrumb-item"><a href="/admin">Панель</a></li>
+            <li class="breadcrumb-item active">Сканирование сайта</li>
+        </ol>
+    </nav>
+
     @if ($diff)
         <b><span style="color:#ff0000">Новые файлы и новые параметры файлов:</span></b><br><br>
 
@@ -41,6 +49,4 @@
     </p>
 
     <p><a class="btn btn-primary" href="/admin/checker/scan?token={{ $_SESSION['token'] }}"><i class="fa fa-sync"></i> Сканировать</a></p>
-
-    <i class="fa fa-wrench"></i> <a href="/admin">В админку</a><br>
 @stop

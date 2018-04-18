@@ -8,6 +8,16 @@
 
     <h1>Создание нового объекта</h1>
 
+    <nav>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
+            <li class="breadcrumb-item"><a href="/admin">Панель</a></li>
+            <li class="breadcrumb-item"><a href="/admin/files">Редактирование страниц</a></li>
+            <li class="breadcrumb-item"><a href="/admin/files?path={{ $path }}">{{ $path }}</a></li>
+            <li class="breadcrumb-item active">Создание нового объекта</li>
+        </ol>
+    </nav>
+
     <div class="container-fluid">
         <div class="row">
             <div class="col-md-6 bg-light p-1">
@@ -41,7 +51,4 @@
 
         <p class="text-muted font-italic">Разрешены латинские символы и цифры, а также знаки дефис и нижнее подчеркивание</p>
     </div>
-
-    <i class="fa fa-arrow-circle-left"></i> <a href="/admin/files?path={{ $path }}">Вернуться</a><br>
-    <i class="fa fa-wrench"></i> <a href="/admin">В админку</a><br>
 @stop

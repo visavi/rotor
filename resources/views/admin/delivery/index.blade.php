@@ -8,6 +8,14 @@
 
     <h1>Рассылка приватных сообщений</h1>
 
+    <nav>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
+            <li class="breadcrumb-item"><a href="/admin">Панель</a></li>
+            <li class="breadcrumb-item active">Рассылка сообщений</li>
+        </ol>
+    </nav>
+
     <div class="form">
         <form action="/admin/delivery" method="post">
             <input type="hidden" name="token" value="{{ $_SESSION['token'] }}">
@@ -28,6 +36,4 @@
             <button class="btn btn-primary">Разослать</button>
         </form>
     </div>
-
-    <i class="fa fa-wrench"></i> <a href="/admin">В админку</a><br>
 @stop
