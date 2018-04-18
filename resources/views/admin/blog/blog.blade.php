@@ -9,24 +9,28 @@
     @if (getUser() && ! $category->closed)
         <div class="float-right">
             <a class="btn btn-success" href="/blog/create?cid={{ $category->id }}">Добавить статью</a>
-        </div>
+        </div><br>
     @endif
 
-    <h1>{{ $category->name }} <small>(Статей: {{ $category->count_blogs }})</small></h1><br>
+    <h1>{{ $category->name }} <small>(Статей: {{ $category->count_blogs }})</small></h1>
 
-    <ol class="breadcrumb">
-        <li class="breadcrumb-item"><a href="/admin/blog">Блоги</a></li>
+    <nav>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
+            <li class="breadcrumb-item"><a href="/admin">Панель</a></li>
+            <li class="breadcrumb-item"><a href="/admin/blog">Блоги</a></li>
 
-        @if ($category->parent->id)
-            <li class="breadcrumb-item"><a href="/admin/blog/{{ $category->parent->id }}">{{ $category->parent->name }}</a></li>
-        @endif
+            @if ($category->parent->id)
+                <li class="breadcrumb-item"><a href="/admin/blog/{{ $category->parent->id }}">{{ $category->parent->name }}</a></li>
+            @endif
 
-        <li class="breadcrumb-item active">{{ $category->name }}</li>
+            <li class="breadcrumb-item active">{{ $category->name }}</li>
 
-        @if (isAdmin())
-            <li class="breadcrumb-item"><a href="/blog/{{ $category->id }}?page={{ $page->current }}">Обзор</a></li>
-        @endif
-    </ol>
+            @if (isAdmin())
+                <li class="breadcrumb-item"><a href="/blog/{{ $category->id }}?page={{ $page->current }}">Обзор</a></li>
+            @endif
+        </ol>
+    </nav>
 
     @if ($blogs->isNotEmpty())
         @foreach ($blogs as $data)

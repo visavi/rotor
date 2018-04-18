@@ -8,9 +8,21 @@
 
     <h1>Редактирование статьи</h1>
 
-    <a href="/blog">Блоги</a> /
-    <a href="/blog/search">Поиск</a> /
-    <a href="/blog/blogs">Все статьи</a><hr>
+    <nav>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
+            <li class="breadcrumb-item"><a href="/admin">Панель</a></li>
+            <li class="breadcrumb-item"><a href="/admin/blog">Блоги</a></li>
+
+            @if ($blog->category->parent->id)
+                <li class="breadcrumb-item"><a href="/admin/blog/{{ $blog->category->parent->id }}">{{ $blog->category->parent->name }}</a></li>
+            @endif
+
+            <li class="breadcrumb-item"><a href="/admin/blog/{{ $blog->category->id }}">{{ $blog->category->name }}</a></li>
+            <li class="breadcrumb-item"><a href="/article/{{ $blog->id }}">{{ $blog->title }}</a></li>
+            <li class="breadcrumb-item active">Редактирование статьи</li>
+        </ol>
+    </nav>
 
     <div class="form next">
         <form action="/admin/article/edit/{{ $blog->id }}" method="post">
@@ -36,8 +48,5 @@
 
             <button class="btn btn-primary">Изменить</button>
         </form>
-    </div><br>
-
-    <i class="fa fa-arrow-circle-up"></i> <a href="/admin/blog">К блогам</a><br>
-    <i class="fa fa-arrow-circle-left"></i> <a href="/admin/blog/{{ $blog->category_id }}">Вернуться</a><br>
+    </div>
 @stop

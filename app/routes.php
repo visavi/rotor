@@ -384,9 +384,6 @@ $routes = [
     ['GET', '/search', function() {
         return view('search/index');
     }],
-
-    ['GET|POST', '/admin/newload', 'admin/newload.php'],
-    ['GET|POST', '/load/add', 'load/add.php'],
 ];
 
 $router->addRoutes($routes);

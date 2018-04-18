@@ -8,6 +8,14 @@
 
     <h1>Backup базы данных</h1>
 
+    <nav>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
+            <li class="breadcrumb-item"><a href="/admin">Панель</a></li>
+            <li class="breadcrumb-item active">Backup</li>
+        </ol>
+    </nav>
+
     @if ($files)
 
         @foreach($files as $file)
@@ -21,6 +29,4 @@
     @endif
 
     <i class="fa fa-check"></i> <a href="/admin/backup/create">Новый бэкап</a><br>
-
-    <i class="fa fa-wrench"></i> <a href="/admin">В админку</a><br>
 @stop

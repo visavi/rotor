@@ -8,6 +8,14 @@
 
     <h1>Черный список</h1>
 
+    <nav>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
+            <li class="breadcrumb-item"><a href="/admin">Панель</a></li>
+            <li class="breadcrumb-item active">Черный список</li>
+        </ol>
+    </nav>
+
     <?php $active = ($type == 'email') ? 'success' : 'light'; ?>
     <a href="/admin/blacklist?type=email" class="badge badge-{{ $active }}">Email</a>
     <?php $active = ($type == 'login') ? 'success' : 'light'; ?>
@@ -57,7 +65,5 @@
         </form>
     </div><br>
 
-    Всего в списке: <b>{{ $page->total }}</b><br><br>
-
-    <i class="fa fa-wrench"></i> <a href="/admin">В админку</a><br>
+    Всего в списке: <b>{{ $page->total }}</b><br>
 @stop

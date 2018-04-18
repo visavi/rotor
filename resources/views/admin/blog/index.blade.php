@@ -1,12 +1,20 @@
 @extends('layout')
 
 @section('title')
-    Управление блогами
+    Блоги
 @stop
 
 @section('content')
 
-    <h1>Управление блогами</h1>
+    <h1>Блоги</h1>
+
+    <nav>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
+            <li class="breadcrumb-item"><a href="/admin">Панель</a></li>
+            <li class="breadcrumb-item active">Блоги</li>
+        </ol>
+    </nav>
 
     @foreach ($categories as $key => $data)
 
@@ -64,6 +72,4 @@
 
         <i class="fa fa-sync"></i> <a href="/admin/blog/restatement?token={{ $_SESSION['token'] }}">Пересчитать</a><br>
     @endif
-
-    <i class="fa fa-wrench"></i> <a href="/admin">В админку</a><br>
 @stop

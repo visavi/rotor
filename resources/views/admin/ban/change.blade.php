@@ -8,6 +8,15 @@
 
     <h1>Изменение бана пользователя {{ $user->login }}</h1>
 
+    <nav>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
+            <li class="breadcrumb-item"><a href="/admin">Панель</a></li>
+            <li class="breadcrumb-item"><a href="/admin/ban">Бан / Разбан</a></li>
+            <li class="breadcrumb-item active">Изменение бана пользователя {{ $user->login }}</li>
+        </ol>
+    </nav>
+
     <h3>{!! $user->getGender() !!} {!! profile($user) !!}</h3>
 
     @if ($user->lastBan->id)
@@ -36,9 +45,6 @@
             </div>
 
             <button class="btn btn-primary">Изменить</button>
-        </form></div><br>
-
-
-    <i class="fa fa-arrow-circle-left"></i> <a href="/admin/ban/edit?user={{ $user->login }}">Вернуться</a><br>
-    <i class="fa fa-wrench"></i> <a href="/admin">В админку</a><br>
+        </form>
+    </div>
 @stop

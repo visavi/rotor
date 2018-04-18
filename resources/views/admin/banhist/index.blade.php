@@ -8,6 +8,14 @@
 
     <h1>История банов</h1>
 
+    <nav>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
+            <li class="breadcrumb-item"><a href="/admin">Панель</a></li>
+            <li class="breadcrumb-item active">История банов</li>
+        </ol>
+    </nav>
+
     @if ($records->isNotEmpty())
 
     <form action="/admin/banhist/delete?page={{ $page->current }}" method="post">
@@ -62,6 +70,4 @@
     @else
         {!! showError('Истории банов еще нет!') !!}
     @endif
-
-    <i class="fa fa-wrench"></i> <a href="/admin">В админку</a><br>
 @stop

@@ -8,6 +8,15 @@
 
     <h1>Бан пользователя {{ $user->login }}</h1>
 
+    <nav>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
+            <li class="breadcrumb-item"><a href="/admin">Панель</a></li>
+            <li class="breadcrumb-item"><a href="/admin/ban">Бан / Разбан</a></li>
+            <li class="breadcrumb-item active">Бан пользователя {{ $user->login }}</li>
+        </ol>
+    </nav>
+
     <h3>{!! $user->getGender() !!} {!! profile($user) !!}</h3>
 
     @if ($user->lastBan->id)
@@ -73,7 +82,4 @@
 
         <p class="text-muted font-italic">Внимание! Постарайтесь как можно подробнее описать причину бана</p>
     @endif
-
-    <i class="fa fa-arrow-circle-left"></i> <a href="/admin/ban">Вернуться</a><br>
-    <i class="fa fa-wrench"></i> <a href="/admin">В админку</a><br>
 @stop

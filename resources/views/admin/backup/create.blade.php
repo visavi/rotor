@@ -1,12 +1,21 @@
 @extends('layout')
 
 @section('title')
-    Backup базы данных
+    Создание backup
 @stop
 
 @section('content')
 
-    <h1>Backup базы данных</h1>
+    <h1>Создание backup</h1>
+
+    <nav>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
+            <li class="breadcrumb-item"><a href="/admin">Панель</a></li>
+            <li class="breadcrumb-item"><a href="/admin/backup">Backup</a></li>
+            <li class="breadcrumb-item active">Создание backup</li>
+        </ol>
+    </nav>
 
     @if ($tables)
         Всего таблиц: <b>{{ count($tables) }}</b><br><br>
@@ -71,7 +80,4 @@
     @else
         {!! showError('Нет таблиц для бэкапа!') !!}
     @endif
-
-    <i class="fa fa-arrow-circle-left"></i> <a href="/admin/backup">Вернуться</a><br>
-    <i class="fa fa-wrench"></i> <a href="/admin">В админку</a><br>
 @stop

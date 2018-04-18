@@ -8,6 +8,22 @@
 
     <h1>Редактирование раздела {{ $category->name }}</h1>
 
+    <nav>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
+            <li class="breadcrumb-item"><a href="/admin">Панель</a></li>
+            <li class="breadcrumb-item"><a href="/admin/blog">Блоги</a></li>
+
+            @if ($category->parent->id)
+                <li class="breadcrumb-item"><a href="/admin/blog/{{ $category->parent->id }}">{{ $category->parent->name }}</a></li>
+            @endif
+
+            <li class="breadcrumb-item"><a href="/admin/blog/{{ $category->id }}">{{ $category->name }}</a></li>
+            <li class="breadcrumb-item active">Редактирование раздела</li>
+        </ol>
+    </nav>
+
+
     <div class="form mb-3">
         <form action="/admin/blog/edit/{{ $category->id }}" method="post">
             <input type="hidden" name="token" value="{{ $_SESSION['token'] }}">
@@ -55,7 +71,4 @@
             <button class="btn btn-primary">Изменить</button>
         </form>
     </div>
-
-    <i class="fa fa-arrow-circle-left"></i> <a href="/admin/blog">Вернуться</a><br>
-    <i class="fa fa-wrench"></i> <a href="/admin">В админку</a><br>
 @stop
