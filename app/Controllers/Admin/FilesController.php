@@ -28,7 +28,7 @@ class FilesController extends AdminController
         if (
             ! file_exists(RESOURCES.'/views/'.$this->path) ||
             ! is_dir(RESOURCES.'/views/'.$this->path) ||
-            ! ends_with($this->path, '/') ||
+            empty($this->path) ||
             str_contains($this->path, '.') ||
             starts_with($this->path, '/')
         ) {
@@ -41,16 +41,18 @@ class FilesController extends AdminController
      */
     public function index()
     {
-        $files = preg_grep('/^([^.])/', scandir(RESOURCES.'/views/'.$this->path.$this->file));
+        $path =  $this->path ? $this->path . '/' : $this->path;
 
-        usort($files, function($a, $b) {
-            if (is_file(RESOURCES.'/views/'.$this->path.$a) && is_file(APP.'/views/'.$this->path.$b)) {
+        $files = preg_grep('/^([^.])/', scandir(RESOURCES . '/views/' . $path . $this->file));
+
+        usort($files, function($a, $b) use ($path) {
+            if (is_file(RESOURCES . '/views/'. $path . '/' . $a) && is_file(RESOURCES . '/views/' . $path . '/' . $b)) {
                 return 0;
             }
-            return (is_dir(RESOURCES.'/views/'.$this->path.$a)) ? -1 : 1;
+            return is_dir(RESOURCES . '/views/' . $path . '/' . $a) ? -1 : 1;
         });
 
-        return view('admin/files/index', ['files' => $files, 'path' => $this->path, 'file' => $this->file]);
+        return view('admin/files/index',compact('files', 'path'));
     }
 
     /**
