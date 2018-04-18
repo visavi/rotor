@@ -26,8 +26,8 @@ class FilesController extends AdminController
         $this->path = check(Request::input('path'));
 
         if (
-            ! file_exists(RESOURCES.'/views/'.$this->path) ||
-            ! is_dir(RESOURCES.'/views/'.$this->path) ||
+            ! file_exists(RESOURCES . '/views/' . $this->path) ||
+            ! is_dir(RESOURCES . '/views/' . $this->path) ||
             empty($this->path) ||
             str_contains($this->path, '.') ||
             starts_with($this->path, '/')
@@ -41,18 +41,19 @@ class FilesController extends AdminController
      */
     public function index()
     {
-        $path =  $this->path ? $this->path . '/' : $this->path;
-
+        $path  = $this->path;
         $files = preg_grep('/^([^.])/', scandir(RESOURCES . '/views/' . $path . $this->file));
 
         usort($files, function($a, $b) use ($path) {
-            if (is_file(RESOURCES . '/views/'. $path . '/' . $a) && is_file(RESOURCES . '/views/' . $path . '/' . $b)) {
+            if (is_file(RESOURCES . '/views/' . $path . '/' . $a) && is_file(RESOURCES . '/views/' . $path . '/' . $b)) {
                 return 0;
             }
             return is_dir(RESOURCES . '/views/' . $path . '/' . $a) ? -1 : 1;
         });
 
-        return view('admin/files/index',compact('files', 'path'));
+        $directories = explode('/', $path);
+
+        return view('admin/files/index',compact('files', 'path', 'directories'));
     }
 
     /**
@@ -60,15 +61,17 @@ class FilesController extends AdminController
      */
     public function edit()
     {
+        $fileName = $this->path ? '/' . $this->file : $this->file;
+
         if (! preg_match('#^([a-z0-9_\-/]+|)$#', $this->path) || ! preg_match('#^[a-z0-9_\-/]+$#', $this->file)) {
             abort('default', 'Недопустимое название страницы!');
         }
 
-        if (! file_exists(RESOURCES.'/views/'.$this->path.$this->file.'.blade.php')) {
+        if (! file_exists(RESOURCES . '/views/' . $this->path . $fileName . '.blade.php')) {
             abort('default', 'Данного файла не существует!');
         }
 
-        if (! is_writable(RESOURCES.'/views/'.$this->path.$this->file.'.blade.php')) {
+        if (! is_writable(RESOURCES . '/views/' . $this->path . $fileName . '.blade.php')) {
             abort('default', 'Файл недоступен для записи!');
         }
 
@@ -78,10 +81,10 @@ class FilesController extends AdminController
 
             if ($token == $_SESSION['token']) {
 
-                file_put_contents(RESOURCES.'/views/'.$this->path.$this->file.'.blade.php', $msg);
+                file_put_contents(RESOURCES . '/views/' . $this->path . $fileName . '.blade.php', $msg);
 
                 setFlash('success', 'Файл успешно сохранен!');
-                redirect ('/admin/files/edit?path='.$this->path.'&file='.$this->file);
+                redirect ('/admin/files/edit?path=' . $this->path . '&file=' . $this->file);
 
             } else {
                 setInput(Request::all());
@@ -89,7 +92,7 @@ class FilesController extends AdminController
             }
         }
 
-        $contest = file_get_contents(RESOURCES.'/views/'.$this->path.$this->file.'.blade.php');
+        $contest = file_get_contents(RESOURCES . '/views/' . $this->path . $fileName . '.blade.php');
 
         return view('admin/files/edit', ['contest' => $contest, 'path' => $this->path, 'file' => $this->file]);
     }
@@ -99,8 +102,8 @@ class FilesController extends AdminController
      */
     public function create()
     {
-        if (! is_writable(RESOURCES.'/views/'.$this->path)) {
-            abort('default', 'Директория '.$this->path.' недоступна для записи!');
+        if (! is_writable(RESOURCES . '/views/' . $this->path)) {
+            abort('default', 'Директория ' . $this->path . ' недоступна для записи!');
         }
 
         if (Request::isMethod('post')) {
@@ -125,19 +128,19 @@ class FilesController extends AdminController
 
                 if ($filename) {
 
-                    file_put_contents(RESOURCES.'/views/'.$this->path.$filename.'.blade.php', '');
-                    chmod(RESOURCES.'/views/'.$this->path.$filename.'.blade.php', 0666);
+                    file_put_contents(RESOURCES . '/views/' . $this->path . $filename . '.blade.php', '');
+                    chmod(RESOURCES.'/views/' . $this->path . $filename . '.blade.php', 0666);
 
                     setFlash('success', 'Новый файл успешно создан!');
                     redirect('/admin/files/edit?path=' . $this->path . '&file=' . $filename);
                 } else {
 
                     $old = umask(0);
-                    mkdir(RESOURCES .'/views/'.$this->path.$dirname, 0777, true);
+                    mkdir(RESOURCES . '/views/' . $this->path . $dirname, 0777, true);
                     umask($old);
 
                     setFlash('success', 'Новая директория успешно создана!');
-                    redirect('/admin/files?path='. $this->path . $dirname.'/');
+                    redirect('/admin/files?path=' . $this->path . $dirname . '/');
                 }
 
             } else {
@@ -154,8 +157,8 @@ class FilesController extends AdminController
      */
     public function delete()
     {
-        if (! is_writable(RESOURCES.'/views/'.$this->path)) {
-            abort('default', 'Директория '.$this->path.' недоступна для записи!');
+        if (! is_writable(RESOURCES . '/views/' . $this->path)) {
+            abort('default', 'Директория ' . $this->path . ' недоступна для записи!');
         }
 
         $token    = check(Request::input('token'));
@@ -176,7 +179,7 @@ class FilesController extends AdminController
         if ($validator->isValid()) {
 
             if ($filename) {
-                unlink(RESOURCES .'/views/'.$this->path.$filename.'.blade.php');
+                unlink(RESOURCES . '/views/' . $this->path . $filename . '.blade.php');
                 setFlash('success', 'Файл успешно удален!');
             } else {
                 removeDir(RESOURCES . '/views/' . $this->path . $dirname);
@@ -187,6 +190,6 @@ class FilesController extends AdminController
             setFlash('danger', $validator->getErrors());
         }
 
-        redirect('/admin/files?path='. $this->path);
+        redirect('/admin/files?path=' . $this->path);
     }
 }

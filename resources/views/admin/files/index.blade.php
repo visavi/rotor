@@ -22,12 +22,13 @@
             @if ($path)
                 <li class="breadcrumb-item"><a href="/admin/files">Редактирование страниц</a></li>
 
-                <?php $directories = explode('/', $path); ?>
-
+                <?php $dirName = []; ?>
                 @foreach ($directories as $directory)
-                    <li class="breadcrumb-item"><a href="/admin/files?path={{ $directory }}">{{ $directory }}</a></li>
+                    <?php $dirName[] = $directory; ?>
+                    @if ($path !== implode('/', $dirName))
+                        <li class="breadcrumb-item"><a href="/admin/files?path={{ implode('/', $dirName) }}">{{ implode('/', $dirName) }}</a></li>
+                    @endif
                 @endforeach
-
             @endif
 
             <li class="breadcrumb-item active">{{ $path ?? 'Редактирование страниц' }}</li>
@@ -35,23 +36,21 @@
     </nav>
 
     @if ($files)
-
         <ul class="list-group">
             @foreach ($files as $file)
-                @if (is_dir(RESOURCES . '/views/' . $path . $file))
+                <?php $fileName = $path ? '/' . $file : $file; ?>
+                @if (is_dir(RESOURCES . '/views/' . $path . $fileName))
                     <li class="list-group-item">
                         <div class="float-right">
                             <a href="/admin/files/delete?path={{ $path }}&amp;dirname={{ $file }}&amp;token={{ $_SESSION['token'] }}" onclick="return confirm('Вы действительно хотите удалить эту директорию')"><i class="fa fa-times"></i></a>
                         </div>
 
-                        <i class="fa fa-folder"></i> <b><a href="/admin/files?path={{ $path . $file }}">{{ $file }}</a></b><br>
-                        Объектов: {{ count(array_diff(scandir(RESOURCES . '/views/' . $path . $file), ['.', '..'])) }}
+                        <i class="fa fa-folder"></i> <b><a href="/admin/files?path={{ $path . $fileName }}">{{ $file }}</a></b><br>
+                        Объектов: {{ count(array_diff(scandir(RESOURCES . '/views/' . $path . $fileName), ['.', '..'])) }}
                     </li>
                 @else
-
-
-                    <?php $size = formatSize(filesize(RESOURCES . '/views/' . $path . $file)); ?>
-                    <?php $string = count(file(RESOURCES . '/views/' . $path . $file)); ?>
+                    <?php $size = formatSize(filesize(RESOURCES . '/views/' . $path . $fileName)); ?>
+                    <?php $string = count(file(RESOURCES . '/views/' . $path . $fileName)); ?>
 
                     <li class="list-group-item">
                         <div class="float-right">
@@ -61,7 +60,7 @@
                         <i class="fa fa-file"></i>
                         <b><a href="/admin/files/edit?path={{ $path }}&amp;file={{ basename($file, '.blade.php') }}">{{ $file }}</a></b> ({{ $size }})<br>
                         Строк: {{ $string }} /
-                        Изменен: {{ dateFixed(filemtime(RESOURCES . '/views/' . $path . $file)) }}
+                        Изменен: {{ dateFixed(filemtime(RESOURCES . '/views/' . $path . $fileName)) }}
                     </li>
                 @endif
             @endforeach

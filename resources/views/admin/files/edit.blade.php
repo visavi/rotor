@@ -14,7 +14,7 @@
             <li class="breadcrumb-item"><a href="/admin">Панель</a></li>
             <li class="breadcrumb-item"><a href="/admin/files">Редактирование страниц</a></li>
             <li class="breadcrumb-item"><a href="/admin/files?path={{ $path }}">{{ $path }}</a></li>
-            <li class="breadcrumb-item active">Создание нового объекта</li>
+            <li class="breadcrumb-item active">Редактирование файла</li>
         </ol>
     </nav>
 
