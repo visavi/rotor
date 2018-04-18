@@ -1,4 +1,16 @@
-<?php //show_title('Функция cache_admin_links'); ?>
+@section('title')
+    Функция cache_admin_links
+@stop
+
+<h1>Функция Функция cache_admin_links</h1>
+
+<nav>
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
+        <li class="breadcrumb-item"><a href="/files/docs">Документация Rotor</a></li>
+        <li class="breadcrumb-item active">Функция cache_admin_links</li>
+    </ol>
+</nav>
 
 Функция кэширует ссылки на дополнительные админские страницы<br>
 Является вспомогательной для функции вывода ссылок <a href="/files/docs/show_admin_links">show_admin_links</a><br>
@@ -23,6 +35,3 @@ $links = cacheAdminLinks();
 // Вызывается внутри функции showAdminLinks()
 ?>[/code]'));
 ?>
-
-<br>
-<i class="fa fa-arrow-circle-left"></i> <a href="/files/docs">Вернуться</a><br>

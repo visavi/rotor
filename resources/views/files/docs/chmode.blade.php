@@ -1,11 +1,23 @@
-<?php //show_title('Функция chmode'); ?>
+@section('title')
+    Функция chmode
+@stop
+
+<h1>Функция chmode</h1>
+
+<nav>
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
+        <li class="breadcrumb-item"><a href="/files/docs">Документация Rotor</a></li>
+        <li class="breadcrumb-item active">Функция chmode</li>
+    </ol>
+</nav>
 
 Функция автоустановки прав доступа<br>
 Сканирует папку и выставляет на файлы доступ - 0777<br>
 
 <pre class="d">
 <b>chmode</b>(
-	string path
+    string path
 );
 </pre><br>
 
@@ -19,6 +31,3 @@ echo bbCode(check('[code]<?php
 chmode(STORAGE.\'/forum\');
 ?>[/code]'));
 ?>
-
-<br>
-<i class="fa fa-arrow-circle-left"></i> <a href="/files/docs">Вернуться</a><br>

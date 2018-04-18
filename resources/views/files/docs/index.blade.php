@@ -2,7 +2,14 @@
     Документация RotorCMS
 @stop
 
-<h1>Документация RotorCMS</h1>
+<h1>Документация Rotor</h1>
+
+<nav>
+   <ol class="breadcrumb">
+       <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
+       <li class="breadcrumb-item active">Документация Rotor</li>
+   </ol>
+</nav>
 
 <div class="b"><b>Стандартные функции</b></div>
 - <a href="/files/docs/maketime">maketime</a><br>
@@ -198,9 +205,3 @@
  - <b>vote</b> (Вопросы в голосованиях)<br>
  - <b>voteanswer</b> (Ответы на голосования)<br>
  - <b>wall</b> (Записи на стене)<br>
-
-<br>
-Напишите о функции которой нет в списке или у которой нет описания, сделайте примеры отправьте на <a href="mailto:<?=cryptMail('visavi.net@mail.ru')?>?subject=<?=rawurlencode('Описание функции')?>"><?=cryptMail('visavi.net@mail.ru')?></a> и получите до 5 тысяч чатлов за одно полное описание и до 10 тыс за описание небольшой функции<br>
-
-<br><b><a href="/assets/example.txt">Скачать пример файла документации</a></b><br>
-<br>

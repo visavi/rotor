@@ -1,12 +1,19 @@
 @extends('layout')
 
 @section('title')
-    Количество посещений
+    Статистика посещений
 @stop
 
 @section('content')
 
-    <h1>Количество посещений</h1>
+    <h1>Статистика посещений</h1>
+
+    <nav>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
+            <li class="breadcrumb-item active">Статистика посещений</li>
+        </ol>
+    </nav>
 
     Всего посетителей на сайте: <b>{{ $online[1] }}</b><br>
     Всего авторизованных: <b>{{ $online[0] }}</b><br>

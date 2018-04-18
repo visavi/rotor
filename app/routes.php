@@ -185,7 +185,7 @@ $routes = [
     ['GET|POST', '/pictures', 'PictureController@index'],
     ['GET',      '/pictures/delete', 'PictureController@delete'],
 
-    ['GET|POST', '/files/[*:action]?', 'FileController', 'files'],
+    ['GET|POST', '/files/[*:action]?', 'FileController@index', 'files'],
 
     ['GET',      '/load', 'Load\LoadController@index'],
     ['GET',      '/load/rss', 'Load\LoadController@rss'],

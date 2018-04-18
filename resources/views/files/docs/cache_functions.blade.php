@@ -1,4 +1,16 @@
-<?php //show_title('Функция cache_functions'); ?>
+@section('title')
+    Функция cache_functions
+@stop
+
+<h1>Функция Функция cache_functions</h1>
+
+<nav>
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
+        <li class="breadcrumb-item"><a href="/files/docs">Документация Rotor</a></li>
+        <li class="breadcrumb-item active">Функция cache_functions</li>
+    </ol>
+</nav>
 
 Функция кэширует и сохраняет в файл список всех пользовательских функций, которые лежать в директории includes/functions, по умолчанию кэширует на 3 часа
 <br>
@@ -7,7 +19,7 @@
 
 <pre class="d">
 <b>cache_functions</b>(
-	int cache
+    int cache
 );
 </pre><br>
 
@@ -22,6 +34,3 @@ echo bbCode(check('[code]<?php
 $functions = cache_functions();
 ?>[/code]'));
 ?>
-
-<br>
-<i class="fa fa-arrow-circle-left"></i> <a href="/files/docs">Вернуться</a><br>

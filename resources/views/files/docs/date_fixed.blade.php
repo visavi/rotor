@@ -1,12 +1,24 @@
-<?php //show_title('Функция date_fixed'); ?>
+@section('title')
+    Функция date_fixed
+@stop
+
+<h1>Функция date_fixed</h1>
+
+<nav>
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
+        <li class="breadcrumb-item"><a href="/files/docs">Документация Rotor</a></li>
+        <li class="breadcrumb-item active">Функция date_fixed</li>
+    </ol>
+</nav>
 
 Конвертирует время timestamp с учетом часового пояса конкретного пользователя в нормальное представление<br>
 Если указан формат по умолчанию, то вместо текущей даты будет написано Сегодня или Вчера, если дата вчерашняя<br><br>
 
 <pre class="d">
 <b>date_fixed</b>(
-	int timestamp,
-	string format = "d.m.y / H:i"
+    int timestamp,
+    string format = "d.m.y / H:i"
 );
 </pre><br>
 
@@ -24,6 +36,3 @@ echo dateFixed(time(), "j F Y / H:i"); /* 13 Ноября 2011 / 22:00 */
 $mktime = mktime(0, 0, 0, 7, 1, 2010);
 echo dateFixed($mktime); /* 01.07.10 / 00:00 */
 </pre>
-
-<br>
-<i class="fa fa-arrow-circle-left"></i> <a href="/files/docs">Вернуться</a><br>

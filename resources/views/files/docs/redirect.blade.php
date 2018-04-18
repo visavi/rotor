@@ -1,11 +1,23 @@
-<?php //show_title('Функция redirect'); ?>
+@section('title')
+    Функция redirect
+@stop
+
+<h1>Функция redirect</h1>
+
+<nav>
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
+        <li class="breadcrumb-item"><a href="/files/docs">Документация Rotor</a></li>
+        <li class="breadcrumb-item active">Функция redirect</li>
+    </ol>
+</nav>
 
 Перенаправляет пользователя на другую страницу, при обработке функции автоматически вызывается функция exit (Доступно с версии 2.6.5)<br><br>
 
 <pre class="d">
 <b>redirect</b>(
-	string url,
-	boolean permanent = false
+    string url,
+    boolean permanent = false
 );
 </pre><br>
 
@@ -23,6 +35,3 @@ redirect("/"); /* Перенаправляет на главную страни�
 redirect("/", true); /* Устанавливает постоянное перенаправление на главную страницу */
 ?>[/code]'));
 ?>
-
-<br>
-<i class="fa fa-arrow-circle-left"></i> <a href="/files/docs">Вернуться</a><br>

@@ -1,4 +1,16 @@
-<?php //show_title('Функция last_page'); ?>
+@section('title')
+  Функция last_page
+@stop
+
+<h1>Функция last_page</h1>
+
+<nav>
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
+        <li class="breadcrumb-item"><a href="/files/docs">Документация Rotor</a></li>
+        <li class="breadcrumb-item active">Функция last_page</li>
+    </ol>
+</nav>
 
 Функция вычисляет номер последней страницы на основе определенного вывода количества сообщений на странице<br>
 К примеру если у пользователя выводится 15 сообщений на страницу в форуме, а всего сообщений 32, то последняя страница будет иметь номер 3,
@@ -27,6 +39,3 @@ if ($start >= $total) {
 // Если текущая страница больше чем всего страниц, то переменная start будет иметь значение последней страницы
 ?>[/code]'));
 ?>
-
-<br>
-<i class="fa fa-arrow-circle-left"></i> <a href="/files/docs">Вернуться</a><br>

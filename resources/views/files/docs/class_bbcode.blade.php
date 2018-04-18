@@ -1,5 +1,16 @@
-<?php //show_title('Class BBCode'); ?>
-<b>Класс для обработки BB-кодов</b><br><br>
+@section('title')
+    Class BBCode
+@stop
+
+<h1>Class BBCode</h1>
+
+<nav>
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
+        <li class="breadcrumb-item"><a href="/files/docs">Документация Rotor</a></li>
+        <li class="breadcrumb-item active">Class BBCode</li>
+    </ol>
+</nav>
 
 Пример
 <pre class="prettyprint linenums">
@@ -29,26 +40,26 @@ $text = $bbcode->parseSmiles($text);
 
 <b>Список доступных парсеров</b>
 <ul>
-	<li>code - исходный код</li>
-	<li>bold - жирный текст</li>
-	<li>italic - наклонный текст</li>
-	<li>underLine- подчеркивание текста</li>
-	<li>lineThrough - зачеркивание текста</li>
-	<li>fontSize - размер текста</li>
-	<li>fontColor - цвет текста</li>
-	<li>center - центрирование текста</li>
-	<li>quote - цитирование</li>
-	<li>namedQuote - цитирование с параметром</li>
-	<li>http - обычная ссылка</li>
-	<li>link - ссылка</li>
-	<li>namedLink - именованная ссылка</li>
-	<li>image - картинка</li>
-	<li>orderedList - сортированный список</li>
-	<li>unorderedList - именованный список</li>
-	<li>spoiler - спойлер</li>
-	<li>shortSpoiler - именованный спойлер</li>
-	<li>hide - скрытие текста</li>
-	<li>youtube - видео</li>
+    <li>code - исходный код</li>
+    <li>bold - жирный текст</li>
+    <li>italic - наклонный текст</li>
+    <li>underLine- подчеркивание текста</li>
+    <li>lineThrough - зачеркивание текста</li>
+    <li>fontSize - размер текста</li>
+    <li>fontColor - цвет текста</li>
+    <li>center - центрирование текста</li>
+    <li>quote - цитирование</li>
+    <li>namedQuote - цитирование с параметром</li>
+    <li>http - обычная ссылка</li>
+    <li>link - ссылка</li>
+    <li>namedLink - именованная ссылка</li>
+    <li>image - картинка</li>
+    <li>orderedList - сортированный список</li>
+    <li>unorderedList - именованный список</li>
+    <li>spoiler - спойлер</li>
+    <li>shortSpoiler - именованный спойлер</li>
+    <li>hide - скрытие текста</li>
+    <li>youtube - видео</li>
 </ul>
 
 
@@ -97,6 +108,3 @@ $text = $bbcode->clear($text);
 var_dump($bbcode->getParsers());
 </pre>
 
-
-<br>
-<i class="fa fa-arrow-circle-left"></i> <a href="/files/docs">Вернуться</a><br>

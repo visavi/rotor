@@ -1,11 +1,23 @@
-<?php //show_title('Функция points'); ?>
+@section('title')
+    Функция points
+@stop
+
+<h1>Функция points</h1>
+
+<nav>
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
+        <li class="breadcrumb-item"><a href="/files/docs">Документация Rotor</a></li>
+        <li class="breadcrumb-item active">Функция points</li>
+    </ol>
+</nav>
 
 Функция правильного окончания актива сайта, окончания устанавливаются в настройках админки через запятую, по умолчанию (баллов, балла, балл)<br>
 Можно указать только один вариант окончания, тогда оно будет подставляться для всех чисел передаваемых в функцию<br><br>
 
 <pre class="d">
 <b>points</b>(
-	int sum
+    int sum
 );
 </pre><br>
 
@@ -23,6 +35,3 @@ echo points(2); /* 2 балла */
 echo points(5); /* 5 баллов */
 ?>[/code]'));
 ?>
-
-<br>
-<i class="fa fa-arrow-circle-left"></i> <a href="/files/docs">Вернуться</a><br>

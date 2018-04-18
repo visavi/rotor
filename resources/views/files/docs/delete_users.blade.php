@@ -1,4 +1,16 @@
-<?php //show_title('Функция delete_users'); ?>
+@section('title')
+    Функция delete_users
+@stop
+
+<h1>Функция delete_users</h1>
+
+<nav>
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
+        <li class="breadcrumb-item"><a href="/files/docs">Документация Rotor</a></li>
+        <li class="breadcrumb-item active">Функция delete_users</li>
+    </ol>
+</nav>
 
 Полностью удаляет пользователя с сайта, удаляются все записи в таблицах, а также некоторые загруженные файлы, к примеру аватар, персональное фото и фотографии в галерее<br>
 При выполнении функции вызывается вспомогательная функция <a href="/files/docs/delete_album">delete_album</a>
@@ -6,7 +18,7 @@
 
 <pre class="d">
 <b>delete_users</b>(
-	string user
+    string user
 );
 </pre><br>
 
@@ -21,6 +33,3 @@ echo bbCode(check('[code]<?php
 deleteUser("Vantuz"); /* Полностью удаляет пользователя Vantuz */
 ?>[/code]'));
 ?>
-
-<br>
-<i class="fa fa-arrow-circle-left"></i> <a href="/files/docs">Вернуться</a><br>

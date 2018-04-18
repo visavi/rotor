@@ -1,4 +1,16 @@
-<?php //show_title('Функция resize_image'); ?>
+@section('title')
+    Функция resize_image
+@stop
+
+<h1>Функция resize_image</h1>
+
+<nav>
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
+        <li class="breadcrumb-item"><a href="/files/docs">Документация Rotor</a></li>
+        <li class="breadcrumb-item active">Функция resize_image</li>
+    </ol>
+</nav>
 
 Функция ресайза и кэширования уменьшенных копий картинок, проверяет сделана ли миниатюра изображения, если нет, то автоматически уменьшает картинку и сохраняет ее в специальной папке uploads/thumbnail.<br>
 Если размер оригинального изображения менее чем требуемый размер уменьшенной копии, то обработка не производится<br>
@@ -6,10 +18,10 @@
 
 <pre class="d">
 <b>resize_image</b>(
-	string dir,
-	string name,
-	int size,
-	array params = []
+    string dir,
+    string name,
+    int size,
+    array params = []
 );
 </pre><br>
 
@@ -29,6 +41,3 @@ echo resizeImage(\'/uploads/pictures/\', $data[\'link\'], [\'alt\' = $data[\'tit
  /* Функция вернет уменьшенную картинку <img src="/uploads/thumbnail/upload_pictures_1350.jpg" alt="Название"/> */
 ?>[/code]'));
 ?>
-
-<br>
-<i class="fa fa-arrow-circle-left"></i> <a href="/files/docs">Вернуться</a><br>

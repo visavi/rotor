@@ -1,4 +1,16 @@
-<?php //show_title('Функция include_javascript'); ?>
+@section('title')
+    Функция include_javascript
+@stop
+
+<h1>Функция include_javascript</h1>
+
+<nav>
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
+        <li class="breadcrumb-item"><a href="/files/docs">Документация Rotor</a></li>
+        <li class="breadcrumb-item active">Функция include_javascript</li>
+    </ol>
+</nav>
 
 Функция проверяет, включена ли у пользователя в настройках опция вывода Javascript, если да, то подключается библиотека Jquery и некоторые вспомогательные jquery-плагины
 <br>
@@ -20,6 +32,3 @@ echo bbCode(check('[code]<?php
 includeScript();
 ?>[/code]'));
 ?>
-
-<br>
-<i class="fa fa-arrow-circle-left"></i> <a href="/files/docs">Вернуться</a><br>

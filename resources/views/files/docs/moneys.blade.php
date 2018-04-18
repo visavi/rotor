@@ -1,11 +1,23 @@
-<?php //show_title('Функция moneys'); ?>
+@section('title')
+    Функция moneys
+@stop
+
+<h1>Функция moneys</h1>
+
+<nav>
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
+        <li class="breadcrumb-item"><a href="/files/docs">Документация Rotor</a></li>
+        <li class="breadcrumb-item active">Функция moneys</li>
+    </ol>
+</nav>
 
 Преобразует число в сумму денег с окончанием в виде названия валюты, окончания устанавливаются в настройках админки через запятую, по умолчанию (рублей, рубля, рубль)<br>
 Можно указать только один вариант окончания, тогда оно будет подставляться для всех чисел передаваемых в функцию<br><br>
 
 <pre class="d">
 <b>moneys</b>(
-	int sum
+    int sum
 );
 </pre><br>
 
@@ -23,6 +35,3 @@ echo moneys(2); /* 2 рубля */
 echo moneys(5); /* 5 рублей */
 ?>[/code]'));
 ?>
-
-<br>
-<i class="fa fa-arrow-circle-left"></i> <a href="/files/docs">Вернуться</a><br>

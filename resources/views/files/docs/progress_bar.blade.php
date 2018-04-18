@@ -1,11 +1,23 @@
-<?php //show_title('Функция progress_bar'); ?>
+@section('title')
+    Функция progress_bar
+@stop
+
+<h1>Функция progress_bar</h1>
+
+<nav>
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
+        <li class="breadcrumb-item"><a href="/files/docs">Документация Rotor</a></li>
+        <li class="breadcrumb-item active">Функция progress_bar</li>
+    </ol>
+</nav>
 
 Функция выводит прогресс-бар, на основе введенных данных (Доступно с версии 3.0.2)<br><br>
 
 <pre class="d">
 <b>progress_bar</b>(
-	int percent,
-	string title = ''
+    int percent,
+    string title = ''
 );
 </pre><br>
 
@@ -26,6 +38,3 @@ progressBar(35, \'Батарейка\');
 progressBar(55).'<br>';
 progressBar(35, 'Батарейка').'<br>';
 ?>
-
-<br>
-<i class="fa fa-arrow-circle-left"></i> <a href="/files/docs">Вернуться</a><br>

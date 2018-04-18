@@ -9,7 +9,7 @@ class FileController extends BaseController
      */
     public function __call($action, $params)
     {
-        if (! $action) {
+        if ($action === 'index') {
             return view('files/index');
         }
 
@@ -17,9 +17,9 @@ class FileController extends BaseController
             abort(404);
         }
 
-        $action = str_contains($action, '/') ? $action : $action.'/index';
+        $action = str_contains($action, '/') ? $action : $action . '/index';
 
-        if (! file_exists(RESOURCES.'/views/files/'.$action.'.blade.php')) {
+        if (! file_exists(RESOURCES.'/views/files/' . $action . '.blade.php')) {
             abort(404);
         }
 

@@ -1,6 +1,16 @@
-<?php //show_title('Class Validation'); ?>
+@section('title')
+    Class Validation
+@stop
 
-<b>Класс для валидации входящих данных</b>
+<h1>Class Validation</h1>
+
+<nav>
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
+        <li class="breadcrumb-item"><a href="/files/docs">Документация Rotor</a></li>
+        <li class="breadcrumb-item active">Class Validation</li>
+    </ol>
+</nav>
 
 <h3>addRule(string $type, mixed $var, string $label, bool $required = false, int $min = 0, int $max = 0)</h3>
 
@@ -9,39 +19,39 @@
 $validator = new Validator();
 
 $validation -> addRule('equal', array($protect, $_SESSION['protect']), 'Проверочное число не совпало с данными на картинке!')
-	-> addRule('regex', array($logs, '|^[a-z0-9\-]+$|i'), 'Недопустимые символы в логине. Разрешены знаки латинского алфавита, цифры и дефис!', true)
-	-> addRule('regex', array($pars, '|^[a-z0-9\-]+$|i'), 'Недопустимые символы в пароле. Разрешены знаки латинского алфавита, цифры и дефис!', true)
-	-> addRule('email', $meil, 'Вы ввели неверный адрес email, необходим формат name@site.domen!')
-	-> addRule('string', $invite, 'Слишком длинный или короткий пригласительный ключ!', setting('invite'), 15, 20)
-	-> addRule('string', $logs, 'Слишком длинный или короткий логин!', true, 3, 20)
-	-> addRule('string', $pars, 'Слишком длинный или короткий пароль!',  true, 6, 20)
-	-> addRule('equal', array($pars, $pars2), 'Ошибка! Введенные пароли отличаются друг от друга!')
-	-> addRule('not_equal', array($logs, $pars), 'Пароль и логин должны отличаться друг от друга!');
+    -> addRule('regex', array($logs, '|^[a-z0-9\-]+$|i'), 'Недопустимые символы в логине. Разрешены знаки латинского алфавита, цифры и дефис!', true)
+    -> addRule('regex', array($pars, '|^[a-z0-9\-]+$|i'), 'Недопустимые символы в пароле. Разрешены знаки латинского алфавита, цифры и дефис!', true)
+    -> addRule('email', $meil, 'Вы ввели неверный адрес email, необходим формат name@site.domen!')
+    -> addRule('string', $invite, 'Слишком длинный или короткий пригласительный ключ!', setting('invite'), 15, 20)
+    -> addRule('string', $logs, 'Слишком длинный или короткий логин!', true, 3, 20)
+    -> addRule('string', $pars, 'Слишком длинный или короткий пароль!',  true, 6, 20)
+    -> addRule('equal', array($pars, $pars2), 'Ошибка! Введенные пароли отличаются друг от друга!')
+    -> addRule('not_equal', array($logs, $pars), 'Пароль и логин должны отличаться друг от друга!');
 
 if ($validator->isValid()){
-	echo 'Все отлично, ошибок нет!';
+    echo 'Все отлично, ошибок нет!';
 } else {
-	showError($validator->getErrors());
+    showError($validator->getErrors());
 }
 </pre>
 
 <b>Список допустимых параметров $type</b>
 <ul>
-	<li><a href="#validateString">string (validateString)</a> - проверяет длину текста</li>
-	<li><a href="#validateNumeric">numeric (validateNumeric)</a> - проверяет число подходящее под условие "больше чем N и меньше чем M"</li>
-	<li><a href="#validateMax">max (validateMax) - проверяет число подходящее под условие "больше чем N"</li>
-	<li><a href="#validateMin">min (validateMin)</a> - проверяет число подходящее под условие "меньше чем N"</li>
-	<li><a href="#validateEqual">equal (validateEqual)</a> - провеяет строку на эквивалентность</li>
-	<li><a href="#validateNotEqual">not_equal (validateNotEqual)</a> - провеяет строку на НЕ эквивалентность</li>
-	<li><a href="#validateEmpty">empty (validateEmpty)</a> - проверяет строку на пустоту</li>
-	<li><a href="#validateNotEmpty">not_empty (validateNotEmpty)</a> - проверяет строку на НЕ пустоту</li>
-	<li><a href="#validateIn">in (validateIn)</a> - проверяет строку на нахождение в переданном списке</li>
-	<li><a href="#validateRegex">regex (validateRegex)</a> - проверяет строку на регулярное выражение</li>
-	<li><a href="#validateFloat">float (validateFloat)</a> - проверяет строку на соответствие числу с плавающей точкой</li>
-	<li><a href="#validateUrl">url (validateUrl)</a> - проверяет строку на соответствие адресной ссылке</li>
-	<li><a href="#validateEmail">email (validateEmail)</a> - проверяет строку на соответствие адресу электронной почты</li>
-	<li><a href="#validateBool">bool (validateBool)</a> - проверяет строку на логический тип</li>
-	<li><a href="#validateCustom">custom (validateCustom)</a> - Выполняет пользовательскую проверку данных</li>
+    <li><a href="#validateString">string (validateString)</a> - проверяет длину текста</li>
+    <li><a href="#validateNumeric">numeric (validateNumeric)</a> - проверяет число подходящее под условие "больше чем N и меньше чем M"</li>
+    <li><a href="#validateMax">max (validateMax) - проверяет число подходящее под условие "больше чем N"</li>
+    <li><a href="#validateMin">min (validateMin)</a> - проверяет число подходящее под условие "меньше чем N"</li>
+    <li><a href="#validateEqual">equal (validateEqual)</a> - провеяет строку на эквивалентность</li>
+    <li><a href="#validateNotEqual">not_equal (validateNotEqual)</a> - провеяет строку на НЕ эквивалентность</li>
+    <li><a href="#validateEmpty">empty (validateEmpty)</a> - проверяет строку на пустоту</li>
+    <li><a href="#validateNotEmpty">not_empty (validateNotEmpty)</a> - проверяет строку на НЕ пустоту</li>
+    <li><a href="#validateIn">in (validateIn)</a> - проверяет строку на нахождение в переданном списке</li>
+    <li><a href="#validateRegex">regex (validateRegex)</a> - проверяет строку на регулярное выражение</li>
+    <li><a href="#validateFloat">float (validateFloat)</a> - проверяет строку на соответствие числу с плавающей точкой</li>
+    <li><a href="#validateUrl">url (validateUrl)</a> - проверяет строку на соответствие адресной ссылке</li>
+    <li><a href="#validateEmail">email (validateEmail)</a> - проверяет строку на соответствие адресу электронной почты</li>
+    <li><a href="#validateBool">bool (validateBool)</a> - проверяет строку на логический тип</li>
+    <li><a href="#validateCustom">custom (validateCustom)</a> - Выполняет пользовательскую проверку данных</li>
 </ul>
 
 <h3>run()</h3>
@@ -49,9 +59,9 @@ if ($validator->isValid()){
 
 <pre class="prettyprint linenums">
 if ($validator->isValid()){
-	echo 'Все отлично, ошибок нет!';
+    echo 'Все отлично, ошибок нет!';
 } else {
-	showError($validator->getErrors());
+    showError($validator->getErrors());
 }
 </pre>
 
@@ -62,7 +72,7 @@ if ($validator->isValid()){
 
 <pre class="prettyprint linenums">
 if (substr_count($logs, '-') > 2) {
-	$validation -> addError('Запрещено использовать в логине слишком много дефисов!');
+    $validation -> addError('Запрещено использовать в логине слишком много дефисов!');
 }
 </pre>
 
@@ -152,6 +162,3 @@ addRule('bool', 1, 'Необходимо дать свое согласие!')
 addRule('custom', strcmp($var1, $var2) !== 0, 'Данные не равны при регистрозависимом сравнении!')
 </pre>
 Возвращает true если условие будет выполнено
-
-<br><br>
-<i class="fa fa-arrow-circle-left"></i> <a href="/files/docs">Вернуться</a><br>

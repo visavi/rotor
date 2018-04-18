@@ -1,10 +1,22 @@
-<?php //show_title('Функция maketime'); ?>
+@section('title')
+    Функция maketime
+@stop
+
+<h1>Функция maketime</h1>
+
+<nav>
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
+        <li class="breadcrumb-item"><a href="/files/docs">Документация Rotor</a></li>
+        <li class="breadcrumb-item active">Функция maketime</li>
+    </ol>
+</nav>
 
 Функция переводит количество секунд в удобный формат времени, при количестве секунд более чем 86400 (Сутки), рекомендуется использовать функцию <a href="/files/docs/makestime">makestime</a><br><br>
 
 <pre class="d">
 <b>maketime</b>(
-	int time
+    int time
 );
 </pre><br>
 
@@ -21,6 +33,3 @@ echo maketime (3600); /* 01:00:00 */
 echo maketime (86400); /* 00:00:00 */
 ?>[/code]'));
 ?>
-
-<br>
-<i class="fa fa-arrow-circle-left"></i> <a href="/files/docs">Вернуться</a><br>

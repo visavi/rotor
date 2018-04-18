@@ -1,11 +1,23 @@
-<?php //show_title('Функция profile'); ?>
+@section('title')
+    Функция profile
+@stop
+
+<h1>Функция profile</h1>
+
+<nav>
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
+        <li class="breadcrumb-item"><a href="/files/docs">Документация Rotor</a></li>
+        <li class="breadcrumb-item active">Функция profile</li>
+    </ol>
+</nav>
 
 Выводит ссылку на профиль пользователя (Доступно с версии 3.0.0)<br><br>
 
 <pre class="d">
 <b>profile</b>(
-	string login,
-	string color = &#39;&#39;
+    string login,
+    string color = &#39;&#39;
 );
 </pre><br>
 
@@ -23,6 +35,3 @@ profile(\'Username\'); /* <a href="/user/Username">Username</a>  */
 profile(\'Username\', \'#ff0000\'); /* <a href="/user/Username"><span style="color:#ff0000">Username</span></a> */
 ?>[/code]'));
 ?>
-
-<br>
-<i class="fa fa-arrow-circle-left"></i> <a href="/files/docs">Вернуться</a><br>

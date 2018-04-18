@@ -1,11 +1,23 @@
-<?php //show_title('Функция bb_code'); ?>
+@section('title')
+    Функция bb_code
+@stop
+
+<h1>Функция bb_code</h1>
+
+<nav>
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
+        <li class="breadcrumb-item"><a href="/files/docs">Документация Rotor</a></li>
+        <li class="breadcrumb-item active">Функция bb_code</li>
+    </ol>
+</nav>
 
 Функция преобразовывает bb-коды в html-теги, между открывающим и закрывающим тегов могу быть переводы строк, неправильная вложенность тегов игнорируется<br>
 Данная функция использует другие функции: <a href="/files/docs/hidden_text">hidden_text</a>, <a href="/files/docs/url_replace">url_replace</a>, <a href="/files/docs/highlight_code">highlight_code</a><br><br>
 
 <pre class="d">
 <b>bb_code</b>(
-	string msg
+    string msg
 );
 </pre><br>
 
@@ -23,7 +35,3 @@ echo bbCode(\'Текст сообщения [url=http://visavi.net]Visavi[/url]\
 
 echo bbCode('Текст сообщения [url=http://visavi.net]Visavi[/url]').'<br>';
 ?>
-
-<br>
-<i class="fa fa-arrow-circle-left"></i> <a href="/files/docs">Вернуться</a><br>
-

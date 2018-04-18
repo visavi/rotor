@@ -1,10 +1,22 @@
-<?php //show_title('Функция format_num'); ?>
+@section('title')
+    Функция format_num
+@stop
+
+<h1>Функция format_num</h1>
+
+<nav>
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
+        <li class="breadcrumb-item"><a href="/files/docs">Документация Rotor</a></li>
+        <li class="breadcrumb-item active">Функция format_num</li>
+    </ol>
+</nav>
 
 Форматирует число и устанавливает цвет текста (Доступно с версии 3.0.0)<br><br>
 
 <pre class="d">
 <b>format_num</b>(
-	int num = 0
+    int num = 0
 );
 </pre><br>
 
@@ -21,6 +33,3 @@ echo formatNum(-3); /* <span style="color:#ff0000">-5</span> */
 echo formatNum(0); /* 0 */
 ?>[/code]'));
 ?>
-
-<br>
-<i class="fa fa-arrow-circle-left"></i> <a href="/files/docs">Вернуться</a><br>

@@ -13,8 +13,6 @@
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
             <li class="breadcrumb-item"><a href="/load">Загрузки</a></li>
             <li class="breadcrumb-item active">Публикация</li>
-            {{--<li class="breadcrumb-item"><a href="/load/add?act=waiting">Ожидающие</a></li>--}}
-            <li class="breadcrumb-item"><a href="/load/active">Проверенные</a></li>
         </ol>
     </nav>
 
