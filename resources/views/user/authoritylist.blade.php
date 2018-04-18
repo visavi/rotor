@@ -8,6 +8,13 @@
 
     <h1>Рейтинг репутации</h1>
 
+    <nav>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
+            <li class="breadcrumb-item active">Рейтинг репутации</li>
+        </ol>
+    </nav>
+
     @if ($users->isNotEmpty())
         @foreach($users as $key => $data)
             <div class="b">
@@ -33,13 +40,17 @@
         {!! pagination($page) !!}
 
         <div class="form">
-            <b>Поиск пользователя:</b><br>
             <form action="/authoritylist" method="post">
-                <input type="text" name="user" value="{{ $user }}">
-                <input type="submit" value="Искать">
+                <div class="form-inline">
+                    <div class="form-group{{ hasError('user') }}">
+                        <input type="text" class="form-control" id="user" name="user" maxlength="20" value="{{ getInput('user', $user) }}" placeholder="Логин пользователя" required>
+                    </div>
+
+                    <button class="btn btn-primary">Искать</button>
+                </div>
+                {!! textError('user') !!}
             </form>
-        </div>
-        <br>
+        </div><br>
 
         Всего пользователей: <b>{{ $page->total }}</b><br><br>
     @else

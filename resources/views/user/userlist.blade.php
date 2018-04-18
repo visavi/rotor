@@ -8,6 +8,13 @@
 
     <h1>Список пользователей</h1>
 
+    <nav>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
+            <li class="breadcrumb-item active">Список пользователей</li>
+        </ol>
+    </nav>
+
     @if ($users->isNotEmpty())
         @foreach($users as $key => $data)
 
@@ -34,13 +41,17 @@
         {!! pagination($page) !!}
 
         <div class="form">
-            <b>Поиск пользователя:</b><br>
             <form action="/userlist" method="post">
-                <input type="text" name="user" value="{{ getUser('login') }}">
-                <input type="submit" value="Искать">
+                <div class="form-inline">
+                    <div class="form-group{{ hasError('user') }}">
+                        <input type="text" class="form-control" id="user" name="user" maxlength="20" value="{{ getInput('user', $user) }}" placeholder="Логин пользователя" required>
+                    </div>
+
+                    <button class="btn btn-primary">Искать</button>
+                </div>
+                {!! textError('user') !!}
             </form>
-        </div>
-        <br>
+        </div><br>
 
         Всего пользователей: <b>{{ $page->total }}</b><br><br>
     @else

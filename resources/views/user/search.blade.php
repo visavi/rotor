@@ -8,8 +8,15 @@
 
     <h1>Поиск пользователей</h1>
 
+    <nav>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
+            <li class="breadcrumb-item active">Поиск пользователей</li>
+        </ol>
+    </nav>
+
     <div class="form">
-        <form method="post" action="/searchuser/search">
+        <form method="get" action="/searchuser/search">
 
             <div class="form-group{{ hasError('find') }}">
                 <label for="find">Логин или имя пользователя:</label>

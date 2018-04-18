@@ -8,6 +8,14 @@
 
     <h1>Результат поиска</h1>
 
+    <nav>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
+            <li class="breadcrumb-item"><a href="/searchuser">Поиск пользователей</a></li>
+            <li class="breadcrumb-item active">Результат поиска</li>
+        </ol>
+    </nav>
+
     @if ($users->isNotEmpty())
         @foreach($users as $user)
             {!! $user->getGender() !!}
@@ -18,6 +26,4 @@
     @else
         {!! showError('По вашему запросу ничего не найдено') !!}
     @endif
-
-    <i class="fa fa-arrow-circle-left"></i> <a href="/searchuser">Вернуться</a><br>
 @stop

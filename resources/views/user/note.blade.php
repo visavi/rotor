@@ -7,6 +7,15 @@
 @section('content')
 
     <h1>Заметка для пользователя {{ $user->login }}</h1>
+
+    <nav>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
+            <li class="breadcrumb-item"><a href="/user/{{ $user->login }}">{{ $user->login }}</a></li>
+            <li class="breadcrumb-item active">Заметка</li>
+        </ol>
+    </nav>
+
     <div class="form">
         <form action="/user/{{ $user->login }}/note" method="post">
             <input type="hidden" name="token" value="{{ $_SESSION['token'] }}">

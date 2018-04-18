@@ -30,8 +30,8 @@ class SearchController extends BaseController
         }
 
         $users = User::query()
-            ->where('login LIKE "%' . $find . '%"')
-            ->orWhere('name LIKE "%' . $find . '%"')
+            ->where('login', 'like', '%' . $find . '%')
+            ->orWhere('name', 'like', '%' . $find . '%')
             ->orderBy('point', 'desc')
             ->limit(setting('usersearch'))
             ->get();

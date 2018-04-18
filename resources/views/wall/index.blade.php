@@ -8,6 +8,14 @@
 
     <h1>Стена пользователя {{ $user->login }}</h1>
 
+    <nav>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
+            <li class="breadcrumb-item"><a href="/user/{{ $user->login }}">{{ $user->login }}</a></li>
+            <li class="breadcrumb-item active">Стена пользователя</li>
+        </ol>
+    </nav>
+
     @if ($newWall)
         <div style="text-align:center"><b><span style="color:#ff0000">Новых записей: {{ $newWall }}</span></b></div>
     @endif

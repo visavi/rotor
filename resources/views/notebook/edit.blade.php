@@ -8,6 +8,15 @@
 
     <h1>Редактирование блокнота</h1>
 
+    <nav>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
+            <li class="breadcrumb-item"><a href="/menu">Мое меню</a></li>
+            <li class="breadcrumb-item"><a href="/notebook">Блокнот</a></li>
+            <li class="breadcrumb-item active">Редактирование блокнота</li>
+        </ol>
+    </nav>
+
     <div class="form">
         <form action="/notebook/edit" method="post">
             <input type="hidden" name="token" value="{{ $_SESSION['token'] }}">
@@ -22,7 +31,5 @@
         </form>
     </div><br>
 
-    * Доступ к личной записи не имеет никто кроме вас<br><br>
-
-    <i class="fa fa-arrow-circle-left"></i> <a href="/notebook">Вернуться</a><br>
+    * Личная запись доступна только для вас<br><br>
 @stop

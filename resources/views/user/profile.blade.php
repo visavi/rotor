@@ -8,11 +8,13 @@
 
     <h1>Мой профиль</h1>
 
-    <i class="fa fa-book"></i>
-    <a href="/user/{{ $user->login }}">Моя анкета</a> /
-    <b>Мой профиль</b> /
-    <a href="/account">Мои данные</a> /
-    <a href="/setting">Настройки</a><hr>
+    <nav>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
+            <li class="breadcrumb-item"><a href="/user/{{ $user->login }}">{{ $user->login }}</a></li>
+            <li class="breadcrumb-item active">Мой профиль</li>
+        </ol>
+    </nav>
 
     <div class="form">
         <form method="post" action="/profile">
