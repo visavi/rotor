@@ -16,7 +16,7 @@
         @endfor
 
         <br>
-        <?php include_once(APP.'/Includes/counter31.php') ?>
+        {{ $metrika->getCounterMonth() }}
     @else
         {!! showError('Статистика за текущий месяц еще не обновилась!') !!}
     @endif

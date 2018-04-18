@@ -642,7 +642,7 @@ function statsOnline($cache = 30)
         $online[] = Online::query()->count();
 
         $metrika = new Metrika();
-        $metrika->count($online);
+        $metrika->getCounter();
 
         file_put_contents(STORAGE . '/temp/online.dat', json_encode($online), LOCK_EX);
     }
@@ -686,7 +686,8 @@ function statsCounter()
  */
 function showCounter()
 {
-    include_once APP . '/Includes/counters.php';
+    $metrika = new Metrika();
+    $metrika->saveStatistic();
 
     if (setting('incount') > 0) {
         return view('app/_counter', ['count' => statsCounter()]);

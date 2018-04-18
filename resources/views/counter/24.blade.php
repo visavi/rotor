@@ -16,7 +16,7 @@
         @endfor
 
         <br>
-        <?php include_once(APP.'/Includes/counter24.php') ?>
+        {{ $metrika->getCounterDay() }}
     @else
         {!! showError('Статистика за текущие сутки еще не обновилась!') !!}
     @endif

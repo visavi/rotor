@@ -27,13 +27,13 @@
     Хитов за месяц: <b>{{ ($counts31->hits + $count->dayhits) }}</b><br><br>
 
     Динамика за неделю<br>
-    <?php include_once(APP.'/Includes/counter7.php') ?>
+    {{ $metrika->getCounterWeek() }}
 
     Динамика за сутки<br>
-    <?php include_once(APP.'/Includes/counter24.php') ?>
+    {{ $metrika->getCounterDay() }}
 
     Динамика за месяц<br>
-    <?php include_once(APP.'/Includes/counter31.php') ?>
+    {{ $metrika->getCounterMonth() }}
 
     <a href="/counter/day">Статистика за сутки</a><br>
     <a href="/counter/month">Статистика за месяц</a><br><br>

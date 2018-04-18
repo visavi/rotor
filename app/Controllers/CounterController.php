@@ -2,6 +2,7 @@
 
 namespace App\Controllers;
 
+use App\Classes\Metrika;
 use App\Models\Counter24;
 use App\Models\Counter31;
 
@@ -22,10 +23,11 @@ class CounterController extends BaseController
             ->selectRaw('sum(hits) as hits')
             ->first();
 
-        $online = statsOnline();
-        $count  = statsCounter();
+        $metrika = new Metrika();
+        $online  = statsOnline();
+        $count   = statsCounter();
 
-        return view('counter/index', compact('online', 'count', 'counts24', 'counts31'));
+        return view('counter/index', compact('online', 'count', 'counts24', 'counts31', 'metrika'));
     }
 
     /**
@@ -53,7 +55,9 @@ class CounterController extends BaseController
             $host_data[$tekhours] = $arrhosts[$tekhours] ?? 0;
         }
 
-        return view('counter/24', compact('hits_data', 'host_data', 'currhour', 'hours'));
+        $metrika = new Metrika();
+
+        return view('counter/24', compact('hits_data', 'host_data', 'currhour', 'hours', 'metrika'));
     }
 
     /**
@@ -82,6 +86,8 @@ class CounterController extends BaseController
             $host_data[$tekdays] = $arrhosts[$tekdays] ?? 0;
         }
 
-        return view('counter/31', compact('hits_data', 'host_data', 'currday', 'days'));
+        $metrika = new Metrika();
+
+        return view('counter/31', compact('hits_data', 'host_data', 'currday', 'days', 'metrika'));
     }
 }
