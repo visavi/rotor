@@ -11,9 +11,10 @@ class CreateBanTable extends AbstractMigration
     {
         if (! $this->hasTable('ban')) {
             $table = $this->table('ban', ['collation' => env('DB_COLLATION')]);
-            $table->addColumn('ip', 'string', ['limit' => 15])
-                ->addColumn('user', 'string', ['limit' => 20, 'null' => true])
-                ->addColumn('time', 'integer')
+            $table
+                ->addColumn('ip', 'string', ['limit' => 15])
+                ->addColumn('user_id', 'integer', ['null' => true])
+                ->addColumn('created_at', 'integer')
                 ->addIndex('ip', ['unique' => true])
                 ->create();
         }

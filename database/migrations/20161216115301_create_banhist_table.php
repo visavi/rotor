@@ -11,14 +11,16 @@ class CreateBanhistTable extends AbstractMigration
     {
         if (! $this->hasTable('banhist')) {
             $table = $this->table('banhist', ['collation' => env('DB_COLLATION')]);
-            $table->addColumn('user', 'string', ['limit' => 20])
-                ->addColumn('send', 'string', ['limit' => 20])
-                ->addColumn('type', 'boolean', ['default' => false])
+            $table
+                ->addColumn('user_id', 'integer')
+                ->addColumn('send_user_id', 'integer')
+                ->addColumn('type', 'enum', ['values' => ['ban','unban','change']])
                 ->addColumn('reason', 'text', ['null' => true])
                 ->addColumn('term', 'integer', ['default' => 0])
-                ->addColumn('time', 'integer')
-                ->addIndex('time')
-                ->addIndex('user')
+                ->addColumn('created_at', 'integer')
+                ->addColumn('explain', 'boolean', ['default' => 0])
+                ->addIndex('user_id')
+                ->addIndex('created_at')
                 ->create();
         }
     }

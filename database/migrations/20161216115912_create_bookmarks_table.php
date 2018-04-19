@@ -12,13 +12,12 @@ class CreateBookmarksTable extends AbstractMigration
     {
         if (! $this->hasTable('bookmarks')) {
             $table = $this->table('bookmarks', ['collation' => env('DB_COLLATION')]);
-            $table->addColumn('user', 'string', ['limit' => 20])
+            $table
+                ->addColumn('user_id', 'integer')
                 ->addColumn('topic_id', 'integer', ['limit' => MysqlAdapter::INT_MEDIUM, 'signed' => false])
-                ->addColumn('forum_id', 'integer', ['limit' => MysqlAdapter::INT_SMALL, 'signed' => false])
-                ->addColumn('posts', 'integer', ['limit' => MysqlAdapter::INT_MEDIUM, 'signed' => false])
-                ->addIndex('forum_id')
+                ->addColumn('count_posts', 'integer', ['limit' => MysqlAdapter::INT_MEDIUM, 'signed' => false])
                 ->addIndex('topic_id')
-                ->addIndex('user')
+                ->addIndex('user_id')
                 ->create();
         }
     }

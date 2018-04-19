@@ -11,7 +11,8 @@ class CreateAntimatTable extends AbstractMigration
     {
         if (! $this->hasTable('antimat')) {
             $table = $this->table('antimat', ['collation' => env('DB_COLLATION')]);
-            $table->addColumn('string', 'string', ['limit' => 100])
+            $table
+                ->addColumn('string', 'string', ['limit' => 100])
                 ->create();
         }
     }
