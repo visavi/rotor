@@ -8,7 +8,7 @@ use App\Models\Blog;
 use App\Models\Category;
 use App\Models\Comment;
 use App\Models\Flood;
-use App\Models\Read;
+use App\Models\Reader;
 use App\Models\User;
 use Illuminate\Database\Capsule\Manager as DB;
 use Illuminate\Database\Query\JoinClause;
@@ -85,14 +85,14 @@ class BlogController extends BaseController
         $page = paginate(1, $total);
 
         if ($page->current == 1) {
-            $reads = Read::query()
+            $reader = Reader::query()
                 ->where('relate_type', Blog::class)
                 ->where('relate_id', $blog->id)
                 ->where('ip', getIp())
                 ->first();
 
-            if (! $reads) {
-                Read::query()->create([
+            if (! $reader) {
+                Reader::query()->create([
                     'relate_type' => Blog::class,
                     'relate_id'   => $blog->id,
                     'ip'          => getIp(),

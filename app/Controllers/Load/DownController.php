@@ -12,7 +12,7 @@ use App\Controllers\BaseController;
 use App\Models\Comment;
 use App\Models\Down;
 use App\Models\Flood;
-use App\Models\Read;
+use App\Models\Reader;
 use App\Models\Polling;
 use Illuminate\Database\Capsule\Manager as DB;
 use Illuminate\Database\Query\JoinClause;
@@ -321,14 +321,14 @@ class DownController extends BaseController
 
         if ($validator->isValid()) {
 
-            $reads = Read::query()
+            $reader = Reader::query()
                 ->where('relate_type', Down::class)
                 ->where('relate_id', $file->relate->id)
                 ->where('ip', getIp())
                 ->first();
 
-            if (! $reads) {
-                Read::query()->create([
+            if (! $reader) {
+                Reader::query()->create([
                     'relate_type' => Down::class,
                     'relate_id'   => $file->relate->id,
                     'ip'          => getIp(),

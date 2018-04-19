@@ -2,14 +2,14 @@
 
 namespace App\Models;
 
-class Read extends BaseModel
+class Reader extends BaseModel
 {
     /**
      * The table associated with the model.
      *
      * @var string
      */
-    protected $table = 'reads';
+    protected $table = 'readers';
 
     /**
      * Indicates if the model should be timestamped.

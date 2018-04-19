@@ -2,17 +2,17 @@
 
 namespace App\Tasks;
 
-use App\Models\Read;
+use App\Models\Reader;
 use Crontask\Tasks\Task;
 
-class DeleteReads extends Task
+class DeleteReaders extends Task
 {
     /**
      * Удаляет старые записи статистики просмотров и скачиваний
      */
     public function run()
     {
-        Read::query()
+        Reader::query()
             ->where('created_at', '<', strtotime('-3 month', SITETIME))
             ->delete();
     }

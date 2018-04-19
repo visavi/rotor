@@ -8,7 +8,7 @@ $taskList = new TaskList();
 
 $taskList->addTasks([
     (new App\Tasks\DeletePollings())->setExpression('@weekly'),
-    (new App\Tasks\DeleteReads())->setExpression('@weekly'),
+    (new App\Tasks\DeleteReaders())->setExpression('@weekly'),
     (new App\Tasks\DeleteLogin())->setExpression('@weekly'),
     (new App\Tasks\DeletePending())->setExpression('@daily'),
     (new App\Tasks\DeleteLogs())->setExpression('@daily'),
