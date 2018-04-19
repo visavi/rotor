@@ -22,11 +22,11 @@
             @if ($path)
                 <li class="breadcrumb-item"><a href="/admin/files">Редактирование страниц</a></li>
 
-                <?php $dirName = []; ?>
+                <?php $dirNames = []; ?>
                 @foreach ($directories as $directory)
-                    <?php $dirName[] = $directory; ?>
-                    @if ($path !== implode('/', $dirName))
-                        <li class="breadcrumb-item"><a href="/admin/files?path={{ implode('/', $dirName) }}">{{ implode('/', $dirName) }}</a></li>
+                    <?php $dirNames[] = $directory; ?>
+                    @if ($path !== implode('/', $dirNames))
+                        <li class="breadcrumb-item"><a href="/admin/files?path={{ implode('/', $dirNames) }}">{{ implode('/', $dirNames) }}</a></li>
                     @endif
                 @endforeach
             @endif

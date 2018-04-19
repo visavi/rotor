@@ -1,12 +1,12 @@
 @extends('layout')
 
 @section('title')
-    {{ 'Редактирование файла '.$path.$file.'.blade.php' }}
+    {{ 'Редактирование файла '.$path.$fileName.'.blade.php' }}
 @stop
 
 @section('content')
 
-    <h1>Редактирование файла {{ $path.$file }}.blade.php</h1>
+    <h1>Редактирование файла {{ $path.$fileName }}.blade.php</h1>
 
     <nav>
         <ol class="breadcrumb">
