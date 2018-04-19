@@ -8,6 +8,15 @@
 
     <h1>Создание новости</h1>
 
+    <nav>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
+            <li class="breadcrumb-item"><a href="/admin">Панель</a></li>
+            <li class="breadcrumb-item"><a href="/admin/news">Новости</a></li>
+            <li class="breadcrumb-item active">Создание новости</li>
+        </ol>
+    </nav>
+
     <div class="form cut">
         <form action="/admin/news/create" method="post" enctype="multipart/form-data">
             <input type="hidden" name="token" value="{{ $_SESSION['token'] }}">
@@ -32,26 +41,19 @@
             {!! textError('image') !!}
             <br>
 
-            <div class="form-check">
-                <label class="form-check-label">
-                    <input type="hidden" value="0" name="closed">
-                    <input name="closed" class="form-check-input" type="checkbox" value="1"{{ getInput('closed') ? ' checked' : '' }}>
-                    Закрыть комментарии
-                </label>
+            <div class="custom-control custom-checkbox">
+                <input type="hidden" value="0" name="closed">
+                <input type="checkbox" class="custom-control-input" value="1" name="closed" id="closed"{{ getInput('closed') ? ' checked' : '' }}>
+                <label class="custom-control-label" for="closed">Закрыть комментарии</label>
             </div>
 
-            <div class="form-check">
-                <label class="form-check-label">
-                    <input type="hidden" value="0" name="top">
-                    <input name="top" class="form-check-input" type="checkbox" value="1"{{ getInput('top') ? ' checked' : '' }}>
-                    Показывать на главной
-                </label>
+            <div class="custom-control custom-checkbox">
+                <input type="hidden" value="0" name="top">
+                <input type="checkbox" class="custom-control-input" value="1" name="top" id="top"{{ getInput('top') ? ' checked' : '' }}>
+                <label class="custom-control-label" for="top">Показывать на главной</label>
             </div>
 
             <button class="btn btn-primary">Создать</button>
         </form>
-    </div><br>
-
-    <i class="fa fa-arrow-circle-left"></i> <a href="/admin/news">Вернуться</a><br>
-    <i class="fa fa-wrench"></i> <a href="/admin">В админку</a><br>
+    </div>
 @stop

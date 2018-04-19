@@ -8,9 +8,17 @@
 
     <div class="float-right">
         <a class="btn btn-success" href="/reklama/create">Разместить рекламу</a>
-    </div>
+    </div><br>
 
-    <h1>Пользовательская реклама</h1><br>
+    <h1>Пользовательская реклама</h1>
+
+    <nav>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
+            <li class="breadcrumb-item"><a href="/admin">Панель</a></li>
+            <li class="breadcrumb-item active">Пользовательская реклама</li>
+        </ol>
+    </nav>
 
     @if ($records->isNotEmpty())
 
@@ -54,6 +62,4 @@
     @else
         {!! showError('В данный момент рекламных ссылок еще нет!') !!}
     @endif
-
-    <i class="fa fa-wrench"></i> <a href="/admin">В админку</a><br>
 @stop

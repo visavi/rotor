@@ -8,6 +8,21 @@
 
     <h1>Перенос темы {{ $topic->title }}</h1>
 
+    <nav>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
+            <li class="breadcrumb-item"><a href="/admin">Панель</a></li>
+            <li class="breadcrumb-item"><a href="/admin/forum">Форум</a></li>
+
+            @if ($topic->forum->parent->id)
+                <li class="breadcrumb-item"><a href="/admin/forum/{{ $topic->forum->parent->id }}">{{ $topic->forum->parent->title }}</a></li>
+            @endif
+
+            <li class="breadcrumb-item"><a href="/admin/forum/{{ $topic->forum->id }}">{{ $topic->forum->title }}</a></li>
+            <li class="breadcrumb-item active">Перенос темы {{ $topic->title }}</li>
+        </ol>
+    </nav>
+
     Автор темы: {!! profile($topic->user) !!}<br>
     Сообщений: {{ $topic->count_posts }}<br>
     Создан: {{ dateFixed($topic->created_at) }}<br>
@@ -37,8 +52,4 @@
             <button class="btn btn-primary">Перенести</button>
         </form>
     </div>
-
-    <i class="fa fa-arrow-circle-up"></i> <a href="/admin/forum/{{ $topic->forum_id }}">Вернуться</a><br>
-    <i class="fa fa-arrow-circle-left"></i> <a href="/admin/forum">Форум</a><br>
-    <i class="fa fa-wrench"></i> <a href="/admin">В админку</a><br>
 @stop

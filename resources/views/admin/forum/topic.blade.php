@@ -8,13 +8,21 @@
 
 @section('content')
     <h1>{{ $topic->title }}</h1>
-    <a href="/forum">Форум</a> /
 
-    @if ($topic->forum->parent->id)
-        <a href="/forum/{{ $topic->forum->parent->id }}">{{ $topic->forum->parent->title }}</a> /
-    @endif
+    <nav>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
+            <li class="breadcrumb-item"><a href="/admin">Панель</a></li>
+            <li class="breadcrumb-item"><a href="/admin/forum">Форум</a></li>
 
-    <a href="/forum/{{ $topic->forum->id }}">{{ $topic->forum->title }}</a>
+            @if ($topic->forum->parent->id)
+                <li class="breadcrumb-item"><a href="/admin/forum/{{ $topic->forum->parent->id }}">{{ $topic->forum->parent->title }}</a></li>
+            @endif
+
+            <li class="breadcrumb-item"><a href="/admin/forum/{{ $topic->forum->id }}">{{ $topic->forum->title }}</a></li>
+            <li class="breadcrumb-item active">{{ $topic->title }}</li>
+        </ol>
+    </nav>
 
     @if ($topic->curators)
        <div>

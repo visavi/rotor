@@ -1,7 +1,7 @@
 @extends('layout')
 
 @section('title')
-    Галерея сайта (Стр. {{ $page->current }})
+    Галерея (Стр. {{ $page->current }})
 @stop
 
 @section('content')
@@ -12,12 +12,12 @@
         </div><br>
     @endif
 
-    <h1>Галерея сайта</h1>
+    <h1>Галерея</h1>
 
     <nav>
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
-            <li class="breadcrumb-item active">Галерея сайта</li>
+            <li class="breadcrumb-item active">Галерея</li>
 
             @if (isAdmin())
                 <li class="breadcrumb-item"><a href="/admin/gallery?page={{ $page->current }}">Управление</a></li>

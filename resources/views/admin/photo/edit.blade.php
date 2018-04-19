@@ -8,6 +8,16 @@
 
     <h1>Редактирование фотографии</h1>
 
+    <nav>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
+            <li class="breadcrumb-item"><a href="/admin">Панель</a></li>
+            <li class="breadcrumb-item"><a href="/admin/gallery">Галерея</a></li>
+            <li class="breadcrumb-item"><a href="/gallery/{{ $photo->id }}">{{ $photo->title }}</a></li>
+            <li class="breadcrumb-item active">Редактирование фотографии</li>
+        </ol>
+    </nav>
+
     <div class="form">
         <form action="/admin/gallery/edit/{{ $photo->id }}?page={{ $page }}" method="post">
             <input type="hidden" name="token" value="{{ $_SESSION['token'] }}">
@@ -32,7 +42,4 @@
             <button class="btn btn-primary">Изменить</button>
         </form>
     </div>
-
-    <i class="fa fa-arrow-circle-left"></i> <a href="/admin/gallery?page={{ $page }}">Вернуться</a><br>
-    <i class="fa fa-wrench"></i> <a href="/admin">В админку</a><br>
 @stop

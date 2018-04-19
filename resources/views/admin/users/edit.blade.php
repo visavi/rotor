@@ -8,6 +8,15 @@
 
     <h1>Редактирование пользователя {{ $user->login }}</h1>
 
+    <nav>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
+            <li class="breadcrumb-item"><a href="/admin">Панель</a></li>
+            <li class="breadcrumb-item"><a href="/admin/users">Пользователи</a></li>
+            <li class="breadcrumb-item active">Редактирование пользователя</li>
+        </ol>
+    </nav>
+
     <h3>{!! profile($user) !!} {{ $user->login }} #{{ $user->id }}</h3>
 
     @if ($user->id == getUser('id'))
@@ -187,7 +196,4 @@
     @if (! in_array($user->level, $adminGroups))
         <i class="fa fa-times"></i> <a href="/admin/users/delete?user={{ $user->login }}">Удалить профиль</a><br>
     @endif
-
-    <i class="fa fa-arrow-circle-left"></i> <a href="/admin/users">Вернуться</a><br>
-    <i class="fa fa-wrench"></i> <a href="/admin">В админку</a><br>
 @stop

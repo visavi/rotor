@@ -8,6 +8,15 @@
 
     <h1>Архив голосований</h1>
 
+    <nav>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
+            <li class="breadcrumb-item"><a href="/admin">Панель</a></li>
+            <li class="breadcrumb-item"><a href="/admin/votes">Голосования</a></li>
+            <li class="breadcrumb-item active">Архив голосований</li>
+        </ol>
+    </nav>
+
     @if ($votes->isNotEmpty())
         @foreach ($votes as $vote)
             <div class="b">
@@ -38,7 +47,4 @@
     @else
         {!! showError('Голосований в архиве еще нет!') !!}
     @endif
-
-    <i class="fa fa-arrow-circle-up"></i> <a href="/admin/votes">К голосованиям</a><br>
-    <i class="fa fa-wrench"></i> <a href="/admin">В админку</a><br>
 @stop

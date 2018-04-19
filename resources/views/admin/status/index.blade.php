@@ -6,7 +6,20 @@
 
 @section('content')
 
+    <div class="float-right">
+        <a class="btn btn-success" href="/admin/status/create">Создать</a>
+    </div><br>
+
+
     <h1>Статусы пользователей</h1>
+
+    <nav>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
+            <li class="breadcrumb-item"><a href="/admin">Панель</a></li>
+            <li class="breadcrumb-item active">Статусы пользователей</li>
+        </ol>
+    </nav>
 
     @if ($statuses->isNotEmpty())
 
@@ -40,7 +53,4 @@
     @else
         {!! showError('Статусы еще не назначены!') !!}
     @endif
-
-    <i class="fa fa-plus"></i> <a href="/admin/status/create">Создать</a><br>
-    <i class="fa fa-wrench"></i> <a href="/admin">В админку</a><br>
 @stop

@@ -75,6 +75,4 @@
 
         <i class="fa fa-sync"></i> <a href="/admin/load/restatement?token={{ $_SESSION['token'] }}">Пересчитать</a><br>
     @endif
-
-    <i class="fa fa-check"></i> <a href="/admin/load?act=newfile">Добавить</a><br>
 @stop

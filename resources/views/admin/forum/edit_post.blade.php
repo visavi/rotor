@@ -8,6 +8,22 @@
 
     <h1>Изменение сообщения</h1>
 
+    <nav>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
+            <li class="breadcrumb-item"><a href="/admin">Панель</a></li>
+            <li class="breadcrumb-item"><a href="/admin/forum">Форум</a></li>
+
+            @if ($post->topic->forum->parent->id)
+                <li class="breadcrumb-item"><a href="/admin/forum/{{ $post->topic->forum->parent->id }}">{{ $post->topic->forum->parent->title }}</a></li>
+            @endif
+
+            <li class="breadcrumb-item"><a href="/admin/forum/{{ $post->topic->forum->id }}">{{ $post->topic->forum->title }}</a></li>
+            <li class="breadcrumb-item"><a href="/admin/forum/{{ $post->topic->id }}">{{ $post->topic->title }}</a></li>
+            <li class="breadcrumb-item active">Редактирование сообщения</li>
+        </ol>
+    </nav>
+
     <i class="fa fa-pencil-alt"></i> <b>{{ $post->user->login }}</b> <small>({{ dateFixed($post->created_at) }})</small><br><br>
 
     <div class="form">
@@ -32,9 +48,4 @@
             <button class="btn btn-primary">Редактировать</button>
         </form>
     </div>
-    <br>
-
-    <i class="fa fa-arrow-circle-up"></i> <a href="/admin/topic/{{ $post->topic_id }}?page={{ $page }}">Вернуться</a><br>
-    <i class="fa fa-arrow-circle-left"></i> <a href="/admin/forum">Форум</a><br>
-    <i class="fa fa-wrench"></i> <a href="/admin">В админку</a><br>
 @stop

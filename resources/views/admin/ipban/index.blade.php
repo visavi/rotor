@@ -8,6 +8,14 @@
 
     <h1>IP-бан панель</h1>
 
+    <nav>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
+            <li class="breadcrumb-item"><a href="/admin">Панель</a></li>
+            <li class="breadcrumb-item active">IP-бан панель</li>
+        </ol>
+    </nav>
+
     <a href="/admin/log?code=666">История автобанов</a><br>
 
     @if ($logs->isNotEmpty())
@@ -66,6 +74,4 @@
     @if ($logs->isNotEmpty() && isAdmin('boss'))
         <i class="fa fa-times"></i> <a href="/admin/ipban/clear?token={{ $_SESSION['token'] }}" onclick="return confirm('Вы действительно хотите очистить список IP?')">Очистить список</a><br>
     @endif
-
-    <i class="fa fa-wrench"></i> <a href="/admin">В админку</a><br>
 @stop

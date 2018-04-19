@@ -8,19 +8,24 @@
 
     <div class="float-right">
         <a class="btn btn-success" href="/forum/create?fid={{ $forum->id }}">Создать тему</a>
-    </div>
+    </div><br>
 
     <h1>{{ $forum->title }}</h1>
 
-    <a href="/admin/forum">Форум</a>
+    <nav>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
+            <li class="breadcrumb-item"><a href="/admin">Панель</a></li>
+            <li class="breadcrumb-item"><a href="/admin/forum">Форум</a></li>
 
-    @if ($forum->parent->id)
-        / <a href="/admin/forum/{{ $forum->parent->id }}">{{ $forum->parent->title }}</a>
-    @endif
+            @if ($forum->parent->id)
+                <li class="breadcrumb-item"><a href="/admin/forum/{{ $forum->parent->id }}">{{ $forum->parent->title }}</a></li>
+            @endif
 
-    / {{ $forum->title }}
-    / <a href="/forum/{{ $forum->id  }}?page={{ $page->current }}">Обзор</a>
-    <hr>
+            <li class="breadcrumb-item active">{{ $forum->title }}</li>
+            <li class="breadcrumb-item"><a href="/forum/{{ $forum->id  }}?page={{ $page->current }}">Обзор</a></li>
+        </ol>
+    </nav>
 
     @if ($topics->isNotEmpty())
             @foreach ($topics as $topic)

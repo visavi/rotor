@@ -8,6 +8,14 @@
 
     <h1>Управление пользователями</h1>
 
+    <nav>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
+            <li class="breadcrumb-item"><a href="/admin">Панель</a></li>
+            <li class="breadcrumb-item active">Пользователи</li>
+        </ol>
+    </nav>
+
     <div class="form">
         <form action="/admin/users/edit" method="get">
             <div class="form-inline">
@@ -67,6 +75,4 @@
     @else
         {!! showError('Пользователей еще нет!') !!}
     @endif
-
-    <i class="fa fa-wrench"></i> <a href="/admin">В админку</a><br>
 @stop

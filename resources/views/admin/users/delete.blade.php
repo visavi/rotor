@@ -8,6 +8,16 @@
 
     <h1>Удаление пользователя {{ $user->login }}</h1>
 
+    <nav>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
+            <li class="breadcrumb-item"><a href="/admin">Панель</a></li>
+            <li class="breadcrumb-item"><a href="/admin/users">Пользователи</a></li>
+            <li class="breadcrumb-item"><a href="/admin/users/edit?user={{ $user->login }}">{{ $user->login }}</a></li>
+            <li class="breadcrumb-item active">Удаление пользователя</li>
+        </ol>
+    </nav>
+
     <div class="form">
         <form action="/admin/users/delete?user={{ $user->login }}" method="post">
             <input type="hidden" name="token" value="{{ $_SESSION['token'] }}">
@@ -47,8 +57,5 @@
 
             <button class="btn btn-danger">Удалить пользователя</button>
         </form>
-    </div><br>
-
-    <i class="fa fa-arrow-circle-left"></i> <a href="/admin/users/edit?user={{ $user->login }}">Вернуться</a><br>
-    <i class="fa fa-wrench"></i> <a href="/admin">В админку</a><br>
+    </div>
 @stop

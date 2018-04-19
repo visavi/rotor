@@ -8,6 +8,15 @@
 
     <h1>Создание шаблона</h1>
 
+    <nav>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
+            <li class="breadcrumb-item"><a href="/admin">Панель</a></li>
+            <li class="breadcrumb-item"><a href="/admin/notice">Шаблоны писем</a></li>
+            <li class="breadcrumb-item active">Создание шаблона</li>
+        </ol>
+    </nav>
+
     <div class="form">
         <form action="/admin/notice/create" method="post">
             <input type="hidden" name="token" value="{{ $_SESSION['token'] }}">
@@ -39,8 +48,5 @@
 
             <button class="btn btn-primary">Сохранить</button>
         </form>
-    </div><br>
-
-    <i class="fa fa-arrow-circle-left"></i> <a href="/admin/notice">Вернуться</a><br>
-    <i class="fa fa-wrench"></i> <a href="/admin">В админку</a><br>
+    </div>
 @stop

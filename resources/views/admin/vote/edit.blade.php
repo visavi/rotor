@@ -8,6 +8,16 @@
 
     <h1>Редактирование голосования</h1>
 
+    <nav>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
+            <li class="breadcrumb-item"><a href="/admin">Панель</a></li>
+            <li class="breadcrumb-item"><a href="/admin/votes">Голосования</a></li>
+            <li class="breadcrumb-item"><a href="/votes/{{ $vote->id }}">{{ $vote->title }}</a></li>
+            <li class="breadcrumb-item active">Редактирование голосования</li>
+        </ol>
+    </nav>
+
     <div class="form">
         <form action="/admin/votes/edit/{{ $vote->id }}" method="post">
             <input type="hidden" name="token" value="{{ $_SESSION['token'] }}">
@@ -42,5 +52,5 @@
     <p class="text-muted font-italic">Поля отмеченные зеленым цветом обязательны для заполнения!</p>
 
     <i class="fa fa-arrow-circle-left"></i> <a href="/admin/votes">Вернуться</a><br>
-    <i class="fa fa-wrench"></i> <a href="/admin">В админку</a><br>
+
 @stop

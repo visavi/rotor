@@ -8,6 +8,15 @@
 
     <h1>Редактирование правил</h1>
 
+    <nav>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
+            <li class="breadcrumb-item"><a href="/admin">Панель</a></li>
+            <li class="breadcrumb-item"><a href="/admin/rules">Правила сайта</a></li>
+            <li class="breadcrumb-item active">Редактирование правил</li>
+        </ol>
+    </nav>
+
     <div class="form">
         <form action="/admin/rules/edit" method="post">
             <input type="hidden" name="token" value="{{ $_SESSION['token'] }}">
@@ -24,7 +33,4 @@
     <b>Внутренние переменные:</b><br>
 
     %SITENAME% - Название сайта<br><br>
-
-    <i class="fa fa-arrow-circle-left"></i> <a href="/admin/rules">Вернуться</a><br>
-    <i class="fa fa-wrench"></i> <a href="/admin">В админку</a><br>
 @stop

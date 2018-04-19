@@ -8,6 +8,14 @@
 
     <h1>Ожидающие регистрации</h1>
 
+    <nav>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
+            <li class="breadcrumb-item"><a href="/admin">Панель</a></li>
+            <li class="breadcrumb-item active">Ожидающие регистрации</li>
+        </ol>
+    </nav>
+
     <div class="mb-3 font-weight-bold">
 
         <i class="fa fa-exclamation-circle"></i>
@@ -56,6 +64,4 @@
     @else
         {!! showError('Нет пользователей требующих подтверждения регистрации!!') !!}
     @endif
-
-    <i class="fa fa-wrench"></i> <a href="/admin">В админку</a><br>
 @stop

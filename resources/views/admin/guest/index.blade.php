@@ -8,7 +8,14 @@
 
     <h1>Управление гостевой</h1>
 
-    <a href="/book?page={{ $page->current }}">Обзор</a><br><hr>
+    <nav>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
+            <li class="breadcrumb-item"><a href="/admin">Панель</a></li>
+            <li class="breadcrumb-item active">Гостевая книга</li>
+            <li class="breadcrumb-item"><a href="/book?page={{ $page->current }}">Обзор</a></li>
+        </ol>
+    </nav>
 
     @if ($posts->isNotEmpty())
         <form action="/admin/book/delete?page={{ $page->current }}" method="post">
@@ -63,6 +70,4 @@
     @else
         {!! showError('Сообщений еще нет!') !!}
     @endif
-
-    <i class="fa fa-wrench"></i> <a href="/admin">В админку</a><br>
 @stop

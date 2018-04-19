@@ -6,7 +6,19 @@
 
 @section('content')
 
+    <div class="float-right">
+        <a class="btn btn-success" href="/admin/rules/edit">Редактировать</a>
+    </div><br>
+
     <h1>Правила сайта</h1>
+
+    <nav>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
+            <li class="breadcrumb-item"><a href="/admin">Панель</a></li>
+            <li class="breadcrumb-item active">Правила сайта</li>
+        </ol>
+    </nav>
 
     @if ($rules)
         <div>
@@ -19,8 +31,4 @@
     @else
         {!! showError('Правила сайта еще не установлены!') !!}
     @endif
-
-    <i class="fa fa-pencil-alt"></i> <a href="/admin/rules/edit">Редактировать</a><br>
-
-    <i class="fa fa-wrench"></i> <a href="/admin">В админку</a><br>
 @stop

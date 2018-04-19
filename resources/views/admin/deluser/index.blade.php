@@ -72,5 +72,5 @@
         <i class="fa fa-arrow-circle-left"></i> <a href="/admin/delusers">Вернуться</a><br>
     @endif
 
-    <i class="fa fa-wrench"></i> <a href="/admin">В админку</a><br>
+
 @stop

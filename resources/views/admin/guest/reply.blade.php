@@ -8,6 +8,15 @@
 
     <h1>Ответ на сообщение</h1>
 
+    <nav>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
+            <li class="breadcrumb-item"><a href="/admin">Панель</a></li>
+            <li class="breadcrumb-item"><a href="/admin/book">Гостевая книга</a></li>
+            <li class="breadcrumb-item active">Ответ на сообщение</li>
+        </ol>
+    </nav>
+
     <div class="alert alert-info">
         <i class="fa fa-pencil-alt"></i> <b>{{ $post->user->login }}</b> <small>({{ dateFixed($post->created_at) }})</small><br>
         <div>Сообщение: {!! bbCode($post->text) !!}</div>
@@ -25,8 +34,5 @@
 
             <button class="btn btn-primary">Ответить</button>
         </form>
-    </div><br>
-
-    <i class="fa fa-arrow-circle-left"></i> <a href="/admin/book?page={{ $page }}">Вернуться</a><br>
-    <i class="fa fa-wrench"></i> <a href="/admin">В админку</a><br>
+    </div>
 @stop

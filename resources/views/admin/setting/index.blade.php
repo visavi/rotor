@@ -8,6 +8,14 @@
 
     <h1>Настройки сайта</h1>
 
+    <nav>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
+            <li class="breadcrumb-item"><a href="/admin">Панель</a></li>
+            <li class="breadcrumb-item active">Настройки сайта</li>
+        </ol>
+    </nav>
+
     <div class="container-fluid">
         <div class="row">
             <div class="col-md-4 bg-light p-1">
@@ -35,7 +43,6 @@
             </div>
         </div>
     </div>
-    <br><i class="fa fa-wrench"></i> <a href="/admin">В админку</a><br>
 @stop
 
 @push('scripts')

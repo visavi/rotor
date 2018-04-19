@@ -8,6 +8,16 @@
 
     <h1>Редактирование новости</h1>
 
+    <nav>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
+            <li class="breadcrumb-item"><a href="/admin">Панель</a></li>
+            <li class="breadcrumb-item"><a href="/admin/news">Новости</a></li>
+            <li class="breadcrumb-item"><a href="/news/{{ $news->id }}">{{ $news->title }}</a></li>
+            <li class="breadcrumb-item active">Редактирование новости</li>
+        </ol>
+    </nav>
+
     <div class="form cut">
         <form action="/admin/news/edit/{{ $news->id }}?page={{ $page }}" method="post" enctype="multipart/form-data">
             <input type="hidden" name="token" value="{{ $_SESSION['token'] }}">
@@ -56,8 +66,5 @@
 
             <button class="btn btn-primary">Изменить</button>
         </form>
-    </div><br>
-
-    <i class="fa fa-arrow-circle-left"></i> <a href="/admin/news?page={{ $page }}">Вернуться</a><br>
-    <i class="fa fa-wrench"></i> <a href="/admin">В админку</a><br>
+    </div>
 @stop

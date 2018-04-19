@@ -6,7 +6,19 @@
 
 @section('content')
 
+    <div class="float-right">
+        <a class="btn btn-success" href="/admin/smiles/create">Загрузить</a>
+    </div><br>
+
     <h1>Смайлы</h1>
+
+    <nav>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
+            <li class="breadcrumb-item"><a href="/admin">Панель</a></li>
+            <li class="breadcrumb-item active">Смайлы</li>
+        </ol>
+    </nav>
 
     @if ($smiles->isNotEmpty())
         <form action="/admin/smiles/delete?page={{ $page->current }}" method="post">
@@ -28,8 +40,4 @@
     @else
         {!! showError('Смайлы еще не загружены!') !!}
     @endif
-
-    <i class="fa fa-upload"></i> <a href="/admin/smiles/create">Загрузить</a><br>
-
-    <i class="fa fa-wrench"></i> <a href="/admin">В админку</a><br>
 @stop

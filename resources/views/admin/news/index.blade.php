@@ -8,11 +8,18 @@
 
     <div class="float-right">
         <a class="btn btn-success" href="/admin/news/create">Добавить новость</a>
-    </div>
+    </div><br>
 
-    <h1>Управление новостями</h1><br>
+    <h1>Управление новостями</h1>
 
-    <div class="form"><a href="/news">Обзор новостей</a></div>
+    <nav>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
+            <li class="breadcrumb-item"><a href="/admin">Панель</a></li>
+            <li class="breadcrumb-item active">Новости</li>
+            <li class="breadcrumb-item"><a href="/news">Обзор новостей</a></li>
+        </ol>
+    </nav>
 
     @if ($news->isNotEmpty())
 
@@ -62,6 +69,4 @@
     @if (isAdmin('boss'))
         <i class="fa fa-sync"></i> <a href="/admin/news/restatement?token={{ $_SESSION['token'] }}">Пересчитать</a><br>
     @endif
-
-    <i class="fa fa-wrench"></i> <a href="/admin">В админку</a><br>
 @stop

@@ -6,11 +6,22 @@
 
 @section('content')
 
+    @if (getUser())
+        <div class="float-right">
+            <a class="btn btn-success" href="/gallery/create">Добавить фото</a><br>
+        </div><br>
+    @endif
+
     <h1>Управление галереей</h1>
 
-    <a href="/gallery/create">Добавить фото</a> /
-    <a href="/gallery?page={{ $page->current }}">Обзор</a>
-    <hr>
+    <nav>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
+            <li class="breadcrumb-item"><a href="/admin">Панель</a></li>
+            <li class="breadcrumb-item active">Галерея</li>
+            <li class="breadcrumb-item"><a href="/gallery?page={{ $page->current }}">Обзор</a></li>
+        </ol>
+    </nav>
 
     @if ($photos->isNotEmpty())
 
@@ -20,7 +31,7 @@
             @foreach ($photos as $data)
                 <div class="b">
                     <i class="fa fa-image"></i>
-                    <b><a href="">{{ $data->title }}</a></b> ({{ formatFileSize(UPLOADS.'/pictures/'.$data->link) }})
+                    <b><a href="/gallery/{{ $data->id }}">{{ $data->title }}</a></b> ({{ formatFileSize(UPLOADS.'/pictures/'.$data->link) }})
 
                     <div class="float-right">
                         <a href="/admin/gallery/edit/{{ $data->id }}?page={{ $page->current }}"><i class="fas fa-pencil-alt text-muted"></i></a>
@@ -55,6 +66,4 @@
     @else
         {!! showError('Фотографий еще нет!') !!}
     @endif
-
-    <i class="fa fa-wrench"></i> <a href="/admin">В админку</a><br>
 @stop

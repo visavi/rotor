@@ -8,6 +8,14 @@
 
     <h1>Управление жалобами</h1>
 
+    <nav>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
+            <li class="breadcrumb-item"><a href="/admin">Панель</a></li>
+            <li class="breadcrumb-item active">Управление жалобами</li>
+        </ol>
+    </nav>
+
     <?php $active = ($type == 'post') ? 'success' : 'light'; ?>
     <a href="/admin/spam?type=post" class="badge badge-{{ $active }}">Форум {{ $total['post'] }}</a>
     <?php $active = ($type == 'guest') ? 'success' : 'light'; ?>
@@ -65,6 +73,4 @@
     @else
         {!! showError('Жалоб еще нет!') !!}
     @endif
-
-    <i class="fa fa-wrench"></i> <a href="/admin">В админку</a><br>
 @stop

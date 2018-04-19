@@ -8,6 +8,15 @@
 
     <h1>Редактирование ссылки</h1>
 
+    <nav>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
+            <li class="breadcrumb-item"><a href="/admin">Панель</a></li>
+            <li class="breadcrumb-item"><a href="/admin/reklama">Пользовательская реклама</a></li>
+            <li class="breadcrumb-item active">Редактирование ссылки</li>
+        </ol>
+    </nav>
+
     <div class="form">
         <form action="/admin/reklama/edit/{{ $link->id }}?page={{ $page }}" method="post">
             <input type="hidden" name="token" value="{{ $_SESSION['token'] }}">
@@ -45,6 +54,4 @@
             <button class="btn btn-primary">Изменить</button>
         </form>
     </div>
-
-    <i class="fa fa-wrench"></i> <a href="/admin">В админку</a><br>
 @stop

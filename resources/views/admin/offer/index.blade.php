@@ -9,21 +9,26 @@
     @if (getUser())
         <div class="float-right">
             <a class="btn btn-success" href="/offers/create">Добавить</a><br>
-        </div>
+        </div><br>
     @endif
 
     <h1>Предложения / Проблемы</h1>
 
+    <nav>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
+            <li class="breadcrumb-item"><a href="/admin">Панель</a></li>
+            <li class="breadcrumb-item active">Предложения / Проблемы</li>
+            <li class="breadcrumb-item"><a href="/offers/{{ $type }}?page={{ $page->current }}">Обзор</a></li>
+        </ol>
+    </nav>
+
     <i class="fa fa-book"></i>
 
-    @if ($type == 'offer')
+    @if ($type === 'offer')
         <b>Предложения</b> ({{ $page->total }}) / <a href="/admin/offers/issue">Проблемы</a> ({{ $page->otherTotal }})
     @else
         <a href="/admin/offers/offer">Предложения</a> ({{ $page->otherTotal }}) / <b>Проблемы</b> ({{ $page->total }})
-    @endif
-
-    @if (isAdmin('admin'))
-        / <a href="/offers/{{ $type }}?page={{ $page->current }}">Обзор</a>
     @endif
 
     <br>Сортировать:
@@ -79,6 +84,4 @@
     @if (isAdmin('boss'))
         <i class="fa fa-sync"></i> <a href="/admin/offers/restatement?token={{ $_SESSION['token'] }}">Пересчитать</a><br>
     @endif
-
-    <i class="fa fa-wrench"></i> <a href="/admin">В админку</a><br>
 @stop

@@ -8,6 +8,15 @@
 
     <h1>Создание ключей</h1>
 
+    <nav>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
+            <li class="breadcrumb-item"><a href="/admin">Панель</a></li>
+            <li class="breadcrumb-item"><a href="/admin/invitations">Приглашения</a></li>
+            <li class="breadcrumb-item active">Создание ключей</li>
+        </ol>
+    </nav>
+
     <h3>Генерация новых ключей</h3>
     <div class="form">
         <form action="/admin/invitations/create" method="post">
@@ -72,7 +81,4 @@
             </form>
         </div><br>
     @endif
-
-    <i class="fa fa-arrow-circle-left"></i> <a href="/admin/invitations">Вернуться</a><br>
-    <i class="fa fa-wrench"></i> <a href="/admin">В админку</a><br>
 @stop

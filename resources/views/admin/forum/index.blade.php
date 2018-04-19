@@ -8,7 +8,14 @@
 
     <h1>Управление форумом</h1>
 
-    <a href="/forum">Обзор форума</a><hr>
+    <nav>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
+            <li class="breadcrumb-item"><a href="/admin">Панель</a></li>
+            <li class="breadcrumb-item active">Форум</li>
+            <li class="breadcrumb-item"><a href="/forum">Обзор форума</a></li>
+        </ol>
+    </nav>
 
     @if ($forums->isNotEmpty())
         @foreach ($forums as $forum)
@@ -73,6 +80,4 @@
 
         <i class="fa fa-sync"></i> <a href="/admin/forum/restatement?token={{ $_SESSION['token'] }}">Пересчитать</a><br>
     @endif
-
-    <i class="fa fa-wrench"></i> <a href="/admin">В админку</a><br>
 @stop

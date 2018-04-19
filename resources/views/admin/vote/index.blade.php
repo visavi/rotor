@@ -14,6 +14,14 @@
 
     <h1>Управление голосованиями</h1>
 
+    <nav>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
+            <li class="breadcrumb-item"><a href="/admin">Панель</a></li>
+            <li class="breadcrumb-item active">Голосования</li>
+        </ol>
+    </nav>
+
     @if ($votes->isNotEmpty())
         @foreach ($votes as $vote)
             <div class="b">
@@ -50,5 +58,4 @@
     @endif
 
     <i class="fa fa-briefcase"></i> <a href="/admin/votes/history">Архив голосований</a><br>
-    <i class="fa fa-wrench"></i> <a href="/admin">В админку</a><br>
 @stop

@@ -8,6 +8,15 @@
 
     <h1>Редактирование шаблона</h1>
 
+    <nav>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
+            <li class="breadcrumb-item"><a href="/admin">Панель</a></li>
+            <li class="breadcrumb-item"><a href="/admin/notice">Шаблоны писем</a></li>
+            <li class="breadcrumb-item active">Редактирование шаблона</li>
+        </ol>
+    </nav>
+
     @if ($notice->protect)
         <div class="p-1 bg-warning text-dark">
             <i class="fa fa-exclamation-circle"></i> <b>Вы редактируете системный шаблон</b>
@@ -41,8 +50,5 @@
 
             <button class="btn btn-primary">Сохранить</button>
         </form>
-    </div><br>
-
-    <i class="fa fa-arrow-circle-left"></i> <a href="/admin/notice">Вернуться</a><br>
-    <i class="fa fa-wrench"></i> <a href="/admin">В админку</a><br>
+    </div>
 @stop

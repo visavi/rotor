@@ -8,6 +8,15 @@
 
     <h1>Добавление статуса</h1>
 
+    <nav>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
+            <li class="breadcrumb-item"><a href="/admin">Панель</a></li>
+            <li class="breadcrumb-item"><a href="/admin/status">Статусы пользователей</a></li>
+            <li class="breadcrumb-item active">Добавление статуса</li>
+        </ol>
+    </nav>
+
     <div class="form">
         <form method="post">
             <input type="hidden" name="token" value="{{ $_SESSION['token'] }}">
@@ -44,5 +53,5 @@
     </div><br>
 
     <i class="fa fa-arrow-circle-left"></i> <a href="/admin/status">Вернуться</a><br>
-    <i class="fa fa-wrench"></i> <a href="/admin">В админку</a><br>
+
 @stop

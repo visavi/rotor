@@ -8,6 +8,15 @@
 
     <h1>Редактирование смайла</h1>
 
+    <nav>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
+            <li class="breadcrumb-item"><a href="/admin">Панель</a></li>
+            <li class="breadcrumb-item"><a href="/admin/smiles">Смайлы</a></li>
+            <li class="breadcrumb-item active">Редактирование смайла</li>
+        </ol>
+    </nav>
+
     <img src="/uploads/smiles/{{ $smile->name }}" alt=""> — <b>{{ $smile->code }}</b><br>
 
     <div class="form">
@@ -26,8 +35,5 @@
 
             <button class="btn btn-primary">Изменить</button>
         </form>
-    </div><br>
-
-    <i class="fa fa-arrow-circle-left"></i> <a href="/admin/smiles?page={{ $page }}">Вернуться</a><br>
-    <i class="fa fa-wrench"></i> <a href="/admin">В админку</a><br>
+    </div>
 @stop

@@ -8,6 +8,14 @@
 
     <h1>PHP-info</h1>
 
+    <nav>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
+            <li class="breadcrumb-item"><a href="/admin">Панель</a></li>
+            <li class="breadcrumb-item active">PHP-info</li>
+        </ol>
+    </nav>
+
     <span class="badge badge-success">PHP {{ parseVersion(PHP_VERSION) }}</span>
 
     @if (zend_version())
@@ -39,6 +47,4 @@
     @else
         {!! showError('Функция ini_get_all запрещена в php.ini') !!}
     @endif
-
-    <i class="fa fa-wrench"></i> <a href="/admin">В админку</a><br>
 @stop

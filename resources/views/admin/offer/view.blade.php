@@ -8,14 +8,17 @@
 
     <h1>{{ $offer->title }}</h1>
 
-    <i class="fa fa-book"></i>
-    <a href="/offers/offer">Предложения</a> /
-    <a href="/offers/issue">Проблемы</a> /
-    <a href="/offers/{{ $offer->id }}">Обзор</a>
-    <hr>
+    <nav>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
+            <li class="breadcrumb-item"><a href="/admin">Панель</a></li>
+            <li class="breadcrumb-item"><a href="/admin/offers">Предложения / Проблемы</a></li>
+            <li class="breadcrumb-item active">{{ $offer->title }}</li>
+            <li class="breadcrumb-item"><a href="/offers/{{ $offer->id }}">Обзор</a></li>
+        </ol>
+    </nav>
 
     <div class="b">
-
         <div class="float-right">
             <a href="/admin/offers/reply/{{ $offer->id }}"><i class="fas fa-reply text-muted"></i></a>
             <a href="/admin/offers/edit/{{ $offer->id }}"><i class="fas fa-pencil-alt text-muted"></i></a>
@@ -50,7 +53,4 @@
             {!! profile($offer->replyUser) !!} ({{ dateFixed($offer->updated_at) }})
         </div><br>
     @endif
-
-    <i class="fa fa-arrow-circle-left"></i> <a href="/admin/offers/{{ $offer->type }}">Вернуться</a><br>
-    <i class="fa fa-wrench"></i> <a href="/admin">В админку</a><br>
 @stop

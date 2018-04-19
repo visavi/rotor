@@ -8,6 +8,14 @@
 
     <h1>Приглашения</h1>
 
+    <nav>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
+            <li class="breadcrumb-item"><a href="/admin">Панель</a></li>
+            <li class="breadcrumb-item active">Приглашения</li>
+        </ol>
+    </nav>
+
     @if (! setting('invite'))
         <i class="fa fa-exclamation-circle"></i> <span style="color:#ff0000"><b>Регистрация по приглашения выключена!</b></span><br><br>
     @endif
@@ -52,5 +60,4 @@
 
     <i class="fa fa-check"></i> <a href="/admin/invitations/create">Создать ключи</a><br>
     <i class="fa fa-key"></i> <a href="/admin/invitations/keys">Список ключей</a><br>
-    <i class="fa fa-wrench"></i> <a href="/admin">В админку</a><br>
 @stop

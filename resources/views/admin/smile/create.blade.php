@@ -8,6 +8,15 @@
 
     <h1>Добавление смайла</h1>
 
+    <nav>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
+            <li class="breadcrumb-item"><a href="/admin">Панель</a></li>
+            <li class="breadcrumb-item"><a href="/admin/smiles">Смайлы</a></li>
+            <li class="breadcrumb-item active">Добавление смайла</li>
+        </ol>
+    </nav>
+
     <div class="form">
         <form action="/admin/smiles/create" method="post" enctype="multipart/form-data">
             <input type="hidden" name="token" value="{{ $_SESSION['token'] }}">
@@ -35,7 +44,4 @@
         Разрешается добавлять смайлы с расширением jpg, jpeg, gif, png<br>
         Весом не более {{ formatSize(setting('smilemaxsize')) }} и размером до {{ setting('smilemaxweight') }} px<br><br>
     </p>
-
-    <i class="fa fa-arrow-circle-left"></i> <a href="/admin/smiles">Вернуться</a><br>
-    <i class="fa fa-wrench"></i> <a href="/admin">В админку</a><br>
 @stop
