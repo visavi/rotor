@@ -1,10 +1,10 @@
 <?php
 
-if (env('APP_ENV') === 'testing') {
+/*if (env('APP_ENV') === 'testing') {
     $migrations = BASEDIR . '/database/{migrations,upgrades}';
-} else {
+} else {*/
     $migrations = BASEDIR . '/database/' . (env('APP_NEW') ? 'migrations' : 'upgrades');
-}
+//}
 
 return [
     'paths' => [
