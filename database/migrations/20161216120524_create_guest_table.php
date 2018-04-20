@@ -11,15 +11,16 @@ class CreateGuestTable extends AbstractMigration
     {
         if (! $this->hasTable('guest')) {
             $table = $this->table('guest', ['collation' => env('DB_COLLATION')]);
-            $table->addColumn('user', 'string', ['limit' => 20])
+            $table
+                ->addColumn('user_id', 'integer')
                 ->addColumn('text', 'text', ['null' => true])
                 ->addColumn('ip', 'string', ['limit' => 15])
                 ->addColumn('brow', 'string', ['limit' => 25])
-                ->addColumn('time', 'integer')
+                ->addColumn('created_at', 'integer')
                 ->addColumn('reply', 'text', ['null' => true])
-                ->addColumn('edit', 'string', ['limit' => 20, 'null' => true])
-                ->addColumn('edit_time', 'integer', ['default' => 0])
-                ->addIndex('time')
+                ->addColumn('edit_user_id', 'integer', ['null' => true])
+                ->addColumn('updated_at', 'integer', ['null' => true])
+                ->addIndex('created_at')
                 ->create();
         }
     }

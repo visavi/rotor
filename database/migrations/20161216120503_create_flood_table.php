@@ -11,10 +11,11 @@ class CreateFloodTable extends AbstractMigration
     {
         if (! $this->hasTable('flood')) {
             $table = $this->table('flood', ['collation' => env('DB_COLLATION')]);
-            $table->addColumn('user', 'string', ['limit' => 20])
+            $table
+                ->addColumn('user_id', 'integer', ['null' => true])
                 ->addColumn('page', 'string', ['limit' => 30])
-                ->addColumn('time', 'integer')
-                ->addIndex('user')
+                ->addColumn('created_at', 'integer')
+                ->addIndex('user_id')
                 ->create();
         }
     }

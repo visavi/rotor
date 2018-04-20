@@ -1,6 +1,7 @@
 <?php
 
 use Phinx\Migration\AbstractMigration;
+use Phinx\Db\Adapter\MysqlAdapter;
 
 class CreateSurpriseTable extends AbstractMigration
 {
@@ -11,10 +12,11 @@ class CreateSurpriseTable extends AbstractMigration
     {
         if (! $this->hasTable('surprise')) {
             $table = $this->table('surprise', ['collation' => env('DB_COLLATION')]);
-            $table->addColumn('user', 'string', ['limit' => 20])
+            $table
+                ->addColumn('user_id', 'integer')
                 ->addColumn('year', 'year', ['limit' => 4])
-                ->addColumn('time', 'integer')
-                ->addIndex('user')
+                ->addColumn('created_at', 'integer')
+                ->addIndex('user_id')
                 ->create();
         }
     }

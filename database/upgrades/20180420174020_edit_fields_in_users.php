@@ -12,7 +12,7 @@ class EditFieldsInUsers extends AbstractMigration
         $rows = $this->fetchAll('SELECT * FROM users');
 
         foreach($rows as $row) {
-            if ($row['money'] >= 2147483648) {
+            if ($row['money'] > 2147483640) {
                 $this->execute('UPDATE users SET money=2147483640 WHERE id="'.$row['id'].'" LIMIT 1;');
             }
         }

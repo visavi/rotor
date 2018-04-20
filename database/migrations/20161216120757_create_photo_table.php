@@ -12,16 +12,17 @@ class CreatePhotoTable extends AbstractMigration
     {
         if (! $this->hasTable('photo')) {
             $table = $this->table('photo', ['collation' => env('DB_COLLATION')]);
-            $table->addColumn('user', 'string', ['limit' => 20])
+            $table
+                ->addColumn('user_id', 'integer')
                 ->addColumn('title', 'string', ['limit' => 50])
                 ->addColumn('text', 'text', ['null' => true])
                 ->addColumn('link', 'string', ['limit' => 30])
-                ->addColumn('time', 'integer')
-                ->addColumn('rating', 'integer', ['limit' => MysqlAdapter::INT_MEDIUM, 'default' => 0])
-                ->addColumn('closed', 'boolean', ['default' => false])
-                ->addColumn('comments', 'integer', ['signed' => false, 'default' => 0])
-                ->addIndex('time')
-                ->addIndex('user')
+                ->addColumn('created_at', 'integer')
+                ->addColumn('rating', 'integer', ['default' => 0])
+                ->addColumn('closed', 'boolean', ['default' => 0])
+                ->addColumn('count_comments', 'integer', ['default' => 0])
+                ->addIndex('created_at')
+                ->addIndex('user_id')
                 ->create();
         }
     }

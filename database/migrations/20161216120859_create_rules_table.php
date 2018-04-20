@@ -11,8 +11,9 @@ class CreateRulesTable extends AbstractMigration
     {
         if (! $this->hasTable('rules')) {
             $table = $this->table('rules', ['collation' => env('DB_COLLATION')]);
-            $table->addColumn('text', 'text', ['null' => true])
-                ->addColumn('time', 'integer')
+            $table
+                ->addColumn('text', 'text', ['null' => true])
+                ->addColumn('created_at', 'integer')
                 ->create();
         }
     }

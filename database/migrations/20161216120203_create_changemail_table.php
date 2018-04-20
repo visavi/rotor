@@ -11,10 +11,11 @@ class CreateChangemailTable extends AbstractMigration
     {
         if (! $this->hasTable('changemail')) {
             $table = $this->table('changemail', ['collation' => env('DB_COLLATION')]);
-            $table->addColumn('user', 'string', ['limit' => 20])
+            $table
+                ->addColumn('user_id', 'integer')
                 ->addColumn('mail', 'string', ['limit' => 50])
                 ->addColumn('hash', 'string', ['limit' => 25])
-                ->addColumn('time', 'integer')
+                ->addColumn('created_at', 'integer')
                 ->create();
         }
     }

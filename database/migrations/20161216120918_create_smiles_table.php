@@ -12,10 +12,9 @@ class CreateSmilesTable extends AbstractMigration
     {
         if (! $this->hasTable('smiles')) {
             $table = $this->table('smiles', ['collation' => env('DB_COLLATION')]);
-            $table->addColumn('cats', 'integer', ['limit' => MysqlAdapter::INT_SMALL, 'signed' => false])
-                ->addColumn('name', 'string', ['limit' => 100])
+            $table
+                ->addColumn('name', 'string', ['limit' => 25])
                 ->addColumn('code', 'string', ['limit' => 20])
-                ->addIndex('cats')
                 ->addIndex('code')
                 ->create();
         }

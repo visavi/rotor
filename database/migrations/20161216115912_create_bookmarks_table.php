@@ -14,8 +14,8 @@ class CreateBookmarksTable extends AbstractMigration
             $table = $this->table('bookmarks', ['collation' => env('DB_COLLATION')]);
             $table
                 ->addColumn('user_id', 'integer')
-                ->addColumn('topic_id', 'integer', ['limit' => MysqlAdapter::INT_MEDIUM, 'signed' => false])
-                ->addColumn('count_posts', 'integer', ['limit' => MysqlAdapter::INT_MEDIUM, 'signed' => false])
+                ->addColumn('topic_id', 'integer')
+                ->addColumn('count_posts', 'integer')
                 ->addIndex('topic_id')
                 ->addIndex('user_id')
                 ->create();

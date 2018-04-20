@@ -11,12 +11,13 @@ class CreateRatingTable extends AbstractMigration
     {
         if (! $this->hasTable('rating')) {
             $table = $this->table('rating', ['collation' => env('DB_COLLATION')]);
-            $table->addColumn('user', 'string', ['limit' => 20])
-                ->addColumn('login', 'string', ['limit' => 20])
+            $table
+                ->addColumn('user_id', 'integer')
+                ->addColumn('recipient_id', 'integer')
                 ->addColumn('text', 'text', ['null' => true])
-                ->addColumn('vote', 'boolean', ['default' => false])
-                ->addColumn('time', 'integer')
-                ->addIndex('user')
+                ->addColumn('vote', 'boolean', ['default' => 0])
+                ->addColumn('created_at', 'integer')
+                ->addIndex('user_id')
                 ->create();
         }
     }

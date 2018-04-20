@@ -12,9 +12,10 @@ class CreateCounter24Table extends AbstractMigration
     {
         if (! $this->hasTable('counter24')) {
             $table = $this->table('counter24', ['collation' => env('DB_COLLATION')]);
-            $table->addColumn('hour', 'integer', ['limit' => MysqlAdapter::INT_MEDIUM, 'signed' => false])
-                ->addColumn('hosts', 'integer', ['limit' => MysqlAdapter::INT_MEDIUM, 'signed' => false])
-                ->addColumn('hits', 'integer', ['limit' => MysqlAdapter::INT_MEDIUM, 'signed' => false])
+            $table
+                ->addColumn('hour', 'integer')
+                ->addColumn('hosts', 'integer')
+                ->addColumn('hits', 'integer')
                 ->addIndex('hour', ['unique' => true])
                 ->create();
         }

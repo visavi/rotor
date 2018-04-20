@@ -11,11 +11,15 @@ class CreateNoticeTable extends AbstractMigration
     {
         if (! $this->hasTable('notice')) {
             $table = $this->table('notice', ['collation' => env('DB_COLLATION')]);
-            $table->addColumn('name', 'string', ['limit' => 100])
+            $table
+                ->addColumn('type', 'string', ['limit' => 20])
+                ->addColumn('name', 'string', ['limit' => 100])
                 ->addColumn('text', 'text', ['null' => true])
-                ->addColumn('user', 'string', ['limit' => 20, 'null' => true])
-                ->addColumn('time', 'integer')
-                ->addColumn('protect', 'boolean', ['default' => false])
+                ->addColumn('user_id', 'integer')
+                ->addColumn('created_at', 'integer')
+                ->addColumn('updated_at', 'integer')
+                ->addColumn('protect', 'boolean', ['default' => 0])
+                ->addIndex('type', ['unique' => true])
                 ->create();
         }
     }

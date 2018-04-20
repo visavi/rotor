@@ -12,14 +12,15 @@ class CreateErrorTable extends AbstractMigration
     {
         if (! $this->hasTable('error')) {
             $table = $this->table('error', ['collation' => env('DB_COLLATION')]);
-            $table->addColumn('num', 'integer', ['limit' => MysqlAdapter::INT_SMALL])
+            $table
+                ->addColumn('code', 'integer')
                 ->addColumn('request', 'string', ['null' => true])
                 ->addColumn('referer', 'string', ['null' => true])
-                ->addColumn('username', 'string', ['limit' => 20, 'null' => true])
+                ->addColumn('user_id', 'integer', ['null' => true])
                 ->addColumn('ip', 'string', ['limit' => 15])
                 ->addColumn('brow', 'string', ['limit' => 25])
-                ->addColumn('time', 'integer')
-                ->addIndex(['num', 'time'], ['name' => 'num_time'])
+                ->addColumn('created_at', 'integer')
+                ->addIndex(['code', 'created_at'], ['name' => 'code'])
                 ->create();
         }
     }

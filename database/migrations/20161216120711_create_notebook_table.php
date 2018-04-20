@@ -11,10 +11,11 @@ class CreateNotebookTable extends AbstractMigration
     {
         if (! $this->hasTable('notebook')) {
             $table = $this->table('notebook', ['collation' => env('DB_COLLATION')]);
-            $table->addColumn('user', 'string', ['limit' => 20])
+            $table
+                ->addColumn('user_id', 'integer')
                 ->addColumn('text', 'text', ['null' => true])
-                ->addColumn('time', 'integer')
-                ->addIndex('user', ['unique' => true])
+                ->addColumn('created_at', 'integer')
+                ->addIndex('user_id', ['unique' => true])
                 ->create();
         }
     }

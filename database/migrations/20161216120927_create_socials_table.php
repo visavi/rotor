@@ -11,10 +11,11 @@ class CreateSocialsTable extends AbstractMigration
     {
         if (! $this->hasTable('socials')) {
             $table = $this->table('socials', ['collation' => env('DB_COLLATION')]);
-            $table->addColumn('user', 'string', ['limit' => 128])
+            $table
+                ->addColumn('user_id', 'integer')
                 ->addColumn('network', 'string')
                 ->addColumn('uid', 'string')
-                ->addIndex('user')
+                ->addIndex('user_id')
                 ->create();
         }
     }

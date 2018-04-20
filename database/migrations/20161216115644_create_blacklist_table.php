@@ -12,7 +12,7 @@ class CreateBlacklistTable extends AbstractMigration
         if (! $this->hasTable('blacklist')) {
             $table = $this->table('blacklist', ['collation' => env('DB_COLLATION')]);
             $table
-                ->addColumn('type', 'string', ['limit' => 20])
+                ->addColumn('type', 'string', ['limit' => 30])
                 ->addColumn('value', 'string', ['limit' => 100])
                 ->addColumn('user_id', 'integer')
                 ->addColumn('created_at', 'integer')

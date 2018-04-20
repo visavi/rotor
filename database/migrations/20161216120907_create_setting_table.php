@@ -10,12 +10,14 @@ class CreateSettingTable extends AbstractMigration
     public function change()
     {
         if (! $this->hasTable('setting')) {
+
             $table = $this->table('setting', [
-                'id' => false,
+                'id'          => false,
                 'primary_key' => 'name',
-                'collation' => env('DB_COLLATION')
+                'collation'   => env('DB_COLLATION')
             ]);
-            $table->addColumn('name', 'string', ['limit' => 25])
+            $table
+                ->addColumn('name', 'string', ['limit' => 25])
                 ->addColumn('value', 'string')
                 ->create();
         }

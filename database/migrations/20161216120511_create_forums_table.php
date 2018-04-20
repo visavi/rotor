@@ -12,17 +12,15 @@ class CreateForumsTable extends AbstractMigration
     {
         if (! $this->hasTable('forums')) {
             $table = $this->table('forums', ['collation' => env('DB_COLLATION')]);
-            $table->addColumn('sort', 'integer', ['limit' => MysqlAdapter::INT_SMALL, 'signed' => false, 'default' => 0])
-                ->addColumn('parent', 'integer', ['limit' => MysqlAdapter::INT_SMALL, 'signed' => false, 'default' => 0])
+            $table
+                ->addColumn('sort', 'integer', ['default' => 0])
+                ->addColumn('parent_id', 'integer', ['default' => 0])
                 ->addColumn('title', 'string', ['limit' => 50])
-                ->addColumn('desc', 'string', ['limit' => 100, 'null' => true])
-                ->addColumn('topics', 'integer', ['signed' => false, 'default' => 0])
-                ->addColumn('posts', 'integer', ['signed' => false, 'default' => 0])
-                ->addColumn('last_id', 'integer', ['signed' => false, 'default' => 0])
-                ->addColumn('last_themes', 'string', ['limit' => 50, 'null' => true])
-                ->addColumn('last_user', 'string', ['limit' => 20, 'null' => true])
-                ->addColumn('last_time', 'integer', ['signed' => false, 'default' => 0])
-                ->addColumn('closed', 'boolean', ['default' => false])
+                ->addColumn('description', 'string', ['limit' => 100, 'null' => true])
+                ->addColumn('last_topic_id', 'integer', ['default' => 0])
+                ->addColumn('closed', 'boolean', ['default' => 0])
+                ->addColumn('count_topics', 'integer', ['default' => 0])
+                ->addColumn('count_posts', 'integer', ['default' => 0])
                 ->create();
         }
     }

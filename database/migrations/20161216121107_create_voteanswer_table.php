@@ -12,9 +12,10 @@ class CreateVoteanswerTable extends AbstractMigration
     {
         if (! $this->hasTable('voteanswer')) {
             $table = $this->table('voteanswer', ['collation' => env('DB_COLLATION')]);
-            $table->addColumn('vote_id', 'integer', ['limit' => MysqlAdapter::INT_SMALL, 'signed' => false])
-                ->addColumn('option', 'string', ['limit' => 50])
-                ->addColumn('result', 'integer', ['limit' => MysqlAdapter::INT_SMALL, 'signed' => false, 'default' => 0])
+            $table
+                ->addColumn('vote_id', 'integer')
+                ->addColumn('answer', 'string', ['limit' => 50])
+                ->addColumn('result', 'integer', ['default' => 0])
                 ->create();
         }
     }

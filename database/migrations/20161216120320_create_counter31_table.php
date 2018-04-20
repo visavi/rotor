@@ -12,9 +12,10 @@ class CreateCounter31Table extends AbstractMigration
     {
         if (! $this->hasTable('counter31')) {
             $table = $this->table('counter31', ['collation' => env('DB_COLLATION')]);
-            $table->addColumn('days', 'integer', ['limit' => MysqlAdapter::INT_MEDIUM, 'signed' => false])
-                ->addColumn('hosts', 'integer', ['limit' => MysqlAdapter::INT_MEDIUM, 'signed' => false])
-                ->addColumn('hits', 'integer', ['limit' => MysqlAdapter::INT_MEDIUM, 'signed' => false])
+            $table
+                ->addColumn('days', 'integer')
+                ->addColumn('hosts', 'integer')
+                ->addColumn('hits', 'integer')
                 ->addIndex('days', ['unique' => true])
                 ->create();
         }

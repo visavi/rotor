@@ -12,15 +12,16 @@ class CreateNewsTable extends AbstractMigration
     {
         if (! $this->hasTable('news')) {
             $table = $this->table('news', ['collation' => env('DB_COLLATION')]);
-            $table->addColumn('title', 'string', ['limit' => 100])
+            $table
+                ->addColumn('title', 'string', ['limit' => 100])
                 ->addColumn('text', 'text', ['null' => true])
-                ->addColumn('author', 'string', ['limit' => 20])
+                ->addColumn('user_id', 'integer')
                 ->addColumn('image', 'string', ['limit' => 30, 'null' => true])
-                ->addColumn('time', 'integer')
-                ->addColumn('comments', 'integer', ['limit' => MysqlAdapter::INT_MEDIUM, 'signed' => false, 'default' => 0])
-                ->addColumn('closed', 'boolean', ['default' => false])
-                ->addColumn('top', 'boolean', ['default' => false])
-                ->addIndex('time')
+                ->addColumn('created_at', 'integer')
+                ->addColumn('count_comments', 'integer', ['default' => 0])
+                ->addColumn('closed', 'boolean', ['default' => 0])
+                ->addColumn('top', 'boolean', ['default' => 0])
+                ->addIndex('created_at')
                 ->create();
         }
     }

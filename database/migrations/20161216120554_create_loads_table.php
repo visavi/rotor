@@ -12,9 +12,12 @@ class CreateLoadsTable extends AbstractMigration
     {
         if (! $this->hasTable('loads')) {
             $table = $this->table('loads', ['collation' => env('DB_COLLATION')]);
-            $table->addColumn('down', 'integer', ['limit' => MysqlAdapter::INT_MEDIUM, 'signed' => false])
-                ->addColumn('ip', 'string', ['limit' => 15])
-                ->addColumn('time', 'integer')
+            $table
+                ->addColumn('sort', 'integer', ['default' => 0])
+                ->addColumn('parent_id', 'integer', ['default' => 0])
+                ->addColumn('name', 'string', ['limit' => 100])
+                ->addColumn('count_downs', 'integer', ['default' => 0])
+                ->addColumn('closed', 'boolean', ['default' => 0])
                 ->create();
         }
     }

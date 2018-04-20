@@ -12,20 +12,21 @@ class CreateOffersTable extends AbstractMigration
     {
         if (! $this->hasTable('offers')) {
             $table = $this->table('offers', ['collation' => env('DB_COLLATION')]);
-            $table->addColumn('type', 'boolean', ['default' => false])
+            $table
+                ->addColumn('type', 'string', ['limit' => 20])
                 ->addColumn('title', 'string', ['limit' => 50])
                 ->addColumn('text', 'text', ['null' => true])
-                ->addColumn('user', 'string', ['limit' => 20])
-                ->addColumn('votes', 'integer', ['limit' => MysqlAdapter::INT_MEDIUM, 'signed' => false, 'default' => 0])
-                ->addColumn('time', 'integer')
-                ->addColumn('status', 'boolean', ['default' => false])
-                ->addColumn('comments', 'integer', ['limit' => MysqlAdapter::INT_MEDIUM, 'signed' => false, 'default' => 0])
-                ->addColumn('closed', 'boolean', ['default' => false])
-                ->addColumn('text_reply', 'text', ['null' => true])
-                ->addColumn('user_reply', 'string', ['limit' => 20, 'null' => true])
-                ->addColumn('time_reply', 'integer', ['default' => 0])
-                ->addIndex('time')
-                ->addIndex('votes')
+                ->addColumn('user_id', 'integer')
+                ->addColumn('rating', 'integer', ['default' => 0])
+                ->addColumn('created_at', 'integer')
+                ->addColumn('status', 'string', ['limit' => 20])
+                ->addColumn('count_comments', 'integer', ['default' => 0])
+                ->addColumn('closed', 'boolean', ['default' => 0])
+                ->addColumn('reply', 'text', ['null' => true])
+                ->addColumn('reply_user_id', 'integer', ['null' => true])
+                ->addColumn('updated_at', 'integer', ['null' => true])
+                ->addIndex('created_at')
+                ->addIndex('rating')
                 ->create();
         }
     }

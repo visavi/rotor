@@ -11,12 +11,13 @@ class CreateIgnoringTable extends AbstractMigration
     {
         if (! $this->hasTable('ignoring')) {
             $table = $this->table('ignoring', ['collation' => env('DB_COLLATION')]);
-            $table->addColumn('user', 'string', ['limit' => 20])
-                ->addColumn('name', 'string', ['limit' => 20])
+            $table
+                ->addColumn('user_id', 'integer')
+                ->addColumn('ignore_id', 'integer')
                 ->addColumn('text', 'text', ['null' => true])
-                ->addColumn('time', 'integer')
-                ->addIndex('time')
-                ->addIndex('user')
+                ->addColumn('created_at', 'integer')
+                ->addIndex('user_id')
+                ->addIndex('created_at')
                 ->create();
         }
     }
