@@ -50,7 +50,7 @@ class RekUserController extends AdminController
         $link = RekUser::query()->find($id);
 
         if (! $link) {
-            abort('default', 'Данной ссылки не существует!');
+            abort(404, 'Данной ссылки не существует!');
         }
 
         if (Request::isMethod('post')) {

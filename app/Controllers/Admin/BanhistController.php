@@ -46,7 +46,7 @@ class BanhistController extends AdminController
         $user = User::query()->where('login', $login)->first();
 
         if (! $user) {
-            abort('default', 'Пользователь не найден!');
+            abort(404, 'Пользователь не найден!');
         }
 
         $total = Banhist::query()->where('user_id', $user->id)->count();

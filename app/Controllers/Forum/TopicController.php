@@ -376,11 +376,11 @@ class TopicController extends BaseController
 
         $topic = Topic::query()->find($id);
 
-        if (empty($topic)) {
-            abort('default', 'Выбранная вами тема не существует, возможно она была удалена!');
+        if (! $topic) {
+            abort(404, 'Выбранная вами тема не существует, возможно она была удалена!');
         }
 
-        if ($topic['user_id'] !== getUser('id')) {
+        if ($topic->user_id !== getUser('id')) {
             abort('default', 'Изменение невозможно, вы не автор данной темы!');
         }
 
@@ -454,7 +454,7 @@ class TopicController extends BaseController
         $isModer = in_array(getUser('id'), explode(',', $post->moderators)) ? true : false;
 
         if (! $post) {
-            abort('default', 'Данного сообщения не существует!');
+            abort(404, 'Данного сообщения не существует!');
         }
 
         if ($post->closed) {

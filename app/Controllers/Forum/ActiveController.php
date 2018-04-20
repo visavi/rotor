@@ -25,7 +25,7 @@ class ActiveController extends BaseController
         $this->user = User::query()->where('login', $login)->first();
 
         if (! $this->user) {
-            abort('default', 'Пользователь не найден!');
+            abort(404, 'Пользователь не найден!');
         }
     }
 

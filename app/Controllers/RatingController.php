@@ -30,7 +30,7 @@ class RatingController extends BaseController
         $user = User::query()->where('login', $login)->first();
 
         if (! $user) {
-            abort('default', 'Данного пользователя не существует!');
+            abort(404, 'Данного пользователя не существует!');
         }
 
         if (getUser('id') == $user->id) {
@@ -118,7 +118,7 @@ class RatingController extends BaseController
         $user = User::query()->where('login', $login)->first();
 
         if (! $user) {
-            abort('default', 'Данного пользователя не существует!');
+            abort(404, 'Данного пользователя не существует!');
         }
 
         $total = Rating::query()->where('recipient_id', $user->id)->count();
@@ -143,7 +143,7 @@ class RatingController extends BaseController
         $user = User::query()->where('login', $login)->first();
 
         if (! $user) {
-            abort('default', 'Данного пользователя не существует!');
+            abort(404, 'Данного пользователя не существует!');
         }
 
         $total = Rating::query()->where('user_id', $user->id)->count();

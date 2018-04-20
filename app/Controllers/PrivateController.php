@@ -238,7 +238,7 @@ class PrivateController extends BaseController
         $login = check(Request::input('user'));
 
         if (! $user = getUserByLogin($login)) {
-            abort('default', 'Пользователя с данным логином не существует!');
+            abort(404, 'Пользователя с данным логином не существует!');
         }
 
         if ($user->id == getUser('id')) {

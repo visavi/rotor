@@ -34,7 +34,7 @@ class BlacklistController extends AdminController
         $this->type = Request::input('type', 'email');
 
         if (! in_array($this->type, $this->types)) {
-            abort('default', 'Указанный тип не найден!');
+            abort(404, 'Указанный тип не найден!');
         }
     }
 

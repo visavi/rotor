@@ -47,7 +47,7 @@ class PhotoController extends AdminController
         $photo = Photo::query()->find($id);
 
         if (! $photo) {
-            abort('default', 'Данной фотографии не существует!');
+            abort(404, 'Данной фотографии не существует!');
         }
 
         if (Request::isMethod('post')) {

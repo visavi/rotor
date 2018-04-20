@@ -166,7 +166,7 @@ class PhotoController extends BaseController
         $photo = Photo::query()->find($id);
 
         if (! $photo) {
-            abort('default', 'Фотография не найдена!');
+            abort(404, 'Фотография не найдена!');
         }
 
         if (Request::isMethod('post')) {
@@ -238,7 +238,7 @@ class PhotoController extends BaseController
         $photo = Photo::query()->find($id);
 
         if (! $photo) {
-            abort('default', 'Фотография не найдена!');
+            abort(404, 'Фотография не найдена!');
         }
 
         if (! getUser()) {
@@ -389,7 +389,7 @@ class PhotoController extends BaseController
         $user = User::query()->where('login', $login)->first();
 
         if (! $user) {
-            abort('default', 'Пользователь не найден!');
+            abort(404, 'Пользователь не найден!');
         }
 
         $total = Photo::query()->where('user_id', $user->id)->count();
@@ -466,7 +466,7 @@ class PhotoController extends BaseController
         $user = User::query()->where('login', $login)->first();
 
         if (! $user) {
-            abort('default', 'Пользователь не найден!');
+            abort(404, 'Пользователь не найден!');
         }
 
         $total = Comment::query()

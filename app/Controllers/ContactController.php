@@ -93,7 +93,7 @@ class ContactController extends BaseController
             ->first();
 
         if (! $contact) {
-            abort('default', 'Запись не найдена');
+            abort(404, 'Запись не найдена');
         }
 
         if (Request::isMethod('post')) {

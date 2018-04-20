@@ -64,11 +64,11 @@ class FilesController extends AdminController
         $fileName = $this->path ? '/' . $this->file : $this->file;
 
         if (! preg_match('#^([a-z0-9_\-/]+|)$#', $this->path) || ! preg_match('#^[a-z0-9_\-/]+$#', $this->file)) {
-            abort('default', 'Недопустимое название страницы!');
+            abort(404, 'Недопустимое название страницы!');
         }
 
         if (! file_exists(RESOURCES . '/views/' . $this->path . $fileName . '.blade.php')) {
-            abort('default', 'Данного файла не существует!');
+            abort(404, 'Данного файла не существует!');
         }
 
         if (! is_writable(RESOURCES . '/views/' . $this->path . $fileName . '.blade.php')) {

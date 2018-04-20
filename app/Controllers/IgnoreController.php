@@ -93,7 +93,7 @@ class IgnoreController extends BaseController
             ->first();
 
         if (! $ignore) {
-            abort('default', 'Запись не найдена');
+            abort(404, 'Запись не найдена');
         }
 
         if (Request::isMethod('post')) {

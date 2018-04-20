@@ -41,7 +41,7 @@ class BlogController extends BaseController
         $category = Category::query()->with('parent')->find($id);
 
         if (! $category) {
-            abort('default', 'Данного раздела не существует!');
+            abort(404, 'Данного раздела не существует!');
         }
 
         $total = Blog::query()->where('category_id', $id)->count();
@@ -236,7 +236,7 @@ class BlogController extends BaseController
             ->get();
 
         if (! $cats) {
-            abort('default', 'Разделы блогов еще не созданы!');
+            abort(404, 'Разделы блогов еще не созданы!');
         }
 
         if (Request::isMethod('post')) {
@@ -483,7 +483,7 @@ class BlogController extends BaseController
         $blog = Blog::query()->where('id', $id)->with('lastComments')->first();
 
         if (! $blog) {
-            abort('default', 'Статья не найдена!');
+            abort(404, 'Статья не найдена!');
         }
 
         return view('blog/rss_comments', compact('blog'));
@@ -620,7 +620,7 @@ class BlogController extends BaseController
         $user = User::query()->where('login', $login)->first();
 
         if (! $user) {
-            abort('default', 'Пользователь не найден!');
+            abort(404, 'Пользователь не найден!');
         }
 
         $total = Blog::query()->where('user_id', $user->id)->count();
@@ -645,7 +645,7 @@ class BlogController extends BaseController
         $user = User::query()->where('login', $login)->first();
 
         if (! $user) {
-            abort('default', 'Пользователь не найден!');
+            abort(404, 'Пользователь не найден!');
         }
 
         $total = Comment::query()

@@ -105,7 +105,7 @@ class MailController extends BaseController
     public function restore()
     {
         if (getUser()) {
-            abort('default', 'Вы авторизованы, восстановление пароля невозможно!');
+            abort(403, 'Вы авторизованы, восстановление пароля невозможно!');
         }
 
         $key = check(Request::input('key'));

@@ -188,7 +188,7 @@ class BlogController extends AdminController
         $category = Category::query()->with('parent')->find($id);
 
         if (! $category) {
-            abort('default', 'Данного раздела не существует!');
+            abort(404, 'Данного раздела не существует!');
         }
 
         $total = Blog::query()->where('category_id', $id)->count();

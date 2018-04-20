@@ -365,7 +365,7 @@ class LoadController extends AdminController
         $file = File::query()->where('relate_id', $down->id)->find($fid);
 
         if (! $file) {
-            abort('default', 'Файла не существует!');
+            abort(404, 'Файла не существует!');
         }
 
         if ($file->isImage()) {

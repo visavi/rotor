@@ -75,7 +75,7 @@ class UserController extends AdminController
         $user = User::query()->where('login', $login)->first();
 
         if (! $user) {
-            abort('default', 'Пользователь не найден!');
+            abort(404, 'Пользователь не найден!');
         }
 
         $allThemes   = array_map('basename', glob(HOME."/themes/*", GLOB_ONLYDIR));
@@ -187,7 +187,7 @@ class UserController extends AdminController
         $user = User::query()->where('login', $login)->first();
 
         if (! $user) {
-            abort('default', 'Пользователь не найден!');
+            abort(404, 'Пользователь не найден!');
         }
 
         if (Request::isMethod('post')) {

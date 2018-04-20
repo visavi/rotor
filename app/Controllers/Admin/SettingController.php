@@ -29,7 +29,7 @@ class SettingController extends AdminController
         $act = check(Request::input('act', 'main'));
 
         if (! in_array($act, Setting::getActions())) {
-            abort('default', 'Недопустимая страница!');
+            abort(404, 'Недопустимая страница!');
         }
 
         if (Request::isMethod('post')) {

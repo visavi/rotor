@@ -34,7 +34,7 @@ class LogController extends AdminController
         $this->lists = [404 => 'Ошибки 404', 403 => 'Ошибки 403', 666 => 'Автобаны'];
 
         if (! isset($this->lists[$this->code])) {
-            abort('default', 'Указанный лог-файл не существует!');
+            abort(404, 'Указанный лог-файл не существует!');
         }
     }
 

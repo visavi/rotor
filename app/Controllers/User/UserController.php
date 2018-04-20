@@ -20,7 +20,7 @@ class UserController extends BaseController
     public function index($login)
     {
         if (! $user = getUserByLogin($login)) {
-            abort('default', 'Пользователя с данным логином не существует!');
+            abort(404, 'Пользователя с данным логином не существует!');
         }
 
         $invite  = Invite::query()->where('invite_user_id', $user->id)->first();
@@ -41,7 +41,7 @@ class UserController extends BaseController
         }
 
         if (! $user = getUserByLogin($login)) {
-            abort('default', 'Пользователя с данным логином не существует!');
+            abort(404, 'Пользователя с данным логином не существует!');
         }
 
         if (Request::isMethod('post')) {
@@ -349,7 +349,7 @@ class UserController extends BaseController
         }
 
         if ($user->level != User::PENDED) {
-            abort('default', 'Вашему профилю не требуется подтверждение регистрации!');
+            abort(403, 'Вашему профилю не требуется подтверждение регистрации!');
         }
 
         if (Request::has('code')) {

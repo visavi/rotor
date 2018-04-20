@@ -20,7 +20,7 @@ class WallController extends BaseController
         $user = User::query()->where('login', $login)->first();
 
         if (! $user) {
-            abort('default', 'Пользователь не найден!');
+            abort(404, 'Пользователь не найден!');
         }
 
         $total   = Wall::query()->where('user_id', $user->id)->count();
@@ -56,7 +56,7 @@ class WallController extends BaseController
         $user = User::query()->where('login', $login)->first();
 
         if (! $user) {
-            abort('default', 'Пользователь не найден!');
+            abort(404, 'Пользователь не найден!');
         }
 
         if (Request::isMethod('post')) {
