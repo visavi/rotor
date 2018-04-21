@@ -59,7 +59,7 @@ header("Content-type:text/html; charset=utf-8");
                         href="/admin">Панель</a>
 
                     @if (statsSpam() > 0)
-                        &bull; <a href="/admin/spam"><span style="color:#ff0000">Спам!</span></a>
+                        &bull; <a href="/admin/spam"><span style="color:#ff0000">Жалобы</span></a>
                     @endif
 
                     @if (getUser('newchat') < statsNewChat())

@@ -4,7 +4,7 @@
     @if (isAdmin())
         <a href="/admin">Панель</a> &bull;
         @if (statsSpam() > 0)
-            <a href="/admin/spam"><span style="color:#ff0000">Спам!</span></a> &bull;
+            <a href="/admin/spam"><span style="color:#ff0000">Жалобы</span></a> &bull;
         @endif
 
         @if (getUser('newchat') < statsNewChat())

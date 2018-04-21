@@ -20,17 +20,13 @@
     <a href="/admin/spam?type=post" class="badge badge-{{ $active }}">Форум {{ $total['post'] }}</a>
     <?php $active = ($type == 'guest') ? 'success' : 'light'; ?>
     <a href="/admin/spam?type=guest" class="badge badge-{{ $active }}">Гостевая {{ $total['guest'] }}</a>
-    <?php $active = ($type == 'photo') ? 'success' : 'light'; ?>
-    <a href="/admin/spam?type=photo" class="badge badge-{{ $active }}">Галерея {{ $total['photo'] }}</a>
-    <?php $active = ($type == 'blog') ? 'success' : 'light'; ?>
-    <a href="/admin/spam?type=blog" class="badge badge-{{ $active }}">Блоги {{ $total['blog'] }}</a>
     <?php $active = ($type == 'inbox') ? 'success' : 'light'; ?>
     <a href="/admin/spam?type=inbox" class="badge badge-{{ $active }}">Приват {{ $total['inbox'] }}</a>
     <?php $active = ($type == 'wall') ? 'success' : 'light'; ?>
     <a href="/admin/spam?type=wall" class="badge badge-{{ $active }}">Стена {{ $total['wall'] }}</a>
-    <?php $active = ($type == 'down') ? 'success' : 'light'; ?>
-    <a href="/admin/spam?type=down" class="badge badge-{{ $active }}">Загрузки {{ $total['down'] }}</a>
-        <br><br>
+    <?php $active = ($type == 'comment') ? 'success' : 'light'; ?>
+    <a href="/admin/spam?type=comment" class="badge badge-{{ $active }}">Комментарии {{ $total['comment'] }}</a>
+    <br><br>
 
     @if ($records->isNotEmpty())
         @foreach ($records as $data)
@@ -38,7 +34,7 @@
                 @if ($data->relate)
                     <div class="b">
                         <i class="fa fa-file"></i>
-                        <b>{!! profile($data->relate->user) !!}</b>
+                        <b>{!! $data->relate->author ? profile($data->relate->author) : profile($data->relate->user) !!}</b>
                         <small>({{ dateFixed($data->relate->created_at, "d.m.y / H:i:s") }})</small>
 
                         <div class="float-right">

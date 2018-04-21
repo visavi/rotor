@@ -738,9 +738,9 @@ function statsAdmins()
 }
 
 /**
- * Возвращает количество спама
+ * Возвращает количество жалоб
  *
- * @return int количество спама
+ * @return int количество жалоб
  */
 function statsSpam()
 {

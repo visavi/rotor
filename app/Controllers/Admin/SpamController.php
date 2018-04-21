@@ -4,12 +4,9 @@ namespace App\Controllers\Admin;
 
 use App\Classes\Request;
 use App\Classes\Validator;
-use App\Models\Blog;
-use App\Models\Down;
+use App\Models\Comment;
 use App\Models\Guest;
 use App\Models\Inbox;
-use App\Models\News;
-use App\Models\Photo;
 use App\Models\Post;
 use App\Models\Spam;
 use App\Models\User;
@@ -36,14 +33,11 @@ class SpamController extends AdminController
         }
 
         $this->types = [
-            'post'  => Post::class,
-            'guest' => Guest::class,
-            'photo' => Photo::class,
-            'blog'  => Blog::class,
-            'inbox' => Inbox::class,
-            'wall'  => Wall::class,
-            'news'  => News::class,
-            'down'  => Down::class,
+            'post'    => Post::class,
+            'guest'   => Guest::class,
+            'inbox'   => Inbox::class,
+            'wall'    => Wall::class,
+            'comment' => Comment::class,
         ];
 
         $spam = Spam::query()

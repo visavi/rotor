@@ -57,38 +57,6 @@ class AjaxController extends BaseController
         $token = check(Request::input('token'));
 
         switch ($type):
-            case News::class:
-                $data = Comment::query()
-                    ->where('relate_type', $type)
-                    ->where('id', $id)
-                    ->first();
-                $path = '/news/comments/' . $data->relate_id . '?page='.$page;
-                break;
-
-            case Blog::class:
-                $data = Comment::query()
-                    ->where('relate_type', $type)
-                    ->where('id', $id)
-                    ->first();
-                $path = '/blog?page=' . $page;
-                break;
-
-            case Photo::class:
-                $data = Comment::query()
-                    ->where('relate_type', $type)
-                    ->where('id', $id)
-                    ->first();
-                $path = '/gallery/comments/' . $data->relate_id . '?page='.$page;
-                break;
-
-            case Offer::class:
-                $data = Comment::query()
-                    ->where('relate_type', $type)
-                    ->where('id', $id)
-                    ->first();
-                $path = '/offers/comments/' . $data->relate_id . '?page='.$page;
-                break;
-
             case Guest::class:
                 $data = $type::query()->find($id);
                 $path = '/book?page='.$page;
@@ -108,12 +76,49 @@ class AjaxController extends BaseController
                 $path = '/wall/' . $data->user->login . '?page='.$page;
                 break;
 
+            case News::class:
+                $data = Comment::query()
+                    ->where('relate_type', $type)
+                    ->where('id', $id)
+                    ->first();
+                $type = Comment::class;
+                $path = '/news/comments/' . $data->relate_id . '?page='.$page;
+                break;
+
+            case Blog::class:
+                $data = Comment::query()
+                    ->where('relate_type', $type)
+                    ->where('id', $id)
+                    ->first();
+                $type = Comment::class;
+                $path = '/article/comments/' . $data->relate_id . '?page=' . $page;
+                break;
+
+            case Photo::class:
+                $data = Comment::query()
+                    ->where('relate_type', $type)
+                    ->where('id', $id)
+                    ->first();
+                $type = Comment::class;
+                $path = '/gallery/comments/' . $data->relate_id . '?page='.$page;
+                break;
+
+            case Offer::class:
+                $data = Comment::query()
+                    ->where('relate_type', $type)
+                    ->where('id', $id)
+                    ->first();
+                $type = Comment::class;
+                $path = '/offers/comments/' . $data->relate_id . '?page='.$page;
+                break;
+
             case Down::class:
                 $data = Comment::query()
                     ->where('relate_type', $type)
                     ->where('id', $id)
                     ->first();
-                $path = '/down/' . $data->relate_id . '?page='.$page;
+                $type = Comment::class;
+                $path = '/down/comments/' . $data->relate_id . '?page='.$page;
                 break;
         endswitch;
 
