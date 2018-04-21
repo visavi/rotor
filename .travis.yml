@@ -24,6 +24,7 @@ script:
 env:
   global:
     - APP_ENV=testing
+    - APP_NEW=true
     - DB_HOST=127.0.0.1
     - DB_DRIVER=mysql
     - DB_DATABASE=test
