@@ -6,18 +6,6 @@ use PHPUnit\Framework\TestCase;
 
 class GuestControllerTest extends TestCase
 {
-    public function testIndex()
-    {
-        $_SESSION['token'] = '';
-        $_SERVER['REMOTE_ADDR'] = '127.0.0.1';
-
-        $guest = new GuestController();
-
-        $page = $guest->index();
-
-        $this->assertContains('Guest book', $page);
-    }
-
     public function testGuest()
     {
         $guest = new Guest();
