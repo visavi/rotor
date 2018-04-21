@@ -29,7 +29,7 @@ class Validator
      */
     public function length($input, $min, $max, $label, $required = true)
     {
-        if ($required === false && blank($input)) {
+        if (! $required && blank($input)) {
             return $this;
         }
 
@@ -271,7 +271,7 @@ class Validator
      */
     public function regex($input, $pattern, $label, $required = true)
     {
-        if ($required === false && blank($input)) {
+        if (! $required && blank($input)) {
             return $this;
         }
 
@@ -292,7 +292,7 @@ class Validator
      */
     public function float($input, $label, $required = true)
     {
-        if ($required === false && blank($input)) {
+        if (! $required && blank($input)) {
             return $this;
         }
 
@@ -313,7 +313,7 @@ class Validator
      */
     public function url($input, $label, $required = true)
     {
-        if ($required === false && blank($input)) {
+        if (! $required && blank($input)) {
             return $this;
         }
 
@@ -334,7 +334,7 @@ class Validator
      */
     public function email($input, $label, $required = true)
     {
-        if ($required === false && blank($input)) {
+        if (! $required && blank($input)) {
             return $this;
         }
 
@@ -356,7 +356,7 @@ class Validator
      */
     public function file($input, $rules, $label, $required = true)
     {
-        if ($required === false && blank($input)) {
+        if (! $required && blank($input)) {
             return $this;
         }
 
