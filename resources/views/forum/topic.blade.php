@@ -197,16 +197,20 @@
                     @if (getUser('point') >= setting('forumloadpoints'))
                         <div class="js-attach-form" style="display: none;">
 
-                            <label class="btn btn-sm btn-secondary" for="inputFile">
-                                <input id="inputFile" type="file" name="file" onchange="$('#upload-file-info').html(this.files[0].name);" hidden>
-                                Файл&hellip;
+                            <label class="btn btn-sm btn-secondary" for="files">
+                                <input type="file" id="files" name="files[]" onchange="$('#upload-file-info').html((this.files.length > 1) ? this.files.length + ' файлов' : this.files[0].name);" hidden multiple>
+                                Прикрепить файлы&hellip;
                             </label>
                             <span class="badge badge-info" id="upload-file-info"></span>
+                            {!! textError('files') !!}
+                            <br>
 
-                            <div class="p-1 bg-info text-white">
+                            <p class="text-muted font-italic">
+                                Можно загрузить до {{ setting('maxfiles') }} файлов<br>
                                 Максимальный вес файла: <b>{{ round(setting('forumloadsize') / 1024 / 1024) }}</b> Mb<br>
-                                Допустимые расширения: {{ str_replace(',', ', ', setting('forumextload')) }}
-                            </div><br>
+                                Допустимые расширения файлов: {{ str_replace(',', ', ', setting('forumextload')) }}<br>
+                                Допустимые размеры картинок: от 100px до {{ setting('screenupsize') }}px
+                            </p>
                         </div>
 
                         <span class="imgright js-attach-button">

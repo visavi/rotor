@@ -1932,17 +1932,7 @@ function showError($errors)
  */
 function setInput(array $data)
 {
-    $prepareData = [];
-    foreach($data as $key => $value) {
-
-        if (is_object($value)) {
-            continue;
-        }
-
-        $prepareData[$key] = $value;
-    }
-
-    $_SESSION['input'] = $prepareData;
+    $_SESSION['input'] = json_encode($data);
 }
 
 /**
@@ -1954,8 +1944,16 @@ function setInput(array $data)
  */
 function getInput($name, $default = null)
 {
-    if ($input = array_get($_SESSION, 'input.' . $name)) {
-        array_forget($_SESSION, 'input.' . $name);
+    if (empty($_SESSION['input'])) {
+        return $default;
+    }
+
+    $session = json_decode($_SESSION['input'], true);
+
+    if (isset($session[$name])) {
+        $input = $session[$name];
+        unset($session[$name]);
+        $_SESSION['input'] = json_encode($session);
     }
 
     return $input ?? $default;

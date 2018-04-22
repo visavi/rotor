@@ -101,6 +101,7 @@ class TopicController extends BaseController
     {
         $msg   = check(Request::input('msg'));
         $token = check(Request::input('token'));
+        $files = (array) Request::file('files');
 
         if (! $user = getUser()) {
             abort(403, 'Авторизуйтесь для добавления сообщения!');
@@ -125,6 +126,30 @@ class TopicController extends BaseController
         // Проверка сообщения на схожесть
         $post = Post::query()->where('topic_id', $topic->id)->orderBy('id', 'desc')->first();
         $validator->notEqual($msg, $post['text'], ['msg' => 'Ваше сообщение повторяет предыдущий пост!']);
+
+        if ($files && $validator->isValid()) {
+
+            $validator->lte(count($files), setting('maxfiles'), ['files' => 'Разрешено загружать не более ' . setting('maxfiles') . ' файлов']);
+
+            // Загрузка файла
+
+            /* if (getUser('point') >= setting('forumloadpoints')) {
+
+            } else {
+                $fileError = 'Ошибка! У вас недостаточно актива для загрузки файлов!';
+            }*/
+
+            $rules = [
+                'maxsize'    => setting('forumloadsize'),
+                'extensions' => explode(',', setting('forumextload')),
+                'maxweight'  => setting('screenupsize'),
+                'minweight'  => 100,
+            ];
+
+            foreach ($files as $file) {
+                $validator->file($file, $rules, ['files' => 'Не удалось загрузить файл!']);
+            }
+        }
 
         if ($validator->isValid()) {
 
@@ -199,65 +224,9 @@ class TopicController extends BaseController
                 }
             }
 
-            // Загрузка файла
-            if (! empty($_FILES['file']['name'])) {
-                if (getUser('point') >= setting('forumloadpoints')) {
-                    if (is_uploaded_file($_FILES['file']['tmp_name'])) {
-
-                        $filename = check($_FILES['file']['name']);
-                        $filename = (!isUtf($filename)) ? utfLower(winToUtf($filename)) : utfLower($filename);
-                        $filesize = $_FILES['file']['size'];
-
-                        if ($filesize > 0 && $filesize <= setting('forumloadsize')) {
-                            $arrext = explode(',', setting('forumextload'));
-                            $ext = getExtension($filename);
-
-                            if (in_array($ext, $arrext, true)) {
-
-                                if (utfStrlen($filename) > 50) {
-                                    $filename = utfSubstr($filename, 0, 45) . '.' . $ext;
-                                }
-
-                                if (! file_exists(HOME . '/uploads/forum/' . $topic->id)) {
-                                    $old = umask(0);
-                                    mkdir(HOME . '/uploads/forum/' . $topic->id, 0777, true);
-                                    umask($old);
-                                }
-
-                                $num = 0;
-                                $hash = $post->id . '.' . $ext;
-                                while (file_exists(HOME . '/uploads/forum/' . $topic->id . '/' . $hash)) {
-                                    $num++;
-                                    $hash = $post->id . '_' . $num . '.' . $ext;
-                                }
-
-                                move_uploaded_file($_FILES['file']['tmp_name'], HOME . '/uploads/forum/' . $topic->id . '/' . $hash);
-
-                                File::query()->create([
-                                    'relate_type' => Post::class,
-                                    'relate_id'   => $post->id,
-                                    'hash'        => $hash,
-                                    'name'        => $filename,
-                                    'size'        => $filesize,
-                                    'user_id'     => getUser('id'),
-                                    'created_at'  => SITETIME,
-                                ]);
-
-                            } else {
-                                $fileError = 'Файл не загружен! Недопустимое расширение!';
-                            }
-                        } else {
-                            $fileError = 'Файл не загружен! Максимальный размер ' . formatSize(setting('forumloadsize')) . '!';
-                        }
-                    } else {
-                        $fileError = 'Ошибка! Не удалось загрузить файл!';
-                    }
-                } else {
-                    $fileError = 'Ошибка! У вас недостаточно актива для загрузки файлов!';
-                }
-
-                if (isset($fileError)) {
-                    setFlash('danger', $fileError);
+            if ($files) {
+                foreach ($files as $file) {
+                    $post->uploadFile($file);
                 }
             }
 
