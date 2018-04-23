@@ -147,8 +147,6 @@ class TopicController extends BaseController
 
         if ($validator->isValid()) {
 
-            $existFiles = $post->files ? $post->files->count() : 0;
-
             $msg = antimat($msg);
 
             if (
@@ -156,7 +154,7 @@ class TopicController extends BaseController
                 $post->created_at + 600 > SITETIME &&
                 getUser('id') === $post->user_id &&
                 (utfStrlen($msg) + utfStrlen($post->text) <= setting('forumtextlength')) &&
-                count($files) + $existFiles <= setting('maxfiles')
+                count($files) + $post->files->count() <= setting('maxfiles')
             ) {
 
                 $newpost = $post->text . "\n\n" . '[i][size=1]Добавлено через ' . makeTime(SITETIME - $post->created_at) . ' сек.[/size][/i]' . "\n" . $msg;
