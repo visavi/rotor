@@ -1950,9 +1950,9 @@ function getInput($name, $default = null)
 
     $session = json_decode($_SESSION['input'], true);
 
-    if (isset($session[$name])) {
-        $input = $session[$name];
-        unset($session[$name]);
+    if ($input = array_get($session, $name)) {
+        array_forget($session, $name);
+
         $_SESSION['input'] = json_encode($session);
     }
 
