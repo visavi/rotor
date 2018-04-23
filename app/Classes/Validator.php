@@ -371,7 +371,7 @@ class Validator
             $rules['extensions'] = ['jpg', 'jpeg', 'gif', 'png'];
         }
 
-        if (! in_array($input->getClientOriginalExtension(), $rules['extensions'], true)) {
+        if (! in_array(strtolower($input->getClientOriginalExtension()), $rules['extensions'], true)) {
             $this->addError([$key => 'Недопустимое расширение файла!']);
         }
 

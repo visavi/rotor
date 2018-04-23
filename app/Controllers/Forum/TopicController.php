@@ -129,15 +129,9 @@ class TopicController extends BaseController
 
         if ($files && $validator->isValid()) {
 
-            $validator->lte(count($files), setting('maxfiles'), ['files' => 'Разрешено загружать не более ' . setting('maxfiles') . ' файлов']);
-
-            // Загрузка файла
-
-            /* if (getUser('point') >= setting('forumloadpoints')) {
-
-            } else {
-                $fileError = 'Ошибка! У вас недостаточно актива для загрузки файлов!';
-            }*/
+            $validator
+                ->lte(count($files), setting('maxfiles'), ['files' => 'Разрешено загружать не более ' . setting('maxfiles') . ' файлов'])
+                ->gte(getUser('point'), setting('forumloadpoints'), 'У вас недостаточно актива для загрузки файлов!');
 
             $rules = [
                 'maxsize'    => setting('forumloadsize'),
@@ -153,13 +147,16 @@ class TopicController extends BaseController
 
         if ($validator->isValid()) {
 
+            $existFiles = $post->files ? $post->files->count() : 0;
+
             $msg = antimat($msg);
 
             if (
                 $post &&
                 $post->created_at + 600 > SITETIME &&
                 getUser('id') === $post->user_id &&
-                (utfStrlen($msg) + utfStrlen($post->text) <= setting('forumtextlength'))
+                (utfStrlen($msg) + utfStrlen($post->text) <= setting('forumtextlength')) &&
+                count($files) + $existFiles <= setting('maxfiles')
             ) {
 
                 $newpost = $post->text . "\n\n" . '[i][size=1]Добавлено через ' . makeTime(SITETIME - $post->created_at) . ' сек.[/size][/i]' . "\n" . $msg;

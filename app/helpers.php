@@ -1576,7 +1576,7 @@ function formatNum($num)
  */
 function uploadFile(UploadedFile $file, $path)
 {
-    $extension = $file->getClientOriginalExtension();
+    $extension = strtolower($file->getClientOriginalExtension());
     $fileName  = uniqueName($extension);
 
     if (! in_array($extension, ['jpg', 'jpeg', 'gif', 'png'])) {

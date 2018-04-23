@@ -69,6 +69,10 @@ class SpamController extends AdminController
             ->with('relate.user', 'user')
             ->get();
 
+        if (in_array($type, ['inbox', 'wall'])) {
+            $records->load('relate.author');
+        }
+
         $total = $this->total;
 
         return view('admin/spam/index', compact('records', 'page', 'total', 'type'));
