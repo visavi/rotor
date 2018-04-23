@@ -27,10 +27,6 @@ class ForumController extends AdminController
             ->orderBy('sort')
             ->get();
 
-        if ($forums->isEmpty()) {
-            abort('default', 'Разделы форума еще не созданы!');
-        }
-
         return view('admin/forum/index', compact('forums'));
     }
 

@@ -26,7 +26,7 @@ class BlogController extends BaseController
             ->with('children', 'new', 'children.new')
             ->get();
 
-        if (! $categories) {
+        if ($categories->isEmpty()) {
             abort('default', 'Разделы блогов еще не созданы!');
         }
 

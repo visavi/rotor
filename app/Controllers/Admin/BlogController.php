@@ -21,10 +21,6 @@ class BlogController extends AdminController
             ->with('children', 'new', 'children.new')
             ->get();
 
-        if (! $categories) {
-            abort('default', 'Разделы блогов еще не созданы!');
-        }
-
         return view('admin/blog/index', compact('categories'));
     }
 
