@@ -60,7 +60,7 @@
 
         <p class="text-muted font-italic">
             Можно загрузить до {{ setting('maxfiles') }} файлов<br>
-            Максимальный вес файла: <b>{{ round(setting('fileupload') / 1024 / 1024) }}</b> Mb<br>
+            Максимальный вес файла: {{ formatSize(setting('fileupload')) }}<br>
             Допустимые расширения файлов: {{ str_replace(',', ', ', setting('allowextload')) }}<br>
             Допустимые размеры картинок: от 100px
         </p>

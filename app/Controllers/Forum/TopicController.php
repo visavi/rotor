@@ -128,7 +128,6 @@ class TopicController extends BaseController
         $validator->notEqual($msg, $post['text'], ['msg' => 'Ваше сообщение повторяет предыдущий пост!']);
 
         if ($files && $validator->isValid()) {
-
             $validator
                 ->lte(count($files), setting('maxfiles'), ['files' => 'Разрешено загружать не более ' . setting('maxfiles') . ' файлов'])
                 ->gte(getUser('point'), setting('forumloadpoints'), 'У вас недостаточно актива для загрузки файлов!');

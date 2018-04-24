@@ -34,10 +34,11 @@
                 {!! textError('text') !!}
             </div>
 
-            <label>
-                <input name="closed" class="js-bold" type="checkbox" value="1" {{ getInput('closed', $photo->closed) == 1 ? ' checked' : '' }}> Закрыть комментарии
-            </label>
-            <br/>
+            <div class="custom-control custom-checkbox">
+                <input type="hidden" value="0" name="closed">
+                <input type="checkbox" class="custom-control-input" value="1" name="closed" id="closed"{{ getInput('closed', $photo->closed) ? ' checked' : '' }}>
+                <label class="custom-control-label" for="closed">Закрыть комментарии</label>
+            </div>
 
             <button class="btn btn-primary">Изменить</button>
         </form>

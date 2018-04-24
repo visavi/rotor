@@ -32,13 +32,19 @@
                 {!! textError('text') !!}
             </div>
 
-            <label class="btn btn-sm btn-secondary" for="photo">
-                <input type="file" id="photo" name="photo" onchange="$('#upload-file-info').html(this.files[0].name);" hidden>
+            <label class="btn btn-sm btn-secondary" for="files">
+                <input type="file" id="files" name="files[]" onchange="$('#upload-file-info').html((this.files.length > 1) ? this.files.length + ' файлов' : this.files[0].name);" hidden multiple>
                 Прикрепить фото&hellip;
             </label>
             <span class="badge badge-info" id="upload-file-info"></span>
-            {!! textError('photo') !!}
+            {!! textError('files') !!}
             <br>
+
+            <p class="text-muted font-italic">
+                Можно загрузить до {{ setting('maxfiles') }} фото<br>
+                Максимальный вес фото: {{ formatSize(setting('filesize')) }} и размером от 100px<br>
+                Допустимые расширения фото: jpg, jpeg, gif и png
+            </p>
 
             <div class="custom-control custom-checkbox">
                 <input type="hidden" value="0" name="closed">
@@ -48,8 +54,5 @@
 
             <button class="btn btn-success">Добавить</button>
         </form>
-    </div><br>
-
-    Разрешается добавлять фотки с расширением jpg, jpeg, gif и png<br>
-    Весом не более {{ formatSize(setting('filesize')) }} и размером от 100px<br><br>
+    </div>
 @stop

@@ -28,7 +28,9 @@
     @endif
 
     <div>
-        <a href="/uploads/pictures/{{ $photo->link }}" class="gallery"><img  class="img-fluid" src="/uploads/pictures/{{ $photo->link }}" alt="image"></a><br>
+        @foreach ($photo->files as $file)
+            <a href="/uploads/pictures/{{ $file->hash }}" class="gallery" data-group="{{ $photo->id }}"><img  class="img-fluid" src="/uploads/pictures/{{ $file->hash }}" alt="image"></a><br>
+        @endforeach
 
         @if ($photo->text)
             {!! bbCode($photo->text) !!}<br>
@@ -44,7 +46,6 @@
             @endunless
         </div>
 
-        Размер: {{ formatFileSize(UPLOADS.'/pictures/'.$photo->link) }}<br>
         Добавлено: {!! profile($photo->user) !!} ({{ dateFixed($photo->created_at) }})<br>
         <a href="/gallery/comments/{{ $photo->id }}">Комментарии</a> ({{ $photo->count_comments }})
         <a href="/gallery/end/{{ $photo->id }}">&raquo;</a>

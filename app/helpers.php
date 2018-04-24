@@ -132,15 +132,8 @@ function deleteAlbum(User $user)
 
     if ($photos->isNotEmpty()) {
         foreach ($photos as $photo) {
-
-            Comment::query()
-                ->where('relate_type', Photo::class)
-                ->where('relate_id', $photo->id)
-                ->delete();
-
-            Photo::query()->where('id', $photo->id)->delete();
-
-            deleteFile(UPLOADS . '/pictures/' . $photo->link);
+            $photo->comments()->delete();
+            $photo->delete();
         }
     }
 }
@@ -1359,7 +1352,11 @@ function recentPhotos($show = 5)
 {
     if (@filemtime(STORAGE . '/temp/recentphotos.dat') < time() - 1800) {
 
-        $recent = Photo::query()->orderBy('created_at', 'desc')->limit($show)->get();
+        $recent = Photo::query()
+            ->orderBy('created_at', 'desc')
+            ->limit($show)
+            ->with('files')
+            ->get();
 
         file_put_contents(STORAGE . '/temp/recentphotos.dat', json_encode($recent, JSON_UNESCAPED_UNICODE), LOCK_EX);
     }
@@ -1367,8 +1364,12 @@ function recentPhotos($show = 5)
     $photos = json_decode(file_get_contents(STORAGE . '/temp/recentphotos.dat'));
 
     if ($photos) {
-        foreach ($photos as $data) {
-            echo '<a href="/gallery/' . $data->id . '">' . resizeImage('/uploads/pictures/' . $data->link, ['alt' => $data->title, 'class' => 'rounded', 'style' => 'width: 100px; height: 100px;']) . '</a>';
+        foreach ($photos as $photo) {
+            $file = current($photo->files);
+
+            if ($file) {
+                echo '<a href="/gallery/' . $photo->id . '">' . resizeImage('/uploads/pictures/' . $file->hash, ['alt' => $photo->title, 'class' => 'rounded', 'style' => 'width: 100px; height: 100px;']) . '</a>';
+            }
         }
 
         echo '<br>';

@@ -25,7 +25,7 @@ class PhotoController extends BaseController
             ->orderBy('created_at', 'desc')
             ->offset($page->offset)
             ->limit($page->limit)
-            ->with('user')
+            ->with('user', 'files')
             ->get();
 
         return view('gallery/index', compact('photos', 'page'));
@@ -68,7 +68,7 @@ class PhotoController extends BaseController
             $token  = check(Request::input('token'));
             $title  = check(Request::input('title'));
             $text   = check(Request::input('text'));
-            $photo  = Request::file('photo');
+            $files  = (array) Request::file('files');
             $closed = empty(Request::input('closed')) ? 0 : 1;
 
             $validator = new Validator();
@@ -77,24 +77,33 @@ class PhotoController extends BaseController
                 ->length($text, 0, 1000, ['text' => 'Слишком длинное описание!'])
                 ->true(Flood::isFlood(), ['text' => 'Антифлуд! Разрешается отправлять сообщения раз в ' . Flood::getPeriod() . ' секунд!']);
 
-            $rules = [
-                'maxsize'   => setting('filesize'),
-                'minweight' => 100,
-            ];
-            $validator->file($photo, $rules, ['photo' => 'Не удалось загрузить фотографию!']);
+            if ($validator->isValid()) {
+                $validator
+                    ->lte(count($files), setting('maxfiles'), ['files' => 'Разрешено загружать не более ' . setting('maxfiles') . ' файлов']);
+
+                $rules = [
+                    'maxsize'    => setting('filesize'),
+                    'minweight' => 100,
+                ];
+
+                foreach ($files as $file) {
+                    $validator->file($file, $rules, ['files' => 'Не удалось загрузить фотографию!']);
+                }
+            }
 
             if ($validator->isValid()) {
-
-                $link = uploadFile($photo, UPLOADS.'/pictures');
 
                 $photo = Photo::query()->create([
                     'user_id'    => getUser('id'),
                     'title'      => $title,
                     'text'       => antimat($text),
-                    'link'       => $link,
                     'created_at' => SITETIME,
                     'closed'     => $closed,
                 ]);
+
+                foreach ($files as $file) {
+                    $photo->uploadFile($file);
+                }
 
                 setFlash('success', 'Фотография успешно загружена!');
                 redirect('/gallery/' . $photo->id);
@@ -317,13 +326,8 @@ class PhotoController extends BaseController
             ->empty($photo->count_comments, 'Запрещено удалять фотографии к которым имеются комментарии!');
 
         if ($validator->isValid()) {
-            deleteFile(UPLOADS . '/pictures/' . $photo->link);
 
-            Comment::query()
-                ->where('relate_type', Photo::class)
-                ->where('relate_id', $photo->id)
-                ->delete();
-
+            $photo->comments()->delete();
             $photo->delete();
 
             setFlash('success', 'Фотография успешно удалена!');

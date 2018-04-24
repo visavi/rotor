@@ -18,25 +18,53 @@
 
     @if ($photos->isNotEmpty())
 
-        @foreach ($photos as $data)
+        @foreach ($photos as $photo)
             <div class="b">
                 <i class="fa fa-image"></i>
-                <b><a href="/gallery/{{ $data->id }}">{{ $data->title }}</a></b> ({{ formatFileSize(UPLOADS.'/pictures/'.$data->link) }})<br>
+                <b><a href="/gallery/{{ $photo->id }}">{{ $photo->title }}</a></b><br>
 
                 @if ($moder)
-                    <a href="/gallery/edit/{{ $data->id }}?page={{ $page->current }}">Редактировать</a> /
-                    <a href="/gallery/delete/{{ $data->id }}?page={{ $page->current }}&amp;token={{ $_SESSION['token'] }}" onclick="return confirm('Вы подтверждаете удаление изображения?')">Удалить</a>
+                    <a href="/gallery/edit/{{ $photo->id }}?page={{ $page->current }}">Редактировать</a> /
+                    <a href="/gallery/delete/{{ $photo->id }}?page={{ $page->current }}&amp;token={{ $_SESSION['token'] }}" onclick="return confirm('Вы подтверждаете удаление изображения?')">Удалить</a>
                 @endif
             </div>
             <div>
-                <a href="/gallery/{{ $data->id }}">{!! resizeImage('/uploads/pictures/' . $data->link, ['alt' => $data->title]) !!}</a><br>
+                <?php $countFiles = $photo->files->count() ?>
+                <div id="myCarousel{{ $loop->iteration }}" class="carousel slide w-75" data-ride="carousel">
+                    @if ($countFiles > 1)
+                        <ol class="carousel-indicators">
+                            @for ($i = 0; $i < $countFiles; $i++)
+                                <li data-target="#myCarousel{{ $loop->iteration }}" data-slide-to="{{ $i }}"{{ empty($i) ? ' class="active"' : '' }}></li>
+                            @endfor
+                        </ol>
+                    @endif
 
-                @if ($data->text)
-                   {!! bbCode($data->text) !!}<br>
+                    <div class="carousel-inner">
+                        @foreach ($photo->files as $file)
+                            <div class="carousel-item{{ $loop->first ? ' active' : '' }}">
+                                {!! resizeImage('/uploads/pictures/' . $file->hash, ['alt' => $photo->title, 'class' => 'd-block w-100']) !!}
+                            </div>
+                        @endforeach
+                    </div>
+
+                    @if ($countFiles > 1)
+                        <a class="carousel-control-prev" href="#myCarousel{{ $loop->iteration }}" role="button" data-slide="prev">
+                            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                            <span class="sr-only">Previous</span>
+                        </a>
+                        <a class="carousel-control-next" href="#myCarousel{{ $loop->iteration }}" role="button" data-slide="next">
+                            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                            <span class="sr-only">Next</span>
+                        </a>
+                    @endif
+                </div>
+
+                @if ($photo->text)
+                   {!! bbCode($photo->text) !!}<br>
                 @endif
 
-                Добавлено: {!! profile($data->user) !!} ({{ dateFixed($data->created_at) }})<br>
-                <a href="/gallery/comments/{{ $data->id }}">Комментарии</a> ({{ $data->count_comments }})
+                Добавлено: {!! profile($photo->user) !!} ({{ dateFixed($photo->created_at) }})<br>
+                <a href="/gallery/comments/{{ $photo->id }}">Комментарии</a> ({{ $photo->count_comments }})
             </div>
         @endforeach
 

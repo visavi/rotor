@@ -207,7 +207,7 @@
 
                             <p class="text-muted font-italic">
                                 Можно загрузить до {{ setting('maxfiles') }} файлов<br>
-                                Максимальный вес файла: <b>{{ round(setting('forumloadsize') / 1024 / 1024) }}</b> Mb<br>
+                                Максимальный вес файла: {{ formatSize(setting('forumloadsize')) }}<br>
                                 Допустимые расширения файлов: {{ str_replace(',', ', ', setting('forumextload')) }}
                             </p>
                         </div>

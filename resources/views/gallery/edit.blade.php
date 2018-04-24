@@ -33,8 +33,11 @@
                 {!! textError('text') !!}
             </div>
 
-            Закрыть комментарии:
-            <input name="closed" type="checkbox" value="1"{{ $checked }}><br>
+            <div class="custom-control custom-checkbox">
+                <input type="hidden" value="0" name="closed">
+                <input type="checkbox" class="custom-control-input" value="1" name="closed" id="closed"{{ getInput('closed', $photo->closed) ? ' checked' : '' }}>
+                <label class="custom-control-label" for="closed">Закрыть комментарии</label>
+            </div>
 
             <button class="btn btn-success">Изменить</button>
         </form>

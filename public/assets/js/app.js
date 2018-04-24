@@ -59,6 +59,10 @@ $(function() {
         useAlpha: false,
         format: 'hex'
     });
+
+    $('.carousel').carousel({
+        interval: false
+    })
 });
 
 /* Вывод уведомлений */

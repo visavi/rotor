@@ -101,15 +101,12 @@ class PhotoController extends AdminController
 
         if ($validator->isValid()) {
 
-
             $photos = Photo::query()
                 ->whereIn('id', $del)
                 ->get();
 
             if ($photos->isNotEmpty()) {
                 foreach ($photos as $photo) {
-                    deleteFile(UPLOADS . '/pictures/' . $photo->link);
-
                     $photo->comments()->delete();
                     $photo->delete();
                 }

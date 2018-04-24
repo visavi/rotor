@@ -16,7 +16,6 @@ class CreatePhotoTable extends AbstractMigration
                 ->addColumn('user_id', 'integer')
                 ->addColumn('title', 'string', ['limit' => 50])
                 ->addColumn('text', 'text', ['null' => true])
-                ->addColumn('link', 'string', ['limit' => 30])
                 ->addColumn('created_at', 'integer')
                 ->addColumn('rating', 'integer', ['default' => 0])
                 ->addColumn('closed', 'boolean', ['default' => 0])
