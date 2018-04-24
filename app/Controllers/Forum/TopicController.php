@@ -136,7 +136,6 @@ class TopicController extends BaseController
             $rules = [
                 'maxsize'    => setting('forumloadsize'),
                 'extensions' => explode(',', setting('forumextload')),
-                'maxweight'  => setting('screenupsize'),
                 'minweight'  => 100,
             ];
 

@@ -268,7 +268,6 @@ class LoadController extends AdminController
                 $rules = [
                     'maxsize'    => setting('fileupload'),
                     'extensions' => explode(',', setting('allowextload')),
-                    'maxweight'  => setting('screenupsize'),
                     'minweight'  => 100,
                 ];
 

@@ -67,7 +67,6 @@ class NewsController extends AdminController
 
             $rules = [
                 'maxsize'   => setting('filesize'),
-                'maxweight' => setting('fileupfoto'),
                 'minweight' => 100,
             ];
 
@@ -120,7 +119,6 @@ class NewsController extends AdminController
 
             $rules = [
                 'maxsize'   => setting('filesize'),
-                'maxweight' => setting('fileupfoto'),
                 'minweight' => 100,
             ];
 

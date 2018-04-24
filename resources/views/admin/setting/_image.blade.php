@@ -12,13 +12,6 @@
         <span class="text-muted font-italic">Ограничение сервера: {{ ini_get('upload_max_filesize') }}</span>
     </div>
 
-
-    <div class="form-group{{ hasError('sets[fileupfoto]') }}">
-        <label for="fileupfoto">Максимальный размер фото (px):</label>
-        <input type="number" class="form-control" id="fileupfoto" name="sets[fileupfoto]" maxlength="4" value="{{ getInput('sets.fileupfoto', $settings['fileupfoto']) }}" required>
-        {!! textError('sets[fileupfoto]') !!}
-    </div>
-
     <div class="form-group{{ hasError('sets[screensize]') }}">
         <label for="screensize">Уменьшение фото при загрузке (px):</label>
         <input type="number" class="form-control" id="screensize" name="sets[screensize]" maxlength="4" value="{{ getInput('sets.screensize', $settings['screensize']) }}" required>

@@ -386,13 +386,17 @@ class Validator
 
             if (isset($rules['maxweight'])) {
                 if ($width > $rules['maxweight'] || $height > $rules['maxweight']) {
-                    $this->addError([$key => 'Максимальный размер файла '. $rules['maxweight'] . 'px!']);
+                    $this->addError([$key => 'Максимальный размер картинки '. $rules['maxweight'] . 'px!']);
                 }
             }
 
             if (isset($rules['minweight'])) {
                 if ($width < $rules['minweight'] || $height < $rules['minweight']) {
-                    $this->addError([$key => 'Минимальный размер файла ' . $rules['minweight'] . 'px!']);
+                    $this->addError([$key => 'Минимальный размер картинки ' . $rules['minweight'] . 'px!']);
+                }
+            } else {
+                if (empty($width) || empty($height)) {
+                    $this->addError([$key => 'Размер картинки слишком маленький!']);
                 }
             }
         }

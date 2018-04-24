@@ -71,7 +71,7 @@
                 Можно загрузить до {{ setting('maxfiles') }} файлов<br>
                 Максимальный вес файла: <b>{{ round(setting('fileupload') / 1024 / 1024) }}</b> Mb<br>
                 Допустимые расширения файлов: {{ str_replace(',', ', ', setting('allowextload')) }}<br>
-                Допустимые размеры картинок: от 100px до {{ setting('screenupsize') }}px
+                Допустимые размеры картинок: от 100px
             </p>
 
             <button class="btn btn-primary">Сохранить</button>

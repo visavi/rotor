@@ -38,7 +38,7 @@
     </div><br>
 
     Разрешается добавлять фотки с расширением jpg, jpeg, gif и png<br>
-    Весом не более {{ formatSize(setting('filesize')) }} и размером от 100 до {{  setting('fileupfoto') }} px<br>
+    Весом не более {{ formatSize(setting('filesize')) }} и размером от 100px<br>
     Аватар генерируется автоматически из вашей фотографии<br><br>
 
     <i class="fa fa-arrow-circle-left"></i> <a href="/profile">Вернуться</a><br>

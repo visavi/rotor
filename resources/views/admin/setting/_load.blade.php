@@ -37,12 +37,6 @@
         <span class="text-muted font-italic">Ограничение сервера: {{ ini_get('upload_max_filesize') }}</span>
     </div>
 
-    <div class="form-group{{ hasError('sets[screenupsize]') }}">
-        <label for="screenupsize">Максимальный размер скриншота (px):</label>
-        <input type="number" class="form-control" id="screenupsize" name="sets[screenupsize]" maxlength="4" value="{{ getInput('sets.screenupsize', $settings['screenupsize']) }}" required>
-        {!! textError('sets[screenupsize]') !!}
-    </div>
-
     <div class="form-group{{ hasError('sets[allowextload]') }}">
         <label for="allowextload">Допустимые расширения файлов:</label>
         <textarea class="form-control" id="allowextload" name="sets[allowextload]" required>{{ getInput('sets.allowextload', $settings['allowextload']) }}</textarea>

@@ -195,7 +195,7 @@
                                 Можно загрузить до {{ setting('maxfiles') }} файлов<br>
                                 Максимальный вес файла: <b>{{ round(setting('forumloadsize') / 1024 / 1024) }}</b> Mb<br>
                                 Допустимые расширения файлов: {{ str_replace(',', ', ', setting('forumextload')) }}<br>
-                                Допустимые размеры картинок: от 100px до {{ setting('screenupsize') }}px
+                                Допустимые размеры картинок: от 100px
                             </p>
                         </div>
 

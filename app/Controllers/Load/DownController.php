@@ -87,7 +87,6 @@ class DownController extends BaseController
                 $rules = [
                     'maxsize'    => setting('fileupload'),
                     'extensions' => explode(',', setting('allowextload')),
-                    'maxweight'  => setting('screenupsize'),
                     'minweight'  => 100,
                 ];
 
@@ -204,7 +203,6 @@ class DownController extends BaseController
                 $rules = [
                     'maxsize'    => setting('fileupload'),
                     'extensions' => explode(',', setting('allowextload')),
-                    'maxweight'  => setting('screenupsize'),
                     'minweight'  => 100,
                 ];
 
