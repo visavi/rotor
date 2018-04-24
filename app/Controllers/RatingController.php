@@ -27,6 +27,7 @@ class RatingController extends BaseController
      */
     public function index($login)
     {
+        $vote = Request::input('vote');
         $user = User::query()->where('login', $login)->first();
 
         if (! $user) {
@@ -45,14 +46,12 @@ class RatingController extends BaseController
         $getRating = Rating::query()
             ->where('user_id', getUser('id'))
             ->where('recipient_id', $user->id)
-            ->where('created_at', '>', SITETIME - 3600 * 24 * 90)
+            ->where('created_at', '>', strtotime('-3 month', SITETIME))
             ->first();
 
         if ($getRating) {
             abort('default', 'Вы уже изменяли репутацию этому пользователю!');
         }
-
-        $vote = Request::input('vote') ? 1 : 0;
 
         if (Request::isMethod('post')) {
 
@@ -75,11 +74,11 @@ class RatingController extends BaseController
                     'user_id'      => getUser('id'),
                     'recipient_id' => $user->id,
                     'text'         => $text,
-                    'vote'         => $vote,
+                    'vote'         => $vote === 'plus' ? '+' : '-',
                     'created_at'   => SITETIME,
                 ]);
 
-                if ($vote == 1) {
+                if ($vote === 'plus') {
                     $text = 'Пользователь [b]' . getUser('login') . '[/b] поставил вам плюс! (Ваш рейтинг: ' . ($user['rating'] + 1) . ')' . PHP_EOL . 'Комментарий: ' . $text;
 
                     $user->update([
@@ -97,7 +96,7 @@ class RatingController extends BaseController
                     ]);
                 }
 
-                sendPrivate($user, getUser(), $text);
+                sendPrivate($user, null, $text);
 
                 setFlash('success', 'Репутация успешно изменена!');
                 redirect('/user/'.$user->login);

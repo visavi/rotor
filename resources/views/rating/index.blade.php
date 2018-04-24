@@ -21,10 +21,10 @@
             <input type="hidden" name="token" value="{{ $_SESSION['token'] }}">
             <label for="inputRating">Рейтинг</label>
             <select class="form-control" id="inputRating" name="vote">
-                <?php $selected = ($vote == 1) ? ' selected' : ''; ?>
-                <option value="1"{{ $selected }}>Плюс</option>
-                <?php $selected = ($vote == 0) ? ' selected' : ''; ?>
-                <option value="0"{{ $selected }}>Минус</option>
+                <?php $selected = ($vote === 'plus') ? ' selected' : ''; ?>
+                <option value="plus"{{ $selected }}>Плюс</option>
+                <?php $selected = ($vote === 'minus') ? ' selected' : ''; ?>
+                <option value="minus"{{ $selected }}>Минус</option>
             </select>
 
             <div class="form-group{{ hasError('text') }}">

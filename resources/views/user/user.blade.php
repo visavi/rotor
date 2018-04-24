@@ -95,8 +95,8 @@
                 <a href="/rating/{{ $user->login }}">Репутация: <b>{!! formatNum($user->rating) !!}</b> (+{{  $user->posrating }}/-{{  $user->negrating }})</a><br>
 
                 @if (getUser() && getUser('login') != $user->login)
-                    <a href="/user/{{ $user->login }}/rating?vote=1"><i class="fa fa-thumbs-up"></i><span style="color:#0099cc"> Плюс</span></a> /
-                    <a href="/user/{{ $user->login }}/rating?vote=0"><span style="color:#ff0000">Минус</span> <i class="fa fa-thumbs-down"></i></a><br>
+                    <a href="/user/{{ $user->login }}/rating?vote=plus"><i class="fa fa-thumbs-up"></i><span style="color:#0099cc"> Плюс</span></a> /
+                    <a href="/user/{{ $user->login }}/rating?vote=minus"><span style="color:#ff0000">Минус</span> <i class="fa fa-thumbs-down"></i></a><br>
                 @endif
 
             </div>
