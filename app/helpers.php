@@ -1579,24 +1579,30 @@ function uploadFile(UploadedFile $file, $path)
     $extension = strtolower($file->getClientOriginalExtension());
     $fileName  = uniqueName($extension);
 
-    if (! in_array($extension, ['jpg', 'jpeg', 'gif', 'png'])) {
-        $file->move($path, $fileName);
-        return $fileName;
+    if (in_array($extension, ['jpg', 'jpeg', 'gif', 'png'])) {
+        $img = Image::make($file);
+
+        if ($img->getWidth() <= 100 && $img->getHeight() <= 100) {
+            $file->move($path, $fileName);
+            return $fileName;
+        }
+
+        $img->resize(setting('screensize'), setting('screensize'), function ($constraint) {
+            $constraint->aspectRatio();
+            $constraint->upsize();
+        });
+
+        if (setting('copyfoto')) {
+            $img->insert(HOME . '/assets/img/images/watermark.png', 'bottom-right', 10, 10);
+        }
+
+        $img->save($path . '/' . $fileName);
+
+        return $img->basename;
     }
 
-    $img = Image::make($file);
-    $img->resize(setting('screensize'), setting('screensize'), function ($constraint) {
-        $constraint->aspectRatio();
-        $constraint->upsize();
-    });
-
-    if (setting('copyfoto')) {
-        $img->insert(HOME . '/assets/img/images/watermark.png', 'bottom-right', 10, 10);
-    }
-
-    $img->save($path . '/' . $fileName);
-
-    return $img->basename;
+    $file->move($path, $fileName);
+    return $fileName;
 }
 
 /**

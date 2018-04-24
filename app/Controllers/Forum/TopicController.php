@@ -136,7 +136,6 @@ class TopicController extends BaseController
             $rules = [
                 'maxsize'    => setting('forumloadsize'),
                 'extensions' => explode(',', setting('forumextload')),
-                'minweight'  => 100,
             ];
 
             foreach ($files as $file) {
