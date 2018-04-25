@@ -55,7 +55,7 @@
     @if (getUser())
 
         <div class="form">
-            <form action="/wall/{{ $user->login }}/create" method="post">
+            <form action="/walls/{{ $user->login }}/create" method="post">
                 <input type="hidden" name="token" value="{{ $_SESSION['token'] }}">
 
                 <div class="form-group{{ hasError('msg') }}">

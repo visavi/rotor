@@ -17,7 +17,7 @@
     </nav>
 
     <div class="form">
-        <form method="post" action="setting">
+        <form method="post" action="/settings">
             <input type="hidden" name="token" value="{{ $_SESSION['token'] }}">
 
             <div class="form-group{{ hasError('themes') }}">

@@ -137,7 +137,7 @@
     @endif
 
     <div class="alert alert-info">
-        <i class="fa fa-sticky-note"></i> <a href="/wall/{{ $user->login }}">Стена сообщений</a> ({{ userWall($user) }})<br>
+        <i class="fa fa-sticky-note"></i> <a href="/walls/{{ $user->login }}">Стена сообщений</a> ({{ userWall($user) }})<br>
 
         @if ($user->login != getUser('login'))
             <i class="fa fa-address-book"></i> Добавить в

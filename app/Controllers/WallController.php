@@ -41,7 +41,7 @@ class WallController extends BaseController
             ]);
         }
 
-        return view('wall/index', compact('messages', 'user', 'page', 'newWall'));
+        return view('walls/index', compact('messages', 'user', 'page', 'newWall'));
     }
 
     /**
@@ -89,9 +89,9 @@ class WallController extends BaseController
                 ]);
 
                 DB::delete('
-                        DELETE FROM wall WHERE user_id = ? AND created_at < (
+                        DELETE FROM walls WHERE user_id = ? AND created_at < (
                             SELECT min(created_at) FROM (
-                                SELECT created_at FROM wall WHERE user_id = ? ORDER BY created_at DESC LIMIT ?
+                                SELECT created_at FROM walls WHERE user_id = ? ORDER BY created_at DESC LIMIT ?
                             ) AS del
                         );',
                     [$user->id, $user->id, setting('wallmaxpost')]
@@ -103,7 +103,7 @@ class WallController extends BaseController
                 setFlash('danger', $validator->getErrors());
             }
 
-            redirect('/wall/' . $user->login);
+            redirect('/walls/' . $user->login);
         }
     }
 

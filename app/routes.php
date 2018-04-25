@@ -128,7 +128,7 @@ $routes = [
     ['POST',     '/ajax/vote', 'AjaxController@vote'],
     ['POST',     '/ajax/complaint', 'AjaxController@complaint'],
 
-    ['GET',      '/walls/[user:login]', 'WallController@index', 'wall'],
+    ['GET',      '/walls/[user:login]', 'WallController@index', 'walls'],
     ['POST',     '/walls/[user:login]/create', 'WallController@create'],
     ['POST',     '/walls/[user:login]/delete', 'WallController@delete'],
 
