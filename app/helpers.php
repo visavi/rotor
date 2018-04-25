@@ -100,7 +100,7 @@ function dateFixed($timestamp, $format = 'd.m.y / H:i')
  */
 function deleteUser(User $user)
 {
-    deleteFile(UPLOADS . '/photos/' . $user->picture);
+    deleteFile(UPLOADS . '/pictures/' . $user->picture);
     deleteFile(UPLOADS . '/avatars/' . $user->avatar);
 
     Inbox::query()->where('user_id', $user->id)->delete();
@@ -1367,7 +1367,7 @@ function recentPhotos($show = 5)
             $file = current($photo->files);
 
             if ($file) {
-                echo '<a href="/photos/' . $photo->id . '">' . resizeImage('/uploads/pictures/' . $file->hash, ['alt' => $photo->title, 'class' => 'rounded', 'style' => 'width: 100px; height: 100px;']) . '</a>';
+                echo '<a href="/photos/' . $photo->id . '">' . resizeImage('/uploads/photos/' . $file->hash, ['alt' => $photo->title, 'class' => 'rounded', 'style' => 'width: 100px; height: 100px;']) . '</a>';
             }
         }
 

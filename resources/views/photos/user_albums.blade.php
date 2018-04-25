@@ -42,7 +42,7 @@
                     <div class="carousel-inner">
                         @foreach ($photo->files as $file)
                             <div class="carousel-item{{ $loop->first ? ' active' : '' }}">
-                                {!! resizeImage('/uploads/pictures/' . $file->hash, ['alt' => $photo->title, 'class' => 'd-block w-100']) !!}
+                                {!! resizeImage('/uploads/photos/' . $file->hash, ['alt' => $photo->title, 'class' => 'd-block w-100']) !!}
                             </div>
                         @endforeach
                     </div>

@@ -31,7 +31,7 @@
 
 <?php
 echo bbCode(check('[code]<?php
-deleteImage("uploads/photos/", "Vantuz.gif");
-/* Удаляет файл Vantuz.gif сначала в директории uploads/photos, а затем в uploads/thumbnails */
+deleteImage("uploads/pictures/", "Vantuz.gif");
+/* Удаляет файл Vantuz.gif сначала в директории uploads/pictures, а затем в uploads/thumbnails */
 ?>[/code]'));
 ?>

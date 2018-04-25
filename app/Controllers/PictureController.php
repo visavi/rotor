@@ -45,7 +45,7 @@ class PictureController extends BaseController
 
                 //-------- Удаляем старую фотку и аватар ----------//
                 if ($this->user->picture) {
-                    deleteFile(UPLOADS . '/photos/' . $this->user->picture);
+                    deleteFile(UPLOADS . '/pictures/' . $this->user->picture);
                     deleteFile(UPLOADS . '/avatars/' . $this->user->avatar);
 
                     $this->user->picture = null;
@@ -53,7 +53,7 @@ class PictureController extends BaseController
                     $this->user->save();
                 }
 
-                $picture = uploadFile($photo, UPLOADS.'/photos');
+                $picture = uploadFile($photo, UPLOADS . '/pictures');
                 $avatar  = uniqueName('png');
 
                 //-------- Генерируем аватар ----------//
@@ -94,7 +94,7 @@ class PictureController extends BaseController
 
         if ($validator->isValid()) {
 
-            deleteFile(UPLOADS . '/photos/' . $this->user->picture);
+            deleteFile(UPLOADS . '/pictures/' . $this->user->picture);
             deleteFile(UPLOADS . '/avatars/' . $this->user->avatar);
 
             $this->user->picture = null;

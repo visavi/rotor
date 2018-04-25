@@ -44,7 +44,7 @@ class Photo extends BaseModel
      */
     public function uploadFile(UploadedFile $file)
     {
-        $fileName = uploadFile($file, UPLOADS . '/pictures');
+        $fileName = uploadFile($file, UPLOADS . '/photos');
 
         File::query()->create([
             'relate_id'   => $this->id,
@@ -66,7 +66,7 @@ class Photo extends BaseModel
     public function delete()
     {
         $this->files->each(function($file) {
-            deleteFile(UPLOADS . '/pictures/' . $file->hash);
+            deleteFile(UPLOADS . '/photos/' . $file->hash);
             $file->delete();
         });
 

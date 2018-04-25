@@ -87,7 +87,7 @@ class PhotoController extends AdminController
      */
     public function delete()
     {
-        if (! is_writable(UPLOADS . '/pictures')){
+        if (! is_writable(UPLOADS . '/photos')){
             abort('default', 'Директория c фотографиями недоступна для записи!');
         }
 

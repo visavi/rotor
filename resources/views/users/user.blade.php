@@ -102,9 +102,9 @@
             </div>
 
             <div class="col-md-6">
-                @if (!empty($user->picture) && file_exists(UPLOADS.'/photos/'.$user->picture))
-                    <a class="gallery" href="/uploads/photos/{{ $user->picture }}">
-                        {!! resizeImage('/uploads/photos/' . $user->picture, ['alt' => $user->login, 'class' => 'float-right img-fluid rounded']) !!}</a>
+                @if (!empty($user->picture) && file_exists(UPLOADS . '/pictures/'.$user->picture))
+                    <a class="gallery" href="/uploads/pictures/{{ $user->picture }}">
+                        {!! resizeImage('/uploads/pictures/' . $user->picture, ['alt' => $user->login, 'class' => 'float-right img-fluid rounded']) !!}</a>
                 @else
                     <img src="/assets/img/images/photo.jpg" alt="Фото" class="float-right img-fluid rounded">
                 @endif
@@ -117,7 +117,7 @@
                 <b><a href="/forums/active/themes?user={{ $user->login }}">Форум</a></b> (<a href="/forums/active/posts?user={{ $user->login }}">Сообщ.</a>) /
                 <b><a href="/loads/active?act=files&amp;user={{ $user->login }}">Загрузки</a></b> (<a href="/loads/active?act=comments&amp;uz={{ $user->login }}">комм.</a>) /
                 <b><a href="/blogs/active/articles?user={{ $user->login }}">Блоги</a></b> (<a href="/blogs/active/comments?user={{ $user->login }}">комм.</a>) /
-                <b><a href="/photos/album/{{ $user->login }}">Галерея</a></b> (<a href="/photos/comments/{{ $user->login }}">комм.</a>)<br>
+                <b><a href="/photos/albums/{{ $user->login }}">Галерея</a></b> (<a href="/photos/comments/{{ $user->login }}">комм.</a>)<br>
             </div>
         </div>
     </div>

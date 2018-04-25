@@ -12,7 +12,7 @@
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
             <li class="breadcrumb-item"><a href="/photos">Галерея</a></li>
-            <li class="breadcrumb-item"><a href="/photos/album/{{ $photo->user->login }}">Альбом</a></li>
+            <li class="breadcrumb-item"><a href="/photos/albums/{{ $photo->user->login }}">Альбом</a></li>
             <li class="breadcrumb-item active">{{ $photo->title }}</li>
         </ol>
     </nav>
@@ -29,7 +29,7 @@
 
     <div>
         @foreach ($photo->files as $file)
-            <a href="/uploads/pictures/{{ $file->hash }}" class="gallery" data-group="{{ $photo->id }}"><img  class="img-fluid" src="/uploads/pictures/{{ $file->hash }}" alt="image"></a><br>
+            <a href="/uploads/photos/{{ $file->hash }}" class="gallery" data-group="{{ $photo->id }}"><img  class="img-fluid" src="/uploads/photos/{{ $file->hash }}" alt="image"></a><br>
         @endforeach
 
         @if ($photo->text)

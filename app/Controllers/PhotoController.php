@@ -37,10 +37,10 @@ class PhotoController extends BaseController
     public function view($id)
     {
         $photo = Photo::query()
-            ->select('photo.*', 'pollings.vote')
-            ->where('photo.id', $id)
+            ->select('photos.*', 'pollings.vote')
+            ->where('photos.id', $id)
             ->leftJoin('pollings', function (JoinClause $join) {
-                $join->on('photo.id', '=', 'pollings.relate_id')
+                $join->on('photos.id', '=', 'pollings.relate_id')
                     ->where('pollings.relate_type', Photo::class)
                     ->where('pollings.user_id', getUser('id'));
             })
@@ -154,7 +154,7 @@ class PhotoController extends BaseController
                 ]);
 
                 setFlash('success', 'Фотография успешно отредактирована!');
-                redirect('/photos/album/' . getUser('login') . '?page=' . $page);
+                redirect('/photos/albums/' . getUser('login') . '?page=' . $page);
             } else {
                 setInput(Request::all());
                 setFlash('danger', $validator->getErrors());
@@ -254,11 +254,11 @@ class PhotoController extends BaseController
         }
 
         $comment = Comment::query()
-            ->select('comments.*', 'photo.closed')
+            ->select('comments.*', 'photos.closed')
             ->where('relate_type', Photo::class)
             ->where('comments.id', $cid)
             ->where('comments.user_id', getUser('id'))
-            ->leftJoin('photo', 'comments.relate_id', '=', 'photo.id')
+            ->leftJoin('photos', 'comments.relate_id', '=', 'photos.id')
             ->first();
 
         if (! $comment) {
@@ -322,7 +322,7 @@ class PhotoController extends BaseController
         $validator = new Validator();
         $validator
             ->equal($token, $_SESSION['token'], 'Неверный идентификатор сессии, повторите действие!')
-            ->true(is_writable(HOME . '/uploads/pictures'), ['Не установлены атрибуты доступа на дирекоторию с фотографиями!'])
+            ->true(is_writable(HOME . '/uploads/photos'), ['Не установлены атрибуты доступа на дирекоторию с фотографиями!'])
             ->empty($photo->count_comments, 'Запрещено удалять фотографии к которым имеются комментарии!');
 
         if ($validator->isValid()) {
@@ -336,7 +336,7 @@ class PhotoController extends BaseController
             setFlash('danger', $validator->getErrors());
         }
 
-        redirect('/photos/album/' . getUser('login') . '?page=' . $page);
+        redirect('/photos/albums/' . getUser('login') . '?page=' . $page);
     }
 
     /**
@@ -366,7 +366,7 @@ class PhotoController extends BaseController
     {
         $total = Photo::query()
             ->distinct()
-            ->join('users', 'photo.user_id', '=', 'users.id')
+            ->join('users', 'photos.user_id', '=', 'users.id')
             ->count('user_id');
 
         $page = paginate(setting('photogroup'), $total);
@@ -374,7 +374,7 @@ class PhotoController extends BaseController
         $albums = Photo::query()
             ->select('user_id', 'login')
             ->selectRaw('count(*) as cnt, sum(count_comments) as count_comments')
-            ->join('users', 'photo.user_id', '=', 'users.id')
+            ->join('users', 'photos.user_id', '=', 'users.id')
             ->offset($page->offset)
             ->limit($page->limit)
             ->groupBy('user_id')
@@ -451,7 +451,7 @@ class PhotoController extends BaseController
         $comments = Comment::query()
             ->select('comments.*', 'title')
             ->where('relate_type', Photo::class)
-            ->leftJoin('photo', 'comments.relate_id', '=', 'photo.id')
+            ->leftJoin('photos', 'comments.relate_id', '=', 'photo.id')
             ->offset($page->offset)
             ->limit($page->limit)
             ->orderBy('comments.created_at', 'desc')
@@ -483,7 +483,7 @@ class PhotoController extends BaseController
             ->select('comments.*', 'title')
             ->where('relate_type', Photo::class)
             ->where('comments.user_id', $user->id)
-            ->leftJoin('photo', 'comments.relate_id', '=', 'photo.id')
+            ->leftJoin('photos', 'comments.relate_id', '=', 'photo.id')
             ->offset($page->offset)
             ->limit($page->limit)
             ->orderBy('comments.created_at', 'desc')

@@ -20,7 +20,7 @@
         @foreach ($albums as $data)
 
             <i class="fa fa-image"></i>
-            <b><a href="/photos/album/{{ $data->login }}">{{ $data->login }}</a></b> ({{ $data->cnt }} фото / {{ $data->count_comments }} комм.)<br>
+            <b><a href="/photos/albums/{{ $data->login }}">{{ $data->login }}</a></b> ({{ $data->cnt }} фото / {{ $data->count_comments }} комм.)<br>
 
         @endforeach
 

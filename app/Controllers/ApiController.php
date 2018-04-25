@@ -59,7 +59,7 @@ class ApiController extends BaseController
             'newprivat' => $user->newprivat,
             'status'    => userStatus($user),
             'avatar'    => siteUrl(true).'/uploads/avatars/'.$user->avatar,
-            'picture'   => siteUrl(true).'/uploads/photos/'.$user->picture,
+            'picture'   => siteUrl(true).'/uploads/pictures/'.$user->picture,
             'rating'    => $user->rating,
             'lastlogin' => $user->updated_at,
         ]);
