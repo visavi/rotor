@@ -5,13 +5,6 @@ namespace App\Models;
 class Error extends BaseModel
 {
     /**
-     * The table associated with the model.
-     *
-     * @var string
-     */
-    protected $table = 'errors';
-
-    /**
      * Indicates if the model should be timestamped.
      *
      * @var bool

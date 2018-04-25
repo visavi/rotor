@@ -2,7 +2,7 @@
 
 use App\Models\Blog;
 use App\Models\Down;
-use App\Models\Guest;
+use App\Models\Guestbook;
 use App\Models\Inbox;
 use App\Models\News;
 use App\Models\Offer;
@@ -28,7 +28,7 @@ class ChangeRelateInSpam extends AbstractMigration
         $this->execute('UPDATE spam SET relate_type="'.addslashes(Offer::class).'" WHERE relate_type="Offer";');
         $this->execute('UPDATE spam SET relate_type="'.addslashes(Down::class).'" WHERE relate_type="Down";');
         $this->execute('UPDATE spam SET relate_type="'.addslashes(Post::class).'" WHERE relate_type="Post";');
-        $this->execute('UPDATE spam SET relate_type="'.addslashes(Guest::class).'" WHERE relate_type="Guest";');
+        $this->execute('UPDATE spam SET relate_type="'.addslashes(Guestbook::class).'" WHERE relate_type="Guest";');
         $this->execute('UPDATE spam SET relate_type="'.addslashes(Inbox::class).'" WHERE relate_type="Inbox";');
         $this->execute('UPDATE spam SET relate_type="'.addslashes(Wall::class).'" WHERE relate_type="Wall";');
     }
@@ -48,7 +48,7 @@ class ChangeRelateInSpam extends AbstractMigration
         $this->execute('UPDATE spam SET relate_type="Offer" WHERE relate_type="'.addslashes(Offer::class).'";');
         $this->execute('UPDATE spam SET relate_type="Down" WHERE relate_type="'.addslashes(Down::class).'";');
         $this->execute('UPDATE spam SET relate_type="Post" WHERE relate_type="'.addslashes(Post::class).'";');
-        $this->execute('UPDATE spam SET relate_type="Guest" WHERE relate_type="'.addslashes(Guest::class).'";');
+        $this->execute('UPDATE spam SET relate_type="Guest" WHERE relate_type="'.addslashes(Guestbook::class).'";');
         $this->execute('UPDATE spam SET relate_type="Inbox" WHERE relate_type="'.addslashes(Inbox::class).'";');
         $this->execute('UPDATE spam SET relate_type="Wall" WHERE relate_type="'.addslashes(Wall::class).'";');
     }

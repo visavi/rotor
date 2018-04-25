@@ -26,9 +26,9 @@ header("Content-type:text/html; charset=utf-8");
         </td>
         <td class="t2"></td>
         <td class="t3">
-            <a title="Центр общения" class="menu" href="/forum">Форум</a> |
-            <a title="Гостевая комната" class="menu" href="/book">Гостевая</a> |
-            <a title="Загрузки" class="menu" href="/load">Загрузки</a> |
+            <a title="Центр общения" class="menu" href="/forums">Форум</a> |
+            <a title="Гостевая комната" class="menu" href="/guestbooks">Гостевая</a> |
+            <a title="Загрузки" class="menu" href="/loads">Загрузки</a> |
             @if (getUser())
                 <a title="Управление настройками" class="menu" href="/menu">Меню</a> |
                 <a title="Выход" class="menu" href="/logout"
@@ -63,7 +63,7 @@ header("Content-type:text/html; charset=utf-8");
                     @endif
 
                     @if (getUser('newchat') < statsNewChat())
-                        &bull; <a href="/admin/chat"><span style="color:#ff0000">Чат</span></a>
+                        &bull; <a href="/admin/chats"><span style="color:#ff0000">Чат</span></a>
                     @endif
                 </div>
             @endif

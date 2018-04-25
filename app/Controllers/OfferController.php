@@ -48,7 +48,7 @@ class OfferController extends BaseController
             ->with('user')
             ->get();
 
-        return view('offer/index', compact('offers', 'page', 'order', 'type'));
+        return view('offers/index', compact('offers', 'page', 'order', 'type'));
     }
 
     /**
@@ -70,7 +70,7 @@ class OfferController extends BaseController
             abort(404, 'Данного предложения или проблемы не существует!');
         }
 
-        return view('offer/view', compact('offer'));
+        return view('offers/view', compact('offer'));
     }
 
     /**
@@ -120,7 +120,7 @@ class OfferController extends BaseController
             }
         }
 
-        return view('offer/create');
+        return view('offers/create');
     }
 
     /**
@@ -178,7 +178,7 @@ class OfferController extends BaseController
             }
         }
 
-        return view('offer/edit', compact('offer'));
+        return view('offers/edit', compact('offer'));
     }
 
     /**
@@ -244,7 +244,7 @@ class OfferController extends BaseController
             ->limit($page->limit)
             ->get();
 
-        return view('offer/comments', compact('offer', 'comments', 'page'));
+        return view('offers/comments', compact('offer', 'comments', 'page'));
     }
 
     /**
@@ -302,7 +302,7 @@ class OfferController extends BaseController
             }
         }
 
-        return view('offer/editcomment', compact('offer', 'comment', 'page'));
+        return view('offers/editcomment', compact('offer', 'comment', 'page'));
     }
 
     /**

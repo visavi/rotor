@@ -52,13 +52,13 @@ class Post extends BaseModel
      */
     public function uploadFile(UploadedFile $file)
     {
-        if (! file_exists(UPLOADS . '/forum/' . $this->topic->id)) {
+        if (! file_exists(UPLOADS . '/forums/' . $this->topic->id)) {
             $old = umask(0);
-            mkdir(UPLOADS . '/forum/' . $this->topic->id, 0777, true);
+            mkdir(UPLOADS . '/forums/' . $this->topic->id, 0777, true);
             umask($old);
         }
 
-        $fileName = uploadFile($file, UPLOADS . '/forum/' . $this->topic->id);
+        $fileName = uploadFile($file, UPLOADS . '/forums/' . $this->topic->id);
 
         File::query()->create([
             'relate_id'   => $this->id,
@@ -80,7 +80,7 @@ class Post extends BaseModel
     public function delete()
     {
         $this->files->each(function($file) {
-            deleteFile(UPLOADS . '/forum/' . $this->topic_id . '/' . $file->hash);
+            deleteFile(UPLOADS . '/forums/' . $this->topic_id . '/' . $file->hash);
             $file->delete();
         });
 

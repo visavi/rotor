@@ -34,11 +34,11 @@ header('Content-type:text/html; charset=utf-8');
                 </div>
 
                 <div class="menu">
-                    <a href="/forum">Форум</a> &bull;
-                    <a href="/book">Гостевая</a> &bull;
+                    <a href="/forums">Форум</a> &bull;
+                    <a href="/guestbooks">Гостевая</a> &bull;
                     <a href="/news">Новости</a> &bull;
-                    <a href="/load">Загрузки</a> &bull;
-                    <a href="/blog">Блоги</a>
+                    <a href="/loads">Загрузки</a> &bull;
+                    <a href="/blogs">Блоги</a>
 
                     <span class="mright">
                         @yield('menu')

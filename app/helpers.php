@@ -12,11 +12,10 @@ use App\Models\Blog;
 use App\Models\Bookmark;
 use App\Models\Load;
 use App\Models\Chat;
-use App\Models\Comment;
 use App\Models\Contact;
 use App\Models\Counter;
 use App\Models\Down;
-use App\Models\Guest;
+use App\Models\Guestbook;
 use App\Models\Ignore;
 use App\Models\Inbox;
 use App\Models\Invite;
@@ -151,7 +150,7 @@ function deleteFile($path)
     }
 
     $thumb = ltrim(str_replace([HOME, '/'], ['', '_'], $path), '_');
-    $thumb = UPLOADS . '/thumbnail/' . $thumb;
+    $thumb = UPLOADS . '/thumbnails/' . $thumb;
 
     if (file_exists($thumb) && is_file($thumb)) {
         unlink($thumb);
@@ -565,7 +564,7 @@ function defaultAvatar(User $user)
     $color  = '#' . substr(dechex(crc32($user->login)), 0, 6);
     $letter = mb_strtoupper(utfSubstr($name, 0, 1), 'utf-8');
 
-    return '<div class="avatar" style="background:' . $color . '"><a href="/user/' . $user->login . '">' . $letter . '</a></div>';
+    return '<div class="avatar" style="background:' . $color . '"><a href="/users/' . $user->login . '">' . $letter . '</a></div>';
 }
 
 /**
@@ -581,11 +580,11 @@ function userAvatar(User $user)
     }
 
     if ($user->avatar && file_exists(UPLOADS . '/avatars/' . $user->avatar)) {
-        return '<a href="/user/' . $user->login . '"><img src="/uploads/avatars/' . $user->avatar . '" alt=""></a> ';
+        return '<a href="/users/' . $user->login . '"><img src="/uploads/avatars/' . $user->avatar . '" alt=""></a> ';
     }
 
     return defaultAvatar($user);
-    //return '<a href="/user/' . $user->login . '"><img src="/assets/img/images/avatar_default.png" alt=""></a> ';
+    //return '<a href="/users/' . $user->login . '"><img src="/assets/img/images/avatar_default.png" alt=""></a> ';
 }
 
 /**
@@ -788,9 +787,9 @@ function statsIpBanned()
  *
  * @return int количество фотографий
  */
-function statsGallery()
+function statsPhotos()
 {
-    if (@filemtime(STORAGE . '/temp/statgallery.dat') < time() - 900) {
+    if (@filemtime(STORAGE . '/temp/statphotos.dat') < time() - 900) {
         $stat     = Photo::query()->count();
         $totalNew = Photo::query()->where('created_at', '>', strtotime('-3 day', SITETIME))->count();
 
@@ -798,10 +797,10 @@ function statsGallery()
             $stat = $stat . '/+' . $totalNew;
         }
 
-        file_put_contents(STORAGE . '/temp/statgallery.dat', $stat, LOCK_EX);
+        file_put_contents(STORAGE . '/temp/statphotos.dat', $stat, LOCK_EX);
     }
 
-    return file_get_contents(STORAGE . '/temp/statgallery.dat');
+    return file_get_contents(STORAGE . '/temp/statphotos.dat');
 }
 
 /**
@@ -984,16 +983,16 @@ function statsForum()
  *
  * @return int количество сообщений
  */
-function statsGuest()
+function statsGuestbook()
 {
-    if (@filemtime(STORAGE . '/temp/statguest.dat') < time() - 600) {
+    if (@filemtime(STORAGE . '/temp/statguestbook.dat') < time() - 600) {
 
-        $total = Guest::query()->count();
+        $total = Guestbook::query()->count();
 
-        file_put_contents(STORAGE . '/temp/statguest.dat', $total, LOCK_EX);
+        file_put_contents(STORAGE . '/temp/statguestbook.dat', $total, LOCK_EX);
     }
 
-    return file_get_contents(STORAGE . '/temp/statguest.dat');
+    return file_get_contents(STORAGE . '/temp/statguestbook.dat');
 }
 
 /**
@@ -1368,7 +1367,7 @@ function recentPhotos($show = 5)
             $file = current($photo->files);
 
             if ($file) {
-                echo '<a href="/gallery/' . $photo->id . '">' . resizeImage('/uploads/pictures/' . $file->hash, ['alt' => $photo->title, 'class' => 'rounded', 'style' => 'width: 100px; height: 100px;']) . '</a>';
+                echo '<a href="/photos/' . $photo->id . '">' . resizeImage('/uploads/pictures/' . $file->hash, ['alt' => $photo->title, 'class' => 'rounded', 'style' => 'width: 100px; height: 100px;']) . '</a>';
             }
         }
 
@@ -1393,8 +1392,8 @@ function recentTopics($show = 5)
 
     if ($topics) {
         foreach ($topics as $topic) {
-            echo '<i class="far fa-circle fa-lg text-muted"></i>  <a href="/topic/' . $topic->id . '">' . $topic->title . '</a> (' . $topic->count_posts . ')';
-            echo '<a href="/topic/end/' . $topic->id . '">&raquo;</a><br>';
+            echo '<i class="far fa-circle fa-lg text-muted"></i>  <a href="/topics/' . $topic->id . '">' . $topic->title . '</a> (' . $topic->count_posts . ')';
+            echo '<a href="/topics/end/' . $topic->id . '">&raquo;</a><br>';
         }
     }
 }
@@ -1424,7 +1423,7 @@ function recentFiles($show = 5)
     if ($files) {
         foreach ($files as $file) {
             $rating = $file->rated ? round($file->rating / $file->rated, 1) : 0;
-            echo '<i class="far fa-circle fa-lg text-muted"></i>  <a href="/down/' . $file->id . '">' . $file->title . '</a> (' . $rating . ')<br>';
+            echo '<i class="far fa-circle fa-lg text-muted"></i>  <a href="/downs/' . $file->id . '">' . $file->title . '</a> (' . $rating . ')<br>';
         }
     }
 }
@@ -1450,7 +1449,7 @@ function recentBlogs($show = 5)
 
     if ($blogs) {
         foreach ($blogs as $blog) {
-            echo '<i class="far fa-circle fa-lg text-muted"></i> <a href="/article/' . $blog->id . '">' . $blog->title . '</a> (' . $blog->count_comments . ')<br>';
+            echo '<i class="far fa-circle fa-lg text-muted"></i> <a href="/articles/' . $blog->id . '">' . $blog->title . '</a> (' . $blog->count_comments . ')<br>';
         }
     }
 }
@@ -1482,18 +1481,18 @@ function statsOffers()
 function restatement($mode)
 {
     switch ($mode) {
-        case 'forum':
+        case 'forums':
             DB::update('update topics set count_posts = (select count(*) from posts where topics.id = posts.topic_id)');
             DB::update('update forums set count_topics = (select count(*) from topics where forums.id = topics.forum_id)');
             DB::update('update forums set count_posts = (select ifnull(sum(count_posts), 0) from topics where forums.id = topics.forum_id)');
             break;
 
-        case 'blog':
+        case 'blogs':
             DB::update('update categories set count_blogs = (select count(*) from blogs where categories.id = blogs.category_id)');
             DB::update('update blogs set count_comments = (select count(*) from comments where relate_type = "' . addslashes(Blog::class) . '" and blogs.id = comments.relate_id)');
             break;
 
-        case 'load':
+        case 'loads':
             DB::update('update loads set count_downs = (select count(*) from downs where loads.id = downs.category_id and active = ?)', [1]);
             DB::update('update downs set count_comments = (select count(*) from comments where relate_type = "' . addslashes(Down::class) . '" and downs.id = comments.relate_id)');
             break;
@@ -1502,11 +1501,11 @@ function restatement($mode)
             DB::update('update news set count_comments = (select count(*) from comments where relate_type = "' . addslashes(News::class) . '" and news.id = comments.relate_id)');
             break;
 
-        case 'photo':
-            DB::update('update photo set count_comments = (select count(*) from comments where relate_type=  "' . addslashes(Photo::class) . '" and photo.id = comments.relate_id)');
+        case 'photos':
+            DB::update('update photos set count_comments = (select count(*) from comments where relate_type=  "' . addslashes(Photo::class) . '" and photos.id = comments.relate_id)');
             break;
 
-        case 'offer':
+        case 'offers':
             DB::update('update offers set count_comments = (select count(*) from comments where relate_type=  "' . addslashes(Offer::class) . '" and offers.id = comments.relate_id)');
             break;
     }
@@ -1540,10 +1539,10 @@ function profile(User $user, $color = null)
         $name = empty($user->name) ? $user->login : $user->name;
 
         if ($color) {
-            return '<a href="/user/' . $user->login . '"><span style="color:' . $color . '">' . $name . '</span></a>';
+            return '<a href="/users/' . $user->login . '"><span style="color:' . $color . '">' . $name . '</span></a>';
         }
 
-        return '<a href="/user/' . $user->login . '">' . $name . '</a>';
+        return '<a href="/users/' . $user->login . '">' . $name . '</a>';
     }
 
     return setting('guestsuser');
@@ -1646,7 +1645,7 @@ function resizeImage($path, array $params = [])
 
     $thumb = ltrim(str_replace('/', '_', $path), '_');
 
-    if (! file_exists(UPLOADS . '/thumbnail/' . $thumb)) {
+    if (! file_exists(UPLOADS . '/thumbnails/' . $thumb)) {
 
         $img = Image::make(HOME . $path);
 
@@ -1654,10 +1653,10 @@ function resizeImage($path, array $params = [])
             $constraint->upsize();
         });
 
-        $img->save(UPLOADS . '/thumbnail/' . $thumb);
+        $img->save(UPLOADS . '/thumbnails/' . $thumb);
     }
 
-    return '<img src="/uploads/thumbnail/' . $thumb . '" ' . $strParams . '>';
+    return '<img src="/uploads/thumbnails/' . $thumb . '" ' . $strParams . '>';
 }
 
 
@@ -1729,7 +1728,7 @@ function removeDir($dir)
  * @param  int  $text   текст сообщения
  * @return bool         результат отправки
  */
-function sendPrivate(User $user, User $author = null, $text)
+function sendMessage(User $user, User $author = null, $text)
 {
     Inbox::query()->create([
         'user_id'    => $user->id,
@@ -2429,22 +2428,22 @@ function ipBan($save = false)
  */
 function setting($key = null)
 {
-    if (! Registry::has('setting')) {
+    if (! Registry::has('settings')) {
 
-        if (! file_exists(STORAGE . '/temp/setting.dat')) {
-            saveSetting();
+        if (! file_exists(STORAGE . '/temp/settings.dat')) {
+            saveSettings();
         }
 
-        $setting = json_decode(file_get_contents(STORAGE . '/temp/setting.dat'), true);
+        $setting = json_decode(file_get_contents(STORAGE . '/temp/settings.dat'), true);
 
-        Registry::set('setting', $setting);
+        Registry::set('settings', $setting);
     }
 
     if (! $key) {
-        return Registry::get('setting');
+        return Registry::get('settings');
     }
 
-    return Registry::get('setting')[$key] ?? null;
+    return Registry::get('settings')[$key] ?? null;
 }
 
 /**
@@ -2454,16 +2453,16 @@ function setting($key = null)
  */
 function setSetting($setting)
 {
-    $setting = array_merge(Registry::get('setting'), $setting);
-    Registry::set('setting', $setting);
+    $setting = array_merge(Registry::get('settings'), $setting);
+    Registry::set('settings', $setting);
 }
 
 /**
  * Кеширует настройки сайта
  */
-function saveSetting() {
-    $setting = Setting::query()->pluck('value', 'name')->all();
-    file_put_contents(STORAGE . '/temp/setting.dat', json_encode($setting, JSON_UNESCAPED_UNICODE), LOCK_EX);
+function saveSettings() {
+    $settings = Setting::query()->pluck('value', 'name')->all();
+    file_put_contents(STORAGE . '/temp/settings.dat', json_encode($settings, JSON_UNESCAPED_UNICODE), LOCK_EX);
 }
 
 /**

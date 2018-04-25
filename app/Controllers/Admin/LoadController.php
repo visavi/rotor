@@ -35,7 +35,7 @@ class LoadController extends AdminController
             ->orderBy('sort')
             ->get();
 
-        return view('admin/load/index', compact('categories'));
+        return view('admin/loads/index', compact('categories'));
     }
 
     /**
@@ -64,13 +64,13 @@ class LoadController extends AdminController
             ]);
 
             setFlash('success', 'Новый раздел успешно создан!');
-            redirect('/admin/load/edit/' . $load->id);
+            redirect('/admin/loads/edit/' . $load->id);
         } else {
             setInput(Request::all());
             setFlash('danger', $validator->getErrors());
         }
 
-        redirect('/admin/load');
+        redirect('/admin/loads');
     }
 
     /**
@@ -119,14 +119,14 @@ class LoadController extends AdminController
                 ]);
 
                 setFlash('success', 'Раздел успешно отредактирован!');
-                redirect('/admin/load');
+                redirect('/admin/loads');
             } else {
                 setInput(Request::all());
                 setFlash('danger', $validator->getErrors());
             }
         }
 
-        return view('admin/load/edit', compact('loads', 'load'));
+        return view('admin/loads/edit', compact('loads', 'load'));
     }
 
     /**
@@ -164,7 +164,7 @@ class LoadController extends AdminController
             setFlash('danger', $validator->getErrors());
         }
 
-        redirect('/admin/load');
+        redirect('/admin/loads');
     }
 
     /**
@@ -180,14 +180,14 @@ class LoadController extends AdminController
 
         if ($token == $_SESSION['token']) {
 
-            restatement('load');
+            restatement('loads');
 
             setFlash('success', 'Данные успешно пересчитаны!');
         } else {
             setFlash('danger', 'Ошибка! Неверный идентификатор сессии, повторите действие!');
         }
 
-        redirect('/admin/load');
+        redirect('/admin/loads');
     }
 
     /**
@@ -228,7 +228,7 @@ class LoadController extends AdminController
             ->limit($page->limit)
             ->get();
 
-        return view('admin/load/load', compact('category', 'downs', 'page', 'order'));
+        return view('admin/loads/load', compact('category', 'downs', 'page', 'order'));
     }
 
     /**
@@ -296,12 +296,12 @@ class LoadController extends AdminController
                 }
 
                 if (! $down->active) {
-                    $text = 'Уведомеление об изменении файла.'.PHP_EOL.'Ваш файл [b][url='.siteUrl().'/down/'.$down->id.']'.$down->title.'[/url][/b] был отредактирован модератором, возможно от вас потребуются дополнительные исправления!';
-                    sendPrivate($down->user, null, $text);
+                    $text = 'Уведомеление об изменении файла.'.PHP_EOL.'Ваш файл [b][url='.siteUrl().'/downs/'.$down->id.']'.$down->title.'[/url][/b] был отредактирован модератором, возможно от вас потребуются дополнительные исправления!';
+                    sendMessage($down->user, null, $text);
                 }
 
                 setFlash('success', 'Загрузка успешно отредактирована!');
-                redirect('/admin/down/edit/' . $down->id);
+                redirect('/admin/downs/edit/' . $down->id);
             } else {
                 setInput(Request::all());
                 setFlash('danger', $validator->getErrors());
@@ -314,7 +314,7 @@ class LoadController extends AdminController
             ->orderBy('sort')
             ->get();
 
-        return view('admin/load/edit_down', compact('categories', 'down'));
+        return view('admin/loads/edit_down', compact('categories', 'down'));
     }
 
     /**
@@ -347,7 +347,7 @@ class LoadController extends AdminController
             setFlash('danger', 'Ошибка! Неверный идентификатор сессии, повторите действие!');
         }
 
-        redirect('/admin/load/' . $down->category_id);
+        redirect('/admin/loads/' . $down->category_id);
     }
 
     /**
@@ -376,7 +376,7 @@ class LoadController extends AdminController
         setFlash('success', 'Файл успешно удален!');
         $file->delete();
 
-        redirect('/admin/down/edit/' . $down->id);
+        redirect('/admin/downs/edit/' . $down->id);
     }
 
     /**
@@ -395,7 +395,7 @@ class LoadController extends AdminController
             ->with('user', 'category', 'files')
             ->get();
 
-        return view('admin/load/new', compact('downs', 'page'));
+        return view('admin/loads/new', compact('downs', 'page'));
     }
 
     /**
@@ -423,15 +423,15 @@ class LoadController extends AdminController
                 $type = 'опубликована' ;
                 $down->category->increment('count_downs');
 
-                $text = 'Уведомеление о публикации файла.'.PHP_EOL.'Ваш файл [b][url='.siteUrl().'/down/'.$down->id.']'.$down->title.'[/url][/b] успешно прошел проверку и добавлен в загрузки';
-                sendPrivate($down->user, null, $text);
+                $text = 'Уведомеление о публикации файла.'.PHP_EOL.'Ваш файл [b][url='.siteUrl().'/downs/'.$down->id.']'.$down->title.'[/url][/b] успешно прошел проверку и добавлен в загрузки';
+                sendMessage($down->user, null, $text);
 
             } else {
                 $type = 'снята с публикации';
                 $down->category->decrement('count_downs');
 
-                $text = 'Уведомеление о cнятии с публикации.'.PHP_EOL.'Ваш файл [b][url='.siteUrl().'/down/'.$down->id.']'.$down->title.'[/url][/b] снят с публикации из загрузок';
-                sendPrivate($down->user, null, $text);
+                $text = 'Уведомеление о cнятии с публикации.'.PHP_EOL.'Ваш файл [b][url='.siteUrl().'/downs/'.$down->id.']'.$down->title.'[/url][/b] снят с публикации из загрузок';
+                sendMessage($down->user, null, $text);
             }
 
             setFlash('success', 'Загрузка успешно ' . $type . '!');
@@ -439,6 +439,6 @@ class LoadController extends AdminController
             setFlash('danger', 'Ошибка! Неверный идентификатор сессии, повторите действие!');
         }
 
-        redirect('/admin/down/edit/' . $down->id);
+        redirect('/admin/downs/edit/' . $down->id);
     }
 }

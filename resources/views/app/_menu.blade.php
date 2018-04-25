@@ -1,5 +1,5 @@
 @if (getUser())
-    <i class="fa fa-user-circle fa-lg"></i> <a href="/user/{{ getUser('login') }}">{{ getUser('login') }}</a> &bull;
+    <i class="fa fa-user-circle fa-lg"></i> <a href="/users/{{ getUser('login') }}">{{ getUser('login') }}</a> &bull;
 
     @if (isAdmin())
         <a href="/admin">Панель</a> &bull;
@@ -8,7 +8,7 @@
         @endif
 
         @if (getUser('newchat') < statsNewChat())
-            <a href="/admin/chat"><span style="color:#ff0000">Чат</span></a> &bull;
+            <a href="/admin/chats"><span style="color:#ff0000">Чат</span></a> &bull;
         @endif
     @endif
         <a href="/menu">Меню</a> &bull;

@@ -79,7 +79,7 @@ class BlacklistController extends AdminController
                 ]);
 
                 setFlash('success', 'Запись успешно добавлена в черный список!');
-                redirect('/admin/blacklist?type=' . $type);
+                redirect('/admin/blacklists?type=' . $type);
             } else {
                 setInput(Request::all());
                 setFlash('danger', $validator->getErrors());
@@ -97,7 +97,7 @@ class BlacklistController extends AdminController
             ->with('user')
             ->get();
 
-        return view('admin/blacklist/index', compact('lists', 'type', 'page'));
+        return view('admin/blacklists/index', compact('lists', 'type', 'page'));
     }
 
     /**
@@ -122,6 +122,6 @@ class BlacklistController extends AdminController
             setFlash('danger', $validator->getErrors());
         }
 
-        redirect('/admin/blacklist?type=' . $type . '&page=' . $page);
+        redirect('/admin/blacklists?type=' . $type . '&page=' . $page);
     }
 }

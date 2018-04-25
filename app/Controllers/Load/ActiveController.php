@@ -57,7 +57,7 @@ class ActiveController extends BaseController
             ->with('category', 'user')
             ->get();
 
-        return view('load/active_files', compact('downs', 'page', 'user', 'active'));
+        return view('loads/active_files', compact('downs', 'page', 'user', 'active'));
     }
 
     /**
@@ -85,7 +85,7 @@ class ActiveController extends BaseController
             ->with('user')
             ->get();
 
-        return view('load/active_comments', compact('comments', 'page', 'user'));
+        return view('loads/active_comments', compact('comments', 'page', 'user'));
     }
 }
 

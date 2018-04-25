@@ -28,7 +28,7 @@ class PhotoController extends BaseController
             ->with('user', 'files')
             ->get();
 
-        return view('gallery/index', compact('photos', 'page'));
+        return view('photos/index', compact('photos', 'page'));
     }
 
     /**
@@ -51,7 +51,7 @@ class PhotoController extends BaseController
             abort(404, 'Фотография не найдена');
         }
 
-        return view('gallery/view', compact('photo'));
+        return view('photos/view', compact('photo'));
     }
 
     /**
@@ -106,14 +106,14 @@ class PhotoController extends BaseController
                 }
 
                 setFlash('success', 'Фотография успешно загружена!');
-                redirect('/gallery/' . $photo->id);
+                redirect('/photos/' . $photo->id);
             } else {
                 setInput(Request::all());
                 setFlash('danger', $validator->getErrors());
             }
         }
 
-        return view('gallery/create');
+        return view('photos/create');
     }
 
     /**
@@ -154,7 +154,7 @@ class PhotoController extends BaseController
                 ]);
 
                 setFlash('success', 'Фотография успешно отредактирована!');
-                redirect('/gallery/album/' . getUser('login') . '?page=' . $page);
+                redirect('/photos/album/' . getUser('login') . '?page=' . $page);
             } else {
                 setInput(Request::all());
                 setFlash('danger', $validator->getErrors());
@@ -163,7 +163,7 @@ class PhotoController extends BaseController
 
         $checked = ($photo['closed'] == 1) ? ' checked' : '';
 
-        return view('gallery/edit', compact('photo', 'checked', 'page'));
+        return view('photos/edit', compact('photo', 'checked', 'page'));
     }
 
     /**
@@ -212,7 +212,7 @@ class PhotoController extends BaseController
                 $photo->increment('count_comments');
 
                 setFlash('success', 'Комментарий успешно добавлен!');
-                redirect('/gallery/end/' . $photo->id);
+                redirect('/photos/end/' . $photo->id);
             } else {
                 setInput(Request::all());
                 setFlash('danger', $validator->getErrors());
@@ -234,7 +234,7 @@ class PhotoController extends BaseController
             ->with('user')
             ->get();
 
-        return view('gallery/comments', compact('photo', 'comments', 'page'));
+        return view('photos/comments', compact('photo', 'comments', 'page'));
     }
 
     /**
@@ -291,13 +291,13 @@ class PhotoController extends BaseController
                 ]);
 
                 setFlash('success', 'Комментарий успешно отредактирован!');
-                redirect('/gallery/comments/' . $photo->id . '?page=' . $page);
+                redirect('/photos/comments/' . $photo->id . '?page=' . $page);
             } else {
                 setInput(Request::all());
                 setFlash('danger', $validator->getErrors());
             }
         }
-        return view('gallery/editcomment', compact('photo', 'comment', 'page'));
+        return view('photos/editcomment', compact('photo', 'comment', 'page'));
     }
 
     /**
@@ -336,7 +336,7 @@ class PhotoController extends BaseController
             setFlash('danger', $validator->getErrors());
         }
 
-        redirect('/gallery/album/' . getUser('login') . '?page=' . $page);
+        redirect('/photos/album/' . getUser('login') . '?page=' . $page);
     }
 
     /**
@@ -356,7 +356,7 @@ class PhotoController extends BaseController
             ->count();
 
         $end = ceil($total / setting('postgallery'));
-        redirect('/gallery/comments/' . $id . '?page=' . $end);
+        redirect('/photos/comments/' . $id . '?page=' . $end);
     }
 
     /**
@@ -381,7 +381,7 @@ class PhotoController extends BaseController
             ->orderBy('cnt', 'desc')
             ->get();
 
-        return view('gallery/albums', compact('albums', 'page'));
+        return view('photos/albums', compact('albums', 'page'));
     }
 
     /**
@@ -409,7 +409,7 @@ class PhotoController extends BaseController
 
         $moder = (getUser('id') == $user->id) ? 1 : 0;
 
-        return view('gallery/user_albums', compact('photos', 'moder', 'page', 'user'));
+        return view('photos/user_albums', compact('photos', 'moder', 'page', 'user'));
     }
 
     /**
@@ -437,7 +437,7 @@ class PhotoController extends BaseController
             ->with('user')
             ->get();
 
-        return view('gallery/top', compact('photos', 'page', 'order'));
+        return view('photos/top', compact('photos', 'page', 'order'));
     }
 
     /**
@@ -458,7 +458,7 @@ class PhotoController extends BaseController
             ->with('user')
             ->get();
 
-        return view('gallery/all_comments', compact('comments', 'page'));
+        return view('photos/all_comments', compact('comments', 'page'));
     }
 
     /**
@@ -490,7 +490,7 @@ class PhotoController extends BaseController
             ->with('user')
             ->get();
 
-        return view('gallery/user_comments', compact('comments', 'page', 'user'));
+        return view('photos/user_comments', compact('comments', 'page', 'user'));
     }
 
     /**
@@ -512,6 +512,6 @@ class PhotoController extends BaseController
             ->count();
 
         $end = ceil($total / setting('postgallery'));
-        redirect('/gallery/comments/' . $id . '?page=' . $end . '#comment_' . $cid);
+        redirect('/photos/comments/' . $id . '?page=' . $end . '#comment_' . $cid);
     }
 }

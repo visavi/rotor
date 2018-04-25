@@ -13,7 +13,7 @@ class SearchController extends BaseController
      */
     public function index()
     {
-        return view('user/search');
+        return view('users/search');
     }
 
     /**
@@ -26,7 +26,7 @@ class SearchController extends BaseController
         if (utfStrlen($find) < 3 || utfStrlen($find) > 20) {
             setInput(Request::all());
             setFlash('danger', ['find' => 'Слишком короткий или длинный запрос, от 3 до 20 символов!']);
-            redirect('/searchuser');
+            redirect('/searchusers');
         }
 
         $users = User::query()
@@ -36,7 +36,7 @@ class SearchController extends BaseController
             ->limit(setting('usersearch'))
             ->get();
 
-        return view('user/search_result', compact('users'));
+        return view('users/search_result', compact('users'));
     }
 
     /**
@@ -59,6 +59,6 @@ class SearchController extends BaseController
             ->limit($page->limit)
             ->get();
 
-        return view('user/search_sort', compact('users', 'page'));
+        return view('users/search_sort', compact('users', 'page'));
     }
 }

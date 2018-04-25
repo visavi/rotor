@@ -56,7 +56,7 @@ class ChatController extends AdminController
                 }
 
                 setFlash('success', 'Сообщение успешно добавлено!');
-                redirect ('/admin/chat');
+                redirect ('/admin/chats');
             } else {
                 setInput(Request::all());
                 setFlash('danger', $validator->getErrors());
@@ -73,7 +73,7 @@ class ChatController extends AdminController
             ->with('user', 'editUser')
             ->get();
 
-        return view('admin/chat/index', compact('posts', 'page'));
+        return view('admin/chats/index', compact('posts', 'page'));
     }
 
     /**
@@ -115,14 +115,14 @@ class ChatController extends AdminController
                 ]);
 
                 setFlash('success', 'Сообщение успешно отредактировано!');
-                redirect('/admin/chat?page=' . $page);
+                redirect('/admin/chats?page=' . $page);
             } else {
                 setInput(Request::all());
                 setFlash('danger', $validator->getErrors());
             }
         }
 
-        return view('admin/chat/edit', compact('post', 'page'));
+        return view('admin/chats/edit', compact('post', 'page'));
     }
 
     /**
@@ -146,6 +146,6 @@ class ChatController extends AdminController
             setFlash('danger', $validator->getErrors());
         }
 
-        redirect('/admin/chat');
+        redirect('/admin/chats');
     }
 }

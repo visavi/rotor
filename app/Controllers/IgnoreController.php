@@ -57,7 +57,7 @@ class IgnoreController extends BaseController
 
                 if (! isIgnore($user, getUser())) {
                     $message = 'Пользователь [b]' . getUser('login') . '[/b] добавил вас в свой игнор-лист!';
-                    sendPrivate($user, getUser(), $message);
+                    sendMessage($user, getUser(), $message);
                 }
 
                 setFlash('success', 'Пользователь успешно добавлен в игнор-лист!');
@@ -79,7 +79,7 @@ class IgnoreController extends BaseController
             ->with('ignoring')
             ->get();
 
-        return view('ignore/index', compact('ignores', 'page'));
+        return view('ignores/index', compact('ignores', 'page'));
     }
 
     /**
@@ -112,14 +112,14 @@ class IgnoreController extends BaseController
                 ]);
 
                 setFlash('success', 'Заметка успешно отредактирована!');
-                redirect('/ignore');
+                redirect('/ignores');
             } else {
                 setInput(Request::all());
                 setFlash('danger', $validator->getErrors());
             }
         }
 
-        return view('ignore/note', compact('ignore'));
+        return view('ignores/note', compact('ignore'));
     }
 
     /**
@@ -147,6 +147,6 @@ class IgnoreController extends BaseController
             setFlash('danger', $validator->getErrors());
         }
 
-        redirect('/ignore?page=' . $page);
+        redirect('/ignores?page=' . $page);
     }
 }

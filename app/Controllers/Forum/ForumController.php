@@ -31,7 +31,7 @@ class ForumController extends BaseController
             abort('default', 'Разделы форума еще не созданы!');
         }
 
-        return view('forum/index', compact('forums'));
+        return view('forums/index', compact('forums'));
     }
 
     /**
@@ -58,7 +58,7 @@ class ForumController extends BaseController
             ->with('lastPost.user')
             ->get();
 
-        return view('forum/forum', compact('forum', 'topics', 'page'));
+        return view('forums/forum', compact('forum', 'topics', 'page'));
     }
 
     /**
@@ -184,14 +184,14 @@ class ForumController extends BaseController
                 }
 
                 setFlash('success', 'Новая тема успешно создана!');
-                redirect('/topic/'.$topic->id);
+                redirect('/topics/'.$topic->id);
             } else {
                 setInput(Request::all());
                 setFlash('danger', $validator->getErrors());
             }
         }
 
-        return view('forum/forum_create', compact('forums', 'fid'));
+        return view('forums/forum_create', compact('forums', 'fid'));
     }
 
     /**
@@ -217,7 +217,7 @@ class ForumController extends BaseController
                 abort('default', 'Разделы форума еще не созданы!');
             }
 
-            return view('forum/search', compact('forums', 'fid'));
+            return view('forums/search', compact('forums', 'fid'));
 
         }
 
@@ -280,12 +280,12 @@ class ForumController extends BaseController
                         ->limit($page->limit)
                         ->get();
 
-                    return view('forum/search_topics', compact('topics', 'page', 'find', 'type', 'where', 'section', 'period'));
+                    return view('forums/search_topics', compact('topics', 'page', 'find', 'type', 'where', 'section', 'period'));
                 }
 
                 setInput(Request::all());
                 setFlash('danger', 'По вашему запросу ничего не найдено!');
-                redirect('/forum/search');
+                redirect('/forums/search');
             }
 
             // Поиск в сообщениях
@@ -321,18 +321,18 @@ class ForumController extends BaseController
                         ->limit($page->limit)
                         ->get();
 
-                    return view('forum/search_posts', compact('posts', 'page', 'find', 'type', 'where', 'section', 'period'));
+                    return view('forums/search_posts', compact('posts', 'page', 'find', 'type', 'where', 'section', 'period'));
                 }
 
                 setInput(Request::all());
                 setFlash('danger', 'По вашему запросу ничего не найдено!');
-                redirect('/forum/search');
+                redirect('/forums/search');
             }
 
         } else {
             setInput(Request::all());
             setFlash('danger', ['find' => 'Запрос должен содержать от 3 до 50 символов!']);
-            redirect('/forum/search');
+            redirect('/forums/search');
         }
     }
 
@@ -352,7 +352,7 @@ class ForumController extends BaseController
             abort('default', 'Нет тем для отображения!');
         }
 
-        return view('forum/rss', compact('topics'));
+        return view('forums/rss', compact('topics'));
     }
 
     /**
@@ -373,7 +373,7 @@ class ForumController extends BaseController
             ->limit(15)
             ->get();
 
-        return view('forum/rss_posts', compact('topic', 'posts'));
+        return view('forums/rss_posts', compact('topic', 'posts'));
     }
 
     /**
@@ -397,7 +397,7 @@ class ForumController extends BaseController
             ->with('forum', 'user', 'lastPost.user')
             ->get();
 
-        return view('forum/top', compact('topics', 'page'));
+        return view('forums/top', compact('topics', 'page'));
     }
 
     /**
@@ -420,6 +420,6 @@ class ForumController extends BaseController
             ->with('topic', 'user')
             ->get();
 
-        return view('forum/top_posts', compact('posts', 'page'));
+        return view('forums/top_posts', compact('posts', 'page'));
     }
 }

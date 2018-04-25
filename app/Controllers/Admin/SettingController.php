@@ -59,10 +59,10 @@ class SettingController extends AdminController
                     Setting::query()->where('name', $name)->update(['value' => $value]);
                 }
 
-                saveSetting();
+                saveSettings();
 
                 setFlash('success', 'Настройки сайта успешно изменены!');
-                redirect('/admin/setting?act=' . $act);
+                redirect('/admin/settings?act=' . $act);
             } else {
                 setInput(Request::all());
                 setFlash('danger', $validator->getErrors());
@@ -71,6 +71,6 @@ class SettingController extends AdminController
 
         $settings = Setting::query()->pluck('value', 'name')->all();
 
-        return view('admin/setting/index', compact('settings', 'act'));
+        return view('admin/settings/index', compact('settings', 'act'));
     }
 }

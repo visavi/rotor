@@ -3,14 +3,14 @@ storage/backup/
 storage/cache/
 storage/temp/
 public/uploads/files/
-public/uploads/screen/
+public/uploads/screens/
 public/uploads/avatars/
 public/uploads/counters/
-public/uploads/forum/
+public/uploads/forums/
 public/uploads/news/
 public/uploads/photos/
 public/uploads/pictures/
-public/uploads/thumbnail/
+public/uploads/thumbnails/
 public/uploads/smiles/
 vendor
 composer.phar

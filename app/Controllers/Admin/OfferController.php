@@ -59,7 +59,7 @@ class OfferController extends AdminController
             ->with('user')
             ->get();
 
-        return view('admin/offer/index', compact('offers', 'page', 'order', 'type'));
+        return view('admin/offers/index', compact('offers', 'page', 'order', 'type'));
     }
 
     /**
@@ -75,7 +75,7 @@ class OfferController extends AdminController
             abort(404, 'Данного предложения или проблемы не существует!');
         }
 
-        return view('admin/offer/view', compact('offer'));
+        return view('admin/offers/view', compact('offer'));
     }
 
     /**
@@ -124,7 +124,7 @@ class OfferController extends AdminController
             }
         }
 
-        return view('admin/offer/edit', compact('offer'));
+        return view('admin/offers/edit', compact('offer'));
     }
 
     /**
@@ -172,7 +172,7 @@ class OfferController extends AdminController
 
         $statuses = Offer::STATUSES;
 
-        return view('admin/offer/reply', compact('offer', 'statuses'));
+        return view('admin/offers/reply', compact('offer', 'statuses'));
     }
 
     /**
@@ -188,7 +188,7 @@ class OfferController extends AdminController
 
         if ($token == $_SESSION['token']) {
 
-            restatement('offer');
+            restatement('offers');
 
             setFlash('success', 'Комментарии успешно пересчитаны!');
         } else {

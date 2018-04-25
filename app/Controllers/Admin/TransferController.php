@@ -22,7 +22,7 @@ class TransferController extends AdminController
             ->with('user', 'recipientUser')
             ->get();
 
-        return view('admin/transfer/index', compact('transfers', 'page'));
+        return view('admin/transfers/index', compact('transfers', 'page'));
     }
 
     /**
@@ -47,6 +47,6 @@ class TransferController extends AdminController
             ->with('user', 'recipientUser')
             ->get();
 
-        return view('admin/transfer/view', compact('transfers', 'page', 'user'));
+        return view('admin/transfers/view', compact('transfers', 'page', 'user'));
     }
 }

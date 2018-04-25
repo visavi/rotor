@@ -18,23 +18,23 @@
     <i class="fa fa-key fa-lg"></i> <b><a href="/admin/upgrade">Версия {{ VERSION }}.{{ setting('buildversion') }}</a></b><br><br>
 
     <div class="b"><i class="fa fa-cog fa-lg text-muted"></i> <b>Редактор</b></div>
-    <i class="far fa-circle fa-lg text-muted"></i> <a href="/admin/chat">Админ-чат</a> ({{ statsChat() }})<br>
-    <i class="far fa-circle fa-lg text-muted"></i> <a href="/admin/book">Гостевая книга</a> ({{ statsGuest() }})<br>
-    <i class="far fa-circle fa-lg text-muted"></i> <a href="/admin/forum">Форум</a> ({{ statsForum() }})<br>
-    <i class="far fa-circle fa-lg text-muted"></i> <a href="/admin/gallery">Галерея</a> ({{ statsGallery() }})<br>
-    <i class="far fa-circle fa-lg text-muted"></i> <a href="/admin/blog">Блоги</a> ({{ statsBlog() }})<br>
+    <i class="far fa-circle fa-lg text-muted"></i> <a href="/admin/chats">Админ-чат</a> ({{ statsChat() }})<br>
+    <i class="far fa-circle fa-lg text-muted"></i> <a href="/admin/guestbooks">Гостевая книга</a> ({{ statsGuestbook() }})<br>
+    <i class="far fa-circle fa-lg text-muted"></i> <a href="/admin/forums">Форум</a> ({{ statsForum() }})<br>
+    <i class="far fa-circle fa-lg text-muted"></i> <a href="/admin/photos">Галерея</a> ({{ statsPhotos() }})<br>
+    <i class="far fa-circle fa-lg text-muted"></i> <a href="/admin/blogs">Блоги</a> ({{ statsBlog() }})<br>
     <i class="far fa-circle fa-lg text-muted"></i> <a href="/admin/reklama">Пользовательская реклама</a><br>
 
     @if (isAdmin('moder'))
         <div class="b"><i class="fa fa-cog fa-lg text-muted"></i> <b>Модератор</b></div>
-        <i class="far fa-circle fa-lg text-muted"></i> <a href="/admin/ban">Бан / Разбан</a><br>
-        <i class="far fa-circle fa-lg text-muted"></i> <a href="/admin/banlist">Список забаненых</a> ({{ statsBanned() }})<br>
+        <i class="far fa-circle fa-lg text-muted"></i> <a href="/admin/bans">Бан / Разбан</a><br>
+        <i class="far fa-circle fa-lg text-muted"></i> <a href="/admin/banlists">Список забаненых</a> ({{ statsBanned() }})<br>
         <i class="far fa-circle fa-lg text-muted"></i> <a href="/admin/spam">Список жалоб</a> ({{ statsSpam() }})<br>
-        <i class="far fa-circle fa-lg text-muted"></i> <a href="/admin/adminlist">Список старших</a> ({{ statsAdmins() }})<br>
-        <i class="far fa-circle fa-lg text-muted"></i> <a href="/admin/reglist">Список ожидающих</a> ({{ statsRegList() }})<br>
+        <i class="far fa-circle fa-lg text-muted"></i> <a href="/admin/adminlists">Список старших</a> ({{ statsAdmins() }})<br>
+        <i class="far fa-circle fa-lg text-muted"></i> <a href="/admin/reglists">Список ожидающих</a> ({{ statsRegList() }})<br>
         <i class="far fa-circle fa-lg text-muted"></i> <a href="/admin/votes">Голосования</a> ({{ statVotes() }})<br>
         <i class="far fa-circle fa-lg text-muted"></i> <a href="/admin/antimat">Управление антиматом</a> ({{ statsAntimat() }})<br>
-        <i class="far fa-circle fa-lg text-muted"></i> <a href="/admin/banhist">История банов</a> ({{ statsBanHist() }})<br>
+        <i class="far fa-circle fa-lg text-muted"></i> <a href="/admin/banhists">История банов</a> ({{ statsBanHist() }})<br>
         <i class="far fa-circle fa-lg text-muted"></i> <a href="/admin/invitations">Приглашения</a> ({{ statsInvite() }})<br>
         <i class="far fa-circle fa-lg text-muted"></i> <a href="/admin/transfers">Денежные операции</a><br>
     @endif
@@ -44,12 +44,12 @@
         <i class="far fa-circle fa-lg text-muted"></i> <a href="/admin/rules">Правила сайта</a><br>
         <i class="far fa-circle fa-lg text-muted"></i> <a href="/admin/news">Новости</a> ({{ statsNews() }})<br>
 
-        <i class="far fa-circle fa-lg text-muted"></i> <a href="/admin/ipban">IP-бан панель</a> ({{ statsIpBanned() }})<br>
+        <i class="far fa-circle fa-lg text-muted"></i> <a href="/admin/ipbans">IP-бан панель</a> ({{ statsIpBanned() }})<br>
         <i class="far fa-circle fa-lg text-muted"></i> <a href="/admin/phpinfo">PHP-информация</a> ({{ parseVersion(PHP_VERSION) }})<br>
-        <i class="far fa-circle fa-lg text-muted"></i> <a href="/admin/load">Загруз-центр</a> ({{ statsLoad() }})<br>
-        <i class="far fa-circle fa-lg text-muted"></i> <a href="/admin/down/new">Новые публикации</a> ({{ statsNewLoad() }})<br>
+        <i class="far fa-circle fa-lg text-muted"></i> <a href="/admin/loads">Загруз-центр</a> ({{ statsLoad() }})<br>
+        <i class="far fa-circle fa-lg text-muted"></i> <a href="/admin/downs/new">Новые публикации</a> ({{ statsNewLoad() }})<br>
         <i class="far fa-circle fa-lg text-muted"></i> <a href="/admin/errors">Ошибки / Автобаны</a><br>
-        <i class="far fa-circle fa-lg text-muted"></i> <a href="/admin/blacklist">Черный список</a> ({{ statsBlacklist() }})<br>
+        <i class="far fa-circle fa-lg text-muted"></i> <a href="/admin/blacklists">Черный список</a> ({{ statsBlacklist() }})<br>
         <i class="far fa-circle fa-lg text-muted"></i> <a href="/admin/offers">Предложения / Проблемы</a> ({{ statsOffers() }})<br>
         <i class="far fa-circle fa-lg text-muted"></i> <a href="/admin/smiles">Управление смайлами</a> ({{ statsSmiles() }})<br>
         <i class="far fa-circle fa-lg text-muted"></i> <a href="/admin/status">Статусы пользователей</a><br>
@@ -57,14 +57,14 @@
 
     @if (isAdmin('boss'))
         <div class="b"><i class="fa fa-cog fa-lg text-muted"></i> <b>Босс</b></div>
-        <i class="far fa-circle fa-lg text-muted"></i> <a href="/admin/setting">Настройки сайта</a><br>
+        <i class="far fa-circle fa-lg text-muted"></i> <a href="/admin/settings">Настройки сайта</a><br>
         <i class="far fa-circle fa-lg text-muted"></i> <a href="/admin/users">Пользователи</a> ({{ statsUsers() }})<br>
-        <i class="far fa-circle fa-lg text-muted"></i> <a href="/admin/cache">Очистка кэша</a><br>
-        <i class="far fa-circle fa-lg text-muted"></i> <a href="/admin/backup">Backup-панель</a><br>
-        <i class="far fa-circle fa-lg text-muted"></i> <a href="/admin/checker">Сканирование сайта</a> ({{ statsChecker() }})<br>
+        <i class="far fa-circle fa-lg text-muted"></i> <a href="/admin/caches">Очистка кэша</a><br>
+        <i class="far fa-circle fa-lg text-muted"></i> <a href="/admin/backups">Backup-панель</a><br>
+        <i class="far fa-circle fa-lg text-muted"></i> <a href="/admin/checkers">Сканирование сайта</a> ({{ statsChecker() }})<br>
         <i class="far fa-circle fa-lg text-muted"></i> <a href="/admin/delivery">Приват-рассылка</a><br>
         <i class="far fa-circle fa-lg text-muted"></i> <a href="/admin/logs">Логи посещений</a><br>
-        <i class="far fa-circle fa-lg text-muted"></i> <a href="/admin/notice">Шаблоны писем</a><br>
+        <i class="far fa-circle fa-lg text-muted"></i> <a href="/admin/notices">Шаблоны писем</a><br>
         <i class="far fa-circle fa-lg text-muted"></i> <a href="/admin/files">Редактирование файлов</a><br>
         <i class="far fa-circle fa-lg text-muted"></i> <a href="/admin/delusers">Чистка пользователей</a><br>
     @endif

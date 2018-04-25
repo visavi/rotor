@@ -35,7 +35,7 @@ class PhotoController extends AdminController
             ->with('user')
             ->get();
 
-        return view('admin/photo/index', compact('photos', 'page'));
+        return view('admin/photos/index', compact('photos', 'page'));
     }
 
     /**
@@ -72,14 +72,14 @@ class PhotoController extends AdminController
                 ]);
 
                 setFlash('success', 'Фотография успешно отредактирована!');
-                redirect('/admin/gallery?page=' . $page);
+                redirect('/admin/photos?page=' . $page);
             } else {
                 setInput(Request::all());
                 setFlash('danger', $validator->getErrors());
             }
         }
 
-        return view('admin/photo/edit', compact('photo', 'page'));
+        return view('admin/photos/edit', compact('photo', 'page'));
     }
 
     /**
@@ -117,7 +117,7 @@ class PhotoController extends AdminController
             setFlash('danger', $validator->getErrors());
         }
 
-        redirect('/admin/gallery?page=' . $page);
+        redirect('/admin/photos?page=' . $page);
     }
 
     /**
@@ -130,10 +130,10 @@ class PhotoController extends AdminController
         if (isAdmin(User::BOSS)) {
             if ($token == $_SESSION['token']) {
 
-                restatement('photo');
+                restatement('photos');
 
                 setFlash('success', 'Комментарии успешно пересчитаны!');
-                redirect('/admin/gallery');
+                redirect('/admin/photos');
             } else {
                 abort('default', 'Неверный идентификатор сессии, повторите действие!');
             }

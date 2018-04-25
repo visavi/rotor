@@ -237,13 +237,13 @@ class UserController extends AdminController
 
                     // Удаление загруженных файлов
                     foreach ($topics as $topic) {
-                        removeDir(UPLOADS . '/forum/' . $topic);
+                        removeDir(UPLOADS . '/forums/' . $topic);
                     }
 
                     File::query()->where('relate_type', Post::class)->whereIn('relate_id', $posts)->delete();
                     Post::query()->whereIn('topic_id', $topics)->delete();
                     Topic::query()->where('user_id', $user->id)->delete();
-                    restatement('forum');
+                    restatement('forums');
                 }
 
                 // Удаление постов форума
@@ -258,13 +258,13 @@ class UserController extends AdminController
 
                     if ($files->isNotEmpty()) {
                         foreach ($files as $file) {
-                            deleteFile(UPLOADS . '/forum/' . $posts[$file['relate_id']] . '/' . $file->hash);
+                            deleteFile(UPLOADS . '/forums/' . $posts[$file['relate_id']] . '/' . $file->hash);
                             $file->delete();
                         }
                     }
 
                     Post::query()->where('user_id', $user->id)->delete();
-                    restatement('forum');
+                    restatement('forums');
                 }
 
                 // Удаление комментариев
@@ -275,11 +275,11 @@ class UserController extends AdminController
                         ->delete();
 
                     if ($deletes) {
-                        restatement('blog');
-                        restatement('load');
+                        restatement('blogs');
+                        restatement('loads');
                         restatement('news');
-                        restatement('photo');
-                        restatement('offer');
+                        restatement('photos');
+                        restatement('offers');
                     }
                 }
 

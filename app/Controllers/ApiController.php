@@ -21,10 +21,10 @@ class ApiController extends BaseController
     /**
      * Api пользователей
      */
-    public function user()
+    public function users()
     {
         header('Content-type: application/json');
-        header('Content-Disposition: inline; filename="user.json";');
+        header('Content-Disposition: inline; filename="users.json";');
 
         $token = check(Request::input('token'));
 
@@ -68,10 +68,10 @@ class ApiController extends BaseController
     /**
      * Api приватных сообщений
      */
-    public function private()
+    public function messages()
     {
         header('Content-type: application/json');
-        header('Content-Disposition: inline; filename="private.json";');
+        header('Content-Disposition: inline; filename="messages.json";');
 
         $token = check(Request::input('token'));
         $count = int(Request::input('count', 10));
@@ -121,10 +121,10 @@ class ApiController extends BaseController
     /**
      * Api постов темы в форуме
      */
-    public function forum()
+    public function forums()
     {
         header('Content-type: application/json');
-        header('Content-Disposition: inline; filename="forum.json";');
+        header('Content-Disposition: inline; filename="forums.json";');
 
         $token = check(Request::input('token'));
         $id    = int(Request::input('id'));

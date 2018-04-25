@@ -31,7 +31,7 @@ class SearchController extends BaseController
                 abort('default', 'Разделы загрузок еще не созданы!');
             }
 
-            return view('load/search', compact('categories', 'cid'));
+            return view('loads/search', compact('categories', 'cid'));
         }
 
         $find = str_replace(['@', '+', '-', '*', '~', '<', '>', '(', ')', '"', "'"], '', $find);
@@ -93,12 +93,12 @@ class SearchController extends BaseController
                         ->with('user', 'category')
                         ->get();
 
-                    return view('load/search_title', compact('downs', 'page', 'find', 'type', 'where', 'section'));
+                    return view('loads/search_title', compact('downs', 'page', 'find', 'type', 'where', 'section'));
                 }
 
                 setInput(Request::all());
                 setFlash('danger', 'По вашему запросу ничего не найдено!');
-                redirect('/load/search');
+                redirect('/loads/search');
             }
 
             // Поиск в описании
@@ -133,18 +133,18 @@ class SearchController extends BaseController
                         ->with('user', 'category')
                         ->get();
 
-                    return view('load/search_text', compact('downs', 'page', 'find', 'type', 'where', 'section'));
+                    return view('loads/search_text', compact('downs', 'page', 'find', 'type', 'where', 'section'));
                 }
 
                 setInput(Request::all());
                 setFlash('danger', 'По вашему запросу ничего не найдено!');
-                redirect('/load/search');
+                redirect('/loads/search');
             }
 
         } else {
             setInput(Request::all());
             setFlash('danger', ['find' => 'Запрос должен содержать от 3 до 50 символов!']);
-            redirect('/load/search');
+            redirect('/loads/search');
         }
     }
 }

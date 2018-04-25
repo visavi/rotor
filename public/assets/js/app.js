@@ -172,7 +172,7 @@ function bookmark(el)
 {
     $.ajax({
         data: {tid: $(el).data('tid'), token: $(el).data('token')},
-        dataType: 'json', type: 'POST', url: '/forum/bookmark/perform',
+        dataType: 'json', type: 'POST', url: '/forums/bookmarks/perform',
         success: function(data) {
 
             if (data.status === 'error'){
@@ -200,7 +200,7 @@ function deletePost(el)
 {
     $.ajax({
         data: {tid: $(el).data('tid'), token: $(el).data('token')},
-        dataType: 'json', type: 'POST', url: '/forum/active/delete',
+        dataType: 'json', type: 'POST', url: '/forums/active/delete',
         success: function(data) {
 
             if (data.status === 'error'){

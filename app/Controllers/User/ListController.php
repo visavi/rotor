@@ -40,11 +40,11 @@ class ListController extends BaseController
                 $end = ceil($position / $page->limit);
 
                 setFlash('success', 'Позиция в рейтинге: '.$position);
-                redirect('/userlist?page='.$end.'&user='.$user);
+                redirect('/userlists?page='.$end.'&user='.$user);
             }
         }
 
-        return view('user/userlist', compact('users', 'page', 'user'));
+        return view('users/userlists', compact('users', 'page', 'user'));
     }
 
     /**
@@ -57,7 +57,7 @@ class ListController extends BaseController
             ->orderByRaw("field(level, '".implode(',', User::ADMIN_GROUPS)."')")
             ->get();
 
-        return view('user/adminlist', compact('users'));
+        return view('users/adminlists', compact('users'));
     }
 
     /**
@@ -92,11 +92,11 @@ class ListController extends BaseController
                 $end = ceil($position / $page->limit);
 
                 setFlash('success', 'Позиция в рейтинге: '.$position);
-                redirect('/authoritylist?page='.$end.'&user='.$user);
+                redirect('/authoritylists?page='.$end.'&user='.$user);
             }
         }
 
-        return view('user/authoritylist', compact('users', 'page', 'user'));
+        return view('users/authoritylists', compact('users', 'page', 'user'));
     }
 
     /**
@@ -131,10 +131,10 @@ class ListController extends BaseController
                 $end = ceil($position / $page->limit);
 
                 setFlash('success', 'Позиция в рейтинге: '.$position);
-                redirect('/ratinglist?page='.$end.'&user='.$user);
+                redirect('/ratinglists?page='.$end.'&user='.$user);
             }
         }
 
-        return view('user/ratinglist', compact('users', 'page', 'user'));
+        return view('users/ratinglists', compact('users', 'page', 'user'));
     }
 }

@@ -96,10 +96,10 @@ class RatingController extends BaseController
                     ]);
                 }
 
-                sendPrivate($user, null, $text);
+                sendMessage($user, null, $text);
 
                 setFlash('success', 'Репутация успешно изменена!');
-                redirect('/user/'.$user->login);
+                redirect('/users/'.$user->login);
             } else {
                 setInput(Request::all());
                 setFlash('danger', $validator->getErrors());

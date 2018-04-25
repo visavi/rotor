@@ -33,7 +33,7 @@ class BanhistController extends AdminController
             ->with('user', 'sendUser')
             ->get();
 
-        return view('admin/banhist/index', compact('records', 'page'));
+        return view('admin/banhists/index', compact('records', 'page'));
     }
 
     /**
@@ -60,7 +60,7 @@ class BanhistController extends AdminController
             ->with('user', 'sendUser')
             ->get();
 
-        return view('admin/banhist/view', compact('user', 'banhist', 'page'));
+        return view('admin/banhists/view', compact('user', 'banhist', 'page'));
     }
 
     /**
@@ -86,9 +86,9 @@ class BanhistController extends AdminController
         }
 
         if ($login) {
-            redirect('/admin/banhist/view?user=' . $login . '&page=' . $page);
+            redirect('/admin/banhists/view?user=' . $login . '&page=' . $page);
         } else {
-            redirect('/admin/banhist?page=' . $page);
+            redirect('/admin/banhists?page=' . $page);
         }
     }
 }

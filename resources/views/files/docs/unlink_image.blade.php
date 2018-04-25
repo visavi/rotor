@@ -12,7 +12,7 @@
     </ol>
 </nav>
 
-Удаляет картинку, а также кэшированное изображение сохраненное в директории uploads/thumbnail, с проверкой имеется ли картинка в данных директориях (Доступно с версии 2.6.0)<br><br>
+Удаляет картинку, а также кэшированное изображение сохраненное в директории uploads/thumbnails, с проверкой имеется ли картинка в данных директориях (Доступно с версии 2.6.0)<br><br>
 
 <pre class="d">
 <b>unlink_image</b>(
@@ -32,6 +32,6 @@
 <?php
 echo bbCode(check('[code]<?php
 deleteImage("uploads/photos/", "Vantuz.gif");
-/* Удаляет файл Vantuz.gif сначала в директории uploads/photos, а затем в uploads/thumbnail */
+/* Удаляет файл Vantuz.gif сначала в директории uploads/photos, а затем в uploads/thumbnails */
 ?>[/code]'));
 ?>

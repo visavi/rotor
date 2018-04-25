@@ -35,7 +35,7 @@ class CheckerController extends AdminController
             $diff['right'] = array_diff($filesScan, $files);
         }
 
-        return view('admin/checker/index', compact('diff'));
+        return view('admin/checkers/index', compact('diff'));
     }
 
     /**
@@ -60,7 +60,7 @@ class CheckerController extends AdminController
             setFlash('danger', 'Неверный идентификатор сессии, повторите действие!');
         }
 
-        redirect("/admin/checker");
+        redirect('/admin/checkers');
     }
 
     /**

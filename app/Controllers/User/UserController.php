@@ -28,7 +28,7 @@ class UserController extends BaseController
 
         $adminGroups = User::ADMIN_GROUPS;
 
-        return view('user/user', compact('user', 'invite', 'adminGroups'));
+        return view('users/user', compact('user', 'invite', 'adminGroups'));
     }
 
     /**
@@ -70,7 +70,7 @@ class UserController extends BaseController
             }
         }
 
-        return view('user/note', compact('user'));
+        return view('users/note', compact('user'));
     }
 
     /**
@@ -196,7 +196,7 @@ class UserController extends BaseController
 
                     // ----- Уведомление в приват ----//
                     $textNotice = textNotice('register', ['%USERNAME%' => $login, '%SITENAME%' => siteUrl()]);
-                    sendPrivate($user, null, $textNotice);
+                    sendMessage($user, null, $textNotice);
 
                     $subject = 'Регистрация на сайте ' . setting('title');
                     $body = view('mailer.register', compact('subject', 'message', 'activateKey', 'activateLink'));
@@ -218,7 +218,7 @@ class UserController extends BaseController
             }
         }
 
-        return view('user/registration');
+        return view('users/registration');
     }
 
     /**
@@ -257,7 +257,7 @@ class UserController extends BaseController
             }
         }
 
-        return view('user/login', compact('cooklog'));
+        return view('users/login', compact('cooklog'));
     }
 
     /**
@@ -332,7 +332,7 @@ class UserController extends BaseController
             }
         }
 
-        return view('user/profile', compact('user'));
+        return view('users/profile', compact('user'));
     }
 
     /*
@@ -370,7 +370,7 @@ class UserController extends BaseController
             }
         }
 
-        return view('user/key');
+        return view('users/key');
     }
 
     /*
@@ -416,14 +416,14 @@ class UserController extends BaseController
                 ]);
 
                 setFlash('success', 'Настройки успешно изменены!');
-                redirect('/setting');
+                redirect('/settings');
             } else {
                 setInput(Request::all());
                 setFlash('danger', $validator->getErrors());
             }
         }
 
-        return view('user/setting', compact('user', 'setting'));
+        return view('users/settings', compact('user', 'setting'));
     }
 
     /**
@@ -435,7 +435,7 @@ class UserController extends BaseController
             abort(403, 'Для изменения данных необходимо авторизоваться!');
         }
 
-        return view('user/account', compact('user'));
+        return view('users/account', compact('user'));
     }
 
     /**
@@ -674,6 +674,6 @@ class UserController extends BaseController
             ->where('created_at', '>', strtotime('-1 day', SITETIME))
             ->get();
 
-        return view('user/who', compact('online', 'birthdays', 'novices'));
+        return view('users/who', compact('online', 'birthdays', 'novices'));
     }
 }

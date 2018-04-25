@@ -1,14 +1,13 @@
 <?php
 
-use App\Controllers\GuestController;
-use App\Models\Guest;
+use App\Models\Guestbook;
 use PHPUnit\Framework\TestCase;
 
-class GuestControllerTest extends TestCase
+class GuestbookControllerTest extends TestCase
 {
     public function testGuest()
     {
-        $guest = new Guest();
+        $guest = new Guestbook();
         $guest->user_id = 1;
         $guest->text = 'Test text message';
         $guest->ip = '127.0.0.1';
@@ -18,17 +17,17 @@ class GuestControllerTest extends TestCase
 
         $this->assertTrue($guest->save());
 
-        $getGuest = Guest::query()->find($guest->id);
+        $getGuest = Guestbook::query()->find($guest->id);
         $this->assertEquals($getGuest->text, 'Test text message');
 
         $guest->update(['text' => 'Test simple message']);
 
-        $getGuest = Guest::query()->find($guest->id);
+        $getGuest = Guestbook::query()->find($guest->id);
         $this->assertEquals($getGuest->text, 'Test simple message');
 
         $guest->delete();
 
-        $getGuest = Guest::query()->find($guest->id);
+        $getGuest = Guestbook::query()->find($guest->id);
         $this->assertNull($getGuest);
     }
 }

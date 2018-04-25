@@ -48,7 +48,7 @@ class IpBanController extends AdminController
                 ipBan(true);
 
                 setFlash('success', 'IP успешно занесен в список!');
-                redirect('/admin/ipban');
+                redirect('/admin/ipbans');
             } else {
                 setInput(Request::all());
                 setFlash('danger', $validator->getErrors());
@@ -65,7 +65,7 @@ class IpBanController extends AdminController
             ->with('user')
             ->get();
 
-        return view('admin/ipban/index', compact('logs', 'page'));
+        return view('admin/ipbans/index', compact('logs', 'page'));
     }
 
     /**
@@ -91,7 +91,7 @@ class IpBanController extends AdminController
             setFlash('danger', $validator->getErrors());
         }
 
-        redirect('/admin/ipban?page=' . $page);
+        redirect('/admin/ipbans?page=' . $page);
     }
 
     /**
@@ -116,6 +116,6 @@ class IpBanController extends AdminController
             setFlash('danger', $validator->getErrors());
         }
 
-        redirect('/admin/ipban');
+        redirect('/admin/ipbans');
     }
 }

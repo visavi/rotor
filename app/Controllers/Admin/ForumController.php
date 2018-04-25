@@ -27,7 +27,7 @@ class ForumController extends AdminController
             ->orderBy('sort')
             ->get();
 
-        return view('admin/forum/index', compact('forums'));
+        return view('admin/forums/index', compact('forums'));
     }
 
     /**
@@ -56,7 +56,7 @@ class ForumController extends AdminController
             ]);
 
             setFlash('success', 'Новый раздел успешно создан!');
-            redirect('/admin/forum/edit/' . $forum->id);
+            redirect('/admin/forums/edit/' . $forum->id);
         } else {
             setInput(Request::all());
             setFlash('danger', $validator->getErrors());
@@ -121,7 +121,7 @@ class ForumController extends AdminController
             }
         }
 
-        return view('admin/forum/edit', compact('forums', 'forum'));
+        return view('admin/forums/edit', compact('forums', 'forum'));
     }
 
     /**
@@ -175,7 +175,7 @@ class ForumController extends AdminController
 
         if ($token == $_SESSION['token']) {
 
-            restatement('forum');
+            restatement('forums');
 
             setFlash('success', 'Данные успешно пересчитаны!');
         } else {
@@ -209,7 +209,7 @@ class ForumController extends AdminController
             ->with('lastPost.user')
             ->get();
 
-        return view('admin/forum/forum', compact('forum', 'topics', 'page'));
+        return view('admin/forums/forum', compact('forum', 'topics', 'page'));
     }
 
     /**
@@ -250,14 +250,14 @@ class ForumController extends AdminController
                 ]);
 
                 setFlash('success', 'Тема успешно отредактирована!');
-                redirect('/admin/forum/' . $topic->forum_id);
+                redirect('/admin/forums/' . $topic->forum_id);
             } else {
                 setInput(Request::all());
                 setFlash('danger', $validator->getErrors());
             }
         }
 
-        return view('admin/forum/edit_topic', compact('topic'));
+        return view('admin/forums/edit_topic', compact('topic'));
     }
 
     /**
@@ -299,7 +299,7 @@ class ForumController extends AdminController
                 $oldTopic->forum->restatement();
 
                 setFlash('success', 'Тема успешно перенесена!');
-                redirect('/admin/forum/' . $topic->forum_id);
+                redirect('/admin/forums/' . $topic->forum_id);
             } else {
                 setInput(Request::all());
                 setFlash('danger', $validator->getErrors());
@@ -312,7 +312,7 @@ class ForumController extends AdminController
             ->orderBy('sort')
             ->get();
 
-        return view('admin/forum/move_topic', compact('forums', 'topic'));
+        return view('admin/forums/move_topic', compact('forums', 'topic'));
     }
 
     /**
@@ -374,7 +374,7 @@ class ForumController extends AdminController
             setFlash('danger', 'Ошибка! Неверный идентификатор сессии, повторите действие!');
         }
 
-        redirect('/admin/topic/' . $topic->id . '?page=' . $page);
+        redirect('/admin/topics/' . $topic->id . '?page=' . $page);
     }
 
     /**
@@ -397,7 +397,7 @@ class ForumController extends AdminController
         if ($validator->isValid()) {
 
             // Удаление загруженных файлов
-            removeDir(UPLOADS . '/forum/' . $topic->id);
+            removeDir(UPLOADS . '/forums/' . $topic->id);
 
             $filtered = $topic->posts->load('files')->filter(function ($post) {
                 return $post->files->isNotEmpty();
@@ -426,7 +426,7 @@ class ForumController extends AdminController
             setFlash('danger', $validator->getErrors());
         }
 
-        redirect('/admin/forum/' . $topic->forum->id . '?page=' . $page);
+        redirect('/admin/forums/' . $topic->forum->id . '?page=' . $page);
     }
 
     /**
@@ -484,7 +484,7 @@ class ForumController extends AdminController
             }
         }
 
-        return view('admin/forum/topic', compact('topic', 'posts', 'page', 'vote'));
+        return view('admin/forums/topic', compact('topic', 'posts', 'page', 'vote'));
     }
 
     /**
@@ -531,21 +531,21 @@ class ForumController extends AdminController
 
                     if ($files->isNotEmpty()) {
                         foreach ($files as $file) {
-                            deleteFile(UPLOADS . '/forum/' . $post->topic_id . '/' . $file->hash);
+                            deleteFile(UPLOADS . '/forums/' . $post->topic_id . '/' . $file->hash);
                             $file->delete();
                         }
                     }
                 }
 
                 setFlash('success', 'Сообщение успешно отредактировано!');
-                redirect('/admin/topic/' . $post->topic_id . '?page=' . $page);
+                redirect('/admin/topics/' . $post->topic_id . '?page=' . $page);
             } else {
                 setInput(Request::all());
                 setFlash('danger', $validator->getErrors());
             }
         }
 
-        return view('admin/forum/edit_post', compact('post', 'page'));
+        return view('admin/forums/edit_post', compact('post', 'page'));
     }
 
     /**
@@ -586,7 +586,7 @@ class ForumController extends AdminController
             setFlash('danger', $validator->getErrors());
         }
 
-        redirect('/admin/topic/' . $topic->id . '?page=' . $page);
+        redirect('/admin/topics/' . $topic->id . '?page=' . $page);
     }
 
     /**
@@ -601,6 +601,6 @@ class ForumController extends AdminController
         }
 
         $end = ceil($topic->count_posts / setting('forumpost'));
-        redirect('/admin/topic/' . $topic->id . '?page=' . $end);
+        redirect('/admin/topics/' . $topic->id . '?page=' . $end);
     }
 }

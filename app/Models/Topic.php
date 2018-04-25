@@ -119,7 +119,7 @@ class Topic extends BaseModel
             ];
         }
 
-        return view('forum/_pagination', compact('pages', 'link'));
+        return view('forums/_pagination', compact('pages', 'link'));
     }
 
     /**

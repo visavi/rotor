@@ -7,7 +7,7 @@ use App\Classes\Validator;
 use App\Models\Blog;
 use App\Models\Comment;
 use App\Models\Down;
-use App\Models\Guest;
+use App\Models\Guestbook;
 use App\Models\Inbox;
 use App\Models\News;
 use App\Models\Offer;
@@ -57,14 +57,14 @@ class AjaxController extends BaseController
         $token = check(Request::input('token'));
 
         switch ($type):
-            case Guest::class:
+            case Guestbook::class:
                 $data = $type::query()->find($id);
-                $path = '/book?page='.$page;
+                $path = '/guestbooks?page='.$page;
                 break;
 
             case Post::class:
                 $data = $type::query()->find($id);
-                $path = '/topic/' . $data->topic_id . '?page='.$page;
+                $path = '/topics/' . $data->topic_id . '?page='.$page;
                 break;
 
             case Inbox::class:
@@ -73,7 +73,7 @@ class AjaxController extends BaseController
 
             case Wall::class:
                 $data = $type::query()->find($id);
-                $path = '/wall/' . $data->user->login . '?page='.$page;
+                $path = '/walls/' . $data->user->login . '?page='.$page;
                 break;
 
             case News::class:
@@ -91,7 +91,7 @@ class AjaxController extends BaseController
                     ->where('id', $id)
                     ->first();
                 $type = Comment::class;
-                $path = '/article/comments/' . $data->relate_id . '?page=' . $page;
+                $path = '/articles/comments/' . $data->relate_id . '?page=' . $page;
                 break;
 
             case Photo::class:
@@ -100,7 +100,7 @@ class AjaxController extends BaseController
                     ->where('id', $id)
                     ->first();
                 $type = Comment::class;
-                $path = '/gallery/comments/' . $data->relate_id . '?page='.$page;
+                $path = '/photos/comments/' . $data->relate_id . '?page='.$page;
                 break;
 
             case Offer::class:
@@ -118,7 +118,7 @@ class AjaxController extends BaseController
                     ->where('id', $id)
                     ->first();
                 $type = Comment::class;
-                $path = '/down/comments/' . $data->relate_id . '?page='.$page;
+                $path = '/downs/comments/' . $data->relate_id . '?page='.$page;
                 break;
         endswitch;
 

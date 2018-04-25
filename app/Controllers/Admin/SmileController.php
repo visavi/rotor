@@ -38,7 +38,7 @@ class SmileController extends AdminController
             ->offset($page->offset)
             ->get();
 
-        return view('admin/smile/index', compact('smiles', 'page'));
+        return view('admin/smiles/index', compact('smiles', 'page'));
     }
 
     /**
@@ -91,7 +91,7 @@ class SmileController extends AdminController
             }
         }
 
-        return view('admin/smile/create');
+        return view('admin/smiles/create');
     }
 
     /**
@@ -136,7 +136,7 @@ class SmileController extends AdminController
             }
         }
 
-        return view('admin/smile/edit', compact('smile', 'page'));
+        return view('admin/smiles/edit', compact('smile', 'page'));
     }
 
     /**

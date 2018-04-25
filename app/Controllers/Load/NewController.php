@@ -29,7 +29,7 @@ class NewController extends BaseController
             ->with('category', 'user')
             ->get();
 
-        return view('load/new_files', compact('downs', 'page'));
+        return view('loads/new_files', compact('downs', 'page'));
     }
 
     /**
@@ -55,6 +55,6 @@ class NewController extends BaseController
             ->with('user')
             ->get();
 
-        return view('load/new_comments', compact('comments', 'page'));
+        return view('loads/new_comments', compact('comments', 'page'));
     }
 }

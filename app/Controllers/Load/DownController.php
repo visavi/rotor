@@ -46,7 +46,7 @@ class DownController extends BaseController
 
         $rating = $down->rated ? round($down->rating / $down->rated, 1) : 0;
 
-        return view('load/down', compact('down', 'rating'));
+        return view('loads/down', compact('down', 'rating'));
     }
 
     /**
@@ -107,14 +107,14 @@ class DownController extends BaseController
                 }
 
                 setFlash('success', 'Загрузка успешно отредактирована!');
-                redirect('/down/' . $down->id);
+                redirect('/downs/' . $down->id);
             } else {
                 setInput(Request::all());
                 setFlash('danger', $validator->getErrors());
             }
         }
 
-        return view('load/edit', compact('down'));
+        return view('loads/edit', compact('down'));
     }
 
     /**
@@ -143,7 +143,7 @@ class DownController extends BaseController
         setFlash('success', 'Файл успешно удален!');
         $file->delete();
 
-        redirect('/down/edit/' . $down->id);
+        redirect('/downs/edit/' . $down->id);
     }
 
     /**
@@ -226,14 +226,14 @@ class DownController extends BaseController
                 }
 
                 setFlash('success', 'Файл успешно загружен!');
-                redirect('/down/' . $down->id);
+                redirect('/downs/' . $down->id);
             } else {
                 setInput(Request::all());
                 setFlash('danger', $validator->getErrors());
             }
         }
 
-        return view('load/create', compact('loads', 'cid'));
+        return view('loads/create', compact('loads', 'cid'));
     }
 
     /**
@@ -295,7 +295,7 @@ class DownController extends BaseController
             setFlash('danger', $validator->getErrors());
         }
 
-        redirect('/down/' . $down->id);
+        redirect('/downs/' . $down->id);
     }
 
     /**
@@ -339,7 +339,7 @@ class DownController extends BaseController
             redirect('/uploads/files/' . $file->hash);
         } else {
             setFlash('danger', $validator->getErrors());
-            redirect('/down/' . $file->relate->id);
+            redirect('/downs/' . $file->relate->id);
         }
     }
 
@@ -387,7 +387,7 @@ class DownController extends BaseController
                 $down->increment('count_comments');
 
                 setFlash('success', 'Комментарий успешно добавлен!');
-                redirect('/down/end/' . $down->id);
+                redirect('/downs/end/' . $down->id);
             } else {
                 setInput(Request::all());
                 setFlash('danger', $validator->getErrors());
@@ -410,7 +410,7 @@ class DownController extends BaseController
             ->with('user')
             ->get();
 
-        return view('load/comments', compact('down', 'comments', 'page'));
+        return view('loads/comments', compact('down', 'comments', 'page'));
     }
 
     /**
@@ -462,14 +462,14 @@ class DownController extends BaseController
                 ]);
 
                 setFlash('success', 'Комментарий успешно отредактирован!');
-                redirect('/down/comments/' . $id . '?page=' . $page);
+                redirect('/downs/comments/' . $id . '?page=' . $page);
             } else {
                 setInput(Request::all());
                 setFlash('danger', $validator->getErrors());
             }
         }
 
-        return view('load/editcomment', compact('down', 'comment', 'page'));
+        return view('loads/editcomment', compact('down', 'comment', 'page'));
     }
 
     /**
@@ -489,7 +489,7 @@ class DownController extends BaseController
             ->count();
 
         $end = ceil($total / setting('downcomm'));
-        redirect('/down/comments/' . $down->id . '?page=' . $end);
+        redirect('/downs/comments/' . $down->id . '?page=' . $end);
     }
 
     /**
@@ -525,7 +525,7 @@ class DownController extends BaseController
         $viewExt   = Down::getViewExt();
         $documents = array_slice($getDocuments, $page->offset, $page->limit, true);
 
-        return view('load/zip', compact('down', 'file', 'documents', 'page', 'viewExt'));
+        return view('loads/zip', compact('down', 'file', 'documents', 'page', 'viewExt'));
     }
 
     /**
@@ -579,7 +579,7 @@ class DownController extends BaseController
 
         $down = $file->relate;
 
-        return view('load/zip_view', compact('down', 'file', 'document', 'content'));
+        return view('loads/zip_view', compact('down', 'file', 'document', 'content'));
     }
 
     /**
@@ -593,7 +593,7 @@ class DownController extends BaseController
             abort(404, 'Данного файла не существует!');
         }
 
-        return view('load/rss_comments', compact('down'));
+        return view('loads/rss_comments', compact('down'));
     }
 
     /**
@@ -615,6 +615,6 @@ class DownController extends BaseController
             ->count();
 
         $end = ceil($total / setting('downcomm'));
-        redirect('/down/comments/' . $id . '?page=' . $end . '#comment_' . $cid);
+        redirect('/downs/comments/' . $id . '?page=' . $end . '#comment_' . $cid);
     }
 }

@@ -58,7 +58,7 @@ class SitemapController extends BaseController
             $new = (SITETIME < $changeTime + 3600 * 24 * 30) ? true : false;
 
             $locs[] = [
-                'loc'        => siteUrl(true) . '/article/' . $blog->id,
+                'loc'        => siteUrl(true) . '/articles/' . $blog->id,
                 'lastmod'    => date('c', $changeTime),
                 'changefreq' => $new ? 'weekly' : 'monthly',
                 'priority'   => $new ? '1.0' : '0.5',
@@ -113,7 +113,7 @@ class SitemapController extends BaseController
             $new = (SITETIME < $topic->updated_at + 3600 * 24 * 30) ? true : false;
 
             $locs[] = [
-                'loc'        => siteUrl(true) . '/topic/' . $topic->id,
+                'loc'        => siteUrl(true) . '/topics/' . $topic->id,
                 'lastmod'    => date('c', $topic->updated_at),
                 'changefreq' => $new ? 'weekly' : 'monthly',
                 'priority'   => $new ? '1.0' : '0.5',
@@ -146,7 +146,7 @@ class SitemapController extends BaseController
             $new = (SITETIME < $changeTime + 3600 * 24 * 30) ? true : false;
 
             $locs[] = [
-                'loc'        => siteUrl(true) . '/down/' . $down->id,
+                'loc'        => siteUrl(true) . '/downs/' . $down->id,
                 'lastmod'    => date('c', $changeTime),
                 'changefreq' => $new ? 'weekly' : 'monthly',
                 'priority'   => $new ? '1.0' : '0.5',

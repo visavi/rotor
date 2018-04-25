@@ -37,7 +37,7 @@ class BackupController extends AdminController
         $files = glob(STORAGE."/backup/*.{zip,gz,bz2,sql}", GLOB_BRACE);
         arsort($files);
 
-        return view('admin/backup/index', compact('files'));
+        return view('admin/backups/index', compact('files'));
     }
 
     /**
@@ -108,7 +108,7 @@ class BackupController extends AdminController
                 $this->fclose($fp, $method);
 
                 setFlash('success', 'База данных успешно обработана и сохранена!');
-                redirect('/admin/backup');
+                redirect('/admin/backups');
             } else {
                 setInput(Request::all());
                 setFlash('danger', $validator->getErrors());
@@ -122,7 +122,7 @@ class BackupController extends AdminController
 
         $levels = range(0, 9);
 
-        return view('admin/backup/create', compact('tables', 'bzopen', 'gzopen', 'levels'));
+        return view('admin/backups/create', compact('tables', 'bzopen', 'gzopen', 'levels'));
     }
 
     /**
@@ -149,7 +149,7 @@ class BackupController extends AdminController
             setFlash('danger', $validator->getErrors());
         }
 
-        redirect("/admin/backup");
+        redirect('/admin/backups');
     }
 
     /**

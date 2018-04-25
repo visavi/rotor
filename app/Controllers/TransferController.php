@@ -32,7 +32,7 @@ class TransferController extends BaseController
      */
     public function index()
     {
-        return view('transfer/index', ['user' => $this->user]);
+        return view('transfers/index', ['user' => $this->user]);
     }
 
     /**
@@ -70,7 +70,7 @@ class TransferController extends BaseController
                 $message = 'Пользователь [b]'.getUser('login').'[/b] перечислил вам '.plural($money, setting('moneyname')).''.PHP_EOL.'Примечание: '.$comment;
 
                 // Уведомление по привату
-                sendPrivate($this->user, getUser(), $message);
+                sendMessage($this->user, getUser(), $message);
 
                 // Запись логов
                 Transfer::query()->create([

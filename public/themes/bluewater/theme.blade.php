@@ -35,10 +35,10 @@ header("Content-type:text/html; charset=utf-8");
     <div id="menu">
         <ul>
             <li><a href="/">Главная</a></li>
-            <li><a href="/forum">Форум</a></li>
-            <li><a href="/load">Загрузки</a></li>
-            <li><a href="/blog">Блоги</a></li>
-            <li><a href="/gallery">Галерея</a></li>
+            <li><a href="/forums">Форум</a></li>
+            <li><a href="/loads">Загрузки</a></li>
+            <li><a href="/blogs">Блоги</a></li>
+            <li><a href="/photos">Галерея</a></li>
         </ul>
     </div>
 

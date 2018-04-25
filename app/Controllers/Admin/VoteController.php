@@ -35,7 +35,7 @@ class VoteController extends AdminController
             ->with('topic')
             ->get();
 
-        return view('admin/vote/index', compact('votes', 'page'));
+        return view('admin/votes/index', compact('votes', 'page'));
     }
 
     /**
@@ -54,7 +54,7 @@ class VoteController extends AdminController
             ->with('topic')
             ->get();
 
-        return view('admin/vote/history', compact('votes', 'page'));
+        return view('admin/votes/history', compact('votes', 'page'));
     }
 
     /**
@@ -112,7 +112,7 @@ class VoteController extends AdminController
 
         $getAnswers = $vote->answers->pluck('answer', 'id')->all();
 
-        return view('admin/vote/edit', compact('vote', 'getAnswers'));
+        return view('admin/votes/edit', compact('vote', 'getAnswers'));
     }
 
     /**

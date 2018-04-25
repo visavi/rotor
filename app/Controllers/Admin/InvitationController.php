@@ -39,7 +39,7 @@ class InvitationController extends AdminController
             ->with('user', 'inviteUser')
             ->get();
 
-        return view('admin/invitation/index', compact('invites', 'page', 'used'));
+        return view('admin/invitations/index', compact('invites', 'page', 'used'));
     }
 
     /**
@@ -53,7 +53,7 @@ class InvitationController extends AdminController
             ->orderBy('created_at', 'desc')
             ->get();
 
-        return view('admin/invitation/keys', compact('keys'));
+        return view('admin/invitations/keys', compact('keys'));
     }
 
     /**
@@ -93,7 +93,7 @@ class InvitationController extends AdminController
 
         $listKeys = [1,2,3,4,5,10,15,20,30,40,50];
 
-        return view('admin/invitation/create', compact('listKeys'));
+        return view('admin/invitations/create', compact('listKeys'));
     }
 
     /**
@@ -133,7 +133,7 @@ class InvitationController extends AdminController
             Invite::query()->insert($newKeys);
 
             $text = 'Вы получили пригласительные ключи в количестве '.count($listKeys).'шт.'.PHP_EOL.'Список ключей: '.implode(', ', $listKeys).PHP_EOL.'С помощью этих ключей вы можете пригласить ваших друзей на наш сайт!';
-            sendPrivate($user, null, $text);
+            sendMessage($user, null, $text);
 
             setFlash('success', 'Ключи успешно отправлены!');
             redirect('/admin/invitations');
@@ -175,7 +175,7 @@ class InvitationController extends AdminController
                 ]);
 
                 $text = 'Поздравляем! Вы получили пригласительный ключ'.PHP_EOL.'Ваш ключ: '.$key.PHP_EOL.'С помощью этого ключа вы можете пригласить вашего друга на наш сайт!';
-                sendPrivate($user, null, $text);
+                sendMessage($user, null, $text);
             }
 
             setFlash('success', 'Ключи успешно отправлены! ('. $users->count() .')');

@@ -56,11 +56,11 @@ class ContactController extends BaseController
 
                 if (! isIgnore($user, getUser())) {
                     $message = 'Пользователь [b]'.getUser('login').'[/b] добавил вас в свой контакт-лист!';
-                    sendPrivate($user, getUser(), $message);
+                    sendMessage($user, getUser(), $message);
                 }
 
                 setFlash('success', 'Пользователь успешно добавлен в контакт-лист!');
-                redirect('/contact?page='.$page);
+                redirect('/contacts?page='.$page);
 
             } else {
                 setInput(Request::all());
@@ -79,7 +79,7 @@ class ContactController extends BaseController
             ->with('contactor')
             ->get();
 
-        return view('contact/index', compact('contacts', 'page'));
+        return view('contacts/index', compact('contacts', 'page'));
     }
 
     /**
@@ -112,14 +112,14 @@ class ContactController extends BaseController
                 ]);
 
                 setFlash('success', 'Заметка успешно отредактирована!');
-                redirect('/contact');
+                redirect('/contacts');
             } else {
                 setInput(Request::all());
                 setFlash('danger', $validator->getErrors());
             }
         }
 
-        return view('contact/note', compact('contact'));
+        return view('contacts/note', compact('contact'));
     }
 
     /**
@@ -147,6 +147,6 @@ class ContactController extends BaseController
             setFlash('danger', $validator->getErrors());
         }
 
-        redirect('/contact?page='.$page);
+        redirect('/contacts?page='.$page);
     }
 }

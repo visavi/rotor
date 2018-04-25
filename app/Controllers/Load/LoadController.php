@@ -24,7 +24,7 @@ class LoadController extends BaseController
             abort('default', 'Разделы загрузок еще не созданы!');
         }
 
-        return view('load/index', compact('categories'));
+        return view('loads/index', compact('categories'));
     }
 
     /**
@@ -65,7 +65,7 @@ class LoadController extends BaseController
             ->limit($page->limit)
             ->get();
 
-        return view('load/load', compact('category', 'downs', 'page', 'order'));
+        return view('loads/load', compact('category', 'downs', 'page', 'order'));
     }
 
     /**
@@ -82,6 +82,6 @@ class LoadController extends BaseController
             abort('default', 'Блоги не найдены!');
         }
 
-        return view('load/rss', compact('downs'));
+        return view('loads/rss', compact('downs'));
     }
 }

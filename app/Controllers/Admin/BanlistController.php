@@ -32,6 +32,6 @@ class BanlistController extends AdminController
             ->with('lastBan')
             ->get();
 
-        return view('admin/banlist/index', compact('users', 'page'));
+        return view('admin/banlists/index', compact('users', 'page'));
     }
 }

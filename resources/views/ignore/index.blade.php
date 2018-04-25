@@ -11,22 +11,22 @@
     <nav>
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
-            <li class="breadcrumb-item"><a href="/user/{{ getUser('login') }}">{{ getUser('login') }}</a></li>
+            <li class="breadcrumb-item"><a href="/users/{{ getUser('login') }}">{{ getUser('login') }}</a></li>
             <li class="breadcrumb-item active">Игнор-лист</li>
         </ol>
     </nav>
 
     @if ($ignores->isNotEmpty())
 
-        <form action="/ignore/delete?page={{ $page->current }}" method="post">
+        <form action="/ignores/delete?page={{ $page->current }}" method="post">
             <input type="hidden" name="token" value="{{ $_SESSION['token'] }}">
 
             @foreach ($ignores as $data)
                 <div class="b">
 
                     <div class="float-right">
-                        <a href="/private/send?user={{ $data->ignoring->login }}" title="Написать"><i class="fa fa-reply text-muted"></i></a>
-                        <a href="/ignore/note/{{ $data->id }}" title="Заметка"><i class="fa fa-sticky-note text-muted"></i></a>
+                        <a href="/messages/send?user={{ $data->ignoring->login }}" title="Написать"><i class="fa fa-reply text-muted"></i></a>
+                        <a href="/ignores/note/{{ $data->id }}" title="Заметка"><i class="fa fa-sticky-note text-muted"></i></a>
                         <input type="checkbox" name="del[]" value="{{ $data->id }}">
                     </div>
 
@@ -69,6 +69,6 @@
         </form>
     </div>
 
-    <i class="fa fa-users"></i> <a href="/contact">Контакт-лист</a><br>
-    <i class="fa fa-envelope"></i> <a href="/private">Сообщения</a><br>
+    <i class="fa fa-users"></i> <a href="/contacts">Контакт-лист</a><br>
+    <i class="fa fa-envelope"></i> <a href="/messages">Сообщения</a><br>
 @stop

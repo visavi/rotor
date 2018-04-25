@@ -42,7 +42,7 @@ class TopController extends BaseController
             ->with('category', 'user')
             ->get();
 
-        return view('load/top', compact('downs', 'page', 'order'));
+        return view('loads/top', compact('downs', 'page', 'order'));
     }
 }
 

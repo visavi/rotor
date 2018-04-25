@@ -26,7 +26,7 @@ class VoteController extends BaseController
             ->with('topic')
             ->get();
 
-        return view('vote/index', compact('votes', 'page'));
+        return view('votes/index', compact('votes', 'page'));
     }
 
     /**
@@ -104,7 +104,7 @@ class VoteController extends BaseController
         $vote->sum = ($vote->count > 0) ? $vote->count : 1;
         $vote->max = ($max > 0) ? $max : 1;
 
-        return view('vote/view', compact('vote', 'show'));
+        return view('votes/view', compact('vote', 'show'));
     }
 
     /**
@@ -125,7 +125,7 @@ class VoteController extends BaseController
             ->with('user')
             ->get();
 
-        return view('vote/voters', compact('vote', 'voters'));
+        return view('votes/voters', compact('vote', 'voters'));
     }
 
     /**
@@ -144,7 +144,7 @@ class VoteController extends BaseController
             ->with('topic')
             ->get();
 
-        return view('vote/history', compact('votes', 'page'));
+        return view('votes/history', compact('votes', 'page'));
     }
 
     /**
@@ -181,7 +181,7 @@ class VoteController extends BaseController
         $vote->sum = ($vote->count > 0) ? $vote->count : 1;
         $vote->max = ($max > 0) ? $max : 1;
 
-        return view('vote/view_history', compact('vote'));
+        return view('votes/view_history', compact('vote'));
     }
 
     /**
@@ -235,6 +235,6 @@ class VoteController extends BaseController
             }
         }
 
-        return view('vote/create');
+        return view('votes/create');
     }
 }

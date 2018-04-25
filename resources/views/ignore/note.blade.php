@@ -11,14 +11,14 @@
     <nav>
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
-            <li class="breadcrumb-item"><a href="/user/{{ getUser('login') }}">{{ getUser('login') }}</a></li>
-            <li class="breadcrumb-item"><a href="/contact">Игнор-лист</a></li>
+            <li class="breadcrumb-item"><a href="/users/{{ getUser('login') }}">{{ getUser('login') }}</a></li>
+            <li class="breadcrumb-item"><a href="/contacts">Игнор-лист</a></li>
             <li class="breadcrumb-item active">Заметка</li>
         </ol>
     </nav>
 
     <div class="form">
-        <form method="post" action="/ignore/note/{{ $ignore->id }}">
+        <form method="post" action="/ignores/note/{{ $ignore->id }}">
             <input type="hidden" name="token" value="{{ $_SESSION['token'] }}">
 
             <div class="form-group{{ hasError('msg') }}">
@@ -32,5 +32,5 @@
     </div>
     <br>
 
-    <i class="fa fa-arrow-circle-left"></i> <a href="/ignore">Вернуться</a><br>
+    <i class="fa fa-arrow-circle-left"></i> <a href="/ignores">Вернуться</a><br>
 @stop

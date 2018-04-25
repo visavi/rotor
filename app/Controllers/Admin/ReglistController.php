@@ -57,7 +57,7 @@ class ReglistController extends AdminController
                     setFlash('success', 'Выбранные пользователи успешно удалены!');
                 }
 
-                redirect('/admin/reglist?page=' . $page);
+                redirect('/admin/reglists?page=' . $page);
             } else {
                 setInput(Request::all());
                 setFlash('danger', $validator->getErrors());
@@ -74,6 +74,6 @@ class ReglistController extends AdminController
             ->limit($page->limit)
             ->get();
 
-        return view('admin/reglist/index', compact('users', 'page'));
+        return view('admin/reglists/index', compact('users', 'page'));
     }
 }

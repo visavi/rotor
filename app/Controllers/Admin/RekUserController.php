@@ -36,7 +36,7 @@ class RekUserController extends AdminController
             ->with('user')
             ->get();
 
-        return view('admin/rekuser/index', compact('records', 'page'));
+        return view('admin/rekusers/index', compact('records', 'page'));
     }
     /**
      * Редактирование ссылки
@@ -86,7 +86,7 @@ class RekUserController extends AdminController
             }
         }
 
-        return view('admin/rekuser/edit', compact('link', 'page'));
+        return view('admin/rekusers/edit', compact('link', 'page'));
     }
     /**
      * Удаление записей

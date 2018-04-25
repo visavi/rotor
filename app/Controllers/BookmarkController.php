@@ -39,7 +39,7 @@ class BookmarkController extends BaseController
             ->limit($page->limit)
             ->get();
 
-        return view('forum/bookmark', compact('topics', 'page'));
+        return view('forums/bookmarks', compact('topics', 'page'));
     }
 
     /**
@@ -106,6 +106,6 @@ class BookmarkController extends BaseController
             setFlash('danger', $validator->getErrors());
         }
 
-        redirect('/forum/bookmark?page=' . $page);
+        redirect('/forums/bookmarks?page=' . $page);
     }
 }

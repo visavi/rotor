@@ -62,7 +62,7 @@ class Application
      */
     private static function getRedirect()
     {
-        if ($_SERVER['REQUEST_URI']) {
+/*        if ($_SERVER['REQUEST_URI']) {
 
             $parse = parse_url($_SERVER['REQUEST_URI']);
 
@@ -91,15 +91,15 @@ class Application
                 }
 
                 if ($parse['path'] == '/forum/topic.php' && isset($output['tid']) && is_numeric($output['tid'])){
-                    redirect('/topic/'.$output['tid'], true);
+                    redirect('/topics/'.$output['tid'], true);
                 }
 
                 if ($parse['path'] == '/forum/print.php' && isset($output['tid']) && is_numeric($output['tid'])){
-                    redirect('/topic/print/'.$output['tid'], true);
+                    redirect('/topics/print/'.$output['tid'], true);
                 }
 
                 if ($parse['path'] == '/forum/rss.php' && isset($output['tid']) && is_numeric($output['tid'])){
-                    redirect('/topic/rss/'.$output['tid'], true);
+                    redirect('/topics/rss/'.$output['tid'], true);
                 }
 
                 if (
@@ -180,19 +180,19 @@ class Application
                 }
 
                 // Галерея
-                if ($parse['path'] == '/gallery/index.php' && isset($output['act']) &&
+                if ($parse['path'] == '/photos/index.php' && isset($output['act']) &&
                     $output['act'] == 'view' && isset($output['gid']) && is_numeric($output['gid'])){
-                    redirect('/gallery/'.$output['gid'], true);
+                    redirect('/photos/'.$output['gid'], true);
                 }
 
-                if ($parse['path'] == '/gallery/album.php' && isset($output['act']) &&
+                if ($parse['path'] == '/photos/album.php' && isset($output['act']) &&
                     $output['act'] == 'photo' && isset($output['uz'])){
-                    redirect('/gallery/album/'.$output['uz'], true);
+                    redirect('/photos/album/'.$output['uz'], true);
                 }
 
-                if ($parse['path'] == '/gallery/comments.php' && isset($output['act']) &&
+                if ($parse['path'] == '/photos/comments.php' && isset($output['act']) &&
                     $output['act'] == 'comments' && isset($output['uz'])){
-                    redirect('/gallery/comments?act=comments&uz='.$output['uz'], true);
+                    redirect('/photos/comments?act=comments&uz='.$output['uz'], true);
                 }
 
                 // Страницы
@@ -201,9 +201,9 @@ class Application
                 }
 
                 if ($parse['path'] == '/pages/user.php' && isset($output['uz'])){
-                    redirect('/user/'.$output['uz'], true);
+                    redirect('/users/'.$output['uz'], true);
                 }
             }
-        }
+        }*/
     }
 }

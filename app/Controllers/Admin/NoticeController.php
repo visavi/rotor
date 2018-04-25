@@ -31,7 +31,7 @@ class NoticeController extends AdminController
             ->with('user')
             ->get();
 
-        return view('admin/notice/index', compact('notices'));
+        return view('admin/notices/index', compact('notices'));
     }
 
     /**
@@ -69,7 +69,7 @@ class NoticeController extends AdminController
                 ]);
 
                 setFlash('success', 'Шаблон успешно сохранен!');
-                redirect('/admin/notice/edit/' . $notice->id);
+                redirect('/admin/notices/edit/' . $notice->id);
 
             } else {
                 setInput(Request::all());
@@ -77,7 +77,7 @@ class NoticeController extends AdminController
             }
         }
 
-        return view('admin/notice/create');
+        return view('admin/notices/create');
     }
 
     /**
@@ -113,7 +113,7 @@ class NoticeController extends AdminController
                 ]);
 
                 setFlash('success', 'Шаблон успешно сохранен!');
-                redirect('/admin/notice/edit/' . $notice->id);
+                redirect('/admin/notices/edit/' . $notice->id);
 
             } else {
                 setInput(Request::all());
@@ -121,7 +121,7 @@ class NoticeController extends AdminController
             }
         }
 
-        return view('admin/notice/edit', compact('notice'));
+        return view('admin/notices/edit', compact('notice'));
     }
 
     /**
@@ -147,6 +147,6 @@ class NoticeController extends AdminController
             setFlash('danger', $validator->getErrors());
         }
 
-        redirect('/admin/notice');
+        redirect('/admin/notices');
     }
 }

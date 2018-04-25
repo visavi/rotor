@@ -29,14 +29,14 @@ class CacheController extends AdminController
         if ($type === 'files') {
             $files = glob(STORAGE . '/temp/*.dat');
 
-            $view = view('admin/cache/index', compact('files'));
+            $view = view('admin/caches/index', compact('files'));
         } else {
-            $images = glob(UPLOADS.'/thumbnail/*.{gif,png,jpg,jpeg}', GLOB_BRACE);
+            $images = glob(UPLOADS.'/thumbnails/*.{gif,png,jpg,jpeg}', GLOB_BRACE);
             $page   = paginate(20, count($images));
 
             $images = array_slice($images, $page->offset, $page->limit);
 
-            $view = view('admin/cache/images', compact('images', 'page'));
+            $view = view('admin/caches/images', compact('images', 'page'));
         }
 
         return $view;
@@ -55,7 +55,7 @@ class CacheController extends AdminController
             if ($type === 'files') {
                 clearCache();
             } else {
-                $images = glob(UPLOADS.'/thumbnail/*.{gif,png,jpg,jpeg}', GLOB_BRACE);
+                $images = glob(UPLOADS.'/thumbnails/*.{gif,png,jpg,jpeg}', GLOB_BRACE);
 
                 if ($images){
                     foreach ($images as $image) {
@@ -69,6 +69,6 @@ class CacheController extends AdminController
             setFlash('danger', 'Ошибка! Неверный идентификатор сессии, повторите действие!');
         }
 
-        redirect('/admin/cache?type=' . $type);
+        redirect('/admin/caches?type=' . $type);
     }
 }

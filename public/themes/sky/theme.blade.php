@@ -40,40 +40,40 @@ header("Content-type:text/html; charset=utf-8");
                     <div class="r"></div>
                     <ul class="art-menu">
                         <li><a href="/"><span class="l"></span><span class="r"></span><span class="t">Главная</span></a></li>
-                        <li><a href="/forum"><span class="l"></span><span class="r"></span><span class="t">Форум</span></a>
+                        <li><a href="/forums"><span class="l"></span><span class="r"></span><span class="t">Форум</span></a>
                             <ul>
-                                 <li><a href="/forum/new/themes">Новые темы</a></li>
-                                 <li><a href="/forum/new/posts">Новые сообщения</a></li>
+                                 <li><a href="/forums/new/themes">Новые темы</a></li>
+                                 <li><a href="/forums/new/posts">Новые сообщения</a></li>
                             </ul>
                         </li>
-                        <li><a href="/book"><span class="l"></span><span class="r"></span><span class="t">Гостевая</span></a></li>
+                        <li><a href="/guestbooks"><span class="l"></span><span class="r"></span><span class="t">Гостевая</span></a></li>
 
-                        <li><a href="/load"><span class="l"></span><span class="r"></span><span class="t">Файлы</span></a>
+                        <li><a href="/loads"><span class="l"></span><span class="r"></span><span class="t">Файлы</span></a>
                            <ul>
-                                 <li><a href="/load/new?act=files">Новые файлы</a></li>
-                                 <li><a href="/load/new?act=comments">Новые комментарии</a></li>
+                                 <li><a href="/loads/new?act=files">Новые файлы</a></li>
+                                 <li><a href="/loads/new?act=comments">Новые комментарии</a></li>
                            </ul>
                         </li>
 
-                        <li><a href="/blog"><span class="l"></span><span class="r"></span><span class="t">Блоги</span></a>
+                        <li><a href="/blogs"><span class="l"></span><span class="r"></span><span class="t">Блоги</span></a>
                            <ul>
-                                 <li><a href="/blog/new/articles">Новые статьи</a></li>
-                                 <li><a href="/blog/new/comments">Новые комментарии</a></li>
+                                 <li><a href="/blogs/new/articles">Новые статьи</a></li>
+                                 <li><a href="/blogs/new/comments">Новые комментарии</a></li>
                            </ul>
                         </li>
 
-                        <li><a href="/gallery"><span class="l"></span><span class="r"></span><span class="t">Галерея</span></a>
+                        <li><a href="/photos"><span class="l"></span><span class="r"></span><span class="t">Галерея</span></a>
                            <ul>
-                                 <li><a href="/gallery/top">Топ фото</a></li>
-                                 <li><a href="/gallery/albums">Все альбомы</a></li>
-                                            <li><a href="/gallery/comments">Все комментарии</a></li>
+                                 <li><a href="/photos/top">Топ фото</a></li>
+                                 <li><a href="/photos/albums">Все альбомы</a></li>
+                                            <li><a href="/photos/comments">Все комментарии</a></li>
                            </ul>
                         </li>
 
                         <li><a href="#"><span class="l"></span><span class="r"></span><span class="t">Актив сайта</span></a>
                            <ul>
-                                 <li><a href="/adminlist">Администрация</a></li>
-                                 <li><a href="/userlist">Пользователи</a></li>
+                                 <li><a href="/adminlists">Администрация</a></li>
+                                 <li><a href="/userlists">Пользователи</a></li>
                            </ul>
                         </li>
 
@@ -112,7 +112,7 @@ header("Content-type:text/html; charset=utf-8");
                                 @endif
 
                                 @if (getUser('newchat')<statsNewChat())
-                                    &bull; <a href="/admin/chat"><span style="color:#ff0000">Чат</span></a>
+                                    &bull; <a href="/admin/chats"><span style="color:#ff0000">Чат</span></a>
                                 @endif
                             </div>
                         @endif
@@ -255,7 +255,7 @@ header("Content-type:text/html; charset=utf-8");
 <div style="text-align:center"><small>
 <a href="/faq">FAQ (Чаво)</a> |
 <a href="/rules">Правила</a> |
-<a href="/mail">Поддержка</a>
+<a href="/mails">Поддержка</a>
 </small></div>
 @yield('scripts')
 @stack('scripts')

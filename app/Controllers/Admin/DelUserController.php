@@ -47,7 +47,7 @@ class DelUserController extends AdminController
 
         $total = User::query()->count();
 
-        return view('admin/deluser/index', compact('users', 'total', 'period', 'point'));
+        return view('admin/delusers/index', compact('users', 'total', 'period', 'point'));
     }
 
     /**

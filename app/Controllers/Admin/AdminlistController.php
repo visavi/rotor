@@ -25,6 +25,6 @@ class AdminlistController extends AdminController
             ->orderByRaw("field(level, '".implode(',', User::ADMIN_GROUPS)."')")
             ->get();
 
-        return view('admin/adminlist/index', compact('users'));
+        return view('admin/adminlists/index', compact('users'));
     }
 }

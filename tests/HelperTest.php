@@ -1,7 +1,7 @@
 <?php
 
 use PHPUnit\Framework\TestCase;
-use App\Models\Guest;
+use App\Models\Guestbook;
 
 class HelperTest extends TestCase
 {

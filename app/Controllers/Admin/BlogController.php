@@ -21,7 +21,7 @@ class BlogController extends AdminController
             ->with('children', 'new', 'children.new')
             ->get();
 
-        return view('admin/blog/index', compact('categories'));
+        return view('admin/blogs/index', compact('categories'));
     }
 
     /**
@@ -50,13 +50,13 @@ class BlogController extends AdminController
             ]);
 
             setFlash('success', 'Новый раздел успешно создан!');
-            redirect('/admin/blog/edit/' . $category->id);
+            redirect('/admin/blogs/edit/' . $category->id);
         } else {
             setInput(Request::all());
             setFlash('danger', $validator->getErrors());
         }
 
-        redirect('/admin/blog');
+        redirect('/admin/blogs');
     }
 
     /**
@@ -105,14 +105,14 @@ class BlogController extends AdminController
                 ]);
 
                 setFlash('success', 'Раздел успешно отредактирован!');
-                redirect('/admin/blog');
+                redirect('/admin/blogs');
             } else {
                 setInput(Request::all());
                 setFlash('danger', $validator->getErrors());
             }
         }
 
-        return view('admin/blog/edit', compact('categories', 'category'));
+        return view('admin/blogs/edit', compact('categories', 'category'));
     }
 
     /**
@@ -150,7 +150,7 @@ class BlogController extends AdminController
             setFlash('danger', $validator->getErrors());
         }
 
-        redirect('/admin/blog');
+        redirect('/admin/blogs');
     }
 
     /**
@@ -166,14 +166,14 @@ class BlogController extends AdminController
 
         if ($token == $_SESSION['token']) {
 
-            restatement('blog');
+            restatement('blogs');
 
             setFlash('success', 'Данные успешно пересчитаны!');
         } else {
             setFlash('danger', 'Ошибка! Неверный идентификатор сессии, повторите действие!');
         }
 
-        redirect('/admin/blog');
+        redirect('/admin/blogs');
     }
 
     /**
@@ -199,7 +199,7 @@ class BlogController extends AdminController
             ->with('user')
             ->get();
 
-        return view('admin/blog/blog', compact('blogs', 'category', 'page'));
+        return view('admin/blogs/blog', compact('blogs', 'category', 'page'));
     }
 
     /**
@@ -236,7 +236,7 @@ class BlogController extends AdminController
                 ]);
 
                 setFlash('success', 'Статья успешно отредактирована!');
-                redirect('/article/'.$blog->id);
+                redirect('/articles/'.$blog->id);
             } else {
                 setInput(Request::all());
                 setFlash('danger', $validator->getErrors());
@@ -249,7 +249,7 @@ class BlogController extends AdminController
             ->orderBy('sort')
             ->get();
 
-        return view('admin/blog/edit_blog', compact('blog', 'categories'));
+        return view('admin/blogs/edit_blog', compact('blog', 'categories'));
     }
 
     /**
@@ -291,7 +291,7 @@ class BlogController extends AdminController
                 ]);
 
                 setFlash('success', 'Статья успешно перенесена!');
-                redirect('/article/'.$blog->id);
+                redirect('/articles/'.$blog->id);
             } else {
                 setInput(Request::all());
                 setFlash('danger', $validator->getErrors());
@@ -304,7 +304,7 @@ class BlogController extends AdminController
             ->orderBy('sort')
             ->get();
 
-        return view('admin/blog/move_blog', compact('blog', 'categories'));
+        return view('admin/blogs/move_blog', compact('blog', 'categories'));
     }
 
     /**
@@ -336,6 +336,6 @@ class BlogController extends AdminController
             setFlash('danger', $validator->getErrors());
         }
 
-        redirect('/admin/blog/' . $blog->category_id . '?page=' . $page);
+        redirect('/admin/blogs/' . $blog->category_id . '?page=' . $page);
     }
 }

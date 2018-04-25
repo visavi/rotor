@@ -23,7 +23,7 @@ class BanController extends AdminController
      */
     public function index()
     {
-        return view('admin/ban/index');
+        return view('admin/bans/index');
     }
 
     /**
@@ -89,14 +89,14 @@ class BanController extends AdminController
                 ]);
 
                 setFlash('success', 'Пользователь успешно заблокирован!');
-                redirect('/admin/ban/edit?user=' . $user->login);
+                redirect('/admin/bans/edit?user=' . $user->login);
             } else {
                 setInput(Request::all());
                 setFlash('danger', $validator->getErrors());
             }
         }
 
-        return view('admin/ban/edit', compact('user'));
+        return view('admin/bans/edit', compact('user'));
     }
 
     /**
@@ -146,14 +146,14 @@ class BanController extends AdminController
                 ]);
 
                 setFlash('success', 'Данные успешно изменены!');
-                redirect('/admin/ban/edit?user=' . $user->login);
+                redirect('/admin/bans/edit?user=' . $user->login);
             } else {
                 setInput(Request::all());
                 setFlash('danger', $validator->getErrors());
             }
         }
 
-        return view('admin/ban/change', compact('user'));
+        return view('admin/bans/change', compact('user'));
     }
 
     /**
@@ -196,6 +196,6 @@ class BanController extends AdminController
             setFlash('danger', $validator->getErrors());
         }
 
-        redirect('/admin/ban/edit?user=' . $user->login);
+        redirect('/admin/bans/edit?user=' . $user->login);
     }
 }

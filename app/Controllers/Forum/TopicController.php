@@ -91,7 +91,7 @@ class TopicController extends BaseController
             }
         }
 
-        return view('forum/topic', compact('topic', 'posts', 'page', 'vote'));
+        return view('forums/topic', compact('topic', 'posts', 'page', 'vote'));
     }
 
     /**
@@ -211,7 +211,7 @@ class TopicController extends BaseController
 
                     $user = User::query()->where('login', $login)->first();
                     if ($user && $user->notify) {
-                        sendPrivate($user, getUser(), 'Пользователь ' . getUser('login') . ' ответил вам в теме [url=' . siteUrl() . '/topic/' . $topic->id . '/' . $post->id . ']' . $topic->title . '[/url]' . PHP_EOL . 'Текст сообщения: ' . $msg);
+                        sendMessage($user, getUser(), 'Пользователь ' . getUser('login') . ' ответил вам в теме [url=' . siteUrl() . '/topics/' . $topic->id . '/' . $post->id . ']' . $topic->title . '[/url]' . PHP_EOL . 'Текст сообщения: ' . $msg);
                     }
                 }
             }
@@ -229,7 +229,7 @@ class TopicController extends BaseController
             setFlash('danger', $validator->getErrors());
         }
 
-        redirect('/topic/end/' . $topic->id);
+        redirect('/topics/end/' . $topic->id);
     }
 
     /**
@@ -266,7 +266,7 @@ class TopicController extends BaseController
 
             if ($files->isNotEmpty()) {
                 foreach ($files as $file) {
-                    deleteFile(UPLOADS . '/forum/' . $topic->id . '/' . $file->hash);
+                    deleteFile(UPLOADS . '/forums/' . $topic->id . '/' . $file->hash);
                     $file->delete();
                 }
             }
@@ -281,7 +281,7 @@ class TopicController extends BaseController
             setFlash('danger', $validator->getErrors());
         }
 
-        redirect('/topic/' . $topic->id . '?page=' . $page);
+        redirect('/topics/' . $topic->id . '?page=' . $page);
     }
 
     /**
@@ -319,7 +319,7 @@ class TopicController extends BaseController
             setFlash('danger', $validator->getErrors());
         }
 
-        redirect('/topic/' . $topic->id);
+        redirect('/topics/' . $topic->id);
     }
 
     /**
@@ -384,7 +384,7 @@ class TopicController extends BaseController
                 }
 
                 setFlash('success', 'Тема успешно изменена!');
-                redirect('/topic/' . $topic->id);
+                redirect('/topics/' . $topic->id);
 
             } else {
                 setInput(Request::all());
@@ -392,7 +392,7 @@ class TopicController extends BaseController
             }
         }
 
-        return view('forum/topic_edit', compact('post', 'topic'));
+        return view('forums/topic_edit', compact('post', 'topic'));
     }
 
     /**
@@ -460,21 +460,21 @@ class TopicController extends BaseController
 
                     if ($files->isNotEmpty()) {
                         foreach ($files as $file) {
-                            deleteFile(UPLOADS . '/forum/' . $post->topic_id . '/' . $file->hash);
+                            deleteFile(UPLOADS . '/forums/' . $post->topic_id . '/' . $file->hash);
                             $file->delete();
                         }
                     }
                 }
 
                 setFlash('success', 'Сообщение успешно отредактировано!');
-                redirect('/topic/' . $post->topic_id . '?page=' . $page);
+                redirect('/topics/' . $post->topic_id . '?page=' . $page);
             } else {
                 setInput(Request::all());
                 setFlash('danger', $validator->getErrors());
             }
         }
 
-        return view('forum/topic_edit_post', compact('post', 'page'));
+        return view('forums/topic_edit_post', compact('post', 'page'));
     }
 
     /**
@@ -538,7 +538,7 @@ class TopicController extends BaseController
             setFlash('danger', $validator->getErrors());
         }
 
-        redirect('/topic/' . $vote->topic_id . '?page=' . $page);
+        redirect('/topics/' . $vote->topic_id . '?page=' . $page);
     }
 
     /**
@@ -558,7 +558,7 @@ class TopicController extends BaseController
             ->orderBy('created_at')
             ->get();
 
-        return view('forum/print', compact('topic', 'posts'));
+        return view('forums/print', compact('topic', 'posts'));
     }
 
     /**
@@ -576,7 +576,7 @@ class TopicController extends BaseController
         }
 
         $end = ceil($countTopics / setting('forumpost'));
-        redirect('/topic/' . $id . '?page=' . $end . '#post_' . $pid);
+        redirect('/topics/' . $id . '?page=' . $end . '#post_' . $pid);
     }
 
     /**
@@ -591,6 +591,6 @@ class TopicController extends BaseController
         }
 
         $end = ceil($topic->count_posts / setting('forumpost'));
-        redirect('/topic/' . $topic->id . '?page=' . $end);
+        redirect('/topics/' . $topic->id . '?page=' . $end);
     }
 }

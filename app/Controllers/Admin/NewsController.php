@@ -143,7 +143,7 @@ class NewsController extends AdminController
                 // Выводим на главную если там нет новостей
                 if ($top && empty(setting('lastnews'))) {
                     Setting::query()->where('name', 'lastnews')->update(['value' => 1]);
-                    saveSetting();
+                    saveSettings();
                 }
 
                 setFlash('success', 'Новость успешно добавлена!');
