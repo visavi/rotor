@@ -3,15 +3,15 @@
 use Phinx\Migration\AbstractMigration;
 use Phinx\Db\Adapter\MysqlAdapter;
 
-class CreateCounter24Table extends AbstractMigration
+class CreateCounters24Table extends AbstractMigration
 {
     /**
      * Change Method.
      */
     public function change()
     {
-        if (! $this->hasTable('counter24')) {
-            $table = $this->table('counter24', ['collation' => env('DB_COLLATION')]);
+        if (! $this->hasTable('counters24')) {
+            $table = $this->table('counters24', ['collation' => env('DB_COLLATION')]);
             $table
                 ->addColumn('hour', 'integer')
                 ->addColumn('hosts', 'integer')

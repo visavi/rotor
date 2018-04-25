@@ -24,7 +24,7 @@ class Metrika
 
         $count = statsCounter();
 
-        if (file_exists(STORAGE.'/temp/counter7.dat')) {
+        if (file_exists(STORAGE . '/temp/counter7.dat')) {
             $host_data = json_decode(file_get_contents(STORAGE . '/temp/counter7.dat'));
         } else {
             $host_data = array_fill(0, 6, 0);
@@ -94,7 +94,7 @@ class Metrika
         imagettftext($img, 6, 0, 13, 29, $color2, HOME . '/assets/fonts/font4.ttf', $count->dayhits);
         imagettftext($img, 12, 0, $pos, 29, $color2, HOME . '/assets/fonts/font7.ttf', $online);
 
-        imagepng($img, UPLOADS.'/counters/counter_new.png');
+        imagepng($img, UPLOADS . '/counters/counter_new.png');
         imagedestroy($img);
 
         rename(UPLOADS . '/counters/counter_new.png', UPLOADS . '/counters/counter.png');
@@ -151,7 +151,7 @@ class Metrika
             foreach ($host_data as $value) {
                 $per_host[] = $value * 2.90 / $maxhit;
             }
-            $img = @imagecreatefromgif(HOME.'/assets/img/images/counter24.gif');
+            $img = @imagecreatefromgif(HOME . '/assets/img/images/counter24.gif');
             // линейный
             $color1 = imagecolorallocate($img, 44, 191, 228);
             $color2 = imagecolorallocate($img, 0, 0, 120);
@@ -178,7 +178,7 @@ class Metrika
                 imageline($img, $x1 + 1, $y1_host, $x2, $y2_host, $color2);
 
                 if ($hits_data[$i] != 0 && $i == $max_index) {
-                    imagettftext($img, 6, 0, 40, $y2_hits-3, $color_red, HOME.'/assets/fonts/font.ttf', 'max. '.$maxhost.' / '.$maxhit);
+                    imagettftext($img, 6, 0, 40, $y2_hits-3, $color_red, HOME . '/assets/fonts/font.ttf', 'max. ' . $maxhost.' / ' . $maxhit);
                     imageline($img, $x2-1, $y2_hits-2, $x2-1, $y2_hits + 42, $color_red);
                 }
                 $y1_hits = $y2_hits;
@@ -187,11 +187,11 @@ class Metrika
                 $x2 -= $coll + 2;
             }
             //Header("Content-type: image/gif");
-            imagegif($img, HOME.$imageCache);
+            imagegif($img, HOME . $imageCache);
             imagedestroy($img);
         }
 
-        echo '<img src="'.$imageCache.'?'.dateFixed(SITETIME, "dmYH").'" alt="Сутки"><br><br>';
+        echo '<img src="' . $imageCache . '?' . dateFixed(SITETIME, "dmYH") . '" alt="Сутки"><br><br>';
     }
 
     /**
@@ -229,7 +229,7 @@ class Metrika
                 $per_host[] = $value * 0.90 / $max;
             }
 
-            $img = imagecreatefromgif(HOME.'/assets/img/images/counter7.gif');
+            $img = imagecreatefromgif(HOME . '/assets/img/images/counter7.gif');
 
             $imageW = 47;
             $collW  = 14;
@@ -281,8 +281,8 @@ class Metrika
                 ];
 
                 imagefilledpolygon($img, $points, 4, $color3);
-                imagettftext($img, 6, 90, $x1+10, 50, $colorBlack, HOME.'/assets/fonts/font.ttf', $host_data[$index]);
-                imagettftext($img, 6, 0, $x1 + 3, 66, $colorBlack, HOME.'/assets/fonts/font.ttf', $arr_week[$week_day]);
+                imagettftext($img, 6, 90, $x1+10, 50, $colorBlack, HOME . '/assets/fonts/font.ttf', $host_data[$index]);
+                imagettftext($img, 6, 0, $x1 + 3, 66, $colorBlack, HOME . '/assets/fonts/font.ttf', $arr_week[$week_day]);
 
                 $x1 += $collW;
                 $x2 += $collW;
@@ -292,7 +292,7 @@ class Metrika
             imagedestroy($img);
         }
 
-        echo '<img src="'.$imageCache.'?'.dateFixed(SITETIME, "dmY").'" alt="Неделя"><br><br>';
+        echo '<img src="' . $imageCache . '?'.dateFixed(SITETIME, "dmY") . '" alt="Неделя"><br><br>';
     }
 
     /**
@@ -347,7 +347,7 @@ class Metrika
             foreach ($host_data as $value) {
                 $per_host[] = $value * 2.90 / $maxhit;
             }
-            $img = imagecreatefromgif(HOME.'/assets/img/images/counter31.gif');
+            $img = imagecreatefromgif(HOME . '/assets/img/images/counter31.gif');
             // линейный
             $color1 = imagecolorallocate($img, 44, 191, 228);
             $color2 = imagecolorallocate($img, 0, 0, 120);
@@ -365,7 +365,7 @@ class Metrika
                 $counth = 31;
             }
 
-            imagettftext($img, 6, 0, 50, 7, $color_red, HOME.'/assets/fonts/font.ttf', 'max. '.$maxhost.' / '.$maxhit);
+            imagettftext($img, 6, 0, 50, 7, $color_red, HOME . '/assets/fonts/font.ttf', 'max. ' . $maxhost . ' / ' . $maxhit);
 
             for($i = 1;$i < $counth;$i++) {
                 // хиты
@@ -384,11 +384,11 @@ class Metrika
                 $x2 -= $coll + 2;
             }
             //Header("Content-type: image/gif");
-            imagegif($img, HOME.$imageCache);
+            imagegif($img, HOME . $imageCache);
             imagedestroy($img);
         }
 
-        echo '<img src="'.$imageCache.'?'.dateFixed(SITETIME, "dmY").'" alt="Месяц"><br><br>';
+        echo '<img src="' . $imageCache . '?' . dateFixed(SITETIME, "dmY") . '" alt="Месяц"><br><br>';
     }
 
     /**
@@ -453,15 +453,15 @@ class Metrika
         $counter = Counter::query()->first();
 
         if ($counter->hours != $hours) {
-            DB::insert("insert ignore into `counter24` (`hour`, `hosts`, `hits`) values (?, ?, ?);", [$hours, $counter->hosts24, $counter->hits24]);
-            DB::update("update `counter` set `hours`=?, `hosts24`=?, `hits24`=?;", [$hours, 0, 0]);
-            DB::delete("delete from `counter24` where `hour` < (select min(`hour`) from (select `hour` from `counter24` order by `hour` desc limit 24) as del);");
+            DB::insert("insert ignore into `counters24` (`hour`, `hosts`, `hits`) values (?, ?, ?);", [$hours, $counter->hosts24, $counter->hits24]);
+            DB::update("update `counters` set `hours`=?, `hosts24`=?, `hits24`=?;", [$hours, 0, 0]);
+            DB::delete("delete from `counters24` where `hour` < (select min(`hour`) from (select `hour` from `counters24` order by `hour` desc limit 24) as del);");
         }
 
         if ($counter->days != $days) {
-            DB::insert("insert ignore into `counter31` (`days`, `hosts`, `hits`) values (?, ?, ?);", [$days, $counter->dayhosts, $counter->dayhits]);
-            DB::update("update `counter` set `days`=?, `dayhosts`=?, `dayhits`=?;", [$days, 0, 0]);
-            DB::delete("delete from `counter31` where `days` < (select min(`days`) from (select `days` from `counter31` order by `days` desc limit 31) as del);");
+            DB::insert("insert ignore into `counters31` (`days`, `hosts`, `hits`) values (?, ?, ?);", [$days, $counter->dayhosts, $counter->dayhits]);
+            DB::update("update `counters` set `days`=?, `dayhosts`=?, `dayhits`=?;", [$days, 0, 0]);
+            DB::delete("delete from `counters31` where `days` < (select min(`days`) from (select `days` from `counters31` order by `days` desc limit 31) as del);");
             // ---------------------------------------------------//
 
             $week = Counter31::query()
@@ -475,7 +475,7 @@ class Metrika
                 array_unshift($hostData, $week[$tekdays] ?? 0);
             }
 
-            file_put_contents(STORAGE.'/temp/counter7.dat', json_encode($hostData), LOCK_EX);
+            file_put_contents(STORAGE . '/temp/counter7.dat', json_encode($hostData), LOCK_EX);
         }
 
         // -----------------------------------------------------------//
