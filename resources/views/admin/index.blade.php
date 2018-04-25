@@ -48,7 +48,7 @@
         <i class="far fa-circle fa-lg text-muted"></i> <a href="/admin/phpinfo">PHP-информация</a> ({{ parseVersion(PHP_VERSION) }})<br>
         <i class="far fa-circle fa-lg text-muted"></i> <a href="/admin/load">Загруз-центр</a> ({{ statsLoad() }})<br>
         <i class="far fa-circle fa-lg text-muted"></i> <a href="/admin/down/new">Новые публикации</a> ({{ statsNewLoad() }})<br>
-        <i class="far fa-circle fa-lg text-muted"></i> <a href="/admin/log">Ошибки / Автобаны</a><br>
+        <i class="far fa-circle fa-lg text-muted"></i> <a href="/admin/errors">Ошибки / Автобаны</a><br>
         <i class="far fa-circle fa-lg text-muted"></i> <a href="/admin/blacklist">Черный список</a> ({{ statsBlacklist() }})<br>
         <i class="far fa-circle fa-lg text-muted"></i> <a href="/admin/offers">Предложения / Проблемы</a> ({{ statsOffers() }})<br>
         <i class="far fa-circle fa-lg text-muted"></i> <a href="/admin/smiles">Управление смайлами</a> ({{ statsSmiles() }})<br>
@@ -63,7 +63,7 @@
         <i class="far fa-circle fa-lg text-muted"></i> <a href="/admin/backup">Backup-панель</a><br>
         <i class="far fa-circle fa-lg text-muted"></i> <a href="/admin/checker">Сканирование сайта</a> ({{ statsChecker() }})<br>
         <i class="far fa-circle fa-lg text-muted"></i> <a href="/admin/delivery">Приват-рассылка</a><br>
-        <i class="far fa-circle fa-lg text-muted"></i> <a href="/admin/logadmin">Логи посещений</a><br>
+        <i class="far fa-circle fa-lg text-muted"></i> <a href="/admin/logs">Логи посещений</a><br>
         <i class="far fa-circle fa-lg text-muted"></i> <a href="/admin/notice">Шаблоны писем</a><br>
         <i class="far fa-circle fa-lg text-muted"></i> <a href="/admin/files">Редактирование файлов</a><br>
         <i class="far fa-circle fa-lg text-muted"></i> <a href="/admin/delusers">Чистка пользователей</a><br>

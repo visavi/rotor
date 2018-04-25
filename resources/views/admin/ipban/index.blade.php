@@ -16,7 +16,7 @@
         </ol>
     </nav>
 
-    <a href="/admin/log?code=666">История автобанов</a><br>
+    <a href="/admin/errors?code=666">История автобанов</a><br>
 
     @if ($logs->isNotEmpty())
 

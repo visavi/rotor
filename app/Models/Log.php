@@ -9,7 +9,7 @@ class Log extends BaseModel
      *
      * @var string
      */
-    protected $table = 'error';
+    protected $table = 'logs';
 
     /**
      * Indicates if the model should be timestamped.

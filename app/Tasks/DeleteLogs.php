@@ -2,8 +2,8 @@
 
 namespace App\Tasks;
 
-use App\Models\Admlog;
 use App\Models\Log;
+use App\Models\Error;
 use Crontask\Tasks\Task;
 
 class DeleteLogs extends Task
@@ -15,11 +15,11 @@ class DeleteLogs extends Task
     {
         $time = strtotime('-1 month', SITETIME);
 
-        Log::query()
+        Error::query()
             ->where('created_at', '<', $time)
             ->delete();
 
-        Admlog::query()
+        Log::query()
             ->where('created_at', '<', $time)
             ->delete();
     }

@@ -231,8 +231,8 @@ $routes = [
     ['GET',      '/admin', 'Admin\AdminController@index', 'admin'],
     ['GET',      '/admin/spam', 'Admin\SpamController@index'],
     ['POST',     '/admin/spam/delete', 'Admin\SpamController@delete'],
-    ['GET',      '/admin/log', 'Admin\LogController@index'],
-    ['GET',      '/admin/log/clear', 'Admin\LogController@clear'],
+    ['GET',      '/admin/errors', 'Admin\ErrorController@index'],
+    ['GET',      '/admin/errors/clear', 'Admin\ErrorController@clear'],
     ['GET|POST', '/admin/antimat', 'Admin\AntimatController@index'],
     ['GET',      '/admin/antimat/[delete|clear:action]', 'Admin\AntimatController'],
     ['GET',      '/admin/status', 'Admin\StatusController@index'],
@@ -258,8 +258,8 @@ $routes = [
 
     ['GET|POST', '/admin/delivery', 'Admin\DeliveryController@index'],
 
-    ['GET',      '/admin/logadmin', 'Admin\LogAdminController@index'],
-    ['GET',      '/admin/logadmin/clear', 'Admin\LogAdminController@clear'],
+    ['GET',      '/admin/logs', 'Admin\LogController@index'],
+    ['GET',      '/admin/logs/clear', 'Admin\LogController@clear'],
 
     ['GET',      '/admin/notice', 'Admin\NoticeController@index'],
     ['GET|POST', '/admin/notice/create', 'Admin\NoticeController@create'],

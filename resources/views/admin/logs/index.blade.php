@@ -31,7 +31,7 @@
 
         {!! pagination($page) !!}
 
-        <i class="fa fa-times"></i> <a href="/admin/logadmin/clear?token={{ $_SESSION['token'] }}" onclick="return confirm('Вы уверены что хотите очистить логи?')">Очистить логи</a><br>
+        <i class="fa fa-times"></i> <a href="/admin/logs/clear?token={{ $_SESSION['token'] }}" onclick="return confirm('Вы уверены что хотите очистить логи?')">Очистить логи</a><br>
 
     @else
         {!! showError('Логов еще нет!') !!}

@@ -1,26 +1,24 @@
 <?php
 
 use Phinx\Migration\AbstractMigration;
-use Phinx\Db\Adapter\MysqlAdapter;
 
-class CreateErrorTable extends AbstractMigration
+class CreateLogsTable extends AbstractMigration
 {
     /**
-     * Change Method.
+     * Migrate Change.
      */
     public function change()
     {
-        if (! $this->hasTable('error')) {
-            $table = $this->table('error', ['collation' => env('DB_COLLATION')]);
+        if (! $this->hasTable('logs')) {
+            $table = $this->table('logs', ['collation' => env('DB_COLLATION')]);
             $table
-                ->addColumn('code', 'integer')
+                ->addColumn('user_id', 'integer')
                 ->addColumn('request', 'string', ['null' => true])
                 ->addColumn('referer', 'string', ['null' => true])
-                ->addColumn('user_id', 'integer', ['null' => true])
                 ->addColumn('ip', 'string', ['limit' => 15])
                 ->addColumn('brow', 'string', ['limit' => 25])
                 ->addColumn('created_at', 'integer')
-                ->addIndex(['code', 'created_at'], ['name' => 'code'])
+                ->addIndex('created_at')
                 ->create();
         }
     }

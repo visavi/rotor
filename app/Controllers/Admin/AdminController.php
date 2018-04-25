@@ -3,7 +3,7 @@
 namespace App\Controllers\Admin;
 
 use App\Controllers\BaseController;
-use App\Models\Admlog;
+use App\Models\Log;
 use App\Models\User;
 use Phinx\Console\PhinxApplication;
 use Phinx\Wrapper\TextWrapper;
@@ -19,7 +19,7 @@ Class AdminController extends BaseController
             abort(403, 'Доступ запрещен!');
         }
 
-        Admlog::query()->create([
+        Log::query()->create([
             'user_id'    => getUser('id'),
             'request'    => server('REQUEST_URI'),
             'referer'    => server('HTTP_REFERER'),

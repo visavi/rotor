@@ -4,7 +4,7 @@ namespace App\Controllers;
 
 use App\Classes\Request;
 use App\Models\Ban;
-use App\Models\Log;
+use App\Models\Error;
 use Illuminate\Database\Capsule\Manager as DB;
 
 Class BaseController
@@ -68,7 +68,7 @@ Class BaseController
 
                         if (! $banip) {
 
-                            Log::query()->create([
+                            Error::query()->create([
                                 'code'       => 666,
                                 'request'    => utfSubstr(server('REQUEST_URI'), 0, 200),
                                 'referer'    => utfSubstr(server('HTTP_REFERER'), 0, 200),

@@ -26,7 +26,7 @@
                 @if ($key == $code)
                     <b>{{ $value }}</b>
                 @else
-                    <a href="/admin/log?code={{ $key }}">{{ $value }}</a>
+                    <a href="/admin/errors?code={{ $key }}">{{ $value }}</a>
                 @endif
             </li>
         @endforeach
@@ -51,7 +51,7 @@
         Всего записей: <b>{{ $page->total }}</b><br><br>
 
         @if (isAdmin('boss'))
-            <i class="fa fa-trash-alt"></i> <a href="/admin/log/clear?token={{ $_SESSION['token'] }}">Очистить</a><br>
+            <i class="fa fa-trash-alt"></i> <a href="/admin/errors/clear?token={{ $_SESSION['token'] }}">Очистить</a><br>
         @endif
 
     @else

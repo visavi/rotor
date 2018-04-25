@@ -20,7 +20,7 @@ use App\Models\Guest;
 use App\Models\Ignore;
 use App\Models\Inbox;
 use App\Models\Invite;
-use App\Models\Log;
+use App\Models\Error;
 use App\Models\Login;
 use App\Models\News;
 use App\Models\Note;
@@ -1860,7 +1860,7 @@ function abort($code, $message = null)
 
     if (setting('errorlog') && in_array($code, [403, 404])) {
 
-        Log::query()->create([
+        Error::query()->create([
             'code'       => $code,
             'request'    => utfSubstr(server('REQUEST_URI'), 0, 200),
             'referer'    => utfSubstr(server('HTTP_REFERER'), 0, 200),

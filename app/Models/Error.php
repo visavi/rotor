@@ -2,14 +2,14 @@
 
 namespace App\Models;
 
-class Admlog extends BaseModel
+class Error extends BaseModel
 {
     /**
      * The table associated with the model.
      *
      * @var string
      */
-    protected $table = 'admlog';
+    protected $table = 'errors';
 
     /**
      * Indicates if the model should be timestamped.
