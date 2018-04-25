@@ -9,9 +9,9 @@ class NoticeSeeder extends AbstractSeed
      */
     public function run()
     {
-        $this->execute('TRUNCATE notice');
+        $this->execute('TRUNCATE notices');
 
-        $table = $this->table('notice');
+        $table = $this->table('notices');
 
         $data = [
             'type'      => 'register',

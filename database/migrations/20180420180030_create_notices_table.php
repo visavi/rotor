@@ -2,15 +2,15 @@
 
 use Phinx\Migration\AbstractMigration;
 
-class CreateNoticeTable extends AbstractMigration
+class CreateNoticesTable extends AbstractMigration
 {
     /**
      * Change Method.
      */
     public function change()
     {
-        if (! $this->hasTable('notice')) {
-            $table = $this->table('notice', ['collation' => env('DB_COLLATION')]);
+        if (! $this->hasTable('notices')) {
+            $table = $this->table('notices', ['collation' => env('DB_COLLATION')]);
             $table
                 ->addColumn('type', 'string', ['limit' => 20])
                 ->addColumn('name', 'string', ['limit' => 100])

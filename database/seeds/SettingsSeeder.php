@@ -2,7 +2,7 @@
 
 use Phinx\Seed\AbstractSeed;
 
-class SettingSeeder extends AbstractSeed
+class SettingsSeeder extends AbstractSeed
 {
     /**
      * Run Method.
@@ -128,9 +128,9 @@ class SettingSeeder extends AbstractSeed
             ['name'  => 'ziplist', 'value' => 20],
         ];
 
-        $this->execute('TRUNCATE setting');
+        $this->execute('TRUNCATE settings');
 
-        $table = $this->table('setting');
+        $table = $this->table('settings');
         $table->insert($data)->save();
 
         clearCache();

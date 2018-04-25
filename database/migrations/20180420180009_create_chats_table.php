@@ -2,15 +2,15 @@
 
 use Phinx\Migration\AbstractMigration;
 
-class CreateChatTable extends AbstractMigration
+class CreateChatsTable extends AbstractMigration
 {
     /**
      * Change Method.
      */
     public function change()
     {
-        if (! $this->hasTable('chat')) {
-            $table = $this->table('chat', ['collation' => env('DB_COLLATION')]);
+        if (! $this->hasTable('chats')) {
+            $table = $this->table('chats', ['collation' => env('DB_COLLATION')]);
             $table
                 ->addColumn('user_id', 'integer')
                 ->addColumn('text', 'text', ['null' => true])

@@ -2,15 +2,15 @@
 
 use Phinx\Migration\AbstractMigration;
 
-class CreateContactTable extends AbstractMigration
+class CreateContactsTable extends AbstractMigration
 {
     /**
      * Change Method.
      */
     public function change()
     {
-        if (! $this->hasTable('contact')) {
-            $table = $this->table('contact', ['collation' => env('DB_COLLATION')]);
+        if (! $this->hasTable('contacts')) {
+            $table = $this->table('contacts', ['collation' => env('DB_COLLATION')]);
             $table
                 ->addColumn('user_id', 'integer')
                 ->addColumn('contact_id', 'integer')

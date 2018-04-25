@@ -2,16 +2,16 @@
 
 use Phinx\Migration\AbstractMigration;
 
-class CreateSettingTable extends AbstractMigration
+class CreateSettingsTable extends AbstractMigration
 {
     /**
      * Change Method.
      */
     public function change()
     {
-        if (! $this->hasTable('setting')) {
+        if (! $this->hasTable('settings')) {
 
-            $table = $this->table('setting', [
+            $table = $this->table('settings', [
                 'id'          => false,
                 'primary_key' => 'name',
                 'collation'   => env('DB_COLLATION')

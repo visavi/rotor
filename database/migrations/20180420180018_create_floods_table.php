@@ -2,15 +2,15 @@
 
 use Phinx\Migration\AbstractMigration;
 
-class CreateFloodTable extends AbstractMigration
+class CreateFloodsTable extends AbstractMigration
 {
     /**
      * Change Method.
      */
     public function change()
     {
-        if (! $this->hasTable('flood')) {
-            $table = $this->table('flood', ['collation' => env('DB_COLLATION')]);
+        if (! $this->hasTable('floods')) {
+            $table = $this->table('floods', ['collation' => env('DB_COLLATION')]);
             $table
                 ->addColumn('user_id', 'integer', ['null' => true])
                 ->addColumn('page', 'string', ['limit' => 30])

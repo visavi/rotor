@@ -2,15 +2,15 @@
 
 use Phinx\Migration\AbstractMigration;
 
-class CreateWallTable extends AbstractMigration
+class CreateWallsTable extends AbstractMigration
 {
     /**
      * Change Method.
      */
     public function change()
     {
-        if (! $this->hasTable('wall')) {
-            $table = $this->table('wall', ['collation' => env('DB_COLLATION')]);
+        if (! $this->hasTable('walls')) {
+            $table = $this->table('walls', ['collation' => env('DB_COLLATION')]);
             $table
                 ->addColumn('user_id', 'integer')
                 ->addColumn('author_id', 'integer')

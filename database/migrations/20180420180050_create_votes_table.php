@@ -3,15 +3,15 @@
 use Phinx\Migration\AbstractMigration;
 use Phinx\Db\Adapter\MysqlAdapter;
 
-class CreateVoteTable extends AbstractMigration
+class CreateVotesTable extends AbstractMigration
 {
     /**
      * Change Method.
      */
     public function change()
     {
-        if (! $this->hasTable('vote')) {
-            $table = $this->table('vote', ['collation' => env('DB_COLLATION')]);
+        if (! $this->hasTable('votes')) {
+            $table = $this->table('votes', ['collation' => env('DB_COLLATION')]);
             $table
                 ->addColumn('title', 'string', ['limit' => 100])
                 ->addColumn('count', 'integer', ['default' => 0])

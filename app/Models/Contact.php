@@ -5,13 +5,6 @@ namespace App\Models;
 class Contact extends BaseModel
 {
     /**
-     * The table associated with the model.
-     *
-     * @var string
-     */
-    protected $table = 'contact';
-
-    /**
      * Indicates if the model should be timestamped.
      *
      * @var bool
