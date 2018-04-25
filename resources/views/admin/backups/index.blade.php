@@ -6,6 +6,12 @@
 
 @section('content')
 
+    @if (getUser())
+        <div class="float-right">
+            <a class="btn btn-success" href="/admin/backups/create">Создать бэкап</a><br>
+        </div><br>
+    @endif
+
     <h1>Backup базы данных</h1>
 
     <nav>
@@ -27,6 +33,4 @@
     @else
         {!! showError('Бэкапов еще нет!') !!}
     @endif
-
-    <i class="fa fa-check"></i> <a href="/admin/backups/create">Новый бэкап</a><br>
 @stop

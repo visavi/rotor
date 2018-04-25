@@ -50,7 +50,4 @@
     </div><br>
 
     <p class="text-muted font-italic">Поля отмеченные зеленым цветом обязательны для заполнения!</p>
-
-    <i class="fa fa-arrow-circle-left"></i> <a href="/admin/votes">Вернуться</a><br>
-
 @stop

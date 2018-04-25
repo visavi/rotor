@@ -28,8 +28,5 @@
 
             <button class="btn btn-primary">Сохранить</button>
         </form>
-    </div><br>
-
-
-    <i class="fa fa-arrow-circle-left"></i> <a href="/users/{{ $user->login }}">Вернуться</a><br>
+    </div>
 @stop

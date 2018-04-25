@@ -30,7 +30,4 @@
             <button class="btn btn-primary">Редактировать</button>
         </form>
     </div>
-    <br>
-
-    <i class="fa fa-arrow-circle-left"></i> <a href="/contacts">Вернуться</a><br>
 @stop

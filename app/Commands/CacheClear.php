@@ -28,7 +28,7 @@ class CacheClear extends AbstractCommand
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $cacheFiles = glob(STORAGE.'/cache/*.php');
+        $cacheFiles = glob(STORAGE.'/caches/*.php');
 
         if ($cacheFiles) {
             foreach ($cacheFiles as $file) {

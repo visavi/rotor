@@ -68,9 +68,5 @@
 
             <button class="btn btn-primary">Удалить пользователей</button>
         </form><br>
-
-        <i class="fa fa-arrow-circle-left"></i> <a href="/admin/delusers">Вернуться</a><br>
     @endif
-
-
 @stop

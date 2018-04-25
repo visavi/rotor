@@ -34,7 +34,7 @@ class BackupController extends AdminController
      */
     public function index()
     {
-        $files = glob(STORAGE."/backup/*.{zip,gz,bz2,sql}", GLOB_BRACE);
+        $files = glob(STORAGE."/backups/*.{zip,gz,bz2,sql}", GLOB_BRACE);
         arsort($files);
 
         return view('admin/backups/index', compact('files'));
@@ -65,7 +65,7 @@ class BackupController extends AdminController
                 $limit    = 3000;
                 $filename = 'backup_'.$this->date.'.sql';
 
-                $fp = $this->fopen(STORAGE.'/backup/'.$filename, "w", $method, $level);
+                $fp = $this->fopen(STORAGE.'/backups/'.$filename, "w", $method, $level);
 
                 foreach ($selectTables as $table) {
 
@@ -138,11 +138,11 @@ class BackupController extends AdminController
         $validator->equal($token, $_SESSION['token'], 'Неверный идентификатор сессии, повторите действие!')
             ->notEmpty($file, 'Не передано название бэкапа для удаления!')
             ->regex($file, '|^[\w\.\-]+$|i', 'Недопустимое название бэкапа!')
-            ->true(file_exists(STORAGE.'/backup/'.$file), 'Файла для удаления не существует!');
+            ->true(file_exists(STORAGE.'/backups/'.$file), 'Файла для удаления не существует!');
 
         if ($validator->isValid()) {
 
-            unlink(STORAGE.'/backup/'.$file);
+            unlink(STORAGE.'/backups/'.$file);
 
             setFlash('success', 'Бэкап успешно удален!');
         } else {

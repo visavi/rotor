@@ -19,7 +19,7 @@
 
 <div class="b"><i class="fa fa-wrench fa-lg text-muted"></i> <b>Анкета / Настройки</b></div>
 <i class="far fa-circle fa-lg text-muted"></i> <a href="/users/{{ getUser('login') }}">Моя анкета</a><br>
-<i class="far fa-circle fa-lg text-muted"></i> <a href="/profiles">Мой профиль</a><br>
+<i class="far fa-circle fa-lg text-muted"></i> <a href="/profile">Мой профиль</a><br>
 <i class="far fa-circle fa-lg text-muted"></i> <a href="/accounts">Мои данные</a><br>
 <i class="far fa-circle fa-lg text-muted"></i> <a href="/settings">Настройки</a><br>
 <i class="far fa-circle fa-lg text-muted"></i> <a href="/wall/{{ getUser('login') }}">Моя стена</a> ({{ userWall(getUser()) }})<br>

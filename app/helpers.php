@@ -1833,7 +1833,7 @@ function view($view, array $params = [])
         HOME . '/themes/' . setting('themes') . '/views',
         RESOURCES . '/views',
         HOME . '/themes',
-    ], STORAGE . '/cache');
+    ], STORAGE . '/caches');
 
     $blade->compiler()->withoutDoubleEncoding();
 

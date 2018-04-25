@@ -50,8 +50,5 @@
 
             <button class="btn btn-primary">Добавить</button>
         </form>
-    </div><br>
-
-    <i class="fa fa-arrow-circle-left"></i> <a href="/admin/status">Вернуться</a><br>
-
+    </div>
 @stop
