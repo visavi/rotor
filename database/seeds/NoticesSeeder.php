@@ -2,7 +2,7 @@
 
 use Phinx\Seed\AbstractSeed;
 
-class NoticeSeeder extends AbstractSeed
+class NoticesSeeder extends AbstractSeed
 {
     /**
      * Run Method.
