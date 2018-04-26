@@ -197,7 +197,7 @@ $routes = [
     ['GET',      '/downs/delete/[i:id]/[i:fid]', 'Load\DownController@deleteFile'],
     ['GET|POST', '/downs/create', 'Load\DownController@create'],
     ['POST',     '/downs/votes/[i:id]', 'Load\DownController@vote'],
-    ['GET|POST', '/downs/downsload/[i:id]', 'Load\DownController@download'],
+    ['GET|POST', '/downs/download/[i:id]', 'Load\DownController@download'],
     ['GET|POST', '/downs/comments/[i:id]', 'Load\DownController@comments'],
     ['GET',      '/downs/comment/[i:id]/[i:cid]', 'Load\DownController@viewComment'],
     ['GET',      '/downs/end/[i:id]', 'Load\DownController@end'],
