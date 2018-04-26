@@ -1772,8 +1772,7 @@ function textNotice($type, array $replace = [])
 function performance()
 {
     if (isAdmin() && setting('performance')) {
-
-        $queries = env('APP_DEBUG') ? getQueryLog() : [];
+        $queries = getQueryLog();
         return view('app/_performance', compact('queries'));
     }
 
