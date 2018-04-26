@@ -164,7 +164,7 @@
             @endif
         @else
         <i class="fa fa-user-circle"></i> <a href="/profile">Мой профиль</a><br>
-        <i class="fa fa-cog"></i> <a href="/account">Мои данные</a><br>
+        <i class="fa fa-cog"></i> <a href="/accounts">Мои данные</a><br>
         <i class="fa fa-wrench"></i> <a href="/settings">Настройки</a><br>
         @endif
 
