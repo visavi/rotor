@@ -31,7 +31,7 @@
 
 <?php
 echo bbCode(check('[code]<?
-profile(\'Username\'); /* <a href="/user/Username">Username</a>  */
+profile(\'Username\'); /* <a href="/users/Username">Username</a>  */
 profile(\'Username\', \'#ff0000\'); /* <a href="/users/Username"><span style="color:#ff0000">Username</span></a> */
 ?>[/code]'));
 ?>

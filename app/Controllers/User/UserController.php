@@ -62,7 +62,7 @@ class UserController extends BaseController
                 ]);
 
                 setFlash('success', 'Заметка успешно сохранена!');
-                redirect('/user/'.$user->login);
+                redirect('/users/'.$user->login);
 
             } else {
                 setInput(Request::all());
