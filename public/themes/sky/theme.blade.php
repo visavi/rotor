@@ -72,8 +72,8 @@ header("Content-type:text/html; charset=utf-8");
 
                         <li><a href="#"><span class="l"></span><span class="r"></span><span class="t">Актив сайта</span></a>
                            <ul>
-                                 <li><a href="/adminlists">Администрация</a></li>
-                                 <li><a href="/userlists">Пользователи</a></li>
+                                 <li><a href="/administrators">Администрация</a></li>
+                                 <li><a href="/users">Пользователи</a></li>
                            </ul>
                         </li>
 

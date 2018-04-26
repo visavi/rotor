@@ -44,8 +44,8 @@
     <i class="far fa-circle fa-lg text-muted"></i> <a href="/files/docs">Документация RotorCMS</a><br>
     <i class="far fa-circle fa-lg text-muted"></i> <a href="/search">Поиск по сайту</a><br>
     <i class="far fa-circle fa-lg text-muted"></i> <a href="/mails">Обратная связь</a><br>
-    <i class="far fa-circle fa-lg text-muted"></i> <a href="/userlists">Список юзеров</a> ({{  statsUsers() }})<br>
-    <i class="far fa-circle fa-lg text-muted"></i> <a href="/adminlists">Администрация</a> ({{ statsAdmins() }})<br>
+    <i class="far fa-circle fa-lg text-muted"></i> <a href="/users">Список юзеров</a> ({{  statsUsers() }})<br>
+    <i class="far fa-circle fa-lg text-muted"></i> <a href="/administrators">Администрация</a> ({{ statsAdmins() }})<br>
     <i class="far fa-circle fa-lg text-muted"></i> <a href="/pages/stat">Информация</a><br>
 
     <div class="b">

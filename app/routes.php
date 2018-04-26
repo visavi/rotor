@@ -163,8 +163,8 @@ $routes = [
 
     ['GET',      '/authlogs', 'LoginController@index'],
 
-    ['GET',      '/adminlists', 'User\ListController@adminlist'],
-    ['GET|POST', '/userlists', 'User\ListController@userlist'],
+    ['GET|POST', '/users', 'User\ListController@userlist'],
+    ['GET',      '/administrators', 'User\ListController@adminlist'],
     ['GET|POST', '/authoritylists', 'User\ListController@authoritylist'],
     ['GET|POST', '/ratinglists', 'User\ListController@ratinglist'],
     ['GET|POST', '/bans', 'User\BanController@ban'],
@@ -305,7 +305,7 @@ $routes = [
     ['GET|POST', '/admin/users/edit', 'Admin\UserController@edit'],
     ['GET|POST', '/admin/users/delete', 'Admin\UserController@delete'],
 
-    ['GET',      '/admin/adminlists', 'Admin\AdminlistController@index'],
+    ['GET',      '/admin/administrators', 'Admin\AdminlistController@index'],
 
     ['GET',      '/admin/invitations', 'Admin\InvitationController@index'],
     ['GET|POST', '/admin/invitations/create', 'Admin\InvitationController@create'],

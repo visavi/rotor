@@ -41,7 +41,7 @@
         {!! pagination($page) !!}
 
         <div class="form">
-            <form action="/userlists" method="post">
+            <form action="/users" method="post">
                 <div class="form-inline">
                     <div class="form-group{{ hasError('user') }}">
                         <input type="text" class="form-control" id="user" name="user" maxlength="20" value="{{ getInput('user', $user) }}" placeholder="Логин пользователя" required>

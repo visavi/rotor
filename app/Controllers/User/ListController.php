@@ -40,11 +40,11 @@ class ListController extends BaseController
                 $end = ceil($position / $page->limit);
 
                 setFlash('success', 'Позиция в рейтинге: '.$position);
-                redirect('/userlists?page='.$end.'&user='.$user);
+                redirect('/users?page='.$end.'&user='.$user);
             }
         }
 
-        return view('users/userlists', compact('users', 'page', 'user'));
+        return view('users/users', compact('users', 'page', 'user'));
     }
 
     /**
@@ -57,7 +57,7 @@ class ListController extends BaseController
             ->orderByRaw("field(level, '".implode(',', User::ADMIN_GROUPS)."')")
             ->get();
 
-        return view('users/adminlists', compact('users'));
+        return view('users/administrators', compact('users'));
     }
 
     /**
