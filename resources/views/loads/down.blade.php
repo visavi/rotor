@@ -57,7 +57,7 @@
                         @endif
 
                         @if ($file->extension === 'mp4')
-                            <?php $poster = file_exists(UPLOADS . '/screen/' . $file->hash . '.jpg') ? '/uploads/screen/' . $file->hash . '.jpg' : null; ?>
+                            <?php $poster = file_exists(UPLOADS . '/screens/' . $file->hash . '.jpg') ? '/uploads/screens/' . $file->hash . '.jpg' : null; ?>
 
                            <video width="640" height="360" style="max-width:100%;" poster="{{ $poster }}" preload="none" controls playsinline>
                                <source src="/uploads/files/{{ $file->hash }}" type="video/mp4">
@@ -75,7 +75,7 @@
         @if ($down->getImages()->isNotEmpty())
             <div class="mt-3">
                 @foreach ($down->getImages() as $image)
-                    <a href="/uploads/screen/{{ $image->hash }}" class="gallery" data-group="{{ $down->id }}">{!! resizeImage('/uploads/screen/' . $image->hash, ['alt' => $down->title]) !!}</a><br>
+                    <a href="/uploads/screens/{{ $image->hash }}" class="gallery" data-group="{{ $down->id }}">{!! resizeImage('/uploads/screens/' . $image->hash, ['alt' => $down->title]) !!}</a><br>
                 @endforeach
             </div>
         @endif

@@ -160,14 +160,14 @@ class Down extends BaseModel
 
             // Сохраняем скрин с 5 секунды
             $frame = $video->frame(TimeCode::fromSeconds(5));
-            $frame->save(UPLOADS . '/screen/' . $fileName . '.jpg');
+            $frame->save(UPLOADS . '/screens/' . $fileName . '.jpg');
 
             File::query()->create([
                 'relate_id'   => $this->id,
                 'relate_type' => self::class,
                 'hash'        => $fileName . '.jpg',
                 'name'        => 'screenshot.jpg',
-                'size'        => filesize(UPLOADS . '/screen/' . $fileName . '.jpg'),
+                'size'        => filesize(UPLOADS . '/screens/' . $fileName . '.jpg'),
                 'user_id'     => getUser('id'),
                 'created_at'  => SITETIME,
             ]);
@@ -203,7 +203,7 @@ class Down extends BaseModel
         $this->files->each(function($file) {
 
             if ($file->isImage()) {
-                deleteFile(UPLOADS . '/screen/' . $file->hash);
+                deleteFile(UPLOADS . '/screens/' . $file->hash);
             } else {
                 deleteFile(UPLOADS . '/files/' . $file->hash);
             }

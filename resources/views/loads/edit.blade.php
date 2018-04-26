@@ -52,8 +52,8 @@
 
             @if ($down->getImages()->isNotEmpty())
                 @foreach ($down->getImages() as $image)
-                    {!! resizeImage('/uploads/screen/' . $image->hash) !!}<br>
-                    <i class="fa fa-image"></i> <b><a href="/uploads/screen/{{ $image->hash }}">{{ $image->name }}</a></b> ({{ formatSize($image->size ) }}) (<a href="/downs/delete/{{ $down->id }}/{{ $image->id }}" onclick="return confirm('Вы действительно хотите удалить данный скриншот?')">Удалить</a>)<br><br>
+                    {!! resizeImage('/uploads/screens/' . $image->hash) !!}<br>
+                    <i class="fa fa-image"></i> <b><a href="/uploads/screens/{{ $image->hash }}">{{ $image->name }}</a></b> ({{ formatSize($image->size ) }}) (<a href="/downs/delete/{{ $down->id }}/{{ $image->id }}" onclick="return confirm('Вы действительно хотите удалить данный скриншот?')">Удалить</a>)<br><br>
                 @endforeach
             @endif
 
