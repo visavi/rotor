@@ -38,7 +38,12 @@ FileETag MTime Size
 </FilesMatch>
 </IfModule>
 
-<Files ~ "app|resources|storage|rotor">
+<Directory ~ "app|resources|storage|vendor">
+    Order allow,deny
+    Deny from all
+</Directory>
+
+<Files ~ "rotor">
     Order allow,deny
     Deny from all
 </Files>
