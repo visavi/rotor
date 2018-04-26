@@ -37,5 +37,5 @@
         </form>
     </div><br>
 
-    <i class="fa fa-briefcase"></i> <a href="/rating/{{ $user->login }}">История</a><br>
+    <i class="fa fa-briefcase"></i> <a href="/ratings/{{ $user->login }}">История</a><br>
 @stop

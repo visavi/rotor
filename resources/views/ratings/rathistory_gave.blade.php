@@ -17,7 +17,7 @@
         </ol>
     </nav>
 
-    <i class="fa fa-thumbs-up"></i> <a href="/rating/{{ $user->login }}/received">Полученные</a> / <b>Отданные</b><hr>
+    <i class="fa fa-thumbs-up"></i> <a href="/ratings/{{ $user->login }}/received">Полученные</a> / <b>Отданные</b><hr>
 
     @if ($ratings->isNotEmpty())
         @foreach ($ratings as $data)

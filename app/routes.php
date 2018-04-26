@@ -124,7 +124,7 @@ $routes = [
 
     ['POST',     '/ajax/bbcode', 'AjaxController@bbCode'],
     ['POST',     '/ajax/delcomment', 'AjaxController@delComment'],
-    ['POST',     '/ajax/rating', 'AjaxController@rating'],
+    ['POST',     '/ajax/ratings', 'AjaxController@rating'],
     ['POST',     '/ajax/vote', 'AjaxController@vote'],
     ['POST',     '/ajax/complaint', 'AjaxController@complaint'],
 

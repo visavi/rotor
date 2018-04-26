@@ -106,7 +106,7 @@ class RatingController extends BaseController
             }
         }
 
-        return view('rating/index', compact('user', 'vote'));
+        return view('ratings/index', compact('user', 'vote'));
     }
 
     /**
@@ -131,7 +131,7 @@ class RatingController extends BaseController
             ->with('user')
             ->get();
 
-        return view('rating/rathistory', compact('ratings', 'user', 'page'));
+        return view('ratings/rathistory', compact('ratings', 'user', 'page'));
     }
 
     /**
@@ -156,7 +156,7 @@ class RatingController extends BaseController
             ->with('recipient')
             ->get();
 
-        return view('rating/rathistory_gave', compact('ratings', 'user', 'page'));
+        return view('ratings/rathistory_gave', compact('ratings', 'user', 'page'));
     }
 
     /**

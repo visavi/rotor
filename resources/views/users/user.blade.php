@@ -16,7 +16,7 @@
     <nav>
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
-            <li class="breadcrumb-item active">Анкета {{ getUser('login') }}</li>
+            <li class="breadcrumb-item active">Анкета {{ $user->login }}</li>
         </ol>
     </nav>
 
@@ -92,7 +92,7 @@
 
                 Последняя визит: {{ dateFixed($user->updated_at) }}<br>
 
-                <a href="/rating/{{ $user->login }}">Репутация: <b>{!! formatNum($user->rating) !!}</b> (+{{  $user->posrating }}/-{{  $user->negrating }})</a><br>
+                <a href="/ratings/{{ $user->login }}">Репутация: <b>{!! formatNum($user->rating) !!}</b> (+{{  $user->posrating }}/-{{  $user->negrating }})</a><br>
 
                 @if (getUser() && getUser('login') != $user->login)
                     <a href="/users/{{ $user->login }}/rating?vote=plus"><i class="fa fa-thumbs-up"></i><span style="color:#0099cc"> Плюс</span></a> /

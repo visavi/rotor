@@ -294,7 +294,7 @@ function deleteRating(el)
 {
     $.ajax({
         data: {id: $(el).data('id'), login: $(el).data('login'), token: $(el).data('token')},
-        dataType: 'json', type: 'POST', url: '/rating/delete',
+        dataType: 'json', type: 'POST', url: '/ratings/delete',
         success: function(data) {
 
             if (data.status === 'error'){
