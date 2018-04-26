@@ -77,7 +77,7 @@
             <div class="form-group{{ hasError('newpass') }}">
                 <label for="newpass">Новый пароль:</label>
                 <input class="form-control" id="newpass" name="newpass" maxlength="20" value="{{ getInput('newpass') }}">
-                {!! textError('email') !!}
+                {!! textError('newpass') !!}
             </div>
 
             <div class="form-group{{ hasError('newpass2') }}">
