@@ -167,7 +167,7 @@ $routes = [
     ['GET',      '/administrators', 'User\ListController@adminlist'],
     ['GET|POST', '/authoritylists', 'User\ListController@authoritylist'],
     ['GET|POST', '/ratinglists', 'User\ListController@ratinglist'],
-    ['GET|POST', '/bans', 'User\BanController@ban'],
+    ['GET|POST', '/ban', 'User\BanController@ban'],
     ['GET|POST', '/who', 'User\UserController@who'],
 
     ['GET',      '/faq', 'PageController@faq'],
