@@ -84,21 +84,21 @@ class Application
             if (isset($parse['path'])) {
 
                 $path  = explode('/', ltrim($parse['path'], '/'));
-                $query = $parse['query'] ?? null;
+                $query = isset($parse['query']) ? '?' . $parse['query'] : null;
 
-      /*          if (isset($parse['query'])) {
+                if (isset($parse['query'])) {
                     parse_str($parse['query'], $query);
-                }*/
-
-               /* var_dump($parse['path'], $query, $path);*/
-
-                // Форум
-                if (isset($path[0], $path[1]) && $path[0] === 'forum' && is_numeric($path[1])) {
-                    redirect('/forums/' . $path[1], true);
                 }
 
-                if (isset($path[0], $path[1]) && $path[0] === 'topic' && is_numeric($path[1])) {
-                    redirect('/topics/' . $path[1] . '?' . $query, true);
+                // Форум
+                if (isset($path[0]) && $path[0] === 'forum') {
+                    $parse['path'] = str_replace('/forum', '/forums', $parse['path']);
+                    redirect($parse['path'], true);
+                }
+
+                if (isset($path[0]) && $path[0] === 'topic') {
+                    $parse['path'] = str_replace('/topic', '/topics', $parse['path']);
+                    redirect($parse['path'] . $query, true);
                 }
 
                 /*if ($parse['path'] == '/forum/forum.php' && isset($output['fid']) && is_numeric($output['fid'])){
