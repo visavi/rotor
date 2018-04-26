@@ -156,7 +156,7 @@ class MessageController extends BaseController
 
         $contacts = Contact::query()
             ->where('user_id', getUser('id'))
-            ->rightJoin('users', 'contact.contact_id', '=', 'users.id')
+            ->rightJoin('users', 'contacts.contact_id', '=', 'users.id')
             ->orderBy('users.login')
             ->get();
 

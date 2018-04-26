@@ -23,9 +23,9 @@ class SearchController extends BaseController
     {
         $find = check(Request::input('find'));
 
-        if (utfStrlen($find) < 3 || utfStrlen($find) > 20) {
+        if (utfStrlen($find) < 2 || utfStrlen($find) > 20) {
             setInput(Request::all());
-            setFlash('danger', ['find' => 'Слишком короткий или длинный запрос, от 3 до 20 символов!']);
+            setFlash('danger', ['find' => 'Слишком короткий или длинный запрос, от 2 до 20 символов!']);
             redirect('/searchusers');
         }
 

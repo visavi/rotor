@@ -52,7 +52,7 @@
 
                 <div class="form-group{{ hasError('user') }}">
                     <label for="inputLogin">Логин:</label>
-                    <input type="text" class="form-control" id="inputLogin" name="user" maxlength="20" value="{{ getInput('user') }}" required>
+                    <input type="text" class="form-control" id="inputLogin" name="user" maxlength="20" value="{{ getInput('user') }}">
                     {!! textError('user') !!}
                 </div>
 
@@ -85,7 +85,6 @@
         Введите логин или выберите пользователя из своего контакт-листа<br>
     @endif
 
-    <i class="fa fa-arrow-circle-up"></i> <a href="/messages">К письмам</a><br>
     <i class="fa fa-search"></i> <a href="/searchusers">Поиск контактов</a><br>
     <i class="fa fa-envelope"></i> <a href="/messages/send">Написать письмо</a><br>
     <i class="fa fa-address-book"></i> <a href="/contacts">Контакт</a> / <a href="/ignores">Игнор</a><br>

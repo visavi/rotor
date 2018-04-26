@@ -9,7 +9,7 @@ class Counter24 extends BaseModel
      *
      * @var string
      */
-    protected $table = 'counter24';
+    protected $table = 'counters24';
 
     /**
      * Indicates if the model should be timestamped.

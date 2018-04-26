@@ -33,6 +33,6 @@ class LoginController extends BaseController
             ->limit($page->limit)
             ->get();
 
-        return view('login/index', compact('logins', 'page'));
+        return view('logins/index', compact('logins', 'page'));
     }
 }

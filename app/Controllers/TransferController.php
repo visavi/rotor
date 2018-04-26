@@ -88,6 +88,6 @@ class TransferController extends BaseController
             setFlash('danger', $validator->getErrors());
         }
 
-        redirect('/transfer');
+        redirect('/transfers');
     }
 }

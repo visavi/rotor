@@ -31,7 +31,7 @@ class NotebookController extends BaseController
      */
     public function index()
     {
-        return view('notebook/index', ['note' => $this->note]);
+        return view('notebooks/index', ['note' => $this->note]);
     }
 
     /**
@@ -61,9 +61,9 @@ class NotebookController extends BaseController
                 setFlash('danger', $validator->getErrors());
             }
 
-            redirect('/notebook');
+            redirect('/notebooks');
         }
 
-        return view('notebook/edit', ['note' => $this->note]);
+        return view('notebooks/edit', ['note' => $this->note]);
     }
 }

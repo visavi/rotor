@@ -474,7 +474,7 @@ class UserController extends BaseController
             $genkey = str_random(random_int(15,20));
 
             $subject = 'Изменение email на сайте '.setting('title');
-            $message = 'Здравствуйте, '.$user->login.'<br>Вами была произведена операция по изменению адреса электронной почты<br><br>Для того, чтобы изменить email, необходимо подтвердить новый адрес почты<br>Перейдите по данной ссылке:<br><br><a href="'.siteUrl(true).'/account/editmail?key='.$genkey.'">'.siteUrl(true).'/account/editmail?key='.$genkey.'</a><br><br>Ссылка будет дейстительной в течение суток до '.date('j.m.y / H:i', strtotime('+1 day', SITETIME)).'<br>Для изменения адреса необходимо быть авторизованным на сайте<br>Если это сообщение попало к вам по ошибке или вы не собираетесь менять email, то просто проигнорируйте данное письмо';
+            $message = 'Здравствуйте, '.$user->login.'<br>Вами была произведена операция по изменению адреса электронной почты<br><br>Для того, чтобы изменить email, необходимо подтвердить новый адрес почты<br>Перейдите по данной ссылке:<br><br><a href="'.siteUrl(true).'/accounts/editmail?key='.$genkey.'">'.siteUrl(true).'/accounts/editmail?key='.$genkey.'</a><br><br>Ссылка будет дейстительной в течение суток до '.date('j.m.y / H:i', strtotime('+1 day', SITETIME)).'<br>Для изменения адреса необходимо быть авторизованным на сайте<br>Если это сообщение попало к вам по ошибке или вы не собираетесь менять email, то просто проигнорируйте данное письмо';
 
             $body = view('mailer.default', compact('subject', 'message'));
             sendMail($email, $subject, $body);
@@ -492,7 +492,7 @@ class UserController extends BaseController
             setFlash('danger', $validator->getErrors());
         }
 
-        redirect('/account');
+        redirect('/accounts');
     }
 
     /**
@@ -537,7 +537,7 @@ class UserController extends BaseController
             setFlash('danger', $validator->getErrors());
         }
 
-        redirect('/account');
+        redirect('/accounts');
     }
 
     /**
@@ -580,7 +580,7 @@ class UserController extends BaseController
             setFlash('danger', $validator->getErrors());
         }
 
-        redirect('/account');
+        redirect('/accounts');
     }
 
     /**
@@ -627,7 +627,7 @@ class UserController extends BaseController
         } else {
             setInput(Request::all());
             setFlash('danger', $validator->getErrors());
-            redirect('/account');
+            redirect('/accounts');
         }
     }
 
@@ -653,7 +653,7 @@ class UserController extends BaseController
             setFlash('danger', 'Ошибка! Неверный идентификатор сессии, повторите действие!');
         }
 
-        redirect('/account');
+        redirect('/accounts');
     }
 
     /**

@@ -9,7 +9,7 @@ class Counter31 extends BaseModel
      *
      * @var string
      */
-    protected $table = 'counter31';
+    protected $table = 'counters31';
 
     /**
      * Indicates if the model should be timestamped.

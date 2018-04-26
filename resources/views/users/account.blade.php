@@ -19,7 +19,7 @@
     <h3>Изменение email</h3>
 
     <div class="form mb-4">
-        <form method="post" action="/account/changemail">
+        <form method="post" action="/accounts/changemail">
         <input type="hidden" name="token" value="{{ $_SESSION['token'] }}">
 
             <div class="form-group{{ hasError('email') }}">
@@ -45,7 +45,7 @@
 
     @if ($user->point >= setting('editstatuspoint'))
         <div class="form mb-4">
-            <form method="post" action="/account/editstatus">
+            <form method="post" action="/accounts/editstatus">
                 <input type="hidden" name="token" value="{{ $_SESSION['token'] }}">
 
                 <label for="status">Персональный статус:</label>
@@ -71,7 +71,7 @@
     <h3>Изменение пароля</h3>
 
     <div class="form mb-4">
-        <form method="post" action="/account/editpassword">
+        <form method="post" action="/accounts/editpassword">
             <input type="hidden" name="token" value="{{ $_SESSION['token'] }}">
 
             <div class="form-group{{ hasError('newpass') }}">
@@ -100,7 +100,7 @@
     <h3>Ваш API-токен</h3>
 
     <div class="form mb-4">
-        <form method="post" action="/account/apikey">
+        <form method="post" action="/accounts/apikey">
             <input type="hidden" name="token" value="{{ $_SESSION['token'] }}">
 
             @if ($user->apikey)

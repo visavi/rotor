@@ -94,8 +94,6 @@
     </div>
 
     @if (getUser() && getUser('id') != $down->user_id)
-
-        <label for="score">Проверочный код:</label><br>
         <form class="form-inline" action="/downs/votes/{{ $down->id }}" method="post">
             <input type="hidden" name="token" value="{{ $_SESSION['token'] }}">
 
