@@ -13,7 +13,7 @@
     <nav>
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
-            <li class="breadcrumb-item"><a href="/load">Загрузки</a></li>
+            <li class="breadcrumb-item"><a href="/loads">Загрузки</a></li>
 
             @if ($down->category->parent->id)
                 <li class="breadcrumb-item"><a href="/loads/{{ $down->category->parent->id }}">{{ $down->category->parent->name }}</a></li>

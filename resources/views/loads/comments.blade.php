@@ -11,7 +11,7 @@
     <nav>
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
-            <li class="breadcrumb-item"><a href="/load">Загрузки</a></li>
+            <li class="breadcrumb-item"><a href="/loads">Загрузки</a></li>
             <li class="breadcrumb-item"><a href="/downs/{{ $down->id }}">{{ $down->title }}</a></li>
             <li class="breadcrumb-item active">Комментарии</li>
             <li class="breadcrumb-item"><a href="/downs/rss/{{ $down->id }}">RSS-лента</a></li>

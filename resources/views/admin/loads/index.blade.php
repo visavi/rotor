@@ -73,6 +73,6 @@
             </form>
         </div>
 
-        <i class="fa fa-sync"></i> <a href="/admin/load/restatement?token={{ $_SESSION['token'] }}">Пересчитать</a><br>
+        <i class="fa fa-sync"></i> <a href="/admin/loads/restatement?token={{ $_SESSION['token'] }}">Пересчитать</a><br>
     @endif
 @stop

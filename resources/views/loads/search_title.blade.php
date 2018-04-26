@@ -10,7 +10,7 @@
     <nav>
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
-            <li class="breadcrumb-item"><a href="/load">Загрузки</a></li>
+            <li class="breadcrumb-item"><a href="/loads">Загрузки</a></li>
             <li class="breadcrumb-item"><a href="/loads/search">Поиск</a></li>
             <li class="breadcrumb-item active">Поиск запроса</li>
         </ol>
