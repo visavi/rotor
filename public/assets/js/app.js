@@ -91,9 +91,10 @@ function postReply(el)
 {
     postJump();
 
-    var post = $(el).closest('.post');
-    var author = post.find('b').text();
-    var field = $('.markItUp');
+    var field  = $('.markItUp');
+    var post   = $(el).closest('.post');
+    var top    = post.find('.b');
+    var author = top.find('b').text();
 
     separ = field.val().length ? '\n' : '';
     field.focus().val(field.val() + separ + '[b]' + author + '[/b], ');
@@ -106,13 +107,13 @@ function postQuote(el)
 {
     postJump();
 
-    var field = $('.markItUp');
-    var post = $(el).closest('.post');
-    var top = post.find('.b');
+    var field  = $('.markItUp');
+    var post   = $(el).closest('.post');
+    var top    = post.find('.b');
     var author = top.find('b').text();
-    var date = top.find('small').text();
+    var date   = top.find('small').text();
 
-    var text = post.find('.message').clone();
+    var text    = post.find('.message').clone();
     var message = text.find("blockquote").remove().end().text();
 
     separ = field.val().length ? '\n' : '';

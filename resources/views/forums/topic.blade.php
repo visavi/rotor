@@ -117,7 +117,7 @@
                             @endif
 
                             @if ((getUser('id') == $data->user_id && $data->created_at + 600 > SITETIME) || $topic->isModer)
-                                <a href="/post/edit/{{ $data->id }}?page={{ $page->current }}" title="Редактировать"><i class="fa fa-pencil-alt text-muted"></i></a>
+                                <a href="/posts/edit/{{ $data->id }}?page={{ $page->current }}" title="Редактировать"><i class="fa fa-pencil-alt text-muted"></i></a>
                                 @if ($topic->isModer)
                                     <input type="checkbox" name="del[]" value="{{ $data->id }}">
                                 @endif
@@ -146,16 +146,17 @@
                 </div>
 
                 @if ($data->files->isNotEmpty())
-                    <div class="hiding"><i class="fa fa-paperclip"></i> <b>Прикрепленные файлы:</b><br>
-                    @foreach ($data->files as $file)
-                        <?php $ext = getExtension($file->hash); ?>
+                    <div class="hiding">
+                        <i class="fa fa-paperclip"></i> <b>Прикрепленные файлы:</b><br>
+                        @foreach ($data->files as $file)
+                            <?php $ext = getExtension($file->hash); ?>
 
-                        {!! icons($ext) !!}
-                        <a href="/uploads/forums/{{ $topic->id }}/{{ $file->hash }}">{{ $file->name }}</a> ({{ formatSize($file->size) }})<br>
-                        @if (in_array($ext, ['jpg', 'jpeg', 'gif', 'png']))
-                            <a href="/uploads/forums/{{ $topic->id }}/{{ $file->hash }}" class="gallery" data-group="{{ $data->id }}">{!! resizeImage('/uploads/forums/' . $topic->id.'/'.$file->hash, ['alt' => $file->name]) !!}</a><br>
-                        @endif
-                    @endforeach
+                            {!! icons($ext) !!}
+                            <a href="/uploads/forums/{{ $topic->id }}/{{ $file->hash }}">{{ $file->name }}</a> ({{ formatSize($file->size) }})<br>
+                            @if (in_array($ext, ['jpg', 'jpeg', 'gif', 'png']))
+                                <a href="/uploads/forums/{{ $topic->id }}/{{ $file->hash }}" class="gallery" data-group="{{ $data->id }}">{!! resizeImage('/uploads/forums/' . $topic->id.'/'.$file->hash, ['alt' => $file->name]) !!}</a><br>
+                            @endif
+                        @endforeach
                     </div>
                 @endif
 
