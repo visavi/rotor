@@ -62,11 +62,11 @@ class Application
      */
     private static function getRedirect()
     {
-/*        if ($_SERVER['REQUEST_URI']) {
+        if ($_SERVER['REQUEST_URI']) {
 
             $parse = parse_url($_SERVER['REQUEST_URI']);
 
-            if (isset($parse['path'])) {
+            /*if (isset($parse['path'])) {
                 if (strpos($parse['path'], '/upload/') !== false) {
                     $parse['path'] = str_replace('/upload/', '/uploads/', $parse['path']);
                     redirect($parse['path'], true);
@@ -79,22 +79,37 @@ class Application
 
             if (isset($parse['path']) && ($parse['path'] == '/services/' || $parse['path'] == '/services')){
                 redirect('/files', true);
-            }
+            }*/
 
-            if (isset($parse['path']) && isset($parse['query'])) {
+            if (isset($parse['path'])) {
 
-                parse_str($parse['query'], $output);
+                $path  = explode('/', ltrim($parse['path'], '/'));
+                $query = $parse['query'] ?? null;
+
+      /*          if (isset($parse['query'])) {
+                    parse_str($parse['query'], $query);
+                }*/
+
+               /* var_dump($parse['path'], $query, $path);*/
 
                 // Форум
-                if ($parse['path'] == '/forum/forum.php' && isset($output['fid']) && is_numeric($output['fid'])){
+                if (isset($path[0], $path[1]) && $path[0] === 'forum' && is_numeric($path[1])) {
+                    redirect('/forums/' . $path[1], true);
+                }
+
+                if (isset($path[0], $path[1]) && $path[0] === 'topic' && is_numeric($path[1])) {
+                    redirect('/topics/' . $path[1] . '?' . $query, true);
+                }
+
+                /*if ($parse['path'] == '/forum/forum.php' && isset($output['fid']) && is_numeric($output['fid'])){
                     redirect('/forum/'.$output['fid'], true);
-                }
+                }*/
 
-                if ($parse['path'] == '/forum/topic.php' && isset($output['tid']) && is_numeric($output['tid'])){
+                /*if ($parse['path'] == '/topic.php' && isset($output['tid']) && is_numeric($output['tid'])){
                     redirect('/topics/'.$output['tid'], true);
-                }
+                }*/
 
-                if ($parse['path'] == '/forum/print.php' && isset($output['tid']) && is_numeric($output['tid'])){
+/*                if ($parse['path'] == '/forum/print.php' && isset($output['tid']) && is_numeric($output['tid'])){
                     redirect('/topics/print/'.$output['tid'], true);
                 }
 
@@ -202,8 +217,8 @@ class Application
 
                 if ($parse['path'] == '/pages/user.php' && isset($output['uz'])){
                     redirect('/users/'.$output['uz'], true);
-                }
+                }*/
             }
-        }*/
+        }
     }
 }
