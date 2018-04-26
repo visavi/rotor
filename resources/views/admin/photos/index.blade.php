@@ -41,7 +41,7 @@
 
                 <div>
                     <?php $countFiles = $photo->files->count() ?>
-                    <div id="myCarousel{{ $loop->iteration }}" class="carousel slide w-75" data-ride="carousel">
+                    <div id="myCarousel{{ $loop->iteration }}" class="carousel slide" data-ride="carousel">
                         @if ($countFiles > 1)
                             <ol class="carousel-indicators">
                                 @for ($i = 0; $i < $countFiles; $i++)
@@ -53,7 +53,7 @@
                         <div class="carousel-inner">
                             @foreach ($photo->files as $file)
                                 <div class="carousel-item{{ $loop->first ? ' active' : '' }}">
-                                    {!! resizeImage('/uploads/photos/' . $file->hash, ['alt' => $photo->title, 'class' => 'd-block w-100']) !!}
+                                    <a href="/photos/{{ $photo->id }}">{!! resizeImage('/uploads/photos/' . $file->hash, ['alt' => $photo->title, 'class' => 'd-block w-100']) !!}</a>
                                 </div>
                             @endforeach
                         </div>
