@@ -36,9 +36,9 @@
             @endif
 
             @if ($data->bold)
-                Жирность: есть<br>
+                Жирный текст: есть<br>
             @else
-                Жирность: нет<br>
+                Жирный текст: нет<br>
             @endif
         @endforeach
 

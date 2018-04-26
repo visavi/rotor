@@ -48,9 +48,11 @@
                 {!! textError('color') !!}
             </div>
 
-            <label>
-                <input name="bold" class="js-bold" type="checkbox" value="1" {{ getInput('bold') == 1 ? ' checked' : '' }}> Жирность
-            </label>
+            <div class="custom-control custom-checkbox">
+                <input type="hidden" value="0" name="bold">
+                <input type="checkbox" class="custom-control-input js-bold" value="1" name="bold" id="bold"{{ getInput('bold') ? ' checked' : '' }}>
+                <label class="custom-control-label" for="bold">Жирный текст</label>
+            </div>
 
             {!! view('app/_captcha') !!}
 
@@ -59,7 +61,7 @@
     </div><br>
 
     Стоимость размещения ссылки {{ plural(setting('rekuserprice'), setting('moneyname')) }} за {{ setting('rekusertime') }} часов<br>
-    Цвет и жирность опционально, стоимость каждой опции {{ plural(setting('rekuseroptprice'), setting('moneyname')) }}<br>
+    Цвет и жирный текст опционально, стоимость каждой опции {{ plural(setting('rekuseroptprice'), setting('moneyname')) }}<br>
     Ссылка прокручивается на всех страницах сайта с другими ссылками пользователей<br>
     В названии ссылки запрещено использовать любые ненормативные и матные слова<br>
     Адрес ссылки не должен направлять на прямое скачивание какого-либо контента<br>

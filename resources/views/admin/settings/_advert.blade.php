@@ -16,7 +16,7 @@
     </div>
 
     <div class="form-group{{ hasError('sets[rekuseroptprice]') }}">
-        <label for="rekuseroptprice">Цена опций (жирность, цвет):</label>
+        <label for="rekuseroptprice">Цена опций (жирный текст, цвет):</label>
         <input type="number" class="form-control" id="rekuseroptprice" name="sets[rekuseroptprice]" maxlength="8" value="{{ getInput('sets.rekuseroptprice.', $settings['rekuseroptprice']) }}" required>
         {!! textError('sets[rekuseroptprice]') !!}
     </div>

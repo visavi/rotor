@@ -46,10 +46,11 @@
                 {!! textError('color') !!}
             </div>
 
-            <label>
-                <input name="bold" class="js-bold" type="checkbox" value="1" {{ getInput('bold', $link->bold) == 1 ? ' checked' : '' }}> Жирность
-            </label>
-            <br/>
+            <div class="custom-control custom-checkbox">
+                <input type="hidden" value="0" name="bold">
+                <input type="checkbox" class="custom-control-input" value="1" name="bold" id="bold"{{ getInput('bold', $link->bold) ? ' checked' : '' }}>
+                <label class="custom-control-label" for="bold">Жирный текст</label>
+            </div>
 
             <button class="btn btn-primary">Изменить</button>
         </form>
