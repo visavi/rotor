@@ -35,16 +35,16 @@
     Сортировать:
 
     <?php $active = ($order === 'created_at') ? 'success' : 'light'; ?>
-    <a href="/loads/{{ $category->id }}?sort=time" class="badge badge-{{ $active }}">По дате</a>
+    <a href="/admin/loads/{{ $category->id }}?sort=time" class="badge badge-{{ $active }}">По дате</a>
 
     <?php $active = ($order === 'loads') ? 'success' : 'light'; ?>
-    <a href="/loads/{{ $category->id }}?sort=loads" class="badge badge-{{ $active }}">Скачивания</a>
+    <a href="/admin/loads/{{ $category->id }}?sort=loads" class="badge badge-{{ $active }}">Скачивания</a>
 
     <?php $active = ($order === 'rated') ? 'success' : 'light'; ?>
-    <a href="/loads/{{ $category->id }}?sort=rated" class="badge badge-{{ $active }}">Оценки</a>
+    <a href="/admin/loads/{{ $category->id }}?sort=rated" class="badge badge-{{ $active }}">Оценки</a>
 
     <?php $active = ($order === 'count_comments') ? 'success' : 'light'; ?>
-    <a href="/loads/{{ $category->id }}?sort=comments" class="badge badge-{{ $active }}">Комментарии</a>
+    <a href="/admin/loads/{{ $category->id }}?sort=comments" class="badge badge-{{ $active }}">Комментарии</a>
     <hr>
 
     @if ($category->children->isNotEmpty() && $page->current == 1)
@@ -52,7 +52,7 @@
             @foreach ($category->children as $child)
                 <div class="b">
                     <i class="fa fa-folder-open"></i>
-                    <b><a href="/loads/{{ $child->id }}">{{ $child->name }}</a></b> ({{ $child->count_downs }})</div>
+                    <b><a href="/admin/loads/{{ $child->id }}">{{ $child->name }}</a></b> ({{ $child->count_downs }})</div>
             @endforeach
         </div>
         <hr>
