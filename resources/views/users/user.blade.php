@@ -42,7 +42,7 @@
     <div class="container-fluid">
         <div class="row">
             <div class="col-md-6">
-                Cтатус: <b><a href="/statusfaq">{!! userStatus($user) !!}</a></b><br>
+                Статус: <b><a href="/statusfaq">{!! userStatus($user) !!}</a></b><br>
 
                 {!! $user->getGender() !!}
                 Пол:
@@ -90,7 +90,7 @@
                     Зарегистрирован по приглашению: {!! profile($invite->user) !!}<br>
                 @endif
 
-                Последняя визит: {{ dateFixed($user->updated_at) }}<br>
+                Последний визит: {{ dateFixed($user->updated_at) }}<br>
 
                 <a href="/ratings/{{ $user->login }}">Репутация: <b>{!! formatNum($user->rating) !!}</b> (+{{  $user->posrating }}/-{{  $user->negrating }})</a><br>
 
@@ -115,7 +115,7 @@
                 @endif
 
                 <b><a href="/forums/active/themes?user={{ $user->login }}">Форум</a></b> (<a href="/forums/active/posts?user={{ $user->login }}">Сообщ.</a>) /
-                <b><a href="/loads/active?act=files&amp;user={{ $user->login }}">Загрузки</a></b> (<a href="/loads/active?act=comments&amp;uz={{ $user->login }}">комм.</a>) /
+                <b><a href="/downs/active/files?user={{ $user->login }}">Загрузки</a></b> (<a href="/downs/active/comments?user={{ $user->login }}">комм.</a>) /
                 <b><a href="/blogs/active/articles?user={{ $user->login }}">Блоги</a></b> (<a href="/blogs/active/comments?user={{ $user->login }}">комм.</a>) /
                 <b><a href="/photos/albums/{{ $user->login }}">Галерея</a></b> (<a href="/photos/comments/{{ $user->login }}">комм.</a>)<br>
             </div>

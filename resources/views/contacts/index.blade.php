@@ -26,7 +26,7 @@
                     <div class="float-right">
                         <a href="/messages/send?user={{ $contact->contactor->login }}" title="Написать"><i class="fa fa-reply text-muted"></i></a>
                         <a href="/contacts/note/{{ $contact->id }}" title="Заметка"><i class="fa fa-sticky-note text-muted"></i></a>
-                        <a href="/transfers?uz={{ $contact->contactor->login }}" title="Перевод"><i class="fa fa-money-bill-alt text-muted"></i></a>
+                        <a href="/transfers?user={{ $contact->contactor->login }}" title="Перевод"><i class="fa fa-money-bill-alt text-muted"></i></a>
                         <input type="checkbox" name="del[]" value="{{ $contact->id }}">
                     </div>
 
