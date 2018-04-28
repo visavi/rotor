@@ -98,6 +98,8 @@ class SettingsSeeder extends AbstractSeed
             ['name'  => 'registermoney', 'value' => 1000],
             ['name'  => 'regkeys', 'value' => 0],
             ['name'  => 'reglist', 'value' => 10],
+            ['name'  => 'recaptcha_private', 'value' => ''],
+            ['name'  => 'recaptcha_public', 'value' => ''],
             ['name'  => 'rekuseroptprice', 'value' => 100],
             ['name'  => 'rekuserpost', 'value' => 10],
             ['name'  => 'rekuserprice', 'value' => 1000],
