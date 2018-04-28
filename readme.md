@@ -28,9 +28,9 @@ Rotor 7.0
    или можно скачать готовый пакет 
     [composer.phar](https://getcomposer.org/composer.phar)
     и запустить его через команду
-   `php composer.phar update`
+   `php composer.phar install`
 
-4. Перейдите в директорию с сайтом выполните команду в консоли `composer update`
+4. Перейдите в директорию с сайтом выполните команду в консоли `composer install`
 
 5. Создайте базу данных с кодировкой utf8mb4 и пользователя для нее из панели управления на вашем сервере, во время установки скрипта необходимо будет вписать эти данные для соединения в файл .env
 `CREATE DATABASE rotor CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;`  
@@ -92,13 +92,16 @@ composer create-project --stability=dev visavi/rotor .
 В секцию server добавить следующую запись: 
 
 ```
-rewrite ^/(.*)/$ /$1 permanent;
+if (!-d $request_filename) {
+    rewrite ^/(.*)/$ /$1 permanent;
+}
+
 ```
 необходимую для удаление слешей в конце пути и запрета просмотра php файлов
 
 ```
 location ~* /(assets|themes|uploads)/.*\.php$ {
-        deny all;
+    deny all;
 }
 ```
 В секции location / необходимо заменить строку
