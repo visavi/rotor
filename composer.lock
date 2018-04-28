@@ -119,6 +119,51 @@
             "time": "2015-11-30T00:47:43+00:00"
         },
         {
+            "name": "cbschuld/browser.php",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/cbschuld/Browser.php.git",
+                "reference": "6bde9efb0b14a4917affe741500c29149419e491"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/cbschuld/Browser.php/zipball/6bde9efb0b14a4917affe741500c29149419e491",
+                "reference": "6bde9efb0b14a4917affe741500c29149419e491",
+                "shasum": ""
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "1.95-dev"
+                }
+            },
+            "autoload": {
+                "files": [
+                    "lib/Browser.php"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Chris Schuld",
+                    "email": "chris@chrisschuld.com",
+                    "homepage": "http://chrisschuld.com"
+                }
+            ],
+            "description": "A PHP Class to detect a user's Browser",
+            "homepage": "http://chrisschuld.com/projects/browser-php-detecting-a-users-browser-from-php.html",
+            "keywords": [
+                "browser",
+                "detection",
+                "user agent"
+            ],
+            "time": "2017-07-31T23:43:17+00:00"
+        },
+        {
             "name": "doctrine/cache",
             "version": "v1.7.1",
             "source": {
