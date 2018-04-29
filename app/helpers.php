@@ -472,7 +472,7 @@ function ratingVote($rating)
     $output .= str_repeat('<i class="fa fa-star"></i>', $full_stars);
     $output .= str_repeat('<i class="fa fa-star-half"></i>', $half_stars);
     $output .= str_repeat('<i class="far fa-star"></i>', $empty_stars);
-    $output .= '</div>';
+    $output .= '( ' . $rating .' )</div>';
 
     return $output;
 }
@@ -2347,7 +2347,7 @@ function translator($fallback = 'en')
             new \Illuminate\Filesystem\Filesystem(),
             RESOURCES . '/lang'
         ),
-        setting('lang')
+        setting('language')
     );
 
     $translator->setFallback($fallback);

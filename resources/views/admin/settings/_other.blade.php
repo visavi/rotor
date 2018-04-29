@@ -3,12 +3,10 @@
 <form action="/admin/settings?act=other" method="post">
     <input type="hidden" name="token" value="{{ $_SESSION['token'] }}">
 
-    <div class="form-check">
-        <label class="form-check-label">
-            <input type="hidden" value="0" name="sets[errorlog]">
-            <input name="sets[errorlog]" class="form-check-input" type="checkbox" value="1"{{ getInput('sets.errorlog', $settings['errorlog']) ? ' checked' : '' }}>
-            Включить запись логов
-        </label>
+    <div class="custom-control custom-checkbox">
+        <input type="hidden" value="0" name="sets[errorlog]">
+        <input type="checkbox" class="custom-control-input" value="1" name="sets[errorlog]" id="errorlog"{{ getInput('sets.errorlog', $settings['errorlog']) ? ' checked' : '' }}>
+        <label class="custom-control-label" for="errorlog">Включить запись логов</label>
     </div>
 
     <div class="form-group{{ hasError('sets[keywords]') }}">
@@ -53,12 +51,10 @@
         {!! textError('sets[statusdef]') !!}
     </div>
 
-    <div class="form-check">
-        <label class="form-check-label">
-            <input type="hidden" value="0" name="sets[addbansend]">
-            <input name="sets[addbansend]" class="form-check-input" type="checkbox" value="1"{{ getInput('sets.addbansend', $settings['addbansend']) ? ' checked' : '' }}>
-            Объяснение из бана
-        </label>
+    <div class="custom-control custom-checkbox">
+        <input type="hidden" value="0" name="sets[addbansend]">
+        <input type="checkbox" class="custom-control-input" value="1" name="sets[addbansend]" id="addbansend"{{ getInput('sets.addbansend', $settings['addbansend']) ? ' checked' : '' }}>
+        <label class="custom-control-label" for="addbansend">Объяснение из бана</label>
     </div>
 
     <button class="btn btn-primary">Сохранить</button>

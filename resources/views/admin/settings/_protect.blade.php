@@ -27,20 +27,16 @@
         {!! textError('sets[captcha_offset]') !!}
     </div>
 
-    <div class="form-check">
-        <label class="form-check-label">
-            <input type="hidden" value="0" name="sets[captcha_distortion]">
-            <input name="sets.captcha_distortion" class="form-check-input" type="checkbox" value="1"{{ getInput('sets.captcha_distortion', $settings['captcha_distortion']) ? ' checked' : '' }}>
-            Искажение
-        </label>
+    <div class="custom-control custom-checkbox">
+        <input type="hidden" value="0" name="sets[captcha_distortion]">
+        <input type="checkbox" class="custom-control-input" value="1" name="sets[captcha_distortion]" id="captcha_distortion"{{ getInput('sets.captcha_distortion', $settings['captcha_distortion']) ? ' checked' : '' }}>
+        <label class="custom-control-label" for="captcha_distortion">Искажение</label>
     </div>
 
-    <div class="form-check">
-        <label class="form-check-label">
-            <input type="hidden" value="0" name="sets[captcha_interpolation]">
-            <input name="sets[captcha_interpolation]" class="form-check-input" type="checkbox" value="1"{{ getInput('sets.captcha_interpolation', $settings['captcha_interpolation']) ? ' checked' : '' }}>
-            Размытие
-        </label>
+    <div class="custom-control custom-checkbox">
+        <input type="hidden" value="0" name="sets[captcha_interpolation]">
+        <input type="checkbox" class="custom-control-input" value="1" name="sets[captcha_interpolation]" id="captcha_interpolation"{{ getInput('sets.captcha_interpolation', $settings['captcha_interpolation']) ? ' checked' : '' }}>
+        <label class="custom-control-label" for="captcha_interpolation">Размытие</label>
     </div>
 
     <h3 class="mt-3">reCaptcha</h3>

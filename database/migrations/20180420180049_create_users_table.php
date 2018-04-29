@@ -20,7 +20,7 @@ class CreateUsersTable extends AbstractMigration
                 ->addColumn('name', 'string', ['limit' => 20, 'null' => true])
                 ->addColumn('country', 'string', ['limit' => 30, 'null' => true])
                 ->addColumn('city', 'string', ['limit' => 50, 'null' => true])
-                ->addColumn('lang', 'string', ['limit' => 2, 'null' => true])
+                ->addColumn('language', 'string', ['limit' => 2, 'null' => true])
                 ->addColumn('info', 'text', ['null' => true])
                 ->addColumn('site', 'string', ['limit' => 50, 'null' => true])
                 ->addColumn('icq', 'string', ['limit' => 10, 'null' => true])

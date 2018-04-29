@@ -43,12 +43,10 @@
         {!! textError('sets[allowextload]') !!}
     </div>
 
-    <div class="form-check">
-        <label class="form-check-label">
-            <input type="hidden" value="0" name="sets[downupload]">
-            <input name="sets[downupload]" class="form-check-input" type="checkbox" value="1"{{ getInput('sets.downupload', $settings['downupload']) ? ' checked' : '' }}>
-            Разрешать загружать файлы пользователям
-        </label>
+    <div class="custom-control custom-checkbox">
+        <input type="hidden" value="0" name="sets[downupload]">
+        <input type="checkbox" class="custom-control-input" value="1" name="sets[downupload]" id="downupload"{{ getInput('sets.downupload', $settings['downupload']) ? ' checked' : '' }}>
+        <label class="custom-control-label" for="downupload">Разрешать загружать файлы пользователям</label>
     </div>
 
     <button class="btn btn-primary">Сохранить</button>

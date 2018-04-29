@@ -62,7 +62,6 @@
                 <label class="custom-control-label" for="closed">Закрыть раздел</label>
             </div>
 
-
             <button class="btn btn-primary">Изменить</button>
         </form>
     </div>
