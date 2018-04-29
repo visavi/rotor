@@ -123,12 +123,3 @@ if (empty(setting('themes')) || ! file_exists(HOME . '/themes/' . setting('theme
 if (empty(setting('language')) || ! file_exists(RESOURCES . '/lang/' . setting('language'))) {
     setSetting(['language' => 'ru']);
 }
-
-$files = glob(APP . '/Plugins/*.php');
-foreach ($files as $file) {
-    require_once $file;
-}
-
-if (isset($setting)) {
-    setSetting($setting);
-}
