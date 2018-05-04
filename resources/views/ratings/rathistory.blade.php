@@ -12,7 +12,11 @@
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
             <li class="breadcrumb-item"><a href="/users/{{ $user->login }}">{{ $user->login }}</a></li>
-            <li class="breadcrumb-item"><a href="/users/{{ $user->login }}/rating">Изменения репутации</a></li>
+
+            @if (getUser('id') != $user->id)
+                <li class="breadcrumb-item"><a href="/users/{{ $user->login }}/rating">Изменения репутации</a></li>
+            @endif
+
             <li class="breadcrumb-item active">Полученные голоса</li>
         </ol>
     </nav>

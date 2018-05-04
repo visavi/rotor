@@ -2308,6 +2308,10 @@ function imageBase64($path, array $params = [])
         $params['class'] = 'img-fluid';
     }
 
+    if (empty($params['alt'])) {
+        $params['alt'] = basename($path);
+    }
+
     $strParams = [];
     foreach ($params as $key => $param) {
         $strParams[] = $key . '="' . $param . '"';
