@@ -19,20 +19,16 @@
         {!! textError('sets[incount]') !!}
     </div>
 
-    <div class="form-check">
-        <label class="form-check-label">
-            <input type="hidden" value="0" name="sets[performance]">
-            <input name="sets[performance]" class="form-check-input" type="checkbox" value="1"{{ getInput('sets.performance', $settings['performance']) ? ' checked' : '' }}>
-            Производительность
-        </label>
+    <div class="custom-control custom-checkbox">
+        <input type="hidden" value="0" name="sets[performance]">
+        <input type="checkbox" class="custom-control-input" value="1" name="sets[performance]" id="performance"{{ getInput('sets.performance', $settings['performance']) ? ' checked' : '' }}>
+        <label class="custom-control-label" for="performance">Производительность</label>
     </div>
 
-    <div class="form-check">
-        <label class="form-check-label">
-            <input type="hidden" value="0" name="sets[onlines]">
-            <input name="sets[onlines]" class="form-check-input" type="checkbox" value="1"{{ getInput('sets.onlines', $settings['onlines']) ? ' checked' : '' }}>
-            Онлайн
-        </label>
+    <div class="custom-control custom-checkbox">
+        <input type="hidden" value="0" name="sets[onlines]">
+        <input type="checkbox" class="custom-control-input" value="1" name="sets[onlines]" id="onlines"{{ getInput('sets.onlines', $settings['onlines']) ? ' checked' : '' }}>
+        <label class="custom-control-label" for="onlines">Онлайн</label>
     </div>
 
     <div class="form-group{{ hasError('sets[timeonline]') }}">

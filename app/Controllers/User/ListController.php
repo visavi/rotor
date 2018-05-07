@@ -56,7 +56,7 @@ class ListController extends BaseController
     {
         $users = User::query()
             ->whereIn('level', User::ADMIN_GROUPS)
-            ->orderByRaw("field(level, '".implode(',', User::ADMIN_GROUPS)."')")
+            ->orderByRaw("field(level, '".implode("','", User::ADMIN_GROUPS)."')")
             ->get();
 
         return view('users/administrators', compact('users'));

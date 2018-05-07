@@ -3,6 +3,8 @@
 <form action="/admin/settings" method="post">
     <input type="hidden" name="token" value="{{ $_SESSION['token'] }}">
 
+
+
     <div class="form-group{{ hasError('sets[title]') }}">
         <label for="title">Заголовок всех страниц:</label>
         <input type="text" class="form-control" id="title" name="sets[title]" maxlength="100" value="{{ getInput('sets.title', $settings['title']) }}" required>
@@ -45,8 +47,23 @@
         {!! textError('sets[timezone]') !!}
     </div>
 
-    <?php $themes = glob(HOME."/themes/*", GLOB_ONLYDIR); ?>
+    <?php $languages = array_map('basename', glob(RESOURCES."/lang/*", GLOB_ONLYDIR)); ?>
+    <?php $inputLang = getInput('language', $settings['language']); ?>
 
+    <div class="form-group{{ hasError('sets[language]') }}">
+        <label for="language">Язык:</label>
+        <select class="form-control" id="language" name="sets[language]">
+
+            @foreach ($languages as $language)
+                <?php $selected = ($language == $inputLang) ? ' selected' : ''; ?>
+                <option value="{{ $language }}"{{ $selected }}>{{ $language }}</option>
+            @endforeach
+        </select>
+
+        {!! textError('sets[language]') !!}
+    </div>
+
+    <?php $themes = array_map('basename', glob(HOME."/themes/*", GLOB_ONLYDIR)); ?>
     <?php $inputThemes = getInput('sets.themes', $settings['themes']); ?>
 
     <div class="form-group{{ hasError('sets[themes]') }}">
@@ -54,8 +71,8 @@
         <select class="form-control" id="themes" name="sets[themes]">
 
             @foreach ($themes as $theme)
-                <?php $selected = ($inputThemes == basename($theme)) ? ' selected' : ''; ?>
-                <option value="{{ basename($theme) }}"{{ $selected }}>{{ basename($theme) }}</option>
+                <?php $selected = ($inputThemes == $theme) ? ' selected' : ''; ?>
+                <option value="{{ $theme }}"{{ $selected }}>{{ $theme }}</option>
             @endforeach
 
         </select>
@@ -70,8 +87,8 @@
             <option value="0">Выключить</option>
 
             @foreach ($themes as $theme)
-                <?php $selected = ($inputThemes == basename($theme)) ? ' selected' : ''; ?>
-                <option value="{{ basename($theme) }}"{{ $selected }}>{{ basename($theme) }}</option>
+                <?php $selected = ($inputThemes == $theme) ? ' selected' : ''; ?>
+                <option value="{{ $theme }}"{{ $selected }}>{{ $theme }}</option>
             @endforeach
 
         </select>
@@ -94,28 +111,22 @@
         {!! textError('sets[closedsite]') !!}
     </div>
 
-    <div class="form-check">
-        <label class="form-check-label">
-            <input type="hidden" value="0" name="sets[openreg]">
-            <input name="sets[openreg]" class="form-check-input" type="checkbox" value="1"{{ getInput('sets.openreg', $settings['openreg']) ? ' checked' : '' }}>
-            Разрешить регистрацию
-        </label>
+    <div class="custom-control custom-checkbox">
+        <input type="hidden" value="0" name="sets[openreg]">
+        <input type="checkbox" class="custom-control-input" value="1" name="sets[openreg]" id="openreg"{{ getInput('sets.openreg', $settings['openreg']) ? ' checked' : '' }}>
+        <label class="custom-control-label" for="openreg">Разрешить регистрацию</label>
     </div>
 
-    <div class="form-check">
-        <label class="form-check-label">
-            <input type="hidden" value="0" name="sets[regkeys]">
-            <input name="sets[regkeys]" class="form-check-input" type="checkbox" value="1"{{ getInput('sets.regkeys', $settings['regkeys']) ? ' checked' : '' }}>
-            Подтверждение регистрации
-        </label>
+    <div class="custom-control custom-checkbox">
+        <input type="hidden" value="0" name="sets[regkeys]">
+        <input type="checkbox" class="custom-control-input" value="1" name="sets[regkeys]" id="regkeys"{{ getInput('sets.regkeys', $settings['regkeys']) ? ' checked' : '' }}>
+        <label class="custom-control-label" for="regkeys">Подтверждение регистрации</label>
     </div>
 
-    <div class="form-check">
-        <label class="form-check-label">
-            <input type="hidden" value="0" name="sets[invite]">
-            <input name="sets[invite]" class="form-check-input" type="checkbox" value="1"{{ getInput('sets.invite', $settings['invite']) ? ' checked' : '' }}>
-            Регистрация по приглашениям
-        </label>
+    <div class="custom-control custom-checkbox">
+        <input type="hidden" value="0" name="sets[invite]">
+        <input type="checkbox" class="custom-control-input" value="1" name="sets[invite]" id="invite"{{ getInput('sets.invite', $settings['invite']) ? ' checked' : '' }}>
+        <label class="custom-control-label" for="invite">Регистрация по приглашениям</label>
     </div>
 
     <p class="text-muted font-italic">

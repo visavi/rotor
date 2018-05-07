@@ -61,7 +61,7 @@ class IgnoreController extends BaseController
                 }
 
                 setFlash('success', 'Пользователь успешно добавлен в игнор-лист!');
-                redirect('/ignore?page=' . $page);
+                redirect('/ignores?page=' . $page);
             } else {
                 setInput(Request::all());
                 setFlash('danger', $validator->getErrors());

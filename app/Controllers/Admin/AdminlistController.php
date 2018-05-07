@@ -22,7 +22,7 @@ class AdminlistController extends AdminController
     {
         $users = User::query()
             ->whereIn('level', User::ADMIN_GROUPS)
-            ->orderByRaw("field(level, '".implode(',', User::ADMIN_GROUPS)."')")
+            ->orderByRaw("field(level, '".implode("','", User::ADMIN_GROUPS)."')")
             ->get();
 
         return view('admin/administrators/index', compact('users'));

@@ -67,6 +67,7 @@ class SettingsSeeder extends AbstractSeed
             ['name'  => 'ipbanlist', 'value' => 10],
             ['name'  => 'keywords', 'value' => 'Ключевые слова вашего сайта'],
             ['name'  => 'lastnews', 'value' => 5],
+            ['name'  => 'language', 'value' => 'ru'],
             ['name'  => 'limitcontact', 'value' => 50],
             ['name'  => 'limitignore', 'value' => 50],
             ['name'  => 'limitmail', 'value' => 300],

@@ -73,8 +73,10 @@ if ($user = checkAuth()) {
 
     Registry::set('user', $user);
 
-    $setting['themes'] = $user->themes;
-    $setting['lang']   = $user->lang;
+    setSetting([
+        'themes'   => $user->themes,
+        'language' => $user->language,
+    ]);
 
     // Забанен
     if ($user->level == User::BANNED) {
@@ -106,27 +108,18 @@ if ($user = checkAuth()) {
  */
 $browser_detect = new Mobile_Detect();
 
-if (! getUser() || empty($setting['themes'])) {
+if (! getUser() || empty(setting('themes'))) {
     if (! empty(setting('webthemes'))) {
         if (! $browser_detect->isMobile() && ! $browser_detect->isTablet()) {
-            $setting['themes'] = setting('webthemes');
+            setSetting(['themes' => setting('webthemes')]);
         }
     }
 }
 
-if (empty($setting['themes']) || ! file_exists(HOME . '/themes/' . $setting['themes'])) {
-    $setting['themes'] = 'default';
+if (empty(setting('themes')) || ! file_exists(HOME . '/themes/' . setting('themes'))) {
+    setSetting(['themes' => 'default']);
 }
 
-if (empty($setting['lang']) || ! file_exists(RESOURCES . '/lang/' . $setting['lang'])) {
-    $setting['lang'] = 'ru';
-}
-
-$files = glob(APP . '/Plugins/*.php');
-foreach ($files as $file) {
-    require_once $file;
-}
-
-if (isset($setting)) {
-    setSetting($setting);
+if (empty(setting('language')) || ! file_exists(RESOURCES . '/lang/' . setting('language'))) {
+    setSetting(['language' => 'ru']);
 }

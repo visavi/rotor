@@ -16,7 +16,7 @@
     </nav>
 
     Всего на сайте: <b>{{ $page->total }}</b><br>
-    Зарегистрированных:  <b>{{ $registered }}</b><br><br>
+    Авторизованных:  <b>{{ $registered }}</b><br><br>
 
     @if ($online->isNotEmpty())
 

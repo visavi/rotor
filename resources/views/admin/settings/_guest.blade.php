@@ -15,20 +15,16 @@
         {!! textError('sets[postnews]') !!}
     </div>
 
-    <div class="form-check">
-        <label class="form-check-label">
-            <input type="hidden" value="0" name="sets[bookadds]">
-            <input name="sets[bookadds]" class="form-check-input" type="checkbox" value="1"{{ getInput('sets.bookadds', $settings['bookadds']) ? ' checked' : '' }}>
-            Разрешить гостям писать в гостевой
-        </label>
+    <div class="custom-control custom-checkbox">
+        <input type="hidden" value="0" name="sets[bookadds]">
+        <input type="checkbox" class="custom-control-input" value="1" name="sets[bookadds]" id="bookadds"{{ getInput('sets.bookadds', $settings['bookadds']) ? ' checked' : '' }}>
+        <label class="custom-control-label" for="bookadds">Разрешить гостям писать в гостевой</label>
     </div>
 
-    <div class="form-check">
-        <label class="form-check-label">
-            <input type="hidden" value="0" name="sets[bookscores]">
-            <input name="sets[bookscores]" class="form-check-input" type="checkbox" value="1"{{ getInput('sets.bookscores', $settings['bookscores']) ? ' checked' : '' }}>
-            Начислять баллы в гостевой
-        </label>
+    <div class="custom-control custom-checkbox">
+        <input type="hidden" value="0" name="sets[bookscores]">
+        <input type="checkbox" class="custom-control-input" value="1" name="sets[bookscores]" id="bookscores"{{ getInput('sets.bookscores', $settings['bookscores']) ? ' checked' : '' }}>
+        <label class="custom-control-label" for="bookscores">Начислять баллы в гостевой</label>
     </div>
 
     <div class="form-group{{ hasError('sets[bookpost]') }}">

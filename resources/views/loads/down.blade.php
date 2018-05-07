@@ -40,14 +40,13 @@
 
     <div class="message">
         {!! bbCode($down->text) !!}
-    </div><br>
+    </div>
 
     @if ($down->files->isNotEmpty())
-
         @if ($down->getFiles()->isNotEmpty())
-            @foreach ($down->getFiles() as $file)
-                @if (file_exists(UPLOADS.'/files/'.$file->hash))
-                    <div class="mt-3">
+            <div class="mt-3">
+                @foreach ($down->getFiles() as $file)
+                    @if ($file->hash && file_exists(UPLOADS.'/files/'.$file->hash))
                         <i class="fa fa-download"></i> <b><a href="/downs/download/{{ $file->id }}">{{ $file->name }}</a></b> ({{ formatSize($file->size) }})
 
                         @if ($file->extension === 'mp3')
@@ -65,11 +64,14 @@
                         @endif
 
                         @if ($file->extension === 'zip')
-                            <a href="/downs/zip/{{ $file->id }}">Просмотреть архив</a><br>
+                            <a href="/downs/zip/{{ $file->id }}">Просмотреть архив</a>
                         @endif
-                    </div>
-                @endif
-            @endforeach
+                    @else
+                        <i class="fa fa-download"></i> Файл не найден
+                    @endif
+                    <br>
+                @endforeach
+            </div>
         @endif
 
         @if ($down->getImages()->isNotEmpty())

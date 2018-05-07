@@ -36,18 +36,18 @@
                 {!! textError('themes') !!}
             </div>
 
-            <?php $inputLang = getInput('lang', $user->lang); ?>
-            <div class="form-group{{ hasError('lang') }}">
-                <label for="lang">Язык:</label>
+            <?php $inputLang = getInput('language', $user->language); ?>
+            <div class="form-group{{ hasError('language') }}">
+                <label for="language">Язык:</label>
 
-                <select class="form-control" name="lang" id="lang">
-                    @foreach ($setting['languages'] as $lang)
-                        <?php $selected = ($lang == $inputLang) ? ' selected' : ''; ?>
-                        <option value="{{ $lang }}"{{ $selected }}>{{ $lang }}</option>
+                <select class="form-control" name="language" id="language">
+                    @foreach ($setting['languages'] as $language)
+                        <?php $selected = ($language == $inputLang) ? ' selected' : ''; ?>
+                        <option value="{{ $language }}"{{ $selected }}>{{ $language }}</option>
                     @endforeach
                 </select>
 
-                {!! textError('lang') !!}
+                {!! textError('language') !!}
             </div>
 
             <?php $inputTimezone = getInput('timezone', $user->timezone); ?>

@@ -11,7 +11,7 @@
     <nav>
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
-            <li class="breadcrumb-item"><a href="/counter">Статистика посещений</a></li>
+            <li class="breadcrumb-item"><a href="/counters">Статистика посещений</a></li>
             <li class="breadcrumb-item active">Статистика за месяц</li>
         </ol>
     </nav>

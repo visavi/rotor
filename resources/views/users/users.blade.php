@@ -31,7 +31,7 @@
             </div>
 
             <div>
-                Форум: {{ $data->allforum }} | Гостевая: {{ $data->allguest }} | Коммент: {{ $data->allcomments }}<br>
+                Форум: {{ $data->allforum }} | Гостевая: {{ $data->allguest }} | Комментарии: {{ $data->allcomments }}<br>
                 Посещений: {{ $data->visits }}<br>
                 Деньги: {{ $data->money }}<br>
                 Дата регистрации: {{ dateFixed($data->created_at, 'd.m.Y') }}

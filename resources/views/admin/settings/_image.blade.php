@@ -24,12 +24,10 @@
         {!! textError('sets[previewsize]') !!}
     </div>
 
-    <div class="form-check">
-        <label class="form-check-label">
-            <input type="hidden" value="0" name="sets[copyfoto]">
-            <input name="sets[copyfoto]" class="form-check-input" type="checkbox" value="1"{{ getInput('sets.copyfoto', $settings['copyfoto']) ? ' checked' : '' }}>
-            Наложение копирайта
-        </label>
+    <div class="custom-control custom-checkbox">
+        <input type="hidden" value="0" name="sets[copyfoto]">
+        <input type="checkbox" class="custom-control-input" value="1" name="sets[copyfoto]" id="copyfoto"{{ getInput('sets.copyfoto', $settings['copyfoto']) ? ' checked' : '' }}>
+        <label class="custom-control-label" for="copyfoto">Наложение копирайта</label>
     </div>
 
     <img src="/assets/img/images/watermark.png" alt="watermark" title="{{ siteUrl() }}/assets/img/images/watermark.png"><br>
