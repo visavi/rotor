@@ -42,6 +42,6 @@
     Динамика за месяц<br>
     {{ $metrika->getCounterMonth() }}
 
-    <a href="/counter/day">Статистика за сутки</a><br>
-    <a href="/counter/month">Статистика за месяц</a><br><br>
+    <a href="/counters/day">Статистика за сутки</a><br>
+    <a href="/counters/month">Статистика за месяц</a><br><br>
 @stop

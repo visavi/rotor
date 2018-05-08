@@ -27,7 +27,7 @@ class CounterController extends BaseController
         $online  = statsOnline();
         $count   = statsCounter();
 
-        return view('counter/index', compact('online', 'count', 'counts24', 'counts31', 'metrika'));
+        return view('counters/index', compact('online', 'count', 'counts24', 'counts31', 'metrika'));
     }
 
     /**
@@ -57,7 +57,7 @@ class CounterController extends BaseController
 
         $metrika = new Metrika();
 
-        return view('counter/24', compact('hits_data', 'host_data', 'currhour', 'hours', 'metrika'));
+        return view('counters/24', compact('hits_data', 'host_data', 'currhour', 'hours', 'metrika'));
     }
 
     /**
@@ -88,6 +88,6 @@ class CounterController extends BaseController
 
         $metrika = new Metrika();
 
-        return view('counter/31', compact('hits_data', 'host_data', 'currday', 'days', 'metrika'));
+        return view('counters/31', compact('hits_data', 'host_data', 'currday', 'days', 'metrika'));
     }
 }
