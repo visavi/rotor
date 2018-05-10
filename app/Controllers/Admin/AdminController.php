@@ -49,7 +49,7 @@ Class AdminController extends BaseController
         $app  = new PhinxApplication();
         $wrap = new TextWrapper($app);
 
-        $app->setName('RotorCMS by Vantuz - http://visavi.net');
+        $app->setName('Rotor by Vantuz - http://visavi.net');
         $app->setVersion(VERSION);
 
         $wrap->setOption('configuration', BASEDIR.'/app/migration.php');

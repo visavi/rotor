@@ -20,6 +20,6 @@
 
     <br>
     <div class="alert alert-success">
-        <i class="fa fa-check"></i> <b>Установлена актуальная версия RotorCMS</b>
+        <i class="fa fa-check"></i> <b>Установлена актуальная версия Rotor</b>
     </div>
 @stop

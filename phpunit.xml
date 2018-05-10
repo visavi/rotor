@@ -9,7 +9,7 @@
         </whitelist>
     </filter>
     <testsuites>
-        <testsuite name="RotorCMS Test Suite">
+        <testsuite name="Rotor Test Suite">
             <directory>./tests</directory>
         </testsuite>
     </testsuites>

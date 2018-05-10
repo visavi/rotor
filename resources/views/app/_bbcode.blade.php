@@ -2,7 +2,7 @@
 <html lang="ru">
 <head>
     <meta charset="utf-8">
-    <title>RotorCMS</title>
+    <title>Rotor</title>
     @include('app/_styles')
 </head>
 <body>

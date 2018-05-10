@@ -11,10 +11,10 @@ header("Content-type:text/html; charset=utf-8");
     @yield('styles')
     @stack('styles')
     <link rel="stylesheet" href="/themes/bluewater/css/style.css">
-    <link rel="alternate" href="/news/rsss" title="RSS News" type="application/rss+xml">
+    <link rel="alternate" href="/news/rss" title="RSS News" type="application/rss+xml">
     <meta name="keywords" content="%KEYWORDS%">
     <meta name="description" content="%DESCRIPTION%">
-    <meta name="generator" content="RotorCMS {{ VERSION }}">
+    <meta name="generator" content="Rotor {{ VERSION }}">
 </head>
 <body>
 <!--Design by WmLiM (http://komwap.ru)-->

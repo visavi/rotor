@@ -15,7 +15,7 @@ header('Content-type:text/html; charset=utf-8');
     <link rel="alternate" href="/news/rss" title="RSS News" type="application/rss+xml">
     <meta name="description" content="@yield('description', setting('description'))">
     <meta name="keywords" content="@yield('keywords', setting('keywords'))">
-    <meta name="generator" content="RotorCMS {{ VERSION }}">
+    <meta name="generator" content="Rotor {{ VERSION }}">
 </head>
 <body>
 <!--Design by Vantuz (http://visavi.net)-->

@@ -1,5 +1,5 @@
 @section('title')
-    Документация RotorCMS
+    Документация Rotor
 @stop
 
 <h1>Документация Rotor</h1>

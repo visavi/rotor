@@ -16,8 +16,8 @@ unset($level);
 
 define('DIR', rtrim($folder_level, '/'));
 
-include_once DIR.'/app/bootstrap.php';
-include_once DIR.'/app/helpers.php';
+include_once DIR . '/app/bootstrap.php';
+include_once DIR . '/app/helpers.php';
 
 function parsePHPModules() {
     ob_start();
@@ -67,7 +67,7 @@ function getModuleSetting($pModuleName, $pSettings) {
 $app  = new Phinx\Console\PhinxApplication();
 $wrap = new Phinx\Wrapper\TextWrapper($app);
 
-$app->setName('RotorCMS by Vantuz - http://visavi.net');
+$app->setName('Rotor by Vantuz - http://visavi.net');
 $app->setVersion(VERSION);
 
 $wrap->setOption('configuration', DIR.'/app/migration.php');
@@ -80,7 +80,7 @@ header("Content-type:text/html; charset=utf-8");
 <html lang="ru">
 <head>
     <title>
-        <?= env('APP_NEW') ? 'Установка' : 'Обновление' ?> RotorCMS
+        <?= env('APP_NEW') ? 'Установка' : 'Обновление' ?> Rotor
     </title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
@@ -94,182 +94,183 @@ header("Content-type:text/html; charset=utf-8");
 </div>
 <div class="site">
 
-    <?php if (env('APP_NEW')): ?>
-        <?php if (! Request::has('act')): ?>
+    <?php if (! Request::has('act')): ?>
 
-            <h1>Шаг 1 - проверка требований</h1>
+        <h1>Шаг 1 - проверка требований</h1>
 
-            <p style="color:#ff0000">
-                Если в процессе установки движка произойдет какая-либо ошибка, чтобы узнать причину ошибки включите вывод ошибок, измените значение APP_DEBUG на true
-            </p>
+        <p style="color:#ff0000">
+            Если в процессе установки движка произойдет какая-либо ошибка, чтобы узнать причину ошибки включите вывод ошибок, измените значение APP_DEBUG на true
+        </p>
 
-            <p style="color:#ff0000">
-                Если вы обновляетесь с предыдущей версии RotorCMS вам необходимо провести обновление базы данных, для этого измените значение APP_NEW на false и обновите текущую страницу</p>
+        <p style="color:#ff0000">
+            Если вы обновляетесь с предыдущей версии Rotor вам необходимо провести обновление базы данных, для этого измените значение APP_NEW на false и обновите текущую страницу</p>
 
-            <p>Для установки вам необходимо прописать данные от БД в файл .env</p>
+        <p>Для установки вам необходимо прописать данные от БД в файл .env</p>
 
-            <?php
-            $keys = [
-                'APP_ENV',
-                'APP_NEW',
-                'APP_DEBUG',
-                'DB_DRIVER',
-                'DB_HOST',
-                'DB_PORT',
-                'DB_DATABASE',
-                'DB_USERNAME',
-                'DB_CHARSET',
-                'DB_COLLATION',
-                'SITE_ADMIN',
-                'SITE_EMAIL',
-                'SITE_URL',
-            ];
+        <?php
+        $keys = [
+            'APP_ENV',
+            'APP_NEW',
+            'APP_DEBUG',
+            'DB_DRIVER',
+            'DB_HOST',
+            'DB_PORT',
+            'DB_DATABASE',
+            'DB_USERNAME',
+            'DB_CHARSET',
+            'DB_COLLATION',
+            'SITE_ADMIN',
+            'SITE_EMAIL',
+            'SITE_URL',
+        ];
 
-            foreach ($keys as $key) {
-                echo $key.' - '.env($key).'<br>';
-            }
-            ?>
-            <p>Не забудьте изменить значение APP_KEY, эти данные необходимы для шифрования cookies и паролей в сессиях</p>
+        foreach ($keys as $key) {
+            echo $key.' - '.env($key).'<br>';
+        }
+        ?>
+        <p>Не забудьте изменить значение APP_KEY, эти данные необходимы для шифрования cookies и паролей в сессиях</p>
 
-            <p>Минимальная версия PHP необходимая для работы движка PHP 7.1.3 и MySQL 5.5.3</p>
+        <p>Минимальная версия PHP необходимая для работы движка PHP 7.1.3 и MySQL 5.5.3</p>
 
-            <p style="font-size: 15px; font-weight: bold">Проверка требований</p>
-            <?php
-            $error_setting = 0;
+        <p style="font-size: 15px; font-weight: bold">Проверка требований</p>
+        <?php
+        $errorSettings = 0;
 
-            if (version_compare(PHP_VERSION, '7.1.3') > 0) {
-                echo '<i class="fa fa-plus-circle"></i> Версия PHP 7.1.3 и выше: <b><span style="color:#00cc00">ОК</span></b> (Версия ' . parseVersion(PHP_VERSION) . ')<br>';
+        if (version_compare(PHP_VERSION, '7.1.3') > 0) {
+            echo '<i class="fa fa-plus-circle"></i> Версия PHP 7.1.3 и выше: <b><span style="color:#00cc00">ОК</span></b> (Версия ' . parseVersion(PHP_VERSION) . ')<br>';
+        } else {
+            echo '<i class="fa fa-minus-circle"></i> Версия PHP 7.1.3 и выше: <b><span style="color:#ff0000">Ошибка</span></b>  (Версия ' . parseVersion(PHP_VERSION) . ')<br>';
+            $errorCritical = 1;
+        }
+
+        if (extension_loaded('pdo_mysql')) {
+
+            $version = strtok(getModuleSetting('pdo_mysql', ['Client API version', 'PDO Driver for MySQL, client library version']), '-');
+            echo '<i class="fa fa-plus-circle"></i> Расширение PDO-MySQL ('.$version.'): <b><span style="color:#00cc00">ОК</span></b><br>';
+        } else {
+            echo '<i class="fa fa-minus-circle"></i> Расширение PDO-MySQL: <b><span style="color:#ff0000">Ошибка</span></b> (Расширение не загружено)<br>';
+            $errorCritical = 1;
+        }
+
+        if (extension_loaded('openssl')) {
+            $version = getModuleSetting('openssl', ['OpenSSL Library Version', 'OpenSSL Header Version']);
+            echo '<i class="fa fa-plus-circle"></i> Расширение OpenSSL ('.$version.'): <b><span style="color:#00cc00">ОК</span></b><br>';
+        } else {
+            echo '<i class="fa fa-minus-circle"></i> Расширение OpenSSL: <b><span style="color:#ff0000">Ошибка</span></b> (Расширение не загружено)<br>';
+            $errorCritical = 1;
+        }
+
+        if (extension_loaded('tokenizer')) {
+            echo '<i class="fa fa-plus-circle"></i> Расширение Tokenizer: <b><span style="color:#00cc00">ОК</span></b><br>';
+        } else {
+            echo '<i class="fa fa-minus-circle"></i> Расширение Tokenizer: <b><span style="color:#ff0000">Ошибка</span></b> (Расширение не загружено)<br>';
+            $errorCritical = 1;
+        }
+
+        if (extension_loaded('mbstring')) {
+            $version = getModuleSetting('mbstring', ['oniguruma version', 'Multibyte regex (oniguruma) version']);
+            echo '<i class="fa fa-plus-circle"></i> Расширение Mbstring ('.$version.'): <b><span style="color:#00cc00">ОК</span></b><br>';
+        } else {
+            echo '<i class="fa fa-minus-circle"></i> Расширение Mbstring: <b><span style="color:#ff0000">Ошибка</span></b> (Расширение не загружено)<br>';
+            $errorCritical = 1;
+        }
+
+        if (extension_loaded('xml')) {
+            $version = getModuleSetting('xml', 'libxml2 Version');
+            echo '<i class="fa fa-plus-circle"></i> Расширение XML ('.$version.'): <b><span style="color:#00cc00">ОК</span></b><br>';
+        } else {
+            echo '<i class="fa fa-minus-circle"></i> Расширение XML: <b><span style="color:#ff0000">Ошибка</span></b> (Расширение не загружено)<br>';
+            $errorCritical = 1;
+        }
+
+        if (extension_loaded('gd')) {
+            $version = getModuleSetting('gd', ['GD headers Version', 'GD library Version']);
+            echo '<i class="fa fa-plus-circle"></i> Библиотека GD ('.$version.'): <b><span style="color:#00cc00">ОК</span></b><br>';
+        } else {
+            echo '<i class="fa fa-minus-circle"></i> Библиотека GD: <b><span style="color:#ffa500">Предупреждение</span></b> (Библиотека не загружена)<br>';
+            $errorSettings++;
+        }
+
+        if (extension_loaded('curl')) {
+            $version = getModuleSetting('curl', 'cURL Information');
+            echo '<i class="fa fa-plus-circle"></i> Библиотека Curl ('.$version.'): <b><span style="color:#00cc00">ОК</span></b><br>';
+        } else {
+            echo '<i class="fa fa-minus-circle"></i> Библиотека Curl: <b><span style="color:#ffa500">Предупреждение</span></b> (Библиотека не загружена)<br>';
+            $errorSettings++;
+        }
+
+        echo 'Для обработка видео желательно установить библиотеку FFmpeg<br>';
+
+        echo '<br><p style="font-size: 15px; font-weight: bold">Права доступа</p>';
+
+        $uploadDir = file_exists(DIR . '/public/uploads') ? DIR . '/public/uploads' : DIR . '/uploads';
+
+        $storage = glob(DIR . '/storage/*', GLOB_ONLYDIR);
+        $uploads = glob($uploadDir . '/*', GLOB_ONLYDIR);
+
+        $dirs = array_merge($storage, $uploads);
+
+        $chmod_errors = 0;
+
+        foreach ($dirs as $dir) {
+            if (is_writable($dir)) {
+                $file_status = '<span style="color:#00cc00">ОК</span>';
             } else {
-                echo '<i class="fa fa-minus-circle"></i> Версия PHP 7.1.3 и выше: <b><span style="color:#ff0000">Ошибка</span></b>  (Версия ' . parseVersion(PHP_VERSION) . ')<br>';
-                $error_critical = 1;
-            }
-
-            if (extension_loaded('pdo_mysql')) {
-
-                $version = strtok(getModuleSetting('pdo_mysql', ['Client API version', 'PDO Driver for MySQL, client library version']), '-');
-                echo '<i class="fa fa-plus-circle"></i> Расширение PDO-MySQL ('.$version.'): <b><span style="color:#00cc00">ОК</span></b><br>';
-            } else {
-                echo '<i class="fa fa-minus-circle"></i> Расширение PDO-MySQL: <b><span style="color:#ff0000">Ошибка</span></b> (Расширение не загружено)<br>';
-                $error_critical = 1;
-            }
-
-            if (extension_loaded('openssl')) {
-                $version = getModuleSetting('openssl', ['OpenSSL Library Version', 'OpenSSL Header Version']);
-                echo '<i class="fa fa-plus-circle"></i> Расширение OpenSSL ('.$version.'): <b><span style="color:#00cc00">ОК</span></b><br>';
-            } else {
-                echo '<i class="fa fa-minus-circle"></i> Расширение OpenSSL: <b><span style="color:#ff0000">Ошибка</span></b> (Расширение не загружено)<br>';
-                $error_critical = 1;
-            }
-
-            if (extension_loaded('tokenizer')) {
-                echo '<i class="fa fa-plus-circle"></i> Расширение Tokenizer: <b><span style="color:#00cc00">ОК</span></b><br>';
-            } else {
-                echo '<i class="fa fa-minus-circle"></i> Расширение Tokenizer: <b><span style="color:#ff0000">Ошибка</span></b> (Расширение не загружено)<br>';
-                $error_critical = 1;
-            }
-
-            if (extension_loaded('mbstring')) {
-                $version = getModuleSetting('mbstring', ['oniguruma version', 'Multibyte regex (oniguruma) version']);
-                echo '<i class="fa fa-plus-circle"></i> Расширение Mbstring ('.$version.'): <b><span style="color:#00cc00">ОК</span></b><br>';
-            } else {
-                echo '<i class="fa fa-minus-circle"></i> Расширение Mbstring: <b><span style="color:#ff0000">Ошибка</span></b> (Расширение не загружено)<br>';
-                $error_critical = 1;
-            }
-
-            if (extension_loaded('xml')) {
-                $version = getModuleSetting('xml', 'libxml2 Version');
-                echo '<i class="fa fa-plus-circle"></i> Расширение XML ('.$version.'): <b><span style="color:#00cc00">ОК</span></b><br>';
-            } else {
-                echo '<i class="fa fa-minus-circle"></i> Расширение XML: <b><span style="color:#ff0000">Ошибка</span></b> (Расширение не загружено)<br>';
-                $error_critical = 1;
-            }
-
-            if (extension_loaded('gd')) {
-                $version = getModuleSetting('gd', ['GD headers Version', 'GD library Version']);
-                echo '<i class="fa fa-plus-circle"></i> Библиотека GD ('.$version.'): <b><span style="color:#00cc00">ОК</span></b><br>';
-            } else {
-                echo '<i class="fa fa-minus-circle"></i> Библиотека GD: <b><span style="color:#ffa500">Предупреждение</span></b> (Библиотека не загружена)<br>';
-                $error_setting++;
-            }
-
-            if (extension_loaded('curl')) {
-                $version = getModuleSetting('curl', 'cURL Information');
-                echo '<i class="fa fa-plus-circle"></i> Библиотека Curl ('.$version.'): <b><span style="color:#00cc00">ОК</span></b><br>';
-            } else {
-                echo '<i class="fa fa-minus-circle"></i> Библиотека Curl: <b><span style="color:#ffa500">Предупреждение</span></b> (Библиотека не загружена)<br>';
-                $error_setting++;
-            }
-
-            echo 'Для обработка видео желательно установить библиотеку FFmpeg<br>';
-
-            echo '<br><p style="font-size: 15px; font-weight: bold">Права доступа</p>';
-
-            $uploadDir = file_exists(DIR . '/public/uploads') ? DIR . '/public/uploads' : DIR . '/uploads';
-
-            $storage = glob(DIR . '/storage/*', GLOB_ONLYDIR);
-            $uploads = glob($uploadDir . '/*', GLOB_ONLYDIR);
-
-            $dirs = array_merge($storage, $uploads);
-
-            $chmod_errors = 0;
-
-            foreach ($dirs as $dir) {
+                $old = umask(0);
+                @chmod ($dir, 0777);
+                umask($old);
                 if (is_writable($dir)) {
                     $file_status = '<span style="color:#00cc00">ОК</span>';
                 } else {
-                    $old = umask(0);
-                    @chmod ($dir, 0777);
-                    umask($old);
-                    if (is_writable($dir)) {
-                        $file_status = '<span style="color:#00cc00">ОК</span>';
-                    } else {
-                        $file_status = '<span style="color:#ff0000">Запрещено</span>';
-                        $chmod_errors = 1;
-                    }
+                    $file_status = '<span style="color:#ff0000">Запрещено</span>';
+                    $chmod_errors = 1;
                 }
-                $chmod_value = @decoct(@fileperms($dir)) % 1000;
-
-                echo '<i class="fa fa-check-circle"></i> '.str_replace('../', '', $dir).' <b> - ' . $file_status . '</b> (chmod ' . $chmod_value . ')<br>';
             }
-    ?>
-            <br>Дополнительно можете выставить права на директории и файлы с шаблонами внутри resources/views<br><br>
+            $chmod_value = @decoct(@fileperms($dir)) % 1000;
 
-            Если какой-то пункт выделен красным, необходимо зайти по FTP и выставить CHMOD разрешающую запись<br>
-            Некоторые настройки являются рекомендуемыми для полной совместимости, однако скрипт способен работать даже если рекомендуемые настройки не совпадают с текущими.<br><br>
+            echo '<i class="fa fa-check-circle"></i> '.str_replace('../', '', $dir).' <b> - ' . $file_status . '</b> (chmod ' . $chmod_value . ')<br>';
+        }
+?>
+        <br>Дополнительно можете выставить права на директории и файлы с шаблонами внутри resources/views<br><br>
 
-            <?php if (empty($error_critical) && empty($chmod_errors)): ?>
-                <i class="fa fa-check-circle"></i> <b><span style="color:#00cc00">Вы можете продолжить установку движка!</span></b><br><br>
+        Если какой-то пункт выделен красным, необходимо зайти по FTP и выставить CHMOD разрешающую запись<br>
+        Некоторые настройки являются рекомендуемыми для полной совместимости, однако скрипт способен работать даже если рекомендуемые настройки не совпадают с текущими.<br><br>
 
-                <?php if (empty($error_setting)): ?>
-                    Все модули и библиотеки присутствуют, настройки корректны, необходимые файлы и папки доступны для записи<br><br>
-                <?php else: ?>
-                    <b><span style="color:#ffa500">У вас имеются предупреждения!</span></b> (Всего: <?= $error_setting ?>)<br>
-                    Данные предупреждения не являются критическими, но тем не менее для полноценной, стабильной и безопасной работы движка желательно их устранить<br>
-                    Вы можете продолжить установку скрипта, но нет никаких гарантий, что движок будет работать стабильно<br><br>
-                <?php endif; ?>
+        <?php if (empty($errorCritical) && empty($chmod_errors)): ?>
+            <i class="fa fa-check-circle"></i> <b><span style="color:#00cc00">Вы можете продолжить установку движка!</span></b><br><br>
 
-                <span style="color:#ff0000">
-                    Внимание, кодировка таблиц настраивается в файле .env,<br>
-                    Требуемая кодировка БД utf8mb4_unicode_ci<br>
-                    По умолчанию БД будет создана в кодировке <?= env('DB_COLLATION') ?>
-                </span>
-                <br><br>
-
-                <p><a style="font-size: 18px" href="?act=status">Проверить статус</a></p><br>
+            <?php if (empty($errorSettings)): ?>
+                Все модули и библиотеки присутствуют, настройки корректны, необходимые файлы и папки доступны для записи<br><br>
             <?php else: ?>
-                <b><span style="color:#ff0000">Имеются критические ошибки!</span></b><br>
-                Вы не сможете приступить к установке, пока не устраните все ошибки<br><br>
+                <b><span style="color:#ffa500">У вас имеются предупреждения!</span></b> (Всего: <?= $errorSettings ?>)<br>
+                Данные предупреждения не являются критическими, но тем не менее для полноценной, стабильной и безопасной работы движка желательно их устранить<br>
+                Вы можете продолжить установку скрипта, но нет никаких гарантий, что движок будет работать стабильно<br><br>
             <?php endif; ?>
 
-        <?php elseif(Request::input('act') === 'status'): ?>
-            <h1>Шаг 2 - проверка статуса</h1>
+            <span style="color:#ff0000">
+                Внимание, кодировка таблиц настраивается в файле .env,<br>
+                Требуемая кодировка БД utf8mb4_unicode_ci<br>
+                По умолчанию БД будет создана в кодировке <?= env('DB_COLLATION') ?>
+            </span>
+            <br><br>
+
+            <p><a style="font-size: 18px" href="?act=status">Проверить статус</a> (Выполняется <?= env('APP_NEW') ? 'установка' : 'обновление' ?>)</p><br>
+        <?php else: ?>
+            <b><span style="color:#ff0000">Имеются критические ошибки!</span></b><br>
+            Вы не сможете приступить к установке, пока не устраните все ошибки<br><br>
+        <?php endif; ?>
+    <?php endif; ?>
+
+    <?php if (env('APP_NEW')): ?>
+        <?php if (Request::input('act') === 'status'): ?>
+            <h1>Шаг 2 - проверка статуса (установка)</h1>
 
             <?= nl2br($wrap->getStatus()); ?>
 
             <p><a style="font-size: 18px" href="?act=migrate">Выполнить миграции</a></p>
 
         <?php elseif(Request::input('act') === 'migrate'): ?>
-            <h1>Шаг 3 - выполнение миграций</h1>
+            <h1>Шаг 3 - выполнение миграций (установка)</h1>
 
             <?= nl2br($wrap->getMigrate()); ?>
 
@@ -277,14 +278,14 @@ header("Content-type:text/html; charset=utf-8");
 
         <?php elseif(Request::input('act') === 'seed'): ?>
 
-            <h1>Шаг 4 - заполнение БД</h1>
+            <h1>Шаг 4 - заполнение БД (установка)</h1>
 
             <?= nl2br($wrap->getSeed()); ?>
 
             <p><a style="font-size: 18px" href="?act=account">Создать администратора</a></p>
         <?php elseif(Request::input('act') === 'account'): ?>
 
-            <h1>Шаг 5 - создание администратора</h1>
+            <h1>Шаг 5 - создание администратора (установка)</h1>
 
             Прежде чем перейти к администрированию вашего сайта, необходимо создать аккаунт администратора.<br>
             Перед тем как нажимать кнопку Создать, убедитесь, что на предыдущей странице нет уведомлений об ошибках, иначе процесс не сможет быть завершен удачно.<br>
@@ -298,6 +299,7 @@ header("Content-type:text/html; charset=utf-8");
             ?>
 
             <?php if (Request::isMethod('post')): ?>
+
                 <?php
                 if (strlen($login) <= 20 && strlen($login) >= 3) {
                 if (preg_match('|^[a-z0-9\-]+$|i', $login)) {
@@ -327,12 +329,12 @@ header("Content-type:text/html; charset=utf-8");
                     ]);
 
                     // -------------- Приват ---------------//
-                    $text = 'Привет, ' . $login . '! Поздравляем с успешной установкой нашего движка RotorCMS.'.PHP_EOL.'Новые версии, апгрейды, а также множество других дополнений вы найдете на нашем сайте [url=http://visavi.net]VISAVI.NET[/url]';
+                    $text = 'Привет, ' . $login . '! Поздравляем с успешной установкой нашего движка Rotor.'.PHP_EOL.'Новые версии, апгрейды, а также множество других дополнений вы найдете на нашем сайте [url=http://visavi.net]VISAVI.NET[/url]';
 
                     sendMessage($user, null, $text);
 
                     // -------------- Новость ---------------//
-                    $textnews = 'Добро пожаловать на демонстрационную страницу движка RotorCMS'.PHP_EOL.'RotorCMS - функционально законченная система управления контентом с открытым кодом написанная на PHP. Она использует базу данных MySQL для хранения содержимого вашего сайта. RotorCMS является гибкой, мощной и интуитивно понятной системой с минимальными требованиями к хостингу, высоким уровнем защиты и является превосходным выбором для построения сайта любой степени сложности'.PHP_EOL.'Главной особенностью RotorCMS является низкая нагрузка на системные ресурсы, даже при очень большой аудитории сайта нагрузка не сервер будет минимальной, и вы не будете испытывать каких-либо проблем с отображением информации.'.PHP_EOL.'Движок RotorCMS вы можете скачать на официальном сайте [url=http://visavi.net]VISAVI.NET[/url]';
+                    $textnews = 'Добро пожаловать на демонстрационную страницу движка Rotor'.PHP_EOL.'Rotor - функционально законченная система управления контентом с открытым кодом написанная на PHP. Она использует базу данных MySQL для хранения содержимого вашего сайта. Rotor является гибкой, мощной и интуитивно понятной системой с минимальными требованиями к хостингу, высоким уровнем защиты и является превосходным выбором для построения сайта любой степени сложности'.PHP_EOL.'Главной особенностью Rotor является низкая нагрузка на системные ресурсы, даже при очень большой аудитории сайта нагрузка не сервер будет минимальной, и вы не будете испытывать каких-либо проблем с отображением информации.'.PHP_EOL.'Движок Rotor вы можете скачать на официальном сайте [url=http://visavi.net]VISAVI.NET[/url]';
 
                     $news = News::query()->create([
                         'title'      => 'Добро пожаловать!',
@@ -374,12 +376,12 @@ header("Content-type:text/html; charset=utf-8");
             В поле ввода адреса сайта необходимо ввести адрес в который у вас распакован движок, если это поддомен или папка, то необходимо указать ее, к примеру http://wap.visavi.net<br><br>
 
 
-        <?php else: ?>
+        <?php elseif (Request::input('act') === 'finish'): ?>
 
             <h1>Установка завершена</h1>
 
             <p>
-                Поздравляем Вас, RotorCMS был успешно установлен на Ваш сервер. Вы можете перейти на главную страницу вашего сайта и посмотреть возможности скрипта<br><br>
+                Поздравляем Вас, Rotor был успешно установлен на Ваш сервер. Вы можете перейти на главную страницу вашего сайта и посмотреть возможности скрипта<br><br>
                 Аккаунт администратора создан<br><br>
                 <a href="/">Перейти на главную страницу сайта</a><br>
             </p>
@@ -388,17 +390,29 @@ header("Content-type:text/html; charset=utf-8");
 
     <?php else: ?>
 
-        <?php if (! Request::has('act')): ?>
-        <p style="font-size: 20px">Список доступных миграций</p>
-        <?= nl2br($wrap->getStatus()); ?>
-        <a style="font-size: 18px" href="?act=upgrade">Перейти к обновлению</a>
+        <?php if (Request::input('act') === 'status'): ?>
+
+            <h1>Шаг 2 - проверка статуса (обновление)</h1>
+            <?= nl2br($wrap->getStatus()); ?>
+            <a style="font-size: 18px" href="?act=migrate">Перейти к обновлению</a>
+
         <?php elseif(Request::input('act') === 'rollback'): ?>
-        <?= nl2br($wrap->getRollback()); ?>
-        <?php else: ?>
-        <?= nl2br($wrap->getMigrate()); ?>
-        <p style="font-size: 20px">Удалите директории install и upgrade</p>
+            <?= nl2br($wrap->getRollback()); ?>
+
+        <?php elseif (Request::input('act') === 'migrate'): ?>
+
+            <h1>Обновление завершено</h1>
+
+            <?= nl2br($wrap->getMigrate()); ?>
+
+            <p>
+                Поздравляем Вас, Rotor был успешно обновлен. Вы можете перейти на главную страницу вашего сайта и посмотреть возможности скрипта<br><br>
+                <a href="/">Перейти на главную страницу сайта</a><br>
+            </p>
+
+            <p style="font-size: 20px">Удалите директории install и upgrade</p>
         <?php endif; ?>
     <?php endif; ?>
-</div>
+ </div>
 </body>
 </html>
