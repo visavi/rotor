@@ -204,8 +204,10 @@ header("Content-type:text/html; charset=utf-8");
 
             echo '<br><p style="font-size: 15px; font-weight: bold">Права доступа</p>';
 
-            $storage = glob(DIR.'/app/storage/*', GLOB_ONLYDIR);
-            $uploads = glob(DIR.'/uploads/*', GLOB_ONLYDIR);
+            $uploadDir = file_exists(DIR . '/public/uploads') ? DIR . '/public/uploads' : DIR . '/uploads';
+
+            $storage = glob(DIR . '/storage/*', GLOB_ONLYDIR);
+            $uploads = glob($uploadDir . '/*', GLOB_ONLYDIR);
 
             $dirs = array_merge($storage, $uploads);
 
