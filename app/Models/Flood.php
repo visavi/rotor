@@ -25,22 +25,22 @@ class Flood extends BaseModel
      */
     public static function getPeriod()
     {
+        if (isAdmin()) {
+            return 0;
+        }
+
         $period = setting('floodstime');
 
-        if (getUser('point') < 50) {
-            $period = round(setting('floodstime') * 2);
-        }
-        if (getUser('point') >= 500) {
+        if (getUser('point') >= 100) {
             $period = round(setting('floodstime') / 2);
         }
-        if (getUser('point') >= 1000) {
+
+        if (getUser('point') >= 300) {
             $period = round(setting('floodstime') / 3);
         }
-        if (getUser('point') >= 5000) {
+
+        if (getUser('point') >= 500) {
             $period = round(setting('floodstime') / 6);
-        }
-        if (isAdmin()) {
-            $period = 0;
         }
 
         return $period;

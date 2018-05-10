@@ -1539,13 +1539,13 @@ function profile(User $user, $color = null)
         $name = empty($user->name) ? $user->login : $user->name;
 
         if ($color) {
-            return '<a href="/users/' . $user->login . '"><span style="color:' . $color . '">' . $name . '</span></a>';
+            $name = '<span style="color:' . $color . '">' . $name . '</span>';
         }
 
-        return '<a href="/users/' . $user->login . '">' . $name . '</a>';
+        return '<a class="author" href="/users/' . $user->login . '" data-login="' . $user->login . '">' . $name . '</a>';
     }
 
-    return setting('guestsuser');
+    return '<span class="author" data-login="' . setting('guestsuser') . '">' . setting('guestsuser') . '</span>';
 }
 
 /**

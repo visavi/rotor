@@ -93,11 +93,10 @@ function postReply(el)
 
     var field  = $('.markItUp');
     var post   = $(el).closest('.post');
-    var top    = post.find('.b');
-    var author = top.find('b').text();
+    var author = post.find('.author').data('login');
 
     separ = field.val().length ? '\n' : '';
-    field.focus().val(field.val() + separ + '[b]' + author + '[/b], ');
+    field.focus().val(field.val() + separ + '@' + author + ', ');
 
     return false;
 }
@@ -110,14 +109,14 @@ function postQuote(el)
     var field  = $('.markItUp');
     var post   = $(el).closest('.post');
     var top    = post.find('.b');
-    var author = top.find('b').text();
+    var author = post.find('.author').data('login');
     var date   = top.find('small').text();
 
     var text    = post.find('.message').clone();
     var message = text.find("blockquote").remove().end().text();
 
     separ = field.val().length ? '\n' : '';
-    field.focus().val(field.val() + separ + '[quote=' + author + ' ' + date + ']' + $.trim(message) + '[/quote]\n');
+    field.focus().val(field.val() + separ + '[quote=@' + author + ' ' + date + ']' + $.trim(message) + '[/quote]\n');
 
     return false;
 }
