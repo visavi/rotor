@@ -51,7 +51,7 @@
                         <b>{!! profile($data->user) !!}</b> <small>({{ dateFixed($data->created_at) }})</small><br>
                         {!! userStatus($data->user) !!} {!! userOnline($data->user) !!}
                     @else
-                        <b>{{ setting('guestsuser') }}</b> <small>({{ dateFixed($data->created_at) }})</small>
+                        <b class="author" data-login="{{ setting('guestsuser') }}">{{ setting('guestsuser') }}</b> <small>({{ dateFixed($data->created_at) }})</small>
                     @endif
                 </div>
 

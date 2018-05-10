@@ -96,7 +96,7 @@ function postReply(el)
     var author = post.find('.author').data('login');
 
     separ = field.val().length ? '\n' : '';
-    field.focus().val(field.val() + separ + '@' + author + ', ');
+    field.focus().val(field.val() + separ + '[b]@' + author + '[/b], ');
 
     return false;
 }
@@ -293,7 +293,10 @@ function changeRating(el)
 function deleteRating(el)
 {
     $.ajax({
-        data: {id: $(el).data('id'), login: $(el).data('login'), token: $(el).data('token')},
+        data: {
+            id: $(el).data('id'),
+            token: $(el).data('token')
+        },
         dataType: 'json', type: 'POST', url: '/ratings/delete',
         success: function(data) {
 
