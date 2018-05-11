@@ -22,7 +22,11 @@ class SendMessages extends Task
                 $user = getUserById($queue->user_id);
 
                 sendMail($user->email, $queue->subject, $queue->text);
-                $queue->update(['sent' => 1]);
+
+                $queue->update([
+                    'sent'    => 1,
+                    'sent_at' => SITETIME,
+                ]);
             }
         }
     }
