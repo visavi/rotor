@@ -90,8 +90,8 @@ class Metrika
             $x2 += $coll;
         }
 
-        imagettftext($img, 6, 0, 13, 23, $color2, HOME . '/assets/fonts/font4.ttf', $count->dayhosts);
-        imagettftext($img, 6, 0, 13, 29, $color2, HOME . '/assets/fonts/font4.ttf', $count->dayhits);
+        imagettftext($img, 6, 0, 13, 23, $color2, HOME . '/assets/fonts/font4.ttf', formatShortNum($count->dayhosts));
+        imagettftext($img, 6, 0, 13, 29, $color2, HOME . '/assets/fonts/font4.ttf', formatShortNum($count->dayhits));
         imagettftext($img, 12, 0, $pos, 29, $color2, HOME . '/assets/fonts/font7.ttf', $online);
 
         imagepng($img, UPLOADS . '/counters/counter_new.png');
