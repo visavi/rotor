@@ -91,7 +91,7 @@ function postReply(el)
 {
     postJump();
 
-    var field  = $('.markItUp');
+    var field  = $('.markItUpEditor');
     var post   = $(el).closest('.post');
     var author = post.find('.author').data('login');
 
@@ -106,7 +106,7 @@ function postQuote(el)
 {
     postJump();
 
-    var field  = $('.markItUp');
+    var field  = $('.markItUpEditor');
     var post   = $(el).closest('.post');
     var top    = post.find('.b');
     var author = post.find('.author').data('login');

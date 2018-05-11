@@ -37,30 +37,30 @@
     @if ($comments->isNotEmpty())
         <div class="b"><i class="fa fa-comment"></i> <b>Последние комментарии</b></div>
 
-        @foreach ($comments as $comm)
-            <div class="b">
-                <div class="img">{!! userAvatar($comm->user) !!}</div>
+        @foreach ($comments as $comment)
+            <div class="post">
+                <div class="b">
+                    <div class="img">{!! userAvatar($comment->user) !!}</div>
 
-                <b>{!! profile($comm->user) !!}</b>
-                <small> ({{ dateFixed($comm->created_at) }})</small><br>
-                {!! userStatus($comm->user) !!} {!! userOnline($comm->user) !!}
-            </div>
+                    <b>{!! profile($comment->user) !!}</b>
+                    <small> ({{ dateFixed($comment->created_at) }})</small><br>
+                    {!! userStatus($comment->user) !!} {!! userOnline($comment->user) !!}
+                </div>
 
-            <div>
-                {!! bbCode($comm->text) !!}<br>
+                <div>
+                    {!! bbCode($comment->text) !!}<br>
 
-                @if (isAdmin())
-                 <span class="data">({{ $comm->brow }}, {{ $comm->ip }})</span>
-                @endif
+                    @if (isAdmin())
+                     <span class="data">({{ $comment->brow }}, {{ $comment->ip }})</span>
+                    @endif
+                </div>
             </div>
         @endforeach
 
-        @if ($news->count_comments > 5)
-            <div class="act">
-                <b><a href="/news/comments/{{ $news->id }}">Все комментарии</a></b> ({{ $news->count_comments }})
-                <a href="/news/end/{{ $news->id }}">&raquo;</a>
-            </div><br>
-        @endif
+        <div class="bg-light p-1 mb-3 border">
+            <i class="fas fa-comments"></i> <b><a href="/news/comments/{{ $news->id }}">Все комментарии</a></b> ({{ $news->count_comments }})
+            <a href="/news/end/{{ $news->id }}">&raquo;</a>
+        </div>
     @endif
 
     @if (! $news->closed)
