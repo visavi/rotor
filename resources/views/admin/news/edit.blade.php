@@ -48,20 +48,16 @@
             {!! textError('image') !!}
             <br>
 
-            <div class="form-check">
-                <label class="form-check-label">
-                    <input type="hidden" value="0" name="closed">
-                    <input name="closed" class="form-check-input" type="checkbox" value="1"{{ getInput('closed', $news->closed) ? ' checked' : '' }}>
-                    Закрыть комментарии
-                </label>
+            <div class="custom-control custom-checkbox">
+                <input type="hidden" value="0" name="closed">
+                <input type="checkbox" class="custom-control-input" value="1" name="closed" id="closed"{{ getInput('closed', $news->closed) ? ' checked' : '' }}>
+                <label class="custom-control-label" for="closed">Закрыть комментарии</label>
             </div>
 
-            <div class="form-check">
-                <label class="form-check-label">
-                    <input type="hidden" value="0" name="top">
-                    <input name="top" class="form-check-input" type="checkbox" value="1"{{ getInput('top', $news->top) ? ' checked' : '' }}>
-                    Показывать на главной
-                </label>
+            <div class="custom-control custom-checkbox">
+                <input type="hidden" value="0" name="top">
+                <input type="checkbox" class="custom-control-input" value="1" name="top" id="top"{{ getInput('top', $news->top) ? ' checked' : '' }}>
+                <label class="custom-control-label" for="top">Показывать на главной</label>
             </div>
 
             <button class="btn btn-primary">Изменить</button>
