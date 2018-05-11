@@ -81,7 +81,7 @@ class NewsController extends BaseController
             if ($validator->isValid()) {
                 $msg = antimat($msg);
 
-                Comment::query()->create([
+                $comment = Comment::query()->create([
                     'relate_type' => News::class,
                     'relate_id'   => $news->id,
                     'text'        => $msg,
@@ -99,6 +99,8 @@ class NewsController extends BaseController
                 ]);
 
                 $news->increment('count_comments');
+
+                sendNotify($msg, '/news/comment/' . $news->id . '/' . $comment->id, $news->title);
 
                 setFlash('success', 'Комментарий успешно добавлен!');
 
@@ -263,6 +265,6 @@ class NewsController extends BaseController
             ->count();
 
         $end = ceil($total / setting('postnews'));
-        redirect('/news/comments/' . $id . '?page=' . $end . '#comment_' . $cid);
+        redirect('/news/comments/' . $news->id . '?page=' . $end . '#comment_' . $cid);
     }
 }

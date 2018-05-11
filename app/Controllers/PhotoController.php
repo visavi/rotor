@@ -161,7 +161,7 @@ class PhotoController extends BaseController
             }
         }
 
-        $checked = ($photo['closed'] == 1) ? ' checked' : '';
+        $checked = $photo->closed ? ' checked' : '';
 
         return view('photos/edit', compact('photo', 'checked', 'page'));
     }
@@ -192,7 +192,7 @@ class PhotoController extends BaseController
             if ($validator->isValid()) {
                 $msg = antimat($msg);
 
-                Comment::query()->create([
+                $comment = Comment::query()->create([
                     'relate_type' => Photo::class,
                     'relate_id'   => $photo->id,
                     'text'        => $msg,
@@ -210,6 +210,8 @@ class PhotoController extends BaseController
                 ]);
 
                 $photo->increment('count_comments');
+
+                sendNotify($msg, '/photos/comment/' . $photo->id . '/' . $comment->id, $photo->title);
 
                 setFlash('success', 'Комментарий успешно добавлен!');
                 redirect('/photos/end/' . $photo->id);
@@ -512,6 +514,6 @@ class PhotoController extends BaseController
             ->count();
 
         $end = ceil($total / setting('postgallery'));
-        redirect('/photos/comments/' . $id . '?page=' . $end . '#comment_' . $cid);
+        redirect('/photos/comments/' . $photo->id . '?page=' . $end . '#comment_' . $cid);
     }
 }

@@ -371,7 +371,9 @@ class Validator
             $rules['extensions'] = ['jpg', 'jpeg', 'gif', 'png'];
         }
 
-        if (! in_array(strtolower($input->getClientOriginalExtension()), $rules['extensions'], true)) {
+        $extension = strtolower($input->getClientOriginalExtension());
+
+        if (! in_array($extension, $rules['extensions'], true)) {
             $this->addError([$key => 'Недопустимое расширение файла!']);
         }
 
@@ -381,7 +383,7 @@ class Validator
             }
         }
 
-        if (in_array($input->getClientOriginalExtension(), ['jpg', 'jpeg', 'gif', 'png'], true)) {
+        if (in_array($extension, ['jpg', 'jpeg', 'gif', 'png'], true)) {
             list($width, $height) = getimagesize($input);
 
             if (isset($rules['maxweight'])) {

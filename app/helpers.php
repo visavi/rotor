@@ -1739,6 +1739,35 @@ function removeDir($dir)
 }
 
 /**
+ * Отправляет уведомление об упоминании в приват
+ *
+ * @param string $text     текст сообщения
+ * @param string $pageUrl  путь к странице
+ * @param string $pageName название страницу
+ */
+function sendNotify(string $text, string $pageUrl, string $pageName)
+{
+    /*$parseText = preg_replace('|\[quote(.*?)\](.*?)\[/quote\]|s', '', $text);*/
+    preg_match_all('|@([\w\-]+)|', $text, $matches);
+
+    if (! empty($matches[1])) {
+        $usersAnswer = array_unique($matches[1]);
+
+        foreach ($usersAnswer as $login) {
+
+            if ($login === getUser('login')) {
+                continue;
+            }
+
+            $user = getUserByLogin($login);
+            if ($user && $user->notify) {
+                sendMessage($user, getUser(), 'Пользователь @' . getUser('login') . ' упомянул вас на странице [url=' . siteUrl() . $pageUrl. ']' . $pageName . '[/url]' . PHP_EOL . 'Текст сообщения: ' . $text);
+            }
+        }
+    }
+}
+
+/**
  * Отправляет приватное сообщение
  *
  * @param  User $user   Получатель

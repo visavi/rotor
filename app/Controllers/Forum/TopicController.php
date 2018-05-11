@@ -196,25 +196,7 @@ class TopicController extends BaseController
             }
 
             // Рассылка уведомлений в приват
-            $parseText = preg_replace('|\[quote(.*?)\](.*?)\[/quote\]|s', '', $msg);
-
-            preg_match_all('|\[b\](.*?)\[\/b\]|s', $parseText, $matches);
-
-            if (isset($matches[1])) {
-                $usersAnswer = array_unique($matches[1]);
-
-                foreach ($usersAnswer as $login) {
-
-                    if ($login == getUser('login')) {
-                        continue;
-                    }
-
-                    $user = User::query()->where('login', $login)->first();
-                    if ($user && $user->notify) {
-                        sendMessage($user, getUser(), 'Пользователь ' . getUser('login') . ' ответил вам в теме [url=' . siteUrl() . '/topics/' . $topic->id . '/' . $post->id . ']' . $topic->title . '[/url]' . PHP_EOL . 'Текст сообщения: ' . $msg);
-                    }
-                }
-            }
+            sendNotify($msg, '/topics/' . $topic->id . '/' . $post->id, $topic->title);
 
             if ($files) {
                 foreach ($files as $file) {

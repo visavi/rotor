@@ -320,7 +320,7 @@ class BlogController extends BaseController
 
                 $msg = antimat($msg);
 
-                Comment::query()->create([
+                $comment = Comment::query()->create([
                     'relate_type' => Blog::class,
                     'relate_id'   => $blog->id,
                     'text'        => $msg,
@@ -337,6 +337,8 @@ class BlogController extends BaseController
                 ]);
 
                 $blog->increment('count_comments');
+
+                sendNotify($msg, '/articles/comment/' . $blog->id . '/' . $comment->id, $blog->title);
 
                 setFlash('success', 'Комментарий успешно добавлен!');
                 redirect('/articles/end/' . $blog->id);
@@ -687,7 +689,7 @@ class BlogController extends BaseController
             ->count();
 
         $end = ceil($total / setting('blogpost'));
-        redirect('/articles/comments/' . $id . '?page=' . $end . '#comment_' . $cid);
+        redirect('/articles/comments/' . $blog->id . '?page=' . $end . '#comment_' . $cid);
     }
 
     /**

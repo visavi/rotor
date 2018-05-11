@@ -209,7 +209,7 @@ class OfferController extends BaseController
 
                 $msg = antimat($msg);
 
-                Comment::query()->create([
+                $comment = Comment::query()->create([
                     'relate_type' => Offer::class,
                     'relate_id'   => $offer->id,
                     'text'        => $msg,
@@ -220,6 +220,8 @@ class OfferController extends BaseController
                 ]);
 
                 $offer->increment('count_comments');
+
+                sendNotify($msg, '/offers/comment/' . $offer->id . '/' . $comment->id, $offer->title);
 
                 setFlash('success', 'Комментарий успешно добавлен!');
                 redirect('/offers/end/' . $offer->id);
@@ -323,5 +325,27 @@ class OfferController extends BaseController
 
         $end = ceil($total / setting('postcommoffers'));
         redirect('/offers/comments/' . $offer->id . '?page=' . $end);
+    }
+
+    /**
+     * Переход к сообщению
+     */
+    public function viewComment($id, $cid)
+    {
+        $offer = Offer::query()->find($id);
+
+        if (! $offer) {
+            abort(404, 'Данного предложения или проблемы не существует!');
+        }
+
+        $total = Comment::query()
+            ->where('relate_type', Offer::class)
+            ->where('relate_id', $id)
+            ->where('id', '<=', $cid)
+            ->orderBy('created_at')
+            ->count();
+
+        $end = ceil($total / setting('postcommoffers'));
+        redirect('/offers/comments/' . $offer->id . '?page=' . $end . '#comment_' . $cid);
     }
 }

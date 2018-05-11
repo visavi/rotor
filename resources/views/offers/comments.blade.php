@@ -20,7 +20,7 @@
 
     @if ($comments->isNotEmpty())
         @foreach ($comments as $data)
-            <div class="post">
+            <div class="post" id="comment_{{ $data->id }}">
                 <div class="b">
                     <div class="img">{!! userAvatar($data->user) !!}</div>
 

@@ -72,6 +72,8 @@ class GuestbookController extends BaseController
                 'created_at' => SITETIME,
             ]);
 
+            sendNotify($msg, '/guestbooks', 'Гостевая книга');
+
             setFlash('success', 'Сообщение успешно добавлено!');
         } else {
             setInput(Request::all());

@@ -37,7 +37,7 @@ $routes = [
     ['GET|POST', '/articles/comments/[i:id]', 'BlogController@comments'],
     ['GET|POST', '/articles/edit/[i:id]/[i:cid]', 'BlogController@editComment'],
     ['GET',      '/articles/end/[i:id]', 'BlogController@end'],
-    ['GET',      '/articles/[i:id]/[i:cid]', 'BlogController@viewcomment'],
+    ['GET',      '/articles/comment/[i:id]/[i:cid]', 'BlogController@viewComment'],
 
     ['GET',      '/news', 'NewsController@index', 'news'],
     ['GET',      '/news/[i:id]', 'NewsController@view'],
@@ -46,7 +46,7 @@ $routes = [
     ['GET',      '/news/rss', 'NewsController@rss', 'news_rss'],
     ['GET|POST', '/news/edit/[i:id]/[i:cid]', 'NewsController@editComment'],
     ['GET',      '/news/allcomments', 'NewsController@allComments'],
-    ['GET',      '/news/[i:id]/[i:cid]', 'NewsController@viewComment'],
+    ['GET',      '/news/comment/[i:id]/[i:cid]', 'NewsController@viewComment'],
 
     ['GET',      '/photos', 'PhotoController@index', 'photos'],
     ['GET',      '/photos/[i:id]', 'PhotoController@view'],
@@ -60,7 +60,7 @@ $routes = [
     ['GET',      '/photos/albums/[user:login]', 'PhotoController@album'],
     ['GET',      '/photos/comments', 'PhotoController@allComments'],
     ['GET',      '/photos/comments/[user:login]', 'PhotoController@userComments'],
-    ['GET',      '/photos/comment/[i:id]/[i:cid]', 'PhotoController@viewcomment'],
+    ['GET',      '/photos/comment/[i:id]/[i:cid]', 'PhotoController@viewComment'],
     ['GET|POST', '/photos/top', 'PhotoController@top'],
 
     ['GET',      '/forums', 'Forum\ForumController@index', 'forum'],
@@ -181,6 +181,7 @@ $routes = [
     ['GET|POST', '/offers/comments/[i:id]', 'OfferController@comments'],
     ['GET',      '/offers/end/[i:id]', 'OfferController@end'],
     ['GET|POST', '/offers/edit/[i:id]/[i:cid]', 'OfferController@editComment'],
+    ['GET',      '/offers/comment/[i:id]/[i:cid]', 'OfferController@viewComment'],
 
     ['GET|POST', '/pictures', 'PictureController@index'],
     ['GET',      '/pictures/delete', 'PictureController@delete'],

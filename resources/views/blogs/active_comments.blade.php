@@ -21,7 +21,7 @@
             <div class="post">
                 <div class="b">
                     <i class="fa fa-comment"></i>
-                    <b><a href="/articles/{{ $data->relate_id}}/{{ $data->id}}">{{ $data->title }}</a></b> ({{ $data->count_comments }})
+                    <b><a href="/articles/comment/{{ $data->relate_id}}/{{ $data->id}}">{{ $data->title }}</a></b> ({{ $data->count_comments }})
 
                     <div class="float-right">
                         @if (isAdmin())

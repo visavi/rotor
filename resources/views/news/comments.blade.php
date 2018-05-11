@@ -6,7 +6,7 @@
 
 @section('content')
 
-    <h1>Комментарии {{ $news->title }}</h1>
+    <h1>{{ $news->title }} - Комментарии</h1>
 
     <nav>
         <ol class="breadcrumb">
@@ -19,8 +19,8 @@
 
     @if ($comments->isNotEmpty())
         @foreach ($comments as $data)
-            <div class="post">
-                <div class="b" id="comment_{{ $data->id }}">
+            <div class="post" id="comment_{{ $data->id }}">
+                <div class="b">
                     <div class="img">{!! userAvatar($data->user) !!}</div>
 
                     @if (getUser())

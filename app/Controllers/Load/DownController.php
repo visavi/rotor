@@ -309,7 +309,7 @@ class DownController extends BaseController
             abort(404, 'Данного файла не существует!');
         }
 
-        if (! $file->relate->active) {
+        if (! isAdmin(User::ADMIN) && ! $file->relate->active) {
             abort('default', 'Данный файл еще не проверен модератором!');
         }
 
@@ -374,7 +374,7 @@ class DownController extends BaseController
 
                 $msg = antimat($msg);
 
-                Comment::query()->create([
+                $comment = Comment::query()->create([
                     'relate_type' => Down::class,
                     'relate_id'   => $down->id,
                     'text'        => $msg,
@@ -385,6 +385,8 @@ class DownController extends BaseController
                 ]);
 
                 $down->increment('count_comments');
+
+                sendNotify($msg, '/downs/comment/' . $down->id . '/' . $comment->id, $down->title);
 
                 setFlash('success', 'Комментарий успешно добавлен!');
                 redirect('/downs/end/' . $down->id);
@@ -503,7 +505,7 @@ class DownController extends BaseController
             abort(404, 'Данного файла не существует!');
         }
 
-        if (! $file->relate->active) {
+        if (! isAdmin(User::ADMIN) && ! $file->relate->active) {
             abort('default', 'Данный файл еще не проверен модератором!');
         }
 
@@ -539,7 +541,7 @@ class DownController extends BaseController
             abort(404, 'Данного файла не существует!');
         }
 
-        if (! $file->relate->active) {
+        if (! isAdmin(User::ADMIN) && ! $file->relate->active) {
             abort('default', 'Данный файл еще не проверен модератором!');
         }
 
@@ -615,6 +617,6 @@ class DownController extends BaseController
             ->count();
 
         $end = ceil($total / setting('downcomm'));
-        redirect('/downs/comments/' . $id . '?page=' . $end . '#comment_' . $cid);
+        redirect('/downs/comments/' . $down->id . '?page=' . $end . '#comment_' . $cid);
     }
 }
