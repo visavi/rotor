@@ -22,7 +22,7 @@
         <div class="form-group{{ hasError('category') }}">
             <label for="inputCategory">Категория</label>
 
-            <select class="form-control" id="inputCategory" name="category">
+            <select class="form-control" id="inputCategory" name="cid">
                 @foreach ($loads as $data)
 
                     <option value="{{ $data->id }}"{{ ($cid == $data->id && ! $data->closed) ? ' selected' : '' }}{{ $data->closed ? ' disabled' : '' }}>{{ $data->name }}</option>

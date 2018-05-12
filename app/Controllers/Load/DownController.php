@@ -174,12 +174,11 @@ class DownController extends BaseController
         if (Request::isMethod('post')) {
 
             $token    = check(Request::input('token'));
-            $category = check(Request::input('category'));
             $title    = check(Request::input('title'));
             $text     = check(Request::input('text'));
             $files    = (array) Request::file('files');
 
-            $category = Load::query()->find($category);
+            $category = Load::query()->find($cid);
 
             $validator = new Validator();
             $validator
