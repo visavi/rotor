@@ -1,15 +1,15 @@
 <IfModule mod_rewrite.c>
-    RewriteEngine on
+    RewriteEngine On
 
-	RedirectMatch 403 ^/app/?$
+    RedirectMatch 403 ^/app/?$
 
     # Redirect Trailing Slashes If Not A Folder...
     RewriteCond %{REQUEST_FILENAME} !-d
     RewriteCond %{REQUEST_URI} (.+)/$
     RewriteRule ^ %1 [L,R=301]
 
-	RewriteCond %{REQUEST_URI} !^public
-	RewriteRule ^(.*)$ public/$1 [L]
+    RewriteCond %{REQUEST_URI} !^public
+    RewriteRule ^(.*)$ public/$1 [L]
 </IfModule>
 
 <Files ~ "rotor|resources|storage|vendor">
