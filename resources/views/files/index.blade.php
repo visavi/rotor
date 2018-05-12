@@ -27,23 +27,23 @@
 
         Также можно указать заголовок страницы, который автоматически подставится в блок title, для этого нужно написать следующий код
 
-    <pre class="prettyprint linenums">
-    @@section('title')
-        Новый заголовок страницы
-    @@stop
-    </pre>
+<pre class="prettyprint linenums">
+@@section('title')
+    Новый заголовок страницы
+@@stop
+</pre>
 
-        Дополнительно можно указать произвольные ключевые слова и описание заполнив переменные setting('keywords') и setting('description')
+    Дополнительно можно указать произвольные ключевые слова и описание заполнив переменные setting('keywords') и setting('description')
 
-    <pre class="prettyprint linenums">
-    @@section('keywords')
-        Ключевые слова
-    @@stop
-    
-    @@section('keywords')
-        Описание страниц
-    @@stop
-    </pre>
+<pre class="prettyprint linenums">
+@@section('keywords')
+    Ключевые слова
+@@stop
+
+@@section('description')
+    Описание страниц
+@@stop
+</pre>
     </div>
 
     Посмотрите пример страниц в виде <a href="/files/docs">документации Rotor</a><br>
