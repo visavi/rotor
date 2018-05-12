@@ -1,47 +1,44 @@
 DirectoryIndex index.php
 AddDefaultCharset UTF-8
-Options -Indexes
 
 <IfModule mod_rewrite.c>
+    <IfModule mod_negotiation.c>
+        Options -MultiViews -Indexes
+    </IfModule>
+
     RewriteEngine On
+
+    # Handle Authorization Header
+    RewriteCond %{HTTP:Authorization} .
+    RewriteRule .* - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization}]
+
+    # Redirect Trailing Slashes If Not A Folder...
     RewriteCond %{REQUEST_FILENAME} !-d
-    RewriteRule ^(.*)/$ /$1 [L,R=301]
+    RewriteCond %{REQUEST_URI} (.+)/$
+    RewriteRule ^ %1 [L,R=301]
+
+    # Handle Front Controller...
+    RewriteCond %{REQUEST_FILENAME} !-d
     RewriteCond %{REQUEST_FILENAME} !-f
     RewriteRule ^ index.php [L]
 </IfModule>
 
-FileETag MTime Size
-<ifmodule mod_expires.c>
-<filesmatch ".(ico|jpg|gif|png|css|js)$">
-    ExpiresActive on
-    ExpiresDefault "access plus 1 month"
-</filesmatch>
-</ifmodule>
-
 <IfModule mod_expires.c>
-    ExpiresActive On
-    ExpiresByType image/x-icon "access plus 2 weeks"
-    ExpiresByType image/png "access plus 2 weeks"
-    ExpiresByType image/jpeg "access plus 2 weeks"
-    ExpiresByType image/gif "access plus 2 weeks"
-    ExpiresByType text/javascript "access plus 1 week"
-    ExpiresByType text/css "access plus 1 week"
+    <filesmatch ".(ico|jpg|gif|png|css|js)$">
+        ExpiresActive on
+        ExpiresDefault "access plus 1 month"
+    </filesmatch>
 </IfModule>
 
 <IfModule mod_headers.c>
-<FilesMatch .*\.(js|css)$>
-    Header set Cache-control: private
-</FilesMatch>
+    <FilesMatch .*\.(js|css)$>
+        Header set Cache-control: private
+    </FilesMatch>
 
-<FilesMatch .*\.(gif|jpg|png)$>
-    Header set Cache-control: public
-</FilesMatch>
+    <FilesMatch .*\.(gif|jpg|png)$>
+        Header set Cache-control: public
+    </FilesMatch>
 </IfModule>
-
-<Files ~ "rotor|app|resources|storage|vendor">
-    Order allow,deny
-    Deny from all
-</Files>
 
 <FilesMatch "^\.">
     Order allow,deny
