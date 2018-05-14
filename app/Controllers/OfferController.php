@@ -17,7 +17,7 @@ class OfferController extends BaseController
      */
     public function index($type = 'offer')
     {
-        $otherType = $type == Offer::OFFER ? Offer::ISSUE : Offer::OFFER;
+        $otherType = $type === Offer::OFFER ? Offer::ISSUE : Offer::OFFER;
 
         $sort = check(Request::input('sort'));
 
@@ -82,12 +82,14 @@ class OfferController extends BaseController
             abort(403, 'Авторизуйтесь для добавления записи!');
         }
 
+        $type  = check(Request::input('type'));
+
         if (Request::isMethod('post')) {
 
             $token = check(Request::input('token'));
             $title = check(Request::input('title'));
             $text  = check(Request::input('text'));
-            $type  = check(Request::input('type'));
+
 
             $validator = new Validator();
             $validator->equal($token, $_SESSION['token'], ['Неверный идентификатор сессии, повторите действие!'])
@@ -120,7 +122,7 @@ class OfferController extends BaseController
             }
         }
 
-        return view('offers/create');
+        return view('offers/create', compact('type'));
     }
 
     /**

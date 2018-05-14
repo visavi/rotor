@@ -26,8 +26,8 @@ class Offer extends BaseModel
      * Типы
      */
     const TYPES = [
-        self::OFFER => 'Предложение',
-        self::ISSUE => 'Проблема',
+        self::OFFER => 'Предложения',
+        self::ISSUE => 'Проблемы',
     ];
 
 

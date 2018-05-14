@@ -11,8 +11,7 @@
     <nav>
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
-            <li class="breadcrumb-item"><a href="/offers/offer">Предложения</a></li>
-            <li class="breadcrumb-item"><a href="/offers/issue">Проблемы</a></li>
+            <li class="breadcrumb-item"><a href="/offers/offer">Предложения / Проблемы</a></li>
             <li class="breadcrumb-item active">Добавление</li>
         </ol>
     </nav>
@@ -22,7 +21,7 @@
             <form action="/offers/create" method="post">
                 <input type="hidden" name="token" value="{{ $_SESSION['token'] }}">
 
-                <?php $inputType = getInput('type'); ?>
+                <?php $inputType = getInput('type', $type); ?>
 
                 <div class="form-group{{ hasError('type') }}">
                     <label for="inputType">Я хотел бы...</label>

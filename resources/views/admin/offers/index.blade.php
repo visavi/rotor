@@ -8,7 +8,7 @@
 
     @if (getUser())
         <div class="float-right">
-            <a class="btn btn-success" href="/offers/create">Добавить</a><br>
+            <a class="btn btn-success" href="/offers/create?type={{ $type }}">Добавить</a><br>
         </div><br>
     @endif
 
@@ -23,13 +23,14 @@
         </ol>
     </nav>
 
-    <i class="fa fa-book"></i>
-
     @if ($type === 'offer')
-        <b>Предложения</b> ({{ $page->total }}) / <a href="/admin/offers/issue">Проблемы</a> ({{ $page->otherTotal }})
+        <a class="btn btn-danger btn-sm" href="/admin/offers/offer">Предложения <span class="badge badge-light">{{ $page->total }}</span></a>
+        <a class="btn btn-light btn-sm" href="/admin/offers/issue">Проблемы <span class="badge badge-light">{{ $page->otherTotal }}</span></a>
     @else
-        <a href="/admin/offers/offer">Предложения</a> ({{ $page->otherTotal }}) / <b>Проблемы</b> ({{ $page->total }})
+        <a class="btn btn-light btn-sm" href="/admin/offers/offer">Предложения <span class="badge badge-light">{{ $page->otherTotal }}</span></a>
+        <a class="btn btn-danger btn-sm" href="/admin/offers/issue">Проблемы <span class="badge badge-light">{{ $page->total }}</span></a>
     @endif
+
 
     <br>Сортировать:
     <?php $active = ($order === 'rating') ? 'success' : 'light'; ?>

@@ -8,7 +8,7 @@
 
     @if (getUser())
         <div class="float-right">
-            <a class="btn btn-success" href="/offers/create">Добавить</a>
+            <a class="btn btn-success" href="/offers/create?type={{ $type }}">Добавить</a>
         </div><br>
     @endif
 
@@ -17,14 +17,7 @@
     <nav>
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
-
-            @if ($type === 'offer')
-                <li class="breadcrumb-item"><a href="/offers/issue">Проблемы</a> ({{ $page->otherTotal }})</li>
-                <li class="breadcrumb-item active">Предложения({{ $page->total }})</li>
-            @else
-                <li class="breadcrumb-item"><a href="/offers/offer">Предложения</a> ({{ $page->otherTotal }})</li>
-                <li class="breadcrumb-item active">Проблемы ({{ $page->total }})</li>
-            @endif
+            <li class="breadcrumb-item active">Предложения / Проблемы</li>
 
             @if (isAdmin('admin'))
                 <li class="breadcrumb-item"><a href="/admin/offers/{{ $type }}?page={{ $page->current }}">Управление</a></li>
@@ -32,7 +25,15 @@
         </ol>
     </nav>
 
-    Сортировать:
+    @if ($type === 'offer')
+        <a class="btn btn-danger btn-sm" href="/offers/offer">Предложения <span class="badge badge-light">{{ $page->total }}</span></a>
+        <a class="btn btn-light btn-sm" href="/offers/issue">Проблемы <span class="badge badge-light">{{ $page->otherTotal }}</span></a>
+    @else
+        <a class="btn btn-light btn-sm" href="/offers/offer">Предложения <span class="badge badge-light">{{ $page->otherTotal }}</span></a>
+        <a class="btn btn-danger btn-sm" href="/offers/issue">Проблемы <span class="badge badge-light">{{ $page->total }}</span></a>
+    @endif
+
+    <br>Сортировать:
     <?php $active = ($order === 'rating') ? 'success' : 'light'; ?>
     <a href="/offers/{{ $type }}?sort=rating" class="badge badge-{{ $active }}">Голоса</a>
 

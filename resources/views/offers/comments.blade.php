@@ -11,8 +11,7 @@
     <nav>
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
-            <li class="breadcrumb-item"><a href="/offers/offer">Предложения</a></li>
-            <li class="breadcrumb-item"><a href="/offers/issue">Проблемы</a></li>
+            <li class="breadcrumb-item"><a href="/offers/{{ $offer->type }}">Предложения / Проблемы</a></li>
             <li class="breadcrumb-item"><a href="/offers/{{ $offer->id }}">{{ $offer->title }}</a></li>
             <li class="breadcrumb-item active">Комментарии</li>
         </ol>
