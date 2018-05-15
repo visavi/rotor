@@ -16,6 +16,8 @@ Disallow: /contacts
 Disallow: /ignores
 Disallow: /profile
 Disallow: /pictures
+Disallow: /ratings
+Disallow: /transfers
 Disallow: /messages
 Disallow: /settings
 Disallow: /notebooks
