@@ -87,7 +87,7 @@
     <form action="/admin/posts/delete?tid={{ $topic->id }}&amp;page={{ $page->current }}" method="post">
         <input type="hidden" name="token" value="{{ $_SESSION['token'] }}">
 
-        <div class="form text-right">
+        <div class="p-1 bg-light text-right">
             <label for="all">Отметить все</label>
             <input type="checkbox" id="all" onchange="var o=this.form.elements;for(var i=0;i&lt;o.length;i++)o[i].checked=this.checked">
         </div>

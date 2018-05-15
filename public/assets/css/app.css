@@ -75,6 +75,7 @@ blockquote small:before {
 .prettyprint {
   font-size: 100%;
   border-radius: 4px;
+  margin-bottom: 0;
 }
 
 .spoiler {
