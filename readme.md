@@ -85,7 +85,7 @@ composer create-project --stability=dev visavi/rotor .
 ### Настройки cron
 
 ```
-* * * * * php path-to-site/app/cron.php 2>&1
+* * * * * php /path-to-site/app/cron.php 2>&1
 ```
 
 ### Настройки nginx
