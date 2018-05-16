@@ -28,7 +28,7 @@ class Metrika
         }
 
         if (file_exists(STORAGE . '/temp/online.dat')) {
-            $online = current(json_decode(file_get_contents(STORAGE . '/temp/online.dat')));
+            $online = last(json_decode(file_get_contents(STORAGE . '/temp/online.dat')));
         } else {
             $online = 0;
         }
