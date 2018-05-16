@@ -28,9 +28,9 @@ class Metrika
         }
 
         if (file_exists(STORAGE . '/temp/online.dat')) {
-            $online = json_decode(file_get_contents(STORAGE . '/temp/online.dat'));
+            $online = current(json_decode(file_get_contents(STORAGE . '/temp/online.dat')));
         } else {
-            $online = [0, 0];
+            $online = 0;
         }
 
         if (file_exists(STORAGE . '/temp/counter7.dat')) {
@@ -99,7 +99,7 @@ class Metrika
 
         imagettftext($img, 6, 0, 13, 23, $color2, HOME . '/assets/fonts/font4.ttf', formatShortNum($count->dayhosts));
         imagettftext($img, 6, 0, 13, 29, $color2, HOME . '/assets/fonts/font4.ttf', formatShortNum($count->dayhits));
-        imagettftext($img, 12, 0, $pos, 29, $color2, HOME . '/assets/fonts/font7.ttf', $online[1]);
+        imagettftext($img, 12, 0, $pos, 29, $color2, HOME . '/assets/fonts/font7.ttf', $online);
 
         imagepng($img, UPLOADS . '/counters/counter_new.png');
         imagedestroy($img);
