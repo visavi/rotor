@@ -13,8 +13,7 @@ class Metrika
     /**
      * Генерирует счетчик
      *
-     * @param int $online
-     * @return resource
+     * @return void
      */
     public function getCounter()
     {
@@ -22,7 +21,17 @@ class Metrika
         $week_day = date('w');
         $arr_week = ['вс', 'пн', 'вт', 'ср', 'чт', 'пт', 'сб'];
 
-        $count = statsCounter();
+        if (file_exists(STORAGE . '/temp/counter.dat')) {
+            $count = json_decode(file_get_contents(STORAGE . '/temp/counter.dat'));
+        } else {
+            $count = (object) ['dayhosts' => 0, 'dayhits' => 0];
+        }
+
+        if (file_exists(STORAGE . '/temp/online.dat')) {
+            $online = json_decode(file_get_contents(STORAGE . '/temp/online.dat'));
+        } else {
+            $online = [0, 0];
+        }
 
         if (file_exists(STORAGE . '/temp/counter7.dat')) {
             $host_data = json_decode(file_get_contents(STORAGE . '/temp/counter7.dat'));
@@ -35,8 +44,6 @@ class Metrika
         $img    = imagecreatefrompng(HOME . '/assets/img/images/counter.png');
         $color  = imagecolorallocate($img, 0, 0, 0);
         $color2 = imagecolorallocate($img, 102, 102, 102);
-
-        $online = Online::query()->count();
 
         $pos = 65;
         if ($online >= 10 && $online < 100) $pos = 52;
@@ -92,7 +99,7 @@ class Metrika
 
         imagettftext($img, 6, 0, 13, 23, $color2, HOME . '/assets/fonts/font4.ttf', formatShortNum($count->dayhosts));
         imagettftext($img, 6, 0, 13, 29, $color2, HOME . '/assets/fonts/font4.ttf', formatShortNum($count->dayhits));
-        imagettftext($img, 12, 0, $pos, 29, $color2, HOME . '/assets/fonts/font7.ttf', $online);
+        imagettftext($img, 12, 0, $pos, 29, $color2, HOME . '/assets/fonts/font7.ttf', $online[1]);
 
         imagepng($img, UPLOADS . '/counters/counter_new.png');
         imagedestroy($img);

@@ -23,8 +23,8 @@ Class BaseController
                 $dbSplit = explode('.', $ip);
 
                 foreach($ipSplit as $key => $split) {
-                    if (isset($dbSplit[$key]) && ($split == $dbSplit[$key] || $dbSplit[$key] == '*')) {
-                        $matches += 1;
+                    if (isset($dbSplit[$key]) && ($split === $dbSplit[$key] || $dbSplit[$key] === '*')) {
+                        ++$matches;
                     }
                 }
 

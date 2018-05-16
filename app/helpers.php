@@ -623,18 +623,14 @@ function userWall(User $user)
 /**
  * Возвращает количество пользователей онлайн по типам
  *
- * @param  int   $cache время кеширования данных
- * @return array        массив данных
+ * @return array массив данных
  */
-function statsOnline($cache = 30)
+function statsOnline()
 {
-    if (@filemtime(STORAGE . '/temp/online.dat') < time() - $cache) {
+    if (@filemtime(STORAGE . '/temp/online.dat') < time() - 30) {
 
         $online[] = Online::query()->whereNotNull('user_id')->count();
         $online[] = Online::query()->count();
-
-        $metrika = new Metrika();
-        $metrika->getCounter();
 
         file_put_contents(STORAGE . '/temp/online.dat', json_encode($online), LOCK_EX);
     }
