@@ -24,12 +24,12 @@
             <input type="hidden" name="token" value="{{ $_SESSION['token'] }}">
 
             <div class="form-group{{ hasError('msg') }}">
-                <label for="msg">{{ trans('guest.message') }}:</label>
-                <textarea class="form-control markItUp" id="msg" rows="5" name="msg" placeholder="{{ trans('guest.message_text') }}" required>{{ getInput('msg', $post->text) }}</textarea>
+                <label for="msg">{{ trans('guestbooks.message') }}:</label>
+                <textarea class="form-control markItUp" id="msg" rows="5" name="msg" placeholder="{{ trans('guestbooks.message_text') }}" required>{{ getInput('msg', $post->text) }}</textarea>
                 {!! textError('msg') !!}
             </div>
 
-            <button class="btn btn-primary">{{ trans('guest.edit') }}</button>
+            <button class="btn btn-primary">{{ trans('guestbooks.edit') }}</button>
         </form>
     </div>
 @stop
