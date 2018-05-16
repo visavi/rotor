@@ -58,7 +58,7 @@ header("Content-type:text/html; charset=utf-8");
                         <li><a href="/blogs"><span class="l"></span><span class="r"></span><span class="t">Блоги</span></a>
                            <ul>
                                  <li><a href="/articles">Новые статьи</a></li>
-                                 <li><a href="/blogs/comments">Новые комментарии</a></li>
+                                 <li><a href="/articles/comments">Новые комментарии</a></li>
                            </ul>
                         </li>
 

@@ -1,18 +1,18 @@
 @extends('layout')
 
 @section('title')
-    Статьи пользователей
+    Авторы
 @stop
 
 @section('content')
 
-    <h1>Статьи пользователей</h1>
+    <h1>Авторы</h1>
 
     <nav>
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
             <li class="breadcrumb-item"><a href="/blogs">Блоги</a></li>
-            <li class="breadcrumb-item active">Статьи пользователей</li>
+            <li class="breadcrumb-item active">Авторы</li>
         </ol>
     </nav>
 

@@ -19,7 +19,7 @@
         Мои: <a href="/blogs/active/articles">статьи</a>, <a href="/blogs/active/comments">комментарии</a> /
     @endif
 
-    Новые: <a href="/articles">статьи</a>, <a href="/blogs/comments">комментарии</a><hr>
+    Новые: <a href="/articles">статьи</a>, <a href="/articles/comments">комментарии</a><hr>
 
     @foreach ($categories as $key => $data)
 
@@ -51,6 +51,6 @@
     <a href="/blogs/top">Топ статей</a> /
     <a href="/blogs/tags">Облако тегов</a> /
     <a href="/blogs/search">Поиск</a> /
-    <a href="/blogs/blogs">Все статьи</a> /
+    <a href="/blogs/authors">Авторы</a> /
     <a href="/blogs/rss">RSS</a><br>
 @stop

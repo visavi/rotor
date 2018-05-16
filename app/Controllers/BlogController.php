@@ -56,7 +56,7 @@ class BlogController extends BaseController
             ->with('user')
             ->get();
 
-        return view('blogs/blogs', compact('blogs', 'category', 'page'));
+        return view('blogs/blog', compact('blogs', 'category', 'page'));
     }
 
     /**
@@ -196,7 +196,7 @@ class BlogController extends BaseController
     /**
      * Просмотр по категориям
      */
-    public function blogs()
+    public function authors()
     {
         $total = Blog::query()
             ->distinct()
@@ -215,7 +215,7 @@ class BlogController extends BaseController
             ->orderBy('cnt', 'desc')
             ->get();
 
-        return view('blogs/user_blogs', compact('blogs', 'page'));
+        return view('blogs/authors', compact('blogs', 'page'));
     }
 
     /**

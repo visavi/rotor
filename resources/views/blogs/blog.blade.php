@@ -53,5 +53,5 @@
     <a href="/blogs/top">Топ статей</a> /
     <a href="/blogs/tags">Облако тегов</a> /
     <a href="/blogs/search">Поиск</a> /
-    <a href="/blogs/blogs">Все статьи</a>
+    <a href="/blogs/authors">Авторы</a>
 @stop

@@ -70,6 +70,10 @@ class Blog extends BaseModel
         $diffSize  = $maxSize - $minSize;
         $diffCount = $maxCount - $minCount;
 
+        if (empty($diffCount)) {
+            $diffCount = 1;
+        }
+
         return round($minSize + (log(1 + $count) - $minCount) * ($diffSize / $diffCount));
     }
 }

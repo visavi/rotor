@@ -179,7 +179,7 @@ class BlogController extends AdminController
     /**
      * Список блогов
      */
-    public function blogs($id)
+    public function blog($id)
     {
         $category = Category::query()->with('parent')->find($id);
 
@@ -199,7 +199,7 @@ class BlogController extends AdminController
             ->with('user')
             ->get();
 
-        return view('admin/blogs/blogs', compact('blogs', 'category', 'page'));
+        return view('admin/blogs/blog', compact('blogs', 'category', 'page'));
     }
 
     /**
