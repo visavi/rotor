@@ -42,8 +42,8 @@ header("Content-type:text/html; charset=utf-8");
                         <li><a href="/"><span class="l"></span><span class="r"></span><span class="t">Главная</span></a></li>
                         <li><a href="/forums"><span class="l"></span><span class="r"></span><span class="t">Форум</span></a>
                             <ul>
-                                 <li><a href="/forums/new/themes">Новые темы</a></li>
-                                 <li><a href="/forums/new/posts">Новые сообщения</a></li>
+                                 <li><a href="/topics">Новые темы</a></li>
+                                 <li><a href="/forums/posts">Новые сообщения</a></li>
                             </ul>
                         </li>
                         <li><a href="/guestbooks"><span class="l"></span><span class="r"></span><span class="t">Гостевая</span></a></li>
@@ -57,8 +57,8 @@ header("Content-type:text/html; charset=utf-8");
 
                         <li><a href="/blogs"><span class="l"></span><span class="r"></span><span class="t">Блоги</span></a>
                            <ul>
-                                 <li><a href="/blogs/new/articles">Новые статьи</a></li>
-                                 <li><a href="/blogs/new/comments">Новые комментарии</a></li>
+                                 <li><a href="/articles">Новые статьи</a></li>
+                                 <li><a href="/blogs/comments">Новые комментарии</a></li>
                            </ul>
                         </li>
 

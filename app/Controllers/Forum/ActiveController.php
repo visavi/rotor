@@ -32,7 +32,7 @@ class ActiveController extends BaseController
     /**
      * Вывод тем
      */
-    public function themes()
+    public function topics()
     {
         $user  = $this->user;
         $total = Topic::query()->where('user_id', $user->id)->count();
@@ -51,7 +51,7 @@ class ActiveController extends BaseController
             ->with('forum', 'user', 'lastPost.user')
             ->get();
 
-        return view('forums/active_themes', compact('topics', 'user', 'page'));
+        return view('forums/active_topics', compact('topics', 'user', 'page'));
     }
 
     /**

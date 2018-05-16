@@ -114,7 +114,7 @@
                     <div class="alert alert-warning"><b>О себе</b>:<br>{!! bbCode($user->info) !!}</div>
                 @endif
 
-                <b><a href="/forums/active/themes?user={{ $user->login }}">Форум</a></b> (<a href="/forums/active/posts?user={{ $user->login }}">Сообщ.</a>) /
+                <b><a href="/forums/active/topics?user={{ $user->login }}">Форум</a></b> (<a href="/forums/active/posts?user={{ $user->login }}">Сообщ.</a>) /
                 <b><a href="/downs/active/files?user={{ $user->login }}">Загрузки</a></b> (<a href="/downs/active/comments?user={{ $user->login }}">комм.</a>) /
                 <b><a href="/blogs/active/articles?user={{ $user->login }}">Блоги</a></b> (<a href="/blogs/active/comments?user={{ $user->login }}">комм.</a>) /
                 <b><a href="/photos/albums/{{ $user->login }}">Галерея</a></b> (<a href="/photos/comments/{{ $user->login }}">комм.</a>)<br>

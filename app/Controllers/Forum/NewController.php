@@ -11,7 +11,7 @@ class NewController extends BaseController
     /**
      * Вывод тем
      */
-    public function themes()
+    public function topics()
     {
         $total = Topic::query()->count();
 
@@ -32,7 +32,7 @@ class NewController extends BaseController
             ->with('forum', 'user', 'lastPost.user')
             ->get();
 
-        return view('forums/new_themes', compact('topics', 'page'));
+        return view('forums/new_topics', compact('topics', 'page'));
     }
 
     /**

@@ -19,7 +19,7 @@
         Мои: <a href="/downs/active/files">файлы</a>, <a href="/downs/active/comments">комментарии</a> /
     @endif
 
-    Новые: <a href="/downs/new/files">файлы</a>, <a href="/downs/new/comments">комментарии</a>
+    Новые: <a href="/downs">файлы</a>, <a href="/downs/comments">комментарии</a>
     <hr>
 
     @foreach ($categories as $category)

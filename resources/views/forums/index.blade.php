@@ -18,10 +18,10 @@
     </nav>
 
     @if (getUser())
-        Мои: <a href="/forums/active/themes">темы</a>, <a href="/forums/active/posts">сообщения</a>, <a href="/forums/bookmarks">закладки</a> /
+        Мои: <a href="/forums/active/topics">темы</a>, <a href="/forums/active/posts">сообщения</a>, <a href="/forums/bookmarks">закладки</a> /
     @endif
 
-    Новые: <a href="/forums/new/themes">темы</a>, <a href="/forums/new/posts">сообщения</a>
+    Новые: <a href="/topics">темы</a>, <a href="/posts">сообщения</a>
     <hr/>
 
     @if ($forums->isNotEmpty())

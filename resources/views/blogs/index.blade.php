@@ -19,7 +19,7 @@
         Мои: <a href="/blogs/active/articles">статьи</a>, <a href="/blogs/active/comments">комментарии</a> /
     @endif
 
-    Новые: <a href="/blogs/new/articles">статьи</a>, <a href="/blogs/new/comments">комментарии</a><hr>
+    Новые: <a href="/articles">статьи</a>, <a href="/blogs/comments">комментарии</a><hr>
 
     @foreach ($categories as $key => $data)
 

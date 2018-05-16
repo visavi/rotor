@@ -11,7 +11,7 @@
     <nav>
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
-            <li class="breadcrumb-item"><a href="/blog">Блоги</a></li>
+            <li class="breadcrumb-item"><a href="/blogs">Блоги</a></li>
             <li class="breadcrumb-item active">Статьи пользователей</li>
         </ol>
     </nav>

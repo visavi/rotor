@@ -56,7 +56,7 @@ class BlogController extends BaseController
             ->with('user')
             ->get();
 
-        return view('blogs/blog', compact('blogs', 'category', 'page'));
+        return view('blogs/blogs', compact('blogs', 'category', 'page'));
     }
 
     /**
