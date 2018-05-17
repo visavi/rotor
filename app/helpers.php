@@ -2060,7 +2060,10 @@ function sendMail($to, $subject, $body, array $params = [])
         ->setBody($body, 'text/html');
 
     if (env('MAIL_DRIVER') === 'smtp') {
-        $transport = (new Swift_SmtpTransport(env('MAIL_HOST'), env('MAIL_PORT'), env('MAIL_ENCRYPTION')))
+        $transport = (new Swift_SmtpTransport())
+            ->setHost(env('MAIL_HOST'))
+            ->setPort(env('MAIL_PORT'))
+            ->setEncryption(env('MAIL_ENCRYPTION'))
             ->setUsername(env('MAIL_USERNAME'))
             ->setPassword(env('MAIL_PASSWORD'));
     } else {
@@ -2072,7 +2075,12 @@ function sendMail($to, $subject, $body, array $params = [])
     }
 
     $mailer = new Swift_Mailer($transport);
-    return $mailer->send($message);
+
+    try {
+        return $mailer->send($message);
+    } catch (Exception $e) {
+        return false;
+    }
 }
 
 /**
