@@ -2064,7 +2064,11 @@ function sendMail($to, $subject, $body, array $params = [])
             ->setUsername(env('MAIL_USERNAME'))
             ->setPassword(env('MAIL_PASSWORD'));
     } else {
-        $transport = new Swift_SendmailTransport(env('MAIL_PATH'));
+        $transport = new Swift_SendmailTransport();
+
+        if (env('MAIL_PATH')) {
+            $transport->setCommand(env('MAIL_PATH'));
+        }
     }
 
     $mailer = new Swift_Mailer($transport);
