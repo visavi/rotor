@@ -1757,7 +1757,7 @@ function sendNotify(string $text, string $pageUrl, string $pageName)
 
             $user = getUserByLogin($login);
             if ($user && $user->notify) {
-                sendMessage($user, getUser(), 'Пользователь @' . getUser('login') . ' упомянул вас на странице [url=' . siteUrl() . $pageUrl. ']' . $pageName . '[/url]' . PHP_EOL . 'Текст сообщения: ' . $text);
+                sendMessage($user, null, 'Пользователь ' . profile(getUser()) . ' упомянул вас на странице [url=' . siteUrl() . $pageUrl. ']' . $pageName . '[/url]' . PHP_EOL . 'Текст сообщения: ' . $text);
             }
         }
     }
@@ -2219,7 +2219,7 @@ function getUserById($id)
 }
 
 /**
- * Возвращает настройки пользователя по ключу
+ * Возвращает данные пользователя по ключу
  *
  * @param  string $key ключ массива
  * @return string|\Illuminate\Database\Query\Builder|User
