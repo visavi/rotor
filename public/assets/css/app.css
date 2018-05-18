@@ -139,6 +139,7 @@ blockquote small:before {
   color: #fff;
   background-color: #f75c48;
   padding: 0 3px;
+  display: inline-block;
   border-radius: 3px;
 }
 
