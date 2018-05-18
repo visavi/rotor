@@ -2250,7 +2250,7 @@ function pagination($page)
     }
 
     if (empty($page->crumbs)) {
-        $page->crumbs = 3;
+        $page->crumbs = 2;
     }
 
     $url     = array_except($_GET, 'page');
