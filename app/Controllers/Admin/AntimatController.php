@@ -36,7 +36,7 @@ class AntimatController extends AdminController
                 ->notEmpty($word, 'Вы не ввели слово для занесения в список!');
 
             $duplicate = Antimat::query()->where('string', $word)->first();
-            $validator->empty($duplicate, 'Введенное слово уже имеетеся в списке!');
+            $validator->empty($duplicate, 'Введенное слово уже имеется в списке!');
 
             if ($validator->isValid()) {
 
