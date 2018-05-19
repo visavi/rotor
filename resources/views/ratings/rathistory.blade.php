@@ -27,7 +27,7 @@
         @foreach ($ratings as $data)
             <div class="post">
                 <div class="b">
-                    @if (empty($data['vote']))
+                    @if ($data->vote == '-')
                         <i class="fa fa-thumbs-down text-danger"></i>
                     @else
                         <i class="fa fa-thumbs-up text-success"></i>
