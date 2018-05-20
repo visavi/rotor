@@ -104,8 +104,16 @@
             <input type="hidden" name="token" value="{{ $_SESSION['token'] }}">
 
             @if ($user->apikey)
-                Токен: <br>
-                <strong>{{ $user->apikey }}</strong><br>
+                <div class="form-group">
+                    <label for="apikey">Токен:</label>
+                    <div class="input-group">
+                        <input class="form-control col-sm-4" type="text" id="apikey" name="apikey" value="{{ $user->apikey }}">
+                        <div class="input-group-append" onclick="return copyToClipboard(this)" data-toggle="tooltip" title="Скопировать">
+                            <span class="input-group-text"><i class="far fa-clipboard"></i></span>
+                        </div>
+                    </div>
+                </div>
+
                 <button class="btn btn-primary">Изменить токен</button>
             @else
                 <button class="btn btn-primary">Получить токен</button>

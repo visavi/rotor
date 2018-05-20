@@ -375,3 +375,13 @@ function showVoteForm()
 
     return false;
 }
+
+
+function copyToClipboard(el)
+{
+    var form = $(el).closest('.input-group');
+    form.find('input').select();
+    document.execCommand("copy");
+
+    return false;
+}
