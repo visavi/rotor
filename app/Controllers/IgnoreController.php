@@ -35,16 +35,16 @@ class IgnoreController extends BaseController
             $validator->equal($token, $_SESSION['token'], 'Неверный идентификатор сессии, повторите действие!');
 
             $user = User::query()->where('login', $login)->first();
-            $validator->notEmpty($user, 'Данного пользователя не существует!');
+            $validator->notEmpty($user, ['user' => 'Данного пользователя не существует!']);
 
             if ($user) {
-                $validator->notEqual($user->login, getUser('login'), 'Запрещено добавлять свой логин!');
+                $validator->notEqual($user->login, getUser('login'), ['user' => 'Запрещено добавлять свой логин!']);
 
                 $totalIgnore = Ignore::query()->where('user_id', getUser('id'))->count();
                 $validator->lte($totalIgnore, setting('limitignore'), 'Ошибка! Игнор-лист переполнен (Максимум ' . setting('limitignore') . ' пользователей!)');
 
-                $validator->false(isIgnore(getUser(), $user), 'Данный пользователь уже есть в игнор-листе!');
-                $validator->notIn($user->level, User::ADMIN_GROUPS, 'Запрещено добавлять в игнор администрацию сайта');
+                $validator->false(isIgnore(getUser(), $user), ['user' => 'Данный пользователь уже есть в игнор-листе!']);
+                $validator->notIn($user->level, User::ADMIN_GROUPS, ['user' => 'Запрещено добавлять в игнор администрацию сайта']);
             }
 
             if ($validator->isValid()) {

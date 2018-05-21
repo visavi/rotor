@@ -35,15 +35,15 @@ class ContactController extends BaseController
             $validator->equal($token, $_SESSION['token'], 'Неверный идентификатор сессии, повторите действие!');
 
             $user = User::query()->where('login', $login)->first();
-            $validator->notEmpty($user, 'Данного пользователя не существует!');
+            $validator->notEmpty($user, ['user' => 'Данного пользователя не существует!']);
 
             if ($user) {
-                $validator->notEqual($user->login, getUser('login'), 'Запрещено добавлять свой логин!');
+                $validator->notEqual($user->login, getUser('login'), ['user' => 'Запрещено добавлять свой логин!']);
 
                 $totalContact = Contact::query()->where('user_id', getUser('id'))->count();
                 $validator->lte($totalContact, setting('limitcontact'), 'Ошибка! Контакт-лист переполнен (Максимум ' . setting('limitcontact') . ' пользователей!)');
 
-                $validator->false(isContact(getUser(), $user), 'Данный пользователь уже есть в контакт-листе!');
+                $validator->false(isContact(getUser(), $user), ['user' => 'Данный пользователь уже есть в контакт-листе!']);
             }
 
             if ($validator->isValid()) {
