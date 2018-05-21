@@ -1,33 +1,33 @@
 @extends('layout')
 
 @section('title')
-    Блокнот
+    {{ trans('notebooks.title') }}
 @stop
 
 @section('content')
 
-    <h1>Блокнот</h1>
+    <h1>{{ trans('notebooks.title') }}</h1>
 
     <nav>
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
-            <li class="breadcrumb-item"><a href="/menu">Мое меню</a></li>
-            <li class="breadcrumb-item active">Блокнот</li>
+            <li class="breadcrumb-item"><a href="/menu">{{ trans('common.menu') }}</a></li>
+            <li class="breadcrumb-item active">{{ trans('notebooks.title') }}</li>
         </ol>
     </nav>
 
-    Здесь вы можете хранить отрывки сообщений или любую другую важную информацию<br><br>
+    {{ trans('notebooks.info') }}<br><br>
 
     @if ($note->text)
-        <div>Личная запись:<br>
+        <div>{{ trans('notebooks.subtitle') }}:<br>
             {!! bbCode($note->text) !!}
         </div>
         <br>
 
-        Последнее изменение: {{ dateFixed($note->created_at) }}<br><br>
+        {{ trans('notebooks.last_edited') }}: {{ dateFixed($note->created_at) }}<br><br>
     @else
-        {!! showError('Запись пустая или отсутствует!') !!}
+        {!! showError(trans('notebooks.empty_note')) !!}
     @endif
 
-    <i class="fa fa-pencil-alt"></i> <a href="/notebooks/edit">Редактировать</a><br>
+    <i class="fa fa-pencil-alt"></i> <a href="/notebooks/edit">{{ trans('notebooks.edit') }}</a><br>
 @stop
