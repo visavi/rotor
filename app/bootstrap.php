@@ -14,7 +14,7 @@ define('UPLOADS', HOME . '/uploads');
 define('RESOURCES', BASEDIR . '/resources');
 define('STORAGE', BASEDIR . '/storage');
 define('SITETIME', time());
-define('VERSION', '7.0');
+define('VERSION', '7.1');
 
 require_once BASEDIR . '/vendor/autoload.php';
 
