@@ -2800,16 +2800,16 @@
         },
         {
             "name": "visavi/cleanup",
-            "version": "v1.3",
+            "version": "v1.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/visavi/cleanup.git",
-                "reference": "f8ed01de90a547aba5830f0e4b4e4fbc07be9227"
+                "reference": "ce015983634a8c4c96a525caf13ca787ff06718a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/visavi/cleanup/zipball/f8ed01de90a547aba5830f0e4b4e4fbc07be9227",
-                "reference": "f8ed01de90a547aba5830f0e4b4e4fbc07be9227",
+                "url": "https://api.github.com/repos/visavi/cleanup/zipball/ce015983634a8c4c96a525caf13ca787ff06718a",
+                "reference": "ce015983634a8c4c96a525caf13ca787ff06718a",
                 "shasum": ""
             },
             "require": {
@@ -2837,7 +2837,7 @@
                 "composer",
                 "vendor"
             ],
-            "time": "2017-10-24T13:48:37+00:00"
+            "time": "2018-05-21T15:16:26+00:00"
         },
         {
             "name": "visavi/crontask",
