@@ -295,7 +295,7 @@ class UserController extends BaseController
             $skype    = check(strtolower(Request::input('skype')));
             $site     = check(Request::input('site'));
             $birthday = check(Request::input('birthday'));
-            $gender   = Request::input('gender') == 'male' ? 'male' : 'female';
+            $gender   = Request::input('gender') === 'male' ? 'male' : 'female';
 
             $validator = new Validator();
             $validator->equal($token, $_SESSION['token'], 'Неверный идентификатор сессии, повторите действие!')
@@ -303,11 +303,11 @@ class UserController extends BaseController
                 ->regex($birthday, '#^[0-9]{2}+\.[0-9]{2}+\.[0-9]{4}$#', ['birthday' => 'Недопустимый формат даты рождения, необходим формат дд.мм.гггг!'], false)
                 ->regex($icq, '#^[0-9]{5,10}$#', ['icq' => 'Недопустимый формат ICQ, только цифры от 5 до 10 символов!'], false)
                 ->regex($skype, '#^[a-z]{1}[0-9a-z\_\.\-]{5,31}$#', ['skype' => 'Недопустимый формат Skype, только латинские символы от 6 до 32!'], false)
-                ->length($info, 0, 1000, ['info' => 'Слишком большая информация о себе, не более 1000 символов!']);
+                ->length($info, 0, 1000, ['info' => 'Слишком большая информация о себе, не более 1000 символов!'])
+                ->length($name, 3, 20, ['name' => 'Слишком длинное или короткое имя!'], false);
 
             if ($validator->isValid()) {
 
-                $name    = utfSubstr($name, 0, 20);
                 $country = utfSubstr($country, 0, 30);
                 $city    = utfSubstr($city, 0, 50);
 

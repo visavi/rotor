@@ -102,7 +102,7 @@ class ApiController extends BaseController
         $messages = [];
         foreach ($inbox as $data) {
 
-            $data['text'] = str_replace('<img src="/uploads/smiles/', '<img src="'.siteUrl().'/uploads/smiles/', bbCode($data->text));
+            $data->text = bbCode($data->text);
 
             $messages[] = [
                 'author_id'  => $data->author_id,
@@ -154,7 +154,7 @@ class ApiController extends BaseController
         $messages = [];
         foreach ($posts as $post) {
 
-            $post['text'] = str_replace('<img src="/uploads/smiles/', '<img src="'.siteUrl().'/uploads/smiles/', bbCode($post['text']));
+            $post->text = bbCode($post->text);
 
             $messages[] = [
                 'post_id'    => $post->id,

@@ -1747,17 +1747,12 @@ function sendNotify(string $text, string $pageUrl, string $pageName)
     preg_match_all('|@([\w\-]+)|', $text, $matches);
 
     if (! empty($matches[1])) {
-        $usersAnswer = array_unique($matches[1]);
+        $usersAnswer = array_unique(array_diff($matches[1], [getUser('login')]));
 
         foreach ($usersAnswer as $login) {
-
-            if ($login === getUser('login')) {
-                continue;
-            }
-
             $user = getUserByLogin($login);
             if ($user && $user->notify) {
-                sendMessage($user, null, 'Пользователь ' . profile(getUser()) . ' упомянул вас на странице <a href="' . $pageUrl. '">' . $pageName . '</a>' . PHP_EOL . 'Текст сообщения: ' . $text);
+                sendMessage($user, null, 'Пользователь ' . profile(getUser()) . ' упомянул вас на странице [url=' . $pageUrl . ']' . $pageName . '[/url]' . PHP_EOL . 'Текст сообщения: ' . $text);
             }
         }
     }
@@ -1766,16 +1761,16 @@ function sendNotify(string $text, string $pageUrl, string $pageName)
 /**
  * Отправляет приватное сообщение
  *
- * @param  User $user   Получатель
- * @param  User $author Отправитель
- * @param  int  $text   текст сообщения
- * @return bool         результат отправки
+ * @param  User      $user   Получатель
+ * @param  User|null $author Отправитель
+ * @param  int       $text   текст сообщения
+ * @return bool              результат отправки
  */
-function sendMessage(User $user, User $author = null, $text)
+function sendMessage(User $user, ?User $author, $text)
 {
     Inbox::query()->create([
         'user_id'    => $user->id,
-        'author_id'  => $author->id ?? null,
+        'author_id'  => $author ? $author->id : null,
         'text'       => $text,
         'created_at' => SITETIME,
     ]);
@@ -2200,9 +2195,9 @@ function server($key = null, $default = null)
  * Возвращает объект пользователя по логину
  *
  * @param  string    $login логин пользователя
- * @return \Illuminate\Database\Eloquent\Builder|\Illuminate\Database\Eloquent\Model
+ * @return \Illuminate\Database\Eloquent\Builder|\Illuminate\Database\Eloquent\Model|null
  */
-function getUserByLogin($login)
+function getUserByLogin($login): ?User
 {
     return User::query()->where('login', $login)->first();
 }
@@ -2211,9 +2206,9 @@ function getUserByLogin($login)
  * Возвращает объект пользователя по id
  *
  * @param  int       $id ID пользователя
- * @return \Illuminate\Database\Eloquent\Builder|\Illuminate\Database\Eloquent\Model
+ * @return \Illuminate\Database\Eloquent\Builder|\Illuminate\Database\Eloquent\Model|null
  */
-function getUserById($id)
+function getUserById($id): ?User
 {
     return User::query()->find($id);
 }
@@ -2222,7 +2217,7 @@ function getUserById($id)
  * Возвращает данные пользователя по ключу
  *
  * @param  string $key ключ массива
- * @return string|\Illuminate\Database\Query\Builder|User
+ * @return \Illuminate\Database\Query\Builder|mixed
  */
 function getUser($key = null)
 {
