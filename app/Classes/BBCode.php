@@ -24,7 +24,7 @@ class BBCode
      */
     protected $parsers = [
         'code' => [
-            'pattern' => '/\[code\](.*?)\[\/code\]/s',
+            'pattern'  => '/\[code\](.*?)\[\/code\]/s',
             'callback' => 'highlightCode'
         ],
         'bold' => [
@@ -44,7 +44,7 @@ class BBCode
             'replace' => '<del>$1</del>',
         ],
         'fontSize' => [
-            'pattern' => '/\[size\=([1-5])\](.*?)\[\/size\]/s',
+            'pattern'  => '/\[size\=([1-5])\](.*?)\[\/size\]/s',
             'callback' => 'fontSize',
         ],
         'fontColor' => [
@@ -67,15 +67,15 @@ class BBCode
             'iterate' => 3,
         ],
         'http' => [
-            'pattern' => '%\b(((?<!(=|]))\w+:)//[^\s()<>\[\]]+)%s',
+            'pattern'  => '%\b(((?<!(=|]))\w+:)//[^\s()<>\[\]]+)%s',
             'callback' => 'urlReplace',
         ],
         'link' => [
-            'pattern' => '%\[url\]((\w+:)?//[^\s()<>\[\]]+)\[/url\]%s',
+            'pattern'  => '%\[url\]((\w+:)?//[^\s()<>\[\]]+)\[/url\]%s',
             'callback' => 'urlReplace',
         ],
         'namedLink' => [
-            'pattern' => '%\[url\=((\w+:)?//[^\s()<>\[\]]+)\](.*?)\[/url\]%s',
+            'pattern'  => '%\[url\=((\w+:)?//[^\s()<>\[\]]+)\](.*?)\[/url\]%s',
             'callback' => 'urlReplace',
         ],
         'image' => [
@@ -83,25 +83,25 @@ class BBCode
             'replace' => '<img src="$1" class="img-fluid" alt="image">',
         ],
         'orderedList' => [
-            'pattern' => '/\[list=1\](.*?)\[\/list\]/s',
+            'pattern'  => '/\[list=1\](.*?)\[\/list\]/s',
             'callback' => 'listReplace',
         ],
         'unorderedList' => [
-            'pattern' => '/\[list\](.*?)\[\/list\]/s',
+            'pattern'  => '/\[list\](.*?)\[\/list\]/s',
             'callback' => 'listReplace',
         ],
         'spoiler' => [
-            'pattern' => '/\[spoiler\](.*?)\[\/spoiler\]/s',
+            'pattern'  => '/\[spoiler\](.*?)\[\/spoiler\]/s',
             'callback' => 'spoilerText',
-            'iterate' => 1,
+            'iterate'  => 1,
         ],
         'shortSpoiler' => [
-            'pattern' => '/\[spoiler\=(.*?)\](.*?)\[\/spoiler\]/s',
+            'pattern'  => '/\[spoiler\=(.*?)\](.*?)\[\/spoiler\]/s',
             'callback' => 'spoilerText',
-            'iterate' => 1,
+            'iterate'  => 1,
         ],
         'hide' => [
-            'pattern' => '/\[hide\](.*?)\[\/hide\]/s',
+            'pattern'  => '/\[hide\](.*?)\[\/hide\]/s',
             'callback' => 'hiddenText',
         ],
         'youtube' => [

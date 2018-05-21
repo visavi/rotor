@@ -96,7 +96,7 @@ function postReply(el)
     var author = post.find('.author').data('login');
 
     separ = field.val().length ? '\n' : '';
-    field.focus().val(field.val() + separ + '[b]@' + author + '[/b], ');
+    field.focus().val(field.val() + separ + '@' + author + ', ');
 
     return false;
 }
