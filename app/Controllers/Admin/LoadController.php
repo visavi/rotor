@@ -423,14 +423,14 @@ class LoadController extends AdminController
                 $type = 'опубликована' ;
                 $down->category->increment('count_downs');
 
-                $text = 'Уведомеление о публикации файла.'.PHP_EOL.'Ваш файл [b][url='.siteUrl().'/downs/'.$down->id.']'.$down->title.'[/url][/b] успешно прошел проверку и добавлен в загрузки';
+                $text = 'Уведомеление о публикации файла.'.PHP_EOL.'Ваш файл <a href="/downs/'.$down->id.'">'.$down->title.'</a> успешно прошел проверку и добавлен в загрузки';
                 sendMessage($down->user, null, $text);
 
             } else {
                 $type = 'снята с публикации';
                 $down->category->decrement('count_downs');
 
-                $text = 'Уведомеление о cнятии с публикации.'.PHP_EOL.'Ваш файл [b][url='.siteUrl().'/downs/'.$down->id.']'.$down->title.'[/url][/b] снят с публикации из загрузок';
+                $text = 'Уведомеление о снятии с публикации.'.PHP_EOL.'Ваш файл <a href="/downs/'.$down->id.'">'.$down->title.'</a> снят с публикации из загрузок';
                 sendMessage($down->user, null, $text);
             }
 
