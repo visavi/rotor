@@ -1,19 +1,19 @@
 @extends('layout')
 
 @section('title')
-    Редактирование блокнота
+    {{ trans('notebooks.title_edit') }}
 @stop
 
 @section('content')
 
-    <h1>Редактирование блокнота</h1>
+    <h1>{{ trans('notebooks.title_edit') }}</h1>
 
     <nav>
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
-            <li class="breadcrumb-item"><a href="/menu">Мое меню</a></li>
-            <li class="breadcrumb-item"><a href="/notebooks">Блокнот</a></li>
-            <li class="breadcrumb-item active">Редактирование блокнота</li>
+            <li class="breadcrumb-item"><a href="/menu">{{ trans('common.menu') }}</a></li>
+            <li class="breadcrumb-item"><a href="/notebooks">{{ trans('notebooks.title') }}</a></li>
+            <li class="breadcrumb-item active">{{ trans('notebooks.title_edit') }}</li>
         </ol>
     </nav>
 
@@ -22,14 +22,14 @@
             <input type="hidden" name="token" value="{{ $_SESSION['token'] }}">
 
             <div class="form-group{{ hasError('msg') }}">
-                <label for="msg">Запись:</label>
+                <label for="msg">{{ trans('notebooks.note') }}:</label>
                 <textarea class="form-control markItUp" id="msg" rows="5" name="msg">{{ getInput('msg', $note->text) }}</textarea>
                 {!! textError('msg') !!}
             </div>
 
-            <button class="btn btn-primary">Сохранить</button>
+            <button class="btn btn-primary">{{ trans('notebooks.save') }}</button>
         </form>
     </div><br>
 
-    * Личная запись доступна только для вас<br><br>
+    {{ trans('notebooks.info_edit') }}<br><br>
 @stop
