@@ -1,18 +1,18 @@
 @extends('layout')
 
 @section('title')
-    Игнор-лист
+    {{ trans('ignores.title') }}
 @stop
 
 @section('content')
 
-    <h1>Игнор-лист</h1>
+    <h1>{{ trans('ignores.title') }}</h1>
 
     <nav>
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
-            <li class="breadcrumb-item"><a href="/users/{{ getUser('login') }}">{{ getUser('login') }}</a></li>
-            <li class="breadcrumb-item active">Игнор-лист</li>
+            <li class="breadcrumb-item"><a href="/menu">{{ trans('common.menu') }}</a></li>
+            <li class="breadcrumb-item active">{{ trans('ignores.title') }}</li>
         </ol>
     </nav>
 
@@ -25,8 +25,8 @@
                 <div class="b">
 
                     <div class="float-right">
-                        <a href="/messages/send?user={{ $data->ignoring->login }}" title="Написать"><i class="fa fa-reply text-muted"></i></a>
-                        <a href="/ignores/note/{{ $data->id }}" title="Заметка"><i class="fa fa-sticky-note text-muted"></i></a>
+                        <a href="/messages/send?user={{ $data->ignoring->login }}" data-toggle="tooltip" title="{{ trans('ignores.write') }}"><i class="fa fa-reply text-muted"></i></a>
+                        <a href="/ignores/note/{{ $data->id }}" data-toggle="tooltip" title="{{ trans('ignores.note') }}"><i class="fa fa-sticky-note text-muted"></i></a>
                         <input type="checkbox" name="del[]" value="{{ $data->id }}">
                     </div>
 
@@ -38,37 +38,41 @@
 
                 <div>
                     @if ($data->text)
-                        Заметка: {!! bbCode($data->text) !!}<br>
+                        {{ trans('ignores.note') }}: {!! bbCode($data->text) !!}<br>
                     @endif
                 </div>
             @endforeach
 
             <div class="float-right">
-                <button class="btn btn-sm btn-danger">Удалить выбранное</button>
+                <button class="btn btn-sm btn-danger">{{ trans('common.delete_selected') }}</button>
             </div>
         </form>
 
         {!! pagination($page) !!}
 
-        Всего в игноре: <b>{{ $page->total }}</b><br>
+        {{ trans('ignores.total') }}: <b>{{ $page->total }}</b><br>
     @else
-        {!! showError('Игнор-лист пуст!') !!}
+        {!! showError(trans('ignores.empty_list')) !!}
     @endif
 
     <div class="form my-3">
         <form method="post">
             <input type="hidden" name="token" value="{{ $_SESSION['token'] }}">
-            <div class="form-inline">
-                <div class="form-group{{ hasError('user') }}">
-                    <input type="text" class="form-control" id="user" name="user" maxlength="20" value="{{ getInput('user') }}" placeholder="Логин пользователя" required>
+            <div class="input-group{{ hasError('user') }}">
+                <div class="input-group-prepend">
+                    <span class="input-group-text"><i class="fa fa-pencil-alt"></i></span>
                 </div>
 
-                <button class="btn btn-primary">Добавить</button>
+                <input type="text" class="form-control" id="user" name="user" maxlength="20" value="{{ getInput('user') }}" placeholder="{{ trans('ignores.user_login') }}" required>
+
+                <span class="input-group-btn">
+                    <button class="btn btn-primary">{{ trans('ignores.add') }}</button>
+                </span>
             </div>
             {!! textError('user') !!}
         </form>
     </div>
 
-    <i class="fa fa-users"></i> <a href="/contacts">Контакт-лист</a><br>
-    <i class="fa fa-envelope"></i> <a href="/messages">Сообщения</a><br>
+    <i class="fa fa-users"></i> <a href="/contacts">{{ trans('ignores.contacts') }}</a><br>
+    <i class="fa fa-envelope"></i> <a href="/messages">{{ trans('ignores.messages') }}</a><br>
 @stop
