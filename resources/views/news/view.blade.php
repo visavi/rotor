@@ -13,12 +13,12 @@
     <nav>
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
-            <li class="breadcrumb-item"><a href="/news">Новости сайта</a></li>
+            <li class="breadcrumb-item"><a href="/news">{{ trans('news.header') }}</a></li>
             <li class="breadcrumb-item active">{{ $news->title }}</li>
 
             @if (isAdmin())
-                <li class="breadcrumb-item"><a href="/admin/news/edit/{{ $news->id }}">Редактировать</a></li>
-                <li class="breadcrumb-item"><a href="/admin/news/delete/{{ $news->id }}?token={{ $_SESSION['token'] }}" onclick="return confirm('Вы действительно хотите удалить данную новость?')">Удалить</a></li>
+                <li class="breadcrumb-item"><a href="/admin/news/edit/{{ $news->id }}">{{ trans('common.edit') }}</a></li>
+                <li class="breadcrumb-item"><a href="/admin/news/delete/{{ $news->id }}?token={{ $_SESSION['token'] }}" onclick="return confirm('{{ trans('news.confirm_delete') }}')">{{ trans('common.delete') }}</a></li>
             @endif
         </ol>
     </nav>
@@ -31,11 +31,11 @@
     <div>{!! bbCode($news->text) !!}</div>
 
     <div style="clear:both;">
-        Добавлено: {!! profile($news->user) !!}
+        {{ trans('news.added_by') }}: {!! profile($news->user) !!}
     </div><br>
 
     @if ($comments->isNotEmpty())
-        <div class="b"><i class="fa fa-comment"></i> <b>Последние комментарии</b></div>
+        <div class="b"><i class="fa fa-comment"></i> <b>{{ trans('news.last_comments') }}</b></div>
 
         @foreach ($comments as $comment)
             <div class="post">
@@ -58,14 +58,14 @@
         @endforeach
 
         <div class="bg-light p-1 mb-3 border">
-            <i class="fas fa-comments"></i> <b><a href="/news/comments/{{ $news->id }}">Все комментарии</a></b> ({{ $news->count_comments }})
+            <i class="fas fa-comments"></i> <b><a href="/news/comments/{{ $news->id }}">{{ trans('news.all_comments') }}</a></b> ({{ $news->count_comments }})
             <a href="/news/end/{{ $news->id }}">&raquo;</a>
         </div>
     @endif
 
     @if (! $news->closed)
         @if ($comments->isEmpty())
-            {!! showError('Комментариев еще нет!') !!}
+            {!! showError(trans('news.empty_comments')) !!}
         @endif
 
         @if (getUser())
@@ -74,23 +74,23 @@
                     <input type="hidden" name="token" value="{{ $_SESSION['token'] }}">
 
                     <div class="form-group{{ hasError('msg') }}">
-                        <label for="msg">Сообщение:</label>
-                        <textarea class="form-control markItUp" id="msg" rows="5" name="msg" required>{{ getInput('msg') }}</textarea>
+                        <label for="msg">{{ trans('news.message') }}:</label>
+                        <textarea class="form-control markItUp" id="msg" rows="5" name="msg" placeholder="{{ trans('news.message_text') }}" required>{{ getInput('msg') }}</textarea>
                         {!! textError('msg') !!}
                     </div>
 
-                    <button class="btn btn-success">Написать</button>
+                    <button class="btn btn-success">{{ trans('news.write') }}</button>
                 </form>
             </div>
 
             <br>
-            <a href="/rules">Правила</a> /
-            <a href="/smiles">Смайлы</a> /
-            <a href="/tags">Теги</a><br><br>
+            <a href="/rules">{{ trans('common.rules') }}</a> /
+            <a href="/smiles">{{ trans('common.smiles') }}</a> /
+            <a href="/tags">{{ trans('common.tags') }}</a><br><br>
         @else
-            {!! showError('Для добавления сообщения необходимо авторизоваться') !!}
+            {!! showError(trans('news.not_authorized')) !!}
         @endif
     @else
-        {!! showError('Комментирование данной новости закрыто!') !!}
+        {!! showError(trans('news.closed_news')) !!}
     @endif
 @stop
