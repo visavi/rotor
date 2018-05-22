@@ -78,7 +78,7 @@
     @endif
 
     <a href="/rules">Правила</a> /
-    <a href="/forums/top/themes">Топ тем</a> /
+    <a href="/forums/top/topics">Топ тем</a> /
     <a href="/forums/top/posts">Топ постов</a> /
     <a href="/forums/search?fid={{ $forum->id }}">Поиск</a><br>
 @stop

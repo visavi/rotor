@@ -47,31 +47,9 @@ pre {
     -moz-tab-size: 4;
 }
 
-a:active, a:visited, a:link {
-    color: #888;
-    text-decoration: none;
-}
-
-a:hover {
-    color: #aeaeae;
-    text-decoration: none;
-}
-
-a.btn {
-    color: #fff;
-}
-
-.content {
-
-}
-
 .site {
     padding: 5px;
     background-image: url(../img/f.png);
-}
-
-.site a {
-    border-bottom: 1px solid #e6e5e5;
 }
 
 .menu {

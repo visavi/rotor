@@ -379,7 +379,7 @@ class ForumController extends BaseController
     /**
      * Последние темы
      */
-    public function topThemes()
+    public function topTopics()
     {
         $total = Topic::query()->count();
 
@@ -405,7 +405,13 @@ class ForumController extends BaseController
      */
     public function topPosts()
     {
-        $total = Post::query()->count();
+        $period = int(Request::input('period'));
+
+        $total = Post::query()
+            ->when($period, function ($query) use ($period) {
+                return $query->where('created_at', '>',strtotime('-' . $period . ' day', SITETIME));
+            })
+            ->count();
 
         if ($total > 500) {
             $total = 500;
@@ -414,12 +420,16 @@ class ForumController extends BaseController
         $page = paginate(setting('forumpost'), $total);
 
         $posts = Post::query()
+            ->when($period, function ($query) use ($period) {
+                return $query->where('created_at', '>',strtotime('-' . $period . ' day', SITETIME));
+            })
             ->orderBy('rating', 'desc')
+            ->orderBy('created_at', 'desc')
             ->limit($page->limit)
             ->offset($page->offset)
             ->with('topic', 'user')
             ->get();
 
-        return view('forums/top_posts', compact('posts', 'page'));
+        return view('forums/top_posts', compact('posts', 'page', 'period'));
     }
 }

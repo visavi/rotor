@@ -219,7 +219,7 @@
     <a href="/smiles">Смайлы</a>  /
     <a href="/tags">Теги</a>  /
     <a href="/rules">Правила</a> /
-    <a href="/forums/top/themes">Топ тем</a> /
+    <a href="/forums/top/topics">Топ тем</a> /
     <a href="/forums/top/posts">Топ постов</a> /
     <a href="/forums/search?fid={{ $topic->forum_id }}">Поиск</a><br>
 @stop

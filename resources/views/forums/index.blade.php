@@ -57,5 +57,5 @@
         {!! showError('Разделы форума еще не созданы!') !!}
     @endif
 
-    <br/><a href="/rules">Правила</a> / <a href="/forums/top/themes">Топ тем</a> / <a href="/forums/top/posts">Топ постов</a> / <a href="/forums/search">Поиск</a> / <a href="/forums/rss">RSS</a><br/>
+    <br/><a href="/rules">Правила</a> / <a href="/forums/top/topics">Топ тем</a> / <a href="/forums/top/posts">Топ постов</a> / <a href="/forums/search">Поиск</a> / <a href="/forums/rss">RSS</a><br/>
 @stop

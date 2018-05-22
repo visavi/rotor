@@ -15,6 +15,23 @@
         </ol>
     </nav>
 
+    Период:
+    <?php $active = ($period == 1) ? 'success' : 'light'; ?>
+    <a href="/forums/top/posts?period=1" class="badge badge-{{ $active }}">Сутки</a>
+
+    <?php $active = ($period == 7) ? 'success' : 'light'; ?>
+    <a href="/forums/top/posts?period=7" class="badge badge-{{ $active }}">Неделя</a>
+
+    <?php $active = ($period == 30) ? 'success' : 'light'; ?>
+    <a href="/forums/top/posts?period=30" class="badge badge-{{ $active }}">Месяц</a>
+
+    <?php $active = ($period == 365) ? 'success' : 'light'; ?>
+    <a href="/forums/top/posts?period=365" class="badge badge-{{ $active }}">Год</a>
+
+    <?php $active = (empty($period)) ? 'success' : 'light'; ?>
+    <a href="/forums/top/posts" class="badge badge-{{ $active }}">За все время</a>
+    <hr>
+
     @if ($posts->isNotEmpty())
         @foreach ($posts as $data)
             <div class="b">
@@ -26,9 +43,9 @@
 
                 Написал: {{ $data->user->login }} {!! userOnline($data->user) !!} <small>({{ dateFixed($data->created_at) }})</small><br>
 
-                <?php if (isAdmin()): ?>
+                @if (isAdmin())
                     <span class="data">({{ $data->brow }}, {{ $data->ip }})</span>
-                <?php endif; ?>
+                @endif
 
             </div>
         @endforeach

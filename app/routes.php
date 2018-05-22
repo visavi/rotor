@@ -70,7 +70,7 @@ $routes = [
     ['GET',      '/forums/active/[posts|topics:action]', 'Forum\ActiveController'],
     ['POST',     '/forums/active/delete', 'Forum\ActiveController@delete'],
     ['GET',      '/forums/top/posts', 'Forum\ForumController@topPosts'],
-    ['GET',      '/forums/top/themes', 'Forum\ForumController@topThemes'],
+    ['GET',      '/forums/top/topics', 'Forum\ForumController@topTopics'],
     ['GET',      '/forums/rss', 'Forum\ForumController@rss'],
     ['GET',      '/forums/bookmarks', 'BookmarkController@index'],
     ['POST',     '/forums/bookmarks/[delete|perform:action]', 'BookmarkController'],
