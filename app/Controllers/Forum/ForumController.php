@@ -254,7 +254,7 @@ class ForumController extends BaseController
                 if (empty($_SESSION['forumfindres']) || $forumfind != $_SESSION['forumfind']) {
 
                     $searchsec = ($section > 0) ? "forum_id = " . $section . " AND" : '';
-                    $searchper = ($period > 0) ? "updated_at > " . (SITETIME - ($period * 24 * 60 * 60)) . " AND" : '';
+                    $searchper = ($period > 0) ? "updated_at > " . strtotime('-' . $period . ' day', SITETIME) . " AND" : '';
 
                     $result = Topic::query()
                         ->select('id')
@@ -293,8 +293,8 @@ class ForumController extends BaseController
 
                 if (empty($_SESSION['forumfindres']) || $forumfind != $_SESSION['forumfind']) {
 
-                    $searchsec = ($section > 0) ? "topics.forum_id = " . $section . " AND" : '';
-                    $searchper = ($period > 0) ? "created_at > " . (SITETIME - ($period * 24 * 60 * 60)) . " AND" : '';
+                    $searchsec = ($section > 0) ? 'topics.forum_id = ' . $section . ' AND' : '';
+                    $searchper = ($period > 0) ? 'posts.created_at > ' . strtotime('-' . $period . ' day', SITETIME) . ' AND' : '';
 
                     $result = Post::query()
                         ->select('posts.id')
@@ -409,7 +409,7 @@ class ForumController extends BaseController
 
         $total = Post::query()
             ->when($period, function ($query) use ($period) {
-                return $query->where('created_at', '>',strtotime('-' . $period . ' day', SITETIME));
+                return $query->where('created_at', '>', strtotime('-' . $period . ' day', SITETIME));
             })
             ->count();
 
@@ -421,7 +421,7 @@ class ForumController extends BaseController
 
         $posts = Post::query()
             ->when($period, function ($query) use ($period) {
-                return $query->where('created_at', '>',strtotime('-' . $period . ' day', SITETIME));
+                return $query->where('created_at', '>', strtotime('-' . $period . ' day', SITETIME));
             })
             ->orderBy('rating', 'desc')
             ->orderBy('created_at', 'desc')
