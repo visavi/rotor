@@ -1,20 +1,20 @@
 @extends('layout')
 
 @section('title')
-    Новости сайта (Стр. {{ $page->current}})
+    {{ trans('news.title', ['page' => $page->current]) }}
 @stop
 
 @section('content')
 
-    <h1>Новости сайта</h1>
+    <h1>{{ trans('news.header') }}</h1>
 
     <nav>
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
-            <li class="breadcrumb-item active">Новости сайта</li>
+            <li class="breadcrumb-item active">{{ trans('news.header') }}</li>
 
             @if (isAdmin('moder'))
-                <li class="breadcrumb-item"><a href="/admin/news">Управление</a></li>
+                <li class="breadcrumb-item"><a href="/admin/news">{{ trans('common.management') }}</a></li>
             @endif
         </ol>
     </nav>
@@ -34,17 +34,17 @@
 
             <div class="clearfix">{!! bbCode($data->shortText()) !!}</div>
             <div>
-                Добавлено: {!! profile($data->user) !!}<br>
-                <a href="/news/comments/{{ $data->id }}">Комментарии</a> ({{ $data->count_comments }})
+                {{ trans('news.added_by') }}: {!! profile($data->user) !!}<br>
+                <a href="/news/comments/{{ $data->id }}">{{ trans('news.comments') }}</a> ({{ $data->count_comments }})
                 <a href="/news/end/{{ $data->id }}">&raquo;</a>
             </div>
         @endforeach
 
         {!! pagination($page) !!}
     @else
-        {!! showError('Новостей еще нет!') !!}
+        {!! showError(trans('news.empty_news')) !!}
     @endif
 
-    <i class="fa fa-rss"></i> <a href="/news/rss">RSS подписка</a><br>
-    <i class="fa fa-comment"></i> <a href="/news/allcomments">Комментарии</a><br>
+    <i class="fa fa-rss"></i> <a href="/news/rss">{{ trans('news.rss') }}</a><br>
+    <i class="fa fa-comment"></i> <a href="/news/allcomments">{{ trans('news.last_comments') }}</a><br>
 @stop

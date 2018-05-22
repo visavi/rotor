@@ -1,19 +1,19 @@
 @extends('layout')
 
 @section('title')
-    {{ $news->title }} - Комментарии (Стр. {{ $page->current}})
+    {{ $news->title }} - {{ trans('news.comments_title', ['page' => $page->current]) }}
 @stop
 
 @section('content')
 
-    <h1>{{ $news->title }} - Комментарии</h1>
+    <h1>{{ $news->title }} - {{ trans('news.comments') }}</h1>
 
     <nav>
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
-            <li class="breadcrumb-item"><a href="/news">Новости сайта</a></li>
+            <li class="breadcrumb-item"><a href="/news">{{ trans('news.header') }}</a></li>
             <li class="breadcrumb-item"><a href="/news/{{ $news->id }}">{{ $news->title }}</a></li>
-            <li class="breadcrumb-item active">Комментарии</li>
+            <li class="breadcrumb-item active">{{ trans('news.comments') }}</li>
         </ol>
     </nav>
 
@@ -26,20 +26,20 @@
                     @if (getUser())
                         <div class="float-right">
                             @if (getUser('id') != $data->user_id)
-                                <a href="#" onclick="return postReply(this)" title="Ответить"><i class="fa fa-reply text-muted"></i></a>
+                                <a href="#" onclick="return postReply(this)" data-toggle="tooltip" title="{{ trans('common.reply') }}"><i class="fa fa-reply text-muted"></i></a>
 
-                                <a href="#" onclick="return postQuote(this)" title="Цитировать"><i class="fa fa-quote-right text-muted"></i></a>
+                                <a href="#" onclick="return postQuote(this)" data-toggle="tooltip" title="{{ trans('common.quote') }}"><i class="fa fa-quote-right text-muted"></i></a>
 
-                                <a href="#" onclick="return sendComplaint(this)" data-type="{{ App\Models\News::class }}" data-id="{{ $data->id }}" data-token="{{ $_SESSION['token'] }}" data-page="{{ $page->current }}" rel="nofollow" title="Жалоба"><i class="fa fa-bell text-muted"></i></a>
+                                <a href="#" onclick="return sendComplaint(this)" data-type="{{ App\Models\News::class }}" data-id="{{ $data->id }}" data-token="{{ $_SESSION['token'] }}" data-page="{{ $page->current }}" rel="nofollow" data-toggle="tooltip" title="{{ trans('common.complain') }}"><i class="fa fa-bell text-muted"></i></a>
 
                             @endif
 
                             @if ($data->user_id == getUser('id') && $data->created_at + 600 > SITETIME)
-                                <a title="Редактировать" href="/news/edit/{{ $news->id }}/{{ $data->id }}?page={{ $page->current }}"><i class="fa fa-pencil-alt text-muted"></i></a>
+                                <a href="/news/edit/{{ $news->id }}/{{ $data->id }}?page={{ $page->current }}" data-toggle="tooltip" title="{{ trans('common.edit') }}"><i class="fa fa-pencil-alt text-muted"></i></a>
                             @endif
 
                             @if (isAdmin())
-                                <a href="#" onclick="return deleteComment(this)" data-rid="{{ $data->relate_id }}" data-id="{{ $data->id }}" data-type="{{ App\Models\News::class }}" data-token="{{ $_SESSION['token'] }}" data-toggle="tooltip" title="Удалить"><i class="fa fa-times text-muted"></i></a>
+                                <a href="#" onclick="return deleteComment(this)" data-rid="{{ $data->relate_id }}" data-id="{{ $data->id }}" data-type="{{ App\Models\News::class }}" data-token="{{ $_SESSION['token'] }}" data-toggle="tooltip" title="{{ trans('common.delete') }}"><i class="fa fa-times text-muted"></i></a>
                             @endif
                         </div>
                     @endif
@@ -65,7 +65,7 @@
     @if (! $news->closed)
 
         @if ($comments->isEmpty())
-            {!! showError('Комментариев еще нет!') !!}
+            {!! showError(trans('news.empty_comments')) !!}
         @endif
 
         @if (getUser())
@@ -74,22 +74,22 @@
                     <input type="hidden" name="token" value="{{ $_SESSION['token'] }}">
 
                     <div class="form-group{{ hasError('msg') }}">
-                        <label for="msg">Сообщение:</label>
-                        <textarea class="form-control markItUp" id="msg" rows="5" name="msg" required>{{ getInput('msg') }}</textarea>
+                        <label for="msg">{{ trans('news.message') }}:</label>
+                        <textarea class="form-control markItUp" id="msg" rows="5" name="msg" placeholder="{{ trans('news.message_text') }}" required>{{ getInput('msg') }}</textarea>
                         {!! textError('msg') !!}
                     </div>
 
-                    <button class="btn btn-success">Написать</button>
+                    <button class="btn btn-success">{{ trans('news.write') }}</button>
                 </form>
             </div>
         <br>
-        <a href="/rules">Правила</a> /
-        <a href="/smiles">Смайлы</a> /
-        <a href="/tags">Теги</a><br><br>
+        <a href="/rules">{{ trans('common.rules') }}</a> /
+        <a href="/smiles">{{ trans('common.smiles') }}</a> /
+        <a href="/tags">{{ trans('common.tags') }}</a><br><br>
         @else
-            {!! showError('Для добавления сообщения необходимо авторизоваться') !!}
+            {!! showError(trans('news.not_authorized')) !!}
         @endif
     @else
-        {!! showError('Комментирование данной новости закрыто!') !!}
+        {!! showError(trans('news.closed_news')) !!}
     @endif
 @stop

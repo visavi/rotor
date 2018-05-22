@@ -1,18 +1,18 @@
 @extends('layout')
 
 @section('title')
-    Последние комментарии
+    {{ trans('news.last_comments') }}
 @stop
 
 @section('content')
 
-    <h1>Последние комментарии</h1>
+    <h1>{{ trans('news.last_comments') }}</h1>
 
     <nav>
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
-            <li class="breadcrumb-item"><a href="/news">Новости сайта</a></li>
-            <li class="breadcrumb-item active">Последние комментарии</li>
+            <li class="breadcrumb-item"><a href="/news">{{ trans('news.header') }}</a></li>
+            <li class="breadcrumb-item active">{{ trans('news.last_comments') }}</li>
         </ol>
     </nav>
 
@@ -24,7 +24,7 @@
 
             <div>
                 {!! bbCode($data->text) !!}<br>
-                Написал: {!! profile($data->user) !!} <small>({{ dateFixed($data->created_at) }})</small><br>
+                {{ trans('news.posted_by') }}: {!! profile($data->user) !!} <small>({{ dateFixed($data->created_at) }})</small><br>
 
                 @if (isAdmin())
                     <span class="data">({{ $data->brow }}, {{ $data->ip }})</span>
@@ -34,6 +34,6 @@
 
         {!! pagination($page) !!}
     @else
-        {!! showError('Комментарии не найдены!') !!}
+        {!! showError(trans('news.empty_comments')) !!}
     @endif
 @stop
