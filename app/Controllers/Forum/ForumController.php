@@ -253,8 +253,8 @@ class ForumController extends BaseController
 
                 if (empty($_SESSION['forumfindres']) || $forumfind != $_SESSION['forumfind']) {
 
-                    $searchsec = ($section > 0) ? "forum_id = " . $section . " AND" : '';
-                    $searchper = ($period > 0) ? "updated_at > " . strtotime('-' . $period . ' day', SITETIME) . " AND" : '';
+                    $searchsec = ($section > 0) ? 'forum_id = ' . $section . ' AND' : '';
+                    $searchper = ($period > 0) ? 'updated_at > ' . strtotime('-' . $period . ' day', SITETIME) . ' AND' : '';
 
                     $result = Topic::query()
                         ->select('id')

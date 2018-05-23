@@ -562,7 +562,11 @@ class DownController extends BaseController
             abort('default', 'Не удалось вывести содержимое файла');
         }
 
-        $content = $archive[$document->getName()];
+        try {
+            $content = $archive[$document->getName()];
+        } catch (Exception $e) {
+            abort('default', 'Не удалось прочитать файл!');
+        }
 
         if (preg_match("/\.(gif|png|bmp|jpg|jpeg)$/", $document->getName()) && $document->getSize() > 0) {
 
