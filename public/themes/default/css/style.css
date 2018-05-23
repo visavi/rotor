@@ -47,6 +47,15 @@ pre {
     -moz-tab-size: 4;
 }
 
+a {
+    color: #888;
+}
+
+a:hover {
+    color: #aeaeae;
+    text-decoration-color: #e6e5e5;
+}
+
 .site {
     padding: 5px;
     background-image: url(../img/f.png);
