@@ -28,7 +28,7 @@ Class BaseController
                     }
                 }
 
-                if ($matches == 4 && ! Request::is('banip', 'captcha')) {
+                if ($matches === 4 && ! Request::is('banip', 'captcha')) {
                     redirect('/banip');
                 }
             }
