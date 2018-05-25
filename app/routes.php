@@ -11,6 +11,9 @@ $routes = [
     ['GET',      '/closed', 'HomeController@closed'],
     ['GET|POST', '/banip', 'HomeController@banip'],
 
+    ['GET',      '/board', 'BoardController@index', 'board'],
+    ['GET',      '/board/[i:id]', 'BoardController@board'],
+
     ['GET',      '/guestbooks', 'GuestbookController@index', 'book'],
     ['POST',     '/guestbooks/add', 'GuestbookController@add'],
     ['GET|POST', '/guestbooks/edit/[i:id]', 'GuestbookController@edit'],
