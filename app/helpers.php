@@ -1525,11 +1525,12 @@ function counterString($file)
 /**
  * Возвращает ссылку на профиль пользователя
  *
- * @param  User   $user  объект пользователя
- * @param  string $color цвет логина
+ * @param  User    $user  объект пользователя
+ * @param  string  $color цвет логина
+ * @param  boolean $link  выводить как ссылку
  * @return string        путь к профилю
  */
-function profile(User $user, $color = null)
+function profile(User $user, $color = null, $link = true)
 {
     if ($user->id) {
         $name = empty($user->name) ? $user->login : $user->name;
@@ -1538,7 +1539,11 @@ function profile(User $user, $color = null)
             $name = '<span style="color:' . $color . '">' . $name . '</span>';
         }
 
-        return '<a class="author" href="/users/' . $user->login . '" data-login="' . $user->login . '">' . $name . '</a>';
+        if ($link) {
+            return '<a class="author" href="/users/' . $user->login . '" data-login="' . $user->login . '">' . $name . '</a>';
+        }
+
+        return '<span class="author" data-login="' . $user->login . '">' . $name . '</span>';
     }
 
     return '<span class="author" data-login="' . setting('guestsuser') . '">' . setting('guestsuser') . '</span>';

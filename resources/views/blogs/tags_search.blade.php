@@ -19,7 +19,7 @@
     <h3>Поиск запроса &quot;{{ $tag }}&quot; в метках</h3>
     Найдено совпадений: <b>{{ $page->total }}</b><br>
 
-    <?php foreach($blogs as $data): ?>
+    @foreach($blogs as $data)
 
         <div class="b">
             <i class="fa fa-pencil-alt"></i>
@@ -30,9 +30,9 @@
             Категория: <a href="/blogs/{{ $data->category_id }}">{{ $data->name }}</a><br>
             Просмотров: {{ $data->visits }}<br>
             Метки: {{ $data->tags }}<br>
-            Автор: <?= profile($data->user) ?>  (<?=dateFixed($data->created_at)?>)
+            Автор: {!! profile($data->user) !!}  ({{ dateFixed($data->created_at) }})
         </div>
-    <?php endforeach; ?>
+    @endforeach
 
     {!! pagination($page) !!}
 @stop

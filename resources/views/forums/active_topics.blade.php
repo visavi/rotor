@@ -25,7 +25,7 @@
         <div>
             {!! $data->pagination() !!}
             Форум: <a href="/forums/{{ $data->forum->id }}">{{ $data->forum->title }}</a><br>
-            Автор: {{ $data->user->login }} / Посл.: {{ $data->lastPost->user->login }} ({{ dateFixed($data->lastPost->created_at) }})
+            Автор: {!! profile($data->user, null, false) !!} / Посл.: {!! profile($data->lastPost->user, null, false) !!} ({{ dateFixed($data->lastPost->created_at) }})
         </div>
     @endforeach
 
