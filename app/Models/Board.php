@@ -18,4 +18,20 @@ class Board extends BaseModel
      * @var array
      */
     protected $guarded = [];
+
+    /**
+     * Возвращает связь родительской категории
+     */
+    public function parent()
+    {
+        return $this->belongsTo(Category::class, 'parent_id')->withDefault();
+    }
+
+    /**
+     * Возвращает связь подкатегорий
+     */
+    public function children()
+    {
+        return $this->hasMany(Category::class, 'parent_id')->orderBy('sort');
+    }
 }
