@@ -23,7 +23,7 @@ class Forum extends BaseModel
      */
     public function parent()
     {
-        return $this->belongsTo(Forum::class, 'parent_id')->withDefault();
+        return $this->belongsTo(self::class, 'parent_id')->withDefault();
     }
 
     /**
@@ -31,7 +31,7 @@ class Forum extends BaseModel
      */
     public function children()
     {
-        return $this->hasMany(Forum::class, 'parent_id')->orderBy('sort');
+        return $this->hasMany(self::class, 'parent_id')->orderBy('sort');
     }
 
     /**

@@ -143,7 +143,7 @@ class Down extends BaseModel
      */
     public function convertVideo(UploadedFile  $file, $fileName)
     {
-        $isVideo = strpos($file->getClientMimeType(), 'video/') !== false ? true : false;
+        $isVideo = strpos($file->getClientMimeType(), 'video/') !== false;
 
         // Обработка видео
         if ($isVideo && env('FFMPEG_ENABLED')) {
