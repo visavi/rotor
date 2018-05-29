@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="ru">
+<html lang="{{ setting('language') }}">
 <head>
     <meta charset="utf-8">
     <title>Rotor</title>

@@ -2,7 +2,7 @@
 header("Content-type:text/html; charset=utf-8");
 ?>
 <!DOCTYPE html>
-<html lang="ru">
+<html lang="{{ setting('language') }}">
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <title>@yield('title') - {{ setting('title') }}</title>
