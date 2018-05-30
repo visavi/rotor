@@ -29,7 +29,11 @@
                         <input type="checkbox" name="del[]" value="{{ $data->id }}">
                     </div>
 
-                    <div class="img">{!! userAvatar($data->user) !!}</div>
+                    <div class="img">
+                        {!! userAvatar($data->user) !!}
+                        {!! userOnline($data->user) !!}
+                    </div>
+
                     <b>{!! profile($data->user) !!}</b> ({{ dateFixed($data->created_at) }})
                 </div>
 

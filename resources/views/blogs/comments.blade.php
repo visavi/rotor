@@ -28,7 +28,10 @@
         @foreach ($comments as $data)
             <div class="post" id="comment_{{ $data->id }}">
                 <div class="b">
-                    <div class="img">{!! userAvatar($data->user) !!}</div>
+                    <div class="img">
+                        {!! userAvatar($data->user) !!}
+                        {!! userOnline($data->user) !!}
+                    </div>
 
                     <div class="float-right">
                         @if (getUser('id') != $data->user_id)
@@ -49,7 +52,7 @@
                     </div>
 
                     <b>{!! profile($data->user) !!}</b> <small>({{ dateFixed($data->created_at) }})</small><br>
-                    {!! userStatus($data->user) !!} {!! userOnline($data->user) !!}
+                    {!! userStatus($data->user) !!}
                 </div>
                 <div class="message">
                     {!! bbCode($data->text) !!}<br>

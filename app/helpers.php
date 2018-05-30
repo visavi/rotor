@@ -576,11 +576,11 @@ function defaultAvatar(User $user)
 function userAvatar(User $user)
 {
     if (! $user->id) {
-        return '<img src="/assets/img/images/avatar_guest.png" alt=""> ';
+        return '<img class="avatar" src="/assets/img/images/avatar_guest.png" alt=""> ';
     }
 
     if ($user->avatar && file_exists(UPLOADS . '/avatars/' . $user->avatar)) {
-        return '<a href="/users/' . $user->login . '"><img src="/uploads/avatars/' . $user->avatar . '" alt=""></a> ';
+        return '<a href="/users/' . $user->login . '"><img src="/uploads/avatars/' . $user->avatar . '" alt="" class="avatar"></a> ';
     }
 
     return defaultAvatar($user);
@@ -884,7 +884,7 @@ function userOnline(User $user)
 {
     static $visits;
 
-    $online = '<i class="fa fa-asterisk text-danger"></i>';
+    $online = '<div class="offline" title="Оффлайн"></div>';
 
     if (! $visits) {
         if (@filemtime(STORAGE . '/temp/visit.dat') < time() - 10) {
@@ -901,7 +901,7 @@ function userOnline(User $user)
     }
 
     if (isset($visits->{$user->id})) {
-        $online = '<i class="fa fa-asterisk fa-spin text-success"></i>';
+        $online = '<div class="online" title="Онлайн"></div>';
     }
 
     return $online;

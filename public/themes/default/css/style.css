@@ -42,11 +42,6 @@ h1 small {
     background-color: #eee;
 }
 
-pre {
-    tab-size: 16;
-    -moz-tab-size: 4;
-}
-
 a {
     color: #888;
 }
@@ -105,16 +100,9 @@ table {
 }
 
 .img {
-    background-color: #fff;
-    border: 1px solid #ccc;
     float: left;
     padding: 1px;
     margin : 1px 5px 1px 1px;
-}
-
-.imgright {
-    float:right;
-    margin : 5px;
 }
 
 .a {

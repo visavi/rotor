@@ -11,7 +11,10 @@
     @if ($users->isNotEmpty())
         @foreach($users as $key => $data)
             <div class="b">
-                <div class="img">{!! userAvatar($data) !!}</div>
+                <div class="img">
+                    {!! userAvatar($data) !!}
+                    {!! userOnline($data) !!}
+                </div>
 
                 {{ ($page->offset + $key + 1) }}.
 
@@ -21,7 +24,7 @@
                     <b>{!! profile($data) !!}</b>
                 @endif
                 ({{ plural($data->money, setting('moneyname')) }})<br>
-                {!! userStatus($data) !!} {!! userOnline($data) !!}
+                {!! userStatus($data) !!}
             </div>
 
             <div>

@@ -30,10 +30,13 @@
                         <input type="checkbox" name="del[]" value="{{ $data->id }}">
                     </div>
 
-                    <div class="img">{!! userAvatar($data->ignoring) !!}</div>
+                    <div class="img">
+                        {!! userAvatar($data->ignoring) !!}
+                        {!! userOnline($data->ignoring) !!}
+                    </div>
 
                     <b>{!! profile($data->ignoring) !!}</b> <small>({{ dateFixed($data->created_at) }})</small><br>
-                    {!! userStatus($data->ignoring) !!} {!! userOnline($data->ignoring) !!}
+                    {!! userStatus($data->ignoring) !!}
                 </div>
 
                 <div>

@@ -197,16 +197,9 @@ input[type="submit"] {
 }
 
 .img {
-    background-color: #fff;
-    border: 1px solid #ccc;
     float: left;
     padding: 1px;
     margin: 1px 5px 1px 1px;
-}
-
-.imgright {
-    float: right;
-    margin: 5px;
 }
 
 .b {
@@ -266,4 +259,8 @@ input[type="submit"] {
 .message {
     overflow: hidden;
     text-overflow: ellipsis;
+}
+
+.content {
+    width: 580px;
 }

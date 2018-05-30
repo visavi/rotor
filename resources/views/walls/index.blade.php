@@ -36,10 +36,14 @@
                             <a href="#" onclick="return deleteWall(this)" data-id="{{ $data->id }}" data-login="{{ $data->user->login }}" data-token="{{ $_SESSION['token'] }}" data-toggle="tooltip" title="{{ trans('common.delete') }}"><i class="fa fa-times text-muted"></i></a>
                         @endif
                     </div>
-                    <div class="img">{!! userAvatar($data->author) !!}</div>
+
+                    <div class="img">
+                        {!! userAvatar($data->author) !!}
+                        {!! userOnline($data->author) !!}
+                    </div>
 
                     <b>{!! profile($data->author) !!}</b> <small>({{ dateFixed($data->created_at) }})</small><br>
-                    {!! userStatus($data->author) !!} {!! userOnline($data->author) !!}
+                    {!! userStatus($data->author) !!}
                 </div>
                 <div class="message">
                     {!! bbCode($data->text) !!}

@@ -40,11 +40,14 @@
         @foreach ($comments as $comment)
             <div class="post">
                 <div class="b">
-                    <div class="img">{!! userAvatar($comment->user) !!}</div>
+                    <div class="img">
+                        {!! userAvatar($comment->user) !!}
+                        {!! userOnline($comment->user) !!}
+                    </div>
 
                     <b>{!! profile($comment->user) !!}</b>
                     <small> ({{ dateFixed($comment->created_at) }})</small><br>
-                    {!! userStatus($comment->user) !!} {!! userOnline($comment->user) !!}
+                    {!! userStatus($comment->user) !!}
                 </div>
 
                 <div>

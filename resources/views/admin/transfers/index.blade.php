@@ -20,8 +20,12 @@
 
         @foreach ($transfers as $data)
             <div class="b">
-                <div class="img">{!! userAvatar($data->user) !!}</div>
-                <b>{!! profile($data->user) !!}</b> {!! userOnline($data->user) !!}
+                <div class="img">
+                    {!! userAvatar($data->user) !!}
+                    {!! userOnline($data->user) !!}
+                </div>
+
+                <b>{!! profile($data->user) !!}</b>
 
                 <small>({{ dateFixed($data->created_at) }})</small><br>
 

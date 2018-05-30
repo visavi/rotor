@@ -67,7 +67,7 @@ header("Content-type:text/html; charset=utf-8");
                     @endif
                 </div>
             @endif
-            <div>
+            <div class="content">
                 @yield('advertTop')
                 @yield('advertUser')
                 @yield('note')

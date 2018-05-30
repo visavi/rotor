@@ -30,10 +30,13 @@
                         <input type="checkbox" name="del[]" value="{{ $contact->id }}">
                     </div>
 
-                    <div class="img">{!! userAvatar($contact->contactor) !!}</div>
+                    <div class="img">
+                        {!! userAvatar($contact->contactor) !!}
+                        {!! userOnline($contact->contactor) !!}
+                    </div>
 
                     <b>{!! profile($contact->contactor) !!}</b> <small>({{ dateFixed($contact->created_at) }})</small><br>
-                    {!! userStatus($contact->contactor) !!} {!! userOnline($contact->contactor) !!}
+                    {!! userStatus($contact->contactor) !!}
                 </div>
                 <div>
                     @if ($contact->text)

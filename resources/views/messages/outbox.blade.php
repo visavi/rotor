@@ -29,9 +29,14 @@
 
             @foreach ($messages as $data)
                 <div class="b">
-                    <div class="img">{!! userAvatar($data->recipient) !!}</div>
+                    <div class="img">
+                        {!! userAvatar($data->recipient) !!}
+                        {!! userOnline($data->recipient) !!}
+                    </div>
+
                     <b>{!! profile($data->recipient) !!}</b>  ({{ dateFixed($data->created_at) }})<br>
-                    {!! userStatus($data->recipient) !!} {!! userOnline($data->recipient) !!}</div>
+                    {!! userStatus($data->recipient) !!}
+                </div>
 
                 <div>{!! bbCode($data->text) !!}<br>
 

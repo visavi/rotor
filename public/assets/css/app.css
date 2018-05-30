@@ -179,7 +179,8 @@ blockquote small:before {
   width: 48px;
   line-height: 48px;
   text-align: center;
-  float: left;
+  border-radius: 50%;
+  border: 2px solid #fff;
 }
 
 .avatar a {
@@ -188,6 +189,30 @@ blockquote small:before {
   font-weight: bold;
   color: #fff;
   display: block;
+}
+
+.offline {
+  width: 14px;
+  height: 14px;
+  position: relative;
+  background: #ff7d5d;
+  border-radius: 7px;
+  margin-top: -12px;
+  right: -35px;
+  z-index: 99;
+  border: 2px solid #fff;
+}
+
+.online {
+  width: 14px;
+  height: 14px;
+  position: relative;
+  background: #5dff55;
+  border-radius: 7px;
+  margin-top: -12px;
+  right: -35px;
+  z-index: 99;
+  border: 2px solid #fff;
 }
 
 .pagination {

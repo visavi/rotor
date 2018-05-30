@@ -123,10 +123,13 @@
                             </div>
                         </div>
 
-                        <div class="img">{!! userAvatar($data->user) !!}</div>
+                        <div class="img">
+                            {!! userAvatar($data->user) !!}
+                            {!! userOnline($data->user) !!}
+                        </div>
 
                         {{ $num }}. <b>{!! profile($data->user) !!}</b> <small>({{ dateFixed($data->created_at) }})</small><br>
-                        {!! userStatus($data->user) !!} {!! userOnline($data->user) !!}
+                        {!! userStatus($data->user) !!}
                     </div>
 
                     <div class="message">
@@ -200,7 +203,7 @@
                             </p>
                         </div>
 
-                        <span class="imgright js-attach-button">
+                        <span class="float-right js-attach-button">
                             <a href="#" onclick="return showAttachForm();">Загрузить файл</a>
                         </span>
                     @endif

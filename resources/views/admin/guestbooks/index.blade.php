@@ -24,7 +24,13 @@
             @foreach($posts as $data)
 
                 <div class="b">
-                    <div class="img">{!! userAvatar($data->user) !!}</div>
+                    <div class="img">
+                        {!! userAvatar($data->user) !!}
+
+                        @if ($data->user_id)
+                            {!! userOnline($data->user) !!}
+                        @endif
+                    </div>
 
                     <div class="float-right">
                         <a href="/admin/guestbooks/reply/{{ $data->id }}?page={{ $page->current }}"><i class="fa fa-reply text-muted"></i></a>
@@ -34,7 +40,7 @@
 
                     @if ($data->user_id)
                         <b>{!! profile($data->user) !!}</b> <small>({{ dateFixed($data->created_at) }})</small><br>
-                        {!! userStatus($data->user) !!} {!! userOnline($data->user) !!}
+                        {!! userStatus($data->user) !!}
                     @else
                         <b>{{ setting('guestsuser') }}</b> <small>({{ dateFixed($data->created_at) }})</small>
                     @endif

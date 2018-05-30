@@ -37,10 +37,13 @@
                         </div>
                     @endif
 
-                    <div class="img">{!! userAvatar($post->user) !!}</div>
+                        <div class="img">
+                            {!! userAvatar($post->user) !!}
+                            {!! userOnline($post->user) !!}
+                        </div>
 
                     <b>{!! profile($post->user) !!}</b> <small>({{ dateFixed($post->created_at) }})</small><br>
-                    {!! userStatus($post->user) !!} {!! userOnline($post->user) !!}
+                    {!! userStatus($post->user) !!}
                 </div>
 
                 <div class="message">{!! bbCode($post->text) !!}</div>

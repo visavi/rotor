@@ -53,10 +53,14 @@
                         <input type="checkbox" name="del[]" value="{{ $data->id }}">
                     </div>
 
-                    <div class="img">{!! userAvatar($data->author) !!}</div>
+                    <div class="img">
+                        {!! userAvatar($data->author) !!}
+                        {!! userOnline($data->author) !!}
+                    </div>
+
                     @if ($data->author->id)
                         <b>{!! profile($data->author) !!}</b> ({{ dateFixed($data->created_at) }})<br>
-                        {!! userStatus($data->author) !!} {!! userOnline($data->author) !!}
+                        {!! userStatus($data->author) !!}
                     @else
                         <b>Система</b>
                     @endif
