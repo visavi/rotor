@@ -122,11 +122,6 @@ blockquote small:before {
   background-color: #f8f8f8;
 }
 
-/* Fix audiojs */
-.audiojs .play-pause {
-  width: auto;
-}
-
 .post-rating-up.active {
   color: #fff;
   background-color: #78c062;
@@ -155,6 +150,11 @@ blockquote small:before {
   font-size: 10px;
   position: absolute;
   right: 3px;
+}
+
+.img {
+  float:left;
+  margin-right : 10px;
 }
 
 .avatar-box {

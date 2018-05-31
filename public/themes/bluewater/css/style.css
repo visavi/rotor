@@ -41,12 +41,6 @@ h1 small {
 }
 
 /* images */
-.img {
-    float:left;
-    padding : 0;
-    margin-right : 5px;
-}
-
 img.float-right { margin: 5px 0 10px 10px;  }
 img.float-left { margin: 5px 10px 10px 0; }
 
@@ -388,12 +382,6 @@ input.button {
     padding: 5px 0 5px 0;
     border: 1px solid #E5F0FB;
     background: #F4F8FD;
-}
-
-.img {
-    float: left;
-    padding: 1px;
-    margin : 1px 5px 1px 1px;
 }
 
 .login {

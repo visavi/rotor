@@ -99,12 +99,6 @@ table {
     font-size: 14px;
 }
 
-.img {
-    float: left;
-    padding: 1px;
-    margin : 1px 5px 1px 1px;
-}
-
 .a {
     color: #666;
     background: #ddd url(../img/aa.gif);
