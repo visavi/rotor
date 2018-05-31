@@ -7,6 +7,7 @@ use App\Classes\Validator;
 use App\Models\Blog;
 use App\Models\Comment;
 use App\Models\Down;
+use App\Models\File;
 use App\Models\Guestbook;
 use App\Models\Inbox;
 use App\Models\News;
@@ -265,5 +266,51 @@ class AjaxController extends BaseController
             'cancel' => $cancel,
             'rating' => formatNum($post['rating'])
         ]);
+    }
+
+    /**
+     * Загрузка фотографии
+     */
+    public function uploadImage()
+    {
+        $image = Request::file('image');
+        $token = check(Request::input('token'));
+
+        $validator = new Validator();
+        //$validator->equal($token, $_SESSION['token'], 'Неверный идентификатор сессии, повторите действие!');
+
+        if ($validator->isValid()) {
+            /*$validator
+                ->lte(count($files), setting('maxfiles'), ['files' => 'Разрешено загружать не более ' . setting('maxfiles') . ' файлов']);*/
+
+            $rules = [
+                'maxsize'   => setting('filesize'),
+                'minweight' => 100,
+            ];
+
+            $validator->file($image, $rules, ['files' => 'Не удалось загрузить фотографию!']);
+
+        }
+
+        if ($validator->isValid()) {
+            $fileName  = uploadFile($image, UPLOADS . '/blogs');
+
+            $file = File::query()->create([
+                'relate_id'   => 0,
+                'relate_type' => Blog::class,
+                'hash'        => $fileName,
+                'name'        => $image->getClientOriginalName(),
+                'size'        => $image->getClientSize(),
+                'user_id'     => getUser('id'),
+                'created_at'  => SITETIME,
+            ]);
+
+            echo json_encode(['status' => 'success', 'image' => resizeImage('/uploads/blogs/' . $file->hash, ['size' => 100, 'data-id' => $file->id])]);
+        } else {
+            echo json_encode([
+                'status' => 'error',
+                'message' => current($validator->getErrors())
+            ]);
+        }
     }
 }

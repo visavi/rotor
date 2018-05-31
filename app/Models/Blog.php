@@ -53,6 +53,14 @@ class Blog extends BaseModel
     }
 
     /**
+     * Возвращает загруженные файлы
+     */
+    public function files()
+    {
+        return $this->morphMany(File::class, 'relate');
+    }
+
+    /**
      * Возвращает размер шрифта для облака тегов
      *
      * @param int $count

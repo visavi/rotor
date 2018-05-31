@@ -385,3 +385,24 @@ function copyToClipboard(el)
 
     return false;
 }
+
+/* Загрузка изображения */
+function submitImage(el)
+{
+    let form = new FormData();
+    form.append('image', el.files[0]);
+
+    $.ajax({
+        data: form,
+        type: 'post',
+        contentType: false,
+        processData: false,
+        dataType: 'json',
+        url: '/ajax/upload',
+        success: function(data) {
+            $('.js-image').append($(data.image));
+        }
+    });
+
+    return false;
+}

@@ -58,6 +58,19 @@
                 {!! textError('tags') !!}
             </div>
 
+            <div class="js-image">
+                @if ($files->isNotEmpty())
+                    @foreach ($files as $file)
+                        {!! resizeImage('/uploads/blogs/' . $file->hash, ['size' => 100, 'data-id' => $file->id]) !!}
+                    @endforeach
+                @endif
+            </div>
+
+            <label class="btn btn-sm btn-secondary" for="image">
+                <input id="image" type="file" name="image" onchange="return submitImage(this);" hidden>
+                Прикрепить картинку&hellip;
+            </label><br>
+
             <button class="btn btn-primary">Опубликовать</button>
         </form>
     </div><br>

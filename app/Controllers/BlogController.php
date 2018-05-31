@@ -7,6 +7,7 @@ use App\Classes\Validator;
 use App\Models\Blog;
 use App\Models\Category;
 use App\Models\Comment;
+use App\Models\File;
 use App\Models\Flood;
 use App\Models\Reader;
 use App\Models\User;
@@ -290,7 +291,13 @@ class BlogController extends BaseController
             }
         }
 
-        return view('blogs/create', ['cats' => $cats, 'cid' => $cid]);
+        $files = File::query()
+            ->where('relate_type', Blog::class)
+            ->where('relate_id', 0)
+            ->where('user_id', getUser('id'))
+            ->get();
+
+        return view('blogs/create', compact('cats', 'cid', 'files'));
     }
 
     /**
