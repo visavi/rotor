@@ -1,7 +1,7 @@
 @extends('layout')
 
 @section('title')
-    Управление голосованиями
+    Голосования
 @stop
 
 @section('content')
@@ -12,7 +12,7 @@
         </div><br>
     @endif
 
-    <h1>Управление голосованиями</h1>
+    <h1>Голосования</h1>
 
     <nav>
         <ol class="breadcrumb">

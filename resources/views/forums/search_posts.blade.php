@@ -27,7 +27,7 @@
 
         <div>{!! bbCode($post->text) !!}<br>
             Раздел: <a href="/topics/{{ $post->topic->forum->id }}">{{ $post->topic->forum->title }}</a><br>
-            Написал: {!! profile($post->user) !!} {!! userOnline($post->user) !!} <small>({{ dateFixed($post->created_at) }})</small><br>
+            Написал: {!! profile($post->user) !!} <small>({{ dateFixed($post->created_at) }})</small><br>
         </div>
 
     @endforeach

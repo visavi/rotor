@@ -41,7 +41,7 @@
             <div>
                 {!! bbCode($data->text) !!}<br>
 
-                Написал: {{ $data->user->login }} {!! userOnline($data->user) !!} <small>({{ dateFixed($data->created_at) }})</small><br>
+                Написал: {{ $data->user->login }} <small>({{ dateFixed($data->created_at) }})</small><br>
 
                 @if (isAdmin())
                     <span class="data">({{ $data->brow }}, {{ $data->ip }})</span>

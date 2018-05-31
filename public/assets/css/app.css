@@ -191,26 +191,13 @@ blockquote small:before {
   display: block;
 }
 
-.offline {
-  width: 14px;
-  height: 14px;
-  position: relative;
-  background: #ff7d5d;
-  border-radius: 7px;
-  margin-top: -12px;
-  right: -35px;
-  z-index: 99;
-  border: 2px solid #fff;
-}
-
 .online {
   width: 14px;
   height: 14px;
   position: relative;
-  background: #5dff55;
   border-radius: 7px;
-  margin-top: -12px;
-  right: -35px;
+  margin-top: -14px;
+  right: -34px;
   z-index: 99;
   border: 2px solid #fff;
 }

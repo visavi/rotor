@@ -1,12 +1,12 @@
 @extends('layout')
 
 @section('title')
-    Управление пользователями
+    Пользователи
 @stop
 
 @section('content')
 
-    <h1>Управление пользователями</h1>
+    <h1>Пользователи</h1>
 
     <nav>
         <ol class="breadcrumb">

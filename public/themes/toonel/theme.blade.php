@@ -30,7 +30,7 @@ header("Content-type:text/html; charset=utf-8");
             <a title="Гостевая комната" class="menu" href="/guestbooks">Гостевая</a> |
             <a title="Загрузки" class="menu" href="/loads">Загрузки</a> |
             @if (getUser())
-                <a title="Управление настройками" class="menu" href="/menu">Меню</a> |
+                <a title="Настройки" class="menu" href="/menu">Меню</a> |
                 <a title="Выход" class="menu" href="/logout"
                    onclick="return confirm('Вы действительно хотите выйти?')">Выход</a>
             @else

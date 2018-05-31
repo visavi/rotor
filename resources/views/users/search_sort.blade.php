@@ -17,13 +17,20 @@
     </nav>
 
     @if ($users->isNotEmpty())
+        <div class="mb-3">
+            @foreach($users as $user)
+                <div  class="text-truncate bg-light my-1">
+                    <div class="img">
+                        {!! userAvatar($user) !!}
+                        {!! userOnline($user) !!}
+                    </div>
 
-        @foreach ($users as $user)
-            {!! $user->getGender() !!} <b>{!! profile($user) !!}</b>
-            {!! userOnline($user) !!} ({{ plural($user->point, setting('scorename')) }})<br>
-        @endforeach
+                    <b><a href="/admin/users/edit?user={{ $user->login }}">{{ $user->login }}</a></b>
+                    ({{ plural($user->point, setting('scorename')) }})
+                </div>
+            @endforeach
+        </div>
 
-        <br>
         {!! pagination($page) !!}
 
         Найдено совпадений: {{ $page->total }}<br><br>

@@ -1,18 +1,18 @@
 @extends('layout')
 
 @section('title')
-    Список забаненых
+    Забаненные
 @stop
 
 @section('content')
 
-    <h1>Список забаненых</h1>
+    <h1>Забаненные</h1>
 
     <nav>
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
             <li class="breadcrumb-item"><a href="/admin">Панель</a></li>
-            <li class="breadcrumb-item active">Список забаненых</li>
+            <li class="breadcrumb-item active">Забаненные</li>
         </ol>
     </nav>
 

@@ -28,12 +28,12 @@
     @if (isAdmin('moder'))
         <div class="b"><i class="fa fa-cog fa-lg text-muted"></i> <b>Модератор</b></div>
         <i class="far fa-circle fa-lg text-muted"></i> <a href="/admin/bans">Бан / Разбан</a><br>
-        <i class="far fa-circle fa-lg text-muted"></i> <a href="/admin/banlists">Список забаненых</a> ({{ statsBanned() }})<br>
-        <i class="far fa-circle fa-lg text-muted"></i> <a href="/admin/spam">Список жалоб</a> ({{ statsSpam() }})<br>
-        <i class="far fa-circle fa-lg text-muted"></i> <a href="/admin/administrators">Список старших</a> ({{ statsAdmins() }})<br>
-        <i class="far fa-circle fa-lg text-muted"></i> <a href="/admin/reglists">Список ожидающих</a> ({{ statsRegList() }})<br>
+        <i class="far fa-circle fa-lg text-muted"></i> <a href="/admin/banlists">Забаненные</a> ({{ statsBanned() }})<br>
+        <i class="far fa-circle fa-lg text-muted"></i> <a href="/admin/spam">Жалобы</a> ({{ statsSpam() }})<br>
+        <i class="far fa-circle fa-lg text-muted"></i> <a href="/admin/administrators">Администрация</a> ({{ statsAdmins() }})<br>
+        <i class="far fa-circle fa-lg text-muted"></i> <a href="/admin/reglists">Ожидающие</a> ({{ statsRegList() }})<br>
         <i class="far fa-circle fa-lg text-muted"></i> <a href="/admin/votes">Голосования</a> ({{ statVotes() }})<br>
-        <i class="far fa-circle fa-lg text-muted"></i> <a href="/admin/antimat">Управление антиматом</a> ({{ statsAntimat() }})<br>
+        <i class="far fa-circle fa-lg text-muted"></i> <a href="/admin/antimat">Антимат</a> ({{ statsAntimat() }})<br>
         <i class="far fa-circle fa-lg text-muted"></i> <a href="/admin/banhists">История банов</a> ({{ statsBanHist() }})<br>
         <i class="far fa-circle fa-lg text-muted"></i> <a href="/admin/invitations">Приглашения</a> ({{ statsInvite() }})<br>
         <i class="far fa-circle fa-lg text-muted"></i> <a href="/admin/transfers">Денежные операции</a><br>
@@ -51,7 +51,7 @@
         <i class="far fa-circle fa-lg text-muted"></i> <a href="/admin/errors">Ошибки / Автобаны</a><br>
         <i class="far fa-circle fa-lg text-muted"></i> <a href="/admin/blacklists">Черный список</a> ({{ statsBlacklist() }})<br>
         <i class="far fa-circle fa-lg text-muted"></i> <a href="/admin/offers">Предложения / Проблемы</a> ({{ statsOffers() }})<br>
-        <i class="far fa-circle fa-lg text-muted"></i> <a href="/admin/smiles">Управление смайлами</a> ({{ statsSmiles() }})<br>
+        <i class="far fa-circle fa-lg text-muted"></i> <a href="/admin/smiles">Смайлы</a> ({{ statsSmiles() }})<br>
         <i class="far fa-circle fa-lg text-muted"></i> <a href="/admin/status">Статусы пользователей</a><br>
     @endif
 

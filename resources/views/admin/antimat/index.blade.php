@@ -1,18 +1,18 @@
 @extends('layout')
 
 @section('title')
-    Управление антиматом
+    Антимат
 @stop
 
 @section('content')
 
-    <h1>Управление антиматом</h1>
+    <h1>Антимат</h1>
 
     <nav>
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
             <li class="breadcrumb-item"><a href="/admin">Панель</a></li>
-            <li class="breadcrumb-item active">Управление антиматом</li>
+            <li class="breadcrumb-item active">Антимат</li>
         </ol>
     </nav>
 

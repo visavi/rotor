@@ -1,18 +1,18 @@
 @extends('layout')
 
 @section('title')
-    Управление жалобами
+    Жалобы
 @stop
 
 @section('content')
 
-    <h1>Управление жалобами</h1>
+    <h1>Жалобы</h1>
 
     <nav>
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
             <li class="breadcrumb-item"><a href="/admin">Панель</a></li>
-            <li class="breadcrumb-item active">Управление жалобами</li>
+            <li class="breadcrumb-item active">Жалобы</li>
         </ol>
     </nav>
 

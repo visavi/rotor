@@ -1,7 +1,7 @@
 @extends('layout')
 
 @section('title')
-    Управление галереей
+    Галерея
 @stop
 
 @section('content')
@@ -12,7 +12,7 @@
         </div><br>
     @endif
 
-    <h1>Управление галереей</h1>
+    <h1>Галерея</h1>
 
     <nav>
         <ol class="breadcrumb">

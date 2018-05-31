@@ -16,13 +16,21 @@
     </nav>
 
     @if ($users->isNotEmpty())
+        <div class="mb-3">
+            @foreach($users as $user)
+                <div  class="text-truncate bg-light my-1">
+                    <div class="img">
+                        {!! userAvatar($user) !!}
+                        {!! userOnline($user) !!}
+                    </div>
 
-        @foreach($users as $user)
-            {!! $user->getGender() !!} <b>{!! profile($user) !!}</b>
-            ({{ userLevel($user->level) }}) {!! userOnline($user) !!}<br>
-        @endforeach
+                    <b>{!! profile($user) !!}</b>
+                    ({{ userLevel($user->level) }})
+                </div>
+            @endforeach
+        </div>
 
-        <br>Всего в администрации: <b>{{ $users->count() }}</b><br><br>
+        Всего в администрации: <b>{{ $users->count() }}</b><br><br>
 
         @if (getUser())
             <h3>Быстрая почта</h3>

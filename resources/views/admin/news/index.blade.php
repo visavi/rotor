@@ -1,7 +1,7 @@
 @extends('layout')
 
 @section('title')
-    Управление новостями
+    Новости
 @stop
 
 @section('content')
@@ -10,7 +10,7 @@
         <a class="btn btn-success" href="/admin/news/create">Добавить новость</a>
     </div><br>
 
-    <h1>Управление новостями</h1>
+    <h1>Новости</h1>
 
     <nav>
         <ol class="breadcrumb">

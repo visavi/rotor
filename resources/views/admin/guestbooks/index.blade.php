@@ -1,12 +1,12 @@
 @extends('layout')
 
 @section('title')
-    Управление гостевой
+    Гостевая книга
 @stop
 
 @section('content')
 
-    <h1>Управление гостевой</h1>
+    <h1>Гостевая книга</h1>
 
     <nav>
         <ol class="breadcrumb">

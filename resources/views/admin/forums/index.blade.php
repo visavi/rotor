@@ -1,12 +1,12 @@
 @extends('layout')
 
 @section('title')
-    Управление форумом
+    Форум
 @stop
 
 @section('content')
 
-    <h1>Управление форумом</h1>
+    <h1>Форум</h1>
 
     <nav>
         <ol class="breadcrumb">

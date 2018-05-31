@@ -884,7 +884,7 @@ function userOnline(User $user)
 {
     static $visits;
 
-    $online = '<div class="offline" title="Оффлайн"></div>';
+    $online = '<div class="online bg-danger" title="Оффлайн"></div>';
 
     if (! $visits) {
         if (@filemtime(STORAGE . '/temp/visit.dat') < time() - 10) {
@@ -901,7 +901,7 @@ function userOnline(User $user)
     }
 
     if (isset($visits->{$user->id})) {
-        $online = '<div class="online" title="Онлайн"></div>';
+        $online = '<div class="online bg-success" title="Онлайн"></div>';
     }
 
     return $online;

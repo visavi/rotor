@@ -18,16 +18,25 @@
 
     @if ($users->isNotEmpty())
 
-        @foreach($users as $user)
-            {!! $user->getGender() !!} <b>{!! profile($user) !!}</b>
-            ({{ userLevel($user->level) }}) {!! userOnline($user) !!}<br>
+        <div class="mb-3">
+            @foreach($users as $user)
+                <div  class="text-truncate bg-light my-1">
+                    <div class="img">
+                        {!! userAvatar($user) !!}
+                        {!! userOnline($user) !!}
+                    </div>
 
-            @if (isAdmin('boss'))
-                <i class="fa fa-pencil-alt"></i> <a href="/admin/users/edit?user={{ $user->login }}">Изменить</a><br>
-            @endif
-        @endforeach
+                    <b>{!! profile($user) !!}</b>
+                    ({{ userLevel($user->level) }})<br>
 
-        <br>Всего в администрации: <b>{{ $users->count() }}</b><br><br>
+                    @if (isAdmin('boss'))
+                        <i class="fa fa-pencil-alt"></i> <a href="/admin/users/edit?user={{ $user->login }}">Изменить</a><br>
+                    @endif
+                </div>
+            @endforeach
+        </div>
+
+        Всего в администрации: <b>{{ $users->count() }}</b><br><br>
 
     @else
         {!! showError('Администрации еще нет!') !!}
