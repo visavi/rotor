@@ -12,6 +12,7 @@ public/uploads/photos/
 public/uploads/pictures/
 public/uploads/thumbnails/
 public/uploads/smiles/
+public/uploads/blogs/
 vendor
 composer.phar
 .env
