@@ -80,7 +80,29 @@ class BlogController extends BaseController
             abort(404, 'Данной статьи не существует!');
         }
 
-        $text = preg_split('|\[nextpage\](<br * /?>)*|', $blog['text'], -1, PREG_SPLIT_NO_EMPTY);
+        preg_match_all('/\[attach=(.*?)\]/', $blog->text, $attachId);
+
+        if (! empty($attachId[1])) {
+            $attachId[1] = array_unique($attachId[1]);
+
+            $images = File::query()
+                ->where('relate_type', Blog::class)
+               // ->where('relate_id', $blog->id)
+                ->whereIn('id', $attachId[1])
+                ->pluck('hash', 'id')
+                ->all();
+
+            if ($images) {
+                $replaces = [];
+                foreach ($images as $key => $image) {
+                    $replaces['[attach=' . $key . ']'] = '<img src="/uploads/blogs/' . $image . '">';
+                }
+
+                $blog->text = str_replace(array_keys($replaces), array_values($replaces), $blog->text);
+            }
+        }
+
+        $text = preg_split('|\[nextpage\](<br * /?>)*|', $blog->text, -1, PREG_SPLIT_NO_EMPTY);
 
         $total = count($text);
         $page = paginate(1, $total);

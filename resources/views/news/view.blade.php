@@ -25,7 +25,7 @@
 
     @if ($news->image)
         <div class="img">
-            <a href="/uploads/news/{{ $news->image }}">{!! resizeImage('/uploads/news/' . $news->image, ['size' => 100, 'alt' => $news->title]) !!}</a></div>
+            <a href="/uploads/news/{{ $news->image }}">{!! resizeImage('/uploads/news/' . $news->image, ['width' => 100, 'alt' => $news->title]) !!}</a></div>
     @endif
 
     <div>{!! bbCode($news->text) !!}</div>
