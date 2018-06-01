@@ -11,8 +11,9 @@ class OnlineController extends BaseController
      */
     public function index()
     {
-        $total = Online::query()->whereNotNull('user_id')->count();
-        $all   = Online::query()->count();
+        $total  = Online::query()->whereNotNull('user_id')->count();
+        $all    = Online::query()->count();
+        $guests = false;
 
         $page = paginate(setting('onlinelist'), $total);
 
@@ -24,7 +25,7 @@ class OnlineController extends BaseController
             ->limit($page->limit)
             ->get();
 
-        return view('pages/online', compact('online', 'page', 'all'));
+        return view('pages/online', compact('online', 'page', 'total', 'all', 'guests'));
     }
 
     /**
@@ -32,10 +33,11 @@ class OnlineController extends BaseController
      */
     public function all()
     {
-        $total      = Online::query()->count();
-        $registered = Online::query()->whereNotNull('user_id')->count();
+        $all    = Online::query()->count();
+        $total  = Online::query()->whereNotNull('user_id')->count();
+        $guests = true;
 
-        $page = paginate(setting('onlinelist'), $total);
+        $page = paginate(setting('onlinelist'), $all);
 
         $online = Online::with('user')
             ->orderBy('updated_at', 'desc')
@@ -43,6 +45,6 @@ class OnlineController extends BaseController
             ->limit($page->limit)
             ->get();
 
-        return view('pages/online_all', compact('online', 'page', 'registered'));
+        return view('pages/online', compact('online', 'page', 'total', 'all', 'guests'));
     }
 }

@@ -180,7 +180,6 @@ blockquote small:before {
   line-height: 48px;
   text-align: center;
   border-radius: 50%;
-  border: 2px solid #fff;
 }
 
 .avatar a {
