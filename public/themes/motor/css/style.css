@@ -127,7 +127,7 @@ form {
 .fdivider img {
     padding : 0 2px 0 2px;
 }
-#footer {
+.footer {
     clear : both;
     font-size : 0.8em;
     color : #666666;
@@ -135,22 +135,22 @@ form {
     padding: 20px 40px;
     height : 22px;
 }
-#footer #text {
+.footer .footer-text  {
     color : #666666;
     float : left;
     padding-top : 13px;
     width : 92%;
 }
-#footer #text a {
+.footer .footer-text a {
     color : #006699;
 }
-#footer #image {
+.footer .footer-image {
     float : right;
 }
-#linkfooter {
+.linkfooter {
     text-align : center;
 }
-#linkfooter a {
+.linkfooter a {
     font-size : 0.9em;
     color : #006699;
 }

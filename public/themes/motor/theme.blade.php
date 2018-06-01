@@ -66,11 +66,11 @@ header('Content-type:text/html; charset=utf-8');
                 </div>
             </div>
 
-            <div id="footer">
-                <div id="text">
+            <div class="footer">
+                <div class="footer-text">
                     &copy; Copyright 2005-{{ date('Y') }} {{ setting('title') }}
                 </div>
-                <div id="image">
+                <div class="footer-image">
                     <a href="/"><img src="/themes/motor/img/smalllogo2.gif" alt="smalllogo"></a>
                 </div>
             </div>

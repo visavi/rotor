@@ -26,7 +26,7 @@ $(function() {
 
     // Спойлер
     $('.spoiler-title').click(function(){
-        var spoiler = $(this).parent();
+        let spoiler = $(this).parent();
         spoiler.toggleClass('spoiler-open');
         spoiler.find('.spoiler-text:first').slideToggle();
     });
@@ -91,9 +91,9 @@ function postReply(el)
 {
     postJump();
 
-    var field  = $('.markItUpEditor');
-    var post   = $(el).closest('.post');
-    var author = post.find('.author').data('login');
+    let field  = $('.markItUpEditor');
+    let post   = $(el).closest('.post');
+    let author = post.find('.author').data('login');
 
     separ = field.val().length ? '\n' : '';
     field.focus().val(field.val() + separ + '@' + author + ', ');
@@ -106,14 +106,14 @@ function postQuote(el)
 {
     postJump();
 
-    var field  = $('.markItUpEditor');
-    var post   = $(el).closest('.post');
-    var top    = post.find('.b');
-    var author = post.find('.author').data('login');
-    var date   = top.find('small').text();
+    let field  = $('.markItUpEditor');
+    let post   = $(el).closest('.post');
+    let top    = post.find('.b');
+    let author = post.find('.author').data('login');
+    let date   = top.find('small').text();
 
-    var text    = post.find('.message').clone();
-    var message = text.find("blockquote").remove().end().text();
+    let text    = post.find('.message').clone();
+    let message = text.find("blockquote").remove().end().text();
 
     separ = field.val().length ? '\n' : '';
     field.focus().val(field.val() + separ + '[quote=@' + author + ' ' + date + ']' + $.trim(message) + '[/quote]\n');
@@ -146,7 +146,7 @@ function sendComplaint(el)
                     page: $(el).data('page'),
                     token: $(el).data('token')
                 },
-                dataType: 'json', type: 'POST', url: '/ajax/complaint',
+                dataType: 'json', type: 'post', url: '/ajax/complaint',
                 success: function(data) {
 
                     $(el).replaceWith('<i class="fa fa-bell-slash text-muted"></i>');
@@ -172,7 +172,7 @@ function bookmark(el)
 {
     $.ajax({
         data: {tid: $(el).data('tid'), token: $(el).data('token')},
-        dataType: 'json', type: 'POST', url: '/forums/bookmarks/perform',
+        dataType: 'json', type: 'post', url: '/forums/bookmarks/perform',
         success: function(data) {
 
             if (data.status === 'error'){
@@ -200,7 +200,7 @@ function deletePost(el)
 {
     $.ajax({
         data: {tid: $(el).data('tid'), token: $(el).data('token')},
-        dataType: 'json', type: 'POST', url: '/forums/active/delete',
+        dataType: 'json', type: 'post', url: '/forums/active/delete',
         success: function(data) {
 
             if (data.status === 'error'){
@@ -231,7 +231,7 @@ function deleteComment(el)
                     type: $(el).data('type'),
                     token: $(el).data('token')
                 },
-                dataType: 'json', type: 'POST', url: '/ajax/delcomment',
+                dataType: 'json', type: 'post', url: '/ajax/delcomment',
                 success: function(data) {
 
                     if (data.status === 'error'){
@@ -263,7 +263,7 @@ function changeRating(el)
             token: $(el).data('token')
         },
         dataType: 'json',
-        type: 'POST',
+        type: 'post',
         url: '/ajax/rating',
         success: function(data) {
             if (data.status === 'error') {
@@ -297,7 +297,7 @@ function deleteRating(el)
             id: $(el).data('id'),
             token: $(el).data('token')
         },
-        dataType: 'json', type: 'POST', url: '/ratings/delete',
+        dataType: 'json', type: 'post', url: '/ratings/delete',
         success: function(data) {
 
             if (data.status === 'error'){
@@ -323,7 +323,7 @@ function deleteSpam(el)
 {
     $.ajax({
         data: {id: $(el).data('id'), token: $(el).data('token')},
-        dataType: 'json', type: 'POST', url: '/admin/spam/delete',
+        dataType: 'json', type: 'post', url: '/admin/spam/delete',
         success: function(data) {
 
             if (data.status === 'error'){
@@ -349,7 +349,7 @@ function deleteWall(el)
 {
     $.ajax({
         data: {id: $(el).data('id'), login: $(el).data('login'), token: $(el).data('token')},
-        dataType: 'json', type: 'POST', url: '/walls/' + $(el).data('login') + '/delete',
+        dataType: 'json', type: 'post', url: '/walls/' + $(el).data('login') + '/delete',
         success: function(data) {
 
             if (data.status === 'error'){
@@ -379,7 +379,7 @@ function showVoteForm()
 
 function copyToClipboard(el)
 {
-    var form = $(el).closest('.input-group');
+    let form = $(el).closest('.input-group');
     form.find('input').select();
     document.execCommand("copy");
 
@@ -398,9 +398,64 @@ function submitImage(el)
         contentType: false,
         processData: false,
         dataType: 'json',
-        url: '/ajax/upload',
+        url: '/ajax/image/upload',
         success: function(data) {
-            $('.js-image').append($(data.image));
+
+            if (data.status === 'error'){
+                notify('error', data.message);
+                return false;
+            }
+
+            if (data.status === 'success'){
+
+                let template = $('.js-image-template').clone();
+
+                template.find('img')
+                    .attr('src', '/uploads/blogs/' + data.hash)
+                    .attr('data-id', data.id);
+
+                template.find('a')
+                    .attr('data-id', data.id);
+
+                $('.js-images').append(template.html());
+                pasteImage(template.find('img'));
+            }
+        }
+    });
+
+    return false;
+}
+
+/* Вставка изображения в поле */
+function pasteImage(el)
+{
+    let field  = $('.markItUpEditor');
+
+    separ = field.val().length ? '\n' : '';
+    field.focus().val(field.val() + separ + '[attach=' + $(el).data('id') + ']');
+}
+
+/* Удаление изображения */
+function deleteImage(el)
+{
+    $.ajax({
+        data: {
+            id: $(el).data('id'),
+            token: $(el).data('token')
+        },
+        dataType: 'json',
+        type: 'post',
+        url: '/ajax/image/delete',
+        success: function(data) {
+
+            if (data.status === 'error'){
+                notify('error', data.message);
+                return false;
+            }
+
+            if (data.status === 'success'){
+                $(el).closest('.js-image').hide('fast');
+            }
         }
     });
 

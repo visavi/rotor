@@ -1645,8 +1645,8 @@ function resizeImage($path, array $params = [])
         $params['class'] = 'img-fluid';
     }
 
-    if (empty($params['size'])) {
-        $params['size'] = setting('previewsize');
+    if (empty($params['width'])) {
+        $params['width'] = setting('previewsize');
     }
 
     $strParams = [];
@@ -1658,7 +1658,7 @@ function resizeImage($path, array $params = [])
 
     list($width, $height) = getimagesize(HOME . $path);
 
-    if ($width <= $params['size'] && $height <= $params['size']) {
+    if ($width <= $params['width'] && $height <= $params['width']) {
         return '<img src="' . $path . '"' . $strParams . '>';
     }
 
@@ -1668,7 +1668,7 @@ function resizeImage($path, array $params = [])
 
         $img = Image::make(HOME . $path);
 
-        $img->fit($params['size'], $params['size'], function ($constraint) {
+        $img->fit($params['width'], $params['width'], function ($constraint) {
             $constraint->upsize();
         });
 

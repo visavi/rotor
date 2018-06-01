@@ -131,7 +131,8 @@ $routes = [
     ['POST',     '/ajax/rating', 'AjaxController@rating'],
     ['POST',     '/ajax/vote', 'AjaxController@vote'],
     ['POST',     '/ajax/complaint', 'AjaxController@complaint'],
-    ['POST',     '/ajax/upload', 'AjaxController@uploadImage'],
+    ['POST',     '/ajax/image/upload', 'AjaxController@uploadImage'],
+    ['POST',     '/ajax/image/delete', 'AjaxController@deleteImage'],
 
     ['GET',      '/walls/[user:login]', 'WallController@index', 'walls'],
     ['POST',     '/walls/[user:login]/create', 'WallController@create'],

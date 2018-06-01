@@ -305,12 +305,52 @@ class AjaxController extends BaseController
                 'created_at'  => SITETIME,
             ]);
 
-            echo json_encode(['status' => 'success', 'image' => resizeImage('/uploads/blogs/' . $file->hash, ['size' => 100, 'data-id' => $file->id])]);
+            echo json_encode([
+                'status' => 'success',
+                'hash'   => $file->hash,
+                'id'     => $file->id,
+            ]);
         } else {
             echo json_encode([
-                'status' => 'error',
+                'status'  => 'error',
                 'message' => current($validator->getErrors())
             ]);
         }
+    }
+
+    /**
+     * Удаление фотографии
+     */
+    public function deleteImage()
+    {
+        $id    = int(Request::input('id'));
+        $token = check(Request::input('token'));
+
+        $validator = new Validator();
+        $validator->equal($token, $_SESSION['token'], 'Неверный идентификатор сессии, повторите действие!');
+
+        if ($validator->isValid()) {
+            $file = File::query()
+                ->where('relate_type', Blog::class)
+                ->where('id', $id)
+                ->where('user_id', getUser('id'))
+                ->first();
+
+            if ($file) {
+                deleteFile(UPLOADS . '/blogs/' . $file->hash);
+                $file->delete();
+            }
+
+            echo json_encode([
+                'status'  => 'success',
+            ]);
+        } else {
+            echo json_encode([
+                'status'  => 'error',
+                'message' => current($validator->getErrors())
+            ]);
+        }
+
+
     }
 }
