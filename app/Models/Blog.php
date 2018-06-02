@@ -84,4 +84,38 @@ class Blog extends BaseModel
 
         return round($minSize + (log(1 + $count) - $minCount) * ($diffSize / $diffCount));
     }
+
+    /**
+     * Обрабатывает вставки изображений в тексте
+     *
+     * @return string текст статьт
+     */
+    public function parseAttach()
+    {
+        preg_match_all('/\[attach=(.*?)\]/', $this->text, $attachId);
+
+        if (! empty($attachId[1])) {
+            $attached = array_unique($attachId[1]);
+
+            $images = File::query()
+                ->where('relate_type', self::class)
+                ->where('relate_id', $this->id)
+                ->whereIn('id', $attached)
+                ->pluck('hash', 'id')
+                ->all();
+
+            if ($images) {
+                $search  = [];
+                $replace = [];
+                foreach ($images as $key => $image) {
+                    $search[]  = '[attach=' . $key . ']';
+                    $replace[] = '<img class="img-fluid" src="/uploads/blogs/' . $image . '" alt="image">';
+                }
+
+                return str_replace($search, $replace, $this->text);
+            }
+        }
+
+        return $this->text;
+    }
 }

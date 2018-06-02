@@ -80,30 +80,7 @@ class BlogController extends BaseController
             abort(404, 'Данной статьи не существует!');
         }
 
-        preg_match_all('/\[attach=(.*?)\]/', $blog->text, $attachId);
-
-        if (! empty($attachId[1])) {
-            $attached = array_unique($attachId[1]);
-
-            $images = File::query()
-                ->where('relate_type', Blog::class)
-                ->where('relate_id', $blog->id)
-                ->whereIn('id', $attached)
-                ->pluck('hash', 'id')
-                ->all();
-
-            if ($images) {
-                $search  = [];
-                $replace = [];
-                foreach ($images as $key => $image) {
-                    $search[]  = '[attach=' . $key . ']';
-                    $replace[] = '<img class="img-fluid" src="/uploads/blogs/' . $image . '" alt="image">';
-                }
-
-                $blog->text = str_replace($search, $replace, $blog->text);
-            }
-        }
-
+        $blog->text = $blog->parseAttach();
         $text = preg_split('|\[nextpage\](<br * /?>)*|', $blog->text, -1, PREG_SPLIT_NO_EMPTY);
 
         $total = count($text);
@@ -491,7 +468,8 @@ class BlogController extends BaseController
             abort(404, 'Данной статьи не существует!');
         }
 
-        $blog['text'] = preg_replace('|\[nextpage\](<br * /?>)*|', '', $blog['text']);
+        $blog->text = $blog->parseAttach();
+        $blog->text = preg_replace('|\[nextpage\](<br * /?>)*|', '', $blog->text);
 
         return view('blogs/print', compact('blog'));
     }
@@ -763,9 +741,9 @@ class BlogController extends BaseController
      */
     public function search()
     {
-        $find    = check(Request::input('find'));
-        $type    = int(Request::input('type'));
-        $where   = int(Request::input('where'));
+        $find  = check(Request::input('find'));
+        $type  = int(Request::input('type'));
+        $where = int(Request::input('where'));
 
         if (! getUser()) {
             abort(403, 'Чтобы использовать поиск, необходимо авторизоваться');
@@ -773,120 +751,119 @@ class BlogController extends BaseController
 
         if (empty($find)) {
             return view('blogs/search');
-        } else {
+        }
 
-            if (! isUtf($find)) {
-                $find = winToUtf($find);
-            }
+        if (! isUtf($find)) {
+            $find = winToUtf($find);
+        }
 
-            if (utfStrlen($find) >= 3 && utfStrlen($find) <= 50) {
-                $findme = utfLower($find);
-                $findmewords = explode(" ", $findme);
+        if (utfStrlen($find) >= 3 && utfStrlen($find) <= 50) {
+            $findme = utfLower($find);
+            $findmewords = explode(" ", $findme);
 
-                $arrfind = [];
-                foreach ($findmewords as $valfind) {
-                    if (utfStrlen($valfind) >= 3) {
-                        $arrfind[] = $valfind;
-                    }
+            $arrfind = [];
+            foreach ($findmewords as $valfind) {
+                if (utfStrlen($valfind) >= 3) {
+                    $arrfind[] = $valfind;
                 }
-                array_splice($arrfind, 3);
-
-                    $types = (empty($type)) ? 'AND' : 'OR';
-                    $wheres = (empty($where)) ? 'title' : 'text';
-
-                    $blogfind = ($types . $wheres . $find);
-
-                    // ----------------------------- Поиск в названии -------------------------------//
-                    if ($wheres == 'title') {
-
-                        if ($type == 2) {
-                            $arrfind[0] = $findme;
-                        }
-                        $search1 = (isset($arrfind[1]) && $type != 2) ? $types . " `title` LIKE '%" . $arrfind[1] . "%'" : '';
-                        $search2 = (isset($arrfind[2]) && $type != 2) ? $types . " `title` LIKE '%" . $arrfind[2] . "%'" : '';
-
-                        if (empty($_SESSION['blogfindres']) || $blogfind != $_SESSION['blogfind']) {
-
-                            $result = Blog::query()
-                                ->select('id')
-                                ->whereRaw("title like '%".$arrfind[0]."%'".$search1.$search2)
-                                ->limit(500)
-                                ->pluck('id')
-                                ->all();
-
-                            $_SESSION['blogfind'] = $blogfind;
-                            $_SESSION['blogfindres'] = $result;
-                        }
-
-                        $total = count($_SESSION['blogfindres']);
-                        $page = paginate(setting('blogpost'), $total);
-
-                        if ($total > 0) {
-                            $blogs = Blog::query()
-                                ->select('blogs.*', 'categories.name')
-                                ->whereIn('blogs.id', $_SESSION['blogfindres'])
-                                ->join('categories', 'blogs.category_id', '=', 'categories.id')
-                                ->orderBy('created_at', 'desc')
-                                ->offset($page->offset)
-                                ->limit($page->limit)
-                                ->with('user')
-                                ->get();
-
-                            return view('blogs/search_title', compact('blogs', 'find', 'page'));
-                        } else {
-                            setInput(Request::all());
-                            setFlash('danger', 'По вашему запросу ничего не найдено!');
-                            redirect('/blogs/search');
-                        }
-                    }
-                    // --------------------------- Поиск в текте -------------------------------//
-                    if ($wheres == 'text') {
-
-                        if ($type == 2) {
-                            $arrfind[0] = $findme;
-                        }
-                        $search1 = (isset($arrfind[1]) && $type != 2) ? $types . " `text` LIKE '%" . $arrfind[1] . "%'" : '';
-                        $search2 = (isset($arrfind[2]) && $type != 2) ? $types . " `text` LIKE '%" . $arrfind[2] . "%'" : '';
-
-                        if (empty($_SESSION['blogfindres']) || $blogfind != $_SESSION['blogfind']) {
-
-                            $result = Blog::query()
-                                ->select('id')
-                                ->whereRaw("text like '%".$arrfind[0]."%'".$search1.$search2)
-                                ->limit(500)
-                                ->pluck('id')
-                                ->all();
-
-                            $_SESSION['blogfind'] = $blogfind;
-                            $_SESSION['blogfindres'] = $result;
-                        }
-
-                        $total = count($_SESSION['blogfindres']);
-                        $page = paginate(setting('blogpost'), $total);
-
-                        if ($total > 0) {
-                            $blogs = Blog::query()
-                                ->select('blogs.*', 'categories.name')
-                                ->whereIn('blogs.id', $_SESSION['blogfindres'])
-                                ->join('categories', 'blogs.category_id', '=', 'categories.id')
-                                ->orderBy('created_at', 'desc')
-                                ->offset($page->offset)
-                                ->limit($page->limit)
-                                ->with('user')
-                                ->get();
-
-                            return view('blogs/search_text', compact('blogs', 'find', 'page'));
-                        } else {
-                            setInput(Request::all());
-                            setFlash('danger', 'По вашему запросу ничего не найдено!');
-                            redirect('/blogs/search');
-                        }
-                    }
-            } else {
-                setInput(Request::all());
-                setFlash('danger', ['find' => 'Запрос должен содержать от 3 до 50 символов!']);
-                redirect('/blogs/search');
             }
+            array_splice($arrfind, 3);
+
+                $types = (empty($type)) ? 'AND' : 'OR';
+                $wheres = (empty($where)) ? 'title' : 'text';
+
+                $blogfind = ($types . $wheres . $find);
+
+                // ----------------------------- Поиск в названии -------------------------------//
+                if ($wheres === 'title') {
+
+                    if ($type === 2) {
+                        $arrfind[0] = $findme;
+                    }
+                    $search1 = (isset($arrfind[1]) && $type != 2) ? $types . " `title` LIKE '%" . $arrfind[1] . "%'" : '';
+                    $search2 = (isset($arrfind[2]) && $type != 2) ? $types . " `title` LIKE '%" . $arrfind[2] . "%'" : '';
+
+                    if (empty($_SESSION['blogfindres']) || $blogfind != $_SESSION['blogfind']) {
+
+                        $result = Blog::query()
+                            ->select('id')
+                            ->whereRaw("title like '%".$arrfind[0]."%'".$search1.$search2)
+                            ->limit(500)
+                            ->pluck('id')
+                            ->all();
+
+                        $_SESSION['blogfind'] = $blogfind;
+                        $_SESSION['blogfindres'] = $result;
+                    }
+
+                    $total = count($_SESSION['blogfindres']);
+                    $page = paginate(setting('blogpost'), $total);
+
+                    if ($total > 0) {
+                        $blogs = Blog::query()
+                            ->select('blogs.*', 'categories.name')
+                            ->whereIn('blogs.id', $_SESSION['blogfindres'])
+                            ->join('categories', 'blogs.category_id', '=', 'categories.id')
+                            ->orderBy('created_at', 'desc')
+                            ->offset($page->offset)
+                            ->limit($page->limit)
+                            ->with('user')
+                            ->get();
+
+                        return view('blogs/search_title', compact('blogs', 'find', 'page'));
+                    }
+
+                    setInput(Request::all());
+                    setFlash('danger', 'По вашему запросу ничего не найдено!');
+                    redirect('/blogs/search');
+                }
+                // --------------------------- Поиск в текте -------------------------------//
+                if ($wheres === 'text') {
+
+                    if ($type === 2) {
+                        $arrfind[0] = $findme;
+                    }
+                    $search1 = (isset($arrfind[1]) && $type != 2) ? $types . " `text` LIKE '%" . $arrfind[1] . "%'" : '';
+                    $search2 = (isset($arrfind[2]) && $type != 2) ? $types . " `text` LIKE '%" . $arrfind[2] . "%'" : '';
+
+                    if (empty($_SESSION['blogfindres']) || $blogfind != $_SESSION['blogfind']) {
+
+                        $result = Blog::query()
+                            ->select('id')
+                            ->whereRaw("text like '%".$arrfind[0]."%'".$search1.$search2)
+                            ->limit(500)
+                            ->pluck('id')
+                            ->all();
+
+                        $_SESSION['blogfind'] = $blogfind;
+                        $_SESSION['blogfindres'] = $result;
+                    }
+
+                    $total = count($_SESSION['blogfindres']);
+                    $page = paginate(setting('blogpost'), $total);
+
+                    if ($total > 0) {
+                        $blogs = Blog::query()
+                            ->select('blogs.*', 'categories.name')
+                            ->whereIn('blogs.id', $_SESSION['blogfindres'])
+                            ->join('categories', 'blogs.category_id', '=', 'categories.id')
+                            ->orderBy('created_at', 'desc')
+                            ->offset($page->offset)
+                            ->limit($page->limit)
+                            ->with('user')
+                            ->get();
+
+                        return view('blogs/search_text', compact('blogs', 'find', 'page'));
+                    }
+
+                    setInput(Request::all());
+                    setFlash('danger', 'По вашему запросу ничего не найдено!');
+                    redirect('/blogs/search');
+                }
+        } else {
+            setInput(Request::all());
+            setFlash('danger', ['find' => 'Запрос должен содержать от 3 до 50 символов!']);
+            redirect('/blogs/search');
         }
     }
 }

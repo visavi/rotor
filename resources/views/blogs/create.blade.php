@@ -77,7 +77,7 @@
             </div>
 
             <label class="btn btn-sm btn-secondary" for="image">
-                <input id="image" type="file" name="image" onchange="return submitImage(this);" data-token="{{ $_SESSION['token'] }}" hidden>
+                <input id="image" type="file" name="image" onchange="return submitImage(this);" data-id="0" data-token="{{ $_SESSION['token'] }}" hidden>
                 Прикрепить картинку&hellip;
             </label><br>
 

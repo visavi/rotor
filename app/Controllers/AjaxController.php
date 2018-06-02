@@ -269,16 +269,28 @@ class AjaxController extends BaseController
     }
 
     /**
-     * Загрузка фотографии
+     * Загрузка изображений
      */
     public function uploadImage()
     {
         $image = Request::file('image');
+        $id    = int(Request::input('id'));
         $token = check(Request::input('token'));
+
+        if ($id) {
+            $blog = Blog::query()->where('user_id', getUser('id'))->find($id);
+
+            if (! $blog) {
+                exit(json_encode([
+                    'status'  => 'error',
+                    'message' => 'Blog not found'
+                ]));
+            }
+        }
 
         $existFiles = File::query()
             ->where('relate_type', Blog::class)
-            ->where('relate_id', 0)
+            ->where('relate_id', $id)
             ->where('user_id', getUser('id'))
             ->count();
 
@@ -300,7 +312,7 @@ class AjaxController extends BaseController
             $fileName  = uploadFile($image, UPLOADS . '/blogs');
 
             $file = File::query()->create([
-                'relate_id'   => 0,
+                'relate_id'   => $id,
                 'relate_type' => Blog::class,
                 'hash'        => $fileName,
                 'name'        => $image->getClientOriginalName(),
@@ -323,7 +335,7 @@ class AjaxController extends BaseController
     }
 
     /**
-     * Удаление фотографии
+     * Удаление изображений
      */
     public function deleteImage()
     {
@@ -354,7 +366,5 @@ class AjaxController extends BaseController
                 'message' => current($validator->getErrors())
             ]);
         }
-
-
     }
 }

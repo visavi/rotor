@@ -25,7 +25,7 @@ $(function() {
     });
 
     // Спойлер
-    $('.spoiler-title').click(function(){
+    $('.spoiler-title').click(function() {
         let spoiler = $(this).parent();
         spoiler.toggleClass('spoiler-open');
         spoiler.find('.spoiler-text:first').slideToggle();
@@ -45,7 +45,7 @@ $(function() {
         onComplete : function() {
             $(this).colorbox.resize();
         }
-    }).colorbox({rel: function(){
+    }).colorbox({rel: function() {
             return $(this).data('group');
         },
         current: 'Фото {current} из {total}'
@@ -124,7 +124,7 @@ function postQuote(el)
 /* Выход с сайта */
 function logout(el)
 {
-    if (bootbox.confirm('Вы уверены, что хотите выйти?', function(result){
+    if (bootbox.confirm('Вы уверены, что хотите выйти?', function(result) {
             if (result) {
                 window.location = $(el).attr("href");
             }
@@ -136,7 +136,7 @@ function logout(el)
 /* Отправка жалобы на спам */
 function sendComplaint(el)
 {
-    bootbox.confirm('Вы действительно хотите отправить жалобу?', function(result){
+    bootbox.confirm('Вы действительно хотите отправить жалобу?', function(result) {
         if (result) {
 
             $.ajax({
@@ -151,12 +151,12 @@ function sendComplaint(el)
 
                     $(el).replaceWith('<i class="fa fa-bell-slash text-muted"></i>');
 
-                    if (data.status === 'error'){
+                    if (data.status === 'error') {
                         notify('error', data.message);
                         return false;
                     }
 
-                    if (data.status === 'success'){
+                    if (data.status === 'success') {
                         notify('success', 'Жалоба успешно отправлена!');
                     }
                 }
@@ -175,17 +175,17 @@ function bookmark(el)
         dataType: 'json', type: 'post', url: '/forums/bookmarks/perform',
         success: function(data) {
 
-            if (data.status === 'error'){
+            if (data.status === 'error') {
                 notify('error', data.message);
                 return false;
             }
 
-            if (data.status === 'added'){
+            if (data.status === 'added') {
                 notify('success', data.message);
                 $(el).text('Из закладок');
             }
 
-            if (data.status === 'deleted'){
+            if (data.status === 'deleted') {
                 notify('success', data.message);
                 $(el).text('В закладки');
             }
@@ -203,12 +203,12 @@ function deletePost(el)
         dataType: 'json', type: 'post', url: '/forums/active/delete',
         success: function(data) {
 
-            if (data.status === 'error'){
+            if (data.status === 'error') {
                 notify('error', data.message);
                 return false;
             }
 
-            if (data.status === 'success'){
+            if (data.status === 'success') {
                 notify('success', 'Сообщение успешно удалено');
 
                 $(el).closest('.post').hide('slow');
@@ -222,7 +222,7 @@ function deletePost(el)
 /* Удаление комментариев */
 function deleteComment(el)
 {
-    bootbox.confirm('Вы действительно хотите удалить комментарий?', function(result){
+    bootbox.confirm('Вы действительно хотите удалить комментарий?', function(result) {
         if (result) {
             $.ajax({
                 data: {
@@ -234,12 +234,12 @@ function deleteComment(el)
                 dataType: 'json', type: 'post', url: '/ajax/delcomment',
                 success: function(data) {
 
-                    if (data.status === 'error'){
+                    if (data.status === 'error') {
                         notify('error', data.message);
                         return false;
                     }
 
-                    if (data.status === 'success'){
+                    if (data.status === 'success') {
                         notify('success', 'Комментарий успешно удален!');
 
                         $(el).closest('.post').hide('slow');
@@ -300,12 +300,12 @@ function deleteRating(el)
         dataType: 'json', type: 'post', url: '/ratings/delete',
         success: function(data) {
 
-            if (data.status === 'error'){
+            if (data.status === 'error') {
                 notify('error', data.message);
                 return false;
             }
 
-            if (data.status === 'success'){
+            if (data.status === 'success') {
                 notify('success', 'Запись успешно удалена');
 
                 $(el).closest('.post').hide('slow');
@@ -326,12 +326,12 @@ function deleteSpam(el)
         dataType: 'json', type: 'post', url: '/admin/spam/delete',
         success: function(data) {
 
-            if (data.status === 'error'){
+            if (data.status === 'error') {
                 notify('error', data.message);
                 return false;
             }
 
-            if (data.status === 'success'){
+            if (data.status === 'success') {
                 notify('success', 'Запись успешно удалена');
 
                 $(el).closest('.post').hide('slow');
@@ -352,12 +352,12 @@ function deleteWall(el)
         dataType: 'json', type: 'post', url: '/walls/' + $(el).data('login') + '/delete',
         success: function(data) {
 
-            if (data.status === 'error'){
+            if (data.status === 'error') {
                 notify('error', data.message);
                 return false;
             }
 
-            if (data.status === 'success'){
+            if (data.status === 'success') {
                 notify('success', 'Запись успешно удалена');
 
                 $(el).closest('.post').hide('slow');
@@ -391,6 +391,7 @@ function submitImage(el)
 {
     let form = new FormData();
     form.append('image', el.files[0]);
+    form.append('id', $(el).data('id'));
     form.append('token', $(el).data('token'));
 
     $.ajax({
@@ -402,12 +403,12 @@ function submitImage(el)
         url: '/ajax/image/upload',
         success: function(data) {
 
-            if (data.status === 'error'){
+            if (data.status === 'error') {
                 notify('error', data.message);
                 return false;
             }
 
-            if (data.status === 'success'){
+            if (data.status === 'success') {
 
                 let template = $('.js-image-template').clone();
 
@@ -449,12 +450,12 @@ function deleteImage(el)
         url: '/ajax/image/delete',
         success: function(data) {
 
-            if (data.status === 'error'){
+            if (data.status === 'error') {
                 notify('error', data.message);
                 return false;
             }
 
-            if (data.status === 'success'){
+            if (data.status === 'success') {
                 $(el).closest('.js-image').hide('fast');
             }
         }
