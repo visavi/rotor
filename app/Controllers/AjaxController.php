@@ -276,20 +276,24 @@ class AjaxController extends BaseController
         $image = Request::file('image');
         $token = check(Request::input('token'));
 
+        $existFiles = File::query()
+            ->where('relate_type', Blog::class)
+            ->where('relate_id', 0)
+            ->where('user_id', getUser('id'))
+            ->count();
+
         $validator = new Validator();
-        //$validator->equal($token, $_SESSION['token'], 'Неверный идентификатор сессии, повторите действие!');
+        $validator
+            ->equal($token, $_SESSION['token'], 'Неверный идентификатор сессии, повторите действие!')
+            ->lt($existFiles, setting('maxfiles'), 'Разрешено загружать не более ' . setting('maxfiles') . ' файлов');
 
         if ($validator->isValid()) {
-            /*$validator
-                ->lte(count($files), setting('maxfiles'), ['files' => 'Разрешено загружать не более ' . setting('maxfiles') . ' файлов']);*/
-
             $rules = [
                 'maxsize'   => setting('filesize'),
                 'minweight' => 100,
             ];
 
             $validator->file($image, $rules, ['files' => 'Не удалось загрузить фотографию!']);
-
         }
 
         if ($validator->isValid()) {

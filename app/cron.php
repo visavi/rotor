@@ -12,6 +12,7 @@ $taskList->addTasks([
     (new App\Tasks\DeleteLogin())->setExpression('@weekly'),
     (new App\Tasks\DeletePending())->setExpression('@daily'),
     (new App\Tasks\DeleteLogs())->setExpression('@daily'),
+    (new App\Tasks\DeleteFiles())->setExpression('@daily'),
     (new App\Tasks\AddSubscribers())->setExpression('@hourly'),
     (new App\Tasks\UpdateCounter())->setExpression('* * * * *'),
     (new App\Tasks\SendMessages())->setExpression('* * * * *'),

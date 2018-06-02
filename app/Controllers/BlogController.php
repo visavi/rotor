@@ -83,22 +83,24 @@ class BlogController extends BaseController
         preg_match_all('/\[attach=(.*?)\]/', $blog->text, $attachId);
 
         if (! empty($attachId[1])) {
-            $attachId[1] = array_unique($attachId[1]);
+            $attached = array_unique($attachId[1]);
 
             $images = File::query()
                 ->where('relate_type', Blog::class)
-               // ->where('relate_id', $blog->id)
-                ->whereIn('id', $attachId[1])
+                ->where('relate_id', $blog->id)
+                ->whereIn('id', $attached)
                 ->pluck('hash', 'id')
                 ->all();
 
             if ($images) {
-                $replaces = [];
+                $search  = [];
+                $replace = [];
                 foreach ($images as $key => $image) {
-                    $replaces['[attach=' . $key . ']'] = '<img src="/uploads/blogs/' . $image . '">';
+                    $search[]  = '[attach=' . $key . ']';
+                    $replace[] = '<img class="img-fluid" src="/uploads/blogs/' . $image . '" alt="image">';
                 }
 
-                $blog->text = str_replace(array_keys($replaces), array_values($replaces), $blog->text);
+                $blog->text = str_replace($search, $replace, $blog->text);
             }
         }
 
@@ -107,7 +109,7 @@ class BlogController extends BaseController
         $total = count($text);
         $page = paginate(1, $total);
 
-        if ($page->current == 1) {
+        if ($page->current === 1) {
             $reader = Reader::query()
                 ->where('relate_type', Blog::class)
                 ->where('relate_id', $blog->id)
@@ -299,11 +301,16 @@ class BlogController extends BaseController
 
                 $category->increment('count_blogs');
 
-                $user = User::query()->where('id', getUser('id'));
-                $user->update([
+                getUser()->update([
                     'point' => DB::raw('point + 5'),
                     'money' => DB::raw('money + 100'),
                 ]);
+
+                File::query()
+                    ->where('relate_type', Blog::class)
+                    ->where('relate_id', 0)
+                    ->where('user_id', getUser('id'))
+                    ->update(['relate_id' => $article->id]);
 
                 setFlash('success', 'Статья успешно опубликована!');
                 redirect('/articles/'.$article->id);

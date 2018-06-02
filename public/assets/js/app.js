@@ -391,6 +391,7 @@ function submitImage(el)
 {
     let form = new FormData();
     form.append('image', el.files[0]);
+    form.append('token', $(el).data('token'));
 
     $.ajax({
         data: form,
