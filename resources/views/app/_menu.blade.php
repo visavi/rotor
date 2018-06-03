@@ -12,7 +12,7 @@
         @endif
     @endif
         <a href="/menu">Меню</a> &bull;
-        <a href="/logout" onclick="return logout(this)">Выход</a>
+        <a href="/logout?token={{ $_SESSION['token'] }}" onclick="return logout(this)">Выход</a>
 @else
     <i class="fa fa-lock fa-lg"></i> <a href="/login<?= returnUrl() ?>" rel="nofollow">Авторизация</a> &bull;
     <a href="/register" rel="nofollow">Регистрация</a>

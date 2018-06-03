@@ -31,8 +31,7 @@ header("Content-type:text/html; charset=utf-8");
             <a title="Загрузки" class="menu" href="/loads">Загрузки</a> |
             @if (getUser())
                 <a title="Настройки" class="menu" href="/menu">Меню</a> |
-                <a title="Выход" class="menu" href="/logout"
-                   onclick="return confirm('Вы действительно хотите выйти?')">Выход</a>
+                <a title="Выход" class="menu" href="/logout?token={{ $_SESSION['token'] }}" onclick="return logout(this)">Выход</a>
             @else
                 <a title="Страница авторизации" class="menu" href="/login">Вход</a> |
                 <a title="Страница регистрации" class="menu"

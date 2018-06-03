@@ -265,12 +265,17 @@ class UserController extends BaseController
      */
     public function logout()
     {
+        $token  = check(Request::input('token'));
         $domain = siteDomain(siteUrl());
 
-        $_SESSION = [];
-        setcookie('password', '', SITETIME - 3600, '/', $domain, null, true);
-        setcookie(session_name(), '', SITETIME - 3600, '/', '');
-        session_destroy();
+        if ($token === $_SESSION['token']) {
+            $_SESSION = [];
+            setcookie('password', '', SITETIME - 3600, '/', $domain, null, true);
+            setcookie(session_name(), '', SITETIME - 3600, '/', '');
+            session_destroy();
+        } else {
+            setFlash('danger', 'Ошибка! Неверный идентификатор сессии, повторите действие!');
+        }
 
         redirect('/');
     }

@@ -78,9 +78,9 @@ header("Content-type:text/html; charset=utf-8");
                         </li>
 
                         @if (!getUser())
-                        <li><a href="/register" ><span class="l"></span><span class="r"></span><span class="t">Регистрация</span></a></li>
-                         #else
-                          <li><a href="/logout" onclick="return confirm('Вы действительно хотите выйти?')"><span class="l"></span><span class="r"></span><span class="t">Выход</span></a></li>
+                            <li><a href="/register"><span class="l"></span><span class="r"></span><span class="t">Регистрация</span></a></li>
+                        @else
+                            <li><a href="/logout?token={{ $_SESSION['token'] }}" onclick="return logout(this)"><span class="l"></span><span class="r"></span><span class="t">Выход</span></a></li>
                         @endif
 
             </ul></div>

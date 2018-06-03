@@ -32,4 +32,4 @@
 <i class="far fa-circle fa-lg text-muted"></i> <a href="/transfers">Перевод денег</a><br>
 
 <div class="b"><i class="fa fa-sign-out-alt fa-lg text-muted"></i> <b>Выход</b></div>
-<i class="far fa-circle fa-lg text-muted"></i> <a href="/logout">Выход [Exit]</a><br>
+<i class="far fa-circle fa-lg text-muted"></i> <a href="/logout?token={{ $_SESSION['token'] }}">Выход [Exit]</a><br>
