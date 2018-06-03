@@ -72,7 +72,7 @@
             <div class="js-image-template d-none">
                 <span class="js-image">
                     <img src="#" width="100" onclick="return pasteImage(this);" alt="" class="img-fluid">
-                    <a href="#" onclick="return deleteImage(this);" data-id="" data-token="{{ $_SESSION['token'] }}"><i class="fas fa-times"></i></a>
+                    <a href="#" onclick="return deleteImage(this);" data-token="{{ $_SESSION['token'] }}"><i class="fas fa-times"></i></a>
                 </span>
             </div>
 
