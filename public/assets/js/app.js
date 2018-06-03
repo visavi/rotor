@@ -26,7 +26,7 @@ $(function() {
 
     // Спойлер
     $('.spoiler-title').click(function() {
-        let spoiler = $(this).parent();
+        var spoiler = $(this).parent();
         spoiler.toggleClass('spoiler-open');
         spoiler.find('.spoiler-text:first').slideToggle();
     });
@@ -91,9 +91,9 @@ function postReply(el)
 {
     postJump();
 
-    let field  = $('.markItUpEditor');
-    let post   = $(el).closest('.post');
-    let author = post.find('.author').data('login');
+    var field  = $('.markItUpEditor');
+    var post   = $(el).closest('.post');
+    var author = post.find('.author').data('login');
 
     separ = field.val().length ? '\n' : '';
     field.focus().val(field.val() + separ + '@' + author + ', ');
@@ -106,14 +106,14 @@ function postQuote(el)
 {
     postJump();
 
-    let field  = $('.markItUpEditor');
-    let post   = $(el).closest('.post');
-    let top    = post.find('.b');
-    let author = post.find('.author').data('login');
-    let date   = top.find('small').text();
+    var field  = $('.markItUpEditor');
+    var post   = $(el).closest('.post');
+    var top    = post.find('.b');
+    var author = post.find('.author').data('login');
+    var date   = top.find('small').text();
 
-    let text    = post.find('.message').clone();
-    let message = text.find("blockquote").remove().end().text();
+    var text    = post.find('.message').clone();
+    var message = text.find("blockquote").remove().end().text();
 
     separ = field.val().length ? '\n' : '';
     field.focus().val(field.val() + separ + '[quote=@' + author + ' ' + date + ']' + $.trim(message) + '[/quote]\n');
@@ -379,7 +379,7 @@ function showVoteForm()
 
 function copyToClipboard(el)
 {
-    let form = $(el).closest('.input-group');
+    var form = $(el).closest('.input-group');
     form.find('input').select();
     document.execCommand("copy");
 
@@ -389,7 +389,7 @@ function copyToClipboard(el)
 /* Загрузка изображения */
 function submitImage(el)
 {
-    let form = new FormData();
+    var form = new FormData();
     form.append('image', el.files[0]);
     form.append('id', $(el).data('id'));
     form.append('token', $(el).data('token'));
@@ -410,14 +410,14 @@ function submitImage(el)
 
             if (data.status === 'success') {
 
-                let template = $('.js-image-template').clone();
+                var template = $('.js-image-template').clone();
 
-                template.find('img')
-                    .attr('src', '/uploads/blogs/' + data.hash)
-                    .attr('data-id', data.id);
+                template.find('img').attr({
+                    'src'         : data.path,
+                    'data-source' : data.source
+                });
 
-                template.find('a')
-                    .attr('data-id', data.id);
+                template.find('a').attr('data-id', data.id);
 
                 $('.js-images').append(template.html());
                 pasteImage(template.find('img'));
@@ -431,10 +431,11 @@ function submitImage(el)
 /* Вставка изображения в поле */
 function pasteImage(el)
 {
-    let field  = $('.markItUpEditor');
-
-    separ = field.val().length ? '\n' : '';
-    field.focus().val(field.val() + separ + '[attach=' + $(el).data('id') + ']');
+    var field    = $('.markItUpEditor');
+    var caretPos = field[0].selectionStart;
+    var text     = field.val();
+    var paste    = '[img]' + $(el).data('source') + '[/img]';
+    field.focus().val(text.substring(0, caretPos) + paste + text.substring(caretPos));
 }
 
 /* Удаление изображения */

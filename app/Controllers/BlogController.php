@@ -80,7 +80,6 @@ class BlogController extends BaseController
             abort(404, 'Данной статьи не существует!');
         }
 
-        $blog->text = $blog->parseAttach();
         $text = preg_split('|\[nextpage\](<br * /?>)*|', $blog->text, -1, PREG_SPLIT_NO_EMPTY);
 
         $total = count($text);
@@ -108,10 +107,10 @@ class BlogController extends BaseController
         $end = ($total < $page->offset + 1) ? $total : $page->offset + 1;
 
         for ($i = $page->offset; $i < $end; $i++) {
-            $blog['text'] = bbCode($text[$i]) . '<br>';
+            $blog->text = bbCode($text[$i]) . '<br>';
         }
 
-        $tagsList = preg_split('/[\s]*[,][\s]*/', $blog['tags']);
+        $tagsList = preg_split('/[\s]*[,][\s]*/', $blog->tags);
 
         $tags = '';
         foreach ($tagsList as $key => $value) {
@@ -468,7 +467,6 @@ class BlogController extends BaseController
             abort(404, 'Данной статьи не существует!');
         }
 
-        $blog->text = $blog->parseAttach();
         $blog->text = preg_replace('|\[nextpage\](<br * /?>)*|', '', $blog->text);
 
         return view('blogs/print', compact('blog'));

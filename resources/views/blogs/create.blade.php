@@ -62,7 +62,7 @@
                 @if ($files->isNotEmpty())
                     @foreach ($files as $file)
                         <span class="js-image">
-                            {!! resizeImage('/uploads/blogs/' . $file->hash, ['width' => 100, 'data-id' => $file->id, 'onclick' => 'return pasteImage(this);']) !!}
+                            {!! resizeImage('/uploads/blogs/' . $file->hash, ['width' => 100, 'onclick' => 'return pasteImage(this);']) !!}
                             <a href="#" onclick="return deleteImage(this);" data-id="{{ $file->id }}" data-token="{{ $_SESSION['token'] }}"><i class="fas fa-times"></i></a>
                         </span>
                     @endforeach
@@ -71,7 +71,7 @@
 
             <div class="js-image-template d-none">
                 <span class="js-image">
-                    <img src="#" width="100" data-id="" onclick="return pasteImage(this);" alt="" class="img-fluid">
+                    <img src="#" width="100" onclick="return pasteImage(this);" alt="" class="img-fluid">
                     <a href="#" onclick="return deleteImage(this);" data-id="" data-token="{{ $_SESSION['token'] }}"><i class="fas fa-times"></i></a>
                 </span>
             </div>

@@ -230,9 +230,9 @@ class BlogController extends AdminController
             if ($validator->isValid()) {
 
                 $blog->update([
-                    'title'       => $title,
-                    'text'        => $text,
-                    'tags'        => $tags,
+                    'title' => $title,
+                    'text'  => $text,
+                    'tags'  => $tags,
                 ]);
 
                 setFlash('success', 'Статья успешно отредактирована!');
@@ -308,7 +308,7 @@ class BlogController extends AdminController
     }
 
     /**
-     * Удаление тем
+     * Удаление статьи
      */
     public function deleteBlog($id)
     {

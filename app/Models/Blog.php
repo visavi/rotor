@@ -86,36 +86,18 @@ class Blog extends BaseModel
     }
 
     /**
-     * Обрабатывает вставки изображений в тексте
+     * Удаление статьи и загруженных файлов
      *
-     * @return string текст статьт
+     * @return bool|null
+     * @throws \Exception
      */
-    public function parseAttach()
+    public function delete()
     {
-        preg_match_all('/\[attach=(.*?)\]/', $this->text, $attachId);
+        $this->files->each(function($file) {
+            deleteFile(UPLOADS . '/blogs/' . $file->hash);
+            $file->delete();
+        });
 
-        if (! empty($attachId[1])) {
-            $attached = array_unique($attachId[1]);
-
-            $images = File::query()
-                ->where('relate_type', self::class)
-                ->where('relate_id', $this->id)
-                ->whereIn('id', $attached)
-                ->pluck('hash', 'id')
-                ->all();
-
-            if ($images) {
-                $search  = [];
-                $replace = [];
-                foreach ($images as $key => $image) {
-                    $search[]  = '[attach=' . $key . ']';
-                    $replace[] = '<img class="img-fluid" src="/uploads/blogs/' . $image . '" alt="image">';
-                }
-
-                return str_replace($search, $replace, $this->text);
-            }
-        }
-
-        return $this->text;
+        return parent::delete();
     }
 }

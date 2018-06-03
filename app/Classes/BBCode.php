@@ -71,15 +71,15 @@ class BBCode
             'callback' => 'urlReplace',
         ],
         'link' => [
-            'pattern'  => '%\[url\]((\w+:)?//[^\s()<>\[\]]+)\[/url\]%s',
+            'pattern'  => '%\[url\]((\w+:/)?/[^\s()<>\[\]]+)\[/url\]%s',
             'callback' => 'urlReplace',
         ],
         'namedLink' => [
-            'pattern'  => '%\[url\=((\w+:)?//[^\s()<>\[\]]+)\](.*?)\[/url\]%s',
+            'pattern'  => '%\[url\=((\w+:/)?/[^\s()<>\[\]]+)\](.*?)\[/url\]%s',
             'callback' => 'urlReplace',
         ],
         'image' => [
-            'pattern' => '%\[img\]((\w+:)?//[^\s()<>\[\]]+\.(jpg|png|gif|jpeg))\[/img\]%s',
+            'pattern' => '%\[img\]((\w+:/)?/[^\s()<>\[\]]+\.(jpg|png|gif|jpeg))\[/img\]%s',
             'replace' => '<img src="$1" class="img-fluid" alt="image">',
         ],
         'orderedList' => [

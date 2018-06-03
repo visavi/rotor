@@ -47,7 +47,9 @@
 
     {!! $blog->text !!}
 
-    {!! pagination($page) !!}
+    @if ($page->total > 1)
+        {!! pagination($page) !!}
+    @endif
 
     Автор статьи: {!! profile($blog->user) !!} ({{ dateFixed($blog->created_at) }})<br>
 

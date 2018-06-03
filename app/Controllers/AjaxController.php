@@ -277,6 +277,10 @@ class AjaxController extends BaseController
         $id    = int(Request::input('id'));
         $token = check(Request::input('token'));
 
+        if (! getUser()) {
+            exit(json_encode(['status' => 'error', 'message' => 'Not authorized']));
+        }
+
         if ($id) {
             $blog = Blog::query()->where('user_id', getUser('id'))->find($id);
 
@@ -297,7 +301,7 @@ class AjaxController extends BaseController
         $validator = new Validator();
         $validator
             ->equal($token, $_SESSION['token'], 'Неверный идентификатор сессии, повторите действие!')
-            ->lt($existFiles, setting('maxfiles'), 'Разрешено загружать не более ' . setting('maxfiles') . ' файлов');
+            ->lt($existFiles, setting('maxfiles'), 'Разрешено загружать не более ' . setting('maxfiles') . ' файлов!');
 
         if ($validator->isValid()) {
             $rules = [
@@ -321,11 +325,15 @@ class AjaxController extends BaseController
                 'created_at'  => SITETIME,
             ]);
 
+            $image = resizeProcess('/uploads/blogs/' . $file->hash, ['size' => 100]);
+
             echo json_encode([
                 'status' => 'success',
-                'hash'   => $file->hash,
+                'path'   => $image['path'],
+                'source' => $image['source'],
                 'id'     => $file->id,
             ]);
+
         } else {
             echo json_encode([
                 'status'  => 'error',
@@ -342,20 +350,30 @@ class AjaxController extends BaseController
         $id    = int(Request::input('id'));
         $token = check(Request::input('token'));
 
+        if (! getUser()) {
+            exit(json_encode(['status' => 'error', 'message' => 'Not authorized']));
+        }
+
+        $file = File::query()
+            ->where('relate_type', Blog::class)
+            ->where('id', $id)
+            ->first();
+
+        if (! $file) {
+            exit(json_encode([
+                'status'  => 'error',
+                'message' => 'File not found'
+            ]));
+        }
+
         $validator = new Validator();
-        $validator->equal($token, $_SESSION['token'], 'Неверный идентификатор сессии, повторите действие!');
+        $validator->equal($token, $_SESSION['token'], 'Неверный идентификатор сессии, повторите действие!')
+            ->true($file->user_id === getUser('id') || isAdmin(), 'Удаление невозможно, вы не автор данного файла!');
 
         if ($validator->isValid()) {
-            $file = File::query()
-                ->where('relate_type', Blog::class)
-                ->where('id', $id)
-                ->where('user_id', getUser('id'))
-                ->first();
 
-            if ($file) {
-                deleteFile(UPLOADS . '/blogs/' . $file->hash);
-                $file->delete();
-            }
+            deleteFile(UPLOADS . '/blogs/' . $file->hash);
+            $file->delete();
 
             echo json_encode([
                 'status'  => 'success',

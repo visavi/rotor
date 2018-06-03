@@ -1625,18 +1625,14 @@ function uploadFile(UploadedFile $file, $path)
 }
 
 /**
- * Выполняет уменьшение и кеширование изображений
+ * Обрабатывает и уменьшает изображение
  *
  * @param  string $path   путь к изображению
  * @param  array  $params параметры изображения
- * @return string         уменьшенное изображение
+ * @return array          обработанные параметры
  */
-function resizeImage($path, array $params = [])
+function resizeProcess($path, array $params = [])
 {
-    if (! file_exists(HOME . $path)) {
-        return '<img src="/assets/img/images/photo.jpg" alt="nophoto">';
-    }
-
     if (empty($params['alt'])) {
         $params['alt'] = basename($path);
     }
@@ -1649,17 +1645,22 @@ function resizeImage($path, array $params = [])
         $params['width'] = setting('previewsize');
     }
 
-    $strParams = [];
-    foreach ($params as $key => $param) {
-        $strParams[] = $key . '="' . $param . '"';
+    if (! file_exists(HOME . $path)) {
+        return [
+            'path'   => '/assets/img/images/photo.jpg',
+            'source' => false,
+            'params' => $params,
+        ];
     }
-
-    $strParams = implode(' ', $strParams);
 
     list($width, $height) = getimagesize(HOME . $path);
 
     if ($width <= $params['width'] && $height <= $params['width']) {
-        return '<img src="' . $path . '"' . $strParams . '>';
+        return [
+            'path'   => $path,
+            'source' => $path,
+            'params' => $params,
+        ];
     }
 
     $thumb = ltrim(str_replace('/', '_', $path), '_');
@@ -1675,7 +1676,32 @@ function resizeImage($path, array $params = [])
         $img->save(UPLOADS . '/thumbnails/' . $thumb);
     }
 
-    return '<img src="/uploads/thumbnails/' . $thumb . '" ' . $strParams . '>';
+    return [
+        'path'   => '/uploads/thumbnails/' . $thumb,
+        'source' => $path,
+        'params' => $params,
+    ];
+}
+
+/**
+ * Выводит уменьшенное изображение
+ *
+ * @param  string $path   путь к изображению
+ * @param  array  $params параметры изображения
+ * @return string         уменьшенное изображение
+ */
+function resizeImage($path, array $params = [])
+{
+    $image = resizeProcess($path, $params);
+
+    $strParams = [];
+    foreach ($image['params'] as $key => $param) {
+        $strParams[] = $key . '="' . $param . '"';
+    }
+
+    $strParams = implode(' ', $strParams);
+
+    return '<img src="' . $image['path'] . '" data-source="' . $image['source'] . '" ' . $strParams . '>';
 }
 
 
