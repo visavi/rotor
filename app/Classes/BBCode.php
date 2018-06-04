@@ -143,7 +143,7 @@ class BBCode
      */
     public function clear($source)
     {
-        return $source = preg_replace('/\[(.*?)\]/', '', $source);
+        return preg_replace('/\[(.*?)\]/', '', $source);
     }
 
     /**
