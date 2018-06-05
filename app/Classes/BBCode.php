@@ -232,7 +232,7 @@ class BBCode
 
         return '<div class="spoiler">
                 <b class="spoiler-title">' . $title . '</b>
-                <div class="spoiler-text d-none">' . $text . '</div>
+                <div class="spoiler-text" style="display: none;">' . $text . '</div>
             </div>';
     }
 
@@ -245,7 +245,7 @@ class BBCode
     public function hiddenText($match)
     {
         return '<div class="hiding">
-                <span class="strong">Скрытый контент:</span> ' . (getUser() ? $match[1] : 'Для просмотра необходимо авторизоваться!') .
+                <span class="font-weight-bold">Скрытый контент:</span> ' . (getUser() ? $match[1] : 'Для просмотра необходимо авторизоваться!') .
             '</div>';
     }
 

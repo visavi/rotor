@@ -222,7 +222,7 @@ class BBCodeTest extends TestCase
         $parseText = bbCode($text);
         $parseText = trim(preg_replace('/\s\s+/', '', $parseText));
 
-        $this->assertEquals($parseText, '<div class="spoiler"><b class="spoiler-title">Развернуть для просмотра</b><div class="spoiler-text d-none">Спойлер</div></div>');
+        $this->assertEquals($parseText, '<div class="spoiler"><b class="spoiler-title">Развернуть для просмотра</b><div class="spoiler-text" style="display: none;">Спойлер</div></div>');
     }
 
     /**
@@ -234,7 +234,7 @@ class BBCodeTest extends TestCase
         $parseText = bbCode($text);
         $parseText = trim(preg_replace('/\s\s+/', '', $parseText));
 
-        $this->assertEquals($parseText, '<div class="spoiler"><b class="spoiler-title">Открыть</b><div class="spoiler-text d-none">Спойлер</div></div>');
+        $this->assertEquals($parseText, '<div class="spoiler"><b class="spoiler-title">Открыть</b><div class="spoiler-text" style="display: none;">Спойлер</div></div>');
     }
 
     /**
@@ -246,7 +246,7 @@ class BBCodeTest extends TestCase
         $parseText = bbCode($text);
         $parseText = trim(preg_replace('/\s\s+/', '', $parseText));
 
-        $this->assertEquals($parseText, '<div class="hiding"><span class="strong">Скрытый контент:</span> Для просмотра необходимо авторизоваться!</div>');
+        $this->assertEquals($parseText, '<div class="hiding"><span class="font-weight-bold">Скрытый контент:</span> Для просмотра необходимо авторизоваться!</div>');
     }
 
     /**
