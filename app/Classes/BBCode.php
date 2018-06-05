@@ -24,50 +24,50 @@ class BBCode
      */
     protected $parsers = [
         'code' => [
-            'pattern'  => '/\[code\](.*?)\[\/code\]/s',
+            'pattern'  => '/\[code\](.+?)\[\/code\]/s',
             'callback' => 'highlightCode'
         ],
         'bold' => [
-            'pattern' => '/\[b\](.*?)\[\/b\]/s',
+            'pattern' => '/\[b\](.+?)\[\/b\]/s',
             'replace' => '<strong>$1</strong>',
         ],
         'italic' => [
-            'pattern' => '/\[i\](.*?)\[\/i\]/s',
+            'pattern' => '/\[i\](.+?)\[\/i\]/s',
             'replace' => '<em>$1</em>',
         ],
         'underLine' => [
-            'pattern' => '/\[u\](.*?)\[\/u\]/s',
+            'pattern' => '/\[u\](.+?)\[\/u\]/s',
             'replace' => '<u>$1</u>',
         ],
         'lineThrough' => [
-            'pattern' => '/\[s\](.*?)\[\/s\]/s',
+            'pattern' => '/\[s\](.+?)\[\/s\]/s',
             'replace' => '<del>$1</del>',
         ],
         'fontSize' => [
-            'pattern'  => '/\[size\=([1-5])\](.*?)\[\/size\]/s',
+            'pattern'  => '/\[size\=([1-5])\](.+?)\[\/size\]/s',
             'callback' => 'fontSize',
         ],
         'fontColor' => [
-            'pattern' => '/\[color\=(#[A-f0-9]{6}|#[A-f0-9]{3})\](.*?)\[\/color\]/s',
+            'pattern' => '/\[color\=(#[A-f0-9]{6}|#[A-f0-9]{3})\](.+?)\[\/color\]/s',
             'replace' => '<span style="color:$1">$2</span>',
             'iterate' => 5,
         ],
         'center' => [
-            'pattern' => '/\[center\](.*?)\[\/center\]/s',
+            'pattern' => '/\[center\](.+?)\[\/center\]/s',
             'replace' => '<div style="text-align:center;">$1</div>',
         ],
         'quote' => [
-            'pattern' => '/\[quote\](.*?)\[\/quote\]/s',
+            'pattern' => '/\[quote\](.+?)\[\/quote\]/s',
             'replace' => '<blockquote>$1</blockquote>',
             'iterate' => 3,
         ],
         'namedQuote' => [
-            'pattern' => '/\[quote\=(.*?)\](.*?)\[\/quote\]/s',
+            'pattern' => '/\[quote\=(.+?)\](.+?)\[\/quote\]/s',
             'replace' => '<blockquote>$2<small>$1</small></blockquote>',
             'iterate' => 3,
         ],
         'http' => [
-            'pattern'  => '%\b(((?<!(=|]))\w+:)//[^\s()<>\[\]]+)%s',
+            'pattern'  => '%\b(((?<!(=|]))\w+://)[^\s()<>\[\]]+)%s',
             'callback' => 'urlReplace',
         ],
         'link' => [
@@ -75,7 +75,7 @@ class BBCode
             'callback' => 'urlReplace',
         ],
         'namedLink' => [
-            'pattern'  => '%\[url\=((\w+://|//|/)[^\s()<>\[\]]+)\](.*?)\[/url\]%s',
+            'pattern'  => '%\[url\=((\w+://|//|/)[^\s()<>\[\]]+)\](.+?)\[/url\]%s',
             'callback' => 'urlReplace',
         ],
         'image' => [
@@ -83,25 +83,25 @@ class BBCode
             'replace' => '<img src="$1" class="img-fluid" alt="image">',
         ],
         'orderedList' => [
-            'pattern'  => '/\[list=1\](.*?)\[\/list\]/s',
+            'pattern'  => '/\[list=1\](.+?)\[\/list\]/s',
             'callback' => 'listReplace',
         ],
         'unorderedList' => [
-            'pattern'  => '/\[list\](.*?)\[\/list\]/s',
+            'pattern'  => '/\[list\](.+?)\[\/list\]/s',
             'callback' => 'listReplace',
         ],
         'spoiler' => [
-            'pattern'  => '/\[spoiler\](.*?)\[\/spoiler\]/s',
+            'pattern'  => '/\[spoiler\](.+?)\[\/spoiler\]/s',
             'callback' => 'spoilerText',
             'iterate'  => 1,
         ],
         'shortSpoiler' => [
-            'pattern'  => '/\[spoiler\=(.*?)\](.*?)\[\/spoiler\]/s',
+            'pattern'  => '/\[spoiler\=(.+?)\](.+?)\[\/spoiler\]/s',
             'callback' => 'spoilerText',
             'iterate'  => 1,
         ],
         'hide' => [
-            'pattern'  => '/\[hide\](.*?)\[\/hide\]/s',
+            'pattern'  => '/\[hide\](.+?)\[\/hide\]/s',
             'callback' => 'hiddenText',
         ],
         'youtube' => [
@@ -122,7 +122,7 @@ class BBCode
 
         foreach ($this->parsers as $parser) {
 
-            $iterate = isset($parser['iterate']) ? $parser['iterate'] : 1;
+            $iterate = $parser['iterate'] ?? 1;
 
             for ($i = 0; $i < $iterate; $i++) {
                 if (isset($parser['callback'])) {
@@ -227,12 +227,12 @@ class BBCode
      */
     public function spoilerText($match)
     {
-        $title = (empty($match[1]) || !isset($match[2])) ? 'Развернуть для просмотра' : $match[1];
-        $text = (empty($match[2])) ? !isset($match[2]) ? $match[1] : 'Текст отсутствует' : $match[2];
+        $title = empty($match[2]) ? 'Развернуть для просмотра' : $match[1];
+        $text  = empty($match[2]) ? $match[1] : $match[2];
 
         return '<div class="spoiler">
                 <b class="spoiler-title">' . $title . '</b>
-                <div class="spoiler-text" style="display: none;">' . $text . '</div>
+                <div class="spoiler-text" class="d-none">' . $text . '</div>
             </div>';
     }
 
