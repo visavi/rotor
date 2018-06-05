@@ -50,7 +50,7 @@
     <i class="fa fa-quote-right"></i> [quote]Цитата[/quote]{!! bbCode('[quote]Для вставки цитат[/quote]') !!}<br>
     <i class="fa fa-quote-right"></i> [quote=Автор цитаты]Цитата[/quote]{!! bbCode('[quote=Автор цитаты]Для вставки цитат[/quote]') !!}<br>
 
-    <i class="fa fa-code"></i> [code]Форматированный код[/code]{!! bbCode('[code]&lt;? echo"Для вставки php-кода"; ?&gt;[/code]') !!}<br>
+    <i class="fa fa-code"></i> [code]Форматированный код[/code]{!! bbCode('[code]&lt;?= "Для вставки php-кода" ?&gt;[/code]') !!}<br>
     <i class="fa fa-exchange-alt"></i> [nextpage] - Служит для переноса текста на новую страницу (Работает только в блогах)<br>
     <i class="fa fa-cut"></i> [cut] - Служит для обрезки текста (Работает только в новостях)<br><br>
 
