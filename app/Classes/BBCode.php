@@ -165,7 +165,7 @@ class BBCode
             }
         }
 
-        return '<a href="'.$match[1].'"'.$target.'>'.rawurldecode($name).'</a>';
+        return '<a href="' . $match[1] . '"' . $target . '>' . rawurldecode($name) . '</a>';
     }
 
     /**
@@ -184,12 +184,12 @@ class BBCode
 
         $list = [];
         foreach($li as $l){
-            $list[] = '<li>'.$l.'</li>';
+            $list[] = '<li>' . $l . '</li>';
         }
 
         $tag  = strpos($match[0], '[list]') === false ? 'ol' : 'ul';
 
-        return '<'.$tag.'>'.implode($list).'</'.$tag.'>';
+        return '<' . $tag . '>' . implode($list) . '</' . $tag . '>';
     }
 
     /**
@@ -202,7 +202,7 @@ class BBCode
     {
         $sizes = [1 => 'x-small', 2 => 'small', 3 => 'medium', 4 => 'large', 5 => 'x-large'];
 
-        return '<span style="font-size:'.$sizes[$match[1]].'">'.$match[2].'</span>';
+        return '<span style="font-size:' . $sizes[$match[1]] . '">' . $match[2] . '</span>';
     }
 
     /**
@@ -216,7 +216,7 @@ class BBCode
         //Чтобы bb-код и смайлы не работали внутри тега [code]
         $match[1] = strtr($match[1], [':' => '&#58;', '[' => '&#91;']);
 
-        return '<pre class="prettyprint linenums pre-scrollable">'.$match[1].'</pre>';
+        return '<pre class="prettyprint linenums pre-scrollable">' . $match[1] . '</pre>';
     }
 
     /**
@@ -231,8 +231,8 @@ class BBCode
         $text = (empty($match[2])) ? !isset($match[2]) ? $match[1] : 'Текст отсутствует' : $match[2];
 
         return '<div class="spoiler">
-                <b class="spoiler-title">'.$title.'</b>
-                <div class="spoiler-text" style="display: none;">'.$text.'</div>
+                <b class="spoiler-title">' . $title . '</b>
+                <div class="spoiler-text" style="display: none;">' . $text . '</div>
             </div>';
     }
 
@@ -247,7 +247,7 @@ class BBCode
         if (empty($match[1])) $match[1] = 'Текст отсутствует';
 
         return '<div class="hiding">
-                <span class="strong">Скрытый контент:</span> '.(getUser() ? $match[1] : 'Для просмотра необходимо авторизоваться!').
+                <span class="strong">Скрытый контент:</span> ' . (getUser() ? $match[1] : 'Для просмотра необходимо авторизоваться!') .
                 '</div>';
     }
 
@@ -263,7 +263,7 @@ class BBCode
         static $listSmiles;
 
         if (empty($listSmiles)) {
-            if (! file_exists(STORAGE.'/temp/smiles.dat')) {
+            if (! file_exists(STORAGE . '/temp/smiles.dat')) {
 
                 $smiles = Smile::query()
                     ->select('code', 'name')
@@ -276,20 +276,20 @@ class BBCode
 
                 $smilesName = array_map(
                     function($smile) {
-                        return str_replace($smile, '<img src="/uploads/smiles/'.$smile.'" alt="'.$smile.'">', $smile);
+                        return str_replace($smile, '<img src="/uploads/smiles/' . $smile . '" alt="' . $smile . '">', $smile);
                     }, $smilesName);
 
-                file_put_contents(STORAGE.'/temp/smiles.dat', json_encode(['codes' => $smilesCode, 'names' => $smilesName]));
+                file_put_contents(STORAGE . '/temp/smiles.dat', json_encode(['codes' => $smilesCode, 'names' => $smilesName]));
             }
 
-            $listSmiles = json_decode(file_get_contents(STORAGE.'/temp/smiles.dat'));
+            $listSmiles = json_decode(file_get_contents(STORAGE . '/temp/smiles.dat'));
         }
 
         return str_replace($listSmiles->codes, $listSmiles->names, $source);
     }
 
     /**
-     * Добавляет или переопределяет парсер.
+     * Добавляет или переопределяет парсер
      *
      * @param  string $name    Parser name
      * @param  string $pattern Pattern
