@@ -36,7 +36,7 @@
     <i class="fa fa-link"></i> Для ссылки с названием: [url=http://адрес_cсылки] Название [/url]<br>
     <i class="fa fa-link"></i> Короткий способ: [url] http://адрес_cсылки [/url]<br><br>
 
-    <i class="fa fa-image"></i> [img]Ссылка на изображение[/img]<br>{!! bbCode('[img]'.siteUrl().'/assets/img/images/logo.png[/img]') !!}<br>
+    <i class="fa fa-image"></i> [img]Ссылка на изображение[/img]<br>{!! bbCode('[img]/assets/img/images/logo.png[/img]') !!}<br>
     <i class="fab fa-youtube"></i> [youtube]Ссылка на видео с youtube[/youtube]<br>{!! bbCode('[youtube]https://www.youtube.com/watch?v=yf_YWiqqv34[/youtube]') !!}<br>
 
     <i class="fa fa-align-center"></i> [center]Текст по центру[/center]{!! bbCode('[center]Текст по центру[/center]') !!}<br>
