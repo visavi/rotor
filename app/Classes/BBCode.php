@@ -71,15 +71,15 @@ class BBCode
             'callback' => 'urlReplace',
         ],
         'link' => [
-            'pattern'  => '%\[url\]((\w+:)?[//|/][^\s()<>\[\]]+)\[/url\]%s',
+            'pattern'  => '%\[url\]((\w+://|//|/)[^\s()<>\[\]]+)\[/url\]%s',
             'callback' => 'urlReplace',
         ],
         'namedLink' => [
-            'pattern'  => '%\[url\=((\w+:)?[//|/][^\s()<>\[\]]+)\](.*?)\[/url\]%s',
+            'pattern'  => '%\[url\=((\w+://|//|/)[^\s()<>\[\]]+)\](.*?)\[/url\]%s',
             'callback' => 'urlReplace',
         ],
         'image' => [
-            'pattern' => '%\[img\]((\w+:)?[//|/][^\s()<>\[\]]+\.(jpg|png|gif|jpeg))\[/img\]%s',
+            'pattern' => '%\[img\]((\w+://|//|/)[^\s()<>\[\]]+\.(jpg|png|gif|jpeg))\[/img\]%s',
             'replace' => '<img src="$1" class="img-fluid" alt="image">',
         ],
         'orderedList' => [
@@ -157,11 +157,11 @@ class BBCode
         $name = $match[3] ?? $match[1];
 
         $target = '';
-        if (strpos($match[1], $_SERVER['SERVER_NAME']) === false) {
-            $target = ' target="_blank" rel="nofollow"';
-        } else {
-            if (!empty($match[2])) {
-                $match[1] = str_replace($match[2], '', $match[1]);
+        if ($match[2] !== '/') {
+            if (strpos($match[1], $_SERVER['SERVER_NAME']) === false) {
+                $target = ' target="_blank" rel="nofollow"';
+            } else {
+                $match[1] = '//' . ltrim($match[1], $match[2]);
             }
         }
 

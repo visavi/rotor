@@ -63,9 +63,14 @@
 
     @if ($users->isNotEmpty())
         @foreach ($users as $user)
-            <hr>
-            <div>
-                {!! $user->getGender() !!} <b><a href="/admin/users/edit?user={{ $user->login }}">{{ $user->login }}</a></b> (email: {{ $user->email }})<br>
+            <div  class="text-truncate bg-light my-1">
+                <div class="img">
+                    {!! userAvatar($user) !!}
+                    {!! userOnline($user) !!}
+                </div>
+
+                <b><a href="/admin/users/edit?user={{ $user->login }}">{{ $user->login }}</a></b>
+                (email: {{ $user->email }})<br>
                 Зарегистрирован: {{ dateFixed($user->created_at, 'd.m.Y') }}
             </div>
         @endforeach

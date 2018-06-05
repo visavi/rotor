@@ -27,7 +27,11 @@
                     </div>
 
                     <b><a href="/admin/users/edit?user={{ $user->login }}">{{ $user->login }}</a></b>
-                    ({{ plural($user->point, setting('scorename')) }})
+                    ({{ plural($user->point, setting('scorename')) }})<br>
+
+                    @if ($user->name )
+                        Имя: {{ $user->name }}
+                    @endif
                 </div>
             @endforeach
         </div>
