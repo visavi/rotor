@@ -19,11 +19,9 @@
 
     @if ($downs->isNotEmpty())
         @foreach ($downs as $data)
-            <?php $rating = $data->rated ? round($data->rating / $data->rated, 1) : 0; ?>
-
             <div class="b">
                 <i class="fa fa-file"></i>
-                <b><a href="/downs/{{ $data->id }}">{{ $data->title }}</a></b> ({{ $rating }})
+                <b><a href="/downs/{{ $data->id }}">{{ $data->title }}</a></b> ({{ $data->count_comments }})
 
 
                 <div class="float-right">

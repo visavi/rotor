@@ -1418,8 +1418,7 @@ function recentFiles($show = 5)
 
     if ($files) {
         foreach ($files as $file) {
-            $rating = $file->rated ? round($file->rating / $file->rated, 1) : 0;
-            echo '<i class="far fa-circle fa-lg text-muted"></i>  <a href="/downs/' . $file->id . '">' . $file->title . '</a> (' . $rating . ')<br>';
+            echo '<i class="far fa-circle fa-lg text-muted"></i>  <a href="/downs/' . $file->id . '">' . $file->title . '</a> (' . $file->count_comments . ')<br>';
         }
     }
 }

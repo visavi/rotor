@@ -29,10 +29,11 @@
 
             <div class="b">
                 <i class="fa fa-file"></i>
-                <b><a href="/downs/{{ $down->id }}">{{ $down->title }}</a></b> ({{ $rating }})
+                <b><a href="/downs/{{ $down->id }}">{{ $down->title }}</a></b> ({{ $down->count_comments }})
             </div>
             <div>
                 Категория: <a href="/loads/{{ $down->category->id }}">{{ $down->category->name }}</a><br>
+                Рейтинг: {{ $rating }}<br>
                 Скачиваний: {{ $down->loads }}<br>
                 Автор: {!! profile($down->user) !!} ({{ dateFixed($down->created_at) }})
             </div>

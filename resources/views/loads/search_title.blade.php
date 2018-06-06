@@ -23,11 +23,12 @@
 
         <div class="b">
             <i class="fa fa-file"></i>
-            <b><a href="/downs/{{ $data->id }}">{{ $data->title }}</a></b> ({{ $rating }})
+            <b><a href="/downs/{{ $data->id }}">{{ $data->title }}</a></b> ({{ $data->count_comments }})
         </div>
 
         <div>
             Категория: <a href="/loads/{{ $data->category->id }}">{{ $data->category->name }}</a><br>
+            Рейтинг: {{ $rating }}<br>
             Скачиваний: {{ $data->loads }}<br>
             Добавил: {!! profile($data->user) !!} ({{ dateFixed($data->created_at) }})
         </div>

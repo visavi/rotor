@@ -63,10 +63,11 @@
 
             <div class="b">
                 <i class="fa fa-file"></i>
-                <b><a href="/downs/{{ $data->id }}">{{ $data->title }}</a></b> ({{ $rating }})
+                <b><a href="/downs/{{ $data->id }}">{{ $data->title }}</a></b> ({{ $data->count_comments }})
             </div>
 
             <div>
+                Рейтинг: {{ $rating }}<br>
                 Скачиваний: {{ $data->loads }}<br>
                 <a href="/downs/comments/{{ $data->id }}">Комментарии</a> ({{ $data->count_comments }})
                 <a href="/downs/end/{{ $data->id }}">&raquo;</a>
