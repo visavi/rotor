@@ -38,7 +38,7 @@
                     {!! userStatus($data->recipient) !!}
                 </div>
 
-                <div>{!! bbCode($data->text) !!}<br>
+                <div class="message">{!! bbCode($data->text) !!}<br>
 
                     <input type="checkbox" name="del[]" value="{{ $data->id }}">
                     <a href="/messages/send?user={{ $data->recipient->login }}">Написать еще</a> /

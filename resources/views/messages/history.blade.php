@@ -33,7 +33,7 @@
                 <b>{!! profile($data->author) !!}</b>
                 ({{  dateFixed($data->created_at) }})
             </div>
-            <div>{!! bbCode($data->text) !!}</div>
+            <div class="message">{!! bbCode($data->text) !!}</div>
         @endforeach
 
         {!! pagination($page) !!}

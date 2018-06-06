@@ -27,6 +27,22 @@ class BBCode
             'pattern'  => '/\[code\](.+?)\[\/code\]/s',
             'callback' => 'highlightCode'
         ],
+        'http' => [
+            'pattern'  => '%\b(((?<!(=|]))\w+://)[^\s()<>\[\]]+)%s',
+            'callback' => 'urlReplace',
+        ],
+        'link' => [
+            'pattern'  => '%\[url\]((\w+://|//|/)[^\s()<>\[\]]+)\[/url\]%s',
+            'callback' => 'urlReplace',
+        ],
+        'namedLink' => [
+            'pattern'  => '%\[url\=((\w+://|//|/)[^\s()<>\[\]]+)\](.+?)\[/url\]%s',
+            'callback' => 'urlReplace',
+        ],
+        'image' => [
+            'pattern' => '%\[img\]((\w+://|//|/)[^\s()<>\[\]]+\.(jpg|png|gif|jpeg))\[/img\]%s',
+            'replace' => '<img src="$1" class="img-fluid" alt="image">',
+        ],
         'bold' => [
             'pattern' => '/\[b\](.+?)\[\/b\]/s',
             'replace' => '<strong>$1</strong>',
@@ -65,22 +81,6 @@ class BBCode
             'pattern' => '/\[quote\=(.+?)\](.+?)\[\/quote\]/s',
             'replace' => '<blockquote>$2<small>$1</small></blockquote>',
             'iterate' => 3,
-        ],
-        'http' => [
-            'pattern'  => '%\b(((?<!(=|]))\w+://)[^\s()<>\[\]]+)%s',
-            'callback' => 'urlReplace',
-        ],
-        'link' => [
-            'pattern'  => '%\[url\]((\w+://|//|/)[^\s()<>\[\]]+)\[/url\]%s',
-            'callback' => 'urlReplace',
-        ],
-        'namedLink' => [
-            'pattern'  => '%\[url\=((\w+://|//|/)[^\s()<>\[\]]+)\](.+?)\[/url\]%s',
-            'callback' => 'urlReplace',
-        ],
-        'image' => [
-            'pattern' => '%\[img\]((\w+://|//|/)[^\s()<>\[\]]+\.(jpg|png|gif|jpeg))\[/img\]%s',
-            'replace' => '<img src="$1" class="img-fluid" alt="image">',
         ],
         'orderedList' => [
             'pattern'  => '/\[list=1\](.+?)\[\/list\]/s',

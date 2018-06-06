@@ -7,8 +7,8 @@ body
     color: #1A2E33;
     margin: 0 auto;
     padding: 0;
-	background: #FFFFFF url(../img/Page-BgSimpleGradient.jpg) repeat-x;
-	width: 100%;
+    background: #FFFFFF url(../img/Page-BgSimpleGradient.jpg) repeat-x;
+    width: 100%;
     height: 933px;
 }
 
@@ -48,10 +48,10 @@ body
 
 #art-main
 {
-	position: relative;
-	width: 100%;
-	left: 0;
-	top: 0;
+    position: relative;
+    width: 100%;
+    left: 0;
+    top: 0;
 }
 
 
@@ -81,122 +81,122 @@ table.position
 
 .art-Sheet
 {
-	position:relative;
-	z-index:0;
-	margin:0 auto;
-	width: 1000px;
-	min-width:61px;
-	min-height:61px;
+    position:relative;
+    z-index:0;
+    margin:0 auto;
+    width: 1000px;
+    min-width:61px;
+    min-height:61px;
 }
 
 .art-Sheet-body
 {
-	position: relative;
-	z-index:1;
-	padding: 9px;
+    position: relative;
+    z-index:1;
+    padding: 9px;
 }
 
 .art-Sheet-tr, .art-Sheet-tl, .art-Sheet-br, .art-Sheet-bl, .art-Sheet-tc, .art-Sheet-bc,.art-Sheet-cr, .art-Sheet-cl
 {
-	position:absolute;
-	z-index:-1;
+    position:absolute;
+    z-index:-1;
 }
 
 .art-Sheet-tr, .art-Sheet-tl, .art-Sheet-br, .art-Sheet-bl
 {
-	width: 88px;
-	height: 88px;
-	background-image: url(../img/Sheet-s.png);
+    width: 88px;
+    height: 88px;
+    background-image: url(../img/Sheet-s.png);
 }
 
 .art-Sheet-tl
 {
-	top:0;
-	left:0;
-	clip: rect(auto, 44px, 44px, auto);
+    top:0;
+    left:0;
+    clip: rect(auto, 44px, 44px, auto);
 }
 
 .art-Sheet-tr
 {
-	top: 0;
-	right: 0;
-	clip: rect(auto, 10000px, 44px, 44px);
+    top: 0;
+    right: 0;
+    clip: rect(auto, 10000px, 44px, 44px);
 }
 
 .art-Sheet-bl
 {
-	bottom: 0;
-	left: 0;
-	clip: rect(44px, 44px, 10000px, auto);
+    bottom: 0;
+    left: 0;
+    clip: rect(44px, 44px, 10000px, auto);
 }
 
 .art-Sheet-br
 {
-	bottom: 0;
-	right: 0;
-	clip: rect(44px, 10000px, 10000px, 44px);
+    bottom: 0;
+    right: 0;
+    clip: rect(44px, 10000px, 10000px, 44px);
 }
 
 .art-Sheet-tc, .art-Sheet-bc
 {
-	left: 44px;
-	right: 44px;
-	height: 88px;
-	background-image: url(../img/Sheet-h.png);
+    left: 44px;
+    right: 44px;
+    height: 88px;
+    background-image: url(../img/Sheet-h.png);
 }
 
 .art-Sheet-tc
 {
-	top: 0;
-	clip: rect(auto, 10000px, 44px, auto);
+    top: 0;
+    clip: rect(auto, 10000px, 44px, auto);
 }
 
 .art-Sheet-bc
 {
-	bottom: 0;
-	clip: rect(44px, 10000px, 10000px, auto);
+    bottom: 0;
+    clip: rect(44px, 10000px, 10000px, auto);
 }
 
 .art-Sheet-cr, .art-Sheet-cl
 {
-	top: 44px;
-	bottom: 44px;
-	width: 88px;
-	background-image: url(../img/Sheet-v.png);
+    top: 44px;
+    bottom: 44px;
+    width: 88px;
+    background-image: url(../img/Sheet-v.png);
 }
 
 .art-Sheet-cr
 {
-	right:0;
-	clip: rect(auto, 10000px, 10000px, 44px);
+    right:0;
+    clip: rect(auto, 10000px, 10000px, 44px);
 }
 
 .art-Sheet-cl
 {
-	left:0;
-	clip: rect(auto, 44px, 10000px, auto);
+    left:0;
+    clip: rect(auto, 44px, 10000px, auto);
 }
 
 .art-Sheet-cc
 {
-	position:absolute;
-	z-index:-1;
-	top: 44px;
-	left: 44px;
-	right: 44px;
-	bottom: 44px;
-	background-color: #E0EDF0;
+    position:absolute;
+    z-index:-1;
+    top: 44px;
+    left: 44px;
+    right: 44px;
+    bottom: 44px;
+    background-color: #E0EDF0;
 }
 
 
 .art-Sheet
 {
-	margin-top: 1px !important;
+    margin-top: 1px !important;
 }
 
 #art-page-background-simple-gradient, #art-page-background-gradient, #art-page-background-glare
 {
-	min-width:900px;
+    min-width:900px;
 }
 
 .art-menu a, .art-menu a:link, .art-menu a:visited, .art-menu a:hover
@@ -210,11 +210,11 @@ table.position
 
 .art-menu, .art-menu ul
 {
-	margin: 0;
-	padding: 0;
-	border: 0;
-	list-style-type: none;
-	display: block;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    list-style-type: none;
+    display: block;
 }
 
 .art-menu li
@@ -264,16 +264,16 @@ table.position
 
 .art-menu:after, .art-menu ul:after
 {
-	content: ".";
-	height: 0;
-	display: block;
-	visibility: hidden;
-	overflow: hidden;
-	clear: both;
+    content: ".";
+    height: 0;
+    display: block;
+    visibility: hidden;
+    overflow: hidden;
+    clear: both;
 }
 .art-menu, .art-menu ul
 {
-	min-height: 0;
+    min-height: 0;
 }
 
 .art-menu ul
@@ -327,26 +327,26 @@ hr {
 
 .divb
 {
-	border: 1px solid #e0edf0;
-	font-size: 1.2em;
-	font-weight: bold;
-	color: #e0edf0;
-	background-color: #7bb0bc;
-	padding: 3px;
-	margin-bottom: 3px;
-	overflow: hidden;
+    border: 1px solid #e0edf0;
+    font-size: 1.2em;
+    font-weight: bold;
+    color: #e0edf0;
+    background-color: #7bb0bc;
+    padding: 3px;
+    margin-bottom: 3px;
+    overflow: hidden;
 }
 
 .art-menu
 {
-	padding: 6px 14px 0px 14px;
+    padding: 6px 14px 0px 14px;
 }
 
 .art-nav
 {
-	position: relative;
-	height: 40px;
-	z-index: 100;
+    position: relative;
+    height: 40px;
+    z-index: 100;
 }
 
 .art-nav .l, .art-nav .r
@@ -478,8 +478,8 @@ hr {
     line-height: 16px;
     margin-right: auto;
 
-	background: url(../img/subitem-bg.png) repeat-x left top;
-	border: 0 solid;
+    background: url(../img/subitem-bg.png) repeat-x left top;
+    border: 0 solid;
 }
 
 .art-nav ul.art-menu ul span, .art-nav ul.art-menu ul span span
@@ -536,156 +536,156 @@ hr {
 
 .art-contentLayout
 {
-	position: relative;
-	margin-bottom: 7px;
-	width: 982px;
+    position: relative;
+    margin-bottom: 7px;
+    width: 982px;
 }
 
 .art-Block
 {
-	position:relative;
-	z-index:0;
-	margin:0 auto;
-	min-width:15px;
-	min-height:15px;
+    position:relative;
+    z-index:0;
+    margin:0 auto;
+    min-width:15px;
+    min-height:15px;
 }
 
 .art-Block-body
 {
-	position: relative;
-	z-index:1;
-	padding: 8px;
+    position: relative;
+    z-index:1;
+    padding: 8px;
 }
 
 .art-Block-tr, .art-Block-tl, .art-Block-br, .art-Block-bl, .art-Block-tc, .art-Block-bc,.art-Block-cr, .art-Block-cl
 {
-	position:absolute;
-	z-index:-1;
+    position:absolute;
+    z-index:-1;
 }
 
 .art-Block-br, .art-Block-bl
 {
-	width: 14px;
-	height: 14px;
-	background-image: url(../img/Block-b.png);
+    width: 14px;
+    height: 14px;
+    background-image: url(../img/Block-b.png);
 }
 
 
 .art-Block-tr, .art-Block-tl
 {
-	width: 14px;
-	height: 14px;
-	background-image: url(../img/Block-s.png);
+    width: 14px;
+    height: 14px;
+    background-image: url(../img/Block-s.png);
 }
 
 .art-Block-tl
 {
-	top:0;
-	left:0;
-	clip: rect(auto, 7px, 7px, auto);
+    top:0;
+    left:0;
+    clip: rect(auto, 7px, 7px, auto);
 }
 
 .art-Block-tr
 {
-	top: 0;
-	right: 0;
-	clip: rect(auto, 10000px, 7px, 7px);
+    top: 0;
+    right: 0;
+    clip: rect(auto, 10000px, 7px, 7px);
 }
 
 .art-Block-bl
 {
-	bottom: 0;
-	left: 0;
-	clip: rect(7px, 7px, 10000px, auto);
+    bottom: 0;
+    left: 0;
+    clip: rect(7px, 7px, 10000px, auto);
 }
 
 .art-Block-br
 {
-	bottom: 0;
-	right: 0;
-	clip: rect(7px, 10000px, 10000px, 7px);
+    bottom: 0;
+    right: 0;
+    clip: rect(7px, 10000px, 10000px, 7px);
 }
 
 .art-Block-tc, .art-Block-bc
 {
-	left: 7px;
-	right: 7px;
-	height: 14px;
-	background-image: url(../img/Block-h.png);
+    left: 7px;
+    right: 7px;
+    height: 14px;
+    background-image: url(../img/Block-h.png);
 }
 
 .art-Block-tc
 {
-	top: 0;
-	clip: rect(auto, 10000px, 7px, auto);
+    top: 0;
+    clip: rect(auto, 10000px, 7px, auto);
 }
 
 .art-Block-bc
 {
-	bottom: 0;
-	clip: rect(7px, 10000px, 10000px, auto);
+    bottom: 0;
+    clip: rect(7px, 10000px, 10000px, auto);
 }
 
 .art-Block-cr, .art-Block-cl
 {
-	top: 7px;
-	bottom: 7px;
-	width: 14px;
-	background-image: url(../img/Block-v.png);
+    top: 7px;
+    bottom: 7px;
+    width: 14px;
+    background-image: url(../img/Block-v.png);
 }
 
 .art-Block-cr
 {
-	right:0;
-	clip: rect(auto, 10000px, 10000px, 7px);
+    right:0;
+    clip: rect(auto, 10000px, 10000px, 7px);
 }
 
 .art-Block-cl
 {
-	left:0;
-	clip: rect(auto, 7px, 10000px, auto);
+    left:0;
+    clip: rect(auto, 7px, 10000px, auto);
 }
 
 .art-Block-cc
 {
-	position:absolute;
-	z-index:-1;
-	top: 7px;
-	left: 7px;
-	right: 7px;
-	bottom: 7px;
-	background-image: url(../img/Block-c.png);
+    position:absolute;
+    z-index:-1;
+    top: 7px;
+    left: 7px;
+    right: 7px;
+    bottom: 7px;
+    background-image: url(../img/Block-c.png);
 }
 
 
 .art-Block
 {
-	margin: 6px;
+    margin: 6px;
 }
 
 .art-BlockContent
 {
-	position:relative;
-	z-index:0;
-	margin:0 auto;
-	min-width:1px;
-	min-height:1px;
+    position:relative;
+    z-index:0;
+    margin:0 auto;
+    min-width:1px;
+    min-height:1px;
 }
 
 .art-BlockContent-body
 {
-	position: relative;
-	z-index:1;
-	padding: 0px;
+    position: relative;
+    z-index:1;
+    padding: 0px;
 }
 
 
 
 .art-BlockContent-body
 {
-	color:#16282C;
-	font-family: Verdana, Geneva, Arial, Helvetica, Sans-Serif;
-	font-size: 11px;
+    color:#16282C;
+    font-family: Verdana, Geneva, Arial, Helvetica, Sans-Serif;
+    font-size: 11px;
 }
 
 .art-BlockContent-body a:link
@@ -697,9 +697,9 @@ hr {
 
 .art-BlockContent-body a:visited, .art-BlockContent-body a.visited
 {
-	color: #5497A6;
-	font-family: Verdana, Geneva, Arial, Helvetica, Sans-Serif;
-	text-decoration: none;
+    color: #5497A6;
+    font-family: Verdana, Geneva, Arial, Helvetica, Sans-Serif;
+    text-decoration: none;
 }
 
 .art-BlockContent-body a:hover, .art-BlockContent-body a.hover
@@ -726,123 +726,123 @@ hr {
 .art-BlockContent-body ul li
 {
     padding:0 0 0 5px;
-	background: url(../img/BlockContentBullets.png) no-repeat;
-	margin:0.5em 0 0.5em 0;
+    background: url(../img/BlockContentBullets.png) no-repeat;
+    margin:0.5em 0 0.5em 0;
     line-height:1.2em;
 }
 
 .art-Post
 {
-	position:relative;
-	z-index:0;
-	margin:0 auto;
-	min-width:23px;
-	min-height:23px;
+    position:relative;
+    z-index:0;
+    margin:0 auto;
+    min-width:23px;
+    min-height:23px;
 }
 
 .art-Post-body
 {
-	position: relative;
-	z-index:1;
-	padding: 15px;
+    position: relative;
+    z-index:1;
+    padding: 15px;
 }
 
 .art-Post-tr, .art-Post-tl, .art-Post-br, .art-Post-bl, .art-Post-tc, .art-Post-bc,.art-Post-cr, .art-Post-cl
 {
-	position:absolute;
-	z-index:-1;
+    position:absolute;
+    z-index:-1;
 }
 
 .art-Post-tr, .art-Post-tl, .art-Post-br, .art-Post-bl
 {
-	width: 30px;
-	height: 30px;
-	background-image: url(../img/Post-s.png);
+    width: 30px;
+    height: 30px;
+    background-image: url(../img/Post-s.png);
 }
 
 .art-Post-tl
 {
-	top:0;
-	left:0;
-	clip: rect(auto, 15px, 15px, auto);
+    top:0;
+    left:0;
+    clip: rect(auto, 15px, 15px, auto);
 }
 
 .art-Post-tr
 {
-	top: 0;
-	right: 0;
-	clip: rect(auto, 10000px, 15px, 15px);
+    top: 0;
+    right: 0;
+    clip: rect(auto, 10000px, 15px, 15px);
 }
 
 .art-Post-bl
 {
-	bottom: 0;
-	left: 0;
-	clip: rect(15px, 15px, 10000px, auto);
+    bottom: 0;
+    left: 0;
+    clip: rect(15px, 15px, 10000px, auto);
 }
 
 .art-Post-br
 {
-	bottom: 0;
-	right: 0;
-	clip: rect(15px, 10000px, 10000px, 15px);
+    bottom: 0;
+    right: 0;
+    clip: rect(15px, 10000px, 10000px, 15px);
 }
 
 .art-Post-tc, .art-Post-bc
 {
-	left: 15px;
-	right: 15px;
-	height: 30px;
-	background-image: url(../img/Post-h.png);
+    left: 15px;
+    right: 15px;
+    height: 30px;
+    background-image: url(../img/Post-h.png);
 }
 
 .art-Post-tc
 {
-	top: 0;
-	clip: rect(auto, 10000px, 15px, auto);
+    top: 0;
+    clip: rect(auto, 10000px, 15px, auto);
 }
 
 .art-Post-bc
 {
-	bottom: 0;
-	clip: rect(15px, 10000px, 10000px, auto);
+    bottom: 0;
+    clip: rect(15px, 10000px, 10000px, auto);
 }
 
 .art-Post-cr, .art-Post-cl
 {
-	top: 15px;
-	bottom: 15px;
-	width: 30px;
-	background-image: url(../img/Post-v.png);
+    top: 15px;
+    bottom: 15px;
+    width: 30px;
+    background-image: url(../img/Post-v.png);
 }
 
 .art-Post-cr
 {
-	right:0;
-	clip: rect(auto, 10000px, 10000px, 15px);
+    right:0;
+    clip: rect(auto, 10000px, 10000px, 15px);
 }
 
 .art-Post-cl
 {
-	left:0;
-	clip: rect(auto, 15px, 10000px, auto);
+    left:0;
+    clip: rect(auto, 15px, 10000px, auto);
 }
 
 .art-Post-cc
 {
-	position:absolute;
-	z-index:-1;
-	top: 15px;
-	left: 15px;
-	right: 15px;
-	bottom: 15px;
-	background-color: #EBF3F5;
+    position:absolute;
+    z-index:-1;
+    top: 15px;
+    left: 15px;
+    right: 15px;
+    bottom: 15px;
+    background-color: #EBF3F5;
 }
 
 
 .art-Post
 {
-	margin: 3px;
+    margin: 3px;
 }
 
 a img
@@ -852,8 +852,8 @@ a img
 
 .art-article img, img.art-article
 {
-	border: solid 1px #9DC5CD;
-	margin: 1em;
+    border: solid 1px #9DC5CD;
+    margin: 1em;
 }
 
 .art-metadata-icons img
@@ -865,9 +865,9 @@ a img
 
 .art-article table, table.art-article
 {
-	border-collapse: collapse;
-	margin: 1px;
-	width:auto;
+    border-collapse: collapse;
+    margin: 1px;
+    width:auto;
 }
 
 .art-article table, table.art-article .art-article tr, .art-article th, .art-article td
@@ -892,32 +892,32 @@ a img
 
 .art-PostHeaderIcon-wrapper
 {
-	text-decoration:none;
-	margin: 0.2em 0;
-	padding: 0;
-	font-weight:normal;
-	font-style:normal;
-	letter-spacing:normal;
-	word-spacing:normal;
-	font-variant:normal;
-	text-decoration:none;
-	font-variant:normal;
-	text-transform:none;
-	text-align:left;
-	text-indent:0;
-	line-height:inherit;
-	font-family: "Trebuchet MS", Arial, Helvetica, Sans-Serif;
-	font-size: 25px;
-	text-align: center;
-	color: #005C70;
+    text-decoration:none;
+    margin: 0.2em 0;
+    padding: 0;
+    font-weight:normal;
+    font-style:normal;
+    letter-spacing:normal;
+    word-spacing:normal;
+    font-variant:normal;
+    text-decoration:none;
+    font-variant:normal;
+    text-transform:none;
+    text-align:left;
+    text-indent:0;
+    line-height:inherit;
+    font-family: "Trebuchet MS", Arial, Helvetica, Sans-Serif;
+    font-size: 25px;
+    text-align: center;
+    color: #005C70;
 }
 
 .art-PostHeaderIcon-wrapper, .art-PostHeaderIcon-wrapper a, .art-PostHeaderIcon-wrapper a:link, .art-PostHeaderIcon-wrapper a:visited, .art-PostHeaderIcon-wrapper a:hover
 {
-	font-family: "Trebuchet MS", Arial, Helvetica, Sans-Serif;
-	font-size: 25px;
-	text-align: center;
-	color: #005C70;
+    font-family: "Trebuchet MS", Arial, Helvetica, Sans-Serif;
+    font-size: 25px;
+    text-align: center;
+    color: #005C70;
 }
 
 .art-PostHeader a:link
@@ -1066,9 +1066,9 @@ blockquote p
 
 blockquote
 {
-        margin:10px 10px 10px 50px;
-    padding:5px 5px 5px 41px;
-	background: #CCE1E5 url(../img/PostQuote.png) no-repeat left top;
+    margin:10px 10px 10px 50px;
+    padding:5px;
+    background-color: #CCE1E5;
 }
 
 input, select, textarea
@@ -1088,13 +1088,13 @@ textarea {
 
 .art-button-wrapper.hover .art-button, .art-button:hover
 {
-	color: #F1F7F8 !important;
-	text-decoration: none !important;
+    color: #F1F7F8 !important;
+    text-decoration: none !important;
 }
 
 .art-button-wrapper.active .art-button
 {
-	color: #E5FAFF !important;
+    color: #E5FAFF !important;
 }
 
 .art-button-wrapper .l, .art-button-wrapper .r
@@ -1131,46 +1131,46 @@ textarea {
 
 .art-Footer
 {
-	position:relative;
-	z-index:0;
-	overflow:hidden;
-	width: 982px;
-	margin: 5px auto 0 auto;
+    position:relative;
+    z-index:0;
+    overflow:hidden;
+    width: 982px;
+    margin: 5px auto 0 auto;
 }
 
 .art-Footer .art-Footer-inner
 {
-	height:1%;
-	position: relative;
-	z-index: 0;
-	padding: 10px;
-	text-align: center;
+    height:1%;
+    position: relative;
+    z-index: 0;
+    padding: 10px;
+    text-align: center;
 }
 
 .art-Footer .art-Footer-background
 {
-	position:absolute;
-	z-index:-1;
-	background-repeat:no-repeat;
-	background-image: url(../img/Footer.png);
-	width: 982px;
-	height: 120px;
-	bottom:0;
-	left:0;
+    position:absolute;
+    z-index:-1;
+    background-repeat:no-repeat;
+    background-image: url(../img/Footer.png);
+    width: 982px;
+    height: 120px;
+    bottom:0;
+    left:0;
 }
 
 
 .art-rss-tag-icon
 {
-	position: relative;
-	display:block;
-	float:left;
-	background-image: url(../img/rssIcon.png);
-	background-position: center right;
-	background-repeat: no-repeat;
-	margin: 0 5px 0 0;
-	height: 32px;
-	width: 24px;
+    position: relative;
+    display:block;
+    float:left;
+    background-image: url(../img/rssIcon.png);
+    background-position: center right;
+    background-repeat: no-repeat;
+    margin: 0 5px 0 0;
+    height: 32px;
+    width: 24px;
 }
 
 
@@ -1183,10 +1183,10 @@ textarea {
 
 .art-Footer .art-Footer-text
 {
-	display:inline-block;
-	color:#0C1618;
-	font-family: Verdana, Geneva, Arial, Helvetica, Sans-Serif;
-	font-size: 10px;
+    display:inline-block;
+    color:#0C1618;
+    font-family: Verdana, Geneva, Arial, Helvetica, Sans-Serif;
+    font-size: 10px;
 }
 
 .art-Footer .art-Footer-text a:link
@@ -1212,85 +1212,85 @@ textarea {
 
 .art-page-footer, .art-page-footer a, .art-page-footer a:link, .art-page-footer a:visited, .art-page-footer a:hover
 {
-	font-family:Arial;
-	font-size:10px;
-	letter-spacing:normal;
-	word-spacing:normal;
-	font-style:normal;
-	font-weight:normal;
-	text-decoration:underline;
-	color:#14D4FF;
+    font-family:Arial;
+    font-size:10px;
+    letter-spacing:normal;
+    word-spacing:normal;
+    font-style:normal;
+    font-weight:normal;
+    text-decoration:underline;
+    color:#14D4FF;
 }
 
 .art-page-footer
 {
-	margin:1em;
-	text-align:center;
-	text-decoration:none;
-	color:#8FBCC7;
+    margin:1em;
+    text-align:center;
+    text-decoration:none;
+    color:#8FBCC7;
 }
 
 .art-contentLayout .art-sidebar1
 {
-	position: relative;
-	margin: 0;
-	padding: 0;
-	border: 0;
-	float: left;
-	overflow: hidden;
-	width: 220px;
+    position: relative;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    float: left;
+    overflow: hidden;
+    width: 220px;
 }
 
 .art-contentLayout .art-content
 {
-	position: relative;
-	margin: 0;
-	padding: 0;
-	border: 0;
-	float: left;
-	overflow: hidden;
-	width: 542px;
+    position: relative;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    float: left;
+    overflow: hidden;
+    width: 542px;
 }
 .art-contentLayout .art-content-sidebar1
 {
-	position: relative;
-	margin: 0;
-	padding: 0;
-	border: 0;
-	float: left;
-	overflow: hidden;
-	width: 761px;
+    position: relative;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    float: left;
+    overflow: hidden;
+    width: 761px;
 }
 .art-contentLayout .art-content-sidebar2
 {
-	position: relative;
-	margin: 0;
-	padding: 0;
-	border: 0;
-	float: left;
-	overflow: hidden;
-	width: 761px;
+    position: relative;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    float: left;
+    overflow: hidden;
+    width: 761px;
 }
 .art-contentLayout .art-content-wide
 {
-	position: relative;
-	margin: 0;
-	padding: 0;
-	border: 0;
-	float: left;
-	overflow: hidden;
-	width: 981px;
+    position: relative;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    float: left;
+    overflow: hidden;
+    width: 981px;
 }
 
 .art-contentLayout .art-sidebar2
 {
-	position: relative;
-	margin: 0;
-	padding: 0;
-	border: 0;
-	float: left;
-	overflow: hidden;
-	width: 220px;
+    position: relative;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    float: left;
+    overflow: hidden;
+    width: 220px;
 }
 
 .message {

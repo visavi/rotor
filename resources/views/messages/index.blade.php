@@ -65,7 +65,7 @@
                         <b>Система</b>
                     @endif
                 </div>
-                <div>{!! bbCode($data->text) !!}</div>
+                <div class="message">{!! bbCode($data->text) !!}</div>
             @endforeach
 
             <div class="float-right">
