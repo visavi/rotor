@@ -141,13 +141,13 @@ class AjaxController extends BaseController
                 'created_at'  => SITETIME,
             ]);
 
-            echo json_encode(['status' => 'success']);
-        } else {
-            echo json_encode([
-                'status' => 'error',
-                'message' => current($validator->getErrors())
-            ]);
+            return json_encode(['status' => 'success']);
         }
+
+        return json_encode([
+            'status' => 'error',
+            'message' => current($validator->getErrors())
+        ]);
     }
 
     /**
@@ -178,13 +178,13 @@ class AjaxController extends BaseController
                 $type::query()->find($rid)->decrement('count_comments');
             }
 
-            echo json_encode(['status' => 'success']);
-        } else {
-            echo json_encode([
-                'status' => 'error',
-                'message' => current($validator->getErrors())
-            ]);
+            return json_encode(['status' => 'success']);
         }
+
+        return json_encode([
+            'status' => 'error',
+            'message' => current($validator->getErrors())
+        ]);
     }
 
     /**
@@ -261,7 +261,7 @@ class AjaxController extends BaseController
             $post->decrement('rating');
         }
 
-        echo json_encode([
+        return json_encode([
             'status' => 'success',
             'cancel' => $cancel,
             'rating' => formatNum($post['rating'])
@@ -327,19 +327,19 @@ class AjaxController extends BaseController
 
             $image = resizeProcess('/uploads/blogs/' . $file->hash, ['size' => 100]);
 
-            echo json_encode([
+            return json_encode([
                 'status' => 'success',
                 'path'   => $image['path'],
                 'source' => $image['source'],
                 'id'     => $file->id,
             ]);
 
-        } else {
-            echo json_encode([
-                'status'  => 'error',
-                'message' => current($validator->getErrors())
-            ]);
         }
+
+        return json_encode([
+            'status'  => 'error',
+            'message' => current($validator->getErrors())
+        ]);
     }
 
     /**
@@ -375,14 +375,14 @@ class AjaxController extends BaseController
             deleteFile(UPLOADS . '/blogs/' . $file->hash);
             $file->delete();
 
-            echo json_encode([
+            return json_encode([
                 'status'  => 'success',
             ]);
-        } else {
-            echo json_encode([
-                'status'  => 'error',
-                'message' => current($validator->getErrors())
-            ]);
         }
+
+        return json_encode([
+            'status'  => 'error',
+            'message' => current($validator->getErrors())
+        ]);
     }
 }
