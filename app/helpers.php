@@ -55,13 +55,8 @@ use ReCaptcha\ReCaptcha;
  */
 function makeTime($time)
 {
-    if ($time < 3600) {
-        $time = sprintf('%02d:%02d', ($time / 60) % 60, $time % 60);
-    } else {
-        $time = sprintf('%02d:%02d:%02d', ($time / 3600) % 24, ($time / 60) % 60, $time % 60);
-    }
-
-    return $time;
+    $format = $time < 3600 ? 'i:s' : 'H:i:s';
+    return gmdate($format, $time);
 }
 
 /**
@@ -2588,9 +2583,9 @@ function siteDomain($url)
  */
 function parseVersion($version)
 {
-    $version = explode('.', strtok($version, '-'));
+    $ver = explode('.', strtok($version, '-'));
 
-    return $version[0] . '.' . $version[1] . '.' . $version[2] ?? 0;
+    return $ver[0] . '.' . $ver[1] . '.' . ($ver[2] ?? 0);
 }
 
 /**
@@ -2628,6 +2623,7 @@ function uniqueName(string $extension = null): string
  * Возвращает курсы валют
  *
  * @return string
+ * @throws ErrorException
  */
 function getCourses()
 {

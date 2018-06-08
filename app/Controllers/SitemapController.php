@@ -104,7 +104,7 @@ class SitemapController extends BaseController
      */
     public function topics()
     {
-        $topics = Topic::query()->orderBy('updated_at', 'desc')->limit(25000)->get();
+        $topics = Topic::query()->orderBy('updated_at', 'desc')->limit(15000)->get();
 
         $locs = [];
         foreach ($topics as $topic) {
