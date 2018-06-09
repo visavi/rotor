@@ -220,7 +220,13 @@ class User extends BaseModel
         }
     }
 
-    public static function getStatusByLevel($level)
+    /**
+     * Возвращает имя уровня пользователя
+     *
+     * @param  string $level
+     * @return string
+     */
+    public static function getLevelByKey($level)
     {
         $levels = explode(',', setting('statusname'));
 
@@ -253,13 +259,13 @@ class User extends BaseModel
     }
 
     /**
-     * Возвращает имя уровня пользователя
+     * Возвращает уровень пользователя
      *
      * @return string Уровень пользователя
      */
     public function getLevel()
     {
-        return self::getStatusByLevel($this->level);
+        return self::getLevelByKey($this->level);
     }
 
     /**

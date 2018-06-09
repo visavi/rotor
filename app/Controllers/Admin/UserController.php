@@ -83,7 +83,7 @@ class UserController extends AdminController
 
         $allGroups   = [];
         foreach (User::ALL_GROUPS as $level) {
-            $allGroups[$level] = User::getStatusByLevel($level);
+            $allGroups[$level] = User::getLevelByKey($level);
         }
 
         if (Request::isMethod('post')) {
