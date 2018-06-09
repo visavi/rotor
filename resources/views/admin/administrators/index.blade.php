@@ -27,7 +27,7 @@
                     </div>
 
                     <b>{!! profile($user) !!}</b>
-                    ({{ userLevel($user->level) }})<br>
+                    ({{ $user->getLevel() }})<br>
 
                     @if (isAdmin('boss'))
                         <i class="fa fa-pencil-alt"></i> <a href="/admin/users/edit?user={{ $user->login }}">Изменить</a><br>

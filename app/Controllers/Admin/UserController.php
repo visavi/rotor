@@ -79,8 +79,12 @@ class UserController extends AdminController
         }
 
         $allThemes   = array_map('basename', glob(HOME."/themes/*", GLOB_ONLYDIR));
-        $allGroups   = array_reverse(User::ALL_GROUPS);
         $adminGroups = User::ADMIN_GROUPS;
+
+        $allGroups   = [];
+        foreach (User::ALL_GROUPS as $level) {
+            $allGroups[$level] = User::getStatusByLevel($level);
+        }
 
         if (Request::isMethod('post')) {
 
@@ -285,10 +289,10 @@ class UserController extends AdminController
 
                 // Удаление фотографий в галерее
                 if ($delimages) {
-                    deleteAlbum($user);
+                    $user->deleteAlbum();
                 }
 
-                deleteUser($user);
+                $user->delete();
 
                 setFlash('success', 'Пользователь успешно удален!');
                 redirect('/admin/users');

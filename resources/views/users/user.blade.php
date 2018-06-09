@@ -36,7 +36,7 @@
     @endif
 
     @if (in_array($user->level, $adminGroups))
-        <div class="alert alert-info">Должность: <b>{{ userLevel($user->level) }}</b></div>
+        <div class="alert alert-info">Должность: <b>{{ $user->getLevel() }}</b></div>
     @endif
 
     <div class="container-fluid">

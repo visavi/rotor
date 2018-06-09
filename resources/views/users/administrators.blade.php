@@ -25,7 +25,7 @@
                     </div>
 
                     <b>{!! profile($user) !!}</b>
-                    ({{ userLevel($user->level) }})
+                    ({{ $user->getLevel() }})
                 </div>
             @endforeach
         </div>

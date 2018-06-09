@@ -20,7 +20,7 @@ class DeletePending extends Task
                 ->get();
 
             foreach($users as $user) {
-                deleteUser($user);
+                $user->delete();
             }
         }
     }

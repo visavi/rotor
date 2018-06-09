@@ -51,7 +51,7 @@ class ReglistController extends AdminController
                         ->get();
 
                     foreach ($users as $user) {
-                        deleteUser($user);
+                        $user->delete();
                     }
 
                     setFlash('success', 'Выбранные пользователи успешно удалены!');

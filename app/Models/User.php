@@ -7,13 +7,13 @@ use Illuminate\Database\Capsule\Manager as DB;
 
 class User extends BaseModel
 {
-    const BOSS    = 'boss';    // Владелец
-    const ADMIN   = 'admin';   // Админ
-    const MODER   = 'moder';   // Модератор
-    const EDITOR  = 'editor';  // Редактор
-    const USER    = 'user';    // Пользователь
-    const PENDED  = 'pended';  // Ожидающий
-    const BANNED  = 'banned';  // Забаненный
+    const BOSS   = 'boss';    // Владелец
+    const ADMIN  = 'admin';   // Админ
+    const MODER  = 'moder';   // Модератор
+    const EDITOR = 'editor';  // Редактор
+    const USER   = 'user';    // Пользователь
+    const PENDED = 'pended';  // Ожидающий
+    const BANNED = 'banned';  // Забаненный
 
     /**
      * Администраторы
@@ -208,8 +208,8 @@ class User extends BaseModel
 
             if ($social && $user = getUserById($social->user_id)) {
 
-                setcookie('login', $user->login, SITETIME + 3600 * 24 * 365, '/', $domain);
-                setcookie('password', md5($user->password.env('APP_KEY')), SITETIME + 3600 * 24 * 365, '/', $domain, null, true);
+                setcookie('login', $user->login, strtotime('+1 year', SITETIME), '/', $domain);
+                setcookie('password', md5($user->password.env('APP_KEY')), strtotime('+1 year', SITETIME), '/', $domain, null, true);
 
                 $_SESSION['id']       = $user->id;
                 $_SESSION['password'] = md5(env('APP_KEY').$user->password);
@@ -218,5 +218,91 @@ class User extends BaseModel
                 redirect('/');
             }
         }
+    }
+
+    public static function getStatusByLevel($level)
+    {
+        $levels = explode(',', setting('statusname'));
+
+        switch ($level) {
+            case self::BOSS:
+                $status = $levels[0];
+                break;
+            case self::ADMIN:
+                $status = $levels[1];
+                break;
+            case self::MODER:
+                $status = $levels[2];
+                break;
+            case self::EDITOR:
+                $status = $levels[3];
+                break;
+            case self::USER:
+                $status = $levels[4];
+                break;
+            case self::PENDED:
+                $status = $levels[5];
+                break;
+            case self::BANNED:
+                $status = $levels[6];
+                break;
+            default: $status = setting('statusdef');
+        }
+
+        return $status;
+    }
+
+    /**
+     * Возвращает имя уровня пользователя
+     *
+     * @return string Уровень пользователя
+     */
+    public function getLevel()
+    {
+        return self::getStatusByLevel($this->level);
+    }
+
+    /**
+     * Удаляет альбом пользователя
+     *
+     * @return void
+     */
+    public function deleteAlbum()
+    {
+        $photos = Photo::query()->where('user_id', $this->id)->get();
+
+        if ($photos->isNotEmpty()) {
+            foreach ($photos as $photo) {
+                $photo->comments()->delete();
+                $photo->delete();
+            }
+        }
+    }
+
+    /**
+     * Удаляет записи пользователя из всех таблиц
+     *
+     * @return bool       результат удаления
+     * @throws \Exception
+     */
+    public function delete()
+    {
+        deleteFile(UPLOADS . '/pictures/' . $this->picture);
+        deleteFile(UPLOADS . '/avatars/' . $this->avatar);
+
+        Inbox::query()->where('user_id', $this->id)->delete();
+        Outbox::query()->where('user_id', $this->id)->delete();
+        Contact::query()->where('user_id', $this->id)->delete();
+        Ignore::query()->where('user_id', $this->id)->delete();
+        Rating::query()->where('user_id', $this->id)->delete();
+        Wall::query()->where('user_id', $this->id)->delete();
+        Note::query()->where('user_id', $this->id)->delete();
+        Notebook::query()->where('user_id', $this->id)->delete();
+        Banhist::query()->where('user_id', $this->id)->delete();
+        Bookmark::query()->where('user_id', $this->id)->delete();
+        Login::query()->where('user_id', $this->id)->delete();
+        Invite::query()->where('user_id', $this->id)->orWhere('invite_user_id', $this->id)->delete();
+
+        return parent::delete();
     }
 }

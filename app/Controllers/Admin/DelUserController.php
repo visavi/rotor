@@ -74,8 +74,8 @@ class DelUserController extends AdminController
         if ($validator->isValid()) {
 
             foreach ($users as $user) {
-                deleteAlbum($user);
-                deleteUser($user);
+                $user->deleteAlbum();
+                $user->delete();
             }
 
             setFlash('success', 'Пользователи успешно удалены!');

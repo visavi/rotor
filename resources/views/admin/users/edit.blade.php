@@ -32,9 +32,9 @@
             <div class="form-group">
                 <label for="level">Уровень:</label>
                 <select class="form-control" id="level" name="level">
-                    @foreach($allGroups as $level)
-                        <?php $selected = ($level == $inputLevel) ? ' selected' : ''; ?>
-                        <option value="{{ $level }}"{{ $selected }}>{{ userLevel($level) }}</option>
+                    @foreach($allGroups as $key => $level)
+                        <?php $selected = ($key === $inputLevel) ? ' selected' : ''; ?>
+                        <option value="{{ $key }}"{{ $selected }}>{{ $level }}</option>
                     @endforeach
                 </select>
                 {!! textError('level') !!}

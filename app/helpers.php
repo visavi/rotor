@@ -7,7 +7,6 @@ use App\Models\{
     Banhist,
     BlackList,
     Blog,
-    Bookmark,
     Load,
     Chat,
     Contact,
@@ -18,17 +17,12 @@ use App\Models\{
     Inbox,
     Invite,
     Error,
-    Login,
     News,
-    Note,
-    Notebook,
     Notice,
     Offer,
     Online,
-    Outbox,
     Photo,
     Post,
-    Rating,
     RekUser,
     Setting,
     Smile,
@@ -84,52 +78,6 @@ function dateFixed($timestamp, $format = 'd.m.y / H:i')
     $replace = ['Января', 'Февраля', 'Марта', 'Апреля', 'Мая', 'Июня', 'Июля', 'Августа', 'Сентября', 'Октября', 'Ноября', 'Декабря'];
 
     return str_replace($search, $replace, $dateStamp);
-}
-
-/**
- * Удаляет записи пользователя из всех таблиц
- *
- * @param  User $user объект пользователя
- * @return bool          результат удаления
- * @throws Exception
- */
-function deleteUser(User $user)
-{
-    deleteFile(UPLOADS . '/pictures/' . $user->picture);
-    deleteFile(UPLOADS . '/avatars/' . $user->avatar);
-
-    Inbox::query()->where('user_id', $user->id)->delete();
-    Outbox::query()->where('user_id', $user->id)->delete();
-    Contact::query()->where('user_id', $user->id)->delete();
-    Ignore::query()->where('user_id', $user->id)->delete();
-    Rating::query()->where('user_id', $user->id)->delete();
-    Wall::query()->where('user_id', $user->id)->delete();
-    Note::query()->where('user_id', $user->id)->delete();
-    Notebook::query()->where('user_id', $user->id)->delete();
-    Banhist::query()->where('user_id', $user->id)->delete();
-    Bookmark::query()->where('user_id', $user->id)->delete();
-    Login::query()->where('user_id', $user->id)->delete();
-    Invite::query()->where('user_id', $user->id)->orWhere('invite_user_id', $user->id)->delete();
-
-    return $user->delete();
-}
-
-/**
- * Удаляет альбом пользователя
- *
- * @param  User $user объект пользователя
- * @return void
- */
-function deleteAlbum(User $user)
-{
-    $photos = Photo::query()->where('user_id', $user->id)->get();
-
-    if ($photos->isNotEmpty()) {
-        foreach ($photos as $photo) {
-            $photo->comments()->delete();
-            $photo->delete();
-        }
-    }
 }
 
 /**
@@ -350,44 +298,6 @@ function antimat($str)
     }
 
     return $str;
-}
-
-/**
- * Возвращает имя уровня пользователя
- *
- * @param  string $level уровень пользователя
- * @return mixed         имя уровня
- */
-function userLevel($level)
-{
-    $name = explode(',', setting('statusname'));
-
-    switch ($level) {
-        case User::BOSS:
-            $status = $name[0];
-            break;
-        case User::ADMIN:
-            $status = $name[1];
-            break;
-        case User::MODER:
-            $status = $name[2];
-            break;
-        case User::EDITOR:
-            $status = $name[3];
-            break;
-        case User::USER:
-            $status = $name[4];
-            break;
-        case User::PENDED:
-            $status = $name[5];
-            break;
-        case User::BANNED:
-            $status = $name[6];
-            break;
-        default: $status = setting('statusdef');
-    }
-
-    return $status;
 }
 
 /**
