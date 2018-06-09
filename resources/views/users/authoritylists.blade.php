@@ -31,7 +31,7 @@
                     <b>{!! profile($data) !!}</b>
                 @endif
                 (Репутация: {{ $data->rating }})<br>
-                {!! userStatus($data) !!}
+                {!! $data->getStatus() !!}
             </div>
 
             <div>

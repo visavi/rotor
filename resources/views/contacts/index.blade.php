@@ -36,7 +36,7 @@
                     </div>
 
                     <b>{!! profile($contact->contactor) !!}</b> <small>({{ dateFixed($contact->created_at) }})</small><br>
-                    {!! userStatus($contact->contactor) !!}
+                    {!! $contact->contactor->getStatus() !!}
                 </div>
                 <div>
                     @if ($contact->text)

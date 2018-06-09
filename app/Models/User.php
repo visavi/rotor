@@ -4,16 +4,17 @@ namespace App\Models;
 
 use Curl\Curl;
 use Illuminate\Database\Capsule\Manager as DB;
+use Illuminate\Database\Query\JoinClause;
 
 class User extends BaseModel
 {
-    const BOSS   = 'boss';    // Владелец
-    const ADMIN  = 'admin';   // Админ
-    const MODER  = 'moder';   // Модератор
-    const EDITOR = 'editor';  // Редактор
-    const USER   = 'user';    // Пользователь
-    const PENDED = 'pended';  // Ожидающий
-    const BANNED = 'banned';  // Забаненный
+    const BOSS   = 'boss';   // Владелец
+    const ADMIN  = 'admin';  // Админ
+    const MODER  = 'moder';  // Модератор
+    const EDITOR = 'editor'; // Редактор
+    const USER   = 'user';   // Пользователь
+    const PENDED = 'pended'; // Ожидающий
+    const BANNED = 'banned'; // Забаненный
 
     /**
      * Администраторы
@@ -136,11 +137,11 @@ class User extends BaseModel
 
                 if ($remember) {
                     setcookie('login', $user['login'], SITETIME + 3600 * 24 * 365, '/', $domain);
-                    setcookie('password', md5($user['password'].env('APP_KEY')), SITETIME + 3600 * 24 * 365, '/', $domain, null, true);
+                    setcookie('password', md5($user['password'] . env('APP_KEY')), SITETIME + 3600 * 24 * 365, '/', $domain, null, true);
                 }
 
                 $_SESSION['id']       = $user->id;
-                $_SESSION['password'] = md5(env('APP_KEY').$user->password);
+                $_SESSION['password'] = md5(env('APP_KEY') . $user->password);
 
                 // Сохранение привязки к соц. сетям
                 if (! empty($_SESSION['social'])) {
@@ -209,12 +210,12 @@ class User extends BaseModel
             if ($social && $user = getUserById($social->user_id)) {
 
                 setcookie('login', $user->login, strtotime('+1 year', SITETIME), '/', $domain);
-                setcookie('password', md5($user->password.env('APP_KEY')), strtotime('+1 year', SITETIME), '/', $domain, null, true);
+                setcookie('password', md5($user->password . env('APP_KEY')), strtotime('+1 year', SITETIME), '/', $domain, null, true);
 
                 $_SESSION['id']       = $user->id;
-                $_SESSION['password'] = md5(env('APP_KEY').$user->password);
+                $_SESSION['password'] = md5(env('APP_KEY') . $user->password);
 
-                setFlash('success', 'Добро пожаловать, '.$user->login.'!');
+                setFlash('success', 'Добро пожаловать, ' . $user->login . '!');
                 redirect('/');
             }
         }
@@ -266,6 +267,64 @@ class User extends BaseModel
     public function getLevel()
     {
         return self::getLevelByKey($this->level);
+    }
+
+    /**
+     * Возвращает статус пользователя
+     *
+     * @return string статус пользователя
+     */
+    public function getStatus()
+    {
+        static $status;
+
+        if (! $this->id) {
+            return setting('statusdef');
+        }
+
+        if (! $status) {
+            $this->saveStatus(3600);
+            $status = json_decode(file_get_contents(STORAGE . '/temp/status.dat'));
+        }
+
+        return $status->{$this->id} ?? setting('statusdef');
+    }
+
+    /**
+     * Кеширует статусы пользователей
+     *
+     * @param int $time время кеширования
+     */
+    public function saveStatus($time = 0)
+    {
+        if (empty($time) || @filemtime(STORAGE . '/temp/status.dat') < time() - $time) {
+
+            $users = User::query()
+                ->select('users.id', 'users.status', 'status.name', 'status.color')
+                ->leftJoin('status', function (JoinClause $join) {
+                    $join->whereRaw('users.point between status.topoint and status.point');
+                })
+                ->where('users.point', '>', 0)
+                ->get();
+
+            $statuses = [];
+            foreach ($users as $user) {
+
+                if ($user->status) {
+                    $statuses[$user->id] = '<span style="color:#ff0000">' . $user->status . '</span>';
+                    continue;
+                }
+
+                if ($user->color) {
+                    $statuses[$user->id] = '<span style="color:' . $user->color . '">' . $user->name . '</span>';
+                    continue;
+                }
+
+                $statuses[$user->id] = $user->name;
+            }
+
+            file_put_contents(STORAGE . '/temp/status.dat', json_encode($statuses, JSON_UNESCAPED_UNICODE), LOCK_EX);
+        }
     }
 
     /**

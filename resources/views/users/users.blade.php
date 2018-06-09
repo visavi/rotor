@@ -30,7 +30,7 @@
                     {{ ($page->offset + $key + 1) }}. <b>{!! profile($data) !!}</b>
                 @endif
                 ({{ plural($data->point, setting('scorename')) }})<br>
-                {!! userStatus($data) !!}
+                {!! $data->getStatus() !!}
             </div>
 
             <div>

@@ -35,7 +35,7 @@
                     </div>
 
                     <b>{!! profile($data->recipient) !!}</b>  ({{ dateFixed($data->created_at) }})<br>
-                    {!! userStatus($data->recipient) !!}
+                    {!! $data->recipient->getStatus() !!}
                 </div>
 
                 <div class="message">{!! bbCode($data->text) !!}<br>

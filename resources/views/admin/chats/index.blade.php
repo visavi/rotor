@@ -43,7 +43,7 @@
                         </div>
 
                     <b>{!! profile($post->user) !!}</b> <small>({{ dateFixed($post->created_at) }})</small><br>
-                    {!! userStatus($post->user) !!}
+                    {!! $post->user->getStatus() !!}
                 </div>
 
                 <div class="message">{!! bbCode($post->text) !!}</div>

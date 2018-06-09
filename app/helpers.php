@@ -35,7 +35,6 @@ use App\Models\{
 
 use Curl\Curl;
 use Illuminate\Database\Capsule\Manager as DB;
-use Illuminate\Database\Query\JoinClause;
 use Illuminate\Http\UploadedFile;
 use Intervention\Image\ImageManagerStatic as Image;
 use Jenssegers\Blade\Blade;
@@ -298,65 +297,6 @@ function antimat($str)
     }
 
     return $str;
-}
-
-/**
- * Кеширует статусы пользователей
- *
- * @param int $time время кеширования
- */
-function saveStatus($time = 0)
-{
-    if (empty($time) || @filemtime(STORAGE . '/temp/status.dat') < time() - $time) {
-
-    $users = User::query()
-        ->select('users.id', 'users.status', 'status.name', 'status.color')
-        ->leftJoin('status', function (JoinClause $join) {
-            $join->whereRaw('users.point between status.topoint and status.point');
-        })
-        ->where('users.point', '>', 0)
-        ->get();
-
-        $statuses = [];
-        foreach ($users as $user) {
-
-            if ($user->status) {
-                $statuses[$user->id] = '<span style="color:#ff0000">' . $user->status . '</span>';
-                continue;
-            }
-
-            if ($user->color) {
-                $statuses[$user->id] = '<span style="color:' . $user->color . '">' . $user->name . '</span>';
-                continue;
-            }
-
-            $statuses[$user->id] = $user->name;
-        }
-
-        file_put_contents(STORAGE . '/temp/status.dat', json_encode($statuses, JSON_UNESCAPED_UNICODE), LOCK_EX);
-    }
-}
-
-/**
- * Возвращает статус пользователя
- *
- * @param  User   $user объект пользователя
- * @return string       статус пользователя
- */
-function userStatus(User $user)
-{
-    static $status;
-
-    if (! $user) {
-        return setting('statusdef');
-    }
-
-    if (! $status) {
-        saveStatus(3600);
-        $status = json_decode(file_get_contents(STORAGE . '/temp/status.dat'));
-    }
-
-    return $status->{$user->id} ?? setting('statusdef');
 }
 
 /**

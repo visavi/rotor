@@ -57,7 +57,7 @@ class ApiController extends BaseController
             'money'     => $user->money,
             'allprivat' => userMail($user),
             'newprivat' => $user->newprivat,
-            'status'    => userStatus($user),
+            'status'    => $user->getStatus(),
             'avatar'    => siteUrl(true).'/uploads/avatars/'.$user->avatar,
             'picture'   => siteUrl(true).'/uploads/pictures/'.$user->picture,
             'rating'    => $user->rating,

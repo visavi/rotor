@@ -40,7 +40,7 @@
 
                     @if ($data->user_id)
                         <b>{!! profile($data->user) !!}</b> <small>({{ dateFixed($data->created_at) }})</small><br>
-                        {!! userStatus($data->user) !!}
+                        {!! $data->user->getStatus() !!}
                     @else
                         <b>{{ setting('guestsuser') }}</b> <small>({{ dateFixed($data->created_at) }})</small>
                     @endif

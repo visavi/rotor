@@ -24,7 +24,7 @@
                     <b>{!! profile($data) !!}</b>
                 @endif
                 ({{ plural($data->money, setting('moneyname')) }})<br>
-                {!! userStatus($data) !!}
+                {!! $data->getStatus() !!}
             </div>
 
             <div>

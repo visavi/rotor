@@ -129,7 +129,7 @@
                         </div>
 
                         {{ $num }}. <b>{!! profile($data->user) !!}</b> <small>({{ dateFixed($data->created_at) }})</small><br>
-                        {!! userStatus($data->user) !!}
+                        {!! $data->user->getStatus() !!}
                     </div>
 
                     <div class="message">

@@ -60,7 +60,7 @@
 
                     @if ($data->author->id)
                         <b>{!! profile($data->author) !!}</b> ({{ dateFixed($data->created_at) }})<br>
-                        {!! userStatus($data->author) !!}
+                        {!! $data->author->getStatus() !!}
                     @else
                         <b>Система</b>
                     @endif

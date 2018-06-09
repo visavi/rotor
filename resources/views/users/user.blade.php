@@ -42,7 +42,7 @@
     <div class="container-fluid">
         <div class="row">
             <div class="col-md-6">
-                Статус: <b><a href="/statusfaq">{!! userStatus($user) !!}</a></b><br>
+                Статус: <b><a href="/statusfaq">{!! $user->getStatus() !!}</a></b><br>
 
                 {!! $user->getGender() !!}
                 Пол:

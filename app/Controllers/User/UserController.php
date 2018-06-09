@@ -575,7 +575,7 @@ class UserController extends BaseController
                 'status' => $status,
                 'money'  => DB::raw('money - '.$cost),
             ]);
-            saveStatus();
+            $user->saveStatus();
 
             setFlash('success', 'Ваш статус успешно изменен!');
         } else {

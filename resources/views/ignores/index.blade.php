@@ -36,7 +36,7 @@
                     </div>
 
                     <b>{!! profile($data->ignoring) !!}</b> <small>({{ dateFixed($data->created_at) }})</small><br>
-                    {!! userStatus($data->ignoring) !!}
+                    {!! $data->ignoring->getStatus() !!}
                 </div>
 
                 <div>

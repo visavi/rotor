@@ -47,7 +47,7 @@
 
                     <b>{!! profile($comment->user) !!}</b>
                     <small> ({{ dateFixed($comment->created_at) }})</small><br>
-                    {!! userStatus($comment->user) !!}
+                    {!! $comment->user->getStatus() !!}
                 </div>
 
                 <div>
