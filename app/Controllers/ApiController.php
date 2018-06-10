@@ -29,14 +29,14 @@ class ApiController extends BaseController
         $token = check(Request::input('token'));
 
         if (! $token) {
-            echo json_encode(['error'=>'no token']);
+            echo json_encode(['error' => 'no token']);
             exit();
         }
 
         $user = User::query()->where('apikey', $token)->first();
 
         if (! $user) {
-            echo json_encode(['error'=>'no user']);
+            echo json_encode(['error' => 'no user']);
             exit();
         }
 
@@ -58,8 +58,8 @@ class ApiController extends BaseController
             'allprivat' => $user->getCountMessages(),
             'newprivat' => $user->newprivat,
             'status'    => $user->getStatus(),
-            'avatar'    => siteUrl(true).'/uploads/avatars/'.$user->avatar,
-            'picture'   => siteUrl(true).'/uploads/pictures/'.$user->picture,
+            'avatar'    => $user->avatar ? siteUrl(true).'/uploads/avatars/' . $user->avatar : null,
+            'picture'   => $user->picture ? siteUrl(true).'/uploads/pictures/' . $user->picture : null,
             'rating'    => $user->rating,
             'lastlogin' => $user->updated_at,
         ]);
@@ -77,13 +77,13 @@ class ApiController extends BaseController
         $count = int(Request::input('count', 10));
 
         if (! $token) {
-            echo json_encode(['error'=>'no token']);
+            echo json_encode(['error' => 'no token']);
             exit();
         }
 
         $user = User::query()->where('apikey', $token)->first();
         if (! $user) {
-            echo json_encode(['error'=>'no user']);
+            echo json_encode(['error' => 'no user']);
             exit();
         }
 
@@ -93,7 +93,7 @@ class ApiController extends BaseController
             ->get();
 
         if ($inbox->isEmpty()) {
-            echo json_encode(['error'=>'no messages']);
+            echo json_encode(['error' => 'no messages']);
             exit();
         }
 
@@ -130,19 +130,19 @@ class ApiController extends BaseController
         $id    = int(Request::input('id'));
 
         if (! $token) {
-            echo json_encode(['error'=>'no token']);
+            echo json_encode(['error' => 'no token']);
             exit();
         }
 
         $user = User::query()->where('apikey', $token)->first();
         if (! $user) {
-            echo json_encode(['error'=>'no user']);
+            echo json_encode(['error' => 'no user']);
             exit();
         }
 
         $topic = Topic::query()->find($id);
         if (! $topic) {
-            echo json_encode(['error'=>'no topic']);
+            echo json_encode(['error' => 'no topic']);
             exit();
         }
 
