@@ -43,7 +43,7 @@ class IgnoreController extends BaseController
                 $totalIgnore = Ignore::query()->where('user_id', getUser('id'))->count();
                 $validator->lte($totalIgnore, setting('limitignore'), 'Ошибка! Игнор-лист переполнен (Максимум ' . setting('limitignore') . ' пользователей!)');
 
-                $validator->false(isIgnore(getUser(), $user), ['user' => 'Данный пользователь уже есть в игнор-листе!']);
+                $validator->false(getUser()->isIgnore($user), ['user' => 'Данный пользователь уже есть в игнор-листе!']);
                 $validator->notIn($user->level, User::ADMIN_GROUPS, ['user' => 'Запрещено добавлять в игнор администрацию сайта']);
             }
 
@@ -55,9 +55,9 @@ class IgnoreController extends BaseController
                     'created_at' => SITETIME,
                 ]);
 
-                if (! isIgnore($user, getUser())) {
+                if (! $user->isIgnore(getUser())) {
                     $message = 'Пользователь [b]' . getUser('login') . '[/b] добавил вас в свой игнор-лист!';
-                    sendMessage($user, getUser(), $message);
+                    $user->sendMessage(getUser(), $message);
                 }
 
                 setFlash('success', 'Пользователь успешно добавлен в игнор-лист!');

@@ -297,7 +297,7 @@ class LoadController extends AdminController
 
                 if (! $down->active) {
                     $text = 'Уведомеление об изменении файла.'.PHP_EOL.'Ваш файл [b][url='.siteUrl().'/downs/'.$down->id.']'.$down->title.'[/url][/b] был отредактирован модератором, возможно от вас потребуются дополнительные исправления!';
-                    sendMessage($down->user, null, $text);
+                    $down->user->sendMessage(null, $text);
                 }
 
                 setFlash('success', 'Загрузка успешно отредактирована!');
@@ -424,14 +424,14 @@ class LoadController extends AdminController
                 $down->category->increment('count_downs');
 
                 $text = 'Уведомеление о публикации файла.'.PHP_EOL.'Ваш файл <a href="/downs/'.$down->id.'">'.$down->title.'</a> успешно прошел проверку и добавлен в загрузки';
-                sendMessage($down->user, null, $text);
+                $down->user->sendMessage(null, $text);
 
             } else {
                 $type = 'снята с публикации';
                 $down->category->decrement('count_downs');
 
                 $text = 'Уведомеление о снятии с публикации.'.PHP_EOL.'Ваш файл <a href="/downs/'.$down->id.'">'.$down->title.'</a> снят с публикации из загрузок';
-                sendMessage($down->user, null, $text);
+                $down->user->sendMessage(null, $text);
             }
 
             setFlash('success', 'Загрузка успешно ' . $type . '!');

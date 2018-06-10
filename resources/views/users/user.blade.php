@@ -137,7 +137,7 @@
     @endif
 
     <div class="alert alert-info">
-        <i class="fa fa-sticky-note"></i> <a href="/walls/{{ $user->login }}">Стена сообщений</a> ({{ userWall($user) }})<br>
+        <i class="fa fa-sticky-note"></i> <a href="/walls/{{ $user->login }}">Стена сообщений</a> ({{ $user->getCountWall() }})<br>
 
         @if ($user->login != getUser('login'))
             <i class="fa fa-address-book"></i> Добавить в
@@ -152,7 +152,7 @@
             @endif
 
             @if (isAdmin('moder'))
-                @if (!empty(setting('invite')))
+                @if (setting('invite'))
                     <i class="fa fa-ban"></i> <a href="/admin/invitations/send?user={{ $user->login }}&amp;token={{ $_SESSION['token'] }}">Отправить инвайт</a><br>
                 @endif
             <i class="fa fa-ban"></i> <a href="/admin/bans/edit?user={{ $user->login }}">Бан / Разбан</a><br>

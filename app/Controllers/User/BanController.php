@@ -56,7 +56,7 @@ class BanController extends BaseController
 
                 $message = 'Объяснение нарушения: '.antimat($msg);
 
-                sendMessage($sendUser, $user, $message);
+                $sendUser->sendMessage($user, $message);
 
                 $banhist->update([
                     'explain' => 0

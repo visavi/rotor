@@ -43,7 +43,7 @@ class ContactController extends BaseController
                 $totalContact = Contact::query()->where('user_id', getUser('id'))->count();
                 $validator->lte($totalContact, setting('limitcontact'), 'Ошибка! Контакт-лист переполнен (Максимум ' . setting('limitcontact') . ' пользователей!)');
 
-                $validator->false(isContact(getUser(), $user), ['user' => 'Данный пользователь уже есть в контакт-листе!']);
+                $validator->false(getUser()->isContact($user), ['user' => 'Данный пользователь уже есть в контакт-листе!']);
             }
 
             if ($validator->isValid()) {
@@ -54,9 +54,9 @@ class ContactController extends BaseController
                     'created_at' => SITETIME,
                 ]);
 
-                if (! isIgnore($user, getUser())) {
+                if (! $user->isIgnore(getUser())) {
                     $message = 'Пользователь [b]'.getUser('login').'[/b] добавил вас в свой контакт-лист!';
-                    sendMessage($user, getUser(), $message);
+                    $user->sendMessage(getUser(), $message);
                 }
 
                 setFlash('success', 'Пользователь успешно добавлен в контакт-лист!');

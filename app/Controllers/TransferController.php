@@ -56,7 +56,7 @@ class TransferController extends BaseController
         if ($this->user) {
             $validator
                 ->notEqual($this->user->id, getUser('id'), ['user' => 'Запрещено переводить деньги самому себе!'])
-                ->false(isIgnore($this->user, getUser()), ['user' => 'Вы внесены в игнор-лист получателя!']);
+                ->false($this->user->isIgnore(getUser()), ['user' => 'Вы внесены в игнор-лист получателя!']);
         }
 
         if ($validator->isValid()) {
@@ -70,7 +70,7 @@ class TransferController extends BaseController
                 $message = 'Пользователь [b]'.getUser('login').'[/b] перечислил вам '.plural($money, setting('moneyname')).''.PHP_EOL.'Примечание: '.$comment;
 
                 // Уведомление по привату
-                sendMessage($this->user, getUser(), $message);
+                $this->user->sendMessage(getUser(), $message);
 
                 // Запись логов
                 Transfer::query()->create([

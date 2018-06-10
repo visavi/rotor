@@ -1,38 +1,9 @@
 <?php
 
 use App\Classes\{BBCode, Metrika, Registry, Request};
-use App\Models\{
-    Antimat,
-    Ban,
-    Banhist,
-    BlackList,
-    Blog,
-    Load,
-    Chat,
-    Contact,
-    Counter,
-    Down,
-    Guestbook,
-    Ignore,
-    Inbox,
-    Invite,
-    Error,
-    News,
-    Notice,
-    Offer,
-    Online,
-    Photo,
-    Post,
-    RekUser,
-    Setting,
-    Smile,
-    Spam,
-    Topic,
-    User,
-    Vote,
-    Wall
+use App\Models\{Antimat, Ban, Banhist, BlackList, Blog, Load, Chat, Counter, Down, Guestbook, Invite,
+    Error, News, Notice, Offer, Online, Photo, Post, RekUser, Setting, Smile, Spam, Topic, User, Vote
 };
-
 use Curl\Curl;
 use Illuminate\Database\Capsule\Manager as DB;
 use Illuminate\Http\UploadedFile;
@@ -373,39 +344,6 @@ function getCalendar()
     $calendar = makeCalendar($date['mon'], $date['year']);
 
     return view('app/_calendar', compact('calendar', 'date', 'newsDays', 'newsIds'));
-}
-
-/**
- * Возвращает размер контакт-листа
- *
- * @param  User $user объект пользователя
- * @return int        количество контактов
- */
-function userContact(User $user)
-{
-    return Contact::query()->where('user_id', $user->id)->count();
-}
-
-/**
- * Возвращает размер игнор-листа
- *
- * @param  User $user объект пользователя
- * @return int        количество игнорируемых
- */
-function userIgnore(User $user)
-{
-    return Ignore::query()->where('user_id', $user->id)->count();
-}
-
-/**
- * Возвращает количество записей на стене сообщений
- *
- * @param  User $user объект пользователя
- * @return int        количество записей
- */
-function userWall(User $user)
-{
-    return Wall::query()->where('user_id', $user->id)->count();
 }
 
 /**
@@ -1431,50 +1369,6 @@ function resizeImage($path, array $params = [])
     return '<img src="' . $image['path'] . '" data-source="' . $image['source'] . '" ' . $strParams . '>';
 }
 
-
-/**
- * Возвращает находится ли пользователь в контакатх
- *
- * @param  User $user        пользователя
- * @param  User $contactUser объект пользователя
- * @return bool              находится ли в контактах
- */
-function isContact(User $user, User $contactUser)
-{
-    $isContact = Contact::query()
-        ->where('user_id', $user->id)
-        ->where('contact_id', $contactUser->id)
-        ->first();
-
-    if ($isContact) {
-        return true;
-    }
-
-    return false;
-}
-
-/**
- * Возвращает находится ли пользователь в игноре
- *
- * @param  User $user       объект пользователя
- * @param  User $ignoreUser объект пользователя
- * @return bool             находится ли в игноре
- */
-function isIgnore(User $user, User $ignoreUser)
-{
-
-    $isIgnore = Ignore::query()
-        ->where('user_id', $user->id)
-        ->where('ignore_id', $ignoreUser->id)
-        ->first();
-
-    if ($isIgnore) {
-        return true;
-    }
-
-    return false;
-}
-
 /**
  * Удаляет директорию рекурсивно
  *
@@ -1510,32 +1404,10 @@ function sendNotify(string $text, string $pageUrl, string $pageName)
         foreach ($usersAnswer as $login) {
             $user = getUserByLogin($login);
             if ($user && $user->notify) {
-                sendMessage($user, null, 'Пользователь ' . getUser()->getProfile() . ' упомянул вас на странице [url=' . $pageUrl . ']' . $pageName . '[/url]' . PHP_EOL . 'Текст сообщения: ' . $text);
+                $user->sendMessage(null, 'Пользователь ' . getUser()->getProfile() . ' упомянул вас на странице [url=' . $pageUrl . ']' . $pageName . '[/url]' . PHP_EOL . 'Текст сообщения: ' . $text);
             }
         }
     }
-}
-
-/**
- * Отправляет приватное сообщение
- *
- * @param  User      $user   Получатель
- * @param  User|null $author Отправитель
- * @param  int       $text   текст сообщения
- * @return bool              результат отправки
- */
-function sendMessage(User $user, ?User $author, $text)
-{
-    Inbox::query()->create([
-        'user_id'    => $user->id,
-        'author_id'  => $author ? $author->id : null,
-        'text'       => $text,
-        'created_at' => SITETIME,
-    ]);
-
-    $user->increment('newprivat');
-
-    return true;
 }
 
 /**

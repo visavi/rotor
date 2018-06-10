@@ -67,7 +67,7 @@ class DeliveryController extends AdminController
             if ($validator->isValid()) {
 
                 foreach ($users as $user) {
-                    sendMessage($user, null, $msg);
+                    $user->sendMessage(null, $msg);
                 }
 
                 setFlash('success', 'Сообщение успешно разослано!');

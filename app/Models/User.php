@@ -98,7 +98,7 @@ class User extends BaseModel
      * @param  boolean $link  выводить как ссылку
      * @return string        путь к профилю
      */
-    public function getProfile($color = null, $link = true)
+    public function getProfile($color = null, $link = true): string
     {
         if ($this->id) {
             $name = empty($this->name) ? $this->login : $this->name;
@@ -122,7 +122,7 @@ class User extends BaseModel
      *
      * @return string пол пользователя
      */
-    public function getGender()
+    public function getGender(): string
     {
         if ($this->gender === 'female') {
             return '<i class="fa fa-female fa-lg"></i>';
@@ -236,12 +236,12 @@ class User extends BaseModel
     }
 
     /**
-     * Возвращает имя уровня пользователя
+     * Возвращает название уровня по ключу
      *
      * @param  string $level
      * @return string
      */
-    public static function getLevelByKey($level)
+    public static function getLevelByKey(string $level): string
     {
         $levels = explode(',', setting('statusname'));
 
@@ -274,11 +274,21 @@ class User extends BaseModel
     }
 
     /**
+     * Возвращает уровень пользователя
+     *
+     * @return string Уровень пользователя
+     */
+    public function getLevel(): string
+    {
+        return self::getLevelByKey($this->level);
+    }
+
+    /**
      * Возвращает онлайн-статус пользователя
      *
      * @return string онлайн-статус
      */
-    public function getOnline()
+    public function getOnline(): string
     {
         static $visits;
 
@@ -306,21 +316,11 @@ class User extends BaseModel
     }
 
     /**
-     * Возвращает уровень пользователя
-     *
-     * @return string Уровень пользователя
-     */
-    public function getLevel()
-    {
-        return self::getLevelByKey($this->level);
-    }
-
-    /**
      * Возвращает статус пользователя
      *
      * @return string статус пользователя
      */
-    public function getStatus()
+    public function getStatus(): string
     {
         static $status;
 
@@ -341,7 +341,7 @@ class User extends BaseModel
      *
      * @return string код аватара
      */
-    public function defaultAvatar()
+    public function defaultAvatar(): string
     {
         $name   = empty($this->name) ? $this->login : $this->name;
         $color  = '#' . substr(dechex(crc32($this->login)), 0, 6);
@@ -355,7 +355,7 @@ class User extends BaseModel
      *
      * @return string аватар пользователя
      */
-    public function getAvatar()
+    public function getAvatar(): string
     {
         if (! $this->id) {
             return '<img class="avatar" src="/assets/img/images/avatar_guest.png" alt=""> ';
@@ -372,13 +372,14 @@ class User extends BaseModel
     /**
      * Кеширует статусы пользователей
      *
-     * @param int $time время кеширования
+     * @param  int $time время кеширования
+     * @return void
      */
-    public function saveStatus($time = 0)
+    public function saveStatus($time = 0): void
     {
         if (empty($time) || @filemtime(STORAGE . '/temp/status.dat') < time() - $time) {
 
-            $users = User::query()
+            $users = self::query()
                 ->select('users.id', 'users.status', 'status.name', 'status.color')
                 ->leftJoin('status', function (JoinClause $join) {
                     $join->whereRaw('users.point between status.topoint and status.point');
@@ -407,13 +408,105 @@ class User extends BaseModel
     }
 
     /**
+     * Возвращает находится ли пользователь в контакатх
+     *
+     * @param  User $user объект пользователя
+     * @return bool       находится ли в контактах
+     */
+    public function isContact(User $user): bool
+    {
+        $isContact = Contact::query()
+            ->where('user_id', $this->id)
+            ->where('contact_id', $user->id)
+            ->first();
+
+        if ($isContact) {
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
+     * Возвращает находится ли пользователь в игноре
+     *
+     * @param  User $user объект пользователя
+     * @return bool       находится ли в игноре
+     */
+    public function isIgnore(User $user): bool
+    {
+
+        $isIgnore = Ignore::query()
+            ->where('user_id', $this->id)
+            ->where('ignore_id', $user->id)
+            ->first();
+
+        if ($isIgnore) {
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
+     * Отправляет приватное сообщение
+     *
+     * @param  User|null $author Отправитель
+     * @param  int       $text   текст сообщения
+     * @return bool              результат отправки
+     */
+    public function sendMessage(?User $author, $text): bool
+    {
+        Inbox::query()->create([
+            'user_id'    => $this->id,
+            'author_id'  => $author ? $author->id : null,
+            'text'       => $text,
+            'created_at' => SITETIME,
+        ]);
+
+        $this->increment('newprivat');
+
+        return true;
+    }
+
+    /**
      * Возвращает количество писем пользователя
      *
      * @return int количество писем
      */
-    public function getCountMessages()
+    public function getCountMessages(): int
     {
         return Inbox::query()->where('user_id', $this->id)->count();
+    }
+
+    /**
+     * Возвращает размер контакт-листа
+     *
+     * @return int количество контактов
+     */
+    public function getCountContact(): int
+    {
+        return Contact::query()->where('user_id', $this->id)->count();
+    }
+
+    /**
+     * Возвращает размер игнор-листа
+     *
+     * @return int количество игнорируемых
+     */
+    public function getCountIgnore(): int
+    {
+        return Ignore::query()->where('user_id', $this->id)->count();
+    }
+
+    /**
+     * Возвращает количество записей на стене сообщений
+     *
+     * @return int количество записей
+     */
+    public function getCountWall(): int
+    {
+        return Wall::query()->where('user_id', $this->id)->count();
     }
 
     /**
@@ -421,7 +514,7 @@ class User extends BaseModel
      *
      * @return void
      */
-    public function deleteAlbum()
+    public function deleteAlbum(): void
     {
         $photos = Photo::query()->where('user_id', $this->id)->get();
 

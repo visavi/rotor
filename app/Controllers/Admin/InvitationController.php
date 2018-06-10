@@ -133,7 +133,7 @@ class InvitationController extends AdminController
             Invite::query()->insert($newKeys);
 
             $text = 'Вы получили пригласительные ключи в количестве '.count($listKeys).'шт.'.PHP_EOL.'Список ключей: '.implode(', ', $listKeys).PHP_EOL.'С помощью этих ключей вы можете пригласить ваших друзей на наш сайт!';
-            sendMessage($user, null, $text);
+            $user->sendMessage(null, $text);
 
             setFlash('success', 'Ключи успешно отправлены!');
             redirect('/admin/invitations');
@@ -175,7 +175,7 @@ class InvitationController extends AdminController
                 ]);
 
                 $text = 'Поздравляем! Вы получили пригласительный ключ'.PHP_EOL.'Ваш ключ: '.$key.PHP_EOL.'С помощью этого ключа вы можете пригласить вашего друга на наш сайт!';
-                sendMessage($user, null, $text);
+                $user->sendMessage(null, $text);
             }
 
             setFlash('success', 'Ключи успешно отправлены! ('. $users->count() .')');
