@@ -50,7 +50,7 @@
 
                 <div class="clearfix">{!! bbCode($data->shortText()) !!}</div>
 
-                <div>Добавлено: {!! profile($data->user) !!}<br>
+                <div>Добавлено: {!! $data->user->getProfile() !!}<br>
                     <a href="/news/comments/{{  $data->id }}">Комментарии</a> ({{ $data->count_comments }})
                     <a href="/news/end/{{ $data->id }}">&raquo;</a>
                 </div>

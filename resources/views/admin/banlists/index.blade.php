@@ -19,7 +19,7 @@
     @if ($users->isNotEmpty())
         @foreach ($users as $user)
             <div class="b">
-                {!! $user->getGender() !!} <b>{!! profile($user) !!}</b>
+                {!! $user->getGender() !!} <b>{!! $user->getProfile() !!}</b>
 
                 @if ($user->lastBan->created_at)
                     (Забанен: {{ dateFixed($user->lastBan->created_at) }})
@@ -30,7 +30,7 @@
                 До окончания бана: {{ formatTime($user->timeban - SITETIME) }}<br>
 
                 @if ($user->lastBan->id)
-                    Забанил: <b>{!! profile($user->lastBan->sendUser) !!}</b><br>
+                    Забанил: <b>{!! $user->lastBan->sendUser->getProfile() !!}</b><br>
                     Причина: {!! bbCode($user->lastBan->reason) !!}<br>
                 @endif
 

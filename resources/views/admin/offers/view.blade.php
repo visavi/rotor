@@ -31,7 +31,7 @@
     <div>
         {!! bbCode($offer->text) !!}<br><br>
 
-        Добавлено: {!! profile($offer->user) !!} ({{ dateFixed($offer->created_at) }})<br>
+        Добавлено: {!! $offer->user->getProfile() !!} ({{ dateFixed($offer->created_at) }})<br>
 
         <div class="js-rating">Рейтинг:
             <span>{!! formatNum($offer->rating) !!}</span><br>
@@ -50,7 +50,7 @@
         <div class="b"><b>Официальный ответ</b></div>
         <div class="q">
             {!! bbCode($offer->reply) !!}<br>
-            {!! profile($offer->replyUser) !!} ({{ dateFixed($offer->updated_at) }})
+            {!! $offer->replyUser->getProfile() !!} ({{ dateFixed($offer->updated_at) }})
         </div><br>
     @endif
 @stop

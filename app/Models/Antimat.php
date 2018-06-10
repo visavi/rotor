@@ -2,6 +2,8 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Capsule\Manager as DB;
+
 class Antimat extends BaseModel
 {
     /**
@@ -24,4 +26,26 @@ class Antimat extends BaseModel
      * @var array
      */
     protected $guarded = [];
+
+    /**
+     * Очищает строку от мата по базе слов
+     *
+     * @param  string $str строка
+     * @return string      обработанная строка
+     */
+    public static function replace($str)
+    {
+        $words = self::query()
+            ->orderBy(DB::raw('CHAR_LENGTH(string)'), 'desc')
+            ->pluck('string')
+            ->all();
+
+        if ($words) {
+            foreach($words as $word) {
+                $str = preg_replace('|' . preg_quote($word) . '|iu', '***', $str);
+            }
+        }
+
+        return $str;
+    }
 }

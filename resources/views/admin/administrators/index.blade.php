@@ -22,11 +22,11 @@
             @foreach($users as $user)
                 <div  class="text-truncate bg-light my-1">
                     <div class="img">
-                        {!! userAvatar($user) !!}
-                        {!! userOnline($user) !!}
+                        {!! $user->getAvatar() !!}
+                        {!! $user->getOnline() !!}
                     </div>
 
-                    <b>{!! profile($user) !!}</b>
+                    <b>{!! $user->getProfile() !!}</b>
                     ({{ $user->getLevel() }})<br>
 
                     @if (isAdmin('boss'))

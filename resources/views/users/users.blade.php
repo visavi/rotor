@@ -20,14 +20,14 @@
 
             <div class="b">
                 <div class="img">
-                    {!! userAvatar($data) !!}
-                    {!! userOnline($data) !!}
+                    {!! $data->getAvatar() !!}
+                    {!! $data->getOnline() !!}
                 </div>
 
                 @if ($user == $data->login)
-                    {{ ($page->offset + $key + 1) }}. <b>{!! profile($data, '#ff0000') !!}</b>
+                    {{ ($page->offset + $key + 1) }}. <b>{!! $data->getProfile('#ff0000') !!}</b>
                 @else
-                    {{ ($page->offset + $key + 1) }}. <b>{!! profile($data) !!}</b>
+                    {{ ($page->offset + $key + 1) }}. <b>{!! $data->getProfile() !!}</b>
                 @endif
                 ({{ plural($data->point, setting('scorename')) }})<br>
                 {!! $data->getStatus() !!}

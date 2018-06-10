@@ -35,7 +35,7 @@
                 Категория: <a href="/loads/{{ $down->category->id }}">{{ $down->category->name }}</a><br>
                 Рейтинг: {{ $rating }}<br>
                 Скачиваний: {{ $down->loads }}<br>
-                Автор: {!! profile($down->user) !!} ({{ dateFixed($down->created_at) }})
+                Автор: {!! $down->user->getProfile() !!} ({{ dateFixed($down->created_at) }})
             </div>
 
         @endforeach

@@ -30,8 +30,8 @@
             <div class="post" id="comment_{{ $data->id }}">
                 <div class="b">
                     <div class="img">
-                        {!! userAvatar($data->user) !!}
-                        {!! userOnline($data->user) !!}
+                        {!! $data->user->getAvatar() !!}
+                        {!! $data->user->getOnline() !!}
                     </div>
 
                     @if (getUser())
@@ -54,7 +54,7 @@
                         </div>
                     @endif
 
-                    <b>{!! profile($data->user) !!}</b> <small>({{ dateFixed($data->created_at) }})</small><br>
+                    <b>{!! $data->user->getProfile() !!}</b> <small>({{ dateFixed($data->created_at) }})</small><br>
                     {!! $data->user->getStatus() !!}
                 </div>
                 <div class="message">

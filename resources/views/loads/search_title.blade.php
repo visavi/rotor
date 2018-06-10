@@ -30,7 +30,7 @@
             Категория: <a href="/loads/{{ $data->category->id }}">{{ $data->category->name }}</a><br>
             Рейтинг: {{ $rating }}<br>
             Скачиваний: {{ $data->loads }}<br>
-            Добавил: {!! profile($data->user) !!} ({{ dateFixed($data->created_at) }})
+            Добавил: {!! $data->user->getProfile() !!} ({{ dateFixed($data->created_at) }})
         </div>
     @endforeach
 

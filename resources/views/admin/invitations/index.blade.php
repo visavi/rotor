@@ -37,10 +37,10 @@
                 </div>
 
                 <div>
-                    Владелец: {!! profile($invite->user) !!}<br>
+                    Владелец: {!! $invite->user->getProfile() !!}<br>
 
                     @if ($invite->invite_user_id)
-                        Приглашенный: {!! profile($invite->inviteUser) !!}<br>
+                        Приглашенный: {!! $invite->inviteUser->getProfile() !!}<br>
                     @endif
 
                     Создан: {{ dateFixed($invite->created_at) }}<br>

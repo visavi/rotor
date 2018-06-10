@@ -41,7 +41,7 @@
                 <i class="fa fa-wrench"></i> Кураторы темы:
                 @foreach ($topic->curators as $key => $curator)
                     <?php $comma = (empty($key)) ? '' : ', '; ?>
-                    {{ $comma }}{!! profile($curator) !!}
+                    {{ $comma }}{!! $curator->getProfile() !!}
                 @endforeach
             </span>
         </div>
@@ -136,11 +136,11 @@
                     </div>
 
                     <div class="img">
-                        {!! userAvatar($data->user) !!}
-                        {!! userOnline($data->user) !!}
+                        {!! $data->user->getAvatar() !!}
+                        {!! $data->user->getOnline() !!}
                     </div>
 
-                    {{ $num }}. <b>{!! profile($data->user) !!}</b> <small>({{ dateFixed($data->created_at) }})</small><br>
+                    {{ $num }}. <b>{!! $data->user->getProfile() !!}</b> <small>({{ dateFixed($data->created_at) }})</small><br>
                     {!! $data->user->getStatus() !!}
                 </div>
 

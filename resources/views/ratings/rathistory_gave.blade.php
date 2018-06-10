@@ -32,7 +32,7 @@
                     <i class="fa fa-thumbs-up text-success"></i>
                 @endif
 
-                <b>{!! profile($data->recipient) !!}</b> ({{ dateFixed($data->created_at) }})
+                <b>{!! $data->recipient->getProfile() !!}</b> ({{ dateFixed($data->created_at) }})
             </div>
             <div>
                 Комментарий:

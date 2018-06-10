@@ -33,7 +33,7 @@
                 <div>
                     {!! bbCode($data->text) !!}<br>
 
-                    Написал: {!! profile($data->user) !!} <small>({{ dateFixed($data->created_at) }})</small><br>
+                    Написал: {!! $data->user->getProfile() !!} <small>({{ dateFixed($data->created_at) }})</small><br>
                     @if (isAdmin())
                         <span class="data">({{ $data->brow }}, {{ $data->ip }})</span>
                     @endif

@@ -33,7 +33,7 @@
     <div>
         {!! bbCode($offer->text) !!}<br><br>
 
-        Добавлено: {!! profile($offer->user) !!} ({{ dateFixed($offer->created_at) }})<br>
+        Добавлено: {!! $offer->user->getProfile() !!} ({{ dateFixed($offer->created_at) }})<br>
 
         <div class="js-rating">Рейтинг:
             @unless (getUser('id') == $offer->user_id)
@@ -50,7 +50,7 @@
         <div class="b"><b>Официальный ответ</b></div>
         <div class="q">
             {!! bbCode($offer->reply) !!}<br>
-            {!! profile($offer->replyUser) !!} ({{ dateFixed($offer->updated_at) }})
+            {!! $offer->replyUser->getProfile() !!} ({{ dateFixed($offer->updated_at) }})
         </div><br>
     @endif
 
@@ -61,11 +61,11 @@
         @foreach ($offer->lastComments as $comment)
             <div class="b">
                 <div class="img">
-                    {!! userAvatar($comment->user) !!}
-                    {!! userOnline($comment->user) !!}
+                    {!! $comment->user->getAvatar() !!}
+                    {!! $comment->user->getOnline() !!}
                 </div>
 
-                <b>{!! profile($comment->user) !!}</b>
+                <b>{!! $comment->user->getProfile() !!}</b>
                 <small>({{ dateFixed($comment->created_at) }})</small><br>
                 {!! $comment->user->getStatus() !!}
             </div>

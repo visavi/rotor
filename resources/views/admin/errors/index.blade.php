@@ -41,7 +41,7 @@
             </div>
             <div>
                 Referer: {{ $data->referer ?: 'Не определено' }}<br>
-                Пользователь: {!! profile($data->user) !!}<br>
+                Пользователь: {!! $data->user->getProfile() !!}<br>
                 <span class="data">({{ $data->brow }}, {{ $data->ip }})</span>
             </div>
         @endforeach

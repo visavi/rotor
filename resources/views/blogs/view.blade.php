@@ -51,7 +51,7 @@
         {!! pagination($page) !!}
     @endif
 
-    Автор статьи: {!! profile($blog->user) !!} ({{ dateFixed($blog->created_at) }})<br>
+    Автор статьи: {!! $blog->user->getProfile() !!} ({{ dateFixed($blog->created_at) }})<br>
 
     <i class="fa fa-tag"></i> {!! $tags !!}<hr>
 

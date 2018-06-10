@@ -23,7 +23,7 @@
                 <b><a href="/articles/{{ $data->id }}">{{ $data->title }}</a></b> ({!! formatNum($data->rating) !!})
             </div>
 
-            <div>Автор: {!! profile($data->user) !!} ({{ dateFixed($data->created_at) }})<br>
+            <div>Автор: {!! $data->user->getProfile() !!} ({{ dateFixed($data->created_at) }})<br>
                 <i class="fa fa-comment"></i> <a href="/articles/comments/{{ $data->id }}">Комментарии</a> ({{ $data->count_comments }})
                 <a href="/articles/end/{{ $data->id }}">&raquo;</a>
             </div>

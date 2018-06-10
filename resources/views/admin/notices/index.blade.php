@@ -37,7 +37,7 @@
 
             <div>
                 <span class="badge badge-info">Тип шаблона: {{ $notice->type }}</span><br>
-                Изменено: {!! profile($notice->user) !!}
+                Изменено: {!! $notice->user->getProfile() !!}
                 ({{ dateFixed($notice->updated_at) }})
             </div>
         @endforeach

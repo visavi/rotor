@@ -19,7 +19,7 @@
     @if ($logs)
         @foreach ($logs as $log)
             <div class="b">
-                <i class="fa fa-file"></i> <b>{!! profile($log->user) !!}</b>
+                <i class="fa fa-file"></i> <b>{!! $log->user->getProfile() !!}</b>
                  ({{  dateFixed($log->created_at) }})
             </div>
             <div>

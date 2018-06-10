@@ -25,10 +25,10 @@
 
                 <div class="b">
                     <div class="img">
-                        {!! userAvatar($data->user) !!}
+                        {!! $data->user->getAvatar() !!}
 
                         @if ($data->user_id)
-                            {!! userOnline($data->user) !!}
+                            {!! $data->user->getOnline() !!}
                         @endif
                     </div>
 
@@ -39,7 +39,7 @@
                     </div>
 
                     @if ($data->user_id)
-                        <b>{!! profile($data->user) !!}</b> <small>({{ dateFixed($data->created_at) }})</small><br>
+                        <b>{!! $data->user->getProfile() !!}</b> <small>({{ dateFixed($data->created_at) }})</small><br>
                         {!! $data->user->getStatus() !!}
                     @else
                         <b>{{ setting('guestsuser') }}</b> <small>({{ dateFixed($data->created_at) }})</small>

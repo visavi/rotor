@@ -55,7 +55,7 @@ class ApiController extends BaseController
             'newwall'   => $user->newwall,
             'point'     => $user->point,
             'money'     => $user->money,
-            'allprivat' => userMail($user),
+            'allprivat' => $user->getCountMessages(),
             'newprivat' => $user->newprivat,
             'status'    => $user->getStatus(),
             'avatar'    => siteUrl(true).'/uploads/avatars/'.$user->avatar,

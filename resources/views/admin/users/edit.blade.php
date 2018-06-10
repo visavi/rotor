@@ -17,7 +17,7 @@
         </ol>
     </nav>
 
-    <h3>{!! profile($user) !!} {{ $user->login }} #{{ $user->id }}</h3>
+    <h3>{!! $user->getProfile() !!} {{ $user->login }} #{{ $user->id }}</h3>
 
     @if ($user->id == getUser('id'))
         <b><span style="color:#ff0000">Внимание! Вы редактируете cобственный аккаунт!</span></b><br><br>
@@ -178,7 +178,7 @@
         <b><span style="color:#ff0000">Внимание, аккаунт требует подтверждение регистрации!</span></b><br>
     @endif
 
-    @if ($user->level == 'banned' && $user->timeban > SITETIME)
+    @if ($user->level === 'banned' && $user->timeban > SITETIME)
         <div class="form">
             <b><span style="color:#ff0000">Внимание, данный пользователь заблокирован!</span></b><br>
             До окончания бана: {{ formatTime($user->timeban - SITETIME) }}<br>
@@ -186,7 +186,7 @@
             @if ($banhist)
                 Срок: {{ formatTime($banhist->term) }}<br>
                 Причина: {!! bbCode($banhist->reason) !!}<br>
-                Забанил: {!! profile($banhist->sendUser) !!}<br>
+                Забанил: {!! $banhist->sendUser->getProfile() !!}<br>
             @endif
         </div>
     @endif

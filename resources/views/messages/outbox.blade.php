@@ -30,11 +30,11 @@
             @foreach ($messages as $data)
                 <div class="b">
                     <div class="img">
-                        {!! userAvatar($data->recipient) !!}
-                        {!! userOnline($data->recipient) !!}
+                        {!! $data->recipient->getAvatar() !!}
+                        {!! $data->recipient->getOnline() !!}
                     </div>
 
-                    <b>{!! profile($data->recipient) !!}</b>  ({{ dateFixed($data->created_at) }})<br>
+                    <b>{!! $data->recipient->getProfile() !!}</b>  ({{ dateFixed($data->created_at) }})<br>
                     {!! $data->recipient->getStatus() !!}
                 </div>
 

@@ -21,7 +21,7 @@
 
         @foreach($online as $key => $value)
             {{ $comma = (empty($key)) ? '' : ', ' }}
-            {!! $value->user->getGender() !!} <b>{!! profile($value->user) !!}</b>
+            {!! $value->user->getGender() !!} <b>{!! $value->user->getProfile() !!}</b>
         @endforeach
 
         <br>Всего пользователей: {{ $online->count() }} чел.<br><br>
@@ -35,7 +35,7 @@
 
         @foreach($birthdays as $key => $value)
             {{ $comma = (empty($key)) ? '' : ', ' }}
-            {!! $value->getGender() !!} <b>{!! profile($value) !!}</b>
+            {!! $value->getGender() !!} <b>{!! $value->getProfile() !!}</b>
         @endforeach
 
         <br>Всего именниников: {{ $birthdays->count() }} чел.<br><br>
@@ -48,7 +48,7 @@
     @if ($novices->isNotEmpty())
         @foreach($novices as $key => $value)
             {{ $comma = (empty($key)) ? '' : ', ' }}
-            {!! $value->getGender() !!} <b>{!! profile($value) !!}</b>
+            {!! $value->getGender() !!} <b>{!! $value->getProfile() !!}</b>
         @endforeach
 
         <br>Всего новичков: {{ $novices->count() }} чел.<br><br>

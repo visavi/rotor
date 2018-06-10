@@ -38,7 +38,7 @@
             {!! $data->text !!}<br>
 
             Категория: <a href="/blogs/{{ $data->category_id }}">{{ $data->name }}</a><br>
-            Автор: {!! profile($data->user) !!}  ({{ dateFixed($data->created_at) }})
+            Автор: {!! $data->user->getProfile() !!}  ({{ dateFixed($data->created_at) }})
         </div>
     @endforeach
 

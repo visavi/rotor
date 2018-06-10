@@ -32,7 +32,7 @@
                 <div>Добавлено:
 
                     @if ($log->user->id)
-                        <b>{!! profile($log->user) !!}</b><br>
+                        <b>{!! $log->user->getProfile() !!}</b><br>
                     @else
                         <b>Автоматически</b><br>
                     @endif

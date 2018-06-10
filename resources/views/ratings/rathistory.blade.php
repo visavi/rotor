@@ -33,7 +33,7 @@
                         <i class="fa fa-thumbs-up text-success"></i>
                     @endif
 
-                    <b>{!! profile($data->user) !!}</b> ({{ dateFixed($data->created_at) }})
+                    <b>{!! $data->user->getProfile() !!}</b> ({{ dateFixed($data->created_at) }})
 
                     <div class="float-right">
                         @if (isAdmin())

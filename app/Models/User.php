@@ -92,6 +92,32 @@ class User extends BaseModel
     }
 
     /**
+     * Возвращает ссылку на профиль пользователя
+     *
+     * @param  string  $color цвет логина
+     * @param  boolean $link  выводить как ссылку
+     * @return string        путь к профилю
+     */
+    public function getProfile($color = null, $link = true)
+    {
+        if ($this->id) {
+            $name = empty($this->name) ? $this->login : $this->name;
+
+            if ($color) {
+                $name = '<span style="color:' . $color . '">' . $name . '</span>';
+            }
+
+            if ($link) {
+                return '<a class="author" href="/users/' . $this->login . '" data-login="' . $this->login . '">' . $name . '</a>';
+            }
+
+            return '<span class="author" data-login="' . $this->login . '">' . $name . '</span>';
+        }
+
+        return '<span class="author" data-login="' . setting('guestsuser') . '">' . setting('guestsuser') . '</span>';
+    }
+
+    /**
      * Возвращает пол пользователя
      *
      * @return string пол пользователя
@@ -121,23 +147,11 @@ class User extends BaseModel
 
             $user = self::query()->where('login', $login)->first();
 
-            /* Миграция старых паролей */
-            if (preg_match('/^[a-f0-9]{32}$/', $user['password']))
-            {
-                if (md5(md5($password)) == $user['password']) {
-                    $user['password'] = password_hash($password, PASSWORD_BCRYPT);
-
-                    $user = self::query()->where('login', $user['login'])->first();
-                    $user->password = $user['password'];
-                    $user->save();
-                }
-            }
-
             if ($user && password_verify($password, $user['password'])) {
 
                 if ($remember) {
-                    setcookie('login', $user['login'], SITETIME + 3600 * 24 * 365, '/', $domain);
-                    setcookie('password', md5($user['password'] . env('APP_KEY')), SITETIME + 3600 * 24 * 365, '/', $domain, null, true);
+                    setcookie('login', $user->login, strtotime('+1 year', SITETIME), '/', $domain);
+                    setcookie('password', md5($user->password . env('APP_KEY')), strtotime('+1 year', SITETIME), '/', $domain, null, true);
                 }
 
                 $_SESSION['id']       = $user->id;
@@ -260,6 +274,38 @@ class User extends BaseModel
     }
 
     /**
+     * Возвращает онлайн-статус пользователя
+     *
+     * @return string онлайн-статус
+     */
+    public function getOnline()
+    {
+        static $visits;
+
+        $online = '<div class="online bg-danger" title="Оффлайн"></div>';
+
+        if (! $visits) {
+            if (@filemtime(STORAGE . '/temp/visit.dat') < time() - 10) {
+
+                $onlines = Online::query()
+                    ->whereNotNull('user_id')
+                    ->pluck('user_id', 'user_id')
+                    ->all();
+
+                file_put_contents(STORAGE . '/temp/visit.dat', json_encode($onlines), LOCK_EX);
+            }
+
+            $visits = json_decode(file_get_contents(STORAGE . '/temp/visit.dat'));
+        }
+
+        if (isset($visits->{$this->id})) {
+            $online = '<div class="online bg-success" title="Онлайн"></div>';
+        }
+
+        return $online;
+    }
+
+    /**
      * Возвращает уровень пользователя
      *
      * @return string Уровень пользователя
@@ -288,6 +334,39 @@ class User extends BaseModel
         }
 
         return $status->{$this->id} ?? setting('statusdef');
+    }
+
+    /**
+     * Возвращает аватар для пользователя по умолчанию
+     *
+     * @return string код аватара
+     */
+    public function defaultAvatar()
+    {
+        $name   = empty($this->name) ? $this->login : $this->name;
+        $color  = '#' . substr(dechex(crc32($this->login)), 0, 6);
+        $letter = mb_strtoupper(utfSubstr($name, 0, 1), 'utf-8');
+
+        return '<div class="avatar" style="background:' . $color . '"><a href="/users/' . $this->login . '">' . $letter . '</a></div>';
+    }
+
+    /**
+     * Возвращает аватар пользователя
+     *
+     * @return string аватар пользователя
+     */
+    public function getAvatar()
+    {
+        if (! $this->id) {
+            return '<img class="avatar" src="/assets/img/images/avatar_guest.png" alt=""> ';
+        }
+
+        if ($this->avatar && file_exists(UPLOADS . '/avatars/' . $this->avatar)) {
+            return '<a href="/users/' . $this->login . '"><img src="/uploads/avatars/' . $this->avatar . '" alt="" class="avatar"></a> ';
+        }
+
+        return $this->defaultAvatar();
+        //return '<a href="/users/' . $user->login . '"><img src="/assets/img/images/avatar_default.png" alt=""></a> ';
     }
 
     /**
@@ -325,6 +404,16 @@ class User extends BaseModel
 
             file_put_contents(STORAGE . '/temp/status.dat', json_encode($statuses, JSON_UNESCAPED_UNICODE), LOCK_EX);
         }
+    }
+
+    /**
+     * Возвращает количество писем пользователя
+     *
+     * @return int количество писем
+     */
+    public function getCountMessages()
+    {
+        return Inbox::query()->where('user_id', $this->id)->count();
     }
 
     /**

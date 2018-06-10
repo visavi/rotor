@@ -43,7 +43,7 @@
                 <div>
                     @if ($topic->lastPost)
                         {!! $topic->pagination('/admin/topics') !!}
-                        Сообщение: {!! profile($topic->lastPost->user, null, false) !!} ({{ dateFixed($topic->lastPost->created_at) }})
+                        Сообщение: {!! $topic->lastPost->user->getProfile(null, false) !!} ({{ dateFixed($topic->lastPost->created_at) }})
                     @endif
                 </div>
             @endforeach

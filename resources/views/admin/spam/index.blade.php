@@ -34,7 +34,7 @@
                 @if ($data->relate)
                     <div class="b">
                         <i class="fa fa-file"></i>
-                        <b>{!! $data->relate->author ? profile($data->relate->author) : profile($data->relate->user) !!}</b>
+                        <b>{!! $data->relate->author ? $data->relate->author->getProfile() : $data->relate->user->getProfile() !!}</b>
                         <small>({{ dateFixed($data->relate->created_at, "d.m.y / H:i:s") }})</small>
 
                         <div class="float-right">
@@ -60,7 +60,7 @@
                     @if ($data['path'])
                         <a href="{{ $data->path }}">Перейти к сообщению</a><br>
                     @endif
-                    Жалоба: {!! profile($data->user) !!} ({{ dateFixed($data->created_at) }})
+                    Жалоба: {!! $data->user->getProfile() !!} ({{ dateFixed($data->created_at) }})
                 </div>
             </div>
         @endforeach

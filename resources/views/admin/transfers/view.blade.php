@@ -22,17 +22,17 @@
         @foreach ($transfers as $data)
             <div class="b">
                 <div class="img">
-                    {!! userAvatar($data->user) !!}
-                    {!! userOnline($data->user) !!}
+                    {!! $data->user->getAvatar() !!}
+                    {!! $data->user->getOnline() !!}
                 </div>
 
-                <b>{!! profile($data->user) !!}</b>
+                <b>{!! $data->user->getProfile() !!}</b>
 
                 <small>({{ dateFixed($data->created_at) }})</small><br>
             </div>
 
             <div>
-                Кому: {!! profile($data->recipientUser) !!}<br>
+                Кому: {!! $data->recipientUser->getProfile() !!}<br>
                 Сумма: {{ plural($data->total, setting('moneyname')) }}<br>
                 Комментарий: {!! bbCode($data->text) !!}<br>
             </div>

@@ -36,7 +36,7 @@
                     <i class="fa fa-pencil-alt"></i> <b>{{ $list->value }}</b>
                 </div>
                 <div>
-                    Добавлено: {!! profile($list->user) !!}<br>
+                    Добавлено: {!! $list->user->getProfile() !!}<br>
                     Время: {{ dateFixed($list->created_at) }}
                 </div>
             @endforeach

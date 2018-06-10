@@ -17,11 +17,11 @@
         </ol>
     </nav>
 
-    <h3>{!! $user->getGender() !!} {!! profile($user) !!}</h3>
+    <h3>{!! $user->getGender() !!} {!! $user->getProfile() !!}</h3>
 
     @if ($user->lastBan->id)
         Последний бан: {{ dateFixed($user->lastBan->created_at) }}<br>
-        Забанил: <b>{!! profile($user->lastBan->sendUser) !!}</b><br>
+        Забанил: <b>{!! $user->lastBan->sendUser->getProfile() !!}</b><br>
         Срок: {{ formatTime($user->lastBan->term) }}<br>
         Причина: {!! bbCode($user->lastBan->reason) !!}<br>
     @endif

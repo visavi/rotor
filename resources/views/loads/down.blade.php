@@ -92,7 +92,7 @@
         Рейтинг: {!! ratingVote($rating) !!}<br>
         Всего голосов: <b>{{ $down->rated }}</b><br>
         Всего скачиваний: <b>{{ $down->loads }}</b><br>
-        Добавлено: {!! profile($down->user) !!} ({{ dateFixed($down->created_at) }})<br><br>
+        Добавлено: {!! $down->user->getProfile() !!} ({{ dateFixed($down->created_at) }})<br><br>
     </div>
 
     @if (getUser() && getUser('id') != $down->user_id)

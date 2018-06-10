@@ -29,8 +29,8 @@
 
                 <div>
                     {!! $topic->topic->pagination() !!}
-                    Автор: {!! profile($topic->topic->user, null, false) !!} /
-                    Посл.: {!! profile($topic->topic->lastPost->user, null, false) !!}
+                    Автор: {!! $topic->topic->user->getProfile(null, false) !!} /
+                    Посл.: {!! $topic->topic->lastPost->user->getProfile(null, false) !!}
                     ({{ dateFixed($topic->topic->lastPost->created_at) }})
                 </div>
             @endforeach

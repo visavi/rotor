@@ -285,18 +285,7 @@ function formatTime($time)
  */
 function antimat($str)
 {
-    $words = Antimat::query()
-        ->orderBy(DB::raw('CHAR_LENGTH(string)'), 'desc')
-        ->pluck('string')
-        ->all();
-
-    if ($words) {
-        foreach($words as $word) {
-            $str = preg_replace('|' . preg_quote($word) . '|iu', '***', $str);
-        }
-    }
-
-    return $str;
+    return Antimat::replace($str);
 }
 
 /**
@@ -384,52 +373,6 @@ function getCalendar()
     $calendar = makeCalendar($date['mon'], $date['year']);
 
     return view('app/_calendar', compact('calendar', 'date', 'newsDays', 'newsIds'));
-}
-
-/**
- * Возвращает количество писем пользователя
- *
- * @param  User $user объект пользователя
- * @return int        количество писем
- */
-function userMail(User $user)
-{
-    return Inbox::query()->where('user_id', $user->id)->count();
-}
-
-/**
- * Возвращает аватар для пользователя по умолчанию
- *
- * @param  User   $user логин пользователя
- * @return string       код аватара
- */
-function defaultAvatar(User $user)
-{
-    $name   = empty($user->name) ? $user->login : $user->name;
-    $color  = '#' . substr(dechex(crc32($user->login)), 0, 6);
-    $letter = mb_strtoupper(utfSubstr($name, 0, 1), 'utf-8');
-
-    return '<div class="avatar" style="background:' . $color . '"><a href="/users/' . $user->login . '">' . $letter . '</a></div>';
-}
-
-/**
- * Возвращает аватар пользователя
- *
- * @param  User   $user объект пользователя
- * @return string       аватар пользователя
- */
-function userAvatar(User $user)
-{
-    if (! $user->id) {
-        return '<img class="avatar" src="/assets/img/images/avatar_guest.png" alt=""> ';
-    }
-
-    if ($user->avatar && file_exists(UPLOADS . '/avatars/' . $user->avatar)) {
-        return '<a href="/users/' . $user->login . '"><img src="/uploads/avatars/' . $user->avatar . '" alt="" class="avatar"></a> ';
-    }
-
-    return defaultAvatar($user);
-    //return '<a href="/users/' . $user->login . '"><img src="/assets/img/images/avatar_default.png" alt=""></a> ';
 }
 
 /**
@@ -717,39 +660,6 @@ function statsInvite()
     $usedInvited = Invite::query()->where('used', 1)->count();
 
     return $invited . '/' . $usedInvited;
-}
-
-/**
- * Возвращает онлайн-статус пользователя
- *
- * @param  User   $user объект пользователя
- * @return string       онлайн-статус
- */
-function userOnline(User $user)
-{
-    static $visits;
-
-    $online = '<div class="online bg-danger" title="Оффлайн"></div>';
-
-    if (! $visits) {
-        if (@filemtime(STORAGE . '/temp/visit.dat') < time() - 10) {
-
-            $onlines = Online::query()
-                ->whereNotNull('user_id')
-                ->pluck('user_id', 'user_id')
-                ->all();
-
-            file_put_contents(STORAGE . '/temp/visit.dat', json_encode($onlines), LOCK_EX);
-        }
-
-        $visits = json_decode(file_get_contents(STORAGE . '/temp/visit.dat'));
-    }
-
-    if (isset($visits->{$user->id})) {
-        $online = '<div class="online bg-success" title="Онлайн"></div>';
-    }
-
-    return $online;
 }
 
 /**
@@ -1367,33 +1277,6 @@ function counterString($file)
 }
 
 /**
- * Возвращает ссылку на профиль пользователя
- *
- * @param  User    $user  объект пользователя
- * @param  string  $color цвет логина
- * @param  boolean $link  выводить как ссылку
- * @return string        путь к профилю
- */
-function profile(User $user, $color = null, $link = true)
-{
-    if ($user->id) {
-        $name = empty($user->name) ? $user->login : $user->name;
-
-        if ($color) {
-            $name = '<span style="color:' . $color . '">' . $name . '</span>';
-        }
-
-        if ($link) {
-            return '<a class="author" href="/users/' . $user->login . '" data-login="' . $user->login . '">' . $name . '</a>';
-        }
-
-        return '<span class="author" data-login="' . $user->login . '">' . $name . '</span>';
-    }
-
-    return '<span class="author" data-login="' . setting('guestsuser') . '">' . setting('guestsuser') . '</span>';
-}
-
-/**
  * Форматирует вывод числа
  *
  * @param  int    $num число
@@ -1422,10 +1305,10 @@ function formatShortNum($num)
 {
     if (! is_numeric($num)) return false;
 
-    if ($num > 1000000000000) return round($num / 1000000000000, 1).'T';
-    elseif ($num > 1000000000) return round($num / 1000000000, 1).'B';
-    elseif ($num > 1000000) return round($num / 1000000, 1). 'M';
-    elseif ($num > 1000) return round($num / 1000, 1).'K';
+    if ($num > 1000000000000) return round($num / 1000000000000, 1) . 'T';
+    elseif ($num > 1000000000) return round($num / 1000000000, 1) . 'B';
+    elseif ($num > 1000000) return round($num / 1000000, 1) . 'M';
+    elseif ($num > 1000) return round($num / 1000, 1) . 'K';
 
     return $num;
 }
@@ -1627,7 +1510,7 @@ function sendNotify(string $text, string $pageUrl, string $pageName)
         foreach ($usersAnswer as $login) {
             $user = getUserByLogin($login);
             if ($user && $user->notify) {
-                sendMessage($user, null, 'Пользователь ' . profile(getUser()) . ' упомянул вас на странице [url=' . $pageUrl . ']' . $pageName . '[/url]' . PHP_EOL . 'Текст сообщения: ' . $text);
+                sendMessage($user, null, 'Пользователь ' . getUser()->getProfile() . ' упомянул вас на странице [url=' . $pageUrl . ']' . $pageName . '[/url]' . PHP_EOL . 'Текст сообщения: ' . $text);
             }
         }
     }

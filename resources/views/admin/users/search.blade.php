@@ -22,8 +22,8 @@
             @foreach($users as $user)
                 <div  class="text-truncate bg-light my-1">
                     <div class="img">
-                        {!! userAvatar($user) !!}
-                        {!! userOnline($user) !!}
+                        {!! $user->getAvatar() !!}
+                        {!! $user->getOnline() !!}
                     </div>
 
                     <b><a href="/admin/users/edit?user={{ $user->login }}">{{ $user->login }}</a></b>

@@ -24,8 +24,8 @@
             </div>
             <div>
                 {!! $data->pagination() !!}
-                Автор: {!! profile($data->user, null, false) !!}<br>
-                Сообщение: {!! profile($data->lastPost->user, null, false) !!} ({{ dateFixed($data->lastPost->created_at) }})
+                Автор: {!! $data->user->getProfile(null, false) !!}<br>
+                Сообщение: {!! $data->lastPost->user->getProfile(null, false) !!} ({{ dateFixed($data->lastPost->created_at) }})
             </div>
         @endforeach
 

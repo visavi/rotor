@@ -46,7 +46,7 @@
 
             </div>
             <div>
-                Автор: {!! profile($data->user) !!} ({{ dateFixed($data->created_at) }})<br>
+                Автор: {!! $data->user->getProfile() !!} ({{ dateFixed($data->created_at) }})<br>
                 Просмотров: {{ $data->visits }}<br>
                 <a href="/articles/comments/{{ $data->id }}">Комментарии</a> ({{ $data->count_comments }})
                 <a href="/articles/end/{{ $data->id }}">&raquo;</a>

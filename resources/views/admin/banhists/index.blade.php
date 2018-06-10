@@ -31,11 +31,11 @@
                 </div>
 
                 <div class="img">
-                    {!! userAvatar($data->user) !!}
-                    {!! userOnline($data->user) !!}
+                    {!! $data->user->getAvatar() !!}
+                    {!! $data->user->getOnline() !!}
                 </div>
 
-                <b>{!! profile($data->user) !!}</b>
+                <b>{!! $data->user->getProfile() !!}</b>
 
                 <small>({{ dateFixed($data->created_at) }})</small><br>
             </div>
@@ -45,7 +45,7 @@
                     Срок: {{ formatTime($data->term) }}<br>
                 @endif
 
-                {!! $data->getType() !!}: {!! profile($data->sendUser) !!}<br>
+                {!! $data->getType() !!}: {!! $data->sendUser->getProfile() !!}<br>
 
             </div>
         @endforeach

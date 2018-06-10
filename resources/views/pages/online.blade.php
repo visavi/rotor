@@ -24,10 +24,10 @@
         @foreach ($online as $data)
             <div class="b">
                 <div class="img">
-                    {!! userAvatar($data->user) !!}
+                    {!! $data->user->getAvatar() !!}
                 </div>
 
-                <b>{!! profile($data->user) !!}</b> (Время: {{ dateFixed($data['updated_at'], 'H:i:s') }})
+                <b>{!! $data->user->getProfile() !!}</b> (Время: {{ dateFixed($data['updated_at'], 'H:i:s') }})
             </div>
 
             @if (isAdmin())

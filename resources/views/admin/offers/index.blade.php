@@ -65,7 +65,7 @@
                     </div>
 
                     <div>{!! bbCode($data->text) !!}<br>
-                        Добавлено: {!! profile($data->user) !!} ({{ dateFixed($data->created_at) }})<br>
+                        Добавлено: {!! $data->user->getProfile() !!} ({{ dateFixed($data->created_at) }})<br>
                         <a href="/offers/comments/{{ $data->id }}">Комментарии</a> ({{ $data->count_comments }})
                         <a href="/offers/end/{{ $data['id'] }}">&raquo;</a></div>
                 @endforeach

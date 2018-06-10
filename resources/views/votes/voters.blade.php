@@ -21,7 +21,7 @@
 
     @if ($voters->isNotEmpty())
         @foreach ($voters as $voter)
-            {!! $voter->user->getGender() !!} {!! profile($voter->user) !!} ({{ dateFixed($voter->created_at) }})<br>
+            {!! $voter->user->getGender() !!} {!! $voter->user->getProfile() !!} ({{ dateFixed($voter->created_at) }})<br>
         @endforeach
     @else
         {!! showError('В голосовании никто не участвовал!') !!}

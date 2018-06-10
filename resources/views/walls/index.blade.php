@@ -38,11 +38,11 @@
                     </div>
 
                     <div class="img">
-                        {!! userAvatar($data->author) !!}
-                        {!! userOnline($data->author) !!}
+                        {!! $data->author->getAvatar() !!}
+                        {!! $data->author->getOnline() !!}
                     </div>
 
-                    <b>{!! profile($data->author) !!}</b> <small>({{ dateFixed($data->created_at) }})</small><br>
+                    <b>{!! $data->author->getProfile() !!}</b> <small>({{ dateFixed($data->created_at) }})</small><br>
                     {!! $data->author->getStatus() !!}
                 </div>
                 <div class="message">

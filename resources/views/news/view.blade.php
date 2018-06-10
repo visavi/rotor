@@ -31,7 +31,7 @@
     <div>{!! bbCode($news->text) !!}</div>
 
     <div style="clear:both;">
-        {{ trans('news.added_by') }}: {!! profile($news->user) !!}
+        {{ trans('news.added_by') }}: {!! $news->user->getProfile() !!}
     </div><br>
 
     @if ($comments->isNotEmpty())
@@ -41,11 +41,11 @@
             <div class="post">
                 <div class="b">
                     <div class="img">
-                        {!! userAvatar($comment->user) !!}
-                        {!! userOnline($comment->user) !!}
+                        {!! $comment->user->getAvatar() !!}
+                        {!! $comment->user->getOnline() !!}
                     </div>
 
-                    <b>{!! profile($comment->user) !!}</b>
+                    <b>{!! $comment->user->getProfile() !!}</b>
                     <small> ({{ dateFixed($comment->created_at) }})</small><br>
                     {!! $comment->user->getStatus() !!}
                 </div>

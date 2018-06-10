@@ -31,11 +31,11 @@
                     </div>
 
                     <div class="img">
-                        {!! userAvatar($contact->contactor) !!}
-                        {!! userOnline($contact->contactor) !!}
+                        {!! $contact->contactor->getAvatar() !!}
+                        {!! $contact->contactor->getOnline() !!}
                     </div>
 
-                    <b>{!! profile($contact->contactor) !!}</b> <small>({{ dateFixed($contact->created_at) }})</small><br>
+                    <b>{!! $contact->contactor->getProfile() !!}</b> <small>({{ dateFixed($contact->created_at) }})</small><br>
                     {!! $contact->contactor->getStatus() !!}
                 </div>
                 <div>

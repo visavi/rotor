@@ -24,7 +24,7 @@
 
             <div>
                 {!! bbCode($data->text) !!}<br>
-                {{ trans('news.posted_by') }}: {!! profile($data->user) !!} <small>({{ dateFixed($data->created_at) }})</small><br>
+                {{ trans('news.posted_by') }}: {!! $data->user->getProfile() !!} <small>({{ dateFixed($data->created_at) }})</small><br>
 
                 @if (isAdmin())
                     <span class="data">({{ $data->brow }}, {{ $data->ip }})</span>

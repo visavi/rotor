@@ -23,7 +23,7 @@
         </ol>
     </nav>
 
-    Автор темы: {!! profile($topic->user) !!}<br>
+    Автор темы: {!! $topic->user->getProfile() !!}<br>
     Сообщений: {{ $topic->count_posts }}<br>
     Создан: {{ dateFixed($topic->created_at) }}<br>
 

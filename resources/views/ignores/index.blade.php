@@ -31,11 +31,11 @@
                     </div>
 
                     <div class="img">
-                        {!! userAvatar($data->ignoring) !!}
-                        {!! userOnline($data->ignoring) !!}
+                        {!! $data->ignoring->getAvatar() !!}
+                        {!! $data->ignoring->getOnline() !!}
                     </div>
 
-                    <b>{!! profile($data->ignoring) !!}</b> <small>({{ dateFixed($data->created_at) }})</small><br>
+                    <b>{!! $data->ignoring->getProfile() !!}</b> <small>({{ dateFixed($data->created_at) }})</small><br>
                     {!! $data->ignoring->getStatus() !!}
                 </div>
 

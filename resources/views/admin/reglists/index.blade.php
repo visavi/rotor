@@ -35,7 +35,7 @@
             @foreach ($users as $user)
                <div class="b">
                    <input type="checkbox" name="choice[]" value="{{ $user->id }}">
-                    {!! $user->getGender() !!} <b>{!! profile($user) !!}</b>
+                    {!! $user->getGender() !!} <b>{!! $user->getProfile() !!}</b>
                    (email: {{ $user->email }})
                </div>
 

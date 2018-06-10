@@ -66,7 +66,7 @@
 
                 <br>{!! bbCode($photo->text) !!}<br>
 
-                Добавлено: {!! profile($photo->user) !!} ({{ dateFixed($photo->created_at) }})<br>
+                Добавлено: {!! $photo->user->getProfile() !!} ({{ dateFixed($photo->created_at) }})<br>
                 <a href="/photos/comments/{{ $photo->id }}">Комментарии</a> ({{ $photo->count_comments }})
                 <a href="/photos/end/{{ $photo->id }}">&raquo;</a>
             </div>

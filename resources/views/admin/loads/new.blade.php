@@ -34,7 +34,7 @@
             </div>
                 Категория: <a href="/admin/loads/{{ $data->category->id }}">{{ $data->category->name }}</a><br>
                 Файлов/Картинок: {{ $data->getFiles()->count() }}/{{ $data->getImages()->count() }}<br>
-                Автор: {!! profile($data->user) !!} ({{ dateFixed($data->created_at) }})
+                Автор: {!! $data->user->getProfile() !!} ({{ dateFixed($data->created_at) }})
             <div>
 
             </div>

@@ -28,7 +28,7 @@
             @foreach ($records as $data)
                 <div class="b">
                     <i class="fa fa-check-circle"></i>
-                    <b><a href="{{ $data->site }}">{{ $data->name }}</a></b> ({!! profile($data->user) !!})
+                    <b><a href="{{ $data->site }}">{{ $data->name }}</a></b> ({!! $data->user->getProfile() !!})
 
                     <div class="float-right">
                         <a href="/admin/reklama/edit/{{ $data->id }}?page={{ $page->current }}"><i class="fas fa-pencil-alt text-muted"></i></a>

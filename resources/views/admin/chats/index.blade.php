@@ -38,18 +38,18 @@
                     @endif
 
                         <div class="img">
-                            {!! userAvatar($post->user) !!}
-                            {!! userOnline($post->user) !!}
+                            {!! $post->user->getAvatar() !!}
+                            {!! $post->user->getOnline() !!}
                         </div>
 
-                    <b>{!! profile($post->user) !!}</b> <small>({{ dateFixed($post->created_at) }})</small><br>
+                    <b>{!! $post->user->getProfile() !!}</b> <small>({{ dateFixed($post->created_at) }})</small><br>
                     {!! $post->user->getStatus() !!}
                 </div>
 
                 <div class="message">{!! bbCode($post->text) !!}</div>
 
                 @if ($post->edit_user_id)
-                    <small><i class="fa fa-exclamation-circle"></i> Отредактировано: {!! profile($post->editUser) !!} ({{ dateFixed($post->updated_at) }})</small><br>
+                    <small><i class="fa fa-exclamation-circle"></i> Отредактировано: {!! $post->editUser->getProfile() !!} ({{ dateFixed($post->updated_at) }})</small><br>
                 @endif
 
                 <span class="data">({{ $post->brow }}, {{ $post->ip }})</span>

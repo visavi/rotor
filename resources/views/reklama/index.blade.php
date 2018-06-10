@@ -24,7 +24,7 @@
         @foreach($adverts as $data)
             <div class="b">
                 <i class="fa fa-check-circle"></i>
-                <b><a href="{{ $data->site }}">{{ $data->name }}</a></b> ({!! profile($data->user) !!})
+                <b><a href="{{ $data->site }}">{{ $data->name }}</a></b> ({!! $data->user->getProfile() !!})
             </div>
 
             Истекает: {{ dateFixed($data->deleted_at) }}<br>

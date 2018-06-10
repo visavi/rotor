@@ -54,12 +54,12 @@
                     </div>
 
                     <div class="img">
-                        {!! userAvatar($data->author) !!}
-                        {!! userOnline($data->author) !!}
+                        {!! $data->author->getAvatar() !!}
+                        {!! $data->author->getOnline() !!}
                     </div>
 
                     @if ($data->author->id)
-                        <b>{!! profile($data->author) !!}</b> ({{ dateFixed($data->created_at) }})<br>
+                        <b>{!! $data->author->getProfile() !!}</b> ({{ dateFixed($data->created_at) }})<br>
                         {!! $data->author->getStatus() !!}
                     @else
                         <b>Система</b>

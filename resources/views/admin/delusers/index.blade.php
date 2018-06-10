@@ -56,7 +56,7 @@
 
             <?php $comma = $loop->first ? '' : ',' ?>
 
-            {{ $comma }} {!! profile($user) !!}
+            {{ $comma }} {!! $user->getProfile() !!}
         @endforeach
 
         <br><br>Будет удалено пользователей: <b>{{ $users->count() }}</b><br>

@@ -43,7 +43,7 @@
                 <div>
                     Тема: <a href="/topics/end/{{ $child->lastTopic->id }}">{{ $child->lastTopic->title }}</a><br>
                     @if ($child->lastTopic->lastPost->id)
-                        Сообщение: {!! profile($child->lastTopic->lastPost->user, null, false) !!} ({{ dateFixed($child->lastTopic->lastPost->created_at) }})
+                        Сообщение: {!! $child->lastTopic->lastPost->user->getProfile(null, false) !!} ({{ dateFixed($child->lastTopic->lastPost->created_at) }})
                     @endif
                 </div>
             @else
@@ -64,7 +64,7 @@
             <div>
                 @if ($topic->lastPost)
                     {!! $topic->pagination() !!}
-                    Сообщение: {!! profile($topic->lastPost->user, null, false) !!} ({{ dateFixed($topic->lastPost->created_at) }})
+                    Сообщение: {!! $topic->lastPost->user->getProfile(null, false) !!} ({{ dateFixed($topic->lastPost->created_at) }})
                 @endif
             </div>
         @endforeach

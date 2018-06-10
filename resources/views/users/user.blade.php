@@ -7,7 +7,7 @@
 @section('content')
 
     <div class="avatar-box">
-        <div class="avatar-box_image">{!! userAvatar($user) !!}</div>
+        <div class="avatar-box_image">{!! $user->getAvatar() !!}</div>
         <h1 class="avatar-box_login">
             {{ $user->login }} <small>#{{ $user->id }}</small>
         </h1>
@@ -87,7 +87,7 @@
                 Дата регистрации: {{ dateFixed($user->created_at, 'd.m.Y') }}<br>
 
                 @if ($invite)
-                    Зарегистрирован по приглашению: {!! profile($invite->user) !!}<br>
+                    Зарегистрирован по приглашению: {!! $invite->user->getProfile() !!}<br>
                 @endif
 
                 Последний визит: {{ dateFixed($user->updated_at) }}<br>
@@ -128,7 +128,7 @@
 
         @if (! empty($user->note->text))
             {!! bbCode($user->note->text) !!}<br>
-            Изменено: {!! profile($user->note->editUser) !!} ({{ dateFixed($user->note->updated_at) }})<br>
+            Изменено: {!! $user->note->editUser->getProfile() !!} ({{ dateFixed($user->note->updated_at) }})<br>
         @else
             Записей еще нет!<br>
         @endif

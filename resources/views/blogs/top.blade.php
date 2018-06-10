@@ -37,7 +37,7 @@
             </div>
 
             <div>
-                Автор: {!! profile($data->user) !!}<br>
+                Автор: {!! $data->user->getProfile() !!}<br>
                 Категория: <a href="/blogs/{{ $data->category_id }}">{{ $data->name }}</a><br>
                 Просмотров: {{ $data->visits }}<br>
                 <a href="/articles/comments/{{ $data->id }}">Комментарии</a> ({{ $data->count_comments }})

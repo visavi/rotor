@@ -19,16 +19,16 @@
         @foreach($users as $key => $data)
             <div class="b">
                 <div class="img">
-                    {!! userAvatar($data) !!}
-                    {!! userOnline($data) !!}
+                    {!! $data->getAvatar() !!}
+                    {!! $data->getOnline() !!}
                 </div>
 
                 {{ ($page->offset + $key + 1) }}.
 
                 @if ($user == $data->login)
-                    <b>{!! profile($data, '#ff0000') !!}</b>
+                    <b>{!! $data->getProfile('#ff0000') !!}</b>
                 @else
-                    <b>{!! profile($data) !!}</b>
+                    <b>{!! $data->getProfile() !!}</b>
                 @endif
                 (Репутация: {{ $data->rating }})<br>
                 {!! $data->getStatus() !!}
