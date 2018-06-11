@@ -160,9 +160,10 @@ class User extends BaseModel
                 // Сохранение привязки к соц. сетям
                 if (! empty($_SESSION['social'])) {
                     Social::query()->create([
-                        'user_id' => $user->id,
-                        'network' => $_SESSION['social']->network,
-                        'uid'     => $_SESSION['social']->uid,
+                        'user_id'    => $user->id,
+                        'network'    => $_SESSION['social']->network,
+                        'uid'        => $_SESSION['social']->uid,
+                        'created_at' => SITETIME,
                     ]);
                 }
 

@@ -22,9 +22,10 @@
 <i class="far fa-circle fa-lg text-muted"></i> <a href="/profile">Мой профиль</a><br>
 <i class="far fa-circle fa-lg text-muted"></i> <a href="/accounts">Мои данные</a><br>
 <i class="far fa-circle fa-lg text-muted"></i> <a href="/settings">Настройки</a><br>
-<i class="far fa-circle fa-lg text-muted"></i> <a href="/walls/{{ getUser('login') }}">Моя стена</a> ({{ getUser()->getCountWall() }})<br>
+<i class="far fa-circle fa-lg text-muted"></i> <a href="/socials">Социальные сети</a><br>
 
 <div class="b"><i class="fa fa-star fa-lg text-muted"></i> <b>Активность</b></div>
+<i class="far fa-circle fa-lg text-muted"></i> <a href="/walls/{{ getUser('login') }}">Моя стена</a> ({{ getUser()->getCountWall() }})<br>
 <i class="far fa-circle fa-lg text-muted"></i> <a href="/notebooks">Блокнот</a><br>
 <i class="far fa-circle fa-lg text-muted"></i> <a href="/reklama">Реклама</a><br>
 <i class="far fa-circle fa-lg text-muted"></i> <a href="/ratings/{{ getUser('login') }}">История репутации</a><br>
