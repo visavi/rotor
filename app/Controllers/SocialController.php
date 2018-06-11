@@ -5,6 +5,7 @@ namespace App\Controllers;
 use App\Classes\Request;
 use App\Classes\Validator;
 use App\Models\Social;
+use Curl\Curl;
 
 class SocialController extends BaseController
 {
@@ -27,6 +28,43 @@ class SocialController extends BaseController
      */
     public function index()
     {
+        $token = check(Request::input('token'));
+
+        if (Request::isMethod('post')) {
+            $curl    = new Curl();
+            $network = $curl->get('//ulogin.ru/token.php',
+                [
+                    'token' => $token,
+                    'host'  => $_SERVER['HTTP_HOST']
+                ]
+            );
+
+            if ($network && empty($network->error)) {
+
+                $social = Social::query()
+                    ->where('network', $network->network)
+                    ->where('uid', $network->uid)
+                    ->first();
+
+                if (! $social) {
+                    Social::query()->create([
+                        'user_id'    => $this->user->id,
+                        'network'    => $network->network,
+                        'uid'        => $network->uid,
+                        'created_at' => SITETIME,
+                    ]);
+
+                    setFlash('success', 'Привязка успешно добавлена!');
+                } else {
+                    setFlash('danger', 'Данная социальная сеть уже привязана!');
+                }
+
+                redirect('/socials');
+            }
+
+            setFlash('danger', 'Не удалось добавить привязку!');
+        }
+
         $socials = Social::query()
             ->where('user_id', $this->user->id)
             ->get();

@@ -106,7 +106,7 @@ $routes = [
     ['POST',     '/accounts/editpassword', 'User\UserController@editPassword'],
     ['POST',     '/accounts/apikey', 'User\UserController@apikey'],
 
-    ['GET',      '/socials', 'SocialController@index'],
+    ['GET|POST', '/socials', 'SocialController@index'],
     ['GET',      '/socials/delete/[i:id]', 'SocialController@delete'],
 
     ['GET',      '/searchusers', 'User\SearchController@index'],

@@ -8,9 +8,9 @@
 
     <div class="float-right">
         <a class="btn btn-success" href="/reklama/create">Разместить рекламу</a>
-    </div>
+    </div><br>
 
-    <h1>Реклама на сайте</h1><br>
+    <h1>Реклама на сайте</h1>
 
     <nav>
         <ol class="breadcrumb">

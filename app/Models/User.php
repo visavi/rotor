@@ -175,11 +175,11 @@ class User extends BaseModel
                 if (! $authorization) {
 
                     Login::query()->create([
-                        'user_id' => $user->id,
-                        'ip' => getIp(),
-                        'brow' => getBrowser(),
+                        'user_id'    => $user->id,
+                        'ip'         => getIp(),
+                        'brow'       => getBrowser(),
                         'created_at' => SITETIME,
-                        'type' => 1,
+                        'type'       => 1,
                     ]);
                 }
 
@@ -210,7 +210,7 @@ class User extends BaseModel
         $network = $curl->get('http://ulogin.ru/token.php',
             [
                 'token' => $token,
-                'host' => $_SERVER['HTTP_HOST']
+                'host'  => $_SERVER['HTTP_HOST']
             ]
         );
 
