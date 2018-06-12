@@ -1815,8 +1815,14 @@ function getBrowser($userAgent = null)
 function server($key = null, $default = null)
 {
     $server = Request::server($key, $default);
-    if ($key === 'REQUEST_URI') $server = urldecode($server);
-    if ($key === 'PHP_SELF') $server = current(explode('?', server('REQUEST_URI')));
+
+    if ($key === 'REQUEST_URI') {
+        $server = urldecode($server);
+    }
+
+    if ($key === 'PHP_SELF') {
+        $server = current(explode('?', server('REQUEST_URI')));
+    }
 
     return check($server);
 }

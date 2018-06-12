@@ -207,7 +207,7 @@ class User extends BaseModel
         $domain = siteDomain(siteUrl());
 
         $curl = new Curl();
-        $network = $curl->get('http://ulogin.ru/token.php',
+        $network = $curl->get('//ulogin.ru/token.php',
             [
                 'token' => $token,
                 'host'  => $_SERVER['HTTP_HOST']

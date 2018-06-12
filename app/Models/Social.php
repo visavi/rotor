@@ -2,6 +2,8 @@
 
 namespace App\Models;
 
+use stdClass;
+
 class Social extends BaseModel
 {
     /**
@@ -17,4 +19,89 @@ class Social extends BaseModel
      * @var array
      */
     protected $guarded = [];
+
+    /**
+     * Генерирует уникальный логин
+     *
+     * @param StdClass $network
+     * @param string   $delimiter
+     * @return mixed
+     */
+    public function generateLogin($network, $delimiter = '-')
+    {
+        $firstName   = ucfirst(str_slug($network->first_name, $delimiter));
+        $lastName    = ucfirst(str_slug($network->last_name, $delimiter));
+        $firstLetter = $firstName[0];
+
+        $variants = [];
+
+        if (! empty($network->nickname)) {
+            $variants[] = str_slug($network->nickname, $delimiter);
+        }
+
+        $variants[] = $firstName;
+        $variants[] = $firstName . $lastName;
+        $variants[] = $firstName . $delimiter . $lastName;
+        $variants[] = $lastName . $firstName;
+        $variants[] = $lastName . $delimiter . $firstName;
+        $variants[] = $firstLetter . $lastName;
+        $variants[] = $firstLetter . $delimiter . $lastName;
+        $variants[] = $lastName;
+
+        if (! empty($network->bdate)) {
+            [,, $year] = explode('.', $network->bdate);
+            $shortYear = substr($year, -2);
+
+            $variants[] = $firstName . $shortYear;
+            $variants[] = $firstName . $year;
+            $variants[] = $firstName . $delimiter . $shortYear;
+            $variants[] = $firstName . $delimiter . $year;
+
+            $variants[] = $firstName . $lastName . $shortYear;
+            $variants[] = $firstName . $lastName . $year;
+            $variants[] = $firstName . $delimiter . $lastName . $shortYear;
+            $variants[] = $firstName . $delimiter . $lastName . $year;
+            $variants[] = $firstName . $delimiter . $lastName . $delimiter . $shortYear;
+            $variants[] = $firstName . $delimiter . $lastName . $delimiter . $year;
+
+            $variants[] = $lastName . $firstName . $shortYear;
+            $variants[] = $lastName . $firstName . $year;
+            $variants[] = $lastName . $delimiter . $firstName . $shortYear;
+            $variants[] = $lastName . $delimiter . $firstName . $year;
+            $variants[] = $lastName . $delimiter . $firstName . $delimiter . $shortYear;
+            $variants[] = $lastName . $delimiter . $firstName . $delimiter . $year;
+
+            $variants[] = $firstLetter . $lastName . $shortYear;
+            $variants[] = $firstLetter . $lastName . $year;
+            $variants[] = $firstLetter . $lastName . $delimiter . $shortYear;
+            $variants[] = $firstLetter . $lastName . $delimiter . $year;
+            $variants[] = $firstLetter . $delimiter . $lastName . $shortYear;
+            $variants[] = $firstLetter . $delimiter . $lastName . $year;
+            $variants[] = $firstLetter . $delimiter . $lastName . $delimiter . $shortYear;
+            $variants[] = $firstLetter . $delimiter . $lastName . $delimiter . $year;
+
+            $variants[] = $lastName . $shortYear;
+            $variants[] = $lastName . $year;
+            $variants[] = $lastName . $delimiter . $shortYear;
+            $variants[] = $lastName . $delimiter . $year;
+
+        }
+
+        foreach ($variants as $variant) {
+            if (! getUserByLogin($variant)) {
+                return $variant;
+            }
+        }
+
+        $i = 0;
+        while (true) {
+            $login = $firstName . ++$i;
+
+            if (! getUserByLogin($login)) {
+                return $login;
+            }
+        }
+
+        return false;
+    }
 }
