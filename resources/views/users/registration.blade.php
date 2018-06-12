@@ -28,7 +28,6 @@
     @endif
 
     <br>
-
     @if (isset($_SESSION['social']))
         <div class="bg-success text-light p-1">
             <img class="rounded-circle border" alt="photo" src="{{ $_SESSION['social']->photo }}" style="width: 48px; height: 48px;">
@@ -41,7 +40,7 @@
     @endif
 
     <script src="//ulogin.ru/js/ulogin.js"></script>
-    <div style="padding: 5px;" id="uLogin" data-ulogin="display=panel;fields=first_name,last_name,photo;optional=sex,email,nickname;providers=vkontakte,odnoklassniki,mailru,facebook,twitter,google,yandex;redirect_uri={{ siteUrl() }}%2Flogin">
+    <div style="padding: 5px;" id="uLogin" data-ulogin="display=panel;fields=first_name,last_name,photo;optional=sex,email,nickname;providers=vkontakte,odnoklassniki,mailru,facebook,twitter,google,yandex;redirect_uri={{ siteUrl() }}%2Fregister">
     </div>
 
     <div class="form">

@@ -35,7 +35,7 @@
             </div>
         @endforeach
 
-        {{ trans('socials.total') }}: <b>{{ $socials->count() }}</b><br><br>
+        <br>{{ trans('socials.total') }}: <b>{{ $socials->count() }}</b><br>
 
     @else
         {!! showError(trans('socials.empty_records')) !!}

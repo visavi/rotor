@@ -296,7 +296,7 @@ class LoadController extends AdminController
                 }
 
                 if (! $down->active) {
-                    $text = 'Уведомеление об изменении файла.'.PHP_EOL.'Ваш файл [b][url='.siteUrl().'/downs/'.$down->id.']'.$down->title.'[/url][/b] был отредактирован модератором, возможно от вас потребуются дополнительные исправления!';
+                    $text = 'Уведомеление об изменении файла.'.PHP_EOL.'Ваш файл [b][url=/downs/'.$down->id.']'.$down->title.'[/url][/b] был отредактирован модератором, возможно от вас потребуются дополнительные исправления!';
                     $down->user->sendMessage(null, $text);
                 }
 

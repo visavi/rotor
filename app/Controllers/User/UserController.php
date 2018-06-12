@@ -195,7 +195,7 @@ class UserController extends BaseController
                     }
 
                     // ----- Уведомление в приват ----//
-                    $textNotice = textNotice('register', ['%USERNAME%' => $login, '%SITENAME%' => siteUrl()]);
+                    $textNotice = textNotice('register', ['%username%' => $login]);
                     $user->sendMessage(null, $textNotice);
 
                     $subject = 'Регистрация на сайте ' . setting('title');
@@ -230,7 +230,7 @@ class UserController extends BaseController
             abort('403', 'Вы уже авторизованы!');
         }
 
-        $cooklog = (isset($_COOKIE['login'])) ? check($_COOKIE['login']): '';
+        $cooklog = isset($_COOKIE['login']) ? check($_COOKIE['login']): '';
         if (Request::isMethod('post')) {
             if (Request::has('login') && Request::has('pass')) {
                 $return   = Request::input('return', '');
