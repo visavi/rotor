@@ -2239,8 +2239,8 @@ function uniqueName(string $extension = null): string
 function getCourses()
 {
     if (
-        @filemtime(STORAGE . '/temp/courses.dat') < time() - 3600 ||
-        @filesize(STORAGE . '/temp/courses.dat') == 0
+        @filesize(STORAGE . '/temp/courses.dat') === 0 ||
+        @filemtime(STORAGE . '/temp/courses.dat') < time() - 3600
     ) {
         $curl = new Curl();
         if ($xml = $curl->get('http://www.cbr.ru/scripts/XML_daily.asp')){
