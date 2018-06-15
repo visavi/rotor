@@ -19,7 +19,7 @@
     {{ trans('socials.text_choise') }}
 
     <script src="//ulogin.ru/js/ulogin.js"></script>
-    <div class="mb-3" id="uLogin" data-ulogin="display=panel;fields=nickname,photo;optional=first_name,last_name,bdate,sex,email;providers=vkontakte,odnoklassniki,mailru,facebook,google,yandex,instagram;redirect_uri={{ siteUrl() }}%2Fsocials">
+    <div class="mb-3" id="uLogin" data-ulogin="display=panel;providers=vkontakte,odnoklassniki,mailru,facebook,google,yandex,instagram;redirect_uri={{ siteUrl() }}%2Fsocials">
     </div>
 
     @if ($socials->isNotEmpty())
