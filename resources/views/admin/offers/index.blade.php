@@ -24,11 +24,11 @@
     </nav>
 
     @if ($type === 'offer')
-        <a class="btn btn-danger btn-sm" href="/admin/offers/offer">Предложения <span class="badge badge-light">{{ $page->total }}</span></a>
+        <a class="btn btn-primary btn-sm" href="/admin/offers/offer">Предложения <span class="badge badge-light">{{ $page->total }}</span></a>
         <a class="btn btn-light btn-sm" href="/admin/offers/issue">Проблемы <span class="badge badge-light">{{ $page->otherTotal }}</span></a>
     @else
         <a class="btn btn-light btn-sm" href="/admin/offers/offer">Предложения <span class="badge badge-light">{{ $page->otherTotal }}</span></a>
-        <a class="btn btn-danger btn-sm" href="/admin/offers/issue">Проблемы <span class="badge badge-light">{{ $page->total }}</span></a>
+        <a class="btn btn-primary btn-sm" href="/admin/offers/issue">Проблемы <span class="badge badge-light">{{ $page->total }}</span></a>
     @endif
 
 
