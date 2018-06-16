@@ -14,6 +14,9 @@ class BoardController extends BaseController
      */
     public function index()
     {
+        $items = Item::query()->limit(10)->get();
 
+
+        return view('boards/index', compact('items'));
     }
 }

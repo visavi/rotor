@@ -84,7 +84,6 @@ class Social extends BaseModel
             $variants[] = $lastName . $year;
             $variants[] = $lastName . $delimiter . $shortYear;
             $variants[] = $lastName . $delimiter . $year;
-
         }
 
         foreach ($variants as $variant) {
