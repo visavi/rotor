@@ -132,7 +132,7 @@ class Down extends BaseModel
             'relate_type' => self::class,
             'hash'        => $fileName,
             'name'        => $file->getClientOriginalName(),
-            'size'        => $file->getClientSize(),
+            'size'        => filesize(UPLOADS . '/' . $path . '/' . $fileName),
             'user_id'     => getUser('id'),
             'created_at'  => SITETIME,
         ]);

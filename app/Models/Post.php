@@ -65,7 +65,7 @@ class Post extends BaseModel
             'relate_type' => self::class,
             'hash'        => $fileName,
             'name'        => $file->getClientOriginalName(),
-            'size'        => $file->getClientSize(),
+            'size'        => filesize(UPLOADS . '/forums/' . $this->topic->id . '/' . $fileName),
             'user_id'     => getUser('id'),
             'created_at'  => SITETIME,
         ]);

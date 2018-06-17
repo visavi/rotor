@@ -378,7 +378,7 @@ class Validator
         }
 
         if (isset($rules['maxsize'])) {
-            if ($input->getClientSize() > $rules['maxsize']) {
+            if ($input->getSize() > $rules['maxsize']) {
                 $this->addError([$key => 'Максимальный вес файла ' . formatSize($rules['maxsize']) . '!']);
             }
         }

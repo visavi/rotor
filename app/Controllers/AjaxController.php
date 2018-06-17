@@ -320,7 +320,7 @@ class AjaxController extends BaseController
                 'relate_type' => Blog::class,
                 'hash'        => $fileName,
                 'name'        => $image->getClientOriginalName(),
-                'size'        => $image->getClientSize(),
+                'size'        => filesize(UPLOADS . '/blogs/' . $fileName),
                 'user_id'     => getUser('id'),
                 'created_at'  => SITETIME,
             ]);

@@ -51,7 +51,7 @@ class Photo extends BaseModel
             'relate_type' => self::class,
             'hash'        => $fileName,
             'name'        => $file->getClientOriginalName(),
-            'size'        => $file->getClientSize(),
+            'size'        => filesize(UPLOADS . '/photos/' . $fileName),
             'user_id'     => getUser('id'),
             'created_at'  => SITETIME,
         ]);
