@@ -10,7 +10,7 @@ class CreateItemsTable extends AbstractMigration
      */
     public function change()
     {
-        if (! $this->hasTable('items')) {
+
             $table = $this->table('items', ['collation' => env('DB_COLLATION')]);
             $table
                 ->addColumn('board_id', 'integer')
@@ -21,8 +21,10 @@ class CreateItemsTable extends AbstractMigration
                 ->addColumn('created_at', 'integer')
                 ->addColumn('updated_at', 'integer', ['null' => true])
                 ->addColumn('expires_at', 'integer')
-                ->addIndex('category_id')
-                ->addIndex('created_at');
-        }
+                ->addIndex('board_id')
+                ->addIndex('expires_at')
+                ->addIndex('created_at')
+                ->create();
+
     }
 }
