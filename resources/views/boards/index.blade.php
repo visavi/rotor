@@ -6,6 +6,12 @@
 
 @section('content')
 
+    @if (getUser())
+        <div class="float-right">
+            <a class="btn btn-success" href="/items/create">Добавить объявление</a><br>
+        </div><br>
+    @endif
+
     <h1>Объявления</h1>
 
     <nav>
@@ -16,16 +22,39 @@
     </nav>
 
     @if ($items->isNotEmpty())
-
         @foreach ($items as $item)
-            <div class="b"><b>{{ $item->title }}</b></div>
-            <div class="message">{!! bbCode($item->text) !!}</div>
-            <div>
-                <span class="badge badge-pill badge-success">Цена: {{ $item->price }} ₽</span><br>
-                Категория: <a href="/boards/{{ $item->category->id }}">{{ $item->category->name }}</a><br>
-                Автор: {!! $item->user->getProfile() !!}
+            <div class="row mb-3">
+                <div class="col-md-12">
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-md-3">
+                                    <a href="/items/{{ $item->id }}">{!! $item->getFirstImage() !!}</a>
+                                </div>
+                                <div class="col-md-7">
+                                    <h5><a href="/items/{{ $item->id }}">{{ $item->title }}</a></h5>
+                                    <small>
+                                        @if ($item->category->parent->id)
+                                            <i class="fas fa-angle-right"></i> <a href="/boards/{{ $item->category->parent->id }}">{{ $item->category->parent->name }}</a>
+                                        @endif
+
+                                            <i class="fas fa-angle-right"></i> <a href="/boards/{{ $item->category->id }}">{{ $item->category->name }}</a>
+                                    </small>
+                                    <div class="message">{!! $item->cutText() !!}</div>
+                                    <p><i class="fa fa-user-circle"></i> {!! $item->user->getProfile() !!}</p>
+                                </div>
+                                <div class="col-md-2">
+                                    <button type="button" class="btn btn-success">{{ $item->price }} ₽</button><br>
+                                    <small>{{ dateFixed($item->created_at) }}</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         @endforeach
+
+        <?php var_dump(Illuminate\Support\Str::words('The quick brown fox jumps over the lazy dog', 3)) ?>
 
         {!! pagination($page) !!}
 
