@@ -67,11 +67,8 @@ class Item extends BaseModel
     {
         $image = $this->files->first();
 
-         if ($image) {
-             return resizeImage('/uploads/boards/' . $image->hash, ['alt' => $this->title, 'class' => 'img-fluid']);
-         }
-
-         return '<img src="/assets/img/images/photo.jpg" alt="">';
+        $path = $image ? '/uploads/boards/' . $image->hash : null;
+        return resizeImage($path, ['alt' => $this->title, 'class' => 'img-fluid']);
     }
 
     /**

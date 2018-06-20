@@ -91,13 +91,14 @@ class Down extends BaseModel
     /**
      * Обрезает текст
      *
+     * @param int $limit
      * @return string
      */
-    public function cutText()
+    public function cutText($limit = 200)
     {
-        if (utfStrlen($this->text) > 300) {
+        if (strlen($this->text) > $limit) {
             $this->text = strip_tags(bbCode($this->text), '<br>');
-            $this->text = str_limit($this->text, 300);
+            $this->text = mb_substr($this->text, 0, mb_strrpos(mb_substr($this->text, 0, $limit), ' ')) . '...';
         }
 
         return $this->text;

@@ -41,11 +41,13 @@
                                             <i class="fas fa-angle-right"></i> <a href="/boards/{{ $item->category->id }}">{{ $item->category->name }}</a>
                                     </small>
                                     <div class="message">{!! $item->cutText() !!}</div>
-                                    <p><i class="fa fa-user-circle"></i> {!! $item->user->getProfile() !!}</p>
+                                    <p><i class="fa fa-user-circle"></i> {!! $item->user->getProfile() !!} / {{ dateFixed($item->created_at) }}</p>
                                 </div>
+
                                 <div class="col-md-2">
-                                    <button type="button" class="btn btn-success">{{ $item->price }} ₽</button><br>
-                                    <small>{{ dateFixed($item->created_at) }}</small>
+                                    @if ($item->price)
+                                        <button type="button" class="btn btn-primary">{{ $item->price }} ₽</button>
+                                    @endif
                                 </div>
                             </div>
                         </div>
@@ -53,8 +55,6 @@
                 </div>
             </div>
         @endforeach
-
-        <?php var_dump(Illuminate\Support\Str::words('The quick brown fox jumps over the lazy dog', 3)) ?>
 
         {!! pagination($page) !!}
 

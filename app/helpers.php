@@ -1310,7 +1310,7 @@ function resizeProcess($path, array $params = [])
         $params['width'] = setting('previewsize');
     }
 
-    if (! file_exists(HOME . $path)) {
+    if (! $path || ! file_exists(HOME . $path)) {
         return [
             'path'   => '/assets/img/images/photo.jpg',
             'source' => false,
