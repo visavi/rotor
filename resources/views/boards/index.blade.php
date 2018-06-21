@@ -17,7 +17,17 @@
     <nav>
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
-            <li class="breadcrumb-item active">Объявления</li>
+
+            @if ($board)
+                <li class="breadcrumb-item"><a href="/boards">Объявления</a></li>
+
+                @if ($board->parent->id)
+                    <li class="breadcrumb-item"><a href="/boards/{{ $board->parent->id }}">{{ $board->parent->name }}</a></li>
+                @endif
+                <li class="breadcrumb-item active">{{ $board->name }}</li>
+            @else
+                <li class="breadcrumb-item active">Объявления</li>
+            @endif
         </ol>
     </nav>
 
@@ -33,13 +43,7 @@
                                 </div>
                                 <div class="col-md-7">
                                     <h5><a href="/items/{{ $item->id }}">{{ $item->title }}</a></h5>
-                                    <small>
-                                        @if ($item->category->parent->id)
-                                            <i class="fas fa-angle-right"></i> <a href="/boards/{{ $item->category->parent->id }}">{{ $item->category->parent->name }}</a>
-                                        @endif
-
-                                            <i class="fas fa-angle-right"></i> <a href="/boards/{{ $item->category->id }}">{{ $item->category->name }}</a>
-                                    </small>
+                                    <small><i class="fas fa-angle-right"></i> <a href="/boards/{{ $item->category->id }}">{{ $item->category->name }}</a></small>
                                     <div class="message">{!! $item->cutText() !!}</div>
                                     <p><i class="fa fa-user-circle"></i> {!! $item->user->getProfile() !!} / {{ dateFixed($item->created_at) }}</p>
                                 </div>

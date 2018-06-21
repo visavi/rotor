@@ -12,7 +12,7 @@ $routes = [
     ['GET|POST', '/banip', 'HomeController@banip'],
 
     ['GET',      '/boards', 'BoardController@index', 'board'],
-    ['GET',      '/boards/[i:id]', 'BoardController@board'],
+    ['GET',      '/boards/[i:id]', 'BoardController@index'],
     ['GET|POST', '/items/create', 'BoardController@create'],
     ['GET',      '/items/[i:id]', 'BoardController@view'],
 

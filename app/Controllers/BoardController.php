@@ -13,19 +13,36 @@ class BoardController extends BaseController
     /**
      * Главная страница
      */
-    public function index()
+    public function index($id = null)
     {
-        $total = Item::query()->count();
+        $board = null;
+
+        if ($id) {
+            $board = Board::query()->find($id);
+
+            if (! $board) {
+                abort(404, 'Категория не найдена!');
+            }
+        }
+
+        $total = Item::query()
+            ->when($board, function ($query) use ($board) {
+                return $query->where('board_id', $board->id);
+            })->count();
+
         $page = paginate(10, $total);
 
         $items = Item::query()
+            ->when($board, function ($query) use ($board) {
+                return $query->where('board_id', $board->id);
+            })
             ->orderBy('created_at', 'desc')
             ->limit($page->limit)
             ->offset($page->offset)
             ->with('category.parent', 'user', 'files')
             ->get();
 
-        return view('boards/index', compact('items', 'page'));
+        return view('boards/index', compact('items', 'page', 'board'));
     }
 
     /**
