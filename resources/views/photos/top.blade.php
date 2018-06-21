@@ -39,7 +39,7 @@
                     @if ($countFiles > 1)
                         <ol class="carousel-indicators">
                             @for ($i = 0; $i < $countFiles; $i++)
-                                <li data-target="#myCarousel{{ $loop->iteration }}" data-slide-to="{{ $i }}"{{ empty($i) ? ' class="active"' : '' }}></li>
+                                <li data-target="#myCarousel{{ $loop->iteration }}" data-slide-to="{{ $i }}"{!! empty($i) ? ' class="active"' : '' !!}></li>
                             @endfor
                         </ol>
                     @endif

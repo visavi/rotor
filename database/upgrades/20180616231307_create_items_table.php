@@ -17,7 +17,7 @@ class CreateItemsTable extends AbstractMigration
                 ->addColumn('title', 'string', ['limit' => 100])
                 ->addColumn('text', 'text', ['null' => true])
                 ->addColumn('user_id', 'integer')
-                ->addColumn('price', 'integer')
+                ->addColumn('price', 'integer', ['default' => 0])
                 ->addColumn('created_at', 'integer')
                 ->addColumn('updated_at', 'integer', ['null' => true])
                 ->addColumn('expires_at', 'integer')

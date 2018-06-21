@@ -29,6 +29,23 @@ class BoardController extends BaseController
     }
 
     /**
+     * Просмотр объявления
+     */
+    public function view($id)
+    {
+        $item = Item::query()
+            ->where('expires_at', '>', SITETIME)
+            ->with('category')
+            ->find($id);
+
+        if (! $item) {
+            abort(404, 'Объявление не найдено!');
+        }
+
+        return view('boards/view', compact('item'));
+    }
+
+    /**
      * Создание объявления
      */
     public function create()

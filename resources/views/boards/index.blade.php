@@ -61,5 +61,4 @@
     @else
         {!! showError('Объявлений еще нет!') !!}
     @endif
-
 @stop
