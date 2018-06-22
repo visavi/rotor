@@ -1,8 +1,33 @@
 <?php
 
 use App\Classes\{BBCode, Metrika, Registry, Request};
-use App\Models\{Antimat, Ban, Banhist, BlackList, Blog, Load, Chat, Counter, Down, Guestbook, Invite,
-    Error, News, Notice, Offer, Online, Photo, Post, RekUser, Setting, Smile, Spam, Topic, User, Vote
+use App\Models\{
+    Antimat,
+    Ban,
+    Banhist,
+    BlackList,
+    Blog,
+    Item,
+    Load,
+    Chat,
+    Counter,
+    Down,
+    Guestbook,
+    Invite,
+    Error,
+    News,
+    Notice,
+    Offer,
+    Online,
+    Photo,
+    Post,
+    RekUser,
+    Setting,
+    Smile,
+    Spam,
+    Topic,
+    User,
+    Vote
 };
 use Curl\Curl;
 use Illuminate\Database\Capsule\Manager as DB;
@@ -222,8 +247,8 @@ function formatFileSize($file)
 /**
  * Возвращает время в человекочитаемом формате
  *
- * @param  string $time  кол. секунд timestamp
- * @return string        время в читаемом формате
+ * @param  string $time кол. секунд timestamp
+ * @return string       время в читаемом формате
  */
 function formatTime($time)
 {
@@ -323,10 +348,9 @@ function makeCalendar($month, $year)
  */
 function getCalendar()
 {
-    $date['day']  = dateFixed(SITETIME, "j");
-    $date['mon']  = dateFixed(SITETIME, "n");
-    $date['year'] = dateFixed(SITETIME, "Y");
-    $startMonth   = mktime(0, 0, 0, $date['mon'], 1);
+    [$date['day'], $date['mon'], $date['year']] = explode('.', dateFixed(SITETIME, 'j.n.Y'));
+
+    $startMonth = mktime(0, 0, 0, $date['mon'], 1);
 
     $newsDays = [];
     $newsIds  = [];
@@ -634,7 +658,7 @@ function photoNavigation($id)
  */
 function statsBlog()
 {
-    if (@filemtime(STORAGE . '/temp/statblogblog.dat') < time() - 900) {
+    if (@filemtime(STORAGE . '/temp/statblog.dat') < time() - 900) {
 
         $stat      = Blog::query()->count();
         $totalnew  = Blog::query()->where('created_at', '>', strtotime('-3 day', SITETIME))->count();
@@ -735,6 +759,28 @@ function statsLoad()
 function statsNewLoad()
 {
     return Down::query()->where('active', 0)->count();
+}
+
+/**
+ * Возвращает количество объявлений
+ *
+ * @return string количество статей
+ */
+function statsBoard()
+{
+    if (@filemtime(STORAGE . '/temp/statboard.dat') < time() - 900) {
+
+        $stat      = Item::query()->count();
+        $totalnew  = Item::query()->where('created_at', '>', strtotime('-3 day', SITETIME))->count();
+
+        if ($totalnew) {
+            $stat = $stat . '/+' . $totalnew;
+        }
+
+        file_put_contents(STORAGE . '/temp/statboard.dat', $stat, LOCK_EX);
+    }
+
+    return file_get_contents(STORAGE . '/temp/statboard.dat');
 }
 
 /**
@@ -1141,6 +1187,34 @@ function recentBlogs($show = 5)
         }
     }
 }
+
+/**
+ * Выводит последние объявления
+ *
+ * @param  int  $show Количество последних объявлений
+ * @return void       Список объявлений
+ */
+function recentBoards($show = 5)
+{
+    if (@filemtime(STORAGE . '/temp/recentboard.dat') < time() - 600) {
+        $lastItems = Item::query()
+            ->where('expires_at', '>', SITETIME)
+            ->orderBy('created_at', 'desc')
+            ->limit($show)
+            ->get();
+
+        file_put_contents(STORAGE . '/temp/recentboard.dat', json_encode($lastItems, JSON_UNESCAPED_UNICODE), LOCK_EX);
+    }
+
+    $items = json_decode(file_get_contents(STORAGE . '/temp/recentboard.dat'));
+
+    if ($items) {
+        foreach ($items as $item) {
+            echo '<i class="far fa-circle fa-lg text-muted"></i> <a href="/items/' . $item->id . '">' . $item->title . '</a><br>';
+        }
+    }
+}
+
 
 /**
  *  Возвращает количество предложений и проблем

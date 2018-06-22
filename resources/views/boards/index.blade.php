@@ -31,6 +31,18 @@
         </ol>
     </nav>
 
+    @if ($boards->isNotEmpty())
+        <div class="row mb-3">
+            @foreach ($boards->chunk(3) as $chunk)
+                @foreach ($chunk as $board)
+                    <div class="col-md-3">
+                        <a href="/boards/{{ $board->id }}">{{ $board->name }}</a> {{ $board->count_items }}
+                    </div>
+                @endforeach
+            @endforeach
+        </div>
+    @endif
+
     @if ($items->isNotEmpty())
         @foreach ($items as $item)
             <div class="row mb-3">

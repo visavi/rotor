@@ -51,8 +51,8 @@
         </div>
 
         <div class="form-group{{ hasError('price') }}">
-            <label for="inputPrice">Цена:</label>
-            <input class="form-control" id="inputPrice" name="price" value="{{ getInput('price', 0) }}" required>
+            <label for="inputPrice">Цена ₽:</label>
+            <input class="form-control" id="inputPrice" name="price" value="{{ getInput('price') }}" required>
             {!! textError('price') !!}
         </div>
 

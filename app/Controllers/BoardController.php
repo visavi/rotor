@@ -28,7 +28,9 @@ class BoardController extends BaseController
         $total = Item::query()
             ->when($board, function ($query) use ($board) {
                 return $query->where('board_id', $board->id);
-            })->count();
+            })
+            ->where('expires_at', '>', SITETIME)
+            ->count();
 
         $page = paginate(10, $total);
 
@@ -36,13 +38,20 @@ class BoardController extends BaseController
             ->when($board, function ($query) use ($board) {
                 return $query->where('board_id', $board->id);
             })
+            ->where('expires_at', '>', SITETIME)
             ->orderBy('created_at', 'desc')
             ->limit($page->limit)
             ->offset($page->offset)
-            ->with('category.parent', 'user', 'files')
+            ->with('category', 'user', 'files')
             ->get();
 
-        return view('boards/index', compact('items', 'page', 'board'));
+        $boards = Board::query()
+            ->when($board, function ($query) use ($board) {
+                return $query->where('parent_id', $board->id);
+            })
+            ->get();
+
+        return view('boards/index', compact('items', 'page', 'board', 'boards'));
     }
 
     /**

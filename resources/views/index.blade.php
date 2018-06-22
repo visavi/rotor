@@ -38,6 +38,12 @@
     {{ recentBlogs() }}
 
     <div class="b">
+        <i class="fa fa-globe fa-lg text-muted"></i>
+        <b><a href="/boards">Объявления</a></b> ({{ statsBoard() }})
+    </div>
+    {{ recentBoards() }}
+
+    <div class="b">
         <i class="fa fa-cog fa-lg text-muted"></i>
         <b><a href="/pages">Сервисы сайта</a></b>
     </div>
