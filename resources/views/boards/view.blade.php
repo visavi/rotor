@@ -6,6 +6,12 @@
 
 @section('content')
 
+    @if ($item->user->id == getUser('id'))
+        <div class="float-right">
+            <a class="btn btn-success" href="/items/edit/{{ $item->id }}">Изменить</a>
+        </div><br>
+    @endif
+
     <h1>{{ $item->title }}</h1>
 
     <nav>

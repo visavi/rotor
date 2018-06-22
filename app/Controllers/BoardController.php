@@ -154,4 +154,32 @@ class BoardController extends BaseController
 
         return view('boards/create', compact('boards', 'bid'));
     }
+
+    /**
+     * Редактирование объявления
+     */
+    public function edit($id)
+    {
+        if (! getUser()) {
+            abort(403, 'Для редактирования объявления необходимо авторизоваться');
+        }
+
+        $item = Item::query()->find($id);
+
+        if (! $item) {
+            abort(404, 'Данного объявления не существует!');
+        }
+
+        if ($item->user_id !== getUser('id')) {
+            abort('default', 'Изменение невозможно, вы не автор данного объявления!');
+        }
+
+        $boards = Board::query()
+            ->where('parent_id', 0)
+            ->with('children')
+            ->orderBy('sort')
+            ->get();
+
+        return view('boards/edit', compact('item', 'boards'));
+    }
 }
