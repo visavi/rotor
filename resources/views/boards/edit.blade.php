@@ -23,7 +23,7 @@
         </ol>
     </nav>
 
-    <div class="form next">
+    <div class="form">
         <form action="/items/edit/{{ $item->id }}" method="post">
             <input type="hidden" name="token" value="{{ $_SESSION['token'] }}">
 

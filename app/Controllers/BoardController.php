@@ -46,9 +46,7 @@ class BoardController extends BaseController
             ->get();
 
         $boards = Board::query()
-            ->when($board, function ($query) use ($board) {
-                return $query->where('parent_id', $board->id);
-            })
+            ->where('parent_id', $board->id ?? 0)
             ->get();
 
         return view('boards/index', compact('items', 'page', 'board', 'boards'));
