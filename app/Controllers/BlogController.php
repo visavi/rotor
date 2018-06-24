@@ -136,7 +136,7 @@ class BlogController extends BaseController
             abort(404, 'Данной статьи не существует!');
         }
 
-        if ($blog->user_id != getUser('id')) {
+        if ($blog->user_id !== getUser('id')) {
             abort('default', 'Изменение невозможно, вы не автор данной статьи!');
         }
 
@@ -165,7 +165,7 @@ class BlogController extends BaseController
             if ($validator->isValid()) {
 
                 // Обновление счетчиков
-                if ($blog->category_id != $category->id) {
+                if ($blog->category_id !== $category->id) {
                     $category->increment('count_blogs');
                     Category::query()->where('id', $blog->category_id)->decrement('count_blogs');
                 }

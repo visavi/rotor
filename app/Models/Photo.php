@@ -44,14 +44,14 @@ class Photo extends BaseModel
      */
     public function uploadFile(UploadedFile $file)
     {
-        $fileName = uploadFile($file, UPLOADS . '/photos');
+        $upload = uploadFile($file, UPLOADS . '/photos');
 
         File::query()->create([
             'relate_id'   => $this->id,
             'relate_type' => self::class,
-            'hash'        => $fileName,
-            'name'        => $file->getClientOriginalName(),
-            'size'        => filesize(UPLOADS . '/photos/' . $fileName),
+            'hash'        => $upload['filename'],
+            'name'        => $upload['name'],
+            'size'        => $upload['filesize'],
             'user_id'     => getUser('id'),
             'created_at'  => SITETIME,
         ]);

@@ -26,12 +26,33 @@ class AjaxController extends BaseController
     public function __construct()
     {
         parent::__construct();
+        $this->checkAjax();
+        $this->checkAuthorize();
+    }
 
+    /**
+     * Проверяет является ли запрос ajax
+     */
+    public function checkAjax()
+    {
         if (! Request::ajax()) {
-            exit(json_encode([
+            return json_encode([
                 'status' => 'error',
                 'message' => 'This is not ajax request'
-            ]));
+            ]);
+        }
+    }
+
+    /**
+     * Проверяет является ли запрос ajax
+     */
+    public function checkAuthorize()
+    {
+        if (! getUser()) {
+            return json_encode([
+                'status' => 'error',
+                'message' => 'Not authorized'
+            ]);
         }
     }
 
@@ -128,7 +149,6 @@ class AjaxController extends BaseController
         $validator = new Validator();
         $validator
             ->equal($token, $_SESSION['token'], 'Неверный идентификатор сессии, повторите действие!')
-            ->true(getUser(), 'Для отправки жалобы необходимо авторизоваться')
             ->true($data, 'Выбранное вами сообщение для жалобы не существует!')
             ->false($spam, 'Жалоба на данное сообщение уже отправлена!');
 
@@ -156,7 +176,7 @@ class AjaxController extends BaseController
     public function delComment()
     {
         if (! isAdmin()) {
-            exit(json_encode(['status' => 'error', 'message' => 'Not authorized']));
+            return json_encode(['status' => 'error', 'message' => 'Not authorized']);
         }
 
         $token = check(Request::input('token'));
@@ -205,20 +225,16 @@ class AjaxController extends BaseController
         $vote  = check(Request::input('vote'));
         $token = check(Request::input('token'));
 
-        if (! getUser()) {
-            exit(json_encode(['status' => 'error', 'message' => 'Not authorized']));
-        }
-
-        if ($token != $_SESSION['token']) {
-            exit(json_encode(['status' => 'error', 'message' => 'Invalid token']));
+        if ($token !== $_SESSION['token']) {
+            return json_encode(['status' => 'error', 'message' => 'Invalid token']);
         }
 
         if (! in_array($vote, ['+', '-'], true)) {
-            exit(json_encode(['status' => 'error', 'message' => 'Invalid rating']));
+            return json_encode(['status' => 'error', 'message' => 'Invalid rating']);
         }
 
         if (! in_array($type, $types, true)) {
-            exit(json_encode(['status' => 'error', 'message' => 'Type invalid']));
+            return json_encode(['status' => 'error', 'message' => 'Type invalid']);
         }
 
         $post = $type::query()
@@ -227,7 +243,7 @@ class AjaxController extends BaseController
             ->first();
 
         if (! $post) {
-            exit(json_encode(['status' => 'error', 'message' => 'Record not found']));
+            return json_encode(['status' => 'error', 'message' => 'Record not found']);
         }
 
         $polling = Polling::query()
@@ -239,8 +255,8 @@ class AjaxController extends BaseController
         $cancel = false;
 
         if ($polling) {
-            if ($polling->vote == $vote) {
-                exit(json_encode(['status' => 'error']));
+            if ($polling->vote === $vote) {
+                return json_encode(['status' => 'error']);
             }
 
             $polling->delete();
@@ -273,27 +289,32 @@ class AjaxController extends BaseController
      */
     public function uploadImage()
     {
+        $types = [
+            Blog::class,
+        ];
+
         $image = Request::file('image');
         $id    = int(Request::input('id'));
+        $type  = check(Request::input('type'));
         $token = check(Request::input('token'));
 
-        if (! getUser()) {
-            exit(json_encode(['status' => 'error', 'message' => 'Not authorized']));
+        if (! in_array($type, $types, true)) {
+            return json_encode(['status' => 'error', 'message' => 'Type invalid']);
         }
 
         if ($id) {
-            $blog = Blog::query()->where('user_id', getUser('id'))->find($id);
+            $service = $type::query()->where('user_id', getUser('id'))->find($id);
 
-            if (! $blog) {
-                exit(json_encode([
+            if (! $service) {
+                return json_encode([
                     'status'  => 'error',
-                    'message' => 'Blog not found'
-                ]));
+                    'message' => 'Service not found'
+                ]);
             }
         }
 
-        $existFiles = File::query()
-            ->where('relate_type', Blog::class)
+        $countFiles = File::query()
+            ->where('relate_type', $type)
             ->where('relate_id', $id)
             ->where('user_id', getUser('id'))
             ->count();
@@ -301,7 +322,7 @@ class AjaxController extends BaseController
         $validator = new Validator();
         $validator
             ->equal($token, $_SESSION['token'], 'Неверный идентификатор сессии, повторите действие!')
-            ->lt($existFiles, setting('maxfiles'), 'Разрешено загружать не более ' . setting('maxfiles') . ' файлов!');
+            ->lt($countFiles, setting('maxfiles'), 'Разрешено загружать не более ' . setting('maxfiles') . ' файлов!');
 
         if ($validator->isValid()) {
             $rules = [
@@ -313,19 +334,20 @@ class AjaxController extends BaseController
         }
 
         if ($validator->isValid()) {
-            $fileName  = uploadFile($image, UPLOADS . '/blogs');
+            // @TODO сделать проверку getUploadPath и вынести UploadFile в базовый класс
+            $upload = uploadFile($image, (new $type)->getUploadPath());
 
             $file = File::query()->create([
                 'relate_id'   => $id,
-                'relate_type' => Blog::class,
-                'hash'        => $fileName,
-                'name'        => $image->getClientOriginalName(),
-                'size'        => filesize(UPLOADS . '/blogs/' . $fileName),
+                'relate_type' => $type,
+                'hash'        => $upload['filename'],
+                'name'        => $upload['name'],
+                'size'        => $upload['filesize'],
                 'user_id'     => getUser('id'),
                 'created_at'  => SITETIME,
             ]);
 
-            $image = resizeProcess('/uploads/blogs/' . $file->hash, ['size' => 100]);
+            $image = resizeProcess($upload['path'], ['size' => 100]);
 
             return json_encode([
                 'status' => 'success',
@@ -333,7 +355,6 @@ class AjaxController extends BaseController
                 'source' => $image['source'],
                 'id'     => $file->id,
             ]);
-
         }
 
         return json_encode([
@@ -348,22 +369,19 @@ class AjaxController extends BaseController
     public function deleteImage()
     {
         $id    = int(Request::input('id'));
+        $type  = check(Request::input('type'));
         $token = check(Request::input('token'));
 
-        if (! getUser()) {
-            exit(json_encode(['status' => 'error', 'message' => 'Not authorized']));
-        }
-
         $file = File::query()
-            ->where('relate_type', Blog::class)
+            ->where('relate_type', $type)
             ->where('id', $id)
             ->first();
 
         if (! $file) {
-            exit(json_encode([
+            return json_encode([
                 'status'  => 'error',
                 'message' => 'File not found'
-            ]));
+            ]);
         }
 
         $validator = new Validator();
@@ -372,7 +390,7 @@ class AjaxController extends BaseController
 
         if ($validator->isValid()) {
 
-            deleteFile(UPLOADS . '/blogs/' . $file->hash);
+            deleteFile((new $type)->getUploadPath() . '/' . $file->hash);
             $file->delete();
 
             return json_encode([

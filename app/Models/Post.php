@@ -58,14 +58,14 @@ class Post extends BaseModel
             umask($old);
         }
 
-        $fileName = uploadFile($file, UPLOADS . '/forums/' . $this->topic->id);
+        $upload = uploadFile($file, UPLOADS . '/forums/' . $this->topic->id);
 
         File::query()->create([
             'relate_id'   => $this->id,
             'relate_type' => self::class,
-            'hash'        => $fileName,
-            'name'        => $file->getClientOriginalName(),
-            'size'        => filesize(UPLOADS . '/forums/' . $this->topic->id . '/' . $fileName),
+            'hash'        => $upload['filename'],
+            'name'        => $upload['name'],
+            'size'        => $upload['filesize'],
             'user_id'     => getUser('id'),
             'created_at'  => SITETIME,
         ]);

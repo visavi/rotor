@@ -286,7 +286,7 @@ class LoadController extends AdminController
                     'text'        => $text,
                 ]);
 
-                if ($down->category->id != $oldDown->category->id && $down->active) {
+                if ($down->category->id !== $oldDown->category->id && $down->active) {
                     $down->category->increment('count_downs');
                     $oldDown->category->decrement('count_downs');
                 }
@@ -296,7 +296,7 @@ class LoadController extends AdminController
                 }
 
                 if (! $down->active) {
-                    $text = 'Уведомеление об изменении файла.'.PHP_EOL.'Ваш файл [b][url=/downs/'.$down->id.']'.$down->title.'[/url][/b] был отредактирован модератором, возможно от вас потребуются дополнительные исправления!';
+                    $text = 'Уведомеление об изменении файла.' . PHP_EOL . 'Ваш файл [b][url=/downs/' . $down->id . ']' . $down->title . '[/url][/b] был отредактирован модератором, возможно от вас потребуются дополнительные исправления!';
                     $down->user->sendMessage(null, $text);
                 }
 

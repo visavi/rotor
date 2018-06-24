@@ -124,16 +124,16 @@ class Down extends BaseModel
     {
         $extension = strtolower($file->getClientOriginalExtension());
         $path      = in_array($extension, ['jpg', 'jpeg', 'gif', 'png']) ? 'screens' : 'files';
-        $fileName  = uploadFile($file, UPLOADS . '/' . $path);
+        $upload = uploadFile($file, UPLOADS . '/' . $path);
 
-        $this->convertVideo($file, $fileName);
+        $this->convertVideo($file, $upload['filename']);
 
         File::query()->create([
             'relate_id'   => $this->id,
             'relate_type' => self::class,
-            'hash'        => $fileName,
-            'name'        => $file->getClientOriginalName(),
-            'size'        => filesize(UPLOADS . '/' . $path . '/' . $fileName),
+            'hash'        => $upload['filename'],
+            'name'        => $upload['name'],
+            'size'        => $upload['filesize'],
             'user_id'     => getUser('id'),
             'created_at'  => SITETIME,
         ]);

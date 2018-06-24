@@ -6,6 +6,12 @@
 
 @section('content')
 
+    @if (getUser())
+        <div class="float-right">
+            <a class="btn btn-success" href="/blogs/create">Добавить статью</a>
+        </div><br>
+    @endif
+
     <h1>Блоги</h1>
 
     <nav>

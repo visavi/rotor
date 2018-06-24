@@ -85,7 +85,7 @@ class NewsController extends AdminController
                     'text'   => $text,
                     'closed' => $closed,
                     'top'    => $top,
-                    'image'  => $image ?? $news->image,
+                    'image'  => $image ? $image['filename'] : $news->image,
                  ]);
 
                 setFlash('success', 'Новость успешно отредактирована!');
@@ -136,7 +136,7 @@ class NewsController extends AdminController
                     'text'       => $text,
                     'closed'     => $closed,
                     'top'        => $top,
-                    'image'      => $image ?? null,
+                    'image'      => $image ? $image['filename'] : null,
                     'created_at' => SITETIME,
                 ]);
 

@@ -392,6 +392,7 @@ function submitImage(el)
     var form = new FormData();
     form.append('image', el.files[0]);
     form.append('id', $(el).data('id'));
+    form.append('type', $(el).data('type'));
     form.append('token', $(el).data('token'));
 
     $.ajax({
@@ -444,6 +445,7 @@ function deleteImage(el)
     $.ajax({
         data: {
             id: $(el).data('id'),
+            type: $(el).data('type'),
             token: $(el).data('token')
         },
         dataType: 'json',

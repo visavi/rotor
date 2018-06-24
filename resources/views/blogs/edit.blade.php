@@ -34,11 +34,11 @@
                 <select class="form-control" id="inputCategory" name="cid">
 
                     @foreach ($categories as $data)
-                        <option value="{{ $data->id }}"{{ ($inputCategory == $data->id && ! $data->closed) ? ' selected' : '' }}{{ $data->closed ? ' disabled' : '' }}>{{ $data->name }}</option>
+                        <option value="{{ $data->id }}"{{ ($inputCategory === $data->id && ! $data->closed) ? ' selected' : '' }}{{ $data->closed ? ' disabled' : '' }}>{{ $data->name }}</option>
 
                         @if ($data->children->isNotEmpty())
                             @foreach($data->children as $datasub)
-                                <option value="{{ $datasub->id }}"{{ ($inputCategory == $datasub->id && ! $data->closed) ? ' selected' : '' }}{{ $datasub->closed ? ' disabled' : '' }}>– {{ $datasub->name }}</option>
+                                <option value="{{ $datasub->id }}"{{ ($inputCategory === $datasub->id && ! $data->closed) ? ' selected' : '' }}{{ $datasub->closed ? ' disabled' : '' }}>– {{ $datasub->name }}</option>
                             @endforeach
                         @endif
                     @endforeach
@@ -65,28 +65,7 @@
                 {!! textError('tags') !!}
             </div>
 
-            <div class="js-images">
-                @if ($blog->files->isNotEmpty())
-                    @foreach ($blog->files as $file)
-                        <span class="js-image">
-                            {!! resizeImage('/uploads/blogs/' . $file->hash, ['width' => 100, 'onclick' => 'return pasteImage(this);']) !!}
-                            <a href="#" onclick="return deleteImage(this);" data-id="{{ $file->id }}" data-token="{{ $_SESSION['token'] }}"><i class="fas fa-times"></i></a>
-                        </span>
-                    @endforeach
-                @endif
-            </div>
-
-            <div class="js-image-template d-none">
-                <span class="js-image">
-                    <img src="#" width="100" onclick="return pasteImage(this);" alt="" class="img-fluid">
-                    <a href="#" onclick="return deleteImage(this);" data-token="{{ $_SESSION['token'] }}"><i class="fas fa-times"></i></a>
-                </span>
-            </div>
-
-            <label class="btn btn-sm btn-secondary" for="image">
-                <input id="image" type="file" name="image" onchange="return submitImage(this);" data-id="{{ $blog->id }}" data-token="{{ $_SESSION['token'] }}" hidden>
-                Прикрепить картинку&hellip;
-            </label><br>
+            @include('app._upload', ['id' => $blog->id, 'files' => $blog->files, 'type' => App\Models\Blog::class])
 
             <button class="btn btn-primary">Изменить</button>
         </form>

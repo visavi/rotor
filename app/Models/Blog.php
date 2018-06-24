@@ -19,6 +19,8 @@ class Blog extends BaseModel
      */
     protected $guarded = [];
 
+    public $uploadPath = 'blogs';
+
     /**
      * Возвращает комментарии блогов
      *

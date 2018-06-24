@@ -1330,37 +1330,41 @@ function formatShortNum($num)
  *
  * @param  UploadedFile $file путь изображения
  * @param  string       $path путь сохранения изображения
- * @return string             имя загруженного файла
+ * @return array              данные загруженного файла
  */
 function uploadFile(UploadedFile $file, $path)
 {
     $extension = strtolower($file->getClientOriginalExtension());
-    $fileName  = uniqueName($extension);
+    $filename  = uniqueName($extension);
 
     if (in_array($extension, ['jpg', 'jpeg', 'gif', 'png'])) {
         $img = Image::make($file);
 
         if ($img->getWidth() <= 100 && $img->getHeight() <= 100) {
-            $file->move($path, $fileName);
-            return $fileName;
+            $file->move($path, $filename);
+        } else {
+            $img->resize(setting('screensize'), setting('screensize'), function ($constraint) {
+                $constraint->aspectRatio();
+                $constraint->upsize();
+            });
+
+            if (setting('copyfoto')) {
+                $img->insert(HOME . '/assets/img/images/watermark.png', 'bottom-right', 10, 10);
+            }
+
+            $img->save($path . '/' . $filename);
         }
-
-        $img->resize(setting('screensize'), setting('screensize'), function ($constraint) {
-            $constraint->aspectRatio();
-            $constraint->upsize();
-        });
-
-        if (setting('copyfoto')) {
-            $img->insert(HOME . '/assets/img/images/watermark.png', 'bottom-right', 10, 10);
-        }
-
-        $img->save($path . '/' . $fileName);
-
-        return $img->basename;
+    } else {
+        $file->move($path, $filename);
     }
 
-    $file->move($path, $fileName);
-    return $fileName;
+    return [
+        'path'      => str_replace(HOME, '', $path) . '/' . $filename,
+        'name'      => $file->getClientOriginalName(),
+        'filename'  => $filename,
+        'filesize'  => filesize($path . '/' . $filename),
+        'extension' => $extension,
+    ];
 }
 
 /**
@@ -1392,7 +1396,7 @@ function resizeProcess($path, array $params = [])
         ];
     }
 
-    list($width, $height) = getimagesize(HOME . $path);
+    [$width, $height] = getimagesize(HOME . $path);
 
     if ($width <= $params['width'] && $height <= $params['width']) {
         return [

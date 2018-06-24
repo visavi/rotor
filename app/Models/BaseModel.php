@@ -6,6 +6,8 @@ use \Illuminate\Database\Eloquent\Model;
 
 class BaseModel extends Model
 {
+    public $uploadPath;
+
     /**
      * Возвращает связь пользователей
      */
@@ -20,8 +22,18 @@ class BaseModel extends Model
      * @param string $value
      * @return string
      */
-    public function getLoginAttribute($value)
+    public function getLoginAttribute($value): string
     {
         return $value ?? setting('guestsuser');
+    }
+
+    /**
+     * Возвращает директорию загрузки файлов
+     *
+     * @return string
+     */
+    public function getUploadPath(): string
+    {
+        return UPLOADS . '/' . $this->uploadPath;
     }
 }

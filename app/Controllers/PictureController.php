@@ -61,7 +61,7 @@ class PictureController extends BaseController
                 $img->fit(48);
                 $img->save(UPLOADS . '/avatars/' . $avatar);
 
-                $this->user->picture = $picture;
+                $this->user->picture = $picture['filename'];
                 $this->user->avatar = $avatar;
                 $this->user->save();
 
