@@ -19,6 +19,11 @@ class Blog extends BaseModel
      */
     protected $guarded = [];
 
+    /**
+     * Директория загрузки файлов
+     *
+     * @var string
+     */
     public $uploadPath = 'blogs';
 
     /**

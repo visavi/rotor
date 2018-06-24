@@ -8,18 +8,18 @@ use Illuminate\Database\Query\JoinClause;
 
 class User extends BaseModel
 {
-    const BOSS   = 'boss';   // Владелец
-    const ADMIN  = 'admin';  // Админ
-    const MODER  = 'moder';  // Модератор
-    const EDITOR = 'editor'; // Редактор
-    const USER   = 'user';   // Пользователь
-    const PENDED = 'pended'; // Ожидающий
-    const BANNED = 'banned'; // Забаненный
+    public const BOSS   = 'boss';   // Владелец
+    public const ADMIN  = 'admin';  // Админ
+    public const MODER  = 'moder';  // Модератор
+    public const EDITOR = 'editor'; // Редактор
+    public const USER   = 'user';   // Пользователь
+    public const PENDED = 'pended'; // Ожидающий
+    public const BANNED = 'banned'; // Забаненный
 
     /**
      * Администраторы
      */
-    const ADMIN_GROUPS = [
+    public const ADMIN_GROUPS = [
         self::BOSS,
         self::ADMIN,
         self::MODER,
@@ -29,7 +29,7 @@ class User extends BaseModel
     /**
      * Участники
      */
-    const USER_GROUPS = [
+    public const USER_GROUPS = [
         self::BOSS,
         self::ADMIN,
         self::MODER,
@@ -40,7 +40,7 @@ class User extends BaseModel
     /**
      * Все пользователи
      */
-    const ALL_GROUPS = [
+    public const ALL_GROUPS = [
         self::BOSS,
         self::ADMIN,
         self::MODER,
@@ -63,6 +63,13 @@ class User extends BaseModel
      * @var array
      */
     protected $guarded = [];
+
+    /**
+     * Директория загрузки файлов
+     *
+     * @var string
+     */
+    public $uploadPath = 'pictures';
 
     /**
      * Связь с таблицей online

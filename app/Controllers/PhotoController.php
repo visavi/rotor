@@ -324,7 +324,6 @@ class PhotoController extends BaseController
         $validator = new Validator();
         $validator
             ->equal($token, $_SESSION['token'], 'Неверный идентификатор сессии, повторите действие!')
-            ->true(is_writable(HOME . '/uploads/photos'), ['Не установлены атрибуты доступа на дирекоторию с фотографиями!'])
             ->empty($photo->count_comments, 'Запрещено удалять фотографии к которым имеются комментарии!');
 
         if ($validator->isValid()) {

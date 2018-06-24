@@ -45,8 +45,8 @@ class NewsController extends AdminController
      */
     public function edit($id)
     {
-        $page   = int(Request::input('page', 1));
-        $news   = News::query()->find($id);
+        $page = int(Request::input('page', 1));
+        $news = News::query()->find($id);
 
         if (! $news) {
             abort(404, 'Новость не существует, возможно она была удалена!');
@@ -76,8 +76,8 @@ class NewsController extends AdminController
 
                 // Удаление старой картинки
                 if ($image) {
-                    deleteFile(UPLOADS . '/news/' . $news->image);
-                    $image = uploadFile($image, UPLOADS . '/news');
+                    deleteFile($news->getUploadPath() . '/' . $news->image);
+                    $image = uploadFile($image, $news->getUploadPath());
                 }
 
                 $news->update([
@@ -127,7 +127,7 @@ class NewsController extends AdminController
             if ($validator->isValid()) {
 
                 if ($image) {
-                    $image = uploadFile($image, UPLOADS . '/news');
+                    $image = uploadFile($image, (new News())->getUploadPath());
                 }
 
                 $news = News::query()->create([
@@ -160,7 +160,7 @@ class NewsController extends AdminController
     /**
      * Пересчет комментариев
      */
-    public function restatement()
+    public function restatement(): void
     {
         if (! isAdmin(User::BOSS)) {
             abort(403, 'Доступ запрещен!');
@@ -168,7 +168,7 @@ class NewsController extends AdminController
 
         $token = check(Request::input('token'));
 
-        if ($token == $_SESSION['token']) {
+        if ($token === $_SESSION['token']) {
 
             restatement('news');
 
@@ -181,38 +181,32 @@ class NewsController extends AdminController
     }
 
     /**
-     * Удаление комментариев
+     * Удаление новостей
+     *
+     * @param int $id
      */
-    public function delete()
+    public function delete($id): void
     {
-        if (! is_writable(UPLOADS.'/news')){
-            abort('default', 'Директория c файлами новостей недоступна для записи!');
-        }
-
         $page  = int(Request::input('page', 1));
         $token = check(Request::input('token'));
-        $del   = intar(Request::input('del'));
+
+        $news = News::query()->find($id);
+
+        if (! $news) {
+            abort(404, 'Новость не существует, возможно она была удалена!');
+        }
 
         $validator = new Validator();
-        $validator->equal($token, $_SESSION['token'], 'Неверный идентификатор сессии, повторите действие!')
-            ->true($del, 'Отсутствуют выбранные записи для удаления!');
+        $validator->equal($token, $_SESSION['token'], 'Неверный идентификатор сессии, повторите действие!');
 
         if ($validator->isValid()) {
 
-            $newses = News::query()
-                ->whereIn('id', $del)
-                ->get();
+            deleteFile($news->getUploadPath() . '/' . $news->image);
 
-            if ($newses->isNotEmpty()) {
-                foreach ($newses as $news) {
-                    deleteFile(UPLOADS . '/news/' . $news->image);
+            $news->comments()->delete();
+            $news->delete();
 
-                    $news->comments()->delete();
-                    $news->delete();
-                }
-            }
-
-            setFlash('success', 'Выбранные новости успешно удалены!');
+            setFlash('success', 'Новость успешно удалена!');
         } else {
             setFlash('danger', $validator->getErrors());
         }

@@ -20,6 +20,13 @@ class Board extends BaseModel
     protected $guarded = [];
 
     /**
+     * Директория загрузки файлов
+     *
+     * @var string
+     */
+    public $uploadPath = 'boards';
+
+    /**
      * Возвращает связь родительской категории
      */
     public function parent()

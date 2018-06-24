@@ -25,6 +25,13 @@ class Down extends BaseModel
     protected $guarded = [];
 
     /**
+     * Директория загрузки файлов
+     *
+     * @var string
+     */
+    public $uploadPath = 'files';
+
+    /**
      * Список расширений доступных для просмотра в архиве
      *
      * @var array

@@ -21,6 +21,13 @@ class Photo extends BaseModel
     protected $guarded = [];
 
     /**
+     * Директория загрузки файлов
+     *
+     * @var string
+     */
+    public $uploadPath = 'photos';
+
+    /**
      * Возвращает комментарии фотографий
      */
     public function comments()

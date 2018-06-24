@@ -302,7 +302,7 @@ $routes = [
     ['GET|POST', '/admin/news/edit/[i:id]', 'Admin\NewsController@edit'],
     ['GET|POST', '/admin/news/create', 'Admin\NewsController@create'],
     ['GET',      '/admin/news/restatement', 'Admin\NewsController@restatement'],
-    ['POST',     '/admin/news/delete', 'Admin\NewsController@delete'],
+    ['GET',      '/admin/news/delete/[i:id]', 'Admin\NewsController@delete'],
 
     ['GET',      '/admin/guestbooks', 'Admin\GuestbookController@index'],
     ['GET|POST', '/admin/guestbooks/edit/[i:id]', 'Admin\GuestbookController@edit'],

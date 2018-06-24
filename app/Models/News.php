@@ -19,6 +19,13 @@ class News extends BaseModel
     protected $guarded = [];
 
     /**
+     * Директория загрузки файлов
+     *
+     * @var string
+     */
+    public $uploadPath = 'news';
+
+    /**
      * Возвращает комментарии новостей
      */
     public function comments()
@@ -30,7 +37,7 @@ class News extends BaseModel
      * Возвращает иконку в зависимости от статуса
      * @return string иконка новостей
      */
-    public function getIcon()
+    public function getIcon(): string
     {
         if ($this->closed) {
             $icon = 'fa-lock';
@@ -46,7 +53,7 @@ class News extends BaseModel
      *
      * @return string
      */
-    public function shortText()
+    public function shortText(): string
     {
         if (stristr($this->text, '[cut]')) {
             $this->text = current(explode('[cut]', $this->text)) . ' <a href="/news/'. $this->id .'" class="badge badge-success">Читать далее &raquo;</a>';

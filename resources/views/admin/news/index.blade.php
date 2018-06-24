@@ -22,42 +22,39 @@
     </nav>
 
     @if ($news->isNotEmpty())
+        @foreach ($news as $data)
 
-        <form action="/admin/news/delete?page={{ $page->current}} " method="post">
-            <input type="hidden" name="token" value="{{ $_SESSION['token'] }}">
-
-            @foreach ($news as $data)
-
-                <div class="b">
-                    <div class="float-right">
-                        @if ($data->top)
-                            <div class="right"><span style="color:#ff0000">На главной</span></div>
-                        @endif
-                    </div>
-
-                    <i class="fa {{ $data->getIcon() }} text-muted"></i>
-
-                    <b><a href="/news/{{ $data->id }}">{{ $data->title }}</a></b><small> ({{ dateFixed($data->created_at) }})</small><br>
-                    <input type="checkbox" name="del[]" value="{{ $data->id }}">
-                    <a href="/admin/news/edit/{{ $data->id }}?page={{ $page->current }}">Редактировать</a>
+            <div class="b">
+                <div class="float-right">
+                    @if ($data->top)
+                        <div class="right"><span style="color:#ff0000">На главной</span></div>
+                    @endif
                 </div>
 
-                @if ($data->image)
-                    <div class="img">
-                        <a href="/uploads/news/{{ $data->image }}">{!! resizeImage('/uploads/news/' . $data->image, ['width' => 100, 'alt' => $data->title]) !!}</a>
-                    </div>
-                @endif
+                <i class="fa {{ $data->getIcon() }} text-muted"></i>
 
-                <div class="clearfix">{!! bbCode($data->shortText()) !!}</div>
+                <b><a href="/news/{{ $data->id }}">{{ $data->title }}</a></b><small> ({{ dateFixed($data->created_at) }})</small><br>
 
-                <div>Добавлено: {!! $data->user->getProfile() !!}<br>
-                    <a href="/news/comments/{{  $data->id }}">Комментарии</a> ({{ $data->count_comments }})
-                    <a href="/news/end/{{ $data->id }}">&raquo;</a>
+                <div class="float-right">
+                    <a href="/admin/news/edit/{{ $data->id }}?page={{ $page->current }}"><i class="fas fa-pencil-alt text-muted"></i></a>
+                    <a href="/admin/news/delete/{{ $data->id }}?token={{ $_SESSION['token'] }}" onclick="return confirm('{{ trans('news.confirm_delete') }}')"><i class="fas fa-times text-muted"></i></a>
                 </div>
-            @endforeach
 
-            <button class="btn btn-sm btn-danger">Удалить выбранное</button>
-        </form>
+            </div>
+
+            @if ($data->image)
+                <div class="img">
+                    <a href="/uploads/news/{{ $data->image }}">{!! resizeImage('/uploads/news/' . $data->image, ['width' => 100, 'alt' => $data->title]) !!}</a>
+                </div>
+            @endif
+
+            <div class="clearfix">{!! bbCode($data->shortText()) !!}</div>
+
+            <div>Добавлено: {!! $data->user->getProfile() !!}<br>
+                <a href="/news/comments/{{  $data->id }}">Комментарии</a> ({{ $data->count_comments }})
+                <a href="/news/end/{{ $data->id }}">&raquo;</a>
+            </div>
+        @endforeach
 
         {!! pagination($page) !!}
 

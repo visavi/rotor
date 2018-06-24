@@ -21,6 +21,13 @@ class Post extends BaseModel
     protected $guarded = [];
 
     /**
+     * Директория загрузки файлов
+     *
+     * @var string
+     */
+    public $uploadPath = 'forums';
+
+    /**
      * Возвращает связь пользователей
      */
     public function editUser()
