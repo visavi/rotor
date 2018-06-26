@@ -31,7 +31,6 @@ use App\Models\{
 };
 use Curl\Curl;
 use Illuminate\Database\Capsule\Manager as DB;
-use Illuminate\Http\UploadedFile;
 use Intervention\Image\ImageManagerStatic as Image;
 use Jenssegers\Blade\Blade;
 use ReCaptcha\ReCaptcha;
@@ -1326,48 +1325,6 @@ function formatShortNum($num)
 }
 
 /**
- * Загружает изображение
- *
- * @param  UploadedFile $file путь изображения
- * @param  string       $path путь сохранения изображения
- * @return array              данные загруженного файла
- */
-function uploadFile(UploadedFile $file, $path)
-{
-    $extension = strtolower($file->getClientOriginalExtension());
-    $filename  = uniqueName($extension);
-
-    if (in_array($extension, ['jpg', 'jpeg', 'gif', 'png'])) {
-        $img = Image::make($file);
-
-        if ($img->getWidth() <= 100 && $img->getHeight() <= 100) {
-            $file->move($path, $filename);
-        } else {
-            $img->resize(setting('screensize'), setting('screensize'), function ($constraint) {
-                $constraint->aspectRatio();
-                $constraint->upsize();
-            });
-
-            if (setting('copyfoto')) {
-                $img->insert(HOME . '/assets/img/images/watermark.png', 'bottom-right', 10, 10);
-            }
-
-            $img->save($path . '/' . $filename);
-        }
-    } else {
-        $file->move($path, $filename);
-    }
-
-    return [
-        'path'      => str_replace(HOME, '', $path) . '/' . $filename,
-        'name'      => $file->getClientOriginalName(),
-        'filename'  => $filename,
-        'filesize'  => filesize($path . '/' . $filename),
-        'extension' => $extension,
-    ];
-}
-
-/**
  * Обрабатывает и уменьшает изображение
  *
  * @param  string $path   путь к изображению
@@ -1411,10 +1368,15 @@ function resizeProcess($path, array $params = [])
     if (! file_exists(UPLOADS . '/thumbnails/' . $thumb)) {
 
         $img = Image::make(HOME . $path);
-
-        $img->fit($params['width'], $params['width'], function ($constraint) {
+        $img->resize($params['width'], $params['width'], function ($constraint) {
+            $constraint->aspectRatio();
             $constraint->upsize();
         });
+
+/*
+        $img->fit($params['width'], $params['width'], function ($constraint) {
+            $constraint->upsize();
+        });*/
 
         $img->save(UPLOADS . '/thumbnails/' . $thumb);
     }

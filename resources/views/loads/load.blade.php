@@ -9,10 +9,10 @@
     @if (getUser() && ! $category->closed)
         <div class="float-right">
             <a class="btn btn-success" href="/downs/create?cid={{ $category->id }}">Добавить файл</a>
-        </div>
+        </div><br>
     @endif
 
-    <h1>{{ $category->name }}</h1><br>
+    <h1>{{ $category->name }}</h1>
 
     <nav>
         <ol class="breadcrumb">

@@ -76,8 +76,8 @@ class NewsController extends AdminController
 
                 // Удаление старой картинки
                 if ($image) {
-                    deleteFile($news->getUploadPath() . '/' . $news->image);
-                    $image = uploadFile($image, $news->getUploadPath());
+                    deleteFile($news->uploadPath . '/' . $news->image);
+                    $image = $news->uploadFile($image);
                 }
 
                 $news->update([
@@ -127,7 +127,7 @@ class NewsController extends AdminController
             if ($validator->isValid()) {
 
                 if ($image) {
-                    $image = uploadFile($image, (new News())->getUploadPath());
+                    $image = basename((new News())->uploadFile($image));
                 }
 
                 $news = News::query()->create([
@@ -136,9 +136,11 @@ class NewsController extends AdminController
                     'text'       => $text,
                     'closed'     => $closed,
                     'top'        => $top,
-                    'image'      => $image ? $image['filename'] : null,
+                    'image'      => $image ?? null,
                     'created_at' => SITETIME,
                 ]);
+
+
 
                 // Выводим на главную если там нет новостей
                 if ($top && empty(setting('lastnews'))) {
@@ -201,7 +203,7 @@ class NewsController extends AdminController
 
         if ($validator->isValid()) {
 
-            deleteFile($news->getUploadPath() . '/' . $news->image);
+            deleteFile($news->uploadPath . '/' . $news->image);
 
             $news->comments()->delete();
             $news->delete();

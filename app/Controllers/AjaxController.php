@@ -5,6 +5,7 @@ namespace App\Controllers;
 use App\Classes\Request;
 use App\Classes\Validator;
 use App\Models\Blog;
+use App\Models\Board;
 use App\Models\Comment;
 use App\Models\Down;
 use App\Models\File;
@@ -291,6 +292,7 @@ class AjaxController extends BaseController
     {
         $types = [
             Blog::class,
+            Board::class,
         ];
 
         $image = Request::file('image');
@@ -303,14 +305,16 @@ class AjaxController extends BaseController
         }
 
         if ($id) {
-            $service = $type::query()->where('user_id', getUser('id'))->find($id);
+            $model = $type::query()->where('user_id', getUser('id'))->find($id);
 
-            if (! $service) {
+            if (! $model) {
                 return json_encode([
                     'status'  => 'error',
                     'message' => 'Service not found'
                 ]);
             }
+        } else {
+            $model = new $type();
         }
 
         $countFiles = File::query()
@@ -334,26 +338,13 @@ class AjaxController extends BaseController
         }
 
         if ($validator->isValid()) {
-            // @TODO сделать проверку getUploadPath и вынести UploadFile в базовый класс
-            $upload = uploadFile($image, (new $type)->getUploadPath());
-
-            $file = File::query()->create([
-                'relate_id'   => $id,
-                'relate_type' => $type,
-                'hash'        => $upload['filename'],
-                'name'        => $upload['name'],
-                'size'        => $upload['filesize'],
-                'user_id'     => getUser('id'),
-                'created_at'  => SITETIME,
-            ]);
-
-            $image = resizeProcess($upload['path'], ['size' => 100]);
+            $upload = $model->uploadFile($image);
+            $image  = resizeProcess($upload, ['size' => 100]);
 
             return json_encode([
                 'status' => 'success',
                 'path'   => $image['path'],
                 'source' => $image['source'],
-                'id'     => $file->id,
             ]);
         }
 
@@ -374,8 +365,7 @@ class AjaxController extends BaseController
 
         $file = File::query()
             ->where('relate_type', $type)
-            ->where('id', $id)
-            ->first();
+            ->find($id);
 
         if (! $file) {
             return json_encode([
@@ -390,7 +380,7 @@ class AjaxController extends BaseController
 
         if ($validator->isValid()) {
 
-            deleteFile((new $type)->getUploadPath() . '/' . $file->hash);
+            deleteFile((new $type)->uploadPath . '/' . $file->hash);
             $file->delete();
 
             return json_encode([

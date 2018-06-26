@@ -16,7 +16,7 @@
     </nav>
 
     <div class="form">
-        @if (!empty($user->picture) && file_exists(UPLOADS . '/pictures/'.$user->picture))
+        @if (!empty($user->picture) && file_exists($user->uploadPath . '/' . $user->picture))
             {!! resizeImage('/uploads/pictures/' . $user->picture, ['alt' => $user['login'], 'class' => 'img-fluid rounded']) !!}
         @else
             <img class="img-fluid rounded" src="/assets/img/images/photo.jpg" alt="Фото">

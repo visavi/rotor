@@ -22,6 +22,13 @@ class Item extends BaseModel
     protected $guarded = [];
 
     /**
+     * Директория загрузки файлов
+     *
+     * @var string
+     */
+    public $uploadPath = UPLOADS . '/boards';
+
+    /**
      * Возвращает категорию объявлений
      */
     public function category()
@@ -35,27 +42,6 @@ class Item extends BaseModel
     public function files()
     {
         return $this->morphMany(File::class, 'relate');
-    }
-
-    /**
-     * Загружает файл
-     *
-     * @param UploadedFile $file
-     * @return void
-     */
-    public function uploadFile(UploadedFile $file)
-    {
-        $upload  = uploadFile($file, UPLOADS . '/boards');
-
-        File::query()->create([
-            'relate_id'   => $this->id,
-            'relate_type' => self::class,
-            'hash'        => $upload['filename'],
-            'name'        => $upload['name'],
-            'size'        => $upload['filesize'],
-            'user_id'     => getUser('id'),
-            'created_at'  => SITETIME,
-        ]);
     }
 
     /**

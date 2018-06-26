@@ -45,24 +45,24 @@ class PictureController extends BaseController
 
                 //-------- Удаляем старую фотку и аватар ----------//
                 if ($this->user->picture) {
-                    deleteFile(UPLOADS . '/pictures/' . $this->user->picture);
-                    deleteFile(UPLOADS . '/avatars/' . $this->user->avatar);
+                    deleteFile($this->user->uploadPath . '/' . $this->user->picture);
+                    deleteFile($this->user->uploadAvatarPath . '/' . $this->user->avatar);
 
                     $this->user->picture = null;
                     $this->user->avatar = null;
                     $this->user->save();
                 }
 
-                $picture = uploadFile($photo, UPLOADS . '/pictures');
-                $avatar  = uniqueName('png');
-
                 //-------- Генерируем аватар ----------//
+                $avatar = uniqueName('png');
                 $img = Image::make($photo);
                 $img->fit(48);
-                $img->save(UPLOADS . '/avatars/' . $avatar);
+                $img->save($this->user->uploadAvatarPath . '/' . $avatar);
 
-                $this->user->picture = $picture['filename'];
-                $this->user->avatar = $avatar;
+                $picture = $this->user->uploadFile($photo);
+
+                $this->user->picture = basename($picture);
+                $this->user->avatar  = $avatar;
                 $this->user->save();
 
                 setFlash('success', 'Фотография успешно загружена!');
@@ -94,8 +94,8 @@ class PictureController extends BaseController
 
         if ($validator->isValid()) {
 
-            deleteFile(UPLOADS . '/pictures/' . $this->user->picture);
-            deleteFile(UPLOADS . '/avatars/' . $this->user->avatar);
+            deleteFile($this->user->uploadPath . '/' . $this->user->picture);
+            deleteFile($this->user->uploadAvatarPath . '/' . $this->user->avatar);
 
             $this->user->picture = null;
             $this->user->avatar = null;

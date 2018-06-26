@@ -135,9 +135,9 @@ class DownController extends BaseController
         }
 
         if ($file->isImage()) {
-            deleteFile(UPLOADS . '/screens/' . $file->hash);
+            deleteFile($down->uploadScreenPath . '/' . $file->hash);
         } else {
-            deleteFile(UPLOADS . '/files/' . $file->hash);
+            deleteFile($down->uploadPath . '/' . $file->hash);
         }
 
         setFlash('success', 'Файл успешно удален!');
@@ -314,7 +314,7 @@ class DownController extends BaseController
 
         $validator = new Validator();
         $validator
-            ->true(file_exists(UPLOADS . '/files/' . $file->hash), 'Файла для скачивания не существует!');
+            ->true(file_exists($file->relate->uploadPath . '/' . $file->hash), 'Файла для скачивания не существует!');
 
         if ($validator->isValid()) {
 
@@ -514,7 +514,7 @@ class DownController extends BaseController
 
         try {
             $archive = new ZipFile();
-            $archive->openFile(UPLOADS . '/files/' . $file->hash);
+            $archive->openFile($file->relate->uploadPath . '/' . $file->hash);
         } catch (Exception $e) {
             abort('default', 'Не удалось открыть архив!');
         }
@@ -550,7 +550,7 @@ class DownController extends BaseController
 
         try {
             $archive = new ZipFile();
-            $archive->openFile(UPLOADS . '/files/' . $file->hash);
+            $archive->openFile($file->relate->uploadPath . '/' . $file->hash);
         } catch (Exception $e) {
             abort('default', 'Не удалось открыть архив!');
         }

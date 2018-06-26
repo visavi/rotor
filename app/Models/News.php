@@ -23,7 +23,14 @@ class News extends BaseModel
      *
      * @var string
      */
-    public $uploadPath = 'news';
+    public $uploadPath = UPLOADS . '/news';
+
+    /**
+     * Записывать файлы в таблицу
+     *
+     * @var bool
+     */
+    public $dataRecord = false;
 
     /**
      * Возвращает комментарии новостей

@@ -6,6 +6,12 @@
 
 @section('content')
 
+    @if (getUser())
+        <div class="float-right">
+            <a class="btn btn-success" href="/downs/create">Добавить файл</a>
+        </div><br>
+    @endif
+
     <h1>Загрузки</h1>
 
     <nav>

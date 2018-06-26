@@ -69,7 +69,21 @@ class User extends BaseModel
      *
      * @var string
      */
-    public $uploadPath = 'pictures';
+    public $uploadPath = UPLOADS . '/pictures';
+
+    /**
+     * Директория загрузки аватаров
+     *
+     * @var string
+     */
+    public $uploadAvatarPath = UPLOADS . '/avatars';
+
+    /**
+     * Записывать файлы в таблицу
+     *
+     * @var bool
+     */
+    public $dataRecord = false;
 
     /**
      * Связь с таблицей online
@@ -369,7 +383,7 @@ class User extends BaseModel
             return '<img class="avatar" src="/assets/img/images/avatar_guest.png" alt=""> ';
         }
 
-        if ($this->avatar && file_exists(UPLOADS . '/avatars/' . $this->avatar)) {
+        if ($this->avatar && file_exists($this->uploadAvatarPath . '/' . $this->avatar)) {
             return '<a href="/users/' . $this->login . '"><img src="/uploads/avatars/' . $this->avatar . '" alt="" class="avatar"></a> ';
         }
 
@@ -542,8 +556,8 @@ class User extends BaseModel
      */
     public function delete()
     {
-        deleteFile(UPLOADS . '/pictures/' . $this->picture);
-        deleteFile(UPLOADS . '/avatars/' . $this->avatar);
+        deleteFile($this->uploadPath . '/' . $this->picture);
+        deleteFile($this->uploadAvatarPath . '/' . $this->avatar);
 
         Inbox::query()->where('user_id', $this->id)->delete();
         Outbox::query()->where('user_id', $this->id)->delete();

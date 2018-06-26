@@ -24,7 +24,7 @@ class Blog extends BaseModel
      *
      * @var string
      */
-    public $uploadPath = 'blogs';
+    public $uploadPath = UPLOADS . '/blogs';
 
     /**
      * Возвращает комментарии блогов
@@ -77,7 +77,7 @@ class Blog extends BaseModel
      * @param int $maxSize
      * @return int
      */
-    public static function logTagSize($count, $minCount, $maxCount, $minSize = 10, $maxSize = 30)
+    public static function logTagSize($count, $minCount, $maxCount, $minSize = 10, $maxSize = 30): int
     {
         $minCount = log($minCount + 1);
         $maxCount = log($maxCount + 1);
@@ -101,7 +101,7 @@ class Blog extends BaseModel
     public function delete()
     {
         $this->files->each(function($file) {
-            deleteFile(UPLOADS . '/blogs/' . $file->hash);
+            deleteFile($this->uploadPath . '/' . $file->hash);
             $file->delete();
         });
 

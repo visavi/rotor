@@ -39,7 +39,7 @@ class BoardController extends BaseController
                 return $query->where('board_id', $board->id);
             })
             ->where('expires_at', '>', SITETIME)
-            ->orderBy('created_at', 'desc')
+            ->orderBy('updated_at', 'desc')
             ->limit($page->limit)
             ->offset($page->offset)
             ->with('category', 'user', 'files')
@@ -135,6 +135,7 @@ class BoardController extends BaseController
                     'user_id'    => $user->id,
                     'price'      => $price,
                     'created_at' => SITETIME,
+                    'updated_at' => SITETIME,
                     'expires_at' => strtotime('+1 month', SITETIME),
                 ]);
 

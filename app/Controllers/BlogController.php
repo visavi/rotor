@@ -178,7 +178,7 @@ class BlogController extends BaseController
                 ]);
 
                 setFlash('success', 'Статья успешно отредактирована!');
-                redirect('/articles/'.$blog->id);
+                redirect('/articles/' . $blog->id);
             } else {
                 setInput(Request::all());
                 setFlash('danger', $validator->getErrors());
@@ -289,7 +289,7 @@ class BlogController extends BaseController
                     ->update(['relate_id' => $article->id]);
 
                 setFlash('success', 'Статья успешно опубликована!');
-                redirect('/articles/'.$article->id);
+                redirect('/articles/' . $article->id);
             } else {
                 setInput(Request::all());
                 setFlash('danger', $validator->getErrors());

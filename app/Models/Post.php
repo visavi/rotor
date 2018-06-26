@@ -25,7 +25,7 @@ class Post extends BaseModel
      *
      * @var string
      */
-    public $uploadPath = 'forums';
+    public $uploadPath = UPLOADS . '/forums';
 
     /**
      * Возвращает связь пользователей
@@ -54,28 +54,19 @@ class Post extends BaseModel
     /**
      * Загружает файл
      *
-     * @param UploadedFile $file
-     * @return void
+     * @param  UploadedFile $file
+     * @param  string       $uploadPath
+     * @return string
      */
-    public function uploadFile(UploadedFile $file)
+    public function uploadFile(UploadedFile $file, $uploadPath = null): string
     {
-        if (! file_exists(UPLOADS . '/forums/' . $this->topic->id)) {
+        if (! file_exists($this->uploadPath . '/' . $this->topic->id)) {
             $old = umask(0);
-            mkdir(UPLOADS . '/forums/' . $this->topic->id, 0777, true);
+            mkdir($this->uploadPath . '/' . $this->topic->id, 0777, true);
             umask($old);
         }
 
-        $upload = uploadFile($file, UPLOADS . '/forums/' . $this->topic->id);
-
-        File::query()->create([
-            'relate_id'   => $this->id,
-            'relate_type' => self::class,
-            'hash'        => $upload['filename'],
-            'name'        => $upload['name'],
-            'size'        => $upload['filesize'],
-            'user_id'     => getUser('id'),
-            'created_at'  => SITETIME,
-        ]);
+        return parent::uploadFile($file, $this->uploadPath . '/' . $this->topic->id);
     }
 
     /**
@@ -87,7 +78,7 @@ class Post extends BaseModel
     public function delete()
     {
         $this->files->each(function($file) {
-            deleteFile(UPLOADS . '/forums/' . $this->topic_id . '/' . $file->hash);
+            deleteFile($this->uploadPath . '/' . $this->topic_id . '/' . $file->hash);
             $file->delete();
         });
 

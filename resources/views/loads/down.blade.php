@@ -46,7 +46,7 @@
         @if ($down->getFiles()->isNotEmpty())
             <div class="mt-3">
                 @foreach ($down->getFiles() as $file)
-                    @if ($file->hash && file_exists(UPLOADS.'/files/'.$file->hash))
+                    @if ($file->hash && file_exists($down->uploadPath . '/' . $file->hash))
                         <i class="fa fa-download"></i> <b><a href="/downs/download/{{ $file->id }}">{{ $file->name }}</a></b> ({{ formatSize($file->size) }})
 
                         @if ($file->extension === 'mp3')
@@ -56,7 +56,7 @@
                         @endif
 
                         @if ($file->extension === 'mp4')
-                            <?php $poster = file_exists(UPLOADS . '/screens/' . $file->hash . '.jpg') ? '/uploads/screens/' . $file->hash . '.jpg' : null; ?>
+                            <?php $poster = file_exists($down->uploadScreenPath . '/' . $file->hash . '.jpg') ? '/uploads/screens/' . $file->hash . '.jpg' : null; ?>
 
                            <video width="640" height="360" style="max-width:100%;" poster="{{ $poster }}" preload="none" controls playsinline>
                                <source src="/uploads/files/{{ $file->hash }}" type="video/mp4">
