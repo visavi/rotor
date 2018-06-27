@@ -127,7 +127,7 @@ class NewsController extends AdminController
             if ($validator->isValid()) {
 
                 if ($image) {
-                    $image = basename((new News())->uploadFile($image));
+                    $image = (new News())->uploadFile($image);
                 }
 
                 $news = News::query()->create([
