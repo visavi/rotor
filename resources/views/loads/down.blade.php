@@ -46,20 +46,20 @@
         @if ($down->getFiles()->isNotEmpty())
             <div class="mt-3">
                 @foreach ($down->getFiles() as $file)
-                    @if ($file->hash && file_exists($down->uploadPath . '/' . $file->hash))
+                    @if ($file->hash && file_exists(HOME . $file->hash))
                         <i class="fa fa-download"></i> <b><a href="/downs/download/{{ $file->id }}">{{ $file->name }}</a></b> ({{ formatSize($file->size) }})
 
                         @if ($file->extension === 'mp3')
                             <audio preload="none" controls style="max-width:100%;">
-                                <source src="/uploads/files/{{ $file->hash }}" type="audio/mp3">
+                                <source src="{{ $file->hash }}" type="audio/mp3">
                             </audio>
                         @endif
 
                         @if ($file->extension === 'mp4')
-                            <?php $poster = file_exists($down->uploadScreenPath . '/' . $file->hash . '.jpg') ? '/uploads/screens/' . $file->hash . '.jpg' : null; ?>
+                            <?php $poster = file_exists(HOME . $file->hash . '.jpg') ? $file->hash . '.jpg' : null; ?>
 
                            <video width="640" height="360" style="max-width:100%;" poster="{{ $poster }}" preload="none" controls playsinline>
-                               <source src="/uploads/files/{{ $file->hash }}" type="video/mp4">
+                               <source src="{{ $file->hash }}" type="video/mp4">
                            </video>
                         @endif
 
@@ -77,7 +77,7 @@
         @if ($down->getImages()->isNotEmpty())
             <div class="mt-3">
                 @foreach ($down->getImages() as $image)
-                    <a href="/uploads/screens/{{ $image->hash }}" class="gallery" data-group="{{ $down->id }}">{!! resizeImage('/uploads/screens/' . $image->hash, ['alt' => $down->title]) !!}</a><br>
+                    <a href="{{ $image->hash }}" class="gallery" data-group="{{ $down->id }}">{!! resizeImage($image->hash, ['alt' => $down->title]) !!}</a><br>
                 @endforeach
             </div>
         @endif

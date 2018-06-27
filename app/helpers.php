@@ -1101,7 +1101,7 @@ function recentPhotos($show = 5)
             $file = current($photo->files);
 
             if ($file) {
-                echo '<a href="/photos/' . $photo->id . '">' . resizeImage('/uploads/photos/' . $file->hash, ['alt' => $photo->title, 'class' => 'rounded', 'style' => 'width: 100px; height: 100px;']) . '</a>';
+                echo '<a href="/photos/' . $photo->id . '">' . resizeImage($file->hash, ['alt' => $photo->title, 'class' => 'rounded', 'style' => 'width: 100px; height: 100px;']) . '</a>';
             }
         }
 
@@ -1373,7 +1373,7 @@ function resizeProcess($path, array $params = [])
             $constraint->upsize();
         });
 
-/*
+        /*
         $img->fit($params['width'], $params['width'], function ($constraint) {
             $constraint->upsize();
         });*/

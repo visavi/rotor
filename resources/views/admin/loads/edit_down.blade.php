@@ -75,14 +75,14 @@
             @if ($down->getFiles()->isNotEmpty())
                 @foreach ($down->getFiles() as $file)
                 <i class="fa fa-download"></i>
-                <b><a href="/uploads/files/{{ $file->hash }}">{{ $file->name }}</a></b> ({{ formatSize($file->size) }}) (<a href="/admin/downs/delete/{{ $down->id }}/{{ $file->id }}" onclick="return confirm('Вы действительно хотите удалить данный файл?')">Удалить</a>)<br>
+                <b><a href="{{ $file->hash }}">{{ $file->name }}</a></b> ({{ formatSize($file->size) }}) (<a href="/admin/downs/delete/{{ $down->id }}/{{ $file->id }}" onclick="return confirm('Вы действительно хотите удалить данный файл?')">Удалить</a>)<br>
                 @endforeach
             @endif
 
             @if ($down->getImages()->isNotEmpty())
                 @foreach ($down->getImages() as $image)
-                    {!! resizeImage('/uploads/screens/' . $image->hash) !!}<br>
-                    <i class="fa fa-image"></i> <b><a href="/uploads/screens/{{ $image->hash }}">{{ $image->name }}</a></b> ({{ formatSize($image->size ) }}) (<a href="/admin/downs/delete/{{ $down->id }}/{{ $image->id }}" onclick="return confirm('Вы действительно хотите удалить данный скриншот?')">Удалить</a>)<br><br>
+                    {!! resizeImage($image->hash) !!}<br>
+                    <i class="fa fa-image"></i> <b><a href="{{ $image->hash }}">{{ $image->name }}</a></b> ({{ formatSize($image->size ) }}) (<a href="/admin/downs/delete/{{ $down->id }}/{{ $image->id }}" onclick="return confirm('Вы действительно хотите удалить данный скриншот?')">Удалить</a>)<br><br>
                 @endforeach
             @endif
 

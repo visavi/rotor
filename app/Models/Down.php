@@ -29,8 +29,7 @@ class Down extends BaseModel
      *
      * @var string
      */
-    public $uploadPath       = UPLOADS . '/files';
-    public $uploadScreenPath = UPLOADS . '/screens';
+    public $uploadPath = UPLOADS . '/files';
 
     /**
      * Список расширений доступных для просмотра в архиве
@@ -126,24 +125,20 @@ class Down extends BaseModel
      * Загружает файл
      *
      * @param  UploadedFile $file
-     * @param  string       $uploadPath
      * @return string
      */
-    public function uploadFile(UploadedFile $file, $uploadPath = null): string
+    public function uploadFile(UploadedFile $file): string
     {
-        $extension = strtolower($file->getClientOriginalExtension());
-        $path      = in_array($extension, ['jpg', 'jpeg', 'gif', 'png']) ? $this->uploadScreenPath : $this->uploadPath;
+        $path = parent::uploadFile($file, $this->uploadPath);
+        $this->convertVideo($file, $path);
 
-        $upload = parent::uploadFile($file, $path);
-        $this->convertVideo($file, $upload);
-
-        return $upload;
+        return $path;
     }
 
     /**
      * @param UploadedFile $file
      */
-    public function convertVideo(UploadedFile  $file, $fileName)
+    public function convertVideo(UploadedFile  $file, $path)
     {
         $isVideo = strpos($file->getClientMimeType(), 'video/') !== false;
 
@@ -159,18 +154,18 @@ class Down extends BaseModel
 
             $ffmpeg = FFMpeg::create($ffconfig);
 
-            $video = $ffmpeg->open($this->uploadPath . '/' . $fileName);
+            $video = $ffmpeg->open(HOME . $path);
 
             // Сохраняем скрин с 5 секунды
             $frame = $video->frame(TimeCode::fromSeconds(5));
-            $frame->save($this->uploadScreenPath . '/' . $fileName . '.jpg');
+            $frame->save(HOME . $path . '.jpg');
 
             File::query()->create([
                 'relate_id'   => $this->id,
                 'relate_type' => self::class,
-                'hash'        => $fileName . '.jpg',
+                'hash'        => $path . '.jpg',
                 'name'        => 'screenshot.jpg',
-                'size'        => filesize($this->uploadScreenPath . '/' . $fileName . '.jpg'),
+                'size'        => filesize(HOME . $path . '.jpg'),
                 'user_id'     => getUser('id'),
                 'created_at'  => SITETIME,
             ]);
@@ -178,7 +173,7 @@ class Down extends BaseModel
             // Перекодируем видео в h264
             $ffprobe = FFProbe::create($ffconfig);
             $codec = $ffprobe
-                ->streams($this->uploadPath . '/' . $fileName)
+                ->streams(HOME . $path)
                 ->videos()
                 ->first()
                 ->get('codec_name');
@@ -205,12 +200,7 @@ class Down extends BaseModel
     {
         $this->files->each(function($file) {
 
-            if ($file->isImage()) {
-                deleteFile($this->uploadScreenPath . '/' . $file->hash);
-            } else {
-                deleteFile($this->uploadPath . '/' . $file->hash);
-            }
-
+            deleteFile(HOME . $file->hash);
             $file->delete();
         });
 

@@ -45,8 +45,8 @@ class PictureController extends BaseController
 
                 //-------- Удаляем старую фотку и аватар ----------//
                 if ($this->user->picture) {
-                    deleteFile($this->user->uploadPath . '/' . $this->user->picture);
-                    deleteFile($this->user->uploadAvatarPath . '/' . $this->user->avatar);
+                    deleteFile(HOME . $this->user->picture);
+                    deleteFile(HOME . $this->user->avatar);
 
                     $this->user->picture = null;
                     $this->user->avatar = null;
@@ -94,8 +94,8 @@ class PictureController extends BaseController
 
         if ($validator->isValid()) {
 
-            deleteFile($this->user->uploadPath . '/' . $this->user->picture);
-            deleteFile($this->user->uploadAvatarPath . '/' . $this->user->avatar);
+            deleteFile(HOME . $this->user->picture);
+            deleteFile(HOME . $this->user->avatar);
 
             $this->user->picture = null;
             $this->user->avatar = null;

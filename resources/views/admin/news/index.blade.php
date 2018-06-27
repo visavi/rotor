@@ -44,7 +44,7 @@
 
             @if ($data->image)
                 <div class="img">
-                    <a href="/uploads/news/{{ $data->image }}">{!! resizeImage('/uploads/news/' . $data->image, ['width' => 100, 'alt' => $data->title]) !!}</a>
+                    <a href="{{ $data->image }}">{!! resizeImage($data->image, ['width' => 100, 'alt' => $data->title]) !!}</a>
                 </div>
             @endif
 

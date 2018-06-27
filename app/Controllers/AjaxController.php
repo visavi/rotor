@@ -380,7 +380,7 @@ class AjaxController extends BaseController
 
         if ($validator->isValid()) {
 
-            deleteFile((new $type)->uploadPath . '/' . $file->hash);
+            deleteFile(UPLOADS . '/' . $file->hash);
             $file->delete();
 
             return json_encode([

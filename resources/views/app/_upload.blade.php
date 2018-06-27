@@ -2,7 +2,7 @@
     @if ($files->isNotEmpty())
         @foreach ($files as $file)
             <span class="js-image">
-                {!! resizeImage('/uploads/blogs/' . $file->hash, ['width' => 100, 'onclick' => 'return pasteImage(this);']) !!}
+                {!! resizeImage($file->hash, ['width' => 100, 'onclick' => 'return pasteImage(this);']) !!}
                 <a href="#" onclick="return deleteImage(this);" data-id="{{ $file->id }}" data-type="{{ $type }}" data-token="{{ $_SESSION['token'] }}"><i class="fas fa-times"></i></a>
             </span>
         @endforeach

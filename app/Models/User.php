@@ -383,8 +383,8 @@ class User extends BaseModel
             return '<img class="avatar" src="/assets/img/images/avatar_guest.png" alt=""> ';
         }
 
-        if ($this->avatar && file_exists($this->uploadAvatarPath . '/' . $this->avatar)) {
-            return '<a href="/users/' . $this->login . '"><img src="/uploads/avatars/' . $this->avatar . '" alt="" class="avatar"></a> ';
+        if ($this->avatar && file_exists(HOME . '/' . $this->avatar)) {
+            return '<a href="/users/' . $this->login . '"><img src="' . $this->avatar . '" alt="" class="avatar"></a> ';
         }
 
         return $this->defaultAvatar();
@@ -556,7 +556,7 @@ class User extends BaseModel
      */
     public function delete()
     {
-        deleteFile($this->uploadPath . '/' . $this->picture);
+        deleteFile(HOME . $this->picture);
         deleteFile($this->uploadAvatarPath . '/' . $this->avatar);
 
         Inbox::query()->where('user_id', $this->id)->delete();

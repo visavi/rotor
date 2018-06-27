@@ -40,7 +40,7 @@
                 <i class="fa fa-paperclip"></i> <b>Удаление файлов:</b><br>
                 @foreach ($post->files as $file)
                     <input type="checkbox" name="delfile[]" value="{{ $file->id }}">
-                    <a href="/uploads/forums/{{ $post->topic_id }}/{{ $file->hash }}" target="_blank">{{ $file->name }}</a> ({{ formatSize($file->size) }})<br>
+                    <a href="{{ $file->hash }}" target="_blank">{{ $file->name }}</a> ({{ formatSize($file->size) }})<br>
                 @endforeach
                 <br>
             @endif

@@ -101,7 +101,7 @@ class Blog extends BaseModel
     public function delete()
     {
         $this->files->each(function($file) {
-            deleteFile($this->uploadPath . '/' . $file->hash);
+            deleteFile(HOME . $file->hash);
             $file->delete();
         });
 

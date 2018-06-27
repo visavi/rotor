@@ -367,11 +367,7 @@ class LoadController extends AdminController
             abort(404, 'Файла не существует!');
         }
 
-        if ($file->isImage()) {
-            deleteFile(UPLOADS . '/screens/' . $file->hash);
-        } else {
-            deleteFile(UPLOADS . '/files/' . $file->hash);
-        }
+        deleteFile(HOME . $file->hash);
 
         setFlash('success', 'Файл успешно удален!');
         $file->delete();

@@ -17,7 +17,7 @@
         </ol>
     </nav>
 
-    <img src="/uploads/smiles/{{ $smile->name }}" alt=""> — <b>{{ $smile->code }}</b><br>
+    <img src="{{ $smile->name }}" alt=""> — <b>{{ $smile->code }}</b><br>
 
     <div class="form">
         <form action="/admin/smiles/edit/{{ $smile->id }}?page={{ $page }}" method="post">

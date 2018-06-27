@@ -3,7 +3,6 @@ storage/backups/
 storage/caches/
 storage/temp/
 public/uploads/files/
-public/uploads/screens/
 public/uploads/avatars/
 public/uploads/counters/
 public/uploads/forums/

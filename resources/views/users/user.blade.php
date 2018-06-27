@@ -102,9 +102,9 @@
             </div>
 
             <div class="col-md-6">
-                @if (!empty($user->picture) && file_exists($user->uploadPath . '/' . $user->picture))
-                    <a class="gallery" href="/uploads/pictures/{{ $user->picture }}">
-                        {!! resizeImage('/uploads/pictures/' . $user->picture, ['alt' => $user->login, 'class' => 'float-right img-fluid rounded']) !!}</a>
+                @if (!empty($user->picture) && file_exists(HOME . '/' . $user->picture))
+                    <a class="gallery" href="{{ $user->picture }}">
+                        {!! resizeImage($user->picture, ['alt' => $user->login, 'class' => 'float-right img-fluid rounded']) !!}</a>
                 @else
                     <img src="/assets/img/images/photo.jpg" alt="Фото" class="float-right img-fluid rounded">
                 @endif

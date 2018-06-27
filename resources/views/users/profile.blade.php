@@ -84,9 +84,9 @@
 
                     <div class="col-md-6">
                         <div class="float-right">
-                            @if ($user->picture && file_exists($user->uploadPath . '/' . $user->picture))
-                                <a class="gallery" href="/uploads/pictures/{{ getUser('picture') }}">
-                                    {!! resizeImage('/uploads/pictures/' . getUser('picture'), ['alt' => $user->login, 'class' => 'img-fluid rounded']) !!}
+                            @if ($user->picture && file_exists(HOME . $user->picture))
+                                <a class="gallery" href="{{ getUser('picture') }}">
+                                    {!! resizeImage(getUser('picture'), ['alt' => $user->login, 'class' => 'img-fluid rounded']) !!}
                                 </a><br>
                                 <a href="/pictures">Изменить</a> / <a href="/pictures/delete?token={{ $_SESSION['token'] }}">Удалить</a>
                             @else

@@ -50,7 +50,7 @@
                                     <div class="carousel-inner">
                                         @foreach ($item->files as $file)
                                             <div class="carousel-item{{ $loop->first ? ' active' : '' }}">
-                                                {!! resizeImage('/uploads/boards/' . $file->hash, ['alt' => $item->title, 'class' => 'd-block w-100']) !!}
+                                                {!! resizeImage($file->hash, ['alt' => $item->title, 'class' => 'd-block w-100']) !!}
                                             </div>
                                         @endforeach
                                     </div>

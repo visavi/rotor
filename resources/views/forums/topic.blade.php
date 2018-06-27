@@ -155,9 +155,9 @@
                             <?php $ext = getExtension($file->hash); ?>
 
                             {!! icons($ext) !!}
-                            <a href="/uploads/forums/{{ $topic->id }}/{{ $file->hash }}">{{ $file->name }}</a> ({{ formatSize($file->size) }})<br>
+                            <a href="{{ $file->hash }}">{{ $file->name }}</a> ({{ formatSize($file->size) }})<br>
                             @if (in_array($ext, ['jpg', 'jpeg', 'gif', 'png']))
-                                <a href="/uploads/forums/{{ $topic->id }}/{{ $file->hash }}" class="gallery" data-group="{{ $data->id }}">{!! resizeImage('/uploads/forums/' . $topic->id.'/'.$file->hash, ['alt' => $file->name]) !!}</a><br>
+                                <a href="{{ $file->hash }}" class="gallery" data-group="{{ $data->id }}">{!! resizeImage($file->hash, ['alt' => $file->name]) !!}</a><br>
                             @endif
                         @endforeach
                     </div>

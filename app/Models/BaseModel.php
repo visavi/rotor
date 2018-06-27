@@ -44,21 +44,22 @@ class BaseModel extends Model
     /**
      * Загружает изображение
      *
-     * @param  UploadedFile $file       объект изображения
-     * @param null          $uploadPath путь директории для загрузки
-     * @return string                   путь загруженного файла
+     * @param  UploadedFile $file объект изображения
+     * @return string             путь загруженного файла
      */
-    public function uploadFile(UploadedFile $file, $uploadPath = null): string
+    public function uploadFile(UploadedFile $file): string
     {
         $extension = strtolower($file->getClientOriginalExtension());
         $filename  = uniqueName($extension);
-        $path      = $uploadPath ?? $this->uploadPath;
+        $fullPath  = $this->uploadPath . '/' . $filename;
+        $path      = str_replace(HOME, '', $fullPath);
+
 
         if (in_array($extension, ['jpg', 'jpeg', 'gif', 'png'], true)) {
             $img = Image::make($file);
 
             if ($img->getWidth() <= 100 && $img->getHeight() <= 100) {
-                $file->move($path, $filename);
+                $file->move($this->uploadPath, $filename);
             } else {
                 $img->resize(setting('screensize'), setting('screensize'), function ($constraint) {
                     $constraint->aspectRatio();
@@ -69,24 +70,24 @@ class BaseModel extends Model
                     $img->insert(HOME . '/assets/img/images/watermark.png', 'bottom-right', 10, 10);
                 }
 
-                $img->save($path . '/' . $filename);
+                $img->save($fullPath);
             }
         } else {
-            $file->move($path, $filename);
+            $file->move($this->uploadPath, $filename);
         }
 
         if ($this->dataRecord) {
             File::query()->create([
                 'relate_id'   => (int) $this->id,
                 'relate_type' => static::class,
-                'hash'        => $filename,
+                'hash'        => $path,
                 'name'        => $file->getClientOriginalName(),
-                'size'        => filesize($path . '/' . $filename),
+                'size'        => filesize($fullPath),
                 'user_id'     => getUser('id'),
                 'created_at'  => SITETIME,
             ]);
         }
 
-        return str_replace(HOME, '', $path) . '/' . $filename;
+        return $path;
     }
 }

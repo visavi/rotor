@@ -17,7 +17,7 @@
 
     @if ($smiles)
         @foreach ($smiles as $smile)
-            <img src="/uploads/smiles/{{ $smile['name'] }}" alt=""> — <b>{{ $smile['code'] }}</b><br>
+            <img src="{{ $smile['name'] }}" alt=""> — <b>{{ $smile['code'] }}</b><br>
         @endforeach
 
         {!! pagination($page) !!}

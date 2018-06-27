@@ -52,24 +52,6 @@ class Post extends BaseModel
     }
 
     /**
-     * Загружает файл
-     *
-     * @param  UploadedFile $file
-     * @param  string       $uploadPath
-     * @return string
-     */
-    public function uploadFile(UploadedFile $file, $uploadPath = null): string
-    {
-        if (! file_exists($this->uploadPath . '/' . $this->topic->id)) {
-            $old = umask(0);
-            mkdir($this->uploadPath . '/' . $this->topic->id, 0777, true);
-            umask($old);
-        }
-
-        return parent::uploadFile($file, $this->uploadPath . '/' . $this->topic->id);
-    }
-
-    /**
      * Удаление поста и загруженных файлов
      *
      * @return bool|null
@@ -78,7 +60,7 @@ class Post extends BaseModel
     public function delete()
     {
         $this->files->each(function($file) {
-            deleteFile($this->uploadPath . '/' . $this->topic_id . '/' . $file->hash);
+            deleteFile(HOME . $file->hash);
             $file->delete();
         });
 

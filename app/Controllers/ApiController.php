@@ -58,8 +58,8 @@ class ApiController extends BaseController
             'allprivat' => $user->getCountMessages(),
             'newprivat' => $user->newprivat,
             'status'    => $user->getStatus(),
-            'avatar'    => $user->avatar ? siteUrl(true).'/uploads/avatars/' . $user->avatar : null,
-            'picture'   => $user->picture ? siteUrl(true).'/uploads/pictures/' . $user->picture : null,
+            'avatar'    => $user->avatar ? siteUrl(true) . $user->avatar : null,
+            'picture'   => $user->picture ? siteUrl(true) . $user->picture : null,
             'rating'    => $user->rating,
             'lastlogin' => $user->updated_at,
         ]);

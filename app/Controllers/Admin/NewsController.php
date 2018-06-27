@@ -76,7 +76,7 @@ class NewsController extends AdminController
 
                 // Удаление старой картинки
                 if ($image) {
-                    deleteFile($news->uploadPath . '/' . $news->image);
+                    deleteFile(HOME . $news->image);
                     $image = $news->uploadFile($image);
                 }
 
@@ -203,7 +203,7 @@ class NewsController extends AdminController
 
         if ($validator->isValid()) {
 
-            deleteFile($news->uploadPath . '/' . $news->image);
+            deleteFile(HOME . $news->image);
 
             $news->comments()->delete();
             $news->delete();

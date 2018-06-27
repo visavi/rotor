@@ -18,7 +18,7 @@ class DeleteFiles extends Task
             ->get();
 
         foreach($files as $file) {
-            deleteFile(UPLOADS . '/blogs/' . $file->hash);
+            deleteFile(UPLOADS . '/' . $file->hash);
             $file->delete();
         }
     }
