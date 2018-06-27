@@ -298,8 +298,8 @@ function ratingVote($rating)
     $empty_stars = 5 - $full_stars - $half_stars;
 
     $output = '<div class="star-rating fa-lg text-danger">';
-    $output .= str_repeat('<i class="fa fa-star"></i>', $full_stars);
-    $output .= str_repeat('<i class="fa fa-star-half"></i>', $half_stars);
+    $output .= str_repeat('<i class="fas fa-star"></i>', $full_stars);
+    $output .= str_repeat('<i class="fas fa-star-half-alt"></i>', $half_stars);
     $output .= str_repeat('<i class="far fa-star"></i>', $empty_stars);
     $output .= '( ' . $rating .' )</div>';
 
@@ -1345,7 +1345,7 @@ function resizeProcess($path, array $params = [])
         $params['width'] = setting('previewsize');
     }
 
-    if (! file_exists(HOME . $path) || ! is_file($path)) {
+    if (! file_exists(HOME . $path) || ! is_file(HOME . $path)) {
         return [
             'path'   => '/assets/img/images/photo.jpg',
             'source' => false,

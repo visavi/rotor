@@ -1,6 +1,6 @@
 <link rel="stylesheet" href="/assets/css/bootstrap.min.css">
 <link rel="stylesheet" href="/assets/css/bootstrap-colorpicker.min.css">
-<link rel="stylesheet" href="/assets/css/fontawesome-all.min.css">
+<link rel="stylesheet" href="/assets/css/fontawesome.min.css">
 <link rel="stylesheet" href="/assets/css/prettify.css">
 <link rel="stylesheet" href="/assets/js/markitup/style.css">
 <link rel="stylesheet" href="/assets/css/toastr.min.css">
