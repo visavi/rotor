@@ -240,6 +240,7 @@ class UserController extends AdminController
                     $posts  = Post::query()->whereIn('topic_id', $topics)->pluck('id')->all();
 
                     // Удаление загруженных файлов
+                    // @TODO удаление файлов
                     foreach ($topics as $topic) {
                         removeDir(UPLOADS . '/forums/' . $topic);
                     }
@@ -262,7 +263,7 @@ class UserController extends AdminController
 
                     if ($files->isNotEmpty()) {
                         foreach ($files as $file) {
-                            deleteFile(UPLOADS . '/forums/' . $file->hash);
+                            deleteFile(HOME . $file->hash);
                             $file->delete();
                         }
                     }

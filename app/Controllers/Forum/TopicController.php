@@ -248,7 +248,7 @@ class TopicController extends BaseController
 
             if ($files->isNotEmpty()) {
                 foreach ($files as $file) {
-                    deleteFile(UPLOADS . '/forums/' . $file->hash);
+                    deleteFile(HOME . $file->hash);
                     $file->delete();
                 }
             }
@@ -442,7 +442,7 @@ class TopicController extends BaseController
 
                     if ($files->isNotEmpty()) {
                         foreach ($files as $file) {
-                            deleteFile(UPLOADS . '/forums/' . $file->hash);
+                            deleteFile(HOME . $file->hash);
                             $file->delete();
                         }
                     }

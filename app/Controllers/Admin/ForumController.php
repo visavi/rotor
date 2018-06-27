@@ -531,7 +531,7 @@ class ForumController extends AdminController
 
                     if ($files->isNotEmpty()) {
                         foreach ($files as $file) {
-                            deleteFile(UPLOADS . '/forums/' . $file->hash);
+                            deleteFile(HOME . $file->hash);
                             $file->delete();
                         }
                     }

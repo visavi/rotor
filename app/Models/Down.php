@@ -129,7 +129,7 @@ class Down extends BaseModel
      */
     public function uploadFile(UploadedFile $file): string
     {
-        $path = parent::uploadFile($file, $this->uploadPath);
+        $path = parent::uploadFile($file);
         $this->convertVideo($file, $path);
 
         return $path;
@@ -172,20 +172,16 @@ class Down extends BaseModel
 
             // Перекодируем видео в h264
             $ffprobe = FFProbe::create($ffconfig);
-            $codec = $ffprobe
+            $video = $ffprobe
                 ->streams(HOME . $path)
                 ->videos()
-                ->first()
-                ->get('codec_name');
+                ->first();
 
-            if ($file->getClientOriginalExtension() === 'mp4' && $codec !== 'h264') {
+            if ($video && $video->get('codec_name') !== 'h264' && $file->getClientOriginalExtension() === 'mp4') {
                 $format = new X264('libmp3lame', 'libx264');
-                $video->save($format, $this->uploadPath . '/convert-' . $fileName);
+                $video->save($format, HOME . $path . '.convert');
 
-                rename(
-                    $this->uploadPath . '/convert-' . $fileName,
-                    $this->uploadPath . '/' . $fileName
-                );
+                rename(HOME . $path . '.convert', HOME . $path);
             }
         }
     }

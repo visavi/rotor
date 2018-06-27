@@ -13,7 +13,7 @@ class CreateSmilesTable extends AbstractMigration
         if (! $this->hasTable('smiles')) {
             $table = $this->table('smiles', ['collation' => env('DB_COLLATION')]);
             $table
-                ->addColumn('name', 'string', ['limit' => 25])
+                ->addColumn('name', 'string', ['limit' => 100])
                 ->addColumn('code', 'string', ['limit' => 20])
                 ->addIndex('code')
                 ->create();

@@ -54,15 +54,15 @@ class PictureController extends BaseController
                 }
 
                 //-------- Генерируем аватар ----------//
-                $avatar = uniqueName('png');
+                $avatar = $this->user->uploadAvatarPath . '/' . uniqueName('png');
                 $img = Image::make($photo);
                 $img->fit(48);
-                $img->save($this->user->uploadAvatarPath . '/' . $avatar);
+                $img->save($avatar);
 
                 $picture = $this->user->uploadFile($photo);
 
-                $this->user->picture = basename($picture);
-                $this->user->avatar  = $avatar;
+                $this->user->picture = $picture;
+                $this->user->avatar  = str_replace(HOME, '', $avatar);
                 $this->user->save();
 
                 setFlash('success', 'Фотография успешно загружена!');

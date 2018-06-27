@@ -557,7 +557,7 @@ class User extends BaseModel
     public function delete()
     {
         deleteFile(HOME . $this->picture);
-        deleteFile($this->uploadAvatarPath . '/' . $this->avatar);
+        deleteFile(HOME . $this->avatar);
 
         Inbox::query()->where('user_id', $this->id)->delete();
         Outbox::query()->where('user_id', $this->id)->delete();

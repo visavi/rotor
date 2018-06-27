@@ -15,7 +15,7 @@ class CreateFilesTable extends AbstractMigration
             $table
                 ->addColumn('relate_type', 'string', ['limit' => 50])
                 ->addColumn('relate_id', 'integer')
-                ->addColumn('hash', 'string', ['limit' => 40])
+                ->addColumn('hash', 'string', ['limit' => 100])
                 ->addColumn('name', 'string', ['limit' => 60])
                 ->addColumn('size', 'integer')
                 ->addColumn('user_id', 'integer')

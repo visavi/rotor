@@ -1,3 +1,4 @@
+
 <?php
 
 use Phinx\Migration\AbstractMigration;
@@ -15,6 +16,7 @@ class CreateSocialsTable extends AbstractMigration
                 ->addColumn('user_id', 'integer')
                 ->addColumn('network', 'string')
                 ->addColumn('uid', 'string')
+                ->addColumn('created_at', 'integer')
                 ->addIndex('user_id')
                 ->create();
         }
