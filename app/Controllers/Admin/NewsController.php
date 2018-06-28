@@ -140,8 +140,6 @@ class NewsController extends AdminController
                     'created_at' => SITETIME,
                 ]);
 
-
-
                 // Выводим на главную если там нет новостей
                 if ($top && empty(setting('lastnews'))) {
                     Setting::query()->where('name', 'lastnews')->update(['value' => 1]);

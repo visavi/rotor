@@ -75,29 +75,6 @@ function dateFixed($timestamp, $format = 'd.m.y / H:i')
 }
 
 /**
- * Удаляет файл и превью
- *
- * @param string $path путь к файлу
- * @return bool
- */
-function deleteFile($path)
-{
-    if (file_exists($path) && is_file($path)) {
-        unlink($path);
-    }
-
-    $thumb = ltrim(str_replace([HOME, '/'], ['', '_'], $path), '_');
-    $thumb = UPLOADS . '/thumbnails/' . $thumb;
-
-    if (file_exists($thumb) && is_file($thumb)) {
-        unlink($thumb);
-    }
-
-    return true;
-}
-
-
-/**
  * Конвертирует строку в кодировку utf-8
  *
  * @param  string $str строка
@@ -1412,18 +1389,41 @@ function resizeImage($path, array $params = [])
 /**
  * Удаляет директорию рекурсивно
  *
- * @param string $dir
+ * @param string $dir  путь к директории
+ * @return void
  */
-function removeDir($dir)
+function deleteDir($dir)
 {
     if (file_exists($dir)) {
         if ($files = glob($dir . '/*')) {
             foreach($files as $file) {
-                is_dir($file) ? removeDir($file) : unlink($file);
+                is_dir($file) ? deleteDir($file) : unlink($file);
             }
         }
         rmdir($dir);
     }
+}
+
+/**
+ * Удаляет файл и превью
+ *
+ * @param string $path путь к файлу
+ * @return bool
+ */
+function deleteFile($path)
+{
+    if (file_exists($path) && is_file($path)) {
+        unlink($path);
+    }
+
+    $thumb = ltrim(str_replace([HOME, '/'], ['', '_'], $path), '_');
+    $thumb = UPLOADS . '/thumbnails/' . $thumb;
+
+    if (file_exists($thumb) && is_file($thumb)) {
+        unlink($thumb);
+    }
+
+    return true;
 }
 
 /**

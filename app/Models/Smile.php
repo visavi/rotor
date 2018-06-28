@@ -18,4 +18,10 @@ class Smile extends BaseModel
      */
     protected $guarded = [];
 
+    /**
+     * Директория загрузки файлов
+     *
+     * @var string
+     */
+    public $uploadPath = UPLOADS . '/smiles';
 }

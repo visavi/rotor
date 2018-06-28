@@ -397,8 +397,6 @@ class ForumController extends AdminController
         if ($validator->isValid()) {
 
             // Удаление загруженных файлов
-            removeDir(UPLOADS . '/forums/' . $topic->id);
-
             $filtered = $topic->posts->load('files')->filter(function ($post) {
                 return $post->files->isNotEmpty();
             });
@@ -408,9 +406,9 @@ class ForumController extends AdminController
             });
 
             // Удаление голосований
-            $topic->vote->delete();
             $topic->vote->answers()->delete();
             $topic->vote->pollings()->delete();
+            $topic->vote->delete();
 
             // Удаление закладок
             $topic->bookmarks()->delete();

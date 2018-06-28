@@ -6,6 +6,12 @@
 
 @section('content')
 
+    @if (getUser())
+        <div class="float-right">
+            <a class="btn btn-success" href="/forums/create">Создать тему</a>
+        </div><br>
+    @endif
+
     <h1>Форум {{ setting('title') }}</h1>
 
     @include('advert/_forum')

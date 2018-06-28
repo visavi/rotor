@@ -188,7 +188,7 @@ class FilesController extends AdminController
                 unlink(RESOURCES . '/views/' . $this->path . $fileName . '.blade.php');
                 setFlash('success', 'Файл успешно удален!');
             } else {
-                removeDir(RESOURCES . '/views/' . $this->path . $dirName);
+                deleteDir(RESOURCES . '/views/' . $this->path . $dirName);
                 setFlash('success', 'Директория успешно удалена!');
             }
 

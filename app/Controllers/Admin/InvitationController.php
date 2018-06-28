@@ -158,7 +158,7 @@ class InvitationController extends AdminController
         $users = User::query()->where('updated_at', '>', strtotime('-1 week', SITETIME))->get();
 
         $users = $users->filter(function ($value, $key) {
-            return $value->id != getUser('id');
+            return $value->id !== getUser('id');
         });
 
         $validator->false($users->isEmpty(), 'Отсутствуют получатели ключей!');

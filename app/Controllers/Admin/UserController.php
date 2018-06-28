@@ -240,12 +240,20 @@ class UserController extends AdminController
                     $posts  = Post::query()->whereIn('topic_id', $topics)->pluck('id')->all();
 
                     // Удаление загруженных файлов
-                    // @TODO удаление файлов
-                    foreach ($topics as $topic) {
-                        removeDir(UPLOADS . '/forums/' . $topic);
+                    if ($posts) {
+                        $files = File::query()
+                            ->where('relate_type', Post::class)
+                            ->whereIn('relate_id', $posts)
+                            ->get();
+
+                        if ($files->isNotEmpty()) {
+                            foreach ($files as $file) {
+                                deleteFile(HOME . $file->hash);
+                                $file->delete();
+                            }
+                        }
                     }
 
-                    File::query()->where('relate_type', Post::class)->whereIn('relate_id', $posts)->delete();
                     Post::query()->whereIn('topic_id', $topics)->delete();
                     Topic::query()->where('user_id', $user->id)->delete();
                     restatement('forums');
@@ -253,18 +261,20 @@ class UserController extends AdminController
 
                 // Удаление постов форума
                 if ($delposts) {
+                    $posts  = Post::query()->where('user_id', $user->id)->pluck('id')->all();
 
-                    $posts  = Post::query()->where('user_id', $user->id)->pluck('topic_id', 'id')->all();
+                    // Удаление загруженных файлов
+                    if ($posts) {
+                        $files = File::query()
+                            ->where('relate_type', Post::class)
+                            ->whereIn('relate_id', $posts)
+                            ->get();
 
-                    $files = File::query()
-                        ->where('relate_type', Post::class)
-                        ->whereIn('relate_id', array_keys($posts))
-                        ->get();
-
-                    if ($files->isNotEmpty()) {
-                        foreach ($files as $file) {
-                            deleteFile(HOME . $file->hash);
-                            $file->delete();
+                        if ($files->isNotEmpty()) {
+                            foreach ($files as $file) {
+                                deleteFile(HOME . $file->hash);
+                                $file->delete();
+                            }
                         }
                     }
 

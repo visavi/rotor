@@ -37,27 +37,27 @@ class DeliveryController extends AdminController
                 ->between($type, 1, 4, 'Вы не выбрали получаетелей рассылки!');
 
             // Рассылка пользователям, которые в онлайне
-            if ($type == 1) {
+            if ($type === 1) {
                 $users = User::query()->whereHas('online')->get();
             }
 
             // Рассылка активным пользователям, которые посещали сайт менее недели назад
-            if ($type == 2) {
+            if ($type === 2) {
                 $users = User::query()->where('updated_at', '>', strtotime('-1 week', SITETIME))->get();
             }
 
             // Рассылка администрации
-            if ($type == 3){
+            if ($type === 3){
                 $users = User::query()->whereIn('level', User::ADMIN_GROUPS)->get();
             }
 
             // Рассылка всем пользователям сайта
-            if ($type == 4){
+            if ($type === 4){
                 $users = User::query()->whereIn('level', User::USER_GROUPS)->get();
             }
 
             $users = $users->filter(function ($value, $key) {
-                return $value->id != getUser('id');
+                return $value->id !== getUser('id');
             });
 
             if ($users->isEmpty()) {

@@ -74,10 +74,11 @@ class SmileController extends AdminController
             if ($validator->isValid()) {
 
                 $newName = uniqueName($smile->getClientOriginalExtension());
-                Image::make($smile)->save(UPLOADS.'/smiles/' . $newName);
+                $path    = (new Smile())->uploadPath . '/' . $newName;
+                Image::make($smile)->save($path);
 
                 Smile::query()->create([
-                    'name' => $newName,
+                    'name' => str_replace(HOME, '', $path),
                     'code' => $code,
                 ]);
 
@@ -144,7 +145,7 @@ class SmileController extends AdminController
      */
     public function delete()
     {
-        if (! is_writable(UPLOADS.'/smiles')){
+        if (! is_writable(UPLOADS . '/smiles')){
             abort('default', 'Директория со смайлами недоступна для записи!');
         }
 
@@ -171,7 +172,7 @@ class SmileController extends AdminController
 
             clearCache();
 
-            setFlash('success', 'Выбранные пользователи успешно удалены!');
+            setFlash('success', 'Выбранные смайлы успешно удалены!');
         } else {
             setFlash('danger', $validator->getErrors());
         }
