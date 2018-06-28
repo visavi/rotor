@@ -185,7 +185,6 @@ class VoteController extends AdminController
         }
     }
 
-
     /**
      * Пересчет голосов
      */

@@ -2,22 +2,23 @@
 
 namespace App\Controllers;
 
-use App\Classes\Request;
-use App\Classes\Validator;
-use App\Models\Blog;
-use App\Models\Board;
-use App\Models\Comment;
-use App\Models\Down;
-use App\Models\File;
-use App\Models\Guestbook;
-use App\Models\Inbox;
-use App\Models\News;
-use App\Models\Offer;
-use App\Models\Photo;
-use App\Models\Polling;
-use App\Models\Post;
-use App\Models\Spam;
-use App\Models\Wall;
+use App\Classes\{Request, Validator};
+use App\Models\{
+    Blog,
+    Comment,
+    Down,
+    File,
+    Guestbook,
+    Inbox,
+    Item,
+    News,
+    Offer,
+    Photo,
+    Polling,
+    Post,
+    Spam,
+    Wall
+};
 
 class AjaxController extends BaseController
 {
@@ -292,7 +293,7 @@ class AjaxController extends BaseController
     {
         $types = [
             Blog::class,
-            Board::class,
+            Item::class,
         ];
 
         $image = Request::file('image');
@@ -359,9 +360,18 @@ class AjaxController extends BaseController
      */
     public function deleteImage()
     {
+        $types = [
+            Blog::class,
+            Item::class,
+        ];
+
         $id    = int(Request::input('id'));
         $type  = check(Request::input('type'));
         $token = check(Request::input('token'));
+
+        if (! in_array($type, $types, true)) {
+            return json_encode(['status' => 'error', 'message' => 'Type invalid']);
+        }
 
         $file = File::query()
             ->where('relate_type', $type)

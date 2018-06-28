@@ -65,7 +65,7 @@
                 {!! textError('tags') !!}
             </div>
 
-            @include('app._upload', ['id' => $blog->id, 'files' => $blog->files, 'type' => App\Models\Blog::class])
+            @include('app._upload', ['id' => $blog->id, 'files' => $blog->files, 'type' => App\Models\Blog::class, 'paste' => true])
 
             <button class="btn btn-primary">Изменить</button>
         </form>

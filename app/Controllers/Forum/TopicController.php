@@ -280,7 +280,7 @@ class TopicController extends BaseController
             ->true(getUser(), 'Для закрытия тем необходимо авторизоваться')
             ->gte(getUser('point'), setting('editforumpoint'), 'Для закрытия тем вам необходимо набрать ' . plural(setting('editforumpoint'), setting('scorename')) . '!')
             ->notEmpty($topic, 'Выбранная вами тема не существует, возможно она была удалена!')
-            ->equal($topic['user_id'], getUser('id'), 'Вы не автор данной темы!')
+            ->equal($topic->user_id, getUser('id'), 'Вы не автор данной темы!')
             ->empty($topic->closed, 'Данная тема уже закрыта!');
 
         if ($validator->isValid()) {

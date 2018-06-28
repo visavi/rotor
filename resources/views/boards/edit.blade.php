@@ -23,6 +23,20 @@
         </ol>
     </nav>
 
+    @if ($item->expires_at > SITETIME)
+        <div class="alert alert-info">Истекает: {{ dateFixed($item->expires_at) }}</div>
+    @else
+        <div class="alert alert-danger">Объявление закрыто</div>
+    @endif
+
+    @if ($item->expires_at > SITETIME)
+        <a href="/items/close/{{ $item->id }}?token={{ $_SESSION['token'] }}" onclick="return confirm('Вы действительно хотите снять объявление с публикации?')">Снять с публикации</a> /
+    @else
+        <a href="/items/close/{{ $item->id }}?token={{ $_SESSION['token'] }}">Опубликовать</a> /
+    @endif
+
+    <a href="/items/delete/{{ $item->id }}?token={{ $_SESSION['token'] }}" onclick="return confirm('Вы действительно хотите удалить объявление?')">Удалить</a>
+
     <div class="form">
         <form action="/items/edit/{{ $item->id }}" method="post">
             <input type="hidden" name="token" value="{{ $_SESSION['token'] }}">
@@ -34,11 +48,11 @@
                 <select class="form-control" id="inputCategory" name="bid">
 
                     @foreach ($boards as $data)
-                        <option value="{{ $data->id }}"{{ ($inputCategory == $data->id && ! $data->closed) ? ' selected' : '' }}{{ $data->closed ? ' disabled' : '' }}>{{ $data->name }}</option>
+                        <option value="{{ $data->id }}"{{ ($inputCategory === $data->id && ! $data->closed) ? ' selected' : '' }}{{ $data->closed ? ' disabled' : '' }}>{{ $data->name }}</option>
 
                         @if ($data->children->isNotEmpty())
                             @foreach($data->children as $datasub)
-                                <option value="{{ $datasub->id }}"{{ ($inputCategory == $datasub->id && ! $data->closed) ? ' selected' : '' }}{{ $datasub->closed ? ' disabled' : '' }}>– {{ $datasub->name }}</option>
+                                <option value="{{ $datasub->id }}"{{ ($inputCategory === $datasub->id && ! $data->closed) ? ' selected' : '' }}{{ $datasub->closed ? ' disabled' : '' }}>– {{ $datasub->name }}</option>
                             @endforeach
                         @endif
                     @endforeach
@@ -65,22 +79,7 @@
                 {!! textError('price') !!}
             </div>
 
-            <div class="js-images">
-                @if ($item->files->isNotEmpty())
-                    @foreach ($item->files as $file)
-                        <span class="js-image">
-                            {!! resizeImage($file->hash, ['width' => 100]) !!}
-                            <a href="#" onclick="return deleteImage(this);" data-id="{{ $file->id }}" data-token="{{ $_SESSION['token'] }}"><i class="fas fa-times"></i></a>
-                        </span>
-                    @endforeach
-                @endif
-            </div>
-
-
-            <label class="btn btn-sm btn-secondary" for="image">
-                <input id="image" type="file" name="image" data-id="{{ $item->id }}" data-token="{{ $_SESSION['token'] }}" hidden>
-                Прикрепить картинку&hellip;
-            </label><br>
+            @include('app._upload', ['id' => $item->id, 'files' => $item->files, 'type' => App\Models\Item::class])
 
             <button class="btn btn-primary">Изменить</button>
         </form>

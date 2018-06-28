@@ -72,4 +72,20 @@ class Item extends BaseModel
 
         return $this->text;
     }
+
+    /**
+     * Удаление объявления и загруженных файлов
+     *
+     * @return bool|null
+     * @throws \Exception
+     */
+    public function delete()
+    {
+        $this->files->each(function($file) {
+            deleteFile(HOME . $file->hash);
+            $file->delete();
+        });
+
+        return parent::delete();
+    }
 }

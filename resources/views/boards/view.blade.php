@@ -28,6 +28,10 @@
         </ol>
     </nav>
 
+    @if ($item->expires_at <= SITETIME)
+        <div class="alert alert-danger">Объявление закрыто</div>
+    @endif
+
     <div class="row mb-3">
         <div class="col-md-12">
             <div class="card">
@@ -73,7 +77,13 @@
                     <div class="row">
                         <div class="col-md-10">
                             <div class="message">{!! bbCode($item->text) !!}</div>
-                            <p><i class="fa fa-user-circle"></i> {!! $item->user->getProfile() !!} / {{ dateFixed($item->created_at) }}</p>
+                            <p>
+                                <i class="fa fa-user-circle"></i> {!! $item->user->getProfile() !!} / {{ dateFixed($item->updated_at) }}<br>
+
+                                @if ($item->expires_at > SITETIME)
+                                    <i class="fas fa-clock"></i> Истекает через {{ formatTime($item->expires_at - SITETIME) }}
+                                @endif
+                            </p>
                         </div>
 
                         <div class="col-md-2">

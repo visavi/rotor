@@ -5,6 +5,7 @@ namespace App\Controllers;
 use App\Classes\Request;
 use App\Classes\Validator;
 use App\Models\Board;
+use App\Models\File;
 use App\Models\Flood;
 use App\Models\Item;
 
@@ -58,12 +59,15 @@ class BoardController extends BaseController
     public function view($id)
     {
         $item = Item::query()
-            ->where('expires_at', '>', SITETIME)
             ->with('category')
             ->find($id);
 
         if (! $item) {
             abort(404, 'Объявление не найдено!');
+        }
+
+        if ($item->expires_at <= SITETIME && $item->user_id !== getUser('id')) {
+            abort('default', 'Объявление закрыто или истек срок размещения!');
         }
 
         return view('boards/view', compact('item'));
@@ -96,7 +100,6 @@ class BoardController extends BaseController
             $title = check(Request::input('title'));
             $text  = check(Request::input('text'));
             $price = int(Request::input('price'));
-            $files = (array) Request::file('files');
 
             $board = Board::query()->find($bid);
 
@@ -112,20 +115,6 @@ class BoardController extends BaseController
                 $validator->empty($board->closed, ['category' => 'В данный раздел запрещено добавлять объявления!']);
             }
 
-            $validator->lte(count($files), setting('maxfiles'), ['files' => 'Разрешено загружать не более ' . setting('maxfiles') . ' файлов']);
-
-            if ($validator->isValid()) {
-                $rules = [
-                    'maxsize'    => setting('fileupload'),
-                    'extensions' => explode(',', setting('allowextload')),
-                    'minweight'  => 100,
-                ];
-
-                foreach ($files as $file) {
-                    $validator->file($file, $rules, ['files' => 'Не удалось загрузить файл!']);
-                }
-            }
-
             if ($validator->isValid()) {
 
                 $item = Item::query()->create([
@@ -139,9 +128,13 @@ class BoardController extends BaseController
                     'expires_at' => strtotime('+1 month', SITETIME),
                 ]);
 
-                foreach ($files as $file) {
-                    $item->uploadFile($file);
-                }
+                $item->category->increment('count_items');
+
+                File::query()
+                    ->where('relate_type', Item::class)
+                    ->where('relate_id', 0)
+                    ->where('user_id', getUser('id'))
+                    ->update(['relate_id' => $item->id]);
 
                 setFlash('success', 'Объявления успешно добавлено!');
                 redirect('/items/' . $item->id);
@@ -151,7 +144,13 @@ class BoardController extends BaseController
             }
         }
 
-        return view('boards/create', compact('boards', 'bid'));
+        $files = File::query()
+            ->where('relate_type', Item::class)
+            ->where('relate_id', 0)
+            ->where('user_id', getUser('id'))
+            ->get();
+
+        return view('boards/create', compact('boards', 'bid', 'files'));
     }
 
     /**
@@ -180,5 +179,85 @@ class BoardController extends BaseController
             ->get();
 
         return view('boards/edit', compact('item', 'boards'));
+    }
+
+    /**
+     * Снятие / Публикация объявления
+     */
+    public function close($id)
+    {
+        $token = check(Request::input('token'));
+
+        if (! getUser()) {
+            abort(403, 'Для редактирования объявления необходимо авторизоваться');
+        }
+
+        $item = Item::query()->find($id);
+
+        if (! $item) {
+            abort(404, 'Данного объявления не существует!');
+        }
+
+        $validator = new Validator();
+        $validator->equal($token, $_SESSION['token'], 'Неверный идентификатор сессии, повторите действие!')
+            ->equal($item->user_id, getUser('id'), 'Изменение невозможно, вы не автор данного объявления!');
+
+        if ($validator->isValid()) {
+
+            if ($item->expires_at > SITETIME) {
+                $type = 'снято с публикации';
+                $item->update([
+                    'expires_at' => SITETIME,
+                ]);
+
+                $item->category->decrement('count_items');
+            } else {
+                $type    = 'опубликовано';
+                $expired = strtotime('+1 month', $item->updated_at) <= SITETIME;
+
+                $item->update([
+                    'expires_at' => strtotime('+1 month', SITETIME),
+                    'updated_at' => $expired ? SITETIME : $item->updated_at,
+                ]);
+
+                $item->category->increment('count_items');
+            }
+
+            setFlash('success', 'Объявление успешно ' . $type . '!');
+        } else {
+            setFlash('danger', $validator->getErrors());
+        }
+
+        redirect('/items/edit/' . $item->id);
+    }
+
+    /**
+     * Удаление объявления
+     */
+    public function delete($id)
+    {
+        $token = check(Request::input('token'));
+
+        $item = Item::query()->find($id);
+
+        if (! $item) {
+            abort(404, 'Данного объявления не существует!');
+        }
+
+        $validator = new Validator();
+        $validator->equal($token, $_SESSION['token'], 'Неверный идентификатор сессии, повторите действие!');
+
+        if ($validator->isValid()) {
+
+            $item->delete();
+
+            $item->category->decrement('count_items');
+
+            setFlash('success', 'Объявление успешно удалено!');
+        } else {
+            setFlash('danger', $validator->getErrors());
+        }
+
+        redirect('/boards/' . $item->board_id);
     }
 }

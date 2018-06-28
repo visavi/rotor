@@ -12,7 +12,11 @@
         </div><br>
     @endif
 
-    <h1>Объявления</h1>
+    @if ($board)
+        <h1>{{ $board->name }} <small>(Объявлений: {{ $board->count_items }})</small></h1>
+    @else
+        <h1>Объявления</h1>
+    @endif
 
     <nav>
         <ol class="breadcrumb">
