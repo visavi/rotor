@@ -45,9 +45,9 @@ class BaseModel extends Model
      * Загружает изображение
      *
      * @param  UploadedFile $file объект изображения
-     * @return string             путь загруженного файла
+     * @return array              путь загруженного файла
      */
-    public function uploadFile(UploadedFile $file): string
+    public function uploadFile(UploadedFile $file): array
     {
         $extension = strtolower($file->getClientOriginalExtension());
         $filename  = uniqueName($extension);
@@ -77,7 +77,7 @@ class BaseModel extends Model
         }
 
         if ($this->dataRecord) {
-            File::query()->create([
+            $upload = File::query()->create([
                 'relate_id'   => (int) $this->id,
                 'relate_type' => static::class,
                 'hash'        => $path,
@@ -88,6 +88,10 @@ class BaseModel extends Model
             ]);
         }
 
-        return $path;
+        return [
+            'id'        => $upload->id ?? 0,
+            'path'      => $path,
+            'extension' => $extension,
+        ];
     }
 }

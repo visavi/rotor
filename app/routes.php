@@ -11,8 +11,8 @@ $routes = [
     ['GET',      '/closed', 'HomeController@closed'],
     ['GET|POST', '/banip', 'HomeController@banip'],
 
-    ['GET',      '/boards', 'BoardController@index', 'board'],
-    ['GET',      '/boards/[i:id]', 'BoardController@index'],
+    ['GET',      '/boards/[i:id]?', 'BoardController@index', 'board'],
+    ['GET',      '/boards/active', 'BoardController@active'],
     ['GET|POST', '/items/create', 'BoardController@create'],
     ['GET',      '/items/[i:id]', 'BoardController@view'],
     ['GET|POST', '/items/edit/[i:id]', 'BoardController@edit'],
@@ -242,7 +242,7 @@ $routes = [
     ['GET',      '/api/forums', 'ApiController@forums'],
     ['GET',      '/api/messages', 'ApiController@messages'],
 
-    ['GET',      '/admin', 'Admin\AdminController@index', 'admin'],
+    ['GET',      '/admin', 'Admin\AdminController@main', 'admin'],
     ['GET',      '/admin/spam', 'Admin\SpamController@index'],
     ['POST',     '/admin/spam/delete', 'Admin\SpamController@delete'],
     ['GET',      '/admin/errors', 'Admin\ErrorController@index'],
@@ -394,6 +394,11 @@ $routes = [
     ['GET|POST', '/admin/articles/edit/[i:id]', 'Admin\BlogController@editBlog'],
     ['GET|POST', '/admin/articles/move/[i:id]', 'Admin\BlogController@moveBlog'],
     ['GET',      '/admin/articles/delete/[i:id]', 'Admin\BlogController@deleteBlog'],
+
+    ['GET',      '/admin/boards/[i:id]?', 'Admin\BoardController@index'],
+    ['GET',      '/admin/boards/restatement', 'Admin\BoardController@restatement'],
+    ['GET|POST', '/admin/items/edit/[i:id]', 'Admin\BoardController@edit'],
+    ['GET',      '/admin/items/delete/[i:id]', 'Admin\BoardController@delete'],
 
     ['GET', '/search', function() {
         return view('search/index');

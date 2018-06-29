@@ -23,6 +23,7 @@
     <i class="far fa-circle fa-lg text-muted"></i> <a href="/admin/forums">Форум</a> ({{ statsForum() }})<br>
     <i class="far fa-circle fa-lg text-muted"></i> <a href="/admin/photos">Галерея</a> ({{ statsPhotos() }})<br>
     <i class="far fa-circle fa-lg text-muted"></i> <a href="/admin/blogs">Блоги</a> ({{ statsBlog() }})<br>
+    <i class="far fa-circle fa-lg text-muted"></i> <a href="/admin/boards">Объявления</a> ({{ statsBoard() }})<br>
     <i class="far fa-circle fa-lg text-muted"></i> <a href="/admin/reklama">Пользовательская реклама</a><br>
 
     @if (isAdmin('moder'))

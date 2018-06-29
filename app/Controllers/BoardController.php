@@ -172,6 +172,50 @@ class BoardController extends BaseController
             abort('default', 'Изменение невозможно, вы не автор данного объявления!');
         }
 
+        if (Request::isMethod('post')) {
+
+            $token = check(Request::input('token'));
+            $bid   = int(Request::input('bid'));
+            $title = check(Request::input('title'));
+            $text  = check(Request::input('text'));
+            $price = check(Request::input('price'));
+
+            $board = Board::query()->find($bid);
+
+            $validator = new Validator();
+            $validator
+                ->equal($token, $_SESSION['token'], 'Неверный идентификатор сессии, повторите действие!')
+                ->length($title, 5, 50, ['title' => 'Слишком длинное или короткое название!'])
+                ->length($text, 50, 5000, ['text' => 'Слишком длинный или короткий текст описания!'])
+                ->notEmpty($board, ['category' => 'Категории для данного объявления не существует!']);
+
+            if ($board) {
+                $validator->empty($board->closed, ['category' => 'В данный раздел запрещено добавлять объявления!']);
+            }
+
+            if ($validator->isValid()) {
+
+                // Обновление счетчиков
+                if ($item->board_id !== $board->id) {
+                    $board->increment('count_items');
+                    Board::query()->where('id', $item->board_id)->decrement('count_items');
+                }
+
+                $item->update([
+                    'board_id' => $board->id,
+                    'title'    => $title,
+                    'text'     => $text,
+                    'price'    => $price,
+                ]);
+
+                setFlash('success', 'Объявление успешно отредактировано!');
+                redirect('/items/' . $item->id);
+            } else {
+                setInput(Request::all());
+                setFlash('danger', $validator->getErrors());
+            }
+        }
+
         $boards = Board::query()
             ->where('parent_id', 0)
             ->with('children')
@@ -259,5 +303,29 @@ class BoardController extends BaseController
         }
 
         redirect('/boards/' . $item->board_id);
+    }
+
+    /**
+     * Мои объявления
+     */
+    public function active()
+    {
+        if (! getUser()) {
+            abort(403, 'Для просмотра своих объявлений необходимо авторизоваться');
+        }
+
+        $total = Item::query()->where('user_id', getUser('id'))->count();
+
+        $page = paginate(10, $total);
+
+        $items = Item::query()
+            ->where('user_id', getUser('id'))
+            ->orderBy('updated_at', 'desc')
+            ->limit($page->limit)
+            ->offset($page->offset)
+            ->with('category', 'user', 'files')
+            ->get();
+
+        return view('boards/active', compact('items', 'page'));
     }
 }

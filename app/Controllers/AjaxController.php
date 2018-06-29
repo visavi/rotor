@@ -340,10 +340,11 @@ class AjaxController extends BaseController
 
         if ($validator->isValid()) {
             $upload = $model->uploadFile($image);
-            $image  = resizeProcess($upload, ['size' => 100]);
+            $image  = resizeProcess($upload['path'], ['size' => 100]);
 
             return json_encode([
                 'status' => 'success',
+                'id'     => $upload['id'],
                 'path'   => $image['path'],
                 'source' => $image['source'],
             ]);

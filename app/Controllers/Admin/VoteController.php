@@ -196,7 +196,7 @@ class VoteController extends AdminController
 
         $token = check(Request::input('token'));
 
-        if ($token == $_SESSION['token']) {
+        if ($token === $_SESSION['token']) {
 
             DB::update('update vote set count = (select SUM(result) from voteanswer where vote.id = voteanswer.vote_id)');
 

@@ -77,7 +77,7 @@ class NewsController extends AdminController
                 // Удаление старой картинки
                 if ($image) {
                     deleteFile(HOME . $news->image);
-                    $image = $news->uploadFile($image);
+                    $upload = $news->uploadFile($image);
                 }
 
                 $news->update([
@@ -85,7 +85,7 @@ class NewsController extends AdminController
                     'text'   => $text,
                     'closed' => $closed,
                     'top'    => $top,
-                    'image'  => $image ?? $news->image,
+                    'image'  => $upload['path'] ?? $news->image,
                  ]);
 
                 setFlash('success', 'Новость успешно отредактирована!');
@@ -127,7 +127,7 @@ class NewsController extends AdminController
             if ($validator->isValid()) {
 
                 if ($image) {
-                    $image = (new News())->uploadFile($image);
+                    $upload = (new News())->uploadFile($image);
                 }
 
                 $news = News::query()->create([
@@ -136,7 +136,7 @@ class NewsController extends AdminController
                     'text'       => $text,
                     'closed'     => $closed,
                     'top'        => $top,
-                    'image'      => $image ?? null,
+                    'image'      => $upload['path'] ?? null,
                     'created_at' => SITETIME,
                 ]);
 

@@ -17,9 +17,9 @@
         </ol>
     </nav>
 
-    @foreach ($vote->voted as $key => $data)
-        <?php $proc = round(($data * 100) / $vote->sum, 1); ?>
-        <?php $maxproc = round(($data * 100) / $vote->max); ?>
+    @foreach ($info['voted'] as $key => $data)
+        <?php $proc = round(($data * 100) / $info['sum'], 1); ?>
+        <?php $maxproc = round(($data * 100) / $info['max']); ?>
 
         <b>{{ $key }}</b> (Голосов: {{ $data }})<br>
         {!! progressBar($maxproc, $proc.'%') !!}

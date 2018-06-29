@@ -6,12 +6,6 @@
 
 @section('content')
 
-    @if (getUser())
-        <div class="float-right">
-            <a class="btn btn-success" href="/items/create?bid={{ $board->id or 0 }}">Добавить объявление</a><br>
-        </div><br>
-    @endif
-
     @if ($board)
         <h1>{{ $board->name }} <small>(Объявлений: {{ $board->count_items }})</small></h1>
     @else
@@ -21,38 +15,35 @@
     <nav>
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
+            <li class="breadcrumb-item"><a href="/admin">Панель</a></li>
 
             @if ($board)
-                <li class="breadcrumb-item"><a href="/boards">Объявления</a></li>
+                <li class="breadcrumb-item"><a href="/admin/boards">Объявления</a></li>
 
                 @if ($board->parent->id)
-                    <li class="breadcrumb-item"><a href="/boards/{{ $board->parent->id }}">{{ $board->parent->name }}</a></li>
+                    <li class="breadcrumb-item"><a href="/admin/boards/{{ $board->parent->id }}">{{ $board->parent->name }}</a></li>
                 @endif
                 <li class="breadcrumb-item active">{{ $board->name }}</li>
 
                 @if (isAdmin())
-                    <li class="breadcrumb-item"><a href="/admin/boards/{{ $board->id  }}?page={{ $page->current }}">Управление</a></li>
+                    <li class="breadcrumb-item"><a href="/boards/{{ $board->id  }}?page={{ $page->current }}">Обзор</a></li>
                 @endif
             @else
                 <li class="breadcrumb-item active">Объявления</li>
 
                 @if (isAdmin())
-                    <li class="breadcrumb-item"><a href="/admin/boards?page={{ $page->current }}">Управление</a></li>
+                    <li class="breadcrumb-item"><a href="/boards?page={{ $page->current }}">Обзор</a></li>
                 @endif
             @endif
         </ol>
     </nav>
-
-    <div class="mb-3">
-        <i class="far fa-list-alt"></i> <a href="/boards/active">Мои объявления</a>
-    </div>
 
     @if ($boards->isNotEmpty())
         <div class="row mb-3">
             @foreach ($boards->chunk(3) as $chunk)
                 @foreach ($chunk as $board)
                     <div class="col-md-3">
-                        <a href="/boards/{{ $board->id }}">{{ $board->name }}</a> {{ $board->count_items }}
+                        <a href="/admin/boards/{{ $board->id }}">{{ $board->name }}</a> {{ $board->count_items }}
                     </div>
                 @endforeach
             @endforeach
@@ -70,6 +61,12 @@
                                     <a href="/items/{{ $item->id }}">{!! $item->getFirstImage() !!}</a>
                                 </div>
                                 <div class="col-md-7">
+
+                                    <div class="float-right">
+                                        <a href="/admin/items/edit/{{ $item->id }}" data-toggle="tooltip" title="Редактировать"><i class="fa fa-pencil-alt"></i></a>
+                                        <a href="/admin/items/delete/{{ $item->id }}?token={{ $_SESSION['token'] }}" onclick="return confirm('Вы действительно хотите удалить объявление?')" data-toggle="tooltip" title="Удалить"><i class="fa fa-times"></i></a>
+                                    </div>
+
                                     <h5><a href="/items/{{ $item->id }}">{{ $item->title }}</a></h5>
                                     <small><i class="fas fa-angle-right"></i> <a href="/boards/{{ $item->category->id }}">{{ $item->category->name }}</a></small>
                                     <div class="message">{!! $item->cutText() !!}</div>
@@ -91,5 +88,9 @@
         {!! pagination($page) !!}
     @else
         {!! showError('Объявлений еще нет!') !!}
+    @endif
+
+    @if (isAdmin('boss'))
+        <i class="fa fa-sync"></i> <a href="/admin/boards/restatement?token={{ $_SESSION['token'] }}">Пересчитать</a><br>
     @endif
 @stop

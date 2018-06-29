@@ -94,17 +94,16 @@ class VoteController extends BaseController
             }
         }
 
-        $results = array_pluck($vote->answers, 'result', 'answer');
-        $max = max($results);
+        $voted = array_pluck($vote->answers, 'result', 'answer');
+        $max   = max($voted);
 
-        arsort($results);
+        arsort($voted);
 
-        $vote->voted = $results;
+        $info['voted'] = $voted;
+        $info['sum']   = $vote->count > 0 ? $vote->count : 1;
+        $info['max']   = $max > 0 ? $max : 1;
 
-        $vote->sum = ($vote->count > 0) ? $vote->count : 1;
-        $vote->max = ($max > 0) ? $max : 1;
-
-        return view('votes/view', compact('vote', 'show'));
+        return view('votes/view', compact('vote', 'show', 'info'));
     }
 
     /**
@@ -171,17 +170,16 @@ class VoteController extends BaseController
             abort('default', 'Для данного голосования не созданы варианты ответов');
         }
 
-        $results = array_pluck($vote->answers, 'result', 'answer');
-        $max = max($results);
+        $voted = array_pluck($vote->answers, 'result', 'answer');
+        $max   = max($voted);
 
-        arsort($results);
+        arsort($voted);
 
-        $vote->voted = $results;
+        $info['voted'] = $voted;
+        $info['sum']   = $vote->count > 0 ? $vote->count : 1;
+        $info['max']   = $max > 0 ? $max : 1;
 
-        $vote->sum = ($vote->count > 0) ? $vote->count : 1;
-        $vote->max = ($max > 0) ? $max : 1;
-
-        return view('votes/view_history', compact('vote'));
+        return view('votes/view_history', compact('vote', 'info'));
     }
 
     /**

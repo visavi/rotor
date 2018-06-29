@@ -6,7 +6,7 @@
 
 @section('content')
 
-    @if ($item->user->id == getUser('id'))
+    @if ($item->user->id === getUser('id'))
         <div class="float-right">
             <a class="btn btn-success" href="/items/edit/{{ $item->id }}">Изменить</a>
         </div><br>
@@ -30,6 +30,13 @@
 
     @if ($item->expires_at <= SITETIME)
         <div class="alert alert-danger">Объявление закрыто</div>
+    @endif
+
+    @if (isAdmin())
+        <div>
+            <a href="/admin/items/edit/{{ $item->id }}">Редактировать</a> /
+            <a href="/admin/items/delete/{{ $item->id }}?token={{ $_SESSION['token'] }}" onclick="return confirm('Вы действительно хотите удалить объявление?')">Удалить</a>
+        </div>
     @endif
 
     <div class="row mb-3">
@@ -88,7 +95,7 @@
 
                         <div class="col-md-2">
                             @if ($item->price)
-                                <button type="button" class="btn btn-primary">{{ $item->price }} ₽</button>
+                                <button type="button" class="btn btn-info">{{ $item->price }} ₽</button>
                             @endif
                         </div>
                     </div>
