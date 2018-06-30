@@ -387,7 +387,7 @@ function copyToClipboard(el)
 }
 
 /* Загрузка изображения */
-function submitImage(el)
+function submitImage(el, paste = false)
 {
     var form = new FormData();
     form.append('image', el.files[0]);
@@ -421,7 +421,10 @@ function submitImage(el)
                 template.find('a').attr('data-id', data.id);
 
                 $('.js-images').append(template.html());
-                pasteImage(template.find('img'));
+
+                if (paste) {
+                    pasteImage(template.find('img'));
+                }
             }
         }
     });
