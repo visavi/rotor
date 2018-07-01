@@ -1246,6 +1246,10 @@ function restatement($mode)
         case 'offers':
             DB::update('update offers set count_comments = (select count(*) from comments where relate_type=  "' . addslashes(Offer::class) . '" and offers.id = comments.relate_id)');
             break;
+
+        case 'boards':
+            DB::update('update boards set count_items = (select count(*) from items where boards.id = items.board_id and items.expires_at > ' . SITETIME . ');');
+            break;
     }
 }
 

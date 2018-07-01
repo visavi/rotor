@@ -91,6 +91,7 @@
     @endif
 
     @if (isAdmin('boss'))
+        <i class="far fa-list-alt"></i> <a href="/admin/boards/categories">Категории</a><br>
         <i class="fa fa-sync"></i> <a href="/admin/boards/restatement?token={{ $_SESSION['token'] }}">Пересчитать</a><br>
     @endif
 @stop

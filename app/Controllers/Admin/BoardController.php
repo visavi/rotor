@@ -54,9 +54,156 @@ class BoardController extends AdminController
     }
 
     /**
-     * Редактирование объявления
+     * Категории объявлений
+     */
+    public function categories()
+    {
+        if (! isAdmin(User::BOSS)) {
+            abort(403, 'Доступ запрещен!');
+        }
+
+        $boards = Board::query()
+            ->where('parent_id', 0)
+            ->orderBy('sort')
+            ->with('children')
+            ->get();
+
+        return view('admin/boards/categories', compact('boards'));
+    }
+
+    /**
+     * Создание раздела
+     */
+    public function create()
+    {
+        if (! isAdmin(User::BOSS)) {
+            abort(403, 'Доступ запрещен!');
+        }
+
+        $token = check(Request::input('token'));
+        $name  = check(Request::input('name'));
+
+        $validator = new Validator();
+        $validator->equal($token, $_SESSION['token'], 'Неверный идентификатор сессии, повторите действие!')
+            ->length($name, 3, 50, ['name' => 'Слишком длинное или короткое название раздела!']);
+
+        if ($validator->isValid()) {
+
+            $max = Board::query()->max('sort') + 1;
+
+            $board = Board::query()->create([
+                'name'  => $name,
+                'sort'  => $max,
+            ]);
+
+            setFlash('success', 'Новый раздел успешно создан!');
+            redirect('/admin/boards/edit/' . $board->id);
+        } else {
+            setInput(Request::all());
+            setFlash('danger', $validator->getErrors());
+        }
+
+        redirect('/admin/boards/categories');
+    }
+
+    /**
+     * Редактирование раздела
      */
     public function edit($id)
+    {
+        if (! isAdmin(User::BOSS)) {
+            abort(403, 'Доступ запрещен!');
+        }
+
+        $board = Board::query()->with('children')->find($id);
+
+        if (! $board) {
+            abort(404, 'Данного раздела не существует!');
+        }
+
+        $boards = Board::query()
+            ->where('parent_id', 0)
+            ->orderBy('sort')
+            ->get();
+
+        if (Request::isMethod('post')) {
+            $token  = check(Request::input('token'));
+            $parent = int(Request::input('parent'));
+            $name   = check(Request::input('name'));
+            $sort   = check(Request::input('sort'));
+            $closed = empty(Request::input('closed')) ? 0 : 1;
+
+            $validator = new Validator();
+            $validator->equal($token, $_SESSION['token'], 'Неверный идентификатор сессии, повторите действие!')
+                ->length($name, 3, 50, ['title' => 'Слишком длинное или короткое название раздела!'])
+                ->notEqual($parent, $board->id, ['parent' => 'Недопустимый выбор родительского раздела!']);
+
+            if (! empty($parent) && $board->children->isNotEmpty()) {
+                $validator->addError(['parent' => 'Текущий раздел имеет подразделы!']);
+            }
+
+            if ($validator->isValid()) {
+
+                $board->update([
+                    'parent_id' => $parent,
+                    'name'      => $name,
+                    'sort'      => $sort,
+                    'closed'    => $closed,
+                ]);
+
+                setFlash('success', 'Раздел успешно отредактирован!');
+                redirect('/admin/boards/categories');
+            } else {
+                setInput(Request::all());
+                setFlash('danger', $validator->getErrors());
+            }
+        }
+
+        return view('admin/boards/edit', compact('boards', 'board'));
+    }
+
+    /**
+     * Удаление раздела
+     */
+    public function delete($id)
+    {
+        if (! isAdmin(User::BOSS)) {
+            abort(403, 'Доступ запрещен!');
+        }
+
+        $board = Board::query()->with('children')->find($id);
+
+        if (! $board) {
+            abort(404, 'Данного раздела не существует!');
+        }
+
+        $token = check(Request::input('token'));
+
+        $validator = new Validator();
+        $validator->equal($token, $_SESSION['token'], 'Неверный идентификатор сессии, повторите действие!')
+            ->true($board->children->isEmpty(), 'Удаление невозможно! Данный раздел имеет подразделы!');
+
+        $item = Item::query()->where('board_id', $board->id)->first();
+        if ($item) {
+            $validator->addError('Удаление невозможно! В данном разделе имеются объявления!');
+        }
+
+        if ($validator->isValid()) {
+
+            $board->delete();
+
+            setFlash('success', 'Раздел успешно удален!');
+        } else {
+            setFlash('danger', $validator->getErrors());
+        }
+
+        redirect('/admin/boards/categories');
+    }
+
+    /**
+     * Редактирование объявления
+     */
+    public function editItem($id)
     {
         $item = Item::query()->find($id);
 
@@ -78,10 +225,10 @@ class BoardController extends AdminController
                 ->equal($token, $_SESSION['token'], 'Неверный идентификатор сессии, повторите действие!')
                 ->length($title, 5, 50, ['title' => 'Слишком длинное или короткое название!'])
                 ->length($text, 50, 5000, ['text' => 'Слишком длинный или короткий текст описания!'])
-                ->notEmpty($board, ['category' => 'Категории для данного объявления не существует!']);
+                ->notEmpty($board, ['bid' => 'Категории для данного объявления не существует!']);
 
             if ($board) {
-                $validator->empty($board->closed, ['category' => 'В данный раздел запрещено добавлять объявления!']);
+                $validator->empty($board->closed, ['bid' => 'В данный раздел запрещено добавлять объявления!']);
             }
 
             if ($validator->isValid()) {
@@ -113,13 +260,13 @@ class BoardController extends AdminController
             ->orderBy('sort')
             ->get();
 
-        return view('/admin/boards/edit', compact('item', 'boards'));
+        return view('/admin/boards/edit_item', compact('item', 'boards'));
     }
 
     /**
      * Удаление объявления
      */
-    public function delete($id): void
+    public function deleteItem($id): void
     {
         $token = check(Request::input('token'));
 
@@ -159,7 +306,7 @@ class BoardController extends AdminController
 
         if ($token === $_SESSION['token']) {
 
-            DB::update('update boards set count_items = (select count(*) from items where boards.id = items.board_id and items.expires_at > ' . SITETIME . ');');
+            restatement('boards');
 
             setFlash('success', 'Объявления успешно пересчитаны!');
         } else {

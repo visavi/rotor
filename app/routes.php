@@ -397,8 +397,12 @@ $routes = [
 
     ['GET',      '/admin/boards/[i:id]?', 'Admin\BoardController@index'],
     ['GET',      '/admin/boards/restatement', 'Admin\BoardController@restatement'],
-    ['GET|POST', '/admin/items/edit/[i:id]', 'Admin\BoardController@edit'],
-    ['GET',      '/admin/items/delete/[i:id]', 'Admin\BoardController@delete'],
+    ['GET|POST', '/admin/items/edit/[i:id]', 'Admin\BoardController@editItem'],
+    ['GET',      '/admin/items/delete/[i:id]', 'Admin\BoardController@deleteItem'],
+    ['GET',      '/admin/boards/categories', 'Admin\BoardController@categories'],
+    ['POST',     '/admin/boards/create', 'Admin\BoardController@create'],
+    ['GET|POST', '/admin/boards/edit/[i:id]', 'Admin\BoardController@edit'],
+    ['GET',      '/admin/boards/delete/[i:id]', 'Admin\BoardController@delete'],
 
     ['GET', '/search', function() {
         return view('search/index');

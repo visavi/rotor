@@ -29,16 +29,10 @@
         <div class="alert alert-danger">Объявление не активно</div>
     @endif
 
-    @if ($item->expires_at > SITETIME)
-        <a href="/items/close/{{ $item->id }}?token={{ $_SESSION['token'] }}" onclick="return confirm('Вы действительно хотите снять объявление с публикации?')">Снять с публикации</a> /
-    @else
-        <a href="/items/close/{{ $item->id }}?token={{ $_SESSION['token'] }}">Опубликовать</a> /
-    @endif
-
-    <a href="/items/delete/{{ $item->id }}?token={{ $_SESSION['token'] }}" onclick="return confirm('Вы действительно хотите удалить объявление?')">Удалить</a>
+    <a href="/admin/items/delete/{{ $item->id }}?token={{ $_SESSION['token'] }}" onclick="return confirm('Вы действительно хотите удалить объявление?')">Удалить</a>
 
     <div class="form">
-        <form action="/items/edit/{{ $item->id }}" method="post">
+        <form action="/admin/items/edit/{{ $item->id }}" method="post">
             <input type="hidden" name="token" value="{{ $_SESSION['token'] }}">
 
             <div class="form-group{{ hasError('bid') }}">
@@ -79,7 +73,16 @@
                 {!! textError('price') !!}
             </div>
 
-            @include('app._upload', ['id' => $item->id, 'files' => $item->files, 'type' => App\Models\Item::class])
+            <div class="js-images">
+                @if ($item->files->isNotEmpty())
+                    @foreach ($item->files as $file)
+                        <span class="js-image">
+                            {!! resizeImage($file->hash, ['width' => 100]) !!}
+                            <a href="#" onclick="return deleteImage(this);" data-id="{{ $file->id }}" data-type="{{ App\Models\Item::class }}" data-token="{{ $_SESSION['token'] }}"><i class="fas fa-times"></i></a>
+                        </span>
+                    @endforeach
+                @endif
+            </div>
 
             <button class="btn btn-primary">Изменить</button>
         </form>

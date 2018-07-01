@@ -36,7 +36,7 @@
                                         @if ($item->expires_at > SITETIME)
                                             <i class="fas fa-clock"></i> Истекает через {{ formatTime($item->expires_at - SITETIME) }}
                                         @else
-                                            <span class="badge badge-danger">Объявление закрыто</span>
+                                            <span class="badge badge-danger">Объявление не активно</span>
                                         @endif
                                     </p>
                                 </div>

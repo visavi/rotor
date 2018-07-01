@@ -38,11 +38,11 @@
 
                     @foreach ($categories as $data)
 
-                        @if ($data->id == $category->id)
+                        @if ($data->id === $category->id)
                             @continue
                         @endif
 
-                        <option value="{{ $data->id }}"{{ ($inputParent == $data->id && ! $data->closed) ? ' selected' : '' }}{{ $data->closed ? ' disabled' : '' }}>{{ $data->name }}</option>
+                        <option value="{{ $data->id }}"{{ ($inputParent === $data->id && ! $data->closed) ? ' selected' : '' }}{{ $data->closed ? ' disabled' : '' }}>{{ $data->name }}</option>
                     @endforeach
 
                 </select>

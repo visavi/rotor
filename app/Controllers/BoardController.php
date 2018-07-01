@@ -67,7 +67,7 @@ class BoardController extends BaseController
         }
 
         if ($item->expires_at <= SITETIME && $item->user_id !== getUser('id')) {
-            abort('default', 'Объявление закрыто или истек срок размещения!');
+            abort('default', 'Объявление не активно или истек срок размещения!');
         }
 
         return view('boards/view', compact('item'));

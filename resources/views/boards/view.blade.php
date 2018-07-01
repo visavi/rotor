@@ -29,7 +29,7 @@
     </nav>
 
     @if ($item->expires_at <= SITETIME)
-        <div class="alert alert-danger">Объявление закрыто</div>
+        <div class="alert alert-danger">Объявление не активно</div>
     @endif
 
     @if (isAdmin())
