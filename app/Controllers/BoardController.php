@@ -168,12 +168,7 @@ class BoardController extends BaseController
             abort(404, 'Данного объявления не существует!');
         }
 
-        if ($item->user_id !== getUser('id')) {
-            abort('default', 'Изменение невозможно, вы не автор данного объявления!');
-        }
-
         if (Request::isMethod('post')) {
-
             $token = check(Request::input('token'));
             $bid   = int(Request::input('bid'));
             $title = check(Request::input('title'));
@@ -187,7 +182,8 @@ class BoardController extends BaseController
                 ->equal($token, $_SESSION['token'], 'Неверный идентификатор сессии, повторите действие!')
                 ->length($title, 5, 50, ['title' => 'Слишком длинное или короткое название!'])
                 ->length($text, 50, 5000, ['text' => 'Слишком длинный или короткий текст описания!'])
-                ->notEmpty($board, ['category' => 'Категории для данного объявления не существует!']);
+                ->notEmpty($board, ['category' => 'Категории для данного объявления не существует!'])
+                ->equal($item->user_id, getUser('id'), 'Изменение невозможно, вы не автор данного объявления!');
 
             if ($board) {
                 $validator->empty($board->closed, ['category' => 'В данный раздел запрещено добавлять объявления!']);
@@ -278,9 +274,13 @@ class BoardController extends BaseController
     /**
      * Удаление объявления
      */
-    public function delete($id)
+    public function delete($id): void
     {
         $token = check(Request::input('token'));
+
+        if (! getUser()) {
+            abort(403, 'Для редактирования объявления необходимо авторизоваться');
+        }
 
         $item = Item::query()->find($id);
 
@@ -289,7 +289,8 @@ class BoardController extends BaseController
         }
 
         $validator = new Validator();
-        $validator->equal($token, $_SESSION['token'], 'Неверный идентификатор сессии, повторите действие!');
+        $validator->equal($token, $_SESSION['token'], 'Неверный идентификатор сессии, повторите действие!')
+            ->equal($item->user_id, getUser('id'), 'Удаление невозможно, вы не автор данного объявления!');
 
         if ($validator->isValid()) {
 

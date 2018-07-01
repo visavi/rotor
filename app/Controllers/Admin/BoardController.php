@@ -65,7 +65,6 @@ class BoardController extends AdminController
         }
 
         if (Request::isMethod('post')) {
-
             $token = check(Request::input('token'));
             $bid   = int(Request::input('bid'));
             $title = check(Request::input('title'));
@@ -115,6 +114,36 @@ class BoardController extends AdminController
             ->get();
 
         return view('/admin/boards/edit', compact('item', 'boards'));
+    }
+
+    /**
+     * Удаление объявления
+     */
+    public function delete($id): void
+    {
+        $token = check(Request::input('token'));
+
+        $item = Item::query()->find($id);
+
+        if (! $item) {
+            abort(404, 'Данного объявления не существует!');
+        }
+
+        $validator = new Validator();
+        $validator->equal($token, $_SESSION['token'], 'Неверный идентификатор сессии, повторите действие!');
+
+        if ($validator->isValid()) {
+
+            $item->delete();
+
+            $item->category->decrement('count_items');
+
+            setFlash('success', 'Объявление успешно удалено!');
+        } else {
+            setFlash('danger', $validator->getErrors());
+        }
+
+        redirect('/admin/boards/' . $item->board_id);
     }
 
     /**
