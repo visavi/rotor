@@ -42,7 +42,7 @@
         <div class="row mb-3">
             @foreach ($boards->chunk(3) as $chunk)
                 @foreach ($chunk as $board)
-                    <div class="col-md-3">
+                    <div class="col-md-3 col-sm-6">
                         <a href="/admin/boards/{{ $board->id }}">{{ $board->name }}</a> {{ $board->count_items }}
                     </div>
                 @endforeach

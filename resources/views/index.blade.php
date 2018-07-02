@@ -38,7 +38,7 @@
     {{ recentBlogs() }}
 
     <div class="b">
-        <i class="fa fa-globe fa-lg text-muted"></i>
+        <i class="fa fa-list-alt fa-lg text-muted"></i>
         <b><a href="/boards">Объявления</a></b> ({{ statsBoard() }})
     </div>
     {{ recentBoards() }}
