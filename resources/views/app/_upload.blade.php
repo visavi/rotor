@@ -22,6 +22,6 @@ $click = $cond ? 'return pasteImage(this);' : false;
 </div>
 
 <label class="btn btn-sm btn-secondary" for="image">
-    <input id="image" type="file" name="image" onchange="return submitImage(this, {{ $cond }});" data-id="{{ $id or 0 }}" data-type="{{ $type }}" data-token="{{ $_SESSION['token'] }}" hidden>
+    <input id="image" type="file" name="image" accept="image/*" onchange="return submitImage(this, {{ $cond }});" data-id="{{ $id or 0 }}" data-type="{{ $type }}" data-token="{{ $_SESSION['token'] }}" hidden>
     Прикрепить картинку&hellip;
 </label><br>
