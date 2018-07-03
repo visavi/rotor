@@ -402,6 +402,12 @@ function submitImage(el, paste = false)
         processData: false,
         dataType: 'json',
         url: '/ajax/image/upload',
+        beforeSend: function() {
+            $('.js-images').append('<i class="fas fa-spinner fa-spin fa-3x mx-3"></i>');
+        },
+        complete: function() {
+            $('.fa-spinner').remove();
+        },
         success: function(data) {
 
             if (data.status === 'error') {
