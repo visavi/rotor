@@ -14,6 +14,7 @@ public/uploads/smiles/
 public/uploads/blogs/
 public/uploads/boards/
 vendor
+upgrade
 composer.phar
 .env
 .idea/
