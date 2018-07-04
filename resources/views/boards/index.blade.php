@@ -43,9 +43,11 @@
         </ol>
     </nav>
 
-    <div class="mb-3">
-        <i class="far fa-list-alt"></i> <a href="/boards/active">Мои объявления</a>
-    </div>
+    @if (getUser())
+        <div class="mb-3">
+            <i class="far fa-list-alt"></i> <a href="/boards/active">Мои объявления</a>
+        </div>
+    @endif
 
     @if ($boards->isNotEmpty())
         <div class="row mb-3">
