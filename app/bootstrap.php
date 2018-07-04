@@ -18,10 +18,10 @@ define('VERSION', '7.2');
 
 require_once BASEDIR . '/vendor/autoload.php';
 
-//if (! env('APP_ENV')) {
+if (! env('APP_ENV')) {
     $dotenv = new Dotenv(BASEDIR);
     $dotenv->load();
-//}
+}
 
 if (env('APP_DEBUG') && class_exists(Run::class)) {
     $whoops = new Run();
