@@ -405,8 +405,8 @@ class Metrika
      */
     public function saveStatistic()
     {
-        $days  = floor((gmmktime(0, 0, 0, date("m"), date("d"), date("Y")) - gmmktime(0, 0, 0, 1, 1, 1970)) / 86400);
-        $hours = floor((gmmktime(date("H"), 0, 0, date("m"), date("d"), date("Y")) - gmmktime((date("Z") / 3600), 0, 0, 1, 1, 1970)) / 3600);
+        $period = date('Y-m-d H:00:00', SITETIME);
+        $day    = date('Y-m-d 00:00:00', SITETIME);
 
         Online::query()->where('updated_at', '<', SITETIME - setting('timeonline'))->delete();
 
@@ -459,19 +459,11 @@ class Metrika
         // -----------------------------------------------------------//
         $counter = Counter::query()->first();
 
-        if ($counter->hours != $hours) {
-            DB::insert("insert ignore into `counters24` (`hour`, `hosts`, `hits`) values (?, ?, ?);", [$hours, $counter->hosts24, $counter->hits24]);
-            DB::update("update `counters` set `hours`=?, `hosts24`=?, `hits24`=?;", [$hours, 0, 0]);
-            DB::delete("delete from `counters24` where `hour` < (select min(`hour`) from (select `hour` from `counters24` order by `hour` desc limit 24) as del);");
-        }
+        if (date('Y-m-d 00:00:00', strtotime($counter->period)) !== $day) {
+            DB::insert('insert ignore into counters31 (period, hosts, hits) values (?, ?, ?);', [$day, $counter->dayhosts, $counter->dayhits]);
+            DB::update('update counters set period=?, dayhosts=?, dayhits=?;', [$period, 0, 0]);
 
-        if ($counter->days != $days) {
-            DB::insert("insert ignore into `counters31` (`days`, `hosts`, `hits`) values (?, ?, ?);", [$days, $counter->dayhosts, $counter->dayhits]);
-            DB::update("update `counters` set `days`=?, `dayhosts`=?, `dayhits`=?;", [$days, 0, 0]);
-            DB::delete("delete from `counters31` where `days` < (select min(`days`) from (select `days` from `counters31` order by `days` desc limit 31) as del);");
-            // ---------------------------------------------------//
-
-            $week = Counter31::query()
+/*            $week = Counter31::query()
                 ->orderBy('days', 'desc')
                 ->limit(6)
                 ->pluck('hosts', 'days')
@@ -482,7 +474,12 @@ class Metrika
                 array_unshift($hostData, $week[$tekdays] ?? 0);
             }
 
-            file_put_contents(STORAGE . '/temp/counter7.dat', json_encode($hostData), LOCK_EX);
+            file_put_contents(STORAGE . '/temp/counter7.dat', json_encode($hostData), LOCK_EX);*/
+        }
+
+        if ($counter->period !== $period) {
+            DB::insert('insert ignore into counters24 (period, hosts, hits) values (?, ?, ?);', [$period, $counter->hosts24, $counter->hits24]);
+            DB::update('update counters set period=?, hosts24=?, hits24=?;', [$period, 0, 0]);
         }
 
         // -----------------------------------------------------------//
