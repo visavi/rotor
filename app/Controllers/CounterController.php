@@ -13,81 +13,49 @@ class CounterController extends BaseController
      */
     public function index()
     {
-        $counts24 = Counter24::query()
-            ->selectRaw('sum(hosts) as hosts')
-            ->selectRaw('sum(hits) as hits')
-            ->first();
-
-        $counts31 = Counter31::query()
-            ->selectRaw('sum(hosts) as hosts')
-            ->selectRaw('sum(hits) as hits')
-            ->first();
-
         $metrika = new Metrika();
         $online  = statsOnline();
         $count   = statsCounter();
 
+        $counts31 = [];
+        $counters = Counter31::query()
+            ->whereRaw('period BETWEEN NOW() - INTERVAL 30 DAY AND NOW()')
+            ->orderBy('period', 'desc')
+            ->get();
+
+        for ($i = 0; $i <= 30; $i++) {
+
+            $curDate = date('Y-m-d 00:00:00', strtotime("-$i day", SITETIME));
+
+            $cnt = $counters->first(function($item) use ($curDate) {
+                return $item->period === $curDate;
+            });
+
+            $counts31['hits'][]   = $cnt->hits ?? 0;
+            $counts31['hosts'][]  = $cnt->hosts ?? 0;
+            $counts31['labels'][] = date('M j', strtotime($curDate));
+        }
+
+
+        $counts24 = [];
+        $counters = Counter24::query()
+            ->whereRaw('period BETWEEN NOW() - INTERVAL 24 HOUR AND NOW()')
+            ->orderBy('period', 'desc')
+            ->get();
+
+        for ($i = 0; $i <= 24; $i++) {
+
+            $curHour = date('Y-m-d H:00:00', strtotime("-$i hour", SITETIME));
+
+            $cnt = $counters->first(function($item) use ($curHour) {
+                return $item->period === $curHour;
+            });
+
+            $counts24['hits'][]   = $cnt->hits ?? 0;
+            $counts24['hosts'][]  = $cnt->hosts ?? 0;
+            $counts24['labels'][] = date('H', strtotime($curHour));
+        }
+
         return view('counters/index', compact('online', 'count', 'counts24', 'counts31', 'metrika'));
-    }
-
-    /**
-     * Статистика за сутки
-     */
-    public function day()
-    {
-        $currhour = date("G", SITETIME);
-
-        $hours = floor((gmmktime(date("H"), 0, 0, date("m"), date("d"), date("Y")) - gmmktime((date("Z") / 3600), 0, 0, 1, 1, 1970)) / 3600);
-
-        $counts = Counter24::query()->orderBy('hour', 'desc')->get();
-        $arrhits   = [];
-        $arrhosts  = [];
-        $hits_data = [];
-        $host_data = [];
-
-        foreach ($counts as $val) {
-            $arrhits[$val['hour']] = $val['hits'];
-            $arrhosts[$val['hour']] = $val['hosts'];
-        }
-
-        for ($i = 0, $tekhours = $hours; $i < 24; $tekhours -= 1, $i++) {
-            $hits_data[$tekhours] = $arrhits[$tekhours] ?? 0;
-            $host_data[$tekhours] = $arrhosts[$tekhours] ?? 0;
-        }
-
-        $metrika = new Metrika();
-
-        return view('counters/24', compact('hits_data', 'host_data', 'currhour', 'hours', 'metrika'));
-    }
-
-    /**
-     * Статистика за месяц
-     */
-    public function month()
-    {
-        $currday = date("j", SITETIME);
-
-        $days = floor((gmmktime(0, 0, 0, date("m"), date("d"), date("Y")) - gmmktime(0, 0, 0, 1, 1, 1970)) / 86400);
-
-        $counts = Counter31::query()->orderBy('days', 'desc')->get();
-
-        $arrhits = [];
-        $arrhosts = [];
-        $hits_data = [];
-        $host_data = [];
-
-        foreach ($counts as $val) {
-            $arrhits[$val['days']] = $val['hits'];
-            $arrhosts[$val['days']] = $val['hosts'];
-        }
-
-        for ($i = 0, $tekdays = $days; $i < 31; $tekdays -= 1, $i++) {
-            $hits_data[$tekdays] = $arrhits[$tekdays] ?? 0;
-            $host_data[$tekdays] = $arrhosts[$tekdays] ?? 0;
-        }
-
-        $metrika = new Metrika();
-
-        return view('counters/31', compact('hits_data', 'host_data', 'currday', 'days', 'metrika'));
     }
 }

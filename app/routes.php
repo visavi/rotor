@@ -164,7 +164,7 @@ $routes = [
     ['GET|POST', '/contacts', 'ContactController@index'],
     ['GET|POST', '/contacts/note/[i:id]', 'ContactController@note'],
     ['POST',     '/contacts/delete', 'ContactController@delete'],
-    ['GET',      '/counters/[day|month:action]?', 'CounterController@index'],
+    ['GET',      '/counters', 'CounterController@index'],
 
     ['GET',      '/transfers', 'TransferController@index'],
     ['POST',     '/transfers/send', 'TransferController@send'],
