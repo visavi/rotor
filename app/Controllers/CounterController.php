@@ -13,9 +13,8 @@ class CounterController extends BaseController
      */
     public function index()
     {
-        $metrika = new Metrika();
-        $online  = statsOnline();
         $count   = statsCounter();
+        $online  = statsOnline();
 
         $counts31 = [];
         $counters = Counter31::query()
@@ -56,6 +55,6 @@ class CounterController extends BaseController
             $counts24['labels'][] = date('H', strtotime($curHour));
         }
 
-        return view('counters/index', compact('online', 'count', 'counts24', 'counts31', 'metrika'));
+        return view('counters/index', compact('count', 'online', 'counts24', 'counts31'));
     }
 }
