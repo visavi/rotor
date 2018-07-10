@@ -29,21 +29,18 @@ class Metrika
 
         // ----------------------------------------------------------------------//
         $img   = imagecreatefrompng(HOME . '/assets/img/images/counter.png');
-        $color = imagecolorallocate($img, 102, 102, 102);
+        $color = imagecolorallocate($img, 62, 62, 62);
 
         $pos = 66;
         if ($online >= 10 && $online < 100) {
             $pos = 54;
         }
-        if ($online >= 100 && $online < 200) {
-            $pos = 46;
-        }
-        if ($online >= 200 && $online < 1000) {
+        if ($online >= 100 && $online < 1000) {
             $pos = 42;
         }
 
-        imagettftext($img, 6, 0, 13, 7, $color, HOME . '/assets/fonts/font.ttf', formatShortNum($count->dayhosts));
-        imagettftext($img, 6, 0, 13, 13, $color, HOME . '/assets/fonts/font.ttf', formatShortNum($count->dayhits));
+        imagettftext($img, 6, 0, 14, 7, $color, HOME . '/assets/fonts/font.ttf', formatShortNum($count->dayhosts));
+        imagettftext($img, 6, 0, 14, 13, $color, HOME . '/assets/fonts/font.ttf', formatShortNum($count->dayhits));
         imagettftext($img, 12, 0, $pos, 13, $color, HOME . '/assets/fonts/font.ttf', $online);
 
         imagepng($img, UPLOADS . '/counters/counter_new.png');

@@ -43,7 +43,7 @@ h1 small {
 }
 
 a {
-    color: #888;
+    color: #666;
 }
 
 a:hover {
@@ -54,6 +54,16 @@ a:hover {
 .site {
     padding: 5px;
     background-image: url(../img/f.png);
+}
+
+.site a {
+    color: #666;
+    text-decoration: underline;
+    text-decoration-color: #ccc;
+}
+
+.site a:hover {
+    color: #aeaeae;
 }
 
 .menu {
@@ -67,6 +77,10 @@ a:hover {
 .menu a {
     text-decoration : none;
     font-weight : bold;
+}
+
+.content {
+    margin: 10px;
 }
 
 legend {

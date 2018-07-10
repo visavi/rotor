@@ -18,7 +18,7 @@ class CounterController extends BaseController
 
         $counts31 = [];
         $counters = Counter31::query()
-            ->whereRaw('period BETWEEN NOW() - INTERVAL 30 DAY AND NOW()')
+            ->whereRaw('period BETWEEN NOW() - INTERVAL 31 DAY AND NOW()')
             ->orderBy('period', 'desc')
             ->get();
 
@@ -35,10 +35,12 @@ class CounterController extends BaseController
             $counts31['labels'][] = date('M j', strtotime($curDate));
         }
 
+        //var_dump()
+
 
         $counts24 = [];
         $counters = Counter24::query()
-            ->whereRaw('period BETWEEN NOW() - INTERVAL 24 HOUR AND NOW()')
+            ->whereRaw('period BETWEEN NOW() - INTERVAL 25 HOUR AND NOW()')
             ->orderBy('period', 'desc')
             ->get();
 
