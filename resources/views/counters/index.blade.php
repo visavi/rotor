@@ -79,11 +79,11 @@
             reverseData: true,
             fullWidth: true,
             chartPadding: {
-                right: 30
+                right: 35
             },
             axisY: {
                 onlyInteger: true,
-                offset: 20
+                offset: 35
             },
             axisX: {
                 labelInterpolationFnc: function (value, index) {
@@ -111,11 +111,11 @@
             reverseData: true,
             fullWidth: true,
             chartPadding: {
-                right: 30
+                right: 35
             },
             axisY: {
                 onlyInteger: true,
-                offset: 20
+                offset: 35
             },
             axisX: {
                 labelInterpolationFnc: function (value, index) {

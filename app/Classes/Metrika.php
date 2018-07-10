@@ -3,8 +3,6 @@
 namespace App\Classes;
 
 use App\Models\Counter;
-use App\Models\Counter24;
-use App\Models\Counter31;
 use App\Models\Online;
 use Illuminate\Database\Capsule\Manager as DB;
 
@@ -30,17 +28,23 @@ class Metrika
         }
 
         // ----------------------------------------------------------------------//
-        $img    = imagecreatefrompng(HOME . '/assets/img/images/counter.png');
-        $color2 = imagecolorallocate($img, 102, 102, 102);
+        $img   = imagecreatefrompng(HOME . '/assets/img/images/counter.png');
+        $color = imagecolorallocate($img, 102, 102, 102);
 
-        $pos = 65;
-        if ($online >= 10 && $online < 100) $pos = 52;
-        if ($online >= 100 && $online < 200) $pos = 44;
-        if ($online >= 200 && $online < 1000) $pos = 40;
+        $pos = 66;
+        if ($online >= 10 && $online < 100) {
+            $pos = 54;
+        }
+        if ($online >= 100 && $online < 200) {
+            $pos = 46;
+        }
+        if ($online >= 200 && $online < 1000) {
+            $pos = 42;
+        }
 
-        imagettftext($img, 6, 0, 13, 23, $color2, HOME . '/assets/fonts/font4.ttf', formatShortNum($count->dayhosts));
-        imagettftext($img, 6, 0, 13, 29, $color2, HOME . '/assets/fonts/font4.ttf', formatShortNum($count->dayhits));
-        imagettftext($img, 12, 0, $pos, 29, $color2, HOME . '/assets/fonts/font7.ttf', $online);
+        imagettftext($img, 6, 0, 13, 7, $color, HOME . '/assets/fonts/font.ttf', formatShortNum($count->dayhosts));
+        imagettftext($img, 6, 0, 13, 13, $color, HOME . '/assets/fonts/font.ttf', formatShortNum($count->dayhits));
+        imagettftext($img, 12, 0, $pos, 13, $color, HOME . '/assets/fonts/font.ttf', $online);
 
         imagepng($img, UPLOADS . '/counters/counter_new.png');
         imagedestroy($img);
