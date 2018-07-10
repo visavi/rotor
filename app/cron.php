@@ -15,7 +15,6 @@ $taskList->addTasks([
     (new App\Tasks\DeleteFiles())->setExpression('@daily'),
     (new App\Tasks\RestatementBoard())->setExpression('30 */3 * * *'),
     (new App\Tasks\AddSubscribers())->setExpression('@hourly'),
-    (new App\Tasks\UpdateCounter())->setExpression('* * * * *'),
     (new App\Tasks\SendMessages())->setExpression('* * * * *'),
 ]);
 

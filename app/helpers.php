@@ -353,7 +353,10 @@ function getCalendar()
  */
 function statsOnline()
 {
-    if (@filemtime(STORAGE . '/temp/online.dat') < time() - 30) {
+    if (@filemtime(STORAGE . '/temp/online.dat') < time() - 60) {
+
+        $metrika = new Metrika();
+        $metrika->getCounter();
 
         $online[] = Online::query()->whereNotNull('user_id')->count();
         $online[] = Online::query()->count();
@@ -371,8 +374,10 @@ function statsOnline()
  */
 function showOnline()
 {
+    $online = statsOnline();
+
     if (setting('onlines')) {
-        return view('app/_online', ['online' => statsOnline()]);
+        return view('app/_online', compact('online'));
     }
 
     return null;
@@ -385,7 +390,7 @@ function showOnline()
  */
 function statsCounter()
 {
-    if (@filemtime(STORAGE . '/temp/counter.dat') < time() - 10) {
+    if (@filemtime(STORAGE . '/temp/counter.dat') < time() - 30) {
         $counts = Counter::query()->first();
         file_put_contents(STORAGE . '/temp/counter.dat', json_encode($counts), LOCK_EX);
     }
