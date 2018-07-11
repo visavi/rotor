@@ -13,6 +13,9 @@ public/uploads/thumbnails/
 public/uploads/smiles/
 public/uploads/blogs/
 public/uploads/boards/
+node_modules/
+public/assets/css/compiled.css
+public/assets/js/compiled.js
 vendor
 upgrade
 composer.phar

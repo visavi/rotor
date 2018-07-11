@@ -387,7 +387,7 @@ function copyToClipboard(el)
 }
 
 /* Загрузка изображения */
-function submitImage(el, paste = false)
+function submitImage(el, paste)
 {
     var form = new FormData();
     form.append('image', el.files[0]);
