@@ -12,12 +12,21 @@
     "production": "NODE_ENV=production node_modules/webpack/bin/webpack.js --no-progress --hide-modules --config=node_modules/laravel-mix/setup/webpack.config.js"
   },
   "dependencies": {
-    "laravel-mix": "^2.1"
+    "hoek": "^5.0.3",
+    "laravel-mix": "^2.1.11"
   },
   "repository": {
     "type": "git",
-    "url": "git@github.com:visavi/rotor.git"
+    "url": "git+ssh://git@github.com/visavi/rotor.git"
   },
   "author": "Alexander Grigorev",
-  "license": "MIT"
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/visavi/rotor/issues"
+  },
+  "homepage": "https://github.com/visavi/rotor#readme",
+  "main": "webpack.mix.js",
+  "directories": {
+    "test": "tests"
+  }
 }
