@@ -12,7 +12,6 @@
     "production": "NODE_ENV=production node_modules/webpack/bin/webpack.js --no-progress --hide-modules --config=node_modules/laravel-mix/setup/webpack.config.js"
   },
   "dependencies": {
-    "hoek": "^5.0.3",
     "laravel-mix": "^2.1.11"
   },
   "repository": {
