@@ -48,6 +48,8 @@
 
 @push('styles')
     <link rel="stylesheet" href="/assets/css/chartist.min.css">
+    <link rel="stylesheet" href="/assets/css/chartist-plugin-tooltip.css">
+
     <style>
         .ct-series-a .ct-line,
         .ct-series-a .ct-point {
@@ -67,6 +69,7 @@
 
 @push('scripts')
     <script src="/assets/js/chartist.min.js"></script>
+    <script src="/assets/js/chartist-plugin-tooltip.min.js"></script>
     <script>
         new Chartist.Line('.ct-chart31', {
             onlyInteger: true,
@@ -76,6 +79,9 @@
                 @json($counts31['hosts'])
             ]
         }, {
+            plugins: [
+                Chartist.plugins.tooltip()
+            ],
             reverseData: true,
             fullWidth: true,
             chartPadding: {
@@ -83,7 +89,10 @@
             },
             axisY: {
                 onlyInteger: true,
-                offset: 35
+                offset: 35,
+                labelInterpolationFnc: function(value) {
+                    return (value > 1000) ? (value / 1000) + 'k' : value;
+                }
             },
             axisX: {
                 labelInterpolationFnc: function (value, index) {
@@ -108,6 +117,9 @@
                 @json($counts24['hosts'])
             ]
         }, {
+            plugins: [
+                Chartist.plugins.tooltip()
+            ],
             reverseData: true,
             fullWidth: true,
             chartPadding: {
