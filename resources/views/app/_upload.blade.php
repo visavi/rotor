@@ -1,5 +1,5 @@
 <?php
-$cond  = ! empty($paste);
+$cond  = empty($paste) ? 0 : 1;
 $click = $cond ? 'return pasteImage(this);' : false;
 ?>
 
