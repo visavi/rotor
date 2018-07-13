@@ -56,13 +56,13 @@ a:hover {
     background-image: url(../img/f.png);
 }
 
-.site a {
+.site a:not(.btn):not(.badge) {
     color: #666;
     text-decoration: underline;
     text-decoration-color: #ccc;
 }
 
-.site a:hover {
+.site a:hover:not(.btn):not(.badge) {
     color: #aeaeae;
 }
 
@@ -80,7 +80,7 @@ a:hover {
 }
 
 .content {
-    margin: 10px;
+    margin: 0 10px;
 }
 
 legend {
