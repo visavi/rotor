@@ -34,7 +34,7 @@ class HomeController extends BaseController
      */
     public function banip()
     {
-        header($_SERVER["SERVER_PROTOCOL"].' 403 Forbidden');
+        header($_SERVER['SERVER_PROTOCOL'].' 403 Forbidden');
 
         $ban = Ban::query()
             ->where('ip', getIp())

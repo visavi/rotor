@@ -53,7 +53,7 @@ class GuestbookController extends BaseController
             $msg = antimat($msg);
 
             if (getUser()) {
-                $bookscores = (setting('bookscores')) ? 1 : 0;
+                $bookscores = setting('bookscores') ? 1 : 0;
 
                 getUser()->update([
                     'allguest' => DB::raw('allguest + 1'),
