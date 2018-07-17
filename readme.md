@@ -126,6 +126,14 @@ try_files $uri $uri/ /index.php?$query_string;
 
 Если при запуске сервера консоль выводит информацию о том, что порт 8000 занят, попробуйте порт 8080
 
+### Настройки webpack
+
+Для сжатия css и js необходимо установить npm и nodejs, после этого запустить команды
+```
+npm install
+npm run prod
+```
+
 ### Author
 Author: Vantuz  
 Email: admin@visavi.net  
