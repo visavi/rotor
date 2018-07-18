@@ -24,8 +24,6 @@
     </nav>
 
     @if ($photos->isNotEmpty())
-
-        <form action="/admin/photos/delete?page={{ $page->current }}" method="post">
             <input type="hidden" name="token" value="{{ $_SESSION['token'] }}">
 
             @foreach ($photos as $photo)
@@ -35,7 +33,7 @@
 
                     <div class="float-right">
                         <a href="/admin/photos/edit/{{ $photo->id }}?page={{ $page->current }}"><i class="fas fa-pencil-alt text-muted"></i></a>
-                        <input type="checkbox" name="del[]" value="{{ $photo->id }}">
+                        <a href="/admin/photos/delete/{{ $photo->id }}?page={{ $page->current }}&amp;token={{ $_SESSION['token'] }}"><i class="fas fa-times text-muted"></i></a>
                     </div>
                 </div>
 
@@ -79,10 +77,6 @@
                     <a href="/photos/end/{{ $photo->id }}">&raquo;</a>
                 </div>
             @endforeach
-
-            <div class="float-right">
-                <button class="btn btn-sm btn-danger">Удалить выбранное</button>
-            </div>
         </form>
 
         {!! pagination($page) !!}

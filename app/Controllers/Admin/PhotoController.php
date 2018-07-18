@@ -85,7 +85,7 @@ class PhotoController extends AdminController
     /**
      * Удаление записей
      */
-    public function delete()
+    public function delete($id): void
     {
         if (! is_writable(UPLOADS . '/photos')){
             abort('default', 'Директория c фотографиями недоступна для записи!');
@@ -93,26 +93,22 @@ class PhotoController extends AdminController
 
         $page  = int(Request::input('page', 1));
         $token = check(Request::input('token'));
-        $del   = intar(Request::input('del'));
+
+        $photo = Photo::query()->find($id);
+
+        if (! $photo) {
+            abort(404, 'Данной фотографии не существует!');
+        }
 
         $validator = new Validator();
-        $validator->equal($token, $_SESSION['token'], 'Неверный идентификатор сессии, повторите действие!')
-            ->true($del, 'Отсутствуют выбранные фотографии!');
+        $validator->equal($token, $_SESSION['token'], 'Неверный идентификатор сессии, повторите действие!');
 
         if ($validator->isValid()) {
 
-            $photos = Photo::query()
-                ->whereIn('id', $del)
-                ->get();
+            $photo->comments()->delete();
+            $photo->delete();
 
-            if ($photos->isNotEmpty()) {
-                foreach ($photos as $photo) {
-                    $photo->comments()->delete();
-                    $photo->delete();
-                }
-            }
-
-            setFlash('success', 'Выбранные фотографии успешно удалены!');
+            setFlash('success', 'Фотография успешно удалена!');
         } else {
             setFlash('danger', $validator->getErrors());
         }
@@ -123,12 +119,12 @@ class PhotoController extends AdminController
     /**
      * Пересчет комментариев
      */
-    public function restatement()
+    public function restatement(): void
     {
         $token = check(Request::input('token'));
 
         if (isAdmin(User::BOSS)) {
-            if ($token == $_SESSION['token']) {
+            if ($token === $_SESSION['token']) {
 
                 restatement('photos');
 

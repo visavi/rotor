@@ -364,7 +364,7 @@ $routes = [
     ['GET',      '/admin/photos', 'Admin\PhotoController@index'],
     ['GET|POST', '/admin/photos/edit/[i:id]', 'Admin\PhotoController@edit'],
     ['GET',      '/admin/photos/restatement', 'Admin\PhotoController@restatement'],
-    ['POST',     '/admin/photos/delete', 'Admin\PhotoController@delete'],
+    ['GET',      '/admin/photos/delete/[i:id]', 'Admin\PhotoController@delete'],
 
     ['GET',      '/admin/reklama', 'Admin\RekUserController@index'],
     ['GET|POST', '/admin/reklama/edit/[i:id]', 'Admin\RekUserController@edit'],
