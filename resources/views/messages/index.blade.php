@@ -62,7 +62,7 @@
                         <b>{!! $data->author->getProfile() !!}</b> ({{ dateFixed($data->created_at) }})<br>
                         {!! $data->author->getStatus() !!}
                     @else
-                        <b>Система</b>
+                        <b>Система</b> ({{ dateFixed($data->created_at) }})<br>
                     @endif
                 </div>
                 <div class="message">{!! bbCode($data->text) !!}</div>
