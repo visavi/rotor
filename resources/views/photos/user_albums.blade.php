@@ -20,13 +20,16 @@
 
         @foreach ($photos as $photo)
             <div class="b">
-                <i class="fa fa-image"></i>
-                <b><a href="/photos/{{ $photo->id }}">{{ $photo->title }}</a></b><br>
 
                 @if ($moder)
-                    <a href="/photos/edit/{{ $photo->id }}?page={{ $page->current }}">Редактировать</a> /
-                    <a href="/photos/delete/{{ $photo->id }}?page={{ $page->current }}&amp;token={{ $_SESSION['token'] }}" onclick="return confirm('Вы подтверждаете удаление изображения?')">Удалить</a>
+                    <div class="float-right">
+                        <a href="/photos/edit/{{ $photo->id }}?page={{ $page->current }}"><i class="fa fa-pencil-alt text-muted"></i></a>
+                        <a href="/photos/delete/{{ $photo->id }}?page={{ $page->current }}&amp;token={{ $_SESSION['token'] }}" onclick="return confirm('Вы подтверждаете удаление изображения?')"><i class="fa fa-times text-muted"></i></a>
+                    </div>
                 @endif
+
+                <i class="fa fa-image"></i>
+                <b><a href="/photos/{{ $photo->id }}">{{ $photo->title }}</a></b><br>
             </div>
             <div>
                 <?php $countFiles = $photo->files->count() ?>

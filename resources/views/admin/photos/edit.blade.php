@@ -34,6 +34,17 @@
                 {!! textError('text') !!}
             </div>
 
+            <div class="js-images">
+                @if ($photo->files->isNotEmpty())
+                    @foreach ($photo->files as $file)
+                        <span class="js-image">
+                            {!! resizeImage($file->hash, ['width' => 100]) !!}
+                            <a href="#" onclick="return deleteImage(this);" data-id="{{ $file->id }}" data-type="{{ App\Models\Photo::class }}"  data-token="{{ $_SESSION['token'] }}"><i class="fas fa-times"></i></a>
+                        </span>
+                    @endforeach
+                @endif
+            </div>
+
             <div class="custom-control custom-checkbox">
                 <input type="hidden" value="0" name="closed">
                 <input type="checkbox" class="custom-control-input" value="1" name="closed" id="closed"{{ getInput('closed', $photo->closed) ? ' checked' : '' }}>

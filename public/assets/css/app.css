@@ -1,11 +1,3 @@
-.form-group {
-  margin-bottom: 5px;
-}
-
-select.form-control, input.form-control {
-  width: 300px;
-}
-
 textarea.form-control {
   resize: vertical;
 }

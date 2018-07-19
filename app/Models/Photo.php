@@ -2,8 +2,6 @@
 
 namespace App\Models;
 
-use Illuminate\Http\UploadedFile;
-
 class Photo extends BaseModel
 {
     /**

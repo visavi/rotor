@@ -5,6 +5,7 @@ namespace App\Controllers;
 use App\Classes\Request;
 use App\Classes\Validator;
 use App\Models\Comment;
+use App\Models\File;
 use App\Models\Flood;
 use App\Models\Photo;
 use App\Models\User;
@@ -15,8 +16,10 @@ class PhotoController extends BaseController
 {
     /**
      * Главная страница
+     *
+     * @return string
      */
-    public function index()
+    public function index(): string
     {
         $total = Photo::query()->count();
         $page = paginate(setting('fotolist'), $total);
@@ -33,8 +36,11 @@ class PhotoController extends BaseController
 
     /**
      * Просмотр полной фотографии
+     *
+     * @param int $id
+     * @return string
      */
-    public function view($id)
+    public function view($id): string
     {
         $photo = Photo::query()
             ->select('photos.*', 'pollings.vote')
@@ -56,10 +62,12 @@ class PhotoController extends BaseController
 
     /**
      * Форма загрузки фото
+     *
+     * @return string
      */
-    public function create()
+    public function create(): string
     {
-        if (!getUser()) {
+        if (! getUser()) {
             abort(403, 'Для добавления фотографий небходимо авторизоваться!');
         }
 
@@ -68,28 +76,13 @@ class PhotoController extends BaseController
             $token  = check(Request::input('token'));
             $title  = check(Request::input('title'));
             $text   = check(Request::input('text'));
-            $files  = (array) Request::file('files');
             $closed = empty(Request::input('closed')) ? 0 : 1;
 
             $validator = new Validator();
             $validator->equal($token, $_SESSION['token'], 'Неверный идентификатор сессии, повторите действие!')
                 ->length($title, 5, 50, ['title' => 'Слишком длинное или короткое название!'])
                 ->length($text, 0, 1000, ['text' => 'Слишком длинное описание!'])
-                ->true(Flood::isFlood(), ['text' => 'Антифлуд! Разрешается отправлять сообщения раз в ' . Flood::getPeriod() . ' секунд!']);
-
-            if ($validator->isValid()) {
-                $validator
-                    ->lte(count($files), setting('maxfiles'), ['files' => 'Разрешено загружать не более ' . setting('maxfiles') . ' файлов']);
-
-                $rules = [
-                    'maxsize'    => setting('filesize'),
-                    'minweight' => 100,
-                ];
-
-                foreach ($files as $file) {
-                    $validator->file($file, $rules, ['files' => 'Не удалось загрузить фотографию!']);
-                }
-            }
+                ->true(Flood::isFlood(), ['text' => 'Антифлуд! Разрешается загружать фото раз в ' . Flood::getPeriod() . ' секунд!']);
 
             if ($validator->isValid()) {
 
@@ -101,9 +94,11 @@ class PhotoController extends BaseController
                     'closed'     => $closed,
                 ]);
 
-                foreach ($files as $file) {
-                    $photo->uploadFile($file);
-                }
+                File::query()
+                    ->where('relate_type', Photo::class)
+                    ->where('relate_id', 0)
+                    ->where('user_id', getUser('id'))
+                    ->update(['relate_id' => $photo->id]);
 
                 setFlash('success', 'Фотография успешно загружена!');
                 redirect('/photos/' . $photo->id);
@@ -113,13 +108,22 @@ class PhotoController extends BaseController
             }
         }
 
-        return view('photos/create');
+        $files = File::query()
+            ->where('relate_type', Photo::class)
+            ->where('relate_id', 0)
+            ->where('user_id', getUser('id'))
+            ->get();
+
+        return view('photos/create', compact('files'));
     }
 
     /**
      * Редактирование фото
+     *
+     * @param int $id
+     * @return string
      */
-    public function edit($id)
+    public function edit($id): string
     {
         $page = int(Request::input('page', 1));
 
@@ -168,8 +172,11 @@ class PhotoController extends BaseController
 
     /**
      * Список комментариев
+     *
+     * @param int $id
+     * @return string
      */
-    public function comments($id)
+    public function comments($id): string
     {
         $photo = Photo::query()->find($id);
 
@@ -241,8 +248,12 @@ class PhotoController extends BaseController
 
     /**
      * Редактирование комментария
+     *
+     * @param int $id
+     * @param int $cid
+     * @return string
      */
-    public function editComment($id, $cid)
+    public function editComment($id, $cid): string
     {
         $page = int(Request::input('page', 1));
         $photo = Photo::query()->find($id);
@@ -304,8 +315,10 @@ class PhotoController extends BaseController
 
     /**
      * Удаление фотографий
+     *
+     * @param int $id
      */
-    public function delete($id)
+    public function delete($id): void
     {
         $page = int(Request::input('page', 1));
 
@@ -342,8 +355,10 @@ class PhotoController extends BaseController
 
     /**
      * Переадресация на последнюю страницу
+     *
+     * @param int $id
      */
-    public function end($id)
+    public function end($id): void
     {
         $photo = Photo::query()->find($id);
 
@@ -362,8 +377,10 @@ class PhotoController extends BaseController
 
     /**
      * Альбомы пользователей
+     *
+     * @return string
      */
-    public function albums()
+    public function albums(): string
     {
         $total = Photo::query()
             ->distinct()
@@ -387,8 +404,11 @@ class PhotoController extends BaseController
 
     /**
      * Альбом пользователя
+     *
+     * @param string $login
+     * @return string
      */
-    public function album($login)
+    public function album($login): string
     {
         $user = User::query()->where('login', $login)->first();
 
@@ -408,15 +428,17 @@ class PhotoController extends BaseController
             ->with('user')
             ->get();
 
-        $moder = (getUser('id') == $user->id) ? 1 : 0;
+        $moder = (getUser('id') === $user->id) ? 1 : 0;
 
         return view('photos/user_albums', compact('photos', 'moder', 'page', 'user'));
     }
 
     /**
      * Альбом пользователя
+     *
+     * @return string
      */
-    public function top()
+    public function top(): string
     {
         $sort = check(Request::input('sort', 'rating'));
 
@@ -443,8 +465,10 @@ class PhotoController extends BaseController
 
     /**
      * Выводит все комментарии
+     *
+     * @return string
      */
-    public function allComments()
+    public function allComments(): string
     {
         $total = Comment::query()->where('relate_type', Photo::class)->count();
         $page = paginate(setting('postgallery'), $total);
@@ -464,8 +488,11 @@ class PhotoController extends BaseController
 
     /**
      * Выводит комментарии пользователя
+     *
+     * @param string $login
+     * @return string
      */
-    public function UserComments($login)
+    public function UserComments($login): string
     {
         $user = User::query()->where('login', $login)->first();
 
@@ -496,8 +523,11 @@ class PhotoController extends BaseController
 
     /**
      * Переход к сообщению
+     *
+     * @param int $id
+     * @param int $cid
      */
-    public function viewComment($id, $cid)
+    public function viewComment($id, $cid): void
     {
         $photo = Photo::query()->find($id);
 

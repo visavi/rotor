@@ -294,6 +294,7 @@ class AjaxController extends BaseController
         $types = [
             Blog::class,
             Item::class,
+            Photo::class,
         ];
 
         $image = Request::file('image');
@@ -364,6 +365,7 @@ class AjaxController extends BaseController
         $types = [
             Blog::class,
             Item::class,
+            Photo::class,
         ];
 
         $id    = int(Request::input('id'));
