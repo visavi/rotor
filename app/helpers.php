@@ -900,7 +900,7 @@ function access($level)
 {
     $access = array_flip(User::ALL_GROUPS);
 
-    return getUser() && isset($access[$level]) && isset($access[getUser('level')]) && $access[getUser('level')] <= $access[$level];
+    return getUser() && isset($access[$level], $access[getUser('level')]) && $access[getUser('level')] <= $access[$level];
 }
 
 /**

@@ -24,6 +24,12 @@
         </ol>
     </nav>
 
+    @if (! $down->active)
+        <div class="p-1 bg-warning text-dark">
+            <b>Внимание!</b> Данная загрузка ожидает проверки модератором!<br>
+        </div><br>
+    @endif
+
     @if (isAdmin('boss'))
         <i class="fa fa-pencil-alt"></i>
 

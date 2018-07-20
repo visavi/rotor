@@ -220,6 +220,18 @@ class DownController extends BaseController
                     $down->uploadFile($file);
                 }
 
+                if (! isAdmin(User::ADMIN)) {
+                    $admins = User::query()->whereIn('level', [User::BOSS, User::ADMIN])->get();
+
+                    if ($admins->isNotEmpty()) {
+                        $text = 'Уведомеление о публикации файла.' . PHP_EOL . 'Новый файл [b][url=/admin/downs/edit/' . $down->id . ']' . $down->title . '[/url][/b] требует подтверждения на публикацию!';
+
+                        foreach ($admins as $admin) {
+                            $admin->sendMessage($user, $text);
+                        }
+                    }
+                }
+
                 setFlash('success', 'Файл успешно загружен!');
                 redirect('/downs/' . $down->id);
             } else {
