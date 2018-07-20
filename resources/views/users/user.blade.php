@@ -35,7 +35,7 @@
         </div>
     @endif
 
-    @if (in_array($user->level, $adminGroups))
+    @if (in_array($user->level, $adminGroups, true))
         <div class="alert alert-info">Должность: <b>{{ $user->getLevel() }}</b></div>
     @endif
 
@@ -50,27 +50,31 @@
 
                 Логин: <b>{{ $user->login }}</b><br>
 
-                @if (!empty($user->name))
+                @if (! empty($user->name))
                     Имя: <b>{{ $user->name }}<br></b>
                 @endif
 
-                @if (!empty($user->country))
+                @if (! empty($user->country))
                     Страна: <b>{{ $user->country }}<br></b>
                 @endif
 
-                @if (!empty($user->city))
+                @if (! empty($user->city))
                     Откуда: {{ $user->city }}<br>
                 @endif
 
-                @if (!empty($user->birthday))
+                @if (! empty($user->birthday))
                     Дата рождения: {{ $user->birthday }}<br>
                 @endif
 
-                @if (!empty($user->icq))
+                @if (! empty($user->phone))
+                    Телефон: {{ $user->phone }}<br>
+                @endif
+
+                @if (! empty($user->icq))
                     ICQ: {{ $user->icq }}<br>
                 @endif
 
-                @if (!empty($user->skype))
+                @if (! empty($user->skype))
                     Skype: {{ $user->skype }}<br>
                 @endif
 
@@ -94,7 +98,7 @@
 
                 <a href="/ratings/{{ $user->login }}">Репутация: <b>{!! formatNum($user->rating) !!}</b> (+{{  $user->posrating }}/-{{  $user->negrating }})</a><br>
 
-                @if (getUser() && getUser('login') != $user->login)
+                @if (getUser() && getUser('login') !== $user->login)
                     <a href="/users/{{ $user->login }}/rating?vote=plus"><i class="fa fa-thumbs-up"></i><span style="color:#0099cc"> Плюс</span></a> /
                     <a href="/users/{{ $user->login }}/rating?vote=minus"><span style="color:#ff0000">Минус</span> <i class="fa fa-thumbs-down"></i></a><br>
                 @endif
@@ -139,7 +143,7 @@
     <div class="alert alert-info">
         <i class="fa fa-sticky-note"></i> <a href="/walls/{{ $user->login }}">Стена сообщений</a> ({{ $user->getCountWall() }})<br>
 
-        @if ($user->login != getUser('login'))
+        @if ($user->login !== getUser('login'))
             <i class="fa fa-address-book"></i> Добавить в
             <a href="/contacts?act=add&amp;user={{ $user->login }}&amp;token={{ $_SESSION['token'] }}">контакт</a> /
             <a href="/ignores?act=add&amp;user={{ $user->login }}&amp;token={{ $_SESSION['token'] }}">игнор</a><br>

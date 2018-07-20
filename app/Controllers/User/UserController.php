@@ -296,6 +296,7 @@ class UserController extends BaseController
             $name     = check(Request::input('name'));
             $country  = check(Request::input('country'));
             $city     = check(Request::input('city'));
+            $phone    = check(Request::input('phone'));
             $icq      = check(str_replace('-', '', Request::input('icq')));
             $skype    = check(strtolower(Request::input('skype')));
             $site     = check(Request::input('site'));
@@ -321,6 +322,7 @@ class UserController extends BaseController
                     'gender'   => $gender,
                     'country'  => $country,
                     'city'     => $city,
+                    'phone'    => $phone,
                     'icq'      => $icq,
                     'skype'    => $skype,
                     'site'     => $site,

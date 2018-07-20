@@ -42,6 +42,12 @@
                             {!! textError('city') !!}
                         </div>
 
+                        <div class="form-group{{ hasError('phone') }}">
+                            <label for="inputPhone">Телефон:</label>
+                            <input class="form-control" id="inputPhone" name="phone" maxlength="15" value="{{ getInput('phone', $user->phone) }}">
+                            {!! textError('phone') !!}
+                        </div>
+
                         <div class="form-group{{ hasError('icq') }}">
                             <label for="inputIcq">ICQ:</label>
                             <input class="form-control" id="inputIcq" name="icq" maxlength="10" value="{{ getInput('icq', $user->icq) }}">
