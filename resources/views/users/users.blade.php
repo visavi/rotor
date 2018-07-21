@@ -62,4 +62,5 @@
     @endif
 
     <i class="fa fa-users"></i> <a href="/who">Новички</a><br>
+    <i class="fas fa-search"></i> <a href="/searchusers">Поиск пользователей</a><br>
 @stop
