@@ -16,8 +16,11 @@ class UserController extends BaseController
 {
     /**
      * Анкета пользователя
+     *
+     * @param string $login
+     * @return string
      */
-    public function index($login)
+    public function index($login): string
     {
         if (! $user = getUserByLogin($login)) {
             abort(404, 'Пользователя с данным логином не существует!');
@@ -33,8 +36,11 @@ class UserController extends BaseController
 
     /**
      * Заметка
+     *
+     * @param string $login
+     * @return string
      */
-    public function note($login)
+    public function note($login): string
     {
         if (! isAdmin()) {
             abort(403, 'Данная страница доступна только администрации!');
@@ -76,7 +82,7 @@ class UserController extends BaseController
     /**
      * Регистрация
      */
-    public function register()
+    public function register(): string
     {
         if (getUser()) {
             abort('403', 'Вы уже регистрировались, запрещено создавать несколько аккаунтов!');
@@ -224,7 +230,7 @@ class UserController extends BaseController
     /**
      * Авторизация
      */
-    public function login()
+    public function login(): string
     {
         if (getUser()) {
             abort('403', 'Вы уже авторизованы!');
@@ -263,7 +269,7 @@ class UserController extends BaseController
     /**
      * Выход
      */
-    public function logout()
+    public function logout(): void
     {
         $token  = check(Request::input('token'));
         $domain = siteDomain(siteUrl());
@@ -283,7 +289,7 @@ class UserController extends BaseController
     /**
      * Редактирование профиля
      */
-    public function profile()
+    public function profile(): string
     {
         if (! $user = getUser()) {
             abort(403, 'Авторизуйтесь для изменения данных в профиле!');
@@ -296,8 +302,8 @@ class UserController extends BaseController
             $name     = check(Request::input('name'));
             $country  = check(Request::input('country'));
             $city     = check(Request::input('city'));
-            $phone    = check(Request::input('phone'));
-            $icq      = check(str_replace('-', '', Request::input('icq')));
+            $phone    = preg_replace('/\D/', '', Request::input('phone'));
+            $icq      = preg_replace('/\D/', '', Request::input('icq'));
             $skype    = check(strtolower(Request::input('skype')));
             $site     = check(Request::input('site'));
             $birthday = check(Request::input('birthday'));
@@ -307,7 +313,8 @@ class UserController extends BaseController
             $validator->equal($token, $_SESSION['token'], 'Неверный идентификатор сессии, повторите действие!')
                 ->regex($site, '#^https?://([а-яa-z0-9_\-\.])+(\.([а-яa-z0-9\/])+)+$#u', ['site' => 'Недопустимый адрес сайта, необходим формата http://my_site.domen!'], false)
                 ->regex($birthday, '#^[0-9]{2}+\.[0-9]{2}+\.[0-9]{4}$#', ['birthday' => 'Недопустимый формат даты рождения, необходим формат дд.мм.гггг!'], false)
-                ->regex($icq, '#^[0-9]{5,10}$#', ['icq' => 'Недопустимый формат ICQ, только цифры от 5 до 10 символов!'], false)
+                ->regex($phone, '#^\d{11}$#', ['phone' => 'Недопустимый формат телефона. Пример: 8-900-123-45-67!'], false)
+                ->regex($icq, '#^\d{5,10}$#', ['icq' => 'Недопустимый формат ICQ, только цифры от 5 до 10 символов!'], false)
                 ->regex($skype, '#^[a-z]{1}[0-9a-z\_\.\-]{5,31}$#', ['skype' => 'Недопустимый формат Skype, только латинские символы от 6 до 32!'], false)
                 ->length($info, 0, 1000, ['info' => 'Слишком большая информация о себе, не более 1000 символов!'])
                 ->length($name, 3, 20, ['name' => 'Слишком длинное или короткое имя!'], false);
@@ -345,7 +352,7 @@ class UserController extends BaseController
     /*
      * Подтверждение регистрации
      */
-    function key()
+    public function key(): string
     {
         if (! $user = getUser()) {
             abort(403, 'Для подтверждения регистрации  необходимо быть авторизованным!');
@@ -355,14 +362,14 @@ class UserController extends BaseController
             abort('default', 'Подтверждение регистрации выключено на сайте!');
         }
 
-        if ($user->level != User::PENDED) {
+        if ($user->level !== User::PENDED) {
             abort(403, 'Вашему профилю не требуется подтверждение регистрации!');
         }
 
         if (Request::has('code')) {
             $code = check(trim(Request::input('code')));
 
-            if ($code == $user->confirmregkey) {
+            if ($code === $user->confirmregkey) {
 
                 $user->update([
                     'confirmregkey' => null,
@@ -383,14 +390,14 @@ class UserController extends BaseController
     /*
      * Настройки
      */
-    function setting()
+    public function setting(): string
     {
         if (! $user = getUser()) {
             abort(403, 'Для изменения настроек необходимо авторизоваться!');
         }
 
-        $setting['themes']    = array_map('basename', glob(HOME."/themes/*", GLOB_ONLYDIR));
-        $setting['languages'] = array_map('basename', glob(RESOURCES."/lang/*", GLOB_ONLYDIR));
+        $setting['themes']    = array_map('basename', glob(HOME . '/themes/*', GLOB_ONLYDIR));
+        $setting['languages'] = array_map('basename', glob(RESOURCES . '/lang/*', GLOB_ONLYDIR));
         $setting['timezones'] = range(-12, 12);
 
         if (Request::isMethod('post')) {
@@ -399,8 +406,8 @@ class UserController extends BaseController
             $themes    = check(Request::input('themes'));
             $timezone  = check(Request::input('timezone', 0));
             $language  = check(Request::input('language'));
-            $notify    = Request::input('notify') == 1 ? 1 : 0;
-            $subscribe = Request::input('subscribe') == 1 ? str_random(32) : null;
+            $notify    = Request::input('notify') === 1 ? 1 : 0;
+            $subscribe = Request::input('subscribe') === 1 ? str_random(32) : null;
 
             $validator = new Validator();
             $validator->equal($token, $_SESSION['token'], 'Неверный идентификатор сессии, повторите действие!')
@@ -434,7 +441,7 @@ class UserController extends BaseController
     /**
      * Данные пользователя
      */
-    public function account()
+    public function account(): string
     {
         if (! $user = getUser()) {
             abort(403, 'Для изменения данных необходимо авторизоваться!');
@@ -446,7 +453,7 @@ class UserController extends BaseController
     /**
      * Инициализация изменения email
      */
-    public function changeMail()
+    public function changeMail(): void
     {
         if (! $user = getUser()) {
             abort(403, 'Для изменения данных необходимо авторизоваться!');
@@ -503,7 +510,7 @@ class UserController extends BaseController
     /**
      * Изменение email
      */
-    public function editMail()
+    public function editMail(): void
     {
         if (! $user = getUser()) {
             abort(403, 'Для изменения данных необходимо авторизоваться!');
@@ -548,7 +555,7 @@ class UserController extends BaseController
     /**
      * Изменение статуса
      */
-    public function editStatus()
+    public function editStatus(): void
     {
         if (! $user = getUser()) {
             abort(403, 'Для изменения данных необходимо авторизоваться!');
@@ -591,7 +598,7 @@ class UserController extends BaseController
     /**
      * Изменение пароля
      */
-    public function editPassword()
+    public function editPassword(): void
     {
         if (! $user = getUser()) {
             abort(403, 'Для изменения данных необходимо авторизоваться!');
@@ -639,7 +646,7 @@ class UserController extends BaseController
     /**
      * Генерация ключа
      */
-    public function apikey()
+    public function apikey(): void
     {
         if (! $user = getUser()) {
             abort(403, 'Для изменения данных необходимо авторизоваться!');
@@ -664,7 +671,7 @@ class UserController extends BaseController
     /**
      * Пользователи онлайн
      */
-    public function who()
+    public function who(): string
     {
         $online = Online::query()
             ->whereNotNull('user_id')

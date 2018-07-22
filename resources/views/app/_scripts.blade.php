@@ -11,5 +11,6 @@
     <script src="/assets/js/toastr.min.js"></script>
     <script src="/assets/js/mediaelement/mediaelement-and-player.min.js"></script>
     <script src="/assets/js/colorbox/jquery.colorbox-min.js"></script>
+    <script src="/assets/js/jquery.mask.min.js"></script>
     <script src="/assets/js/app.js"></script>
 @endif

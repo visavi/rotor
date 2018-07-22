@@ -44,7 +44,7 @@
 
                         <div class="form-group{{ hasError('phone') }}">
                             <label for="inputPhone">Телефон:</label>
-                            <input class="form-control" id="inputPhone" name="phone" maxlength="15" value="{{ getInput('phone', $user->phone) }}">
+                            <input class="phone form-control" id="inputPhone" name="phone" placeholder="8 ___ ___-__-__" maxlength="15" value="{{ getInput('phone', $user->phone) }}">
                             {!! textError('phone') !!}
                         </div>
 

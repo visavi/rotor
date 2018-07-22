@@ -62,7 +62,9 @@ $(function() {
 
     $('.carousel').carousel({
         interval: false
-    })
+    });
+
+    $('.phone').mask('0 000 000-00-00');
 });
 
 /* Вывод уведомлений */
