@@ -4,11 +4,11 @@ namespace App\Classes;
 
 class Registry
 {
-    static private $_instance = null;
+    static private $_instance;
 
     private $registry = [];
 
-    static public function getInstance()
+    public static function getInstance(): ?Registry
     {
         if (is_null(self::$_instance)) {
             self::$_instance = new self;
@@ -17,17 +17,17 @@ class Registry
         return self::$_instance;
     }
 
-    static public function set($key, $object)
+    public static function set($key, $object): void
     {
         self::getInstance()->registry[$key] = $object;
     }
 
-    static public function get($key)
+    public static function get($key)
     {
         return self::getInstance()->registry[$key];
     }
 
-    static public function has($name)
+    public static function has($name): bool
     {
         if (! isset(self::getInstance()->registry[$name])) {
             return false;
@@ -36,7 +36,7 @@ class Registry
         return true;
     }
 
-    static public function remove($name)
+    public static function remove($name): void
     {
         if (self::has($name)) {
             unset(self::getInstance()->registry[$name]);
