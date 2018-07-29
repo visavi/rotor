@@ -25,6 +25,6 @@
         {!! progressBar($maxproc, $proc.'%') !!}
     @endforeach
 
-    Вариантов: <b>{{ count($vote->voted) }}</b><br>
+    Вариантов: <b>{{ count($info['voted']) }}</b><br>
     Проголосовало: <b>{{ $vote->count }}</b><br><br>
 @stop

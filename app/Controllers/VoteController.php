@@ -12,8 +12,10 @@ class VoteController extends BaseController
 {
     /**
      * Главная страница
+     *
+     * @return string
      */
-    public function index()
+    public function index(): string
     {
         $total = Vote::query()->where('closed', 0)->count();
         $page = paginate(setting('allvotes'), $total);
@@ -31,8 +33,11 @@ class VoteController extends BaseController
 
     /**
      * Просмотр голосования
+     *
+     * @param int $id
+     * @return string
      */
-    public function view($id)
+    public function view($id): string
     {
         $show = Request::input('show');
 
@@ -108,8 +113,11 @@ class VoteController extends BaseController
 
     /**
      * Проголосовавшие
+     *
+     * @param int $id
+     * @return string
      */
-    public function voters($id)
+    public function voters($id): string
     {
         $vote = Vote::query()->find($id);
 
@@ -129,8 +137,10 @@ class VoteController extends BaseController
 
     /**
      * История голосований
+     *
+     * @return string
      */
-    public function history()
+    public function history(): string
     {
         $total = Vote::query()->where('closed', 1)->count();
         $page = paginate(setting('allvotes'), $total);
@@ -148,8 +158,11 @@ class VoteController extends BaseController
 
     /**
      * Результаты истории голосований
+     *
+     * @param int $id
+     * @return string
      */
-    public function viewHistory($id)
+    public function viewHistory($id): string
     {
         $vote = Vote::query()->find($id);
 
@@ -184,8 +197,10 @@ class VoteController extends BaseController
 
     /**
      * Создание голосования
+     *
+     * @return string
      */
-    public function create()
+    public function create(): string
     {
         if (Request::isMethod('post')) {
 

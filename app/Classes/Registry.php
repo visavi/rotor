@@ -10,7 +10,7 @@ class Registry
 
     public static function getInstance(): ?Registry
     {
-        if (is_null(self::$_instance)) {
+        if (self::$_instance === null) {
             self::$_instance = new self;
         }
 
