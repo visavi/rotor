@@ -316,7 +316,7 @@ class DownController extends BaseController
             abort(404, 'Данного файла не существует!');
         }
 
-        if (! isAdmin(User::ADMIN) && ! $file->relate->active) {
+        if (! $file->relate->active && ! isAdmin(User::ADMIN)) {
             abort('default', 'Данный файл еще не проверен модератором!');
         }
 
@@ -512,7 +512,7 @@ class DownController extends BaseController
             abort(404, 'Данного файла не существует!');
         }
 
-        if (! isAdmin(User::ADMIN) && ! $file->relate->active) {
+        if (! $file->relate->active && ! isAdmin(User::ADMIN)) {
             abort('default', 'Данный файл еще не проверен модератором!');
         }
 
@@ -548,7 +548,7 @@ class DownController extends BaseController
             abort(404, 'Данного файла не существует!');
         }
 
-        if (! isAdmin(User::ADMIN) && ! $file->relate->active) {
+        if (! $file->relate->active && ! isAdmin(User::ADMIN)) {
             abort('default', 'Данный файл еще не проверен модератором!');
         }
 
@@ -576,7 +576,7 @@ class DownController extends BaseController
             abort('default', 'Не удалось прочитать файл!');
         }
 
-        if (preg_match("/\.(gif|png|bmp|jpg|jpeg)$/", $document->getName()) && $document->getSize() > 0) {
+        if ($document->getSize() > 0 && preg_match("/\.(gif|png|bmp|jpg|jpeg)$/", $document->getName())) {
 
             $ext = getExtension($document->getName());
 
