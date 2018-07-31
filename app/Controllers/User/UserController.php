@@ -100,7 +100,7 @@ class UserController extends BaseController
                 $invite      = setting('invite') ? check(Request::input('invite')) : '';
                 $email       = strtolower(check(Request::input('email')));
                 $domain      = utfSubstr(strrchr($email, '@'), 1);
-                $gender      = Request::input('gender') == 'male' ? 'male' : 'female';
+                $gender      = Request::input('gender') === 'male' ? 'male' : 'female';
                 $activateKey = null;
                 $level       = User::USER;
 

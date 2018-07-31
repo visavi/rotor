@@ -7,14 +7,18 @@ use App\Classes\Validator;
 use App\Models\Board;
 use App\Models\Item;
 use App\Models\User;
+use Exception;
 use Illuminate\Database\Capsule\Manager as DB;
 
 class BoardController extends AdminController
 {
     /**
      * Главная страница
+     *
+     * @param int $id
+     * @return string
      */
-    public function index($id = null)
+    public function index($id = null): string
     {
         $board = null;
 
@@ -55,8 +59,10 @@ class BoardController extends AdminController
 
     /**
      * Категории объявлений
+     *
+     * @return string
      */
-    public function categories()
+    public function categories(): string
     {
         if (! isAdmin(User::BOSS)) {
             abort(403, 'Доступ запрещен!');
@@ -73,8 +79,10 @@ class BoardController extends AdminController
 
     /**
      * Создание раздела
+     *
+     * @return void
      */
-    public function create()
+    public function create(): void
     {
         if (! isAdmin(User::BOSS)) {
             abort(403, 'Доступ запрещен!');
@@ -108,8 +116,11 @@ class BoardController extends AdminController
 
     /**
      * Редактирование раздела
+     *
+     * @param int $id
+     * @return string
      */
-    public function edit($id)
+    public function edit($id): string
     {
         if (! isAdmin(User::BOSS)) {
             abort(403, 'Доступ запрещен!');
@@ -164,8 +175,11 @@ class BoardController extends AdminController
 
     /**
      * Удаление раздела
+     *
+     * @param int $id
+     * @throws Exception
      */
-    public function delete($id)
+    public function delete($id): void
     {
         if (! isAdmin(User::BOSS)) {
             abort(403, 'Доступ запрещен!');
@@ -202,8 +216,11 @@ class BoardController extends AdminController
 
     /**
      * Редактирование объявления
+     *
+     * @param int $id
+     * @return string
      */
-    public function editItem($id)
+    public function editItem($id): string
     {
         $item = Item::query()->find($id);
 
@@ -217,6 +234,7 @@ class BoardController extends AdminController
             $title = check(Request::input('title'));
             $text  = check(Request::input('text'));
             $price = check(Request::input('price'));
+            $phone = preg_replace('/\D/', '', Request::input('phone'));
 
             $board = Board::query()->find($bid);
 
@@ -225,6 +243,7 @@ class BoardController extends AdminController
                 ->equal($token, $_SESSION['token'], 'Неверный идентификатор сессии, повторите действие!')
                 ->length($title, 5, 50, ['title' => 'Слишком длинное или короткое название!'])
                 ->length($text, 50, 5000, ['text' => 'Слишком длинный или короткий текст описания!'])
+                ->regex($phone, '#^\d{11}$#', ['phone' => 'Недопустимый формат телефона. Пример: 8-900-123-45-67!'], false)
                 ->notEmpty($board, ['bid' => 'Категории для данного объявления не существует!']);
 
             if ($board) {
@@ -244,6 +263,7 @@ class BoardController extends AdminController
                     'title'    => $title,
                     'text'     => $text,
                     'price'    => $price,
+                    'phone'    => $phone,
                 ]);
 
                 setFlash('success', 'Объявление успешно отредактировано!');
@@ -265,6 +285,9 @@ class BoardController extends AdminController
 
     /**
      * Удаление объявления
+     *
+     * @param int $id
+     * @throws Exception
      */
     public function deleteItem($id): void
     {
@@ -295,6 +318,8 @@ class BoardController extends AdminController
 
     /**
      * Пересчет голосов
+     *
+     * @return void
      */
     public function restatement(): void
     {

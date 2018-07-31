@@ -751,8 +751,8 @@ function statsBoard()
 {
     if (@filemtime(STORAGE . '/temp/statboard.dat') < time() - 900) {
 
-        $stat      = Item::query()->count();
-        $totalnew  = Item::query()->where('created_at', '>', strtotime('-3 day', SITETIME))->count();
+        $stat      = Item::query()->where('expires_at', '>', SITETIME)->count();
+        $totalnew  = Item::query()->where('updated_at', '>', strtotime('-3 day', SITETIME))->count();
 
         if ($totalnew) {
             $stat = $stat . '/+' . $totalnew;

@@ -73,6 +73,12 @@
                 {!! textError('price') !!}
             </div>
 
+            <div class="form-group{{ hasError('phone') }}">
+                <label for="inputPhone">Телефон:</label>
+                <input class="phone form-control" id="inputPhone" name="phone" placeholder="8 ___ ___-__-__" maxlength="15" value="{{ getInput('phone', $item->phone) }}">
+                {!! textError('phone') !!}
+            </div>
+
             <div class="js-images">
                 @if ($item->files->isNotEmpty())
                     @foreach ($item->files as $file)

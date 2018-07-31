@@ -56,6 +56,12 @@
             {!! textError('price') !!}
         </div>
 
+        <div class="form-group{{ hasError('phone') }}">
+            <label for="inputPhone">Телефон:</label>
+            <input class="phone form-control" id="inputPhone" name="phone" placeholder="8 ___ ___-__-__" maxlength="15" value="{{ getInput('phone', getUser('phone')) }}">
+            {!! textError('phone') !!}
+        </div>
+
         @include('app._upload', ['files' => $files, 'type' => App\Models\Item::class])
 
         <button class="btn btn-primary">Загрузить</button>

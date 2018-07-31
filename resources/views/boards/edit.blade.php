@@ -79,6 +79,12 @@
                 {!! textError('price') !!}
             </div>
 
+            <div class="form-group{{ hasError('phone') }}">
+                <label for="inputPhone">Телефон:</label>
+                <input class="phone form-control" id="inputPhone" name="phone" placeholder="8 ___ ___-__-__" maxlength="15" value="{{ getInput('phone', $item->phone) }}">
+                {!! textError('phone') !!}
+            </div>
+
             @include('app._upload', ['id' => $item->id, 'files' => $item->files, 'type' => App\Models\Item::class])
 
             <button class="btn btn-primary">Изменить</button>

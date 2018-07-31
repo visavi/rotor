@@ -85,6 +85,11 @@
                         <div class="col-md-10">
                             <div class="message">{!! bbCode($item->text) !!}</div>
                             <p>
+
+                                @if ($item->phone)
+                                    <span class="badge badge-pill badge-primary">Телефон: {{ $item->phone }}</span><br>
+                                @endif
+
                                 <i class="fa fa-user-circle"></i> {!! $item->user->getProfile() !!} / {{ dateFixed($item->updated_at) }}<br>
 
                                 @if ($item->expires_at > SITETIME)

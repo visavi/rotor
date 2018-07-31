@@ -8,13 +8,17 @@ use App\Models\Board;
 use App\Models\File;
 use App\Models\Flood;
 use App\Models\Item;
+use Exception;
 
 class BoardController extends BaseController
 {
     /**
      * Главная страница
+     *
+     * @param int $id
+     * @return string
      */
-    public function index($id = null)
+    public function index($id = null): string
     {
         $board = null;
 
@@ -55,8 +59,11 @@ class BoardController extends BaseController
 
     /**
      * Просмотр объявления
+     *
+     * @param int $id
+     * @return string
      */
-    public function view($id)
+    public function view($id): string
     {
         $item = Item::query()
             ->with('category')
@@ -75,8 +82,10 @@ class BoardController extends BaseController
 
     /**
      * Создание объявления
+     *
+     * @return string
      */
-    public function create()
+    public function create(): string
     {
         $bid = int(Request::input('bid'));
 
@@ -100,6 +109,7 @@ class BoardController extends BaseController
             $title = check(Request::input('title'));
             $text  = check(Request::input('text'));
             $price = int(Request::input('price'));
+            $phone = preg_replace('/\D/', '', Request::input('phone'));
 
             $board = Board::query()->find($bid);
 
@@ -108,6 +118,7 @@ class BoardController extends BaseController
                 ->equal($token, $_SESSION['token'], 'Неверный идентификатор сессии, повторите действие!')
                 ->length($title, 5, 50, ['title' => 'Слишком длинное или короткое название!'])
                 ->length($text, 50, 5000, ['text' => 'Слишком длинный или короткий текст описания!'])
+                ->regex($phone, '#^\d{11}$#', ['phone' => 'Недопустимый формат телефона. Пример: 8-900-123-45-67!'], false)
                 ->true(Flood::isFlood(), ['text' => 'Антифлуд! Разрешается добавлять объявления раз в ' . Flood::getPeriod() . ' секунд!'])
                 ->notEmpty($board, ['category' => 'Категории для данного объявления не существует!']);
 
@@ -123,6 +134,7 @@ class BoardController extends BaseController
                     'text'       => $text,
                     'user_id'    => $user->id,
                     'price'      => $price,
+                    'phone'      => $phone,
                     'created_at' => SITETIME,
                     'updated_at' => SITETIME,
                     'expires_at' => strtotime('+1 month', SITETIME),
@@ -155,8 +167,11 @@ class BoardController extends BaseController
 
     /**
      * Редактирование объявления
+     *
+     * @param int $id
+     * @return string
      */
-    public function edit($id)
+    public function edit($id): string
     {
         if (! getUser()) {
             abort(403, 'Для редактирования объявления необходимо авторизоваться');
@@ -174,6 +189,7 @@ class BoardController extends BaseController
             $title = check(Request::input('title'));
             $text  = check(Request::input('text'));
             $price = check(Request::input('price'));
+            $phone = preg_replace('/\D/', '', Request::input('phone'));
 
             $board = Board::query()->find($bid);
 
@@ -182,6 +198,7 @@ class BoardController extends BaseController
                 ->equal($token, $_SESSION['token'], 'Неверный идентификатор сессии, повторите действие!')
                 ->length($title, 5, 50, ['title' => 'Слишком длинное или короткое название!'])
                 ->length($text, 50, 5000, ['text' => 'Слишком длинный или короткий текст описания!'])
+                ->regex($phone, '#^\d{11}$#', ['phone' => 'Недопустимый формат телефона. Пример: 8-900-123-45-67!'], false)
                 ->notEmpty($board, ['category' => 'Категории для данного объявления не существует!'])
                 ->equal($item->user_id, getUser('id'), 'Изменение невозможно, вы не автор данного объявления!');
 
@@ -202,6 +219,7 @@ class BoardController extends BaseController
                     'title'    => $title,
                     'text'     => $text,
                     'price'    => $price,
+                    'phone'    => $phone,
                 ]);
 
                 setFlash('success', 'Объявление успешно отредактировано!');
@@ -223,8 +241,10 @@ class BoardController extends BaseController
 
     /**
      * Снятие / Публикация объявления
+     *
+     * @param int $id
      */
-    public function close($id)
+    public function close($id): void
     {
         $token = check(Request::input('token'));
 
@@ -273,6 +293,9 @@ class BoardController extends BaseController
 
     /**
      * Удаление объявления
+     *
+     * @param int $id
+     * @throws Exception
      */
     public function delete($id): void
     {
@@ -308,8 +331,10 @@ class BoardController extends BaseController
 
     /**
      * Мои объявления
+     *
+     * @return string
      */
-    public function active()
+    public function active(): string
     {
         if (! getUser()) {
             abort(403, 'Для просмотра своих объявлений необходимо авторизоваться');
