@@ -7,7 +7,7 @@
 @section('content')
 
     <div class="float-right">
-        <a class="btn btn-success" href="/admin/notices/create">Добавить шаблон</a>
+        <a class="btn btn-success" href="/admin/notices/create">Добавить</a>
     </div><br>
 
     <h1>Шаблоны писем</h1>

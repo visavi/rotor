@@ -8,7 +8,7 @@
 
     @if (getUser() && ! $category->closed)
         <div class="float-right">
-            <a class="btn btn-success" href="/blogs/create?cid={{ $category->id }}">Добавить статью</a>
+            <a class="btn btn-success" href="/blogs/create?cid={{ $category->id }}">Добавить</a>
         </div><br>
     @endif
 

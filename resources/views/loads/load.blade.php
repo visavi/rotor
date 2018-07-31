@@ -8,7 +8,7 @@
 
     @if (getUser() && ! $category->closed)
         <div class="float-right">
-            <a class="btn btn-success" href="/downs/create?cid={{ $category->id }}">Добавить файл</a>
+            <a class="btn btn-success" href="/downs/create?cid={{ $category->id }}">Добавить</a>
         </div><br>
     @endif
 

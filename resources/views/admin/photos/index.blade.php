@@ -8,7 +8,7 @@
 
     @if (getUser())
         <div class="float-right">
-            <a class="btn btn-success" href="/photos/create">Добавить фото</a><br>
+            <a class="btn btn-success" href="/photos/create">Добавить</a><br>
         </div><br>
     @endif
 

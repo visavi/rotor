@@ -7,7 +7,7 @@
 @section('content')
 
     <div class="float-right">
-        <a class="btn btn-success" href="/admin/news/create">Добавить новость</a>
+        <a class="btn btn-success" href="/admin/news/create">Добавить</a>
     </div><br>
 
     <h1>Новости</h1>

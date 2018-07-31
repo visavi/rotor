@@ -8,7 +8,7 @@
 
     @if (getUser())
         <div class="float-right">
-            <a class="btn btn-success" href="/downs/create">Добавить файл</a>
+            <a class="btn btn-success" href="/downs/create">Добавить</a>
         </div><br>
     @endif
 
