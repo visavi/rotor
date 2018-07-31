@@ -22,6 +22,7 @@ mix.scripts([
     'public/assets/js/markitup/markitup.set.js',
     'public/assets/js/mediaelement/mediaelement-and-player.min.js',
     'public/assets/js/colorbox/jquery.colorbox-min.js',
+    'public/assets/js/jquery.mask.min.js',
     'public/assets/js/app.js',
 ], 'public/assets/js/compiled.js');
 
