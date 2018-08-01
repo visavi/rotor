@@ -13,10 +13,10 @@ class CreateCounters31Table extends AbstractMigration
         if (! $this->hasTable('counters31')) {
             $table = $this->table('counters31', ['collation' => env('DB_COLLATION')]);
             $table
-                ->addColumn('days', 'integer')
+                ->addColumn('period', 'datetime')
                 ->addColumn('hosts', 'integer')
                 ->addColumn('hits', 'integer')
-                ->addIndex('days', ['unique' => true])
+                ->addIndex('period', ['unique' => true])
                 ->create();
         }
     }

@@ -23,6 +23,7 @@ class CreateUsersTable extends AbstractMigration
                 ->addColumn('language', 'string', ['limit' => 2, 'null' => true])
                 ->addColumn('info', 'text', ['null' => true])
                 ->addColumn('site', 'string', ['limit' => 50, 'null' => true])
+                ->addColumn('phone', 'string', ['limit' => 15, 'null' => true])
                 ->addColumn('icq', 'string', ['limit' => 10, 'null' => true])
                 ->addColumn('skype', 'string', ['limit' => 32, 'null' => true])
                 ->addColumn('gender', 'enum', ['values' => ['male','female']])

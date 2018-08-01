@@ -13,8 +13,7 @@ class CreateCountersTable extends AbstractMigration
         if (! $this->hasTable('counters')) {
             $table = $this->table('counters', ['collation' => env('DB_COLLATION')]);
             $table
-                ->addColumn('hours', 'integer')
-                ->addColumn('days', 'integer')
+                ->addColumn('period', 'datetime')
                 ->addColumn('allhosts', 'integer')
                 ->addColumn('allhits', 'integer')
                 ->addColumn('dayhosts', 'integer')
