@@ -9,6 +9,6 @@ class CountersSeeder extends AbstractSeed
      */
     public function run()
     {
-        $this->execute("REPLACE INTO `counters` (`id`, `hours`, `days`, `allhosts`, `allhits`, `dayhosts`, `dayhits`, `hosts24`, `hits24`) VALUES (1, '0', '0', '0', '0', '0', '0', '0', '0');");
+        $this->execute("REPLACE INTO `counters` (`id`, `period`, `allhosts`, `allhits`, `dayhosts`, `dayhits`, `hosts24`, `hits24`) VALUES (1, '" . date('Y-m-d H:00:00') . "', '0', '0', '0', '0', '0', '0');");
     }
 }
