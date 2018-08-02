@@ -32,7 +32,7 @@
     @if (! $down->active)
         <div class="p-1 bg-warning text-dark">
             <b>Внимание!</b> Данная загрузка ожидает проверки модератором!<br>
-            @if ($down->user_id == getUser('id'))
+            @if ($down->user_id === getUser('id'))
                 <i class="fa fa-pencil-alt"></i> <a href="/downs/edit/{{ $down->id }}">Перейти к редактированию</a>
             @endif
         </div><br>
@@ -95,11 +95,11 @@
         Добавлено: {!! $down->user->getProfile() !!} ({{ dateFixed($down->created_at) }})<br><br>
     </div>
 
-    @if (getUser() && getUser('id') != $down->user_id)
+    @if (getUser() && getUser('id') !== $down->user_id)
         <form class="form-inline" action="/downs/votes/{{ $down->id }}" method="post">
             <input type="hidden" name="token" value="{{ $_SESSION['token'] }}">
 
-            <div class="form-group{{ hasError('score') }}">
+            <div class="form-group mb-2{{ hasError('score') }}">
                 <select class="form-control" id="score" name="score">
                     <option value="5" {{ $down->vote == 5 ? ' selected' : '' }}>Отлично</option>
                     <option value="4" {{ $down->vote == 4 ? ' selected' : '' }}>Хорошо</option>
@@ -109,7 +109,7 @@
                 </select>
                 {!! textError('protect') !!}
             </div>
-            <button class="btn btn-primary">Оценить</button>
+            <button class="btn btn-primary mb-2">Оценить</button>
         </form>
     @endif
 @stop
