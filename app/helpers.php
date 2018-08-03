@@ -311,7 +311,11 @@ function makeCalendar($month, $year)
                 $row[] = '';
             }
         }
-        if (! $notEmpty) break;
+
+        if (! $notEmpty) {
+            break;
+        }
+
         $cal[] = $row;
     }
     return $cal;
@@ -1025,6 +1029,8 @@ function getAdvertUser()
             return view('advert/_user', compact('result'));
         }
     }
+
+    return false;
 }
 
 /**
@@ -1300,12 +1306,25 @@ function formatNum($num)
  */
 function formatShortNum($num)
 {
-    if (! is_numeric($num)) return false;
+    if (! is_numeric($num)) {
+        return false;
+    }
 
-    if ($num > 1000000000000) return round($num / 1000000000000, 1) . 'T';
-    elseif ($num > 1000000000) return round($num / 1000000000, 1) . 'B';
-    elseif ($num > 1000000) return round($num / 1000000, 1) . 'M';
-    elseif ($num > 1000) return round($num / 1000, 1) . 'K';
+    if ($num > 1000000000000) {
+        return round($num / 1000000000000, 1) . 'T';
+    }
+
+    if ($num > 1000000000) {
+        return round($num / 1000000000, 1) . 'B';
+    }
+
+    if ($num > 1000000) {
+        return round($num / 1000000, 1) . 'M';
+    }
+
+    if ($num > 1000) {
+        return round($num / 1000, 1) . 'K';
+    }
 
     return $num;
 }
@@ -1573,7 +1592,7 @@ function abort($code, $message = null)
         header($_SERVER['SERVER_PROTOCOL'] . ' 404 Not Found');
     }
 
-    if (setting('errorlog') && in_array($code, [403, 404])) {
+    if (setting('errorlog') && in_array($code, [403, 404], true)) {
 
         Error::query()->create([
             'code'       => $code,
@@ -1785,9 +1804,18 @@ function plural($num, $forms)
         return $num . ' ' . $forms[0];
     }
 
-    if ($num % 100 > 10 &&  $num % 100 < 15) return $num . ' ' . $forms[2];
-    if ($num % 10 === 1) return $num . ' ' . $forms[0];
-    if ($num % 10 > 1 && $num %10 < 5) return $num . ' ' . $forms[1];
+    if ($num % 100 > 10 &&  $num % 100 < 15) {
+        return $num . ' ' . $forms[2];
+    }
+
+    if ($num % 10 === 1) {
+        return $num . ' ' . $forms[0];
+    }
+
+    if ($num % 10 > 1 && $num % 10 < 5) {
+        return $num . ' ' . $forms[1];
+    }
+
     return $num . ' ' . $forms[2];
 }
 
