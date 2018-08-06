@@ -137,8 +137,9 @@ class Down extends BaseModel
 
     /**
      * @param UploadedFile $file
+     * @param int          $path
      */
-    public function convertVideo(UploadedFile  $file, $path)
+    public function convertVideo(UploadedFile  $file, $path): void
     {
         $isVideo = strpos($file->getClientMimeType(), 'video/') !== false;
 
@@ -192,7 +193,7 @@ class Down extends BaseModel
      * @return bool|null
      * @throws \Exception
      */
-    public function delete()
+    public function delete(): ?bool
     {
         $this->files->each(function($file) {
 

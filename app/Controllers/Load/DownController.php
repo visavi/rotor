@@ -22,8 +22,11 @@ class DownController extends BaseController
 {
     /**
      * Просмотр загрузки
+     *
+     * @param int $id
+     * @return string
      */
-    public function index($id)
+    public function index($id): string
     {
         $down = Down::query()
             ->select('downs.*', 'pollings.vote')
@@ -51,8 +54,11 @@ class DownController extends BaseController
 
     /**
      * Редактирование загрузки
+     *
+     * @param int $id
+     * @return string
      */
-    public function edit($id)
+    public function edit($id): string
     {
         $down = Down::query()->where('user_id', getUser('id'))->find($id);
 
@@ -119,8 +125,12 @@ class DownController extends BaseController
 
     /**
      * Удаление файла
+     *
+     * @param int $id
+     * @param int $fid
+     * @throws Exception
      */
-    public function deleteFile($id, $fid)
+    public function deleteFile($id, $fid): void
     {
         $down = Down::query()->where('user_id', getUser('id'))->find($id);
 
@@ -144,8 +154,10 @@ class DownController extends BaseController
 
     /**
      * Создание загрузки
+     *
+     * @return string
      */
-    public function create()
+    public function create(): string
     {
         $cid = int(Request::input('cid'));
 
@@ -169,10 +181,10 @@ class DownController extends BaseController
 
         if (Request::isMethod('post')) {
 
-            $token    = check(Request::input('token'));
-            $title    = check(Request::input('title'));
-            $text     = check(Request::input('text'));
-            $files    = (array) Request::file('files');
+            $token = check(Request::input('token'));
+            $title = check(Request::input('title'));
+            $text  = check(Request::input('text'));
+            $files = (array) Request::file('files');
 
             $category = Load::query()->find($cid);
 
@@ -245,8 +257,10 @@ class DownController extends BaseController
 
     /**
      * Голосование
+     *
+     * @param $id
      */
-    public function vote($id)
+    public function vote($id): void
     {
         $token = check(Request::input('token'));
         $score = int(Request::input('score'));
@@ -307,8 +321,10 @@ class DownController extends BaseController
 
     /**
      * Скачивание файла
+     *
+     * @param $id
      */
-    public function download($id)
+    public function download($id): void
     {
         $file = File::query()->where('relate_type', Down::class)->find($id);
 
@@ -352,8 +368,11 @@ class DownController extends BaseController
 
     /**
      * Комментарии
+     *
+     * @param $id
+     * @return string
      */
-    public function comments($id)
+    public function comments($id): string
     {
         $down = Down::query()->find($id);
 
@@ -424,8 +443,12 @@ class DownController extends BaseController
 
     /**
      * Подготовка к редактированию комментария
+     *
+     * @param int $id
+     * @param int $cid
+     * @return string
      */
-    public function editComment($id, $cid)
+    public function editComment($id, $cid): string
     {
         $down = Down::query()->find($id);
 
@@ -483,8 +506,10 @@ class DownController extends BaseController
 
     /**
      * Переадресация на последнюю страницу
+     *
+     * @param int $id
      */
-    public function end($id)
+    public function end($id): void
     {
         $down = Down::query()->find($id);
 
@@ -503,8 +528,11 @@ class DownController extends BaseController
 
     /**
      * Просмотр zip архива
+     *
+     * @param int $id
+     * @return string
      */
-    public function zip($id)
+    public function zip($id): string
     {
         $file = File::query()->where('relate_type', Down::class)->find($id);
 
@@ -597,8 +625,11 @@ class DownController extends BaseController
 
     /**
      * RSS комментариев
+     *
+     * @param int $id
+     * @return string
      */
-    public function rss($id)
+    public function rss($id): string
     {
         $down = Down::query()->where('id', $id)->with('lastComments')->first();
 
@@ -611,8 +642,11 @@ class DownController extends BaseController
 
     /**
      * Переход к сообщению
+     *
+     * @param int $id
+     * @param int $cid
      */
-    public function viewComment($id, $cid)
+    public function viewComment($id, $cid): void
     {
         $down = Down::query()->find($id);
 
