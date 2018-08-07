@@ -17,8 +17,10 @@ class ForumController extends BaseController
 {
     /**
      * Главная страница
+     *
+     * @return string
      */
-    public function index()
+    public function index(): string
     {
         $forums = Forum::query()
             ->where('parent_id', 0)
@@ -36,8 +38,11 @@ class ForumController extends BaseController
 
     /**
      * Страница списка тем
+     *
+     * @param int $id
+     * @return string
      */
-    public function forum($id)
+    public function forum($id): string
     {
         $forum = Forum::query()->with('parent', 'children.lastTopic.lastPost.user')->find($id);
 
@@ -63,8 +68,10 @@ class ForumController extends BaseController
 
     /**
      * Создание новой темы
+     *
+     * @return string
      */
-    public function create()
+    public function create(): string
     {
         $fid = int(Request::input('fid'));
 
@@ -196,8 +203,10 @@ class ForumController extends BaseController
 
     /**
      * Поиск
+     *
+     * @return string
      */
-    public function search()
+    public function search(): ?string
     {
         $fid     = check(Request::input('fid'));
         $find    = check(Request::input('find'));
@@ -234,24 +243,24 @@ class ForumController extends BaseController
             $arrfind = [];
             foreach ($findmewords as $val) {
                 if (utfStrlen($val) >= 3) {
-                    $arrfind[] = (empty($type)) ? '+' . $val . '*' : $val . '*';
+                    $arrfind[] = empty($type) ? '+' . $val . '*' : $val . '*';
                 }
             }
 
-            $findme = implode(" ", $arrfind);
+            $findme = implode(' ', $arrfind);
 
-            if ($type == 2 && count($findmewords) > 1) {
+            if ($type === 2 && count($findmewords) > 1) {
                 $findme = "\"$find\"";
             }
 
-            $wheres = (empty($where)) ? 'topics' : 'posts';
+            $wheres = empty($where) ? 'topics' : 'posts';
 
             $forumfind = ($type . $wheres . $period . $section . $find);
 
             // Поиск в темах
             if ($wheres === 'topics') {
 
-                if (empty($_SESSION['forumfindres']) || $forumfind != $_SESSION['forumfind']) {
+                if (empty($_SESSION['forumfindres']) || $forumfind !== $_SESSION['forumfind']) {
 
                     $searchsec = ($section > 0) ? 'forum_id = ' . $section . ' AND' : '';
                     $searchper = ($period > 0) ? 'updated_at > ' . strtotime('-' . $period . ' day', SITETIME) . ' AND' : '';
@@ -291,7 +300,7 @@ class ForumController extends BaseController
             // Поиск в сообщениях
             if ($wheres === 'posts') {
 
-                if (empty($_SESSION['forumfindres']) || $forumfind != $_SESSION['forumfind']) {
+                if (empty($_SESSION['forumfindres']) || $forumfind !== $_SESSION['forumfind']) {
 
                     $searchsec = ($section > 0) ? 'topics.forum_id = ' . $section . ' AND' : '';
                     $searchper = ($period > 0) ? 'posts.created_at > ' . strtotime('-' . $period . ' day', SITETIME) . ' AND' : '';
@@ -338,8 +347,10 @@ class ForumController extends BaseController
 
     /**
      * RSS всех топиков
+     *
+     * @return string
      */
-    public function rss()
+    public function rss(): string
     {
         $topics = Topic::query()
             ->where('closed', 0)
@@ -378,8 +389,10 @@ class ForumController extends BaseController
 
     /**
      * Последние темы
+     *
+     * @return string
      */
-    public function topTopics()
+    public function topTopics(): string
     {
         $total = Topic::query()->count();
 
@@ -402,8 +415,10 @@ class ForumController extends BaseController
 
     /**
      * Последние сообщения
+     *
+     * @return string
      */
-    public function topPosts()
+    public function topPosts(): string
     {
         $period = int(Request::input('period'));
 
