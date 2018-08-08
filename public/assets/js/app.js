@@ -97,7 +97,7 @@ function postReply(el)
     var post   = $(el).closest('.post');
     var author = post.find('.author').data('login');
 
-    separ = field.val().length ? '\n' : '';
+    var separ = field.val().length ? '\n' : '';
     field.focus().val(field.val() + separ + '@' + author + ', ');
 
     return false;
@@ -117,7 +117,7 @@ function postQuote(el)
     var text    = post.find('.message').clone();
     var message = text.find("blockquote").remove().end().text();
 
-    separ = field.val().length ? '\n' : '';
+    var separ = field.val().length ? '\n' : '';
     field.focus().val(field.val() + separ + '[quote=@' + author + ' ' + date + ']' + $.trim(message) + '[/quote]\n');
 
     return false;
