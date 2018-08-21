@@ -38,7 +38,8 @@
     "require-dev": {
         "filp/whoops": "^2.1",
         "phpunit/phpunit": "^7.0",
-        "php-coveralls/php-coveralls": "^2.0"
+        "php-coveralls/php-coveralls": "^2.0",
+        "facebook/xhprof": "dev-master"
     },
     "scripts": {
         "post-create-project-cmd": [
@@ -60,5 +61,6 @@
         "branch-alias": {
             "dev-master": "7.4-dev"
         }
-    }
+    },
+    "minimum-stability": "dev"
 }
