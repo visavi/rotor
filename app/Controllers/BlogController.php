@@ -114,7 +114,7 @@ class BlogController extends BaseController
 
         $tags = '';
         foreach ($tagsList as $key => $value) {
-            $comma = (empty($key)) ? '' : ', ';
+            $comma = empty($key) ? '' : ', ';
             $tags .= $comma . '<a href="/blogs/tags/' . urlencode($value) . '">' . $value . '</a>';
         }
 
@@ -511,7 +511,7 @@ class BlogController extends BaseController
         if ($tag) {
             $tag = urldecode($tag);
 
-            if (! isUtf($tag)){
+            if (! isUtf($tag)) {
                 $tag = winToUtf($tag);
             }
 
@@ -523,7 +523,7 @@ class BlogController extends BaseController
             if (
                 empty($_SESSION['findresult']) ||
                 empty($_SESSION['blogfind'])   ||
-                $tag != $_SESSION['blogfind']
+                $tag !== $_SESSION['blogfind']
             ) {
                 $result = Blog::query()
                     ->select('id')
@@ -553,7 +553,7 @@ class BlogController extends BaseController
 
         }
 
-        if (@filemtime(STORAGE."/temp/tagcloud.dat") < time() - 3600) {
+        if (@filemtime(STORAGE . '/temp/tagcloud.dat') < time() - 3600) {
 
             $allTags = Blog::query()
                 ->select('tags')
@@ -568,7 +568,7 @@ class BlogController extends BaseController
             array_splice($allTags, 100);
             shuffleAssoc($allTags);
 
-            file_put_contents(STORAGE."/temp/tagcloud.dat", json_encode($allTags, JSON_UNESCAPED_UNICODE), LOCK_EX);
+            file_put_contents(STORAGE . '/temp/tagcloud.dat', json_encode($allTags, JSON_UNESCAPED_UNICODE), LOCK_EX);
         }
         $tags = json_decode(file_get_contents(STORAGE.'/temp/tagcloud.dat'), true);
         $max = max($tags);
@@ -757,7 +757,7 @@ class BlogController extends BaseController
 
         if (utfStrlen($find) >= 3 && utfStrlen($find) <= 50) {
             $findme = utfLower($find);
-            $findmewords = explode(" ", $findme);
+            $findmewords = explode(' ', $findme);
 
             $arrfind = [];
             foreach ($findmewords as $valfind) {
@@ -767,8 +767,8 @@ class BlogController extends BaseController
             }
             array_splice($arrfind, 3);
 
-                $types = (empty($type)) ? 'AND' : 'OR';
-                $wheres = (empty($where)) ? 'title' : 'text';
+                $types = empty($type) ? 'AND' : 'OR';
+                $wheres = empty($where) ? 'title' : 'text';
 
                 $blogfind = ($types . $wheres . $find);
 
@@ -778,10 +778,10 @@ class BlogController extends BaseController
                     if ($type === 2) {
                         $arrfind[0] = $findme;
                     }
-                    $search1 = (isset($arrfind[1]) && $type != 2) ? $types . " `title` LIKE '%" . $arrfind[1] . "%'" : '';
-                    $search2 = (isset($arrfind[2]) && $type != 2) ? $types . " `title` LIKE '%" . $arrfind[2] . "%'" : '';
+                    $search1 = isset($arrfind[1]) && $type !== 2 ? $types . " `title` LIKE '%" . $arrfind[1] . "%'" : '';
+                    $search2 = isset($arrfind[2]) && $type !== 2 ? $types . " `title` LIKE '%" . $arrfind[2] . "%'" : '';
 
-                    if (empty($_SESSION['blogfindres']) || $blogfind != $_SESSION['blogfind']) {
+                    if (empty($_SESSION['blogfindres']) || $blogfind !== $_SESSION['blogfind']) {
 
                         $result = Blog::query()
                             ->select('id')
@@ -821,10 +821,10 @@ class BlogController extends BaseController
                     if ($type === 2) {
                         $arrfind[0] = $findme;
                     }
-                    $search1 = (isset($arrfind[1]) && $type != 2) ? $types . " `text` LIKE '%" . $arrfind[1] . "%'" : '';
-                    $search2 = (isset($arrfind[2]) && $type != 2) ? $types . " `text` LIKE '%" . $arrfind[2] . "%'" : '';
+                    $search1 = isset($arrfind[1]) && $type !== 2 ? $types . " `text` LIKE '%" . $arrfind[1] . "%'" : '';
+                    $search2 = isset($arrfind[2]) && $type !== 2 ? $types . " `text` LIKE '%" . $arrfind[2] . "%'" : '';
 
-                    if (empty($_SESSION['blogfindres']) || $blogfind != $_SESSION['blogfind']) {
+                    if (empty($_SESSION['blogfindres']) || $blogfind !== $_SESSION['blogfind']) {
 
                         $result = Blog::query()
                             ->select('id')

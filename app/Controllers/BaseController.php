@@ -62,12 +62,11 @@ Class BaseController
                 // ----------------------- Автоматическая блокировка ------------------------//
                 if (counterString(STORAGE.'/antidos/'.getIp().'.dat') > setting('doslimit')) {
 
-                    if (!empty(setting('errorlog'))){
+                    if (!empty(setting('errorlog'))) {
 
                         $banip = Ban::query()->where('ip', getIp())->first();
 
                         if (! $banip) {
-
                             Error::query()->create([
                                 'code'       => 666,
                                 'request'    => utfSubstr(server('REQUEST_URI'), 0, 200),
@@ -80,7 +79,7 @@ Class BaseController
                             ]);
 
                             DB::insert(
-                                "insert ignore into ban (`ip`, `created_at`) values (?, ?);",
+                                'insert ignore into ban (`ip`, `created_at`) values (?, ?);',
                                 [getIp(), SITETIME]
                             );
 

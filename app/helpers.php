@@ -412,8 +412,10 @@ function showCounter()
     $metrika = new Metrika();
     $metrika->saveStatistic();
 
+    $count = statsCounter();
+
     if (setting('incount') > 0) {
-        return view('app/_counter', ['count' => statsCounter()]);
+        return view('app/_counter', compact('count'));
     }
 
     return null;
@@ -2320,20 +2322,12 @@ function getCourses()
         @filemtime(STORAGE . '/temp/courses.dat') < time() - 3600
     ) {
         $curl = new Curl();
-        if ($xml = $curl->get('http://www.cbr.ru/scripts/XML_daily.asp')){
+        $curl->setConnectTimeout(3);
 
-            $courses = [];
-            $courses['Date'] = (string) $xml->attributes()->Date;
-
-            foreach ($xml->Valute as $item) {
-                $courses[(string) $item->CharCode] = [
-                    'name'    => (string) $item->Name,
-                    'value'   => (string) $item->Value,
-                    'nominal' => (string) $item->Nominal,
-                ];
-            }
-
-            file_put_contents(STORAGE . '/temp/courses.dat', json_encode($courses), LOCK_EX);
+        if ($query = $curl->get('https://www.cbr-xml-daily.ru/daily_json.js')) {
+            file_put_contents(STORAGE . '/temp/courses.dat', $query, LOCK_EX);
+        } else {
+           touch(STORAGE . '/temp/courses.dat', SITETIME);
         }
     }
 

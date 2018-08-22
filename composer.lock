@@ -1,10 +1,10 @@
 {
     "_readme": [
         "This file locks the dependencies of your project to a known state",
-        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
+        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "1deedbc38ef1ddb82c7a97f1018ded07",
+    "content-hash": "f940bf2df42af36f47861e38b253503b",
     "packages": [
         {
             "name": "alchemy/binary-driver",
@@ -161,7 +161,7 @@
                 "detection",
                 "user agent"
             ],
-            "time": "2017-07-31 23:43:17"
+            "time": "2017-07-31T23:43:17+00:00"
         },
         {
             "name": "doctrine/cache",
@@ -3023,46 +3023,6 @@
             "time": "2017-07-22T11:58:36+00:00"
         },
         {
-            "name": "facebook/xhprof",
-            "version": "dev-master",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/lox/xhprof.git",
-                "reference": "d9bfac3d543e017eff1351d2bd795240d747a079"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/lox/xhprof/zipball/d9bfac3d543e017eff1351d2bd795240d747a079",
-                "reference": "d9bfac3d543e017eff1351d2bd795240d747a079",
-                "shasum": ""
-            },
-            "require": {
-                "php": ">=5.2.0"
-            },
-            "bin": [
-                "bin/xhprofile"
-            ],
-            "type": "library",
-            "autoload": {
-                "files": [
-                    "xhprof_lib/utils/xhprof_lib.php",
-                    "xhprof_lib/utils/xhprof_runs.php"
-                ]
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "Apache-2.0"
-            ],
-            "description": "XHProf: A Hierarchical Profiler for PHP",
-            "homepage": "http://pecl.php.net/package/xhprof",
-            "keywords": [
-                "performance",
-                "profiling"
-            ],
-            "abandoned": "lox/xhprof",
-            "time": "2015-08-23T09:14:39+00:00"
-        },
-        {
             "name": "filp/whoops",
             "version": "2.2.0",
             "source": {
@@ -3938,16 +3898,16 @@
         },
         {
             "name": "phpunit/phpunit",
-            "version": "7.3.1",
+            "version": "7.3.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/phpunit.git",
-                "reference": "f9b14c17860eccb440a0352a117a81eb754cff5a"
+                "reference": "34705f81bddc3f505b9599a2ef96e2b4315ba9b8"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/f9b14c17860eccb440a0352a117a81eb754cff5a",
-                "reference": "f9b14c17860eccb440a0352a117a81eb754cff5a",
+                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/34705f81bddc3f505b9599a2ef96e2b4315ba9b8",
+                "reference": "34705f81bddc3f505b9599a2ef96e2b4315ba9b8",
                 "shasum": ""
             },
             "require": {
@@ -4018,7 +3978,7 @@
                 "testing",
                 "xunit"
             ],
-            "time": "2018-08-07T06:44:28+00:00"
+            "time": "2018-08-22T06:39:21+00:00"
         },
         {
             "name": "sebastian/code-unit-reverse-lookup",
@@ -4724,10 +4684,9 @@
         }
     ],
     "aliases": [],
-    "minimum-stability": "dev",
+    "minimum-stability": "stable",
     "stability-flags": {
-        "cbschuld/browser.php": 20,
-        "facebook/xhprof": 20
+        "cbschuld/browser.php": 20
     },
     "prefer-stable": false,
     "prefer-lowest": false,
