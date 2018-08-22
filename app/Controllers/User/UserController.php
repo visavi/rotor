@@ -406,8 +406,8 @@ class UserController extends BaseController
             $themes    = check(Request::input('themes'));
             $timezone  = check(Request::input('timezone', 0));
             $language  = check(Request::input('language'));
-            $notify    = Request::input('notify') === 1 ? 1 : 0;
-            $subscribe = Request::input('subscribe') === 1 ? str_random(32) : null;
+            $notify    = Request::input('notify') ? 1 : 0;
+            $subscribe = Request::input('subscribe') ? str_random(32) : null;
 
             $validator = new Validator();
             $validator->equal($token, $_SESSION['token'], 'Неверный идентификатор сессии, повторите действие!')
