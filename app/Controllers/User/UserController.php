@@ -10,6 +10,8 @@ use App\Models\ChangeMail;
 use App\Models\Invite;
 use App\Models\Online;
 use App\Models\User;
+use ErrorException;
+use Exception;
 use Illuminate\Database\Capsule\Manager as DB;
 
 class UserController extends BaseController
@@ -81,6 +83,9 @@ class UserController extends BaseController
 
     /**
      * Регистрация
+     *
+     * @return string
+     * @throws ErrorException
      */
     public function register(): string
     {
@@ -229,6 +234,9 @@ class UserController extends BaseController
 
     /**
      * Авторизация
+     *
+     * @return string
+     * @throws ErrorException
      */
     public function login(): string
     {
@@ -268,6 +276,8 @@ class UserController extends BaseController
 
     /**
      * Выход
+     *
+     * @return void
      */
     public function logout(): void
     {
@@ -288,6 +298,8 @@ class UserController extends BaseController
 
     /**
      * Редактирование профиля
+     *
+     * @return string
      */
     public function profile(): string
     {
@@ -351,6 +363,8 @@ class UserController extends BaseController
 
     /*
      * Подтверждение регистрации
+     *
+     * @return string
      */
     public function key(): string
     {
@@ -389,6 +403,8 @@ class UserController extends BaseController
 
     /*
      * Настройки
+     *
+     * @return string
      */
     public function setting(): string
     {
@@ -440,6 +456,8 @@ class UserController extends BaseController
 
     /**
      * Данные пользователя
+     *
+     * @return string
      */
     public function account(): string
     {
@@ -509,6 +527,9 @@ class UserController extends BaseController
 
     /**
      * Изменение email
+     *
+     * @return void
+     * @throws Exception
      */
     public function editMail(): void
     {
@@ -554,6 +575,8 @@ class UserController extends BaseController
 
     /**
      * Изменение статуса
+     *
+     * @return void
      */
     public function editStatus(): void
     {
@@ -597,6 +620,8 @@ class UserController extends BaseController
 
     /**
      * Изменение пароля
+     *
+     * @return void
      */
     public function editPassword(): void
     {
@@ -645,6 +670,8 @@ class UserController extends BaseController
 
     /**
      * Генерация ключа
+     *
+     * @return void
      */
     public function apikey(): void
     {
@@ -654,7 +681,7 @@ class UserController extends BaseController
 
         $token = check(Request::input('token'));
 
-        if ($token == $_SESSION['token']) {
+        if ($token === $_SESSION['token']) {
 
             $user->update([
                 'apikey' => md5(getUser('login').str_random()),
@@ -670,6 +697,8 @@ class UserController extends BaseController
 
     /**
      * Пользователи онлайн
+     *
+     * @return string
      */
     public function who(): string
     {

@@ -28,8 +28,10 @@ class UserController extends AdminController
 
     /**
      * Главная страница
+     *
+     * @return string
      */
-    public function index()
+    public function index(): string
     {
         $total = User::query()->count();
         $page = paginate(setting('userlist'), $total);
@@ -45,8 +47,10 @@ class UserController extends AdminController
 
     /**
      * Поиск пользователей
+     *
+     * @return string
      */
-    public function search()
+    public function search(): string
     {
         $q = check(Request::input('q'));
 
@@ -67,8 +71,10 @@ class UserController extends AdminController
 
     /**
      * Редактирование пользователя
+     *
+     * @return string
      */
-    public function edit()
+    public function edit(): string
     {
         $login = check(Request::input('user'));
 
@@ -78,7 +84,7 @@ class UserController extends AdminController
             abort(404, 'Пользователь не найден!');
         }
 
-        $allThemes   = array_map('basename', glob(HOME."/themes/*", GLOB_ONLYDIR));
+        $allThemes   = array_map('basename', glob(HOME . '/themes/*', GLOB_ONLYDIR));
         $adminGroups = User::ADMIN_GROUPS;
 
         $allGroups   = [];
@@ -183,8 +189,11 @@ class UserController extends AdminController
 
     /**
      * Удаление пользователя
+     *
+     * @return string
+     * @throws \Exception
      */
-    public function delete()
+    public function delete(): string
     {
         $login = check(Request::input('user'));
 
