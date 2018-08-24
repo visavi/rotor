@@ -85,8 +85,8 @@ class DownController extends BaseController
             $validator->empty($duplicate, ['title' => 'Загрузка с аналогичный названием уже существует!']);
 
             $existFiles = $down->files ? $down->files->count() : 0;
-            $validator->notEmpty(count($files) + $existFiles, ['files' => 'Необходимо загрузить хотя бы 1 файл']);
-            $validator->lte(count($files) + $existFiles, setting('maxfiles'), ['files' => 'Разрешено загружать не более ' . setting('maxfiles') . ' файлов']);
+            $validator->notEmpty(\count($files) + $existFiles, ['files' => 'Необходимо загрузить хотя бы 1 файл']);
+            $validator->lte(\count($files) + $existFiles, setting('maxfiles'), ['files' => 'Разрешено загружать не более ' . setting('maxfiles') . ' файлов']);
 
             if ($validator->isValid()) {
 
@@ -204,7 +204,7 @@ class DownController extends BaseController
             }
 
             $validator->notEmpty($files, ['files' => 'Необходимо загрузить хотя бы 1 файл']);
-            $validator->lte(count($files), setting('maxfiles'), ['files' => 'Разрешено загружать не более ' . setting('maxfiles') . ' файлов']);
+            $validator->lte(\count($files), setting('maxfiles'), ['files' => 'Разрешено загружать не более ' . setting('maxfiles') . ' файлов']);
 
             if ($validator->isValid()) {
                 $rules = [
@@ -560,7 +560,7 @@ class DownController extends BaseController
         $getDocuments = array_values($archive->getAllInfo());
 
         $viewExt   = Down::getViewExt();
-        $documents = array_slice($getDocuments, $page->offset, $page->limit, true);
+        $documents = \array_slice($getDocuments, $page->offset, $page->limit, true);
 
         return view('loads/zip', compact('down', 'file', 'documents', 'page', 'viewExt'));
     }
@@ -609,7 +609,7 @@ class DownController extends BaseController
             $ext = getExtension($document->getName());
 
             header('Content-type: image/' . $ext);
-            header('Content-Length: ' . strlen($content));
+            header('Content-Length: ' . \strlen($content));
             header('Content-Disposition: inline; filename="' . $document->getName() . '";');
             exit($content);
         }

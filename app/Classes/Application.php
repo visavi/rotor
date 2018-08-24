@@ -15,11 +15,11 @@ class Application
             abort(404);
         }
 
-        if (is_callable($router['target'])) {
-            $call = call_user_func_array($router['target'], $router['params']);
+        if (\is_callable($router['target'])) {
+            $call = \call_user_func_array($router['target'], $router['params']);
         } else {
             list($controller, $action) = self::getController($router);
-            $call = call_user_func_array([new $controller, $action], $router['params']);
+            $call = \call_user_func_array([new $controller, $action], $router['params']);
         }
 
         echo $call;

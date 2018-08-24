@@ -193,7 +193,7 @@
 
     Последний визит: {{ dateFixed($user->updated_at, 'j F Y / H:i') }}<br><br>
 
-    @if (! in_array($user->level, $adminGroups))
+    @if (! in_array($user->level, $adminGroups, true))
         <i class="fa fa-times"></i> <a href="/admin/users/delete?user={{ $user->login }}">Удалить профиль</a><br>
     @endif
 @stop

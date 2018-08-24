@@ -122,7 +122,7 @@ class ForumController extends BaseController
                     }
                 }
 
-                $validator->between(count($answers), 2, 10, ['answer' => 'Недостаточное количество вариантов ответов!']);
+                $validator->between(\count($answers), 2, 10, ['answer' => 'Недостаточное количество вариантов ответов!']);
             }
 
             /* TODO: Сделать проверку поиска похожей темы */
@@ -249,7 +249,7 @@ class ForumController extends BaseController
 
             $findme = implode(' ', $arrfind);
 
-            if ($type === 2 && count($findmewords) > 1) {
+            if ($type === 2 && \count($findmewords) > 1) {
                 $findme = "\"$find\"";
             }
 
@@ -276,7 +276,7 @@ class ForumController extends BaseController
                     $_SESSION['forumfindres'] = $result;
                 }
 
-                $total = count($_SESSION['forumfindres']);
+                $total = \count($_SESSION['forumfindres']);
 
                 if ($total > 0) {
                     $page = paginate(setting('forumtem'), $total);
@@ -317,7 +317,7 @@ class ForumController extends BaseController
                     $_SESSION['forumfindres'] = $result;
                 }
 
-                $total = count($_SESSION['forumfindres']);
+                $total = \count($_SESSION['forumfindres']);
 
                 if ($total > 0) {
                     $page = paginate(setting('forumpost'), $total);

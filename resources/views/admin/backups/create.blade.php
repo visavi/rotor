@@ -29,7 +29,7 @@
 
                 <?php $sheets = getInput('sheets', []); ?>
                 @foreach ($tables as $data)
-                    <?php $checked = in_array($data->Name, $sheets) ? ' checked' : ''; ?>
+                    <?php $checked = in_array($data->Name, $sheets, true) ? ' checked' : ''; ?>
 
                     <div class="form-check">
                         <label class="form-check-label">

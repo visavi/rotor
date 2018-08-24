@@ -47,24 +47,24 @@ class SearchController extends BaseController
             $arrfind = [];
             foreach ($findmewords as $val) {
                 if (utfStrlen($val) >= 3) {
-                    $arrfind[] = (empty($type)) ? '+' . $val . '*' : $val . '*';
+                    $arrfind[] = empty($type) ? '+' . $val . '*' : $val . '*';
                 }
             }
 
             $findme = implode(' ', $arrfind);
 
-            if ($type == 2 && count($findmewords) > 1) {
+            if ($type === 2 && \count($findmewords) > 1) {
                 $findme = "\"$find\"";
             }
 
-            $wheres = (empty($where)) ? 'title' : 'text';
+            $wheres = empty($where) ? 'title' : 'text';
 
             $loadfind = ($type . $wheres . $section . $find);
 
             // Поиск в названии
             if ($wheres === 'title') {
 
-                if (empty($_SESSION['loadfindres']) || $loadfind != $_SESSION['loadfind']) {
+                if (empty($_SESSION['loadfindres']) || $loadfind !== $_SESSION['loadfind']) {
 
                     $searchsec = ($section > 0) ? 'category_id = ' . $section . ' AND' : '';
 
@@ -80,7 +80,7 @@ class SearchController extends BaseController
                     $_SESSION['loadfindres'] = $result;
                 }
 
-                $total = count($_SESSION['loadfindres']);
+                $total = \count($_SESSION['loadfindres']);
 
                 if ($total > 0) {
                     $page = paginate(setting('downlist'), $total);
@@ -104,7 +104,7 @@ class SearchController extends BaseController
             // Поиск в описании
             if ($wheres === 'text') {
 
-                if (empty($_SESSION['loadfindres']) || $loadfind != $_SESSION['loadfind']) {
+                if (empty($_SESSION['loadfindres']) || $loadfind !== $_SESSION['loadfind']) {
 
                     $searchsec = ($section > 0) ? 'category_id = ' . $section . ' AND' : '';
 
@@ -120,7 +120,7 @@ class SearchController extends BaseController
                     $_SESSION['loadfindres'] = $result;
                 }
 
-                $total = count($_SESSION['loadfindres']);
+                $total = \count($_SESSION['loadfindres']);
 
                 if ($total > 0) {
                     $page = paginate(setting('downlist'), $total);

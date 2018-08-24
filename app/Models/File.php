@@ -43,6 +43,6 @@ class File extends BaseModel
      */
     public function isImage()
     {
-        return in_array($this->extension, ['jpg', 'jpeg', 'gif', 'png']);
+        return \in_array($this->extension, ['jpg', 'jpeg', 'gif', 'png']);
     }
 }

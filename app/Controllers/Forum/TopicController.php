@@ -129,7 +129,7 @@ class TopicController extends BaseController
 
         if ($files && $validator->isValid()) {
             $validator
-                ->lte(count($files), setting('maxfiles'), ['files' => 'Разрешено загружать не более ' . setting('maxfiles') . ' файлов'])
+                ->lte(\count($files), setting('maxfiles'), ['files' => 'Разрешено загружать не более ' . setting('maxfiles') . ' файлов'])
                 ->gte(getUser('point'), setting('forumloadpoints'), 'У вас недостаточно актива для загрузки файлов!');
 
             $rules = [
@@ -151,7 +151,7 @@ class TopicController extends BaseController
                 $post->created_at + 600 > SITETIME &&
                 getUser('id') === $post->user_id &&
                 (utfStrlen($msg) + utfStrlen($post->text) <= setting('forumtextlength')) &&
-                count($files) + $post->files->count() <= setting('maxfiles')
+                \count($files) + $post->files->count() <= setting('maxfiles')
             ) {
 
                 $newpost = $post->text . "\n\n" . '[i][size=1]Добавлено через ' . makeTime(SITETIME - $post->created_at) . ' сек.[/size][/i]' . "\n" . $msg;
@@ -229,7 +229,7 @@ class TopicController extends BaseController
             abort(404, 'Данной темы не существует!');
         }
 
-        $isModer = in_array(getUser('id'), explode(',', $topic->moderators)) ? true : false;
+        $isModer = \in_array(getUser('id'), explode(',', $topic->moderators), true) ? true : false;
 
         $validator = new Validator();
         $validator->equal($token, $_SESSION['token'], 'Неверный идентификатор сессии, повторите действие!')
@@ -394,7 +394,7 @@ class TopicController extends BaseController
             ->where('posts.id', $id)
             ->first();
 
-        $isModer = in_array(getUser('id'), explode(',', $post->moderators)) ? true : false;
+        $isModer = \in_array(getUser('id'), explode(',', $post->moderators), true) ? true : false;
 
         if (! $post) {
             abort(404, 'Данного сообщения не существует!');

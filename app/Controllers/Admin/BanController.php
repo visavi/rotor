@@ -39,7 +39,7 @@ class BanController extends AdminController
             abort(404, 'Пользователь не найден!');
         }
 
-        if (in_array($user->level, User::ADMIN_GROUPS)) {
+        if (\in_array($user->level, User::ADMIN_GROUPS, true)) {
             abort('default', 'Запрещено банить администрацию сайта!');
         }
 
@@ -52,7 +52,7 @@ class BanController extends AdminController
 
             $validator = new Validator();
             $validator->equal($token, $_SESSION['token'], 'Неверный идентификатор сессии, повторите действие!')
-                ->false($user->level == User::BANNED && $user->timeban > SITETIME, 'Данный аккаунт уже заблокирован!')
+                ->false($user->level === User::BANNED && $user->timeban > SITETIME, 'Данный аккаунт уже заблокирован!')
                 ->gt($time, 0, ['time' => 'Вы не указали время бана!'])
                 ->in($type, ['minutes', 'hours', 'days'], ['type', 'Не выбрано время бана!'])
                 ->length($reason, 5, 1000, ['reason' => 'Слишком длинная или короткая причина бана!'])

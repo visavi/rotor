@@ -35,7 +35,7 @@
 
                 {!! icons($ext) !!}
 
-                @if (in_array($ext, $viewExt))
+                @if (in_array($ext, $viewExt, true))
                     <a href="/downs/zip/{{ $file->id }}/{{ $key }}">{{ $document->getName() }}</a>
                 @else
                     {{ $document->getName() }}

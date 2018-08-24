@@ -15,7 +15,7 @@
                         @continue
                     @endif
 
-                    @if (in_array($valDay, $newsDays))
+                    @if (in_array($valDay, $newsDays, true))
                         <td><a href="/news/{{ $newsIds[$valDay] }}"><span style="color: #fff; background-color:#9def89; padding: 1px 5px;">{{ $valDay }}</span></a></td>
                         @continue
                     @endif

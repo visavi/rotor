@@ -231,11 +231,11 @@ class AjaxController extends BaseController
             return json_encode(['status' => 'error', 'message' => 'Invalid token']);
         }
 
-        if (! in_array($vote, ['+', '-'], true)) {
+        if (! \in_array($vote, ['+', '-'], true)) {
             return json_encode(['status' => 'error', 'message' => 'Invalid rating']);
         }
 
-        if (! in_array($type, $types, true)) {
+        if (! \in_array($type, $types, true)) {
             return json_encode(['status' => 'error', 'message' => 'Type invalid']);
         }
 
@@ -302,7 +302,7 @@ class AjaxController extends BaseController
         $type  = check(Request::input('type'));
         $token = check(Request::input('token'));
 
-        if (! in_array($type, $types, true)) {
+        if (! \in_array($type, $types, true)) {
             return json_encode(['status' => 'error', 'message' => 'Type invalid']);
         }
 
@@ -372,7 +372,7 @@ class AjaxController extends BaseController
         $type  = check(Request::input('type'));
         $token = check(Request::input('token'));
 
-        if (! in_array($type, $types, true)) {
+        if (! \in_array($type, $types, true)) {
             return json_encode(['status' => 'error', 'message' => 'Type invalid']);
         }
 

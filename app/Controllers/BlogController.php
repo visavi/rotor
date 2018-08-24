@@ -82,7 +82,7 @@ class BlogController extends BaseController
 
         $text = preg_split('|\[nextpage\](<br * /?>)*|', $blog->text, -1, PREG_SPLIT_NO_EMPTY);
 
-        $total = count($text);
+        $total = \count($text);
         $page = paginate(1, $total);
 
         if ($page->current === 1) {
@@ -536,7 +536,7 @@ class BlogController extends BaseController
                 $_SESSION['findresult'] = $result;
             }
 
-            $total = count($_SESSION['findresult']);
+            $total = \count($_SESSION['findresult']);
             $page = paginate(setting('blogpost'), $total);
 
             $blogs = Blog::query()
@@ -794,8 +794,8 @@ class BlogController extends BaseController
                         $_SESSION['blogfindres'] = $result;
                     }
 
-                    $total = count($_SESSION['blogfindres']);
-                    $page = paginate(setting('blogpost'), $total);
+                    $total = \count($_SESSION['blogfindres']);
+                    $page  = paginate(setting('blogpost'), $total);
 
                     if ($total > 0) {
                         $blogs = Blog::query()
@@ -837,8 +837,8 @@ class BlogController extends BaseController
                         $_SESSION['blogfindres'] = $result;
                     }
 
-                    $total = count($_SESSION['blogfindres']);
-                    $page = paginate(setting('blogpost'), $total);
+                    $total = \count($_SESSION['blogfindres']);
+                    $page  = paginate(setting('blogpost'), $total);
 
                     if ($total > 0) {
                         $blogs = Blog::query()
