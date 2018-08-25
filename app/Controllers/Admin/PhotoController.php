@@ -23,8 +23,10 @@ class PhotoController extends AdminController
 
     /**
      * Главная страница
+     *
+     * @return string
      */
-    public function index()
+    public function index(): string
     {
         $total = Photo::count();
         $page  = paginate(setting('fotolist'), $total);
@@ -40,8 +42,11 @@ class PhotoController extends AdminController
 
     /**
      * Редактирование ссылки
+     *
+     * @param int $id
+     * @return string
      */
-    public function edit($id)
+    public function edit($id): string
     {
         $page  = int(Request::input('page', 1));
         $photo = Photo::query()->find($id);
@@ -84,6 +89,10 @@ class PhotoController extends AdminController
 
     /**
      * Удаление записей
+     *
+     * @param int $id
+     * @return void
+     * @throws \Exception
      */
     public function delete($id): void
     {
@@ -118,6 +127,8 @@ class PhotoController extends AdminController
 
     /**
      * Пересчет комментариев
+     *
+     * @return void
      */
     public function restatement(): void
     {

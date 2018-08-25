@@ -23,8 +23,10 @@ class StatusController extends AdminController
 
     /**
      * Главная страница
+     *
+     * @return string
      */
-    public function index()
+    public function index(): string
     {
         $statuses = Status::query()->orderBy('topoint', 'desc')->get();
 
@@ -33,8 +35,10 @@ class StatusController extends AdminController
 
     /**
      * Добавление статуса
+     *
+     * @return string
      */
-    public function create()
+    public function create(): string
     {
         if (Request::isMethod('post')) {
             $token   = check(Request::input('token'));
@@ -71,8 +75,10 @@ class StatusController extends AdminController
 
     /**
      * Редактирование статуса
+     *
+     * @return string
      */
-    public function edit()
+    public function edit(): string
     {
         $id = int(Request::input('id'));
 
@@ -117,8 +123,11 @@ class StatusController extends AdminController
 
     /**
      * Удаление статуса
+     *
+     * @return void
+     * @throws \Exception
      */
-    public function delete()
+    public function delete(): void
     {
         $token = check(Request::input('token'));
         $id    = int(Request::input('id'));

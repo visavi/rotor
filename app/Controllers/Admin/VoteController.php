@@ -21,8 +21,10 @@ class VoteController extends AdminController
 
     /**
      * Главная страница
+     *
+     * @return string
      */
-    public function index()
+    public function index(): string
     {
         $total = Vote::query()->where('closed', 0)->count();
         $page = paginate(setting('allvotes'), $total);
@@ -40,8 +42,10 @@ class VoteController extends AdminController
 
     /**
      * Архив голосований
+     *
+     * @return string
      */
-    public function history()
+    public function history(): string
     {
         $total = Vote::query()->where('closed', 0)->count();
         $page = paginate(setting('allvotes'), $total);
@@ -59,8 +63,11 @@ class VoteController extends AdminController
 
     /**
      * Редактирование голосования
+     *
+     * @param int $id
+     * @return string
      */
-    public function edit($id)
+    public function edit($id): string
     {
         $vote = Vote::query()->where('id', $id)->first();
 
@@ -117,8 +124,11 @@ class VoteController extends AdminController
 
     /**
      * Удаление голосования
+     *
+     * @param int $id
+     * @return void
      */
-    public function delete($id)
+    public function delete($id): void
     {
         $token = check(Request::input('token'));
         $vote  = Vote::query()->where('id', $id)->first();
@@ -149,8 +159,11 @@ class VoteController extends AdminController
 
     /**
      * Открытие-закрытие голосования
+     *
+     * @param int $id
+     * @return void
      */
-    public function close($id)
+    public function close($id): void
     {
         $token = check(Request::input('token'));
         $vote  = Vote::query()->where('id', $id)->first();
@@ -178,17 +191,19 @@ class VoteController extends AdminController
             setFlash('danger', 'Ошибка! Неверный идентификатор сессии, повторите действие!');
         }
 
-        if ($closed) {
-            redirect('/admin/votes/history');
-        }  else {
+        if (empty($closed)) {
             redirect('/admin/votes');
+        }  else {
+            redirect('/admin/votes/history');
         }
     }
 
     /**
      * Пересчет голосов
+     *
+     * @return void
      */
-    public function restatement()
+    public function restatement(): void
     {
         if (! isAdmin(User::BOSS)) {
             abort(403, 'Доступ запрещен!');

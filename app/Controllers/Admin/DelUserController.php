@@ -22,8 +22,10 @@ class DelUserController extends AdminController
 
     /**
      * Главная страница
+     *
+     * @return string
      */
-    public function index()
+    public function index(): string
     {
         $users  = collect();
         $period = check(Request::input('period'));
@@ -36,7 +38,7 @@ class DelUserController extends AdminController
             }
 
             $users = User::query()
-                ->where('updated_at', '<', SITETIME - ($period * 24 * 3600))
+                ->where('updated_at', '<', strtotime('-' . $period . ' days', SITETIME))
                 ->where('point', '<=', $point)
                 ->get();
 
@@ -52,8 +54,10 @@ class DelUserController extends AdminController
 
     /**
      * Очистка пользователей
+     *
+     * @return void
      */
-    public function clear()
+    public function clear(): void
     {
         $token  = check(Request::input('token'));
         $period = check(Request::input('period'));
@@ -65,7 +69,7 @@ class DelUserController extends AdminController
             ->gte($period, 180, 'Указанно недопустимое время для удаления!');
 
         $users = User::query()
-            ->where('updated_at', '<', SITETIME - ($period * 24 * 3600))
+            ->where('updated_at', '<', strtotime('-' . $period . ' days', SITETIME))
             ->where('point', '<=', $point)
             ->get();
 

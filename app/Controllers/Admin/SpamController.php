@@ -53,8 +53,10 @@ class SpamController extends AdminController
 
     /**
      * Главная страница
+     *
+     * @return string
      */
-    public function index()
+    public function index(): string
     {
         $type = check(Request::input('type'));
         $type = isset($this->types[$type]) ? $type : 'post';
@@ -80,8 +82,11 @@ class SpamController extends AdminController
 
     /**
      * Удаление жалоб
+     *
+     * @return void
+     * @throws \Exception
      */
-    public function delete()
+    public function delete(): void
     {
         $id    = int(Request::input('id'));
         $token = check(Request::input('token'));

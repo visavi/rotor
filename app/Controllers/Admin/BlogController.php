@@ -12,8 +12,10 @@ class BlogController extends AdminController
 {
     /**
      * Главная страница
+     *
+     * @return string
      */
-    public function index()
+    public function index(): string
     {
         $categories = Category::query()
             ->where('parent_id', 0)
@@ -26,8 +28,10 @@ class BlogController extends AdminController
 
     /**
      * Создание раздела
+     *
+     * @return void
      */
-    public function create()
+    public function create(): void
     {
         if (! isAdmin(User::BOSS)) {
             abort(403, 'Доступ запрещен!');
@@ -61,8 +65,11 @@ class BlogController extends AdminController
 
     /**
      * Редактирование раздела
+     *
+     * @param int $id
+     * @return string
      */
-    public function edit($id)
+    public function edit($id): string
     {
         if (! isAdmin(User::BOSS)) {
             abort(403, 'Доступ запрещен!');
@@ -117,8 +124,12 @@ class BlogController extends AdminController
 
     /**
      * Удаление раздела
+     *
+     * @param int $id
+     * @return void
+     * @throws \Exception
      */
-    public function delete($id)
+    public function delete($id): void
     {
         if (! isAdmin(User::BOSS)) {
             abort(403, 'Доступ запрещен!');
@@ -155,8 +166,10 @@ class BlogController extends AdminController
 
     /**
      * Пересчет данных
+     *
+     * @return void
      */
-    public function restatement()
+    public function restatement(): void
     {
         if (! isAdmin(User::BOSS)) {
             abort(403, 'Доступ запрещен!');
@@ -164,7 +177,7 @@ class BlogController extends AdminController
 
         $token = check(Request::input('token'));
 
-        if ($token == $_SESSION['token']) {
+        if ($token === $_SESSION['token']) {
 
             restatement('blogs');
 
@@ -178,8 +191,11 @@ class BlogController extends AdminController
 
     /**
      * Список блогов
+     *
+     * @param int $id
+     * @return string
      */
-    public function blog($id)
+    public function blog($id): string
     {
         $category = Category::query()->with('parent')->find($id);
 
@@ -204,8 +220,11 @@ class BlogController extends AdminController
 
     /**
      * Редактирование статьи
+     *
+     * @param int $id
+     * @return string
      */
-    public function editBlog($id)
+    public function editBlog($id): string
     {
         $blog = Blog::query()->find($id);
 
@@ -254,8 +273,11 @@ class BlogController extends AdminController
 
     /**
      * Перенос статьи
+     *
+     * @param int $id
+     * @return string
      */
-    public function moveBlog($id)
+    public function moveBlog($id): string
     {
         $blog = Blog::query()->find($id);
 
@@ -309,8 +331,12 @@ class BlogController extends AdminController
 
     /**
      * Удаление статьи
+     *
+     * @param int $id
+     * @return void
+     * @throws \Exception
      */
-    public function deleteBlog($id)
+    public function deleteBlog($id): void
     {
         $page  = int(Request::input('page', 1));
         $token = check(Request::input('token'));

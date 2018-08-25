@@ -22,8 +22,10 @@ class RekUserController extends AdminController
     }
     /**
      * Главная страница
+     *
+     * @return string
      */
-    public function index()
+    public function index(): string
     {
         $total = RekUser::query()->where('deleted_at', '>', SITETIME)->count();
         $page = paginate(setting('rekuserpost'), $total);
@@ -41,10 +43,10 @@ class RekUserController extends AdminController
     /**
      * Редактирование ссылки
      *
-     * @param $id
+     * @param int $id
      * @return string
      */
-    public function edit($id)
+    public function edit($id): string
     {
         $page = int(Request::input('page', 1));
         $link = RekUser::query()->find($id);
@@ -90,8 +92,10 @@ class RekUserController extends AdminController
     }
     /**
      * Удаление записей
+     *
+     * @return void
      */
-    public function delete()
+    public function delete(): void
     {
         $page  = int(Request::input('page', 1));
         $token = check(Request::input('token'));

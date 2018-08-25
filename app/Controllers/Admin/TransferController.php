@@ -9,8 +9,10 @@ class TransferController extends AdminController
 {
     /**
      * Главная страница
+     *
+     * @return string
      */
-    public function index()
+    public function index(): string
     {
         $total = Transfer::query()->count();
         $page = paginate(setting('listtransfers'), $total);
@@ -27,8 +29,10 @@ class TransferController extends AdminController
 
     /**
      * Просмотр всех переводов
+     *
+     * @return string
      */
-    public function view()
+    public function view(): string
     {
         $login = check(Request::input('user'));
 

@@ -40,8 +40,10 @@ class ErrorController extends AdminController
 
     /**
      * Главная страница
+     *
+     * @return string
      */
-    public function index()
+    public function index(): string
     {
         $lists = $this->lists;
         $code  = $this->code;
@@ -62,8 +64,10 @@ class ErrorController extends AdminController
 
     /**
      * Очистка логов
+     *
+     * @return void
      */
-    public function clear()
+    public function clear(): void
     {
         $token = check(Request::input('token'));
 

@@ -20,8 +20,10 @@ class BanhistController extends AdminController
 
     /**
      * Главная страница
+     *
+     * @return string
      */
-    public function index()
+    public function index(): string
     {
         $total = Banhist::query()->count();
         $page = paginate(setting('listbanhist'), $total);
@@ -38,8 +40,10 @@ class BanhistController extends AdminController
 
     /**
      * История банов
+     *
+     * @return string
      */
-    public function view()
+    public function view(): string
     {
         $login = check(Request::input('user'));
 
@@ -65,8 +69,10 @@ class BanhistController extends AdminController
 
     /**
      * Удаление банов
+     *
+     * @return void
      */
-    public function delete()
+    public function delete(): void
     {
         $page  = int(Request::input('page', 1));
         $token = check(Request::input('token'));

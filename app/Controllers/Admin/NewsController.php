@@ -24,8 +24,10 @@ class NewsController extends AdminController
 
     /**
      * Главная страница
+     *
+     * @return string
      */
-    public function index()
+    public function index(): string
     {
         $total = News::query()->count();
         $page = paginate(setting('postnews'), $total);
@@ -42,8 +44,11 @@ class NewsController extends AdminController
 
     /**
      * Редактирование новости
+     *
+     * @param int $id
+     * @return string
      */
-    public function edit($id)
+    public function edit($id): string
     {
         $page = int(Request::input('page', 1));
         $news = News::query()->find($id);
@@ -101,8 +106,10 @@ class NewsController extends AdminController
 
     /**
      * Создание новости
+     *
+     * @return string
      */
-    public function create()
+    public function create(): string
     {
         if (Request::isMethod('post')) {
             $token  = check(Request::input('token'));
@@ -159,6 +166,8 @@ class NewsController extends AdminController
 
     /**
      * Пересчет комментариев
+     *
+     * @return void
      */
     public function restatement(): void
     {
@@ -184,6 +193,8 @@ class NewsController extends AdminController
      * Удаление новостей
      *
      * @param int $id
+     * @return void
+     * @throws \Exception
      */
     public function delete($id): void
     {

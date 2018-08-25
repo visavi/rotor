@@ -38,28 +38,38 @@ class FilesController extends AdminController
 
     /**
      * Главная страница
+     *
+     * @return string
      */
-    public function index()
+    public function index(): string
     {
         $path  = $this->path;
-        $files = preg_grep('/^([^.])/', scandir(RESOURCES . '/views/' . $path . $this->file));
+        $elements = preg_grep('/^([^.])/', scandir(RESOURCES . '/views/' . $path . $this->file, SCANDIR_SORT_ASCENDING));
 
-        usort($files, function($a, $b) use ($path) {
-            if (is_file(RESOURCES . '/views/' . $path . '/' . $a) && is_file(RESOURCES . '/views/' . $path . '/' . $b)) {
-                return 0;
+        $folders = [];
+        $files   = [];
+
+        foreach ($elements as $element) {
+            if (is_dir(RESOURCES . '/views/' . $path . '/' . $element)) {
+                $folders[] = $element;
+            } else {
+                $files[] = $element;
             }
-            return is_dir(RESOURCES . '/views/' . $path . '/' . $a) ? -1 : 1;
-        });
+        }
+
+        $files = array_merge($folders, $files);
 
         $directories = explode('/', $path);
 
-        return view('admin/files/index',compact('files', 'path', 'directories'));
+        return view('admin/files/index', compact('files', 'path', 'directories'));
     }
 
     /**
      * Редактирование файла
+     *
+     * @return string
      */
-    public function edit()
+    public function edit(): string
     {
         $fileName = $this->path ? '/' . $this->file : $this->file;
 
@@ -79,7 +89,7 @@ class FilesController extends AdminController
             $token = check(Request::input('token'));
             $msg   = Request::input('msg');
 
-            if ($token == $_SESSION['token']) {
+            if ($token === $_SESSION['token']) {
 
                 file_put_contents(RESOURCES . '/views/' . $this->path . $fileName . '.blade.php', $msg);
 
@@ -99,8 +109,10 @@ class FilesController extends AdminController
 
     /**
      * Создание файла
+     *
+     * @return string
      */
-    public function create()
+    public function create(): string
     {
         if (! is_writable(RESOURCES . '/views/' . $this->path)) {
             abort('default', 'Директория ' . $this->path . ' недоступна для записи!');
@@ -157,8 +169,10 @@ class FilesController extends AdminController
 
     /**
      * Удаление файла
+     *
+     * @return void
      */
-    public function delete()
+    public function delete(): void
     {
         if (! is_writable(RESOURCES . '/views/' . $this->path)) {
             abort('default', 'Директория ' . $this->path . ' недоступна для записи!');

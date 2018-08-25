@@ -19,8 +19,10 @@ class ReglistController extends AdminController
 
     /**
      * Главная страница
+     *
+     * @return string
      */
-    public function index()
+    public function index(): string
     {
         if (Request::isMethod('post')) {
             $page   = int(Request::input('page', 1));

@@ -23,8 +23,10 @@ class IpBanController extends AdminController
 
     /**
      * Главная страница
+     *
+     * @return string
      */
-    public function index()
+    public function index(): string
     {
         if (Request::isMethod('post')) {
             $token = check(Request::input('token'));
@@ -70,8 +72,10 @@ class IpBanController extends AdminController
 
     /**
      * Удаление ip
+     *
+     * @return void
      */
-    public function delete()
+    public function delete(): void
     {
         $page  = int(Request::input('page', 1));
         $token = check(Request::input('token'));
@@ -96,8 +100,10 @@ class IpBanController extends AdminController
 
     /**
      * Очистка ip
+     *
+     * @return void
      */
-    public function clear()
+    public function clear(): void
     {
         $token = check(Request::input('token'));
 

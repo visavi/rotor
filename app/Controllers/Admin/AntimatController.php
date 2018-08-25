@@ -23,8 +23,10 @@ class AntimatController extends AdminController
 
     /**
      * Главная страница
+     *
+     * @return string
      */
-    public function index()
+    public function index(): string
     {
         if (Request::isMethod('post')) {
             $token = check(Request::input('token'));
@@ -60,8 +62,11 @@ class AntimatController extends AdminController
 
     /**
      * Удаление слова из списка
+     *
+     * @return void
+     * @throws \Exception
      */
-    public function delete()
+    public function delete(): void
     {
         $token = check(Request::input('token'));
         $id    = int(Request::input('id'));
@@ -86,8 +91,10 @@ class AntimatController extends AdminController
 
     /**
      * Очистка списка слов
+     *
+     * @return void
      */
-    public function clear()
+    public function clear(): void
     {
         $token = check(Request::input('token'));
 

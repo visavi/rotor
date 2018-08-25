@@ -25,10 +25,13 @@ class OfferController extends AdminController
 
     /**
      * Главная страница
+     *
+     * @param string $type
+     * @return string
      */
-    public function index($type = Offer::OFFER)
+    public function index($type = Offer::OFFER): string
     {
-        $otherType = $type == Offer::OFFER ? Offer::ISSUE : Offer::OFFER;
+        $otherType = $type === Offer::OFFER ? Offer::ISSUE : Offer::OFFER;
 
         $sort = check(Request::input('sort'));
 
@@ -64,8 +67,11 @@ class OfferController extends AdminController
 
     /**
      * Просмотр записи
+     *
+     * @param int $id
+     * @return string
      */
-    public function view($id)
+    public function view($id): string
     {
         $offer = Offer::query()
             ->where('offers.id', $id)
@@ -80,8 +86,11 @@ class OfferController extends AdminController
 
     /**
      * Редактирование записи
+     *
+     * @param int $id
+     * @return string
      */
-    public function edit($id)
+    public function edit($id): string
     {
         $offer = Offer::query()->where('id', $id)->first();
 
@@ -129,8 +138,11 @@ class OfferController extends AdminController
 
     /**
      * Ответ на предложение
+     *
+     * @param int $id
+     * @return string
      */
-    public function reply($id)
+    public function reply($id): string
     {
         $offer = Offer::query()->where('id', $id)->first();
 
@@ -177,8 +189,10 @@ class OfferController extends AdminController
 
     /**
      * Пересчет комментариев
+     *
+     * @return void
      */
-    public function restatement()
+    public function restatement(): void
     {
         if (! isAdmin(User::BOSS)) {
             abort(403, 'Доступ запрещен!');
@@ -186,7 +200,7 @@ class OfferController extends AdminController
 
         $token = check(Request::input('token'));
 
-        if ($token == $_SESSION['token']) {
+        if ($token === $_SESSION['token']) {
 
             restatement('offers');
 
@@ -200,13 +214,15 @@ class OfferController extends AdminController
 
     /**
      * Удаление записей
+     *
+     * @return void
      */
-    public function delete()
+    public function delete(): void
     {
         $page  = int(Request::input('page', 1));
         $token = check(Request::input('token'));
         $del   = intar(Request::input('del'));
-        $type  = Request::input('type') == Offer::OFFER ? Offer::OFFER : Offer::ISSUE;
+        $type  = Request::input('type') === Offer::OFFER ? Offer::OFFER : Offer::ISSUE;
 
         $validator = new Validator();
         $validator->equal($token, $_SESSION['token'], 'Неверный идентификатор сессии, повторите действие!')

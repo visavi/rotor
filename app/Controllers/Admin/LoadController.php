@@ -26,8 +26,10 @@ class LoadController extends AdminController
 
     /**
      * Главная страница
+     *
+     * @return string
      */
-    public function index()
+    public function index(): string
     {
         $categories = Load::query()
             ->where('parent_id', 0)
@@ -40,8 +42,10 @@ class LoadController extends AdminController
 
     /**
      * Создание раздела
+     *
+     * @return void
      */
-    public function create()
+    public function create(): void
     {
         if (! isAdmin(User::BOSS)) {
             abort(403, 'Доступ запрещен!');
@@ -75,8 +79,11 @@ class LoadController extends AdminController
 
     /**
      * Редактирование раздела
+     *
+     * @param int $id
+     * @return string
      */
-    public function edit($id)
+    public function edit($id): string
     {
         if (! isAdmin(User::BOSS)) {
             abort(403, 'Доступ запрещен!');
@@ -131,8 +138,12 @@ class LoadController extends AdminController
 
     /**
      * Удаление раздела
+     *
+     * @param int $id
+     * @return void
+     * @throws \Exception
      */
-    public function delete($id)
+    public function delete($id): void
     {
         if (! isAdmin(User::BOSS)) {
             abort(403, 'Доступ запрещен!');
@@ -169,8 +180,10 @@ class LoadController extends AdminController
 
     /**
      * Пересчет данных
+     *
+     * @return void
      */
-    public function restatement()
+    public function restatement(): void
     {
         if (! isAdmin(User::BOSS)) {
             abort(403, 'Доступ запрещен!');
@@ -178,7 +191,7 @@ class LoadController extends AdminController
 
         $token = check(Request::input('token'));
 
-        if ($token == $_SESSION['token']) {
+        if ($token === $_SESSION['token']) {
 
             restatement('loads');
 
@@ -192,8 +205,11 @@ class LoadController extends AdminController
 
     /**
      * Просмотр загрузок раздела
+     *
+     * @param int $id
+     * @return string
      */
-    public function load($id)
+    public function load($id): string
     {
         $category = Load::query()->with('parent')->find($id);
 
@@ -233,8 +249,11 @@ class LoadController extends AdminController
 
     /**
      * Редактирование загрузки
+     *
+     * @param int $id
+     * @return string
      */
-    public function editDown($id)
+    public function editDown($id): string
     {
         $down = Down::query()->find($id);
 
@@ -319,8 +338,12 @@ class LoadController extends AdminController
 
     /**
      * Удаление загрузки
+     *
+     * @param $id
+     * @return void
+     * @throws \Exception
      */
-    public function deleteDown($id)
+    public function deleteDown($id): void
     {
         $token = check(Request::input('token'));
         $down  = Down::query()->find($id);
@@ -352,8 +375,13 @@ class LoadController extends AdminController
 
     /**
      * Удаление файла
+     *
+     * @param int $id
+     * @param int $fid
+     * @return void
+     * @throws \Exception
      */
-    public function deleteFile($id, $fid)
+    public function deleteFile($id, $fid): void
     {
         $down = Down::query()->find($id);
 
@@ -377,8 +405,10 @@ class LoadController extends AdminController
 
     /**
      * Новые публикации
+     *
+     * @return string
      */
-    public function new()
+    public function new(): string
     {
         $total = Down::query()->where('active', 0)->count();
         $page = paginate(setting('downlist'), $total);
@@ -396,8 +426,11 @@ class LoadController extends AdminController
 
     /**
      * Публикация загрузки
+     *
+     * @param int $id
+     * @return void
      */
-    public function publish($id)
+    public function publish($id): void
     {
         $token = check(Request::input('token'));
         $down  = Down::query()->find($id);

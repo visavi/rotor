@@ -23,8 +23,10 @@ class NoticeController extends AdminController
 
     /**
      * Главная страница
+     *
+     * @return string
      */
-    public function index()
+    public function index(): string
     {
         $notices = Notice::query()
             ->orderBy('id')
@@ -36,8 +38,10 @@ class NoticeController extends AdminController
 
     /**
      * Создание шаблона
+     *
+     * @return string
      */
-    public function create()
+    public function create(): string
     {
         if (Request::isMethod('post')) {
             $token   = check(Request::input('token'));
@@ -82,8 +86,11 @@ class NoticeController extends AdminController
 
     /**
      * Редактирование шаблона
+     *
+     * @param int $id
+     * @return string
      */
-    public function edit($id)
+    public function edit($id): string
     {
         $notice = Notice::query()->find($id);
 
@@ -126,8 +133,12 @@ class NoticeController extends AdminController
 
     /**
      * Удаление шаблона
+     *
+     * @param $id
+     * @return void
+     * @throws \Exception
      */
-    public function delete($id)
+    public function delete($id): void
     {
         $token = check(Request::input('token'));
 

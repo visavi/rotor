@@ -23,10 +23,12 @@ class InvitationController extends AdminController
 
     /**
      * Главная страница
+     *
+     * @return string
      */
-    public function index()
+    public function index(): string
     {
-        $used = Request::input('used') == 1 ? 1 : 0;
+        $used = Request::input('used') ? 1 : 0;
 
         $total = Invite::query()->where('used', $used)->count();
         $page = paginate(setting('listinvite'), $total);
@@ -44,8 +46,10 @@ class InvitationController extends AdminController
 
     /**
      * Список ключей
+     *
+     * @return string
      */
-    public function keys()
+    public function keys(): string
     {
         $keys = Invite::query()
             ->where('user_id', getUser('id'))
@@ -58,8 +62,11 @@ class InvitationController extends AdminController
 
     /**
      * Создание ключей
+     *
+     * @return string
+     * @throws \Exception
      */
-    public function create()
+    public function create(): string
     {
         if (Request::isMethod('post')) {
             $token  = check(Request::input('token'));
@@ -91,15 +98,18 @@ class InvitationController extends AdminController
             }
         }
 
-        $listKeys = [1,2,3,4,5,10,15,20,30,40,50];
+        $listKeys = [1, 2, 3, 4, 5, 10, 15, 20, 30, 40, 50];
 
         return view('admin/invitations/create', compact('listKeys'));
     }
 
     /**
      * Отправка ключей пользователю
+     *
+     * @return void
+     * @throws \Exception
      */
-    public function send()
+    public function send(): void
     {
         $token    = check(Request::input('token'));
         $login    = check(Request::input('user'));
@@ -132,7 +142,7 @@ class InvitationController extends AdminController
 
             Invite::query()->insert($newKeys);
 
-            $text = 'Вы получили пригласительные ключи в количестве '.count($listKeys).'шт.'.PHP_EOL.'Список ключей: '.implode(', ', $listKeys).PHP_EOL.'С помощью этих ключей вы можете пригласить ваших друзей на наш сайт!';
+            $text = 'Вы получили пригласительные ключи в количестве ' . \count($listKeys) . 'шт.'.PHP_EOL.'Список ключей: '.implode(', ', $listKeys).PHP_EOL.'С помощью этих ключей вы можете пригласить ваших друзей на наш сайт!';
             $user->sendMessage(null, $text);
 
             setFlash('success', 'Ключи успешно отправлены!');
@@ -146,8 +156,11 @@ class InvitationController extends AdminController
 
     /**
      * Отправка ключей активным пользователям
+     *
+     * @return void
+     * @throws \Exception
      */
-    public function mail()
+    public function mail(): void
     {
         $token    = check(Request::input('token'));
 
@@ -189,13 +202,15 @@ class InvitationController extends AdminController
 
     /**
      * Удаление ключей
+     *
+     * @return void
      */
-    public function delete()
+    public function delete(): void
     {
         $page  = int(Request::input('page', 1));
         $token = check(Request::input('token'));
         $del   = intar(Request::input('del'));
-        $used  = Request::input('used') == 1 ? 1 : 0;
+        $used  = Request::input('used') ? 1 : 0;
 
         $validator = new Validator();
         $validator->equal($token, $_SESSION['token'], 'Неверный идентификатор сессии, повторите действие!')

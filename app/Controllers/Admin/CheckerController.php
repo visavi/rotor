@@ -77,7 +77,7 @@ class CheckerController extends AdminController
     {
         static $state;
 
-        $files = preg_grep('/^([^.])/', scandir($dir));
+        $files = preg_grep('/^([^.])/', scandir($dir, SCANDIR_SORT_ASCENDING));
 
         foreach ($files as $file) {
             if (is_file($dir . '/' . $file)) {

@@ -23,12 +23,14 @@ class SettingController extends AdminController
 
     /**
      * Главная страница
+     *
+     * @return string
      */
-    public function index()
+    public function index(): string
     {
         $act = check(Request::input('act', 'main'));
 
-        if (! \in_array($act, Setting::getActions())) {
+        if (! \in_array($act, Setting::getActions(), true)) {
             abort(404, 'Недопустимая страница!');
         }
 

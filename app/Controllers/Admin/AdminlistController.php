@@ -17,8 +17,10 @@ class AdminlistController extends AdminController
 
     /**
      * Главная страница
+     *
+     * @return string
      */
-    public function index()
+    public function index(): string
     {
         $users = User::query()
             ->whereIn('level', User::ADMIN_GROUPS)

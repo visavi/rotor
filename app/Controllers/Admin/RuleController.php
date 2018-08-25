@@ -23,8 +23,10 @@ class RuleController extends AdminController
 
     /**
      * Главная страница
+     *
+     * @return string
      */
-    public function index()
+    public function index(): string
     {
         $rules = Rule::query()->first();
 
@@ -41,8 +43,10 @@ class RuleController extends AdminController
 
     /**
      * Редактирование правил
+     *
+     * @return string
      */
-    public function edit()
+    public function edit(): string
     {
         $rules = Rule::query()->firstOrNew([]);
 

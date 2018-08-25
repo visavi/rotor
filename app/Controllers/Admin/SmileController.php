@@ -25,8 +25,10 @@ class SmileController extends AdminController
 
     /**
      * Главная страница
+     *
+     * @return string
      */
-    public function index()
+    public function index(): string
     {
         $total = Smile::query()->count();
         $page = paginate(setting('smilelist'), $total);
@@ -43,8 +45,10 @@ class SmileController extends AdminController
 
     /**
      * Добавление смайла
+     *
+     * @return string
      */
-    public function create()
+    public function create(): string
     {
         if (! is_writable(UPLOADS.'/smiles')){
             abort('default', 'Директория со смайлами недоступна для записи!');
@@ -97,8 +101,11 @@ class SmileController extends AdminController
 
     /**
      * Редактирование смайла
+     *
+     * @param int $id
+     * @return string
      */
-    public function edit($id)
+    public function edit($id): string
     {
         $page = int(Request::input('page', 1));
 
@@ -142,8 +149,10 @@ class SmileController extends AdminController
 
     /**
      * Удаление смайлов
+     *
+     * @return void
      */
-    public function delete()
+    public function delete(): void
     {
         if (! is_writable(UPLOADS . '/smiles')){
             abort('default', 'Директория со смайлами недоступна для записи!');

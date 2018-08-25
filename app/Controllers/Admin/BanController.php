@@ -20,16 +20,20 @@ class BanController extends AdminController
 
     /**
      * Главная страница
+     *
+     * @return string
      */
-    public function index()
+    public function index(): string
     {
         return view('admin/bans/index');
     }
 
     /**
      * Бан пользователя
+     *
+     * @return string
      */
-    public function edit()
+    public function edit(): string
     {
         $login = check(Request::input('user'));
 
@@ -101,8 +105,10 @@ class BanController extends AdminController
 
     /**
      * Изменение бана
+     *
+     * @return string
      */
-    public function change()
+    public function change(): string
     {
         $login = check(Request::input('user'));
 
@@ -158,8 +164,10 @@ class BanController extends AdminController
 
     /**
      * Снятие бана
+     *
+     * @return void
      */
-    public function unban()
+    public function unban(): void
     {
         $token = check(Request::input('token'));
         $login = check(Request::input('user'));

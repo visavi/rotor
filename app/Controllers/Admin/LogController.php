@@ -22,8 +22,10 @@ class LogController extends AdminController
 
     /**
      * Главная страница
+     *
+     * @return string
      */
-    public function index()
+    public function index(): string
     {
         $total = Log::query()->count();
         $page = paginate(setting('loglist'), $total);
@@ -40,12 +42,14 @@ class LogController extends AdminController
 
     /**
      * Очистка логов
+     *
+     * @return void
      */
-    public function clear()
+    public function clear(): void
     {
         $token = check(Request::input('token'));
 
-        if ($token == $_SESSION['token']) {
+        if ($token === $_SESSION['token']) {
 
             Log::query()->truncate();
 

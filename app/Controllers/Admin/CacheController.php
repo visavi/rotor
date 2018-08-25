@@ -21,8 +21,10 @@ class CacheController extends AdminController
 
     /**
      * Главная страница
+     *
+     * @return string
      */
-    public function index()
+    public function index(): string
     {
         $type = check(Request::input('type', 'files'));
 
@@ -44,6 +46,8 @@ class CacheController extends AdminController
 
     /**
      * Очистка кеша
+     *
+     * @return void
      */
     public function clear(): void
     {

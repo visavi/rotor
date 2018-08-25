@@ -33,15 +33,17 @@ class BlacklistController extends AdminController
         $this->types = ['email', 'login', 'domain'];
         $this->type = Request::input('type', 'email');
 
-        if (! \in_array($this->type, $this->types)) {
+        if (! \in_array($this->type, $this->types, true)) {
             abort(404, 'Указанный тип не найден!');
         }
     }
 
     /**
      * Главная страница
+     *
+     * @return string
      */
-    public function index()
+    public function index(): string
     {
         $type = $this->type;
 
@@ -53,15 +55,15 @@ class BlacklistController extends AdminController
             $validator->equal($token, $_SESSION['token'], 'Неверный идентификатор сессии, повторите действие!')
                 ->length($value, 1, 100, ['value' => 'Вы не ввели запись или она слишком длинная!']);
 
-            if ($type == 'email') {
+            if ($type === 'email') {
                 $validator->regex($value, '#^([a-z0-9_\-\.])+\@([a-z0-9_\-\.])+(\.([a-z0-9])+)+$#', ['value' => 'Недопустимый адрес email, необходим формат name@site.domen!']);
             }
 
-            if ($type == 'login') {
+            if ($type === 'login') {
                 $validator->regex($value, '|^[a-z0-9\-]+$|', ['value' => 'Недопустимые символы в логине!']);
             }
 
-            if ($type == 'domain') {
+            if ($type === 'domain') {
                 $value = siteDomain($value);
                 $validator->regex($value, '#([а-яa-z0-9_\-\.])+(\.([а-яa-z0-9\/])+)+$#u', ['value' => 'Недопустимый адрес сайта!']);
             }
@@ -102,8 +104,10 @@ class BlacklistController extends AdminController
 
     /**
      * Удаление записей
+     *
+     * @return void
      */
-    public function delete()
+    public function delete(): void
     {
         $page  = int(Request::input('page', 1));
         $token = check(Request::input('token'));

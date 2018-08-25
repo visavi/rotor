@@ -22,7 +22,7 @@ class BackupController extends AdminController
             abort(403, 'Доступ запрещен!');
         }
 
-        if (function_exists('set_time_limit')) {
+        if (\function_exists('set_time_limit')) {
             set_time_limit(600);
         }
 
@@ -31,10 +31,12 @@ class BackupController extends AdminController
 
     /**
      * Главная страница
+     *
+     * @return string
      */
-    public function index()
+    public function index(): string
     {
-        $files = glob(STORAGE."/backups/*.{zip,gz,bz2,sql}", GLOB_BRACE);
+        $files = glob(STORAGE . '/backups/*.{zip,gz,bz2,sql}', GLOB_BRACE);
         arsort($files);
 
         return view('admin/backups/index', compact('files'));
@@ -42,8 +44,10 @@ class BackupController extends AdminController
 
     /**
      * Создание нового бэкапа
+     *
+     * @return string
      */
-    public function create()
+    public function create(): string
     {
         if (Request::isMethod('post')) {
 
@@ -65,7 +69,7 @@ class BackupController extends AdminController
                 $limit    = 3000;
                 $filename = 'backup_'.$this->date.'.sql';
 
-                $fp = $this->fopen(STORAGE.'/backups/'.$filename, "w", $method, $level);
+                $fp = $this->fopen(STORAGE.'/backups/'.$filename, 'w', $method, $level);
 
                 foreach ($selectTables as $table) {
 
@@ -117,8 +121,8 @@ class BackupController extends AdminController
 
         $tables = DB::select('SHOW TABLE STATUS');
 
-        $bzopen = function_exists('bzopen') ? true : false;
-        $gzopen = function_exists('gzopen') ? true : false;
+        $bzopen = \function_exists('bzopen') ? true : false;
+        $gzopen = \function_exists('gzopen') ? true : false;
 
         $levels = range(0, 9);
 
@@ -127,8 +131,10 @@ class BackupController extends AdminController
 
     /**
      * Удаляет сохраненный бэкап
+     *
+     * @return void
      */
-    public function delete()
+    public function delete(): void
     {
         $token = check(Request::input('token'));
         $file  = check(Request::input('file'));
@@ -154,6 +160,12 @@ class BackupController extends AdminController
 
     /**
      * Открывает поток
+     *
+     * @param string $name
+     * @param string $mode
+     * @param string $method
+     * @param int $level
+     * @return bool|resource
      */
     private function fopen($name, $mode, $method, $level)
     {
@@ -170,8 +182,12 @@ class BackupController extends AdminController
 
     /**
      * Записывает данные в поток
+     *
+     * @param resource $fp
+     * @param string $str
+     * @param string $method
      */
-    private function fwrite($fp, $str, $method)
+    private function fwrite($fp, $str, $method): void
     {
         if ($method === 'bzip') {
             bzwrite($fp, $str);
@@ -184,8 +200,11 @@ class BackupController extends AdminController
 
     /**
      * Закрывает поток
+     *
+     * @param resource $fp
+     * @param string $method
      */
-    private function fclose($fp, $method)
+    private function fclose($fp, $method): void
     {
         if ($method === 'bzip') {
             bzclose($fp);

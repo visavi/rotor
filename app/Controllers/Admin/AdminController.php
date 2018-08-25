@@ -31,8 +31,10 @@ Class AdminController extends BaseController
 
     /**
      * Главная страница
+     *
+     * @return string
      */
-    public function main()
+    public function main(): string
     {
         $existBoss = User::query()
             ->where('level', User::BOSS)
@@ -43,8 +45,10 @@ Class AdminController extends BaseController
 
     /**
      * Проверка обновлений
+     *
+     * @return string
      */
-    public function upgrade()
+    public function upgrade(): string
     {
         $app  = new PhinxApplication();
         $wrap = new TextWrapper($app);
@@ -61,8 +65,10 @@ Class AdminController extends BaseController
 
     /**
      * Просмотр информации о PHP
+     *
+     * @return string
      */
-    public function phpinfo()
+    public function phpinfo(): string
     {
         if (! isAdmin(User::ADMIN)) {
             abort(403, 'Доступ запрещен!');
@@ -71,7 +77,7 @@ Class AdminController extends BaseController
         $iniInfo = null;
         $gdInfo  = null;
 
-        if (function_exists('ini_get_all')) {
+        if (\function_exists('ini_get_all')) {
             $iniInfo = ini_get_all();
         }
 

@@ -29,8 +29,11 @@ class GuestbookController extends AdminController
 
     /**
      * Редактирование сообщения
+     *
+     * @param int $id
+     * @return string
      */
-    public function edit($id)
+    public function edit($id): string
     {
         $page = int(Request::input('page'));
         $post = Guestbook::with('user')->find($id);
@@ -71,8 +74,11 @@ class GuestbookController extends AdminController
 
     /**
      * Ответ на сообщение
+     *
+     * @param int $id
+     * @return string
      */
-    public function reply($id)
+    public function reply($id): string
     {
         $page = int(Request::input('page'));
         $post = Guestbook::with('user')->find($id);
@@ -111,8 +117,10 @@ class GuestbookController extends AdminController
 
     /**
      * Удаление сообщений
+     *
+     * @return void
      */
-    public function delete()
+    public function delete(): void
     {
         $page  = int(Request::input('page', 1));
         $token = check(Request::input('token'));
@@ -135,8 +143,10 @@ class GuestbookController extends AdminController
 
     /**
      * Очистка сообщений
+     *
+     * @return void
      */
-    public function clear()
+    public function clear(): void
     {
         $token = check(Request::input('token'));
 

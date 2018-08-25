@@ -33,7 +33,7 @@ class ForumController extends AdminController
     /**
      * Создание раздела
      */
-    public function create()
+    public function create(): void
     {
         if (! isAdmin(User::BOSS)) {
             abort(403, 'Доступ запрещен!');
@@ -67,8 +67,11 @@ class ForumController extends AdminController
 
     /**
      * Редактирование форума
+     *
+     * @param int $id
+     * @return string
      */
-    public function edit($id)
+    public function edit($id): string
     {
         if (! isAdmin(User::BOSS)) {
             abort(403, 'Доступ запрещен!');
@@ -126,8 +129,12 @@ class ForumController extends AdminController
 
     /**
      * Удаление раздела
+     *
+     * @param $id
+     * @return void
+     * @throws \Exception
      */
-    public function delete($id)
+    public function delete($id): void
     {
         if (! isAdmin(User::BOSS)) {
             abort(403, 'Доступ запрещен!');
@@ -165,7 +172,7 @@ class ForumController extends AdminController
     /**
      * Пересчет данных
      */
-    public function restatement()
+    public function restatement(): void
     {
         if (! isAdmin(User::BOSS)) {
             abort(403, 'Доступ запрещен!');
@@ -173,7 +180,7 @@ class ForumController extends AdminController
 
         $token = check(Request::input('token'));
 
-        if ($token == $_SESSION['token']) {
+        if ($token === $_SESSION['token']) {
 
             restatement('forums');
 
@@ -187,8 +194,11 @@ class ForumController extends AdminController
 
     /**
      * Просмотр тем раздела
+     *
+     * @param int $id
+     * @return string
      */
-    public function forum($id)
+    public function forum($id): string
     {
         $forum = Forum::query()->with('parent', 'children.lastTopic.lastPost.user')->find($id);
 
@@ -214,8 +224,11 @@ class ForumController extends AdminController
 
     /**
      * Редактирование темы
+     *
+     * @param int $id
+     * @return string
      */
-    public function editTopic($id)
+    public function editTopic($id): string
     {
         $topic = Topic::query()->find($id);
 
@@ -262,8 +275,11 @@ class ForumController extends AdminController
 
     /**
      * Перенос темы
+     *
+     * @param int $id
+     * @return string
      */
-    public function moveTopic($id)
+    public function moveTopic($id): string
     {
         $topic = Topic::query()->find($id);
 
@@ -317,8 +333,11 @@ class ForumController extends AdminController
 
     /**
      * Закрытие и закрепление тем
+     *
+     * @return void
+     * @param $id
      */
-    public function actionTopic($id)
+    public function actionTopic($id): void
     {
         $page  = int(Request::input('page', 1));
         $token = check(Request::input('token'));
@@ -330,7 +349,7 @@ class ForumController extends AdminController
             abort(404, 'Данной темы не существует!');
         }
 
-        if ($token == $_SESSION['token']) {
+        if ($token === $_SESSION['token']) {
 
             switch ($type):
                 case 'closed':
@@ -379,8 +398,12 @@ class ForumController extends AdminController
 
     /**
      * Удаление тем
+     *
+     * @param $id
+     * @return void
+     * @throws \Exception
      */
-    public function deleteTopic($id)
+    public function deleteTopic($id): void
     {
         $page  = int(Request::input('page', 1));
         $token = check(Request::input('token'));
@@ -429,8 +452,11 @@ class ForumController extends AdminController
 
     /**
      * Просмотр темы
+     *
+     * @param int $id
+     * @return string
      */
-    public function topic($id)
+    public function topic($id): string
     {
         $topic = Topic::query()->where('id', $id)->with('forum.parent')->first();
 
@@ -487,8 +513,11 @@ class ForumController extends AdminController
 
     /**
      * Редактирование сообщения
+     *
+     * @param int $id
+     * @return string
      */
-    public function editPost($id)
+    public function editPost($id): string
     {
         $page = int(Request::input('page', 1));
 
@@ -548,8 +577,10 @@ class ForumController extends AdminController
 
     /**
      * Удаление тем
+     *
+     * @return void
      */
-    public function deletePosts()
+    public function deletePosts(): void
     {
         $tid   = int(Request::input('tid'));
         $page  = int(Request::input('page', 1));
@@ -589,8 +620,11 @@ class ForumController extends AdminController
 
     /**
      * Переадресация к последнему сообщению
+     *
+     * @return void
+     * @param $id
      */
-    public function end($id)
+    public function end($id): void
     {
         $topic = Topic::query()->find($id);
 
