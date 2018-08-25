@@ -20,8 +20,11 @@ class TopicController extends BaseController
 {
     /**
      * Главная страница
+     *
+     * @param int $id
+     * @return string
      */
-    public function index($id)
+    public function index($id): string
     {
         $topic = Topic::query()
             ->select('topics.*', 'bookmarks.count_posts as bookmark_posts')
@@ -96,8 +99,11 @@ class TopicController extends BaseController
 
     /**
      * Создание сообщения
+     *
+     * @param int $id
+     * @return void
      */
-    public function create($id)
+    public function create($id): void
     {
         $msg   = check(Request::input('msg'));
         $token = check(Request::input('token'));
@@ -216,8 +222,11 @@ class TopicController extends BaseController
 
     /**
      * Удаление сообщений
+     *
+     * @param int $id
+     * @return void
      */
-    public function delete($id)
+    public function delete($id): void
     {
         $token = check(Request::input('token'));
         $del   = intar(Request::input('del'));
@@ -268,8 +277,11 @@ class TopicController extends BaseController
 
     /**
      * Закрытие темы
+     *
+     * @param int $id
+     * @return void
      */
-    public function close($id)
+    public function close($id): void
     {
         $token = check(Request::input('token'));
 
@@ -306,8 +318,11 @@ class TopicController extends BaseController
 
     /**
      * Редактирование темы
+     *
+     * @param int $id
+     * @return string
      */
-    public function edit($id)
+    public function edit($id): string
     {
         if (! getUser()) {
             abort(403, 'Авторизуйтесь для изменения темы!');
@@ -379,8 +394,11 @@ class TopicController extends BaseController
 
     /**
      * Редактирование сообщения
+     *
+     * @param int $id
+     * @return string
      */
-    public function editPost($id)
+    public function editPost($id): string
     {
         $page = int(Request::input('page'));
 
@@ -404,7 +422,7 @@ class TopicController extends BaseController
             abort('default', 'Редактирование невозможно, данная тема закрыта!');
         }
 
-        if (! $isModer && $post->user_id != getUser('id')) {
+        if (! $isModer && $post->user_id !== getUser('id')) {
             abort('default', 'Редактировать сообщения может только автор или кураторы темы!');
         }
 
@@ -461,8 +479,11 @@ class TopicController extends BaseController
 
     /**
      * Голосование
+     *
+     * @param $id
+     * @return void
      */
-    public function vote($id)
+    public function vote($id): void
     {
         if (! getUser()) {
             abort(403, 'Авторизуйтесь для голосования!');
@@ -525,8 +546,11 @@ class TopicController extends BaseController
 
     /**
      * Печать темы
+     *
+     * @param int $id
+     * @return string
      */
-    public function print($id)
+    public function print($id): string
     {
         $topic = Topic::query()->find($id);
 
@@ -545,8 +569,12 @@ class TopicController extends BaseController
 
     /**
      * Переход к сообщению
+     *
+     * @param int $id
+     * @param int $pid
+     * @return void
      */
-    public function viewpost($id, $pid)
+    public function viewpost($id, $pid): void
     {
         $countTopics = Post::query()
             ->where('id', '<=', $pid)
@@ -563,8 +591,11 @@ class TopicController extends BaseController
 
     /**
      * Переадресация к последнему сообщению
+     *
+     * @param $id
+     * @return void
      */
-    public function end($id)
+    public function end($id): void
     {
         $topic = Topic::query()->find($id);
 

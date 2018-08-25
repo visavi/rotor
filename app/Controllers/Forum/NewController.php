@@ -10,8 +10,10 @@ class NewController extends BaseController
 {
     /**
      * Вывод тем
+     *
+     * @return string
      */
-    public function topics()
+    public function topics(): string
     {
         $total = Topic::query()->count();
 
@@ -37,8 +39,10 @@ class NewController extends BaseController
 
     /**
      * Вывод сообшений
+     *
+     * @return string
      */
-    public function posts()
+    public function posts(): string
     {
         $total = Post::query()->count();
 

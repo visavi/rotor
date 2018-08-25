@@ -31,8 +31,10 @@ class ActiveController extends BaseController
 
     /**
      * Вывод тем
+     *
+     * @return string
      */
-    public function topics()
+    public function topics(): string
     {
         $user  = $this->user;
         $total = Topic::query()->where('user_id', $user->id)->count();
@@ -56,8 +58,10 @@ class ActiveController extends BaseController
 
     /**
      * Вывод сообшений
+     *
+     * @return string
      */
-    public function posts()
+    public function posts(): string
     {
         $user  = $this->user;
         $total = Post::query()->where('user_id', $user->id)->count();
@@ -81,8 +85,11 @@ class ActiveController extends BaseController
 
     /**
      * Удаление сообщений
+     *
+     * @return string
+     * @throws \Exception
      */
-    public function delete()
+    public function delete(): string
     {
         if (! Request::ajax()) {
             redirect('/');
@@ -111,10 +118,10 @@ class ActiveController extends BaseController
             $post->topic->decrement('count_posts');
             $post->topic->forum->decrement('count_posts');
 
-            exit(json_encode(['status' => 'success']));
-        } else {
-            exit(json_encode(['status' => 'error', 'message' => current($validator->getErrors())]));
+            return json_encode(['status' => 'success']);
         }
+
+        return json_encode(['status' => 'error', 'message' => current($validator->getErrors())]);
     }
 }
 

@@ -368,8 +368,11 @@ class ForumController extends BaseController
 
     /**
      * RSS постов
+     *
+     * @param int $id
+     * @return string
      */
-    public function rssPosts($id)
+    public function rssPosts($id): string
     {
         $topic = Topic::query()->find($id);
 
