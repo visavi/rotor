@@ -259,6 +259,7 @@ class DownController extends BaseController
      * Голосование
      *
      * @param $id
+     * @return void
      */
     public function vote($id): void
     {
@@ -323,6 +324,7 @@ class DownController extends BaseController
      * Скачивание файла
      *
      * @param $id
+     * @return void
      */
     public function download($id): void
     {
@@ -508,6 +510,7 @@ class DownController extends BaseController
      * Переадресация на последнюю страницу
      *
      * @param int $id
+     * @return void
      */
     public function end($id): void
     {
@@ -567,8 +570,12 @@ class DownController extends BaseController
 
     /**
      * Просмотр файла в zip архиве
+     *
+     * @param int $id
+     * @param int $fid
+     * @return string
      */
-    public function zipView($id, $fid)
+    public function zipView($id, $fid): string
     {
         $file = File::query()->where('relate_type', Down::class)->find($id);
 
@@ -645,6 +652,7 @@ class DownController extends BaseController
      *
      * @param int $id
      * @param int $cid
+     * @return void
      */
     public function viewComment($id, $cid): void
     {

@@ -10,8 +10,10 @@ class TopController extends BaseController
 {
     /**
      * Топ файлов
+     *
+     * @return string
      */
-    public function index()
+    public function index(): string
     {
         $total = Down::query()->where('active', 1)->count();
 

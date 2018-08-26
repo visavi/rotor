@@ -11,8 +11,10 @@ class LoadController extends BaseController
 {
     /**
      * Главная страница
+     *
+     * @return string
      */
-    public function index()
+    public function index(): string
     {
         $categories = Load::query()
             ->where('parent_id', 0)
@@ -29,8 +31,11 @@ class LoadController extends BaseController
 
     /**
      * Список файлов в категории
+     *
+     * @param int $id
+     * @return string
      */
-    public function load($id)
+    public function load($id): string
     {
         $category = Load::query()->with('parent')->find($id);
 
@@ -70,8 +75,10 @@ class LoadController extends BaseController
 
     /**
      * RSS всех файлов
+     *
+     * @return string
      */
-    public function rss()
+    public function rss(): string
     {
         $downs = Down::query()
             ->orderBy('created_at', 'desc')

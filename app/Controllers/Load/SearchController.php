@@ -11,8 +11,10 @@ class SearchController extends BaseController
 {
     /**
      * Поиск
+     *
+     * @return string
      */
-    public function index()
+    public function index(): ?string
     {
         $cid     = check(Request::input('cid'));
         $find    = check(Request::input('find'));

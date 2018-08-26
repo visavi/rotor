@@ -10,8 +10,10 @@ class NewController extends BaseController
 {
     /**
      * Новые файлы
+     *
+     * @return string
      */
-    public function files()
+    public function files(): string
     {
         $total = Down::query()->where('active', 1)->count();
 
@@ -34,8 +36,10 @@ class NewController extends BaseController
 
     /**
      * Новые комментарии
+     *
+     * @return string
      */
-    public function comments()
+    public function comments(): string
     {
         $total = Comment::query()->where('relate_type', Down::class)->count();
 

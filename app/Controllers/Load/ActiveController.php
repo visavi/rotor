@@ -30,13 +30,15 @@ class ActiveController extends BaseController
 
     /**
      * Мои файлы
+     *
+     * @return string
      */
-    public function files()
+    public function files(): string
     {
         $active = check(Request::input('active', 1));
         $user   = $this->user;
 
-        if ($user->id != getUser('id')) {
+        if ($user->id !== getUser('id')) {
             $active = 1;
         }
 
@@ -62,8 +64,10 @@ class ActiveController extends BaseController
 
     /**
      * Мои комментарии
+     *
+     * @return string
      */
-    public function comments()
+    public function comments(): string
     {
         $user  = $this->user;
         $total = Comment::query()->where('relate_type', Down::class)->count();
