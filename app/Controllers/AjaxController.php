@@ -33,9 +33,11 @@ class AjaxController extends BaseController
     }
 
     /**
-     * Проверяет является ли запрос ajax
+     * Возвращает является ли запрос ajax
+     *
+     * @return string
      */
-    public function checkAjax()
+    public function checkAjax(): string
     {
         if (! Request::ajax()) {
             return json_encode([
@@ -43,12 +45,16 @@ class AjaxController extends BaseController
                 'message' => 'This is not ajax request'
             ]);
         }
+
+        return true;
     }
 
     /**
-     * Проверяет является ли запрос ajax
+     * Возвращает авторизован ли пользователь
+     *
+     * @return string
      */
-    public function checkAuthorize()
+    public function checkAuthorize(): string
     {
         if (! getUser()) {
             return json_encode([
@@ -56,12 +62,16 @@ class AjaxController extends BaseController
                 'message' => 'Not authorized'
             ]);
         }
+
+        return true;
     }
 
     /**
-     * Предпросмотр bbCode
+     * Возвращает bbCode для предпросмотра
+     *
+     * @return string
      */
-    public function bbCode()
+    public function bbCode(): string
     {
         $message = check(Request::input('data'));
 
@@ -69,9 +79,11 @@ class AjaxController extends BaseController
     }
 
     /**
-     * Жалоба на сообщение
+     * Отправляет жалобу на сообщение
+     *
+     * @return string
      */
-    public function complaint()
+    public function complaint(): string
     {
         $path  = null;
         $data  = false;
@@ -173,9 +185,11 @@ class AjaxController extends BaseController
     }
 
     /**
-     * Удаление комментариев
+     * Удаляет комментарии
+     *
+     * @return string
      */
-    public function delComment()
+    public function delComment(): string
     {
         if (! isAdmin()) {
             return json_encode(['status' => 'error', 'message' => 'Not authorized']);
@@ -210,9 +224,12 @@ class AjaxController extends BaseController
     }
 
     /**
-     * Изменение рейтинга
+     * Изменяет рейтинг
+     *
+     * @return string
+     * @throws \Exception
      */
-    public function rating()
+    public function rating(): string
     {
         $types = [
             Post::class,
@@ -287,9 +304,11 @@ class AjaxController extends BaseController
     }
 
     /**
-     * Загрузка изображений
+     * Загружает изображение
+     *
+     * @return string
      */
-    public function uploadImage()
+    public function uploadImage(): string
     {
         $types = [
             Blog::class,
@@ -358,9 +377,12 @@ class AjaxController extends BaseController
     }
 
     /**
-     * Удаление изображений
+     * Удаляет изображение
+     *
+     * @return string
+     * @throws \Exception
      */
-    public function deleteImage()
+    public function deleteImage(): string
     {
         $types = [
             Blog::class,

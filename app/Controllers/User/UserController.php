@@ -470,6 +470,8 @@ class UserController extends BaseController
 
     /**
      * Инициализация изменения email
+     *
+     * @return void
      */
     public function changeMail(): void
     {
