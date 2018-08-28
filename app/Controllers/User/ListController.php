@@ -10,8 +10,10 @@ class ListController extends BaseController
 {
     /**
      * Список пользователей
+     *
+     * @return string
      */
-    public function userlist()
+    public function userlist(): string
     {
         $total = User::query()->count();
         $page = paginate(setting('userlist'), $total);
@@ -35,8 +37,8 @@ class ListController extends BaseController
                 ->keys()
                 ->first();
 
-            if (isset($position)) {
-                $position += 1;
+            if ($position) {
+                ++$position;
                 $end = ceil($position / $page->limit);
 
                 setFlash('success', 'Позиция в рейтинге: '.$position);
@@ -51,8 +53,10 @@ class ListController extends BaseController
 
     /**
      * Список админов
+     *
+     * @return string
      */
-    public function adminlist()
+    public function adminlist(): string
     {
         $users = User::query()
             ->whereIn('level', User::ADMIN_GROUPS)
@@ -64,8 +68,10 @@ class ListController extends BaseController
 
     /**
      * Рейтинг репутации
+     *
+     * @return string
      */
-    public function authoritylist()
+    public function authoritylist(): string
     {
         $total = User::query()->count();
         $page = paginate(setting('avtorlist'), $total);
@@ -89,8 +95,8 @@ class ListController extends BaseController
                 ->keys()
                 ->first();
 
-            if (isset($position)) {
-                $position += 1;
+            if ($position) {
+                ++$position;
                 $end = ceil($position / $page->limit);
 
                 setFlash('success', 'Позиция в рейтинге: '.$position);
@@ -105,8 +111,10 @@ class ListController extends BaseController
 
     /**
      * Рейтинг толстосумов
+     *
+     * @return string
      */
-    public function ratinglist()
+    public function ratinglist(): string
     {
         $total = User::query()->count();
         $page = paginate(setting('userlist'), $total);
@@ -130,8 +138,8 @@ class ListController extends BaseController
                 ->keys()
                 ->first();
 
-            if (isset($position)) {
-                $position += 1;
+            if ($position) {
+                ++$position;
                 $end = ceil($position / $page->limit);
 
                 setFlash('success', 'Позиция в рейтинге: '.$position);

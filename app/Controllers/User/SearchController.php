@@ -10,16 +10,20 @@ class SearchController extends BaseController
 {
     /**
      * Главная страница
+     *
+     * @return string
      */
-    public function index()
+    public function index(): string
     {
         return view('users/search');
     }
 
     /**
      * Поиск пользователя
+     *
+     * @return string
      */
-    public function search()
+    public function search(): string
     {
         $find = check(Request::input('find'));
 
@@ -41,8 +45,11 @@ class SearchController extends BaseController
 
     /**
      * Поиск по первой букве
+     *
+     * @param string $letter
+     * @return string
      */
-    public function sort($letter)
+    public function sort($letter): string
     {
         $search = is_numeric($letter) ? "RLIKE '^[-0-9]'" : "LIKE '$letter%'";
 

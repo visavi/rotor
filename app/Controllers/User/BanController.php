@@ -10,16 +10,18 @@ use App\Models\User;
 
 class BanController extends BaseController
 {
-    /*
-    * Бан пользователя
-    */
-    function ban()
+    /**
+     * Бан пользователя
+     *
+     * @return string
+     */
+    public function ban(): string
     {
         if (! $user = getUser()) {
             abort(403, 'Вы не авторизованы!');
         }
 
-        if ($user->level != User::BANNED) {
+        if ($user->level !== User::BANNED) {
             abort('default', 'Вы не забанены или срок бана истек!');
         }
 
