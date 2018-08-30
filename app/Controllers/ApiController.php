@@ -12,16 +12,20 @@ class ApiController extends BaseController
 {
     /**
      * Главная страница
+     *
+     * @return string
      */
-    public function index()
+    public function index(): string
     {
         return view('api/index');
     }
 
     /**
      * Api пользователей
+     *
+     * @return void
      */
-    public function users()
+    public function users(): void
     {
         header('Content-type: application/json');
         header('Content-Disposition: inline; filename="users.json";');
@@ -67,8 +71,10 @@ class ApiController extends BaseController
 
     /**
      * Api приватных сообщений
+     *
+     * @return void
      */
-    public function messages()
+    public function messages(): void
     {
         header('Content-type: application/json');
         header('Content-Disposition: inline; filename="messages.json";');
@@ -120,8 +126,10 @@ class ApiController extends BaseController
 
     /**
      * Api постов темы в форуме
+     *
+     * @return void
      */
-    public function forums()
+    public function forums(): void
     {
         header('Content-type: application/json');
         header('Content-Disposition: inline; filename="forums.json";');
