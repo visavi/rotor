@@ -18,8 +18,10 @@ class BlogController extends BaseController
 {
     /**
      * Главная страница
+     *
+     * @return string
      */
-    public function index()
+    public function index(): string
     {
         $categories = Category::query()
             ->where('parent_id', 0)
@@ -36,8 +38,11 @@ class BlogController extends BaseController
 
     /**
      * Список блогов
+     *
+     * @param int $id
+     * @return string
      */
-    public function blog($id)
+    public function blog($id): string
     {
         $category = Category::query()->with('parent')->find($id);
 
@@ -62,8 +67,11 @@ class BlogController extends BaseController
 
     /**
      * Просмотр статьи
+     *
+     * @param int $id
+     * @return string
      */
-    public function view($id)
+    public function view($id): string
     {
         $blog = Blog::query()
             ->select('blogs.*', 'pollings.vote')
@@ -123,8 +131,11 @@ class BlogController extends BaseController
 
     /**
      * Редактирование статьи
+     *
+     * @param int $id
+     * @return string
      */
-    public function edit($id)
+    public function edit($id): string
     {
         if (! getUser()) {
             abort(403, 'Для редактирования статьи необходимо авторизоваться');
@@ -196,8 +207,10 @@ class BlogController extends BaseController
 
     /**
      * Просмотр по категориям
+     *
+     * @return string
      */
-    public function authors()
+    public function authors(): string
     {
         $total = Blog::query()
             ->distinct()
@@ -221,8 +234,10 @@ class BlogController extends BaseController
 
     /**
      * Создание статьи
+     *
+     * @return string
      */
-    public function create()
+    public function create(): string
     {
         $cid = int(Request::input('cid'));
 
@@ -307,8 +322,11 @@ class BlogController extends BaseController
 
     /**
      * Комментарии
+     *
+     * @param int $id
+     * @return string
      */
-    public function comments($id)
+    public function comments($id): string
     {
         $blog = Blog::query()->find($id);
 
@@ -380,8 +398,12 @@ class BlogController extends BaseController
 
     /**
      * Подготовка к редактированию комментария
+     *
+     * @param int $id
+     * @param int $cid
+     * @return string
      */
-    public function editComment($id, $cid)
+    public function editComment($id, $cid): string
     {
         $page = int(Request::input('page', 1));
         $blog = Blog::query()->find($id);
@@ -438,8 +460,11 @@ class BlogController extends BaseController
 
     /**
      * Переадресация на последнюю страницу
+     *
+     * @param int $id
+     * @return void
      */
-    public function end($id)
+    public function end($id): void
     {
         $blog = Blog::query()->find($id);
 
@@ -458,8 +483,11 @@ class BlogController extends BaseController
 
     /**
      * Печать
+     *
+     * @param int $id
+     * @return string
      */
-    public function print($id)
+    public function print($id): string
     {
         $blog = Blog::query()->find($id);
 
@@ -474,8 +502,10 @@ class BlogController extends BaseController
 
     /**
      * RSS всех блогов
+     *
+     * @return string
      */
-    public function rss()
+    public function rss(): string
     {
         $blogs = Blog::query()
             ->orderBy('created_at', 'desc')
@@ -491,8 +521,11 @@ class BlogController extends BaseController
 
     /**
      * RSS комментариев к блогу
+     *
+     * @param int $id
+     * @return string
      */
-    public function rssComments($id)
+    public function rssComments($id): string
     {
         $blog = Blog::query()->where('id', $id)->with('lastComments')->first();
 
@@ -505,8 +538,11 @@ class BlogController extends BaseController
 
     /**
      * Поиск по тегам
+     *
+     * @param string $tag
+     * @return string
      */
-    public function tags($tag = null)
+    public function tags($tag = null): string
     {
         if ($tag) {
             $tag = urldecode($tag);
@@ -579,8 +615,10 @@ class BlogController extends BaseController
 
     /**
      * Новые статьи
+     *
+     * @return string
      */
-    public function newArticles()
+    public function newArticles(): string
     {
         $total = Blog::query()->count();
 
@@ -601,8 +639,10 @@ class BlogController extends BaseController
 
     /**
      * Новые комментарии
+     *
+     * @return string
      */
-    public function newComments()
+    public function newComments(): string
     {
         $total = Comment::query()->where('relate_type', Blog::class)->count();
 
@@ -626,8 +666,10 @@ class BlogController extends BaseController
 
     /**
      * Статьи пользователя
+     *
+     * @return string
      */
-    public function userArticles()
+    public function userArticles(): string
     {
         $login = check(Request::input('user', getUser('login')));
 
@@ -651,8 +693,10 @@ class BlogController extends BaseController
 
     /**
      * Комментарии пользователя
+     *
+     * @return string
      */
-    public function userComments()
+    public function userComments(): string
     {
         $login = check(Request::input('user', getUser('login')));
 
@@ -684,8 +728,12 @@ class BlogController extends BaseController
 
     /**
      * Переход к сообщению
+     *
+     * @param $id
+     * @param $cid
+     * @return void
      */
-    public function viewComment($id, $cid)
+    public function viewComment($id, $cid): void
     {
         $blog = Blog::query()->find($id);
 
@@ -706,8 +754,10 @@ class BlogController extends BaseController
 
     /**
      * Топ статей
+     *
+     * @return string
      */
-    public function top()
+    public function top(): string
     {
         $sort = check(Request::get('sort', 'visits'));
 
@@ -736,8 +786,10 @@ class BlogController extends BaseController
 
     /**
      * Поиск
+     *
+     * @return string
      */
-    public function search()
+    public function search(): ?string
     {
         $find  = check(Request::input('find'));
         $type  = int(Request::input('type'));
