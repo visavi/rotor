@@ -160,10 +160,10 @@
                     <i class="fa fa-ban"></i> <a href="/admin/invitations/send?user={{ $user->login }}&amp;token={{ $_SESSION['token'] }}">Отправить инвайт</a><br>
                 @endif
             <i class="fa fa-ban"></i> <a href="/admin/bans/edit?user={{ $user->login }}">Бан / Разбан</a><br>
-            <i class="fa fa-history"></i> <a href="/banhists/view?user={{ $user->login }}">История банов</a><br>
+            <i class="fa fa-history"></i> <a href="/admin/banhists/view?user={{ $user->login }}">История банов</a><br>
             @endif
 
-            @if (isAdmin('admin'))
+            @if (isAdmin('boss'))
                 <i class="fa fa-wrench"></i> <a href="/admin/users/edit?user={{ $user->login }}">Редактировать</a><br>
             @endif
         @else

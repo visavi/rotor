@@ -20,6 +20,6 @@
 
     <br>
     <div class="alert alert-success">
-        <i class="fa fa-check"></i> <b>Установлена актуальная версия Rotor</b>
+        <i class="fa fa-check"></i> <b>База данных в актуальном состоянии</b>
     </div>
 @stop
