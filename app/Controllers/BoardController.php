@@ -115,11 +115,11 @@ class BoardController extends BaseController
 
             $validator = new Validator();
             $validator
-                ->equal($token, $_SESSION['token'], 'Неверный идентификатор сессии, повторите действие!')
-                ->length($title, 5, 50, ['title' => 'Слишком длинное или короткое название!'])
-                ->length($text, 50, 5000, ['text' => 'Слишком длинный или короткий текст описания!'])
-                ->regex($phone, '#^\d{11}$#', ['phone' => 'Недопустимый формат телефона. Пример: 8-900-123-45-67!'], false)
-                ->true(Flood::isFlood(), ['text' => 'Антифлуд! Разрешается добавлять объявления раз в ' . Flood::getPeriod() . ' секунд!'])
+                ->equal($token, $_SESSION['token'], trans('validator.token'))
+                ->length($title, 5, 50, ['title' => trans('validator.name')])
+                ->length($text, 50, 5000, ['text' => trans('validator.text')])
+                ->regex($phone, '#^\d{11}$#', ['phone' => trans('validator.phone')], false)
+                ->true(Flood::isFlood(), ['text' =>  trans('validator.flood', ['sec' => Flood::getPeriod()])])
                 ->notEmpty($board, ['category' => 'Категории для данного объявления не существует!']);
 
             if ($board) {
@@ -195,10 +195,10 @@ class BoardController extends BaseController
 
             $validator = new Validator();
             $validator
-                ->equal($token, $_SESSION['token'], 'Неверный идентификатор сессии, повторите действие!')
-                ->length($title, 5, 50, ['title' => 'Слишком длинное или короткое название!'])
-                ->length($text, 50, 5000, ['text' => 'Слишком длинный или короткий текст описания!'])
-                ->regex($phone, '#^\d{11}$#', ['phone' => 'Недопустимый формат телефона. Пример: 8-900-123-45-67!'], false)
+                ->equal($token, $_SESSION['token'], trans('validator.token'))
+                ->length($title, 5, 50, ['title' => trans('validator.name')])
+                ->length($text, 50, 5000, ['text' => trans('validator.text')])
+                ->regex($phone, '#^\d{11}$#', ['phone' => trans('validator.phone')], false)
                 ->notEmpty($board, ['category' => 'Категории для данного объявления не существует!'])
                 ->equal($item->user_id, getUser('id'), 'Изменение невозможно, вы не автор данного объявления!');
 

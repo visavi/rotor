@@ -51,7 +51,7 @@
             </div>
 
             <div class="form-group{{ hasError('name') }}">
-                <label for="name">Название:</label>
+                <label for="name">Заголовок:</label>
                 <input class="form-control" name="name" id="name" maxlength="50" value="{{ getInput('name', $board->name) }}" required>
                 {!! textError('name') !!}
             </div>

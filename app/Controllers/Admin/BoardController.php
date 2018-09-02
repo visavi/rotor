@@ -92,7 +92,7 @@ class BoardController extends AdminController
         $name  = check(Request::input('name'));
 
         $validator = new Validator();
-        $validator->equal($token, $_SESSION['token'], 'Неверный идентификатор сессии, повторите действие!')
+        $validator->equal($token, $_SESSION['token'], trans('validator.token'))
             ->length($name, 3, 50, ['name' => 'Слишком длинное или короткое название раздела!']);
 
         if ($validator->isValid()) {
@@ -145,7 +145,7 @@ class BoardController extends AdminController
             $closed = empty(Request::input('closed')) ? 0 : 1;
 
             $validator = new Validator();
-            $validator->equal($token, $_SESSION['token'], 'Неверный идентификатор сессии, повторите действие!')
+            $validator->equal($token, $_SESSION['token'], trans('validator.token'))
                 ->length($name, 3, 50, ['title' => 'Слишком длинное или короткое название раздела!'])
                 ->notEqual($parent, $board->id, ['parent' => 'Недопустимый выбор родительского раздела!']);
 
@@ -194,7 +194,7 @@ class BoardController extends AdminController
         $token = check(Request::input('token'));
 
         $validator = new Validator();
-        $validator->equal($token, $_SESSION['token'], 'Неверный идентификатор сессии, повторите действие!')
+        $validator->equal($token, $_SESSION['token'], trans('validator.token'))
             ->true($board->children->isEmpty(), 'Удаление невозможно! Данный раздел имеет подразделы!');
 
         $item = Item::query()->where('board_id', $board->id)->first();
@@ -240,10 +240,10 @@ class BoardController extends AdminController
 
             $validator = new Validator();
             $validator
-                ->equal($token, $_SESSION['token'], 'Неверный идентификатор сессии, повторите действие!')
-                ->length($title, 5, 50, ['title' => 'Слишком длинное или короткое название!'])
-                ->length($text, 50, 5000, ['text' => 'Слишком длинный или короткий текст описания!'])
-                ->regex($phone, '#^\d{11}$#', ['phone' => 'Недопустимый формат телефона. Пример: 8-900-123-45-67!'], false)
+                ->equal($token, $_SESSION['token'], trans('validator.token'))
+                ->length($title, 5, 50, ['title' => trans('validator.name')])
+                ->length($text, 50, 5000, ['text' => trans('validator.text')])
+                ->regex($phone, '#^\d{11}$#', ['phone' => trans('validator.phone')], false)
                 ->notEmpty($board, ['bid' => 'Категории для данного объявления не существует!']);
 
             if ($board) {
