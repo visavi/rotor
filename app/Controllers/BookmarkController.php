@@ -23,8 +23,10 @@ class BookmarkController extends BaseController
 
     /**
      * Главная страница
+     *
+     * @return string
      */
-    public function index()
+    public function index(): string
     {
         $total = Bookmark::query()->where('user_id', getUser('id'))->count();
         $page  = paginate(setting('forumtem'), $total);
@@ -44,10 +46,15 @@ class BookmarkController extends BaseController
 
     /**
      * Добавление / удаление закладок
+     *
+     * @return string
+     * @throws \Exception
      */
-    public function perform()
+    public function perform(): string
     {
-        if (! Request::ajax()) redirect('/');
+        if (! Request::ajax()) {
+            redirect('/');
+        }
 
         $token = check(Request::input('token'));
         $tid   = int(Request::input('tid'));
@@ -67,24 +74,26 @@ class BookmarkController extends BaseController
 
             if ($bookmark) {
                 $bookmark->delete();
-                exit(json_encode(['status' => 'deleted', 'message' => 'Тема успешно удалена из закладок!']));
-            } else {
-                Bookmark::query()->create([
-                    'user_id'     => getUser('id'),
-                    'topic_id'    => $tid,
-                    'count_posts' => $topic->count_posts,
-                ]);
-                exit(json_encode(['status' => 'added', 'message' => 'Тема успешно добавлена в закладки!']));
+                return json_encode(['status' => 'deleted', 'message' => 'Тема успешно удалена из закладок!']);
             }
-        } else {
-            exit(json_encode(['status' => 'error', 'message' => current($validator->getErrors())]));
+
+            Bookmark::query()->create([
+                'user_id'     => getUser('id'),
+                'topic_id'    => $tid,
+                'count_posts' => $topic->count_posts,
+            ]);
+            return json_encode(['status' => 'added', 'message' => 'Тема успешно добавлена в закладки!']);
         }
+
+        return json_encode(['status' => 'error', 'message' => current($validator->getErrors())]);
     }
 
     /**
      * Удаление закладок
+     *
+     * @return void
      */
-    public function delete()
+    public function delete(): void
     {
         $token    = check(Request::input('token'));
         $topicIds = intar(Request::input('del'));
