@@ -23,8 +23,10 @@ class ContactController extends BaseController
 
     /**
      * Главная страница
+     *
+     * @return string
      */
-    public function index()
+    public function index(): string
     {
         if (Request::isMethod('post')) {
             $page  = int(Request::input('page', 1));
@@ -84,8 +86,11 @@ class ContactController extends BaseController
 
     /**
      * Заметка для пользователя
+     *
+     * @param int $id
+     * @return string
      */
-    public function note($id)
+    public function note($id): string
     {
         $contact = Contact::query()
             ->where('user_id', getUser('id'))
@@ -124,8 +129,10 @@ class ContactController extends BaseController
 
     /**
      * Удаление контактов
+     *
+     * @return void
      */
-    public function delete()
+    public function delete(): void
     {
         $page  = int(Request::input('page', 1));
         $token = check(Request::input('token'));
