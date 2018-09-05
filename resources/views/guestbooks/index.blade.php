@@ -71,7 +71,7 @@
                     <span class="data">({{ $data->brow }}, {{ $data->ip }})</span>
                 @endif
 
-                @if ($data->reply))
+                @if ($data->reply)
                     <br><span style="color:#ff0000">{{ trans('guestbooks.answer') }}: {!! bbCode($data->reply) !!}</span>
                 @endif
             </div>
