@@ -24,8 +24,11 @@ class RatingController extends BaseController
 
     /**
      * Изменение рейтинга
+     *
+     * @param string $login
+     * @return string
      */
-    public function index($login)
+    public function index($login): string
     {
         $vote = Request::input('vote');
         $user = User::query()->where('login', $login)->first();
@@ -34,7 +37,7 @@ class RatingController extends BaseController
             abort(404, 'Данного пользователя не существует!');
         }
 
-        if (getUser('id') == $user->id) {
+        if (getUser('id') === $user->id) {
             abort('default', 'Запрещено изменять репутацию самому себе!');
         }
 
@@ -62,7 +65,7 @@ class RatingController extends BaseController
             $validator->equal($token, $_SESSION['token'], 'Неверный идентификатор сессии, повторите действие!')
                 ->length($text, 5, 250, ['text' => 'Слишком длинный или короткий комментарий!']);
 
-            if (getUser('rating') < 10 && empty($vote)) {
+            if (empty($vote) && getUser('rating') < 10) {
                 $validator->addError('Уменьшать репутацию могут только пользователи с рейтингом 10 или выше!');
             }
 
@@ -111,8 +114,11 @@ class RatingController extends BaseController
 
     /**
      *  Полученные голоса
+     *
+     * @param string $login
+     * @return string
      */
-    public function received($login)
+    public function received($login): string
     {
         $user = User::query()->where('login', $login)->first();
 
@@ -136,8 +142,11 @@ class RatingController extends BaseController
 
     /**
      *  Отданные голоса
+     *
+     * @param string $login
+     * @return string
      */
-    public function gave($login)
+    public function gave($login): string
     {
         $user = User::query()->where('login', $login)->first();
 
@@ -161,8 +170,11 @@ class RatingController extends BaseController
 
     /**
      *  Удаление истории
+     *
+     * @return void
+     * @throws \Exception
      */
-    public function delete()
+    public function delete(): void
     {
         $id    = int(Request::input('id'));
         $token = check(Request::input('token'));

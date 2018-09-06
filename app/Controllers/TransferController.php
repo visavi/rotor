@@ -29,16 +29,20 @@ class TransferController extends BaseController
 
     /**
      * Главная страница
+     *
+     * @return string
      */
-    public function index()
+    public function index(): string
     {
         return view('transfers/index', ['user' => $this->user]);
     }
 
     /**
      * Перевод денег
+     *
+     * @return void
      */
-    public function send()
+    public function send(): void
     {
         $money = int(Request::input('money'));
         $msg   = check(Request::input('msg'));
@@ -67,7 +71,7 @@ class TransferController extends BaseController
                 $this->user->increment('newprivat');
 
                 $comment = $msg ?? 'Не указано';
-                $message = 'Пользователь [b]'.getUser('login').'[/b] перечислил вам '.plural($money, setting('moneyname')).''.PHP_EOL.'Примечание: '.$comment;
+                $message = 'Пользователь [b]' . getUser()->getProfile() . '[/b] перечислил вам '.plural($money, setting('moneyname')).''.PHP_EOL.'Примечание: '.$comment;
 
                 // Уведомление по привату
                 $this->user->sendMessage(getUser(), $message);
