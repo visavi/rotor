@@ -79,7 +79,7 @@ class RatingController extends BaseController
                 ]);
 
                 if ($vote === 'plus') {
-                    $text = 'Пользователь [b]' . getUser('login') . '[/b] поставил вам плюс! (Ваш рейтинг: ' . ($user['rating'] + 1) . ')' . PHP_EOL . 'Комментарий: ' . $text;
+                    $text = 'Пользователь [b]' . getUser()->getProfile() . '[/b] поставил вам плюс! (Ваш рейтинг: ' . ($user['rating'] + 1) . ')' . PHP_EOL . 'Комментарий: ' . $text;
 
                     $user->update([
                         'rating'    => DB::raw('posrating - negrating + 1'),
@@ -88,7 +88,7 @@ class RatingController extends BaseController
 
                 } else {
 
-                    $text = 'Пользователь [b]' . getUser('login') . '[/b] поставил вам минус! (Ваш рейтинг: ' . ($user['rating'] - 1) . ')' . PHP_EOL . 'Комментарий: ' . $text;
+                    $text = 'Пользователь [b]' . getUser()->getProfile() . '[/b] поставил вам минус! (Ваш рейтинг: ' . ($user['rating'] - 1) . ')' . PHP_EOL . 'Комментарий: ' . $text;
 
                     $user->update([
                         'rating'    => DB::raw('posrating - negrating - 1'),
