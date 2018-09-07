@@ -10,8 +10,10 @@ class CounterController extends BaseController
 {
     /**
      * Главная страница
+     *
+     * @return string
      */
-    public function index()
+    public function index(): string
     {
         $count   = statsCounter();
         $online  = statsOnline();
@@ -34,9 +36,6 @@ class CounterController extends BaseController
             $counts31['hosts'][]  = $cnt->hosts ?? 0;
             $counts31['labels'][] = date('M j', strtotime($curDate));
         }
-
-        //var_dump()
-
 
         $counts24 = [];
         $counters = Counter24::query()

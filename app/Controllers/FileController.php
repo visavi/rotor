@@ -6,6 +6,10 @@ class FileController extends BaseController
 {
     /**
      * Главная страница
+     *
+     * @param string $action
+     * @param string $params
+     * @return string
      */
     public function __call($action, $params)
     {
@@ -24,6 +28,5 @@ class FileController extends BaseController
         }
 
         return view('files/layout', compact('action'));
-
     }
 }
