@@ -12,8 +12,10 @@ class GuestbookController extends BaseController
 {
     /**
      * Главная страница
+     *
+     * @return string
      */
-    public function index()
+    public function index(): string
     {
         $total = Guestbook::query()->count();
         $page = paginate(setting('bookpost'), $total);
@@ -30,8 +32,10 @@ class GuestbookController extends BaseController
 
     /**
      * Добавление сообщения
+     *
+     * @return void
      */
-    public function add()
+    public function add(): void
     {
         $msg   = check(Request::input('msg'));
         $token = check(Request::input('token'));
@@ -85,8 +89,11 @@ class GuestbookController extends BaseController
 
     /**
      * Редактирование сообщения
+     *
+     * @param int $id
+     * @return string
      */
-    public function edit($id)
+    public function edit($id): string
     {
         if (! getUser()) {
             abort(403);
