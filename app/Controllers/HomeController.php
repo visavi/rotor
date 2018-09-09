@@ -11,16 +11,20 @@ class HomeController extends BaseController
 {
     /**
      * Главная страница
+     *
+     * @return string
      */
-    public function index()
+    public function index(): string
     {
         return view('index');
     }
 
     /**
      * Закрытие сайта
+     *
+     * @return string
      */
-    public function closed()
+    public function closed(): string
     {
         if (setting('closedsite') != 2) {
             redirect('/');
@@ -31,8 +35,11 @@ class HomeController extends BaseController
 
     /**
      * Бан по IP
+     *
+     * @return string
+     * @throws \Exception
      */
-    public function banip()
+    public function banip(): string
     {
         header($_SERVER['SERVER_PROTOCOL'].' 403 Forbidden');
 
@@ -59,8 +66,11 @@ class HomeController extends BaseController
 
     /**
      * Защитная картинка
+     *
+     * @return void
+     * @throws \Exception
      */
-    public function captcha()
+    public function captcha(): void
     {
         header('Content-type: image/jpeg');
         $phrase = new PhraseBuilder;
