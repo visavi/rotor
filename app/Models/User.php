@@ -122,14 +122,19 @@ class User extends BaseModel
     public function getProfile($color = null, $link = true): string
     {
         if ($this->id) {
-            $name = empty($this->name) ? $this->login : $this->name;
+            $admin = null;
+            $name  = empty($this->name) ? $this->login : $this->name;
 
             if ($color) {
                 $name = '<span style="color:' . $color . '">' . $name . '</span>';
             }
 
+            if (\in_array($this->level, self::ADMIN_GROUPS, true)) {
+                $admin = ' <i class="fas fa-crown text-danger"></i>';
+            }
+
             if ($link) {
-                return '<a class="author" href="/users/' . $this->login . '" data-login="' . $this->login . '">' . $name . '</a>';
+                return '<a class="author" href="/users/' . $this->login . '" data-login="' . $this->login . '">' . $name . '</a>' . $admin;
             }
 
             return '<span class="author" data-login="' . $this->login . '">' . $name . '</span>';
