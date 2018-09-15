@@ -8,7 +8,7 @@
 
     @if (getUser())
         <div class="float-right">
-            <a class="btn btn-success" href="/items/create?bid={{ $board->id or 0 }}">Добавить</a><br>
+            <a class="btn btn-success" href="/items/create?bid={{ $board->id ?? 0 }}">Добавить</a><br>
         </div><br>
     @endif
 
