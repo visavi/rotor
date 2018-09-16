@@ -14,8 +14,11 @@ class WallController extends BaseController
 {
     /**
      * Главная страница
+     *
+     * @param string $login
+     * @return string
      */
-    public function index($login)
+    public function index($login): string
     {
         $user = User::query()->where('login', $login)->first();
 
@@ -35,7 +38,7 @@ class WallController extends BaseController
             ->with('user', 'author')
             ->get();
 
-        if ($newWall && $user->id == getUser('id')) {
+        if ($newWall && $user->id === getUser('id')) {
             $user->update([
                 'newwall' => 0,
             ]);
@@ -46,8 +49,11 @@ class WallController extends BaseController
 
     /**
      * Добавление сообщения
+     *
+     * @param string $login
+     * @return void
      */
-    public function create($login)
+    public function create($login): void
     {
         if (! getUser()) {
             abort(403, 'Для отправки сообщений необходимо авторизоваться!');
@@ -77,7 +83,7 @@ class WallController extends BaseController
 
             if ($validator->isValid()) {
 
-                if ($user->id != getUser('id')) {
+                if ($user->id !== getUser('id')) {
                     $user->increment('newwall');
                 }
 
@@ -109,8 +115,11 @@ class WallController extends BaseController
 
     /**
      * Удаление сообщений
+     *
+     * @param string $login
+     * @return void
      */
-    public function delete($login)
+    public function delete($login): void
     {
         $id    = int(Request::input('id'));
         $token = check(Request::input('token'));
@@ -123,7 +132,7 @@ class WallController extends BaseController
             ->equal($token, $_SESSION['token'], 'Неверный идентификатор сессии, повторите действие!')
             ->notEmpty($id, 'Не выбрана запись для удаление!')
             ->notEmpty($user, 'Пользователь не найден!')
-            ->true((isAdmin() || $user->id == getUser('id')), 'Записи может удалять только владелец и администрация!');
+            ->true(isAdmin() || $user->id === getUser('id'), 'Записи может удалять только владелец и администрация!');
 
         if ($validator->isValid()) {
 

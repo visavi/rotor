@@ -1937,11 +1937,14 @@ function getUserById($id): ?User
 function getUser($key = null)
 {
     if (Registry::has('user')) {
+
+        $user = Registry::get('user');
+
         if ($key) {
-            return Registry::get('user')[$key] ?? null;
+            return $user[$key] ?? null;
         }
 
-        return Registry::get('user');
+        return $user;
     }
 
     return null;

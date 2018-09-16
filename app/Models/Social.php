@@ -4,6 +4,11 @@ namespace App\Models;
 
 use stdClass;
 
+/**
+ * Class Social
+ *
+ * @property int id
+ */
 class Social extends BaseModel
 {
     /**

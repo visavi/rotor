@@ -2,6 +2,11 @@
 
 namespace App\Models;
 
+/**
+ * Class Online
+ *
+ * @property int id
+ */
 class Online extends BaseModel
 {
     /**

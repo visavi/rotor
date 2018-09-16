@@ -2,6 +2,15 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
+
+/**
+ * Class Category
+ *
+ * @property int id
+ */
 class Category extends BaseModel
 {
     /**
@@ -20,16 +29,20 @@ class Category extends BaseModel
 
     /**
      * Возвращает связь родительской категории
+     *
+     * @return BelongsTo
      */
-    public function parent()
+    public function parent(): BelongsTo
     {
         return $this->belongsTo(self::class, 'parent_id')->withDefault();
     }
 
     /**
      * Возвращает связь подкатегорий
+     *
+     * @return HasMany
      */
-    public function children()
+    public function children(): HasMany
     {
         return $this->hasMany(self::class, 'parent_id')->orderBy('sort');
     }
@@ -37,9 +50,9 @@ class Category extends BaseModel
     /**
      * Возвращает количество статей за последние 3 дня
      *
-     * @return mixed
+     * @return hasOne
      */
-    public function new()
+    public function new(): hasOne
     {
         return $this->hasOne(Blog::class, 'category_id')
             ->selectRaw('category_id, count(*) as count_blogs')

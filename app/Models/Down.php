@@ -6,8 +6,17 @@ use FFMpeg\Coordinate\TimeCode;
 use FFMpeg\FFMpeg;
 use FFMpeg\FFProbe;
 use FFMpeg\Format\Video\X264;
+use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Http\UploadedFile;
 
+/**
+ * Class Down
+ *
+ * @property int id
+ */
 class Down extends BaseModel
 {
     /**
@@ -40,8 +49,10 @@ class Down extends BaseModel
 
     /**
      * Возвращает категорию загрузок
+     *
+     * @return BelongsTo
      */
-    public function category()
+    public function category(): BelongsTo
     {
         return $this->belongsTo(Load::class, 'category_id')->withDefault();
     }
@@ -49,7 +60,7 @@ class Down extends BaseModel
     /**
      * Возвращает комментарии
      */
-    public function comments()
+    public function comments(): MorphMany
     {
         return $this->morphMany(Comment::class, 'relate');
     }
@@ -58,9 +69,9 @@ class Down extends BaseModel
      * Возвращает последнии комментарии к файлу
      *
      * @param int $limit
-     * @return mixed
+     * @return HasMany
      */
-    public function lastComments($limit = 15)
+    public function lastComments($limit = 15): HasMany
     {
         return $this->hasMany(Comment::class, 'relate_id')
             ->where('relate_type', self::class)
@@ -70,15 +81,17 @@ class Down extends BaseModel
     /**
      * Возвращает загруженные файлы
      */
-    public function files()
+    public function files(): MorphMany
     {
         return $this->morphMany(File::class, 'relate');
     }
 
     /**
      * Возвращает файлы
+     *
+     * @return Collection
      */
-    public function getFiles()
+    public function getFiles(): Collection
     {
         return $this->files->filter(function ($value, $key) {
             return ! $value->isImage();
@@ -87,8 +100,10 @@ class Down extends BaseModel
 
     /**
      * Возвращает картинки
+     *
+     * @return Collection
      */
-    public function getImages()
+    public function getImages(): Collection
     {
         return $this->files->filter(function ($value, $key) {
             return $value->isImage();
@@ -103,7 +118,7 @@ class Down extends BaseModel
      */
     public function cutText($limit = 200): string
     {
-        if (strlen($this->text) > $limit) {
+        if (\strlen($this->text) > $limit) {
             $this->text = strip_tags(bbCode($this->text), '<br>');
             $this->text = mb_substr($this->text, 0, mb_strrpos(mb_substr($this->text, 0, $limit), ' ')) . '...';
         }

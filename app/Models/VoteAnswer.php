@@ -2,6 +2,11 @@
 
 namespace App\Models;
 
+/**
+ * Class VoteAnswer
+ *
+ * @property int id
+ */
 class VoteAnswer extends BaseModel
 {
     /**

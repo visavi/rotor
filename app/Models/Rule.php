@@ -2,6 +2,11 @@
 
 namespace App\Models;
 
+/**
+ * Class Rule
+ *
+ * @property int id
+ */
 class Rule extends BaseModel
 {
     /**

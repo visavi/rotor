@@ -2,6 +2,11 @@
 
 namespace App\Models;
 
+/**
+ * Class Log
+ *
+ * @property int id
+ */
 class Log extends BaseModel
 {
     /**

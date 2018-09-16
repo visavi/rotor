@@ -2,6 +2,11 @@
 
 namespace App\Models;
 
+/**
+ * Class Smile
+ *
+ * @property int id
+ */
 class Smile extends BaseModel
 {
     /**

@@ -2,6 +2,13 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+
+/**
+ * Class Ignore
+ *
+ * @property int id
+ */
 class Ignore extends BaseModel
 {
     /**
@@ -27,8 +34,10 @@ class Ignore extends BaseModel
 
     /**
      * Возвращает связь пользователей
+     *
+     * @return BelongsTo
      */
-    public function ignoring()
+    public function ignoring(): BelongsTo
     {
         return $this->belongsTo(User::class, 'ignore_id')->withDefault();
     }

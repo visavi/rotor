@@ -2,6 +2,13 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+
+/**
+ * Class Banhist
+ *
+ * @property int id
+ */
 class Banhist extends BaseModel
 {
     /**
@@ -28,14 +35,16 @@ class Banhist extends BaseModel
     /**
      * Типы банов
      */
-    const BAN    = 'ban';    // Бан
-    const UNBAN  = 'unban';  // Разбан
-    const CHANGE = 'change'; // Изменение
+    public const BAN    = 'ban';    // Бан
+    public const UNBAN  = 'unban';  // Разбан
+    public const CHANGE = 'change'; // Изменение
 
     /**
      * Возвращает связь пользователей
+     *
+     * @return BelongsTo
      */
-    public function sendUser()
+    public function sendUser(): BelongsTo
     {
         return $this->belongsTo(User::class, 'send_user_id')->withDefault();
     }
@@ -45,7 +54,7 @@ class Banhist extends BaseModel
      *
      * @return string тип бана
      */
-    public function getType()
+    public function getType(): string
     {
         switch ($this->type) {
             case self::BAN:

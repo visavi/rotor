@@ -2,6 +2,13 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+
+/**
+ * Class Outbox
+ *
+ * @property int id
+ */
 class Outbox extends BaseModel
 {
     /**
@@ -27,8 +34,10 @@ class Outbox extends BaseModel
 
     /**
      * Возвращает связь пользователей
+     *
+     * @return BelongsTo
      */
-    public function recipient()
+    public function recipient(): BelongsTo
     {
         return $this->belongsTo(User::class, 'recipient_id')->withDefault();
     }

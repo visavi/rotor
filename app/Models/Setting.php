@@ -2,6 +2,11 @@
 
 namespace App\Models;
 
+/**
+ * Class Setting
+ *
+ * @property int id
+ */
 class Setting extends BaseModel
 {
     /**
@@ -23,7 +28,7 @@ class Setting extends BaseModel
      *
      * @return array
      */
-    public static function getActions()
+    public static function getActions(): array
     {
         return [
             'main',

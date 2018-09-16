@@ -2,8 +2,14 @@
 
 namespace App\Models;
 
-use Illuminate\Http\UploadedFile;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\MorphMany;
 
+/**
+ * Class Post
+ *
+ * @property int id
+ */
 class Post extends BaseModel
 {
     /**
@@ -29,24 +35,30 @@ class Post extends BaseModel
 
     /**
      * Возвращает связь пользователей
+     *
+     * @return BelongsTo
      */
-    public function editUser()
+    public function editUser(): BelongsTo
     {
         return $this->belongsTo(User::class, 'edit_user_id')->withDefault();
     }
 
     /**
      * Возвращает топик
+     *
+     * @return BelongsTo
      */
-    public function topic()
+    public function topic(): BelongsTo
     {
         return $this->belongsTo(Topic::class, 'topic_id')->withDefault();
     }
 
     /**
      * Возвращает загруженные файлы
+     *
+     * @return MorphMany
      */
-    public function files()
+    public function files(): MorphMany
     {
         return $this->morphMany(File::class, 'relate');
     }
@@ -57,7 +69,7 @@ class Post extends BaseModel
      * @return bool|null
      * @throws \Exception
      */
-    public function delete()
+    public function delete(): ?bool
     {
         $this->files->each(function($file) {
             deleteFile(HOME . $file->hash);

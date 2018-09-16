@@ -2,6 +2,11 @@
 
 namespace App\Models;
 
+/**
+ * Class Notebook
+ *
+ * @property int id
+ */
 class Notebook extends BaseModel
 {
     /**

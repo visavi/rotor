@@ -2,6 +2,15 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
+
+/**
+ * Class Load
+ *
+ * @property int id
+ */
 class Load extends BaseModel
 {
     /**
@@ -20,16 +29,20 @@ class Load extends BaseModel
 
     /**
      * Возвращает связь родительской категории
+     *
+     * @return BelongsTo
      */
-    public function parent()
+    public function parent(): BelongsTo
     {
         return $this->belongsTo(self::class, 'parent_id')->withDefault();
     }
 
     /**
      * Возвращает связь подкатегорий
+     *
+     * @return HasMany
      */
-    public function children()
+    public function children(): HasMany
     {
         return $this->hasMany(self::class, 'parent_id')->orderBy('sort');
     }
@@ -37,9 +50,9 @@ class Load extends BaseModel
     /**
      * Возвращает количество загрузок за последние 3 дней
      *
-     * @return mixed
+     * @return hasOne
      */
-    public function new()
+    public function new(): hasOne
     {
         return $this->hasOne(Down::class, 'category_id')
             ->selectRaw('category_id, count(*) as count_downs')

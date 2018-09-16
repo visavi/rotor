@@ -2,9 +2,16 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+
+/**
+ * Class Board
+ *
+ * @property int id
+ */
 class Board extends BaseModel
 {
-
     /**
      * Indicates if the model should be timestamped.
      *
@@ -28,16 +35,20 @@ class Board extends BaseModel
 
     /**
      * Возвращает связь родительской категории
+     *
+     * @return BelongsTo
      */
-    public function parent()
+    public function parent(): BelongsTo
     {
         return $this->belongsTo(self::class, 'parent_id')->withDefault();
     }
 
     /**
      * Возвращает связь подкатегорий
+     *
+     * @return HasMany
      */
-    public function children()
+    public function children(): HasMany
     {
         return $this->hasMany(self::class, 'parent_id')->orderBy('sort');
     }

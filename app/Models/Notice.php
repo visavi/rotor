@@ -2,6 +2,11 @@
 
 namespace App\Models;
 
+/**
+ * Class Notice
+ *
+ * @property int id
+ */
 class Notice extends BaseModel
 {
     /**

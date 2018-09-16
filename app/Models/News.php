@@ -2,6 +2,13 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Relations\MorphMany;
+
+/**
+ * Class News
+ *
+ * @property int id
+ */
 class News extends BaseModel
 {
     /**
@@ -35,7 +42,7 @@ class News extends BaseModel
     /**
      * Возвращает комментарии новостей
      */
-    public function comments()
+    public function comments(): MorphMany
     {
         return $this->morphMany(Comment::class, 'relate');
     }
@@ -62,7 +69,7 @@ class News extends BaseModel
      */
     public function shortText(): string
     {
-        if (stristr($this->text, '[cut]')) {
+        if (stripos($this->text, '[cut]') !== false) {
             $this->text = current(explode('[cut]', $this->text)) . ' <a href="/news/'. $this->id .'" class="badge badge-success">Читать далее &raquo;</a>';
         }
 

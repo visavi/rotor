@@ -2,6 +2,11 @@
 
 namespace App\Models;
 
+/**
+ * Class Mailing
+ *
+ * @property int id
+ */
 class Mailing extends BaseModel
 {
     /**

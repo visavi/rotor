@@ -4,6 +4,12 @@ namespace App\Models;
 
 use Illuminate\Database\Capsule\Manager as DB;
 
+/**
+ * Class Antimat
+ *
+ * @property int id
+ * @property string string
+ */
 class Antimat extends BaseModel
 {
     /**
@@ -33,7 +39,7 @@ class Antimat extends BaseModel
      * @param  string $str строка
      * @return string      обработанная строка
      */
-    public static function replace($str)
+    public static function replace($str): string
     {
         $words = self::query()
             ->orderBy(DB::raw('CHAR_LENGTH(string)'), 'desc')

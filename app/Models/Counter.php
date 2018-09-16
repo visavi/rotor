@@ -2,6 +2,11 @@
 
 namespace App\Models;
 
+/**
+ * Class Counter
+ *
+ * @property int id
+ */
 class Counter extends BaseModel
 {
     /**

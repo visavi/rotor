@@ -2,6 +2,11 @@
 
 namespace App\Models;
 
+/**
+ * Class Comment
+ *
+ * @property int id
+ */
 class Comment extends BaseModel
 {
     /**

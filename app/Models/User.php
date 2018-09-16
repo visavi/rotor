@@ -4,8 +4,15 @@ namespace App\Models;
 
 use Curl\Curl;
 use Illuminate\Database\Capsule\Manager as DB;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Query\JoinClause;
 
+/**
+ * Class User
+ *
+ * @property int id
+ */
 class User extends BaseModel
 {
     public const BOSS   = 'boss';   // Владелец
@@ -87,16 +94,20 @@ class User extends BaseModel
 
     /**
      * Связь с таблицей online
+     *
+     * @return BelongsTo
      */
-    public function online()
+    public function online(): BelongsTo
     {
         return $this->belongsTo(Online::class, 'id', 'user_id')->withDefault();
     }
 
     /**
      * Возвращает последний бан
+     *
+     * @return hasOne
      */
-    public function lastBan()
+    public function lastBan(): hasOne
     {
         return $this->hasOne(Banhist::class, 'user_id', 'id')
             ->whereIn('type', ['ban', 'change'])
@@ -106,8 +117,10 @@ class User extends BaseModel
 
     /**
      * Возвращает заметку пользователя
+     *
+     * @return hasOne
      */
-    public function note()
+    public function note(): HasOne
     {
         return $this->hasOne(Note::class)->withDefault();
     }
@@ -130,7 +143,7 @@ class User extends BaseModel
             }
 
             if (\in_array($this->level, self::ADMIN_GROUPS, true)) {
-                $admin = ' <i class="fas fa-crown text-danger"></i>';
+                $admin = ' <i class="fas fa-sm fa-crown text-danger"></i>';
             }
 
             if ($link) {
@@ -228,7 +241,7 @@ class User extends BaseModel
      * @return void
      * @throws \ErrorException
      */
-    public static function socialAuth($token)
+    public static function socialAuth($token): void
     {
         $domain = siteDomain(siteUrl());
 
@@ -556,10 +569,10 @@ class User extends BaseModel
     /**
      * Удаляет записи пользователя из всех таблиц
      *
-     * @return bool       результат удаления
+     * @return bool|null  результат удаления
      * @throws \Exception
      */
-    public function delete()
+    public function delete(): ?bool
     {
         deleteFile(HOME . $this->picture);
         deleteFile(HOME . $this->avatar);

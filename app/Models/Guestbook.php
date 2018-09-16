@@ -2,6 +2,13 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+
+/**
+ * Class Guestbook
+ *
+ * @property int id
+ */
 class Guestbook extends BaseModel
 {
     /**
@@ -20,8 +27,10 @@ class Guestbook extends BaseModel
 
     /**
      * Возвращает связь пользователей
+     *
+     * @return BelongsTo
      */
-    public function editUser()
+    public function editUser(): BelongsTo
     {
         return $this->belongsTo(User::class, 'edit_user_id')->withDefault();
     }

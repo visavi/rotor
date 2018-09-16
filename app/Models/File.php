@@ -2,6 +2,13 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Relations\MorphTo;
+
+/**
+ * Class File
+ *
+ * @property int id
+ */
 class File extends BaseModel
 {
     /**
@@ -20,8 +27,10 @@ class File extends BaseModel
 
     /**
      * Возвращает связанные модели
+     *
+     * @return MorphTo
      */
-    public function relate()
+    public function relate(): MorphTo
     {
         return $this->morphTo('relate');
     }
@@ -31,7 +40,7 @@ class File extends BaseModel
      *
      * @return string
      */
-    public function getExtensionAttribute()
+    public function getExtensionAttribute(): string
     {
         return getExtension($this->hash);
     }
@@ -41,7 +50,7 @@ class File extends BaseModel
      *
      * @return string
      */
-    public function isImage()
+    public function isImage(): string
     {
         return \in_array($this->extension, ['jpg', 'jpeg', 'gif', 'png']);
     }

@@ -2,6 +2,11 @@
 
 namespace App\Models;
 
+/**
+ * Class BlackList
+ *
+ * @property int id
+ */
 class BlackList extends BaseModel
 {
     /**

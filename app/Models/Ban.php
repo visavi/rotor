@@ -2,6 +2,14 @@
 
 namespace App\Models;
 
+/**
+ * Class Ban
+ *
+ * @property int id
+ * @property string ip
+ * @property int user_id
+ * @property int created_at
+ */
 class Ban extends BaseModel
 {
     /**

@@ -2,6 +2,11 @@
 
 namespace App\Models;
 
+/**
+ * Class Surprise
+ *
+ * @property int id
+ */
 class Surprise extends BaseModel
 {
     /**

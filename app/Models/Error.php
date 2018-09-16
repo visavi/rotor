@@ -2,6 +2,11 @@
 
 namespace App\Models;
 
+/**
+ * Class Error
+ *
+ * @property int id
+ */
 class Error extends BaseModel
 {
     /**

@@ -2,6 +2,11 @@
 
 namespace App\Models;
 
+/**
+ * Class Flood
+ *
+ * @property int id
+ */
 class Flood extends BaseModel
 {
     /**
@@ -23,7 +28,7 @@ class Flood extends BaseModel
      *
      * @return int
      */
-    public static function getPeriod()
+    public static function getPeriod(): int
     {
         if (isAdmin()) {
             return 0;
@@ -52,7 +57,7 @@ class Flood extends BaseModel
      * @param int $period
      * @return bool
      */
-    public static function isFlood($period = 0)
+    public static function isFlood($period = 0): bool
     {
         $userId = getUser('id');
         $period = $period ?: self::getPeriod();

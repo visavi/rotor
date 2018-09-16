@@ -2,6 +2,11 @@
 
 namespace App\Models;
 
+/**
+ * Class Status
+ *
+ * @property int id
+ */
 class Status extends BaseModel
 {
     /**

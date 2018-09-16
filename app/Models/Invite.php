@@ -2,6 +2,13 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+
+/**
+ * Class Invite
+ *
+ * @property int id
+ */
 class Invite extends BaseModel
 {
     /**
@@ -27,8 +34,10 @@ class Invite extends BaseModel
 
     /**
      * Возвращает связь пользователей
+     *
+     * @return BelongsTo
      */
-    public function inviteUser()
+    public function inviteUser(): BelongsTo
     {
         return $this->belongsTo(User::class, 'invite_user_id')->withDefault();
     }

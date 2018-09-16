@@ -2,6 +2,11 @@
 
 namespace App\Models;
 
+/**
+ * Class Login
+ *
+ * @property int id
+ */
 class Login extends BaseModel
 {
     /**

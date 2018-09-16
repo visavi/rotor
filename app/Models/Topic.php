@@ -2,6 +2,15 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
+
+/**
+ * Class Topic
+ *
+ * @property int id
+ */
 class Topic extends BaseModel
 {
     /**
@@ -20,40 +29,50 @@ class Topic extends BaseModel
 
     /**
      * Возвращает сообщения
+     *
+     * @return HasMany
      */
-    public function posts()
+    public function posts(): HasMany
     {
         return $this->hasMany(Post::class, 'topic_id');
     }
 
     /**
      * Возвращает закладки
+     *
+     * @return HasMany
      */
-    public function bookmarks()
+    public function bookmarks(): HasMany
     {
         return $this->hasMany(Bookmark::class, 'topic_id');
     }
 
     /**
      * Возвращает голосование
+     *
+     * @return hasOne
      */
-    public function vote()
+    public function vote(): hasOne
     {
         return $this->hasOne(Vote::class, 'topic_id')->withDefault();
     }
 
     /**
      * Возвращает последнее сообщение
+     *
+     * @return BelongsTo
      */
-    public function lastPost()
+    public function lastPost(): BelongsTo
     {
         return $this->belongsTo(Post::class, 'last_post_id')->withDefault();
     }
 
     /**
      * Возвращает раздел форума
+     *
+     * @return BelongsTo
      */
-    public function forum()
+    public function forum(): BelongsTo
     {
         return $this->belongsTo(Forum::class, 'forum_id')->withDefault();
     }
@@ -63,7 +82,7 @@ class Topic extends BaseModel
      *
      * @return string иконка топика
      */
-    public function getIcon()
+    public function getIcon(): string
     {
         if ($this->closed) {
             $icon = 'fa-lock';
@@ -82,7 +101,7 @@ class Topic extends BaseModel
      * @param  string url                 $url
      * @return string сформированный блок
      */
-    public function pagination($url = '/topics')
+    public function pagination($url = '/topics'): string
     {
         if (! $this->count_posts) {
             return null;

@@ -2,6 +2,13 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+
+/**
+ * Class Note
+ *
+ * @property int id
+ */
 class Note extends BaseModel
 {
     /**
@@ -20,8 +27,10 @@ class Note extends BaseModel
 
     /**
      * Возвращает связь пользователей
+     *
+     * @return BelongsTo
      */
-    public function editUser()
+    public function editUser(): BelongsTo
     {
         return $this->belongsTo(User::class, 'edit_user_id')->withDefault();
     }

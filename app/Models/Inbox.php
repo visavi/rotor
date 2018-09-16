@@ -2,6 +2,13 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+
+/**
+ * Class Inbox
+ *
+ * @property int id
+ */
 class Inbox extends BaseModel
 {
     /**
@@ -27,8 +34,10 @@ class Inbox extends BaseModel
 
     /**
      * Возвращает связь пользователей
+     *
+     * @return BelongsTo
      */
-    public function author()
+    public function author(): BelongsTo
     {
         return $this->belongsTo(User::class, 'author_id')->withDefault();
     }

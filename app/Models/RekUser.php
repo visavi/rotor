@@ -2,6 +2,11 @@
 
 namespace App\Models;
 
+/**
+ * Class RekUser
+ *
+ * @property int id
+ */
 class RekUser extends BaseModel
 {
     /**

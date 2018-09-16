@@ -2,6 +2,11 @@
 
 namespace App\Models;
 
+/**
+ * Class Polling
+ *
+ * @property int id
+ */
 class Polling extends BaseModel
 {
     /**
