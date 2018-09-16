@@ -10,6 +10,17 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
  * Class Topic
  *
  * @property int id
+ * @property int forum_id
+ * @property string title
+ * @property int user_id
+ * @property int closed
+ * @property int locked
+ * @property int count_posts
+ * @property int updated_at
+ * @property string moderators
+ * @property string note
+ * @property int last_post_id
+ * @property int created_at
  */
 class Topic extends BaseModel
 {

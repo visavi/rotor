@@ -8,6 +8,13 @@ use Illuminate\Database\Eloquent\Relations\MorphTo;
  * Class File
  *
  * @property int id
+ * @property string relate_type
+ * @property int relate_id
+ * @property string hash
+ * @property string name
+ * @property int size
+ * @property int user_id
+ * @property int created_at
  */
 class File extends BaseModel
 {

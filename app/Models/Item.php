@@ -9,6 +9,15 @@ use Illuminate\Database\Eloquent\Relations\MorphMany;
  * Class Item
  *
  * @property int id
+ * @property int board_id
+ * @property string title
+ * @property string text
+ * @property int user_id
+ * @property int price
+ * @property string phone
+ * @property int created_at
+ * @property int updated_at
+ * @property int expires_at
  */
 class Item extends BaseModel
 {

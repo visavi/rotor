@@ -10,6 +10,11 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
  * Class Category
  *
  * @property int id
+ * @property int sort
+ * @property int parent_id
+ * @property string name
+ * @property int count_blogs
+ * @property int closed
  */
 class Category extends BaseModel
 {

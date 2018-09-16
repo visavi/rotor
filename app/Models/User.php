@@ -12,6 +12,49 @@ use Illuminate\Database\Query\JoinClause;
  * Class User
  *
  * @property int id
+ * @property string login
+ * @property string password
+ * @property string email
+ * @property string level
+ * @property string name
+ * @property string country
+ * @property string city
+ * @property string language
+ * @property string info
+ * @property string site
+ * @property string phone
+ * @property string icq
+ * @property string skype
+ * @property string gender
+ * @property string birthday
+ * @property int visits
+ * @property int newprivat
+ * @property int newwall
+ * @property int allforum
+ * @property int allguest
+ * @property int allcomments
+ * @property string themes
+ * @property string timezone
+ * @property int point
+ * @property int money
+ * @property string status
+ * @property string avatar
+ * @property string picture
+ * @property int rating
+ * @property int posrating
+ * @property int negrating
+ * @property string keypasswd
+ * @property int timepasswd
+ * @property int sendprivatmail
+ * @property int timebonus
+ * @property string confirmregkey
+ * @property int newchat
+ * @property int notify
+ * @property string apikey
+ * @property string subscribe
+ * @property int timeban
+ * @property int updated_at
+ * @property int created_at
  */
 class User extends BaseModel
 {

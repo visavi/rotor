@@ -6,6 +6,9 @@ namespace App\Models;
  * Class Counter31
  *
  * @property int id
+ * @property string period
+ * @property int hosts
+ * @property int hits
  */
 class Counter31 extends BaseModel
 {

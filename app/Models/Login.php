@@ -6,6 +6,11 @@ namespace App\Models;
  * Class Login
  *
  * @property int id
+ * @property int user_id
+ * @property string ip
+ * @property string brow
+ * @property int created_at
+ * @property int type
  */
 class Login extends BaseModel
 {

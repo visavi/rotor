@@ -9,6 +9,11 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * Class Board
  *
  * @property int id
+ * @property int sort
+ * @property int parent_id
+ * @property string name
+ * @property int count_items
+ * @property int closed
  */
 class Board extends BaseModel
 {

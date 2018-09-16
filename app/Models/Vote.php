@@ -10,6 +10,11 @@ use Illuminate\Database\Eloquent\Relations\MorphMany;
  * Class Vote
  *
  * @property int id
+ * @property string title
+ * @property int count
+ * @property int closed
+ * @property int created_at
+ * @property int topic_id
  */
 class Vote extends BaseModel
 {

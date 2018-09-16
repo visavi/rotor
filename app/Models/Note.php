@@ -8,6 +8,10 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * Class Note
  *
  * @property int id
+ * @property int user_id
+ * @property string text
+ * @property int edit_ser_id
+ * @property int updated_at
  */
 class Note extends BaseModel
 {

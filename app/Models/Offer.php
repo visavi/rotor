@@ -10,6 +10,18 @@ use Illuminate\Database\Eloquent\Relations\MorphOne;
  * Class Offer
  *
  * @property int id
+ * @property string type
+ * @property string title
+ * @property string text
+ * @property int user_id
+ * @property int rating
+ * @property int created_at
+ * @property string status
+ * @property int count_comments
+ * @property int closed
+ * @property string reply
+ * @property int reply_user_id
+ * @property int updated_at
  */
 class Offer extends BaseModel
 {

@@ -8,6 +8,14 @@ use Illuminate\Database\Eloquent\Relations\MorphMany;
  * Class News
  *
  * @property int id
+ * @property string title
+ * @property string text
+ * @property int user_id
+ * @property string image
+ * @property int created_at
+ * @property int count_comments
+ * @property int closed
+ * @property int top
  */
 class News extends BaseModel
 {

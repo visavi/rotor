@@ -6,6 +6,9 @@ namespace App\Models;
  * Class VoteAnswer
  *
  * @property int id
+ * @property int vote_id
+ * @property string answer
+ * @property int result
  */
 class VoteAnswer extends BaseModel
 {

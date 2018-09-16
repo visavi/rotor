@@ -6,6 +6,9 @@ namespace App\Models;
  * Class Surprise
  *
  * @property int id
+ * @property int user_id
+ * @property int year
+ * @property int created_at
  */
 class Surprise extends BaseModel
 {

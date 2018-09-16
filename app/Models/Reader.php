@@ -6,6 +6,10 @@ namespace App\Models;
  * Class Reader
  *
  * @property int id
+ * @property string relate_type
+ * @property int relate_id
+ * @property string ip
+ * @property int created_at
  */
 class Reader extends BaseModel
 {

@@ -6,6 +6,9 @@ namespace App\Models;
  * Class Flood
  *
  * @property int id
+ * @property int user_id
+ * @property string page
+ * @property int created_at
  */
 class Flood extends BaseModel
 {

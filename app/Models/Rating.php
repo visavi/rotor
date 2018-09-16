@@ -8,6 +8,11 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * Class Rating
  *
  * @property int id
+ * @property int user_id
+ * @property int recipient_id
+ * @property string text
+ * @property string vote
+ * @property int created_at
  */
 class Rating extends BaseModel
 {

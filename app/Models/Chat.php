@@ -8,6 +8,13 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * Class Chat
  *
  * @property int id
+ * @property int user_id
+ * @property string text
+ * @property string ip
+ * @property string brow
+ * @property int created_at
+ * @property int edit_user_id
+ * @property int updated_at
  */
 class Chat extends BaseModel
 {

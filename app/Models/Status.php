@@ -6,6 +6,10 @@ namespace App\Models;
  * Class Status
  *
  * @property int id
+ * @property int topoint
+ * @property int point
+ * @property string name
+ * @property string color
  */
 class Status extends BaseModel
 {

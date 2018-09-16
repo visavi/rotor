@@ -8,6 +8,10 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * Class Ignore
  *
  * @property int id
+ * @property int user_id
+ * @property int ignore_id
+ * @property string text
+ * @property int created_at
  */
 class Ignore extends BaseModel
 {

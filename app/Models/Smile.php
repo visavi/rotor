@@ -6,6 +6,8 @@ namespace App\Models;
  * Class Smile
  *
  * @property int id
+ * @property string name
+ * @property string code
  */
 class Smile extends BaseModel
 {

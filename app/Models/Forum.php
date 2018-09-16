@@ -9,6 +9,14 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * Class Forum
  *
  * @property int id
+ * @property int sort
+ * @property int parent_id
+ * @property string title
+ * @property string description
+ * @property int count_topics
+ * @property int count_posts
+ * @property int last_topic_id
+ * @property int closed
  */
 class Forum extends BaseModel
 {

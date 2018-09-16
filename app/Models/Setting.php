@@ -5,7 +5,8 @@ namespace App\Models;
 /**
  * Class Setting
  *
- * @property int id
+ * @property string name
+ * @property string value
  */
 class Setting extends BaseModel
 {

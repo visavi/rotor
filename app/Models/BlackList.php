@@ -6,6 +6,10 @@ namespace App\Models;
  * Class BlackList
  *
  * @property int id
+ * @property string type
+ * @property string value
+ * @property int user_id
+ * @property int created_at
  */
 class BlackList extends BaseModel
 {

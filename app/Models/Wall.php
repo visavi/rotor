@@ -8,6 +8,10 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * Class Wall
  *
  * @property int id
+ * @property int user_id
+ * @property int author_id
+ * @property string text
+ * @property int created_at
  */
 class Wall extends BaseModel
 {

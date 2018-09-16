@@ -16,6 +16,17 @@ use Illuminate\Http\UploadedFile;
  * Class Down
  *
  * @property int id
+ * @property int category_id
+ * @property string title
+ * @property string text
+ * @property int user_id
+ * @property int created_at
+ * @property int count_comments
+ * @property int rating
+ * @property int rated
+ * @property int loads
+ * @property int active
+ * @property int updated_at
  */
 class Down extends BaseModel
 {

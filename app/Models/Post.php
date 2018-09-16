@@ -9,6 +9,15 @@ use Illuminate\Database\Eloquent\Relations\MorphMany;
  * Class Post
  *
  * @property int id
+ * @property int topic_id
+ * @property int user_id
+ * @property string text
+ * @property int rating
+ * @property int created_at
+ * @property string ip
+ * @property string brow
+ * @property int edit_user_id
+ * @property int updated_at
  */
 class Post extends BaseModel
 {

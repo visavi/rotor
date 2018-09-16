@@ -6,6 +6,9 @@ namespace App\Models;
  * Class Counter24
  *
  * @property int id
+ * @property string period
+ * @property int hosts
+ * @property int hits
  */
 class Counter24 extends BaseModel
 {

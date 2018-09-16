@@ -8,6 +8,13 @@ use Illuminate\Database\Eloquent\Relations\MorphMany;
  * Class Photo
  *
  * @property int id
+ * @property int user_id
+ * @property string title
+ * @property string text
+ * @property int created_at
+ * @property int rating
+ * @property int closed
+ * @property int count_comments
  */
 class Photo extends BaseModel
 {

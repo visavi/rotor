@@ -8,6 +8,10 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * Class Outbox
  *
  * @property int id
+ * @property int user_id
+ * @property int recipient_id
+ * @property string text
+ * @property int created_at
  */
 class Outbox extends BaseModel
 {

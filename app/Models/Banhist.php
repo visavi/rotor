@@ -8,6 +8,13 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * Class Banhist
  *
  * @property int id
+ * @property int user_id
+ * @property int send_user_id
+ * @property string type
+ * @property string reason
+ * @property int term
+ * @property int created_at
+ * @property int explain
  */
 class Banhist extends BaseModel
 {
