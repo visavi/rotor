@@ -48,6 +48,7 @@ class GuestbookController extends BaseController
         /* Проерка для гостей */
         if (! getUser() && setting('bookadds')) {
             $validator->true(captchaVerify(), ['protect' => 'Не удалось пройти проверку captcha!']);
+            $validator->false(strpos($msg, 'http'), ['msg' => 'Текст сообщения не должен содержать ссылок!']);
         } else {
             $validator->true(getUser(), ['msg' => 'Для добавления сообщения необходимо авторизоваться']);
         }
