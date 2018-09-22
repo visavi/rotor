@@ -31,8 +31,9 @@
 
     <br>При наборе определенного количества актива, пользователю открываются новые возможности:<br>
 
-
-    <b>{{ plural(50, setting('scorename')) }}</b> - добавление рекламных ссылок<br>
+    @if (!empty(setting('rekuserpoint')))
+        <b>{{ plural(setting('rekuserpoint'), setting('scorename')) }}</b> - добавление рекламных ссылок<br>
+    @endif
 
     @if (!empty(setting('privatprotect')))
         <b>{{ plural(setting('privatprotect'), setting('scorename')) }}</b> - отключается captcha для некоторых действий<br>

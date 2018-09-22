@@ -22,8 +22,10 @@ class RekUserController extends BaseController
 
     /**
      * Главная страница
+     *
+     * @return string
      */
-    public function index()
+    public function index(): string
     {
         $total = RekUser::query()->where('deleted_at', '>', SITETIME)->count();
 
@@ -42,14 +44,16 @@ class RekUserController extends BaseController
 
     /**
      * Покупка рекламы
+     *
+     * @return string
      */
-    public function create()
+    public function create(): string
     {
         if (! getUser()) {
             abort(403, 'Для покупки рекламы необходимо авторизоваться!');
         }
 
-        if (getUser('point') < 50) {
+        if (getUser('point') < setting('rekuserpoint')) {
             abort('default', 'Для покупки рекламы вам необходимо набрать '.plural(50, setting('scorename')).'!');
         }
 
@@ -68,25 +72,25 @@ class RekUserController extends BaseController
         }
 
         if (Request::isMethod('post')) {
-            $token   = check(Request::input('token'));
-            $site    = check(Request::input('site'));
-            $name    = check(Request::input('name'));
-            $color   = check(Request::input('color'));
-            $bold    = empty(Request::input('bold')) ? 0 : 1;
+            $token = check(Request::input('token'));
+            $site  = check(Request::input('site'));
+            $name  = check(Request::input('name'));
+            $color = check(Request::input('color'));
+            $bold  = empty(Request::input('bold')) ? 0 : 1;
 
             $price = setting('rekuserprice');
 
             if ($color) {
-                $price = $price + setting('rekuseroptprice');
+                $price += setting('rekuseroptprice');
             }
 
             if ($bold) {
-                $price = $price + setting('rekuseroptprice');
+                $price += setting('rekuseroptprice');
             }
 
             $validator = new Validator();
             $validator->equal($token, $_SESSION['token'], 'Неверный идентификатор сессии, повторите действие!')
-                ->gte(getUser('point'), 50, 'Для покупки рекламы вам необходимо набрать '.plural(50, setting('scorename')).'!')
+                ->gte(getUser('point'), setting('rekuserpoint'), 'Для покупки рекламы вам необходимо набрать '.plural(50, setting('scorename')).'!')
                 ->true(captchaVerify(), ['protect' => 'Не удалось пройти проверку captcha!'])
                 ->regex($site, '|^https?://([а-яa-z0-9_\-\.])+(\.([а-яa-z0-9\/\-?_=#])+)+$|iu', ['site' => 'Недопустимый адрес сайта!. Разрешены символы [а-яa-z0-9_-.?=#/]!'])
                 ->length($site, 5, 100, ['site' => 'Слишком длинный или короткий адрес ссылки!'])

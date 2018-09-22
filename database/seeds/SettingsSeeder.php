@@ -107,6 +107,7 @@ class SettingsSeeder extends AbstractSeed
             ['name'  => 'rekusershow', 'value' => 1],
             ['name'  => 'rekusertime', 'value' => 12],
             ['name'  => 'rekusertotal', 'value' => 10],
+            ['name'  => 'rekuserpoint', 'value' => 50],
             ['name'  => 'scorename', 'value' => 'балл,балла,баллов'],
             ['name'  => 'screensize', 'value' => 1000],
             ['name'  => 'sendmailpacket', 'value' => 3],

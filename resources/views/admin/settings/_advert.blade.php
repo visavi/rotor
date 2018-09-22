@@ -15,6 +15,12 @@
         {!! textError('sets[rekuserprice]') !!}
     </div>
 
+    <div class="form-group{{ hasError('sets[rekuserpoint]') }}">
+        <label for="rekuserpoint">Актива для размещения рекламы:</label>
+        <input type="number" class="form-control" id="rekuserpoint" name="sets[rekuserpoint]" maxlength="3" value="{{ getInput('sets.rekuserpoint', $settings['rekuserpoint']) }}" required>
+        {!! textError('sets[rekuserpoint]') !!}
+    </div>
+
     <div class="form-group{{ hasError('sets[rekuseroptprice]') }}">
         <label for="rekuseroptprice">Цена опций (жирный текст, цвет):</label>
         <input type="number" class="form-control" id="rekuseroptprice" name="sets[rekuseroptprice]" maxlength="8" value="{{ getInput('sets.rekuseroptprice.', $settings['rekuseroptprice']) }}" required>
