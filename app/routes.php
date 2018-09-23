@@ -2,8 +2,10 @@
 
 $router = new AltoRouter();
 
-$router->addMatchTypes(['user' => '[0-9A-Za-z-_]++']);
-$router->addMatchTypes(['letter'=> '[0-9a-z]']);
+$router->addMatchTypes([
+    'letter' => '[0-9a-z]',
+    'user'   => '[0-9A-Za-z-_]++',
+]);
 
 $routes = [
     ['GET',      '/', 'HomeController@index', 'home'],
