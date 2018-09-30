@@ -181,6 +181,7 @@ class UserController extends BaseController
                         $level        = User::PENDED;
                     }
 
+                    /* @var User $user */
                     $user = User::query()->create([
                         'login'         => $login,
                         'password'      => password_hash($password, PASSWORD_BCRYPT),
@@ -472,6 +473,7 @@ class UserController extends BaseController
      * Инициализация изменения email
      *
      * @return void
+     * @throws Exception
      */
     public function changeMail(): void
     {

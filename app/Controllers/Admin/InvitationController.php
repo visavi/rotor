@@ -115,6 +115,7 @@ class InvitationController extends AdminController
         $login    = check(Request::input('user'));
         $userkeys = int(Request::input('userkeys'));
 
+        /* @var User $user */
         $user = getUserByLogin($login);
 
         $validator = new Validator();
@@ -187,7 +188,7 @@ class InvitationController extends AdminController
                     'created_at' => SITETIME,
                 ]);
 
-                $text = 'Поздравляем! Вы получили пригласительный ключ'.PHP_EOL.'Ваш ключ: '.$key.PHP_EOL.'С помощью этого ключа вы можете пригласить вашего друга на наш сайт!';
+                $text = 'Поздравляем! Вы получили пригласительный ключ' . PHP_EOL . 'Ваш ключ: ' . $key . PHP_EOL.'С помощью этого ключа вы можете пригласить вашего друга на наш сайт!';
                 $user->sendMessage(null, $text);
             }
 
