@@ -1751,8 +1751,7 @@ function sendMail($to, $subject, $body, array $params = [])
         ->setSubject($subject)
         ->setBody($body, 'text/html')
         ->setFrom($params['from'])
-        ->setReturnPath(env('SITE_EMAIL'))
-        ->setBody($body, 'text/html');
+        ->setReturnPath(env('SITE_EMAIL'));
 
     if (env('MAIL_DRIVER') === 'smtp') {
         $transport = (new Swift_SmtpTransport())
