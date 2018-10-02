@@ -253,6 +253,7 @@ class UserController extends BaseController
                 $pass     = trim(Request::input('pass'));
                 $remember = Request::input('remember');
 
+                /** @var User $user */
                 if ($user = User::auth($login, $pass, $remember)) {
                     setFlash('success', 'Добро пожаловать, '.$user->login.'!');
 

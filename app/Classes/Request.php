@@ -26,12 +26,13 @@ use Illuminate\Http\Request as HttpRequest;
  * @method static string ip()
  * @method static string path()
  * @method static mixed server(string $key = null, mixed $default = null)
+ * @method static string header(string $key = null, mixed $default = null)
  */
 class Request
 {
     public static function __callStatic($method, $args)
     {
         $request = HttpRequest::createFromGlobals();
-        return call_user_func_array([$request, $method], $args);
+        return \call_user_func_array([$request, $method], $args);
     }
 }

@@ -178,7 +178,7 @@ function intar($numbers)
 {
     if ($numbers) {
         if (is_array($numbers)) {
-            $numbers = array_map('intval', $numbers);
+            $numbers = array_map('\intval', $numbers);
         } else {
             $numbers = [(int) $numbers];
         }
@@ -229,11 +229,11 @@ function formatFileSize($file)
 function formatTime($time)
 {
     $units = [
-        'год,года,лет'           => 365 * 24 * 60 * 60,
-        'месяц,месяца,месяцев'   => 30 * 24 * 60 * 60,
-        'неделя,недели,недель'   => 7 * 24 * 60 * 60,
-        'день,дня,дней'          => 24 * 60 * 60,
-        'час,часа,часов'         => 60 * 60,
+        'год,года,лет'           => 31536000,
+        'месяц,месяца,месяцев'   => 2592000,
+        'неделя,недели,недель'   => 604800,
+        'день,дня,дней'          => 86400,
+        'час,часа,часов'         => 3600,
         'минута,минуты,минут'    => 60,
         'секунда,секунды,секунд' => 1,
     ];
@@ -875,6 +875,7 @@ function checkAuth()
 {
     if (isset($_SESSION['id'], $_SESSION['password'])) {
 
+        /** @var User $user */
         $user = User::query()->find($_SESSION['id']);
 
         if ($user && $_SESSION['password'] === md5(env('APP_KEY') . $user->password)) {
