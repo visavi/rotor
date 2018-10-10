@@ -70,7 +70,10 @@ class ActiveController extends BaseController
     public function comments(): string
     {
         $user  = $this->user;
-        $total = Comment::query()->where('relate_type', Down::class)->count();
+        $total = Comment::query()
+            ->where('relate_type', Down::class)
+            ->where('user_id', $user->id)
+            ->count();
 
         if ($total > 500) {
             $total = 500;
