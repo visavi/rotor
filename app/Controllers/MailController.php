@@ -89,7 +89,7 @@ class MailController extends BaseController
                 sendMail($user['email'], $subject, $body);
 
                 setFlash('success', 'Восстановление пароля инициализировано!');
-                redirect('/recovery');
+                redirect('/login');
             } else {
                 setInput(Request::all());
                 setFlash('danger', $validator->getErrors());
