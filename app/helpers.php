@@ -1869,6 +1869,13 @@ function bbCode($text, $parse = true)
 function getIp()
 {
     $ip = Request::ip();
+    
+    if (isset($_SERVER["HTTP_CF_CONNECTING_IP"])) {
+        if (filter_var($_SERVER["HTTP_CF_CONNECTING_IP"], FILTER_VALIDATE_IP, FILTER_FLAG_NO_PRIV_RANGE | FILTER_FLAG_NO_RES_RANGE) !== false){
+            $ip = $_SERVER["HTTP_CF_CONNECTING_IP"];
+        }
+    }
+    
     return $ip === '::1' ? '127.0.0.1' : $ip;
 }
 
