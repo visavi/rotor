@@ -16,7 +16,7 @@ class Application
 
         switch ($router[0]) {
             case Dispatcher::FOUND:
-                echo $this->getController($router);
+                echo $this->call($router);
                 break;
 
             case Dispatcher::METHOD_NOT_ALLOWED:
@@ -37,14 +37,9 @@ class Application
      * @param array $router
      * @return mixed
      */
-    private function getController($router)
+    private function call($router)
     {
         [, $controller, $params] = $router;
-
-        if (\is_object($controller)) {
-            return \call_user_func_array($controller, $params);
-        }
-
         $action = $params['action'] ?? $controller[1];
 
         return \call_user_func_array([new $controller[0], $action], $params);
