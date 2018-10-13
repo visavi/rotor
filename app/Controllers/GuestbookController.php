@@ -100,6 +100,7 @@ class GuestbookController extends BaseController
             abort(403);
         }
 
+        /** @var Guestbook $post */
         $post = Guestbook::query()->where('user_id', getUser('id'))->find($id);
 
         if (! $post) {

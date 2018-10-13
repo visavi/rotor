@@ -141,6 +141,7 @@ class BlogController extends BaseController
             abort(403, 'Для редактирования статьи необходимо авторизоваться');
         }
 
+        /** @var Blog $blog */
         $blog = Blog::query()->find($id);
 
         if (! $blog) {
@@ -159,6 +160,7 @@ class BlogController extends BaseController
             $text  = check(Request::input('text'));
             $tags  = check(Request::input('tags'));
 
+            /** @var Category $category */
             $category = Category::query()->find($cid);
 
             $validator = new Validator();
@@ -262,6 +264,7 @@ class BlogController extends BaseController
             $text  = check(Request::input('text'));
             $tags  = check(Request::input('tags'));
 
+            /** @var Category $category */
             $category = Category::query()->find($cid);
 
             $validator = new Validator();
@@ -281,7 +284,8 @@ class BlogController extends BaseController
 
                 $text = antimat($text);
 
-                $article = Blog::query()->create([
+                /** @var Blog $blog */
+                $blog = Blog::query()->create([
                     'category_id' => $cid,
                     'user_id'     => getUser('id'),
                     'title'       => $title,
@@ -301,10 +305,10 @@ class BlogController extends BaseController
                     ->where('relate_type', Blog::class)
                     ->where('relate_id', 0)
                     ->where('user_id', getUser('id'))
-                    ->update(['relate_id' => $article->id]);
+                    ->update(['relate_id' => $blog->id]);
 
                 setFlash('success', 'Статья успешно опубликована!');
-                redirect('/articles/' . $article->id);
+                redirect('/articles/' . $blog->id);
             } else {
                 setInput(Request::all());
                 setFlash('danger', $validator->getErrors());
@@ -328,6 +332,7 @@ class BlogController extends BaseController
      */
     public function comments($id): string
     {
+        /** @var Blog $blog */
         $blog = Blog::query()->find($id);
 
         if (! $blog) {
@@ -406,6 +411,8 @@ class BlogController extends BaseController
     public function editComment($id, $cid): string
     {
         $page = int(Request::input('page', 1));
+
+        /** @var Blog $blog */
         $blog = Blog::query()->find($id);
 
         if (! $blog) {
@@ -489,6 +496,7 @@ class BlogController extends BaseController
      */
     public function print($id): string
     {
+        /** @var Blog $blog */
         $blog = Blog::query()->find($id);
 
         if (! $blog) {
@@ -537,58 +545,12 @@ class BlogController extends BaseController
     }
 
     /**
-     * Поиск по тегам
+     * Вывод всех тегов
      *
-     * @param string $tag
      * @return string
      */
-    public function tags($tag = null): string
+    public function tags()
     {
-        if ($tag) {
-            $tag = urldecode($tag);
-
-            if (! isUtf($tag)) {
-                $tag = winToUtf($tag);
-            }
-
-            if (utfStrlen($tag) < 2) {
-                setFlash('danger', 'Ошибка! Необходимо не менее 2-х символов в запросе!');
-                redirect('/blogs/tags');
-            }
-
-            if (
-                empty($_SESSION['findresult']) ||
-                empty($_SESSION['blogfind'])   ||
-                $tag !== $_SESSION['blogfind']
-            ) {
-                $result = Blog::query()
-                    ->select('id')
-                    ->where('tags', 'like', '%'.$tag.'%')
-                    ->limit(500)
-                    ->pluck('id')
-                    ->all();
-
-                $_SESSION['blogfind'] = $tag;
-                $_SESSION['findresult'] = $result;
-            }
-
-            $total = \count($_SESSION['findresult']);
-            $page = paginate(setting('blogpost'), $total);
-
-            $blogs = Blog::query()
-                ->select('blogs.*', 'categories.name')
-                ->whereIn('blogs.id', $_SESSION['findresult'])
-                ->join('categories', 'blogs.category_id', '=', 'categories.id')
-                ->orderBy('created_at', 'desc')
-                ->offset($page->offset)
-                ->limit($page->limit)
-                ->with('user')
-                ->get();
-
-            return view('blogs/tags_search', compact('blogs', 'tag', 'page'));
-
-        }
-
         if (@filemtime(STORAGE . '/temp/tagcloud.dat') < time() - 3600) {
 
             $allTags = Blog::query()
@@ -606,11 +568,63 @@ class BlogController extends BaseController
 
             file_put_contents(STORAGE . '/temp/tagcloud.dat', json_encode($allTags, JSON_UNESCAPED_UNICODE), LOCK_EX);
         }
-        $tags = json_decode(file_get_contents(STORAGE.'/temp/tagcloud.dat'), true);
+
+        $tags = json_decode(file_get_contents(STORAGE . '/temp/tagcloud.dat'), true);
         $max = max($tags);
         $min = min($tags);
 
         return view('blogs/tags', compact('tags', 'max', 'min'));
+    }
+
+    /**
+     * Поиск по тегам
+     *
+     * @param string $tag
+     * @return string
+     */
+    public function searchTag($tag): string
+    {
+        $tag = urldecode($tag);
+
+        if (! isUtf($tag)) {
+            $tag = winToUtf($tag);
+        }
+
+        if (utfStrlen($tag) < 2) {
+            setFlash('danger', 'Ошибка! Необходимо не менее 2-х символов в запросе!');
+            redirect('/blogs/tags');
+        }
+
+        if (
+            empty($_SESSION['findresult']) ||
+            empty($_SESSION['blogfind'])   ||
+            $tag !== $_SESSION['blogfind']
+        ) {
+            $result = Blog::query()
+                ->select('id')
+                ->where('tags', 'like', '%'.$tag.'%')
+                ->limit(500)
+                ->pluck('id')
+                ->all();
+
+            $_SESSION['blogfind'] = $tag;
+            $_SESSION['findresult'] = $result;
+        }
+
+        $total = \count($_SESSION['findresult']);
+        $page = paginate(setting('blogpost'), $total);
+
+        $blogs = Blog::query()
+            ->select('blogs.*', 'categories.name')
+            ->whereIn('blogs.id', $_SESSION['findresult'])
+            ->join('categories', 'blogs.category_id', '=', 'categories.id')
+            ->orderBy('created_at', 'desc')
+            ->offset($page->offset)
+            ->limit($page->limit)
+            ->with('user')
+            ->get();
+
+        return view('blogs/tags_search', compact('blogs', 'tag', 'page'));
     }
 
     /**
@@ -735,6 +749,7 @@ class BlogController extends BaseController
      */
     public function viewComment($id, $cid): void
     {
+        /** @var Blog $blog */
         $blog = Blog::query()->find($id);
 
         if (! $blog) {
@@ -759,7 +774,7 @@ class BlogController extends BaseController
      */
     public function top(): string
     {
-        $sort = check(Request::get('sort', 'visits'));
+        $sort = check(Request::input('sort', 'visits'));
 
         switch ($sort) {
             case 'rated': $order = 'rating';

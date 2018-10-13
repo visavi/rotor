@@ -148,6 +148,7 @@ class ApiController extends BaseController
             exit();
         }
 
+        /** @var Topic $topic */
         $topic = Topic::query()->find($id);
         if (! $topic) {
             echo json_encode(['error' => 'no topic']);

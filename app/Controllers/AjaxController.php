@@ -41,7 +41,7 @@ class AjaxController extends BaseController
     {
         if (! Request::ajax()) {
             return json_encode([
-                'status' => 'error',
+                'status'  => 'error',
                 'message' => 'This is not ajax request'
             ]);
         }
@@ -54,11 +54,11 @@ class AjaxController extends BaseController
      *
      * @return string
      */
-    public function checkAuthorize(): string
+    private function checkAuthorize(): string
     {
         if (! getUser()) {
             return json_encode([
-                'status' => 'error',
+                'status'  => 'error',
                 'message' => 'Not authorized'
             ]);
         }
@@ -179,7 +179,7 @@ class AjaxController extends BaseController
         }
 
         return json_encode([
-            'status' => 'error',
+            'status'  => 'error',
             'message' => current($validator->getErrors())
         ]);
     }
@@ -218,7 +218,7 @@ class AjaxController extends BaseController
         }
 
         return json_encode([
-            'status' => 'error',
+            'status'  => 'error',
             'message' => current($validator->getErrors())
         ]);
     }
@@ -398,6 +398,7 @@ class AjaxController extends BaseController
             return json_encode(['status' => 'error', 'message' => 'Type invalid']);
         }
 
+        /** @var File $file */
         $file = File::query()
             ->where('relate_type', $type)
             ->find($id);
@@ -419,7 +420,7 @@ class AjaxController extends BaseController
             $file->delete();
 
             return json_encode([
-                'status'  => 'success',
+                'status' => 'success',
             ]);
         }
 

@@ -18,6 +18,7 @@ use Illuminate\Database\Eloquent\Relations\MorphMany;
  * @property int created_at
  * @property int updated_at
  * @property int expires_at
+ * @property Board category
  */
 class Item extends BaseModel
 {

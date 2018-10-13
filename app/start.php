@@ -17,42 +17,38 @@ date_default_timezone_set(setting('timezone'));
 /**
  * Авторизация по кукам
  */
-if (empty($_SESSION['id']) && empty($_SESSION['password'])) {
-    if (isset($_COOKIE['login'], $_COOKIE['password'])) {
+if (empty($_SESSION['id']) && isset($_COOKIE['login'], $_COOKIE['password'])) {
 
-        $cookLogin = check($_COOKIE['login']);
-        $cookPass  = check($_COOKIE['password']);
+    $cookLogin = check($_COOKIE['login']);
+    $cookPass  = check($_COOKIE['password']);
 
-        $user = User::query()->where('login', $cookLogin)->first();
+    $user = User::query()->where('login', $cookLogin)->first();
 
-        if ($user) {
-            if ($cookLogin === $user->login && $cookPass === md5($user->password . env('APP_KEY'))) {
-                session_regenerate_id(1);
+    if ($user && $cookLogin === $user->login && $cookPass === md5($user->password . env('APP_KEY'))) {
+        session_regenerate_id(1);
 
-                $_SESSION['id']       = $user->id;
-                $_SESSION['password'] = md5(env('APP_KEY') . $user->password);
+        $_SESSION['id']       = $user->id;
+        $_SESSION['password'] = md5(env('APP_KEY') . $user->password);
 
-                $authorization = Login::query()
-                    ->where('user_id', $user->id)
-                    ->where('created_at', '>', SITETIME - 30)
-                    ->first();
+        $authorization = Login::query()
+            ->where('user_id', $user->id)
+            ->where('created_at', '>', SITETIME - 30)
+            ->first();
 
-                if (! $authorization) {
+        if (! $authorization) {
 
-                    Login::query()->create([
-                        'user_id'    => $user->id,
-                        'ip'         => getIp(),
-                        'brow'       => getBrowser(),
-                        'created_at' => SITETIME,
-                    ]);
-                }
-
-                $user->update([
-                    'visits'     => DB::raw('visits + 1'),
-                    'updated_at' => SITETIME
-                ]);
-            }
+            Login::query()->create([
+                'user_id'    => $user->id,
+                'ip'         => getIp(),
+                'brow'       => getBrowser(),
+                'created_at' => SITETIME,
+            ]);
         }
+
+        $user->update([
+            'visits'     => DB::raw('visits + 1'),
+            'updated_at' => SITETIME
+        ]);
     }
 }
 
@@ -79,17 +75,13 @@ if ($user = checkAuth()) {
     ]);
 
     // Забанен
-    if ($user->level == User::BANNED) {
-        if (! Request::is('ban', 'rules', 'logout')) {
-            redirect('/ban?user=' . $user->login);
-        }
+    if ($user->level === User::BANNED && ! Request::is('ban', 'rules', 'logout')) {
+        redirect('/ban?user=' . $user->login);
     }
 
     // Подтверждение регистрации
-    if (setting('regkeys') && $user->level == User::PENDED) {
-        if (! Request::is('key', 'ban', 'login', 'logout')) {
-            redirect('/key?user=' . $user->login);
-        }
+    if ($user->level === User::PENDED && setting('regkeys') && ! Request::is('key', 'ban', 'login', 'logout')) {
+        redirect('/key?user=' . $user->login);
     }
 
     // ---------------------- Получение ежедневного бонуса -----------------------//
@@ -109,10 +101,8 @@ if ($user = checkAuth()) {
 $browser_detect = new Mobile_Detect();
 
 if (! getUser() || empty(setting('themes'))) {
-    if (! empty(setting('webthemes'))) {
-        if (! $browser_detect->isMobile() && ! $browser_detect->isTablet()) {
-            setSetting(['themes' => setting('webthemes')]);
-        }
+    if (! empty(setting('webthemes')) && ! $browser_detect->isMobile() && ! $browser_detect->isTablet()) {
+        setSetting(['themes' => setting('webthemes')]);
     }
 }
 
@@ -123,3 +113,5 @@ if (empty(setting('themes')) || ! file_exists(HOME . '/themes/' . setting('theme
 if (empty(setting('language')) || ! file_exists(RESOURCES . '/lang/' . setting('language'))) {
     setSetting(['language' => 'ru']);
 }
+
+return new \App\Classes\Application();

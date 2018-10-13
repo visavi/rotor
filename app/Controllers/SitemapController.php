@@ -160,6 +160,9 @@ class SitemapController extends BaseController
 
     /**
      * Если вызывается несуществуюший метод
+     *
+     * @param string $name
+     * @param array $arguments
      */
     public function __call($name, $arguments)
     {

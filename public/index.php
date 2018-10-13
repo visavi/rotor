@@ -8,6 +8,6 @@
  * @copyright 2005-2018
  */
 
-include_once __DIR__.'/../app/start.php';
-
-App\Classes\Application::run();
+/** @var App\Classes\Application $app */
+$app = require __DIR__ . '/../app/start.php';
+$app->run();

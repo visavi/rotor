@@ -1587,20 +1587,27 @@ function view($view, array $params = [])
  */
 function abort($code, $message = null)
 {
-    if ($code === 403) {
-        header($_SERVER['SERVER_PROTOCOL'] . ' 403 Forbidden');
-    }
+    $protocol = server('SERVER_PROTOCOL');
+    $referer  = server('HTTP_REFERER') ?? null;
 
-    if ($code === 404) {
-        header($_SERVER['SERVER_PROTOCOL'] . ' 404 Not Found');
-    }
+   switch ($code) {
+       case 403:
+           header($protocol . ' 403 Forbidden');
+           break;
+       case 404:
+           header($protocol . ' 404 Not Found');
+           break;
+       case 405:
+           header($protocol . ' 405 Method Not Allowed');
+           break;
+   }
 
-    if (setting('errorlog') && in_array($code, [403, 404], true)) {
+    if (setting('errorlog') && in_array($code, [403, 404, 405], true)) {
 
         Error::query()->create([
             'code'       => $code,
             'request'    => utfSubstr(server('REQUEST_URI'), 0, 200),
-            'referer'    => utfSubstr(server('HTTP_REFERER'), 0, 200),
+            'referer'    => utfSubstr($referer, 0, 200),
             'user_id'    => getUser('id'),
             'ip'         => getIp(),
             'brow'       => getBrowser(),
@@ -1609,7 +1616,7 @@ function abort($code, $message = null)
     }
 
     if (Request::ajax()) {
-        header($_SERVER['SERVER_PROTOCOL'] . ' 200 OK');
+        header($protocol . ' 200 OK');
 
         exit(json_encode([
             'status' => 'error',
@@ -1617,7 +1624,6 @@ function abort($code, $message = null)
         ]));
     }
 
-    $referer = Request::header('referer') ?? null;
     exit(view('errors/' . $code, compact('message', 'referer')));
 }
 

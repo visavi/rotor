@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
@@ -19,6 +20,7 @@ use Illuminate\Database\Eloquent\Relations\MorphMany;
  * @property int visits
  * @property int count_comments
  * @property int created_at
+ * @property Collection files
  */
 class Blog extends BaseModel
 {
@@ -42,15 +44,6 @@ class Blog extends BaseModel
      * @var string
      */
     public $uploadPath = UPLOADS . '/blogs';
-
-    /**
-     * The attributes that should be cast to native types.
-     *
-     * @var array
-     */
-    protected $casts = [
-        'user_id' => 'int',
-    ];
 
     /**
      * Возвращает комментарии блогов
@@ -98,11 +91,11 @@ class Blog extends BaseModel
     /**
      * Возвращает размер шрифта для облака тегов
      *
-     * @param int $count
-     * @param int $minCount
-     * @param int $maxCount
-     * @param int $minSize
-     * @param int $maxSize
+     * @param int   $count
+     * @param float $minCount
+     * @param float $maxCount
+     * @param int   $minSize
+     * @param int   $maxSize
      * @return int
      */
     public static function logTagSize($count, $minCount, $maxCount, $minSize = 10, $maxSize = 30): int

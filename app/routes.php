@@ -1,416 +1,504 @@
 <?php
 
-$router = new AltoRouter();
+use FastRoute\RouteCollector;
 
-$router->addMatchTypes([
-    'letter' => '[0-9a-z]',
-    'user'   => '[0-9A-Za-z-_]++',
+return FastRoute\cachedDispatcher(function(RouteCollector $r)
+{
+    $r->get('/', [App\Controllers\HomeController::class, 'index']);
+    $r->get('/captcha', [App\Controllers\HomeController::class, 'captcha']);
+    $r->get('/closed', [App\Controllers\HomeController::class, 'closed']);
+    $r->get('/search',[App\Controllers\HomeController::class, 'search']);
+    $r->addRoute(['GET', 'POST'], '/banip', [App\Controllers\HomeController::class, 'banip']);
+
+    /* Карта сайта */
+    $r->get('/sitemap.xml', [App\Controllers\SitemapController::class, 'index']);
+    $r->get('/sitemap/{action:[a-z]+}.xml', [App\Controllers\SitemapController::class]);
+
+    /* Категории объявления */
+    $r->addGroup('/boards', function (RouteCollector $r) {
+        $r->get('[/{id:\d+}]', [App\Controllers\BoardController::class, 'index']);
+        $r->get('/active', [App\Controllers\BoardController::class, 'active']);
+    });
+
+    /* Объявления */
+    $r->addGroup('/items', function (RouteCollector $r) {
+        $r->get('/{id:\d+}', [App\Controllers\BoardController::class, 'view']);
+        $r->get('/close/{id:\d+}', [App\Controllers\BoardController::class, 'close']);
+        $r->get('/delete/{id:\d+}', [App\Controllers\BoardController::class, 'delete']);
+        $r->addRoute(['GET', 'POST'], '/create', [App\Controllers\BoardController::class, 'create']);
+        $r->addRoute(['GET', 'POST'], '/edit/{id:\d+}', [App\Controllers\BoardController::class, 'edit']);
+    });
+
+    /* Гостевая книга */
+    $r->addGroup('/guestbooks', function (RouteCollector $r) {
+        $r->get('', [App\Controllers\GuestbookController::class, 'index']);
+        $r->post('/add', [App\Controllers\GuestbookController::class, 'add']);
+        $r->addRoute(['GET', 'POST'], '/edit/{id:\d+}', [App\Controllers\GuestbookController::class, 'edit']);
+    });
+
+    /* Категория блогов */
+    $r->addGroup('/blogs', function (RouteCollector $r) {
+        $r->get('', [App\Controllers\BlogController::class, 'index']);
+        $r->get('/{id:\d+}', [App\Controllers\BlogController::class, 'blog']);
+        $r->get('/tags', [App\Controllers\BlogController::class, 'tags']);
+        $r->get('/tags/{tag:.*}', [App\Controllers\BlogController::class, 'searchTag']);
+        $r->get('/authors', [App\Controllers\BlogController::class, 'authors']);
+        $r->get('/active/articles', [App\Controllers\BlogController::class, 'userArticles']);
+        $r->get('/active/comments', [App\Controllers\BlogController::class, 'userComments']);
+        $r->get('/top', [App\Controllers\BlogController::class, 'top']);
+        $r->get('/rss', [App\Controllers\BlogController::class, 'rss']);
+        $r->addRoute(['GET', 'POST'], '/create', [App\Controllers\BlogController::class, 'create']);
+        $r->addRoute(['GET', 'POST'], '/search', [App\Controllers\BlogController::class, 'search']);
+    });
+
+    /* Статьи блогов */
+    $r->addGroup('/articles', function (RouteCollector $r) {
+        $r->get('', [App\Controllers\BlogController::class, 'newArticles']);
+        $r->get('/{id:\d+}', [App\Controllers\BlogController::class, 'view']);
+        $r->get('/print/{id:\d+}', [App\Controllers\BlogController::class, 'print']);
+        $r->get('/rss/{id:\d+}', [App\Controllers\BlogController::class, 'rssComments']);
+        $r->get('/comments', [App\Controllers\BlogController::class, 'newComments']);
+        $r->get('/end/{id:\d+}', [App\Controllers\BlogController::class, 'end']);
+        $r->get('/comment/{id:\d+}/{cid:\d+}', [App\Controllers\BlogController::class, 'viewComment']);
+        $r->addRoute(['GET', 'POST'], '/edit/{id:\d+}', [App\Controllers\BlogController::class, 'edit']);
+        $r->addRoute(['GET', 'POST'], '/comments/{id:\d+}', [App\Controllers\BlogController::class, 'comments']);
+        $r->addRoute(['GET', 'POST'], '/edit/{id:\d+}/{cid:\d+}', [App\Controllers\BlogController::class, 'editComment']);
+    });
+
+    /* Новости */
+    $r->addGroup('/news', function (RouteCollector $r) {
+        $r->get('', [App\Controllers\NewsController::class, 'index']);
+        $r->get('/{id:\d+}', [App\Controllers\NewsController::class, 'view']);
+        $r->get('/end/{id:\d+}', [App\Controllers\NewsController::class, 'end']);
+        $r->get('/rss', [App\Controllers\NewsController::class, 'rss']);
+        $r->get('/allcomments', [App\Controllers\NewsController::class, 'allComments']);
+        $r->get('/comment/{id:\d+}/{cid:\d+}', [App\Controllers\NewsController::class, 'viewComment']);
+        $r->addRoute(['GET', 'POST'], '/comments/{id:\d+}', [App\Controllers\NewsController::class, 'comments']);
+        $r->addRoute(['GET', 'POST'], '/edit/{id:\d+}/{cid:\d+}', [App\Controllers\NewsController::class, 'editComment']);
+    });
+
+    /* Фотогалерея */
+    $r->addGroup('/photos', function (RouteCollector $r) {
+        $r->get('', [App\Controllers\PhotoController::class, 'index']);
+        $r->get('/{id:\d+}', [App\Controllers\PhotoController::class, 'view']);
+        $r->get('/delete/{id:\d+}', [App\Controllers\PhotoController::class, 'delete']);
+        $r->get('/end/{id:\d+}', [App\Controllers\PhotoController::class, 'end']);
+        $r->get('/albums', [App\Controllers\PhotoController::class, 'albums']);
+        $r->get('/albums/{login:[\w\-]+}', [App\Controllers\PhotoController::class, 'album']);
+        $r->get('/comments', [App\Controllers\PhotoController::class, 'allComments']);
+        $r->get('/comments/{login:[\w\-]+}', [App\Controllers\PhotoController::class, 'userComments']);
+        $r->get('/comments/{id:\d+}/{cid:\d+}', [App\Controllers\PhotoController::class, 'viewComment']);
+        $r->addRoute(['GET', 'POST'], '/comments/{id:\d+}', [App\Controllers\PhotoController::class, 'comments']);
+        $r->addRoute(['GET', 'POST'], '/create', [App\Controllers\PhotoController::class, 'create']);
+        $r->addRoute(['GET', 'POST'], '/edit/{id:\d+}', [App\Controllers\PhotoController::class, 'edit']);
+        $r->addRoute(['GET', 'POST'], '/edit/{id:\d+}/{cid:\d+}', [App\Controllers\PhotoController::class, 'editComment']);
+        $r->addRoute(['GET', 'POST'], '/top', [App\Controllers\PhotoController::class, 'top']);
+    });
+
+    /* Категория форума */
+    $r->addGroup('/forums', function (RouteCollector $r) {
+        $r->get('', [App\Controllers\Forum\ForumController::class, 'index']);
+        $r->get('/{id:\d+}', [App\Controllers\Forum\ForumController::class, 'forum']);
+        $r->get('/search', [App\Controllers\Forum\ForumController::class, 'search']);
+        $r->get('/active/{action:posts|topics}', [App\Controllers\Forum\ActiveController::class]);
+        $r->post('/active/delete', [App\Controllers\Forum\ActiveController::class, 'delete']);
+        $r->get('/top/post', [App\Controllers\Forum\ForumController::class, 'topPosts']);
+        $r->get('/top/topics', [App\Controllers\Forum\ForumController::class, 'topTopics']);
+        $r->get('/rss', [App\Controllers\Forum\ForumController::class, 'rss']);
+        $r->get('/bookmarks', [App\Controllers\BookmarkController::class, 'index']);
+        $r->post('/bookmarks/{action:delete|perform}', [App\Controllers\BookmarkController::class]);
+        $r->addRoute(['GET', 'POST'], '/create', [App\Controllers\Forum\ForumController::class, 'create']);
+    });
+
+    /* Темы форума */
+    $r->addGroup('/topics', function (RouteCollector $r) {
+        $r->get('', [App\Controllers\Forum\NewController::class, 'topics']);
+        $r->get('/{id:\d+}', [App\Controllers\Forum\TopicController::class, 'index']);
+        $r->get('/{id:\d+}/{pid:\d+}', [App\Controllers\Forum\TopicController::class, 'viewpost']);
+        $r->post('/votes/{id:\d+}', [App\Controllers\Forum\TopicController::class, 'vote']);
+        $r->get('/end/{id:\d+}', [App\Controllers\Forum\TopicController::class, 'end']);
+        $r->get('/close/{id:\d+}', [App\Controllers\Forum\TopicController::class, 'close']);
+        $r->post('/create/{id:\d+}', [App\Controllers\Forum\TopicController::class, 'create']);
+        $r->post('/delete/{id:\d+}', [App\Controllers\Forum\TopicController::class, 'delete']);
+        $r->get('/print/{id:\d+}', [App\Controllers\Forum\TopicController::class, 'print']);
+        $r->get('/rss/{id:\d+}', [App\Controllers\Forum\ForumController::class, 'rssPosts']);
+        $r->addRoute(['GET', 'POST'], '/edit/{id:\d+}', [App\Controllers\Forum\TopicController::class, 'edit']);
+    });
+
+    /* Посты форума */
+    $r->addGroup('/posts', function (RouteCollector $r) {
+        $r->get('', [App\Controllers\Forum\NewController::class, 'posts']);
+        $r->addRoute(['GET', 'POST'], '/edit/{id:\d+}', [App\Controllers\Forum\TopicController::class, 'editPost']);
+    });
+
+    /* Категории загрузок */
+    $r->addGroup('/loads', function (RouteCollector $r) {
+        $r->get('', [App\Controllers\Load\LoadController::class, 'index']);
+        $r->get('/rss', [App\Controllers\Load\LoadController::class, 'rss']);
+        $r->get('/{id:\d+}', [App\Controllers\Load\LoadController::class, 'load']);
+        $r->get('/top', [App\Controllers\Load\TopController::class, 'index']);
+        $r->get('/search', [App\Controllers\Load\SearchController::class, 'index']);
+    });
+
+    /* Загрузки */
+    $r->addGroup('/downs', function (RouteCollector $r) {
+        $r->get('', [App\Controllers\Load\NewController::class, 'files']);
+        $r->get('/{id:\d+}', [App\Controllers\Load\DownController::class, 'index']);
+        $r->get('/delete/{id:\d+}/{fid:\d+}', [App\Controllers\Load\DownController::class, 'deleteFile']);
+        $r->post('/votes/{id:\d+}', [App\Controllers\Load\DownController::class, 'vote']);
+        $r->get('/comment/{id:\d+}/{cid:\d+}', [App\Controllers\Load\DownController::class, 'viewComment']);
+        $r->get('/end/{id:\d+}', [App\Controllers\Load\DownController::class, 'end']);
+        $r->get('/rss/{id:\d+}', [App\Controllers\Load\DownController::class, 'rss']);
+        $r->get('/zip/{id:\d+}', [App\Controllers\Load\DownController::class, 'zip']);
+        $r->get('/zip/{id:\d+}/{fid:\d+}', [App\Controllers\Load\DownController::class, 'zipView']);
+        $r->get('/comments', [App\Controllers\Load\NewController::class, 'comments']);
+        $r->get('/active/files', [App\Controllers\Load\ActiveController::class, 'files']);
+        $r->get('/active/comments', [App\Controllers\Load\ActiveController::class, 'comments']);
+        $r->addRoute(['GET', 'POST'], '/edit/{id:\d+}', [App\Controllers\Load\DownController::class, 'edit']);
+        $r->addRoute(['GET', 'POST'], '/create', [App\Controllers\Load\DownController::class, 'create']);
+        $r->addRoute(['GET', 'POST'], '/download/{id:\d+}', [App\Controllers\Load\DownController::class, 'download']);
+        $r->addRoute(['GET', 'POST'], '/comments/{id:\d+}', [App\Controllers\Load\DownController::class, 'comments']);
+        $r->addRoute(['GET', 'POST'], '/edit/{id:\d+}/{cid:\d+}', [App\Controllers\Load\DownController::class, 'editComment']);
+    });
+
+    /* Предложения и проблемы */
+    $r->addGroup('/offers', function (RouteCollector $r) {
+        $r->get('[/{type:offer|issue}]', [App\Controllers\OfferController::class, 'index']);
+        $r->get('/{id:\d+}', [App\Controllers\OfferController::class, 'view']);
+        $r->get('/end/{id:\d+}', [App\Controllers\OfferController::class, 'end']);
+        $r->get('/comment/{id:\d+}/{cid:\d+}', [App\Controllers\OfferController::class, 'viewComment']);
+        $r->addRoute(['GET', 'POST'], '/create', [App\Controllers\OfferController::class, 'create']);
+        $r->addRoute(['GET', 'POST'], '/edit/{id:\d+}', [App\Controllers\OfferController::class, 'edit']);
+        $r->addRoute(['GET', 'POST'], '/comments/{id:\d+}', [App\Controllers\OfferController::class, 'comments']);
+        $r->addRoute(['GET', 'POST'], '/edit/{id:\d+}/{cid:\d+}', [App\Controllers\OfferController::class, 'editComment']);
+    });
+
+    /* Ajax */
+    $r->addGroup('/ajax', function (RouteCollector $r) {
+        $r->post('/bbcode', [App\Controllers\AjaxController::class, 'bbCode']);
+        $r->post('/delcomment', [App\Controllers\AjaxController::class, 'delComment']);
+        $r->post('/rating', [App\Controllers\AjaxController::class, 'rating']);
+        $r->post('/vote', [App\Controllers\AjaxController::class, 'vote']);
+        $r->post('/complaint', [App\Controllers\AjaxController::class, 'complaint']);
+        $r->post('/image/upload', [App\Controllers\AjaxController::class, 'uploadImage']);
+        $r->post('/image/delete', [App\Controllers\AjaxController::class, 'deleteImage']);
+    });
+
+    /* Голосования */
+    $r->addGroup('/votes', function (RouteCollector $r) {
+        $r->get('', [App\Controllers\VoteController::class, 'index']);
+        $r->get('/voters/{id:\d+}', [App\Controllers\VoteController::class, 'voters']);
+        $r->get('/history', [App\Controllers\VoteController::class, 'history']);
+        $r->get('/history/{id:\d+}', [App\Controllers\VoteController::class, 'viewHistory']);
+        $r->addRoute(['GET', 'POST'], '/{id:\d+}', [App\Controllers\VoteController::class, 'view']);
+        $r->addRoute(['GET', 'POST'], '/create', [App\Controllers\VoteController::class, 'create']);
+    });
+
+    /* Мои данные */
+    $r->addGroup('/accounts', function (RouteCollector $r) {
+        $r->get('', [App\Controllers\User\UserController::class, 'account']);
+        $r->get('/editmail', [App\Controllers\User\UserController::class, 'editMail']);
+        $r->post('/changemail', [App\Controllers\User\UserController::class, 'changeMail']);
+        $r->post('/editstatus', [App\Controllers\User\UserController::class, 'editStatus']);
+        $r->post('/editpassword', [App\Controllers\User\UserController::class, 'editPassword']);
+        $r->post('/apikey', [App\Controllers\User\UserController::class, 'apikey']);
+    });
+
+    /* Фото профиля */
+    $r->addGroup('/pictures', function (RouteCollector $r) {
+        $r->addRoute(['GET', 'POST'], '', [App\Controllers\PictureController::class, 'index']);
+        $r->get('/delete', [App\Controllers\PictureController::class, 'delete']);
+    });
+
+    /* Социальные сети */
+    $r->addGroup('/socials', function (RouteCollector $r) {
+        $r->addRoute(['GET', 'POST'], '', [App\Controllers\SocialController::class, 'index']);
+        $r->get('/delete/{id:\d+}', [App\Controllers\SocialController::class, 'delete']);
+    });
+
+    /* Поиск пользователя */
+    $r->addGroup('/searchusers', function (RouteCollector $r) {
+        $r->get('', [App\Controllers\User\SearchController::class, 'index']);
+        $r->get('/{letter:[0-9a-z]}', [App\Controllers\User\SearchController::class, 'sort']);
+        $r->addRoute(['GET', 'POST'], '/search', [App\Controllers\User\SearchController::class, 'search']);
+    });
+
+    /* Стена сообщений */
+    $r->addGroup('/walls', function (RouteCollector $r) {
+        $r->get('/{login:[\w\-]+}', [App\Controllers\WallController::class, 'index']);
+        $r->post('/{login:[\w\-]+}/create', [App\Controllers\WallController::class, 'create']);
+        $r->post('/{login:[\w\-]+}/delete', [App\Controllers\WallController::class, 'delete']);
+    });
+
+    /* Личные сообщения */
+    $r->addGroup('/messages', function (RouteCollector $r) {
+        $r->get('[/{action:outbox|history|clear}]', [App\Controllers\MessageController::class, 'index']);
+        $r->post('/delete', [App\Controllers\MessageController::class, 'delete']);
+        $r->addRoute(['GET', 'POST'], '/send', [App\Controllers\MessageController::class, 'send']);
+    });
+
+    /* Игнор-лист */
+    $r->addGroup('/ignores', function (RouteCollector $r) {
+        $r->post('/delete', [App\Controllers\IgnoreController::class, 'delete']);
+        $r->addRoute(['GET', 'POST'], '', [App\Controllers\IgnoreController::class, 'index']);
+        $r->addRoute(['GET', 'POST'], '/note/{id:\d+}', [App\Controllers\IgnoreController::class, 'note']);
+    });
+
+    /* Контакт-лист */
+    $r->addGroup('/contacts', function (RouteCollector $r) {
+        $r->post('/delete', [App\Controllers\ContactController::class, 'delete']);
+        $r->addRoute(['GET', 'POST'], '', [App\Controllers\ContactController::class, 'index']);
+        $r->addRoute(['GET', 'POST'], '/note/{id:\d+}', [App\Controllers\ContactController::class, 'note']);
+    });
+
+    /* Перевод денег */
+    $r->addGroup('/transfers', function (RouteCollector $r) {
+        $r->get('', [App\Controllers\TransferController::class, 'index']);
+        $r->post('/send', [App\Controllers\TransferController::class, 'send']);
+    });
+
+    /* Личные заметки */
+    $r->addGroup('/notebooks', function (RouteCollector $r) {
+        $r->get('', [App\Controllers\NotebookController::class, 'index']);
+        $r->addRoute(['GET', 'POST'], '/edit', [App\Controllers\NotebookController::class, 'edit']);
+    });
+
+    /* Реклама */
+    $r->addGroup('/reklama', function (RouteCollector $r) {
+        $r->get('', [App\Controllers\RekUserController::class, 'index']);
+        $r->addRoute(['GET', 'POST'], '/create', [App\Controllers\RekUserController::class, 'create']);
+    });
+
+    /* Репутация пользователя */
+    $r->addGroup('/ratings', function (RouteCollector $r) {
+        $r->get('/{login:[\w\-]+}[/{action:received|gave}]', [App\Controllers\RatingController::class, 'received']);
+        $r->post('/delete', [App\Controllers\RatingController::class, 'delete']);
+    });
+
+    /* API */
+    $r->addGroup('/api', function (RouteCollector $r) {
+        $r->get('', [App\Controllers\ApiController::class, 'index']);
+        $r->get('/users', [App\Controllers\ApiController::class, 'users']);
+        $r->get('/forums', [App\Controllers\ApiController::class, 'forums']);
+        $r->get('/messages', [App\Controllers\ApiController::class, 'messages']);
+    });
+
+    $r->get('/recovery/restore', [App\Controllers\MailController::class, 'restore']);
+    $r->addRoute(['GET', 'POST'], '/recovery', [App\Controllers\MailController::class, 'recovery']);
+    $r->addRoute(['GET', 'POST'], '/mails', [App\Controllers\MailController::class, 'index']);
+    $r->addRoute(['GET', 'POST'], '/unsubscribe', [App\Controllers\MailController::class, 'unsubscribe']);
+
+    $r->get('/authlogs', [App\Controllers\LoginController::class, 'index']);
+
+    $r->get('/administrators', [App\Controllers\User\ListController::class, 'adminlist']);
+    $r->addRoute(['GET', 'POST'], '/authoritylists', [App\Controllers\User\ListController::class, 'authoritylist']);
+    $r->addRoute(['GET', 'POST'], '/ratinglists', [App\Controllers\User\ListController::class, 'ratinglist']);
+    $r->addRoute(['GET', 'POST'], '/ban', [App\Controllers\User\BanController::class, 'ban']);
+    $r->addRoute(['GET', 'POST'], '/who', [App\Controllers\User\UserController::class, 'who']);
+
+    $r->get('/faq', [App\Controllers\PageController::class, 'faq']);
+    $r->get('/statusfaq', [App\Controllers\PageController::class, 'tatusfaq']);
+    $r->get('/surprise', [App\Controllers\PageController::class, 'surprise']);
+
+
+    $r->get('/users/{login:[\w\-]+}', [App\Controllers\User\UserController::class, 'index']);
+    $r->addRoute(['GET', 'POST'], '/users', [App\Controllers\User\ListController::class, 'userlist']);
+    $r->addRoute(['GET', 'POST'], '/users/{login:[\w\-]+}/rating', [App\Controllers\RatingController::class, 'index']);
+
+    $r->get('/logout', [App\Controllers\User\UserController::class, 'logout']);
+    $r->get('/key', [App\Controllers\User\UserController::class, 'key']);
+    $r->addRoute(['GET', 'POST'], '/users/{login:[\w\-]+}/note', [App\Controllers\User\UserController::class, 'note']);
+    $r->addRoute(['GET', 'POST'], '/login', [App\Controllers\User\UserController::class, 'login']);
+    $r->addRoute(['GET', 'POST'], '/register', [App\Controllers\User\UserController::class, 'register']);
+    $r->addRoute(['GET', 'POST'], '/profile', [App\Controllers\User\UserController::class, 'profile']);
+    $r->addRoute(['GET', 'POST'], '/settings', [App\Controllers\User\UserController::class, 'setting']);
+
+    $r->get('/menu', [App\Controllers\PageController::class, 'menu']);
+    $r->get('/pages[/{action:[a-zA-Z0-9]+}]', [App\Controllers\PageController::class, 'index']);
+    $r->get('/tags', [App\Controllers\PageController::class, 'tags']);
+    $r->get('/rules', [App\Controllers\PageController::class, 'rules']);
+    $r->get('/smiles', [App\Controllers\PageController::class, 'smiles']);
+    $r->get('/online[/{action:all}]', [App\Controllers\OnlineController::class, 'index']);
+    $r->get('/counters', [App\Controllers\CounterController::class, 'index']);
+
+    $r->get('/files[/{action:.+}]', [App\Controllers\FileController::class, 'index']);
+
+    /* Админ-панель */
+    $r->addGroup('/admin', function (RouteCollector $r) {
+        $r->get('/loads', [App\Controllers\Admin\LoadController::class, 'index']);
+        $r->post('/loads/create', [App\Controllers\Admin\LoadController::class, 'create']);
+        $r->addRoute(['GET', 'POST'], '/loads/edit/{id:\d+}', [App\Controllers\Admin\LoadController::class, 'edit']);
+        $r->get('/loads/delete/{id:\d+}', [App\Controllers\Admin\LoadController::class, 'delete']);
+        $r->get('/loads/restatement', [App\Controllers\Admin\LoadController::class, 'restatement']);
+        $r->get('/loads/{id:\d+}', [App\Controllers\Admin\LoadController::class, 'load']);
+        $r->addRoute(['GET', 'POST'], '/downs/edit/{id:\d+}', [App\Controllers\Admin\LoadController::class, 'editDown']);
+        $r->addRoute(['GET', 'POST'], '/downs/delete/{id:\d+}', [App\Controllers\Admin\LoadController::class, 'deleteDown']);
+        $r->get('/downs/delete/{id:\d+}/{fid:\d+}', [App\Controllers\Admin\LoadController::class, 'deleteFile']);
+        $r->get('/downs/new', [App\Controllers\Admin\LoadController::class, 'new']);
+        $r->get('/downs/publish/{id:\d+}', [App\Controllers\Admin\LoadController::class, 'publish']);
+
+        $r->get('', [App\Controllers\Admin\AdminController::class, 'main', 'admin']);
+        $r->get('/spam', [App\Controllers\Admin\SpamController::class, 'index']);
+        $r->post('/spam/delete', [App\Controllers\Admin\SpamController::class, 'delete']);
+        $r->get('/errors', [App\Controllers\Admin\ErrorController::class, 'index']);
+        $r->get('/errors/clear', [App\Controllers\Admin\ErrorController::class, 'clear']);
+        $r->addRoute(['GET', 'POST'], '/antimat', [App\Controllers\Admin\AntimatController::class, 'index']);
+        $r->get('/antimat/{action:delete|clear}', [App\Controllers\Admin\AntimatController::class]);
+        $r->get('/status', [App\Controllers\Admin\StatusController::class, 'index']);
+        $r->addRoute(['GET', 'POST'], '/status/{action:create|edit}', [App\Controllers\Admin\StatusController::class]);
+        $r->get('/status/delete', [App\Controllers\Admin\StatusController::class, 'delete']);
+
+        $r->get('/rules', [App\Controllers\Admin\RuleController::class, 'index']);
+        $r->addRoute(['GET', 'POST'], '/rules/edit', [App\Controllers\Admin\RuleController::class, 'edit']);
+
+        $r->get('/upgrade', [App\Controllers\Admin\AdminController::class, 'upgrade']);
+        $r->get('/phpinfo', [App\Controllers\Admin\AdminController::class, 'phpinfo']);
+
+        $r->addRoute(['GET', 'POST'], '/settings', [App\Controllers\Admin\SettingController::class, 'index']);
+        $r->get('/caches', [App\Controllers\Admin\CacheController::class, 'index']);
+        $r->post('/caches/clear', [App\Controllers\Admin\CacheController::class, 'clear']);
+
+        $r->get('/backups', [App\Controllers\Admin\BackupController::class, 'index']);
+        $r->addRoute(['GET', 'POST'], '/backups/create', [App\Controllers\Admin\BackupController::class, 'create']);
+        $r->get('/backups/delete', [App\Controllers\Admin\BackupController::class, 'delete']);
+
+        $r->addRoute(['GET', 'POST'], '/checkers', [App\Controllers\Admin\CheckerController::class, 'index']);
+        $r->addRoute(['GET', 'POST'], '/checkers/scan', [App\Controllers\Admin\CheckerController::class, 'scan']);
+
+        $r->addRoute(['GET', 'POST'], '/delivery', [App\Controllers\Admin\DeliveryController::class, 'index']);
+
+        $r->get('/logs', [App\Controllers\Admin\LogController::class, 'index']);
+        $r->get('/logs/clear', [App\Controllers\Admin\LogController::class, 'clear']);
+
+        $r->get('/notices', [App\Controllers\Admin\NoticeController::class, 'index']);
+        $r->addRoute(['GET', 'POST'], '/notices/create', [App\Controllers\Admin\NoticeController::class, 'create']);
+        $r->addRoute(['GET', 'POST'], '/notices/edit/{id:\d+}', [App\Controllers\Admin\NoticeController::class, 'edit']);
+        $r->get('/notices/delete/{id:\d+}', [App\Controllers\Admin\NoticeController::class, 'delete']);
+
+        $r->addRoute(['GET', 'POST'], '/delusers', [App\Controllers\Admin\DelUserController::class, 'index']);
+        $r->post('/delusers/clear', [App\Controllers\Admin\DelUserController::class, 'clear']);
+
+        $r->get('/files', [App\Controllers\Admin\FilesController::class, 'index']);
+        $r->addRoute(['GET', 'POST'], '/files/edit', [App\Controllers\Admin\FilesController::class, 'edit']);
+        $r->addRoute(['GET', 'POST'], '/files/create', [App\Controllers\Admin\FilesController::class, 'create']);
+        $r->get('/files/delete', [App\Controllers\Admin\FilesController::class, 'delete']);
+
+        $r->get('/smiles', [App\Controllers\Admin\SmileController::class, 'index']);
+        $r->addRoute(['GET', 'POST'], '/smiles/create', [App\Controllers\Admin\SmileController::class, 'create']);
+        $r->addRoute(['GET', 'POST'], '/smiles/edit/{id:\d+}', [App\Controllers\Admin\SmileController::class, 'edit']);
+        $r->post('/smiles/delete', [App\Controllers\Admin\SmileController::class, 'delete']);
+
+        $r->addRoute(['GET', 'POST'], '/ipbans', [App\Controllers\Admin\IpBanController::class, 'index']);
+        $r->post('/ipbans/delete', [App\Controllers\Admin\IpBanController::class, 'delete']);
+        $r->get('/ipbans/clear', [App\Controllers\Admin\IpBanController::class, 'clear']);
+
+        $r->addRoute(['GET', 'POST'], '/blacklists', [App\Controllers\Admin\BlacklistController::class, 'index']);
+        $r->post('/blacklists/delete', [App\Controllers\Admin\BlacklistController::class, 'delete']);
+
+        $r->get('/news', [App\Controllers\Admin\NewsController::class, 'index']);
+        $r->addRoute(['GET', 'POST'], '/news/edit/{id:\d+}', [App\Controllers\Admin\NewsController::class, 'edit']);
+        $r->addRoute(['GET', 'POST'], '/news/create', [App\Controllers\Admin\NewsController::class, 'create']);
+        $r->get('/news/restatement', [App\Controllers\Admin\NewsController::class, 'restatement']);
+        $r->get('/news/delete/{id:\d+}', [App\Controllers\Admin\NewsController::class, 'delete']);
+
+        $r->get('/guestbooks', [App\Controllers\Admin\GuestbookController::class, 'index']);
+        $r->addRoute(['GET', 'POST'], '/guestbooks/edit/{id:\d+}', [App\Controllers\Admin\GuestbookController::class, 'edit']);
+        $r->addRoute(['GET', 'POST'], '/guestbooks/reply/{id:\d+}', [App\Controllers\Admin\GuestbookController::class, 'reply']);
+        $r->post('/guestbooks/delete', [App\Controllers\Admin\GuestbookController::class, 'delete']);
+        $r->get('/guestbooks/clear', [App\Controllers\Admin\GuestbookController::class, 'clear']);
+
+        $r->get('/transfers', [App\Controllers\Admin\TransferController::class, 'index']);
+        $r->get('/transfers/view', [App\Controllers\Admin\TransferController::class, 'view']);
+
+        $r->get('/users', [App\Controllers\Admin\UserController::class, 'index']);
+        $r->get('/users/search', [App\Controllers\Admin\UserController::class, 'search']);
+        $r->addRoute(['GET', 'POST'], '/users/edit', [App\Controllers\Admin\UserController::class, 'edit']);
+        $r->addRoute(['GET', 'POST'], '/users/delete', [App\Controllers\Admin\UserController::class, 'delete']);
+
+        $r->get('/administrators', [App\Controllers\Admin\AdminlistController::class, 'index']);
+
+        $r->get('/invitations', [App\Controllers\Admin\InvitationController::class, 'index']);
+        $r->addRoute(['GET', 'POST'], '/invitations/create', [App\Controllers\Admin\InvitationController::class, 'create']);
+        $r->get('/invitations/keys', [App\Controllers\Admin\InvitationController::class, 'keys']);
+        $r->post('/invitations/send', [App\Controllers\Admin\InvitationController::class, 'send']);
+        $r->post('/invitations/mail', [App\Controllers\Admin\InvitationController::class, 'mail']);
+        $r->post('/invitations/delete', [App\Controllers\Admin\InvitationController::class, 'delete']);
+
+        $r->addRoute(['GET', 'POST'], '/reglists', [App\Controllers\Admin\ReglistController::class, 'index']);
+
+        $r->addRoute(['GET', 'POST'], '/chats', [App\Controllers\Admin\ChatController::class, 'index']);
+        $r->addRoute(['GET', 'POST'], '/chats/edit/{id:\d+}', [App\Controllers\Admin\ChatController::class, 'edit']);
+        $r->get('/chats/clear', [App\Controllers\Admin\ChatController::class, 'clear']);
+
+        $r->get('/banlists', [App\Controllers\Admin\BanlistController::class, 'index']);
+
+        $r->get('/bans', [App\Controllers\Admin\BanController::class, 'index']);
+        $r->addRoute(['GET', 'POST'], '/bans/edit', [App\Controllers\Admin\BanController::class, 'edit']);
+        $r->addRoute(['GET', 'POST'], '/bans/change', [App\Controllers\Admin\BanController::class, 'change']);
+        $r->get('/bans/unban', [App\Controllers\Admin\BanController::class, 'unban']);
+
+        $r->get('/banhists', [App\Controllers\Admin\BanhistController::class, 'index']);
+        $r->get('/banhists/view', [App\Controllers\Admin\BanhistController::class, 'view']);
+        $r->post('/banhists/delete', [App\Controllers\Admin\BanhistController::class, 'delete']);
+
+        $r->get('/votes', [App\Controllers\Admin\VoteController::class, 'index']);
+        $r->get('/votes/history', [App\Controllers\Admin\VoteController::class, 'history']);
+        $r->addRoute(['GET', 'POST'], '/votes/edit/{id:\d+}', [App\Controllers\Admin\VoteController::class, 'edit']);
+        $r->get('/votes/close/{id:\d+}', [App\Controllers\Admin\VoteController::class, 'close']);
+        $r->get('/votes/delete/{id:\d+}', [App\Controllers\Admin\VoteController::class, 'delete']);
+        $r->get('/votes/restatement', [App\Controllers\Admin\VoteController::class, 'restatement']);
+
+        $r->get('/offers[/{type:offer|issue}]', [App\Controllers\Admin\OfferController::class, 'index']);
+        $r->get('/offers/{id:\d+}', [App\Controllers\Admin\OfferController::class, 'view']);
+        $r->addRoute(['GET', 'POST'], '/offers/edit/{id:\d+}', [App\Controllers\Admin\OfferController::class, 'edit']);
+        $r->addRoute(['GET', 'POST'], '/offers/reply/{id:\d+}', [App\Controllers\Admin\OfferController::class, 'reply']);
+        $r->get('/offers/restatement', [App\Controllers\Admin\OfferController::class, 'restatement']);
+        $r->addRoute(['GET', 'POST'], '/offers/delete', [App\Controllers\Admin\OfferController::class, 'delete']);
+
+        $r->get('/photos', [App\Controllers\Admin\PhotoController::class, 'index']);
+        $r->addRoute(['GET', 'POST'], '/photos/edit/{id:\d+}', [App\Controllers\Admin\PhotoController::class, 'edit']);
+        $r->get('/photos/restatement', [App\Controllers\Admin\PhotoController::class, 'restatement']);
+        $r->get('/photos/delete/{id:\d+}', [App\Controllers\Admin\PhotoController::class, 'delete']);
+
+        $r->get('/reklama', [App\Controllers\Admin\RekUserController::class, 'index']);
+        $r->addRoute(['GET', 'POST'], '/reklama/edit/{id:\d+}', [App\Controllers\Admin\RekUserController::class, 'edit']);
+        $r->post('/reklama/delete', [App\Controllers\Admin\RekUserController::class, 'delete']);
+
+        $r->get('/forums', [App\Controllers\Admin\ForumController::class, 'index']);
+        $r->post('/forums/create', [App\Controllers\Admin\ForumController::class, 'create']);
+        $r->addRoute(['GET', 'POST'], '/forums/edit/{id:\d+}', [App\Controllers\Admin\ForumController::class, 'edit']);
+        $r->get('/forums/delete/{id:\d+}', [App\Controllers\Admin\ForumController::class, 'delete']);
+        $r->get('/forums/restatement', [App\Controllers\Admin\ForumController::class, 'restatement']);
+        $r->get('/forums/{id:\d+}', [App\Controllers\Admin\ForumController::class, 'forum']);
+        $r->addRoute(['GET', 'POST'], '/topics/edit/{id:\d+}', [App\Controllers\Admin\ForumController::class, 'editTopic']);
+        $r->addRoute(['GET', 'POST'], '/topics/move/{id:\d+}', [App\Controllers\Admin\ForumController::class, 'moveTopic']);
+        $r->get('/topics/action/{id:\d+}', [App\Controllers\Admin\ForumController::class, 'actionTopic']);
+        $r->get('/topics/delete/{id:\d+}', [App\Controllers\Admin\ForumController::class, 'deleteTopic']);
+        $r->get('/topics/{id:\d+}', [App\Controllers\Admin\ForumController::class, 'topic']);
+        $r->addRoute(['GET', 'POST'], '/posts/edit/{id:\d+}', [App\Controllers\Admin\ForumController::class, 'editPost']);
+        $r->post('/posts/delete', [App\Controllers\Admin\ForumController::class, 'deletePosts']);
+        $r->get('/topics/end/{id:\d+}', [App\Controllers\Admin\ForumController::class, 'end']);
+
+        $r->get('/blogs', [App\Controllers\Admin\BlogController::class, 'index']);
+        $r->post('/blogs/create', [App\Controllers\Admin\BlogController::class, 'create']);
+        $r->get('/blogs/restatement', [App\Controllers\Admin\BlogController::class, 'restatement']);
+        $r->addRoute(['GET', 'POST'], '/blogs/edit/{id:\d+}', [App\Controllers\Admin\BlogController::class, 'edit']);
+        $r->get('/blogs/delete/{id:\d+}', [App\Controllers\Admin\BlogController::class, 'delete']);
+        $r->get('/blogs/{id:\d+}', [App\Controllers\Admin\BlogController::class, 'blog']);
+        $r->addRoute(['GET', 'POST'], '/articles/edit/{id:\d+}', [App\Controllers\Admin\BlogController::class, 'editBlog']);
+        $r->addRoute(['GET', 'POST'], '/articles/move/{id:\d+}', [App\Controllers\Admin\BlogController::class, 'moveBlog']);
+        $r->get('/articles/delete/{id:\d+}', [App\Controllers\Admin\BlogController::class, 'deleteBlog']);
+
+        $r->get('/boards/{id:\d+}?', [App\Controllers\Admin\BoardController::class, 'index']);
+        $r->get('/boards/restatement', [App\Controllers\Admin\BoardController::class, 'restatement']);
+        $r->addRoute(['GET', 'POST'], '/items/edit/{id:\d+}', [App\Controllers\Admin\BoardController::class, 'editItem']);
+        $r->get('/items/delete/{id:\d+}', [App\Controllers\Admin\BoardController::class, 'deleteItem']);
+        $r->get('/boards/categories', [App\Controllers\Admin\BoardController::class, 'categories']);
+        $r->post('/boards/create', [App\Controllers\Admin\BoardController::class, 'create']);
+        $r->addRoute(['GET', 'POST'], '/boards/edit/{id:\d+}', [App\Controllers\Admin\BoardController::class, 'edit']);
+        $r->get('/boards/delete/{id:\d+}', [App\Controllers\Admin\BoardController::class, 'delete']);
+    });
+}, [
+    'cacheFile'     => STORAGE . '/temp/routes.dat',
+    'cacheDisabled' => env('APP_DEBUG'),
 ]);
-
-$routes = [
-    ['GET',      '/', 'HomeController@index', 'home'],
-    ['GET',      '/captcha', 'HomeController@captcha', 'captcha'],
-    ['GET',      '/closed', 'HomeController@closed'],
-    ['GET|POST', '/banip', 'HomeController@banip'],
-
-    ['GET',      '/boards/[i:id]?', 'BoardController@index', 'board'],
-    ['GET',      '/boards/active', 'BoardController@active'],
-    ['GET|POST', '/items/create', 'BoardController@create'],
-    ['GET',      '/items/[i:id]', 'BoardController@view'],
-    ['GET|POST', '/items/edit/[i:id]', 'BoardController@edit'],
-    ['GET',      '/items/close/[i:id]', 'BoardController@close'],
-    ['GET',      '/items/delete/[i:id]', 'BoardController@delete'],
-
-    ['GET',      '/guestbooks', 'GuestbookController@index', 'book'],
-    ['POST',     '/guestbooks/add', 'GuestbookController@add'],
-    ['GET|POST', '/guestbooks/edit/[i:id]', 'GuestbookController@edit'],
-
-    ['GET',      '/sitemap.xml', 'SitemapController@index'],
-    ['GET',      '/sitemap/[a:action].xml', 'SitemapController'],
-
-    ['GET',      '/blogs', 'BlogController@index', 'blogs'],
-    ['GET',      '/blogs/[i:id]', 'BlogController@blog'],
-    ['GET',      '/blogs/tags/[*:tag]?', 'BlogController@tags'],
-    ['GET|POST', '/blogs/create', 'BlogController@create'],
-    ['GET',      '/blogs/authors', 'BlogController@authors'],
-    ['GET',      '/blogs/active/articles', 'BlogController@userArticles'],
-    ['GET',      '/blogs/active/comments', 'BlogController@userComments'],
-    ['GET',      '/blogs/top', 'BlogController@top'],
-    ['GET',      '/blogs/rss', 'BlogController@rss'],
-    ['GET|POST', '/blogs/search', 'BlogController@search'],
-    ['GET',      '/articles', 'BlogController@newArticles'],
-    ['GET',      '/articles/[i:id]', 'BlogController@view'],
-    ['GET|POST', '/articles/edit/[i:id]', 'BlogController@edit'],
-    ['GET',      '/articles/print/[i:id]', 'BlogController@print'],
-    ['GET',      '/articles/rss/[i:id]', 'BlogController@rssComments'],
-    ['GET',      '/articles/comments', 'BlogController@newComments'],
-    ['GET|POST', '/articles/comments/[i:id]', 'BlogController@comments'],
-    ['GET|POST', '/articles/edit/[i:id]/[i:cid]', 'BlogController@editComment'],
-    ['GET',      '/articles/end/[i:id]', 'BlogController@end'],
-    ['GET',      '/articles/comment/[i:id]/[i:cid]', 'BlogController@viewComment'],
-
-    ['GET',      '/news', 'NewsController@index', 'news'],
-    ['GET',      '/news/[i:id]', 'NewsController@view'],
-    ['GET|POST', '/news/comments/[i:id]', 'NewsController@comments'],
-    ['GET',      '/news/end/[i:id]', 'NewsController@end'],
-    ['GET',      '/news/rss', 'NewsController@rss', 'news_rss'],
-    ['GET|POST', '/news/edit/[i:id]/[i:cid]', 'NewsController@editComment'],
-    ['GET',      '/news/allcomments', 'NewsController@allComments'],
-    ['GET',      '/news/comment/[i:id]/[i:cid]', 'NewsController@viewComment'],
-
-    ['GET',      '/photos', 'PhotoController@index', 'photos'],
-    ['GET',      '/photos/[i:id]', 'PhotoController@view'],
-    ['GET',      '/photos/delete/[i:id]', 'PhotoController@delete'],
-    ['GET',      '/photos/end/[i:id]', 'PhotoController@end'],
-    ['GET|POST', '/photos/comments/[i:id]', 'PhotoController@comments'],
-    ['GET|POST', '/photos/create', 'PhotoController@create'],
-    ['GET|POST', '/photos/edit/[i:id]', 'PhotoController@edit'],
-    ['GET|POST', '/photos/edit/[i:id]/[i:cid]', 'PhotoController@editComment'],
-    ['GET',      '/photos/albums', 'PhotoController@albums'],
-    ['GET',      '/photos/albums/[user:login]', 'PhotoController@album'],
-    ['GET',      '/photos/comments', 'PhotoController@allComments'],
-    ['GET',      '/photos/comments/[user:login]', 'PhotoController@userComments'],
-    ['GET',      '/photos/comment/[i:id]/[i:cid]', 'PhotoController@viewComment'],
-    ['GET|POST', '/photos/top', 'PhotoController@top'],
-
-    ['GET',      '/forums', 'Forum\ForumController@index', 'forum'],
-    ['GET',      '/forums/[i:id]', 'Forum\ForumController@forum'],
-    ['GET|POST', '/forums/create', 'Forum\ForumController@create'],
-    ['GET',      '/forums/search', 'Forum\ForumController@search'],
-    ['GET',      '/forums/active/[posts|topics:action]', 'Forum\ActiveController'],
-    ['POST',     '/forums/active/delete', 'Forum\ActiveController@delete'],
-    ['GET',      '/forums/top/posts', 'Forum\ForumController@topPosts'],
-    ['GET',      '/forums/top/topics', 'Forum\ForumController@topTopics'],
-    ['GET',      '/forums/rss', 'Forum\ForumController@rss'],
-    ['GET',      '/forums/bookmarks', 'BookmarkController@index'],
-    ['POST',     '/forums/bookmarks/[delete|perform:action]', 'BookmarkController'],
-    ['GET',      '/topics', 'Forum\NewController@topics'],
-    ['GET',      '/posts', 'Forum\NewController@posts'],
-    ['GET',      '/topics/[i:id]', 'Forum\TopicController@index'],
-    ['GET',      '/topics/[i:id]/[i:pid]', 'Forum\TopicController@viewpost'],
-    ['POST',     '/topics/votes/[i:id]', 'Forum\TopicController@vote'],
-    ['GET',      '/topics/end/[i:id]', 'Forum\TopicController@end'],
-    ['GET',      '/topics/close/[i:id]', 'Forum\TopicController@close'],
-    ['POST',     '/topics/create/[i:id]', 'Forum\TopicController@create'],
-    ['POST',     '/topics/delete/[i:id]', 'Forum\TopicController@delete'],
-    ['GET|POST', '/topics/edit/[i:id]', 'Forum\TopicController@edit'],
-    ['GET',      '/topics/print/[i:id]', 'Forum\TopicController@print'],
-    ['GET',      '/topics/rss/[i:id]', 'Forum\ForumController@rssPosts'],
-    ['GET|POST', '/posts/edit/[i:id]', 'Forum\TopicController@editPost'],
-
-    ['GET',      '/users/[user:login]', 'User\UserController@index'],
-    ['GET|POST', '/users/[user:login]/note', 'User\UserController@note', 'note'],
-    ['GET|POST', '/login', 'User\UserController@login', 'login'],
-    ['GET',      '/logout', 'User\UserController@logout', 'logout'],
-    ['GET|POST', '/register', 'User\UserController@register', 'register'],
-    ['GET|POST', '/profile', 'User\UserController@profile'],
-    ['GET',      '/key', 'User\UserController@key'],
-    ['GET|POST', '/settings', 'User\UserController@setting'],
-    ['GET',      '/accounts', 'User\UserController@account'],
-    ['POST',     '/accounts/changemail', 'User\UserController@changeMail'],
-    ['GET',      '/accounts/editmail', 'User\UserController@editMail'],
-    ['POST',     '/accounts/editstatus', 'User\UserController@editStatus'],
-    ['POST',     '/accounts/editpassword', 'User\UserController@editPassword'],
-    ['POST',     '/accounts/apikey', 'User\UserController@apikey'],
-
-    ['GET|POST', '/socials', 'SocialController@index'],
-    ['GET',      '/socials/delete/[i:id]', 'SocialController@delete'],
-
-    ['GET',      '/searchusers', 'User\SearchController@index'],
-    ['GET',      '/searchusers/[letter:letter]', 'User\SearchController@sort'],
-    ['GET|POST', '/searchusers/search', 'User\SearchController@search'],
-
-    ['GET',      '/ratings/[user:login]/[received|gave:action]?', 'RatingController@received'],
-    ['POST',     '/ratings/delete', 'RatingController@delete'],
-    ['GET|POST', '/users/[user:login]/rating', 'RatingController@index'],
-
-    ['GET|POST', '/mails', 'MailController@index', 'mails'],
-    ['GET|POST', '/recovery', 'MailController@recovery', 'recovery'],
-    ['GET',      '/recovery/restore', 'MailController@restore'],
-    ['GET|POST', '/unsubscribe', 'MailController@unsubscribe', 'unsubscribe'],
-
-    ['GET',      '/menu', 'PageController@menu'],
-    ['GET',      '/pages/[a:action]?', 'PageController@index'],
-    ['GET',      '/tags', 'PageController@tags', 'tags'],
-    ['GET',      '/rules', 'PageController@rules', 'rules'],
-    ['GET',      '/smiles', 'PageController@smiles', 'smiles'],
-    ['GET',      '/online/[all:action]?', 'OnlineController@index', 'online'],
-
-    ['POST',     '/ajax/bbcode', 'AjaxController@bbCode'],
-    ['POST',     '/ajax/delcomment', 'AjaxController@delComment'],
-    ['POST',     '/ajax/rating', 'AjaxController@rating'],
-    ['POST',     '/ajax/vote', 'AjaxController@vote'],
-    ['POST',     '/ajax/complaint', 'AjaxController@complaint'],
-    ['POST',     '/ajax/image/upload', 'AjaxController@uploadImage'],
-    ['POST',     '/ajax/image/delete', 'AjaxController@deleteImage'],
-
-    ['GET',      '/walls/[user:login]', 'WallController@index', 'walls'],
-    ['POST',     '/walls/[user:login]/create', 'WallController@create'],
-    ['POST',     '/walls/[user:login]/delete', 'WallController@delete'],
-
-    ['GET',      '/messages/[outbox|history|clear:action]?', 'MessageController@index'],
-    ['POST',     '/messages/delete', 'MessageController@delete'],
-    ['GET|POST', '/messages/send', 'MessageController@send'],
-
-    ['GET',      '/votes', 'VoteController@index'],
-    ['GET|POST', '/votes/[i:id]', 'VoteController@view'],
-    ['GET',      '/votes/voters/[i:id]', 'VoteController@voters'],
-    ['GET',      '/votes/history', 'VoteController@history'],
-    ['GET',      '/votes/history/[i:id]', 'VoteController@viewHistory'],
-    ['GET|POST', '/votes/create', 'VoteController@create'],
-
-    ['GET|POST', '/ignores', 'IgnoreController@index'],
-    ['GET|POST', '/ignores/note/[i:id]', 'IgnoreController@note'],
-    ['POST',     '/ignores/delete', 'IgnoreController@delete'],
-
-    ['GET|POST', '/contacts', 'ContactController@index'],
-    ['GET|POST', '/contacts/note/[i:id]', 'ContactController@note'],
-    ['POST',     '/contacts/delete', 'ContactController@delete'],
-    ['GET',      '/counters', 'CounterController@index'],
-
-    ['GET',      '/transfers', 'TransferController@index'],
-    ['POST',     '/transfers/send', 'TransferController@send'],
-
-    ['GET',      '/notebooks', 'NotebookController@index'],
-    ['GET|POST', '/notebooks/edit', 'NotebookController@edit'],
-
-    ['GET',      '/reklama', 'RekUserController@index'],
-    ['GET|POST', '/reklama/create', 'RekUserController@create'],
-
-    ['GET',      '/authlogs', 'LoginController@index'],
-
-    ['GET|POST', '/users', 'User\ListController@userlist'],
-    ['GET',      '/administrators', 'User\ListController@adminlist'],
-    ['GET|POST', '/authoritylists', 'User\ListController@authoritylist'],
-    ['GET|POST', '/ratinglists', 'User\ListController@ratinglist'],
-    ['GET|POST', '/ban', 'User\BanController@ban'],
-    ['GET|POST', '/who', 'User\UserController@who'],
-
-    ['GET',      '/faq', 'PageController@faq'],
-    ['GET',      '/statusfaq', 'PageController@statusfaq'],
-    ['GET',      '/surprise', 'PageController@surprise'],
-
-    ['GET',      '/offers/[offer|issue:type]?', 'OfferController@index'],
-    ['GET',      '/offers/[i:id]', 'OfferController@view'],
-    ['GET|POST', '/offers/create', 'OfferController@create'],
-    ['GET|POST', '/offers/edit/[i:id]', 'OfferController@edit'],
-    ['GET|POST', '/offers/comments/[i:id]', 'OfferController@comments'],
-    ['GET',      '/offers/end/[i:id]', 'OfferController@end'],
-    ['GET|POST', '/offers/edit/[i:id]/[i:cid]', 'OfferController@editComment'],
-    ['GET',      '/offers/comment/[i:id]/[i:cid]', 'OfferController@viewComment'],
-
-    ['GET|POST', '/pictures', 'PictureController@index'],
-    ['GET',      '/pictures/delete', 'PictureController@delete'],
-
-    ['GET|POST', '/files/[*:action]?', 'FileController@index', 'files'],
-
-    ['GET',      '/loads', 'Load\LoadController@index'],
-    ['GET',      '/loads/rss', 'Load\LoadController@rss'],
-    ['GET',      '/loads/[i:id]', 'Load\LoadController@load'],
-    ['GET',      '/loads/top', 'Load\TopController@index'],
-    ['GET',      '/loads/search', 'Load\SearchController@index'],
-    ['GET',      '/downs/[i:id]', 'Load\DownController@index'],
-    ['GET|POST', '/downs/edit/[i:id]', 'Load\DownController@edit'],
-    ['GET',      '/downs/delete/[i:id]/[i:fid]', 'Load\DownController@deleteFile'],
-    ['GET|POST', '/downs/create', 'Load\DownController@create'],
-    ['POST',     '/downs/votes/[i:id]', 'Load\DownController@vote'],
-    ['GET|POST', '/downs/download/[i:id]', 'Load\DownController@download'],
-    ['GET|POST', '/downs/comments/[i:id]', 'Load\DownController@comments'],
-    ['GET',      '/downs/comment/[i:id]/[i:cid]', 'Load\DownController@viewComment'],
-    ['GET',      '/downs/end/[i:id]', 'Load\DownController@end'],
-    ['GET|POST', '/downs/edit/[i:id]/[i:cid]', 'Load\DownController@editComment'],
-    ['GET',      '/downs/rss/[i:id]', 'Load\DownController@rss'],
-    ['GET',      '/downs/zip/[i:id]', 'Load\DownController@zip'],
-    ['GET',      '/downs/zip/[i:id]/[i:fid]', 'Load\DownController@zipView'],
-    ['GET',      '/downs', 'Load\NewController@files'],
-    ['GET',      '/downs/comments', 'Load\NewController@comments'],
-    ['GET',      '/downs/active/files', 'Load\ActiveController@files'],
-    ['GET',      '/downs/active/comments', 'Load\ActiveController@comments'],
-
-    ['GET',      '/admin/loads', 'Admin\LoadController@index'],
-    ['POST',     '/admin/loads/create', 'Admin\LoadController@create'],
-    ['GET|POST', '/admin/loads/edit/[i:id]', 'Admin\LoadController@edit'],
-    ['GET',      '/admin/loads/delete/[i:id]', 'Admin\LoadController@delete'],
-    ['GET',      '/admin/loads/restatement', 'Admin\LoadController@restatement'],
-    ['GET',      '/admin/loads/[i:id]', 'Admin\LoadController@load'],
-    ['GET|POST', '/admin/downs/edit/[i:id]', 'Admin\LoadController@editDown'],
-    ['GET|POST', '/admin/downs/delete/[i:id]', 'Admin\LoadController@deleteDown'],
-    ['GET',      '/admin/downs/delete/[i:id]/[i:fid]', 'Admin\LoadController@deleteFile'],
-    ['GET',      '/admin/downs/new', 'Admin\LoadController@new'],
-    ['GET',      '/admin/downs/publish/[i:id]', 'Admin\LoadController@publish'],
-
-    ['GET',      '/api', 'ApiController@index'],
-    ['GET',      '/api/users', 'ApiController@users'],
-    ['GET',      '/api/forums', 'ApiController@forums'],
-    ['GET',      '/api/messages', 'ApiController@messages'],
-
-    ['GET',      '/admin', 'Admin\AdminController@main', 'admin'],
-    ['GET',      '/admin/spam', 'Admin\SpamController@index'],
-    ['POST',     '/admin/spam/delete', 'Admin\SpamController@delete'],
-    ['GET',      '/admin/errors', 'Admin\ErrorController@index'],
-    ['GET',      '/admin/errors/clear', 'Admin\ErrorController@clear'],
-    ['GET|POST', '/admin/antimat', 'Admin\AntimatController@index'],
-    ['GET',      '/admin/antimat/[delete|clear:action]', 'Admin\AntimatController'],
-    ['GET',      '/admin/status', 'Admin\StatusController@index'],
-    ['GET|POST', '/admin/status/[create|edit:action]', 'Admin\StatusController'],
-    ['GET',      '/admin/status/delete', 'Admin\StatusController@delete'],
-
-    ['GET',      '/admin/rules', 'Admin\RuleController@index'],
-    ['GET|POST', '/admin/rules/edit', 'Admin\RuleController@edit'],
-
-    ['GET',      '/admin/upgrade', 'Admin\AdminController@upgrade'],
-    ['GET',      '/admin/phpinfo', 'Admin\AdminController@phpinfo'],
-
-    ['GET|POST', '/admin/settings', 'Admin\SettingController@index'],
-    ['GET',      '/admin/caches', 'Admin\CacheController@index'],
-    ['POST',     '/admin/caches/clear', 'Admin\CacheController@clear'],
-
-    ['GET',      '/admin/backups', 'Admin\BackupController@index'],
-    ['GET|POST', '/admin/backups/create', 'Admin\BackupController@create'],
-    ['GET',      '/admin/backups/delete', 'Admin\BackupController@delete'],
-
-    ['GET|POST', '/admin/checkers', 'Admin\CheckerController@index'],
-    ['GET|POST', '/admin/checkers/scan', 'Admin\CheckerController@scan'],
-
-    ['GET|POST', '/admin/delivery', 'Admin\DeliveryController@index'],
-
-    ['GET',      '/admin/logs', 'Admin\LogController@index'],
-    ['GET',      '/admin/logs/clear', 'Admin\LogController@clear'],
-
-    ['GET',      '/admin/notices', 'Admin\NoticeController@index'],
-    ['GET|POST', '/admin/notices/create', 'Admin\NoticeController@create'],
-    ['GET|POST', '/admin/notices/edit/[i:id]', 'Admin\NoticeController@edit'],
-    ['GET',      '/admin/notices/delete/[i:id]', 'Admin\NoticeController@delete'],
-
-    ['GET|POST', '/admin/delusers', 'Admin\DelUserController@index'],
-    ['POST',     '/admin/delusers/clear', 'Admin\DelUserController@clear'],
-
-    ['GET',      '/admin/files', 'Admin\FilesController@index'],
-    ['GET|POST', '/admin/files/edit', 'Admin\FilesController@edit'],
-    ['GET|POST', '/admin/files/create', 'Admin\FilesController@create'],
-    ['GET',      '/admin/files/delete', 'Admin\FilesController@delete'],
-
-    ['GET',      '/admin/smiles', 'Admin\SmileController@index'],
-    ['GET|POST', '/admin/smiles/create', 'Admin\SmileController@create'],
-    ['GET|POST', '/admin/smiles/edit/[i:id]', 'Admin\SmileController@edit'],
-    ['POST',     '/admin/smiles/delete', 'Admin\SmileController@delete'],
-
-    ['GET|POST', '/admin/ipbans', 'Admin\IpBanController@index'],
-    ['POST',     '/admin/ipbans/delete', 'Admin\IpBanController@delete'],
-    ['GET',      '/admin/ipbans/clear', 'Admin\IpBanController@clear'],
-
-    ['GET|POST', '/admin/blacklists', 'Admin\BlacklistController@index'],
-    ['POST',     '/admin/blacklists/delete', 'Admin\BlacklistController@delete'],
-
-    ['GET',      '/admin/news', 'Admin\NewsController@index'],
-    ['GET|POST', '/admin/news/edit/[i:id]', 'Admin\NewsController@edit'],
-    ['GET|POST', '/admin/news/create', 'Admin\NewsController@create'],
-    ['GET',      '/admin/news/restatement', 'Admin\NewsController@restatement'],
-    ['GET',      '/admin/news/delete/[i:id]', 'Admin\NewsController@delete'],
-
-    ['GET',      '/admin/guestbooks', 'Admin\GuestbookController@index'],
-    ['GET|POST', '/admin/guestbooks/edit/[i:id]', 'Admin\GuestbookController@edit'],
-    ['GET|POST', '/admin/guestbooks/reply/[i:id]', 'Admin\GuestbookController@reply'],
-    ['POST',     '/admin/guestbooks/delete', 'Admin\GuestbookController@delete'],
-    ['GET',      '/admin/guestbooks/clear', 'Admin\GuestbookController@clear'],
-
-    ['GET',      '/admin/transfers', 'Admin\TransferController@index'],
-    ['GET',      '/admin/transfers/view', 'Admin\TransferController@view'],
-
-    ['GET',      '/admin/users', 'Admin\UserController@index'],
-    ['GET',      '/admin/users/search', 'Admin\UserController@search'],
-    ['GET|POST', '/admin/users/edit', 'Admin\UserController@edit'],
-    ['GET|POST', '/admin/users/delete', 'Admin\UserController@delete'],
-
-    ['GET',      '/admin/administrators', 'Admin\AdminlistController@index'],
-
-    ['GET',      '/admin/invitations', 'Admin\InvitationController@index'],
-    ['GET|POST', '/admin/invitations/create', 'Admin\InvitationController@create'],
-    ['GET',      '/admin/invitations/keys', 'Admin\InvitationController@keys'],
-    ['POST',     '/admin/invitations/send', 'Admin\InvitationController@send'],
-    ['POST',     '/admin/invitations/mail', 'Admin\InvitationController@mail'],
-    ['POST',     '/admin/invitations/delete', 'Admin\InvitationController@delete'],
-
-    ['GET|POST', '/admin/reglists', 'Admin\ReglistController@index'],
-
-    ['GET|POST', '/admin/chats', 'Admin\ChatController@index'],
-    ['GET|POST', '/admin/chats/edit/[i:id]', 'Admin\ChatController@edit'],
-    ['GET',      '/admin/chats/clear', 'Admin\ChatController@clear'],
-
-    ['GET',      '/admin/banlists', 'Admin\BanlistController@index'],
-
-    ['GET',      '/admin/bans', 'Admin\BanController@index'],
-    ['GET|POST', '/admin/bans/edit', 'Admin\BanController@edit'],
-    ['GET|POST', '/admin/bans/change', 'Admin\BanController@change'],
-    ['GET',      '/admin/bans/unban', 'Admin\BanController@unban'],
-
-    ['GET',      '/admin/banhists', 'Admin\BanhistController@index'],
-    ['GET',      '/admin/banhists/view', 'Admin\BanhistController@view'],
-    ['POST',     '/admin/banhists/delete', 'Admin\BanhistController@delete'],
-
-    ['GET',      '/admin/votes', 'Admin\VoteController@index'],
-    ['GET',      '/admin/votes/history', 'Admin\VoteController@history'],
-    ['GET|POST', '/admin/votes/edit/[i:id]', 'Admin\VoteController@edit'],
-    ['GET',      '/admin/votes/close/[i:id]', 'Admin\VoteController@close'],
-    ['GET',      '/admin/votes/delete/[i:id]', 'Admin\VoteController@delete'],
-    ['GET',      '/admin/votes/close/[i:id]', 'Admin\VoteController@change'],
-    ['GET',      '/admin/votes/restatement', 'Admin\VoteController@restatement'],
-
-    ['GET',      '/admin/offers/[offer|issue:type]?', 'Admin\OfferController@index'],
-    ['GET',      '/admin/offers/[i:id]', 'Admin\OfferController@view'],
-    ['GET|POST', '/admin/offers/edit/[i:id]', 'Admin\OfferController@edit'],
-    ['GET|POST', '/admin/offers/reply/[i:id]', 'Admin\OfferController@reply'],
-    ['GET',      '/admin/offers/restatement', 'Admin\OfferController@restatement'],
-    ['GET|POST', '/admin/offers/delete', 'Admin\OfferController@delete'],
-
-    ['GET',      '/admin/photos', 'Admin\PhotoController@index'],
-    ['GET|POST', '/admin/photos/edit/[i:id]', 'Admin\PhotoController@edit'],
-    ['GET',      '/admin/photos/restatement', 'Admin\PhotoController@restatement'],
-    ['GET',      '/admin/photos/delete/[i:id]', 'Admin\PhotoController@delete'],
-
-    ['GET',      '/admin/reklama', 'Admin\RekUserController@index'],
-    ['GET|POST', '/admin/reklama/edit/[i:id]', 'Admin\RekUserController@edit'],
-    ['POST',     '/admin/reklama/delete', 'Admin\RekUserController@delete'],
-
-    ['GET',      '/admin/forums', 'Admin\ForumController@index'],
-    ['POST',     '/admin/forums/create', 'Admin\ForumController@create'],
-    ['GET|POST', '/admin/forums/edit/[i:id]', 'Admin\ForumController@edit'],
-    ['GET',      '/admin/forums/delete/[i:id]', 'Admin\ForumController@delete'],
-    ['GET',      '/admin/forums/restatement', 'Admin\ForumController@restatement'],
-    ['GET',      '/admin/forums/[i:id]', 'Admin\ForumController@forum'],
-    ['GET|POST', '/admin/topics/edit/[i:id]', 'Admin\ForumController@editTopic'],
-    ['GET|POST', '/admin/topics/move/[i:id]', 'Admin\ForumController@moveTopic'],
-    ['GET',      '/admin/topics/action/[i:id]', 'Admin\ForumController@actionTopic'],
-    ['GET',      '/admin/topics/delete/[i:id]', 'Admin\ForumController@deleteTopic'],
-    ['GET',      '/admin/topics/[i:id]', 'Admin\ForumController@topic'],
-    ['GET|POST', '/admin/posts/edit/[i:id]', 'Admin\ForumController@editPost'],
-    ['POST',     '/admin/posts/delete', 'Admin\ForumController@deletePosts'],
-    ['GET',      '/admin/topics/end/[i:id]', 'Admin\ForumController@end'],
-
-    ['GET',      '/admin/blogs', 'Admin\BlogController@index'],
-    ['POST',     '/admin/blogs/create', 'Admin\BlogController@create'],
-    ['GET',      '/admin/blogs/restatement', 'Admin\BlogController@restatement'],
-    ['GET|POST', '/admin/blogs/edit/[i:id]', 'Admin\BlogController@edit'],
-    ['GET',      '/admin/blogs/delete/[i:id]', 'Admin\BlogController@delete'],
-    ['GET',      '/admin/blogs/[i:id]', 'Admin\BlogController@blog'],
-    ['GET|POST', '/admin/articles/edit/[i:id]', 'Admin\BlogController@editBlog'],
-    ['GET|POST', '/admin/articles/move/[i:id]', 'Admin\BlogController@moveBlog'],
-    ['GET',      '/admin/articles/delete/[i:id]', 'Admin\BlogController@deleteBlog'],
-
-    ['GET',      '/admin/boards/[i:id]?', 'Admin\BoardController@index'],
-    ['GET',      '/admin/boards/restatement', 'Admin\BoardController@restatement'],
-    ['GET|POST', '/admin/items/edit/[i:id]', 'Admin\BoardController@editItem'],
-    ['GET',      '/admin/items/delete/[i:id]', 'Admin\BoardController@deleteItem'],
-    ['GET',      '/admin/boards/categories', 'Admin\BoardController@categories'],
-    ['POST',     '/admin/boards/create', 'Admin\BoardController@create'],
-    ['GET|POST', '/admin/boards/edit/[i:id]', 'Admin\BoardController@edit'],
-    ['GET',      '/admin/boards/delete/[i:id]', 'Admin\BoardController@delete'],
-
-    ['GET', '/search', function() {
-        return view('search/index');
-    }],
-];
-
-$router->addRoutes($routes);
-
-App\Classes\Registry::set('router', $router);

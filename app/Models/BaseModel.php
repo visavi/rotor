@@ -7,6 +7,12 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Http\UploadedFile;
 use Intervention\Image\ImageManagerStatic as Image;
 
+/**
+ * Class BaseModel
+ *
+ * @property User user
+ * @package App\Models
+ */
 class BaseModel extends Model
 {
     /**

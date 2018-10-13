@@ -26,7 +26,7 @@ use Illuminate\Http\Request as HttpRequest;
  * @method static string ip()
  * @method static string path()
  * @method static mixed server(string $key = null, mixed $default = null)
- * @method static string header(string $key = null, mixed $default = null)
+ * @method static mixed header(string $key = null, mixed $default = null)
  */
 class Request
 {

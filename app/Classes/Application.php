@@ -2,41 +2,52 @@
 
 namespace App\Classes;
 
+use Illuminate\Http\Request;
+use FastRoute\Dispatcher;
+
 class Application
 {
     /**
      * Запускает приложение
      */
-    public static function run()
+    public function run(): void
     {
-        $router = self::getRouter();
+        $router = $this->getRouter();
 
-        if (! $router['target']) {
-            abort(404);
+        switch ($router[0]) {
+            case Dispatcher::FOUND:
+                echo $this->getController($router);
+                break;
+
+            case Dispatcher::METHOD_NOT_ALLOWED:
+                abort(405);
+                break;
+
+            default:
+                abort(404);
+                break;
         }
 
-        if (\is_callable($router['target'])) {
-            $call = \call_user_func_array($router['target'], $router['params']);
-        } else {
-            list($controller, $action) = self::getController($router);
-            $call = \call_user_func_array([new $controller, $action], $router['params']);
-        }
-
-        echo $call;
+       // $router['params']['request'] = Request::createFromGlobals();
     }
 
     /**
-     * Подготовливает пути из роутов
+     * Вызывает контроллер
      *
-     * @param $router
-     * @return array
+     * @param array $router
+     * @return mixed
      */
-    private static function getController($router)
+    private function getController($router)
     {
-        $target = explode('@', $router['target']);
-        $action = $router['params']['action'] ?? $target[1];
+        [, $controller, $params] = $router;
 
-        return ['App\\Controllers\\'.$target[0], $action];
+        if (\is_object($controller)) {
+            return \call_user_func_array($controller, $params);
+        }
+
+        $action = $params['action'] ?? $controller[1];
+
+        return \call_user_func_array([new $controller[0], $action], $params);
     }
 
     /**
@@ -44,8 +55,10 @@ class Application
      *
      * @return array
      */
-    private static function getRouter()
+    private function getRouter(): array
     {
-        return Registry::get('router')->match();
+        $dispatcher = require APP . '/routes.php';
+
+        return $dispatcher->dispatch(server('REQUEST_METHOD'), server('PHP_SELF'));
     }
 }

@@ -86,4 +86,14 @@ class HomeController extends BaseController
 
         $_SESSION['protect'] = $builder->getPhrase();
     }
+
+    /**
+     * Поиск по сайту
+     *
+     * @return string
+     */
+    public function search(): string
+    {
+        return view('search/index');
+    }
 }

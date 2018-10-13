@@ -9,6 +9,7 @@ use App\Models\File;
 use App\Models\Flood;
 use App\Models\Item;
 use Exception;
+use Illuminate\Database\Eloquent\Builder;
 
 class BoardController extends BaseController
 {
@@ -18,11 +19,12 @@ class BoardController extends BaseController
      * @param int $id
      * @return string
      */
-    public function index($id = null): string
+    public function index(int $id = null): string
     {
         $board = null;
 
         if ($id) {
+            /** @var Board $board */
             $board = Board::query()->find($id);
 
             if (! $board) {
@@ -31,7 +33,7 @@ class BoardController extends BaseController
         }
 
         $total = Item::query()
-            ->when($board, function ($query) use ($board) {
+            ->when($board, function (Builder $query) use ($board) {
                 return $query->where('board_id', $board->id);
             })
             ->where('expires_at', '>', SITETIME)
@@ -40,7 +42,7 @@ class BoardController extends BaseController
         $page = paginate(10, $total);
 
         $items = Item::query()
-            ->when($board, function ($query) use ($board) {
+            ->when($board, function (Builder $query) use ($board) {
                 return $query->where('board_id', $board->id);
             })
             ->where('expires_at', '>', SITETIME)
@@ -65,6 +67,7 @@ class BoardController extends BaseController
      */
     public function view($id): string
     {
+        /** @var Item $item */
         $item = Item::query()
             ->with('category')
             ->find($id);
@@ -111,6 +114,7 @@ class BoardController extends BaseController
             $price = int(Request::input('price'));
             $phone = preg_replace('/\D/', '', Request::input('phone'));
 
+            /** @var Board $board */
             $board = Board::query()->find($bid);
 
             $validator = new Validator();
@@ -128,6 +132,7 @@ class BoardController extends BaseController
 
             if ($validator->isValid()) {
 
+                /** @var Item $item */
                 $item = Item::query()->create([
                     'board_id'   => $board->id,
                     'title'      => $title,
@@ -177,6 +182,7 @@ class BoardController extends BaseController
             abort(403, 'Для редактирования объявления необходимо авторизоваться');
         }
 
+        /** @var Item $item */
         $item = Item::query()->find($id);
 
         if (! $item) {
@@ -191,6 +197,7 @@ class BoardController extends BaseController
             $price = check(Request::input('price'));
             $phone = preg_replace('/\D/', '', Request::input('phone'));
 
+            /** @var Board $board */
             $board = Board::query()->find($bid);
 
             $validator = new Validator();
@@ -252,6 +259,7 @@ class BoardController extends BaseController
             abort(403, 'Для редактирования объявления необходимо авторизоваться');
         }
 
+        /** @var Item $item */
         $item = Item::query()->find($id);
 
         if (! $item) {
@@ -305,6 +313,7 @@ class BoardController extends BaseController
             abort(403, 'Для редактирования объявления необходимо авторизоваться');
         }
 
+        /** @var Item $item */
         $item = Item::query()->find($id);
 
         if (! $item) {
