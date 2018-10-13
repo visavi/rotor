@@ -2,11 +2,11 @@
 
 namespace App\Controllers;
 
-use App\Classes\Request;
 use App\Models\Inbox;
 use App\Models\Post;
 use App\Models\Topic;
 use App\Models\User;
+use Illuminate\Http\Request;
 
 class ApiController extends BaseController
 {
@@ -23,14 +23,15 @@ class ApiController extends BaseController
     /**
      * Api пользователей
      *
+     * @param Request $request
      * @return void
      */
-    public function users(): void
+    public function users(Request $request): void
     {
         header('Content-type: application/json');
         header('Content-Disposition: inline; filename="users.json";');
 
-        $token = check(Request::input('token'));
+        $token = check($request->input('token'));
 
         if (! $token) {
             echo json_encode(['error' => 'no token']);
@@ -72,15 +73,16 @@ class ApiController extends BaseController
     /**
      * Api приватных сообщений
      *
+     * @param Request $request
      * @return void
      */
-    public function messages(): void
+    public function messages(Request $request): void
     {
         header('Content-type: application/json');
         header('Content-Disposition: inline; filename="messages.json";');
 
-        $token = check(Request::input('token'));
-        $count = int(Request::input('count', 10));
+        $token = check($request->input('token'));
+        $count = int($request->input('count', 10));
 
         if (! $token) {
             echo json_encode(['error' => 'no token']);
@@ -127,15 +129,16 @@ class ApiController extends BaseController
     /**
      * Api постов темы в форуме
      *
+     * @param Request $request
      * @return void
      */
-    public function forums(): void
+    public function forums(Request $request): void
     {
         header('Content-type: application/json');
         header('Content-Disposition: inline; filename="forums.json";');
 
-        $token = check(Request::input('token'));
-        $id    = int(Request::input('id'));
+        $token = check($request->input('token'));
+        $id    = int($request->input('id'));
 
         if (! $token) {
             echo json_encode(['error' => 'no token']);

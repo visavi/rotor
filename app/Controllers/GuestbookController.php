@@ -2,11 +2,11 @@
 
 namespace App\Controllers;
 
-use App\Classes\Request;
 use App\Classes\Validator;
 use App\Models\Flood;
 use App\Models\Guestbook;
 use Illuminate\Database\Capsule\Manager as DB;
+use Illuminate\Http\Request;
 
 class GuestbookController extends BaseController
 {
@@ -33,12 +33,13 @@ class GuestbookController extends BaseController
     /**
      * Добавление сообщения
      *
+     * @param Request $request
      * @return void
      */
-    public function add(): void
+    public function add(Request $request): void
     {
-        $msg   = check(Request::input('msg'));
-        $token = check(Request::input('token'));
+        $msg   = check($request->input('msg'));
+        $token = check($request->input('token'));
 
         $validator = new Validator();
         $validator->equal($token, $_SESSION['token'], ['msg' => 'Неверный идентификатор сессии, повторите действие!'])
@@ -81,7 +82,7 @@ class GuestbookController extends BaseController
 
             setFlash('success', 'Сообщение успешно добавлено!');
         } else {
-            setInput(Request::all());
+            setInput($request->all());
             setFlash('danger', $validator->getErrors());
         }
 
@@ -91,10 +92,11 @@ class GuestbookController extends BaseController
     /**
      * Редактирование сообщения
      *
-     * @param int $id
+     * @param int     $id
+     * @param Request $request
      * @return string
      */
-    public function edit($id): string
+    public function edit($id, Request $request): string
     {
         if (! getUser()) {
             abort(403);
@@ -111,10 +113,10 @@ class GuestbookController extends BaseController
             abort('default', 'Редактирование невозможно, прошло более 10 минут!');
         }
 
-        if (Request::isMethod('post')) {
+        if ($request->isMethod('post')) {
 
-            $msg   = check(Request::input('msg'));
-            $token = check(Request::input('token'));
+            $msg   = check($request->input('msg'));
+            $token = check($request->input('token'));
 
             $validator = new Validator();
             $validator->equal($token, $_SESSION['token'], ['msg' => 'Неверный идентификатор сессии, повторите действие!'])
@@ -133,7 +135,7 @@ class GuestbookController extends BaseController
                 setFlash('success', 'Сообщение успешно отредактировано!');
                 redirect('/guestbooks');
             } else {
-                setInput(Request::all());
+                setInput($request->all());
                 setFlash('danger', $validator->getErrors());
             }
         }

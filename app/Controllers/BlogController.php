@@ -2,7 +2,6 @@
 
 namespace App\Controllers;
 
-use App\Classes\Request;
 use App\Classes\Validator;
 use App\Models\Blog;
 use App\Models\Category;
@@ -13,6 +12,7 @@ use App\Models\Reader;
 use App\Models\User;
 use Illuminate\Database\Capsule\Manager as DB;
 use Illuminate\Database\Query\JoinClause;
+use Illuminate\Http\Request;
 
 class BlogController extends BaseController
 {
@@ -42,7 +42,7 @@ class BlogController extends BaseController
      * @param int $id
      * @return string
      */
-    public function blog($id): string
+    public function blog(int $id): string
     {
         $category = Category::query()->with('parent')->find($id);
 
@@ -71,7 +71,7 @@ class BlogController extends BaseController
      * @param int $id
      * @return string
      */
-    public function view($id): string
+    public function view(int $id): string
     {
         $blog = Blog::query()
             ->select('blogs.*', 'pollings.vote')
@@ -132,10 +132,11 @@ class BlogController extends BaseController
     /**
      * Редактирование статьи
      *
-     * @param int $id
+     * @param int     $id
+     * @param Request $request
      * @return string
      */
-    public function edit($id): string
+    public function edit(int $id, Request $request): string
     {
         if (! getUser()) {
             abort(403, 'Для редактирования статьи необходимо авторизоваться');
@@ -152,13 +153,13 @@ class BlogController extends BaseController
             abort('default', 'Изменение невозможно, вы не автор данной статьи!');
         }
 
-        if (Request::isMethod('post')) {
+        if ($request->isMethod('post')) {
 
-            $token = check(Request::input('token'));
-            $cid   = int(Request::input('cid'));
-            $title = check(Request::input('title'));
-            $text  = check(Request::input('text'));
-            $tags  = check(Request::input('tags'));
+            $token = check($request->input('token'));
+            $cid   = int($request->input('cid'));
+            $title = check($request->input('title'));
+            $text  = check($request->input('text'));
+            $tags  = check($request->input('tags'));
 
             /** @var Category $category */
             $category = Category::query()->find($cid);
@@ -193,7 +194,7 @@ class BlogController extends BaseController
                 setFlash('success', 'Статья успешно отредактирована!');
                 redirect('/articles/' . $blog->id);
             } else {
-                setInput(Request::all());
+                setInput($request->all());
                 setFlash('danger', $validator->getErrors());
             }
         }
@@ -237,11 +238,12 @@ class BlogController extends BaseController
     /**
      * Создание статьи
      *
+     * @param Request $request
      * @return string
      */
-    public function create(): string
+    public function create(Request $request): string
     {
-        $cid = int(Request::input('cid'));
+        $cid = int($request->input('cid'));
 
         if (! getUser()) {
             abort(403, 'Для публикации новой статьи необходимо авторизоваться');
@@ -257,12 +259,12 @@ class BlogController extends BaseController
             abort(404, 'Разделы блогов еще не созданы!');
         }
 
-        if (Request::isMethod('post')) {
+        if ($request->isMethod('post')) {
 
-            $token = check(Request::input('token'));
-            $title = check(Request::input('title'));
-            $text  = check(Request::input('text'));
-            $tags  = check(Request::input('tags'));
+            $token = check($request->input('token'));
+            $title = check($request->input('title'));
+            $text  = check($request->input('text'));
+            $tags  = check($request->input('tags'));
 
             /** @var Category $category */
             $category = Category::query()->find($cid);
@@ -310,7 +312,7 @@ class BlogController extends BaseController
                 setFlash('success', 'Статья успешно опубликована!');
                 redirect('/articles/' . $blog->id);
             } else {
-                setInput(Request::all());
+                setInput($request->all());
                 setFlash('danger', $validator->getErrors());
             }
         }
@@ -327,10 +329,11 @@ class BlogController extends BaseController
     /**
      * Комментарии
      *
-     * @param int $id
+     * @param int     $id
+     * @param Request $request
      * @return string
      */
-    public function comments($id): string
+    public function comments(int $id, Request $request): string
     {
         /** @var Blog $blog */
         $blog = Blog::query()->find($id);
@@ -339,10 +342,10 @@ class BlogController extends BaseController
             abort(404, 'Данной статьи не существует!');
         }
 
-        if (Request::isMethod('post')) {
+        if ($request->isMethod('post')) {
 
-            $token = check(Request::input('token'));
-            $msg   = check(Request::input('msg'));
+            $token = check($request->input('token'));
+            $msg   = check($request->input('msg'));
 
             $validator = new Validator();
             $validator
@@ -355,6 +358,7 @@ class BlogController extends BaseController
 
                 $msg = antimat($msg);
 
+                /** @var Comment $comment */
                 $comment = Comment::query()->create([
                     'relate_type' => Blog::class,
                     'relate_id'   => $blog->id,
@@ -378,7 +382,7 @@ class BlogController extends BaseController
                 setFlash('success', 'Комментарий успешно добавлен!');
                 redirect('/articles/end/' . $blog->id);
             } else {
-                setInput(Request::all());
+                setInput($request->all());
                 setFlash('danger', $validator->getErrors());
             }
         }
@@ -404,13 +408,14 @@ class BlogController extends BaseController
     /**
      * Подготовка к редактированию комментария
      *
-     * @param int $id
-     * @param int $cid
+     * @param int     $id
+     * @param int     $cid
+     * @param Request $request
      * @return string
      */
-    public function editComment($id, $cid): string
+    public function editComment(int $id, int $cid, Request $request): string
     {
-        $page = int(Request::input('page', 1));
+        $page = int($request->input('page', 1));
 
         /** @var Blog $blog */
         $blog = Blog::query()->find($id);
@@ -437,10 +442,10 @@ class BlogController extends BaseController
             abort('default', 'Редактирование невозможно, прошло более 10 минут!');
         }
 
-        if (Request::isMethod('post')) {
-            $token = check(Request::input('token'));
-            $msg   = check(Request::input('msg'));
-            $page  = int(Request::input('page', 1));
+        if ($request->isMethod('post')) {
+            $token = check($request->input('token'));
+            $msg   = check($request->input('msg'));
+            $page  = int($request->input('page', 1));
 
             $validator = new Validator();
             $validator
@@ -457,7 +462,7 @@ class BlogController extends BaseController
                 setFlash('success', 'Комментарий успешно отредактирован!');
                 redirect('/articles/comments/' . $blog->id . '?page=' . $page);
             } else {
-                setInput(Request::all());
+                setInput($request->all());
                 setFlash('danger', $validator->getErrors());
             }
         }
@@ -471,7 +476,7 @@ class BlogController extends BaseController
      * @param int $id
      * @return void
      */
-    public function end($id): void
+    public function end(int $id): void
     {
         $blog = Blog::query()->find($id);
 
@@ -494,7 +499,7 @@ class BlogController extends BaseController
      * @param int $id
      * @return string
      */
-    public function print($id): string
+    public function print(int $id): string
     {
         /** @var Blog $blog */
         $blog = Blog::query()->find($id);
@@ -533,7 +538,7 @@ class BlogController extends BaseController
      * @param int $id
      * @return string
      */
-    public function rssComments($id): string
+    public function rssComments(int $id): string
     {
         $blog = Blog::query()->where('id', $id)->with('lastComments')->first();
 
@@ -549,7 +554,7 @@ class BlogController extends BaseController
      *
      * @return string
      */
-    public function tags()
+    public function tags(): string
     {
         if (@filemtime(STORAGE . '/temp/tagcloud.dat') < time() - 3600) {
 
@@ -559,7 +564,7 @@ class BlogController extends BaseController
                 ->all();
 
             $stingTag = implode(',', $allTags);
-            $dumptags = preg_split('/[\s]*[,][\s]*/s', $stingTag, -1, PREG_SPLIT_NO_EMPTY);
+            $dumptags = preg_split('/[\s]*[,][\s]*/', $stingTag, -1, PREG_SPLIT_NO_EMPTY);
             $allTags  = array_count_values(array_map('utfLower', $dumptags));
 
             arsort($allTags);
@@ -582,7 +587,7 @@ class BlogController extends BaseController
      * @param string $tag
      * @return string
      */
-    public function searchTag($tag): string
+    public function searchTag(string $tag): string
     {
         $tag = urldecode($tag);
 
@@ -681,11 +686,12 @@ class BlogController extends BaseController
     /**
      * Статьи пользователя
      *
+     * @param Request $request
      * @return string
      */
-    public function userArticles(): string
+    public function userArticles(Request $request): string
     {
-        $login = check(Request::input('user', getUser('login')));
+        $login = check($request->input('user', getUser('login')));
 
         $user = User::query()->where('login', $login)->first();
 
@@ -708,11 +714,12 @@ class BlogController extends BaseController
     /**
      * Комментарии пользователя
      *
+     * @param Request $request
      * @return string
      */
-    public function userComments(): string
+    public function userComments(Request $request): string
     {
-        $login = check(Request::input('user', getUser('login')));
+        $login = check($request->input('user', getUser('login')));
 
         $user = User::query()->where('login', $login)->first();
 
@@ -747,7 +754,7 @@ class BlogController extends BaseController
      * @param $cid
      * @return void
      */
-    public function viewComment($id, $cid): void
+    public function viewComment(int $id, int $cid): void
     {
         /** @var Blog $blog */
         $blog = Blog::query()->find($id);
@@ -770,11 +777,12 @@ class BlogController extends BaseController
     /**
      * Топ статей
      *
+     * @param Request $request
      * @return string
      */
-    public function top(): string
+    public function top(Request $request): string
     {
-        $sort = check(Request::input('sort', 'visits'));
+        $sort = check($request->input('sort', 'visits'));
 
         switch ($sort) {
             case 'rated': $order = 'rating';
@@ -802,13 +810,14 @@ class BlogController extends BaseController
     /**
      * Поиск
      *
+     * @param Request $request
      * @return string
      */
-    public function search(): ?string
+    public function search(Request $request): ?string
     {
-        $find  = check(Request::input('find'));
-        $type  = int(Request::input('type'));
-        $where = int(Request::input('where'));
+        $find  = check($request->input('find'));
+        $type  = int($request->input('type'));
+        $where = int($request->input('where'));
 
         if (! getUser()) {
             abort(403, 'Чтобы использовать поиск, необходимо авторизоваться');
@@ -822,7 +831,9 @@ class BlogController extends BaseController
             $find = winToUtf($find);
         }
 
-        if (utfStrlen($find) >= 3 && utfStrlen($find) <= 50) {
+        $strlen = utfStrlen($find);
+
+        if ($strlen >= 3 && $strlen <= 50) {
             $findme = utfLower($find);
             $findmewords = explode(' ', $findme);
 
@@ -878,7 +889,7 @@ class BlogController extends BaseController
                         return view('blogs/search_title', compact('blogs', 'find', 'page'));
                     }
 
-                    setInput(Request::all());
+                    setInput($request->all());
                     setFlash('danger', 'По вашему запросу ничего не найдено!');
                     redirect('/blogs/search');
                 }
@@ -921,12 +932,12 @@ class BlogController extends BaseController
                         return view('blogs/search_text', compact('blogs', 'find', 'page'));
                     }
 
-                    setInput(Request::all());
+                    setInput($request->all());
                     setFlash('danger', 'По вашему запросу ничего не найдено!');
                     redirect('/blogs/search');
                 }
         } else {
-            setInput(Request::all());
+            setInput($request->all());
             setFlash('danger', ['find' => 'Запрос должен содержать от 3 до 50 символов!']);
             redirect('/blogs/search');
         }

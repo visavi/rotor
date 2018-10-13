@@ -2,15 +2,17 @@
 
 namespace App\Controllers;
 
-use App\Classes\Request;
 use App\Models\Ban;
 use App\Models\Error;
 use Illuminate\Database\Capsule\Manager as DB;
+use Illuminate\Http\Request;
 
 Class BaseController
 {
     public function __construct()
     {
+        $request = new Request();
+
         /**
          * Проверка на ip-бан
          */
@@ -28,7 +30,7 @@ Class BaseController
                     }
                 }
 
-                if ($matches === 4 && ! Request::is('banip', 'captcha')) {
+                if ($matches === 4 && ! $request->is('banip', 'captcha')) {
                     redirect('/banip');
                 }
             }
@@ -91,13 +93,13 @@ Class BaseController
         }
 
         // Сайт закрыт для гостей
-        if (setting('closedsite') == 1 && ! getUser() && ! Request::is('register', 'login', 'recovery', 'captcha')) {
+        if (setting('closedsite') == 1 && ! getUser() && ! $request->is('register', 'login', 'recovery', 'captcha')) {
             setFlash('danger', 'Для входа на сайт необходимо авторизоваться!');
             redirect('/login');
         }
 
         // Сайт закрыт для всех
-        if (setting('closedsite') == 2 && ! isAdmin() && ! Request::is('closed', 'login')) {
+        if (setting('closedsite') == 2 && ! isAdmin() && ! $request->is('closed', 'login')) {
             redirect('/closed');
         }
     }

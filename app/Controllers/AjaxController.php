@@ -2,7 +2,7 @@
 
 namespace App\Controllers;
 
-use App\Classes\{Request, Validator};
+use App\Classes\Validator;
 use App\Models\{
     Blog,
     Comment,
@@ -19,61 +19,31 @@ use App\Models\{
     Spam,
     Wall
 };
+use Illuminate\Http\Request;
 
 class AjaxController extends BaseController
 {
     /**
      * Конструктор
+     *
+     * @param Request $request
      */
-    public function __construct()
+    public function __construct(Request $request)
     {
         parent::__construct();
-        $this->checkAjax();
+        $this->checkAjax($request);
         $this->checkAuthorize();
-    }
-
-    /**
-     * Возвращает является ли запрос ajax
-     *
-     * @return string
-     */
-    public function checkAjax(): string
-    {
-        if (! Request::ajax()) {
-            return json_encode([
-                'status'  => 'error',
-                'message' => 'This is not ajax request'
-            ]);
-        }
-
-        return true;
-    }
-
-    /**
-     * Возвращает авторизован ли пользователь
-     *
-     * @return string
-     */
-    private function checkAuthorize(): string
-    {
-        if (! getUser()) {
-            return json_encode([
-                'status'  => 'error',
-                'message' => 'Not authorized'
-            ]);
-        }
-
-        return true;
     }
 
     /**
      * Возвращает bbCode для предпросмотра
      *
+     * @param Request $request
      * @return string
      */
-    public function bbCode(): string
+    public function bbCode(Request $request): string
     {
-        $message = check(Request::input('data'));
+        $message = check($request->input('data'));
 
         return view('app/_bbcode', compact('message'));
     }
@@ -81,16 +51,17 @@ class AjaxController extends BaseController
     /**
      * Отправляет жалобу на сообщение
      *
+     * @param Request $request
      * @return string
      */
-    public function complaint(): string
+    public function complaint(Request $request): string
     {
         $path  = null;
         $data  = false;
-        $id    = int(Request::input('id'));
-        $type  = check(Request::input('type'));
-        $page  = check(Request::input('page'));
-        $token = check(Request::input('token'));
+        $id    = int($request->input('id'));
+        $type  = check($request->input('type'));
+        $page  = check($request->input('page'));
+        $token = check($request->input('token'));
 
         switch ($type):
             case Guestbook::class:
@@ -187,18 +158,19 @@ class AjaxController extends BaseController
     /**
      * Удаляет комментарии
      *
+     * @param Request $request
      * @return string
      */
-    public function delComment(): string
+    public function delComment(Request $request): string
     {
         if (! isAdmin()) {
             return json_encode(['status' => 'error', 'message' => 'Not authorized']);
         }
 
-        $token = check(Request::input('token'));
-        $type  = check(Request::input('type'));
-        $rid   = int(Request::input('rid'));
-        $id    = int(Request::input('id'));
+        $token = check($request->input('token'));
+        $type  = check($request->input('type'));
+        $rid   = int($request->input('rid'));
+        $id    = int($request->input('id'));
 
         $validator = new Validator();
         $validator->equal($token, $_SESSION['token'], 'Неверный идентификатор сессии, повторите действие!');
@@ -226,10 +198,11 @@ class AjaxController extends BaseController
     /**
      * Изменяет рейтинг
      *
+     * @param Request $request
      * @return string
      * @throws \Exception
      */
-    public function rating(): string
+    public function rating(Request $request): string
     {
         $types = [
             Post::class,
@@ -239,10 +212,10 @@ class AjaxController extends BaseController
             Offer::class,
         ];
 
-        $id    = int(Request::input('id'));
-        $type  = check(Request::input('type'));
-        $vote  = check(Request::input('vote'));
-        $token = check(Request::input('token'));
+        $id    = int($request->input('id'));
+        $type  = check($request->input('type'));
+        $vote  = check($request->input('vote'));
+        $token = check($request->input('token'));
 
         if ($token !== $_SESSION['token']) {
             return json_encode(['status' => 'error', 'message' => 'Invalid token']);
@@ -306,9 +279,10 @@ class AjaxController extends BaseController
     /**
      * Загружает изображение
      *
+     * @param Request $request
      * @return string
      */
-    public function uploadImage(): string
+    public function uploadImage(Request $request): string
     {
         $types = [
             Blog::class,
@@ -316,10 +290,10 @@ class AjaxController extends BaseController
             Photo::class,
         ];
 
-        $image = Request::file('image');
-        $id    = int(Request::input('id'));
-        $type  = check(Request::input('type'));
-        $token = check(Request::input('token'));
+        $image = $request->file('image');
+        $id    = int($request->input('id'));
+        $type  = check($request->input('type'));
+        $token = check($request->input('token'));
 
         if (! \in_array($type, $types, true)) {
             return json_encode(['status' => 'error', 'message' => 'Type invalid']);
@@ -379,10 +353,11 @@ class AjaxController extends BaseController
     /**
      * Удаляет изображение
      *
+     * @param Request $request
      * @return string
      * @throws \Exception
      */
-    public function deleteImage(): string
+    public function deleteImage(Request $request): string
     {
         $types = [
             Blog::class,
@@ -390,9 +365,9 @@ class AjaxController extends BaseController
             Photo::class,
         ];
 
-        $id    = int(Request::input('id'));
-        $type  = check(Request::input('type'));
-        $token = check(Request::input('token'));
+        $id    = int($request->input('id'));
+        $type  = check($request->input('type'));
+        $token = check($request->input('token'));
 
         if (! \in_array($type, $types, true)) {
             return json_encode(['status' => 'error', 'message' => 'Type invalid']);
@@ -428,5 +403,40 @@ class AjaxController extends BaseController
             'status'  => 'error',
             'message' => current($validator->getErrors())
         ]);
+    }
+
+    /**
+     * Возвращает является ли запрос ajax
+     *
+     * @param Request $request
+     * @return string
+     */
+    private function checkAjax(Request $request): string
+    {
+        if (! $request->ajax()) {
+            return json_encode([
+                'status'  => 'error',
+                'message' => 'This is not ajax request'
+            ]);
+        }
+
+        return true;
+    }
+
+    /**
+     * Возвращает авторизован ли пользователь
+     *
+     * @return string
+     */
+    private function checkAuthorize(): string
+    {
+        if (! getUser()) {
+            return json_encode([
+                'status'  => 'error',
+                'message' => 'Not authorized'
+            ]);
+        }
+
+        return true;
     }
 }

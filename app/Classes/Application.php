@@ -2,7 +2,9 @@
 
 namespace App\Classes;
 
+use DI\Container;
 use FastRoute\Dispatcher;
+use Illuminate\Http\Request;
 
 class Application
 {
@@ -35,9 +37,19 @@ class Application
     private function call($router)
     {
         [, $controller, $params] = $router;
-        $action = $params['action'] ?? $controller[1];
 
-        return \call_user_func_array([new $controller[0], $action], $params);
+        if (isset($params['action'])) {
+            $controller[1] = $params['action'];
+        }
+
+        $container = new Container();
+        $container->set(Request::class, Request::createFromGlobals());
+
+        try {
+            return $container->call($controller, $params);
+        } catch (\Exception $e) {
+            return \call_user_func_array([new $controller[0], $controller[1]], $params);
+        }
     }
 
     /**
