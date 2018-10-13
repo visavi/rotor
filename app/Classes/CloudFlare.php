@@ -3,13 +3,14 @@
 namespace App\Classes;
 
 use Closure;
+use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\IpUtils;
 
 class CloudFlare
 {
     /**
      * List of IP's used by CloudFlare.
-     * @var array
+     * @const array
      */
     protected const IPS = [
         '103.21.244.0/22',
@@ -35,6 +36,13 @@ class CloudFlare
         '2a06:98c0::/29'
     ];
 
+    private $request;
+
+    public function __construct()
+    {
+        $this->request = Request::createFromGlobals();
+    }
+
     /**
      * Checks if current request is coming from CloudFlare servers.
      *
@@ -42,7 +50,7 @@ class CloudFlare
      */
     public function isTrustedRequest(): bool
     {
-        return IpUtils::checkIp(Request::ip(), static::IPS);
+        return IpUtils::checkIp($this->request->ip(), static::IPS);
     }
 
     /**
@@ -66,8 +74,8 @@ class CloudFlare
     public function ip(): string
     {
         return $this->onTrustedRequest(function () {
-            return filter_var(Request::header('CF_CONNECTING_IP'), FILTER_VALIDATE_IP);
-        }) ?: Request::ip();
+            return filter_var($this->request->header('CF_CONNECTING_IP'), FILTER_VALIDATE_IP);
+        }) ?: $this->request->ip();
     }
 
     /**
@@ -78,7 +86,7 @@ class CloudFlare
     public function country(): string
     {
         return $this->onTrustedRequest(function () {
-            return Request::header('CF_IPCOUNTRY');
+            return $this->request->header('CF_IPCOUNTRY');
         }) ?: '';
     }
 }
