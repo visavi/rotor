@@ -2,7 +2,6 @@
 
 namespace App\Classes;
 
-use Illuminate\Http\Request;
 use FastRoute\Dispatcher;
 
 class Application
@@ -18,17 +17,13 @@ class Application
             case Dispatcher::FOUND:
                 echo $this->call($router);
                 break;
-
             case Dispatcher::METHOD_NOT_ALLOWED:
                 abort(405);
                 break;
-
             default:
                 abort(404);
                 break;
         }
-
-       // $router['params']['request'] = Request::createFromGlobals();
     }
 
     /**

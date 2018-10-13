@@ -489,7 +489,7 @@ return FastRoute\cachedDispatcher(function(RouteCollector $r)
         $r->addRoute(['GET', 'POST'], '/articles/move/{id:\d+}', [App\Controllers\Admin\BlogController::class, 'moveBlog']);
         $r->get('/articles/delete/{id:\d+}', [App\Controllers\Admin\BlogController::class, 'deleteBlog']);
 
-        $r->get('/boards/{id:\d+}?', [App\Controllers\Admin\BoardController::class, 'index']);
+        $r->get('/boards[/{id:\d+}]', [App\Controllers\Admin\BoardController::class, 'index']);
         $r->get('/boards/restatement', [App\Controllers\Admin\BoardController::class, 'restatement']);
         $r->addRoute(['GET', 'POST'], '/items/edit/{id:\d+}', [App\Controllers\Admin\BoardController::class, 'editItem']);
         $r->get('/items/delete/{id:\d+}', [App\Controllers\Admin\BoardController::class, 'deleteItem']);
