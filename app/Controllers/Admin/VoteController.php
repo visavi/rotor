@@ -64,11 +64,12 @@ class VoteController extends AdminController
     /**
      * Редактирование голосования
      *
-     * @param int     $id
-     * @param Request $request
+     * @param int       $id
+     * @param Request   $request
+     * @param Validator $validator
      * @return string
      */
-    public function edit(int $id, Request $request): string
+    public function edit(int $id, Request $request, Validator $validator): string
     {
         $vote = Vote::query()->where('id', $id)->first();
 
@@ -82,7 +83,6 @@ class VoteController extends AdminController
             $title   = check($request->input('title'));
             $answers = check($request->input('answers'));
 
-            $validator = new Validator();
             $validator->equal($token, $_SESSION['token'], 'Неверный идентификатор сессии, повторите действие!');
 
             $validator->length($title, 5, 100, ['title' => 'Слишком длинный или короткий текст вопроса!']);
@@ -217,7 +217,7 @@ class VoteController extends AdminController
 
         if ($token === $_SESSION['token']) {
 
-            DB::update('update votes set count = (select SUM(result) from voteanswer where votes.id = voteanswer.vote_id)');
+            restatement('votes');
 
             setFlash('success', 'Голосования успешно пересчитаны!');
         } else {

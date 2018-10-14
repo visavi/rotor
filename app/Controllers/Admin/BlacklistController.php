@@ -38,10 +38,11 @@ class BlacklistController extends AdminController
     /**
      * Главная страница
      *
-     * @param Request $request
+     * @param Request   $request
+     * @param Validator $validator
      * @return string
      */
-    public function index(Request $request): string
+    public function index(Request $request, Validator $validator): string
     {
         $type = $this->type;
 
@@ -49,7 +50,6 @@ class BlacklistController extends AdminController
             $token = check($request->input('token'));
             $value = check(utfLower($request->input('value')));
 
-            $validator = new Validator();
             $validator->equal($token, $_SESSION['token'], 'Неверный идентификатор сессии, повторите действие!')
                 ->length($value, 1, 100, ['value' => 'Вы не ввели запись или она слишком длинная!']);
 
@@ -103,17 +103,17 @@ class BlacklistController extends AdminController
     /**
      * Удаление записей
      *
-     * @param Request $request
+     * @param Request   $request
+     * @param Validator $validator
      * @return void
      */
-    public function delete(Request $request): void
+    public function delete(Request $request, Validator $validator): void
     {
         $page  = int($request->input('page', 1));
         $token = check($request->input('token'));
         $del   = intar($request->input('del'));
         $type  = $this->type;
 
-        $validator = new Validator();
         $validator->equal($token, $_SESSION['token'], 'Неверный идентификатор сессии, повторите действие!')
             ->true($del, 'Отсутствуют выбранные записи для удаления!');
 

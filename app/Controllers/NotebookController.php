@@ -37,16 +37,16 @@ class NotebookController extends BaseController
     /**
      * Редактирование
      *
-     * @param Request $request
+     * @param Request   $request
+     * @param Validator $validator
      * @return string
      */
-    public function edit(Request $request): string
+    public function edit(Request $request, Validator $validator): string
     {
         if ($request->isMethod('post')) {
             $token = check($request->input('token'));
             $msg   = check($request->input('msg'));
 
-            $validator = new Validator();
             $validator
                 ->equal($token, $_SESSION['token'], ['msg' => 'Неверный идентификатор сессии, повторите действие!'])
                 ->length($msg, 0, 10000, ['msg' => 'Слишком длинная запись!'], false);

@@ -39,11 +39,12 @@ class UserController extends BaseController
     /**
      * Заметка
      *
-     * @param string  $login
-     * @param Request $request
+     * @param string    $login
+     * @param Request   $request
+     * @param Validator $validator
      * @return string
      */
-    public function note(string $login, Request $request): string
+    public function note(string $login, Request $request, Validator $validator): string
     {
         if (! isAdmin()) {
             abort(403, 'Данная страница доступна только администрации!');
@@ -58,7 +59,6 @@ class UserController extends BaseController
             $notice = check($request->input('notice'));
             $token  = check($request->input('token'));
 
-            $validator = new Validator();
             $validator->equal($token, $_SESSION['token'], ['notice' => 'Неверный идентификатор сессии, повторите действие!'])
                 ->length($notice, 0, 1000, ['notice' => 'Слишком большая заметка, не более 1000 символов!']);
 
@@ -85,11 +85,12 @@ class UserController extends BaseController
     /**
      * Регистрация
      *
-     * @param Request $request
+     * @param Request   $request
+     * @param Validator $validator
      * @return string
      * @throws ErrorException
      */
-    public function register(Request $request): string
+    public function register(Request $request, Validator $validator): string
     {
         if (getUser()) {
             abort('403', 'Вы уже регистрировались, запрещено создавать несколько аккаунтов!');
@@ -111,7 +112,6 @@ class UserController extends BaseController
                 $activateKey = null;
                 $level       = User::USER;
 
-                $validator = new Validator();
                 $validator->true(captchaVerify(), ['protect' => 'Не удалось пройти проверку captcha!'])
                     ->regex($login, '|^[a-z0-9\-]+$|i', ['login' => 'Недопустимые символы в логине. Разрешены знаки латинского алфавита, цифры и дефис!'])
                     ->regex(utfSubstr($login, 0, 1), '|^[a-z0-9]+$|i', ['login' => 'Логин должен начинаться с буквы или цифры!'])
@@ -305,10 +305,11 @@ class UserController extends BaseController
     /**
      * Редактирование профиля
      *
-     * @param Request $request
+     * @param Request   $request
+     * @param Validator $validator
      * @return string
      */
-    public function profile(Request $request): string
+    public function profile(Request $request, Validator $validator): string
     {
         if (! $user = getUser()) {
             abort(403, 'Авторизуйтесь для изменения данных в профиле!');
@@ -328,7 +329,6 @@ class UserController extends BaseController
             $birthday = check($request->input('birthday'));
             $gender   = $request->input('gender') === 'male' ? 'male' : 'female';
 
-            $validator = new Validator();
             $validator->equal($token, $_SESSION['token'], 'Неверный идентификатор сессии, повторите действие!')
                 ->regex($site, '#^https?://([а-яa-z0-9_\-\.])+(\.([а-яa-z0-9\/])+)+$#u', ['site' => 'Недопустимый адрес сайта, необходим формата http://my_site.domen!'], false)
                 ->regex($birthday, '#^[0-9]{2}+\.[0-9]{2}+\.[0-9]{4}$#', ['birthday' => 'Недопустимый формат даты рождения, необходим формат дд.мм.гггг!'], false)
@@ -412,10 +412,11 @@ class UserController extends BaseController
     /**
      * Настройки
      *
-     * @param Request $request
+     * @param Request   $request
+     * @param Validator $validator
      * @return string
      */
-    public function setting(Request $request): string
+    public function setting(Request $request, Validator $validator): string
     {
         if (! $user = getUser()) {
             abort(403, 'Для изменения настроек необходимо авторизоваться!');
@@ -434,7 +435,6 @@ class UserController extends BaseController
             $notify    = $request->input('notify') ? 1 : 0;
             $subscribe = $request->input('subscribe') ? str_random(32) : null;
 
-            $validator = new Validator();
             $validator->equal($token, $_SESSION['token'], 'Неверный идентификатор сессии, повторите действие!')
                 ->regex($themes, '|^[a-z0-9_\-]+$|i', ['themes' => 'Недопустимое название темы!'])
                 ->true(\in_array($themes, $setting['themes'], true) || empty($themes), ['themes' => 'Данная тема не установлена на сайте!'])
@@ -480,11 +480,12 @@ class UserController extends BaseController
     /**
      * Инициализация изменения email
      *
-     * @param Request $request
+     * @param Request   $request
+     * @param Validator $validator
      * @return void
      * @throws Exception
      */
-    public function changeMail(Request $request): void
+    public function changeMail(Request $request, Validator $validator): void
     {
         if (! $user = getUser()) {
             abort(403, 'Для изменения данных необходимо авторизоваться!');
@@ -494,7 +495,6 @@ class UserController extends BaseController
         $email    = check(strtolower($request->input('email')));
         $password = check($request->input('password'));
 
-        $validator = new Validator();
         $validator->equal($token, $_SESSION['token'], 'Неверный идентификатор сессии, повторите действие!')
             ->notEqual($email, $user->email, ['email' => 'Новый адрес email должен отличаться от текущего!'])
             ->email($email, ['email' => 'Неправильный адрес email, необходим формат name@site.domen!'])
@@ -541,11 +541,12 @@ class UserController extends BaseController
     /**
      * Изменение email
      *
-     * @param Request $request
+     * @param Request   $request
+     * @param Validator $validator
      * @return void
      * @throws Exception
      */
-    public function editMail(Request $request): void
+    public function editMail(Request $request, Validator $validator): void
     {
         if (! $user = getUser()) {
             abort(403, 'Для изменения данных необходимо авторизоваться!');
@@ -557,7 +558,6 @@ class UserController extends BaseController
 
         $changeMail = ChangeMail::query()->where('hash', $key)->where('user_id', $user->id)->first();
 
-        $validator = new Validator();
         $validator->notEmpty($key, 'Вы не ввели код изменения электронной почты!')
             ->notEmpty($changeMail, 'Данный код изменения электронной почты не найден в списке!');
 
@@ -590,10 +590,11 @@ class UserController extends BaseController
     /**
      * Изменение статуса
      *
-     * @param Request $request
+     * @param Request   $request
+     * @param Validator $validator
      * @return void
      */
-    public function editStatus(Request $request): void
+    public function editStatus(Request $request, Validator $validator): void
     {
         if (! $user = getUser()) {
             abort(403, 'Для изменения данных необходимо авторизоваться!');
@@ -603,7 +604,6 @@ class UserController extends BaseController
         $status = check($request->input('status'));
         $cost   = $status ? setting('editstatusmoney') : 0;
 
-        $validator = new Validator();
         $validator->equal($token, $_SESSION['token'], 'Неверный идентификатор сессии, повторите действие!')
             ->empty($user->ban, ['status' => 'Для изменения статуса у вас не должно быть нарушений!'])
             ->notEqual($status, $user->status, ['status' => 'Новый статус должен отличаться от текущего!'])
@@ -636,10 +636,11 @@ class UserController extends BaseController
     /**
      * Изменение пароля
      *
-     * @param Request $request
+     * @param Request   $request
+     * @param Validator $validator
      * @return void
      */
-    public function editPassword(Request $request): void
+    public function editPassword(Request $request, Validator $validator): void
     {
         if (! $user = getUser()) {
             abort(403, 'Для изменения данных необходимо авторизоваться!');
@@ -650,7 +651,6 @@ class UserController extends BaseController
         $newpass2 = check($request->input('newpass2'));
         $oldpass  = check($request->input('oldpass'));
 
-        $validator = new Validator();
         $validator->equal($token, $_SESSION['token'], 'Неверный идентификатор сессии, повторите действие!')
             ->true(password_verify($oldpass, $user->password), ['oldpass' => 'Введенный пароль не совпадает с данными в профиле!'])
             ->length($newpass, 6, 20, ['newpass' => 'Слишком длинный или короткий новый пароль!'])

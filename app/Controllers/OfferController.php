@@ -82,10 +82,11 @@ class OfferController extends BaseController
     /**
      * Создание записи
      *
-     * @param Request $request
+     * @param Request   $request
+     * @param Validator $validator
      * @return string
      */
-    public function create(Request $request): string
+    public function create(Request $request, Validator $validator): string
     {
         if (! $user = getUser()) {
             abort(403, 'Авторизуйтесь для добавления записи!');
@@ -99,8 +100,6 @@ class OfferController extends BaseController
             $title = check($request->input('title'));
             $text  = check($request->input('text'));
 
-
-            $validator = new Validator();
             $validator->equal($token, $_SESSION['token'], ['Неверный идентификатор сессии, повторите действие!'])
                 ->length($title, 5, 50, ['title' => 'Слишком длинный или короткий заголовок!'])
                 ->length($text, 5, 1000, ['text' => 'Слишком длинное или короткое описание!'])
@@ -138,11 +137,12 @@ class OfferController extends BaseController
     /**
      * Редактирование записи
      *
-     * @param int     $id
-     * @param Request $request
+     * @param int       $id
+     * @param Request   $request
+     * @param Validator $validator
      * @return string
      */
-    public function edit(int $id, Request $request): string
+    public function edit(int $id, Request $request, Validator $validator): string
     {
         if (! $user = getUser()) {
             abort(403, 'Авторизуйтесь для редактирования записи!');
@@ -168,7 +168,6 @@ class OfferController extends BaseController
             $text  = check($request->input('text'));
             $type  = check($request->input('type'));
 
-            $validator = new Validator();
             $validator->equal($token, $_SESSION['token'], ['Неверный идентификатор сессии, повторите действие!'])
                 ->length($title, 5, 50, ['title' => 'Слишком длинный или короткий заголовок!'])
                 ->length($text, 5, 1000, ['text' => 'Слишком длинное или короткое описание!'])
@@ -200,11 +199,12 @@ class OfferController extends BaseController
     /**
      * Комментарии
      *
-     * @param int     $id
-     * @param Request $request
+     * @param int       $id
+     * @param Request   $request
+     * @param Validator $validator
      * @return string
      */
-    public function comments(int $id, Request $request): string
+    public function comments(int $id, Request $request, Validator $validator): string
     {
         /** @var Offer $offer */
         $offer = Offer::query()->find($id);
@@ -218,7 +218,6 @@ class OfferController extends BaseController
             $token = check($request->input('token'));
             $msg   = check($request->input('msg'));
 
-            $validator = new Validator();
             $validator
                 ->true(getUser(), 'Для добавления комментария необходимо авторизоваться!')
                 ->equal($token, $_SESSION['token'], 'Неверный идентификатор сессии, повторите действие!')
@@ -274,12 +273,13 @@ class OfferController extends BaseController
     /**
      * Подготовка к редактированию комментария
      *
-     * @param int     $id
-     * @param int     $cid
-     * @param Request $request
+     * @param int       $id
+     * @param int       $cid
+     * @param Request   $request
+     * @param Validator $validator
      * @return string
      */
-    public function editComment(int $id, int $cid, Request $request): string
+    public function editComment(int $id, int $cid, Request $request, Validator $validator): string
     {
         $page = int($request->input('page', 1));
 
@@ -313,7 +313,6 @@ class OfferController extends BaseController
             $msg   = check($request->input('msg'));
             $page  = int($request->input('page', 1));
 
-            $validator = new Validator();
             $validator
                 ->equal($token, $_SESSION['token'], 'Неверный идентификатор сессии, повторите действие!')
                 ->length($msg, 5, 1000, ['msg' => 'Слишком длинный или короткий комментарий!']);

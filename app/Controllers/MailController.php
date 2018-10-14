@@ -11,10 +11,11 @@ class MailController extends BaseController
     /**
      * Главная страница
      *
-     * @param Request $request
+     * @param Request   $request
+     * @param Validator $validator
      * @return string
      */
-    public function index(Request $request): string
+    public function index(Request $request, Validator $validator): string
     {
         if ($request->isMethod('post')) {
 
@@ -27,7 +28,6 @@ class MailController extends BaseController
                 $email = getUser('email');
             }
 
-            $validator = new Validator();
             $validator->true(captchaVerify(), ['protect' => 'Не удалось пройти проверку captcha!'])
                 ->length($name, 5, 100, ['name' => 'Слишком длинное или короткое имя'])
                 ->length($message, 5, 50000, ['message' => 'Слишком длинное или короткое сообшение'])
@@ -55,10 +55,11 @@ class MailController extends BaseController
     /**
      * Восстановление пароля
      *
-     * @param Request $request
+     * @param Request   $request
+     * @param Validator $validator
      * @return string
      */
-    public function recovery(Request $request): string
+    public function recovery(Request $request, Validator $validator): string
     {
         if (getUser()) {
             abort('default', 'Вы авторизованы, восстановление пароля невозможно!');
@@ -74,7 +75,6 @@ class MailController extends BaseController
                 abort('default', 'Пользователь с данным логином или email не найден!');
             }
 
-            $validator = new Validator();
             $validator->true(captchaVerify(), ['protect' => 'Не удалось пройти проверку captcha!'])
                 ->lte($user['timepasswd'], SITETIME, ['user' => 'Восстанавливать пароль можно не чаще чем раз в 12 часов!']);
 
@@ -108,10 +108,11 @@ class MailController extends BaseController
     /**
      * Восстановление пароля
      *
-     * @param Request $request
+     * @param Request   $request
+     * @param Validator $validator
      * @return string
      */
-    public function restore(Request $request): ?string
+    public function restore(Request $request, Validator $validator): ?string
     {
         if (getUser()) {
             abort(403, 'Вы авторизованы, восстановление пароля невозможно!');
@@ -124,7 +125,6 @@ class MailController extends BaseController
             abort('default', 'Ключ для восстановления недействителен!');
         }
 
-        $validator = new Validator();
         $validator->notEmpty($key, 'Отсутствует секретный код в ссылке для восстановления пароля!')
             ->notEmpty($user['keypasswd'], 'Данный пользователь не запрашивал восстановление пароля!')
             ->gte($user['timepasswd'], SITETIME, 'Секретный ключ для восстановления уже устарел!');

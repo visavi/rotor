@@ -24,10 +24,11 @@ class DeliveryController extends AdminController
     /**
      * Главная страница
      *
-     * @param Request $request
+     * @param Request   $request
+     * @param Validator $validator
      * @return string
      */
-    public function index(Request $request): string
+    public function index(Request $request, Validator $validator): string
     {
         if ($request->isMethod('post')) {
 
@@ -35,7 +36,6 @@ class DeliveryController extends AdminController
             $msg   = check($request->input('msg'));
             $type  = int($request->input('type'));
 
-            $validator = new Validator();
             $validator->equal($token, $_SESSION['token'], ['msg' => 'Неверный идентификатор сессии, повторите действие!'])
                 ->length($msg, 5, 1000, ['msg' => 'Слишком длинный или короткий текст комментария!'])
                 ->between($type, 1, 4, 'Вы не выбрали получаетелей рассылки!');

@@ -73,10 +73,11 @@ class UserController extends AdminController
     /**
      * Редактирование пользователя
      *
-     * @param Request $request
+     * @param Request   $request
+     * @param Validator $validator
      * @return string
      */
-    public function edit(Request $request): string
+    public function edit(Request $request, Validator $validator): string
     {
         $login = check($request->input('user'));
 
@@ -117,7 +118,6 @@ class UserController extends AdminController
             $info      = check($request->input('info'));
             $created   = check($request->input('created'));
 
-            $validator = new Validator();
             $validator->equal($token, $_SESSION['token'], 'Неверный идентификатор сессии, повторите действие!')
                 ->in($level, User::ALL_GROUPS, ['level' => 'Недопустимый уровень пользователя!'])
                 ->length($password, 6, 20, 'Слишком длинный или короткий новый пароль!', false)
@@ -192,11 +192,12 @@ class UserController extends AdminController
     /**
      * Удаление пользователя
      *
-     * @param Request $request
+     * @param Request   $request
+     * @param Validator $validator
      * @return string
      * @throws \Exception
      */
-    public function delete(Request $request): string
+    public function delete(Request $request, Validator $validator): string
     {
         $login = check($request->input('user'));
 
@@ -216,7 +217,6 @@ class UserController extends AdminController
             $delcomments = empty($request->input('delcomments')) ? 0 : 1;
             $delimages   = empty($request->input('delimages')) ? 0 : 1;
 
-            $validator = new Validator();
             $validator->equal($token, $_SESSION['token'], 'Неверный идентификатор сессии, повторите действие!')
                 ->notIn($user->level, User::ADMIN_GROUPS, 'Запрещено удалять пользователей из группы администраторов!');
 

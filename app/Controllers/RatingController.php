@@ -25,11 +25,12 @@ class RatingController extends BaseController
     /**
      * Изменение рейтинга
      *
-     * @param string  $login
-     * @param Request $request
+     * @param string    $login
+     * @param Request   $request
+     * @param Validator $validator
      * @return string
      */
-    public function index(string $login, Request $request): string
+    public function index(string $login, Request $request, Validator $validator): string
     {
         $vote = $request->input('vote');
         $user = User::query()->where('login', $login)->first();
@@ -62,7 +63,6 @@ class RatingController extends BaseController
             $token = check($request->input('token'));
             $text  = check($request->input('text'));
 
-            $validator = new Validator();
             $validator->equal($token, $_SESSION['token'], 'Неверный идентификатор сессии, повторите действие!')
                 ->length($text, 5, 250, ['text' => 'Слишком длинный или короткий комментарий!']);
 
@@ -172,16 +172,16 @@ class RatingController extends BaseController
     /**
      *  Удаление истории
      *
-     * @param Request $request
+     * @param Request   $request
+     * @param Validator $validator
      * @return void
      * @throws \Exception
      */
-    public function delete(Request $request): void
+    public function delete(Request $request, Validator $validator): void
     {
         $id    = int($request->input('id'));
         $token = check($request->input('token'));
 
-        $validator = new Validator();
         $validator
             ->true($request->ajax(), 'Это не ajax запрос!')
             ->true(isAdmin(User::ADMIN), 'Удалять рейтинг могут только администраторы')

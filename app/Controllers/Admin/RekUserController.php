@@ -44,11 +44,12 @@ class RekUserController extends AdminController
     /**
      * Редактирование ссылки
      *
-     * @param int     $id
-     * @param Request $request
+     * @param int       $id
+     * @param Request   $request
+     * @param Validator $validator
      * @return string
      */
-    public function edit(int $id, Request $request): string
+    public function edit(int $id, Request $request, Validator $validator): string
     {
         $page = int($request->input('page', 1));
         $link = RekUser::query()->find($id);
@@ -64,7 +65,6 @@ class RekUserController extends AdminController
             $color = check($request->input('color'));
             $bold  = empty($request->input('bold')) ? 0 : 1;
 
-            $validator = new Validator();
             $validator->equal($token, $_SESSION['token'], 'Неверный идентификатор сессии, повторите действие!')
                 ->regex($site, '|^https?://([а-яa-z0-9_\-\.])+(\.([а-яa-z0-9\/\-?_=#])+)+$|iu', ['site' => 'Недопустимый адрес сайта!. Разрешены символы [а-яa-z0-9_-.?=#/]!'])
                 ->length($site, 5, 50, ['site' => 'Слишком длинный или короткий адрес ссылки!'])
@@ -96,16 +96,15 @@ class RekUserController extends AdminController
     /**
      * Удаление записей
      *
-     * @param Request $request
+     * @param Request   $request
+     * @param Validator $validator
      * @return void
      */
-    public function delete(Request $request): void
+    public function delete(Request $request, Validator $validator): void
     {
         $page  = int($request->input('page', 1));
         $token = check($request->input('token'));
         $del   = intar($request->input('del'));
-
-        $validator = new Validator();
 
         $validator->equal($token, $_SESSION['token'], 'Неверный идентификатор сессии, повторите действие!')
             ->true($del, 'Отсутствуют выбранные записи для удаления!');

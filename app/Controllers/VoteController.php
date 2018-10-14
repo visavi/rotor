@@ -34,11 +34,12 @@ class VoteController extends BaseController
     /**
      * Просмотр голосования
      *
-     * @param int     $id
-     * @param Request $request
+     * @param int       $id
+     * @param Request   $request
+     * @param Validator $validator
      * @return string
      */
-    public function view(int $id, Request $request): string
+    public function view(int $id, Request $request, Validator $validator): string
     {
         $show = $request->input('show');
 
@@ -70,7 +71,6 @@ class VoteController extends BaseController
             $token = check($request->input('token'));
             $poll  = int($request->input('poll'));
 
-            $validator = new Validator();
             $validator->equal($token, $_SESSION['token'], 'Неверный идентификатор сессии, повторите действие!')
                 ->empty($vote->poll, 'Вы уже проголосовали в этом опросе!')
                 ->notEmpty($poll, 'Вы не выбрали вариант ответа!');
@@ -202,10 +202,11 @@ class VoteController extends BaseController
     /**
      * Создание голосования
      *
-     * @param Request $request
+     * @param Request   $request
+     * @param Validator $validator
      * @return string
      */
-    public function create(Request $request): string
+    public function create(Request $request, Validator $validator): string
     {
         if ($request->isMethod('post')) {
 
@@ -213,7 +214,6 @@ class VoteController extends BaseController
             $question = check($request->input('question'));
             $answers  = check($request->input('answer'));
 
-            $validator = new Validator();
             $validator->equal($token, $_SESSION['token'], 'Неверный идентификатор сессии, повторите действие!')
                 ->length($question, 5, 100, ['question' => 'Слишком длинный или короткий текст вопроса!']);
 

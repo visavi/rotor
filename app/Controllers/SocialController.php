@@ -79,17 +79,17 @@ class SocialController extends BaseController
     /**
      * Удаление привязки
      *
-     * @param int     $id
-     * @param Request $request
+     * @param int       $id
+     * @param Request   $request
+     * @param Validator $validator
      * @throws \Exception
      */
-    public function delete(int $id, Request $request): void
+    public function delete(int $id, Request $request, Validator $validator): void
     {
         $token = check($request->input('token'));
 
         $social = Social::query()->where('user_id', $this->user->id)->find($id);
 
-        $validator = new Validator();
         $validator->equal($token, $_SESSION['token'], 'Неверный идентификатор сессии, повторите действие!')
             ->notEmpty($social, 'Не найдена привязка к социальной сети!');
 

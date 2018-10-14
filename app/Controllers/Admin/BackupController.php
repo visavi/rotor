@@ -45,10 +45,11 @@ class BackupController extends AdminController
     /**
      * Создание нового бэкапа
      *
-     * @param Request $request
+     * @param Request   $request
+     * @param Validator $validator
      * @return string
      */
-    public function create(Request $request): string
+    public function create(Request $request, Validator $validator): string
     {
         if ($request->isMethod('post')) {
 
@@ -57,7 +58,6 @@ class BackupController extends AdminController
             $method = check($request->input('method'));
             $level  = int($request->input('level'));
 
-            $validator = new Validator();
             $validator->equal($token, $_SESSION['token'], 'Неверный идентификатор сессии, повторите действие!')
                 ->notEmpty($sheets, ['sheets' => 'Ошибка! Не выбраны таблицы для сохранения!'])
                 ->in($method, ['none', 'gzip', 'bzip'], ['method' => 'Ошибка! Неправильный метод сжатия!'])
@@ -133,16 +133,15 @@ class BackupController extends AdminController
     /**
      * Удаляет сохраненный бэкап
      *
-     * @param Request $request
+     * @param Request   $request
+     * @param Validator $validator
      * @return void
      */
-    public function delete(Request $request): void
+    public function delete(Request $request, Validator $validator): void
     {
         $token = check($request->input('token'));
         $file  = check($request->input('file'));
 
-
-        $validator = new Validator();
         $validator->equal($token, $_SESSION['token'], 'Неверный идентификатор сессии, повторите действие!')
             ->notEmpty($file, 'Не передано название бэкапа для удаления!')
             ->regex($file, '|^[\w\.\-]+$|i', 'Недопустимое название бэкапа!')

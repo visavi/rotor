@@ -30,11 +30,12 @@ class GuestbookController extends AdminController
     /**
      * Редактирование сообщения
      *
-     * @param int     $id
-     * @param Request $request
+     * @param int       $id
+     * @param Request   $request
+     * @param Validator $validator
      * @return string
      */
-    public function edit(int $id, Request $request): string
+    public function edit(int $id, Request $request, Validator $validator): string
     {
         $page = int($request->input('page'));
         $post = Guestbook::with('user')->find($id);
@@ -48,7 +49,6 @@ class GuestbookController extends AdminController
             $msg   = check($request->input('msg'));
             $token = check($request->input('token'));
 
-            $validator = new Validator();
             $validator->equal($token, $_SESSION['token'], ['msg' => 'Неверный идентификатор сессии, повторите действие!'])
                 ->length($msg, 5, setting('guesttextlength'), ['msg' => 'Слишком длинное или короткое сообщение!']);
 
@@ -76,11 +76,12 @@ class GuestbookController extends AdminController
     /**
      * Ответ на сообщение
      *
-     * @param int     $id
-     * @param Request $request
+     * @param int       $id
+     * @param Request   $request
+     * @param Validator $validator
      * @return string
      */
-    public function reply(int $id, Request $request): string
+    public function reply(int $id, Request $request, Validator $validator): string
     {
         $page = int($request->input('page'));
         $post = Guestbook::with('user')->find($id);
@@ -94,7 +95,6 @@ class GuestbookController extends AdminController
             $reply = check($request->input('reply'));
             $token = check($request->input('token'));
 
-            $validator = new Validator();
             $validator->equal($token, $_SESSION['token'], ['msg' => 'Неверный идентификатор сессии, повторите действие!'])
                 ->length($reply, 5, setting('guesttextlength'), ['msg' => 'Слишком длинный или короткий ответ!']);
 
@@ -120,16 +120,16 @@ class GuestbookController extends AdminController
     /**
      * Удаление сообщений
      *
-     * @param Request $request
+     * @param Request   $request
+     * @param Validator $validator
      * @return void
      */
-    public function delete(Request $request): void
+    public function delete(Request $request, Validator $validator): void
     {
         $page  = int($request->input('page', 1));
         $token = check($request->input('token'));
         $del   = intar($request->input('del'));
 
-        $validator = new Validator();
         $validator->equal($token, $_SESSION['token'], 'Неверный идентификатор сессии, повторите действие!')
             ->true($del, 'Отсутствуют выбранные сообщения для удаления!');
 
@@ -147,14 +147,14 @@ class GuestbookController extends AdminController
     /**
      * Очистка сообщений
      *
-     * @param Request $request
+     * @param Request   $request
+     * @param Validator $validator
      * @return void
      */
-    public function clear(Request $request): void
+    public function clear(Request $request, Validator $validator): void
     {
         $token = check($request->input('token'));
 
-        $validator = new Validator();
         $validator
             ->equal($token, $_SESSION['token'], 'Неверный идентификатор сессии, повторите действие!')
             ->true(isAdmin(User::BOSS), 'Очищать гостевую может только владелец!');

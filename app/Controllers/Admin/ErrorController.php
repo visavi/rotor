@@ -66,14 +66,14 @@ class ErrorController extends AdminController
     /**
      * Очистка логов
      *
-     * @param Request $request
+     * @param Request   $request
+     * @param Validator $validator
      * @return void
      */
-    public function clear(Request $request): void
+    public function clear(Request $request, Validator $validator): void
     {
         $token = check($request->input('token'));
 
-        $validator = new Validator();
         $validator
             ->equal($token, $_SESSION['token'], 'Неверный идентификатор сессии, повторите действие!')
             ->true(isAdmin(User::BOSS), 'Очищать логи может только владелец!');

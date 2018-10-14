@@ -84,16 +84,16 @@ class SpamController extends AdminController
     /**
      * Удаление жалоб
      *
-     * @param Request $request
+     * @param Request   $request
+     * @param Validator $validator
      * @return void
      * @throws \Exception
      */
-    public function delete(Request $request): void
+    public function delete(Request $request, Validator $validator): void
     {
         $id    = int($request->input('id'));
         $token = check($request->input('token'));
 
-        $validator = new Validator();
         $validator
             ->true($request->ajax(), 'Это не ajax запрос!')
             ->equal($token, $_SESSION['token'], 'Неверный идентификатор сессии, повторите действие!')

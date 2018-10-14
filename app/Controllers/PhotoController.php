@@ -63,10 +63,11 @@ class PhotoController extends BaseController
     /**
      * Форма загрузки фото
      *
-     * @param Request $request
+     * @param Request   $request
+     * @param Validator $validator
      * @return string
      */
-    public function create(Request $request): string
+    public function create(Request $request, Validator $validator): string
     {
         if (! getUser()) {
             abort(403, 'Для добавления фотографий небходимо авторизоваться!');
@@ -79,7 +80,6 @@ class PhotoController extends BaseController
             $text   = check($request->input('text'));
             $closed = empty($request->input('closed')) ? 0 : 1;
 
-            $validator = new Validator();
             $validator->equal($token, $_SESSION['token'], 'Неверный идентификатор сессии, повторите действие!')
                 ->length($title, 5, 50, ['title' => 'Слишком длинное или короткое название!'])
                 ->length($text, 0, 1000, ['text' => 'Слишком длинное описание!'])
@@ -122,11 +122,12 @@ class PhotoController extends BaseController
     /**
      * Редактирование фото
      *
-     * @param int     $id
-     * @param Request $request
+     * @param int       $id
+     * @param Request   $request
+     * @param Validator $validator
      * @return string
      */
-    public function edit(int $id, Request $request): string
+    public function edit(int $id, Request $request, Validator $validator): string
     {
         $page = int($request->input('page', 1));
 
@@ -147,7 +148,6 @@ class PhotoController extends BaseController
             $text   = check($request->input('text'));
             $closed = empty($request->input('closed')) ? 0 : 1;
 
-            $validator = new Validator();
             $validator->equal($token, $_SESSION['token'], 'Неверный идентификатор сессии, повторите действие!')
                 ->length($title, 5, 50, ['title' => 'Слишком длинное или короткое название!'])
                 ->length($text, 0, 1000, ['text' => 'Слишком длинное описание!']);
@@ -177,11 +177,12 @@ class PhotoController extends BaseController
     /**
      * Список комментариев
      *
-     * @param int     $id
-     * @param Request $request
+     * @param int       $id
+     * @param Request   $request
+     * @param Validator $validator
      * @return string
      */
-    public function comments(int $id, Request $request): string
+    public function comments(int $id, Request $request, Validator $validator): string
     {
         /** @var Photo $photo */
         $photo = Photo::query()->find($id);
@@ -194,7 +195,6 @@ class PhotoController extends BaseController
             $msg   = check($request->input('msg'));
             $token = check($request->input('token'));
 
-            $validator = new Validator();
             $validator
                 ->true(getUser(), 'Чтобы добавить комментарий необходимо авторизоваться')
                 ->equal($token, $_SESSION['token'], 'Неверный идентификатор сессии, повторите действие!')
@@ -256,12 +256,13 @@ class PhotoController extends BaseController
     /**
      * Редактирование комментария
      *
-     * @param int     $id
-     * @param int     $cid
-     * @param Request $request
+     * @param int       $id
+     * @param int       $cid
+     * @param Request   $request
+     * @param Validator $validator
      * @return string
      */
-    public function editComment(int $id, int $cid, Request $request): string
+    public function editComment(int $id, int $cid, Request $request, Validator $validator): string
     {
         $page = int($request->input('page', 1));
 
@@ -300,7 +301,6 @@ class PhotoController extends BaseController
             $msg   = check($request->input('msg'));
             $token = check($request->input('token'));
 
-            $validator = new Validator();
             $validator
                 ->equal($token, $_SESSION['token'], 'Неверный идентификатор сессии, повторите действие!')
                 ->length($msg, 5, 1000, ['msg' => 'Слишком длинный или короткий комментарий!'])
@@ -326,11 +326,12 @@ class PhotoController extends BaseController
     /**
      * Удаление фотографий
      *
-     * @param int     $id
-     * @param Request $request
+     * @param int       $id
+     * @param Request   $request
+     * @param Validator $validator
      * @throws \Exception
      */
-    public function delete(int $id, Request $request): void
+    public function delete(int $id, Request $request, Validator $validator): void
     {
         $page = int($request->input('page', 1));
 
@@ -347,7 +348,6 @@ class PhotoController extends BaseController
             abort(404, 'Выбранное вами фото не найдено или вы не автор этой фотографии!');
         }
 
-        $validator = new Validator();
         $validator
             ->equal($token, $_SESSION['token'], 'Неверный идентификатор сессии, повторите действие!')
             ->empty($photo->count_comments, 'Запрещено удалять фотографии к которым имеются комментарии!');

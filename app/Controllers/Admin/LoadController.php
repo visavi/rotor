@@ -42,10 +42,11 @@ class LoadController extends AdminController
     /**
      * Создание раздела
      *
-     * @param Request $request
+     * @param Request   $request
+     * @param Validator $validator
      * @return void
      */
-    public function create(Request $request): void
+    public function create(Request $request, Validator $validator): void
     {
         if (! isAdmin(User::BOSS)) {
             abort(403, 'Доступ запрещен!');
@@ -54,7 +55,6 @@ class LoadController extends AdminController
         $token = check($request->input('token'));
         $name  = check($request->input('name'));
 
-        $validator = new Validator();
         $validator->equal($token, $_SESSION['token'], 'Неверный идентификатор сессии, повторите действие!')
             ->length($name, 5, 50, ['title' => 'Слишком длинное или короткое название раздела!']);
 
@@ -81,11 +81,12 @@ class LoadController extends AdminController
     /**
      * Редактирование раздела
      *
-     * @param int     $id
-     * @param Request $request
+     * @param int       $id
+     * @param Request   $request
+     * @param Validator $validator
      * @return string
      */
-    public function edit(int $id, Request $request): string
+    public function edit(int $id, Request $request, Validator $validator): string
     {
         if (! isAdmin(User::BOSS)) {
             abort(403, 'Доступ запрещен!');
@@ -110,7 +111,6 @@ class LoadController extends AdminController
             $sort   = check($request->input('sort'));
             $closed = empty($request->input('closed')) ? 0 : 1;
 
-            $validator = new Validator();
             $validator->equal($token, $_SESSION['token'], 'Неверный идентификатор сессии, повторите действие!')
                 ->length($name, 5, 50, ['title' => 'Слишком длинное или короткое название раздела!'])
                 ->notEqual($parent, $load->id, ['parent' => 'Недопустимый выбор родительского раздела!']);
@@ -142,12 +142,13 @@ class LoadController extends AdminController
     /**
      * Удаление раздела
      *
-     * @param int     $id
-     * @param Request $request
+     * @param int       $id
+     * @param Request   $request
+     * @param Validator $validator
      * @return void
      * @throws \Exception
      */
-    public function delete(int $id, Request $request): void
+    public function delete(int $id, Request $request, Validator $validator): void
     {
         if (! isAdmin(User::BOSS)) {
             abort(403, 'Доступ запрещен!');
@@ -162,7 +163,6 @@ class LoadController extends AdminController
 
         $token = check($request->input('token'));
 
-        $validator = new Validator();
         $validator->equal($token, $_SESSION['token'], 'Неверный идентификатор сессии, повторите действие!')
             ->true($load->children->isEmpty(), 'Удаление невозможно! Данный раздел имеет подразделы!');
 
@@ -258,11 +258,12 @@ class LoadController extends AdminController
     /**
      * Редактирование загрузки
      *
-     * @param int     $id
-     * @param Request $request
+     * @param int       $id
+     * @param Request   $request
+     * @param Validator $validator
      * @return string
      */
-    public function editDown(int $id, Request $request): string
+    public function editDown(int $id, Request $request, Validator $validator): string
     {
         /** @var Down $down */
         $down = Down::query()->find($id);
@@ -281,7 +282,6 @@ class LoadController extends AdminController
             /** @var Load $category */
             $category = Load::query()->find($category);
 
-            $validator = new Validator();
             $validator->equal($token, $_SESSION['token'], 'Неверный идентификатор сессии, повторите действие!')
                 ->length($title, 5, 50, ['title' => 'Слишком длинное или короткое название!'])
                 ->length($text, 50, 5000, ['text' => 'Слишком длинное или короткое описание!'])

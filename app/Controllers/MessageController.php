@@ -81,10 +81,11 @@ class MessageController extends BaseController
     /**
      * Отправка сообщений
      *
-     * @param Request $request
+     * @param Request   $request
+     * @param Validator $validator
      * @return string
      */
-    public function send(Request $request): string
+    public function send(Request $request, Validator $validator): string
     {
         $login = check($request->input('user'));
 
@@ -99,7 +100,6 @@ class MessageController extends BaseController
             $token   = check($request->input('token'));
             $msg     = check($request->input('msg'));
 
-            $validator = new Validator();
             $validator->equal($token, $_SESSION['token'], ['msg' => 'Неверный идентификатор сессии, повторите действие!'])
                 ->true($user, ['user' => 'Пользователь не найден!'])
                 ->length($msg, 5, 1000, ['msg' => 'Слишком длинное или короткое сообщение!'])
@@ -169,16 +169,16 @@ class MessageController extends BaseController
     /**
      * Удаление сообщений
      *
-     * @param Request $request
+     * @param Request   $request
+     * @param Validator $validator
      */
-    public function delete(Request $request): void
+    public function delete(Request $request, Validator $validator): void
     {
         $token = check($request->input('token'));
         $type  = check($request->input('type'));
         $del   = intar($request->input('del'));
         $page  = int($request->input('page', 1));
 
-        $validator = new Validator();
         $validator->equal($token, $_SESSION['token'], 'Неверный идентификатор сессии, повторите действие!')
             ->true($del, 'Отсутствуют выбранные сообщения для удаления!');
 
@@ -208,15 +208,15 @@ class MessageController extends BaseController
     /**
      * Очистка сообщений
      *
-     * @param Request $request
+     * @param Request   $request
+     * @param Validator $validator
      */
-    public function clear(Request $request): void
+    public function clear(Request $request, Validator $validator): void
     {
         $token = check($request->input('token'));
         $type  = check($request->input('type'));
         $page  = int($request->input('page', 1));
 
-        $validator = new Validator();
         $validator->equal($token, $_SESSION['token'], 'Неверный идентификатор сессии, повторите действие!')
             ->empty(getUser('newprivat'), 'У вас имеются непрочитанные сообщения!');
 

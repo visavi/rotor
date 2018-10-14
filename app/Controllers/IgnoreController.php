@@ -24,17 +24,17 @@ class IgnoreController extends BaseController
     /**
      * Главная страница
      *
-     * @param Request $request
+     * @param Request   $request
+     * @param Validator $validator
      * @return string
      */
-    public function index(Request $request): string
+    public function index(Request $request, Validator $validator): string
     {
         if ($request->isMethod('post')) {
             $page  = int($request->input('page', 1));
             $token = check($request->input('token'));
             $login = check($request->input('user'));
 
-            $validator = new Validator();
             $validator->equal($token, $_SESSION['token'], 'Неверный идентификатор сессии, повторите действие!');
 
             $user = User::query()->where('login', $login)->first();
@@ -88,11 +88,12 @@ class IgnoreController extends BaseController
     /**
      * Заметка для пользователя
      *
-     * @param int     $id
-     * @param Request $request
+     * @param int       $id
+     * @param Request   $request
+     * @param Validator $validator
      * @return string
      */
-    public function note(int $id, Request $request): string
+    public function note(int $id, Request $request, Validator $validator): string
     {
         $ignore = Ignore::query()
             ->where('user_id', getUser('id'))
@@ -108,7 +109,6 @@ class IgnoreController extends BaseController
             $token = check($request->input('token'));
             $msg   = check($request->input('msg'));
 
-            $validator = new Validator();
             $validator->equal($token, $_SESSION['token'], ['msg' => 'Неверный идентификатор сессии, повторите действие!'])
                 ->length($msg, 0, 1000, ['msg' => 'Слишком большая заметка, не более 1000 символов!']);
 
@@ -132,15 +132,15 @@ class IgnoreController extends BaseController
     /**
      * Удаление контактов
      *
-     * @param Request $request
+     * @param Request   $request
+     * @param Validator $validator
      */
-    public function delete(Request $request): void
+    public function delete(Request $request, Validator $validator): void
     {
         $page  = int($request->input('page', 1));
         $token = check($request->input('token'));
         $del   = intar($request->input('del'));
 
-        $validator = new Validator();
         $validator->equal($token, $_SESSION['token'], 'Неверный идентификатор сессии, повторите действие!')
             ->true($del, 'Отсутствуют выбранные пользователи для удаления!');
 

@@ -112,10 +112,11 @@ class FilesController extends AdminController
     /**
      * Создание файла
      *
-     * @param Request $request
+     * @param Request   $request
+     * @param Validator $validator
      * @return string
      */
-    public function create(Request $request): string
+    public function create(Request $request, Validator $validator): string
     {
         if (! is_writable(RESOURCES . '/views/' . $this->path)) {
             abort('default', 'Директория ' . $this->path . ' недоступна для записи!');
@@ -129,7 +130,6 @@ class FilesController extends AdminController
             $fileName = $this->path ? '/' . $filename : $filename;
             $dirName  = $this->path ? '/' . $dirname : $dirname;
 
-            $validator = new Validator();
             $validator->equal($token, $_SESSION['token'], 'Неверный идентификатор сессии, повторите действие!');
 
             if ($filename) {
@@ -173,10 +173,11 @@ class FilesController extends AdminController
     /**
      * Удаление файла
      *
-     * @param Request $request
+     * @param Request   $request
+     * @param Validator $validator
      * @return void
      */
-    public function delete(Request $request): void
+    public function delete(Request $request, Validator $validator): void
     {
         if (! is_writable(RESOURCES . '/views/' . $this->path)) {
             abort('default', 'Директория ' . $this->path . ' недоступна для записи!');
@@ -189,7 +190,6 @@ class FilesController extends AdminController
         $fileName = $this->path ? '/' . $filename : $filename;
         $dirName  = $this->path ? '/' . $dirname : $dirname;
 
-        $validator = new Validator();
         $validator->equal($token, $_SESSION['token'], 'Неверный идентификатор сессии, повторите действие!');
 
         if ($filename) {

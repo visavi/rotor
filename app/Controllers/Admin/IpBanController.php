@@ -24,16 +24,16 @@ class IpBanController extends AdminController
     /**
      * Главная страница
      *
-     * @param Request $request
+     * @param Request   $request
+     * @param Validator $validator
      * @return string
      */
-    public function index(Request $request): string
+    public function index(Request $request, Validator $validator): string
     {
         if ($request->isMethod('post')) {
             $token = check($request->input('token'));
             $ip    = check($request->input('ip'));
 
-            $validator = new Validator();
             $validator->equal($token, $_SESSION['token'], 'Неверный идентификатор сессии, повторите действие!')
                 ->regex($ip, '|^[0-9]{1,3}\.[0-9,*]{1,3}\.[0-9,*]{1,3}\.[0-9,*]{1,3}$|', ['ip' => 'Вы ввели недопустимый IP-адрес для бана!']);
 
@@ -74,16 +74,16 @@ class IpBanController extends AdminController
     /**
      * Удаление ip
      *
-     * @param Request $request
+     * @param Request   $request
+     * @param Validator $validator
      * @return void
      */
-    public function delete(Request $request): void
+    public function delete(Request $request, Validator $validator): void
     {
         $page  = int($request->input('page', 1));
         $token = check($request->input('token'));
         $del   = intar($request->input('del'));
 
-        $validator = new Validator();
         $validator->equal($token, $_SESSION['token'], 'Неверный идентификатор сессии, повторите действие!')
             ->true($del, 'Отсутствуют выбранные ip для удаления!');
 
@@ -103,14 +103,14 @@ class IpBanController extends AdminController
     /**
      * Очистка ip
      *
-     * @param Request $request
+     * @param Request   $request
+     * @param Validator $validator
      * @return void
      */
-    public function clear(Request $request): void
+    public function clear(Request $request, Validator $validator): void
     {
         $token = check($request->input('token'));
 
-        $validator = new Validator();
         $validator
             ->equal($token, $_SESSION['token'], 'Неверный идентификатор сессии, повторите действие!')
             ->true(isAdmin(User::BOSS), 'Очищать список IP может только владелец!');

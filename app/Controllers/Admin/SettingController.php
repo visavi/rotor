@@ -24,10 +24,11 @@ class SettingController extends AdminController
     /**
      * Главная страница
      *
-     * @param Request $request
+     * @param Request   $request
+     * @param Validator $validator
      * @return string
      */
-    public function index(Request $request): string
+    public function index(Request $request, Validator $validator): string
     {
         $act = check($request->input('act', 'main'));
 
@@ -42,7 +43,6 @@ class SettingController extends AdminController
             $opt   = check($request->input('opt'));
             $token = check($request->input('token'));
 
-            $validator = new Validator();
             $validator->equal($token, $_SESSION['token'], ['msg' => 'Неверный идентификатор сессии, повторите действие!'])
                 ->notEmpty($sets, ['sets' => 'Ошибка! Не переданы настройки сайта']);
 

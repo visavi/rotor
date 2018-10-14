@@ -12,10 +12,11 @@ class ChatController extends AdminController
     /**
      * Главная страница
      *
-     * @param Request $request
+     * @param Request   $request
+     * @param Validator $validator
      * @return string
      */
-    public function index(Request $request): string
+    public function index(Request $request, Validator $validator): string
     {
         if (getUser('newchat') !== statsNewChat()) {
             getUser()->update([
@@ -27,7 +28,6 @@ class ChatController extends AdminController
             $msg   = check($request->input('msg'));
             $token = check($request->input('token'));
 
-            $validator = new Validator();
             $validator->equal($token, $_SESSION['token'], ['msg' => 'Неверный идентификатор сессии, повторите действие!'])
                 ->length($msg, 5, 1500, ['msg' => 'Слишком длинное или короткое сообщение!']);
 
@@ -82,11 +82,12 @@ class ChatController extends AdminController
     /**
      * Редактирование сообщения
      *
-     * @param int     $id
-     * @param Request $request
+     * @param int       $id
+     * @param Request   $request
+     * @param Validator $validator
      * @return string
      */
-    public function edit(int $id, Request $request): string
+    public function edit(int $id, Request $request, Validator $validator): string
     {
         $page  = int($request->input('page', 1));
 
@@ -110,7 +111,6 @@ class ChatController extends AdminController
             $msg   = check($request->input('msg'));
             $token = check($request->input('token'));
 
-            $validator = new Validator();
             $validator->equal($token, $_SESSION['token'], ['msg' => 'Неверный идентификатор сессии, повторите действие!'])
                 ->length($msg, 5, 1500, ['msg' => 'Слишком длинное или короткое сообщение!']);
 
@@ -136,14 +136,14 @@ class ChatController extends AdminController
     /**
      * Очистка чата
      *
-     * @param Request $request
+     * @param Request   $request
+     * @param Validator $validator
      * @return void
      */
-    public function clear(Request $request): void
+    public function clear(Request $request, Validator $validator): void
     {
         $token = check($request->input('token'));
 
-        $validator = new Validator();
         $validator
             ->equal($token, $_SESSION['token'], 'Неверный идентификатор сессии, повторите действие!')
             ->true(isAdmin(User::BOSS), 'Очищать чат может только владелец!');

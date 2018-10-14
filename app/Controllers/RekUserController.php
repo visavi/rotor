@@ -45,10 +45,11 @@ class RekUserController extends BaseController
     /**
      * Покупка рекламы
      *
-     * @param Request $request
+     * @param Request   $request
+     * @param Validator $validator
      * @return string
      */
-    public function create(Request $request): string
+    public function create(Request $request, Validator $validator): string
     {
         if (! getUser()) {
             abort(403, 'Для покупки рекламы необходимо авторизоваться!');
@@ -89,7 +90,6 @@ class RekUserController extends BaseController
                 $price += setting('rekuseroptprice');
             }
 
-            $validator = new Validator();
             $validator->equal($token, $_SESSION['token'], 'Неверный идентификатор сессии, повторите действие!')
                 ->gte(getUser('point'), setting('rekuserpoint'), 'Для покупки рекламы вам необходимо набрать '.plural(50, setting('scorename')).'!')
                 ->true(captchaVerify(), ['protect' => 'Не удалось пройти проверку captcha!'])

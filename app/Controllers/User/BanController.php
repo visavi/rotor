@@ -13,10 +13,11 @@ class BanController extends BaseController
     /**
      * Бан пользователя
      *
-     * @param Request $request
+     * @param Request   $request
+     * @param Validator $validator
      * @return string
      */
-    public function ban(Request $request): string
+    public function ban(Request $request, Validator $validator): string
     {
         if (! $user = getUser()) {
             abort(403, 'Вы не авторизованы!');
@@ -48,7 +49,6 @@ class BanController extends BaseController
 
             $sendUser = getUserById($banhist->send_user_id);
 
-            $validator = new Validator();
             $validator
                 ->true(setting('addbansend'), 'Писать объяснительные запрещено администрацией!')
                 ->true($banhist->explain, 'Ошибка! Вы уже писали объяснение!')

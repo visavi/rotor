@@ -64,17 +64,17 @@ class InvitationController extends AdminController
     /**
      * Создание ключей
      *
-     * @param Request $request
+     * @param Request   $request
+     * @param Validator $validator
      * @return string
      * @throws \Exception
      */
-    public function create(Request $request): string
+    public function create(Request $request, Validator $validator): string
     {
         if ($request->isMethod('post')) {
             $token  = check($request->input('token'));
             $keys   = int($request->input('keys'));
 
-            $validator = new Validator();
             $validator->equal($token, $_SESSION['token'], 'Неверный идентификатор сессии, повторите действие!')
                 ->notEmpty($keys, ['keys' => 'Не указано число ключей!']);
 
@@ -108,11 +108,12 @@ class InvitationController extends AdminController
     /**
      * Отправка ключей пользователю
      *
-     * @param Request $request
+     * @param Request   $request
+     * @param Validator $validator
      * @return void
      * @throws \Exception
      */
-    public function send(Request $request): void
+    public function send(Request $request, Validator $validator): void
     {
         $token    = check($request->input('token'));
         $login    = check($request->input('user'));
@@ -121,7 +122,6 @@ class InvitationController extends AdminController
         /* @var User $user */
         $user = getUserByLogin($login);
 
-        $validator = new Validator();
         $validator->equal($token, $_SESSION['token'], 'Неверный идентификатор сессии, повторите действие!')
             ->notEmpty($user, ['user' => 'Пользователя с данным логином не существует!'])
             ->notEmpty($userkeys, ['userkeys' => 'Не указано число ключей!']);
@@ -161,15 +161,15 @@ class InvitationController extends AdminController
     /**
      * Отправка ключей активным пользователям
      *
-     * @param Request $request
+     * @param Request   $request
+     * @param Validator $validator
      * @return void
      * @throws \Exception
      */
-    public function mail(Request $request): void
+    public function mail(Request $request, Validator $validator): void
     {
         $token = check($request->input('token'));
 
-        $validator = new Validator();
         $validator->equal($token, $_SESSION['token'], 'Неверный идентификатор сессии, повторите действие!')
             ->true(isAdmin(User::BOSS), 'Рассылать ключи может только владелец');
 
@@ -209,17 +209,17 @@ class InvitationController extends AdminController
     /**
      * Удаление ключей
      *
-     * @param Request $request
+     * @param Request   $request
+     * @param Validator $validator
      * @return void
      */
-    public function delete(Request $request): void
+    public function delete(Request $request, Validator $validator): void
     {
         $page  = int($request->input('page', 1));
         $token = check($request->input('token'));
         $del   = intar($request->input('del'));
         $used  = $request->input('used') ? 1 : 0;
 
-        $validator = new Validator();
         $validator->equal($token, $_SESSION['token'], 'Неверный идентификатор сессии, повторите действие!')
             ->true($del, 'Отсутствуют выбранные записи для удаления!');
 

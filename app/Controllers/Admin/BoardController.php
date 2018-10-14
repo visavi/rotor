@@ -81,10 +81,11 @@ class BoardController extends AdminController
     /**
      * Создание раздела
      *
-     * @param Request $request
+     * @param Request   $request
+     * @param Validator $validator
      * @return void
      */
-    public function create(Request $request): void
+    public function create(Request $request, Validator $validator): void
     {
         if (! isAdmin(User::BOSS)) {
             abort(403, 'Доступ запрещен!');
@@ -93,7 +94,6 @@ class BoardController extends AdminController
         $token = check($request->input('token'));
         $name  = check($request->input('name'));
 
-        $validator = new Validator();
         $validator->equal($token, $_SESSION['token'], trans('validator.token'))
             ->length($name, 3, 50, ['name' => 'Слишком длинное или короткое название раздела!']);
 
@@ -120,11 +120,12 @@ class BoardController extends AdminController
     /**
      * Редактирование раздела
      *
-     * @param int     $id
-     * @param Request $request
+     * @param int       $id
+     * @param Request   $request
+     * @param Validator $validator
      * @return string
      */
-    public function edit(int $id, Request $request): string
+    public function edit(int $id, Request $request, Validator $validator): string
     {
         if (! isAdmin(User::BOSS)) {
             abort(403, 'Доступ запрещен!');
@@ -149,7 +150,6 @@ class BoardController extends AdminController
             $sort   = check($request->input('sort'));
             $closed = empty($request->input('closed')) ? 0 : 1;
 
-            $validator = new Validator();
             $validator->equal($token, $_SESSION['token'], trans('validator.token'))
                 ->length($name, 3, 50, ['title' => 'Слишком длинное или короткое название раздела!'])
                 ->notEqual($parent, $board->id, ['parent' => 'Недопустимый выбор родительского раздела!']);
@@ -181,11 +181,12 @@ class BoardController extends AdminController
     /**
      * Удаление раздела
      *
-     * @param int     $id
-     * @param Request $request
+     * @param int       $id
+     * @param Request   $request
+     * @param Validator $validator
      * @throws Exception
      */
-    public function delete(int $id, Request $request): void
+    public function delete(int $id, Request $request, Validator $validator): void
     {
         if (! isAdmin(User::BOSS)) {
             abort(403, 'Доступ запрещен!');
@@ -200,7 +201,6 @@ class BoardController extends AdminController
 
         $token = check($request->input('token'));
 
-        $validator = new Validator();
         $validator->equal($token, $_SESSION['token'], trans('validator.token'))
             ->true($board->children->isEmpty(), 'Удаление невозможно! Данный раздел имеет подразделы!');
 
@@ -224,11 +224,12 @@ class BoardController extends AdminController
     /**
      * Редактирование объявления
      *
-     * @param int     $id
-     * @param Request $request
+     * @param int       $id
+     * @param Request   $request
+     * @param Validator $validator
      * @return string
      */
-    public function editItem(int $id, Request $request): string
+    public function editItem(int $id, Request $request, Validator $validator): string
     {
         /** @var Item $item */
         $item = Item::query()->find($id);
@@ -248,7 +249,6 @@ class BoardController extends AdminController
             /** @var Board $board */
             $board = Board::query()->find($bid);
 
-            $validator = new Validator();
             $validator
                 ->equal($token, $_SESSION['token'], trans('validator.token'))
                 ->length($title, 5, 50, ['title' => trans('validator.name')])
@@ -296,11 +296,12 @@ class BoardController extends AdminController
     /**
      * Удаление объявления
      *
-     * @param int     $id
-     * @param Request $request
+     * @param int       $id
+     * @param Request   $request
+     * @param Validator $validator
      * @throws Exception
      */
-    public function deleteItem(int $id, Request $request): void
+    public function deleteItem(int $id, Request $request, Validator $validator): void
     {
         $token = check($request->input('token'));
 
@@ -311,7 +312,6 @@ class BoardController extends AdminController
             abort(404, 'Данного объявления не существует!');
         }
 
-        $validator = new Validator();
         $validator->equal($token, $_SESSION['token'], 'Неверный идентификатор сессии, повторите действие!');
 
         if ($validator->isValid()) {

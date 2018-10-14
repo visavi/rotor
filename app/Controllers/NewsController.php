@@ -62,11 +62,12 @@ class NewsController extends BaseController
     /**
      * Комментарии
      *
-     * @param int     $id
-     * @param Request $request
+     * @param int       $id
+     * @param Request   $request
+     * @param Validator $validator
      * @return string
      */
-    public function comments(int $id, Request $request): string
+    public function comments(int $id, Request $request, Validator $validator): string
     {
         /** @var News $news */
         $news = News::query()->find($id);
@@ -79,7 +80,6 @@ class NewsController extends BaseController
             $msg   = check($request->input('msg'));
             $token = check($request->input('token'));
 
-            $validator = new Validator();
             $validator->true(getUser(), 'Чтобы добавить комментарий необходимо авторизоваться')
                 ->equal($token, $_SESSION['token'], 'Неверный идентификатор сессии, повторите действие!')
                 ->equal(Flood::isFlood(), true, ['msg' => 'Антифлуд! Разрешается комментировать раз в ' . Flood::getPeriod() . ' сек!'])
@@ -147,12 +147,13 @@ class NewsController extends BaseController
     /**
      * Редактирование комментария
      *
-     * @param int     $id
-     * @param int     $cid
-     * @param Request $request
+     * @param int       $id
+     * @param int       $cid
+     * @param Request   $request
+     * @param Validator $validator
      * @return string
      */
-    public function editComment(int $id, int $cid, Request $request): string
+    public function editComment(int $id, int $cid, Request $request, Validator $validator): string
     {
         $page = int($request->input('page', 1));
 
@@ -185,7 +186,6 @@ class NewsController extends BaseController
             $msg   = check($request->input('msg'));
             $token = check($request->input('token'));
 
-            $validator = new Validator();
             $validator
                 ->equal($token, $_SESSION['token'], 'Неверный идентификатор сессии, повторите действие!')
                 ->length($msg, 5, 1000, ['msg' => 'Слишком длинный или короткий комментарий!']);

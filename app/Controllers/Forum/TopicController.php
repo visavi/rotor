@@ -99,11 +99,12 @@ class TopicController extends BaseController
     /**
      * Создание сообщения
      *
-     * @param int     $id
-     * @param Request $request
+     * @param int       $id
+     * @param Request   $request
+     * @param Validator $validator
      * @return void
      */
-    public function create(int $id, Request $request): void
+    public function create(int $id, Request $request, Validator $validator): void
     {
         $msg   = check($request->input('msg'));
         $token = check($request->input('token'));
@@ -123,7 +124,6 @@ class TopicController extends BaseController
             abort(404, 'Выбранная вами тема не существует, возможно она была удалена!');
         }
 
-        $validator = new Validator();
         $validator->equal($token, $_SESSION['token'], ['msg' => 'Неверный идентификатор сессии, повторите действие!'])
             ->empty($topic->closed, ['msg' => 'Запрещено писать в закрытую тему!'])
             ->equal(Flood::isFlood(), true, ['msg' => 'Антифлуд! Разрешается отправлять сообщения раз в ' . Flood::getPeriod() . ' сек!'])
@@ -224,11 +224,12 @@ class TopicController extends BaseController
     /**
      * Удаление сообщений
      *
-     * @param int     $id
-     * @param Request $request
+     * @param int       $id
+     * @param Request   $request
+     * @param Validator $validator
      * @return void
      */
-    public function delete(int $id, Request $request): void
+    public function delete(int $id, Request $request, Validator $validator): void
     {
         $token = check($request->input('token'));
         $del   = intar($request->input('del'));
@@ -243,7 +244,6 @@ class TopicController extends BaseController
 
         $isModer = \in_array(getUser('id'), explode(',', $topic->moderators), true) ? true : false;
 
-        $validator = new Validator();
         $validator->equal($token, $_SESSION['token'], 'Неверный идентификатор сессии, повторите действие!')
             ->true(getUser(), 'Для закрытия тем необходимо авторизоваться')
             ->notEmpty($del, 'Отстутствуют выбранные сообщения для удаления!')
@@ -281,18 +281,18 @@ class TopicController extends BaseController
     /**
      * Закрытие темы
      *
-     * @param int     $id
-     * @param Request $request
+     * @param int       $id
+     * @param Request   $request
+     * @param Validator $validator
      * @return void
      */
-    public function close(int $id, Request $request): void
+    public function close(int $id, Request $request, Validator $validator): void
     {
         $token = check($request->input('token'));
 
         /** @var Topic $topic */
         $topic = Topic::query()->find($id);
 
-        $validator = new Validator();
         $validator->equal($token, $_SESSION['token'], 'Неверный идентификатор сессии, повторите действие!')
             ->true(getUser(), 'Для закрытия тем необходимо авторизоваться')
             ->gte(getUser('point'), setting('editforumpoint'), 'Для закрытия тем вам необходимо набрать ' . plural(setting('editforumpoint'), setting('scorename')) . '!')
@@ -324,11 +324,12 @@ class TopicController extends BaseController
     /**
      * Редактирование темы
      *
-     * @param int     $id
-     * @param Request $request
+     * @param int       $id
+     * @param Request   $request
+     * @param Validator $validator
      * @return string
      */
-    public function edit(int $id, Request $request): string
+    public function edit(int $id, Request $request, Validator $validator): string
     {
         if (! getUser()) {
             abort(403, 'Авторизуйтесь для изменения темы!');
@@ -363,8 +364,6 @@ class TopicController extends BaseController
             $title = check($request->input('title'));
             $msg   = check($request->input('msg'));
 
-
-            $validator = new Validator();
             $validator->equal($token, $_SESSION['token'], 'Неверный идентификатор сессии, повторите действие!')
                 ->length($title, 5, 50, ['title' => 'Слишком длинное или короткое название темы!']);
 
@@ -402,11 +401,12 @@ class TopicController extends BaseController
     /**
      * Редактирование сообщения
      *
-     * @param int     $id
-     * @param Request $request
+     * @param int       $id
+     * @param Request   $request
+     * @param Validator $validator
      * @return string
      */
-    public function editPost(int $id, Request $request): string
+    public function editPost(int $id, Request $request, Validator $validator): string
     {
         $page = int($request->input('page'));
 
@@ -444,7 +444,6 @@ class TopicController extends BaseController
             $msg     = check($request->input('msg'));
             $delfile = intar($request->input('delfile'));
 
-            $validator = new Validator();
             $validator->equal($token, $_SESSION['token'], 'Неверный идентификатор сессии, повторите действие!')
                 ->length($msg, 5, setting('forumtextlength'), ['msg' => 'Слишком длинное или короткое сообщение!']);
 
@@ -488,11 +487,12 @@ class TopicController extends BaseController
     /**
      * Голосование
      *
-     * @param int     $id
-     * @param Request $request
+     * @param int       $id
+     * @param Request   $request
+     * @param Validator $validator
      * @return void
      */
-    public function vote(int $id, Request $request): void
+    public function vote(int $id, Request $request, Validator $validator): void
     {
         if (! getUser()) {
             abort(403, 'Авторизуйтесь для голосования!');
@@ -508,7 +508,6 @@ class TopicController extends BaseController
         $poll  = int($request->input('poll'));
         $page  = int($request->input('page'));
 
-        $validator = new Validator();
         $validator->equal($token, $_SESSION['token'], 'Неверный идентификатор сессии, повторите действие!');
 
         if ($vote->closed) {

@@ -29,10 +29,11 @@ class BlogController extends AdminController
     /**
      * Создание раздела
      *
-     * @param Request $request
+     * @param Request   $request
+     * @param Validator $validator
      * @return void
      */
-    public function create(Request $request): void
+    public function create(Request $request, Validator $validator): void
     {
         if (! isAdmin(User::BOSS)) {
             abort(403, 'Доступ запрещен!');
@@ -41,7 +42,6 @@ class BlogController extends AdminController
         $token = check($request->input('token'));
         $name  = check($request->input('name'));
 
-        $validator = new Validator();
         $validator->equal($token, $_SESSION['token'], 'Неверный идентификатор сессии, повторите действие!')
             ->length($name, 3, 50, ['name' => 'Слишком длинное или короткое название раздела!']);
 
@@ -68,11 +68,12 @@ class BlogController extends AdminController
     /**
      * Редактирование раздела
      *
-     * @param int     $id
-     * @param Request $request
+     * @param int       $id
+     * @param Request   $request
+     * @param Validator $validator
      * @return string
      */
-    public function edit(int $id, Request $request): string
+    public function edit(int $id, Request $request, Validator $validator): string
     {
         if (! isAdmin(User::BOSS)) {
             abort(403, 'Доступ запрещен!');
@@ -97,7 +98,6 @@ class BlogController extends AdminController
             $sort   = check($request->input('sort'));
             $closed = empty($request->input('closed')) ? 0 : 1;
 
-            $validator = new Validator();
             $validator->equal($token, $_SESSION['token'], 'Неверный идентификатор сессии, повторите действие!')
                 ->length($name, 3, 50, ['title' => 'Слишком длинное или короткое название раздела!'])
                 ->notEqual($parent, $category->id, ['parent' => 'Недопустимый выбор родительского раздела!']);
@@ -129,12 +129,13 @@ class BlogController extends AdminController
     /**
      * Удаление раздела
      *
-     * @param int     $id
-     * @param Request $request
+     * @param int       $id
+     * @param Request   $request
+     * @param Validator $validator
      * @return void
      * @throws \Exception
      */
-    public function delete(int $id, Request $request): void
+    public function delete(int $id, Request $request, Validator $validator): void
     {
         if (! isAdmin(User::BOSS)) {
             abort(403, 'Доступ запрещен!');
@@ -149,7 +150,6 @@ class BlogController extends AdminController
 
         $token = check($request->input('token'));
 
-        $validator = new Validator();
         $validator->equal($token, $_SESSION['token'], 'Неверный идентификатор сессии, повторите действие!')
             ->true($category->children->isEmpty(), 'Удаление невозможно! Данный раздел имеет подразделы!');
 
@@ -228,11 +228,12 @@ class BlogController extends AdminController
     /**
      * Редактирование статьи
      *
-     * @param int     $id
-     * @param Request $request
+     * @param int       $id
+     * @param Request   $request
+     * @param Validator $validator
      * @return string
      */
-    public function editBlog(int $id, Request $request): string
+    public function editBlog(int $id, Request $request, Validator $validator): string
     {
         /** @var Blog $blog */
         $blog = Blog::query()->find($id);
@@ -248,7 +249,6 @@ class BlogController extends AdminController
             $text  = check($request->input('text'));
             $tags  = check($request->input('tags'));
 
-            $validator = new Validator();
             $validator
                 ->equal($token, $_SESSION['token'], 'Неверный идентификатор сессии, повторите действие!')
                 ->length($title, 5, 50, ['title' => 'Слишком длинный или короткий заголовок!'])
@@ -283,11 +283,12 @@ class BlogController extends AdminController
     /**
      * Перенос статьи
      *
-     * @param int     $id
-     * @param Request $request
+     * @param int       $id
+     * @param Request   $request
+     * @param Validator $validator
      * @return string
      */
-    public function moveBlog(int $id, Request $request): string
+    public function moveBlog(int $id, Request $request, Validator $validator): string
     {
         /** @var Blog $blog */
         $blog = Blog::query()->find($id);
@@ -304,7 +305,6 @@ class BlogController extends AdminController
             /** @var Category $category */
             $category = Category::query()->find($cid);
 
-            $validator = new Validator();
             $validator
                 ->equal($token, $_SESSION['token'], 'Неверный идентификатор сессии, повторите действие!')
                 ->notEmpty($category, ['cid' => 'Категории для статьи не существует!']);
@@ -344,12 +344,13 @@ class BlogController extends AdminController
     /**
      * Удаление статьи
      *
-     * @param int     $id
-     * @param Request $request
+     * @param int       $id
+     * @param Request   $request
+     * @param Validator $validator
      * @return void
      * @throws \Exception
      */
-    public function deleteBlog(int $id, Request $request): void
+    public function deleteBlog(int $id, Request $request, Validator $validator): void
     {
         $page  = int($request->input('page', 1));
         $token = check($request->input('token'));
@@ -361,7 +362,6 @@ class BlogController extends AdminController
             abort(404, 'Данной статьи не существует!');
         }
 
-        $validator = new Validator();
         $validator->equal($token, $_SESSION['token'], 'Неверный идентификатор сессии, повторите действие!');
 
         if ($validator->isValid()) {

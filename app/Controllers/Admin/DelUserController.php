@@ -56,16 +56,16 @@ class DelUserController extends AdminController
     /**
      * Очистка пользователей
      *
-     * @param Request $request
+     * @param Request   $request
+     * @param Validator $validator
      * @return void
      */
-    public function clear(Request $request): void
+    public function clear(Request $request, Validator $validator): void
     {
         $token  = check($request->input('token'));
         $period = check($request->input('period'));
         $point  = check($request->input('point'));
 
-        $validator = new Validator();
         $validator
             ->equal($token, $_SESSION['token'], 'Неверный идентификатор сессии, повторите действие!')
             ->gte($period, 180, 'Указанно недопустимое время для удаления!');

@@ -20,10 +20,11 @@ class ReglistController extends AdminController
     /**
      * Главная страница
      *
-     * @param Request $request
+     * @param Request   $request
+     * @param Validator $validator
      * @return string
      */
-    public function index(Request $request): string
+    public function index(Request $request, Validator $validator): string
     {
         if ($request->isMethod('post')) {
             $page   = int($request->input('page', 1));
@@ -31,7 +32,6 @@ class ReglistController extends AdminController
             $choice = intar($request->input('choice'));
             $action = check($request->input('action'));
 
-            $validator = new Validator();
             $validator->equal($token, $_SESSION['token'], 'Неверный идентификатор сессии, повторите действие!')
                 ->notEmpty($choice, 'Отсутствуют выбранные пользователи!')
                 ->in($action, ['yes', 'no'], ['action' => 'Необходимо выбрать действие!']);

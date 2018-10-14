@@ -36,10 +36,11 @@ class StatusController extends AdminController
     /**
      * Добавление статуса
      *
-     * @param Request $request
+     * @param Request   $request
+     * @param Validator $validator
      * @return string
      */
-    public function create(Request $request): string
+    public function create(Request $request, Validator $validator): string
     {
         if ($request->isMethod('post')) {
             $token   = check($request->input('token'));
@@ -48,7 +49,6 @@ class StatusController extends AdminController
             $name    = check($request->input('name'));
             $color   = check($request->input('color'));
 
-            $validator = new Validator();
             $validator
                 ->equal($token, $_SESSION['token'], 'Неверный идентификатор сессии, повторите действие!')
                 ->length($name, 5, 30, ['name' => 'Слишком длинное или короткое название статуса!'])
@@ -77,10 +77,11 @@ class StatusController extends AdminController
     /**
      * Редактирование статуса
      *
-     * @param Request $request
+     * @param Request   $request
+     * @param Validator $validator
      * @return string
      */
-    public function edit(Request $request): string
+    public function edit(Request $request, Validator $validator): string
     {
         $id = int($request->input('id'));
 
@@ -97,7 +98,6 @@ class StatusController extends AdminController
             $name    = check($request->input('name'));
             $color   = check($request->input('color'));
 
-            $validator = new Validator();
             $validator
                 ->equal($token, $_SESSION['token'], 'Неверный идентификатор сессии, повторите действие!')
                 ->length($name, 5, 30, ['name' => 'Слишком длинное или короткое название статуса!'])
@@ -126,16 +126,16 @@ class StatusController extends AdminController
     /**
      * Удаление статуса
      *
-     * @param Request $request
+     * @param Request   $request
+     * @param Validator $validator
      * @return void
      * @throws \Exception
      */
-    public function delete(Request $request): void
+    public function delete(Request $request, Validator $validator): void
     {
         $token = check($request->input('token'));
         $id    = int($request->input('id'));
 
-        $validator = new Validator();
         $validator->equal($token, $_SESSION['token'], 'Неверный идентификатор сессии, повторите действие!');
 
         $status = Status::query()->find($id);

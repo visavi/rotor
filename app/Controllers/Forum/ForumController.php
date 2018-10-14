@@ -71,10 +71,11 @@ class ForumController extends BaseController
     /**
      * Создание новой темы
      *
-     * @param Request $request
+     * @param Request   $request
+     * @param Validator $validator
      * @return string
      */
-    public function create(Request $request): string
+    public function create(Request $request, Validator $validator): string
     {
         $fid = int($request->input('fid'));
 
@@ -104,7 +105,6 @@ class ForumController extends BaseController
             /** @var Forum $forum */
             $forum = Forum::query()->find($fid);
 
-            $validator = new Validator();
             $validator->equal($token, $_SESSION['token'], 'Неверный идентификатор сессии, повторите действие!')
                 ->notEmpty($forum, ['fid' => 'Форума для новой темы не существует!'])
                 ->equal(Flood::isFlood(), true, ['msg' => 'Антифлуд! Разрешается cоздавать темы раз в '.Flood::getPeriod().' сек!'])

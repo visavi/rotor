@@ -39,10 +39,11 @@ class NoticeController extends AdminController
     /**
      * Создание шаблона
      *
-     * @param Request $request
+     * @param Request   $request
+     * @param Validator $validator
      * @return string
      */
-    public function create(Request $request): string
+    public function create(Request $request, Validator $validator): string
     {
         if ($request->isMethod('post')) {
             $token   = check($request->input('token'));
@@ -51,7 +52,6 @@ class NoticeController extends AdminController
             $text    = check($request->input('text'));
             $protect = empty($request->input('protect')) ? 0 : 1;
 
-            $validator = new Validator();
             $validator->equal($token, $_SESSION['token'], 'Неверный идентификатор сессии, повторите действие!')
                 ->regex($type, '|^[a-z0-9_\-]+$|i', ['type' => 'Недопустимое название типа шаблона!'])
                 ->length($type, 3, 20, ['type' => 'Слишком длинный или короткий тип шаблона!'])
@@ -89,11 +89,12 @@ class NoticeController extends AdminController
     /**
      * Редактирование шаблона
      *
-     * @param int     $id
-     * @param Request $request
+     * @param int       $id
+     * @param Request   $request
+     * @param Validator $validator
      * @return string
      */
-    public function edit(int $id, Request $request): string
+    public function edit(int $id, Request $request, Validator $validator): string
     {
         /** @var Notice $notice */
         $notice = Notice::query()->find($id);
@@ -108,7 +109,6 @@ class NoticeController extends AdminController
             $text    = check($request->input('text'));
             $protect = empty($request->input('protect')) ? 0 : 1;
 
-            $validator = new Validator();
             $validator->equal($token, $_SESSION['token'], 'Неверный идентификатор сессии, повторите действие!')
                 ->length($name, 5, 100, ['name' => 'Слишком длинное или короткое название шаблона!'])
                 ->length($text, 10, 65000, ['text' => 'Слишком длинный или короткий текст шаблона!']);
@@ -138,19 +138,19 @@ class NoticeController extends AdminController
     /**
      * Удаление шаблона
      *
-     * @param int     $id
-     * @param Request $request
+     * @param int       $id
+     * @param Request   $request
+     * @param Validator $validator
      * @return void
      * @throws \Exception
      */
-    public function delete(int $id, Request $request): void
+    public function delete(int $id, Request $request, Validator $validator): void
     {
         /** @var Notice $notice */
         $notice = Notice::query()->find($id);
 
         $token = check($request->input('token'));
 
-        $validator = new Validator();
         $validator->equal($token, $_SESSION['token'], 'Неверный идентификатор сессии, повторите действие!')
             ->notEmpty($notice, 'Не найден шаблон для удаления!')
             ->empty($notice->protect, 'Запрещено удалять защищенный шаблон!');

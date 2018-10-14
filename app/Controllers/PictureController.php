@@ -25,17 +25,17 @@ class PictureController extends BaseController
     /**
      * Главная страница
      *
-     * @param Request $request
+     * @param Request   $request
+     * @param Validator $validator
      * @return string
      */
-    public function index(Request $request): string
+    public function index(Request $request, Validator $validator): string
     {
         if ($request->isMethod('post')) {
 
             $token = check($request->input('token'));
             $photo = $request->file('photo');
 
-            $validator = new Validator();
             $validator->equal($token, $_SESSION['token'], ['photo' => 'Неверный идентификатор сессии, повторите действие!']);
 
             $rules = [
@@ -83,13 +83,13 @@ class PictureController extends BaseController
     /**
      * Удаление фотографии
      *
-     * @param Request $request
+     * @param Request   $request
+     * @param Validator $validator
      */
-    public function delete(Request $request): void
+    public function delete(Request $request, Validator $validator): void
     {
         $token = check($request->input('token'));
 
-        $validator = new Validator();
         $validator->equal($token, $_SESSION['token'], ['photo' => 'Неверный идентификатор сессии, повторите действие!']);
 
 

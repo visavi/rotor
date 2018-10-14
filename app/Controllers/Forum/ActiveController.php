@@ -87,11 +87,12 @@ class ActiveController extends BaseController
     /**
      * Удаление сообщений
      *
-     * @param Request $request
+     * @param Request   $request
+     * @param Validator $validator
      * @return string
      * @throws \Exception
      */
-    public function delete(Request $request): string
+    public function delete(Request $request, Validator $validator): string
     {
         if (! $request->ajax()) {
             redirect('/');
@@ -104,7 +105,6 @@ class ActiveController extends BaseController
         $token = check($request->input('token'));
         $tid   = int($request->input('tid'));
 
-        $validator = new Validator();
         $validator->equal($token, $_SESSION['token'], 'Неверный идентификатор сессии, повторите действие!');
 
         $post = Post::query()

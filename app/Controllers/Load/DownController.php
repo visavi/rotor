@@ -55,11 +55,12 @@ class DownController extends BaseController
     /**
      * Редактирование загрузки
      *
-     * @param int     $id
-     * @param Request $request
+     * @param int       $id
+     * @param Request   $request
+     * @param Validator $validator
      * @return string
      */
-    public function edit(int $id, Request $request): string
+    public function edit(int $id, Request $request, Validator $validator): string
     {
         /** @var Down $down */
         $down = Down::query()->where('user_id', getUser('id'))->find($id);
@@ -78,7 +79,6 @@ class DownController extends BaseController
             $text  = check($request->input('text'));
             $files = (array) $request->file('files');
 
-            $validator = new Validator();
             $validator->equal($token, $_SESSION['token'], 'Неверный идентификатор сессии, повторите действие!')
                 ->length($title, 5, 50, ['title' => 'Слишком длинное или короткое название!'])
                 ->length($text, 50, 5000, ['text' => 'Слишком длинное или короткое описание!']);
@@ -159,10 +159,11 @@ class DownController extends BaseController
     /**
      * Создание загрузки
      *
-     * @param Request $request
+     * @param Request   $request
+     * @param Validator $validator
      * @return string
      */
-    public function create(Request $request): string
+    public function create(Request $request, Validator $validator): string
     {
         $cid = int($request->input('cid'));
 
@@ -194,7 +195,6 @@ class DownController extends BaseController
             /** @var Load $category */
             $category = Load::query()->find($cid);
 
-            $validator = new Validator();
             $validator
                 ->equal($token, $_SESSION['token'], 'Неверный идентификатор сессии, повторите действие!')
                 ->length($title, 5, 50, ['title' => 'Слишком длинное или короткое название!'])
@@ -265,11 +265,12 @@ class DownController extends BaseController
     /**
      * Голосование
      *
-     * @param int     $id
-     * @param Request $request
+     * @param int       $id
+     * @param Request   $request
+     * @param Validator $validator
      * @return void
      */
-    public function vote(int $id, Request $request): void
+    public function vote(int $id, Request $request, Validator $validator): void
     {
         $token = check($request->input('token'));
         $score = int($request->input('score'));
@@ -281,7 +282,6 @@ class DownController extends BaseController
             abort(404, 'Данного файла не существует!');
         }
 
-        $validator = new Validator();
         $validator
             ->equal($token, $_SESSION['token'], ['score' => 'Неверный идентификатор сессии, повторите действие!'])
             ->true(getUser(), ['score' => 'Для голосования необходимо авторизоваться!'])
@@ -332,10 +332,11 @@ class DownController extends BaseController
     /**
      * Скачивание файла
      *
-     * @param $id
+     * @param int       $id
+     * @param Validator $validator
      * @return void
      */
-    public function download(int $id): void
+    public function download(int $id, Validator $validator): void
     {
         /** @var File $file */
         $file = File::query()->where('relate_type', Down::class)->find($id);
@@ -348,7 +349,6 @@ class DownController extends BaseController
             abort('default', 'Данный файл еще не проверен модератором!');
         }
 
-        $validator = new Validator();
         $validator
             ->true(file_exists(HOME . $file->hash), 'Файла для скачивания не существует!');
 
@@ -381,11 +381,12 @@ class DownController extends BaseController
     /**
      * Комментарии
      *
-     * @param int     $id
-     * @param Request $request
+     * @param int       $id
+     * @param Request   $request
+     * @param Validator $validator
      * @return string
      */
-    public function comments(int $id, Request $request): string
+    public function comments(int $id, Request $request, Validator $validator): string
     {
         /** @var Down $down */
         $down = Down::query()->find($id);
@@ -403,7 +404,6 @@ class DownController extends BaseController
             $token = check($request->input('token'));
             $msg   = check($request->input('msg'));
 
-            $validator = new Validator();
             $validator
                 ->true(getUser(), 'Для добавления комментария необходимо авторизоваться!')
                 ->equal($token, $_SESSION['token'], 'Неверный идентификатор сессии, повторите действие!')
@@ -459,12 +459,13 @@ class DownController extends BaseController
     /**
      * Подготовка к редактированию комментария
      *
-     * @param int     $id
-     * @param int     $cid
-     * @param Request $request
+     * @param int       $id
+     * @param int       $cid
+     * @param Request   $request
+     * @param Validator $validator
      * @return string
      */
-    public function editComment(int $id, int $cid, Request $request): string
+    public function editComment(int $id, int $cid, Request $request, Validator $validator): string
     {
         $down = Down::query()->find($id);
 
@@ -497,7 +498,6 @@ class DownController extends BaseController
             $msg   = check($request->input('msg'));
             $page  = int($request->input('page', 1));
 
-            $validator = new Validator();
             $validator
                 ->equal($token, $_SESSION['token'], 'Неверный идентификатор сессии, повторите действие!')
                 ->length($msg, 5, 1000, ['msg' => 'Слишком длинный или короткий комментарий!']);

@@ -45,11 +45,12 @@ class NewsController extends AdminController
     /**
      * Редактирование новости
      *
-     * @param int     $id
-     * @param Request $request
+     * @param int       $id
+     * @param Request   $request
+     * @param Validator $validator
      * @return string
      */
-    public function edit(int $id, Request $request): string
+    public function edit(int $id, Request $request, Validator $validator): string
     {
         /** @var News $news */
         $news = News::query()->find($id);
@@ -67,7 +68,6 @@ class NewsController extends AdminController
             $closed = empty($request->input('closed')) ? 0 : 1;
             $top    = empty($request->input('top')) ? 0 : 1;
 
-            $validator = new Validator();
             $validator->equal($token, $_SESSION['token'], 'Неверный идентификатор сессии, повторите действие!')
                 ->length($title, 5, 50, ['title' => 'Слишком длинный или короткий заголовок новости!'])
                 ->length($text, 5, 10000, ['text' => 'Слишком длинный или короткий текст новости!']);
@@ -109,10 +109,11 @@ class NewsController extends AdminController
     /**
      * Создание новости
      *
-     * @param Request $request
+     * @param Request   $request
+     * @param Validator $validator
      * @return string
      */
-    public function create(Request $request): string
+    public function create(Request $request, Validator $validator): string
     {
         if ($request->isMethod('post')) {
             $token  = check($request->input('token'));
@@ -122,7 +123,6 @@ class NewsController extends AdminController
             $closed = empty($request->input('closed')) ? 0 : 1;
             $top    = empty($request->input('top')) ? 0 : 1;
 
-            $validator = new Validator();
             $validator->equal($token, $_SESSION['token'], 'Неверный идентификатор сессии, повторите действие!')
                 ->length($title, 5, 50, ['title' => 'Слишком длинный или короткий заголовок новости!'])
                 ->length($text, 5, 10000, ['text' => 'Слишком длинный или короткий текст новости!']);
@@ -197,12 +197,13 @@ class NewsController extends AdminController
     /**
      * Удаление новостей
      *
-     * @param int     $id
-     * @param Request $request
+     * @param int       $id
+     * @param Request   $request
+     * @param Validator $validator
      * @return void
      * @throws \Exception
      */
-    public function delete(int $id, Request $request): void
+    public function delete(int $id, Request $request, Validator $validator): void
     {
         $page  = int($request->input('page', 1));
         $token = check($request->input('token'));
@@ -214,7 +215,6 @@ class NewsController extends AdminController
             abort(404, 'Новость не существует, возможно она была удалена!');
         }
 
-        $validator = new Validator();
         $validator->equal($token, $_SESSION['token'], 'Неверный идентификатор сессии, повторите действие!');
 
         if ($validator->isValid()) {

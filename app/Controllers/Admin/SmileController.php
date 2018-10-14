@@ -46,10 +46,11 @@ class SmileController extends AdminController
     /**
      * Добавление смайла
      *
-     * @param Request $request
+     * @param Request   $request
+     * @param Validator $validator
      * @return string
      */
-    public function create(Request $request): string
+    public function create(Request $request, Validator $validator): string
     {
         if (! is_writable(UPLOADS.'/smiles')){
             abort('default', 'Директория со смайлами недоступна для записи!');
@@ -60,7 +61,6 @@ class SmileController extends AdminController
             $code  = check(utfLower($request->input('code')));
             $smile = $request->file('smile');
 
-            $validator = new Validator();
             $validator->equal($token, $_SESSION['token'], 'Неверный идентификатор сессии, повторите действие!')
                 ->length($code, 2, 20, ['code' => 'Слишком длинный или короткий код смайла!'])
                 ->regex($code, '|^:+[a-яa-z0-9_\-/\(\)]+$|i', ['code' => 'Код смайла должен начинаться с двоеточия. Разрешены буквы, цифры и дефис!']);
@@ -103,11 +103,12 @@ class SmileController extends AdminController
     /**
      * Редактирование смайла
      *
-     * @param int     $id
-     * @param Request $request
+     * @param int       $id
+     * @param Request   $request
+     * @param Validator $validator
      * @return string
      */
-    public function edit(int $id, Request $request): string
+    public function edit(int $id, Request $request, Validator $validator): string
     {
         /** @var Smile $smile */
         $smile = Smile::query()->find($id);
@@ -122,7 +123,6 @@ class SmileController extends AdminController
             $token = check($request->input('token'));
             $code  = check(utfLower($request->input('code')));
 
-            $validator = new Validator();
             $validator->equal($token, $_SESSION['token'], 'Неверный идентификатор сессии, повторите действие!')
                 ->length($code, 2, 20, ['code' => 'Слишком длинный или короткий код смайла!'])
                 ->regex($code, '|^:+[a-яa-z0-9_\-/\(\)]+$|i', ['code' => 'Код смайла должен начинаться с двоеточия. Разрешены буквы, цифры и дефис!']);
@@ -152,10 +152,11 @@ class SmileController extends AdminController
     /**
      * Удаление смайлов
      *
-     * @param Request $request
+     * @param Request   $request
+     * @param Validator $validator
      * @return void
      */
-    public function delete(Request $request): void
+    public function delete(Request $request, Validator $validator): void
     {
         if (! is_writable(UPLOADS . '/smiles')){
             abort('default', 'Директория со смайлами недоступна для записи!');
@@ -165,7 +166,6 @@ class SmileController extends AdminController
         $token = check($request->input('token'));
         $del   = intar($request->input('del'));
 
-        $validator = new Validator();
         $validator->equal($token, $_SESSION['token'], 'Неверный идентификатор сессии, повторите действие!')
             ->true($del, 'Отсутствуют выбранные смайлы для удаления!');
 

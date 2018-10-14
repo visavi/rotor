@@ -50,11 +50,12 @@ class WallController extends BaseController
     /**
      * Добавление сообщения
      *
-     * @param string  $login
-     * @param Request $request
+     * @param string    $login
+     * @param Request   $request
+     * @param Validator $validator
      * @return void
      */
-    public function create($login, Request $request): void
+    public function create($login, Request $request, Validator $validator): void
     {
         if (! getUser()) {
             abort(403, 'Для отправки сообщений необходимо авторизоваться!');
@@ -70,7 +71,6 @@ class WallController extends BaseController
             $token = check($request->input('token'));
             $msg   = check($request->input('msg'));
 
-            $validator = new Validator();
             $validator->equal($token, $_SESSION['token'], 'Неверный идентификатор сессии, повторите действие!')
                 ->length($msg, 5, 1000, ['msg' => 'Слишком длинное или короткое сообщение!'])
                 ->equal(Flood::isFlood(), true, ['msg' => 'Антифлуд! Разрешается отправлять сообщения раз в ' . Flood::getPeriod() . ' сек!']);
@@ -117,18 +117,18 @@ class WallController extends BaseController
     /**
      * Удаление сообщений
      *
-     * @param string  $login
-     * @param Request $request
+     * @param string    $login
+     * @param Request   $request
+     * @param Validator $validator
      * @return void
      */
-    public function delete(string $login, Request $request): void
+    public function delete(string $login, Request $request, Validator $validator): void
     {
         $id    = int($request->input('id'));
         $token = check($request->input('token'));
 
         $user = User::query()->where('login', $login)->first();
 
-        $validator = new Validator();
         $validator
             ->true($request->ajax(), 'Это не ajax запрос!')
             ->equal($token, $_SESSION['token'], 'Неверный идентификатор сессии, повторите действие!')

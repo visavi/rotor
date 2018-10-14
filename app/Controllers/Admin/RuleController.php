@@ -44,10 +44,11 @@ class RuleController extends AdminController
     /**
      * Редактирование правил
      *
-     * @param Request $request
+     * @param Request   $request
+     * @param Validator $validator
      * @return string
      */
-    public function edit(Request $request): string
+    public function edit(Request $request, Validator $validator): string
     {
         $rules = Rule::query()->firstOrNew([]);
 
@@ -55,7 +56,6 @@ class RuleController extends AdminController
             $token = check($request->input('token'));
             $msg   = check($request->input('msg'));
 
-            $validator = new Validator();
             $validator
                 ->equal($token, $_SESSION['token'], 'Неверный идентификатор сессии, повторите действие!')
                 ->notEmpty($msg, ['msg' => 'Вы не ввели текст с правилами сайта!']);

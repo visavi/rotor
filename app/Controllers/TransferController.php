@@ -41,16 +41,16 @@ class TransferController extends BaseController
     /**
      * Перевод денег
      *
-     * @param Request $request
+     * @param Request   $request
+     * @param Validator $validator
      * @return void
      */
-    public function send(Request $request): void
+    public function send(Request $request, Validator $validator): void
     {
         $money = int($request->input('money'));
         $msg   = check($request->input('msg'));
         $token = check($request->input('token'));
 
-        $validator = new Validator();
         $validator
             ->equal($token, $_SESSION['token'], ['msg' => 'Неверный идентификатор сессии, повторите действие!'])
             ->true($this->user, ['user' => 'Ошибка! Пользователь не найден!'])
