@@ -24,9 +24,10 @@ class InvitationController extends AdminController
     /**
      * Главная страница
      *
+     * @param Request $request
      * @return string
      */
-    public function index(): string
+    public function index(Request $request): string
     {
         $used = $request->input('used') ? 1 : 0;
 
@@ -63,10 +64,11 @@ class InvitationController extends AdminController
     /**
      * Создание ключей
      *
+     * @param Request $request
      * @return string
      * @throws \Exception
      */
-    public function create(): string
+    public function create(Request $request): string
     {
         if ($request->isMethod('post')) {
             $token  = check($request->input('token'));
@@ -106,10 +108,11 @@ class InvitationController extends AdminController
     /**
      * Отправка ключей пользователю
      *
+     * @param Request $request
      * @return void
      * @throws \Exception
      */
-    public function send(): void
+    public function send(Request $request): void
     {
         $token    = check($request->input('token'));
         $login    = check($request->input('user'));
@@ -158,12 +161,13 @@ class InvitationController extends AdminController
     /**
      * Отправка ключей активным пользователям
      *
+     * @param Request $request
      * @return void
      * @throws \Exception
      */
-    public function mail(): void
+    public function mail(Request $request): void
     {
-        $token    = check($request->input('token'));
+        $token = check($request->input('token'));
 
         $validator = new Validator();
         $validator->equal($token, $_SESSION['token'], 'Неверный идентификатор сессии, повторите действие!')
@@ -179,6 +183,7 @@ class InvitationController extends AdminController
 
         if ($validator->isValid()) {
 
+            /** @var User $user */
             foreach ($users as $user) {
                 $key = str_random(random_int(12, 15));
 
@@ -204,9 +209,10 @@ class InvitationController extends AdminController
     /**
      * Удаление ключей
      *
+     * @param Request $request
      * @return void
      */
-    public function delete(): void
+    public function delete(Request $request): void
     {
         $page  = int($request->input('page', 1));
         $token = check($request->input('token'));

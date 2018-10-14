@@ -24,9 +24,10 @@ class IpBanController extends AdminController
     /**
      * Главная страница
      *
+     * @param Request $request
      * @return string
      */
-    public function index(): string
+    public function index(Request $request): string
     {
         if ($request->isMethod('post')) {
             $token = check($request->input('token'));
@@ -73,9 +74,10 @@ class IpBanController extends AdminController
     /**
      * Удаление ip
      *
+     * @param Request $request
      * @return void
      */
-    public function delete(): void
+    public function delete(Request $request): void
     {
         $page  = int($request->input('page', 1));
         $token = check($request->input('token'));
@@ -101,9 +103,10 @@ class IpBanController extends AdminController
     /**
      * Очистка ip
      *
+     * @param Request $request
      * @return void
      */
-    public function clear(): void
+    public function clear(Request $request): void
     {
         $token = check($request->input('token'));
 

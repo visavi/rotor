@@ -36,9 +36,10 @@ class StatusController extends AdminController
     /**
      * Добавление статуса
      *
+     * @param Request $request
      * @return string
      */
-    public function create(): string
+    public function create(Request $request): string
     {
         if ($request->isMethod('post')) {
             $token   = check($request->input('token'));
@@ -76,9 +77,10 @@ class StatusController extends AdminController
     /**
      * Редактирование статуса
      *
+     * @param Request $request
      * @return string
      */
-    public function edit(): string
+    public function edit(Request $request): string
     {
         $id = int($request->input('id'));
 
@@ -124,10 +126,11 @@ class StatusController extends AdminController
     /**
      * Удаление статуса
      *
+     * @param Request $request
      * @return void
      * @throws \Exception
      */
-    public function delete(): void
+    public function delete(Request $request): void
     {
         $token = check($request->input('token'));
         $id    = int($request->input('id'));

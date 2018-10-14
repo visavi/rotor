@@ -30,8 +30,9 @@ class ErrorController extends AdminController
             abort(403, 'Доступ запрещен!');
         }
 
+        $request     = Request::createFromGlobals();
         $this->code  = int($request->input('code', 404));
-        $this->lists = [404 => 'Ошибки 404', 403 => 'Ошибки 403', 666 => 'Автобаны'];
+        $this->lists = [403 => 'Ошибки 403', 404 => 'Ошибки 404', 666 => 'Автобаны'];
 
         if (! isset($this->lists[$this->code])) {
             abort(404, 'Указанный лог-файл не существует!');
@@ -65,9 +66,10 @@ class ErrorController extends AdminController
     /**
      * Очистка логов
      *
+     * @param Request $request
      * @return void
      */
-    public function clear(): void
+    public function clear(Request $request): void
     {
         $token = check($request->input('token'));
 

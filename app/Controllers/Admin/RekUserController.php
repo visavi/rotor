@@ -40,13 +40,15 @@ class RekUserController extends AdminController
 
         return view('admin/rekusers/index', compact('records', 'page'));
     }
+
     /**
      * Редактирование ссылки
      *
-     * @param int $id
+     * @param int     $id
+     * @param Request $request
      * @return string
      */
-    public function edit(int $id): string
+    public function edit(int $id, Request $request): string
     {
         $page = int($request->input('page', 1));
         $link = RekUser::query()->find($id);
@@ -90,12 +92,14 @@ class RekUserController extends AdminController
 
         return view('admin/rekusers/edit', compact('link', 'page'));
     }
+
     /**
      * Удаление записей
      *
+     * @param Request $request
      * @return void
      */
-    public function delete(): void
+    public function delete(Request $request): void
     {
         $page  = int($request->input('page', 1));
         $token = check($request->input('token'));

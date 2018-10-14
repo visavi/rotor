@@ -23,9 +23,10 @@ class DelUserController extends AdminController
     /**
      * Главная страница
      *
+     * @param Request $request
      * @return string
      */
-    public function index(): string
+    public function index(Request $request): string
     {
         $users  = collect();
         $period = check($request->input('period'));
@@ -55,9 +56,10 @@ class DelUserController extends AdminController
     /**
      * Очистка пользователей
      *
+     * @param Request $request
      * @return void
      */
-    public function clear(): void
+    public function clear(Request $request): void
     {
         $token  = check($request->input('token'));
         $period = check($request->input('period'));

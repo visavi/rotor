@@ -12,9 +12,10 @@ class ChatController extends AdminController
     /**
      * Главная страница
      *
+     * @param Request $request
      * @return string
      */
-    public function index(): string
+    public function index(Request $request): string
     {
         if (getUser('newchat') !== statsNewChat()) {
             getUser()->update([
@@ -81,10 +82,11 @@ class ChatController extends AdminController
     /**
      * Редактирование сообщения
      *
-     * @param int $id
+     * @param int     $id
+     * @param Request $request
      * @return string
      */
-    public function edit(int $id): string
+    public function edit(int $id, Request $request): string
     {
         $page  = int($request->input('page', 1));
 
@@ -92,6 +94,7 @@ class ChatController extends AdminController
             abort(403);
         }
 
+        /** @var Chat $post */
         $post = Chat::query()->where('user_id', getUser('id'))->find($id);
 
         if (! $post) {
@@ -133,9 +136,10 @@ class ChatController extends AdminController
     /**
      * Очистка чата
      *
+     * @param Request $request
      * @return void
      */
-    public function clear(): void
+    public function clear(Request $request): void
     {
         $token = check($request->input('token'));
 

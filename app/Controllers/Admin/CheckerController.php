@@ -43,9 +43,10 @@ class CheckerController extends AdminController
     /**
      * Сканирование сайта
      *
+     * @param Request $request
      * @return void
      */
-    public function scan(): void
+    public function scan(Request $request): void
     {
         $token = check($request->input('token'));
 

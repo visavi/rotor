@@ -2,7 +2,6 @@
 
 namespace App\Tasks;
 
-use App\Models\Reader;
 use Crontask\Tasks\Task;
 
 class RestatementBoard extends Task

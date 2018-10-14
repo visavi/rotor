@@ -21,6 +21,7 @@ use Illuminate\Database\Eloquent\Relations\MorphMany;
  * @property int count_comments
  * @property int created_at
  * @property Collection files
+ * @property Category category
  */
 class Blog extends BaseModel
 {

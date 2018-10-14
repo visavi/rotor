@@ -28,6 +28,8 @@ use Illuminate\Http\UploadedFile;
  * @property int active
  * @property int updated_at
  * @property Collection files
+ * @property Collection comments
+ * @property Load category
  */
 class Down extends BaseModel
 {

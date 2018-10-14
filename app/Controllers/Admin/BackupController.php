@@ -45,9 +45,10 @@ class BackupController extends AdminController
     /**
      * Создание нового бэкапа
      *
+     * @param Request $request
      * @return string
      */
-    public function create(): string
+    public function create(Request $request): string
     {
         if ($request->isMethod('post')) {
 
@@ -132,9 +133,10 @@ class BackupController extends AdminController
     /**
      * Удаляет сохраненный бэкап
      *
+     * @param Request $request
      * @return void
      */
-    public function delete(): void
+    public function delete(Request $request): void
     {
         $token = check($request->input('token'));
         $file  = check($request->input('file'));

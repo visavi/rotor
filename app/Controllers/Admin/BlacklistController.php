@@ -10,11 +10,6 @@ use Illuminate\Http\Request;
 class BlacklistController extends AdminController
 {
     /**
-     * @var array
-     */
-    private $types;
-
-    /**
      * @var string
      */
     private $type;
@@ -30,10 +25,12 @@ class BlacklistController extends AdminController
             abort(403, 'Доступ запрещен!');
         }
 
-        $this->types = ['email', 'login', 'domain'];
+        $types = ['email', 'login', 'domain'];
+
+        $request    = Request::createFromGlobals();
         $this->type = $request->input('type', 'email');
 
-        if (! \in_array($this->type, $this->types, true)) {
+        if (! \in_array($this->type, $types, true)) {
             abort(404, 'Указанный тип не найден!');
         }
     }
@@ -41,9 +38,10 @@ class BlacklistController extends AdminController
     /**
      * Главная страница
      *
+     * @param Request $request
      * @return string
      */
-    public function index(): string
+    public function index(Request $request): string
     {
         $type = $this->type;
 
@@ -105,9 +103,10 @@ class BlacklistController extends AdminController
     /**
      * Удаление записей
      *
+     * @param Request $request
      * @return void
      */
-    public function delete(): void
+    public function delete(Request $request): void
     {
         $page  = int($request->input('page', 1));
         $token = check($request->input('token'));

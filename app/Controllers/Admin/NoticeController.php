@@ -39,9 +39,10 @@ class NoticeController extends AdminController
     /**
      * Создание шаблона
      *
+     * @param Request $request
      * @return string
      */
-    public function create(): string
+    public function create(Request $request): string
     {
         if ($request->isMethod('post')) {
             $token   = check($request->input('token'));
@@ -62,6 +63,7 @@ class NoticeController extends AdminController
 
             if ($validator->isValid()) {
 
+                /** @var Notice $notice */
                 $notice = Notice::query()->create([
                     'type'       => $type,
                     'name'       => $name,
@@ -87,11 +89,13 @@ class NoticeController extends AdminController
     /**
      * Редактирование шаблона
      *
-     * @param int $id
+     * @param int     $id
+     * @param Request $request
      * @return string
      */
-    public function edit(int $id): string
+    public function edit(int $id, Request $request): string
     {
+        /** @var Notice $notice */
         $notice = Notice::query()->find($id);
 
         if (! $notice) {
@@ -134,15 +138,17 @@ class NoticeController extends AdminController
     /**
      * Удаление шаблона
      *
-     * @param $id
+     * @param int     $id
+     * @param Request $request
      * @return void
      * @throws \Exception
      */
-    public function delete(int $id): void
+    public function delete(int $id, Request $request): void
     {
-        $token = check($request->input('token'));
-
+        /** @var Notice $notice */
         $notice = Notice::query()->find($id);
+
+        $token = check($request->input('token'));
 
         $validator = new Validator();
         $validator->equal($token, $_SESSION['token'], 'Неверный идентификатор сессии, повторите действие!')

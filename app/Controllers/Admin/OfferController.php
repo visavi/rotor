@@ -26,10 +26,11 @@ class OfferController extends AdminController
     /**
      * Главная страница
      *
-     * @param string $type
+     * @param string  $type
+     * @param Request $request
      * @return string
      */
-    public function index($type = Offer::OFFER): string
+    public function index(Request $request, $type = Offer::OFFER): string
     {
         $otherType = $type === Offer::OFFER ? Offer::ISSUE : Offer::OFFER;
 
@@ -87,10 +88,11 @@ class OfferController extends AdminController
     /**
      * Редактирование записи
      *
-     * @param int $id
+     * @param int     $id
+     * @param Request $request
      * @return string
      */
-    public function edit(int $id): string
+    public function edit(int $id, Request $request): string
     {
         $offer = Offer::query()->where('id', $id)->first();
 
@@ -139,10 +141,11 @@ class OfferController extends AdminController
     /**
      * Ответ на предложение
      *
-     * @param int $id
+     * @param int     $id
+     * @param Request $request
      * @return string
      */
-    public function reply(int $id): string
+    public function reply(int $id, Request $request): string
     {
         $offer = Offer::query()->where('id', $id)->first();
 
@@ -190,9 +193,10 @@ class OfferController extends AdminController
     /**
      * Пересчет комментариев
      *
+     * @param Request $request
      * @return void
      */
-    public function restatement(): void
+    public function restatement(Request $request): void
     {
         if (! isAdmin(User::BOSS)) {
             abort(403, 'Доступ запрещен!');
@@ -215,9 +219,10 @@ class OfferController extends AdminController
     /**
      * Удаление записей
      *
+     * @param Request $request
      * @return void
      */
-    public function delete(): void
+    public function delete(Request $request): void
     {
         $page  = int($request->input('page', 1));
         $token = check($request->input('token'));

@@ -45,13 +45,15 @@ class NewsController extends AdminController
     /**
      * Редактирование новости
      *
-     * @param int $id
+     * @param int     $id
+     * @param Request $request
      * @return string
      */
-    public function edit(int $id): string
+    public function edit(int $id, Request $request): string
     {
-        $page = int($request->input('page', 1));
+        /** @var News $news */
         $news = News::query()->find($id);
+        $page = int($request->input('page', 1));
 
         if (! $news) {
             abort(404, 'Новость не существует, возможно она была удалена!');
@@ -107,9 +109,10 @@ class NewsController extends AdminController
     /**
      * Создание новости
      *
+     * @param Request $request
      * @return string
      */
-    public function create(): string
+    public function create(Request $request): string
     {
         if ($request->isMethod('post')) {
             $token  = check($request->input('token'));
@@ -137,6 +140,7 @@ class NewsController extends AdminController
                     $upload = (new News())->uploadFile($image);
                 }
 
+                /** @var News $news */
                 $news = News::query()->create([
                     'user_id'    => getUser('id'),
                     'title'      => $title,
@@ -167,9 +171,10 @@ class NewsController extends AdminController
     /**
      * Пересчет комментариев
      *
+     * @param Request $request
      * @return void
      */
-    public function restatement(): void
+    public function restatement(Request $request): void
     {
         if (! isAdmin(User::BOSS)) {
             abort(403, 'Доступ запрещен!');
@@ -192,15 +197,17 @@ class NewsController extends AdminController
     /**
      * Удаление новостей
      *
-     * @param int $id
+     * @param int     $id
+     * @param Request $request
      * @return void
      * @throws \Exception
      */
-    public function delete(int $id): void
+    public function delete(int $id, Request $request): void
     {
         $page  = int($request->input('page', 1));
         $token = check($request->input('token'));
 
+        /** @var News $news */
         $news = News::query()->find($id);
 
         if (! $news) {

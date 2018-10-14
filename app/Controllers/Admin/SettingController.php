@@ -24,9 +24,10 @@ class SettingController extends AdminController
     /**
      * Главная страница
      *
+     * @param Request $request
      * @return string
      */
-    public function index(): string
+    public function index(Request $request): string
     {
         $act = check($request->input('act', 'main'));
 

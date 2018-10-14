@@ -64,10 +64,11 @@ class VoteController extends AdminController
     /**
      * Редактирование голосования
      *
-     * @param int $id
+     * @param int     $id
+     * @param Request $request
      * @return string
      */
-    public function edit(int $id): string
+    public function edit(int $id, Request $request): string
     {
         $vote = Vote::query()->where('id', $id)->first();
 
@@ -125,10 +126,11 @@ class VoteController extends AdminController
     /**
      * Удаление голосования
      *
-     * @param int $id
+     * @param int     $id
+     * @param Request $request
      * @return void
      */
-    public function delete(int $id): void
+    public function delete(int $id, Request $request): void
     {
         $token = check($request->input('token'));
         $vote  = Vote::query()->where('id', $id)->first();
@@ -160,10 +162,11 @@ class VoteController extends AdminController
     /**
      * Открытие-закрытие голосования
      *
-     * @param int $id
+     * @param int     $id
+     * @param Request $request
      * @return void
      */
-    public function close(int $id): void
+    public function close(int $id, Request $request): void
     {
         $token = check($request->input('token'));
         $vote  = Vote::query()->where('id', $id)->first();
@@ -201,9 +204,10 @@ class VoteController extends AdminController
     /**
      * Пересчет голосов
      *
+     * @param Request $request
      * @return void
      */
-    public function restatement(): void
+    public function restatement(Request $request): void
     {
         if (! isAdmin(User::BOSS)) {
             abort(403, 'Доступ запрещен!');
@@ -213,7 +217,7 @@ class VoteController extends AdminController
 
         if ($token === $_SESSION['token']) {
 
-            DB::update('update vote set count = (select SUM(result) from voteanswer where vote.id = voteanswer.vote_id)');
+            DB::update('update votes set count = (select SUM(result) from voteanswer where votes.id = voteanswer.vote_id)');
 
             setFlash('success', 'Голосования успешно пересчитаны!');
         } else {

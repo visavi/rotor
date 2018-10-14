@@ -41,9 +41,10 @@ class BanhistController extends AdminController
     /**
      * История банов
      *
+     * @param Request $request
      * @return string
      */
-    public function view(): string
+    public function view(Request $request): string
     {
         $login = check($request->input('user'));
 
@@ -70,9 +71,10 @@ class BanhistController extends AdminController
     /**
      * Удаление банов
      *
+     * @param Request $request
      * @return void
      */
-    public function delete(): void
+    public function delete(Request $request): void
     {
         $page  = int($request->input('page', 1));
         $token = check($request->input('token'));

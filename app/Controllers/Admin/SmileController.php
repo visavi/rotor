@@ -46,9 +46,10 @@ class SmileController extends AdminController
     /**
      * Добавление смайла
      *
+     * @param Request $request
      * @return string
      */
-    public function create(): string
+    public function create(Request $request): string
     {
         if (! is_writable(UPLOADS.'/smiles')){
             abort('default', 'Директория со смайлами недоступна для записи!');
@@ -102,14 +103,15 @@ class SmileController extends AdminController
     /**
      * Редактирование смайла
      *
-     * @param int $id
+     * @param int     $id
+     * @param Request $request
      * @return string
      */
-    public function edit(int $id): string
+    public function edit(int $id, Request $request): string
     {
-        $page = int($request->input('page', 1));
-
+        /** @var Smile $smile */
         $smile = Smile::query()->find($id);
+        $page = int($request->input('page', 1));
 
         if (! $smile) {
             abort(404, 'Данного смайла не существует!');
@@ -150,9 +152,10 @@ class SmileController extends AdminController
     /**
      * Удаление смайлов
      *
+     * @param Request $request
      * @return void
      */
-    public function delete(): void
+    public function delete(Request $request): void
     {
         if (! is_writable(UPLOADS . '/smiles')){
             abort('default', 'Директория со смайлами недоступна для записи!');

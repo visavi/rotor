@@ -42,9 +42,10 @@ class LoadController extends AdminController
     /**
      * Создание раздела
      *
+     * @param Request $request
      * @return void
      */
-    public function create(): void
+    public function create(Request $request): void
     {
         if (! isAdmin(User::BOSS)) {
             abort(403, 'Доступ запрещен!');
@@ -61,6 +62,7 @@ class LoadController extends AdminController
 
             $max = Load::query()->max('sort') + 1;
 
+            /** @var Load $load */
             $load = Load::query()->create([
                 'name' => $name,
                 'sort' => $max,
@@ -79,15 +81,17 @@ class LoadController extends AdminController
     /**
      * Редактирование раздела
      *
-     * @param int $id
+     * @param int     $id
+     * @param Request $request
      * @return string
      */
-    public function edit(int $id): string
+    public function edit(int $id, Request $request): string
     {
         if (! isAdmin(User::BOSS)) {
             abort(403, 'Доступ запрещен!');
         }
 
+        /** @var Load $load */
         $load = Load::query()->with('children')->find($id);
 
         if (! $load) {
@@ -138,16 +142,18 @@ class LoadController extends AdminController
     /**
      * Удаление раздела
      *
-     * @param int $id
+     * @param int     $id
+     * @param Request $request
      * @return void
      * @throws \Exception
      */
-    public function delete(int $id): void
+    public function delete(int $id, Request $request): void
     {
         if (! isAdmin(User::BOSS)) {
             abort(403, 'Доступ запрещен!');
         }
 
+        /** @var Load $load */
         $load = Load::query()->with('children')->find($id);
 
         if (! $load) {
@@ -180,9 +186,10 @@ class LoadController extends AdminController
     /**
      * Пересчет данных
      *
+     * @param Request $request
      * @return void
      */
-    public function restatement(): void
+    public function restatement(Request $request): void
     {
         if (! isAdmin(User::BOSS)) {
             abort(403, 'Доступ запрещен!');
@@ -205,11 +212,13 @@ class LoadController extends AdminController
     /**
      * Просмотр загрузок раздела
      *
-     * @param int $id
+     * @param int     $id
+     * @param Request $request
      * @return string
      */
-    public function load(int $id): string
+    public function load(int $id, Request $request): string
     {
+        /** @var Load $category */
         $category = Load::query()->with('parent')->find($id);
 
         if (! $category) {
@@ -249,11 +258,13 @@ class LoadController extends AdminController
     /**
      * Редактирование загрузки
      *
-     * @param int $id
+     * @param int     $id
+     * @param Request $request
      * @return string
      */
-    public function editDown(int $id): string
+    public function editDown(int $id, Request $request): string
     {
+        /** @var Down $down */
         $down = Down::query()->find($id);
 
         if (! $down) {
@@ -267,6 +278,7 @@ class LoadController extends AdminController
             $text     = check($request->input('text'));
             $files    = (array) $request->file('files');
 
+            /** @var Load $category */
             $category = Load::query()->find($category);
 
             $validator = new Validator();
@@ -338,13 +350,16 @@ class LoadController extends AdminController
     /**
      * Удаление загрузки
      *
-     * @param $id
+     * @param int     $id
+     * @param Request $request
      * @return void
      * @throws \Exception
      */
-    public function deleteDown(int $id): void
+    public function deleteDown(int $id, Request $request): void
     {
         $token = check($request->input('token'));
+
+        /** @var Down $down */
         $down  = Down::query()->find($id);
 
         if (! $down) {
@@ -382,12 +397,14 @@ class LoadController extends AdminController
      */
     public function deleteFile(int $id, int $fid): void
     {
+        /** @var Down $down */
         $down = Down::query()->find($id);
 
         if (! $down) {
             abort(404, 'Файла не существует!');
         }
 
+        /** @var File $file */
         $file = File::query()->where('relate_id', $down->id)->find($fid);
 
         if (! $file) {
@@ -426,13 +443,15 @@ class LoadController extends AdminController
     /**
      * Публикация загрузки
      *
-     * @param int $id
+     * @param int     $id
+     * @param Request $request
      * @return void
      */
-    public function publish(int $id): void
+    public function publish(int $id, Request $request): void
     {
-        $token = check($request->input('token'));
+        /** @var Down $down */
         $down  = Down::query()->find($id);
+        $token = check($request->input('token'));
 
         if (! $down) {
             abort(404, 'Данного файла не существует!');
@@ -451,14 +470,14 @@ class LoadController extends AdminController
                 $type = 'опубликована' ;
                 $down->category->increment('count_downs');
 
-                $text = 'Уведомеление о публикации файла.'.PHP_EOL.'Ваш файл <a href="/downs/'.$down->id.'">'.$down->title.'</a> успешно прошел проверку и добавлен в загрузки';
+                $text = 'Уведомеление о публикации файла.' . PHP_EOL . 'Ваш файл <a href="/downs/' . $down->id . '">' . $down->title . '</a> успешно прошел проверку и добавлен в загрузки';
                 $down->user->sendMessage(null, $text);
 
             } else {
                 $type = 'снята с публикации';
                 $down->category->decrement('count_downs');
 
-                $text = 'Уведомеление о снятии с публикации.'.PHP_EOL.'Ваш файл <a href="/downs/'.$down->id.'">'.$down->title.'</a> снят с публикации из загрузок';
+                $text = 'Уведомеление о снятии с публикации.' . PHP_EOL . 'Ваш файл <a href="/downs/' . $down->id . '">' . $down->title . '</a> снят с публикации из загрузок';
                 $down->user->sendMessage(null, $text);
             }
 

@@ -44,9 +44,10 @@ class RuleController extends AdminController
     /**
      * Редактирование правил
      *
+     * @param Request $request
      * @return string
      */
-    public function edit(): string
+    public function edit(Request $request): string
     {
         $rules = Rule::query()->firstOrNew([]);
 

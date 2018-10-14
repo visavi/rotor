@@ -43,9 +43,10 @@ class LogController extends AdminController
     /**
      * Очистка логов
      *
+     * @param Request $request
      * @return void
      */
-    public function clear(): void
+    public function clear(Request $request): void
     {
         $token = check($request->input('token'));
 

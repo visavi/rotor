@@ -29,9 +29,10 @@ class BlogController extends AdminController
     /**
      * Создание раздела
      *
+     * @param Request $request
      * @return void
      */
-    public function create(): void
+    public function create(Request $request): void
     {
         if (! isAdmin(User::BOSS)) {
             abort(403, 'Доступ запрещен!');
@@ -48,6 +49,7 @@ class BlogController extends AdminController
 
             $max = Category::query()->max('sort') + 1;
 
+            /** @var Category $category */
             $category = Category::query()->create([
                 'name'  => $name,
                 'sort'  => $max,
@@ -66,15 +68,17 @@ class BlogController extends AdminController
     /**
      * Редактирование раздела
      *
-     * @param int $id
+     * @param int     $id
+     * @param Request $request
      * @return string
      */
-    public function edit(int $id): string
+    public function edit(int $id, Request $request): string
     {
         if (! isAdmin(User::BOSS)) {
             abort(403, 'Доступ запрещен!');
         }
 
+        /** @var Category $category */
         $category = Category::query()->with('children')->find($id);
 
         if (! $category) {
@@ -125,16 +129,18 @@ class BlogController extends AdminController
     /**
      * Удаление раздела
      *
-     * @param int $id
+     * @param int     $id
+     * @param Request $request
      * @return void
      * @throws \Exception
      */
-    public function delete(int $id): void
+    public function delete(int $id, Request $request): void
     {
         if (! isAdmin(User::BOSS)) {
             abort(403, 'Доступ запрещен!');
         }
 
+        /** @var Category $category */
         $category = Category::query()->with('children')->find($id);
 
         if (! $category) {
@@ -167,9 +173,10 @@ class BlogController extends AdminController
     /**
      * Пересчет данных
      *
+     * @param Request $request
      * @return void
      */
-    public function restatement(): void
+    public function restatement(Request $request): void
     {
         if (! isAdmin(User::BOSS)) {
             abort(403, 'Доступ запрещен!');
@@ -221,11 +228,13 @@ class BlogController extends AdminController
     /**
      * Редактирование статьи
      *
-     * @param int $id
+     * @param int     $id
+     * @param Request $request
      * @return string
      */
-    public function editBlog(int $id): string
+    public function editBlog(int $id, Request $request): string
     {
+        /** @var Blog $blog */
         $blog = Blog::query()->find($id);
 
         if (! $blog) {
@@ -274,11 +283,13 @@ class BlogController extends AdminController
     /**
      * Перенос статьи
      *
-     * @param int $id
+     * @param int     $id
+     * @param Request $request
      * @return string
      */
-    public function moveBlog(int $id): string
+    public function moveBlog(int $id, Request $request): string
     {
+        /** @var Blog $blog */
         $blog = Blog::query()->find($id);
 
         if (! $blog) {
@@ -290,6 +301,7 @@ class BlogController extends AdminController
             $token = check($request->input('token'));
             $cid   = int($request->input('cid'));
 
+            /** @var Category $category */
             $category = Category::query()->find($cid);
 
             $validator = new Validator();
@@ -332,15 +344,17 @@ class BlogController extends AdminController
     /**
      * Удаление статьи
      *
-     * @param int $id
+     * @param int     $id
+     * @param Request $request
      * @return void
      * @throws \Exception
      */
-    public function deleteBlog(int $id): void
+    public function deleteBlog(int $id, Request $request): void
     {
         $page  = int($request->input('page', 1));
         $token = check($request->input('token'));
 
+        /** @var Blog $blog */
         $blog = Blog::query()->find($id);
 
         if (! $blog) {

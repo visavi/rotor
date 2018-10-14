@@ -31,9 +31,10 @@ class BanController extends AdminController
     /**
      * Бан пользователя
      *
+     * @param Request $request
      * @return string
      */
-    public function edit(): string
+    public function edit(Request $request): string
     {
         $login = check($request->input('user'));
 
@@ -65,11 +66,11 @@ class BanController extends AdminController
             if ($validator->isValid()) {
 
                 if ($type === 'days') {
-                    $time = $time * 3600 * 24;
+                    $time *= 86400;
                 } elseif ($type === 'hours') {
-                    $time = $time * 3600;
+                    $time *= 3600;
                 } else {
-                    $time = $time * 60;
+                    $time *= 60;
                 }
 
                 $user->update([
@@ -106,9 +107,10 @@ class BanController extends AdminController
     /**
      * Изменение бана
      *
+     * @param Request $request
      * @return string
      */
-    public function change(): string
+    public function change(Request $request): string
     {
         $login = check($request->input('user'));
 
@@ -165,9 +167,10 @@ class BanController extends AdminController
     /**
      * Снятие бана
      *
+     * @param Request $request
      * @return void
      */
-    public function unban(): void
+    public function unban(Request $request): void
     {
         $token = check($request->input('token'));
         $login = check($request->input('user'));

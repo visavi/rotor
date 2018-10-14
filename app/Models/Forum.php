@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
@@ -18,6 +19,8 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property int last_topic_id
  * @property int closed
  * @property Forum parent
+ * @property Collection children
+ * @property Topic lastTopic
  */
 class Forum extends BaseModel
 {

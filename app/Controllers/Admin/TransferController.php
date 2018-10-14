@@ -30,9 +30,10 @@ class TransferController extends AdminController
     /**
      * Просмотр всех переводов
      *
+     * @param Request $request
      * @return string
      */
-    public function view(): string
+    public function view(Request $request): string
     {
         $login = check($request->input('user'));
 

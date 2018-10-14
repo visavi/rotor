@@ -4,6 +4,7 @@ namespace App\Controllers\Admin;
 
 use App\Classes\Validator;
 use App\Models\User;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\Request;
 
 class DeliveryController extends AdminController
@@ -23,9 +24,10 @@ class DeliveryController extends AdminController
     /**
      * Главная страница
      *
+     * @param Request $request
      * @return string
      */
-    public function index(): string
+    public function index(Request $request): string
     {
         if ($request->isMethod('post')) {
 
@@ -58,6 +60,7 @@ class DeliveryController extends AdminController
                 $users = User::query()->whereIn('level', User::USER_GROUPS)->get();
             }
 
+            /** @var Collection $users */
             $users = $users->filter(function ($value, $key) {
                 return $value->id !== getUser('id');
             });

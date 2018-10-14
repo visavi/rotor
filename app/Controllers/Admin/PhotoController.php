@@ -28,10 +28,11 @@ class PhotoController extends AdminController
      */
     public function index(): string
     {
-        $total = Photo::count();
+        $total = Photo::query()->count();
         $page  = paginate(setting('fotolist'), $total);
 
-        $photos = Photo::orderBy('created_at', 'desc')
+        $photos = Photo::query()
+            ->orderBy('created_at', 'desc')
             ->offset($page->offset)
             ->limit($page->limit)
             ->with('user')
@@ -43,10 +44,11 @@ class PhotoController extends AdminController
     /**
      * Редактирование ссылки
      *
-     * @param int $id
+     * @param int     $id
+     * @param Request $request
      * @return string
      */
-    public function edit(int $id): string
+    public function edit(int $id, Request $request): string
     {
         $page  = int($request->input('page', 1));
         $photo = Photo::query()->find($id);
@@ -90,11 +92,12 @@ class PhotoController extends AdminController
     /**
      * Удаление записей
      *
-     * @param int $id
+     * @param int     $id
+     * @param Request $request
      * @return void
      * @throws \Exception
      */
-    public function delete(int $id): void
+    public function delete(int $id, Request $request): void
     {
         if (! is_writable(UPLOADS . '/photos')){
             abort('default', 'Директория c фотографиями недоступна для записи!');
@@ -103,6 +106,7 @@ class PhotoController extends AdminController
         $page  = int($request->input('page', 1));
         $token = check($request->input('token'));
 
+        /** @var Photo $photo */
         $photo = Photo::query()->find($id);
 
         if (! $photo) {
@@ -128,9 +132,10 @@ class PhotoController extends AdminController
     /**
      * Пересчет комментариев
      *
+     * @param Request $request
      * @return void
      */
-    public function restatement(): void
+    public function restatement(Request $request): void
     {
         $token = check($request->input('token'));
 

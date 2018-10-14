@@ -22,6 +22,7 @@ class FilesController extends AdminController
             abort(403, 'Доступ запрещен!');
         }
 
+        $request    = Request::createFromGlobals();
         $this->file = ltrim(check($request->input('file')), '/');
         $this->path = rtrim(check($request->input('path')), '/');
 
@@ -67,9 +68,10 @@ class FilesController extends AdminController
     /**
      * Редактирование файла
      *
+     * @param Request $request
      * @return string
      */
-    public function edit(): string
+    public function edit(Request $request): string
     {
         $fileName = $this->path ? '/' . $this->file : $this->file;
 
@@ -110,9 +112,10 @@ class FilesController extends AdminController
     /**
      * Создание файла
      *
+     * @param Request $request
      * @return string
      */
-    public function create(): string
+    public function create(Request $request): string
     {
         if (! is_writable(RESOURCES . '/views/' . $this->path)) {
             abort('default', 'Директория ' . $this->path . ' недоступна для записи!');
@@ -170,9 +173,10 @@ class FilesController extends AdminController
     /**
      * Удаление файла
      *
+     * @param Request $request
      * @return void
      */
-    public function delete(): void
+    public function delete(Request $request): void
     {
         if (! is_writable(RESOURCES . '/views/' . $this->path)) {
             abort('default', 'Директория ' . $this->path . ' недоступна для записи!');

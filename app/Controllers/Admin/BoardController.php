@@ -7,6 +7,7 @@ use App\Models\Board;
 use App\Models\Item;
 use App\Models\User;
 use Exception;
+use Illuminate\Database\Query\Builder;
 use Illuminate\Http\Request;
 
 class BoardController extends AdminController
@@ -22,6 +23,7 @@ class BoardController extends AdminController
         $board = null;
 
         if ($id) {
+            /** @var Board $board */
             $board = Board::query()->find($id);
 
             if (! $board) {
@@ -30,7 +32,7 @@ class BoardController extends AdminController
         }
 
         $total = Item::query()
-            ->when($board, function ($query) use ($board) {
+            ->when($board, function (Builder $query) use ($board) {
                 return $query->where('board_id', $board->id);
             })
             ->where('expires_at', '>', SITETIME)
@@ -39,7 +41,7 @@ class BoardController extends AdminController
         $page = paginate(10, $total);
 
         $items = Item::query()
-            ->when($board, function ($query) use ($board) {
+            ->when($board, function (Builder $query) use ($board) {
                 return $query->where('board_id', $board->id);
             })
             ->where('expires_at', '>', SITETIME)
@@ -79,9 +81,10 @@ class BoardController extends AdminController
     /**
      * Создание раздела
      *
+     * @param Request $request
      * @return void
      */
-    public function create(): void
+    public function create(Request $request): void
     {
         if (! isAdmin(User::BOSS)) {
             abort(403, 'Доступ запрещен!');
@@ -98,6 +101,7 @@ class BoardController extends AdminController
 
             $max = Board::query()->max('sort') + 1;
 
+            /** @var Board $board */
             $board = Board::query()->create([
                 'name'  => $name,
                 'sort'  => $max,
@@ -116,15 +120,17 @@ class BoardController extends AdminController
     /**
      * Редактирование раздела
      *
-     * @param int $id
+     * @param int     $id
+     * @param Request $request
      * @return string
      */
-    public function edit(int $id): string
+    public function edit(int $id, Request $request): string
     {
         if (! isAdmin(User::BOSS)) {
             abort(403, 'Доступ запрещен!');
         }
 
+        /** @var Board $board */
         $board = Board::query()->with('children')->find($id);
 
         if (! $board) {
@@ -175,15 +181,17 @@ class BoardController extends AdminController
     /**
      * Удаление раздела
      *
-     * @param int $id
+     * @param int     $id
+     * @param Request $request
      * @throws Exception
      */
-    public function delete(int $id): void
+    public function delete(int $id, Request $request): void
     {
         if (! isAdmin(User::BOSS)) {
             abort(403, 'Доступ запрещен!');
         }
 
+        /** @var Board $board */
         $board = Board::query()->with('children')->find($id);
 
         if (! $board) {
@@ -216,11 +224,13 @@ class BoardController extends AdminController
     /**
      * Редактирование объявления
      *
-     * @param int $id
+     * @param int     $id
+     * @param Request $request
      * @return string
      */
-    public function editItem(int $id): string
+    public function editItem(int $id, Request $request): string
     {
+        /** @var Item $item */
         $item = Item::query()->find($id);
 
         if (! $item) {
@@ -235,6 +245,7 @@ class BoardController extends AdminController
             $price = check($request->input('price'));
             $phone = preg_replace('/\D/', '', $request->input('phone'));
 
+            /** @var Board $board */
             $board = Board::query()->find($bid);
 
             $validator = new Validator();
@@ -285,13 +296,15 @@ class BoardController extends AdminController
     /**
      * Удаление объявления
      *
-     * @param int $id
+     * @param int     $id
+     * @param Request $request
      * @throws Exception
      */
-    public function deleteItem(int $id): void
+    public function deleteItem(int $id, Request $request): void
     {
         $token = check($request->input('token'));
 
+        /** @var Item $item */
         $item = Item::query()->find($id);
 
         if (! $item) {
@@ -318,9 +331,10 @@ class BoardController extends AdminController
     /**
      * Пересчет голосов
      *
+     * @param Request $request
      * @return void
      */
-    public function restatement(): void
+    public function restatement(Request $request): void
     {
         if (! isAdmin(User::BOSS)) {
             abort(403, 'Доступ запрещен!');

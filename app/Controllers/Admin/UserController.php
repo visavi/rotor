@@ -48,9 +48,10 @@ class UserController extends AdminController
     /**
      * Поиск пользователей
      *
+     * @param Request $request
      * @return string
      */
-    public function search(): string
+    public function search(Request $request): string
     {
         $q = check($request->input('q'));
 
@@ -72,9 +73,10 @@ class UserController extends AdminController
     /**
      * Редактирование пользователя
      *
+     * @param Request $request
      * @return string
      */
-    public function edit(): string
+    public function edit(Request $request): string
     {
         $login = check($request->input('user'));
 
@@ -190,10 +192,11 @@ class UserController extends AdminController
     /**
      * Удаление пользователя
      *
+     * @param Request $request
      * @return string
      * @throws \Exception
      */
-    public function delete(): string
+    public function delete(Request $request): string
     {
         $login = check($request->input('user'));
 

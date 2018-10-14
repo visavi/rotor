@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
@@ -15,6 +16,8 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
  * @property string name
  * @property int count_downs
  * @property int closed
+ * @property Load parent
+ * @property Collection children
  */
 class Load extends BaseModel
 {
