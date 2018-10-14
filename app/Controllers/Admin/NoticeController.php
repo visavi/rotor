@@ -2,10 +2,10 @@
 
 namespace App\Controllers\Admin;
 
-use App\Classes\Request;
 use App\Classes\Validator;
 use App\Models\Notice;
 use App\Models\User;
+use Illuminate\Http\Request;
 
 class NoticeController extends AdminController
 {
@@ -43,12 +43,12 @@ class NoticeController extends AdminController
      */
     public function create(): string
     {
-        if (Request::isMethod('post')) {
-            $token   = check(Request::input('token'));
-            $type    = check(Request::input('type'));
-            $name    = check(Request::input('name'));
-            $text    = check(Request::input('text'));
-            $protect = empty(Request::input('protect')) ? 0 : 1;
+        if ($request->isMethod('post')) {
+            $token   = check($request->input('token'));
+            $type    = check($request->input('type'));
+            $name    = check($request->input('name'));
+            $text    = check($request->input('text'));
+            $protect = empty($request->input('protect')) ? 0 : 1;
 
             $validator = new Validator();
             $validator->equal($token, $_SESSION['token'], 'Неверный идентификатор сессии, повторите действие!')
@@ -76,7 +76,7 @@ class NoticeController extends AdminController
                 redirect('/admin/notices/edit/' . $notice->id);
 
             } else {
-                setInput(Request::all());
+                setInput($request->all());
                 setFlash('danger', $validator->getErrors());
             }
         }
@@ -90,7 +90,7 @@ class NoticeController extends AdminController
      * @param int $id
      * @return string
      */
-    public function edit($id): string
+    public function edit(int $id): string
     {
         $notice = Notice::query()->find($id);
 
@@ -98,11 +98,11 @@ class NoticeController extends AdminController
             abort(404, 'Данного шаблона не существует!');
         }
 
-        if (Request::isMethod('post')) {
-            $token   = check(Request::input('token'));
-            $name    = check(Request::input('name'));
-            $text    = check(Request::input('text'));
-            $protect = empty(Request::input('protect')) ? 0 : 1;
+        if ($request->isMethod('post')) {
+            $token   = check($request->input('token'));
+            $name    = check($request->input('name'));
+            $text    = check($request->input('text'));
+            $protect = empty($request->input('protect')) ? 0 : 1;
 
             $validator = new Validator();
             $validator->equal($token, $_SESSION['token'], 'Неверный идентификатор сессии, повторите действие!')
@@ -123,7 +123,7 @@ class NoticeController extends AdminController
                 redirect('/admin/notices/edit/' . $notice->id);
 
             } else {
-                setInput(Request::all());
+                setInput($request->all());
                 setFlash('danger', $validator->getErrors());
             }
         }
@@ -138,9 +138,9 @@ class NoticeController extends AdminController
      * @return void
      * @throws \Exception
      */
-    public function delete($id): void
+    public function delete(int $id): void
     {
-        $token = check(Request::input('token'));
+        $token = check($request->input('token'));
 
         $notice = Notice::query()->find($id);
 

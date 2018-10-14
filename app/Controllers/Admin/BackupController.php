@@ -2,10 +2,10 @@
 
 namespace App\Controllers\Admin;
 
-use App\Classes\Request;
 use App\Classes\Validator;
 use App\Models\User;
 use Illuminate\Database\Capsule\Manager as DB;
+use Illuminate\Http\Request;
 
 class BackupController extends AdminController
 {
@@ -49,12 +49,12 @@ class BackupController extends AdminController
      */
     public function create(): string
     {
-        if (Request::isMethod('post')) {
+        if ($request->isMethod('post')) {
 
-            $token  = check(Request::input('token'));
-            $sheets = check(Request::input('sheets'));
-            $method = check(Request::input('method'));
-            $level  = int(Request::input('level'));
+            $token  = check($request->input('token'));
+            $sheets = check($request->input('sheets'));
+            $method = check($request->input('method'));
+            $level  = int($request->input('level'));
 
             $validator = new Validator();
             $validator->equal($token, $_SESSION['token'], 'Неверный идентификатор сессии, повторите действие!')
@@ -114,7 +114,7 @@ class BackupController extends AdminController
                 setFlash('success', 'База данных успешно обработана и сохранена!');
                 redirect('/admin/backups');
             } else {
-                setInput(Request::all());
+                setInput($request->all());
                 setFlash('danger', $validator->getErrors());
             }
         }
@@ -136,8 +136,8 @@ class BackupController extends AdminController
      */
     public function delete(): void
     {
-        $token = check(Request::input('token'));
-        $file  = check(Request::input('file'));
+        $token = check($request->input('token'));
+        $file  = check($request->input('file'));
 
 
         $validator = new Validator();

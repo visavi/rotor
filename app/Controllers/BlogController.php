@@ -132,11 +132,12 @@ class BlogController extends BaseController
     /**
      * Редактирование статьи
      *
-     * @param int     $id
-     * @param Request $request
+     * @param int       $id
+     * @param Request   $request
+     * @param Validator $validator
      * @return string
      */
-    public function edit(int $id, Request $request): string
+    public function edit(int $id, Request $request, Validator $validator): string
     {
         if (! getUser()) {
             abort(403, 'Для редактирования статьи необходимо авторизоваться');
@@ -164,7 +165,6 @@ class BlogController extends BaseController
             /** @var Category $category */
             $category = Category::query()->find($cid);
 
-            $validator = new Validator();
             $validator
                 ->equal($token, $_SESSION['token'], 'Неверный идентификатор сессии, повторите действие!')
                 ->length($title, 5, 50, ['title' => 'Слишком длинный или короткий заголовок!'])
@@ -238,10 +238,11 @@ class BlogController extends BaseController
     /**
      * Создание статьи
      *
-     * @param Request $request
+     * @param Request   $request
+     * @param Validator $validator
      * @return string
      */
-    public function create(Request $request): string
+    public function create(Request $request, Validator $validator): string
     {
         $cid = int($request->input('cid'));
 
@@ -269,7 +270,6 @@ class BlogController extends BaseController
             /** @var Category $category */
             $category = Category::query()->find($cid);
 
-            $validator = new Validator();
             $validator
                 ->equal($token, $_SESSION['token'], 'Неверный идентификатор сессии, повторите действие!')
                 ->length($title, 5, 50, ['title' => 'Слишком длинный или короткий заголовок!'])
@@ -329,11 +329,12 @@ class BlogController extends BaseController
     /**
      * Комментарии
      *
-     * @param int     $id
-     * @param Request $request
+     * @param int       $id
+     * @param Request   $request
+     * @param Validator $validator
      * @return string
      */
-    public function comments(int $id, Request $request): string
+    public function comments(int $id, Request $request, Validator $validator): string
     {
         /** @var Blog $blog */
         $blog = Blog::query()->find($id);
@@ -347,7 +348,6 @@ class BlogController extends BaseController
             $token = check($request->input('token'));
             $msg   = check($request->input('msg'));
 
-            $validator = new Validator();
             $validator
                 ->true(getUser(), 'Для добавления комментария необходимо авторизоваться!')
                 ->equal($token, $_SESSION['token'], 'Неверный идентификатор сессии, повторите действие!')
@@ -408,12 +408,13 @@ class BlogController extends BaseController
     /**
      * Подготовка к редактированию комментария
      *
-     * @param int     $id
-     * @param int     $cid
-     * @param Request $request
+     * @param int       $id
+     * @param int       $cid
+     * @param Request   $request
+     * @param Validator $validator
      * @return string
      */
-    public function editComment(int $id, int $cid, Request $request): string
+    public function editComment(int $id, int $cid, Request $request, Validator $validator): string
     {
         $page = int($request->input('page', 1));
 
@@ -447,7 +448,6 @@ class BlogController extends BaseController
             $msg   = check($request->input('msg'));
             $page  = int($request->input('page', 1));
 
-            $validator = new Validator();
             $validator
                 ->equal($token, $_SESSION['token'], 'Неверный идентификатор сессии, повторите действие!')
                 ->length($msg, 5, 1000, ['msg' => 'Слишком длинный или короткий комментарий!']);

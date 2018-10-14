@@ -33,15 +33,15 @@ class GuestbookController extends BaseController
     /**
      * Добавление сообщения
      *
-     * @param Request $request
+     * @param Request   $request
+     * @param Validator $validator
      * @return void
      */
-    public function add(Request $request): void
+    public function add(Request $request, Validator $validator): void
     {
         $msg   = check($request->input('msg'));
         $token = check($request->input('token'));
 
-        $validator = new Validator();
         $validator->equal($token, $_SESSION['token'], ['msg' => 'Неверный идентификатор сессии, повторите действие!'])
             ->length($msg, 5, setting('guesttextlength'), ['msg' => 'Слишком длинное или короткое сообщение!'])
             ->true(Flood::isFlood(), ['msg' => 'Антифлуд! Разрешается отправлять сообщения раз в ' . Flood::getPeriod() . ' секунд!']);
@@ -92,11 +92,12 @@ class GuestbookController extends BaseController
     /**
      * Редактирование сообщения
      *
-     * @param int     $id
-     * @param Request $request
+     * @param int       $id
+     * @param Request   $request
+     * @param Validator $validator
      * @return string
      */
-    public function edit($id, Request $request): string
+    public function edit(int $id, Request $request, Validator $validator): string
     {
         if (! getUser()) {
             abort(403);
@@ -118,7 +119,6 @@ class GuestbookController extends BaseController
             $msg   = check($request->input('msg'));
             $token = check($request->input('token'));
 
-            $validator = new Validator();
             $validator->equal($token, $_SESSION['token'], ['msg' => 'Неверный идентификатор сессии, повторите действие!'])
                 ->length($msg, 5, setting('guesttextlength'), ['msg' => 'Слишком длинное или короткое сообщение!']);
 

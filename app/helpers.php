@@ -1,6 +1,6 @@
 <?php
 
-use App\Classes\{BBCode, Metrika, Registry, Request, CloudFlare};
+use App\Classes\{BBCode, Metrika, Registry, CloudFlare};
 use App\Models\{
     Antimat,
     Ban,
@@ -31,6 +31,7 @@ use App\Models\{
 };
 use Curl\Curl;
 use Illuminate\Database\Capsule\Manager as DB;
+use Illuminate\Http\Request;
 use Intervention\Image\ImageManagerStatic as Image;
 use Jenssegers\Blade\Blade;
 use ReCaptcha\ReCaptcha;
@@ -1551,10 +1552,12 @@ function clearCache()
  */
 function returnUrl($url = null)
 {
-    if (Request::is('/', 'login', 'register', 'recovery', 'restore', 'ban', 'closed')) {
+    $request = Request::createFromGlobals();
+
+    if ($request->is('/', 'login', 'register', 'recovery', 'restore', 'ban', 'closed')) {
         return false;
     }
-    $query = Request::has('return') ? Request::input('return') : Request::path();
+    $query = $request->has('return') ? $request->input('return') : $request->path();
     return '?return=' . urlencode(! $url ? $query : $url);
 }
 
@@ -1587,6 +1590,7 @@ function view($view, array $params = [])
  */
 function abort($code, $message = null)
 {
+    $request  = Request::createFromGlobals();
     $protocol = server('SERVER_PROTOCOL');
     $referer  = server('HTTP_REFERER') ?? null;
 
@@ -1615,7 +1619,7 @@ function abort($code, $message = null)
         ]);
     }
 
-    if (Request::ajax()) {
+    if ($request->ajax()) {
         header($protocol . ' 200 OK');
 
         exit(json_encode([
@@ -1901,7 +1905,8 @@ function getBrowser($userAgent = null)
  */
 function server($key = null, $default = null)
 {
-    $server = Request::server($key, $default);
+    $request = Request::createFromGlobals();
+    $server  = $request->server($key, $default);
 
     if ($key === 'REQUEST_URI') {
         $server = urldecode($server);
@@ -1931,7 +1936,7 @@ function getUserByLogin($login): ?User
  * @param  int       $id ID пользователя
  * @return \Illuminate\Database\Eloquent\Builder|\Illuminate\Database\Eloquent\Model|null
  */
-function getUserById($id): ?User
+function getUserById(int $id): ?User
 {
     return User::query()->find($id);
 }
@@ -2053,7 +2058,8 @@ function pagination($page)
  */
 function paginate(int $limit, int $total)
 {
-    $current = int(Request::input('page'));
+    $request = Request::createFromGlobals();
+    $current = int($request->input('page'));
 
     if ($current < 1) {
         $current = 1;
@@ -2296,13 +2302,15 @@ function parseVersion($version)
  */
 function captchaVerify(): bool
 {
+    $request = Request::createFromGlobals();
+
     if (setting('recaptcha_public') && setting('recaptcha_private')) {
         $recaptcha = new ReCaptcha(setting('recaptcha_private'));
-        $response = $recaptcha->verify(Request::input('g-recaptcha-response'), getIp());
+        $response = $recaptcha->verify($request->input('g-recaptcha-response'), getIp());
         return $response->isSuccess();
     }
 
-    return check(strtolower(Request::input('protect'))) === $_SESSION['protect'];
+    return check(strtolower($request->input('protect'))) === $_SESSION['protect'];
 }
 
 /**

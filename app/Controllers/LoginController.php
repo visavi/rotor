@@ -21,7 +21,7 @@ class LoginController extends BaseController
     /**
      * Главная страница
      */
-    public function index()
+    public function index(): string
     {
         $total = Login::query()->where('user_id', getUser('id'))->count();
         $page = paginate(setting('loginauthlist'), $total);

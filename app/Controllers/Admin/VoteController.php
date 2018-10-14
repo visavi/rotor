@@ -2,11 +2,11 @@
 
 namespace App\Controllers\Admin;
 
-use App\Classes\Request;
 use App\Classes\Validator;
 use App\Models\User;
 use App\Models\Vote;
 use Illuminate\Database\Capsule\Manager as DB;
+use Illuminate\Http\Request;
 
 class VoteController extends AdminController
 {
@@ -67,7 +67,7 @@ class VoteController extends AdminController
      * @param int $id
      * @return string
      */
-    public function edit($id): string
+    public function edit(int $id): string
     {
         $vote = Vote::query()->where('id', $id)->first();
 
@@ -75,11 +75,11 @@ class VoteController extends AdminController
             abort(404, 'Данного голосования не существует!');
         }
 
-        if (Request::isMethod('post')) {
+        if ($request->isMethod('post')) {
 
-            $token   = check(Request::input('token'));
-            $title   = check(Request::input('title'));
-            $answers = check(Request::input('answers'));
+            $token   = check($request->input('token'));
+            $title   = check($request->input('title'));
+            $answers = check($request->input('answers'));
 
             $validator = new Validator();
             $validator->equal($token, $_SESSION['token'], 'Неверный идентификатор сессии, повторите действие!');
@@ -112,7 +112,7 @@ class VoteController extends AdminController
                 setFlash('success', 'Голосование успешно изменено!');
                 redirect('/admin/votes/edit/'.$vote->id);
             } else {
-                setInput(Request::all());
+                setInput($request->all());
                 setFlash('danger', $validator->getErrors());
             }
         }
@@ -128,9 +128,9 @@ class VoteController extends AdminController
      * @param int $id
      * @return void
      */
-    public function delete($id): void
+    public function delete(int $id): void
     {
-        $token = check(Request::input('token'));
+        $token = check($request->input('token'));
         $vote  = Vote::query()->where('id', $id)->first();
 
         if (! $vote) {
@@ -163,9 +163,9 @@ class VoteController extends AdminController
      * @param int $id
      * @return void
      */
-    public function close($id): void
+    public function close(int $id): void
     {
-        $token = check(Request::input('token'));
+        $token = check($request->input('token'));
         $vote  = Vote::query()->where('id', $id)->first();
 
         if (! $vote) {
@@ -209,7 +209,7 @@ class VoteController extends AdminController
             abort(403, 'Доступ запрещен!');
         }
 
-        $token = check(Request::input('token'));
+        $token = check($request->input('token'));
 
         if ($token === $_SESSION['token']) {
 

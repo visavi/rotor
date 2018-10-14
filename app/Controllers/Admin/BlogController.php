@@ -2,11 +2,11 @@
 
 namespace App\Controllers\Admin;
 
-use App\Classes\Request;
 use App\Classes\Validator;
 use App\Models\Blog;
 use App\Models\Category;
 use App\Models\User;
+use Illuminate\Http\Request;
 
 class BlogController extends AdminController
 {
@@ -37,8 +37,8 @@ class BlogController extends AdminController
             abort(403, 'Доступ запрещен!');
         }
 
-        $token = check(Request::input('token'));
-        $name  = check(Request::input('name'));
+        $token = check($request->input('token'));
+        $name  = check($request->input('name'));
 
         $validator = new Validator();
         $validator->equal($token, $_SESSION['token'], 'Неверный идентификатор сессии, повторите действие!')
@@ -56,7 +56,7 @@ class BlogController extends AdminController
             setFlash('success', 'Новый раздел успешно создан!');
             redirect('/admin/blogs/edit/' . $category->id);
         } else {
-            setInput(Request::all());
+            setInput($request->all());
             setFlash('danger', $validator->getErrors());
         }
 
@@ -69,7 +69,7 @@ class BlogController extends AdminController
      * @param int $id
      * @return string
      */
-    public function edit($id): string
+    public function edit(int $id): string
     {
         if (! isAdmin(User::BOSS)) {
             abort(403, 'Доступ запрещен!');
@@ -86,12 +86,12 @@ class BlogController extends AdminController
             ->orderBy('sort')
             ->get();
 
-        if (Request::isMethod('post')) {
-            $token  = check(Request::input('token'));
-            $parent = int(Request::input('parent'));
-            $name   = check(Request::input('name'));
-            $sort   = check(Request::input('sort'));
-            $closed = empty(Request::input('closed')) ? 0 : 1;
+        if ($request->isMethod('post')) {
+            $token  = check($request->input('token'));
+            $parent = int($request->input('parent'));
+            $name   = check($request->input('name'));
+            $sort   = check($request->input('sort'));
+            $closed = empty($request->input('closed')) ? 0 : 1;
 
             $validator = new Validator();
             $validator->equal($token, $_SESSION['token'], 'Неверный идентификатор сессии, повторите действие!')
@@ -114,7 +114,7 @@ class BlogController extends AdminController
                 setFlash('success', 'Раздел успешно отредактирован!');
                 redirect('/admin/blogs');
             } else {
-                setInput(Request::all());
+                setInput($request->all());
                 setFlash('danger', $validator->getErrors());
             }
         }
@@ -129,7 +129,7 @@ class BlogController extends AdminController
      * @return void
      * @throws \Exception
      */
-    public function delete($id): void
+    public function delete(int $id): void
     {
         if (! isAdmin(User::BOSS)) {
             abort(403, 'Доступ запрещен!');
@@ -141,7 +141,7 @@ class BlogController extends AdminController
             abort(404, 'Данного раздела не существует!');
         }
 
-        $token = check(Request::input('token'));
+        $token = check($request->input('token'));
 
         $validator = new Validator();
         $validator->equal($token, $_SESSION['token'], 'Неверный идентификатор сессии, повторите действие!')
@@ -175,7 +175,7 @@ class BlogController extends AdminController
             abort(403, 'Доступ запрещен!');
         }
 
-        $token = check(Request::input('token'));
+        $token = check($request->input('token'));
 
         if ($token === $_SESSION['token']) {
 
@@ -195,7 +195,7 @@ class BlogController extends AdminController
      * @param int $id
      * @return string
      */
-    public function blog($id): string
+    public function blog(int $id): string
     {
         $category = Category::query()->with('parent')->find($id);
 
@@ -224,7 +224,7 @@ class BlogController extends AdminController
      * @param int $id
      * @return string
      */
-    public function editBlog($id): string
+    public function editBlog(int $id): string
     {
         $blog = Blog::query()->find($id);
 
@@ -232,12 +232,12 @@ class BlogController extends AdminController
             abort(404, 'Данной статьи не существует!');
         }
 
-        if (Request::isMethod('post')) {
+        if ($request->isMethod('post')) {
 
-            $token = check(Request::input('token'));
-            $title = check(Request::input('title'));
-            $text  = check(Request::input('text'));
-            $tags  = check(Request::input('tags'));
+            $token = check($request->input('token'));
+            $title = check($request->input('title'));
+            $text  = check($request->input('text'));
+            $tags  = check($request->input('tags'));
 
             $validator = new Validator();
             $validator
@@ -257,7 +257,7 @@ class BlogController extends AdminController
                 setFlash('success', 'Статья успешно отредактирована!');
                 redirect('/articles/'.$blog->id);
             } else {
-                setInput(Request::all());
+                setInput($request->all());
                 setFlash('danger', $validator->getErrors());
             }
         }
@@ -277,7 +277,7 @@ class BlogController extends AdminController
      * @param int $id
      * @return string
      */
-    public function moveBlog($id): string
+    public function moveBlog(int $id): string
     {
         $blog = Blog::query()->find($id);
 
@@ -285,10 +285,10 @@ class BlogController extends AdminController
             abort(404, 'Данной статьи не существует!');
         }
 
-        if (Request::isMethod('post')) {
+        if ($request->isMethod('post')) {
 
-            $token = check(Request::input('token'));
-            $cid   = int(Request::input('cid'));
+            $token = check($request->input('token'));
+            $cid   = int($request->input('cid'));
 
             $category = Category::query()->find($cid);
 
@@ -315,7 +315,7 @@ class BlogController extends AdminController
                 setFlash('success', 'Статья успешно перенесена!');
                 redirect('/articles/'.$blog->id);
             } else {
-                setInput(Request::all());
+                setInput($request->all());
                 setFlash('danger', $validator->getErrors());
             }
         }
@@ -336,10 +336,10 @@ class BlogController extends AdminController
      * @return void
      * @throws \Exception
      */
-    public function deleteBlog($id): void
+    public function deleteBlog(int $id): void
     {
-        $page  = int(Request::input('page', 1));
-        $token = check(Request::input('token'));
+        $page  = int($request->input('page', 1));
+        $token = check($request->input('token'));
 
         $blog = Blog::query()->find($id);
 

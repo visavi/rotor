@@ -2,13 +2,13 @@
 
 namespace App\Controllers;
 
-use App\Classes\Request;
 use App\Classes\Validator;
 use App\Models\Flood;
 use App\Models\Ignore;
 use App\Models\User;
 use App\Models\Wall;
 use Illuminate\Database\Capsule\Manager as DB;
+use Illuminate\Http\Request;
 
 class WallController extends BaseController
 {
@@ -18,7 +18,7 @@ class WallController extends BaseController
      * @param string $login
      * @return string
      */
-    public function index($login): string
+    public function index(string $login): string
     {
         $user = User::query()->where('login', $login)->first();
 
@@ -50,10 +50,11 @@ class WallController extends BaseController
     /**
      * Добавление сообщения
      *
-     * @param string $login
+     * @param string  $login
+     * @param Request $request
      * @return void
      */
-    public function create($login): void
+    public function create($login, Request $request): void
     {
         if (! getUser()) {
             abort(403, 'Для отправки сообщений необходимо авторизоваться!');
@@ -65,9 +66,9 @@ class WallController extends BaseController
             abort(404, 'Пользователь не найден!');
         }
 
-        if (Request::isMethod('post')) {
-            $token = check(Request::input('token'));
-            $msg   = check(Request::input('msg'));
+        if ($request->isMethod('post')) {
+            $token = check($request->input('token'));
+            $msg   = check($request->input('msg'));
 
             $validator = new Validator();
             $validator->equal($token, $_SESSION['token'], 'Неверный идентификатор сессии, повторите действие!')
@@ -105,7 +106,7 @@ class WallController extends BaseController
 
                 setFlash('success', 'Запись успешно добавлена!');
             } else {
-                setInput(Request::all());
+                setInput($request->all());
                 setFlash('danger', $validator->getErrors());
             }
 
@@ -116,19 +117,20 @@ class WallController extends BaseController
     /**
      * Удаление сообщений
      *
-     * @param string $login
+     * @param string  $login
+     * @param Request $request
      * @return void
      */
-    public function delete($login): void
+    public function delete(string $login, Request $request): void
     {
-        $id    = int(Request::input('id'));
-        $token = check(Request::input('token'));
+        $id    = int($request->input('id'));
+        $token = check($request->input('token'));
 
         $user = User::query()->where('login', $login)->first();
 
         $validator = new Validator();
         $validator
-            ->true(Request::ajax(), 'Это не ajax запрос!')
+            ->true($request->ajax(), 'Это не ajax запрос!')
             ->equal($token, $_SESSION['token'], 'Неверный идентификатор сессии, повторите действие!')
             ->notEmpty($id, 'Не выбрана запись для удаление!')
             ->notEmpty($user, 'Пользователь не найден!')

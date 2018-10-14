@@ -2,8 +2,8 @@
 
 namespace App\Controllers\Admin;
 
-use App\Classes\Request;
 use App\Models\Transfer;
+use Illuminate\Http\Request;
 
 class TransferController extends AdminController
 {
@@ -34,7 +34,7 @@ class TransferController extends AdminController
      */
     public function view(): string
     {
-        $login = check(Request::input('user'));
+        $login = check($request->input('user'));
 
         if (! $user = getUserByLogin($login)) {
             abort(404, 'Пользователь с данным логином не найден!');

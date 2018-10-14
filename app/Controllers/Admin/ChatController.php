@@ -2,10 +2,10 @@
 
 namespace App\Controllers\Admin;
 
-use App\Classes\Request;
 use App\Classes\Validator;
 use App\Models\Chat;
 use App\Models\User;
+use Illuminate\Http\Request;
 
 class ChatController extends AdminController
 {
@@ -22,9 +22,9 @@ class ChatController extends AdminController
             ]);
         }
 
-        if (Request::isMethod('post')) {
-            $msg   = check(Request::input('msg'));
-            $token = check(Request::input('token'));
+        if ($request->isMethod('post')) {
+            $msg   = check($request->input('msg'));
+            $token = check($request->input('token'));
 
             $validator = new Validator();
             $validator->equal($token, $_SESSION['token'], ['msg' => 'Неверный идентификатор сессии, повторите действие!'])
@@ -60,7 +60,7 @@ class ChatController extends AdminController
                 setFlash('success', 'Сообщение успешно добавлено!');
                 redirect ('/admin/chats');
             } else {
-                setInput(Request::all());
+                setInput($request->all());
                 setFlash('danger', $validator->getErrors());
             }
         }
@@ -84,9 +84,9 @@ class ChatController extends AdminController
      * @param int $id
      * @return string
      */
-    public function edit($id): string
+    public function edit(int $id): string
     {
-        $page  = int(Request::input('page', 1));
+        $page  = int($request->input('page', 1));
 
         if (! getUser()) {
             abort(403);
@@ -102,10 +102,10 @@ class ChatController extends AdminController
             abort('default', 'Редактирование невозможно, прошло более 10 минут!');
         }
 
-        if (Request::isMethod('post')) {
+        if ($request->isMethod('post')) {
 
-            $msg   = check(Request::input('msg'));
-            $token = check(Request::input('token'));
+            $msg   = check($request->input('msg'));
+            $token = check($request->input('token'));
 
             $validator = new Validator();
             $validator->equal($token, $_SESSION['token'], ['msg' => 'Неверный идентификатор сессии, повторите действие!'])
@@ -122,7 +122,7 @@ class ChatController extends AdminController
                 setFlash('success', 'Сообщение успешно отредактировано!');
                 redirect('/admin/chats?page=' . $page);
             } else {
-                setInput(Request::all());
+                setInput($request->all());
                 setFlash('danger', $validator->getErrors());
             }
         }
@@ -137,7 +137,7 @@ class ChatController extends AdminController
      */
     public function clear(): void
     {
-        $token = check(Request::input('token'));
+        $token = check($request->input('token'));
 
         $validator = new Validator();
         $validator

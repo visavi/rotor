@@ -2,10 +2,10 @@
 
 namespace App\Controllers\Admin;
 
-use App\Classes\Request;
 use App\Classes\Validator;
 use App\Models\Rule;
 use App\Models\User;
+use Illuminate\Http\Request;
 
 class RuleController extends AdminController
 {
@@ -50,9 +50,9 @@ class RuleController extends AdminController
     {
         $rules = Rule::query()->firstOrNew([]);
 
-        if (Request::isMethod('post')) {
-            $token = check(Request::input('token'));
-            $msg   = check(Request::input('msg'));
+        if ($request->isMethod('post')) {
+            $token = check($request->input('token'));
+            $msg   = check($request->input('msg'));
 
             $validator = new Validator();
             $validator
@@ -70,7 +70,7 @@ class RuleController extends AdminController
                 redirect('/admin/rules');
 
             } else {
-                setInput(Request::all());
+                setInput($request->all());
                 setFlash('danger', $validator->getErrors());
             }
         }

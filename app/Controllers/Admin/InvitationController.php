@@ -2,10 +2,10 @@
 
 namespace App\Controllers\Admin;
 
-use App\Classes\Request;
 use App\Classes\Validator;
 use App\Models\Invite;
 use App\Models\User;
+use Illuminate\Http\Request;
 
 class InvitationController extends AdminController
 {
@@ -28,7 +28,7 @@ class InvitationController extends AdminController
      */
     public function index(): string
     {
-        $used = Request::input('used') ? 1 : 0;
+        $used = $request->input('used') ? 1 : 0;
 
         $total = Invite::query()->where('used', $used)->count();
         $page = paginate(setting('listinvite'), $total);
@@ -68,9 +68,9 @@ class InvitationController extends AdminController
      */
     public function create(): string
     {
-        if (Request::isMethod('post')) {
-            $token  = check(Request::input('token'));
-            $keys   = int(Request::input('keys'));
+        if ($request->isMethod('post')) {
+            $token  = check($request->input('token'));
+            $keys   = int($request->input('keys'));
 
             $validator = new Validator();
             $validator->equal($token, $_SESSION['token'], 'Неверный идентификатор сессии, повторите действие!')
@@ -93,7 +93,7 @@ class InvitationController extends AdminController
                 setFlash('success', 'Ключи успешно созданы!');
                 redirect('/admin/invitations');
             } else {
-                setInput(Request::all());
+                setInput($request->all());
                 setFlash('danger', $validator->getErrors());
             }
         }
@@ -111,9 +111,9 @@ class InvitationController extends AdminController
      */
     public function send(): void
     {
-        $token    = check(Request::input('token'));
-        $login    = check(Request::input('user'));
-        $userkeys = int(Request::input('userkeys'));
+        $token    = check($request->input('token'));
+        $login    = check($request->input('user'));
+        $userkeys = int($request->input('userkeys'));
 
         /* @var User $user */
         $user = getUserByLogin($login);
@@ -149,7 +149,7 @@ class InvitationController extends AdminController
             setFlash('success', 'Ключи успешно отправлены!');
             redirect('/admin/invitations');
         } else {
-            setInput(Request::all());
+            setInput($request->all());
             setFlash('danger', $validator->getErrors());
             redirect('/admin/invitations/create');
         }
@@ -163,7 +163,7 @@ class InvitationController extends AdminController
      */
     public function mail(): void
     {
-        $token    = check(Request::input('token'));
+        $token    = check($request->input('token'));
 
         $validator = new Validator();
         $validator->equal($token, $_SESSION['token'], 'Неверный идентификатор сессии, повторите действие!')
@@ -195,7 +195,7 @@ class InvitationController extends AdminController
             setFlash('success', 'Ключи успешно отправлены! ('. $users->count() .')');
             redirect('/admin/invitations');
         } else {
-            setInput(Request::all());
+            setInput($request->all());
             setFlash('danger', $validator->getErrors());
             redirect('/admin/invitations/create');
         }
@@ -208,10 +208,10 @@ class InvitationController extends AdminController
      */
     public function delete(): void
     {
-        $page  = int(Request::input('page', 1));
-        $token = check(Request::input('token'));
-        $del   = intar(Request::input('del'));
-        $used  = Request::input('used') ? 1 : 0;
+        $page  = int($request->input('page', 1));
+        $token = check($request->input('token'));
+        $del   = intar($request->input('del'));
+        $used  = $request->input('used') ? 1 : 0;
 
         $validator = new Validator();
         $validator->equal($token, $_SESSION['token'], 'Неверный идентификатор сессии, повторите действие!')

@@ -2,10 +2,10 @@
 
 namespace App\Controllers\Admin;
 
-use App\Classes\Request;
 use App\Classes\Validator;
 use App\Models\RekUser;
 use App\Models\User;
+use Illuminate\Http\Request;
 
 class RekUserController extends AdminController
 {
@@ -46,21 +46,21 @@ class RekUserController extends AdminController
      * @param int $id
      * @return string
      */
-    public function edit($id): string
+    public function edit(int $id): string
     {
-        $page = int(Request::input('page', 1));
+        $page = int($request->input('page', 1));
         $link = RekUser::query()->find($id);
 
         if (! $link) {
             abort(404, 'Данной ссылки не существует!');
         }
 
-        if (Request::isMethod('post')) {
-            $token = check(Request::input('token'));
-            $site  = check(Request::input('site'));
-            $name  = check(Request::input('name'));
-            $color = check(Request::input('color'));
-            $bold  = empty(Request::input('bold')) ? 0 : 1;
+        if ($request->isMethod('post')) {
+            $token = check($request->input('token'));
+            $site  = check($request->input('site'));
+            $name  = check($request->input('name'));
+            $color = check($request->input('color'));
+            $bold  = empty($request->input('bold')) ? 0 : 1;
 
             $validator = new Validator();
             $validator->equal($token, $_SESSION['token'], 'Неверный идентификатор сессии, повторите действие!')
@@ -83,7 +83,7 @@ class RekUserController extends AdminController
                 setFlash('success', 'Рекламная ссылка успешно изменена!');
                 redirect('/admin/reklama?page=' . $page);
             } else {
-                setInput(Request::all());
+                setInput($request->all());
                 setFlash('danger', $validator->getErrors());
             }
         }
@@ -97,9 +97,9 @@ class RekUserController extends AdminController
      */
     public function delete(): void
     {
-        $page  = int(Request::input('page', 1));
-        $token = check(Request::input('token'));
-        $del   = intar(Request::input('del'));
+        $page  = int($request->input('page', 1));
+        $token = check($request->input('token'));
+        $del   = intar($request->input('del'));
 
         $validator = new Validator();
 

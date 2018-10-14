@@ -2,10 +2,10 @@
 
 namespace App\Controllers;
 
-use App\Classes\Request;
 use App\Classes\Validator;
 use App\Models\Bookmark;
 use App\Models\Topic;
+use Illuminate\Http\Request;
 
 class BookmarkController extends BaseController
 {
@@ -47,21 +47,23 @@ class BookmarkController extends BaseController
     /**
      * Добавление / удаление закладок
      *
+     * @param Request   $request
+     * @param Validator $validator
      * @return string
      * @throws \Exception
      */
-    public function perform(): string
+    public function perform(Request $request, Validator $validator): string
     {
-        if (! Request::ajax()) {
+        if (! $request->ajax()) {
             redirect('/');
         }
 
-        $token = check(Request::input('token'));
-        $tid   = int(Request::input('tid'));
+        $token = check($request->input('token'));
+        $tid   = int($request->input('tid'));
 
-        $validator = new Validator();
         $validator->equal($token, $_SESSION['token'], 'Неверный идентификатор сессии, повторите действие!');
 
+        /** @var Topic $topic */
         $topic = Topic::query()->find($tid);
         $validator->true($topic, 'Данной темы не существует!');
 
@@ -91,15 +93,16 @@ class BookmarkController extends BaseController
     /**
      * Удаление закладок
      *
+     * @param Request   $request
+     * @param Validator $validator
      * @return void
      */
-    public function delete(): void
+    public function delete(Request $request, Validator $validator): void
     {
-        $token    = check(Request::input('token'));
-        $topicIds = intar(Request::input('del'));
-        $page     = int(Request::input('page'));
+        $token    = check($request->input('token'));
+        $topicIds = intar($request->input('del'));
+        $page     = int($request->input('page'));
 
-        $validator = new Validator();
         $validator->equal($token, $_SESSION['token'], 'Неверный идентификатор сессии, повторите действие!')
             ->notEmpty($topicIds, 'Ошибка! Отсутствуют выбранные закладки!');
 

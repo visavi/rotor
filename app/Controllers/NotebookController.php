@@ -2,9 +2,9 @@
 
 namespace App\Controllers;
 
-use App\Classes\Request;
 use App\Classes\Validator;
 use App\Models\Notebook;
+use Illuminate\Http\Request;
 
 class NotebookController extends BaseController
 {
@@ -36,12 +36,15 @@ class NotebookController extends BaseController
 
     /**
      * Редактирование
+     *
+     * @param Request $request
+     * @return string
      */
-    public function edit()
+    public function edit(Request $request): string
     {
-        if (Request::isMethod('post')) {
-            $token = check(Request::input('token'));
-            $msg   = check(Request::input('msg'));
+        if ($request->isMethod('post')) {
+            $token = check($request->input('token'));
+            $msg   = check($request->input('msg'));
 
             $validator = new Validator();
             $validator
@@ -57,7 +60,7 @@ class NotebookController extends BaseController
 
                 setFlash('success', 'Запись успешно сохранена!');
             } else {
-                setInput(Request::all());
+                setInput($request->all());
                 setFlash('danger', $validator->getErrors());
             }
 

@@ -2,8 +2,8 @@
 
 namespace App\Controllers\Admin;
 
-use App\Classes\Request;
 use App\Models\User;
+use Illuminate\Http\Request;
 
 class CacheController extends AdminController
 {
@@ -26,7 +26,7 @@ class CacheController extends AdminController
      */
     public function index(): string
     {
-        $type = check(Request::input('type', 'files'));
+        $type = check($request->input('type', 'files'));
 
         if ($type === 'files') {
             $files = glob(STORAGE . '/temp/*.dat');
@@ -51,8 +51,8 @@ class CacheController extends AdminController
      */
     public function clear(): void
     {
-        $token = check(Request::input('token'));
-        $type  = check(Request::input('type', 'files'));
+        $token = check($request->input('token'));
+        $type  = check($request->input('type', 'files'));
 
         if ($token === $_SESSION['token']) {
 

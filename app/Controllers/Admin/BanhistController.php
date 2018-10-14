@@ -2,10 +2,10 @@
 
 namespace App\Controllers\Admin;
 
-use App\Classes\Request;
 use App\Classes\Validator;
 use App\Models\Banhist;
 use App\Models\User;
+use Illuminate\Http\Request;
 
 class BanhistController extends AdminController
 {
@@ -45,7 +45,7 @@ class BanhistController extends AdminController
      */
     public function view(): string
     {
-        $login = check(Request::input('user'));
+        $login = check($request->input('user'));
 
         $user = User::query()->where('login', $login)->first();
 
@@ -74,10 +74,10 @@ class BanhistController extends AdminController
      */
     public function delete(): void
     {
-        $page  = int(Request::input('page', 1));
-        $token = check(Request::input('token'));
-        $del   = intar(Request::input('del'));
-        $login = check(Request::input('user'));
+        $page  = int($request->input('page', 1));
+        $token = check($request->input('token'));
+        $del   = intar($request->input('del'));
+        $login = check($request->input('user'));
 
         $validator = new Validator();
         $validator->equal($token, $_SESSION['token'], 'Неверный идентификатор сессии, повторите действие!')

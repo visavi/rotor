@@ -27,6 +27,7 @@ use Illuminate\Http\UploadedFile;
  * @property int loads
  * @property int active
  * @property int updated_at
+ * @property Collection files
  */
 class Down extends BaseModel
 {
@@ -104,7 +105,7 @@ class Down extends BaseModel
      */
     public function getFiles(): Collection
     {
-        return $this->files->filter(function ($value, $key) {
+        return $this->files->filter(function (File $value, $key) {
             return ! $value->isImage();
         });
     }
@@ -116,7 +117,7 @@ class Down extends BaseModel
      */
     public function getImages(): Collection
     {
-        return $this->files->filter(function ($value, $key) {
+        return $this->files->filter(function (File $value, $key) {
             return $value->isImage();
         });
     }

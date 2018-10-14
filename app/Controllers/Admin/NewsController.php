@@ -2,11 +2,11 @@
 
 namespace App\Controllers\Admin;
 
-use App\Classes\Request;
 use App\Classes\Validator;
 use App\Models\News;
 use App\Models\Setting;
 use App\Models\User;
+use Illuminate\Http\Request;
 
 class NewsController extends AdminController
 {
@@ -48,22 +48,22 @@ class NewsController extends AdminController
      * @param int $id
      * @return string
      */
-    public function edit($id): string
+    public function edit(int $id): string
     {
-        $page = int(Request::input('page', 1));
+        $page = int($request->input('page', 1));
         $news = News::query()->find($id);
 
         if (! $news) {
             abort(404, 'Новость не существует, возможно она была удалена!');
         }
 
-        if (Request::isMethod('post')) {
-            $token  = check(Request::input('token'));
-            $title  = check(Request::input('title'));
-            $text   = check(Request::input('text'));
-            $image  = Request::file('image');
-            $closed = empty(Request::input('closed')) ? 0 : 1;
-            $top    = empty(Request::input('top')) ? 0 : 1;
+        if ($request->isMethod('post')) {
+            $token  = check($request->input('token'));
+            $title  = check($request->input('title'));
+            $text   = check($request->input('text'));
+            $image  = $request->file('image');
+            $closed = empty($request->input('closed')) ? 0 : 1;
+            $top    = empty($request->input('top')) ? 0 : 1;
 
             $validator = new Validator();
             $validator->equal($token, $_SESSION['token'], 'Неверный идентификатор сессии, повторите действие!')
@@ -96,7 +96,7 @@ class NewsController extends AdminController
                 setFlash('success', 'Новость успешно отредактирована!');
                 redirect('/admin/news/edit/' . $news->id . '?page=' . $page);
             } else {
-                setInput(Request::all());
+                setInput($request->all());
                 setFlash('danger', $validator->getErrors());
             }
         }
@@ -111,13 +111,13 @@ class NewsController extends AdminController
      */
     public function create(): string
     {
-        if (Request::isMethod('post')) {
-            $token  = check(Request::input('token'));
-            $title  = check(Request::input('title'));
-            $text   = check(Request::input('text'));
-            $image  = Request::file('image');
-            $closed = empty(Request::input('closed')) ? 0 : 1;
-            $top    = empty(Request::input('top')) ? 0 : 1;
+        if ($request->isMethod('post')) {
+            $token  = check($request->input('token'));
+            $title  = check($request->input('title'));
+            $text   = check($request->input('text'));
+            $image  = $request->file('image');
+            $closed = empty($request->input('closed')) ? 0 : 1;
+            $top    = empty($request->input('top')) ? 0 : 1;
 
             $validator = new Validator();
             $validator->equal($token, $_SESSION['token'], 'Неверный идентификатор сессии, повторите действие!')
@@ -156,7 +156,7 @@ class NewsController extends AdminController
                 setFlash('success', 'Новость успешно добавлена!');
                 redirect('/admin/news/edit/' . $news->id);
             } else {
-                setInput(Request::all());
+                setInput($request->all());
                 setFlash('danger', $validator->getErrors());
             }
         }
@@ -175,7 +175,7 @@ class NewsController extends AdminController
             abort(403, 'Доступ запрещен!');
         }
 
-        $token = check(Request::input('token'));
+        $token = check($request->input('token'));
 
         if ($token === $_SESSION['token']) {
 
@@ -196,10 +196,10 @@ class NewsController extends AdminController
      * @return void
      * @throws \Exception
      */
-    public function delete($id): void
+    public function delete(int $id): void
     {
-        $page  = int(Request::input('page', 1));
-        $token = check(Request::input('token'));
+        $page  = int($request->input('page', 1));
+        $token = check($request->input('token'));
 
         $news = News::query()->find($id);
 

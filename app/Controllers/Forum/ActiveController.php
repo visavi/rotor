@@ -2,12 +2,12 @@
 
 namespace App\Controllers\Forum;
 
-use App\Classes\Request;
 use App\Classes\Validator;
 use App\Controllers\BaseController;
 use App\Models\Post;
 use App\Models\Topic;
 use App\Models\User;
+use Illuminate\Http\Request;
 
 class ActiveController extends BaseController
 {
@@ -20,7 +20,8 @@ class ActiveController extends BaseController
     {
         parent::__construct();
 
-        $login = check(Request::input('user', getUser('login')));
+        $request = Request::createFromGlobals();
+        $login   = check($request->input('user', getUser('login')));
 
         $this->user = User::query()->where('login', $login)->first();
 
@@ -86,12 +87,13 @@ class ActiveController extends BaseController
     /**
      * Удаление сообщений
      *
+     * @param Request $request
      * @return string
      * @throws \Exception
      */
-    public function delete(): string
+    public function delete(Request $request): string
     {
-        if (! Request::ajax()) {
+        if (! $request->ajax()) {
             redirect('/');
         }
 
@@ -99,8 +101,8 @@ class ActiveController extends BaseController
             abort(403, 'Удалять сообщения могут только модераторы!');
         }
 
-        $token = check(Request::input('token'));
-        $tid   = int(Request::input('tid'));
+        $token = check($request->input('token'));
+        $tid   = int($request->input('tid'));
 
         $validator = new Validator();
         $validator->equal($token, $_SESSION['token'], 'Неверный идентификатор сессии, повторите действие!');

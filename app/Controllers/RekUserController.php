@@ -2,9 +2,9 @@
 
 namespace App\Controllers;
 
-use App\Classes\Request;
 use App\Classes\Validator;
 use App\Models\RekUser;
+use Illuminate\Http\Request;
 
 class RekUserController extends BaseController
 {
@@ -45,9 +45,10 @@ class RekUserController extends BaseController
     /**
      * Покупка рекламы
      *
+     * @param Request $request
      * @return string
      */
-    public function create(): string
+    public function create(Request $request): string
     {
         if (! getUser()) {
             abort(403, 'Для покупки рекламы необходимо авторизоваться!');
@@ -71,12 +72,12 @@ class RekUserController extends BaseController
             abort('default', 'Вы уже разместили рекламу, запрещено добавлять несколько сайтов подряд!');
         }
 
-        if (Request::isMethod('post')) {
-            $token = check(Request::input('token'));
-            $site  = check(Request::input('site'));
-            $name  = check(Request::input('name'));
-            $color = check(Request::input('color'));
-            $bold  = empty(Request::input('bold')) ? 0 : 1;
+        if ($request->isMethod('post')) {
+            $token = check($request->input('token'));
+            $site  = check($request->input('site'));
+            $name  = check($request->input('name'));
+            $color = check($request->input('color'));
+            $bold  = empty($request->input('bold')) ? 0 : 1;
 
             $price = setting('rekuserprice');
 
@@ -120,7 +121,7 @@ class RekUserController extends BaseController
                 setFlash('success', 'Рекламная ссылка успешно размещена');
                 redirect('/reklama');
             } else {
-                setInput(Request::all());
+                setInput($request->all());
                 setFlash('danger', $validator->getErrors());
             }
         }

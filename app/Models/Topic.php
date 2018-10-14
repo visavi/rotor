@@ -21,6 +21,7 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
  * @property string note
  * @property int last_post_id
  * @property int created_at
+ * @property Forum forum
  */
 class Topic extends BaseModel
 {

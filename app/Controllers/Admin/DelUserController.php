@@ -2,9 +2,9 @@
 
 namespace App\Controllers\Admin;
 
-use App\Classes\Request;
 use App\Classes\Validator;
 use App\Models\User;
+use Illuminate\Http\Request;
 
 class DelUserController extends AdminController
 {
@@ -28,10 +28,10 @@ class DelUserController extends AdminController
     public function index(): string
     {
         $users  = collect();
-        $period = check(Request::input('period'));
-        $point  = check(Request::input('point'));
+        $period = check($request->input('period'));
+        $point  = check($request->input('point'));
 
-        if (Request::isMethod('post')) {
+        if ($request->isMethod('post')) {
 
             if ($period < 180) {
                 abort('default', 'Указанно недопустимое время для удаления!');
@@ -59,9 +59,9 @@ class DelUserController extends AdminController
      */
     public function clear(): void
     {
-        $token  = check(Request::input('token'));
-        $period = check(Request::input('period'));
-        $point  = check(Request::input('point'));
+        $token  = check($request->input('token'));
+        $period = check($request->input('period'));
+        $point  = check($request->input('point'));
 
         $validator = new Validator();
         $validator

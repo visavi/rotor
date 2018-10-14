@@ -2,10 +2,10 @@
 
 namespace App\Controllers\Admin;
 
-use App\Classes\Request;
 use App\Classes\Validator;
 use App\Models\Setting;
 use App\Models\User;
+use Illuminate\Http\Request;
 
 class SettingController extends AdminController
 {
@@ -28,18 +28,18 @@ class SettingController extends AdminController
      */
     public function index(): string
     {
-        $act = check(Request::input('act', 'main'));
+        $act = check($request->input('act', 'main'));
 
         if (! \in_array($act, Setting::getActions(), true)) {
             abort(404, 'Недопустимая страница!');
         }
 
-        if (Request::isMethod('post')) {
+        if ($request->isMethod('post')) {
 
-            $sets  = check(Request::input('sets'));
-            $mods  = check(Request::input('mods'));
-            $opt   = check(Request::input('opt'));
-            $token = check(Request::input('token'));
+            $sets  = check($request->input('sets'));
+            $mods  = check($request->input('mods'));
+            $opt   = check($request->input('opt'));
+            $token = check($request->input('token'));
 
             $validator = new Validator();
             $validator->equal($token, $_SESSION['token'], ['msg' => 'Неверный идентификатор сессии, повторите действие!'])
@@ -66,7 +66,7 @@ class SettingController extends AdminController
                 setFlash('success', 'Настройки сайта успешно изменены!');
                 redirect('/admin/settings?act=' . $act);
             } else {
-                setInput(Request::all());
+                setInput($request->all());
                 setFlash('danger', $validator->getErrors());
             }
         }

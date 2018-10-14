@@ -2,11 +2,11 @@
 
 namespace App\Controllers\Load;
 
-use App\Classes\Request;
 use App\Controllers\BaseController;
 use App\Models\Comment;
 use App\Models\Down;
 use App\Models\User;
+use Illuminate\Http\Request;
 
 class ActiveController extends BaseController
 {
@@ -19,7 +19,8 @@ class ActiveController extends BaseController
     {
         parent::__construct();
 
-        $login = check(Request::input('user', getUser('login')));
+        $request = Request::createFromGlobals();
+        $login   = check($request->input('user', getUser('login')));
 
         $this->user = User::query()->where('login', $login)->first();
 
@@ -31,11 +32,12 @@ class ActiveController extends BaseController
     /**
      * Мои файлы
      *
+     * @param Request $request
      * @return string
      */
-    public function files(): string
+    public function files(Request $request): string
     {
-        $active = check(Request::input('active', 1));
+        $active = check($request->input('active', 1));
         $user   = $this->user;
 
         if ($user->id !== getUser('id')) {

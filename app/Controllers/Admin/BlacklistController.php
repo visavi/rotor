@@ -2,10 +2,10 @@
 
 namespace App\Controllers\Admin;
 
-use App\Classes\Request;
 use App\Classes\Validator;
 use App\Models\BlackList;
 use App\Models\User;
+use Illuminate\Http\Request;
 
 class BlacklistController extends AdminController
 {
@@ -31,7 +31,7 @@ class BlacklistController extends AdminController
         }
 
         $this->types = ['email', 'login', 'domain'];
-        $this->type = Request::input('type', 'email');
+        $this->type = $request->input('type', 'email');
 
         if (! \in_array($this->type, $this->types, true)) {
             abort(404, 'Указанный тип не найден!');
@@ -47,9 +47,9 @@ class BlacklistController extends AdminController
     {
         $type = $this->type;
 
-        if (Request::isMethod('post')) {
-            $token = check(Request::input('token'));
-            $value = check(utfLower(Request::input('value')));
+        if ($request->isMethod('post')) {
+            $token = check($request->input('token'));
+            $value = check(utfLower($request->input('value')));
 
             $validator = new Validator();
             $validator->equal($token, $_SESSION['token'], 'Неверный идентификатор сессии, повторите действие!')
@@ -83,7 +83,7 @@ class BlacklistController extends AdminController
                 setFlash('success', 'Запись успешно добавлена в черный список!');
                 redirect('/admin/blacklists?type=' . $type);
             } else {
-                setInput(Request::all());
+                setInput($request->all());
                 setFlash('danger', $validator->getErrors());
             }
         }
@@ -109,9 +109,9 @@ class BlacklistController extends AdminController
      */
     public function delete(): void
     {
-        $page  = int(Request::input('page', 1));
-        $token = check(Request::input('token'));
-        $del   = intar(Request::input('del'));
+        $page  = int($request->input('page', 1));
+        $token = check($request->input('token'));
+        $del   = intar($request->input('del'));
         $type  = $this->type;
 
         $validator = new Validator();

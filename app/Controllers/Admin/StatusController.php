@@ -2,10 +2,10 @@
 
 namespace App\Controllers\Admin;
 
-use App\Classes\Request;
 use App\Classes\Validator;
 use App\Models\Status;
 use App\Models\User;
+use Illuminate\Http\Request;
 
 class StatusController extends AdminController
 {
@@ -40,12 +40,12 @@ class StatusController extends AdminController
      */
     public function create(): string
     {
-        if (Request::isMethod('post')) {
-            $token   = check(Request::input('token'));
-            $topoint = int(Request::input('topoint'));
-            $point   = int(Request::input('point'));
-            $name    = check(Request::input('name'));
-            $color   = check(Request::input('color'));
+        if ($request->isMethod('post')) {
+            $token   = check($request->input('token'));
+            $topoint = int($request->input('topoint'));
+            $point   = int($request->input('point'));
+            $name    = check($request->input('name'));
+            $color   = check($request->input('color'));
 
             $validator = new Validator();
             $validator
@@ -65,7 +65,7 @@ class StatusController extends AdminController
                 setFlash('success', 'Статус успешно добавлен!');
                 redirect('/admin/status');
             } else {
-                setInput(Request::all());
+                setInput($request->all());
                 setFlash('danger', $validator->getErrors());
             }
         }
@@ -80,7 +80,7 @@ class StatusController extends AdminController
      */
     public function edit(): string
     {
-        $id = int(Request::input('id'));
+        $id = int($request->input('id'));
 
         $status = Status::query()->find($id);
 
@@ -88,12 +88,12 @@ class StatusController extends AdminController
             abort(404, 'Выбранный вами статус не найден!');
         }
 
-        if (Request::isMethod('post')) {
-            $token   = check(Request::input('token'));
-            $topoint = int(Request::input('topoint'));
-            $point   = int(Request::input('point'));
-            $name    = check(Request::input('name'));
-            $color   = check(Request::input('color'));
+        if ($request->isMethod('post')) {
+            $token   = check($request->input('token'));
+            $topoint = int($request->input('topoint'));
+            $point   = int($request->input('point'));
+            $name    = check($request->input('name'));
+            $color   = check($request->input('color'));
 
             $validator = new Validator();
             $validator
@@ -113,7 +113,7 @@ class StatusController extends AdminController
                 setFlash('success', 'Статус успешно изменен!');
                 redirect('/admin/status');
             } else {
-                setInput(Request::all());
+                setInput($request->all());
                 setFlash('danger', $validator->getErrors());
             }
         }
@@ -129,8 +129,8 @@ class StatusController extends AdminController
      */
     public function delete(): void
     {
-        $token = check(Request::input('token'));
-        $id    = int(Request::input('id'));
+        $token = check($request->input('token'));
+        $id    = int($request->input('id'));
 
         $validator = new Validator();
         $validator->equal($token, $_SESSION['token'], 'Неверный идентификатор сессии, повторите действие!');

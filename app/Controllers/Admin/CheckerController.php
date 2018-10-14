@@ -2,8 +2,8 @@
 
 namespace App\Controllers\Admin;
 
-use App\Classes\Request;
 use App\Models\User;
+use Illuminate\Http\Request;
 
 class CheckerController extends AdminController
 {
@@ -47,7 +47,7 @@ class CheckerController extends AdminController
      */
     public function scan(): void
     {
-        $token = check(Request::input('token'));
+        $token = check($request->input('token'));
 
         if ($token === $_SESSION['token']) {
             if (is_writable(STORAGE . '/temp')) {

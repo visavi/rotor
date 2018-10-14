@@ -2,7 +2,6 @@
 
 namespace App\Controllers;
 
-use App\Classes\Request;
 use App\Classes\Validator;
 use App\Models\Contact;
 use App\Models\Flood;
@@ -11,6 +10,7 @@ use App\Models\Inbox;
 use App\Models\Outbox;
 use App\Models\User;
 use Illuminate\Database\Capsule\Manager as DB;
+use Illuminate\Http\Request;
 
 class MessageController extends BaseController
 {
@@ -80,21 +80,24 @@ class MessageController extends BaseController
 
     /**
      * Отправка сообщений
+     *
+     * @param Request $request
+     * @return string
      */
-    public function send()
+    public function send(Request $request): string
     {
-        $login = check(Request::input('user'));
+        $login = check($request->input('user'));
 
-        if (! empty(Request::input('contact'))) {
-            $login = check(Request::input('contact'));
+        if (! empty($request->input('contact'))) {
+            $login = check($request->input('contact'));
         }
 
         $user = User::query()->where('login', $login)->first();
 
-        if (Request::isMethod('post')) {
+        if ($request->isMethod('post')) {
 
-            $token   = check(Request::input('token'));
-            $msg     = check(Request::input('msg'));
+            $token   = check($request->input('token'));
+            $msg     = check($request->input('msg'));
 
             $validator = new Validator();
             $validator->equal($token, $_SESSION['token'], ['msg' => 'Неверный идентификатор сессии, повторите действие!'])
@@ -106,7 +109,7 @@ class MessageController extends BaseController
 
                 $validator->notEqual($user->id, getUser('id'), ['user' => 'Нельзя отправлять письмо самому себе!']);
 
-                if (getUser('point') < setting('privatprotect') && ! captchaVerify()) {
+                if (! captchaVerify() && getUser('point') < setting('privatprotect')) {
                     $validator->addError(['protect' => 'Не удалось пройти проверку captcha!']);
                 }
 
@@ -143,13 +146,13 @@ class MessageController extends BaseController
                     'created_at'    => SITETIME,
                 ]);
 
-                DB::delete("DELETE FROM `outbox` WHERE `recipient_id`=? AND `created_at` < (SELECT MIN(`created_at`) FROM (SELECT `created_at` FROM `outbox` WHERE `recipient_id`=? ORDER BY `created_at` DESC LIMIT " . setting('limitoutmail') . ") AS del);", [getUser('id'), getUser('id')]);
+                DB::delete('DELETE FROM `outbox` WHERE `recipient_id`=? AND `created_at` < (SELECT MIN(`created_at`) FROM (SELECT `created_at` FROM `outbox` WHERE `recipient_id`=? ORDER BY `created_at` DESC LIMIT ' . setting('limitoutmail') . ') AS del);', [getUser('id'), getUser('id')]);
 
                 setFlash('success', 'Ваше письмо успешно отправлено!');
                 redirect('/messages');
 
             } else {
-                setInput(Request::all());
+                setInput($request->all());
                 setFlash('danger', $validator->getErrors());
             }
         }
@@ -165,13 +168,15 @@ class MessageController extends BaseController
 
     /**
      * Удаление сообщений
+     *
+     * @param Request $request
      */
-    public function delete()
+    public function delete(Request $request): void
     {
-        $token = check(Request::input('token'));
-        $type  = check(Request::input('type'));
-        $del   = intar(Request::input('del'));
-        $page  = int(Request::input('page', 1));
+        $token = check($request->input('token'));
+        $type  = check($request->input('type'));
+        $del   = intar($request->input('del'));
+        $page  = int($request->input('page', 1));
 
         $validator = new Validator();
         $validator->equal($token, $_SESSION['token'], 'Неверный идентификатор сессии, повторите действие!')
@@ -179,7 +184,7 @@ class MessageController extends BaseController
 
         if ($validator->isValid()) {
 
-            if ($type == 'outbox') {
+            if ($type === 'outbox') {
                 Outbox::query()
                     ->where('user_id', getUser('id'))
                     ->whereIn('id', $del)
@@ -202,12 +207,14 @@ class MessageController extends BaseController
 
     /**
      * Очистка сообщений
+     *
+     * @param Request $request
      */
-    public function clear()
+    public function clear(Request $request): void
     {
-        $token = check(Request::input('token'));
-        $type  = check(Request::input('type'));
-        $page  = int(Request::input('page', 1));
+        $token = check($request->input('token'));
+        $type  = check($request->input('type'));
+        $page  = int($request->input('page', 1));
 
         $validator = new Validator();
         $validator->equal($token, $_SESSION['token'], 'Неверный идентификатор сессии, повторите действие!')
@@ -215,7 +222,7 @@ class MessageController extends BaseController
 
         if ($validator->isValid()) {
 
-            if ($type == 'outbox') {
+            if ($type === 'outbox') {
                 Outbox::query()->where('user_id', getUser('id'))->delete();
             } else {
                 Inbox::query()->where('user_id', getUser('id'))->delete();
@@ -232,16 +239,19 @@ class MessageController extends BaseController
 
     /**
      * Просмотр переписки
+     *
+     * @param Request $request
+     * @return string
      */
-    public function history()
+    public function history(Request $request): string
     {
-        $login = check(Request::input('user'));
+        $login = check($request->input('user'));
 
         if (! $user = getUserByLogin($login)) {
             abort(404, 'Пользователя с данным логином не существует!');
         }
 
-        if ($user->id == getUser('id')) {
+        if ($user->id === getUser('id')) {
             abort('default', 'Отсутствует переписка с самим собой!');
         }
 

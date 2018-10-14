@@ -2,20 +2,21 @@
 
 namespace App\Controllers\User;
 
-use App\Classes\Request;
 use App\Classes\Validator;
 use App\Controllers\BaseController;
 use App\Models\Banhist;
 use App\Models\User;
+use Illuminate\Http\Request;
 
 class BanController extends BaseController
 {
     /**
      * Бан пользователя
      *
+     * @param Request $request
      * @return string
      */
-    public function ban(): string
+    public function ban(Request $request): string
     {
         if (! $user = getUser()) {
             abort(403, 'Вы не авторизованы!');
@@ -42,8 +43,8 @@ class BanController extends BaseController
             ->orderBy('created_at', 'desc')
             ->first();
 
-        if ($banhist && Request::isMethod('post')) {
-            $msg = check(Request::input('msg'));
+        if ($banhist && $request->isMethod('post')) {
+            $msg = check($request->input('msg'));
 
             $sendUser = getUserById($banhist->send_user_id);
 
@@ -67,7 +68,7 @@ class BanController extends BaseController
                 setFlash('success', 'Объяснение успешно отправлено!');
                 redirect('/ban');
             } else {
-                setInput(Request::all());
+                setInput($request->all());
                 setFlash('danger', $validator->getErrors());
             }
         }

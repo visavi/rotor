@@ -12,18 +12,22 @@ class PageController extends BaseController
 {
     /**
      * Главная страница
+     *
+     * @param string $action
+     * @param string $params
+     * @return string
      */
-    public function __call($action, $params)
+    public function __call(string $action, string $params)
     {
         if (! preg_match('|^[a-z0-9_\-]+$|i', $action)) {
             abort(404);
         }
 
-        if (! file_exists(RESOURCES.'/views/main/'.$action.'.blade.php')){
+        if (! file_exists(RESOURCES . '/views/main/' . $action . '.blade.php')){
             abort(404);
         }
 
-        if (! getUser() && $action == 'menu'){
+        if ($action === 'menu' && ! getUser()){
             abort(404);
         }
 
@@ -73,7 +77,7 @@ class PageController extends BaseController
     /**
      * Ежегодный сюрприз
      */
-    public function surprise()
+    public function surprise(): void
     {
         $surprise['requiredPoint'] = 50;
         $surprise['requiredDate']  = '10.01';

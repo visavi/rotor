@@ -2,22 +2,25 @@
 
 namespace App\Controllers;
 
-use App\Classes\Request;
 use App\Classes\Validator;
 use App\Models\User;
+use Illuminate\Http\Request;
 
 class MailController extends BaseController
 {
     /**
      * Главная страница
+     *
+     * @param Request $request
+     * @return string
      */
-    public function index()
+    public function index(Request $request): string
     {
-        if (Request::isMethod('post')) {
+        if ($request->isMethod('post')) {
 
-            $message = nl2br(check(Request::input('message')));
-            $name    = check(Request::input('name'));
-            $email   = check(Request::input('email'));
+            $message = nl2br(check($request->input('message')));
+            $name    = check($request->input('name'));
+            $email   = check($request->input('email'));
 
             if (getUser()) {
                 $name = getUser('login');
@@ -41,7 +44,7 @@ class MailController extends BaseController
                 setFlash('success', 'Ваше письмо успешно отправлено!');
                 redirect('/');
             } else {
-                setInput(Request::all());
+                setInput($request->all());
                 setFlash('danger', $validator->getErrors());
             }
         }
@@ -51,17 +54,20 @@ class MailController extends BaseController
 
     /**
      * Восстановление пароля
+     *
+     * @param Request $request
+     * @return string
      */
-    public function recovery()
+    public function recovery(Request $request): string
     {
         if (getUser()) {
             abort('default', 'Вы авторизованы, восстановление пароля невозможно!');
         }
 
-        $cookieLogin = (isset($_COOKIE['login'])) ? check($_COOKIE['login']) : '';
+        $cookieLogin = isset($_COOKIE['login']) ? check($_COOKIE['login']) : '';
 
-        if (Request::isMethod('post')) {
-            $login = check(Request::input('user'));
+        if ($request->isMethod('post')) {
+            $login = check($request->input('user'));
 
             $user = User::query()->where('login', $login)->orWhere('email', $login)->first();
             if (! $user) {
@@ -91,7 +97,7 @@ class MailController extends BaseController
                 setFlash('success', 'Восстановление пароля инициализировано!');
                 redirect('/login');
             } else {
-                setInput(Request::all());
+                setInput($request->all());
                 setFlash('danger', $validator->getErrors());
             }
         }
@@ -101,14 +107,17 @@ class MailController extends BaseController
 
     /**
      * Восстановление пароля
+     *
+     * @param Request $request
+     * @return string
      */
-    public function restore()
+    public function restore(Request $request): ?string
     {
         if (getUser()) {
             abort(403, 'Вы авторизованы, восстановление пароля невозможно!');
         }
 
-        $key = check(Request::input('key'));
+        $key = check($request->input('key'));
 
         $user = User::query()->where('keypasswd', $key)->first();
         if (! $user) {
@@ -139,18 +148,20 @@ class MailController extends BaseController
             sendMail($user['email'], $subject, $body);
 
             return view('mails/restore', ['login' => $user['login'], 'password' => $newpass]);
-        } else {
-            setFlash('danger', current($validator->getErrors()));
-            redirect('/');
         }
+
+        setFlash('danger', current($validator->getErrors()));
+        redirect('/');
     }
 
     /**
      * Отписка от рассылки
+     *
+     * @param Request $request
      */
-    public function unsubscribe()
+    public function unsubscribe(Request $request): void
     {
-        $key = check(Request::input('key'));
+        $key = check($request->input('key'));
 
         if (! $key) {
             abort('default', 'Отсутствует ключ для отписки от рассылки');

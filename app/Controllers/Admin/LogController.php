@@ -2,9 +2,9 @@
 
 namespace App\Controllers\Admin;
 
-use App\Classes\Request;
 use App\Models\Log;
 use App\Models\User;
+use Illuminate\Http\Request;
 
 class LogController extends AdminController
 {
@@ -47,7 +47,7 @@ class LogController extends AdminController
      */
     public function clear(): void
     {
-        $token = check(Request::input('token'));
+        $token = check($request->input('token'));
 
         if ($token === $_SESSION['token']) {
 

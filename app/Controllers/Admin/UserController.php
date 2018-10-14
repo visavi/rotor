@@ -2,7 +2,6 @@
 
 namespace App\Controllers\Admin;
 
-use App\Classes\Request;
 use App\Classes\Validator;
 use App\Models\Banhist;
 use App\Models\BlackList;
@@ -11,6 +10,7 @@ use App\Models\File;
 use App\Models\Post;
 use App\Models\Topic;
 use App\Models\User;
+use Illuminate\Http\Request;
 
 class UserController extends AdminController
 {
@@ -52,7 +52,7 @@ class UserController extends AdminController
      */
     public function search(): string
     {
-        $q = check(Request::input('q'));
+        $q = check($request->input('q'));
 
         $search = $q == 1 ? "RLIKE '^[-0-9]'" : "LIKE '$q%'";
 
@@ -76,7 +76,7 @@ class UserController extends AdminController
      */
     public function edit(): string
     {
-        $login = check(Request::input('user'));
+        $login = check($request->input('user'));
 
         $user = User::query()->where('login', $login)->first();
 
@@ -92,28 +92,28 @@ class UserController extends AdminController
             $allGroups[$level] = User::getLevelByKey($level);
         }
 
-        if (Request::isMethod('post')) {
+        if ($request->isMethod('post')) {
 
-            $token     = check(Request::input('token'));
-            $level     = check(Request::input('level'));
-            $password  = check(Request::input('password'));
-            $email     = check(Request::input('email'));
-            $name      = check(Request::input('name'));
-            $country   = check(Request::input('country'));
-            $city      = check(Request::input('city'));
-            $site      = check(Request::input('site'));
-            $birthday  = check(Request::input('birthday'));
-            $icq       = check(str_replace('-', '', Request::input('icq')));
-            $skype     = check(strtolower(Request::input('skype')));
-            $point     = int(Request::input('point'));
-            $money     = int(Request::input('money'));
-            $status    = check(Request::input('status'));
-            $posrating = int(Request::input('posrating'));
-            $negrating = int(Request::input('negrating'));
-            $themes    = check(Request::input('themes'));
-            $gender    = Request::input('gender') === 'male' ? 'male' : 'female';
-            $info      = check(Request::input('info'));
-            $created   = check(Request::input('created'));
+            $token     = check($request->input('token'));
+            $level     = check($request->input('level'));
+            $password  = check($request->input('password'));
+            $email     = check($request->input('email'));
+            $name      = check($request->input('name'));
+            $country   = check($request->input('country'));
+            $city      = check($request->input('city'));
+            $site      = check($request->input('site'));
+            $birthday  = check($request->input('birthday'));
+            $icq       = check(str_replace('-', '', $request->input('icq')));
+            $skype     = check(strtolower($request->input('skype')));
+            $point     = int($request->input('point'));
+            $money     = int($request->input('money'));
+            $status    = check($request->input('status'));
+            $posrating = int($request->input('posrating'));
+            $negrating = int($request->input('negrating'));
+            $themes    = check($request->input('themes'));
+            $gender    = $request->input('gender') === 'male' ? 'male' : 'female';
+            $info      = check($request->input('info'));
+            $created   = check($request->input('created'));
 
             $validator = new Validator();
             $validator->equal($token, $_SESSION['token'], 'Неверный идентификатор сессии, повторите действие!')
@@ -173,7 +173,7 @@ class UserController extends AdminController
                 redirect('/admin/users/edit?user=' . $user->login);
 
             } else {
-                setInput(Request::all());
+                setInput($request->all());
                 setFlash('danger', $validator->getErrors());
             }
         }
@@ -195,7 +195,7 @@ class UserController extends AdminController
      */
     public function delete(): string
     {
-        $login = check(Request::input('user'));
+        $login = check($request->input('user'));
 
         $user = User::query()->where('login', $login)->first();
 
@@ -203,15 +203,15 @@ class UserController extends AdminController
             abort(404, 'Пользователь не найден!');
         }
 
-        if (Request::isMethod('post')) {
+        if ($request->isMethod('post')) {
 
-            $token       = check(Request::input('token'));
-            $loginblack  = empty(Request::input('loginblack')) ? 0 : 1;
-            $mailblack   = empty(Request::input('mailblack')) ? 0 : 1;
-            $deltopics   = empty(Request::input('deltopics')) ? 0 : 1;
-            $delposts    = empty(Request::input('delposts')) ? 0 : 1;
-            $delcomments = empty(Request::input('delcomments')) ? 0 : 1;
-            $delimages   = empty(Request::input('delimages')) ? 0 : 1;
+            $token       = check($request->input('token'));
+            $loginblack  = empty($request->input('loginblack')) ? 0 : 1;
+            $mailblack   = empty($request->input('mailblack')) ? 0 : 1;
+            $deltopics   = empty($request->input('deltopics')) ? 0 : 1;
+            $delposts    = empty($request->input('delposts')) ? 0 : 1;
+            $delcomments = empty($request->input('delcomments')) ? 0 : 1;
+            $delimages   = empty($request->input('delimages')) ? 0 : 1;
 
             $validator = new Validator();
             $validator->equal($token, $_SESSION['token'], 'Неверный идентификатор сессии, повторите действие!')
@@ -317,7 +317,7 @@ class UserController extends AdminController
                 setFlash('success', 'Пользователь успешно удален!');
                 redirect('/admin/users');
             } else {
-                setInput(Request::all());
+                setInput($request->all());
                 setFlash('danger', $validator->getErrors());
             }
         }

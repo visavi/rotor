@@ -2,7 +2,6 @@
 
 namespace App\Controllers;
 
-use App\Classes\Request;
 use App\Classes\Validator;
 use App\Models\Comment;
 use App\Models\File;
@@ -11,6 +10,7 @@ use App\Models\Photo;
 use App\Models\User;
 use Illuminate\Database\Capsule\Manager as DB;
 use Illuminate\Database\Query\JoinClause;
+use Illuminate\Http\Request;
 
 class PhotoController extends BaseController
 {
@@ -40,7 +40,7 @@ class PhotoController extends BaseController
      * @param int $id
      * @return string
      */
-    public function view($id): string
+    public function view(int $id): string
     {
         $photo = Photo::query()
             ->select('photos.*', 'pollings.vote')
@@ -63,20 +63,21 @@ class PhotoController extends BaseController
     /**
      * Форма загрузки фото
      *
+     * @param Request $request
      * @return string
      */
-    public function create(): string
+    public function create(Request $request): string
     {
         if (! getUser()) {
             abort(403, 'Для добавления фотографий небходимо авторизоваться!');
         }
 
-        if (Request::isMethod('post')) {
+        if ($request->isMethod('post')) {
 
-            $token  = check(Request::input('token'));
-            $title  = check(Request::input('title'));
-            $text   = check(Request::input('text'));
-            $closed = empty(Request::input('closed')) ? 0 : 1;
+            $token  = check($request->input('token'));
+            $title  = check($request->input('title'));
+            $text   = check($request->input('text'));
+            $closed = empty($request->input('closed')) ? 0 : 1;
 
             $validator = new Validator();
             $validator->equal($token, $_SESSION['token'], 'Неверный идентификатор сессии, повторите действие!')
@@ -86,6 +87,7 @@ class PhotoController extends BaseController
 
             if ($validator->isValid()) {
 
+                /** @var Photo $photo */
                 $photo = Photo::query()->create([
                     'user_id'    => getUser('id'),
                     'title'      => $title,
@@ -103,7 +105,7 @@ class PhotoController extends BaseController
                 setFlash('success', 'Фотография успешно загружена!');
                 redirect('/photos/' . $photo->id);
             } else {
-                setInput(Request::all());
+                setInput($request->all());
                 setFlash('danger', $validator->getErrors());
             }
         }
@@ -120,28 +122,30 @@ class PhotoController extends BaseController
     /**
      * Редактирование фото
      *
-     * @param int $id
+     * @param int     $id
+     * @param Request $request
      * @return string
      */
-    public function edit($id): string
+    public function edit(int $id, Request $request): string
     {
-        $page = int(Request::input('page', 1));
+        $page = int($request->input('page', 1));
 
         if (! getUser()) {
             abort(403, 'Авторизуйтесь для редактирования фотографии!');
         }
 
+        /** @var Photo $photo */
         $photo = Photo::query()->where('user_id', getUser('id'))->find($id);
 
         if (! $photo) {
             abort(404, 'Выбранное вами фото не найдено или вы не автор этой фотографии!');
         }
 
-        if (Request::isMethod('post')) {
-            $token  = check(Request::input('token'));
-            $title  = check(Request::input('title'));
-            $text   = check(Request::input('text'));
-            $closed = empty(Request::input('closed')) ? 0 : 1;
+        if ($request->isMethod('post')) {
+            $token  = check($request->input('token'));
+            $title  = check($request->input('title'));
+            $text   = check($request->input('text'));
+            $closed = empty($request->input('closed')) ? 0 : 1;
 
             $validator = new Validator();
             $validator->equal($token, $_SESSION['token'], 'Неверный идентификатор сессии, повторите действие!')
@@ -160,7 +164,7 @@ class PhotoController extends BaseController
                 setFlash('success', 'Фотография успешно отредактирована!');
                 redirect('/photos/albums/' . getUser('login') . '?page=' . $page);
             } else {
-                setInput(Request::all());
+                setInput($request->all());
                 setFlash('danger', $validator->getErrors());
             }
         }
@@ -173,20 +177,22 @@ class PhotoController extends BaseController
     /**
      * Список комментариев
      *
-     * @param int $id
+     * @param int     $id
+     * @param Request $request
      * @return string
      */
-    public function comments($id): string
+    public function comments(int $id, Request $request): string
     {
+        /** @var Photo $photo */
         $photo = Photo::query()->find($id);
 
         if (! $photo) {
             abort(404, 'Фотография не найдена!');
         }
 
-        if (Request::isMethod('post')) {
-            $msg   = check(Request::input('msg'));
-            $token = check(Request::input('token'));
+        if ($request->isMethod('post')) {
+            $msg   = check($request->input('msg'));
+            $token = check($request->input('token'));
 
             $validator = new Validator();
             $validator
@@ -199,6 +205,7 @@ class PhotoController extends BaseController
             if ($validator->isValid()) {
                 $msg = antimat($msg);
 
+                /** @var Comment $comment */
                 $comment = Comment::query()->create([
                     'relate_type' => Photo::class,
                     'relate_id'   => $photo->id,
@@ -223,7 +230,7 @@ class PhotoController extends BaseController
                 setFlash('success', 'Комментарий успешно добавлен!');
                 redirect('/photos/end/' . $photo->id);
             } else {
-                setInput(Request::all());
+                setInput($request->all());
                 setFlash('danger', $validator->getErrors());
             }
         }
@@ -249,13 +256,16 @@ class PhotoController extends BaseController
     /**
      * Редактирование комментария
      *
-     * @param int $id
-     * @param int $cid
+     * @param int     $id
+     * @param int     $cid
+     * @param Request $request
      * @return string
      */
-    public function editComment($id, $cid): string
+    public function editComment(int $id, int $cid, Request $request): string
     {
-        $page = int(Request::input('page', 1));
+        $page = int($request->input('page', 1));
+
+        /** @var Photo $photo */
         $photo = Photo::query()->find($id);
 
         if (! $photo) {
@@ -286,9 +296,9 @@ class PhotoController extends BaseController
             abort('default', 'Редактирование невозможно, прошло более 10 минут!');
         }
 
-        if (Request::isMethod('post')) {
-            $msg   = check(Request::input('msg'));
-            $token = check(Request::input('token'));
+        if ($request->isMethod('post')) {
+            $msg   = check($request->input('msg'));
+            $token = check($request->input('token'));
 
             $validator = new Validator();
             $validator
@@ -306,7 +316,7 @@ class PhotoController extends BaseController
                 setFlash('success', 'Комментарий успешно отредактирован!');
                 redirect('/photos/comments/' . $photo->id . '?page=' . $page);
             } else {
-                setInput(Request::all());
+                setInput($request->all());
                 setFlash('danger', $validator->getErrors());
             }
         }
@@ -316,18 +326,21 @@ class PhotoController extends BaseController
     /**
      * Удаление фотографий
      *
-     * @param int $id
+     * @param int     $id
+     * @param Request $request
+     * @throws \Exception
      */
-    public function delete($id): void
+    public function delete(int $id, Request $request): void
     {
-        $page = int(Request::input('page', 1));
+        $page = int($request->input('page', 1));
 
-        $token = check(Request::input('token'));
+        $token = check($request->input('token'));
 
         if (! getUser()) {
             abort(403, 'Для удаления фотографий небходимо авторизоваться!');
         }
 
+        /** @var Photo $photo */
         $photo = Photo::query()->where('user_id', getUser('id'))->find($id);
 
         if (! $photo) {
@@ -358,7 +371,7 @@ class PhotoController extends BaseController
      *
      * @param int $id
      */
-    public function end($id): void
+    public function end(int $id): void
     {
         $photo = Photo::query()->find($id);
 
@@ -436,18 +449,17 @@ class PhotoController extends BaseController
     /**
      * Альбом пользователя
      *
+     * @param Request $request
      * @return string
      */
-    public function top(): string
+    public function top(Request $request): string
     {
-        $sort = check(Request::input('sort', 'rating'));
+        $sort = check($request->input('sort', 'rating'));
 
-        switch ($sort) {
-            case 'comments':
-                $order = 'count_comments';
-                break;
-            default:
-                $order = 'rating';
+        if ($sort === 'comments') {
+            $order = 'count_comments';
+        } else {
+            $order = 'rating';
         }
 
         $total = Photo::query()->count();
@@ -527,8 +539,9 @@ class PhotoController extends BaseController
      * @param int $id
      * @param int $cid
      */
-    public function viewComment($id, $cid): void
+    public function viewComment(int $id, int $cid): void
     {
+        /** @var Photo $photo */
         $photo = Photo::query()->find($id);
 
         if (! $photo) {

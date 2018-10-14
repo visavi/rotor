@@ -2,10 +2,10 @@
 
 namespace App\Controllers;
 
-use App\Classes\Request;
 use App\Classes\Validator;
 use App\Models\Social;
 use Curl\Curl;
+use Illuminate\Http\Request;
 
 class SocialController extends BaseController
 {
@@ -25,12 +25,16 @@ class SocialController extends BaseController
 
     /**
      * Главная страница
+     *
+     * @param Request $request
+     * @return string
+     * @throws \ErrorException
      */
-    public function index()
+    public function index(Request $request): string
     {
-        $token = check(Request::input('token'));
+        $token = check($request->input('token'));
 
-        if (Request::isMethod('post')) {
+        if ($request->isMethod('post')) {
             $curl    = new Curl();
             $network = $curl->get('//ulogin.ru/token.php',
                 [
@@ -74,10 +78,14 @@ class SocialController extends BaseController
 
     /**
      * Удаление привязки
+     *
+     * @param int     $id
+     * @param Request $request
+     * @throws \Exception
      */
-    public function delete($id)
+    public function delete(int $id, Request $request): void
     {
-        $token = check(Request::input('token'));
+        $token = check($request->input('token'));
 
         $social = Social::query()->where('user_id', $this->user->id)->find($id);
 

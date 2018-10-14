@@ -2,10 +2,10 @@
 
 namespace App\Controllers;
 
-use App\Classes\Request;
 use App\Models\Ban;
 use Gregwar\Captcha\PhraseBuilder;
 use Gregwar\Captcha\CaptchaBuilder;
+use Illuminate\Http\Request;
 
 class HomeController extends BaseController
 {
@@ -36,10 +36,11 @@ class HomeController extends BaseController
     /**
      * Бан по IP
      *
+     * @param Request $request
      * @return string
      * @throws \Exception
      */
-    public function banip(): string
+    public function banip(Request $request): string
     {
         header($_SERVER['SERVER_PROTOCOL'].' 403 Forbidden');
 
@@ -48,7 +49,7 @@ class HomeController extends BaseController
             ->whereNull('user_id')
             ->first();
 
-        if (Request::isMethod('post')) {
+        if ($request->isMethod('post')) {
 
             if ($ban && captchaVerify()) {
 

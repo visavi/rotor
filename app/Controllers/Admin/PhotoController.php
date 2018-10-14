@@ -2,10 +2,10 @@
 
 namespace App\Controllers\Admin;
 
-use App\Classes\Request;
 use App\Classes\Validator;
 use App\Models\Photo;
 use App\Models\User;
+use Illuminate\Http\Request;
 
 class PhotoController extends AdminController
 {
@@ -46,20 +46,20 @@ class PhotoController extends AdminController
      * @param int $id
      * @return string
      */
-    public function edit($id): string
+    public function edit(int $id): string
     {
-        $page  = int(Request::input('page', 1));
+        $page  = int($request->input('page', 1));
         $photo = Photo::query()->find($id);
 
         if (! $photo) {
             abort(404, 'Данной фотографии не существует!');
         }
 
-        if (Request::isMethod('post')) {
-            $token  = check(Request::input('token'));
-            $title  = check(Request::input('title'));
-            $text   = check(Request::input('text'));
-            $closed = empty(Request::input('closed')) ? 0 : 1;
+        if ($request->isMethod('post')) {
+            $token  = check($request->input('token'));
+            $title  = check($request->input('title'));
+            $text   = check($request->input('text'));
+            $closed = empty($request->input('closed')) ? 0 : 1;
 
             $validator = new Validator();
             $validator->equal($token, $_SESSION['token'], 'Неверный идентификатор сессии, повторите действие!')
@@ -79,7 +79,7 @@ class PhotoController extends AdminController
                 setFlash('success', 'Фотография успешно отредактирована!');
                 redirect('/admin/photos?page=' . $page);
             } else {
-                setInput(Request::all());
+                setInput($request->all());
                 setFlash('danger', $validator->getErrors());
             }
         }
@@ -94,14 +94,14 @@ class PhotoController extends AdminController
      * @return void
      * @throws \Exception
      */
-    public function delete($id): void
+    public function delete(int $id): void
     {
         if (! is_writable(UPLOADS . '/photos')){
             abort('default', 'Директория c фотографиями недоступна для записи!');
         }
 
-        $page  = int(Request::input('page', 1));
-        $token = check(Request::input('token'));
+        $page  = int($request->input('page', 1));
+        $token = check($request->input('token'));
 
         $photo = Photo::query()->find($id);
 
@@ -132,7 +132,7 @@ class PhotoController extends AdminController
      */
     public function restatement(): void
     {
-        $token = check(Request::input('token'));
+        $token = check($request->input('token'));
 
         if (isAdmin(User::BOSS)) {
             if ($token === $_SESSION['token']) {

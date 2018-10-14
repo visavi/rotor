@@ -2,13 +2,12 @@
 
 namespace App\Controllers\Admin;
 
-use App\Classes\Request;
 use App\Classes\Validator;
 use App\Models\Down;
 use App\Models\File;
 use App\Models\Load;
 use App\Models\User;
-use Illuminate\Database\Capsule\Manager as DB;
+use Illuminate\Http\Request;
 
 class LoadController extends AdminController
 {
@@ -51,8 +50,8 @@ class LoadController extends AdminController
             abort(403, 'Доступ запрещен!');
         }
 
-        $token = check(Request::input('token'));
-        $name  = check(Request::input('name'));
+        $token = check($request->input('token'));
+        $name  = check($request->input('name'));
 
         $validator = new Validator();
         $validator->equal($token, $_SESSION['token'], 'Неверный идентификатор сессии, повторите действие!')
@@ -70,7 +69,7 @@ class LoadController extends AdminController
             setFlash('success', 'Новый раздел успешно создан!');
             redirect('/admin/loads/edit/' . $load->id);
         } else {
-            setInput(Request::all());
+            setInput($request->all());
             setFlash('danger', $validator->getErrors());
         }
 
@@ -83,7 +82,7 @@ class LoadController extends AdminController
      * @param int $id
      * @return string
      */
-    public function edit($id): string
+    public function edit(int $id): string
     {
         if (! isAdmin(User::BOSS)) {
             abort(403, 'Доступ запрещен!');
@@ -100,12 +99,12 @@ class LoadController extends AdminController
             ->orderBy('sort')
             ->get();
 
-        if (Request::isMethod('post')) {
-            $token  = check(Request::input('token'));
-            $parent = int(Request::input('parent'));
-            $name   = check(Request::input('name'));
-            $sort   = check(Request::input('sort'));
-            $closed = empty(Request::input('closed')) ? 0 : 1;
+        if ($request->isMethod('post')) {
+            $token  = check($request->input('token'));
+            $parent = int($request->input('parent'));
+            $name   = check($request->input('name'));
+            $sort   = check($request->input('sort'));
+            $closed = empty($request->input('closed')) ? 0 : 1;
 
             $validator = new Validator();
             $validator->equal($token, $_SESSION['token'], 'Неверный идентификатор сессии, повторите действие!')
@@ -128,7 +127,7 @@ class LoadController extends AdminController
                 setFlash('success', 'Раздел успешно отредактирован!');
                 redirect('/admin/loads');
             } else {
-                setInput(Request::all());
+                setInput($request->all());
                 setFlash('danger', $validator->getErrors());
             }
         }
@@ -143,7 +142,7 @@ class LoadController extends AdminController
      * @return void
      * @throws \Exception
      */
-    public function delete($id): void
+    public function delete(int $id): void
     {
         if (! isAdmin(User::BOSS)) {
             abort(403, 'Доступ запрещен!');
@@ -155,7 +154,7 @@ class LoadController extends AdminController
             abort(404, 'Данного раздела не существует!');
         }
 
-        $token = check(Request::input('token'));
+        $token = check($request->input('token'));
 
         $validator = new Validator();
         $validator->equal($token, $_SESSION['token'], 'Неверный идентификатор сессии, повторите действие!')
@@ -189,7 +188,7 @@ class LoadController extends AdminController
             abort(403, 'Доступ запрещен!');
         }
 
-        $token = check(Request::input('token'));
+        $token = check($request->input('token'));
 
         if ($token === $_SESSION['token']) {
 
@@ -209,7 +208,7 @@ class LoadController extends AdminController
      * @param int $id
      * @return string
      */
-    public function load($id): string
+    public function load(int $id): string
     {
         $category = Load::query()->with('parent')->find($id);
 
@@ -220,7 +219,7 @@ class LoadController extends AdminController
         $total = Down::query()->where('category_id', $category->id)->where('active', 1)->count();
         $page = paginate(setting('downlist'), $total);
 
-        $sort = check(Request::input('sort'));
+        $sort = check($request->input('sort'));
 
         switch ($sort) {
             case 'rated':
@@ -253,7 +252,7 @@ class LoadController extends AdminController
      * @param int $id
      * @return string
      */
-    public function editDown($id): string
+    public function editDown(int $id): string
     {
         $down = Down::query()->find($id);
 
@@ -261,12 +260,12 @@ class LoadController extends AdminController
             abort(404, 'Данного файла не существует!');
         }
 
-        if (Request::isMethod('post')) {
-            $token    = check(Request::input('token'));
-            $category = check(Request::input('category'));
-            $title    = check(Request::input('title'));
-            $text     = check(Request::input('text'));
-            $files    = (array) Request::file('files');
+        if ($request->isMethod('post')) {
+            $token    = check($request->input('token'));
+            $category = check($request->input('category'));
+            $title    = check($request->input('title'));
+            $text     = check($request->input('text'));
+            $files    = (array) $request->file('files');
 
             $category = Load::query()->find($category);
 
@@ -322,7 +321,7 @@ class LoadController extends AdminController
                 setFlash('success', 'Загрузка успешно отредактирована!');
                 redirect('/admin/downs/edit/' . $down->id);
             } else {
-                setInput(Request::all());
+                setInput($request->all());
                 setFlash('danger', $validator->getErrors());
             }
         }
@@ -343,9 +342,9 @@ class LoadController extends AdminController
      * @return void
      * @throws \Exception
      */
-    public function deleteDown($id): void
+    public function deleteDown(int $id): void
     {
-        $token = check(Request::input('token'));
+        $token = check($request->input('token'));
         $down  = Down::query()->find($id);
 
         if (! $down) {
@@ -381,7 +380,7 @@ class LoadController extends AdminController
      * @return void
      * @throws \Exception
      */
-    public function deleteFile($id, $fid): void
+    public function deleteFile(int $id, int $fid): void
     {
         $down = Down::query()->find($id);
 
@@ -430,9 +429,9 @@ class LoadController extends AdminController
      * @param int $id
      * @return void
      */
-    public function publish($id): void
+    public function publish(int $id): void
     {
-        $token = check(Request::input('token'));
+        $token = check($request->input('token'));
         $down  = Down::query()->find($id);
 
         if (! $down) {

@@ -1,8 +1,8 @@
 <?php
 
-use App\Classes\Request;
 use App\Models\News;
 use App\Models\User;
+use Illuminate\Http\Request;
 
 ob_start();
 
@@ -94,7 +94,7 @@ header("Content-type:text/html; charset=utf-8");
 </div>
 <div class="site">
 
-    <?php if (! Request::has('act')): ?>
+    <?php if (! $request->has('act')): ?>
 
         <h1>Шаг 1 - проверка требований</h1>
 
@@ -262,28 +262,28 @@ header("Content-type:text/html; charset=utf-8");
     <?php endif; ?>
 
     <?php if (env('APP_NEW')): ?>
-        <?php if (Request::input('act') === 'status'): ?>
+        <?php if ($request->input('act') === 'status'): ?>
             <h1>Шаг 2 - проверка статуса (установка)</h1>
 
             <?= nl2br($wrap->getStatus()); ?>
 
             <p><a style="font-size: 18px" href="?act=migrate">Выполнить миграции</a></p>
 
-        <?php elseif(Request::input('act') === 'migrate'): ?>
+        <?php elseif($request->input('act') === 'migrate'): ?>
             <h1>Шаг 3 - выполнение миграций (установка)</h1>
 
             <?= nl2br($wrap->getMigrate()); ?>
 
             <p><a style="font-size: 18px" href="?act=seed">Заполнить БД</a></p>
 
-        <?php elseif(Request::input('act') === 'seed'): ?>
+        <?php elseif($request->input('act') === 'seed'): ?>
 
             <h1>Шаг 4 - заполнение БД (установка)</h1>
 
             <?= nl2br($wrap->getSeed()); ?>
 
             <p><a style="font-size: 18px" href="?act=account">Создать администратора</a></p>
-        <?php elseif(Request::input('act') === 'account'): ?>
+        <?php elseif($request->input('act') === 'account'): ?>
 
             <h1>Шаг 5 - создание администратора (установка)</h1>
 
@@ -292,13 +292,13 @@ header("Content-type:text/html; charset=utf-8");
             После окончания инсталляции необходимо удалить директории <b>install</b> и <b>upgrade</b> со всем содержимым навсегда, пароль и остальные данные вы сможете поменять в своем профиле<br><br>
 
             <?php
-                $login     = check(Request::input('login'));
-                $password  = check(Request::input('password'));
-                $password2 = check(Request::input('password2'));
-                $email     = strtolower(check(Request::input('email')));
+                $login     = check($request->input('login'));
+                $password  = check($request->input('password'));
+                $password2 = check($request->input('password2'));
+                $email     = strtolower(check($request->input('email')));
             ?>
 
-            <?php if (Request::isMethod('post')): ?>
+            <?php if ($request->isMethod('post')): ?>
 
                 <?php
                 if (strlen($login) <= 20 && strlen($login) >= 3) {
@@ -376,7 +376,7 @@ header("Content-type:text/html; charset=utf-8");
             В поле ввода адреса сайта необходимо ввести адрес в который у вас распакован движок, если это поддомен или папка, то необходимо указать ее, к примеру http://wap.visavi.net<br><br>
 
 
-        <?php elseif (Request::input('act') === 'finish'): ?>
+        <?php elseif ($request->input('act') === 'finish'): ?>
 
             <h1>Установка завершена</h1>
 
@@ -390,16 +390,16 @@ header("Content-type:text/html; charset=utf-8");
 
     <?php else: ?>
 
-        <?php if (Request::input('act') === 'status'): ?>
+        <?php if ($request->input('act') === 'status'): ?>
 
             <h1>Шаг 2 - проверка статуса (обновление)</h1>
             <?= nl2br($wrap->getStatus()); ?>
             <a style="font-size: 18px" href="?act=migrate">Перейти к обновлению</a>
 
-        <?php elseif(Request::input('act') === 'rollback'): ?>
+        <?php elseif($request->input('act') === 'rollback'): ?>
             <?= nl2br($wrap->getRollback()); ?>
 
-        <?php elseif (Request::input('act') === 'migrate'): ?>
+        <?php elseif ($request->input('act') === 'migrate'): ?>
 
             <h1>Обновление завершено</h1>
 

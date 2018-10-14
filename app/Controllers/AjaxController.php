@@ -51,10 +51,11 @@ class AjaxController extends BaseController
     /**
      * Отправляет жалобу на сообщение
      *
-     * @param Request $request
+     * @param Request   $request
+     * @param Validator $validator
      * @return string
      */
-    public function complaint(Request $request): string
+    public function complaint(Request $request, Validator $validator): string
     {
         $path  = null;
         $data  = false;
@@ -131,7 +132,6 @@ class AjaxController extends BaseController
 
         $spam = Spam::query()->where(['relate_type' => $type, 'relate_id' => $id])->first();
 
-        $validator = new Validator();
         $validator
             ->equal($token, $_SESSION['token'], 'Неверный идентификатор сессии, повторите действие!')
             ->true($data, 'Выбранное вами сообщение для жалобы не существует!')
@@ -158,10 +158,11 @@ class AjaxController extends BaseController
     /**
      * Удаляет комментарии
      *
-     * @param Request $request
+     * @param Request   $request
+     * @param Validator $validator
      * @return string
      */
-    public function delComment(Request $request): string
+    public function delComment(Request $request, Validator $validator): string
     {
         if (! isAdmin()) {
             return json_encode(['status' => 'error', 'message' => 'Not authorized']);
@@ -172,7 +173,6 @@ class AjaxController extends BaseController
         $rid   = int($request->input('rid'));
         $id    = int($request->input('id'));
 
-        $validator = new Validator();
         $validator->equal($token, $_SESSION['token'], 'Неверный идентификатор сессии, повторите действие!');
 
         if ($validator->isValid()) {
@@ -279,10 +279,11 @@ class AjaxController extends BaseController
     /**
      * Загружает изображение
      *
-     * @param Request $request
+     * @param Request   $request
+     * @param Validator $validator
      * @return string
      */
-    public function uploadImage(Request $request): string
+    public function uploadImage(Request $request, Validator $validator): string
     {
         $types = [
             Blog::class,
@@ -318,7 +319,6 @@ class AjaxController extends BaseController
             ->where('user_id', getUser('id'))
             ->count();
 
-        $validator = new Validator();
         $validator
             ->equal($token, $_SESSION['token'], 'Неверный идентификатор сессии, повторите действие!')
             ->lt($countFiles, setting('maxfiles'), 'Разрешено загружать не более ' . setting('maxfiles') . ' файлов!');
@@ -353,11 +353,12 @@ class AjaxController extends BaseController
     /**
      * Удаляет изображение
      *
-     * @param Request $request
+     * @param Request   $request
+     * @param Validator $validator
      * @return string
      * @throws \Exception
      */
-    public function deleteImage(Request $request): string
+    public function deleteImage(Request $request, Validator $validator): string
     {
         $types = [
             Blog::class,
@@ -385,7 +386,6 @@ class AjaxController extends BaseController
             ]);
         }
 
-        $validator = new Validator();
         $validator->equal($token, $_SESSION['token'], 'Неверный идентификатор сессии, повторите действие!')
             ->true($file->user_id === getUser('id') || isAdmin(), 'Удаление невозможно, вы не автор данного файла!');
 

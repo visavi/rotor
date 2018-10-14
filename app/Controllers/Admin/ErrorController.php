@@ -2,10 +2,10 @@
 
 namespace App\Controllers\Admin;
 
-use App\Classes\Request;
 use App\Classes\Validator;
 use App\Models\Error;
 use App\Models\User;
+use Illuminate\Http\Request;
 
 class ErrorController extends AdminController
 {
@@ -30,7 +30,7 @@ class ErrorController extends AdminController
             abort(403, 'Доступ запрещен!');
         }
 
-        $this->code  = int(Request::input('code', 404));
+        $this->code  = int($request->input('code', 404));
         $this->lists = [404 => 'Ошибки 404', 403 => 'Ошибки 403', 666 => 'Автобаны'];
 
         if (! isset($this->lists[$this->code])) {
@@ -69,7 +69,7 @@ class ErrorController extends AdminController
      */
     public function clear(): void
     {
-        $token = check(Request::input('token'));
+        $token = check($request->input('token'));
 
         $validator = new Validator();
         $validator

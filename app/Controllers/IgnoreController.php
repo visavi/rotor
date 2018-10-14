@@ -2,10 +2,10 @@
 
 namespace App\Controllers;
 
-use App\Classes\Request;
 use App\Classes\Validator;
 use App\Models\Ignore;
 use App\Models\User;
+use Illuminate\Http\Request;
 
 class IgnoreController extends BaseController
 {
@@ -23,13 +23,16 @@ class IgnoreController extends BaseController
 
     /**
      * Главная страница
+     *
+     * @param Request $request
+     * @return string
      */
-    public function index()
+    public function index(Request $request): string
     {
-        if (Request::isMethod('post')) {
-            $page  = int(Request::input('page', 1));
-            $token = check(Request::input('token'));
-            $login = check(Request::input('user'));
+        if ($request->isMethod('post')) {
+            $page  = int($request->input('page', 1));
+            $token = check($request->input('token'));
+            $login = check($request->input('user'));
 
             $validator = new Validator();
             $validator->equal($token, $_SESSION['token'], 'Неверный идентификатор сессии, повторите действие!');
@@ -63,7 +66,7 @@ class IgnoreController extends BaseController
                 setFlash('success', 'Пользователь успешно добавлен в игнор-лист!');
                 redirect('/ignores?page=' . $page);
             } else {
-                setInput(Request::all());
+                setInput($request->all());
                 setFlash('danger', $validator->getErrors());
             }
         }
@@ -84,8 +87,12 @@ class IgnoreController extends BaseController
 
     /**
      * Заметка для пользователя
+     *
+     * @param int     $id
+     * @param Request $request
+     * @return string
      */
-    public function note($id)
+    public function note(int $id, Request $request): string
     {
         $ignore = Ignore::query()
             ->where('user_id', getUser('id'))
@@ -96,10 +103,10 @@ class IgnoreController extends BaseController
             abort(404, 'Запись не найдена');
         }
 
-        if (Request::isMethod('post')) {
+        if ($request->isMethod('post')) {
 
-            $token = check(Request::input('token'));
-            $msg   = check(Request::input('msg'));
+            $token = check($request->input('token'));
+            $msg   = check($request->input('msg'));
 
             $validator = new Validator();
             $validator->equal($token, $_SESSION['token'], ['msg' => 'Неверный идентификатор сессии, повторите действие!'])
@@ -114,7 +121,7 @@ class IgnoreController extends BaseController
                 setFlash('success', 'Заметка успешно отредактирована!');
                 redirect('/ignores');
             } else {
-                setInput(Request::all());
+                setInput($request->all());
                 setFlash('danger', $validator->getErrors());
             }
         }
@@ -124,12 +131,14 @@ class IgnoreController extends BaseController
 
     /**
      * Удаление контактов
+     *
+     * @param Request $request
      */
-    public function delete()
+    public function delete(Request $request): void
     {
-        $page  = int(Request::input('page', 1));
-        $token = check(Request::input('token'));
-        $del   = intar(Request::input('del'));
+        $page  = int($request->input('page', 1));
+        $token = check($request->input('token'));
+        $del   = intar($request->input('del'));
 
         $validator = new Validator();
         $validator->equal($token, $_SESSION['token'], 'Неверный идентификатор сессии, повторите действие!')

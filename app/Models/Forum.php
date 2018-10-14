@@ -17,6 +17,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property int count_posts
  * @property int last_topic_id
  * @property int closed
+ * @property Forum parent
  */
 class Forum extends BaseModel
 {

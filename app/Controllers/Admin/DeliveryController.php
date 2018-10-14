@@ -2,9 +2,9 @@
 
 namespace App\Controllers\Admin;
 
-use App\Classes\Request;
 use App\Classes\Validator;
 use App\Models\User;
+use Illuminate\Http\Request;
 
 class DeliveryController extends AdminController
 {
@@ -27,11 +27,11 @@ class DeliveryController extends AdminController
      */
     public function index(): string
     {
-        if (Request::isMethod('post')) {
+        if ($request->isMethod('post')) {
 
-            $token = check(Request::input('token'));
-            $msg   = check(Request::input('msg'));
-            $type  = int(Request::input('type'));
+            $token = check($request->input('token'));
+            $msg   = check($request->input('msg'));
+            $type  = int($request->input('type'));
 
             $validator = new Validator();
             $validator->equal($token, $_SESSION['token'], ['msg' => 'Неверный идентификатор сессии, повторите действие!'])
@@ -75,7 +75,7 @@ class DeliveryController extends AdminController
                 setFlash('success', 'Сообщение успешно разослано!');
                 redirect('/admin/delivery');
             } else {
-                setInput(Request::all());
+                setInput($request->all());
                 setFlash('danger', $validator->getErrors());
             }
         }

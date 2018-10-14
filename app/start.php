@@ -1,10 +1,10 @@
 <?php
 
 use App\Classes\Registry;
-use App\Classes\Request;
 use App\Models\Login;
 use App\Models\User;
 use Illuminate\Database\Capsule\Manager as DB;
+use Illuminate\Http\Request;
 
 require __DIR__ . '/bootstrap.php';
 
@@ -75,12 +75,12 @@ if ($user = checkAuth()) {
     ]);
 
     // Забанен
-    if ($user->level === User::BANNED && ! Request::is('ban', 'rules', 'logout')) {
+    if ($user->level === User::BANNED && ! $request->is('ban', 'rules', 'logout')) {
         redirect('/ban?user=' . $user->login);
     }
 
     // Подтверждение регистрации
-    if ($user->level === User::PENDED && setting('regkeys') && ! Request::is('key', 'ban', 'login', 'logout')) {
+    if ($user->level === User::PENDED && setting('regkeys') && ! $request->is('key', 'ban', 'login', 'logout')) {
         redirect('/key?user=' . $user->login);
     }
 

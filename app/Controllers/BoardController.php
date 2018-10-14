@@ -86,10 +86,11 @@ class BoardController extends BaseController
     /**
      * Создание объявления
      *
-     * @param Request $request
+     * @param Request   $request
+     * @param Validator $validator
      * @return string
      */
-    public function create(Request $request): string
+    public function create(Request $request, Validator $validator): string
     {
         $bid = int($request->input('bid'));
 
@@ -118,7 +119,6 @@ class BoardController extends BaseController
             /** @var Board $board */
             $board = Board::query()->find($bid);
 
-            $validator = new Validator();
             $validator
                 ->equal($token, $_SESSION['token'], trans('validator.token'))
                 ->length($title, 5, 50, ['title' => trans('validator.name')])
@@ -174,11 +174,12 @@ class BoardController extends BaseController
     /**
      * Редактирование объявления
      *
-     * @param int     $id
-     * @param Request $request
+     * @param int       $id
+     * @param Request   $request
+     * @param Validator $validator
      * @return string
      */
-    public function edit(int $id, Request $request): string
+    public function edit(int $id, Request $request, Validator $validator): string
     {
         if (! getUser()) {
             abort(403, 'Для редактирования объявления необходимо авторизоваться');
@@ -202,7 +203,6 @@ class BoardController extends BaseController
             /** @var Board $board */
             $board = Board::query()->find($bid);
 
-            $validator = new Validator();
             $validator
                 ->equal($token, $_SESSION['token'], trans('validator.token'))
                 ->length($title, 5, 50, ['title' => trans('validator.name')])
@@ -251,10 +251,11 @@ class BoardController extends BaseController
     /**
      * Снятие / Публикация объявления
      *
-     * @param int     $id
-     * @param Request $request
+     * @param int       $id
+     * @param Request   $request
+     * @param Validator $validator
      */
-    public function close(int $id, Request $request): void
+    public function close(int $id, Request $request, Validator $validator): void
     {
         $token = check($request->input('token'));
 
@@ -269,7 +270,6 @@ class BoardController extends BaseController
             abort(404, 'Данного объявления не существует!');
         }
 
-        $validator = new Validator();
         $validator->equal($token, $_SESSION['token'], 'Неверный идентификатор сессии, повторите действие!')
             ->equal($item->user_id, getUser('id'), 'Изменение невозможно, вы не автор данного объявления!');
 
@@ -305,11 +305,12 @@ class BoardController extends BaseController
     /**
      * Удаление объявления
      *
-     * @param int     $id
-     * @param Request $request
+     * @param int       $id
+     * @param Request   $request
+     * @param Validator $validator
      * @throws Exception
      */
-    public function delete(int $id, Request $request): void
+    public function delete(int $id, Request $request, Validator $validator): void
     {
         $token = check($request->input('token'));
 
@@ -324,7 +325,6 @@ class BoardController extends BaseController
             abort(404, 'Данного объявления не существует!');
         }
 
-        $validator = new Validator();
         $validator->equal($token, $_SESSION['token'], 'Неверный идентификатор сессии, повторите действие!')
             ->equal($item->user_id, getUser('id'), 'Удаление невозможно, вы не автор данного объявления!');
 

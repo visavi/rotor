@@ -2,11 +2,11 @@
 
 namespace App\Controllers;
 
-use App\Classes\Request;
 use App\Classes\Validator;
 use App\Models\Transfer;
 use App\Models\User;
 use Illuminate\Database\Capsule\Manager as DB;
+use Illuminate\Http\Request;
 
 class TransferController extends BaseController
 {
@@ -23,8 +23,8 @@ class TransferController extends BaseController
         if (! getUser()) {
             abort(403, 'Для совершения операций необходимо авторизоваться');
         }
-
-        $login      = check(Request::input('user'));
+        $request    = Request::createFromGlobals();
+        $login      = check($request->input('user'));
         $this->user = User::query()->where('login', $login)->first();
     }
 
@@ -41,13 +41,14 @@ class TransferController extends BaseController
     /**
      * Перевод денег
      *
+     * @param Request $request
      * @return void
      */
-    public function send(): void
+    public function send(Request $request): void
     {
-        $money = int(Request::input('money'));
-        $msg   = check(Request::input('msg'));
-        $token = check(Request::input('token'));
+        $money = int($request->input('money'));
+        $msg   = check($request->input('msg'));
+        $token = check($request->input('token'));
 
         $validator = new Validator();
         $validator
@@ -89,7 +90,7 @@ class TransferController extends BaseController
 
             setFlash('success', 'Перевод успешно завершен!');
         } else {
-            setInput(Request::all());
+            setInput($request->all());
             setFlash('danger', $validator->getErrors());
         }
 

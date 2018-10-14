@@ -2,7 +2,6 @@
 
 namespace App\Controllers\Admin;
 
-use App\Classes\Request;
 use App\Classes\Validator;
 use App\Models\Comment;
 use App\Models\Guestbook;
@@ -11,6 +10,7 @@ use App\Models\Post;
 use App\Models\Spam;
 use App\Models\User;
 use App\Models\Wall;
+use Illuminate\Http\Request;
 
 class SpamController extends AdminController
 {
@@ -58,7 +58,7 @@ class SpamController extends AdminController
      */
     public function index(): string
     {
-        $type = check(Request::input('type'));
+        $type = check($request->input('type'));
         $type = isset($this->types[$type]) ? $type : 'post';
 
         $page = paginate(setting('spamlist'),  $this->total[$type]);
@@ -88,12 +88,12 @@ class SpamController extends AdminController
      */
     public function delete(): void
     {
-        $id    = int(Request::input('id'));
-        $token = check(Request::input('token'));
+        $id    = int($request->input('id'));
+        $token = check($request->input('token'));
 
         $validator = new Validator();
         $validator
-            ->true(Request::ajax(), 'Это не ajax запрос!')
+            ->true($request->ajax(), 'Это не ajax запрос!')
             ->equal($token, $_SESSION['token'], 'Неверный идентификатор сессии, повторите действие!')
             ->notEmpty($id, 'Не выбрана запись для удаление!');
 

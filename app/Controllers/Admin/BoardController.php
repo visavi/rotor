@@ -2,13 +2,12 @@
 
 namespace App\Controllers\Admin;
 
-use App\Classes\Request;
 use App\Classes\Validator;
 use App\Models\Board;
 use App\Models\Item;
 use App\Models\User;
 use Exception;
-use Illuminate\Database\Capsule\Manager as DB;
+use Illuminate\Http\Request;
 
 class BoardController extends AdminController
 {
@@ -88,8 +87,8 @@ class BoardController extends AdminController
             abort(403, 'Доступ запрещен!');
         }
 
-        $token = check(Request::input('token'));
-        $name  = check(Request::input('name'));
+        $token = check($request->input('token'));
+        $name  = check($request->input('name'));
 
         $validator = new Validator();
         $validator->equal($token, $_SESSION['token'], trans('validator.token'))
@@ -107,7 +106,7 @@ class BoardController extends AdminController
             setFlash('success', 'Новый раздел успешно создан!');
             redirect('/admin/boards/edit/' . $board->id);
         } else {
-            setInput(Request::all());
+            setInput($request->all());
             setFlash('danger', $validator->getErrors());
         }
 
@@ -120,7 +119,7 @@ class BoardController extends AdminController
      * @param int $id
      * @return string
      */
-    public function edit($id): string
+    public function edit(int $id): string
     {
         if (! isAdmin(User::BOSS)) {
             abort(403, 'Доступ запрещен!');
@@ -137,12 +136,12 @@ class BoardController extends AdminController
             ->orderBy('sort')
             ->get();
 
-        if (Request::isMethod('post')) {
-            $token  = check(Request::input('token'));
-            $parent = int(Request::input('parent'));
-            $name   = check(Request::input('name'));
-            $sort   = check(Request::input('sort'));
-            $closed = empty(Request::input('closed')) ? 0 : 1;
+        if ($request->isMethod('post')) {
+            $token  = check($request->input('token'));
+            $parent = int($request->input('parent'));
+            $name   = check($request->input('name'));
+            $sort   = check($request->input('sort'));
+            $closed = empty($request->input('closed')) ? 0 : 1;
 
             $validator = new Validator();
             $validator->equal($token, $_SESSION['token'], trans('validator.token'))
@@ -165,7 +164,7 @@ class BoardController extends AdminController
                 setFlash('success', 'Раздел успешно отредактирован!');
                 redirect('/admin/boards/categories');
             } else {
-                setInput(Request::all());
+                setInput($request->all());
                 setFlash('danger', $validator->getErrors());
             }
         }
@@ -179,7 +178,7 @@ class BoardController extends AdminController
      * @param int $id
      * @throws Exception
      */
-    public function delete($id): void
+    public function delete(int $id): void
     {
         if (! isAdmin(User::BOSS)) {
             abort(403, 'Доступ запрещен!');
@@ -191,7 +190,7 @@ class BoardController extends AdminController
             abort(404, 'Данного раздела не существует!');
         }
 
-        $token = check(Request::input('token'));
+        $token = check($request->input('token'));
 
         $validator = new Validator();
         $validator->equal($token, $_SESSION['token'], trans('validator.token'))
@@ -220,7 +219,7 @@ class BoardController extends AdminController
      * @param int $id
      * @return string
      */
-    public function editItem($id): string
+    public function editItem(int $id): string
     {
         $item = Item::query()->find($id);
 
@@ -228,13 +227,13 @@ class BoardController extends AdminController
             abort(404, 'Данного объявления не существует!');
         }
 
-        if (Request::isMethod('post')) {
-            $token = check(Request::input('token'));
-            $bid   = int(Request::input('bid'));
-            $title = check(Request::input('title'));
-            $text  = check(Request::input('text'));
-            $price = check(Request::input('price'));
-            $phone = preg_replace('/\D/', '', Request::input('phone'));
+        if ($request->isMethod('post')) {
+            $token = check($request->input('token'));
+            $bid   = int($request->input('bid'));
+            $title = check($request->input('title'));
+            $text  = check($request->input('text'));
+            $price = check($request->input('price'));
+            $phone = preg_replace('/\D/', '', $request->input('phone'));
 
             $board = Board::query()->find($bid);
 
@@ -269,7 +268,7 @@ class BoardController extends AdminController
                 setFlash('success', 'Объявление успешно отредактировано!');
                 redirect('/admin/items/edit/' . $item->id);
             } else {
-                setInput(Request::all());
+                setInput($request->all());
                 setFlash('danger', $validator->getErrors());
             }
         }
@@ -289,9 +288,9 @@ class BoardController extends AdminController
      * @param int $id
      * @throws Exception
      */
-    public function deleteItem($id): void
+    public function deleteItem(int $id): void
     {
-        $token = check(Request::input('token'));
+        $token = check($request->input('token'));
 
         $item = Item::query()->find($id);
 
@@ -327,7 +326,7 @@ class BoardController extends AdminController
             abort(403, 'Доступ запрещен!');
         }
 
-        $token = check(Request::input('token'));
+        $token = check($request->input('token'));
 
         if ($token === $_SESSION['token']) {
 

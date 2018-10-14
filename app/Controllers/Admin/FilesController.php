@@ -2,9 +2,9 @@
 
 namespace App\Controllers\Admin;
 
-use App\Classes\Request;
 use App\Classes\Validator;
 use App\Models\User;
+use Illuminate\Http\Request;
 
 class FilesController extends AdminController
 {
@@ -22,8 +22,8 @@ class FilesController extends AdminController
             abort(403, 'Доступ запрещен!');
         }
 
-        $this->file = ltrim(check(Request::input('file')), '/');
-        $this->path = rtrim(check(Request::input('path')), '/');
+        $this->file = ltrim(check($request->input('file')), '/');
+        $this->path = rtrim(check($request->input('path')), '/');
 
         if (
             ! file_exists(RESOURCES . '/views/' . $this->path) ||
@@ -85,9 +85,9 @@ class FilesController extends AdminController
             abort('default', 'Файл недоступен для записи!');
         }
 
-        if (Request::isMethod('post')) {
-            $token = check(Request::input('token'));
-            $msg   = Request::input('msg');
+        if ($request->isMethod('post')) {
+            $token = check($request->input('token'));
+            $msg   = $request->input('msg');
 
             if ($token === $_SESSION['token']) {
 
@@ -97,7 +97,7 @@ class FilesController extends AdminController
                 redirect ('/admin/files/edit?path=' . $this->path . '&file=' . $this->file);
 
             } else {
-                setInput(Request::all());
+                setInput($request->all());
                 setFlash('danger', 'Неверный идентификатор сессии, повторите действие!');
             }
         }
@@ -118,10 +118,10 @@ class FilesController extends AdminController
             abort('default', 'Директория ' . $this->path . ' недоступна для записи!');
         }
 
-        if (Request::isMethod('post')) {
-            $token    = check(Request::input('token'));
-            $filename = check(Request::input('filename'));
-            $dirname  = check(Request::input('dirname'));
+        if ($request->isMethod('post')) {
+            $token    = check($request->input('token'));
+            $filename = check($request->input('filename'));
+            $dirname  = check($request->input('dirname'));
 
             $fileName = $this->path ? '/' . $filename : $filename;
             $dirName  = $this->path ? '/' . $dirname : $dirname;
@@ -159,7 +159,7 @@ class FilesController extends AdminController
                 }
 
             } else {
-                setInput(Request::all());
+                setInput($request->all());
                 setFlash('danger', $validator->getErrors());
             }
         }
@@ -178,9 +178,9 @@ class FilesController extends AdminController
             abort('default', 'Директория ' . $this->path . ' недоступна для записи!');
         }
 
-        $token    = check(Request::input('token'));
-        $filename = check(Request::input('filename'));
-        $dirname  = check(Request::input('dirname'));
+        $token    = check($request->input('token'));
+        $filename = check($request->input('filename'));
+        $dirname  = check($request->input('dirname'));
 
         $fileName = $this->path ? '/' . $filename : $filename;
         $dirName  = $this->path ? '/' . $dirname : $dirname;

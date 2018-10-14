@@ -2,18 +2,19 @@
 
 namespace App\Controllers\Load;
 
-use App\Classes\Request;
 use App\Controllers\BaseController;
 use App\Models\Down;
+use Illuminate\Http\Request;
 
 class TopController extends BaseController
 {
     /**
      * Топ файлов
      *
+     * @param Request $request
      * @return string
      */
-    public function index(): string
+    public function index(Request $request): string
     {
         $total = Down::query()->where('active', 1)->count();
 
@@ -23,7 +24,7 @@ class TopController extends BaseController
 
         $page = paginate(setting('downlist'), $total);
 
-        $sort = check(Request::input('sort'));
+        $sort = check($request->input('sort'));
 
         switch ($sort) {
             case 'rated':

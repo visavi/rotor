@@ -2,10 +2,10 @@
 
 namespace App\Controllers\Admin;
 
-use App\Classes\Request;
 use App\Classes\Validator;
 use App\Models\Guestbook;
 use App\Models\User;
+use Illuminate\Http\Request;
 
 class GuestbookController extends AdminController
 {
@@ -33,19 +33,19 @@ class GuestbookController extends AdminController
      * @param int $id
      * @return string
      */
-    public function edit($id): string
+    public function edit(int $id): string
     {
-        $page = int(Request::input('page'));
+        $page = int($request->input('page'));
         $post = Guestbook::with('user')->find($id);
 
         if (! $post) {
             abort(404, 'Сообщения для редактирования не существует!');
         }
 
-        if (Request::isMethod('post')) {
+        if ($request->isMethod('post')) {
 
-            $msg   = check(Request::input('msg'));
-            $token = check(Request::input('token'));
+            $msg   = check($request->input('msg'));
+            $token = check($request->input('token'));
 
             $validator = new Validator();
             $validator->equal($token, $_SESSION['token'], ['msg' => 'Неверный идентификатор сессии, повторите действие!'])
@@ -64,7 +64,7 @@ class GuestbookController extends AdminController
                 setFlash('success', 'Сообщение успешно отредактировано!');
                 redirect('/admin/guestbooks?page=' . $page);
             } else {
-                setInput(Request::all());
+                setInput($request->all());
                 setFlash('danger', $validator->getErrors());
             }
         }
@@ -78,19 +78,19 @@ class GuestbookController extends AdminController
      * @param int $id
      * @return string
      */
-    public function reply($id): string
+    public function reply(int $id): string
     {
-        $page = int(Request::input('page'));
+        $page = int($request->input('page'));
         $post = Guestbook::with('user')->find($id);
 
         if (! $post) {
             abort(404, 'Сообщения для ответа не существует!');
         }
 
-        if (Request::isMethod('post')) {
+        if ($request->isMethod('post')) {
 
-            $reply = check(Request::input('reply'));
-            $token = check(Request::input('token'));
+            $reply = check($request->input('reply'));
+            $token = check($request->input('token'));
 
             $validator = new Validator();
             $validator->equal($token, $_SESSION['token'], ['msg' => 'Неверный идентификатор сессии, повторите действие!'])
@@ -107,7 +107,7 @@ class GuestbookController extends AdminController
                 setFlash('success', 'Ответ успешно добавлен!');
                 redirect('/admin/guestbooks?page=' . $page);
             } else {
-                setInput(Request::all());
+                setInput($request->all());
                 setFlash('danger', $validator->getErrors());
             }
         }
@@ -122,9 +122,9 @@ class GuestbookController extends AdminController
      */
     public function delete(): void
     {
-        $page  = int(Request::input('page', 1));
-        $token = check(Request::input('token'));
-        $del   = intar(Request::input('del'));
+        $page  = int($request->input('page', 1));
+        $token = check($request->input('token'));
+        $del   = intar($request->input('del'));
 
         $validator = new Validator();
         $validator->equal($token, $_SESSION['token'], 'Неверный идентификатор сессии, повторите действие!')
@@ -148,7 +148,7 @@ class GuestbookController extends AdminController
      */
     public function clear(): void
     {
-        $token = check(Request::input('token'));
+        $token = check($request->input('token'));
 
         $validator = new Validator();
         $validator

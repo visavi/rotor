@@ -2,7 +2,6 @@
 
 namespace App\Controllers;
 
-use App\Classes\Metrika;
 use App\Models\Counter24;
 use App\Models\Counter31;
 

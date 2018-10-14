@@ -15,6 +15,7 @@ use Illuminate\Database\Eloquent\Relations\MorphTo;
  * @property int size
  * @property int user_id
  * @property int created_at
+ * @property string extension
  */
 class File extends BaseModel
 {

@@ -2,12 +2,12 @@
 
 namespace App\Controllers\Admin;
 
-use App\Classes\Request;
 use App\Classes\Validator;
 use App\Models\Smile;
 use App\Models\User;
 use Illuminate\Database\Capsule\Manager as DB;
 use Intervention\Image\ImageManagerStatic as Image;
+use Illuminate\Http\Request;
 
 class SmileController extends AdminController
 {
@@ -54,10 +54,10 @@ class SmileController extends AdminController
             abort('default', 'Директория со смайлами недоступна для записи!');
         }
 
-        if (Request::isMethod('post')) {
-            $token = check(Request::input('token'));
-            $code  = check(utfLower(Request::input('code')));
-            $smile = Request::file('smile');
+        if ($request->isMethod('post')) {
+            $token = check($request->input('token'));
+            $code  = check(utfLower($request->input('code')));
+            $smile = $request->file('smile');
 
             $validator = new Validator();
             $validator->equal($token, $_SESSION['token'], 'Неверный идентификатор сессии, повторите действие!')
@@ -91,7 +91,7 @@ class SmileController extends AdminController
                 setFlash('success', 'Смайл успешно загружен!');
                 redirect('/admin/smiles');
             } else {
-                setInput(Request::all());
+                setInput($request->all());
                 setFlash('danger', $validator->getErrors());
             }
         }
@@ -105,9 +105,9 @@ class SmileController extends AdminController
      * @param int $id
      * @return string
      */
-    public function edit($id): string
+    public function edit(int $id): string
     {
-        $page = int(Request::input('page', 1));
+        $page = int($request->input('page', 1));
 
         $smile = Smile::query()->find($id);
 
@@ -115,10 +115,10 @@ class SmileController extends AdminController
             abort(404, 'Данного смайла не существует!');
         }
 
-        if (Request::isMethod('post')) {
+        if ($request->isMethod('post')) {
 
-            $token = check(Request::input('token'));
-            $code  = check(utfLower(Request::input('code')));
+            $token = check($request->input('token'));
+            $code  = check(utfLower($request->input('code')));
 
             $validator = new Validator();
             $validator->equal($token, $_SESSION['token'], 'Неверный идентификатор сессии, повторите действие!')
@@ -139,7 +139,7 @@ class SmileController extends AdminController
                 setFlash('success', 'Смайл успешно отредактирован!');
                 redirect('/admin/smiles?page=' . $page);
             } else {
-                setInput(Request::all());
+                setInput($request->all());
                 setFlash('danger', $validator->getErrors());
             }
         }
@@ -158,9 +158,9 @@ class SmileController extends AdminController
             abort('default', 'Директория со смайлами недоступна для записи!');
         }
 
-        $page  = int(Request::input('page', 1));
-        $token = check(Request::input('token'));
-        $del   = intar(Request::input('del'));
+        $page  = int($request->input('page', 1));
+        $token = check($request->input('token'));
+        $del   = intar($request->input('del'));
 
         $validator = new Validator();
         $validator->equal($token, $_SESSION['token'], 'Неверный идентификатор сессии, повторите действие!')

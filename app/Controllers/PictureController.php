@@ -2,8 +2,8 @@
 
 namespace App\Controllers;
 
-use App\Classes\Request;
 use App\Classes\Validator;
+use Illuminate\Http\Request;
 use Intervention\Image\ImageManagerStatic as Image;
 
 class PictureController extends BaseController
@@ -24,13 +24,16 @@ class PictureController extends BaseController
 
     /**
      * Главная страница
+     *
+     * @param Request $request
+     * @return string
      */
-    public function index()
+    public function index(Request $request): string
     {
-        if (Request::isMethod('post')) {
+        if ($request->isMethod('post')) {
 
-            $token = check(Request::input('token'));
-            $photo = Request::file('photo');
+            $token = check($request->input('token'));
+            $photo = $request->file('photo');
 
             $validator = new Validator();
             $validator->equal($token, $_SESSION['token'], ['photo' => 'Неверный идентификатор сессии, повторите действие!']);
@@ -69,7 +72,7 @@ class PictureController extends BaseController
                 redirect('/profile');
             }
 
-            setInput(Request::all());
+            setInput($request->all());
             setFlash('danger', $validator->getErrors());
         }
 
@@ -79,10 +82,12 @@ class PictureController extends BaseController
 
     /**
      * Удаление фотографии
+     *
+     * @param Request $request
      */
-    public function delete()
+    public function delete(Request $request): void
     {
-        $token = check(Request::input('token'));
+        $token = check($request->input('token'));
 
         $validator = new Validator();
         $validator->equal($token, $_SESSION['token'], ['photo' => 'Неверный идентификатор сессии, повторите действие!']);

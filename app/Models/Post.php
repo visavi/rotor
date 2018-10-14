@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 
@@ -18,6 +19,7 @@ use Illuminate\Database\Eloquent\Relations\MorphMany;
  * @property string brow
  * @property int edit_user_id
  * @property int updated_at
+ * @property Collection files
  */
 class Post extends BaseModel
 {
