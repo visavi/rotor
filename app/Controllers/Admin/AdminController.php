@@ -46,11 +46,11 @@ Class AdminController extends BaseController
     /**
      * Проверка обновлений
      *
+     * @param PhinxApplication $app
      * @return string
      */
-    public function upgrade(): string
+    public function upgrade(PhinxApplication $app): string
     {
-        $app  = new PhinxApplication();
         $wrap = new TextWrapper($app);
 
         $app->setName('Rotor by Vantuz - http://visavi.net');
