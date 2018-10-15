@@ -30,7 +30,7 @@ env:
     - DB_DATABASE=test
     - DB_USERNAME=root
     - DB_PASSWORD=
-    - SITE_URL=//localhost
+    - SITE_URL=//127.0.0.1
 
 after_success:
   - travis_retry php vendor/bin/php-coveralls -v
