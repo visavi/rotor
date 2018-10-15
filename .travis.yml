@@ -22,8 +22,7 @@ script:
   - vendor/bin/phpunit --coverage-clover build/logs/clover.xml --stderr
 
 addons:
-  hosts:
-    - rotor.ll
+  hostname: rotor.ll
 
 env:
   global:
