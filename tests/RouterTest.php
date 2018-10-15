@@ -8,7 +8,7 @@ class RouterTest extends TestCase
     public function testRouter(): void
     {
         $curl = new Curl();
-        $curl->get('//' . $_SERVER['SERVER_NAME'] . '/guestbooks');
+        $curl->get(env('SITE_URL') . '/guestbooks');
 
         $this->assertEquals(200, $curl->getHttpStatusCode());
 
