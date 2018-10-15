@@ -1,4 +1,4 @@
-language: phpSITE_URL
+language: php
 
 php:
   - 7.1
