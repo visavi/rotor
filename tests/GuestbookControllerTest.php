@@ -5,7 +5,7 @@ use PHPUnit\Framework\TestCase;
 
 class GuestbookControllerTest extends TestCase
 {
-    public function testGuest()
+    public function testGuest(): void
     {
         $guest = new Guestbook();
         $guest->user_id = 1;
@@ -17,6 +17,7 @@ class GuestbookControllerTest extends TestCase
 
         $this->assertTrue($guest->save());
 
+        /** @var Guestbook $getGuest */
         $getGuest = Guestbook::query()->find($guest->id);
         $this->assertEquals($getGuest->text, 'Test text message');
 
