@@ -774,19 +774,30 @@ function statsBoard()
 /**
  * Обфусцирует email
  *
- * @param  string $mail email
+ * @param  string $email email
  * @return string       обфусцированный email
  */
-function cryptMail($mail)
+function cryptMail($email)
 {
     $output  = '';
-    $symbols = str_split($mail);
+    $symbols = str_split($email);
 
     foreach ($symbols as $symbol) {
         $output  .= '&#' . ord($symbol) . ';';
     }
 
     return $output;
+}
+
+/**
+ * Частично скрывает email
+ *
+ * @param  string $email
+ * @return string
+ */
+function hideMail($email)
+{
+    return preg_replace('/(?<=.).(?=.*@)/u', '*', $email);
 }
 
 /**

@@ -94,7 +94,7 @@ class MailController extends BaseController
                 $body = view('mailer.recovery', compact('subject', 'message', 'resetLink'));
                 sendMail($user['email'], $subject, $body);
 
-                setFlash('success', 'Восстановление пароля инициализировано!');
+                setFlash('success', 'Инструкция по восстановлению пароля отправлена на ' . hideMail($user['email']) . '!');
                 redirect('/login');
             } else {
                 setInput($request->all());
