@@ -477,3 +477,12 @@ function deleteImage(el)
 
     return false;
 }
+
+/* Показывает форму для повторной отправки код подтверждения */
+function resendingCode(el)
+{
+    $('.js-resending-link').hide();
+    $('.js-resending-form').show();
+
+    return false;
+}

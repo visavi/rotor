@@ -40,7 +40,7 @@
                 {!! textError('message') !!}
             </div>
 
-                {!! view('app/_captcha') !!}
+            {!! view('app/_captcha') !!}
 
             <button class="btn btn-primary">Отправить</button>
         </form>

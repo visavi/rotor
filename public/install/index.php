@@ -19,6 +19,8 @@ define('DIR', rtrim($folder_level, '/'));
 include_once DIR . '/app/bootstrap.php';
 include_once DIR . '/app/helpers.php';
 
+$request = Request::createFromGlobals();
+
 function parsePHPModules() {
     ob_start();
     phpinfo(INFO_MODULES);
@@ -73,9 +75,8 @@ $app->setVersion(VERSION);
 $wrap->setOption('configuration', DIR.'/app/migration.php');
 $wrap->setOption('parser', 'php');
 $wrap->setOption('environment', 'default');
-
-header("Content-type:text/html; charset=utf-8");
 ?>
+
 <!DOCTYPE html>
 <html lang="ru">
 <head>

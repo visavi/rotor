@@ -136,7 +136,7 @@ class UserController extends BaseController
 
                     // Проверка логина в черном списке
                     $blackLogin = Blacklist::query()
-                        ->where('type', 2)
+                        ->where('type', 'login')
                         ->where('value', strtolower($login))
                         ->count();
                     $validator->empty($blackLogin, ['login' => 'Выбранный вами логин занесен в черный список!']);
@@ -148,14 +148,14 @@ class UserController extends BaseController
 
                 // Проверка домена от email в черном списке
                 $blackDomain = Blacklist::query()
-                    ->where('type', 3)
+                    ->where('type', 'domain')
                     ->where('value', $domain)
                     ->count();
                 $validator->empty($blackDomain, ['email' => 'Домен от вашего адреса email занесен в черный список!']);
 
                 // Проверка email в черном списке
                 $blackMail = Blacklist::query()
-                    ->where('type', 1)
+                    ->where('type', 'email')
                     ->where('value', $email)
                     ->count();
                 $validator->empty($blackMail, ['email' => 'Указанный вами адрес email занесен в черный список!']);
@@ -173,9 +173,6 @@ class UserController extends BaseController
 
                 // Регистрация аккаунта
                 if ($validator->isValid()) {
-
-                    // --- Уведомление о регистрации на email ---//
-                    $message = 'Добро пожаловать, ' . $login . '<br>Теперь вы зарегистрированный пользователь сайта <a href="' . siteUrl(true) . '">' . setting('title') . '</a> , сохраните ваш пароль и логин в надежном месте, они вам еще пригодятся. <br>Ваши данные для входа на сайт <br><b>Логин: ' . $login . '</b><br><b>Пароль: ' . $password . '</b><br><br>';
 
                     if (setting('regkeys')) {
                         $activateKey  = str_random();
@@ -211,6 +208,9 @@ class UserController extends BaseController
                     // ----- Уведомление в приват ----//
                     $textNotice = textNotice('register', ['%username%' => $login]);
                     $user->sendMessage(null, $textNotice);
+
+                    // --- Уведомление о регистрации на email ---//
+                    $message = 'Добро пожаловать, ' . $login . '<br>Теперь вы зарегистрированный пользователь сайта <a href="' . siteUrl(true) . '">' . setting('title') . '</a> , сохраните ваш пароль и логин в надежном месте, они вам еще пригодятся. <br>Ваши данные для входа на сайт <br><b>Логин: ' . $login . '</b><br><b>Пароль: ' . $password . '</b><br><br>';
 
                     $subject = 'Регистрация на сайте ' . setting('title');
                     $body = view('mailer.register', compact('subject', 'message', 'activateKey', 'activateLink'));
@@ -371,11 +371,13 @@ class UserController extends BaseController
     /**
      * Подтверждение регистрации
      *
-     * @param Request $request
+     * @param Request   $request
+     * @param Validator $validator
      * @return string
      */
-    public function key(Request $request): string
+    public function key(Request $request, Validator $validator): string
     {
+        /* @var User $user */
         if (! $user = getUser()) {
             abort(403, 'Для подтверждения регистрации  необходимо быть авторизованным!');
         }
@@ -388,6 +390,53 @@ class UserController extends BaseController
             abort(403, 'Вашему профилю не требуется подтверждение регистрации!');
         }
 
+        /* Повторная отправка */
+        if ($request->has('email') && $request->isMethod('post')) {
+
+            $token  = check($request->input('token'));
+            $email  = strtolower(check($request->input('email')));
+            $domain = utfSubstr(strrchr($email, '@'), 1);
+
+            $validator->equal($token, $_SESSION['token'], 'Неверный идентификатор сессии, повторите действие!')
+                ->true(captchaVerify(), ['protect' => 'Не удалось пройти проверку captcha!'])
+                ->email($email, ['email' => 'Вы ввели неверный адрес email, необходим формат name@site.domen!']);
+
+            $regMail = User::query()->where('login', '<>', $user->login)->where('email', $email)->count();
+            $validator->empty($regMail, ['email' => 'Указанный вами адрес email уже используется в системе!']);
+
+            $blackMail = BlackList::query()->where('type', 'email')->where('value', $email)->count();
+            $validator->empty($blackMail, ['email' => 'Указанный вами адрес email занесен в черный список!']);
+
+            $blackDomain = Blacklist::query()->where('type', 'domain')->where('value', $domain)->count();
+            $validator->empty($blackDomain, ['email' => 'Домен от вашего адреса email занесен в черный список!']);
+
+            if ($validator->isValid()) {
+
+                $activateKey  = str_random();
+                $activateLink = siteUrl(true).'/key?code=' . $activateKey;
+
+                $user->update([
+                    'email'         => $email,
+                    'confirmregkey' => $activateKey,
+                ]);
+
+                /* Уведомление о регистрации на email */
+                $message = 'Добро пожаловать, ' . $user->login . '<br>Теперь вы зарегистрированный пользователь сайта <a href="' . siteUrl(true) . '">' . setting('title') . '</a> , сохраните ваш пароль и логин в надежном месте, они вам еще пригодятся. <br><br>';
+
+                $subject = 'Регистрация на сайте ' . setting('title');
+                $body = view('mailer.register', compact('subject', 'message', 'activateKey', 'activateLink'));
+
+                sendMail($email, $subject, $body);
+
+                setFlash('success', 'Новый код подтверждения успешно отправлен!');
+                redirect('/');
+            } else {
+                setInput($request->all());
+                setFlash('danger', $validator->getErrors());
+            }
+        }
+
+        /* Подтверждение кода */
         if ($request->has('code')) {
             $code = check(trim($request->input('code')));
 
@@ -406,7 +455,7 @@ class UserController extends BaseController
             }
         }
 
-        return view('users/key');
+        return view('users/key', compact('user'));
     }
 
     /**
@@ -564,10 +613,10 @@ class UserController extends BaseController
         if ($changeMail) {
             $validator->notEqual($changeMail->mail, $user->mail, 'Новый адрес email должен отличаться от текущего!');
 
-            $regMail = User::query()->where('email', $changeMail->mail)->first();
+            $regMail = User::query()->where('email', $changeMail->mail)->count();
             $validator->empty($regMail, 'Указанный вами адрес email уже используется в системе!');
 
-            $blackMail = BlackList::query()->where('type', 'email')->where('value', $changeMail->mail)->first();
+            $blackMail = BlackList::query()->where('type', 'email')->where('value', $changeMail->mail)->count();
             $validator->empty($blackMail, 'Указанный вами адрес email занесен в черный список!');
         }
 

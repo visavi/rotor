@@ -14,6 +14,8 @@ session_start();
 
 date_default_timezone_set(setting('timezone'));
 
+$request = Request::createFromGlobals();
+
 /**
  * Авторизация по кукам
  */

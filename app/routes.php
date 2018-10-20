@@ -306,7 +306,7 @@ return FastRoute\cachedDispatcher(function(RouteCollector $r)
     $r->addRoute(['GET', 'POST'], '/users/{login:[\w\-]+}/rating', [App\Controllers\RatingController::class, 'index']);
 
     $r->get('/logout', [App\Controllers\User\UserController::class, 'logout']);
-    $r->get('/key', [App\Controllers\User\UserController::class, 'key']);
+    $r->addRoute(['GET', 'POST'], '/key', [App\Controllers\User\UserController::class, 'key']);
     $r->addRoute(['GET', 'POST'], '/users/{login:[\w\-]+}/note', [App\Controllers\User\UserController::class, 'note']);
     $r->addRoute(['GET', 'POST'], '/login', [App\Controllers\User\UserController::class, 'login']);
     $r->addRoute(['GET', 'POST'], '/register', [App\Controllers\User\UserController::class, 'register']);
