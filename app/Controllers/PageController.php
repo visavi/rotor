@@ -14,10 +14,10 @@ class PageController extends BaseController
      * Главная страница
      *
      * @param string $action
-     * @param string $params
+     * @param array $params
      * @return string
      */
-    public function __call(string $action, string $params)
+    public function __call(string $action, array $params)
     {
         if (! preg_match('|^[a-z0-9_\-]+$|i', $action)) {
             abort(404);
