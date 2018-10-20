@@ -32,7 +32,7 @@ class ErrorController extends AdminController
 
         $request     = Request::createFromGlobals();
         $this->code  = int($request->input('code', 404));
-        $this->lists = [403 => 'Ошибки 403', 404 => 'Ошибки 404', 666 => 'Автобаны'];
+        $this->lists = [403 => 'Ошибки 403', 404 => 'Ошибки 404', 405 => 'Ошибки 405', 666 => 'Автобаны'];
 
         if (! isset($this->lists[$this->code])) {
             abort(404, 'Указанный лог-файл не существует!');

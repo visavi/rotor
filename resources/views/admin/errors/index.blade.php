@@ -23,7 +23,7 @@
     <ol class="breadcrumb">
         @foreach ($lists as $key => $value)
             <li class="breadcrumb-item">
-                @if ($key == $code)
+                @if ($key === $code)
                     <b>{{ $value }}</b>
                 @else
                     <a href="/admin/errors?code={{ $key }}">{{ $value }}</a>
