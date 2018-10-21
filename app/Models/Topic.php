@@ -116,7 +116,7 @@ class Topic extends BaseModel
      * @param  string url                 $url
      * @return string сформированный блок
      */
-    public function pagination($url = '/topics'): string
+    public function pagination($url = '/topics'): ?string
     {
         if (! $this->count_posts) {
             return null;
