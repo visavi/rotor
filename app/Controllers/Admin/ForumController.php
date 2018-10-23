@@ -35,7 +35,7 @@ class ForumController extends AdminController
      * @param Request   $request
      * @param Validator $validator
      */
-    public function create(Request $request, Validator $validator: void
+    public function create(Request $request, Validator $validator): void
     {
         if (! isAdmin(User::BOSS)) {
             abort(403, 'Доступ запрещен!');
