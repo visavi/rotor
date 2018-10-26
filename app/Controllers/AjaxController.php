@@ -414,10 +414,10 @@ class AjaxController extends BaseController
     private function checkAjax(Request $request): string
     {
         if (! $request->ajax()) {
-            return json_encode([
+            exit(json_encode([
                 'status'  => 'error',
                 'message' => 'This is not ajax request'
-            ]);
+            ]));
         }
 
         return true;
@@ -431,10 +431,10 @@ class AjaxController extends BaseController
     private function checkAuthorize(): string
     {
         if (! getUser()) {
-            return json_encode([
+            exit(json_encode([
                 'status'  => 'error',
                 'message' => 'Not authorized'
-            ]);
+            ]));
         }
 
         return true;

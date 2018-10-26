@@ -113,12 +113,12 @@
                             @endif
 
                             <div class="js-rating">
-                                @if (getUser() && getUser('id') != $data->user_id)
-                                    <a class="post-rating-down{{ $data->vote == '-' ? ' active' : '' }}" href="#" onclick="return changeRating(this);" data-id="{{ $data->id }}" data-type="{{ App\Models\Post::class }}" data-vote="-" data-token="{{ $_SESSION['token'] }}"><i class="fa fa-minus"></i></a>
+                                @if (getUser() && getUser('id') !== $data->user_id)
+                                    <a class="post-rating-down{{ $data->vote === '-' ? ' active' : '' }}" href="#" onclick="return changeRating(this);" data-id="{{ $data->id }}" data-type="{{ App\Models\Post::class }}" data-vote="-" data-token="{{ $_SESSION['token'] }}"><i class="fa fa-minus"></i></a>
                                 @endif
                                 <span>{!! formatNum($data->rating) !!}</span>
-                                @if (getUser() && getUser('id') != $data->user_id)
-                                    <a class="post-rating-up{{ $data->vote == '+' ? ' active' : '' }}" href="#" onclick="return changeRating(this);" data-id="{{ $data->id }}" data-type="{{ App\Models\Post::class }}" data-vote="+" data-token="{{ $_SESSION['token'] }}"><i class="fa fa-plus"></i></a>
+                                @if (getUser() && getUser('id') !== $data->user_id)
+                                    <a class="post-rating-up{{ $data->vote === '+' ? ' active' : '' }}" href="#" onclick="return changeRating(this);" data-id="{{ $data->id }}" data-type="{{ App\Models\Post::class }}" data-vote="+" data-token="{{ $_SESSION['token'] }}"><i class="fa fa-plus"></i></a>
                                 @endif
                             </div>
                         </div>

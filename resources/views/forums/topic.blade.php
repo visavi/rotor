@@ -108,7 +108,7 @@
                 <div class="b" id="post_{{ $data->id }}">
                     <div class="float-right text-right">
                         @if (getUser())
-                            @if (getUser('id') != $data->user_id)
+                            @if (getUser('id') !== $data->user_id)
                                 <a href="#" onclick="return postReply(this)" title="Ответить"><i class="fa fa-reply text-muted"></i></a>
 
                                 <a href="#" onclick="return postQuote(this)" title="Цитировать"><i class="fa fa-quote-right text-muted"></i></a>
@@ -116,7 +116,7 @@
                                 <a href="#" onclick="return sendComplaint(this)" data-type="{{ App\Models\Post::class }}" data-id="{{ $data->id }}" data-token="{{ $_SESSION['token'] }}" data-page="{{ $page->current }}" rel="nofollow" title="Жалоба"><i class="fa fa-bell text-muted"></i></a>
                             @endif
 
-                            @if ((getUser('id') == $data->user_id && $data->created_at + 600 > SITETIME) || $topic->isModer)
+                            @if ($topic->isModer || (getUser('id') === $data->user_id && $data->created_at + 600 > SITETIME))
                                 <a href="/posts/edit/{{ $data->id }}?page={{ $page->current }}" title="Редактировать"><i class="fa fa-pencil-alt text-muted"></i></a>
                                 @if ($topic->isModer)
                                     <input type="checkbox" name="del[]" value="{{ $data->id }}">
@@ -125,12 +125,12 @@
                         @endif
 
                         <div class="js-rating">
-                            @if (getUser() && getUser('id') != $data->user_id)
-                                <a class="post-rating-down{{ $data->vote == '-' ? ' active' : '' }}" href="#" onclick="return changeRating(this);" data-id="{{ $data->id }}" data-type="{{ App\Models\Post::class }}" data-vote="-" data-token="{{ $_SESSION['token'] }}"><i class="fa fa-minus"></i></a>
+                            @if (getUser() && getUser('id') !== $data->user_id)
+                                <a class="post-rating-down{{ $data->vote === '-' ? ' active' : '' }}" href="#" onclick="return changeRating(this);" data-id="{{ $data->id }}" data-type="{{ App\Models\Post::class }}" data-vote="-" data-token="{{ $_SESSION['token'] }}"><i class="fa fa-minus"></i></a>
                             @endif
                             <span>{!! formatNum($data->rating) !!}</span>
-                            @if (getUser() && getUser('id') != $data->user_id)
-                                <a class="post-rating-up{{ $data->vote == '+' ? ' active' : '' }}" href="#" onclick="return changeRating(this);" data-id="{{ $data->id }}" data-type="{{ App\Models\Post::class }}" data-vote="+" data-token="{{ $_SESSION['token'] }}"><i class="fa fa-plus"></i></a>
+                            @if (getUser() && getUser('id') !== $data->user_id)
+                                <a class="post-rating-up{{ $data->vote === '+' ? ' active' : '' }}" href="#" onclick="return changeRating(this);" data-id="{{ $data->id }}" data-type="{{ App\Models\Post::class }}" data-vote="+" data-token="{{ $_SESSION['token'] }}"><i class="fa fa-plus"></i></a>
                             @endif
                         </div>
                     </div>

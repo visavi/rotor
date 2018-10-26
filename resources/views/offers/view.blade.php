@@ -36,13 +36,13 @@
         Добавлено: {!! $offer->user->getProfile() !!} ({{ dateFixed($offer->created_at) }})<br>
 
         <div class="js-rating">Рейтинг:
-            @unless (getUser('id') == $offer->user_id)
-                <a class="post-rating-down{{ $offer->vote == '-' ? ' active' : '' }}" href="#" onclick="return changeRating(this);" data-id="{{ $offer->id }}" data-type="{{ App\Models\Offer::class }}" data-vote="-" data-token="{{ $_SESSION['token'] }}"><i class="fa fa-thumbs-down"></i></a>
-            @endunless
+            @if (getUser() && getUser('id') !== $offer->user_id)
+                <a class="post-rating-down{{ $offer->vote === '-' ? ' active' : '' }}" href="#" onclick="return changeRating(this);" data-id="{{ $offer->id }}" data-type="{{ App\Models\Offer::class }}" data-vote="-" data-token="{{ $_SESSION['token'] }}"><i class="fa fa-thumbs-down"></i></a>
+            @endif
             <span>{!! formatNum($offer->rating) !!}</span>
-            @unless (getUser('id') == $offer->user_id)
-                <a class="post-rating-up{{ $offer->vote == '+' ? ' active' : '' }}" href="#" onclick="return changeRating(this);" data-id="{{ $offer->id }}" data-type="{{ App\Models\Offer::class }}" data-vote="+" data-token="{{ $_SESSION['token'] }}"><i class="fa fa-thumbs-up"></i></a>
-            @endunless
+            @if (getUser() && getUser('id') !== $offer->user_id)
+                <a class="post-rating-up{{ $offer->vote === '+' ? ' active' : '' }}" href="#" onclick="return changeRating(this);" data-id="{{ $offer->id }}" data-type="{{ App\Models\Offer::class }}" data-vote="+" data-token="{{ $_SESSION['token'] }}"><i class="fa fa-thumbs-up"></i></a>
+            @endif
         </div>
     </div><br>
 

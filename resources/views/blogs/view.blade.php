@@ -56,13 +56,13 @@
     <i class="fa fa-tag"></i> {!! $tags !!}<hr>
 
     <div class="js-rating">Рейтинг:
-        @unless (getUser('id') == $blog->user_id)
-            <a class="post-rating-down<?= $blog->vote == '-' ? ' active' : '' ?>" href="#" onclick="return changeRating(this);" data-id="{{ $blog->id }}" data-type="{{ App\Models\Blog::class }}" data-vote="-" data-token="{{ $_SESSION['token'] }}"><i class="fa fa-thumbs-down"></i></a>
-        @endunless
+        @if (getUser() && getUser('id') !== $blog->user_id)
+            <a class="post-rating-down<?= $blog->vote === '-' ? ' active' : '' ?>" href="#" onclick="return changeRating(this);" data-id="{{ $blog->id }}" data-type="{{ App\Models\Blog::class }}" data-vote="-" data-token="{{ $_SESSION['token'] }}"><i class="fa fa-thumbs-down"></i></a>
+        @endif
         <span>{!! formatNum($blog->rating) !!}</span>
-        @unless (getUser('id') == $blog->user_id)
-            <a class="post-rating-up<?= $blog->vote == '+' ? ' active' : '' ?>" href="#" onclick="return changeRating(this);" data-id="{{ $blog->id }}" data-type="{{ App\Models\Blog::class }}" data-vote="+" data-token="{{ $_SESSION['token'] }}"><i class="fa fa-thumbs-up"></i></a>
-        @endunless
+        @if (getUser() && getUser('id') !== $blog->user_id)
+            <a class="post-rating-up<?= $blog->vote === '+' ? ' active' : '' ?>" href="#" onclick="return changeRating(this);" data-id="{{ $blog->id }}" data-type="{{ App\Models\Blog::class }}" data-vote="+" data-token="{{ $_SESSION['token'] }}"><i class="fa fa-thumbs-up"></i></a>
+        @endif
     </div>
 
     <i class="fa fa-eye"></i> Просмотров: {{ $blog->visits }}<br>
