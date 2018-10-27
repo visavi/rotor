@@ -15,9 +15,10 @@ $app->setName('Rotor by Vantuz - http://visavi.net');
 $app->setVersion(VERSION);
 
 $app->addCommands([
-    new \App\Commands\Install(),
+    new \App\Commands\AppInstall(),
     new \App\Commands\KeyGenerate(),
     new \App\Commands\CacheClear(),
+    new \App\Commands\RouteClear(),
 ]);
 
 $dispatcher = new EventDispatcher();

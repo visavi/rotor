@@ -6,16 +6,16 @@ use Phinx\Console\Command\AbstractCommand;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
-class Install extends AbstractCommand
+class AppInstall extends AbstractCommand
 {
     /**
      * {@inheritdoc}
      */
-    protected function configure()
+    protected function configure(): void
     {
         parent::configure();
 
-        $this->setName('install')
+        $this->setName('app:install')
              ->setDescription('Setting permissions on folders');
     }
 
@@ -26,7 +26,7 @@ class Install extends AbstractCommand
      * @param OutputInterface $output
      * @return void
      */
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): void
     {
         $storage = glob(STORAGE.'/*', GLOB_ONLYDIR);
         $uploads = glob(UPLOADS.'/*', GLOB_ONLYDIR);
@@ -35,7 +35,7 @@ class Install extends AbstractCommand
 
         foreach ($dirs as $dir) {
             $old = umask(0);
-            chmod ($dir, 0777);
+            chmod($dir, 0777);
             umask($old);
         }
 

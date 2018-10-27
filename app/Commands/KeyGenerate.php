@@ -11,7 +11,7 @@ class KeyGenerate extends AbstractCommand
     /**
      * {@inheritdoc}
      */
-    protected function configure()
+    protected function configure(): void
     {
         parent::configure();
 
@@ -26,7 +26,7 @@ class KeyGenerate extends AbstractCommand
      * @param OutputInterface $output
      * @return void
      */
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): void
     {
         $key = str_random(32);
         $this->writeNewEnvironmentFileWith($key);
@@ -40,7 +40,7 @@ class KeyGenerate extends AbstractCommand
      * @param  string  $key
      * @return void
      */
-    protected function writeNewEnvironmentFileWith($key)
+    protected function writeNewEnvironmentFileWith($key): void
     {
         file_put_contents(BASEDIR . '/.env', preg_replace(
             $this->keyReplacementPattern(),
@@ -54,7 +54,7 @@ class KeyGenerate extends AbstractCommand
      *
      * @return string
      */
-    protected function keyReplacementPattern()
+    protected function keyReplacementPattern(): string
     {
         $escaped = preg_quote('=' . env('APP_KEY'), '/');
         return "/^APP_KEY{$escaped}/m";
