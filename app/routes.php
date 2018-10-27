@@ -297,7 +297,7 @@ return FastRoute\cachedDispatcher(function(RouteCollector $r)
     $r->addRoute(['GET', 'POST'], '/who', [App\Controllers\User\UserController::class, 'who']);
 
     $r->get('/faq', [App\Controllers\PageController::class, 'faq']);
-    $r->get('/statusfaq', [App\Controllers\PageController::class, 'tatusfaq']);
+    $r->get('/statusfaq', [App\Controllers\PageController::class, 'statusfaq']);
     $r->get('/surprise', [App\Controllers\PageController::class, 'surprise']);
 
 
@@ -314,14 +314,14 @@ return FastRoute\cachedDispatcher(function(RouteCollector $r)
     $r->addRoute(['GET', 'POST'], '/settings', [App\Controllers\User\UserController::class, 'setting']);
 
     $r->get('/menu', [App\Controllers\PageController::class, 'menu']);
-    $r->get('/pages[/{action:[a-zA-Z0-9]+}]', [App\Controllers\PageController::class, 'index']);
+    $r->get('/pages[/{page:[a-zA-Z0-9]+}]', [App\Controllers\PageController::class, 'index']);
     $r->get('/tags', [App\Controllers\PageController::class, 'tags']);
     $r->get('/rules', [App\Controllers\PageController::class, 'rules']);
     $r->get('/smiles', [App\Controllers\PageController::class, 'smiles']);
     $r->get('/online[/{action:all}]', [App\Controllers\OnlineController::class, 'index']);
     $r->get('/counters', [App\Controllers\CounterController::class, 'index']);
 
-    $r->get('/files[/{action:.+}]', [App\Controllers\FileController::class, 'index']);
+    $r->get('/files[/{page:.+}]', [App\Controllers\FileController::class, 'index']);
 
     /* Админ-панель */
     $r->addGroup('/admin', function (RouteCollector $r) {
@@ -337,7 +337,7 @@ return FastRoute\cachedDispatcher(function(RouteCollector $r)
         $r->get('/downs/new', [App\Controllers\Admin\LoadController::class, 'new']);
         $r->get('/downs/publish/{id:\d+}', [App\Controllers\Admin\LoadController::class, 'publish']);
 
-        $r->get('', [App\Controllers\Admin\AdminController::class, 'main', 'admin']);
+        $r->get('', [App\Controllers\Admin\AdminController::class, 'main']);
         $r->get('/spam', [App\Controllers\Admin\SpamController::class, 'index']);
         $r->post('/spam/delete', [App\Controllers\Admin\SpamController::class, 'delete']);
         $r->get('/errors', [App\Controllers\Admin\ErrorController::class, 'index']);
