@@ -1,5 +1,5 @@
 @extends('layout')
 
 @section('content')
-    @include('files/' . $action)
+    @include('files/' . $page)
 @stop

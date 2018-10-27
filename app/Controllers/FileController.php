@@ -7,26 +7,25 @@ class FileController extends BaseController
     /**
      * Главная страница
      *
-     * @param string $action
-     * @param string $params
+     * @param string $page
      * @return string
      */
-    public function __call($action, $params)
+    public function index(string $page = 'index'): string
     {
-        if ($action === 'index') {
+        if ($page === 'index') {
             return view('files/index');
         }
 
-        if (! preg_match('|^[a-z0-9_\-/]+$|i', $action)) {
+        if (! preg_match('|^[a-z0-9_\-/]+$|i', $page)) {
             abort(404);
         }
 
-        $action = str_contains($action, '/') ? $action : $action . '/index';
+        $page = str_contains($page, '/') ? $page : $page . '/index';
 
-        if (! file_exists(RESOURCES.'/views/files/' . $action . '.blade.php')) {
+        if (! file_exists(RESOURCES . '/views/files/' . $page . '.blade.php')) {
             abort(404);
         }
 
-        return view('files/layout', compact('action'));
+        return view('files/layout', compact('page'));
     }
 }

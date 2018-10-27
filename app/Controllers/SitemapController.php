@@ -11,22 +11,25 @@ use Illuminate\Database\Query\JoinClause;
 class SitemapController extends BaseController
 {
     /**
+     * @var array
+     */
+    public $pages = [
+        'news',
+        'blogs',
+        'topics',
+        'downs',
+    ];
+
+    /**
      * Генерируем главную страницу
      */
     public function index()
     {
-        $pages = [
-            'news.xml',
-            'blogs.xml',
-            'topics.xml',
-            'downs.xml',
-        ];
-
         $locs = [];
 
-        foreach ($pages as $page) {
+        foreach ($this->pages as $page) {
             $locs[] = [
-                'loc'     => siteUrl(true) . '/sitemap/' . $page,
+                'loc'     => siteUrl(true) . '/sitemap/' . $page . '.xml',
                 'lastmod' => date('c', SITETIME),
             ];
         }
@@ -35,9 +38,26 @@ class SitemapController extends BaseController
     }
 
     /**
-     * Генерируем блоги
+     * Вызывает страницу
+     *
+     * @param $page
+     * @return string
      */
-    public function blogs()
+    public function page(string $page): string
+    {
+        if (! \in_array($page, $this->pages, true)) {
+            abort(404);
+        }
+
+        return $this->$page();
+    }
+
+    /**
+     * Генерируем блоги
+     *
+     * @return string
+     */
+    private function blogs(): string
     {
         $blogs = Blog::query()
             ->selectRaw('blogs.*, max(c.created_at) as last_time')
@@ -67,10 +87,13 @@ class SitemapController extends BaseController
 
         return view('sitemap/url', compact('locs'));
     }
+
     /**
      * Генерируем новости
+     *
+     * @return string
      */
-    public function news()
+    private function news(): string
     {
         $newses = News::query()
             ->selectRaw('news.*, max(c.created_at) as last_time')
@@ -103,8 +126,10 @@ class SitemapController extends BaseController
 
     /**
      * Генерируем темы форума
+     *
+     * @return string
      */
-    public function topics()
+    private function topics(): string
     {
         $topics = Topic::query()->orderBy('updated_at', 'desc')->limit(15000)->get();
 
@@ -126,8 +151,10 @@ class SitemapController extends BaseController
 
     /**
      * Генерируем загрузки
+     *
+     * @return string
      */
-    public function downs()
+    private function downs(): string
     {
         $downs = Down::query()
             ->selectRaw('downs.*, max(c.created_at) as last_time')
@@ -156,16 +183,5 @@ class SitemapController extends BaseController
         }
 
         return view('sitemap/url', compact('locs'));
-    }
-
-    /**
-     * Если вызывается несуществуюший метод
-     *
-     * @param string $name
-     * @param array $arguments
-     */
-    public function __call($name, $arguments)
-    {
-        abort(404);
     }
 }

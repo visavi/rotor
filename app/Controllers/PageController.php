@@ -13,25 +13,24 @@ class PageController extends BaseController
     /**
      * Главная страница
      *
-     * @param string $action
-     * @param array $params
+     * @param string $page
      * @return string
      */
-    public function __call(string $action, array $params)
+    public function index(string $page = 'index'): string
     {
-        if (! preg_match('|^[a-z0-9_\-]+$|i', $action)) {
+        if (! preg_match('|^[a-z0-9_\-]+$|i', $page)) {
             abort(404);
         }
 
-        if (! file_exists(RESOURCES . '/views/main/' . $action . '.blade.php')){
+        if (! file_exists(RESOURCES . '/views/main/' . $page . '.blade.php')){
             abort(404);
         }
 
-        if ($action === 'menu' && ! getUser()){
+        if ($page === 'menu' && ! getUser()){
             abort(404);
         }
 
-        return view('main/layout', compact('action'));
+        return view('main/layout', compact('page'));
     }
 
     /**

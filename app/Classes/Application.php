@@ -60,11 +60,7 @@ class Application
         $container = new Container();
         $container->set(Request::class, Request::createFromGlobals());
 
-        try {
-            return $container->call($controller, $params);
-        } catch (\Exception $e) {
-            return \call_user_func_array([new $controller[0], $controller[1]], $params);
-        }
+        return $container->call($controller, $params);
     }
 
     /**
@@ -150,7 +146,7 @@ class Application
                 redirect('/key?user=' . $user->login);
             }
 
-            // ---------------------- Получение ежедневного бонуса -----------------------//
+            // Получение ежедневного бонуса
             if ($user->timebonus < SITETIME - 82800) {
                 $user->update([
                     'timebonus' => SITETIME,
@@ -190,6 +186,7 @@ class Application
         if (empty($_SESSION['token'])) {
             $_SESSION['token'] = str_random(8);
         }
+
         if (empty($_SESSION['protect'])) {
             $_SESSION['protect'] = random_int(1000, 99999);
         }

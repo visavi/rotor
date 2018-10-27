@@ -12,7 +12,7 @@ return FastRoute\cachedDispatcher(function(RouteCollector $r)
 
     /* Карта сайта */
     $r->get('/sitemap.xml', [App\Controllers\SitemapController::class, 'index']);
-    $r->get('/sitemap/{action:[a-z]+}.xml', [App\Controllers\SitemapController::class]);
+    $r->get('/sitemap/{page:[a-z]+}.xml', [App\Controllers\SitemapController::class, 'page']);
 
     /* Категории объявления */
     $r->addGroup('/boards', function (RouteCollector $r) {
