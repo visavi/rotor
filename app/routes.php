@@ -313,8 +313,8 @@ return FastRoute\cachedDispatcher(function(RouteCollector $r)
     $r->addRoute(['GET', 'POST'], '/profile', [App\Controllers\User\UserController::class, 'profile']);
     $r->addRoute(['GET', 'POST'], '/settings', [App\Controllers\User\UserController::class, 'setting']);
 
+    $r->get('/pages[/{page:[\w\-]+}]', [App\Controllers\PageController::class, 'index']);
     $r->get('/menu', [App\Controllers\PageController::class, 'menu']);
-    $r->get('/pages[/{page:[a-zA-Z0-9]+}]', [App\Controllers\PageController::class, 'index']);
     $r->get('/tags', [App\Controllers\PageController::class, 'tags']);
     $r->get('/rules', [App\Controllers\PageController::class, 'rules']);
     $r->get('/smiles', [App\Controllers\PageController::class, 'smiles']);

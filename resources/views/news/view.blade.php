@@ -8,8 +8,7 @@
 
 @section('content')
 
-    <h1>{{ $news->title }} <small> ({{ dateFixed($news->created_at) }})</small></h1>
-
+    <h1>{{ $news->title }}</h1>
     <nav>
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
@@ -31,7 +30,7 @@
     <div>{!! bbCode($news->text) !!}</div>
 
     <div style="clear:both;">
-        {{ trans('news.added_by') }}: {!! $news->user->getProfile() !!}
+        {{ trans('news.added_by') }}: {!! $news->user->getProfile() !!} ({{ dateFixed($news->created_at) }})
     </div><br>
 
     @if ($comments->isNotEmpty())

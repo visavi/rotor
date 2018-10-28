@@ -18,15 +18,11 @@ class PageController extends BaseController
      */
     public function index(string $page = 'index'): string
     {
-        if (! preg_match('|^[a-z0-9_\-]+$|i', $page)) {
-            abort(404);
-        }
-
-        if (! file_exists(RESOURCES . '/views/main/' . $page . '.blade.php')){
-            abort(404);
-        }
-
-        if ($page === 'menu' && ! getUser()){
+        if (
+            $page === 'menu'  ||
+            ! preg_match('|^[a-z0-9_\-]+$|i', $page) ||
+            ! file_exists(RESOURCES . '/views/main/' . $page . '.blade.php')
+        ) {
             abort(404);
         }
 
@@ -34,17 +30,35 @@ class PageController extends BaseController
     }
 
     /**
-     * Теги
+     * Меню
+     *
+     * @return string
      */
-    public function tags()
+    public function menu(): string
+    {
+        if (! getUser()) {
+            abort(404);
+        }
+
+        return view('main/layout', ['page' => 'menu']);
+    }
+
+    /**
+     * Теги
+     *
+     * @return string
+     */
+    public function tags(): string
     {
         return view('pages/tags');
     }
 
     /**
      * Правила
+     *
+     * @return string
      */
-    public function rules()
+    public function rules(): string
     {
         $rules = Rule::query()->first();
 
@@ -57,8 +71,10 @@ class PageController extends BaseController
 
     /**
      * Смайлы
+     *
+     * @return string
      */
-    public function smiles()
+    public function smiles(): string
     {
         $total = Smile::query()->count();
         $page = paginate(setting('smilelist'), $total);
@@ -75,6 +91,9 @@ class PageController extends BaseController
 
     /**
      * Ежегодный сюрприз
+     *
+     * @return void
+     * @throws \Exception
      */
     public function surprise(): void
     {
@@ -130,8 +149,10 @@ class PageController extends BaseController
 
     /**
      * FAQ по сайту
+     *
+     * @return string
      */
-    public function faq()
+    public function faq(): string
     {
         return view('pages/faq');
     }
@@ -139,8 +160,10 @@ class PageController extends BaseController
 
     /**
      * FAQ по статусам
+     *
+     * @return string
      */
-    public function statusfaq()
+    public function statusfaq(): string
     {
         $statuses = Status::query()
             ->orderBy('topoint', 'desc')
