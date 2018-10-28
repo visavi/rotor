@@ -22,7 +22,7 @@ class BBCode
     /**
      * @var array
      */
-    protected $parsers = [
+    protected static $parsers = [
         'code' => [
             'pattern'  => '/\[code\](.+?)\[\/code\]/s',
             'callback' => 'highlightCode'
@@ -108,6 +108,10 @@ class BBCode
             'pattern' => '/\[youtube\](.*youtu(?:\.be\/|be\.com\/.*(?:vi?\/?=?|embed\/)))([\w-]{11}).*\[\/youtube\]/U',
             'replace' => '<div class="embed-responsive embed-responsive-16by9"><iframe class="embed-responsive-item" src="//www.youtube.com/embed/$2" allowfullscreen></iframe></div>',
         ],
+        'username' => [
+            'pattern' => '/(?<=^|\s)@([\w\-]+)/',
+            'replace' => '<a href="/users/$1">$0</a>',
+        ],
     ];
 
     /**
@@ -120,8 +124,7 @@ class BBCode
     {
         $source = nl2br($source, false);
 
-        foreach ($this->parsers as $parser) {
-
+        foreach (self::$parsers as $parser) {
             $iterate = $parser['iterate'] ?? 1;
 
             for ($i = 0; $i < $iterate; $i++) {
@@ -296,7 +299,7 @@ class BBCode
      */
     public function setParser($name, $pattern, $replace): void
     {
-        $this->parsers[$name] = [
+        self::$parsers[$name] = [
             'pattern' => $pattern,
             'replace' => $replace
         ];
@@ -311,7 +314,7 @@ class BBCode
     public function only($only = null)
     {
         $only = \is_array($only) ? $only : \func_get_args();
-        $this->parsers = $this->arrayOnly($only);
+        self::$parsers = $this->arrayOnly($only);
         return $this;
     }
 
@@ -324,7 +327,7 @@ class BBCode
     public function except($except = null)
     {
         $except = \is_array($except) ? $except : \func_get_args();
-        $this->parsers = $this->arrayExcept($except);
+        self::$parsers = $this->arrayExcept($except);
         return $this;
     }
 
@@ -335,7 +338,7 @@ class BBCode
      */
     public function getParsers(): array
     {
-        return $this->parsers;
+        return self::$parsers;
     }
 
     /**
@@ -346,7 +349,7 @@ class BBCode
      */
     private function arrayOnly(array $only): array
     {
-        return array_intersect_key($this->parsers, array_flip($only));
+        return array_intersect_key(self::$parsers, array_flip($only));
     }
 
     /**
@@ -358,6 +361,6 @@ class BBCode
      */
     private function arrayExcept(array $excepts): array
     {
-        return array_diff_key($this->parsers, array_flip($excepts));
+        return array_diff_key(self::$parsers, array_flip($excepts));
     }
 }
