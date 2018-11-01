@@ -44,9 +44,11 @@
     "scripts": {
         "post-autoload-dump": [
             "@php -r \"file_exists('.env') || copy('.env.example', '.env');\"",
-            "@php rotor app:install",
-            "@php rotor key:generate",
             "@php rotor route:clear"
+        ],
+        "post-create-project-cmd": [
+            "@php rotor app:install",
+            "@php rotor key:generate"
         ]
     },
     "autoload": {
