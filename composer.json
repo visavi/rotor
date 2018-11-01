@@ -42,11 +42,13 @@
         "php-coveralls/php-coveralls": "^2.1"
     },
     "scripts": {
+        "post-root-package-install": [
+            "@php -r \"file_exists('.env') || copy('.env.example', '.env');\""
+        ],
         "post-autoload-dump": [
             "@php rotor route:clear"
         ],
         "post-create-project-cmd": [
-            "@php -r \"file_exists('.env') || copy('.env.example', '.env');\"",
             "@php rotor app:install",
             "@php rotor key:generate"
         ]
