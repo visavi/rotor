@@ -70,7 +70,7 @@ class BaseModel extends Model
     public function uploadFile(UploadedFile $file): array
     {
         $extension = strtolower($file->getClientOriginalExtension());
-        $basename  = basename($file->getClientOriginalName());
+        $basename  = basename($file->getClientOriginalName(), '.' . $extension);
         $filename  = uniqueName($extension);
         $fullPath  = $this->uploadPath . '/' . $filename;
         $path      = str_replace(HOME, '', $fullPath);
