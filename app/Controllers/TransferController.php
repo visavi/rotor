@@ -73,7 +73,7 @@ class TransferController extends BaseController
                 $this->user->increment('newprivat');
 
                 $comment = $msg ?? 'Не указано';
-                $message = 'Пользователь [b]' . getUser()->getProfile() . '[/b] перечислил вам ' . plural($money, setting('moneyname')) . PHP_EOL . 'Примечание: ' . $comment;
+                $message = 'Пользователь @' . getUser('login') . ' перечислил вам ' . plural($money, setting('moneyname')) . PHP_EOL . 'Примечание: ' . $comment;
 
                 // Уведомление по привату
                 $this->user->sendMessage(getUser(), $message);

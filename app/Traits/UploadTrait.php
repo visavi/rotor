@@ -4,6 +4,7 @@ namespace App\Traits;
 
 use App\Models\File;
 use Illuminate\Http\UploadedFile;
+use Intervention\Image\Constraint;
 use Intervention\Image\ImageManagerStatic as Image;
 
 
@@ -30,7 +31,7 @@ trait UploadTrait
             if ($img->getWidth() <= 100 && $img->getHeight() <= 100) {
                 $file->move($this->uploadPath, $filename);
             } else {
-                $img->resize(setting('screensize'), setting('screensize'), function ($constraint) {
+                $img->resize(setting('screensize'), setting('screensize'), function (Constraint $constraint) {
                     $constraint->aspectRatio();
                     $constraint->upsize();
                 });
@@ -51,7 +52,7 @@ trait UploadTrait
                 'relate_type' => static::class,
                 'hash'        => $path,
                 'name'        => utfSubstr($basename, 0, 50) . '.' . $extension,
-                'size'        => filesize($fullPath),
+                'size'        => $file->getSize(),
                 'user_id'     => getUser('id'),
                 'created_at'  => SITETIME,
             ]);
