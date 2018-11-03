@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Traits\UploadTrait;
 use FFMpeg\Coordinate\TimeCode;
 use FFMpeg\FFMpeg;
 use FFMpeg\FFProbe;
@@ -33,6 +34,8 @@ use Illuminate\Http\UploadedFile;
  */
 class Down extends BaseModel
 {
+    use UploadTrait;
+
     /**
      * Indicates if the model should be timestamped.
      *

@@ -84,7 +84,7 @@ class NewsController extends AdminController
                 // Удаление старой картинки
                 if ($image) {
                     deleteFile(HOME . $news->image);
-                    $upload = $news->uploadFile($image);
+                    $upload = $news->uploadFile($image, false);
                 }
 
                 $news->update([
@@ -137,7 +137,7 @@ class NewsController extends AdminController
             if ($validator->isValid()) {
 
                 if ($image) {
-                    $upload = (new News())->uploadFile($image);
+                    $upload = (new News())->uploadFile($image, false);
                 }
 
                 /** @var News $news */

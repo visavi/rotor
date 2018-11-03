@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Traits\UploadTrait;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -20,6 +21,8 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  */
 class Board extends BaseModel
 {
+    use UploadTrait;
+
     /**
      * Indicates if the model should be timestamped.
      *

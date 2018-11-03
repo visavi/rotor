@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Traits\UploadTrait;
 use Curl\Curl;
 use Illuminate\Database\Capsule\Manager as DB;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -58,6 +59,8 @@ use Illuminate\Database\Query\JoinClause;
  */
 class User extends BaseModel
 {
+    use UploadTrait;
+
     public const BOSS   = 'boss';   // Владелец
     public const ADMIN  = 'admin';  // Админ
     public const MODER  = 'moder';  // Модератор
@@ -127,13 +130,6 @@ class User extends BaseModel
      * @var string
      */
     public $uploadAvatarPath = UPLOADS . '/avatars';
-
-    /**
-     * Записывать файлы в таблицу
-     *
-     * @var bool
-     */
-    public $dataRecord = false;
 
     /**
      * Связь с таблицей online

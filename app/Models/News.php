@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Traits\UploadTrait;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 
 /**
@@ -19,6 +20,8 @@ use Illuminate\Database\Eloquent\Relations\MorphMany;
  */
 class News extends BaseModel
 {
+    use UploadTrait;
+
     /**
      * Indicates if the model should be timestamped.
      *
@@ -39,13 +42,6 @@ class News extends BaseModel
      * @var string
      */
     public $uploadPath = UPLOADS . '/news';
-
-    /**
-     * Записывать файлы в таблицу
-     *
-     * @var bool
-     */
-    public $dataRecord = false;
 
     /**
      * Возвращает комментарии новостей

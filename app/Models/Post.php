@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Traits\UploadTrait;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
@@ -23,6 +24,8 @@ use Illuminate\Database\Eloquent\Relations\MorphMany;
  */
 class Post extends BaseModel
 {
+    use UploadTrait;
+
     /**
      * Indicates if the model should be timestamped.
      *

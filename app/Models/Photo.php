@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Traits\UploadTrait;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 
 /**
@@ -18,6 +19,8 @@ use Illuminate\Database\Eloquent\Relations\MorphMany;
  */
 class Photo extends BaseModel
 {
+    use UploadTrait;
+
     /**
      * Indicates if the model should be timestamped.
      *
