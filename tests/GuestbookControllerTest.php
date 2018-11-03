@@ -5,14 +5,18 @@ use PHPUnit\Framework\TestCase;
 
 class GuestbookControllerTest extends TestCase
 {
+    /**
+     * @throws Exception
+     */
     public function testGuest(): void
     {
+        /** @var Guestbook|\Illuminate\Database\Eloquent\Model $guest */
         $guest = new Guestbook();
         $guest->user_id = 1;
         $guest->text = 'Test text message';
         $guest->ip = '127.0.0.1';
         $guest->brow = 'Chrome 60.0';
-        $guest->created_at = SITETIME;
+        $guest->created_at = time();
         $guest->save();
 
         $this->assertTrue($guest->save());
