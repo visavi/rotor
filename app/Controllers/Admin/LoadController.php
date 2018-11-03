@@ -462,7 +462,7 @@ class LoadController extends AdminController
             $active = $down->active ^ 1;
 
             $down->update([
-                'active'    => $active,
+                'active'     => $active,
                 'updated_at' => SITETIME,
             ]);
 

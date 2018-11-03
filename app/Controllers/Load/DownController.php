@@ -233,10 +233,11 @@ class DownController extends BaseController
                     'text'        => $text,
                     'user_id'     => $user->id,
                     'created_at'  => SITETIME,
+                    'active'      => isAdmin(User::ADMIN),
                 ]);
 
                 foreach ($files as $file) {
-                    $down->uploadFile($file);
+                    $down->uploadAndConvertFile($file);
                 }
 
                 if (! isAdmin(User::ADMIN)) {

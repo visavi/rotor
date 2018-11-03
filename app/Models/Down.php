@@ -159,9 +159,9 @@ class Down extends BaseModel
      * @param  UploadedFile $file
      * @return array
      */
-    public function uploadFile(UploadedFile $file): array
+    public function uploadAndConvertFile(UploadedFile $file): array
     {
-        $upload = parent::uploadFile($file);
+        $upload = $this->uploadFile($file);
         $this->convertVideo($file, $upload['path']);
 
         return $upload;
