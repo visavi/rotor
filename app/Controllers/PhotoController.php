@@ -373,19 +373,20 @@ class PhotoController extends BaseController
      */
     public function end(int $id): void
     {
+        /** @var Photo $photo */
         $photo = Photo::query()->find($id);
 
-        if (empty($photo)) {
+        if (! $photo) {
             abort(404, 'Выбранное вами фото не найдено, возможно оно было удалено!');
         }
 
         $total = Comment::query()
             ->where('relate_type', Photo::class)
-            ->where('relate_id', $id)
+            ->where('relate_id', $photo->id)
             ->count();
 
         $end = ceil($total / setting('postgallery'));
-        redirect('/photos/comments/' . $id . '?page=' . $end);
+        redirect('/photos/comments/' . $photo->id . '?page=' . $end);
     }
 
     /**

@@ -28,7 +28,7 @@
     @if (getUser())
         Мои:
         <a href="/photos/albums/{{ getUser('login') }}">фото</a>,
-        <a href="/photos/comments/{{ getUser('login') }}">комментарии</a> /
+        <a href="/photos/comments/active/{{ getUser('login') }}">комментарии</a> /
     @endif
 
     Все:
