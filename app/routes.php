@@ -87,7 +87,7 @@ return FastRoute\cachedDispatcher(function(RouteCollector $r)
         $r->get('/albums/{login:[\w\-]+}', [App\Controllers\PhotoController::class, 'album']);
         $r->get('/comments', [App\Controllers\PhotoController::class, 'allComments']);
         $r->get('/comments/active/{login:[\w\-]+}', [App\Controllers\PhotoController::class, 'userComments']);
-        $r->get('/comments/{id:\d+}/{cid:\d+}', [App\Controllers\PhotoController::class, 'viewComment']);
+        $r->get('/comment/{id:\d+}/{cid:\d+}', [App\Controllers\PhotoController::class, 'viewComment']);
         $r->addRoute(['GET', 'POST'], '/comments/{id:\d+}', [App\Controllers\PhotoController::class, 'comments']);
         $r->addRoute(['GET', 'POST'], '/create', [App\Controllers\PhotoController::class, 'create']);
         $r->addRoute(['GET', 'POST'], '/edit/{id:\d+}', [App\Controllers\PhotoController::class, 'edit']);
