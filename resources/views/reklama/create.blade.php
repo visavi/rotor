@@ -67,30 +67,30 @@
     Адрес ссылки не должен направлять на прямое скачивание какого-либо контента<br>
     Запрещены ссылки на сайты с алярмами и порно<br>
     За нарушение правил предусмотрено наказание в виде бана<br><br>
-
-    @push('scripts')
-        <script>
-            $(document).ready(function() {
-                var rekuserprice    = <?= setting('rekuserprice'); ?>;
-                var rekuseroptprice = <?= setting('rekuseroptprice'); ?>;
-                var price           = $('.js-price');
-                var bold            = $('.js-bold');
-                var color           = $('.js-color');
-                var recount = function() {
-                    var newprice = parseInt(rekuserprice);
-
-                    if (bold.is(':checked')) {
-                        newprice += parseInt(rekuseroptprice);
-                    }
-                    if (color.val().length) {
-                        newprice += parseInt(rekuseroptprice);
-                    }
-                    price.html(newprice);
-                };
-                recount();
-                bold.on('change', recount);
-                color.on('input change', recount);
-            });
-        </script>
-    @endpush
 @stop
+
+@push('scripts')
+    <script>
+        $(document).ready(function() {
+            var rekuserprice    = <?= setting('rekuserprice'); ?>;
+            var rekuseroptprice = <?= setting('rekuseroptprice'); ?>;
+            var price           = $('.js-price');
+            var bold            = $('.js-bold');
+            var color           = $('.js-color');
+            var recount = function() {
+                var newprice = parseInt(rekuserprice);
+
+                if (bold.is(':checked')) {
+                    newprice += parseInt(rekuseroptprice);
+                }
+                if (color.val().length) {
+                    newprice += parseInt(rekuseroptprice);
+                }
+                price.html(newprice);
+            };
+            recount();
+            bold.on('change', recount);
+            color.on('input change', recount);
+        });
+    </script>
+@endpush
