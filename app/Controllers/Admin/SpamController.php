@@ -5,7 +5,7 @@ namespace App\Controllers\Admin;
 use App\Classes\Validator;
 use App\Models\Comment;
 use App\Models\Guestbook;
-use App\Models\Inbox;
+use App\Models\Message;
 use App\Models\Post;
 use App\Models\Spam;
 use App\Models\User;
@@ -35,7 +35,7 @@ class SpamController extends AdminController
         $this->types = [
             'post'    => Post::class,
             'guest'   => Guestbook::class,
-            'inbox'   => Inbox::class,
+            'message' => Message::class,
             'wall'    => Wall::class,
             'comment' => Comment::class,
         ];

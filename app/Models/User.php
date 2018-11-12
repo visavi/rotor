@@ -514,7 +514,6 @@ class User extends BaseModel
      */
     public function isIgnore(User $user): bool
     {
-
         $isIgnore = Ignore::query()
             ->where('user_id', $this->id)
             ->where('ignore_id', $user->id)
@@ -536,11 +535,11 @@ class User extends BaseModel
      */
     public function sendMessage(?User $author, $text): bool
     {
-        Inbox::query()->create([
-            'user_id'    => $this->id,
-            'author_id'  => $author ? $author->id : null,
-            'text'       => $text,
-            'created_at' => SITETIME,
+        Message::query()->create([
+            'user_id'      => $this->id,
+            'talk_user_id' => $author ? $author->id : 0,
+            'text'         => $text,
+            'created_at'   => SITETIME,
         ]);
 
         $this->increment('newprivat');
@@ -555,7 +554,7 @@ class User extends BaseModel
      */
     public function getCountMessages(): int
     {
-        return Inbox::query()->where('user_id', $this->id)->count();
+        return Message::query()->where('user_id', $this->id)->count();
     }
 
     /**
@@ -616,8 +615,7 @@ class User extends BaseModel
         deleteFile(HOME . $this->picture);
         deleteFile(HOME . $this->avatar);
 
-        Inbox::query()->where('user_id', $this->id)->delete();
-        Outbox::query()->where('user_id', $this->id)->delete();
+        Message::query()->where('user_id', $this->id)->delete();
         Contact::query()->where('user_id', $this->id)->delete();
         Ignore::query()->where('user_id', $this->id)->delete();
         Rating::query()->where('user_id', $this->id)->delete();

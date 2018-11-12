@@ -5,23 +5,17 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
- * Class Outbox
+ * Class Inbox
  *
  * @property int id
  * @property int user_id
- * @property int recipient_id
+ * @property int talk_user_id
  * @property string text
+ * @property string type
  * @property int created_at
  */
-class Outbox extends BaseModel
+class Message extends BaseModel
 {
-    /**
-     * The table associated with the model.
-     *
-     * @var string
-     */
-    protected $table = 'outbox';
-
     /**
      * Indicates if the model should be timestamped.
      *
@@ -41,8 +35,8 @@ class Outbox extends BaseModel
      *
      * @return BelongsTo
      */
-    public function recipient(): BelongsTo
+    public function talkUser(): BelongsTo
     {
-        return $this->belongsTo(User::class, 'recipient_id')->withDefault();
+        return $this->belongsTo(User::class, 'talk_user_id')->withDefault();
     }
 }

@@ -32,6 +32,7 @@ use App\Models\{
 use Curl\Curl;
 use Illuminate\Database\Capsule\Manager as DB;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 use Intervention\Image\ImageManagerStatic as Image;
 use Jenssegers\Blade\Blade;
 use ReCaptcha\ReCaptcha;
@@ -1011,12 +1012,13 @@ function shuffleAssoc(&$array)
 /**
  * Возвращает обрезанную до заданного количества слов строку
  *
- * @param  string  $str   Исходная строка
- * @param  int     $words Максимальное количество слов в результате
+ * @param  string $str   Исходная строка
+ * @param  int    $words Максимальное количество слов в результате
+ * @param  string $end
  * @return string         Обрезанная строка
  */
-function stripString($str, $words = 20) {
-    return implode(' ', array_slice(explode(' ', strip_tags($str)), 0, $words));
+function stripString($str, $words = 20, $end = '...') {
+    return Str::words(strip_tags($str), $words, $end);
 }
 
 /**

@@ -12,3 +12,7 @@ require __DIR__ . '/../app/bootstrap.php';
 
 $app = new \App\Classes\Application();
 $app->run();
+
+//setting('limitmail')
+// getUser('newprivat')
+// limitoutmail

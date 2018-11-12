@@ -2,7 +2,7 @@
 
 namespace App\Controllers;
 
-use App\Models\Inbox;
+use App\Models\Message;
 use App\Models\Post;
 use App\Models\Topic;
 use App\Models\User;
@@ -95,34 +95,37 @@ class ApiController extends BaseController
             exit();
         }
 
-        $inbox = Inbox::query()->where('user_id', $user->id)
-            ->orderBy('created_at')
+        $messages = Message::query()
+            ->where('user_id', $user->id)
+            ->where('type', 'in')
+            ->orderBy('created_at', 'desc')
             ->limit($count)
             ->get();
 
-        if ($inbox->isEmpty()) {
+        if ($messages->isEmpty()) {
             echo json_encode(['error' => 'no messages']);
             exit();
         }
 
-        $total = $inbox->count();
+        $total = $messages->count();
 
-        $messages = [];
-        foreach ($inbox as $data) {
+        $msg = [];
+        foreach ($messages as $data) {
 
             $data->text = bbCode($data->text);
 
-            $messages[] = [
-                'author_id'  => $data->author_id,
-                'login'      => $data->author->login,
+            $msg[] = [
+                'author_id'  => $data->talk_user_id,
+                'login'      => $data->talkUser->id ? $data->talkUser->login : 'Система',
                 'text'       => $data->text,
+                'read'       => $data->read,
                 'created_at' => $data->created_at,
             ];
         }
 
         echo json_encode([
             'total'    => $total,
-            'messages' => $messages
+            'messages' => $msg
         ]);
     }
 

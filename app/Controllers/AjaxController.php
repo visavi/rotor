@@ -9,7 +9,7 @@ use App\Models\{
     Down,
     File,
     Guestbook,
-    Inbox,
+    Message,
     Item,
     News,
     Offer,
@@ -75,7 +75,7 @@ class AjaxController extends BaseController
                 $path = '/topics/' . $data->topic_id . '?page='.$page;
                 break;
 
-            case Inbox::class:
+            case Message::class:
                 $data = $type::query()->find($id);
                 break;
 

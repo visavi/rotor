@@ -6,14 +6,16 @@ use App\Classes\Validator;
 use App\Models\Contact;
 use App\Models\Flood;
 use App\Models\Ignore;
-use App\Models\Inbox;
-use App\Models\Outbox;
+use App\Models\Message;
 use App\Models\User;
 use Illuminate\Database\Capsule\Manager as DB;
+use Illuminate\Database\Query\JoinClause;
 use Illuminate\Http\Request;
 
 class MessageController extends BaseController
 {
+    public $user;
+
     /**
      * Конструктор
      */
@@ -21,7 +23,7 @@ class MessageController extends BaseController
     {
         parent::__construct();
 
-        if (! getUser()) {
+        if (! $this->user = getUser()) {
             abort(403, 'Для просмотра писем необходимо авторизоваться!');
         }
     }
@@ -29,53 +31,83 @@ class MessageController extends BaseController
     /**
      * Главная страница
      */
-    public function index()
+    public function index(): string
     {
-        $total = Inbox::query()->where('user_id', getUser('id'))->count();
-        $page  = paginate(setting('privatpost'), $total);
+        $total = Message::query()
+            ->distinct()
+            ->where('user_id', $this->user->id)
+            ->count('talk_user_id');
+        $page = paginate(setting('privatpost'), $total);
 
-        $page->totalOutbox = Outbox::query()->where('user_id', getUser('id'))->count();
+        $latestMessage = Message::query()
+            ->select('talk_user_id', DB::raw('max(created_at) as last_created_at'))
+            ->where('user_id', $this->user->id)
+            ->groupBy('talk_user_id');
 
-        $messages = Inbox::query()
-            ->where('user_id', getUser('id'))
+        $messages = Message::query()
+            ->joinSub($latestMessage, 'latest_message', function (JoinClause $join) {
+                $join->on('messages.created_at', 'latest_message.last_created_at')
+                ->whereRaw('messages.talk_user_id = latest_message.talk_user_id');
+            })
+            ->where('user_id', $this->user->id)
             ->orderBy('created_at', 'desc')
             ->offset($page->offset)
             ->limit($page->limit)
-            ->with('author')
+            ->with('talkUser')
             ->get();
 
-        $newprivat = getUser('newprivat');
 
-        if ($newprivat) {
-            $user = User::query()->find(getUser('id'));
-            $user->update([
+        if ($this->user->newprivat) {
+            $this->user->update([
                 'newprivat'      => 0,
                 'sendprivatmail' => 0,
             ]);
         }
 
-        return view('messages/index', compact('messages', 'page', 'newprivat'));
+        return view('messages/index', compact('messages', 'page'));
     }
 
     /**
-     * Исходящие сообщения
+     * Диалог
+     *
+     * @param string $login
+     * @return string
      */
-    public function outbox()
+    public function talk(string $login): string
     {
-        $total = Outbox::query()->where('user_id', getUser('id'))->count();
-        $page = paginate(setting('privatpost'), $total);
+        $user = User::query()->where('login', $login)->first();
 
-        $messages = Outbox::query()
-            ->where('user_id', getUser('id'))
+        if (! $user) {
+            abort(404, 'Пользователь не найден!');
+        }
+
+        if ($user->id === $this->user->id) {
+            abort('default', 'Отсутствует переписка с самим собой!');
+        }
+
+        $total = Message::query()
+            ->where('user_id', $this->user->id)
+            ->where('talk_user_id', $user->id)
+            ->count();
+
+        $page  = paginate(setting('privatpost'), $total);
+
+        $messages = Message::query()
+            ->where('user_id', $this->user->id)
+            ->where('talk_user_id', $user->id)
             ->orderBy('created_at', 'desc')
             ->offset($page->offset)
             ->limit($page->limit)
-            ->with('recipient')
+            ->with('user', 'talkUser')
             ->get();
 
-        $page->totalInbox = Inbox::query()->where('user_id', getUser('id'))->count();
+        // Прочитано
+        Message::query()
+            ->where('user_id', $this->user->id)
+            ->where('talk_user_id', $user->id)
+            ->update(['read' => 1]);
 
-        return view('messages/outbox', compact('messages', 'page'));
+        return view('messages/talk', compact('messages', 'user', 'page'));
     }
 
     /**
@@ -97,8 +129,8 @@ class MessageController extends BaseController
 
         if ($request->isMethod('post')) {
 
-            $token   = check($request->input('token'));
-            $msg     = check($request->input('msg'));
+            $token = check($request->input('token'));
+            $msg   = check($request->input('msg'));
 
             $validator->equal($token, $_SESSION['token'], ['msg' => 'Неверный идентификатор сессии, повторите действие!'])
                 ->true($user, ['user' => 'Пользователь не найден!'])
@@ -106,21 +138,16 @@ class MessageController extends BaseController
                 ->equal(Flood::isFlood(), true, 'Антифлуд! Разрешается отправлять сообщения раз в ' . Flood::getPeriod() . ' сек!');
 
             if ($user) {
+                $validator->notEqual($user->id, $this->user->id, ['user' => 'Нельзя отправлять письмо самому себе!']);
 
-                $validator->notEqual($user->id, getUser('id'), ['user' => 'Нельзя отправлять письмо самому себе!']);
-
-                if (! captchaVerify() && getUser('point') < setting('privatprotect')) {
+                if (! captchaVerify() && $this->user->point < setting('privatprotect')) {
                     $validator->addError(['protect' => 'Не удалось пройти проверку captcha!']);
                 }
-
-                // лимит ящика
-                $totalInbox = Inbox::query()->where('user_id', $user->id)->count();
-                $validator->lte($totalInbox, setting('limitmail'), 'Ящик получателя переполнен!');
 
                 // Проверка на игнор
                 $ignoring = Ignore::query()
                     ->where('user_id', $user->id)
-                    ->where('ignore_id', getUser('id'))
+                    ->where('ignore_id', $this->user->id)
                     ->first();
 
                 $validator->empty($ignoring, ['user' => 'Вы внесены в игнор-лист получателя!']);
@@ -129,27 +156,25 @@ class MessageController extends BaseController
             if ($validator->isValid()) {
 
                 $msg = antimat($msg);
-
                 $user->increment('newprivat');
 
-                Inbox::query()->create([
-                    'user_id'    => $user->id,
-                    'author_id'  => getUser('id'),
-                    'text'       => $msg,
-                    'created_at' => SITETIME,
+                Message::query()->create([
+                    'user_id'      => $user->id,
+                    'talk_user_id' => $this->user->id,
+                    'text'         => $msg,
+                    'type'         => 'in',
+                    'created_at'   => SITETIME,
+                ])->create([
+                    'user_id'      => $this->user->id,
+                    'talk_user_id' => $user->id,
+                    'text'         => $msg,
+                    'type'         => 'out',
+                    'read'         => 1,
+                    'created_at'   => SITETIME,
                 ]);
 
-                Outbox::query()->create([
-                    'user_id'       => getUser('id'),
-                    'recipient_id'  => $user->id,
-                    'text'          => $msg,
-                    'created_at'    => SITETIME,
-                ]);
-
-                DB::delete('DELETE FROM `outbox` WHERE `recipient_id`=? AND `created_at` < (SELECT MIN(`created_at`) FROM (SELECT `created_at` FROM `outbox` WHERE `recipient_id`=? ORDER BY `created_at` DESC LIMIT ' . setting('limitoutmail') . ') AS del);', [getUser('id'), getUser('id')]);
-
-                setFlash('success', 'Ваше письмо успешно отправлено!');
-                redirect('/messages');
+                setFlash('success', 'Письмо успешно отправлено!');
+                redirect('/messages/talk/' . $user->login);
 
             } else {
                 setInput($request->all());
@@ -158,7 +183,7 @@ class MessageController extends BaseController
         }
 
         $contacts = Contact::query()
-            ->where('user_id', getUser('id'))
+            ->where('user_id', $this->user->id)
             ->rightJoin('users', 'contacts.contact_id', '=', 'users.id')
             ->orderBy('users.login')
             ->get();
@@ -235,48 +260,5 @@ class MessageController extends BaseController
 
         $type = $type ? '/' . $type : '';
         redirect('/messages' . $type . '?page=' . $page);
-    }
-
-    /**
-     * Просмотр переписки
-     *
-     * @param Request $request
-     * @return string
-     */
-    public function history(Request $request): string
-    {
-        $login = check($request->input('user'));
-
-        if (! $user = getUserByLogin($login)) {
-            abort(404, 'Пользователя с данным логином не существует!');
-        }
-
-        if ($user->id === getUser('id')) {
-            abort('default', 'Отсутствует переписка с самим собой!');
-        }
-
-        $totalInbox  = Inbox::query()->where('user_id', getUser('id'))->where('author_id', $user->id)->count();
-        $totalOutbox = Outbox::query()->where('user_id', getUser('id'))->where('recipient_id', $user->id)->count();
-
-        $total = $totalInbox + $totalOutbox;
-
-        $page = paginate(setting('privatpost'), $total);
-
-        $outbox = Outbox::query()
-            ->select('id', 'user_id', 'user_id as author_id', 'text', 'created_at')
-            ->where('user_id', getUser('id'))
-            ->where('recipient_id', $user->id);
-
-        $messages = Inbox::query()
-            ->where('user_id', getUser('id'))
-            ->where('author_id', $user->id)
-            ->unionAll($outbox)
-            ->orderBy('created_at', 'desc')
-            ->offset($page->offset)
-            ->limit($page->limit)
-            ->with('author')
-            ->get();
-
-        return view('messages/history', compact('messages', 'page', 'user'));
     }
 }
