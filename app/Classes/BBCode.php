@@ -109,7 +109,7 @@ class BBCode
             'replace' => '<div class="embed-responsive embed-responsive-16by9"><iframe class="embed-responsive-item" src="//www.youtube.com/embed/$2" allowfullscreen></iframe></div>',
         ],
         'username' => [
-            'pattern' => '/(?<=^|\s)@([\w\-]+)/',
+            'pattern' => '/(?<=^|\s)@([\w\-]+)(?=(\s|,))/',
             'replace' => '<a href="/users/$1">$0</a>',
         ],
     ];
