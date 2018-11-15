@@ -52,7 +52,7 @@ trait UploadTrait
                 'relate_type' => static::class,
                 'hash'        => $path,
                 'name'        => utfSubstr($basename, 0, 50) . '.' . $extension,
-                'size'        => $file->getSize(),
+                'size'        => filesize($fullPath),
                 'user_id'     => getUser('id'),
                 'created_at'  => SITETIME,
             ]);
