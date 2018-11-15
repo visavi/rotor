@@ -45,7 +45,7 @@
 
     <p class="text-muted font-italic">
         Сканирование системы позволяет узнать какие файлы или папки менялись в течение определенного времени<br>
-        Внимание сервис не учитывает некоторые расширения файлов: {{ setting('nocheck') }}
+        Внимание, сервис не учитывает некоторые расширения файлов: {{ setting('nocheck') }}
     </p>
 
     <p><a class="btn btn-primary" href="/admin/checkers/scan?token={{ $_SESSION['token'] }}"><i class="fa fa-sync"></i> Сканировать</a></p>

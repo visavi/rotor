@@ -21,7 +21,10 @@
     </nav>
 
     @if ($user->level === 'pended')
-        <b><span style="color:#ff0000">Внимание, аккаунт требует подтверждение регистрации!</span></b><br>
+        <div class="p-1 bg-danger text-white">
+            <i class="fas fa-exclamation-triangle"></i>
+            Внимание, аккаунт требует подтверждение регистрации!
+        </div>
     @endif
 
     @if ($user->level === 'banned' && $user->timeban > SITETIME)

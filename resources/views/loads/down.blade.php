@@ -31,7 +31,7 @@
 
     @if (! $down->active)
         <div class="p-1 bg-warning text-dark">
-            <b>Внимание!</b> Данная загрузка ожидает проверки модератором!<br>
+            <i class="fas fa-exclamation-triangle"></i> Внимание! Данная загрузка ожидает проверки модератором!<br>
             @if ($down->user_id === getUser('id'))
                 <i class="fa fa-pencil-alt"></i> <a href="/downs/edit/{{ $down->id }}">Перейти к редактированию</a>
             @endif

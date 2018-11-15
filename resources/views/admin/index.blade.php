@@ -71,12 +71,18 @@
     @endif
 
     @if (! $existBoss)
-        <br><div class="b"><b><span style="color:#ff0000">Внимание!!! Отсутствует профиль суперадмина</span></b><br>
-        В базе данных не найден пользователь с правами boss</div>
+        <div class="p-1 bg-danger text-white">
+            <i class="fas fa-exclamation-triangle"></i>
+            Внимание! Отсутствует профиль суперадмина<br>
+            В базе данных не найден пользователь с правами boss
+        </div>
     @endif
 
     @if (file_exists(HOME.'/install'))
-        <br><div class="b"><b><span style="color:#ff0000">Внимание!!! Необходимо удалить директорию install</span></b><br>
-        Наличие этой директории может нарушить безопасность сайта. Удалите ее прямо сейчас!</div>
+        <div class="p-1 bg-danger text-white">
+            <i class="fas fa-exclamation-triangle"></i>
+            Внимание! Необходимо удалить директорию install<br>
+            Наличие этой директории может нарушить безопасность сайта. Удалите ее прямо сейчас!
+        </div>
     @endif
 @stop

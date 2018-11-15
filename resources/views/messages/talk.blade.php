@@ -17,7 +17,7 @@
     <h1>Диалог с {{ $user->getProfile(null, false) }}</h1>
 
     @if (getUser()->isIgnore($user))
-        <div class="p-2 bg-danger text-white">
+        <div class="p-1 bg-danger text-white">
             <i class="fas fa-exclamation-triangle"></i>
             Внимание, данный пользователь находится в игнор-листе!
         </div>
