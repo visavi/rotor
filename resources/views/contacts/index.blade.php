@@ -24,7 +24,7 @@
             @foreach ($contacts as $contact)
                 <div class="b">
                     <div class="float-right">
-                        <a href="/messages/send?user={{ $contact->contactor->login }}" data-toggle="tooltip" title="{{ trans('contacts.write') }}"><i class="fa fa-reply text-muted"></i></a>
+                        <a href="/messages/talk/{{ $contact->contactor->login }}" data-toggle="tooltip" title="{{ trans('contacts.write') }}"><i class="fa fa-reply text-muted"></i></a>
                         <a href="/contacts/note/{{ $contact->id }}" data-toggle="tooltip" title="{{ trans('contacts.note') }}"><i class="fa fa-sticky-note text-muted"></i></a>
                         <a href="/transfers?user={{ $contact->contactor->login }}" data-toggle="tooltip" title="{{ trans('contacts.transfer') }}"><i class="fa fa-money-bill-alt text-muted"></i></a>
                         <input type="checkbox" name="del[]" value="{{ $contact->id }}">

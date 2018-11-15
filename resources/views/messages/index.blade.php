@@ -17,18 +17,20 @@
 
     @if ($messages->isNotEmpty())
         @foreach ($messages as $data)
-            <div class="media border-bottom p-2" data-href="/messages/talk/{{ $data->talkUser->login }}">
+            <?php $link = $data->author->id ? '/' . $data->author->login : ''; ?>
+            <div class="media border-bottom p-2" data-href="/messages/talk{{ $link }}">
                 <div class="img mr-3">
-                    {!! $data->talkUser->getAvatar() !!}
-                    {!! $data->talkUser->getOnline() !!}
+                    {!! $data->author->getAvatar() !!}
+                    {!! $data->author->getOnline() !!}
                 </div>
                 <div class="media-body">
                     <div class="text-muted float-right">
                         {{  dateFixed($data->created_at) }}
+                        <a href="/messages/delete/{{ (int) $data->author->id }}?token={{ $_SESSION['token'] }}&amp;page={{ $page->current }}" onclick="return confirm('Вы действительно хотите удалить сообщения?')" data-toggle="tooltip" title="Удалить"><i class="fa fa-times"></i></a>
                     </div>
 
-                    @if ($data->talkUser->id)
-                        <b>{!! $data->talkUser->getProfile() !!}</b>
+                    @if ($data->author->id)
+                        <b>{!! $data->author->getProfile() !!}</b>
                     @else
                         <b>Система</b><br>
                     @endif
@@ -42,8 +44,6 @@
         @endforeach
 
         {!! pagination($page) !!}
-
-        <i class="fa fa-times"></i> <a href="/messages/clear?token={{ $_SESSION['token'] }}">Очистить ящик</a><br>
     @else
         {!! showError('Сообщений еще нет!') !!}
     @endif

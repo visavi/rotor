@@ -189,10 +189,14 @@ class User extends BaseModel
                 return '<a class="author" href="/users/' . $this->login . '" data-login="' . $this->login . '">' . $name . '</a>' . $admin;
             }
 
-            return '<span class="author" data-login="' . $this->login . '">' . $name . '</span>';
+            return $name;
         }
 
-        return '<span class="author" data-login="' . setting('guestsuser') . '">' . setting('guestsuser') . '</span>';
+        if ($link) {
+            return '<span class="author" data-login="' . setting('guestsuser') . '">' . setting('guestsuser') . '</span>';
+        }
+
+        return setting('guestsuser');
     }
 
     /**
@@ -536,10 +540,10 @@ class User extends BaseModel
     public function sendMessage(?User $author, $text): bool
     {
         Message::query()->create([
-            'user_id'      => $this->id,
-            'talk_user_id' => $author ? $author->id : 0,
-            'text'         => $text,
-            'created_at'   => SITETIME,
+            'user_id'    => $this->id,
+            'author_id'  => $author ? $author->id : 0,
+            'text'       => $text,
+            'created_at' => SITETIME,
         ]);
 
         $this->increment('newprivat');

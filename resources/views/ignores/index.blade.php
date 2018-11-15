@@ -25,7 +25,7 @@
                 <div class="b">
 
                     <div class="float-right">
-                        <a href="/messages/send?user={{ $data->ignoring->login }}" data-toggle="tooltip" title="{{ trans('ignores.write') }}"><i class="fa fa-reply text-muted"></i></a>
+                        <a href="/messages/talk/{{ $data->ignoring->login }}" data-toggle="tooltip" title="{{ trans('ignores.write') }}"><i class="fa fa-reply text-muted"></i></a>
                         <a href="/ignores/note/{{ $data->id }}" data-toggle="tooltip" title="{{ trans('ignores.note') }}"><i class="fa fa-sticky-note text-muted"></i></a>
                         <input type="checkbox" name="del[]" value="{{ $data->id }}">
                     </div>

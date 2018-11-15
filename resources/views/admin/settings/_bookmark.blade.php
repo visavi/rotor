@@ -3,18 +3,6 @@
 <form action="/admin/settings?act=bookmark" method="post">
     <input type="hidden" name="token" value="{{ $_SESSION['token'] }}">
 
-    <div class="form-group{{ hasError('sets[limitmail]') }}">
-        <label for="limitmail">Кол. писем во входящих:</label>
-        <input type="number" class="form-control" id="limitmail" name="sets[limitmail]" maxlength="3" value="{{ getInput('sets.limitmail', $settings['limitmail']) }}" required>
-        {!! textError('sets[limitmail]') !!}
-    </div>
-
-    <div class="form-group{{ hasError('sets[limitoutmail]') }}">
-        <label for="limitoutmail">Кол. писем в отправленных:</label>
-        <input type="number" class="form-control" id="limitoutmail" name="sets[limitoutmail]" maxlength="3" value="{{ getInput('sets.limitoutmail', $settings['limitoutmail']) }}" required>
-        {!! textError('sets[limitoutmail]') !!}
-    </div>
-
     <div class="form-group{{ hasError('sets[privatpost]') }}">
         <label for="privatpost">Писем в привате на стр.:</label>
         <input type="number" class="form-control" id="privatpost" name="sets[privatpost]" maxlength="2" value="{{ getInput('sets.privatpost', $settings['privatpost']) }}" required>

@@ -16,11 +16,11 @@ class MoveOutboxToMessages extends AbstractMigration
 
         foreach ($rows as $row) {
             $data[] = [
-                'user_id'      => $row['user_id'],
-                'talk_user_id' => $row['recipient_id'],
-                'text'         => $row['text'],
-                'type'         => 'out',
-                'created_at'   => $row['created_at'],
+                'user_id'    => $row['user_id'],
+                'author_id'  => $row['recipient_id'],
+                'text'       => $row['text'],
+                'type'       => 'out',
+                'created_at' => $row['created_at'],
             ];
         }
 

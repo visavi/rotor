@@ -5,9 +5,6 @@
 @stop
 
 @section('content')
-
-    <h1>Новое сообщение</h1>
-
     <nav>
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
@@ -17,10 +14,11 @@
         </ol>
     </nav>
 
-    @if ($user)
+    <h1>Новое сообщение</h1>
 
+    @if ($user)
         <i class="fa fa-envelope"></i> Сообщение для <b>{!! $user->getProfile() !!}</b>:<br>
-        <i class="fa fa-history"></i> <a href="/messages/history?user={{ $user->login  }}">История переписки</a><br>
+        <i class="fa fa-history"></i> <a href="/messages/talk/{{ $user->login  }}">История переписки</a><br>
 
         @if (getUser()->isIgnore($user))
             <b><span style="color:#ff0000">Внимание, данный пользователь находится в игнор-листе!</span></b><br>

@@ -13,12 +13,12 @@ class CreateMessagesTable extends AbstractMigration
             $table = $this->table('messages', ['collation' => env('DB_COLLATION')]);
             $table
                 ->addColumn('user_id', 'integer')
-                ->addColumn('talk_user_id', 'integer')
+                ->addColumn('author_id', 'integer')
                 ->addColumn('text', 'text', ['null' => true])
                 ->addColumn('type', 'enum', ['values' => ['in', 'out']])
                 ->addColumn('read', 'boolean', ['default' => 0])
                 ->addColumn('created_at', 'integer')
-                ->addIndex(['user_id', 'talk_user_id'], ['name' => 'user_id'])
+                ->addIndex(['user_id', 'author_id'], ['name' => 'user_id'])
                 ->addIndex('created_at')
                 ->create();
         }

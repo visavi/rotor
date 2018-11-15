@@ -1,11 +1,10 @@
 @extends('layout')
 
 @section('title')
-    Диалог
+    Диалог с {!! $user->getProfile(null, false) !!}
 @stop
 
 @section('content')
-
     <nav>
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
@@ -15,13 +14,13 @@
         </ol>
     </nav>
 
-    <h1>Диалог с {!! $user->getProfile(null, false) !!}</h1>
+    <h1>Диалог с {{ $user->getProfile(null, false) }}</h1>
 
     @if ($messages->isNotEmpty())
 
         @foreach ($messages as $data)
 
-            <?php $author = $data->type === 'in' ? $data->talkUser : $data->user; ?>
+            <?php $author = $data->type === 'in' ? $data->author : $data->user; ?>
             <div class="post">
                 <div class="b">
                     <div class="img">
@@ -32,7 +31,7 @@
                     <div class="text-muted float-right">
                         {{  dateFixed($data->created_at) }}
 
-                        @if ($data->type === 'in' && $data->talkUser->id)
+                        @if ($data->type === 'in')
                             <a href="#" onclick="return sendComplaint(this)" data-type="{{ App\Models\Message::class }} " data-id="{{ $data->id }}" data-token="{{ $_SESSION['token'] }}" rel="nofollow" title="Жалоба"><i class="fa fa-bell text-muted"></i></a>
                         @endif
                     </div>
@@ -48,7 +47,6 @@
         @endforeach
 
         {!! pagination($page) !!}
-
     @else
         {!! showError('История переписки отсутствует!') !!}
     @endif
@@ -69,7 +67,11 @@
         </form>
     </div><br>
 
-    Всего писем: <b>{{ $page->total }}</b><br><br>
+    Писем: <b>{{ $page->total }}</b><br><br>
+
+    @if ($page->total)
+        <i class="fa fa-times"></i> <a href="/messages/delete/{{ $user->id }}?token={{ $_SESSION['token'] }}">Удалить переписку</a><br>
+    @endif
 
     <i class="fa fa-search"></i> <a href="/searchusers">Поиск пользователей</a><br>
     <i class="fa fa-envelope"></i> <a href="/messages/send">Написать письмо</a><br>

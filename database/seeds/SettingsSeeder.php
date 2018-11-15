@@ -70,8 +70,6 @@ class SettingsSeeder extends AbstractSeed
             ['name'  => 'language', 'value' => 'ru'],
             ['name'  => 'limitcontact', 'value' => 50],
             ['name'  => 'limitignore', 'value' => 50],
-            ['name'  => 'limitmail', 'value' => 300],
-            ['name'  => 'limitoutmail', 'value' => 100],
             ['name'  => 'listbanhist', 'value' => 10],
             ['name'  => 'listinvite', 'value' => 20],
             ['name'  => 'listtransfers', 'value' => 10],

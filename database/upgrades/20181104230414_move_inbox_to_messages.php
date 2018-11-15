@@ -16,12 +16,12 @@ class MoveInboxToMessages extends AbstractMigration
 
         foreach ($rows as $row) {
             $data[] = [
-                'user_id'      => $row['user_id'],
-                'talk_user_id' => (int) $row['author_id'],
-                'text'         => $row['text'],
-                'type'         => 'in',
-                'read'         => 1,
-                'created_at'   => $row['created_at'],
+                'user_id'    => $row['user_id'],
+                'tauthor_id' => $row['author_id'] ?? 0,
+                'text'       => $row['text'],
+                'type'       => 'in',
+                'read'       => 1,
+                'created_at' => $row['created_at'],
             ];
         }
 

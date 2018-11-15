@@ -115,8 +115,8 @@ class ApiController extends BaseController
             $data->text = bbCode($data->text);
 
             $msg[] = [
-                'author_id'  => $data->talk_user_id,
-                'login'      => $data->talkUser->id ? $data->talkUser->login : 'Система',
+                'author_id'  => $data->author_id,
+                'login'      => $data->author->id ? $data->author->login : 'Система',
                 'text'       => $data->text,
                 'read'       => $data->read,
                 'created_at' => $data->created_at,

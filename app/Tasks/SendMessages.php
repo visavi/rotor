@@ -21,12 +21,14 @@ class SendMessages extends Task
             foreach ($queues as $queue) {
                 $user = getUserById($queue->user_id);
 
-                sendMail($user->email, $queue->subject, $queue->text);
+                if ($user) {
+                    sendMail($user->email, $queue->subject, $queue->text);
 
-                $queue->update([
-                    'sent'    => 1,
-                    'sent_at' => SITETIME,
-                ]);
+                    $queue->update([
+                        'sent'    => 1,
+                        'sent_at' => SITETIME,
+                    ]);
+                }
             }
         }
     }

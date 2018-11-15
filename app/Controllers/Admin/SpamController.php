@@ -72,7 +72,7 @@ class SpamController extends AdminController
             ->with('relate.user', 'user')
             ->get();
 
-        if (\in_array($type, ['inbox', 'wall'])) {
+        if (\in_array($type, ['message', 'wall'])) {
             $records->load('relate.author');
         }
 
