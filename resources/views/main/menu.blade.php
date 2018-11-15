@@ -13,7 +13,6 @@
 
 <div class="b"><i class="fa fa-envelope fa-lg text-muted"></i> <b>Почта / Контакты</b></div>
 <i class="far fa-circle fa-lg text-muted"></i> <a href="/messages">Сообщения</a> ({{ getUser()->getCountMessages() }})<br>
-<i class="far fa-circle fa-lg text-muted"></i> <a href="/messages/send">Отправить письмо</a><br>
 <i class="far fa-circle fa-lg text-muted"></i> <a href="/contacts">Контакт-лист</a> ({{ getUser()->getCountContact() }})<br>
 <i class="far fa-circle fa-lg text-muted"></i> <a href="/ignores">Игнор-лист</a> ({{ getUser()->getCountIgnore() }})<br>
 

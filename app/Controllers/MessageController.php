@@ -3,7 +3,6 @@
 namespace App\Controllers;
 
 use App\Classes\Validator;
-use App\Models\Contact;
 use App\Models\Flood;
 use App\Models\Ignore;
 use App\Models\Message;
@@ -123,80 +122,64 @@ class MessageController extends BaseController
      *
      * @param Request   $request
      * @param Validator $validator
-     * @return string
+     * @return void
      */
-    public function send(Request $request, Validator $validator): string
+    public function send(Request $request, Validator $validator): void
     {
         $login = check($request->input('user'));
-
-        if (! empty($request->input('contact'))) {
-            $login = check($request->input('contact'));
-        }
+        $token = check($request->input('token'));
+        $msg   = check($request->input('msg'));
 
         $user = User::query()->where('login', $login)->first();
 
-        if ($request->isMethod('post')) {
-
-            $token = check($request->input('token'));
-            $msg   = check($request->input('msg'));
-
-            $validator->equal($token, $_SESSION['token'], ['msg' => 'Неверный идентификатор сессии, повторите действие!'])
-                ->true($user, ['user' => 'Пользователь не найден!'])
-                ->length($msg, 5, 1000, ['msg' => 'Слишком длинное или короткое сообщение!'])
-                ->equal(Flood::isFlood(), true, 'Антифлуд! Разрешается отправлять сообщения раз в ' . Flood::getPeriod() . ' сек!');
-
-            if ($user) {
-                $validator->notEqual($user->id, $this->user->id, ['user' => 'Нельзя отправлять письмо самому себе!']);
-
-                if (! captchaVerify() && $this->user->point < setting('privatprotect')) {
-                    $validator->addError(['protect' => 'Не удалось пройти проверку captcha!']);
-                }
-
-                // Проверка на игнор
-                $ignoring = Ignore::query()
-                    ->where('user_id', $user->id)
-                    ->where('ignore_id', $this->user->id)
-                    ->first();
-
-                $validator->empty($ignoring, ['user' => 'Вы внесены в игнор-лист получателя!']);
-            }
-
-            if ($validator->isValid()) {
-
-                $msg = antimat($msg);
-                $user->increment('newprivat');
-
-                Message::query()->create([
-                    'user_id'      => $user->id,
-                    'author_id' => $this->user->id,
-                    'text'         => $msg,
-                    'type'         => 'in',
-                    'created_at'   => SITETIME,
-                ])->create([
-                    'user_id'      => $this->user->id,
-                    'author_id' => $user->id,
-                    'text'         => $msg,
-                    'type'         => 'out',
-                    'read'         => 1,
-                    'created_at'   => SITETIME,
-                ]);
-
-                setFlash('success', 'Письмо успешно отправлено!');
-                redirect('/messages/talk/' . $user->login);
-
-            } else {
-                setInput($request->all());
-                setFlash('danger', $validator->getErrors());
-            }
+        if (! $user) {
+            abort(404, 'Пользователь не найден!');
         }
 
-        $contacts = Contact::query()
-            ->where('user_id', $this->user->id)
-            ->rightJoin('users', 'contacts.contact_id', '=', 'users.id')
-            ->orderBy('users.login')
-            ->get();
+        $validator->equal($token, $_SESSION['token'], ['msg' => 'Неверный идентификатор сессии, повторите действие!'])
+            ->length($msg, 5, 1000, ['msg' => 'Слишком длинное или короткое сообщение!'])
+            ->equal(Flood::isFlood(), true, 'Антифлуд! Разрешается отправлять сообщения раз в ' . Flood::getPeriod() . ' сек!')
+            ->notEqual($user->id, $this->user->id, 'Нельзя отправлять письмо самому себе!');
 
-        return view('messages/send', compact('user', 'contacts'));
+        if (! captchaVerify() && $this->user->point < setting('privatprotect')) {
+            $validator->addError(['protect' => 'Не удалось пройти проверку captcha!']);
+        }
+
+        // Проверка на игнор
+        $ignoring = Ignore::query()
+            ->where('user_id', $user->id)
+            ->where('ignore_id', $this->user->id)
+            ->first();
+
+        $validator->empty($ignoring, ['user' => 'Вы внесены в игнор-лист получателя!']);
+
+        if ($validator->isValid()) {
+
+            $msg = antimat($msg);
+            $user->increment('newprivat');
+
+            Message::query()->create([
+                'user_id'    => $user->id,
+                'author_id'  => $this->user->id,
+                'text'       => $msg,
+                'type'       => 'in',
+                'created_at' => SITETIME,
+            ])->create([
+                'user_id'    => $this->user->id,
+                'author_id'  => $user->id,
+                'text'       => $msg,
+                'type'       => 'out',
+                'read'       => 1,
+                'created_at' => SITETIME,
+            ]);
+
+            setFlash('success', 'Письмо успешно отправлено!');
+        } else {
+            setInput($request->all());
+            setFlash('danger', $validator->getErrors());
+        }
+
+        redirect('/messages/talk/' . $user->login);
     }
 
     /**

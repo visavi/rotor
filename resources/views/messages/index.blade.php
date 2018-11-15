@@ -49,7 +49,6 @@
     @endif
 
     <i class="fa fa-search"></i> <a href="/searchusers">Поиск пользователей</a><br>
-    <i class="fa fa-envelope"></i> <a href="/messages/send">Написать письмо</a><br>
     <i class="fa fa-address-book"></i> <a href="/contacts">Контакт</a> / <a href="/ignores">Игнор</a><br>
 @stop
 

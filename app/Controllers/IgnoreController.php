@@ -30,10 +30,11 @@ class IgnoreController extends BaseController
      */
     public function index(Request $request, Validator $validator): string
     {
+        $login = check($request->input('user'));
+
         if ($request->isMethod('post')) {
             $page  = int($request->input('page', 1));
             $token = check($request->input('token'));
-            $login = check($request->input('user'));
 
             $validator->equal($token, $_SESSION['token'], 'Неверный идентификатор сессии, повторите действие!');
 
@@ -82,7 +83,7 @@ class IgnoreController extends BaseController
             ->with('ignoring')
             ->get();
 
-        return view('ignores/index', compact('ignores', 'page'));
+        return view('ignores/index', compact('ignores', 'page', 'login'));
     }
 
     /**

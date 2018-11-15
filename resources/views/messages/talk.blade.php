@@ -16,6 +16,13 @@
 
     <h1>Диалог с {{ $user->getProfile(null, false) }}</h1>
 
+    @if (getUser()->isIgnore($user))
+        <div class="p-2 bg-danger text-white">
+            <i class="fas fa-exclamation-triangle"></i>
+            Внимание, данный пользователь находится в игнор-листе!
+        </div>
+    @endif
+
     @if ($messages->isNotEmpty())
 
         @foreach ($messages as $data)
@@ -56,8 +63,11 @@
         <form action="/messages/send?user={{ $user->login }}" method="post">
             <input type="hidden" name="token" value="{{ $_SESSION['token'] }}">
 
-            <label for="msg">Сообщение:</label>
-            <textarea class="form-control markItUp" id="msg" rows="5" name="msg" placeholder="Текст сообщения" required></textarea>
+            <div class="form-group{{ hasError('msg') }}">
+                <label for="msg">Сообщение:</label>
+                <textarea class="form-control markItUp" id="msg" rows="5" name="msg" placeholder="Текст сообщения" required>{{ getInput('msg') }}</textarea>
+                {!! textError('msg') !!}
+            </div>
 
             @if (getUser('point') < setting('privatprotect'))
                 {!! view('app/_captcha') !!}

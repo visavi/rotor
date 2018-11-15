@@ -145,8 +145,8 @@
 
         @if ($user->login !== getUser('login'))
             <i class="fa fa-address-book"></i> Добавить в
-            <a href="/contacts?act=add&amp;user={{ $user->login }}&amp;token={{ $_SESSION['token'] }}">контакт</a> /
-            <a href="/ignores?act=add&amp;user={{ $user->login }}&amp;token={{ $_SESSION['token'] }}">игнор</a><br>
+            <a href="/contacts?user={{ $user->login }}">контакт</a> /
+            <a href="/ignores?user={{ $user->login }}">игнор</a><br>
             <i class="fa fa-envelope"></i> <a href="/messages/talk/{{ $user->login }}">Отправить сообщение</a><br>
 
             <i class="fa fa-money-bill-alt"></i> <a href="/transfers?user={{ $user->login }}">Перечислить денег</a><br>
