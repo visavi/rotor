@@ -59,8 +59,8 @@ class ContactController extends BaseController
                 ]);
 
                 if (! $user->isIgnore(getUser())) {
-                    $message = 'Пользователь [b]'.getUser('login').'[/b] добавил вас в свой контакт-лист!';
-                    $user->sendMessage(getUser(), $message);
+                    $message = 'Пользователь @' . getUser('login') . ' добавил вас в свой контакт-лист!';
+                    $user->sendMessage(null, $message);
                 }
 
                 setFlash('success', 'Пользователь успешно добавлен в контакт-лист!');

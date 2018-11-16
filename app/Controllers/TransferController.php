@@ -70,13 +70,12 @@ class TransferController extends BaseController
             DB::transaction(function () use ($money, $msg) {
                 getUser()->decrement('money', $money);
                 $this->user->increment('money', $money);
-                $this->user->increment('newprivat');
 
                 $comment = $msg ?? 'Не указано';
                 $message = 'Пользователь @' . getUser('login') . ' перечислил вам ' . plural($money, setting('moneyname')) . PHP_EOL . 'Примечание: ' . $comment;
 
                 // Уведомление по привату
-                $this->user->sendMessage(getUser(), $message);
+                $this->user->sendMessage(null, $message);
 
                 // Запись логов
                 Transfer::query()->create([
