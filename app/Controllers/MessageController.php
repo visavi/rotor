@@ -39,7 +39,7 @@ class MessageController extends BaseController
         $page = paginate(setting('privatpost'), $total);
 
         $latestMessage = Message::query()
-            ->select('author_id', DB::raw('max(created_at) as last_created_at'))
+            ->select('author_id', DB::connection()->raw('max(created_at) as last_created_at'))
             ->where('user_id', $this->user->id)
             ->groupBy('author_id');
 

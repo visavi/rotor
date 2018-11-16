@@ -1248,39 +1248,39 @@ function restatement($mode)
 {
     switch ($mode) {
         case 'forums':
-            DB::update('update topics set count_posts = (select count(*) from posts where topics.id = posts.topic_id)');
-            DB::update('update forums set count_topics = (select count(*) from topics where forums.id = topics.forum_id)');
-            DB::update('update forums set count_posts = (select ifnull(sum(count_posts), 0) from topics where forums.id = topics.forum_id)');
+            DB::connection()->update('update topics set count_posts = (select count(*) from posts where topics.id = posts.topic_id)');
+            DB::connection()->update('update forums set count_topics = (select count(*) from topics where forums.id = topics.forum_id)');
+            DB::connection()->update('update forums set count_posts = (select ifnull(sum(count_posts), 0) from topics where forums.id = topics.forum_id)');
             break;
 
         case 'blogs':
-            DB::update('update categories set count_blogs = (select count(*) from blogs where categories.id = blogs.category_id)');
-            DB::update('update blogs set count_comments = (select count(*) from comments where relate_type = "' . addslashes(Blog::class) . '" and blogs.id = comments.relate_id)');
+            DB::connection()->update('update categories set count_blogs = (select count(*) from blogs where categories.id = blogs.category_id)');
+            DB::connection()->update('update blogs set count_comments = (select count(*) from comments where relate_type = "' . addslashes(Blog::class) . '" and blogs.id = comments.relate_id)');
             break;
 
         case 'loads':
-            DB::update('update loads set count_downs = (select count(*) from downs where loads.id = downs.category_id and active = ?)', [1]);
-            DB::update('update downs set count_comments = (select count(*) from comments where relate_type = "' . addslashes(Down::class) . '" and downs.id = comments.relate_id)');
+            DB::connection()->update('update loads set count_downs = (select count(*) from downs where loads.id = downs.category_id and active = ?)', [1]);
+            DB::connection()->update('update downs set count_comments = (select count(*) from comments where relate_type = "' . addslashes(Down::class) . '" and downs.id = comments.relate_id)');
             break;
 
         case 'news':
-            DB::update('update news set count_comments = (select count(*) from comments where relate_type = "' . addslashes(News::class) . '" and news.id = comments.relate_id)');
+            DB::connection()->update('update news set count_comments = (select count(*) from comments where relate_type = "' . addslashes(News::class) . '" and news.id = comments.relate_id)');
             break;
 
         case 'photos':
-            DB::update('update photos set count_comments = (select count(*) from comments where relate_type=  "' . addslashes(Photo::class) . '" and photos.id = comments.relate_id)');
+            DB::connection()->update('update photos set count_comments = (select count(*) from comments where relate_type=  "' . addslashes(Photo::class) . '" and photos.id = comments.relate_id)');
             break;
 
         case 'offers':
-            DB::update('update offers set count_comments = (select count(*) from comments where relate_type=  "' . addslashes(Offer::class) . '" and offers.id = comments.relate_id)');
+            DB::connection()->update('update offers set count_comments = (select count(*) from comments where relate_type=  "' . addslashes(Offer::class) . '" and offers.id = comments.relate_id)');
             break;
 
         case 'boards':
-            DB::update('update boards set count_items = (select count(*) from items where boards.id = items.board_id and items.expires_at > ' . SITETIME . ');');
+            DB::connection()->update('update boards set count_items = (select count(*) from items where boards.id = items.board_id and items.expires_at > ' . SITETIME . ');');
             break;
 
         case 'votes':
-            DB::update('update votes set count = (select ifnull(sum(result), 0) from voteanswer where votes.id = voteanswer.vote_id)');
+            DB::connection()->update('update votes set count = (select ifnull(sum(result), 0) from voteanswer where votes.id = voteanswer.vote_id)');
             break;
     }
 }
@@ -2191,7 +2191,7 @@ function trans_choice($id, $number, array $replace = [], $locale = null)
  */
 function getQueryLog()
 {
-    $queries = DB::getQueryLog();
+    $queries = DB::connection()->getQueryLog();
     $formattedQueries = [];
     foreach ($queries as $query) {
         $prep = $query['query'];

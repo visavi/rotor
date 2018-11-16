@@ -34,7 +34,7 @@ class SmileController extends AdminController
         $page = paginate(setting('smilelist'), $total);
 
         $smiles = Smile::query()
-            ->orderBy(DB::raw('CHAR_LENGTH(`code`)'))
+            ->orderBy(DB::connection()->raw('CHAR_LENGTH(`code`)'))
             ->orderBy('name')
             ->limit($page->limit)
             ->offset($page->offset)

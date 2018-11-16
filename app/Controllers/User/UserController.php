@@ -669,7 +669,7 @@ class UserController extends BaseController
 
             $user->update([
                 'status' => $status,
-                'money'  => DB::raw('money - '.$cost),
+                'money'  => DB::connection()->raw('money - '.$cost),
             ]);
             $user->saveStatus();
 

@@ -79,7 +79,7 @@ Class BaseController
 
                         ]);
 
-                        DB::insert(
+                        DB::connection()->insert(
                             'insert ignore into ban (`ip`, `created_at`) values (?, ?);',
                             [getIp(), SITETIME]
                         );

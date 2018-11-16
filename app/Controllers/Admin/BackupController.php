@@ -65,7 +65,7 @@ class BackupController extends AdminController
 
             if ($validator->isValid()) {
 
-                $selectTables = DB::select('SHOW TABLE STATUS where name IN("' . implode('","', $sheets) . '")');
+                $selectTables = DB::connection()->select('SHOW TABLE STATUS where name IN("' . implode('","', $sheets) . '")');
 
                 $limit    = 3000;
                 $filename = 'backup_'.$this->date.'.sql';
@@ -74,12 +74,12 @@ class BackupController extends AdminController
 
                 foreach ($selectTables as $table) {
 
-                    $show = DB::selectOne("SHOW CREATE TABLE `{$table->Name}`");
+                    $show = DB::connection()->selectOne("SHOW CREATE TABLE `{$table->Name}`");
 
                     $this->fwrite($fp, "--\n-- Структура таблицы `{$table->Name}`\n--\n\n", $method);
                     $this->fwrite($fp, "DROP TABLE IF EXISTS `{$table->Name}`;\n{$show->{'Create Table'}};\n\n", $method);
 
-                    $total = DB::table($table->Name)->count();
+                    $total = DB::connection()->table($table->Name)->count();
 
                     if (! $total) {
                         continue;
@@ -90,7 +90,7 @@ class BackupController extends AdminController
 
                     for ($i = 0; $i < $total; $i += $limit) {
 
-                        $cols = DB::table($table->Name)->lockForUpdate()->limit($limit)->offset($i)->get();
+                        $cols = DB::connection()->table($table->Name)->lockForUpdate()->limit($limit)->offset($i)->get();
 
                         foreach ($cols as $key => $col) {
                             $records = get_object_vars($col);
@@ -120,7 +120,7 @@ class BackupController extends AdminController
             }
         }
 
-        $tables = DB::select('SHOW TABLE STATUS');
+        $tables = DB::connection()->select('SHOW TABLE STATUS');
 
         $bzopen = \function_exists('bzopen') ? true : false;
         $gzopen = \function_exists('gzopen') ? true : false;

@@ -12,6 +12,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property int author_id
  * @property string text
  * @property string type
+ * @property int reading
  * @property int created_at
  */
 class Message extends BaseModel

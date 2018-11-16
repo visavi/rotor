@@ -23,6 +23,7 @@ class TransferController extends BaseController
         if (! getUser()) {
             abort(403, 'Для совершения операций необходимо авторизоваться');
         }
+
         $request    = Request::createFromGlobals();
         $login      = check($request->input('user'));
         $this->user = User::query()->where('login', $login)->first();
@@ -67,7 +68,7 @@ class TransferController extends BaseController
 
         if ($validator->isValid()) {
 
-            DB::transaction(function () use ($money, $msg) {
+            DB::connection()->transaction(function () use ($money, $msg) {
                 getUser()->decrement('money', $money);
                 $this->user->increment('money', $money);
 

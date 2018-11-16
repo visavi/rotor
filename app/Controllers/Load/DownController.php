@@ -317,8 +317,8 @@ class DownController extends BaseController
                 ]);
 
                 $down->update([
-                    'rating' => DB::raw('rating + ' . $score),
-                    'rated'  => DB::raw('rated + 1'),
+                    'rating' => DB::connection()->raw('rating + ' . $score),
+                    'rated'  => DB::connection()->raw('rated + 1'),
                 ]);
             }
 

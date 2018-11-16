@@ -95,7 +95,7 @@ class WallController extends BaseController
                     'created_at' => SITETIME,
                 ]);
 
-                DB::delete('
+                DB::connection()->delete('
                         DELETE FROM walls WHERE user_id = ? AND created_at < (
                             SELECT min(created_at) FROM (
                                 SELECT created_at FROM walls WHERE user_id = ? ORDER BY created_at DESC LIMIT ?

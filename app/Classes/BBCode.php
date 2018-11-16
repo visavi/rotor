@@ -268,7 +268,7 @@ class BBCode
 
                 $smiles = Smile::query()
                     ->select('code', 'name')
-                    ->orderBy(DB::raw('CHAR_LENGTH(code)'), 'desc')
+                    ->orderBy(DB::connection()->raw('CHAR_LENGTH(code)'), 'desc')
                     ->get()
                     ->toArray();
 

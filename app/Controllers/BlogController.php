@@ -299,8 +299,8 @@ class BlogController extends BaseController
                 $category->increment('count_blogs');
 
                 getUser()->update([
-                    'point' => DB::raw('point + 5'),
-                    'money' => DB::raw('money + 100'),
+                    'point' => DB::connection()->raw('point + 5'),
+                    'money' => DB::connection()->raw('money + 100'),
                 ]);
 
                 File::query()
@@ -370,9 +370,9 @@ class BlogController extends BaseController
                 ]);
 
                 getUser()->update([
-                    'allcomments' => DB::raw('allcomments + 1'),
-                    'point'       => DB::raw('point + 1'),
-                    'money'       => DB::raw('money + 5'),
+                    'allcomments' => DB::connection()->raw('allcomments + 1'),
+                    'point'       => DB::connection()->raw('point + 1'),
+                    'money'       => DB::connection()->raw('money + 5'),
                 ]);
 
                 $blog->increment('count_comments');

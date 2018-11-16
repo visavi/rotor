@@ -39,9 +39,11 @@
     "require-dev": {
         "filp/whoops": "^2.2",
         "phpunit/phpunit": "^7.3",
+        "phpstan/phpstan": "^0.10.5",
         "php-coveralls/php-coveralls": "^2.1"
     },
     "scripts": {
+        "phpstan": "phpstan analyse app --autoload-file=app/bootstrap.php --level=1 --no-progress -vvv",
         "post-root-package-install": [
             "@php -r \"file_exists('.env') || copy('.env.example', '.env');\""
         ],

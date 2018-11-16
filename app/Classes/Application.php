@@ -111,7 +111,7 @@ class Application
                 }
 
                 $user->update([
-                    'visits'     => DB::raw('visits + 1'),
+                    'visits'     => DB::connection()->raw('visits + 1'),
                     'updated_at' => SITETIME
                 ]);
             }
@@ -150,7 +150,7 @@ class Application
             if ($user->timebonus < SITETIME - 82800) {
                 $user->update([
                     'timebonus' => SITETIME,
-                    'money'     => DB::raw('money + ' . setting('bonusmoney')),
+                    'money'     => DB::connection()->raw('money + ' . setting('bonusmoney')),
                 ]);
 
                 setFlash('success', 'Получен ежедневный бонус ' . plural(setting('bonusmoney'), setting('moneyname')) . '!');

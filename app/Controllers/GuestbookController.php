@@ -62,9 +62,9 @@ class GuestbookController extends BaseController
                 $bookscores = setting('bookscores') ? 1 : 0;
 
                 getUser()->update([
-                    'allguest' => DB::raw('allguest + 1'),
-                    'point'    => DB::raw('point + ' . $bookscores),
-                    'money'    => DB::raw('money + 5'),
+                    'allguest' => DB::connection()->raw('allguest + 1'),
+                    'point'    => DB::connection()->raw('point + ' . $bookscores),
+                    'money'    => DB::connection()->raw('money + 5'),
                 ]);
             }
 

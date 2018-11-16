@@ -145,7 +145,7 @@ class VoteController extends AdminController
 
         if ($token === $_SESSION['token']) {
 
-            DB::transaction(function () use ($vote) {
+            DB::connection()->transaction(function () use ($vote) {
                 $vote->delete();
                 $vote->answers()->delete();
                 $vote->pollings()->delete();

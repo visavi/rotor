@@ -80,7 +80,7 @@ class PageController extends BaseController
         $page = paginate(setting('smilelist'), $total);
 
         $smiles = Smile::query()
-            ->orderBy(DB::raw('CHAR_LENGTH(`code`)'))
+            ->orderBy(DB::connection()->raw('CHAR_LENGTH(`code`)'))
             ->orderBy('name')
             ->limit($page->limit)
             ->offset($page->offset)
@@ -127,10 +127,10 @@ class PageController extends BaseController
         }
 
         $user->update([
-            'point'     => DB::raw('point + '.$surprisePoint),
-            'money'     => DB::raw('money + '.$surpriseMoney),
-            'rating'    => DB::raw('posrating - negrating + '.$surpriseRating),
-            'posrating' => DB::raw('posrating + '.$surpriseRating),
+            'point'     => DB::connection()->raw('point + '.$surprisePoint),
+            'money'     => DB::connection()->raw('money + '.$surpriseMoney),
+            'rating'    => DB::connection()->raw('posrating - negrating + '.$surpriseRating),
+            'posrating' => DB::connection()->raw('posrating + '.$surpriseRating),
         ]);
 
         $text = 'Поздравляем с новым '.$currentYear.' годом!'.PHP_EOL.'В качестве сюрприза вы получаете '.PHP_EOL.plural($surprisePoint, setting('scorename')).PHP_EOL.plural($surpriseMoney, setting('moneyname')).PHP_EOL.$surpriseRating.' рейтинга репутации'.PHP_EOL.'Ура!!!';

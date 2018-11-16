@@ -137,9 +137,9 @@ class ForumController extends BaseController
                 $msg   = antimat($msg);
 
                 $user->update([
-                    'allforum' => DB::raw('allforum + 1'),
-                    'point'    => DB::raw('point + 1'),
-                    'money'    => DB::raw('money + 5'),
+                    'allforum' => DB::connection()->raw('allforum + 1'),
+                    'point'    => DB::connection()->raw('point + 1'),
+                    'money'    => DB::connection()->raw('money + 5'),
                 ]);
 
                 /** @var Topic $topic */
@@ -165,8 +165,8 @@ class ForumController extends BaseController
                 Topic::query()->where('id', $topic->id)->update(['last_post_id' => $post->id]);
 
                 $forum->update([
-                    'count_topics'  => DB::raw('count_topics + 1'),
-                    'count_posts'   => DB::raw('count_posts + 1'),
+                    'count_topics'  => DB::connection()->raw('count_topics + 1'),
+                    'count_posts'   => DB::connection()->raw('count_posts + 1'),
                     'last_topic_id' => $topic->id,
                 ]);
 

@@ -111,30 +111,30 @@ class Metrika
         $counter = Counter::query()->first();
 
         if (date('Y-m-d 00:00:00', strtotime($counter->period)) !== $day) {
-            DB::insert('insert ignore into counters31 (period, hosts, hits) values (?, ?, ?);', [$day, $counter->dayhosts, $counter->dayhits]);
-            DB::update('update counters set period=?, dayhosts=?, dayhits=?;', [$period, 0, 0]);
+            DB::connection()->insert('insert ignore into counters31 (period, hosts, hits) values (?, ?, ?);', [$day, $counter->dayhosts, $counter->dayhits]);
+            DB::connection()->update('update counters set period=?, dayhosts=?, dayhits=?;', [$period, 0, 0]);
         }
 
         if ($counter->period !== $period) {
-            DB::insert('insert ignore into counters24 (period, hosts, hits) values (?, ?, ?);', [$period, $counter->hosts24, $counter->hits24]);
-            DB::update('update counters set period=?, hosts24=?, hits24=?;', [$period, 0, 0]);
+            DB::connection()->insert('insert ignore into counters24 (period, hosts, hits) values (?, ?, ?);', [$period, $counter->hosts24, $counter->hits24]);
+            DB::connection()->update('update counters set period=?, hosts24=?, hits24=?;', [$period, 0, 0]);
         }
 
         // -----------------------------------------------------------//
         if ($newHost) {
             $counter->update([
-                'allhosts' => DB::raw('allhosts + 1'),
-                'allhits'  => DB::raw('allhits + 1'),
-                'dayhosts' => DB::raw('dayhosts + 1'),
-                'dayhits'  => DB::raw('dayhits + 1'),
-                'hosts24'  => DB::raw('hosts24 + 1'),
-                'hits24'   => DB::raw('hits24 + 1'),
+                'allhosts' => DB::connection()->raw('allhosts + 1'),
+                'allhits'  => DB::connection()->raw('allhits + 1'),
+                'dayhosts' => DB::connection()->raw('dayhosts + 1'),
+                'dayhits'  => DB::connection()->raw('dayhits + 1'),
+                'hosts24'  => DB::connection()->raw('hosts24 + 1'),
+                'hits24'   => DB::connection()->raw('hits24 + 1'),
             ]);
         } else {
             $counter->update([
-                'allhits' => DB::raw('allhits + 1'),
-                'dayhits' => DB::raw('dayhits + 1'),
-                'hits24'  => DB::raw('hits24 + 1'),
+                'allhits' => DB::connection()->raw('allhits + 1'),
+                'dayhits' => DB::connection()->raw('dayhits + 1'),
+                'hits24'  => DB::connection()->raw('hits24 + 1'),
             ]);
         }
     }
