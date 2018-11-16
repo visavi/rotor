@@ -5,15 +5,6 @@
 @stop
 
 @section('content')
-
-    @if (getUser() && ! $category->closed)
-        <div class="float-right">
-            <a class="btn btn-success" href="/blogs/create?cid={{ $category->id }}">Добавить</a>
-        </div><br>
-    @endif
-
-    <h1>{{ $category->name }} <small>(Статей: {{ $category->count_blogs }})</small></h1>
-
     <nav>
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
@@ -32,6 +23,14 @@
         </ol>
     </nav>
 
+    @if (! $category->closed && getUser())
+        <div class="float-right">
+            <a class="btn btn-success" href="/blogs/create?cid={{ $category->id }}">Добавить</a>
+        </div><br>
+    @endif
+
+    <h1>{{ $category->name }} <small>(Статей: {{ $category->count_blogs }})</small></h1>
+
     @if ($blogs->isNotEmpty())
         @foreach ($blogs as $data)
             <div class="b">
@@ -46,6 +45,7 @@
 
             </div>
             <div>
+                {!! stripString(bbCode($data->text), 50) !!}<br>
                 Автор: {!! $data->user->getProfile() !!} ({{ dateFixed($data->created_at) }})<br>
                 Просмотров: {{ $data->visits }}<br>
                 <a href="/articles/comments/{{ $data->id }}">Комментарии</a> ({{ $data->count_comments }})
