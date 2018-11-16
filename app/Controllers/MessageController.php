@@ -110,7 +110,7 @@ class MessageController extends BaseController
         Message::query()
             ->where('user_id', $this->user->id)
             ->where('author_id', $user->id)
-            ->update(['read' => 1]);
+            ->update(['reading' => 1]);
 
         $view = $user->id ? 'messages/talk' : 'messages/talk_system';
 
@@ -169,7 +169,7 @@ class MessageController extends BaseController
                 'author_id'  => $user->id,
                 'text'       => $msg,
                 'type'       => 'out',
-                'read'       => 1,
+                'reading'    => 1,
                 'created_at' => SITETIME,
             ]);
 

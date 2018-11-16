@@ -36,7 +36,7 @@
                     @endif
 
                     <div class="message">{!! stripString(bbCode($data->text)) !!}</div>
-                    @unless ($data->read)
+                    @unless ($data->reading)
                         <span class="badge badge-info">Новое</span>
                     @endunless
                 </div>

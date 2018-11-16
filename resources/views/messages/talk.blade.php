@@ -45,7 +45,7 @@
 
                     <b>{!! $author->getProfile() !!}</b>
 
-                    @unless ($data->read)
+                    @unless ($data->reading)
                         <br><span class="badge badge-info">Новое</span>
                     @endunless
                 </div>

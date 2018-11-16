@@ -20,6 +20,7 @@ class MoveOutboxToMessages extends AbstractMigration
                 'author_id'  => $row['recipient_id'],
                 'text'       => $row['text'],
                 'type'       => 'out',
+                'read'       => 1,
                 'created_at' => $row['created_at'],
             ];
         }

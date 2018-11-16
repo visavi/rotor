@@ -118,7 +118,7 @@ class ApiController extends BaseController
                 'author_id'  => $data->author_id,
                 'login'      => $data->author->id ? $data->author->login : 'Система',
                 'text'       => $data->text,
-                'read'       => $data->read,
+                'reading'    => $data->reading,
                 'created_at' => $data->created_at,
             ];
         }
