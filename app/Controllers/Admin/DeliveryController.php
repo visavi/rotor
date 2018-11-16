@@ -35,6 +35,7 @@ class DeliveryController extends AdminController
             $token = check($request->input('token'));
             $msg   = check($request->input('msg'));
             $type  = int($request->input('type'));
+            $users = collect();
 
             $validator->equal($token, $_SESSION['token'], ['msg' => 'Неверный идентификатор сессии, повторите действие!'])
                 ->length($msg, 5, 1000, ['msg' => 'Слишком длинный или короткий текст комментария!'])

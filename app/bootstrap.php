@@ -6,7 +6,7 @@ use Whoops\Handler\PlainTextHandler;
 use Whoops\Handler\PrettyPageHandler;
 use Whoops\Run;
 
-define('STARTTIME', microtime(1));
+define('STARTTIME', microtime(true));
 define('BASEDIR', dirname(__DIR__));
 define('APP', BASEDIR . '/app');
 define('HOME', BASEDIR . '/public');

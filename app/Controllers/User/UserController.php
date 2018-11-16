@@ -109,8 +109,9 @@ class UserController extends BaseController
                 $email       = strtolower(check($request->input('email')));
                 $domain      = utfSubstr(strrchr($email, '@'), 1);
                 $gender      = $request->input('gender') === 'male' ? 'male' : 'female';
-                $activateKey = null;
                 $level       = User::USER;
+                $activateKey = null;
+                $invitation  = null;
 
                 $validator->true(captchaVerify(), ['protect' => 'Не удалось пройти проверку captcha!'])
                     ->regex($login, '|^[a-z0-9\-]+$|i', ['login' => 'Недопустимые символы в логине. Разрешены знаки латинского алфавита, цифры и дефис!'])
@@ -198,7 +199,7 @@ class UserController extends BaseController
                     ]);
 
                     // Активация пригласительного ключа
-                    if (setting('invite')) {
+                    if ($invitation && setting('invite')) {
                         $invitation->update([
                             'used'           => 1,
                             'invite_user_id' => $user->id,

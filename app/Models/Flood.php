@@ -77,7 +77,7 @@ class Flood extends BaseModel
             ->first();
 
         if (! $flood) {
-            self::create([
+            self::query()->create([
                 'user_id'    => $userId,
                 'page'       => server('PHP_SELF'),
                 'created_at' => SITETIME + $period,

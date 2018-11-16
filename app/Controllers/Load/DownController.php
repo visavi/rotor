@@ -571,16 +571,17 @@ class DownController extends BaseController
         try {
             $archive = new ZipFile();
             $archive->openFile(HOME . $file->hash);
+
+            $down         = $file->relate;
+            $page         = paginate(setting('ziplist'), $archive->count());
+            $getDocuments = array_values($archive->getAllInfo());
+
+            $viewExt   = Down::getViewExt();
+            $documents = \array_slice($getDocuments, $page->offset, $page->limit, true);
+
         } catch (Exception $e) {
             abort('default', 'Не удалось открыть архив!');
         }
-
-        $down         = $file->relate;
-        $page         = paginate(setting('ziplist'), $archive->count());
-        $getDocuments = array_values($archive->getAllInfo());
-
-        $viewExt   = Down::getViewExt();
-        $documents = \array_slice($getDocuments, $page->offset, $page->limit, true);
 
         return view('loads/zip', compact('down', 'file', 'documents', 'page', 'viewExt'));
     }
@@ -612,38 +613,31 @@ class DownController extends BaseController
         try {
             $archive = new ZipFile();
             $archive->openFile(HOME . $file->hash);
-        } catch (Exception $e) {
-            abort('default', 'Не удалось открыть архив!');
-        }
-        /** @var ZipFile $archive */
-        $getDocuments = array_values($archive->getAllInfo());
-        $document     = $getDocuments[$fid] ?? null;
 
-        if (! $document) {
-            abort('default', 'Не удалось вывести содержимое файла');
-        }
+            /** @var ZipFile $archive */
+            $getDocuments = array_values($archive->getAllInfo());
+            $document     = $getDocuments[$fid] ?? null;
 
-        try {
             $content = $archive[$document->getName()];
+
+            if ($document->getSize() > 0 && preg_match("/\.(gif|png|bmp|jpg|jpeg)$/", $document->getName())) {
+
+                $ext = getExtension($document->getName());
+
+                header('Content-type: image/' . $ext);
+                header('Content-Length: ' . \strlen($content));
+                header('Content-Disposition: inline; filename="' . $document->getName() . '";');
+                exit($content);
+            }
+
+            if (! isUtf($content)) {
+                $content = winToUtf($content);
+            }
+
+            $down = $file->relate;
         } catch (Exception $e) {
             abort('default', 'Не удалось прочитать файл!');
         }
-
-        if ($document->getSize() > 0 && preg_match("/\.(gif|png|bmp|jpg|jpeg)$/", $document->getName())) {
-
-            $ext = getExtension($document->getName());
-
-            header('Content-type: image/' . $ext);
-            header('Content-Length: ' . \strlen($content));
-            header('Content-Disposition: inline; filename="' . $document->getName() . '";');
-            exit($content);
-        }
-
-        if (! isUtf($content)) {
-            $content = winToUtf($content);
-        }
-
-        $down = $file->relate;
 
         return view('loads/zip_view', compact('down', 'file', 'document', 'content'));
     }

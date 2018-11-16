@@ -7,7 +7,7 @@
         <li class="list-inline-item" data-toggle="tooltip" title="Загрузка CPU"><i class="fa fa-tachometer-alt"></i> {{ round($cpu[0], 2) }}</li>
     <?php endif; ?>
 
-    <li class="list-inline-item" data-toggle="tooltip" title="Загрузка страницы"><i class="fa fa-rocket"></i> {{ round(microtime(1) - STARTTIME, 4) }} сек.</li>
+    <li class="list-inline-item" data-toggle="tooltip" title="Загрузка страницы"><i class="fa fa-rocket"></i> {{ round(microtime(true) - STARTTIME, 4) }} сек.</li>
 </ul>
 
 @if (env('APP_DEBUG'))
