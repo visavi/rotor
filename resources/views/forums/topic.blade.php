@@ -26,7 +26,7 @@
     <a href="/topics/print/{{ $topic->id }}">Печать</a> / <a href="/topics/rss/{{ $topic->id }}">RSS-лента</a>
 
     @if (getUser())
-        @if ($topic->user->id == getUser('id') && empty($topic->closed) && getUser('point') >= setting('editforumpoint'))
+        @if (! $topic->closed && $topic->user->id === getUser('id') && getUser('point') >= setting('editforumpoint'))
            / <a href="/topics/close/{{ $topic->id }}?token={{ $_SESSION['token'] }}">Закрыть</a>
            / <a href="/topics/edit/{{ $topic->id }}">Изменить</a>
         @endif

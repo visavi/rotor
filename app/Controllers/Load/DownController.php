@@ -350,11 +350,9 @@ class DownController extends BaseController
             abort('default', 'Данный файл еще не проверен модератором!');
         }
 
-        $validator
-            ->true(file_exists(HOME . $file->hash), 'Файла для скачивания не существует!');
+        $validator->true(file_exists(HOME . $file->hash), 'Файла для скачивания не существует!');
 
         if ($validator->isValid()) {
-
             $reader = Reader::query()
                 ->where('relate_type', Down::class)
                 ->where('relate_id', $file->relate->id)
@@ -372,7 +370,7 @@ class DownController extends BaseController
                 $file->relate->increment('loads');
             }
 
-            redirect($file->hash);
+            $file->download();
         } else {
             setFlash('danger', $validator->getErrors());
             redirect('/downs/' . $file->relate->id);

@@ -1,0 +1,9 @@
+parameters:
+    level: 1
+    universalObjectCratesClasses:
+        - Illuminate\Database\Eloquent\Model
+        - Illuminate\Http\Request
+    paths:
+        - app
+    bootstrap: app/bootstrap.php
+    reportUnmatchedIgnoredErrors: false
