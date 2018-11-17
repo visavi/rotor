@@ -27,7 +27,7 @@
 
     @if (getUser())
         @if (! $topic->closed && $topic->user->id === getUser('id') && getUser('point') >= setting('editforumpoint'))
-           / <a href="/topics/close/{{ $topic->id }}?token={{ $_SESSION['token'] }}">Закрыть</a>
+           / <a href="/topics/close/{{ $topic->id }}?token={{ $_SESSION['token'] }}" onclick="return confirm('Вы действительно хотите закрыть данную тему?')">Закрыть</a>
            / <a href="/topics/edit/{{ $topic->id }}">Изменить</a>
         @endif
 
