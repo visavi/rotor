@@ -5,8 +5,6 @@
 @stop
 
 @section('content')
-    <h1>Изменение сообщения</h1>
-
     <nav>
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
@@ -22,6 +20,8 @@
             <li class="breadcrumb-item active">Изменение сообщения</li>
         </ol>
     </nav>
+
+    <h1>Изменение сообщения</h1>
 
     <i class="fa fa-pencil-alt"></i> <b>{{ $post->user->login }}</b> <small>({{ dateFixed($post->created_at) }})</small><br><br>
 

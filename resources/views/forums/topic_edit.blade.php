@@ -5,9 +5,6 @@
 @stop
 
 @section('content')
-
-    <h1>Изменение темы</h1>
-
     <nav>
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
@@ -23,6 +20,8 @@
             <li class="breadcrumb-item active">Изменение темы</li>
         </ol>
     </nav>
+
+    <h1>Изменение темы</h1>
 
     <i class="fa fa-pencil-alt"></i> <b>{{ $post->user->login }}</b> <small>({{ dateFixed($post->created_at) }})</small><br><br>
 
@@ -43,6 +42,33 @@
                     <textarea class="form-control markItUp" id="msg" rows="5" name="msg" required>{{ getInput('msg', $post->text) }}</textarea>
                     {!! textError('msg') !!}
                 </div>
+            @endif
+
+            @if ($vote)
+                <div class="form-group{{ hasError('question') }}">
+                    <label for="question"><span class="text-success">Вопрос:</span></label>
+                    <input class="form-control" name="question" id="question" maxlength="100" value="{{ getInput('question', $vote->title) }}" required>
+                    {!! textError('question') !!}
+                </div>
+
+                @if (! $vote->count)
+                    <div class="form-group{{ hasError('answers') }}">
+                        <?php $answers = getInput('answers', $vote->getAnswers); ?>
+                        <?php $answers = array_slice($answers + array_fill(0, 10, ''), 0, 10, true); ?>
+
+                        @foreach ($answers as $key => $answer)
+                            <label for="inputAnswers{{ $key }}">
+                                @if (isset($vote->getAnswers[$key]))
+                                    <span class="text-success">Ответ {{ $loop->iteration }}:</span>
+                                @else
+                                    Ответ {{ $loop->iteration }}:
+                                @endif
+                            </label>
+                            <input type="text" name="answers[{{ $key }}]" class="form-control" id="inputAnswers{{ $key }}" value="{{ $answer }}" maxlength="50">
+                        @endforeach
+                        {!! textError('answers') !!}
+                    </div>
+                @endif
             @endif
 
             <button class="btn btn-primary">Редактировать</button>

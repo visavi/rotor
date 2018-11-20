@@ -1711,7 +1711,7 @@ function setInput(array $data)
  *
  * @param string $name имя поля
  * @param string $default
- * @return string сохраненный текст
+ * @return mixed сохраненное значение
  */
 function getInput($name, $default = null)
 {

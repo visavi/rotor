@@ -5,8 +5,6 @@
 @stop
 
 @section('content')
-    <h1>Новые темы</h1>
-
     <nav>
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
@@ -14,6 +12,8 @@
             <li class="breadcrumb-item active">Новые темы</li>
         </ol>
     </nav>
+
+    <h1>Новые темы</h1>
 
     @foreach ($topics as $data)
         <div class="b">

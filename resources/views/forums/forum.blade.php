@@ -5,15 +5,6 @@
 @stop
 
 @section('content')
-
-    @if (getUser() && ! $forum->closed)
-        <div class="float-right">
-            <a class="btn btn-success" href="/forums/create?fid={{ $forum->id }}">Создать тему</a>
-        </div><br>
-    @endif
-
-    <h1>{{ $forum->title }}</h1>
-
     <nav>
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
@@ -30,6 +21,14 @@
             @endif
         </ol>
     </nav>
+
+    @if (! $forum->closed && getUser())
+        <div class="float-right">
+            <a class="btn btn-success" href="/forums/create?fid={{ $forum->id }}">Создать тему</a>
+        </div><br>
+    @endif
+
+    <h1>{{ $forum->title }}</h1>
 
     @if ($forum->children->isNotEmpty() && $page->current == 1)
         <div class="act">

@@ -16,7 +16,6 @@
         "ext-gd": "*",
         "ext-json": "*",
         "ext-mbstring": "*",
-        "ext-fileinfo": "*",
         "cbschuld/browser.php": "dev-master",
         "gregwar/captcha": "^1.1",
         "google/recaptcha": "~1.2",

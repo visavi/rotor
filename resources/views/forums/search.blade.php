@@ -5,8 +5,6 @@
 @stop
 
 @section('content')
-    <h1>Поиск по форуму</h1>
-
     <nav>
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
@@ -14,6 +12,8 @@
             <li class="breadcrumb-item active">Поиск по форуму</li>
         </ol>
     </nav>
+
+    <h1>Поиск по форуму</h1>
 
     <div class="form">
         <form action="/forums/search">

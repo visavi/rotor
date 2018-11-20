@@ -5,9 +5,6 @@
 @stop
 
 @section('content')
-
-    <h1>Создание новой темы</h1>
-
     <nav>
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
@@ -15,6 +12,8 @@
             <li class="breadcrumb-item active">Создание новой темы</li>
         </ol>
     </nav>
+
+    <h1>Создание новой темы</h1>
 
     <div class="form">
         <form action="/forums/create" method="post">
@@ -67,15 +66,15 @@
                     {!! textError('question') !!}
                 </div>
 
-                <div class="form-group{{ hasError('answer') }}">
+                <div class="form-group{{ hasError('answers') }}">
 
-                    <?php $answers = array_diff((array) getInput('answer'), ['']) ?>
+                    <?php $answers = array_diff((array) getInput('answers'), ['']) ?>
 
                     @for ($i = 0; $i < 10; $i++)
-                        <label for="inputAnswer{{ $i }}">Ответ {{ $i + 1 }}</label>
-                        <input type="text" name="answer[]" class="form-control" id="inputAnswer{{ $i }}" value="{{ $answers[$i] ?? '' }}" maxlength="50">
+                        <label for="inputAnswers{{ $i }}">Ответ {{ $i + 1 }}</label>
+                        <input type="text" name="answers[]" class="form-control" id="inputAnswers{{ $i }}" value="{{ $answers[$i] ?? '' }}" maxlength="50">
                     @endfor
-                    {!! textError('answer') !!}
+                    {!! textError('answers') !!}
                 </div>
             </div>
             <button class="btn btn-primary">Создать тему</button>

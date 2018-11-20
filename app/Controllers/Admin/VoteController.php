@@ -5,6 +5,7 @@ namespace App\Controllers\Admin;
 use App\Classes\Validator;
 use App\Models\User;
 use App\Models\Vote;
+use App\Models\VoteAnswer;
 use Illuminate\Database\Capsule\Manager as DB;
 use Illuminate\Http\Request;
 
@@ -78,10 +79,9 @@ class VoteController extends AdminController
         }
 
         if ($request->isMethod('post')) {
-
             $token   = check($request->input('token'));
             $title   = check($request->input('title'));
-            $answers = check($request->input('answers'));
+            $answers = check((array) $request->input('answers'));
 
             $validator->equal($token, $_SESSION['token'], 'Неверный идентификатор сессии, повторите действие!');
 
@@ -103,11 +103,18 @@ class VoteController extends AdminController
                     'title' => $title,
                 ]);
 
+                $countAnswers = $vote->answers()->count();
+
                 foreach ($answers as $answerId => $answer) {
-                    $vote->answers()
-                        ->updateOrCreate(['id' => $answerId], [
-                            'answer' => $answer
-                        ]);
+                    /** @var VoteAnswer $ans */
+                    $ans = $vote->answers()->firstOrNew(['id' => $answerId]);
+
+                    if ($ans->exists) {
+                        $ans->update(['answer' => $answer]);
+                    } else if ($countAnswers < 10) {
+                        $ans->fill(['answer' => $answer])->save();
+                        $countAnswers++;
+                    }
                 }
 
                 setFlash('success', 'Голосование успешно изменено!');
@@ -118,9 +125,9 @@ class VoteController extends AdminController
             }
         }
 
-        $getAnswers = $vote->answers->pluck('answer', 'id')->all();
+        $vote->getAnswers = $vote->answers->pluck('answer', 'id')->all();
 
-        return view('admin/votes/edit', compact('vote', 'getAnswers'));
+        return view('admin/votes/edit', compact('vote'));
     }
 
     /**
@@ -129,6 +136,7 @@ class VoteController extends AdminController
      * @param int     $id
      * @param Request $request
      * @return void
+     * @throws \Throwable
      */
     public function delete(int $id, Request $request): void
     {

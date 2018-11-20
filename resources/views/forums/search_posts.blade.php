@@ -5,9 +5,6 @@
 @stop
 
 @section('content')
-
-    <h1>Поиск запроса {{ $find }}</h1>
-
     <nav>
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
@@ -16,6 +13,8 @@
             <li class="breadcrumb-item active">Поиск запроса</li>
         </ol>
     </nav>
+
+    <h1>Поиск запроса {{ $find }}</h1>
 
     <p>Найдено совпадений в сообщениях: {{ $page->total }}</p>
 

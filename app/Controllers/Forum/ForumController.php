@@ -100,7 +100,7 @@ class ForumController extends BaseController
             $token    = check($request->input('token'));
             $vote     = empty($request->input('vote')) ? 0 : 1;
             $question = check($request->input('question'));
-            $answers  = check($request->input('answer'));
+            $answers  = check((array) $request->input('answers'));
 
             /** @var Forum $forum */
             $forum = Forum::query()->find($fid);
@@ -121,12 +121,12 @@ class ForumController extends BaseController
 
                 foreach ($answers as $answer) {
                     if (utfStrlen($answer) > 50) {
-                        $validator->addError(['answer' => 'Длина вариантов ответа не должна быть более 50 символов!']);
+                        $validator->addError(['answers' => 'Длина вариантов ответа не должна быть более 50 символов!']);
                         break;
                     }
                 }
 
-                $validator->between(\count($answers), 2, 10, ['answer' => 'Недостаточное количество вариантов ответов!']);
+                $validator->between(\count($answers), 2, 10, ['answers' => 'Недостаточное количество вариантов ответов!']);
             }
 
             /* TODO: Сделать проверку поиска похожей темы */

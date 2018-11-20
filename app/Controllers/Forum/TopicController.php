@@ -358,11 +358,15 @@ class TopicController extends BaseController
             ->orderBy('id')
             ->first();
 
-        if ($request->isMethod('post')) {
+        /** @var Vote $vote */
+        $vote = Vote::query()->where('topic_id', $id)->first();
 
-            $token = check($request->input('token'));
-            $title = check($request->input('title'));
-            $msg   = check($request->input('msg'));
+        if ($request->isMethod('post')) {
+            $token    = check($request->input('token'));
+            $title    = check($request->input('title'));
+            $msg      = check($request->input('msg'));
+            $question = check($request->input('question'));
+            $answers  = check((array) $request->input('answers'));
 
             $validator->equal($token, $_SESSION['token'], 'Неверный идентификатор сессии, повторите действие!')
                 ->length($title, 5, 50, ['title' => 'Слишком длинное или короткое название темы!']);
@@ -371,8 +375,26 @@ class TopicController extends BaseController
                 $validator->length($msg, 5, setting('forumtextlength'), ['msg' => 'Слишком длинный или короткий текст сообщения!']);
             }
 
-            if ($validator->isValid()) {
+            if ($vote) {
+                $validator->length($question, 5, 100, ['question' => 'Слишком длинный или короткий текст вопроса!']);
 
+                if ($answers) {
+                    $validator->empty($vote->count, ['question' => 'Изменение вариантов ответа доступно только до голосований!']);
+
+                    $answers = array_unique(array_diff($answers, ['']));
+
+                    foreach ($answers as $answer) {
+                        if (utfStrlen($answer) > 50) {
+                            $validator->addError(['answers' => 'Длина вариантов ответа не должна быть более 50 символов!']);
+                            break;
+                        }
+                    }
+
+                    $validator->between(\count($answers), 2, 10, ['answers' => 'Недостаточное количество вариантов ответов!']);
+                }
+            }
+
+            if ($validator->isValid()) {
                 $title = antimat($title);
                 $msg   = antimat($msg);
 
@@ -386,6 +408,28 @@ class TopicController extends BaseController
                     ]);
                 }
 
+                if ($vote) {
+                    $vote->update([
+                        'title' => $question,
+                    ]);
+
+                    if ($answers) {
+                        $countAnswers = $vote->answers()->count();
+
+                        foreach ($answers as $answerId => $answer) {
+                            /** @var VoteAnswer $ans */
+                            $ans = $vote->answers()->firstOrNew(['id' => $answerId]);
+
+                            if ($ans->exists) {
+                                $ans->update(['answer' => $answer]);
+                            } else if ($countAnswers < 10) {
+                                $ans->fill(['answer' => $answer])->save();
+                                $countAnswers++;
+                            }
+                        }
+                    }
+                }
+
                 setFlash('success', 'Тема успешно изменена!');
                 redirect('/topics/' . $topic->id);
 
@@ -395,7 +439,11 @@ class TopicController extends BaseController
             }
         }
 
-        return view('forums/topic_edit', compact('post', 'topic'));
+        if ($vote) {
+            $vote->getAnswers = $vote->answers->pluck('answer', 'id')->all();
+        }
+
+        return view('forums/topic_edit', compact('post', 'topic', 'vote'));
     }
 
     /**

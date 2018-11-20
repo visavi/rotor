@@ -31,6 +31,6 @@ class VoteAnswer extends BaseModel
      *
      * @var array
      */
-    protected $guarded = [];
+    protected $guarded = ['id'];
 
 }

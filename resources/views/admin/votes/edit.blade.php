@@ -29,12 +29,12 @@
             </div>
 
             <div class="form-group{{ hasError('answers') }}">
-                <?php $answers = getInput('answers', $getAnswers); ?>
-                <?php $answers = array_slice($answers + array_fill(0, 10, ""), 0, 10, true); ?>
+                <?php $answers = getInput('answers', $vote->getAnswers); ?>
+                <?php $answers = array_slice($answers + array_fill(0, 10, ''), 0, 10, true); ?>
 
                 @foreach ($answers as $key => $answer)
                     <label for="inputAnswers{{ $key }}">
-                        @if (isset($getAnswers[$key]))
+                        @if (isset($vote->getAnswers[$key]))
                             <span class="text-success">Ответ {{ $loop->iteration }}:</span>
                         @else
                             Ответ {{ $loop->iteration }}:
