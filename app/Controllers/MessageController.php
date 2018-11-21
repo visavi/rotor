@@ -89,7 +89,6 @@ class MessageController extends BaseController
             $user->id = 0;
         }
 
-
         $total = Message::query()
             ->where('user_id', $this->user->id)
             ->where('author_id', $user->id)

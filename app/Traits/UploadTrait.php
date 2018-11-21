@@ -20,7 +20,8 @@ trait UploadTrait
     public function uploadFile(UploadedFile $file, $record = true): array
     {
         $extension = strtolower($file->getClientOriginalExtension());
-        $basename  = basename($file->getClientOriginalName(), '.' . $extension);
+        $basename  = pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME);
+        $basename  = utfSubstr($basename, 0, 50) . '.' . $extension;
         $filename  = uniqueName($extension);
         $fullPath  = $this->uploadPath . '/' . $filename;
         $path      = str_replace(HOME, '', $fullPath);
@@ -51,7 +52,7 @@ trait UploadTrait
                 'relate_id'   => (int) $this->id,
                 'relate_type' => static::class,
                 'hash'        => $path,
-                'name'        => utfSubstr($basename, 0, 50) . '.' . $extension,
+                'name'        => $basename,
                 'size'        => filesize($fullPath),
                 'user_id'     => getUser('id'),
                 'created_at'  => SITETIME,

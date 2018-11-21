@@ -35,7 +35,10 @@
                         <b>Система</b><br>
                     @endif
 
-                    <div class="message">{!! stripString(bbCode($data->text)) !!}</div>
+                    <div class="message">
+                        {{ $data->type === 'out' ? 'Вы: ' : '' }}
+                        {!! stripString(bbCode($data->text)) !!}
+                    </div>
                     @unless ($data->reading)
                         <span class="badge badge-info">Новое</span>
                     @endunless
