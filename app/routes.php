@@ -4,6 +4,8 @@ use FastRoute\RouteCollector;
 
 return FastRoute\cachedDispatcher(function(RouteCollector $r)
 {
+    $r->get('/test', [App\Modules\Test\Controllers\IndexController::class, 'index']);
+
     $r->get('/', [App\Controllers\HomeController::class, 'index']);
     $r->get('/captcha', [App\Controllers\HomeController::class, 'captcha']);
     $r->get('/closed', [App\Controllers\HomeController::class, 'closed']);

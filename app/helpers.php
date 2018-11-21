@@ -1579,6 +1579,24 @@ function returnUrl($url = null)
 }
 
 /**
+ * Возвращает шаблонизатор
+ *
+ * @return Blade|\Illuminate\View\Factory
+ */
+function blade()
+{
+    $blade = new Blade([
+        HOME . '/themes/' . setting('themes') . '/views',
+        RESOURCES . '/views',
+        HOME . '/themes',
+    ], STORAGE . '/caches');
+
+    $blade->compiler()->withoutDoubleEncoding();
+
+    return $blade;
+}
+
+/**
  * Возвращает подключенный шаблон
  *
  * @param  string $view   имя шаблона
@@ -1586,6 +1604,19 @@ function returnUrl($url = null)
  * @return string         сформированный код
  */
 function view($view, array $params = [])
+{
+    return blade()->render($view, $params);
+}
+
+
+/**
+ * Возвращает подключенный шаблон
+ *
+ * @param  string $view   имя шаблона
+ * @param  array  $params массив параметров
+ * @return string         сформированный код
+ */
+/*function view($view, array $params = [])
 {
     $blade = new Blade([
         HOME . '/themes/' . setting('themes') . '/views',
@@ -1596,7 +1627,7 @@ function view($view, array $params = [])
     $blade->compiler()->withoutDoubleEncoding();
 
     return $blade->render($view, $params);
-}
+}*/
 
 /**
  * Сохраняет страницы с ошибками
