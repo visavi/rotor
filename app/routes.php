@@ -2,10 +2,7 @@
 
 use FastRoute\RouteCollector;
 
-return FastRoute\cachedDispatcher(function(RouteCollector $r)
-{
-    $r->get('/test', [App\Modules\Test\Controllers\IndexController::class, 'index']);
-
+return FastRoute\cachedDispatcher(function(RouteCollector $r) {
     $r->get('/', [App\Controllers\HomeController::class, 'index']);
     $r->get('/captcha', [App\Controllers\HomeController::class, 'captcha']);
     $r->get('/closed', [App\Controllers\HomeController::class, 'closed']);
@@ -501,6 +498,14 @@ return FastRoute\cachedDispatcher(function(RouteCollector $r)
         $r->addRoute(['GET', 'POST'], '/boards/edit/{id:\d+}', [App\Controllers\Admin\BoardController::class, 'edit']);
         $r->get('/boards/delete/{id:\d+}', [App\Controllers\Admin\BoardController::class, 'delete']);
     });
+
+    $modules = glob(APP . '/Modules/*', GLOB_ONLYDIR);
+
+    foreach ($modules as $module) {
+        if (file_exists($module . '/routes.php')){
+            include_once $module . '/routes.php';
+        }
+    }
 }, [
     'cacheFile'     => STORAGE . '/temp/routes.dat',
     'cacheDisabled' => env('APP_DEBUG'),
