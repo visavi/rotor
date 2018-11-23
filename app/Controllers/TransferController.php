@@ -10,13 +10,17 @@ use Illuminate\Http\Request;
 
 class TransferController extends BaseController
 {
-    /* @var User user */
+    /**
+     * @var User
+     */
     public $user;
 
     /**
      * Конструктор
+     *
+     * @param Request $request
      */
-    public function __construct()
+    public function __construct(Request $request)
     {
         parent::__construct();
 
@@ -24,7 +28,6 @@ class TransferController extends BaseController
             abort(403, 'Для совершения операций необходимо авторизоваться');
         }
 
-        $request    = Request::createFromGlobals();
         $login      = check($request->input('user'));
         $this->user = User::query()->where('login', $login)->first();
     }
@@ -45,6 +48,7 @@ class TransferController extends BaseController
      * @param Request   $request
      * @param Validator $validator
      * @return void
+     * @throws \Throwable
      */
     public function send(Request $request, Validator $validator): void
     {

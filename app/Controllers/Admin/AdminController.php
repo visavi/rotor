@@ -11,6 +11,9 @@ use Illuminate\Database\Capsule\Manager as DB;
 
 Class AdminController extends BaseController
 {
+    /**
+     * AdminController constructor.
+     */
     public function __construct()
     {
         parent::__construct();

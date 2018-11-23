@@ -14,14 +14,14 @@ class ActiveController extends BaseController
 
     /**
      * Конструктор
+     *
+     * @param Request $request
      */
-    public function __construct()
+    public function __construct(Request $request)
     {
         parent::__construct();
 
-        $request = Request::createFromGlobals();
-        $login   = check($request->input('user', getUser('login')));
-
+        $login      = check($request->input('user', getUser('login')));
         $this->user = User::query()->where('login', $login)->first();
 
         if (! $this->user) {

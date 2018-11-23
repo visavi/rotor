@@ -11,7 +11,7 @@ Class BaseController
 {
     public function __construct()
     {
-        $request = new Request();
+        $request = Request::createFromGlobals();
 
         /**
          * Проверка на ip-бан
@@ -93,13 +93,13 @@ Class BaseController
         }
 
         // Сайт закрыт для гостей
-        if (setting('closedsite') == 1 && ! getUser() && ! $request->is('register', 'login', 'recovery', 'captcha')) {
+        if (setting('closedsite') === '1' && ! getUser() && ! $request->is('register', 'login', 'recovery', 'captcha')) {
             setFlash('danger', 'Для входа на сайт необходимо авторизоваться!');
             redirect('/login');
         }
 
         // Сайт закрыт для всех
-        if (setting('closedsite') == 2 && ! isAdmin() && ! $request->is('closed', 'login')) {
+        if (setting('closedsite') === '2' && ! isAdmin() && ! $request->is('closed', 'login')) {
             redirect('/closed');
         }
     }
