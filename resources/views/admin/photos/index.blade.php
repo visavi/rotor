@@ -33,7 +33,7 @@
 
                 <div class="float-right">
                     <a href="/admin/photos/edit/{{ $photo->id }}?page={{ $page->current }}"><i class="fas fa-pencil-alt text-muted"></i></a>
-                    <a href="/admin/photos/delete/{{ $photo->id }}?page={{ $page->current }}&amp;token={{ $_SESSION['token'] }}"><i class="fas fa-times text-muted"></i></a>
+                    <a href="/admin/photos/delete/{{ $photo->id }}?page={{ $page->current }}&amp;token={{ $_SESSION['token'] }}" onclick="return confirm('Вы подтверждаете удаление изображения?')"><i class="fas fa-times text-muted"></i></a>
                 </div>
             </div>
 
