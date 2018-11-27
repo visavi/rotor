@@ -11,17 +11,22 @@ class DiceController extends IndexController
      */
     private $user;
 
+    /**
+     * DiceController constructor.
+     */
     public function __construct()
     {
         parent::__construct();
 
         if (! $this->user = getUser()) {
-            abort(403, 'Для игры операций необходимо авторизоваться!');
+            abort(403, 'Для игры необходимо авторизоваться!');
         }
     }
 
     /**
      * Кости
+     *
+     * @return string
      */
     public function index(): string
     {
@@ -30,6 +35,8 @@ class DiceController extends IndexController
 
     /**
      * Игра в кости
+     *
+     * @return string
      */
     public function go(): string
     {

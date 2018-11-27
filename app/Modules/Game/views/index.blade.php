@@ -15,4 +15,5 @@
     <h1>Игры / Развлечения</h1>
 
     <i class="far fa-circle fa-lg text-muted"></i> <a href="/games/dice">Кости</a><br>
+    <i class="far fa-circle fa-lg text-muted"></i> <a href="/games/thimbles">Наперстки</a><br>
 @stop
