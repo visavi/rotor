@@ -140,7 +140,7 @@ class BlogController extends BaseController
     public function edit(int $id, Request $request, Validator $validator): string
     {
         if (! getUser()) {
-            abort(403, 'Для редактирования статьи необходимо авторизоваться');
+            abort(403, 'Для редактирования статьи необходимо авторизоваться!');
         }
 
         /** @var Blog $blog */
@@ -247,7 +247,7 @@ class BlogController extends BaseController
         $cid = int($request->input('cid'));
 
         if (! getUser()) {
-            abort(403, 'Для публикации новой статьи необходимо авторизоваться');
+            abort(403, 'Для публикации новой статьи необходимо авторизоваться!');
         }
 
         $cats = Category::query()
@@ -820,7 +820,7 @@ class BlogController extends BaseController
         $where = int($request->input('where'));
 
         if (! getUser()) {
-            abort(403, 'Чтобы использовать поиск, необходимо авторизоваться');
+            abort(403, 'Чтобы использовать поиск, необходимо авторизоваться!');
         }
 
         if (empty($find)) {

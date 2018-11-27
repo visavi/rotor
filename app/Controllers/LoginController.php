@@ -14,7 +14,7 @@ class LoginController extends BaseController
         parent::__construct();
 
         if (! getUser()) {
-            abort(403, 'Для просмотра истории необходимо авторизоваться');
+            abort(403, 'Для просмотра истории необходимо авторизоваться!');
         }
     }
 

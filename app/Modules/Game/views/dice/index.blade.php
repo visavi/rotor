@@ -19,7 +19,7 @@
 
     <a class="btn btn-primary" href="/games/dice/go?rand={{ mt_rand(1000, 99999) }}">Играть</a><br><br>
 
-    У вас в наличии: {{ plural(getUser('money'), setting('moneyname')) }}<br><br>
+    У вас в наличии: {{ plural($user->money, setting('moneyname')) }}<br><br>
 
     Для участия в игре нажмите "Играть"<br>
     За каждый проигрыш у вас будут списывать по {{ plural(5, setting('moneyname')) }}<br>

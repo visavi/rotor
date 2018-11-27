@@ -1993,7 +1993,7 @@ function getUserById(int $id): ?User
  * Возвращает данные пользователя по ключу
  *
  * @param  string $key ключ массива
- * @return \Illuminate\Database\Query\Builder|mixed
+ * @return User|mixed
  */
 function getUser($key = null)
 {
