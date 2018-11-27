@@ -21,6 +21,6 @@ class IndexController extends BaseController
      */
     public function index(): string
     {
-        return $this->view->make('game::index');
+        return $this->view()->make('game::index');
     }
 }
