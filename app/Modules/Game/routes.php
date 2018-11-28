@@ -11,5 +11,5 @@ $r->addGroup('/games', function (RouteCollector $r) {
 
     $r->get('/thimbles', [App\Modules\Game\Controllers\ThimbleController::class, 'index']);
     $r->get('/thimbles/choice', [App\Modules\Game\Controllers\ThimbleController::class, 'choice']);
-    $r->get('/thimbles/choice/go', [App\Modules\Game\Controllers\ThimbleController::class, 'go']);
+    $r->get('/thimbles/go', [App\Modules\Game\Controllers\ThimbleController::class, 'go']);
 });

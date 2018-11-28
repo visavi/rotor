@@ -22,7 +22,7 @@
     У вас в наличии: {{ plural($user->money, setting('moneyname')) }}<br><br>
 
     Для участия в игре нажмите "Играть"<br>
-    За каждый выигрыш вы получите {{ plural(50, setting('moneyname')) }}<br>
-    За каждый проигрыш у вас будут списывать по {{ plural(100, setting('moneyname')) }}<br>
+    За каждый выигрыш вы получите {{ plural(10, setting('moneyname')) }}<br>
+    За каждый проигрыш у вас будут списывать по {{ plural(5, setting('moneyname')) }}<br>
     Итак дерзайте!<br>
 @stop

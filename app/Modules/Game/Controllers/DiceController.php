@@ -37,6 +37,7 @@ class DiceController extends IndexController
      * Игра в кости
      *
      * @return string
+     * @throws \Exception
      */
     public function go(): string
     {
@@ -50,10 +51,10 @@ class DiceController extends IndexController
             'draw'    => 'Ничья',
         ];
 
-        $num[0] = mt_rand(1, mt_rand(5, 6));
-        $num[1] = mt_rand(1, mt_rand(5, 6));
-        $num[2] = mt_rand(1, 6);
-        $num[3] = mt_rand(1, 6);
+        $num[0] = random_int(1, random_int(5, 6));
+        $num[1] = random_int(1, random_int(5, 6));
+        $num[2] = random_int(1, 6);
+        $num[3] = random_int(1, 6);
 
         $sumUser = $num[0] + $num[1];
         $sumBank = $num[2] + $num[3];

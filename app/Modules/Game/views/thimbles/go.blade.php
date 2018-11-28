@@ -17,58 +17,15 @@
 
     <h1>Игра</h1>
 
-<?php /*
+    <a href="/games/thimbles/go?thimble=1&amp;rand={{ random_int(1000, 99999) }}"><img src="/assets/img/games/thimbles/{{ $randThimble === 1 ? 3 : 2 }}.gif" alt="image"></a>
+    <a href="/games/thimbles/go?thimble=2&amp;rand={{ random_int(1000, 99999) }}"><img src="/assets/img/games/thimbles/{{ $randThimble === 2 ? 3 : 2 }}.gif" alt="image"></a>
+    <a href="/games/thimbles/go?thimble=3&amp;rand={{ random_int(1000, 99999) }}"><img src="/assets/img/games/thimbles/{{ $randThimble === 3 ? 3 : 2 }}.gif" alt="image"></a><br><br>
 
-        $thimble = intval($_GET['thimble']);
-        if (!isset($_SESSION['naperstki'])) {
-            $_SESSION['naperstki'] = 0;
-        }
+    Выберите наперсток в котором может находится шарик<br><br>
 
-            if ($_SESSION['naperstki'] < 3) {
-                $_SESSION['naperstki']++;
-
-                $rand_thimble = mt_rand(1, 3);
-
-                if ($rand_thimble == 1) {
-                    echo '<img src="/assets/img/naperstki/3.gif" alt="image" /> ';
-                } else {
-                    echo '<img src="/assets/img/naperstki/2.gif" alt="image" /> ';
-                }
-
-                if ($rand_thimble == 2) {
-                    echo '<img src="/assets/img/naperstki/3.gif" alt="image" /> ';
-                } else {
-                    echo '<img src="/assets/img/naperstki/2.gif" alt="image" /> ';
-                }
-
-                if ($rand_thimble == 3) {
-                    echo '<img src="/assets/img/naperstki/3.gif" alt="image" />';
-                } else {
-                    echo '<img src="/assets/img/naperstki/2.gif" alt="image" />';
-                }
-                // ------------------------------ Выигрыш ----------------------------//
-                if ($thimble == $rand_thimble) {
-                    DB::run()->query("UPDATE users SET money=money+100 WHERE login=?", [$log]);
-
-                    echo '<br /><b>Вы выиграли!</b><br />';
-                    // ------------------------------ Проигрыш ----------------------------//
-                } else {
-                    DB::run()->query("UPDATE users SET money=money-50 WHERE login=?", [$log]);
-
-                    echo '<br /><b>Вы проиграли!</b><br />';
-                }
-            } else {
-                show_error('Необходимо выбрать один из наперстков');
-            }
-
-            echo '<br /><b><a href="/games/naperstki?act=choice&amp;rand=' . $rand . '">К выбору</a></b><br /><br />';
-
-            $allmoney = DB::run()->querySingle("SELECT money FROM users WHERE login=?;", [$log]);
-            echo 'У вас в наличии: ' . moneys($allmoney) . '<br /><br />';
-
-
-
- */ ?>
+    <div class="font-weight-bold">
+        <i class="fas fa-trophy"></i> {!! $result !!}
+    </div>
 
     У вас в наличии: {{ plural($user->money, setting('moneyname')) }}<br><br>
 @stop
