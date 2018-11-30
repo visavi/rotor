@@ -68,6 +68,7 @@
         <i class="far fa-circle fa-lg text-muted"></i> <a href="/admin/notices">Шаблоны писем</a><br>
         <i class="far fa-circle fa-lg text-muted"></i> <a href="/admin/files">Редактирование страниц</a><br>
         <i class="far fa-circle fa-lg text-muted"></i> <a href="/admin/delusers">Чистка пользователей</a><br>
+        <i class="far fa-circle fa-lg text-muted"></i> <a href="/admin/modules">Модули</a><br>
     @endif
 
     @if (! $existBoss)

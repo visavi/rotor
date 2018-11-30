@@ -489,6 +489,7 @@ return FastRoute\cachedDispatcher(function(RouteCollector $r) {
         $r->addRoute(['GET', 'POST'], '/articles/move/{id:\d+}', [App\Controllers\Admin\BlogController::class, 'moveBlog']);
         $r->get('/articles/delete/{id:\d+}', [App\Controllers\Admin\BlogController::class, 'deleteBlog']);
 
+        /* Доска объявлений */
         $r->get('/boards[/{id:\d+}]', [App\Controllers\Admin\BoardController::class, 'index']);
         $r->get('/boards/restatement', [App\Controllers\Admin\BoardController::class, 'restatement']);
         $r->addRoute(['GET', 'POST'], '/items/edit/{id:\d+}', [App\Controllers\Admin\BoardController::class, 'editItem']);
@@ -497,6 +498,10 @@ return FastRoute\cachedDispatcher(function(RouteCollector $r) {
         $r->post('/boards/create', [App\Controllers\Admin\BoardController::class, 'create']);
         $r->addRoute(['GET', 'POST'], '/boards/edit/{id:\d+}', [App\Controllers\Admin\BoardController::class, 'edit']);
         $r->get('/boards/delete/{id:\d+}', [App\Controllers\Admin\BoardController::class, 'delete']);
+
+        /* Модули */
+        $r->get('/modules', [App\Controllers\Admin\ModuleController::class, 'index']);
+        $r->get('/modules/module', [App\Controllers\Admin\ModuleController::class, 'module']);
     });
 
     $modules = glob(APP . '/Modules/*', GLOB_ONLYDIR);
