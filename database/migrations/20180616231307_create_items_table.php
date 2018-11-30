@@ -1,7 +1,6 @@
 <?php
 
 use Phinx\Migration\AbstractMigration;
-use Phinx\Db\Adapter\MysqlAdapter;
 
 class CreateItemsTable extends AbstractMigration
 {
@@ -10,6 +9,7 @@ class CreateItemsTable extends AbstractMigration
      */
     public function change()
     {
+        if (! $this->hasTable('items')) {
             $table = $this->table('items', ['collation' => env('DB_COLLATION')]);
             $table
                 ->addColumn('board_id', 'integer')
@@ -25,5 +25,6 @@ class CreateItemsTable extends AbstractMigration
                 ->addIndex('expires_at')
                 ->addIndex('created_at')
                 ->create();
+        }
     }
 }
