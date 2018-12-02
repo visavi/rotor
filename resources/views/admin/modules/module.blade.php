@@ -21,10 +21,19 @@
     Автор: {{ $module['author'] }} <a href="{{ $module['homepage'] }}">{{ $module['homepage'] }}</a><br><br>
 
     @if ($migrations)
-        <i class="fas fa-database"></i> <a href="">Выполнить миграции</a><br>
+        <b>Список миграций</b><br>
+        @foreach ($migrations as $migration)
+            <i class="fas fa-database"></i> {{ $migration }}<br>
+        @endforeach
     @endif
 
-    @if ($images)
-        <i class="fas fa-images"></i> <a href="">Создать симлинк для изображений</a><br>
+    @if ($module['symlinks'])
+        <b>Список симлинков</b><br>
+        @foreach ($module['symlinks'] as $key => $symlink)
+            <i class="fas fa-images"></i> {{ $key }} -> {{ $symlink }}<br>
+        @endforeach
     @endif
+
+    <br>
+    <a class="btn btn-primary" href="/admin/modules/install?module={{ $moduleName }}">Установить модуль</a>
 @stop

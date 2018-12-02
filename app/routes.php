@@ -502,6 +502,7 @@ return FastRoute\cachedDispatcher(function(RouteCollector $r) {
         /* Модули */
         $r->get('/modules', [App\Controllers\Admin\ModuleController::class, 'index']);
         $r->get('/modules/module', [App\Controllers\Admin\ModuleController::class, 'module']);
+        $r->get('/modules/install', [App\Controllers\Admin\ModuleController::class, 'install']);
     });
 
     $modules = glob(APP . '/Modules/*', GLOB_ONLYDIR);
