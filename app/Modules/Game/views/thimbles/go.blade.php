@@ -17,9 +17,9 @@
 
     <h1>Игра</h1>
 
-    <a href="/games/thimbles/go?thimble=1&amp;rand={{ random_int(1000, 99999) }}"><img src="/assets/img/games/thimbles/{{ $randThimble === 1 ? 3 : 2 }}.gif" alt="image"></a>
-    <a href="/games/thimbles/go?thimble=2&amp;rand={{ random_int(1000, 99999) }}"><img src="/assets/img/games/thimbles/{{ $randThimble === 2 ? 3 : 2 }}.gif" alt="image"></a>
-    <a href="/games/thimbles/go?thimble=3&amp;rand={{ random_int(1000, 99999) }}"><img src="/assets/img/games/thimbles/{{ $randThimble === 3 ? 3 : 2 }}.gif" alt="image"></a><br><br>
+    <a href="/games/thimbles/go?thimble=1&amp;rand={{ random_int(1000, 99999) }}"><img src="/assets/modules/games/thimbles/{{ $randThimble === 1 ? 3 : 2 }}.gif" alt="image"></a>
+    <a href="/games/thimbles/go?thimble=2&amp;rand={{ random_int(1000, 99999) }}"><img src="/assets/modules/games/thimbles/{{ $randThimble === 2 ? 3 : 2 }}.gif" alt="image"></a>
+    <a href="/games/thimbles/go?thimble=3&amp;rand={{ random_int(1000, 99999) }}"><img src="/assets/modules/games/thimbles/{{ $randThimble === 3 ? 3 : 2 }}.gif" alt="image"></a><br><br>
 
     Выберите наперсток в котором может находится шарик<br><br>
 

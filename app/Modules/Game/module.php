@@ -8,6 +8,6 @@ return [
     'email'       => 'admin@visavi.net',
     'homepage'    => 'https://visavi.net',
     'symlinks'    => [
-        'images' => HOME . '/assets/img/games',
+        'images' => HOME . '/assets/modules/games',
     ],
 ];

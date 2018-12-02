@@ -13,11 +13,12 @@ public/uploads/thumbnails/
 public/uploads/smiles/
 public/uploads/blogs/
 public/uploads/boards/
+public/assets/modules/
 node_modules/
-public/assets/css/compiled.css
-public/assets/js/compiled.js
 vendor
 upgrade
+public/assets/css/compiled.css
+public/assets/js/compiled.js
 composer.phar
 .env
 .idea/

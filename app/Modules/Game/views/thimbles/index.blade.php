@@ -15,7 +15,7 @@
 
     <h1>Наперстки</h1>
 
-    <img src="/assets/img/games/thimbles/1.gif" alt="image"><br><br>
+    <img src="/assets/modules/games/thimbles/1.gif" alt="image"><br><br>
 
     <a class="btn btn-primary" href="/games/thimbles/choice">Играть</a><br><br>
 

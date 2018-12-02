@@ -88,7 +88,7 @@ class ModuleController extends AdminController
         $module = include $modulePath . '/module.php';
 
         foreach ($module['symlinks'] as $key => $symlink) {
-            if (! file_exists($modulePath . '/' . $key)) {
+            if (! file_exists($symlink)) {
                 symlink($modulePath . '/' . $key, $symlink);
             }
         }

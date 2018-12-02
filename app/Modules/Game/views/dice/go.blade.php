@@ -17,10 +17,10 @@
     <h1>Ваш ход</h1>
 
     Ваши кости:<br>
-    <img src="/assets/img/games/dice/{{ $num[0] }}.gif" alt="image"> и <img src="/assets/img/games/dice/{{ $num[1] }}.gif" alt="image"><br><br>
+    <img src="/assets/modules/games/dice/{{ $num[0] }}.gif" alt="image"> и <img src="/assets/modules/games/dice/{{ $num[1] }}.gif" alt="image"><br><br>
 
     У банкира:<br>
-    <img src="/assets/img/games/dice/{{ $num[2] }}.gif" alt="image"> и <img src="/assets/img/games/dice/{{ $num[3] }}.gif" alt="image"><br><br>
+    <img src="/assets/modules/games/dice/{{ $num[2] }}.gif" alt="image"> и <img src="/assets/modules/games/dice/{{ $num[3] }}.gif" alt="image"><br><br>
 
     <div class="font-weight-bold">
         <i class="fas fa-trophy"></i> {!! $result !!}
