@@ -30,9 +30,14 @@ class ModuleController extends AdminController
      */
     public function index(): string
     {
-        $modules = array_map('basename', glob(APP . '/Modules/*', GLOB_ONLYDIR));
+        $modules = glob(APP . '/Modules/*', GLOB_ONLYDIR);
 
-        return view('admin/modules/index', compact('modules'));
+        $moduleNames = [];
+        foreach ($modules as $module) {
+            $moduleNames[basename($module)] = include $module . '/module.php';
+        }
+
+        return view('admin/modules/index', compact('moduleNames'));
     }
 
     /**
@@ -43,13 +48,10 @@ class ModuleController extends AdminController
      */
     public function module(Request $request): string
     {
-        $module = check($request->input('module'));
+        $moduleName = check($request->input('module'));
+        $modulePath = APP . '/Modules/' . $moduleName;
 
-        // TODO придумать какой-то конфиг, где будет указано название модуля, автор, описание, сайт автора, итд
-
-        $modulePath = APP . '/Modules/' . $module;
-
-        if (! preg_match('|^[\w\-]+$|i', $module) || ! file_exists($modulePath)) {
+        if (! preg_match('|^[\w\-]+$|i', $moduleName) || ! file_exists($modulePath)) {
             abort('default', 'Данный модуль не найден!');
         }
 
@@ -63,6 +65,8 @@ class ModuleController extends AdminController
             $images = true;
         }
 
-        return view('admin/modules/module', compact('module', 'migrations', 'images'));
+        $module = include $modulePath . '/module.php';
+
+        return view('admin/modules/module', compact('module', 'moduleName', 'migrations', 'images'));
     }
 }

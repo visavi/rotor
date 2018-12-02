@@ -15,9 +15,11 @@
 
     <h1>Модули</h1>
 
-    @if ($modules)
-        @foreach ($modules as $module)
-            <i class="fas fa-plug"></i> <a href="/admin/modules/module?module={{ $module }}">{{ $module }}</a>
+    @if ($moduleNames)
+        @foreach ($moduleNames as $name => $module)
+            <i class="fas fa-plug"></i> <a href="/admin/modules/module?module={{ $name }}">{{ $module['name'] }}</a> ({{ $name }})<br>
+            {{ $module['description'] }}<br>
+            Автор: {{ $module['author'] }} <a href="{{ $module['homepage'] }}">{{ $module['homepage'] }}</a><hr>
         @endforeach
     @else
         {!! showError('Модули еще не загружены!') !!}

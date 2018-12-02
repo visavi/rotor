@@ -26,7 +26,7 @@
         "php-ffmpeg/php-ffmpeg": "~0.12",
         "swiftmailer/swiftmailer": "~6.1",
         "vlucas/phpdotenv": "^2.5",
-        "robmorgan/phinx": "^0.9",
+        "robmorgan/phinx": "^0.10",
         "php-curl-class/php-curl-class": "^8.3",
         "jenssegers/blade": "^1.1",
         "visavi/cleanup": "^1.3",
