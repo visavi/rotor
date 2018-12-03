@@ -55,12 +55,10 @@ blockquote small:before {
 
 .has-error .form-control {
     border-color: #dc3545;
-    -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075);
     box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075);
 }
 .has-error .form-control:focus {
     border-color: #dc3545;
-    -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075), 0 0 6px #ce8483;
     box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075), 0 0 6px #ce8483;
 }
 
@@ -195,4 +193,15 @@ blockquote small:before {
 
 .pagination {
   padding-top: 20px;
+}
+
+.carousel-control-prev-icon,
+.carousel-control-next-icon {
+  box-shadow: 0 1px 0.4rem rgba(0, 0, 0, 0.5);
+  background-color: rgba(0, 0, 0, 0.3);
+  border-radius: 50%;
+}
+
+.carousel-indicators li {
+  box-shadow: 0 1px 0.4rem rgba(0, 0, 0, 0.5);
 }

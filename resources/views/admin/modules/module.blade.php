@@ -18,22 +18,63 @@
 
     {{ $module['name'] }}<br>
     {{ $module['description'] }}<br>
-    Автор: {{ $module['author'] }} <a href="{{ $module['homepage'] }}">{{ $module['homepage'] }}</a><br><br>
+    Версия: {{ $module['version'] }}<br>
+    Автор: {{ $module['author'] }} <a href="{{ $module['homepage'] }}">{{ $module['homepage'] }}</a><br>
+
+    @if ($screenshots)
+        <?php $countScreens = count($screenshots); ?>
+        <div id="myCarousel" class="carousel slide" data-ride="carousel">
+            @if ($countScreens > 1)
+                <ol class="carousel-indicators">
+                    @for ($i = 0; $i < $countScreens; $i++)
+                        <li data-target="#myCarousel" data-slide-to="{{ $i }}"{!! empty($i) ? ' class="active"' : '' !!}></li>
+                    @endfor
+                </ol>
+            @endif
+
+            <div class="carousel-inner">
+                @foreach ($screenshots as $key => $screenshot)
+                    <div class="carousel-item{{ empty($key) ? ' active' : '' }}">
+                        {!! imageBase64($screenshot, ['class' => 'd-block w-100']) !!}
+                    </div>
+                @endforeach
+            </div>
+
+            @if ($countScreens > 1)
+                <a class="carousel-control-prev" href="#myCarousel" role="button" data-slide="prev">
+                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                    <span class="sr-only">Previous</span>
+                </a>
+                <a class="carousel-control-next" href="#myCarousel" role="button" data-slide="next">
+                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                    <span class="sr-only">Next</span>
+                </a>
+            @endif
+        </div>
+    @endif
 
     @if ($migrations)
-        <b>Список миграций</b><br>
+        <div class="mt-2 font-weight-bold">Список миграций</div>
         @foreach ($migrations as $migration)
             <i class="fas fa-database"></i> {{ $migration }}<br>
         @endforeach
     @endif
 
-    @if ($module['symlinks'])
-        <b>Список симлинков</b><br>
-        @foreach ($module['symlinks'] as $key => $symlink)
+
+    @if ($symlinks)
+        <div class="mt-2 font-weight-bold">Список симлинков</div>
+        @foreach ($symlinks as $key => $symlink)
             <i class="fas fa-images"></i> {{ $key }} -> {{ $symlink }}<br>
         @endforeach
     @endif
 
     <br>
-    <a class="btn btn-primary" href="/admin/modules/install?module={{ $moduleName }}">Установить модуль</a>
+    @if ($moduleActive)
+        @if (version_compare($module['version'], $moduleActive->version, '>'))
+            <a class="btn btn-success" href="/admin/modules/install?module={{ $moduleName }}">Обновить модуль</a>
+        @endif
+        <a class="btn btn-danger" href="/admin/modules/uninstall?module={{ $moduleName }}">Отключить модуль</a>
+    @else
+        <a class="btn btn-success" href="/admin/modules/install?module={{ $moduleName }}">Включить модуль</a>
+    @endif
 @stop

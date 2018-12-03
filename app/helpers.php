@@ -1457,19 +1457,22 @@ function deleteDir($dir)
  * Удаляет файл и превью
  *
  * @param string $path путь к файлу
+ * @param bool   $thumbDelete
  * @return bool
  */
-function deleteFile($path)
+function deleteFile($path, $thumbDelete = true)
 {
     if (file_exists($path) && is_file($path)) {
         unlink($path);
     }
 
-    $thumb = ltrim(str_replace([HOME, '/'], ['', '_'], $path), '_');
-    $thumb = UPLOADS . '/thumbnails/' . $thumb;
+    if ($thumbDelete) {
+        $thumb = ltrim(str_replace([HOME, '/'], ['', '_'], $path), '_');
+        $thumb = UPLOADS . '/thumbnails/' . $thumb;
 
-    if (file_exists($thumb) && is_file($thumb)) {
-        unlink($thumb);
+        if (file_exists($thumb) && is_file($thumb)) {
+            unlink($thumb);
+        }
     }
 
     return true;
