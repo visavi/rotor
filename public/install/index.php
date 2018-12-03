@@ -205,34 +205,33 @@ $wrap->setOption('environment', 'default');
         echo '<br><p style="font-size: 15px; font-weight: bold">Права доступа</p>';
 
         $uploadDir = file_exists(DIR . '/public/uploads') ? DIR . '/public/uploads' : DIR . '/uploads';
+        $moduleDir = file_exists(DIR . '/public/assets/modules') ? DIR . '/public/assets/modules' : DIR . '/assets/modules';
 
         $storage = glob(DIR . '/storage/*', GLOB_ONLYDIR);
         $uploads = glob($uploadDir . '/*', GLOB_ONLYDIR);
 
-        $dirs = array_merge($storage, $uploads);
+        $dirs = array_merge($storage, $uploads, [$moduleDir]);
 
         $chmod_errors = 0;
 
         foreach ($dirs as $dir) {
+            $old = umask(0);
+            @chmod ($dir, 0777);
+            umask($old);
+
             if (is_writable($dir)) {
                 $file_status = '<span style="color:#00cc00">ОК</span>';
             } else {
-                $old = umask(0);
-                @chmod ($dir, 0777);
-                umask($old);
-                if (is_writable($dir)) {
-                    $file_status = '<span style="color:#00cc00">ОК</span>';
-                } else {
-                    $file_status = '<span style="color:#ff0000">Запрещено</span>';
-                    $chmod_errors = 1;
-                }
+                $file_status = '<span style="color:#ff0000">Запрещено</span>';
+                $chmod_errors = 1;
             }
+
             $chmod_value = @decoct(@fileperms($dir)) % 1000;
 
             echo '<i class="fa fa-check-circle"></i> '.str_replace('../', '', $dir).' <b> - ' . $file_status . '</b> (chmod ' . $chmod_value . ')<br>';
         }
 ?>
-        <br>Дополнительно можете выставить права на директории и файлы с шаблонами внутри resources/views<br><br>
+        <br>Дополнительно можете выставить права на директории и файлы с шаблонами внутри resources/views - это необходимо для редактирования шаблонов сайта<br><br>
 
         Если какой-то пункт выделен красным, необходимо зайти по FTP и выставить CHMOD разрешающую запись<br>
         Некоторые настройки являются рекомендуемыми для полной совместимости, однако скрипт способен работать даже если рекомендуемые настройки не совпадают с текущими.<br><br>

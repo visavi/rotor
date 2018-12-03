@@ -30,8 +30,9 @@ class AppInstall extends AbstractCommand
     {
         $storage = glob(STORAGE.'/*', GLOB_ONLYDIR);
         $uploads = glob(UPLOADS.'/*', GLOB_ONLYDIR);
+        $modules = [HOME . '/assets/modules'];
 
-        $dirs = array_merge($storage, $uploads);
+        $dirs = array_merge($storage, $uploads, $modules);
 
         foreach ($dirs as $dir) {
             $old = umask(0);

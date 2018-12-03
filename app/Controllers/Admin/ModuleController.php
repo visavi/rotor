@@ -88,9 +88,11 @@ class ModuleController extends AdminController
         $module = include $modulePath . '/module.php';
 
         foreach ($module['symlinks'] as $key => $symlink) {
-            if (! file_exists($symlink)) {
-                symlink($modulePath . '/' . $key, $symlink);
+            if (file_exists($symlink)) {
+                deleteFile($symlink);
             }
+
+            symlink($modulePath . '/' . $key, $symlink);
         }
 
         setFlash('success', 'Модуль успешно установлен!');
