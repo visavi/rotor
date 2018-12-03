@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\Module;
 use FastRoute\RouteCollector;
 
 return FastRoute\cachedDispatcher(function(RouteCollector $r) {
@@ -506,11 +507,11 @@ return FastRoute\cachedDispatcher(function(RouteCollector $r) {
         $r->get('/modules/uninstall', [App\Controllers\Admin\ModuleController::class, 'uninstall']);
     });
 
-    $modules = glob(APP . '/Modules/*', GLOB_ONLYDIR);
+    $modules = Module::query()->get();
 
     foreach ($modules as $module) {
-        if (file_exists($module . '/routes.php')){
-            include_once $module . '/routes.php';
+        if (file_exists(APP . '/Modules/' . $module->name . '/routes.php')){
+            include_once APP . '/Modules/' . $module->name . '/routes.php';
         }
     }
 }, [

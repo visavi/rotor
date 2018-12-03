@@ -82,7 +82,7 @@ class ModuleController extends AdminController
     }
 
     /**
-     * Установка модуля
+     * Включение модуля
      *
      * @param Request          $request
      * @param PhinxApplication $app
@@ -125,6 +125,9 @@ class ModuleController extends AdminController
             $wrap->getMigrate();
         }
 
+        if (file_exists(STORAGE . '/temp/routes.dat')) {
+            unlink (STORAGE . '/temp/routes.dat');
+        }
 
         $mod = Module::query()->firstOrNew(['name' => $moduleName]);
 
@@ -189,6 +192,10 @@ class ModuleController extends AdminController
 
             $wrap = new TextWrapper($app);
             $wrap->getRollback(null, 0);
+        }
+
+        if (file_exists(STORAGE . '/temp/routes.dat')) {
+            unlink (STORAGE . '/temp/routes.dat');
         }
 
         Module::query()->where('name', $moduleName)->delete();
