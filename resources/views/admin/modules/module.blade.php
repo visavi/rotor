@@ -21,8 +21,8 @@
     Версия: {{ $module['version'] }}<br>
     Автор: {{ $module['author'] }} <a href="{{ $module['homepage'] }}">{{ $module['homepage'] }}</a><br>
 
-    @if ($screenshots)
-        <?php $countScreens = count($screenshots); ?>
+    @if (isset($module['screenshots']))
+        <?php $countScreens = count($module['screenshots']); ?>
         <div id="myCarousel" class="carousel slide" data-ride="carousel">
             @if ($countScreens > 1)
                 <ol class="carousel-indicators">
@@ -33,7 +33,7 @@
             @endif
 
             <div class="carousel-inner">
-                @foreach ($screenshots as $key => $screenshot)
+                @foreach ($module['screenshots'] as $key => $screenshot)
                     <div class="carousel-item{{ empty($key) ? ' active' : '' }}">
                         {!! imageBase64($screenshot, ['class' => 'd-block w-100']) !!}
                     </div>
@@ -53,17 +53,17 @@
         </div>
     @endif
 
-    @if ($migrations)
+    @if (isset($module['migrations']))
         <div class="mt-2 font-weight-bold">Список миграций</div>
-        @foreach ($migrations as $migration)
+        @foreach ($module['migrations'] as $migration)
             <i class="fas fa-database"></i> {{ $migration }}<br>
         @endforeach
     @endif
 
 
-    @if ($symlinks)
+    @if (isset($module['symlinks']))
         <div class="mt-2 font-weight-bold">Список симлинков</div>
-        @foreach ($symlinks as $key => $symlink)
+        @foreach ($module['symlinks'] as $key => $symlink)
             <i class="fas fa-images"></i> {{ $key }} -> {{ $symlink }}<br>
         @endforeach
     @endif

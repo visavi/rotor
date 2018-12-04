@@ -31,12 +31,14 @@ class ModuleController extends AdminController
      */
     public function index(): string
     {
-        $modules       = glob(APP . '/Modules/*', GLOB_ONLYDIR);
+        $modules      = glob(APP . '/Modules/*', GLOB_ONLYDIR);
         $moduleActive = Module::query()->pluck('version', 'name')->all();
 
         $moduleNames = [];
         foreach ($modules as $module) {
-            $moduleNames[basename($module)] = include $module . '/module.php';
+            if (file_exists($module . '/module.php')) {
+                $moduleNames[basename($module)] = include $module . '/module.php';
+            }
         }
 
         return view('admin/modules/index', compact('moduleNames', 'moduleActive'));
@@ -53,7 +55,7 @@ class ModuleController extends AdminController
         $moduleName = check($request->input('module'));
         $modulePath = APP . '/Modules/' . $moduleName;
 
-        if (! preg_match('|^[\w\-]+$|i', $moduleName) || ! file_exists($modulePath)) {
+        if (! preg_match('|^[A-Z][\w\-]+$|', $moduleName) || ! file_exists($modulePath)) {
             abort('default', 'Данный модуль не найден!');
         }
 
@@ -61,24 +63,21 @@ class ModuleController extends AdminController
 
         $module = include $modulePath . '/module.php';
 
-        $screenshots = false;
         if (file_exists($modulePath . '/screenshots')) {
-            $screenshots = glob($modulePath . '/screenshots/*.{gif,png,jpg,jpeg}', GLOB_BRACE);
+            $module['screenshots'] = glob($modulePath . '/screenshots/*.{gif,png,jpg,jpeg}', GLOB_BRACE);
         }
 
-        $migrations = false;
         if (file_exists($modulePath . '/migrations')) {
-            $migrations = array_map('basename', glob($modulePath . '/migrations/*.php'));
+            $module['migrations'] = array_map('basename', glob($modulePath . '/migrations/*.php'));
         }
 
-        $symlinks = false;
         if ($module['symlinks']) {
-            $symlinks = array_map(function ($symlink) {
+            $module['symlinks'] = array_map(function ($symlink) {
                 return str_replace(HOME, '', $symlink);
             }, $module['symlinks']);
         }
 
-        return view('admin/modules/module', compact('module', 'moduleName', 'screenshots', 'migrations', 'symlinks', 'moduleActive'));
+        return view('admin/modules/module', compact('module', 'moduleName', 'moduleActive'));
     }
 
     /**
@@ -93,24 +92,25 @@ class ModuleController extends AdminController
         $moduleName = check($request->input('module'));
         $modulePath = APP . '/Modules/' . $moduleName;
 
-        if (! preg_match('|^[\w\-]+$|i', $moduleName) || ! file_exists($modulePath)) {
+        if (! preg_match('|^[A-Z][\w\-]+$|', $moduleName) || ! file_exists($modulePath)) {
             abort('default', 'Данный модуль не найден!');
         }
 
         $module = include $modulePath . '/module.php';
 
         // Создание ссылок
-        foreach ($module['symlinks'] as $key => $symlink) {
-            if (file_exists($symlink)) {
-                unlink($symlink);
-            }
+        if (isset($module['symlinks'])) {
+            foreach ($module['symlinks'] as $key => $symlink) {
+                if (file_exists($symlink)) {
+                    unlink($symlink);
+                }
 
-            symlink($modulePath . '/' . $key, $symlink);
+                symlink($modulePath . '/' . $key, $symlink);
+            }
         }
 
         // Выполнение миграций
         if (file_exists($modulePath . '/migrations')) {
-
             $app->add(new Migrate());
 
             /** @var Migrate $command */
@@ -136,8 +136,8 @@ class ModuleController extends AdminController
                 'version'    => $module['version'],
                 'updated_at' => SITETIME,
             ]);
-            $result = 'Модуль успешно обновлен!';
 
+            $result = 'Модуль успешно обновлен!';
         } else {
             $mod->fill([
                 'version'    => $module['version'],
@@ -164,16 +164,18 @@ class ModuleController extends AdminController
         $moduleName = check($request->input('module'));
         $modulePath = APP . '/Modules/' . $moduleName;
 
-        if (! preg_match('|^[\w\-]+$|i', $moduleName) || ! file_exists($modulePath)) {
+        if (! preg_match('|^[A-Z][\w\-]+$|', $moduleName) || ! file_exists($modulePath)) {
             abort('default', 'Данный модуль не найден!');
         }
 
         $module = include $modulePath . '/module.php';
 
         // Удаление ссылок
-        foreach ($module['symlinks'] as $key => $symlink) {
-            if (file_exists($symlink)) {
-                unlink($symlink);
+        if (isset($module['symlinks'])) {
+            foreach ($module['symlinks'] as $key => $symlink) {
+                if (file_exists($symlink)) {
+                    unlink($symlink);
+                }
             }
         }
 
