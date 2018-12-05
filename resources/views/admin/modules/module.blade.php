@@ -73,7 +73,11 @@
         @if (version_compare($module['version'], $moduleActive->version, '>'))
             <a class="btn btn-success" href="/admin/modules/install?module={{ $moduleName }}">Обновить модуль</a>
         @endif
-        <a class="btn btn-danger" href="/admin/modules/uninstall?module={{ $moduleName }}">Отключить модуль</a>
+        <a class="btn btn-danger" href="/admin/modules/uninstall?module={{ $moduleName }}" onclick="return confirm('Вы действительно хотите отключить модуль?')">Отключить модуль</a>
+
+        @if (isset($module['migrations']))
+            <p class="text-muted font-italic">Внимание! При отключении модуля, будут удалены изменение в БД</p>
+        @endif
     @else
         <a class="btn btn-success" href="/admin/modules/install?module={{ $moduleName }}">Включить модуль</a>
     @endif
