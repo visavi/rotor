@@ -1582,24 +1582,6 @@ function returnUrl($url = null)
 }
 
 /**
- * Возвращает шаблонизатор
- *
- * @return Blade|\Illuminate\View\Factory
- */
-function blade()
-{
-    $blade = new Blade([
-        HOME . '/themes/' . setting('themes') . '/views',
-        RESOURCES . '/views',
-        HOME . '/themes',
-    ], STORAGE . '/caches');
-
-    $blade->compiler()->withoutDoubleEncoding();
-
-    return $blade;
-}
-
-/**
  * Возвращает подключенный шаблон
  *
  * @param  string $view   имя шаблона
@@ -1608,19 +1590,6 @@ function blade()
  */
 function view($view, array $params = []): string
 {
-    return blade()->render($view, $params);
-}
-
-
-/**
- * Возвращает подключенный шаблон
- *
- * @param  string $view   имя шаблона
- * @param  array  $params массив параметров
- * @return string         сформированный код
- */
-/*function view($view, array $params = [])
-{
     $blade = new Blade([
         HOME . '/themes/' . setting('themes') . '/views',
         RESOURCES . '/views',
@@ -1629,8 +1598,13 @@ function view($view, array $params = []): string
 
     $blade->compiler()->withoutDoubleEncoding();
 
+    if (strpos($view, '::') !== false) {
+        [$namespace] = explode('::', $view);
+        $blade->addNamespace($namespace, APP . '/Modules/' . $namespace . '/resources/views');
+    }
+
     return $blade->render($view, $params);
-}*/
+}
 
 /**
  * Сохраняет страницы с ошибками
@@ -2202,7 +2176,13 @@ function translator($fallback = 'en')
  */
 function trans($key, array $replace = [], $locale = null)
 {
-    return translator()->trans($key, $replace, $locale);
+    $translator = translator();
+    if (strpos($key, '::') !== false) {
+        [$namespace] = explode('::', $key);
+        $translator->addNamespace($namespace, APP . '/Modules/' . $namespace . '/resources/lang');
+    }
+
+    return $translator->trans($key, $replace, $locale);
 }
 
 /**
@@ -2216,7 +2196,13 @@ function trans($key, array $replace = [], $locale = null)
  */
 function trans_choice($key, $number, array $replace = [], $locale = null)
 {
-    return translator()->transChoice($key, $number, $replace, $locale);
+    $translator = translator();
+    if (strpos($key, '::') !== false) {
+        [$namespace] = explode('::', $key);
+        $translator->addNamespace($namespace, APP . '/Modules/' . $namespace . '/resources/lang');
+    }
+
+    return $translator->transChoice($key, $number, $replace, $locale);
 }
 
 /**

@@ -32,7 +32,7 @@ class BanditController extends IndexController
      */
     public function index(): string
     {
-        return $this->view('game::bandit/index', ['user' => $this->user]);
+        return view('Game::bandit/index', ['user' => $this->user]);
     }
 
     /**
@@ -277,7 +277,7 @@ class BanditController extends IndexController
 
         $user = $this->user;
 
-        return $this->view('game::bandit/go', compact('num', 'results', 'sum', 'user'));
+        return view('Game::bandit/go', compact('num', 'results', 'sum', 'user'));
     }
 
     /**
@@ -287,6 +287,6 @@ class BanditController extends IndexController
      */
     public function faq(): string
     {
-        return $this->view('game::bandit/faq');
+        return view('Game::bandit/faq');
     }
 }

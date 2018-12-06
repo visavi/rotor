@@ -34,7 +34,7 @@ class BlackjackController extends IndexController
      */
     public function index(): string
     {
-        return $this->view('game::blackjack/index', ['user' => $this->user]);
+        return view('Game::blackjack/index', ['user' => $this->user]);
     }
 
     /**
@@ -152,7 +152,7 @@ class BlackjackController extends IndexController
 
         $user = $this->user;
 
-        return $this->view('game::blackjack/game', compact('user', 'blackjack', 'scores', 'result', 'text'));
+        return view('Game::blackjack/game', compact('user', 'blackjack', 'scores', 'result', 'text'));
     }
 
     /**
@@ -162,7 +162,7 @@ class BlackjackController extends IndexController
      */
     public function rules(): string
     {
-        return $this->view('game::blackjack/rules');
+        return view('Game::blackjack/rules');
     }
 
     /**

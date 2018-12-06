@@ -33,7 +33,7 @@ class ThimbleController extends IndexController
      */
     public function index(): string
     {
-        return $this->view('game::thimbles/index', ['user' => $this->user]);
+        return view('Game::thimbles/index', ['user' => $this->user]);
     }
 
     /**
@@ -43,7 +43,7 @@ class ThimbleController extends IndexController
      */
     public function choice(): string
     {
-        return $this->view('game::thimbles/choice', ['user' => $this->user]);
+        return view('Game::thimbles/choice', ['user' => $this->user]);
     }
 
     /**
@@ -83,6 +83,6 @@ class ThimbleController extends IndexController
 
         $user = $this->user;
 
-        return $this->view('game::thimbles/go', compact('user', 'randThimble', 'thimble', 'result'));
+        return view('Game::thimbles/go', compact('user', 'randThimble', 'thimble', 'result'));
     }
 }

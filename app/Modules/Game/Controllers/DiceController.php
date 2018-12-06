@@ -32,7 +32,7 @@ class DiceController extends IndexController
      */
     public function index(): string
     {
-        return $this->view('game::dice/index', ['user' => $this->user]);
+        return view('Game::dices/index', ['user' => $this->user]);
     }
 
     /**
@@ -73,6 +73,6 @@ class DiceController extends IndexController
 
         $user = $this->user;
 
-        return $this->view('game::dice/go', compact('num', 'result', 'user'));
+        return view('Game::dices/go', compact('num', 'result', 'user'));
     }
 }
