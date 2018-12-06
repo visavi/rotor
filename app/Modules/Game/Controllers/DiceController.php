@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Modules\Game\Controllers;
 
 use App\Models\User;
@@ -30,7 +32,7 @@ class DiceController extends IndexController
      */
     public function index(): string
     {
-        return $this->view()->make('game::dice/index', ['user' => $this->user]);
+        return $this->view('game::dice/index', ['user' => $this->user]);
     }
 
     /**
@@ -71,6 +73,6 @@ class DiceController extends IndexController
 
         $user = $this->user;
 
-        return $this->view()->make('game::dice/go', compact('num', 'result', 'user'));
+        return $this->view('game::dice/go', compact('num', 'result', 'user'));
     }
 }

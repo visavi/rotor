@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Modules\Game\Controllers;
 
 use App\Models\User;
@@ -31,7 +33,7 @@ class ThimbleController extends IndexController
      */
     public function index(): string
     {
-        return $this->view()->make('game::thimbles/index', ['user' => $this->user]);
+        return $this->view('game::thimbles/index', ['user' => $this->user]);
     }
 
     /**
@@ -41,7 +43,7 @@ class ThimbleController extends IndexController
      */
     public function choice(): string
     {
-        return $this->view()->make('game::thimbles/choice', ['user' => $this->user]);
+        return $this->view('game::thimbles/choice', ['user' => $this->user]);
     }
 
     /**
@@ -81,6 +83,6 @@ class ThimbleController extends IndexController
 
         $user = $this->user;
 
-        return $this->view()->make('game::thimbles/go', compact('user', 'randThimble', 'thimble', 'result'));
+        return $this->view('game::thimbles/go', compact('user', 'randThimble', 'thimble', 'result'));
     }
 }

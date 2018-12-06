@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Modules\Game\Controllers;
 
 use App\Models\User;
@@ -30,17 +32,7 @@ class BanditController extends IndexController
      */
     public function index(): string
     {
-        return $this->view()->make('game::bandit/index', ['user' => $this->user]);
-    }
-
-    /**
-     * Правила игры
-     *
-     * @return string
-     */
-    public function faq(): string
-    {
-        return $this->view()->make('game::bandit/faq');
+        return $this->view('game::bandit/index', ['user' => $this->user]);
     }
 
     /**
@@ -285,6 +277,16 @@ class BanditController extends IndexController
 
         $user = $this->user;
 
-        return $this->view()->make('game::bandit/go', compact('num', 'results', 'sum', 'user'));
+        return $this->view('game::bandit/go', compact('num', 'results', 'sum', 'user'));
+    }
+
+    /**
+     * Правила игры
+     *
+     * @return string
+     */
+    public function faq(): string
+    {
+        return $this->view('game::bandit/faq');
     }
 }

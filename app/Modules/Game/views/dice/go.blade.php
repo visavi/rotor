@@ -26,7 +26,7 @@
         <i class="fas fa-trophy"></i> {!! $result !!}
     </div>
 
-    <a class="btn btn-primary" href="/games/dice/go?rand={{ random_int(1000, 99999) }}">Играть</a><br><br>
+    <a class="btn btn-primary" href="/games/dice/go?rand={{ mt_rand(1000, 99999) }}">Играть</a><br><br>
 
     У вас в наличии: {{ plural($user->money, setting('moneyname')) }}<br>
 @stop

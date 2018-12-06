@@ -30,7 +30,7 @@
         <i class="fas fa-trophy"></i> Ваш выигрыш составил: <b>{{ plural($sum, setting('moneyname')) }}</b><br><br>
     @endif
 
-    <a class="btn btn-primary" href="/games/bandit/go?rand={{ random_int(1000, 99999) }}">Играть</a><br><br>
+    <a class="btn btn-primary" href="/games/bandit/go?rand={{ mt_rand(1000, 99999) }}">Играть</a><br><br>
 
     У вас в наличии: {{ plural($user->money, setting('moneyname')) }}<br>
 @stop

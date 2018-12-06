@@ -1606,7 +1606,7 @@ function blade()
  * @param  array  $params массив параметров
  * @return string         сформированный код
  */
-function view($view, array $params = [])
+function view($view, array $params = []): string
 {
     return blade()->render($view, $params);
 }

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Modules\Game\Controllers;
 
 use App\Controllers\BaseController;
@@ -9,11 +11,15 @@ class IndexController extends BaseController
     /**
      * Возвращает шаблонизатор
      *
-     * @return \Illuminate\View\Factory|\Jenssegers\Blade\Blade
+     * @param string $view
+     * @param array  $params
+     * @return string
      */
-    protected function view()
+    protected function view(string $view, array $params = []): string
     {
-        return blade()->addNamespace('game', APP . '/Modules/Game/views');
+        $blade = blade()->addNamespace('game', APP . '/Modules/Game/views');
+
+        return $blade->make($view, $params)->render();
     }
 
     /**
@@ -21,6 +27,6 @@ class IndexController extends BaseController
      */
     public function index(): string
     {
-        return $this->view()->make('game::index');
+        return $this->view('game::index');
     }
 }
