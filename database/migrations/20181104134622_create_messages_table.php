@@ -15,7 +15,7 @@ class CreateMessagesTable extends AbstractMigration
             ->addColumn('author_id', 'integer')
             ->addColumn('text', 'text', ['null' => true])
             ->addColumn('type', 'enum', ['values' => ['in', 'out']])
-            ->addColumn('read', 'boolean', ['default' => 0])
+            ->addColumn('reading', 'boolean', ['default' => 0])
             ->addColumn('created_at', 'integer')
             ->addIndex(['user_id', 'author_id'], ['name' => 'user_id'])
             ->addIndex('created_at')
