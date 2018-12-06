@@ -2195,28 +2195,28 @@ function translator($fallback = 'en')
 /**
  * Translate the given message.
  *
- * @param  string  $id
+ * @param  string  $key
  * @param  array   $replace
  * @param  string  $locale
  * @return string
  */
-function trans($id, array $replace = [], $locale = null)
+function trans($key, array $replace = [], $locale = null)
 {
-    return translator()->trans($id, $replace, $locale);
+    return translator()->trans($key, $replace, $locale);
 }
 
 /**
  * Translates the given message based on a count.
  *
- * @param  string  $id
+ * @param  string  $key
  * @param  int|array|\Countable  $number
  * @param  array   $replace
  * @param  string  $locale
  * @return string
  */
-function trans_choice($id, $number, array $replace = [], $locale = null)
+function trans_choice($key, $number, array $replace = [], $locale = null)
 {
-    return translator()->transChoice($id, $number, $replace, $locale);
+    return translator()->transChoice($key, $number, $replace, $locale);
 }
 
 /**
