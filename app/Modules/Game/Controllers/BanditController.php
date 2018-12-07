@@ -14,7 +14,7 @@ class BanditController extends IndexController
     private $user;
 
     /**
-     * BanditController constructor.
+     * Controller constructor.
      */
     public function __construct()
     {

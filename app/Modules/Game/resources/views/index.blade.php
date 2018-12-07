@@ -18,4 +18,5 @@
     <i class="far fa-circle fa-lg text-muted"></i> <a href="/games/dices">{{ trans('Game::games.dices') }}</a><br>
     <i class="far fa-circle fa-lg text-muted"></i> <a href="/games/thimbles">{{ trans('Game::games.thimbles') }}</a><br>
     <i class="far fa-circle fa-lg text-muted"></i> <a href="/games/bandit">{{ trans('Game::games.bandit') }}</a><br>
+    <i class="far fa-circle fa-lg text-muted"></i> <a href="/games/bandit">Угадай число</a><br>
 @stop

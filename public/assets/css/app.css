@@ -202,6 +202,10 @@ blockquote small:before {
   border-radius: 50%;
 }
 
+.carousel-control-next, .carousel-control-prev {
+    width: auto;
+}
+
 .carousel-indicators li {
   box-shadow: 0 1px 0.4rem rgba(0, 0, 0, 0.5);
 }

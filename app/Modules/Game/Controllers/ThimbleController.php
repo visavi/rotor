@@ -15,7 +15,7 @@ class ThimbleController extends IndexController
     private $user;
 
     /**
-     * ThimbleController constructor.
+     * Controller constructor.
      */
     public function __construct()
     {

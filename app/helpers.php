@@ -33,6 +33,7 @@ use Curl\Curl;
 use Illuminate\Database\Capsule\Manager as DB;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
+use Intervention\Image\Constraint;
 use Intervention\Image\ImageManagerStatic as Image;
 use Jenssegers\Blade\Blade;
 use ReCaptcha\ReCaptcha;
@@ -1394,7 +1395,7 @@ function resizeProcess($path, array $params = [])
     if (! file_exists(UPLOADS . '/thumbnails/' . $thumb)) {
 
         $img = Image::make(HOME . $path);
-        $img->resize($params['width'], $params['width'], function ($constraint) {
+        $img->resize($params['width'], $params['width'], function (Constraint $constraint) {
             $constraint->aspectRatio();
             $constraint->upsize();
         });
@@ -1590,6 +1591,7 @@ function returnUrl($url = null)
  */
 function view($view, array $params = []): string
 {
+
     $blade = new Blade([
         HOME . '/themes/' . setting('themes') . '/views',
         RESOURCES . '/views',
@@ -1600,6 +1602,7 @@ function view($view, array $params = []): string
 
     if (strpos($view, '::') !== false) {
         [$namespace] = explode('::', $view);
+        /** @var Illuminate\View\Factory $blade */
         $blade->addNamespace($namespace, APP . '/Modules/' . $namespace . '/resources/views');
     }
 
@@ -2133,10 +2136,10 @@ function imageBase64($path, array $params = [])
  * Выводит прогресс-бар
  *
  * @param  int    $percent
- * @param  bool   $title
+ * @param  string $title
  * @return string
  */
-function progressBar($percent, $title = false)
+function progressBar($percent, $title = null)
 {
     if (! $title) {
         $title = $percent . '%';

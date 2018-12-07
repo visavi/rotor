@@ -14,7 +14,7 @@ class DiceController extends IndexController
     private $user;
 
     /**
-     * DiceController constructor.
+     * Controller constructor.
      */
     public function __construct()
     {
