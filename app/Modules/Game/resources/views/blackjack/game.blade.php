@@ -21,7 +21,7 @@
     <b>Ваши карты:</b><br>
 
     @foreach($blackjack['cards'] as $card)
-        <img src="/assets/modules/games/cards/{{ $card }}.gif" alt="image">
+        <img src="/assets/modules/games/cards/{{ $card }}.png" alt="image">
     @endforeach
 
     <br>{{ plural($scores['user'], ['очко', 'очка', 'очков']) }}<br><br>
@@ -31,7 +31,7 @@
         <b>Карты банкира:</b><br>
 
         @foreach($blackjack['bankercards'] as $card)
-            <img src="/assets/modules/games/cards/{{ $card }}.gif" alt="image">
+            <img src="/assets/modules/games/cards/{{ $card }}.png" alt="image">
         @endforeach
 
         <br>{{ plural($scores['banker'], ['очко', 'очка', 'очков']) }}<br>
@@ -50,7 +50,7 @@
     @else
         <b>Карты банкира:</b><br>
         @foreach($blackjack['bankercards'] as $card)
-            <img src="/assets/modules/games/cards/0.gif" alt="image">
+            <img src="/assets/modules/games/cards/0.png" alt="image">
         @endforeach
 
         <div class="my-3">На кону: {{ plural($blackjack['bet'] * 2, setting('moneyname')) }}</div>

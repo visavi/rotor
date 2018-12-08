@@ -1,7 +1,7 @@
 @extends('layout')
 
 @section('title')
-    Кости
+    Ваш ход
 @stop
 
 @section('content')

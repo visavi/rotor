@@ -176,17 +176,17 @@ class BlackjackController extends IndexController
         $score = [];
 
         foreach ($cards as $card) {
-            if ($card > 32) {
+            if ($card > 48) {
                 $score[] =  11;
                 continue;
             }
 
-            if ($card > 20) {
-                $score[] =  (int) (($card - 1) / 4) - 3;
+            if ($card > 36) {
+                $score[] = (int) (($card - 1) / 4) - 7;
                 continue;
             }
 
-            $score[] = (int) (($card - 1) / 4) + 6;
+            $score[] = (int) (($card - 1) / 4) + 2;
         }
 
         return array_sum($score);
@@ -200,10 +200,10 @@ class BlackjackController extends IndexController
      */
     private function takeCard($case): array
     {
-        $rand = mt_rand(15, 17);
+        $rand = mt_rand(16, 18);
 
         if (empty($_SESSION['blackjack']['deck'])) {
-            $_SESSION['blackjack']['deck'] = array_combine(range(1, 36), range(1, 36));
+            $_SESSION['blackjack']['deck'] = array_combine(range(1, 52), range(1, 52));
         }
 
         if (empty($_SESSION['blackjack']['cards'])) {

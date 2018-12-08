@@ -23,4 +23,5 @@ $r->addGroup('/games', function (RouteCollector $r) {
     $r->addRoute(['GET', 'POST'], '/blackjack/bet', [App\Modules\Game\Controllers\BlackjackController::class, 'bet']);
 
     $r->get('/guess', [App\Modules\Game\Controllers\GuessNumberController::class, 'index']);
+    $r->addRoute(['GET', 'POST'], '/guess/go', [App\Modules\Game\Controllers\GuessNumberController::class, 'go']);
 });
