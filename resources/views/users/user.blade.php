@@ -146,17 +146,16 @@
     <div class="alert alert-info">
         <i class="fa fa-sticky-note"></i> <a href="/walls/{{ $user->login }}">Стена сообщений</a> ({{ $user->getCountWall() }})<br>
 
+        @if (!empty($user->site))
+            <i class="fa fa-home"></i> <a href="{{ $user->site }}">Перейти на сайт {{ $user->login }}</a><br>
+        @endif
+
         @if ($user->login !== getUser('login'))
             <i class="fa fa-address-book"></i> Добавить в
             <a href="/contacts?user={{ $user->login }}">контакт</a> /
             <a href="/ignores?user={{ $user->login }}">игнор</a><br>
             <i class="fa fa-envelope"></i> <a href="/messages/talk/{{ $user->login }}">Отправить сообщение</a><br>
-
             <i class="fa fa-money-bill-alt"></i> <a href="/transfers?user={{ $user->login }}">Перечислить денег</a><br>
-
-            @if (!empty($user->site))
-                <i class="fa fa-home"></i> <a href="{{ $user->site }}">Перейти на сайт {{ $user->login }}</a><br>
-            @endif
 
             @if (isAdmin('moder'))
                 @if (setting('invite'))
@@ -170,9 +169,9 @@
                 <i class="fa fa-wrench"></i> <a href="/admin/users/edit?user={{ $user->login }}">Редактировать</a><br>
             @endif
         @else
-        <i class="fa fa-user-circle"></i> <a href="/profile">Мой профиль</a><br>
-        <i class="fa fa-cog"></i> <a href="/accounts">Мои данные</a><br>
-        <i class="fa fa-wrench"></i> <a href="/settings">Настройки</a><br>
+            <i class="fa fa-user-circle"></i> <a href="/profile">Мой профиль</a><br>
+            <i class="fa fa-cog"></i> <a href="/accounts">Мои данные</a><br>
+            <i class="fa fa-wrench"></i> <a href="/settings">Настройки</a><br>
         @endif
 
     </div>
