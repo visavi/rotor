@@ -18,5 +18,6 @@
     <i class="far fa-circle fa-lg text-muted"></i> <a href="/games/dices">{{ trans('Game::games.dices') }}</a><br>
     <i class="far fa-circle fa-lg text-muted"></i> <a href="/games/thimbles">{{ trans('Game::games.thimbles') }}</a><br>
     <i class="far fa-circle fa-lg text-muted"></i> <a href="/games/bandit">{{ trans('Game::games.bandit') }}</a><br>
-    <i class="far fa-circle fa-lg text-muted"></i> <a href="/games/guess">Угадай число</a><br>
+    <i class="far fa-circle fa-lg text-muted"></i> <a href="/games/guess">{{ trans('Game::games.guess') }}</a><br>
+    <i class="far fa-circle fa-lg text-muted"></i> <a href="/games/safe">{{ trans('Game::games.safe') }}</a><br>
 @stop

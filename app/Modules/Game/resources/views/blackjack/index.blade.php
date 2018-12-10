@@ -15,7 +15,11 @@
 
     <h1>21 (Очко)</h1>
 
-    <img src="/assets/modules/games/cards/18.png" alt="image"> <img src="/assets/modules/games/cards/34.png" alt="image"><br><br>
+    <img src="/assets/modules/games/cards/44.png" alt="image">
+    <img src="/assets/modules/games/cards/18.png" alt="image">
+    <img src="/assets/modules/games/cards/27.png" alt="image">
+    <img src="/assets/modules/games/cards/45.png" alt="image">
+    <br><br>
 
     @if (empty($_SESSION['blackjack']['bet']))
         <div class="form">
