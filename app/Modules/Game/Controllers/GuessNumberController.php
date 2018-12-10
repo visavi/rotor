@@ -4,10 +4,11 @@ declare(strict_types=1);
 
 namespace App\Modules\Game\Controllers;
 
+use App\Classes\Validator;
 use App\Models\User;
 use Illuminate\Http\Request;
 
-class GuessNumberController extends IndexController
+class GuessNumberController extends \App\Controllers\BaseController
 {
     /**
      * @var User
@@ -29,62 +30,72 @@ class GuessNumberController extends IndexController
     /**
      * Угадай число
      *
+     * @param Request $request
      * @return string
      */
-    public function index(): string
+    public function index(Request $request): string
     {
+        $newGame = int($request->input('new'));
+
+        if ($newGame) {
+            unset($_SESSION['guess']);
+        }
+
         return view('Game::guess/index', ['user' => $this->user]);
     }
 
     /**
      * Попытка
      *
-     * @param Request $request
+     * @param Request   $request
+     * @param Validator $validator
      * @return string
      */
-    public function go(Request $request): string
+    public function go(Request $request, Validator $validator): string
     {
-        $guess = int($request->input('guess'));
+        $token       = check($request->input('token'));
+        $guessNumber = int($request->input('guess'));
 
+        $validator->equal($token, $_SESSION['token'], 'Неверный идентификатор сессии, повторите действие!')
+            ->between($guessNumber, 1, 100, ['guess' => 'Необходимо указать число!'])
+            ->gte($this->user->money, 3, ['guess' => 'У вас недостаточно денег для игры!']);
 
-
-        if ($this->user->money < 5) {
-            abort('default', 'Вы не можете играть! У вас недостаточно средств!');
+        if (! $validator->isValid()) {
+            setInput($request->all());
+            setFlash('danger', $validator->getErrors());
+            redirect('/games/guess');
         }
 
-        if (empty($_SESSION['guess']['hill'])) {
-            $_SESSION['guess']['hill']  = mt_rand(1, 100);
-            $_SESSION['guess']['count'] = 0;
+        if (empty($_SESSION['guess']['number'])) {
+            $_SESSION['guess']['count']  = 0;
+            $_SESSION['guess']['number'] = mt_rand(1, 100);
         }
- var_dump($_SESSION['guess']);
+
         $_SESSION['guess']['count']++;
-        $this->user->decrement('money', 5);
+        $this->user->decrement('money', 3);
+        $hint = null;
 
-        if ($guess !== $_SESSION['guess']['hill']) {
-            if ($_SESSION['guess']['count'] < 5) {
+        $guess = $_SESSION['guess'];
 
-                echo '<b>Попыток: '.$_SESSION['guess']['count'].'</b><br />';
-
-                if ($guess > $_SESSION['guess']['hill']) {
-                    echo $guess.' — это большое число<br /><i class="fa fa-minus-circle"></i> Введите меньше<br /><br />';
-                }
-                if ($guess < $_SESSION['guess']['hill']) {
-                    echo $guess.' — это маленькое число<br /><i class="fa fa-plus-circle"></i> Введите больше<br /><br />';
+        if ($guessNumber !== $guess['number']) {
+            if ($guess['count'] < 5) {
+                if ($guessNumber > $guess['number']) {
+                    $hint = 'большое число, введите меньше!';
                 }
 
-                $count_pop = 5 - $_SESSION['guess']['count'] ;
-
-                echo 'Осталось попыток: <b>'.$count_pop.'</b><br />';
-
+                if ($guessNumber < $guess['number']) {
+                    $hint = 'маленькое число, введите больше!';
+                }
+            } else {
+                unset($_SESSION['guess']);
             }
         } else {
-            $this->user->increment('money', 100);
-
-
-
             unset($_SESSION['guess']);
+            $this->user->increment('money', 100);
         }
 
-        return view('Game::guess/go', ['user' => $this->user]);
+        $user = $this->user;
+
+        return view('Game::guess/go', compact('user', 'guess', 'hint', 'guessNumber'));
     }
 }

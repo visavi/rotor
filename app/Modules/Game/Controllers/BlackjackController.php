@@ -8,7 +8,7 @@ use App\Classes\Validator;
 use App\Models\User;
 use Illuminate\Http\Request;
 
-class BlackjackController extends IndexController
+class BlackjackController extends \App\Controllers\BaseController
 {
     /**
      * @var User
@@ -55,7 +55,7 @@ class BlackjackController extends IndexController
 
         $validator->equal($token, $_SESSION['token'], 'Неверный идентификатор сессии, повторите действие!')
             ->gt($bet, 0, ['bet' => 'Вы не указали ставку!'])
-            ->gte($this->user->money, $bet, ['bet' => 'У вас недостаточно денег для ставки!']);
+            ->gte($this->user->money, $bet, ['bet' => 'У вас недостаточно денег для игры!']);
 
 
         if ($validator->isValid()) {

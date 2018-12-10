@@ -6,7 +6,7 @@ namespace App\Modules\Game\Controllers;
 
 use App\Models\User;
 
-class BanditController extends IndexController
+class BanditController extends \App\Controllers\BaseController
 {
     /**
      * @var User

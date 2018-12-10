@@ -7,7 +7,7 @@ namespace App\Modules\Game\Controllers;
 use App\Models\User;
 use Illuminate\Http\Request;
 
-class ThimbleController extends IndexController
+class ThimbleController extends \App\Controllers\BaseController
 {
     /**
      * @var User

@@ -6,7 +6,7 @@ namespace App\Modules\Game\Controllers;
 
 use App\Models\User;
 
-class DiceController extends IndexController
+class DiceController extends \App\Controllers\BaseController
 {
     /**
      * @var User

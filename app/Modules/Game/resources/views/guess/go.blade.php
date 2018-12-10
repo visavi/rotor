@@ -16,9 +16,26 @@
 
     <h1>Ваш ход</h1>
 
-    <b>Введите число от 1 до 100</b><br><br>
+    @if($guessNumber !== $guess['number'])
 
-    @if (1 === 1)
+        @if ($guess['count'] < 5)
+            <span class="badge badge-info">{{ $guessNumber }}</span> — {!! $hint !!}<br><br>
+
+            Использовано попыток: <b>{{ $guess['count'] }} из 5</b><br><br>
+        @else
+            <i class="fa fa-times"></i> <b class="text-danger">Поражение! Вы не угадали число!</b><br>
+            Было загадано: {{ $guess['number'] }}<br><br>
+
+            <b>Начните новую игру</b><br>
+        @endif
+    @else
+        <b class="text-success">Поздравляем!!! Вы угадали число: {{ $guess['number'] }}</b><br>
+        Ваш выигрыш составил {{ plural(100, setting('moneyname')) }}<br><br>
+
+        <b>Начните новую игру</b><br>
+    @endif
+
+    <b>Введите число от 1 до 100</b><br>
     <div class="form">
         <form action="/games/guess/go" method="post">
             <input type="hidden" name="token" value="{{ $_SESSION['token'] }}">
@@ -33,16 +50,7 @@
         </form>
     </div><br>
 
-
-
-    echo '<i class="fa fa-times"></i> <b>Вы проигали потому что, не отгадали число за 5 попыток</b><br />';
-    echo 'Было загадано число: '.$_SESSION['hill'].'<br /><br />';
-
-
-    @else
-        echo '<b>Поздравляем!!! Вы угадали число '.$guess.'</b><br />';
-        echo 'Ваш выигрыш составил 100<br /><br />';
-    @endif
-
     У вас в наличии: {{ plural($user->money, setting('moneyname')) }}<br>
+
+    <i class="fa fa-arrow-circle-up"></i> <a href="/games/guess?new=1">Начать заново</a><br>
 @stop
