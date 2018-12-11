@@ -24,4 +24,7 @@ $r->addGroup('/games', function (RouteCollector $r) {
 
     $r->get('/guess', [App\Modules\Game\Controllers\GuessNumberController::class, 'index']);
     $r->addRoute(['GET', 'POST'], '/guess/go', [App\Modules\Game\Controllers\GuessNumberController::class, 'go']);
+
+    $r->get('/safe', [App\Modules\Game\Controllers\SafeController::class, 'index']);
+    $r->addRoute(['GET', 'POST'], '/safe/go', [App\Modules\Game\Controllers\SafeController::class, 'go']);
 });
