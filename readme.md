@@ -1,4 +1,4 @@
-Rotor 7.4
+Rotor
 =========
 
 [![Php Version](https://img.shields.io/badge/php-%3E%3D%207.1.3-brightgreen.svg)](https://php.net)
