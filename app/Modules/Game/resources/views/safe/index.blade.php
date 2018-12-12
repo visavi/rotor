@@ -17,12 +17,13 @@
 
     У вас в наличии: {{ plural($user->money, setting('moneyname')) }}<br><br>
 
-    {!! $user->getProfile(null, false) !!}, не торопись! Просто хорошо подумай. <br>
+    {!! $user->getProfile(null, false) !!}, не торопись! Просто хорошо подумай<br>
     <br><img src="/assets/modules/games/safe/safe-closed.png" alt="сейф"><br>
 
     Всё готово для совершения взлома! Введите комбинацию цифр и нажмите ломать сейф!<br><br>
 
     Комбинация сейфа:<br>
+    <span class="badge badge-info">-</span>
     <span class="badge badge-info">-</span>
     <span class="badge badge-info">-</span>
     <span class="badge badge-info">-</span>
@@ -44,6 +45,9 @@
                 <div class="col-1">
                     <input class="form-control" name="code3" maxlength="1" value="{{ getInput('code3') }}" required>
                 </div>
+                <div class="col-1">
+                    <input class="form-control" name="code4" maxlength="1" value="{{ getInput('code4') }}" required>
+                </div>
             </div>
             <button class="btn btn-primary">Ломать сейф</button>
         </form>
@@ -53,6 +57,6 @@
     В сейфе тебя ждёт: {{ plural(1000, setting('moneyname')) }}<br>
     За попытку взлома ты заплатишь {{ plural(100, setting('moneyname')) }}<br>
     Платишь 1 paз зa 5 попыток. Ну это чтобы купить себе необходимое для взлома оборудование.<br>
-    У тебя будет только 5 попыток чтобы подобрать код из 4-х цифр.<br>
+    У тебя будет только 5 попыток чтобы подобрать код из 5-х цифр.<br>
     Если тебя это устраивает, то ВПЕРЁД!<br>
 @stop

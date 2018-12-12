@@ -16,43 +16,72 @@
 
     <h1>Ваш ход</h1>
 
-    @if ($hack[0] === $safe[0] && $hack[1] === $safe[1] && $hack[2] === $safe[2] && $hack[3] === $safe[3]) {
-    <img src="/assets/img/safe/safe-open.png" alt="сейф"/><br>';
-    <br>ПОЗДРАВЛЯЮ! СЕЙФ УСПЕШНО ВЗЛОМАН!<br>
-    <font color="red">НА ВАШ СЧЁТ ПЕРЕВЕДЕНЫ 1000$</font><br>';
+    Комбинация сейфа:<br>
+    <span class="badge badge-info">{{ $hack[0] }}</span>
+    <span class="badge badge-info">{{ $hack[1] }}</span>
+    <span class="badge badge-info">{{ $hack[2] }}</span>
+    <span class="badge badge-info">{{ $hack[3] }}</span>
+    <span class="badge badge-info">{{ $hack[4] }}</span>
+    <br><br>
 
-    DB::run() -> query("UPDATE `users` SET `money`=`money`+? WHERE `login`=? LIMIT 1;", [$config['safesum'], $log]);
-    unset($_SESSION['go'], $_SESSION['try']);
+    @if (implode($safe['cipher']) === implode($hack))
+        <img src="/assets/modules/games/safe/safe-open.png" alt="сейф"><br><br>
+        ПОЗДРАВЛЯЮ! СЕЙФ УСПЕШНО ВЗЛОМАН!<br>
+        НА ВАШ СЧЁТ ПЕРЕВЕДЕНЫ {{ plural(1000, setting('moneyname')) }}<br><br>
 
-    echo'&raquo; <a href="/games/safe">Ещё взломать?</a><br><br>';
+        <a href="/games/safe">Ещё взломать?</a><br><br>
     @else
-        <div class="form">
-            <form action="/games/safe/go" method="post">
-                <input type="hidden" name="token" value="{{ $_SESSION['token'] }}">
-                <div class="form-group row{{ hasError('bet') }}">
-                    <div class="col-1">
-                        <input class="form-control" name="code0" maxlength="1" value="{{ getInput('code0', $hack[0]) }}" required>
+        @if ($safe['try'])
+            {!! $user->getProfile(null, false) !!}, не торопись! Просто хорошо подумай<br>
+            Попыток осталось: {{ $safe['try'] }}<br>
+
+            <img src="/assets/modules/games/safe/safe-closed.png" alt="сейф"><br>
+
+            <div class="form">
+                <form action="/games/safe/go" method="post">
+                    <input type="hidden" name="token" value="{{ $_SESSION['token'] }}">
+                    <div class="form-group row{{ hasError('bet') }}">
+                        <div class="col-1">
+                            <input class="form-control" name="code0" maxlength="1" value="{{ getInput('code0', $hack[0] === $safe['cipher'][0] ? $safe['cipher'][0] : '') }}" required>
+                        </div>
+                        <div class="col-1">
+                            <input class="form-control" name="code1" maxlength="1" value="{{ getInput('code1', $hack[1] === $safe['cipher'][1] ? $safe['cipher'][1] : '') }}" required>
+                        </div>
+                        <div class="col-1">
+                            <input class="form-control" name="code2" maxlength="1" value="{{ getInput('code2', $hack[2] === $safe['cipher'][2] ? $safe['cipher'][2] : '') }}" required>
+                        </div>
+                        <div class="col-1">
+                            <input class="form-control" name="code3" maxlength="1" value="{{ getInput('code3', $hack[3] === $safe['cipher'][3] ? $safe['cipher'][3] : '') }}" required>
+                        </div>
+                        <div class="col-1">
+                            <input class="form-control" name="code4" maxlength="1" value="{{ getInput('code4', $hack[4] === $safe['cipher'][4] ? $safe['cipher'][4] : '') }}" required>
+                        </div>
                     </div>
-                    <div class="col-1">
-                        <input class="form-control" name="code1" maxlength="1" value="{{ getInput('code1', $hack[1]) }}" required>
-                    </div>
-                    <div class="col-1">
-                        <input class="form-control" name="code2" maxlength="1" value="{{ getInput('code2', $hack[2]) }}" required>
-                    </div>
-                    <div class="col-1">
-                        <input class="form-control" name="code3" maxlength="1" value="{{ getInput('code3', $hack[3]) }}" required>
-                    </div>
-                </div>
-                <button class="btn btn-primary">Ломать сейф</button>
-            </form>
-        </div><br>
+                    <button class="btn btn-primary">Ломать сейф</button>
+                </form>
+            </div><br>
+        @else
+            <img src="/assets/modules/games/safe/safe-closed.png" alt="сейф"><br>
+
+            Шифр был:<br/>
+            <span class="badge badge-info">{{ $safe['cipher'][0] }}</span>
+            <span class="badge badge-info">{{ $safe['cipher'][1] }}</span>
+            <span class="badge badge-info">{{ $safe['cipher'][2] }}</span>
+            <span class="badge badge-info">{{ $safe['cipher'][3] }}</span>
+            <span class="badge badge-info">{{ $safe['cipher'][4] }}</span>
+            <br><br>
+            Попытки закончились. A взломать сейф так и не получилось...<br>
+            Возможно, в другой раз тебе повезёт больше...<br><br>
+
+            <a href="/games/safe">Ещё разок!</a><br><br>
+        @endif
     @endif
 
     У вас в наличии: {{ plural($user->money, setting('moneyname')) }}<br>
 
     <hr>
     Справка:<br>
-    1. символ <b>-</b> означает, что введённая цифра отсутствует в коде сейфа.<br>
-    2. символ <b>*</b> означает, что цифра, которую вы ввели есть, но стоит на другом месте в шифре сейфа.<br>
-    3. символ <b>х</b> означает, что хотябы одна из угаданных вами цифр присутствует в шифре сейфа, и стоит на месте <b>х</b>.<br><br>';
+    1. символ <b>-</b> означает, что введённая цифра отсутствует в коде сейфа<br>
+    2. символ <b>*</b> означает, что цифра, которую вы ввели есть, но стоит на другом месте в шифре сейфа<br>
+    3. символ <b>х</b> означает, что хотябы одна из угаданных вами цифр присутствует в шифре сейфа, и стоит на месте <b>х</b><br>
 @stop
