@@ -301,9 +301,10 @@ $wrap->setOption('environment', 'default');
             <?php if ($request->isMethod('post')): ?>
 
                 <?php
-                if (strlen($login) <= 20 && strlen($login) >= 3) {
+                $length = strlen($login);
+                if ($length <= 20 && $length >= 3) {
                 if (preg_match('|^[a-z0-9\-]+$|i', $login)) {
-                if ($password == $password2) {
+                if ($password === $password2) {
                 if (preg_match('#^([a-z0-9_\-\.])+\@([a-z0-9_\-\.])+(\.([a-z0-9])+)+$#', $email)) {
 
                 // Проверка логина на существование

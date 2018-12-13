@@ -16,15 +16,15 @@
         </ol>
     </nav>
 
-    <?php $active = ($type == 'post') ? 'success' : 'light'; ?>
+    <?php $active = ($type === 'post') ? 'success' : 'light'; ?>
     <a href="/admin/spam?type=post" class="badge badge-{{ $active }}">Форум {{ $total['post'] }}</a>
-    <?php $active = ($type == 'guest') ? 'success' : 'light'; ?>
+    <?php $active = ($type === 'guest') ? 'success' : 'light'; ?>
     <a href="/admin/spam?type=guest" class="badge badge-{{ $active }}">Гостевая {{ $total['guest'] }}</a>
-    <?php $active = ($type == 'message') ? 'success' : 'light'; ?>
+    <?php $active = ($type === 'message') ? 'success' : 'light'; ?>
     <a href="/admin/spam?type=message" class="badge badge-{{ $active }}">Приват {{ $total['message'] }}</a>
-    <?php $active = ($type == 'wall') ? 'success' : 'light'; ?>
+    <?php $active = ($type === 'wall') ? 'success' : 'light'; ?>
     <a href="/admin/spam?type=wall" class="badge badge-{{ $active }}">Стена {{ $total['wall'] }}</a>
-    <?php $active = ($type == 'comment') ? 'success' : 'light'; ?>
+    <?php $active = ($type === 'comment') ? 'success' : 'light'; ?>
     <a href="/admin/spam?type=comment" class="badge badge-{{ $active }}">Комментарии {{ $total['comment'] }}</a>
     <br><br>
 

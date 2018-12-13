@@ -31,11 +31,11 @@
 
                     @foreach ($forums as $data)
 
-                        @if ($data->id == $forum->id)
+                        @if ($data->id === $forum->id)
                             @continue
                         @endif
 
-                        <option value="{{ $data->id }}"{{ ($inputParent == $data->id && ! $data->closed) ? ' selected' : '' }}{{ $data->closed ? ' disabled' : '' }}>{{ $data->title }}</option>
+                        <option value="{{ $data->id }}"{{ ($inputParent === $data->id && ! $data->closed) ? ' selected' : '' }}{{ $data->closed ? ' disabled' : '' }}>{{ $data->title }}</option>
                     @endforeach
 
                 </select>

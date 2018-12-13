@@ -30,7 +30,7 @@
 
     <h1>{{ $forum->title }}</h1>
 
-    @if ($forum->children->isNotEmpty() && $page->current == 1)
+    @if ($forum->children->isNotEmpty() && $page->current === 1)
         <div class="act">
 
         @foreach ($forum->children as $child)

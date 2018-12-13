@@ -24,14 +24,14 @@
         @foreach ($posts as $post)
             <div class="post">
                 <div class="b">
-                    @if (getUser('id') != $post->user_id)
+                    @if (getUser('id') !== $post->user_id)
                         <div class="float-right">
                             <a href="#" onclick="return postReply(this)" data-toggle="tooltip" title="Ответить"><i class="fa fa-reply text-muted"></i></a>
                             <a href="#" onclick="return postQuote(this)" data-toggle="tooltip" title="Цитировать"><i class="fa fa-quote-right text-muted"></i></a>
                         </div>
                     @endif
 
-                    @if (getUser('id') == $post->user_id && $post->created_at + 600 > SITETIME)
+                    @if ($post->created_at + 600 > SITETIME && getUser('id') === $post->user_id)
                         <div class="float-right">
                             <a href="/admin/chats/edit/{{ $post->id }}?page={{ $page->current }}" title="Редактировать"><i class="fas fa-pencil-alt text-muted"></i></a>
                         </div>

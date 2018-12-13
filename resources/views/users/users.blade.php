@@ -24,7 +24,7 @@
                     {!! $data->getOnline() !!}
                 </div>
 
-                @if ($user == $data->login)
+                @if ($user === $data->login)
                     {{ ($page->offset + $key + 1) }}. <b>{!! $data->getProfile('#ff0000') !!}</b>
                 @else
                     {{ ($page->offset + $key + 1) }}. <b>{!! $data->getProfile() !!}</b>

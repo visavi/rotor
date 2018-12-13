@@ -18,7 +18,7 @@
 
                 {{ ($page->offset + $key + 1) }}.
 
-                @if ($user == $data->login)
+                @if ($user === $data->login)
                     <b>{!! $data->getProfile('#ff0000') !!}</b>
                 @else
                     <b>{!! $data->getProfile() !!}</b>

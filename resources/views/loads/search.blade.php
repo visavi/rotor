@@ -17,6 +17,8 @@
 
     <div class="form">
         <form action="/loads/search">
+            <input type="hidden" name="cid" value="{{ $cid }}">
+
             <div class="form-group{{ hasError('find') }}">
                 <label for="inputFind">Запрос</label>
                 <input name="find" class="form-control" id="inputFind" maxlength="50" placeholder="Введите запрос" value="{{ getInput('find') }}" required>
@@ -25,20 +27,18 @@
 
             <div class="form-group{{ hasError('section') }}">
                 <label for="inputSection">Раздел</label>
-                <?php $inputSection = getInput('section', $cid); ?>
+                <?php $inputSection = (int) getInput('section', $cid); ?>
 
                 <select class="form-control" id="inputSection" name="section">
                     <option value="0">Не имеет значения</option>
 
                     @foreach ($categories as $data)
-                        <?php $selected = ($inputSection == $data->id) ? ' selected' : ''; ?>
-
+                        <?php $selected = ($inputSection === $data->id) ? ' selected' : ''; ?>
                         <option value="{{ $data->id }}"{{ $selected }}>{{ $data->name }}</option>
 
                         @if ($data->children)
                             @foreach($data->children as $datasub)
-                                <?php $selected = ($inputSection == $datasub->id) ? ' selected' : ''; ?>
-
+                                <?php $selected = ($inputSection === $datasub->id) ? ' selected' : ''; ?>
                                 <option value="{{ $datasub->id }}"{{ $selected }}>– {{ $datasub->name }}</option>
                             @endforeach
                         @endif
@@ -49,42 +49,33 @@
             </div>
 
             Искать:<br>
-            <?php $inputWhere = getInput('where'); ?>
-            <div class="radio">
-                <label>
-                    <input type="radio" name="where" value="0"{{ $inputWhere == 0 ? ' checked' : '' }}>
-                    В названии
-                </label>
+            <?php $inputWhere = (int) getInput('where'); ?>
+            <div class="custom-control custom-radio">
+                <input class="custom-control-input" type="radio" id="inputWhere0" name="where" value="0"{{ $inputWhere === 0 ? ' checked' : '' }}>
+                <label class="custom-control-label" for="inputWhere0">В названии</label>
             </div>
-
-            <div class="radio">
-                <label>
-                    <input type="radio" name="where" value="1"{{ $inputWhere == 1 ? ' checked' : '' }}>
-                    В описании
-                </label>
+            <div class="custom-control custom-radio">
+                <input class="custom-control-input" type="radio" id="inputWhere1" name="where" value="1"{{ $inputWhere === 1 ? ' checked' : '' }}>
+                <label class="custom-control-label" for="inputWhere1">В описании</label>
             </div>
 
             Тип запроса:<br>
-            <?php $inputType = getInput('type'); ?>
-            <div class="radio">
-                <label>
-                    <input type="radio" name="type" value="0"{{ $inputType == 0 ? ' checked' : '' }}>
-                    И
-                </label>
+            <?php $inputType = (int) getInput('type'); ?>
+            <div class="form-group{{ hasError('type') }}">
+                <div class="custom-control custom-radio">
+                    <input class="custom-control-input" type="radio" id="inputType0" name="type" value="0"{{ $inputType === 0 ? ' checked' : '' }}>
+                    <label class="custom-control-label" for="inputType0">И</label>
+                </div>
+                <div class="custom-control custom-radio">
+                    <input class="custom-control-input" type="radio" id="inputType1" name="type" value="1"{{ $inputType === 1 ? ' checked' : '' }}>
+                    <label class="custom-control-label" for="inputType1">Или</label>
+                </div>
+                <div class="custom-control custom-radio">
+                    <input class="custom-control-input" type="radio" id="inputType2" name="type" value="2"{{ $inputType === 2 ? ' checked' : '' }}>
+                    <label class="custom-control-label" for="inputType2">Полный</label>
+                </div>
+                {!! textError('type') !!}
             </div>
-            <div class="radio">
-                <label>
-                    <input type="radio" name="type" value="1"{{ $inputType == 1 ? ' checked' : '' }}>
-                    Или
-                </label>
-            </div>
-            <div class="radio">
-                <label>
-                    <input type="radio" name="type" value="2"{{ $inputType == 2 ? ' checked' : '' }}>
-                    Полный
-                </label>
-            </div>
-
             <button class="btn btn-primary">Найти</button>
         </form>
     </div>

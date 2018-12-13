@@ -19,8 +19,8 @@
 
     <h3>{!! $user->getProfile() !!} {{ $user->login }} #{{ $user->id }}</h3>
 
-    @if ($user->id == getUser('id'))
-        <b><span style="color:#ff0000">Внимание! Вы редактируете cобственный аккаунт!</span></b><br><br>
+    @if ($user->id === getUser('id'))
+        <b><span style="color:#ff0000">Внимание! Вы редактируете собственный аккаунт!</span></b><br><br>
     @endif
 
     <div class="form">
@@ -152,11 +152,11 @@
             Пол:
             <div class="form-group{{ hasError('gender') }}">
                 <div class="custom-control custom-radio">
-                    <input class="custom-control-input" type="radio" id="inputGenderMale" name="gender" value="male"{{ $inputGender == 'male' ? ' checked' : '' }}>
+                    <input class="custom-control-input" type="radio" id="inputGenderMale" name="gender" value="male"{{ $inputGender === 'male' ? ' checked' : '' }}>
                     <label class="custom-control-label" for="inputGenderMale">Мужской</label>
                 </div>
                 <div class="custom-control custom-radio">
-                    <input class="custom-control-input" type="radio" id="inputGenderFemale" name="gender" value="female"{{ $inputGender == 'female' ? ' checked' : '' }}>
+                    <input class="custom-control-input" type="radio" id="inputGenderFemale" name="gender" value="female"{{ $inputGender === 'female' ? ' checked' : '' }}>
                     <label class="custom-control-label" for="inputGenderFemale">Женский</label>
                 </div>
                 {!! textError('gender') !!}
@@ -174,7 +174,7 @@
 
     <div class="b"><b>Дополнительная информация</b></div>
 
-    @if ($user->level == 'pended')
+    @if ($user->level === 'pended')
         <b><span style="color:#ff0000">Внимание, аккаунт требует подтверждение регистрации!</span></b><br>
     @endif
 

@@ -95,17 +95,17 @@
         Добавлено: {!! $down->user->getProfile() !!} ({{ dateFixed($down->created_at) }})<br><br>
     </div>
 
-    @if (getUser() && getUser('id') !== $down->user_id)
+    @if (getUser() && getUser('id') === $down->user_id)
         <form class="form-inline" action="/downs/votes/{{ $down->id }}" method="post">
             <input type="hidden" name="token" value="{{ $_SESSION['token'] }}">
 
             <div class="form-group mb-2{{ hasError('score') }}">
                 <select class="form-control" id="score" name="score">
-                    <option value="5" {{ $down->vote == 5 ? ' selected' : '' }}>Отлично</option>
-                    <option value="4" {{ $down->vote == 4 ? ' selected' : '' }}>Хорошо</option>
-                    <option value="3" {{ $down->vote == 3 ? ' selected' : '' }}>Нормально</option>
-                    <option value="2" {{ $down->vote == 2 ? ' selected' : '' }}>Плохо</option>
-                    <option value="1" {{ $down->vote == 1 ? ' selected' : '' }}>Отстой</option>
+                    <option value="5" {{ $down->vote === '5' ? ' selected' : '' }}>Отлично</option>
+                    <option value="4" {{ $down->vote === '4' ? ' selected' : '' }}>Хорошо</option>
+                    <option value="3" {{ $down->vote === '3' ? ' selected' : '' }}>Нормально</option>
+                    <option value="2" {{ $down->vote === '2' ? ' selected' : '' }}>Плохо</option>
+                    <option value="1" {{ $down->vote === '1' ? ' selected' : '' }}>Отстой</option>
                 </select>
                 {!! textError('protect') !!}
             </div>

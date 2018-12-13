@@ -30,7 +30,7 @@
             <div class="post">
                 <div class="b">
 
-                    @if (getUser() && getUser('id') != $data->user_id)
+                    @if (getUser() && getUser('id') !== $data->user_id)
                         <div class="float-right">
                             <a href="#" onclick="return postReply(this)" data-toggle="tooltip" title="{{ trans('common.reply') }}"><i class="fa fa-reply text-muted"></i></a>
                             <a href="#" onclick="return postQuote(this)" data-toggle="tooltip" title="{{ trans('common.quote') }}"><i class="fa fa-quote-right text-muted"></i></a>
@@ -39,7 +39,7 @@
                         </div>
                     @endif
 
-                    @if (getUser() && getUser('id') == $data->user_id && $data->created_at + 600 > SITETIME)
+                    @if ($data->created_at + 600 > SITETIME && getUser() && getUser('id') === $data->user_id)
                         <div class="float-right">
                             <a href="/guestbooks/edit/{{ $data->id }}" data-toggle="tooltip" title="{{ trans('common.edit') }}"><i class="fa fa-pencil-alt text-muted"></i></a>
                         </div>
@@ -97,7 +97,7 @@
             </form>
         </div><br>
 
-    @elseif (setting('bookadds') == 1)
+    @elseif (setting('bookadds') === '1')
 
         <div class="form">
             <form action="/guestbooks/add" method="post">

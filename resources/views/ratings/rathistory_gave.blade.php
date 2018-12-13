@@ -13,7 +13,7 @@
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
             <li class="breadcrumb-item"><a href="/users/{{ $user->login }}">{{ $user->login }}</a></li>
 
-            @if (getUser('id') != $user->id)
+            @if (getUser('id') !== $user->id)
                 <li class="breadcrumb-item"><a href="/users/{{ $user->login }}/rating">Изменения репутации</a></li>
             @endif
 
@@ -26,7 +26,7 @@
     @if ($ratings->isNotEmpty())
         @foreach ($ratings as $data)
             <div class="b">
-                @if ($data->vote == '-')
+                @if ($data->vote === '-')
                     <i class="fa fa-thumbs-down text-danger"></i>
                 @else
                     <i class="fa fa-thumbs-up text-success"></i>

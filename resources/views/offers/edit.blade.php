@@ -25,8 +25,8 @@
 
                 <?php $inputType = getInput('type', $offer->type); ?>
                 <select class="form-control" name="type" id="type">
-                    <option value="offer"{{ $inputType == 'offer' ? ' selected' : '' }}>Предложение</option>
-                    <option value="issue"{{ $inputType == 'issue' ? ' selected' : '' }}>Проблема</option>
+                    <option value="offer"{{ $inputType === 'offer' ? ' selected' : '' }}>Предложение</option>
+                    <option value="issue"{{ $inputType === 'issue' ? ' selected' : '' }}>Проблема</option>
                 </select>
 
                 {!! textError('type') !!}

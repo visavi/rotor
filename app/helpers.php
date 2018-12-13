@@ -311,7 +311,7 @@ function makeCalendar($month, $year)
                 $row[] = $n;
                 $notEmpty = true;
             } else {
-                $row[] = '';
+                $row[] = null;
             }
         }
 
@@ -332,7 +332,7 @@ function makeCalendar($month, $year)
 function getCalendar()
 {
     [$date['day'], $date['mon'], $date['year']] = explode('.', dateFixed(SITETIME, 'j.n.Y'));
-
+    $date       = array_map('\intval', $date);
     $startMonth = mktime(0, 0, 0, $date['mon'], 1);
 
     $newsDays = [];

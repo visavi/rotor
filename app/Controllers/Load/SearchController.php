@@ -17,7 +17,7 @@ class SearchController extends BaseController
      */
     public function index(Request $request): ?string
     {
-        $cid     = check($request->input('cid'));
+        $cid     = int($request->input('cid'));
         $find    = check($request->input('find'));
         $type    = int($request->input('type'));
         $where   = int($request->input('where'));

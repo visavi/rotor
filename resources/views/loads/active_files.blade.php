@@ -15,7 +15,7 @@
         </ol>
     </nav>
 
-    @if ($user->id == getUser('id'))
+    @if ($user->id === getUser('id'))
         <?php $type = ($active == 1) ? 'success' : 'light'; ?>
         <a href="/downs/active/files?active=1" class="badge badge-{{ $type }}">Проверенные</a>
 

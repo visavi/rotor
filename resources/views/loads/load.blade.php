@@ -6,7 +6,7 @@
 
 @section('content')
 
-    @if (getUser() && ! $category->closed)
+    @if (! $category->closed && getUser())
         <div class="float-right">
             <a class="btn btn-success" href="/downs/create?cid={{ $category->id }}">Добавить</a>
         </div><br>
@@ -46,7 +46,7 @@
     <a href="/loads/{{ $category->id }}?sort=comments" class="badge badge-{{ $active }}">Комментарии</a>
     <hr>
 
-    @if ($category->children->isNotEmpty() && $page->current == 1)
+    @if ($page->current === 1 && $category->children->isNotEmpty())
         <div class="act">
             @foreach ($category->children as $child)
                 <div class="b">
@@ -86,5 +86,5 @@
     @endif
 
     <a href="/loads/top">Топ файлов</a> /
-    <a href="/loads/search">Поиск</a>
+    <a href="/loads/search?cid={{ $category->id }}">Поиск</a>
 @stop

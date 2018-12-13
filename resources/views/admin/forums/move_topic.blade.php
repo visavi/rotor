@@ -36,11 +36,11 @@
                 <select class="form-control" id="fid" name="fid">
 
                     @foreach ($forums as $data)
-                        <option value="{{ $data->id }}"{{ $data->closed || $topic->forum_id == $data->id ? ' disabled' : '' }}>{{ $data->title }}</option>
+                        <option value="{{ $data->id }}"{{ $data->closed || $topic->forum_id === $data->id ? ' disabled' : '' }}>{{ $data->title }}</option>
 
                         @if ($data->children->isNotEmpty())
                             @foreach($data->children as $datasub)
-                                <option value="{{ $datasub->id }}"{{ $datasub->closed || $topic->forum_id == $datasub->id ? ' disabled' : '' }}>– {{ $datasub->title }}</option>
+                                <option value="{{ $datasub->id }}"{{ $datasub->closed || $topic->forum_id === $datasub->id ? ' disabled' : '' }}>– {{ $datasub->title }}</option>
                             @endforeach
                         @endif
                     @endforeach

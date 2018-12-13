@@ -47,7 +47,7 @@
     <a href="/admin/loads/{{ $category->id }}?sort=comments" class="badge badge-{{ $active }}">Комментарии</a>
     <hr>
 
-    @if ($category->children->isNotEmpty() && $page->current == 1)
+    @if ($category->children->isNotEmpty() && $page->current === 1)
         <div class="act">
             @foreach ($category->children as $child)
                 <div class="b">

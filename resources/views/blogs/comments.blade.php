@@ -34,7 +34,7 @@
                     </div>
 
                     <div class="float-right">
-                        @if (getUser('id') != $data->user_id)
+                        @if (getUser('id') !== $data->user_id)
                             <a href="#" onclick="return postReply(this)" title="Ответить"><i class="fa fa-reply text-muted"></i></a>
 
                             <a href="#" onclick="return postQuote(this)" title="Цитировать"><i class="fa fa-quote-right text-muted"></i></a>
@@ -42,7 +42,7 @@
                             <a href="#" onclick="return sendComplaint(this)" data-type="{{ App\Models\Blog::class }}" data-id="{{ $data->id }}" data-token="{{ $_SESSION['token'] }}" data-page="{{ $page->current }}" rel="nofollow" title="Жалоба"><i class="fa fa-bell text-muted"></i></a>
                         @endif
 
-                        @if (getUser('id') == $data->user->id && $data->created_at + 600 > SITETIME)
+                        @if ($data->created_at + 600 > SITETIME && getUser('id') === $data->user->id)
                             <a href="/articles/edit/{{ $blog->id }}/{{ $data->id }}?page={{ $page->current }}"><i class="fa fa-pencil-alt text-muted"></i></a>
                         @endif
 

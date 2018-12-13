@@ -216,7 +216,7 @@ class ForumController extends BaseController
      */
     public function search(Request $request): ?string
     {
-        $fid     = check($request->input('fid'));
+        $fid     = int($request->input('fid'));
         $find    = check($request->input('find'));
         $type    = int($request->input('type'));
         $where   = int($request->input('where'));

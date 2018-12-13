@@ -22,7 +22,7 @@
        <a href="/admin/photos/delete/{{ $photo->id }}?token={{ $_SESSION['token'] }}" onclick="return confirm('Вы подтверждаете удаление изображения?')">Удалить</a>
     @endif
 
-    @if ($photo->user->id == getUser('id') && ! isAdmin())
+    @if ($photo->user->id === getUser('id') && ! isAdmin())
         <a href="/photos/edit/{{ $photo->id }}">Редактировать</a> /
         <a href="/photos/delete/{{ $photo->id }}?token={{ $_SESSION['token'] }}" onclick="return confirm('Вы подтверждаете удаление изображения?')">Удалить</a>
     @endif

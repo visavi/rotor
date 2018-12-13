@@ -55,7 +55,7 @@ class UserController extends AdminController
     {
         $q = check($request->input('q'));
 
-        $search = $q == 1 ? "RLIKE '^[-0-9]'" : "LIKE '$q%'";
+        $search = $q === '1' ? "RLIKE '^[-0-9]'" : "LIKE '$q%'";
 
         $total = User::query()->whereRaw('login ' . $search)->count();
         $page = paginate(setting('usersearch'), $total);

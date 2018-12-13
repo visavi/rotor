@@ -28,7 +28,7 @@
 
                     @if (getUser())
                         <div class="float-right">
-                            @if (getUser('id') != $data->user_id)
+                            @if (getUser('id') !== $data->user_id)
                                 <a href="#" onclick="return postReply(this)" data-toggle="tooltip" title="{{ trans('common.reply') }}"><i class="fa fa-reply text-muted"></i></a>
 
                                 <a href="#" onclick="return postQuote(this)" data-toggle="tooltip" title="{{ trans('common.quote') }}"><i class="fa fa-quote-right text-muted"></i></a>
@@ -37,7 +37,7 @@
 
                             @endif
 
-                            @if ($data->user_id == getUser('id') && $data->created_at + 600 > SITETIME)
+                            @if ($data->created_at + 600 > SITETIME && $data->user_id === getUser('id'))
                                 <a href="/news/edit/{{ $news->id }}/{{ $data->id }}?page={{ $page->current }}" data-toggle="tooltip" title="{{ trans('common.edit') }}"><i class="fa fa-pencil-alt text-muted"></i></a>
                             @endif
 

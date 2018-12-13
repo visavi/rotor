@@ -32,7 +32,7 @@ class DownController extends BaseController
             ->select('downs.*', 'pollings.vote')
             ->where('downs.id', $id)
             ->leftJoin('pollings', function (JoinClause $join) {
-                $join->on('downs.id', '=', 'pollings.relate_id')
+                $join->on('downs.id', 'pollings.relate_id')
                     ->where('pollings.relate_type', Down::class)
                     ->where('pollings.user_id', getUser('id'));
             })

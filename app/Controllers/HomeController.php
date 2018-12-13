@@ -26,7 +26,7 @@ class HomeController extends BaseController
      */
     public function closed(): string
     {
-        if (setting('closedsite') != 2) {
+        if (setting('closedsite') !== '2') {
             redirect('/');
         }
 

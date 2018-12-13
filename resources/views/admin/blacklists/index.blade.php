@@ -16,11 +16,11 @@
         </ol>
     </nav>
 
-    <?php $active = ($type == 'email') ? 'success' : 'light'; ?>
+    <?php $active = ($type === 'email') ? 'success' : 'light'; ?>
     <a href="/admin/blacklists?type=email" class="badge badge-{{ $active }}">Email</a>
-    <?php $active = ($type == 'login') ? 'success' : 'light'; ?>
+    <?php $active = ($type === 'login') ? 'success' : 'light'; ?>
     <a href="/admin/blacklists?type=login" class="badge badge-{{ $active }}">Логины</a>
-    <?php $active = ($type == 'domain') ? 'success' : 'light'; ?>
+    <?php $active = ($type === 'domain') ? 'success' : 'light'; ?>
     <a href="/admin/blacklists?type=domain" class="badge badge-{{ $active }}">Домены</a>
     <br><br>
 

@@ -11,7 +11,7 @@
     @if ($banhist)
         <b><span style="color:#ff0000">Причина бана: {!! bbCode($banhist->reason) !!}</span></b><br><br>
 
-        @if (setting('addbansend') == 1 && $banhist->explain == 1)
+        @if ($banhist->explain === 1 && setting('addbansend') === '1')
             <div class="form">
                 <form method="post" action="/ban">
 

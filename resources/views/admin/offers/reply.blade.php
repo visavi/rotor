@@ -34,7 +34,7 @@
                 <?php $inputStatus = getInput('status', $offer->status); ?>
                 <select class="form-control" name="status" id="status">
                     @foreach ($statuses as $key => $status)
-                        <?php $selected = ($key == $inputStatus) ? ' selected' : ''; ?>
+                        <?php $selected = ($key === $inputStatus) ? ' selected' : ''; ?>
                         <option value="{{ $key }}"{{ $selected }}>{{ $status }}</option>
                     @endforeach
                 </select>

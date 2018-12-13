@@ -14,7 +14,7 @@
 
 @section('content')
 
-    @if ($blog->user->id == getUser('id'))
+    @if ($blog->user->id === getUser('id'))
         <div class="float-right">
             <a class="btn btn-success" href="/articles/edit/{{ $blog->id }}">Изменить</a>
         </div><br>

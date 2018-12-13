@@ -32,11 +32,11 @@
 
                     @foreach ($loads as $data)
 
-                        @if ($data->id == $load->id)
+                        @if ($data->id === $load->id)
                             @continue
                         @endif
 
-                        <option value="{{ $data->id }}"{{ ($inputParent == $data->id && ! $data->closed) ? ' selected' : '' }}{{ $data->closed ? ' disabled' : '' }}>{{ $data->name }}</option>
+                        <option value="{{ $data->id }}"{{ ($inputParent === $data->id && ! $data->closed) ? ' selected' : '' }}{{ $data->closed ? ' disabled' : '' }}>{{ $data->name }}</option>
                     @endforeach
 
                 </select>
