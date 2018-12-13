@@ -16,10 +16,10 @@
     </nav>
 
     @if ($user->id === getUser('id'))
-        <?php $type = ($active == 1) ? 'success' : 'light'; ?>
+        <?php $type = ($active === 1) ? 'success' : 'light'; ?>
         <a href="/downs/active/files?active=1" class="badge badge-{{ $type }}">Проверенные</a>
 
-        <?php $type = ($active == 0) ? 'success' : 'light'; ?>
+        <?php $type = ($active === 0) ? 'success' : 'light'; ?>
         <a href="/downs/active/files?active=0" class="badge badge-{{ $type }}">Ожидающие</a>
     @endif
 

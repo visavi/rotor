@@ -140,7 +140,7 @@
                     <option value="0">Автоматически</option>
 
                     @foreach ($allThemes as $theme)
-                        <?php $selected = ($theme == $inputThemes) ? ' selected' : ''; ?>
+                        <?php $selected = ($theme === $inputThemes) ? ' selected' : ''; ?>
                         <option value="{{ $theme }}"{{ $selected }}>{{ $theme }}</option>
                     @endforeach
                 </select>

@@ -65,6 +65,12 @@ $(function() {
     });
 
     $('.phone').mask('0 000 000-00-00');
+
+ /*   if($('.markItUpEditor').val().length > 0) {
+        window.onbeforeunload = function() {
+            return "You're about to end your session, are you sure?";
+        }
+    }*/
 });
 
 /* Вывод уведомлений */

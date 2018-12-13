@@ -37,7 +37,7 @@ class ActiveController extends BaseController
      */
     public function files(Request $request): string
     {
-        $active = check($request->input('active', 1));
+        $active = int($request->input('active', 1));
         $user   = $this->user;
 
         if ($user->id !== getUser('id')) {

@@ -11,7 +11,7 @@
         <select class="form-control" id="incount" name="sets[incount]">
 
             @foreach ($statsite as $key => $stat)
-                <?php $selected = ($key == $settings['incount']) ? ' selected' : ''; ?>
+                <?php $selected = ($key === (int) $settings['incount']) ? ' selected' : ''; ?>
                 <option value="{{ $key }}"{{ $selected }}>{{ $stat }}</option>
             @endforeach
 

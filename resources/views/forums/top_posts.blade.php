@@ -16,16 +16,16 @@
     <h1>Топ популярных постов</h1>
 
     Период:
-    <?php $active = ($period == 1) ? 'success' : 'light'; ?>
+    <?php $active = ($period === 1) ? 'success' : 'light'; ?>
     <a href="/forums/top/posts?period=1" class="badge badge-{{ $active }}">Сутки</a>
 
-    <?php $active = ($period == 7) ? 'success' : 'light'; ?>
+    <?php $active = ($period === 7) ? 'success' : 'light'; ?>
     <a href="/forums/top/posts?period=7" class="badge badge-{{ $active }}">Неделя</a>
 
-    <?php $active = ($period == 30) ? 'success' : 'light'; ?>
+    <?php $active = ($period === 30) ? 'success' : 'light'; ?>
     <a href="/forums/top/posts?period=30" class="badge badge-{{ $active }}">Месяц</a>
 
-    <?php $active = ($period == 365) ? 'success' : 'light'; ?>
+    <?php $active = ($period === 365) ? 'success' : 'light'; ?>
     <a href="/forums/top/posts?period=365" class="badge badge-{{ $active }}">Год</a>
 
     <?php $active = (empty($period)) ? 'success' : 'light'; ?>

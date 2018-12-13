@@ -22,14 +22,12 @@
         <form action="/admin/invitations/create" method="post">
             <input type="hidden" name="token" value="{{ $_SESSION['token'] }}">
 
-            <?php $inputKeys = getInput('keys'); ?>
+            <?php $inputKeys = (int) getInput('keys'); ?>
             <div class="form-group{{ hasError('keys') }}">
                 <label for="keys">Количество ключей:</label>
-
                 <select class="form-control" name="keys" id="keys">
-
                     @foreach ($listKeys as $key)
-                        <?php $selected = ($key == $inputKeys) ? ' selected' : ''; ?>
+                        <?php $selected = ($key === $inputKeys) ? ' selected' : ''; ?>
                         <option value="{{ $key }}"{{ $selected }}>{{ $key }}</option>
                     @endforeach
                 </select>
@@ -52,14 +50,14 @@
                 {!! textError('user') !!}
             </div>
 
-            <?php $inputKeys = getInput('userkeys'); ?>
+            <?php $inputKeys = (int) getInput('userkeys'); ?>
             <div class="form-group{{ hasError('userkeys') }}">
                 <label for="userkeys">Количество ключей:</label>
 
                 <select class="form-control" name="userkeys" id="userkeys">
 
                     @foreach ($listKeys as $key)
-                        <?php $selected = ($key == $inputKeys) ? ' selected' : ''; ?>
+                        <?php $selected = ($key === $inputKeys) ? ' selected' : ''; ?>
                         <option value="{{ $key }}"{{ $selected }}>{{ $key }}</option>
                     @endforeach
                 </select>

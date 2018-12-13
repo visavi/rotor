@@ -61,13 +61,13 @@
                     {!! textError('method') !!}
                 </div>
 
-                <?php $inputLevel = getInput('level', 7); ?>
+                <?php $inputLevel = (int) getInput('level', 7); ?>
 
                 <div class="form-group">
                     <label for="level">Степень сжатия:</label>
                     <select class="form-control" id="level" name="level">
                         @foreach($levels as $key => $level)
-                            <?php $selected = ($key == $inputLevel) ? ' selected' : ''; ?>
+                            <?php $selected = ($key === $inputLevel) ? ' selected' : ''; ?>
                             <option value="{{ $key }}"{{ $selected }}>{{ $level }}</option>
                         @endforeach
                     </select>

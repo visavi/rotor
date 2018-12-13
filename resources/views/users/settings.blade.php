@@ -28,7 +28,7 @@
                     <option value="0">Автоматически</option>
 
                     @foreach ($setting['themes'] as $theme)
-                        <?php $selected = ($theme == $inputThemes) ? ' selected' : ''; ?>
+                        <?php $selected = ($theme === $inputThemes) ? ' selected' : ''; ?>
                         <option value="{{ $theme }}"{{ $selected }}>{{ $theme }}</option>
                     @endforeach
                 </select>
@@ -42,7 +42,7 @@
 
                 <select class="form-control" name="language" id="language">
                     @foreach ($setting['languages'] as $language)
-                        <?php $selected = ($language == $inputLang) ? ' selected' : ''; ?>
+                        <?php $selected = ($language === $inputLang) ? ' selected' : ''; ?>
                         <option value="{{ $language }}"{{ $selected }}>{{ $language }}</option>
                     @endforeach
                 </select>
@@ -50,13 +50,13 @@
                 {!! textError('language') !!}
             </div>
 
-            <?php $inputTimezone = getInput('timezone', $user->timezone); ?>
+            <?php $inputTimezone = (int) getInput('timezone', $user->timezone); ?>
             <div class="form-group{{ hasError('timezone') }}">
                 <label for="timezone">Временной сдвиг {{ dateFixed(SITETIME, 'H:i') }}:</label>
 
                 <select class="form-control" name="timezone" id="timezone">';
                     @foreach($setting['timezones'] as $timezone)
-                        <?php $selected = ($timezone == $inputTimezone) ? ' selected' : ''; ?>
+                        <?php $selected = ($timezone === $inputTimezone) ? ' selected' : ''; ?>
                         <option value="{{ $timezone }}"{{ $selected }}>{{ $timezone }}</option>
                     @endforeach
                 </select>

@@ -27,11 +27,24 @@
             </div>
 
             Отправить:<br>
-            <?php $inputType = getInput('type', 1); ?>
-            <label><input name="type" type="radio" value="1"{{ $inputType == 1 ? ' checked' : '' }}> В онлайне</label><br>
-            <label><input name="type" type="radio" value="2"{{ $inputType == 2 ? ' checked' : '' }}> Активным</label><br>
-            <label><input name="type" type="radio" value="3"{{ $inputType == 3 ? ' checked' : '' }}> Администрации</label><br>
-            <label><input name="type" type="radio" value="4"{{ $inputType == 4 ? ' checked' : '' }}> Всем пользователям</label><br>
+            <?php $inputType = (int) getInput('type', 1); ?>
+
+            <div class="custom-control custom-radio">
+                <input class="custom-control-input" type="radio" id="inputType1" name="type" value="1"{{ $inputType === 1 ? ' checked' : '' }}>
+                <label class="custom-control-label" for="inputType1">В онлайне</label>
+            </div>
+            <div class="custom-control custom-radio">
+                <input class="custom-control-input" type="radio" id="inputType2" name="type" value="2"{{ $inputType === 2 ? ' checked' : '' }}>
+                <label class="custom-control-label" for="inputType2">Активным</label>
+            </div>
+            <div class="custom-control custom-radio">
+                <input class="custom-control-input" type="radio" id="inputType3" name="type" value="3"{{ $inputType === 3 ? ' checked' : '' }}>
+                <label class="custom-control-label" for="inputType3">Администрации</label>
+            </div>
+            <div class="custom-control custom-radio">
+                <input class="custom-control-input" type="radio" id="inputType4" name="type" value="4"{{ $inputType === 4 ? ' checked' : '' }}>
+                <label class="custom-control-label" for="inputType4">Всем пользователям</label>
+            </div>
 
             <button class="btn btn-primary">Разослать</button>
         </form>

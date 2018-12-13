@@ -47,7 +47,7 @@
         {!! textError('sets[timezone]') !!}
     </div>
 
-    <?php $languages = array_map('basename', glob(RESOURCES."/lang/*", GLOB_ONLYDIR)); ?>
+    <?php $languages = array_map('basename', glob(RESOURCES . '/lang/*', GLOB_ONLYDIR)); ?>
     <?php $inputLang = getInput('language', $settings['language']); ?>
 
     <div class="form-group{{ hasError('sets[language]') }}">
@@ -55,7 +55,7 @@
         <select class="form-control" id="language" name="sets[language]">
 
             @foreach ($languages as $language)
-                <?php $selected = ($language == $inputLang) ? ' selected' : ''; ?>
+                <?php $selected = ($language === $inputLang) ? ' selected' : ''; ?>
                 <option value="{{ $language }}"{{ $selected }}>{{ $language }}</option>
             @endforeach
         </select>
@@ -63,7 +63,7 @@
         {!! textError('sets[language]') !!}
     </div>
 
-    <?php $themes = array_map('basename', glob(HOME."/themes/*", GLOB_ONLYDIR)); ?>
+    <?php $themes = array_map('basename', glob(HOME . '/themes/*', GLOB_ONLYDIR)); ?>
     <?php $inputThemes = getInput('sets.themes', $settings['themes']); ?>
 
     <div class="form-group{{ hasError('sets[themes]') }}">
@@ -71,7 +71,7 @@
         <select class="form-control" id="themes" name="sets[themes]">
 
             @foreach ($themes as $theme)
-                <?php $selected = ($inputThemes == $theme) ? ' selected' : ''; ?>
+                <?php $selected = ($inputThemes === $theme) ? ' selected' : ''; ?>
                 <option value="{{ $theme }}"{{ $selected }}>{{ $theme }}</option>
             @endforeach
 
@@ -87,7 +87,7 @@
             <option value="0">Выключить</option>
 
             @foreach ($themes as $theme)
-                <?php $selected = ($inputThemes == $theme) ? ' selected' : ''; ?>
+                <?php $selected = ($inputThemes === $theme) ? ' selected' : ''; ?>
                 <option value="{{ $theme }}"{{ $selected }}>{{ $theme }}</option>
             @endforeach
 
@@ -103,7 +103,7 @@
         <select class="form-control" id="closedsite" name="sets[closedsite]">
 
             @foreach ($statsite as $key => $stat)
-                <?php $selected = ($key == $settings['closedsite']) ? ' selected' : ''; ?>
+                <?php $selected = ($key === (int) $settings['closedsite']) ? ' selected' : ''; ?>
                 <option value="{{ $key }}"{{ $selected }}>{{ $stat }}</option>
             @endforeach
 
