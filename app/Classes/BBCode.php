@@ -265,28 +265,27 @@ class BBCode
 
         if (empty($listSmiles)) {
             if (! file_exists(STORAGE . '/temp/smiles.dat')) {
-
                 $smiles = Smile::query()
                     ->select('code', 'name')
                     ->orderBy(DB::connection()->raw('CHAR_LENGTH(code)'), 'desc')
                     ->get()
                     ->toArray();
 
-                $smilesCode = array_column($smiles, 'code');
-                $smilesName = array_column($smiles, 'name');
+                $smiles = array_column($smiles, 'name', 'code');
 
-                $smilesName = array_map(
+                $smiles = array_map(
                     function($smile) {
-                        return str_replace($smile, '<img src="' . $smile . '" alt="' . basename($smile) . '">', $smile);
-                    }, $smilesName);
+                        return '<img src="' . $smile . '" alt="' . basename($smile) . '">';
+                    }, $smiles
+                );
 
-                file_put_contents(STORAGE . '/temp/smiles.dat', json_encode(['codes' => $smilesCode, 'names' => $smilesName]));
+                file_put_contents(STORAGE . '/temp/smiles.dat', json_encode($smiles));
             }
 
-            $listSmiles = json_decode(file_get_contents(STORAGE . '/temp/smiles.dat'));
+            $listSmiles = json_decode(file_get_contents(STORAGE . '/temp/smiles.dat'), true);
         }
 
-        return str_replace($listSmiles->codes, $listSmiles->names, $source);
+        return strtr($source, $listSmiles);
     }
 
     /**
