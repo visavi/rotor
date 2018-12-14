@@ -385,6 +385,7 @@ return FastRoute\cachedDispatcher(function(RouteCollector $r) {
         $r->get('/files/delete', [App\Controllers\Admin\FilesController::class, 'delete']);
 
         $r->get('/smiles', [App\Controllers\Admin\SmileController::class, 'index']);
+        $r->get('/smiles/{id:\d+}', [App\Controllers\Admin\SmileController::class, 'view']);
         $r->addRoute(['GET', 'POST'], '/smiles/create', [App\Controllers\Admin\SmileController::class, 'create']);
         $r->addRoute(['GET', 'POST'], '/smiles/edit/{id:\d+}', [App\Controllers\Admin\SmileController::class, 'edit']);
         $r->post('/smiles/delete', [App\Controllers\Admin\SmileController::class, 'delete']);

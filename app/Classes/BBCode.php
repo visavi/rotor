@@ -257,7 +257,6 @@ class BBCode
      *
      * @param $source
      * @return string Обработанный текст
-     * @internal param string $text Необработанный текст
      */
     public function parseSmiles($source): string
     {
@@ -356,7 +355,6 @@ class BBCode
      *
      * @param array $excepts
      * @return array parsers
-     * @internal param array $except parsers to exclude
      */
     private function arrayExcept(array $excepts): array
     {

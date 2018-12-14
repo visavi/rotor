@@ -2,6 +2,8 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+
 /**
  * Class Smile
  *
@@ -31,4 +33,14 @@ class Smile extends BaseModel
      * @var string
      */
     public $uploadPath = UPLOADS . '/smiles';
+
+    /**
+     * Возвращает связь категории смайлов
+     *
+     * @return BelongsTo
+     */
+    public function category(): BelongsTo
+    {
+        return $this->belongsTo(SmilesCategory::class, 'category_id')->withDefault();
+    }
 }

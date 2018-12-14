@@ -4,6 +4,7 @@ namespace App\Controllers\Admin;
 
 use App\Classes\Validator;
 use App\Models\Smile;
+use App\Models\SmilesCategory;
 use App\Models\User;
 use Illuminate\Database\Capsule\Manager as DB;
 use Intervention\Image\ImageManagerStatic as Image;
@@ -30,6 +31,12 @@ class SmileController extends AdminController
      */
     public function index(): string
     {
+        $categories = SmilesCategory::query()->get();
+
+        if ($categories->isNotEmpty()) {
+            return view('admin/smiles/index', compact('categories'));
+        }
+
         $total = Smile::query()->count();
         $page = paginate(setting('smilelist'), $total);
 
@@ -38,9 +45,33 @@ class SmileController extends AdminController
             ->orderBy('name')
             ->limit($page->limit)
             ->offset($page->offset)
+            ->with('category')
             ->get();
 
-        return view('admin/smiles/index', compact('smiles', 'page'));
+        return view('admin/smiles/view', compact('smiles', 'page'));
+    }
+
+    /**
+     * Просмотр смайлов по категориям
+     *
+     * @param int $id
+     * @return string
+     */
+    public function view(int $id): string
+    {
+        $total = Smile::query()->where('category_id', $id)->count();
+        $page = paginate(setting('smilelist'), $total);
+
+        $smiles = Smile::query()
+            ->where('category_id', $id)
+            ->orderBy(DB::connection()->raw('CHAR_LENGTH(`code`)'))
+            ->orderBy('name')
+            ->limit($page->limit)
+            ->offset($page->offset)
+            ->with('category')
+            ->get();
+
+        return view('admin/smiles/view', compact('smiles', 'page'));
     }
 
     /**
