@@ -59,11 +59,23 @@ class SmileController extends AdminController
      */
     public function view(int $id): string
     {
+        $category = null;
+
+        if ($id) {
+            $category = SmilesCategory::query()->where('id', $id)->first();
+
+            if (! $category) {
+                abort(404, 'Данной категории не существует!');
+            }
+        }
+
         $total = Smile::query()->where('category_id', $id)->count();
         $page = paginate(setting('smilelist'), $total);
 
         $smiles = Smile::query()
-            ->where('category_id', $id)
+            ->when($category, function (Builder $query) use ($category) {
+                return $query->where('category_id', $category->id);
+            })
             ->orderBy(DB::connection()->raw('CHAR_LENGTH(`code`)'))
             ->orderBy('name')
             ->limit($page->limit)
@@ -71,7 +83,7 @@ class SmileController extends AdminController
             ->with('category')
             ->get();
 
-        return view('admin/smiles/view', compact('smiles', 'page'));
+        return view('admin/smiles/view', compact('category', 'smiles', 'page'));
     }
 
     /**

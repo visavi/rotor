@@ -26,6 +26,6 @@
             <i class="far fa-smile"></i>  <b><a href="/admin/smiles/{{ $category->id }}">{{ $category->name }}</a></b><br>
         @endforeach
     @else
-        {!! showError('Категорий еще не созданы!') !!}
+        {!! showError('Категории еще не созданы!') !!}
     @endif
 @stop

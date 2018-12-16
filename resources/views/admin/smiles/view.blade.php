@@ -1,7 +1,7 @@
 @extends('layout')
 
 @section('title')
-    Смайлы
+    {{ $category->name ?? 'Без категории' }}
 @stop
 
 @section('content')
@@ -10,14 +10,14 @@
         <a class="btn btn-success" href="/admin/smiles/create">Загрузить</a>
     </div><br>
 
-    <h1>Смайлы</h1>
+    <h1>{{ $category->name ?? 'Без категории' }}</h1>
 
     <nav>
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
             <li class="breadcrumb-item"><a href="/admin">Панель</a></li>
             <li class="breadcrumb-item"><a href="/admin/smiles">Смайлы</a></li>
-            <li class="breadcrumb-item active">Смайлы</li>
+            <li class="breadcrumb-item active">{{ $category->name ?? 'Без категории' }}</li>
         </ol>
     </nav>
 
@@ -36,7 +36,7 @@
 
         {!! pagination($page) !!}
 
-        Всего cмайлов: <b>{{ $page->total }}</b><br><br>
+        Всего смайлов: <b>{{ $page->total }}</b><br><br>
 
     @else
         {!! showError('Смайлы еще не загружены!') !!}
