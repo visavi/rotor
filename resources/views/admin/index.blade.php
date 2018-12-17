@@ -52,7 +52,7 @@
         <i class="far fa-circle fa-lg text-muted"></i> <a href="/admin/errors">Ошибки / Автобаны</a><br>
         <i class="far fa-circle fa-lg text-muted"></i> <a href="/admin/blacklists">Черный список</a> ({{ statsBlacklist() }})<br>
         <i class="far fa-circle fa-lg text-muted"></i> <a href="/admin/offers">Предложения / Проблемы</a> ({{ statsOffers() }})<br>
-        <i class="far fa-circle fa-lg text-muted"></i> <a href="/admin/smiles">Смайлы</a> ({{ statsSmiles() }})<br>
+        <i class="far fa-circle fa-lg text-muted"></i> <a href="/admin/stickers">Стикеры</a> ({{ statsStickers() }})<br>
         <i class="far fa-circle fa-lg text-muted"></i> <a href="/admin/status">Статусы пользователей</a><br>
     @endif
 

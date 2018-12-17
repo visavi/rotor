@@ -5,14 +5,14 @@ declare(strict_types=1);
 namespace App\Models;
 
 /**
- * Class SmileCategory
+ * Class StickersCategory
  *
  * @property int id
  * @property string name
  * @property int updated_at
  * @property int created_at
  */
-class SmilesCategory extends BaseModel
+class StickersCategory extends BaseModel
 {
     /**
      * Indicates if the model should be timestamped.

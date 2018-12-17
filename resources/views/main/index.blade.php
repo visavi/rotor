@@ -13,7 +13,7 @@
 
 <i class="far fa-circle fa-lg text-muted"></i> <a href="/rules">Правила сайта</a><br>
 <i class="far fa-circle fa-lg text-muted"></i> <a href="/tags">Справка по тегам</a><br>
-<i class="far fa-circle fa-lg text-muted"></i> <a href="/smiles">Галерея смайлов</a><br>
+<i class="far fa-circle fa-lg text-muted"></i> <a href="/stickers">Стикеры</a><br>
 <i class="far fa-circle fa-lg text-muted"></i> <a href="/faq">FAQ (Чаво)</a><br>
 <i class="far fa-circle fa-lg text-muted"></i> <a href="/api">API интерфейс</a><br>
 

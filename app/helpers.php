@@ -23,7 +23,7 @@ use App\Models\{
     Post,
     RekUser,
     Setting,
-    Smile,
+    Sticker,
     Spam,
     Topic,
     User,
@@ -578,13 +578,13 @@ function statsAntimat()
 }
 
 /**
- * Возвращает количество смайлов
+ * Возвращает количество стикеров
  *
- * @return int количество смайлов
+ * @return int количество стикеров
  */
-function statsSmiles()
+function statsStickers()
 {
-    return Smile::query()->count();
+    return Sticker::query()->count();
 }
 
 /**
@@ -1891,7 +1891,7 @@ function bbCode($text, $parse = true)
     }
 
     $text = $bbCode->parse($text);
-    $text = $bbCode->parseSmiles($text);
+    $text = $bbCode->parseStickers($text);
 
     return $text;
 }

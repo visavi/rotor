@@ -2,7 +2,7 @@
 
 return [
     'rules'             => 'Rules',
-    'smiles'            => 'Smiles',
+    'stickers'          => 'Stickers',
     'tags'              => 'Tags',
     'management'        => 'Management',
     'reply'             => 'Reply',

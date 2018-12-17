@@ -318,8 +318,8 @@ return FastRoute\cachedDispatcher(function(RouteCollector $r) {
     $r->get('/menu', [App\Controllers\PageController::class, 'menu']);
     $r->get('/tags', [App\Controllers\PageController::class, 'tags']);
     $r->get('/rules', [App\Controllers\PageController::class, 'rules']);
-    $r->get('/smiles', [App\Controllers\PageController::class, 'smiles']);
-    $r->get('/smiles/{id:\d+}', [App\Controllers\PageController::class, 'smilesCategory']);
+    $r->get('/stickers', [App\Controllers\PageController::class, 'stickers']);
+    $r->get('/stickers/{id:\d+}', [App\Controllers\PageController::class, 'stickersCategory']);
     $r->get('/online[/{action:all}]', [App\Controllers\OnlineController::class, 'index']);
     $r->get('/counters', [App\Controllers\CounterController::class, 'index']);
 
@@ -385,11 +385,11 @@ return FastRoute\cachedDispatcher(function(RouteCollector $r) {
         $r->addRoute(['GET', 'POST'], '/files/create', [App\Controllers\Admin\FilesController::class, 'create']);
         $r->get('/files/delete', [App\Controllers\Admin\FilesController::class, 'delete']);
 
-        $r->get('/smiles', [App\Controllers\Admin\SmileController::class, 'index']);
-        $r->get('/smiles/{id:\d+}', [App\Controllers\Admin\SmileController::class, 'category']);
-        $r->addRoute(['GET', 'POST'], '/smiles/create', [App\Controllers\Admin\SmileController::class, 'create']);
-        $r->addRoute(['GET', 'POST'], '/smiles/edit/{id:\d+}', [App\Controllers\Admin\SmileController::class, 'edit']);
-        $r->get('/smiles/delete/{id:\d+}', [App\Controllers\Admin\SmileController::class, 'delete']);
+        $r->get('/stickers', [App\Controllers\Admin\StickerController::class, 'index']);
+        $r->get('/stickers/{id:\d+}', [App\Controllers\Admin\StickerController::class, 'category']);
+        $r->addRoute(['GET', 'POST'], '/stickers/create', [App\Controllers\Admin\StickerController::class, 'create']);
+        $r->addRoute(['GET', 'POST'], '/stickers/edit/{id:\d+}', [App\Controllers\Admin\StickerController::class, 'edit']);
+        $r->get('/stickers/delete/{id:\d+}', [App\Controllers\Admin\StickerController::class, 'delete']);
 
         $r->addRoute(['GET', 'POST'], '/ipbans', [App\Controllers\Admin\IpBanController::class, 'index']);
         $r->post('/ipbans/delete', [App\Controllers\Admin\IpBanController::class, 'delete']);

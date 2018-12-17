@@ -7,7 +7,7 @@ class BBCodeTest extends TestCase
     /**
      * Тестирует подсветку текста
      */
-    public function testCode()
+    public function testCode(): void
     {
         $text      = '[code]<?php var_dump([1,2,4]);[/code]';
         $parseText = bbCode($text);
@@ -18,7 +18,7 @@ class BBCodeTest extends TestCase
     /**
      * Тестирует жирность текста
      */
-    public function testBold()
+    public function testBold(): void
     {
         $text      = '[b]Привет[/b]';
         $parseText = bbCode($text);
@@ -29,7 +29,7 @@ class BBCodeTest extends TestCase
     /**
      * Тестирует наклон текста
      */
-    public function testItalic()
+    public function testItalic(): void
     {
         $text      = '[i]Привет[/i]';
         $parseText = bbCode($text);
@@ -40,7 +40,7 @@ class BBCodeTest extends TestCase
     /**
      * Тестирует подчеркивание текста
      */
-    public function testUnderLine()
+    public function testUnderLine(): void
     {
         $text      = '[u]Привет[/u]';
         $parseText = bbCode($text);
@@ -51,7 +51,7 @@ class BBCodeTest extends TestCase
     /**
      * Тестирует зачеркивание текста
      */
-    public function testLineThrough()
+    public function testLineThrough(): void
     {
         $text      = '[s]Привет[/s]';
         $parseText = bbCode($text);
@@ -62,7 +62,7 @@ class BBCodeTest extends TestCase
     /**
      * Тестирует размер текста
      */
-    public function testFontSize()
+    public function testFontSize(): void
     {
         $text      = '[size=5]Привет[/size]';
         $parseText = bbCode($text);
@@ -73,7 +73,7 @@ class BBCodeTest extends TestCase
     /**
      * Тестирует цвет текста
      */
-    public function testFontColor()
+    public function testFontColor(): void
     {
         $text      = '[color=#ff0000]Привет[/color]';
         $parseText = bbCode($text);
@@ -84,7 +84,7 @@ class BBCodeTest extends TestCase
     /**
      * Тестирует вложенность цветов текста
      */
-    public function testIterateFontColor()
+    public function testIterateFontColor(): void
     {
         $text      = '[color=#ff0000]П[color=#00ff00]р[color=#0000ff]и[/color][color=#00ff00]в[/color][/color]ет[/color]';
         $parseText = bbCode($text);
@@ -95,7 +95,7 @@ class BBCodeTest extends TestCase
     /**
      * Тестирует центрирование текста
      */
-    public function testCenter()
+    public function testCenter(): void
     {
         $text      = '[center]Привет[/center]';
         $parseText = bbCode($text);
@@ -106,7 +106,7 @@ class BBCodeTest extends TestCase
     /**
      * Тестирует цитирование текста
      */
-    public function testQuote()
+    public function testQuote(): void
     {
         $text      = '[quote]Привет[/quote]';
         $parseText = bbCode($text);
@@ -117,7 +117,7 @@ class BBCodeTest extends TestCase
     /**
      * Тестирует цитирование текста с именем
      */
-    public function testNamedQuote()
+    public function testNamedQuote(): void
     {
         $text      = '[quote=Имя]Привет[/quote]';
         $parseText = bbCode($text);
@@ -128,7 +128,7 @@ class BBCodeTest extends TestCase
     /**
      * Тестирует ссылку в тексте
      */
-    public function testHttp()
+    public function testHttp(): void
     {
         $text      = 'http://сайт.рф';
         $parseText = bbCode($text);
@@ -139,7 +139,7 @@ class BBCodeTest extends TestCase
     /**
      * Тестирует ссылку в тексте совпадающую с именем сайта
      */
-    public function testHttpNotTarget()
+    public function testHttpNotTarget(): void
     {
         $text      = 'http://rotor.ll';
         $parseText = bbCode($text);
@@ -150,7 +150,7 @@ class BBCodeTest extends TestCase
     /**
      * Тестирует ссылку в тексте совпадающую с именем сайта
      */
-    public function testHttpsComplex()
+    public function testHttpsComplex(): void
     {
         $text      = 'https://rotor.ll/dir/index.php?name=name&name2=name2#anchor';
         $parseText = bbCode($text);
@@ -161,7 +161,7 @@ class BBCodeTest extends TestCase
     /**
      * Тестирует ссылку в тексте
      */
-    public function testLink()
+    public function testLink(): void
     {
         $text      = '[url]https://rotor.ll[/url]';
         $parseText = bbCode($text);
@@ -172,7 +172,7 @@ class BBCodeTest extends TestCase
     /**
      * Тестирует именованную ссылку в тексте
      */
-    public function testNamedLink()
+    public function testNamedLink(): void
     {
         $text      = '[url=http://rotor.ll/dir/index.php?name=name&name2=name2#anchor]Сайт[/url]';
         $parseText = bbCode($text);
@@ -183,7 +183,7 @@ class BBCodeTest extends TestCase
     /**
      * Тестирует картинку в тексте
      */
-    public function testImage()
+    public function testImage(): void
     {
         $text      = '[img]http://rotor.ll/assets/images/img/logo.png[/img]';
         $parseText = bbCode($text);
@@ -194,7 +194,7 @@ class BBCodeTest extends TestCase
     /**
      * Тестирует сортированный список в тексте
      */
-    public function testOrderedList()
+    public function testOrderedList(): void
     {
         $text      = '[list=1]Список'.PHP_EOL.'список2[/list]';
         $parseText = bbCode($text);
@@ -205,7 +205,7 @@ class BBCodeTest extends TestCase
     /**
      * Тестирует несортированный список в тексте
      */
-    public function testUnorderedList()
+    public function testUnorderedList(): void
     {
         $text      = '[list]Список[/list]';
         $parseText = bbCode($text);
@@ -216,7 +216,7 @@ class BBCodeTest extends TestCase
     /**
      * Тестирует спойлер в тексте
      */
-    public function testSpoiler()
+    public function testSpoiler(): void
     {
         $text      = '[spoiler]Спойлер[/spoiler]';
         $parseText = bbCode($text);
@@ -228,7 +228,7 @@ class BBCodeTest extends TestCase
     /**
      * Тестирует именованный спойлер в тексте
      */
-    public function testShortSpoiler()
+    public function testShortSpoiler(): void
     {
         $text      = '[spoiler=Открыть]Спойлер[/spoiler]';
         $parseText = bbCode($text);
@@ -240,7 +240,7 @@ class BBCodeTest extends TestCase
     /**
      * Тестирует скрытый текст
      */
-    public function testHide()
+    public function testHide(): void
     {
         $text      = '[hide]Скрытый текст[/hide]';
         $parseText = bbCode($text);
@@ -252,7 +252,7 @@ class BBCodeTest extends TestCase
     /**
      * Тестирует видео в тексте
      */
-    public function testYoutube()
+    public function testYoutube(): void
     {
         $text      = '[youtube]https://www.youtube.com/watch?v=85bkCmaOh4o[/youtube]';
         $parseText = bbCode($text);
@@ -261,20 +261,20 @@ class BBCodeTest extends TestCase
     }
 
     /**
-     * Тестирует смайлы в тексте
+     * Тестирует стикеры в тексте
      */
-    public function testSmile()
+    public function testSticker(): void
     {
         $text      = 'Привет :D :hello';
         $parseText = bbCode($text);
 
-        $this->assertEquals($parseText, 'Привет <img src="/uploads/smiles/D.gif" alt="D.gif"> <img src="/uploads/smiles/hello.gif" alt="hello.gif">');
+        $this->assertEquals($parseText, 'Привет <img src="/uploads/stickers/D.gif" alt="D.gif"> <img src="/uploads/stickers/hello.gif" alt="hello.gif">');
     }
 
     /**
      * Тестирует очистку тегов в тексте
      */
-    public function testClear()
+    public function testClear(): void
     {
         $text      = '[center][b]Привет[/b] [i]Привет[/i][/center]';
         $parseText = bbCode($text, false);

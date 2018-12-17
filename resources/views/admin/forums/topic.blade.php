@@ -219,7 +219,7 @@
         {!! showError('Для добавления сообщения необходимо авторизоваться') !!}
     @endif
 
-    <a href="/smiles">Смайлы</a>  /
+    <a href="/stickers">Стикеры</a>  /
     <a href="/tags">Теги</a>  /
     <a href="/rules">Правила</a> /
     <a href="/forums/top/topics">Топ тем</a> /

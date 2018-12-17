@@ -8,7 +8,7 @@
 
     @foreach ($posts as $data)
         <?php $data->text = bbCode($data->text); ?>
-        <?php $data->text = str_replace('/uploads/smiles', siteUrl().'/uploads/smiles', $data->text); ?>
+        <?php $data->text = str_replace('/uploads/stickers', siteUrl().'/uploads/stickers', $data->text); ?>
 
         <item>
             <title>{{ $data->text }}</title>

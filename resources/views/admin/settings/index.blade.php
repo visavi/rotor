@@ -34,7 +34,7 @@
                     <a class="nav-link" href="/admin/settings?act=price" id="price">Стоимость и цены</a>
                     <a class="nav-link" href="/admin/settings?act=advert" id="advert">Реклама на сайте</a>
                     <a class="nav-link" href="/admin/settings?act=image" id="image">Загрузка изображений</a>
-                    <a class="nav-link" href="/admin/settings?act=smile" id="smile">Смайлы</a>
+                    <a class="nav-link" href="/admin/settings?act=sticker" id="sticker">Стикеры</a>
                     <a class="nav-link" href="/admin/settings?act=offer" id="offer">Предложения / Проблемы</a>
                 </div>
             </div>

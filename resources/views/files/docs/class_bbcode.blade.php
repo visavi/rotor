@@ -20,7 +20,7 @@ $bbcode->setParser('header', '/\[h1\](.*?)\[\/h1\]/s', '&lt;h1>$1&lt;/h1>');
 $bbcode->except('bold')->only('header', 'italic');
 
 $text = $bbcode->parse($text);
-$text = $bbcode->parseSmiles($text);
+$text = $bbcode->parseStickers($text);
 </pre>
 
 Каждый парсер может состоять из нескольких параметров<br>

@@ -2,7 +2,7 @@
 
 namespace App\Classes;
 
-use App\Models\Smile;
+use App\Models\Sticker;
 use Illuminate\Database\Capsule\Manager as DB;
 
 /**
@@ -216,7 +216,7 @@ class BBCode
      */
     public function highlightCode($match): string
     {
-        //Чтобы bb-код и смайлы не работали внутри тега [code]
+        //Чтобы bb-код и стикеры не работали внутри тега [code]
         $match[1] = strtr($match[1], [':' => '&#58;', '[' => '&#91;']);
 
         return '<pre class="prettyprint linenums pre-scrollable">' . $match[1] . '</pre>';
@@ -253,38 +253,38 @@ class BBCode
     }
 
     /**
-     * Обрабатывет смайлы
+     * Обрабатывет стикеры
      *
      * @param $source
      * @return string Обработанный текст
      */
-    public function parseSmiles($source): string
+    public function parseStickers($source): string
     {
-        static $listSmiles;
+        static $listStickers;
 
-        if (empty($listSmiles)) {
-            if (! file_exists(STORAGE . '/temp/smiles.dat')) {
-                $smiles = Smile::query()
+        if (empty($listStickers)) {
+            if (! file_exists(STORAGE . '/temp/stickers.dat')) {
+                $stickers = Sticker::query()
                     ->select('code', 'name')
                     ->orderBy(DB::connection()->raw('CHAR_LENGTH(code)'), 'desc')
                     ->get()
                     ->toArray();
 
-                $smiles = array_column($smiles, 'name', 'code');
+                $stickers = array_column($stickers, 'name', 'code');
 
-                $smiles = array_map(
-                    function($smile) {
-                        return '<img src="' . $smile . '" alt="' . basename($smile) . '">';
-                    }, $smiles
+                $stickers = array_map(
+                    function($sticker) {
+                        return '<img src="' . $sticker . '" alt="' . basename($sticker) . '">';
+                    }, $stickers
                 );
 
-                file_put_contents(STORAGE . '/temp/smiles.dat', json_encode($smiles));
+                file_put_contents(STORAGE . '/temp/stickers.dat', json_encode($stickers));
             }
 
-            $listSmiles = json_decode(file_get_contents(STORAGE . '/temp/smiles.dat'), true);
+            $listStickers = json_decode(file_get_contents(STORAGE . '/temp/stickers.dat'), true);
         }
 
-        return strtr($source, $listSmiles);
+        return strtr($source, $listStickers);
     }
 
     /**

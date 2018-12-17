@@ -3,8 +3,8 @@
 namespace App\Controllers;
 
 use App\Models\Rule;
-use App\Models\Smile;
-use App\Models\SmilesCategory;
+use App\Models\Sticker;
+use App\Models\StickersCategory;
 use App\Models\Status;
 use App\Models\Surprise;
 use Illuminate\Database\Capsule\Manager as DB;
@@ -71,43 +71,43 @@ class PageController extends BaseController
     }
 
     /**
-     * Смайлы
+     * Стикеры
      *
      * @return string
      */
-    public function smiles(): string
+    public function stickers(): string
     {
-        $categories = SmilesCategory::query()->get();
+        $categories = StickersCategory::query()->get();
 
         if ($categories->isNotEmpty()) {
-            return view('pages/smiles', compact('categories'));
+            return view('pages/stickers', compact('categories'));
         }
 
-        return $this->smilesCategory(0);
+        return $this->stickersCategory(0);
     }
 
     /**
-     * Смайлы
+     * Стикеры
      *
      * @param int $id
      * @return string
      */
-    public function smilesCategory(int $id): string
+    public function stickersCategory(int $id): string
     {
         $category = null;
 
         if ($id) {
-            $category = SmilesCategory::query()->where('id', $id)->first();
+            $category = StickersCategory::query()->where('id', $id)->first();
 
             if (! $category) {
                 abort(404, 'Данной категории не существует!');
             }
         }
 
-        $total = Smile::query()->where('category_id', $id)->count();
-        $page = paginate(setting('smilelist'), $total);
+        $total = Sticker::query()->where('category_id', $id)->count();
+        $page = paginate(setting('stickerlist'), $total);
 
-        $smiles = Smile::query()
+        $stickers = Sticker::query()
             ->where('category_id', $id)
             ->orderBy(DB::connection()->raw('CHAR_LENGTH(`code`)'))
             ->orderBy('name')
@@ -116,7 +116,7 @@ class PageController extends BaseController
             ->with('category')
             ->get();
 
-        return view('pages/smiles_category', compact('category', 'smiles', 'page'));
+        return view('pages/stickers_category', compact('category', 'stickers', 'page'));
     }
 
     /**

@@ -8,7 +8,7 @@
 
     @foreach ($blogs as $blog)
         <?php $blog->text = bbCode($blog->text); ?>
-        <?php $blog->text = str_replace('/uploads/smiles', siteUrl().'/uploads/smiles', $blog->text); ?>
+        <?php $blog->text = str_replace('/uploads/stickers', siteUrl().'/uploads/stickers', $blog->text); ?>
 
         <item>
             <title>{{ $blog->title }}</title>

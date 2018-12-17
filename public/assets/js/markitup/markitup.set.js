@@ -55,7 +55,7 @@ mySettings = {
 
         {separator:'---------------' },
         {title:'Очистка BB-кода', name:'<i class="fa fa-eraser"></i>', className:"bb-clean", replaceWith:function(markitup) { return markitup.selection.replace(/\[(.*?)\]/g, "") } },
-        {title:'Смайл', name:'<i class="fa fa-smile"></i>', className:"bb-smile", openWith:' :) ',
+        {title:'Стикер', name:'<i class="fa fa-smile"></i>', className:"bb-sticker", openWith:' :) ',
         dropMenu: [
             {name:':)', openWith:' :) ', className:"col1-1" },
             {name:':(', openWith:' :( ', className:"col1-2" },

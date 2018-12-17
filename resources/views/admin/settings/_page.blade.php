@@ -15,10 +15,10 @@
         {!! textError('sets[onlinelist]') !!}
     </div>
 
-    <div class="form-group{{ hasError('sets[smilelist]') }}">
-        <label for="smilelist">Смайлов на стр.:</label>
-        <input type="number" class="form-control" id="smilelist" name="sets[smilelist]" maxlength="2" value="{{ getInput('sets.smilelist', $settings['smilelist']) }}" required>
-        {!! textError('sets[smilelist]') !!}
+    <div class="form-group{{ hasError('sets[stickerlist]') }}">
+        <label for="stickerlist">Стикеров на стр.:</label>
+        <input type="number" class="form-control" id="stickerlist" name="sets[stickerlist]" maxlength="2" value="{{ getInput('sets.stickerlist', $settings['stickerlist']) }}" required>
+        {!! textError('sets[stickerlist]') !!}
     </div>
 
     <div class="form-group{{ hasError('sets[avtorlist]') }}">

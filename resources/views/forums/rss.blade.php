@@ -8,7 +8,7 @@
 
     @foreach ($topics as $topic)
         <?php $topic->text = bbCode($topic->text); ?>
-        <?php $topic->text = str_replace('/uploads/smiles', siteUrl().'/uploads/smiles', $topic->text); ?>
+        <?php $topic->text = str_replace('/uploads/stickers', siteUrl().'/uploads/stickers', $topic->text); ?>
 
         <item>
             <title>{{ $topic->title }}</title>

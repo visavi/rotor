@@ -103,7 +103,7 @@
             </div>
             <br>
             <a href="/rules">Правила</a> /
-            <a href="/smiles">Смайлы</a> /
+            <a href="/stickers">Стикеры</a> /
             <a href="/tags">Теги</a><br><br>
         @else
             {!! showError('Комментирование данного предложения или проблемы закрыто!') !!}

@@ -2,14 +2,14 @@
 
 use Phinx\Migration\AbstractMigration;
 
-class CreateSmilesCategoriesTable extends AbstractMigration
+class CreateStickersCategoriesTable extends AbstractMigration
 {
     /**
      * Change Method.
      */
     public function change(): void
     {
-        $table = $this->table('smiles_categories', ['collation' => env('DB_COLLATION')]);
+        $table = $this->table('stickers_categories', ['collation' => env('DB_COLLATION')]);
         $table
             ->addColumn('name', 'string', ['limit' => 50])
             ->addColumn('updated_at', 'integer', ['null' => true])

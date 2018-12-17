@@ -26,8 +26,6 @@
 - utf_lower<br>
 - <a href="/files/docs/check">check</a><br>
 - subtok<br>
-- smiles<br>
-- nosmiles<br>
 - formatsize<br>
 - read_file<br>
 - read_dir<br>
@@ -70,7 +68,7 @@
 - stats_blacklist<br>
 - stats_navigation<br>
 - stats_antimat<br>
-- stats_smiles<br>
+- statsStickers<br>
 - stats_avatars<br>
 - stats_checker<br>
 - stats_advert<br>
@@ -100,10 +98,6 @@
 - stats_news<br>
 - last_news<br>
 - verifi<br>
-- quickcode<br>
-- quicksmiles<br>
-- quickpaste<br>
-- check_user<br>
 - <a href="/files/docs/is_user">is_user</a><br>
 - is_admin<br>
 - show_title<br>
@@ -195,7 +189,7 @@
  - <b>rekuser</b> (реклама пользователей)<br>
  - <b>rules</b> (правила)<br>
  - <b>setting</b> (Настройки сайта)<br>
- - <b>smiles</b> (Смайлы)<br>
+ - <b>stickers</b> (Стикеры)<br>
  - <b>spam</b> (Список жалоб)<br>
  - <b>status</b> (Статус юзера)<br>
  - <b>topics</b> (Топики форума)<br>

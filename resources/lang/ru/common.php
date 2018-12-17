@@ -2,7 +2,7 @@
 
 return [
     'rules'             => 'Правила',
-    'smiles'            => 'Смайлы',
+    'stickers'          => 'Стикеры',
     'tags'              => 'Теги',
     'management'        => 'Управление',
     'reply'             => 'Ответить',

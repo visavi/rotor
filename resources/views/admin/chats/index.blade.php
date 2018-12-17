@@ -16,7 +16,7 @@
         </ol>
     </nav>
 
-    <a href="/smiles">Смайлы</a> /
+    <a href="/stickers">Стикеры</a> /
     <a href="/tags">Теги</a><hr>
 
     @if ($posts->isNotEmpty())

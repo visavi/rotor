@@ -46,7 +46,7 @@ class Setting extends BaseModel
             'price',
             'advert',
             'image',
-            'smile',
+            'sticker',
             'offer',
         ];
     }

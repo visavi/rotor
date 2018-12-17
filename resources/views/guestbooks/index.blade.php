@@ -16,7 +16,7 @@
     </nav>
 
     <a href="/rules">{{ trans('common.rules') }}</a> /
-    <a href="/smiles">{{ trans('common.smiles') }}</a> /
+    <a href="/stickers">{{ trans('common.stickers') }}</a> /
     <a href="/tags">{{ trans('common.tags') }}</a>
 
     @if (isAdmin())

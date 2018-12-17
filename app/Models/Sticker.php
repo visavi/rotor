@@ -7,13 +7,14 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
- * Class Smile
+ * Class Sticker
  *
  * @property int id
+ * @property int category_id
  * @property string name
  * @property string code
  */
-class Smile extends BaseModel
+class Sticker extends BaseModel
 {
     /**
      * Indicates if the model should be timestamped.
@@ -34,15 +35,15 @@ class Smile extends BaseModel
      *
      * @var string
      */
-    public $uploadPath = UPLOADS . '/smiles';
+    public $uploadPath = UPLOADS . '/stickers';
 
     /**
-     * Возвращает связь категории смайлов
+     * Возвращает связь категории стикеров
      *
      * @return BelongsTo
      */
     public function category(): BelongsTo
     {
-        return $this->belongsTo(SmilesCategory::class, 'category_id')->withDefault();
+        return $this->belongsTo(StickersCategory::class, 'category_id')->withDefault();
     }
 }

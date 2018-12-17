@@ -163,11 +163,11 @@
     background: #00ffff;
 }
 
-.markItUp .bb-smile ul{
+.markItUp .bb-sticker ul{
     width: 135px;
     padding: 1px;
 }
-.markItUp .bb-smile li{
+.markItUp .bb-sticker li{
     border:none;
     width:26px;
     height:30px;
@@ -176,87 +176,87 @@
     margin:0;
     padding:0;
 }
-.markItUp .bb-smile ul a{
+.markItUp .bb-sticker ul a{
     width:26px;
     height:26px;
     text-indent:-10000px;
 }
-.markItUp .bb-smile .col1-0 a{padding:1px}
+.markItUp .bb-sticker .col1-0 a{padding:1px}
 
-.markItUp .bb-smile .col1-1 a {
-    background-image:url('/uploads/smiles/).gif');
+.markItUp .bb-sticker .col1-1 a {
+    background-image:url('/uploads/stickers/).gif');
 }
-.markItUp .bb-smile .col1-2 a {
-    background-image:url('/uploads/smiles/(.gif');
+.markItUp .bb-sticker .col1-2 a {
+    background-image:url('/uploads/stickers/(.gif');
 }
-.markItUp .bb-smile .col1-3 a {
-    background-image:url('/uploads/smiles/E.gif');
+.markItUp .bb-sticker .col1-3 a {
+    background-image:url('/uploads/stickers/E.gif');
 }
-.markItUp .bb-smile .col1-4 a {
-    background-image:url('/uploads/smiles/D.gif');
+.markItUp .bb-sticker .col1-4 a {
+    background-image:url('/uploads/stickers/D.gif');
 }
-.markItUp .bb-smile .col1-5 a {
-    background-image:url('/uploads/smiles/no.gif');
+.markItUp .bb-sticker .col1-5 a {
+    background-image:url('/uploads/stickers/no.gif');
 }
-.markItUp .bb-smile .col2-1 a {
-    background-image:url('/uploads/smiles/hello.gif');
+.markItUp .bb-sticker .col2-1 a {
+    background-image:url('/uploads/stickers/hello.gif');
 }
-.markItUp .bb-smile .col2-2 a {
-    background-image:url('/uploads/smiles/cry.gif');
+.markItUp .bb-sticker .col2-2 a {
+    background-image:url('/uploads/stickers/cry.gif');
 }
-.markItUp .bb-smile .col2-3 a {
-    background-image:url('/uploads/smiles/obana.gif');
+.markItUp .bb-sticker .col2-3 a {
+    background-image:url('/uploads/stickers/obana.gif');
 }
-.markItUp .bb-smile .col2-4 a {
-    background-image:url('/uploads/smiles/hi.gif');
+.markItUp .bb-sticker .col2-4 a {
+    background-image:url('/uploads/stickers/hi.gif');
 }
-.markItUp .bb-smile .col2-5 a {
-    background-image:url('/uploads/smiles/oy.gif');
+.markItUp .bb-sticker .col2-5 a {
+    background-image:url('/uploads/stickers/oy.gif');
 }
-.markItUp .bb-smile .col3-1 a {
-    background-image:url('/uploads/smiles/infat.gif');
+.markItUp .bb-sticker .col3-1 a {
+    background-image:url('/uploads/stickers/infat.gif');
 }
-.markItUp .bb-smile .col3-2 a {
-    background-image:url('/uploads/smiles/klass.gif');
+.markItUp .bb-sticker .col3-2 a {
+    background-image:url('/uploads/stickers/klass.gif');
 }
-.markItUp .bb-smile .col3-3 a {
-    background-image:url('/uploads/smiles/krut.gif');
+.markItUp .bb-sticker .col3-3 a {
+    background-image:url('/uploads/stickers/krut.gif');
 }
-.markItUp .bb-smile .col3-4 a {
-    background-image:url('/uploads/smiles/aaa.gif');
+.markItUp .bb-sticker .col3-4 a {
+    background-image:url('/uploads/stickers/aaa.gif');
 }
-.markItUp .bb-smile .col3-5 a {
-    background-image:url('/uploads/smiles/zlo.gif');
+.markItUp .bb-sticker .col3-5 a {
+    background-image:url('/uploads/stickers/zlo.gif');
 }
-.markItUp .bb-smile .col4-1 a {
-    background-image:url('/uploads/smiles/blum.gif');
+.markItUp .bb-sticker .col4-1 a {
+    background-image:url('/uploads/stickers/blum.gif');
 }
-.markItUp .bb-smile .col4-2 a {
-    background-image:url('/uploads/smiles/baby.gif');
+.markItUp .bb-sticker .col4-2 a {
+    background-image:url('/uploads/stickers/baby.gif');
 }
-.markItUp .bb-smile .col4-3 a {
-    background-image:url('/uploads/smiles/read.gif');
+.markItUp .bb-sticker .col4-3 a {
+    background-image:url('/uploads/stickers/read.gif');
 }
-.markItUp .bb-smile .col4-4 a {
-    background-image:url('/uploads/smiles/blin.gif');
+.markItUp .bb-sticker .col4-4 a {
+    background-image:url('/uploads/stickers/blin.gif');
 }
-.markItUp .bb-smile .col4-5 a {
-    background-image:url('/uploads/smiles/nyam.gif');
+.markItUp .bb-sticker .col4-5 a {
+    background-image:url('/uploads/stickers/nyam.gif');
 }
-.markItUp .bb-smile .col5-1 a {
-    background-image:url('/uploads/smiles/puls.gif');
+.markItUp .bb-sticker .col5-1 a {
+    background-image:url('/uploads/stickers/puls.gif');
 }
-.markItUp .bb-smile .col5-2 a {
-    background-image:url('/uploads/smiles/xaxa.gif');
+.markItUp .bb-sticker .col5-2 a {
+    background-image:url('/uploads/stickers/xaxa.gif');
 }
-.markItUp .bb-smile .col5-3 a {
-    background-image:url('/uploads/smiles/4moks.gif');
+.markItUp .bb-sticker .col5-3 a {
+    background-image:url('/uploads/stickers/4moks.gif');
 }
-.markItUp .bb-smile .col5-4 a {
-    background-image:url('/uploads/smiles/heart.gif');
+.markItUp .bb-sticker .col5-4 a {
+    background-image:url('/uploads/stickers/heart.gif');
 }
-.markItUp .bb-smile .col5-5 a {
-    background-image:url('/uploads/smiles/moder.gif');
+.markItUp .bb-sticker .col5-5 a {
+    background-image:url('/uploads/stickers/moder.gif');
 }
 .markItUp .bb-nextpage a	{
     display: none;
