@@ -2,12 +2,12 @@
 
 use Phinx\Seed\AbstractSeed;
 
-class Stickers extends AbstractSeed
+class StickersSeeder extends AbstractSeed
 {
     /**
      * Run Method.
      */
-    public function run()
+    public function run(): void
     {
         $this->execute('TRUNCATE stickers');
 

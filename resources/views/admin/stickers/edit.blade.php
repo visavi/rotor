@@ -16,7 +16,7 @@
 
     <h1>Редактирование стикера</h1>
 
-    <img src="{{ $sticker->name }}" alt=""> — <b>{{ $sticker->code }}</b><br>
+    <img src="{{ $sticker->name }}" alt=""></b><br>
 
     <div class="form">
         <form action="/admin/stickers/edit/{{ $sticker->id }}?page={{ $page }}" method="post">

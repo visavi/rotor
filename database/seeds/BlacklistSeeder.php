@@ -7,7 +7,7 @@ class BlacklistSeeder extends AbstractSeed
     /**
      * Run Method.
      */
-    public function run()
+    public function run(): void
     {
         $this->execute('TRUNCATE blacklist');
 

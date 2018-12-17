@@ -7,7 +7,7 @@ class SettingsSeeder extends AbstractSeed
     /**
      * Run Method.
      */
-    public function run()
+    public function run(): void
     {
         $data = [
             ['name'  => 'addbansend', 'value' => 1],
