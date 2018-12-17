@@ -97,7 +97,7 @@
             </form>
         </div><br>
 
-    @elseif (setting('bookadds') === '1')
+    @elseif (setting('bookadds'))
 
         <div class="form">
             <form action="/guestbooks/add" method="post">

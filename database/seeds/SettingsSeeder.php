@@ -33,7 +33,7 @@ class SettingsSeeder extends AbstractSeed
             ['name'  => 'captcha_maxlength', 'value' => 5],
             ['name'  => 'captcha_offset', 'value' => 5],
             ['name'  => 'captcha_spaces', 'value' => 0],
-            ['name'  => 'captcha_symbols', 'value' => '0123456789'],
+            ['name'  => 'captcha_symbols', 'value' => '1234567890'],
             ['name'  => 'chatpost', 'value' => 10],
             ['name'  => 'closedsite', 'value' => 0],
             ['name'  => 'contactlist', 'value' => 10],
@@ -50,7 +50,7 @@ class SettingsSeeder extends AbstractSeed
             ['name'  => 'editstatuspoint', 'value' => 1000],
             ['name'  => 'errorlog', 'value' => 1],
             ['name'  => 'filesize', 'value' => 5242880],
-            ['name'  => 'fileupload', 'value' => 33554432],
+            ['name'  => 'fileupload', 'value' => 10485760],
             ['name'  => 'floodstime', 'value' => 30],
             ['name'  => 'forumextload', 'value' => 'zip,rar,txt,jpg,jpeg,gif,png,mp3,mp4,3gp,wav,pdf'],
             ['name'  => 'forumloadpoints', 'value' => 150],
@@ -112,8 +112,8 @@ class SettingsSeeder extends AbstractSeed
             ['name'  => 'sendmoneypoint', 'value' => 150],
             ['name'  => 'sendprivatmailday', 'value' => 3],
             ['name'  => 'smilelist', 'value' => 10],
-            ['name'  => 'smilemaxsize', 'value' => 10240],
-            ['name'  => 'smilemaxweight', 'value' => 100],
+            ['name'  => 'smilemaxsize', 'value' => 1048576],
+            ['name'  => 'smilemaxweight', 'value' => 500],
             ['name'  => 'smileminweight', 'value' => 16],
             ['name'  => 'spamlist', 'value' => 10],
             ['name'  => 'statusdef', 'value' => 'Дух'],
@@ -135,6 +135,6 @@ class SettingsSeeder extends AbstractSeed
         $table = $this->table('settings');
         $table->insert($data)->save();
 
-        clearCache();
+        clearCache('settings');
     }
 }

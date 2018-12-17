@@ -23,7 +23,7 @@
         <i class="fa fa-pencil-alt text-muted"></i> <span style="color:#ff0000"><b>Включено подтверждение регистрации!</b> Вам на почтовый ящик будет выслан код, который необходим для подтверждения регистрации!</span><br>
     @endif
 
-    @if (!empty(setting('invite')))
+    @if (setting('invite'))
         <i class="fa fa-pencil-alt text-muted"></i> <span style="color:#ff0000"><b>Включена регистрация по приглашениям!</b> Регистрация пользователей возможна только по специальным пригласительным ключам</span><br>
     @endif
 
@@ -50,7 +50,7 @@
                 <label for="inputLogin">Логин:</label>
                 <input class="form-control" name="login" id="inputLogin" maxlength="20" value="{{ getInput('login') }}" required>
                 {!! textError('login') !!}
-                <span class="text-muted font-italic">Только символы латинского алфавита и цифры</span>
+                <span class="text-muted font-italic">Только символы латинского алфавита, цифры и дефис</span>
             </div>
 
             <div class="form-group{{ hasError('password') }}">

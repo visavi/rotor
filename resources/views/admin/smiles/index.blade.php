@@ -5,7 +5,6 @@
 @stop
 
 @section('content')
-
     <nav>
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
@@ -20,7 +19,7 @@
 
     <h1>Смайлы</h1>
 
-    <i class="far fa-smile"></i>  <b><a href="/admin/smiles/0">Без категории</a></b><br>
+    <i class="far fa-smile"></i>  <b><a href="/admin/smiles/0">Общие</a></b><br>
     @if ($categories->isNotEmpty())
         @foreach($categories as $category)
             <i class="far fa-smile"></i>  <b><a href="/admin/smiles/{{ $category->id }}">{{ $category->name }}</a></b><br>

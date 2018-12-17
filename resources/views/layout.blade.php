@@ -1,4 +1,4 @@
-@extends(setting('themes').'/theme')
+@extends(setting('themes') . '/theme')
 
 @section('menu')
     @include('app/_menu')

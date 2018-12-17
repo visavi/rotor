@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Controllers\Admin;
 
 use App\Classes\Validator;
@@ -7,8 +9,6 @@ use App\Models\Smile;
 use App\Models\SmilesCategory;
 use App\Models\User;
 use Illuminate\Database\Capsule\Manager as DB;
-use Illuminate\Database\Eloquent\Builder;
-use Intervention\Image\ImageManagerStatic as Image;
 use Illuminate\Http\Request;
 
 class SmileController extends AdminController
@@ -38,18 +38,7 @@ class SmileController extends AdminController
             return view('admin/smiles/index', compact('categories'));
         }
 
-        $total = Smile::query()->count();
-        $page = paginate(setting('smilelist'), $total);
-
-        $smiles = Smile::query()
-            ->orderBy(DB::connection()->raw('CHAR_LENGTH(`code`)'))
-            ->orderBy('name')
-            ->limit($page->limit)
-            ->offset($page->offset)
-            ->with('category')
-            ->get();
-
-        return view('admin/smiles/view', compact('smiles', 'page'));
+        return $this->category(0);
     }
 
     /**
@@ -58,7 +47,7 @@ class SmileController extends AdminController
      * @param int $id
      * @return string
      */
-    public function view(int $id): string
+    public function category(int $id): string
     {
         $category = null;
 
@@ -74,9 +63,7 @@ class SmileController extends AdminController
         $page = paginate(setting('smilelist'), $total);
 
         $smiles = Smile::query()
-            ->when($category, function (Builder $query) use ($category) {
-                return $query->where('category_id', $category->id);
-            })
+            ->where('category_id', $id)
             ->orderBy(DB::connection()->raw('CHAR_LENGTH(`code`)'))
             ->orderBy('name')
             ->limit($page->limit)
@@ -84,7 +71,7 @@ class SmileController extends AdminController
             ->with('category')
             ->get();
 
-        return view('admin/smiles/view', compact('category', 'smiles', 'page'));
+        return view('admin/smiles/category', compact('category', 'smiles', 'page'));
     }
 
     /**
@@ -96,6 +83,8 @@ class SmileController extends AdminController
      */
     public function create(Request $request, Validator $validator): string
     {
+        $cid  = int($request->input('cid'));
+
         if (! is_writable(UPLOADS.'/smiles')){
             abort('default', 'Директория со смайлами недоступна для записи!');
         }
@@ -108,6 +97,11 @@ class SmileController extends AdminController
             $validator->equal($token, $_SESSION['token'], 'Неверный идентификатор сессии, повторите действие!')
                 ->length($code, 2, 20, ['code' => 'Слишком длинный или короткий код смайла!'])
                 ->regex($code, '|^:+[a-яa-z0-9_\-/\(\)]+$|i', ['code' => 'Код смайла должен начинаться с двоеточия. Разрешены буквы, цифры и дефис!']);
+
+            if ($cid) {
+                $category = SmilesCategory::query()->where('id', $cid)->first();
+                $validator->notEmpty($category, ['category' => 'Данной категории не существует!']);
+            }
 
             $duplicate = Smile::query()->where('code', $code)->first();
             $validator->empty($duplicate, ['code' => 'Смайл с данным кодом уже имеется в списке!']);
@@ -124,24 +118,27 @@ class SmileController extends AdminController
 
                 $newName = uniqueName($smile->getClientOriginalExtension());
                 $path    = (new Smile())->uploadPath . '/' . $newName;
-                Image::make($smile)->save($path);
+                $smile->move((new Smile())->uploadPath, $newName);
 
                 Smile::query()->create([
-                    'name' => str_replace(HOME, '', $path),
-                    'code' => $code,
+                    'category_id' => $cid,
+                    'name'        => str_replace(HOME, '', $path),
+                    'code'        => $code,
                 ]);
 
-                clearCache();
+                clearCache('smiles');
 
                 setFlash('success', 'Смайл успешно загружен!');
-                redirect('/admin/smiles');
+                redirect('/admin/smiles/' . $cid);
             } else {
                 setInput($request->all());
                 setFlash('danger', $validator->getErrors());
             }
         }
 
-        return view('admin/smiles/create');
+        $categories = SmilesCategory::query()->get();
+
+        return view('admin/smiles/create', compact('categories', 'cid'));
     }
 
     /**
@@ -166,6 +163,7 @@ class SmileController extends AdminController
 
             $token = check($request->input('token'));
             $code  = check(utfLower($request->input('code')));
+            $cid   = int($request->input('cid'));
 
             $validator->equal($token, $_SESSION['token'], 'Неверный идентификатор сессии, повторите действие!')
                 ->length($code, 2, 20, ['code' => 'Слишком длинный или короткий код смайла!'])
@@ -174,65 +172,72 @@ class SmileController extends AdminController
             $duplicate = Smile::query()->where('code', $code)->where('id', '<>', $smile->id)->first();
             $validator->empty($duplicate, ['code' => 'Смайл с данным кодом уже имеется в списке!']);
 
+            if ($cid) {
+                $category = SmilesCategory::query()->where('id', $cid)->first();
+                $validator->notEmpty($category, ['category' => 'Данной категории не существует!']);
+            }
+
             if ($validator->isValid()) {
 
                 $smile->update([
-                    'code' => $code,
+                    'code'        => $code,
+                    'category_id' => $cid,
                 ]);
 
-                clearCache();
+                clearCache('smiles');
 
                 setFlash('success', 'Смайл успешно отредактирован!');
-                redirect('/admin/smiles?page=' . $page);
+                redirect('/admin/smiles/' . $cid . '?page=' . $page);
             } else {
                 setInput($request->all());
                 setFlash('danger', $validator->getErrors());
             }
         }
 
-        return view('admin/smiles/edit', compact('smile', 'page'));
+        $categories = SmilesCategory::query()->get();
+
+        return view('admin/smiles/edit', compact('smile', 'categories', 'page'));
     }
 
     /**
      * Удаление смайлов
      *
+     * @param int       $id
      * @param Request   $request
      * @param Validator $validator
      * @return void
+     * @throws \Exception
      */
-    public function delete(Request $request, Validator $validator): void
+    public function delete(int $id, Request $request, Validator $validator): void
     {
         if (! is_writable(UPLOADS . '/smiles')){
             abort('default', 'Директория со смайлами недоступна для записи!');
         }
 
-        $page  = int($request->input('page', 1));
-        $token = check($request->input('token'));
-        $del   = intar($request->input('del'));
+        $smile = Smile::query()->where('id', $id)->first();
 
-        $validator->equal($token, $_SESSION['token'], 'Неверный идентификатор сессии, повторите действие!')
-            ->true($del, 'Отсутствуют выбранные смайлы для удаления!');
+        if (! $smile) {
+            abort(404, 'Данного смайла не существует!');
+        }
+
+        $page     = int($request->input('page', 1));
+        $token    = check($request->input('token'));
+        $category = $smile->category->id;
+
+        $validator->equal($token, $_SESSION['token'], 'Неверный идентификатор сессии, повторите действие!');
 
         if ($validator->isValid()) {
 
-            $smiles = Smile::query()
-                ->whereIn('id', $del)
-                ->get();
+            deleteFile(HOME . $smile->name, false);
+            $smile->delete();
 
-            if ($smiles->isNotEmpty()) {
-                foreach ($smiles as $smile) {
-                    deleteFile(HOME . $smile->name);
-                    $smile->delete();
-                }
-            }
+            clearCache('smiles');
 
-            clearCache();
-
-            setFlash('success', 'Выбранные смайлы успешно удалены!');
+            setFlash('success', 'Смайл успешно удален!');
         } else {
             setFlash('danger', $validator->getErrors());
         }
 
-        redirect('/admin/smiles?page=' . $page);
+        redirect('/admin/smiles/' . $category . '?page=' . $page);
     }
 }

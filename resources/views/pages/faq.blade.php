@@ -31,36 +31,36 @@
 
     <br>При наборе определенного количества актива, пользователю открываются новые возможности:<br>
 
-    @if (!empty(setting('rekuserpoint')))
+    @if (setting('rekuserpoint'))
         <b>{{ plural(setting('rekuserpoint'), setting('scorename')) }}</b> - добавление рекламных ссылок<br>
     @endif
 
-    @if (!empty(setting('privatprotect')))
+    @if (setting('privatprotect'))
         <b>{{ plural(setting('privatprotect'), setting('scorename')) }}</b> - отключается captcha для некоторых действий<br>
     @endif
 
 
-    @if (!empty(setting('addofferspoint')))
+    @if (setting('addofferspoint'))
         <b>{{ plural(setting('addofferspoint'), setting('scorename')) }}</b> - создание тем в "Предложениях и проблемах"<br>
     @endif
 
-    @if (!empty(setting('forumloadpoints')))
+    @if (setting('forumloadpoints'))
         <b>{{ plural(setting('forumloadpoints'), setting('scorename')) }}</b> - Прикрепление файлов в форуме<br>
     @endif
 
-    @if (!empty(setting('sendmoneypoint')))
+    @if (setting('sendmoneypoint'))
         <b>{{ plural(setting('sendmoneypoint'), setting('scorename')) }}</b> - перечисление игровых денег<br>
     @endif
 
-    @if (!empty(setting('editratingpoint')))
+    @if (setting('editratingpoint'))
         <b>{{ plural(setting('editratingpoint'), setting('scorename')) }}</b> - изменение репутации пользователям<br>
     @endif
 
-    @if (!empty(setting('editforumpoint')))
+    @if (setting('editforumpoint'))
         <b>{{ plural(setting('editforumpoint'), setting('scorename')) }}</b> - изменение и закрытие своих тем на форуме<br>
     @endif
 
-    @if (!empty(setting('advertpoint')))
+    @if (setting('advertpoint'))
         <b>{{ plural(setting('advertpoint'), setting('scorename')) }}</b> - исчезает вся реклама на главной странице сайта<br>
     @endif
 

@@ -4,6 +4,7 @@ namespace App\Controllers;
 
 use App\Models\Rule;
 use App\Models\Smile;
+use App\Models\SmilesCategory;
 use App\Models\Status;
 use App\Models\Surprise;
 use Illuminate\Database\Capsule\Manager as DB;
@@ -76,17 +77,46 @@ class PageController extends BaseController
      */
     public function smiles(): string
     {
-        $total = Smile::query()->count();
+        $categories = SmilesCategory::query()->get();
+
+        if ($categories->isNotEmpty()) {
+            return view('pages/smiles', compact('categories'));
+        }
+
+        return $this->smilesCategory(0);
+    }
+
+    /**
+     * Смайлы
+     *
+     * @param int $id
+     * @return string
+     */
+    public function smilesCategory(int $id): string
+    {
+        $category = null;
+
+        if ($id) {
+            $category = SmilesCategory::query()->where('id', $id)->first();
+
+            if (! $category) {
+                abort(404, 'Данной категории не существует!');
+            }
+        }
+
+        $total = Smile::query()->where('category_id', $id)->count();
         $page = paginate(setting('smilelist'), $total);
 
         $smiles = Smile::query()
+            ->where('category_id', $id)
             ->orderBy(DB::connection()->raw('CHAR_LENGTH(`code`)'))
             ->orderBy('name')
             ->limit($page->limit)
             ->offset($page->offset)
+            ->with('category')
             ->get();
 
-        return view('pages/smiles', compact('smiles', 'page'));
+        return view('pages/smiles_category', compact('category', 'smiles', 'page'));
     }
 
     /**

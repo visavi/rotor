@@ -15,15 +15,14 @@
         </ol>
     </nav>
 
-    @if ($smiles)
-        @foreach ($smiles as $smile)
-            <img src="{{ $smile['name'] }}" alt=""> — <b>{{ $smile['code'] }}</b><br>
+    <h1>Смайлы</h1>
+
+    <i class="far fa-smile"></i>  <b><a href="/smiles/0">Общие</a></b><br>
+    @if ($categories->isNotEmpty())
+        @foreach($categories as $category)
+            <i class="far fa-smile"></i>  <b><a href="/smiles/{{ $category->id }}">{{ $category->name }}</a></b><br>
         @endforeach
-
-        {!! pagination($page) !!}
-
-        Всего cмайлов: <b>{{ $page->total }}</b><br><br>
     @else
-        {!! showError('Смайлы не найдены!') !!}
+        {!! showError('Категории еще не созданы!') !!}
     @endif
 @stop

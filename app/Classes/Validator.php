@@ -377,14 +377,12 @@ class Validator
             $this->addError([$key => 'Недопустимое расширение файла!']);
         }
 
-        if (isset($rules['maxsize'])) {
-            if ($input->getSize() > $rules['maxsize']) {
-                $this->addError([$key => 'Максимальный вес файла ' . formatSize($rules['maxsize']) . '!']);
-            }
+        if (isset($rules['maxsize']) && $input->getSize() > $rules['maxsize']) {
+            $this->addError([$key => 'Максимальный вес файла ' . formatSize($rules['maxsize']) . '!']);
         }
 
         if (\in_array($extension, ['jpg', 'jpeg', 'gif', 'png'], true)) {
-            list($width, $height) = getimagesize($input);
+            [$width, $height] = getimagesize($input);
 
             if (isset($rules['maxweight'])) {
                 if ($width > $rules['maxweight'] || $height > $rules['maxweight']) {
@@ -396,10 +394,8 @@ class Validator
                 if ($width < $rules['minweight'] || $height < $rules['minweight']) {
                     $this->addError([$key => 'Минимальный размер картинки ' . $rules['minweight'] . 'px!']);
                 }
-            } else {
-                if (empty($width) || empty($height)) {
-                    $this->addError([$key => 'Размер картинки слишком маленький!']);
-                }
+            } elseif (empty($width) || empty($height)) {
+                $this->addError([$key => 'Размер картинки слишком маленький!']);
             }
         }
 

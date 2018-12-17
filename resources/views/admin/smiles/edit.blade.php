@@ -5,9 +5,6 @@
 @stop
 
 @section('content')
-
-    <h1>Редактирование смайла</h1>
-
     <nav>
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
@@ -17,11 +14,27 @@
         </ol>
     </nav>
 
+    <h1>Редактирование смайла</h1>
+
     <img src="{{ $smile->name }}" alt=""> — <b>{{ $smile->code }}</b><br>
 
     <div class="form">
         <form action="/admin/smiles/edit/{{ $smile->id }}?page={{ $page }}" method="post">
             <input type="hidden" name="token" value="{{ $_SESSION['token'] }}">
+
+            <div class="form-group{{ hasError('category') }}">
+                <label for="inputCategory">Категория</label>
+
+                <?php $inputCategory = getInput('cid', $smile->category->id); ?>
+                <select class="form-control" id="inputCategory" name="cid">
+                    <option value="0"{{ empty($inputCategory) ? ' selected' : '' }}>Общие смайлы</option>
+
+                    @foreach ($categories as $category)
+                        <option value="{{ $category->id }}"{{ ($inputCategory === $category->id) ? ' selected' : '' }}>{{ $category->name }}</option>
+                    @endforeach
+                </select>
+                {!! textError('category') !!}
+            </div>
 
             <div class="form-group{{ hasError('code') }}">
                 <label for="code">Код смайла:</label>
@@ -30,9 +43,8 @@
             </div>
 
             <p class="text-muted font-italic">
-                Код смайла должен начинаться со знака двоеточия<br>
+                Код смайла должен начинаться со знака двоеточия
             </p>
-
             <button class="btn btn-primary">Изменить</button>
         </form>
     </div>

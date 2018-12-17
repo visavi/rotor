@@ -319,6 +319,7 @@ return FastRoute\cachedDispatcher(function(RouteCollector $r) {
     $r->get('/tags', [App\Controllers\PageController::class, 'tags']);
     $r->get('/rules', [App\Controllers\PageController::class, 'rules']);
     $r->get('/smiles', [App\Controllers\PageController::class, 'smiles']);
+    $r->get('/smiles/{id:\d+}', [App\Controllers\PageController::class, 'smilesCategory']);
     $r->get('/online[/{action:all}]', [App\Controllers\OnlineController::class, 'index']);
     $r->get('/counters', [App\Controllers\CounterController::class, 'index']);
 
@@ -385,10 +386,10 @@ return FastRoute\cachedDispatcher(function(RouteCollector $r) {
         $r->get('/files/delete', [App\Controllers\Admin\FilesController::class, 'delete']);
 
         $r->get('/smiles', [App\Controllers\Admin\SmileController::class, 'index']);
-        $r->get('/smiles/{id:\d+}', [App\Controllers\Admin\SmileController::class, 'view']);
+        $r->get('/smiles/{id:\d+}', [App\Controllers\Admin\SmileController::class, 'category']);
         $r->addRoute(['GET', 'POST'], '/smiles/create', [App\Controllers\Admin\SmileController::class, 'create']);
         $r->addRoute(['GET', 'POST'], '/smiles/edit/{id:\d+}', [App\Controllers\Admin\SmileController::class, 'edit']);
-        $r->post('/smiles/delete', [App\Controllers\Admin\SmileController::class, 'delete']);
+        $r->get('/smiles/delete/{id:\d+}', [App\Controllers\Admin\SmileController::class, 'delete']);
 
         $r->addRoute(['GET', 'POST'], '/ipbans', [App\Controllers\Admin\IpBanController::class, 'index']);
         $r->post('/ipbans/delete', [App\Controllers\Admin\IpBanController::class, 'delete']);

@@ -1543,24 +1543,27 @@ function performance()
 /**
  * Очистка кеш-файлов
  *
+ * @param string $filename
  * @return bool результат выполнения
  */
-function clearCache()
+function clearCache(string $filename = null)
 {
+    if ($filename) {
+        return deleteFile(STORAGE . '/temp/' . $filename . '.dat', false);
+    }
+
     $files = glob(STORAGE . '/temp/*.dat');
     $files = array_diff($files, [
         STORAGE . '/temp/checker.dat',
-        STORAGE . '/temp/counter7.dat'
+        STORAGE . '/temp/counter7.dat',
+        STORAGE . '/temp/ipban.dat'
     ]);
 
     if ($files) {
         foreach ($files as $file) {
-            unlink ($file);
+            unlink($file);
         }
     }
-
-    // Авто-кэширование данных
-    ipBan(true);
 
     return true;
 }
@@ -2080,9 +2083,9 @@ function pagination($page)
 /**
  * Обрабатывает постраничную навигацию
  *
- * @param  integer $limit элементов на страницу
- * @param  integer $total всего элементов
- * @return object         массив подготовленных данных
+ * @param  int    $limit элементов на страницу
+ * @param  int    $total всего элементов
+ * @return object        массив подготовленных данных
  */
 function paginate(int $limit, int $total)
 {
@@ -2249,7 +2252,7 @@ function ipBan($save = false)
  * Возвращает настройки сайта по ключу
  *
  * @param  string $key ключ массива
- * @return string      данные
+ * @return mixed       данные
  */
 function setting($key = null)
 {
@@ -2275,6 +2278,7 @@ function setting($key = null)
  * Устанавливает настройки сайта
  *
  * @param array $setting массив настроек
+ * @return void
  */
 function setSetting($setting)
 {
@@ -2284,9 +2288,25 @@ function setSetting($setting)
 
 /**
  * Кеширует настройки сайта
+ *
+ * @return void
  */
-function saveSettings() {
+function saveSettings()
+{
     $settings = Setting::query()->pluck('value', 'name')->all();
+
+    $settings = array_map(function ($value) {
+        if (is_numeric($value)) {
+            return strpos($value, '.') === false ? (int) $value : (float) $value;
+        }
+
+        if ($value === '') {
+            return null;
+        }
+
+        return $value;
+    }, $settings);
+
     file_put_contents(STORAGE . '/temp/settings.dat', json_encode($settings, JSON_UNESCAPED_UNICODE), LOCK_EX);
 }
 

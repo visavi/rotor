@@ -65,7 +65,7 @@
 
         </div>
     @else
-        {!! showError('Для изменения стасута необходимо иметь '.plural(setting('editstatuspoint'), setting('scorename')).'!') !!}
+        {!! showError('Для изменения стасута необходимо иметь ' . plural(setting('editstatuspoint'), setting('scorename')) . '!') !!}
     @endif
 
     <h3>Изменение пароля</h3>
