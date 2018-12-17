@@ -102,7 +102,7 @@ return FastRoute\cachedDispatcher(function(RouteCollector $r) {
         $r->get('/search', [App\Controllers\Forum\ForumController::class, 'search']);
         $r->get('/active/{action:posts|topics}', [App\Controllers\Forum\ActiveController::class]);
         $r->post('/active/delete', [App\Controllers\Forum\ActiveController::class, 'delete']);
-        $r->get('/top/post', [App\Controllers\Forum\ForumController::class, 'topPosts']);
+        $r->get('/top/posts', [App\Controllers\Forum\ForumController::class, 'topPosts']);
         $r->get('/top/topics', [App\Controllers\Forum\ForumController::class, 'topTopics']);
         $r->get('/rss', [App\Controllers\Forum\ForumController::class, 'rss']);
         $r->get('/bookmarks', [App\Controllers\BookmarkController::class, 'index']);

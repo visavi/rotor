@@ -11,7 +11,7 @@ use App\Models\Topic;
 use App\Models\Vote;
 use App\Models\VoteAnswer;
 use Illuminate\Database\Capsule\Manager as DB;
-use Illuminate\Database\Query\Builder;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 
 class ForumController extends BaseController

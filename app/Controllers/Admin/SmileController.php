@@ -7,6 +7,7 @@ use App\Models\Smile;
 use App\Models\SmilesCategory;
 use App\Models\User;
 use Illuminate\Database\Capsule\Manager as DB;
+use Illuminate\Database\Eloquent\Builder;
 use Intervention\Image\ImageManagerStatic as Image;
 use Illuminate\Http\Request;
 
