@@ -387,9 +387,15 @@ return FastRoute\cachedDispatcher(function(RouteCollector $r) {
 
         $r->get('/stickers', [App\Controllers\Admin\StickerController::class, 'index']);
         $r->get('/stickers/{id:\d+}', [App\Controllers\Admin\StickerController::class, 'category']);
-        $r->addRoute(['GET', 'POST'], '/stickers/create', [App\Controllers\Admin\StickerController::class, 'create']);
+
+        $r->post('/stickers/create', [App\Controllers\Admin\StickerController::class, 'create']);
         $r->addRoute(['GET', 'POST'], '/stickers/edit/{id:\d+}', [App\Controllers\Admin\StickerController::class, 'edit']);
         $r->get('/stickers/delete/{id:\d+}', [App\Controllers\Admin\StickerController::class, 'delete']);
+
+        $r->addRoute(['GET', 'POST'], '/stickers/sticker/create', [App\Controllers\Admin\StickerController::class, 'createSticker']);
+        $r->addRoute(['GET', 'POST'], '/stickers/sticker/edit/{id:\d+}', [App\Controllers\Admin\StickerController::class, 'editSticker']);
+        $r->get('/stickers/sticker/delete/{id:\d+}', [App\Controllers\Admin\StickerController::class, 'deleteSticker']);
+
 
         $r->addRoute(['GET', 'POST'], '/ipbans', [App\Controllers\Admin\IpBanController::class, 'index']);
         $r->post('/ipbans/delete', [App\Controllers\Admin\IpBanController::class, 'delete']);

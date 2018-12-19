@@ -45,7 +45,6 @@
         </div>
     @endforeach
 
-
     <div class="form my-3">
         <form action="/admin/boards/create" method="post">
             <input type="hidden" name="token" value="{{ $_SESSION['token'] }}">

@@ -17,10 +17,11 @@
 
     <h1>Стикеры</h1>
 
-    <i class="far fa-smile"></i>  <b><a href="/stickers/0">Общие</a></b><br>
     @if ($categories->isNotEmpty())
         @foreach($categories as $category)
-            <i class="far fa-smile"></i>  <b><a href="/stickers/{{ $category->id }}">{{ $category->name }}</a></b><br>
+            <div class="bg-light p-2 mb-1 border">
+                <i class="far fa-smile"></i>  <b><a href="/stickers/{{ $category->id }}">{{ $category->name }}</a></b> ({{ $category->cnt }})
+            </div>
         @endforeach
     @else
         {!! showError('Категории еще не созданы!') !!}

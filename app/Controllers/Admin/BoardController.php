@@ -151,7 +151,7 @@ class BoardController extends AdminController
             $closed = empty($request->input('closed')) ? 0 : 1;
 
             $validator->equal($token, $_SESSION['token'], trans('validator.token'))
-                ->length($name, 3, 50, ['title' => 'Слишком длинное или короткое название раздела!'])
+                ->length($name, 3, 50, ['name' => 'Слишком длинное или короткое название раздела!'])
                 ->notEqual($parent, $board->id, ['parent' => 'Недопустимый выбор родительского раздела!']);
 
             if (! empty($parent) && $board->children->isNotEmpty()) {

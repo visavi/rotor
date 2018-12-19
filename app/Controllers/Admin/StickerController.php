@@ -32,13 +32,15 @@ class StickerController extends AdminController
      */
     public function index(): string
     {
-        $categories = StickersCategory::query()->get();
+        $categories = StickersCategory::query()
+            ->selectRaw('sc.id, sc.name, count(s.id) cnt')
+            ->from('stickers_categories as sc')
+            ->leftJoin('stickers as s', 's.category_id', 'sc.id')
+            ->groupBy('sc.id')
+            ->orderBy('sc.id')
+            ->get();
 
-        if ($categories->isNotEmpty()) {
-            return view('admin/stickers/index', compact('categories'));
-        }
-
-        return $this->category(0);
+        return view('admin/stickers/index', compact('categories'));
     }
 
     /**
@@ -49,14 +51,10 @@ class StickerController extends AdminController
      */
     public function category(int $id): string
     {
-        $category = null;
+        $category = StickersCategory::query()->where('id', $id)->first();
 
-        if ($id) {
-            $category = StickersCategory::query()->where('id', $id)->first();
-
-            if (! $category) {
-                abort(404, 'Данной категории не существует!');
-            }
+        if (! $category) {
+            abort(404, 'Данной категории не существует!');
         }
 
         $total = Sticker::query()->where('category_id', $id)->count();
@@ -75,13 +73,125 @@ class StickerController extends AdminController
     }
 
     /**
+     * Создание категории
+     *
+     * @param Request   $request
+     * @param Validator $validator
+     * @return void
+     */
+    public function create(Request $request, Validator $validator): void
+    {
+        $token = check($request->input('token'));
+        $name  = check($request->input('name'));
+
+        $validator->equal($token, $_SESSION['token'], trans('validator.token'))
+            ->length($name, 3, 50, ['name' => 'Слишком длинное или короткое название категории!']);
+
+        if ($validator->isValid()) {
+
+            /** @var StickersCategory $category */
+            $category = StickersCategory::query()->create([
+                'name'       => $name,
+                'created_at' => SITETIME,
+            ]);
+
+            setFlash('success', 'Новая категория успешно создана!');
+            redirect('/admin/stickers/' . $category->id);
+        } else {
+            setInput($request->all());
+            setFlash('danger', $validator->getErrors());
+        }
+
+        redirect('/admin/stickers');
+    }
+
+    /**
+     * Редактирование категории
+     *
+     * @param int       $id
+     * @param Request   $request
+     * @param Validator $validator
+     * @return string
+     */
+    public function edit(int $id, Request $request, Validator $validator): string
+    {
+        $category = StickersCategory::query()->find($id);
+
+        if (! $category) {
+            abort(404, 'Данной категории не существует!');
+        }
+
+        if ($request->isMethod('post')) {
+            $token = check($request->input('token'));
+            $name  = check($request->input('name'));
+
+            $validator->equal($token, $_SESSION['token'], trans('validator.token'))
+                ->length($name, 3, 50, ['name' => 'Слишком длинное или короткое название категории!']);
+
+            if ($validator->isValid()) {
+
+                $category->update([
+                    'name'       => $name,
+                    'updated_at' => SITETIME,
+                ]);
+
+                setFlash('success', 'Категория успешно отредактирована!');
+                redirect('/admin/stickers');
+            } else {
+                setInput($request->all());
+                setFlash('danger', $validator->getErrors());
+            }
+        }
+
+        return view('admin/stickers/edit_category', compact('category'));
+    }
+
+    /**
+     * Удаление категории
+     *
+     * @param int       $id
+     * @param Request   $request
+     * @param Validator $validator
+     * @throws \Exception
+     */
+    public function delete(int $id, Request $request, Validator $validator): void
+    {
+        /** @var StickersCategory $category */
+        $category = StickersCategory::query()->find($id);
+
+        if (! $category) {
+            abort(404, 'Данной категории не существует!');
+        }
+
+        $token = check($request->input('token'));
+
+        $validator->equal($token, $_SESSION['token'], trans('validator.token'));
+
+        $sticker = Sticker::query()->where('category_id', $category->id)->first();
+        if ($sticker) {
+            $validator->addError('Удаление невозможно! В данной категории имеются стикеры!');
+        }
+
+        if ($validator->isValid()) {
+
+            $category->delete();
+
+            setFlash('success', 'Категория успешно удалена!');
+        } else {
+            setFlash('danger', $validator->getErrors());
+        }
+
+        redirect('/admin/stickers');
+    }
+
+    /**
      * Добавление стикера
      *
      * @param Request   $request
      * @param Validator $validator
      * @return string
      */
-    public function create(Request $request, Validator $validator): string
+    public function createSticker(Request $request, Validator $validator): string
     {
         $cid  = int($request->input('cid'));
 
@@ -138,7 +248,7 @@ class StickerController extends AdminController
 
         $categories = StickersCategory::query()->get();
 
-        return view('admin/stickers/create', compact('categories', 'cid'));
+        return view('admin/stickers/create_sticker', compact('categories', 'cid'));
     }
 
     /**
@@ -149,7 +259,7 @@ class StickerController extends AdminController
      * @param Validator $validator
      * @return string
      */
-    public function edit(int $id, Request $request, Validator $validator): string
+    public function editSticker(int $id, Request $request, Validator $validator): string
     {
         /** @var Sticker $sticker */
         $sticker = Sticker::query()->find($id);
@@ -196,7 +306,7 @@ class StickerController extends AdminController
 
         $categories = StickersCategory::query()->get();
 
-        return view('admin/stickers/edit', compact('sticker', 'categories', 'page'));
+        return view('admin/stickers/edit_sticker', compact('sticker', 'categories', 'page'));
     }
 
     /**
@@ -208,7 +318,7 @@ class StickerController extends AdminController
      * @return void
      * @throws \Exception
      */
-    public function delete(int $id, Request $request, Validator $validator): void
+    public function deleteSticker(int $id, Request $request, Validator $validator): void
     {
         if (! is_writable(UPLOADS . '/stickers')){
             abort('default', 'Директория со стикерами недоступна для записи!');
@@ -217,7 +327,7 @@ class StickerController extends AdminController
         $sticker = Sticker::query()->where('id', $id)->first();
 
         if (! $sticker) {
-            abort(404, 'Данного стикреа не существует!');
+            abort(404, 'Данного стикера не существует!');
         }
 
         $page     = int($request->input('page', 1));
