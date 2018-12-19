@@ -5,8 +5,6 @@
 @stop
 
 @section('content')
-    <h1>Редактирование загрузки</h1>
-
     <nav>
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
@@ -21,6 +19,8 @@
             <li class="breadcrumb-item active">Редактирование загрузки</li>
         </ol>
     </nav>
+
+    <h1>Редактирование загрузки</h1>
 
     <div class="p-1 bg-warning text-dark">
         <b>Внимание!</b> Данная загрузка ожидает проверки модератором!<br>

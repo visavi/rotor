@@ -332,7 +332,7 @@ class StickerController extends AdminController
 
         $page     = int($request->input('page', 1));
         $token    = check($request->input('token'));
-        $category = (int) $sticker->category->id;
+        $category = $sticker->category->id;
 
         $validator->equal($token, $_SESSION['token'], 'Неверный идентификатор сессии, повторите действие!');
 

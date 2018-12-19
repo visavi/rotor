@@ -5,8 +5,6 @@
 @stop
 
 @section('content')
-    <h1>Файлы {{ $user->login }}</h1>
-
     <nav>
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
@@ -14,6 +12,8 @@
             <li class="breadcrumb-item active">Файлы {{ $user->login }}</li>
         </ol>
     </nav>
+
+    <h1>Файлы {{ $user->login }}</h1>
 
     @if ($user->id === getUser('id'))
         <?php $type = ($active === 1) ? 'success' : 'light'; ?>
