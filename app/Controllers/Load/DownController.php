@@ -240,7 +240,9 @@ class DownController extends BaseController
                     $down->uploadAndConvertFile($file);
                 }
 
-                if (! isAdmin(User::ADMIN)) {
+                if (isAdmin(User::ADMIN)) {
+                    $down->category->increment('count_downs');
+                } else {
                     $admins = User::query()->whereIn('level', [User::BOSS, User::ADMIN])->get();
 
                     if ($admins->isNotEmpty()) {
