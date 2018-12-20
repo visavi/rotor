@@ -193,7 +193,7 @@ $wrap->setOption('environment', 'default');
         }
 
         if (extension_loaded('curl')) {
-            $version = getModuleSetting('curl', 'cURL Information');
+            $version = getModuleSetting('curl', 'Curl Information');
             echo '<i class="fa fa-plus-circle"></i> Библиотека Curl ('.$version.'): <b><span style="color:#00cc00">ОК</span></b><br>';
         } else {
             echo '<i class="fa fa-minus-circle"></i> Библиотека Curl: <b><span style="color:#ffa500">Предупреждение</span></b> (Библиотека не загружена)<br>';
