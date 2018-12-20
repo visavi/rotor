@@ -5,9 +5,6 @@
 @stop
 
 @section('content')
-
-    <h1>Публикация нового файла</h1>
-
     <nav>
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
@@ -15,6 +12,8 @@
             <li class="breadcrumb-item active">Публикация</li>
         </ol>
     </nav>
+
+    <h1>Публикация нового файла</h1>
 
     <form action="/downs/create" method="post" enctype="multipart/form-data">
         <input type="hidden" name="token" value="{{ $_SESSION['token'] }}">

@@ -5,7 +5,6 @@
 @stop
 
 @section('content')
-
     @foreach ($downs as $down)
         <?php $down->text = bbCode($down->text); ?>
         <?php $down->text = str_replace('/uploads/stickers', siteUrl().'/uploads/stickers', $down->text); ?>

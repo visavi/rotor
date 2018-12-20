@@ -17,7 +17,7 @@
     <h1>Добавление стикера</h1>
 
     <div class="form">
-        <form action="/admin/stickers/create" method="post" enctype="multipart/form-data">
+        <form action="/admin/stickers/sticker/create" method="post" enctype="multipart/form-data">
             <input type="hidden" name="token" value="{{ $_SESSION['token'] }}">
 
             <div class="form-group{{ hasError('category') }}">

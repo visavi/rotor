@@ -77,13 +77,15 @@ class PageController extends BaseController
      */
     public function stickers(): string
     {
-        $categories = StickersCategory::query()->get();
+        $categories = StickersCategory::query()
+            ->selectRaw('sc.id, sc.name, count(s.id) cnt')
+            ->from('stickers_categories as sc')
+            ->leftJoin('stickers as s', 's.category_id', 'sc.id')
+            ->groupBy('sc.id')
+            ->orderBy('sc.id')
+            ->get();
 
-        if ($categories->isNotEmpty()) {
-            return view('pages/stickers', compact('categories'));
-        }
-
-        return $this->stickersCategory(0);
+        return view('pages/stickers', compact('categories'));
     }
 
     /**
@@ -94,14 +96,10 @@ class PageController extends BaseController
      */
     public function stickersCategory(int $id): string
     {
-        $category = null;
+        $category = StickersCategory::query()->where('id', $id)->first();
 
-        if ($id) {
-            $category = StickersCategory::query()->where('id', $id)->first();
-
-            if (! $category) {
-                abort(404, 'Данной категории не существует!');
-            }
+        if (! $category) {
+            abort(404, 'Данной категории не существует!');
         }
 
         $total = Sticker::query()->where('category_id', $id)->count();

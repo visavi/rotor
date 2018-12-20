@@ -7,9 +7,6 @@
 @section('description', stripString($down->text))
 
 @section('content')
-
-    <h1>{{ $down->title }}</h1>
-
     <nav>
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
@@ -29,6 +26,8 @@
         </ol>
     </nav>
 
+    <h1>{{ $down->title }}</h1>
+
     @if (! $down->active)
         <div class="p-1 bg-warning text-dark">
             <i class="fas fa-exclamation-triangle"></i> Внимание! Данная загрузка ожидает проверки модератором!<br>
@@ -47,7 +46,9 @@
             <div class="mt-3">
                 @foreach ($down->getFiles() as $file)
                     @if ($file->hash && file_exists(HOME . $file->hash))
-                        <i class="fa fa-download"></i> <b><a href="/downs/download/{{ $file->id }}">{{ $file->name }}</a></b> ({{ formatSize($file->size) }})
+
+                        {{ $file->name }} ({{ formatSize($file->size) }})<br>
+                        <a class="btn btn-success" href="/downs/download/{{ $file->id }}"><i class="fa fa-download"></i> Скачать</a><br>
 
                         @if ($file->extension === 'mp3')
                             <audio preload="none" controls style="max-width:100%;">
@@ -64,7 +65,7 @@
                         @endif
 
                         @if ($file->extension === 'zip')
-                            <a href="/downs/zip/{{ $file->id }}">Просмотреть архив</a>
+                            <a href="/downs/zip/{{ $file->id }}">Просмотреть архив</a><br>
                         @endif
                     @else
                         <i class="fa fa-download"></i> Файл не найден

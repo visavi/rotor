@@ -10,7 +10,7 @@ class AddCategoryIdToStickers extends AbstractMigration
     public function change(): void
     {
         $table = $this->table('stickers');
-        $table->addColumn('category_id', 'integer', ['default' => 0, 'after' => 'id'])
+        $table->addColumn('category_id', 'integer', ['default' => 1, 'after' => 'id'])
             ->update();
     }
 }

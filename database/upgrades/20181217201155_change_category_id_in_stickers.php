@@ -22,7 +22,7 @@ class ChangeCategoryIdInStickers extends AbstractMigration
     {
         $table = $this->table('stickers');
         $table
-            ->changeColumn('category_id', 'integer', ['default' => 0])
+            ->changeColumn('category_id', 'integer', ['default' => 1])
             ->save();
     }
 }

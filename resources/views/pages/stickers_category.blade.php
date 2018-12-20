@@ -1,21 +1,19 @@
 @extends('layout')
 
 @section('title')
-    {{ $category->name ?? 'Общие стикеры' }}
+    {{ $category->name }}
 @stop
 
 @section('content')
     <nav>
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
-            @if ($category)
-                <li class="breadcrumb-item"><a href="/stickers">Стикеры</a></li>
-            @endif
-            <li class="breadcrumb-item active">{{ $category->name ?? 'Общие стикеры' }}</li>
+            <li class="breadcrumb-item"><a href="/stickers">Стикеры</a></li>
+            <li class="breadcrumb-item active">{{ $category->name }}</li>
         </ol>
     </nav>
 
-    <h1>{{ $category->name ?? 'Общие стикеры' }}</h1>
+    <h1>{{ $category->name }}</h1>
 
     @if ($stickers)
         @foreach ($stickers as $sticker)

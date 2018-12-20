@@ -5,9 +5,6 @@
 @stop
 
 @section('content')
-
-    <h1>Новые комментарии</h1>
-
     <nav>
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
@@ -15,6 +12,8 @@
             <li class="breadcrumb-item active">Новые комментарии</li>
         </ol>
     </nav>
+
+    <h1>Новые комментарии</h1>
 
     @if ($comments->isNotEmpty())
         @foreach ($comments as $data)

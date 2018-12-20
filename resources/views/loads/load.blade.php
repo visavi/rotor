@@ -5,15 +5,6 @@
 @stop
 
 @section('content')
-
-    @if (! $category->closed && getUser())
-        <div class="float-right">
-            <a class="btn btn-success" href="/downs/create?cid={{ $category->id }}">Добавить</a>
-        </div><br>
-    @endif
-
-    <h1>{{ $category->name }}</h1>
-
     <nav>
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
@@ -30,6 +21,14 @@
             @endif
         </ol>
     </nav>
+
+    @if (! $category->closed && getUser())
+        <div class="float-right">
+            <a class="btn btn-success" href="/downs/create?cid={{ $category->id }}">Добавить</a>
+        </div><br>
+    @endif
+
+    <h1>{{ $category->name }}</h1>
 
     Сортировать:
 

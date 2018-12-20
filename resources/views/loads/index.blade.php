@@ -5,6 +5,12 @@
 @stop
 
 @section('content')
+    <nav>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
+            <li class="breadcrumb-item active">Загрузки</li>
+        </ol>
+    </nav>
 
     @if (getUser())
         <div class="float-right">
@@ -13,13 +19,6 @@
     @endif
 
     <h1>Загрузки</h1>
-
-    <nav>
-        <ol class="breadcrumb">
-            <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
-            <li class="breadcrumb-item active">Загрузки</li>
-        </ol>
-    </nav>
 
     @if (getUser())
         Мои: <a href="/downs/active/files">файлы</a>, <a href="/downs/active/comments">комментарии</a> /

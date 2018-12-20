@@ -5,9 +5,6 @@
 @stop
 
 @section('content')
-
-    <h1>Топ популярных файлов</h1>
-
     <nav>
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
@@ -16,8 +13,9 @@
         </ol>
     </nav>
 
-    Сортировать:
+    <h1>Топ популярных файлов</h1>
 
+    Сортировать:
     <?php $active = ($order === 'loads') ? 'success' : 'light'; ?>
     <a href="/loads/top?sort=loads" class="badge badge-{{ $active }}">Скачивания</a>
 

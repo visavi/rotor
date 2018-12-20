@@ -10,16 +10,17 @@
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
             <li class="breadcrumb-item"><a href="/admin">Панель</a></li>
             <li class="breadcrumb-item"><a href="/admin/stickers">Стикеры</a></li>
+            <li class="breadcrumb-item"><a href="/admin/stickers/{{ $sticker->category->id }}">{{ $sticker->category->name }}</a></li>
             <li class="breadcrumb-item active">Редактирование стикера</li>
         </ol>
     </nav>
 
     <h1>Редактирование стикера</h1>
 
-    <img src="{{ $sticker->name }}" alt=""></b><br>
+    <img src="{{ $sticker->name }}" alt=""><br>
 
     <div class="form">
-        <form action="/admin/stickers/edit/{{ $sticker->id }}?page={{ $page }}" method="post">
+        <form action="/admin/stickers/sticker/edit/{{ $sticker->id }}?page={{ $page }}" method="post">
             <input type="hidden" name="token" value="{{ $_SESSION['token'] }}">
 
             <div class="form-group{{ hasError('category') }}">
