@@ -74,7 +74,7 @@
         </form>
     </div><br>
 
-    @if (isAdmin('boss') && $page->total > 0)
-        <i class="fa fa-times"></i> <a href="/admin/chat/clear?token={{ $_SESSION['token'] }}" onclick="return confirm('Вы действительно хотите очистить админ-чат?')">Очистить чат</a><br>
+    @if ($page->total > 0 && isAdmin('boss'))
+        <i class="fa fa-times"></i> <a href="/admin/chats/clear?token={{ $_SESSION['token'] }}" onclick="return confirm('Вы действительно хотите очистить админ-чат?')">Очистить чат</a><br>
     @endif
 @stop
