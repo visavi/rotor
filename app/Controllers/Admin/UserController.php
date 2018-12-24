@@ -106,7 +106,7 @@ class UserController extends AdminController
             $city      = check($request->input('city'));
             $site      = check($request->input('site'));
             $birthday  = check($request->input('birthday'));
-            $icq       = check(str_replace('-', '', $request->input('icq')));
+            $icq       = preg_replace('/\D/', '', $request->input('icq'));
             $skype     = check(strtolower($request->input('skype')));
             $point     = int($request->input('point'));
             $money     = int($request->input('money'));
