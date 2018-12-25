@@ -1,7 +1,7 @@
 @extends('layout')
 
 @section('title')
-    Диалог с {!! $user->getProfile(null, false) !!}
+    Диалог с {{ $user->getName() }}
 @stop
 
 @section('content')
@@ -14,7 +14,7 @@
         </ol>
     </nav>
 
-    <h1>Диалог с {{ $user->getProfile(null, false) }}</h1>
+    <h1>Диалог с {{ $user->getName() }}</h1>
 
     @if (getUser()->isIgnore($user))
         <div class="p-1 bg-danger text-white">

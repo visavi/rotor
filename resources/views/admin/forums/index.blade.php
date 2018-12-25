@@ -53,7 +53,7 @@
                 @if ($forum->lastTopic->lastPost->id)
                     Тема: <a href="/admin/topics/end/{{ $forum->lastTopic->id }}">{{ $forum->lastTopic->title }}</a>
                     <br/>
-                    Сообщение: {!! $forum->lastTopic->lastPost->user->getProfile(null, false) !!} ({{ dateFixed($forum->lastTopic->lastPost->created_at) }})
+                    Сообщение: {{ $forum->lastTopic->lastPost->user->getName() }} ({{ dateFixed($forum->lastTopic->lastPost->created_at) }})
                 @else
                     Темы еще не созданы!
                 @endif

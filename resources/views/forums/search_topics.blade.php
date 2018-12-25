@@ -26,7 +26,7 @@
         <div>
             {!! $topic->pagination() !!}
             Раздел: <a href="/topics/{{ $topic->forum->id }}">{{ $topic->forum->title }}</a><br>
-            Сообщение: {!! $topic->lastPost->user->getProfile(null, false) !!} ({{ dateFixed($topic->lastPost->created_at) }})
+            Сообщение: {{ $topic->lastPost->user->getName() }} ({{ dateFixed($topic->lastPost->created_at) }})
         </div>
     @endforeach
 

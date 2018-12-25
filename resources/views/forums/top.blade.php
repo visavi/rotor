@@ -23,8 +23,8 @@
             </div>
             <div>
                 {!! $data->pagination() !!}
-                Автор: {!! $data->user->getProfile(null, false) !!}<br>
-                Сообщение: {!! $data->lastPost->user->getProfile(null, false) !!} ({{ dateFixed($data->lastPost->created_at) }})
+                Автор: {{ $data->user->getName() }}<br>
+                Сообщение: {{ $data->lastPost->user->getName() }} ({{ dateFixed($data->lastPost->created_at) }})
             </div>
         @endforeach
 

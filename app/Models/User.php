@@ -165,17 +165,30 @@ class User extends BaseModel
     }
 
     /**
+     * Возвращает имя или логин пользователя
+     *
+     * @return string
+     */
+    public function getName(): string
+    {
+        if ($this->id) {
+            return empty($this->name) ? $this->login : $this->name;
+        }
+
+        return setting('guestsuser');
+    }
+
+    /**
      * Возвращает ссылку на профиль пользователя
      *
-     * @param  string  $color цвет логина
-     * @param  boolean $link  выводить как ссылку
+     * @param  string $color цвет логина
      * @return string        путь к профилю
      */
-    public function getProfile($color = null, $link = true): string
+    public function getProfile($color = null): string
     {
         if ($this->id) {
             $admin = null;
-            $name  = empty($this->name) ? $this->login : $this->name;
+            $name  = $this->getName();
 
             if ($color) {
                 $name = '<span style="color:' . $color . '">' . $name . '</span>';
@@ -185,18 +198,10 @@ class User extends BaseModel
                 $admin = ' <i class="fas fa-sm fa-crown text-danger"></i>';
             }
 
-            if ($link) {
-                return '<a class="author" href="/users/' . $this->login . '" data-login="' . $this->login . '">' . $name . '</a>' . $admin;
-            }
-
-            return $name;
+            return '<a class="author" href="/users/' . $this->login . '" data-login="' . $this->login . '">' . $name . '</a>' . $admin;
         }
 
-        if ($link) {
-            return '<span class="author" data-login="' . setting('guestsuser') . '">' . setting('guestsuser') . '</span>';
-        }
-
-        return setting('guestsuser');
+        return '<span class="author" data-login="' . setting('guestsuser') . '">' . setting('guestsuser') . '</span>';
     }
 
     /**
