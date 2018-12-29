@@ -26,7 +26,7 @@
 
     @if ($lists->isNotEmpty())
 
-        <form action="/admin/blacklist/delete?type={{ $type }}&amp;page={{ $page->current }}" method="post">
+        <form action="/admin/blacklists/delete?type={{ $type }}&amp;page={{ $page->current }}" method="post">
             <input type="hidden" name="token" value="{{ $_SESSION['token'] }}">
 
             @foreach ($lists as $list)
