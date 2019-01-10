@@ -125,12 +125,11 @@ class PageController extends BaseController
      */
     public function surprise(): void
     {
-        $surprise['requiredPoint'] = 50;
         $surprise['requiredDate']  = '10.01';
 
-        $surpriseMoney  = random_int(10000, 20000);
+        $surpriseMoney  = random_int(10000, 50000);
         $surprisePoint  = random_int(150, 250);
-        $surpriseRating = random_int(3, 7);
+        $surpriseRating = random_int(3, 10);
         $currentYear    = date('Y');
 
         if (! $user = getUser()) {
@@ -139,10 +138,6 @@ class PageController extends BaseController
 
         if (strtotime(date('d.m.Y')) > strtotime($surprise['requiredDate'].'.'.date('Y'))) {
             abort('default', 'Срок получения сюрприза еще не начался или уже закончился!');
-        }
-
-        if ($user->point < $surprise['requiredPoint']) {
-            abort('default', 'Чтобы получить сюрприз необходимо '.plural($surprise['requiredPoint'], setting('scorename')).'!');
         }
 
         $existSurprise = Surprise::query()
@@ -154,14 +149,25 @@ class PageController extends BaseController
             abort('default', 'В этом году сюрприз уже получен');
         }
 
+        $pointSum  = $user->point;
+        $pointText = null;
+
+        if ($user->point >= 50) {
+            $pointSum  = DB::connection()->raw('point + ' . $surprisePoint);
+            $pointText = plural($surprisePoint, setting('scorename')) . PHP_EOL;
+        }
+
+
         $user->update([
-            'point'     => DB::connection()->raw('point + '.$surprisePoint),
-            'money'     => DB::connection()->raw('money + '.$surpriseMoney),
-            'rating'    => DB::connection()->raw('posrating - negrating + '.$surpriseRating),
-            'posrating' => DB::connection()->raw('posrating + '.$surpriseRating),
+            'point'     => $pointSum,
+            'money'     => DB::connection()->raw('money + ' . $surpriseMoney),
+            'rating'    => DB::connection()->raw('posrating - negrating + ' . $surpriseRating),
+            'posrating' => DB::connection()->raw('posrating + ' . $surpriseRating),
         ]);
 
-        $text = 'Поздравляем с новым '.$currentYear.' годом!'.PHP_EOL.'В качестве сюрприза вы получаете '.PHP_EOL.plural($surprisePoint, setting('scorename')).PHP_EOL.plural($surpriseMoney, setting('moneyname')).PHP_EOL.$surpriseRating.' рейтинга репутации'.PHP_EOL.'Ура!!!';
+
+
+        $text = 'Поздравляем с новым ' . $currentYear . ' годом!' . PHP_EOL . 'В качестве сюрприза вы получаете ' . PHP_EOL . $pointText . plural($surpriseMoney, setting('moneyname')) . PHP_EOL . $surpriseRating . ' рейтинга репутации' . PHP_EOL . 'Ура!!!';
 
         $user->sendMessage(null, $text);
 
