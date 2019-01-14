@@ -47,7 +47,7 @@
                 @foreach ($down->getFiles() as $file)
                     @if ($file->hash && file_exists(HOME . $file->hash))
 
-                        {{ $file->name }} ({{ formatSize($file->size) }})<br>
+                        <b>{{ $file->name }}</b> ({{ formatSize($file->size) }})<br>
                         <a class="btn btn-success" href="/downs/download/{{ $file->id }}"><i class="fa fa-download"></i> Скачать</a><br>
 
                         @if ($file->extension === 'mp3')
@@ -96,21 +96,24 @@
         Добавлено: {!! $down->user->getProfile() !!} ({{ dateFixed($down->created_at) }})<br><br>
     </div>
 
-    @if (getUser() && getUser('id') === $down->user_id)
-        <form class="form-inline" action="/downs/votes/{{ $down->id }}" method="post">
+    @if (getUser() && getUser('id') !== $down->user_id)
+        <form action="/downs/votes/{{ $down->id }}" method="post">
             <input type="hidden" name="token" value="{{ $_SESSION['token'] }}">
-
-            <div class="form-group mb-2{{ hasError('score') }}">
-                <select class="form-control" id="score" name="score">
-                    <option value="5" {{ $down->vote === '5' ? ' selected' : '' }}>Отлично</option>
-                    <option value="4" {{ $down->vote === '4' ? ' selected' : '' }}>Хорошо</option>
-                    <option value="3" {{ $down->vote === '3' ? ' selected' : '' }}>Нормально</option>
-                    <option value="2" {{ $down->vote === '2' ? ' selected' : '' }}>Плохо</option>
-                    <option value="1" {{ $down->vote === '1' ? ' selected' : '' }}>Отстой</option>
-                </select>
-                {!! textError('protect') !!}
+            <label for="score">Ваша оценка</label>
+            <div class="form-inline">
+                <div class="form-group mb-2{{ hasError('score') }}">
+                    <select class="form-control" id="score" name="score">
+                        <option value="0">Выбрать оценку</option>
+                        <option value="1" {{ $down->vote === '1' ? ' selected' : '' }}>Отстой</option>
+                        <option value="2" {{ $down->vote === '2' ? ' selected' : '' }}>Плохо</option>
+                        <option value="3" {{ $down->vote === '3' ? ' selected' : '' }}>Нормально</option>
+                        <option value="4" {{ $down->vote === '4' ? ' selected' : '' }}>Хорошо</option>
+                        <option value="5" {{ $down->vote === '5' ? ' selected' : '' }}>Отлично</option>
+                    </select>
+                    {!! textError('protect') !!}
+                </div>
+                <button class="btn btn-primary mb-2">Оценить</button>
             </div>
-            <button class="btn btn-primary mb-2">Оценить</button>
         </form>
     @endif
 @stop
