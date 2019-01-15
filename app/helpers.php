@@ -1582,6 +1582,7 @@ function returnUrl($url = null)
         return false;
     }
     $query = $request->has('return') ? $request->input('return') : $request->path();
+
     return '?return=' . urlencode(! $url ? $query : $url);
 }
 

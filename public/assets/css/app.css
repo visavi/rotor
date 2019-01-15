@@ -2,20 +2,6 @@ textarea.form-control {
   resize: vertical;
 }
 
-.logotype {
-  font-size: 28px;
-  color: #666;
-  text-indent: 0;
-  display: inline-block;
-  font-weight: bold;
-  line-height:normal;
-}
-
-.logotype:first-letter {
-  font-size: 40px;
-  color: orange;
-}
-
 @font-face {
   font-family: FontAwesome;
   src: url('/assets/fonts/fa-solid-900.woff');
