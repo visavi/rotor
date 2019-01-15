@@ -20,15 +20,13 @@
 <body>
 
 <!-- Navigation -->
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
+<nav class="navbar navbar-expand-lg bg-light fixed-top">
     <div class="container">
         <a class="navbar-brand" href="/"><img src="/assets/img/images/logo.png" alt="{{ setting('title') }}"></a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
-        <div class="collapse navbar-collapse" id="navbarResponsive">
-            @include('app/_menu_test')
-        </div>
+        @include('./menu')
     </div>
 </nav>
 
@@ -116,7 +114,7 @@
     </div>
 </div>
 
-<footer class="py-5 bg-dark">
+<footer class="py-5 bg-light">
     <div class="container">
         <p class="m-0 text-center text-white">&copy; Copyright 2005-{{ date('Y') }} {{ setting('title') }}</p>
 
