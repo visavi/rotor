@@ -269,21 +269,21 @@ $wrap->setOption('environment', 'default');
 
             <p><a style="font-size: 18px" href="?act=migrate">Выполнить миграции</a></p>
 
-        <?php elseif($request->input('act') === 'migrate'): ?>
+        <?php elseif ($request->input('act') === 'migrate'): ?>
             <h1>Шаг 3 - выполнение миграций (установка)</h1>
 
             <?= nl2br($wrap->getMigrate()); ?>
 
             <p><a style="font-size: 18px" href="?act=seed">Заполнить БД</a></p>
 
-        <?php elseif($request->input('act') === 'seed'): ?>
+        <?php elseif ($request->input('act') === 'seed'): ?>
 
             <h1>Шаг 4 - заполнение БД (установка)</h1>
 
             <?= nl2br($wrap->getSeed()); ?>
 
             <p><a style="font-size: 18px" href="?act=account">Создать администратора</a></p>
-        <?php elseif($request->input('act') === 'account'): ?>
+        <?php elseif ($request->input('act') === 'account'): ?>
 
             <h1>Шаг 5 - создание администратора (установка)</h1>
 
@@ -397,7 +397,7 @@ $wrap->setOption('environment', 'default');
             <?= nl2br($wrap->getStatus()); ?>
             <a style="font-size: 18px" href="?act=migrate">Перейти к обновлению</a>
 
-        <?php elseif($request->input('act') === 'rollback'): ?>
+        <?php elseif ($request->input('act') === 'rollback'): ?>
             <?= nl2br($wrap->getRollback()); ?>
 
         <?php elseif ($request->input('act') === 'migrate'): ?>

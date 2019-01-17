@@ -1018,8 +1018,9 @@ function shuffleAssoc(&$array)
  * @param  string $end
  * @return string         Обрезанная строка
  */
-function stripString($str, $words = 20, $end = '...') {
-    return Str::words(strip_tags($str), $words, $end);
+function stripString($str, $words = 20, $end = '...')
+{
+    return Str::words(strip_tags($str, '<br>'), $words, $end);
 }
 
 /**

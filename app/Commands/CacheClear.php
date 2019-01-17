@@ -42,7 +42,7 @@ class CacheClear extends AbstractCommand
             STORAGE.'/temp/counter7.dat',
         ]);
 
-        if ($cacheFiles){
+        if ($cacheFiles) {
             foreach ($cacheFiles as $file) {
                 unlink ($file);
             }

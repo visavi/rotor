@@ -63,7 +63,7 @@ class CacheController extends AdminController
             } else {
                 $images = glob(UPLOADS.'/thumbnails/*.{gif,png,jpg,jpeg}', GLOB_BRACE);
 
-                if ($images){
+                if ($images) {
                     foreach ($images as $image) {
                         unlink ($image);
                     }

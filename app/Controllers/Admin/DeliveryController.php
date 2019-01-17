@@ -52,12 +52,12 @@ class DeliveryController extends AdminController
             }
 
             // Рассылка администрации
-            if ($type === 3){
+            if ($type === 3) {
                 $users = User::query()->whereIn('level', User::ADMIN_GROUPS)->get();
             }
 
             // Рассылка всем пользователям сайта
-            if ($type === 4){
+            if ($type === 4) {
                 $users = User::query()->whereIn('level', User::USER_GROUPS)->get();
             }
 

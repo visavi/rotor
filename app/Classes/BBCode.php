@@ -186,7 +186,7 @@ class BBCode
         }
 
         $list = [];
-        foreach($li as $l){
+        foreach($li as $l) {
             $list[] = '<li>' . $l . '</li>';
         }
 

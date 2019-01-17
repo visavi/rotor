@@ -25,7 +25,7 @@
 
 <?php
 echo bbCode(check('[code]<?php
-if(getUser()) {
+if (getUser()) {
     echo \'Пользователь авторизирован\';
 } else {
     echo \'Пользователь не авторизирован\';

@@ -195,7 +195,7 @@ class StickerController extends AdminController
     {
         $cid  = int($request->input('cid'));
 
-        if (! is_writable(UPLOADS.'/stickers')){
+        if (! is_writable(UPLOADS.'/stickers')) {
             abort('default', 'Директория со стикерами недоступна для записи!');
         }
 
@@ -320,7 +320,7 @@ class StickerController extends AdminController
      */
     public function deleteSticker(int $id, Request $request, Validator $validator): void
     {
-        if (! is_writable(UPLOADS . '/stickers')){
+        if (! is_writable(UPLOADS . '/stickers')) {
             abort('default', 'Директория со стикерами недоступна для записи!');
         }
 
