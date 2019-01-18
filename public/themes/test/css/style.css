@@ -7,3 +7,39 @@ body {
     padding-top: 56px;
   }
 }
+
+.bg-site {
+  background: #1e88e5;
+}
+
+.nav-item > a.nav-link {
+  color: #fff !important;
+}
+
+.tools-item {
+  position: relative;
+  width: 30px;
+  height: 30px;
+}
+
+.tools-item .tools-item-count {
+  width: 15px;
+  height: 15px;
+  border-radius: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: absolute;
+  top: 3px;
+  right: 3px;
+  font-style: normal;
+  font-size: 11px;
+  background: #FF5A00;
+  color: #fff;
+}
+
+.avatar-image {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+}

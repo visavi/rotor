@@ -20,7 +20,7 @@
 <body>
 
 <!-- Navigation -->
-<nav class="navbar navbar-expand-lg bg-light fixed-top">
+<nav class="navbar navbar-expand-md navbar-dark bg-site fixed-top">
     <div class="container">
         <a class="navbar-brand" href="/"><img src="/assets/img/images/logo.png" alt="{{ setting('title') }}"></a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
@@ -35,7 +35,7 @@
         <div class="col-md-8 mt-4">
             @yield('advertTop')
             @yield('advertUser')
-            @yield('note')
+            {{--@yield('note')--}}
             @yield('flash')
             @yield('layout')
             @yield('advertBottom')
@@ -114,7 +114,7 @@
     </div>
 </div>
 
-<footer class="py-5 bg-light">
+<footer class="py-5 bg-secondary">
     <div class="container">
         <p class="m-0 text-center text-white">&copy; Copyright 2005-{{ date('Y') }} {{ setting('title') }}</p>
 

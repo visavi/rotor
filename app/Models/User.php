@@ -450,11 +450,19 @@ class User extends BaseModel
         }
 
         if ($this->avatar && file_exists(HOME . '/' . $this->avatar)) {
-            return '<a href="/users/' . $this->login . '"><img src="' . $this->avatar . '" alt="" class="avatar"></a> ';
+            return '<a class="avatar" href="/users/' . $this->login . '"><img src="' . $this->avatar . '" alt=""></a> ';
         }
 
         return $this->defaultAvatar();
-        //return '<a href="/users/' . $user->login . '"><img src="/assets/img/images/avatar_default.png" alt=""></a> ';
+    }
+
+    public function getAvatarImage(): string
+    {
+        if ($this->avatar && file_exists(HOME . '/' . $this->avatar)) {
+            return '<img src="' . $this->avatar . '" alt="" class="avatar-image">';
+        }
+
+        return '<img class="avatar-image" src="/assets/img/images/avatar_guest.png" alt="">';
     }
 
     /**
