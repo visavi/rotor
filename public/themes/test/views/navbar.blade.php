@@ -1,27 +1,13 @@
+<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+</button>
+
 <div class="collapse navbar-collapse" id="navbarResponsive">
     <ul class="navbar-nav ml-auto">
         @if ($user = getUser())
-            <li class="nav-item">
-                <a class="nav-link tools-item" href="/messages">
-                    <i class="fas fa-bell"></i>
-                    @if ($user->newprivat)
-                        <i class="tools-item-count">{{ $user->newprivat }}</i>
-                    @endif
-                </a>
-            </li>
-
-            <li class="nav-item">
-                <a class="nav-link tools-item" href="/walls/{{ getUser('login') }}">
-                    <i class="fas fa-comment-alt"></i>
-                    @if ($user->newwall)
-                        <i class="tools-item-count">{{ $user->newwall }}</i>
-                    @endif
-                </a>
-            </li>
-
             @if (isAdmin())
                 <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" id="dropdown01" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fas fa-wrench"></i></a>
+                    <a class="nav-link dropdown-toggle" href="#" id="dropdown01" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fas fa-cog"></i></a>
                     <div class="dropdown-menu" aria-labelledby="dropdown01">
                         <a class="dropdown-item" href="/admin">Панель</a>
                         <a class="dropdown-item{{ statsSpam() ? ' text-danger' : '' }}" href="/admin/spam">Чат</a>
