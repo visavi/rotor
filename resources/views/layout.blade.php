@@ -43,7 +43,3 @@
 @section('performance')
     {!! performance() !!}
 @stop
-
-@section('layout')
-    @yield('content')
-@stop

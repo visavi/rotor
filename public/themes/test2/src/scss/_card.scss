@@ -1,0 +1,31 @@
+.card {
+  box-shadow: $card-box-shadow;
+  margin-bottom: $card-margin-bottom;
+
+  @include make-container-sm-full-width();
+
+  .card-header {
+    border-bottom: $card-header-border-width solid $card-border-color;
+
+    h1,
+    h2,
+    h3,
+    h4,
+    h5,
+    h6 {
+      margin-bottom: 0;
+    }
+  }
+
+  .card-footer {
+    border-top: $card-footer-border-width solid $card-border-color;
+  }
+
+  .table {
+    margin: $card-spacer-y 0;
+  }
+
+  .list-group {
+    box-shadow: none;
+  }
+}

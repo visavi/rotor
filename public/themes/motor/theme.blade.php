@@ -52,7 +52,9 @@
                     @yield('advertUser')
                     @yield('note')
                     @yield('flash')
-                    @yield('layout')
+                    @yield('header')
+                    @yield('breadcrumb')
+                    @yield('content')
                     @yield('advertBottom')
 
                     <div class="small" id="down">

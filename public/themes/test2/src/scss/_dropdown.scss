@@ -1,0 +1,20 @@
+.dropdown-item {
+  .dropdown-item-title {
+    color: $gray-600;
+  }
+
+  &.dropdown-link {
+    color: $blue;
+  }
+
+  &.active,
+  &:active {
+    .dropdown-item-title {
+      color: rgba($white, .75);
+    }
+
+    &.dropdown-link {
+      color: $white;
+    }
+  }
+}

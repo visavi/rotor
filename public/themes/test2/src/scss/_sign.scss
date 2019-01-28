@@ -1,0 +1,86 @@
+.page-sign {
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+  height: 100%;
+  width: 100%;
+
+  .container-sign {
+    display: flex;
+    flex: 1 1 0;
+    margin: 0 auto;
+    max-width: 26.25rem;
+    width: 100%;
+
+    .card {
+      margin: auto;
+      width: 100%;
+
+      .card-header {
+        background: $white;
+        border: none;
+        color: lighten($gray-700, 10%);
+        font-weight: 300;
+        padding: $card-spacer-y 2rem;
+        text-align: center;
+
+        img {
+          margin: 1rem 0;
+          max-height: 5rem;
+          max-width: 5rem;
+        }
+
+        h1 {
+          font-size: 20pt;
+          margin-bottom: .5rem;
+        }
+
+        span {
+          color: $gray-600;
+        }
+      }
+
+      .card-body {
+        padding: $card-spacer-y 2rem;
+
+        label {
+          color: $gray-600;
+          font-size: 11pt;
+        }
+
+        .form-group {
+          margin-bottom: .5rem;
+        }
+
+        .form-control {
+          padding: 1.3rem .75rem;
+        }
+
+        .btn {
+          padding: .75rem 1.5rem;
+          text-transform: uppercase;
+        }
+      }
+
+      .card-footer {
+        border: none;
+        font-size: 11pt;
+        padding: 1.25rem 2rem;
+        text-align: center;
+
+        p {
+          margin-bottom: 0;
+        }
+      }
+
+      @include breakpoint-xs {
+        .card-header,
+        .card-body,
+        .card-footer {
+          padding-left: 1rem;
+          padding-right: 1rem;
+        }
+      }
+    }
+  }
+}

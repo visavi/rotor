@@ -199,7 +199,9 @@
                                             @yield('advertTop')
                                             @yield('advertUser')
                                             @yield('flash')
-                                            @yield('layout')
+                                            @yield('header')
+                                            @yield('breadcrumb')
+                                            @yield('content')
                                             @yield('advertBottom')
                                         </div>
                                     </div>

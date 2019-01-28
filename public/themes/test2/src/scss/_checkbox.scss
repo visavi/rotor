@@ -1,0 +1,82 @@
+@mixin checkbox-color($name, $color) {
+  label.checkbox-#{$name} input[type=checkbox] {
+    + .check-mark {
+      border-color: $color;
+    }
+
+    &:checked + .check-mark {
+      background: $color;
+    }
+
+    &:checked:disabled + .check-mark {
+      background: lighten($color, 20%);
+      border-color: lighten($color, 20%);
+    }
+
+    &:focus + .check-mark {
+      box-shadow: 0 0 0 .2rem rgba($color, .25);
+    }
+  }
+}
+
+label.checkbox {
+  margin-bottom: 0;
+  align-items: center;
+  display: inline-flex;
+  position: relative;
+  user-select: none;
+
+  input[type=checkbox] {
+    position: absolute;
+    opacity: 0;
+    height: 0;
+    width: 0;
+
+    + .check-mark {
+      background-color: $white;
+      border: .125rem solid darken($gray-500, 10%);
+      cursor: pointer;
+      height: 1.25rem;
+      width: 1.25rem;
+      margin-right: .625rem;
+      position: relative;
+      border-radius: .125rem;
+      transition: all 0.2s ease;
+
+      &::after {
+        content: "";
+        position: absolute;
+        display: none;
+        left: .3125rem;
+        top: .125rem;
+        width: .375rem;
+        height: .625rem;
+        border: solid $white;
+        border-width: 0 .125rem .125rem 0;
+        transform: rotate(45deg);
+      }
+    }
+
+    &:focus + .check-mark {
+      box-shadow: 0 0 0 .2rem rgba(darken($gray-500, 10%), .25);
+    }
+
+    &:checked + .check-mark {
+      background: darken($gray-500, 10%);
+
+      &::after {
+        display: block;
+      }
+    }
+
+    &:disabled + .check-mark {
+      cursor: not-allowed;
+    }
+  }
+}
+
+@include checkbox-color(danger, $danger);
+@include checkbox-color(info, $info);
+@include checkbox-color(primary, $primary);
+@include checkbox-color(success, $success);
+@include checkbox-color(warning, $warning);

@@ -1,0 +1,77 @@
+html, body {
+  height: 100%;
+  width: 100%;
+}
+
+body {
+  background: $body-bg;
+  display: flex;
+  font-family: $font-family-base;
+  font-size: $font-size-base;
+}
+
+.app {
+  display: flex;
+  height: 100%;
+  width: 100%;
+
+  .app-sidebar,
+  .app-content {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    min-width: 0;
+  }
+
+  .app-sidebar {
+    flex-shrink: 0;
+    box-shadow: $sidebar-box-shadow;
+    overflow-x: hidden;
+    overflow-y: auto;
+    width: $sidebar-width;
+    transition: width .3s;
+    z-index: $zindex-fixed;
+
+    @include breakpoint-down-to-sm {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 0;
+
+      &.show {
+        box-shadow: $sidebar-box-shadow-sm;
+        width: $sidebar-width;
+
+        &::before {
+          visibility: visible;
+          opacity: 1;
+        }
+      }
+    }
+  }
+
+  .app-content {
+    flex: 1 1 0;
+  }
+
+  .app-sidebar .sidebar-header,
+  .app-content .content-header {
+    flex-shrink: 0;
+  }
+
+  .app-sidebar .sidebar-nav,
+  .app-content .content-body {
+    flex-grow: 1;
+  }
+
+  .app-content .content-body {
+    overflow-y: auto;
+    height: 100%;
+  }
+}
+
+.container,
+.container-fluid {
+  padding-top: $grid-gutter-width / 2;
+  padding-bottom: $grid-gutter-width / 2;
+}

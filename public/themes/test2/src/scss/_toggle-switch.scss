@@ -1,0 +1,106 @@
+@mixin switch-color($name, $color) {
+  label.switch-#{$name} {
+    input[type=radio],
+    input[type=checkbox] {
+      + .switch-slider {
+        background: $color;
+      }
+
+      &:disabled + .switch-slider {
+        background: lighten($color, 20%);
+      }
+
+      &:focus + .switch-slider {
+        box-shadow: 0 0 0 .2rem rgba($color, .25);
+      }
+    }
+  }
+}
+
+@mixin switch-to-color($name, $color) {
+  label.switch-to-#{$name} {
+    input[type=radio],
+    input[type=checkbox] {
+      &:checked + .switch-slider {
+        background: $color;
+      }
+
+      &:checked:disabled + .switch-slider {
+        background: lighten($color, 20%);
+      }
+
+      &:checked:focus + .switch-slider {
+        box-shadow: 0 0 0 .2rem rgba($color, .25);
+      }
+    }
+  }
+}
+
+label.switch {
+  margin-bottom: 0;
+  position: relative;
+  align-items: center;
+  display: inline-flex;
+  border-radius: 2rem;
+
+  input[type=radio],
+  input[type=checkbox] {
+    position: absolute;
+    opacity: 0;
+    height: 0;
+    width: 0;
+
+    + .switch-slider {
+      background: $gray-500;
+      cursor: pointer;
+      display: block;
+      outline: 0;
+      padding: .125rem;
+      position: relative;
+      height: 1rem;
+      width: 2.5rem;
+      border-radius: 2rem;
+      transition: all .4s ease;
+      user-select: none;
+
+      &::after {
+        background: $white;
+        border-radius: 50%;
+        box-shadow: 0 0 .125rem .0625rem rgba($black, .2);
+        display: block;
+        content: "";
+        position: absolute;
+        top: -.25rem;
+        left: 0;
+        height: 1.5625rem;
+        width: 1.5625rem;
+        transition: all .2s ease;
+      }
+    }
+
+    &:checked + .switch-slider::after {
+      left: .9375rem;
+    }
+
+    &:disabled + .switch-slider {
+      background: lighten($gray-400, 5%);
+      cursor: not-allowed;
+    }
+
+    &:focus + .switch-slider {
+      box-shadow: 0 0 0 .2rem rgba($gray-400, .25);
+    }
+  }
+}
+
+@include switch-color(danger, $danger);
+@include switch-color(info, $info);
+@include switch-color(primary, $primary);
+@include switch-color(success, $success);
+@include switch-color(warning, $warning);
+
+@include switch-to-color(danger, $danger);
+@include switch-to-color(info, $info);
+@include switch-to-color(primary, $primary);
+@include switch-to-color(success, $success);
+@include switch-to-color(warning, $warning);

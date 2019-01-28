@@ -1,0 +1,53 @@
+.callout {
+  background: $callout-bg;
+  padding: $callout-padding-y $callout-padding-x;
+  margin-bottom: $callout-margin-bottom;
+  border-left: $callout-border-width solid $gray-400;
+  border-radius: $callout-border-radius;
+  box-shadow: $callout-box-shadow;
+
+  @include make-container-sm-full-width();
+
+  h4 {
+    margin-top: 0;
+    margin-bottom: .25rem;
+  }
+
+  ul:last-child,
+  ol:last-child,
+  p:last-child {
+    margin-bottom: 0;
+  }
+
+  code {
+    border-radius: .25rem;
+  }
+
+  & + .callout {
+    margin-top: -.25rem;
+  }
+
+  &.callout-info {
+    border-left-color: $info;
+
+    h4 {
+      color: $info;
+    }
+  }
+
+  &.callout-warning {
+    border-left-color: $warning;
+
+    h4 {
+      color: $warning;
+    }
+  }
+
+  &.callout-danger {
+    border-left-color: $danger;
+
+    h4 {
+      color: $danger;
+    }
+  }
+}

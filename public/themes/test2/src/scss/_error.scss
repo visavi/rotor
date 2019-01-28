@@ -1,0 +1,12 @@
+.container-error {
+  color: $gray-700;
+  display: flex;
+  flex-flow: column;
+  height: 100%;
+  padding: 0;
+
+  .error {
+    margin: auto;
+    text-align: center;
+  }
+}

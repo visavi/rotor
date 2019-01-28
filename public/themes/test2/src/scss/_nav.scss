@@ -1,0 +1,52 @@
+.card .nav.nav-tabs {
+  .nav-link {
+    border-radius: 0;
+    border-top: none;
+    border-bottom: none;
+    color: $nav-tabs-link-color;
+    outline: 0;
+  }
+
+  .nav-item:first-child .nav-link {
+    border-left: none;
+  }
+}
+
+.nav-tabs-responsive {
+  .nav-tabs {
+    display: none;
+  }
+
+  @include breakpoint-down-to-sm {
+    .tab-pane {
+      display: block;
+    }
+
+    .nav-link-collapse {
+      border-bottom: $nav-link-collapse-border-bottom;
+      color: $nav-tabs-link-color;
+      display: block;
+      padding: $nav-link-collapse-padding-y $card-spacer-x;
+      text-decoration: none;
+    }
+
+    .card .card-body,
+    .card .list-group {
+      border-bottom: $nav-link-collapse-border-bottom;
+    }
+  }
+
+  @include breakpoint-up-to-md {
+    .nav-tabs {
+      display: flex;
+    }
+
+    [data-toggle=collapse] {
+      display: none;
+    }
+
+    .tab-pane .collapse {
+      display: block;
+    }
+  }
+}

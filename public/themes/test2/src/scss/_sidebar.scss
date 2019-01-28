@@ -1,0 +1,105 @@
+.app-sidebar {
+  .sidebar-header {
+    background-color: $sidebar-header-bg-color;
+    display: flex;
+    flex-direction: column;
+    padding: 1.5rem 1rem;
+
+    .avatar {
+      background: $gray-200;
+      border-radius: 50%;
+      margin-bottom: 1.5rem;
+      height: 3rem;
+      width: 3rem;
+    }
+
+    .username {
+      color: $white;
+      display: flex;
+      flex-direction: column;
+      white-space: nowrap;
+
+      small {
+        color: rgba(255, 255, 255, 0.8);
+        font-size: 10pt;
+        font-weight: normal;
+      }
+    }
+  }
+
+  .sidebar-nav {
+    background: $white;
+    padding: 1rem 0;
+
+    ul {
+      list-style-type: none;
+      margin: 0;
+      padding: 0;
+    }
+
+    li {
+      a {
+        color: $sidebar-link-color;
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        outline: 0;
+        padding: .5rem 1rem;
+        text-decoration: none;
+        white-space: nowrap;
+
+        &:hover,
+        &[aria-expanded=true] {
+          background: $sidebar-link-hover-bg;
+          color: $sidebar-link-hover-color;
+        }
+
+        .sidebar-nav-icon {
+          flex-shrink: 0;
+          width: 2rem;
+        }
+
+        .sidebar-nav-text {
+          flex: 1 1 0;
+        }
+      }
+
+      > ul {
+        background: darken($gray-100, 2%);
+
+        li {
+          padding-left: 3rem;
+          padding-bottom: .5rem;
+
+          a {
+            padding: 0;
+          }
+
+          &:last-child {
+            padding-bottom: 1rem;
+          }
+        }
+      }
+    }
+
+    .sidebar-nav-header {
+      color: $gray-600;
+      display: inline-block;
+      font-size: 11pt;
+      font-weight: 700;
+      margin-bottom: .5rem;
+      padding: 0 1rem;
+    }
+  }
+}
+
+.btn-sidebar {
+  background: transparent;
+  box-shadow: none;
+  font-size: 1.4rem;
+  padding: 0 $btn-padding-x 0 0;
+
+  @include breakpoint-up-to-md {
+    display: none;
+  }
+}

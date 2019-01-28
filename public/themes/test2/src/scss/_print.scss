@@ -1,0 +1,15 @@
+@media print {
+  body {
+    display: block;
+  }
+
+  .app {
+    display: block;
+    height: auto;
+
+    .app-sidebar,
+    .app-content .content-header {
+      display: none;
+    }
+  }
+}

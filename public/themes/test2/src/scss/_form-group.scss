@@ -1,0 +1,13 @@
+.form-group.has-error {
+  label {
+    color: $danger;
+  }
+
+  .form-control {
+    border: .0625rem solid $danger;
+
+    &:focus {
+      box-shadow: 0 0 0 .2rem rgba($danger, .25);
+    }
+  }
+}

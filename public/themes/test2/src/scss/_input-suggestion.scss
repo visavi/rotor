@@ -1,0 +1,42 @@
+.input-suggestion {
+  position: relative;
+  border-radius: .25rem;
+
+  .input-suggestion-list {
+    background-color: $white;
+    border-bottom: .0625rem solid $primary;
+    border-left: .0625rem solid $primary;
+    border-right: .0625rem solid $primary;
+    border-bottom-left-radius: .31rem;
+    border-bottom-right-radius: .31rem;
+    display: none;
+    position: absolute;
+    width: 100%;
+    z-index: 1050;
+
+    .list-group .list-group-item {
+      border: none;
+      border-top-left-radius: 0;
+      border-top-right-radius: 0;
+    }
+  }
+
+  &.open {
+    box-shadow: 0 0 0 .2rem rgba($primary, .25);
+
+    input {
+      border-bottom-left-radius: 0;
+      border-bottom-right-radius: 0;
+      box-shadow: none;
+    }
+
+    input,
+    .input-suggestion-list {
+      background-color: $white;
+      border-color: lighten($primary, 25%);
+      color: $gray-700;
+      display: block;
+      transition: border-color .15s ease-in-out, box-shadow .15s ease-in-out;
+    }
+  }
+}

@@ -1,0 +1,126 @@
+.source-code {
+  margin-bottom: 1rem;
+
+  @include make-container-sm-full-width();
+
+  > a {
+    @include breakpoint-down-to-sm {
+      margin-right: $grid-gutter-width / 2;
+      margin-left: $grid-gutter-width / 2;
+    }
+  }
+
+  .nav-tabs a {
+    color: $source-code-link;
+    font-size: .95rem;
+    text-decoration: none;
+    padding: .75rem;
+    padding-bottom: 0;
+    transition: color .2s ease;
+
+    &.active,
+    &:active,
+    &:hover {
+      color: darken($source-code-link, 30%);
+    }
+  }
+
+  pre,
+  .nav-tabs {
+    background: $source-code-background;
+    border: none;
+  }
+
+  pre {
+    margin: 0;
+    overflow-x: auto;
+    padding: .75rem;
+    text-align: left;
+  }
+
+  .html {
+    .hljs-meta {
+      color: $source-code-namespace;
+    }
+
+    .hljs-section,
+    .hljs-tag {
+      color: $source-code-keyword;
+    }
+
+    .hljs-tag .hljs-attr {
+      color: $source-code-attribute;
+    }
+
+    .hljs-tag .hljs-string {
+      color: $source-code-string;
+    }
+
+    .hljs-comment {
+      color: $source-code-comment;
+    }
+  }
+
+  .css,
+  .scss {
+    .hljs-keyword {
+      color: $source-code-keyword;
+    }
+
+    .hljs-selector-class {
+      color: $source-code-class;
+    }
+
+    .hljs-attribute {
+      color: $source-code-attribute;
+    }
+
+    .hljs-comment {
+      color: $source-code-comment;
+    }
+
+    .hljs-number {
+      color: $source-code-number;
+    }
+  }
+
+  .js {
+    .hljs-number {
+      color: $source-code-number;
+    }
+
+    .hljs-string {
+      color: $source-code-string;
+    }
+
+    .hljs-keyword {
+      color: $source-code-keyword;
+    }
+
+    .hljs-comment {
+      color: $source-code-comment;
+    }
+
+    a .hljs-comment {
+      color: $blue;
+    }
+  }
+
+  .json {
+    .hljs-attr {
+      color: $source-code-attribute;
+    }
+
+    .hljs-string {
+      color: $source-code-string;
+    }
+
+    .hljs-literal, {
+      color: $source-code-keyword;
+    }
+
+    .hljs-number {
+      color: $source-code-number;
+    }
+  }
+}

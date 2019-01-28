@@ -1,0 +1,17 @@
+.font-lg {
+  font-size: $font-size-lg;
+}
+
+.font-sm {
+  font-size: $font-size-sm;
+}
+
+.decoration-none {
+  text-decoration: none !important;
+}
+
+@each $color, $value in $grays {
+  .text-gray-#{$color} {
+    color: $value;
+  }
+}

@@ -1,0 +1,26 @@
+&lt;div class="form-group"&gt;
+  &lt;button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modal-camera"&gt;
+    &lt;i class="fa fa-camera"&gt;&lt;/i&gt; Take a picture
+  &lt;/button&gt;
+&lt;/div&gt;
+
+&lt;img id="snapshot-preview" src="unknown.png" class="img-thumbnail"&gt;
+
+&lt;div id="modal-camera" class="modal" tabindex="-1" data-backdrop="static"&gt;
+  &lt;div class="modal-dialog"&gt;
+    &lt;div class="modal-content"&gt;
+      &lt;div class="modal-header"&gt;
+        &lt;h5 class="modal-title"&gt;
+          &lt;i class="fa fa-camera"&gt;&lt;/i&gt; Camera
+        &lt;/h5&gt;
+      &lt;/div&gt;
+      &lt;div class="modal-body"&gt;
+        &lt;video id="camera" class="camera" data-size="320x240"&gt;&lt;/video&gt;
+      &lt;/div&gt;
+      &lt;div class="modal-footer"&gt;
+        &lt;button id="button-snapshot" type="button" class="btn btn-info"&gt;Take a picture&lt;/button&gt;
+        &lt;button type="button" class="btn btn-outline-danger" data-dismiss="modal"&gt;Turn off&lt;/button&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+&lt;/div&gt;

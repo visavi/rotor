@@ -1,0 +1,24 @@
+.app-sidebar .sidebar-header {
+  background-image: url("/themes/test2/assets/img/sidebar-header.svg");
+  background-repeat: no-repeat;
+  background-size: 100% 100%;
+}
+
+.page-sign {
+  background-attachment: fixed;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+.page-sign.sign-in {
+  background:
+    linear-gradient(160deg, rgba(60, 162, 224, .25) 50%, rgba(241, 244, 245, .9) 50%),
+    url("/themes/test2/assets/img/rocky-mountain.jpg");
+}
+
+.page-sign.sign-up {
+  background:
+    linear-gradient(-160deg, rgba(60, 162, 224, .25) 50%, rgba(241, 244, 245, .9) 50%),
+    url("/themes/test2/assets/img/rocky-mountain.jpg");
+}
