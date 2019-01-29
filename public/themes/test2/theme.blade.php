@@ -268,6 +268,6 @@
 @yield('scripts')
 @stack('scripts')
 <script src="/themes/test2/dist/admin4b.min.js"></script>
-<script src="/themes/test2/assets/js/themes/test2.js"></script>
+<script src="/themes/test2/assets/js/docs.js"></script>
 </body>
 </html>
