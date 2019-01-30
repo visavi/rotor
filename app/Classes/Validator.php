@@ -33,6 +33,8 @@ class Validator
             return $this;
         }
 
+        $input = htmlspecialchars_decode($input, ENT_QUOTES);
+
         if (mb_strlen($input, 'utf-8') < $min) {
             $this->addError($label, ' (Не менее ' . $min . ' симв.)');
         } elseif (mb_strlen($input, 'utf-8') > $max) {
