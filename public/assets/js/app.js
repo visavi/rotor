@@ -11,14 +11,16 @@ $(function() {
 
     $('.markItUp').markItUp(mySettings).on('input', function () {
         var maxlength = $(this).attr('maxlength');
-        var currentLength = $(this).val().length;
+        var currentLength = $(this).val().replace(/(\r\n|\n|\r)/g, "\r\n").length;
         var counter = $('.js-textarea-counter');
+
+        console.log(currentLength);
 
         if (currentLength === 0) {
             counter.empty();
-        } else if (currentLength >= maxlength) {
+        } else if (currentLength > maxlength) {
             counter.addClass('text-danger');
-            counter.text('Вы достигли максимального количества символов');
+            counter.text('Вы превысили максимальное количество символов');
         } else {
             counter.removeClass('text-danger');
             counter.text('Осталось символов: ' + (maxlength - currentLength));
