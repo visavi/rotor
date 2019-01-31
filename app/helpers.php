@@ -141,17 +141,18 @@ function isUtf($str)
 /**
  * Преобразует специальные символы в HTML-сущности
  *
- * @param  mixed $string строка или массив строк
- * @return mixed         обработанные данные
+ * @param  mixed $string       строка или массив строк
+ * @param  bool  $doubleEncode преобразовывать существующие html-сущности
+ * @return mixed               обработанные данные
  */
-function check($string)
+function check($string, $doubleEncode = true)
 {
     if (is_array($string)) {
         foreach($string as $key => $val) {
-            $string[$key] = check($val);
+            $string[$key] = check($val, $doubleEncode);
         }
     } else {
-        $string =  htmlspecialchars($string, ENT_QUOTES);
+        $string =  htmlspecialchars($string, ENT_QUOTES, 'UTF-8', $doubleEncode);
         $search = [chr(0), "\x00", "\x1A", chr(226) . chr(128) . chr(174)];
 
         $string = trim(str_replace($search, [], $string));
