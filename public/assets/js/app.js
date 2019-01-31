@@ -11,10 +11,12 @@ $(function() {
 
     $('.markItUp').markItUp(mySettings).on('input', function () {
         var maxlength = $(this).attr('maxlength');
-        var currentLength = $(this).val().replace(/(\r\n|\n|\r)/g, "\r\n").length;
-        var counter = $('.js-textarea-counter');
+        var text = $(this).val()
+            .replace(/(\r\n|\n|\r)/g, "\r\n")
+            .trim();
 
-        console.log(currentLength);
+        var currentLength = escapeHtml(text).length;
+        var counter = $('.js-textarea-counter');
 
         if (currentLength === 0) {
             counter.empty();
@@ -90,13 +92,29 @@ $(function() {
     }*/
 });
 
+/* Экранирование символов */
+function escapeHtml(str)
+{
+    var map = {
+        '&': '&amp;',
+        '<': '&lt;',
+        '>': '&gt;',
+        '"': '&quot;',
+        "'": '&#039;',
+    };
+
+    return str.replace(/[&<>"']/g, function(m) {return map[m];});
+}
+
 /* Вывод уведомлений */
-function notify(type, title, message, optionsOverride) {
+function notify(type, title, message, optionsOverride)
+{
     return toastr[type](message, title, optionsOverride);
 }
 
 /* Показ формы загрузки файла */
-function showAttachForm() {
+function showAttachForm()
+{
     $('.js-attach-button').hide();
     $('.js-attach-form').slideDown();
 
