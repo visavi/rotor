@@ -2,15 +2,15 @@
     Функция page_strnavigation
 @stop
 
-<h1>Функция page_strnavigation</h1>
-
-<nav>
-    <ol class="breadcrumb">
-        <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
-        <li class="breadcrumb-item"><a href="/files/docs">Документация Rotor</a></li>
-        <li class="breadcrumb-item active">Функция page_strnavigation</li>
-    </ol>
-</nav>
+@section('breadcrumb')
+    <nav>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
+            <li class="breadcrumb-item"><a href="/files/docs">Документация Rotor</a></li>
+            <li class="breadcrumb-item active">Функция page_strnavigation</li>
+        </ol>
+    </nav>
+@stop
 
 Функция постраничной навигации, выводит страницы, а также ссылки Назад и Далее<br>
 Также показывает всегда первую и последнюю страницу, разрывы выводятся в виде многоточия ...<br><br>

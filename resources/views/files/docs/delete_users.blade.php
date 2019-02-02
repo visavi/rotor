@@ -2,15 +2,15 @@
     Функция delete_users
 @stop
 
-<h1>Функция delete_users</h1>
-
-<nav>
-    <ol class="breadcrumb">
-        <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
-        <li class="breadcrumb-item"><a href="/files/docs">Документация Rotor</a></li>
-        <li class="breadcrumb-item active">Функция delete_users</li>
-    </ol>
-</nav>
+@section('breadcrumb')
+    <nav>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
+            <li class="breadcrumb-item"><a href="/files/docs">Документация Rotor</a></li>
+            <li class="breadcrumb-item active">Функция delete_users</li>
+        </ol>
+    </nav>
+@stop
 
 Полностью удаляет пользователя с сайта, удаляются все записи в таблицах, а также некоторые загруженные файлы, к примеру аватар, персональное фото и фотографии в галерее<br>
 При выполнении функции вызывается вспомогательная функция <a href="/files/docs/delete_album">delete_album</a>

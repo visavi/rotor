@@ -4,7 +4,7 @@
     Мои закладки
 @stop
 
-@section('content')
+@section('breadcrumb')
     <nav>
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
@@ -12,9 +12,9 @@
             <li class="breadcrumb-item active">Мои закладки</li>
         </ol>
     </nav>
+@stop
 
-    <h1>Мои закладки</h1>
-
+@section('content')
     @if ($topics->isNotEmpty())
         <form action="/forums/bookmarks/delete?page={{ $page->current }}" method="post">
             <input type="hidden" name="token" value="{{ $_SESSION['token'] }}">

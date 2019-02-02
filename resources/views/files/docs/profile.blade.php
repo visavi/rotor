@@ -2,15 +2,15 @@
     Функция profile
 @stop
 
-<h1>Функция profile</h1>
-
-<nav>
-    <ol class="breadcrumb">
-        <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
-        <li class="breadcrumb-item"><a href="/files/docs">Документация Rotor</a></li>
-        <li class="breadcrumb-item active">Функция profile</li>
-    </ol>
-</nav>
+@section('breadcrumb')
+    <nav>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
+            <li class="breadcrumb-item"><a href="/files/docs">Документация Rotor</a></li>
+            <li class="breadcrumb-item active">Функция profile</li>
+        </ol>
+    </nav>
+@stop
 
 Выводит ссылку на профиль пользователя (Доступно с версии 3.0.0)<br><br>
 

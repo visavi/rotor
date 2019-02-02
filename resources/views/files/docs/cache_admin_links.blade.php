@@ -2,15 +2,15 @@
     Функция cache_admin_links
 @stop
 
-<h1>Функция Функция cache_admin_links</h1>
-
-<nav>
-    <ol class="breadcrumb">
-        <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
-        <li class="breadcrumb-item"><a href="/files/docs">Документация Rotor</a></li>
-        <li class="breadcrumb-item active">Функция cache_admin_links</li>
-    </ol>
-</nav>
+@section('breadcrumb')
+    <nav>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
+            <li class="breadcrumb-item"><a href="/files/docs">Документация Rotor</a></li>
+            <li class="breadcrumb-item active">Функция cache_admin_links</li>
+        </ol>
+    </nav>
+@stop
 
 Функция кэширует ссылки на дополнительные админские страницы<br>
 Является вспомогательной для функции вывода ссылок <a href="/files/docs/show_admin_links">show_admin_links</a><br>

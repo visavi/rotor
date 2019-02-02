@@ -4,10 +4,11 @@
     Блоги - Список статей {{ $user->login }} (Стр. {{ $page->current }})
 @stop
 
-@section('content')
-
+@section('header')
     <h1>Список статей {{ $user->login }}</h1>
+@stop
 
+@section('breadcrumb')
     <nav>
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
@@ -15,7 +16,9 @@
             <li class="breadcrumb-item active">Список статей {{ $user->login }}</li>
         </ol>
     </nav>
+@stop
 
+@section('content')
     @if ($blogs->isNotEmpty())
         @foreach ($blogs as $data)
             <div class="b">

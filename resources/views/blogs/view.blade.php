@@ -12,8 +12,7 @@
     {{ stripString($blog->text) }}
 @stop
 
-@section('content')
-
+@section('header')
     @if ($blog->user->id === getUser('id'))
         <div class="float-right">
             <a class="btn btn-success" href="/articles/edit/{{ $blog->id }}">Изменить</a>
@@ -21,7 +20,9 @@
     @endif
 
     <h1>{{ $blog->title }} <small>(Оценка: {!! formatNum($blog->rating) !!})</small></h1>
+@stop
 
+@section('breadcrumb')
     <nav>
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
@@ -34,7 +35,9 @@
             <li class="breadcrumb-item active">{{ $blog->title }}</li>
         </ol>
     </nav>
+@stop
 
+@section('content')
     <a href="/articles/print/{{ $blog->id }}">Печать</a> /
     <a href="/articles/rss/{{ $blog->id }}">RSS-лента</a>
 

@@ -4,7 +4,7 @@
     Изменение темы
 @stop
 
-@section('content')
+@section('breadcrumb')
     <nav>
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
@@ -20,8 +20,9 @@
             <li class="breadcrumb-item active">Изменение темы</li>
         </ol>
     </nav>
+@stop
 
-    <h1>Изменение темы</h1>
+@section('content')
 
     <i class="fa fa-pencil-alt"></i> <b>{{ $post->user->login }}</b> <small>({{ dateFixed($post->created_at) }})</small><br><br>
 

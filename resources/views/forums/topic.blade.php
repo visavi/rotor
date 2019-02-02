@@ -6,7 +6,11 @@
 
 @section('description', 'Обсуждение темы: '.$topic->title.' (Стр. '.$page->current.')')
 
-@section('content')
+@section('header')
+    <h1>{{ $topic->title }}</h1>
+@stop
+
+@section('breadcrumb')
     <nav>
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
@@ -20,9 +24,9 @@
             <li class="breadcrumb-item active">{{ $topic->title }}</li>
         </ol>
     </nav>
+@stop
 
-    <h1>{{ $topic->title }}</h1>
-
+@section('content')
     <a href="/topics/print/{{ $topic->id }}">Печать</a> / <a href="/topics/rss/{{ $topic->id }}">RSS-лента</a>
 
     @if (getUser())

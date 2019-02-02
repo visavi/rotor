@@ -4,9 +4,7 @@
     {{ trans('guestbooks.title_edit') }}
 @stop
 
-@section('content')
-    <h1>{{ trans('guestbooks.title_edit') }}</h1>
-
+@section('breadcrumb')
     <nav>
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
@@ -14,7 +12,9 @@
             <li class="breadcrumb-item active">{{ trans('guestbooks.title_edit') }}</li>
         </ol>
     </nav>
+@stop
 
+@section('content')
     <i class="fa fa-pencil-alt text-muted"></i> <b>{!! $post->user->login !!}</b> ({{ dateFixed($post->created_at) }})<br><br>
 
     <div class="form">

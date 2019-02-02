@@ -4,10 +4,7 @@
     Пользователи
 @stop
 
-@section('content')
-
-    <h1>Пользователи</h1>
-
+@section('breadcrumb')
     <nav>
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
@@ -15,7 +12,9 @@
             <li class="breadcrumb-item active">Пользователи</li>
         </ol>
     </nav>
+@stop
 
+@section('content')
     <div class="form">
         <form action="/admin/users/edit" method="get">
             <div class="form-inline">

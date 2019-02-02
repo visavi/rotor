@@ -2,15 +2,15 @@
     Функция addmail
 @stop
 
-<h1>Функция addmail</h1>
-
-<nav>
-    <ol class="breadcrumb">
-        <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
-        <li class="breadcrumb-item"><a href="/files/docs">Документация Rotor</a></li>
-        <li class="breadcrumb-item active">Функция addmail</li>
-    </ol>
-</nav>
+@section('breadcrumb')
+    <nav>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
+            <li class="breadcrumb-item"><a href="/files/docs">Документация Rotor</a></li>
+            <li class="breadcrumb-item active">Функция addmail</li>
+        </ol>
+    </nav>
+@stop
 
 Функция для отправки писем на email, отсылает письма через стандартную функцию <a href="http://ru.php.net/manual/ru/function.mail.php">mail()</a>, данные отправляются в кодировке UTF-8<br><br>
 

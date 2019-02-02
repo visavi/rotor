@@ -4,9 +4,7 @@
     Облако тегов
 @stop
 
-@section('content')
-    <h1>Облако тегов</h1>
-
+@section('breadcrumb')
     <nav>
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
@@ -14,7 +12,9 @@
             <li class="breadcrumb-item active">Облако тегов</li>
         </ol>
     </nav>
+@stop
 
+@section('content')
     <div style="text-align:center">
         @foreach ($tags as $key => $val)
 

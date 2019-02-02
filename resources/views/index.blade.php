@@ -4,12 +4,12 @@
     Главная страница
 @stop
 
-@section('content')
-
+@section('header')
     @include('advert/_top')
-
     <h1>{{ setting('title') }}</h1>
+@stop
 
+@section('content')
     <i class="far fa-circle fa-lg text-muted"></i> <a href="/news">Новости сайта</a> ({{ statsNewsDate() }})<br> {{ lastNews() }}
 
     <div class="b">

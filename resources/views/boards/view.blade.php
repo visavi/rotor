@@ -4,8 +4,7 @@
     {{ $item->title }}
 @stop
 
-@section('content')
-
+@section('header')
     @if ($item->user->id === getUser('id'))
         <div class="float-right">
             <a class="btn btn-success" href="/items/edit/{{ $item->id }}">Изменить</a>
@@ -13,7 +12,9 @@
     @endif
 
     <h1>{{ $item->title }}</h1>
+@stop
 
+@section('breadcrumb')
     <nav>
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
@@ -27,7 +28,9 @@
             <li class="breadcrumb-item active">{{ $item->title }}</li>
         </ol>
     </nav>
+@stop
 
+@section('content')
     @if ($item->expires_at <= SITETIME)
         <div class="alert alert-danger">Объявление не активно</div>
     @endif

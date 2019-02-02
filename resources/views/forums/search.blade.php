@@ -4,7 +4,7 @@
     Поиск по форуму
 @stop
 
-@section('content')
+@section('breadcrumb')
     <nav>
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
@@ -12,9 +12,9 @@
             <li class="breadcrumb-item active">Поиск по форуму</li>
         </ol>
     </nav>
+@stop
 
-    <h1>Поиск по форуму</h1>
-
+@section('content')
     <div class="form">
         <form action="/forums/search">
             <input type="hidden" name="fid" value="{{ $fid }}">

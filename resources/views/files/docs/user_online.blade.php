@@ -2,15 +2,15 @@
     Функция user_online
 @stop
 
-<h1>Функция user_online</h1>
-
-<nav>
-    <ol class="breadcrumb">
-        <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
-        <li class="breadcrumb-item"><a href="/files/docs">Документация Rotor</a></li>
-        <li class="breadcrumb-item active">Функция user_online</li>
-    </ol>
-</nav>
+@section('breadcrumb')
+    <nav>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
+            <li class="breadcrumb-item"><a href="/files/docs">Документация Rotor</a></li>
+            <li class="breadcrumb-item active">Функция user_online</li>
+        </ol>
+    </nav>
+@stop
 
 Определяет по указанному логину его статус на сайте. Online или Offline. По умолчанию данные кэшируются на 10 секунд<br>
 

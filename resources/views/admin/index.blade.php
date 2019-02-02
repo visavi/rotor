@@ -4,17 +4,16 @@
     Панель управления
 @stop
 
-@section('content')
-
-    <h1>Панель управления</h1>
-
+@section('breadcrumb')
     <nav>
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
             <li class="breadcrumb-item active">Панель</li>
         </ol>
     </nav>
+@stop
 
+@section('content')
     <i class="fa fa-key fa-lg"></i> <b><a href="/admin/upgrade">Версия {{ VERSION }}.{{ setting('buildversion') }}</a></b><br><br>
 
     <div class="b"><i class="fa fa-cog fa-lg text-muted"></i> <b>Редактор</b></div>

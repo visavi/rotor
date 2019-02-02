@@ -4,7 +4,7 @@
     Топ популярных постов
 @stop
 
-@section('content')
+@section('breadcrumb')
     <nav>
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
@@ -12,9 +12,9 @@
             <li class="breadcrumb-item active">Топ популярных постов</li>
         </ol>
     </nav>
+@stop
 
-    <h1>Топ популярных постов</h1>
-
+@section('content')
     Период:
     <?php $active = ($period === 1) ? 'success' : 'light'; ?>
     <a href="/forums/top/posts?period=1" class="badge badge-{{ $active }}">Сутки</a>

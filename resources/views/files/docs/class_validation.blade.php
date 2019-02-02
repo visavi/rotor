@@ -2,15 +2,15 @@
     Class Validation
 @stop
 
-<h1>Class Validation</h1>
-
-<nav>
-    <ol class="breadcrumb">
-        <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
-        <li class="breadcrumb-item"><a href="/files/docs">Документация Rotor</a></li>
-        <li class="breadcrumb-item active">Class Validation</li>
-    </ol>
-</nav>
+@section('breadcrumb')
+    <nav>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
+            <li class="breadcrumb-item"><a href="/files/docs">Документация Rotor</a></li>
+            <li class="breadcrumb-item active">Class Validation</li>
+        </ol>
+    </nav>
+@stop
 
 <h3>addRule(string $type, mixed $var, string $label, bool $required = false, int $min = 0, int $max = 0)</h3>
 

@@ -4,10 +4,7 @@
     Редактирование объявления
 @stop
 
-@section('content')
-
-    <h1>Редактирование объявления</h1>
-
+@section('breadcrumb')
     <nav>
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
@@ -22,7 +19,9 @@
             <li class="breadcrumb-item active">Редактирование</li>
         </ol>
     </nav>
+@stop
 
+@section('content')
     @if ($item->expires_at > SITETIME)
         <div class="alert alert-info">Истекает: {{ dateFixed($item->expires_at) }}</div>
     @else

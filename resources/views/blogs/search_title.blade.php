@@ -4,10 +4,11 @@
     {{ $find }} - Результаты поиска
 @stop
 
-@section('content')
-
+@section('header')
     <h1>Результаты поиска</h1>
+@stop
 
+@section('breadcrumb')
     <nav>
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
@@ -16,7 +17,9 @@
             <li class="breadcrumb-item active">Результаты поиска</li>
         </ol>
     </nav>
+@stop
 
+@section('content')
     <h3>Поиск запроса &quot;{{ $find }}&quot; в заголовке</h3>
     Найдено совпадений: <b>{{ $page->total }}</b><br><br>
 

@@ -4,10 +4,7 @@
     {{ trans('contacts.title') }}
 @stop
 
-@section('content')
-
-    <h1>{{ trans('contacts.title') }}</h1>
-
+@section('breadcrumb')
     <nav>
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
@@ -15,7 +12,9 @@
             <li class="breadcrumb-item active">{{ trans('contacts.title') }}</li>
         </ol>
     </nav>
+@stop
 
+@section('content')
     @if ($contacts->isNotEmpty())
 
         <form action="/contacts/delete?page={{ $page->current }}" method="post">

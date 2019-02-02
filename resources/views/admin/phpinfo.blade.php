@@ -4,10 +4,7 @@
     PHP-info
 @stop
 
-@section('content')
-
-    <h1>PHP-info</h1>
-
+@section('breadcrumb')
     <nav>
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
@@ -15,7 +12,9 @@
             <li class="breadcrumb-item active">PHP-info</li>
         </ol>
     </nav>
+@stop
 
+@section('content')
     <span class="badge badge-success">PHP {{ parseVersion(PHP_VERSION) }}</span>
 
     @if (zend_version())

@@ -2,15 +2,15 @@
     Функция chmode
 @stop
 
-<h1>Функция chmode</h1>
-
-<nav>
-    <ol class="breadcrumb">
-        <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
-        <li class="breadcrumb-item"><a href="/files/docs">Документация Rotor</a></li>
-        <li class="breadcrumb-item active">Функция chmode</li>
-    </ol>
-</nav>
+@section('breadcrumb')
+    <nav>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
+            <li class="breadcrumb-item"><a href="/files/docs">Документация Rotor</a></li>
+            <li class="breadcrumb-item active">Функция chmode</li>
+        </ol>
+    </nav>
+@stop
 
 Функция автоустановки прав доступа<br>
 Сканирует папку и выставляет на файлы доступ - 0777<br>

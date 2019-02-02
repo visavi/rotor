@@ -4,10 +4,7 @@
     Публикация новой статьи
 @stop
 
-@section('content')
-
-    <h1>Публикация новой статьи</h1>
-
+@section('breadcrumb')
     <nav>
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
@@ -15,7 +12,9 @@
             <li class="breadcrumb-item active">Публикация новой статьи</li>
         </ol>
     </nav>
+@stop
 
+@section('content')
     <div class="form next">
         <form action="/blogs/create" method="post">
             <input type="hidden" name="token" value="{{ $_SESSION['token'] }}">

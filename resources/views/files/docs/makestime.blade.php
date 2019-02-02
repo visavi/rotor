@@ -2,15 +2,15 @@
     Функция makestime
 @stop
 
-<h1>Функция makestime</h1>
-
-<nav>
-    <ol class="breadcrumb">
-        <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
-        <li class="breadcrumb-item"><a href="/files/docs">Документация Rotor</a></li>
-        <li class="breadcrumb-item active">Функция makestime</li>
-    </ol>
-</nav>
+@section('breadcrumb')
+    <nav>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
+            <li class="breadcrumb-item"><a href="/files/docs">Документация Rotor</a></li>
+            <li class="breadcrumb-item active">Функция makestime</li>
+        </ol>
+    </nav>
+@stop
 
 Функция переводит количество секунд в удобный формат времени, для вывода времени до 1 дня можно использовать функцию <a href="/files/docs/maketime">maketime</a><br><br>
 

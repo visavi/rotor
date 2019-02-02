@@ -4,9 +4,7 @@
     {{ $blog->title }} - Комментарии
 @stop
 
-@section('content')
-    <h1>{{ $blog->title }} - Комментарии</h1>
-
+@section('breadcrumb')
     <nav>
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
@@ -21,7 +19,9 @@
             <li class="breadcrumb-item active">Комментарии</li>
         </ol>
     </nav>
+@stop
 
+@section('content')
     <a href="/articles/rss/{{ $blog->id }}">RSS-лента</a><hr>
 
     @if ($comments->isNotEmpty())

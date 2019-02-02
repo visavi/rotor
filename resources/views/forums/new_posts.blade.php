@@ -4,7 +4,11 @@
     Форум - Новые сообщения (Стр. {{ $page->current }})
 @stop
 
-@section('content')
+@section('header')
+    <h1>Новые сообщения</h1>
+@stop
+
+@section('breadcrumb')
     <nav>
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
@@ -12,9 +16,9 @@
             <li class="breadcrumb-item active">Новые сообщения</li>
         </ol>
     </nav>
+@stop
 
-    <h1>Новые сообщения</h1>
-
+@section('content')
     @foreach ($posts as $data)
         <div class="b">
             <i class="fa fa-file-alt"></i> <b><a href="/topics/{{ $data->topic_id }}/{{ $data->id }}">{{ $data->topic->title }}</a></b>

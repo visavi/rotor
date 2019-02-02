@@ -4,14 +4,7 @@
     Форум
 @stop
 
-@section('content')
-    <nav>
-        <ol class="breadcrumb">
-            <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
-            <li class="breadcrumb-item active">Форум</li>
-        </ol>
-    </nav>
-
+@section('header')
     @if (getUser())
         <div class="float-right">
             <a class="btn btn-success" href="/forums/create">Создать тему</a>
@@ -19,7 +12,18 @@
     @endif
 
     <h1>Форум {{ setting('title') }}</h1>
+@stop
 
+@section('breadcrumb')
+    <nav>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
+            <li class="breadcrumb-item active">Форум</li>
+        </ol>
+    </nav>
+@stop
+
+@section('content')
     @include('advert/_forum')
 
     @if (getUser())

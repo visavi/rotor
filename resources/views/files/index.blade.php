@@ -4,17 +4,20 @@
     Собственные страницы сайта
 @stop
 
-@section('content')
-
+@section('header')
     <h1>Как создать свои страницы</h1>
+@stop
 
+@section('breadcrumb')
     <nav>
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
             <li class="breadcrumb-item active">Как создать свои страницы</li>
         </ol>
     </nav>
+@stop
 
+@section('content')
     1. Перейдите в директорию /resources/views/files, эта директория автоматически генерирует страницы сайта<br>
     2. Создайте в ней директорию с произвольным латинским названием (к примеру library)<br>
     3. Положите в созданную директорию обычный файл с расширением .blade.php (к примеру index.blade.php)<br>

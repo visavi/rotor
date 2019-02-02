@@ -2,15 +2,15 @@
     Функция delete_album
 @stop
 
-<h1>Функция delete_album</h1>
-
-<nav>
-    <ol class="breadcrumb">
-        <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
-        <li class="breadcrumb-item"><a href="/files/docs">Документация Rotor</a></li>
-        <li class="breadcrumb-item active">Функция delete_album</li>
-    </ol>
-</nav>
+@section('breadcrumb')
+    <nav>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
+            <li class="breadcrumb-item"><a href="/files/docs">Документация Rotor</a></li>
+            <li class="breadcrumb-item active">Функция delete_album</li>
+        </ol>
+    </nav>
+@stop
 
 Полностью удаляет фотоальбом пользователя, удаляются все фотографии в галерее, а также аватар и персональное фото в анктете, при этом сам профиль пользователя и остальные данные не затрагиваются<br>
 Является вспомогательной для функции <a href="/files/docs/delete_users">delete_users</a>

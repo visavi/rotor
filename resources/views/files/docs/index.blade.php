@@ -2,14 +2,14 @@
     Документация Rotor
 @stop
 
-<h1>Документация Rotor</h1>
-
-<nav>
-   <ol class="breadcrumb">
-       <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
-       <li class="breadcrumb-item active">Документация Rotor</li>
-   </ol>
-</nav>
+@section('breadcrumb')
+    <nav>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
+            <li class="breadcrumb-item active">Документация Rotor</li>
+        </ol>
+    </nav>
+@stop
 
 <div class="b"><b>Стандартные функции</b></div>
 - <a href="/files/docs/maketime">maketime</a><br>
@@ -149,53 +149,53 @@
 <br>
 
 <div class="b"><b>Таблицы базы данных</b></div>
- - <b>logs</b> (Записи логов админки)<br>
- - <b>antimat</b> (Антимат)<br>
- - <b>avatars</b> (Аватары)<br>
- - <b>ban</b> (Хранение забаненых IP адресов)<br>
- - <b>banhist</b> (Банлист пользователей)<br>
- - <b>bank</b> (Хранение денег пользователей)<br>
- - <b>blacklist</b> (Чёрный список)<br>
- - <b>blogs</b> (Статьи блога)<br>
- - <b>bookmarks</b> (Закладки форума)<br>
- - <b>loads</b> (категории загруз центра (Названия категорий))<br>
- - <b>categories</b> (Категории блогов)<br>
- - <b>changemail</b> (Активация email (изменение email у пользователей))<br>
- - <b>chat</b> (Админ чат)<br>
- - <b>comments</b> (Комментарии)<br>
- - <b>contact</b> (Контакт лист)<br>
- - <b>counter</b> (Счётчик посетителей)<br>
- - <b>counter24</b> (Счётчик за 24 часа)<br>
- - <b>counter31</b> (счетчик за месяц)<br>
- - <b>downs</b> (Описание файлов в загруз-центре)<br>
- - <b>error</b> (Таблица ошибок)<br>
- - <b>flood</b> (Данные антифлуда)<br>
- - <b>forums</b> (Список форумов)<br>
- - <b>ignore</b> (Игнор лист)<br>
- - <b>inbox</b> (Приват / входящие)<br>
- - <b>loads</b> (Загрузки)<br>
- - <b>login</b> (Авторизации пользователей)<br>
- - <b>navigation</b> (Навигация, быстрый переход, ссылки)<br>
- - <b>news</b> (Новости)<br>
- - <b>note</b> (Админские заметки о пользователях)<br>
- - <b>notebooks</b> (Блокнот в личном кабинете)<br>
- - <b>offers</b> (Предложения и проблемы)<br>
- - <b>online</b> (Вывод онлайн, кто на сайте)<br>
- - <b>outbox</b> (Приват / исходящие)<br>
- - <b>posts</b> (Посты форума)<br>
- - <b>poolings</b> (Логи рейтинга)<br>
- - <b>rating</b> (Рейтинг, изменение репутации, плюсы и минусы)<br>
- - <b>readblog</b> (Прочтений в блогах)<br>
- - <b>rekuser</b> (реклама пользователей)<br>
- - <b>rules</b> (правила)<br>
- - <b>setting</b> (Настройки сайта)<br>
- - <b>stickers</b> (Стикеры)<br>
- - <b>spam</b> (Список жалоб)<br>
- - <b>status</b> (Статус юзера)<br>
- - <b>topics</b> (Топики форума)<br>
- - <b>transfers</b> (суммы перевода денег)<br>
- - <b>users</b> (Анкета пользователя)<br>
- - <b>visit</b> (Дата посещений)<br>
- - <b>vote</b> (Вопросы в голосованиях)<br>
- - <b>voteanswer</b> (Ответы на голосования)<br>
- - <b>wall</b> (Записи на стене)<br>
+- <b>logs</b> (Записи логов админки)<br>
+- <b>antimat</b> (Антимат)<br>
+- <b>avatars</b> (Аватары)<br>
+- <b>ban</b> (Хранение забаненых IP адресов)<br>
+- <b>banhist</b> (Банлист пользователей)<br>
+- <b>bank</b> (Хранение денег пользователей)<br>
+- <b>blacklist</b> (Чёрный список)<br>
+- <b>blogs</b> (Статьи блога)<br>
+- <b>bookmarks</b> (Закладки форума)<br>
+- <b>loads</b> (категории загруз центра (Названия категорий))<br>
+- <b>categories</b> (Категории блогов)<br>
+- <b>changemail</b> (Активация email (изменение email у пользователей))<br>
+- <b>chat</b> (Админ чат)<br>
+- <b>comments</b> (Комментарии)<br>
+- <b>contact</b> (Контакт лист)<br>
+- <b>counter</b> (Счётчик посетителей)<br>
+- <b>counter24</b> (Счётчик за 24 часа)<br>
+- <b>counter31</b> (счетчик за месяц)<br>
+- <b>downs</b> (Описание файлов в загруз-центре)<br>
+- <b>error</b> (Таблица ошибок)<br>
+- <b>flood</b> (Данные антифлуда)<br>
+- <b>forums</b> (Список форумов)<br>
+- <b>ignore</b> (Игнор лист)<br>
+- <b>inbox</b> (Приват / входящие)<br>
+- <b>loads</b> (Загрузки)<br>
+- <b>login</b> (Авторизации пользователей)<br>
+- <b>navigation</b> (Навигация, быстрый переход, ссылки)<br>
+- <b>news</b> (Новости)<br>
+- <b>note</b> (Админские заметки о пользователях)<br>
+- <b>notebooks</b> (Блокнот в личном кабинете)<br>
+- <b>offers</b> (Предложения и проблемы)<br>
+- <b>online</b> (Вывод онлайн, кто на сайте)<br>
+- <b>outbox</b> (Приват / исходящие)<br>
+- <b>posts</b> (Посты форума)<br>
+- <b>poolings</b> (Логи рейтинга)<br>
+- <b>rating</b> (Рейтинг, изменение репутации, плюсы и минусы)<br>
+- <b>readblog</b> (Прочтений в блогах)<br>
+- <b>rekuser</b> (реклама пользователей)<br>
+- <b>rules</b> (правила)<br>
+- <b>setting</b> (Настройки сайта)<br>
+- <b>stickers</b> (Стикеры)<br>
+- <b>spam</b> (Список жалоб)<br>
+- <b>status</b> (Статус юзера)<br>
+- <b>topics</b> (Топики форума)<br>
+- <b>transfers</b> (суммы перевода денег)<br>
+- <b>users</b> (Анкета пользователя)<br>
+- <b>visit</b> (Дата посещений)<br>
+- <b>vote</b> (Вопросы в голосованиях)<br>
+- <b>voteanswer</b> (Ответы на голосования)<br>
+- <b>wall</b> (Записи на стене)<br>

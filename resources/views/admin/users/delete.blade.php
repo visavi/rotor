@@ -4,10 +4,7 @@
     Удаление пользователя {{ $user->login }}
 @stop
 
-@section('content')
-
-    <h1>Удаление пользователя {{ $user->login }}</h1>
-
+@section('breadcrumb')
     <nav>
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
@@ -17,7 +14,9 @@
             <li class="breadcrumb-item active">Удаление пользователя</li>
         </ol>
     </nav>
+@stop
 
+@section('content')
     <div class="form">
         <form action="/admin/users/delete?user={{ $user->login }}" method="post">
             <input type="hidden" name="token" value="{{ $_SESSION['token'] }}">

@@ -2,15 +2,15 @@
     Функция progress_bar
 @stop
 
-<h1>Функция progress_bar</h1>
-
-<nav>
-    <ol class="breadcrumb">
-        <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
-        <li class="breadcrumb-item"><a href="/files/docs">Документация Rotor</a></li>
-        <li class="breadcrumb-item active">Функция progress_bar</li>
-    </ol>
-</nav>
+@section('breadcrumb')
+    <nav>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
+            <li class="breadcrumb-item"><a href="/files/docs">Документация Rotor</a></li>
+            <li class="breadcrumb-item active">Функция progress_bar</li>
+        </ol>
+    </nav>
+@stop
 
 Функция выводит прогресс-бар, на основе введенных данных (Доступно с версии 3.0.2)<br><br>
 

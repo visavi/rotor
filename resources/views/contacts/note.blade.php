@@ -4,10 +4,7 @@
     {{ trans('contacts.note_title') }} {{ $contact->contactor->login }}
 @stop
 
-@section('content')
-
-    <h1>{{ trans('contacts.note_title') }} {{ $contact->contactor->login }}</h1>
-
+@section('breadcrumb')
     <nav>
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
@@ -16,7 +13,9 @@
             <li class="breadcrumb-item active">{{ trans('contacts.note') }}</li>
         </ol>
     </nav>
+@stop
 
+@section('content')
     <div class="form">
         <form method="post" action="/contacts/note/{{ $contact->id }}">
             <input type="hidden" name="token" value="{{ $_SESSION['token'] }}">

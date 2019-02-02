@@ -4,9 +4,7 @@
     Поиск по тегам
 @stop
 
-@section('content')
-    <h1>Поиск по тегам</h1>
-
+@section('breadcrumb')
     <nav>
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
@@ -15,7 +13,9 @@
             <li class="breadcrumb-item active">Поиск по тегам</li>
         </ol>
     </nav>
+@stop
 
+@section('content')
     <h3>Поиск запроса &quot;{{ $tag }}&quot; в метках</h3>
     Найдено совпадений: <b>{{ $page->total }}</b><br>
 

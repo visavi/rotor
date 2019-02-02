@@ -4,7 +4,11 @@
     Форум - Новые темы (Стр. {{ $page->current }})
 @stop
 
-@section('content')
+@section('header')
+    <h1>Новые темы</h1>
+@stop
+
+@section('breadcrumb')
     <nav>
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
@@ -12,9 +16,9 @@
             <li class="breadcrumb-item active">Новые темы</li>
         </ol>
     </nav>
+@stop
 
-    <h1>Новые темы</h1>
-
+@section('content')
     @foreach ($topics as $data)
         <div class="b">
             <i class="fa {{ $data->getIcon() }} text-muted"></i>

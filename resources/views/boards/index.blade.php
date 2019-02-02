@@ -4,8 +4,7 @@
     Объявления
 @stop
 
-@section('content')
-
+@section('header')
     @if (getUser())
         <div class="float-right">
             <a class="btn btn-success" href="/items/create?bid={{ $board->id ?? 0 }}">Добавить</a><br>
@@ -17,7 +16,9 @@
     @else
         <h1>Объявления</h1>
     @endif
+@stop
 
+@section('breadcrumb')
     <nav>
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
@@ -42,7 +43,9 @@
             @endif
         </ol>
     </nav>
+@stop
 
+@section('content')
     @if (getUser())
         <div class="mb-3">
             <i class="far fa-list-alt"></i> <a href="/boards/active">Мои объявления</a>

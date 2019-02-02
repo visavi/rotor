@@ -4,10 +4,11 @@
     Блоги - Новые статьи (Стр. {{ $page->current }})
 @stop
 
-@section('content')
-
+@section('header')
     <h1>Новые статьи</h1>
+@stop
 
+@section('breadcrumb')
     <nav>
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
@@ -15,7 +16,9 @@
             <li class="breadcrumb-item active">Новые статьи</li>
         </ol>
     </nav>
+@stop
 
+@section('content')
     @if ($blogs->isNotEmpty())
         @foreach ($blogs as $data)
             <div class="b">

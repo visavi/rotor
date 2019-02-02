@@ -2,15 +2,15 @@
     Функция check
 @stop
 
-<h1>Функция check</h1>
-
-<nav>
-    <ol class="breadcrumb">
-        <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
-        <li class="breadcrumb-item"><a href="/files/docs">Документация Rotor</a></li>
-        <li class="breadcrumb-item active">Функция check</li>
-    </ol>
-</nav>
+@section('breadcrumb')
+    <nav>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
+            <li class="breadcrumb-item"><a href="/files/docs">Документация Rotor</a></li>
+            <li class="breadcrumb-item active">Функция check</li>
+        </ol>
+    </nav>
+@stop
 
 Фильтрует данные путём замены служебных символов и тегов на html сущности. Используется для обработки GET и POST запросов,  также применяется для фильтрация массивов.<br>
 Данные дополнительно обрабатывается функцией <a href="http://ru2.php.net/manual/ru/function.stripslashes.php">stripslashes</a>  (Удаление экранирования символов) и <a href="http://ru2.php.net/manual/ru/function.trim.php">trim</a> (Удаление пробелов в начале и конце строки)<br><br>

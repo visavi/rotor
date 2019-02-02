@@ -64,7 +64,8 @@
                     @endif
                 </div>
 
-                <div class="message">{!! bbCode($data->text) !!}</div>
+                <div class="message">{!! bbCode(
+                $data->text) !!}</div>
 
                 @if ($data->edit_user_id)
                     <small><i class="fa fa-exclamation-circle text-danger"></i> {{ trans('guestbooks.edited') }}: {{ $data->editUser->login }} ({{ dateFixed($data->updated_at) }})</small><br>

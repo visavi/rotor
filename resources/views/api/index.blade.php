@@ -4,9 +4,16 @@
     API интерфейс
 @stop
 
-@section('content')
-    <h1>API интерфейс</h1>
+@section('breadcrumb')
+    <nav>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
+            <li class="breadcrumb-item active">API интерфейс</li>
+        </ol>
+    </nav>
+@stop
 
+@section('content')
     <i class="fa fa-cog"></i> <b><a href="/api">api</a></b> - Главная страница с описанием интерфейса<br>
     <i class="fa fa-cog"></i> <b><a href="/api/users">api/users</a></b> - Возвращает данные пользователя. GET: Параметры: token, ответ: массив данных из профиля пользователя<br>
     <i class="fa fa-cog"></i> <b><a href="/api/messages">api/messages</a></b> Возвращает приватные письма пользователя - GET: Параметры: token, count = 10, Ответ: total - кол. сообщений, messages - массив приватных сообщений<br>

@@ -4,10 +4,11 @@
     Блоги - Новые комментарии (Стр. {{ $page->current }})
 @stop
 
-@section('content')
-
+@section('header')
     <h1>Новые комментарии</h1>
+@stop
 
+@section('breadcrumb')
     <nav>
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
@@ -15,7 +16,9 @@
             <li class="breadcrumb-item active">Новые комментарии</li>
         </ol>
     </nav>
+@stop
 
+@section('content')
     @if ($comments->isNotEmpty())
         @foreach ($comments as $data)
             <div class="post">

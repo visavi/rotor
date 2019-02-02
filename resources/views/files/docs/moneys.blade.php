@@ -2,15 +2,15 @@
     Функция moneys
 @stop
 
-<h1>Функция moneys</h1>
-
-<nav>
-    <ol class="breadcrumb">
-        <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
-        <li class="breadcrumb-item"><a href="/files/docs">Документация Rotor</a></li>
-        <li class="breadcrumb-item active">Функция moneys</li>
-    </ol>
-</nav>
+@section('breadcrumb')
+    <nav>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
+            <li class="breadcrumb-item"><a href="/files/docs">Документация Rotor</a></li>
+            <li class="breadcrumb-item active">Функция moneys</li>
+        </ol>
+    </nav>
+@stop
 
 Преобразует число в сумму денег с окончанием в виде названия валюты, окончания устанавливаются в настройках админки через запятую, по умолчанию (рублей, рубля, рубль)<br>
 Можно указать только один вариант окончания, тогда оно будет подставляться для всех чисел передаваемых в функцию<br><br>

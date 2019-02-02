@@ -43,3 +43,7 @@
 @section('performance')
     {!! performance() !!}
 @stop
+
+@section('header')
+    <h1>@yield('title')</h1>
+@stop

@@ -2,15 +2,15 @@
     Функция date_fixed
 @stop
 
-<h1>Функция date_fixed</h1>
-
-<nav>
-    <ol class="breadcrumb">
-        <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
-        <li class="breadcrumb-item"><a href="/files/docs">Документация Rotor</a></li>
-        <li class="breadcrumb-item active">Функция date_fixed</li>
-    </ol>
-</nav>
+@section('breadcrumb')
+    <nav>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
+            <li class="breadcrumb-item"><a href="/files/docs">Документация Rotor</a></li>
+            <li class="breadcrumb-item active">Функция date_fixed</li>
+        </ol>
+    </nav>
+@stop
 
 Конвертирует время timestamp с учетом часового пояса конкретного пользователя в нормальное представление<br>
 Если указан формат по умолчанию, то вместо текущей даты будет написано Сегодня или Вчера, если дата вчерашняя<br><br>

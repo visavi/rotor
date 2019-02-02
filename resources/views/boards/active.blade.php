@@ -4,10 +4,11 @@
     Мои объявления
 @stop
 
-@section('content')
-
+@section('header')
     <h1>Мои объявления <small>(Объявлений: {{ $page->total }})</small></h1>
+@stop
 
+@section('breadcrumb')
     <nav>
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
@@ -15,7 +16,9 @@
             <li class="breadcrumb-item active">Мои объявления</li>
         </ol>
     </nav>
+@stop
 
+@section('content')
     @if ($items->isNotEmpty())
         @foreach ($items as $item)
             <div class="row mb-3">

@@ -2,15 +2,15 @@
     Функция redirect
 @stop
 
-<h1>Функция redirect</h1>
-
-<nav>
-    <ol class="breadcrumb">
-        <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
-        <li class="breadcrumb-item"><a href="/files/docs">Документация Rotor</a></li>
-        <li class="breadcrumb-item active">Функция redirect</li>
-    </ol>
-</nav>
+@section('breadcrumb')
+    <nav>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
+            <li class="breadcrumb-item"><a href="/files/docs">Документация Rotor</a></li>
+            <li class="breadcrumb-item active">Функция redirect</li>
+        </ol>
+    </nav>
+@stop
 
 Перенаправляет пользователя на другую страницу, при обработке функции автоматически вызывается функция exit (Доступно с версии 2.6.5)<br><br>
 

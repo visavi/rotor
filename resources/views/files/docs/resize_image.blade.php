@@ -2,15 +2,15 @@
     Функция resize_image
 @stop
 
-<h1>Функция resize_image</h1>
-
-<nav>
-    <ol class="breadcrumb">
-        <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
-        <li class="breadcrumb-item"><a href="/files/docs">Документация Rotor</a></li>
-        <li class="breadcrumb-item active">Функция resize_image</li>
-    </ol>
-</nav>
+@section('breadcrumb')
+    <nav>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
+            <li class="breadcrumb-item"><a href="/files/docs">Документация Rotor</a></li>
+            <li class="breadcrumb-item active">Функция resize_image</li>
+        </ol>
+    </nav>
+@stop
 
 Функция ресайза и кэширования уменьшенных копий картинок, проверяет сделана ли миниатюра изображения, если нет, то автоматически уменьшает картинку и сохраняет ее в специальной папке uploads/thumbnails.<br>
 Если размер оригинального изображения менее чем требуемый размер уменьшенной копии, то обработка не производится<br>

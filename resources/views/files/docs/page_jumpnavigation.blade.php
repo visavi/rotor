@@ -2,15 +2,15 @@
     Функция page_jumpnavigation
 @stop
 
-<h1>Функция page_jumpnavigation</h1>
-
-<nav>
-    <ol class="breadcrumb">
-        <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
-        <li class="breadcrumb-item"><a href="/files/docs">Документация Rotor</a></li>
-        <li class="breadcrumb-item active">Функция page_jumpnavigation</li>
-    </ol>
-</nav>
+@section('breadcrumb')
+    <nav>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
+            <li class="breadcrumb-item"><a href="/files/docs">Документация Rotor</a></li>
+            <li class="breadcrumb-item active">Функция page_jumpnavigation</li>
+        </ol>
+    </nav>
+@stop
 
 Функция постраничной навигации, выводит ссылки Назад и Далее (<span style="color:#ff0000">Удалено с версии 3.0.0</span>)<br>
 Данная функция заменена на более расширенную <a href="/files/docs/page_strnavigation">page_strnavigation</a>, которая выводит эти ссылки а также номера страниц<br><br>

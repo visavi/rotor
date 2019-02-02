@@ -4,10 +4,7 @@
     Апгрейд системы
 @stop
 
-@section('content')
-
-    <h1>Апгрейд системы</h1>
-
+@section('breadcrumb')
     <nav>
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
@@ -15,7 +12,9 @@
             <li class="breadcrumb-item active">Апгрейд системы</li>
         </ol>
     </nav>
+@stop
 
+@section('content')
     {!! nl2br($wrap->getMigrate()) !!}
 
     <br>
