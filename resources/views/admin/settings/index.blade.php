@@ -47,7 +47,7 @@
 @push('scripts')
     <script>
         $(function () {
-            $('#{{ $act }}').tab('show');
+            $('#{{ $act }}').addClass('active');
         })
     </script>
 @endpush

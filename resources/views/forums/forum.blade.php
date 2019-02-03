@@ -34,7 +34,7 @@
 @stop
 
 @section('content')
-    @if ($forum->children->isNotEmpty() && $page->current === 1)
+    @if ($page->current === 1 && $forum->children->isNotEmpty())
         <div class="act">
 
         @foreach ($forum->children as $child)

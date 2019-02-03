@@ -23,7 +23,6 @@
 @stop
 
 @section('content')
-
     <i class="fa fa-pencil-alt"></i> <b>{{ $post->user->login }}</b> <small>({{ dateFixed($post->created_at) }})</small><br><br>
 
     <div class="form">
@@ -40,7 +39,8 @@
             @if ($post)
                 <div class="form-group{{ hasError('msg') }}">
                     <label for="msg">Сообщение:</label>
-                    <textarea class="form-control markItUp" id="msg" rows="5" name="msg" required>{{ getInput('msg', $post->text) }}</textarea>
+                    <textarea class="form-control markItUp" id="msg" rows="5" maxlength="{{ setting('forumtextlength') }}" name="msg" required>{{ getInput('msg', $post->text) }}</textarea>
+                    <span class="js-textarea-counter"></span>
                     {!! textError('msg') !!}
                 </div>
             @endif

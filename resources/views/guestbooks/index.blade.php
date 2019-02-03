@@ -110,7 +110,7 @@
 
                 <div class="form-group{{ hasError('msg') }}">
                     <label for="msg">{{ trans('guestbooks.message') }}:</label>
-                    <textarea class="form-control" id="msg" rows="5"  maxlength="{{ setting('guesttextlength') }}" name="msg" placeholder="{{ trans('guestbooks.message_text') }}" required>{{ getInput('msg') }}</textarea>
+                    <textarea class="form-control" id="msg" rows="5" maxlength="{{ setting('guesttextlength') }}" name="msg" placeholder="{{ trans('guestbooks.message_text') }}" required>{{ getInput('msg') }}</textarea>
                     {!! textError('msg') !!}
                 </div>
 
