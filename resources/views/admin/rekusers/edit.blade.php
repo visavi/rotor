@@ -4,10 +4,7 @@
     Редактирование ссылки
 @stop
 
-@section('content')
-
-    <h1>Редактирование ссылки</h1>
-
+@section('breadcrumb')
     <nav>
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
@@ -16,7 +13,9 @@
             <li class="breadcrumb-item active">Редактирование ссылки</li>
         </ol>
     </nav>
+@stop
 
+@section('content')s
     <div class="form">
         <form action="/admin/reklama/edit/{{ $link->id }}?page={{ $page }}" method="post">
             <input type="hidden" name="token" value="{{ $_SESSION['token'] }}">

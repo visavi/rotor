@@ -5,9 +5,6 @@
 @stop
 
 @section('content')
-
-    <h1>Вас забанили</h1>
-
     @if ($banhist)
         <b><span style="color:#ff0000">Причина бана: {!! bbCode($banhist->reason) !!}</span></b><br><br>
 

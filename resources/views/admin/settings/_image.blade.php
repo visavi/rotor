@@ -1,4 +1,6 @@
-<h3>Загрузка изображений</h3>
+@section('header')
+    <h1>Загрузка изображений</h1>
+@stop
 
 <form action="/admin/settings?act=image" method="post">
     <input type="hidden" name="token" value="{{ $_SESSION['token'] }}">

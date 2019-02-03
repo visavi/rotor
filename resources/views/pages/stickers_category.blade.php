@@ -4,7 +4,7 @@
     {{ $category->name }}
 @stop
 
-@section('content')
+@section('breadcrumb')
     <nav>
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
@@ -12,9 +12,9 @@
             <li class="breadcrumb-item active">{{ $category->name }}</li>
         </ol>
     </nav>
+@stop
 
-    <h1>{{ $category->name }}</h1>
-
+@section('content')
     @if ($stickers)
         @foreach ($stickers as $sticker)
             <div class="bg-light p-2 mb-1 border">

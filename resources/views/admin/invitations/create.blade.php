@@ -4,10 +4,7 @@
     Создание ключей
 @stop
 
-@section('content')
-
-    <h1>Создание ключей</h1>
-
+@section('breadcrumb')
     <nav>
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
@@ -16,7 +13,9 @@
             <li class="breadcrumb-item active">Создание ключей</li>
         </ol>
     </nav>
+@stop
 
+@section('content')
     <h3>Генерация новых ключей</h3>
     <div class="form">
         <form action="/admin/invitations/create" method="post">

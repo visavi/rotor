@@ -4,10 +4,7 @@
     Редактирование загрузки {{ $down->title }}
 @stop
 
-@section('content')
-
-    <h1>Редактирование загрузки {{ $down->title }}</h1>
-
+@section('breadcrumb')
     <nav>
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
@@ -23,7 +20,9 @@
             <li class="breadcrumb-item"><a href="/downs/{{ $down->id }}">Обзор загрузки</a></li>
         </ol>
     </nav>
+@stop
 
+@section('content')
     @if (! $down->active)
         <div class="p-1 bg-warning text-dark">
             <b>Внимание!</b> Данная загрузка ожидает проверки модератором!<br>

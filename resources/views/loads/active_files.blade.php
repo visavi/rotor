@@ -4,7 +4,11 @@
     Загрузки - Список файлов {{ $user->login }} (Стр. {{ $page->current }})
 @stop
 
-@section('content')
+@section('header')
+    <h1>Файлы {{ $user->login }}</h1>
+@stop
+
+@section('breadcrumb')
     <nav>
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
@@ -12,9 +16,9 @@
             <li class="breadcrumb-item active">Файлы {{ $user->login }}</li>
         </ol>
     </nav>
+@stop
 
-    <h1>Файлы {{ $user->login }}</h1>
-
+@section('content')
     @if ($user->id === getUser('id'))
         <?php $type = ($active === 1) ? 'success' : 'light'; ?>
         <a href="/downs/active/files?active=1" class="badge badge-{{ $type }}">Проверенные</a>

@@ -4,14 +4,15 @@
     Новости
 @stop
 
-@section('content')
-
+@section('header')
     <div class="float-right">
         <a class="btn btn-success" href="/admin/news/create">Добавить</a>
     </div><br>
 
     <h1>Новости</h1>
+@stop
 
+@section('breadcrumb')
     <nav>
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
@@ -20,7 +21,9 @@
             <li class="breadcrumb-item"><a href="/news">Обзор новостей</a></li>
         </ol>
     </nav>
+@stop
 
+@section('content')
     @if ($news->isNotEmpty())
         @foreach ($news as $data)
 

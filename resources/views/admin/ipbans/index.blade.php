@@ -4,10 +4,7 @@
     IP-бан панель
 @stop
 
-@section('content')
-
-    <h1>IP-бан панель</h1>
-
+@section('breadcrumb')
     <nav>
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
@@ -15,7 +12,9 @@
             <li class="breadcrumb-item active">IP-бан панель</li>
         </ol>
     </nav>
+@stop
 
+@section('content')
     <a href="/admin/errors?code=666">История автобанов</a><br>
 
     @if ($logs->isNotEmpty())

@@ -4,10 +4,7 @@
     Изменение сообщения
 @stop
 
-@section('content')
-
-    <h1>Изменение сообщения</h1>
-
+@section('breadcrumb')
     <nav>
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
@@ -23,7 +20,9 @@
             <li class="breadcrumb-item active">Редактирование сообщения</li>
         </ol>
     </nav>
+@stop
 
+@section('content')
     <i class="fa fa-pencil-alt"></i> <b>{{ $post->user->login }}</b> <small>({{ dateFixed($post->created_at) }})</small><br><br>
 
     <div class="form">

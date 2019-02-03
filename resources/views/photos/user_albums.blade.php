@@ -4,10 +4,11 @@
     Альбом {{ $user->login }} (Стр. {{ $page->current }})
 @stop
 
-@section('content')
-
+@section('headers')
     <h1>Альбом {{ $user->login }}</h1>
+@stop
 
+@section('breadcrumb')
     <nav>
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
@@ -15,9 +16,10 @@
             <li class="breadcrumb-item active">Альбом {{ $user->login }}</li>
         </ol>
     </nav>
+@stop
 
+@section('content')
     @if ($photos->isNotEmpty())
-
         @foreach ($photos as $photo)
             <div class="b">
 

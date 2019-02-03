@@ -4,10 +4,7 @@
     Жалобы
 @stop
 
-@section('content')
-
-    <h1>Жалобы</h1>
-
+@section('breadcrumb')
     <nav>
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
@@ -15,7 +12,9 @@
             <li class="breadcrumb-item active">Жалобы</li>
         </ol>
     </nav>
+@stop
 
+@section('content')
     <?php $active = ($type === 'post') ? 'success' : 'light'; ?>
     <a href="/admin/spam?type=post" class="badge badge-{{ $active }}">Форум {{ $total['post'] }}</a>
     <?php $active = ($type === 'guest') ? 'success' : 'light'; ?>

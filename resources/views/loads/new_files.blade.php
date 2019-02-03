@@ -4,7 +4,11 @@
     Загрузки - Новые файлы (Стр. {{ $page->current }})
 @stop
 
-@section('content')
+@section('header')
+    <h1>Новые файлы</h1>
+@stop
+
+@section('breadcrumb')
     <nav>
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
@@ -12,9 +16,9 @@
             <li class="breadcrumb-item active">Новые файлы</li>
         </ol>
     </nav>
+@stop
 
-    <h1>Новые файлы</h1>
-
+@section('content')
     @if ($downs->isNotEmpty())
         @foreach ($downs as $down)
             <?php $rating = $down->rated ? round($down->rating / $down->rated, 1) : 0; ?>

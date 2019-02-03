@@ -4,14 +4,15 @@
     Шаблоны писем
 @stop
 
-@section('content')
-
+@section('header')
     <div class="float-right">
         <a class="btn btn-success" href="/admin/notices/create">Добавить</a>
     </div><br>
 
     <h1>Шаблоны писем</h1>
+@stop
 
+@section('breadcrumb')
     <nav>
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
@@ -19,7 +20,9 @@
             <li class="breadcrumb-item active">Шаблоны писем</li>
         </ol>
     </nav>
+@stop
 
+@section('content')
     @if ($notices->isNotEmpty())
         @foreach ($notices as $notice)
 

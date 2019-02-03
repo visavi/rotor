@@ -1,4 +1,6 @@
-<h3>Блоги</h3>
+@section('header')
+    <h1>Блоги</h1>
+@stop
 
 <form action="/admin/settings?act=blog" method="post">
     <input type="hidden" name="token" value="{{ $_SESSION['token'] }}">

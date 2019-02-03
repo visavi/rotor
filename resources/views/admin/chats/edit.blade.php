@@ -4,9 +4,7 @@
     Редактирование сообщения
 @stop
 
-@section('content')
-    <h1>Редактирование сообщения </h1>
-
+@section('breadcrumb')
     <nav>
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
@@ -15,7 +13,9 @@
             <li class="breadcrumb-item active">Редактирование</li>
         </ol>
     </nav>
+@stop
 
+@section('content')
     <i class="fa fa-pencil-alt text-muted"></i> <b>{!! $post->user->login !!}</b> ({{ dateFixed($post->created_at) }})<br><br>
 
     <div class="form">

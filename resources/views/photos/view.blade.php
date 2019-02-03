@@ -4,10 +4,7 @@
     {{ $photo->title }}
 @stop
 
-@section('content')
-
-    <h1>{{ $photo->title }}</h1>
-
+@section('breadcrumb')
     <nav>
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
@@ -16,7 +13,9 @@
             <li class="breadcrumb-item active">{{ $photo->title }}</li>
         </ol>
     </nav>
+@stop
 
+@section('content')
     @if (isAdmin())
         <a href="/admin/photos/edit/{{ $photo->id }}">Редактировать</a> /
        <a href="/admin/photos/delete/{{ $photo->id }}?token={{ $_SESSION['token'] }}" onclick="return confirm('Вы подтверждаете удаление изображения?')">Удалить</a>

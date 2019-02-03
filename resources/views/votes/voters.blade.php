@@ -4,10 +4,7 @@
     Голосования {{ $vote->title }}
 @stop
 
-@section('content')
-
-    <h1>Голосования {{ $vote->title }}</h1>
-
+@section('breadcrumb')
     <nav>
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
@@ -16,7 +13,9 @@
             <li class="breadcrumb-item active">Голосования</li>
         </ol>
     </nav>
+@stop
 
+@section('content')
     <i class="fa fa-chart-bar"></i> Голосов: {{ $vote->count }}<br><br>
 
     @if ($voters->isNotEmpty())

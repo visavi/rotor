@@ -4,10 +4,7 @@
     Создание backup
 @stop
 
-@section('content')
-
-    <h1>Создание backup</h1>
-
+@section('breadcrumb')
     <nav>
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
@@ -16,7 +13,9 @@
             <li class="breadcrumb-item active">Создание backup</li>
         </ol>
     </nav>
+@stop
 
+@section('content')
     @if ($tables)
         Всего таблиц: <b>{{ count($tables) }}</b><br><br>
 

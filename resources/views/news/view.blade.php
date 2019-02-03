@@ -6,9 +6,7 @@
 
 @section('description', stripString($news->text))
 
-@section('content')
-
-    <h1>{{ $news->title }}</h1>
+@section('breadcrumb')
     <nav>
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
@@ -21,7 +19,9 @@
             @endif
         </ol>
     </nav>
+@stop
 
+@section('content')
     @if ($news->image)
         <div class="img">
             <a href="{{ $news->image }}">{!! resizeImage($news->image, ['width' => 100, 'alt' => $news->title]) !!}</a></div>

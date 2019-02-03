@@ -4,17 +4,16 @@
     Поиск по сайту
 @stop
 
-@section('content')
-
-    <h1>Поиск по сайту</h1>
-
+@section('breadcrumb')
     <nav>
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
             <li class="breadcrumb-item active">Поиск по сайту</li>
         </ol>
     </nav>
+@stop
 
+@section('content')
     Откройте в редакторе файлов страницу:<br>
     <code>search/index</code><br><br>
     или через файловую систему:<br>

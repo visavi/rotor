@@ -4,7 +4,7 @@
     Поиск запроса {{ $find }}
 @stop
 
-@section('content')
+@section('breadcrumb')
     <nav>
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
@@ -13,9 +13,9 @@
             <li class="breadcrumb-item active">Поиск запроса</li>
         </ol>
     </nav>
+@stop
 
-    <h1>Поиск запроса {{ $find }}</h1>
-
+@section('content')
     Найдено совпадений в названии: <b>{{ $page->total }}</b><br><br>
 
     @foreach ($downs as $data)

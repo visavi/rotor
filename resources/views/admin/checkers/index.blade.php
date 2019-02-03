@@ -4,10 +4,7 @@
     Сканирование сайта
 @stop
 
-@section('content')
-
-    <h1>Сканирование сайта</h1>
-
+@section('breadcrumb')
     <nav>
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
@@ -15,7 +12,9 @@
             <li class="breadcrumb-item active">Сканирование сайта</li>
         </ol>
     </nav>
+@stop
 
+@section('content')
     @if ($diff)
         <b><span style="color:#ff0000">Новые файлы и новые параметры файлов:</span></b><br><br>
 

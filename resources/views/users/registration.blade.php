@@ -4,17 +4,16 @@
     Регистрация
 @stop
 
-@section('content')
-
-    <h1>Регистрация</h1>
-
+@section('breadcrumb')
     <nav>
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
             <li class="breadcrumb-item active">Регистрация</li>
         </ol>
     </nav>
+@stop
 
+@section('content')
     Регистрация на сайте означает что вы ознакомлены и согласны с <b><a href="/rules">правилами</a></b> нашего сайта<br>
     Длина логина должна быть от 3 до 20 символов<br>
     Логин должен состоять только из знаков латинского алфавита и цифр, допустим знак дефиса!<br>

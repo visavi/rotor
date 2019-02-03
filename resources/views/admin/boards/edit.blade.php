@@ -4,10 +4,7 @@
     Редактирование раздела {{ $board->name }}
 @stop
 
-@section('content')
-
-    <h1>Редактирование раздела {{ $board->name }}</h1>
-
+@section('breadcrumb')
     <nav>
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
@@ -23,8 +20,9 @@
             <li class="breadcrumb-item active">Редактирование раздела</li>
         </ol>
     </nav>
+@stop
 
-
+@section('content')
     <div class="form mb-3">
         <form action="/admin/boards/edit/{{ $board->id }}" method="post">
             <input type="hidden" name="token" value="{{ $_SESSION['token'] }}">

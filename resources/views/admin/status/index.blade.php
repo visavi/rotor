@@ -4,15 +4,16 @@
     Статусы пользователей
 @stop
 
-@section('content')
-
+@section('header')
     <div class="float-right">
         <a class="btn btn-success" href="/admin/status/create">Создать</a>
     </div><br>
 
 
     <h1>Статусы пользователей</h1>
+@stop
 
+@section('breadcrumb')
     <nav>
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
@@ -20,7 +21,9 @@
             <li class="breadcrumb-item active">Статусы пользователей</li>
         </ol>
     </nav>
+@stop
 
+@section('content')
     @if ($statuses->isNotEmpty())
 
         <div class="card">

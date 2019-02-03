@@ -1,4 +1,6 @@
-<h3>Стоимость и цены</h3>
+@section('header')
+    <h1>Стоимость и цены</h1>
+@stop
 
 <form action="/admin/settings?act=price" method="post">
     <input type="hidden" name="token" value="{{ $_SESSION['token'] }}">

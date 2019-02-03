@@ -4,17 +4,16 @@
     Справка по тегам
 @stop
 
-@section('content')
-
-    <h1>Справка по тегам</h1>
-
+@section('breadcrumb')
     <nav>
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
             <li class="breadcrumb-item active">Справка по тегам</li>
         </ol>
     </nav>
+@stop
 
+@section('content')
     Вы можете выражать свой текст следующими тегами:<br><br>
 
     <i class="fa fa-bold"></i> [b]{!! bbCode('[b]Жирный шрифт[/b]') !!}[/b]<br>

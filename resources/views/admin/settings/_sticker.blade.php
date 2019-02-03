@@ -1,4 +1,6 @@
-<h3>Стикеры</h3>
+@section('header')
+    <h1>Стикеры</h1>
+@stop
 
 <form action="/admin/settings?act=sticker" method="post">
     <input type="hidden" name="token" value="{{ $_SESSION['token'] }}">

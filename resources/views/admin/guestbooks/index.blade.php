@@ -4,10 +4,7 @@
     Гостевая книга
 @stop
 
-@section('content')
-
-    <h1>Гостевая книга</h1>
-
+@section('breadcrumb')
     <nav>
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
@@ -16,7 +13,9 @@
             <li class="breadcrumb-item"><a href="/guestbooks?page={{ $page->current }}">Обзор</a></li>
         </ol>
     </nav>
+@stop
 
+@section('content')
     @if ($posts->isNotEmpty())
         <form action="/admin/guestbooks/delete?page={{ $page->current }}" method="post">
             <input type="hidden" name="token" value="{{ $_SESSION['token'] }}">

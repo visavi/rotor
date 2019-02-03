@@ -4,10 +4,7 @@
     Ожидающие регистрации
 @stop
 
-@section('content')
-
-    <h1>Ожидающие регистрации</h1>
-
+@section('breadcrumb')
     <nav>
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
@@ -15,7 +12,9 @@
             <li class="breadcrumb-item active">Ожидающие регистрации</li>
         </ol>
     </nav>
+@stop
 
+@section('content')
     <div class="mb-3 font-weight-bold">
 
         <i class="fa fa-exclamation-circle"></i>

@@ -4,7 +4,7 @@
     Добавление стикера
 @stop
 
-@section('content')
+@section('breadcrumb')
     <nav>
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
@@ -13,9 +13,9 @@
             <li class="breadcrumb-item active">Добавление стикера</li>
         </ol>
     </nav>
+@stop
 
-    <h1>Добавление стикера</h1>
-
+@section('content')
     <div class="form">
         <form action="/admin/stickers/sticker/create" method="post" enctype="multipart/form-data">
             <input type="hidden" name="token" value="{{ $_SESSION['token'] }}">

@@ -4,8 +4,7 @@
     Голосования (Стр. {{ $page->current }})
 @stop
 
-@section('content')
-
+@section('header')
     @if (getUser())
         <div class="float-right">
             <a class="btn btn-success" href="/votes/create">Создать голосование</a><br>
@@ -13,14 +12,18 @@
     @endif
 
     <h1>Голосования</h1>
+@stop
 
+@section('breadcrumb')
     <nav>
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
             <li class="breadcrumb-item active">Голосования</li>
         </ol>
     </nav>
+@stop
 
+@section('content')
     @if ($votes->isNotEmpty())
         @foreach ($votes as $vote)
             <div class="b">

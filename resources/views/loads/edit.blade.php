@@ -4,7 +4,7 @@
     Редактирование загрузки
 @stop
 
-@section('content')
+@section('breadcrumb')
     <nav>
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
@@ -19,9 +19,9 @@
             <li class="breadcrumb-item active">Редактирование загрузки</li>
         </ol>
     </nav>
+@stop
 
-    <h1>Редактирование загрузки</h1>
-
+@section('content')
     <div class="p-1 bg-warning text-dark">
         <b>Внимание!</b> Данная загрузка ожидает проверки модератором!<br>
         После проверки вы не сможете отредактировать описание и загрузить файл или скриншот

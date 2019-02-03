@@ -4,17 +4,16 @@
     Обратная связь
 @stop
 
-@section('content')
-
-    <h1>Обратная связь</h1>
-
+@section('breadcrumb')
     <nav>
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
             <li class="breadcrumb-item active">Обратная связь</li>
         </ol>
     </nav>
+@stop
 
+@section('content')
     <div class="form">
         <form method="post" action="/mails">
 

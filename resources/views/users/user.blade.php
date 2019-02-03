@@ -4,22 +4,25 @@
     Анкета пользователя {{ $user->login }}
 @stop
 
-@section('content')
-
+@section('header')
     <div class="avatar-box">
         <div class="avatar-box_image">{!! $user->getAvatar() !!}</div>
         <h1 class="avatar-box_login">
             {{ $user->login }} <small>#{{ $user->id }}</small>
         </h1>
     </div>
+@stop
 
+@section('breadcrumb')
     <nav>
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
             <li class="breadcrumb-item active">Анкета {{ $user->login }}</li>
         </ol>
     </nav>
+@stop
 
+@section('content')
     @if ($user->level === 'pended')
         <div class="p-1 bg-danger text-white">
             <i class="fas fa-exclamation-triangle"></i>

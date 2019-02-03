@@ -4,10 +4,7 @@
     Мой профиль
 @stop
 
-@section('content')
-
-    <h1>Мой профиль</h1>
-
+@section('breadcrumb')
     <nav>
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
@@ -15,7 +12,9 @@
             <li class="breadcrumb-item active">Мой профиль</li>
         </ol>
     </nav>
+@stop
 
+@section('content')
     <div class="form">
         <form method="post" action="/profile">
             <input type="hidden" name="token" value="{{ $_SESSION['token'] }}">

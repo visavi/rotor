@@ -4,7 +4,7 @@
     Диалог с {{ $user->getName() }}
 @stop
 
-@section('content')
+@section('breadcrumb')
     <nav>
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
@@ -13,9 +13,9 @@
             <li class="breadcrumb-item active">Диалог</li>
         </ol>
     </nav>
+@stop
 
-    <h1>Диалог с {{ $user->getName() }}</h1>
-
+@section('content')
     @if (getUser()->isIgnore($user))
         <div class="p-1 bg-danger text-white">
             <i class="fas fa-exclamation-triangle"></i>

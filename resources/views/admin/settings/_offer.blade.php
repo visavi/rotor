@@ -1,4 +1,6 @@
-<h3>Предложения / Проблемы</h3>
+@section('header')
+    <h1>Предложения / Проблемы</h1>
+@stop
 
 <form action="/admin/settings?act=offer" method="post">
     <input type="hidden" name="token" value="{{ $_SESSION['token'] }}">

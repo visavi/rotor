@@ -4,7 +4,7 @@
     Поиск по файлам
 @stop
 
-@section('content')
+@section('breadcrumb')
     <nav>
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
@@ -12,9 +12,9 @@
             <li class="breadcrumb-item active">Поиск</li>
         </ol>
     </nav>
+@stop
 
-    <h1>Поиск по файлам</h1>
-
+@section('content')
     <div class="form">
         <form action="/loads/search">
             <input type="hidden" name="cid" value="{{ $cid }}">

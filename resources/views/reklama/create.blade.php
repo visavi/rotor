@@ -4,10 +4,7 @@
     Размещение рекламы
 @stop
 
-@section('content')
-
-    <h1>Размещение рекламы</h1>
-
+@section('breadcrumb')
     <nav>
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
@@ -16,7 +13,9 @@
             <li class="breadcrumb-item active">Размещение рекламы</li>
         </ol>
     </nav>
+@stop
 
+@section('content')
     У вас в наличии: <b>{{ plural(getUser('money'), setting('moneyname')) }}</b><br><br>
 
     <div class="form">

@@ -4,7 +4,7 @@
     Модули
 @stop
 
-@section('content')
+@section('breadcrumb')
     <nav>
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
@@ -12,9 +12,9 @@
             <li class="breadcrumb-item active">Модули</li>
         </ol>
     </nav>
+@stop
 
-    <h1>Модули</h1>
-
+@section('content')
     @if ($moduleNames)
         @foreach ($moduleNames as $name => $module)
             <i class="fas fa-plug"></i> <a class="font-weight-bold" href="/admin/modules/module?module={{ $name }}">{{ $module['name'] }}</a> ({{ $name }})

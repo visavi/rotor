@@ -1,13 +1,10 @@
 @extends('layout')
 
 @section('title')
-    Редактирование статьи
+    Редактирование статьи {{ $blog->title }}
 @stop
 
-@section('content')
-
-    <h1>Редактирование статьи</h1>
-
+@section('breadcrumb')
     <nav>
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
@@ -23,7 +20,9 @@
             <li class="breadcrumb-item active">Редактирование статьи</li>
         </ol>
     </nav>
+@stop
 
+@section('content')
     <div class="form next">
         <form action="/admin/articles/edit/{{ $blog->id }}" method="post">
             <input type="hidden" name="token" value="{{ $_SESSION['token'] }}">

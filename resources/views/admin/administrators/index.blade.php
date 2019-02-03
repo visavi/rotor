@@ -4,10 +4,7 @@
     Администрация сайта
 @stop
 
-@section('content')
-
-    <h1>Администрация сайта</h1>
-
+@section('breadcrumb')
     <nav>
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
@@ -15,7 +12,9 @@
             <li class="breadcrumb-item active">Администрация сайта</li>
         </ol>
     </nav>
+@stop
 
+@section('content')
     @if ($users->isNotEmpty())
 
         <div class="mb-3">

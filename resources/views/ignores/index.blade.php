@@ -4,10 +4,7 @@
     {{ trans('ignores.title') }}
 @stop
 
-@section('content')
-
-    <h1>{{ trans('ignores.title') }}</h1>
-
+@section('breadcrumb')
     <nav>
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
@@ -15,7 +12,9 @@
             <li class="breadcrumb-item active">{{ trans('ignores.title') }}</li>
         </ol>
     </nav>
+@stop
 
+@section('content')
     @if ($ignores->isNotEmpty())
 
         <form action="/ignores/delete?page={{ $page->current }}" method="post">

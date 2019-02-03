@@ -4,10 +4,7 @@
     Приглашения
 @stop
 
-@section('content')
-
-    <h1>Приглашения</h1>
-
+@section('breadcrumb')
     <nav>
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
@@ -15,7 +12,9 @@
             <li class="breadcrumb-item active">Приглашения</li>
         </ol>
     </nav>
+@stop
 
+@section('content')
     @if (! setting('invite'))
         <i class="fa fa-exclamation-circle"></i> <span style="color:#ff0000"><b>Регистрация по приглашения выключена!</b></span><br><br>
     @endif

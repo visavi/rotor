@@ -4,17 +4,16 @@
     Онлайн пользователей
 @stop
 
-@section('content')
-
-    <h1>Онлайн пользователей</h1>
-
+@section('breadcrumb')
     <nav>
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
             <li class="breadcrumb-item active">Онлайн пользователей</li>
         </ol>
     </nav>
+@stop
 
+@section('content')
     <div class="b"><b>Кто на сайте:</b></div>
 
     @if ($online->isNotEmpty())

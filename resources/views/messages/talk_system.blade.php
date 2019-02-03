@@ -4,7 +4,7 @@
     Уведомления
 @stop
 
-@section('content')
+@section('breadcrumb')
     <nav>
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
@@ -13,9 +13,9 @@
             <li class="breadcrumb-item active">Уведомления</li>
         </ol>
     </nav>
+@stop
 
-    <h1>Уведомления</h1>
-
+@section('content')
     @if ($messages->isNotEmpty())
 
         @foreach ($messages as $data)

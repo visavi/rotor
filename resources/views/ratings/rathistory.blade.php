@@ -4,10 +4,7 @@
     Полученные голоса {{ $user->login }}
 @stop
 
-@section('content')
-
-    <h1>Полученные голоса {{ $user->login }}</h1>
-
+@section('breadcrumb')
     <nav>
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
@@ -20,7 +17,9 @@
             <li class="breadcrumb-item active">Полученные голоса</li>
         </ol>
     </nav>
+@stop
 
+@section('content')
     <i class="fa fa-thumbs-up"></i> <b>Полученные</b> / <a href="/ratings/{{ $user->login }}/gave">Отданные</a><hr>
 
     @if ($ratings->isNotEmpty())

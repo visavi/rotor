@@ -4,10 +4,7 @@
     Редактирование шаблона
 @stop
 
-@section('content')
-
-    <h1>Редактирование шаблона</h1>
-
+@section('breadcrumb')
     <nav>
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
@@ -16,7 +13,9 @@
             <li class="breadcrumb-item active">Редактирование шаблона</li>
         </ol>
     </nav>
+@stop
 
+@section('content')
     @if ($notice->protect)
         <div class="p-1 bg-warning text-dark">
             <i class="fa fa-exclamation-circle"></i> <b>Вы редактируете системный шаблон</b>

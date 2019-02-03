@@ -4,10 +4,7 @@
     Админ-логи
 @stop
 
-@section('content')
-
-    <h1>Админ-логи</h1>
-
+@section('breadcrumb')
     <nav>
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
@@ -15,7 +12,9 @@
             <li class="breadcrumb-item active">Админ-логи</li>
         </ol>
     </nav>
+@stop
 
+@section('content')
     @if ($logs)
         @foreach ($logs as $log)
             <div class="b">

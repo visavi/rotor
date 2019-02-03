@@ -4,10 +4,7 @@
     Ответ на сообщение
 @stop
 
-@section('content')
-
-    <h1>Ответ на сообщение</h1>
-
+@section('breadcrumb')
     <nav>
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
@@ -16,7 +13,9 @@
             <li class="breadcrumb-item active">Ответ на сообщение</li>
         </ol>
     </nav>
+@stop
 
+@section('content')
     <div class="alert alert-info">
         <i class="fa fa-pencil-alt"></i> <b>{{ $post->user->login }}</b> <small>({{ dateFixed($post->created_at) }})</small><br>
         <div>Сообщение: {!! bbCode($post->text) !!}</div>

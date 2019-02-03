@@ -4,7 +4,7 @@
     Просмотр архива {{ $down->title }}
 @stop
 
-@section('content')
+@section('breadcrumb')
     <nav>
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
@@ -19,9 +19,9 @@
             <li class="breadcrumb-item active">Просмотр архива</li>
         </ol>
     </nav>
+@stop
 
-    <h1>Просмотр архива {{ $down->title }}</h1>
-
+@section('content')
     Всего файлов: {{ $page->total }}<hr>
 
     @if ($documents)

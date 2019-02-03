@@ -4,10 +4,7 @@
     Бан / Разбан
 @stop
 
-@section('content')
-
-    <h1>Бан / Разбан</h1>
-
+@section('breadcrumb')
     <nav>
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
@@ -15,7 +12,9 @@
             <li class="breadcrumb-item active">Бан / Разбан</li>
         </ol>
     </nav>
+@stop
 
+@section('content')
     <label for="user">Логин пользователя:</label><br>
     <div class="form">
         <form method="get" action="/admin/bans/edit">

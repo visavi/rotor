@@ -4,10 +4,11 @@
     {{ trans('news.title', ['page' => $page->current]) }}
 @stop
 
-@section('content')
-
+@section('header')
     <h1>{{ trans('news.header') }}</h1>
+@stop
 
+@section('breadcrumb')
     <nav>
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
@@ -18,7 +19,9 @@
             @endif
         </ol>
     </nav>
+@stop
 
+@section('content')
     @if ($news->isNotEmpty())
         @foreach ($news as $data)
             <div class="b">

@@ -4,14 +4,7 @@
     Загрузки
 @stop
 
-@section('content')
-    <nav>
-        <ol class="breadcrumb">
-            <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
-            <li class="breadcrumb-item active">Загрузки</li>
-        </ol>
-    </nav>
-
+@section('header')
     @if (getUser())
         <div class="float-right">
             <a class="btn btn-success" href="/downs/create">Добавить</a>
@@ -19,7 +12,18 @@
     @endif
 
     <h1>Загрузки</h1>
+@stop
 
+@section('breadcrumb')
+    <nav>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
+            <li class="breadcrumb-item active">Загрузки</li>
+        </ol>
+    </nav>
+@stop
+
+@section('content')
     @if (getUser())
         Мои: <a href="/downs/active/files">файлы</a>, <a href="/downs/active/comments">комментарии</a> /
     @endif

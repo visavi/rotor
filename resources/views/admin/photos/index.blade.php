@@ -4,8 +4,7 @@
     Галерея
 @stop
 
-@section('content')
-
+@section('header')
     @if (getUser())
         <div class="float-right">
             <a class="btn btn-success" href="/photos/create">Добавить</a><br>
@@ -13,7 +12,9 @@
     @endif
 
     <h1>Галерея</h1>
+@stop
 
+@section('breadcrumb')
     <nav>
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
@@ -22,7 +23,9 @@
             <li class="breadcrumb-item"><a href="/photos?page={{ $page->current }}">Обзор</a></li>
         </ol>
     </nav>
+@stop
 
+@section('content')
     @if ($photos->isNotEmpty())
         <input type="hidden" name="token" value="{{ $_SESSION['token'] }}">
 

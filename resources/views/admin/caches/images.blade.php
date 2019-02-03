@@ -1,13 +1,10 @@
 @extends('layout')
 
 @section('title')
-    Очистка кэша
+    Очистка кэша изображений
 @stop
 
-@section('content')
-
-    <h1>Очистка кэша</h1>
-
+@section('breadcrumb')
     <nav>
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
@@ -15,7 +12,9 @@
             <li class="breadcrumb-item active">Очистка кэша</li>
         </ol>
     </nav>
+@stop
 
+@section('content')
     <i class="fa fa-eraser fa-2x"></i> <a href="/admin/caches">Файлы</a> / <b>Изображения</b><br><br>
 
     @if ($images)

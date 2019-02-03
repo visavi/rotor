@@ -4,8 +4,7 @@
     Предложения / Проблемы
 @stop
 
-@section('content')
-
+@section('header')
     @if (getUser())
         <div class="float-right">
             <a class="btn btn-success" href="/offers/create?type={{ $type }}">Добавить</a><br>
@@ -13,7 +12,9 @@
     @endif
 
     <h1>Предложения / Проблемы</h1>
+@stop
 
+@section('breadcrumb')
     <nav>
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
@@ -22,7 +23,9 @@
             <li class="breadcrumb-item"><a href="/offers/{{ $type }}?page={{ $page->current }}">Обзор</a></li>
         </ol>
     </nav>
+@stop
 
+@section('content')
     @if ($type === 'offer')
         <a class="btn btn-primary btn-sm" href="/admin/offers/offer">Предложения <span class="badge badge-light">{{ $page->total }}</span></a>
         <a class="btn btn-light btn-sm" href="/admin/offers/issue">Проблемы <span class="badge badge-light">{{ $page->otherTotal }}</span></a>

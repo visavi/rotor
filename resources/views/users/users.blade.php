@@ -4,17 +4,20 @@
     Список пользователей (Стр. {{ $page->current }})
 @stop
 
-@section('content')
-
+@section('header')
     <h1>Список пользователей</h1>
+@stop
 
+@section('breadcrumb')
     <nav>
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
             <li class="breadcrumb-item active">Список пользователей</li>
         </ol>
     </nav>
+@stop
 
+@section('content')
     @if ($users->isNotEmpty())
         @foreach($users as $key => $data)
 

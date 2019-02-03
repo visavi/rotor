@@ -4,7 +4,11 @@
     Топ популярных файлов (Стр. {{ $page->current }})
 @stop
 
-@section('content')
+@section('header')
+    <h1>Топ популярных файлов</h1>
+@stop
+
+@section('breadcrumb')
     <nav>
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
@@ -12,9 +16,9 @@
             <li class="breadcrumb-item active">Топ файлов</li>
         </ol>
     </nav>
+@stop
 
-    <h1>Топ популярных файлов</h1>
-
+@section('content')
     Сортировать:
     <?php $active = ($order === 'loads') ? 'success' : 'light'; ?>
     <a href="/loads/top?sort=loads" class="badge badge-{{ $active }}">Скачивания</a>

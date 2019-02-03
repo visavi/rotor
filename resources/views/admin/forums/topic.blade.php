@@ -6,9 +6,11 @@
 
 @section('description', 'Обсуждение темы: '.$topic->title.' (Стр. '.$page->current.')')
 
-@section('content')
+@section('header')
     <h1>{{ $topic->title }}</h1>
+@stop
 
+@section('breadcrumb')
     <nav>
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
@@ -23,7 +25,9 @@
             <li class="breadcrumb-item active">{{ $topic->title }}</li>
         </ol>
     </nav>
+@stop
 
+@section('content')
     @if ($topic->curators)
        <div>
             <span class="badge badge-warning">

@@ -4,7 +4,11 @@
     Загрузки - Список комментариев {{ $user->login }} (Стр. {{ $page->current }})
 @stop
 
-@section('content')
+@section('header')
+    <h1>Комментарии {{ $user->login }}</h1>
+@stop
+
+@section('breadcrumb')
     <nav>
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
@@ -12,9 +16,9 @@
             <li class="breadcrumb-item active">Комментарии {{ $user->login }}</li>
         </ol>
     </nav>
+@stop
 
-    <h1>Комментарии {{ $user->login }}</h1>
-
+@section('content')
     @if ($comments->isNotEmpty())
         @foreach ($comments as $data)
             <div class="post">

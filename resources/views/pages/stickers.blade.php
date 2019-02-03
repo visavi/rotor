@@ -4,19 +4,16 @@
     Список стикеров
 @stop
 
-@section('content')
-
-    <h1>Список стикеров</h1>
-
+@section('breadcrumb')
     <nav>
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
             <li class="breadcrumb-item active">Список стикеров</li>
         </ol>
     </nav>
+@stop
 
-    <h1>Стикеры</h1>
-
+@section('content')
     @if ($categories->isNotEmpty())
         @foreach($categories as $category)
             <div class="bg-light p-2 mb-1 border">

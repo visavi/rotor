@@ -4,8 +4,7 @@
     Галерея (Стр. {{ $page->current }})
 @stop
 
-@section('content')
-
+@section('header')
     @if (getUser())
         <div class="float-right">
             <a class="btn btn-success" href="/photos/create">Добавить</a><br>
@@ -13,7 +12,9 @@
     @endif
 
     <h1>Галерея</h1>
+@stop
 
+@section('breadcrumb')
     <nav>
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
@@ -24,7 +25,9 @@
             @endif
         </ol>
     </nav>
+@stop
 
+@section('content')
     @if (getUser())
         Мои:
         <a href="/photos/albums/{{ getUser('login') }}">фото</a>,

@@ -4,14 +4,15 @@
     {{ $forum->title }} (Стр. {{ $page->current }})
 @stop
 
-@section('content')
-
+@section('header')
     <div class="float-right">
         <a class="btn btn-success" href="/forums/create?fid={{ $forum->id }}">Создать тему</a>
     </div><br>
 
     <h1>{{ $forum->title }}</h1>
+@stop
 
+@section('breadcrumb')
     <nav>
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
@@ -26,7 +27,9 @@
             <li class="breadcrumb-item"><a href="/forums/{{ $forum->id  }}?page={{ $page->current }}">Обзор</a></li>
         </ol>
     </nav>
+@stop
 
+@section('content')
     @if ($topics->isNotEmpty())
             @foreach ($topics as $topic)
                 <div class="b" id="topic_{{ $topic->id }}">

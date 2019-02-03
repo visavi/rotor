@@ -4,10 +4,7 @@
     Создание нового объекта
 @stop
 
-@section('content')
-
-    <h1>Создание нового объекта</h1>
-
+@section('breadcrumb')
     <nav>
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
@@ -17,7 +14,9 @@
             <li class="breadcrumb-item active">Создание нового объекта</li>
         </ol>
     </nav>
+@stop
 
+@section('content')
     <div class="container-fluid">
         <div class="row">
             <div class="col-md-6 bg-light p-1">

@@ -4,17 +4,16 @@
     Статусы пользователей
 @stop
 
-@section('content')
-
-    <h1>Статусы пользователей</h1>
-
+@section('breadcrumb')
     <nav>
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
             <li class="breadcrumb-item active">Статусы пользователей</li>
         </ol>
     </nav>
+@stop
 
+@section('content')
     В зависимости от вашей активности на сайте вы получаете определенный статус<br>
     При наборе определенного количества актива ваш статус меняется на вышестоящий<br>
     Актив - это сумма постов на форуме, гостевой, в комментариях и пр.<br><br>

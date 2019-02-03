@@ -4,14 +4,15 @@
     Объявления
 @stop
 
-@section('content')
-
+@section('header')
     @if ($board)
         <h1>{{ $board->name }} <small>(Объявлений: {{ $board->count_items }})</small></h1>
     @else
         <h1>Объявления</h1>
     @endif
+@stop
 
+@section('breadcrumb')
     <nav>
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
@@ -37,7 +38,9 @@
             @endif
         </ol>
     </nav>
+@stop
 
+@section('content')
     @if ($boards->isNotEmpty())
         <div class="row mb-3">
             @foreach ($boards->chunk(3) as $chunk)

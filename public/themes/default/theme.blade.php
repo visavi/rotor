@@ -32,8 +32,8 @@
         @yield('advertUser')
         @yield('note')
         @yield('flash')
-        @yield('header')
         @yield('breadcrumb')
+        @yield('header')
         @yield('content')
         @yield('advertBottom')
     </div>

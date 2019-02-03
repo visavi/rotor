@@ -4,10 +4,7 @@
    {{ $offer->title }}
 @stop
 
-@section('content')
-
-    <h1>{{ $offer->title }}</h1>
-
+@section('breadcrumb')
     <nav>
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
@@ -19,7 +16,9 @@
             @endif
         </ol>
     </nav>
+@stop
 
+@section('content')
     <div class="b">
         {!! $offer->getStatus() !!}
 

@@ -4,10 +4,7 @@
     {{ $offer->title }}
 @stop
 
-@section('content')
-
-    <h1>{{ $offer->title }}</h1>
-
+@section('breadcrumb')
     <nav>
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
@@ -17,7 +14,9 @@
             <li class="breadcrumb-item"><a href="/offers/{{ $offer->id }}">Обзор</a></li>
         </ol>
     </nav>
+@stop
 
+@section('content')
     <div class="b">
         <div class="float-right">
             <a href="/admin/offers/reply/{{ $offer->id }}"><i class="fas fa-reply text-muted"></i></a>

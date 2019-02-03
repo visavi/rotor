@@ -1,4 +1,6 @@
-<h3>Основные настройки</h3>
+@section('header')
+    <h1>Основные настройки</h1>
+@stop
 
 <form action="/admin/settings" method="post">
     <input type="hidden" name="token" value="{{ $_SESSION['token'] }}">

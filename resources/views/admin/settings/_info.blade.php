@@ -1,4 +1,6 @@
-<h3>Вывод информации</h3>
+@section('header')
+    <h1>Вывод информации</h1>
+@stop
 
 <form action="/admin/settings?act=info" method="post">
     <input type="hidden" name="token" value="{{ $_SESSION['token'] }}">

@@ -4,17 +4,16 @@
     Список администраторов
 @stop
 
-@section('content')
-
-    <h1>Список администраторов</h1>
-
+@section('breadcrumb')
     <nav>
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
             <li class="breadcrumb-item active">Список администраторов</li>
         </ol>
     </nav>
+@stop
 
+@section('content')
     @if ($users->isNotEmpty())
         <div class="mb-3">
             @foreach($users as $user)

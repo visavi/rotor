@@ -4,14 +4,15 @@
     Пользовательская реклама
 @stop
 
-@section('content')
-
+@section('header')
     <div class="float-right">
         <a class="btn btn-success" href="/reklama/create">Разместить рекламу</a>
     </div><br>
 
     <h1>Пользовательская реклама</h1>
+@stop
 
+@section('breadcrumb')
     <nav>
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
@@ -19,7 +20,9 @@
             <li class="breadcrumb-item active">Пользовательская реклама</li>
         </ol>
     </nav>
+@stop
 
+@section('content')
     @if ($records->isNotEmpty())
 
         <form action="/admin/reklama/delete?page={{ $page->current }}" method="post">

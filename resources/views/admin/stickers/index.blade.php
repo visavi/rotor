@@ -4,7 +4,15 @@
     Стикеры
 @stop
 
-@section('content')
+@section('header')
+    <div class="float-right">
+        <a class="btn btn-success" href="/admin/stickers/sticker/create">Загрузить</a>
+    </div><br>
+
+    <h1>Стикеры</h1>
+@stop
+
+@section('breadcrumb')
     <nav>
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
@@ -12,13 +20,9 @@
             <li class="breadcrumb-item active">Стикеры</li>
         </ol>
     </nav>
+@stop
 
-    <div class="float-right">
-        <a class="btn btn-success" href="/admin/stickers/sticker/create">Загрузить</a>
-    </div><br>
-
-    <h1>Стикеры</h1>
-
+@section('content')
     @if ($categories->isNotEmpty())
         @foreach($categories as $category)
             <div class="bg-light p-2 mb-1 border">

@@ -4,7 +4,7 @@
     Модуль {{ $module['name'] }}
 @stop
 
-@section('content')
+@section('breadcrumb')
     <nav>
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
@@ -13,9 +13,9 @@
             <li class="breadcrumb-item active">Модуль {{ $module['name'] }}</li>
         </ol>
     </nav>
+@stop
 
-    <h1>Модуль {{ $module['name'] }}</h1>
-
+@section('content')
     {{ $module['name'] }}<br>
     {{ $module['description'] }}<br>
     Версия: {{ $module['version'] }}<br>

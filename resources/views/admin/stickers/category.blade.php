@@ -4,7 +4,15 @@
     {{ $category->name }}
 @stop
 
-@section('content')
+@section('header')
+    <div class="float-right">
+        <a class="btn btn-success" href="/admin/stickers/sticker/create?cid={{ $category->id ?? 0 }}">Загрузить</a>
+    </div><br>
+
+    <h1>{{ $category->name }}</h1>
+@stop
+
+@section('breadcrumb')
     <nav>
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
@@ -13,13 +21,9 @@
             <li class="breadcrumb-item active">{{ $category->name }}</li>
         </ol>
     </nav>
+@stop
 
-    <div class="float-right">
-        <a class="btn btn-success" href="/admin/stickers/sticker/create?cid={{ $category->id ?? 0 }}">Загрузить</a>
-    </div><br>
-
-    <h1>{{ $category->name }}</h1>
-
+@section('content')
     @if ($stickers->isNotEmpty())
         @foreach($stickers as $sticker)
             <div class="bg-light p-2 mb-1 border">

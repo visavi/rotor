@@ -1,4 +1,6 @@
-<h3>Форум / Галерея</h3>
+@section('header')
+    <h1>Форум / Галерея</h1>
+@stop
 
 <form action="/admin/settings?act=forum" method="post">
     <input type="hidden" name="token" value="{{ $_SESSION['token'] }}">

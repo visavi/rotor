@@ -4,10 +4,7 @@
     {{ trans('socials.title') }}
 @stop
 
-@section('content')
-
-    <h1>{{ trans('socials.title') }}</h1>
-
+@section('breadcrumb')
     <nav>
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
@@ -15,7 +12,9 @@
             <li class="breadcrumb-item active">{{ trans('socials.title') }}</li>
         </ol>
     </nav>
+@stop
 
+@section('content')
     {{ trans('socials.text_choise') }}
 
     <script src="//ulogin.ru/js/ulogin.js"></script>

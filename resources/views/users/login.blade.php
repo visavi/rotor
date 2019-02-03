@@ -4,17 +4,16 @@
     Авторизация
 @stop
 
-@section('content')
-
-    <h1>Авторизация</h1>
-
+@section('breadcrumb')
     <nav>
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
             <li class="breadcrumb-item active">Авторизация</li>
         </ol>
     </nav>
+@stop
 
+@section('content')
     @if (isset($_SESSION['social']))
         <div class="bg-success text-light p-1">
             <img class="rounded-circle border" alt="photo" src="{{ $_SESSION['social']->photo }}" style="width: 48px; height: 48px;">

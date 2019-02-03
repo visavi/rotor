@@ -1,13 +1,10 @@
 @extends('layout')
 
 @section('title')
-    Редактирование новости
+    Редактирование новости {{ $news->title }}
 @stop
 
-@section('content')
-
-    <h1>Редактирование новости</h1>
-
+@section('breadcrumb')
     <nav>
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
@@ -17,7 +14,9 @@
             <li class="breadcrumb-item active">Редактирование новости</li>
         </ol>
     </nav>
+@stop
 
+@section('content')
     <div class="form cut">
         <form action="/admin/news/edit/{{ $news->id }}?page={{ $page }}" method="post" enctype="multipart/form-data">
             <input type="hidden" name="token" value="{{ $_SESSION['token'] }}">

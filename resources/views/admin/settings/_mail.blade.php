@@ -1,4 +1,6 @@
-<h3>Почта / Рассылка</h3>
+@section('header')
+    <h1>Почта / Рассылка</h1>
+@stop
 
 <form action="/admin/settings?act=mail" method="post">
     <input type="hidden" name="token" value="{{ $_SESSION['token'] }}">

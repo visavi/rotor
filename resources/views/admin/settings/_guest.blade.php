@@ -1,4 +1,6 @@
-<h3>Гостевая / Новости</h3>
+@section('header')
+    <h1>Гостевая / Новости</h1>
+@stop
 
 <form action="/admin/settings?act=guest" method="post">
     <input type="hidden" name="token" value="{{ $_SESSION['token'] }}">

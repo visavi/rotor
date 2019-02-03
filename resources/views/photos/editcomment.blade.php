@@ -4,10 +4,7 @@
     Редактирование комментария
 @stop
 
-@section('content')
-
-    <h1>Редактирование комментария</h1>
-
+@section('breadcrumb')
     <nav>
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
@@ -17,7 +14,9 @@
             <li class="breadcrumb-item active">Редактирование фотографии</li>
         </ol>
     </nav>
+@stop
 
+@section('content')
     <i class="fa fa-pencil-alt"></i> <b>{{ $comment->user->login }}</b> <small>({{ dateFixed($comment->created_at) }})</small><br><br>
 
     <div class="form">

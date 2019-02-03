@@ -4,10 +4,7 @@
     Денежные операции {{ $user->login }}
 @stop
 
-@section('content')
-
-    <h1>Денежные операции {{ $user->login }}</h1>
-
+@section('breadcrumb')
     <nav>
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
@@ -16,7 +13,9 @@
             <li class="breadcrumb-item active">Денежные операции {{ $user->login }}</li>
         </ol>
     </nav>
+@stop
 
+@section('content')
     @if ($transfers->isNotEmpty())
 
         @foreach ($transfers as $data)

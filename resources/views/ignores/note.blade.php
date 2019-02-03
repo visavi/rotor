@@ -4,10 +4,7 @@
     {{ trans('ignores.note_title') }} {{ $ignore->ignoring->login }}
 @stop
 
-@section('content')
-
-    <h1>{{ trans('ignores.note_title') }} {{ $ignore->ignoring->login }}</h1>
-
+@section('breadcrumb')
     <nav>
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
@@ -16,7 +13,9 @@
             <li class="breadcrumb-item active">{{ trans('ignores.note') }}</li>
         </ol>
     </nav>
+@stop
 
+@section('content')
     <div class="form">
         <form method="post" action="/ignores/note/{{ $ignore->id }}">
             <input type="hidden" name="token" value="{{ $_SESSION['token'] }}">

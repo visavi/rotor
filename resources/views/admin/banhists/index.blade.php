@@ -4,10 +4,7 @@
     История банов
 @stop
 
-@section('content')
-
-    <h1>История банов</h1>
-
+@section('breadcrumb')
     <nav>
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
@@ -15,7 +12,9 @@
             <li class="breadcrumb-item active">История банов</li>
         </ol>
     </nav>
+@stop
 
+@section('content')
     @if ($records->isNotEmpty())
 
     <form action="/admin/banhists/delete?page={{ $page->current }}" method="post">

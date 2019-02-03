@@ -4,7 +4,7 @@
     Просмотр файла {{ $document->getName() }}
 @stop
 
-@section('content')
+@section('breadcrumb')
     <nav>
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
@@ -20,9 +20,9 @@
             <li class="breadcrumb-item active">Просмотр файла</li>
         </ol>
     </nav>
+@stop
 
-    <h1>Просмотр файла {{ $document->getName() }}</h1>
-
+@section('content')
     Размер файла: {{ formatSize($document->getSize()) }}<hr>
 
     @if ($content)

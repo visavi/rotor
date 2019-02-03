@@ -4,10 +4,7 @@
     Топ популярных фотографий
 @stop
 
-@section('content')
-
-    <h1>Топ популярных фотографий</h1>
-
+@section('breadcrumb')
     <nav>
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
@@ -15,7 +12,9 @@
             <li class="breadcrumb-item active">Топ популярных фотографий</li>
         </ol>
     </nav>
+@stop
 
+@section('content')
     @if ($photos->isNotEmpty())
 
         Сортировать:

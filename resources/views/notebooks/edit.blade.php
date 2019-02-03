@@ -4,10 +4,7 @@
     {{ trans('notebooks.title_edit') }}
 @stop
 
-@section('content')
-
-    <h1>{{ trans('notebooks.title_edit') }}</h1>
-
+@section('breadcrumb')
     <nav>
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
@@ -16,7 +13,9 @@
             <li class="breadcrumb-item active">{{ trans('notebooks.title_edit') }}</li>
         </ol>
     </nav>
+@stop
 
+@section('content')
     <div class="form">
         <form action="/notebooks/edit" method="post">
             <input type="hidden" name="token" value="{{ $_SESSION['token'] }}">

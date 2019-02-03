@@ -6,7 +6,7 @@
 
 @section('description', stripString($down->text))
 
-@section('content')
+@section('breadcrumb')
     <nav>
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
@@ -25,9 +25,9 @@
             @endif
         </ol>
     </nav>
+@stop
 
-    <h1>{{ $down->title }}</h1>
-
+@section('content')
     @if (! $down->active)
         <div class="p-1 bg-warning text-dark">
             <i class="fas fa-exclamation-triangle"></i> Внимание! Данная загрузка ожидает проверки модератором!<br>

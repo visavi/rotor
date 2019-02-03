@@ -4,10 +4,7 @@
     Черный список
 @stop
 
-@section('content')
-
-    <h1>Черный список</h1>
-
+@section('breadcrumb')
     <nav>
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
@@ -15,7 +12,9 @@
             <li class="breadcrumb-item active">Черный список</li>
         </ol>
     </nav>
+@stop
 
+@section('content')
     <?php $active = ($type === 'email') ? 'success' : 'light'; ?>
     <a href="/admin/blacklists?type=email" class="badge badge-{{ $active }}">Email</a>
     <?php $active = ($type === 'login') ? 'success' : 'light'; ?>

@@ -4,10 +4,7 @@
     {{ $vote->title }}
 @stop
 
-@section('content')
-
-    <h1>{{ $vote->title }}</h1>
-
+@section('breadcrumb')
     <nav>
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
@@ -15,7 +12,9 @@
             <li class="breadcrumb-item active">{{ $vote->title }}</li>
         </ol>
     </nav>
+@stop
 
+@section('content')
     @if ($vote->topic->id)
         Тема: <a href="/topics/{{ $vote->topic->id }}">{{ $vote->topic->title }}</a><br><br>
     @endif

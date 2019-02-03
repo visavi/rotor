@@ -4,7 +4,7 @@
     Приватные сообщения
 @stop
 
-@section('content')
+@section('breadcrumb')
     <nav>
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
@@ -12,9 +12,9 @@
             <li class="breadcrumb-item">Сообщения</li>
         </ol>
     </nav>
+@stop
 
-    <h1>Приватные сообщения</h1>
-
+@section('content')
     @if ($messages->isNotEmpty())
         @foreach ($messages as $data)
             <?php $link = $data->author->id ? '/' . $data->author->login : ''; ?>

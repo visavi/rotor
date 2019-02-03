@@ -4,10 +4,7 @@
     Редактирование правил
 @stop
 
-@section('content')
-
-    <h1>Редактирование правил</h1>
-
+@section('breadcrumb')
     <nav>
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
@@ -16,7 +13,9 @@
             <li class="breadcrumb-item active">Редактирование правил</li>
         </ol>
     </nav>
+@stop
 
+@section('content')
     <div class="form">
         <form action="/admin/rules/edit" method="post">
             <input type="hidden" name="token" value="{{ $_SESSION['token'] }}">

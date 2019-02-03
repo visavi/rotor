@@ -4,10 +4,7 @@
     {{ $photo->title }} - Комментарии
 @stop
 
-@section('content')
-
-    <h1>{{ $photo->title }}</h1>
-
+@section('breadcrumb')
     <nav>
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
@@ -16,7 +13,9 @@
             <li class="breadcrumb-item active">Комментарии</li>
         </ol>
     </nav>
+@stop
 
+@section('content')
     @if ($comments->isNotEmpty())
         @foreach ($comments as $data)
             <div class="post" id="comment_{{ $data->id }}">
