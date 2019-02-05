@@ -72,7 +72,7 @@ class WallController extends BaseController
             $msg   = check($request->input('msg'));
 
             $validator->equal($token, $_SESSION['token'], 'Неверный идентификатор сессии, повторите действие!')
-                ->length($msg, 5, 1000, ['msg' => 'Слишком длинное или короткое сообщение!'])
+                ->length($msg, 5, setting('comment_length'), ['msg' => 'Слишком длинное или короткое сообщение!'])
                 ->equal(Flood::isFlood(), true, ['msg' => 'Антифлуд! Разрешается отправлять сообщения раз в ' . Flood::getPeriod() . ' сек!']);
 
             $ignoring = Ignore::query()

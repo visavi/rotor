@@ -136,7 +136,7 @@ class MessageController extends BaseController
         }
 
         $validator->equal($token, $_SESSION['token'], ['msg' => 'Неверный идентификатор сессии, повторите действие!'])
-            ->length($msg, 5, 1000, ['msg' => 'Слишком длинное или короткое сообщение!'])
+            ->length($msg, 5, setting('comment_length'), ['msg' => 'Слишком длинное или короткое сообщение!'])
             ->equal(Flood::isFlood(), true, 'Антифлуд! Разрешается отправлять сообщения раз в ' . Flood::getPeriod() . ' сек!')
             ->notEqual($user->id, $this->user->id, 'Нельзя отправлять письмо самому себе!');
 

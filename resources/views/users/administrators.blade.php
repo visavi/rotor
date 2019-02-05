@@ -49,7 +49,8 @@
 
                     <div class="form-group">
                         <label for="msg">Сообщение:</label>
-                        <textarea class="form-control" id="msg" rows="5" name="msg" required></textarea>
+                        <textarea class="form-control markItUp" maxlength="{{ setting('comment_length') }}" id="msg" rows="5" name="msg" required></textarea>
+                        <span class="js-textarea-counter"></span>
                     </div>
 
                     @if (getUser('point') < setting('privatprotect'))

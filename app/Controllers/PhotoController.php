@@ -198,7 +198,7 @@ class PhotoController extends BaseController
             $validator
                 ->true(getUser(), 'Чтобы добавить комментарий необходимо авторизоваться')
                 ->equal($token, $_SESSION['token'], 'Неверный идентификатор сессии, повторите действие!')
-                ->length($msg, 5, 1000, ['msg' => 'Слишком длинное или короткое название!'])
+                ->length($msg, 5, setting('comment_length'), ['msg' => 'Слишком длинный или короткий комментарий!'])
                 ->true(Flood::isFlood(), ['msg' => 'Антифлуд! Разрешается отправлять сообщения раз в ' . Flood::getPeriod() . ' секунд!'])
                 ->empty($photo->closed, ['msg' => 'Комментирование данной фотографии запрещено!']);
 
@@ -303,7 +303,7 @@ class PhotoController extends BaseController
 
             $validator
                 ->equal($token, $_SESSION['token'], 'Неверный идентификатор сессии, повторите действие!')
-                ->length($msg, 5, 1000, ['msg' => 'Слишком длинный или короткий комментарий!'])
+                ->length($msg, 5, setting('comment_length'), ['msg' => 'Слишком длинный или короткий комментарий!'])
                 ->empty($comment->closed, 'Комментирование данной фотографии запрещено!');
 
             if ($validator->isValid()) {

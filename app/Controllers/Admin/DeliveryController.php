@@ -38,7 +38,7 @@ class DeliveryController extends AdminController
             $users = collect();
 
             $validator->equal($token, $_SESSION['token'], ['msg' => 'Неверный идентификатор сессии, повторите действие!'])
-                ->length($msg, 5, 1000, ['msg' => 'Слишком длинный или короткий текст комментария!'])
+                ->length($msg, 5, setting('comment_length'), ['msg' => 'Слишком длинный или короткий комментарий!'])
                 ->between($type, 1, 4, 'Вы не выбрали получаетелей рассылки!');
 
             // Рассылка пользователям, которые в онлайне

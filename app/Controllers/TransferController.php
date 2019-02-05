@@ -59,7 +59,7 @@ class TransferController extends BaseController
         $validator
             ->equal($token, $_SESSION['token'], ['msg' => 'Неверный идентификатор сессии, повторите действие!'])
             ->true($this->user, ['user' => 'Ошибка! Пользователь не найден!'])
-            ->length($msg, 0, 1000, ['msg' => 'Слишком длинный комментарий!'])
+            ->length($msg, 0, setting('comment_length'), ['msg' => 'Слишком длинный комментарий!'])
             ->gte(getUser('point'), setting('sendmoneypoint'), ['money' => 'Для перевода денег вам необходимо набрать '.plural(setting('sendmoneypoint'), setting('scorename'))])
             ->gt($money, 0, ['money' => 'Перевод невозможен указана неверная сумма!'])
             ->lte($money, getUser('money'), ['money' => 'Недостаточно средств для перевода такого количества денег!']);

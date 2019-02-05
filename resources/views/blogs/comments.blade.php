@@ -76,7 +76,8 @@
 
                 <div class="form-group{{ hasError('msg') }}">
                     <label for="msg">Сообщение:</label>
-                    <textarea class="form-control markItUp" id="msg" rows="5" name="msg" required>{{ getInput('msg') }}</textarea>
+                    <textarea class="form-control markItUp" maxlength="{{ setting('comment_length') }}" id="msg" rows="5" name="msg" required>{{ getInput('msg') }}</textarea>
+                    <span class="js-textarea-counter"></span>
                     {!! textError('msg') !!}
                 </div>
 

@@ -408,7 +408,7 @@ class DownController extends BaseController
             $validator
                 ->true(getUser(), 'Для добавления комментария необходимо авторизоваться!')
                 ->equal($token, $_SESSION['token'], 'Неверный идентификатор сессии, повторите действие!')
-                ->length($msg, 5, 1000, ['msg' => 'Слишком длинное или короткий комментарий!'])
+                ->length($msg, 5, setting('comment_length'), ['msg' => 'Слишком длинный или короткий комментарий!'])
                 ->true(Flood::isFlood(), ['msg' => 'Антифлуд! Разрешается отправлять комментарии раз в ' . Flood::getPeriod() . ' секунд!']);
 
             if ($validator->isValid()) {
@@ -501,7 +501,7 @@ class DownController extends BaseController
 
             $validator
                 ->equal($token, $_SESSION['token'], 'Неверный идентификатор сессии, повторите действие!')
-                ->length($msg, 5, 1000, ['msg' => 'Слишком длинный или короткий комментарий!']);
+                ->length($msg, 5, setting('comment_length'), ['msg' => 'Слишком длинный или короткий комментарий!']);
 
             if ($validator->isValid()) {
                 $msg = antimat($msg);
