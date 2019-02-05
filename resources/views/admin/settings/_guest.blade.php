@@ -47,6 +47,12 @@
         {!! textError('sets[guesttextlength]') !!}
     </div>
 
+    <div class="form-group{{ hasError('sets[comment_length]') }}">
+        <label for="comment_length">Символов в комментариях:</label>
+        <input type="number" class="form-control" id="comment_length" name="sets[comment_length]" maxlength="5" value="{{ getInput('sets.comment_length', $settings['comment_length']) }}" required>
+        {!! textError('sets[comment_length]') !!}
+    </div>
+
     <div class="form-group{{ hasError('sets[guesttextlength]') }}">
         <label for="chatpost">Сообщений в админ-чате на стр:</label>
         <input type="number" class="form-control" id="chatpost" name="sets[chatpost]" maxlength="2" value="{{ getInput('sets.chatpost', $settings['chatpost']) }}" required>

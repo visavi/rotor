@@ -22,7 +22,7 @@
                     <a class="nav-link" href="/admin/settings?act=main" id="main">Основные настройки</a>
                     <a class="nav-link" href="/admin/settings?act=mail" id="mail">Почта / Рассылка</a>
                     <a class="nav-link" href="/admin/settings?act=info" id="info">Вывод информации</a>
-                    <a class="nav-link" href="/admin/settings?act=guest" id="guest">Гостевая / Новости</a>
+                    <a class="nav-link" href="/admin/settings?act=guest" id="guest">Гостевая / Новости / Комментарии</a>
                     <a class="nav-link" href="/admin/settings?act=forum" id="forum">Форум / Галерея</a>
                     <a class="nav-link" href="/admin/settings?act=bookmark" id="bookmark">Закладки / Голосования / Приват</a>
                     <a class="nav-link" href="/admin/settings?act=load" id="load">Загруз-центр</a>

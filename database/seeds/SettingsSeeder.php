@@ -36,6 +36,7 @@ class SettingsSeeder extends AbstractSeed
             ['name'  => 'captcha_symbols', 'value' => '1234567890'],
             ['name'  => 'chatpost', 'value' => 10],
             ['name'  => 'closedsite', 'value' => 0],
+            ['name'  => 'comment_length', 'value' => 1000],
             ['name'  => 'contactlist', 'value' => 10],
             ['name'  => 'copy', 'value' => '© Rotor'],
             ['name'  => 'copyfoto', 'value' => 1],
