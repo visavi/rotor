@@ -55,8 +55,8 @@ class LoadController extends AdminController
         $token = check($request->input('token'));
         $name  = check($request->input('name'));
 
-        $validator->equal($token, $_SESSION['token'], 'Неверный идентификатор сессии, повторите действие!')
-            ->length($name, 3, 50, ['title' => 'Слишком длинное или короткое название раздела!']);
+        $validator->equal($token, $_SESSION['token'], trans('validator.token'))
+            ->length($name, 3, 50, ['title' => trans('validator.title')]);
 
         if ($validator->isValid()) {
 
@@ -111,8 +111,8 @@ class LoadController extends AdminController
             $sort   = check($request->input('sort'));
             $closed = empty($request->input('closed')) ? 0 : 1;
 
-            $validator->equal($token, $_SESSION['token'], 'Неверный идентификатор сессии, повторите действие!')
-                ->length($name, 3, 50, ['title' => 'Слишком длинное или короткое название раздела!'])
+            $validator->equal($token, $_SESSION['token'], trans('validator.token'))
+                ->length($name, 3, 50, ['title' => trans('validator.title')])
                 ->notEqual($parent, $load->id, ['parent' => 'Недопустимый выбор родительского раздела!']);
 
             if (! empty($parent) && $load->children->isNotEmpty()) {
@@ -163,7 +163,7 @@ class LoadController extends AdminController
 
         $token = check($request->input('token'));
 
-        $validator->equal($token, $_SESSION['token'], 'Неверный идентификатор сессии, повторите действие!')
+        $validator->equal($token, $_SESSION['token'], trans('validator.token'))
             ->true($load->children->isEmpty(), 'Удаление невозможно! Данный раздел имеет подразделы!');
 
         $down = Down::query()->where('category_id', $load->id)->first();
@@ -203,7 +203,7 @@ class LoadController extends AdminController
 
             setFlash('success', 'Данные успешно пересчитаны!');
         } else {
-            setFlash('danger', 'Ошибка! Неверный идентификатор сессии, повторите действие!');
+            setFlash('danger', trans('validator.token'));
         }
 
         redirect('/admin/loads');
@@ -282,9 +282,9 @@ class LoadController extends AdminController
             /** @var Load $category */
             $category = Load::query()->find($category);
 
-            $validator->equal($token, $_SESSION['token'], 'Неверный идентификатор сессии, повторите действие!')
-                ->length($title, 5, 50, ['title' => 'Слишком длинное или короткое название!'])
-                ->length($text, 50, 5000, ['text' => 'Слишком длинное или короткое описание!'])
+            $validator->equal($token, $_SESSION['token'], trans('validator.token'))
+                ->length($title, 5, 50, ['title' => trans('validator.title')])
+                ->length($text, 50, 5000, ['text' => trans('validator.text')])
                 ->notEmpty($category, ['category' => 'Категории для данного файла не существует!']);
 
             $duplicate = Down::query()->where('title', $title)->where('id', '<>', $down->id)->count();
@@ -381,7 +381,7 @@ class LoadController extends AdminController
 
             setFlash('success', 'Загрузка успешно удалена!');
         } else {
-            setFlash('danger', 'Ошибка! Неверный идентификатор сессии, повторите действие!');
+            setFlash('danger', trans('validator.token'));
         }
 
         redirect('/admin/loads/' . $down->category_id);
@@ -483,7 +483,7 @@ class LoadController extends AdminController
 
             setFlash('success', 'Загрузка успешно ' . $type . '!');
         } else {
-            setFlash('danger', 'Ошибка! Неверный идентификатор сессии, повторите действие!');
+            setFlash('danger', trans('validator.token'));
         }
 
         redirect('/admin/downs/edit/' . $down->id);

@@ -83,9 +83,9 @@ class VoteController extends AdminController
             $title   = check($request->input('title'));
             $answers = check((array) $request->input('answers'));
 
-            $validator->equal($token, $_SESSION['token'], 'Неверный идентификатор сессии, повторите действие!');
+            $validator->equal($token, $_SESSION['token'], trans('validator.token'));
 
-            $validator->length($title, 5, 100, ['title' => 'Слишком длинный или короткий текст вопроса!']);
+            $validator->length($title, 5, 100, ['title' => trans('validator.text')]);
             $answers = array_unique(array_diff($answers, ['']));
 
             foreach ($answers as $answer) {
@@ -161,7 +161,7 @@ class VoteController extends AdminController
 
             setFlash('success', 'Голосование успешно удалено!');
         } else {
-            setFlash('danger', 'Ошибка! Неверный идентификатор сессии, повторите действие!');
+            setFlash('danger', trans('validator.token'));
         }
 
         redirect('/admin/votes');
@@ -199,7 +199,7 @@ class VoteController extends AdminController
 
             setFlash('success', 'Голосование успешно ' . $type . '!');
         } else {
-            setFlash('danger', 'Ошибка! Неверный идентификатор сессии, повторите действие!');
+            setFlash('danger', trans('validator.token'));
         }
 
         if (empty($closed)) {
@@ -229,7 +229,7 @@ class VoteController extends AdminController
 
             setFlash('success', 'Голосования успешно пересчитаны!');
         } else {
-            setFlash('danger', 'Ошибка! Неверный идентификатор сессии, повторите действие!');
+            setFlash('danger', trans('validator.token'));
         }
 
         redirect('/admin/votes');

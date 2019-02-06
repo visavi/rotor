@@ -109,9 +109,9 @@ class OfferController extends AdminController
             $type   = check($request->input('type'));
             $closed = empty($request->input('closed')) ? 0 : 1;
 
-            $validator->equal($token, $_SESSION['token'], ['Неверный идентификатор сессии, повторите действие!'])
-                ->length($title, 5, 50, ['title' => 'Слишком длинный или короткий заголовок!'])
-                ->length($text, 5, 1000, ['text' => 'Слишком длинное или короткое описание!'])
+            $validator->equal($token, $_SESSION['token'], trans('validator.token'))
+                ->length($title, 5, 50, ['title' => trans('validator.title')])
+                ->length($text, 5, 1000, ['text' => trans('validator.text')])
                 ->in($type, array_keys(Offer::TYPES), ['type' => 'Выбран неверный тип записи! (Необходимо предложение или проблема)']);
 
             if ($validator->isValid()) {
@@ -161,8 +161,8 @@ class OfferController extends AdminController
             $status = check($request->input('status'));
             $closed = empty($request->input('closed')) ? 0 : 1;
 
-            $validator->equal($token, $_SESSION['token'], ['Неверный идентификатор сессии, повторите действие!'])
-                ->length($reply, 5, 3000, ['reply' => 'Слишком длинный или короткий текст ответа!'])
+            $validator->equal($token, $_SESSION['token'], trans('validator.token'))
+                ->length($reply, 5, 3000, ['reply' => trans('validator.text')])
                 ->in($status, array_keys(Offer::STATUSES), ['status' => 'Недопустимый статус предложения или проблемы!']);
 
             if ($validator->isValid()) {
@@ -210,7 +210,7 @@ class OfferController extends AdminController
 
             setFlash('success', 'Комментарии успешно пересчитаны!');
         } else {
-            setFlash('danger', 'Ошибка! Неверный идентификатор сессии, повторите действие!');
+            setFlash('danger', trans('validator.token'));
         }
 
         redirect('/admin/offers');
@@ -230,7 +230,7 @@ class OfferController extends AdminController
         $del   = intar($request->input('del'));
         $type  = $request->input('type') === Offer::OFFER ? Offer::OFFER : Offer::ISSUE;
 
-        $validator->equal($token, $_SESSION['token'], 'Неверный идентификатор сессии, повторите действие!')
+        $validator->equal($token, $_SESSION['token'], trans('validator.token'))
             ->true($del, 'Отсутствуют выбранные записи для удаления!');
 
         if ($validator->isValid()) {

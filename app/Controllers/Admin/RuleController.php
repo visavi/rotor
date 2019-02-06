@@ -57,7 +57,7 @@ class RuleController extends AdminController
             $msg   = check($request->input('msg'));
 
             $validator
-                ->equal($token, $_SESSION['token'], 'Неверный идентификатор сессии, повторите действие!')
+                ->equal($token, $_SESSION['token'], trans('validator.token'))
                 ->notEmpty($msg, ['msg' => 'Вы не ввели текст с правилами сайта!']);
 
             if ($validator->isValid()) {

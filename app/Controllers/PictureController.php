@@ -36,7 +36,7 @@ class PictureController extends BaseController
             $token = check($request->input('token'));
             $photo = $request->file('photo');
 
-            $validator->equal($token, $_SESSION['token'], ['photo' => 'Неверный идентификатор сессии, повторите действие!']);
+            $validator->equal($token, $_SESSION['token'], ['photo' => trans('validator.token')]);
 
             $rules = [
                 'maxsize'   => setting('filesize'),
@@ -90,8 +90,7 @@ class PictureController extends BaseController
     {
         $token = check($request->input('token'));
 
-        $validator->equal($token, $_SESSION['token'], ['photo' => 'Неверный идентификатор сессии, повторите действие!']);
-
+        $validator->equal($token, $_SESSION['token'], ['photo' => trans('validator.token')]);
 
         if (! $this->user->picture) {
             $validator->addError('Фотографии для удаления не существует!');

@@ -57,7 +57,7 @@ class TransferController extends BaseController
         $token = check($request->input('token'));
 
         $validator
-            ->equal($token, $_SESSION['token'], ['msg' => 'Неверный идентификатор сессии, повторите действие!'])
+            ->equal($token, $_SESSION['token'], ['msg' => trans('validator.token')])
             ->true($this->user, ['user' => 'Ошибка! Пользователь не найден!'])
             ->length($msg, 0, setting('comment_length'), ['msg' => 'Слишком длинный комментарий!'])
             ->gte(getUser('point'), setting('sendmoneypoint'), ['money' => 'Для перевода денег вам необходимо набрать '.plural(setting('sendmoneypoint'), setting('scorename'))])

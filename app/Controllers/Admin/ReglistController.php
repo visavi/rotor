@@ -32,7 +32,7 @@ class ReglistController extends AdminController
             $choice = intar($request->input('choice'));
             $action = check($request->input('action'));
 
-            $validator->equal($token, $_SESSION['token'], 'Неверный идентификатор сессии, повторите действие!')
+            $validator->equal($token, $_SESSION['token'], trans('validator.token'))
                 ->notEmpty($choice, 'Отсутствуют выбранные пользователи!')
                 ->in($action, ['yes', 'no'], ['action' => 'Необходимо выбрать действие!']);
 

@@ -44,8 +44,8 @@ class ForumController extends AdminController
         $token = check($request->input('token'));
         $title = check($request->input('title'));
 
-        $validator->equal($token, $_SESSION['token'], 'Неверный идентификатор сессии, повторите действие!')
-            ->length($title, 5, 50, ['title' => 'Слишком длинное или короткое название раздела!']);
+        $validator->equal($token, $_SESSION['token'], trans('validator.token'))
+            ->length($title, 5, 50, ['title' => trans('validator.title')]);
 
         if ($validator->isValid()) {
 
@@ -101,9 +101,9 @@ class ForumController extends AdminController
             $sort        = check($request->input('sort'));
             $closed      = empty($request->input('closed')) ? 0 : 1;
 
-            $validator->equal($token, $_SESSION['token'], 'Неверный идентификатор сессии, повторите действие!')
-                ->length($title, 5, 50, ['title' => 'Слишком длинное или короткое название раздела!'])
-                ->length($description, 0, 100, ['description' => 'Слишком длинное описания раздела!'])
+            $validator->equal($token, $_SESSION['token'], trans('validator.token'))
+                ->length($title, 5, 50, ['title' => trans('validator.title')])
+                ->length($description, 0, 100, ['description' => trans('validator.text')])
                 ->notEqual($parent, $forum->id, ['parent' => 'Недопустимый выбор родительского раздела!']);
 
             if (! empty($parent) && $forum->children->isNotEmpty()) {
@@ -155,7 +155,7 @@ class ForumController extends AdminController
 
         $token = check($request->input('token'));
 
-        $validator->equal($token, $_SESSION['token'], 'Неверный идентификатор сессии, повторите действие!')
+        $validator->equal($token, $_SESSION['token'], trans('validator.token'))
             ->true($forum->children->isEmpty(), 'Удаление невозможно! Данный раздел имеет подфорумы!');
 
         $topic = Topic::query()->where('forum_id', $forum->id)->first();
@@ -194,7 +194,7 @@ class ForumController extends AdminController
 
             setFlash('success', 'Данные успешно пересчитаны!');
         } else {
-            setFlash('danger', 'Ошибка! Неверный идентификатор сессии, повторите действие!');
+            setFlash('danger', trans('validator.token'));
         }
 
         redirect('/admin/forums');
@@ -257,8 +257,8 @@ class ForumController extends AdminController
             $locked     = empty($request->input('locked')) ? 0 : 1;
             $closed     = empty($request->input('closed')) ? 0 : 1;
 
-            $validator->equal($token, $_SESSION['token'], 'Неверный идентификатор сессии, повторите действие!')
-                ->length($title, 5, 50, ['title' => 'Слишком длинное или короткое название темы!'])
+            $validator->equal($token, $_SESSION['token'], trans('validator.token'))
+                ->length($title, 5, 50, ['title' => trans('validator.title')])
                 ->length($note, 0, 250, ['note' => 'Слишком длинное объявление!']);
 
             if ($validator->isValid()) {
@@ -308,7 +308,7 @@ class ForumController extends AdminController
             /** @var Forum $forum */
             $forum = Forum::query()->find($fid);
 
-            $validator->equal($token, $_SESSION['token'], 'Неверный идентификатор сессии, повторите действие!')
+            $validator->equal($token, $_SESSION['token'], trans('validator.token'))
                 ->notEmpty($forum, ['forum' => 'Выбранного раздела не существует!']);
 
             if ($forum) {
@@ -406,7 +406,7 @@ class ForumController extends AdminController
             endswitch;
 
         } else {
-            setFlash('danger', 'Ошибка! Неверный идентификатор сессии, повторите действие!');
+            setFlash('danger', trans('validator.token'));
         }
 
         redirect('/admin/topics/' . $topic->id . '?page=' . $page);
@@ -433,7 +433,7 @@ class ForumController extends AdminController
             abort(404, 'Данной темы не существует!');
         }
 
-        $validator->equal($token, $_SESSION['token'], 'Неверный идентификатор сессии, повторите действие!');
+        $validator->equal($token, $_SESSION['token'], trans('validator.token'));
 
         if ($validator->isValid()) {
 
@@ -554,8 +554,8 @@ class ForumController extends AdminController
             $msg     = check($request->input('msg'));
             $delfile = intar($request->input('delfile'));
 
-            $validator->equal($token, $_SESSION['token'], 'Неверный идентификатор сессии, повторите действие!')
-                ->length($msg, 5, setting('forumtextlength'), ['msg' => 'Слишком длинное или короткое сообщение!']);
+            $validator->equal($token, $_SESSION['token'], trans('validator.token'))
+                ->length($msg, 5, setting('forumtextlength'), ['msg' => trans('validator.text')]);
 
             if ($validator->isValid()) {
 
@@ -614,7 +614,7 @@ class ForumController extends AdminController
             abort(404, 'Данной темы не существует!');
         }
 
-        $validator->equal($token, $_SESSION['token'], 'Неверный идентификатор сессии, повторите действие!')
+        $validator->equal($token, $_SESSION['token'], trans('validator.token'))
             ->true($del, 'Отсутствуют выбранные сообщения для удаления!');
 
         if ($validator->isValid()) {

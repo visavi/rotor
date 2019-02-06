@@ -105,7 +105,7 @@ class ActiveController extends BaseController
         $token = check($request->input('token'));
         $tid   = int($request->input('tid'));
 
-        $validator->equal($token, $_SESSION['token'], 'Неверный идентификатор сессии, повторите действие!');
+        $validator->equal($token, $_SESSION['token'], trans('validator.token'));
 
         $post = Post::query()
             ->where('id', $tid)

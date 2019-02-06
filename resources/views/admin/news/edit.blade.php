@@ -22,7 +22,7 @@
             <input type="hidden" name="token" value="{{ $_SESSION['token'] }}">
 
             <div class="form-group{{ hasError('title') }}">
-                <label for="title">Заголовок:</label>
+                <label for="title">Название:</label>
                 <input type="text" class="form-control" id="title" name="title" maxlength="100" value="{{ getInput('title', $news->title) }}" required>
                 {!! textError('title') !!}
             </div>

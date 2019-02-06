@@ -63,8 +63,8 @@ class RatingController extends BaseController
             $token = check($request->input('token'));
             $text  = check($request->input('text'));
 
-            $validator->equal($token, $_SESSION['token'], 'Неверный идентификатор сессии, повторите действие!')
-                ->length($text, 5, 250, ['text' => 'Слишком длинный или короткий комментарий!']);
+            $validator->equal($token, $_SESSION['token'], trans('validator.token'))
+                ->length($text, 5, 250, ['text' => trans('validator.text')]);
 
             if (empty($vote) && getUser('rating') < 10) {
                 $validator->addError('Уменьшать репутацию могут только пользователи с рейтингом 10 или выше!');
@@ -185,7 +185,7 @@ class RatingController extends BaseController
         $validator
             ->true($request->ajax(), 'Это не ajax запрос!')
             ->true(isAdmin(User::ADMIN), 'Удалять рейтинг могут только администраторы')
-            ->equal($token, $_SESSION['token'], 'Неверный идентификатор сессии, повторите действие!')
+            ->equal($token, $_SESSION['token'], trans('validator.token'))
             ->notEmpty($id, ['Не выбрана запись для удаление!']);
 
         if ($validator->isValid()) {

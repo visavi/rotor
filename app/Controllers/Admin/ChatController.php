@@ -28,8 +28,8 @@ class ChatController extends AdminController
             $msg   = check($request->input('msg'));
             $token = check($request->input('token'));
 
-            $validator->equal($token, $_SESSION['token'], ['msg' => 'Неверный идентификатор сессии, повторите действие!'])
-                ->length($msg, 5, 1500, ['msg' => 'Слишком длинное или короткое сообщение!']);
+            $validator->equal($token, $_SESSION['token'], ['msg' => trans('validator.token')])
+                ->length($msg, 5, 1500, ['msg' => trans('validator.text')]);
 
             if ($validator->isValid()) {
 
@@ -111,8 +111,8 @@ class ChatController extends AdminController
             $msg   = check($request->input('msg'));
             $token = check($request->input('token'));
 
-            $validator->equal($token, $_SESSION['token'], ['msg' => 'Неверный идентификатор сессии, повторите действие!'])
-                ->length($msg, 5, 1500, ['msg' => 'Слишком длинное или короткое сообщение!']);
+            $validator->equal($token, $_SESSION['token'], ['msg' => trans('validator.token')])
+                ->length($msg, 5, 1500, ['msg' => trans('validator.text')]);
 
             if ($validator->isValid()) {
 
@@ -145,7 +145,7 @@ class ChatController extends AdminController
         $token = check($request->input('token'));
 
         $validator
-            ->equal($token, $_SESSION['token'], 'Неверный идентификатор сессии, повторите действие!')
+            ->equal($token, $_SESSION['token'], trans('validator.token'))
             ->true(isAdmin(User::BOSS), 'Очищать чат может только владелец!');
 
         if ($validator->isValid()) {

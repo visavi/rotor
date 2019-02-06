@@ -38,13 +38,13 @@
         </div>
 
         <div class="form-group{{ hasError('title') }}">
-            <label for="inputTitle">Заголовок:</label>
+            <label for="inputTitle">Название:</label>
             <input class="form-control" id="inputTitle" name="title" value="{{ getInput('title') }}" required>
             {!! textError('title') !!}
         </div>
 
         <div class="form-group{{ hasError('text') }}">
-            <label for="text">Описание:</label>
+            <label for="text">Текст:</label>
             <textarea class="form-control markItUp" id="text" rows="10" name="text" required>{{ getInput('text') }}</textarea>
             {!! textError('text') !!}
         </div>

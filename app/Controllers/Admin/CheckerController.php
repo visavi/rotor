@@ -62,7 +62,7 @@ class CheckerController extends AdminController
                 setFlash('danger', 'Директория temp недоступна для записи!');
             }
         } else {
-            setFlash('danger', 'Неверный идентификатор сессии, повторите действие!');
+            setFlash('danger', trans('validator.token'));
         }
 
         redirect('/admin/checkers');

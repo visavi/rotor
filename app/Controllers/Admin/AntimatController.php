@@ -35,7 +35,7 @@ class AntimatController extends AdminController
             $word  = check(utfLower($request->input('word')));
 
             $validator
-                ->equal($token, $_SESSION['token'], 'Неверный идентификатор сессии, повторите действие!')
+                ->equal($token, $_SESSION['token'], trans('validator.token'))
                 ->notEmpty($word, 'Вы не ввели слово для занесения в список!');
 
             $duplicate = Antimat::query()->where('string', $word)->first();
@@ -74,7 +74,7 @@ class AntimatController extends AdminController
         $token = check($request->input('token'));
         $id    = int($request->input('id'));
 
-        $validator->equal($token, $_SESSION['token'], 'Неверный идентификатор сессии, повторите действие!');
+        $validator->equal($token, $_SESSION['token'], trans('validator.token'));
 
         $word = Antimat::query()->find($id);
         $validator->notEmpty($word, 'Выбранное для удаления слово не найдено!');
@@ -103,7 +103,7 @@ class AntimatController extends AdminController
         $token = check($request->input('token'));
 
         $validator
-            ->equal($token, $_SESSION['token'], 'Неверный идентификатор сессии, повторите действие!')
+            ->equal($token, $_SESSION['token'], trans('validator.token'))
             ->true(isAdmin(User::BOSS), 'Очищать список может только владелец!');
 
         if ($validator->isValid()) {

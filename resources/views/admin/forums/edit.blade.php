@@ -49,7 +49,7 @@
             </div>
 
             <div class="form-group{{ hasError('description') }}">
-                <label for="description">Описание:</label>
+                <label for="description">Текст:</label>
                 <input class="form-control" name="description" id="description" maxlength="100" value="{{ getInput('description', $forum->description) }}">
                 {!! textError('description') !!}
             </div>

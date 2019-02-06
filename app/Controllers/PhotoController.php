@@ -80,10 +80,10 @@ class PhotoController extends BaseController
             $text   = check($request->input('text'));
             $closed = empty($request->input('closed')) ? 0 : 1;
 
-            $validator->equal($token, $_SESSION['token'], 'Неверный идентификатор сессии, повторите действие!')
-                ->length($title, 5, 50, ['title' => 'Слишком длинное или короткое название!'])
+            $validator->equal($token, $_SESSION['token'], trans('validator.token'))
+                ->length($title, 5, 50, ['title' => trans('validator.title')])
                 ->length($text, 0, 1000, ['text' => 'Слишком длинное описание!'])
-                ->true(Flood::isFlood(), ['text' => 'Антифлуд! Разрешается загружать фото раз в ' . Flood::getPeriod() . ' секунд!']);
+                ->true(Flood::isFlood(), ['text' => trans('validator.flood', ['sec' => Flood::getPeriod()])]);
 
             if ($validator->isValid()) {
 
@@ -148,8 +148,8 @@ class PhotoController extends BaseController
             $text   = check($request->input('text'));
             $closed = empty($request->input('closed')) ? 0 : 1;
 
-            $validator->equal($token, $_SESSION['token'], 'Неверный идентификатор сессии, повторите действие!')
-                ->length($title, 5, 50, ['title' => 'Слишком длинное или короткое название!'])
+            $validator->equal($token, $_SESSION['token'], trans('validator.token'))
+                ->length($title, 5, 50, ['title' => trans('validator.title')])
                 ->length($text, 0, 1000, ['text' => 'Слишком длинное описание!']);
 
             if ($validator->isValid()) {
@@ -197,9 +197,9 @@ class PhotoController extends BaseController
 
             $validator
                 ->true(getUser(), 'Чтобы добавить комментарий необходимо авторизоваться')
-                ->equal($token, $_SESSION['token'], 'Неверный идентификатор сессии, повторите действие!')
-                ->length($msg, 5, setting('comment_length'), ['msg' => 'Слишком длинный или короткий комментарий!'])
-                ->true(Flood::isFlood(), ['msg' => 'Антифлуд! Разрешается отправлять сообщения раз в ' . Flood::getPeriod() . ' секунд!'])
+                ->equal($token, $_SESSION['token'], trans('validator.token'))
+                ->length($msg, 5, setting('comment_length'), ['msg' => trans('validator.text')])
+                ->true(Flood::isFlood(), ['msg' => trans('validator.flood', ['sec' => Flood::getPeriod()])])
                 ->empty($photo->closed, ['msg' => 'Комментирование данной фотографии запрещено!']);
 
             if ($validator->isValid()) {
@@ -302,8 +302,8 @@ class PhotoController extends BaseController
             $token = check($request->input('token'));
 
             $validator
-                ->equal($token, $_SESSION['token'], 'Неверный идентификатор сессии, повторите действие!')
-                ->length($msg, 5, setting('comment_length'), ['msg' => 'Слишком длинный или короткий комментарий!'])
+                ->equal($token, $_SESSION['token'], trans('validator.token'))
+                ->length($msg, 5, setting('comment_length'), ['msg' => trans('validator.text')])
                 ->empty($comment->closed, 'Комментирование данной фотографии запрещено!');
 
             if ($validator->isValid()) {
@@ -349,7 +349,7 @@ class PhotoController extends BaseController
         }
 
         $validator
-            ->equal($token, $_SESSION['token'], 'Неверный идентификатор сессии, повторите действие!')
+            ->equal($token, $_SESSION['token'], trans('validator.token'))
             ->empty($photo->count_comments, 'Запрещено удалять фотографии к которым имеются комментарии!');
 
         if ($validator->isValid()) {

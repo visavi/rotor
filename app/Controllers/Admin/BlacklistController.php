@@ -50,7 +50,7 @@ class BlacklistController extends AdminController
             $token = check($request->input('token'));
             $value = check(utfLower($request->input('value')));
 
-            $validator->equal($token, $_SESSION['token'], 'Неверный идентификатор сессии, повторите действие!')
+            $validator->equal($token, $_SESSION['token'], trans('validator.token'))
                 ->length($value, 1, 100, ['value' => 'Вы не ввели запись или она слишком длинная!']);
 
             if ($type === 'email') {
@@ -114,7 +114,7 @@ class BlacklistController extends AdminController
         $del   = intar($request->input('del'));
         $type  = $this->type;
 
-        $validator->equal($token, $_SESSION['token'], 'Неверный идентификатор сессии, повторите действие!')
+        $validator->equal($token, $_SESSION['token'], trans('validator.token'))
             ->true($del, 'Отсутствуют выбранные записи для удаления!');
 
         if ($validator->isValid()) {

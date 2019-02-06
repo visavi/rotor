@@ -85,7 +85,7 @@ class StickerController extends AdminController
         $name  = check($request->input('name'));
 
         $validator->equal($token, $_SESSION['token'], trans('validator.token'))
-            ->length($name, 3, 50, ['name' => 'Слишком длинное или короткое название категории!']);
+            ->length($name, 3, 50, ['name' => trans('validator.title')]);
 
         if ($validator->isValid()) {
 
@@ -126,7 +126,7 @@ class StickerController extends AdminController
             $name  = check($request->input('name'));
 
             $validator->equal($token, $_SESSION['token'], trans('validator.token'))
-                ->length($name, 3, 50, ['name' => 'Слишком длинное или короткое название категории!']);
+                ->length($name, 3, 50, ['name' => trans('validator.title')]);
 
             if ($validator->isValid()) {
 
@@ -204,7 +204,7 @@ class StickerController extends AdminController
             $code    = check(utfLower($request->input('code')));
             $sticker = $request->file('sticker');
 
-            $validator->equal($token, $_SESSION['token'], 'Неверный идентификатор сессии, повторите действие!')
+            $validator->equal($token, $_SESSION['token'], trans('validator.token'))
                 ->length($code, 2, 20, ['code' => 'Слишком длинный или короткий код стикера!'])
                 ->regex($code, '|^:+[a-яa-z0-9_\-/\(\)]+$|i', ['code' => 'Код стикера должен начинаться с двоеточия. Разрешены буквы, цифры и дефис!']);
 
@@ -275,7 +275,7 @@ class StickerController extends AdminController
             $code  = check(utfLower($request->input('code')));
             $cid   = int($request->input('cid'));
 
-            $validator->equal($token, $_SESSION['token'], 'Неверный идентификатор сессии, повторите действие!')
+            $validator->equal($token, $_SESSION['token'], trans('validator.token'))
                 ->length($code, 2, 20, ['code' => 'Слишком длинный или короткий код стикера!'])
                 ->regex($code, '|^:+[a-яa-z0-9_\-/\(\)]+$|i', ['code' => 'Код стикера должен начинаться с двоеточия. Разрешены буквы, цифры и дефис!']);
 
@@ -334,7 +334,7 @@ class StickerController extends AdminController
         $token    = check($request->input('token'));
         $category = $sticker->category->id;
 
-        $validator->equal($token, $_SESSION['token'], 'Неверный идентификатор сессии, повторите действие!');
+        $validator->equal($token, $_SESSION['token'], trans('validator.token'));
 
         if ($validator->isValid()) {
 

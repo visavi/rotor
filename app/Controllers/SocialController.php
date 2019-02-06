@@ -90,7 +90,7 @@ class SocialController extends BaseController
 
         $social = Social::query()->where('user_id', $this->user->id)->find($id);
 
-        $validator->equal($token, $_SESSION['token'], 'Неверный идентификатор сессии, повторите действие!')
+        $validator->equal($token, $_SESSION['token'], trans('validator.token'))
             ->notEmpty($social, 'Не найдена привязка к социальной сети!');
 
         if ($validator->isValid()) {

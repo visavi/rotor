@@ -36,7 +36,7 @@ class ContactController extends BaseController
             $page  = int($request->input('page', 1));
             $token = check($request->input('token'));
 
-            $validator->equal($token, $_SESSION['token'], 'Неверный идентификатор сессии, повторите действие!');
+            $validator->equal($token, $_SESSION['token'], trans('validator.token'));
 
             $user = User::query()->where('login', $login)->first();
             $validator->notEmpty($user, ['user' => 'Данного пользователя не существует!']);
@@ -110,7 +110,7 @@ class ContactController extends BaseController
             $token = check($request->input('token'));
             $msg   = check($request->input('msg'));
 
-            $validator->equal($token, $_SESSION['token'], ['msg' => 'Неверный идентификатор сессии, повторите действие!'])
+            $validator->equal($token, $_SESSION['token'], ['msg' => trans('validator.token')])
                 ->length($msg, 0, 1000, ['msg' => 'Слишком большая заметка, не более 1000 символов!']);
 
             if ($validator->isValid()) {
@@ -143,7 +143,7 @@ class ContactController extends BaseController
         $token = check($request->input('token'));
         $del   = intar($request->input('del'));
 
-        $validator->equal($token, $_SESSION['token'], 'Неверный идентификатор сессии, повторите действие!')
+        $validator->equal($token, $_SESSION['token'], trans('validator.token'))
             ->true($del, 'Отсутствуют выбранные пользователи для удаления!');
 
         if ($validator->isValid()) {

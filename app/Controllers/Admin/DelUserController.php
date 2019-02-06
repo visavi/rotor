@@ -67,7 +67,7 @@ class DelUserController extends AdminController
         $point  = check($request->input('point'));
 
         $validator
-            ->equal($token, $_SESSION['token'], 'Неверный идентификатор сессии, повторите действие!')
+            ->equal($token, $_SESSION['token'], trans('validator.token'))
             ->gte($period, 180, 'Указанно недопустимое время для удаления!');
 
         $users = User::query()

@@ -133,7 +133,7 @@ class AjaxController extends BaseController
         $spam = Spam::query()->where(['relate_type' => $type, 'relate_id' => $id])->first();
 
         $validator
-            ->equal($token, $_SESSION['token'], 'Неверный идентификатор сессии, повторите действие!')
+            ->equal($token, $_SESSION['token'], trans('validator.token'))
             ->true($data, 'Выбранное вами сообщение для жалобы не существует!')
             ->false($spam, 'Жалоба на данное сообщение уже отправлена!');
 
@@ -173,7 +173,7 @@ class AjaxController extends BaseController
         $rid   = int($request->input('rid'));
         $id    = int($request->input('id'));
 
-        $validator->equal($token, $_SESSION['token'], 'Неверный идентификатор сессии, повторите действие!');
+        $validator->equal($token, $_SESSION['token'], trans('validator.token'));
 
         if ($validator->isValid()) {
             $delComments = Comment::query()
@@ -320,7 +320,7 @@ class AjaxController extends BaseController
             ->count();
 
         $validator
-            ->equal($token, $_SESSION['token'], 'Неверный идентификатор сессии, повторите действие!')
+            ->equal($token, $_SESSION['token'], trans('validator.token'))
             ->lt($countFiles, setting('maxfiles'), 'Разрешено загружать не более ' . setting('maxfiles') . ' файлов!');
 
         if ($validator->isValid()) {
@@ -386,7 +386,7 @@ class AjaxController extends BaseController
             ]);
         }
 
-        $validator->equal($token, $_SESSION['token'], 'Неверный идентификатор сессии, повторите действие!')
+        $validator->equal($token, $_SESSION['token'], trans('validator.token'))
             ->true($file->user_id === getUser('id') || isAdmin(), 'Удаление невозможно, вы не автор данного файла!');
 
         if ($validator->isValid()) {

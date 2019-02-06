@@ -28,9 +28,9 @@ class MailController extends BaseController
                 $email = getUser('email');
             }
 
-            $validator->true(captchaVerify(), ['protect' => 'Не удалось пройти проверку captcha!'])
+            $validator->true(captchaVerify(), ['protect' => trans('validator.captcha')])
                 ->length($name, 5, 100, ['name' => 'Слишком длинное или короткое имя'])
-                ->length($message, 5, 50000, ['message' => 'Слишком длинное или короткое сообшение'])
+                ->length($message, 5, 50000, ['message' => trans('validator.text')])
                 ->email($email, ['email' => 'Неправильный адрес email, необходим формат name@site.domen!']);
 
             if ($validator->isValid()) {
@@ -75,7 +75,7 @@ class MailController extends BaseController
                 abort('default', 'Пользователь с данным логином или email не найден!');
             }
 
-            $validator->true(captchaVerify(), ['protect' => 'Не удалось пройти проверку captcha!'])
+            $validator->true(captchaVerify(), ['protect' => trans('validator.captcha')])
                 ->lte($user['timepasswd'], SITETIME, ['user' => 'Восстанавливать пароль можно не чаще чем раз в 12 часов!']);
 
             if ($validator->isValid()) {

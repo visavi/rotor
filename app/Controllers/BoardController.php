@@ -121,7 +121,7 @@ class BoardController extends BaseController
 
             $validator
                 ->equal($token, $_SESSION['token'], trans('validator.token'))
-                ->length($title, 5, 50, ['title' => trans('validator.name')])
+                ->length($title, 5, 50, ['title' => trans('validator.title')])
                 ->length($text, 50, 5000, ['text' => trans('validator.text')])
                 ->regex($phone, '#^\d{11}$#', ['phone' => trans('validator.phone')], false)
                 ->true(Flood::isFlood(), ['text' =>  trans('validator.flood', ['sec' => Flood::getPeriod()])])
@@ -205,7 +205,7 @@ class BoardController extends BaseController
 
             $validator
                 ->equal($token, $_SESSION['token'], trans('validator.token'))
-                ->length($title, 5, 50, ['title' => trans('validator.name')])
+                ->length($title, 5, 50, ['title' => trans('validator.title')])
                 ->length($text, 50, 5000, ['text' => trans('validator.text')])
                 ->regex($phone, '#^\d{11}$#', ['phone' => trans('validator.phone')], false)
                 ->notEmpty($board, ['category' => 'Категории для данного объявления не существует!'])
@@ -270,7 +270,7 @@ class BoardController extends BaseController
             abort(404, 'Данного объявления не существует!');
         }
 
-        $validator->equal($token, $_SESSION['token'], 'Неверный идентификатор сессии, повторите действие!')
+        $validator->equal($token, $_SESSION['token'], trans('validator.token'))
             ->equal($item->user_id, getUser('id'), 'Изменение невозможно, вы не автор данного объявления!');
 
         if ($validator->isValid()) {
@@ -325,7 +325,7 @@ class BoardController extends BaseController
             abort(404, 'Данного объявления не существует!');
         }
 
-        $validator->equal($token, $_SESSION['token'], 'Неверный идентификатор сессии, повторите действие!')
+        $validator->equal($token, $_SESSION['token'], trans('validator.token'))
             ->equal($item->user_id, getUser('id'), 'Удаление невозможно, вы не автор данного объявления!');
 
         if ($validator->isValid()) {

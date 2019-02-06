@@ -90,12 +90,12 @@ class RekUserController extends BaseController
                 $price += setting('rekuseroptprice');
             }
 
-            $validator->equal($token, $_SESSION['token'], 'Неверный идентификатор сессии, повторите действие!')
+            $validator->equal($token, $_SESSION['token'], trans('validator.token'))
                 ->gte(getUser('point'), setting('rekuserpoint'), 'Для покупки рекламы вам необходимо набрать '.plural(50, setting('scorename')).'!')
-                ->true(captchaVerify(), ['protect' => 'Не удалось пройти проверку captcha!'])
+                ->true(captchaVerify(), ['protect' => trans('validator.captcha')])
                 ->regex($site, '|^https?://([а-яa-z0-9_\-\.])+(\.([а-яa-z0-9\/\-?_=#])+)+$|iu', ['site' => 'Недопустимый адрес сайта!. Разрешены символы [а-яa-z0-9_-.?=#/]!'])
                 ->length($site, 5, 100, ['site' => 'Слишком длинный или короткий адрес ссылки!'])
-                ->length($name, 5, 35, ['name' => 'Слишком длинное или короткое название ссылки!'])
+                ->length($name, 5, 35, ['name' => trans('validator.title')])
                 ->regex($color, '|^#+[A-f0-9]{6}$|', ['color' => 'Недопустимый формат цвета ссылки! (пример #ff0000)'], false)
                 ->gte(getUser('money'), $price, ['Для покупки рекламы у вас недостаточно денег!']);
 

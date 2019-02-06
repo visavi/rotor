@@ -42,8 +42,8 @@ class BlogController extends AdminController
         $token = check($request->input('token'));
         $name  = check($request->input('name'));
 
-        $validator->equal($token, $_SESSION['token'], 'Неверный идентификатор сессии, повторите действие!')
-            ->length($name, 3, 50, ['name' => 'Слишком длинное или короткое название раздела!']);
+        $validator->equal($token, $_SESSION['token'], trans('validator.token'))
+            ->length($name, 3, 50, ['name' => trans('validator.title')]);
 
         if ($validator->isValid()) {
 
@@ -98,8 +98,8 @@ class BlogController extends AdminController
             $sort   = check($request->input('sort'));
             $closed = empty($request->input('closed')) ? 0 : 1;
 
-            $validator->equal($token, $_SESSION['token'], 'Неверный идентификатор сессии, повторите действие!')
-                ->length($name, 3, 50, ['title' => 'Слишком длинное или короткое название раздела!'])
+            $validator->equal($token, $_SESSION['token'], trans('validator.token'))
+                ->length($name, 3, 50, ['title' => trans('validator.title')])
                 ->notEqual($parent, $category->id, ['parent' => 'Недопустимый выбор родительского раздела!']);
 
             if (! empty($parent) && $category->children->isNotEmpty()) {
@@ -150,7 +150,7 @@ class BlogController extends AdminController
 
         $token = check($request->input('token'));
 
-        $validator->equal($token, $_SESSION['token'], 'Неверный идентификатор сессии, повторите действие!')
+        $validator->equal($token, $_SESSION['token'], trans('validator.token'))
             ->true($category->children->isEmpty(), 'Удаление невозможно! Данный раздел имеет подразделы!');
 
         $article = Blog::query()->where('category_id', $category->id)->first();
@@ -190,7 +190,7 @@ class BlogController extends AdminController
 
             setFlash('success', 'Данные успешно пересчитаны!');
         } else {
-            setFlash('danger', 'Ошибка! Неверный идентификатор сессии, повторите действие!');
+            setFlash('danger', trans('validator.token'));
         }
 
         redirect('/admin/blogs');
@@ -250,9 +250,9 @@ class BlogController extends AdminController
             $tags  = check($request->input('tags'));
 
             $validator
-                ->equal($token, $_SESSION['token'], 'Неверный идентификатор сессии, повторите действие!')
-                ->length($title, 5, 50, ['title' => 'Слишком длинный или короткий заголовок!'])
-                ->length($text, 100, setting('maxblogpost'), ['text' => 'Слишком длинный или короткий текст статьи!'])
+                ->equal($token, $_SESSION['token'], trans('validator.token'))
+                ->length($title, 5, 50, ['title' => trans('validator.title')])
+                ->length($text, 100, setting('maxblogpost'), ['text' => trans('validator.text')])
                 ->length($tags, 2, 50, ['tags' => 'Слишком длинные или короткие метки статьи!']);
 
             if ($validator->isValid()) {
@@ -306,7 +306,7 @@ class BlogController extends AdminController
             $category = Category::query()->find($cid);
 
             $validator
-                ->equal($token, $_SESSION['token'], 'Неверный идентификатор сессии, повторите действие!')
+                ->equal($token, $_SESSION['token'], trans('validator.token'))
                 ->notEmpty($category, ['cid' => 'Категории для статьи не существует!']);
 
             if ($category) {
@@ -362,7 +362,7 @@ class BlogController extends AdminController
             abort(404, 'Данной статьи не существует!');
         }
 
-        $validator->equal($token, $_SESSION['token'], 'Неверный идентификатор сессии, повторите действие!');
+        $validator->equal($token, $_SESSION['token'], trans('validator.token'));
 
         if ($validator->isValid()) {
 

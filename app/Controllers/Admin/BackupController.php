@@ -58,7 +58,7 @@ class BackupController extends AdminController
             $method = check($request->input('method'));
             $level  = int($request->input('level'));
 
-            $validator->equal($token, $_SESSION['token'], 'Неверный идентификатор сессии, повторите действие!')
+            $validator->equal($token, $_SESSION['token'], trans('validator.token'))
                 ->notEmpty($sheets, ['sheets' => 'Ошибка! Не выбраны таблицы для сохранения!'])
                 ->in($method, ['none', 'gzip', 'bzip'], ['method' => 'Ошибка! Неправильный метод сжатия!'])
                 ->between($level, 0, 9, ['level' => 'Ошибка! Неправильная степень сжатия!']);
@@ -142,7 +142,7 @@ class BackupController extends AdminController
         $token = check($request->input('token'));
         $file  = check($request->input('file'));
 
-        $validator->equal($token, $_SESSION['token'], 'Неверный идентификатор сессии, повторите действие!')
+        $validator->equal($token, $_SESSION['token'], trans('validator.token'))
             ->notEmpty($file, 'Не передано название бэкапа для удаления!')
             ->regex($file, '|^[\w\.\-]+$|i', 'Недопустимое название бэкапа!')
             ->true(file_exists(STORAGE.'/backups/'.$file), 'Файла для удаления не существует!');

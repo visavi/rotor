@@ -43,7 +43,7 @@ class SettingController extends AdminController
             $opt   = check($request->input('opt'));
             $token = check($request->input('token'));
 
-            $validator->equal($token, $_SESSION['token'], ['msg' => 'Неверный идентификатор сессии, повторите действие!'])
+            $validator->equal($token, $_SESSION['token'], ['msg' => trans('validator.token')])
                 ->notEmpty($sets, ['sets' => 'Ошибка! Не переданы настройки сайта']);
 
             foreach ($sets as $name => $value) {

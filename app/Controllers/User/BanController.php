@@ -53,7 +53,7 @@ class BanController extends BaseController
                 ->true(setting('addbansend'), 'Писать объяснительные запрещено администрацией!')
                 ->true($banhist->explain, 'Ошибка! Вы уже писали объяснение!')
                 ->true($sendUser->id, 'Пользователь который вас забанил не найден!')
-                ->length($msg, 5, 1000, ['text' => 'Слишком длинное или короткое объяснение!']);
+                ->length($msg, 5, 1000, ['text' => trans('validator.text')]);
 
             if ($validator->isValid()) {
 

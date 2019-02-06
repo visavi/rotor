@@ -71,9 +71,9 @@ class WallController extends BaseController
             $token = check($request->input('token'));
             $msg   = check($request->input('msg'));
 
-            $validator->equal($token, $_SESSION['token'], 'Неверный идентификатор сессии, повторите действие!')
-                ->length($msg, 5, setting('comment_length'), ['msg' => 'Слишком длинное или короткое сообщение!'])
-                ->equal(Flood::isFlood(), true, ['msg' => 'Антифлуд! Разрешается отправлять сообщения раз в ' . Flood::getPeriod() . ' сек!']);
+            $validator->equal($token, $_SESSION['token'], trans('validator.token'))
+                ->length($msg, 5, setting('comment_length'), ['msg' => trans('validator.text')])
+                ->equal(Flood::isFlood(), true, ['msg' => trans('validator.flood', ['sec' => Flood::getPeriod()])]);
 
             $ignoring = Ignore::query()
                 ->where('user_id', $user->id)
@@ -131,7 +131,7 @@ class WallController extends BaseController
 
         $validator
             ->true($request->ajax(), 'Это не ajax запрос!')
-            ->equal($token, $_SESSION['token'], 'Неверный идентификатор сессии, повторите действие!')
+            ->equal($token, $_SESSION['token'], trans('validator.token'))
             ->notEmpty($id, 'Не выбрана запись для удаление!')
             ->notEmpty($user, 'Пользователь не найден!')
             ->true(isAdmin() || $user->id === getUser('id'), 'Записи может удалять только владелец и администрация!');

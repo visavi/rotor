@@ -135,13 +135,13 @@ class MessageController extends BaseController
             abort(404, 'Пользователь не найден!');
         }
 
-        $validator->equal($token, $_SESSION['token'], ['msg' => 'Неверный идентификатор сессии, повторите действие!'])
-            ->length($msg, 5, setting('comment_length'), ['msg' => 'Слишком длинное или короткое сообщение!'])
-            ->equal(Flood::isFlood(), true, 'Антифлуд! Разрешается отправлять сообщения раз в ' . Flood::getPeriod() . ' сек!')
+        $validator->equal($token, $_SESSION['token'], ['msg' => trans('validator.token')])
+            ->length($msg, 5, setting('comment_length'), ['msg' => trans('validator.text')])
+            ->equal(Flood::isFlood(), true, trans('validator.flood', ['sec' => Flood::getPeriod()]))
             ->notEqual($user->id, $this->user->id, 'Нельзя отправлять письмо самому себе!');
 
         if (! captchaVerify() && $this->user->point < setting('privatprotect')) {
-            $validator->addError(['protect' => 'Не удалось пройти проверку captcha!']);
+            $validator->addError(['protect' => trans('validator.captcha')]);
         }
 
         // Проверка на игнор
@@ -198,7 +198,7 @@ class MessageController extends BaseController
             ->where('author_id', $uid)
             ->count();
 
-        $validator->equal($token, $_SESSION['token'], 'Неверный идентификатор сессии, повторите действие!')
+        $validator->equal($token, $_SESSION['token'], trans('validator.token'))
             ->notEmpty($total, ['user' => 'Переписки с данным пользователем не существует!'])
             ->empty(getUser('newprivat'), 'У вас имеются непрочитанные сообщения!');
 

@@ -40,7 +40,7 @@
             </div>
 
             <div class="form-group{{ hasError('title') }}">
-                <label for="inputTitle">Заголовок:</label>
+                <label for="inputTitle">Название:</label>
                 <input type="text" class="form-control" id="inputTitle" name="title" maxlength="50" value="{{ getInput('title') }}" required>
                 {!! textError('title') !!}
             </div>

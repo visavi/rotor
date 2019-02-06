@@ -56,11 +56,11 @@ class BanController extends AdminController
             $reason = check($request->input('reason'));
             $notice = check($request->input('notice'));
 
-            $validator->equal($token, $_SESSION['token'], 'Неверный идентификатор сессии, повторите действие!')
+            $validator->equal($token, $_SESSION['token'], trans('validator.token'))
                 ->false($user->level === User::BANNED && $user->timeban > SITETIME, 'Данный аккаунт уже заблокирован!')
                 ->gt($time, 0, ['time' => 'Вы не указали время бана!'])
                 ->in($type, ['minutes', 'hours', 'days'], ['type', 'Не выбрано время бана!'])
-                ->length($reason, 5, 1000, ['reason' => 'Слишком длинная или короткая причина бана!'])
+                ->length($reason, 5, 1000, ['reason' => trans('validator.text')])
                 ->length($notice, 0, 1000, ['notice' => 'Слишком большая заметка, не более 1000 символов!']);
 
             if ($validator->isValid()) {
@@ -133,9 +133,9 @@ class BanController extends AdminController
             $timeban = strtotime($timeban);
             $term    = $timeban - SITETIME;
 
-            $validator->equal($token, $_SESSION['token'], 'Неверный идентификатор сессии, повторите действие!')
+            $validator->equal($token, $_SESSION['token'], trans('validator.token'))
                 ->gt($term, 0, ['timeban' => 'Слишком маленькое время бана!'])
-                ->length($reason, 5, 1000, ['reason' => 'Слишком длинная или короткая причина бана!']);
+                ->length($reason, 5, 1000, ['reason' => trans('validator.text')]);
 
             if ($validator->isValid()) {
 
@@ -186,7 +186,7 @@ class BanController extends AdminController
             abort('default', 'Данный пользователь не забанен!');
         }
 
-        $validator->equal($token, $_SESSION['token'], 'Неверный идентификатор сессии, повторите действие!');
+        $validator->equal($token, $_SESSION['token'], trans('validator.token'));
 
         if ($validator->isValid()) {
 

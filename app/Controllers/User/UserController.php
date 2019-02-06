@@ -59,7 +59,7 @@ class UserController extends BaseController
             $notice = check($request->input('notice'));
             $token  = check($request->input('token'));
 
-            $validator->equal($token, $_SESSION['token'], ['notice' => 'Неверный идентификатор сессии, повторите действие!'])
+            $validator->equal($token, $_SESSION['token'], ['notice' => trans('validator.token')])
                 ->length($notice, 0, 1000, ['notice' => 'Слишком большая заметка, не более 1000 символов!']);
 
             if ($validator->isValid()) {
@@ -113,7 +113,7 @@ class UserController extends BaseController
                 $activateKey = null;
                 $invitation  = null;
 
-                $validator->true(captchaVerify(), ['protect' => 'Не удалось пройти проверку captcha!'])
+                $validator->true(captchaVerify(), ['protect' => trans('validator.captcha')])
                     ->regex($login, '|^[a-z0-9\-]+$|i', ['login' => 'Недопустимые символы в логине. Разрешены знаки латинского алфавита, цифры и дефис!'])
                     ->regex(utfSubstr($login, 0, 1), '|^[a-z0-9]+$|i', ['login' => 'Логин должен начинаться с буквы или цифры!'])
                     ->email($email, ['email' => 'Вы ввели неверный адрес email, необходим формат name@site.domen!'])
@@ -297,7 +297,7 @@ class UserController extends BaseController
             setcookie(session_name(), '', SITETIME - 3600, '/', '');
             session_destroy();
         } else {
-            setFlash('danger', 'Ошибка! Неверный идентификатор сессии, повторите действие!');
+            setFlash('danger', trans('validator.token'));
         }
 
         redirect('/');
@@ -330,10 +330,10 @@ class UserController extends BaseController
             $birthday = check($request->input('birthday'));
             $gender   = $request->input('gender') === 'male' ? 'male' : 'female';
 
-            $validator->equal($token, $_SESSION['token'], 'Неверный идентификатор сессии, повторите действие!')
+            $validator->equal($token, $_SESSION['token'], trans('validator.token'))
                 ->regex($site, '#^https?://([а-яa-z0-9_\-\.])+(\.([а-яa-z0-9\/])+)+$#u', ['site' => 'Недопустимый адрес сайта, необходим формата http://my_site.domen!'], false)
                 ->regex($birthday, '#^[0-9]{2}+\.[0-9]{2}+\.[0-9]{4}$#', ['birthday' => 'Недопустимый формат даты рождения, необходим формат дд.мм.гггг!'], false)
-                ->regex($phone, '#^\d{11}$#', ['phone' => 'Недопустимый формат телефона. Пример: 8 900 123-45-67'], false)
+                ->regex($phone, '#^\d{11}$#', ['phone' => trans('validator.phone')], false)
                 ->regex($icq, '#^\d{5,10}$#', ['icq' => 'Недопустимый формат ICQ, только цифры от 5 до 10 символов!'], false)
                 ->regex($skype, '#^[a-z]{1}[0-9a-z\_\.\-]{5,31}$#', ['skype' => 'Недопустимый формат Skype, только латинские символы от 6 до 32!'], false)
                 ->length($info, 0, 1000, ['info' => 'Слишком большая информация о себе, не более 1000 символов!'])
@@ -398,8 +398,8 @@ class UserController extends BaseController
             $email  = strtolower(check($request->input('email')));
             $domain = utfSubstr(strrchr($email, '@'), 1);
 
-            $validator->equal($token, $_SESSION['token'], 'Неверный идентификатор сессии, повторите действие!')
-                ->true(captchaVerify(), ['protect' => 'Не удалось пройти проверку captcha!'])
+            $validator->equal($token, $_SESSION['token'], trans('validator.token'))
+                ->true(captchaVerify(), ['protect' => trans('validator.captcha')])
                 ->email($email, ['email' => 'Вы ввели неверный адрес email, необходим формат name@site.domen!']);
 
             $regMail = User::query()->where('login', '<>', $user->login)->where('email', $email)->count();
@@ -485,7 +485,7 @@ class UserController extends BaseController
             $notify    = $request->input('notify') ? 1 : 0;
             $subscribe = $request->input('subscribe') ? str_random(32) : null;
 
-            $validator->equal($token, $_SESSION['token'], 'Неверный идентификатор сессии, повторите действие!')
+            $validator->equal($token, $_SESSION['token'], trans('validator.token'))
                 ->regex($themes, '|^[a-z0-9_\-]+$|i', ['themes' => 'Недопустимое название темы!'])
                 ->true(\in_array($themes, $setting['themes'], true) || empty($themes), ['themes' => 'Данная тема не установлена на сайте!'])
                 ->regex($language, '|^[a-z]+$|', ['language' => 'Недопустимое название языка!'])
@@ -545,7 +545,7 @@ class UserController extends BaseController
         $email    = check(strtolower($request->input('email')));
         $password = check($request->input('password'));
 
-        $validator->equal($token, $_SESSION['token'], 'Неверный идентификатор сессии, повторите действие!')
+        $validator->equal($token, $_SESSION['token'], trans('validator.token'))
             ->notEqual($email, $user->email, ['email' => 'Новый адрес email должен отличаться от текущего!'])
             ->email($email, ['email' => 'Неправильный адрес email, необходим формат name@site.domen!'])
             ->true(password_verify($password, $user->password), ['password' => 'Введенный пароль не совпадает с данными в профиле!']);
@@ -654,7 +654,7 @@ class UserController extends BaseController
         $status = check($request->input('status'));
         $cost   = $status ? setting('editstatusmoney') : 0;
 
-        $validator->equal($token, $_SESSION['token'], 'Неверный идентификатор сессии, повторите действие!')
+        $validator->equal($token, $_SESSION['token'], trans('validator.token'))
             ->empty($user->ban, ['status' => 'Для изменения статуса у вас не должно быть нарушений!'])
             ->notEqual($status, $user->status, ['status' => 'Новый статус должен отличаться от текущего!'])
             ->gte($user->point, setting('editstatuspoint'), ['status' => 'У вас недостаточно актива для изменения статуса!'])
@@ -701,7 +701,7 @@ class UserController extends BaseController
         $newpass2 = check($request->input('newpass2'));
         $oldpass  = check($request->input('oldpass'));
 
-        $validator->equal($token, $_SESSION['token'], 'Неверный идентификатор сессии, повторите действие!')
+        $validator->equal($token, $_SESSION['token'], trans('validator.token'))
             ->true(password_verify($oldpass, $user->password), ['oldpass' => 'Введенный пароль не совпадает с данными в профиле!'])
             ->length($newpass, 6, 20, ['newpass' => 'Слишком длинный или короткий новый пароль!'])
             ->notEqual(getUser('login'), $newpass, ['newpass' => 'Пароль и логин должны отличаться друг от друга!'])
@@ -756,7 +756,7 @@ class UserController extends BaseController
 
             setFlash('success', 'Новый ключ успешно сгенерирован!');
         } else {
-            setFlash('danger', 'Ошибка! Неверный идентификатор сессии, повторите действие!');
+            setFlash('danger', trans('validator.token'));
         }
 
         redirect('/accounts');

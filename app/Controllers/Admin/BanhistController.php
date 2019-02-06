@@ -82,7 +82,7 @@ class BanhistController extends AdminController
         $del   = intar($request->input('del'));
         $login = check($request->input('user'));
 
-        $validator->equal($token, $_SESSION['token'], 'Неверный идентификатор сессии, повторите действие!')
+        $validator->equal($token, $_SESSION['token'], trans('validator.token'))
             ->true($del, 'Отсутствуют выбранные записи для удаления!');
 
         if ($validator->isValid()) {

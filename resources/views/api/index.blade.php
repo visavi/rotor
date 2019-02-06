@@ -1,37 +1,37 @@
 @extends('layout')
 
 @section('title')
-    API интерфейс
+    {{ trans('api.title') }}
 @stop
 
 @section('breadcrumb')
     <nav>
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
-            <li class="breadcrumb-item active">API интерфейс</li>
+            <li class="breadcrumb-item active">{{ trans('api.title') }}</li>
         </ol>
     </nav>
 @stop
 
 @section('content')
-    <i class="fa fa-cog"></i> <b><a href="/api">api</a></b> - Главная страница с описанием интерфейса<br>
-    <i class="fa fa-cog"></i> <b><a href="/api/users">api/users</a></b> - Возвращает данные пользователя. GET: Параметры: token, ответ: массив данных из профиля пользователя<br>
-    <i class="fa fa-cog"></i> <b><a href="/api/messages">api/messages</a></b> Возвращает приватные письма пользователя - GET: Параметры: token, count = 10, Ответ: total - кол. сообщений, messages - массив приватных сообщений<br>
-    <i class="fa fa-cog"></i> <b><a href="/api/forums">api/forums</a></b> Возвращает сообщения из темы в форуме - GET: Параметры: token, id, Ответ: id - id темы, author - автор темы, title - заголовок темы, messages - массив постов<br>
+    <i class="fa fa-cog"></i> <b><a href="/api">api</a></b> - {{ trans('api.page_main') }}<br>
+    <i class="fa fa-cog"></i> <b><a href="/api/users">api/users</a></b> - {{ trans('api.page_users') }}<br>
+    <i class="fa fa-cog"></i> <b><a href="/api/messages">api/messages</a></b> {{ trans('api.page_messages') }}<br>
+    <i class="fa fa-cog"></i> <b><a href="/api/forums">api/forums</a></b> {{ trans('api.page_forums') }}<br>
 
-    <br>Для доступа к данным нужен API-ключ, которые можно получить на странице мои данные<br><br>
+    <br>{{ trans('api.text_description') }}<br><br>
 
-    Пример использования
-<pre class="prettyprint linenums">/api/users?token=Ключ</pre>
+    {{ trans('api.text_example') }}
+<pre class="prettyprint linenums">/api/users?token=key</pre>
 
-    Возвращает json
+    {{ trans('api.text_return') }}
 <pre class="prettyprint linenums">
 {
   "login": "admin",
   "email": "my@domain.com",
-  "name": "Александр",
-  "country": "Россия",
-  "city": "Москва",
+  "name": "Alex",
+  "country": "Russia",
+  "city": "Moscow",
   "site": "http://pizdec.ru",
   "icq": "364466",
   "skype": "vantuzilla",
@@ -43,7 +43,7 @@
   "ban": 0,
   "allprivat": 1,
   "newprivat": 0,
-  "status": "<span style=\"color:#ff0000\">Господин ПЖ</span>",
+  "status": "<span style=\"color:#ff0000\">Status</span>",
   "avatar": "",
   "picture": "",
   "rating": 567,

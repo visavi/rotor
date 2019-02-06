@@ -52,11 +52,11 @@ class NoticeController extends AdminController
             $text    = check($request->input('text'));
             $protect = empty($request->input('protect')) ? 0 : 1;
 
-            $validator->equal($token, $_SESSION['token'], 'Неверный идентификатор сессии, повторите действие!')
+            $validator->equal($token, $_SESSION['token'], trans('validator.token'))
                 ->regex($type, '|^[a-z0-9_\-]+$|i', ['type' => 'Недопустимое название типа шаблона!'])
                 ->length($type, 3, 20, ['type' => 'Слишком длинный или короткий тип шаблона!'])
-                ->length($name, 5, 100, ['name' => 'Слишком длинное или короткое название шаблона!'])
-                ->length($text, 10, 65000, ['text' => 'Слишком длинный или короткий текст шаблона!']);
+                ->length($name, 5, 100, ['name' => trans('validator.title')])
+                ->length($text, 10, 65000, ['text' => trans('validator.text')]);
 
             $duplicate = Notice::query()->where('type', $type)->first();
             $validator->empty($duplicate, ['type' => 'Данный тип уже имеетеся в списке!']);
@@ -109,9 +109,9 @@ class NoticeController extends AdminController
             $text    = check($request->input('text'));
             $protect = empty($request->input('protect')) ? 0 : 1;
 
-            $validator->equal($token, $_SESSION['token'], 'Неверный идентификатор сессии, повторите действие!')
-                ->length($name, 5, 100, ['name' => 'Слишком длинное или короткое название шаблона!'])
-                ->length($text, 10, 65000, ['text' => 'Слишком длинный или короткий текст шаблона!']);
+            $validator->equal($token, $_SESSION['token'], trans('validator.token'))
+                ->length($name, 5, 100, ['name' => trans('validator.title')])
+                ->length($text, 10, 65000, ['text' => trans('validator.text')]);
 
             if ($validator->isValid()) {
 
@@ -151,7 +151,7 @@ class NoticeController extends AdminController
 
         $token = check($request->input('token'));
 
-        $validator->equal($token, $_SESSION['token'], 'Неверный идентификатор сессии, повторите действие!')
+        $validator->equal($token, $_SESSION['token'], trans('validator.token'))
             ->notEmpty($notice, 'Не найден шаблон для удаления!')
             ->empty($notice->protect, 'Запрещено удалять защищенный шаблон!');
 

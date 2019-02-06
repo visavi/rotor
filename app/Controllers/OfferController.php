@@ -100,10 +100,10 @@ class OfferController extends BaseController
             $title = check($request->input('title'));
             $text  = check($request->input('text'));
 
-            $validator->equal($token, $_SESSION['token'], ['Неверный идентификатор сессии, повторите действие!'])
-                ->length($title, 5, 50, ['title' => 'Слишком длинный или короткий заголовок!'])
-                ->length($text, 5, 1000, ['text' => 'Слишком длинное или короткое описание!'])
-                ->true(Flood::isFlood(), ['text' => 'Антифлуд! Разрешается добавлять записи раз в ' . Flood::getPeriod() . ' секунд!'])
+            $validator->equal($token, $_SESSION['token'], trans('validator.token'))
+                ->length($title, 5, 50, ['title' => trans('validator.title')])
+                ->length($text, 5, 1000, ['text' => trans('validator.text')])
+                ->true(Flood::isFlood(), ['text' => trans('validator.flood', ['sec' => Flood::getPeriod()])])
                 ->in($type, array_keys(Offer::TYPES), ['type' => 'Выбран неверный тип записи! (Необходимо предложение или проблема)'])
                 ->gte(getUser('point'), setting('addofferspoint'), ['Для добавления предложения или проблемы вам необходимо набрать ' . plural(setting('addofferspoint'), setting('scorename')) . '!']);
 
@@ -168,9 +168,9 @@ class OfferController extends BaseController
             $text  = check($request->input('text'));
             $type  = check($request->input('type'));
 
-            $validator->equal($token, $_SESSION['token'], ['Неверный идентификатор сессии, повторите действие!'])
-                ->length($title, 5, 50, ['title' => 'Слишком длинный или короткий заголовок!'])
-                ->length($text, 5, 1000, ['text' => 'Слишком длинное или короткое описание!'])
+            $validator->equal($token, $_SESSION['token'], trans('validator.token'))
+                ->length($title, 5, 50, ['title' => trans('validator.title')])
+                ->length($text, 5, 1000, ['text' => trans('validator.text')])
                 ->in($type, array_keys(Offer::TYPES), ['type' => 'Выбран неверный тип записи! (Необходимо предложение или проблема)']);
 
             if ($validator->isValid()) {
@@ -220,9 +220,9 @@ class OfferController extends BaseController
 
             $validator
                 ->true(getUser(), 'Для добавления комментария необходимо авторизоваться!')
-                ->equal($token, $_SESSION['token'], 'Неверный идентификатор сессии, повторите действие!')
-                ->length($msg, 5, setting('comment_length'), ['msg' => 'Слишком длинное или короткий комментарий!'])
-                ->true(Flood::isFlood(), ['msg' => 'Антифлуд! Разрешается отправлять комментарии раз в ' . Flood::getPeriod() . ' секунд!'])
+                ->equal($token, $_SESSION['token'], trans('validator.token'))
+                ->length($msg, 5, setting('comment_length'), ['msg' => trans('validator.text')])
+                ->true(Flood::isFlood(), ['msg' => trans('validator.flood', ['sec' => Flood::getPeriod()])])
                 ->empty($offer->closed, ['msg' => 'Комментирование данной записи закрыто!']);
 
             if ($validator->isValid()) {
@@ -314,8 +314,8 @@ class OfferController extends BaseController
             $page  = int($request->input('page', 1));
 
             $validator
-                ->equal($token, $_SESSION['token'], 'Неверный идентификатор сессии, повторите действие!')
-                ->length($msg, 5, setting('comment_length'), ['msg' => 'Слишком длинный или короткий комментарий!']);
+                ->equal($token, $_SESSION['token'], trans('validator.token'))
+                ->length($msg, 5, setting('comment_length'), ['msg' => trans('validator.text')]);
 
             if ($validator->isValid()) {
                 $msg = antimat($msg);

@@ -79,9 +79,9 @@ class DownController extends BaseController
             $text  = check($request->input('text'));
             $files = (array) $request->file('files');
 
-            $validator->equal($token, $_SESSION['token'], 'Неверный идентификатор сессии, повторите действие!')
-                ->length($title, 5, 50, ['title' => 'Слишком длинное или короткое название!'])
-                ->length($text, 50, 5000, ['text' => 'Слишком длинное или короткое описание!']);
+            $validator->equal($token, $_SESSION['token'], trans('validator.token'))
+                ->length($title, 5, 50, ['title' => trans('validator.title')])
+                ->length($text, 50, 5000, ['text' => trans('validator.text')]);
 
             $duplicate = Down::query()->where('title', $title)->where('id', '<>', $down->id)->count();
             $validator->empty($duplicate, ['title' => 'Загрузка с аналогичный названием уже существует!']);
@@ -196,10 +196,10 @@ class DownController extends BaseController
             $category = Load::query()->find($cid);
 
             $validator
-                ->equal($token, $_SESSION['token'], 'Неверный идентификатор сессии, повторите действие!')
-                ->length($title, 5, 50, ['title' => 'Слишком длинное или короткое название!'])
-                ->length($text, 50, 5000, ['text' => 'Слишком длинный или короткий текст описания!'])
-                ->true(Flood::isFlood(), ['text' => 'Антифлуд! Разрешается добавлять файлы раз в ' . Flood::getPeriod() . ' секунд!'])
+                ->equal($token, $_SESSION['token'], trans('validator.token'))
+                ->length($title, 5, 50, ['title' => trans('validator.title')])
+                ->length($text, 50, 5000, ['text' => trans('validator.text')])
+                ->true(Flood::isFlood(), ['text' => trans('validator.flood', ['sec' => Flood::getPeriod()])])
                 ->notEmpty($category, ['category' => 'Категории для данного файла не существует!']);
 
             if ($category) {
@@ -286,7 +286,7 @@ class DownController extends BaseController
         }
 
         $validator
-            ->equal($token, $_SESSION['token'], ['score' => 'Неверный идентификатор сессии, повторите действие!'])
+            ->equal($token, $_SESSION['token'], ['score' => trans('validator.token')])
             ->true(getUser(), ['score' => 'Для голосования необходимо авторизоваться!'])
             ->between($score, 1, 5, ['score' => 'Необходимо поставить оценку!'])
             ->notEmpty($down->active, ['score' => 'Данный файл еще не проверен модератором!'])
@@ -407,9 +407,9 @@ class DownController extends BaseController
 
             $validator
                 ->true(getUser(), 'Для добавления комментария необходимо авторизоваться!')
-                ->equal($token, $_SESSION['token'], 'Неверный идентификатор сессии, повторите действие!')
-                ->length($msg, 5, setting('comment_length'), ['msg' => 'Слишком длинный или короткий комментарий!'])
-                ->true(Flood::isFlood(), ['msg' => 'Антифлуд! Разрешается отправлять комментарии раз в ' . Flood::getPeriod() . ' секунд!']);
+                ->equal($token, $_SESSION['token'], trans('validator.token'))
+                ->length($msg, 5, setting('comment_length'), ['msg' => trans('validator.text')])
+                ->true(Flood::isFlood(), ['msg' => trans('validator.flood', ['sec' => Flood::getPeriod()])]);
 
             if ($validator->isValid()) {
 
@@ -500,8 +500,8 @@ class DownController extends BaseController
             $page  = int($request->input('page', 1));
 
             $validator
-                ->equal($token, $_SESSION['token'], 'Неверный идентификатор сессии, повторите действие!')
-                ->length($msg, 5, setting('comment_length'), ['msg' => 'Слишком длинный или короткий комментарий!']);
+                ->equal($token, $_SESSION['token'], trans('validator.token'))
+                ->length($msg, 5, setting('comment_length'), ['msg' => trans('validator.text')]);
 
             if ($validator->isValid()) {
                 $msg = antimat($msg);

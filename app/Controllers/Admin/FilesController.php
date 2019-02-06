@@ -100,7 +100,7 @@ class FilesController extends AdminController
 
             } else {
                 setInput($request->all());
-                setFlash('danger', 'Неверный идентификатор сессии, повторите действие!');
+                setFlash('danger', trans('validator.token'));
             }
         }
 
@@ -130,7 +130,7 @@ class FilesController extends AdminController
             $fileName = $this->path ? '/' . $filename : $filename;
             $dirName  = $this->path ? '/' . $dirname : $dirname;
 
-            $validator->equal($token, $_SESSION['token'], 'Неверный идентификатор сессии, повторите действие!');
+            $validator->equal($token, $_SESSION['token'], trans('validator.token'));
 
             if ($filename) {
                 $validator->length($filename, 1, 30, ['filename' => 'Необходимо ввести название файла!']);
@@ -190,7 +190,7 @@ class FilesController extends AdminController
         $fileName = $this->path ? '/' . $filename : $filename;
         $dirName  = $this->path ? '/' . $dirname : $dirname;
 
-        $validator->equal($token, $_SESSION['token'], 'Неверный идентификатор сессии, повторите действие!');
+        $validator->equal($token, $_SESSION['token'], trans('validator.token'));
 
         if ($filename) {
             $validator->true(file_exists(RESOURCES . '/views/' . $this->path . $fileName . '.blade.php'), 'Данного файла не существует!');

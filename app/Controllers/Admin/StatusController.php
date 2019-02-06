@@ -50,7 +50,7 @@ class StatusController extends AdminController
             $color   = check($request->input('color'));
 
             $validator
-                ->equal($token, $_SESSION['token'], 'Неверный идентификатор сессии, повторите действие!')
+                ->equal($token, $_SESSION['token'], trans('validator.token'))
                 ->length($name, 5, 30, ['name' => 'Слишком длинное или короткое название статуса!'])
                 ->regex($color, '|^#+[A-f0-9]{6}$|', ['color' => 'Недопустимый формат цвета статуса! (пример #ff0000)'], false);
 
@@ -99,7 +99,7 @@ class StatusController extends AdminController
             $color   = check($request->input('color'));
 
             $validator
-                ->equal($token, $_SESSION['token'], 'Неверный идентификатор сессии, повторите действие!')
+                ->equal($token, $_SESSION['token'], trans('validator.token'))
                 ->length($name, 5, 30, ['name' => 'Слишком длинное или короткое название статуса!'])
                 ->regex($color, '|^#+[A-f0-9]{6}$|', ['color' => 'Недопустимый формат цвета статуса! (пример #ff0000)'], false);
 
@@ -136,7 +136,7 @@ class StatusController extends AdminController
         $token = check($request->input('token'));
         $id    = int($request->input('id'));
 
-        $validator->equal($token, $_SESSION['token'], 'Неверный идентификатор сессии, повторите действие!');
+        $validator->equal($token, $_SESSION['token'], trans('validator.token'));
 
         $status = Status::query()->find($id);
         $validator->notEmpty($status, 'Выбранный для удаления статус не найден!');

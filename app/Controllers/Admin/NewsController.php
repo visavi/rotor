@@ -68,9 +68,9 @@ class NewsController extends AdminController
             $closed = empty($request->input('closed')) ? 0 : 1;
             $top    = empty($request->input('top')) ? 0 : 1;
 
-            $validator->equal($token, $_SESSION['token'], 'Неверный идентификатор сессии, повторите действие!')
-                ->length($title, 5, 50, ['title' => 'Слишком длинный или короткий заголовок новости!'])
-                ->length($text, 5, 10000, ['text' => 'Слишком длинный или короткий текст новости!']);
+            $validator->equal($token, $_SESSION['token'], trans('validator.token'))
+                ->length($title, 5, 50, ['title' => trans('validator.title')])
+                ->length($text, 5, 10000, ['text' => trans('validator.text')]);
 
             $rules = [
                 'maxsize'   => setting('filesize'),
@@ -123,9 +123,9 @@ class NewsController extends AdminController
             $closed = empty($request->input('closed')) ? 0 : 1;
             $top    = empty($request->input('top')) ? 0 : 1;
 
-            $validator->equal($token, $_SESSION['token'], 'Неверный идентификатор сессии, повторите действие!')
-                ->length($title, 5, 50, ['title' => 'Слишком длинный или короткий заголовок новости!'])
-                ->length($text, 5, 10000, ['text' => 'Слишком длинный или короткий текст новости!']);
+            $validator->equal($token, $_SESSION['token'], trans('validator.token'))
+                ->length($title, 5, 50, ['title' => trans('validator.title')])
+                ->length($text, 5, 10000, ['text' => trans('validator.text')]);
 
             $rules = [
                 'maxsize'   => setting('filesize'),
@@ -188,7 +188,7 @@ class NewsController extends AdminController
 
             setFlash('success', 'Комментарии успешно пересчитаны!');
         } else {
-            setFlash('danger', 'Ошибка! Неверный идентификатор сессии, повторите действие!');
+            setFlash('danger', trans('validator.token'));
         }
 
         redirect('/admin/news');
@@ -215,7 +215,7 @@ class NewsController extends AdminController
             abort(404, 'Новость не существует, возможно она была удалена!');
         }
 
-        $validator->equal($token, $_SESSION['token'], 'Неверный идентификатор сессии, повторите действие!');
+        $validator->equal($token, $_SESSION['token'], trans('validator.token'));
 
         if ($validator->isValid()) {
 

@@ -48,7 +48,7 @@ class NotebookController extends BaseController
             $msg   = check($request->input('msg'));
 
             $validator
-                ->equal($token, $_SESSION['token'], ['msg' => 'Неверный идентификатор сессии, повторите действие!'])
+                ->equal($token, $_SESSION['token'], ['msg' => trans('validator.token')])
                 ->length($msg, 0, 10000, ['msg' => 'Слишком длинная запись!'], false);
 
             if ($validator->isValid()) {

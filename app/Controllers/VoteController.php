@@ -71,7 +71,7 @@ class VoteController extends BaseController
             $token = check($request->input('token'));
             $poll  = int($request->input('poll'));
 
-            $validator->equal($token, $_SESSION['token'], 'Неверный идентификатор сессии, повторите действие!')
+            $validator->equal($token, $_SESSION['token'], trans('validator.token'))
                 ->empty($vote->poll, 'Вы уже проголосовали в этом опросе!')
                 ->notEmpty($poll, 'Вы не выбрали вариант ответа!');
 
@@ -214,8 +214,8 @@ class VoteController extends BaseController
             $question = check($request->input('question'));
             $answers  = check($request->input('answer'));
 
-            $validator->equal($token, $_SESSION['token'], 'Неверный идентификатор сессии, повторите действие!')
-                ->length($question, 5, 100, ['question' => 'Слишком длинный или короткий текст вопроса!']);
+            $validator->equal($token, $_SESSION['token'], trans('validator.token'))
+                ->length($question, 5, 100, ['question' => trans('validator.text')]);
 
             $answers = array_unique(array_diff($answers, ['']));
 

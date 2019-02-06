@@ -72,7 +72,7 @@
             </div>
 
             <div class="form-group{{ hasError('text') }}">
-                <label for="text">Описание:</label>
+                <label for="text">Текст:</label>
                 <textarea class="form-control markItUp" id="text" name="text" rows="5">{{ getInput('text', $down->text) }}</textarea>
                 {!! textError('text') !!}
             </div>

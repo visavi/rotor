@@ -42,13 +42,13 @@ class GuestbookController extends BaseController
         $msg   = check($request->input('msg'));
         $token = check($request->input('token'));
 
-        $validator->equal($token, $_SESSION['token'], ['msg' => 'Неверный идентификатор сессии, повторите действие!'])
-            ->length($msg, 5, setting('guesttextlength'), ['msg' => 'Слишком длинное или короткое сообщение!'])
-            ->true(Flood::isFlood(), ['msg' => 'Антифлуд! Разрешается отправлять сообщения раз в ' . Flood::getPeriod() . ' секунд!']);
+        $validator->equal($token, $_SESSION['token'], ['msg' => trans('validator.token')])
+            ->length($msg, 5, setting('guesttextlength'), ['msg' => trans('validator.text')])
+            ->true(Flood::isFlood(), ['msg' => trans('validator.flood', ['sec' => Flood::getPeriod()])]);
 
         /* Проерка для гостей */
         if (! getUser() && setting('bookadds')) {
-            $validator->true(captchaVerify(), ['protect' => 'Не удалось пройти проверку captcha!']);
+            $validator->true(captchaVerify(), ['protect' => trans('validator.captcha')]);
             $validator->false(stripos($msg, 'http'), ['msg' => 'Текст сообщения не должен содержать ссылок!']);
         } else {
             $validator->true(getUser(), ['msg' => 'Для добавления сообщения необходимо авторизоваться']);
@@ -119,8 +119,8 @@ class GuestbookController extends BaseController
             $msg   = check($request->input('msg'));
             $token = check($request->input('token'));
 
-            $validator->equal($token, $_SESSION['token'], ['msg' => 'Неверный идентификатор сессии, повторите действие!'])
-                ->length($msg, 5, setting('guesttextlength'), ['msg' => 'Слишком длинное или короткое сообщение!']);
+            $validator->equal($token, $_SESSION['token'], ['msg' => trans('validator.token')])
+                ->length($msg, 5, setting('guesttextlength'), ['msg' => trans('validator.text')]);
 
             if ($validator->isValid()) {
 

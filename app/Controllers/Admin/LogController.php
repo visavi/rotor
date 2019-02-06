@@ -56,7 +56,7 @@ class LogController extends AdminController
 
             setFlash('success', 'Лог-файл успешно очищен!');
         } else {
-            setFlash('danger', 'Ошибка! Неверный идентификатор сессии, повторите действие!');
+            setFlash('danger', trans('validator.token'));
         }
 
         redirect('/admin/logs');

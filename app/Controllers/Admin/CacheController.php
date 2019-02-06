@@ -72,7 +72,7 @@ class CacheController extends AdminController
 
             setFlash('success', 'Кеш успешно очищен!');
         } else {
-            setFlash('danger', 'Ошибка! Неверный идентификатор сессии, повторите действие!');
+            setFlash('danger', trans('validator.token'));
         }
 
         redirect('/admin/caches?type=' . $type);

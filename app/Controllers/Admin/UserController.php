@@ -118,7 +118,7 @@ class UserController extends AdminController
             $info      = check($request->input('info'));
             $created   = check($request->input('created'));
 
-            $validator->equal($token, $_SESSION['token'], 'Неверный идентификатор сессии, повторите действие!')
+            $validator->equal($token, $_SESSION['token'], trans('validator.token'))
                 ->in($level, User::ALL_GROUPS, ['level' => 'Недопустимый уровень пользователя!'])
                 ->length($password, 6, 20, 'Слишком длинный или короткий новый пароль!', false)
                 ->email($email, ['email' => 'Вы ввели неверный адрес email, необходим формат name@site.domen!'])
@@ -217,7 +217,7 @@ class UserController extends AdminController
             $delcomments = empty($request->input('delcomments')) ? 0 : 1;
             $delimages   = empty($request->input('delimages')) ? 0 : 1;
 
-            $validator->equal($token, $_SESSION['token'], 'Неверный идентификатор сессии, повторите действие!')
+            $validator->equal($token, $_SESSION['token'], trans('validator.token'))
                 ->notIn($user->level, User::ADMIN_GROUPS, 'Запрещено удалять пользователей из группы администраторов!');
 
             if ($validator->isValid()) {

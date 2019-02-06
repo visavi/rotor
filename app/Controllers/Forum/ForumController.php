@@ -105,18 +105,18 @@ class ForumController extends BaseController
             /** @var Forum $forum */
             $forum = Forum::query()->find($fid);
 
-            $validator->equal($token, $_SESSION['token'], 'Неверный идентификатор сессии, повторите действие!')
+            $validator->equal($token, $_SESSION['token'], trans('validator.token'))
                 ->notEmpty($forum, ['fid' => 'Форума для новой темы не существует!'])
-                ->equal(Flood::isFlood(), true, ['msg' => 'Антифлуд! Разрешается cоздавать темы раз в '.Flood::getPeriod().' сек!'])
-                ->length($title, 5, 50, ['title' => 'Слишком длинное или короткое название темы!'])
-                ->length($msg, 5, setting('forumtextlength'), ['msg' => 'Слишком длинный или короткий текст сообщения!']);
+                ->equal(Flood::isFlood(), true, ['msg' => trans('validator.flood', ['sec' => Flood::getPeriod()])])
+                ->length($title, 5, 50, ['title' => trans('validator.title')])
+                ->length($msg, 5, setting('forumtextlength'), ['msg' => trans('validator.text')]);
 
             if ($forum) {
                 $validator->empty($forum->closed, ['fid' => 'В данном форуме запрещено создавать темы!']);
             }
 
             if ($vote) {
-                $validator->length($question, 5, 100, ['question' => 'Слишком длинный или короткий текст вопроса!']);
+                $validator->length($question, 5, 100, ['question' => trans('validator.text')]);
                 $answers = array_unique(array_diff($answers, ['']));
 
                 foreach ($answers as $answer) {
