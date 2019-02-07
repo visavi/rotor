@@ -31,8 +31,8 @@
 
     @if (getUser())
         @if (! $topic->closed && $topic->user->id === getUser('id') && getUser('point') >= setting('editforumpoint'))
-           / <a href="/topics/close/{{ $topic->id }}?token={{ $_SESSION['token'] }}" onclick="return confirm('Вы действительно хотите закрыть данную тему?')">Закрыть</a>
-           / <a href="/topics/edit/{{ $topic->id }}">Изменить</a>
+           / <a href="/topics/close/{{ $topic->id }}?token={{ $_SESSION['token'] }}" onclick="return confirm('{{ trans('forums.confirm_close_topic') }}')">{{ trans('common.close') }}</a>
+           / <a href="/topics/edit/{{ $topic->id }}">{{ trans('common.edit') }}</a>
         @endif
 
         <?php $bookmark = $topic->bookmark_posts ? trans('forums.from_bookmarks') : trans('forums.to_bookmarks'); ?>
@@ -59,32 +59,32 @@
 
     @if (isAdmin())
         @if ($topic->closed)
-            <a href="/admin/topics/action/{{ $topic->id }}?type=open&amp;page={{ $page->current }}&amp;token={{ $_SESSION['token'] }}">Открыть</a> /
+            <a href="/admin/topics/action/{{ $topic->id }}?type=open&amp;page={{ $page->current }}&amp;token={{ $_SESSION['token'] }}">{{ trans('common.open') }}</a> /
         @else
-            <a href="/admin/topics/action/{{ $topic->id }}?type=closed&amp;page={{ $page->current }}&amp;token={{ $_SESSION['token'] }}">Закрыть</a> /
+            <a href="/admin/topics/action/{{ $topic->id }}?type=closed&amp;page={{ $page->current }}&amp;token={{ $_SESSION['token'] }}">{{ trans('common.close') }}</a> /
         @endif
 
         @if ($topic->locked)
-            <a href="/admin/topics/action/{{ $topic->id }}?type=unlocked&amp;page={{ $page->current }}&amp;token={{ $_SESSION['token'] }}">Открепить</a> /
+            <a href="/admin/topics/action/{{ $topic->id }}?type=unlocked&amp;page={{ $page->current }}&amp;token={{ $_SESSION['token'] }}">{{ trans('common.unlock') }}</a> /
         @else
-            <a href="/admin/topics/action/{{ $topic->id }}?type=locked&amp;page={{ $page->current }}&amp;token={{ $_SESSION['token'] }}">Закрепить</a> /
+            <a href="/admin/topics/action/{{ $topic->id }}?type=locked&amp;page={{ $page->current }}&amp;token={{ $_SESSION['token'] }}">{{ trans('common.lock') }}</a> /
         @endif
 
-        <a href="/admin/topics/edit/{{ $topic->id }}">Изменить</a> /
-        <a href="/admin/topics/move/{{ $topic->id }}">Переместить</a> /
-        <a href="/admin/topics/delete/{{ $topic->id }}?token={{ $_SESSION['token'] }}" onclick="return confirm('Вы действительно хотите удалить данную тему?')">Удалить</a> /
-        <a href="/admin/topics/{{ $topic->id }}?page={{ $page->current }}">Управление</a><br>
+        <a href="/admin/topics/edit/{{ $topic->id }}">{{ trans('common.change') }}</a> /
+        <a href="/admin/topics/move/{{ $topic->id }}">{{ trans('common.move') }}</a> /
+        <a href="/admin/topics/delete/{{ $topic->id }}?token={{ $_SESSION['token'] }}" onclick="return confirm('{{ trans('forums.confirm_delete_topic') }}')">{{ trans('common.delete') }}</a> /
+        <a href="/admin/topics/{{ $topic->id }}?page={{ $page->current }}">{{ trans('common.management') }}</a><br>
     @endif
 
     @if ($vote)
         <h3>{{ $vote->title }}</h3>
 
-        @if (!getUser() || $vote->poll || $vote->closed)
+        @if ($vote->poll || $vote->closed || ! getUser())
             @foreach ($vote->voted as $key => $data)
                 <?php $proc = round(($data * 100) / $vote->sum, 1); ?>
                 <?php $maxproc = round(($data * 100) / $vote->max); ?>
 
-                <b>{{ $key }}</b> (Голосов: {{ $data }})<br>
+                <b>{{ $key }}</b> ({{ trans('forums.votes') }}: {{ $data }})<br>
                 {!! progressBar($maxproc, $proc.'%') !!}
             @endforeach
         @else
@@ -93,11 +93,11 @@
                 @foreach ($vote->answers as $answer)
                     <label><input name="poll" type="radio" value="{{ $answer->id }}"> {{ $answer->answer }}</label><br>
                 @endforeach
-                <br><button class="btn btn-sm btn-primary">Голосовать</button>
+                <br><button class="btn btn-sm btn-primary">{{ trans('forums.vote') }}</button>
             </form><br>
         @endif
 
-        Всего проголосовало: {{ $vote->count }}
+        {{ trans('forums.total_votes') }}: {{ $vote->count }}
     @endif
 
     @if ($topic->isModer)
@@ -113,15 +113,15 @@
                     <div class="float-right text-right">
                         @if (getUser())
                             @if (getUser('id') !== $data->user_id)
-                                <a href="#" onclick="return postReply(this)" title="Ответить"><i class="fa fa-reply text-muted"></i></a>
+                                <a href="#" onclick="return postReply(this)" title="{{ trans('common.reply') }}"><i class="fa fa-reply text-muted"></i></a>
 
-                                <a href="#" onclick="return postQuote(this)" title="Цитировать"><i class="fa fa-quote-right text-muted"></i></a>
+                                <a href="#" onclick="return postQuote(this)" title="{{ trans('common.quote') }}"><i class="fa fa-quote-right text-muted"></i></a>
 
-                                <a href="#" onclick="return sendComplaint(this)" data-type="{{ App\Models\Post::class }}" data-id="{{ $data->id }}" data-token="{{ $_SESSION['token'] }}" data-page="{{ $page->current }}" rel="nofollow" title="Жалоба"><i class="fa fa-bell text-muted"></i></a>
+                                <a href="#" onclick="return sendComplaint(this)" data-type="{{ App\Models\Post::class }}" data-id="{{ $data->id }}" data-token="{{ $_SESSION['token'] }}" data-page="{{ $page->current }}" rel="nofollow" title="{{ trans('common.complain') }}"><i class="fa fa-bell text-muted"></i></a>
                             @endif
 
                             @if ($topic->isModer || (getUser('id') === $data->user_id && $data->created_at + 600 > SITETIME))
-                                <a href="/posts/edit/{{ $data->id }}?page={{ $page->current }}" title="Редактировать"><i class="fa fa-pencil-alt text-muted"></i></a>
+                                <a href="/posts/edit/{{ $data->id }}?page={{ $page->current }}" title="{{ trans('common.edit') }}"><i class="fa fa-pencil-alt text-muted"></i></a>
                                 @if ($topic->isModer)
                                     <input type="checkbox" name="del[]" value="{{ $data->id }}">
                                 @endif
@@ -154,7 +154,7 @@
 
                 @if ($data->files->isNotEmpty())
                     <div class="hiding">
-                        <i class="fa fa-paperclip"></i> <b>Прикрепленные файлы:</b><br>
+                        <i class="fa fa-paperclip"></i> <b>{{ trans('forums.attached_files') }}:</b><br>
                         @foreach ($data->files as $file)
                             <?php $ext = getExtension($file->hash); ?>
 
@@ -168,7 +168,7 @@
                 @endif
 
                 @if ($data->edit_user_id)
-                    <small><i class="fa fa-exclamation-circle text-danger"></i> Отредактировано: {{ $data->editUser->login }} ({{ dateFixed($data->updated_at) }})</small><br>
+                    <small><i class="fa fa-exclamation-circle text-danger"></i> {{ trans('forums.changed') }}: {{ $data->editUser->login }} ({{ dateFixed($data->updated_at) }})</small><br>
                 @endif
 
                 @if (isAdmin())
@@ -178,12 +178,12 @@
         @endforeach
 
     @else
-        {!! showError('Сообщений еще нет, будь первым!') !!}
+        {!! showError(trans('forums.empty_posts')) !!}
     @endif
 
     @if ($topic->isModer)
             <span class="float-right">
-                <button class="btn btn-sm btn-danger">Удалить выбранное</button>
+                <button class="btn btn-sm btn-danger">{{ trans('common.delete_selected') }}</button>
             </span>
         </form>
     @endif
@@ -197,8 +197,8 @@
                     <input type="hidden" name="token" value="{{ $_SESSION['token'] }}">
 
                     <div class="form-group{{ hasError('msg') }}">
-                        <label for="msg">Сообщение:</label>
-                        <textarea class="form-control markItUp" maxlength="{{ setting('forumtextlength') }}" id="msg" rows="5" name="msg" placeholder="Текст сообщения" required>{{ getInput('msg') }}</textarea>
+                        <label for="msg">{{ trans('forums.post') }}:</label>
+                        <textarea class="form-control markItUp" maxlength="{{ setting('forumtextlength') }}" id="msg" rows="5" name="msg" placeholder="{{ trans('forums.post') }}" required>{{ getInput('msg') }}</textarea>
                         <span class="js-textarea-counter"></span>
                         {!! textError('msg') !!}
                     </div>
@@ -208,39 +208,39 @@
 
                             <label class="btn btn-sm btn-secondary" for="files">
                                 <input type="file" id="files" name="files[]" onchange="$('#upload-file-info').html((this.files.length > 1) ? this.files.length + ' файлов' : this.files[0].name);" hidden multiple>
-                                Прикрепить файлы&hellip;
+                                {{ trans('forums.attach_files') }}&hellip;
                             </label>
                             <span class="badge badge-info" id="upload-file-info"></span>
                             {!! textError('files') !!}
                             <br>
 
                             <p class="text-muted font-italic">
-                                Можно загрузить до {{ setting('maxfiles') }} файлов<br>
-                                Максимальный вес файла: {{ formatSize(setting('forumloadsize')) }}<br>
-                                Допустимые расширения файлов: {{ str_replace(',', ', ', setting('forumextload')) }}
+                                {{ trans('common.max_file_upload') }}: {{ setting('maxfiles') }}<br>
+                                {{ trans('common.max_file weight') }}: {{ formatSize(setting('forumloadsize')) }}<br>
+                                {{ trans('common.valid_file_extensions') }}: {{ str_replace(',', ', ', setting('forumextload')) }}
                             </p>
                         </div>
 
                         <span class="float-right js-attach-button">
-                            <a href="#" onclick="return showAttachForm();">Загрузить файл</a>
+                            <a href="#" onclick="return showAttachForm();">{{ trans('forums.attach_files') }}</a>
                         </span>
                     @endif
 
-                    <button class="btn btn-primary">Написать</button>
+                    <button class="btn btn-primary">{{ trans('common.write') }}</button>
                 </form>
             </div><br>
 
         @else
-            {!! showError('Данная тема закрыта для обсуждения!') !!}
+            {!! showError(trans('forums.topic_closed')) !!}
         @endif
     @else
-        {!! showError('Для добавления сообщения необходимо авторизоваться') !!}
+        {!! showError(trans('common.not_authorized')) !!}
     @endif
 
-    <a href="/stickers">Стикеры</a>  /
-    <a href="/tags">Теги</a>  /
-    <a href="/rules">Правила</a> /
-    <a href="/forums/top/topics">Топ тем</a> /
-    <a href="/forums/top/posts">Топ постов</a> /
-    <a href="/forums/search?fid={{ $topic->forum_id }}">Поиск</a><br>
+    <a href="/stickers">{{ trans('common.stickers') }}</a>  /
+    <a href="/tags">{{ trans('common.tags') }}</a>  /
+    <a href="/rules">{{ trans('common.rules') }}</a> /
+    <a href="/forums/top/topics">{{ trans('forums.top_topics') }}</a> /
+    <a href="/forums/top/posts">{{ trans('forums.top_topics') }}</a> /
+    <a href="/forums/search?fid={{ $topic->forum_id }}">{{ trans('common.search') }}</a><br>
 @stop

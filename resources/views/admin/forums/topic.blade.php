@@ -49,7 +49,7 @@
     @if ($topic->closed)
         <a href="/admin/topics/action/{{ $topic->id }}?type=open&amp;page={{ $page->current }}&amp;token={{ $_SESSION['token'] }}">Открыть</a> /
     @else
-        <a href="/admin/topics/action/{{ $topic->id }}?type=closed&amp;page={{ $page->current }}&amp;token={{ $_SESSION['token'] }}">Закрыть</a> /
+        <a href="/admin/topics/action/{{ $topic->id }}?type=closed&amp;page={{ $page->current }}&amp;token={{ $_SESSION['token'] }}"  onclick="return confirm('{{ trans('forums.confirm_close_topic') }}')">Закрыть</a> /
     @endif
 
     @if ($topic->locked)
@@ -60,14 +60,14 @@
 
     <a href="/admin/topics/edit/{{ $topic->id }}">Изменить</a> /
     <a href="/admin/topics/move/{{ $topic->id }}">Переместить</a> /
-    <a href="/admin/topics/delete/{{ $topic->id }}?token={{ $_SESSION['token'] }}" onclick="return confirm('Вы действительно хотите удалить данную тему?')">Удалить</a> /
+    <a href="/admin/topics/delete/{{ $topic->id }}?token={{ $_SESSION['token'] }}" onclick="return confirm('{{ trans('forums.confirm_delete_topic') }}')">Удалить</a> /
     <a href="/topics/{{ $topic->id }}?page={{ $page->current }}">Обзор</a><br>
 
 
     @if ($vote)
         <h3>{{ $vote->title }}</h3>
 
-        @if (!getUser() || $vote->poll || $vote->closed)
+        @if ($vote->poll || $vote->closed || ! getUser())
             @foreach ($vote->voted as $key => $data)
                 <?php $proc = round(($data * 100) / $vote->sum, 1); ?>
                 <?php $maxproc = round(($data * 100) / $vote->max); ?>

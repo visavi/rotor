@@ -1,6 +1,7 @@
 <?php
 
 return [
+    'write'             => 'Write',
     'rules'             => 'Rules',
     'stickers'          => 'Stickers',
     'tags'              => 'Tags',
@@ -12,10 +13,21 @@ return [
     'quote'             => 'Quote',
     'complain'          => 'Complain',
     'edit'              => 'Edit',
+    'change'            => 'Change',
+    'open'              => 'Open',
+    'close'             => 'Close',
+    'lock'              => 'Lock',
+    'unlock'            => 'Unlock',
+    'move'              => 'Move',
     'delete'            => 'Delete',
     'delete_selected'   => 'Delete selected',
     'menu'              => 'My menu',
     'verification_code' => 'Verification code',
     'pages'             => 'Pages',
     'page_num'          => '(Page :page)',
+
+    'max_file_upload'       => 'You can upload files',
+    'max_file weight'       => 'Maximum file weight',
+    'valid_file_extensions' => 'Valid file extensions',
+    'not_authorized'        => 'To add a message you need to be logged in!',
 ];

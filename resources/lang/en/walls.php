@@ -7,6 +7,5 @@ return [
     'message_text'   => 'Message text',
     'message'        => 'Message',
     'write'          => 'Write',
-    'not_authorized' => 'To add a message you need to be logged in!',
     'total'          => 'Total records',
 ];

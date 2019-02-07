@@ -14,7 +14,6 @@ return [
     'message'        => 'Message',
     'message_text'   => 'Message text',
     'write'          => 'Write',
-    'not_authorized' => 'To add a message you need to be logged in!',
     'closed_news'    => 'Commenting on this news is closed!',
 
     'comments_title' => 'Comments (Page :page)',

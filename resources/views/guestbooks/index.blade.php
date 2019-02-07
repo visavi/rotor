@@ -98,7 +98,7 @@
                     {!! textError('msg') !!}
                 </div>
 
-                <button class="btn btn-primary">{{ trans('guestbooks.write') }}</button>
+                <button class="btn btn-primary">{{ trans('common.write') }}</button>
             </form>
         </div><br>
 
@@ -116,11 +116,11 @@
 
                 {!! view('app/_captcha') !!}
 
-                <button class="btn btn-primary">{{ trans('guestbooks.write') }}</button>
+                <button class="btn btn-primary">{{ trans('common.write') }}</button>
             </form>
         </div><br>
 
     @else
-        {!! showError(trans('guestbooks.not_authorized')) !!}
+        {!! showError(trans('common.not_authorized')) !!}
     @endif
 @stop

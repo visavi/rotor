@@ -94,7 +94,7 @@
         <a href="/stickers">{{ trans('common.stickers') }}</a> /
         <a href="/tags">{{ trans('common.tags') }}</a><br><br>
         @else
-            {!! showError(trans('news.not_authorized')) !!}
+            {!! showError(trans('common.not_authorized')) !!}
         @endif
     @else
         {!! showError(trans('news.closed_news')) !!}

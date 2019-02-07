@@ -76,6 +76,6 @@
         </div><br>
 
     @else
-        {!! showError(trans('walls.not_authorized')) !!}
+        {!! showError(trans('common.not_authorized')) !!}
     @endif
 @stop
