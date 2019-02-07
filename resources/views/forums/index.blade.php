@@ -1,24 +1,24 @@
 @extends('layout')
 
 @section('title')
-    Форум
+    {{ trans('forums.title') }}
 @stop
 
 @section('header')
     @if (getUser())
         <div class="float-right">
-            <a class="btn btn-success" href="/forums/create">Создать тему</a>
+            <a class="btn btn-success" href="/forums/create">{{ trans('forums.create_topic') }}</a>
         </div><br>
     @endif
 
-    <h1>Форум {{ setting('title') }}</h1>
+    <h1>{{ trans('forums.title') }} {{ setting('title') }}</h1>
 @stop
 
 @section('breadcrumb')
     <nav>
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
-            <li class="breadcrumb-item active">Форум</li>
+            <li class="breadcrumb-item active">{{ trans('forums.forum') }}</li>
         </ol>
     </nav>
 @stop
@@ -27,10 +27,10 @@
     @include('advert/_forum')
 
     @if (getUser())
-        Мои: <a href="/forums/active/topics">темы</a>, <a href="/forums/active/posts">сообщения</a>, <a href="/forums/bookmarks">закладки</a> /
+        {{ trans('forums.my') }}: <a href="/forums/active/topics">{{ trans('forums.topics') }}</a>, <a href="/forums/active/posts">{{ trans('forums.posts') }}</a>, <a href="/forums/bookmarks">{{ trans('forums.bookmarks') }}</a> /
     @endif
 
-    Новые: <a href="/topics">темы</a>, <a href="/posts">сообщения</a>
+    {{ trans('forums.new') }}: <a href="/topics">{{ trans('forums.topics') }}</a>, <a href="/posts">{{ trans('forums.posts') }}</a>
     <hr/>
 
     @if ($forums->isNotEmpty())
@@ -54,17 +54,22 @@
                 @endif
 
                 @if ($forum->lastTopic->lastPost->id)
-                    Тема: <a href="/topics/end/{{ $forum->lastTopic->id }}">{{ $forum->lastTopic->title }}</a>
+                        {{ trans('forums.topic') }}: <a href="/topics/end/{{ $forum->lastTopic->id }}">{{ $forum->lastTopic->title }}</a>
                     <br/>
-                    Сообщение: {{ $forum->lastTopic->lastPost->user->getName() }} ({{ dateFixed($forum->lastTopic->lastPost->created_at) }})
+                        {{ trans('forums.post') }}: {{ $forum->lastTopic->lastPost->user->getName() }} ({{ dateFixed($forum->lastTopic->lastPost->created_at) }})
                 @else
-                    Темы еще не созданы!
+                    {{ trans('forums.empty_topics') }}
                 @endif
             </div>
         @endforeach
     @else
-        {!! showError('Разделы форума еще не созданы!') !!}
+        {!! showError(trans('forums.empty_forums')) !!}
     @endif
 
-    <br/><a href="/rules">Правила</a> / <a href="/forums/top/topics">Топ тем</a> / <a href="/forums/top/posts">Топ постов</a> / <a href="/forums/search">Поиск</a> / <a href="/forums/rss">RSS</a><br/>
+    <br/>
+    <a href="/rules">{{ trans('common.rules') }}</a> /
+    <a href="/forums/top/topics">{{ trans('forums.top_topics') }}</a> /
+    <a href="/forums/top/posts">{{ trans('forums.top_posts') }}</a> /
+    <a href="/forums/search">{{ trans('common.search') }}</a> /
+    <a href="/forums/rss">{{ trans('common.rss') }}</a><br/>
 @stop

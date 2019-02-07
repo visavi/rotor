@@ -1,22 +1,22 @@
 @extends('layout')
 
 @section('title')
-    Поиск запроса {{ $find }}
+    {{ trans('forums.title_search_request') }} {{ $find }}
 @stop
 
 @section('breadcrumb')
     <nav>
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
-            <li class="breadcrumb-item"><a href="/forums">Форум</a></li>
-            <li class="breadcrumb-item"><a href="/forums/search">Поиск</a></li>
-            <li class="breadcrumb-item active">Поиск запроса</li>
+            <li class="breadcrumb-item"><a href="/forums">{{ trans('forums.forum') }}</a></li>
+            <li class="breadcrumb-item"><a href="/forums/search">{{ trans('common.search') }}</a></li>
+            <li class="breadcrumb-item active">{{ trans('forums.title_search_request') }}</li>
         </ol>
     </nav>
 @stop
 
 @section('content')
-    <p>Найдено совпадений в темах: {{ $page->total }}</p>
+    <p>{{ trans('forums.found_topics') }}: {{ $page->total }}</p>
 
     @foreach ($topics as $topic)
         <div class="b">
@@ -25,8 +25,8 @@
         </div>
         <div>
             {!! $topic->pagination() !!}
-            Раздел: <a href="/topics/{{ $topic->forum->id }}">{{ $topic->forum->title }}</a><br>
-            Сообщение: {{ $topic->lastPost->user->getName() }} ({{ dateFixed($topic->lastPost->created_at) }})
+            {{ trans('forums.forum') }}: <a href="/topics/{{ $topic->forum->id }}">{{ $topic->forum->title }}</a><br>
+            {{ trans('forums.post') }}: {{ $topic->lastPost->user->getName() }} ({{ dateFixed($topic->lastPost->created_at) }})
         </div>
     @endforeach
 

@@ -1,13 +1,13 @@
 @extends('layout')
 
 @section('title')
-    {{ $forum->title }} (Стр. {{ $page->current }})
+    {{ $forum->title }} ({{ trans('common.page_num', ['page' => $page->current]) }})
 @stop
 
 @section('header')
     @if (! $forum->closed && getUser())
         <div class="float-right">
-            <a class="btn btn-success" href="/forums/create?fid={{ $forum->id }}">Создать тему</a>
+            <a class="btn btn-success" href="/forums/create?fid={{ $forum->id }}">{{ trans('forums.create_topic') }}</a>
         </div><br>
     @endif
 
@@ -18,7 +18,7 @@
     <nav>
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
-            <li class="breadcrumb-item"><a href="/forums">Форум</a></li>
+            <li class="breadcrumb-item"><a href="/forums">{{ trans('forums.forum') }}</a></li>
 
             @if ($forum->parent->id)
                 <li class="breadcrumb-item"><a href="/forums/{{ $forum->parent->id }}">{{ $forum->parent->title }}</a></li>
@@ -27,7 +27,7 @@
             <li class="breadcrumb-item active">{{ $forum->title }}</li>
 
             @if (isAdmin())
-                <li class="breadcrumb-item"><a href="/admin/forums/{{  $forum->id  }}?page={{ $page->current }}">Управление</a></li>
+                <li class="breadcrumb-item"><a href="/admin/forums/{{  $forum->id  }}?page={{ $page->current }}">{{ trans('common.management') }}</a></li>
             @endif
         </ol>
     </nav>
@@ -44,13 +44,13 @@
 
             @if ($child->lastTopic->id)
                 <div>
-                    Тема: <a href="/topics/end/{{ $child->lastTopic->id }}">{{ $child->lastTopic->title }}</a><br>
+                    {{ trans('forums.topic') }}: <a href="/topics/end/{{ $child->lastTopic->id }}">{{ $child->lastTopic->title }}</a><br>
                     @if ($child->lastTopic->lastPost->id)
-                        Сообщение: {{ $child->lastTopic->lastPost->user->getName() }} ({{ dateFixed($child->lastTopic->lastPost->created_at) }})
+                        {{ trans('forums.post') }}: {{ $child->lastTopic->lastPost->user->getName() }} ({{ dateFixed($child->lastTopic->lastPost->created_at) }})
                     @endif
                 </div>
             @else
-                <div>Темы еще не созданы!</div>
+                <div>{{ trans('forums.empty_topic') }}</div>
             @endif
         @endforeach
 
@@ -67,7 +67,7 @@
             <div>
                 @if ($topic->lastPost)
                     {!! $topic->pagination() !!}
-                    Сообщение: {{ $topic->lastPost->user->getName() }} ({{ dateFixed($topic->lastPost->created_at) }})
+                    {{ trans('forums.post') }}: {{ $topic->lastPost->user->getName() }} ({{ dateFixed($topic->lastPost->created_at) }})
                 @endif
             </div>
         @endforeach
@@ -75,13 +75,13 @@
         {!! pagination($page) !!}
 
     @elseif ($forum->closed)
-        {!! showError('В данном разделе запрещено создавать темы!') !!}
+        {!! showError(trans('forums.closed_forum')) !!}
     @else
-        {!! showError('Тем еще нет, будь первым!') !!}
+        {!! showError(trans('forums.empty_topic')) !!}
     @endif
 
-    <a href="/rules">Правила</a> /
-    <a href="/forums/top/topics">Топ тем</a> /
-    <a href="/forums/top/posts">Топ постов</a> /
-    <a href="/forums/search?fid={{ $forum->id }}">Поиск</a><br>
+    <a href="/rules">{{ trans('common.rules') }}</a> /
+    <a href="/forums/top/topics">{{ trans('forums.top_topics') }}</a> /
+    <a href="/forums/top/posts">{{ trans('forums.top_posts') }}</a> /
+    <a href="/forums/search?fid={{ $forum->id }}">{{ trans('common.search') }}</a><br>
 @stop

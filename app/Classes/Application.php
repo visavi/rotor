@@ -162,7 +162,6 @@ class Application
      * Устанавливает настройки
      *
      * @return void
-     * @throws \Exception
      */
     private function setSetting(): void
     {
@@ -178,6 +177,10 @@ class Application
             setSetting(['themes' => 'default']);
         }
 
+        if (isset($_SESSION['language'])) {
+            setSetting(['language' => $_SESSION['language']]);
+        }
+
         if (empty(setting('language')) || ! file_exists(RESOURCES . '/lang/' . setting('language'))) {
             setSetting(['language' => 'ru']);
         }
@@ -188,7 +191,7 @@ class Application
         }
 
         if (empty($_SESSION['protect'])) {
-            $_SESSION['protect'] = random_int(1000, 99999);
+            $_SESSION['protect'] = \mt_rand(1000, 99999);
         }
     }
 }

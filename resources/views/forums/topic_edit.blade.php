@@ -1,14 +1,14 @@
 @extends('layout')
 
 @section('title')
-    Изменение темы
+    {{ trans('forums.title_edit_topic') }}
 @stop
 
 @section('breadcrumb')
     <nav>
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
-            <li class="breadcrumb-item"><a href="/forums">Форум</a></li>
+            <li class="breadcrumb-item"><a href="/forums">{{ trans('forums.forum') }}</a></li>
 
             @if ($topic->forum->parent->id)
                 <li class="breadcrumb-item"><a href="/forums/{{ $topic->forum->parent->id }}">{{ $topic->forum->parent->title }}</a></li>
@@ -17,7 +17,7 @@
             <li class="breadcrumb-item"><a href="/forums/{{ $topic->forum->id }}">{{ $topic->forum->title }}</a></li>
 
             <li class="breadcrumb-item"><a href="/topics/{{ $topic->id }}">{{ $topic->title }}</a></li>
-            <li class="breadcrumb-item active">Изменение темы</li>
+            <li class="breadcrumb-item active">{{ trans('forums.title_edit_topic') }}</li>
         </ol>
     </nav>
 @stop
@@ -31,14 +31,14 @@
 
 
             <div class="form-group{{ hasError('title') }}">
-                <label for="inputTitle">Название темы</label>
-                <input name="title" type="text" class="form-control" id="inputTitle"  maxlength="50" placeholder="Название темы" value="{{ getInput('title', $topic->title) }}" required>
+                <label for="inputTitle">{{ trans('forums.topic') }}:</label>
+                <input name="title" type="text" class="form-control" id="inputTitle"  maxlength="50" placeholder="{{ trans('forums.topic') }}" value="{{ getInput('title', $topic->title) }}" required>
                 {!! textError('title') !!}
             </div>
 
             @if ($post)
                 <div class="form-group{{ hasError('msg') }}">
-                    <label for="msg">Сообщение:</label>
+                    <label for="msg">{{ trans('forums.post') }}:</label>
                     <textarea class="form-control markItUp" maxlength="{{ setting('forumtextlength') }}" id="msg" rows="5" name="msg" required>{{ getInput('msg', $post->text) }}</textarea>
                     <span class="js-textarea-counter"></span>
                     {!! textError('msg') !!}
@@ -47,7 +47,7 @@
 
             @if ($vote)
                 <div class="form-group{{ hasError('question') }}">
-                    <label for="question"><span class="text-success">Вопрос:</span></label>
+                    <label for="question"><span class="text-success">{{ trans('forums.question') }}:</span></label>
                     <input class="form-control" name="question" id="question" maxlength="100" value="{{ getInput('question', $vote->title) }}" required>
                     {!! textError('question') !!}
                 </div>
@@ -60,9 +60,9 @@
                         @foreach ($answers as $key => $answer)
                             <label for="inputAnswers{{ $key }}">
                                 @if (isset($vote->getAnswers[$key]))
-                                    <span class="text-success">Ответ {{ $loop->iteration }}:</span>
+                                    <span class="text-success">{{ trans('forums.answer') }} {{ $loop->iteration }}:</span>
                                 @else
-                                    Ответ {{ $loop->iteration }}:
+                                    {{ trans('forums.answer') }} {{ $loop->iteration }}:
                                 @endif
                             </label>
                             <input type="text" name="answers[{{ $key }}]" class="form-control" id="inputAnswers{{ $key }}" value="{{ $answer }}" maxlength="50">
@@ -72,7 +72,7 @@
                 @endif
             @endif
 
-            <button class="btn btn-primary">Редактировать</button>
+            <button class="btn btn-primary">{{ trans('common.edit') }}</button>
         </form>
     </div>
 @stop

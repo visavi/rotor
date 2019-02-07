@@ -1,19 +1,19 @@
 @extends('layout')
 
 @section('title')
-    Форум - Новые сообщения (Стр. {{ $page->current }})
+    {{ trans('forums.forum') }} - {{ trans('forums.title_new_posts') }} ({{ trans('common.page_num', ['page' => $page->current]) }})
 @stop
 
 @section('header')
-    <h1>Новые сообщения</h1>
+    <h1>{{ trans('forums.title_new_posts') }}</h1>
 @stop
 
 @section('breadcrumb')
     <nav>
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
-            <li class="breadcrumb-item"><a href="/forums">Форум</a></li>
-            <li class="breadcrumb-item active">Новые сообщения</li>
+            <li class="breadcrumb-item"><a href="/forums">{{ trans('forums.forum') }}</a></li>
+            <li class="breadcrumb-item active">{{ trans('forums.title_new_posts') }}</li>
         </ol>
     </nav>
 @stop
@@ -27,7 +27,7 @@
         <div>
             {!! bbCode($data->text) !!}<br>
 
-            Написал: {{ $data->user->login }} <small>({{ dateFixed($data->created_at) }})</small><br>
+            {{ trans('forums.posted_by') }}: {{ $data->user->login }} <small>({{ dateFixed($data->created_at) }})</small><br>
 
             @if (isAdmin())
                 <span class="data">({{ $data->brow }}, {{ $data->ip }})</span>

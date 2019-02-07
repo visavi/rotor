@@ -1,15 +1,15 @@
 @extends('layout')
 
 @section('title')
-    Мои закладки
+    {{ trans('forums.forum') }}
 @stop
 
 @section('breadcrumb')
     <nav>
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
-            <li class="breadcrumb-item"><a href="/forums">Форум</a></li>
-            <li class="breadcrumb-item active">Мои закладки</li>
+            <li class="breadcrumb-item"><a href="/forums">{{ trans('forums.forum') }}</a></li>
+            <li class="breadcrumb-item active">{{ trans('forums.title_bookmarks') }}</li>
         </ol>
     </nav>
 @stop
@@ -29,17 +29,17 @@
 
                 <div>
                     {!! $topic->topic->pagination() !!}
-                    Автор: {{ $topic->topic->user->getName() }} /
-                    Посл.: {{ $topic->topic->lastPost->user->getName() }}
+                    {{ trans('forums.author') }}: {{ $topic->topic->user->getName() }} /
+                    {{ trans('forums.latest') }}: {{ $topic->topic->lastPost->user->getName() }}
                     ({{ dateFixed($topic->topic->lastPost->created_at) }})
                 </div>
             @endforeach
 
-            <button class="btn btn-sm btn-danger">Удалить выбранное</button>
+            <button class="btn btn-sm btn-danger">{{ trans('common.delete_selected') }}</button>
         </form>
 
         {!! pagination($page) !!}
     @else
-        {!! showError('Закладок еще нет!') !!}
+        {!! showError(trans('forums.empty_bookmarks')) !!}
     @endif
 @stop

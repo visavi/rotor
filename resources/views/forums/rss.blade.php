@@ -1,7 +1,7 @@
 @extends('layout_rss')
 
 @section('title')
-    Темы форума
+    {{ trans('forums.title_rss') }}
 @stop
 
 @section('content')
@@ -16,7 +16,7 @@
             <description>{{ $topic->text }} </description>
             <author>{{ $topic->lastPost->user->login }}</author>
             <pubDate>{{ date('r', $topic->updated_at) }}</pubDate>
-            <category>Темы</category>
+            <category>{{ trans('forums.topics') }}</category>
             <guid>{{ siteUrl() }}/topics/{{ $topic->id }}</guid>
         </item>
     @endforeach

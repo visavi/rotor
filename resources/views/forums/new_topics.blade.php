@@ -1,19 +1,19 @@
 @extends('layout')
 
 @section('title')
-    Форум - Новые темы (Стр. {{ $page->current }})
+    {{ trans('forums.forum') }} - {{ trans('forums.title_new_topics') }} ({{ trans('common.page_num', ['page' => $page->current]) }})
 @stop
 
 @section('header')
-    <h1>Новые темы</h1>
+    <h1>{{ trans('forums.title_new_topics') }}</h1>
 @stop
 
 @section('breadcrumb')
     <nav>
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
-            <li class="breadcrumb-item"><a href="/forums">Форум</a></li>
-            <li class="breadcrumb-item active">Новые темы</li>
+            <li class="breadcrumb-item"><a href="/forums">{{ trans('forums.forum') }}</a></li>
+            <li class="breadcrumb-item active">{{ trans('forums.title_new_topics') }}</li>
         </ol>
     </nav>
 @stop
@@ -27,8 +27,8 @@
 
         <div>
             {!! $data->pagination() !!}
-            Форум: <a href="/forums/{{  $data->forum->id }}">{{  $data->forum->title }}</a><br>
-            Автор: {{ $data->user->getName() }} / Посл.: {{ $data->lastPost->user->getName() }} ({{ dateFixed($data->created_at) }})
+            {{ trans('forums.forum') }}: <a href="/forums/{{  $data->forum->id }}">{{  $data->forum->title }}</a><br>
+            {{ trans('forums.author') }}: {{ $data->user->getName() }} / Посл.: {{ $data->lastPost->user->getName() }} ({{ dateFixed($data->created_at) }})
         </div>
 
     @endforeach

@@ -97,4 +97,21 @@ class HomeController extends BaseController
     {
         return view('search/index');
     }
+
+    /**
+     * Быстрое изменение языка
+     *
+     * @param string  $lang
+     * @param Request $request
+     */
+    public function language(string $lang, Request $request): void
+    {
+        $return = $request->input('return');
+
+        if (preg_match('|^[a-z]+$|', $lang)) {
+            $_SESSION['language'] = $lang;
+        }
+
+        redirect($return ?? '/');
+    }
 }

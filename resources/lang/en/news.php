@@ -1,8 +1,7 @@
 <?php
 
 return [
-    'title'          => 'Site news (Page :page)',
-    'header'         => 'Site news',
+    'title'          => 'Site news',
     'added_by'       => 'Added by',
     'comments'       => 'Comments',
     'empty_news'     => 'No news yet!',

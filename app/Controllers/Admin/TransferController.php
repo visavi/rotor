@@ -38,7 +38,7 @@ class TransferController extends AdminController
         $login = check($request->input('user'));
 
         if (! $user = getUserByLogin($login)) {
-            abort(404, 'Пользователь с данным логином не найден!');
+            abort(404, trans('validator.user'));
         }
 
         $total = Transfer::query()->where('user_id', $user->id)->count();

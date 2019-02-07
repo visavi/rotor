@@ -10,7 +10,7 @@
     <nav>
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
-            <li class="breadcrumb-item"><a href="/news">{{ trans('news.header') }}</a></li>
+            <li class="breadcrumb-item"><a href="/news">{{ trans('news.title') }}</a></li>
             <li class="breadcrumb-item active">{{ $news->title }}</li>
 
             @if (isAdmin())

@@ -1,14 +1,14 @@
 @extends('layout')
 
 @section('title')
-    Изменение сообщения
+    {{ trans('forums.title_edit_post') }}
 @stop
 
 @section('breadcrumb')
     <nav>
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
-            <li class="breadcrumb-item"><a href="/forums">Форум</a></li>
+            <li class="breadcrumb-item"><a href="/forums">{{ trans('forums.forum') }}</a></li>
 
             @if ($post->topic->forum->parent->id)
                 <li class="breadcrumb-item"><a href="/forums/{{ $post->topic->forum->parent->id }}">{{ $post->topic->forum->parent->title }}</a></li>
@@ -17,7 +17,7 @@
             <li class="breadcrumb-item"><a href="/forums/{{ $post->topic->forum->id }}">{{ $post->topic->forum->title }}</a></li>
 
             <li class="breadcrumb-item"><a href="/topics/{{ $post->topic->id }}">{{ $post->topic->title }}</a></li>
-            <li class="breadcrumb-item active">Изменение сообщения</li>
+            <li class="breadcrumb-item active">{{ trans('forums.title_edit_post') }}</li>
         </ol>
     </nav>
 @stop
@@ -30,14 +30,14 @@
             <input type="hidden" name="token" value="{{ $_SESSION['token'] }}">
 
             <div class="form-group{{ hasError('msg') }}">
-                <label for="msg">Сообщение:</label>
+                <label for="msg">{{ trans('forums.post') }}:</label>
                 <textarea class="form-control markItUp" maxlength="{{ setting('forumtextlength') }}" id="msg" rows="5" name="msg" required>{{ getInput('msg', $post->text) }}</textarea>
                 <span class="js-textarea-counter"></span>
                 {!! textError('msg') !!}
             </div>
 
             @if ($post->files->isNotEmpty())
-                <i class="fa fa-paperclip"></i> <b>Удаление файлов:</b><br>
+                <i class="fa fa-paperclip"></i> <b>{{ trans('forums.delete_files') }}:</b><br>
                 @foreach ($post->files as $file)
                     <input type="checkbox" name="delfile[]" value="{{ $file->id }}">
                     <a href="{{ $file->hash }}" target="_blank">{{ $file->name }}</a> ({{ formatSize($file->size) }})<br>
@@ -45,7 +45,7 @@
                 <br>
             @endif
 
-            <button class="btn btn-primary">Редактировать</button>
+            <button class="btn btn-primary">{{ trans('common.edit') }}</button>
         </form>
     </div>
 @stop

@@ -1,10 +1,10 @@
 @extends('layout')
 
 @section('title')
-    {{ $topic->title }} (Стр. {{ $page->current }})
+    {{ $topic->title }} ({{ trans('common.page_num', ['page' => $page->current]) }})
 @stop
 
-@section('description', 'Обсуждение темы: '.$topic->title.' (Стр. '.$page->current.')')
+@section('description', trans('forums.topic_discussion') . ': ' . $topic->title)
 
 @section('header')
     <h1>{{ $topic->title }}</h1>
@@ -14,7 +14,7 @@
     <nav>
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
-            <li class="breadcrumb-item"><a href="/forums">Форум</a></li>
+            <li class="breadcrumb-item"><a href="/forums">{{ trans('forums.forum') }}</a></li>
 
             @if ($topic->forum->parent->id)
                 <li class="breadcrumb-item"><a href="/forums/{{ $topic->forum->parent->id }}">{{ $topic->forum->parent->title }}</a></li>
@@ -27,7 +27,7 @@
 @stop
 
 @section('content')
-    <a href="/topics/print/{{ $topic->id }}">Печать</a> / <a href="/topics/rss/{{ $topic->id }}">RSS-лента</a>
+    <a href="/topics/print/{{ $topic->id }}">{{ trans('common.print') }}</a> / <a href="/topics/rss/{{ $topic->id }}">{{ trans('common.rss') }}</a>
 
     @if (getUser())
         @if (! $topic->closed && $topic->user->id === getUser('id') && getUser('point') >= setting('editforumpoint'))
@@ -35,14 +35,14 @@
            / <a href="/topics/edit/{{ $topic->id }}">Изменить</a>
         @endif
 
-        <?php $bookmark = $topic->bookmark_posts ? 'Из закладок' : 'В закладки'; ?>
+        <?php $bookmark = $topic->bookmark_posts ? trans('forums.from_bookmarks') : trans('forums.to_bookmarks'); ?>
         / <a href="#" onclick="return bookmark(this)" data-tid="{{ $topic->id }}" data-token="{{ $_SESSION['token'] }}">{{ $bookmark }}</a>
     @endif
 
     @if ($topic->curators)
        <div>
             <span class="badge badge-warning">
-                <i class="fa fa-wrench"></i> Кураторы темы:
+                <i class="fa fa-wrench"></i> {{ trans('forums.topic_curators') }}:
                 @foreach ($topic->curators as $key => $curator)
                     <?php $comma = (empty($key)) ? '' : ', '; ?>
                     {{ $comma }}{!! $curator->getProfile() !!}

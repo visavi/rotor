@@ -1,8 +1,7 @@
 <?php
 
 return [
-    'title'          => 'Guest book (Page :page)',
-    'header'         => 'Guest book',
+    'title'          => 'Guest book',
     'edited'         => 'Edited',
     'write'          => 'Write',
     'message_text'   => 'Message text',

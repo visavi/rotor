@@ -23,7 +23,12 @@
 </div>
 
 <div class="menu">
-@yield('menu')
+    @yield('menu')
+
+    <div class="float-right">
+        <a href="/language/ru{{ returnUrl() }}">RU</a> /
+        <a href="/language/en{{ returnUrl() }}">EN</a>
+    </div>
 </div>
 
 <div class="site">

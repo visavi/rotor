@@ -8,7 +8,7 @@
     <nav>
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
-            <li class="breadcrumb-item"><a href="/">{{ trans('guestbooks.header') }}</a></li>
+            <li class="breadcrumb-item"><a href="/">{{ trans('guestbooks.title') }}</a></li>
             <li class="breadcrumb-item active">{{ trans('guestbooks.title_edit') }}</li>
         </ol>
     </nav>

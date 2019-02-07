@@ -5,6 +5,7 @@ $(function() {
     bootbox.setDefaults({ locale: 'ru' });
 
     toastr.options = {
+        'toastClass' : 'toastr',
         "progressBar": true,
         "positionClass": "toast-top-full-width"
     };

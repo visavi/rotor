@@ -1,15 +1,15 @@
 @extends('layout')
 
 @section('title')
-    Топ популярных тем
+    {{ trans('forums.title_top_topics') }}
 @stop
 
 @section('breadcrumb')
     <nav>
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
-            <li class="breadcrumb-item"><a href="/forums">Форум</a></li>
-            <li class="breadcrumb-item active">Топ популярных тем</li>
+            <li class="breadcrumb-item"><a href="/forums">{{ trans('forums.forum') }}</a></li>
+            <li class="breadcrumb-item active">{{ trans('forums.title_top_topics') }}</li>
         </ol>
     </nav>
 @stop
@@ -23,13 +23,13 @@
             </div>
             <div>
                 {!! $data->pagination() !!}
-                Автор: {{ $data->user->getName() }}<br>
-                Сообщение: {{ $data->lastPost->user->getName() }} ({{ dateFixed($data->lastPost->created_at) }})
+                {{ trans('forums.author') }}: {{ $data->user->getName() }}<br>
+                {{ trans('forums.post') }}: {{ $data->lastPost->user->getName() }} ({{ dateFixed($data->lastPost->created_at) }})
             </div>
         @endforeach
 
         {!! pagination($page) !!}
     @else
-        {!! showError('Созданных тем еще нет!') !!}
+        {!! showError(trans('forums.empty_topics')) !!}
     @endif
 @stop

@@ -16,7 +16,7 @@
             <description>{{ $topic->title }} </description>
             <author>{{ $data->user->login }}</author>
             <pubDate>{{ date('r', $data->created_at) }}</pubDate>
-            <category>Сообщения</category>
+            <category>{{ trans('forums.posts') }}</category>
             <guid>{{ siteUrl() }}/topics/{{ $topic->id }}/{{  $data->id }}</guid>
         </item>
     @endforeach

@@ -1,15 +1,15 @@
 @extends('layout')
 
 @section('title')
-    Топ популярных постов
+    {{ trans('forums.title_top_posts') }}
 @stop
 
 @section('breadcrumb')
     <nav>
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
-            <li class="breadcrumb-item"><a href="/forums">Форум</a></li>
-            <li class="breadcrumb-item active">Топ популярных постов</li>
+            <li class="breadcrumb-item"><a href="/forums">{{ trans('forums.forum') }}</a></li>
+            <li class="breadcrumb-item active">{{ trans('forums.title_top_posts') }}</li>
         </ol>
     </nav>
 @stop
@@ -17,31 +17,31 @@
 @section('content')
     Период:
     <?php $active = ($period === 1) ? 'success' : 'light'; ?>
-    <a href="/forums/top/posts?period=1" class="badge badge-{{ $active }}">Сутки</a>
+    <a href="/forums/top/posts?period=1" class="badge badge-{{ $active }}">{{ trans('forums.last_day') }}</a>
 
     <?php $active = ($period === 7) ? 'success' : 'light'; ?>
-    <a href="/forums/top/posts?period=7" class="badge badge-{{ $active }}">Неделя</a>
+    <a href="/forums/top/posts?period=7" class="badge badge-{{ $active }}">{{ trans('forums.last_week') }}</a>
 
     <?php $active = ($period === 30) ? 'success' : 'light'; ?>
-    <a href="/forums/top/posts?period=30" class="badge badge-{{ $active }}">Месяц</a>
+    <a href="/forums/top/posts?period=30" class="badge badge-{{ $active }}">{{ trans('forums.last_month') }}</a>
 
     <?php $active = ($period === 365) ? 'success' : 'light'; ?>
-    <a href="/forums/top/posts?period=365" class="badge badge-{{ $active }}">Год</a>
+    <a href="/forums/top/posts?period=365" class="badge badge-{{ $active }}">{{ trans('forums.last_year') }}</a>
 
     <?php $active = (empty($period)) ? 'success' : 'light'; ?>
-    <a href="/forums/top/posts" class="badge badge-{{ $active }}">За все время</a>
+    <a href="/forums/top/posts" class="badge badge-{{ $active }}">{{ trans('forums.all_time') }}</a>
     <hr>
 
     @if ($posts->isNotEmpty())
         @foreach ($posts as $data)
             <div class="b">
                 <i class="fa fa-file-alt"></i> <b><a href="/topics/{{ $data->topic_id }}/{{ $data->id }}">{{ $data->topic->title }}</a></b>
-                (Рейтинг: {{ $data->rating }})
+                ({{ trans('forums.rating') }}: {{ $data->rating }})
             </div>
             <div>
                 {!! bbCode($data->text) !!}<br>
 
-                Написал: {{ $data->user->login }} <small>({{ dateFixed($data->created_at) }})</small><br>
+                {{ trans('forums.posted_by') }}: {{ $data->user->login }} <small>({{ dateFixed($data->created_at) }})</small><br>
 
                 @if (isAdmin())
                     <span class="data">({{ $data->brow }}, {{ $data->ip }})</span>
@@ -52,6 +52,6 @@
 
         {!! pagination($page) !!}
     @else
-        {!! showError('Сообщений еще нет!') !!}
+        {!! showError(trans('forums.empty_posts')) !!}
     @endif
 @stop

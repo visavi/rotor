@@ -23,7 +23,7 @@ class WallController extends BaseController
         $user = User::query()->where('login', $login)->first();
 
         if (! $user) {
-            abort(404, 'Пользователь не найден!');
+            abort(404, trans('validator.user'));
         }
 
         $total   = Wall::query()->where('user_id', $user->id)->count();
@@ -64,7 +64,7 @@ class WallController extends BaseController
         $user = User::query()->where('login', $login)->first();
 
         if (! $user) {
-            abort(404, 'Пользователь не найден!');
+            abort(404, trans('validator.user'));
         }
 
         if ($request->isMethod('post')) {
@@ -133,7 +133,7 @@ class WallController extends BaseController
             ->true($request->ajax(), 'Это не ajax запрос!')
             ->equal($token, $_SESSION['token'], trans('validator.token'))
             ->notEmpty($id, 'Не выбрана запись для удаление!')
-            ->notEmpty($user, 'Пользователь не найден!')
+            ->notEmpty($user, trans('validator.user'))
             ->true(isAdmin() || $user->id === getUser('id'), 'Записи может удалять только владелец и администрация!');
 
         if ($validator->isValid()) {

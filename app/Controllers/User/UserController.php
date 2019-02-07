@@ -252,7 +252,7 @@ class UserController extends BaseController
         $cooklog = isset($_COOKIE['login']) ? check($_COOKIE['login']): '';
         if ($request->isMethod('post')) {
             if ($request->has('login') && $request->has('pass')) {
-                $return   = $request->input('return', '');
+                $return   = $request->input('return');
                 $login    = check(utfLower($request->input('login')));
                 $pass     = trim($request->input('pass'));
                 $remember = $request->input('remember');
@@ -260,12 +260,7 @@ class UserController extends BaseController
                 /** @var User $user */
                 if ($user = User::auth($login, $pass, $remember)) {
                     setFlash('success', 'Добро пожаловать, '.$user->login.'!');
-
-                    if ($return) {
-                        redirect($return);
-                    } else {
-                        redirect('/');
-                    }
+                    redirect($return ?? '/');
                 }
 
                 setInput($request->all());

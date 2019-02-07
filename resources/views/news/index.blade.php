@@ -1,18 +1,18 @@
 @extends('layout')
 
 @section('title')
-    {{ trans('news.title', ['page' => $page->current]) }}
+    {{ trans('news.title') }} ({{ trans('common.page_num', ['page' => $page->current]) }})
 @stop
 
 @section('header')
-    <h1>{{ trans('news.header') }}</h1>
+    <h1>{{ trans('news.title') }}</h1>
 @stop
 
 @section('breadcrumb')
     <nav>
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
-            <li class="breadcrumb-item active">{{ trans('news.header') }}</li>
+            <li class="breadcrumb-item active">{{ trans('news.title') }}</li>
 
             @if (isAdmin('moder'))
                 <li class="breadcrumb-item"><a href="/admin/news">{{ trans('common.management') }}</a></li>

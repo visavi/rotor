@@ -696,7 +696,7 @@ class BlogController extends BaseController
         $user = User::query()->where('login', $login)->first();
 
         if (! $user) {
-            abort(404, 'Пользователь не найден!');
+            abort(404, trans('validator.user'));
         }
 
         $total = Blog::query()->where('user_id', $user->id)->count();
@@ -724,7 +724,7 @@ class BlogController extends BaseController
         $user = User::query()->where('login', $login)->first();
 
         if (! $user) {
-            abort(404, 'Пользователь не найден!');
+            abort(404, trans('validator.user'));
         }
 
         $total = Comment::query()

@@ -1583,9 +1583,10 @@ function returnUrl($url = null)
     if ($request->is('/', 'login', 'register', 'recovery', 'restore', 'ban', 'closed')) {
         return false;
     }
+
     $query = $request->has('return') ? $request->input('return') : $request->path();
 
-    return '?return=' . urlencode(! $url ? $query : $url);
+    return '?return=' . urlencode($url ?? '/' . $query);
 }
 
 /**

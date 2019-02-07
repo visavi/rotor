@@ -72,7 +72,7 @@ class MailController extends BaseController
 
             $user = User::query()->where('login', $login)->orWhere('email', $login)->first();
             if (! $user) {
-                abort('default', 'Пользователь с данным логином или email не найден!');
+                abort('default', trans('validator.user'));
             }
 
             $validator->true(captchaVerify(), ['protect' => trans('validator.captcha')])

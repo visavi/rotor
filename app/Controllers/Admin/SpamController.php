@@ -101,7 +101,11 @@ class SpamController extends AdminController
 
         if ($validator->isValid()) {
 
-            Spam::query()->find($id)->delete();
+            $spam = Spam::query()->find($id);
+
+            if ($spam) {
+                $spam->delete();
+            }
 
             echo json_encode(['status' => 'success']);
         } else {

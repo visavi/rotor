@@ -42,7 +42,7 @@ class BanController extends AdminController
         $user = User::query()->where('login', $login)->with('lastBan')->first();
 
         if (! $user) {
-            abort(404, 'Пользователь не найден!');
+            abort(404, trans('validator.user'));
         }
 
         if (\in_array($user->level, User::ADMIN_GROUPS, true)) {
@@ -118,7 +118,7 @@ class BanController extends AdminController
         $user = User::query()->where('login', $login)->with('lastBan')->first();
 
         if (! $user) {
-            abort(404, 'Пользователь не найден!');
+            abort(404, trans('validator.user'));
         }
 
         if ($user->level !== User::BANNED || $user->timeban < SITETIME) {
@@ -179,7 +179,7 @@ class BanController extends AdminController
         $user = User::query()->where('login', $login)->with('lastBan')->first();
 
         if (! $user) {
-            abort(404, 'Пользователь не найден!');
+            abort(404, trans('validator.user'));
         }
 
         if ($user->level !== User::BANNED || $user->timeban < SITETIME) {

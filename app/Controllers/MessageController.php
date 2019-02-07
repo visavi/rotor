@@ -78,7 +78,7 @@ class MessageController extends BaseController
             $user = User::query()->where('login', $login)->first();
 
             if (! $user) {
-                abort(404, 'Пользователь не найден!');
+                abort(404, trans('validator.user'));
             }
 
             if ($user->id === $this->user->id) {
@@ -132,7 +132,7 @@ class MessageController extends BaseController
         $user = User::query()->where('login', $login)->first();
 
         if (! $user) {
-            abort(404, 'Пользователь не найден!');
+            abort(404, trans('validator.user'));
         }
 
         $validator->equal($token, $_SESSION['token'], ['msg' => trans('validator.token')])
