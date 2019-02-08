@@ -38,9 +38,31 @@
 @@section('title')
     Новый заголовок страницы
 @@stop
-</pre>
+</pre><br>
 
-    Дополнительно можно указать произвольные ключевые слова и описание заполнив переменные setting('keywords') и setting('description')
+    Значение в блоке title, будет подставлено в название страницы &lt;h1&gt;<br>
+    Для того чтобы изменить блок название, то следует создать блок header<br>
+<pre class="prettyprint linenums">
+@@section('header')
+    &lt;h1&gt;Измененное название страницы&lt;/h1&gt;
+@@stop
+</pre><br>
+
+    Блок с навигацией также задается отдельно<br>
+
+<pre class="prettyprint linenums">
+@@section('breadcrumb')
+    &lt;nav>
+        &lt;ol class="breadcrumb">
+            &lt;li class="breadcrumb-item">&lt;a href="/">&lt;i class="fas fa-home">&lt;/i>&lt;/a>&lt;li>
+            &lt;li class="breadcrumb-item">&lt;a href="/files">Файлы&lt;/a>&lt;/li>
+            &lt;li class="breadcrumb-item active">Активная страница&lt;/li>
+        &lt;/ol>
+    &lt;/nav>
+@@stop
+</pre><br>
+
+    Дополнительно можно указать произвольные ключевые слова и описание заполнив переменные setting('keywords') и setting('description')<br>
 
 <pre class="prettyprint linenums">
 @@section('keywords')
@@ -50,7 +72,7 @@
 @@section('description')
     Описание страниц
 @@stop
-</pre>
+</pre><br>
 
     Посмотрите пример страниц в виде <a href="/files/docs">документации Rotor</a><br>
 @stop
