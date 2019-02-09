@@ -208,7 +208,7 @@
 
                             <label class="btn btn-sm btn-secondary" for="files">
                                 <input type="file" id="files" name="files[]" onchange="$('#upload-file-info').html((this.files.length > 1) ? this.files.length + ' файлов' : this.files[0].name);" hidden multiple>
-                                {{ trans('forums.attach_files') }}&hellip;
+                                {{ trans('common.attach_files') }}&hellip;
                             </label>
                             <span class="badge badge-info" id="upload-file-info"></span>
                             {!! textError('files') !!}
@@ -216,13 +216,13 @@
 
                             <p class="text-muted font-italic">
                                 {{ trans('common.max_file_upload') }}: {{ setting('maxfiles') }}<br>
-                                {{ trans('common.max_file weight') }}: {{ formatSize(setting('forumloadsize')) }}<br>
+                                {{ trans('common.max_file_weight') }}: {{ formatSize(setting('forumloadsize')) }}<br>
                                 {{ trans('common.valid_file_extensions') }}: {{ str_replace(',', ', ', setting('forumextload')) }}
                             </p>
                         </div>
 
                         <span class="float-right js-attach-button">
-                            <a href="#" onclick="return showAttachForm();">{{ trans('forums.attach_files') }}</a>
+                            <a href="#" onclick="return showAttachForm();">{{ trans('common.attach_files') }}</a>
                         </span>
                     @endif
 

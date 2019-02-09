@@ -2,7 +2,7 @@
 <html lang="{{ setting('language') }}">
 <head>
     <meta charset="utf-8">
-    <title>Rotor</title>
+    <title>BBCode</title>
     @include('app/_styles')
 </head>
 <body>

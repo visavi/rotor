@@ -1,13 +1,24 @@
 <?php
 
 return [
+    'yesterday' => 'Yesterday',
+    'today'     => 'Today',
+
+    'mo' => 'Mo',
+    'tu' => 'Tu',
+    'we' => 'We',
+    'th' => 'Th',
+    'fr' => 'Fr',
+    'sa' => 'Sa',
+    'su' => 'Su',
+
     'write'             => 'Write',
     'rules'             => 'Rules',
     'stickers'          => 'Stickers',
     'tags'              => 'Tags',
     'search'            => 'Search',
-    'rss'               => 'RSS',
-    'print'             => 'Печать',
+    'rss'               => 'Rss',
+    'print'             => 'Print',
     'management'        => 'Management',
     'reply'             => 'Reply',
     'quote'             => 'Quote',
@@ -24,10 +35,13 @@ return [
     'menu'              => 'My menu',
     'verification_code' => 'Verification code',
     'pages'             => 'Pages',
-    'page_num'          => '(Page :page)',
+    'page_num'          => 'Page :page',
 
     'max_file_upload'       => 'You can upload files',
-    'max_file weight'       => 'Maximum file weight',
+    'max_file_weight'       => 'Maximum file weight',
+    'min_image_size'        => 'Minimum image size',
     'valid_file_extensions' => 'Valid file extensions',
     'not_authorized'        => 'To add a message you need to be logged in!',
+    'attach_files'          => 'Attach files',
+    'attach_image'          => 'Attach image',
 ];

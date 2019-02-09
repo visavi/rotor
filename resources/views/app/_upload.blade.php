@@ -23,11 +23,12 @@ $click = $cond ? 'return pasteImage(this);' : false;
 
 <label class="btn btn-sm btn-secondary" for="image">
     <input id="image" type="file" name="image" accept="image/*" onchange="return submitImage(this, {{ $cond }});" data-id="{{ $id ?? 0 }}" data-type="{{ $type }}" data-token="{{ $_SESSION['token'] }}" hidden>
-    Прикрепить картинку&hellip;
+    {{ trans('common.attach_image') }}&hellip;
 </label><br>
 
 <p class="text-muted font-italic">
-    Можно загрузить до {{ setting('maxfiles') }} фото<br>
-    Максимальный вес фото: {{ formatSize(setting('filesize')) }} и размером от 100px<br>
-    Допустимые расширения фото: jpg, jpeg, gif и png
+    {{ trans('common.max_file_upload') }}: {{ setting('maxfiles') }}<br>
+    {{ trans('common.max_file_weight') }}: {{ formatSize(setting('filesize')) }}<br>
+    {{ trans('common.min_image_size') }}: 100px<br>
+    {{ trans('common.valid_file_extensions') }}: jpg, jpeg, gif и png
 </p>

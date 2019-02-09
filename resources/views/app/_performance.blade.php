@@ -1,13 +1,13 @@
 <ul class="list-inline hiding text-left">
-    <li class="list-inline-item" data-toggle="tooltip" title="MySQL запросы"><i class="fa fa-database"></i> {{ count($queries) }}</li>
-    <li class="list-inline-item" data-toggle="tooltip" title="Потребление ОЗУ"><i class="fa fa-bolt"></i> {{ formatSize(memory_get_usage()) }}</li>
+    <li class="list-inline-item" data-toggle="tooltip" title="{{ trans('app.mysql_queries') }}"><i class="fa fa-database"></i> {{ count($queries) }}</li>
+    <li class="list-inline-item" data-toggle="tooltip" title="{{ trans('app.ram_consumption') }}"><i class="fa fa-bolt"></i> {{ formatSize(memory_get_usage()) }}</li>
 
     <?php if (function_exists('sys_getloadavg')): ?>
         <?php $cpu = sys_getloadavg(); ?>
-        <li class="list-inline-item" data-toggle="tooltip" title="Загрузка CPU"><i class="fa fa-tachometer-alt"></i> {{ round($cpu[0], 2) }}</li>
+        <li class="list-inline-item" data-toggle="tooltip" title="{{ trans('app.cpu_load') }}"><i class="fa fa-tachometer-alt"></i> {{ round($cpu[0], 2) }}</li>
     <?php endif; ?>
 
-    <li class="list-inline-item" data-toggle="tooltip" title="Загрузка страницы"><i class="fa fa-rocket"></i> {{ round(microtime(true) - STARTTIME, 4) }} сек.</li>
+    <li class="list-inline-item" data-toggle="tooltip" title="{{ trans('app.loading_speed') }}"><i class="fa fa-rocket"></i> {{ round(microtime(true) - STARTTIME, 4) }} сек.</li>
 </ul>
 
 @if (env('APP_DEBUG'))

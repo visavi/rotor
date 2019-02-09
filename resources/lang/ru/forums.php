@@ -62,7 +62,6 @@ return [
     'title_edit_post'      => 'Изменение сообщения',
     'delete_files'         => 'Удаление файлов',
     'attached_files'       => 'Прикрепленные файлы',
-    'attach_files'         => 'Прикрепить файлы',
     'topic_discussion'     => 'Обсуждение темы',
     'topic_curators'       => 'Кураторы темы',
     'changed'              => 'Изменил',

@@ -2,8 +2,13 @@
 <table>
     <thead>
         <tr>
-            <th>Пн</th><th>Вт</th><th>Ср</th><th>Чт</th><th>Пт</th><th><span  class="text-danger">Сб</span></th><th><span class="text-danger">Вс</span>
-            </th>
+            <th>{{ trans('common.mo') }}</th>
+            <th>{{ trans('common.tu') }}</th>
+            <th>{{ trans('common.we') }}</th>
+            <th>{{ trans('common.th') }}</th>
+            <th>{{ trans('common.fr') }}</th>
+            <th><span class="text-danger">{{ trans('common.sa') }}</span></th>
+            <th><span class="text-danger">{{ trans('common.su') }}</span></th>
         </tr>
     </thead>
     <tbody>
