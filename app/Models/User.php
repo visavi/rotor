@@ -450,7 +450,7 @@ class User extends BaseModel
         }
 
         if ($this->avatar && file_exists(HOME . '/' . $this->avatar)) {
-            return '<a class="avatar" href="/users/' . $this->login . '"><img src="' . $this->avatar . '" alt=""></a> ';
+            return '<a class="avatar" href="/users/' . $this->login . '"><img class="avatar" src="' . $this->avatar . '" alt=""></a> ';
         }
 
         return $this->defaultAvatar();
