@@ -24,7 +24,7 @@
             <div>
                 {!! $data->pagination() !!}
                 {{ trans('forums.author') }}: {{ $data->user->getName() }}<br>
-                {{ trans('forums.post') }}: {{ $data->lastPost->user->getName() }} ({{ dateFixed($data->lastPost->created_at) }})
+                {{ trans('forums.message') }}: {{ $data->lastPost->user->getName() }} ({{ dateFixed($data->lastPost->created_at) }})
             </div>
         @endforeach
 

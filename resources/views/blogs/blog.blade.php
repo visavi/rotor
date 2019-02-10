@@ -7,11 +7,11 @@
 @section('header')
     @if (! $category->closed && getUser())
         <div class="float-right">
-            <a class="btn btn-success" href="/blogs/create?cid={{ $category->id }}">Добавить</a>
+            <a class="btn btn-success" href="/blogs/create?cid={{ $category->id }}">{{ trans('blogs.add') }}</a>
         </div><br>
     @endif
 
-    <h1>{{ $category->name }} <small>(Статей: {{ $category->count_blogs }})</small></h1>
+    <h1>{{ $category->name }} <small>({{ trans('blogs.all_articles') }}: {{ $category->count_blogs }})</small></h1>
 @stop
 
 @section('breadcrumb')
@@ -27,7 +27,7 @@
             <li class="breadcrumb-item active">{{ $category->name }}</li>
 
             @if (isAdmin())
-                <li class="breadcrumb-item"><a href="/admin/blogs/{{ $category->id }}?page={{ $page->current }}">Управление</a></li>
+                <li class="breadcrumb-item"><a href="/admin/blogs/{{ $category->id }}?page={{ $page->current }}">{{ trans('common.management') }}</a></li>
             @endif
         </ol>
     </nav>
@@ -42,20 +42,20 @@
             </div>
             <div>
                 {!! stripString(bbCode($data->text), 50) !!}<br>
-                Автор: {!! $data->user->getProfile() !!} ({{ dateFixed($data->created_at) }})<br>
-                Просмотров: {{ $data->visits }}<br>
-                <a href="/articles/comments/{{ $data->id }}">Комментарии</a> ({{ $data->count_comments }})
+                {{ trans('blogs.author') }}: {!! $data->user->getProfile() !!} ({{ dateFixed($data->created_at) }})<br>
+                {{ trans('blogs.viewing') }}: {{ $data->visits }}<br>
+                <a href="/articles/comments/{{ $data->id }}">{{ trans('blogs.comments') }}</a> ({{ $data->count_comments }})
                 <a href="/articles/end/{{ $data->id }}">&raquo;</a>
             </div>
         @endforeach
 
         {!! pagination($page) !!}
     @else
-        {!! showError('Статей еще нет, будь первым!') !!}
+        {!! showError(trans('blogs.empty_articles')) !!}
     @endif
 
-    <a href="/blogs/top">Топ статей</a> /
-    <a href="/blogs/tags">Облако тегов</a> /
-    <a href="/blogs/search">Поиск</a> /
-    <a href="/blogs/authors">Авторы</a>
+    <a href="/blogs/top">{{ trans('blogs.top_articles') }}</a> /
+    <a href="/blogs/tags">{{ trans('blogs.tag_cloud') }}</a> /
+    <a href="/blogs/search">{{ trans('common.search') }}</a> /
+    <a href="/blogs/authors">{{ trans('blogs.authors') }}</a>
 @stop

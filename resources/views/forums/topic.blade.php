@@ -197,8 +197,8 @@
                     <input type="hidden" name="token" value="{{ $_SESSION['token'] }}">
 
                     <div class="form-group{{ hasError('msg') }}">
-                        <label for="msg">{{ trans('forums.post') }}:</label>
-                        <textarea class="form-control markItUp" maxlength="{{ setting('forumtextlength') }}" id="msg" rows="5" name="msg" placeholder="{{ trans('forums.post') }}" required>{{ getInput('msg') }}</textarea>
+                        <label for="msg">{{ trans('forums.message') }}:</label>
+                        <textarea class="form-control markItUp" maxlength="{{ setting('forumtextlength') }}" id="msg" rows="5" name="msg" placeholder="{{ trans('forums.message') }}" required>{{ getInput('msg') }}</textarea>
                         <span class="js-textarea-counter"></span>
                         {!! textError('msg') !!}
                     </div>

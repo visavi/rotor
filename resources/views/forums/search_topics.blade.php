@@ -26,7 +26,7 @@
         <div>
             {!! $topic->pagination() !!}
             {{ trans('forums.forum') }}: <a href="/topics/{{ $topic->forum->id }}">{{ $topic->forum->title }}</a><br>
-            {{ trans('forums.post') }}: {{ $topic->lastPost->user->getName() }} ({{ dateFixed($topic->lastPost->created_at) }})
+            {{ trans('forums.message') }}: {{ $topic->lastPost->user->getName() }} ({{ dateFixed($topic->lastPost->created_at) }})
         </div>
     @endforeach
 

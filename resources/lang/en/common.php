@@ -37,6 +37,7 @@ return [
     'pages'             => 'Pages',
     'page_num'          => 'Page :page',
     'comments'          => 'Comments',
+    'empty_comments'    => 'Комментариев еще нет!',
 
     'max_file_upload'       => 'You can upload files',
     'max_file_weight'       => 'Maximum file weight',

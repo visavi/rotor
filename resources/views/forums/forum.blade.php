@@ -46,7 +46,7 @@
                 <div>
                     {{ trans('forums.topic') }}: <a href="/topics/end/{{ $child->lastTopic->id }}">{{ $child->lastTopic->title }}</a><br>
                     @if ($child->lastTopic->lastPost->id)
-                        {{ trans('forums.post') }}: {{ $child->lastTopic->lastPost->user->getName() }} ({{ dateFixed($child->lastTopic->lastPost->created_at) }})
+                        {{ trans('forums.message') }}: {{ $child->lastTopic->lastPost->user->getName() }} ({{ dateFixed($child->lastTopic->lastPost->created_at) }})
                     @endif
                 </div>
             @else
@@ -67,7 +67,7 @@
             <div>
                 @if ($topic->lastPost)
                     {!! $topic->pagination() !!}
-                    {{ trans('forums.post') }}: {{ $topic->lastPost->user->getName() }} ({{ dateFixed($topic->lastPost->created_at) }})
+                    {{ trans('forums.message') }}: {{ $topic->lastPost->user->getName() }} ({{ dateFixed($topic->lastPost->created_at) }})
                 @endif
             </div>
         @endforeach

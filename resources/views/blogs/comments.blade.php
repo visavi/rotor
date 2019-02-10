@@ -1,7 +1,7 @@
 @extends('layout')
 
 @section('title')
-    {{ $blog->title }} - Комментарии
+    {{ $blog->title }} - {{ trans('blogs.comments') }}
 @stop
 
 @section('breadcrumb')
@@ -16,13 +16,13 @@
 
             <li class="breadcrumb-item"><a href="/blogs/{{ $blog->category->id }}">{{ $blog->category->name }}</a></li>
             <li class="breadcrumb-item"><a href="/articles/{{ $blog->id }}">{{ $blog->title }}</a></li>
-            <li class="breadcrumb-item active">Комментарии</li>
+            <li class="breadcrumb-item active">{{ trans('blogs.comments') }}</li>
         </ol>
     </nav>
 @stop
 
 @section('content')
-    <a href="/articles/rss/{{ $blog->id }}">RSS-лента</a><hr>
+    <a href="/articles/rss/{{ $blog->id }}">{{ trans('common.rss') }}</a><hr>
 
     @if ($comments->isNotEmpty())
         @foreach ($comments as $data)
@@ -35,19 +35,19 @@
 
                     <div class="float-right">
                         @if (getUser('id') !== $data->user_id)
-                            <a href="#" onclick="return postReply(this)" title="Ответить"><i class="fa fa-reply text-muted"></i></a>
+                            <a href="#" onclick="return postReply(this)" title="{{ trans('common.reply') }}"><i class="fa fa-reply text-muted"></i></a>
 
-                            <a href="#" onclick="return postQuote(this)" title="Цитировать"><i class="fa fa-quote-right text-muted"></i></a>
+                            <a href="#" onclick="return postQuote(this)" title="{{ trans('common.quote') }}"><i class="fa fa-quote-right text-muted"></i></a>
 
-                            <a href="#" onclick="return sendComplaint(this)" data-type="{{ App\Models\Blog::class }}" data-id="{{ $data->id }}" data-token="{{ $_SESSION['token'] }}" data-page="{{ $page->current }}" rel="nofollow" title="Жалоба"><i class="fa fa-bell text-muted"></i></a>
+                            <a href="#" onclick="return sendComplaint(this)" data-type="{{ App\Models\Blog::class }}" data-id="{{ $data->id }}" data-token="{{ $_SESSION['token'] }}" data-page="{{ $page->current }}" rel="nofollow" title="{{ trans('common.complain') }}"><i class="fa fa-bell text-muted"></i></a>
                         @endif
 
                         @if ($data->created_at + 600 > SITETIME && getUser('id') === $data->user->id)
-                            <a href="/articles/edit/{{ $blog->id }}/{{ $data->id }}?page={{ $page->current }}"><i class="fa fa-pencil-alt text-muted"></i></a>
+                            <a href="/articles/edit/{{ $blog->id }}/{{ $data->id }}?page={{ $page->current }}" data-toggle="tooltip" title="{{ trans('common.edit') }}"><i class="fa fa-pencil-alt text-muted"></i></a>
                         @endif
 
                         @if (isAdmin())
-                            <a href="#" onclick="return deleteComment(this)" data-rid="{{ $data->relate_id }}" data-id="{{ $data->id }}" data-type="{{ App\Models\Blog::class }}" data-token="{{ $_SESSION['token'] }}" data-toggle="tooltip" title="Удалить"><i class="fa fa-times text-muted"></i></a>
+                            <a href="#" onclick="return deleteComment(this)" data-rid="{{ $data->relate_id }}" data-id="{{ $data->id }}" data-type="{{ App\Models\Blog::class }}" data-token="{{ $_SESSION['token'] }}" data-toggle="tooltip" title="{{ trans('common.delete') }}"><i class="fa fa-times text-muted"></i></a>
                         @endif
                     </div>
 
@@ -66,7 +66,7 @@
 
         {!! pagination($page) !!}
     @else
-        {!! showError('Нет сообщений') !!}
+        {!! showError(trans('common.empty_comments')) !!}
     @endif
 
     @if (getUser())
@@ -75,21 +75,21 @@
                 <input type="hidden" name="token" value="{{ $_SESSION['token'] }}">
 
                 <div class="form-group{{ hasError('msg') }}">
-                    <label for="msg">Сообщение:</label>
+                    <label for="msg">{{ trans('blogs.message') }}:</label>
                     <textarea class="form-control markItUp" maxlength="{{ setting('comment_length') }}" id="msg" rows="5" name="msg" required>{{ getInput('msg') }}</textarea>
                     <span class="js-textarea-counter"></span>
                     {!! textError('msg') !!}
                 </div>
 
-                <button class="btn btn-success">Написать</button>
+                <button class="btn btn-success">{{ trans('common.write') }}</button>
             </form>
         </div><br>
 
-        <a href="/rules">Правила</a> /
-        <a href="/stickers">Стикеры</a> /
-        <a href="/tags">Теги</a><br><br>
+        <a href="/rules">{{ trans('common.rules') }}</a> /
+        <a href="/stickers">{{ trans('common.stickers') }}</a> /
+        <a href="/tags">{{ trans('common.tags') }}</a><br><br>
 
     @else
-        {!! showError('Для добавления сообщения необходимо авторизоваться') !!}
+        {!! showError(trans('common.not_authorized')) !!}
     @endif
 @stop

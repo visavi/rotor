@@ -37,6 +37,7 @@ return [
     'pages'             => 'Страницы',
     'page_num'          => 'Стр. :page',
     'comments'          => 'Комментарии',
+    'empty_comments'    => 'Комментариев еще нет!',
 
     'max_file_upload'       => 'Можно загрузить файлов',
     'max_file_weight'       => 'Максимальный вес файла',

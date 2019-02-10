@@ -79,7 +79,6 @@ class GuestbookController extends BaseController
             ]);
 
             sendNotify($msg, '/guestbooks', 'Гостевая книга');
-
             setFlash('success', 'Сообщение успешно добавлено!');
         } else {
             setInput($request->all());

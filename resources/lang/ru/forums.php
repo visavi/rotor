@@ -3,7 +3,7 @@
 return [
     'forum'                => 'Форум',
     'topic'                => 'Тема',
-    'post'                 => 'Сообщение',
+    'message'              => 'Сообщение',
     'author'               => 'Автор',
     'posted_by'            => 'Написал',
     'latest'               => 'Посл.',
@@ -29,7 +29,7 @@ return [
     'my'                   => 'Мои',
     'new'                  => 'Новые',
     'topics'               => 'Темы',
-    'posts'                => 'Сообщения',
+    'messages'             => 'Сообщения',
     'bookmarks'            => 'Закладки',
     'to_bookmarks'         => 'В закладки',
     'from_bookmarks'       => 'Из закладок',
