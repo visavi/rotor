@@ -36,6 +36,7 @@ return [
     'verification_code' => 'Verification code',
     'pages'             => 'Pages',
     'page_num'          => 'Page :page',
+    'comments'          => 'Comments',
 
     'max_file_upload'       => 'You can upload files',
     'max_file_weight'       => 'Maximum file weight',

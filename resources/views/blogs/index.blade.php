@@ -1,7 +1,7 @@
 @extends('layout')
 
 @section('title')
-    Блоги - Список разделов
+    {{ trans('blogs.blogs') }} - Список разделов
 @stop
 
 @section('header')
@@ -18,7 +18,7 @@
     <nav>
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
-            <li class="breadcrumb-item active">Блоги</li>
+            <li class="breadcrumb-item active">{{ trans('blogs.blogs') }}</li>
         </ol>
     </nav>
 @stop

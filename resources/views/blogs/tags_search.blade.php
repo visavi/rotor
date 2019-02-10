@@ -8,7 +8,7 @@
     <nav>
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
-            <li class="breadcrumb-item"><a href="/blogs">Блоги</a></li>
+            <li class="breadcrumb-item"><a href="/blogs">{{ trans('blogs.blogs') }}</a></li>
             <li class="breadcrumb-item"><a href="/blogs/tags">Облако тегов</a></li>
             <li class="breadcrumb-item active">Поиск по тегам</li>
         </ol>

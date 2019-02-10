@@ -1,7 +1,7 @@
 @extends('layout')
 
 @section('title')
-    Блоги - Новые статьи (Стр. {{ $page->current }})
+    {{ trans('blogs.blogs') }} - Новые статьи ({{ trans('common.page_num', ['page' => $page->current]) }})
 @stop
 
 @section('header')
@@ -12,7 +12,7 @@
     <nav>
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
-            <li class="breadcrumb-item"><a href="/blogs">Блоги</a></li>
+            <li class="breadcrumb-item"><a href="/blogs">{{ trans('blogs.blogs') }}</a></li>
             <li class="breadcrumb-item active">Новые статьи</li>
         </ol>
     </nav>

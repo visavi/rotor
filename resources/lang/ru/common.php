@@ -36,6 +36,7 @@ return [
     'verification_code' => 'Проверочный код',
     'pages'             => 'Страницы',
     'page_num'          => 'Стр. :page',
+    'comments'          => 'Комментарии',
 
     'max_file_upload'       => 'Можно загрузить файлов',
     'max_file_weight'       => 'Максимальный вес файла',
