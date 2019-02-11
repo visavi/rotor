@@ -1835,6 +1835,17 @@ function getExtension($filename)
 }
 
 /**
+ * Возвращает имя файла без расширения
+ *
+ * @param  string $filename имя файла
+ * @return string имя без расширения
+ */
+function getBodyName($filename)
+{
+    return pathinfo($filename, PATHINFO_FILENAME);
+}
+
+/**
  * Склоняет числа
  *
  * @param  integer $num  число
@@ -2118,7 +2129,7 @@ function paginate(int $limit, int $total)
  */
 function imageBase64($path, array $params = [])
 {
-    $type = pathinfo($path, PATHINFO_EXTENSION);
+    $type = getExtension($path);
     $data = file_get_contents($path);
 
     if (! isset($params['class'])) {
