@@ -5,9 +5,6 @@
 @stop
 
 @section('content')
-
-    <h1>{{ trans('walls.title') }} {{ $user->login }}</h1>
-
     <nav>
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
