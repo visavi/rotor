@@ -10,7 +10,6 @@ return [
 
     'confirm_delete' => 'Do you really want to delete this news?',
     'all_comments'   => 'All comments',
-    'empty_comments' => 'No comments yet!',
     'message'        => 'Message',
     'message_text'   => 'Message text',
     'write'          => 'Write',

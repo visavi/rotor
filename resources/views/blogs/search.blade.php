@@ -1,7 +1,7 @@
 @extends('layout')
 
 @section('title')
-    Поиск в блогах
+    {{ trans('blogs.title_search') }}
 @stop
 
 @section('breadcrumb')
@@ -9,7 +9,7 @@
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
             <li class="breadcrumb-item"><a href="/blogs">{{ trans('blogs.blogs') }}</a></li>
-            <li class="breadcrumb-item active">Поиск в блогах</li>
+            <li class="breadcrumb-item active">{{ trans('blogs.title_search') }}</li>
         </ol>
     </nav>
 @stop
@@ -18,44 +18,44 @@
     <div class="form">
         <form action="/blogs/search">
             <div class="form-group{{ hasError('find') }}">
-                <label for="inputFind">Запрос</label>
-                <input name="find" class="form-control" id="inputFind" maxlength="50" placeholder="Введите запрос" value="{{ getInput('find') }}" required>
+                <label for="inputFind">{{ trans('common.request') }}:</label>
+                <input name="find" class="form-control" id="inputFind" maxlength="50" placeholder="{{ trans('common.request') }}" value="{{ getInput('find') }}" required>
                 {!! textError('find') !!}
             </div>
 
-            Искать:
+            {{ trans('common.look_in') }}:
             <?php $inputWhere = (int) getInput('where'); ?>
             <div class="form-group{{ hasError('where') }}">
                 <div class="custom-control custom-radio">
                     <input class="custom-control-input" type="radio" id="inputWhere0" name="where" value="0"{{ $inputWhere === 0 ? ' checked' : '' }}>
-                    <label class="custom-control-label" for="inputWhere0">В заголовках</label>
+                    <label class="custom-control-label" for="inputWhere0">{{ trans('blogs.in_titles') }}</label>
                 </div>
                 <div class="custom-control custom-radio">
                     <input class="custom-control-input" type="radio" id="inputWhere1" name="where" value="1"{{ $inputWhere === 1 ? ' checked' : '' }}>
-                    <label class="custom-control-label" for="inputWhere1">В тексте</label>
+                    <label class="custom-control-label" for="inputWhere1">{{ trans('blogs.in_text') }}</label>
                 </div>
                 {!! textError('where') !!}
             </div>
 
-            Тип запроса:
+            {{ trans('common.request_type') }}:
             <?php $inputType = (int) getInput('type'); ?>
             <div class="form-group{{ hasError('type') }}">
                 <div class="custom-control custom-radio">
                     <input class="custom-control-input" type="radio" id="inputType0" name="type" value="0"{{ $inputType === 0 ? ' checked' : '' }}>
-                    <label class="custom-control-label" for="inputType0">И</label>
+                    <label class="custom-control-label" for="inputType0">{{ trans('common.and') }}</label>
                 </div>
                 <div class="custom-control custom-radio">
                     <input class="custom-control-input" type="radio" id="inputType1" name="type" value="1"{{ $inputType === 1 ? ' checked' : '' }}>
-                    <label class="custom-control-label" for="inputType1">Или</label>
+                    <label class="custom-control-label" for="inputType1">{{ trans('common.or') }}</label>
                 </div>
                 <div class="custom-control custom-radio">
                     <input class="custom-control-input" type="radio" id="inputType2" name="type" value="2"{{ $inputType === 2 ? ' checked' : '' }}>
-                    <label class="custom-control-label" for="inputType2">Полный</label>
+                    <label class="custom-control-label" for="inputType2">{{ trans('common.full') }}</label>
                 </div>
                 {!! textError('type') !!}
             </div>
 
-            <button class="btn btn-primary">Поиск</button>
+            <button class="btn btn-primary">{{ trans('common.search') }}</button>
         </form>
     </div>
 @stop

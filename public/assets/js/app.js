@@ -11,22 +11,25 @@ $(function() {
     };
 
     $('.markItUp').markItUp(mySettings).on('input', function () {
+        var hint      = $(this).data('hint');
         var maxlength = $(this).attr('maxlength');
-        var text = $(this).val()
+        var text      = $(this).val()
             .replace(/(\r\n|\n|\r)/g, "\r\n")
             .trim();
 
         var currentLength = escapeHtml(text).length;
         var counter = $('.js-textarea-counter');
 
-        if (currentLength === 0) {
-            counter.empty();
-        } else if (currentLength > maxlength) {
+        if (currentLength > maxlength) {
             counter.addClass('text-danger');
-            counter.text('Вы превысили максимальное количество символов');
         } else {
             counter.removeClass('text-danger');
-            counter.text('Осталось символов: ' + (maxlength - currentLength));
+        }
+
+        counter.text(hint + ': ' + (maxlength - currentLength));
+
+        if (currentLength === 0) {
+            counter.empty();
         }
     });
 
@@ -45,14 +48,14 @@ $(function() {
     });
 
     // Спойлер
-    $('.spoiler-title').click(function() {
+    $('.spoiler-title').on('click', function() {
         var spoiler = $(this).parent();
         spoiler.toggleClass('spoiler-open');
         spoiler.find('.spoiler-text:first').slideToggle();
     });
 
     /* Показ новостей на главной */
-    $('.news-title').click(function() {
+    $('.news-title').on('click', function() {
         $(this).toggleClass('fa-caret-up');
         $(this).nextAll(".news-text:first").slideToggle();
     });

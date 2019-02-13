@@ -26,7 +26,7 @@
                 <b><a href="/articles/{{ $data->id }}">{{ $data->title }}</a></b> ({!! formatNum($data->rating) !!})
             </div>
 
-            <div>{{ trans('blogs.author') }}: {!! $data->user->getProfile() !!} ({{ dateFixed($data->created_at) }})<br>
+            <div>{{ trans('common.author') }}: {!! $data->user->getProfile() !!} ({{ dateFixed($data->created_at) }})<br>
                 <i class="fa fa-comment"></i> <a href="/articles/comments/{{ $data->id }}">{{ trans('common.comments') }}</a> ({{ $data->count_comments }})
                 <a href="/articles/end/{{ $data->id }}">&raquo;</a>
             </div>

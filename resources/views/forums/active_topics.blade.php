@@ -28,7 +28,7 @@
         <div>
             {!! $data->pagination() !!}
             {{ trans('forums.forum') }}: <a href="/forums/{{ $data->forum->id }}">{{ $data->forum->title }}</a><br>
-            {{ trans('forums.author') }}: {{ $data->user->getName() }} / {{ trans('forums.latest') }}.: {{ $data->lastPost->user->getName() }} ({{ dateFixed($data->lastPost->created_at) }})
+            {{ trans('common.author') }}: {{ $data->user->getName() }} / {{ trans('forums.latest') }}.: {{ $data->lastPost->user->getName() }} ({{ dateFixed($data->lastPost->created_at) }})
         </div>
     @endforeach
 

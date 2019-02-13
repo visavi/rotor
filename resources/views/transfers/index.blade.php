@@ -41,7 +41,7 @@
 
                 <div class="form-group{{ hasError('msg') }}">
                     <label for="msg">{{ trans('transfers.comment') }}:</label>
-                    <textarea class="form-control markItUp" maxlength="{{ setting('comment_length') }}" id="msg" rows="5" name="msg" placeholder="{{ trans('transfers.comment') }}">{{ getInput('msg') }}</textarea>
+                    <textarea class="form-control markItUp" maxlength="{{ setting('comment_length') }}" data-hint="{{ trans('common.characters_left') }}" id="msg" rows="5" name="msg" placeholder="{{ trans('transfers.comment') }}">{{ getInput('msg') }}</textarea>
                     <span class="js-textarea-counter"></span>
                     {!! textError('msg') !!}
                 </div>

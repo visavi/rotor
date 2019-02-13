@@ -1,7 +1,7 @@
 @extends('layout')
 
 @section('title')
-    Публикация новой статьи
+    {{ trans('blogs.title_create') }}
 @stop
 
 @section('breadcrumb')
@@ -9,7 +9,7 @@
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
             <li class="breadcrumb-item"><a href="/blogs">{{ trans('blogs.blogs') }}</a></li>
-            <li class="breadcrumb-item active">Публикация новой статьи</li>
+            <li class="breadcrumb-item active">{{ trans('blogs.title_create') }}</li>
         </ol>
     </nav>
 @stop
@@ -20,7 +20,7 @@
             <input type="hidden" name="token" value="{{ $_SESSION['token'] }}">
 
             <div class="form-group{{ hasError('cid') }}">
-                <label for="inputCategory">Раздел</label>
+                <label for="inputCategory">{{ trans('blogs.blog') }}</label>
 
                 <?php $inputCategory = getInput('cid', $cid); ?>
                 <select class="form-control" id="inputCategory" name="cid">
@@ -40,33 +40,34 @@
             </div>
 
             <div class="form-group{{ hasError('title') }}">
-                <label for="inputTitle">Название:</label>
+                <label for="inputTitle">{{ trans('blogs.name') }}:</label>
                 <input type="text" class="form-control" id="inputTitle" name="title" maxlength="50" value="{{ getInput('title') }}" required>
                 {!! textError('title') !!}
             </div>
 
             <div class="form-group{{ hasError('text') }}">
-                <label for="text">Текст:</label>
-                <textarea class="form-control markItUp" id="text" rows="5" name="text" required>{{ getInput('text') }}</textarea>
+                <label for="text">{{ trans('blogs.article') }}:</label>
+                <textarea class="form-control markItUp" maxlength="{{ setting('maxblogpost') }}" data-hint="{{ trans('common.characters_left') }}" id="text" rows="5" name="text" required>{{ getInput('text') }}</textarea>
+                <span class="js-textarea-counter"></span>
                 {!! textError('text') !!}
             </div>
 
             <div class="form-group{{ hasError('tags') }}">
-                <label for="inputTags">Метки:</label>
+                <label for="inputTags">{{ trans('blogs.tags') }}:</label>
                 <input type="text" class="form-control" id="inputTags" name="tags" maxlength="100" value="{{ getInput('tags') }}" required>
                 {!! textError('tags') !!}
             </div>
 
             @include('app._upload', ['files' => $files, 'type' => App\Models\Blog::class, 'paste' => true])
 
-            <button class="btn btn-primary">Опубликовать</button>
+            <button class="btn btn-primary">{{ trans('blogs.add') }}</button>
         </form>
     </div><br>
 
-    Рекомендация! Для разбивки статьи по страницам используйте тег [nextpage]<br>
-    Метки статьи должны быть от 2 до 20 символов с общей длиной не более 50 символов<br><br>
+    {{ trans('blogs.text_create1') }}<br>
+    {{ trans('blogs.text_create2') }}<br><br>
 
-    <a href="/rules">Правила</a> /
-    <a href="/stickers">Стикеры</a> /
-    <a href="/tags">Теги</a><br><br>
+    <a href="/rules">{{ trans('common.rules') }}</a> /
+    <a href="/stickers">{{ trans('common.stickers') }}</a> /
+    <a href="/tags">{{ trans('common.tags') }}</a><br><br>
 @stop

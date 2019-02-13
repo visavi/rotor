@@ -20,8 +20,8 @@
             <input type="hidden" name="fid" value="{{ $fid }}">
 
             <div class="form-group{{ hasError('find') }}">
-                <label for="inputFind">{{ trans('forums.request') }}</label>
-                <input name="find" class="form-control" id="inputFind" maxlength="50" placeholder="{{ trans('forums.request') }}" value="{{ getInput('find') }}" required>
+                <label for="inputFind">{{ trans('common.request') }}:</label>
+                <input name="find" class="form-control" id="inputFind" maxlength="50" placeholder="{{ trans('common.request') }}" value="{{ getInput('find') }}" required>
                 {!! textError('find') !!}
             </div>
 
@@ -30,7 +30,7 @@
                 <?php $inputSection = (int) getInput('section', $fid); ?>
 
                 <select class="form-control" id="inputSection" name="section">
-                    <option value="0">{{ trans('forums.no_matter') }}</option>
+                    <option value="0">{{ trans('common.not_matter') }}</option>
 
                     @foreach ($forums as $data)
                         <?php $selected = ($inputSection === $data->id) ? ' selected' : ''; ?>
@@ -51,20 +51,20 @@
             </div>
 
             <div class="form-group{{ hasError('period') }}">
-                <label for="inputPeriod">{{ trans('forums.period') }}</label>
+                <label for="inputPeriod">{{ trans('common.period') }}</label>
 
                 <?php $inputPeriod = (int) getInput('period'); ?>
                 <select class="form-control" id="inputPeriod" name="period">
-                    <option value="0"{{ $inputPeriod === 0 ? ' selected' : '' }}>{{ trans('forums.all_time') }}</option>
-                    <option value="1"{{ $inputPeriod === 7 ? ' selected' : '' }}>{{ trans('forums.last_day') }}</option>
-                    <option value="7"{{ $inputPeriod === 7 ? ' selected' : '' }}>{{ trans('forums.last_week') }}</option>
-                    <option value="30"{{ $inputPeriod ===30 ? ' selected' : '' }}>{{ trans('forums.last_month') }}</option>
-                    <option value="365"{{ $inputPeriod === 365 ? ' selected' : '' }}>{{ trans('forums.last_year') }}</option>
+                    <option value="0"{{ $inputPeriod === 0 ? ' selected' : '' }}>{{ trans('common.all_time') }}</option>
+                    <option value="1"{{ $inputPeriod === 7 ? ' selected' : '' }}>{{ trans('common.last_day') }}</option>
+                    <option value="7"{{ $inputPeriod === 7 ? ' selected' : '' }}>{{ trans('common.last_week') }}</option>
+                    <option value="30"{{ $inputPeriod ===30 ? ' selected' : '' }}>{{ trans('common.last_month') }}</option>
+                    <option value="365"{{ $inputPeriod === 365 ? ' selected' : '' }}>{{ trans('common.last_year') }}</option>
                 </select>
                 {!! textError('period') !!}
             </div>
 
-            {{ trans('forums.look_in') }}:<br>
+            {{ trans('common.look_in') }}:<br>
             <?php $inputWhere = (int) getInput('where'); ?>
             <div class="custom-control custom-radio">
                 <input class="custom-control-input" type="radio" id="inputWhere0" name="where" value="0"{{ $inputWhere === 0 ? ' checked' : '' }}>
@@ -75,20 +75,20 @@
                 <label class="custom-control-label" for="inputWhere1">{{ trans('forums.in_posts') }}</label>
             </div>
 
-            {{ trans('forums.request_type') }}:<br>
+            {{ trans('common.request_type') }}:<br>
             <?php $inputType = (int) getInput('type'); ?>
             <div class="form-group{{ hasError('type') }}">
                 <div class="custom-control custom-radio">
                     <input class="custom-control-input" type="radio" id="inputType0" name="type" value="0"{{ $inputType === 0 ? ' checked' : '' }}>
-                    <label class="custom-control-label" for="inputType0">{{ trans('forums.and') }}</label>
+                    <label class="custom-control-label" for="inputType0">{{ trans('common.and') }}</label>
                 </div>
                 <div class="custom-control custom-radio">
                     <input class="custom-control-input" type="radio" id="inputType1" name="type" value="1"{{ $inputType === 1 ? ' checked' : '' }}>
-                    <label class="custom-control-label" for="inputType1">{{ trans('forums.or') }}</label>
+                    <label class="custom-control-label" for="inputType1">{{ trans('common.or') }}</label>
                 </div>
                 <div class="custom-control custom-radio">
                     <input class="custom-control-input" type="radio" id="inputType2" name="type" value="2"{{ $inputType === 2 ? ' checked' : '' }}>
-                    <label class="custom-control-label" for="inputType2">{{ trans('forums.full') }}</label>
+                    <label class="custom-control-label" for="inputType2">{{ trans('common.full') }}</label>
                 </div>
                 {!! textError('type') !!}
             </div>

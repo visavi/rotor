@@ -33,6 +33,6 @@
 
         {!! pagination($page) !!}
     @else
-        {!! showError(trans('news.empty_comments')) !!}
+        {!! showError(trans('common.empty_comments')) !!}
     @endif
 @stop

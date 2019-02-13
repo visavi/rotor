@@ -1,7 +1,7 @@
 @extends('layout')
 
 @section('title')
-    Редактирование комментария
+    {{ trans('blogs.title_edit_comment') }}
 @stop
 
 @section('breadcrumb')
@@ -16,8 +16,8 @@
 
             <li class="breadcrumb-item"><a href="/blogs/{{ $blog->category->id }}">{{ $blog->category->name }}</a></li>
             <li class="breadcrumb-item"><a href="/articles/{{ $blog->id }}">{{ $blog->title }}</a></li>
-            <li class="breadcrumb-item"><a href="/articles/comments/{{ $blog->id }}">Комментарии</a></li>
-            <li class="breadcrumb-item active">Редактирование</li>
+            <li class="breadcrumb-item"><a href="/articles/comments/{{ $blog->id }}">{{ trans('common.comments') }}</a></li>
+            <li class="breadcrumb-item active">{{ trans('blogs.title_edit_comment') }}</li>
         </ol>
     </nav>
 @stop
@@ -30,13 +30,13 @@
             <input type="hidden" name="token" value="{{ $_SESSION['token'] }}">
 
             <div class="form-group{{ hasError('msg') }}">
-                <label for="msg">Сообщение:</label>
-                <textarea class="form-control markItUp" maxlength="{{ setting('comment_length') }}" id="msg" rows="5" name="msg" required>{{ getInput('msg', $comment->text) }}</textarea>
+                <label for="msg">{{ trans('common.message') }}:</label>
+                <textarea class="form-control markItUp" maxlength="{{ setting('comment_length') }}" data-hint="{{ trans('common.characters_left') }}" id="msg" rows="5" name="msg" required>{{ getInput('msg', $comment->text) }}</textarea>
                 <span class="js-textarea-counter"></span>
                 {!! textError('msg') !!}
             </div>
 
-            <button class="btn btn-primary">Редактировать</button>
+            <button class="btn btn-primary">{{ trans('common.edit') }}</button>
         </form>
     </div><br>
 @stop

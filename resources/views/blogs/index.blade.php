@@ -1,17 +1,17 @@
 @extends('layout')
 
 @section('title')
-    {{ trans('blogs.blogs') }} - Список разделов
+    {{ trans('blogs.blogs') }} - {{ trans('blogs.blogs_list') }}
 @stop
 
 @section('header')
     @if (getUser())
         <div class="float-right">
-            <a class="btn btn-success" href="/blogs/create">Добавить</a>
+            <a class="btn btn-success" href="/blogs/create">{{ trans('blogs.add') }}</a>
         </div><br>
     @endif
 
-    <h1>Блоги</h1>
+    <h1>{{ trans('blogs.blogs') }}</h1>
 @stop
 
 @section('breadcrumb')
@@ -25,13 +25,12 @@
 
 @section('content')
     @if (getUser())
-        Мои: <a href="/blogs/active/articles">статьи</a>, <a href="/blogs/active/comments">комментарии</a> /
+        {{ trans('common.my') }}: <a href="/blogs/active/articles">{{ trans('blogs.articles') }}</a>, <a href="/blogs/active/comments">{{ trans('common.comments') }}</a> /
     @endif
 
-    Новые: <a href="/articles">статьи</a>, <a href="/articles/comments">комментарии</a><hr>
+    {{ trans('common.new') }}: <a href="/articles">{{ trans('blogs.articles') }}</a>, <a href="/articles/comments">{{ trans('common.comments') }}</a><hr>
 
     @foreach ($categories as $key => $data)
-
         <div class="b">
             <i class="fa fa-folder-open"></i> <b><a href="/blogs/{{ $data->id }}">{{ $data->name }}</a></b>
 
@@ -57,9 +56,9 @@
     @endforeach
 
     <br>
-    <a href="/blogs/top">Топ статей</a> /
-    <a href="/blogs/tags">Облако тегов</a> /
-    <a href="/blogs/search">Поиск</a> /
-    <a href="/blogs/authors">Авторы</a> /
-    <a href="/blogs/rss">RSS</a><br>
+    <a href="/blogs/top">{{ trans('blogs.top_articles') }}</a> /
+    <a href="/blogs/tags">{{ trans('blogs.tag_cloud') }}</a> /
+    <a href="/blogs/search">{{ trans('common.search') }}</a> /
+    <a href="/blogs/authors">{{ trans('blogs.authors') }}</a> /
+    <a href="/blogs/rss">{{ trans('common.rss') }}</a>
 @stop

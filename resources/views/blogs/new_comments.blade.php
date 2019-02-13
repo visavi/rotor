@@ -1,11 +1,11 @@
 @extends('layout')
 
 @section('title')
-    {{ trans('blogs.blogs') }} - Новые комментарии ({{ trans('common.page_num', ['page' => $page->current]) }})
+    {{ trans('blogs.blogs') }} - {{ trans('blogs.new_comments') }} ({{ trans('common.page_num', ['page' => $page->current]) }})
 @stop
 
 @section('header')
-    <h1>Новые комментарии</h1>
+    <h1>{{ trans('blogs.new_comments') }}</h1>
 @stop
 
 @section('breadcrumb')
@@ -13,7 +13,7 @@
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
             <li class="breadcrumb-item"><a href="/blogs">{{ trans('blogs.blogs') }}</a></li>
-            <li class="breadcrumb-item active">Новые комментарии</li>
+            <li class="breadcrumb-item active">{{ trans('blogs.new_comments') }}</li>
         </ol>
     </nav>
 @stop
@@ -35,7 +35,7 @@
                 <div>
                     {!! bbCode($data->text) !!}<br>
 
-                    Написал: {!! $data->user->getProfile() !!} <small>({{ dateFixed($data->created_at) }})</small><br>
+                    {{ trans('blogs.posted_by') }}: {!! $data->user->getProfile() !!} <small>({{ dateFixed($data->created_at) }})</small><br>
                     @if (isAdmin())
                         <span class="data">({{ $data->brow }}, {{ $data->ip }})</span>
                     @endif
@@ -45,6 +45,6 @@
 
         {!! pagination($page) !!}
     @else
-        {!! showError('Комментарии не найдены!') !!}
+        {!! showError(trans('common.empty_comments')) !!}
     @endif
 @stop

@@ -46,6 +46,6 @@
 
         {!! pagination($page) !!}
     @else
-        {!! showError(trans('blogs.empty_comments')) !!}
+        {!! showError(trans('common.empty_comments')) !!}
     @endif
 @stop

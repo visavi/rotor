@@ -29,7 +29,7 @@
 
                 <div>
                     {!! $topic->topic->pagination() !!}
-                    {{ trans('forums.author') }}: {{ $topic->topic->user->getName() }} /
+                    {{ trans('common.author') }}: {{ $topic->topic->user->getName() }} /
                     {{ trans('forums.latest') }}: {{ $topic->topic->lastPost->user->getName() }}
                     ({{ dateFixed($topic->topic->lastPost->created_at) }})
                 </div>

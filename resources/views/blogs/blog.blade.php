@@ -42,9 +42,9 @@
             </div>
             <div>
                 {!! stripString(bbCode($data->text), 50) !!}<br>
-                {{ trans('blogs.author') }}: {!! $data->user->getProfile() !!} ({{ dateFixed($data->created_at) }})<br>
-                {{ trans('blogs.viewing') }}: {{ $data->visits }}<br>
-                <a href="/articles/comments/{{ $data->id }}">{{ trans('blogs.comments') }}</a> ({{ $data->count_comments }})
+                {{ trans('common.author') }}: {!! $data->user->getProfile() !!} ({{ dateFixed($data->created_at) }})<br>
+                {{ trans('common.views') }}: {{ $data->visits }}<br>
+                <a href="/articles/comments/{{ $data->id }}">{{ trans('common.comments') }}</a> ({{ $data->count_comments }})
                 <a href="/articles/end/{{ $data->id }}">&raquo;</a>
             </div>
         @endforeach

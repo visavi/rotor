@@ -1,7 +1,7 @@
 @extends('layout')
 
 @section('title')
-    Поиск по тегам
+    {{ trans('blogs.title_tags') }}
 @stop
 
 @section('breadcrumb')
@@ -9,15 +9,14 @@
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
             <li class="breadcrumb-item"><a href="/blogs">{{ trans('blogs.blogs') }}</a></li>
-            <li class="breadcrumb-item"><a href="/blogs/tags">Облако тегов</a></li>
-            <li class="breadcrumb-item active">Поиск по тегам</li>
+            <li class="breadcrumb-item"><a href="/blogs/tags">{{ trans('blogs.tag_cloud') }}</a></li>
+            <li class="breadcrumb-item active">{{ trans('blogs.title_tags') }}</li>
         </ol>
     </nav>
 @stop
 
 @section('content')
-    <h3>Поиск запроса &quot;{{ $tag }}&quot; в метках</h3>
-    Найдено совпадений: <b>{{ $page->total }}</b><br>
+    <p>{{ trans('blogs.found_in_tags') }}: {{ $page->total }}</p>
 
     @foreach($blogs as $data)
 
@@ -27,10 +26,10 @@
         </div>
 
         <div>
-            Категория: <a href="/blogs/{{ $data->category_id }}">{{ $data->name }}</a><br>
-            Просмотров: {{ $data->visits }}<br>
-            Метки: {{ $data->tags }}<br>
-            Автор: {!! $data->user->getProfile() !!}  ({{ dateFixed($data->created_at) }})
+            {{ trans('blogs.blog') }}: <a href="/blogs/{{ $data->category_id }}">{{ $data->name }}</a><br>
+            {{ trans('common.views') }}: {{ $data->visits }}<br>
+            {{ trans('blogs.tags') }}: {{ $data->tags }}<br>
+            {{ trans('common.author') }}: {!! $data->user->getProfile() !!}  ({{ dateFixed($data->created_at) }})
         </div>
     @endforeach
 

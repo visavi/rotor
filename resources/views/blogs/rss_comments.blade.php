@@ -16,7 +16,7 @@
             <description>{{ $blog->title }}</description>
             <author>{{ $data->user->login }}</author>
             <pubDate>{{ date('r', $data->created_at) }}</pubDate>
-            <category>Комментарии</category>
+            <category>{{ trans('common.comments') }}</category>
             <guid>{{ siteUrl() }}/articles/comments/{{ $blog->id }}?pid={{ $data->id }}</guid>
         </item>
     @endforeach

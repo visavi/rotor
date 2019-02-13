@@ -1,11 +1,11 @@
 @extends('layout')
 
 @section('title')
-    Топ статей ({{ trans('common.page_num', ['page' => $page->current]) }})
+    {{ trans('blogs.top_articles') }} ({{ trans('common.page_num', ['page' => $page->current]) }})
 @stop
 
 @section('header')
-    <h1>Топ статей</h1>
+    <h1>{{ trans('blogs.top_articles') }}</h1>
 @stop
 
 @section('breadcrumb')
@@ -13,22 +13,22 @@
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
             <li class="breadcrumb-item"><a href="/blogs">{{ trans('blogs.blogs') }}</a></li>
-            <li class="breadcrumb-item active">Топ статей</li>
+            <li class="breadcrumb-item active">{{ trans('blogs.top_articles') }}</li>
         </ol>
     </nav>
 @stop
 
 @section('content')
-    Сортировать:
+    {{ trans('common.sort') }}:
 
     <?php $active = ($order === 'visits') ? 'success' : 'light'; ?>
-    <a href="/blogs/top?sort=visits" class="badge badge-{{ $active }}">Просмотры</a>
+    <a href="/blogs/top?sort=visits" class="badge badge-{{ $active }}">{{ trans('common.views') }}</a>
 
     <?php $active = ($order === 'rating') ? 'success' : 'light'; ?>
-    <a href="/blogs/top?sort=rated" class="badge badge-{{ $active }}">Оценки</a>
+    <a href="/blogs/top?sort=rated" class="badge badge-{{ $active }}">{{ trans('common.ratings') }}</a>
 
     <?php $active = ($order === 'count_comments') ? 'success' : 'light'; ?>
-    <a href="/blogs/top?sort=comments" class="badge badge-{{ $active }}">Комментарии</a>
+    <a href="/blogs/top?sort=comments" class="badge badge-{{ $active }}">{{ trans('common.comments') }}</a>
     <hr>
 
     @if ($blogs->isNotEmpty())
@@ -40,16 +40,16 @@
             </div>
 
             <div>
-                Автор: {!! $data->user->getProfile() !!}<br>
-                Категория: <a href="/blogs/{{ $data->category_id }}">{{ $data->name }}</a><br>
-                Просмотров: {{ $data->visits }}<br>
-                <a href="/articles/comments/{{ $data->id }}">Комментарии</a> ({{ $data->count_comments }})
+                {{ trans('blogs.blog') }}: <a href="/blogs/{{ $data->category_id }}">{{ $data->name }}</a><br>
+                {{ trans('common.author') }}: {!! $data->user->getProfile() !!}<br>
+                {{ trans('common.views') }}: {{ $data->visits }}<br>
+                <a href="/articles/comments/{{ $data->id }}">{{ trans('common.comments') }}</a> ({{ $data->count_comments }})
                 <a href="/articles/end/{{ $data->id }}">&raquo;</a>
             </div>
         @endforeach
 
         {!! pagination($page) !!}
     @else
-        {!! showError('Опубликованных статей еще нет!') !!}
+        {!! showError(trans('blogs.empty_articles')) !!}
     @endif
 @stop
