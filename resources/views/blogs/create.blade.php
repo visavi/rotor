@@ -47,7 +47,7 @@
 
             <div class="form-group{{ hasError('text') }}">
                 <label for="text">{{ trans('blogs.article') }}:</label>
-                <textarea class="form-control markItUp" maxlength="{{ setting('maxblogpost') }}" data-hint="{{ trans('common.characters_left') }}" id="text" rows="5" name="text" required>{{ getInput('text') }}</textarea>
+                <textarea class="form-control markItUp" maxlength="{{ setting('maxblogpost') }}" data-hint="{{ trans('main.characters_left') }}" id="text" rows="5" name="text" required>{{ getInput('text') }}</textarea>
                 <span class="js-textarea-counter"></span>
                 {!! textError('text') !!}
             </div>
@@ -67,7 +67,7 @@
     {{ trans('blogs.text_create1') }}<br>
     {{ trans('blogs.text_create2') }}<br><br>
 
-    <a href="/rules">{{ trans('common.rules') }}</a> /
-    <a href="/stickers">{{ trans('common.stickers') }}</a> /
-    <a href="/tags">{{ trans('common.tags') }}</a><br><br>
+    <a href="/rules">{{ trans('main.rules') }}</a> /
+    <a href="/stickers">{{ trans('main.stickers') }}</a> /
+    <a href="/tags">{{ trans('main.tags') }}</a><br><br>
 @stop

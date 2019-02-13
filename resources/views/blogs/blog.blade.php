@@ -1,7 +1,7 @@
 @extends('layout')
 
 @section('title')
-    {{ $category->name }} ({{ trans('common.page_num', ['page' => $page->current]) }})
+    {{ $category->name }} ({{ trans('main.page_num', ['page' => $page->current]) }})
 @stop
 
 @section('header')
@@ -27,7 +27,7 @@
             <li class="breadcrumb-item active">{{ $category->name }}</li>
 
             @if (isAdmin())
-                <li class="breadcrumb-item"><a href="/admin/blogs/{{ $category->id }}?page={{ $page->current }}">{{ trans('common.management') }}</a></li>
+                <li class="breadcrumb-item"><a href="/admin/blogs/{{ $category->id }}?page={{ $page->current }}">{{ trans('main.management') }}</a></li>
             @endif
         </ol>
     </nav>
@@ -42,9 +42,9 @@
             </div>
             <div>
                 {!! stripString(bbCode($data->text), 50) !!}<br>
-                {{ trans('common.author') }}: {!! $data->user->getProfile() !!} ({{ dateFixed($data->created_at) }})<br>
-                {{ trans('common.views') }}: {{ $data->visits }}<br>
-                <a href="/articles/comments/{{ $data->id }}">{{ trans('common.comments') }}</a> ({{ $data->count_comments }})
+                {{ trans('main.author') }}: {!! $data->user->getProfile() !!} ({{ dateFixed($data->created_at) }})<br>
+                {{ trans('main.views') }}: {{ $data->visits }}<br>
+                <a href="/articles/comments/{{ $data->id }}">{{ trans('main.comments') }}</a> ({{ $data->count_comments }})
                 <a href="/articles/end/{{ $data->id }}">&raquo;</a>
             </div>
         @endforeach
@@ -56,6 +56,6 @@
 
     <a href="/blogs/top">{{ trans('blogs.top_articles') }}</a> /
     <a href="/blogs/tags">{{ trans('blogs.tag_cloud') }}</a> /
-    <a href="/blogs/search">{{ trans('common.search') }}</a> /
+    <a href="/blogs/search">{{ trans('main.search') }}</a> /
     <a href="/blogs/authors">{{ trans('blogs.authors') }}</a>
 @stop

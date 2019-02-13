@@ -8,7 +8,7 @@
     <nav>
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
-            <li class="breadcrumb-item"><a href="/admin">{{ trans('common.panel') }}</a></li>
+            <li class="breadcrumb-item"><a href="/admin">{{ trans('main.panel') }}</a></li>
             <li class="breadcrumb-item"><a href="/admin/news">Новости</a></li>
             <li class="breadcrumb-item active">Создание новости</li>
         </ol>
@@ -28,7 +28,7 @@
 
             <div class="form-group{{ hasError('text') }}">
                 <label for="text">Текст:</label>
-                <textarea class="form-control markItUp" maxlength="10000" data-hint="{{ trans('common.characters_left') }}" id="text" rows="10" name="text" required>{{ getInput('text') }}</textarea>
+                <textarea class="form-control markItUp" maxlength="10000" data-hint="{{ trans('main.characters_left') }}" id="text" rows="10" name="text" required>{{ getInput('text') }}</textarea>
                 <span class="js-textarea-counter"></span>
                 {!! textError('text') !!}
             </div>

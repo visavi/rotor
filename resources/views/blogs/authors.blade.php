@@ -18,7 +18,7 @@
     @if ($blogs->isNotEmpty())
         @foreach ($blogs as $data)
             <i class="fa fa-pencil-alt"></i>
-            <b><a href="/blogs/active/articles?user={{ $data->login }}">{{ $data->login }}</a></b> ({{ $data->cnt }} {{ trans('blogs.all_articles') }} / {{ $data->count_comments }} {{ trans('common.comments') }})<br>
+            <b><a href="/blogs/active/articles?user={{ $data->login }}">{{ $data->login }}</a></b> ({{ $data->cnt }} {{ trans('blogs.all_articles') }} / {{ $data->count_comments }} {{ trans('main.comments') }})<br>
         @endforeach
 
         {!! pagination($page) !!}

@@ -23,14 +23,14 @@
                 <div class="b">
                     <div class="float-right">
                         @if (getUser() && getUser('id') !== $data->author_id)
-                            <a href="#" onclick="return postReply(this)" title="{{ trans('common.reply') }}"><i class="fa fa-reply text-muted"></i></a>
-                            <a href="#" onclick="return postQuote(this)" title="{{ trans('common.quote') }}"><i class="fa fa-quote-right text-muted"></i></a>
+                            <a href="#" onclick="return postReply(this)" title="{{ trans('main.reply') }}"><i class="fa fa-reply text-muted"></i></a>
+                            <a href="#" onclick="return postQuote(this)" title="{{ trans('main.quote') }}"><i class="fa fa-quote-right text-muted"></i></a>
 
-                            <a href="#" onclick="return sendComplaint(this)" data-type="{{ App\Models\Wall::class }}" data-id="{{ $data->id }}" data-token="{{ $_SESSION['token'] }}" data-page="{{ $page->current }}" rel="nofollow" title="{{ trans('common.complain') }}"><i class="fa fa-bell text-muted"></i></a>
+                            <a href="#" onclick="return sendComplaint(this)" data-type="{{ App\Models\Wall::class }}" data-id="{{ $data->id }}" data-token="{{ $_SESSION['token'] }}" data-page="{{ $page->current }}" rel="nofollow" title="{{ trans('main.complain') }}"><i class="fa fa-bell text-muted"></i></a>
                         @endif
 
                         @if (isAdmin() || $user->id === getUser('id'))
-                            <a href="#" onclick="return deleteWall(this)" data-id="{{ $data->id }}" data-login="{{ $data->user->login }}" data-token="{{ $_SESSION['token'] }}" data-toggle="tooltip" title="{{ trans('common.delete') }}"><i class="fa fa-times text-muted"></i></a>
+                            <a href="#" onclick="return deleteWall(this)" data-id="{{ $data->id }}" data-login="{{ $data->user->login }}" data-token="{{ $_SESSION['token'] }}" data-toggle="tooltip" title="{{ trans('main.delete') }}"><i class="fa fa-times text-muted"></i></a>
                         @endif
                     </div>
 
@@ -73,6 +73,6 @@
         </div><br>
 
     @else
-        {!! showError(trans('common.not_authorized')) !!}
+        {!! showError(trans('main.not_authorized')) !!}
     @endif
 @stop

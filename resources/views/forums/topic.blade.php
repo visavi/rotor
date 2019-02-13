@@ -1,7 +1,7 @@
 @extends('layout')
 
 @section('title')
-    {{ $topic->title }} ({{ trans('common.page_num', ['page' => $page->current]) }})
+    {{ $topic->title }} ({{ trans('main.page_num', ['page' => $page->current]) }})
 @stop
 
 @section('description', trans('forums.topic_discussion') . ': ' . $topic->title)
@@ -27,12 +27,12 @@
 @stop
 
 @section('content')
-    <a href="/topics/print/{{ $topic->id }}">{{ trans('common.print') }}</a> / <a href="/topics/rss/{{ $topic->id }}">{{ trans('common.rss') }}</a>
+    <a href="/topics/print/{{ $topic->id }}">{{ trans('main.print') }}</a> / <a href="/topics/rss/{{ $topic->id }}">{{ trans('main.rss') }}</a>
 
     @if (getUser())
         @if (! $topic->closed && $topic->user->id === getUser('id') && getUser('point') >= setting('editforumpoint'))
-           / <a href="/topics/close/{{ $topic->id }}?token={{ $_SESSION['token'] }}" onclick="return confirm('{{ trans('forums.confirm_close_topic') }}')">{{ trans('common.close') }}</a>
-           / <a href="/topics/edit/{{ $topic->id }}">{{ trans('common.edit') }}</a>
+           / <a href="/topics/close/{{ $topic->id }}?token={{ $_SESSION['token'] }}" onclick="return confirm('{{ trans('forums.confirm_close_topic') }}')">{{ trans('main.close') }}</a>
+           / <a href="/topics/edit/{{ $topic->id }}">{{ trans('main.edit') }}</a>
         @endif
 
         <?php $bookmark = $topic->bookmark_posts ? trans('forums.from_bookmarks') : trans('forums.to_bookmarks'); ?>
@@ -59,21 +59,21 @@
 
     @if (isAdmin())
         @if ($topic->closed)
-            <a href="/admin/topics/action/{{ $topic->id }}?type=open&amp;page={{ $page->current }}&amp;token={{ $_SESSION['token'] }}">{{ trans('common.open') }}</a> /
+            <a href="/admin/topics/action/{{ $topic->id }}?type=open&amp;page={{ $page->current }}&amp;token={{ $_SESSION['token'] }}">{{ trans('main.open') }}</a> /
         @else
-            <a href="/admin/topics/action/{{ $topic->id }}?type=closed&amp;page={{ $page->current }}&amp;token={{ $_SESSION['token'] }}">{{ trans('common.close') }}</a> /
+            <a href="/admin/topics/action/{{ $topic->id }}?type=closed&amp;page={{ $page->current }}&amp;token={{ $_SESSION['token'] }}">{{ trans('main.close') }}</a> /
         @endif
 
         @if ($topic->locked)
-            <a href="/admin/topics/action/{{ $topic->id }}?type=unlocked&amp;page={{ $page->current }}&amp;token={{ $_SESSION['token'] }}">{{ trans('common.unlock') }}</a> /
+            <a href="/admin/topics/action/{{ $topic->id }}?type=unlocked&amp;page={{ $page->current }}&amp;token={{ $_SESSION['token'] }}">{{ trans('main.unlock') }}</a> /
         @else
-            <a href="/admin/topics/action/{{ $topic->id }}?type=locked&amp;page={{ $page->current }}&amp;token={{ $_SESSION['token'] }}">{{ trans('common.lock') }}</a> /
+            <a href="/admin/topics/action/{{ $topic->id }}?type=locked&amp;page={{ $page->current }}&amp;token={{ $_SESSION['token'] }}">{{ trans('main.lock') }}</a> /
         @endif
 
-        <a href="/admin/topics/edit/{{ $topic->id }}">{{ trans('common.change') }}</a> /
-        <a href="/admin/topics/move/{{ $topic->id }}">{{ trans('common.move') }}</a> /
-        <a href="/admin/topics/delete/{{ $topic->id }}?token={{ $_SESSION['token'] }}" onclick="return confirm('{{ trans('forums.confirm_delete_topic') }}')">{{ trans('common.delete') }}</a> /
-        <a href="/admin/topics/{{ $topic->id }}?page={{ $page->current }}">{{ trans('common.management') }}</a><br>
+        <a href="/admin/topics/edit/{{ $topic->id }}">{{ trans('main.change') }}</a> /
+        <a href="/admin/topics/move/{{ $topic->id }}">{{ trans('main.move') }}</a> /
+        <a href="/admin/topics/delete/{{ $topic->id }}?token={{ $_SESSION['token'] }}" onclick="return confirm('{{ trans('forums.confirm_delete_topic') }}')">{{ trans('main.delete') }}</a> /
+        <a href="/admin/topics/{{ $topic->id }}?page={{ $page->current }}">{{ trans('main.management') }}</a><br>
     @endif
 
     @if ($vote)
@@ -113,15 +113,15 @@
                     <div class="float-right text-right">
                         @if (getUser())
                             @if (getUser('id') !== $data->user_id)
-                                <a href="#" onclick="return postReply(this)" title="{{ trans('common.reply') }}"><i class="fa fa-reply text-muted"></i></a>
+                                <a href="#" onclick="return postReply(this)" title="{{ trans('main.reply') }}"><i class="fa fa-reply text-muted"></i></a>
 
-                                <a href="#" onclick="return postQuote(this)" title="{{ trans('common.quote') }}"><i class="fa fa-quote-right text-muted"></i></a>
+                                <a href="#" onclick="return postQuote(this)" title="{{ trans('main.quote') }}"><i class="fa fa-quote-right text-muted"></i></a>
 
-                                <a href="#" onclick="return sendComplaint(this)" data-type="{{ App\Models\Post::class }}" data-id="{{ $data->id }}" data-token="{{ $_SESSION['token'] }}" data-page="{{ $page->current }}" rel="nofollow" title="{{ trans('common.complain') }}"><i class="fa fa-bell text-muted"></i></a>
+                                <a href="#" onclick="return sendComplaint(this)" data-type="{{ App\Models\Post::class }}" data-id="{{ $data->id }}" data-token="{{ $_SESSION['token'] }}" data-page="{{ $page->current }}" rel="nofollow" title="{{ trans('main.complain') }}"><i class="fa fa-bell text-muted"></i></a>
                             @endif
 
                             @if ($topic->isModer || (getUser('id') === $data->user_id && $data->created_at + 600 > SITETIME))
-                                <a href="/posts/edit/{{ $data->id }}?page={{ $page->current }}" title="{{ trans('common.edit') }}"><i class="fa fa-pencil-alt text-muted"></i></a>
+                                <a href="/posts/edit/{{ $data->id }}?page={{ $page->current }}" title="{{ trans('main.edit') }}"><i class="fa fa-pencil-alt text-muted"></i></a>
                                 @if ($topic->isModer)
                                     <input type="checkbox" name="del[]" value="{{ $data->id }}">
                                 @endif
@@ -183,7 +183,7 @@
 
     @if ($topic->isModer)
             <span class="float-right">
-                <button class="btn btn-sm btn-danger">{{ trans('common.delete_selected') }}</button>
+                <button class="btn btn-sm btn-danger">{{ trans('main.delete_selected') }}</button>
             </span>
         </form>
     @endif
@@ -198,7 +198,7 @@
 
                     <div class="form-group{{ hasError('msg') }}">
                         <label for="msg">{{ trans('forums.message') }}:</label>
-                        <textarea class="form-control markItUp" maxlength="{{ setting('forumtextlength') }}" data-hint="{{ trans('common.characters_left') }}" id="msg" rows="5" name="msg" placeholder="{{ trans('forums.message') }}" required>{{ getInput('msg') }}</textarea>
+                        <textarea class="form-control markItUp" maxlength="{{ setting('forumtextlength') }}" data-hint="{{ trans('main.characters_left') }}" id="msg" rows="5" name="msg" placeholder="{{ trans('forums.message') }}" required>{{ getInput('msg') }}</textarea>
                         <span class="js-textarea-counter"></span>
                         {!! textError('msg') !!}
                     </div>
@@ -208,25 +208,25 @@
 
                             <label class="btn btn-sm btn-secondary" for="files">
                                 <input type="file" id="files" name="files[]" onchange="$('#upload-file-info').html((this.files.length > 1) ? this.files.length + ' файлов' : this.files[0].name);" hidden multiple>
-                                {{ trans('common.attach_files') }}&hellip;
+                                {{ trans('main.attach_files') }}&hellip;
                             </label>
                             <span class="badge badge-info" id="upload-file-info"></span>
                             {!! textError('files') !!}
                             <br>
 
                             <p class="text-muted font-italic">
-                                {{ trans('common.max_file_upload') }}: {{ setting('maxfiles') }}<br>
-                                {{ trans('common.max_file_weight') }}: {{ formatSize(setting('forumloadsize')) }}<br>
-                                {{ trans('common.valid_file_extensions') }}: {{ str_replace(',', ', ', setting('forumextload')) }}
+                                {{ trans('main.max_file_upload') }}: {{ setting('maxfiles') }}<br>
+                                {{ trans('main.max_file_weight') }}: {{ formatSize(setting('forumloadsize')) }}<br>
+                                {{ trans('main.valid_file_extensions') }}: {{ str_replace(',', ', ', setting('forumextload')) }}
                             </p>
                         </div>
 
                         <span class="float-right js-attach-button">
-                            <a href="#" onclick="return showAttachForm();">{{ trans('common.attach_files') }}</a>
+                            <a href="#" onclick="return showAttachForm();">{{ trans('main.attach_files') }}</a>
                         </span>
                     @endif
 
-                    <button class="btn btn-primary">{{ trans('common.write') }}</button>
+                    <button class="btn btn-primary">{{ trans('main.write') }}</button>
                 </form>
             </div><br>
 
@@ -234,13 +234,13 @@
             {!! showError(trans('forums.topic_closed')) !!}
         @endif
     @else
-        {!! showError(trans('common.not_authorized')) !!}
+        {!! showError(trans('main.not_authorized')) !!}
     @endif
 
-    <a href="/stickers">{{ trans('common.stickers') }}</a>  /
-    <a href="/tags">{{ trans('common.tags') }}</a>  /
-    <a href="/rules">{{ trans('common.rules') }}</a> /
+    <a href="/stickers">{{ trans('main.stickers') }}</a>  /
+    <a href="/tags">{{ trans('main.tags') }}</a>  /
+    <a href="/rules">{{ trans('main.rules') }}</a> /
     <a href="/forums/top/topics">{{ trans('forums.top_topics') }}</a> /
     <a href="/forums/top/posts">{{ trans('forums.top_topics') }}</a> /
-    <a href="/forums/search?fid={{ $topic->forum_id }}">{{ trans('common.search') }}</a><br>
+    <a href="/forums/search?fid={{ $topic->forum_id }}">{{ trans('main.search') }}</a><br>
 @stop

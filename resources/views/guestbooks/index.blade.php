@@ -1,7 +1,7 @@
 @extends('layout')
 
 @section('title')
-    {{ trans('guestbooks.title') }} ({{ trans('common.page_num', ['page' => $page->current]) }})
+    {{ trans('guestbooks.title') }} ({{ trans('main.page_num', ['page' => $page->current]) }})
 @stop
 
 @section('header')
@@ -18,12 +18,12 @@
 @stop
 
 @section('content')
-    <a href="/rules">{{ trans('common.rules') }}</a> /
-    <a href="/stickers">{{ trans('common.stickers') }}</a> /
-    <a href="/tags">{{ trans('common.tags') }}</a>
+    <a href="/rules">{{ trans('main.rules') }}</a> /
+    <a href="/stickers">{{ trans('main.stickers') }}</a> /
+    <a href="/tags">{{ trans('main.tags') }}</a>
 
     @if (isAdmin())
-        / <a href="/admin/guestbooks?page={{ $page->current }}">{{ trans('common.management') }}</a>
+        / <a href="/admin/guestbooks?page={{ $page->current }}">{{ trans('main.management') }}</a>
     @endif
     <hr>
 
@@ -35,16 +35,16 @@
 
                     @if (getUser() && getUser('id') !== $data->user_id)
                         <div class="float-right">
-                            <a href="#" onclick="return postReply(this)" data-toggle="tooltip" title="{{ trans('common.reply') }}"><i class="fa fa-reply text-muted"></i></a>
-                            <a href="#" onclick="return postQuote(this)" data-toggle="tooltip" title="{{ trans('common.quote') }}"><i class="fa fa-quote-right text-muted"></i></a>
+                            <a href="#" onclick="return postReply(this)" data-toggle="tooltip" title="{{ trans('main.reply') }}"><i class="fa fa-reply text-muted"></i></a>
+                            <a href="#" onclick="return postQuote(this)" data-toggle="tooltip" title="{{ trans('main.quote') }}"><i class="fa fa-quote-right text-muted"></i></a>
 
-                            <a href="#" onclick="return sendComplaint(this)" data-type="{{ App\Models\Guestbook::class }}" data-id="{{ $data->id }}" data-token="{{ $_SESSION['token'] }}" data-page="{{ $page->current }}" rel="nofollow" data-toggle="tooltip" title="{{ trans('common.complain') }}"><i class="fa fa-bell text-muted"></i></a>
+                            <a href="#" onclick="return sendComplaint(this)" data-type="{{ App\Models\Guestbook::class }}" data-id="{{ $data->id }}" data-token="{{ $_SESSION['token'] }}" data-page="{{ $page->current }}" rel="nofollow" data-toggle="tooltip" title="{{ trans('main.complain') }}"><i class="fa fa-bell text-muted"></i></a>
                         </div>
                     @endif
 
                     @if ($data->created_at + 600 > SITETIME && getUser() && getUser('id') === $data->user_id)
                         <div class="float-right">
-                            <a href="/guestbooks/edit/{{ $data->id }}" data-toggle="tooltip" title="{{ trans('common.edit') }}"><i class="fa fa-pencil-alt text-muted"></i></a>
+                            <a href="/guestbooks/edit/{{ $data->id }}" data-toggle="tooltip" title="{{ trans('main.edit') }}"><i class="fa fa-pencil-alt text-muted"></i></a>
                         </div>
                     @endif
 
@@ -93,12 +93,12 @@
                 <input type="hidden" name="token" value="{{ $_SESSION['token'] }}">
                 <div class="form-group{{ hasError('msg') }}">
                     <label for="msg">{{ trans('guestbooks.message') }}:</label>
-                    <textarea class="form-control markItUp" maxlength="{{ setting('guesttextlength') }}" data-hint="{{ trans('common.characters_left') }}" id="msg" rows="5" name="msg" placeholder="{{ trans('guestbooks.message_text') }}" required>{{ getInput('msg') }}</textarea>
+                    <textarea class="form-control markItUp" maxlength="{{ setting('guesttextlength') }}" data-hint="{{ trans('main.characters_left') }}" id="msg" rows="5" name="msg" placeholder="{{ trans('guestbooks.message_text') }}" required>{{ getInput('msg') }}</textarea>
                     <span class="js-textarea-counter"></span>
                     {!! textError('msg') !!}
                 </div>
 
-                <button class="btn btn-primary">{{ trans('common.write') }}</button>
+                <button class="btn btn-primary">{{ trans('main.write') }}</button>
             </form>
         </div><br>
 
@@ -116,11 +116,11 @@
 
                 {!! view('app/_captcha') !!}
 
-                <button class="btn btn-primary">{{ trans('common.write') }}</button>
+                <button class="btn btn-primary">{{ trans('main.write') }}</button>
             </form>
         </div><br>
 
     @else
-        {!! showError(trans('common.not_authorized')) !!}
+        {!! showError(trans('main.not_authorized')) !!}
     @endif
 @stop

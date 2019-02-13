@@ -8,7 +8,7 @@
     <nav>
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
-            <li class="breadcrumb-item"><a href="/admin">{{ trans('common.panel') }}</a></li>
+            <li class="breadcrumb-item"><a href="/admin">{{ trans('main.panel') }}</a></li>
             <li class="breadcrumb-item"><a href="/admin/forums">Форум</a></li>
 
             @if ($post->topic->forum->parent->id)
@@ -31,7 +31,7 @@
 
             <div class="form-group{{ hasError('msg') }}">
                 <label for="msg">Сообщение:</label>
-                <textarea class="form-control markItUp" maxlength="{{ setting('forumtextlength') }}" data-hint="{{ trans('common.characters_left') }}" id="msg" rows="5" name="msg" required>{{ getInput('msg', $post->text) }}</textarea>
+                <textarea class="form-control markItUp" maxlength="{{ setting('forumtextlength') }}" data-hint="{{ trans('main.characters_left') }}" id="msg" rows="5" name="msg" required>{{ getInput('msg', $post->text) }}</textarea>
                 <span class="js-textarea-counter"></span>
                 {!! textError('msg') !!}
             </div>

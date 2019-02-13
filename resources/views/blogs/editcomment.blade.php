@@ -16,7 +16,7 @@
 
             <li class="breadcrumb-item"><a href="/blogs/{{ $blog->category->id }}">{{ $blog->category->name }}</a></li>
             <li class="breadcrumb-item"><a href="/articles/{{ $blog->id }}">{{ $blog->title }}</a></li>
-            <li class="breadcrumb-item"><a href="/articles/comments/{{ $blog->id }}">{{ trans('common.comments') }}</a></li>
+            <li class="breadcrumb-item"><a href="/articles/comments/{{ $blog->id }}">{{ trans('main.comments') }}</a></li>
             <li class="breadcrumb-item active">{{ trans('blogs.title_edit_comment') }}</li>
         </ol>
     </nav>
@@ -30,13 +30,13 @@
             <input type="hidden" name="token" value="{{ $_SESSION['token'] }}">
 
             <div class="form-group{{ hasError('msg') }}">
-                <label for="msg">{{ trans('common.message') }}:</label>
-                <textarea class="form-control markItUp" maxlength="{{ setting('comment_length') }}" data-hint="{{ trans('common.characters_left') }}" id="msg" rows="5" name="msg" required>{{ getInput('msg', $comment->text) }}</textarea>
+                <label for="msg">{{ trans('main.message') }}:</label>
+                <textarea class="form-control markItUp" maxlength="{{ setting('comment_length') }}" data-hint="{{ trans('main.characters_left') }}" id="msg" rows="5" name="msg" required>{{ getInput('msg', $comment->text) }}</textarea>
                 <span class="js-textarea-counter"></span>
                 {!! textError('msg') !!}
             </div>
 
-            <button class="btn btn-primary">{{ trans('common.edit') }}</button>
+            <button class="btn btn-primary">{{ trans('main.edit') }}</button>
         </form>
     </div><br>
 @stop

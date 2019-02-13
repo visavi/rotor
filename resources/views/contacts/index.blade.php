@@ -8,7 +8,7 @@
     <nav>
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
-            <li class="breadcrumb-item"><a href="/menu">{{ trans('common.menu') }}</a></li>
+            <li class="breadcrumb-item"><a href="/menu">{{ trans('main.menu') }}</a></li>
             <li class="breadcrumb-item active">{{ trans('contacts.title') }}</li>
         </ol>
     </nav>
@@ -45,7 +45,7 @@
             @endforeach
 
             <div class="float-right">
-                <button class="btn btn-sm btn-danger">{{ trans('common.delete_selected') }}</button>
+                <button class="btn btn-sm btn-danger">{{ trans('main.delete_selected') }}</button>
             </div>
         </form>
 

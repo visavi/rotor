@@ -1,7 +1,7 @@
 @extends('layout')
 
 @section('title')
-    {{ trans('blogs.blogs') }} - {{ trans('blogs.new_articles') }} ({{ trans('common.page_num', ['page' => $page->current]) }})
+    {{ trans('blogs.blogs') }} - {{ trans('blogs.new_articles') }} ({{ trans('main.page_num', ['page' => $page->current]) }})
 @stop
 
 @section('header')
@@ -28,8 +28,8 @@
 
             <div>
                 {{ trans('blogs.blog') }}: <a href="/blogs/{{ $data->category_id }}">{{ $data->category->name }}</a><br>
-                {{ trans('common.views') }}: {{ $data->visits }}<br>
-                {{ trans('common.author') }}: {!! $data->user->getProfile() !!}  ({{  dateFixed($data->created_at) }})
+                {{ trans('main.views') }}: {{ $data->visits }}<br>
+                {{ trans('main.author') }}: {!! $data->user->getProfile() !!}  ({{  dateFixed($data->created_at) }})
             </div>
         @endforeach
 

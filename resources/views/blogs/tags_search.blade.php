@@ -27,9 +27,9 @@
 
         <div>
             {{ trans('blogs.blog') }}: <a href="/blogs/{{ $data->category_id }}">{{ $data->name }}</a><br>
-            {{ trans('common.views') }}: {{ $data->visits }}<br>
+            {{ trans('main.views') }}: {{ $data->visits }}<br>
             {{ trans('blogs.tags') }}: {{ $data->tags }}<br>
-            {{ trans('common.author') }}: {!! $data->user->getProfile() !!}  ({{ dateFixed($data->created_at) }})
+            {{ trans('main.author') }}: {!! $data->user->getProfile() !!}  ({{ dateFixed($data->created_at) }})
         </div>
     @endforeach
 

@@ -8,7 +8,7 @@
     <nav>
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
-            <li class="breadcrumb-item"><a href="/menu">{{ trans('common.menu') }}</a></li>
+            <li class="breadcrumb-item"><a href="/menu">{{ trans('main.menu') }}</a></li>
             <li class="breadcrumb-item active">{{ trans('transfers.title') }}</li>
         </ol>
     </nav>
@@ -41,7 +41,7 @@
 
                 <div class="form-group{{ hasError('msg') }}">
                     <label for="msg">{{ trans('transfers.comment') }}:</label>
-                    <textarea class="form-control markItUp" maxlength="{{ setting('comment_length') }}" data-hint="{{ trans('common.characters_left') }}" id="msg" rows="5" name="msg" placeholder="{{ trans('transfers.comment') }}">{{ getInput('msg') }}</textarea>
+                    <textarea class="form-control markItUp" maxlength="{{ setting('comment_length') }}" data-hint="{{ trans('main.characters_left') }}" id="msg" rows="5" name="msg" placeholder="{{ trans('transfers.comment') }}">{{ getInput('msg') }}</textarea>
                     <span class="js-textarea-counter"></span>
                     {!! textError('msg') !!}
                 </div>

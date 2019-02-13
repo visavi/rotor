@@ -15,21 +15,21 @@
 @stop
 
 @section('content')
-    {{ trans('common.period') }}:
+    {{ trans('main.period') }}:
     <?php $active = ($period === 1) ? 'success' : 'light'; ?>
-    <a href="/forums/top/posts?period=1" class="badge badge-{{ $active }}">{{ trans('common.last_day') }}</a>
+    <a href="/forums/top/posts?period=1" class="badge badge-{{ $active }}">{{ trans('main.last_day') }}</a>
 
     <?php $active = ($period === 7) ? 'success' : 'light'; ?>
-    <a href="/forums/top/posts?period=7" class="badge badge-{{ $active }}">{{ trans('common.last_week') }}</a>
+    <a href="/forums/top/posts?period=7" class="badge badge-{{ $active }}">{{ trans('main.last_week') }}</a>
 
     <?php $active = ($period === 30) ? 'success' : 'light'; ?>
-    <a href="/forums/top/posts?period=30" class="badge badge-{{ $active }}">{{ trans('common.last_month') }}</a>
+    <a href="/forums/top/posts?period=30" class="badge badge-{{ $active }}">{{ trans('main.last_month') }}</a>
 
     <?php $active = ($period === 365) ? 'success' : 'light'; ?>
-    <a href="/forums/top/posts?period=365" class="badge badge-{{ $active }}">{{ trans('common.last_year') }}</a>
+    <a href="/forums/top/posts?period=365" class="badge badge-{{ $active }}">{{ trans('main.last_year') }}</a>
 
     <?php $active = (empty($period)) ? 'success' : 'light'; ?>
-    <a href="/forums/top/posts" class="badge badge-{{ $active }}">{{ trans('common.all_time') }}</a>
+    <a href="/forums/top/posts" class="badge badge-{{ $active }}">{{ trans('main.all_time') }}</a>
     <hr>
 
     @if ($posts->isNotEmpty())

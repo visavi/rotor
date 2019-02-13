@@ -27,10 +27,10 @@
     @include('advert/_forum')
 
     @if (getUser())
-        {{ trans('common.my') }}: <a href="/forums/active/topics">{{ trans('forums.topics') }}</a>, <a href="/forums/active/posts">{{ trans('forums.messages') }}</a>, <a href="/forums/bookmarks">{{ trans('forums.bookmarks') }}</a> /
+        {{ trans('main.my') }}: <a href="/forums/active/topics">{{ trans('forums.topics') }}</a>, <a href="/forums/active/posts">{{ trans('forums.messages') }}</a>, <a href="/forums/bookmarks">{{ trans('forums.bookmarks') }}</a> /
     @endif
 
-    {{ trans('common.new') }}: <a href="/topics">{{ trans('forums.topics') }}</a>, <a href="/posts">{{ trans('forums.messages') }}</a>
+    {{ trans('main.new') }}: <a href="/topics">{{ trans('forums.topics') }}</a>, <a href="/posts">{{ trans('forums.messages') }}</a>
     <hr/>
 
     @if ($forums->isNotEmpty())
@@ -67,9 +67,9 @@
     @endif
 
     <br/>
-    <a href="/rules">{{ trans('common.rules') }}</a> /
+    <a href="/rules">{{ trans('main.rules') }}</a> /
     <a href="/forums/top/topics">{{ trans('forums.top_topics') }}</a> /
     <a href="/forums/top/posts">{{ trans('forums.top_posts') }}</a> /
-    <a href="/forums/search">{{ trans('common.search') }}</a> /
-    <a href="/forums/rss">{{ trans('common.rss') }}</a><br/>
+    <a href="/forums/search">{{ trans('main.search') }}</a> /
+    <a href="/forums/rss">{{ trans('main.rss') }}</a><br/>
 @stop

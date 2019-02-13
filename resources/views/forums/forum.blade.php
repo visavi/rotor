@@ -1,7 +1,7 @@
 @extends('layout')
 
 @section('title')
-    {{ $forum->title }} ({{ trans('common.page_num', ['page' => $page->current]) }})
+    {{ $forum->title }} ({{ trans('main.page_num', ['page' => $page->current]) }})
 @stop
 
 @section('header')
@@ -27,7 +27,7 @@
             <li class="breadcrumb-item active">{{ $forum->title }}</li>
 
             @if (isAdmin())
-                <li class="breadcrumb-item"><a href="/admin/forums/{{  $forum->id  }}?page={{ $page->current }}">{{ trans('common.management') }}</a></li>
+                <li class="breadcrumb-item"><a href="/admin/forums/{{  $forum->id  }}?page={{ $page->current }}">{{ trans('main.management') }}</a></li>
             @endif
         </ol>
     </nav>
@@ -80,8 +80,8 @@
         {!! showError(trans('forums.empty_topic')) !!}
     @endif
 
-    <a href="/rules">{{ trans('common.rules') }}</a> /
+    <a href="/rules">{{ trans('main.rules') }}</a> /
     <a href="/forums/top/topics">{{ trans('forums.top_topics') }}</a> /
     <a href="/forums/top/posts">{{ trans('forums.top_posts') }}</a> /
-    <a href="/forums/search?fid={{ $forum->id }}">{{ trans('common.search') }}</a><br>
+    <a href="/forums/search?fid={{ $forum->id }}">{{ trans('main.search') }}</a><br>
 @stop

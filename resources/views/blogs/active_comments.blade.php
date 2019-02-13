@@ -1,7 +1,7 @@
 @extends('layout')
 
 @section('title')
-    {{ trans('blogs.blogs') }} - {{ trans('blogs.comments_list', ['user' => $user->login]) }} ({{ trans('common.page_num', ['page' => $page->current]) }})
+    {{ trans('blogs.blogs') }} - {{ trans('blogs.comments_list', ['user' => $user->login]) }} ({{ trans('main.page_num', ['page' => $page->current]) }})
 @stop
 
 @section('header')
@@ -28,7 +28,7 @@
 
                     <div class="float-right">
                         @if (isAdmin())
-                            <a href="#" onclick="return deleteComment(this)" data-rid="{{ $data->relate_id }}" data-id="{{ $data->id }}" data-type="{{ App\Models\Blog::class }}" data-token="{{ $_SESSION['token'] }}" data-toggle="tooltip" title="{{ trans('common.delete') }}"><i class="fa fa-times text-muted"></i></a>
+                            <a href="#" onclick="return deleteComment(this)" data-rid="{{ $data->relate_id }}" data-id="{{ $data->id }}" data-type="{{ App\Models\Blog::class }}" data-token="{{ $_SESSION['token'] }}" data-toggle="tooltip" title="{{ trans('main.delete') }}"><i class="fa fa-times text-muted"></i></a>
                         @endif
                     </div>
                 </div>
@@ -46,6 +46,6 @@
 
         {!! pagination($page) !!}
     @else
-        {!! showError(trans('common.empty_comments')) !!}
+        {!! showError(trans('main.empty_comments')) !!}
     @endif
 @stop

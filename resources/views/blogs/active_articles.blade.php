@@ -1,7 +1,7 @@
 @extends('layout')
 
 @section('title')
-    {{ trans('blogs.blogs') }} - {{ trans('blogs.title_active_articles', ['user' => $user->login]) }} ({{ trans('common.page_num', ['page' => $page->current]) }})
+    {{ trans('blogs.blogs') }} - {{ trans('blogs.title_active_articles', ['user' => $user->login]) }} ({{ trans('main.page_num', ['page' => $page->current]) }})
 @stop
 
 @section('header')
@@ -26,8 +26,8 @@
                 <b><a href="/articles/{{ $data->id }}">{{ $data->title }}</a></b> ({!! formatNum($data->rating) !!})
             </div>
 
-            <div>{{ trans('common.author') }}: {!! $data->user->getProfile() !!} ({{ dateFixed($data->created_at) }})<br>
-                <i class="fa fa-comment"></i> <a href="/articles/comments/{{ $data->id }}">{{ trans('common.comments') }}</a> ({{ $data->count_comments }})
+            <div>{{ trans('main.author') }}: {!! $data->user->getProfile() !!} ({{ dateFixed($data->created_at) }})<br>
+                <i class="fa fa-comment"></i> <a href="/articles/comments/{{ $data->id }}">{{ trans('main.comments') }}</a> ({{ $data->count_comments }})
                 <a href="/articles/end/{{ $data->id }}">&raquo;</a>
             </div>
         @endforeach

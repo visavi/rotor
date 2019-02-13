@@ -1,7 +1,7 @@
 @extends('layout')
 
 @section('title')
-    {{ trans('forums.forum') }} - {{ trans('forums.title_new_topics') }} ({{ trans('common.page_num', ['page' => $page->current]) }})
+    {{ trans('forums.forum') }} - {{ trans('forums.title_new_topics') }} ({{ trans('main.page_num', ['page' => $page->current]) }})
 @stop
 
 @section('header')
@@ -28,7 +28,7 @@
         <div>
             {!! $data->pagination() !!}
             {{ trans('forums.forum') }}: <a href="/forums/{{  $data->forum->id }}">{{  $data->forum->title }}</a><br>
-            {{ trans('common.author') }}: {{ $data->user->getName() }} / Посл.: {{ $data->lastPost->user->getName() }} ({{ dateFixed($data->created_at) }})
+            {{ trans('main.author') }}: {{ $data->user->getName() }} / Посл.: {{ $data->lastPost->user->getName() }} ({{ dateFixed($data->created_at) }})
         </div>
 
     @endforeach

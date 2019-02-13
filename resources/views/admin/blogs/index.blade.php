@@ -8,7 +8,7 @@
     <nav>
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
-            <li class="breadcrumb-item"><a href="/admin">{{ trans('common.panel') }}</a></li>
+            <li class="breadcrumb-item"><a href="/admin">{{ trans('main.panel') }}</a></li>
             <li class="breadcrumb-item active">{{ trans('blogs.blogs') }}</li>
         </ol>
     </nav>
@@ -63,12 +63,12 @@
                         <input type="text" class="form-control" id="name" name="name" maxlength="50" value="{{ getInput('name') }}" placeholder="{{ trans('blogs.blog') }}" required>
                     </div>
 
-                    <button class="btn btn-primary">{{ trans('common.create') }}</button>
+                    <button class="btn btn-primary">{{ trans('main.create') }}</button>
                 </div>
                 {!! textError('name') !!}
             </form>
         </div>
 
-        <i class="fa fa-sync"></i> <a href="/admin/blogs/restatement?token={{ $_SESSION['token'] }}">{{ trans('common.recount') }}</a><br>
+        <i class="fa fa-sync"></i> <a href="/admin/blogs/restatement?token={{ $_SESSION['token'] }}">{{ trans('main.recount') }}</a><br>
     @endif
 @stop

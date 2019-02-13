@@ -1,7 +1,7 @@
 @extends('layout')
 
 @section('title')
-    {{ trans('blogs.top_articles') }} ({{ trans('common.page_num', ['page' => $page->current]) }})
+    {{ trans('blogs.top_articles') }} ({{ trans('main.page_num', ['page' => $page->current]) }})
 @stop
 
 @section('header')
@@ -19,16 +19,16 @@
 @stop
 
 @section('content')
-    {{ trans('common.sort') }}:
+    {{ trans('main.sort') }}:
 
     <?php $active = ($order === 'visits') ? 'success' : 'light'; ?>
-    <a href="/blogs/top?sort=visits" class="badge badge-{{ $active }}">{{ trans('common.views') }}</a>
+    <a href="/blogs/top?sort=visits" class="badge badge-{{ $active }}">{{ trans('main.views') }}</a>
 
     <?php $active = ($order === 'rating') ? 'success' : 'light'; ?>
-    <a href="/blogs/top?sort=rated" class="badge badge-{{ $active }}">{{ trans('common.ratings') }}</a>
+    <a href="/blogs/top?sort=rated" class="badge badge-{{ $active }}">{{ trans('main.ratings') }}</a>
 
     <?php $active = ($order === 'count_comments') ? 'success' : 'light'; ?>
-    <a href="/blogs/top?sort=comments" class="badge badge-{{ $active }}">{{ trans('common.comments') }}</a>
+    <a href="/blogs/top?sort=comments" class="badge badge-{{ $active }}">{{ trans('main.comments') }}</a>
     <hr>
 
     @if ($blogs->isNotEmpty())
@@ -41,9 +41,9 @@
 
             <div>
                 {{ trans('blogs.blog') }}: <a href="/blogs/{{ $data->category_id }}">{{ $data->name }}</a><br>
-                {{ trans('common.author') }}: {!! $data->user->getProfile() !!}<br>
-                {{ trans('common.views') }}: {{ $data->visits }}<br>
-                <a href="/articles/comments/{{ $data->id }}">{{ trans('common.comments') }}</a> ({{ $data->count_comments }})
+                {{ trans('main.author') }}: {!! $data->user->getProfile() !!}<br>
+                {{ trans('main.views') }}: {{ $data->visits }}<br>
+                <a href="/articles/comments/{{ $data->id }}">{{ trans('main.comments') }}</a> ({{ $data->count_comments }})
                 <a href="/articles/end/{{ $data->id }}">&raquo;</a>
             </div>
         @endforeach

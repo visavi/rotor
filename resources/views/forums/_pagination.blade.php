@@ -1,4 +1,4 @@
-<div>{{ trans('common.pages') }}:
+<div>{{ trans('main.pages') }}:
     @foreach ($pages as $page)
         @if (isset($page['separator']))
             <span>{{ $page['name'] }}</span>

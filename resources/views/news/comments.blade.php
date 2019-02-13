@@ -1,7 +1,7 @@
 @extends('layout')
 
 @section('title')
-    {{ $news->title }} - {{ trans('news.comments_title') }} ({{ trans('common.page_num', ['page' => $page->current]) }})
+    {{ $news->title }} - {{ trans('news.comments_title') }} ({{ trans('main.page_num', ['page' => $page->current]) }})
 @stop
 
 @section('header')
@@ -32,20 +32,20 @@
                     @if (getUser())
                         <div class="float-right">
                             @if (getUser('id') !== $data->user_id)
-                                <a href="#" onclick="return postReply(this)" data-toggle="tooltip" title="{{ trans('common.reply') }}"><i class="fa fa-reply text-muted"></i></a>
+                                <a href="#" onclick="return postReply(this)" data-toggle="tooltip" title="{{ trans('main.reply') }}"><i class="fa fa-reply text-muted"></i></a>
 
-                                <a href="#" onclick="return postQuote(this)" data-toggle="tooltip" title="{{ trans('common.quote') }}"><i class="fa fa-quote-right text-muted"></i></a>
+                                <a href="#" onclick="return postQuote(this)" data-toggle="tooltip" title="{{ trans('main.quote') }}"><i class="fa fa-quote-right text-muted"></i></a>
 
-                                <a href="#" onclick="return sendComplaint(this)" data-type="{{ App\Models\News::class }}" data-id="{{ $data->id }}" data-token="{{ $_SESSION['token'] }}" data-page="{{ $page->current }}" rel="nofollow" data-toggle="tooltip" title="{{ trans('common.complain') }}"><i class="fa fa-bell text-muted"></i></a>
+                                <a href="#" onclick="return sendComplaint(this)" data-type="{{ App\Models\News::class }}" data-id="{{ $data->id }}" data-token="{{ $_SESSION['token'] }}" data-page="{{ $page->current }}" rel="nofollow" data-toggle="tooltip" title="{{ trans('main.complain') }}"><i class="fa fa-bell text-muted"></i></a>
 
                             @endif
 
                             @if ($data->created_at + 600 > SITETIME && $data->user_id === getUser('id'))
-                                <a href="/news/edit/{{ $news->id }}/{{ $data->id }}?page={{ $page->current }}" data-toggle="tooltip" title="{{ trans('common.edit') }}"><i class="fa fa-pencil-alt text-muted"></i></a>
+                                <a href="/news/edit/{{ $news->id }}/{{ $data->id }}?page={{ $page->current }}" data-toggle="tooltip" title="{{ trans('main.edit') }}"><i class="fa fa-pencil-alt text-muted"></i></a>
                             @endif
 
                             @if (isAdmin())
-                                <a href="#" onclick="return deleteComment(this)" data-rid="{{ $data->relate_id }}" data-id="{{ $data->id }}" data-type="{{ App\Models\News::class }}" data-token="{{ $_SESSION['token'] }}" data-toggle="tooltip" title="{{ trans('common.delete') }}"><i class="fa fa-times text-muted"></i></a>
+                                <a href="#" onclick="return deleteComment(this)" data-rid="{{ $data->relate_id }}" data-id="{{ $data->id }}" data-type="{{ App\Models\News::class }}" data-token="{{ $_SESSION['token'] }}" data-toggle="tooltip" title="{{ trans('main.delete') }}"><i class="fa fa-times text-muted"></i></a>
                             @endif
                         </div>
                     @endif
@@ -71,7 +71,7 @@
     @if (! $news->closed)
 
         @if ($comments->isEmpty())
-            {!! showError(trans('common.empty_comments')) !!}
+            {!! showError(trans('main.empty_comments')) !!}
         @endif
 
         @if (getUser())
@@ -81,7 +81,7 @@
 
                     <div class="form-group{{ hasError('msg') }}">
                         <label for="msg">{{ trans('news.message') }}:</label>
-                        <textarea class="form-control markItUp" id="msg" rows="5" maxlength="{{ setting('comment_length') }}" data-hint="{{ trans('common.characters_left') }}" name="msg" placeholder="{{ trans('news.message_text') }}" required>{{ getInput('msg') }}</textarea>
+                        <textarea class="form-control markItUp" id="msg" rows="5" maxlength="{{ setting('comment_length') }}" data-hint="{{ trans('main.characters_left') }}" name="msg" placeholder="{{ trans('news.message_text') }}" required>{{ getInput('msg') }}</textarea>
                         <span class="js-textarea-counter"></span>
                         {!! textError('msg') !!}
                     </div>
@@ -90,11 +90,11 @@
                 </form>
             </div>
         <br>
-        <a href="/rules">{{ trans('common.rules') }}</a> /
-        <a href="/stickers">{{ trans('common.stickers') }}</a> /
-        <a href="/tags">{{ trans('common.tags') }}</a><br><br>
+        <a href="/rules">{{ trans('main.rules') }}</a> /
+        <a href="/stickers">{{ trans('main.stickers') }}</a> /
+        <a href="/tags">{{ trans('main.tags') }}</a><br><br>
         @else
-            {!! showError(trans('common.not_authorized')) !!}
+            {!! showError(trans('main.not_authorized')) !!}
         @endif
     @else
         {!! showError(trans('news.closed_news')) !!}

@@ -15,11 +15,11 @@
 @section('header')
     @if ($blog->user->id === getUser('id'))
         <div class="float-right">
-            <a class="btn btn-success" href="/articles/edit/{{ $blog->id }}">{{ trans('common.change') }}</a>
+            <a class="btn btn-success" href="/articles/edit/{{ $blog->id }}">{{ trans('main.change') }}</a>
         </div><br>
     @endif
 
-    <h1>{{ $blog->title }} <small>({{ trans('common.ratings') }}: {!! formatNum($blog->rating) !!})</small></h1>
+    <h1>{{ $blog->title }} <small>({{ trans('main.ratings') }}: {!! formatNum($blog->rating) !!})</small></h1>
 @stop
 
 @section('breadcrumb')
@@ -38,13 +38,13 @@
 @stop
 
 @section('content')
-    <a href="/articles/print/{{ $blog->id }}">{{ trans('common.print') }}</a> /
-    <a href="/articles/rss/{{ $blog->id }}">{{ trans('common.rss') }}</a>
+    <a href="/articles/print/{{ $blog->id }}">{{ trans('main.print') }}</a> /
+    <a href="/articles/rss/{{ $blog->id }}">{{ trans('main.rss') }}</a>
 
     @if (isAdmin())
-        / <a href="/admin/articles/edit/{{ $blog->id }}">{{ trans('common.edit') }}</a> /
-        <a href="/admin/articles/move/{{ $blog->id }}">{{ trans('common.move') }}</a> /
-        <a href="/admin/articles/delete/{{ $blog->id }}?token={{ $_SESSION['token'] }}" onclick="return confirm('{{ trans('blogs.confirm_delete_article') }}')">{{ trans('common.delete') }}</a>
+        / <a href="/admin/articles/edit/{{ $blog->id }}">{{ trans('main.edit') }}</a> /
+        <a href="/admin/articles/move/{{ $blog->id }}">{{ trans('main.move') }}</a> /
+        <a href="/admin/articles/delete/{{ $blog->id }}?token={{ $_SESSION['token'] }}" onclick="return confirm('{{ trans('blogs.confirm_delete_article') }}')">{{ trans('main.delete') }}</a>
     @endif
     <hr>
 
@@ -54,11 +54,11 @@
         {!! pagination($page) !!}
     @endif
 
-    {{ trans('common.author') }}: {!! $blog->user->getProfile() !!} ({{ dateFixed($blog->created_at) }})<br>
+    {{ trans('main.author') }}: {!! $blog->user->getProfile() !!} ({{ dateFixed($blog->created_at) }})<br>
 
     <i class="fa fa-tag"></i> {!! $tags !!}<hr>
 
-    <div class="js-rating">{{ trans('common.ratings') }}:
+    <div class="js-rating">{{ trans('main.ratings') }}:
         @if (getUser() && getUser('id') !== $blog->user_id)
             <a class="post-rating-down<?= $blog->vote === '-' ? ' active' : '' ?>" href="#" onclick="return changeRating(this);" data-id="{{ $blog->id }}" data-type="{{ App\Models\Blog::class }}" data-vote="-" data-token="{{ $_SESSION['token'] }}"><i class="fa fa-thumbs-down"></i></a>
         @endif
@@ -68,7 +68,7 @@
         @endif
     </div>
 
-    <i class="fa fa-eye"></i> {{ trans('common.views') }}: {{ $blog->visits }}<br>
-    <i class="fa fa-comment"></i> <a href="/articles/comments/{{ $blog->id }}">{{ trans('common.comments') }}</a> ({{  $blog->count_comments }})
+    <i class="fa fa-eye"></i> {{ trans('main.views') }}: {{ $blog->visits }}<br>
+    <i class="fa fa-comment"></i> <a href="/articles/comments/{{ $blog->id }}">{{ trans('main.comments') }}</a> ({{  $blog->count_comments }})
     <a href="/articles/end/{{ $blog->id }}">&raquo;</a><br><br>
 @stop

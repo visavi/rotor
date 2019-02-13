@@ -1,7 +1,7 @@
 @extends('layout')
 
 @section('title')
-    {{ trans('forums.forum') }} - {{ trans('forums.title_new_posts') }} ({{ trans('common.page_num', ['page' => $page->current]) }})
+    {{ trans('forums.forum') }} - {{ trans('forums.title_new_posts') }} ({{ trans('main.page_num', ['page' => $page->current]) }})
 @stop
 
 @section('header')

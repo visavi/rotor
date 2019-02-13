@@ -1,7 +1,7 @@
 @extends('layout')
 
 @section('title')
-    {{ trans('blogs.blogs') }} - {{ trans('blogs.new_comments') }} ({{ trans('common.page_num', ['page' => $page->current]) }})
+    {{ trans('blogs.blogs') }} - {{ trans('blogs.new_comments') }} ({{ trans('main.page_num', ['page' => $page->current]) }})
 @stop
 
 @section('header')
@@ -45,6 +45,6 @@
 
         {!! pagination($page) !!}
     @else
-        {!! showError(trans('common.empty_comments')) !!}
+        {!! showError(trans('main.empty_comments')) !!}
     @endif
 @stop

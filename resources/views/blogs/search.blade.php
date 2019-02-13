@@ -18,12 +18,12 @@
     <div class="form">
         <form action="/blogs/search">
             <div class="form-group{{ hasError('find') }}">
-                <label for="inputFind">{{ trans('common.request') }}:</label>
-                <input name="find" class="form-control" id="inputFind" maxlength="50" placeholder="{{ trans('common.request') }}" value="{{ getInput('find') }}" required>
+                <label for="inputFind">{{ trans('main.request') }}:</label>
+                <input name="find" class="form-control" id="inputFind" maxlength="50" placeholder="{{ trans('main.request') }}" value="{{ getInput('find') }}" required>
                 {!! textError('find') !!}
             </div>
 
-            {{ trans('common.look_in') }}:
+            {{ trans('main.look_in') }}:
             <?php $inputWhere = (int) getInput('where'); ?>
             <div class="form-group{{ hasError('where') }}">
                 <div class="custom-control custom-radio">
@@ -37,25 +37,25 @@
                 {!! textError('where') !!}
             </div>
 
-            {{ trans('common.request_type') }}:
+            {{ trans('main.request_type') }}:
             <?php $inputType = (int) getInput('type'); ?>
             <div class="form-group{{ hasError('type') }}">
                 <div class="custom-control custom-radio">
                     <input class="custom-control-input" type="radio" id="inputType0" name="type" value="0"{{ $inputType === 0 ? ' checked' : '' }}>
-                    <label class="custom-control-label" for="inputType0">{{ trans('common.and') }}</label>
+                    <label class="custom-control-label" for="inputType0">{{ trans('main.and') }}</label>
                 </div>
                 <div class="custom-control custom-radio">
                     <input class="custom-control-input" type="radio" id="inputType1" name="type" value="1"{{ $inputType === 1 ? ' checked' : '' }}>
-                    <label class="custom-control-label" for="inputType1">{{ trans('common.or') }}</label>
+                    <label class="custom-control-label" for="inputType1">{{ trans('main.or') }}</label>
                 </div>
                 <div class="custom-control custom-radio">
                     <input class="custom-control-input" type="radio" id="inputType2" name="type" value="2"{{ $inputType === 2 ? ' checked' : '' }}>
-                    <label class="custom-control-label" for="inputType2">{{ trans('common.full') }}</label>
+                    <label class="custom-control-label" for="inputType2">{{ trans('main.full') }}</label>
                 </div>
                 {!! textError('type') !!}
             </div>
 
-            <button class="btn btn-primary">{{ trans('common.search') }}</button>
+            <button class="btn btn-primary">{{ trans('main.search') }}</button>
         </form>
     </div>
 @stop

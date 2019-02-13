@@ -25,10 +25,10 @@
 
 @section('content')
     @if (getUser())
-        {{ trans('common.my') }}: <a href="/blogs/active/articles">{{ trans('blogs.articles') }}</a>, <a href="/blogs/active/comments">{{ trans('common.comments') }}</a> /
+        {{ trans('main.my') }}: <a href="/blogs/active/articles">{{ trans('blogs.articles') }}</a>, <a href="/blogs/active/comments">{{ trans('main.comments') }}</a> /
     @endif
 
-    {{ trans('common.new') }}: <a href="/articles">{{ trans('blogs.articles') }}</a>, <a href="/articles/comments">{{ trans('common.comments') }}</a><hr>
+    {{ trans('main.new') }}: <a href="/articles">{{ trans('blogs.articles') }}</a>, <a href="/articles/comments">{{ trans('main.comments') }}</a><hr>
 
     @foreach ($categories as $key => $data)
         <div class="b">
@@ -58,7 +58,7 @@
     <br>
     <a href="/blogs/top">{{ trans('blogs.top_articles') }}</a> /
     <a href="/blogs/tags">{{ trans('blogs.tag_cloud') }}</a> /
-    <a href="/blogs/search">{{ trans('common.search') }}</a> /
+    <a href="/blogs/search">{{ trans('main.search') }}</a> /
     <a href="/blogs/authors">{{ trans('blogs.authors') }}</a> /
-    <a href="/blogs/rss">{{ trans('common.rss') }}</a>
+    <a href="/blogs/rss">{{ trans('main.rss') }}</a>
 @stop

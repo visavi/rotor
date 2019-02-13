@@ -14,8 +14,8 @@
             <li class="breadcrumb-item active">{{ $news->title }}</li>
 
             @if (isAdmin())
-                <li class="breadcrumb-item"><a href="/admin/news/edit/{{ $news->id }}">{{ trans('common.edit') }}</a></li>
-                <li class="breadcrumb-item"><a href="/admin/news/delete/{{ $news->id }}?token={{ $_SESSION['token'] }}" onclick="return confirm('{{ trans('news.confirm_delete') }}')">{{ trans('common.delete') }}</a></li>
+                <li class="breadcrumb-item"><a href="/admin/news/edit/{{ $news->id }}">{{ trans('main.edit') }}</a></li>
+                <li class="breadcrumb-item"><a href="/admin/news/delete/{{ $news->id }}?token={{ $_SESSION['token'] }}" onclick="return confirm('{{ trans('news.confirm_delete') }}')">{{ trans('main.delete') }}</a></li>
             @endif
         </ol>
     </nav>
@@ -67,7 +67,7 @@
 
     @if (! $news->closed)
         @if ($comments->isEmpty())
-            {!! showError(trans('common.empty_comments')) !!}
+            {!! showError(trans('main.empty_comments')) !!}
         @endif
 
         @if (getUser())
@@ -77,7 +77,7 @@
 
                     <div class="form-group{{ hasError('msg') }}">
                         <label for="msg">{{ trans('news.message') }}:</label>
-                        <textarea class="form-control markItUp" id="msg" rows="5" maxlength="{{ setting('comment_length') }}" data-hint="{{ trans('common.characters_left') }}" name="msg" placeholder="{{ trans('news.message_text') }}" required>{{ getInput('msg') }}</textarea>
+                        <textarea class="form-control markItUp" id="msg" rows="5" maxlength="{{ setting('comment_length') }}" data-hint="{{ trans('main.characters_left') }}" name="msg" placeholder="{{ trans('news.message_text') }}" required>{{ getInput('msg') }}</textarea>
                         <span class="js-textarea-counter"></span>
                         {!! textError('msg') !!}
                     </div>
@@ -87,11 +87,11 @@
             </div>
 
             <br>
-            <a href="/rules">{{ trans('common.rules') }}</a> /
-            <a href="/stickers">{{ trans('common.stickers') }}</a> /
-            <a href="/tags">{{ trans('common.tags') }}</a><br><br>
+            <a href="/rules">{{ trans('main.rules') }}</a> /
+            <a href="/stickers">{{ trans('main.stickers') }}</a> /
+            <a href="/tags">{{ trans('main.tags') }}</a><br><br>
         @else
-            {!! showError(trans('common.not_authorized')) !!}
+            {!! showError(trans('main.not_authorized')) !!}
         @endif
     @else
         {!! showError(trans('news.closed_news')) !!}

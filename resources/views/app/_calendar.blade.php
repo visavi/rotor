@@ -2,13 +2,13 @@
 <table>
     <thead>
         <tr>
-            <th>{{ trans('common.mo') }}</th>
-            <th>{{ trans('common.tu') }}</th>
-            <th>{{ trans('common.we') }}</th>
-            <th>{{ trans('common.th') }}</th>
-            <th>{{ trans('common.fr') }}</th>
-            <th><span class="text-danger">{{ trans('common.sa') }}</span></th>
-            <th><span class="text-danger">{{ trans('common.su') }}</span></th>
+            <th>{{ trans('main.mo') }}</th>
+            <th>{{ trans('main.tu') }}</th>
+            <th>{{ trans('main.we') }}</th>
+            <th>{{ trans('main.th') }}</th>
+            <th>{{ trans('main.fr') }}</th>
+            <th><span class="text-danger">{{ trans('main.sa') }}</span></th>
+            <th><span class="text-danger">{{ trans('main.su') }}</span></th>
         </tr>
     </thead>
     <tbody>

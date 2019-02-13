@@ -102,7 +102,7 @@
 
                         @if (isAdmin())
                             <div class="nmenu">
-                                <i class="fa fa-wrench"></i> <a href="/admin">{{ trans('common.panel') }}</a>
+                                <i class="fa fa-wrench"></i> <a href="/admin">{{ trans('main.panel') }}</a>
 
                                 @if (statsSpam()>0)
                                     &bull; <a href="/admin/spam"><span style="color:#ff0000">Жалобы</span></a>

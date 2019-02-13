@@ -31,7 +31,7 @@
 
             <div class="form-group{{ hasError('msg') }}">
                 <label for="msg">{{ trans('forums.message') }}:</label>
-                <textarea class="form-control markItUp" maxlength="{{ setting('forumtextlength') }}" data-hint="{{ trans('common.characters_left') }}" id="msg" rows="5" name="msg" required>{{ getInput('msg', $post->text) }}</textarea>
+                <textarea class="form-control markItUp" maxlength="{{ setting('forumtextlength') }}" data-hint="{{ trans('main.characters_left') }}" id="msg" rows="5" name="msg" required>{{ getInput('msg', $post->text) }}</textarea>
                 <span class="js-textarea-counter"></span>
                 {!! textError('msg') !!}
             </div>
@@ -45,7 +45,7 @@
                 <br>
             @endif
 
-            <button class="btn btn-primary">{{ trans('common.edit') }}</button>
+            <button class="btn btn-primary">{{ trans('main.edit') }}</button>
         </form>
     </div>
 @stop

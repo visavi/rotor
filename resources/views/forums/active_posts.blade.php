@@ -1,7 +1,7 @@
 @extends('layout')
 
 @section('title')
-    {{ trans('forums.forum') }} - {{ trans('forums.title_active_posts', ['user' => $user->login]) }} ({{ trans('common.page_num', ['page' => $page->current]) }})
+    {{ trans('forums.forum') }} - {{ trans('forums.title_active_posts', ['user' => $user->login]) }} ({{ trans('main.page_num', ['page' => $page->current]) }})
 @stop
 
 @section('header')
@@ -25,7 +25,7 @@
                 <i class="fa fa-file-alt"></i> <b><a href="/topics/{{ $data->topic_id }}/{{ $data->id }}">{{ $data->topic->title }}</a></b>
 
                 @if (isAdmin())
-                    <a href="#" class="float-right" onclick="return deletePost(this)" data-tid="{{ $data->id }}" data-token="{{ $_SESSION['token'] }}" data-toggle="tooltip" title="{{ trans('common.delete') }}"><i class="fa fa-times"></i></a>
+                    <a href="#" class="float-right" onclick="return deletePost(this)" data-tid="{{ $data->id }}" data-token="{{ $_SESSION['token'] }}" data-toggle="tooltip" title="{{ trans('main.delete') }}"><i class="fa fa-times"></i></a>
                 @endif
             </div>
             <div>

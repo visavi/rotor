@@ -1,7 +1,7 @@
 @extends('layout')
 
 @section('title')
-    {{ trans('common.search_request') }} {{ $find }}
+    {{ trans('main.search_request') }} {{ $find }}
 @stop
 
 @section('breadcrumb')
@@ -9,8 +9,8 @@
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
             <li class="breadcrumb-item"><a href="/forums">{{ trans('forums.forum') }}</a></li>
-            <li class="breadcrumb-item"><a href="/forums/search">{{ trans('common.search') }}</a></li>
-            <li class="breadcrumb-item active">{{ trans('common.search_request') }}</li>
+            <li class="breadcrumb-item"><a href="/forums/search">{{ trans('main.search') }}</a></li>
+            <li class="breadcrumb-item active">{{ trans('main.search_request') }}</li>
         </ol>
     </nav>
 @stop

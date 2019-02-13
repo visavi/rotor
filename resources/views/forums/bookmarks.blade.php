@@ -29,13 +29,13 @@
 
                 <div>
                     {!! $topic->topic->pagination() !!}
-                    {{ trans('common.author') }}: {{ $topic->topic->user->getName() }} /
+                    {{ trans('main.author') }}: {{ $topic->topic->user->getName() }} /
                     {{ trans('forums.latest') }}: {{ $topic->topic->lastPost->user->getName() }}
                     ({{ dateFixed($topic->topic->lastPost->created_at) }})
                 </div>
             @endforeach
 
-            <button class="btn btn-sm btn-danger">{{ trans('common.delete_selected') }}</button>
+            <button class="btn btn-sm btn-danger">{{ trans('main.delete_selected') }}</button>
         </form>
 
         {!! pagination($page) !!}

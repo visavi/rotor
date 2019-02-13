@@ -8,7 +8,7 @@
     <nav>
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
-            <li class="breadcrumb-item"><a href="/admin">{{ trans('common.panel') }}</a></li>
+            <li class="breadcrumb-item"><a href="/admin">{{ trans('main.panel') }}</a></li>
             <li class="breadcrumb-item"><a href="/admin/blogs">{{ trans('blogs.blogs') }}</a></li>
 
             @if ($category->parent->id)
@@ -54,7 +54,7 @@
             </div>
 
             <div class="form-group{{ hasError('sort') }}">
-                <label for="sort">{{ trans('common.position') }}:</label>
+                <label for="sort">{{ trans('main.position') }}:</label>
                 <input type="number" class="form-control" name="sort" id="sort" maxlength="2" value="{{ getInput('sort', $category->sort) }}" required>
                 {!! textError('sort') !!}
             </div>
@@ -62,11 +62,11 @@
             <div class="custom-control custom-checkbox">
                 <input type="hidden" value="0" name="closed">
                 <input type="checkbox" class="custom-control-input" value="1" name="closed" id="closed"{{ getInput('closed', $category->closed) ? ' checked' : '' }}>
-                <label class="custom-control-label" for="closed">{{ trans('common.close') }}</label>
+                <label class="custom-control-label" for="closed">{{ trans('main.close') }}</label>
             </div>
 
 
-            <button class="btn btn-primary">{{ trans('common.change') }}</button>
+            <button class="btn btn-primary">{{ trans('main.change') }}</button>
         </form>
     </div>
 @stop

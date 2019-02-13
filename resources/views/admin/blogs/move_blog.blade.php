@@ -8,7 +8,7 @@
     <nav>
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
-            <li class="breadcrumb-item"><a href="/admin">{{ trans('common.panel') }}</a></li>
+            <li class="breadcrumb-item"><a href="/admin">{{ trans('main.panel') }}</a></li>
             <li class="breadcrumb-item"><a href="/admin/blogs">{{ trans('blogs.blogs') }}</a></li>
 
             @if ($blog->category->parent->id)
@@ -47,7 +47,7 @@
                 {!! textError('cid') !!}
             </div>
 
-            <button class="btn btn-primary">{{ trans('common.move') }}</button>
+            <button class="btn btn-primary">{{ trans('main.move') }}</button>
         </form>
     </div>
 @stop
