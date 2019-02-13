@@ -1,7 +1,7 @@
 @extends('layout')
 
 @section('title')
-    {{ trans('blogs.title_edit') }}
+    {{ trans('blogs.title_edit_article') }}
 @stop
 
 @section('breadcrumb')
@@ -16,7 +16,7 @@
 
             <li class="breadcrumb-item"><a href="/blogs/{{ $blog->category->id }}">{{ $blog->category->name }}</a></li>
             <li class="breadcrumb-item"><a href="/articles/{{ $blog->id }}">{{ $blog->title }}</a></li>
-            <li class="breadcrumb-item active">{{ trans('blogs.title_edit') }}</li>
+            <li class="breadcrumb-item active">{{ trans('blogs.title_edit_article') }}</li>
         </ol>
     </nav>
 @stop

@@ -1,7 +1,7 @@
 @extends('layout')
 
 @section('title')
-    Редактирование раздела {{ $category->name }}
+    {{ trans('blogs.title_edit_blog') }} {{ $category->name }}
 @stop
 
 @section('breadcrumb')
@@ -9,14 +9,14 @@
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
             <li class="breadcrumb-item"><a href="/admin">{{ trans('common.panel') }}</a></li>
-            <li class="breadcrumb-item"><a href="/admin/blogs">Блоги</a></li>
+            <li class="breadcrumb-item"><a href="/admin/blogs">{{ trans('blogs.blogs') }}</a></li>
 
             @if ($category->parent->id)
                 <li class="breadcrumb-item"><a href="/admin/blogs/{{ $category->parent->id }}">{{ $category->parent->name }}</a></li>
             @endif
 
             <li class="breadcrumb-item"><a href="/admin/blogs/{{ $category->id }}">{{ $category->name }}</a></li>
-            <li class="breadcrumb-item active">Редактирование раздела</li>
+            <li class="breadcrumb-item active">{{ trans('blogs.title_edit_blog') }}</li>
         </ol>
     </nav>
 @stop
@@ -27,12 +27,12 @@
             <input type="hidden" name="token" value="{{ $_SESSION['token'] }}">
 
             <div class="form-group{{ hasError('parent') }}">
-                <label for="parent">Родительский раздел</label>
+                <label for="parent">{{ trans('blogs.parent_blog') }}</label>
 
                 <?php $inputParent = getInput('parent', $category->parent_id); ?>
 
                 <select class="form-control" id="parent" name="parent">
-                    <option value="0">Основной форум</option>
+                    <option value="0">---</option>
 
                     @foreach ($categories as $data)
 
@@ -48,13 +48,13 @@
             </div>
 
             <div class="form-group{{ hasError('name') }}">
-                <label for="name">Название:</label>
+                <label for="name">{{ trans('blogs.name') }}:</label>
                 <input class="form-control" name="name" id="name" maxlength="50" value="{{ getInput('name', $category->name) }}" required>
                 {!! textError('name') !!}
             </div>
 
             <div class="form-group{{ hasError('sort') }}">
-                <label for="sort">Положение:</label>
+                <label for="sort">{{ trans('common.position') }}:</label>
                 <input type="number" class="form-control" name="sort" id="sort" maxlength="2" value="{{ getInput('sort', $category->sort) }}" required>
                 {!! textError('sort') !!}
             </div>
@@ -62,11 +62,11 @@
             <div class="custom-control custom-checkbox">
                 <input type="hidden" value="0" name="closed">
                 <input type="checkbox" class="custom-control-input" value="1" name="closed" id="closed"{{ getInput('closed', $category->closed) ? ' checked' : '' }}>
-                <label class="custom-control-label" for="closed">Закрыть раздел</label>
+                <label class="custom-control-label" for="closed">{{ trans('common.close') }}</label>
             </div>
 
 
-            <button class="btn btn-primary">Изменить</button>
+            <button class="btn btn-primary">{{ trans('common.change') }}</button>
         </form>
     </div>
 @stop

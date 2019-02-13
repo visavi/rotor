@@ -1,7 +1,7 @@
 @extends('layout')
 
 @section('title')
-    Редактирование статьи {{ $blog->title }}
+    {{ trans('blogs.title_edit_article') }} {{ $blog->title }}
 @stop
 
 @section('breadcrumb')
@@ -9,7 +9,7 @@
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
             <li class="breadcrumb-item"><a href="/admin">{{ trans('common.panel') }}</a></li>
-            <li class="breadcrumb-item"><a href="/admin/blogs">Блоги</a></li>
+            <li class="breadcrumb-item"><a href="/admin/blogs">{{ trans('blogs.blogs') }}</a></li>
 
             @if ($blog->category->parent->id)
                 <li class="breadcrumb-item"><a href="/admin/blogs/{{ $blog->category->parent->id }}">{{ $blog->category->parent->name }}</a></li>
@@ -17,7 +17,7 @@
 
             <li class="breadcrumb-item"><a href="/admin/blogs/{{ $blog->category->id }}">{{ $blog->category->name }}</a></li>
             <li class="breadcrumb-item"><a href="/articles/{{ $blog->id }}">{{ $blog->title }}</a></li>
-            <li class="breadcrumb-item active">Редактирование статьи</li>
+            <li class="breadcrumb-item active">{{ trans('blogs.title_edit_article') }}</li>
         </ol>
     </nav>
 @stop
@@ -28,19 +28,19 @@
             <input type="hidden" name="token" value="{{ $_SESSION['token'] }}">
 
             <div class="form-group{{ hasError('title') }}">
-                <label for="inputTitle">Название:</label>
+                <label for="inputTitle">{{ trans('blogs.name') }}:</label>
                 <input type="text" class="form-control" id="inputTitle" name="title" maxlength="50" value="{{ getInput('title', $blog->title) }}" required>
                 {!! textError('title') !!}
             </div>
 
             <div class="form-group{{ hasError('text') }}">
-                <label for="text">Текст:</label>
+                <label for="text">{{ trans('blogs.article') }}:</label>
                 <textarea class="form-control markItUp" id="text" rows="5" name="text" required>{{ getInput('text', $blog->text) }}</textarea>
                 {!! textError('text') !!}
             </div>
 
             <div class="form-group{{ hasError('tags') }}">
-                <label for="inputTags">Метки:</label>
+                <label for="inputTags">{{ trans('blogs.tags') }}:</label>
                 <input type="text" class="form-control" id="inputTags" name="tags" maxlength="100" value="{{ getInput('tags', $blog->tags) }}" required>
                 {!! textError('tags') !!}
             </div>
@@ -56,7 +56,7 @@
                 @endif
             </div>
 
-            <button class="btn btn-primary">Изменить</button>
+            <button class="btn btn-primary">{{ trans('common.change') }}</button>
         </form>
     </div>
 @stop

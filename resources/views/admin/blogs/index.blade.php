@@ -9,7 +9,7 @@
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
             <li class="breadcrumb-item"><a href="/admin">{{ trans('common.panel') }}</a></li>
-            <li class="breadcrumb-item active">Блоги</li>
+            <li class="breadcrumb-item active">{{ trans('blogs.blogs') }}</li>
         </ol>
     </nav>
 @stop
@@ -29,7 +29,7 @@
             @if (isAdmin('boss'))
                 <div class="float-right">
                     <a href="/admin/blogs/edit/{{ $data->id }}"><i class="fa fa-pencil-alt"></i></a>
-                    <a href="/admin/blogs/delete/{{ $data->id }}?token={{ $_SESSION['token'] }}" onclick="return confirm('Вы уверены что хотите удалить данный раздел?')"><i class="fa fa-times"></i></a>
+                    <a href="/admin/blogs/delete/{{ $data->id }}?token={{ $_SESSION['token'] }}" onclick="return confirm('{{ trans('blogs.confirm_delete_blog') }}')"><i class="fa fa-times"></i></a>
                 </div>
             @endif
         </div>
@@ -46,7 +46,7 @@
 
                     @if (isAdmin('boss'))
                         <a href="/admin/blogs/edit/{{ $child->id }}"><i class="fa fa-pencil-alt"></i></a>
-                        <a href="/admin/blogs/delete/{{ $child->id }}?token={{ $_SESSION['token'] }}" onclick="return confirm('Вы уверены что хотите удалить данный раздел?')"><i class="fa fa-times"></i></a>
+                        <a href="/admin/blogs/delete/{{ $child->id }}?token={{ $_SESSION['token'] }}" onclick="return confirm('{{ trans('blogs.confirm_delete_blog') }}')"><i class="fa fa-times"></i></a>
                     @endif
                     <br/>
                 @endforeach
@@ -60,15 +60,15 @@
                 <input type="hidden" name="token" value="{{ $_SESSION['token'] }}">
                 <div class="form-inline">
                     <div class="form-group{{ hasError('name') }}">
-                        <input type="text" class="form-control" id="name" name="name" maxlength="50" value="{{ getInput('name') }}" placeholder="Раздел" required>
+                        <input type="text" class="form-control" id="name" name="name" maxlength="50" value="{{ getInput('name') }}" placeholder="{{ trans('blogs.blog') }}" required>
                     </div>
 
-                    <button class="btn btn-primary">Создать раздел</button>
+                    <button class="btn btn-primary">{{ trans('common.create') }}</button>
                 </div>
                 {!! textError('name') !!}
             </form>
         </div>
 
-        <i class="fa fa-sync"></i> <a href="/admin/blogs/restatement?token={{ $_SESSION['token'] }}">Пересчитать</a><br>
+        <i class="fa fa-sync"></i> <a href="/admin/blogs/restatement?token={{ $_SESSION['token'] }}">{{ trans('common.recount') }}</a><br>
     @endif
 @stop

@@ -1,7 +1,7 @@
 @extends('layout')
 
 @section('title')
-    Перенос статьи
+    {{ trans('blogs.title_move_article') }} {{ $blog->title }}
 @stop
 
 @section('breadcrumb')
@@ -9,7 +9,7 @@
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
             <li class="breadcrumb-item"><a href="/admin">{{ trans('common.panel') }}</a></li>
-            <li class="breadcrumb-item"><a href="/admin/blogs">Блоги</a></li>
+            <li class="breadcrumb-item"><a href="/admin/blogs">{{ trans('blogs.blogs') }}</a></li>
 
             @if ($blog->category->parent->id)
                 <li class="breadcrumb-item"><a href="/admin/blogs/{{ $blog->category->parent->id }}">{{ $blog->category->parent->name }}</a></li>
@@ -17,7 +17,7 @@
 
             <li class="breadcrumb-item"><a href="/admin/blogs/{{ $blog->category->id }}">{{ $blog->category->name }}</a></li>
             <li class="breadcrumb-item"><a href="/articles/{{ $blog->id }}">{{ $blog->title }}</a></li>
-            <li class="breadcrumb-item active">Перенос статьи</li>
+            <li class="breadcrumb-item active">{{ trans('blogs.title_move_article') }}</li>
         </ol>
     </nav>
 @stop
@@ -28,7 +28,7 @@
             <input type="hidden" name="token" value="{{ $_SESSION['token'] }}">
 
             <div class="form-group{{ hasError('cid') }}">
-                <label for="inputCategory">Раздел</label>
+                <label for="inputCategory">{{ trans('blogs.blog') }}</label>
 
                 <?php $inputCategory = getInput('cid', $blog->category_id); ?>
                 <select class="form-control" id="inputCategory" name="cid">
@@ -47,7 +47,7 @@
                 {!! textError('cid') !!}
             </div>
 
-            <button class="btn btn-primary">Перенести</button>
+            <button class="btn btn-primary">{{ trans('common.move') }}</button>
         </form>
     </div>
 @stop

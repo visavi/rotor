@@ -24,6 +24,7 @@ return [
     'reply'             => 'Reply',
     'quote'             => 'Quote',
     'complain'          => 'Complain',
+    'create'            => 'Create',
     'edit'              => 'Edit',
     'change'            => 'Change',
     'open'              => 'Open',
@@ -34,6 +35,7 @@ return [
     'delete'            => 'Delete',
     'delete_selected'   => 'Delete selected',
     'sort'              => 'Sort',
+    'recount'           => 'Recount',
     'author'            => 'Author',
     'menu'              => 'My menu',
     'verification_code' => 'Verification code',
@@ -46,6 +48,7 @@ return [
     'empty_comments'    => 'No comments yet!',
     'my'                => 'My',
     'new'               => 'New',
+    'position'          => 'Position',
 
     'request'        => 'Request',
     'not_matter'     => 'Not matter',
