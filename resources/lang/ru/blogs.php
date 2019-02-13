@@ -8,6 +8,7 @@ return [
     'blogs_list'             => 'Список разделов',
     'name'                   => 'Название',
     'article'                => 'Статья',
+    'articles'               => 'Статьи',
     'authors'                => 'Авторы',
     'tags'                   => 'Теги',
     'all_articles'           => 'Статей',
