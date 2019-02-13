@@ -1,25 +1,25 @@
 @extends('layout')
 
 @section('title')
-    {{ $category->name }} (Стр. {{ $page->current }})
+    {{ $category->name }} ({{ trans('common.page_num', ['page' => $page->current]) }})
 @stop
 
 @section('header')
     @if (! $category->closed && getUser())
         <div class="float-right">
-            <a class="btn btn-success" href="/blogs/create?cid={{ $category->id }}">Добавить</a>
+            <a class="btn btn-success" href="/blogs/create?cid={{ $category->id }}">{{ trans('blogs.add') }}</a>
         </div><br>
     @endif
 
-    <h1>{{ $category->name }} <small>(Статей: {{ $category->count_blogs }})</small></h1>
+    <h1>{{ $category->name }} <small>({{ trans('blogs.all_articles') }}: {{ $category->count_blogs }})</small></h1>
 @stop
 
 @section('breadcrumb')
     <nav>
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
-            <li class="breadcrumb-item"><a href="/admin">Панель</a></li>
-            <li class="breadcrumb-item"><a href="/admin/blogs">Блоги</a></li>
+            <li class="breadcrumb-item"><a href="/admin">{{ trans('common.panel') }}</a></li>
+            <li class="breadcrumb-item"><a href="/admin/blogs">{{ trans('blogs.blogs') }}</a></li>
 
             @if ($category->parent->id)
                 <li class="breadcrumb-item"><a href="/admin/blogs/{{ $category->parent->id }}">{{ $category->parent->name }}</a></li>
@@ -42,23 +42,23 @@
                 <b><a href="/articles/{{ $data->id }}">{{ $data->title }}</a></b> ({!! formatNum($data->rating) !!})
 
                 <div class="float-right">
-                    <a href="/admin/articles/edit/{{ $data->id }}" title="Редактировать"><i class="fa fa-pencil-alt text-muted"></i></a>
-                    <a href="/admin/articles/move/{{ $data->id }}" title="Перенести"><i class="fa fa-arrows-alt text-muted"></i></a>
-                    <a href="/admin/articles/delete/{{ $data->id }}?page={{ $page->current }}&amp;token={{ $_SESSION['token'] }}" onclick="return confirm('Вы действительно хотите удалить данную статью?')" title="Удалить"><i class="fa fa-times text-muted"></i></a>
+                    <a href="/admin/articles/edit/{{ $data->id }}" title="{{ trans('common.edit') }}"><i class="fa fa-pencil-alt text-muted"></i></a>
+                    <a href="/admin/articles/move/{{ $data->id }}" title="{{ trans('common.move') }}"><i class="fa fa-arrows-alt text-muted"></i></a>
+                    <a href="/admin/articles/delete/{{ $data->id }}?page={{ $page->current }}&amp;token={{ $_SESSION['token'] }}" onclick="return confirm('{{ trans('blogs.confirm_delete_article') }}')" title="{{ trans('common.delete') }}"><i class="fa fa-times text-muted"></i></a>
                 </div>
 
             </div>
             <div>
                 {!! stripString(bbCode($data->text), 50) !!}<br>
-                Автор: {!! $data->user->getProfile() !!} ({{ dateFixed($data->created_at) }})<br>
-                Просмотров: {{ $data->visits }}<br>
-                <a href="/articles/comments/{{ $data->id }}">Комментарии</a> ({{ $data->count_comments }})
+                {{ trans('common.author') }}: {!! $data->user->getProfile() !!} ({{ dateFixed($data->created_at) }})<br>
+                {{ trans('common.views') }}: {{ $data->visits }}<br>
+                <a href="/articles/comments/{{ $data->id }}">{{ trans('common.comments') }}</a> ({{ $data->count_comments }})
                 <a href="/articles/end/{{ $data->id }}">&raquo;</a>
             </div>
         @endforeach
 
         {!! pagination($page) !!}
     @else
-        {!! showError('Статей еще нет, будь первым!') !!}
+        {!! showError(trans('blogs.empty_articles')) !!}
     @endif
 @stop

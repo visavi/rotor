@@ -8,7 +8,7 @@
     <nav>
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
-            <li class="breadcrumb-item"><a href="/admin">Панель</a></li>
+            <li class="breadcrumb-item"><a href="/admin">{{ trans('common.panel') }}</a></li>
             <li class="breadcrumb-item"><a href="/admin/guestbooks">Гостевая книга</a></li>
             <li class="breadcrumb-item active">Редактирование сообщения</li>
         </ol>

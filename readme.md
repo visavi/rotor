@@ -1,5 +1,7 @@
-Rotor
+Rotor 
 =========
+
+[Description in Russian](https://github.com/visavi/rotor/blob/master/readme_ru.md)
 
 [![Php Version](https://img.shields.io/badge/php-%3E%3D%207.1.3-brightgreen.svg)](https://php.net)
 [![Latest Stable Version](https://poser.pugx.org/visavi/rotor/v/stable)](https://packagist.org/packages/visavi/rotor)
@@ -10,88 +12,88 @@ Rotor
 [![Code Climate](https://codeclimate.com/github/visavi/rotor/badges/gpa.svg)](https://codeclimate.com/github/visavi/rotor)
 [![Coverage Status](https://coveralls.io/repos/github/visavi/rotor/badge.svg?branch=master)](https://coveralls.io/github/visavi/rotor?branch=master)
 
-Добро пожаловать!
-Мы благодарим Вас за то, что Вы решили использовать наш скрипт для своего сайта. Rotor - функционально законченная система управления контентом с открытым кодом написанная на PHP. Она использует базу данных MySQL для хранения содержимого вашего сайта.
+Welcome!
+We thank you for choosing to use our script for your site. Rotor is a functionally complete open source content management system written in PHP. It uses a MySQL database to store the contents of your site.
 
-**Rotor** является гибкой, мощной и интуитивно понятной системой с минимальными требованиями к хостингу, высоким уровнем защиты и является превосходным выбором для построения сайта любой степени сложности
+**Rotor** is a flexible, powerful and intuitive system with minimal hosting requirements, a high level of protection and an excellent choice for building a website of any complexity.
 
-Главной особенностью Rotor является низкая нагрузка на системные ресурсы и высокая скорость работы, даже при очень большой аудитории сайта нагрузка на сервер будет минимальной, и вы не будете испытывать каких-либо проблем с отображением информации.
+The main feature of Rotor is low load on system resources and high speed, even with a very large audience of the site, the load on the server will be minimal, and you will not experience any problems with displaying information.
 
-### Действия при первой установке движка Rotor
+### Actions at the first installation of the Rotor engine
 
-1. Настройте сайт так чтобы `public` был корневой директорией (Не обязательно для apache)
-Если у вас сайт находится в директории public_html, то содержимое директории public из архива необходимо положить в public_html, а все остальное должно находится на одном уровне с public_html
- В app/bootstrap.php и поменяй константу HOME
+1. Configure the site so that `public` is the root directory (Not necessary for apache)
+   If your site is in the public_html directory, then the contents of the public directory from the archive must be put in public_html, and everything else must be on the same level as public_html
+     In app / bootstrap.php and change the HOME constant
  `define('HOME', BASEDIR . '/public_html');`
 
-2. Распакуйте архив
+2. Unpack the archive
 
-3. Установите и настройте менеджер зависимостей [Composer](https://getcomposer.org).
-   или можно скачать готовый пакет 
+3. Install and configure the dependency manager [Composer](https://getcomposer.org).
+   or you can download the finished package
     [composer.phar](https://getcomposer.org/composer.phar)
-    и запустить его через команду
+    and run it through the command
    `php composer.phar install`
 
-4. Перейдите в директорию с сайтом выполните команду в консоли `composer install`
+4. Go to the site directory run the command in the console `composer install`
 
-5. Создайте базу данных с кодировкой utf8mb4 и пользователя для нее из панели управления на вашем сервере, во время установки скрипта необходимо будет вписать эти данные для соединения в файл .env
+5. Create a database with utf8mb4 encoding and a user for it from the control panel on your server, during the installation of the script, you will need to enter this data to be connected to the .env file
 `CREATE DATABASE rotor CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;`  
 
-6. Настройте конфигурационный файл .env, окружение, данные для доступа к БД, логин и email администратора и данные для отправки писем, sendmail или smtp. Если устанавливаете CMS вручную, то переименуйте конфигурационный файл .env.example в .env (Файл не отслеживается git'ом, поэтому на сервере и на локальном сайте могут находиться 2 разных файла с разными окружениями указанными в APP_ENV)
+6. Configure the .env configuration file, the environment, the data for accessing the database, the administrator's login and email, and the data for sending mail, sendmail or smtp. If you install CMS manually, then rename the configuration file .env.example to .env (The file is not tracked by git, so there can be 2 different files on the server and on the local site with different environments specified in APP_ENV)
 
-7. Установите права на запись всем директориям внутри `public/uploads` и `storage` или выполните команду `php rotor app:install`
+7. Set write permissions to all directories inside `public / uploads` and` storage` or execute the command `php rotor app: install`
 
-8. Если вы впервые устанавливаете движок, то необходимо очистить папку /database/upgrades и настройка APP_NEW должна быть true, если вы обновляетесь с предыдущей версии, то APP_NEW должна быть false.
+8. If you are installing the engine for the first time, then you need to clear the / database / upgrades folder and the APP_NEW setting should be true; if you are upgrading from a previous version, then APP_NEW should be false.
 
-9. Выполните миграции с помощью консольной команды `php rotor migrate`
+9. Migrate using the console command `php rotor migrate`
 
-10. Выполните заполнение БД с помощью команды `php rotor seed:run`
+10. Fill out the database using the command `php rotor seed:run`
 
-### Установка одной командой
-Для установки стабильной версии перейдите в консоли в директорию с сайтом и выполните команду 
+### Installation by one command
+To install the stable version, go to the site directory in the console and execute the command
 ```
 composer create-project visavi/rotor .
 ```
 
-Для установки последней версии выполните команду
+To install the latest version, run the command
 ```
 composer create-project --stability=dev visavi/rotor .
 ```
 
-### Требования
+### Requirements
 
-Минимальная версия PHP необходимая для работы движка PHP 7.1.3 и MySQL 5.5.3
+Minimal PHP version required for PHP 7.1.3 and MySQL 5.5.3 engine
 
-Если версия MySQL ниже 5.5.3, то необходимо в файле .env установить
+If MySQL version is lower than 5.5.3, then it is necessary to install in the .env file
 `DB_COLLATION=utf8_unicode_ci`
 
-Для работы полнотекстового поиска рекомендуется версия MySQL >= 5.6
+Version is recommended for full-text search. MySQL >= 5.6
 
-### Миграции и заполнение БД
+### Migrations and database seeder
 
-Текущий статус миграции `php rotor status`
+Current migration status `php rotor status`
 
-Создание миграций `php rotor create CreateTestTable`
+Create migrations `php rotor create CreateTestTable`
 
-Выполнение миграций `php rotor migrate` или `php rotor migrate -t 20110103081132` для отдельной миграции
+Performing migrations `php rotor migrate` or `php rotor migrate -t 20110103081132` for a specific migration
 
-Откат последней миграции `php rotor rollback` или `php rotor rollback -t 20120103083322` для отдельной миграции
+Rollback last migration `php rotor rollback` or `php rotor rollback -t 20120103083322` for a specific migration
 
-Создание сида `php rotor seed:create UsersSeeder`
+Create seeder `php rotor seed:create UsersSeeder`
 
-Выполнение сида `php rotor seed:run` или `php rotor seed:run -s UsersSeeder` для отдельного сида
+Performing seeder `php rotor seed:run` or `php rotor seed:run -s UsersSeeder` for a specific seed
 
-### Настройки cron
+### Cron settings
 
 ```
 * * * * * php /path-to-site/app/cron.php 2>&1
 ```
 
-### Настройки nginx
+### Nginx settings
 
-Чтобы пути обрабатывались правильно необходимо настроить сайт
+For the paths to be processed correctly, you need to configure the site.
 
-В секцию server добавить следующую запись: 
+Add the following entry to the server section:
 
 ```
 if (!-d $request_filename) {
@@ -99,14 +101,14 @@ if (!-d $request_filename) {
 }
 
 ```
-необходимую для удаление слешей в конце пути и запрета просмотра php файлов
+necessary to remove slashes at the end of the path and prohibit viewing php files
 
 ```
 location ~* /(assets|themes|uploads)/.*\.php$ {
     deny all;
 }
 ```
-В секции location / необходимо заменить строку
+In the location / section, you must replace the line
 
 ```
 try_files $uri $uri/ =404
@@ -116,19 +118,19 @@ try_files $uri $uri/ =404
 try_files $uri $uri/ /index.php?$query_string;
 ```
 
-### Запуск без Nginx
+### Run without Nginx
 
-В случае отсутствия сервера Nginx на локальной машине достаточно использовать встроенный сервер PHP через консоль. Для поднятия сервера и доступа к системе нужно:
+If there is no Nginx server on the local machine, it is sufficient to use the built-in PHP server through the console. To raise the server and access the system you need:
 
-1. Находясь в консоли, перейти в папку public
-2. Выполнить в консоли команду `php -S localhost:8000`
-3. Зайти в браузере по ссылке localhost:8000
+1. While in the console, go to the public folder
+2. Run the command in the console `php -S localhost:8000`
+3. Enter the browser link localhost:8000
 
-Если при запуске сервера консоль выводит информацию о том, что порт 8000 занят, попробуйте порт 8080
+If, when the server starts, the console displays information that port 8000 is busy, try port 8080
 
-### Настройки webpack
+### Webpack settings
 
-Для сжатия css и js необходимо установить npm и nodejs, после этого запустить команды
+To compress css and js, you need to install npm and nodejs, then run the commands (Optional)
 ```
 npm install
 npm run prod

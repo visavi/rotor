@@ -12,6 +12,7 @@ return [
     'sa' => 'Sa',
     'su' => 'Su',
 
+    'panel'             => 'Control Panel',
     'write'             => 'Write',
     'rules'             => 'Rules',
     'stickers'          => 'Stickers',

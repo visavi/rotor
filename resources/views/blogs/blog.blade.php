@@ -11,7 +11,7 @@
         </div><br>
     @endif
 
-    <h1>{{ $category->name }} <small>({{ trans('blogs.all_articles') }}: {{ $category->count_blogs }})</small></h1>
+    <h1>{{ $category->name }} <small>(`{{ trans('blogs.all_articles') }}`: {{ $category->count_blogs }})</small></h1>
 @stop
 
 @section('breadcrumb')
