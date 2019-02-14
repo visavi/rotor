@@ -19,7 +19,7 @@ define('VERSION', '7.5');
 require_once BASEDIR . '/vendor/autoload.php';
 
 if (! env('APP_ENV')) {
-    $dotenv = new Dotenv(BASEDIR);
+    $dotenv = Dotenv::create(BASEDIR);
     $dotenv->load();
 }
 
@@ -40,7 +40,6 @@ if (env('APP_DEBUG') && class_exists(Run::class)) {
 }
 
 $db = new DB();
-
 $db->addConnection([
     'driver'    => env('DB_DRIVER'),
     'port'      => env('DB_PORT'),
