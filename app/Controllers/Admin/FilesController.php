@@ -28,9 +28,9 @@ class FilesController extends AdminController
         $this->path = rtrim(check($request->input('path')), '/');
 
         if (
+            empty($this->path) ||
             ! file_exists(RESOURCES . '/views/' . $this->path) ||
             ! is_dir(RESOURCES . '/views/' . $this->path) ||
-            empty($this->path) ||
             Str::contains($this->path, '.') ||
             Str::startsWith($this->path, '/')
         ) {
