@@ -13,6 +13,7 @@ use ErrorException;
 use Exception;
 use Illuminate\Database\Capsule\Manager as DB;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 
 class UserController extends BaseController
 {
@@ -176,7 +177,7 @@ class UserController extends BaseController
                 if ($validator->isValid()) {
 
                     if (setting('regkeys')) {
-                        $activateKey  = str_random();
+                        $activateKey  = Str::random();
                         $activateLink = siteUrl(true).'/key?code=' . $activateKey;
                         $level        = User::PENDED;
                     }
@@ -193,7 +194,7 @@ class UserController extends BaseController
                         'language'      => setting('language'),
                         'money'         => setting('registermoney'),
                         'confirmregkey' => $activateKey,
-                        'subscribe'     => str_random(32),
+                        'subscribe'     => Str::random(32),
                         'updated_at'    => SITETIME,
                         'created_at'    => SITETIME,
                     ]);
@@ -408,7 +409,7 @@ class UserController extends BaseController
 
             if ($validator->isValid()) {
 
-                $activateKey  = str_random();
+                $activateKey  = Str::random();
                 $activateLink = siteUrl(true).'/key?code=' . $activateKey;
 
                 $user->update([
@@ -478,7 +479,7 @@ class UserController extends BaseController
             $timezone  = check($request->input('timezone', 0));
             $language  = check($request->input('language'));
             $notify    = $request->input('notify') ? 1 : 0;
-            $subscribe = $request->input('subscribe') ? str_random(32) : null;
+            $subscribe = $request->input('subscribe') ? Str::random(32) : null;
 
             $validator->equal($token, $_SESSION['token'], trans('validator.token'))
                 ->regex($themes, '|^[a-z0-9_\-]+$|i', ['themes' => 'Недопустимое название темы!'])
@@ -528,7 +529,6 @@ class UserController extends BaseController
      * @param Request   $request
      * @param Validator $validator
      * @return void
-     * @throws Exception
      */
     public function changeMail(Request $request, Validator $validator): void
     {
@@ -559,7 +559,7 @@ class UserController extends BaseController
 
         if ($validator->isValid()) {
 
-            $genkey = str_random(random_int(15,20));
+            $genkey = Str::random(\mt_rand(15,20));
 
             $subject = 'Изменение email на сайте '.setting('title');
             $message = 'Здравствуйте, '.$user->login.'<br>Вами была произведена операция по изменению адреса электронной почты<br><br>Для того, чтобы изменить email, необходимо подтвердить новый адрес почты<br>Перейдите по данной ссылке:<br><br><a href="'.siteUrl(true).'/accounts/editmail?key='.$genkey.'">'.siteUrl(true).'/accounts/editmail?key='.$genkey.'</a><br><br>Ссылка будет дейстительной в течение суток до '.date('j.m.y / H:i', strtotime('+1 day', SITETIME)).'<br>Для изменения адреса необходимо быть авторизованным на сайте<br>Если это сообщение попало к вам по ошибке или вы не собираетесь менять email, то просто проигнорируйте данное письмо';
@@ -746,7 +746,7 @@ class UserController extends BaseController
         if ($token === $_SESSION['token']) {
 
             $user->update([
-                'apikey' => md5(getUser('login').str_random()),
+                'apikey' => md5(getUser('login') . Str::random()),
             ]);
 
             setFlash('success', 'Новый ключ успешно сгенерирован!');

@@ -32,6 +32,7 @@ use App\Models\{
 use Curl\Curl;
 use Illuminate\Database\Capsule\Manager as DB;
 use Illuminate\Http\Request;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
 use Intervention\Image\Constraint;
 use Intervention\Image\ImageManagerStatic as Image;
@@ -1014,14 +1015,27 @@ function shuffleAssoc(&$array)
 /**
  * Возвращает обрезанную до заданного количества слов строку
  *
- * @param  string $str   Исходная строка
+ * @param  string $value Исходная строка
  * @param  int    $words Максимальное количество слов в результате
  * @param  string $end
  * @return string         Обрезанная строка
  */
-function stripString($str, $words = 20, $end = '...')
+function truncateWord($value, $words = 20, $end = '...')
 {
-    return Str::words(strip_tags($str, '<br>'), $words, $end);
+    return Str::words($value, strip_tags($words), $end);
+}
+
+/**
+ * Возвращает обрезанную до заданного количества букв строку
+ *
+ * @param  string $value Исходная строка
+ * @param  int    $words Максимальное количество слов в результате
+ * @param  string $end
+ * @return string         Обрезанная строка
+ */
+function truncateString($value, $words = 100, $end = '...')
+{
+    return Str::limit($value, strip_tags($words), $end);
 }
 
 /**
@@ -1043,7 +1057,7 @@ function getAdvertUser()
             $total = count($datafile);
             $show  = setting('rekusershow') > $total ? $total : setting('rekusershow');
 
-            $links  = array_random($datafile, $show);
+            $links  = Arr::random($datafile, $show);
             $result = implode('<br>', $links);
 
             return view('advert/_user', compact('result'));
@@ -1739,8 +1753,8 @@ function getInput($name, $default = null)
 
     $session = json_decode($_SESSION['input'], true);
 
-    if ($input = array_get($session, $name)) {
-        array_forget($session, $name);
+    if ($input = Arr::get($session, $name)) {
+        Arr::forget($session, $name);
 
         $_SESSION['input'] = json_encode($session);
     }
@@ -2025,7 +2039,7 @@ function pagination($page)
         $page->crumbs = 2;
     }
 
-    $url     = array_except($_GET, 'page');
+    $url     = Arr::except($_GET, 'page');
     $request = $url ? '&' . http_build_query($url) : null;
 
     $pages   = [];
@@ -2336,7 +2350,7 @@ function siteUrl($parse = false)
     $url = env('SITE_URL');
 
     if ($parse) {
-        $url = starts_with($url, '//') ? 'http:' . $url : $url;
+        $url = Str::startsWith($url, '//') ? 'http:' . $url : $url;
     }
 
     return $url;

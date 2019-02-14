@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Support\Str;
 use stdClass;
 
 /**
@@ -38,14 +39,14 @@ class Social extends BaseModel
      */
     public function generateLogin($network, $delimiter = '-')
     {
-        $firstName   = ucfirst(str_slug($network->first_name, $delimiter));
-        $lastName    = ucfirst(str_slug($network->last_name, $delimiter));
+        $firstName   = ucfirst(Str::slug($network->first_name, $delimiter));
+        $lastName    = ucfirst(Str::slug($network->last_name, $delimiter));
         $firstLetter = $firstName[0];
 
         $variants = [];
 
         if (! empty($network->nickname)) {
-            $variants[] = str_slug($network->nickname, $delimiter);
+            $variants[] = Str::slug($network->nickname, $delimiter);
         }
 
         $variants[] = $firstName;

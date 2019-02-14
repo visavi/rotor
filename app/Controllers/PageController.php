@@ -121,16 +121,15 @@ class PageController extends BaseController
      * Ежегодный сюрприз
      *
      * @return void
-     * @throws \Exception
      */
     public function surprise(): void
     {
         $surprise['requiredDate']  = '10.01';
 
-        $surpriseMoney  = random_int(10000, 50000);
-        $surprisePoint  = random_int(150, 250);
-        $surpriseRating = random_int(3, 10);
-        $currentYear    = date('Y');
+        $surpriseMoney  = \mt_rand(10000, 50000);
+        $surprisePoint  = \mt_rand(150, 250);
+        $surpriseRating = \mt_rand(3, 10);
+        $currentYear    = \date('Y');
 
         if (! $user = getUser()) {
             abort(403, 'Для того чтобы получить сюрприз, необходимо авторизоваться!');

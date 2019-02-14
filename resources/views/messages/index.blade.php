@@ -37,7 +37,7 @@
 
                     <div class="message">
                         {{ $data->type === 'out' ? 'Вы: ' : '' }}
-                        {!! stripString(bbCode($data->text)) !!}
+                        {!! truncateWord(bbCode($data->text)) !!}
                     </div>
                     @unless ($data->reading)
                         <span class="badge badge-info">Новое</span>

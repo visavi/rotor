@@ -16,6 +16,7 @@ use App\Models\VoteAnswer;
 use Illuminate\Database\Capsule\Manager as DB;
 use Illuminate\Database\Query\JoinClause;
 use Illuminate\Http\Request;
+use Illuminate\Support\Arr;
 
 class TopicController extends BaseController
 {
@@ -81,7 +82,7 @@ class TopicController extends BaseController
 
             if ($vote->answers->isNotEmpty()) {
 
-                $results = array_pluck($vote->answers, 'result', 'answer');
+                $results = Arr::pluck($vote->answers, 'result', 'answer');
                 $max = max($results);
 
                 arsort($results);

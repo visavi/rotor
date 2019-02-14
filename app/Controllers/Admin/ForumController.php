@@ -11,6 +11,7 @@ use App\Models\User;
 use App\Models\Vote;
 use Illuminate\Database\Query\JoinClause;
 use Illuminate\Http\Request;
+use Illuminate\Support\Arr;
 
 class ForumController extends AdminController
 {
@@ -514,7 +515,7 @@ class ForumController extends AdminController
 
             if ($vote->answers->isNotEmpty()) {
 
-                $results = array_pluck($vote->answers, 'result', 'answer');
+                $results = Arr::pluck($vote->answers, 'result', 'answer');
                 $max = max($results);
 
                 arsort($results);

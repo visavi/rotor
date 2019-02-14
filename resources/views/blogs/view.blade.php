@@ -9,7 +9,7 @@
 @stop
 
 @section('description')
-    {{ stripString(bbCode($blog->text)) }}
+    {{ truncateWord(bbCode($blog->text)) }}
 @stop
 
 @section('header')

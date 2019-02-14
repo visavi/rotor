@@ -8,6 +8,7 @@ use DI\Container;
 use FastRoute\Dispatcher;
 use Illuminate\Database\Capsule\Manager as DB;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 use Mobile_Detect;
 
 class Application
@@ -187,7 +188,7 @@ class Application
 
         /* Установка сессионных переменных */
         if (empty($_SESSION['token'])) {
-            $_SESSION['token'] = str_random(8);
+            $_SESSION['token'] = Str::random(8);
         }
 
         if (empty($_SESSION['protect'])) {

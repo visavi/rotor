@@ -39,7 +39,7 @@
             </thead>
 
             @foreach($iniInfo as $inikey => $inivalue)
-                <tr><td>{{ $inikey }}</td><td>{{ str_limit($inivalue['local_value'], 50) }}</td></tr>
+                <tr><td>{{ $inikey }}</td><td>{{ truncateString($inivalue['local_value'], 50) }}</td></tr>
             @endforeach
         </table><br>
 

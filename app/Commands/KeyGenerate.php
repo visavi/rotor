@@ -2,6 +2,7 @@
 
 namespace App\Commands;
 
+use Illuminate\Support\Str;
 use Phinx\Console\Command\AbstractCommand;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -28,7 +29,7 @@ class KeyGenerate extends AbstractCommand
      */
     protected function execute(InputInterface $input, OutputInterface $output): void
     {
-        $key = str_random(32);
+        $key = Str::random(32);
         $this->writeNewEnvironmentFileWith($key);
 
         $output->writeln('<info>Application key ['.$key.'] set successfully.</info>');

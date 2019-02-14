@@ -6,6 +6,7 @@ use App\Classes\Validator;
 use App\Models\Invite;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 
 class InvitationController extends AdminController
 {
@@ -67,7 +68,6 @@ class InvitationController extends AdminController
      * @param Request   $request
      * @param Validator $validator
      * @return string
-     * @throws \Exception
      */
     public function create(Request $request, Validator $validator): string
     {
@@ -84,7 +84,7 @@ class InvitationController extends AdminController
 
                 for ($i = 0; $i < $keys; $i++) {
                     $newKeys[] = [
-                        'hash'       => str_random(random_int(12, 15)),
+                        'hash'       => Str::random(\mt_rand(12, 15)),
                         'user_id'    => getUser('id'),
                         'created_at' => SITETIME,
                     ];
@@ -111,7 +111,6 @@ class InvitationController extends AdminController
      * @param Request   $request
      * @param Validator $validator
      * @return void
-     * @throws \Exception
      */
     public function send(Request $request, Validator $validator): void
     {
@@ -133,7 +132,7 @@ class InvitationController extends AdminController
 
             for ($i = 0; $i < $userkeys; $i++) {
 
-                $key = str_random(random_int(12, 15));
+                $key = Str::random(\mt_rand(12, 15));
 
                 $listKeys[] = $key;
 
@@ -164,7 +163,6 @@ class InvitationController extends AdminController
      * @param Request   $request
      * @param Validator $validator
      * @return void
-     * @throws \Exception
      */
     public function mail(Request $request, Validator $validator): void
     {
@@ -185,7 +183,7 @@ class InvitationController extends AdminController
 
             /** @var User $user */
             foreach ($users as $user) {
-                $key = str_random(random_int(12, 15));
+                $key = Str::random(\mt_rand(12, 15));
 
                 Invite::query()->create([
                     'hash'       => $key,

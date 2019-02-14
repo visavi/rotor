@@ -7,6 +7,7 @@ use App\Models\Polling;
 use App\Models\Vote;
 use App\Models\VoteAnswer;
 use Illuminate\Http\Request;
+use Illuminate\Support\Arr;
 
 class VoteController extends BaseController
 {
@@ -101,7 +102,7 @@ class VoteController extends BaseController
             }
         }
 
-        $voted = array_pluck($vote->answers, 'result', 'answer');
+        $voted = Arr::pluck($vote->answers, 'result', 'answer');
         $max   = max($voted);
 
         arsort($voted);
@@ -187,7 +188,7 @@ class VoteController extends BaseController
             abort('default', 'Для данного голосования не созданы варианты ответов');
         }
 
-        $voted = array_pluck($vote->answers, 'result', 'answer');
+        $voted = Arr::pluck($vote->answers, 'result', 'answer');
         $max   = max($voted);
 
         arsort($voted);

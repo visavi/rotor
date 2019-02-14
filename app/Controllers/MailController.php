@@ -5,6 +5,7 @@ namespace App\Controllers;
 use App\Classes\Validator;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 
 class MailController extends BaseController
 {
@@ -79,7 +80,7 @@ class MailController extends BaseController
                 ->lte($user['timepasswd'], SITETIME, ['user' => 'Восстанавливать пароль можно не чаще чем раз в 12 часов!']);
 
             if ($validator->isValid()) {
-                $resetKey  = str_random();
+                $resetKey  = Str::random();
                 $resetLink = siteUrl(true) . '/recovery/restore?key=' . $resetKey;
 
                 $user->update([
@@ -131,7 +132,7 @@ class MailController extends BaseController
 
         if ($validator->isValid()) {
 
-            $newpass    = str_random();
+            $newpass    = Str::random();
             $hashnewpas = password_hash($newpass, PASSWORD_BCRYPT);
 
             $user->update([

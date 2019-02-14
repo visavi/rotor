@@ -2,6 +2,7 @@
 
 use Dotenv\Dotenv;
 use Illuminate\Database\Capsule\Manager as DB;
+use Illuminate\Support\Arr;
 use Whoops\Handler\PlainTextHandler;
 use Whoops\Handler\PrettyPageHandler;
 use Whoops\Run;
@@ -33,7 +34,7 @@ if (env('APP_DEBUG') && class_exists(Run::class)) {
     }
 
     $whoops->pushHandler(function() {
-        $_SERVER = array_except($_SERVER, array_keys($_ENV));
+        $_SERVER = Arr::except($_SERVER, array_keys($_ENV));
         $_ENV    = [];
     });
     $whoops->register();

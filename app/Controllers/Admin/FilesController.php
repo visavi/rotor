@@ -5,6 +5,7 @@ namespace App\Controllers\Admin;
 use App\Classes\Validator;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 
 class FilesController extends AdminController
 {
@@ -30,8 +31,8 @@ class FilesController extends AdminController
             ! file_exists(RESOURCES . '/views/' . $this->path) ||
             ! is_dir(RESOURCES . '/views/' . $this->path) ||
             empty($this->path) ||
-            str_contains($this->path, '.') ||
-            starts_with($this->path, '/')
+            Str::contains($this->path, '.') ||
+            Str::startsWith($this->path, '/')
         ) {
             $this->path = null;
         }

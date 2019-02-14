@@ -2,6 +2,8 @@
 
 namespace App\Controllers;
 
+use Illuminate\Support\Str;
+
 class FileController extends BaseController
 {
     /**
@@ -20,7 +22,7 @@ class FileController extends BaseController
             abort(404);
         }
 
-        $page = str_contains($page, '/') ? $page : $page . '/index';
+        $page = Str::contains($page, '/') ? $page : $page . '/index';
 
         if (! file_exists(RESOURCES . '/views/files/' . $page . '.blade.php')) {
             abort(404);

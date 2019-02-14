@@ -49,7 +49,7 @@
 
             </div>
             <div>
-                {!! stripString(bbCode($data->text), 50) !!}<br>
+                {!! truncateWord(bbCode($data->text), 50) !!}<br>
                 {{ trans('main.author') }}: {!! $data->user->getProfile() !!} ({{ dateFixed($data->created_at) }})<br>
                 {{ trans('main.views') }}: {{ $data->visits }}<br>
                 <a href="/articles/comments/{{ $data->id }}">{{ trans('main.comments') }}</a> ({{ $data->count_comments }})
