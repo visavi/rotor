@@ -1,7 +1,7 @@
 @extends('layout')
 
 @section('title')
-    Редактирование сообщения
+    {{ trans('guestbooks.title_edit') }}
 @stop
 
 @section('breadcrumb')
@@ -10,7 +10,7 @@
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
             <li class="breadcrumb-item"><a href="/admin">{{ trans('main.panel') }}</a></li>
             <li class="breadcrumb-item"><a href="/admin/guestbooks">{{ trans('guestbooks.title') }}</a></li>
-            <li class="breadcrumb-item active">Редактирование сообщения</li>
+            <li class="breadcrumb-item active">{{ trans('guestbooks.title_edit') }}</li>
         </ol>
     </nav>
 @stop
@@ -24,7 +24,7 @@
 
             <div class="form-group{{ hasError('msg') }}">
                 <label for="msg">{{ trans('guestbooks.message') }}:</label>
-                <textarea class="form-control markItUp" id="msg" rows="5" name="msg" placeholder="{{ trans('guestbooks.message_text') }}" required>{{ getInput('msg', $post->text) }}</textarea>
+                <textarea class="form-control markItUp" id="msg" rows="5" name="msg" placeholder="{{ trans('guestbooks.message') }}" required>{{ getInput('msg', $post->text) }}</textarea>
                 {!! textError('msg') !!}
             </div>
 

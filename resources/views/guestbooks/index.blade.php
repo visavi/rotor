@@ -68,7 +68,7 @@
                 $data->text) !!}</div>
 
                 @if ($data->edit_user_id)
-                    <small><i class="fa fa-exclamation-circle text-danger"></i> {{ trans('guestbooks.edited') }}: {{ $data->editUser->getName() }} ({{ dateFixed($data->updated_at) }})</small><br>
+                    <small><i class="fa fa-exclamation-circle text-danger"></i> {{ trans('guestbooks.changed') }}: {{ $data->editUser->getName() }} ({{ dateFixed($data->updated_at) }})</small><br>
                 @endif
 
                 @if (isAdmin())
@@ -93,7 +93,7 @@
                 <input type="hidden" name="token" value="{{ $_SESSION['token'] }}">
                 <div class="form-group{{ hasError('msg') }}">
                     <label for="msg">{{ trans('guestbooks.message') }}:</label>
-                    <textarea class="form-control markItUp" maxlength="{{ setting('guesttextlength') }}" data-hint="{{ trans('main.characters_left') }}" id="msg" rows="5" name="msg" placeholder="{{ trans('guestbooks.message_text') }}" required>{{ getInput('msg') }}</textarea>
+                    <textarea class="form-control markItUp" maxlength="{{ setting('guesttextlength') }}" data-hint="{{ trans('main.characters_left') }}" id="msg" rows="5" name="msg" placeholder="{{ trans('guestbooks.message') }}" required>{{ getInput('msg') }}</textarea>
                     <span class="js-textarea-counter"></span>
                     {!! textError('msg') !!}
                 </div>
@@ -110,7 +110,7 @@
 
                 <div class="form-group{{ hasError('msg') }}">
                     <label for="msg">{{ trans('guestbooks.message') }}:</label>
-                    <textarea class="form-control" id="msg" rows="5" maxlength="{{ setting('guesttextlength') }}" name="msg" placeholder="{{ trans('guestbooks.message_text') }}" required>{{ getInput('msg') }}</textarea>
+                    <textarea class="form-control" id="msg" rows="5" maxlength="{{ setting('guesttextlength') }}" name="msg" placeholder="{{ trans('guestbooks.message') }}" required>{{ getInput('msg') }}</textarea>
                     {!! textError('msg') !!}
                 </div>
 

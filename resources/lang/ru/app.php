@@ -19,4 +19,10 @@ return [
     'ram_consumption' => 'Потребление ОЗУ',
     'cpu_load'        => 'Загрузка CPU',
     'loading_speed'   => 'Загрузка страницы',
+
+    'forum'     => 'Форум',
+    'guestbook' => 'Гостевая',
+    'news'      => 'Новости',
+    'load'      => 'Загрузки',
+    'blog'      => 'Блоги',
 ];

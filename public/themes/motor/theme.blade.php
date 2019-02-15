@@ -36,11 +36,11 @@
                 </div>
 
                 <div class="menu">
-                    <a href="/forums">Форум</a> &bull;
-                    <a href="/guestbooks">Гостевая</a> &bull;
-                    <a href="/news">Новости</a> &bull;
-                    <a href="/loads">Загрузки</a> &bull;
-                    <a href="/blogs">Блоги</a>
+                    <a href="/forums">{{ trans('app.forum') }}</a> &bull;
+                    <a href="/guestbooks">{{ trans('app.guestbook') }}</a> &bull;
+                    <a href="/news">{{ trans('app.news') }}</a> &bull;
+                    <a href="/loads">{{ trans('app.load') }}</a> &bull;
+                    <a href="/blogs">{{ trans('app.blog') }}</a>
 
                     <span class="mright">
                         @yield('menu')

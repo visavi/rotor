@@ -10,7 +10,7 @@
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
             <li class="breadcrumb-item"><a href="/admin">{{ trans('main.panel') }}</a></li>
             <li class="breadcrumb-item active">{{ trans('guestbooks.title') }}</li>
-            <li class="breadcrumb-item"><a href="/guestbooks?page={{ $page->current }}">Обзор</a></li>
+            <li class="breadcrumb-item"><a href="/guestbooks?page={{ $page->current }}">{{ trans('main.review') }}</a></li>
         </ol>
     </nav>
 @stop
@@ -49,28 +49,28 @@
                     {!! bbCode($data->text) !!}<br>
 
                     @if ($data->edit_user_id)
-                        <small><i class="fa fa-exclamation-circle text-danger"></i> Отредактировано: {{ $data->editUser->getName() }} ({{ dateFixed($data->updated_at) }})</small><br>
+                        <small><i class="fa fa-exclamation-circle text-danger"></i> {{ trans('guestbooks.changed') }}: {{ $data->editUser->getName() }} ({{ dateFixed($data->updated_at) }})</small><br>
                     @endif
 
                     <span class="data">({{ $data->brow }}, {{ $data->ip }})</span>
 
                     @if ($data->reply)
-                        <br><span style="color:#ff0000">Ответ: {!! bbCode($data->reply) !!}</span>
+                        <br><span style="color:#ff0000">{{ trans('main.reply') }}: {!! bbCode($data->reply) !!}</span>
                     @endif
                 </div>
             @endforeach
 
             <div class="float-right">
-                <button class="btn btn-sm btn-danger">Удалить выбранное</button>
+                <button class="btn btn-sm btn-danger">{{ trans('main.delete_selected') }}</button>
             </div>
         </form>
 
         {!! pagination($page) !!}
 
-        Всего сообщений: <b>{{ $page->total }}</b><br><br>
+        {{ trans('guestbooks.total_messages') }}: <b>{{ $page->total }}</b><br><br>
 
         @if (isAdmin('boss'))
-            <i class="fa fa-times"></i> <a href="/admin/guestbooks/clear?token={{ $_SESSION['token'] }}" onclick="return confirm('Вы уверены что хотите удалить все сообщения?')">{{ trans('main.clear') }}</a><br>
+            <i class="fa fa-times"></i> <a href="/admin/guestbooks/clear?token={{ $_SESSION['token'] }}" onclick="return confirm('{{ trans('guestbooks.confirm_delete') }}')">{{ trans('main.clear') }}</a><br>
         @endif
     @else
         {!! showError(trans('guestbooks.empty_messages')) !!}

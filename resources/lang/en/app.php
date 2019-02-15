@@ -19,4 +19,10 @@ return [
     'ram_consumption' => 'Consumption of ram',
     'cpu_load'        => 'CPU load',
     'loading_speed'   => 'Loading speed',
+
+    'forum'     => 'Forum',
+    'guestbook' => 'Guest book',
+    'news'      => 'News',
+    'load'      => 'Downloads',
+    'blog'      => 'Blogs',
 ];

@@ -1,7 +1,7 @@
 @extends('layout')
 
 @section('title')
-    Ответ на сообщение
+    {{ trans('guestbooks.title_reply') }}
 @stop
 
 @section('breadcrumb')
@@ -10,7 +10,7 @@
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
             <li class="breadcrumb-item"><a href="/admin">{{ trans('main.panel') }}</a></li>
             <li class="breadcrumb-item"><a href="/admin/guestbooks">{{ trans('guestbooks.title') }}</a></li>
-            <li class="breadcrumb-item active">Ответ на сообщение</li>
+            <li class="breadcrumb-item active">{{ trans('guestbooks.title_reply') }}</li>
         </ol>
     </nav>
 @stop
@@ -18,7 +18,7 @@
 @section('content')
     <div class="alert alert-info">
         <i class="fa fa-pencil-alt"></i> <b>{{ $post->user->login }}</b> <small>({{ dateFixed($post->created_at) }})</small><br>
-        <div>Сообщение: {!! bbCode($post->text) !!}</div>
+        <div>{{ trans('guestbooks.message') }}: {!! bbCode($post->text) !!}</div>
     </div>
 
     <div class="form">
@@ -26,12 +26,12 @@
             <input type="hidden" name="token" value="{{ $_SESSION['token'] }}">
 
             <div class="form-group{{ hasError('reply') }}">
-                <label for="reply">Сообщение:</label>
+                <label for="reply">{{ trans('guestbooks.message') }}:</label>
                 <textarea class="form-control markItUp" id="reply" rows="5" name="reply" required>{{ getInput('reply', $post->reply) }}</textarea>
                 {!! textError('reply') !!}
             </div>
 
-            <button class="btn btn-primary">Ответить</button>
+            <button class="btn btn-primary">{{ trans('main.write') }}</button>
         </form>
     </div>
 @stop

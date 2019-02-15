@@ -75,11 +75,11 @@ return [
     'max_file_weight'       => 'Maximum file weight',
     'min_image_size'        => 'Minimum image size',
     'valid_file_extensions' => 'Valid file extensions',
-    'not_authorized'        => 'To add a message you need to be logged in!',
     'attached_files'        => 'Attached files',
     'attach_files'          => 'Attach files',
     'attach_image'          => 'Attach image',
     'deleting_files'        => 'Deleting files',
 
-    'characters_left'  => 'Characters left',
+    'not_authorized'  => 'To add a message you need to be logged in!',
+    'characters_left' => 'Characters left',
 ];

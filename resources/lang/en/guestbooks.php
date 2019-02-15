@@ -2,11 +2,13 @@
 
 return [
     'title'          => 'Guest book',
-    'edited'         => 'Edited',
-    'message_text'   => 'Message text',
+    'changed'        => 'Changed',
     'message'        => 'Message',
     'answer'         => 'Answer',
     'empty_messages' => 'No messages yet!',
-    'title_edit'     => 'Editing message',
     'edit'           => 'Edit',
+    'title_edit'     => 'Editing message',
+    'title_reply'    => 'Reply message',
+    'confirm_delete' => 'Are you sure you want to delete all messages?',
+    'total_messages' => 'Total messages',
 ];
