@@ -34,7 +34,7 @@ class BookmarkController extends BaseController
         $topics = Bookmark::query()
             ->select('bookmarks.count_posts as bookmark_posts', 'bookmarks.topic_id', 'topics.*')
             ->where('bookmarks.user_id', getUser('id'))
-            ->leftJoin('topics', 'bookmarks.topic_id', '=', 'topics.id')
+            ->leftJoin('topics', 'bookmarks.topic_id', 'topics.id')
             ->with('topic.user', 'topic.lastPost.user')
             ->orderBy('updated_at', 'desc')
             ->offset($page->offset)

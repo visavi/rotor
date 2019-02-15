@@ -27,10 +27,10 @@
     @include('advert/_forum')
 
     @if (getUser())
-        {{ trans('main.my') }}: <a href="/forums/active/topics">{{ trans('forums.topics') }}</a>, <a href="/forums/active/posts">{{ trans('forums.messages') }}</a>, <a href="/forums/bookmarks">{{ trans('forums.bookmarks') }}</a> /
+        {{ trans('main.my') }}: <a href="/forums/active/topics">{{ trans('forums.topics') }}</a>, <a href="/forums/active/posts">{{ trans('forums.posts') }}</a>, <a href="/forums/bookmarks">{{ trans('forums.bookmarks') }}</a> /
     @endif
 
-    {{ trans('main.new') }}: <a href="/topics">{{ trans('forums.topics') }}</a>, <a href="/posts">{{ trans('forums.messages') }}</a>
+    {{ trans('main.new') }}: <a href="/topics">{{ trans('forums.topics') }}</a>, <a href="/posts">{{ trans('forums.posts') }}</a>
     <hr/>
 
     @if ($forums->isNotEmpty())
@@ -56,7 +56,7 @@
                 @if ($forum->lastTopic->lastPost->id)
                         {{ trans('forums.topic') }}: <a href="/topics/end/{{ $forum->lastTopic->id }}">{{ $forum->lastTopic->title }}</a>
                     <br/>
-                        {{ trans('forums.message') }}: {{ $forum->lastTopic->lastPost->user->getName() }} ({{ dateFixed($forum->lastTopic->lastPost->created_at) }})
+                        {{ trans('forums.post') }}: {{ $forum->lastTopic->lastPost->user->getName() }} ({{ dateFixed($forum->lastTopic->lastPost->created_at) }})
                 @else
                     {{ trans('forums.empty_topics') }}
                 @endif

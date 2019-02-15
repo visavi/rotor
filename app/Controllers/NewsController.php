@@ -255,7 +255,7 @@ class NewsController extends BaseController
         $comments = Comment::query()
             ->select('comments.*', 'title', 'count_comments')
             ->where('relate_type', News::class)
-            ->leftJoin('news', 'comments.relate_id', '=', 'news.id')
+            ->leftJoin('news', 'comments.relate_id', 'news.id')
             ->offset($page->offset)
             ->limit($page->limit)
             ->orderBy('created_at', 'desc')

@@ -87,7 +87,7 @@ class ActiveController extends BaseController
             ->select('comments.*', 'title', 'count_comments')
             ->where('relate_type', Down::class)
             ->where('comments.user_id', $user->id)
-            ->leftJoin('downs', 'comments.relate_id', '=', 'downs.id')
+            ->leftJoin('downs', 'comments.relate_id', 'downs.id')
             ->offset($page->offset)
             ->limit($page->limit)
             ->orderBy('comments.created_at', 'desc')

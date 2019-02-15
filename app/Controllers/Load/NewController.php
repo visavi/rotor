@@ -52,7 +52,7 @@ class NewController extends BaseController
         $comments = Comment::query()
             ->select('comments.*', 'title', 'count_comments')
             ->where('relate_type', Down::class)
-            ->leftJoin('downs', 'comments.relate_id', '=', 'downs.id')
+            ->leftJoin('downs', 'comments.relate_id', 'downs.id')
             ->offset($page->offset)
             ->limit($page->limit)
             ->orderBy('comments.created_at', 'desc')

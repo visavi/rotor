@@ -32,8 +32,8 @@ class TopicController extends BaseController
             ->select('topics.*', 'bookmarks.count_posts as bookmark_posts')
             ->where('topics.id', $id)
             ->leftJoin('bookmarks', function (JoinClause $join) {
-                $join->on('topics.id', '=', 'bookmarks.topic_id')
-                    ->where('bookmarks.user_id', '=', getUser('id'));
+                $join->on('topics.id', 'bookmarks.topic_id')
+                    ->where('bookmarks.user_id', getUser('id'));
             })
             ->with('forum.parent')
             ->first();
@@ -118,7 +118,7 @@ class TopicController extends BaseController
         $topic = Topic::query()
             ->select('topics.*', 'forums.parent_id')
             ->where('topics.id', $id)
-            ->leftJoin('forums', 'topics.forum_id', '=', 'forums.id')
+            ->leftJoin('forums', 'topics.forum_id', 'forums.id')
             ->first();
 
         if (! $topic) {
@@ -243,7 +243,7 @@ class TopicController extends BaseController
             abort(404, 'Данной темы не существует!');
         }
 
-        $isModer = \in_array(getUser('id'), explode(',', $topic->moderators), true) ? true : false;
+        $isModer = \in_array(getUser('id'), array_map('\intval', explode(',', $topic->moderators)), true) ? true : false;
 
         $validator->equal($token, $_SESSION['token'], trans('validator.token'))
             ->true(getUser(), 'Для закрытия тем необходимо авторизоваться')
@@ -465,11 +465,11 @@ class TopicController extends BaseController
 
         $post = Post::query()
             ->select('posts.*', 'moderators', 'closed')
-            ->leftJoin('topics', 'posts.topic_id', '=', 'topics.id')
+            ->leftJoin('topics', 'posts.topic_id', 'topics.id')
             ->where('posts.id', $id)
             ->first();
 
-        $isModer = \in_array(getUser('id'), explode(',', $post->moderators), true) ? true : false;
+        $isModer = \in_array(getUser('id'), array_map('\intval', explode(',', $post->moderators)), true) ? true : false;
 
         if (! $post) {
             abort(404, 'Данного сообщения не существует!');
@@ -488,7 +488,6 @@ class TopicController extends BaseController
         }
 
         if ($request->isMethod('post')) {
-
             $token   = check($request->input('token'));
             $msg     = check($request->input('msg'));
             $delfile = intar($request->input('delfile'));

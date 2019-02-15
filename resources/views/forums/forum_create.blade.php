@@ -44,7 +44,7 @@
             </div>
 
             <div class="form-group{{ hasError('msg') }}">
-                <label for="msg">{{ trans('forums.message') }}:</label>
+                <label for="msg">{{ trans('forums.post') }}:</label>
                 <textarea class="form-control markItUp" maxlength="{{ setting('forumtextlength') }}" data-hint="{{ trans('main.characters_left') }}" id="msg" rows="5" name="msg" required>{{ getInput('msg') }}</textarea>
                 <span class="js-textarea-counter"></span>
                 {!! textError('msg') !!}

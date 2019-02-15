@@ -154,7 +154,7 @@
 
                 @if ($data->files->isNotEmpty())
                     <div class="hiding">
-                        <i class="fa fa-paperclip"></i> <b>{{ trans('forums.attached_files') }}:</b><br>
+                        <i class="fa fa-paperclip"></i> <b>{{ trans('main.attached_files') }}:</b><br>
                         @foreach ($data->files as $file)
                             <?php $ext = getExtension($file->hash); ?>
 
@@ -168,7 +168,7 @@
                 @endif
 
                 @if ($data->edit_user_id)
-                    <small><i class="fa fa-exclamation-circle text-danger"></i> {{ trans('forums.changed') }}: {{ $data->editUser->login }} ({{ dateFixed($data->updated_at) }})</small><br>
+                    <small><i class="fa fa-exclamation-circle text-danger"></i> {{ trans('forums.changed') }}: {{ $data->editUser->getName() }} ({{ dateFixed($data->updated_at) }})</small><br>
                 @endif
 
                 @if (isAdmin())
@@ -197,8 +197,8 @@
                     <input type="hidden" name="token" value="{{ $_SESSION['token'] }}">
 
                     <div class="form-group{{ hasError('msg') }}">
-                        <label for="msg">{{ trans('forums.message') }}:</label>
-                        <textarea class="form-control markItUp" maxlength="{{ setting('forumtextlength') }}" data-hint="{{ trans('main.characters_left') }}" id="msg" rows="5" name="msg" placeholder="{{ trans('forums.message') }}" required>{{ getInput('msg') }}</textarea>
+                        <label for="msg">{{ trans('forums.post') }}:</label>
+                        <textarea class="form-control markItUp" maxlength="{{ setting('forumtextlength') }}" data-hint="{{ trans('main.characters_left') }}" id="msg" rows="5" name="msg" placeholder="{{ trans('forums.post') }}" required>{{ getInput('msg') }}</textarea>
                         <span class="js-textarea-counter"></span>
                         {!! textError('msg') !!}
                     </div>

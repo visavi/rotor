@@ -1,7 +1,7 @@
 @extends('layout')
 
 @section('title')
-    Форум
+    {{ trans('forums.forum') }}
 @stop
 
 @section('breadcrumb')
@@ -9,8 +9,8 @@
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
             <li class="breadcrumb-item"><a href="/admin">{{ trans('main.panel') }}</a></li>
-            <li class="breadcrumb-item active">Форум</li>
-            <li class="breadcrumb-item"><a href="/forums">Обзор форума</a></li>
+            <li class="breadcrumb-item active">{{ trans('forums.forum') }}</li>
+            <li class="breadcrumb-item"><a href="/forums">{{ trans('main.review') }}</a></li>
         </ol>
     </nav>
 @stop
@@ -30,7 +30,7 @@
                 @if (isAdmin('boss'))
                     <div class="float-right">
                         <a href="/admin/forums/edit/{{ $forum->id }}"><i class="fa fa-pencil-alt"></i></a>
-                        <a href="/admin/forums/delete/{{ $forum->id }}?token={{ $_SESSION['token'] }}" onclick="return confirm('Вы уверены что хотите удалить данный раздел?')"><i class="fa fa-times"></i></a>
+                        <a href="/admin/forums/delete/{{ $forum->id }}?token={{ $_SESSION['token'] }}" onclick="return confirm('{{ trans('forums.confirm_delete_forum') }}')"><i class="fa fa-times"></i></a>
                     </div>
                 @endif
             </div>
@@ -43,23 +43,23 @@
 
                         @if (isAdmin('boss'))
                             <a href="/admin/forums/edit/{{ $child->id }}"><i class="fa fa-pencil-alt"></i></a>
-                            <a href="/admin/forums/delete/{{ $child->id }}?token={{ $_SESSION['token'] }}" onclick="return confirm('Вы уверены что хотите удалить данный раздел?')"><i class="fa fa-times"></i></a>
+                            <a href="/admin/forums/delete/{{ $child->id }}?token={{ $_SESSION['token'] }}" onclick="return confirm('{{ trans('forums.confirm_delete_forum') }}')"><i class="fa fa-times"></i></a>
                         @endif
                         <br/>
                     @endforeach
                 @endif
 
                 @if ($forum->lastTopic->lastPost->id)
-                    Тема: <a href="/admin/topics/end/{{ $forum->lastTopic->id }}">{{ $forum->lastTopic->title }}</a>
+                        {{ trans('forums.topic') }}: <a href="/admin/topics/end/{{ $forum->lastTopic->id }}">{{ $forum->lastTopic->title }}</a>
                     <br/>
-                    Сообщение: {{ $forum->lastTopic->lastPost->user->getName() }} ({{ dateFixed($forum->lastTopic->lastPost->created_at) }})
+                        {{ trans('forums.post') }}: {{ $forum->lastTopic->lastPost->user->getName() }} ({{ dateFixed($forum->lastTopic->lastPost->created_at) }})
                 @else
-                    Темы еще не созданы!
+                    {{ trans('forums.empty_posts') }}
                 @endif
             </div>
         @endforeach
     @else
-        {!! showError('Разделы форума еще не созданы!') !!}
+        {!! showError(trans('forums.empty_forums')) !!}
     @endif
 
     @if (isAdmin('boss'))
@@ -68,15 +68,15 @@
                 <input type="hidden" name="token" value="{{ $_SESSION['token'] }}">
                 <div class="form-inline">
                     <div class="form-group{{ hasError('title') }}">
-                        <input type="text" class="form-control" id="title" name="title" maxlength="50" value="{{ getInput('title') }}" placeholder="Раздел" required>
+                        <input type="text" class="form-control" id="title" name="title" maxlength="50" value="{{ getInput('title') }}" placeholder="{{ trans('forums.forum') }}" required>
                     </div>
 
-                    <button class="btn btn-primary">Создать раздел</button>
+                    <button class="btn btn-primary">{{ trans('forums.create_forum') }}</button>
                 </div>
                 {!! textError('title') !!}
             </form>
         </div>
 
-        <i class="fa fa-sync"></i> <a href="/admin/forums/restatement?token={{ $_SESSION['token'] }}">Пересчитать</a><br>
+        <i class="fa fa-sync"></i> <a href="/admin/forums/restatement?token={{ $_SESSION['token'] }}">{{ trans('main.recount') }}</a><br>
     @endif
 @stop

@@ -1,7 +1,7 @@
 @extends('layout')
 
 @section('title')
-    Гостевая книга
+    {{ trans('guestbooks.title') }}
 @stop
 
 @section('breadcrumb')
@@ -9,7 +9,7 @@
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
             <li class="breadcrumb-item"><a href="/admin">{{ trans('main.panel') }}</a></li>
-            <li class="breadcrumb-item active">Гостевая книга</li>
+            <li class="breadcrumb-item active">{{ trans('guestbooks.title') }}</li>
             <li class="breadcrumb-item"><a href="/guestbooks?page={{ $page->current }}">Обзор</a></li>
         </ol>
     </nav>
@@ -49,7 +49,7 @@
                     {!! bbCode($data->text) !!}<br>
 
                     @if ($data->edit_user_id)
-                        <small><i class="fa fa-exclamation-circle text-danger"></i> Отредактировано: {{ $data->editUser->login }} ({{ dateFixed($data->updated_at) }})</small><br>
+                        <small><i class="fa fa-exclamation-circle text-danger"></i> Отредактировано: {{ $data->editUser->getName() }} ({{ dateFixed($data->updated_at) }})</small><br>
                     @endif
 
                     <span class="data">({{ $data->brow }}, {{ $data->ip }})</span>
@@ -70,9 +70,9 @@
         Всего сообщений: <b>{{ $page->total }}</b><br><br>
 
         @if (isAdmin('boss'))
-            <i class="fa fa-times"></i> <a href="/admin/guestbooks/clear?token={{ $_SESSION['token'] }}" onclick="return confirm('Вы уверены что хотите удалить все сообщения?')">Очистить</a><br>
+            <i class="fa fa-times"></i> <a href="/admin/guestbooks/clear?token={{ $_SESSION['token'] }}" onclick="return confirm('Вы уверены что хотите удалить все сообщения?')">{{ trans('main.clear') }}</a><br>
         @endif
     @else
-        {!! showError('Сообщений еще нет!') !!}
+        {!! showError(trans('guestbooks.empty_messages')) !!}
     @endif
 @stop
