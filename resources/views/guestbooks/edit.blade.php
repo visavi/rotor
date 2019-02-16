@@ -22,8 +22,8 @@
             <input type="hidden" name="token" value="{{ $_SESSION['token'] }}">
 
             <div class="form-group{{ hasError('msg') }}">
-                <label for="msg">{{ trans('guestbooks.message') }}:</label>
-                <textarea class="form-control markItUp" id="msg" rows="5" maxlength="{{ setting('guesttextlength') }}" data-hint="{{ trans('main.characters_left') }}" name="msg" placeholder="{{ trans('guestbooks.message') }}" required>{{ getInput('msg', $post->text) }}</textarea>
+                <label for="msg">{{ trans('main.message') }}:</label>
+                <textarea class="form-control markItUp" id="msg" rows="5" maxlength="{{ setting('guesttextlength') }}" data-hint="{{ trans('main.characters_left') }}" name="msg" placeholder="{{ trans('main.message') }}" required>{{ getInput('msg', $post->text) }}</textarea>
                 <span class="js-textarea-counter"></span>
                 {!! textError('msg') !!}
             </div>
