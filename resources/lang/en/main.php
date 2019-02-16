@@ -50,6 +50,7 @@ return [
     'views'             => 'Views',
     'comments'          => 'Comments',
     'empty_comments'    => 'No comments yet!',
+    'empty_messages'    => 'No messages yet!',
     'my'                => 'My',
     'new'               => 'New',
     'position'          => 'Position',

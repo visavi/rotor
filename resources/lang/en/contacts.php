@@ -10,8 +10,6 @@ return [
     'empty_list' => 'Contact list is empty!',
     'user_login' => 'User login',
     'add'        => 'Add',
-    'ignores'    => 'Ignore list',
-    'messages'   => 'Messages',
 
     'note_title' => 'Note for',
     'edit'       => 'Edit',

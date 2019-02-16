@@ -84,7 +84,7 @@
         {!! pagination($page) !!}
 
     @else
-        {!! showError(trans('guestbooks.empty_messages')) !!}
+        {!! showError(trans('main.empty_messages')) !!}
     @endif
 
     @if (getUser())

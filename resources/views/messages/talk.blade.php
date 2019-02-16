@@ -1,16 +1,16 @@
 @extends('layout')
 
 @section('title')
-    Диалог с {{ $user->getName() }}
+    {{ trans('messages.dialogue_with', ['user' => $user->getName()]) }}
 @stop
 
 @section('breadcrumb')
     <nav>
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
-            <li class="breadcrumb-item"><a href="/menu">Мое меню</a></li>
-            <li class="breadcrumb-item"><a href="/messages">Приватные сообщения</a></li>
-            <li class="breadcrumb-item active">Диалог</li>
+            <li class="breadcrumb-item"><a href="/menu">{{ trans('main.menu') }}</a></li>
+            <li class="breadcrumb-item"><a href="/messages">{{ trans('messages.private_messages') }}</a></li>
+            <li class="breadcrumb-item active">{{ trans('messages.dialogue') }}</li>
         </ol>
     </nav>
 @stop
@@ -19,7 +19,7 @@
     @if (getUser()->isIgnore($user))
         <div class="p-1 bg-danger text-white">
             <i class="fas fa-exclamation-triangle"></i>
-            Внимание, данный пользователь находится в игнор-листе!
+            {{ trans('messages.warning') }}
         </div>
     @endif
 
@@ -39,14 +39,14 @@
                         {{  dateFixed($data->created_at) }}
 
                         @if ($data->type === 'in')
-                            <a href="#" onclick="return sendComplaint(this)" data-type="{{ App\Models\Message::class }} " data-id="{{ $data->id }}" data-token="{{ $_SESSION['token'] }}" rel="nofollow" title="Жалоба"><i class="fa fa-bell text-muted"></i></a>
+                            <a href="#" onclick="return sendComplaint(this)" data-type="{{ App\Models\Message::class }} " data-id="{{ $data->id }}" data-token="{{ $_SESSION['token'] }}" rel="nofollow" title="{{ trans('main.complain') }}"><i class="fa fa-bell text-muted"></i></a>
                         @endif
                     </div>
 
                     <b>{!! $author->getProfile() !!}</b>
 
                     @unless ($data->reading)
-                        <br><span class="badge badge-info">Новое</span>
+                        <br><span class="badge badge-info">{{ trans('messages.new') }}</span>
                     @endunless
                 </div>
                 <div class="message">{!! bbCode($data->text) !!}</div>
@@ -55,7 +55,7 @@
 
         {!! pagination($page) !!}
     @else
-        {!! showError('История переписки отсутствует!') !!}
+        {!! showError(trans('messages.empty_dialogue')) !!}
     @endif
 
     <br>
@@ -64,8 +64,8 @@
             <input type="hidden" name="token" value="{{ $_SESSION['token'] }}">
 
             <div class="form-group{{ hasError('msg') }}">
-                <label for="msg">Сообщение:</label>
-                <textarea class="form-control markItUp" maxlength="{{ setting('comment_length') }}" data-hint="{{ trans('main.characters_left') }}" id="msg" rows="5" name="msg" placeholder="Текст сообщения" required>{{ getInput('msg') }}</textarea>
+                <label for="msg">{{ trans('main.message') }}:</label>
+                <textarea class="form-control markItUp" maxlength="{{ setting('comment_length') }}" data-hint="{{ trans('main.characters_left') }}" id="msg" rows="5" name="msg" placeholder="{{ trans('main.message') }}" required>{{ getInput('msg') }}</textarea>
                 <span class="js-textarea-counter"></span>
                 {!! textError('msg') !!}
             </div>
@@ -74,17 +74,16 @@
                 {!! view('app/_captcha') !!}
             @endif
 
-            <button class="btn btn-primary">Быстрый ответ</button>
+            <button class="btn btn-primary">{{ trans('main.write') }}</button>
         </form>
     </div><br>
 
-    Писем: <b>{{ $page->total }}</b><br><br>
+    {{ trans('messages.total') }}: <b>{{ $page->total }}</b><br><br>
 
     @if ($page->total)
-        <i class="fa fa-times"></i> <a href="/messages/delete/{{ $user->id }}?token={{ $_SESSION['token'] }}">Удалить переписку</a><br>
+        <i class="fa fa-times"></i> <a href="/messages/delete/{{ $user->id }}?token={{ $_SESSION['token'] }}">{{ trans('messages.delete_talk') }}</a><br>
     @endif
 
-    <i class="fa fa-search"></i> <a href="/searchusers">Поиск пользователей</a><br>
-    <i class="fa fa-envelope"></i> <a href="/messages/send">Написать письмо</a><br>
-    <i class="fa fa-address-book"></i> <a href="/contacts">Контакт</a> / <a href="/ignores">Игнор</a><br>
+    <i class="fa fa-search"></i> <a href="/searchusers">{{ trans('app.user.search') }}</a><br>
+    <i class="fa fa-address-book"></i> <a href="/contacts">{{ trans('app.contact') }}</a> / <a href="/ignores">{{ trans('app.ignore') }}</a><br>
 @stop

@@ -75,6 +75,6 @@
         </form>
     </div>
 
-    <i class="fa fa-users"></i> <a href="/contacts">{{ trans('ignores.contacts') }}</a><br>
-    <i class="fa fa-envelope"></i> <a href="/messages">{{ trans('ignores.messages') }}</a><br>
+    <i class="fa fa-users"></i> <a href="/contacts">{{ trans('app.contact') }}</a><br>
+    <i class="fa fa-envelope"></i> <a href="/messages">{{ trans('app.message') }}</a><br>
 @stop

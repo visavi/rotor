@@ -63,8 +63,8 @@
                 <input type="hidden" name="token" value="{{ $_SESSION['token'] }}">
 
                 <div class="form-group{{ hasError('msg') }}">
-                    <label for="msg">{{ trans('walls.message') }}:</label>
-                    <textarea class="form-control markItUp" id="msg" rows="5" name="msg" placeholder="{{ trans('walls.message_text') }}" required>{{ getInput('msg') }}</textarea>
+                    <label for="msg">{{ trans('main.message') }}:</label>
+                    <textarea class="form-control markItUp" id="msg" rows="5" name="msg" placeholder="{{ trans('main.message') }}" required>{{ getInput('msg') }}</textarea>
                     {!! textError('msg') !!}
                 </div>
 

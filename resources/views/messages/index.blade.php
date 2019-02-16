@@ -1,15 +1,15 @@
 @extends('layout')
 
 @section('title')
-    Приватные сообщения
+    {{ trans('messages.private_messages') }}
 @stop
 
 @section('breadcrumb')
     <nav>
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
-            <li class="breadcrumb-item"><a href="/menu">Мое меню</a></li>
-            <li class="breadcrumb-item">Сообщения</li>
+            <li class="breadcrumb-item"><a href="/menu">{{ trans('main.menu') }}</a></li>
+            <li class="breadcrumb-item">{{ trans('messages.messages') }}</li>
         </ol>
     </nav>
 @stop
@@ -26,21 +26,21 @@
                 <div class="media-body">
                     <div class="text-muted float-right">
                         {{  dateFixed($data->created_at) }}
-                        <a href="/messages/delete/{{ (int) $data->author->id }}?token={{ $_SESSION['token'] }}&amp;page={{ $page->current }}" onclick="return confirm('Вы действительно хотите удалить сообщения?')" data-toggle="tooltip" title="Удалить"><i class="fa fa-times"></i></a>
+                        <a href="/messages/delete/{{ (int) $data->author->id }}?token={{ $_SESSION['token'] }}&amp;page={{ $page->current }}" onclick="return confirm('{{ trans('messages.delete_confirm') }}')" data-toggle="tooltip" title="{{ trans('main.delete') }}"><i class="fa fa-times"></i></a>
                     </div>
 
                     @if ($data->author->id)
                         <b>{!! $data->author->getProfile() !!}</b>
                     @else
-                        <b>Система</b><br>
+                        <b>{{ trans('messages.system') }}</b><br>
                     @endif
 
                     <div class="message">
-                        {{ $data->type === 'out' ? 'Вы: ' : '' }}
+                        {{ $data->type === 'out' ? trans('messages.you') . ': ' : '' }}
                         {!! truncateWord(bbCode($data->text)) !!}
                     </div>
                     @unless ($data->reading)
-                        <span class="badge badge-info">Новое</span>
+                        <span class="badge badge-info">{{ trans('messages.new') }}</span>
                     @endunless
                 </div>
             </div>
@@ -48,11 +48,11 @@
 
         {!! pagination($page) !!}
     @else
-        {!! showError('Сообщений еще нет!') !!}
+        {!! showError(trans('main.empty_messages')) !!}
     @endif
 
-    <i class="fa fa-search"></i> <a href="/searchusers">Поиск пользователей</a><br>
-    <i class="fa fa-address-book"></i> <a href="/contacts">Контакт</a> / <a href="/ignores">Игнор</a><br>
+    <i class="fa fa-search"></i> <a href="/searchusers">{{ trans('app.user.search') }}</a><br>
+    <i class="fa fa-address-book"></i> <a href="/contacts">{{ trans('app.contact') }}</a> / <a href="/ignores">{{ trans('app.ignore') }}</a><br>
 @stop
 
 @push('styles')
