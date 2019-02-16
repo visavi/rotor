@@ -25,4 +25,11 @@ return [
     'news'      => 'News',
     'load'      => 'Downloads',
     'blog'      => 'Blogs',
+    'contact'   => 'Contact list',
+    'ignore'    => 'Ignore list',
+    'message'   => 'Messages',
+    'user'      => [
+        'search'  => 'User search',
+    ],
+
 ];

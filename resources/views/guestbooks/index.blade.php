@@ -84,7 +84,7 @@
         {!! pagination($page) !!}
 
     @else
-        {!! showError(trans('guestbooks.empty_messages')) !!}
+        {!! showError(trans('main.empty_messages')) !!}
     @endif
 
     @if (getUser())
@@ -92,8 +92,8 @@
             <form action="/guestbooks/add" method="post">
                 <input type="hidden" name="token" value="{{ $_SESSION['token'] }}">
                 <div class="form-group{{ hasError('msg') }}">
-                    <label for="msg">{{ trans('guestbooks.message') }}:</label>
-                    <textarea class="form-control markItUp" maxlength="{{ setting('guesttextlength') }}" data-hint="{{ trans('main.characters_left') }}" id="msg" rows="5" name="msg" placeholder="{{ trans('guestbooks.message') }}" required>{{ getInput('msg') }}</textarea>
+                    <label for="msg">{{ trans('main.message') }}:</label>
+                    <textarea class="form-control markItUp" maxlength="{{ setting('guesttextlength') }}" data-hint="{{ trans('main.characters_left') }}" id="msg" rows="5" name="msg" placeholder="{{ trans('main.message') }}" required>{{ getInput('msg') }}</textarea>
                     <span class="js-textarea-counter"></span>
                     {!! textError('msg') !!}
                 </div>
@@ -109,8 +109,8 @@
                 <input type="hidden" name="token" value="{{ $_SESSION['token'] }}">
 
                 <div class="form-group{{ hasError('msg') }}">
-                    <label for="msg">{{ trans('guestbooks.message') }}:</label>
-                    <textarea class="form-control" id="msg" rows="5" maxlength="{{ setting('guesttextlength') }}" name="msg" placeholder="{{ trans('guestbooks.message') }}" required>{{ getInput('msg') }}</textarea>
+                    <label for="msg">{{ trans('main.message') }}:</label>
+                    <textarea class="form-control" id="msg" rows="5" maxlength="{{ setting('guesttextlength') }}" name="msg" placeholder="{{ trans('main.message') }}" required>{{ getInput('msg') }}</textarea>
                     {!! textError('msg') !!}
                 </div>
 

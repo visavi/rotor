@@ -73,6 +73,6 @@
             <i class="fa fa-times"></i> <a href="/admin/guestbooks/clear?token={{ $_SESSION['token'] }}" onclick="return confirm('{{ trans('guestbooks.confirm_delete') }}')">{{ trans('main.clear') }}</a><br>
         @endif
     @else
-        {!! showError(trans('guestbooks.empty_messages')) !!}
+        {!! showError(trans('main.empty_messages')) !!}
     @endif
 @stop

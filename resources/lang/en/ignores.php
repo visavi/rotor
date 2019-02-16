@@ -9,8 +9,6 @@ return [
     'empty_list' => 'Ignore list is empty!',
     'user_login' => 'User login',
     'add'        => 'Add',
-    'contacts'   => 'Contact list',
-    'messages'   => 'Messages',
 
     'note_title' => 'Note for',
     'edit'       => 'Edit',
