@@ -1,3 +1,4 @@
+<script src="/language/{{ setting('language') }}/main.js"></script>
 @if (file_exists(HOME . '/assets/js/compiled.js'))
     <script src="/assets/js/compiled.js"></script>
 @else

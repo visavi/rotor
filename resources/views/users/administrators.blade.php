@@ -49,7 +49,7 @@
 
                     <div class="form-group">
                         <label for="msg">Сообщение:</label>
-                        <textarea class="form-control markItUp" maxlength="{{ setting('comment_length') }}" data-hint="{{ trans('main.characters_left') }}" id="msg" rows="5" name="msg" required></textarea>
+                        <textarea class="form-control markItUp" maxlength="{{ setting('comment_length') }}" id="msg" rows="5" name="msg" required></textarea>
                         <span class="js-textarea-counter"></span>
                     </div>
 

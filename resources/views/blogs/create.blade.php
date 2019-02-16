@@ -47,7 +47,7 @@
 
             <div class="form-group{{ hasError('text') }}">
                 <label for="text">{{ trans('blogs.article') }}:</label>
-                <textarea class="form-control markItUp" maxlength="{{ setting('maxblogpost') }}" data-hint="{{ trans('main.characters_left') }}" id="text" rows="5" name="text" required>{{ getInput('text') }}</textarea>
+                <textarea class="form-control markItUp" maxlength="{{ setting('maxblogpost') }}" id="text" rows="5" name="text" required>{{ getInput('text') }}</textarea>
                 <span class="js-textarea-counter"></span>
                 {!! textError('text') !!}
             </div>

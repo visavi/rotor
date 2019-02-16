@@ -22,7 +22,7 @@
             <input type="hidden" name="token" value="{{ $_SESSION['token'] }}">
 
             <div class="form-group{{ hasError('msg') }}">
-                <textarea class="form-control" id="markItUpHtml" rows="25" name="msg">{{ getInput('msg', $contest) }}</textarea>
+                <textarea class="form-control markItUpHtml" rows="25" name="msg">{{ getInput('msg', $contest) }}</textarea>
                 {!! textError('msg') !!}
             </div>
 

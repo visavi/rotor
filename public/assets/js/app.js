@@ -2,7 +2,7 @@ $(function() {
 
     prettyPrint();
 
-    bootbox.setDefaults({ locale: 'ru' });
+    bootbox.setDefaults({ locale: translate.language });
 
     toastr.options = {
         'toastClass' : 'toastr',
@@ -11,7 +11,6 @@ $(function() {
     };
 
     $('.markItUp').markItUp(mySettings).on('input', function () {
-        var hint      = $(this).data('hint');
         var maxlength = $(this).attr('maxlength');
         var text      = $(this).val()
             .replace(/(\r\n|\n|\r)/g, "\r\n")
@@ -26,7 +25,7 @@ $(function() {
             counter.removeClass('text-danger');
         }
 
-        counter.text(hint + ': ' + (maxlength - currentLength));
+        counter.text(translate.characters_left + ': ' + (maxlength - currentLength));
 
         if (currentLength === 0) {
             counter.empty();
@@ -171,7 +170,7 @@ function postQuote(el)
 /* Выход с сайта */
 function logout(el)
 {
-    if (bootbox.confirm('Вы уверены, что хотите выйти?', function(result) {
+    if (bootbox.confirm(translate.confirm_logout, function(result) {
             if (result) {
                 window.location = $(el).attr("href");
             }

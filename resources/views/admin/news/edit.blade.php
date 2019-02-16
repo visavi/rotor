@@ -29,7 +29,7 @@
 
             <div class="form-group{{ hasError('text') }}">
                 <label for="text">Текст:</label>
-                <textarea class="form-control markItUp" maxlength="10000" data-hint="{{ trans('main.characters_left') }}" id="text" rows="10" name="text" required>{{ getInput('text', $news->text) }}</textarea>
+                <textarea class="form-control markItUp" maxlength="10000" id="text" rows="10" name="text" required>{{ getInput('text', $news->text) }}</textarea>
                 <span class="js-textarea-counter"></span>
                 {!! textError('text') !!}
             </div>

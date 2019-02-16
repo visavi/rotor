@@ -113,4 +113,18 @@ class HomeController extends BaseController
 
         redirect($return ?? '/');
     }
+
+    /**
+     * Returns the file with the translation text
+     *
+     * @param string  $lang
+     * @return string
+     */
+    public function translation(string $lang): string
+    {
+        header('Content-type: application/javascript');
+        $file = RESOURCES . '/lang/' . $lang . '/main.js';
+
+        return file_exists($file) ? file_get_contents($file) : null;
+    }
 }

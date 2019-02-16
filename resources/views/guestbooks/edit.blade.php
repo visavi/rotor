@@ -23,7 +23,7 @@
 
             <div class="form-group{{ hasError('msg') }}">
                 <label for="msg">{{ trans('main.message') }}:</label>
-                <textarea class="form-control markItUp" id="msg" rows="5" maxlength="{{ setting('guesttextlength') }}" data-hint="{{ trans('main.characters_left') }}" name="msg" placeholder="{{ trans('main.message') }}" required>{{ getInput('msg', $post->text) }}</textarea>
+                <textarea class="form-control markItUp" id="msg" rows="5" maxlength="{{ setting('guesttextlength') }}" name="msg" placeholder="{{ trans('main.message') }}" required>{{ getInput('msg', $post->text) }}</textarea>
                 <span class="js-textarea-counter"></span>
                 {!! textError('msg') !!}
             </div>

@@ -82,5 +82,4 @@ return [
     'deleting_files'        => 'Deleting files',
 
     'not_authorized'  => 'To add a message you need to be logged in!',
-    'characters_left' => 'Characters left',
 ];
