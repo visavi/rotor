@@ -178,7 +178,7 @@ class Application
             setSetting(['themes' => 'default']);
         }
 
-        if (isset($_SESSION['language'])) {
+        if (isset($_SESSION['language']) && ! getUser()) {
             setSetting(['language' => $_SESSION['language']]);
         }
 

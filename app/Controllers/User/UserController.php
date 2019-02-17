@@ -473,7 +473,6 @@ class UserController extends BaseController
         $setting['timezones'] = range(-12, 12);
 
         if ($request->isMethod('post')) {
-
             $token     = check($request->input('token'));
             $themes    = check($request->input('themes'));
             $timezone  = check($request->input('timezone', 0));
@@ -483,7 +482,7 @@ class UserController extends BaseController
 
             $validator->equal($token, $_SESSION['token'], trans('validator.token'))
                 ->regex($themes, '|^[a-z0-9_\-]+$|i', ['themes' => 'Недопустимое название темы!'])
-                ->true(\in_array($themes, $setting['themes'], true) || empty($themes), ['themes' => 'Данная тема не установлена на сайте!'])
+                ->in($themes, $setting['themes'], ['themes' => 'Данная тема не установлена на сайте!'])
                 ->regex($language, '|^[a-z]+$|', ['language' => 'Недопустимое название языка!'])
                 ->in($language, $setting['languages'], ['language' => 'Данный язык не установлен на сайте!'])
                 ->regex($timezone, '|^[\-\+]{0,1}[0-9]{1,2}$|', ['timezone' => 'Недопустимое значение временного сдвига. (Допустимый диапазон -12 — +12 часов)!']);

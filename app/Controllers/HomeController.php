@@ -105,10 +105,17 @@ class HomeController extends BaseController
      */
     public function language(string $lang, Request $request): void
     {
-        $return = $request->input('return');
+        $return    = $request->input('return');
+        $languages = array_map('basename', glob(RESOURCES . '/lang/*', GLOB_ONLYDIR));
 
-        if (preg_match('|^[a-z]+$|', $lang)) {
-            $_SESSION['language'] = $lang;
+        if (preg_match('|^[a-z]+$|', $lang) && in_array($lang, $languages, true)) {
+            if ($user = getUser()) {
+                $user->update([
+                    'language' => $lang,
+                ]);
+            } else {
+                $_SESSION['language'] = $lang;
+            }
         }
 
         redirect($return ?? '/');
