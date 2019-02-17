@@ -1,7 +1,13 @@
 translate = {
-    language:        'ru',
+    language: 'ru',
     characters_left: 'Осталось символов',
     confirm_logout:  'Вы уверены, что хотите выйти?',
+    confirm_complain_submit: 'Вы действительно хотите отправить жалобу?',
+    complain_submitted: 'Жалоба успешно отправлена!',
+    confirm_message_delete: 'Вы действительно хотите удалить сообщение?',
+    message_deleted: 'Сообщение успешно удалено!',
+    record_deleted: 'Запись успешно удалена!',
+    photo_count: 'Photo {current} of {total}',
 
     editor: {
         bold: 'Жирный текст',

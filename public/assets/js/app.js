@@ -37,7 +37,7 @@ $(function() {
     $('[data-toggle="tooltip"]').tooltip();
     $('[data-toggle="popover"]').popover();
 
-    // Скрывает поповеры по клику в любом месте
+    // Hide popover poppers anywhere
     $('body').on('click', function (e) {
         //did not click a popover toggle or popover
         if ($(e.target).data('toggle') !== 'popover'
@@ -46,14 +46,14 @@ $(function() {
         }
     });
 
-    // Спойлер
+    // Spoiler
     $('.spoiler-title').on('click', function() {
         var spoiler = $(this).parent();
         spoiler.toggleClass('spoiler-open');
         spoiler.find('.spoiler-text:first').slideToggle();
     });
 
-    /* Показ новостей на главной */
+    /* Show news on the main */
     $('.news-title').on('click', function() {
         $(this).toggleClass('fa-caret-up');
         $(this).nextAll(".news-text:first").slideToggle();
@@ -70,7 +70,7 @@ $(function() {
     }).colorbox({rel: function() {
             return $(this).data('group');
         },
-        current: 'Фото {current} из {total}'
+        current: translate.photo_count
     });
 
     $(window).resize(function() {
@@ -182,7 +182,7 @@ function logout(el)
 /* Отправка жалобы на спам */
 function sendComplaint(el)
 {
-    bootbox.confirm('Вы действительно хотите отправить жалобу?', function(result) {
+    bootbox.confirm(translate.confirm_complain_submit, function(result) {
         if (result) {
 
             $.ajax({
@@ -203,7 +203,7 @@ function sendComplaint(el)
                     }
 
                     if (data.status === 'success') {
-                        notify('success', 'Жалоба успешно отправлена!');
+                        notify('success', translate.complain_submitted);
                     }
                 }
             });
@@ -255,7 +255,7 @@ function deletePost(el)
             }
 
             if (data.status === 'success') {
-                notify('success', 'Сообщение успешно удалено');
+                notify('success', translate.message_deleted);
 
                 $(el).closest('.post').hide('slow');
             }
@@ -268,7 +268,7 @@ function deletePost(el)
 /* Удаление комментариев */
 function deleteComment(el)
 {
-    bootbox.confirm('Вы действительно хотите удалить комментарий?', function(result) {
+    bootbox.confirm(translate.confirm_message_delete, function(result) {
         if (result) {
             $.ajax({
                 data: {
@@ -286,7 +286,7 @@ function deleteComment(el)
                     }
 
                     if (data.status === 'success') {
-                        notify('success', 'Комментарий успешно удален!');
+                        notify('success', translate.message_deleted);
 
                         $(el).closest('.post').hide('slow');
                     }
@@ -352,7 +352,7 @@ function deleteRating(el)
             }
 
             if (data.status === 'success') {
-                notify('success', 'Запись успешно удалена');
+                notify('success', translate.record_deleted);
 
                 $(el).closest('.post').hide('slow');
             }
@@ -378,7 +378,7 @@ function deleteSpam(el)
             }
 
             if (data.status === 'success') {
-                notify('success', 'Запись успешно удалена');
+                notify('success', translate.record_deleted);
 
                 $(el).closest('.post').hide('slow');
             }
@@ -404,7 +404,7 @@ function deleteWall(el)
             }
 
             if (data.status === 'success') {
-                notify('success', 'Запись успешно удалена');
+                notify('success', translate.record_deleted);
 
                 $(el).closest('.post').hide('slow');
             }
