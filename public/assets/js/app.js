@@ -217,7 +217,10 @@ function sendComplaint(el)
 function bookmark(el)
 {
     $.ajax({
-        data: {tid: $(el).data('tid'), token: $(el).data('token')},
+        data: {
+            tid: $(el).data('tid'),
+            token: $(el).data('token')
+        },
         dataType: 'json', type: 'post', url: '/forums/bookmarks/perform',
         success: function(data) {
 
@@ -228,12 +231,12 @@ function bookmark(el)
 
             if (data.status === 'added') {
                 notify('success', data.message);
-                $(el).text('Из закладок');
+                $(el).text($(el).data('from'));
             }
 
             if (data.status === 'deleted') {
                 notify('success', data.message);
-                $(el).text('В закладки');
+                $(el).text($(el).data('to'));
             }
         }
     });

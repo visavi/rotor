@@ -36,7 +36,7 @@
         @endif
 
         <?php $bookmark = $topic->bookmark_posts ? trans('forums.from_bookmarks') : trans('forums.to_bookmarks'); ?>
-        / <a href="#" onclick="return bookmark(this)" data-tid="{{ $topic->id }}" data-token="{{ $_SESSION['token'] }}">{{ $bookmark }}</a>
+        / <a href="#" onclick="return bookmark(this)" data-tid="{{ $topic->id }}" data-token="{{ $_SESSION['token'] }}" data-from="{{ trans('forums.from_bookmarks') }}"  data-to="{{ trans('forums.to_bookmarks') }}">{{ $bookmark }}</a>
     @endif
 
     @if ($topic->curators)

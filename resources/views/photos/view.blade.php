@@ -28,7 +28,7 @@
 
     <div>
         @foreach ($photo->files as $file)
-            <a href="{{ $file->hash }}" class="gallery" data-group="{{ $photo->id }}"><img  class="img-fluid" src="{{ $file->hash }}" alt="image"></a><br>
+            <a href="{{ $file->hash }}" class="gallery" data-group="{{ $photo->id }}"><img class="img-fluid" src="{{ $file->hash }}" alt="image"></a><br>
         @endforeach
 
         @if ($photo->text)
