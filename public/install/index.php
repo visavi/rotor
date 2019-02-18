@@ -200,7 +200,7 @@ $wrap->setOption('environment', 'default');
             $errorSettings++;
         }
 
-        echo 'Для обработка видео желательно установить библиотеку FFmpeg<br>';
+        echo 'Для обработки видео желательно установить библиотеку FFmpeg<br>';
 
         echo '<br><p style="font-size: 15px; font-weight: bold">Права доступа</p>';
 
