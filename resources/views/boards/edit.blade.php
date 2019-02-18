@@ -84,7 +84,7 @@
                 {!! textError('phone') !!}
             </div>
 
-            @include('app._upload', ['id' => $item->id, 'files' => $item->files, 'type' => App\Models\Item::class])
+            @include('app/_upload', ['id' => $item->id, 'files' => $item->files, 'type' => App\Models\Item::class])
 
             <button class="btn btn-primary">Изменить</button>
         </form>

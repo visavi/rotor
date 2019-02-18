@@ -1,17 +1,6 @@
 <?php
 
 return [
-    'yesterday' => 'Yesterday',
-    'today'     => 'Today',
-
-    'mo' => 'Mo',
-    'tu' => 'Tu',
-    'we' => 'We',
-    'th' => 'Th',
-    'fr' => 'Fr',
-    'sa' => 'Sa',
-    'su' => 'Su',
-
     'panel'             => 'Control Panel',
     'write'             => 'Write',
     'rules'             => 'Rules',
@@ -84,4 +73,28 @@ return [
     'deleting_files'        => 'Deleting files',
 
     'not_authorized'  => 'To add a message you need to be logged in!',
+
+    'mo' => 'Mo',
+    'tu' => 'Tu',
+    'we' => 'We',
+    'th' => 'Th',
+    'fr' => 'Fr',
+    'sa' => 'Sa',
+    'su' => 'Su',
+
+    'yesterday' => 'Yesterday',
+    'today'     => 'Today',
+
+    'january'   => 'January',
+    'february'  => 'February',
+    'march'     => 'March',
+    'april'     => 'April',
+    'may'       => 'May',
+    'june'      => 'June',
+    'july'      => 'July',
+    'august'    => 'August',
+    'september' => 'September',
+    'october'   => 'October',
+    'november'  => 'November',
+    'december'  => 'December',
 ];

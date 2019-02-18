@@ -20,7 +20,7 @@ class ValidatorTest extends TestCase
     /**
      * Тестирует длину строки
      */
-    public function testLength()
+    public function testLength(): void
     {
         $this->validator->length('test', 0, 10, 'error');
         $this->assertTrue($this->validator->isValid());
@@ -39,7 +39,7 @@ class ValidatorTest extends TestCase
     /**
      * Тестирует интервал чисел
      */
-    public function testBetween()
+    public function testBetween(): void
     {
         $this->validator->between(15, 10, 20, 'error');
         $this->assertTrue($this->validator->isValid());
@@ -52,7 +52,7 @@ class ValidatorTest extends TestCase
     /**
      * Тестирует больше ли число
      */
-    public function testGt()
+    public function testGt(): void
     {
         $this->validator->gt(15, 10, 'error');
         $this->assertTrue($this->validator->isValid());
@@ -68,7 +68,7 @@ class ValidatorTest extends TestCase
     /**
      * Тестирует равно или больше ли число
      */
-    public function testGte()
+    public function testGte(): void
     {
         $this->validator->gte(15, 10, 'error');
         $this->assertTrue($this->validator->isValid());
@@ -84,7 +84,7 @@ class ValidatorTest extends TestCase
     /**
      * Тестирует меньше ли число
      */
-    public function testLt()
+    public function testLt(): void
     {
         $this->validator->lt(5, 10, 'error');
         $this->assertTrue($this->validator->isValid());
@@ -100,7 +100,7 @@ class ValidatorTest extends TestCase
     /**
      * Тестирует равно или меньше ли число
      */
-    public function testLte()
+    public function testLte(): void
     {
         $this->validator->lte(5, 10, 'error');
         $this->assertTrue($this->validator->isValid());
@@ -116,7 +116,7 @@ class ValidatorTest extends TestCase
     /**
      * Тестирует эквивалентность данных
      */
-    public function testEqual()
+    public function testEqual(): void
     {
         $this->validator->equal('foo', 'foo', 'error');
         $this->assertTrue($this->validator->isValid());
@@ -132,7 +132,7 @@ class ValidatorTest extends TestCase
     /**
      * Тестирует неэквивалентность данных
      */
-    public function testNotEqual()
+    public function testNotEqual(): void
     {
         $this->validator->notEqual('foo', 'bar', 'error');
         $this->assertTrue($this->validator->isValid());
@@ -148,7 +148,7 @@ class ValidatorTest extends TestCase
     /**
      * Тестирует пустоту данных
      */
-    public function testEmpty()
+    public function testEmpty(): void
     {
         $this->validator->empty('', 'error');
         $this->assertTrue($this->validator->isValid());
@@ -175,7 +175,7 @@ class ValidatorTest extends TestCase
     /**
      * Тестирует непустоту данных
      */
-    public function testNotEmpty()
+    public function testNotEmpty(): void
     {
         $this->validator->notEmpty('foo', 'error');
         $this->assertTrue($this->validator->isValid());
@@ -194,7 +194,7 @@ class ValidatorTest extends TestCase
     /**
      * Тестирует на true
      */
-    public function testTrue()
+    public function testTrue(): void
     {
         $this->validator->true(true, 'error');
         $this->assertTrue($this->validator->isValid());
@@ -226,7 +226,7 @@ class ValidatorTest extends TestCase
     /**
      * Тестирует на false
      */
-    public function testFalse()
+    public function testFalse(): void
     {
         $this->validator->false(false, 'error');
         $this->assertTrue($this->validator->isValid());
@@ -253,7 +253,7 @@ class ValidatorTest extends TestCase
     /**
      * Тестирует на вхождение в массив
      */
-    public function testIn()
+    public function testIn(): void
     {
         $this->validator->in('bar', ['foo', 'bar'], 'error');
         $this->assertTrue($this->validator->isValid());
@@ -272,9 +272,9 @@ class ValidatorTest extends TestCase
     }
 
     /**
-     * Тестирует на вхождение в массив
+     * Тестирует на не вхождение в массив
      */
-    public function testNotIn()
+    public function testNotIn(): void
     {
         $this->validator->notIn('test', ['foo', 'bar'], 'error');
         $this->assertTrue($this->validator->isValid());
@@ -296,7 +296,7 @@ class ValidatorTest extends TestCase
     /**
      * Тестирует по регулярному выражению
      */
-    public function testRegex()
+    public function testRegex(): void
     {
         $this->validator->regex('fooBAR', '/^[a-z0-9\-]+$/i', 'error');
         $this->assertTrue($this->validator->isValid());
@@ -318,7 +318,7 @@ class ValidatorTest extends TestCase
     /**
      * Тестирует на число в плавающей точкой
      */
-    public function testFloat()
+    public function testFloat(): void
     {
         $this->validator->float(0.0, 'error');
         $this->assertTrue($this->validator->isValid());
@@ -337,7 +337,7 @@ class ValidatorTest extends TestCase
     /**
      * Тестирует проверку адреса сайта
      */
-    public function testUrl()
+    public function testUrl(): void
     {
         $this->validator->url('http://visavi.net', 'error');
         $this->assertTrue($this->validator->isValid());
@@ -359,7 +359,7 @@ class ValidatorTest extends TestCase
     /**
      * Тестирует проверку email адреса
      */
-    public function testEmail()
+    public function testEmail(): void
     {
         $this->validator->email('admin@visavi.net', 'error');
         $this->assertTrue($this->validator->isValid());
@@ -375,7 +375,7 @@ class ValidatorTest extends TestCase
     /**
      * Тестирует добавление ошибки
      */
-    public function testAddError()
+    public function testAddError(): void
     {
         $this->validator->addError(['key' => 'error']);
         $this->validator->addError(['key' => 'error']);
@@ -389,7 +389,7 @@ class ValidatorTest extends TestCase
     /**
      * Тестирует очистку сообщений
      */
-    public function testClearErrors()
+    public function testClearErrors(): void
     {
         $this->validator->addError(['key' => 'error']);
         $this->validator->addError(['key2' => 'error']);
@@ -402,7 +402,7 @@ class ValidatorTest extends TestCase
     /**
      * Тестирует изображение
      */
-    public function testFile()
+    public function testFile(): void
     {
         $image  = UploadedFile::fake()->image('avatar.jpg');
         $image2 = UploadedFile::fake()->image('avatar.jpg', 100, 100);

@@ -5,7 +5,7 @@ use App\Models\Guestbook;
 
 class HelperTest extends TestCase
 {
-    public function testMakeTime()
+    public function testMakeTime(): void
     {
         $makeTime = makeTime(100);
         $this->assertSame($makeTime, '01:40');
@@ -14,7 +14,7 @@ class HelperTest extends TestCase
         $this->assertSame($makeTime, '01:23:20');
     }
 
-    public function testDateFixed()
+    public function testDateFixed(): void
     {
         $timestamp = 1117627200;
 
@@ -25,7 +25,7 @@ class HelperTest extends TestCase
         $this->assertSame(dateFixed(false), dateFixed(SITETIME));
     }
 
-    public function testFormatTime()
+    public function testFormatTime(): void
     {
         $formatTime = formatTime(0);
         $this->assertSame($formatTime, 0);

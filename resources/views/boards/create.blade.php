@@ -61,7 +61,7 @@
             {!! textError('phone') !!}
         </div>
 
-        @include('app._upload', ['files' => $files, 'type' => App\Models\Item::class])
+        @include('app/_upload', ['files' => $files, 'type' => App\Models\Item::class])
 
         <button class="btn btn-primary">Добавить</button>
     </form>

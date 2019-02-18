@@ -84,6 +84,6 @@
         <i class="fa fa-times"></i> <a href="/messages/delete/{{ $user->id }}?token={{ $_SESSION['token'] }}">{{ trans('messages.delete_talk') }}</a><br>
     @endif
 
-    <i class="fa fa-search"></i> <a href="/searchusers">{{ trans('app.user.search') }}</a><br>
-    <i class="fa fa-address-book"></i> <a href="/contacts">{{ trans('app.contact') }}</a> / <a href="/ignores">{{ trans('app.ignore') }}</a><br>
+    <i class="fa fa-search"></i> <a href="/searchusers">{{ trans('index.user_search') }}</a><br>
+    <i class="fa fa-address-book"></i> <a href="/contacts">{{ trans('index.contacts') }}</a> / <a href="/ignores">{{ trans('index.ignores') }}</a><br>
 @stop

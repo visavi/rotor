@@ -70,12 +70,24 @@ function dateFixed($timestamp, $format = 'd.m.y / H:i')
     $today     = date('d.m.y', SITETIME + $shift);
     $yesterday = date('d.m.y', strtotime('-1 day', SITETIME + $shift));
 
-    $dateStamp = str_replace([$today, $yesterday], [trans('main.today'), trans('main.yesterday')], $dateStamp);
+    $replaces = [
+        $today      => trans('main.today'),
+        $yesterday  => trans('main.yesterday'),
+        'January'   => trans('main.january'),
+        'February'  => trans('main.february'),
+        'March'     => trans('main.march'),
+        'April'     => trans('main.april'),
+        'May'       => trans('main.may'),
+        'June'      => trans('main.june'),
+        'July'      => trans('main.july'),
+        'August'    => trans('main.august'),
+        'September' => trans('main.september'),
+        'October'   => trans('main.october'),
+        'November'  => trans('main.november'),
+        'December'  => trans('main.december'),
+    ];
 
-    $search = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
-    $replace = ['Января', 'Февраля', 'Марта', 'Апреля', 'Мая', 'Июня', 'Июля', 'Августа', 'Сентября', 'Октября', 'Ноября', 'Декабря'];
-
-    return str_replace($search, $replace, $dateStamp);
+    return strtr($dateStamp, $replaces);
 }
 
 /**

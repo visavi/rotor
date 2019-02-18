@@ -58,7 +58,7 @@
                 {!! textError('tags') !!}
             </div>
 
-            @include('app._upload', ['files' => $files, 'type' => App\Models\Blog::class, 'paste' => true])
+            @include('app/_upload', ['files' => $files, 'type' => App\Models\Blog::class, 'paste' => true])
 
             <button class="btn btn-primary">{{ trans('blogs.add') }}</button>
         </form>
