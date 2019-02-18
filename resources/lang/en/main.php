@@ -47,6 +47,8 @@ return [
     'select_all'        => 'Select all',
     'add'               => 'Add',
     'save'              => 'Save',
+    'publish'           => 'Publish',
+    'unpublish'         => 'Unpublish',
 
     'request'        => 'Request',
     'not_matter'     => 'Not matter',
@@ -72,6 +74,7 @@ return [
     'attach_image'          => 'Attach image',
     'deleting_files'        => 'Deleting files',
 
+    'currency'        => 'USD',
     'not_authorized'  => 'To add a message you need to be logged in!',
 
     'mo' => 'Mo',

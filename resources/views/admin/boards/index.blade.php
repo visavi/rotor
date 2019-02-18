@@ -1,14 +1,14 @@
 @extends('layout')
 
 @section('title')
-    Объявления
+    {{ trans('boards.title') }}
 @stop
 
 @section('header')
     @if ($board)
-        <h1>{{ $board->name }} <small>(Объявлений: {{ $board->count_items }})</small></h1>
+        <h1>{{ $board->name }} <small>({{ trans('boards.title') }}: {{ $board->count_items }})</small></h1>
     @else
-        <h1>Объявления</h1>
+        <h1>{{ trans('boards.title') }}</h1>
     @endif
 @stop
 
@@ -19,7 +19,7 @@
             <li class="breadcrumb-item"><a href="/admin">{{ trans('main.panel') }}</a></li>
 
             @if ($board)
-                <li class="breadcrumb-item"><a href="/admin/boards">Объявления</a></li>
+                <li class="breadcrumb-item"><a href="/admin/boards">{{ trans('boards.title') }}</a></li>
 
                 @if ($board->parent->id)
                     <li class="breadcrumb-item"><a href="/admin/boards/{{ $board->parent->id }}">{{ $board->parent->name }}</a></li>
@@ -27,13 +27,13 @@
                 <li class="breadcrumb-item active">{{ $board->name }}</li>
 
                 @if (isAdmin())
-                    <li class="breadcrumb-item"><a href="/boards/{{ $board->id  }}?page={{ $page->current }}">Обзор</a></li>
+                    <li class="breadcrumb-item"><a href="/boards/{{ $board->id  }}?page={{ $page->current }}">{{ trans('main.review') }}</a></li>
                 @endif
             @else
-                <li class="breadcrumb-item active">Объявления</li>
+                <li class="breadcrumb-item active">{{ trans('boards.title') }}</li>
 
                 @if (isAdmin())
-                    <li class="breadcrumb-item"><a href="/boards?page={{ $page->current }}">Обзор</a></li>
+                    <li class="breadcrumb-item"><a href="/boards?page={{ $page->current }}">{{ trans('main.review') }}</a></li>
                 @endif
             @endif
         </ol>
@@ -66,8 +66,8 @@
                                 <div class="col-md-7">
 
                                     <div class="float-right">
-                                        <a href="/admin/items/edit/{{ $item->id }}" data-toggle="tooltip" title="Редактировать"><i class="fa fa-pencil-alt"></i></a>
-                                        <a href="/admin/items/delete/{{ $item->id }}?token={{ $_SESSION['token'] }}" onclick="return confirm('Вы действительно хотите удалить объявление?')" data-toggle="tooltip" title="Удалить"><i class="fa fa-times"></i></a>
+                                        <a href="/admin/items/edit/{{ $item->id }}" data-toggle="tooltip" title="{{ trans('main.edit') }}"><i class="fa fa-pencil-alt"></i></a>
+                                        <a href="/admin/items/delete/{{ $item->id }}?token={{ $_SESSION['token'] }}" onclick="return confirm('{{ trans('boards.confirm_delete') }}')" data-toggle="tooltip" title="{{ trans('main.delete') }}"><i class="fa fa-times"></i></a>
                                     </div>
 
                                     <h5><a href="/items/{{ $item->id }}">{{ $item->title }}</a></h5>
@@ -78,7 +78,7 @@
 
                                 <div class="col-md-2">
                                     @if ($item->price)
-                                        <button type="button" class="btn btn-info">{{ $item->price }} ₽</button>
+                                        <button type="button" class="btn btn-info">{{ $item->price }} {{ trans('main.currency') }}</button>
                                     @endif
                                 </div>
                             </div>
@@ -90,11 +90,11 @@
 
         {!! pagination($page) !!}
     @else
-        {!! showError('Объявлений еще нет!') !!}
+        {!! showError(trans('boards.empty_items')) !!}
     @endif
 
     @if (isAdmin('boss'))
-        <i class="far fa-list-alt"></i> <a href="/admin/boards/categories">Категории</a><br>
-        <i class="fa fa-sync"></i> <a href="/admin/boards/restatement?token={{ $_SESSION['token'] }}">Пересчитать</a><br>
+        <i class="far fa-list-alt"></i> <a href="/admin/boards/categories">{{ trans('boards.categories') }}</a><br>
+        <i class="fa fa-sync"></i> <a href="/admin/boards/restatement?token={{ $_SESSION['token'] }}">{{ trans('main.recount') }}</a><br>
     @endif
 @stop

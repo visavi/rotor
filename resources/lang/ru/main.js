@@ -7,7 +7,7 @@ translate = {
     confirm_message_delete: 'Вы действительно хотите удалить сообщение?',
     message_deleted: 'Сообщение успешно удалено!',
     record_deleted: 'Запись успешно удалена!',
-    photo_count: 'Photo {current} of {total}',
+    photo_count: 'Фото {current} из {total}',
 
     editor: {
         bold: 'Жирный текст',

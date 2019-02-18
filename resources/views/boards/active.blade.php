@@ -1,19 +1,19 @@
 @extends('layout')
 
 @section('title')
-    Мои объявления
+    {{ trans('boards.my_items') }}
 @stop
 
 @section('header')
-    <h1>Мои объявления <small>(Объявлений: {{ $page->total }})</small></h1>
+    <h1>{{ trans('boards.my_items') }} <small>({{ trans('boards.title') }}: {{ $page->total }})</small></h1>
 @stop
 
 @section('breadcrumb')
     <nav>
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
-            <li class="breadcrumb-item"><a href="/boards">Объявления</a></li>
-            <li class="breadcrumb-item active">Мои объявления</li>
+            <li class="breadcrumb-item"><a href="/boards">{{ trans('boards.title') }}</a></li>
+            <li class="breadcrumb-item active">{{ trans('boards.my_items') }}</li>
         </ol>
     </nav>
 @stop
@@ -37,16 +37,16 @@
                                         <i class="fa fa-user-circle"></i> {!! $item->user->getProfile() !!} / {{ dateFixed($item->created_at) }}<br>
 
                                         @if ($item->expires_at > SITETIME)
-                                            <i class="fas fa-clock"></i> Истекает через {{ formatTime($item->expires_at - SITETIME) }}
+                                            <i class="fas fa-clock"></i> {{ trans('boards.expires_in') }} {{ formatTime($item->expires_at - SITETIME) }}
                                         @else
-                                            <span class="badge badge-danger">Объявление не активно</span>
+                                            <span class="badge badge-danger">{{ trans('boards.not_active_item') }}</span>
                                         @endif
                                     </p>
                                 </div>
 
                                 <div class="col-md-2">
                                     @if ($item->price)
-                                        <button type="button" class="btn btn-info">{{ $item->price }} ₽</button>
+                                        <button type="button" class="btn btn-info">{{ $item->price }} {{ trans('main.currency') }}</button>
                                     @endif
                                 </div>
                             </div>
@@ -59,6 +59,6 @@
         {!! pagination($page) !!}
 
     @else
-        {!! showError('Объявлений еще нет!') !!}
+        {!! showError(trans('boards.empty_items')) !!}
     @endif
 @stop
