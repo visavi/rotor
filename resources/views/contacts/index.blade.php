@@ -23,7 +23,7 @@
             @foreach ($contacts as $contact)
                 <div class="b">
                     <div class="float-right">
-                        <a href="/messages/talk/{{ $contact->contactor->login }}" data-toggle="tooltip" title="{{ trans('contacts.write') }}"><i class="fa fa-reply text-muted"></i></a>
+                        <a href="/messages/talk/{{ $contact->contactor->login }}" data-toggle="tooltip" title="{{ trans('main.write') }}"><i class="fa fa-reply text-muted"></i></a>
                         <a href="/contacts/note/{{ $contact->id }}" data-toggle="tooltip" title="{{ trans('contacts.note') }}"><i class="fa fa-sticky-note text-muted"></i></a>
                         <a href="/transfers?user={{ $contact->contactor->login }}" data-toggle="tooltip" title="{{ trans('contacts.transfer') }}"><i class="fa fa-money-bill-alt text-muted"></i></a>
                         <input type="checkbox" name="del[]" value="{{ $contact->id }}">
@@ -67,7 +67,7 @@
                 <input type="text" class="form-control" id="user" name="user" maxlength="20" value="{{ getInput('user', $login) }}" placeholder="{{ trans('contacts.user_login') }}" required>
 
                 <span class="input-group-btn">
-                    <button class="btn btn-primary">{{ trans('contacts.add') }}</button>
+                    <button class="btn btn-primary">{{ trans('main.add') }}</button>
                 </span>
             </div>
             {!! textError('user') !!}

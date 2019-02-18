@@ -29,7 +29,7 @@
                         {{  dateFixed($data->created_at) }}
                     </div>
 
-                    <b>Система</b>
+                    <b>{{ trans('messages.system') }}</b>
 
                     @unless ($data->reading)
                         <br><span class="badge badge-info">{{ trans('messages.new') }}</span>

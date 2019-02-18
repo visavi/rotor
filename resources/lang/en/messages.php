@@ -12,7 +12,7 @@ return [
     'total_notifications' => 'Notifications',
     'delete_talk'         => 'Delete talk',
     'dialogue'            => 'Dialogue',
-    'dialogue_with'       => 'Dialog with :user',
+    'dialogue_with'       => 'Dialogue with :user',
     'warning'             => 'Attention, given user is in ignore list!',
     'empty_dialogue'      => 'No correspondence history!',
     'total'               => 'Messages',

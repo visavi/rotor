@@ -76,13 +76,13 @@
                     <input type="hidden" name="token" value="{{ $_SESSION['token'] }}">
 
                     <div class="form-group{{ hasError('msg') }}">
-                        <label for="msg">{{ trans('news.message') }}:</label>
-                        <textarea class="form-control markItUp" id="msg" rows="5" maxlength="{{ setting('comment_length') }}" name="msg" placeholder="{{ trans('news.message_text') }}" required>{{ getInput('msg') }}</textarea>
+                        <label for="msg">{{ trans('main.message') }}:</label>
+                        <textarea class="form-control markItUp" id="msg" rows="5" maxlength="{{ setting('comment_length') }}" name="msg" placeholder="{{ trans('main.message') }}" required>{{ getInput('msg') }}</textarea>
                         <span class="js-textarea-counter"></span>
                         {!! textError('msg') !!}
                     </div>
 
-                    <button class="btn btn-success">{{ trans('news.write') }}</button>
+                    <button class="btn btn-success">{{ trans('main.write') }}</button>
                 </form>
             </div>
 

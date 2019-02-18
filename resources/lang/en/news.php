@@ -10,12 +10,9 @@ return [
 
     'confirm_delete' => 'Do you really want to delete this news?',
     'all_comments'   => 'All comments',
-    'message'        => 'Message',
-    'message_text'   => 'Message text',
-    'write'          => 'Write',
     'closed_news'    => 'Commenting on this news is closed!',
 
-    'comments_title' => 'Comments (Page :page)',
+    'comments_title' => 'Comments',
 
     'edit_title'     => 'Editing comment',
     'editing'        => 'Editing',
