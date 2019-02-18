@@ -68,7 +68,7 @@
                     {!! textError('msg') !!}
                 </div>
 
-                <button class="btn btn-primary">{{ trans('walls.write') }}</button>
+                <button class="btn btn-primary">{{ trans('main.write') }}</button>
             </form>
         </div><br>
 

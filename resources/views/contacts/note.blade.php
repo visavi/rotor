@@ -26,7 +26,7 @@
                 {!! textError('msg') !!}
             </div>
 
-            <button class="btn btn-primary">{{ trans('contacts.edit') }}</button>
+            <button class="btn btn-primary">{{ trans('main.edit') }}</button>
         </form>
     </div>
 @stop

@@ -28,5 +28,5 @@
         {!! showError(trans('notebooks.empty_note')) !!}
     @endif
 
-    <i class="fa fa-pencil-alt"></i> <a href="/notebooks/edit">{{ trans('notebooks.edit') }}</a><br>
+    <i class="fa fa-pencil-alt"></i> <a href="/notebooks/edit">{{ trans('main.edit') }}</a><br>
 @stop

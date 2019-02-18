@@ -24,7 +24,7 @@
                 <div class="b">
 
                     <div class="float-right">
-                        <a href="/messages/talk/{{ $data->ignoring->login }}" data-toggle="tooltip" title="{{ trans('ignores.write') }}"><i class="fa fa-reply text-muted"></i></a>
+                        <a href="/messages/talk/{{ $data->ignoring->login }}" data-toggle="tooltip" title="{{ trans('main.write') }}"><i class="fa fa-reply text-muted"></i></a>
                         <a href="/ignores/note/{{ $data->id }}" data-toggle="tooltip" title="{{ trans('ignores.note') }}"><i class="fa fa-sticky-note text-muted"></i></a>
                         <input type="checkbox" name="del[]" value="{{ $data->id }}">
                     </div>
@@ -68,7 +68,7 @@
                 <input type="text" class="form-control" id="user" name="user" maxlength="20" value="{{ getInput('user', $login) }}" placeholder="{{ trans('ignores.user_login') }}" required>
 
                 <span class="input-group-btn">
-                    <button class="btn btn-primary">{{ trans('ignores.add') }}</button>
+                    <button class="btn btn-primary">{{ trans('main.add') }}</button>
                 </span>
             </div>
             {!! textError('user') !!}

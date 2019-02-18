@@ -28,7 +28,7 @@
                 {!! textError('msg') !!}
             </div>
 
-            <button class="btn btn-primary">{{ trans('guestbooks.edit') }}</button>
+            <button class="btn btn-primary">{{ trans('main.edit') }}</button>
         </form>
     </div><br>
 @stop

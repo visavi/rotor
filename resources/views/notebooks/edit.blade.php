@@ -26,7 +26,7 @@
                 {!! textError('msg') !!}
             </div>
 
-            <button class="btn btn-primary">{{ trans('notebooks.save') }}</button>
+            <button class="btn btn-primary">{{ trans('main.save') }}</button>
         </form>
     </div><br>
 
