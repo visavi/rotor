@@ -1,7 +1,7 @@
 @extends('layout')
 
 @section('title')
-    Блоги
+    {{ trans('blogs.blogs') }}
 @stop
 
 @section('breadcrumb')
@@ -10,6 +10,7 @@
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
             <li class="breadcrumb-item"><a href="/admin">{{ trans('main.panel') }}</a></li>
             <li class="breadcrumb-item active">{{ trans('blogs.blogs') }}</li>
+            <li class="breadcrumb-item"><a href="/blogs">{{ trans('main.review') }}</a></li>
         </ol>
     </nav>
 @stop

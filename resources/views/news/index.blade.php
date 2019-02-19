@@ -1,18 +1,18 @@
 @extends('layout')
 
 @section('title')
-    {{ trans('news.title') }} ({{ trans('main.page_num', ['page' => $page->current]) }})
+    {{ trans('news.site_news') }} ({{ trans('main.page_num', ['page' => $page->current]) }})
 @stop
 
 @section('header')
-    <h1>{{ trans('news.title') }}</h1>
+    <h1>{{ trans('news.site_news') }}</h1>
 @stop
 
 @section('breadcrumb')
     <nav>
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
-            <li class="breadcrumb-item active">{{ trans('news.title') }}</li>
+            <li class="breadcrumb-item active">{{ trans('news.site_news') }}</li>
 
             @if (isAdmin('moder'))
                 <li class="breadcrumb-item"><a href="/admin/news">{{ trans('main.management') }}</a></li>
@@ -38,7 +38,7 @@
             <div class="clearfix">{!! bbCode($data->shortText()) !!}</div>
             <div>
                 {{ trans('news.added_by') }}: {!! $data->user->getProfile() !!}<br>
-                <a href="/news/comments/{{ $data->id }}">{{ trans('news.comments') }}</a> ({{ $data->count_comments }})
+                <a href="/news/comments/{{ $data->id }}">{{ trans('main.comments') }}</a> ({{ $data->count_comments }})
                 <a href="/news/end/{{ $data->id }}">&raquo;</a>
             </div>
         @endforeach
@@ -48,6 +48,6 @@
         {!! showError(trans('news.empty_news')) !!}
     @endif
 
-    <i class="fa fa-rss"></i> <a href="/news/rss">{{ trans('news.rss') }}</a><br>
+    <i class="fa fa-rss"></i> <a href="/news/rss">{{ trans('main.rss') }}</a><br>
     <i class="fa fa-comment"></i> <a href="/news/allcomments">{{ trans('news.last_comments') }}</a><br>
 @stop

@@ -49,6 +49,9 @@ return [
     'save'              => 'Save',
     'publish'           => 'Publish',
     'unpublish'         => 'Unpublish',
+    'title'             => 'Title',
+    'text'              => 'Text',
+    'close_comments'    => 'Close comments',
 
     'request'        => 'Request',
     'not_matter'     => 'Not matter',

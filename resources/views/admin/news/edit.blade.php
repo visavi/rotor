@@ -1,7 +1,7 @@
 @extends('layout')
 
 @section('title')
-    Редактирование новости {{ $news->title }}
+    {{ trans('news.edit_news_title') }} {{ $news->title }}
 @stop
 
 @section('breadcrumb')
@@ -9,9 +9,9 @@
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
             <li class="breadcrumb-item"><a href="/admin">{{ trans('main.panel') }}</a></li>
-            <li class="breadcrumb-item"><a href="/admin/news">Новости</a></li>
+            <li class="breadcrumb-item"><a href="/admin/news">{{ trans('news.site_news') }}</a></li>
             <li class="breadcrumb-item"><a href="/news/{{ $news->id }}">{{ $news->title }}</a></li>
-            <li class="breadcrumb-item active">Редактирование новости</li>
+            <li class="breadcrumb-item active">{{ trans('news.edit_news_title') }}</li>
         </ol>
     </nav>
 @stop
@@ -22,14 +22,14 @@
             <input type="hidden" name="token" value="{{ $_SESSION['token'] }}">
 
             <div class="form-group{{ hasError('title') }}">
-                <label for="title">Название:</label>
-                <input type="text" class="form-control" id="title" name="title" maxlength="100" value="{{ getInput('title', $news->title) }}" required>
+                <label for="title">{{ trans('main.title') }}:</label>
+                <input type="text" class="form-control" id="title" name="title" maxlength="100" value="{{ getInput('title', $news->title) }}" placeholder="{{ trans('main.title') }}" required>
                 {!! textError('title') !!}
             </div>
 
             <div class="form-group{{ hasError('text') }}">
-                <label for="text">Текст:</label>
-                <textarea class="form-control markItUp" maxlength="10000" id="text" rows="10" name="text" required>{{ getInput('text', $news->text) }}</textarea>
+                <label for="text">{{ trans('main.text') }}:</label>
+                <textarea class="form-control markItUp" maxlength="10000" id="text" rows="10" name="text" placeholder="{{ trans('main.text') }}" required>{{ getInput('text', $news->text) }}</textarea>
                 <span class="js-textarea-counter"></span>
                 {!! textError('text') !!}
             </div>
@@ -42,7 +42,7 @@
 
             <label class="btn btn-sm btn-secondary" for="image">
                 <input id="image" type="file" name="image" onchange="$('#upload-file-info').html(this.files[0].name);" hidden>
-                Прикрепить картинку&hellip;
+                {{ trans('main.attach_image') }}&hellip;
             </label>
             <span class="badge badge-info" id="upload-file-info"></span>
             {!! textError('image') !!}
@@ -51,16 +51,16 @@
             <div class="custom-control custom-checkbox">
                 <input type="hidden" value="0" name="closed">
                 <input type="checkbox" class="custom-control-input" value="1" name="closed" id="closed"{{ getInput('closed', $news->closed) ? ' checked' : '' }}>
-                <label class="custom-control-label" for="closed">Закрыть комментарии</label>
+                <label class="custom-control-label" for="closed">{{ trans('main.close_comments') }}</label>
             </div>
 
             <div class="custom-control custom-checkbox">
                 <input type="hidden" value="0" name="top">
                 <input type="checkbox" class="custom-control-input" value="1" name="top" id="top"{{ getInput('top', $news->top) ? ' checked' : '' }}>
-                <label class="custom-control-label" for="top">Показывать на главной</label>
+                <label class="custom-control-label" for="top">{{ trans('news.show_on_the_homepage') }}</label>
             </div>
 
-            <button class="btn btn-primary">Изменить</button>
+            <button class="btn btn-primary">{{ trans('main.change') }}</button>
         </form>
     </div>
 @stop
