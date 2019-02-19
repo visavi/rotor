@@ -5,16 +5,16 @@
 @stop
 
 @section('header')
-    <h1>{{ $news->title }} - {{ trans('news.comments') }}</h1>
+    <h1>{{ $news->title }} - {{ trans('main.comments') }}</h1>
 @stop
 
 @section('breadcrumb')
     <nav>
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
-            <li class="breadcrumb-item"><a href="/news">{{ trans('news.title') }}</a></li>
+            <li class="breadcrumb-item"><a href="/news">{{ trans('news.site_news') }}</a></li>
             <li class="breadcrumb-item"><a href="/news/{{ $news->id }}">{{ $news->title }}</a></li>
-            <li class="breadcrumb-item active">{{ trans('news.comments') }}</li>
+            <li class="breadcrumb-item active">{{ trans('main.comments') }}</li>
         </ol>
     </nav>
 @stop

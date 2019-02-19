@@ -8,10 +8,10 @@
     <nav>
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
-            <li class="breadcrumb-item"><a href="/news">{{ trans('news.title') }}</a></li>
+            <li class="breadcrumb-item"><a href="/news">{{ trans('news.site_news') }}</a></li>
             <li class="breadcrumb-item"><a href="/news/{{ $news->id }}">{{ $news->title }}</a></li>
-            <li class="breadcrumb-item"><a href="/news/comments/{{ $news->id }}">{{ trans('news.comments') }}</a></li>
-            <li class="breadcrumb-item active">{{ trans('news.editing') }}</li>
+            <li class="breadcrumb-item"><a href="/news/comments/{{ $news->id }}">{{ trans('main.comments') }}</a></li>
+            <li class="breadcrumb-item active">{{ trans('news.edit_title') }}</li>
         </ol>
     </nav>
 @stop
@@ -30,7 +30,7 @@
                 {!! textError('msg') !!}
             </div>
 
-            <button class="btn btn-success">{{ trans('news.edit') }}</button>
+            <button class="btn btn-success">{{ trans('main.edit') }}</button>
         </form>
     </div>
 @stop
