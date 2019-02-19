@@ -1,7 +1,7 @@
 @extends('layout')
 
 @section('title')
-    Ошибка
+    {{ trans('errors.error') }}
 @stop
 
 @section('content')
@@ -17,7 +17,7 @@
 
             @if ($referer)
                 <div class="m-3">
-                    <i class="fa fa-arrow-circle-left"></i> <a href="{{ $referer }}">Вернуться</a><br>
+                    <i class="fa fa-arrow-circle-left"></i> <a href="{{ $referer }}">{{ trans('errors.return') }}</a><br>
                 </div>
             @endif
         </div>

@@ -1,7 +1,7 @@
 @extends('layout')
 
 @section('title')
-    Ошибка 404
+    {{ trans('errors.error') }} 404
 @stop
 
 @section('content')
@@ -13,17 +13,17 @@
             <img src="/assets/img/errors/{{ basename($images[array_rand($images)]) }}" alt="error 404">
         </div>
         <div class="col-md-8 text-center">
-            <h1>Ошибка 404!</h1>
+            <h1>{{ trans('errors.error') }} 404!</h1>
 
             @if ($message)
                 <div class="lead">{{ $message }}</div>
             @else
-                <div class="lead">Данной страницы не существует!</div>
+                <div class="lead">{{ trans('errors.not_found') }}</div>
             @endif
 
             @if ($referer)
                 <div class="m-3">
-                    <i class="fa fa-arrow-circle-left"></i> <a href="{{ $referer }}">Вернуться</a><br>
+                    <i class="fa fa-arrow-circle-left"></i> <a href="{{ $referer }}">{{ trans('errors.return') }}</a><br>
                 </div>
             @endif
         </div>

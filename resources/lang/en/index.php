@@ -5,7 +5,7 @@ return [
     'news'           => 'News',
     'communication'  => 'Communication',
     'guestbooks'     => 'Guest book',
-    'photos'         => 'Photo Gallery',
+    'photos'         => 'Photo gallery',
     'votes'          => 'Voting',
     'offers'         => 'Suggestions / Problems',
     'forums'         => 'Forum',

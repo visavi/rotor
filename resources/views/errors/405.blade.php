@@ -1,7 +1,7 @@
 @extends('layout')
 
 @section('title')
-    Ошибка 405
+    {{ trans('errors.error') }} 405
 @stop
 
 @section('content')
@@ -13,13 +13,13 @@
             <img src="/assets/img/errors/{{ basename($images[array_rand($images)]) }}" alt="error 405">
         </div>
         <div class="col-md-8 text-center">
-            <h1>Ошибка 405!</h1>
+            <h1>{{ trans('errors.error') }} 405!</h1>
 
-            <div class="lead">Переданный метод HTTP не поддерживается на данной странице!</div>
+            <div class="lead">{{ trans('errors.method_not_allowed') }}</div>
 
             @if ($referer)
                 <div class="m-3">
-                    <i class="fa fa-arrow-circle-left"></i> <a href="{{ $referer }}">Вернуться</a><br>
+                    <i class="fa fa-arrow-circle-left"></i> <a href="{{ $referer }}">{{ trans('errors.return') }}</a><br>
                 </div>
             @endif
         </div>

@@ -1,14 +1,14 @@
 @extends('layout')
 
 @section('title')
-    Статистика посещений
+    {{ trans('counters.title') }}
 @stop
 
 @section('breadcrumb')
     <nav>
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
-            <li class="breadcrumb-item active">Статистика посещений</li>
+            <li class="breadcrumb-item active">{{ trans('counters.title') }}</li>
         </ol>
     </nav>
 @stop
@@ -17,32 +17,32 @@
     <div class="row mb-3">
 
         <div class="col-md-6 col-12">
-            Всего посетителей на сайте: <b>{{ $online[1] }}</b><br>
-            Всего авторизованных: <b>{{ $online[0] }}</b><br>
-            Всего гостей: <b>{{ ($online[1] - $online[0]) }}</b><br><br>
+            {{ trans('counters.users_total') }}: <b>{{ $online[1] }}</b><br>
+            {{ trans('counters.authorized_total') }}: <b>{{ $online[0] }}</b><br>
+            {{ trans('counters.guest_total') }}: <b>{{ ($online[1] - $online[0]) }}</b><br><br>
 
-            Всего хостов: <b>{{ $count->allhosts }}</b><br>
-            Всего хитов: <b>{{ $count->allhits }}</b><br>
+            {{ trans('counters.hosts_total') }}: <b>{{ $count->allhosts }}</b><br>
+            {{ trans('counters.hits_total') }}: <b>{{ $count->allhits }}</b><br>
         </div>
 
         <div class="col-md-6 col-12">
-            Хостов за текущий час: <b>{{ $count->hosts24 }}</b><br>
-            Хитов за текущий час: <b>{{ $count->hits24 }}</b><br><br>
+            {{ trans('counters.hosts_hour') }}: <b>{{ $count->hosts24 }}</b><br>
+            {{ trans('counters.hits_hour') }}: <b>{{ $count->hits24 }}</b><br><br>
 
-            Хостов сегодня: <b>{{ $count->dayhosts }}</b><br>
-            Хитов сегодня: <b>{{ $count->dayhits }}</b><br><br>
+            {{ trans('counters.hosts_day') }}: <b>{{ $count->dayhosts }}</b><br>
+            {{ trans('counters.hits_day') }}: <b>{{ $count->dayhits }}</b><br><br>
         </div>
     </div>
 
-    <h3>Динамика за сутки</h3>
-    <span class="badge badge-pill badge-primary">Хосты</span>
-    <span class="badge badge-pill badge-warning">Хиты</span>
+    <h3>{{ trans('counters.dynamics_day') }}</h3>
+    <span class="badge badge-pill badge-primary">{{ trans('counters.hosts') }}</span>
+    <span class="badge badge-pill badge-warning">{{ trans('counters.hits') }}</span>
 
     <div class="ct-chart24 ct-perfect-fourth"></div>
 
-    <h3>Динамика за месяц</h3>
-    <span class="badge badge-pill badge-primary">Хосты</span>
-    <span class="badge badge-pill badge-warning">Хиты</span>
+    <h3>{{ trans('counters.dynamics_month') }}</h3>
+    <span class="badge badge-pill badge-primary">{{ trans('counters.hosts') }}</span>
+    <span class="badge badge-pill badge-warning">{{ trans('counters.hits') }}</span>
     <div class="ct-chart31 ct-perfect-fourth"></div>
 @stop
 
