@@ -77,7 +77,7 @@ class PictureController extends BaseController
         }
 
         $user = $this->user;
-        return view('pages/picture', compact('user'));
+        return view('users/picture', compact('user'));
     }
 
     /**
