@@ -5,13 +5,13 @@ use FastRoute\RouteCollector;
 
 return FastRoute\cachedDispatcher(function(RouteCollector $r) {
     $r->get('/', [App\Controllers\HomeController::class, 'index']);
-    $r->get('/captcha', [App\Controllers\HomeController::class, 'captcha']);
     $r->get('/closed', [App\Controllers\HomeController::class, 'closed']);
     $r->get('/search',[App\Controllers\HomeController::class, 'search']);
-    $r->addRoute(['GET', 'POST'], '/banip', [App\Controllers\HomeController::class, 'banip']);
 
-    $r->get('/language/{lang:[a-z]+}',[App\Controllers\HomeController::class, 'language']);
-    $r->get('/language/{lang:[a-z]+}/main.js', [App\Controllers\HomeController::class, 'translation']);
+    $r->get('/captcha', [App\Controllers\MainController::class, 'captcha']);
+    $r->get('/language/{lang:[a-z]+}',[App\Controllers\MainController::class, 'language']);
+    $r->get('/language/{lang:[a-z]+}/main.js', [App\Controllers\MainController::class, 'translation']);
+    $r->addRoute(['GET', 'POST'], '/banip', [App\Controllers\MainController::class, 'banip']);
 
     /* Карта сайта */
     $r->get('/sitemap.xml', [App\Controllers\SitemapController::class, 'index']);

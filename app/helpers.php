@@ -1667,18 +1667,7 @@ function abort($code, $message = null)
            break;
    }
 
-    if (setting('errorlog') && in_array($code, [403, 404, 405], true)) {
-
-        Error::query()->create([
-            'code'       => $code,
-            'request'    => utfSubstr(server('REQUEST_URI'), 0, 200),
-            'referer'    => utfSubstr($referer, 0, 200),
-            'user_id'    => getUser('id'),
-            'ip'         => getIp(),
-            'brow'       => getBrowser(),
-            'created_at' => SITETIME,
-        ]);
-    }
+    saveErrorLog($code);
 
     if ($request->ajax()) {
         header($protocol . ' 200 OK');
@@ -1690,6 +1679,27 @@ function abort($code, $message = null)
     }
 
     exit(view('errors/' . $code, compact('message', 'referer')));
+}
+
+/**
+ * Saves error logs
+ *
+ * @param int $code
+ * @return void
+ */
+function saveErrorLog(int $code)
+{
+    if (setting('errorlog') && in_array($code, [403, 404, 405, 666], true)) {
+        Error::query()->create([
+            'code'       => $code,
+            'request'    => utfSubstr(server('REQUEST_URI'), 0, 200),
+            'referer'    => utfSubstr(server('HTTP_REFERER'), 0, 200),
+            'user_id'    => getUser('id'),
+            'ip'         => getIp(),
+            'brow'       => getBrowser(),
+            'created_at' => SITETIME,
+        ]);
+    }
 }
 
 /**

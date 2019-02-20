@@ -3,7 +3,6 @@
 namespace App\Controllers;
 
 use App\Models\Ban;
-use App\Models\Error;
 use Illuminate\Database\Capsule\Manager as DB;
 use Illuminate\Http\Request;
 
@@ -13,9 +12,29 @@ Class BaseController
     {
         $request = Request::createFromGlobals();
 
-        /**
-         * Проверка на ip-бан
-         */
+        $this->ipBan($request);
+        $this->frequencyLimit();
+
+        // Сайт закрыт для гостей
+        if (setting('closedsite') === 1 && ! getUser() && ! $request->is('register', 'login', 'recovery', 'captcha')) {
+            setFlash('danger', trans('main.not_logged'));
+            redirect('/login');
+        }
+
+        // Сайт закрыт для всех
+        if (setting('closedsite') === 2 && ! isAdmin() && ! $request->is('closed', 'login')) {
+            redirect('/closed');
+        }
+    }
+
+    /**
+     * Проверка на ip-бан
+     *
+     * @param Request $request
+     * @return void
+     */
+    private function ipBan(Request $request): void
+    {
         if (($ipBan = ipBan()) && ! isAdmin()) {
 
             $ipSplit = explode('.', getIp());
@@ -35,72 +54,53 @@ Class BaseController
                 }
             }
         }
+    }
 
-        /**
-         * Счетчик запросов
-         */
+    /**
+     * Ограничение частоты запросов
+     *
+     * @return void
+     */
+    private function frequencyLimit(): void
+    {
         if (setting('doslimit') && is_writable(STORAGE . '/antidos')) {
 
-            $dosfiles = glob(STORAGE.'/antidos/*.dat');
+            $filename = STORAGE . '/antidos/' . getIp() . '.dat';
+
+            $dosfiles = glob(STORAGE . '/antidos/*.dat');
             foreach ($dosfiles as $filename) {
                 $array_filemtime = @filemtime($filename);
                 if ($array_filemtime < (time() - 60)) {
                     @unlink($filename);
                 }
             }
-            // -------------------------- Проверка на время -----------------------------//
-            if (file_exists(STORAGE.'/antidos/'.getIp().'.dat')) {
-                $file_dos = file(STORAGE.'/antidos/'.getIp().'.dat');
+            /* Проверка на время */
+            if (file_exists($filename)) {
+                $file_dos = file($filename);
                 $file_str = explode('|', $file_dos[0]);
                 if ($file_str[0] < (time() - 60)) {
-                    @unlink(STORAGE.'/antidos/'.getIp().'.dat');
+                    @unlink($filename);
                 }
             }
-            // ------------------------------ Запись логов -------------------------------//
-            $write = time().'|'.server('REQUEST_URI').'|'.server('HTTP_REFERER').'|'.getBrowser().'|'.getUser('login').'|';
-            file_put_contents(STORAGE.'/antidos/'.getIp().'.dat', $write."\r\n", FILE_APPEND);
+            /* Запись логов */
+            $write = time().'|'.server('REQUEST_URI').'|'.server('HTTP_REFERER').'|'.getBrowser().'|'.getUser('id').'|';
+            file_put_contents($filename, $write . PHP_EOL, FILE_APPEND);
 
-            // ----------------------- Автоматическая блокировка ------------------------//
-            if (counterString(STORAGE.'/antidos/'.getIp().'.dat') > setting('doslimit')) {
-
-                if (setting('errorlog')) {
-
+            /* Автоматическая блокировка */
+            if (counterString($filename) > setting('doslimit')) {
                     $banip = Ban::query()->where('ip', getIp())->first();
 
                     if (! $banip) {
-                        Error::query()->create([
-                            'code'       => 666,
-                            'request'    => utfSubstr(server('REQUEST_URI'), 0, 200),
-                            'referer'    => utfSubstr(server('HTTP_REFERER'), 0, 200),
-                            'user_id'    => getUser('id'),
-                            'ip'         => getIp(),
-                            'brow'       => getBrowser(),
-                            'created_at' => SITETIME,
-
-                        ]);
-
                         DB::connection()->insert(
                             'insert ignore into ban (`ip`, `created_at`) values (?, ?);',
                             [getIp(), SITETIME]
                         );
-
-                        ipBan(true);
                     }
-                }
 
-                unlink(STORAGE.'/antidos/'.getIp().'.dat');
+                ipBan(true);
+                saveErrorLog(666);
+                unlink($filename);
             }
-        }
-
-        // Сайт закрыт для гостей
-        if (setting('closedsite') === 1 && ! getUser() && ! $request->is('register', 'login', 'recovery', 'captcha')) {
-            setFlash('danger', 'Для входа на сайт необходимо авторизоваться!');
-            redirect('/login');
-        }
-
-        // Сайт закрыт для всех
-        if (setting('closedsite') === 2 && ! isAdmin() && ! $request->is('closed', 'login')) {
-            redirect('/closed');
         }
     }
 }

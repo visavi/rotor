@@ -22,9 +22,7 @@
 
     @if ($ban)
         <form method="post">
-
             {!! view('app/_captcha') !!}
-
             <button class="btn btn-primary">Подтвердить</button>
         </form>
     @endif
