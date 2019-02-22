@@ -292,7 +292,7 @@ class ForumController extends BaseController
 
                     $topics = Topic::query()
                         ->whereIn('id', $_SESSION['forumfindres'])
-                        ->with('lastPost.user')
+                        ->with('forum', 'lastPost.user')
                         ->orderBy('updated_at', 'desc')
                         ->offset($page->offset)
                         ->limit($page->limit)
@@ -333,7 +333,7 @@ class ForumController extends BaseController
 
                     $posts = Post::query()
                         ->whereIn('id', $_SESSION['forumfindres'])
-                        ->with('user', 'topic')
+                        ->with('user', 'topic.forum')
                         ->orderBy('created_at', 'desc')
                         ->offset($page->offset)
                         ->limit($page->limit)
