@@ -10,7 +10,7 @@ class CreateSurpriseTable extends AbstractMigration
     public function change()
     {
         if (! $this->hasTable('surprise')) {
-            $table = $this->table('surprise', ['collation' => env('DB_COLLATION')]);
+            $table = $this->table('surprise', ['engine' => env('DB_ENGINE'), 'collation' => env('DB_COLLATION')]);
             $table
                 ->addColumn('user_id', 'integer')
                 ->addColumn('year', 'year', ['limit' => 4])

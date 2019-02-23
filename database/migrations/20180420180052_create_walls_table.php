@@ -10,7 +10,7 @@ class CreateWallsTable extends AbstractMigration
     public function change()
     {
         if (! $this->hasTable('walls')) {
-            $table = $this->table('walls', ['collation' => env('DB_COLLATION')]);
+            $table = $this->table('walls', ['engine' => env('DB_ENGINE'), 'collation' => env('DB_COLLATION')]);
             $table
                 ->addColumn('user_id', 'integer')
                 ->addColumn('author_id', 'integer')

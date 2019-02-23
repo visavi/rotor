@@ -14,6 +14,7 @@ class CreateSettingsTable extends AbstractMigration
             $table = $this->table('settings', [
                 'id'          => false,
                 'primary_key' => 'name',
+                'engine'      => env('DB_ENGINE'),
                 'collation'   => env('DB_COLLATION')
             ]);
             $table

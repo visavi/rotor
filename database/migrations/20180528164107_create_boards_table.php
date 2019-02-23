@@ -10,7 +10,7 @@ class CreateBoardsTable extends AbstractMigration
     public function change()
     {
         if (! $this->hasTable('boards')) {
-            $table = $this->table('boards', ['collation' => env('DB_COLLATION')]);
+            $table = $this->table('boards', ['engine' => env('DB_ENGINE'), 'collation' => env('DB_COLLATION')]);
             $table
                 ->addColumn('sort', 'integer', ['default' => 0])
                 ->addColumn('parent_id', 'integer', ['default' => 0])

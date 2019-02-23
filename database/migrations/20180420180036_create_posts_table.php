@@ -10,7 +10,7 @@ class CreatePostsTable extends AbstractMigration
     public function change()
     {
         if (! $this->hasTable('posts')) {
-            $table = $this->table('posts', ['collation' => env('DB_COLLATION')]);
+            $table = $this->table('posts', ['engine' => env('DB_ENGINE'), 'collation' => env('DB_COLLATION')]);
             $table
                 ->addColumn('topic_id', 'integer')
                 ->addColumn('user_id', 'integer')

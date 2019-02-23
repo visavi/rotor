@@ -10,7 +10,7 @@ class CreateBlogsTable extends AbstractMigration
     public function change()
     {
         if (! $this->hasTable('blogs')) {
-            $table = $this->table('blogs', ['collation' => env('DB_COLLATION')]);
+            $table = $this->table('blogs', ['engine' => env('DB_ENGINE'), 'collation' => env('DB_COLLATION')]);
             $table
                 ->addColumn('category_id', 'integer')
                 ->addColumn('user_id', 'integer')

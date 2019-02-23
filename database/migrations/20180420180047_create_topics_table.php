@@ -10,7 +10,7 @@ class CreateTopicsTable extends AbstractMigration
     public function change()
     {
         if (! $this->hasTable('topics')) {
-            $table = $this->table('topics', ['collation' => env('DB_COLLATION')]);
+            $table = $this->table('topics', ['engine' => env('DB_ENGINE'), 'collation' => env('DB_COLLATION')]);
             $table
                 ->addColumn('forum_id', 'integer')
                 ->addColumn('title', 'string', ['limit' => 50])

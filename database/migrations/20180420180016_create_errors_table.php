@@ -10,7 +10,7 @@ class CreateErrorsTable extends AbstractMigration
     public function change()
     {
         if (! $this->hasTable('errors')) {
-            $table = $this->table('errors', ['collation' => env('DB_COLLATION')]);
+            $table = $this->table('errors', ['engine' => env('DB_ENGINE'), 'collation' => env('DB_COLLATION')]);
             $table
                 ->addColumn('code', 'integer')
                 ->addColumn('request', 'string', ['null' => true])

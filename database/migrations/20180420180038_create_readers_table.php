@@ -10,7 +10,7 @@ class CreateReadersTable extends AbstractMigration
     public function change()
     {
         if (! $this->hasTable('readers')) {
-            $table = $this->table('readers', ['collation' => env('DB_COLLATION')]);
+            $table = $this->table('readers', ['engine' => env('DB_ENGINE'), 'collation' => env('DB_COLLATION')]);
             $table
                 ->addColumn('relate_type', 'string', ['limit' => 50])
                 ->addColumn('relate_id', 'integer')

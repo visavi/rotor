@@ -10,7 +10,7 @@ class CreateItemsTable extends AbstractMigration
     public function change()
     {
         if (! $this->hasTable('items')) {
-            $table = $this->table('items', ['collation' => env('DB_COLLATION')]);
+            $table = $this->table('items', ['engine' => env('DB_ENGINE'), 'collation' => env('DB_COLLATION')]);
             $table
                 ->addColumn('board_id', 'integer')
                 ->addColumn('title', 'string', ['limit' => 100])

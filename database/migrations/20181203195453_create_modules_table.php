@@ -9,7 +9,7 @@ class CreateModulesTable extends AbstractMigration
      */
     public function change()
     {
-        $table = $this->table('modules', ['collation' => env('DB_COLLATION')]);
+        $table = $this->table('modules', ['engine' => env('DB_ENGINE'), 'collation' => env('DB_COLLATION')]);
         $table
             ->addColumn('name', 'string', ['limit' => 50])
             ->addColumn('version', 'string', ['limit' => 10])
