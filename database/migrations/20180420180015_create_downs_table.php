@@ -28,7 +28,7 @@ class CreateDownsTable extends AbstractMigration
 
             $mysql = $this->query('SHOW VARIABLES LIKE "version"')->fetch();
 
-            if (version_compare($mysql['Value'], '5.6.0', '>=')) {
+            if (env('DB_ENGINE') === 'MyISAM' || version_compare($mysql['Value'], '5.6.0', '>=')) {
                 $table->addIndex('text', ['type' => 'fulltext']);
                 $table->addIndex('title', ['type' => 'fulltext']);
             }

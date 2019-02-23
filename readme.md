@@ -67,7 +67,10 @@ Minimal PHP version required for PHP 7.1.3 and MySQL 5.5.3 engine
 If MySQL version is lower than 5.5.3, then it is necessary to install in the .env file
 `DB_COLLATION=utf8_unicode_ci`
 
-Version is recommended for full-text search. MySQL >= 5.6
+If you use the InnoDB data storage type, then for full-text search, version MySQL >= 5.6
+
+Storage type can be set to .env
+`DB_ENGINE=InnoDB`
 
 ### Migrations and database seeder
 
