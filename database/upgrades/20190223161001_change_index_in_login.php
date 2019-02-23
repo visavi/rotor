@@ -2,18 +2,18 @@
 
 use Phinx\Migration\AbstractMigration;
 
-class DeleteIndexInOnline extends AbstractMigration
+class ChangeIndexInLogin extends AbstractMigration
 {
     /**
      * Migrate Up.
      */
     public function up()
     {
-        $table = $this->table('online');
+        $table = $this->table('login');
         $table
-            ->removeIndexByName('ip')
-            ->removeIndexByName('updated_at')
+            ->removeIndexByName('created_at')
             ->removeIndexByName('user_id')
+            ->addIndex(['user_id', 'created_at'], ['name' => 'user_time'])
             ->save();
     }
 
@@ -22,10 +22,10 @@ class DeleteIndexInOnline extends AbstractMigration
      */
     public function down()
     {
-        $table = $this->table('online');
+        $table = $this->table('login');
         $table
-            ->addIndex('ip')
-            ->addIndex('updated_at')
+            ->removeIndexByName('user_time')
+            ->addIndex('created_at')
             ->addIndex('user_id')
             ->save();
     }
