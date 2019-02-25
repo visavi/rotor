@@ -28,7 +28,7 @@ class BBCode
             'callback' => 'highlightCode'
         ],
         'http' => [
-            'pattern'  => '%\b(((?<!(=|]))\w+://)[^\s()<>\[\]]+)%s',
+            'pattern'  => '%\b(((?<=^|\s)\w+://)[^\s()<>\[\]]+)%s',
             'callback' => 'urlReplace',
         ],
         'link' => [

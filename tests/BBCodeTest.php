@@ -130,10 +130,10 @@ class BBCodeTest extends TestCase
      */
     public function testHttp(): void
     {
-        $text      = 'http://сайт.рф';
+        $text      = 'http://сайт.рф http://сайт.рф/http://сайт.рф:80';
         $parseText = bbCode($text);
 
-        $this->assertEquals($parseText, '<a href="http://сайт.рф" target="_blank" rel="nofollow">http://сайт.рф</a>');
+        $this->assertEquals($parseText, '<a href="http://сайт.рф" target="_blank" rel="nofollow">http://сайт.рф</a> <a href="http://сайт.рф/http://сайт.рф:80" target="_blank" rel="nofollow">http://сайт.рф/http://сайт.рф:80</a>');
     }
 
     /**
@@ -174,10 +174,10 @@ class BBCodeTest extends TestCase
      */
     public function testNamedLink(): void
     {
-        $text      = '[url=http://rotor.ll/dir/index.php?name=name&name2=name2#anchor]Сайт[/url]';
+        $text      = '[url=http://rotor.ll/dir/index.php?name=name&name2=name2#anchor]Сайт[/url] [url=https://site.com/http://site.net:80/]Sitename[/url]';
         $parseText = bbCode($text);
 
-        $this->assertEquals($parseText, '<a href="//rotor.ll/dir/index.php?name=name&name2=name2#anchor">Сайт</a>');
+        $this->assertEquals($parseText, '<a href="//rotor.ll/dir/index.php?name=name&name2=name2#anchor">Сайт</a> <a href="https://site.com/http://site.net:80/" target="_blank" rel="nofollow">Sitename</a>');
     }
 
     /**
