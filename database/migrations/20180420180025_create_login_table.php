@@ -10,15 +10,14 @@ class CreateLoginTable extends AbstractMigration
     public function change()
     {
         if (! $this->hasTable('login')) {
-            $table = $this->table('login', ['collation' => env('DB_COLLATION')]);
+            $table = $this->table('login', ['engine' => env('DB_ENGINE'), 'collation' => env('DB_COLLATION')]);
             $table
                 ->addColumn('user_id', 'integer')
                 ->addColumn('ip', 'string', ['limit' => 15])
                 ->addColumn('brow', 'string', ['limit' => 25])
                 ->addColumn('created_at', 'integer')
                 ->addColumn('type', 'boolean', ['default' => 0])
-                ->addIndex('user_id')
-                ->addIndex('created_at')
+                ->addIndex(['user_id', 'created_at'], ['name' => 'user_time'])
                 ->create();
         }
     }

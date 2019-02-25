@@ -10,7 +10,7 @@ class CreateBanhistTable extends AbstractMigration
     public function change()
     {
         if (! $this->hasTable('banhist')) {
-            $table = $this->table('banhist', ['collation' => env('DB_COLLATION')]);
+            $table = $this->table('banhist', ['engine' => env('DB_ENGINE'), 'collation' => env('DB_COLLATION')]);
             $table
                 ->addColumn('user_id', 'integer')
                 ->addColumn('send_user_id', 'integer')

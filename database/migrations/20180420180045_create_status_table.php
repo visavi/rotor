@@ -10,7 +10,7 @@ class CreateStatusTable extends AbstractMigration
     public function change()
     {
         if (! $this->hasTable('status')) {
-            $table = $this->table('status', ['collation' => env('DB_COLLATION')]);
+            $table = $this->table('status', ['engine' => env('DB_ENGINE'), 'collation' => env('DB_COLLATION')]);
             $table
                 ->addColumn('topoint', 'integer')
                 ->addColumn('point', 'integer')

@@ -10,7 +10,7 @@ class CreateUsersTable extends AbstractMigration
     public function change()
     {
         if (! $this->hasTable('users')) {
-            $table = $this->table('users', ['collation' => env('DB_COLLATION')]);
+            $table = $this->table('users', ['engine' => env('DB_ENGINE'), 'collation' => env('DB_COLLATION')]);
             $table
                 ->addColumn('login', 'string', ['limit' => 20])
                 ->addColumn('password', 'string', ['limit' => 128])

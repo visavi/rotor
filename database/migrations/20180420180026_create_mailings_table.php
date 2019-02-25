@@ -10,7 +10,7 @@ class CreateMailingsTable extends AbstractMigration
     public function change()
     {
         if (! $this->hasTable('mailings')) {
-            $table = $this->table('mailings', ['collation' => env('DB_COLLATION')]);
+            $table = $this->table('mailings', ['engine' => env('DB_ENGINE'), 'collation' => env('DB_COLLATION')]);
             $table
                 ->addColumn('user_id', 'integer')
                 ->addColumn('type', 'string', ['limit' => 30])

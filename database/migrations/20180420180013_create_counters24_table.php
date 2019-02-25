@@ -10,7 +10,7 @@ class CreateCounters24Table extends AbstractMigration
     public function change()
     {
         if (! $this->hasTable('counters24')) {
-            $table = $this->table('counters24', ['collation' => env('DB_COLLATION')]);
+            $table = $this->table('counters24', ['engine' => env('DB_ENGINE'), 'collation' => env('DB_COLLATION')]);
             $table
                 ->addColumn('period', 'datetime')
                 ->addColumn('hosts', 'integer')

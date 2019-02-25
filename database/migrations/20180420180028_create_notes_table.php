@@ -10,7 +10,7 @@ class CreateNotesTable extends AbstractMigration
     public function change()
     {
         if (! $this->hasTable('notes')) {
-            $table = $this->table('notes', ['collation' => env('DB_COLLATION')]);
+            $table = $this->table('notes', ['engine' => env('DB_ENGINE'), 'collation' => env('DB_COLLATION')]);
             $table
                 ->addColumn('user_id', 'integer')
                 ->addColumn('text', 'text', ['null' => true])

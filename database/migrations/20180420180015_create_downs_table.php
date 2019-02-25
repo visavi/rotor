@@ -10,7 +10,7 @@ class CreateDownsTable extends AbstractMigration
     public function change()
     {
         if (! $this->hasTable('downs')) {
-            $table = $this->table('downs', ['collation' => env('DB_COLLATION')]);
+            $table = $this->table('downs', ['engine' => env('DB_ENGINE'), 'collation' => env('DB_COLLATION')]);
             $table
                 ->addColumn('category_id', 'integer')
                 ->addColumn('title', 'string', ['limit' => 100])
@@ -28,7 +28,7 @@ class CreateDownsTable extends AbstractMigration
 
             $mysql = $this->query('SHOW VARIABLES LIKE "version"')->fetch();
 
-            if (version_compare($mysql['Value'], '5.6.0', '>=')) {
+            if (env('DB_ENGINE') === 'MyISAM' || version_compare($mysql['Value'], '5.6.0', '>=')) {
                 $table->addIndex('text', ['type' => 'fulltext']);
                 $table->addIndex('title', ['type' => 'fulltext']);
             }

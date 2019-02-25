@@ -66,7 +66,7 @@ class RatingController extends BaseController
             $validator->equal($token, $_SESSION['token'], trans('validator.token'))
                 ->length($text, 5, 250, ['text' => trans('validator.text')]);
 
-            if ($vote === 'minus' && getUser('rating') < 0) {
+            if ($vote === 'minus' && getUser('rating') < 1) {
                 $validator->addError('Уменьшать репутацию могут только пользователи с положительным рейтингом!');
             }
 

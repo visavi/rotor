@@ -10,7 +10,7 @@ class CreatePostsTable extends AbstractMigration
     public function change()
     {
         if (! $this->hasTable('posts')) {
-            $table = $this->table('posts', ['collation' => env('DB_COLLATION')]);
+            $table = $this->table('posts', ['engine' => env('DB_ENGINE'), 'collation' => env('DB_COLLATION')]);
             $table
                 ->addColumn('topic_id', 'integer')
                 ->addColumn('user_id', 'integer')
@@ -26,7 +26,7 @@ class CreatePostsTable extends AbstractMigration
 
             $mysql = $this->query('SHOW VARIABLES LIKE "version"')->fetch();
 
-            if (version_compare($mysql['Value'], '5.6.0', '>=')) {
+            if (env('DB_ENGINE') === 'MyISAM' || version_compare($mysql['Value'], '5.6.0', '>=')) {
                 $table->addIndex('text', ['type' => 'fulltext']);
             }
 

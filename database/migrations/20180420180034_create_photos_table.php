@@ -10,7 +10,7 @@ class CreatePhotosTable extends AbstractMigration
     public function change()
     {
         if (! $this->hasTable('photos')) {
-            $table = $this->table('photos', ['collation' => env('DB_COLLATION')]);
+            $table = $this->table('photos', ['engine' => env('DB_ENGINE'), 'collation' => env('DB_COLLATION')]);
             $table
                 ->addColumn('user_id', 'integer')
                 ->addColumn('title', 'string', ['limit' => 50])

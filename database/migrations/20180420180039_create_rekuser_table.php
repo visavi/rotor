@@ -10,7 +10,7 @@ class CreateRekuserTable extends AbstractMigration
     public function change()
     {
         if (! $this->hasTable('rekuser')) {
-            $table = $this->table('rekuser', ['collation' => env('DB_COLLATION')]);
+            $table = $this->table('rekuser', ['engine' => env('DB_ENGINE'), 'collation' => env('DB_COLLATION')]);
             $table
                 ->addColumn('site', 'string', ['limit' => 100])
                 ->addColumn('name', 'string', ['limit' => 50])

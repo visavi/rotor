@@ -10,7 +10,7 @@ class CreateCommentsTable extends AbstractMigration
     public function change()
     {
         if (! $this->hasTable('comments')) {
-            $table = $this->table('comments', ['collation' => env('DB_COLLATION')]);
+            $table = $this->table('comments', ['engine' => env('DB_ENGINE'), 'collation' => env('DB_COLLATION')]);
             $table
                 ->addColumn('user_id', 'integer')
                 ->addColumn('relate_type', 'string', ['limit' => 50])
