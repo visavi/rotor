@@ -1,23 +1,23 @@
 @section('title')
-    Полезная информация
+    {{ trans('index.useful_information') }}
 @stop
 
 @section('breadcrumb')
     <nav>
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
-            <li class="breadcrumb-item active">Полезная информация</li>
+            <li class="breadcrumb-item active">{{ trans('index.useful_information') }}</li>
         </ol>
     </nav>
 @stop
 
-<i class="far fa-circle fa-lg text-muted"></i> <a href="/rules">Правила сайта</a><br>
-<i class="far fa-circle fa-lg text-muted"></i> <a href="/tags">Справка по тегам</a><br>
-<i class="far fa-circle fa-lg text-muted"></i> <a href="/stickers">Стикеры</a><br>
-<i class="far fa-circle fa-lg text-muted"></i> <a href="/faq">FAQ (Чаво)</a><br>
-<i class="far fa-circle fa-lg text-muted"></i> <a href="/api">API интерфейс</a><br>
+<i class="far fa-circle fa-lg text-muted"></i> <a href="/rules">{{ trans('index.site_rules') }}</a><br>
+<i class="far fa-circle fa-lg text-muted"></i> <a href="/tags">{{ trans('index.tag_help') }}</a><br>
+<i class="far fa-circle fa-lg text-muted"></i> <a href="/stickers">{{ trans('index.stickers_help') }}</a><br>
+<i class="far fa-circle fa-lg text-muted"></i> <a href="/faq">{{ trans('index.faq') }}</a><br>
+<i class="far fa-circle fa-lg text-muted"></i> <a href="/api">{{ trans('index.api_interface') }}</a><br>
 
-<i class="far fa-circle fa-lg text-muted"></i> <a href="/ratinglists">Рейтинг толстосумов</a><br>
-<i class="far fa-circle fa-lg text-muted"></i> <a href="/authoritylists">Рейтинг репутации</a><br>
-<i class="far fa-circle fa-lg text-muted"></i> <a href="/statusfaq">Статусы юзеров</a><br>
-<i class="far fa-circle fa-lg text-muted"></i> <a href="/who">Кто онлайн</a><br>
+<i class="far fa-circle fa-lg text-muted"></i> <a href="/ratinglists">{{ trans('index.riches_rating') }}</a><br>
+<i class="far fa-circle fa-lg text-muted"></i> <a href="/authoritylists">{{ trans('index.reputation_rating') }}</a><br>
+<i class="far fa-circle fa-lg text-muted"></i> <a href="/statusfaq">{{ trans('index.user_statuses') }}</a><br>
+<i class="far fa-circle fa-lg text-muted"></i> <a href="/who">{{ trans('index.who_online') }}</a><br>

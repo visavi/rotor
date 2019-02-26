@@ -17,11 +17,6 @@ class BBCode
     /**
      * @var array
      */
-    protected $setting;
-
-    /**
-     * @var array
-     */
     protected static $parsers = [
         'code' => [
             'pattern'  => '/\[code\](.+?)\[\/code\]/s',

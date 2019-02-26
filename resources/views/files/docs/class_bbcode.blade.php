@@ -14,7 +14,7 @@
 
 Пример
 <pre class="prettyprint linenums">
-$bbcode = new BBCode($config);
+$bbcode = new BBCode();
 
 $bbcode->setParser('header', '/\[h1\](.*?)\[\/h1\]/s', '&lt;h1>$1&lt;/h1>');
 $bbcode->except('bold')->only('header', 'italic');
