@@ -41,7 +41,7 @@ The main feature of Rotor is low load on system resources and high speed, even w
 
 6. Configure the .env configuration file, the environment, the data for accessing the database, the administrator's login and email, and the data for sending mail, sendmail or smtp. If you install CMS manually, then rename the configuration file .env.example to .env (The file is not tracked by git, so there can be 2 different files on the server and on the local site with different environments specified in APP_ENV)
 
-7. Set write permissions to all directories inside `public / uploads` and` storage` or execute the command `php rotor app:install`
+7. Set write permissions to all directories inside `public / uploads` and` storage` or execute the command `php rotor app:configure`
 
 8. If you are installing the engine for the first time, then you need to clear the / database / upgrades folder and the APP_NEW setting should be true; if you are upgrading from a previous version, then APP_NEW should be false.
 

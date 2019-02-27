@@ -47,7 +47,7 @@ return [
     'site_rules'         => 'Site rules',
     'tag_help'           => 'Tag help',
     'stickers_help'      => 'Stickers help',
-    'faq'                => 'faq',
+    'faq'                => 'FAQ',
     'api_interface'      => 'Api interface',
     'riches_rating'      => 'Riches rating',
     'reputation_rating'  => 'Reputation rating',

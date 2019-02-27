@@ -38,6 +38,8 @@ use Intervention\Image\Constraint;
 use Intervention\Image\ImageManagerStatic as Image;
 use Jenssegers\Blade\Blade;
 use ReCaptcha\ReCaptcha;
+use Symfony\Component\Console\Input\ArrayInput;
+use Symfony\Component\Console\Output\NullOutput;
 
 /**
  * Форматирует вывод времени из секунд
@@ -2465,3 +2467,14 @@ function getCourses()
 
     return view('app/_courses', compact('courses'));
 }
+
+/*function runCommand(string $command, array $arguments = [])
+{
+   // $command = new AppConfigure();
+
+    $input  = new ArrayInput($arguments);
+    $output = new NullOutput();
+
+
+    return $command->run($input, $output);
+}*/

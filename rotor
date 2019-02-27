@@ -15,7 +15,7 @@ $app->setName('Rotor by Vantuz - http://visavi.net');
 $app->setVersion(VERSION);
 
 $app->addCommands([
-    new \App\Commands\AppInstall(),
+    new \App\Commands\AppConfigure(),
     new \App\Commands\KeyGenerate(),
     new \App\Commands\CacheClear(),
     new \App\Commands\RouteClear(),
