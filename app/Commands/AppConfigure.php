@@ -41,15 +41,15 @@ class AppConfigure extends AbstractCommand
      */
     protected function setPermissions(): void
     {
-        $storage = glob(STORAGE.'/*', GLOB_ONLYDIR);
-        $uploads = glob(UPLOADS.'/*', GLOB_ONLYDIR);
+        $storage = glob(STORAGE . '/*', GLOB_ONLYDIR);
+        $uploads = glob(UPLOADS . '/*', GLOB_ONLYDIR);
         $modules = [HOME . '/assets/modules'];
 
         $dirs = array_merge($storage, $uploads, $modules);
 
         foreach ($dirs as $dir) {
             $old = umask(0);
-            chmod($dir, 0777);
+            @chmod($dir, 0777);
             umask($old);
         }
     }
@@ -70,7 +70,7 @@ class AppConfigure extends AbstractCommand
             deleteFile($link, false);
 
             if (file_exists($file)) {
-                symlink($file, $link);
+                @symlink($file, $link);
             }
         }
     }

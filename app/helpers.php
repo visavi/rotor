@@ -38,6 +38,7 @@ use Intervention\Image\Constraint;
 use Intervention\Image\ImageManagerStatic as Image;
 use Jenssegers\Blade\Blade;
 use ReCaptcha\ReCaptcha;
+use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Output\NullOutput;
 
@@ -2468,13 +2469,21 @@ function getCourses()
     return view('app/_courses', compact('courses'));
 }
 
-/*function runCommand(string $command, array $arguments = [])
+/**
+ * Runs the console command
+ *
+ * @param Command $command
+ * @param array   $arguments
+ * @return void
+ */
+function runCommand(Command $command, array $arguments = [])
 {
-   // $command = new AppConfigure();
-
-    $input  = new ArrayInput($arguments);
+    $input = new ArrayInput($arguments);
     $output = new NullOutput();
 
-
-    return $command->run($input, $output);
-}*/
+    try {
+        $command->run($input, $output);
+    } catch (Exception $e) {
+        return;
+    }
+}

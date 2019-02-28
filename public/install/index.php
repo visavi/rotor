@@ -1,70 +1,16 @@
 <?php
 
+use App\Commands\AppConfigure;
 use App\Models\News;
 use App\Models\User;
 use Illuminate\Http\Request;
 
 ob_start();
-
-$level = 0;
-$folder_level = '';
-while (!file_exists($folder_level.'app') && $level < 5) {
-    $folder_level .= '../';
-    ++$level;
-}
-unset($level);
-
-define('DIR', rtrim($folder_level, '/'));
-
+define('DIR', dirname(__DIR__, 2));
 include_once DIR . '/app/bootstrap.php';
-include_once DIR . '/app/helpers.php';
+include_once APP . '/helpers.php';
 
 $request = Request::createFromGlobals();
-
-function parsePHPModules() {
-    ob_start();
-    phpinfo(INFO_MODULES);
-    $s = ob_get_contents();
-    ob_end_clean();
-    $s = strip_tags($s, '<h2><th><td>');
-    $s = preg_replace('/<th[^>]*>([^<]+)<\/th>/', "<info>\\1</info>", $s);
-    $s = preg_replace('/<td[^>]*>([^<]+)<\/td>/', "<info>\\1</info>", $s);
-    $vTmp = preg_split('/(<h2[^>]*>[^<]+<\/h2>)/', $s, -1, PREG_SPLIT_DELIM_CAPTURE);
-    $vModules = [];
-    for ($i = 1; $i < count($vTmp); $i++) {
-        if (preg_match('/<h2[^>]*>([^<]+)<\/h2>/', $vTmp[$i], $vMat)) {
-            $vName = trim($vMat[1]);
-            $vTmp2 = explode("\n", $vTmp[$i + 1]);
-            foreach ($vTmp2 AS $vOne) {
-                $vPat = '<info>([^<]+)<\/info>';
-                $vPat3 = "/$vPat\s*$vPat\s*$vPat/";
-                $vPat2 = "/$vPat\s*$vPat/";
-                if (preg_match($vPat3, $vOne, $vMat)) {
-                    $vModules[$vName][trim($vMat[1])] = [trim($vMat[2]), trim($vMat[3])];
-                } elseif (preg_match($vPat2, $vOne, $vMat)) {
-                    $vModules[$vName][trim($vMat[1])] = trim($vMat[2]);
-                }
-            }
-        }
-    }
-    return $vModules;
-}
-// ------------------------------------------------------------------//
-function getModuleSetting($pModuleName, $pSettings) {
-    $vModules = parsePHPModules();
-    if (is_array($pSettings)) {
-        foreach ($pSettings as $pSetting) {
-            if (isset($vModules[$pModuleName][$pSetting])) {
-                return $vModules[$pModuleName][$pSetting];
-            }
-        }
-    } else {
-        if (isset($vModules[$pModuleName][$pSettings])) {
-            return $vModules[$pModuleName][$pSettings];
-        }
-    }
-    return 'Не определено';
-}
 
 $app  = new Phinx\Console\PhinxApplication();
 $wrap = new Phinx\Wrapper\TextWrapper($app);
@@ -72,7 +18,7 @@ $wrap = new Phinx\Wrapper\TextWrapper($app);
 $app->setName('Rotor by Vantuz - http://visavi.net');
 $app->setVersion(VERSION);
 
-$wrap->setOption('configuration', DIR.'/app/migration.php');
+$wrap->setOption('configuration', APP . '/migration.php');
 $wrap->setOption('parser', 'php');
 $wrap->setOption('environment', 'default');
 ?>
@@ -118,6 +64,7 @@ $wrap->setOption('environment', 'default');
             'DB_PORT',
             'DB_DATABASE',
             'DB_USERNAME',
+            'DB_ENGINE',
             'DB_CHARSET',
             'DB_COLLATION',
             'SITE_ADMIN',
@@ -126,7 +73,8 @@ $wrap->setOption('environment', 'default');
         ];
 
         foreach ($keys as $key) {
-            echo $key.' - '.env($key).'<br>';
+
+            echo $key . ' - ' . var_export(env($key), true) . '<br>';
         }
         ?>
         <p>Не забудьте изменить значение APP_KEY, эти данные необходимы для шифрования cookies и паролей в сессиях</p>
@@ -204,20 +152,17 @@ $wrap->setOption('environment', 'default');
 
         echo '<br><p style="font-size: 15px; font-weight: bold">Права доступа</p>';
 
-        $uploadDir = file_exists(DIR . '/public/uploads') ? DIR . '/public/uploads' : DIR . '/uploads';
-        $moduleDir = file_exists(DIR . '/public/assets/modules') ? DIR . '/public/assets/modules' : DIR . '/assets/modules';
+        runCommand(new AppConfigure());
 
-        $storage = glob(DIR . '/storage/*', GLOB_ONLYDIR);
-        $uploads = glob($uploadDir . '/*', GLOB_ONLYDIR);
+        $storage = glob(STORAGE . '/*', GLOB_ONLYDIR);
+        $uploads = glob(UPLOADS . '/*', GLOB_ONLYDIR);
+        $modules = [HOME . '/assets/modules'];
 
-        $dirs = array_merge($storage, $uploads, [$moduleDir]);
+        $dirs = array_merge($storage, $uploads, $modules);
 
         $chmod_errors = 0;
 
         foreach ($dirs as $dir) {
-            $old = umask(0);
-            @chmod ($dir, 0777);
-            umask($old);
 
             if (is_writable($dir)) {
                 $file_status = '<span style="color:#00cc00">ОК</span>';
@@ -228,7 +173,7 @@ $wrap->setOption('environment', 'default');
 
             $chmod_value = @decoct(@fileperms($dir)) % 1000;
 
-            echo '<i class="fa fa-check-circle"></i> '.str_replace('../', '', $dir).' <b> - ' . $file_status . '</b> (chmod ' . $chmod_value . ')<br>';
+            echo '<i class="fa fa-check-circle"></i> '.str_replace(DIR, '', $dir).' <b> - ' . $file_status . '</b> (chmod ' . $chmod_value . ')<br>';
         }
 ?>
         <br>Дополнительно можете выставить права на директории и файлы с шаблонами внутри resources/views - это необходимо для редактирования шаблонов сайта<br><br>
@@ -248,11 +193,15 @@ $wrap->setOption('environment', 'default');
             <?php endif; ?>
 
             <span style="color:#ff0000">
-                Внимание, кодировка таблиц настраивается в файле .env,<br>
-                Требуемая кодировка БД utf8mb4_unicode_ci<br>
-                По умолчанию БД будет создана в кодировке <?= env('DB_COLLATION') ?>
-            </span>
-            <br><br>
+                Внимание, сопоставление и кодировка таблиц настраивается в файле .env,<br>
+                Требуемое сопоставление БД utf8mb4_unicode_ci<br>
+            </span><br>
+
+            <b>Настройки БД по умолчанию</b><br>
+            Тип хранилища: <?= env('DB_ENGINE') ?><br>
+            Кодировка: <?= env('DB_CHARSET') ?><br>
+            Сопоставление: <?= env('DB_COLLATION') ?><br>
+            <br>
 
             <p><a style="font-size: 18px" href="?act=status">Проверить статус</a> (Выполняется <?= env('APP_NEW') ? 'установка' : 'обновление' ?>)</p><br>
         <?php else: ?>
@@ -417,3 +366,49 @@ $wrap->setOption('environment', 'default');
  </div>
 </body>
 </html>
+<?php
+
+function parsePHPModules() {
+    ob_start();
+    phpinfo(INFO_MODULES);
+    $s = ob_get_contents();
+    ob_end_clean();
+    $s = strip_tags($s, '<h2><th><td>');
+    $s = preg_replace('/<th[^>]*>([^<]+)<\/th>/', "<info>\\1</info>", $s);
+    $s = preg_replace('/<td[^>]*>([^<]+)<\/td>/', "<info>\\1</info>", $s);
+    $vTmp = preg_split('/(<h2[^>]*>[^<]+<\/h2>)/', $s, -1, PREG_SPLIT_DELIM_CAPTURE);
+    $vModules = [];
+    for ($i = 1; $i < count($vTmp); $i++) {
+        if (preg_match('/<h2[^>]*>([^<]+)<\/h2>/', $vTmp[$i], $vMat)) {
+            $vName = trim($vMat[1]);
+            $vTmp2 = explode("\n", $vTmp[$i + 1]);
+            foreach ($vTmp2 AS $vOne) {
+                $vPat = '<info>([^<]+)<\/info>';
+                $vPat3 = "/$vPat\s*$vPat\s*$vPat/";
+                $vPat2 = "/$vPat\s*$vPat/";
+                if (preg_match($vPat3, $vOne, $vMat)) {
+                    $vModules[$vName][trim($vMat[1])] = [trim($vMat[2]), trim($vMat[3])];
+                } elseif (preg_match($vPat2, $vOne, $vMat)) {
+                    $vModules[$vName][trim($vMat[1])] = trim($vMat[2]);
+                }
+            }
+        }
+    }
+    return $vModules;
+}
+// ------------------------------------------------------------------//
+function getModuleSetting($pModuleName, $pSettings) {
+    $vModules = parsePHPModules();
+    if (is_array($pSettings)) {
+        foreach ($pSettings as $pSetting) {
+            if (isset($vModules[$pModuleName][$pSetting])) {
+                return $vModules[$pModuleName][$pSetting];
+            }
+        }
+    } else {
+        if (isset($vModules[$pModuleName][$pSettings])) {
+            return $vModules[$pModuleName][$pSettings];
+        }
+    }
+    return 'Не определено';
+}
