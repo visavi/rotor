@@ -49,6 +49,12 @@
         {!! textError('sets[timezone]') !!}
     </div>
 
+    <div class="form-group{{ hasError('sets[currency]') }}">
+        <label for="currency">Валюта сайта:</label>
+        <input type="text" class="form-control" id="currency" name="sets[currency]" maxlength="10" value="{{ getInput('sets.currency', $settings['currency']) }}" required>
+        {!! textError('sets[currency]') !!}
+    </div>
+
     <?php $languages = array_map('basename', glob(RESOURCES . '/lang/*', GLOB_ONLYDIR)); ?>
     <?php $inputLang = getInput('language', $settings['language']); ?>
 

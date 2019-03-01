@@ -10,7 +10,7 @@
     <nav>
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
-            <li class="breadcrumb-item"><a href="/loads">Загрузки</a></li>
+            <li class="breadcrumb-item"><a href="/loads">{{ trans('loads.title') }}</a></li>
 
             @if ($down->category->parent->id)
                 <li class="breadcrumb-item"><a href="/loads/{{ $down->category->parent->id }}">{{ $down->category->parent->name }}</a></li>
@@ -30,7 +30,7 @@
 @section('content')
     @if (! $down->active)
         <div class="p-1 bg-warning text-dark">
-            <i class="fas fa-exclamation-triangle"></i> Внимание! Данная загрузка ожидает проверки модератором!<br>
+            <i class="fas fa-exclamation-triangle"></i> {{ trans('loads.pending_down1') }}<br>
             @if ($down->user_id === getUser('id'))
                 <i class="fa fa-pencil-alt"></i> <a href="/downs/edit/{{ $down->id }}">Перейти к редактированию</a>
             @endif

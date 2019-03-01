@@ -1,14 +1,14 @@
 @extends('layout')
 
 @section('title')
-    Редактирование загрузки
+    {{ trans('loads.edit_down') }}
 @stop
 
 @section('breadcrumb')
     <nav>
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
-            <li class="breadcrumb-item"><a href="/loads">Загрузки</a></li>
+            <li class="breadcrumb-item"><a href="/loads">{{ trans('loads.title') }}</a></li>
 
             @if ($down->category->parent->id)
                 <li class="breadcrumb-item"><a href="/loads/{{ $down->category->parent->id }}">{{ $down->category->parent->name }}</a></li>
@@ -16,15 +16,15 @@
 
             <li class="breadcrumb-item"><a href="/loads/{{ $down->category->id }}">{{ $down->category->name }}</a></li>
             <li class="breadcrumb-item"><a href="/downs/{{ $down->id }}">{{ $down->title }}</a></li>
-            <li class="breadcrumb-item active">Редактирование загрузки</li>
+            <li class="breadcrumb-item active">{{ trans('loads.edit_down') }}</li>
         </ol>
     </nav>
 @stop
 
 @section('content')
     <div class="p-1 bg-warning text-dark">
-        <b>Внимание!</b> Данная загрузка ожидает проверки модератором!<br>
-        После проверки вы не сможете отредактировать описание и загрузить файл или скриншот
+        <i class="fas fa-exclamation-triangle"></i> {{ trans('loads.pending_down1') }}<br>
+        {{ trans('loads.pending_down2') }}
     </div><br>
 
     <div class="form mb-3">
@@ -74,7 +74,7 @@
                 Допустимые размеры картинок: от 100px
             </p>
 
-            <button class="btn btn-primary">Сохранить</button>
+            <button class="btn btn-primary">{{ trans('main.edit') }}</button>
         </form>
     </div>
 @stop

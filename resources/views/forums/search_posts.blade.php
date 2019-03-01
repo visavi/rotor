@@ -25,7 +25,7 @@
 
         <div>{!! bbCode($post->text) !!}<br>
             {{ trans('forums.forum') }}: <a href="/topics/{{ $post->topic->forum->id }}">{{ $post->topic->forum->title }}</a><br>
-            {{ trans('forums.posted_by') }}: {!! $post->user->getProfile() !!} <small>({{ dateFixed($post->created_at) }})</small><br>
+            {{ trans('main.posted') }}: {!! $post->user->getProfile() !!} <small>({{ dateFixed($post->created_at) }})</small><br>
         </div>
     @endforeach
 

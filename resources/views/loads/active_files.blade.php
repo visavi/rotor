@@ -1,7 +1,7 @@
 @extends('layout')
 
 @section('title')
-    Загрузки - Список файлов {{ $user->login }} (Стр. {{ $page->current }})
+    {{ trans('loads.title') }} - Список файлов {{ $user->login }} ({{ trans('main.page_num', ['page' => $page->current]) }})
 @stop
 
 @section('header')
@@ -12,7 +12,7 @@
     <nav>
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
-            <li class="breadcrumb-item"><a href="/loads">Загрузки</a></li>
+            <li class="breadcrumb-item"><a href="/loads">{{ trans('loads.title') }}</a></li>
             <li class="breadcrumb-item active">Файлы {{ $user->login }}</li>
         </ol>
     </nav>

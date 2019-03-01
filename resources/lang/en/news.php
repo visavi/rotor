@@ -11,7 +11,6 @@ return [
     'comments_title'       => 'Comments',
     'edit_title'           => 'Editing comment',
     'rss_title'            => 'RSS news',
-    'posted_by'            => 'Posted by',
     'on_homepage'          => 'On homepage',
     'total_news'           => 'Total news',
     'create_title'         => 'Create news',

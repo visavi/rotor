@@ -11,7 +11,6 @@ return [
     'comments_title'       => 'Комментарии',
     'edit_title'           => 'Редактирование комментария',
     'rss_title'            => 'RSS новостей',
-    'posted_by'            => 'Написал',
     'on_homepage'          => 'На главной',
     'total_news'           => 'Всего новостей',
     'create_title'         => 'Создание новости',

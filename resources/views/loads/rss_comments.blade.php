@@ -15,7 +15,7 @@
             <description>{{ $down->title }}</description>
             <author>{{ $data->user->login }}</author>
             <pubDate>{{ date('r', $data->created_at) }}</pubDate>
-            <category>Комментарии</category>
+            <category>{{ trans('main.comments') }}</category>
             <guid>{{ siteUrl() }}/down/comments/{{ $down->id }}?pid={{ $data->id }}</guid>
         </item>
     @endforeach

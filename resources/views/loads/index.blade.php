@@ -1,34 +1,34 @@
 @extends('layout')
 
 @section('title')
-    Загрузки
+    {{ trans('loads.title') }}
 @stop
 
 @section('header')
     @if (getUser())
         <div class="float-right">
-            <a class="btn btn-success" href="/downs/create">Добавить</a>
+            <a class="btn btn-success" href="/downs/create">{{ trans('loads.create_down') }}</a>
         </div><br>
     @endif
 
-    <h1>Загрузки</h1>
+    <h1>{{ trans('loads.title') }}</h1>
 @stop
 
 @section('breadcrumb')
     <nav>
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
-            <li class="breadcrumb-item active">Загрузки</li>
+            <li class="breadcrumb-item active">{{ trans('loads.title') }}</li>
         </ol>
     </nav>
 @stop
 
 @section('content')
     @if (getUser())
-        Мои: <a href="/downs/active/files">файлы</a>, <a href="/downs/active/comments">комментарии</a> /
+        {{ trans('main.my') }}: <a href="/downs/active/files">{{ trans('loads.downs') }}</a>, <a href="/downs/active/comments">{{ trans('loads.comments') }}</a> /
     @endif
 
-    Новые: <a href="/downs">файлы</a>, <a href="/downs/comments">комментарии</a>
+    {{ trans('main.new') }}: <a href="/downs">{{ trans('loads.downs') }}</a>, <a href="/downs/comments">{{ trans('loads.comments') }}</a>
     <hr>
 
     @foreach ($categories as $category)
@@ -45,7 +45,7 @@
         <div>
             @if ($category->children->isNotEmpty())
                 @foreach ($category->children as $child)
-                    <i class="fa fa-angle-right"></i> <b><a href="/loads/{{ $child->id }}">{{ $child['name'] }}</a></b>
+                    <i class="fa fa-angle-right"></i> <b><a href="/loads/{{ $child->id }}">{{ $child->name }}</a></b>
                     @if ($child->new)
                         ({{ $child->count_downs }}/<span style="color:#ff0000">+{{ $child->new->count_downs }}</span>)<br>
                     @else
@@ -57,7 +57,7 @@
     @endforeach
 
     <br>
-    <a href="/loads/top">Топ файлов</a> /
-    <a href="/loads/search">Поиск</a> /
-    <a href="/loads/rss">RSS</a><br>
+    <a href="/loads/top">{{ trans('loads.downs') }}</a> /
+    <a href="/loads/search">{{ trans('main.search') }}</a> /
+    <a href="/loads/rss">{{ trans('main.rss') }}</a><br>
 @stop

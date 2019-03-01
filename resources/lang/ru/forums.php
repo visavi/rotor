@@ -4,7 +4,6 @@ return [
     'forum'                => 'Форум',
     'topic'                => 'Тема',
     'post'                 => 'Сообщение',
-    'posted_by'            => 'Написал',
     'latest'               => 'Посл.',
     'top_topics'           => 'Топ тем',
     'top_posts'            => 'Топ постов',

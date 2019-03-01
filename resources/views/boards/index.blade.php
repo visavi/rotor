@@ -83,7 +83,7 @@
 
                                 <div class="col-md-2">
                                     @if ($item->price)
-                                        <button type="button" class="btn btn-info">{{ $item->price }} {{ trans('main.currency') }}</button>
+                                        <button type="button" class="btn btn-info">{{ $item->price }} {{ setting('currency') }}</button>
                                     @endif
                                 </div>
                             </div>

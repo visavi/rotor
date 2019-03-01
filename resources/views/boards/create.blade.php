@@ -50,7 +50,7 @@
         </div>
 
         <div class="form-group{{ hasError('price') }}">
-            <label for="inputPrice">{{ trans('boards.price') }} {{ trans('main.currency') }}:</label>
+            <label for="inputPrice">{{ trans('boards.price') }} {{ setting('currency') }}:</label>
             <input class="form-control" id="inputPrice" name="price" value="{{ getInput('price') }}" required>
             {!! textError('price') !!}
         </div>

@@ -1,14 +1,14 @@
 @extends('layout')
 
 @section('title')
-    Редактирование комментария
+    {{ trans('loads.edit_comment') }}
 @stop
 
 @section('breadcrumb')
     <nav>
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
-            <li class="breadcrumb-item"><a href="/loads">Загрузки</a></li>
+            <li class="breadcrumb-item"><a href="/loads">{{ trans('loads.title') }}</a></li>
 
             @if ($down->category->parent->id)
                 <li class="breadcrumb-item"><a href="/loads/{{ $down->category->parent->id }}">{{ $down->category->parent->name }}</a></li>
@@ -16,7 +16,7 @@
 
             <li class="breadcrumb-item"><a href="/loads/{{ $down->category->id }}">{{ $down->category->name }}</a></li>
             <li class="breadcrumb-item"><a href="/downs/{{ $down->id }}">{{ $down->title }}</a></li>
-            <li class="breadcrumb-item active">Редактирование комментария</li>
+            <li class="breadcrumb-item active">{{ trans('loads.edit_comment') }}</li>
         </ol>
     </nav>
 @stop
@@ -29,13 +29,13 @@
             <input type="hidden" name="token" value="{{ $_SESSION['token'] }}">
 
             <div class="form-group{{ hasError('msg') }}">
-                <label for="msg">Сообщение:</label>
+                <label for="msg">{{ trans('main.message') }}:</label>
                 <textarea class="form-control markItUp" maxlength="{{ setting('comment_length') }}" id="msg" rows="5" name="msg" required>{{ getInput('msg', $comment->text) }}</textarea>
                 <span class="js-textarea-counter"></span>
                 {!! textError('msg') !!}
             </div>
 
-            <button class="btn btn-primary">Редактировать</button>
+            <button class="btn btn-primary">{{ trans('main.edit') }}</button>
         </form>
     </div><br>
 @stop

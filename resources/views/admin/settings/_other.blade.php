@@ -30,7 +30,7 @@
     </div>
 
     <div class="form-group{{ hasError('sets[moneyname]') }}">
-        <label for="moneyname">Название денег:</label>
+        <label for="moneyname">Название игровой валюты:</label>
         <input type="text" class="form-control" id="moneyname" name="sets[moneyname]" maxlength="100" value="{{ getInput('sets.moneyname', $settings['moneyname']) }}" required>
         {!! textError('sets[moneyname]') !!}
     </div>

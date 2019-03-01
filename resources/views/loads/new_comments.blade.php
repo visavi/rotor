@@ -1,19 +1,19 @@
 @extends('layout')
 
 @section('title')
-    Загрузки - Новые комментарии (Стр. {{ $page->current }})
+    {{ trans('loads.title') }} - {{ trans('loads.new_comments') }} ({{ trans('main.page_num', ['page' => $page->current]) }})
 @stop
 
 @section('header')
-    <h1>Новые комментарии</h1>
+    <h1>{{ trans('loads.new_comments') }}</h1>
 @stop
 
 @section('breadcrumb')
     <nav>
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
-            <li class="breadcrumb-item"><a href="/loads">Загрузки</a></li>
-            <li class="breadcrumb-item active">Новые комментарии</li>
+            <li class="breadcrumb-item"><a href="/loads">{{ trans('loads.title') }}</a></li>
+            <li class="breadcrumb-item active">{{ trans('loads.new_comments') }}</li>
         </ol>
     </nav>
 @stop
@@ -28,7 +28,7 @@
 
                     <div class="float-right">
                         @if (isAdmin())
-                            <a href="#" onclick="return deleteComment(this)" data-rid="{{ $data->relate_id }}" data-id="{{ $data->id }}" data-type="{{ App\Models\Down::class }}" data-token="{{ $_SESSION['token'] }}" data-toggle="tooltip" title="Удалить"><i class="fa fa-times text-muted"></i></a>
+                            <a href="#" onclick="return deleteComment(this)" data-rid="{{ $data->relate_id }}" data-id="{{ $data->id }}" data-type="{{ App\Models\Down::class }}" data-token="{{ $_SESSION['token'] }}" data-toggle="tooltip" title="{{ trans('main.delete') }}"><i class="fa fa-times text-muted"></i></a>
                         @endif
                     </div>
                 </div>
@@ -36,7 +36,7 @@
                 <div>
                     {!! bbCode($data->text) !!}<br>
 
-                    Написал: {!! $data->user->getProfile() !!} <small>({{ dateFixed($data->created_at) }})</small><br>
+                    {{ trans('main.posted') }}: {!! $data->user->getProfile() !!} <small>({{ dateFixed($data->created_at) }})</small><br>
                     @if (isAdmin())
                         <span class="data">({{ $data->brow }}, {{ $data->ip }})</span>
                     @endif
@@ -46,6 +46,6 @@
 
         {!! pagination($page) !!}
     @else
-        {!! showError('Комментарии не найдены!') !!}
+        {!! showError(trans('main.empty_comments')) !!}
     @endif
 @stop

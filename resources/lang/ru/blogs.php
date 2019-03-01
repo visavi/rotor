@@ -14,7 +14,6 @@ return [
     'all_articles'           => 'Статей',
     'all_comments'           => 'Комм.',
     'title_comments'         => 'Комментарии',
-    'posted_by'              => 'Написал',
     'title_active_articles'  => 'Список статей :user',
     'empty_articles'         => 'Статей еще нет!',
     'total_articles'         => 'Всего статей',

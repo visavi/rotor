@@ -1,7 +1,7 @@
 @extends('layout_rss')
 
 @section('title')
-    RSS файлов
+    {{ trans('loads.rss_downs') }}
 @stop
 
 @section('content')
@@ -15,7 +15,7 @@
             <description>{{ $down->text }}</description>
             <author>{{ $down->user->login }}</author>
             <pubDate>{{ date('r', $down->created_at) }}</pubDate>
-            <category>Файлы</category>
+            <category>{{ trans('loads.title') }}</category>
             <guid>{{ siteUrl() }}/down/{{ $down->id }}</guid>
         </item>
     @endforeach
