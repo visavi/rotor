@@ -39,7 +39,7 @@
                         {{  dateFixed($data->created_at) }}
 
                         @if ($data->type === 'in')
-                            <a href="#" onclick="return sendComplaint(this)" data-type="{{ App\Models\Message::class }} " data-id="{{ $data->id }}" data-token="{{ $_SESSION['token'] }}" rel="nofollow" title="{{ trans('main.complain') }}"><i class="fa fa-bell text-muted"></i></a>
+                            <a href="#" onclick="return sendComplaint(this)" data-type="{{ App\Models\Message::class }} " data-id="{{ $data->id }}" data-token="{{ $_SESSION['token'] }}" rel="nofollow" title="{{ trans('main.complaint') }}"><i class="fa fa-bell text-muted"></i></a>
                         @endif
                     </div>
 

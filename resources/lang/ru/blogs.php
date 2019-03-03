@@ -13,7 +13,6 @@ return [
     'tags'                   => 'Теги',
     'all_articles'           => 'Статей',
     'all_comments'           => 'Комм.',
-    'title_comments'         => 'Комментарии',
     'title_active_articles'  => 'Список статей :user',
     'empty_articles'         => 'Статей еще нет!',
     'total_articles'         => 'Всего статей',

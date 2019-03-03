@@ -1,7 +1,7 @@
 @extends('layout')
 
 @section('title')
-    {{ $blog->title }} - {{ trans('blogs.title_comments') }}
+    {{ $blog->title }} - {{ trans('main.comments') }}
 @stop
 
 @section('breadcrumb')
@@ -16,7 +16,7 @@
 
             <li class="breadcrumb-item"><a href="/blogs/{{ $blog->category->id }}">{{ $blog->category->name }}</a></li>
             <li class="breadcrumb-item"><a href="/articles/{{ $blog->id }}">{{ $blog->title }}</a></li>
-            <li class="breadcrumb-item active">{{ trans('blogs.title_comments') }}</li>
+            <li class="breadcrumb-item active">{{ trans('main.comments') }}</li>
         </ol>
     </nav>
 @stop
@@ -39,7 +39,7 @@
 
                             <a href="#" onclick="return postQuote(this)" title="{{ trans('main.quote') }}"><i class="fa fa-quote-right text-muted"></i></a>
 
-                            <a href="#" onclick="return sendComplaint(this)" data-type="{{ App\Models\Blog::class }}" data-id="{{ $data->id }}" data-token="{{ $_SESSION['token'] }}" data-page="{{ $page->current }}" rel="nofollow" title="{{ trans('main.complain') }}"><i class="fa fa-bell text-muted"></i></a>
+                            <a href="#" onclick="return sendComplaint(this)" data-type="{{ App\Models\Blog::class }}" data-id="{{ $data->id }}" data-token="{{ $_SESSION['token'] }}" data-page="{{ $page->current }}" rel="nofollow" title="{{ trans('main.complaint') }}"><i class="fa fa-bell text-muted"></i></a>
                         @endif
 
                         @if ($data->created_at + 600 > SITETIME && getUser('id') === $data->user->id)

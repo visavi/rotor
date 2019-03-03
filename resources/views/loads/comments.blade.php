@@ -1,7 +1,7 @@
 @extends('layout')
 
 @section('title')
-   {{ $down->title }} - Комментарии
+   {{ $down->title }} - {{ trans('main.comments') }}
 @stop
 
 @section('breadcrumb')
@@ -17,8 +17,8 @@
             <li class="breadcrumb-item"><a href="/loads/{{ $down->category_id }}">{{ $down->category->name }}</a></li>
 
             <li class="breadcrumb-item"><a href="/downs/{{ $down->id }}">{{ $down->title }}</a></li>
-            <li class="breadcrumb-item active">Комментарии</li>
-            <li class="breadcrumb-item"><a href="/downs/rss/{{ $down->id }}">RSS-лента</a></li>
+            <li class="breadcrumb-item active">{{ trans('main.comments') }}</li>
+            <li class="breadcrumb-item"><a href="/downs/rss/{{ $down->id }}">{{ trans('main.rss') }}</a></li>
         </ol>
     </nav>
 @stop
@@ -36,11 +36,11 @@
                     @if (getUser())
                         <div class="float-right">
                             @if (getUser('id') !== $data->user_id)
-                                <a href="#" onclick="return postReply(this)" title="Ответить"><i class="fa fa-reply text-muted"></i></a>
+                                <a href="#" onclick="return postReply(this)" title="{{ trans('main.reply') }}"><i class="fa fa-reply text-muted"></i></a>
 
-                                <a href="#" onclick="return postQuote(this)" title="Цитировать"><i class="fa fa-quote-right text-muted"></i></a>
+                                <a href="#" onclick="return postQuote(this)" title="{{ trans('main.quote') }}"><i class="fa fa-quote-right text-muted"></i></a>
 
-                                <a href="#" onclick="return sendComplaint(this)" data-type="{{ App\Models\Down::class }}" data-id="{{ $data->id }}" data-token="{{ $_SESSION['token'] }}" data-page="{{ $page->current }}" rel="nofollow" title="Жалоба"><i class="fa fa-bell text-muted"></i></a>
+                                <a href="#" onclick="return sendComplaint(this)" data-type="{{ App\Models\Down::class }}" data-id="{{ $data->id }}" data-token="{{ $_SESSION['token'] }}" data-page="{{ $page->current }}" rel="nofollow" title="{{ trans('main.complaint') }}"><i class="fa fa-bell text-muted"></i></a>
                             @endif
 
                             @if ($data->created_at + 600 > SITETIME && getUser('id') === $data->user->id)
@@ -48,7 +48,7 @@
                             @endif
 
                             @if (isAdmin())
-                                <a href="#" onclick="return deleteComment(this)" data-rid="{{ $data->relate_id }}" data-id="{{ $data->id }}" data-type="{{ App\Models\Down::class }}" data-token="{{ $_SESSION['token'] }}" data-toggle="tooltip" title="Удалить"><i class="fa fa-times text-muted"></i></a>
+                                <a href="#" onclick="return deleteComment(this)" data-rid="{{ $data->relate_id }}" data-id="{{ $data->id }}" data-type="{{ App\Models\Down::class }}" data-token="{{ $_SESSION['token'] }}" data-toggle="tooltip" title="{{ trans('main.delete') }}"><i class="fa fa-times text-muted"></i></a>
                             @endif
                         </div>
                     @endif
@@ -68,7 +68,7 @@
 
         {!! pagination($page) !!}
     @else
-        {!! showError('Нет сообщений') !!}
+        {!! showError(trans('main.empty_comments')) !!}
     @endif
 
     @if (getUser())
@@ -77,20 +77,20 @@
                 <input type="hidden" name="token" value="{{ $_SESSION['token'] }}">
 
                 <div class="form-group{{ hasError('msg') }}">
-                    <label for="msg">Сообщение:</label>
+                    <label for="msg">{{ trans('main.message') }}:</label>
                     <textarea class="form-control markItUp" maxlength="{{ setting('comment_length') }}" id="msg" rows="5" name="msg" required>{{ getInput('msg') }}</textarea>
                     <span class="js-textarea-counter"></span>
                     {!! textError('msg') !!}
                 </div>
 
-                <button class="btn btn-success">Написать</button>
+                <button class="btn btn-success">{{ trans('main.write') }}</button>
             </form>
         </div><br>
 
-        <a href="/rules">Правила</a> /
-        <a href="/stickers">Стикеры</a> /
-        <a href="/tags">Теги</a><br><br>
+        <a href="/rules">{{ trans('main.rules') }}</a> /
+        <a href="/stickers">{{ trans('main.stickers') }}</a> /
+        <a href="/tags">{{ trans('main.tags') }}</a><br><br>
     @else
-        {!! showError('Для добавления сообщения необходимо авторизоваться') !!}
+        {!! showError(trans('main.not_authorized')) !!}
     @endif
 @stop

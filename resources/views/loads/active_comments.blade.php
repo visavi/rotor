@@ -1,11 +1,11 @@
 @extends('layout')
 
 @section('title')
-    {{ trans('loads.title') }} - Список комментариев {{ $user->login }} ({{ trans('main.page_num', ['page' => $page->current]) }})
+    {{ trans('loads.title') }} - {{ trans('loads.active_comments', ['user' => $user->login]) }} ({{ trans('main.page_num', ['page' => $page->current]) }})
 @stop
 
 @section('header')
-    <h1>Комментарии {{ $user->login }}</h1>
+    <h1>{{ trans('loads.active_comments', ['user' => $user->login]) }}</h1>
 @stop
 
 @section('breadcrumb')
@@ -13,7 +13,7 @@
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
             <li class="breadcrumb-item"><a href="/loads">{{ trans('loads.title') }}</a></li>
-            <li class="breadcrumb-item active">Комментарии {{ $user->login }}</li>
+            <li class="breadcrumb-item active">{{ trans('loads.active_comments', ['user' => $user->login]) }}</li>
         </ol>
     </nav>
 @stop
@@ -28,7 +28,7 @@
 
                     <div class="float-right">
                         @if (isAdmin())
-                            <a href="#" onclick="return deleteComment(this)" data-rid="{{ $data->relate_id }}" data-id="{{ $data->id }}" data-type="{{ App\Models\Down::class }}" data-token="{{ $_SESSION['token'] }}" data-toggle="tooltip" title="Удалить"><i class="fa fa-times text-muted"></i></a>
+                            <a href="#" onclick="return deleteComment(this)" data-rid="{{ $data->relate_id }}" data-id="{{ $data->id }}" data-type="{{ App\Models\Down::class }}" data-token="{{ $_SESSION['token'] }}" data-toggle="tooltip" title="{{ trans('main.delete') }}"><i class="fa fa-times text-muted"></i></a>
                         @endif
                     </div>
                 </div>
@@ -36,7 +36,7 @@
                 <div>
                     {!! bbCode($data->text) !!}<br>
 
-                    Написал: {!! $data->user->getProfile() !!} <small>({{ dateFixed($data->created_at) }})</small><br>
+                    {{ trans('main.posted') }}: {!! $data->user->getProfile() !!} <small>({{ dateFixed($data->created_at) }})</small><br>
                     @if (isAdmin())
                         <span class="data">({{ $data->brow }}, {{ $data->ip }})</span>
                     @endif
@@ -46,6 +46,6 @@
 
         {!! pagination($page) !!}
     @else
-        {!! showError('Комментарии не найдены!') !!}
+        {!! showError(trans('main.empty_comments')) !!}
     @endif
 @stop

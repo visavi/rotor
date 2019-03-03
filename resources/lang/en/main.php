@@ -13,7 +13,7 @@ return [
     'management'        => 'Management',
     'reply'             => 'Reply',
     'quote'             => 'Quote',
-    'complain'          => 'Complain',
+    'complaint'         => 'Complaint',
     'create'            => 'Create',
     'created'           => 'Created',
     'upload'            => 'Upload',
