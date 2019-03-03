@@ -29,6 +29,6 @@ $click = $cond ? 'return pasteImage(this);' : false;
 <p class="text-muted font-italic">
     {{ trans('main.max_file_upload') }}: {{ setting('maxfiles') }}<br>
     {{ trans('main.max_file_weight') }}: {{ formatSize(setting('filesize')) }}<br>
-    {{ trans('main.min_image_size') }}: 100px<br>
-    {{ trans('main.valid_file_extensions') }}: jpg, jpeg, gif и png
+    {{ trans('main.valid_file_extensions') }}: jpg, jpeg, gif и png<br>
+    {{ trans('main.min_image_size') }}: 100px
 </p>

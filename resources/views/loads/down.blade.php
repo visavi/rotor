@@ -18,10 +18,10 @@
 
             <li class="breadcrumb-item"><a href="/loads/{{ $down->category_id }}">{{ $down->category->name }}</a></li>
             <li class="breadcrumb-item active">{{ $down->title }}</li>
-            <li class="breadcrumb-item"><a href="/downs/rss/{{ $down->id }}">RSS-лента</a></li>
+            <li class="breadcrumb-item"><a href="/downs/rss/{{ $down->id }}">{{ trans('main.rss') }}</a></li>
 
             @if (isAdmin('admin'))
-                <li class="breadcrumb-item"><a href="/admin/downs/edit/{{ $down->id }}">Редактировать</a></li>
+                <li class="breadcrumb-item"><a href="/admin/downs/edit/{{ $down->id }}">{{ trans('main.edit') }}</a></li>
             @endif
         </ol>
     </nav>
@@ -32,7 +32,7 @@
         <div class="p-1 bg-warning text-dark">
             <i class="fas fa-exclamation-triangle"></i> {{ trans('loads.pending_down1') }}<br>
             @if ($down->user_id === getUser('id'))
-                <i class="fa fa-pencil-alt"></i> <a href="/downs/edit/{{ $down->id }}">Перейти к редактированию</a>
+                <i class="fa fa-pencil-alt"></i> <a href="/downs/edit/{{ $down->id }}">{{ trans('main.edit') }}</a>
             @endif
         </div><br>
     @endif
@@ -48,7 +48,7 @@
                     @if ($file->hash && file_exists(HOME . $file->hash))
 
                         <b>{{ $file->name }}</b> ({{ formatSize($file->size) }})<br>
-                        <a class="btn btn-success" href="/downs/download/{{ $file->id }}"><i class="fa fa-download"></i> Скачать</a><br>
+                        <a class="btn btn-success" href="/downs/download/{{ $file->id }}"><i class="fa fa-download"></i> {{ trans('main.download') }}</a><br>
 
                         @if ($file->extension === 'mp3')
                             <audio preload="none" controls style="max-width:100%;">
@@ -65,10 +65,10 @@
                         @endif
 
                         @if ($file->extension === 'zip')
-                            <a href="/downs/zip/{{ $file->id }}">Просмотреть архив</a><br>
+                            <a href="/downs/zip/{{ $file->id }}">{{ trans('loads.view_archive') }}</a><br>
                         @endif
                     @else
-                        <i class="fa fa-download"></i> Файл не найден
+                        <i class="fa fa-download"></i> {{ trans('main.file_not_found') }}
                     @endif
                     <br>
                 @endforeach
@@ -83,36 +83,36 @@
             </div>
         @endif
     @else
-        {!! showError('Файлы еще не загружены!') !!}
+        {!! showError(trans('main.not_uploaded')) !!}
     @endif
 
     <div class="mt-3">
-        <i class="fa fa-comment"></i> <a href="/downs/comments/{{ $down->id }}">Комментарии</a> ({{ $down->count_comments }})
+        <i class="fa fa-comment"></i> <a href="/downs/comments/{{ $down->id }}">{{ trans('main.comments') }}</a> ({{ $down->count_comments }})
         <a href="/downs/end/{{ $down->id }}">&raquo;</a><br>
 
-        Рейтинг: {!! ratingVote($rating) !!}<br>
-        Всего голосов: <b>{{ $down->rated }}</b><br>
-        Всего скачиваний: <b>{{ $down->loads }}</b><br>
-        Добавлено: {!! $down->user->getProfile() !!} ({{ dateFixed($down->created_at) }})<br><br>
+        {{ trans('main.rating') }}: {!! ratingVote($rating) !!}<br>
+        {{ trans('main.votes') }}: <b>{{ $down->rated }}</b><br>
+        {{ trans('main.downloads') }}: <b>{{ $down->loads }}</b><br>
+        {{ trans('main.created') }}: {!! $down->user->getProfile() !!} ({{ dateFixed($down->created_at) }})<br><br>
     </div>
 
     @if (getUser() && getUser('id') !== $down->user_id)
         <form action="/downs/votes/{{ $down->id }}" method="post">
             <input type="hidden" name="token" value="{{ $_SESSION['token'] }}">
-            <label for="score">Ваша оценка</label>
+            <label for="score">{{ trans('main.your_vote') }}:</label>
             <div class="form-inline">
                 <div class="form-group mb-2{{ hasError('score') }}">
                     <select class="form-control" id="score" name="score">
-                        <option value="0">Выбрать оценку</option>
-                        <option value="1" {{ $down->vote === '1' ? ' selected' : '' }}>Отстой</option>
-                        <option value="2" {{ $down->vote === '2' ? ' selected' : '' }}>Плохо</option>
-                        <option value="3" {{ $down->vote === '3' ? ' selected' : '' }}>Нормально</option>
-                        <option value="4" {{ $down->vote === '4' ? ' selected' : '' }}>Хорошо</option>
-                        <option value="5" {{ $down->vote === '5' ? ' selected' : '' }}>Отлично</option>
+                        <option value="0">{{ trans('main.select_vote') }}</option>
+                        <option value="1" {{ $down->vote === '1' ? ' selected' : '' }}>{{ trans('main.sucks') }}</option>
+                        <option value="2" {{ $down->vote === '2' ? ' selected' : '' }}>{{ trans('main.bad') }}</option>
+                        <option value="3" {{ $down->vote === '3' ? ' selected' : '' }}>{{ trans('main.normal') }}</option>
+                        <option value="4" {{ $down->vote === '4' ? ' selected' : '' }}>{{ trans('main.good') }}</option>
+                        <option value="5" {{ $down->vote === '5' ? ' selected' : '' }}>{{ trans('main.excellent') }}</option>
                     </select>
                     {!! textError('protect') !!}
                 </div>
-                <button class="btn btn-primary mb-2">Оценить</button>
+                <button class="btn btn-primary mb-2">{{ trans('main.rate') }}</button>
             </div>
         </form>
     @endif

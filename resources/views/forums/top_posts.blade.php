@@ -36,7 +36,7 @@
         @foreach ($posts as $data)
             <div class="b">
                 <i class="fa fa-file-alt"></i> <b><a href="/topics/{{ $data->topic_id }}/{{ $data->id }}">{{ $data->topic->title }}</a></b>
-                ({{ trans('forums.rating') }}: {{ $data->rating }})
+                ({{ trans('main.rating') }}: {{ $data->rating }})
             </div>
             <div>
                 {!! bbCode($data->text) !!}<br>

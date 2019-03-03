@@ -203,8 +203,7 @@
                             <p class="text-muted font-italic">
                                 {{ trans('main.max_file_upload') }}: {{ setting('maxfiles') }}<br>
                                 {{ trans('main.max_file_weight') }}: {{ formatSize(setting('forumloadsize')) }}<br>
-                                {{ trans('main.valid_file_extensions') }}: {{ str_replace(',', ', ', setting('forumextload')) }}<br>
-                                {{ trans('main.min_image_size') }}: 100px
+                                {{ trans('main.valid_file_extensions') }}: {{ str_replace(',', ', ', setting('forumextload')) }}
                             </p>
                         </div>
 

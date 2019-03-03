@@ -2478,7 +2478,7 @@ function getCourses()
  */
 function runCommand(Command $command, array $arguments = [])
 {
-    $input = new ArrayInput($arguments);
+    $input  = new ArrayInput($arguments);
     $output = new NullOutput();
 
     try {
