@@ -1,7 +1,7 @@
 @extends('layout')
 
 @section('title')
-    Просмотр файла {{ $document->getName() }}
+    {{ trans('loads.view_file') }} {{ $document->getName() }}
 @stop
 
 @section('breadcrumb')
@@ -16,18 +16,18 @@
 
             <li class="breadcrumb-item"><a href="/loads/{{ $down->category->id }}">{{ $down->category->name }}</a></li>
             <li class="breadcrumb-item"><a href="/downs/{{ $down->id }}">{{ $down->title }}</a></li>
-            <li class="breadcrumb-item"><a href="/downs/zip/{{ $file->id }}">Архив</a></li>
-            <li class="breadcrumb-item active">Просмотр файла</li>
+            <li class="breadcrumb-item"><a href="/downs/zip/{{ $file->id }}">{{ trans('loads.view_archive') }}</a></li>
+            <li class="breadcrumb-item active">{{ trans('loads.view_file') }}</li>
         </ol>
     </nav>
 @stop
 
 @section('content')
-    Размер файла: {{ formatSize($document->getSize()) }}<hr>
+    {{ trans('loads.file_size') }}: {{ formatSize($document->getSize()) }}<hr>
 
     @if ($content)
         <pre class="prettyprint linenums">{{ $content }}</pre><br>
     @else
-        {!! showError('Данный файл пустой!') !!}
+        {!! showError(trans('loads.empty_file')) !!}
     @endif
 @stop

@@ -25,7 +25,7 @@
     <a href="/blogs/top?sort=visits" class="badge badge-{{ $active }}">{{ trans('main.views') }}</a>
 
     <?php $active = ($order === 'rating') ? 'success' : 'light'; ?>
-    <a href="/blogs/top?sort=rated" class="badge badge-{{ $active }}">{{ trans('main.ratings') }}</a>
+    <a href="/blogs/top?sort=rated" class="badge badge-{{ $active }}">{{ trans('main.rating') }}</a>
 
     <?php $active = ($order === 'count_comments') ? 'success' : 'light'; ?>
     <a href="/blogs/top?sort=comments" class="badge badge-{{ $active }}">{{ trans('main.comments') }}</a>

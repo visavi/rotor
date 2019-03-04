@@ -1,11 +1,11 @@
 @extends('layout')
 
 @section('title')
-    Топ популярных файлов ({{ trans('main.page_num', ['page' => $page->current]) }})
+    {{ trans('loads.top_downs') }} ({{ trans('main.page_num', ['page' => $page->current]) }})
 @stop
 
 @section('header')
-    <h1>Топ популярных файлов</h1>
+    <h1>{{ trans('loads.top_downs') }}</h1>
 @stop
 
 @section('breadcrumb')
@@ -13,21 +13,21 @@
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
             <li class="breadcrumb-item"><a href="/loads">{{ trans('loads.title') }}</a></li>
-            <li class="breadcrumb-item active">Топ файлов</li>
+            <li class="breadcrumb-item active">{{ trans('loads.top_downs') }}</li>
         </ol>
     </nav>
 @stop
 
 @section('content')
-    Сортировать:
+    {{ trans('main.sort') }}:
     <?php $active = ($order === 'loads') ? 'success' : 'light'; ?>
-    <a href="/loads/top?sort=loads" class="badge badge-{{ $active }}">Скачивания</a>
+    <a href="/loads/top?sort=loads" class="badge badge-{{ $active }}">{{ trans('main.downloads') }}</a>
 
     <?php $active = ($order === 'rated') ? 'success' : 'light'; ?>
-    <a href="/loads/top?sort=rated" class="badge badge-{{ $active }}">Оценки</a>
+    <a href="/loads/top?sort=rated" class="badge badge-{{ $active }}">{{ trans('main.rating') }}</a>
 
     <?php $active = ($order === 'count_comments') ? 'success' : 'light'; ?>
-    <a href="/loads/top?sort=comments" class="badge badge-{{ $active }}">Комментарии</a>
+    <a href="/loads/top?sort=comments" class="badge badge-{{ $active }}">{{ trans('main.comments') }}</a>
     <hr>
 
     @if ($downs->isNotEmpty())
@@ -41,18 +41,16 @@
             </div>
 
             <div>
-                Категория: <a href="/loads/{{ $data->category->id }}">{{ $data->category->name }}</a><br>
-                Рейтинг: {{ $rating }}<br>
-                Скачиваний: {{ $data->loads }}<br>
-                <a href="/downs/comments/{{ $data->id }}">Комментарии</a> ({{ $data->count_comments }})
+                {{ trans('loads.load') }}: <a href="/loads/{{ $data->category->id }}">{{ $data->category->name }}</a><br>
+                {{ trans('main.rating') }}: {{ $rating }}<br>
+                {{ trans('main.downloads') }}: {{ $data->loads }}<br>
+                <a href="/downs/comments/{{ $data->id }}">{{ trans('main.comments') }}</a> ({{ $data->count_comments }})
                 <a href="/downs/end/{{ $data->id }}">&raquo;</a>
             </div>
         @endforeach
 
         {!! pagination($page) !!}
     @else
-        @if (! $category->closed)
-            {!! showError('Файлы не найдены!') !!}
-        @endif
+        {!! showError(trans('loads.empty_downs')) !!}
     @endif
 @stop

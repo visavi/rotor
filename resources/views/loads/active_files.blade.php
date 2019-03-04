@@ -37,7 +37,7 @@
             </div>
             <div>
                 {{ trans('loads.load') }}: <a href="/loads/{{ $down->category->id }}">{{ $down->category->name }}</a><br>
-                {{ trans('main.ratings') }}: {{ $rating }}<br>
+                {{ trans('main.rating') }}: {{ $rating }}<br>
                 {{ trans('main.downloads') }}: {{ $down->loads }}<br>
                 {{ trans('main.author') }}: {!! $down->user->getProfile() !!} ({{ dateFixed($down->created_at) }})
             </div>

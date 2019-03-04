@@ -1,7 +1,7 @@
 @extends('layout')
 
 @section('title')
-    Просмотр архива {{ $down->title }}
+    {{ trans('loads.view_archive') }} {{ $down->title }}
 @stop
 
 @section('breadcrumb')
@@ -16,20 +16,20 @@
 
             <li class="breadcrumb-item"><a href="/loads/{{ $down->category->id }}">{{ $down->category->name }}</a></li>
             <li class="breadcrumb-item"><a href="/downs/{{ $down->id }}">{{ $down->title }}</a></li>
-            <li class="breadcrumb-item active">Просмотр архива</li>
+            <li class="breadcrumb-item active">{{ trans('loads.view_archive') }}</li>
         </ol>
     </nav>
 @stop
 
 @section('content')
-    Всего файлов: {{ $page->total }}<hr>
+    {{ trans('loads.total_files') }}: {{ $page->total }}<hr>
 
     @if ($documents)
         @foreach ($documents as $key => $document)
 
             @if ($document->isFolder())
                 <i class="fa fa-folder-open"></i>
-                <b>Директория {{ rtrim($document->getName(), '/') }}</b><br>
+                <b>{{ trans('loads.directory') }} {{ rtrim($document->getName(), '/') }}</b><br>
             @else
                 <?php $ext = getExtension($document->getName()) ?>
 
@@ -48,6 +48,6 @@
 
         {!! pagination($page) !!}
     @else
-        {!! showError('В данном архиве нет файлов!') !!}
+        {!! showError(trans('loads.empty_archive')) !!}
     @endif
 @stop

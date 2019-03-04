@@ -19,7 +19,7 @@
         </div><br>
     @endif
 
-    <h1>{{ $blog->title }} <small>({{ trans('main.ratings') }}: {!! formatNum($blog->rating) !!})</small></h1>
+    <h1>{{ $blog->title }} <small>({{ trans('main.rating') }}: {!! formatNum($blog->rating) !!})</small></h1>
 @stop
 
 @section('breadcrumb')
@@ -58,7 +58,7 @@
 
     <i class="fa fa-tag"></i> {!! $tags !!}<hr>
 
-    <div class="js-rating">{{ trans('main.ratings') }}:
+    <div class="js-rating">{{ trans('main.rating') }}:
         @if (getUser() && getUser('id') !== $blog->user_id)
             <a class="post-rating-down<?= $blog->vote === '-' ? ' active' : '' ?>" href="#" onclick="return changeRating(this);" data-id="{{ $blog->id }}" data-type="{{ App\Models\Blog::class }}" data-vote="-" data-token="{{ $_SESSION['token'] }}"><i class="fa fa-thumbs-down"></i></a>
         @endif

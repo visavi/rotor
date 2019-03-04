@@ -4,6 +4,10 @@
     {{ $blog->title }}
 @stop
 
+@section('description')
+    {{ truncateWord(bbCode($blog->text)) }}
+@stop
+
 @section('content')
 
     <h1>{{ $blog->title }}</h1>

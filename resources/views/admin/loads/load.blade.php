@@ -1,13 +1,13 @@
 @extends('layout')
 
 @section('title')
-    {{ $category->name }} (Стр. {{ $page->current }})
+    {{ $category->name }} ({{ trans('main.page_num', ['page' => $page->current]) }})
 @stop
 
 @section('header')
     @if (! $category->closed && getUser())
         <div class="float-right">
-            <a class="btn btn-success" href="/downs/create?cid={{ $category->id }}">Добавить</a>
+            <a class="btn btn-success" href="/downs/create?cid={{ $category->id }}">{{ trans('loads.create_down') }}</a>
         </div><br>
     @endif
 
@@ -19,7 +19,7 @@
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
             <li class="breadcrumb-item"><a href="/admin">{{ trans('main.panel') }}</a></li>
-            <li class="breadcrumb-item"><a href="/admin/loads">Загрузки</a></li>
+            <li class="breadcrumb-item"><a href="/admin/loads">{{ trans('loads.title') }}</a></li>
 
             @if ($category->parent->id)
                 <li class="breadcrumb-item"><a href="/admin/loads/{{ $category->parent->id }}">{{ $category->parent->name }}</a></li>
@@ -28,7 +28,7 @@
             <li class="breadcrumb-item active">{{ $category->name }}</li>
 
             @if (isAdmin('admin'))
-                <li class="breadcrumb-item"><a href="/loads/{{ $category->id }}?page={{ $page->current }}">Обзор</a></li>
+                <li class="breadcrumb-item"><a href="/loads/{{ $category->id }}?page={{ $page->current }}">{{ trans('main.review') }}</a></li>
             @endif
         </ol>
     </nav>
@@ -38,19 +38,19 @@
     Сортировать:
 
     <?php $active = ($order === 'created_at') ? 'success' : 'light'; ?>
-    <a href="/admin/loads/{{ $category->id }}?sort=time" class="badge badge-{{ $active }}">По дате</a>
+    <a href="/admin/loads/{{ $category->id }}?sort=time" class="badge badge-{{ $active }}">{{ trans('main.date') }}</a>
 
     <?php $active = ($order === 'loads') ? 'success' : 'light'; ?>
-    <a href="/admin/loads/{{ $category->id }}?sort=loads" class="badge badge-{{ $active }}">Скачивания</a>
+    <a href="/admin/loads/{{ $category->id }}?sort=loads" class="badge badge-{{ $active }}">{{ trans('main.downloads') }}</a>
 
     <?php $active = ($order === 'rated') ? 'success' : 'light'; ?>
-    <a href="/admin/loads/{{ $category->id }}?sort=rated" class="badge badge-{{ $active }}">Оценки</a>
+    <a href="/admin/loads/{{ $category->id }}?sort=rated" class="badge badge-{{ $active }}">{{ trans('main.rating') }}</a>
 
     <?php $active = ($order === 'count_comments') ? 'success' : 'light'; ?>
-    <a href="/admin/loads/{{ $category->id }}?sort=comments" class="badge badge-{{ $active }}">Комментарии</a>
+    <a href="/admin/loads/{{ $category->id }}?sort=comments" class="badge badge-{{ $active }}">{{ trans('main.comments') }}</a>
     <hr>
 
-    @if ($category->children->isNotEmpty() && $page->current === 1)
+    @if ($page->current === 1 && $category->children->isNotEmpty())
         <div class="act">
             @foreach ($category->children as $child)
                 <div class="b">
@@ -63,23 +63,25 @@
 
     @if ($downs->isNotEmpty())
         @foreach ($downs as $data)
+            <?php $rating = $data->rated ? round($data->rating / $data->rated, 1) : 0; ?>
             <div class="b">
                 <i class="fa fa-file"></i>
                 <b><a href="/downs/{{ $data->id }}">{{ $data->title }}</a></b> ({{ $data->count_comments }})
 
 
                 <div class="float-right">
-                    <a href="/admin/downs/edit/{{ $data->id }}" title="Редактировать"><i class="fa fa-pencil-alt"></i></a>
+                    <a href="/admin/downs/edit/{{ $data->id }}" title="{{ trans('main.edit') }}"><i class="fa fa-pencil-alt"></i></a>
 
                     @if (isAdmin('boss'))
-                        <a href="/admin/downs/delete/{{ $data->id }}?token={{ $_SESSION['token'] }}" onclick="return confirm('Вы уверены что хотите удалить данную загрузку?')"><i class="fa fa-times"></i></a>
+                        <a href="/admin/downs/delete/{{ $data->id }}?token={{ $_SESSION['token'] }}" onclick="return confirm('{{ trans('loads.confirm_delete_down') }}')"><i class="fa fa-times"></i></a>
                     @endif
                 </div>
             </div>
 
             <div>
-                Скачиваний: {{ $data->loads }}<br>
-                <a href="/downs/comments/{{ $data->id }}">Комментарии</a> ({{ $data->count_comments }})
+                {{ trans('main.rating') }}: {{ $rating }}<br>
+                {{ trans('main.downloads') }}: {{ $data->loads }}<br>
+                <a href="/downs/comments/{{ $data->id }}">{{ trans('main.comments') }}</a> ({{ $data->count_comments }})
                 <a href="/downs/end/{{ $data->id }}">&raquo;</a>
             </div>
         @endforeach
@@ -87,11 +89,11 @@
         {!! pagination($page) !!}
     @else
         @if (! $category->closed)
-            {!! showError('В данной категории еще нет файлов!') !!}
+            {!! showError(trans('loads.empty_downs')) !!}
         @endif
     @endif
 
     @if ($category->closed)
-        {!! showError('В данной категории запрещена загрузка файлов!') !!}
+        {!! showError(trans('loads.closed_load')) !!}
     @endif
 @stop

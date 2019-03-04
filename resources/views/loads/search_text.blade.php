@@ -1,7 +1,7 @@
 @extends('layout')
 
 @section('title')
-    Поиск запроса {{ $find }}
+    {{ trans('main.search_request') }} {{ $find }}
 @stop
 
 @section('breadcrumb')
@@ -9,14 +9,14 @@
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
             <li class="breadcrumb-item"><a href="/loads">{{ trans('loads.title') }}</a></li>
-            <li class="breadcrumb-item"><a href="/loads/search">Поиск</a></li>
-            <li class="breadcrumb-item active">Поиск запроса</li>
+            <li class="breadcrumb-item"><a href="/loads/search">{{ trans('loads.search') }}</a></li>
+            <li class="breadcrumb-item active">{{ trans('main.search_request') }}</li>
         </ol>
     </nav>
 @stop
 
 @section('content')
-    Найдено совпадений в описании: <b>{{ $page->total }}</b><br><br>
+    {{ trans('loads.found_text') }}: <b>{{ $page->total }}</b><br><br>
 
     @foreach ($downs as $data)
         <?php $rating = $data->rated ? round($data->rating / $data->rated, 1) : 0; ?>
@@ -29,9 +29,9 @@
         <div>
             {!! $data->cutText() !!}<br>
 
-            Категория: <a href="/loads/{{ $data->category->id }}">{{ $data->category->name }}</a><br>
-            Рейтинг: {{ $rating }}<br>
-            Добавил: {!! $data->user->getProfile() !!} ({{ dateFixed($data->created_at) }})
+            {{ trans('loads.load') }}: <a href="/loads/{{ $data->category->id }}">{{ $data->category->name }}</a><br>
+            {{ trans('main.rating') }}: {{ $rating }}<br>
+            {{ trans('main.author') }}: {!! $data->user->getProfile() !!} ({{ dateFixed($data->created_at) }})
         </div>
     @endforeach
 

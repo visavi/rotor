@@ -4,6 +4,10 @@
     {{ $topic->title }}
 @stop
 
+@section('description')
+    {{ trans('forums.topic_discussion') }}: {{ $topic->title }}
+@stop
+
 @section('content')
     <h1>{{ $topic->title }}</h1>
 

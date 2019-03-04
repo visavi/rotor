@@ -1,7 +1,7 @@
 @extends('layout')
 
 @section('title')
-    Редактирование раздела {{ $load->name }}
+    {{ trans('loads.edit_load') }} {{ $load->name }}
 @stop
 
 @section('breadcrumb')
@@ -9,9 +9,9 @@
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
             <li class="breadcrumb-item"><a href="/admin">{{ trans('main.panel') }}</a></li>
-            <li class="breadcrumb-item"><a href="/admin/loads">Загрузки</a></li>
+            <li class="breadcrumb-item"><a href="/admin/loads">{{ trans('loads.title') }}</a></li>
             <li class="breadcrumb-item"><a href="/admin/loads/{{ $load->id }}">{{ $load->name }}</a></li>
-            <li class="breadcrumb-item active">Редактирование</li>
+            <li class="breadcrumb-item active">{{ trans('loads.edit_load') }}</li>
         </ol>
     </nav>
 @stop
@@ -22,7 +22,7 @@
             <input type="hidden" name="token" value="{{ $_SESSION['token'] }}">
 
             <div class="form-group{{ hasError('parent') }}">
-                <label for="parent">Родительский раздел</label>
+                <label for="parent">{{ trans('loads.parent_load') }}</label>
 
                 <?php $inputParent = getInput('parent', $load->parent_id); ?>
 
@@ -44,13 +44,13 @@
 
 
             <div class="form-group{{ hasError('name') }}">
-                <label for="name">Название:</label>
+                <label for="name">{{ trans('loads.loads_name') }}:</label>
                 <input class="form-control" name="name" id="name" maxlength="50" value="{{ getInput('name', $load->name) }}" required>
                 {!! textError('name') !!}
             </div>
 
             <div class="form-group{{ hasError('sort') }}">
-                <label for="sort">Положение:</label>
+                <label for="sort">{{ trans('main.position') }}:</label>
                 <input type="number" class="form-control" name="sort" id="sort" maxlength="2" value="{{ getInput('sort', $load->sort) }}" required>
                 {!! textError('sort') !!}
             </div>
@@ -58,10 +58,10 @@
             <div class="custom-control custom-checkbox">
                 <input type="hidden" value="0" name="closed">
                 <input type="checkbox" class="custom-control-input" value="1" name="closed" id="closed"{{ getInput('closed', $load->closed) ? ' checked' : '' }}>
-                <label class="custom-control-label" for="closed">Закрыть раздел</label>
+                <label class="custom-control-label" for="closed">{{ trans('main.close') }}</label>
             </div>
 
-            <button class="btn btn-primary">Изменить</button>
+            <button class="btn btn-primary">{{ trans('main.change') }}</button>
         </form>
     </div>
 @stop

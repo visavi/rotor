@@ -38,7 +38,6 @@ return [
     'message'           => 'Message',
     'messages'          => 'Messages',
     'rating'            => 'Rating',
-    'ratings'           => 'Ratings',
     'votes'             => 'Votes',
     'views'             => 'Views',
     'date'              => 'Date',

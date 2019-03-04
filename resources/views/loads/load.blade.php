@@ -43,7 +43,7 @@
     <a href="/loads/{{ $category->id }}?sort=loads" class="badge badge-{{ $active }}">{{ trans('main.downloads') }}</a>
 
     <?php $active = ($order === 'rated') ? 'success' : 'light'; ?>
-    <a href="/loads/{{ $category->id }}?sort=rated" class="badge badge-{{ $active }}">{{ trans('main.ratings') }}</a>
+    <a href="/loads/{{ $category->id }}?sort=rated" class="badge badge-{{ $active }}">{{ trans('main.rating') }}</a>
 
     <?php $active = ($order === 'count_comments') ? 'success' : 'light'; ?>
     <a href="/loads/{{ $category->id }}?sort=comments" class="badge badge-{{ $active }}">{{ trans('main.comments') }}</a>
@@ -70,7 +70,7 @@
             </div>
 
             <div>
-                {{ trans('main.ratings') }}: {{ $rating }}<br>
+                {{ trans('main.rating') }}: {{ $rating }}<br>
                 {{ trans('main.downloads') }}: {{ $data->loads }}<br>
                 <a href="/downs/comments/{{ $data->id }}">{{ trans('main.comments') }}</a> ({{ $data->count_comments }})
                 <a href="/downs/end/{{ $data->id }}">&raquo;</a>
