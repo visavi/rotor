@@ -15,7 +15,7 @@
 @stop
 
 @section('content')
-    {{ trans('socials.text_choise') }}
+    {{ trans('socials.text_choice') }}
 
     <script src="//ulogin.ru/js/ulogin.js"></script>
     <div class="mb-3" id="uLogin" data-ulogin="display=panel;providers=vkontakte,odnoklassniki,mailru,facebook,google,yandex,instagram;redirect_uri={{ siteUrl() }}/socials;mobilebuttons=0;">
@@ -39,5 +39,4 @@
     @else
         {!! showError(trans('socials.empty_records')) !!}
     @endif
-
 @stop
