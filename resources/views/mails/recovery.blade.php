@@ -14,8 +14,6 @@
 @stop
 
 @section('content')
-
-
     <div class="form">
         <form method="post" action="/recovery">
 

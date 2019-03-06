@@ -13,7 +13,7 @@
     </div>
 
     <div class="card my-4">
-        <h5 class="card-header">Мое меню</h5>
+        <h5 class="card-header">{{ trans('main.menu') }}</h5>
         <div class="card-body">
             @if (getUser())
                 @include('main/menu')
