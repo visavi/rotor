@@ -1,26 +1,27 @@
 @extends('layout')
 
 @section('title')
-    Восстановление пароля
+    {{ trans('mails.password_recovery') }}
 @stop
 
 @section('breadcrumb')
     <nav>
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
-            <li class="breadcrumb-item active">Восстановление пароля</li>
+            <li class="breadcrumb-item active">{{ trans('mails.password_recovery') }}</li>
         </ol>
     </nav>
 @stop
 
 @section('content')
-    <b>Пароль успешно восстановлен!</b><br>
-    Ваши новые данные для входа на сайт<br><br>
+    <b>{{ trans('mails.successful_recovery') }}</b><br>
+    {{ trans('mails.details') }}:<br><br>
 
-    Логин: <b>{{ $login }}</b><br>
-    Пароль: <b>{{ $password }}</b><br><br>
+    {{ trans('mails.login') }}: <b>{{ $login }}</b><br>
+    {{ trans('mails.password') }}: <b>{{ $password }}</b><br><br>
 
-    Запомните и постарайтесь больше не забывать данные<br><br>
-
-    Пароль вы сможете поменять в своем профиле<br><br>
+    <p>
+        {{ trans('mails.restore_text1') }}<br>
+        {{ trans('mails.restore_text2') }}<br>
+    </p>
 @stop

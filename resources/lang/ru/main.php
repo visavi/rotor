@@ -58,6 +58,7 @@ return [
     'title'             => 'Название',
     'text'              => 'Текст',
     'close_comments'    => 'Закрыть комментарии',
+    'send'              => 'Send',
 
     'request'              => 'Запрос',
     'not_matter'           => 'Не имеет значения',

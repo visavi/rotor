@@ -58,6 +58,7 @@ return [
     'title'             => 'Title',
     'text'              => 'Text',
     'close_comments'    => 'Close comments',
+    'send'              => 'Send',
 
     'request'        => 'Request',
     'not_matter'     => 'Not matter',

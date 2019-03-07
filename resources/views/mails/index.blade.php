@@ -1,14 +1,14 @@
 @extends('layout')
 
 @section('title')
-    Обратная связь
+    {{ trans('mails.feedback') }}
 @stop
 
 @section('breadcrumb')
     <nav>
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
-            <li class="breadcrumb-item active">Обратная связь</li>
+            <li class="breadcrumb-item active">{{ trans('mails.feedback') }}</li>
         </ol>
     </nav>
 @stop
@@ -19,7 +19,7 @@
 
             @if (! getUser())
                 <div class="form-group{{ hasError('name') }}">
-                    <label for="inputName">Ваше имя:</label>
+                    <label for="inputName">{{ trans('mails.name') }}:</label>
                     <input type="text" class="form-control" id="inputName" name="name" maxlength="100" value="{{ getInput('name') }}" required>
                     {!! textError('name') !!}
                 </div>
@@ -27,23 +27,23 @@
 
             @if (empty(getUser('email')))
                 <div class="form-group{{ hasError('email') }}">
-                    <label for="inputEmail">Ваш email:</label>
+                    <label for="inputEmail">{{ trans('mails.email') }}:</label>
                     <input type="text" class="form-control" id="inputEmail" name="email" maxlength="50" value="{{ getInput('email') }}" required>
                     {!! textError('email') !!}
                 </div>
             @endif
 
             <div class="form-group{{ hasError('message') }}">
-                <label for="message">Сообщение:</label>
+                <label for="message">{{ trans('mails.message') }}:</label>
                 <textarea class="form-control markItUp" id="message" rows="5" name="message" required>{{ getInput('message') }}</textarea>
                 {!! textError('message') !!}
             </div>
 
             {!! view('app/_captcha') !!}
 
-            <button class="btn btn-primary">Отправить</button>
+            <button class="btn btn-primary">{{ trans('main.send') }}</button>
         </form>
     </div><br>
 
-    Обновите страницу если вы не видите проверочный код!<br><br>
+    {{ trans('mails.feedback_text') }}<br><br>
 @stop
