@@ -1687,10 +1687,10 @@ function abort($code, $message = null)
 /**
  * Saves error logs
  *
- * @param int $code
+ * @param mixed $code
  * @return void
  */
-function saveErrorLog(int $code)
+function saveErrorLog($code)
 {
     if (setting('errorlog') && in_array($code, [403, 404, 405, 666], true)) {
         Error::query()->create([
