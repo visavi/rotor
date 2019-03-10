@@ -59,6 +59,7 @@ return [
     'text'              => 'Text',
     'close_comments'    => 'Close comments',
     'send'              => 'Send',
+    'confirm'           => 'Confirm',
 
     'request'        => 'Request',
     'not_matter'     => 'Not matter',

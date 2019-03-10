@@ -1,12 +1,10 @@
 @extends('layout')
 
 @section('title')
-    Сайт закрыт
+    {{ trans('pages.closed') }}
 @stop
 
 @section('content')
-    <p>Внимание! Сайт закрыт по техническим причинам</p>
-
-    Администрация сайта приносит вам свои извинения за возможные неудобства.<br>
-    Работа сайта возобновится в ближайшее время.<br><br>
+    {{ trans('pages.closed_text1') }}<br>
+    {{ trans('pages.closed_text2') }}<br><br>
 @stop

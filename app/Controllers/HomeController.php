@@ -30,6 +30,8 @@ class HomeController extends BaseController
             redirect('/');
         }
 
+        header($_SERVER['SERVER_PROTOCOL'].' 503 Service Unavailable');
+
         return view('pages/closed');
     }
 
@@ -52,14 +54,15 @@ class HomeController extends BaseController
      */
     public function banip(Request $request): string
     {
-        header($_SERVER['SERVER_PROTOCOL'].' 403 Forbidden');
-
         $ban = Ban::query()
             ->where('ip', getIp())
-            ->whereNull('user_id')
             ->first();
 
-        if ($ban && $request->isMethod('post') && captchaVerify()) {
+        if (! $ban) {
+            redirect('/');
+        }
+
+        if (! $ban->user_id && $request->isMethod('post') && captchaVerify()) {
 
             $ban->delete();
             ipBan(true);
@@ -67,6 +70,8 @@ class HomeController extends BaseController
             setFlash('success', 'IP успешно разбанен!');
             redirect('/');
         }
+
+        header($_SERVER['SERVER_PROTOCOL'].' 403 Forbidden');
 
         return view('pages/banip', compact('ban'));
     }
