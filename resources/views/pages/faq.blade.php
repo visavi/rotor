@@ -1,69 +1,69 @@
 @extends('layout')
 
 @section('title')
-    FAQ по сайту
+    {{ trans('pages.faq') }}
 @stop
 
 @section('breadcrumb')
     <nav>
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
-            <li class="breadcrumb-item active">FAQ по сайту</li>
+            <li class="breadcrumb-item active">{{ trans('pages.faq') }}</li>
         </ol>
     </nav>
 @stop
 
 @section('content')
-    <b>Для чего регистрироваться</b><br>
-    Регистрация предназначена для тех, кто намерен часто заходить на сайт и иметь полный доступ ко все разделам сайта<br>
-    После регистрации у вас появятся новые возможности:<br>
+    <b>{{ trans('pages.faq_register') }}</b><br>
+    {{ trans('pages.faq_register1') }}<br>
+    {{ trans('pages.faq_register2') }}:<br>
 
-    <b>1</b>. Повышать свой статус (после 6 месяцев пребывания на сайте, вы сможете изменить статус на персональный)<br>
-    <b>2</b>. Добавлять свои фотографии в галерею и анкету (Вес картинки не должен превышать {{ formatSize(setting('filesize')) }})<br>
-    <b>3</b>. Изменять репутацию другим  пользователям сайта положительными или отрицательным голосом (При активе {{  plural(setting('editratingpoint'), setting('scorename')) }})<br>
-    <b>4</b>. Иметь свой собственный контакт и игнор-листы<br>
-    <b>5</b>. Изменять темы/скины по своему желанию, которая будет включаться автоматически при авторизации (Большой выбор скинов)<br>
-    <b>6</b>. Общаться по внутренней почте сайта с пользователями сайта, писать под своим аккаунтом в гостевой, комментариях, форуме<br>
-    <b>7</b>. Участвовать в голосованиях на различные темы<br>
-    <b>8</b>. Добавлять свои объявления, на определенный срок (Купля,продажа,вакансии,услуги,обмен и т.д.)<br>
-    <b>9</b>. Изменять под себя настройки сайта<br>
+    <b>1</b>. {{ trans('pages.faq_register_text1') }}<br>
+    <b>2</b>. {{ trans('pages.faq_register_text2') }}<br>
+    <b>3</b>. {{ trans('pages.faq_register_text3') }}<br>
+    <b>4</b>. {{ trans('pages.faq_register_text4') }}<br>
+    <b>5</b>. {{ trans('pages.faq_register_text5') }}<br>
+    <b>6</b>. {{ trans('pages.faq_register_text6') }}<br>
+    <b>7</b>. {{ trans('pages.faq_register_text7') }}<br>
+    <b>8</b>. {{ trans('pages.faq_register_text8') }}<br>
+    <b>9</b>. {{ trans('pages.faq_register_text9') }}<br>
 
-    <br>При наборе определенного количества актива, пользователю открываются новые возможности:<br>
+    <br>{{ trans('pages.faq_active') }}:<br>
 
     @if (setting('rekuserpoint'))
-        <b>{{ plural(setting('rekuserpoint'), setting('scorename')) }}</b> - добавление рекламных ссылок<br>
+        <b>{{ plural(setting('rekuserpoint'), setting('scorename')) }}</b> - {{ trans('pages.faq_active_text1') }}<br>
     @endif
 
     @if (setting('privatprotect'))
-        <b>{{ plural(setting('privatprotect'), setting('scorename')) }}</b> - отключается captcha для некоторых действий<br>
+        <b>{{ plural(setting('privatprotect'), setting('scorename')) }}</b> - {{ trans('pages.faq_active_text2') }}<br>
     @endif
 
 
     @if (setting('addofferspoint'))
-        <b>{{ plural(setting('addofferspoint'), setting('scorename')) }}</b> - создание тем в "Предложениях и проблемах"<br>
+        <b>{{ plural(setting('addofferspoint'), setting('scorename')) }}</b> - {{ trans('pages.faq_active_text3') }}<br>
     @endif
 
     @if (setting('forumloadpoints'))
-        <b>{{ plural(setting('forumloadpoints'), setting('scorename')) }}</b> - Прикрепление файлов в форуме<br>
+        <b>{{ plural(setting('forumloadpoints'), setting('scorename')) }}</b> - {{ trans('pages.faq_active_text4') }}<br>
     @endif
 
     @if (setting('sendmoneypoint'))
-        <b>{{ plural(setting('sendmoneypoint'), setting('scorename')) }}</b> - перечисление игровых денег<br>
+        <b>{{ plural(setting('sendmoneypoint'), setting('scorename')) }}</b> - {{ trans('pages.faq_active_text5') }}<br>
     @endif
 
     @if (setting('editratingpoint'))
-        <b>{{ plural(setting('editratingpoint'), setting('scorename')) }}</b> - изменение репутации пользователям<br>
+        <b>{{ plural(setting('editratingpoint'), setting('scorename')) }}</b> - {{ trans('pages.faq_active_text6') }}<br>
     @endif
 
     @if (setting('editforumpoint'))
-        <b>{{ plural(setting('editforumpoint'), setting('scorename')) }}</b> - изменение и закрытие своих тем на форуме<br>
+        <b>{{ plural(setting('editforumpoint'), setting('scorename')) }}</b> - {{ trans('pages.faq_active_text7') }}<br>
     @endif
 
     @if (setting('advertpoint'))
-        <b>{{ plural(setting('advertpoint'), setting('scorename')) }}</b> - исчезает вся реклама на главной странице сайта<br>
+        <b>{{ plural(setting('advertpoint'), setting('scorename')) }}</b> - {{ trans('pages.faq_active_text8') }}<br>
     @endif
 
-    Также чем больше баллов тем меньше время антифлуда<br>
+    {{ trans('pages.faq_active_text9') }}<br>
 
     <br>
 
