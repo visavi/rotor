@@ -23,12 +23,12 @@ class SendMessages extends Task
 
                 if ($user) {
                     sendMail($user->email, $queue->subject, $queue->text);
-
-                    $queue->update([
-                        'sent'    => 1,
-                        'sent_at' => SITETIME,
-                    ]);
                 }
+
+                $queue->update([
+                    'sent'    => 1,
+                    'sent_at' => SITETIME,
+                ]);
             }
         }
     }
