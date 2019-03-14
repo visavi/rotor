@@ -5,10 +5,10 @@
     <channel>
         <title>@yield('title') {{ setting('title') }}</title>
         <link>{{ siteUrl() }}/</link>
-        <description>Сообщения RSS - {{ setting('title') }}</description>
+        <description>RSS - {{ setting('title') }}</description>
         <image>
             <url>{{ siteUrl() }}{{ setting('logotip') }}</url>
-            <title>Сообщения RSS - {{ setting('title') }}</title>
+            <title>RSS - {{ setting('title') }}</title>
             <link>{{ siteUrl() }}/</link>
         </image>
         <managingEditor>{{ env('SITE_EMAIL') }} ({{ env('SITE_ADMIN') }})</managingEditor>
