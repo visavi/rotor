@@ -1,21 +1,21 @@
 @extends('layout')
 
 @section('title')
-    Кто в онлайне
+    {{ trans('pages.online') }}
 @stop
 
 @section('breadcrumb')
     <nav>
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
-            <li class="breadcrumb-item active">Кто в онлайне</li>
+            <li class="breadcrumb-item active">{{ trans('pages.online') }}</li>
         </ol>
     </nav>
 @stop
 
 @section('content')
-    Всего на сайте: <b>{{ $all }}</b><br>
-    Авторизованных:  <b>{{ $total }}</b><br><br>
+    {{ trans('pages.total_online') }}: <b>{{ $all }}</b><br>
+    {{ trans('pages.authorized') }}:  <b>{{ $total }}</b><br><br>
 
 
     @if ($online->isNotEmpty())
@@ -26,7 +26,7 @@
                     {!! $data->user->getAvatar() !!}
                 </div>
 
-                <b>{!! $data->user->getProfile() !!}</b> (Время: {{ dateFixed($data['updated_at'], 'H:i:s') }})
+                <b>{!! $data->user->getProfile() !!}</b> ({{ trans('pages.time_on_site') }}: {{ dateFixed($data['updated_at'], 'H:i:s') }})
             </div>
 
             @if (isAdmin())
@@ -37,14 +37,14 @@
         @endforeach
         {!! pagination($page) !!}
     @else
-        {!! showError('Пользователей нет!') !!}
+        {!! showError(trans('pages.empty_users')) !!}
     @endif
 
     <i class="fa fa-users"></i>
 
     @if ($guests)
-        <a href="/online">Скрыть гостей</a><br>
+        <a href="/online">{{ trans('pages.hide_guests') }}</a><br>
     @else
-        <a href="/online/all">Показать гостей</a><br>
+        <a href="/online/all">{{ trans('pages.show_guests') }}</a><br>
     @endif
 @stop

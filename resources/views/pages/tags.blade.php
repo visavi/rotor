@@ -1,59 +1,59 @@
 @extends('layout')
 
 @section('title')
-    Справка по тегам
+    {{ trans('pages.tags') }}
 @stop
 
 @section('breadcrumb')
     <nav>
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
-            <li class="breadcrumb-item active">Справка по тегам</li>
+            <li class="breadcrumb-item active">{{ trans('pages.tags') }}</li>
         </ol>
     </nav>
 @stop
 
 @section('content')
-    Вы можете выражать свой текст следующими тегами:<br><br>
+    {{ trans('pages.tags_text') }}:<br><br>
 
-    <i class="fa fa-bold"></i> [b]{!! bbCode('[b]Жирный шрифт[/b]') !!}[/b]<br>
-    <i class="fa fa-italic"></i> [i]{!! bbCode('[i]Наклонный шрифт[/i]') !!}[/i]<br>
-    <i class="fa fa-underline"></i> [u]{!! bbCode('[u]Подчеркнутый шрифт[/u]') !!}[/u]<br>
-    <i class="fa fa-strikethrough"></i> [s]{!! bbCode('[s]Зачеркнутый шрифт[/s]') !!}[/s]<br><br>
+    <i class="fa fa-bold"></i> [b]{!! bbCode('[b]' . trans('pages.bold') . '[/b]') !!}[/b]<br>
+    <i class="fa fa-italic"></i> [i]{!! bbCode('[i]' . trans('pages.italic') . '[/i]') !!}[/i]<br>
+    <i class="fa fa-underline"></i> [u]{!! bbCode('[u]' . trans('pages.underline') . '[/u]') !!}[/u]<br>
+    <i class="fa fa-strikethrough"></i> [s]{!! bbCode('[s]' . trans('pages.strike') . '[/s]') !!}[/s]<br><br>
 
-    <i class="fa fa-font"></i> Размер шрифтов от 1 до 5<br>
-    <i class="fa fa-font"></i> [size=1]{!! bbCode('[size=1]Маленький шрифт[/size]') !!}[/size]<br>
-    <i class="fa fa-font"></i> [size=3]{!! bbCode('[size=3]Средний шрифт[/size]') !!}[/size]<br>
-    <i class="fa fa-font"></i> [size=5]{!! bbCode('[size=5]Большой шрифт[/size]') !!}[/size]<br><br>
+    <i class="fa fa-font"></i> {{ trans('pages.font_size') }}<br>
+    <i class="fa fa-font"></i> [size=1]{!! bbCode('[size=1]' . trans('pages.small_font') . '[/size]') !!}[/size]<br>
+    <i class="fa fa-font"></i> [size=3]{!! bbCode('[size=3]' . trans('pages.medium_font') . '[/size]') !!}[/size]<br>
+    <i class="fa fa-font"></i> [size=5]{!! bbCode('[size=5]' . trans('pages.big_font') . '[/size]') !!}[/size]<br><br>
 
-    <i class="fa fa-th"></i> Цвет текста в формате #ff0000<br>
-    <i class="fa fa-th"></i> [color=#ff0000]{!! bbCode('[color=#ff0000]Красный шрифт[/color]') !!}[/color]<br>
-    <i class="fa fa-th"></i> [color=#00cc00]{!! bbCode('[color=#00cc00]Зеленый шрифт[/color]') !!}[/color]<br>
-    <i class="fa fa-th"></i> [color=#00ffff]{!! bbCode('[color=#00ffff]Голубой шрифт[/color]') !!}[/color]<br><br>
+    <i class="fa fa-th"></i> {{ trans('pages.font_color') }}<br>
+    <i class="fa fa-th"></i> [color=#ff0000]{!! bbCode('[color=#ff0000]' . trans('pages.red_font') . '[/color]') !!}[/color]<br>
+    <i class="fa fa-th"></i> [color=#00cc00]{!! bbCode('[color=#00cc00]' . trans('pages.green_font') . '[/color]') !!}[/color]<br>
+    <i class="fa fa-th"></i> [color=#00ffff]{!! bbCode('[color=#00ffff]' . trans('pages.blue_font') . '[/color]') !!}[/color]<br><br>
 
-    Для того чтобы вставить ссылку, можно просто написать http://адрес_cсылки<br>
-    <i class="fa fa-link"></i> Для ссылки с названием: [url=http://адрес_cсылки] Название [/url]<br>
-    <i class="fa fa-link"></i> Короткий способ: [url] http://адрес_cсылки [/url]<br><br>
+    <i class="fa fa-link"></i> {{ trans('pages.link') }} http://site.com<br>
+    <i class="fa fa-link"></i> {{ trans('pages.link_text') }}: [url=http://site.com]site.com[/url]<br>
+    <i class="fa fa-link"></i> {{ trans('pages.link_short') }}: [url]http://site.com[/url]<br><br>
 
-    <i class="fa fa-image"></i> [img]Ссылка на изображение[/img]<br>{!! bbCode('[img]/assets/img/images/logo.png[/img]') !!}<br>
-    <i class="fab fa-youtube"></i> [youtube]Ссылка на видео с youtube[/youtube]<br>{!! bbCode('[youtube]https://www.youtube.com/watch?v=yf_YWiqqv34[/youtube]') !!}<br>
+    <i class="fa fa-image"></i> [img]{{ trans('pages.image') }}[/img]<br>{!! bbCode('[img]/assets/img/images/logo.png[/img]') !!}<br>
+    <i class="fab fa-youtube"></i> [youtube]{{ trans('pages.video') }}[/youtube]<br>{!! bbCode('[youtube]https://www.youtube.com/watch?v=yf_YWiqqv34[/youtube]') !!}<br>
 
-    <i class="fa fa-align-center"></i> [center]Текст по центру[/center]{!! bbCode('[center]Текст по центру[/center]') !!}<br>
-    <i class="fa fa-list-ul"></i> [list]Элементы списка[/list]{!! bbCode('[list]Элементы списка[/list]') !!}<br>
-    <i class="fa fa-list-ol"></i> [list=1]Элементы нумерованного списка[/list]{!! bbCode('[list=1]Элементы списка[/list]') !!}<br>
+    <i class="fa fa-align-center"></i> [center]{{ trans('pages.center') }}[/center]{!! bbCode('[center]' . trans('pages.center') . '[/center]') !!}<br>
+    <i class="fa fa-list-ul"></i> [list]{{ trans('pages.unorderedlist') }}[/list]{!! bbCode('[list]' . trans('pages.unorderedlist') . '[/list]') !!}<br>
+    <i class="fa fa-list-ol"></i> [list=1]{{ trans('pages.orderedlist') }}[/list]{!! bbCode('[list=1]' . trans('pages.orderedlist') . '[/list]') !!}<br>
 
-    <i class="fa fa-text-height"></i> [spoiler]Выпадающий текст[/spoiler]{!! bbCode('[spoiler]Текст который показывается при нажатии[/spoiler]') !!}<br>
-    <i class="fa fa-text-height"></i> [spoiler=Заголовок спойлера]Выпадающий текст[/spoiler]{!! bbCode('[spoiler=Заголовок спойлера]Текст который показывается при нажатии[/spoiler]') !!}<br>
+    <i class="fa fa-text-height"></i> [spoiler]{{ trans('pages.spoiler_text') }}[/spoiler]{!! bbCode('[spoiler]' . trans('pages.spoiler_text') . '[/spoiler]') !!}<br>
+    <i class="fa fa-text-height"></i> [spoiler={{ trans('pages.spoiler_title') }}]{{ trans('pages.spoiler_text') }}[/spoiler]{!! bbCode('[spoiler=' . trans('pages.spoiler_title') . ']' . trans('pages.spoiler_text') . '[/spoiler]') !!}<br>
 
-    <i class="fa fa-eye-slash"></i> [hide]Скрытый текст[/hide]{!! bbCode('[hide]Для вставки скрытого текста[/hide]') !!}<br>
-    <i class="fa fa-quote-right"></i> [quote]Цитата[/quote]{!! bbCode('[quote]Для вставки цитат[/quote]') !!}<br>
-    <i class="fa fa-quote-right"></i> [quote=Автор цитаты]Цитата[/quote]{!! bbCode('[quote=Автор цитаты]Для вставки цитат[/quote]') !!}<br>
+    <i class="fa fa-eye-slash"></i> [hide]{{ trans('pages.hide_text') }}[/hide]{!! bbCode('[hide]' . trans('pages.hide_text') . '[/hide]') !!}<br>
+    <i class="fa fa-quote-right"></i> [quote]{{ trans('pages.quote') }}[/quote]{!! bbCode('[quote]' . trans('pages.quote') . '[/quote]') !!}<br>
+    <i class="fa fa-quote-right"></i> [quote={{ trans('pages.quote_author') }}]{{ trans('pages.quote') }}[/quote]{!! bbCode('[quote=' . trans('pages.quote_author')  . ']' . trans('pages.quote') . '[/quote]') !!}<br>
 
-    <i class="fa fa-code"></i> [code]Форматированный код[/code]{!! bbCode('[code]&lt;?= "Для вставки php-кода" ?&gt;[/code]') !!}<br>
-    <i class="fa fa-exchange-alt"></i> [nextpage] - Служит для переноса текста на новую страницу (Работает только в блогах)<br>
-    <i class="fa fa-cut"></i> [cut] - Служит для обрезки текста (Работает только в новостях)<br><br>
+    <i class="fa fa-code"></i> [code]{{ trans('pages.code') }}[/code]{!! bbCode('[code]' . trans('pages.code') . '[/code]') !!}<br>
+    <i class="fa fa-exchange-alt"></i> [nextpage] - {{ trans('pages.nextpage') }}<br>
+    <i class="fa fa-cut"></i> [cut] - {{ trans('pages.cutpage') }}<br><br>
 
-    <i class="fa fa-eraser"></i> Очистка выделенного текста от bb-кода<br>
-    <i class="fa fa-smile"></i> Вставка стикера из готового набора<br>
-    <i class="fa fa-check-square"></i> Предварительный просмотр обработанного текста<br><br><br>
+    <i class="fa fa-eraser"></i> {{ trans('pages.clean_text') }}<br>
+    <i class="fa fa-smile"></i> {{ trans('pages.sticker') }}<br>
+    <i class="fa fa-check-square"></i> {{ trans('pages.preview') }}<br><br>
 @stop

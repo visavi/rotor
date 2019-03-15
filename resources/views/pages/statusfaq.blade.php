@@ -1,22 +1,22 @@
 @extends('layout')
 
 @section('title')
-    Статусы пользователей
+    {{ trans('pages.user_statuses') }}
 @stop
 
 @section('breadcrumb')
     <nav>
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
-            <li class="breadcrumb-item active">Статусы пользователей</li>
+            <li class="breadcrumb-item active">{{ trans('pages.user_statuses') }}</li>
         </ol>
     </nav>
 @stop
 
 @section('content')
-    В зависимости от вашей активности на сайте вы получаете определенный статус<br>
-    При наборе определенного количества актива ваш статус меняется на вышестоящий<br>
-    Актив - это сумма постов на форуме, гостевой, в комментариях и пр.<br><br>
+    {{ trans('pages.status_text1') }}<br>
+    {{ trans('pages.status_text2') }}<br>
+    {{ trans('pages.status_text3') }}<br><br>
 
     @if ($statuses->isNotEmpty())
         @foreach ($statuses as $status)
@@ -32,9 +32,9 @@
 
         <br>
     @else
-        {!! showError('Статусы еще не назначены!') !!}
+        {!! showError(trans('pages.empty_statuses')) !!}
     @endif
 
-    Некоторые статусы могут быть выделены определенными цветами<br>
-    Самым активным юзерам администрация сайта может назначать особые статусы<br><br>
+    {{ trans('pages.status_text4') }}<br>
+    {{ trans('pages.status_text5') }}<br><br>
 @stop
