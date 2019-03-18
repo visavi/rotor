@@ -19,12 +19,12 @@ class GuestbookControllerTest extends TestCase
 
         /** @var Guestbook $getGuest */
         $getGuest = Guestbook::query()->find($guest->id);
-        $this->assertEquals($getGuest->text, 'Test text message');
+        $this->assertEquals('Test text message', $getGuest->text);
 
         $guest->update(['text' => 'Test simple message']);
 
         $getGuest = Guestbook::query()->find($guest->id);
-        $this->assertEquals($getGuest->text, 'Test simple message');
+        $this->assertEquals('Test simple message', $getGuest->text);
 
         $guest->delete();
 

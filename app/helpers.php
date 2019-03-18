@@ -168,9 +168,8 @@ function check($string, $doubleEncode = true)
             $string[$key] = check($val, $doubleEncode);
         }
     } else {
-        $string =  htmlspecialchars($string, ENT_QUOTES, 'UTF-8', $doubleEncode);
+        $string = htmlspecialchars($string, ENT_QUOTES, 'UTF-8', $doubleEncode);
         $search = [chr(0), "\x00", "\x1A", chr(226) . chr(128) . chr(174)];
-
         $string = trim(str_replace($search, [], $string));
     }
 

@@ -12,7 +12,7 @@ class BBCodeTest extends TestCase
         $text      = '[code]<?php var_dump([1,2,4]);[/code]';
         $parseText = bbCode($text);
 
-        $this->assertEquals($parseText, '<pre class="prettyprint linenums pre-scrollable"><?php var_dump(&#91;1,2,4]);</pre>');
+        $this->assertSame('<pre class="prettyprint linenums pre-scrollable"><?php var_dump(&#91;1,2,4]);</pre>', $parseText);
     }
 
     /**
@@ -23,7 +23,7 @@ class BBCodeTest extends TestCase
         $text      = '[b]Привет[/b]';
         $parseText = bbCode($text);
 
-        $this->assertEquals($parseText, '<strong>Привет</strong>');
+        $this->assertSame('<strong>Привет</strong>', $parseText);
     }
 
     /**
@@ -34,7 +34,7 @@ class BBCodeTest extends TestCase
         $text      = '[i]Привет[/i]';
         $parseText = bbCode($text);
 
-        $this->assertEquals($parseText, '<em>Привет</em>');
+        $this->assertSame('<em>Привет</em>', $parseText);
     }
 
     /**
@@ -45,7 +45,7 @@ class BBCodeTest extends TestCase
         $text      = '[u]Привет[/u]';
         $parseText = bbCode($text);
 
-        $this->assertEquals($parseText, '<u>Привет</u>');
+        $this->assertSame('<u>Привет</u>', $parseText);
     }
 
     /**
@@ -56,7 +56,7 @@ class BBCodeTest extends TestCase
         $text      = '[s]Привет[/s]';
         $parseText = bbCode($text);
 
-        $this->assertEquals($parseText, '<del>Привет</del>');
+        $this->assertSame('<del>Привет</del>', $parseText);
     }
 
     /**
@@ -67,7 +67,7 @@ class BBCodeTest extends TestCase
         $text      = '[size=5]Привет[/size]';
         $parseText = bbCode($text);
 
-        $this->assertEquals($parseText, '<span style="font-size:x-large">Привет</span>');
+        $this->assertSame('<span style="font-size:x-large">Привет</span>', $parseText);
     }
 
     /**
@@ -78,7 +78,7 @@ class BBCodeTest extends TestCase
         $text      = '[color=#ff0000]Привет[/color]';
         $parseText = bbCode($text);
 
-        $this->assertEquals($parseText, '<span style="color:#ff0000">Привет</span>');
+        $this->assertSame('<span style="color:#ff0000">Привет</span>', $parseText);
     }
 
     /**
@@ -89,7 +89,7 @@ class BBCodeTest extends TestCase
         $text      = '[color=#ff0000]П[color=#00ff00]р[color=#0000ff]и[/color][color=#00ff00]в[/color][/color]ет[/color]';
         $parseText = bbCode($text);
 
-        $this->assertEquals($parseText, '<span style="color:#ff0000">П<span style="color:#00ff00">р<span style="color:#0000ff">и</span><span style="color:#00ff00">в</span></span>ет</span>');
+        $this->assertSame('<span style="color:#ff0000">П<span style="color:#00ff00">р<span style="color:#0000ff">и</span><span style="color:#00ff00">в</span></span>ет</span>', $parseText);
     }
 
     /**
@@ -100,7 +100,7 @@ class BBCodeTest extends TestCase
         $text      = '[center]Привет[/center]';
         $parseText = bbCode($text);
 
-        $this->assertEquals($parseText, '<div style="text-align:center;">Привет</div>');
+        $this->assertSame('<div style="text-align:center;">Привет</div>', $parseText);
     }
 
     /**
@@ -111,7 +111,7 @@ class BBCodeTest extends TestCase
         $text      = '[quote]Привет[/quote]';
         $parseText = bbCode($text);
 
-        $this->assertEquals($parseText, '<blockquote>Привет</blockquote>');
+        $this->assertSame('<blockquote>Привет</blockquote>', $parseText);
     }
 
     /**
@@ -122,7 +122,7 @@ class BBCodeTest extends TestCase
         $text      = '[quote=Имя]Привет[/quote]';
         $parseText = bbCode($text);
 
-        $this->assertEquals($parseText, '<blockquote>Привет<small>Имя</small></blockquote>');
+        $this->assertSame('<blockquote>Привет<small>Имя</small></blockquote>', $parseText);
     }
 
     /**
@@ -133,7 +133,7 @@ class BBCodeTest extends TestCase
         $text      = 'http://сайт.рф http://сайт.рф/http://сайт.рф:80';
         $parseText = bbCode($text);
 
-        $this->assertEquals($parseText, '<a href="http://сайт.рф" target="_blank" rel="nofollow">http://сайт.рф</a> <a href="http://сайт.рф/http://сайт.рф:80" target="_blank" rel="nofollow">http://сайт.рф/http://сайт.рф:80</a>');
+        $this->assertSame('<a href="http://сайт.рф" target="_blank" rel="nofollow">http://сайт.рф</a> <a href="http://сайт.рф/http://сайт.рф:80" target="_blank" rel="nofollow">http://сайт.рф/http://сайт.рф:80</a>', $parseText);
     }
 
     /**
@@ -144,7 +144,7 @@ class BBCodeTest extends TestCase
         $text      = 'http://rotor.ll';
         $parseText = bbCode($text);
 
-        $this->assertEquals($parseText, '<a href="//rotor.ll">http://rotor.ll</a>');
+        $this->assertSame('<a href="//rotor.ll">http://rotor.ll</a>', $parseText);
     }
 
     /**
@@ -155,7 +155,7 @@ class BBCodeTest extends TestCase
         $text      = 'https://rotor.ll/dir/index.php?name=name&name2=name2#anchor';
         $parseText = bbCode($text);
 
-        $this->assertEquals($parseText, '<a href="//rotor.ll/dir/index.php?name=name&name2=name2#anchor">https://rotor.ll/dir/index.php?name=name&name2=name2#anchor</a>');
+        $this->assertSame('<a href="//rotor.ll/dir/index.php?name=name&name2=name2#anchor">https://rotor.ll/dir/index.php?name=name&name2=name2#anchor</a>', $parseText);
     }
 
     /**
@@ -166,7 +166,7 @@ class BBCodeTest extends TestCase
         $text      = '[url]https://rotor.ll[/url]';
         $parseText = bbCode($text);
 
-        $this->assertEquals($parseText, '<a href="//rotor.ll">https://rotor.ll</a>');
+        $this->assertSame('<a href="//rotor.ll">https://rotor.ll</a>', $parseText);
     }
 
     /**
@@ -177,7 +177,7 @@ class BBCodeTest extends TestCase
         $text      = '[url=http://rotor.ll/dir/index.php?name=name&name2=name2#anchor]Сайт[/url] [url=https://site.com/http://site.net:80/]Sitename[/url]';
         $parseText = bbCode($text);
 
-        $this->assertEquals($parseText, '<a href="//rotor.ll/dir/index.php?name=name&name2=name2#anchor">Сайт</a> <a href="https://site.com/http://site.net:80/" target="_blank" rel="nofollow">Sitename</a>');
+        $this->assertSame('<a href="//rotor.ll/dir/index.php?name=name&name2=name2#anchor">Сайт</a> <a href="https://site.com/http://site.net:80/" target="_blank" rel="nofollow">Sitename</a>', $parseText);
     }
 
     /**
@@ -188,7 +188,7 @@ class BBCodeTest extends TestCase
         $text      = '[img]http://rotor.ll/assets/images/img/logo.png[/img]';
         $parseText = bbCode($text);
 
-        $this->assertEquals($parseText, '<img src="http://rotor.ll/assets/images/img/logo.png" class="img-fluid" alt="image">');
+        $this->assertSame('<img src="http://rotor.ll/assets/images/img/logo.png" class="img-fluid" alt="image">', $parseText);
     }
 
     /**
@@ -199,7 +199,7 @@ class BBCodeTest extends TestCase
         $text      = '[list=1]Список'.PHP_EOL.'список2[/list]';
         $parseText = bbCode($text);
 
-        $this->assertEquals($parseText, '<ol><li>Список</li><li>список2</li></ol>');
+        $this->assertSame('<ol><li>Список</li><li>список2</li></ol>', $parseText);
     }
 
     /**
@@ -210,7 +210,7 @@ class BBCodeTest extends TestCase
         $text      = '[list]Список[/list]';
         $parseText = bbCode($text);
 
-        $this->assertEquals($parseText, '<ul><li>Список</li></ul>');
+        $this->assertSame('<ul><li>Список</li></ul>', $parseText);
     }
 
     /**
@@ -222,7 +222,7 @@ class BBCodeTest extends TestCase
         $parseText = bbCode($text);
         $parseText = trim(preg_replace('/\s\s+/', '', $parseText));
 
-        $this->assertEquals($parseText, '<div class="spoiler"><b class="spoiler-title">Развернуть для просмотра</b><div class="spoiler-text" style="display: none;">Спойлер</div></div>');
+        $this->assertSame('<div class="spoiler"><b class="spoiler-title">Развернуть для просмотра</b><div class="spoiler-text" style="display: none;">Спойлер</div></div>', $parseText);
     }
 
     /**
@@ -234,7 +234,7 @@ class BBCodeTest extends TestCase
         $parseText = bbCode($text);
         $parseText = trim(preg_replace('/\s\s+/', '', $parseText));
 
-        $this->assertEquals($parseText, '<div class="spoiler"><b class="spoiler-title">Открыть</b><div class="spoiler-text" style="display: none;">Спойлер</div></div>');
+        $this->assertSame('<div class="spoiler"><b class="spoiler-title">Открыть</b><div class="spoiler-text" style="display: none;">Спойлер</div></div>', $parseText);
     }
 
     /**
@@ -246,7 +246,7 @@ class BBCodeTest extends TestCase
         $parseText = bbCode($text);
         $parseText = trim(preg_replace('/\s\s+/', '', $parseText));
 
-        $this->assertEquals($parseText, '<div class="hiding"><span class="font-weight-bold">Скрытый контент:</span> Для просмотра необходимо авторизоваться!</div>');
+        $this->assertSame('<div class="hiding"><span class="font-weight-bold">Скрытый контент:</span> Для просмотра необходимо авторизоваться!</div>', $parseText);
     }
 
     /**
@@ -257,7 +257,7 @@ class BBCodeTest extends TestCase
         $text      = '[youtube]https://www.youtube.com/watch?v=85bkCmaOh4o[/youtube]';
         $parseText = bbCode($text);
 
-        $this->assertEquals($parseText, '<div class="embed-responsive embed-responsive-16by9"><iframe class="embed-responsive-item" src="//www.youtube.com/embed/85bkCmaOh4o" allowfullscreen></iframe></div>');
+        $this->assertSame('<div class="embed-responsive embed-responsive-16by9"><iframe class="embed-responsive-item" src="//www.youtube.com/embed/85bkCmaOh4o" allowfullscreen></iframe></div>', $parseText);
     }
 
     /**
@@ -268,7 +268,7 @@ class BBCodeTest extends TestCase
         $text      = 'Привет :D :hello';
         $parseText = bbCode($text);
 
-        $this->assertEquals($parseText, 'Привет <img src="/uploads/stickers/D.gif" alt="D.gif"> <img src="/uploads/stickers/hello.gif" alt="hello.gif">');
+        $this->assertSame('Привет <img src="/uploads/stickers/D.gif" alt="D.gif"> <img src="/uploads/stickers/hello.gif" alt="hello.gif">', $parseText);
     }
 
     /**
@@ -279,6 +279,6 @@ class BBCodeTest extends TestCase
         $text      = '[center][b]Привет[/b] [i]Привет[/i][/center]';
         $parseText = bbCode($text, false);
 
-        $this->assertEquals($parseText, 'Привет Привет');
+        $this->assertSame('Привет Привет', $parseText);
     }
 }
