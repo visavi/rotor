@@ -1,7 +1,7 @@
 @extends('layout')
 
 @section('title')
-    Добавление стикера
+    {{ trans('stickers.create_sticker') }}
 @stop
 
 @section('breadcrumb')
@@ -9,8 +9,8 @@
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
             <li class="breadcrumb-item"><a href="/admin">{{ trans('main.panel') }}</a></li>
-            <li class="breadcrumb-item"><a href="/admin/stickers">Стикеры</a></li>
-            <li class="breadcrumb-item active">Добавление стикера</li>
+            <li class="breadcrumb-item"><a href="/admin/stickers">{{ trans('stickers.title') }}</a></li>
+            <li class="breadcrumb-item active">{{ trans('stickers.create_sticker') }}</li>
         </ol>
     </nav>
 @stop
@@ -24,8 +24,6 @@
                 <label for="inputCategory">Категория</label>
 
                 <select class="form-control" id="inputCategory" name="cid">
-                    <option value="0"{{ empty($cid) ? ' selected' : '' }}>Общие стикеры</option>
-
                     @foreach ($categories as $category)
                         <option value="{{ $category->id }}"{{ ($cid === $category->id) ? ' selected' : '' }}>{{ $category->name }}</option>
                     @endforeach

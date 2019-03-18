@@ -9,7 +9,7 @@
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
             <li class="breadcrumb-item"><a href="/admin">{{ trans('main.panel') }}</a></li>
-            <li class="breadcrumb-item"><a href="/admin/stickers">Стикеры</a></li>
+            <li class="breadcrumb-item"><a href="/admin/stickers">{{ trans('stickers.title') }}</a></li>
             <li class="breadcrumb-item"><a href="/admin/stickers/{{ $category->id }}">{{ $category->name }}</a></li>
             <li class="breadcrumb-item active">Редактирование категории</li>
         </ol>

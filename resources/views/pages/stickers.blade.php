@@ -1,14 +1,14 @@
 @extends('layout')
 
 @section('title')
-    Список стикеров
+    {{ trans('stickers.title') }}
 @stop
 
 @section('breadcrumb')
     <nav>
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
-            <li class="breadcrumb-item active">Список стикеров</li>
+            <li class="breadcrumb-item active">{{ trans('stickers.title') }}</li>
         </ol>
     </nav>
 @stop
@@ -21,6 +21,6 @@
             </div>
         @endforeach
     @else
-        {!! showError('Категории еще не созданы!') !!}
+        {!! showError(trans('stickers.empty_categories')) !!}
     @endif
 @stop

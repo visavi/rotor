@@ -16,7 +16,7 @@
             @endif
 
             <li class="breadcrumb-item"><a href="/admin/forums/{{ $post->topic->forum->id }}">{{ $post->topic->forum->title }}</a></li>
-            <li class="breadcrumb-item"><a href="/admin/forums/{{ $post->topic->id }}">{{ $post->topic->title }}</a></li>
+            <li class="breadcrumb-item"><a href="/admin/topics/{{ $post->topic->id }}">{{ $post->topic->title }}</a></li>
             <li class="breadcrumb-item active">{{ trans('forums.title_edit_post') }}</li>
         </ol>
     </nav>

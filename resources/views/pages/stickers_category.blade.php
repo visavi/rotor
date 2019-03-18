@@ -8,7 +8,7 @@
     <nav>
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
-            <li class="breadcrumb-item"><a href="/stickers">Стикеры</a></li>
+            <li class="breadcrumb-item"><a href="/stickers">{{ trans('stickers.title') }}</a></li>
             <li class="breadcrumb-item active">{{ $category->name }}</li>
         </ol>
     </nav>
@@ -25,8 +25,8 @@
 
         {!! pagination($page) !!}
 
-        Всего стикеров: <b>{{ $page->total }}</b><br><br>
+        {{ trans('stickers.total_stickers') }}: <b>{{ $page->total }}</b><br><br>
     @else
-        {!! showError('Стикеры не найдены!') !!}
+        {!! showError(trans('stickers.empty_stickers')) !!}
     @endif
 @stop

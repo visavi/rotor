@@ -1,7 +1,7 @@
 @extends('layout')
 
 @section('title')
-    Стикеры
+    {{ trans('stickers.title') }}
 @stop
 
 @section('header')
@@ -17,7 +17,7 @@
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
             <li class="breadcrumb-item"><a href="/admin">{{ trans('main.panel') }}</a></li>
-            <li class="breadcrumb-item active">Стикеры</li>
+            <li class="breadcrumb-item active">{{ trans('stickers.title') }}</li>
         </ol>
     </nav>
 @stop

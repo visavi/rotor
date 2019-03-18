@@ -193,9 +193,15 @@ class StickerController extends AdminController
      */
     public function createSticker(Request $request, Validator $validator): string
     {
-        $cid  = int($request->input('cid'));
+        $cid = int($request->input('cid'));
 
-        if (! is_writable(UPLOADS.'/stickers')) {
+        $categories = StickersCategory::query()->get();
+
+        if ($categories->isEmpty()) {
+            abort('default', 'Категории еще не созданы!');
+        }
+
+        if (! is_writable(UPLOADS . '/stickers')) {
             abort('default', 'Директория со стикерами недоступна для записи!');
         }
 
@@ -208,10 +214,8 @@ class StickerController extends AdminController
                 ->length($code, 2, 20, ['code' => 'Слишком длинный или короткий код стикера!'])
                 ->regex($code, '|^:+[a-яa-z0-9_\-/\(\)]+$|i', ['code' => 'Код стикера должен начинаться с двоеточия. Разрешены буквы, цифры и дефис!']);
 
-            if ($cid) {
-                $category = StickersCategory::query()->where('id', $cid)->first();
-                $validator->notEmpty($category, ['category' => 'Данной категории не существует!']);
-            }
+            $category = StickersCategory::query()->where('id', $cid)->first();
+            $validator->notEmpty($category, ['category' => 'Данной категории не существует!']);
 
             $duplicate = Sticker::query()->where('code', $code)->first();
             $validator->empty($duplicate, ['code' => 'Стикер с данным кодом уже имеется в списке!']);
@@ -245,8 +249,6 @@ class StickerController extends AdminController
                 setFlash('danger', $validator->getErrors());
             }
         }
-
-        $categories = StickersCategory::query()->get();
 
         return view('admin/stickers/create_sticker', compact('categories', 'cid'));
     }
@@ -282,10 +284,8 @@ class StickerController extends AdminController
             $duplicate = Sticker::query()->where('code', $code)->where('id', '<>', $sticker->id)->first();
             $validator->empty($duplicate, ['code' => 'Стикер с данным кодом уже имеется в списке!']);
 
-            if ($cid) {
-                $category = StickersCategory::query()->where('id', $cid)->first();
-                $validator->notEmpty($category, ['category' => 'Данной категории не существует!']);
-            }
+            $category = StickersCategory::query()->where('id', $cid)->first();
+            $validator->notEmpty($category, ['category' => 'Данной категории не существует!']);
 
             if ($validator->isValid()) {
 

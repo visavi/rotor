@@ -71,16 +71,16 @@
         },
         {
             "name": "cakephp/cache",
-            "version": "3.7.4",
+            "version": "3.7.5",
             "source": {
                 "type": "git",
                 "url": "https://github.com/cakephp/cache.git",
-                "reference": "33619b570542222a78d4c40d3eb1a1a0ab083689"
+                "reference": "16f113ede9ce4df77361dec0f942aaf871647d9a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/cakephp/cache/zipball/33619b570542222a78d4c40d3eb1a1a0ab083689",
-                "reference": "33619b570542222a78d4c40d3eb1a1a0ab083689",
+                "url": "https://api.github.com/repos/cakephp/cache/zipball/16f113ede9ce4df77361dec0f942aaf871647d9a",
+                "reference": "16f113ede9ce4df77361dec0f942aaf871647d9a",
                 "shasum": ""
             },
             "require": {
@@ -110,11 +110,11 @@
                 "caching",
                 "cakephp"
             ],
-            "time": "2019-02-05T13:29:41+00:00"
+            "time": "2019-02-17T17:30:29+00:00"
         },
         {
             "name": "cakephp/collection",
-            "version": "3.7.4",
+            "version": "3.7.5",
             "source": {
                 "type": "git",
                 "url": "https://github.com/cakephp/collection.git",
@@ -160,7 +160,7 @@
         },
         {
             "name": "cakephp/core",
-            "version": "3.7.4",
+            "version": "3.7.5",
             "source": {
                 "type": "git",
                 "url": "https://github.com/cakephp/core.git",
@@ -210,16 +210,16 @@
         },
         {
             "name": "cakephp/database",
-            "version": "3.7.4",
+            "version": "3.7.5",
             "source": {
                 "type": "git",
                 "url": "https://github.com/cakephp/database.git",
-                "reference": "564dd25eecd0349241361946800558a410339137"
+                "reference": "9347f2edfbc98426e1cd8a9f94a6c879a03d2cb7"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/cakephp/database/zipball/564dd25eecd0349241361946800558a410339137",
-                "reference": "564dd25eecd0349241361946800558a410339137",
+                "url": "https://api.github.com/repos/cakephp/database/zipball/9347f2edfbc98426e1cd8a9f94a6c879a03d2cb7",
+                "reference": "9347f2edfbc98426e1cd8a9f94a6c879a03d2cb7",
                 "shasum": ""
             },
             "require": {
@@ -254,20 +254,20 @@
                 "database abstraction",
                 "pdo"
             ],
-            "time": "2019-02-07T17:08:39+00:00"
+            "time": "2019-03-04T17:27:24+00:00"
         },
         {
             "name": "cakephp/datasource",
-            "version": "3.7.4",
+            "version": "3.7.5",
             "source": {
                 "type": "git",
                 "url": "https://github.com/cakephp/datasource.git",
-                "reference": "d98a1675da0b62da834f86c976b2337db38adb49"
+                "reference": "08b5367426f4ee0388bd598fcf2bb994cd0f92c4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/cakephp/datasource/zipball/d98a1675da0b62da834f86c976b2337db38adb49",
-                "reference": "d98a1675da0b62da834f86c976b2337db38adb49",
+                "url": "https://api.github.com/repos/cakephp/datasource/zipball/08b5367426f4ee0388bd598fcf2bb994cd0f92c4",
+                "reference": "08b5367426f4ee0388bd598fcf2bb994cd0f92c4",
                 "shasum": ""
             },
             "require": {
@@ -304,11 +304,11 @@
                 "entity",
                 "query"
             ],
-            "time": "2018-12-13T23:20:56+00:00"
+            "time": "2019-02-14T16:36:35+00:00"
         },
         {
             "name": "cakephp/log",
-            "version": "3.7.4",
+            "version": "3.7.5",
             "source": {
                 "type": "git",
                 "url": "https://github.com/cakephp/log.git",
@@ -353,7 +353,7 @@
         },
         {
             "name": "cakephp/utility",
-            "version": "3.7.4",
+            "version": "3.7.5",
             "source": {
                 "type": "git",
                 "url": "https://github.com/cakephp/utility.git",
@@ -1774,16 +1774,16 @@
         },
         {
             "name": "nelexa/zip",
-            "version": "3.1.9",
+            "version": "3.1.11",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Ne-Lexa/php-zip.git",
-                "reference": "c9871c9f805fe869150d9dacc6a1e7c2db2798fe"
+                "reference": "19e17fb7301175ea3a39a81597d143d01b892445"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Ne-Lexa/php-zip/zipball/c9871c9f805fe869150d9dacc6a1e7c2db2798fe",
-                "reference": "c9871c9f805fe869150d9dacc6a1e7c2db2798fe",
+                "url": "https://api.github.com/repos/Ne-Lexa/php-zip/zipball/19e17fb7301175ea3a39a81597d143d01b892445",
+                "reference": "19e17fb7301175ea3a39a81597d143d01b892445",
                 "shasum": ""
             },
             "require": {
@@ -1829,7 +1829,7 @@
                 "zipalign",
                 "ziparchive"
             ],
-            "time": "2018-11-02T12:15:08+00:00"
+            "time": "2019-03-13T12:41:56+00:00"
         },
         {
             "name": "nesbot/carbon",
@@ -5382,16 +5382,16 @@
         },
         {
             "name": "phpstan/phpstan",
-            "version": "0.11.3",
+            "version": "0.11.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/phpstan/phpstan.git",
-                "reference": "e4644b4a8fd393c346f1137305fb2f76a7dc20a7"
+                "reference": "ccc4f854748664cc61d1f3d4ecb26810df1f0cd4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phpstan/phpstan/zipball/e4644b4a8fd393c346f1137305fb2f76a7dc20a7",
-                "reference": "e4644b4a8fd393c346f1137305fb2f76a7dc20a7",
+                "url": "https://api.github.com/repos/phpstan/phpstan/zipball/ccc4f854748664cc61d1f3d4ecb26810df1f0cd4",
+                "reference": "ccc4f854748664cc61d1f3d4ecb26810df1f0cd4",
                 "shasum": ""
             },
             "require": {
@@ -5451,7 +5451,7 @@
                 "MIT"
             ],
             "description": "PHPStan - PHP Static Analysis Tool",
-            "time": "2019-03-10T16:25:30+00:00"
+            "time": "2019-03-14T14:46:15+00:00"
         },
         {
             "name": "phpunit/php-code-coverage",

@@ -9,7 +9,7 @@
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
             <li class="breadcrumb-item"><a href="/admin">{{ trans('main.panel') }}</a></li>
-            <li class="breadcrumb-item"><a href="/admin/stickers">Стикеры</a></li>
+            <li class="breadcrumb-item"><a href="/admin/stickers">{{ trans('stickers.title') }}</a></li>
             <li class="breadcrumb-item"><a href="/admin/stickers/{{ $sticker->category->id }}">{{ $sticker->category->name }}</a></li>
             <li class="breadcrumb-item active">Редактирование стикера</li>
         </ol>
@@ -28,8 +28,6 @@
 
                 <?php $inputCategory = getInput('cid', $sticker->category->id); ?>
                 <select class="form-control" id="inputCategory" name="cid">
-                    <option value="0"{{ empty($inputCategory) ? ' selected' : '' }}>Общие стикеры</option>
-
                     @foreach ($categories as $category)
                         <option value="{{ $category->id }}"{{ ($inputCategory === $category->id) ? ' selected' : '' }}>{{ $category->name }}</option>
                     @endforeach

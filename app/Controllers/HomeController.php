@@ -30,7 +30,7 @@ class HomeController extends BaseController
             redirect('/');
         }
 
-        header($_SERVER['SERVER_PROTOCOL'].' 503 Service Unavailable');
+        header($_SERVER['SERVER_PROTOCOL'] . ' 503 Service Unavailable');
 
         return view('pages/closed');
     }
@@ -71,7 +71,7 @@ class HomeController extends BaseController
             redirect('/');
         }
 
-        header($_SERVER['SERVER_PROTOCOL'].' 403 Forbidden');
+        header($_SERVER['SERVER_PROTOCOL'] . ' 403 Forbidden');
 
         return view('pages/banip', compact('ban'));
     }
