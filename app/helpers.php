@@ -343,13 +343,14 @@ function makeCalendar($month, $year)
 /**
  * Возвращает календарь
  *
+ * @param int $time
  * @return string календарь
  */
-function getCalendar()
+function getCalendar($time = SITETIME)
 {
-    [$date['day'], $date['mon'], $date['year']] = explode('.', dateFixed(SITETIME, 'j.n.Y'));
+    [$date['day'], $date['month'], $date['year']] = explode('.', dateFixed($time, 'j.n.Y'));
     $date       = array_map('\intval', $date);
-    $startMonth = mktime(0, 0, 0, $date['mon'], 1);
+    $startMonth = mktime(0, 0, 0, $date['month'], 1);
 
     $newsDays = [];
     $newsIds  = [];
@@ -364,9 +365,9 @@ function getCalendar()
         }
     }
 
-    $calendar = makeCalendar($date['mon'], $date['year']);
+    $calendar = makeCalendar($date['month'], $date['year']);
 
-    return view('app/_calendar', compact('calendar', 'date', 'newsDays', 'newsIds'));
+    return view('app/_calendar', compact('calendar', 'date', 'time', 'newsDays', 'newsIds'));
 }
 
 /**
@@ -1913,19 +1914,6 @@ function plural($num, $forms)
     }
 
     return $num . ' ' . $forms[2];
-}
-
-/**
- * Валидирует даты
- *
- * @param  string $date   дата
- * @param  string $format формат даты
- * @return bool           результат валидации
- */
-function validateDate($date, $format = 'Y-m-d H:i:s')
-{
-    $d = DateTime::createFromFormat($format, $date);
-    return $d && $d->format($format) === $date;
 }
 
 /**

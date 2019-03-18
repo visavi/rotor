@@ -1,4 +1,4 @@
-<div><b>{{ dateFixed(SITETIME, 'j F Y') }}</b></div>
+<div><b>{{ dateFixed($time, 'j F Y') }}</b></div>
 <table>
     <thead>
         <tr>

@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\Antimat;
 use Illuminate\Http\UploadedFile;
 use PHPUnit\Framework\TestCase;
 
@@ -27,27 +28,6 @@ class HelperTest extends TestCase
         $this->assertSame('01.06.05 / 12:00', dateFixed($timestamp));
         $this->assertSame('2005-06-01', dateFixed($timestamp, 'Y-m-d'));
         $this->assertSame(dateFixed(SITETIME), dateFixed(false));
-    }
-
-    /**
-     * Testing formatTime
-     */
-    public function testFormatTime(): void
-    {
-        $formatTime = formatTime(0);
-        $this->assertSame(0, $formatTime);
-
-        $formatTime = formatTime(60);
-        $this->assertSame('1 минута', $formatTime);
-
-        $formatTime = formatTime(3600);
-        $this->assertSame('1 час', $formatTime);
-
-        $formatTime = formatTime(86400);
-        $this->assertSame('1 день', $formatTime);
-
-        $formatTime = formatTime(86400 * 365);
-        $this->assertSame('1 год', $formatTime);
     }
 
     /**
@@ -173,4 +153,64 @@ class HelperTest extends TestCase
         $this->assertSame('0byte', formatFileSize($file));
         $this->assertSame(0, formatFileSize(false));
     }
+
+    /**
+     * Testing formatTime
+     */
+    public function testFormatTime(): void
+    {
+        $formatTime = formatTime(0);
+        $this->assertSame(0, $formatTime);
+
+        $formatTime = formatTime(60);
+        $this->assertSame('1 минута', $formatTime);
+
+        $formatTime = formatTime(3600);
+        $this->assertSame('1 час', $formatTime);
+
+        $formatTime = formatTime(86400);
+        $this->assertSame('1 день', $formatTime);
+
+        $formatTime = formatTime(86400 * 365);
+        $this->assertSame('1 год', $formatTime);
+    }
+
+    /**
+     * Testing antimat
+     */
+    public function testAntimat(): void
+    {
+        $antimat = Antimat::query()->create([
+            'string' => 'xxx',
+        ]);
+
+        $this->assertSame('test', antimat('test'));
+        $this->assertSame('test***test', antimat('testxxxtest'));
+        $this->assertSame('тест***тест***', antimat('тестxxxтестxxx'));
+
+        $antimat->delete();
+    }
+
+    /**
+     * Testing ratingVote
+     */
+    public function testRatingVote(): void
+    {
+        $this->assertSame('<div class="star-rating fa-lg text-danger"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="far fa-star"></i>( 4 )</div>', ratingVote(4.2));
+
+        $this->assertSame('<div class="star-rating fa-lg text-danger"><i class="fas fa-star"></i><i class="fas fa-star-half-alt"></i><i class="far fa-star"></i><i class="far fa-star"></i><i class="far fa-star"></i>( 1.5 )</div>', ratingVote(1.5));
+    }
+
+    /**
+     * Testing getCalendar
+     */
+    public function testGetCalendar(): void
+    {
+        $expected = file_get_contents('tests/_data/calendar.txt');
+        $calendar = preg_replace('/\s+/', '', getCalendar(315586800));
+
+        $this->assertSame(trim($expected), $calendar);
+
+    }
+
 }

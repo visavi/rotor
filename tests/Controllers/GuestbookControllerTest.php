@@ -7,15 +7,13 @@ class GuestbookControllerTest extends TestCase
 {
     public function testGuest(): void
     {
-        $guest = new Guestbook();
-        $guest->user_id = 1;
-        $guest->text = 'Test text message';
-        $guest->ip = '127.0.0.1';
-        $guest->brow = 'Chrome 60.0';
-        $guest->created_at = SITETIME;
-        $guest->save();
-
-        $this->assertTrue($guest->save());
+        $guest = Guestbook::query()->create([
+            'user_id'    => 1,
+            'text'       => 'Test text message',
+            'ip'         => '127.0.0.1',
+            'brow'       => 'Chrome 60.0',
+            'created_at' => SITETIME,
+        ]);
 
         /** @var Guestbook $getGuest */
         $getGuest = Guestbook::query()->find($guest->id);
