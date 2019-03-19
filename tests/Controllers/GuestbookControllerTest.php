@@ -1,9 +1,8 @@
 <?php
 
 use App\Models\Guestbook;
-use PHPUnit\Framework\TestCase;
 
-class GuestbookControllerTest extends TestCase
+class GuestbookControllerTest extends \Tests\TestCase
 {
     public function testGuest(): void
     {

@@ -1,6 +1,6 @@
 <?php
 
-use App\Classes\{BBCode, Metrika, Registry, CloudFlare};
+use App\Classes\{BBCode, Calendar, Metrika, Registry, CloudFlare};
 use App\Models\{
     Antimat,
     Ban,
@@ -303,71 +303,16 @@ function ratingVote($rating)
 }
 
 /**
- * Формирует календарь
- *
- * @param  int   $month месяц
- * @param  int   $year  год
- * @return array        сформированный массив
- */
-function makeCalendar($month, $year)
-{
-    $wday = date('w', mktime(0, 0, 0, $month, 1, $year));
-
-    if ($wday === 0) {
-        $wday = 7;
-    }
-
-    $n = - ($wday-2);
-    $cal = [];
-    for ($y = 0; $y < 6; $y++) {
-        $row = [];
-        $notEmpty = false;
-        for ($x = 0; $x < 7; $x++, $n++) {
-            if (checkdate($month, $n, $year)) {
-                $row[] = $n;
-                $notEmpty = true;
-            } else {
-                $row[] = null;
-            }
-        }
-
-        if (! $notEmpty) {
-            break;
-        }
-
-        $cal[] = $row;
-    }
-    return $cal;
-}
-
-/**
  * Возвращает календарь
  *
  * @param int $time
  * @return string календарь
  */
-function getCalendar($time = SITETIME)
+function getCalendar($time = SITETIME): string
 {
-    [$date['day'], $date['month'], $date['year']] = explode('.', dateFixed($time, 'j.n.Y'));
-    $date       = array_map('\intval', $date);
-    $startMonth = mktime(0, 0, 0, $date['month'], 1);
+    $calendar = new Calendar();
 
-    $newsDays = [];
-    $newsIds  = [];
-
-    $news = News::query()->where('created_at', '>', $startMonth)->get();
-
-    if ($news->isNotEmpty()) {
-        foreach ($news as $data) {
-            $curDay           = dateFixed($data->created_at, 'j');
-            $newsDays[]       = $curDay;
-            $newsIds[$curDay] = $data->id;
-        }
-    }
-
-    $calendar = makeCalendar($date['month'], $date['year']);
-
-    return view('app/_calendar', compact('calendar', 'date', 'time', 'newsDays', 'newsIds'));
+    return $calendar->getCalendar($time);
 }
 
 /**

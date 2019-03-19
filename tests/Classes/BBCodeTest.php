@@ -1,8 +1,6 @@
 <?php
 
-use PHPUnit\Framework\TestCase;
-
-class BBCodeTest extends TestCase
+class BBCodeTest extends \Tests\TestCase
 {
     /**
      * Тестирует подсветку текста

@@ -2,9 +2,8 @@
 
 use App\Classes\Validator;
 use Illuminate\Http\UploadedFile;
-use PHPUnit\Framework\TestCase;
 
-class ValidatorTest extends TestCase
+class ValidatorTest extends \Tests\TestCase
 {
     /**
      * @var Validator

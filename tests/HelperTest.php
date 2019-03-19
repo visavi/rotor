@@ -2,9 +2,8 @@
 
 use App\Models\Antimat;
 use Illuminate\Http\UploadedFile;
-use PHPUnit\Framework\TestCase;
 
-class HelperTest extends TestCase
+class HelperTest extends \Tests\TestCase
 {
     /**
      * Testing makeTime
@@ -200,17 +199,4 @@ class HelperTest extends TestCase
 
         $this->assertSame('<div class="star-rating fa-lg text-danger"><i class="fas fa-star"></i><i class="fas fa-star-half-alt"></i><i class="far fa-star"></i><i class="far fa-star"></i><i class="far fa-star"></i>( 1.5 )</div>', ratingVote(1.5));
     }
-
-    /**
-     * Testing getCalendar
-     */
-    public function testGetCalendar(): void
-    {
-        $expected = file_get_contents('tests/_data/calendar.txt');
-        $calendar = preg_replace('/\s+/', '', getCalendar(315586800));
-
-        $this->assertSame(trim($expected), $calendar);
-
-    }
-
 }
