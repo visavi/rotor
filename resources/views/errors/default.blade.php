@@ -4,6 +4,7 @@
     {{ trans('errors.error') }}
 @stop
 
+@section('header', '')
 @section('description', trans('errors.error'))
 @section('keywords', '')
 
@@ -16,6 +17,8 @@
             <img src="/assets/img/errors/{{ basename($images[array_rand($images)]) }}" alt="error">
         </div>
         <div class="col-md-8 text-center">
+            <h1>{{ trans('errors.error') }}!</h1>
+
             <div class="lead">{{ $message }}</div>
 
             @if ($referer)

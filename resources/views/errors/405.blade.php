@@ -4,6 +4,7 @@
     {{ trans('errors.error') }} 405
 @stop
 
+@section('header', '')
 @section('description', trans('errors.error') . ' 405')
 @section('keywords', '')
 
