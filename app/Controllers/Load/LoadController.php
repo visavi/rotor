@@ -88,7 +88,7 @@ class LoadController extends BaseController
             ->get();
 
         if ($downs->isEmpty()) {
-            abort('default', 'Блоги не найдены!');
+            abort('default', 'Файлы не найдены!');
         }
 
         return view('loads/rss', compact('downs'));

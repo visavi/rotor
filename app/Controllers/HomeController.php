@@ -71,7 +71,7 @@ class HomeController extends BaseController
             redirect('/');
         }
 
-        header($_SERVER['SERVER_PROTOCOL'] . ' 403 Forbidden');
+        header($_SERVER['SERVER_PROTOCOL'] . ' 429 Too Many Requests');
 
         return view('pages/banip', compact('ban'));
     }

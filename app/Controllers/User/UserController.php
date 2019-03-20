@@ -94,7 +94,7 @@ class UserController extends BaseController
     public function register(Request $request, Validator $validator): string
     {
         if (getUser()) {
-            abort('403', 'Вы уже регистрировались, запрещено создавать несколько аккаунтов!');
+            abort(403, 'Вы уже регистрировались, запрещено создавать несколько аккаунтов!');
         }
 
         if (! setting('openreg')) {
@@ -247,7 +247,7 @@ class UserController extends BaseController
     public function login(Request $request): string
     {
         if (getUser()) {
-            abort('403', 'Вы уже авторизованы!');
+            abort(403, 'Вы уже авторизованы!');
         }
 
         $cooklog = isset($_COOKIE['login']) ? check($_COOKIE['login']): '';

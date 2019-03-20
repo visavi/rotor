@@ -4,6 +4,9 @@
     {{ trans('errors.error') }}
 @stop
 
+@section('description', trans('errors.error'))
+@section('keywords', '')
+
 @section('content')
 
     <?php $images = glob(HOME.'/assets/img/errors/*.png'); ?>

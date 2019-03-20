@@ -1613,6 +1613,9 @@ function abort($code, $message = null)
        case 405:
            header($protocol . ' 405 Method Not Allowed');
            break;
+       default:
+           header($protocol . ' 400 Bad Request');
+           break;
    }
 
     saveErrorLog($code);

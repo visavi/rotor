@@ -16,7 +16,7 @@ class VoteController extends AdminController
         parent::__construct();
 
         if (! isAdmin(User::MODER)) {
-            abort('403', 'Доступ запрещен!');
+            abort(403, 'Доступ запрещен!');
         }
     }
 
@@ -148,7 +148,7 @@ class VoteController extends AdminController
         }
 
         if (! isAdmin(User::BOSS)) {
-            abort(404, 'Доступ запрещен!');
+            abort(403, 'Доступ запрещен!');
         }
 
         if ($token === $_SESSION['token']) {

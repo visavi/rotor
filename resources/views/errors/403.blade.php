@@ -4,6 +4,9 @@
     {{ trans('errors.error') }} 403
 @stop
 
+@section('description', trans('errors.error') . ' 403')
+@section('keywords', '')
+
 @section('content')
 
     <?php $images = glob(HOME.'/assets/img/errors/*.png'); ?>
