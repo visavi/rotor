@@ -21,7 +21,7 @@
             <input type="hidden" name="token" value="{{ $_SESSION['token'] }}">
 
             <div class="form-group{{ hasError('category') }}">
-                <label for="inputCategory">Категория</label>
+                <label for="inputCategory">{{ trans('stickers.category') }}</label>
 
                 <select class="form-control" id="inputCategory" name="cid">
                     @foreach ($categories as $category)
@@ -32,25 +32,26 @@
             </div>
 
             <div class="form-group{{ hasError('code') }}">
-                <label for="code">Код стикера:</label>
+                <label for="code">{{ trans('stickers.sticker_code') }}:</label>
                 <input type="text" class="form-control" id="code" name="code" maxlength="20" value="{{ getInput('code') }}" required>
                 {!! textError('code') !!}
             </div>
 
             <label class="btn btn-sm btn-secondary" for="sticker">
                 <input id="sticker" type="file" name="sticker" onchange="$('#upload-file-info').html(this.files[0].name);" hidden>
-                Прикрепить стикер&hellip;
+                {{ trans('main.attach_image') }}&hellip;
             </label>
             <span class="badge badge-info" id="upload-file-info"></span>
             {!! textError('sticker') !!}
             <br>
-            <button class="btn btn-primary">Загрузить</button>
+            <button class="btn btn-primary">{{ trans('main.upload') }}</button>
         </form>
     </div><br>
 
     <p class="text-muted font-italic">
-        Код стикера должен начинаться со знака двоеточия<br>
-        Разрешается добавлять стикеры с расширением jpg, jpeg, gif, png<br>
-        Весом не более {{ formatSize(setting('stickermaxsize')) }} и размером до {{ setting('stickermaxweight') }} px<br><br>
+        {{ trans('stickers.valid_sticker_code') }}<br>
+        {{ trans('main.valid_file_extensions') }}: jpg, jpeg, gif, png<br>
+        {{ trans('main.max_file_weight') }}: {{ formatSize(setting('stickermaxsize')) }}<br>
+        {{ trans('main.max_image_size') }}: {{ setting('stickermaxweight') }} px<br><br>
     </p>
 @stop

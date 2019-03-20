@@ -1,7 +1,7 @@
 @extends('layout')
 
 @section('title')
-    Редактирование стикера
+    {{ trans('stickers.edit_sticker') }}
 @stop
 
 @section('breadcrumb')
@@ -11,7 +11,7 @@
             <li class="breadcrumb-item"><a href="/admin">{{ trans('main.panel') }}</a></li>
             <li class="breadcrumb-item"><a href="/admin/stickers">{{ trans('stickers.title') }}</a></li>
             <li class="breadcrumb-item"><a href="/admin/stickers/{{ $sticker->category->id }}">{{ $sticker->category->name }}</a></li>
-            <li class="breadcrumb-item active">Редактирование стикера</li>
+            <li class="breadcrumb-item active">{{ trans('stickers.edit_sticker') }}</li>
         </ol>
     </nav>
 @stop
@@ -24,7 +24,7 @@
             <input type="hidden" name="token" value="{{ $_SESSION['token'] }}">
 
             <div class="form-group{{ hasError('category') }}">
-                <label for="inputCategory">Категория</label>
+                <label for="inputCategory">{{ trans('stickers.category') }}</label>
 
                 <?php $inputCategory = getInput('cid', $sticker->category->id); ?>
                 <select class="form-control" id="inputCategory" name="cid">
@@ -36,15 +36,15 @@
             </div>
 
             <div class="form-group{{ hasError('code') }}">
-                <label for="code">Код стикера:</label>
+                <label for="code">{{ trans('stickers.sticker_code') }}:</label>
                 <input type="text" class="form-control" id="code" name="code" maxlength="20" value="{{ getInput('code', $sticker->code) }}" required>
                 {!! textError('code') !!}
             </div>
 
             <p class="text-muted font-italic">
-                Код стикера должен начинаться со знака двоеточия
+                {{ trans('stickers.valid_sticker_code') }}
             </p>
-            <button class="btn btn-primary">Изменить</button>
+            <button class="btn btn-primary">{{ trans('stickers.change') }}</button>
         </form>
     </div>
 @stop

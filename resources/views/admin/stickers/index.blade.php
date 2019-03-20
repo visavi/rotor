@@ -6,10 +6,10 @@
 
 @section('header')
     <div class="float-right">
-        <a class="btn btn-success" href="/admin/stickers/sticker/create">Загрузить</a>
+        <a class="btn btn-success" href="/admin/stickers/sticker/create">{{ trans('main.upload') }}</a>
     </div><br>
 
-    <h1>Стикеры</h1>
+    <h1>{{ trans('stickers.title') }}</h1>
 @stop
 
 @section('breadcrumb')
@@ -27,16 +27,16 @@
         @foreach($categories as $category)
             <div class="bg-light p-2 mb-1 border">
                 <div class="float-right">
-                    <a href="/admin/stickers/edit/{{ $category->id }}" data-toggle="tooltip" title="Редактировать"><i class="fa fa-pencil-alt"></i></a>
+                    <a href="/admin/stickers/edit/{{ $category->id }}" data-toggle="tooltip" title="{{ trans('main.edit') }}"><i class="fa fa-pencil-alt"></i></a>
 
-                    <a href="/admin/stickers/delete/{{ $category->id }}?token={{ $_SESSION['token'] }}" data-toggle="tooltip" title="Удалить" onclick="return confirm('Вы уверены что хотите удалить данную категорию')"><i class="fa fa-times"></i></a>
+                    <a href="/admin/stickers/delete/{{ $category->id }}?token={{ $_SESSION['token'] }}" data-toggle="tooltip" title="{{ trans('main.delete') }}" onclick="return confirm('{{ trans('stickers.confirm_delete_category') }}')"><i class="fa fa-times"></i></a>
                 </div>
 
                 <i class="far fa-smile"></i>  <b><a href="/admin/stickers/{{ $category->id }}">{{ $category->name }}</a></b> ({{ $category->cnt }})
             </div>
         @endforeach
     @else
-        {!! showError('Категории еще не созданы!') !!}
+        {!! showError(trans('stickers.empty_categories')) !!}
     @endif
 
     <div class="form my-3">
@@ -44,10 +44,10 @@
             <input type="hidden" name="token" value="{{ $_SESSION['token'] }}">
             <div class="form-inline">
                 <div class="form-group{{ hasError('name') }}">
-                    <input type="text" class="form-control" id="name" name="name" maxlength="50" value="{{ getInput('name') }}" placeholder="Категория" required>
+                    <input type="text" class="form-control" id="name" name="name" maxlength="50" value="{{ getInput('name') }}" placeholder="{{ trans('stickers.category') }}" required>
                 </div>
 
-                <button class="btn btn-primary">Создать</button>
+                <button class="btn btn-primary">{{ trans('main.create') }}</button>
             </div>
             {!! textError('name') !!}
         </form>
