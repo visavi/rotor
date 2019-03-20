@@ -1465,7 +1465,7 @@ function deleteFile($path, $thumbDelete = true)
 function sendNotify(string $text, string $pageUrl, string $pageName)
 {
     /*$parseText = preg_replace('|\[quote(.*?)\](.*?)\[/quote\]|s', '', $text);*/
-    preg_match_all('/(?<=^|\s)@([\w\-]+)/', $text, $matches);
+    preg_match_all('/(?<=^|\s|=)@([\w\-]+)/', $text, $matches);
 
     if (! empty($matches[1])) {
         $usersAnswer = array_unique(array_diff($matches[1], [getUser('login')]));
