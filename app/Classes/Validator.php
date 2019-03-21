@@ -35,9 +35,9 @@ class Validator
             return $this;
         }
 
-        if (mb_strlen($input, 'utf-8') < $min) {
+        if (\mb_strlen($input, 'utf-8') < $min) {
             $this->addError($label, ' (Не менее ' . $min . ' симв.)');
-        } elseif (mb_strlen($input, 'utf-8') > $max) {
+        } elseif (\mb_strlen($input, 'utf-8') > $max) {
             $this->addError($label, ' (Не более ' . $max . ' симв.)');
         }
 
@@ -205,7 +205,7 @@ class Validator
      */
     public function true($input, $label): Validator
     {
-        if (filter_var($input, FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE) === false) {
+        if (\filter_var($input, FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE) === false) {
             $this->addError($label);
         }
 
@@ -221,7 +221,7 @@ class Validator
      */
     public function false($input, $label): Validator
     {
-        if (filter_var($input, FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE) !== false) {
+        if (\filter_var($input, FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE) !== false) {
             $this->addError($label);
         }
 
@@ -277,7 +277,7 @@ class Validator
             return $this;
         }
 
-        if (! preg_match($pattern, $input)) {
+        if (! \preg_match($pattern, $input)) {
             $this->addError($label);
         }
 
@@ -319,7 +319,7 @@ class Validator
             return $this;
         }
 
-        if (! preg_match('#^https?://([а-яa-z0-9_\-\.])+(\.([а-яa-z0-9\/])+)+$#u', $input)) {
+        if (! \preg_match('#^https?://([а-яa-z0-9_\-\.])+(\.([а-яa-z0-9\/])+)+$#u', $input)) {
             $this->addError($label);
         }
 
@@ -340,7 +340,7 @@ class Validator
             return $this;
         }
 
-        if (! preg_match('#^([a-z0-9_\-\.])+\@([a-z0-9_\-\.])+(\.([a-z0-9])+)+$#', $input)) {
+        if (! \preg_match('#^([a-z0-9_\-\.])+\@([a-z0-9_\-\.])+(\.([a-z0-9])+)+$#', $input)) {
             $this->addError($label);
         }
 
@@ -367,13 +367,13 @@ class Validator
             return $this;
         }
 
-        $key = \is_array($label) ? key($label) : 0;
+        $key = \is_array($label) ? \key($label) : 0;
 
         if (empty($rules['extensions'])) {
             $rules['extensions'] = ['jpg', 'jpeg', 'gif', 'png'];
         }
 
-        $extension = strtolower($input->getClientOriginalExtension());
+        $extension = \strtolower($input->getClientOriginalExtension());
 
         if (! \in_array($extension, $rules['extensions'], true)) {
             $this->addError([$key => 'Недопустимое расширение файла!']);
@@ -384,7 +384,7 @@ class Validator
         }
 
         if (\in_array($extension, ['jpg', 'jpeg', 'gif', 'png'], true)) {
-            [$width, $height] = getimagesize($input);
+            [$width, $height] = \getimagesize($input->getPathname());
 
             if (isset($rules['maxweight'])) {
                 if ($width > $rules['maxweight'] || $height > $rules['maxweight']) {
@@ -416,8 +416,8 @@ class Validator
         $key = 0;
 
         if (\is_array($error)) {
-            $key   = key($error);
-            $error = current($error);
+            $key   = \key($error);
+            $error = \current($error);
         }
 
         if (isset($this->errors[$key])) {
