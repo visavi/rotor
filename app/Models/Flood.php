@@ -53,7 +53,7 @@ class Flood extends BaseModel
             $period = round(setting('floodstime') / 6);
         }
 
-        return $period;
+        return (int) $period;
     }
 
     /**

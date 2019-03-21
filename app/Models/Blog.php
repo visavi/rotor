@@ -116,7 +116,7 @@ class Blog extends BaseModel
             $diffCount = 1;
         }
 
-        return round($minSize + (log(1 + $count) - $minCount) * ($diffSize / $diffCount));
+        return (int) round($minSize + (log(1 + $count) - $minCount) * ($diffSize / $diffCount));
     }
 
     /**

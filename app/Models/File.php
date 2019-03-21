@@ -59,11 +59,11 @@ class File extends BaseModel
     /**
      * Возвращает является ли файл картинкой
      *
-     * @return string
+     * @return bool
      */
-    public function isImage(): string
+    public function isImage(): bool
     {
-        return \in_array($this->extension, ['jpg', 'jpeg', 'gif', 'png']);
+        return \in_array($this->extension, ['jpg', 'jpeg', 'gif', 'png'], true);
     }
 
     /**

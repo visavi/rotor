@@ -13,7 +13,7 @@
 
 <div class="b"><i class="fa fa-envelope fa-lg text-muted"></i> <b>{{ trans('index.mail_contact') }}</b></div>
 <i class="far fa-circle fa-lg text-muted"></i> <a href="/messages">{{ trans('index.messages') }}</a> ({{ getUser()->getCountMessages() }})<br>
-<i class="far fa-circle fa-lg text-muted"></i> <a href="/contacts">{{ trans('index.contacts') }}т</a> ({{ getUser()->getCountContact() }})<br>
+<i class="far fa-circle fa-lg text-muted"></i> <a href="/contacts">{{ trans('index.contacts') }}</a> ({{ getUser()->getCountContact() }})<br>
 <i class="far fa-circle fa-lg text-muted"></i> <a href="/ignores">{{ trans('index.ignores') }}</a> ({{ getUser()->getCountIgnore() }})<br>
 
 <div class="b"><i class="fa fa-wrench fa-lg text-muted"></i> <b>{{ trans('index.profile_settings') }}</b></div>
