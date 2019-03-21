@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 use App\Classes\{BBCode, Calendar, Metrika, Registry, CloudFlare};
 use App\Models\{
     Antimat,
@@ -1245,11 +1247,11 @@ function restatement($mode)
             break;
 
         case 'photos':
-            DB::connection()->update('update photos set count_comments = (select count(*) from comments where relate_type=  "' . addslashes(Photo::class) . '" and photos.id = comments.relate_id)');
+            DB::connection()->update('update photos set count_comments = (select count(*) from comments where relate_type = "' . addslashes(Photo::class) . '" and photos.id = comments.relate_id)');
             break;
 
         case 'offers':
-            DB::connection()->update('update offers set count_comments = (select count(*) from comments where relate_type=  "' . addslashes(Offer::class) . '" and offers.id = comments.relate_id)');
+            DB::connection()->update('update offers set count_comments = (select count(*) from comments where relate_type = "' . addslashes(Offer::class) . '" and offers.id = comments.relate_id)');
             break;
 
         case 'boards':
@@ -1274,6 +1276,7 @@ function counterString($file)
     if (file_exists($file)) {
         $countLines = count(file($file));
     }
+
     return $countLines;
 }
 
