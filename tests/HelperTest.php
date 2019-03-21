@@ -68,7 +68,7 @@ class HelperTest extends \Tests\TestCase
     {
         $this->assertSame(8, utfStrlen('abcdefgh'));
         $this->assertSame(7, utfStrlen('абвгдеё'));
-        $this->assertSame(1, utfStrlen(0));
+        $this->assertSame(1, utfStrlen('0'));
         $this->assertSame(1, utfStrlen(true));
         $this->assertSame(0, utfStrlen(false));
         $this->assertSame(0, utfStrlen(''));
@@ -149,7 +149,7 @@ class HelperTest extends \Tests\TestCase
     {
         $file = UploadedFile::fake()->create('test.txt');
 
-        $this->assertSame('0byte', formatFileSize($file));
+        $this->assertSame('0byte', formatFileSize($file->getPathname()));
         $this->assertSame(0, formatFileSize(false));
     }
 
