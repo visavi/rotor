@@ -50,7 +50,7 @@ class Antimat extends BaseModel
 
         if ($words) {
             foreach($words as $word) {
-                $str = preg_replace('|' . preg_quote($word) . '|iu', '***', $str);
+                $str = preg_replace('/' . preg_quote($word, '/') . '/iu', '***', $str);
             }
         }
 
