@@ -411,9 +411,9 @@ class AjaxController extends BaseController
      * Возвращает является ли запрос ajax
      *
      * @param Request $request
-     * @return string
+     * @return mixed
      */
-    private function checkAjax(Request $request): string
+    private function checkAjax(Request $request)
     {
         if (! $request->ajax()) {
             exit(json_encode([
@@ -428,9 +428,9 @@ class AjaxController extends BaseController
     /**
      * Возвращает авторизован ли пользователь
      *
-     * @return string
+     * @return mixed
      */
-    private function checkAuthorize(): string
+    private function checkAuthorize()
     {
         if (! getUser()) {
             exit(json_encode([
