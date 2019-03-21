@@ -93,7 +93,7 @@ class Application
             $user = User::query()->where('login', $cookLogin)->first();
 
             if ($user && $cookLogin === $user->login && $cookPass === md5($user->password . env('APP_KEY'))) {
-                session_regenerate_id(1);
+                session_regenerate_id(true);
 
                 $_SESSION['id']       = $user->id;
                 $_SESSION['password'] = md5(env('APP_KEY') . $user->password);
