@@ -286,7 +286,7 @@ return FastRoute\cachedDispatcher(function(RouteCollector $r) {
         $r->get('/messages', [App\Controllers\ApiController::class, 'messages']);
     });
 
-    $r->get('/recovery/restore', [App\Controllers\MailController::class, 'restore']);
+    $r->get('/restore', [App\Controllers\MailController::class, 'restore']);
     $r->addRoute(['GET', 'POST'], '/recovery', [App\Controllers\MailController::class, 'recovery']);
     $r->addRoute(['GET', 'POST'], '/mails', [App\Controllers\MailController::class, 'index']);
     $r->addRoute(['GET', 'POST'], '/unsubscribe', [App\Controllers\MailController::class, 'unsubscribe']);

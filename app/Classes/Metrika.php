@@ -41,9 +41,9 @@ class Metrika
             $pos = 42;
         }
 
-        imagettftext($img, 6, 0, 14, 7, $color, HOME . '/assets/fonts/font.ttf', formatShortNum($count->dayhosts));
-        imagettftext($img, 6, 0, 14, 13, $color, HOME . '/assets/fonts/font.ttf', formatShortNum($count->dayhits));
-        imagettftext($img, 12, 0, $pos, 13, $color, HOME . '/assets/fonts/font.ttf', $online);
+        imagettftext($img, 6, 0, 14, 7, $color, HOME . '/assets/fonts/font.ttf', (string) formatShortNum($count->dayhosts));
+        imagettftext($img, 6, 0, 14, 13, $color, HOME . '/assets/fonts/font.ttf', (string) formatShortNum($count->dayhits));
+        imagettftext($img, 12, 0, $pos, 13, $color, HOME . '/assets/fonts/font.ttf', (string) $online);
 
         imagepng($img, UPLOADS . '/counters/counter_new.png');
         imagedestroy($img);

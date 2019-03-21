@@ -9,7 +9,7 @@ return [
     'email'               => 'Email',
     'message'             => 'Сообщение',
     'successful_recovery' => 'Пароль успешно восстановлен!',
-    'login details'       => 'Ваши новые данные для входа на сайт',
+    'details'             => 'Ваши новые данные для входа на сайт',
     'login'               => 'Логин',
     'password'            => 'Пароль',
 

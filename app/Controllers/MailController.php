@@ -83,7 +83,7 @@ class MailController extends BaseController
 
             if ($validator->isValid()) {
                 $resetKey  = Str::random();
-                $resetLink = siteUrl(true) . '/recovery/restore?key=' . $resetKey;
+                $resetLink = siteUrl(true) . '/restore?key=' . $resetKey;
 
                 $user->update([
                     'keypasswd'  => $resetKey,

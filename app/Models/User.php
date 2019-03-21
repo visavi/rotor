@@ -240,7 +240,7 @@ class User extends BaseModel
 
                 if ($remember) {
                     setcookie('login', $user->login, strtotime('+1 year', SITETIME), '/', $domain);
-                    setcookie('password', md5($user->password . env('APP_KEY')), strtotime('+1 year', SITETIME), '/', $domain, null, true);
+                    setcookie('password', md5($user->password . env('APP_KEY')), strtotime('+1 year', SITETIME), '/', $domain, false, true);
                 }
 
                 $_SESSION['id']       = $user->id;
@@ -314,7 +314,7 @@ class User extends BaseModel
             if ($social && $user = getUserById($social->user_id)) {
 
                 setcookie('login', $user->login, strtotime('+1 year', SITETIME), '/', $domain);
-                setcookie('password', md5($user->password . env('APP_KEY')), strtotime('+1 year', SITETIME), '/', $domain, null, true);
+                setcookie('password', md5($user->password . env('APP_KEY')), strtotime('+1 year', SITETIME), '/', $domain, false, true);
 
                 $_SESSION['id']       = $user->id;
                 $_SESSION['password'] = md5(env('APP_KEY') . $user->password);

@@ -291,7 +291,7 @@ class UserController extends BaseController
 
         if ($token === $_SESSION['token']) {
             $_SESSION = [];
-            setcookie('password', '', SITETIME - 3600, '/', $domain, null, true);
+            setcookie('password', '', SITETIME - 3600, '/', $domain, false, true);
             setcookie(session_name(), '', SITETIME - 3600, '/', '');
             session_destroy();
         } else {
