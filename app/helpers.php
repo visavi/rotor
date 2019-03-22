@@ -209,13 +209,13 @@ function intar($numbers)
 /**
  * Возвращает размер в человекочитаемом формате
  *
- * @param  string  $bytes     размер в байтах
+ * @param  int     $bytes     размер в байтах
  * @param  integer $precision кол. символов после запятой
  * @return string             форматированный вывод размера
  */
 function formatSize($bytes, $precision = 2)
 {
-    $units = ['byte','Kb','Mb','Gb','Tb'];
+    $units = ['B','Kb','Mb','Gb','Tb'];
     $pow   = floor(($bytes ? log($bytes) : 0) / log(1000));
     $pow   = min($pow, count($units) - 1);
 
@@ -236,7 +236,7 @@ function formatFileSize($file)
         return formatSize(filesize($file));
     }
 
-    return 0;
+    return formatSize(0);
 }
 
 /**
