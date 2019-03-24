@@ -134,7 +134,7 @@ class HelperTest extends \Tests\TestCase
      */
     public function testFormatSize(): void
     {
-        $this->assertSame('5byte', formatSize(5));
+        $this->assertSame('5B', formatSize(5));
         $this->assertSame('0.98Kb', formatSize(1000));
         $this->assertSame('1Kb', formatSize(1024));
         $this->assertSame('1Mb', formatSize(1048576));
@@ -149,8 +149,8 @@ class HelperTest extends \Tests\TestCase
     {
         $file = UploadedFile::fake()->create('test.txt');
 
-        $this->assertSame('0byte', formatFileSize($file->getPathname()));
-        $this->assertSame(0, formatFileSize(false));
+        $this->assertSame('0B', formatFileSize($file->getPathname()));
+        $this->assertSame('0B', formatFileSize(false));
     }
 
     /**
