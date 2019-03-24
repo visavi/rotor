@@ -20,7 +20,7 @@ class GuestbookController extends BaseController
     public function index(): string
     {
         $total = Guestbook::query()->count();
-        $page = paginate(setting('bookpost'), $total);
+        $page  = paginate(setting('bookpost'), $total);
 
         $posts = Guestbook::query()
             ->orderBy('created_at', 'desc')

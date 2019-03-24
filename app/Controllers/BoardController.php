@@ -126,7 +126,7 @@ class BoardController extends BaseController
                 ->length($title, 5, 50, ['title' => trans('validator.title')])
                 ->length($text, 50, 5000, ['text' => trans('validator.text')])
                 ->regex($phone, '#^\d{11}$#', ['phone' => trans('validator.phone')], false)
-                ->true(Flood::isFlood(), ['text' =>  trans('validator.flood', ['sec' => Flood::getPeriod()])])
+                ->true(Flood::isFlood(), ['text' => trans('validator.flood', ['sec' => Flood::getPeriod()])])
                 ->notEmpty($board, ['category' => 'Категории для данного объявления не существует!']);
 
             if ($board) {

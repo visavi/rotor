@@ -424,7 +424,7 @@ class PhotoController extends BaseController
      * @param string $login
      * @return string
      */
-    public function album($login): string
+    public function album(string $login): string
     {
         $user = User::query()->where('login', $login)->first();
 
