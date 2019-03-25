@@ -75,9 +75,10 @@ class ForumController extends BaseController
      *
      * @param Request   $request
      * @param Validator $validator
+     * @param Flood     $flood
      * @return string
      */
-    public function create(Request $request, Validator $validator): string
+    public function create(Request $request, Validator $validator, Flood $flood): string
     {
         $fid = int($request->input('fid'));
 
@@ -109,7 +110,7 @@ class ForumController extends BaseController
 
             $validator->equal($token, $_SESSION['token'], trans('validator.token'))
                 ->notEmpty($forum, ['fid' => 'Форума для новой темы не существует!'])
-                ->equal(Flood::isFlood(), true, ['msg' => trans('validator.flood', ['sec' => Flood::getPeriod()])])
+                ->false($flood->isFlood(), ['msg' => trans('validator.flood', ['sec' => $flood->getPeriod()])])
                 ->length($title, 5, 50, ['title' => trans('validator.title')])
                 ->length($msg, 5, setting('forumtextlength'), ['msg' => trans('validator.text')]);
 
@@ -198,6 +199,8 @@ class ForumController extends BaseController
 
                     VoteAnswer::query()->insert($prepareAnswers);
                 }
+
+                $flood->saveState();
 
                 setFlash('success', 'Новая тема успешно создана!');
                 redirect('/topics/'.$topic->id);

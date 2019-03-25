@@ -37,16 +37,17 @@ class GuestbookController extends BaseController
      *
      * @param Request   $request
      * @param Validator $validator
+     * @param Flood     $flood
      * @return void
      */
-    public function add(Request $request, Validator $validator): void
+    public function add(Request $request, Validator $validator, Flood $flood): void
     {
         $msg   = check($request->input('msg'));
         $token = check($request->input('token'));
 
         $validator->equal($token, $_SESSION['token'], ['msg' => trans('validator.token')])
             ->length($msg, 5, setting('guesttextlength'), ['msg' => trans('validator.text')])
-            ->true(Flood::isFlood(), ['msg' => trans('validator.flood', ['sec' => Flood::getPeriod()])]);
+            ->false($flood->isFlood(), ['msg' => trans('validator.flood', ['sec' => $flood->getPeriod()])]);
 
         /* Проерка для гостей */
         if (! getUser() && setting('bookadds')) {
@@ -57,7 +58,6 @@ class GuestbookController extends BaseController
         }
 
         if ($validator->isValid()) {
-
             $msg = antimat($msg);
 
             if (getUser()) {
@@ -80,6 +80,7 @@ class GuestbookController extends BaseController
                 'created_at' => SITETIME,
             ]);
 
+            $flood->saveState();
             sendNotify($msg, '/guestbooks', 'Гостевая книга');
             setFlash('success', 'Сообщение успешно добавлено!');
         } else {

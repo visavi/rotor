@@ -90,9 +90,10 @@ class BoardController extends BaseController
      *
      * @param Request   $request
      * @param Validator $validator
+     * @param Flood     $flood
      * @return string
      */
-    public function create(Request $request, Validator $validator): string
+    public function create(Request $request, Validator $validator, Flood $flood): string
     {
         $bid = int($request->input('bid'));
 
@@ -126,7 +127,7 @@ class BoardController extends BaseController
                 ->length($title, 5, 50, ['title' => trans('validator.title')])
                 ->length($text, 50, 5000, ['text' => trans('validator.text')])
                 ->regex($phone, '#^\d{11}$#', ['phone' => trans('validator.phone')], false)
-                ->true(Flood::isFlood(), ['text' => trans('validator.flood', ['sec' => Flood::getPeriod()])])
+                ->false($flood->isFlood(), ['msg' => trans('validator.flood', ['sec' => $flood->getPeriod()])])
                 ->notEmpty($board, ['category' => 'Категории для данного объявления не существует!']);
 
             if ($board) {
@@ -155,6 +156,8 @@ class BoardController extends BaseController
                     ->where('relate_id', 0)
                     ->where('user_id', getUser('id'))
                     ->update(['relate_id' => $item->id]);
+
+                $flood->saveState();
 
                 setFlash('success', 'Объявления успешно добавлено!');
                 redirect('/items/' . $item->id);

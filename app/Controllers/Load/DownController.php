@@ -163,9 +163,10 @@ class DownController extends BaseController
      *
      * @param Request   $request
      * @param Validator $validator
+     * @param Flood     $flood
      * @return string
      */
-    public function create(Request $request, Validator $validator): string
+    public function create(Request $request, Validator $validator, Flood $flood): string
     {
         $cid = int($request->input('cid'));
 
@@ -201,7 +202,7 @@ class DownController extends BaseController
                 ->equal($token, $_SESSION['token'], trans('validator.token'))
                 ->length($title, 5, 50, ['title' => trans('validator.title')])
                 ->length($text, 50, 5000, ['text' => trans('validator.text')])
-                ->true(Flood::isFlood(), ['text' => trans('validator.flood', ['sec' => Flood::getPeriod()])])
+                ->false($flood->isFlood(), ['msg' => trans('validator.flood', ['sec' => $flood->getPeriod()])])
                 ->notEmpty($category, ['category' => 'Категории для данного файла не существует!']);
 
             if ($category) {
@@ -255,6 +256,8 @@ class DownController extends BaseController
                         }
                     }
                 }
+
+                $flood->saveState();
 
                 setFlash('success', 'Файл успешно загружен!');
                 redirect('/downs/' . $down->id);
@@ -387,9 +390,10 @@ class DownController extends BaseController
      * @param int       $id
      * @param Request   $request
      * @param Validator $validator
+     * @param Flood     $flood
      * @return string
      */
-    public function comments(int $id, Request $request, Validator $validator): string
+    public function comments(int $id, Request $request, Validator $validator, Flood $flood): string
     {
         /** @var Down $down */
         $down = Down::query()->find($id);
@@ -411,7 +415,7 @@ class DownController extends BaseController
                 ->true(getUser(), 'Для добавления комментария необходимо авторизоваться!')
                 ->equal($token, $_SESSION['token'], trans('validator.token'))
                 ->length($msg, 5, setting('comment_length'), ['msg' => trans('validator.text')])
-                ->true(Flood::isFlood(), ['msg' => trans('validator.flood', ['sec' => Flood::getPeriod()])]);
+                ->false($flood->isFlood(), ['msg' => trans('validator.flood', ['sec' => $flood->getPeriod()])]);
 
             if ($validator->isValid()) {
 
@@ -430,6 +434,7 @@ class DownController extends BaseController
 
                 $down->increment('count_comments');
 
+                $flood->saveState();
                 sendNotify($msg, '/downs/comment/' . $down->id . '/' . $comment->id, $down->title);
 
                 setFlash('success', 'Комментарий успешно добавлен!');

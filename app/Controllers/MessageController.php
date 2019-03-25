@@ -123,9 +123,10 @@ class MessageController extends BaseController
      *
      * @param Request   $request
      * @param Validator $validator
+     * @param Flood     $flood
      * @return void
      */
-    public function send(Request $request, Validator $validator): void
+    public function send(Request $request, Validator $validator, Flood $flood): void
     {
         $login = check($request->input('user'));
         $token = check($request->input('token'));
@@ -139,7 +140,7 @@ class MessageController extends BaseController
 
         $validator->equal($token, $_SESSION['token'], ['msg' => trans('validator.token')])
             ->length($msg, 5, setting('comment_length'), ['msg' => trans('validator.text')])
-            ->equal(Flood::isFlood(), true, trans('validator.flood', ['sec' => Flood::getPeriod()]))
+            ->false($flood->isFlood(), ['msg' => trans('validator.flood', ['sec' => $flood->getPeriod()])])
             ->notEqual($user->id, $this->user->id, 'Нельзя отправлять письмо самому себе!');
 
         if (! captchaVerify() && $this->user->point < setting('privatprotect')) {
@@ -173,6 +174,8 @@ class MessageController extends BaseController
                 'reading'    => 1,
                 'created_at' => SITETIME,
             ]);
+
+            $flood->saveState();
 
             setFlash('success', 'Письмо успешно отправлено!');
         } else {

@@ -55,9 +55,10 @@ class WallController extends BaseController
      * @param string    $login
      * @param Request   $request
      * @param Validator $validator
+     * @param Flood     $flood
      * @return void
      */
-    public function create($login, Request $request, Validator $validator): void
+    public function create($login, Request $request, Validator $validator, Flood $flood): void
     {
         if (! getUser()) {
             abort(403, 'Для отправки сообщений необходимо авторизоваться!');
@@ -75,7 +76,7 @@ class WallController extends BaseController
 
             $validator->equal($token, $_SESSION['token'], trans('validator.token'))
                 ->length($msg, 5, setting('comment_length'), ['msg' => trans('validator.text')])
-                ->equal(Flood::isFlood(), true, ['msg' => trans('validator.flood', ['sec' => Flood::getPeriod()])]);
+                ->false($flood->isFlood(), ['msg' => trans('validator.flood', ['sec' => $flood->getPeriod()])]);
 
             $ignoring = Ignore::query()
                 ->where('user_id', $user->id)
@@ -105,6 +106,8 @@ class WallController extends BaseController
                         );',
                     [$user->id, $user->id, setting('wallmaxpost')]
                 );
+
+                $flood->saveState();
 
                 setFlash('success', 'Запись успешно добавлена!');
             } else {

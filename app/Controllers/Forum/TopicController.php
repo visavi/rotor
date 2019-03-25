@@ -105,9 +105,10 @@ class TopicController extends BaseController
      * @param int       $id
      * @param Request   $request
      * @param Validator $validator
+     * @param Flood     $flood
      * @return void
      */
-    public function create(int $id, Request $request, Validator $validator): void
+    public function create(int $id, Request $request, Validator $validator, Flood $flood): void
     {
         $msg   = check($request->input('msg'));
         $token = check($request->input('token'));
@@ -129,7 +130,7 @@ class TopicController extends BaseController
 
         $validator->equal($token, $_SESSION['token'], ['msg' => trans('validator.token')])
             ->empty($topic->closed, ['msg' => 'Запрещено писать в закрытую тему!'])
-            ->equal(Flood::isFlood(), true, ['msg' => trans('validator.flood', ['sec' => Flood::getPeriod()])])
+            ->false($flood->isFlood(), ['msg' => trans('validator.flood', ['sec' => $flood->getPeriod()])])
             ->length($msg, 5, setting('forumtextlength'), ['msg' => trans('validator.text')]);
 
         // Проверка сообщения на схожесть
@@ -205,7 +206,7 @@ class TopicController extends BaseController
                 }
             }
 
-            // Рассылка уведомлений в приват
+            $flood->saveState();
             sendNotify($msg, '/topics/' . $topic->id . '/' . $post->id, $topic->title);
 
             if ($files) {

@@ -242,9 +242,10 @@ class BlogController extends BaseController
      *
      * @param Request   $request
      * @param Validator $validator
+     * @param Flood     $flood
      * @return string
      */
-    public function create(Request $request, Validator $validator): string
+    public function create(Request $request, Validator $validator, Flood $flood): string
     {
         $cid = int($request->input('cid'));
 
@@ -277,7 +278,7 @@ class BlogController extends BaseController
                 ->length($title, 5, 50, ['title' => trans('validator.title')])
                 ->length($text, 100, setting('maxblogpost'), ['text' => trans('validator.text')])
                 ->length($tags, 2, 50, ['tags' => 'Слишком длинные или короткие метки статьи!'])
-                ->true(Flood::isFlood(), ['text' => trans('validator.flood', ['sec' => Flood::getPeriod()])])
+                ->false($flood->isFlood(), ['msg' => trans('validator.flood', ['sec' => $flood->getPeriod()])])
                 ->notEmpty($category, ['cid' => 'Категории для новой статьи не существует или она закрыта!']);
 
             if ($category) {
@@ -311,6 +312,8 @@ class BlogController extends BaseController
                     ->where('user_id', getUser('id'))
                     ->update(['relate_id' => $blog->id]);
 
+                $flood->saveState();
+
                 setFlash('success', 'Статья успешно опубликована!');
                 redirect('/articles/' . $blog->id);
             } else {
@@ -334,9 +337,10 @@ class BlogController extends BaseController
      * @param int       $id
      * @param Request   $request
      * @param Validator $validator
+     * @param Flood     $flood
      * @return string
      */
-    public function comments(int $id, Request $request, Validator $validator): string
+    public function comments(int $id, Request $request, Validator $validator, Flood $flood): string
     {
         /** @var Blog $blog */
         $blog = Blog::query()->find($id);
@@ -354,7 +358,7 @@ class BlogController extends BaseController
                 ->true(getUser(), 'Для добавления комментария необходимо авторизоваться!')
                 ->equal($token, $_SESSION['token'], trans('validator.token'))
                 ->length($msg, 5, setting('comment_length'), ['msg' => trans('validator.text')])
-                ->true(Flood::isFlood(), ['msg' => trans('validator.flood', ['sec' => Flood::getPeriod()])]);
+                ->false($flood->isFlood(), ['msg' => trans('validator.flood', ['sec' => $flood->getPeriod()])]);
 
             if ($validator->isValid()) {
 
@@ -379,6 +383,7 @@ class BlogController extends BaseController
 
                 $blog->increment('count_comments');
 
+                $flood->saveState();
                 sendNotify($msg, '/articles/comment/' . $blog->id . '/' . $comment->id, $blog->title);
 
                 setFlash('success', 'Комментарий успешно добавлен!');

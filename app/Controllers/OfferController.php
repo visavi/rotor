@@ -86,9 +86,10 @@ class OfferController extends BaseController
      *
      * @param Request   $request
      * @param Validator $validator
+     * @param Flood     $flood
      * @return string
      */
-    public function create(Request $request, Validator $validator): string
+    public function create(Request $request, Validator $validator, Flood $flood): string
     {
         if (! $user = getUser()) {
             abort(403, 'Авторизуйтесь для добавления записи!');
@@ -105,7 +106,7 @@ class OfferController extends BaseController
             $validator->equal($token, $_SESSION['token'], trans('validator.token'))
                 ->length($title, 5, 50, ['title' => trans('validator.title')])
                 ->length($text, 5, 1000, ['text' => trans('validator.text')])
-                ->true(Flood::isFlood(), ['text' => trans('validator.flood', ['sec' => Flood::getPeriod()])])
+                ->false($flood->isFlood(), ['msg' => trans('validator.flood', ['sec' => $flood->getPeriod()])])
                 ->in($type, array_keys(Offer::TYPES), ['type' => 'Выбран неверный тип записи! (Необходимо предложение или проблема)'])
                 ->gte(getUser('point'), setting('addofferspoint'), ['Для добавления предложения или проблемы вам необходимо набрать ' . plural(setting('addofferspoint'), setting('scorename')) . '!']);
 
@@ -124,6 +125,8 @@ class OfferController extends BaseController
                     'status'     => 'wait',
                     'created_at' => SITETIME,
                 ]);
+
+                $flood->saveState();
 
                 setFlash('success', 'Запись успешно добавлена!');
                 redirect('/offers/' . $offer->id);
@@ -204,9 +207,10 @@ class OfferController extends BaseController
      * @param int       $id
      * @param Request   $request
      * @param Validator $validator
+     * @param Flood     $flood
      * @return string
      */
-    public function comments(int $id, Request $request, Validator $validator): string
+    public function comments(int $id, Request $request, Validator $validator, Flood $flood): string
     {
         /** @var Offer $offer */
         $offer = Offer::query()->find($id);
@@ -224,7 +228,7 @@ class OfferController extends BaseController
                 ->true(getUser(), 'Для добавления комментария необходимо авторизоваться!')
                 ->equal($token, $_SESSION['token'], trans('validator.token'))
                 ->length($msg, 5, setting('comment_length'), ['msg' => trans('validator.text')])
-                ->true(Flood::isFlood(), ['msg' => trans('validator.flood', ['sec' => Flood::getPeriod()])])
+                ->false($flood->isFlood(), ['msg' => trans('validator.flood', ['sec' => $flood->getPeriod()])])
                 ->empty($offer->closed, ['msg' => 'Комментирование данной записи закрыто!']);
 
             if ($validator->isValid()) {
@@ -244,6 +248,7 @@ class OfferController extends BaseController
 
                 $offer->increment('count_comments');
 
+                $flood->saveState();
                 sendNotify($msg, '/offers/comment/' . $offer->id . '/' . $comment->id, $offer->title);
 
                 setFlash('success', 'Комментарий успешно добавлен!');

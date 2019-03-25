@@ -67,9 +67,10 @@ class PhotoController extends BaseController
      *
      * @param Request   $request
      * @param Validator $validator
+     * @param Flood     $flood
      * @return string
      */
-    public function create(Request $request, Validator $validator): string
+    public function create(Request $request, Validator $validator, Flood $flood): string
     {
         if (! getUser()) {
             abort(403, 'Для добавления фотографий небходимо авторизоваться!');
@@ -85,7 +86,7 @@ class PhotoController extends BaseController
             $validator->equal($token, $_SESSION['token'], trans('validator.token'))
                 ->length($title, 5, 50, ['title' => trans('validator.title')])
                 ->length($text, 0, 1000, ['text' => 'Слишком длинное описание!'])
-                ->true(Flood::isFlood(), ['text' => trans('validator.flood', ['sec' => Flood::getPeriod()])]);
+                ->false($flood->isFlood(), ['msg' => trans('validator.flood', ['sec' => $flood->getPeriod()])]);
 
             if ($validator->isValid()) {
 
@@ -103,6 +104,8 @@ class PhotoController extends BaseController
                     ->where('relate_id', 0)
                     ->where('user_id', getUser('id'))
                     ->update(['relate_id' => $photo->id]);
+
+                $flood->saveState();
 
                 setFlash('success', 'Фотография успешно загружена!');
                 redirect('/photos/' . $photo->id);
@@ -182,9 +185,10 @@ class PhotoController extends BaseController
      * @param int       $id
      * @param Request   $request
      * @param Validator $validator
+     * @param Flood     $flood
      * @return string
      */
-    public function comments(int $id, Request $request, Validator $validator): string
+    public function comments(int $id, Request $request, Validator $validator, Flood $flood): string
     {
         /** @var Photo $photo */
         $photo = Photo::query()->find($id);
@@ -201,7 +205,7 @@ class PhotoController extends BaseController
                 ->true(getUser(), 'Чтобы добавить комментарий необходимо авторизоваться')
                 ->equal($token, $_SESSION['token'], trans('validator.token'))
                 ->length($msg, 5, setting('comment_length'), ['msg' => trans('validator.text')])
-                ->true(Flood::isFlood(), ['msg' => trans('validator.flood', ['sec' => Flood::getPeriod()])])
+                ->false($flood->isFlood(), ['msg' => trans('validator.flood', ['sec' => $flood->getPeriod()])])
                 ->empty($photo->closed, ['msg' => 'Комментирование данной фотографии запрещено!']);
 
             if ($validator->isValid()) {
@@ -227,6 +231,7 @@ class PhotoController extends BaseController
 
                 $photo->increment('count_comments');
 
+                $flood->saveState();
                 sendNotify($msg, '/photos/comment/' . $photo->id . '/' . $comment->id, $photo->title);
 
                 setFlash('success', 'Комментарий успешно добавлен!');

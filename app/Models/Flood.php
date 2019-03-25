@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types=1);
+//declare(strict_types=1);
 
 namespace App\Models;
 
@@ -33,24 +33,25 @@ class Flood extends BaseModel
      *
      * @return int
      */
-    public static function getPeriod(): int
+    public function getPeriod(): int
     {
-        if (isAdmin()) {
+       /* if (isAdmin()) {
             return 0;
+        }*/
+
+        $userPoint = getUser('point');
+        $period    = setting('floodstime');
+
+        if ($userPoint >= 100) {
+            $period = round($period / 2);
         }
 
-        $period = setting('floodstime');
-
-        if (getUser('point') >= 100) {
-            $period = round(setting('floodstime') / 2);
+        if ($userPoint >= 300) {
+            $period = round($period / 3);
         }
 
-        if (getUser('point') >= 300) {
-            $period = round(setting('floodstime') / 3);
-        }
-
-        if (getUser('point') >= 500) {
-            $period = round(setting('floodstime') / 6);
+        if ($userPoint >= 500) {
+            $period = round($period / 6);
         }
 
         return (int) $period;
@@ -59,35 +60,42 @@ class Flood extends BaseModel
     /**
      * Проверяет сообщение на флуд
      *
-     * @param int $period
      * @return bool
      */
-    public static function isFlood($period = 0): bool
+    public function isFlood(): bool
     {
-        $userId = getUser('id');
-        $period = $period ?: self::getPeriod();
-
-        if (empty($period)) {
-            return true;
-        }
-
         self::query()->where('created_at', '<', SITETIME)->delete();
 
         $flood = self::query()
-            ->where('user_id', $userId)
+            ->where('user_id', getUser('id'))
             ->where('page', server('PHP_SELF'))
-            ->first();
+            ->exists();
 
-        if (! $flood) {
-            self::query()->create([
-                'user_id'    => $userId,
-                'page'       => server('PHP_SELF'),
-                'created_at' => SITETIME + $period,
-            ]);
-
+        if ($flood) {
             return true;
         }
 
         return false;
+    }
+
+    /**
+     * Сохраняет состояние
+     *
+     * @param int $period
+     * @return void
+     */
+    public function saveState(int $period = 0): void
+    {
+        $period = $period ?: $this->getPeriod();
+
+        if (empty($period)) {
+            return;
+        }
+
+        self::query()->create([
+            'user_id'    => getUser('id'),
+            'page'       => server('PHP_SELF'),
+            'created_at' => SITETIME + $period,
+        ]);
     }
 }

@@ -67,9 +67,10 @@ class NewsController extends BaseController
      * @param int       $id
      * @param Request   $request
      * @param Validator $validator
+     * @param Flood     $flood
      * @return string
      */
-    public function comments(int $id, Request $request, Validator $validator): string
+    public function comments(int $id, Request $request, Validator $validator, Flood $flood): string
     {
         /** @var News $news */
         $news = News::query()->find($id);
@@ -84,7 +85,7 @@ class NewsController extends BaseController
 
             $validator->true(getUser(), 'Чтобы добавить комментарий необходимо авторизоваться')
                 ->equal($token, $_SESSION['token'], trans('validator.token'))
-                ->equal(Flood::isFlood(), true, ['msg' => trans('validator.flood', ['sec' => Flood::getPeriod()])])
+                ->false($flood->isFlood(), ['msg' => trans('validator.flood', ['sec' => $flood->getPeriod()])])
                 ->length($msg, 5, setting('comment_length'), ['msg' => trans('validator.text')])
                 ->empty($news['closed'], ['msg' => 'Комментирование данной новости запрещено!']);
 
@@ -111,6 +112,7 @@ class NewsController extends BaseController
 
                 $news->increment('count_comments');
 
+                $flood->saveState();
                 sendNotify($msg, '/news/comment/' . $news->id . '/' . $comment->id, $news->title);
 
                 setFlash('success', 'Комментарий успешно добавлен!');
