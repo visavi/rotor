@@ -7,7 +7,6 @@ namespace App\Controllers;
 use App\Classes\Validator;
 use App\Models\Flood;
 use App\Models\Ignore;
-use App\Models\User;
 use App\Models\Wall;
 use Illuminate\Database\Capsule\Manager as DB;
 use Illuminate\Http\Request;
@@ -22,7 +21,7 @@ class WallController extends BaseController
      */
     public function index(string $login): string
     {
-        $user = User::query()->where('login', $login)->first();
+        $user = getUserByLogin($login);
 
         if (! $user) {
             abort(404, trans('validator.user'));
@@ -64,7 +63,7 @@ class WallController extends BaseController
             abort(403, 'Для отправки сообщений необходимо авторизоваться!');
         }
 
-        $user = User::query()->where('login', $login)->first();
+        $user = getUserByLogin($login);
 
         if (! $user) {
             abort(404, trans('validator.user'));
@@ -132,7 +131,7 @@ class WallController extends BaseController
         $id    = int($request->input('id'));
         $token = check($request->input('token'));
 
-        $user = User::query()->where('login', $login)->first();
+        $user = getUserByLogin($login);
 
         $validator
             ->true($request->ajax(), 'Это не ajax запрос!')

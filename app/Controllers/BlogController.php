@@ -11,8 +11,6 @@ use App\Models\Comment;
 use App\Models\File;
 use App\Models\Flood;
 use App\Models\Reader;
-use App\Models\User;
-use Illuminate\Database\Capsule\Manager as DB;
 use Illuminate\Database\Query\JoinClause;
 use Illuminate\Http\Request;
 
@@ -301,10 +299,8 @@ class BlogController extends BaseController
 
                 $category->increment('count_blogs');
 
-                getUser()->update([
-                    'point' => DB::connection()->raw('point + 5'),
-                    'money' => DB::connection()->raw('money + 100'),
-                ]);
+                getUser()->increment('point', 5);
+                getUser()->increment('money', 100);
 
                 File::query()
                     ->where('relate_type', Blog::class)
@@ -375,11 +371,10 @@ class BlogController extends BaseController
                     'brow'        => getBrowser(),
                 ]);
 
-                getUser()->update([
-                    'allcomments' => DB::connection()->raw('allcomments + 1'),
-                    'point'       => DB::connection()->raw('point + 1'),
-                    'money'       => DB::connection()->raw('money + 5'),
-                ]);
+                $user = getUser();
+                $user->increment('allcomments');
+                $user->increment('point');
+                $user->increment('money', 5);
 
                 $blog->increment('count_comments');
 
@@ -699,8 +694,7 @@ class BlogController extends BaseController
     public function userArticles(Request $request): string
     {
         $login = check($request->input('user', getUser('login')));
-
-        $user = User::query()->where('login', $login)->first();
+        $user  = getUserByLogin($login);
 
         if (! $user) {
             abort(404, trans('validator.user'));
@@ -727,8 +721,7 @@ class BlogController extends BaseController
     public function userComments(Request $request): string
     {
         $login = check($request->input('user', getUser('login')));
-
-        $user = User::query()->where('login', $login)->first();
+        $user  = getUserByLogin($login);
 
         if (! $user) {
             abort(404, trans('validator.user'));

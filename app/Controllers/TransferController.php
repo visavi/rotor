@@ -31,7 +31,7 @@ class TransferController extends BaseController
         }
 
         $login      = check($request->input('user'));
-        $this->user = User::query()->where('login', $login)->first();
+        $this->user = getUserByLogin($login);
     }
 
     /**

@@ -82,8 +82,7 @@ class UserController extends AdminController
     public function edit(Request $request, Validator $validator): string
     {
         $login = check($request->input('user'));
-
-        $user = User::query()->where('login', $login)->first();
+        $user  = getUserByLogin($login);
 
         if (! $user) {
             abort(404, trans('validator.user'));
@@ -202,8 +201,7 @@ class UserController extends AdminController
     public function delete(Request $request, Validator $validator): string
     {
         $login = check($request->input('user'));
-
-        $user = User::query()->where('login', $login)->first();
+        $user  = getUserByLogin($login);
 
         if (! $user) {
             abort(404, trans('validator.user'));

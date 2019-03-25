@@ -9,8 +9,6 @@ use App\Models\Comment;
 use App\Models\File;
 use App\Models\Flood;
 use App\Models\Photo;
-use App\Models\User;
-use Illuminate\Database\Capsule\Manager as DB;
 use Illuminate\Database\Query\JoinClause;
 use Illuminate\Http\Request;
 
@@ -222,12 +220,10 @@ class PhotoController extends BaseController
                     'brow'        => getBrowser(),
                 ]);
 
-                $user = User::query()->where('id', getUser('id'));
-                $user->update([
-                    'allcomments' => DB::connection()->raw('allcomments + 1'),
-                    'point'       => DB::connection()->raw('point + 1'),
-                    'money'       => DB::connection()->raw('money + 5'),
-                ]);
+                $user = getUser();
+                $user->increment('allcomments');
+                $user->increment('point');
+                $user->increment('money', 5);
 
                 $photo->increment('count_comments');
 
@@ -431,7 +427,7 @@ class PhotoController extends BaseController
      */
     public function album(string $login): string
     {
-        $user = User::query()->where('login', $login)->first();
+        $user = getUserByLogin($login);
 
         if (! $user) {
             abort(404, trans('validator.user'));
@@ -514,7 +510,7 @@ class PhotoController extends BaseController
      */
     public function UserComments($login): string
     {
-        $user = User::query()->where('login', $login)->first();
+        $user = getUserByLogin($login);
 
         if (! $user) {
             abort(404, trans('validator.user'));

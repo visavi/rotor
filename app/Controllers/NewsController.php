@@ -8,8 +8,7 @@ use App\Classes\Validator;
 use App\Models\Comment;
 use App\Models\Flood;
 use App\Models\News;
-use App\Models\User;
-use Illuminate\Database\Capsule\Manager as DB;
+
 use Illuminate\Http\Request;
 
 class NewsController extends BaseController
@@ -103,12 +102,10 @@ class NewsController extends BaseController
                     'brow'        => getBrowser(),
                 ]);
 
-                $user = User::query()->where('id', getUser('id'));
-                $user->update([
-                    'allcomments' => DB::connection()->raw('allcomments + 1'),
-                    'point'       => DB::connection()->raw('point + 1'),
-                    'money'       => DB::connection()->raw('money + 5'),
-                ]);
+                $user = getUser();
+                $user->increment('allcomments');
+                $user->increment('point');
+                $user->increment('money', 5);
 
                 $news->increment('count_comments');
 
@@ -221,7 +218,7 @@ class NewsController extends BaseController
         /** @var News $news */
         $news = News::query()->find($id);
 
-        if (empty($news)) {
+        if (! $news) {
             abort(404, 'Ошибка! Данной новости не существует!');
         }
 

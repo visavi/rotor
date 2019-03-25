@@ -40,7 +40,7 @@ class IgnoreController extends BaseController
 
             $validator->equal($token, $_SESSION['token'], trans('validator.token'));
 
-            $user = User::query()->where('login', $login)->first();
+            $user = getUserByLogin($login);
             $validator->notEmpty($user, ['user' => 'Данного пользователя не существует!']);
 
             if ($user) {

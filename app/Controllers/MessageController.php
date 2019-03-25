@@ -77,7 +77,7 @@ class MessageController extends BaseController
     public function talk(?string $login = null): string
     {
         if ($login) {
-            $user = User::query()->where('login', $login)->first();
+            $user = getUserByLogin($login);
 
             if (! $user) {
                 abort(404, trans('validator.user'));
@@ -132,7 +132,7 @@ class MessageController extends BaseController
         $token = check($request->input('token'));
         $msg   = check($request->input('msg'));
 
-        $user = User::query()->where('login', $login)->first();
+        $user = getUserByLogin($login);
 
         if (! $user) {
             abort(404, trans('validator.user'));

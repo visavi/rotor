@@ -150,23 +150,17 @@ class PageController extends BaseController
             abort('default', 'В этом году сюрприз уже получен');
         }
 
-        $pointSum  = $user->point;
+
         $pointText = null;
 
         if ($user->point >= 50) {
-            $pointSum  = DB::connection()->raw('point + ' . $surprisePoint);
+            $user->increment('point', $surprisePoint);
             $pointText = plural($surprisePoint, setting('scorename')) . PHP_EOL;
         }
 
-
-        $user->update([
-            'point'     => $pointSum,
-            'money'     => DB::connection()->raw('money + ' . $surpriseMoney),
-            'rating'    => DB::connection()->raw('posrating - negrating + ' . $surpriseRating),
-            'posrating' => DB::connection()->raw('posrating + ' . $surpriseRating),
-        ]);
-
-
+        $user->increment('money', $surpriseMoney);
+        $user->increment('posrating', $surpriseRating);
+        $user->update(['rating' => $user->posrating - $user->negrating]);
 
         $text = 'Поздравляем с новым ' . $currentYear . ' годом!' . PHP_EOL . 'В качестве сюрприза вы получаете ' . PHP_EOL . $pointText . plural($surpriseMoney, setting('moneyname')) . PHP_EOL . $surpriseRating . ' рейтинга репутации' . PHP_EOL . 'Ура!!!';
 

@@ -15,7 +15,6 @@ use App\Models\Down;
 use App\Models\Flood;
 use App\Models\Reader;
 use App\Models\Polling;
-use Illuminate\Database\Capsule\Manager as DB;
 use Illuminate\Database\Query\JoinClause;
 use Illuminate\Http\Request;
 use PhpZip\ZipFile;
@@ -323,10 +322,8 @@ class DownController extends BaseController
                     'created_at'  => SITETIME,
                 ]);
 
-                $down->update([
-                    'rating' => DB::connection()->raw('rating + ' . $score),
-                    'rated'  => DB::connection()->raw('rated + 1'),
-                ]);
+                $down->increment('rating', $score);
+                $down->increment('rated');
             }
 
             setFlash('success', 'Оценка успешно принята!');

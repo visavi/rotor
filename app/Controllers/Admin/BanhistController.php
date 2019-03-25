@@ -49,8 +49,7 @@ class BanhistController extends AdminController
     public function view(Request $request): string
     {
         $login = check($request->input('user'));
-
-        $user = User::query()->where('login', $login)->first();
+        $user  = getUserByLogin($login);
 
         if (! $user) {
             abort(404, trans('validator.user'));

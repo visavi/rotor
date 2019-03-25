@@ -7,7 +7,6 @@ namespace App\Controllers\Load;
 use App\Controllers\BaseController;
 use App\Models\Comment;
 use App\Models\Down;
-use App\Models\User;
 use Illuminate\Http\Request;
 
 class ActiveController extends BaseController
@@ -24,7 +23,7 @@ class ActiveController extends BaseController
         parent::__construct();
 
         $login      = check($request->input('user', getUser('login')));
-        $this->user = User::query()->where('login', $login)->first();
+        $this->user = getUserByLogin($login);
 
         if (! $this->user) {
             abort(404, trans('validator.user'));

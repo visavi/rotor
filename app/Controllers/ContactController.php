@@ -6,7 +6,6 @@ namespace App\Controllers;
 
 use App\Classes\Validator;
 use App\Models\Contact;
-use App\Models\User;
 use Illuminate\Http\Request;
 
 class ContactController extends BaseController
@@ -40,7 +39,7 @@ class ContactController extends BaseController
 
             $validator->equal($token, $_SESSION['token'], trans('validator.token'));
 
-            $user = User::query()->where('login', $login)->first();
+            $user = getUserByLogin($login);
             $validator->notEmpty($user, ['user' => 'Данного пользователя не существует!']);
 
             if ($user) {

@@ -139,11 +139,9 @@ class ForumController extends BaseController
                 $title = antimat($title);
                 $msg   = antimat($msg);
 
-                $user->update([
-                    'allforum' => DB::connection()->raw('allforum + 1'),
-                    'point'    => DB::connection()->raw('point + 1'),
-                    'money'    => DB::connection()->raw('money + 5'),
-                ]);
+                $user->increment('allforum');
+                $user->increment('point');
+                $user->increment('money', 5);
 
                 /** @var Topic $topic */
                 $topic = Topic::query()->create([

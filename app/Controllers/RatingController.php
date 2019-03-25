@@ -7,7 +7,6 @@ namespace App\Controllers;
 use App\Classes\Validator;
 use App\Models\Rating;
 use App\Models\User;
-use Illuminate\Database\Capsule\Manager as DB;
 use Illuminate\Http\Request;
 
 class RatingController extends BaseController
@@ -35,7 +34,7 @@ class RatingController extends BaseController
     public function index(string $login, Request $request, Validator $validator): string
     {
         $vote = $request->input('vote');
-        $user = User::query()->where('login', $login)->first();
+        $user = getUserByLogin($login);
 
         if (! $user) {
             abort(404, 'Данного пользователя не существует!');
@@ -87,19 +86,14 @@ class RatingController extends BaseController
                 if ($vote === 'plus') {
                     $text = 'Пользователь @' . getUser('login') . ' поставил вам плюс! (Ваш рейтинг: ' . ($user['rating'] + 1) . ')' . PHP_EOL . 'Комментарий: ' . $text;
 
-                    $user->update([
-                        'rating'    => DB::connection()->raw('posrating - negrating + 1'),
-                        'posrating' => DB::connection()->raw('posrating + 1'),
-                    ]);
-
+                    $user->increment('posrating');
+                    $user->update(['rating' => $user->posrating - $user->negrating]);
                 } else {
 
                     $text = 'Пользователь @' . getUser('login') . ' поставил вам минус! (Ваш рейтинг: ' . ($user['rating'] - 1) . ')' . PHP_EOL . 'Комментарий: ' . $text;
 
-                    $user->update([
-                        'rating'    => DB::connection()->raw('posrating - negrating - 1'),
-                        'negrating' => DB::connection()->raw('negrating + 1'),
-                    ]);
+                    $user->increment('negrating');
+                    $user->update(['rating' => $user->posrating - $user->negrating]);
                 }
 
                 $user->sendMessage(null, $text);
@@ -123,7 +117,7 @@ class RatingController extends BaseController
      */
     public function received(string $login): string
     {
-        $user = User::query()->where('login', $login)->first();
+        $user = getUserByLogin($login);
 
         if (! $user) {
             abort(404, 'Данного пользователя не существует!');
@@ -151,7 +145,7 @@ class RatingController extends BaseController
      */
     public function gave(string $login): string
     {
-        $user = User::query()->where('login', $login)->first();
+        $user = getUserByLogin($login);
 
         if (! $user) {
             abort(404, 'Данного пользователя не существует!');

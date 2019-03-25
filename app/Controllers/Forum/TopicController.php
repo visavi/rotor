@@ -181,11 +181,9 @@ class TopicController extends BaseController
                     'brow'       => getBrowser(),
                 ]);
 
-                $user->update([
-                    'allforum' => DB::connection()->raw('allforum + 1'),
-                    'point'    => DB::connection()->raw('point + 1'),
-                    'money'    => DB::connection()->raw('money + 5'),
-                ]);
+                $user->increment('allforum');
+                $user->increment('point');
+                $user->increment('money', 5);
 
                 $topic->update([
                     'count_posts'  => DB::connection()->raw('count_posts + 1'),

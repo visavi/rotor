@@ -7,7 +7,6 @@ namespace App\Controllers;
 use App\Classes\Validator;
 use App\Models\Flood;
 use App\Models\Guestbook;
-use Illuminate\Database\Capsule\Manager as DB;
 use Illuminate\Http\Request;
 
 class GuestbookController extends BaseController
@@ -63,11 +62,9 @@ class GuestbookController extends BaseController
             if (getUser()) {
                 $bookscores = setting('bookscores') ? 1 : 0;
 
-                getUser()->update([
-                    'allguest' => DB::connection()->raw('allguest + 1'),
-                    'point'    => DB::connection()->raw('point + ' . $bookscores),
-                    'money'    => DB::connection()->raw('money + 5'),
-                ]);
+                getUser()->increment('allguest');
+                getUser()->increment('point', $bookscores);
+                getUser()->increment('money', 5);
             }
 
             $username = getUser() ? getUser('id') : 0;

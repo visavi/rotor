@@ -8,7 +8,6 @@ use App\Models\Login;
 use App\Models\User;
 use DI\Container;
 use FastRoute\Dispatcher;
-use Illuminate\Database\Capsule\Manager as DB;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use Mobile_Detect;
@@ -90,7 +89,7 @@ class Application
             $cookLogin = check($_COOKIE['login']);
             $cookPass  = check($_COOKIE['password']);
 
-            $user = User::query()->where('login', $cookLogin)->first();
+            $user = getUserByLogin($cookLogin);
 
             if ($user && $cookLogin === $user->login && $cookPass === md5($user->password . env('APP_KEY'))) {
                 session_regenerate_id(true);
@@ -113,10 +112,8 @@ class Application
                     ]);
                 }
 
-                $user->update([
-                    'visits'     => DB::connection()->raw('visits + 1'),
-                    'updated_at' => SITETIME
-                ]);
+                $user->increment('visits');
+                $user->update(['updated_at' => SITETIME]);
             }
         }
     }
@@ -151,10 +148,9 @@ class Application
 
             // Получение ежедневного бонуса
             if ($user->timebonus < SITETIME - 82800) {
-                $user->update([
-                    'timebonus' => SITETIME,
-                    'money'     => DB::connection()->raw('money + ' . setting('bonusmoney')),
-                ]);
+
+                $user->increment('money', setting('bonusmoney'));
+                $user->update(['timebonus' => SITETIME]);
 
                 setFlash('success', 'Получен ежедневный бонус ' . plural(setting('bonusmoney'), setting('moneyname')) . '!');
             }
