@@ -35,9 +35,9 @@ class Flood extends BaseModel
      */
     public function getPeriod(): int
     {
-       /* if (isAdmin()) {
+        if (isAdmin()) {
             return 0;
-        }*/
+        }
 
         $userPoint = getUser('point');
         $period    = setting('floodstime');
