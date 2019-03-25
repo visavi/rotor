@@ -43,15 +43,15 @@ class Flood extends BaseModel
         $period    = setting('floodstime');
 
         if ($userPoint >= 100) {
-            $period = round($period / 2);
+            $period = round(setting('floodstime') / 2);
         }
 
         if ($userPoint >= 300) {
-            $period = round($period / 3);
+            $period = round(setting('floodstime') / 3);
         }
 
         if ($userPoint >= 500) {
-            $period = round($period / 6);
+            $period = round(setting('floodstime') / 6);
         }
 
         return (int) $period;
