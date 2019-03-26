@@ -18,7 +18,7 @@ class PhotoController extends AdminController
     {
         parent::__construct();
 
-        if (!isAdmin(User::EDITOR)) {
+        if (! isAdmin()) {
             abort(403, 'Доступ запрещен!');
         }
     }

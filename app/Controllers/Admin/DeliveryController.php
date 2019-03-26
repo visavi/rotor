@@ -64,7 +64,7 @@ class DeliveryController extends AdminController
             }
 
             /** @var Collection $users */
-            $users = $users->filter(function ($value, $key) {
+            $users = $users->filter(static function ($value, $key) {
                 return $value->id !== getUser('id');
             });
 

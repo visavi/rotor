@@ -231,6 +231,7 @@ class AjaxController extends BaseController
             return json_encode(['status' => 'error', 'message' => 'Type invalid']);
         }
 
+        /** @var Post $post */
         $post = $type::query()
             ->where('user_id', '<>', getUser('id'))
             ->where('id', $id)

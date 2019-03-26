@@ -389,7 +389,7 @@ class ForumController extends BaseController
         /** @var Topic $topic */
         $topic = Topic::query()->find($id);
 
-        if (empty($topic)) {
+        if (! $topic) {
             abort(404, 'Данной темы не существует!');
         }
 

@@ -441,11 +441,11 @@ class ForumController extends AdminController
         if ($validator->isValid()) {
 
             // Удаление загруженных файлов
-            $filtered = $topic->posts->load('files')->filter(function ($post) {
+            $filtered = $topic->posts->load('files')->filter(static function ($post) {
                 return $post->files->isNotEmpty();
             });
 
-            $filtered->each(function(Post $post) {
+            $filtered->each(static function(Post $post) {
                 $post->delete();
             });
 
@@ -626,7 +626,7 @@ class ForumController extends AdminController
                 ->whereIn('id', $del)
                 ->get();
 
-            $posts->each(function(Post $post) {
+            $posts->each(static function(Post $post) {
                 $post->delete();
             });
 

@@ -269,8 +269,7 @@ class BBCode
 
                 $stickers = array_column($stickers, 'name', 'code');
 
-                $stickers = array_map(
-                    function($sticker) {
+                $stickers = array_map(static function($sticker) {
                         return '<img src="' . $sticker . '" alt="' . basename($sticker) . '">';
                     }, $stickers
                 );
