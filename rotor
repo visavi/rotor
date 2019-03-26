@@ -22,7 +22,7 @@ $app->addCommands([
 ]);
 
 $dispatcher = new EventDispatcher();
-$dispatcher->addListener(ConsoleEvents::COMMAND, function (ConsoleCommandEvent $event) {
+$dispatcher->addListener(ConsoleEvents::COMMAND, static function (ConsoleCommandEvent $event) {
     $command = $event->getCommand();
 
     if ($command instanceof AbstractCommand) {

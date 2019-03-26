@@ -17,13 +17,13 @@ return FastRoute\cachedDispatcher(function(RouteCollector $r) {
     $r->get('/sitemap/{page:[a-z]+}.xml', [App\Controllers\SitemapController::class, 'page']);
 
     /* Категории объявления */
-    $r->addGroup('/boards', function (RouteCollector $r) {
+    $r->addGroup('/boards', static function (RouteCollector $r) {
         $r->get('[/{id:\d+}]', [App\Controllers\BoardController::class, 'index']);
         $r->get('/active', [App\Controllers\BoardController::class, 'active']);
     });
 
     /* Объявления */
-    $r->addGroup('/items', function (RouteCollector $r) {
+    $r->addGroup('/items', static function (RouteCollector $r) {
         $r->get('/{id:\d+}', [App\Controllers\BoardController::class, 'view']);
         $r->get('/close/{id:\d+}', [App\Controllers\BoardController::class, 'close']);
         $r->get('/delete/{id:\d+}', [App\Controllers\BoardController::class, 'delete']);
@@ -32,14 +32,14 @@ return FastRoute\cachedDispatcher(function(RouteCollector $r) {
     });
 
     /* Гостевая книга */
-    $r->addGroup('/guestbooks', function (RouteCollector $r) {
+    $r->addGroup('/guestbooks', static function (RouteCollector $r) {
         $r->get('', [App\Controllers\GuestbookController::class, 'index']);
         $r->post('/add', [App\Controllers\GuestbookController::class, 'add']);
         $r->addRoute(['GET', 'POST'], '/edit/{id:\d+}', [App\Controllers\GuestbookController::class, 'edit']);
     });
 
     /* Категория блогов */
-    $r->addGroup('/blogs', function (RouteCollector $r) {
+    $r->addGroup('/blogs', static function (RouteCollector $r) {
         $r->get('', [App\Controllers\BlogController::class, 'index']);
         $r->get('/{id:\d+}', [App\Controllers\BlogController::class, 'blog']);
         $r->get('/tags', [App\Controllers\BlogController::class, 'tags']);
@@ -54,7 +54,7 @@ return FastRoute\cachedDispatcher(function(RouteCollector $r) {
     });
 
     /* Статьи блогов */
-    $r->addGroup('/articles', function (RouteCollector $r) {
+    $r->addGroup('/articles', static function (RouteCollector $r) {
         $r->get('', [App\Controllers\BlogController::class, 'newArticles']);
         $r->get('/{id:\d+}', [App\Controllers\BlogController::class, 'view']);
         $r->get('/print/{id:\d+}', [App\Controllers\BlogController::class, 'print']);
@@ -68,7 +68,7 @@ return FastRoute\cachedDispatcher(function(RouteCollector $r) {
     });
 
     /* Новости */
-    $r->addGroup('/news', function (RouteCollector $r) {
+    $r->addGroup('/news', static function (RouteCollector $r) {
         $r->get('', [App\Controllers\NewsController::class, 'index']);
         $r->get('/{id:\d+}', [App\Controllers\NewsController::class, 'view']);
         $r->get('/end/{id:\d+}', [App\Controllers\NewsController::class, 'end']);
@@ -80,7 +80,7 @@ return FastRoute\cachedDispatcher(function(RouteCollector $r) {
     });
 
     /* Фотогалерея */
-    $r->addGroup('/photos', function (RouteCollector $r) {
+    $r->addGroup('/photos', static function (RouteCollector $r) {
         $r->get('', [App\Controllers\PhotoController::class, 'index']);
         $r->get('/{id:\d+}', [App\Controllers\PhotoController::class, 'view']);
         $r->get('/delete/{id:\d+}', [App\Controllers\PhotoController::class, 'delete']);
@@ -98,7 +98,7 @@ return FastRoute\cachedDispatcher(function(RouteCollector $r) {
     });
 
     /* Категория форума */
-    $r->addGroup('/forums', function (RouteCollector $r) {
+    $r->addGroup('/forums', static function (RouteCollector $r) {
         $r->get('', [App\Controllers\Forum\ForumController::class, 'index']);
         $r->get('/{id:\d+}', [App\Controllers\Forum\ForumController::class, 'forum']);
         $r->get('/search', [App\Controllers\Forum\ForumController::class, 'search']);
@@ -113,7 +113,7 @@ return FastRoute\cachedDispatcher(function(RouteCollector $r) {
     });
 
     /* Темы форума */
-    $r->addGroup('/topics', function (RouteCollector $r) {
+    $r->addGroup('/topics', static function (RouteCollector $r) {
         $r->get('', [App\Controllers\Forum\NewController::class, 'topics']);
         $r->get('/{id:\d+}', [App\Controllers\Forum\TopicController::class, 'index']);
         $r->get('/{id:\d+}/{pid:\d+}', [App\Controllers\Forum\TopicController::class, 'viewpost']);
@@ -128,13 +128,13 @@ return FastRoute\cachedDispatcher(function(RouteCollector $r) {
     });
 
     /* Посты форума */
-    $r->addGroup('/posts', function (RouteCollector $r) {
+    $r->addGroup('/posts', static function (RouteCollector $r) {
         $r->get('', [App\Controllers\Forum\NewController::class, 'posts']);
         $r->addRoute(['GET', 'POST'], '/edit/{id:\d+}', [App\Controllers\Forum\TopicController::class, 'editPost']);
     });
 
     /* Категории загрузок */
-    $r->addGroup('/loads', function (RouteCollector $r) {
+    $r->addGroup('/loads', static function (RouteCollector $r) {
         $r->get('', [App\Controllers\Load\LoadController::class, 'index']);
         $r->get('/rss', [App\Controllers\Load\LoadController::class, 'rss']);
         $r->get('/{id:\d+}', [App\Controllers\Load\LoadController::class, 'load']);
@@ -143,7 +143,7 @@ return FastRoute\cachedDispatcher(function(RouteCollector $r) {
     });
 
     /* Загрузки */
-    $r->addGroup('/downs', function (RouteCollector $r) {
+    $r->addGroup('/downs', static function (RouteCollector $r) {
         $r->get('', [App\Controllers\Load\NewController::class, 'files']);
         $r->get('/{id:\d+}', [App\Controllers\Load\DownController::class, 'index']);
         $r->get('/delete/{id:\d+}/{fid:\d+}', [App\Controllers\Load\DownController::class, 'deleteFile']);
@@ -164,7 +164,7 @@ return FastRoute\cachedDispatcher(function(RouteCollector $r) {
     });
 
     /* Предложения и проблемы */
-    $r->addGroup('/offers', function (RouteCollector $r) {
+    $r->addGroup('/offers', static function (RouteCollector $r) {
         $r->get('[/{type:offer|issue}]', [App\Controllers\OfferController::class, 'index']);
         $r->get('/{id:\d+}', [App\Controllers\OfferController::class, 'view']);
         $r->get('/end/{id:\d+}', [App\Controllers\OfferController::class, 'end']);
@@ -176,7 +176,7 @@ return FastRoute\cachedDispatcher(function(RouteCollector $r) {
     });
 
     /* Ajax */
-    $r->addGroup('/ajax', function (RouteCollector $r) {
+    $r->addGroup('/ajax', static function (RouteCollector $r) {
         $r->post('/bbcode', [App\Controllers\AjaxController::class, 'bbCode']);
         $r->post('/delcomment', [App\Controllers\AjaxController::class, 'delComment']);
         $r->post('/rating', [App\Controllers\AjaxController::class, 'rating']);
@@ -187,7 +187,7 @@ return FastRoute\cachedDispatcher(function(RouteCollector $r) {
     });
 
     /* Голосования */
-    $r->addGroup('/votes', function (RouteCollector $r) {
+    $r->addGroup('/votes', static function (RouteCollector $r) {
         $r->get('', [App\Controllers\VoteController::class, 'index']);
         $r->get('/voters/{id:\d+}', [App\Controllers\VoteController::class, 'voters']);
         $r->get('/history', [App\Controllers\VoteController::class, 'history']);
@@ -197,7 +197,7 @@ return FastRoute\cachedDispatcher(function(RouteCollector $r) {
     });
 
     /* Мои данные */
-    $r->addGroup('/accounts', function (RouteCollector $r) {
+    $r->addGroup('/accounts', static function (RouteCollector $r) {
         $r->get('', [App\Controllers\User\UserController::class, 'account']);
         $r->get('/editmail', [App\Controllers\User\UserController::class, 'editMail']);
         $r->post('/changemail', [App\Controllers\User\UserController::class, 'changeMail']);
@@ -207,33 +207,33 @@ return FastRoute\cachedDispatcher(function(RouteCollector $r) {
     });
 
     /* Фото профиля */
-    $r->addGroup('/pictures', function (RouteCollector $r) {
+    $r->addGroup('/pictures', static function (RouteCollector $r) {
         $r->addRoute(['GET', 'POST'], '', [App\Controllers\PictureController::class, 'index']);
         $r->get('/delete', [App\Controllers\PictureController::class, 'delete']);
     });
 
     /* Социальные сети */
-    $r->addGroup('/socials', function (RouteCollector $r) {
+    $r->addGroup('/socials', static function (RouteCollector $r) {
         $r->addRoute(['GET', 'POST'], '', [App\Controllers\SocialController::class, 'index']);
         $r->get('/delete/{id:\d+}', [App\Controllers\SocialController::class, 'delete']);
     });
 
     /* Поиск пользователя */
-    $r->addGroup('/searchusers', function (RouteCollector $r) {
+    $r->addGroup('/searchusers', static function (RouteCollector $r) {
         $r->get('', [App\Controllers\User\SearchController::class, 'index']);
         $r->get('/{letter:[0-9a-z]}', [App\Controllers\User\SearchController::class, 'sort']);
         $r->addRoute(['GET', 'POST'], '/search', [App\Controllers\User\SearchController::class, 'search']);
     });
 
     /* Стена сообщений */
-    $r->addGroup('/walls', function (RouteCollector $r) {
+    $r->addGroup('/walls', static function (RouteCollector $r) {
         $r->get('/{login:[\w\-]+}', [App\Controllers\WallController::class, 'index']);
         $r->post('/{login:[\w\-]+}/create', [App\Controllers\WallController::class, 'create']);
         $r->post('/{login:[\w\-]+}/delete', [App\Controllers\WallController::class, 'delete']);
     });
 
     /* Личные сообщения */
-    $r->addGroup('/messages', function (RouteCollector $r) {
+    $r->addGroup('/messages', static function (RouteCollector $r) {
         $r->get('', [App\Controllers\MessageController::class, 'index']);
         $r->get('/talk[/{login:[\w\-]+}]', [App\Controllers\MessageController::class, 'talk']);
         $r->get('/delete/{uid:\d+}', [App\Controllers\MessageController::class, 'delete']);
@@ -241,45 +241,45 @@ return FastRoute\cachedDispatcher(function(RouteCollector $r) {
     });
 
     /* Игнор-лист */
-    $r->addGroup('/ignores', function (RouteCollector $r) {
+    $r->addGroup('/ignores', static function (RouteCollector $r) {
         $r->post('/delete', [App\Controllers\IgnoreController::class, 'delete']);
         $r->addRoute(['GET', 'POST'], '', [App\Controllers\IgnoreController::class, 'index']);
         $r->addRoute(['GET', 'POST'], '/note/{id:\d+}', [App\Controllers\IgnoreController::class, 'note']);
     });
 
     /* Контакт-лист */
-    $r->addGroup('/contacts', function (RouteCollector $r) {
+    $r->addGroup('/contacts', static function (RouteCollector $r) {
         $r->post('/delete', [App\Controllers\ContactController::class, 'delete']);
         $r->addRoute(['GET', 'POST'], '', [App\Controllers\ContactController::class, 'index']);
         $r->addRoute(['GET', 'POST'], '/note/{id:\d+}', [App\Controllers\ContactController::class, 'note']);
     });
 
     /* Перевод денег */
-    $r->addGroup('/transfers', function (RouteCollector $r) {
+    $r->addGroup('/transfers', static function (RouteCollector $r) {
         $r->get('', [App\Controllers\TransferController::class, 'index']);
         $r->post('/send', [App\Controllers\TransferController::class, 'send']);
     });
 
     /* Личные заметки */
-    $r->addGroup('/notebooks', function (RouteCollector $r) {
+    $r->addGroup('/notebooks', static function (RouteCollector $r) {
         $r->get('', [App\Controllers\NotebookController::class, 'index']);
         $r->addRoute(['GET', 'POST'], '/edit', [App\Controllers\NotebookController::class, 'edit']);
     });
 
     /* Реклама */
-    $r->addGroup('/reklama', function (RouteCollector $r) {
+    $r->addGroup('/reklama', static function (RouteCollector $r) {
         $r->get('', [App\Controllers\RekUserController::class, 'index']);
         $r->addRoute(['GET', 'POST'], '/create', [App\Controllers\RekUserController::class, 'create']);
     });
 
     /* Репутация пользователя */
-    $r->addGroup('/ratings', function (RouteCollector $r) {
+    $r->addGroup('/ratings', static function (RouteCollector $r) {
         $r->get('/{login:[\w\-]+}[/{action:received|gave}]', [App\Controllers\RatingController::class, 'received']);
         $r->post('/delete', [App\Controllers\RatingController::class, 'delete']);
     });
 
     /* API */
-    $r->addGroup('/api', function (RouteCollector $r) {
+    $r->addGroup('/api', static function (RouteCollector $r) {
         $r->get('', [App\Controllers\ApiController::class, 'index']);
         $r->get('/users', [App\Controllers\ApiController::class, 'users']);
         $r->get('/forums', [App\Controllers\ApiController::class, 'forums']);
@@ -328,7 +328,7 @@ return FastRoute\cachedDispatcher(function(RouteCollector $r) {
     $r->get('/files[/{page:.+}]', [App\Controllers\FileController::class, 'index']);
 
     /* Админ-панель */
-    $r->addGroup('/admin', function (RouteCollector $r) {
+    $r->addGroup('/admin', static function (RouteCollector $r) {
         $r->get('/loads', [App\Controllers\Admin\LoadController::class, 'index']);
         $r->post('/loads/create', [App\Controllers\Admin\LoadController::class, 'create']);
         $r->addRoute(['GET', 'POST'], '/loads/edit/{id:\d+}', [App\Controllers\Admin\LoadController::class, 'edit']);

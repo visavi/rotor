@@ -63,7 +63,7 @@ class SitemapController extends BaseController
     {
         $blogs = Blog::query()
             ->selectRaw('blogs.*, max(c.created_at) as last_time')
-            ->leftJoin('comments as c', function (JoinClause $join) {
+            ->leftJoin('comments as c', static function (JoinClause $join) {
                 $join->on('blogs.id', 'c.relate_id')
                     ->where('relate_type', Blog::class);
             })
@@ -99,7 +99,7 @@ class SitemapController extends BaseController
     {
         $newses = News::query()
             ->selectRaw('news.*, max(c.created_at) as last_time')
-            ->leftJoin('comments as c', function (JoinClause $join) {
+            ->leftJoin('comments as c', static function (JoinClause $join) {
                 $join->on('news.id', 'c.relate_id')
                     ->where('relate_type', News::class);
             })
@@ -160,7 +160,7 @@ class SitemapController extends BaseController
     {
         $downs = Down::query()
             ->selectRaw('downs.*, max(c.created_at) as last_time')
-            ->leftJoin('comments as c', function (JoinClause $join) {
+            ->leftJoin('comments as c', static function (JoinClause $join) {
                 $join->on('downs.id', 'c.relate_id')
                     ->where('relate_type', Down::class);
             })

@@ -45,7 +45,7 @@ class PhotoController extends BaseController
         $photo = Photo::query()
             ->select('photos.*', 'pollings.vote')
             ->where('photos.id', $id)
-            ->leftJoin('pollings', function (JoinClause $join) {
+            ->leftJoin('pollings', static function (JoinClause $join) {
                 $join->on('photos.id', 'pollings.relate_id')
                     ->where('pollings.relate_type', Photo::class)
                     ->where('pollings.user_id', getUser('id'));

@@ -67,7 +67,7 @@ class OfferController extends BaseController
         $offer = Offer::query()
             ->select('offers.*', 'pollings.vote')
             ->where('offers.id', $id)
-            ->leftJoin('pollings', function (JoinClause $join) {
+            ->leftJoin('pollings', static function (JoinClause $join) {
                 $join->on('offers.id', 'pollings.relate_id')
                     ->where('pollings.relate_type', Offer::class)
                     ->where('pollings.user_id', getUser('id'));

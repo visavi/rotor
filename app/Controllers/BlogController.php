@@ -76,7 +76,7 @@ class BlogController extends BaseController
         $blog = Blog::query()
             ->select('blogs.*', 'pollings.vote')
             ->where('blogs.id', $id)
-            ->leftJoin('pollings', function (JoinClause $join) {
+            ->leftJoin('pollings', static function (JoinClause $join) {
                 $join->on('blogs.id', 'pollings.relate_id')
                     ->where('pollings.relate_type', Blog::class)
                     ->where('pollings.user_id', getUser('id'));

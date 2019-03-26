@@ -440,7 +440,7 @@ class ForumController extends BaseController
         $period = int($request->input('period'));
 
         $total = Post::query()
-            ->when($period, function (Builder $query) use ($period) {
+            ->when($period, static function (Builder $query) use ($period) {
                 return $query->where('created_at', '>', strtotime('-' . $period . ' day', SITETIME));
             })
             ->count();
@@ -452,7 +452,7 @@ class ForumController extends BaseController
         $page = paginate(setting('forumpost'), $total);
 
         $posts = Post::query()
-            ->when($period, function (Builder $query) use ($period) {
+            ->when($period, static function (Builder $query) use ($period) {
                 return $query->where('created_at', '>', strtotime('-' . $period . ' day', SITETIME));
             })
             ->orderBy('rating', 'desc')

@@ -46,7 +46,7 @@ class MessageController extends BaseController
             ->groupBy('author_id');
 
         $messages = Message::query()
-            ->joinSub($latestMessage, 'latest_message', function (JoinClause $join) {
+            ->joinSub($latestMessage, 'latest_message', static function (JoinClause $join) {
                 $join->on('messages.created_at', 'latest_message.last_created_at')
                 ->whereRaw('messages.author_id = latest_message.author_id');
             })

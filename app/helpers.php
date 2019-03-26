@@ -1376,7 +1376,7 @@ function resizeProcess($path, array $params = [])
     if (! file_exists(UPLOADS . '/thumbnails/' . $thumb)) {
 
         $img = Image::make(HOME . $path);
-        $img->resize($params['width'], $params['width'], function (Constraint $constraint) {
+        $img->resize($params['width'], $params['width'], static function (Constraint $constraint) {
             $constraint->aspectRatio();
             $constraint->upsize();
         });

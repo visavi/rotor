@@ -34,7 +34,7 @@ trait UploadTrait
             if ($img->getWidth() <= 100 && $img->getHeight() <= 100) {
                 $file->move($this->uploadPath, $filename);
             } else {
-                $img->resize(setting('screensize'), setting('screensize'), function (Constraint $constraint) {
+                $img->resize(setting('screensize'), setting('screensize'), static function (Constraint $constraint) {
                     $constraint->aspectRatio();
                     $constraint->upsize();
                 });

@@ -487,7 +487,7 @@ class User extends BaseModel
 
             $users = self::query()
                 ->select('users.id', 'users.status', 'status.name', 'status.color')
-                ->leftJoin('status', function (JoinClause $join) {
+                ->leftJoin('status', static function (JoinClause $join) {
                     $join->whereRaw('users.point between status.topoint and status.point');
                 })
                 ->where('users.point', '>', 0)

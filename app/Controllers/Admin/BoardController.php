@@ -34,7 +34,7 @@ class BoardController extends AdminController
         }
 
         $total = Item::query()
-            ->when($board, function (Builder $query) use ($board) {
+            ->when($board, static function (Builder $query) use ($board) {
                 return $query->where('board_id', $board->id);
             })
             ->where('expires_at', '>', SITETIME)
@@ -43,7 +43,7 @@ class BoardController extends AdminController
         $page = paginate(10, $total);
 
         $items = Item::query()
-            ->when($board, function (Builder $query) use ($board) {
+            ->when($board, static function (Builder $query) use ($board) {
                 return $query->where('board_id', $board->id);
             })
             ->where('expires_at', '>', SITETIME)
