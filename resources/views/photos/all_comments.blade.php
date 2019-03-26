@@ -44,6 +44,6 @@
         {!! pagination($page) !!}
 
     @else
-        {!! showError('Комментариев еще нет!') !!}
+        {!! showError(trans('main.empty_comments')') !!}
     @endif
 @stop

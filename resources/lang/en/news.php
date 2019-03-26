@@ -2,9 +2,7 @@
 
 return [
     'site_news'            => 'Site news',
-    'added_by'             => 'Added by',
     'empty_news'           => 'No news yet!',
-    'last_comments'        => 'Last comments',
     'confirm_delete'       => 'Do you really want to delete this news?',
     'all_comments'         => 'All comments',
     'closed_news'          => 'Commenting on this news is closed!',

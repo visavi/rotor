@@ -25,7 +25,7 @@
         @foreach ($socials as $social)
             <div class="post">
                 <div class="b">
-                    <i class="fas fa-chevron-circle-right"></i> <b>{{ $social->network }}</b> ({{ trans('socials.added') }}: {{ dateFixed($social->created_at) }})
+                    <i class="fas fa-chevron-circle-right"></i> <b>{{ $social->network }}</b> ({{ trans('main.added') }}: {{ dateFixed($social->created_at) }})
 
                     <div class="float-right">
                         <a href="/socials/delete/{{ $social->id }}?token={{ $_SESSION['token'] }}" onclick="return confirm('{{ trans('socials.text_confirm') }}')"><i class="fas fa-times"></i></a>

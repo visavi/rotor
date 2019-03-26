@@ -64,7 +64,7 @@
     @if (empty($photo->closed))
 
         @if (empty($page->total))
-            {!! showError('Комментариев еще нет!') !!}
+            {!! showError(trans('main.empty_comments')) !!}
         @endif
 
         @if (getUser())
@@ -87,7 +87,7 @@
             <a href="/stickers">Стикеры</a> /
             <a href="/tags">Теги</a><br><br>
         @else
-            {!! showError('Для добавления сообщения необходимо авторизоваться') !!}
+            {!! showError(trans('main.not_authorized')) !!}
         @endif
     @else
         {!! showError('Комментирование данной фотографии закрыто!') !!}

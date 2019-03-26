@@ -9,7 +9,7 @@
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
             <li class="breadcrumb-item"><a href="/admin">{{ trans('main.panel') }}</a></li>
-            <li class="breadcrumb-item"><a href="/admin/offers/{{ $offer->type }}">Предложения / Проблемы</a></li>
+            <li class="breadcrumb-item"><a href="/admin/offers/{{ $offer->type }}">{{ trans('offers.title') }}</a></li>
             <li class="breadcrumb-item"><a href="/admin/offers/{{ $offer->id }}">{{ $offer->title }}</a></li>
             <li class="breadcrumb-item active">Ответ на предложение</li>
         </ol>

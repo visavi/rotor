@@ -8,7 +8,7 @@
     <nav>
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
-            <li class="breadcrumb-item"><a href="/offers/offer">Предложения / Проблемы</a></li>
+            <li class="breadcrumb-item"><a href="/offers/offer">{{ trans('offers.title') }}</a></li>
             <li class="breadcrumb-item active">Добавление</li>
         </ol>
     </nav>

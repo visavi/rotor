@@ -53,7 +53,7 @@ class GuestbookController extends BaseController
             $validator->true(captchaVerify(), ['protect' => trans('validator.captcha')]);
             $validator->false(stripos($msg, 'http'), ['msg' => 'Текст сообщения не должен содержать ссылок!']);
         } else {
-            $validator->true(getUser(), ['msg' => 'Для добавления сообщения необходимо авторизоваться']);
+            $validator->true(getUser(), ['msg' => trans('main.not_authorized')]);
         }
 
         if ($validator->isValid()) {

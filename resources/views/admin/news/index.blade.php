@@ -53,7 +53,7 @@
 
             <div class="clearfix">{!! bbCode($data->shortText()) !!}</div>
 
-            <div>{{ trans('news.added_by') }}: {!! $data->user->getProfile() !!}<br>
+            <div>{{ trans('main.added') }}: {!! $data->user->getProfile() !!}<br>
                 <a href="/news/comments/{{  $data->id }}">{{ trans('main.comments') }}</a> ({{ $data->count_comments }})
                 <a href="/news/end/{{ $data->id }}">&raquo;</a>
             </div>

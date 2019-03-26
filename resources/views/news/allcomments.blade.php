@@ -1,7 +1,7 @@
 @extends('layout')
 
 @section('title')
-    {{ trans('news.last_comments') }}
+    {{ trans('main.last_comments') }}
 @stop
 
 @section('breadcrumb')
@@ -9,7 +9,7 @@
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
             <li class="breadcrumb-item"><a href="/news">{{ trans('news.site_news') }}</a></li>
-            <li class="breadcrumb-item active">{{ trans('news.last_comments') }}</li>
+            <li class="breadcrumb-item active">{{ trans('main.last_comments') }}</li>
         </ol>
     </nav>
 @stop

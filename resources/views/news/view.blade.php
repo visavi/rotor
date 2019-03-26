@@ -30,11 +30,11 @@
     <div>{!! bbCode($news->text) !!}</div>
 
     <div style="clear:both;">
-        {{ trans('news.added_by') }}: {!! $news->user->getProfile() !!} ({{ dateFixed($news->created_at) }})
+        {{ trans('main.added') }}: {!! $news->user->getProfile() !!} ({{ dateFixed($news->created_at) }})
     </div><br>
 
     @if ($comments->isNotEmpty())
-        <div class="b"><i class="fa fa-comment"></i> <b>{{ trans('news.last_comments') }}</b></div>
+        <div class="b"><i class="fa fa-comment"></i> <b>{{ trans('main.last_comments') }}</b></div>
 
         @foreach ($comments as $comment)
             <div class="post">

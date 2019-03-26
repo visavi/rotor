@@ -21,7 +21,7 @@
             <li class="breadcrumb-item active">Галерея</li>
 
             @if (isAdmin())
-                <li class="breadcrumb-item"><a href="/admin/photos?page={{ $page->current }}">Управление</a></li>
+                <li class="breadcrumb-item"><a href="/admin/photos?page={{ $page->current }}">{{ trans('main.management') }}</a></li>
             @endif
         </ol>
     </nav>
