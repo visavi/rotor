@@ -87,7 +87,7 @@ class MailController extends BaseController
 
                 $user->update([
                     'keypasswd'  => $resetKey,
-                    'timepasswd' => SITETIME + 3600,
+                    'timepasswd' => strtotime('+1 hour', SITETIME),
                 ]);
 
                 //Инструкция по восстановлению пароля на email

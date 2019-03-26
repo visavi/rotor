@@ -291,8 +291,8 @@ class UserController extends BaseController
 
         if ($token === $_SESSION['token']) {
             $_SESSION = [];
-            setcookie('password', '', SITETIME - 3600, '/', $domain, false, true);
-            setcookie(session_name(), '', SITETIME - 3600, '/', '');
+            setcookie('password', '', strtotime('-1 hour', SITETIME), '/', $domain, false, true);
+            setcookie(session_name(), '', strtotime('-1 hour', SITETIME), '/', '');
             session_destroy();
         } else {
             setFlash('danger', trans('validator.token'));

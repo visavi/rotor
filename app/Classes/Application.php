@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace App\Classes;
 
-use App\Models\Login;
 use App\Models\User;
 use DI\Container;
 use FastRoute\Dispatcher;
@@ -97,23 +96,7 @@ class Application
                 $_SESSION['id']       = $user->id;
                 $_SESSION['password'] = md5(env('APP_KEY') . $user->password);
 
-                $authorization = Login::query()
-                    ->where('user_id', $user->id)
-                    ->where('created_at', '>', SITETIME - 30)
-                    ->first();
-
-                if (! $authorization) {
-
-                    Login::query()->create([
-                        'user_id'    => $user->id,
-                        'ip'         => getIp(),
-                        'brow'       => getBrowser(),
-                        'created_at' => SITETIME,
-                    ]);
-                }
-
-                $user->increment('visits');
-                $user->update(['updated_at' => SITETIME]);
+                User::saveVisit($user);
             }
         }
     }
@@ -147,7 +130,7 @@ class Application
             }
 
             // Получение ежедневного бонуса
-            if ($user->timebonus < SITETIME - 82800) {
+            if ($user->timebonus < strtotime('-23 hours', SITETIME)) {
 
                 $user->increment('money', setting('bonusmoney'));
                 $user->update(['timebonus' => SITETIME]);

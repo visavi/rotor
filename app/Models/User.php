@@ -6,7 +6,6 @@ namespace App\Models;
 
 use App\Traits\UploadTrait;
 use Curl\Curl;
-use Illuminate\Database\Capsule\Manager as DB;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Query\JoinClause;
@@ -232,9 +231,9 @@ class User extends BaseModel
     {
         $domain = siteDomain(siteUrl());
 
-        if (!empty($login) && !empty($password)) {
+        if (! empty($login) && ! empty($password)) {
 
-            $user = self::query()->where('login', $login)->first();
+            $user = getUserByLogin($login);
 
             if ($user && password_verify($password, $user['password'])) {
 
@@ -256,32 +255,41 @@ class User extends BaseModel
                     ]);
                 }
 
-                $authorization = Login::query()
-                    ->where('user_id', $user->id)
-                    ->where('created_at', '>', SITETIME - 30)
-                    ->first();
-
-                if (! $authorization) {
-
-                    Login::query()->create([
-                        'user_id'    => $user->id,
-                        'ip'         => getIp(),
-                        'brow'       => getBrowser(),
-                        'created_at' => SITETIME,
-                        'type'       => 1,
-                    ]);
-                }
-
-                $user->update([
-                    'visits'     => DB::connection()->raw('visits + 1'),
-                    'updated_at' => SITETIME
-                ]);
-
-                return $user;
+                return self::saveVisit($user, 1);
             }
         }
 
         return false;
+    }
+
+    /**
+     * Сохраняет посещения
+     *
+     * @param User $user
+     * @param int  $type
+     * @return User
+     */
+    public static function saveVisit(User $user, int $type = 0): User
+    {
+        $authorization = Login::query()
+            ->where('user_id', $user->id)
+            ->where('created_at', '>', SITETIME - 60)
+            ->first();
+
+        if (! $authorization) {
+            Login::query()->create([
+                'user_id'    => $user->id,
+                'ip'         => getIp(),
+                'brow'       => getBrowser(),
+                'created_at' => SITETIME,
+                'type'       => $type,
+            ]);
+        }
+
+        $user->increment('visits');
+        $user->update(['updated_at' => SITETIME]);
+
+        return $user;
     }
 
     /**

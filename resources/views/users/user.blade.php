@@ -102,13 +102,15 @@
 
                 Последний визит: {{ dateFixed($user->updated_at) }}<br>
 
-                <a href="/ratings/{{ $user->login }}">Репутация: <b>{!! formatNum($user->rating) !!}</b> (+{{  $user->posrating }}/-{{  $user->negrating }})</a><br>
-
-                @if (getUser() && getUser('login') !== $user->login)
-                    <a href="/users/{{ $user->login }}/rating?vote=plus"><i class="fa fa-thumbs-up"></i><span style="color:#0099cc"> Плюс</span></a> /
-                    <a href="/users/{{ $user->login }}/rating?vote=minus"><span style="color:#ff0000">Минус</span> <i class="fa fa-thumbs-down"></i></a><br>
+                @if (getUser())
+                    <a href="/ratings/{{ $user->login }}">Репутация: <b>{!! formatNum($user->rating) !!}</b> (+{{  $user->posrating }}/-{{  $user->negrating }})</a><br>
+                    @if (getUser('login') !== $user->login)
+                        <a href="/users/{{ $user->login }}/rating?vote=plus"><i class="fa fa-thumbs-up"></i><span style="color:#0099cc"> Плюс</span></a> /
+                        <a href="/users/{{ $user->login }}/rating?vote=minus"><span style="color:#ff0000">Минус</span> <i class="fa fa-thumbs-down"></i></a><br>
+                    @endif
+                @else
+                    Репутация: <b>{!! formatNum($user->rating) !!}</b> (+{{  $user->posrating }}/-{{  $user->negrating }})<br>
                 @endif
-
             </div>
 
             <div class="col-md-6">
