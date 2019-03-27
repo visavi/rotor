@@ -74,7 +74,7 @@ class ModuleController extends AdminController
         }
 
         if ($module['symlinks']) {
-            $module['symlinks'] = array_map(function ($symlink) {
+            $module['symlinks'] = array_map(static function ($symlink) {
                 return str_replace(HOME, '', $symlink);
             }, $module['symlinks']);
         }

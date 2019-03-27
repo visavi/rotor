@@ -2289,7 +2289,7 @@ function saveSettings()
 {
     $settings = Setting::query()->pluck('value', 'name')->all();
 
-    $settings = array_map(function ($value) {
+    $settings = array_map(static function ($value) {
         if (is_numeric($value)) {
             return strpos($value, '.') === false ? (int) $value : (float) $value;
         }

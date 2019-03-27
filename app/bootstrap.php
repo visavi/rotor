@@ -33,7 +33,7 @@ if (env('APP_DEBUG') && class_exists(Run::class)) {
         $whoops->pushHandler(new PrettyPageHandler);
     }
 
-    $whoops->pushHandler(function() {
+    $whoops->pushHandler(static function() {
         $_SERVER = Arr::except($_SERVER, array_keys($_ENV));
         $_ENV    = [];
     });

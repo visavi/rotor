@@ -112,7 +112,7 @@ class Down extends BaseModel
      */
     public function getFiles(): Collection
     {
-        return $this->files->filter(function (File $value, $key) {
+        return $this->files->filter(static function (File $value, $key) {
             return ! $value->isImage();
         });
     }
@@ -124,7 +124,7 @@ class Down extends BaseModel
      */
     public function getImages(): Collection
     {
-        return $this->files->filter(function (File $value, $key) {
+        return $this->files->filter(static function (File $value, $key) {
             return $value->isImage();
         });
     }
@@ -229,7 +229,7 @@ class Down extends BaseModel
      */
     public function delete(): ?bool
     {
-        $this->files->each(function($file) {
+        $this->files->each(static function($file) {
 
             deleteFile(HOME . $file->hash);
             $file->delete();
