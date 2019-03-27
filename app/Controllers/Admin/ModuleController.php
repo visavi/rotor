@@ -7,10 +7,9 @@ namespace App\Controllers\Admin;
 use App\Models\Module;
 use App\Models\User;
 use Illuminate\Http\Request;
-use Phinx\Config\Config;
-use Phinx\Console\Command\Migrate;
+
 use Phinx\Console\PhinxApplication;
-use Phinx\Wrapper\TextWrapper;
+
 
 class ModuleController extends AdminController
 {
@@ -61,35 +60,34 @@ class ModuleController extends AdminController
             abort('default', 'Данный модуль не найден!');
         }
 
-        $moduleActive = Module::query()->where('name', $moduleName)->first();
+        $module = Module::query()->where('name', $moduleName)->first();
 
-        $module = include $modulePath . '/module.php';
+        $moduleConfig = include $modulePath . '/module.php';
 
         if (file_exists($modulePath . '/screenshots')) {
-            $module['screenshots'] = glob($modulePath . '/screenshots/*.{gif,png,jpg,jpeg}', GLOB_BRACE);
+            $moduleConfig['screenshots'] = glob($modulePath . '/screenshots/*.{gif,png,jpg,jpeg}', GLOB_BRACE);
         }
 
         if (file_exists($modulePath . '/migrations')) {
-            $module['migrations'] = array_map('basename', glob($modulePath . '/migrations/*.php'));
+            $moduleConfig['migrations'] = array_map('basename', glob($modulePath . '/migrations/*.php'));
         }
 
-        if ($module['symlinks']) {
-            $module['symlinks'] = array_map(static function ($symlink) {
+        if ($moduleConfig['symlinks']) {
+            $moduleConfig['symlinks'] = array_map(static function ($symlink) {
                 return str_replace(HOME, '', $symlink);
-            }, $module['symlinks']);
+            }, $moduleConfig['symlinks']);
         }
 
-        return view('admin/modules/module', compact('module', 'moduleName', 'moduleActive'));
+        return view('admin/modules/module', compact('module', 'moduleConfig', 'moduleName'));
     }
 
     /**
      * Активация модуля
      *
-     * @param Request          $request
-     * @param PhinxApplication $app
+     * @param Request $request
      * @return void
      */
-    public function install(Request $request, PhinxApplication $app): void
+    public function install(Request $request): void
     {
         $moduleName = check($request->input('module'));
         $modulePath = APP . '/Modules/' . $moduleName;
@@ -98,51 +96,25 @@ class ModuleController extends AdminController
             abort('default', 'Данный модуль не найден!');
         }
 
-        $module = include $modulePath . '/module.php';
+        /** @var Module $module */
+        $module = Module::query()->firstOrNew(['name' => $moduleName]);
 
-        // Создание ссылок
-        if (isset($module['symlinks'])) {
-            foreach ($module['symlinks'] as $key => $symlink) {
-                if (file_exists($symlink)) {
-                    unlink($symlink);
-                }
+        $moduleConfig = include $modulePath . '/module.php';
+        $module->migrate($modulePath . '/migrations');
+        $module->createSymlinks($modulePath, $moduleConfig);
+        clearCache('routes');
 
-                symlink($modulePath . '/' . $key, $symlink);
-            }
-        }
+        if ($module->exists) {
+            $result = $module->disabled ? 'Модуль успешно включен!' : 'Модуль успешно обновлен!';
 
-        // Выполнение миграций
-        if (file_exists($modulePath . '/migrations')) {
-            $app->add(new Migrate());
-
-            /** @var Migrate $command */
-            $command = $app->find('migrate');
-
-            $config = require APP . '/migration.php';
-            $config['paths']['migrations'] = $modulePath . '/migrations';
-
-            $command->setConfig(new Config($config));
-
-            $wrap = new TextWrapper($app);
-            $wrap->getMigrate();
-        }
-
-        if (file_exists(STORAGE . '/temp/routes.dat')) {
-            unlink (STORAGE . '/temp/routes.dat');
-        }
-
-        $mod = Module::query()->firstOrNew(['name' => $moduleName]);
-
-        if ($mod->exists) {
-            $mod->update([
-                'version'    => $module['version'],
+            $module->update([
+                'disabled'   => 0,
+                'version'    => $moduleConfig['version'],
                 'updated_at' => SITETIME,
             ]);
-
-            $result = 'Модуль успешно обновлен!';
         } else {
-            $mod->fill([
-                'version'    => $module['version'],
+            $module->fill([
+                'version'    => $moduleConfig['version'],
                 'updated_at' => SITETIME,
                 'created_at' => SITETIME,
             ])->save();
@@ -157,54 +129,41 @@ class ModuleController extends AdminController
     /**
      * Деактивация/Выключение модуля
      *
-     * @param Request          $request
-     * @param PhinxApplication $app
+     * @param Request $request
      * @return void
+     * @throws \Exception
      */
-    public function uninstall(Request $request, PhinxApplication $app): void
+    public function uninstall(Request $request): void
     {
         $moduleName = check($request->input('module'));
+        $disable    = int($request->input('disable'));
         $modulePath = APP . '/Modules/' . $moduleName;
 
         if (! preg_match('|^[A-Z][\w\-]+$|', $moduleName) || ! file_exists($modulePath)) {
             abort('default', 'Данный модуль не найден!');
         }
 
-        $module = include $modulePath . '/module.php';
-
-        // Удаление ссылок
-        if (isset($module['symlinks'])) {
-            foreach ($module['symlinks'] as $key => $symlink) {
-                if (file_exists($symlink)) {
-                    unlink($symlink);
-                }
-            }
+        /** @var Module $module */
+        $module = Module::query()->where('name', $moduleName)->first();
+        if (! $module) {
+            abort('default', 'Данный модуль не найден!');
         }
 
-        // Откат миграций
-        if (file_exists($modulePath . '/migrations')) {
+        $moduleConfig = include $modulePath . '/module.php';
 
-            $app->add(new Migrate());
+        $module->rollback($modulePath . '/migrations');
+        $module->deleteSymlinks($moduleConfig);
+        clearCache('routes');
 
-            /** @var Migrate $command */
-            $command = $app->find('rollback');
-
-            $config = require APP . '/migration.php';
-            $config['paths']['migrations'] = $modulePath . '/migrations';
-
-            $command->setConfig(new Config($config));
-
-            $wrap = new TextWrapper($app);
-            $wrap->getRollback(null, 0);
+        if ($disable) {
+            $module->update(['disabled' => 1]);
+            $result = 'Модуль успешно отключен!';
+        } else {
+            $module->delete();
+            $result = 'Модуль успешно деактивирован!';
         }
 
-        if (file_exists(STORAGE . '/temp/routes.dat')) {
-            unlink (STORAGE . '/temp/routes.dat');
-        }
-
-        Module::query()->where('name', $moduleName)->delete();
-
-        setFlash('success', 'Модуль успешно отключен!');
+        setFlash('success', $result);
         redirect('/admin/modules/module?module=' . $moduleName);
     }
 }

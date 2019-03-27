@@ -1,7 +1,7 @@
 @extends('layout')
 
 @section('title')
-    Модуль {{ $module['name'] }}
+    Модуль {{ $moduleConfig['name'] }}
 @stop
 
 @section('breadcrumb')
@@ -10,19 +10,19 @@
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
             <li class="breadcrumb-item"><a href="/admin">{{ trans('main.panel') }}</a></li>
             <li class="breadcrumb-item"><a href="/admin/modules">Модули</a></li>
-            <li class="breadcrumb-item active">Модуль {{ $module['name'] }}</li>
+            <li class="breadcrumb-item active">Модуль {{ $moduleConfig['name'] }}</li>
         </ol>
     </nav>
 @stop
 
 @section('content')
-    {{ $module['name'] }}<br>
-    {{ $module['description'] }}<br>
-    Версия: {{ $module['version'] }}<br>
-    Автор: {{ $module['author'] }} <a href="{{ $module['homepage'] }}">{{ $module['homepage'] }}</a><br>
+    {{ $moduleConfig['name'] }}<br>
+    {{ $moduleConfig['description'] }}<br>
+    Версия: {{ $moduleConfig['version'] }}<br>
+    Автор: {{ $moduleConfig['author'] }} <a href="{{ $moduleConfig['homepage'] }}">{{ $moduleConfig['homepage'] }}</a><br>
 
-    @if (isset($module['screenshots']))
-        <?php $countScreens = count($module['screenshots']); ?>
+    @if (isset($moduleConfig['screenshots']))
+        <?php $countScreens = count($moduleConfig['screenshots']); ?>
         <div id="myCarousel" class="carousel slide" data-ride="carousel">
             @if ($countScreens > 1)
                 <ol class="carousel-indicators">
@@ -33,7 +33,7 @@
             @endif
 
             <div class="carousel-inner">
-                @foreach ($module['screenshots'] as $key => $screenshot)
+                @foreach ($moduleConfig['screenshots'] as $key => $screenshot)
                     <div class="carousel-item{{ empty($key) ? ' active' : '' }}">
                         {!! imageBase64($screenshot, ['class' => 'd-block w-100']) !!}
                     </div>
@@ -53,30 +53,36 @@
         </div>
     @endif
 
-    @if (isset($module['migrations']))
+    @if (isset($moduleConfig['migrations']))
         <div class="mt-2 font-weight-bold">Список миграций</div>
-        @foreach ($module['migrations'] as $migration)
+        @foreach ($moduleConfig['migrations'] as $migration)
             <i class="fas fa-database"></i> {{ $migration }}<br>
         @endforeach
     @endif
 
 
-    @if (isset($module['symlinks']))
+    @if (isset($moduleConfig['symlinks']))
         <div class="mt-2 font-weight-bold">Список симлинков</div>
-        @foreach ($module['symlinks'] as $key => $symlink)
+        @foreach ($moduleConfig['symlinks'] as $key => $symlink)
             <i class="fas fa-images"></i> {{ $key }} -> {{ $symlink }}<br>
         @endforeach
     @endif
 
     <br>
-    @if ($moduleActive)
-        @if (version_compare($module['version'], $moduleActive->version, '>'))
+    @if ($module)
+        @if (version_compare($moduleConfig['version'], $module->version, '>'))
             <a class="btn btn-success" href="/admin/modules/install?module={{ $moduleName }}">Обновить</a>
         @endif
-        <a class="btn btn-primary" href="/admin/modules/uninstall?module={{ $moduleName }}">Выключить</a>
+
+        @if ($module['disabled'])
+            <a class="btn btn-primary" href="/admin/modules/install?module={{ $moduleName }}">Включить</a>
+        @else
+            <a class="btn btn-warning" href="/admin/modules/uninstall?module={{ $moduleName }}&amp;disable=1">Выключить</a>
+        @endif
+
         <a class="btn btn-danger" href="/admin/modules/uninstall?module={{ $moduleName }}" onclick="return confirm('Вы действительно хотите деактивировать модуль?')">Деактивировать</a>
 
-        @if (isset($module['migrations']))
+        @if (isset($moduleConfig['migrations']))
             <p class="text-muted font-italic">Внимание! При деактивации модуля, будут удалены изменение в БД</p>
         @endif
     @else
