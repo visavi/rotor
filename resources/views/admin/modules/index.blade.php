@@ -19,13 +19,13 @@
         @foreach ($moduleNames as $name => $module)
             <i class="fas fa-plug"></i> <a class="font-weight-bold" href="/admin/modules/module?module={{ $name }}">{{ $module['name'] }}</a> ({{ $name }})
             @if (isset($moduleActive[$name]))
-                <span class="badge badge-success">Включен</span><br>
+                <span class="badge badge-success">Активирован</span><br>
 
                 @if (version_compare($module['version'], $moduleActive[$name], '>'))
                     <span class="badge badge-warning">Доступно обновление (v.{{ $module['version'] }})</span><br>
                 @endif
             @else
-                <span class="badge badge-danger">Выключен</span><br>
+                <span class="badge badge-danger">Деактивирован</span><br>
             @endif
             {{ $module['description'] }}<br>
             Версия: {{ $module['version'] }}<br>

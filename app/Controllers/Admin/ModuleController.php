@@ -83,7 +83,7 @@ class ModuleController extends AdminController
     }
 
     /**
-     * Включение модуля
+     * Активация модуля
      *
      * @param Request          $request
      * @param PhinxApplication $app
@@ -147,7 +147,7 @@ class ModuleController extends AdminController
                 'created_at' => SITETIME,
             ])->save();
 
-            $result = 'Модуль успешно включен!';
+            $result = 'Модуль успешно активирован!';
         }
 
         setFlash('success', $result);
@@ -155,7 +155,7 @@ class ModuleController extends AdminController
     }
 
     /**
-     * Отключение модуля
+     * Деактивация/Выключение модуля
      *
      * @param Request          $request
      * @param PhinxApplication $app
