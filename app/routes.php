@@ -517,8 +517,7 @@ return FastRoute\cachedDispatcher(function(RouteCollector $r) {
         $r->get('/modules/uninstall', [App\Controllers\Admin\ModuleController::class, 'uninstall']);
     });
 
-    $modules = Module::query()->get();
-
+    $modules = Module::query()->where('disabled', 0)->get();
     foreach ($modules as $module) {
         if (file_exists(APP . '/Modules/' . $module->name . '/routes.php')) {
             include_once APP . '/Modules/' . $module->name . '/routes.php';

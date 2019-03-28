@@ -71,21 +71,21 @@
     <br>
     @if ($module)
         @if (version_compare($moduleConfig['version'], $module->version, '>'))
-            <a class="btn btn-success" href="/admin/modules/install?module={{ $moduleName }}">Обновить</a>
+            <a class="btn btn-info" href="/admin/modules/install?module={{ $moduleName }}&amp;update=1">Обновить</a>
         @endif
 
         @if ($module['disabled'])
-            <a class="btn btn-primary" href="/admin/modules/install?module={{ $moduleName }}">Включить</a>
+            <a class="btn btn-success" href="/admin/modules/install?module={{ $moduleName }}&amp;enable=1">Включить</a>
         @else
             <a class="btn btn-warning" href="/admin/modules/uninstall?module={{ $moduleName }}&amp;disable=1">Выключить</a>
         @endif
 
-        <a class="btn btn-danger" href="/admin/modules/uninstall?module={{ $moduleName }}" onclick="return confirm('Вы действительно хотите деактивировать модуль?')">Деактивировать</a>
+        <a class="btn btn-danger" href="/admin/modules/uninstall?module={{ $moduleName }}" onclick="return confirm('Вы действительно хотите удалить модуль?')">Удалить</a>
 
         @if (isset($moduleConfig['migrations']))
-            <p class="text-muted font-italic">Внимание! При деактивации модуля, будут удалены изменение в БД</p>
+            <p class="text-muted font-italic">Внимание! При удалении модуля, будут удалены все миграции и изменения в БД</p>
         @endif
     @else
-        <a class="btn btn-success" href="/admin/modules/install?module={{ $moduleName }}">Активировать</a>
+        <a class="btn btn-success" href="/admin/modules/install?module={{ $moduleName }}">Установить</a>
     @endif
 @stop

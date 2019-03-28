@@ -8,9 +8,6 @@ use App\Models\Module;
 use App\Models\User;
 use Illuminate\Http\Request;
 
-use Phinx\Console\PhinxApplication;
-
-
 class ModuleController extends AdminController
 {
     /**
@@ -32,17 +29,21 @@ class ModuleController extends AdminController
      */
     public function index(): string
     {
-        $modules      = glob(APP . '/Modules/*', GLOB_ONLYDIR);
-        $moduleActive = Module::query()->pluck('version', 'name')->all();
+        $modules = Module::query()->get();
+        $moduleInstall = [];
+        foreach ($modules as $module) {
+            $moduleInstall[$module->name] = $module;
+        }
 
         $moduleNames = [];
-        foreach ($modules as $module) {
+        $modulesLoaded = glob(APP . '/Modules/*', GLOB_ONLYDIR);
+        foreach ($modulesLoaded as $module) {
             if (file_exists($module . '/module.php')) {
                 $moduleNames[basename($module)] = include $module . '/module.php';
             }
         }
 
-        return view('admin/modules/index', compact('moduleNames', 'moduleActive'));
+        return view('admin/modules/index', compact('moduleInstall', 'moduleNames'));
     }
 
     /**
@@ -82,7 +83,7 @@ class ModuleController extends AdminController
     }
 
     /**
-     * Активация модуля
+     * Установка модуля
      *
      * @param Request $request
      * @return void
@@ -90,6 +91,8 @@ class ModuleController extends AdminController
     public function install(Request $request): void
     {
         $moduleName = check($request->input('module'));
+        $enable     = int($request->input('enable'));
+        $update     = int($request->input('update'));
         $modulePath = APP . '/Modules/' . $moduleName;
 
         if (! preg_match('|^[A-Z][\w\-]+$|', $moduleName) || ! file_exists($modulePath)) {
@@ -100,26 +103,34 @@ class ModuleController extends AdminController
         $module = Module::query()->firstOrNew(['name' => $moduleName]);
 
         $moduleConfig = include $modulePath . '/module.php';
-        $module->migrate($modulePath . '/migrations');
         $module->createSymlinks($modulePath, $moduleConfig);
+        $module->migrate($modulePath . '/migrations');
         clearCache('routes');
 
-        if ($module->exists) {
-            $result = $module->disabled ? 'Модуль успешно включен!' : 'Модуль успешно обновлен!';
+        $result = 'Модуль успешно установлен!';
 
-            $module->update([
-                'disabled'   => 0,
-                'version'    => $moduleConfig['version'],
-                'updated_at' => SITETIME,
-            ]);
+        if ($module->exists) {
+            if ($update) {
+                $module->update([
+                    'version'    => $moduleConfig['version'],
+                    'updated_at' => SITETIME,
+                ]);
+                $result = 'Модуль успешно обновлен!';
+            }
+
+            if ($enable) {
+                $module->update([
+                    'disabled' => 0,
+                    'updated_at' => SITETIME,
+                ]);
+                $result = 'Модуль успешно включен!';
+            }
         } else {
             $module->fill([
                 'version'    => $moduleConfig['version'],
                 'updated_at' => SITETIME,
                 'created_at' => SITETIME,
             ])->save();
-
-            $result = 'Модуль успешно активирован!';
         }
 
         setFlash('success', $result);
@@ -127,7 +138,7 @@ class ModuleController extends AdminController
     }
 
     /**
-     * Деактивация/Выключение модуля
+     * Удаление/Выключение модуля
      *
      * @param Request $request
      * @return void
@@ -151,16 +162,19 @@ class ModuleController extends AdminController
 
         $moduleConfig = include $modulePath . '/module.php';
 
-        $module->rollback($modulePath . '/migrations');
         $module->deleteSymlinks($moduleConfig);
         clearCache('routes');
 
         if ($disable) {
-            $module->update(['disabled' => 1]);
-            $result = 'Модуль успешно отключен!';
+            $module->update([
+                'disabled' => 1,
+                'updated_at' => SITETIME,
+            ]);
+            $result = 'Модуль успешно выключен!';
         } else {
+            $module->rollback($modulePath . '/migrations');
             $module->delete();
-            $result = 'Модуль успешно деактивирован!';
+            $result = 'Модуль успешно удален!';
         }
 
         setFlash('success', $result);

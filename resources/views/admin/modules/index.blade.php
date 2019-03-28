@@ -16,20 +16,26 @@
 
 @section('content')
     @if ($moduleNames)
-        @foreach ($moduleNames as $name => $module)
-            <i class="fas fa-plug"></i> <a class="font-weight-bold" href="/admin/modules/module?module={{ $name }}">{{ $module['name'] }}</a> ({{ $name }})
-            @if (isset($moduleActive[$name]))
-                <span class="badge badge-success">Активирован</span><br>
+        @foreach ($moduleNames as $name => $moduleConfig)
+            <i class="fas fa-plug"></i> <a class="font-weight-bold" href="/admin/modules/module?module={{ $name }}">{{ $moduleConfig['name'] }}</a> ({{ $name }})
 
-                @if (version_compare($module['version'], $moduleActive[$name], '>'))
-                    <span class="badge badge-warning">Доступно обновление (v.{{ $module['version'] }})</span><br>
+            @if (isset($moduleInstall[$name]))
+                <span class="badge badge-success">Установлен</span>
+
+                @if ($moduleInstall[$name]->disabled)
+                    <span class="badge badge-warning">Выключен</span>
                 @endif
+
+                @if (version_compare($moduleConfig['version'], $moduleInstall[$name]->version, '>'))
+                    <span class="badge badge-info">Доступно обновление (v.{{ $moduleConfig['version'] }})</span>
+                @endif
+                <br>
             @else
-                <span class="badge badge-danger">Деактивирован</span><br>
+                <span class="badge badge-danger">Не установлен</span><br>
             @endif
-            {{ $module['description'] }}<br>
-            Версия: {{ $module['version'] }}<br>
-            Автор: {{ $module['author'] }} <a href="{{ $module['homepage'] }}">{{ $module['homepage'] }}</a><hr>
+            {{ $moduleConfig['description'] }}<br>
+            Версия: {{ $moduleConfig['version'] }}<br>
+            Автор: {{ $moduleConfig['author'] }} <a href="{{ $moduleConfig['homepage'] }}">{{ $moduleConfig['homepage'] }}</a><hr>
         @endforeach
     @else
         {!! showError('Модули еще не загружены!') !!}
