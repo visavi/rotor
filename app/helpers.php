@@ -815,7 +815,7 @@ function statsNewsDate()
 /**
  * Возвращает последние новости
  *
- * @return void новость
+ * @return string новость
  */
 function lastNews()
 {
@@ -1098,8 +1098,8 @@ function recentPhotos($show = 5)
 /**
  * Выводит последние темы форума
  *
- * @param  int  $show Количество последних тем форума
- * @return void       Список тем
+ * @param  int    $show Количество последних тем форума
+ * @return string       Список тем
  */
 function recentTopics($show = 5)
 {
@@ -1121,8 +1121,8 @@ function recentTopics($show = 5)
 /**
  * Выводит последние файлы в загрузках
  *
- * @param  int  $show Количество последних файлов в загрузках
- * @return void       Список файлов
+ * @param  int    $show Количество последних файлов в загрузках
+ * @return string       Список файлов
  */
 function recentFiles($show = 5)
 {
@@ -1150,8 +1150,8 @@ function recentFiles($show = 5)
 /**
  * Выводит последние статьи в блогах
  *
- * @param  int  $show Количество последних статей в блогах
- * @return void       Список статей
+ * @param  int    $show Количество последних статей в блогах
+ * @return string       Список статей
  */
 function recentBlogs($show = 5)
 {
@@ -1176,8 +1176,8 @@ function recentBlogs($show = 5)
 /**
  * Выводит последние объявления
  *
- * @param  int  $show Количество последних объявлений
- * @return void       Список объявлений
+ * @param  int    $show Количество последних объявлений
+ * @return string       Список объявлений
  */
 function recentBoards($show = 5)
 {
