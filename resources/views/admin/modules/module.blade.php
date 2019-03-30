@@ -16,7 +16,7 @@
 @stop
 
 @section('header')
-    @if ($module && ! $module['disabled'])
+    @if ($module && ! $module['disabled'] && isset($moduleConfig['panel']))
         <div class="float-right">
             <a class="btn btn-success" href="{{ $moduleConfig['panel'] }}">Управление</a>
         </div><br>
