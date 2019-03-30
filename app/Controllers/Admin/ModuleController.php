@@ -6,6 +6,7 @@ namespace App\Controllers\Admin;
 
 use App\Models\Module;
 use App\Models\User;
+use Exception;
 use Illuminate\Http\Request;
 
 class ModuleController extends AdminController
@@ -73,10 +74,8 @@ class ModuleController extends AdminController
             $moduleConfig['migrations'] = array_map('basename', glob($modulePath . '/migrations/*.php'));
         }
 
-        if ($moduleConfig['symlinks']) {
-            $moduleConfig['symlinks'] = array_map(static function ($symlink) {
-                return str_replace(HOME, '', $symlink);
-            }, $moduleConfig['symlinks']);
+        if (file_exists($modulePath . '/resources/assets')) {
+            $moduleConfig['symlink'] = str_replace(HOME, '', (new Module())->getLinkName($modulePath));
         }
 
         return view('admin/modules/module', compact('module', 'moduleConfig', 'moduleName'));
@@ -103,8 +102,8 @@ class ModuleController extends AdminController
         $module = Module::query()->firstOrNew(['name' => $moduleName]);
 
         $moduleConfig = include $modulePath . '/module.php';
-        $module->createSymlinks($modulePath, $moduleConfig);
-        $module->migrate($modulePath . '/migrations');
+        $module->createSymlink($modulePath);
+        $module->migrate($modulePath);
         clearCache('routes');
 
         $result = 'Модуль успешно установлен!';
@@ -142,7 +141,7 @@ class ModuleController extends AdminController
      *
      * @param Request $request
      * @return void
-     * @throws \Exception
+     * @throws Exception
      */
     public function uninstall(Request $request): void
     {
@@ -160,9 +159,7 @@ class ModuleController extends AdminController
             abort('default', 'Данный модуль не найден!');
         }
 
-        $moduleConfig = include $modulePath . '/module.php';
-
-        $module->deleteSymlinks($moduleConfig);
+        $module->deleteSymlink($modulePath);
         clearCache('routes');
 
         if ($disable) {
@@ -172,7 +169,7 @@ class ModuleController extends AdminController
             ]);
             $result = 'Модуль успешно выключен!';
         } else {
-            $module->rollback($modulePath . '/migrations');
+            $module->rollback($modulePath);
             $module->delete();
             $result = 'Модуль успешно удален!';
         }

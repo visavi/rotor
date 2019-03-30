@@ -54,18 +54,16 @@
     @endif
 
     @if (isset($moduleConfig['migrations']))
-        <div class="mt-2 font-weight-bold">Список миграций</div>
+        <div class="mt-2 font-weight-bold">Миграции</div>
         @foreach ($moduleConfig['migrations'] as $migration)
             <i class="fas fa-database"></i> {{ $migration }}<br>
         @endforeach
     @endif
 
 
-    @if (isset($moduleConfig['symlinks']))
-        <div class="mt-2 font-weight-bold">Список симлинков</div>
-        @foreach ($moduleConfig['symlinks'] as $key => $symlink)
-            <i class="fas fa-images"></i> {{ $key }} -> {{ $symlink }}<br>
-        @endforeach
+    @if (isset($moduleConfig['symlink']))
+        <div class="mt-2 font-weight-bold">Симлинк</div>
+        <i class="fas fa-external-link-alt"></i> {{ $moduleConfig['symlink'] }}<br>
     @endif
 
     <br>

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Models;
 
+use Illuminate\Support\Str;
 use Phinx\Config\Config;
 use Phinx\Console\Command\Migrate;
 use Phinx\Console\PhinxApplication;
@@ -36,12 +37,19 @@ class Module extends BaseModel
     protected $guarded = [];
 
     /**
+     * Assets modules path
+     */
+    public $assetsPath = HOME . '/assets/modules';
+
+    /**
      * Выполняет применение миграции
      *
-     * @param string $migrationPath
+     * @param string $modulePath
      */
-    public function migrate(string $migrationPath): void
+    public function migrate(string $modulePath): void
     {
+        $migrationPath = $modulePath . '/migrations';
+
         if (file_exists($migrationPath)) {
             $app = new PhinxApplication;
             $app->add(new Migrate());
@@ -63,10 +71,12 @@ class Module extends BaseModel
     /**
      * Выполняет откат миграций
      *
-     * @param string $migrationPath
+     * @param string $modulePath
      */
-    public function rollback(string $migrationPath): void
+    public function rollback(string $modulePath): void
     {
+        $migrationPath = $modulePath . '/migrations';
+
         if (file_exists($migrationPath)) {
             $app = new PhinxApplication;
             $app->add(new Migrate());
@@ -87,35 +97,44 @@ class Module extends BaseModel
     /**
      * Создает симлинки модулей
      *
-     * @param string $path
-     * @param array  $module
+     * @param string $modulePath
      */
-    public function createSymlinks(string $path, array $module): void
+    public function createSymlink(string $modulePath): void
     {
-        if (isset($module['symlinks'])) {
-            foreach ($module['symlinks'] as $key => $symlink) {
-                if (file_exists($symlink)) {
-                    unlink($symlink);
-                }
+        $target = $modulePath . '/resources/assets';
+        $link   = $this->getLinkName($modulePath);
 
-                symlink($path . '/' . $key, $symlink);
-            }
+        if (file_exists($link)) {
+            unlink($link);
+        }
+
+        if (file_exists($target)) {
+            symlink($target, $link);
         }
     }
 
     /**
      * Удаляет симлинки модулей
      *
-     * @param array $module
+     * @param string $modulePath
      */
-    public function deleteSymlinks(array $module): void
+    public function deleteSymlink(string $modulePath): void
     {
-        if (isset($module['symlinks'])) {
-            foreach ($module['symlinks'] as $key => $symlink) {
-                if (file_exists($symlink)) {
-                    unlink($symlink);
-                }
-            }
+        $link = $this->getLinkName($modulePath);
+
+        if (file_exists($link)) {
+            unlink($link);
         }
+    }
+
+    /**
+     * Получает название директории для симлинка
+     *
+     * @param string $modulePath
+     * @return string
+     */
+    public function getLinkName(string $modulePath): string
+    {
+        return $this->assetsPath . '/' . Str::plural(strtolower(basename($modulePath)));
     }
 }
