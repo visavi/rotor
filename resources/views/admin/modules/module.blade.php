@@ -15,8 +15,17 @@
     </nav>
 @stop
 
+@section('header')
+    @if ($module && ! $module['disabled'])
+        <div class="float-right">
+            <a class="btn btn-success" href="{{ $moduleConfig['panel'] }}">Управление</a>
+        </div><br>
+    @endif
+
+    <h1>Модуль {{ $moduleConfig['name'] }}</h1>
+@stop
+
 @section('content')
-    {{ $moduleConfig['name'] }}<br>
     {{ $moduleConfig['description'] }}<br>
     Версия: {{ $moduleConfig['version'] }}<br>
     Автор: {{ $moduleConfig['author'] }} <a href="{{ $moduleConfig['homepage'] }}">{{ $moduleConfig['homepage'] }}</a><br>
