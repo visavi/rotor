@@ -219,7 +219,7 @@ class NewsController extends BaseController
         $news = News::query()->find($id);
 
         if (! $news) {
-            abort(404, 'Ошибка! Данной новости не существует!');
+            abort(404, 'Данной новости не существует!');
         }
 
         $end = ceil($news->count_comments / setting('postnews'));
@@ -278,7 +278,7 @@ class NewsController extends BaseController
         $news = News::query()->find($id);
 
         if (! $news) {
-            abort(404, 'Ошибка! Данной новости не существует!');
+            abort(404, 'Данной новости не существует!');
         }
 
         $total = Comment::query()

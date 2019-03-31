@@ -46,7 +46,7 @@ class ContactController extends BaseController
                 $validator->notEqual($user->login, getUser('login'), ['user' => 'Запрещено добавлять свой логин!']);
 
                 $totalContact = Contact::query()->where('user_id', getUser('id'))->count();
-                $validator->lte($totalContact, setting('limitcontact'), 'Ошибка! Контакт-лист переполнен (Максимум ' . setting('limitcontact') . ' пользователей!)');
+                $validator->lte($totalContact, setting('limitcontact'), 'Контакт-лист переполнен (Максимум ' . setting('limitcontact') . ' пользователей!)');
 
                 $validator->false(getUser()->isContact($user), ['user' => 'Данный пользователь уже есть в контакт-листе!']);
             }

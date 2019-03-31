@@ -598,7 +598,7 @@ class BlogController extends BaseController
         }
 
         if (utfStrlen($tag) < 2) {
-            setFlash('danger', 'Ошибка! Необходимо не менее 2-х символов в запросе!');
+            setFlash('danger', 'Необходимо не менее 2-х символов в запросе!');
             redirect('/blogs/tags');
         }
 

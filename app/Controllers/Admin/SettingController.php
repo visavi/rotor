@@ -46,7 +46,7 @@ class SettingController extends AdminController
             $token = check($request->input('token'));
 
             $validator->equal($token, $_SESSION['token'], ['msg' => trans('validator.token')])
-                ->notEmpty($sets, ['sets' => 'Ошибка! Не переданы настройки сайта']);
+                ->notEmpty($sets, ['sets' => 'Не переданы настройки сайта']);
 
             foreach ($sets as $name => $value) {
                 if (empty($opt[$name]) || ! empty($sets[$name])) {

@@ -106,7 +106,7 @@ class BookmarkController extends BaseController
         $page     = int($request->input('page'));
 
         $validator->equal($token, $_SESSION['token'], trans('validator.token'))
-            ->notEmpty($topicIds, 'Ошибка! Отсутствуют выбранные закладки!');
+            ->notEmpty($topicIds, 'Отсутствуют выбранные закладки!');
 
         if ($validator->isValid()) {
 

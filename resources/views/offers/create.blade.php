@@ -48,6 +48,6 @@
         </div><br>
 
     @else
-        {!! showError('Ошибка! Для добавления предложения или проблемы вам необходимо набрать '.plural(setting('addofferspoint'), setting('scorename')).'!') !!}
+        {!! showError('Для добавления предложения или проблемы вам необходимо набрать '.plural(setting('addofferspoint'), setting('scorename')).'!') !!}
     @endif
 @stop

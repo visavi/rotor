@@ -123,7 +123,7 @@ class UserController extends BaseController
                     ->length($invite, 12, 15, ['invite' => 'Слишком длинный или короткий пригласительный ключ!'], setting('invite'))
                     ->length($login, 3, 20, ['login' => 'Слишком длинный или короткий логин!'])
                     ->length($password, 6, 20, ['password' => 'Слишком длинный или короткий пароль!'])
-                    ->equal($password, $password2, ['password2' => 'Ошибка! Введенные пароли отличаются друг от друга!']);
+                    ->equal($password, $password2, ['password2' => 'Введенные пароли отличаются друг от друга!']);
 
                 if (ctype_digit($password)) {
                     $validator->addError(['password' => 'Запрещен пароль состоящий только из цифр, используйте буквы!']);

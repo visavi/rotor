@@ -64,7 +64,7 @@
                     <span class="input-group-text"><i class="fa fa-pencil-alt"></i></span>
                 </div>
 
-                <input type="text" class="form-control" id="user" name="user" maxlength="20" value="{{ getInput('user', $login) }}" placeholder="{{ trans('contacts.user_login') }}" required>
+                <input type="text" class="form-control" id="user" name="user" maxlength="20" value="{{ getInput('user', $login) }}" placeholder="{{ trans('main.user_login') }}" required>
 
                 <span class="input-group-btn">
                     <button class="btn btn-primary">{{ trans('main.add') }}</button>

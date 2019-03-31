@@ -25,7 +25,7 @@ $validation -> addRule('equal', array($protect, $_SESSION['protect']), 'Пров
     -> addRule('string', $invite, 'Слишком длинный или короткий пригласительный ключ!', setting('invite'), 15, 20)
     -> addRule('string', $logs, 'Слишком длинный или короткий логин!', true, 3, 20)
     -> addRule('string', $pars, 'Слишком длинный или короткий пароль!',  true, 6, 20)
-    -> addRule('equal', array($pars, $pars2), 'Ошибка! Введенные пароли отличаются друг от друга!')
+    -> addRule('equal', array($pars, $pars2), 'Введенные пароли отличаются друг от друга!')
     -> addRule('not_equal', array($logs, $pars), 'Пароль и логин должны отличаться друг от друга!');
 
 if ($validator->isValid()){
@@ -103,7 +103,7 @@ addRule('min', array(getUser('timenickname'), SITETIME), 'Изменять ни�
 
 <h3 id="validateEqual">validateEqual</h3>
 <pre class="prettyprint linenums">
-addRule('equal', array($pars, $pars2), 'Ошибка! Введенные пароли отличаются друг от друга!')
+addRule('equal', array($pars, $pars2), 'Введенные пароли отличаются друг от друга!')
 </pre>
 
 <h3 id="validateNotEqual">validateNotEqual</h3>

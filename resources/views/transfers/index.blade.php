@@ -27,8 +27,8 @@
                     <input type="hidden" name="user" value="{{ $user->login }}">
                 @else
                     <div class="form-group{{ hasError('user') }}">
-                        <label for="inputUser">{{ trans('transfers.user_login') }}:</label>
-                        <input name="user" class="form-control" id="inputUser" maxlength="20" placeholder="{{ trans('transfers.user_login') }}" value="{{ getInput('user') }}" required>
+                        <label for="inputUser">{{ trans('main.user_login') }}:</label>
+                        <input name="user" class="form-control" id="inputUser" maxlength="20" placeholder="{{ trans('main.user_login') }}" value="{{ getInput('user') }}" required>
                         {!! textError('user') !!}
                     </div>
                 @endif

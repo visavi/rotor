@@ -106,7 +106,7 @@ class GuestbookController extends BaseController
         $post = Guestbook::query()->where('user_id', getUser('id'))->find($id);
 
         if (! $post) {
-            abort('default', 'Ошибка! Сообщение удалено или вы не автор этого сообщения!');
+            abort('default', 'Сообщение удалено или вы не автор этого сообщения!');
         }
 
         if ($post->created_at + 600 < SITETIME) {

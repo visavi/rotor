@@ -32,6 +32,7 @@ return [
     'author'            => 'Author',
     'posted'            => 'Posted',
     'added'             => 'Added',
+    'sent'              => 'Sent',
     'menu'              => 'My menu',
     'verification_code' => 'Verification code',
     'pages'             => 'Pages',
@@ -79,6 +80,8 @@ return [
     'or'             => 'Or',
     'full'           => 'Full',
     'search_request' => 'Search request',
+
+    'user_login' => 'User login',
 
     'max_file_upload'       => 'You can upload files',
     'max_file_weight'       => 'Maximum file weight',
