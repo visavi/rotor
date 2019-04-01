@@ -1,5 +1,5 @@
 @if (setting('recaptcha_public') && setting('recaptcha_private'))
-    <script src="//www.google.com/recaptcha/api.js"></script>
+    <script src="//www.google.com/recaptcha/api.js?hl={{ setting('language') }}" async defer></script>
     <div class="g-recaptcha" data-sitekey="{{ setting('recaptcha_public') }}"></div>
     {!! textError('protect') !!}
 @else
