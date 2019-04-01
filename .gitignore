@@ -14,7 +14,7 @@
 /public/uploads/blogs
 /public/uploads/boards
 /public/assets/modules
-
+/modules
 /node_modules
 /vendor
 /upgrade
