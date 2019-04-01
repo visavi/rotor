@@ -104,7 +104,7 @@ class Module extends BaseModel
         $target = $modulePath . '/resources/assets';
         $link   = $this->getLinkName($modulePath);
 
-        if (file_exists($link)) {
+        if (is_link($link)) {
             unlink($link);
         }
 
@@ -122,7 +122,7 @@ class Module extends BaseModel
     {
         $link = $this->getLinkName($modulePath);
 
-        if (file_exists($link)) {
+        if (is_link($link)) {
             unlink($link);
         }
     }

@@ -14,6 +14,7 @@ define('HOME', BASEDIR . '/public');
 define('UPLOADS', HOME . '/uploads');
 define('RESOURCES', BASEDIR . '/resources');
 define('STORAGE', BASEDIR . '/storage');
+define('MODULES', BASEDIR . '/modules');
 define('SITETIME', time());
 define('VERSION', '7.5');
 

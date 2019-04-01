@@ -519,8 +519,8 @@ return FastRoute\cachedDispatcher(function(RouteCollector $r) {
 
     $modules = Module::query()->where('disabled', 0)->get();
     foreach ($modules as $module) {
-        if (file_exists(APP . '/Modules/' . $module->name . '/routes.php')) {
-            include_once APP . '/Modules/' . $module->name . '/routes.php';
+        if (file_exists(MODULES . '/' . $module->name . '/routes.php')) {
+            include_once MODULES . '/' . $module->name . '/routes.php';
         }
     }
 }, [

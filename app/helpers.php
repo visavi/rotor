@@ -1,39 +1,42 @@
 <?php
 
 use App\Classes\{BBCode, Calendar, Metrika, Registry, CloudFlare};
-use App\Models\{
-    Antimat,
-    Ban,
-    Banhist,
-    BlackList,
-    Blog,
-    Item,
-    Load,
-    Chat,
-    Counter,
-    Down,
-    Guestbook,
-    Invite,
-    Error,
-    News,
-    Notice,
-    Offer,
-    Online,
-    Photo,
-    Post,
-    RekUser,
-    Setting,
-    Sticker,
-    Spam,
-    Topic,
-    User,
-    Vote
-};
+use App\Models\Antimat;
+use App\Models\Ban;
+use App\Models\Banhist;
+use App\Models\BlackList;
+use App\Models\Blog;
+use App\Models\Item;
+use App\Models\Load;
+use App\Models\Chat;
+use App\Models\Counter;
+use App\Models\Down;
+use App\Models\Guestbook;
+use App\Models\Invite;
+use App\Models\Error;
+use App\Models\News;
+use App\Models\Notice;
+use App\Models\Offer;
+use App\Models\Online;
+use App\Models\Photo;
+use App\Models\Post;
+use App\Models\RekUser;
+use App\Models\Setting;
+use App\Models\Sticker;
+use App\Models\Spam;
+use App\Models\Topic;
+use App\Models\User;
+use App\Models\Vote;
 use Curl\Curl;
 use Illuminate\Database\Capsule\Manager as DB;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Filesystem\Filesystem;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
+use Illuminate\Translation\FileLoader;
+use Illuminate\Translation\Translator;
 use Intervention\Image\Constraint;
 use Intervention\Image\ImageManagerStatic as Image;
 use Jenssegers\Blade\Blade;
@@ -1552,7 +1555,7 @@ function clearCache(string $filename = null)
 /**
  * Возвращает текущую страницу
  *
- * @param null $url
+ * @param string $url
  * @return string текущая страница
  */
 function returnUrl($url = null)
@@ -1589,7 +1592,7 @@ function view($view, array $params = []): string
     if (strpos($view, '::') !== false) {
         [$namespace] = explode('::', $view);
         /** @var Illuminate\View\Factory $blade */
-        $blade->addNamespace($namespace, APP . '/Modules/' . $namespace . '/resources/views');
+        $blade->addNamespace($namespace, MODULES . '/' . $namespace . '/resources/views');
     }
 
     return $blade->render($view, $params);
@@ -1606,7 +1609,7 @@ function abort($code, $message = null)
 {
     $request  = Request::createFromGlobals();
     $protocol = server('SERVER_PROTOCOL');
-    $referer  = server('HTTP_REFERER') ?? null;
+    $referer  = server('HTTP_REFERER');
 
    switch ($code) {
        case 403:
@@ -1948,7 +1951,7 @@ function server($key = null, $default = null)
  * Возвращает объект пользователя по логину
  *
  * @param  string    $login логин пользователя
- * @return \Illuminate\Database\Eloquent\Builder|\Illuminate\Database\Eloquent\Model|null
+ * @return Builder|Model|null
  */
 function getUserByLogin($login): ?User
 {
@@ -1958,8 +1961,8 @@ function getUserByLogin($login): ?User
 /**
  * Возвращает объект пользователя по id
  *
- * @param  int       $id ID пользователя
- * @return \Illuminate\Database\Eloquent\Builder|\Illuminate\Database\Eloquent\Model|null
+ * @param  int $id ID пользователя
+ * @return Builder|Model|null
  */
 function getUserById(int $id): ?User
 {
@@ -2149,13 +2152,13 @@ function progressBar($percent, $title = null)
  * Инициализирует языковую локализацию
  *
  * @param  string $fallback
- * @return \Illuminate\Translation\Translator
+ * @return Translator
  */
 function translator($fallback = 'en')
 {
-    $translator = new \Illuminate\Translation\Translator(
-        new \Illuminate\Translation\FileLoader(
-            new \Illuminate\Filesystem\Filesystem(),
+    $translator = new Translator(
+        new FileLoader(
+            new Filesystem(),
             RESOURCES . '/lang'
         ),
         setting('language')
@@ -2179,7 +2182,7 @@ function trans($key, array $replace = [], $locale = null)
     $translator = translator();
     if (strpos($key, '::') !== false) {
         [$namespace] = explode('::', $key);
-        $translator->addNamespace($namespace, APP . '/Modules/' . $namespace . '/resources/lang');
+        $translator->addNamespace($namespace, MODULES . '/' . $namespace . '/resources/lang');
     }
 
     return $translator->trans($key, $replace, $locale);
@@ -2188,10 +2191,10 @@ function trans($key, array $replace = [], $locale = null)
 /**
  * Translates the given message based on a count.
  *
- * @param  string  $key
- * @param  int|array|\Countable  $number
- * @param  array   $replace
- * @param  string  $locale
+ * @param  string              $key
+ * @param  int|array|Countable $number
+ * @param  array               $replace
+ * @param  string              $locale
  * @return string
  */
 function trans_choice($key, $number, array $replace = [], $locale = null)
@@ -2199,7 +2202,7 @@ function trans_choice($key, $number, array $replace = [], $locale = null)
     $translator = translator();
     if (strpos($key, '::') !== false) {
         [$namespace] = explode('::', $key);
-        $translator->addNamespace($namespace, APP . '/Modules/' . $namespace . '/resources/lang');
+        $translator->addNamespace($namespace, MODULES . '/' . $namespace . '/resources/lang');
     }
 
     return $translator->transChoice($key, $number, $replace, $locale);

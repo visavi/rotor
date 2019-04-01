@@ -37,7 +37,7 @@ class ModuleController extends AdminController
         }
 
         $moduleNames = [];
-        $modulesLoaded = glob(APP . '/Modules/*', GLOB_ONLYDIR);
+        $modulesLoaded = glob(MODULES . '/*', GLOB_ONLYDIR);
         foreach ($modulesLoaded as $module) {
             if (file_exists($module . '/module.php')) {
                 $moduleNames[basename($module)] = include $module . '/module.php';
@@ -56,13 +56,11 @@ class ModuleController extends AdminController
     public function module(Request $request): string
     {
         $moduleName = check($request->input('module'));
-        $modulePath = APP . '/Modules/' . $moduleName;
+        $modulePath = MODULES . '/' . $moduleName;
 
         if (! preg_match('|^[A-Z][\w\-]+$|', $moduleName) || ! file_exists($modulePath)) {
             abort('default', 'Данный модуль не найден!');
         }
-
-        $module = Module::query()->where('name', $moduleName)->first();
 
         $moduleConfig = include $modulePath . '/module.php';
 
@@ -78,6 +76,8 @@ class ModuleController extends AdminController
             $moduleConfig['symlink'] = str_replace(HOME, '', (new Module())->getLinkName($modulePath));
         }
 
+        $module = Module::query()->where('name', $moduleName)->first();
+
         return view('admin/modules/module', compact('module', 'moduleConfig', 'moduleName'));
     }
 
@@ -92,7 +92,7 @@ class ModuleController extends AdminController
         $moduleName = check($request->input('module'));
         $enable     = int($request->input('enable'));
         $update     = int($request->input('update'));
-        $modulePath = APP . '/Modules/' . $moduleName;
+        $modulePath = MODULES . '/' . $moduleName;
 
         if (! preg_match('|^[A-Z][\w\-]+$|', $moduleName) || ! file_exists($modulePath)) {
             abort('default', 'Данный модуль не найден!');
@@ -147,7 +147,7 @@ class ModuleController extends AdminController
     {
         $moduleName = check($request->input('module'));
         $disable    = int($request->input('disable'));
-        $modulePath = APP . '/Modules/' . $moduleName;
+        $modulePath = MODULES . '/' . $moduleName;
 
         if (! preg_match('|^[A-Z][\w\-]+$|', $moduleName) || ! file_exists($modulePath)) {
             abort('default', 'Данный модуль не найден!');
