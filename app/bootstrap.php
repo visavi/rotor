@@ -59,3 +59,21 @@ $db->setEventDispatcher(new Dispatcher(new Container));*/
 $db->setAsGlobal();
 $db->bootEloquent();
 $db::connection()->enableQueryLog();
+
+
+/*use Illuminate\Container\Container;
+use Illuminate\Support\Facades\Facade;
+use Illuminate\Translation\Translator;*/
+/**
+ * Setup a new app instance container
+ *
+ * @var Illuminate\Container\Container
+ */
+/*$app = new Container();
+$app->singleton('app', Container::class);*/
+
+/**
+ * Set $app as FacadeApplication handler
+ */
+/*Facade::setFacadeApplication($app);*/
+

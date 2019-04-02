@@ -818,7 +818,7 @@ function statsNewsDate()
 /**
  * Возвращает последние новости
  *
- * @return string новость
+ * @return string|void новость
  */
 function lastNews()
 {
@@ -1067,8 +1067,8 @@ function saveAdvertUser()
 /**
  * Выводит последние фотографии
  *
- * @param  int  $show Количество последних фотографий
- * @return void       Список фотографий
+ * @param  int  $show  Количество последних фотографий
+ * @return string|void Список фотографий
  */
 function recentPhotos($show = 5)
 {
@@ -1102,7 +1102,7 @@ function recentPhotos($show = 5)
  * Выводит последние темы форума
  *
  * @param  int    $show Количество последних тем форума
- * @return string       Список тем
+ * @return string|void  Список тем
  */
 function recentTopics($show = 5)
 {
@@ -1125,7 +1125,7 @@ function recentTopics($show = 5)
  * Выводит последние файлы в загрузках
  *
  * @param  int    $show Количество последних файлов в загрузках
- * @return string       Список файлов
+ * @return string|void  Список файлов
  */
 function recentFiles($show = 5)
 {
@@ -1154,7 +1154,7 @@ function recentFiles($show = 5)
  * Выводит последние статьи в блогах
  *
  * @param  int    $show Количество последних статей в блогах
- * @return string       Список статей
+ * @return string|void  Список статей
  */
 function recentBlogs($show = 5)
 {
@@ -1180,7 +1180,7 @@ function recentBlogs($show = 5)
  * Выводит последние объявления
  *
  * @param  int    $show Количество последних объявлений
- * @return string       Список объявлений
+ * @return string|void  Список объявлений
  */
 function recentBoards($show = 5)
 {
@@ -1572,6 +1572,33 @@ function returnUrl($url = null)
 }
 
 /**
+ * Adds namespace
+ *
+ * @param object $service
+ * @param string $key
+ */
+function moduleNamespace($service, $key): void
+{
+    if (strpos($key, '::') !== false) {
+        [$namespace] = explode('::', $key);
+
+        if ($service instanceof Blade) {
+            /** @var Illuminate\View\Factory $service */
+            $path = MODULES . '/' . $namespace . '/resources/views';
+        }
+
+        if ($service instanceof Translator) {
+            /** @var Translator $service */
+            $path = MODULES . '/' . $namespace . '/resources/lang';
+        }
+
+        if (isset($path)) {
+            $service->addNamespace($namespace, $path);
+        }
+    }
+}
+
+/**
  * Возвращает подключенный шаблон
  *
  * @param  string $view   имя шаблона
@@ -1580,7 +1607,6 @@ function returnUrl($url = null)
  */
 function view($view, array $params = []): string
 {
-
     $blade = new Blade([
         HOME . '/themes/' . setting('themes') . '/views',
         RESOURCES . '/views',
@@ -1588,14 +1614,63 @@ function view($view, array $params = []): string
     ], STORAGE . '/caches');
 
     $blade->compiler()->withoutDoubleEncoding();
-
-    if (strpos($view, '::') !== false) {
-        [$namespace] = explode('::', $view);
-        /** @var Illuminate\View\Factory $blade */
-        $blade->addNamespace($namespace, MODULES . '/' . $namespace . '/resources/views');
-    }
+    moduleNamespace($blade, $view);
 
     return $blade->render($view, $params);
+}
+
+/**
+ * Инициализирует языковую локализацию
+ *
+ * @param  string $fallback
+ * @return Translator
+ */
+function translator($fallback = 'en')
+{
+    $translator = new Translator(
+        new FileLoader(
+            new Filesystem(),
+            RESOURCES . '/lang'
+        ),
+        setting('language')
+    );
+
+    $translator->setFallback($fallback);
+
+    return $translator;
+}
+
+/**
+ * Translate the given message.
+ *
+ * @param  string  $key
+ * @param  array   $replace
+ * @param  string  $locale
+ * @return string
+ */
+function trans($key, array $replace = [], $locale = null)
+{
+    $translator = translator();
+    moduleNamespace($translator, $key);
+
+    return $translator->trans($key, $replace, $locale);
+}
+
+/**
+ * Translates the given message based on a count.
+ *
+ * @param  string              $key
+ * @param  int|array|Countable $number
+ * @param  array               $replace
+ * @param  string              $locale
+ * @return string
+ */
+function trans_choice($key, $number, array $replace = [], $locale = null)
+{
+    $translator = translator();
+    moduleNamespace($translator, $key);
+
+    return $translator->transChoice($key, $number, $replace, $locale);
 }
 
 /**
@@ -2146,66 +2221,6 @@ function progressBar($percent, $title = null)
     }
 
     return view('app/_progressbar', compact('percent', 'title'));
-}
-
-/**
- * Инициализирует языковую локализацию
- *
- * @param  string $fallback
- * @return Translator
- */
-function translator($fallback = 'en')
-{
-    $translator = new Translator(
-        new FileLoader(
-            new Filesystem(),
-            RESOURCES . '/lang'
-        ),
-        setting('language')
-    );
-
-    $translator->setFallback($fallback);
-
-    return $translator;
-}
-
-/**
- * Translate the given message.
- *
- * @param  string  $key
- * @param  array   $replace
- * @param  string  $locale
- * @return string
- */
-function trans($key, array $replace = [], $locale = null)
-{
-    $translator = translator();
-    if (strpos($key, '::') !== false) {
-        [$namespace] = explode('::', $key);
-        $translator->addNamespace($namespace, MODULES . '/' . $namespace . '/resources/lang');
-    }
-
-    return $translator->trans($key, $replace, $locale);
-}
-
-/**
- * Translates the given message based on a count.
- *
- * @param  string              $key
- * @param  int|array|Countable $number
- * @param  array               $replace
- * @param  string              $locale
- * @return string
- */
-function trans_choice($key, $number, array $replace = [], $locale = null)
-{
-    $translator = translator();
-    if (strpos($key, '::') !== false) {
-        [$namespace] = explode('::', $key);
-        $translator->addNamespace($namespace, MODULES . '/' . $namespace . '/resources/lang');
-    }
-
-    return $translator->transChoice($key, $number, $replace, $locale);
 }
 
 /**
