@@ -50,7 +50,7 @@
                     @endif
                 </div>
             @else
-                <div>{{ trans('forums.empty_topic') }}</div>
+                <div>{{ trans('forums.empty_topics') }}</div>
             @endif
         @endforeach
 
@@ -77,7 +77,7 @@
     @elseif ($forum->closed)
         {!! showError(trans('forums.closed_forum')) !!}
     @else
-        {!! showError(trans('forums.empty_topic')) !!}
+        {!! showError(trans('forums.empty_topics')) !!}
     @endif
 
     <a href="/rules">{{ trans('main.rules') }}</a> /
