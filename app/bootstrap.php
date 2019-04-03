@@ -3,6 +3,8 @@
 use Dotenv\Dotenv;
 use Illuminate\Database\Capsule\Manager as DB;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\View;
+use Jenssegers\Blade\Blade;
 use Whoops\Handler\PlainTextHandler;
 use Whoops\Handler\PrettyPageHandler;
 use Whoops\Run;
@@ -61,19 +63,32 @@ $db->bootEloquent();
 $db::connection()->enableQueryLog();
 
 
-/*use Illuminate\Container\Container;
+use Illuminate\Container\Container;
 use Illuminate\Support\Facades\Facade;
-use Illuminate\Translation\Translator;*/
+use Illuminate\Translation\Translator;
 /**
  * Setup a new app instance container
  *
  * @var Illuminate\Container\Container
  */
-/*$app = new Container();
-$app->singleton('app', Container::class);*/
+$app = new Container();
+$app->singleton('app', Container::class);
 
+
+$app->singleton('view', static function () {
+    $view = new Blade([
+        HOME . '/themes/' . setting('themes') . '/views',
+        RESOURCES . '/views',
+        HOME . '/themes',
+    ], STORAGE . '/caches');
+
+    $view->compiler()->withoutDoubleEncoding();
+
+    return $view;
+});
 /**
  * Set $app as FacadeApplication handler
  */
-/*Facade::setFacadeApplication($app);*/
+Facade::setFacadeApplication($app);
+
 

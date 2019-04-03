@@ -34,6 +34,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Filesystem\Filesystem;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\View;
 use Illuminate\Support\Str;
 use Illuminate\Translation\FileLoader;
 use Illuminate\Translation\Translator;
@@ -1607,16 +1608,9 @@ function moduleNamespace($service, $key): void
  */
 function view($view, array $params = []): string
 {
-    $blade = new Blade([
-        HOME . '/themes/' . setting('themes') . '/views',
-        RESOURCES . '/views',
-        HOME . '/themes',
-    ], STORAGE . '/caches');
 
-    $blade->compiler()->withoutDoubleEncoding();
-    moduleNamespace($blade, $view);
 
-    return $blade->render($view, $params);
+    return View::make($view, $params)->render();
 }
 
 /**
