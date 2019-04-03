@@ -31,16 +31,13 @@ use Curl\Curl;
 use Illuminate\Database\Capsule\Manager as DB;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Filesystem\Filesystem;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\Lang;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\Str;
-use Illuminate\Translation\FileLoader;
-use Illuminate\Translation\Translator;
 use Intervention\Image\Constraint;
 use Intervention\Image\ImageManagerStatic as Image;
-use Jenssegers\Blade\Blade;
 use ReCaptcha\ReCaptcha;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\ArrayInput;
@@ -1573,33 +1570,6 @@ function returnUrl($url = null)
 }
 
 /**
- * Adds namespace
- *
- * @param object $service
- * @param string $key
- */
-function moduleNamespace($service, $key): void
-{
-    if (strpos($key, '::') !== false) {
-        [$namespace] = explode('::', $key);
-
-        if ($service instanceof Blade) {
-            /** @var Illuminate\View\Factory $service */
-            $path = MODULES . '/' . $namespace . '/resources/views';
-        }
-
-        if ($service instanceof Translator) {
-            /** @var Translator $service */
-            $path = MODULES . '/' . $namespace . '/resources/lang';
-        }
-
-        if (isset($path)) {
-            $service->addNamespace($namespace, $path);
-        }
-    }
-}
-
-/**
  * Возвращает подключенный шаблон
  *
  * @param  string $view   имя шаблона
@@ -1608,30 +1578,7 @@ function moduleNamespace($service, $key): void
  */
 function view($view, array $params = []): string
 {
-
-
     return View::make($view, $params)->render();
-}
-
-/**
- * Инициализирует языковую локализацию
- *
- * @param  string $fallback
- * @return Translator
- */
-function translator($fallback = 'en')
-{
-    $translator = new Translator(
-        new FileLoader(
-            new Filesystem(),
-            RESOURCES . '/lang'
-        ),
-        setting('language')
-    );
-
-    $translator->setFallback($fallback);
-
-    return $translator;
 }
 
 /**
@@ -1644,10 +1591,7 @@ function translator($fallback = 'en')
  */
 function trans($key, array $replace = [], $locale = null)
 {
-    $translator = translator();
-    moduleNamespace($translator, $key);
-
-    return $translator->trans($key, $replace, $locale);
+    return Lang::trans($key, $replace, $locale);
 }
 
 /**
@@ -1661,10 +1605,7 @@ function trans($key, array $replace = [], $locale = null)
  */
 function trans_choice($key, $number, array $replace = [], $locale = null)
 {
-    $translator = translator();
-    moduleNamespace($translator, $key);
-
-    return $translator->transChoice($key, $number, $replace, $locale);
+    return Lang::transChoice($key, $number, $replace, $locale);
 }
 
 /**

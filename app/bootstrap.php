@@ -2,8 +2,16 @@
 
 use Dotenv\Dotenv;
 use Illuminate\Database\Capsule\Manager as DB;
+use Illuminate\Events\Dispatcher;
+use Illuminate\Filesystem\Filesystem;
 use Illuminate\Support\Arr;
-use Illuminate\Support\Facades\View;
+use Illuminate\Translation\FileLoader;
+use Illuminate\View\Compilers\BladeCompiler;
+use Illuminate\View\Engines\CompilerEngine;
+use Illuminate\View\Engines\EngineResolver;
+use Illuminate\View\Factory;
+use Illuminate\View\FileViewFinder;
+use Illuminate\View\View;
 use Jenssegers\Blade\Blade;
 use Whoops\Handler\PlainTextHandler;
 use Whoops\Handler\PrettyPageHandler;
@@ -76,6 +84,54 @@ $app->singleton('app', Container::class);
 
 
 $app->singleton('view', static function () {
+
+    // echo $this->viewPath;
+    /*if(isset($viewPath)) {
+        $this->viewPath = $viewPath;
+    }*/
+
+    // this path needs to be array
+    $FileViewFinder = new FileViewFinder(
+        new Filesystem,
+        [
+            HOME . '/themes/' . setting('themes') . '/views',
+            RESOURCES . '/views',
+            HOME . '/themes',
+        ]
+    );
+
+    // use blade instead of phpengine
+    // pass in filesystem object and cache path
+    $compiler = new BladeCompiler(new Filesystem(), __DIR__.'/../app/storage/views');
+    $BladeEngine = new CompilerEngine($compiler);
+
+    // create a dispatcher
+    $dispatcher = new Dispatcher(new Container);
+
+    // build the factory
+    $factory = new Factory(
+        new EngineResolver,
+        $FileViewFinder,
+        $dispatcher
+    );
+
+    // this path needs to be string
+    $viewObj = new View(
+        $factory,
+        $BladeEngine,
+        'index',
+        [
+            HOME . '/themes/' . setting('themes') . '/views',
+            RESOURCES . '/views',
+            HOME . '/themes',
+        ],
+        []
+    );
+
+    return $viewObj;
+
+
+/*
     $view = new Blade([
         HOME . '/themes/' . setting('themes') . '/views',
         RESOURCES . '/views',
@@ -84,7 +140,21 @@ $app->singleton('view', static function () {
 
     $view->compiler()->withoutDoubleEncoding();
 
-    return $view;
+    return $view;*/
+});
+
+$app->singleton('translator', static function () {
+    $translator = new Translator(
+        new FileLoader(
+            new Filesystem(),
+            RESOURCES . '/lang'
+        ),
+        setting('language')
+    );
+
+    $translator->setFallback('ru');
+
+    return $translator;
 });
 /**
  * Set $app as FacadeApplication handler
