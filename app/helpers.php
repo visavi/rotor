@@ -1572,13 +1572,14 @@ function returnUrl($url = null)
 /**
  * Возвращает подключенный шаблон
  *
- * @param  string $view   имя шаблона
- * @param  array  $params массив параметров
+ * @param string $view   имя шаблона
+ * @param array  $params массив параметров
+ * @param array  $mergeData
  * @return string         сформированный код
  */
-function view($view, array $params = []): string
+function view($view, array $params = [], array $mergeData = []): string
 {
-    return View::make($view, $params)->render();
+    return View::make($view, $params, $mergeData)->render();
 }
 
 /**
