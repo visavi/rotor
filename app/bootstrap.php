@@ -1,8 +1,14 @@
 <?php
 
 use Dotenv\Dotenv;
+use Illuminate\Container\Container;
 use Illuminate\Database\Capsule\Manager as DB;
+use Illuminate\Filesystem\Filesystem;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\Facade;
+use Illuminate\Translation\FileLoader;
+use Illuminate\Translation\Translator;
+use Jenssegers\Blade\Blade;
 use Whoops\Handler\PlainTextHandler;
 use Whoops\Handler\PrettyPageHandler;
 use Whoops\Run;
@@ -59,3 +65,40 @@ $db->setEventDispatcher(new Dispatcher(new Container));*/
 $db->setAsGlobal();
 $db->bootEloquent();
 $db::connection()->enableQueryLog();
+
+/**
+ * Setup a new app instance container
+ */
+$app = new Container();
+$app->singleton('app', Container::class);
+
+$app->singleton('view', static function () {
+    $view = new Blade([
+        HOME . '/themes/' . setting('themes') . '/views',
+        RESOURCES . '/views',
+        HOME . '/themes',
+    ], STORAGE . '/caches');
+
+    $view->compiler()->withoutDoubleEncoding();
+
+    return $view;
+});
+
+$app->singleton('translator', static function () {
+    $translator = new Translator(
+        new FileLoader(
+            new Filesystem(),
+            RESOURCES . '/lang'
+        ),
+        setting('language')
+    );
+
+    $translator->setFallback('ru');
+
+    return $translator;
+});
+
+/**
+ * Set $app as FacadeApplication handler
+ */
+Facade::setFacadeApplication($app);
