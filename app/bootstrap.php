@@ -60,7 +60,6 @@ $db->addConnection([
 ]);
 
 /*use Illuminate\Events\Dispatcher;
-use Illuminate\Container\Container;
 $db->setEventDispatcher(new Dispatcher(new Container));*/
 $db->setAsGlobal();
 $db->bootEloquent();
