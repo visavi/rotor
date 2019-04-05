@@ -24,7 +24,7 @@
         "illuminate/database": "~5.8",
         "mobiledetect/mobiledetectlib": "^2.8",
         "php-ffmpeg/php-ffmpeg": "~0.13",
-        "swiftmailer/swiftmailer": "~6.1",
+        "swiftmailer/swiftmailer": "~6.2",
         "vlucas/phpdotenv": "^3.3",
         "robmorgan/phinx": "^0.10",
         "php-curl-class/php-curl-class": "^8.5",
