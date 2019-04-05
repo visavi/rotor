@@ -7,6 +7,8 @@ namespace App\Controllers;
 use App\Models\Ban;
 use Illuminate\Database\Capsule\Manager as DB;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Lang;
+use Illuminate\Support\Facades\View;
 
 Class BaseController
 {
@@ -26,6 +28,13 @@ Class BaseController
         // Сайт закрыт для всех
         if (setting('closedsite') === 2 && ! isAdmin() && ! $request->is('closed', 'login')) {
             redirect('/closed');
+        }
+
+        [$path, $name] = explode('\\', static::class);
+
+        if ($path === 'Modules') {
+            View::addNamespace($name, MODULES . '/' . $name . '/resources/views');
+            Lang::addNamespace($name, MODULES . '/' . $name . '/resources/lang');
         }
     }
 
