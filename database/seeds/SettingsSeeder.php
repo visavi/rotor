@@ -70,6 +70,7 @@ class SettingsSeeder extends AbstractSeed
             ['name'  => 'keywords', 'value' => 'Ключевые слова вашего сайта'],
             ['name'  => 'lastnews', 'value' => 5],
             ['name'  => 'language', 'value' => 'ru'],
+            ['name'  => 'language_fallback', 'value' => 'ru'],
             ['name'  => 'limitcontact', 'value' => 50],
             ['name'  => 'limitignore', 'value' => 50],
             ['name'  => 'listbanhist', 'value' => 10],

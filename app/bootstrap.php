@@ -92,7 +92,7 @@ $app->singleton('translator', static function () {
         setting('language')
     );
 
-    $translator->setFallback('ru');
+    $translator->setFallback(setting('language_fallback'));
 
     return $translator;
 });

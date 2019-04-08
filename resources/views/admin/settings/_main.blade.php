@@ -71,6 +71,25 @@
         {!! textError('sets[language]') !!}
     </div>
 
+    <?php $inputLangFallback = getInput('language_fallback', $settings['language_fallback']); ?>
+
+    <div class="form-group{{ hasError('sets[language_fallback]') }}">
+        <label for="language_fallback">Резервный язык:</label>
+        <select class="form-control" id="language_fallback" name="sets[language_fallback]">
+
+            @foreach ($languages as $language)
+                <?php $selected = ($language === $inputLangFallback) ? ' selected' : ''; ?>
+                <option value="{{ $language }}"{{ $selected }}>{{ $language }}</option>
+            @endforeach
+        </select>
+
+        {!! textError('sets[language_fallback]') !!}
+    </div>
+
+    <p class="text-muted font-italic">
+       Резервный язык используется когда нет перевода основного языка
+    </p>
+
     <?php $themes = array_map('basename', glob(HOME . '/themes/*', GLOB_ONLYDIR)); ?>
     <?php $inputThemes = getInput('sets.themes', $settings['themes']); ?>
 
