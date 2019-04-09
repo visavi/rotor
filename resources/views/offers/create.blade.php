@@ -1,7 +1,7 @@
 @extends('layout')
 
 @section('title')
-    Добавление записи
+    {{ trans('offers.adding_record') }}
 @stop
 
 @section('breadcrumb')
@@ -9,7 +9,7 @@
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
             <li class="breadcrumb-item"><a href="/offers/offer">{{ trans('offers.title') }}</a></li>
-            <li class="breadcrumb-item active">Добавление</li>
+            <li class="breadcrumb-item active">{{ trans('offers.adding_record') }}</li>
         </ol>
     </nav>
 @stop
@@ -23,31 +23,31 @@
                 <?php $inputType = getInput('type', $type); ?>
 
                 <div class="form-group{{ hasError('type') }}">
-                    <label for="inputType">Я хотел бы...</label>
+                    <label for="inputType">{{ trans('offers.i_want_to') }}</label>
                     <select class="form-control" id="inputType" name="type">
-                        <option value="offer"{{ $inputType === 'offer' ? ' selected' : '' }}>Предложить идею</option>
-                        <option value="issue"{{ $inputType === 'issue' ? ' selected' : '' }}>Сообщить о проблеме</option>
+                        <option value="offer"{{ $inputType === 'offer' ? ' selected' : '' }}>{{ trans('offers.suggest_idea') }}</option>
+                        <option value="issue"{{ $inputType === 'issue' ? ' selected' : '' }}>{{ trans('offers.report_problem') }}</option>
                     </select>
                     {!! textError('type') !!}
                 </div>
 
                 <div class="form-group{{ hasError('title') }}">
-                    <label for="inputTitle">Название:</label>
+                    <label for="inputTitle">{{ trans('offers.name') }}:</label>
                     <input type="text" class="form-control" id="inputTitle" name="title" maxlength="50" value="{{ getInput('title') }}" required>
                     {!! textError('title') !!}
                 </div>
 
                 <div class="form-group{{ hasError('text') }}">
-                    <label for="text">Текст:</label>
+                    <label for="text">{{ trans('offers.text') }}:</label>
                     <textarea class="form-control markItUp" id="text" rows="5" name="text" required>{{ getInput('text') }}</textarea>
                     {!! textError('text') !!}
                 </div>
 
-                <button class="btn btn-primary">Добавить</button>
+                <button class="btn btn-primary">{{ trans('offers.add_offer') }}</button>
             </form>
         </div><br>
 
     @else
-        {!! showError('Для добавления предложения или проблемы вам необходимо набрать '.plural(setting('addofferspoint'), setting('scorename')).'!') !!}
+        {!! showError(trans('offers.condition_add', ['point' => plural(setting('addofferspoint'), setting('scorename'))])) !!}
     @endif
 @stop
