@@ -55,8 +55,8 @@
                 @foreach ($offers as $data)
                     <div class="b">
                         <div class="float-right">
-                            <a href="/admin/offers/reply/{{ $data->id }}"><i class="fas fa-reply text-muted"></i></a>
-                            <a href="/admin/offers/edit/{{ $data->id }}"><i class="fas fa-pencil-alt text-muted"></i></a>
+                            <a href="/admin/offers/reply/{{ $data->id }}" data-toggle="tooltip" title="{{ trans('main.reply') }}"><i class="fas fa-reply text-muted"></i></a>
+                            <a href="/admin/offers/edit/{{ $data->id }}" data-toggle="tooltip" title="{{ trans('main.edit') }}"><i class="fas fa-pencil-alt text-muted"></i></a>
                             <input type="checkbox" name="del[]" value="{{ $data->id }}">
                         </div>
 
