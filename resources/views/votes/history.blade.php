@@ -1,15 +1,15 @@
 @extends('layout')
 
 @section('title')
-    История голосований ({{ trans('main.page_num', ['page' => $page->current]) }})
+    {{ trans('votes.archive_votes') }} ({{ trans('main.page_num', ['page' => $page->current]) }})
 @stop
 
 @section('breadcrumb')
     <nav>
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
-            <li class="breadcrumb-item"><a href="/votes">Голосования</a></li>
-            <li class="breadcrumb-item active">История голосований</li>
+            <li class="breadcrumb-item"><a href="/votes">{{ trans('votes.title') }}</a></li>
+            <li class="breadcrumb-item active">{{ trans('votes.archive_votes') }}</li>
         </ol>
     </nav>
 @stop
@@ -23,16 +23,16 @@
             </div>
             <div>
                 @if ($vote->topic->id)
-                    Тема: <a href="/topics/{{ $vote->topic->id }}">{{ $vote->topic->title }}</a><br>
+                    {{ trans('forums.topic') }}: <a href="/topics/{{ $vote->topic->id }}">{{ $vote->topic->title }}</a><br>
                 @endif
 
-                Создано: {{ dateFixed($vote->created_at) }}<br>
-                Всего голосов: {{ $vote->count }}<br>
+                {{ trans('main.created') }}: {{ dateFixed($vote->created_at) }}<br>
+                {{ trans('main.votes') }}: {{ $vote->count }}<br>
             </div>
         @endforeach
 
         {!! pagination($page) !!}
     @else
-        {!! showError('Голосований в архиве еще нет!') !!}
+        {!! showError(trans('votes.empty_votes')) !!}
     @endif
 @stop

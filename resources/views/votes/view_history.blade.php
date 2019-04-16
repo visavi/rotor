@@ -8,8 +8,8 @@
     <nav>
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
-            <li class="breadcrumb-item"><a href="/votes">Голосования</a></li>
-            <li class="breadcrumb-item"><a href="/votes/history">История голосований</a></li>
+            <li class="breadcrumb-item"><a href="/votes">{{ trans('votes.title') }}</a></li>
+            <li class="breadcrumb-item"><a href="/votes/history">{{ trans('votes.archive_votes') }}</a></li>
             <li class="breadcrumb-item active">{{ $vote->title }}</li>
         </ol>
     </nav>
@@ -20,10 +20,10 @@
         <?php $proc = round(($data * 100) / $info['sum'], 1); ?>
         <?php $maxproc = round(($data * 100) / $info['max']); ?>
 
-        <b>{{ $key }}</b> (Голосов: {{ $data }})<br>
+        <b>{{ $key }}</b> ({{ trans('main.votes') }}: {{ $data }})<br>
         {!! progressBar($maxproc, $proc.'%') !!}
     @endforeach
 
-    Вариантов: <b>{{ count($info['voted']) }}</b><br>
-    Проголосовало: <b>{{ $vote->count }}</b><br><br>
+    {{ trans('votes.options') }}: <b>{{ count($info['voted']) }}</b><br>
+    {{ trans('votes.voted') }}: <b>{{ $vote->count }}</b><br><br>
 @stop

@@ -1,24 +1,24 @@
 @extends('layout')
 
 @section('title')
-    Голосования ({{ trans('main.page_num', ['page' => $page->current]) }})
+    {{ trans('votes.title') }} ({{ trans('main.page_num', ['page' => $page->current]) }})
 @stop
 
 @section('header')
     @if (getUser())
         <div class="float-right">
-            <a class="btn btn-success" href="/votes/create">Создать голосование</a><br>
+            <a class="btn btn-success" href="/votes/create">{{ trans('main.create') }}</a><br>
         </div><br>
     @endif
 
-    <h1>Голосования</h1>
+    <h1>{{ trans('votes.title') }}</h1>
 @stop
 
 @section('breadcrumb')
     <nav>
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
-            <li class="breadcrumb-item active">Голосования</li>
+            <li class="breadcrumb-item active">{{ trans('votes.title') }}</li>
         </ol>
     </nav>
 @stop
@@ -32,18 +32,18 @@
             </div>
             <div>
                 @if ($vote->topic->id)
-                    Тема: <a href="/topics/{{ $vote->topic->id }}">{{ $vote->topic->title }}</a><br>
+                    {{ trans('forums.topic') }}: <a href="/topics/{{ $vote->topic->id }}">{{ $vote->topic->title }}</a><br>
                 @endif
 
-                Создано: {{ dateFixed($vote->created_at) }}<br>
-                Всего голосов: {{ $vote->count }}<br>
+                {{ trans('main.created') }}: {{ dateFixed($vote->created_at) }}<br>
+                {{ trans('main.votes') }}: {{ $vote->count }}<br>
             </div>
         @endforeach
 
         {!! pagination($page) !!}
     @else
-        {!! showError('Открытых голосований еще нет!') !!}
+        {!! showError(trans('votes.empty_votes')) !!}
     @endif
 
-    <i class="fa fa-briefcase"></i> <a href="/votes/history">Архив голосований</a><br>
+    <i class="fa fa-briefcase"></i> <a href="/votes/history">{{ trans('votes.archive_votes') }}</a><br>
 @stop

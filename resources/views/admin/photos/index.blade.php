@@ -35,8 +35,8 @@
                 <b><a href="/photos/{{ $photo->id }}">{{ $photo->title }}</a></b>
 
                 <div class="float-right">
-                    <a href="/admin/photos/edit/{{ $photo->id }}?page={{ $page->current }}"><i class="fas fa-pencil-alt text-muted"></i></a>
-                    <a href="/admin/photos/delete/{{ $photo->id }}?page={{ $page->current }}&amp;token={{ $_SESSION['token'] }}" onclick="return confirm('{{ trans('photos.confirm_delete_photo') }}')"><i class="fas fa-times text-muted"></i></a>
+                    <a href="/admin/photos/edit/{{ $photo->id }}?page={{ $page->current }}" data-toggle="tooltip" title="{{ trans('main.edit') }}"><i class="fas fa-pencil-alt text-muted"></i></a>
+                    <a href="/admin/photos/delete/{{ $photo->id }}?page={{ $page->current }}&amp;token={{ $_SESSION['token'] }}" onclick="return confirm('{{ trans('photos.confirm_delete_photo') }}')" data-toggle="tooltip" title="{{ trans('main.delete') }}"><i class="fas fa-times text-muted"></i></a>
                 </div>
             </div>
 
