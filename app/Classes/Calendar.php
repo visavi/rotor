@@ -27,7 +27,7 @@ class Calendar
 
         if ($news->isNotEmpty()) {
             foreach ($news as $data) {
-                $curDay           = dateFixed($data->created_at, 'j');
+                $curDay           = (int) dateFixed($data->created_at, 'j');
                 $newsDays[]       = $curDay;
                 $newsIds[$curDay] = $data->id;
             }

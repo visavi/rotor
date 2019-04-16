@@ -6,7 +6,7 @@
 
 @section('header')
     <div class="float-right">
-        <a class="btn btn-success" href="/admin/news/create">{{ trans('main.add') }}</a>
+        <a class="btn btn-success" href="/admin/news/create">{{ trans('main.create') }}</a>
     </div><br>
 
     <h1>{{ trans('news.site_news') }}</h1>
