@@ -20,7 +20,7 @@
                         @continue
                     @endif
 
-                    @if (in_array($valDay, $newsDays, true))
+                    @if (isset($newsIds[$valDay]))
                         <td class="text-center"><a href="/news/{{ $newsIds[$valDay] }}"><span class="text-white bg-success px-1 font-weight-bold">{{ $valDay }}</span></a></td>
                         @continue
                     @endif

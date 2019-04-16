@@ -18,24 +18,25 @@ class Calendar
     {
         [$date['day'], $date['month'], $date['year']] = explode('.', dateFixed($time, 'j.n.Y'));
         $date       = array_map('\intval', $date);
-        $startMonth = mktime(0, 0, 0, $date['month'], 1);
+        $startMonth = mktime(0, 0, 0, $date['month'], 1, $date['year']);
+        $endMonth   = strtotime('+1 month', $startMonth);
 
-        $newsDays = [];
+        $news = News::query()
+            ->where('created_at', '>=', $startMonth)
+            ->where('created_at', '<', $endMonth)
+            ->get();
+
         $newsIds  = [];
-
-        $news = News::query()->where('created_at', '>', $startMonth)->get();
-
         if ($news->isNotEmpty()) {
             foreach ($news as $data) {
-                $curDay           = (int) dateFixed($data->created_at, 'j');
-                $newsDays[]       = $curDay;
+                $curDay           = dateFixed($data->created_at, 'j');
                 $newsIds[$curDay] = $data->id;
             }
         }
 
         $calendar = $this->makeCalendar($date['month'], $date['year']);
 
-        return view('app/_calendar', compact('calendar', 'date', 'time', 'newsDays', 'newsIds'));
+        return view('app/_calendar', compact('calendar', 'date', 'time', 'newsIds'));
     }
 
     /**
@@ -47,13 +48,13 @@ class Calendar
      */
     protected function makeCalendar($month, $year): array
     {
-        $wday = date('w', mktime(0, 0, 0, $month, 1, $year));
+        $date = date('w', mktime(0, 0, 0, $month, 1, $year));
 
-        if ($wday === 0) {
-            $wday = 7;
+        if ($date === 0) {
+            $date = 7;
         }
 
-        $n = - ($wday-2);
+        $n = - ($date-2);
         $cal = [];
         for ($y = 0; $y < 6; $y++) {
             $row = [];
