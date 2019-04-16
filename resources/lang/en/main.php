@@ -51,6 +51,7 @@ return [
     'empty_messages'    => 'No messages yet!',
     'my'                => 'My',
     'new'               => 'New',
+    'all'               => 'All',
     'position'          => 'Position',
     'description'       => 'Description',
     'select_all'        => 'Select all',
@@ -95,6 +96,9 @@ return [
     'files'                 => 'Files',
     'file_not_found'        => 'File not found',
     'not_uploaded'          => 'Files not uploaded!',
+
+    'next'     => 'Next',
+    'previous' => 'Previous',
 
     'not_authorized'  => 'To add a message you need to be logged in!',
     'not_logged'      => 'You must be logged in to view the site!',

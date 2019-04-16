@@ -1,7 +1,7 @@
 @extends('layout')
 
 @section('title')
-    Рейтинг толстосумов (Стр. {{ $page->current }})
+    Рейтинг толстосумов ({{ trans('main.page_num', ['page' => $page->current]) }})
 @stop
 
 @section('header')

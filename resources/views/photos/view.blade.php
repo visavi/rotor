@@ -8,8 +8,8 @@
     <nav>
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
-            <li class="breadcrumb-item"><a href="/photos">Галерея</a></li>
-            <li class="breadcrumb-item"><a href="/photos/albums/{{ $photo->user->login }}">Альбом</a></li>
+            <li class="breadcrumb-item"><a href="/photos">{{ trans('photos.title') }}</a></li>
+            <li class="breadcrumb-item"><a href="/photos/albums/{{ $photo->user->login }}">{{ trans('photos.album') }}</a></li>
             <li class="breadcrumb-item active">{{ $photo->title }}</li>
         </ol>
     </nav>
@@ -17,13 +17,13 @@
 
 @section('content')
     @if (isAdmin())
-        <a href="/admin/photos/edit/{{ $photo->id }}">Редактировать</a> /
-       <a href="/admin/photos/delete/{{ $photo->id }}?token={{ $_SESSION['token'] }}" onclick="return confirm('Вы подтверждаете удаление изображения?')">Удалить</a>
+        <a href="/admin/photos/edit/{{ $photo->id }}">{{ trans('main.edit') }}</a> /
+       <a href="/admin/photos/delete/{{ $photo->id }}?token={{ $_SESSION['token'] }}" onclick="return confirm('{{ trans('photos.confirm_delete_photo') }}')">{{ trans('main.delete') }}</a>
     @endif
 
     @if ($photo->user->id === getUser('id') && ! isAdmin())
-        <a href="/photos/edit/{{ $photo->id }}">Редактировать</a> /
-        <a href="/photos/delete/{{ $photo->id }}?token={{ $_SESSION['token'] }}" onclick="return confirm('Вы подтверждаете удаление изображения?')">Удалить</a>
+        <a href="/photos/edit/{{ $photo->id }}">{{ trans('main.edit') }}</a> /
+        <a href="/photos/delete/{{ $photo->id }}?token={{ $_SESSION['token'] }}" onclick="return confirm('{{ trans('photos.confirm_delete_photo') }}')">{{ trans('main.delete') }}</a>
     @endif
 
     <div>
@@ -35,7 +35,7 @@
             {!! bbCode($photo->text) !!}<br>
         @endif
 
-        <div class="js-rating">Рейтинг:
+        <div class="js-rating">{{ trans('main.rating') }}:
             @if (getUser() && getUser('id') !== $photo->user_id)
                 <a class="post-rating-down<?= $photo->vote === '-' ? ' active' : '' ?>" href="#" onclick="return changeRating(this);" data-id="{{ $photo->id }}" data-type="{{ App\Models\Photo::class }}" data-vote="-" data-token="{{ $_SESSION['token'] }}"><i class="fa fa-thumbs-down"></i></a>
             @endif
@@ -45,8 +45,8 @@
             @endif
         </div>
 
-        Добавлено: {!! $photo->user->getProfile() !!} ({{ dateFixed($photo->created_at) }})<br>
-        <a href="/photos/comments/{{ $photo->id }}">Комментарии</a> ({{ $photo->count_comments }})
+            {{ trans('main.added') }}: {!! $photo->user->getProfile() !!} ({{ dateFixed($photo->created_at) }})<br>
+        <a href="/photos/comments/{{ $photo->id }}">{{ trans('main.comments') }}</a> ({{ $photo->count_comments }})
         <a href="/photos/end/{{ $photo->id }}">&raquo;</a>
     </div>
     <br>
@@ -56,11 +56,11 @@
     @if ($nav['next'] || $nav['prev'])
         <div class="form" style="text-align:center">
             @if ($nav['next'])
-                <a href="/photos/{{ $nav['next'] }}">&laquo; Назад</a> &nbsp;
+                <a href="/photos/{{ $nav['next'] }}">&laquo; {{ trans('main.previous') }}</a> &nbsp;
             @endif
 
             @if ($nav['prev'])
-                &nbsp; <a href="/photos/{{ $nav['prev'] }}">Вперед &raquo;</a>
+                &nbsp; <a href="/photos/{{ $nav['prev'] }}">{{ trans('main.next') }} &raquo;</a>
             @endif
         </div>
     @endif

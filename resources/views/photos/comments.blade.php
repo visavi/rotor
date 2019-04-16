@@ -1,16 +1,16 @@
 @extends('layout')
 
 @section('title')
-    {{ $photo->title }} - Комментарии
+    {{ $photo->title }} - {{ trans('main.comments') }}
 @stop
 
 @section('breadcrumb')
     <nav>
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
-            <li class="breadcrumb-item"><a href="/photos">Галерея</a></li>
+            <li class="breadcrumb-item"><a href="/photos">{{ trans('photos.title') }}</a></li>
             <li class="breadcrumb-item"><a href="/photos/{{ $photo->id }}">{{ $photo->title }}</a></li>
-            <li class="breadcrumb-item active">Комментарии</li>
+            <li class="breadcrumb-item active">{{ trans('main.comments') }}</li>
         </ol>
     </nav>
 @stop
@@ -28,19 +28,19 @@
                     @if (getUser())
                         <div class="float-right">
                             @if (getUser('id') !== $data->user_id)
-                                <a href="#" onclick="return postReply(this)" title="Ответить"><i class="fa fa-reply text-muted"></i></a>
+                                <a href="#" onclick="return postReply(this)" title="{{ trans('main.reply') }}"><i class="fa fa-reply text-muted"></i></a>
 
-                                <a href="#" onclick="return postQuote(this)" title="Цитировать"><i class="fa fa-quote-right text-muted"></i></a>
+                                <a href="#" onclick="return postQuote(this)" title="{{ trans('main.quote') }}"><i class="fa fa-quote-right text-muted"></i></a>
 
-                                <a href="#" onclick="return sendComplaint(this)" data-type="{{ App\Models\Photo::class }}" data-id="{{ $data->id }}" data-token="{{ $_SESSION['token'] }}" data-page="{{ $page->current }}" rel="nofollow" title="Жалоба"><i class="fa fa-bell text-muted"></i></a>
+                                <a href="#" onclick="return sendComplaint(this)" data-type="{{ App\Models\Photo::class }}" data-id="{{ $data->id }}" data-token="{{ $_SESSION['token'] }}" data-page="{{ $page->current }}" rel="nofollow" title="{{ trans('main.complain') }}"><i class="fa fa-bell text-muted"></i></a>
                             @endif
 
                             @if ($data->created_at + 600 > SITETIME && $data->user_id === getUser('id'))
-                                <a title="Редактировать" href="/photos/edit/{{ $photo->id }}/{{ $data->id }}?page={{ $page->current }}"><i class="fa fa-pencil-alt text-muted"></i></a>
+                                <a href="/photos/edit/{{ $photo->id }}/{{ $data->id }}?page={{ $page->current }}" title="{{ trans('main.edit') }}"><i class="fa fa-pencil-alt text-muted"></i></a>
                             @endif
 
                             @if (isAdmin())
-                                <a href="#" onclick="return deleteComment(this)" data-rid="{{ $data->relate_id }}" data-id="{{ $data->id }}" data-type="{{ App\Models\Photo::class }}" data-token="{{ $_SESSION['token'] }}" data-toggle="tooltip" title="Удалить"><i class="fa fa-times text-muted"></i></a>
+                                <a href="#" onclick="return deleteComment(this)" data-rid="{{ $data->relate_id }}" data-id="{{ $data->id }}" data-type="{{ App\Models\Photo::class }}" data-token="{{ $_SESSION['token'] }}" data-toggle="tooltip" title="{{ trans('main.delete') }}"><i class="fa fa-times text-muted"></i></a>
                             @endif
                         </div>
                     @endif
@@ -62,7 +62,6 @@
     @endif
 
     @if (empty($photo->closed))
-
         @if (empty($page->total))
             {!! showError(trans('main.empty_comments')) !!}
         @endif
@@ -73,23 +72,23 @@
                     <input type="hidden" name="token" value="{{ $_SESSION['token'] }}">
 
                     <div class="form-group{{ hasError('msg') }}">
-                        <label for="msg">Сообщение:</label>
+                        <label for="msg">{{ trans('main.message') }}:</label>
                         <textarea class="form-control markItUp" maxlength="{{ setting('comment_length') }}" id="msg" rows="5" name="msg" required>{{ getInput('msg') }}</textarea>
                         <span class="js-textarea-counter"></span>
                         {!! textError('msg') !!}
                     </div>
 
-                    <button class="btn btn-success">Написать</button>
+                    <button class="btn btn-success">{{ trans('main.write') }}</button>
                 </form>
             </div><br>
 
-            <a href="/rules">Правила</a> /
-            <a href="/stickers">Стикеры</a> /
-            <a href="/tags">Теги</a><br><br>
+            <a href="/rules">{{ trans('main.rules') }}</a> /
+            <a href="/stickers">{{ trans('main.stickers') }}</a> /
+            <a href="/tags">{{ trans('main.tags') }}</a><br><br>
         @else
             {!! showError(trans('main.not_authorized')) !!}
         @endif
     @else
-        {!! showError('Комментирование данной фотографии закрыто!') !!}
+        {!! showError(trans('photos.closed_comments')) !!}
     @endif
 @stop

@@ -1,19 +1,19 @@
 @extends('layout')
 
 @section('title')
-    Список всех комментариев {{ $user->login }} (Стр. {{ $page->current}})
+    {{ trans('main.comments') }} {{ $user->login }} ({{ trans('main.page_num', ['page' => $page->current]) }})
 @stop
 
 @section('header')
-    <h1>Список всех комментариев {{ $user->login }}</h1>
+    <h1>{{ trans('main.comments') }} {{ $user->login }}</h1>
 @stop
 
 @section('breadcrumb')
     <nav>
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
-            <li class="breadcrumb-item"><a href="/photos">Галерея</a></li>
-            <li class="breadcrumb-item active">Список всех комментариев {{ $user->login }}</li>
+            <li class="breadcrumb-item"><a href="/photos">{{ trans('photos.title') }}</a></li>
+            <li class="breadcrumb-item active">{{ trans('main.comments') }} {{ $user->login }}</li>
         </ol>
     </nav>
 @stop
@@ -26,13 +26,13 @@
                     <i class="fa fa-comment"></i> <b><a href="/photos/comment/{{ $data->relate_id }}/{{ $data->id }}">{{ $data->title }}</a></b>
 
                     @if (isAdmin())
-                        <a href="#" class="float-right" onclick="return deleteComment(this)" data-rid="{{ $data->relate_id }}" data-id="{{ $data->id }}" data-type="{{ Photo::class }}" data-token="{{ $_SESSION['token'] }}" data-toggle="tooltip" title="Удалить"><i class="fa fa-times"></i></a>
+                        <a href="#" class="float-right" onclick="return deleteComment(this)" data-rid="{{ $data->relate_id }}" data-id="{{ $data->id }}" data-type="{{ App\Models\Photo::class }}" data-token="{{ $_SESSION['token'] }}" data-toggle="tooltip" title="{{ trans('main.delete') }}"><i class="fa fa-times"></i></a>
                     @endif
                 </div>
 
                 <div>
                     {!! bbCode($data->text) !!}<br>
-                    Написал: <b>{!! $data->user->getProfile() !!}</b> <small>({{ dateFixed($data->created_at) }})</small><br>
+                    {{ trans('main.posted') }}: <b>{!! $data->user->getProfile() !!}</b> <small>({{ dateFixed($data->created_at) }})</small><br>
 
                     @if (isAdmin())
                         <span class="data">({{ $data->brow }}, {{ $data->ip }})</span>

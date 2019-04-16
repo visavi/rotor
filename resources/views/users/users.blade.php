@@ -1,7 +1,7 @@
 @extends('layout')
 
 @section('title')
-    Список пользователей (Стр. {{ $page->current }})
+    Список пользователей ({{ trans('main.page_num', ['page' => $page->current]) }})
 @stop
 
 @section('header')

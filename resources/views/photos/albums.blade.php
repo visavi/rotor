@@ -1,19 +1,19 @@
 @extends('layout')
 
 @section('title')
-    Альбомы пользователей (Стр. {{ $page->current }})
+    {{ trans('photos.albums') }} ({{ trans('main.page_num', ['page' => $page->current]) }})
 @stop
 
 @section('header')
-    <h1>Альбомы пользователей</h1>
+    <h1>{{ trans('photos.albums') }}</h1>
 @stop
 
 @section('breadcrumb')
     <nav>
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
-            <li class="breadcrumb-item"><a href="/photos">Галерея</a></li>
-            <li class="breadcrumb-item active">Альбомы пользователей</li>
+            <li class="breadcrumb-item"><a href="/photos">{{ trans('photos.title') }}</a></li>
+            <li class="breadcrumb-item active">{{ trans('photos.albums') }}</li>
         </ol>
     </nav>
 @stop
@@ -23,14 +23,14 @@
         @foreach ($albums as $data)
 
             <i class="fa fa-image"></i>
-            <b><a href="/photos/albums/{{ $data->login }}">{{ $data->login }}</a></b> ({{ $data->cnt }} фото / {{ $data->count_comments }} комм.)<br>
+            <b><a href="/photos/albums/{{ $data->login }}">{{ $data->login }}</a></b> ({{ $data->cnt }} {{ trans('photos.photos') }} / {{ $data->count_comments }} {{ trans('main.comments') }})<br>
 
         @endforeach
 
         {!! pagination($page) !!}
 
-        Всего альбомов: <b>{{ $page->total }}</b><br><br>
+        {{ trans('photos.total_albums') }}: <b>{{ $page->total }}</b><br><br>
     @else
-        {!! showError('Альбомов еще нет!') !!}
+        {!! showError(trans('photos.empty_albums')) !!}
     @endif
 @stop

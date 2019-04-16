@@ -1,7 +1,7 @@
 @extends('layout')
 
 @section('title')
-    Рейтинг репутации (Стр. {{ $page->current }})
+    Рейтинг репутации ({{ trans('main.page_num', ['page' => $page->current]) }})
 @stop
 
 @section('header')

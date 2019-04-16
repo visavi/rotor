@@ -1,7 +1,7 @@
 @extends('layout')
 
 @section('title')
-    История голосований (Стр. {{ $page->current }})
+    История голосований ({{ trans('main.page_num', ['page' => $page->current]) }})
 @stop
 
 @section('breadcrumb')

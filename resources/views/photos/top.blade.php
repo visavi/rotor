@@ -1,15 +1,15 @@
 @extends('layout')
 
 @section('title')
-    Топ популярных фотографий
+    {{ trans('photos.top_photos') }}
 @stop
 
 @section('breadcrumb')
     <nav>
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
-            <li class="breadcrumb-item"><a href="/photos">Галерея</a></li>
-            <li class="breadcrumb-item active">Топ популярных фотографий</li>
+            <li class="breadcrumb-item"><a href="/photos">{{ trans('photos.title') }}</a></li>
+            <li class="breadcrumb-item active">{{ trans('photos.top_photos') }}</li>
         </ol>
     </nav>
 @stop
@@ -17,14 +17,13 @@
 @section('content')
     @if ($photos->isNotEmpty())
 
-        Сортировать:
+        {{ trans('main.sort') }}:
         <?php $active = ($order === 'rating') ? 'success' : 'light'; ?>
-        <a href="/photos/top?sort=rating" class="badge badge-{{ $active }}">Оценки</a>
+        <a href="/photos/top?sort=rating" class="badge badge-{{ $active }}">{{ trans('main.rating') }}</a>
 
         <?php $active = ($order === 'count_comments') ? 'success' : 'light'; ?>
-        <a href="/photos/top?sort=comments" class="badge badge-{{ $active }}">Комментарии</a>
+        <a href="/photos/top?sort=comments" class="badge badge-{{ $active }}">{{ trans('main.comments') }}</a>
         <hr>
-
 
         @foreach ($photos as $photo)
             <div class="b">
@@ -65,14 +64,14 @@
 
                 <br>{!! bbCode($photo->text) !!}<br>
 
-                Добавлено: {!! $photo->user->getProfile() !!} ({{ dateFixed($photo->created_at) }})<br>
-                <a href="/photos/comments/{{ $photo->id }}">Комментарии</a> ({{ $photo->count_comments }})
+                    {{ trans('main.added') }}: {!! $photo->user->getProfile() !!} ({{ dateFixed($photo->created_at) }})<br>
+                <a href="/photos/comments/{{ $photo->id }}">{{ trans('main.comments') }}</a> ({{ $photo->count_comments }})
                 <a href="/photos/end/{{ $photo->id }}">&raquo;</a>
             </div>
         @endforeach
 
         {!! pagination($page) !!}
     @else
-        {!! showError('Загруженных фотографий еще нет!') !!}
+        {!! showError(trans('photos.empty_photos')) !!}
     @endif
 @stop

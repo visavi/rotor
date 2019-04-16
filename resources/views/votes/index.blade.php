@@ -1,7 +1,7 @@
 @extends('layout')
 
 @section('title')
-    Голосования (Стр. {{ $page->current }})
+    Голосования ({{ trans('main.page_num', ['page' => $page->current]) }})
 @stop
 
 @section('header')

@@ -1,17 +1,17 @@
 @extends('layout')
 
 @section('title')
-    Галерея
+    {{ trans('photos.title') }}
 @stop
 
 @section('header')
     @if (getUser())
         <div class="float-right">
-            <a class="btn btn-success" href="/photos/create">Добавить</a><br>
+            <a class="btn btn-success" href="/photos/create">{{ trans('main.add') }}</a><br>
         </div><br>
     @endif
 
-    <h1>Галерея</h1>
+    <h1>{{ trans('photos.title') }}</h1>
 @stop
 
 @section('breadcrumb')
@@ -19,8 +19,8 @@
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
             <li class="breadcrumb-item"><a href="/admin">{{ trans('main.panel') }}</a></li>
-            <li class="breadcrumb-item active">Галерея</li>
-            <li class="breadcrumb-item"><a href="/photos?page={{ $page->current }}">Обзор</a></li>
+            <li class="breadcrumb-item active">{{ trans('photos.title') }}</li>
+            <li class="breadcrumb-item"><a href="/photos?page={{ $page->current }}">{{ trans('main.review') }}</a></li>
         </ol>
     </nav>
 @stop
@@ -36,7 +36,7 @@
 
                 <div class="float-right">
                     <a href="/admin/photos/edit/{{ $photo->id }}?page={{ $page->current }}"><i class="fas fa-pencil-alt text-muted"></i></a>
-                    <a href="/admin/photos/delete/{{ $photo->id }}?page={{ $page->current }}&amp;token={{ $_SESSION['token'] }}" onclick="return confirm('Вы подтверждаете удаление изображения?')"><i class="fas fa-times text-muted"></i></a>
+                    <a href="/admin/photos/delete/{{ $photo->id }}?page={{ $page->current }}&amp;token={{ $_SESSION['token'] }}" onclick="return confirm('{{ trans('photos.confirm_delete_photo') }}')"><i class="fas fa-times text-muted"></i></a>
                 </div>
             </div>
 
@@ -75,20 +75,20 @@
                     {!! bbCode($photo->text) !!}<br>
                 @endif
 
-                Добавлено: {!! $photo->user->getProfile() !!} ({{ dateFixed($photo->created_at) }})<br>
-                <a href="/photos/comments/{{ $photo->id }}">Комментарии</a> ({{ $photo->count_comments }})
+                    {{ trans('main.added') }}: {!! $photo->user->getProfile() !!} ({{ dateFixed($photo->created_at) }})<br>
+                <a href="/photos/comments/{{ $photo->id }}">{{ trans('main.comments') }}</a> ({{ $photo->count_comments }})
                 <a href="/photos/end/{{ $photo->id }}">&raquo;</a>
             </div>
         @endforeach
 
         {!! pagination($page) !!}
 
-        Всего фотографий: <b>{{ $page->total }}</b><br><br>
+        {{ trans('photos.total_photos') }}: <b>{{ $page->total }}</b><br><br>
 
         @if (isAdmin('boss'))
-            <i class="fa fa-sync"></i> <a href="/admin/photos/restatement?token={{ $_SESSION['token'] }}">Пересчитать</a><br>
+            <i class="fa fa-sync"></i> <a href="/admin/photos/restatement?token={{ $_SESSION['token'] }}">{{ trans('main.recount') }}</a><br>
         @endif
     @else
-        {!! showError('Фотографий еще нет!') !!}
+        {!! showError(trans('photos.empty_photos')) !!}
     @endif
 @stop

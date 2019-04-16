@@ -1,19 +1,19 @@
 @extends('layout')
 
 @section('title')
-    Альбом {{ $user->login }} (Стр. {{ $page->current }})
+    {{ trans('photos.album') }} {{ $user->login }} ({{ trans('main.page_num', ['page' => $page->current]) }})
 @stop
 
 @section('headers')
-    <h1>Альбом {{ $user->login }}</h1>
+    <h1>{{ trans('photos.album') }} {{ $user->login }}</h1>
 @stop
 
 @section('breadcrumb')
     <nav>
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
-            <li class="breadcrumb-item"><a href="/photos">Галерея</a></li>
-            <li class="breadcrumb-item active">Альбом {{ $user->login }}</li>
+            <li class="breadcrumb-item"><a href="/photos">{{ trans('photos.title') }}</a></li>
+            <li class="breadcrumb-item active">{{ trans('photos.album') }} {{ $user->login }}</li>
         </ol>
     </nav>
 @stop
@@ -26,7 +26,7 @@
                 @if ($moder)
                     <div class="float-right">
                         <a href="/photos/edit/{{ $photo->id }}?page={{ $page->current }}"><i class="fa fa-pencil-alt text-muted"></i></a>
-                        <a href="/photos/delete/{{ $photo->id }}?page={{ $page->current }}&amp;token={{ $_SESSION['token'] }}" onclick="return confirm('Вы подтверждаете удаление изображения?')"><i class="fa fa-times text-muted"></i></a>
+                        <a href="/photos/delete/{{ $photo->id }}?page={{ $page->current }}&amp;token={{ $_SESSION['token'] }}" onclick="return confirm('{{ trans('photos.confirm_delete_photo') }}')"><i class="fa fa-times text-muted"></i></a>
                     </div>
                 @endif
 
@@ -68,15 +68,15 @@
                    {!! bbCode($photo->text) !!}<br>
                 @endif
 
-                Добавлено: {!! $photo->user->getProfile() !!} ({{ dateFixed($photo->created_at) }})<br>
-                <a href="/photos/comments/{{ $photo->id }}">Комментарии</a> ({{ $photo->count_comments }})
+                    {{ trans('main.added') }}: {!! $photo->user->getProfile() !!} ({{ dateFixed($photo->created_at) }})<br>
+                <a href="/photos/comments/{{ $photo->id }}">{{ trans('main.comments') }}</a> ({{ $photo->count_comments }})
             </div>
         @endforeach
 
         {!! pagination($page) !!}
 
-        Всего фотографий: <b>{{ $page->total }}</b><br><br>
+        {{ trans('photos.total_photos') }}: <b>{{ $page->total }}</b><br><br>
     @else
-        {!! showError('Фотографий в альбоме еще нет!') !!}
+        {!! showError(trans('photos.empty_photos')) !!}
     @endif
 @stop

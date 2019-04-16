@@ -1,24 +1,24 @@
 @extends('layout')
 
 @section('title')
-    Галерея (Стр. {{ $page->current }})
+    {{ trans('photos.title') }} ({{ trans('main.page_num', ['page' => $page->current]) }})
 @stop
 
 @section('header')
     @if (getUser())
         <div class="float-right">
-            <a class="btn btn-success" href="/photos/create">Добавить</a><br>
+            <a class="btn btn-success" href="/photos/create">{{ trans('main.add') }}</a><br>
         </div><br>
     @endif
 
-    <h1>Галерея</h1>
+    <h1>{{ trans('photos.title') }}</h1>
 @stop
 
 @section('breadcrumb')
     <nav>
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
-            <li class="breadcrumb-item active">Галерея</li>
+            <li class="breadcrumb-item active">{{ trans('photos.title') }}</li>
 
             @if (isAdmin())
                 <li class="breadcrumb-item"><a href="/admin/photos?page={{ $page->current }}">{{ trans('main.management') }}</a></li>
@@ -29,22 +29,22 @@
 
 @section('content')
     @if (getUser())
-        Мои:
-        <a href="/photos/albums/{{ getUser('login') }}">фото</a>,
-        <a href="/photos/comments/active/{{ getUser('login') }}">комментарии</a> /
+        {{ trans('main.my') }}:
+        <a href="/photos/albums/{{ getUser('login') }}">{{ trans('photos.photos') }}</a>,
+        <a href="/photos/comments/active/{{ getUser('login') }}">{{ trans('main.comments') }}</a> /
     @endif
 
-    Все:
-    <a href="/photos/albums">альбомы</a>,
-    <a href="/photos/comments">комментарии</a> /
-    <a href="/photos/top">Топ фото</a>
+    {{ trans('main.all') }}:
+    <a href="/photos/albums">{{ trans('photos.albums') }}</a>,
+    <a href="/photos/comments">{{ trans('main.comments') }}</a> /
+    <a href="/photos/top">{{ trans('photos.top_photos') }}</a>
 
     @if ($photos->isNotEmpty())
         @foreach ($photos as $photo)
 
             <div class="b"><i class="fa fa-image"></i>
                 <b><a href="/photos/{{ $photo->id }}">{{ $photo->title }}</a></b>
-                (Рейтинг: {!! formatNum($photo->rating) !!})
+                ({{ trans('main.rating') }}: {!! formatNum($photo->rating) !!})
             </div>
 
             <div>
@@ -82,17 +82,17 @@
                     {!! bbCode($photo->text) !!}<br>
                 @endif
 
-                Добавлено: {!! $photo->user->getProfile() !!} ({{ dateFixed($photo->created_at) }})<br>
-                <a href="/photos/comments/{{ $photo->id }}">Комментарии</a> ({{ $photo->count_comments }})
+                {{ trans('main.added') }}: {!! $photo->user->getProfile() !!} ({{ dateFixed($photo->created_at) }})<br>
+                <a href="/photos/comments/{{ $photo->id }}">{{ trans('main.comments') }}</a> ({{ $photo->count_comments }})
                 <a href="/photos/end/{{ $photo->id }}">&raquo;</a>
             </div>
         @endforeach
 
         {!! pagination($page) !!}
 
-        Всего фотографий: <b>{{ $page->total }}</b><br><br>
+        {{ trans('photos.total_photos') }}: <b>{{ $page->total }}</b><br><br>
 
     @else
-        {!! showError('Фотографий нет, будь первым!') !!}
+        {!! showError(trans('photos.empty_photos')) !!}
     @endif
 @stop
