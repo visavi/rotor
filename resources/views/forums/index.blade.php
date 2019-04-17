@@ -24,7 +24,7 @@
 @stop
 
 @section('content')
-    @include('advert/_forum')
+    @include('ads/_forum')
 
     @if (getUser())
         {{ trans('main.my') }}: <a href="/forums/active/topics">{{ trans('forums.topics') }}</a>, <a href="/forums/active/posts">{{ trans('forums.posts') }}</a>, <a href="/forums/bookmarks">{{ trans('forums.bookmarks') }}</a> /

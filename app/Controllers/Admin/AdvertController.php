@@ -5,11 +5,10 @@ declare(strict_types=1);
 namespace App\Controllers\Admin;
 
 use App\Classes\Validator;
-use App\Models\RekUser;
-use App\Models\User;
+use App\Models\Advert;
 use Illuminate\Http\Request;
 
-class RekUserController extends AdminController
+class AdvertController extends AdminController
 {
     /**
      * Конструктор
@@ -29,10 +28,10 @@ class RekUserController extends AdminController
      */
     public function index(): string
     {
-        $total = RekUser::query()->where('deleted_at', '>', SITETIME)->count();
+        $total = Advert::query()->where('deleted_at', '>', SITETIME)->count();
         $page = paginate(setting('rekuserpost'), $total);
 
-        $records = RekUser::query()
+        $records = Advert::query()
             ->where('deleted_at', '>', SITETIME)
             ->limit($page->limit)
             ->offset($page->offset)
@@ -40,7 +39,7 @@ class RekUserController extends AdminController
             ->with('user')
             ->get();
 
-        return view('admin/rekusers/index', compact('records', 'page'));
+        return view('admin/adverts/index', compact('records', 'page'));
     }
 
     /**
@@ -54,7 +53,7 @@ class RekUserController extends AdminController
     public function edit(int $id, Request $request, Validator $validator): string
     {
         $page = int($request->input('page', 1));
-        $link = RekUser::query()->find($id);
+        $link = Advert::query()->find($id);
 
         if (! $link) {
             abort(404, 'Данной ссылки не существует!');
@@ -85,14 +84,14 @@ class RekUserController extends AdminController
                 saveAdvertUser();
 
                 setFlash('success', 'Рекламная ссылка успешно изменена!');
-                redirect('/admin/reklama?page=' . $page);
+                redirect('/admin/adverts?page=' . $page);
             } else {
                 setInput($request->all());
                 setFlash('danger', $validator->getErrors());
             }
         }
 
-        return view('admin/rekusers/edit', compact('link', 'page'));
+        return view('admin/adverts/edit', compact('link', 'page'));
     }
 
     /**
@@ -113,7 +112,7 @@ class RekUserController extends AdminController
 
         if ($validator->isValid()) {
 
-            RekUser::query()->whereIn('id', $del)->delete();
+            Advert::query()->whereIn('id', $del)->delete();
 
             saveAdvertUser();
 
@@ -122,6 +121,6 @@ class RekUserController extends AdminController
             setFlash('danger', $validator->getErrors());
         }
 
-        redirect('/admin/reklama?page=' . $page);
+        redirect('/admin/adverts?page=' . $page);
     }
 }

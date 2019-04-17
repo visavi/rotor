@@ -3,7 +3,7 @@
 use App\Models\Module;
 use FastRoute\RouteCollector;
 
-return FastRoute\cachedDispatcher(function(RouteCollector $r) {
+return FastRoute\cachedDispatcher(static function(RouteCollector $r) {
     $r->get('/', [App\Controllers\HomeController::class, 'index']);
     $r->get('/closed', [App\Controllers\HomeController::class, 'closed']);
     $r->get('/search',[App\Controllers\HomeController::class, 'search']);
@@ -267,9 +267,9 @@ return FastRoute\cachedDispatcher(function(RouteCollector $r) {
     });
 
     /* Реклама */
-    $r->addGroup('/reklama', static function (RouteCollector $r) {
-        $r->get('', [App\Controllers\RekUserController::class, 'index']);
-        $r->addRoute(['GET', 'POST'], '/create', [App\Controllers\RekUserController::class, 'create']);
+    $r->addGroup('/adverts', static function (RouteCollector $r) {
+        $r->get('', [App\Controllers\AdvertController::class, 'index']);
+        $r->addRoute(['GET', 'POST'], '/create', [App\Controllers\AdvertController::class, 'create']);
     });
 
     /* Репутация пользователя */
@@ -471,9 +471,9 @@ return FastRoute\cachedDispatcher(function(RouteCollector $r) {
         $r->get('/photos/restatement', [App\Controllers\Admin\PhotoController::class, 'restatement']);
         $r->get('/photos/delete/{id:\d+}', [App\Controllers\Admin\PhotoController::class, 'delete']);
 
-        $r->get('/reklama', [App\Controllers\Admin\RekUserController::class, 'index']);
-        $r->addRoute(['GET', 'POST'], '/reklama/edit/{id:\d+}', [App\Controllers\Admin\RekUserController::class, 'edit']);
-        $r->post('/reklama/delete', [App\Controllers\Admin\RekUserController::class, 'delete']);
+        $r->get('/adverts', [App\Controllers\Admin\AdvertController::class, 'index']);
+        $r->addRoute(['GET', 'POST'], '/adverts/edit/{id:\d+}', [App\Controllers\Admin\AdvertController::class, 'edit']);
+        $r->post('/adverts/delete', [App\Controllers\Admin\AdvertController::class, 'delete']);
 
         $r->get('/forums', [App\Controllers\Admin\ForumController::class, 'index']);
         $r->post('/forums/create', [App\Controllers\Admin\ForumController::class, 'create']);

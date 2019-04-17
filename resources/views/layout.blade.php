@@ -13,11 +13,11 @@
 @stop
 
 @section('advertTop')
-    @include('advert/_top_all')
+    @include('ads/_top_all')
 @stop
 
 @section('advertBottom')
-    @include('advert/_bottom_all')
+    @include('ads/_bottom_all')
 @stop
 
 @section('styles')

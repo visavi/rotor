@@ -6,6 +6,10 @@ namespace App\Models;
 
 use App\Traits\UploadTrait;
 use Curl\Curl;
+use ErrorException;
+use Exception;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Query\JoinClause;
@@ -173,7 +177,7 @@ class User extends BaseModel
     public function getName(): string
     {
         if ($this->id) {
-            return empty($this->name) ? $this->login : $this->name;
+            return $this->name ?: $this->login;
         }
 
         return setting('guestsuser');
@@ -225,7 +229,7 @@ class User extends BaseModel
      * @param  string  $login    Логин
      * @param  string  $password Пароль пользователя
      * @param  boolean $remember Запомнить пароль
-     * @return \Illuminate\Database\Eloquent\Builder|\Illuminate\Database\Eloquent\Model|bool
+     * @return Builder|Model|bool
      */
     public static function auth($login, $password, $remember = true)
     {
@@ -297,7 +301,7 @@ class User extends BaseModel
      *
      * @param string $token идентификатор Ulogin
      * @return void
-     * @throws \ErrorException
+     * @throws ErrorException
      */
     public static function socialAuth($token): void
     {
@@ -441,7 +445,7 @@ class User extends BaseModel
      */
     public function defaultAvatar(): string
     {
-        $name   = empty($this->name) ? $this->login : $this->name;
+        $name   = $this->name ?: $this->login;
         $color  = '#' . substr(dechex(crc32($this->login)), 0, 6);
         $letter = mb_strtoupper(utfSubstr($name, 0, 1), 'utf-8');
 
@@ -635,7 +639,7 @@ class User extends BaseModel
      * Удаляет записи пользователя из всех таблиц
      *
      * @return bool|null  результат удаления
-     * @throws \Exception
+     * @throws Exception
      */
     public function delete(): ?bool
     {

@@ -115,7 +115,7 @@ class Topic extends BaseModel
     /**
      * Генерирует постраничную навигация для форума
      *
-     * @param  string url                 $url
+     * @param  string $url
      * @return string сформированный блок
      */
     public function pagination($url = '/topics'): ?string
@@ -140,7 +140,6 @@ class Topic extends BaseModel
         }
 
         if (5 < $pg_cnt) {
-
             if (6 < $pg_cnt) {
                 $pages[] = [
                     'separator' => true,

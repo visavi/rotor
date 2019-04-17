@@ -82,6 +82,7 @@ return [
     'full'           => 'Полный',
     'search_request' => 'Поиск запроса',
 
+    'cash_money' => 'У вас в наличии',
     'user_login' => 'Логин пользователя',
 
     'max_file_upload'       => 'Можно загрузить файлов',

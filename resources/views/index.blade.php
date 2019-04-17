@@ -5,7 +5,7 @@
 @stop
 
 @section('header')
-    @include('advert/_top')
+    @include('ads/_top')
     <h1>{{ setting('title') }}</h1>
 @stop
 
@@ -63,5 +63,5 @@
     </div>
     {!! getCalendar() !!}
 
-    @include('advert/_bottom')
+    @include('ads/_bottom')
 @stop

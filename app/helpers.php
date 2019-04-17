@@ -20,7 +20,7 @@ use App\Models\Offer;
 use App\Models\Online;
 use App\Models\Photo;
 use App\Models\Post;
-use App\Models\RekUser;
+use App\Models\Advert;
 use App\Models\Setting;
 use App\Models\Sticker;
 use App\Models\Spam;
@@ -1011,11 +1011,11 @@ function truncateString($value, $words = 100, $end = '...')
 function getAdvertUser()
 {
     if (setting('rekusershow')) {
-        if (@filemtime(STORAGE . '/temp/rekuser.dat') < time() - 1800) {
+        if (@filemtime(STORAGE . '/temp/adverts.dat') < time() - 1800) {
             saveAdvertUser();
         }
 
-        $datafile = json_decode(file_get_contents(STORAGE . '/temp/rekuser.dat'));
+        $datafile = json_decode(file_get_contents(STORAGE . '/temp/adverts.dat'));
 
         if ($datafile) {
 
@@ -1025,7 +1025,7 @@ function getAdvertUser()
             $links  = Arr::random($datafile, $show);
             $result = implode('<br>', $links);
 
-            return view('advert/_user', compact('result'));
+            return view('adverts/_links', compact('result'));
         }
     }
 
@@ -1039,7 +1039,7 @@ function getAdvertUser()
  */
 function saveAdvertUser()
 {
-    $data = RekUser::query()->where('deleted_at', '>', SITETIME)->get();
+    $data = Advert::query()->where('deleted_at', '>', SITETIME)->get();
 
     $links = [];
 
@@ -1059,7 +1059,7 @@ function saveAdvertUser()
         }
     }
 
-    file_put_contents(STORAGE . '/temp/rekuser.dat', json_encode($links, JSON_UNESCAPED_UNICODE), LOCK_EX);
+    file_put_contents(STORAGE . '/temp/adverts.dat', json_encode($links, JSON_UNESCAPED_UNICODE), LOCK_EX);
 }
 
 /**

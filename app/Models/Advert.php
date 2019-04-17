@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace App\Models;
 
 /**
- * Class RekUser
+ * Class Advert
  *
  * @property int id
  * @property string site
@@ -16,15 +16,8 @@ namespace App\Models;
  * @property int created_at
  * @property int deleted_at
  */
-class RekUser extends BaseModel
+class Advert extends BaseModel
 {
-    /**
-     * The table associated with the model.
-     *
-     * @var string
-     */
-    protected $table = 'rekuser';
-
     /**
      * Indicates if the model should be timestamped.
      *

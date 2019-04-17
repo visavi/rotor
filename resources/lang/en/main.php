@@ -82,6 +82,7 @@ return [
     'full'           => 'Full',
     'search_request' => 'Search request',
 
+    'cash_money' => 'You have in stock',
     'user_login' => 'User login',
 
     'max_file_upload'       => 'You can upload files',

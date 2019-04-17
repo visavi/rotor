@@ -26,7 +26,7 @@
 <div class="b"><i class="fa fa-star fa-lg text-muted"></i> <b>{{ trans('index.activity') }}</b></div>
 <i class="far fa-circle fa-lg text-muted"></i> <a href="/walls/{{ getUser('login') }}">{{ trans('index.my_wall') }}</a> ({{ getUser()->getCountWall() }})<br>
 <i class="far fa-circle fa-lg text-muted"></i> <a href="/notebooks">{{ trans('index.notebook') }}</a><br>
-<i class="far fa-circle fa-lg text-muted"></i> <a href="/reklama">{{ trans('index.advertising') }}</a><br>
+<i class="far fa-circle fa-lg text-muted"></i> <a href="/adverts">{{ trans('index.advertising') }}</a><br>
 <i class="far fa-circle fa-lg text-muted"></i> <a href="/ratings/{{ getUser('login') }}">{{ trans('index.reputation_history') }}</a><br>
 <i class="far fa-circle fa-lg text-muted"></i> <a href="/authlogs">{{ trans('index.auth_history') }}</a><br>
 <i class="far fa-circle fa-lg text-muted"></i> <a href="/transfers">{{ trans('index.money_transfer') }}</a><br>

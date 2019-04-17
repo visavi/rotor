@@ -5,10 +5,10 @@ declare(strict_types=1);
 namespace App\Controllers;
 
 use App\Classes\Validator;
-use App\Models\RekUser;
+use App\Models\Advert;
 use Illuminate\Http\Request;
 
-class RekUserController extends BaseController
+class AdvertController extends BaseController
 {
     /**
      * Конструктор
@@ -29,11 +29,11 @@ class RekUserController extends BaseController
      */
     public function index(): string
     {
-        $total = RekUser::query()->where('deleted_at', '>', SITETIME)->count();
+        $total = Advert::query()->where('deleted_at', '>', SITETIME)->count();
 
         $page = paginate(setting('rekuserpost'), $total);
 
-        $adverts = RekUser::query()
+        $adverts = Advert::query()
             ->where('deleted_at', '>', SITETIME)
             ->limit($page->limit)
             ->offset($page->offset)
@@ -41,7 +41,7 @@ class RekUserController extends BaseController
             ->with('user')
             ->get();
 
-        return view('reklama/index', compact('adverts', 'page'));
+        return view('adverts/index', compact('adverts', 'page'));
     }
 
     /**
@@ -61,12 +61,12 @@ class RekUserController extends BaseController
             abort('default', 'Для покупки рекламы вам необходимо набрать '.plural(50, setting('scorename')).'!');
         }
 
-        $total = RekUser::query()->where('deleted_at', '>', SITETIME)->count();
+        $total = Advert::query()->where('deleted_at', '>', SITETIME)->count();
         if ($total >= setting('rekusertotal')) {
             abort('default', 'В данный момент нет свободных мест для размещения рекламы!');
         }
 
-        $advert = RekUser::query()
+        $advert = Advert::query()
             ->where('user_id', getUser('id'))
             ->where('deleted_at', '>', SITETIME)
             ->first();
@@ -104,9 +104,9 @@ class RekUserController extends BaseController
 
             if ($validator->isValid()) {
 
-                RekUser::query()->where('deleted_at', '<', SITETIME)->delete();
+                Advert::query()->where('deleted_at', '<', SITETIME)->delete();
 
-                RekUser::query()->create([
+                Advert::query()->create([
                     'site'       => $site,
                     'name'       => $name,
                     'color'      => $color,
@@ -121,13 +121,13 @@ class RekUserController extends BaseController
                 saveAdvertUser();
 
                 setFlash('success', 'Рекламная ссылка успешно размещена');
-                redirect('/reklama');
+                redirect('/adverts');
             } else {
                 setInput($request->all());
                 setFlash('danger', $validator->getErrors());
             }
         }
 
-        return view('reklama/create');
+        return view('adverts/create');
     }
 }

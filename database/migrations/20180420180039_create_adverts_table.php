@@ -2,15 +2,15 @@
 
 use Phinx\Migration\AbstractMigration;
 
-class CreateRekuserTable extends AbstractMigration
+class CreateAdvertsTable extends AbstractMigration
 {
     /**
      * Change Method.
      */
     public function change()
     {
-        if (! $this->hasTable('rekuser')) {
-            $table = $this->table('rekuser', ['engine' => env('DB_ENGINE'), 'collation' => env('DB_COLLATION')]);
+        if (! $this->hasTable('adverts')) {
+            $table = $this->table('adverts', ['engine' => env('DB_ENGINE'), 'collation' => env('DB_COLLATION')]);
             $table
                 ->addColumn('site', 'string', ['limit' => 100])
                 ->addColumn('name', 'string', ['limit' => 50])
