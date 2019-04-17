@@ -75,7 +75,7 @@
                 <label data-toggle="tooltip" title="Получение информационных писем с сайта на email" class="custom-control-label" for="subscribe">Получать информационные письма</label>
             </div>
 
-            <button class="btn btn-primary">Изменить</button>
+            <button class="btn btn-primary">{{ trans('main.change') }}</button>
         </form>
     </div>
 @stop

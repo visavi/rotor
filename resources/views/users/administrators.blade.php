@@ -48,7 +48,7 @@
                     </div>
 
                     <div class="form-group">
-                        <label for="msg">Сообщение:</label>
+                        <label for="msg">{{ trans('main.message') }}:</label>
                         <textarea class="form-control markItUp" maxlength="{{ setting('comment_length') }}" id="msg" rows="5" name="msg" required></textarea>
                         <span class="js-textarea-counter"></span>
                     </div>
@@ -57,7 +57,7 @@
                         {!! view('app/_captcha') !!}
                     @endif
 
-                    <button class="btn btn-primary">Отправить</button>
+                    <button class="btn btn-primary">{{ trans('main.send') }}</button>
                 </form>
             </div><br>
         @endif

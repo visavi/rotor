@@ -93,10 +93,10 @@
                                 <a class="gallery" href="{{ getUser('picture') }}">
                                     {!! resizeImage(getUser('picture'), ['alt' => $user->login, 'class' => 'img-fluid rounded']) !!}
                                 </a><br>
-                                <a href="/pictures">Изменить</a> / <a href="/pictures/delete?token={{ $_SESSION['token'] }}">Удалить</a>
+                                <a href="/pictures">{{ trans('main.change') }}</a> / <a href="/pictures/delete?token={{ $_SESSION['token'] }}">Удалить</a>
                             @else
                                 <img class="img-fluid rounded" src="/assets/img/images/photo.jpg" alt="Фото"><br>
-                                <a href="/pictures">Загрузить фото</a>
+                                <a href="/pictures">{{ trans('main.upload') }}</a>
                             @endif
                         </div>
                     </div>
@@ -107,7 +107,7 @@
                             <textarea class="form-control markItUp" id="info" cols="25" rows="5" name="info">{{ getInput('info', $user->info) }}</textarea>
                             {!! textError('info') !!}
                         </div>
-                        <button class="btn btn-primary">Изменить</button>
+                        <button class="btn btn-primary">{{ trans('main.change') }}</button>
                     </div>
                 </div>
             </div>

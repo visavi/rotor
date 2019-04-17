@@ -49,10 +49,10 @@
             <form action="/authoritylist" method="post">
                 <div class="form-inline">
                     <div class="form-group{{ hasError('user') }}">
-                        <input type="text" class="form-control" id="user" name="user" maxlength="20" value="{{ getInput('user', $user) }}" placeholder="Логин пользователя" required>
+                        <input type="text" class="form-control" id="user" name="user" maxlength="20" value="{{ getInput('user', $user) }}" placeholder="{{ trans('main.user_login') }}" required>
                     </div>
 
-                    <button class="btn btn-primary">Искать</button>
+                    <button class="btn btn-primary">{{ trans('main.search') }}</button>
                 </div>
                 {!! textError('user') !!}
             </form>

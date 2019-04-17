@@ -32,7 +32,7 @@
                 </label>
                 <span class="badge badge-info" id="upload-file-info"></span>
             </div>
-            <button class="btn btn-primary">Добавить</button>
+            <button class="btn btn-primary">{{ trans('main.add') }}</button>
         </form>
     </div><br>
 

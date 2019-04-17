@@ -21,7 +21,7 @@
         <label for="code">Код подтверждения:</label>
         <form method="get" action="/key">
             <input class="form-control" name="code" id="code" maxlength="30" required>
-            <button class="btn btn-primary">Подтвердить</button>
+            <button class="btn btn-primary">{{ trans('main.confirm') }}</button>
         </form>
     </div><br>
 

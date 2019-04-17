@@ -33,7 +33,7 @@
                 {!! textError('password') !!}
             </div>
 
-            <button class="btn btn-primary">Изменить</button>
+            <button class="btn btn-primary">{{ trans('main.change') }}</button>
         </form>
 
         <span class="text-muted font-italic">После изменения, новый email необходимо подтвердить</span>
@@ -53,7 +53,7 @@
                         <input type="text" class="form-control" id="status" name="status" maxlength="20" value="{{ getInput('status', $user->status) }}">
                     </div>
 
-                    <button class="btn btn-primary">Изменить</button>
+                    <button class="btn btn-primary">{{ trans('main.change') }}</button>
                 </div>
                 {!! textError('status') !!}
             </form>
@@ -91,7 +91,7 @@
                 {!! textError('oldpass') !!}
             </div>
 
-            <button class="btn btn-primary">Изменить</button>
+            <button class="btn btn-primary">{{ trans('main.change') }}</button>
         </form>
     </div>
 
@@ -113,9 +113,9 @@
                     </div>
                 </div>
 
-                <button class="btn btn-primary">Изменить токен</button>
+                <button class="btn btn-primary">{{ trans('main.change') }}</button>
             @else
-                <button class="btn btn-primary">Получить токен</button>
+                <button class="btn btn-primary">{{ trans('main.get') }}</button>
             @endif
         </form>
 

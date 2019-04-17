@@ -20,12 +20,12 @@
             <input type="hidden" name="token" value="{{ $_SESSION['token'] }}">
 
             <div class="form-group{{ hasError('notice') }}">
-                <label for="notice">Сообщение:</label>
+                <label for="notice">{{ trans('main.message') }}:</label>
                 <textarea class="form-control markItUp" id="notice" rows="5" name="notice" required>{{ getInput('notice', $user->note->text) }}</textarea>
                 {!! textError('notice') !!}
             </div>
 
-            <button class="btn btn-primary">Сохранить</button>
+            <button class="btn btn-primary">{{ trans('main.save') }}</button>
         </form>
     </div>
 @stop

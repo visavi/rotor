@@ -23,7 +23,7 @@
                 {!! textError('find') !!}
             </div>
 
-            <button class="btn btn-primary">Поиск</button>
+            <button class="btn btn-primary">{{ trans('main.search') }}</button>
         </form>
     </div><br>
 

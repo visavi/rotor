@@ -18,7 +18,7 @@
                       {!! textError('msg') !!}
                   </div>
 
-                    <button class="btn btn-primary">Отправить</button>
+                    <button class="btn btn-primary">{{ trans('main.send') }}</button>
                 </form>
             </div><br>
 
