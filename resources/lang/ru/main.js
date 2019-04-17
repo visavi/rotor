@@ -4,7 +4,7 @@ translate = {
     confirm_logout:  'Вы уверены, что хотите выйти?',
     confirm_complain_submit: 'Вы действительно хотите отправить жалобу?',
     complain_submitted: 'Жалоба успешно отправлена!',
-    confirm_message_delete: 'Вы действительно хотите удалить сообщение?',
+    confirm_message_delete: 'Вы действительно хотите удалить запись?',
     message_deleted: 'Сообщение успешно удалено!',
     record_deleted: 'Запись успешно удалена!',
     photo_count: 'Фото {current} из {total}',

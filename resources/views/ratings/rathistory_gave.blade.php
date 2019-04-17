@@ -1,7 +1,7 @@
 @extends('layout')
 
 @section('title')
-    Отданные голоса {{ $user->login }}
+    {{ trans('ratings.votes_gave') }} {{ $user->login }}
 @stop
 
 @section('breadcrumb')
@@ -11,16 +11,18 @@
             <li class="breadcrumb-item"><a href="/users/{{ $user->login }}">{{ $user->login }}</a></li>
 
             @if (getUser('id') !== $user->id)
-                <li class="breadcrumb-item"><a href="/users/{{ $user->login }}/rating">Изменения репутации</a></li>
+                <li class="breadcrumb-item"><a href="/users/{{ $user->login }}/rating">{{ trans('ratings.title') }}</a></li>
             @endif
 
-            <li class="breadcrumb-item active">Отданные голоса</li>
+            <li class="breadcrumb-item active">{{ trans('ratings.votes_gave') }}</li>
         </ol>
     </nav>
 @stop
 
 @section('content')
-    <i class="fa fa-thumbs-up"></i> <a href="/ratings/{{ $user->login }}/received">Полученные</a> / <b>Отданные</b><hr>
+    <a href="/ratings/{{ $user->login }}/received" class="badge badge-light">{{ trans('ratings.votes_received') }}</a>
+    <a href="/ratings/{{ $user->login }}/gave" class="badge badge-success">{{ trans('ratings.votes_gave') }}</a>
+    <hr>
 
     @if ($ratings->isNotEmpty())
         @foreach ($ratings as $data)
@@ -34,18 +36,13 @@
                 <b>{!! $data->recipient->getProfile() !!}</b> ({{ dateFixed($data->created_at) }})
             </div>
             <div>
-                Комментарий:
-
-                @if ($data['text'])
-                    {!! bbCode($data->text) !!}
-                @else
-                    Отсутствует
-                @endif
+                {{ trans('main.comment') }}:
+                {!! bbCode($data->text) !!}
             </div>
         @endforeach
 
         {!! pagination($page) !!}
     @else
-        {!! showError('В истории еще ничего нет!') !!}
+        {!! showError(trans('ratings.empty_ratings')) !!}
     @endif
 @stop

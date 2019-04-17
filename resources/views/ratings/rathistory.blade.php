@@ -1,7 +1,7 @@
 @extends('layout')
 
 @section('title')
-    Полученные голоса {{ $user->login }}
+    {{ trans('ratings.votes_received') }} {{ $user->login }}
 @stop
 
 @section('breadcrumb')
@@ -11,16 +11,18 @@
             <li class="breadcrumb-item"><a href="/users/{{ $user->login }}">{{ $user->login }}</a></li>
 
             @if (getUser('id') !== $user->id)
-                <li class="breadcrumb-item"><a href="/users/{{ $user->login }}/rating">Изменения репутации</a></li>
+                <li class="breadcrumb-item"><a href="/users/{{ $user->login }}/rating">{{ trans('ratings.title') }}</a></li>
             @endif
 
-            <li class="breadcrumb-item active">Полученные голоса</li>
+            <li class="breadcrumb-item active">{{ trans('ratings.votes_received') }}</li>
         </ol>
     </nav>
 @stop
 
 @section('content')
-    <i class="fa fa-thumbs-up"></i> <b>Полученные</b> / <a href="/ratings/{{ $user->login }}/gave">Отданные</a><hr>
+    <a href="/ratings/{{ $user->login }}/received" class="badge badge-success">{{ trans('ratings.votes_received') }}</a>
+    <a href="/ratings/{{ $user->login }}/gave" class="badge badge-light">{{ trans('ratings.votes_gave') }}</a>
+    <hr>
 
     @if ($ratings->isNotEmpty())
         @foreach ($ratings as $data)
@@ -36,24 +38,19 @@
 
                     <div class="float-right">
                         @if (isAdmin())
-                            <a href="#" onclick="return deleteRating(this)" data-id="{{ $data->id }}" data-token="{{ $_SESSION['token'] }}" data-toggle="tooltip" title="Удалить"><i class="fa fa-times"></i></a>
+                            <a href="#" onclick="return deleteRating(this)" data-id="{{ $data->id }}" data-token="{{ $_SESSION['token'] }}" data-toggle="tooltip" title="{{ trans('main.delete') }}"><i class="fa fa-times"></i></a>
                         @endif
                     </div>
                 </div>
                 <div>
-                    Комментарий:
-
-                    @if ($data->text)
-                        {!! bbCode($data->text) !!}
-                    @else
-                        Отсутствует
-                    @endif
+                    {{ trans('main.comment') }}:
+                    {!! bbCode($data->text) !!}
                 </div>
             </div>
         @endforeach
 
         {!! pagination($page) !!}
     @else
-        {!! showError('В истории еще ничего нет!') !!}
+        {!! showError(trans('ratings.empty_ratings')) !!}
     @endif
 @stop

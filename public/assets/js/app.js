@@ -170,13 +170,13 @@ function postQuote(el)
 /* Выход с сайта */
 function logout(el)
 {
-    if (bootbox.confirm(translate.confirm_logout, function(result) {
-            if (result) {
-                window.location = $(el).attr("href");
-            }
-        }))
+    bootbox.confirm(translate.confirm_logout, function(result) {
+        if (result) {
+            window.location = $(el).attr("href");
+        }
+    });
 
-        return false;
+    return false;
 }
 
 /* Отправка жалобы на спам */
@@ -184,7 +184,6 @@ function sendComplaint(el)
 {
     bootbox.confirm(translate.confirm_complain_submit, function(result) {
         if (result) {
-
             $.ajax({
                 data: {
                     id: $(el).data('id'),
@@ -341,24 +340,28 @@ function changeRating(el)
  */
 function deleteRating(el)
 {
-    $.ajax({
-        data: {
-            id: $(el).data('id'),
-            token: $(el).data('token')
-        },
-        dataType: 'json', type: 'post', url: '/ratings/delete',
-        success: function(data) {
+    bootbox.confirm(translate.confirm_message_delete, function(result) {
+        if (result) {
+            $.ajax({
+                data: {
+                    id: $(el).data('id'),
+                    token: $(el).data('token')
+                },
+                dataType: 'json', type: 'post', url: '/ratings/delete',
+                success: function(data) {
 
-            if (data.status === 'error') {
-                notify('error', data.message);
-                return false;
-            }
+                    if (data.status === 'error') {
+                        notify('error', data.message);
+                        return false;
+                    }
 
-            if (data.status === 'success') {
-                notify('success', translate.record_deleted);
+                    if (data.status === 'success') {
+                        notify('success', translate.record_deleted);
 
-                $(el).closest('.post').hide('slow');
-            }
+                        $(el).closest('.post').hide('slow');
+                    }
+                }
+            });
         }
     });
 
@@ -396,21 +399,25 @@ function deleteSpam(el)
  */
 function deleteWall(el)
 {
-    $.ajax({
-        data: {id: $(el).data('id'), login: $(el).data('login'), token: $(el).data('token')},
-        dataType: 'json', type: 'post', url: '/walls/' + $(el).data('login') + '/delete',
-        success: function(data) {
+    bootbox.confirm(translate.confirm_message_delete, function(result) {
+        if (result) {
+            $.ajax({
+                data: {id: $(el).data('id'), login: $(el).data('login'), token: $(el).data('token')},
+                dataType: 'json', type: 'post', url: '/walls/' + $(el).data('login') + '/delete',
+                success: function (data) {
 
-            if (data.status === 'error') {
-                notify('error', data.message);
-                return false;
-            }
+                    if (data.status === 'error') {
+                        notify('error', data.message);
+                        return false;
+                    }
 
-            if (data.status === 'success') {
-                notify('success', translate.record_deleted);
+                    if (data.status === 'success') {
+                        notify('success', translate.record_deleted);
 
-                $(el).closest('.post').hide('slow');
-            }
+                        $(el).closest('.post').hide('slow');
+                    }
+                }
+            });
         }
     });
 

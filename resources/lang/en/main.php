@@ -46,6 +46,7 @@ return [
     'status'            => 'Status',
     'download'          => 'Download',
     'downloads'         => 'Downloads',
+    'comment'           => 'Comment',
     'comments'          => 'Comments',
     'empty_comments'    => 'No comments yet!',
     'empty_messages'    => 'No messages yet!',
@@ -66,6 +67,7 @@ return [
     'confirm'           => 'Confirm',
     'last_comments'     => 'Last comments',
     'all_comments'      => 'All comments',
+    'continue'          => 'Continue',
 
     'request'        => 'Request',
     'not_matter'     => 'Not matter',
@@ -100,6 +102,8 @@ return [
 
     'next'     => 'Next',
     'previous' => 'Previous',
+    'plus'     => 'Plus',
+    'minus'    => 'Minus',
 
     'not_authorized'  => 'To add a message you need to be logged in!',
     'not_logged'      => 'You must be logged in to view the site!',
