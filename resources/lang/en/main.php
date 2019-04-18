@@ -69,6 +69,7 @@ return [
     'last_comments'     => 'Last comments',
     'all_comments'      => 'All comments',
     'continue'          => 'Continue',
+    'copy'              => 'Copy',
 
     'request'        => 'Request',
     'not_matter'     => 'Not matter',
@@ -85,6 +86,7 @@ return [
     'full'           => 'Full',
     'search_request' => 'Search request',
 
+    'cost'       => 'Cost',
     'cash_money' => 'You have in stock',
     'user_login' => 'User login',
 
