@@ -4,6 +4,7 @@ return [
     'panel'             => 'Control Panel',
     'write'             => 'Write',
     'rules'             => 'Rules',
+    'site_rules'        => 'Site rules',
     'stickers'          => 'Stickers',
     'tags'              => 'Tags',
     'search'            => 'Search',
@@ -86,9 +87,13 @@ return [
     'full'           => 'Full',
     'search_request' => 'Search request',
 
-    'cost'       => 'Cost',
-    'cash_money' => 'You have in stock',
-    'user_login' => 'User login',
+    'cost'              => 'Cost',
+    'cash_money'        => 'You have in stock',
+    'user_login'        => 'User login',
+    'total_users'       => 'Total users',
+    'empty_users'       => 'No users yet!',
+    'reputation'        => 'Reputation',
+    'registration_date' => 'Registration date',
 
     'max_file_upload'       => 'You can upload files',
     'max_file_weight'       => 'Maximum file weight',
@@ -107,6 +112,8 @@ return [
     'previous' => 'Previous',
     'plus'     => 'Plus',
     'minus'    => 'Minus',
+    'pluses'   => 'Pluses',
+    'minuses'  => 'Minuses',
 
     'not_authorized'  => 'To add a message you need to be logged in!',
     'not_logged'      => 'You must be logged in to view the site!',

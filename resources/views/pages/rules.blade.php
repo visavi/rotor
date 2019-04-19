@@ -1,14 +1,14 @@
 @extends('layout')
 
 @section('title')
-    {{ trans('pages.rules') }}
+    {{ trans('main.site_rules') }}
 @stop
 
 @section('breadcrumb')
     <nav>
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
-            <li class="breadcrumb-item active">{{ trans('pages.rules') }}</li>
+            <li class="breadcrumb-item active">{{ trans('main.site_rules') }}</li>
         </ol>
     </nav>
 @stop

@@ -37,7 +37,7 @@
         @endforeach
         {!! pagination($page) !!}
     @else
-        {!! showError(trans('pages.empty_users')) !!}
+        {!! showError(trans('main.empty_users')) !!}
     @endif
 
     <i class="fa fa-users"></i>

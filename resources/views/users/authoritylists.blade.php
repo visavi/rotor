@@ -1,18 +1,18 @@
 @extends('layout')
 
 @section('title')
-    Рейтинг репутации ({{ trans('main.page_num', ['page' => $page->current]) }})
+    {{ trans('users.reputation_rating') }} ({{ trans('main.page_num', ['page' => $page->current]) }})
 @stop
 
 @section('header')
-    <h1>Рейтинг репутации</h1>
+    <h1>{{ trans('users.reputation_rating') }}</h1>
 @stop
 
 @section('breadcrumb')
     <nav>
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
-            <li class="breadcrumb-item active">Рейтинг репутации</li>
+            <li class="breadcrumb-item active">{{ trans('users.reputation_rating') }}</li>
         </ol>
     </nav>
 @stop
@@ -33,13 +33,13 @@
                 @else
                     <b>{!! $data->getProfile() !!}</b>
                 @endif
-                (Репутация: {{ $data->rating }})<br>
+                ({{ trans('main.reputation') }}: {{ $data->rating }})<br>
                 {!! $data->getStatus() !!}
             </div>
 
             <div>
-                Плюсов: {{ $data->posrating }} / Минусов: {{ $data->negrating }}<br>
-                Дата регистрации: {{ dateFixed($data->created_at, 'd.m.Y') }}
+                {{ trans('main.pluses') }}: {{ $data->posrating }} / {{ trans('main.minuses') }}: {{ $data->negrating }}<br>
+                {{ trans('main.registration_date') }}: {{ dateFixed($data->created_at, 'd.m.Y') }}
             </div>
         @endforeach
 
@@ -58,8 +58,8 @@
             </form>
         </div><br>
 
-        Всего пользователей: <b>{{ $page->total }}</b><br><br>
+        {{ trans('main.total_users') }}: <b>{{ $page->total }}</b><br><br>
     @else
-        {!! showError('Пользователей еще нет!') !!}
+        {!! showError(trans('main.empty_users')) !!}
     @endif
 @stop
