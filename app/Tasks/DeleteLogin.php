@@ -15,7 +15,7 @@ class DeleteLogin extends Task
     public function run()
     {
         Login::query()
-            ->where('created_at', '<', strtotime('-1 month', SITETIME))
+            ->where('created_at', '<', strtotime('-3 month', SITETIME))
             ->delete();
     }
 }

@@ -324,7 +324,6 @@ function getCalendar($time = SITETIME): string
 function statsOnline()
 {
     if (@filemtime(STORAGE . '/temp/online.dat') < time() - 60) {
-
         $metrika = new Metrika();
         $metrika->getCounter();
 
@@ -395,7 +394,6 @@ function showCounter()
 function statsUsers()
 {
     if (@filemtime(STORAGE . '/temp/statusers.dat') < time() - 3600) {
-
         $startDay = mktime(0, 0, 0, dateFixed(SITETIME, 'n'));
 
         $stat = User::query()->count();
@@ -419,7 +417,6 @@ function statsUsers()
 function statsAdmins()
 {
     if (@filemtime(STORAGE . '/temp/statadmins.dat') < time() - 3600) {
-
         $total = User::query()->whereIn('level', User::ADMIN_GROUPS)->count();
 
         file_put_contents(STORAGE . '/temp/statadmins.dat', $total, LOCK_EX);
@@ -612,7 +609,6 @@ function photoNavigation($id)
 function statsBlog()
 {
     if (@filemtime(STORAGE . '/temp/statblog.dat') < time() - 900) {
-
         $stat      = Blog::query()->count();
         $totalnew  = Blog::query()->where('created_at', '>', strtotime('-3 day', SITETIME))->count();
 
@@ -634,7 +630,6 @@ function statsBlog()
 function statsForum()
 {
     if (@filemtime(STORAGE . '/temp/statforum.dat') < time() - 600) {
-
         $topics = Topic::query()->count();
         $posts  = Post::query()->count();
 
@@ -652,7 +647,6 @@ function statsForum()
 function statsGuestbook()
 {
     if (@filemtime(STORAGE . '/temp/statguestbook.dat') < time() - 600) {
-
         $total = Guestbook::query()->count();
 
         file_put_contents(STORAGE . '/temp/statguestbook.dat', $total, LOCK_EX);
@@ -689,7 +683,6 @@ function statsNewChat()
 function statsLoad()
 {
     if (@filemtime(STORAGE . '/temp/statload.dat') < time() - 900) {
-
         $totalLoads = Load::query()->sum('count_downs');
 
         $totalNew = Down::query()->where('active', 1)
@@ -722,7 +715,6 @@ function statsNewLoad()
 function statsBoard()
 {
     if (@filemtime(STORAGE . '/temp/statboard.dat') < time() - 900) {
-
         $stat      = Item::query()->where('expires_at', '>', SITETIME)->count();
         $totalnew  = Item::query()->where('updated_at', '>', strtotime('-3 day', SITETIME))->count();
 
@@ -774,7 +766,6 @@ function hideMail($email)
 function statVotes()
 {
     if (@filemtime(STORAGE . '/temp/statvote.dat') < time() - 900) {
-
         $votes = Vote::query()
             ->selectRaw('count(*) AS cnt, ifnull(sum(count), 0) AS sum')
             ->where('closed', 0)
@@ -821,7 +812,6 @@ function statsNewsDate()
 function lastNews()
 {
     if (setting('lastnews') > 0) {
-
         $news = News::query()
             ->where('top', 1)
             ->orderBy('created_at', 'desc')
@@ -851,7 +841,6 @@ function lastNews()
 function checkAuth()
 {
     if (isset($_SESSION['id'], $_SESSION['password'])) {
-
         /** @var User $user */
         $user = User::query()->find($_SESSION['id']);
 
@@ -1018,7 +1007,6 @@ function getAdvertUser()
         $datafile = json_decode(file_get_contents(STORAGE . '/temp/adverts.dat'));
 
         if ($datafile) {
-
             $total = count($datafile);
             $show  = setting('rekusershow') > $total ? $total : setting('rekusershow');
 
@@ -1042,7 +1030,6 @@ function saveAdvertUser()
     $data = Advert::query()->where('deleted_at', '>', SITETIME)->get();
 
     $links = [];
-
     if ($data->isNotEmpty()) {
         foreach ($data as $val) {
             if ($val['color']) {
@@ -1071,7 +1058,6 @@ function saveAdvertUser()
 function recentPhotos($show = 5)
 {
     if (@filemtime(STORAGE . '/temp/recentphotos.dat') < time() - 1800) {
-
         $recent = Photo::query()
             ->orderBy('created_at', 'desc')
             ->limit($show)
@@ -1128,7 +1114,6 @@ function recentTopics($show = 5)
 function recentFiles($show = 5)
 {
     if (@filemtime(STORAGE . '/temp/recentfiles.dat') < time() - 600) {
-
         $lastFiles = Down::query()
             ->where('active', 1)
             ->orderBy('created_at', 'desc')
@@ -1210,7 +1195,6 @@ function recentBoards($show = 5)
 function statsOffers()
 {
     if (@filemtime(STORAGE . '/temp/offers.dat') < time() - 10800) {
-
         $offers   = Offer::query()->where('type', 'offer')->count();
         $problems = Offer::query()->where('type', 'issue')->count();
 
@@ -1375,7 +1359,6 @@ function resizeProcess($path, array $params = [])
     $thumb = ltrim(str_replace('/', '_', $path), '_');
 
     if (! file_exists(UPLOADS . '/thumbnails/' . $thumb)) {
-
         $img = Image::make(HOME . $path);
         $img->resize($params['width'], $params['width'], static function (Constraint $constraint) {
             $constraint->aspectRatio();
@@ -2205,7 +2188,6 @@ function ipBan($save = false)
 function setting($key = null)
 {
     if (! Registry::has('settings')) {
-
         if (! file_exists(STORAGE . '/temp/settings.dat')) {
             saveSettings();
         }

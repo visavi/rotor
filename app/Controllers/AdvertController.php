@@ -101,9 +101,7 @@ class AdvertController extends BaseController
                 ->regex($color, '|^#+[A-f0-9]{6}$|', ['color' => 'Недопустимый формат цвета ссылки! (пример #ff0000)'], false)
                 ->gte(getUser('money'), $price, ['Для покупки рекламы у вас недостаточно денег!']);
 
-
             if ($validator->isValid()) {
-
                 Advert::query()->where('deleted_at', '<', SITETIME)->delete();
 
                 Advert::query()->create([

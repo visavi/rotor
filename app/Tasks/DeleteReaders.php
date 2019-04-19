@@ -15,7 +15,7 @@ class DeleteReaders extends Task
     public function run()
     {
         Reader::query()
-            ->where('created_at', '<', strtotime('-3 month', SITETIME))
+            ->where('created_at', '<', strtotime('-6 month', SITETIME))
             ->delete();
     }
 }
