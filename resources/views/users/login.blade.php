@@ -1,14 +1,14 @@
 @extends('layout')
 
 @section('title')
-    Авторизация
+    {{ trans('users.authorization') }}
 @stop
 
 @section('breadcrumb')
     <nav>
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
-            <li class="breadcrumb-item active">Авторизация</li>
+            <li class="breadcrumb-item active">{{ trans('users.authorization') }}</li>
         </ol>
     </nav>
 @stop
@@ -20,8 +20,7 @@
             <span class="badge badge-primary">{{ $_SESSION['social']->network }}</span> {{ $_SESSION['social']->first_name }} {{ $_SESSION['social']->last_name }} {{ isset($_SESSION['social']->nickname) ? '('.$_SESSION['social']->nickname.')' : '' }}
         </div>
         <div class="bg-info text-light p-1 mb-3">
-            Профиль не связан с какой-либо учетной записью на сайте. Войдите на сайт или зарегистирируйтесь, чтобы связать свою учетную запись с профилем социальной сети.<br>
-            Или выберите другую социальную сеть для входа.
+            {!! trans('users.authorization_text') !!}
         </div>
     @endif
 
@@ -33,22 +32,22 @@
         <form method="post">
 
             <div class="form-group">
-                <label for="inputLogin">Логин:</label>
+                <label for="inputLogin">{{ trans('users.login') }}:</label>
                 <input class="form-control" name="login" id="inputLogin" maxlength="20" value="{{ getInput('login') }}" required>
 
-                <label for="inputPassword">Пароль:</label>
+                <label for="inputPassword">{{ trans('users.password') }}:</label>
                 <input class="form-control" name="pass" type="password" id="inputPassword" maxlength="20" required>
             </div>
 
             <div class="custom-control custom-checkbox">
                 <input type="checkbox" class="custom-control-input" value="1" name="remember" id="remember" checked>
-                <label class="custom-control-label" for="remember">Запомнить меня</label>
+                <label class="custom-control-label" for="remember">{{ trans('users.remember_me') }}</label>
             </div>
 
-            <button class="btn btn-primary">Войти</button>
+            <button class="btn btn-primary">{{ trans('users.enter') }}</button>
         </form>
     </div>
     <br>
-    <a href="/register">Регистрация</a><br>
-    <a href="/recovery">Забыли пароль?</a><br><br>
+    <a href="/register">{{ trans('users.registration') }}</a><br>
+    <a href="/recovery">{{ trans('users.forgot_password') }}</a><br><br>
 @stop

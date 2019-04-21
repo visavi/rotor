@@ -1,14 +1,14 @@
 @extends('layout')
 
 @section('title')
-    Загрузка фотографии
+    {{ trans('users.upload_photos') }}
 @stop
 
 @section('breadcrumb')
     <nav>
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
-            <li class="breadcrumb-item active">Загрузка фотографии</li>
+            <li class="breadcrumb-item active">{{ trans('users.upload_photos') }}</li>
         </ol>
     </nav>
 @stop
@@ -28,7 +28,7 @@
                 <label class="btn btn-sm btn-secondary" for="inputPhoto">
 
                     <input id="inputPhoto" type="file" name="photo" onchange="$('#upload-file-info').html(this.files[0].name);" hidden>
-                    Прикрепить фото&hellip;
+                    {{ trans('main.attach_image') }}&hellip;
                 </label>
                 <span class="badge badge-info" id="upload-file-info"></span>
             </div>
@@ -36,7 +36,8 @@
         </form>
     </div><br>
 
-    Разрешается добавлять файлы с расширением jpg, jpeg, gif, png<br>
-    Весом не более {{ formatSize(setting('filesize')) }} и размером от 100px<br>
-    Аватар генерируется автоматически из вашей фотографии<br>
+    {{ trans('main.valid_file_extensions') }}: jpg, jpeg, gif, png<br>
+    {{ trans('main.max_file_weight') }}: {{ formatSize(setting('filesize')) }}<br>
+    {{ trans('main.min_image_size') }}: 100px<br>
+    {{ trans('users.avatar_generation') }}<br>
 @stop
