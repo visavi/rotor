@@ -23,7 +23,7 @@
             {!! $value->user->getGender() !!} <b>{!! $value->user->getProfile() !!}</b>
         @endforeach
 
-        <br>Всего пользователей: {{ $online->count() }} чел.<br><br>
+        <br>{{ trans('main.total_users') }}: {{ $online->count() }} чел.<br><br>
     @else
         {!! showError('Зарегистированных пользователей нет!') !!}
     @endif

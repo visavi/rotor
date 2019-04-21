@@ -43,7 +43,7 @@
             </form>
         </div><br>
 
-        Всего пользователей: <b>{{ $total }}</b><br><br>
+        {{ trans('main.total_users') }}: <b>{{ $total }}</b><br><br>
     @else
 
         Будут удалены пользователи не посещавшие сайт более <b>{{ $period }}</b> дней <br>

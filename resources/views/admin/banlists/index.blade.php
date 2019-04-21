@@ -42,6 +42,6 @@
         Всего забанено: <b>{{ $page->total }}</b><br><br>
 
     @else
-        {!! showError('Пользователей еще нет!') !!}
+        {!! showError(trans('main.empty_users')) !!}
     @endif
 @stop

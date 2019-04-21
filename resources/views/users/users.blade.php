@@ -59,9 +59,9 @@
             </form>
         </div><br>
 
-        Всего пользователей: <b>{{ $page->total }}</b><br><br>
+        {{ trans('main.total_users') }}: <b>{{ $page->total }}</b><br><br>
     @else
-        {!! showError('Пользователей еще нет!') !!}
+        {!! showError(trans('main.empty_users')) !!}
     @endif
 
     <i class="fa fa-users"></i> <a href="/who">Новички</a><br>

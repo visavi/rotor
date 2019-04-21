@@ -77,6 +77,6 @@
         {!! pagination($page) !!}
 
     @else
-        {!! showError('Пользователей еще нет!') !!}
+        {!! showError(trans('main.empty_users')) !!}
     @endif
 @stop

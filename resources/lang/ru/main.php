@@ -150,4 +150,7 @@ return [
     'october'   => 'Октября',
     'november'  => 'Ноября',
     'december'  => 'Декабря',
+
+    'male'   => 'Male',
+    'female' => 'Female',
 ];
