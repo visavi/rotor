@@ -1,18 +1,18 @@
 @extends('layout')
 
 @section('title')
-    Список пользователей ({{ trans('main.page_num', ['page' => $page->current]) }})
+    {{ trans('index.user_list') }} ({{ trans('main.page_num', ['page' => $page->current]) }})
 @stop
 
 @section('header')
-    <h1>Список пользователей</h1>
+    <h1>{{ trans('index.user_list') }}</h1>
 @stop
 
 @section('breadcrumb')
     <nav>
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
-            <li class="breadcrumb-item active">Список пользователей</li>
+            <li class="breadcrumb-item active">{{ trans('index.user_list') }}</li>
         </ol>
     </nav>
 @stop
@@ -20,7 +20,6 @@
 @section('content')
     @if ($users->isNotEmpty())
         @foreach($users as $key => $data)
-
             <div class="b">
                 <div class="img">
                     {!! $data->getAvatar() !!}
@@ -37,10 +36,10 @@
             </div>
 
             <div>
-                Форум: {{ $data->allforum }} | Гостевая: {{ $data->allguest }} | Комментарии: {{ $data->allcomments }}<br>
-                Посещений: {{ $data->visits }}<br>
-                Деньги: {{ $data->money }}<br>
-                Дата регистрации: {{ dateFixed($data->created_at, 'd.m.Y') }}
+                {{ trans('index.forums') }}: {{ $data->allforum }} | {{ trans('index.guestbooks') }}: {{ $data->allguest }} | {{ trans('main.comments') }}: {{ $data->allcomments }}<br>
+                {{ trans('users.visits') }}: {{ $data->visits }}<br>
+                {{ trans('users.moneys') }}: {{ $data->money }}<br>
+                {{ trans('main.registration_date') }}: {{ dateFixed($data->created_at, 'd.m.Y') }}
             </div>
         @endforeach
 
@@ -64,6 +63,6 @@
         {!! showError(trans('main.empty_users')) !!}
     @endif
 
-    <i class="fa fa-users"></i> <a href="/who">Новички</a><br>
+    <i class="fa fa-users"></i> <a href="/who">{{ trans('users.novices') }}</a><br>
     <i class="fas fa-search"></i> <a href="/searchusers">{{ trans('index.search_users') }}</a><br>
 @stop

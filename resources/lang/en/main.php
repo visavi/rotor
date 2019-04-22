@@ -20,6 +20,7 @@ return [
     'upload'            => 'Upload',
     'edit'              => 'Edit',
     'change'            => 'Change',
+    'changed'           => 'Changed',
     'get'               => 'Get',
     'open'              => 'Open',
     'close'             => 'Close',

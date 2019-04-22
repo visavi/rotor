@@ -49,7 +49,7 @@
                     {!! bbCode($data->text) !!}<br>
 
                     @if ($data->edit_user_id)
-                        <small><i class="fa fa-exclamation-circle text-danger"></i> {{ trans('guestbooks.changed') }}: {{ $data->editUser->getName() }} ({{ dateFixed($data->updated_at) }})</small><br>
+                        <small><i class="fa fa-exclamation-circle text-danger"></i> {{ trans('main.changed') }}: {{ $data->editUser->getName() }} ({{ dateFixed($data->updated_at) }})</small><br>
                     @endif
 
                     <span class="data">({{ $data->brow }}, {{ $data->ip }})</span>

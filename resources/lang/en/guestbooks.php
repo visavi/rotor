@@ -2,7 +2,6 @@
 
 return [
     'title'          => 'Guest book',
-    'changed'        => 'Changed',
     'answer'         => 'Answer',
     'title_edit'     => 'Editing message',
     'title_reply'    => 'Reply message',

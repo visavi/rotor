@@ -1,20 +1,20 @@
 @extends('layout')
 
 @section('title')
-    Онлайн пользователей
+    {{ trans('index.who_online') }}
 @stop
 
 @section('breadcrumb')
     <nav>
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
-            <li class="breadcrumb-item active">Онлайн пользователей</li>
+            <li class="breadcrumb-item active">{{ trans('index.who_online') }}</li>
         </ol>
     </nav>
 @stop
 
 @section('content')
-    <div class="b"><b>Кто на сайте:</b></div>
+    <div class="b"><b>{{ trans('index.users') }}:</b></div>
 
     @if ($online->isNotEmpty())
 
@@ -23,12 +23,12 @@
             {!! $value->user->getGender() !!} <b>{!! $value->user->getProfile() !!}</b>
         @endforeach
 
-        <br>{{ trans('main.total_users') }}: {{ $online->count() }} чел.<br><br>
+        <br>{{ trans('main.total_users') }}: {{ $online->count() }}<br><br>
     @else
-        {!! showError('Зарегистированных пользователей нет!') !!}
+        {!! showError(trans('main.empty_users')) !!}
     @endif
 
-    <div class="b"><b>Поздравляем именинников:</b></div>
+    <div class="b"><b>{{ trans('users.birthdays') }}:</b></div>
 
     @if ($birthdays->isNotEmpty())
 
@@ -37,12 +37,12 @@
             {!! $value->getGender() !!} <b>{!! $value->getProfile() !!}</b>
         @endforeach
 
-        <br>Всего именниников: {{ $birthdays->count() }} чел.<br><br>
+        <br>{{ trans('users.total_birthdays') }}: {{ $birthdays->count() }}<br><br>
     @else
-        {!! showError('Сегодня именинников нет!') !!}
+        {!! showError(trans('users.empty_birthday')) !!}
     @endif
 
-    <div class="b"><b>Приветствуем новичков:</b></div>
+    <div class="b"><b>{{ trans('users.novices') }}:</b></div>
 
     @if ($novices->isNotEmpty())
         @foreach($novices as $key => $value)
@@ -50,9 +50,8 @@
             {!! $value->getGender() !!} <b>{!! $value->getProfile() !!}</b>
         @endforeach
 
-        <br>Всего новичков: {{ $novices->count() }} чел.<br><br>
+        <br>{{ trans('users.total_novices') }}: {{ $novices->count() }}<br><br>
     @else
-        {!! showError('Новичков пока нет!') !!}
+        {!! showError(trans('users.empty_novices')) !!}
     @endif
-
 @stop

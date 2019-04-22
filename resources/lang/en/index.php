@@ -74,12 +74,18 @@ return [
     'reputation_history' => 'Reputation history',
     'auth_history'       => 'Authorization history',
     'money_transfer'     => 'Money transfer',
+    'wall_posts'         => 'Wall posts',
 
     'admin_list'       => 'Admin list',
+    'user_list'        => 'User list',
     'confirm_register' => 'Confirmation of registration',
     'banned'           => 'You are banned',
     'note'             => 'Note',
     'upload_photo'     => 'Upload photo',
     'search_users'     => 'Search users',
     'search_results'   => 'Search results',
+    'account'          => 'Account',
+
+    'ban_history' => 'Ban history',
+    'ban_unban'   => 'Ban / Unban',
 ];

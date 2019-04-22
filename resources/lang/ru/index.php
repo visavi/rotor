@@ -74,12 +74,18 @@ return [
     'reputation_history' => 'История репутации',
     'auth_history'       => 'История авторизаций',
     'money_transfer'     => 'Перевод денег',
+    'wall_posts'         => 'Стена сообщений',
 
     'admin_list'       => 'Список администраторов',
+    'user_list'        => 'Список пользователей',
     'confirm_register' => 'Подтверждение регистрации',
     'banned'           => 'Вас забанили',
     'note'             => 'Заметка',
     'upload_photo'     => 'Загрузка фотографии',
     'search_users'     => 'Поиск пользователей',
     'search_results'   => 'Результат поиска',
+    'account'          => 'Анкета',
+
+    'ban_history' => 'История банов',
+    'ban_unban'   => 'Бан / Разбан',
 ];
