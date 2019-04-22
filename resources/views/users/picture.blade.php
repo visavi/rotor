@@ -1,14 +1,14 @@
 @extends('layout')
 
 @section('title')
-    {{ trans('users.upload_photos') }}
+    {{ trans('index.upload_photo') }}
 @stop
 
 @section('breadcrumb')
     <nav>
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
-            <li class="breadcrumb-item active">{{ trans('users.upload_photos') }}</li>
+            <li class="breadcrumb-item active">{{ trans('index.upload_photo') }}</li>
         </ol>
     </nav>
 @stop

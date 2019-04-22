@@ -64,7 +64,7 @@ return [
     'profile_settings'   => 'Profile / Settings',
     'my_account'         => 'My account',
     'my_profile'         => 'My profile',
-    'my_data'            => 'My Data',
+    'my_details'         => 'My Details',
     'my_settings'        => 'Settings',
     'social_networks'    => 'Social networks',
     'activity'           => 'Activity',
@@ -74,4 +74,12 @@ return [
     'reputation_history' => 'Reputation history',
     'auth_history'       => 'Authorization history',
     'money_transfer'     => 'Money transfer',
+
+    'admin_list'       => 'Admin list',
+    'confirm_register' => 'Confirmation of registration',
+    'banned'           => 'You are banned',
+    'note'             => 'Note',
+    'upload_photo'     => 'Upload photo',
+    'search_users'     => 'Search users',
+    'search_results'   => 'Search results',
 ];

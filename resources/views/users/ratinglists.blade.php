@@ -1,18 +1,18 @@
 @extends('layout')
 
 @section('title')
-    Рейтинг толстосумов ({{ trans('main.page_num', ['page' => $page->current]) }})
+    {{ trans('index.riches_rating') }} ({{ trans('main.page_num', ['page' => $page->current]) }})
 @stop
 
 @section('header')
-    Рейтинг толстосумов
+    {{ trans('index.riches_rating') }}
 @stop
 
 @section('breadcrumb')
     <nav>
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
-            <li class="breadcrumb-item active">Рейтинг толстосумов</li>
+            <li class="breadcrumb-item active">{{ trans('index.riches_rating') }}</li>
         </ol>
     </nav>
 @stop
@@ -38,8 +38,8 @@
             </div>
 
             <div>
-                Плюсов: {{ $data->posrating }} / Минусов: {{ $data->negrating }}<br>
-                Дата регистрации: {{ dateFixed($data->created_at, 'd.m.Y') }}
+                {{ trans('main.pluses') }}: {{ $data->posrating }} / {{ trans('main.minuses') }}: {{ $data->negrating }}<br>
+                {{ trans('main.registration_date') }}: {{ dateFixed($data->created_at, 'd.m.Y') }}
             </div>
         @endforeach
 

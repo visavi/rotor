@@ -1,14 +1,14 @@
 @extends('layout')
 
 @section('title')
-    {{ trans('users.confirm_registration') }}
+    {{ trans('index.confirm_register') }}
 @stop
 
 @section('breadcrumb')
     <nav>
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
-            <li class="breadcrumb-item active">{{ trans('users.confirm_registration') }}</li>
+            <li class="breadcrumb-item active">{{ trans('index.confirm_register') }}</li>
         </ol>
     </nav>
 @stop
@@ -59,5 +59,5 @@
         {!! trans('users.confirm_text') !!}
     </p>
 
-    <i class="fa fa-times"></i> <a href="/logout?token={{ $_SESSION['token'] }}">{!! trans('users.logout') !!}</a><br>
+    <i class="fa fa-times"></i> <a href="/logout?token={{ $_SESSION['token'] }}">{{ trans('users.logout') }}</a><br>
 @stop

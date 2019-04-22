@@ -1,14 +1,14 @@
 @extends('layout')
 
 @section('title')
-    {{ trans('users.admin_list') }}
+    {{ trans('index.admin_list') }}
 @stop
 
 @section('breadcrumb')
     <nav>
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
-            <li class="breadcrumb-item active">{{ trans('users.admin_list') }}</li>
+            <li class="breadcrumb-item active">{{ trans('index.admin_list') }}</li>
         </ol>
     </nav>
 @stop

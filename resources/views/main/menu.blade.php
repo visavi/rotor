@@ -19,7 +19,7 @@
 <div class="b"><i class="fa fa-wrench fa-lg text-muted"></i> <b>{{ trans('index.profile_settings') }}</b></div>
 <i class="far fa-circle fa-lg text-muted"></i> <a href="/users/{{ getUser('login') }}">{{ trans('index.my_account') }}</a><br>
 <i class="far fa-circle fa-lg text-muted"></i> <a href="/profile">{{ trans('index.my_profile') }}</a><br>
-<i class="far fa-circle fa-lg text-muted"></i> <a href="/accounts">{{ trans('index.my_data') }}</a><br>
+<i class="far fa-circle fa-lg text-muted"></i> <a href="/accounts">{{ trans('index.my_details') }}</a><br>
 <i class="far fa-circle fa-lg text-muted"></i> <a href="/settings">{{ trans('index.my_settings') }}</a><br>
 <i class="far fa-circle fa-lg text-muted"></i> <a href="/socials">{{ trans('index.social_networks') }}</a><br>
 

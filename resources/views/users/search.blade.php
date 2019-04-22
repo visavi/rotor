@@ -1,14 +1,14 @@
 @extends('layout')
 
 @section('title')
-    Поиск пользователей
+    {{ trans('index.search_users') }}
 @stop
 
 @section('breadcrumb')
     <nav>
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
-            <li class="breadcrumb-item active">Поиск пользователей</li>
+            <li class="breadcrumb-item active">{{ trans('index.search_users') }}</li>
         </ol>
     </nav>
 @stop
@@ -18,8 +18,8 @@
         <form method="get" action="/searchusers/search">
 
             <div class="form-group{{ hasError('find') }}">
-                <label for="find">Логин или имя пользователя:</label>
-                <input type="text" class="form-control" id="find" name="find" maxlength="50" placeholder="Логин или имя пользователя" value="{{ getInput('find') }}" required>
+                <label for="find">{{ trans('users.login_or_username') }}:</label>
+                <input type="text" class="form-control" id="find" name="find" maxlength="50" placeholder="{{ trans('users.login_or_username') }}" value="{{ getInput('find') }}" required>
                 {!! textError('find') !!}
             </div>
 
@@ -56,6 +56,7 @@
     <a class="badge badge-pill badge-success" href="/searchusers/z">Z</a>
     <br><br>
 
-    Если результат поиска ничего не дал, тогда можно поискать по первым символам логина<br>
-    В этом случае будет выдан результат похожий на введенный вами запрос<br><br>
+    <p class="text-muted font-italic">
+        {!! trans('users.search_text') !!}
+    </p>
 @stop

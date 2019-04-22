@@ -1,7 +1,7 @@
 @extends('layout')
 
 @section('title')
-    {{ trans('users.my_details') }}
+    {{ trans('index.my_details') }}
 @stop
 
 @section('breadcrumb')
@@ -9,7 +9,7 @@
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
             <li class="breadcrumb-item"><a href="/users/{{ $user->login }}">{{ $user->login }}</a></li>
-            <li class="breadcrumb-item active">{{ trans('users.my_details') }}</li>
+            <li class="breadcrumb-item active">{{ trans('index.my_details') }}</li>
         </ol>
     </nav>
 @stop

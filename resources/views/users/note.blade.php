@@ -1,7 +1,7 @@
 @extends('layout')
 
 @section('title')
-    {{ trans('users.note') }} {{ $user->login }}
+    {{ trans('index.note') }} {{ $user->login }}
 @stop
 
 @section('breadcrumb')
@@ -9,7 +9,7 @@
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
             <li class="breadcrumb-item"><a href="/users/{{ $user->login }}">{{ $user->login }}</a></li>
-            <li class="breadcrumb-item active">{{ trans('users.note') }}</li>
+            <li class="breadcrumb-item active">{{ trans('index.note') }}</li>
         </ol>
     </nav>
 @stop
@@ -20,7 +20,7 @@
             <input type="hidden" name="token" value="{{ $_SESSION['token'] }}">
 
             <div class="form-group{{ hasError('notice') }}">
-                <label for="notice">{{ trans('users.note') }}:</label>
+                <label for="notice">{{ trans('index.note') }}:</label>
                 <textarea class="form-control markItUp" id="notice" rows="5" name="notice" required>{{ getInput('notice', $user->note->text) }}</textarea>
                 {!! textError('notice') !!}
             </div>

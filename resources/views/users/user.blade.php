@@ -174,9 +174,9 @@
                 <i class="fa fa-wrench"></i> <a href="/admin/users/edit?user={{ $user->login }}">Редактировать</a><br>
             @endif
         @else
-            <i class="fa fa-user-circle"></i> <a href="/profile">Мой профиль</a><br>
-            <i class="fa fa-cog"></i> <a href="/accounts">Мои данные</a><br>
-            <i class="fa fa-wrench"></i> <a href="/settings">Настройки</a><br>
+            <i class="fa fa-user-circle"></i> <a href="/profile">{{ trans('index.my_profile') }}</a><br>
+            <i class="fa fa-cog"></i> <a href="/accounts">{{ trans('index.my_details') }}</a><br>
+            <i class="fa fa-wrench"></i> <a href="/settings">{{ trans('index.my_settings') }}</a><br>
         @endif
 
     </div>

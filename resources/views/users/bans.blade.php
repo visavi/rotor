@@ -1,7 +1,7 @@
 @extends('layout')
 
 @section('title')
-    {{ trans('users.banned') }}
+    {{ trans('index.banned') }}
 @stop
 
 @section('content')

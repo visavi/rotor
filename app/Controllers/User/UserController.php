@@ -236,7 +236,7 @@ class UserController extends BaseController
             }
         }
 
-        return view('users/registration');
+        return view('users/register');
     }
 
     /**

@@ -70,6 +70,6 @@ class SearchController extends BaseController
             ->limit($page->limit)
             ->get();
 
-        return view('users/search_sort', compact('users', 'page'));
+        return view('users/search_result', compact('users', 'page'));
     }
 }

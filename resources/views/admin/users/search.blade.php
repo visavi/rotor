@@ -1,7 +1,7 @@
 @extends('layout')
 
 @section('title')
-    Поиск пользователей
+    {{ trans('index.search_users') }}
 @stop
 
 @section('breadcrumb')
@@ -10,7 +10,7 @@
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
             <li class="breadcrumb-item"><a href="/admin">{{ trans('main.panel') }}</a></li>
             <li class="breadcrumb-item"><a href="/admin/users">Пользователи</a></li>
-            <li class="breadcrumb-item active">Поиск пользователей</li>
+            <li class="breadcrumb-item active">{{ trans('index.search_users') }}</li>
         </ol>
     </nav>
 @stop

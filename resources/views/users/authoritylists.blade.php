@@ -1,18 +1,18 @@
 @extends('layout')
 
 @section('title')
-    {{ trans('users.reputation_rating') }} ({{ trans('main.page_num', ['page' => $page->current]) }})
+    {{ trans('index.reputation_rating') }} ({{ trans('main.page_num', ['page' => $page->current]) }})
 @stop
 
 @section('header')
-    <h1>{{ trans('users.reputation_rating') }}</h1>
+    <h1>{{ trans('index.reputation_rating') }}</h1>
 @stop
 
 @section('breadcrumb')
     <nav>
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
-            <li class="breadcrumb-item active">{{ trans('users.reputation_rating') }}</li>
+            <li class="breadcrumb-item active">{{ trans('index.reputation_rating') }}</li>
         </ol>
     </nav>
 @stop

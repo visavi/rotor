@@ -64,7 +64,7 @@ return [
     'profile_settings'   => 'Анкета / Настройки',
     'my_account'         => 'Моя анкета',
     'my_profile'         => 'Мой профиль',
-    'my_data'            => 'Мои данные',
+    'my_details'         => 'Мои данные',
     'my_settings'        => 'Мои настройки',
     'social_networks'    => 'Социальные сети',
     'activity'           => 'Активность',
@@ -74,4 +74,12 @@ return [
     'reputation_history' => 'История репутации',
     'auth_history'       => 'История авторизаций',
     'money_transfer'     => 'Перевод денег',
+
+    'admin_list'       => 'Список администраторов',
+    'confirm_register' => 'Подтверждение регистрации',
+    'banned'           => 'Вас забанили',
+    'note'             => 'Заметка',
+    'upload_photo'     => 'Загрузка фотографии',
+    'search_users'     => 'Поиск пользователей',
+    'search_results'   => 'Результат поиска',
 ];

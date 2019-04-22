@@ -1,7 +1,7 @@
 @extends('layout')
 
 @section('title')
-    Мои настройки
+    {{ trans('index.my_settings') }}
 @stop
 
 @section('breadcrumb')
@@ -9,7 +9,7 @@
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
             <li class="breadcrumb-item"><a href="/users/{{ $user->login }}">{{ $user->login }}</a></li>
-            <li class="breadcrumb-item active">Мои настройки</li>
+            <li class="breadcrumb-item active">{{ trans('index.my_settings') }}</li>
         </ol>
     </nav>
 @stop
@@ -20,11 +20,11 @@
             <input type="hidden" name="token" value="{{ $_SESSION['token'] }}">
 
             <div class="form-group{{ hasError('themes') }}">
-                <label for="themes">Тема:</label>
+                <label for="themes">{{ trans('users.theme') }}:</label>
 
                 <?php $inputThemes = getInput('themes', $user->themes); ?>
                 <select class="form-control" name="themes" id="themes">
-                    <option value="0">Автоматически</option>
+                    <option value="0">{{ trans('users.automatically') }}</option>
 
                     @foreach ($setting['themes'] as $theme)
                         <?php $selected = ($theme === $inputThemes) ? ' selected' : ''; ?>
@@ -37,7 +37,7 @@
 
             <?php $inputLang = getInput('language', $user->language); ?>
             <div class="form-group{{ hasError('language') }}">
-                <label for="language">Язык:</label>
+                <label for="language">{{ trans('users.language') }}:</label>
 
                 <select class="form-control" name="language" id="language">
                     @foreach ($setting['languages'] as $language)
@@ -51,7 +51,7 @@
 
             <?php $inputTimezone = (int) getInput('timezone', $user->timezone); ?>
             <div class="form-group{{ hasError('timezone') }}">
-                <label for="timezone">Временной сдвиг {{ dateFixed(SITETIME, 'H:i') }}:</label>
+                <label for="timezone">{{ trans('users.time_shifting') }} {{ dateFixed(SITETIME, 'H:i') }}:</label>
 
                 <select class="form-control" name="timezone" id="timezone">';
                     @foreach($setting['timezones'] as $timezone)
@@ -66,13 +66,13 @@
             <div class="custom-control custom-checkbox">
                 <input type="hidden" value="0" name="notify">
                 <input type="checkbox" class="custom-control-input" value="1" name="notify" id="notify"{{ getInput('notify', $user->notify) ? ' checked' : '' }}>
-                <label data-toggle="tooltip" title="Уведомления об ответах будут приходить в личные сообщения" class="custom-control-label" for="notify">Получать уведомления об ответах</label>
+                <label data-toggle="tooltip" title="{{ trans('users.notification_hint') }}" class="custom-control-label" for="notify">{{ trans('users.receive_notification') }}</label>
             </div>
 
             <div class="custom-control custom-checkbox">
                 <input type="hidden" value="0" name="subscribe">
                 <input type="checkbox" class="custom-control-input" value="1" name="subscribe" id="subscribe"{{ getInput('subscribe', $user->subscribe) ? ' checked' : '' }}>
-                <label data-toggle="tooltip" title="Получение информационных писем с сайта на email" class="custom-control-label" for="subscribe">Получать информационные письма</label>
+                <label data-toggle="tooltip" title="{{ trans('users.newsletters_hint') }}" class="custom-control-label" for="subscribe">{{ trans('users.receive_newsletters') }}</label>
             </div>
 
             <button class="btn btn-primary">{{ trans('main.change') }}</button>

@@ -75,9 +75,9 @@
                         </li>
 
                         @if (!getUser())
-                            <li><a href="/register"><span class="l"></span><span class="r"></span><span class="t">Регистрация</span></a></li>
+                            <li><a href="/register"><span class="l"></span><span class="r"></span><span class="t">{{ trans('index.register') }}</span></a></li>
                         @else
-                            <li><a href="/logout?token={{ $_SESSION['token'] }}" onclick="return logout(this)"><span class="l"></span><span class="r"></span><span class="t">Выход</span></a></li>
+                            <li><a href="/logout?token={{ $_SESSION['token'] }}" onclick="return logout(this)"><span class="l"></span><span class="r"></span><span class="t">{{ trans('index.logout') }}</span></a></li>
                         @endif
 
             </ul></div>
@@ -127,7 +127,7 @@
 
                         <input value="Войти" type="submit"></form>
 
-                        <a href="/register">Регистрация</a><br>
+                        <a href="/register">{{ trans('index.register') }}</a><br>
                         <a href="/recovery">Забыли пароль?</a>
                     @endif
 

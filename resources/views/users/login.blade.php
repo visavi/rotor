@@ -1,14 +1,14 @@
 @extends('layout')
 
 @section('title')
-    {{ trans('users.authorization') }}
+    {{ trans('index.login') }}
 @stop
 
 @section('breadcrumb')
     <nav>
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
-            <li class="breadcrumb-item active">{{ trans('users.authorization') }}</li>
+            <li class="breadcrumb-item active">{{ trans('index.login') }}</li>
         </ol>
     </nav>
 @stop
@@ -20,7 +20,7 @@
             <span class="badge badge-primary">{{ $_SESSION['social']->network }}</span> {{ $_SESSION['social']->first_name }} {{ $_SESSION['social']->last_name }} {{ isset($_SESSION['social']->nickname) ? '('.$_SESSION['social']->nickname.')' : '' }}
         </div>
         <div class="bg-info text-light p-1 mb-3">
-            {!! trans('users.authorization_text') !!}
+            {!! trans('users.social_auth_text') !!}
         </div>
     @endif
 
@@ -48,6 +48,6 @@
         </form>
     </div>
     <br>
-    <a href="/register">{{ trans('users.registration') }}</a><br>
+    <a href="/register">{{ trans('index.register') }}</a><br>
     <a href="/recovery">{{ trans('users.forgot_password') }}</a><br><br>
 @stop

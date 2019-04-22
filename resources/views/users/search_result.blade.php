@@ -1,15 +1,15 @@
 @extends('layout')
 
 @section('title')
-    Результат поиска
+    {{ trans('index.search_results') }}
 @stop
 
 @section('breadcrumb')
     <nav>
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
-            <li class="breadcrumb-item"><a href="/searchusers">Поиск пользователей</a></li>
-            <li class="breadcrumb-item active">Результат поиска</li>
+            <li class="breadcrumb-item"><a href="/searchusers">{{ trans('index.search_users') }}</a></li>
+            <li class="breadcrumb-item active">{{ trans('index.search_results') }}</li>
         </ol>
     </nav>
 @stop
@@ -30,8 +30,13 @@
             @endforeach
         </div>
 
-        Найдено совпадений: <b>{{ $users->count() }}</b><br><br>
+        @if (isset($page))
+            {!! pagination($page) !!}
+            {{ trans('users.total_found') }}: <b>{{ $page->total }}</b><br>
+        @else
+            {{ trans('users.total_found') }}: <b>{{ $users->count() }}</b><br>
+        @endif
     @else
-        {!! showError('По вашему запросу ничего не найдено') !!}
+        {!! showError(trans('users.empty_found')) !!}
     @endif
 @stop
