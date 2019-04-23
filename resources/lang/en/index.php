@@ -42,6 +42,7 @@ return [
     'ram_consumption' => 'Consumption of ram',
     'cpu_load'        => 'CPU load',
     'loading_speed'   => 'Loading speed',
+    'seconds'         => 'sec.',
 
     'useful_information' => 'Useful information',
     'site_rules'         => 'Site rules',

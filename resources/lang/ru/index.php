@@ -42,6 +42,7 @@ return [
     'ram_consumption' => 'Потребление ОЗУ',
     'cpu_load'        => 'Загрузка CPU',
     'loading_speed'   => 'Загрузка страницы',
+    'seconds'         => 'сек.',
 
     'useful_information' => 'Полезная информация',
     'site_rules'         => 'Правила сайта',
