@@ -23,5 +23,6 @@ Disallow: /settings
 Disallow: /notebooks
 Disallow: /authlogs
 Disallow: /key
+Disallow: /walls
 
 Sitemap: /sitemap.xml
