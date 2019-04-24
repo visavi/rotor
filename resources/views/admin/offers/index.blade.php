@@ -18,7 +18,7 @@
     <nav>
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
-            <li class="breadcrumb-item"><a href="/admin">{{ trans('main.panel') }}</a></li>
+            <li class="breadcrumb-item"><a href="/admin">{{ trans('index.panel') }}</a></li>
             <li class="breadcrumb-item active">{{ trans('offers.title') }}</li>
             <li class="breadcrumb-item"><a href="/offers/{{ $type }}?page={{ $page->current }}">{{ trans('main.review') }}</a></li>
         </ol>

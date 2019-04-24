@@ -1,7 +1,6 @@
 <?php
 
 return [
-    'panel'             => 'Control Panel',
     'write'             => 'Write',
     'rules'             => 'Rules',
     'site_rules'        => 'Site rules',
@@ -154,4 +153,12 @@ return [
 
     'male'   => 'Мужской',
     'female' => 'Женский',
+
+    'boss'   => 'Boss',
+    'admin'  => 'Admin',
+    'moder'  => 'Moder',
+    'editor' => 'Editor',
+    'user'   => 'User',
+    'pended' => 'Pended',
+    'banned' => 'Banned',
 ];

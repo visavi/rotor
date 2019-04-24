@@ -41,12 +41,6 @@
         {!! textError('sets[scorename]') !!}
     </div>
 
-    <div class="form-group{{ hasError('sets[statusname]') }}">
-        <label for="statusname">Статусы пользователей:</label>
-        <input type="text" class="form-control" id="statusname" name="sets[statusname]" maxlength="100" value="{{ getInput('sets.statusname', $settings['statusname']) }}" required>
-        {!! textError('sets[statusname]') !!}
-    </div>
-
     <div class="form-group{{ hasError('sets[statusdef]') }}">
         <label for="statusdef">Статус по умолчанию:</label>
         <input type="text" class="form-control" id="statusdef" name="sets[statusdef]" maxlength="20" value="{{ getInput('sets.statusdef', $settings['statusdef']) }}" required>

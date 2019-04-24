@@ -345,29 +345,27 @@ class User extends BaseModel
      */
     public static function getLevelByKey(string $level): string
     {
-        $levels = explode(',', setting('statusname'));
-
         switch ($level) {
             case self::BOSS:
-                $status = $levels[0];
+                $status = trans('main.boss');
                 break;
             case self::ADMIN:
-                $status = $levels[1];
+                $status = trans('main.admin');
                 break;
             case self::MODER:
-                $status = $levels[2];
+                $status = trans('main.moder');
                 break;
             case self::EDITOR:
-                $status = $levels[3];
+                $status = trans('main.editor');
                 break;
             case self::USER:
-                $status = $levels[4];
+                $status = trans('main.user');
                 break;
             case self::PENDED:
-                $status = $levels[5];
+                $status = trans('main.pended');
                 break;
             case self::BANNED:
-                $status = $levels[6];
+                $status = trans('main.banned');
                 break;
             default: $status = setting('statusdef');
         }

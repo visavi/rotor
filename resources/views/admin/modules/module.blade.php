@@ -8,7 +8,7 @@
     <nav>
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
-            <li class="breadcrumb-item"><a href="/admin">{{ trans('main.panel') }}</a></li>
+            <li class="breadcrumb-item"><a href="/admin">{{ trans('index.panel') }}</a></li>
             <li class="breadcrumb-item"><a href="/admin/modules">Модули</a></li>
             <li class="breadcrumb-item active">Модуль {{ $moduleConfig['name'] }}</li>
         </ol>

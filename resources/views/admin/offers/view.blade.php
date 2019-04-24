@@ -8,7 +8,7 @@
     <nav>
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
-            <li class="breadcrumb-item"><a href="/admin">{{ trans('main.panel') }}</a></li>
+            <li class="breadcrumb-item"><a href="/admin">{{ trans('index.panel') }}</a></li>
             <li class="breadcrumb-item"><a href="/admin/offers/{{ $offer->type }}">{{ trans('offers.title') }}</a></li>
             <li class="breadcrumb-item active">{{ $offer->title }}</li>
             <li class="breadcrumb-item"><a href="/offers/{{ $offer->id }}">{{ trans('main.review') }}</a></li>

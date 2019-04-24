@@ -1,22 +1,22 @@
 @extends('layout')
 
 @section('title')
-    Панель управления
+    {{ trans('index.panel') }}
 @stop
 
 @section('breadcrumb')
     <nav>
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
-            <li class="breadcrumb-item active">Панель</li>
+            <li class="breadcrumb-item active">{{ trans('index.panel') }}</li>
         </ol>
     </nav>
 @stop
 
 @section('content')
-    <i class="fa fa-key fa-lg"></i> <b><a href="/admin/upgrade">Версия {{ VERSION }}.{{ setting('buildversion') }}</a></b><br><br>
+    <i class="fa fa-key fa-lg"></i> <b><a href="/admin/upgrade">{{ trans('index.version') }} {{ VERSION }}.{{ setting('buildversion') }}</a></b><br><br>
 
-    <div class="b"><i class="fa fa-cog fa-lg text-muted"></i> <b>Редактор</b></div>
+    <div class="b"><i class="fa fa-cog fa-lg text-muted"></i> <b>{{ trans('main.editor') }}</b></div>
     <i class="far fa-circle fa-lg text-muted"></i> <a href="/admin/chats">Админ-чат</a> ({{ statsChat() }})<br>
     <i class="far fa-circle fa-lg text-muted"></i> <a href="/admin/guestbooks">Гостевая книга</a> ({{ statsGuestbook() }})<br>
     <i class="far fa-circle fa-lg text-muted"></i> <a href="/admin/forums">Форум</a> ({{ statsForum() }})<br>
@@ -26,11 +26,11 @@
     <i class="far fa-circle fa-lg text-muted"></i> <a href="/admin/adverts">Пользовательская реклама</a><br>
 
     @if (isAdmin('moder'))
-        <div class="b"><i class="fa fa-cog fa-lg text-muted"></i> <b>Модератор</b></div>
+        <div class="b"><i class="fa fa-cog fa-lg text-muted"></i> <b>{{ trans('main.moder') }}</b></div>
         <i class="far fa-circle fa-lg text-muted"></i> <a href="/admin/bans">Бан / Разбан</a><br>
         <i class="far fa-circle fa-lg text-muted"></i> <a href="/admin/banlists">Забаненные</a> ({{ statsBanned() }})<br>
         <i class="far fa-circle fa-lg text-muted"></i> <a href="/admin/spam">Жалобы</a> ({{ statsSpam() }})<br>
-        <i class="far fa-circle fa-lg text-muted"></i> <a href="/admin/administrators">Администрация</a> ({{ statsAdmins() }})<br>
+        <i class="far fa-circle fa-lg text-muted"></i> <a href="/admin/administrators">{{ trans('index.admins') }}</a> ({{ statsAdmins() }})<br>
         <i class="far fa-circle fa-lg text-muted"></i> <a href="/admin/reglists">Ожидающие</a> ({{ statsRegList() }})<br>
         <i class="far fa-circle fa-lg text-muted"></i> <a href="/admin/votes">Голосования</a> ({{ statVotes() }})<br>
         <i class="far fa-circle fa-lg text-muted"></i> <a href="/admin/antimat">Антимат</a> ({{ statsAntimat() }})<br>
@@ -40,7 +40,7 @@
     @endif
 
     @if (isAdmin('admin'))
-        <div class="b"><i class="fa fa-cog fa-lg text-muted"></i> <b>Администратор</b></div>
+        <div class="b"><i class="fa fa-cog fa-lg text-muted"></i> <b>{{ trans('main.admin') }}</b></div>
         <i class="far fa-circle fa-lg text-muted"></i> <a href="/admin/rules">Правила сайта</a><br>
         <i class="far fa-circle fa-lg text-muted"></i> <a href="/admin/news">Новости</a> ({{ statsNews() }})<br>
 
@@ -56,7 +56,7 @@
     @endif
 
     @if (isAdmin('boss'))
-        <div class="b"><i class="fa fa-cog fa-lg text-muted"></i> <b>Босс</b></div>
+        <div class="b"><i class="fa fa-cog fa-lg text-muted"></i> <b>{{ trans('main.boss') }}</b></div>
         <i class="far fa-circle fa-lg text-muted"></i> <a href="/admin/settings">Настройки сайта</a><br>
         <i class="far fa-circle fa-lg text-muted"></i> <a href="/admin/users">Пользователи</a> ({{ statsUsers() }})<br>
         <i class="far fa-circle fa-lg text-muted"></i> <a href="/admin/caches">Очистка кэша</a><br>

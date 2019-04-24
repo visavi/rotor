@@ -1,15 +1,15 @@
 @extends('layout')
 
 @section('title')
-    Администрация сайта
+    {{ trans('index.admins') }}
 @stop
 
 @section('breadcrumb')
     <nav>
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
-            <li class="breadcrumb-item"><a href="/admin">{{ trans('main.panel') }}</a></li>
-            <li class="breadcrumb-item active">Администрация сайта</li>
+            <li class="breadcrumb-item"><a href="/admin">{{ trans('index.panel') }}</a></li>
+            <li class="breadcrumb-item active">{{ trans('index.admins') }}</li>
         </ol>
     </nav>
 @stop
@@ -29,15 +29,14 @@
                     ({{ $user->getLevel() }})<br>
 
                     @if (isAdmin('boss'))
-                        <i class="fa fa-pencil-alt"></i> <a href="/admin/users/edit?user={{ $user->login }}">Изменить</a><br>
+                        <i class="fa fa-pencil-alt"></i> <a href="/admin/users/edit?user={{ $user->login }}">{{ trans('main.change') }}</a><br>
                     @endif
                 </div>
             @endforeach
         </div>
 
-        Всего в администрации: <b>{{ $users->count() }}</b><br><br>
-
+        {{ trans('users.total_administration') }}: <b>{{ $users->count() }}</b><br><br>
     @else
-        {!! showError('Администрации еще нет!') !!}
+        {!! showError( trans('users.empty_administration')) !!}
     @endif
 @stop

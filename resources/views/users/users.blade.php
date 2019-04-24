@@ -1,18 +1,18 @@
 @extends('layout')
 
 @section('title')
-    {{ trans('index.user_list') }} ({{ trans('main.page_num', ['page' => $page->current]) }})
+    {{ trans('index.users') }} ({{ trans('main.page_num', ['page' => $page->current]) }})
 @stop
 
 @section('header')
-    <h1>{{ trans('index.user_list') }}</h1>
+    <h1>{{ trans('index.users') }}</h1>
 @stop
 
 @section('breadcrumb')
     <nav>
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
-            <li class="breadcrumb-item active">{{ trans('index.user_list') }}</li>
+            <li class="breadcrumb-item active">{{ trans('index.users') }}</li>
         </ol>
     </nav>
 @stop

@@ -17,6 +17,7 @@ return [
     'search'         => 'Site search',
     'mails'          => 'Feedback',
     'users'          => 'Users',
+    'admins'         => 'Admins',
     'administrators' => 'Administration',
     'contacts'       => 'Contact list',
     'ignores'        => 'Ignore list',
@@ -77,8 +78,6 @@ return [
     'money_transfer'     => 'Money transfer',
     'wall_posts'         => 'Wall posts',
 
-    'admin_list'       => 'Admin list',
-    'user_list'        => 'User list',
     'confirm_register' => 'Confirmation of registration',
     'banned'           => 'You are banned',
     'note'             => 'Note',
@@ -89,4 +88,6 @@ return [
 
     'ban_history' => 'Ban history',
     'ban_unban'   => 'Ban / Unban',
+
+    'version' => 'Version',
 ];
