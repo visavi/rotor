@@ -1,7 +1,7 @@
 @extends('layout')
 
 @section('title')
-    PHP-info
+    {{ trans('index.phpinfo') }}
 @stop
 
 @section('breadcrumb')
@@ -9,7 +9,7 @@
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
             <li class="breadcrumb-item"><a href="/admin">{{ trans('index.panel') }}</a></li>
-            <li class="breadcrumb-item active">PHP-info</li>
+            <li class="breadcrumb-item active">{{ trans('index.phpinfo') }}</li>
         </ol>
     </nav>
 @stop

@@ -1,7 +1,7 @@
 @extends('layout')
 
 @section('title')
-    Апгрейд системы
+    {{ trans('index.upgrade') }}
 @stop
 
 @section('breadcrumb')
@@ -9,7 +9,7 @@
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
             <li class="breadcrumb-item"><a href="/admin">{{ trans('index.panel') }}</a></li>
-            <li class="breadcrumb-item active">Апгрейд системы</li>
+            <li class="breadcrumb-item active">{{ trans('index.upgrade') }}</li>
         </ol>
     </nav>
 @stop

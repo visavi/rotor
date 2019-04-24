@@ -88,6 +88,4 @@ return [
 
     'ban_history' => 'Ban history',
     'ban_unban'   => 'Ban / Unban',
-
-    'version' => 'Version',
 ];

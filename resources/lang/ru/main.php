@@ -86,6 +86,7 @@ return [
     'or'             => 'Или',
     'full'           => 'Полный',
     'search_request' => 'Поиск запроса',
+    'version'        => 'Версия',
 
     'cost'              => 'Цена',
     'cash_money'        => 'У вас в наличии',

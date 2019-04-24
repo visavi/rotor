@@ -86,6 +86,7 @@ return [
     'or'             => 'Or',
     'full'           => 'Full',
     'search_request' => 'Search request',
+    'version'        => 'Version',
 
     'cost'              => 'Cost',
     'cash_money'        => 'You have in stock',
