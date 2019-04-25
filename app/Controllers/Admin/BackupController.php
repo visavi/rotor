@@ -99,8 +99,7 @@ class BackupController extends AdminController
                             $columns = [];
 
                             foreach ($records as $record) {
-                                $record = str_replace('"', '&quot;', $record);
-                                $columns[] = $record ? is_int($record) ? $record : '"' . $record . '"' : 'NULL';
+                                $columns[] = $record ? is_int($record) ? $record : '"' . str_replace('"', '&quot;', $record) . '"' : 'NULL';
                             }
 
                             $this->fwrite($fp, ($key || $i ? ',' : '') . '(' . implode(',', $columns) . ')', $method);

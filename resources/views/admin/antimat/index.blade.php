@@ -1,7 +1,7 @@
 @extends('layout')
 
 @section('title')
-    Антимат
+    {{ trans('index.antimat') }}
 @stop
 
 @section('breadcrumb')
@@ -9,20 +9,19 @@
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
             <li class="breadcrumb-item"><a href="/admin">{{ trans('index.panel') }}</a></li>
-            <li class="breadcrumb-item active">Антимат</li>
+            <li class="breadcrumb-item active">{{ trans('index.antimat') }}</li>
         </ol>
     </nav>
 @stop
 
 @section('content')
-    Все слова из списка будут заменяться на ***<br>
-    Чтобы удалить слово нажмите на него, добавить слово можно в форме ниже<br><br>
+    {!! trans('admin.antimat.text') !!}<br>
 
     @if ($words->isNotEmpty())
 
         <div class="card">
             <h2 class="card-header">
-                Список слов
+                {{ trans('admin.antimat.words') }}
             </h2>
 
             <div class="card-body">
@@ -32,11 +31,11 @@
             </div>
 
             <div class="card-footer">
-                Всего слов в базе: <b>{{ $words->count() }}</b>
+                {{ trans('admin.antimat.total_words') }}: <b>{{ $words->count() }}</b>
 
                 @if (isAdmin('boss'))
                     <span class="float-right">
-                        <i class="fa fa-trash-alt"></i> <a href="/admin/antimat/clear?token={{ $_SESSION['token'] }}" onclick="return confirm('Вы уверены что хотите удалить все слова?')">Очистить</a>
+                        <i class="fa fa-trash-alt"></i> <a href="/admin/antimat/clear?token={{ $_SESSION['token'] }}" onclick="return confirm('{{ trans('admin.antimat.confirm_clear') }}')">{{ trans('main.clear') }}</a>
                     </span>
                 @endif
             </div>
@@ -44,24 +43,22 @@
         <br>
 
     @else
-        {!! showError('Слов еще нет!') !!}
+        {!! showError(trans('admin.antimat.empty_words')) !!}
     @endif
 
-    <div class="form">
-        <form method="post">
-            <input type="hidden" name="token" value="{{ $_SESSION['token'] }}">
+    <form method="post">
+        <input type="hidden" name="token" value="{{ $_SESSION['token'] }}">
 
-            <div class="input-group">
-                <div class="input-group-prepend">
-                    <span class="input-group-text"><i class="fa fa-pencil-alt"></i></span>
-                </div>
-
-                <input type="text" class="form-control" name="word" placeholder="Введите слово" required>
-
-                <span class="input-group-btn">
-                    <button class="btn btn-primary">Добавить</button>
-                </span>
+        <div class="input-group">
+            <div class="input-group-prepend">
+                <span class="input-group-text"><i class="fa fa-pencil-alt"></i></span>
             </div>
-        </form>
-    </div>
+
+            <input type="text" class="form-control" name="word" placeholder="{{ trans('admin.antimat.enter_word') }}" required>
+
+            <span class="input-group-btn">
+                <button class="btn btn-primary">{{ trans('main.add') }}</button>
+            </span>
+        </div>
+    </form>
 @stop
