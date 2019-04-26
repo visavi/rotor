@@ -17,7 +17,7 @@
 @section('content')
     <div class="form">
         <form method="post">
-            <input type="hidden" name="token" value="{{ $_SESSION['token'] }}">
+            @csrf
             <label for="inputRating">{{ trans('main.rating') }}</label>
             <select class="form-control" id="inputRating" name="vote">
                 <?php $selected = ($vote === 'plus') ? ' selected' : ''; ?>

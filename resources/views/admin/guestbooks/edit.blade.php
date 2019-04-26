@@ -20,8 +20,7 @@
 
     <div class="form">
         <form action="/admin/guestbooks/edit/{{ $post->id }}?page={{ $page }}" method="post">
-            <input type="hidden" name="token" value="{{ $_SESSION['token'] }}">
-
+            @csrf
             <div class="form-group{{ hasError('msg') }}">
                 <label for="msg">{{ trans('guestbooks.message') }}:</label>
                 <textarea class="form-control markItUp" id="msg" rows="5" name="msg" placeholder="{{ trans('guestbooks.message') }}" required>{{ getInput('msg', $post->text) }}</textarea>

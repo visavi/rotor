@@ -17,8 +17,7 @@
 @section('content')
     <div class="form">
         <form method="post" action="/settings">
-            <input type="hidden" name="token" value="{{ $_SESSION['token'] }}">
-
+            @csrf
             <div class="form-group{{ hasError('themes') }}">
                 <label for="themes">{{ trans('users.theme') }}:</label>
 

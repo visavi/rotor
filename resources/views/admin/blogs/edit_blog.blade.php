@@ -25,8 +25,7 @@
 @section('content')
     <div class="form next">
         <form action="/admin/articles/edit/{{ $blog->id }}" method="post">
-            <input type="hidden" name="token" value="{{ $_SESSION['token'] }}">
-
+            @csrf
             <div class="form-group{{ hasError('title') }}">
                 <label for="inputTitle">{{ trans('blogs.name') }}:</label>
                 <input type="text" class="form-control" id="inputTitle" name="title" maxlength="50" value="{{ getInput('title', $blog->title) }}" required>

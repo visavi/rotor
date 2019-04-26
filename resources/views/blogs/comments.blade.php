@@ -72,8 +72,7 @@
     @if (getUser())
         <div class="form">
             <form action="/articles/comments/{{ $blog->id }}" method="post">
-                <input type="hidden" name="token" value="{{ $_SESSION['token'] }}">
-
+                @csrf
                 <div class="form-group{{ hasError('msg') }}">
                     <label for="msg">{{ trans('blogs.message') }}:</label>
                     <textarea class="form-control markItUp" maxlength="{{ setting('comment_length') }}" id="msg" rows="5" name="msg" required>{{ getInput('msg') }}</textarea>

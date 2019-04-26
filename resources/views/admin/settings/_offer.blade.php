@@ -3,8 +3,7 @@
 @stop
 
 <form action="/admin/settings?act=offer" method="post">
-    <input type="hidden" name="token" value="{{ $_SESSION['token'] }}">
-
+    @csrf
     <div class="form-group{{ hasError('sets[postoffers]') }}">
         <label for="postoffers">Предложений на страницу:</label>
         <input type="number" class="form-control" id="postoffers" name="sets[postoffers]" maxlength="2" value="{{ getInput('sets.postoffers', $settings['postoffers']) }}" required>

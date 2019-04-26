@@ -3,8 +3,7 @@
 @stop
 
 <form action="/admin/settings?act=page" method="post">
-    <input type="hidden" name="token" value="{{ $_SESSION['token'] }}">
-
+    @csrf
     <div class="form-group{{ hasError('sets[userlist]') }}">
         <label for="userlist">Пользователей в юзерлисте:</label>
         <input type="number" class="form-control" id="userlist" name="sets[userlist]" maxlength="2" value="{{ getInput('sets.userlist', $settings['userlist']) }}" required>

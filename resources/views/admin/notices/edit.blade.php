@@ -26,8 +26,7 @@
 
     <div class="form">
         <form action="/admin/notices/edit/{{ $notice->id }}" method="post">
-            <input type="hidden" name="token" value="{{ $_SESSION['token'] }}">
-
+            @csrf
             <div class="form-group{{ hasError('name') }}">
                 <label for="name">Название:</label>
                 <input type="text" class="form-control" id="name" name="name" maxlength="100" value="{{ getInput('name', $notice->name) }}" required>

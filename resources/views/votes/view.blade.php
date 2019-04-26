@@ -21,8 +21,7 @@
 
     @if (empty($show) && (empty($vote->poll) && getUser()))
         <form action="/votes/{{ $vote->id }}" method="post">
-            <input type="hidden" name="token" value="{{ $_SESSION['token'] }}">
-
+            @csrf
             @foreach($vote->answers as $answer)
                 <label><input name="poll" type="radio" value="{{ $answer['id'] }}"> {{ $answer['answer'] }}</label><br>
             @endforeach

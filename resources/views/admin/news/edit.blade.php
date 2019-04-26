@@ -19,8 +19,7 @@
 @section('content')
     <div class="form cut">
         <form action="/admin/news/edit/{{ $news->id }}?page={{ $page }}" method="post" enctype="multipart/form-data">
-            <input type="hidden" name="token" value="{{ $_SESSION['token'] }}">
-
+            @csrf
             <div class="form-group{{ hasError('title') }}">
                 <label for="title">{{ trans('main.title') }}:</label>
                 <input type="text" class="form-control" id="title" name="title" maxlength="100" value="{{ getInput('title', $news->title) }}" placeholder="{{ trans('main.title') }}" required>

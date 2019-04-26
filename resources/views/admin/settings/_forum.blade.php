@@ -3,8 +3,7 @@
 @stop
 
 <form action="/admin/settings?act=forum" method="post">
-    <input type="hidden" name="token" value="{{ $_SESSION['token'] }}">
-
+    @csrf
     <div class="form-group{{ hasError('sets[forumtem]') }}">
         <label for="forumtem">Тем в форуме на стр.:</label>
         <input type="number" class="form-control" id="forumtem" name="sets[forumtem]" maxlength="2" value="{{ getInput('sets.forumtem', $settings['forumtem']) }}" required>

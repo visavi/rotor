@@ -17,8 +17,7 @@
 @section('content')
     <div class="form">
         <form method="post" action="/profile">
-            <input type="hidden" name="token" value="{{ $_SESSION['token'] }}">
-
+            @csrf
             <div class="container-fluid">
                 <div class="row">
                     <div class="col-md-6">

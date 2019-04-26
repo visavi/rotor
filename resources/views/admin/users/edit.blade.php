@@ -24,10 +24,8 @@
 
     <div class="form">
         <form method="post" action="/admin/users/edit?user={{ $user->login }}">
-            <input type="hidden" name="token" value="{{ $_SESSION['token'] }}">
-
+            @csrf
             <?php $inputLevel = getInput('level', $user->level); ?>
-
             <div class="form-group">
                 <label for="level">Уровень:</label>
                 <select class="form-control" id="level" name="level">

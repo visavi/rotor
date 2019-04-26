@@ -3,8 +3,7 @@
 @stop
 
 <form action="/admin/settings?act=guest" method="post">
-    <input type="hidden" name="token" value="{{ $_SESSION['token'] }}">
-
+    @csrf
     <div class="form-group{{ hasError('sets[sendprivatmailday]') }}">
         <label for="lastnews">Кол. новостей на главной:</label>
         <input type="number" class="form-control" id="lastnews" name="sets[lastnews]" maxlength="2" value="{{ getInput('sets.lastnews', $settings['lastnews']) }}" required>

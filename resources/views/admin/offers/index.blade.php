@@ -50,26 +50,25 @@
         <hr>
 
         <form action="/admin/offers/delete?type={{ $type }}&amp;page={{ $page->current }}" method="post">
-            <input type="hidden" name="token" value="{{ $_SESSION['token'] }}">
-
-                @foreach ($offers as $data)
-                    <div class="b">
-                        <div class="float-right">
-                            <a href="/admin/offers/reply/{{ $data->id }}" data-toggle="tooltip" title="{{ trans('main.reply') }}"><i class="fas fa-reply text-muted"></i></a>
-                            <a href="/admin/offers/edit/{{ $data->id }}" data-toggle="tooltip" title="{{ trans('main.edit') }}"><i class="fas fa-pencil-alt text-muted"></i></a>
-                            <input type="checkbox" name="del[]" value="{{ $data->id }}">
-                        </div>
-
-                        <i class="fa fa-file"></i>
-                        <b><a href="/admin/offers/{{ $data->id }}">{{ $data->title }}</a></b> ({{ trans('main.votes') }}: {{ $data->rating }})<br>
-                        {!! $data->getStatus() !!}
+            @csrf
+            @foreach ($offers as $data)
+                <div class="b">
+                    <div class="float-right">
+                        <a href="/admin/offers/reply/{{ $data->id }}" data-toggle="tooltip" title="{{ trans('main.reply') }}"><i class="fas fa-reply text-muted"></i></a>
+                        <a href="/admin/offers/edit/{{ $data->id }}" data-toggle="tooltip" title="{{ trans('main.edit') }}"><i class="fas fa-pencil-alt text-muted"></i></a>
+                        <input type="checkbox" name="del[]" value="{{ $data->id }}">
                     </div>
 
-                    <div>{!! bbCode($data->text) !!}<br>
-                        {{ trans('main.added') }}: {!! $data->user->getProfile() !!} ({{ dateFixed($data->created_at) }})<br>
-                        <a href="/offers/comments/{{ $data->id }}">{{ trans('main.comments') }}</a> ({{ $data->count_comments }})
-                        <a href="/offers/end/{{ $data['id'] }}">&raquo;</a></div>
-                @endforeach
+                    <i class="fa fa-file"></i>
+                    <b><a href="/admin/offers/{{ $data->id }}">{{ $data->title }}</a></b> ({{ trans('main.votes') }}: {{ $data->rating }})<br>
+                    {!! $data->getStatus() !!}
+                </div>
+
+                <div>{!! bbCode($data->text) !!}<br>
+                    {{ trans('main.added') }}: {!! $data->user->getProfile() !!} ({{ dateFixed($data->created_at) }})<br>
+                    <a href="/offers/comments/{{ $data->id }}">{{ trans('main.comments') }}</a> ({{ $data->count_comments }})
+                    <a href="/offers/end/{{ $data['id'] }}">&raquo;</a></div>
+            @endforeach
 
             <div class="float-right">
                 <button class="btn btn-sm btn-danger">{{ trans('main.delete_selected') }}</button>

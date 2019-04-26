@@ -24,8 +24,7 @@
 @section('content')
     <div class="form mb-3">
         <form action="/admin/topics/edit/{{ $topic->id }}" method="post">
-            <input type="hidden" name="token" value="{{ $_SESSION['token'] }}">
-
+            @csrf
             <div class="form-group{{ hasError('title') }}">
                 <label for="title">{{ trans('forums.topic') }}:</label>
                 <input class="form-control" name="title" id="title" maxlength="50" value="{{ getInput('title', $topic->title) }}" required>

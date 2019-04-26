@@ -19,8 +19,7 @@
     @if ($banhist->isNotEmpty())
 
         <form action="/admin/banhists/delete?user={{ $user->login }}&amp;page={{ $page->current }}" method="post">
-            <input type="hidden" name="token" value="{{ $_SESSION['token'] }}">
-
+            @csrf
             @foreach ($banhist as $data)
                 <div class="b">
 

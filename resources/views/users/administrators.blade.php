@@ -36,8 +36,7 @@
 
             <div class="form">
                 <form method="post" action="/messages/send">
-                    <input type="hidden" name="token" value="{{ $_SESSION['token'] }}">
-
+                    @csrf
                     <div class="form-group">
                         <label for="user">{{ trans('users.choose_addressee') }}:</label>
                         <select class="form-control" id="user" name="user">

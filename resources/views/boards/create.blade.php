@@ -16,8 +16,7 @@
 
 @section('content')
     <form action="/items/create" method="post" enctype="multipart/form-data">
-        <input type="hidden" name="token" value="{{ $_SESSION['token'] }}">
-
+        @csrf
         <div class="form-group{{ hasError('category') }}">
             <label for="inputCategory">{{ trans('boards.category') }}</label>
 

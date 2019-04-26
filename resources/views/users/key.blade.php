@@ -31,8 +31,7 @@
     <div class="js-resending-form"{!! $display !!}>
         <div class="form">
             <form method="post" action="/key">
-                <input type="hidden" name="token" value="{{ $_SESSION['token'] }}">
-
+                @csrf
                 <div class="form-group{{ hasError('email') }}">
                     <label for="email">{{ trans('users.email') }}:</label>
                     <input class="form-control" name="email" id="email" maxlength="50" value="{{ getInput('email', $user->email) }}" required>

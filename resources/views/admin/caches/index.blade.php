@@ -25,7 +25,7 @@
 
         <div class="float-right">
             <form action="/admin/caches/clear" method="post">
-                <input type="hidden" name="token" value="{{ $_SESSION['token'] }}">
+                @csrf
                 <button class="btn btn-sm btn-danger"><i class="fa fa-trash-alt"></i> Очистить кэш</button>
             </form>
         </div>

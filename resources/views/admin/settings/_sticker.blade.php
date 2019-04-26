@@ -3,8 +3,7 @@
 @stop
 
 <form action="/admin/settings?act=sticker" method="post">
-    <input type="hidden" name="token" value="{{ $_SESSION['token'] }}">
-
+    @csrf
     <div class="form-group{{ hasError('sets[stickermaxsize]') }}">
         <label for="stickermaxsize">Максимальный вес стикера (kb):</label>
         <input type="number" class="form-control" id="stickermaxsize" name="sets[stickermaxsize]" maxlength="3" value="{{ getInput('sets.stickermaxsize', round($settings['stickermaxsize'] / 1024)) }}" required>

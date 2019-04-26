@@ -3,8 +3,7 @@
 @stop
 
 <form action="/admin/settings?act=other" method="post">
-    <input type="hidden" name="token" value="{{ $_SESSION['token'] }}">
-
+    @csrf
     <div class="custom-control custom-checkbox">
         <input type="hidden" value="0" name="sets[errorlog]">
         <input type="checkbox" class="custom-control-input" value="1" name="sets[errorlog]" id="errorlog"{{ getInput('sets.errorlog', $settings['errorlog']) ? ' checked' : '' }}>

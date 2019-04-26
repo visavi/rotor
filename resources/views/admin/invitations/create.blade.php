@@ -19,8 +19,7 @@
     <h3>Генерация новых ключей</h3>
     <div class="form">
         <form action="/admin/invitations/create" method="post">
-            <input type="hidden" name="token" value="{{ $_SESSION['token'] }}">
-
+            @csrf
             <?php $inputKeys = (int) getInput('keys'); ?>
             <div class="form-group{{ hasError('keys') }}">
                 <label for="keys">Количество ключей:</label>
@@ -41,8 +40,7 @@
     <h3>Отправить ключ пользователю</h3>
     <div class="form">
         <form action="/admin/invitations/send" method="post">
-            <input type="hidden" name="token" value="{{ $_SESSION['token'] }}">
-
+            @csrf
             <div class="form-group{{ hasError('user') }}">
                 <label for="user">Логин пользователя:</label>
                 <input type="text" class="form-control" id="user" name="user" maxlength="20" value="{{ getInput('user') }}" required>
@@ -73,7 +71,7 @@
         <div class="form">
             Разослать ключи активным пользователям:<br>
             <form action="/admin/invitations/mail" method="post">
-                <input type="hidden" name="token" value="{{ $_SESSION['token'] }}">
+                @csrf
                 <button class="btn btn-primary">Разослать</button>
             </form>
         </div><br>

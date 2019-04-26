@@ -77,7 +77,7 @@
             @endforeach
         @else
             <form action="/topics/votes/{{ $topic->id }}?page={{ $page->current }}" method="post">
-                <input type="hidden" name="token" value="{{ $_SESSION['token'] }}">
+                @csrf
                 @foreach ($vote->answers as $answer)
                     <label><input name="poll" type="radio" value="{{ $answer->id }}"> {{ $answer->answer }}</label><br>
                 @endforeach
@@ -89,8 +89,7 @@
     @endif
 
     <form action="/admin/posts/delete?tid={{ $topic->id }}&amp;page={{ $page->current }}" method="post">
-        <input type="hidden" name="token" value="{{ $_SESSION['token'] }}">
-
+        @csrf
         <div class="p-1 bg-light text-right">
             <label for="all">{{ trans('main.select_all') }}</label>
             <input type="checkbox" id="all" onchange="var o=this.form.elements;for(var i=0;i&lt;o.length;i++)o[i].checked=this.checked">
@@ -180,8 +179,7 @@
         @if (empty($topic->closed))
             <div class="form">
                 <form action="/topics/create/{{ $topic->id }}" method="post" enctype="multipart/form-data">
-                    <input type="hidden" name="token" value="{{ $_SESSION['token'] }}">
-
+                    @csrf
                     <div class="form-group{{ hasError('msg') }}">
                         <label for="msg">{{ trans('forums.post') }}:</label>
                         <textarea class="form-control markItUp" maxlength="{{ setting('forumtextlength') }}" id="msg" rows="5" name="msg" placeholder="{{ trans('forums.post') }}" required>{{ getInput('msg') }}</textarea>

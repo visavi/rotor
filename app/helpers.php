@@ -2363,3 +2363,27 @@ function runCommand(Command $command, array $arguments = [])
         return;
     }
 }
+
+/**
+ * Returns the build version
+ *
+ * @return string
+ */
+function buildVersion()
+{
+    if (strpos(VERSION, '-')) {
+        return str_replace('-', '.' . setting('buildversion') . '-', VERSION);
+    }
+
+    return VERSION . '.' . setting('buildversion');
+}
+
+/**
+ * Returns csrf token field
+ *
+ * @return string
+ */
+function csrf_field()
+{
+    return '<input type="hidden" name="token" value="' . $_SESSION['token'] . '">';
+}

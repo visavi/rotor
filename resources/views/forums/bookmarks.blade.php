@@ -17,7 +17,7 @@
 @section('content')
     @if ($topics->isNotEmpty())
         <form action="/forums/bookmarks/delete?page={{ $page->current }}" method="post">
-            <input type="hidden" name="token" value="{{ $_SESSION['token'] }}">
+            @csrf
             @foreach ($topics as $topic)
                 <div class="b">
                     <input type="checkbox" name="del[]" value="{{ $topic->id }}">

@@ -3,8 +3,7 @@
 @stop
 
 <form action="/admin/settings?act=load" method="post">
-    <input type="hidden" name="token" value="{{ $_SESSION['token'] }}">
-
+    @csrf
     <div class="form-group{{ hasError('sets[maxfiles]') }}">
         <label for="maxfiles">Одновременно загружаемое кол. файлов:</label>
         <input type="number" class="form-control" id="maxfiles" name="sets[maxfiles]" maxlength="2" value="{{ getInput('sets.maxfiles', $settings['maxfiles']) }}" required>

@@ -19,8 +19,7 @@
 @section('content')
     <div class="form">
         <form action="/admin/votes/edit/{{ $vote->id }}" method="post">
-            <input type="hidden" name="token" value="{{ $_SESSION['token'] }}">
-
+            @csrf
             <div class="form-group{{ hasError('title') }}">
                 <label for="title"><span class="text-success">{{ trans('votes.question') }}:</span></label>
                 <input class="form-control" name="title" id="title" maxlength="100" value="{{ getInput('title', $vote->title) }}" required>

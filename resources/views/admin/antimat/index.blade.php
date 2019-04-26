@@ -47,8 +47,7 @@
     @endif
 
     <form method="post">
-        <input type="hidden" name="token" value="{{ $_SESSION['token'] }}">
-
+        @csrf
         <div class="input-group">
             <div class="input-group-prepend">
                 <span class="input-group-text"><i class="fa fa-pencil-alt"></i></span>

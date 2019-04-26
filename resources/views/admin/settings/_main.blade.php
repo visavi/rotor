@@ -3,10 +3,7 @@
 @stop
 
 <form action="/admin/settings" method="post">
-    <input type="hidden" name="token" value="{{ $_SESSION['token'] }}">
-
-
-
+    @csrf
     <div class="form-group{{ hasError('sets[title]') }}">
         <label for="title">Заголовок всех страниц:</label>
         <input type="text" class="form-control" id="title" name="sets[title]" maxlength="100" value="{{ getInput('sets.title', $settings['title']) }}" required>

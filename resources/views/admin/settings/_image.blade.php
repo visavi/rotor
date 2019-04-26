@@ -3,8 +3,7 @@
 @stop
 
 <form action="/admin/settings?act=image" method="post">
-    <input type="hidden" name="token" value="{{ $_SESSION['token'] }}">
-
+    @csrf
     <div class="form-group{{ hasError('sets[filesize]') }}">
         <label for="filesize">Максимальный вес фото (Mb):</label>
         <input type="number" class="form-control" id="filesize" name="sets[filesize]" maxlength="3" value="{{ getInput('sets.filesize', round($settings['filesize'] / 1048576)) }}" required>

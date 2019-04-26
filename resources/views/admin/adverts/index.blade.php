@@ -26,8 +26,7 @@
     @if ($records->isNotEmpty())
 
         <form action="/admin/adverts/delete?page={{ $page->current }}" method="post">
-            <input type="hidden" name="token" value="{{ $_SESSION['token'] }}">
-
+            @csrf
             @foreach ($records as $data)
                 <div class="b">
                     <i class="fa fa-check-circle"></i>

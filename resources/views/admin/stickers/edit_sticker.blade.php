@@ -21,8 +21,7 @@
 
     <div class="form">
         <form action="/admin/stickers/sticker/edit/{{ $sticker->id }}?page={{ $page }}" method="post">
-            <input type="hidden" name="token" value="{{ $_SESSION['token'] }}">
-
+            @csrf
             <div class="form-group{{ hasError('category') }}">
                 <label for="inputCategory">{{ trans('stickers.category') }}</label>
 

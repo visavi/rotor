@@ -98,7 +98,7 @@
 
     @if (getUser() && getUser('id') !== $down->user_id)
         <form action="/downs/votes/{{ $down->id }}" method="post">
-            <input type="hidden" name="token" value="{{ $_SESSION['token'] }}">
+            @csrf
             <label for="score">{{ trans('main.your_vote') }}:</label>
             <div class="form-inline">
                 <div class="form-group mb-2{{ hasError('score') }}">

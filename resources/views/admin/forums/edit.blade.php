@@ -18,8 +18,7 @@
 @section('content')
     <div class="form mb-3">
         <form action="/admin/forums/edit/{{ $forum->id }}" method="post">
-            <input type="hidden" name="token" value="{{ $_SESSION['token'] }}">
-
+            @csrf
             <div class="form-group{{ hasError('parent') }}">
                 <label for="parent">{{ trans('forums.parent_forum') }}</label>
 

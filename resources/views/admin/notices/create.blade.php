@@ -18,8 +18,7 @@
 @section('content')
     <div class="form">
         <form action="/admin/notices/create" method="post">
-            <input type="hidden" name="token" value="{{ $_SESSION['token'] }}">
-
+            @csrf
             <div class="form-group{{ hasError('type') }}">
                 <label for="type">Тип (a-z0-9_-):</label>
                 <input type="text" class="form-control" id="type" name="type" maxlength="20" value="{{ getInput('type') }}" required>

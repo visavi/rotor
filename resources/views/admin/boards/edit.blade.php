@@ -25,8 +25,7 @@
 @section('content')
     <div class="form mb-3">
         <form action="/admin/boards/edit/{{ $board->id }}" method="post">
-            <input type="hidden" name="token" value="{{ $_SESSION['token'] }}">
-
+            @csrf
             <div class="form-group{{ hasError('parent') }}">
                 <label for="parent">{{ trans('boards.parent_category') }}</label>
 

@@ -18,8 +18,7 @@
 @section('content')
     @if ($posts->isNotEmpty())
         <form action="/admin/guestbooks/delete?page={{ $page->current }}" method="post">
-            <input type="hidden" name="token" value="{{ $_SESSION['token'] }}">
-
+            @csrf
             @foreach($posts as $data)
 
                 <div class="b">

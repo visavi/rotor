@@ -18,8 +18,7 @@
 @section('content')
     <div class="form">
         <form method="post">
-            <input type="hidden" name="token" value="{{ $_SESSION['token'] }}">
-
+            @csrf
             <div class="form-group">
                 <label for="inputFrom">От:</label>
                 <input type="text" pattern="\d*" maxlength="10" class="form-control" id="inputFrom" name="topoint" placeholder="От" value="{{ getInput('topoint', $status->topoint) }}">

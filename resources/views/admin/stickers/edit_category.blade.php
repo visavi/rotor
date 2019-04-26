@@ -19,8 +19,7 @@
 @section('content')
     <div class="form mb-3">
         <form action="/admin/stickers/edit/{{ $category->id }}" method="post">
-            <input type="hidden" name="token" value="{{ $_SESSION['token'] }}">
-
+            @csrf
             <div class="form-group{{ hasError('name') }}">
                 <label for="name">{{ trans('stickers.category') }}:</label>
                 <input class="form-control" name="name" id="name" maxlength="50" value="{{ getInput('name', $category->name) }}" required>

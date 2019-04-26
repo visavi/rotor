@@ -3,8 +3,7 @@
 @stop
 
 <form action="/admin/settings?act=advert" method="post">
-    <input type="hidden" name="token" value="{{ $_SESSION['token'] }}">
-
+    @csrf
     <div class="form-group{{ hasError('sets[rekusershow]') }}">
         <label for="rekusershow">Кол. рекламных ссылок:</label>
         <input type="number" class="form-control" id="rekusershow" name="sets[rekusershow]" maxlength="2" value="{{ getInput('sets.rekusershow', $settings['rekusershow']) }}" required>

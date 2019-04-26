@@ -22,8 +22,7 @@
         @endif
 
         <form action="/pictures" method="post" enctype="multipart/form-data">
-            <input type="hidden" name="token" value="{{ $_SESSION['token'] }}">
-
+            @csrf
             <div class="form-group{{ hasError('photo') }}">
                 <label class="btn btn-sm btn-secondary" for="inputPhoto">
 

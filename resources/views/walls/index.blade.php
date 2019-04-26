@@ -60,8 +60,7 @@
 
         <div class="form">
             <form action="/walls/{{ $user->login }}/create" method="post">
-                <input type="hidden" name="token" value="{{ $_SESSION['token'] }}">
-
+                @csrf
                 <div class="form-group{{ hasError('msg') }}">
                     <label for="msg">{{ trans('main.message') }}:</label>
                     <textarea class="form-control markItUp" id="msg" rows="5" name="msg" placeholder="{{ trans('main.message') }}" required>{{ getInput('msg') }}</textarea>

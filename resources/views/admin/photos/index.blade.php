@@ -27,8 +27,7 @@
 
 @section('content')
     @if ($photos->isNotEmpty())
-        <input type="hidden" name="token" value="{{ $_SESSION['token'] }}">
-
+        @csrf
         @foreach ($photos as $photo)
             <div class="b">
                 <i class="fa fa-image"></i>

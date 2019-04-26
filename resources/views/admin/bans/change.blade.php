@@ -29,8 +29,7 @@
 
     <div class="form">
         <form method="post" action="/admin/bans/change?user={{ $user->login }}">
-            <input type="hidden" name="token" value="{{ $_SESSION['token'] }}">
-
+            @csrf
             <div class="form-group{{ hasError('timeban') }}">
                 <label for="timeban">Бан до:</label>
                 <input class="form-control" type="datetime-local" name="timeban" id="timeban" value="{{ getInput('timeban', dateFixed($user->timeban, 'Y-m-d\TH:i')) }}" required>

@@ -3,8 +3,7 @@
 @stop
 
 <form action="/admin/settings?act=info" method="post">
-    <input type="hidden" name="token" value="{{ $_SESSION['token'] }}">
-
+    @csrf
     <?php $inputSite = getInput('sets.incount', $settings['incount']); ?>
     <?php $statsite = ['Выключить', 'Хосты | Хосты всего', 'Хиты | Хиты всего', 'Хиты | Хосты', 'Хиты всего | Хосты всего', 'Графический']; ?>
 

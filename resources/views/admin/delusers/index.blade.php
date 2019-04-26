@@ -61,7 +61,7 @@
         <br><br>Будет удалено пользователей: <b>{{ $users->count() }}</b><br>
 
         <form action="/admin/delusers/clear" method="post">
-            <input type="hidden" name="token" value="{{ $_SESSION['token'] }}">
+            @csrf
             <input type="hidden" name="period" value="{{ $period }}">
             <input type="hidden" name="point" value="{{ $point }}">
 

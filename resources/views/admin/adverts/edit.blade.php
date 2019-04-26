@@ -18,8 +18,7 @@
 @section('content')
     <div class="form">
         <form action="/admin/adverts/edit/{{ $link->id }}?page={{ $page }}" method="post">
-            <input type="hidden" name="token" value="{{ $_SESSION['token'] }}">
-
+            @csrf
             <div class="form-group{{ hasError('site') }}">
                 <label for="site">{{ trans('adverts.link') }}:</label>
                 <input class="form-control" id="site" name="site" type="text" value="{{ getInput('site', $link->site) }}" maxlength="50" required>

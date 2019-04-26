@@ -19,8 +19,7 @@
 @section('content')
     <div class="form">
         <form action="/admin/offers/reply/{{ $offer->id }}" method="post">
-            <input type="hidden" name="token" value="{{ $_SESSION['token'] }}">
-
+            @csrf
             <div class="form-group{{ hasError('reply') }}">
                 <label for="reply">{{ trans('offers.answer') }}:</label>
                 <textarea class="form-control markItUp" id="reply" rows="5" name="reply" required>{{ getInput('reply', $offer->reply) }}</textarea>

@@ -38,8 +38,7 @@
     @else
         <div class="form">
             <form method="post" action="/admin/bans/edit?user={{ $user->login }}">
-                <input type="hidden" name="token" value="{{ $_SESSION['token'] }}">
-
+                @csrf
                 <div class="form-group{{ hasError('time') }}">
                     <label for="time">Время бана:</label>
                     <input class="form-control" name="time" id="time" value="{{ getInput('time') }}" required>

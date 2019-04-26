@@ -21,9 +21,7 @@
 
         <div class="form">
             <form action="/admin/backups/create" method="post">
-                <input type="hidden" name="token" value="{{ $_SESSION['token'] }}">
-
-
+                @csrf
                 <input type="checkbox" id="all" onchange="var o=this.form.elements;for(var i=0;i&lt;o.length;i++)o[i].checked=this.checked"> <b><label for="all">{{ trans('main.select_all') }}</label></b>
 
                 <?php $sheets = getInput('sheets', []); ?>
@@ -63,7 +61,7 @@
                 <?php $inputLevel = (int) getInput('level', 7); ?>
 
                 <div class="form-group">
-                    <label for="level">{{ trans('admin.backup.compress_ration') }}:</label>
+                    <label for="level">{{ trans('admin.backup.compress_ratio') }}:</label>
                     <select class="form-control" id="level" name="level">
                         @foreach($levels as $key => $level)
                             <?php $selected = ($key === $inputLevel) ? ' selected' : ''; ?>

@@ -20,8 +20,7 @@
     @if ($logs->isNotEmpty())
 
         <form action="/admin/ipbans/delete?page={{ $page->current }}" method="post">
-            <input type="hidden" name="token" value="{{ $_SESSION['token'] }}">
-
+            @csrf
             @foreach ($logs as $log)
                 <div class="b">
                     <input type="checkbox" name="del[]" value="{{ $log->id }}">
@@ -52,8 +51,7 @@
 
     <div class="form">
         <form action="/admin/ipbans" method="post">
-            <input type="hidden" name="token" value="{{ $_SESSION['token'] }}">
-
+            @csrf
             <div class="form-inline">
                 <div class="form-group{{ hasError('ip') }}">
                     <input type="text" class="form-control" id="ip" name="ip" maxlength="15" value="{{ getInput('ip') }}" placeholder="IP-адрес" required>

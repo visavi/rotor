@@ -3,8 +3,7 @@
 @stop
 
 <form action="/admin/settings?act=bookmark" method="post">
-    <input type="hidden" name="token" value="{{ $_SESSION['token'] }}">
-
+    @csrf
     <div class="form-group{{ hasError('sets[privatpost]') }}">
         <label for="privatpost">Писем в привате на стр.:</label>
         <input type="number" class="form-control" id="privatpost" name="sets[privatpost]" maxlength="2" value="{{ getInput('sets.privatpost', $settings['privatpost']) }}" required>

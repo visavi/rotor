@@ -19,8 +19,7 @@
 @section('content')
     <div class="form">
         <form method="post">
-            <input type="hidden" name="token" value="{{ $_SESSION['token'] }}">
-
+            @csrf
             <div class="form-group{{ hasError('msg') }}">
                 <textarea class="form-control markItUpHtml" rows="25" name="msg">{{ getInput('msg', $contest) }}</textarea>
                 {!! textError('msg') !!}

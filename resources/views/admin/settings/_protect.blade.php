@@ -3,8 +3,7 @@
 @stop
 
 <form action="/admin/settings?act=protect" method="post">
-    <input type="hidden" name="token" value="{{ $_SESSION['token'] }}">
-
+    @csrf
     <div class="form-group{{ hasError('sets[captcha_symbols]') }}">
         <label for="captcha_symbols">Допустимые символы captcha [a-z0-9]:</label>
         <input pattern="[a-z0-9]+" type="text" class="form-control" id="captcha_symbols" name="sets[captcha_symbols]" maxlength="36" value="{{ getInput('sets.captcha_symbols', $settings['captcha_symbols']) }}" required>

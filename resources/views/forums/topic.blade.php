@@ -91,7 +91,7 @@
             @endforeach
         @else
             <form action="/topics/votes/{{ $topic->id }}?page={{ $page->current }}" method="post">
-                <input type="hidden" name="token" value="{{ $_SESSION['token'] }}">
+                @csrf
                 @foreach ($vote->answers as $answer)
                     <label><input name="poll" type="radio" value="{{ $answer->id }}"> {{ $answer->answer }}</label><br>
                 @endforeach
@@ -104,7 +104,7 @@
 
     @if ($topic->isModer)
         <form action="/topics/delete/{{ $topic->id }}?page={{ $page->current }}" method="post">
-            <input type="hidden" name="token" value="{{ $_SESSION['token'] }}">
+            @csrf
     @endif
 
     @if ($posts->isNotEmpty())
@@ -196,8 +196,7 @@
         @if (empty($topic->closed))
             <div class="form">
                 <form action="/topics/create/{{ $topic->id }}" method="post" enctype="multipart/form-data">
-                    <input type="hidden" name="token" value="{{ $_SESSION['token'] }}">
-
+                    @csrf
                     <div class="form-group{{ hasError('msg') }}">
                         <label for="msg">{{ trans('forums.post') }}:</label>
                         <textarea class="form-control markItUp" maxlength="{{ setting('forumtextlength') }}" id="msg" rows="5" name="msg" placeholder="{{ trans('forums.post') }}" required>{{ getInput('msg') }}</textarea>

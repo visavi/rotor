@@ -3,8 +3,7 @@
 @stop
 
 <form action="/admin/settings?act=price" method="post">
-    <input type="hidden" name="token" value="{{ $_SESSION['token'] }}">
-
+    @csrf
     <div class="form-group{{ hasError('sets[sendmoneypoint]') }}">
         <label for="sendmoneypoint">Актива для перечисления денег:</label>
         <input type="number" class="form-control" id="sendmoneypoint" name="sets[sendmoneypoint]" maxlength="4" value="{{ getInput('sets.sendmoneypoint', $settings['sendmoneypoint']) }}" required>

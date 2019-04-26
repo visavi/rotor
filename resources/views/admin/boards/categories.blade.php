@@ -46,7 +46,7 @@
 
     <div class="form my-3">
         <form action="/admin/boards/create" method="post">
-            <input type="hidden" name="token" value="{{ $_SESSION['token'] }}">
+            @csrf
             <div class="form-inline">
                 <div class="form-group{{ hasError('name') }}">
                     <input type="text" class="form-control" id="name" name="name" maxlength="50" value="{{ getInput('name') }}" placeholder="{{ trans('boards.category') }}" required>

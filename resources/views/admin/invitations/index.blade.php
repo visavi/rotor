@@ -28,7 +28,7 @@
     @if ($invites->isNotEmpty())
 
         <form action="/admin/invitations/delete?used={{ $used }}&amp;page={{ $page->current }}" method="post">
-            <input type="hidden" name="token" value="{{ $_SESSION['token'] }}">
+            @csrf
             @foreach ($invites as $invite)
                 <div class="b">
                     <input type="checkbox" name="del[]" value="{{ $invite->id }}">

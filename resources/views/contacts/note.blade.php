@@ -18,8 +18,7 @@
 @section('content')
     <div class="form">
         <form method="post" action="/contacts/note/{{ $contact->id }}">
-            <input type="hidden" name="token" value="{{ $_SESSION['token'] }}">
-
+            @csrf
             <div class="form-group{{ hasError('msg') }}">
                 <label for="msg">{{ trans('contacts.note') }}:</label>
                 <textarea class="form-control markItUp" id="msg" rows="5" name="msg" placeholder="{{ trans('contacts.note_text') }}">{{ getInput('msg', $contact->text) }}</textarea>

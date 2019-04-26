@@ -29,8 +29,7 @@
 
     <div class="form mb-3">
         <form action="/downs/edit/{{ $down->id }}" method="post" enctype="multipart/form-data">
-            <input type="hidden" name="token" value="{{ $_SESSION['token'] }}">
-
+            @csrf
             <div class="form-group{{ hasError('title') }}">
                 <label for="title">{{ trans('loads.down_title') }}:</label>
                 <input class="form-control" name="title" id="title" maxlength="50" value="{{ getInput('title', $down->title) }}" required>

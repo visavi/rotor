@@ -20,8 +20,7 @@
     @if (getUser('point') >= setting('sendmoneypoint'))
         <div class="form">
             <form action="/transfers/send" method="post">
-                <input type="hidden" name="token" value="{{ $_SESSION['token'] }}">
-
+                @csrf
                 @if ($user)
                     <i class="fa fa-money-bill-alt"></i> {{ trans('transfers.transfer_for') }} <b>{{ $user->login }}</b>:<br><br>
                     <input type="hidden" name="user" value="{{ $user->login }}">

@@ -28,8 +28,7 @@
 
     <div class="form mb-3">
         <form action="/admin/topics/move/{{ $topic->id }}" method="post">
-            <input type="hidden" name="token" value="{{ $_SESSION['token'] }}">
-
+            @csrf
             <div class="form-group{{ hasError('fid') }}">
                 <label for="fid">{{ trans('forums.forum') }}:</label>
                 <select class="form-control" id="fid" name="fid">

@@ -19,8 +19,7 @@
 
     <div class="form mb-4">
         <form method="post" action="/accounts/changemail">
-        <input type="hidden" name="token" value="{{ $_SESSION['token'] }}">
-
+            @csrf
             <div class="form-group{{ hasError('email') }}">
                 <label for="email">{{ trans('users.email') }}:</label>
                 <input class="form-control" id="email" name="email" maxlength="50" value="{{ getInput('email', $user->email) }}">
@@ -45,8 +44,7 @@
     @if ($user->point >= setting('editstatuspoint'))
         <div class="form mb-4">
             <form method="post" action="/accounts/editstatus">
-                <input type="hidden" name="token" value="{{ $_SESSION['token'] }}">
-
+                @csrf
                 <label for="status">{{ trans('users.personal_status') }}:</label>
                 <div class="form-inline">
                     <div class="form-group{{ hasError('status') }}">
@@ -71,8 +69,7 @@
 
     <div class="form mb-4">
         <form method="post" action="/accounts/editpassword">
-            <input type="hidden" name="token" value="{{ $_SESSION['token'] }}">
-
+            @csrf
             <div class="form-group{{ hasError('newpass') }}">
                 <label for="newpass">{{ trans('users.new_password') }}:</label>
                 <input class="form-control" id="newpass" name="newpass" maxlength="20" value="{{ getInput('newpass') }}">
@@ -99,8 +96,7 @@
 
     <div class="form mb-4">
         <form method="post" action="/accounts/apikey">
-            <input type="hidden" name="token" value="{{ $_SESSION['token'] }}">
-
+            @csrf
             @if ($user->apikey)
                 <div class="form-group">
                     <label for="apikey">{{ trans('users.token') }}:</label>

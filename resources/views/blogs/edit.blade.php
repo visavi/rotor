@@ -24,8 +24,7 @@
 @section('content')
     <div class="form next">
         <form action="/articles/edit/{{ $blog->id }}" method="post">
-            <input type="hidden" name="token" value="{{ $_SESSION['token'] }}">
-
+            @csrf
             <div class="form-group{{ hasError('cid') }}">
                 <label for="inputCategory">{{ trans('blogs.blog') }}</label>
 

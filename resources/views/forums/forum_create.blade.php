@@ -17,8 +17,7 @@
 @section('content')
     <div class="form">
         <form action="/forums/create" method="post">
-            <input type="hidden" name="token" value="{{ $_SESSION['token'] }}">
-
+            @csrf
             <div class="form-group{{ hasError('fid') }}">
                 <label for="inputForum">{{ trans('forums.forum') }}</label>
                 <select class="form-control" id="inputForum" name="fid">

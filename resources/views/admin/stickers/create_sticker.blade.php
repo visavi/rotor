@@ -18,8 +18,7 @@
 @section('content')
     <div class="form">
         <form action="/admin/stickers/sticker/create" method="post" enctype="multipart/form-data">
-            <input type="hidden" name="token" value="{{ $_SESSION['token'] }}">
-
+            @csrf
             <div class="form-group{{ hasError('category') }}">
                 <label for="inputCategory">{{ trans('stickers.category') }}</label>
 

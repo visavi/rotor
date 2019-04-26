@@ -18,10 +18,8 @@
     @if (getUser('point') >= setting('addofferspoint'))
         <div class="form">
             <form action="/offers/create" method="post">
-                <input type="hidden" name="token" value="{{ $_SESSION['token'] }}">
-
+                @csrf
                 <?php $inputType = getInput('type', $type); ?>
-
                 <div class="form-group{{ hasError('type') }}">
                     <label for="inputType">{{ trans('offers.i_want_to') }}</label>
                     <select class="form-control" id="inputType" name="type">

@@ -27,9 +27,7 @@
 
     <div class="form">
         <form action="/topics/edit/{{ $topic->id }}" method="post">
-            <input type="hidden" name="token" value="{{ $_SESSION['token'] }}">
-
-
+            @csrf
             <div class="form-group{{ hasError('title') }}">
                 <label for="inputTitle">{{ trans('forums.topic') }}:</label>
                 <input name="title" type="text" class="form-control" id="inputTitle"  maxlength="50" placeholder="{{ trans('forums.topic') }}" value="{{ getInput('title', $topic->title) }}" required>

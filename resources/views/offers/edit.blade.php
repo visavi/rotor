@@ -17,8 +17,7 @@
 @section('content')
     <div class="form">
         <form action="/offers/edit/{{ $offer->id }}" method="post">
-            <input type="hidden" name="token" value="{{ $_SESSION['token'] }}">
-
+            @csrf
             <div class="form-group{{ hasError('type') }}">
                 <label for="types">{{ trans('offers.i_want_to') }}</label>
 

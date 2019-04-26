@@ -21,8 +21,7 @@
         <div class="row">
             <div class="col-md-6 bg-light p-1">
                 <form action="/admin/files/create?path={{ $path }}" method="post">
-                    <input type="hidden" name="token" value="{{ $_SESSION['token'] }}">
-
+                    @csrf
                     <div class="form-group{{ hasError('dirname') }}">
                         <label for="dirname">Название директории:</label>
                         <input type="text" class="form-control" id="dirname" name="dirname" maxlength="30" value="{{ getInput('dirname') }}" required>
@@ -35,8 +34,7 @@
 
             <div class="col-md-6 bg-light p-1">
                 <form action="/admin/files/create?path={{ $path }}" method="post">
-                    <input type="hidden" name="token" value="{{ $_SESSION['token'] }}">
-
+                    @csrf
                     <div class="form-group{{ hasError('filename') }}">
                         <label for="filename">Название файла (без расширения):</label>
                         <input type="text" class="form-control" id="filename" name="filename" maxlength="30" value="{{ getInput('filename') }}" required>

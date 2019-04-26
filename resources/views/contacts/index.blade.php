@@ -18,8 +18,7 @@
     @if ($contacts->isNotEmpty())
 
         <form action="/contacts/delete?page={{ $page->current }}" method="post">
-            <input type="hidden" name="token" value="{{ $_SESSION['token'] }}">
-
+            @csrf
             @foreach ($contacts as $contact)
                 <div class="b">
                     <div class="float-right">
@@ -58,7 +57,7 @@
 
     <div class="form my-3">
         <form method="post">
-            <input type="hidden" name="token" value="{{ $_SESSION['token'] }}">
+            @csrf
             <div class="input-group{{ hasError('user') }}">
                 <div class="input-group-prepend">
                     <span class="input-group-text"><i class="fa fa-pencil-alt"></i></span>

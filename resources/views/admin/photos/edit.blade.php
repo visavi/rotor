@@ -19,8 +19,7 @@
 @section('content')
     <div class="form">
         <form action="/admin/photos/edit/{{ $photo->id }}?page={{ $page }}" method="post">
-            <input type="hidden" name="token" value="{{ $_SESSION['token'] }}">
-
+            @csrf
             <div class="form-group{{ hasError('title') }}">
                 <label for="title">{{ trans('photos.name') }}:</label>
                 <input class="form-control" id="title" name="title" type="text" value="{{ getInput('title', $photo->title) }}" maxlength="50" required>

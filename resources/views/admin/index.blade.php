@@ -14,7 +14,7 @@
 @stop
 
 @section('content')
-    <i class="fa fa-key fa-lg"></i> <b><a href="/admin/upgrade">{{ trans('main.version') }} {{ VERSION }}.{{ setting('buildversion') }}</a></b><br><br>
+    <i class="fa fa-key fa-lg"></i> <b><a href="/admin/upgrade">{{ trans('main.version') }} {{ buildVersion() }}</a></b><br><br>
 
     <div class="b"><i class="fa fa-cog fa-lg text-muted"></i> <b>{{ trans('main.editor') }}</b></div>
     <i class="far fa-circle fa-lg text-muted"></i> <a href="/admin/chats">{{ trans('index.admin_chat') }}</a> ({{ statsChat() }})<br>

@@ -65,7 +65,7 @@
     @if (isAdmin('boss'))
         <div class="form my-3">
             <form action="/admin/forums/create" method="post">
-                <input type="hidden" name="token" value="{{ $_SESSION['token'] }}">
+                @csrf
                 <div class="form-inline">
                     <div class="form-group{{ hasError('title') }}">
                         <input type="text" class="form-control" id="title" name="title" maxlength="50" value="{{ getInput('title') }}" placeholder="{{ trans('forums.forum') }}" required>

@@ -19,8 +19,7 @@
 @section('content')
     <div class="form">
         <form action="/admin/users/delete?user={{ $user->login }}" method="post">
-            <input type="hidden" name="token" value="{{ $_SESSION['token'] }}">
-
+            @csrf
             <b>Добавить в черный список:</b><br>
             <div class="custom-control custom-checkbox">
                 <input type="checkbox" class="custom-control-input" value="1" name="loginblack" id="loginblack" checked>

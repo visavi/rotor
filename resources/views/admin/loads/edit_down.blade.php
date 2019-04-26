@@ -42,8 +42,7 @@
 
     <div class="form mb-3">
         <form action="/admin/downs/edit/{{ $down->id }}" method="post" enctype="multipart/form-data">
-            <input type="hidden" name="token" value="{{ $_SESSION['token'] }}">
-
+            @csrf
             <div class="form-group{{ hasError('category') }}">
                 <label for="inputCategory">{{ trans('loads.load') }}</label>
 

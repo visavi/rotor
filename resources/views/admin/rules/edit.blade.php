@@ -18,8 +18,7 @@
 @section('content')
     <div class="form">
         <form action="/admin/rules/edit" method="post">
-            <input type="hidden" name="token" value="{{ $_SESSION['token'] }}">
-
+            @csrf
             <div class="form-group{{ hasError('msg') }}">
                 <label for="msg">Сообщение:</label>
                 <textarea class="form-control markItUp" id="msg" rows="25" name="msg" required>{{ getInput('msg', $rules->text) }}</textarea>

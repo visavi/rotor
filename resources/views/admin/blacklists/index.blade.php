@@ -26,8 +26,7 @@
     @if ($lists->isNotEmpty())
 
         <form action="/admin/blacklists/delete?type={{ $type }}&amp;page={{ $page->current }}" method="post">
-            <input type="hidden" name="token" value="{{ $_SESSION['token'] }}">
-
+            @csrf
             @foreach ($lists as $list)
                 <div class="b">
                     <input type="checkbox" name="del[]" value="{{ $list->id }}">
@@ -51,8 +50,7 @@
 
     <div class="form">
         <form action="/admin/blacklists?type={{ $type }}" method="post">
-            <input type="hidden" name="token" value="{{ $_SESSION['token'] }}">
-
+            @csrf
             <div class="form-inline">
                 <div class="form-group{{ hasError('value') }}">
                     <input type="text" class="form-control" id="value" name="value" maxlength="100" value="{{ getInput('value') }}" placeholder="Введите запись" required>

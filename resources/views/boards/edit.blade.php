@@ -38,8 +38,7 @@
 
     <div class="form">
         <form action="/items/edit/{{ $item->id }}" method="post">
-            <input type="hidden" name="token" value="{{ $_SESSION['token'] }}">
-
+            @csrf
             <div class="form-group{{ hasError('bid') }}">
                 <label for="inputCategory">{{ trans('boards.category') }}</label>
 

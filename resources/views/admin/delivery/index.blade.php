@@ -17,8 +17,7 @@
 @section('content')
     <div class="form">
         <form action="/admin/delivery" method="post">
-            <input type="hidden" name="token" value="{{ $_SESSION['token'] }}">
-
+            @csrf
             <div class="form-group{{ hasError('msg') }}">
                 <label for="msg">Текст сообщения:</label>
                 <textarea rows="5" class="form-control markItUp" id="msg" name="msg" required>{{ getInput('msg') }}</textarea>

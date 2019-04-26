@@ -20,8 +20,7 @@
 
     <div class="form">
         <form method="post" action="/adverts/create">
-            <input type="hidden" name="token" value="{{ $_SESSION['token'] }}">
-
+            @csrf
             <div class="form-group{{ hasError('site') }}">
                 <label for="site">{{ trans('adverts.link') }}:</label>
                 <input name="site" class="form-control" id="site" maxlength="100" placeholder="{{ trans('adverts.link') }}" value="{{ getInput('site') }}" required>

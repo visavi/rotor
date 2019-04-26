@@ -18,8 +18,7 @@
 @section('content')
     <div class="form">
         <form method="post" action="/ignores/note/{{ $ignore->id }}">
-            <input type="hidden" name="token" value="{{ $_SESSION['token'] }}">
-
+            @csrf
             <div class="form-group{{ hasError('msg') }}">
                 <label for="msg">{{ trans('ignores.note') }}:</label>
                 <textarea class="form-control markItUp" id="msg" rows="5" name="msg" placeholder="{{ trans('ignores.note_text') }}">{{ getInput('msg', $ignore->text) }}</textarea>
