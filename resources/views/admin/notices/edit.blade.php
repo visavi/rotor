@@ -30,13 +30,13 @@
             <div class="form-group{{ hasError('name') }}">
                 <label for="name">Название:</label>
                 <input type="text" class="form-control" id="name" name="name" maxlength="100" value="{{ getInput('name', $notice->name) }}" required>
-                {!! textError('name') !!}
+                <div class="invalid-feedback">{{ textError('name') }}</div>
             </div>
 
             <div class="form-group{{ hasError('text') }}">
                 <label for="text">Текст:</label>
                 <textarea class="form-control markItUp" id="text" rows="15" name="text" required>{{ getInput('text', $notice->text) }}</textarea>
-                {!! textError('text') !!}
+                <div class="invalid-feedback">{{ textError('text') }}</div>
             </div>
 
             <div class="form-check">

@@ -70,7 +70,7 @@
                     <button class="btn btn-primary">{{ trans('main.add') }}</button>
                 </span>
             </div>
-            {!! textError('user') !!}
+            <div class="invalid-feedback">{{ textError('user') }}</div>
         </form>
     </div>
 

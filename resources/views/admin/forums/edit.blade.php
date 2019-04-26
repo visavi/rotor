@@ -37,26 +37,26 @@
                     @endforeach
 
                 </select>
-                {!! textError('parent') !!}
+                <div class="invalid-feedback">{{ textError('parent') }}</div>
             </div>
 
 
             <div class="form-group{{ hasError('title') }}">
                 <label for="title">{{ trans('forums.forum') }}:</label>
                 <input class="form-control" name="title" id="title" maxlength="50" value="{{ getInput('title', $forum->title) }}" required>
-                {!! textError('title') !!}
+                <div class="invalid-feedback">{{ textError('title') }}</div>
             </div>
 
             <div class="form-group{{ hasError('description') }}">
                 <label for="description">{{ trans('main.description') }}:</label>
                 <input class="form-control" name="description" id="description" maxlength="100" value="{{ getInput('description', $forum->description) }}">
-                {!! textError('description') !!}
+                <div class="invalid-feedback">{{ textError('description') }}</div>
             </div>
 
             <div class="form-group{{ hasError('sort') }}">
                 <label for="sort">{{ trans('main.position') }}:</label>
                 <input type="number" class="form-control" name="sort" id="sort" maxlength="2" value="{{ getInput('sort', $forum->sort) }}" required>
-                {!! textError('sort') !!}
+                <div class="invalid-feedback">{{ textError('sort') }}</div>
             </div>
 
             <div class="custom-control custom-checkbox">

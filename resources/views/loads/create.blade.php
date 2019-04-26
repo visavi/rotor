@@ -18,7 +18,7 @@
     <form action="/downs/create" method="post" enctype="multipart/form-data">
         @csrf
         <div class="form-group{{ hasError('category') }}">
-            <label for="inputCategory">{{ trans('loads.load') }}</label>
+            <label for="inputCategory">{{ trans('loads.load') }}:</label>
 
             <select class="form-control" id="inputCategory" name="cid">
                 @foreach ($loads as $data)
@@ -33,19 +33,19 @@
                 @endforeach
 
             </select>
-            {!! textError('category') !!}
+            <div class="invalid-feedback">{{ textError('category') }}</div>
         </div>
 
         <div class="form-group{{ hasError('title') }}">
             <label for="inputTitle">{{ trans('loads.down_title') }}:</label>
             <input class="form-control" id="inputTitle" name="title" value="{{ getInput('title') }}" required>
-            {!! textError('title') !!}
+            <div class="invalid-feedback">{{ textError('title') }}</div>
         </div>
 
         <div class="form-group{{ hasError('text') }}">
             <label for="text">{{ trans('loads.down_text') }}:</label>
             <textarea class="form-control markItUp" id="text" rows="10" name="text" required>{{ getInput('text') }}</textarea>
-            {!! textError('text') !!}
+            <div class="invalid-feedback">{{ textError('text') }}</div>
         </div>
 
         <label class="btn btn-sm btn-secondary" for="files">
@@ -53,7 +53,7 @@
             {{ trans('main.attach_files') }}&hellip;
         </label>
         <span class="badge badge-info" id="upload-file-info"></span>
-        {!! textError('files') !!}
+        <div class="invalid-feedback">{{ textError('files') }}</div>
         <br>
 
         <p class="text-muted font-italic">

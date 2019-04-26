@@ -65,8 +65,8 @@
             <div class="form-group{{ hasError('msg') }}">
                 <label for="msg">{{ trans('main.message') }}:</label>
                 <textarea class="form-control markItUp" maxlength="{{ setting('comment_length') }}" id="msg" rows="5" name="msg" placeholder="{{ trans('main.message') }}" required>{{ getInput('msg') }}</textarea>
+                <div class="invalid-feedback">{{ textError('msg') }}</div>
                 <span class="js-textarea-counter"></span>
-                {!! textError('msg') !!}
             </div>
 
             @if (getUser('point') < setting('privatprotect'))

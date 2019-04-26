@@ -31,8 +31,8 @@
             <div class="form-group{{ hasError('msg') }}">
                 <label for="msg">{{ trans('forums.post') }}:</label>
                 <textarea class="form-control markItUp" maxlength="{{ setting('forumtextlength') }}" id="msg" rows="5" name="msg" required>{{ getInput('msg', $post->text) }}</textarea>
+                <div class="invalid-feedback">{{ textError('msg') }}</div>
                 <span class="js-textarea-counter"></span>
-                {!! textError('msg') !!}
             </div>
 
             @if ($post->files->isNotEmpty())

@@ -33,20 +33,20 @@
                     @endforeach
 
                 </select>
-                {!! textError('fid') !!}
+                <div class="invalid-feedback">{{ textError('fid') }}</div>
             </div>
 
             <div class="form-group{{ hasError('title') }}">
                 <label for="inputTitle">{{ trans('forums.topic') }}:</label>
                 <input name="title" class="form-control" id="inputTitle" maxlength="50" placeholder="{{ trans('forums.topic') }}" value="{{ getInput('title') }}" required>
-                {!! textError('title') !!}
+                <div class="invalid-feedback">{{ textError('title') }}</div>
             </div>
 
             <div class="form-group{{ hasError('msg') }}">
                 <label for="msg">{{ trans('forums.post') }}:</label>
                 <textarea class="form-control markItUp" maxlength="{{ setting('forumtextlength') }}" id="msg" rows="5" name="msg" required>{{ getInput('msg') }}</textarea>
+                <div class="invalid-feedback">{{ textError('msg') }}</div>
                 <span class="js-textarea-counter"></span>
-                {!! textError('msg') !!}
             </div>
 
             <?php $checkVote = getInput('vote') ? true : false; ?>
@@ -62,7 +62,7 @@
 
                     <label for="inputQuestion">{{ trans('forums.question') }}:</label>
                     <input type="text" name="question" class="form-control" id="inputQuestion" value="{{ getInput('question') }}" maxlength="100">
-                    {!! textError('question') !!}
+                    <div class="invalid-feedback">{{ textError('question') }}</div>
                 </div>
 
                 <div class="form-group{{ hasError('answers') }}">
@@ -73,7 +73,7 @@
                         <label for="inputAnswers{{ $i }}">{{ trans('forums.answer') }} {{ $i + 1 }}</label>
                         <input type="text" name="answers[]" class="form-control" id="inputAnswers{{ $i }}" value="{{ $answers[$i] ?? '' }}" maxlength="50">
                     @endfor
-                    {!! textError('answers') !!}
+                    <div class="invalid-feedback">{{ textError('answers') }}</div>
                 </div>
             </div>
             <button class="btn btn-primary">{{ trans('forums.create_topic') }}</button>

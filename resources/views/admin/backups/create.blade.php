@@ -55,7 +55,7 @@
                             <option value="bzip"{{ $selected }}>BZip2</option>
                         @endif
                     </select>
-                    {!! textError('method') !!}
+                    <div class="invalid-feedback">{{ textError('method') }}</div>
                 </div>
 
                 <?php $inputLevel = (int) getInput('level', 7); ?>
@@ -68,7 +68,7 @@
                             <option value="{{ $key }}"{{ $selected }}>{{ $level }}</option>
                         @endforeach
                     </select>
-                    {!! textError('level') !!}
+                    <div class="invalid-feedback">{{ textError('level') }}</div>
                 </div>
 
                 <button class="btn btn-primary">{{ trans('main.create') }}</button>

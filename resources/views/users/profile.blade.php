@@ -25,50 +25,50 @@
                         <div class="form-group{{ hasError('name') }}">
                             <label for="inputName">{{ trans('users.name') }}:</label>
                             <input class="form-control" id="inputName" name="name" maxlength="20" value="{{ getInput('name', $user->name) }}">
-                            {!! textError('name') !!}
+                            <div class="invalid-feedback">{{ textError('name') }}</div>
                         </div>
 
                         <div class="form-group{{ hasError('country') }}">
                             <label for="inputCountry">{{ trans('users.country') }}:</label>
                             <input class="form-control" id="inputCountry" name="country" maxlength="30" value="{{ getInput('country', $user->country) }}">
-                            {!! textError('country') !!}
+                            <div class="invalid-feedback">{{ textError('country') }}</div>
                         </div>
 
                         <div class="form-group{{ hasError('city') }}">
                             <label for="inputCity">{{ trans('users.city') }}:</label>
                             <input class="form-control" id="inputCity" name="city" maxlength="50" value="{{ getInput('city', $user->city) }}">
-                            {!! textError('city') !!}
+                            <div class="invalid-feedback">{{ textError('city') }}</div>
                         </div>
 
                         <div class="form-group{{ hasError('phone') }}">
                             <label for="inputPhone">{{ trans('users.phone') }}:</label>
                             <input class="phone form-control" id="inputPhone" name="phone" placeholder="8 ___ ___-__-__" maxlength="15" value="{{ getInput('phone', $user->phone) }}">
-                            {!! textError('phone') !!}
+                            <div class="invalid-feedback">{{ textError('phone') }}</div>
                         </div>
 
                         <div class="form-group{{ hasError('icq') }}">
                             <label for="inputIcq">ICQ:</label>
                             <input class="form-control" id="inputIcq" name="icq" maxlength="10" value="{{ getInput('icq', $user->icq) }}">
-                            {!! textError('icq') !!}
+                            <div class="invalid-feedback">{{ textError('icq') }}</div>
                         </div>
 
                         <div class="form-group{{ hasError('skype') }}">
                             <label for="inputSkype">Skype:</label>
                             <input class="form-control" id="inputSkype" name="skype" maxlength="32" value="{{ getInput('skype', $user->skype) }}">
-                            {!! textError('skype') !!}
+                            <div class="invalid-feedback">{{ textError('skype') }}</div>
                         </div>
 
                         <div class="form-group{{ hasError('site') }}">
                             <label for="inputSite">{{ trans('users.site') }}:</label>
                             <input class="form-control" id="inputSite" name="site" maxlength="50" value="{{ getInput('site', $user->site) }}">
-                            {!! textError('site') !!}
+                            <div class="invalid-feedback">{{ textError('site') }}</div>
                         </div>
 
 
                         <div class="form-group{{ hasError('birthday') }}">
                             <label for="inputBirthday">{{ trans('users.birthday') }} (dd.mm.yyyy):</label>
                             <input class="form-control" id="inputBirthday" name="birthday" maxlength="10" value="{{ getInput('birthday', $user->birthday) }}">
-                            {!! textError('birthday') !!}
+                            <div class="invalid-feedback">{{ textError('birthday') }}</div>
                         </div>
 
                         <?php $inputGender = getInput('gender', $user->gender); ?>
@@ -82,7 +82,7 @@
                                 <input class="custom-control-input" type="radio" id="inputGenderFemale" name="gender" value="female"{{ $inputGender === 'female' ? ' checked' : '' }}>
                                 <label class="custom-control-label" for="inputGenderFemale">{{ trans('main.female') }}</label>
                             </div>
-                            {!! textError('gender') !!}
+                            <div class="invalid-feedback">{{ textError('gender') }}</div>
                         </div>
                     </div>
 
@@ -104,7 +104,7 @@
                         <div class="form-group{{ hasError('info') }}">
                             <label for="info">{{ trans('users.about') }}:</label>
                             <textarea class="form-control markItUp" id="info" cols="25" rows="5" name="info">{{ getInput('info', $user->info) }}</textarea>
-                            {!! textError('info') !!}
+                            <div class="invalid-feedback">{{ textError('info') }}</div>
                         </div>
                         <button class="btn btn-primary">{{ trans('main.change') }}</button>
                     </div>

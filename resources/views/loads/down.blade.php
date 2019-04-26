@@ -110,7 +110,7 @@
                         <option value="4" {{ $down->vote === '4' ? ' selected' : '' }}>{{ trans('main.good') }}</option>
                         <option value="5" {{ $down->vote === '5' ? ' selected' : '' }}>{{ trans('main.excellent') }}</option>
                     </select>
-                    {!! textError('protect') !!}
+                    <div class="invalid-feedback">{{ textError('protect') }}</div>
                 </div>
                 <button class="btn btn-primary mb-2">{{ trans('main.rate') }}</button>
             </div>

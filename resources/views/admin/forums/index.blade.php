@@ -73,7 +73,7 @@
 
                     <button class="btn btn-primary">{{ trans('forums.create_forum') }}</button>
                 </div>
-                {!! textError('title') !!}
+                <div class="invalid-feedback">{{ textError('title') }}</div>
             </form>
         </div>
 

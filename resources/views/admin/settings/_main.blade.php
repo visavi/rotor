@@ -7,49 +7,49 @@
     <div class="form-group{{ hasError('sets[title]') }}">
         <label for="title">Заголовок всех страниц:</label>
         <input type="text" class="form-control" id="title" name="sets[title]" maxlength="100" value="{{ getInput('sets.title', $settings['title']) }}" required>
-        {!! textError('sets[title]') !!}
+        <div class="invalid-feedback">{{ textError('sets[title]') }}</div>
     </div>
 
     <div class="form-group{{ hasError('sets[logos]') }}">
         <label for="logos">Подпись вверху:</label>
         <input type="text" class="form-control" id="logos" name="sets[logos]" maxlength="100" value="{{ getInput('sets.logos', $settings['logos']) }}" required>
-        {!! textError('sets[logos]') !!}
+        <div class="invalid-feedback">{{ textError('sets[logos]') }}</div>
     </div>
 
     <div class="form-group{{ hasError('sets[copy]') }}">
         <label for="copy">Подпись внизу:</label>
         <input type="text" class="form-control" id="copy" name="sets[copy]" maxlength="100" value="{{ getInput('sets.copy', $settings['copy']) }}" required>
-        {!! textError('sets[copy]') !!}
+        <div class="invalid-feedback">{{ textError('sets[copy]') }}</div>
     </div>
 
     <div class="form-group{{ hasError('sets[logotip]') }}">
         <label for="logotip">Адрес логотипа:</label>
         <input type="text" class="form-control" id="logotip" name="sets[logotip]" maxlength="100" value="{{ getInput('sets.logotip', $settings['logotip']) }}" required>
-        {!! textError('sets[logotip]') !!}
+        <div class="invalid-feedback">{{ textError('sets[logotip]') }}</div>
     </div>
 
     <div class="form-group{{ hasError('sets[floodstime]') }}">
         <label for="floodstime">Время антифлуда (сек):</label>
         <input type="number" class="form-control" id="floodstime" name="sets[floodstime]" maxlength="3" value="{{ getInput('sets.floodstime', $settings['floodstime']) }}" required>
-        {!! textError('sets[floodstime]') !!}
+        <div class="invalid-feedback">{{ textError('sets[floodstime]') }}</div>
     </div>
 
     <div class="form-group{{ hasError('sets[doslimit]') }}">
         <label for="doslimit">Лимит запросов с IP (0 - Выкл):</label>
         <input type="number" class="form-control" id="doslimit" name="sets[doslimit]" maxlength="3" value="{{ getInput('sets.doslimit', $settings['doslimit']) }}" required>
-        {!! textError('sets[doslimit]') !!}
+        <div class="invalid-feedback">{{ textError('sets[doslimit]') }}</div>
     </div>
 
     <div class="form-group{{ hasError('sets[timezone]') }}">
         <label for="timezone">Временная зона:</label>
         <input type="text" class="form-control" id="timezone" name="sets[timezone]" maxlength="50" value="{{ getInput('sets.timezone', $settings['timezone']) }}" required>
-        {!! textError('sets[timezone]') !!}
+        <div class="invalid-feedback">{{ textError('sets[timezone]') }}</div>
     </div>
 
     <div class="form-group{{ hasError('sets[currency]') }}">
         <label for="currency">Валюта сайта:</label>
         <input type="text" class="form-control" id="currency" name="sets[currency]" maxlength="10" value="{{ getInput('sets.currency', $settings['currency']) }}" required>
-        {!! textError('sets[currency]') !!}
+        <div class="invalid-feedback">{{ textError('sets[currency]') }}</div>
     </div>
 
     <?php $languages = array_map('basename', glob(RESOURCES . '/lang/*', GLOB_ONLYDIR)); ?>
@@ -65,7 +65,7 @@
             @endforeach
         </select>
 
-        {!! textError('sets[language]') !!}
+        <div class="invalid-feedback">{{ textError('sets[language]') }}</div>
     </div>
 
     <?php $inputLangFallback = getInput('language_fallback', $settings['language_fallback']); ?>
@@ -80,7 +80,7 @@
             @endforeach
         </select>
 
-        {!! textError('sets[language_fallback]') !!}
+        <div class="invalid-feedback">{{ textError('sets[language_fallback]') }}</div>
     </div>
 
     <p class="text-muted font-italic">
@@ -100,7 +100,7 @@
             @endforeach
 
         </select>
-        {!! textError('sets[themes]') !!}
+        <div class="invalid-feedback">{{ textError('sets[themes]') }}</div>
     </div>
 
     <?php $inputThemes = getInput('sets.webthemes', $settings['webthemes']); ?>
@@ -116,7 +116,7 @@
             @endforeach
 
         </select>
-        {!! textError('sets[webthemes]') !!}
+        <div class="invalid-feedback">{{ textError('sets[webthemes]') }}</div>
     </div>
 
     <?php $inputSite = getInput('sets.closedsite', $settings['closedsite']); ?>
@@ -132,7 +132,7 @@
             @endforeach
 
         </select>
-        {!! textError('sets[closedsite]') !!}
+        <div class="invalid-feedback">{{ textError('sets[closedsite]') }}</div>
     </div>
 
     <div class="custom-control custom-checkbox">

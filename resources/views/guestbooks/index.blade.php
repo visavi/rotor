@@ -94,8 +94,8 @@
                 <div class="form-group{{ hasError('msg') }}">
                     <label for="msg">{{ trans('main.message') }}:</label>
                     <textarea class="form-control markItUp" maxlength="{{ setting('guesttextlength') }}" id="msg" rows="5" name="msg" placeholder="{{ trans('main.message') }}" required>{{ getInput('msg') }}</textarea>
+                    <div class="invalid-feedback">{{ textError('msg') }}</div>
                     <span class="js-textarea-counter"></span>
-                    {!! textError('msg') !!}
                 </div>
 
                 <button class="btn btn-primary">{{ trans('main.write') }}</button>
@@ -110,11 +110,10 @@
                 <div class="form-group{{ hasError('msg') }}">
                     <label for="msg">{{ trans('main.message') }}:</label>
                     <textarea class="form-control" id="msg" rows="5" maxlength="{{ setting('guesttextlength') }}" name="msg" placeholder="{{ trans('main.message') }}" required>{{ getInput('msg') }}</textarea>
-                    {!! textError('msg') !!}
+                    <div class="invalid-feedback">{{ textError('msg') }}</div>
                 </div>
 
                 {!! view('app/_captcha') !!}
-
                 <button class="btn btn-primary">{{ trans('main.write') }}</button>
             </form>
         </div><br>

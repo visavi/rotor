@@ -42,26 +42,26 @@
                     @endforeach
 
                 </select>
-                {!! textError('cid') !!}
+                <div class="invalid-feedback">{{ textError('cid') }}</div>
             </div>
 
             <div class="form-group{{ hasError('title') }}">
                 <label for="inputTitle">{{ trans('blogs.name') }}:</label>
                 <input type="text" class="form-control" id="inputTitle" name="title" maxlength="50" value="{{ getInput('title', $blog->title) }}" required>
-                {!! textError('title') !!}
+                <div class="invalid-feedback">{{ textError('title') }}</div>
             </div>
 
             <div class="form-group{{ hasError('text') }}">
                 <label for="text">{{ trans('blogs.article') }}:</label>
                 <textarea class="form-control markItUp" maxlength="{{ setting('maxblogpost') }}" id="text" rows="5" name="text" required>{{ getInput('text', $blog->text) }}</textarea>
+                <div class="invalid-feedback">{{ textError('text') }}</div>
                 <span class="js-textarea-counter"></span>
-                {!! textError('text') !!}
             </div>
 
             <div class="form-group{{ hasError('tags') }}">
                 <label for="inputTags">{{ trans('blogs.tags') }}:</label>
                 <input type="text" class="form-control" id="inputTags" name="tags" maxlength="100" value="{{ getInput('tags', $blog->tags) }}" required>
-                {!! textError('tags') !!}
+                <div class="invalid-feedback">{{ textError('tags') }}</div>
             </div>
 
             @include('app/_upload', ['id' => $blog->id, 'files' => $blog->files, 'type' => App\Models\Blog::class, 'paste' => true])

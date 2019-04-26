@@ -22,7 +22,7 @@
 
                 <label for="inputQuestion">{{ trans('votes.question') }}:</label>
                 <input type="text" name="question" class="form-control" id="inputQuestion" value="{{ getInput('question') }}" maxlength="100">
-                {!! textError('question') !!}
+                <div class="invalid-feedback">{{ textError('question') }}</div>
             </div>
 
             <div class="form-group{{ hasError('answer') }}">
@@ -33,7 +33,7 @@
                     <label for="inputAnswer{{ $i }}">{{ trans('votes.answer') }} {{ $i + 1 }}</label>
                     <input type="text" name="answer[]" class="form-control" id="inputAnswer{{ $i }}" value="{{ $answers[$i] ?? '' }}" maxlength="50">
                 @endfor
-                {!! textError('answer') !!}
+                <div class="invalid-feedback">{{ textError('answer') }}</div>
             </div>
 
             <button class="btn btn-primary">{{ trans('main.create') }}</button>

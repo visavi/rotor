@@ -50,34 +50,34 @@
             <div class="form-group{{ hasError('login') }}">
                 <label for="inputLogin">{{ trans('users.login') }}:</label>
                 <input class="form-control" name="login" id="inputLogin" maxlength="20" value="{{ getInput('login') }}" required>
-                {!! textError('login') !!}
+                <div class="invalid-feedback">{{ textError('login') }}</div>
                 <span class="text-muted font-italic">{{ trans('users.login_requirements') }}</span>
             </div>
 
             <div class="form-group{{ hasError('password') }}">
                 <label for="inputPassword">{{ trans('users.password') }}:</label>
                 <input class="form-control" name="password" type="password" id="inputPassword" maxlength="20" required>
-                {!! textError('password') !!}
+                <div class="invalid-feedback">{{ textError('password') }}</div>
                 <span class="text-muted font-italic">{{ trans('users.password_requirements') }}</span>
             </div>
 
             <div class="form-group{{ hasError('password2') }}">
                 <label for="inputPassword2">{{ trans('users.confirm_password') }}:</label>
                 <input class="form-control" name="password2" type="password" id="inputPassword2" maxlength="20" required>
-                {!! textError('password2') !!}
+                <div class="invalid-feedback">{{ textError('password2') }}</div>
             </div>
 
             <div class="form-group{{ hasError('email') }}">
                 <label for="inputEmail">Email:</label>
                 <input class="form-control" name="email" id="inputEmail" maxlength="50" value="{{ getInput('email') }}" required>
-                {!! textError('email') !!}
+                <div class="invalid-feedback">{{ textError('email') }}</div>
             </div>
 
             @if (setting('invite'))
                 <div class="form-group{{ hasError('invite') }}">
                     <label for="inputInvite">{{ trans('users.invitation_key') }}:</label>
                     <input class="form-control" name="invite" id="inputInvite" maxlength="32" value="{{ getInput('invite') }}" required>
-                    {!! textError('invite') !!}
+                    <div class="invalid-feedback">{{ textError('invite') }}</div>
                 </div>
             @endif
 
@@ -92,7 +92,7 @@
                     <input class="custom-control-input" type="radio" id="inputGenderFemale" name="gender" value="female"{{ $inputGender === 'female' ? ' checked' : '' }}>
                     <label class="custom-control-label" for="inputGenderFemale">{{ trans('main.female') }}</label>
                 </div>
-                {!! textError('gender') !!}
+                <div class="invalid-feedback">{{ textError('gender') }}</div>
             </div>
 
             {!! view('app/_captcha') !!}

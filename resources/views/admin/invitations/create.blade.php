@@ -30,7 +30,7 @@
                     @endforeach
                 </select>
 
-                {!! textError('keys') !!}
+                <div class="invalid-feedback">{{ textError('keys') }}</div>
             </div>
 
             <button class="btn btn-primary">Создать</button>
@@ -44,7 +44,7 @@
             <div class="form-group{{ hasError('user') }}">
                 <label for="user">Логин пользователя:</label>
                 <input type="text" class="form-control" id="user" name="user" maxlength="20" value="{{ getInput('user') }}" required>
-                {!! textError('user') !!}
+                <div class="invalid-feedback">{{ textError('user') }}</div>
             </div>
 
             <?php $inputKeys = (int) getInput('userkeys'); ?>
@@ -59,7 +59,7 @@
                     @endforeach
                 </select>
 
-                {!! textError('userkeys') !!}
+                <div class="invalid-feedback">{{ textError('userkeys') }}</div>
             </div>
 
             <button class="btn btn-primary">Отправить</button>

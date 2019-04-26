@@ -76,8 +76,8 @@
                 <div class="form-group{{ hasError('msg') }}">
                     <label for="msg">{{ trans('blogs.message') }}:</label>
                     <textarea class="form-control markItUp" maxlength="{{ setting('comment_length') }}" id="msg" rows="5" name="msg" required>{{ getInput('msg') }}</textarea>
+                    <div class="invalid-feedback">{{ textError('msg') }}</div>
                     <span class="js-textarea-counter"></span>
-                    {!! textError('msg') !!}
                 </div>
 
                 <button class="btn btn-success">{{ trans('main.write') }}</button>

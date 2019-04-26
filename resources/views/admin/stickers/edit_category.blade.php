@@ -23,7 +23,7 @@
             <div class="form-group{{ hasError('name') }}">
                 <label for="name">{{ trans('stickers.category') }}:</label>
                 <input class="form-control" name="name" id="name" maxlength="50" value="{{ getInput('name', $category->name) }}" required>
-                {!! textError('name') !!}
+                <div class="invalid-feedback">{{ textError('name') }}</div>
             </div>
             <button class="btn btn-primary">{{ trans('main.change') }}</button>
         </form>

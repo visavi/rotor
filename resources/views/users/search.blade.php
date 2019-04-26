@@ -20,7 +20,7 @@
             <div class="form-group{{ hasError('find') }}">
                 <label for="find">{{ trans('users.login_or_username') }}:</label>
                 <input type="text" class="form-control" id="find" name="find" maxlength="50" placeholder="{{ trans('users.login_or_username') }}" value="{{ getInput('find') }}" required>
-                {!! textError('find') !!}
+                <div class="invalid-feedback">{{ textError('find') }}</div>
             </div>
 
             <button class="btn btn-primary">{{ trans('main.search') }}</button>

@@ -25,7 +25,7 @@
                     <div class="form-group{{ hasError('dirname') }}">
                         <label for="dirname">Название директории:</label>
                         <input type="text" class="form-control" id="dirname" name="dirname" maxlength="30" value="{{ getInput('dirname') }}" required>
-                        {!! textError('dirname') !!}
+                        <div class="invalid-feedback">{{ textError('dirname') }}</div>
                     </div>
 
                     <button class="btn btn-primary">Создать директорию</button>
@@ -38,7 +38,7 @@
                     <div class="form-group{{ hasError('filename') }}">
                         <label for="filename">Название файла (без расширения):</label>
                         <input type="text" class="form-control" id="filename" name="filename" maxlength="30" value="{{ getInput('filename') }}" required>
-                        {!! textError('filename') !!}
+                        <div class="invalid-feedback">{{ textError('filename') }}</div>
                     </div>
 
                     <button class="btn btn-primary">Создать файл</button>

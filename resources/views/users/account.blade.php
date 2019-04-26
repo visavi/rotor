@@ -23,13 +23,13 @@
             <div class="form-group{{ hasError('email') }}">
                 <label for="email">{{ trans('users.email') }}:</label>
                 <input class="form-control" id="email" name="email" maxlength="50" value="{{ getInput('email', $user->email) }}">
-                {!! textError('email') !!}
+                <div class="invalid-feedback">{{ textError('email') }}</div>
             </div>
 
             <div class="form-group{{ hasError('password') }}">
                 <label for="password">{{ trans('users.current_password') }}:</label>
                 <input class="form-control" type="password" id="password" name="password" maxlength="20">
-                {!! textError('password') !!}
+                <div class="invalid-feedback">{{ textError('password') }}</div>
             </div>
 
             <button class="btn btn-primary">{{ trans('main.change') }}</button>
@@ -53,7 +53,7 @@
 
                     <button class="btn btn-primary">{{ trans('main.change') }}</button>
                 </div>
-                {!! textError('status') !!}
+                <div class="invalid-feedback">{{ textError('status') }}</div>
             </form>
 
             @if (setting('editstatusmoney'))
@@ -73,19 +73,19 @@
             <div class="form-group{{ hasError('newpass') }}">
                 <label for="newpass">{{ trans('users.new_password') }}:</label>
                 <input class="form-control" id="newpass" name="newpass" maxlength="20" value="{{ getInput('newpass') }}">
-                {!! textError('newpass') !!}
+                <div class="invalid-feedback">{{ textError('newpass') }}</div>
             </div>
 
             <div class="form-group{{ hasError('newpass2') }}">
                 <label for="newpass2">{{ trans('users.confirm_password') }}:</label>
                 <input class="form-control" id="newpass2" name="newpass2" maxlength="20" value="{{ getInput('newpass2') }}">
-                {!! textError('newpass2') !!}
+                <div class="invalid-feedback">{{ textError('newpass2') }}</div>
             </div>
 
             <div class="form-group{{ hasError('oldpass') }}">
                 <label for="oldpass">{{ trans('users.current_password') }}:</label>
                 <input class="form-control" type="password" id="oldpass" name="oldpass" maxlength="20">
-                {!! textError('oldpass') !!}
+                <div class="invalid-feedback">{{ textError('oldpass') }}</div>
             </div>
 
             <button class="btn btn-primary">{{ trans('main.change') }}</button>

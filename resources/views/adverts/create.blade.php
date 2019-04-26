@@ -24,13 +24,13 @@
             <div class="form-group{{ hasError('site') }}">
                 <label for="site">{{ trans('adverts.link') }}:</label>
                 <input name="site" class="form-control" id="site" maxlength="100" placeholder="{{ trans('adverts.link') }}" value="{{ getInput('site') }}" required>
-                {!! textError('site') !!}
+                <div class="invalid-feedback">{{ textError('site') }}</div>
             </div>
 
             <div class="form-group{{ hasError('name') }}">
                 <label for="name">{{ trans('adverts.name') }}:</label>
                 <input name="name" class="form-control" id="name" maxlength="35" placeholder="{{ trans('adverts.name') }}" value="{{ getInput('name') }}" required>
-                {!! textError('name') !!}
+                <div class="invalid-feedback">{{ textError('name') }}</div>
             </div>
 
             <div class="form-group{{ hasError('color') }}">
@@ -43,7 +43,7 @@
                     </div>
                 </div>
 
-                {!! textError('color') !!}
+                <div class="invalid-feedback">{{ textError('color') }}</div>
             </div>
 
             <div class="custom-control custom-checkbox">

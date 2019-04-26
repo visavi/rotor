@@ -33,31 +33,31 @@
                 @endforeach
 
             </select>
-            {!! textError('category') !!}
+            <div class="invalid-feedback">{{ textError('category') }}</div>
         </div>
 
         <div class="form-group{{ hasError('title') }}">
             <label for="inputTitle">{{ trans('boards.name') }}:</label>
             <input class="form-control" id="inputTitle" name="title" value="{{ getInput('title') }}" required>
-            {!! textError('title') !!}
+            <div class="invalid-feedback">{{ textError('title') }}</div>
         </div>
 
         <div class="form-group{{ hasError('text') }}">
             <label for="text">{{ trans('boards.text') }}:</label>
             <textarea class="form-control markItUp" id="text" rows="10" name="text" required>{{ getInput('text') }}</textarea>
-            {!! textError('text') !!}
+            <div class="invalid-feedback">{{ textError('text') }}</div>
         </div>
 
         <div class="form-group{{ hasError('price') }}">
             <label for="inputPrice">{{ trans('boards.price') }} {{ setting('currency') }}:</label>
             <input class="form-control" id="inputPrice" name="price" value="{{ getInput('price') }}" required>
-            {!! textError('price') !!}
+            <div class="invalid-feedback">{{ textError('price') }}</div>
         </div>
 
         <div class="form-group{{ hasError('phone') }}">
             <label for="inputPhone">{{ trans('boards.phone') }}:</label>
             <input class="phone form-control" id="inputPhone" name="phone" placeholder="8 ___ ___-__-__" maxlength="15" value="{{ getInput('phone', getUser('phone')) }}">
-            {!! textError('phone') !!}
+            <div class="invalid-feedback">{{ textError('phone') }}</div>
         </div>
 
         @include('app/_upload', ['files' => $files, 'type' => App\Models\Item::class])

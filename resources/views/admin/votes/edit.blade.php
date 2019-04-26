@@ -23,7 +23,7 @@
             <div class="form-group{{ hasError('title') }}">
                 <label for="title"><span class="text-success">{{ trans('votes.question') }}:</span></label>
                 <input class="form-control" name="title" id="title" maxlength="100" value="{{ getInput('title', $vote->title) }}" required>
-                {!! textError('title') !!}
+                <div class="invalid-feedback">{{ textError('title') }}</div>
             </div>
 
             <div class="form-group{{ hasError('answers') }}">
@@ -40,7 +40,7 @@
                     </label>
                    <input type="text" name="answers[{{ $key }}]" class="form-control" id="inputAnswers{{ $key }}" value="{{ $answer }}" maxlength="50">
                 @endforeach
-                {!! textError('answers') !!}
+                <div class="invalid-feedback">{{ textError('answers') }}</div>
             </div>
 
             <button class="btn btn-primary">{{ trans('main.change') }}</button>

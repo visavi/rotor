@@ -15,7 +15,7 @@
                   <div class="form-group{{ hasError('msg') }}">
                       <label for="msg">{{ trans('users.explanation') }}:</label>
                       <textarea class="form-control markItUp" id="msg" rows="5" name="msg" required>{{ getInput('msg') }}</textarea>
-                      {!! textError('msg') !!}
+                      <div class="invalid-feedback">{{ textError('msg') }}</div>
                   </div>
 
                     <button class="btn btn-primary">{{ trans('main.send') }}</button>

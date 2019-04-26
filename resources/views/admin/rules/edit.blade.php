@@ -22,7 +22,7 @@
             <div class="form-group{{ hasError('msg') }}">
                 <label for="msg">Сообщение:</label>
                 <textarea class="form-control markItUp" id="msg" rows="25" name="msg" required>{{ getInput('msg', $rules->text) }}</textarea>
-                {!! textError('msg') !!}
+                <div class="invalid-feedback">{{ textError('msg') }}</div>
             </div>
             <button class="btn btn-primary">Изменить</button>
         </form>

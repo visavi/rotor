@@ -21,7 +21,7 @@
                 <div class="form-group{{ hasError('name') }}">
                     <label for="inputName">{{ trans('mails.name') }}:</label>
                     <input type="text" class="form-control" id="inputName" name="name" maxlength="100" value="{{ getInput('name') }}" required>
-                    {!! textError('name') !!}
+                    <div class="invalid-feedback">{{ textError('name') }}</div>
                 </div>
             @endif
 
@@ -29,14 +29,14 @@
                 <div class="form-group{{ hasError('email') }}">
                     <label for="inputEmail">{{ trans('mails.email') }}:</label>
                     <input type="text" class="form-control" id="inputEmail" name="email" maxlength="50" value="{{ getInput('email') }}" required>
-                    {!! textError('email') !!}
+                    <div class="invalid-feedback">{{ textError('email') }}</div>
                 </div>
             @endif
 
             <div class="form-group{{ hasError('message') }}">
                 <label for="message">{{ trans('mails.message') }}:</label>
                 <textarea class="form-control markItUp" id="message" rows="5" name="message" required>{{ getInput('message') }}</textarea>
-                {!! textError('message') !!}
+                <div class="invalid-feedback">{{ textError('message') }}</div>
             </div>
 
             {!! view('app/_captcha') !!}

@@ -30,7 +30,7 @@
             <div class="form-group{{ hasError('name') }}">
                 <label for="inputName">Статус:</label>
                 <input type="text" maxlength="30" class="form-control" id="inputName" name="name" placeholder="Статус" value="{{ getInput('name', $status->name) }}" required>
-                {!! textError('name') !!}
+                <div class="invalid-feedback">{{ textError('name') }}</div>
             </div>
 
             <div class="form-group{{ hasError('color') }}">
@@ -43,7 +43,7 @@
                     </div>
                 </div>
 
-                {!! textError('color') !!}
+                <div class="invalid-feedback">{{ textError('color') }}</div>
             </div>
 
             <button class="btn btn-primary">Редактировать</button>

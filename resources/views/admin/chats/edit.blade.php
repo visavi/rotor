@@ -24,7 +24,7 @@
             <div class="form-group{{ hasError('msg') }}">
                 <label for="msg">Сообщение:</label>
                 <textarea class="form-control markItUp" id="msg" rows="5" name="msg" placeholder="Сообщение" required>{{ getInput('msg', $post->text) }}</textarea>
-                {!! textError('msg') !!}
+                <div class="invalid-feedback">{{ textError('msg') }}</div>
             </div>
 
             <button class="btn btn-primary">Изменить</button>

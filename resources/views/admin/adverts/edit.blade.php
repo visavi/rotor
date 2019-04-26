@@ -22,13 +22,13 @@
             <div class="form-group{{ hasError('site') }}">
                 <label for="site">{{ trans('adverts.link') }}:</label>
                 <input class="form-control" id="site" name="site" type="text" value="{{ getInput('site', $link->site) }}" maxlength="50" required>
-                {!! textError('site') !!}
+                <div class="invalid-feedback">{{ textError('site') }}</div>
             </div>
 
             <div class="form-group{{ hasError('name') }}">
                 <label for="name">{{ trans('adverts.name') }}:</label>
                 <input class="form-control" id="name" name="name" type="text" maxlength="35" value="{{ getInput('name', $link->name) }}" required>
-                {!! textError('name') !!}
+                <div class="invalid-feedback">{{ textError('name') }}</div>
             </div>
 
             <div class="form-group{{ hasError('color') }}">
@@ -41,7 +41,7 @@
                     </div>
                 </div>
 
-                {!! textError('color') !!}
+                <div class="invalid-feedback">{{ textError('color') }}</div>
             </div>
 
             <div class="custom-control custom-checkbox">

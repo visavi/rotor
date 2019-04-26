@@ -65,7 +65,7 @@
 
                 <button class="btn btn-primary">Найти</button>
             </div>
-            {!! textError('user') !!}
+            <div class="invalid-feedback">{{ textError('user') }}</div>
         </form>
     </div>
 

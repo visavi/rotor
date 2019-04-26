@@ -33,13 +33,13 @@
             <div class="form-group{{ hasError('title') }}">
                 <label for="title">{{ trans('loads.down_title') }}:</label>
                 <input class="form-control" name="title" id="title" maxlength="50" value="{{ getInput('title', $down->title) }}" required>
-                {!! textError('title') !!}
+                <div class="invalid-feedback">{{ textError('title') }}</div>
             </div>
 
             <div class="form-group{{ hasError('text') }}">
                 <label for="text">{{ trans('loads.down_text') }}:</label>
                 <textarea class="form-control markItUp" id="text" name="text" rows="5">{{ getInput('text', $down->text) }}</textarea>
-                {!! textError('text') !!}
+                <div class="invalid-feedback">{{ textError('text') }}</div>
             </div>
 
             @if ($down->getFiles()->isNotEmpty())
@@ -62,7 +62,7 @@
                     {{ trans('main.attach_files') }}&hellip;
                 </label>
                 <span class="badge badge-info" id="upload-file-info"></span>
-                {!! textError('files') !!}
+                <div class="invalid-feedback">{{ textError('files') }}</div>
                 <br>
             @endif
 

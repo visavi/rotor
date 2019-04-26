@@ -20,7 +20,7 @@
             <div class="form-group{{ hasError('find') }}">
                 <label for="inputFind">{{ trans('main.request') }}:</label>
                 <input name="find" class="form-control" id="inputFind" maxlength="50" placeholder="{{ trans('main.request') }}" value="{{ getInput('find') }}" required>
-                {!! textError('find') !!}
+                <div class="invalid-feedback">{{ textError('find') }}</div>
             </div>
 
             {{ trans('main.look_in') }}:
@@ -34,7 +34,7 @@
                     <input class="custom-control-input" type="radio" id="inputWhere1" name="where" value="1"{{ $inputWhere === 1 ? ' checked' : '' }}>
                     <label class="custom-control-label" for="inputWhere1">{{ trans('blogs.in_text') }}</label>
                 </div>
-                {!! textError('where') !!}
+                <div class="invalid-feedback">{{ textError('where') }}</div>
             </div>
 
             {{ trans('main.request_type') }}:
@@ -52,7 +52,7 @@
                     <input class="custom-control-input" type="radio" id="inputType2" name="type" value="2"{{ $inputType === 2 ? ' checked' : '' }}>
                     <label class="custom-control-label" for="inputType2">{{ trans('main.full') }}</label>
                 </div>
-                {!! textError('type') !!}
+                <div class="invalid-feedback">{{ textError('type') }}</div>
             </div>
 
             <button class="btn btn-primary">{{ trans('main.search') }}</button>

@@ -22,11 +22,11 @@
             <div class="form-group{{ hasError('find') }}">
                 <label for="inputFind">{{ trans('main.request') }}</label>
                 <input name="find" class="form-control" id="inputFind" maxlength="50" placeholder="{{ trans('main.request') }}" value="{{ getInput('find') }}" required>
-                {!! textError('find') !!}
+                <div class="invalid-feedback">{{ textError('find') }}</div>
             </div>
 
             <div class="form-group{{ hasError('section') }}">
-                <label for="inputSection">{{ trans('loads.load') }}</label>
+                <label for="inputSection">{{ trans('loads.load') }}:</label>
                 <?php $inputSection = (int) getInput('section', $cid); ?>
 
                 <select class="form-control" id="inputSection" name="section">
@@ -45,7 +45,7 @@
                     @endforeach
 
                 </select>
-                {!! textError('section') !!}
+                <div class="invalid-feedback">{{ textError('section') }}</div>
             </div>
 
             {{ trans('main.look_in') }}:<br>
@@ -74,7 +74,7 @@
                     <input class="custom-control-input" type="radio" id="inputType2" name="type" value="2"{{ $inputType === 2 ? ' checked' : '' }}>
                     <label class="custom-control-label" for="inputType2">{{ trans('main.full') }}</label>
                 </div>
-                {!! textError('type') !!}
+                <div class="invalid-feedback">{{ textError('type') }}</div>
             </div>
             <button class="btn btn-primary">{{ trans('main.search') }}</button>
         </form>

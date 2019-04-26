@@ -56,31 +56,31 @@
                     @endforeach
 
                 </select>
-                {!! textError('bid') !!}
+                <div class="invalid-feedback">{{ textError('bid') }}</div>
             </div>
 
             <div class="form-group{{ hasError('title') }}">
                 <label for="inputTitle">{{ trans('boards.name') }}:</label>
                 <input type="text" class="form-control" id="inputTitle" name="title" maxlength="50" value="{{ getInput('title', $item->title) }}" required>
-                {!! textError('title') !!}
+                <div class="invalid-feedback">{{ textError('title') }}</div>
             </div>
 
             <div class="form-group{{ hasError('text') }}">
                 <label for="text">{{ trans('boards.text') }}:</label>
                 <textarea class="form-control markItUp" id="text" rows="5" name="text" required>{{ getInput('text', $item->text) }}</textarea>
-                {!! textError('text') !!}
+                <div class="invalid-feedback">{{ textError('text') }}</div>
             </div>
 
             <div class="form-group{{ hasError('price') }}">
                 <label for="inputPrice">{{ trans('boards.price') }}:</label>
                 <input type="text" class="form-control" id="inputPrice" name="price" value="{{ getInput('price', $item->price) }}" required>
-                {!! textError('price') !!}
+                <div class="invalid-feedback">{{ textError('price') }}</div>
             </div>
 
             <div class="form-group{{ hasError('phone') }}">
                 <label for="inputPhone">{{ trans('boards.phone') }}:</label>
                 <input class="phone form-control" id="inputPhone" name="phone" placeholder="8 ___ ___-__-__" maxlength="15" value="{{ getInput('phone', $item->phone) }}">
-                {!! textError('phone') !!}
+                <div class="invalid-feedback">{{ textError('phone') }}</div>
             </div>
 
             @include('app/_upload', ['id' => $item->id, 'files' => $item->files, 'type' => App\Models\Item::class])

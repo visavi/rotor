@@ -22,14 +22,14 @@
             <div class="form-group{{ hasError('title') }}">
                 <label for="title">{{ trans('main.title') }}:</label>
                 <input type="text" class="form-control" id="title" name="title" maxlength="100" value="{{ getInput('title') }}" placeholder="{{ trans('main.title') }}" required>
-                {!! textError('title') !!}
+                <div class="invalid-feedback">{{ textError('title') }}</div>
             </div>
 
             <div class="form-group{{ hasError('text') }}">
                 <label for="text">{{ trans('main.text') }}:</label>
                 <textarea class="form-control markItUp" maxlength="10000" id="text" rows="10" name="text" placeholder="{{ trans('main.text') }}" required>{{ getInput('text') }}</textarea>
+                <div class="invalid-feedback">{{ textError('text') }}</div>
                 <span class="js-textarea-counter"></span>
-                {!! textError('text') !!}
             </div>
 
             <label class="btn btn-sm btn-secondary" for="image">
@@ -37,7 +37,7 @@
                 {{ trans('main.attach_image') }}&hellip;
             </label>
             <span class="badge badge-info" id="upload-file-info"></span>
-            {!! textError('image') !!}
+            <div class="invalid-feedback">{{ textError('image') }}</div>
             <br>
 
             <div class="custom-control custom-checkbox">

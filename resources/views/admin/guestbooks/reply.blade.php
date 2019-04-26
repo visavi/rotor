@@ -27,7 +27,7 @@
             <div class="form-group{{ hasError('reply') }}">
                 <label for="reply">{{ trans('guestbooks.message') }}:</label>
                 <textarea class="form-control markItUp" id="reply" rows="5" name="reply" required>{{ getInput('reply', $post->reply) }}</textarea>
-                {!! textError('reply') !!}
+                <div class="invalid-feedback">{{ textError('reply') }}</div>
             </div>
 
             <button class="btn btn-primary">{{ trans('main.write') }}</button>

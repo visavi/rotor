@@ -25,7 +25,7 @@
 
                 <button class="btn btn-primary">Редактировать</button>
             </div>
-            {!! textError('user') !!}
+            <div class="invalid-feedback">{{ textError('user') }}</div>
         </form>
     </div>
 

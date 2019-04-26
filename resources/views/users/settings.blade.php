@@ -31,7 +31,7 @@
                     @endforeach
                 </select>
 
-                {!! textError('themes') !!}
+                <div class="invalid-feedback">{{ textError('themes') }}</div>
             </div>
 
             <?php $inputLang = getInput('language', $user->language); ?>
@@ -45,7 +45,7 @@
                     @endforeach
                 </select>
 
-                {!! textError('language') !!}
+                <div class="invalid-feedback">{{ textError('language') }}</div>
             </div>
 
             <?php $inputTimezone = (int) getInput('timezone', $user->timezone); ?>
@@ -59,7 +59,7 @@
                     @endforeach
                 </select>
 
-                {!! textError('timezone') !!}
+                <div class="invalid-feedback">{{ textError('timezone') }}</div>
             </div>
 
             <div class="custom-control custom-checkbox">

@@ -183,8 +183,8 @@
                     <div class="form-group{{ hasError('msg') }}">
                         <label for="msg">{{ trans('forums.post') }}:</label>
                         <textarea class="form-control markItUp" maxlength="{{ setting('forumtextlength') }}" id="msg" rows="5" name="msg" placeholder="{{ trans('forums.post') }}" required>{{ getInput('msg') }}</textarea>
+                        <div class="invalid-feedback">{{ textError('msg') }}</div>
                         <span class="js-textarea-counter"></span>
-                        {!! textError('msg') !!}
                     </div>
 
                     @if (getUser('point') >= setting('forumloadpoints'))
@@ -195,7 +195,7 @@
                                 {{ trans('main.attach_files') }}&hellip;
                             </label>
                             <span class="badge badge-info" id="upload-file-info"></span>
-                            {!! textError('files') !!}
+                            <div class="invalid-feedback">{{ textError('files') }}</div>
                             <br>
 
                             <p class="text-muted font-italic">

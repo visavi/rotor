@@ -49,7 +49,7 @@
 
                 <button class="btn btn-primary">{{ trans('main.create') }}</button>
             </div>
-            {!! textError('name') !!}
+            <div class="invalid-feedback">{{ textError('name') }}</div>
         </form>
     </div>
 @stop

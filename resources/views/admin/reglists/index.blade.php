@@ -52,7 +52,7 @@
 
                 <button class="btn btn-primary">Выполнить</button>
             </div>
-            {!! textError('action') !!}
+            <div class="invalid-feedback">{{ textError('action') }}</div>
         </form>
 
         {!! pagination($page) !!}

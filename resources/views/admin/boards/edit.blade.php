@@ -44,19 +44,19 @@
                     @endforeach
 
                 </select>
-                {!! textError('parent') !!}
+                <div class="invalid-feedback">{{ textError('parent') }}</div>
             </div>
 
             <div class="form-group{{ hasError('name') }}">
                 <label for="name">{{ trans('boards.name') }}:</label>
                 <input class="form-control" name="name" id="name" maxlength="50" value="{{ getInput('name', $board->name) }}" required>
-                {!! textError('name') !!}
+                <div class="invalid-feedback">{{ textError('name') }}</div>
             </div>
 
             <div class="form-group{{ hasError('sort') }}">
                 <label for="sort">{{ trans('main.position') }}:</label>
                 <input type="number" class="form-control" name="sort" id="sort" maxlength="2" value="{{ getInput('sort', $board->sort) }}" required>
-                {!! textError('sort') !!}
+                <div class="invalid-feedback">{{ textError('sort') }}</div>
             </div>
 
             <div class="custom-control custom-checkbox">

@@ -35,7 +35,7 @@
                 <div class="form-group{{ hasError('email') }}">
                     <label for="email">{{ trans('users.email') }}:</label>
                     <input class="form-control" name="email" id="email" maxlength="50" value="{{ getInput('email', $user->email) }}" required>
-                    {!! textError('email') !!}
+                    <div class="invalid-feedback">{{ textError('email') }}</div>
                 </div>
 
                 {!! view('app/_captcha') !!}

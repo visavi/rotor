@@ -23,7 +23,7 @@
             <div class="form-group{{ hasError('reply') }}">
                 <label for="reply">{{ trans('offers.answer') }}:</label>
                 <textarea class="form-control markItUp" id="reply" rows="5" name="reply" required>{{ getInput('reply', $offer->reply) }}</textarea>
-                {!! textError('reply') !!}
+                <div class="invalid-feedback">{{ textError('reply') }}</div>
             </div>
 
             <div class="form-group{{ hasError('status') }}">
@@ -37,7 +37,7 @@
                     @endforeach
                 </select>
 
-                {!! textError('status') !!}
+                <div class="invalid-feedback">{{ textError('status') }}</div>
             </div>
 
             <div class="custom-control custom-checkbox">

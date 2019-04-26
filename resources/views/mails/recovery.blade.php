@@ -20,7 +20,7 @@
             <div class="form-group{{ hasError('user') }}">
                 <label for="inputUser">{{ trans('mails.login_or_email') }}:</label>
                 <input class="form-control" name="user" id="inputUser" value="{{ getInput('user', $cookieLogin) }}" maxlength="100" required>
-                {!! textError('user') !!}
+                <div class="invalid-feedback">{{ textError('user') }}</div>
             </div>
 
             {!! view('app/_captcha') !!}

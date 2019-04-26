@@ -28,21 +28,21 @@
                     <div class="form-group{{ hasError('user') }}">
                         <label for="inputUser">{{ trans('main.user_login') }}:</label>
                         <input name="user" class="form-control" id="inputUser" maxlength="20" placeholder="{{ trans('main.user_login') }}" value="{{ getInput('user') }}" required>
-                        {!! textError('user') !!}
+                        <div class="invalid-feedback">{{ textError('user') }}</div>
                     </div>
                 @endif
 
                 <div class="form-group{{ hasError('money') }}">
                     <label for="inputMoney">{{ trans('transfers.sum') }}:</label>
                     <input name="money" class="form-control" id="inputMoney" placeholder="{{ trans('transfers.sum') }}" value="{{ getInput('money') }}" required>
-                    {!! textError('money') !!}
+                    <div class="invalid-feedback">{{ textError('money') }}</div>
                 </div>
 
                 <div class="form-group{{ hasError('msg') }}">
                     <label for="msg">{{ trans('transfers.comment') }}:</label>
                     <textarea class="form-control markItUp" maxlength="{{ setting('comment_length') }}" id="msg" rows="5" name="msg" placeholder="{{ trans('transfers.comment') }}">{{ getInput('msg') }}</textarea>
+                    <div class="invalid-feedback">{{ textError('msg') }}</div>
                     <span class="js-textarea-counter"></span>
-                    {!! textError('msg') !!}
                 </div>
 
                 <button class="btn btn-primary">{{ trans('transfers.transfer') }}</button>

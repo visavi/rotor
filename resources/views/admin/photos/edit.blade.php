@@ -23,13 +23,13 @@
             <div class="form-group{{ hasError('title') }}">
                 <label for="title">{{ trans('photos.name') }}:</label>
                 <input class="form-control" id="title" name="title" type="text" value="{{ getInput('title', $photo->title) }}" maxlength="50" required>
-                {!! textError('title') !!}
+                <div class="invalid-feedback">{{ textError('title') }}</div>
             </div>
 
             <div class="form-group{{ hasError('text') }}">
                 <label for="text">{{ trans('photos.description') }}:</label>
                 <textarea id="text" class="form-control" cols="25" rows="5" name="text">{{ getInput('text', $photo->text) }}</textarea>
-                {!! textError('text') !!}
+                <div class="invalid-feedback">{{ textError('text') }}</div>
             </div>
 
             <div class="js-images">

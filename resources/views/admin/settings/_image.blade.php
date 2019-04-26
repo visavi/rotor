@@ -7,7 +7,7 @@
     <div class="form-group{{ hasError('sets[filesize]') }}">
         <label for="filesize">Максимальный вес фото (Mb):</label>
         <input type="number" class="form-control" id="filesize" name="sets[filesize]" maxlength="3" value="{{ getInput('sets.filesize', round($settings['filesize'] / 1048576)) }}" required>
-        {!! textError('sets[filesize]') !!}
+        <div class="invalid-feedback">{{ textError('sets[filesize]') }}</div>
 
         <input type="hidden" value="1048576" name="mods[filesize]">
         <span class="text-muted font-italic">Ограничение сервера: {{ ini_get('upload_max_filesize') }}</span>
@@ -16,13 +16,13 @@
     <div class="form-group{{ hasError('sets[screensize]') }}">
         <label for="screensize">Уменьшение фото при загрузке (px):</label>
         <input type="number" class="form-control" id="screensize" name="sets[screensize]" maxlength="4" value="{{ getInput('sets.screensize', $settings['screensize']) }}" required>
-        {!! textError('sets[screensize]') !!}
+        <div class="invalid-feedback">{{ textError('sets[screensize]') }}</div>
     </div>
 
     <div class="form-group{{ hasError('sets[previewsize]') }}">
         <label for="previewsize">Размер превью (px):</label>
         <input type="number" class="form-control" id="previewsize" name="sets[previewsize]" maxlength="3" value="{{ getInput('sets.previewsize', $settings['previewsize']) }}" required>
-        {!! textError('sets[previewsize]') !!}
+        <div class="invalid-feedback">{{ textError('sets[previewsize]') }}</div>
     </div>
 
     <div class="custom-control custom-checkbox">

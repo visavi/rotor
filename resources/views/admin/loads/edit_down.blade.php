@@ -44,7 +44,7 @@
         <form action="/admin/downs/edit/{{ $down->id }}" method="post" enctype="multipart/form-data">
             @csrf
             <div class="form-group{{ hasError('category') }}">
-                <label for="inputCategory">{{ trans('loads.load') }}</label>
+                <label for="inputCategory">{{ trans('loads.load') }}:</label>
 
                 <?php $inputCategory = getInput('category', $down->category_id); ?>
                 <select class="form-control" id="inputCategory" name="category">
@@ -60,19 +60,19 @@
                     @endforeach
 
                 </select>
-                {!! textError('category') !!}
+                <div class="invalid-feedback">{{ textError('category') }}</div>
             </div>
 
             <div class="form-group{{ hasError('title') }}">
                 <label for="title">{{ trans('main.down_title') }}:</label>
                 <input class="form-control" name="title" id="title" maxlength="50" value="{{ getInput('title', $down->title) }}" required>
-                {!! textError('title') !!}
+                <div class="invalid-feedback">{{ textError('title') }}</div>
             </div>
 
             <div class="form-group{{ hasError('text') }}">
                 <label for="text">{{ trans('main.down_text') }}:</label>
                 <textarea class="form-control markItUp" id="text" name="text" rows="5">{{ getInput('text', $down->text) }}</textarea>
-                {!! textError('text') !!}
+                <div class="invalid-feedback">{{ textError('text') }}</div>
             </div>
 
             @if ($down->getFiles()->isNotEmpty())
@@ -95,7 +95,7 @@
                     {{ trans('main.attach_files') }}&hellip;
                 </label>
                 <span class="badge badge-info" id="upload-file-info"></span>
-                {!! textError('files') !!}
+                <div class="invalid-feedback">{{ textError('files') }}</div>
                 <br>
             @endif
 

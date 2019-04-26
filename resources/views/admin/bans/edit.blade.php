@@ -42,7 +42,7 @@
                 <div class="form-group{{ hasError('time') }}">
                     <label for="time">Время бана:</label>
                     <input class="form-control" name="time" id="time" value="{{ getInput('time') }}" required>
-                    {!! textError('time') !!}
+                    <div class="invalid-feedback">{{ textError('time') }}</div>
                 </div>
 
                 <?php $inputType = getInput('type'); ?>
@@ -59,19 +59,19 @@
                         <input class="custom-control-input" type="radio" id="inputTypeDays" name="type" value="days"{{ $inputType === 'days' ? ' checked' : '' }}>
                         <label class="custom-control-label" for="inputTypeDays">Дней</label>
                     </div>
-                    {!! textError('type') !!}
+                    <div class="invalid-feedback">{{ textError('type') }}</div>
                 </div>
 
                 <div class="form-group{{ hasError('reason') }}">
                     <label for="reason">Причина бана:</label>
                     <textarea class="form-control markItUp" id="reason" rows="5" name="reason" required>{{ getInput('reason') }}</textarea>
-                    {!! textError('reason') !!}
+                    <div class="invalid-feedback">{{ textError('reason') }}</div>
                 </div>
 
                 <div class="form-group{{ hasError('note') }}">
                     <label for="notice">Заметка:</label>
                     <textarea class="form-control markItUp" id="notice" rows="5" name="notice">{{ getInput('notice', $user->note->text) }}</textarea>
-                    {!! textError('notice') !!}
+                    <div class="invalid-feedback">{{ textError('notice') }}</div>
                 </div>
 
                 <button class="btn btn-primary">Забанить</button>

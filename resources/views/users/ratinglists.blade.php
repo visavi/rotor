@@ -54,7 +54,7 @@
 
                     <button class="btn btn-primary">{{ trans('main.search') }}</button>
                 </div>
-                {!! textError('user') !!}
+                <div class="invalid-feedback">{{ textError('user') }}</div>
             </form>
         </div><br>
 

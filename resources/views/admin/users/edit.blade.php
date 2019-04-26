@@ -34,99 +34,99 @@
                         <option value="{{ $key }}"{{ $selected }}>{{ $level }}</option>
                     @endforeach
                 </select>
-                {!! textError('level') !!}
+                <div class="invalid-feedback">{{ textError('level') }}</div>
             </div>
 
             <div class="form-group{{ hasError('password') }}">
                 <label for="password">Новый пароль:</label>
                 <input type="text" class="form-control" id="password" name="password" maxlength="50" value="{{ getInput('password') }}">
-                {!! textError('password') !!}
+                <div class="invalid-feedback">{{ textError('password') }}</div>
                 <span class="text-muted font-italic">Оставьте пустым если не нужно менять</span>
             </div>
 
             <div class="form-group{{ hasError('email') }}">
                 <label for="email">Email:</label>
                 <input type="text" class="form-control" id="email" name="email" maxlength="50" value="{{ getInput('email', $user->email) }}" required>
-                {!! textError('email') !!}
+                <div class="invalid-feedback">{{ textError('email') }}</div>
             </div>
 
             <div class="form-group{{ hasError('name') }}">
                 <label for="name">Имя пользователя:</label>
                 <input type="text" class="form-control" id="name" name="name" maxlength="20" value="{{ getInput('name', $user->name) }}">
-                {!! textError('name') !!}
+                <div class="invalid-feedback">{{ textError('name') }}</div>
             </div>
 
 
             <div class="form-group{{ hasError('country') }}">
                 <label for="country">Страна:</label>
                 <input type="text" class="form-control" id="country" name="country" maxlength="30" value="{{ getInput('country', $user->country) }}">
-                {!! textError('country') !!}
+                <div class="invalid-feedback">{{ textError('country') }}</div>
             </div>
 
             <div class="form-group{{ hasError('city') }}">
                 <label for="city">Город:</label>
                 <input type="text" class="form-control" id="city" name="city" maxlength="50" value="{{ getInput('city', $user->city) }}">
-                {!! textError('city') !!}
+                <div class="invalid-feedback">{{ textError('city') }}</div>
             </div>
 
             <div class="form-group{{ hasError('site') }}">
                 <label for="site">Сайт:</label>
                 <input type="text" class="form-control" id="site" name="site" maxlength="50" value="{{ getInput('site', $user->site) }}">
-                {!! textError('site') !!}
+                <div class="invalid-feedback">{{ textError('site') }}</div>
             </div>
 
             <div class="form-group{{ hasError('created') }}">
                 <label for="created">Зарегистрирован:</label>
                 <input type="text" class="form-control" id="created" name="created" maxlength="10" value="{{ getInput('created', dateFixed($user->created_at, 'd.m.Y')) }}" required>
-                {!! textError('created') !!}
+                <div class="invalid-feedback">{{ textError('created') }}</div>
             </div>
 
             <div class="form-group{{ hasError('birthday') }}">
                 <label for="birthday">Дата рождения:</label>
                 <input type="text" class="form-control" id="birthday" name="birthday" maxlength="10" value="{{ getInput('birthday', $user->birthday) }}">
-                {!! textError('birthday') !!}
+                <div class="invalid-feedback">{{ textError('birthday') }}</div>
             </div>
 
             <div class="form-group{{ hasError('icq') }}">
                 <label for="icq">ICQ:</label>
                 <input type="text" class="form-control" id="icq" name="icq" maxlength="10" value="{{ getInput('icq', $user->icq) }}">
-                {!! textError('icq') !!}
+                <div class="invalid-feedback">{{ textError('icq') }}</div>
             </div>
 
             <div class="form-group{{ hasError('skype') }}">
                 <label for="skype">Skype:</label>
                 <input type="text" class="form-control" id="skype" name="skype" maxlength="31" value="{{ getInput('skype', $user->skype) }}">
-                {!! textError('skype') !!}
+                <div class="invalid-feedback">{{ textError('skype') }}</div>
             </div>
 
             <div class="form-group{{ hasError('point') }}">
                 <label for="point">Актив:</label>
                 <input type="text" class="form-control" id="point" name="point" maxlength="10" value="{{ getInput('point', $user->point) }}" required>
-                {!! textError('point') !!}
+                <div class="invalid-feedback">{{ textError('point') }}</div>
             </div>
 
             <div class="form-group{{ hasError('money') }}">
                 <label for="money">Деньги:</label>
                 <input type="text" class="form-control" id="money" name="money" maxlength="15" value="{{ getInput('money', $user->money) }}" required>
-                {!! textError('money') !!}
+                <div class="invalid-feedback">{{ textError('money') }}</div>
             </div>
 
             <div class="form-group{{ hasError('status') }}">
                 <label for="status">Статус:</label>
                 <input type="text" class="form-control" id="status" name="status" maxlength="25" value="{{ getInput('status', $user->status) }}">
-                {!! textError('status') !!}
+                <div class="invalid-feedback">{{ textError('status') }}</div>
             </div>
 
             <div class="form-group{{ hasError('posrating') }}">
                 <label for="posrating">Репутация (плюсы):</label>
                 <input type="text" class="form-control" id="posrating" name="posrating" maxlength="10" value="{{ getInput('posrating', $user->posrating) }}" required>
-                {!! textError('posrating') !!}
+                <div class="invalid-feedback">{{ textError('posrating') }}</div>
             </div>
 
             <div class="form-group{{ hasError('negrating') }}">
                 <label for="negrating">Репутация (минусы):</label>
                 <input type="text" class="form-control" id="negrating" name="negrating" maxlength="10" value="{{ getInput('negrating', $user->negrating) }}" required>
-                {!! textError('negrating') !!}
+                <div class="invalid-feedback">{{ textError('negrating') }}</div>
             </div>
 
             <?php $inputThemes = getInput('themes', $user->themes); ?>
@@ -142,7 +142,7 @@
                     @endforeach
                 </select>
 
-                {!! textError('themes') !!}
+                <div class="invalid-feedback">{{ textError('themes') }}</div>
             </div>
 
             <?php $inputGender = getInput('gender', $user->gender); ?>
@@ -156,13 +156,13 @@
                     <input class="custom-control-input" type="radio" id="inputGenderFemale" name="gender" value="female"{{ $inputGender === 'female' ? ' checked' : '' }}>
                     <label class="custom-control-label" for="inputGenderFemale">Женский</label>
                 </div>
-                {!! textError('gender') !!}
+                <div class="invalid-feedback">{{ textError('gender') }}</div>
             </div>
 
             <div class="form-group{{ hasError('info') }}">
                 <label for="info">О себе:</label>
                 <textarea class="form-control markItUp" id="info" rows="5" name="info">{{ getInput('info', $user->info) }}</textarea>
-                {!! textError('info') !!}
+                <div class="invalid-feedback">{{ textError('info') }}</div>
             </div>
 
             <button class="btn btn-primary">Изменить</button>

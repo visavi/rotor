@@ -1745,7 +1745,9 @@ function getInput($name, $default = null)
  */
 function hasError($field)
 {
-    return isset($_SESSION['flash']['danger'][$field]) ? ' has-error' : '';
+    $isValid = isset($_SESSION['flash']['danger']) ? ' is-valid' : '';
+
+    return isset($_SESSION['flash']['danger'][$field]) ? ' is-invalid' : $isValid;
 }
 
 /**
@@ -1756,14 +1758,7 @@ function hasError($field)
  */
 function textError($field)
 {
-    $text = null;
-
-    if (isset($_SESSION['flash']['danger'][$field])) {
-        $error = $_SESSION['flash']['danger'][$field];
-        $text = '<div class="text-danger">' . $error . '</div>';
-    }
-
-    return $text;
+    return $_SESSION['flash']['danger'][$field] ?? null;
 }
 
 /**

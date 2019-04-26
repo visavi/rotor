@@ -22,7 +22,7 @@
             <div class="form-group{{ hasError('find') }}">
                 <label for="inputFind">{{ trans('main.request') }}:</label>
                 <input name="find" class="form-control" id="inputFind" maxlength="50" placeholder="{{ trans('main.request') }}" value="{{ getInput('find') }}" required>
-                {!! textError('find') !!}
+                <div class="invalid-feedback">{{ textError('find') }}</div>
             </div>
 
             <div class="form-group{{ hasError('section') }}">
@@ -47,7 +47,7 @@
                     @endforeach
 
                 </select>
-                {!! textError('section') !!}
+                <div class="invalid-feedback">{{ textError('section') }}</div>
             </div>
 
             <div class="form-group{{ hasError('period') }}">
@@ -61,7 +61,7 @@
                     <option value="30"{{ $inputPeriod ===30 ? ' selected' : '' }}>{{ trans('main.last_month') }}</option>
                     <option value="365"{{ $inputPeriod === 365 ? ' selected' : '' }}>{{ trans('main.last_year') }}</option>
                 </select>
-                {!! textError('period') !!}
+                <div class="invalid-feedback">{{ textError('period') }}</div>
             </div>
 
             {{ trans('main.look_in') }}:<br>
@@ -90,7 +90,7 @@
                     <input class="custom-control-input" type="radio" id="inputType2" name="type" value="2"{{ $inputType === 2 ? ' checked' : '' }}>
                     <label class="custom-control-label" for="inputType2">{{ trans('main.full') }}</label>
                 </div>
-                {!! textError('type') !!}
+                <div class="invalid-feedback">{{ textError('type') }}</div>
             </div>
 
             <button class="btn btn-primary">{{ trans('main.search') }}</button>

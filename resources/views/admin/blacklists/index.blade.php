@@ -58,7 +58,7 @@
 
                 <button class="btn btn-primary">Добавить</button>
             </div>
-            {!! textError('value') !!}
+            <div class="invalid-feedback">{{ textError('value') }}</div>
         </form>
     </div><br>
 

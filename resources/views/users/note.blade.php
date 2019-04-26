@@ -21,7 +21,7 @@
             <div class="form-group{{ hasError('notice') }}">
                 <label for="notice">{{ trans('index.note') }}:</label>
                 <textarea class="form-control markItUp" id="notice" rows="5" name="notice" required>{{ getInput('notice', $user->note->text) }}</textarea>
-                {!! textError('notice') !!}
+                <div class="invalid-feedback">{{ textError('notice') }}</div>
             </div>
 
             <button class="btn btn-primary">{{ trans('main.save') }}</button>

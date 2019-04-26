@@ -59,7 +59,7 @@
 
                 <button class="btn btn-primary">Добавить</button>
             </div>
-            {!! textError('ip') !!}
+            <div class="invalid-feedback">{{ textError('ip') }}</div>
         </form>
     </div><br>
 

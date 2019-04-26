@@ -68,7 +68,7 @@
 
                     <button class="btn btn-primary">{{ trans('loads.create_load') }}</button>
                 </div>
-                {!! textError('name') !!}
+                <div class="invalid-feedback">{{ textError('name') }}</div>
             </form>
         </div>
 

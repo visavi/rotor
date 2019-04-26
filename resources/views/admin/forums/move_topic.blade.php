@@ -44,7 +44,7 @@
                     @endforeach
 
                 </select>
-                {!! textError('fid') !!}
+                <div class="invalid-feedback">{{ textError('fid') }}</div>
             </div>
 
             <button class="btn btn-primary">{{ trans('main.move') }}</button>

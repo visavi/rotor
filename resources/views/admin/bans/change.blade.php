@@ -33,13 +33,13 @@
             <div class="form-group{{ hasError('timeban') }}">
                 <label for="timeban">Бан до:</label>
                 <input class="form-control" type="datetime-local" name="timeban" id="timeban" value="{{ getInput('timeban', dateFixed($user->timeban, 'Y-m-d\TH:i')) }}" required>
-                {!! textError('timeban') !!}
+                <div class="invalid-feedback">{{ textError('timeban') }}</div>
             </div>
 
             <div class="form-group{{ hasError('reason') }}">
                 <label for="reason">Причина бана:</label>
                 <textarea class="form-control markItUp" id="reason" rows="5" name="reason" required>{{ getInput('reason', $user->lastBan->reason) }}</textarea>
-                {!! textError('reason') !!}
+                <div class="invalid-feedback">{{ textError('reason') }}</div>
             </div>
 
             <button class="btn btn-primary">Изменить</button>

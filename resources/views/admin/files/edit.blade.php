@@ -22,7 +22,7 @@
             @csrf
             <div class="form-group{{ hasError('msg') }}">
                 <textarea class="form-control markItUpHtml" rows="25" name="msg">{{ getInput('msg', $contest) }}</textarea>
-                {!! textError('msg') !!}
+                <div class="invalid-feedback">{{ textError('msg') }}</div>
             </div>
 
             <button class="btn btn-primary">Редактировать</button>

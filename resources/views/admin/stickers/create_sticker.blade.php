@@ -27,13 +27,13 @@
                         <option value="{{ $category->id }}"{{ ($cid === $category->id) ? ' selected' : '' }}>{{ $category->name }}</option>
                     @endforeach
                 </select>
-                {!! textError('category') !!}
+                <div class="invalid-feedback">{{ textError('category') }}</div>
             </div>
 
             <div class="form-group{{ hasError('code') }}">
                 <label for="code">{{ trans('stickers.sticker_code') }}:</label>
                 <input type="text" class="form-control" id="code" name="code" maxlength="20" value="{{ getInput('code') }}" required>
-                {!! textError('code') !!}
+                <div class="invalid-feedback">{{ textError('code') }}</div>
             </div>
 
             <label class="btn btn-sm btn-secondary" for="sticker">
@@ -41,7 +41,7 @@
                 {{ trans('main.attach_image') }}&hellip;
             </label>
             <span class="badge badge-info" id="upload-file-info"></span>
-            {!! textError('sticker') !!}
+            <div class="invalid-feedback">{{ textError('sticker') }}</div>
             <br>
             <button class="btn btn-primary">{{ trans('main.upload') }}</button>
         </form>

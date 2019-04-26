@@ -17,7 +17,7 @@
             @endforeach
 
         </select>
-        {!! textError('sets[incount]') !!}
+        <div class="invalid-feedback">{{ textError('sets[incount]') }}</div>
     </div>
 
     <div class="custom-control custom-checkbox">
@@ -35,7 +35,7 @@
     <div class="form-group{{ hasError('sets[timeonline]') }}">
         <label for="timeonline">Время подсчета онлайн (минут):</label>
         <input type="number" class="form-control" id="timeonline" name="sets[timeonline]" maxlength="3" value="{{ getInput('sets.timeonline', round($settings['timeonline'] / 60)) }}" required>
-        {!! textError('sets[timeonline]') !!}
+        <div class="invalid-feedback">{{ textError('sets[timeonline]') }}</div>
 
         <input type="hidden" value="60" name="mods[timeonline]">
     </div>
