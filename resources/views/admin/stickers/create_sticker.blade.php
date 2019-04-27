@@ -36,13 +36,15 @@
                 <div class="invalid-feedback">{{ textError('code') }}</div>
             </div>
 
-            <label class="btn btn-sm btn-secondary" for="sticker">
-                <input id="sticker" type="file" name="sticker" onchange="$('#upload-file-info').html(this.files[0].name);" hidden>
-                {{ trans('main.attach_image') }}&hellip;
-            </label>
-            <span class="badge badge-info" id="upload-file-info"></span>
-            <div class="invalid-feedback">{{ textError('sticker') }}</div>
-            <br>
+            <div class="custom-file{{ hasError('sticker') }}">
+                <label class="btn btn-sm btn-secondary" for="sticker">
+                    <input id="sticker" type="file" name="sticker" onchange="$('#upload-file-info').html(this.files[0].name);" hidden>
+                    {{ trans('main.attach_image') }}&hellip;
+                </label>
+                <span class="badge badge-info" id="upload-file-info"></span>
+                <div class="invalid-feedback">{{ textError('sticker') }}</div>
+            </div>
+
             <button class="btn btn-primary">{{ trans('main.upload') }}</button>
         </form>
     </div><br>

@@ -26,20 +26,16 @@
 
                 <select class="form-control" id="parent" name="parent">
                     <option value="0">---</option>
-
                     @foreach ($forums as $data)
-
                         @if ($data->id === $forum->id)
                             @continue
                         @endif
 
                         <option value="{{ $data->id }}"{{ ($inputParent === $data->id && ! $data->closed) ? ' selected' : '' }}{{ $data->closed ? ' disabled' : '' }}>{{ $data->title }}</option>
                     @endforeach
-
                 </select>
                 <div class="invalid-feedback">{{ textError('parent') }}</div>
             </div>
-
 
             <div class="form-group{{ hasError('title') }}">
                 <label for="title">{{ trans('forums.forum') }}:</label>
@@ -64,7 +60,6 @@
                 <input type="checkbox" class="custom-control-input" value="1" name="closed" id="closed"{{ getInput('closed', $forum->closed) ? ' checked' : '' }}>
                 <label class="custom-control-label" for="closed">{{ trans('main.close') }}</label>
             </div>
-
 
             <button class="btn btn-primary">{{ trans('main.change') }}</button>
         </form>

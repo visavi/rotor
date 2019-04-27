@@ -90,13 +90,14 @@
             @endif
 
             @if ($down->files->count() < setting('maxfiles'))
-                <label class="btn btn-sm btn-secondary" for="files">
-                    <input type="file" id="files" name="files[]" onchange="$('#upload-file-info').html((this.files.length > 1) ? '{{ trans('main.files') }}: ' + this.files.length : this.files[0].name);" hidden multiple>
-                    {{ trans('main.attach_files') }}&hellip;
-                </label>
-                <span class="badge badge-info" id="upload-file-info"></span>
-                <div class="invalid-feedback">{{ textError('files') }}</div>
-                <br>
+                <div class="custom-file{{ hasError('files') }}">
+                    <label class="btn btn-sm btn-secondary" for="files">
+                        <input type="file" id="files" name="files[]" onchange="$('#upload-file-info').html((this.files.length > 1) ? '{{ trans('main.files') }}: ' + this.files.length : this.files[0].name);" hidden multiple>
+                        {{ trans('main.attach_files') }}&hellip;
+                    </label>
+                    <span class="badge badge-info" id="upload-file-info"></span>
+                    <div class="invalid-feedback">{{ textError('files') }}</div>
+                </div>
             @endif
 
             <p class="text-muted font-italic">

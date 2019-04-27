@@ -34,18 +34,18 @@
             </div>
 
             @if ($news->image && file_exists(HOME . $news->image))
-
                 <a href="{{ $news->image }}">{!! resizeImage($news->image, ['width' => 100, 'alt' => $news['title']]) !!}</a><br>
                 <b>{{ basename($news->image) }}</b> ({{ formatFileSize(HOME . $news->image) }})<br><br>
             @endif
 
-            <label class="btn btn-sm btn-secondary" for="image">
-                <input id="image" type="file" name="image" onchange="$('#upload-file-info').html(this.files[0].name);" hidden>
-                {{ trans('main.attach_image') }}&hellip;
-            </label>
-            <span class="badge badge-info" id="upload-file-info"></span>
-            <div class="invalid-feedback">{{ textError('image') }}</div>
-            <br>
+            <div class="custom-file{{ hasError('image') }}">
+                <label class="btn btn-sm btn-secondary" for="image">
+                    <input id="image" type="file" name="image" onchange="$('#upload-file-info').html(this.files[0].name);" hidden>
+                    {{ trans('main.attach_image') }}&hellip;
+                </label>
+                <span class="badge badge-info" id="upload-file-info"></span>
+                <div class="invalid-feedback">{{ textError('image') }}</div>
+            </div>
 
             <div class="custom-control custom-checkbox">
                 <input type="hidden" value="0" name="closed">

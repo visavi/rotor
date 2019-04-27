@@ -23,13 +23,13 @@
 
         <form action="/pictures" method="post" enctype="multipart/form-data">
             @csrf
-            <div class="form-group{{ hasError('photo') }}">
+            <div class="custom-file{{ hasError('photo') }}">
                 <label class="btn btn-sm btn-secondary" for="inputPhoto">
-
                     <input id="inputPhoto" type="file" name="photo" onchange="$('#upload-file-info').html(this.files[0].name);" hidden>
                     {{ trans('main.attach_image') }}&hellip;
                 </label>
                 <span class="badge badge-info" id="upload-file-info"></span>
+                <div class="invalid-feedback">{{ textError('photo') }}</div>
             </div>
             <button class="btn btn-primary">{{ trans('main.add') }}</button>
         </form>
