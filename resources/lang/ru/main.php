@@ -152,8 +152,8 @@ return [
     'november'  => 'Ноября',
     'december'  => 'Декабря',
 
-    'male'   => 'Male',
-    'female' => 'Female',
+    'male'   => 'Мужской',
+    'female' => 'Женский',
 
     'boss'   => 'Босс',
     'admin'  => 'Админ',

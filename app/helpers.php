@@ -1340,7 +1340,7 @@ function resizeProcess($path, array $params = [])
 
     if (! file_exists(HOME . $path) || ! is_file(HOME . $path)) {
         return [
-            'path'   => '/assets/img/images/photo.jpg',
+            'path'   => '/assets/img/images/photo.png',
             'source' => false,
             'params' => $params,
         ];

@@ -118,7 +118,7 @@
                     <a class="gallery" href="{{ $user->picture }}">
                         {!! resizeImage($user->picture, ['alt' => $user->login, 'class' => 'float-right img-fluid rounded']) !!}</a>
                 @else
-                    <img src="/assets/img/images/photo.jpg" alt="Photo" class="float-right img-fluid rounded">
+                    <img src="/assets/img/images/photo.png" alt="Photo" class="float-right img-fluid rounded">
                 @endif
             </div>
             <div class="col-md-12">

@@ -94,7 +94,7 @@
                                 </a><br>
                                 <a href="/pictures">{{ trans('main.change') }}</a> / <a href="/pictures/delete?token={{ $_SESSION['token'] }}">{{ trans('main.delete') }}</a>
                             @else
-                                <img class="img-fluid rounded" src="/assets/img/images/photo.jpg" alt="Photo"><br>
+                                <img class="img-fluid rounded" src="/assets/img/images/photo.png" alt="Photo"><br>
                                 <a href="/pictures">{{ trans('main.upload') }}</a>
                             @endif
                         </div>
