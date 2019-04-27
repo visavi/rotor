@@ -4,13 +4,8 @@
     {{ $blog->title }}
 @stop
 
-@section('keywords')
-    {{ $blog->tags }}
-@stop
-
-@section('description')
-    {{ truncateWord(bbCode($blog->text)) }}
-@stop
+@section('keywords', $blog->tags)
+@section('description', truncateWord(bbCode($blog->text)))
 
 @section('header')
     @if ($blog->user->id === getUser('id'))

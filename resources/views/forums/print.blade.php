@@ -4,9 +4,7 @@
     {{ $topic->title }}
 @stop
 
-@section('description')
-    {{ trans('forums.topic_discussion') }}: {{ $topic->title }}
-@stop
+@section('description', trans('forums.topic_discussion') . ': ' .$topic->title)
 
 @section('content')
     <h1>{{ $topic->title }}</h1>

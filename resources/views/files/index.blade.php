@@ -65,13 +65,9 @@
     Дополнительно можно указать произвольные ключевые слова и описание заполнив переменные setting('keywords') и setting('description')<br>
 
 <pre class="prettyprint linenums">
-@@section('keywords')
-    Ключевые слова
-@@stop
+@@section('description', 'Описание страницы')
 
-@@section('description')
-    Описание страниц
-@@stop
+@@section('keywords', 'Ключевые слова')
 </pre><br>
 
     Посмотрите пример страниц в виде <a href="/files/docs">документации Rotor</a><br>

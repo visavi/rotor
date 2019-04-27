@@ -4,7 +4,7 @@
     {{ $news->title }}
 @stop
 
-@section('description', truncateWord($news->text))
+@section('description', truncateWord(bbCode($news->text)))
 
 @section('breadcrumb')
     <nav>

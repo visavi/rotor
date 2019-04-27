@@ -4,9 +4,7 @@
     {{ $topic->title }} ({{ trans('main.page_num', ['page' => $page->current]) }})
 @stop
 
-@section('description')
-    {{ trans('forums.topic_discussion') }}: {{ $topic->title }}
-@stop
+@section('description', trans('forums.topic_discussion') . ': ' .$topic->title)
 
 @section('header')
     <h1>{{ $topic->title }}</h1>
