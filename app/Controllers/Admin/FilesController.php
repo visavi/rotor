@@ -63,7 +63,7 @@ class FilesController extends AdminController
 
         $files = array_merge($folders, $files);
 
-        $directories = explode('/', $path);
+        $directories = explode('/', (string) $path);
 
         return view('admin/files/index', compact('files', 'path', 'directories'));
     }

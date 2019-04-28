@@ -785,23 +785,21 @@ function statVotes()
  * Возвращает дату последней новости из кэш-файла,
  * предварительно сформировав этот файл, если он устарел
  *
- * @return string Дата последней новости или тег span с текстом "Сегодня "
+ * @return string Дата последней новости
  */
 function statsNewsDate()
 {
     if (@filemtime(STORAGE . '/temp/statnews.dat') < time() - 900) {
-        $stat = 0;
 
         $news = News::query()->orderBy('created_at', 'desc')->first();
-
-        if ($news) {
-            $stat = dateFixed($news->created_at, 'd.m.y');
-        }
+        $stat = $news ? $news->created_at : 0;
 
         file_put_contents(STORAGE . '/temp/statnews.dat', $stat, LOCK_EX);
     }
 
-    return file_get_contents(STORAGE . '/temp/statnews.dat');
+    $statnews = file_get_contents(STORAGE . '/temp/statnews.dat');
+
+    return dateFixed($statnews, 'd.m.y');
 }
 
 /**
