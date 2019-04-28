@@ -18,8 +18,6 @@
 /node_modules
 /vendor
 /upgrade
-/public/assets/css/compiled.css
-/public/assets/js/compiled.js
 composer.phar
 .env
 .idea/

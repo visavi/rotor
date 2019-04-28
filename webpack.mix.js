@@ -24,7 +24,7 @@ mix.scripts([
     'public/assets/js/colorbox/jquery.colorbox-min.js',
     'public/assets/js/jquery.mask.min.js',
     'public/assets/js/app.js'
-], 'public/assets/js/compiled.js');
+], 'public/assets/modules/compiled.js');
 
 mix.styles([
     'public/assets/css/bootstrap.min.css',
@@ -36,4 +36,4 @@ mix.styles([
     'public/assets/js/mediaelement/mediaelementplayer.min.css',
     'public/assets/js/colorbox/colorbox.css',
     'public/assets/css/app.css'
-], 'public/assets/css/compiled.css');
+], 'public/assets/modules/compiled.css');

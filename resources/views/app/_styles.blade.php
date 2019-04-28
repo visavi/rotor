@@ -1,5 +1,5 @@
-@if (file_exists(HOME . '/assets/css/compiled.css'))
-    <link rel="stylesheet" href="/assets/css/compiled.css">
+@if (file_exists(HOME . '/assets/modules/compiled.css'))
+    <link rel="stylesheet" href="/assets/modules/compiled.css">
 @else
     <link rel="stylesheet" href="/assets/css/bootstrap.min.css">
     <link rel="stylesheet" href="/assets/css/bootstrap-colorpicker.min.css">
