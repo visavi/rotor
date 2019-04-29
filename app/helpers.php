@@ -971,6 +971,7 @@ function shuffleAssoc(&$array)
 function truncateWord($value, $words = 20, $end = '...')
 {
     $value = strip_tags(preg_replace('/\s+/', ' ', $value));
+    $value = preg_replace('/&#?[a-z0-9]{2,8};/i', '', $value);
 
     return Str::words($value, $words, $end);
 }
@@ -986,6 +987,7 @@ function truncateWord($value, $words = 20, $end = '...')
 function truncateString($value, $words = 100, $end = '...')
 {
     $value = strip_tags(preg_replace('/\s+/', ' ', $value));
+    $value = preg_replace('/&#?[a-z0-9]{2,8};/i', '', $value);
 
     return Str::limit($value, $words, $end);
 }

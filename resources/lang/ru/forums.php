@@ -46,7 +46,6 @@ return [
     'title_edit_post'      => 'Изменение сообщения',
     'title_move_topic'     => 'Перенос темы',
     'delete_files'         => 'Удаление файлов',
-    'topic_discussion'     => 'Обсуждение темы',
     'topic_curators'       => 'Кураторы темы',
     'curators_note'        => '(ID пользователей через запятую)',
     'topic_closed'         => 'Данная тема закрыта для обсуждения',
