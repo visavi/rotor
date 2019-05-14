@@ -94,7 +94,7 @@
                 @if ($user->themes)
                     {{ trans('users.theme') }}: {{ $user->themes }}<br>
                 @endif
-                {{ trans('main.registration_date') }}:: {{ dateFixed($user->created_at, 'd.m.Y') }}<br>
+                {{ trans('main.registration_date') }}: {{ dateFixed($user->created_at, 'd.m.Y') }}<br>
 
                 @if ($invite)
                     {{ trans('users.invitation') }}: {!! $invite->user->getProfile() !!}<br>

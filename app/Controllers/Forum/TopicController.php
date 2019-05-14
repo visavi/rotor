@@ -246,7 +246,7 @@ class TopicController extends BaseController
             abort(404, 'Данной темы не существует!');
         }
 
-        $isModer = \in_array(getUser('id'), array_map('\intval', explode(',', $topic->moderators)), true) ? true : false;
+        $isModer = \in_array(getUser('id'), array_map('\intval', explode(',', (string) $topic->moderators)), true);
 
         $validator->equal($token, $_SESSION['token'], trans('validator.token'))
             ->true(getUser(), 'Для закрытия тем необходимо авторизоваться')
@@ -472,8 +472,6 @@ class TopicController extends BaseController
             ->where('posts.id', $id)
             ->first();
 
-        $isModer = \in_array(getUser('id'), array_map('\intval', explode(',', $post->moderators)), true) ? true : false;
-
         if (! $post) {
             abort(404, 'Данного сообщения не существует!');
         }
@@ -481,6 +479,8 @@ class TopicController extends BaseController
         if ($post->closed) {
             abort('default', 'Редактирование невозможно, данная тема закрыта!');
         }
+
+        $isModer = \in_array(getUser('id'), array_map('\intval', explode(',', (string) $post->moderators)), true);
 
         if (! $isModer && $post->user_id !== getUser('id')) {
             abort('default', 'Редактировать сообщения может только автор или кураторы темы!');

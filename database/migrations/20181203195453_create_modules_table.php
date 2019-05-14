@@ -13,6 +13,7 @@ class CreateModulesTable extends AbstractMigration
         $table
             ->addColumn('name', 'string', ['limit' => 50])
             ->addColumn('version', 'string', ['limit' => 10])
+            ->addColumn('disabled', 'boolean', ['default' => 0])
             ->addColumn('updated_at', 'integer', ['null' => true])
             ->addColumn('created_at', 'integer')
             ->create();
