@@ -26,12 +26,12 @@
                     {!! $data->user->getAvatar() !!}
                 </div>
 
-                <b>{!! $data->user->getProfile() !!}</b> ({{ trans('pages.time_on_site') }}: {{ dateFixed($data['updated_at'], 'H:i:s') }})
+                <b>{!! $data->user->getProfile() !!}</b> ({{ trans('pages.time_on_site') }}: {{ dateFixed($data->updated_at, 'H:i:s') }})
             </div>
 
             @if (isAdmin())
                 <div>
-                    <span class="data">({{ $data['brow'] }}, {{ $data['ip'] }})</span>
+                    <span class="data">({{ $data->brow }}, {{ $data->ip }})</span>
                 </div>
             @endif
         @endforeach

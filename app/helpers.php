@@ -810,18 +810,25 @@ function statsNewsDate()
 function lastNews()
 {
     if (setting('lastnews') > 0) {
-        $news = News::query()
-            ->where('top', 1)
-            ->orderBy('created_at', 'desc')
-            ->limit(setting('lastnews'))
-            ->get();
+        if (@filemtime(STORAGE . '/temp/lastnews.dat') < time() - 1800) {
+            $news = News::query()
+                ->where('top', 1)
+                ->orderBy('created_at', 'desc')
+                ->limit(setting('lastnews'))
+                ->get();
 
-        $total = count($news);
+            file_put_contents(STORAGE . '/temp/lastnews.dat', json_encode($news, JSON_UNESCAPED_UNICODE), LOCK_EX);
+        }
 
-        if ($total > 0) {
+        $news = json_decode(file_get_contents(STORAGE . '/temp/lastnews.dat'));
+
+        if ($news > 0) {
             foreach ($news as $data) {
-                $data['text'] = str_replace('[cut]', '', $data->text);
                 echo '<i class="far fa-circle fa-lg text-muted"></i> <a href="/news/' . $data->id . '">' . $data->title . '</a> (' . $data->count_comments . ') <i class="fa fa-caret-down news-title"></i><br>';
+
+                if (stripos($data->text, '[cut]') !== false) {
+                    $data->text = current(explode('[cut]', $data->text)) . ' <a href="/news/'. $data->id .'" class="badge badge-success">Читать далее &raquo;</a>';
+                }
 
                 echo '<div class="news-text" style="display: none;">' . bbCode($data->text) . '<br>';
                 echo '<a href="/news/comments/' . $data->id . '">Комментарии</a> ';

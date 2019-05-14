@@ -67,7 +67,7 @@
                 <div>{!! bbCode($data->text) !!}<br>
                     {{ trans('main.added') }}: {!! $data->user->getProfile() !!} ({{ dateFixed($data->created_at) }})<br>
                     <a href="/offers/comments/{{ $data->id }}">{{ trans('main.comments') }}</a> ({{ $data->count_comments }})
-                    <a href="/offers/end/{{ $data['id'] }}">&raquo;</a></div>
+                    <a href="/offers/end/{{ $data->id }}">&raquo;</a></div>
             @endforeach
 
             <div class="float-right">

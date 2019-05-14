@@ -56,7 +56,7 @@
                 @endif
 
                 <div>
-                    @if ($data['path'])
+                    @if ($data->path)
                         <a href="{{ $data->path }}">Перейти к сообщению</a><br>
                     @endif
                     Жалоба: {!! $data->user->getProfile() !!} ({{ dateFixed($data->created_at) }})
