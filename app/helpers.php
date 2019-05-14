@@ -822,7 +822,7 @@ function lastNews()
 
         $news = json_decode(file_get_contents(STORAGE . '/temp/lastnews.dat'));
 
-        if ($news > 0) {
+        if ($news) {
             foreach ($news as $data) {
                 echo '<i class="far fa-circle fa-lg text-muted"></i> <a href="/news/' . $data->id . '">' . $data->title . '</a> (' . $data->count_comments . ') <i class="fa fa-caret-down news-title"></i><br>';
 
