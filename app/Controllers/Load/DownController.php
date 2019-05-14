@@ -169,12 +169,12 @@ class DownController extends BaseController
     {
         $cid = int($request->input('cid'));
 
-        if (! setting('downupload')) {
+        if (! isAdmin() && ! setting('downupload')) {
             abort('default', 'Загрузка файлов запрещена администрацией сайта!');
         }
 
         if (! $user = getUser()) {
-            abort(403);
+            abort(403, 'Для загрузки файлов необходимо авторизоваться!');
         }
 
         $loads = Load::query()

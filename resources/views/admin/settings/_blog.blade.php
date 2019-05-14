@@ -34,5 +34,11 @@
         <div class="invalid-feedback">{{ textError('sets[blogvotepoint]') }}</div>
     </div>
 
+    <div class="custom-control custom-checkbox">
+        <input type="hidden" value="0" name="sets[blog_create]">
+        <input type="checkbox" class="custom-control-input" value="1" name="sets[blog_create]" id="blog_create"{{ getInput('sets.blog_create', $settings['blog_create']) ? ' checked' : '' }}>
+        <label class="custom-control-label" for="blog_create">Разрешать пользователям публиковать статьи</label>
+    </div>
+
     <button class="btn btn-primary">Сохранить</button>
 </form>

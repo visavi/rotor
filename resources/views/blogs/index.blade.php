@@ -5,6 +5,7 @@
 @stop
 
 @section('header')
+
     @if (getUser())
         <div class="float-right">
             <a class="btn btn-success" href="/blogs/create">{{ trans('blogs.add') }}</a>

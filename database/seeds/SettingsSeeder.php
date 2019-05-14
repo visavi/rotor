@@ -22,6 +22,7 @@ class SettingsSeeder extends AbstractSeed
             ['name'  => 'bloggroup', 'value' => 10],
             ['name'  => 'blogpost', 'value' => 10],
             ['name'  => 'blogvotepoint', 'value' => 50],
+            ['name'  => 'blog_create', 'value' => 1],
             ['name'  => 'bonusmoney', 'value' => 500],
             ['name'  => 'bookadds', 'value' => 1],
             ['name'  => 'bookpost', 'value' => 10],

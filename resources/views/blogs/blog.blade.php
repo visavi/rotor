@@ -5,6 +5,7 @@
 @stop
 
 @section('header')
+
     @if (! $category->closed && getUser())
         <div class="float-right">
             <a class="btn btn-success" href="/blogs/create?cid={{ $category->id }}">{{ trans('blogs.add') }}</a>

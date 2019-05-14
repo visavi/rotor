@@ -247,8 +247,12 @@ class BlogController extends BaseController
     {
         $cid = int($request->input('cid'));
 
+        if (! isAdmin() && ! setting('blog_create')) {
+            abort('default', 'Публикация статей запрещена администрацией сайта!');
+        }
+
         if (! getUser()) {
-            abort(403, 'Для публикации новой статьи необходимо авторизоваться!');
+            abort(403, 'Для публикации статей необходимо авторизоваться!');
         }
 
         $cats = Category::query()
