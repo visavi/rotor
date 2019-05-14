@@ -48,10 +48,10 @@ class GuestbookController extends BaseController
             ->length($msg, 5, setting('guesttextlength'), ['msg' => trans('validator.text')])
             ->false($flood->isFlood(), ['msg' => trans('validator.flood', ['sec' => $flood->getPeriod()])]);
 
-        /* Проерка для гостей */
+        /* Проверка для гостей */
         if (! getUser() && setting('bookadds')) {
             $validator->true(captchaVerify(), ['protect' => trans('validator.captcha')]);
-            $validator->false(stripos($msg, 'http'), ['msg' => 'Текст сообщения не должен содержать ссылок!']);
+            $validator->false(strpos($msg, '//'), ['msg' => 'Текст сообщения не должен содержать ссылок!']);
         } else {
             $validator->true(getUser(), ['msg' => trans('main.not_authorized')]);
         }
