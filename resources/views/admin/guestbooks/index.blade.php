@@ -20,32 +20,31 @@
         <form action="/admin/guestbooks/delete?page={{ $page->current }}" method="post">
             @csrf
             @foreach($posts as $data)
+                <div class="post">
+                    <div class="b">
+                        <div class="img">
+                            {!! $data->user->getAvatar() !!}
 
-                <div class="b">
-                    <div class="img">
-                        {!! $data->user->getAvatar() !!}
+                            @if ($data->user_id)
+                                {!! $data->user->getOnline() !!}
+                            @endif
+                        </div>
+
+                        <div class="float-right">
+                            <a href="/admin/guestbooks/reply/{{ $data->id }}?page={{ $page->current }}"><i class="fa fa-reply text-muted"></i></a>
+                            <a href="/admin/guestbooks/edit/{{ $data->id }}?page={{ $page->current }}"><i class="fas fa-pencil-alt text-muted"></i></a>
+                            <input type="checkbox" name="del[]" value="{{ $data->id }}">
+                        </div>
 
                         @if ($data->user_id)
-                            {!! $data->user->getOnline() !!}
+                            <b>{!! $data->user->getProfile() !!}</b> <small>({{ dateFixed($data->created_at) }})</small><br>
+                            {!! $data->user->getStatus() !!}
+                        @else
+                            <b>{{ setting('guestsuser') }}</b> <small>({{ dateFixed($data->created_at) }})</small>
                         @endif
                     </div>
 
-                    <div class="float-right">
-                        <a href="/admin/guestbooks/reply/{{ $data->id }}?page={{ $page->current }}"><i class="fa fa-reply text-muted"></i></a>
-                        <a href="/admin/guestbooks/edit/{{ $data->id }}?page={{ $page->current }}"><i class="fas fa-pencil-alt text-muted"></i></a>
-                        <input type="checkbox" name="del[]" value="{{ $data->id }}">
-                    </div>
-
-                    @if ($data->user_id)
-                        <b>{!! $data->user->getProfile() !!}</b> <small>({{ dateFixed($data->created_at) }})</small><br>
-                        {!! $data->user->getStatus() !!}
-                    @else
-                        <b>{{ setting('guestsuser') }}</b> <small>({{ dateFixed($data->created_at) }})</small>
-                    @endif
-                </div>
-
-                <div>
-                    {!! bbCode($data->text) !!}<br>
+                    <div class="message">{!! bbCode($data->text) !!}</div>
 
                     @if ($data->edit_user_id)
                         <small><i class="fa fa-exclamation-circle text-danger"></i> {{ trans('main.changed') }}: {{ $data->editUser->getName() }} ({{ dateFixed($data->updated_at) }})</small><br>

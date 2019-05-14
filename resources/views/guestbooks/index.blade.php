@@ -29,10 +29,8 @@
 
     @if ($posts->isNotEmpty())
         @foreach ($posts as $data)
-
             <div class="post">
                 <div class="b">
-
                     @if (getUser() && getUser('id') !== $data->user_id)
                         <div class="float-right">
                             <a href="#" onclick="return postReply(this)" data-toggle="tooltip" title="{{ trans('main.reply') }}"><i class="fa fa-reply text-muted"></i></a>
@@ -64,8 +62,7 @@
                     @endif
                 </div>
 
-                <div class="message">{!! bbCode(
-                $data->text) !!}</div>
+                <div class="message">{!! bbCode($data->text) !!}</div>
 
                 @if ($data->edit_user_id)
                     <small><i class="fa fa-exclamation-circle text-danger"></i> {{ trans('main.changed') }}: {{ $data->editUser->getName() }} ({{ dateFixed($data->updated_at) }})</small><br>
