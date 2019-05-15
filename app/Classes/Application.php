@@ -19,6 +19,10 @@ class Application
         session_start();
         date_default_timezone_set(setting('timezone'));
 
+        if (env('APP_NEW') && file_exists(HOME . '/install/')) {
+            redirect('/install/index.php');
+        }
+
         $this->cookieAuth();
         $this->checkAuth();
         $this->setSetting();

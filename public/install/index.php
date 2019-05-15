@@ -37,7 +37,7 @@ $wrap->setOption('environment', 'default');
 <body>
 
 <div class="cs" id="up">
-    <a href="/"><img src="/assets/img/images/logo.png"></a>
+    <a href="/"><img src="/assets/img/images/logo.png" alt=""></a>
 </div>
 <div class="site">
 
@@ -50,9 +50,9 @@ $wrap->setOption('environment', 'default');
         </p>
 
         <p style="color:#ff0000">
-            Если вы обновляетесь с предыдущей версии Rotor вам необходимо провести обновление базы данных, для этого измените значение APP_NEW на false и обновите текущую страницу</p>
+            Если вы обновляетесь с предыдущей версии Rotor, вам необходимо провести обновление базы данных, для этого значение APP_NEW должно быть false, после этого обновите текущую страницу</p>
 
-        <p>Для установки вам необходимо прописать данные от БД в файл .env</p>
+        <p>Для установки движка, вам необходимо прописать данные от БД в файл .env</p>
 
         <?php
         $keys = [
@@ -214,14 +214,14 @@ $wrap->setOption('environment', 'default');
         <?php if ($request->input('act') === 'status'): ?>
             <h1>Шаг 2 - проверка статуса (установка)</h1>
 
-            <?= nl2br($wrap->getStatus()); ?>
+            <?= nl2br($wrap->getStatus()) ?>
 
             <p><a style="font-size: 18px" href="?act=migrate">Выполнить миграции</a></p>
 
         <?php elseif ($request->input('act') === 'migrate'): ?>
             <h1>Шаг 3 - выполнение миграций (установка)</h1>
 
-            <?= nl2br($wrap->getMigrate()); ?>
+            <?= nl2br($wrap->getMigrate()) ?>
 
             <p><a style="font-size: 18px" href="?act=seed">Заполнить БД</a></p>
 
@@ -229,7 +229,7 @@ $wrap->setOption('environment', 'default');
 
             <h1>Шаг 4 - заполнение БД (установка)</h1>
 
-            <?= nl2br($wrap->getSeed()); ?>
+            <?= nl2br($wrap->getSeed()) ?>
 
             <p><a style="font-size: 18px" href="?act=account">Создать администратора</a></p>
         <?php elseif ($request->input('act') === 'account'): ?>
@@ -343,17 +343,17 @@ $wrap->setOption('environment', 'default');
         <?php if ($request->input('act') === 'status'): ?>
 
             <h1>Шаг 2 - проверка статуса (обновление)</h1>
-            <?= nl2br($wrap->getStatus()); ?>
+            <?= nl2br($wrap->getStatus()) ?>
             <a style="font-size: 18px" href="?act=migrate">Перейти к обновлению</a>
 
         <?php elseif ($request->input('act') === 'rollback'): ?>
-            <?= nl2br($wrap->getRollback()); ?>
+            <?= nl2br($wrap->getRollback()) ?>
 
         <?php elseif ($request->input('act') === 'migrate'): ?>
 
             <h1>Обновление завершено</h1>
 
-            <?= nl2br($wrap->getMigrate()); ?>
+            <?= nl2br($wrap->getMigrate()) ?>
 
             <p>
                 Поздравляем Вас, Rotor был успешно обновлен. Вы можете перейти на главную страницу вашего сайта и посмотреть возможности скрипта<br><br>
@@ -396,8 +396,16 @@ function parsePHPModules() {
     }
     return $vModules;
 }
-// ------------------------------------------------------------------//
-function getModuleSetting($pModuleName, $pSettings) {
+
+/**
+ * Get PHP module setting
+ *
+ * @param $pModuleName
+ * @param $pSettings
+ * @return mixed|string
+ */
+function getModuleSetting($pModuleName, $pSettings)
+{
     $vModules = parsePHPModules();
     if (is_array($pSettings)) {
         foreach ($pSettings as $pSetting) {
@@ -405,10 +413,9 @@ function getModuleSetting($pModuleName, $pSettings) {
                 return $vModules[$pModuleName][$pSetting];
             }
         }
-    } else {
-        if (isset($vModules[$pModuleName][$pSettings])) {
-            return $vModules[$pModuleName][$pSettings];
-        }
+    } else if (isset($vModules[$pModuleName][$pSettings])) {
+        return $vModules[$pModuleName][$pSettings];
     }
+
     return 'Не определено';
 }
