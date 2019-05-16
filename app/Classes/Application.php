@@ -15,13 +15,13 @@ class Application
 {
     public function __construct()
     {
-        ob_start();
-        session_start();
-        date_default_timezone_set(setting('timezone'));
-
         if (env('APP_NEW') && file_exists(HOME . '/install/')) {
             redirect('/install/index.php');
         }
+
+        ob_start();
+        session_start();
+        date_default_timezone_set(setting('timezone'));
 
         $this->cookieAuth();
         $this->checkAuth();
