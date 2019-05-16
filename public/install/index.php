@@ -1,6 +1,10 @@
 <?php
 
 use App\Commands\AppConfigure;
+use App\Commands\AppState;
+use App\Commands\CacheClear;
+use App\Commands\KeyGenerate;
+use App\Commands\RouteClear;
 use App\Models\News;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -238,7 +242,7 @@ $wrap->setOption('environment', 'default');
 
             Прежде чем перейти к администрированию вашего сайта, необходимо создать аккаунт администратора.<br>
             Перед тем как нажимать кнопку Создать, убедитесь, что на предыдущей странице нет уведомлений об ошибках, иначе процесс не сможет быть завершен удачно.<br>
-            После окончания инсталляции необходимо удалить директории <b>install</b> и <b>upgrade</b> со всем содержимым навсегда, пароль и остальные данные вы сможете поменять в своем профиле<br><br>
+            После окончания инсталляции необходимо удалить директорию <b>install</b> со всем содержимым, пароль и остальные данные вы сможете поменять в своем профиле<br><br>
 
             <?php
                 $login     = check($request->input('login'));
@@ -335,7 +339,14 @@ $wrap->setOption('environment', 'default');
                 Аккаунт администратора создан<br><br>
                 <a href="/">Перейти на главную страницу сайта</a><br>
             </p>
-            <p style="font-size: 20px">Удалите директории install и upgrade</p>
+            <p style="font-size: 20px">Удалите директорию install</p>
+
+            <?php
+            runCommand(new AppState());
+            runCommand(new KeyGenerate());
+            runCommand(new CacheClear());
+            runCommand(new RouteClear());
+            ?>
         <?php endif; ?>
 
     <?php else: ?>
@@ -360,7 +371,11 @@ $wrap->setOption('environment', 'default');
                 <a href="/">Перейти на главную страницу сайта</a><br>
             </p>
 
-            <p style="font-size: 20px">Удалите директории install и upgrade</p>
+            <p style="font-size: 20px">Удалите директорию install</p>
+            <?php
+            runCommand(new CacheClear());
+            runCommand(new RouteClear());
+            ?>
         <?php endif; ?>
     <?php endif; ?>
  </div>

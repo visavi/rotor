@@ -18,7 +18,7 @@ class AppConfigure extends AbstractCommand
         parent::configure();
 
         $this->setName('app:configure')
-             ->setDescription('Configures the app');
+             ->setDescription('Configures the application');
     }
 
     /**
@@ -32,9 +32,8 @@ class AppConfigure extends AbstractCommand
     {
         $this->setPermissions();
         $this->createSymlinks();
-        $this->writeAppNew();
 
-        $output->writeln('<info>Site successfully configured.</info>');
+        $output->writeln('<info>Application successfully configured.</info>');
     }
 
     /**
@@ -76,19 +75,5 @@ class AppConfigure extends AbstractCommand
                 @symlink($file, $link);
             }
         }
-    }
-
-    /**
-     * Write APP_NEW false
-     *
-     * @return void
-     */
-    protected function writeAppNew(): void
-    {
-        file_put_contents(BASEDIR . '/.env', str_replace(
-            'APP_NEW=true',
-            'APP_NEW=false',
-            file_get_contents(BASEDIR . '/.env')
-        ));
     }
 }
