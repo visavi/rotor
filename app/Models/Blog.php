@@ -95,6 +95,22 @@ class Blog extends BaseModel
     }
 
     /**
+     * Возвращает путь к первому файлу
+     *
+     * @return mixed код изображения
+     */
+    public function getFirstImage()
+    {
+        $image = $this->files->first();
+
+        if (! $image) {
+            return null;
+        }
+
+        return '<img src="' . $image->hash . '" atl="' . $this->title . '" class="card-img-top">';
+    }
+
+    /**
      * Возвращает размер шрифта для облака тегов
      *
      * @param int   $count

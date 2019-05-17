@@ -51,6 +51,7 @@ return FastRoute\cachedDispatcher(static function(RouteCollector $r) {
         $r->get('/rss', [App\Controllers\BlogController::class, 'rss']);
         $r->addRoute(['GET', 'POST'], '/create', [App\Controllers\BlogController::class, 'create']);
         $r->addRoute(['GET', 'POST'], '/search', [App\Controllers\BlogController::class, 'search']);
+        $r->get('/main', [App\Controllers\BlogController::class, 'main']);
     });
 
     /* Статьи блогов */

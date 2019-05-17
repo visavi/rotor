@@ -946,4 +946,25 @@ class BlogController extends BaseController
             redirect('/blogs/search');
         }
     }
+
+    /**
+     * Список всех блогов (Для вывода на главную страницу)
+     *
+     * @return string
+     */
+    public function main(): string
+    {
+        $total = Blog::query()->count();
+
+        $page = paginate(setting('blogpost'), $total);
+
+        $blogs = Blog::query()
+            ->orderBy('created_at', 'desc')
+            ->offset($page->offset)
+            ->limit($page->limit)
+            ->with('user')
+            ->get();
+
+        return view('blogs/main', compact('blogs', 'page'));
+    }
 }
