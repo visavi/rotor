@@ -1,7 +1,7 @@
 @extends('layout')
 
 @section('title')
-    Очистка кэша изображений
+    {{ trans('index.cache_clear') }}
 @stop
 
 @section('breadcrumb')
@@ -9,13 +9,13 @@
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
             <li class="breadcrumb-item"><a href="/admin">{{ trans('index.panel') }}</a></li>
-            <li class="breadcrumb-item active">Очистка кэша</li>
+            <li class="breadcrumb-item active">{{ trans('index.cache_clear') }}</li>
         </ol>
     </nav>
 @stop
 
 @section('content')
-    <i class="fa fa-eraser fa-2x"></i> <a href="/admin/caches">Файлы</a> / <b>Изображения</b><br><br>
+    <i class="fa fa-eraser fa-2x"></i> <a href="/admin/caches" class="badge badge-light">{{ trans('admin.caches.files') }}</a> / <a href="/admin/caches?type=image" class="badge badge-success">{{ trans('admin.caches.images') }}</a><br><br>
 
     @if ($images)
         @foreach ($images as $image)
@@ -29,12 +29,12 @@
             <form action="/admin/caches/clear" method="post">
                 @csrf
                 <input type="hidden" name="type" value="image">
-                <button class="btn btn-sm btn-danger"><i class="fa fa-trash-alt"></i> Очистить кэш</button>
+                <button class="btn btn-sm btn-danger"><i class="fa fa-trash-alt"></i> {{ trans('admin.caches.clear') }}</button>
             </form>
         </div>
 
-        Всего изображений: {{ $page->total }}<br><br>
+        {{ trans('admin.caches.total_images') }}: {{ $page->total }}<br><br>
     @else
-        {!! showError('Изображений еще нет!') !!}
+        {!! showError(trans('admin.caches.empty_images')) !!}
     @endif
 @stop
