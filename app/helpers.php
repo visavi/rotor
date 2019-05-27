@@ -2000,7 +2000,7 @@ function pagination($page)
     }
 
     if (empty($page->crumbs)) {
-        $page->crumbs = 2;
+        $page->crumbs = 1;
     }
 
     $url     = Arr::except($_GET, 'page');
@@ -2010,14 +2010,6 @@ function pagination($page)
     $pg_cnt  = (int) ceil($page->total / $page->limit);
     $idx_fst = max($page->current - $page->crumbs, 1);
     $idx_lst = min($page->current + $page->crumbs, $pg_cnt);
-
-    if ($page->current !== 1) {
-        $pages[] = [
-            'page'  => $page->current - 1,
-            'title' => 'Предыдущая',
-            'name'  => '«',
-        ];
-    }
 
     if ($page->current > $page->crumbs + 1) {
         $pages[] = [
@@ -2059,14 +2051,6 @@ function pagination($page)
             'page'  => $pg_cnt,
             'title' => $pg_cnt . ' страница',
             'name'  => $pg_cnt,
-        ];
-    }
-
-    if ($page->current !== $pg_cnt) {
-        $pages[] = [
-            'page'  => $page->current + 1,
-            'title' => 'Следующая',
-            'name'  => '»',
         ];
     }
 
