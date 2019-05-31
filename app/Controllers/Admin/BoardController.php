@@ -278,6 +278,7 @@ class BoardController extends AdminController
                     'phone'    => $phone,
                 ]);
 
+                clearCache('recentboard');
                 setFlash('success', 'Объявление успешно отредактировано!');
                 redirect('/admin/items/edit/' . $item->id);
             } else {
@@ -322,6 +323,7 @@ class BoardController extends AdminController
 
             $item->category->decrement('count_items');
 
+            clearCache('recentboard');
             setFlash('success', 'Объявление успешно удалено!');
         } else {
             setFlash('danger', $validator->getErrors());

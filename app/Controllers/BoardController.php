@@ -157,6 +157,7 @@ class BoardController extends BaseController
                     ->where('user_id', getUser('id'))
                     ->update(['relate_id' => $item->id]);
 
+                clearCache('recentboard');
                 $flood->saveState();
 
                 setFlash('success', 'Объявления успешно добавлено!');
@@ -236,6 +237,7 @@ class BoardController extends BaseController
                     'phone'    => $phone,
                 ]);
 
+                clearCache('recentboard');
                 setFlash('success', 'Объявление успешно отредактировано!');
                 redirect('/items/' . $item->id);
             } else {
@@ -339,6 +341,7 @@ class BoardController extends BaseController
 
             $item->category->decrement('count_items');
 
+            clearCache('recentboard');
             setFlash('success', 'Объявление успешно удалено!');
         } else {
             setFlash('danger', $validator->getErrors());

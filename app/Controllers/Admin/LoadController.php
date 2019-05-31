@@ -332,6 +332,7 @@ class LoadController extends AdminController
                     $down->user->sendMessage(null, $text);
                 }
 
+                clearCache('recentfiles');
                 setFlash('success', 'Загрузка успешно отредактирована!');
                 redirect('/admin/downs/edit/' . $down->id);
             } else {
@@ -381,6 +382,7 @@ class LoadController extends AdminController
             $down->comments()->delete();
             $down->delete();
 
+            clearCache('recentfiles');
             setFlash('success', 'Загрузка успешно удалена!');
         } else {
             setFlash('danger', trans('validator.token'));
@@ -483,6 +485,7 @@ class LoadController extends AdminController
                 $down->user->sendMessage(null, $text);
             }
 
+            clearCache('recentfiles');
             setFlash('success', 'Загрузка успешно ' . $type . '!');
         } else {
             setFlash('danger', trans('validator.token'));

@@ -191,6 +191,7 @@ class BlogController extends BaseController
                     'tags'        => $tags,
                 ]);
 
+                clearCache('recentblog');
                 setFlash('success', 'Статья успешно отредактирована!');
                 redirect('/articles/' . $blog->id);
             } else {
@@ -312,6 +313,7 @@ class BlogController extends BaseController
                     ->where('user_id', getUser('id'))
                     ->update(['relate_id' => $blog->id]);
 
+                clearCache('recentblog');
                 $flood->saveState();
 
                 setFlash('success', 'Статья успешно опубликована!');

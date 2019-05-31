@@ -97,6 +97,7 @@ class NewsController extends AdminController
                     'image'  => $upload['path'] ?? $news->image,
                  ]);
 
+                clearCache('lastnews');
                 setFlash('success', 'Новость успешно отредактирована!');
                 redirect('/admin/news/edit/' . $news->id . '?page=' . $page);
             } else {
@@ -159,6 +160,7 @@ class NewsController extends AdminController
                     saveSettings();
                 }
 
+                clearCache('lastnews');
                 setFlash('success', 'Новость успешно добавлена!');
                 redirect('/admin/news/edit/' . $news->id);
             } else {

@@ -276,6 +276,7 @@ class ForumController extends AdminController
                     'closed'     => $closed,
                 ]);
 
+                clearCache('recenttopics');
                 setFlash('success', 'Тема успешно отредактирована!');
                 redirect('/admin/forums/' . $topic->forum_id);
             } else {
@@ -463,6 +464,7 @@ class ForumController extends AdminController
             // Обновление счетчиков
             $topic->forum->restatement();
 
+            clearCache('recenttopics');
             setFlash('success', 'Тема успешно удалена!');
         } else {
             setFlash('danger', $validator->getErrors());

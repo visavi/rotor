@@ -115,6 +115,7 @@ class DownController extends BaseController
                     $down->uploadFile($file);
                 }
 
+                clearCache('recentfiles');
                 setFlash('success', 'Загрузка успешно отредактирована!');
                 redirect('/downs/' . $down->id);
             } else {
@@ -244,6 +245,7 @@ class DownController extends BaseController
 
                 if (isAdmin(User::ADMIN)) {
                     $down->category->increment('count_downs');
+                    clearCache('recentfiles');
                 } else {
                     $admins = User::query()->whereIn('level', [User::BOSS, User::ADMIN])->get();
 
