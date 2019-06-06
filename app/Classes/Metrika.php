@@ -112,6 +112,10 @@ class Metrika
         // -----------------------------------------------------------//
         $counter = Counter::query()->first();
 
+        if (! $counter) {
+            return;
+        }
+
         if (date('Y-m-d 00:00:00', strtotime($counter->period)) !== $day) {
             DB::connection()->insert('insert ignore into counters31 (period, hosts, hits) values (?, ?, ?);', [$day, $counter->dayhosts, $counter->dayhits]);
             DB::connection()->update('update counters set period=?, dayhosts=?, dayhits=?;', [$period, 0, 0]);
