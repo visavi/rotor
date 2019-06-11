@@ -109,11 +109,11 @@ return [
     'receive_newsletters'  => 'Получать информационные письма',
     'newsletters_hint'     => 'Получение информационных писем с сайта на email',
 
-    'novices'        => 'Новички',
-    'birthdays'      => 'Именинники',
-    'total_birthday' => 'Всего именинников',
-    'empty_birthday' => 'Сегодня именинников нет!',
-    'total_novices'  => 'Всего новичков',
-    'empty_novices'  => 'Новичков пока нет!',
+    'novices'         => 'Новички',
+    'birthdays'       => 'Именинники',
+    'total_birthdays' => 'Всего именинников',
+    'empty_birthdays' => 'Сегодня именинников нет!',
+    'total_novices'   => 'Всего новичков',
+    'empty_novices'   => 'Новичков пока нет!',
 
 ];

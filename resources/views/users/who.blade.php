@@ -39,7 +39,7 @@
 
         <br>{{ trans('users.total_birthdays') }}: {{ $birthdays->count() }}<br><br>
     @else
-        {!! showError(trans('users.empty_birthday')) !!}
+        {!! showError(trans('users.empty_birthdays')) !!}
     @endif
 
     <div class="b"><b>{{ trans('users.novices') }}:</b></div>
