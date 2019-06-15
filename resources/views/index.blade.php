@@ -1,7 +1,7 @@
 @extends('layout')
 
 @section('title')
-    {{ trans('index.title') }}
+    {{ setting('logos') }}
 @stop
 
 @section('header')
