@@ -1,7 +1,6 @@
 <?php
 
 return [
-    'title'          => 'Главная страница',
     'news'           => 'Новости',
     'communication'  => 'Общение',
     'guestbooks'     => 'Гостевая',

@@ -1,7 +1,6 @@
 <?php
 
 return [
-    'title'          => 'Home page',
     'news'           => 'News',
     'communication'  => 'Communication',
     'guestbooks'     => 'Guest book',
