@@ -8,16 +8,16 @@
     "packages": [
         {
             "name": "alchemy/binary-driver",
-            "version": "5.0.0",
+            "version": "5.1.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/alchemy-fr/BinaryDriver.git",
-                "reference": "6ccde0e19e81e54da77b08da1a176d43e089f3a3"
+                "reference": "ae5abc1d51683f30494db76b688754683da87774"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/alchemy-fr/BinaryDriver/zipball/6ccde0e19e81e54da77b08da1a176d43e089f3a3",
-                "reference": "6ccde0e19e81e54da77b08da1a176d43e089f3a3",
+                "url": "https://api.github.com/repos/alchemy-fr/BinaryDriver/zipball/ae5abc1d51683f30494db76b688754683da87774",
+                "reference": "ae5abc1d51683f30494db76b688754683da87774",
                 "shasum": ""
             },
             "require": {
@@ -67,7 +67,7 @@
                 "binary",
                 "driver"
             ],
-            "time": "2018-08-06T10:18:33+00:00"
+            "time": "2019-05-19T08:43:30+00:00"
         },
         {
             "name": "cakephp/cache",
@@ -594,20 +594,23 @@
         },
         {
             "name": "doctrine/lexer",
-            "version": "v1.0.1",
+            "version": "1.0.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/doctrine/lexer.git",
-                "reference": "83893c552fd2045dd78aef794c31e694c37c0b8c"
+                "reference": "1febd6c3ef84253d7c815bed85fc622ad207a9f8"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/doctrine/lexer/zipball/83893c552fd2045dd78aef794c31e694c37c0b8c",
-                "reference": "83893c552fd2045dd78aef794c31e694c37c0b8c",
+                "url": "https://api.github.com/repos/doctrine/lexer/zipball/1febd6c3ef84253d7c815bed85fc622ad207a9f8",
+                "reference": "1febd6c3ef84253d7c815bed85fc622ad207a9f8",
                 "shasum": ""
             },
             "require": {
                 "php": ">=5.3.2"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "^4.5"
             },
             "type": "library",
             "extra": {
@@ -616,8 +619,8 @@
                 }
             },
             "autoload": {
-                "psr-0": {
-                    "Doctrine\\Common\\Lexer\\": "lib/"
+                "psr-4": {
+                    "Doctrine\\Common\\Lexer\\": "lib/Doctrine/Common/Lexer"
                 }
             },
             "notification-url": "https://packagist.org/downloads/",
@@ -638,13 +641,16 @@
                     "email": "schmittjoh@gmail.com"
                 }
             ],
-            "description": "Base library for a lexer that can be used in Top-Down, Recursive Descent Parsers.",
-            "homepage": "http://www.doctrine-project.org",
+            "description": "PHP Doctrine Lexer parser library that can be used in Top-Down, Recursive Descent Parsers.",
+            "homepage": "https://www.doctrine-project.org/projects/lexer.html",
             "keywords": [
+                "annotations",
+                "docblock",
                 "lexer",
-                "parser"
+                "parser",
+                "php"
             ],
-            "time": "2014-09-09T13:34:57+00:00"
+            "time": "2019-06-08T11:03:04+00:00"
         },
         {
             "name": "dragonmantank/cron-expression",
@@ -974,7 +980,7 @@
         },
         {
             "name": "illuminate/container",
-            "version": "v5.8.20",
+            "version": "v5.8.22",
             "source": {
                 "type": "git",
                 "url": "https://github.com/illuminate/container.git",
@@ -1019,16 +1025,16 @@
         },
         {
             "name": "illuminate/contracts",
-            "version": "v5.8.20",
+            "version": "v5.8.22",
             "source": {
                 "type": "git",
                 "url": "https://github.com/illuminate/contracts.git",
-                "reference": "c4aedc2d440a22a798f8b060a4ee52d3ee8881d2"
+                "reference": "33b4e0ffb89eb2216c764235c9e95fed1f3fab82"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/illuminate/contracts/zipball/c4aedc2d440a22a798f8b060a4ee52d3ee8881d2",
-                "reference": "c4aedc2d440a22a798f8b060a4ee52d3ee8881d2",
+                "url": "https://api.github.com/repos/illuminate/contracts/zipball/33b4e0ffb89eb2216c764235c9e95fed1f3fab82",
+                "reference": "33b4e0ffb89eb2216c764235c9e95fed1f3fab82",
                 "shasum": ""
             },
             "require": {
@@ -1059,20 +1065,20 @@
             ],
             "description": "The Illuminate Contracts package.",
             "homepage": "https://laravel.com",
-            "time": "2019-06-02T04:52:04+00:00"
+            "time": "2019-06-11T14:00:26+00:00"
         },
         {
             "name": "illuminate/database",
-            "version": "v5.8.20",
+            "version": "v5.8.22",
             "source": {
                 "type": "git",
                 "url": "https://github.com/illuminate/database.git",
-                "reference": "0912ab85c15a56a9b2d917592c14daa34330d70c"
+                "reference": "196dc9dc422d8489ff060c681be567e8483148d9"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/illuminate/database/zipball/0912ab85c15a56a9b2d917592c14daa34330d70c",
-                "reference": "0912ab85c15a56a9b2d917592c14daa34330d70c",
+                "url": "https://api.github.com/repos/illuminate/database/zipball/196dc9dc422d8489ff060c681be567e8483148d9",
+                "reference": "196dc9dc422d8489ff060c681be567e8483148d9",
                 "shasum": ""
             },
             "require": {
@@ -1119,11 +1125,11 @@
                 "orm",
                 "sql"
             ],
-            "time": "2019-06-04T13:01:08+00:00"
+            "time": "2019-06-11T17:04:53+00:00"
         },
         {
             "name": "illuminate/events",
-            "version": "v5.8.20",
+            "version": "v5.8.22",
             "source": {
                 "type": "git",
                 "url": "https://github.com/illuminate/events.git",
@@ -1168,16 +1174,16 @@
         },
         {
             "name": "illuminate/filesystem",
-            "version": "v5.8.20",
+            "version": "v5.8.22",
             "source": {
                 "type": "git",
                 "url": "https://github.com/illuminate/filesystem.git",
-                "reference": "6e86ef54034c781d9ac889dea53d87a4c192d1f0"
+                "reference": "3934079a1a68d81084c12b82e962cb23555f4b2e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/illuminate/filesystem/zipball/6e86ef54034c781d9ac889dea53d87a4c192d1f0",
-                "reference": "6e86ef54034c781d9ac889dea53d87a4c192d1f0",
+                "url": "https://api.github.com/repos/illuminate/filesystem/zipball/3934079a1a68d81084c12b82e962cb23555f4b2e",
+                "reference": "3934079a1a68d81084c12b82e962cb23555f4b2e",
                 "shasum": ""
             },
             "require": {
@@ -1216,20 +1222,20 @@
             ],
             "description": "The Illuminate Filesystem package.",
             "homepage": "https://laravel.com",
-            "time": "2019-05-17T13:01:02+00:00"
+            "time": "2019-06-04T14:33:55+00:00"
         },
         {
             "name": "illuminate/http",
-            "version": "v5.8.20",
+            "version": "v5.8.22",
             "source": {
                 "type": "git",
                 "url": "https://github.com/illuminate/http.git",
-                "reference": "d2f26549660558122dbfeff4c128c71da2322879"
+                "reference": "597fd8923080117cda4af2aa878e88cef5624840"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/illuminate/http/zipball/d2f26549660558122dbfeff4c128c71da2322879",
-                "reference": "d2f26549660558122dbfeff4c128c71da2322879",
+                "url": "https://api.github.com/repos/illuminate/http/zipball/597fd8923080117cda4af2aa878e88cef5624840",
+                "reference": "597fd8923080117cda4af2aa878e88cef5624840",
                 "shasum": ""
             },
             "require": {
@@ -1263,20 +1269,20 @@
             ],
             "description": "The Illuminate Http package.",
             "homepage": "https://laravel.com",
-            "time": "2019-04-26T12:43:07+00:00"
+            "time": "2019-06-11T19:01:45+00:00"
         },
         {
             "name": "illuminate/session",
-            "version": "v5.8.20",
+            "version": "v5.8.22",
             "source": {
                 "type": "git",
                 "url": "https://github.com/illuminate/session.git",
-                "reference": "eca161d09f4f23a77c9a16f9a3eb5c7a82229f2c"
+                "reference": "762eadf940439344a34acdcf2c31efd0deb9b9ac"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/illuminate/session/zipball/eca161d09f4f23a77c9a16f9a3eb5c7a82229f2c",
-                "reference": "eca161d09f4f23a77c9a16f9a3eb5c7a82229f2c",
+                "url": "https://api.github.com/repos/illuminate/session/zipball/762eadf940439344a34acdcf2c31efd0deb9b9ac",
+                "reference": "762eadf940439344a34acdcf2c31efd0deb9b9ac",
                 "shasum": ""
             },
             "require": {
@@ -1314,20 +1320,20 @@
             ],
             "description": "The Illuminate Session package.",
             "homepage": "https://laravel.com",
-            "time": "2019-04-13T10:00:28+00:00"
+            "time": "2019-06-05T13:03:53+00:00"
         },
         {
             "name": "illuminate/support",
-            "version": "v5.8.20",
+            "version": "v5.8.22",
             "source": {
                 "type": "git",
                 "url": "https://github.com/illuminate/support.git",
-                "reference": "318bea0200dc61888d55f52b8d5d029434684e31"
+                "reference": "0c3ef774fdfcb38dce7dc52967107423e86224c5"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/illuminate/support/zipball/318bea0200dc61888d55f52b8d5d029434684e31",
-                "reference": "318bea0200dc61888d55f52b8d5d029434684e31",
+                "url": "https://api.github.com/repos/illuminate/support/zipball/0c3ef774fdfcb38dce7dc52967107423e86224c5",
+                "reference": "0c3ef774fdfcb38dce7dc52967107423e86224c5",
                 "shasum": ""
             },
             "require": {
@@ -1375,20 +1381,20 @@
             ],
             "description": "The Illuminate Support package.",
             "homepage": "https://laravel.com",
-            "time": "2019-05-31T06:33:24+00:00"
+            "time": "2019-06-12T08:34:45+00:00"
         },
         {
             "name": "illuminate/translation",
-            "version": "v5.8.20",
+            "version": "v5.8.22",
             "source": {
                 "type": "git",
                 "url": "https://github.com/illuminate/translation.git",
-                "reference": "f42b8ab5016acb6f4971bb851cbdee1949a135bf"
+                "reference": "a23986a9ae77013046426bbeb4fe9a29e2527f76"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/illuminate/translation/zipball/f42b8ab5016acb6f4971bb851cbdee1949a135bf",
-                "reference": "f42b8ab5016acb6f4971bb851cbdee1949a135bf",
+                "url": "https://api.github.com/repos/illuminate/translation/zipball/a23986a9ae77013046426bbeb4fe9a29e2527f76",
+                "reference": "a23986a9ae77013046426bbeb4fe9a29e2527f76",
                 "shasum": ""
             },
             "require": {
@@ -1421,20 +1427,20 @@
             ],
             "description": "The Illuminate Translation package.",
             "homepage": "https://laravel.com",
-            "time": "2019-04-22T13:12:35+00:00"
+            "time": "2019-06-04T14:33:55+00:00"
         },
         {
             "name": "illuminate/view",
-            "version": "v5.8.20",
+            "version": "v5.8.22",
             "source": {
                 "type": "git",
                 "url": "https://github.com/illuminate/view.git",
-                "reference": "2c6e9f1c47b4976ee83410a5da5c1ef7dbd7a907"
+                "reference": "2680d47400f429bc4841ecc91ca5202b93a96982"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/illuminate/view/zipball/2c6e9f1c47b4976ee83410a5da5c1ef7dbd7a907",
-                "reference": "2c6e9f1c47b4976ee83410a5da5c1ef7dbd7a907",
+                "url": "https://api.github.com/repos/illuminate/view/zipball/2680d47400f429bc4841ecc91ca5202b93a96982",
+                "reference": "2680d47400f429bc4841ecc91ca5202b93a96982",
                 "shasum": ""
             },
             "require": {
@@ -1470,7 +1476,7 @@
             ],
             "description": "The Illuminate View package.",
             "homepage": "https://laravel.com",
-            "time": "2019-05-15T15:54:44+00:00"
+            "time": "2019-06-10T15:02:32+00:00"
         },
         {
             "name": "intervention/image",
@@ -1839,16 +1845,16 @@
         },
         {
             "name": "nesbot/carbon",
-            "version": "2.19.1",
+            "version": "2.19.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/briannesbitt/Carbon.git",
-                "reference": "5cf102d1476fdf92f1f991bd1a1a0d93c65755ca"
+                "reference": "adcad3f3af52d0ad4ad7b05f43aa58243b6ca67b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/briannesbitt/Carbon/zipball/5cf102d1476fdf92f1f991bd1a1a0d93c65755ca",
-                "reference": "5cf102d1476fdf92f1f991bd1a1a0d93c65755ca",
+                "url": "https://api.github.com/repos/briannesbitt/Carbon/zipball/adcad3f3af52d0ad4ad7b05f43aa58243b6ca67b",
+                "reference": "adcad3f3af52d0ad4ad7b05f43aa58243b6ca67b",
                 "shasum": ""
             },
             "require": {
@@ -1895,7 +1901,7 @@
                 "datetime",
                 "time"
             ],
-            "time": "2019-06-04T20:07:46+00:00"
+            "time": "2019-06-07T09:56:45+00:00"
         },
         {
             "name": "neutron/temporary-filesystem",
@@ -4226,16 +4232,16 @@
         },
         {
             "name": "vlucas/phpdotenv",
-            "version": "v3.3.3",
+            "version": "v3.4.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/vlucas/phpdotenv.git",
-                "reference": "dbcc609971dd9b55f48b8008b553d79fd372ddde"
+                "reference": "5084b23845c24dbff8ac6c204290c341e4776c92"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/vlucas/phpdotenv/zipball/dbcc609971dd9b55f48b8008b553d79fd372ddde",
-                "reference": "dbcc609971dd9b55f48b8008b553d79fd372ddde",
+                "url": "https://api.github.com/repos/vlucas/phpdotenv/zipball/5084b23845c24dbff8ac6c204290c341e4776c92",
+                "reference": "5084b23845c24dbff8ac6c204290c341e4776c92",
                 "shasum": ""
             },
             "require": {
@@ -4249,7 +4255,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "3.3-dev"
+                    "dev-master": "3.4-dev"
                 }
             },
             "autoload": {
@@ -4274,7 +4280,7 @@
                 "env",
                 "environment"
             ],
-            "time": "2019-03-06T09:39:45+00:00"
+            "time": "2019-06-15T22:40:20+00:00"
         }
     ],
     "packages-dev": [
@@ -5566,16 +5572,16 @@
         },
         {
             "name": "phpspec/prophecy",
-            "version": "1.8.0",
+            "version": "1.8.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/phpspec/prophecy.git",
-                "reference": "4ba436b55987b4bf311cb7c6ba82aa528aac0a06"
+                "reference": "1927e75f4ed19131ec9bcc3b002e07fb1173ee76"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phpspec/prophecy/zipball/4ba436b55987b4bf311cb7c6ba82aa528aac0a06",
-                "reference": "4ba436b55987b4bf311cb7c6ba82aa528aac0a06",
+                "url": "https://api.github.com/repos/phpspec/prophecy/zipball/1927e75f4ed19131ec9bcc3b002e07fb1173ee76",
+                "reference": "1927e75f4ed19131ec9bcc3b002e07fb1173ee76",
                 "shasum": ""
             },
             "require": {
@@ -5596,8 +5602,8 @@
                 }
             },
             "autoload": {
-                "psr-0": {
-                    "Prophecy\\": "src/"
+                "psr-4": {
+                    "Prophecy\\": "src/Prophecy"
                 }
             },
             "notification-url": "https://packagist.org/downloads/",
@@ -5625,20 +5631,20 @@
                 "spy",
                 "stub"
             ],
-            "time": "2018-08-05T17:53:17+00:00"
+            "time": "2019-06-13T12:50:23+00:00"
         },
         {
             "name": "phpstan/phpdoc-parser",
-            "version": "0.3.4",
+            "version": "0.3.5",
             "source": {
                 "type": "git",
                 "url": "https://github.com/phpstan/phpdoc-parser.git",
-                "reference": "ab518a5fc8f1d90f58bd2c5552ba915e2c477b66"
+                "reference": "8c4ef2aefd9788238897b678a985e1d5c8df6db4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phpstan/phpdoc-parser/zipball/ab518a5fc8f1d90f58bd2c5552ba915e2c477b66",
-                "reference": "ab518a5fc8f1d90f58bd2c5552ba915e2c477b66",
+                "url": "https://api.github.com/repos/phpstan/phpdoc-parser/zipball/8c4ef2aefd9788238897b678a985e1d5c8df6db4",
+                "reference": "8c4ef2aefd9788238897b678a985e1d5c8df6db4",
                 "shasum": ""
             },
             "require": {
@@ -5672,7 +5678,7 @@
                 "MIT"
             ],
             "description": "PHPDoc parser with support for nullable, intersection and generic types",
-            "time": "2019-05-28T11:40:00+00:00"
+            "time": "2019-06-07T19:13:52+00:00"
         },
         {
             "name": "phpstan/phpstan",
@@ -5904,16 +5910,16 @@
         },
         {
             "name": "phpunit/php-timer",
-            "version": "2.1.1",
+            "version": "2.1.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/php-timer.git",
-                "reference": "8b389aebe1b8b0578430bda0c7c95a829608e059"
+                "reference": "1038454804406b0b5f5f520358e78c1c2f71501e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/php-timer/zipball/8b389aebe1b8b0578430bda0c7c95a829608e059",
-                "reference": "8b389aebe1b8b0578430bda0c7c95a829608e059",
+                "url": "https://api.github.com/repos/sebastianbergmann/php-timer/zipball/1038454804406b0b5f5f520358e78c1c2f71501e",
+                "reference": "1038454804406b0b5f5f520358e78c1c2f71501e",
                 "shasum": ""
             },
             "require": {
@@ -5949,7 +5955,7 @@
             "keywords": [
                 "timer"
             ],
-            "time": "2019-02-20T10:12:59+00:00"
+            "time": "2019-06-07T04:22:29+00:00"
         },
         {
             "name": "phpunit/php-token-stream",
@@ -6702,16 +6708,16 @@
         },
         {
             "name": "theseer/tokenizer",
-            "version": "1.1.2",
+            "version": "1.1.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/theseer/tokenizer.git",
-                "reference": "1c42705be2b6c1de5904f8afacef5895cab44bf8"
+                "reference": "11336f6f84e16a720dae9d8e6ed5019efa85a0f9"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/theseer/tokenizer/zipball/1c42705be2b6c1de5904f8afacef5895cab44bf8",
-                "reference": "1c42705be2b6c1de5904f8afacef5895cab44bf8",
+                "url": "https://api.github.com/repos/theseer/tokenizer/zipball/11336f6f84e16a720dae9d8e6ed5019efa85a0f9",
+                "reference": "11336f6f84e16a720dae9d8e6ed5019efa85a0f9",
                 "shasum": ""
             },
             "require": {
@@ -6738,7 +6744,7 @@
                 }
             ],
             "description": "A small library for converting tokenized PHP source code into XML and potentially other formats",
-            "time": "2019-04-04T09:56:43+00:00"
+            "time": "2019-06-13T22:48:21+00:00"
         },
         {
             "name": "webmozart/assert",

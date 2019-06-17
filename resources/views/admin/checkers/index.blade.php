@@ -1,7 +1,7 @@
 @extends('layout')
 
 @section('title')
-    Сканирование сайта
+    {{ trans('index.site_scan') }}
 @stop
 
 @section('breadcrumb')
@@ -9,14 +9,14 @@
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
             <li class="breadcrumb-item"><a href="/admin">{{ trans('index.panel') }}</a></li>
-            <li class="breadcrumb-item active">Сканирование сайта</li>
+            <li class="breadcrumb-item active">{{ trans('index.site_scan') }}</li>
         </ol>
     </nav>
 @stop
 
 @section('content')
     @if ($diff)
-        <b><span style="color:#ff0000">Новые файлы и новые параметры файлов:</span></b><br><br>
+        <b><span style="color:#ff0000">{{ trans('admin.checkers.new_files') }}:</span></b><br><br>
 
         @if ($diff['left'])
             @foreach($diff['left'] as $file)
@@ -24,10 +24,10 @@
             @endforeach
             <br>
         @else
-            {!! showError('Нет новых изменений!') !!}
+            {!! showError(trans('admin.checkers.empty_changes')) !!}
         @endif
 
-        <b><span style="color:#ff0000">Удаленные файлы и старые параметры файлов:</span></b><br><br>
+        <b><span style="color:#ff0000">{{ trans('admin.checkers.old_files') }}:</span></b><br><br>
 
         @if ($diff['right'])
             @foreach($diff['right'] as $file)
@@ -35,17 +35,17 @@
             @endforeach
             <br>
         @else
-            {!! showError('Нет старых изменений!') !!}
+            {!! showError(trans('admin.checkers.empty_changes')) !!}
         @endif
 
     @else
-        {!! showError('Необходимо провести начальное сканирование!') !!}
+        {!! showError(trans('admin.checkers.initial_scan')) !!}
     @endif
 
     <p class="text-muted font-italic">
-        Сканирование системы позволяет узнать какие файлы или папки менялись в течение определенного времени<br>
-        Внимание, сервис не учитывает некоторые расширения файлов: {{ setting('nocheck') }}
+        {{ trans('admin.checkers.information_scan') }}<br>
+        {{ trans('admin.checkers.invalid_extensions') }}: {{ setting('nocheck') }}
     </p>
 
-    <p><a class="btn btn-primary" href="/admin/checkers/scan?token={{ $_SESSION['token'] }}"><i class="fa fa-sync"></i> Сканировать</a></p>
+    <p><a class="btn btn-primary" href="/admin/checkers/scan?token={{ $_SESSION['token'] }}"><i class="fa fa-sync"></i> {{ trans('admin.checkers.scan') }}</a></p>
 @stop
