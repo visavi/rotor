@@ -34,3 +34,6 @@ env:
 
 after_success:
   - travis_retry php vendor/bin/php-coveralls -v
+
+services:
+  - mysql
