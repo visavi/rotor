@@ -1,7 +1,7 @@
 @extends('layout')
 
 @section('title')
-    История банов
+    {{ trans('index.ban_history') }}
 @stop
 
 @section('breadcrumb')
@@ -9,7 +9,7 @@
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
             <li class="breadcrumb-item"><a href="/admin">{{ trans('index.panel') }}</a></li>
-            <li class="breadcrumb-item active">История банов</li>
+            <li class="breadcrumb-item active">{{ trans('index.ban_history') }}</li>
         </ol>
     </nav>
 @stop
@@ -23,8 +23,8 @@
             <div class="b">
 
                 <div class="float-right">
-                    <a href="/admin/bans/change?user={{ $data->user->login }}" data-toggle="tooltip" title="Изменить"><i class="fa fa-pencil-alt"></i></a>
-                    <a href="/admin/banhists/view?user={{ $data->user->login }}" data-toggle="tooltip" title="История"><i class="fa fa-history"></i></a>
+                    <a href="/admin/bans/change?user={{ $data->user->login }}" data-toggle="tooltip" title="{{ trans('main.change') }}"><i class="fa fa-pencil-alt"></i></a>
+                    <a href="/admin/banhists/view?user={{ $data->user->login }}" data-toggle="tooltip" title="{{ trans('admin.banhists.history') }}"><i class="fa fa-history"></i></a>
                     <input type="checkbox" name="del[]" value="{{ $data->id }}">
                 </div>
 
@@ -39,8 +39,8 @@
             </div>
             <div>
                 @if ($data->type !== 'unban')
-                    Причина: {!! bbCode($data->reason) !!}<br>
-                    Срок: {{ formatTime($data->term) }}<br>
+                    {{ trans('admin.banhists.reason') }}: {!! bbCode($data->reason) !!}<br>
+                    {{ trans('admin.banhists.term') }}: {{ formatTime($data->term) }}<br>
                 @endif
 
                 {!! $data->getType() !!}: {!! $data->sendUser->getProfile() !!}<br>
@@ -49,7 +49,7 @@
         @endforeach
 
         <div class="float-right">
-            <button class="btn btn-sm btn-danger">Удалить выбранное</button>
+            <button class="btn btn-sm btn-danger">{{ trans('main.delete_selected') }}</button>
         </div>
     </form>
 
@@ -57,19 +57,19 @@
 
     <div class="form mb-3">
         <form action="/admin/banhists/view" method="get">
-            <b>Поиск по пользователю:</b><br>
+            <b>{{ trans('admin.banhists.search_user') }}:</b><br>
             <div class="form-inline">
                 <div class="form-group{{ hasError('user') }}">
-                    <input type="text" class="form-control" id="user" name="user" maxlength="20" value="{{ getInput('user') }}" placeholder="Логин пользователя" required>
+                    <input type="text" class="form-control" id="user" name="user" maxlength="20" value="{{ getInput('user') }}" placeholder="{{ trans('main.user_login') }}" required>
                 </div>
 
-                <button class="btn btn-primary">Найти</button>
+                <button class="btn btn-primary">{{ trans('main.search') }}</button>
             </div>
             <div class="invalid-feedback">{{ textError('user') }}</div>
         </form>
     </div>
 
     @else
-        {!! showError('Истории банов еще нет!') !!}
+        {!! showError(trans('admin.banhists.empty_history')) !!}
     @endif
 @stop

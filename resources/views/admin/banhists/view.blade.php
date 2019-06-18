@@ -1,7 +1,7 @@
 @extends('layout')
 
 @section('title')
-    Просмотр истории {{ $user->login }}
+    {{ trans('admin.banhists.view_history') }} {{ $user->login }}
 @stop
 
 @section('breadcrumb')
@@ -9,8 +9,8 @@
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
             <li class="breadcrumb-item"><a href="/admin">{{ trans('index.panel') }}</a></li>
-            <li class="breadcrumb-item"><a href="/admin/banhists">История банов</a></li>
-            <li class="breadcrumb-item active">Просмотр истории {{ $user->login }}</li>
+            <li class="breadcrumb-item"><a href="/admin/banhists">{{ trans('index.ban_history') }}</a></li>
+            <li class="breadcrumb-item active">{{ trans('admin.banhists.view_history') }} {{ $user->login }}</li>
         </ol>
     </nav>
 @stop
@@ -37,8 +37,8 @@
 
                 <div>
                     @if ($data->type !== 'unban')
-                        Причина: {!! bbCode($data->reason) !!}<br>
-                        Срок: {{ formatTime($data->term) }}<br>
+                        {{ trans('admin.banhists.reason') }}: {!! bbCode($data->reason) !!}<br>
+                        {{ trans('admin.banhists.term') }}: {{ formatTime($data->term) }}<br>
                     @endif
 
                     {!! $data->getType() !!}: {!! $data->sendUser->getProfile() !!}<br>
@@ -47,13 +47,13 @@
             @endforeach
 
             <div class="float-right">
-                <button class="btn btn-sm btn-danger">Удалить выбранное</button>
+                <button class="btn btn-sm btn-danger">{{ trans('main.delete_selected') }}</button>
             </div>
         </form>
 
         {!! pagination($page) !!}
 
     @else
-        {!! showError('В истории еще ничего нет!') !!}
+        {!! showError(trans('admin.banhists.empty_history')) !!}
     @endif
 @stop

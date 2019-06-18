@@ -25,6 +25,15 @@ return [
         'empty_tables'    => 'Нет таблиц для бэкапа!',
     ],
 
+    'banhists' => [
+        'history'       => 'История',
+        'search_user'   => 'Поиск по пользователю',
+        'reason'        => 'Причина',
+        'term'          => 'Срок',
+        'empty_history' => 'Истории банов еще нет!',
+        'view_history'  => 'Просмотр истории',
+    ],
+
     'caches' => [
         'files'        => 'Файлы',
         'images'       => 'Изображения',
