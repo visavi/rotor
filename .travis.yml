@@ -1,5 +1,7 @@
 language: php
 
+dist: precise
+
 php:
   - 7.1
   - 7.2
@@ -34,6 +36,3 @@ env:
 
 after_success:
   - travis_retry php vendor/bin/php-coveralls -v
-
-services:
-  - mysql
