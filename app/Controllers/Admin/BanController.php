@@ -61,7 +61,7 @@ class BanController extends AdminController
             $validator->equal($token, $_SESSION['token'], trans('validator.token'))
                 ->false($user->level === User::BANNED && $user->timeban > SITETIME, 'Данный аккаунт уже заблокирован!')
                 ->gt($time, 0, ['time' => 'Вы не указали время бана!'])
-                ->in($type, ['minutes', 'hours', 'days'], ['type', 'Не выбрано время бана!'])
+                ->in($type, ['minutes', 'hours', 'days'], ['type' => 'Не выбрано время бана!'])
                 ->length($reason, 5, 1000, ['reason' => trans('validator.text')])
                 ->length($notice, 0, 1000, ['notice' => 'Слишком большая заметка, не более 1000 символов!']);
 

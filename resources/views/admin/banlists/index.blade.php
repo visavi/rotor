@@ -1,7 +1,7 @@
 @extends('layout')
 
 @section('title')
-    Забаненные
+    {{ trans('index.banned_list') }}
 @stop
 
 @section('breadcrumb')
@@ -9,7 +9,7 @@
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
             <li class="breadcrumb-item"><a href="/admin">{{ trans('index.panel') }}</a></li>
-            <li class="breadcrumb-item active">Забаненные</li>
+            <li class="breadcrumb-item active">{{ trans('index.banned_list') }}</li>
         </ol>
     </nav>
 @stop
@@ -21,25 +21,25 @@
                 {!! $user->getGender() !!} <b>{!! $user->getProfile() !!}</b>
 
                 @if ($user->lastBan->created_at)
-                    (Забанен: {{ dateFixed($user->lastBan->created_at) }})
+                    ({{ dateFixed($user->lastBan->created_at) }})
                 @endif
             </div>
 
             <div>
-                До окончания бана: {{ formatTime($user->timeban - SITETIME) }}<br>
+                {{ trans('users.ending_ban') }}: {{ formatTime($user->timeban - SITETIME) }}<br>
 
                 @if ($user->lastBan->id)
-                    Забанил: <b>{!! $user->lastBan->sendUser->getProfile() !!}</b><br>
-                    Причина: {!! bbCode($user->lastBan->reason) !!}<br>
+                    {{ trans('users.banned') }}: <b>{!! $user->lastBan->sendUser->getProfile() !!}</b><br>
+                    {{ trans('users.reason_ban') }}: {!! bbCode($user->lastBan->reason) !!}<br>
                 @endif
 
-                <i class="fa fa-pencil-alt"></i> <a href="/admin/bans/edit?user={{ $user->login }}">Редактировать</a>
+                <i class="fa fa-pencil-alt"></i> <a href="/admin/bans/edit?user={{ $user->login }}">{{ trans('main.edit') }}</a>
             </div>
         @endforeach
 
         {!! pagination($page) !!}
 
-        Всего забанено: <b>{{ $page->total }}</b><br><br>
+        {{ trans('main.total_users') }}: <b>{{ $page->total }}</b><br><br>
 
     @else
         {!! showError(trans('main.empty_users')) !!}

@@ -8,6 +8,5 @@ return [
     'empty_note'  => 'This note is empty or missing!',
 
     'title_edit'  => 'Editing notebook',
-    'note'        => 'Note',
     'info_edit'   => 'Private note are available only to you',
 ];

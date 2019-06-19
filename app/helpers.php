@@ -249,13 +249,13 @@ function formatFileSize($file)
 function formatTime($time)
 {
     $units = [
-        'год,года,лет'           => 31536000,
-        'месяц,месяца,месяцев'   => 2592000,
-        'неделя,недели,недель'   => 604800,
-        'день,дня,дней'          => 86400,
-        'час,часа,часов'         => 3600,
-        'минута,минуты,минут'    => 60,
-        'секунда,секунды,секунд' => 1,
+        trans('main.plural_years')   => 31536000,
+        trans('main.plural_months')  => 2592000,
+        trans('main.plural_weeks')   => 604800,
+        trans('main.plural_days')    => 86400,
+        trans('main.plural_hours')   => 3600,
+        trans('main.plural_minutes') => 60,
+        trans('main.plural_seconds') => 1,
     ];
 
     foreach ($units as $unit => $seconds) {

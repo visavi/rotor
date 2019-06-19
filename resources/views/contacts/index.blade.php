@@ -23,7 +23,7 @@
                 <div class="b">
                     <div class="float-right">
                         <a href="/messages/talk/{{ $contact->contactor->login }}" data-toggle="tooltip" title="{{ trans('main.write') }}"><i class="fa fa-reply text-muted"></i></a>
-                        <a href="/contacts/note/{{ $contact->id }}" data-toggle="tooltip" title="{{ trans('contacts.note') }}"><i class="fa fa-sticky-note text-muted"></i></a>
+                        <a href="/contacts/note/{{ $contact->id }}" data-toggle="tooltip" title="{{ trans('main.note') }}"><i class="fa fa-sticky-note text-muted"></i></a>
                         <a href="/transfers?user={{ $contact->contactor->login }}" data-toggle="tooltip" title="{{ trans('contacts.transfer') }}"><i class="fa fa-money-bill-alt text-muted"></i></a>
                         <input type="checkbox" name="del[]" value="{{ $contact->id }}">
                     </div>
@@ -38,7 +38,7 @@
                 </div>
                 <div>
                     @if ($contact->text)
-                        {{ trans('contacts.note') }}: {!! bbCode($contact->text) !!}<br>
+                        {{ trans('main.note') }}: {!! bbCode($contact->text) !!}<br>
                     @endif
                 </div>
             @endforeach

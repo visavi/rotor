@@ -139,7 +139,7 @@
 
     @if (isAdmin())
     <div class="alert alert-success">
-        <i class="fa fa-thumbtack"></i> <b>{{ trans('index.note') }}:</b> (<a href="/users/{{ $user->login }}/note">{{ trans('main.change') }}</a>)<br>
+        <i class="fa fa-thumbtack"></i> <b>{{ trans('main.note') }}:</b> (<a href="/users/{{ $user->login }}/note">{{ trans('main.change') }}</a>)<br>
 
         @if (! empty($user->note->text))
             {!! bbCode($user->note->text) !!}<br>

@@ -24,7 +24,7 @@
 
                     <div class="float-right">
                         <a href="/messages/talk/{{ $data->ignoring->login }}" data-toggle="tooltip" title="{{ trans('main.write') }}"><i class="fa fa-reply text-muted"></i></a>
-                        <a href="/ignores/note/{{ $data->id }}" data-toggle="tooltip" title="{{ trans('ignores.note') }}"><i class="fa fa-sticky-note text-muted"></i></a>
+                        <a href="/ignores/note/{{ $data->id }}" data-toggle="tooltip" title="{{ trans('main.note') }}"><i class="fa fa-sticky-note text-muted"></i></a>
                         <input type="checkbox" name="del[]" value="{{ $data->id }}">
                     </div>
 
@@ -39,7 +39,7 @@
 
                 <div>
                     @if ($data->text)
-                        {{ trans('ignores.note') }}: {!! bbCode($data->text) !!}<br>
+                        {{ trans('main.note') }}: {!! bbCode($data->text) !!}<br>
                     @endif
                 </div>
             @endforeach

@@ -37,8 +37,8 @@
 
                 <div>
                     @if ($data->type !== 'unban')
-                        {{ trans('admin.banhists.reason') }}: {!! bbCode($data->reason) !!}<br>
-                        {{ trans('admin.banhists.term') }}: {{ formatTime($data->term) }}<br>
+                        {{ trans('users.reason_ban') }}: {!! bbCode($data->reason) !!}<br>
+                        {{ trans('users.term') }}: {{ formatTime($data->term) }}<br>
                     @endif
 
                     {!! $data->getType() !!}: {!! $data->sendUser->getProfile() !!}<br>

@@ -10,7 +10,7 @@
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
             <li class="breadcrumb-item"><a href="/menu">{{ trans('main.menu') }}</a></li>
             <li class="breadcrumb-item"><a href="/ignores">{{ trans('ignores.title') }}</a></li>
-            <li class="breadcrumb-item active">{{ trans('ignores.note') }}</li>
+            <li class="breadcrumb-item active">{{ trans('main.note') }}</li>
         </ol>
     </nav>
 @stop
@@ -20,8 +20,8 @@
         <form method="post" action="/ignores/note/{{ $ignore->id }}">
             @csrf
             <div class="form-group{{ hasError('msg') }}">
-                <label for="msg">{{ trans('ignores.note') }}:</label>
-                <textarea class="form-control markItUp" id="msg" rows="5" name="msg" placeholder="{{ trans('ignores.note_text') }}">{{ getInput('msg', $ignore->text) }}</textarea>
+                <label for="msg">{{ trans('main.note') }}:</label>
+                <textarea class="form-control markItUp" id="msg" rows="5" name="msg" placeholder="{{ trans('main.note') }}">{{ getInput('msg', $ignore->text) }}</textarea>
                 <div class="invalid-feedback">{{ textError('msg') }}</div>
             </div>
 
