@@ -32,7 +32,7 @@ class MailController extends BaseController
             }
 
             $validator->true(captchaVerify(), ['protect' => trans('validator.captcha')])
-                ->length($name, 5, 100, ['name' => 'Слишком длинное или короткое имя'])
+                ->length($name, 3, 100, ['name' => 'Слишком длинное или короткое имя'])
                 ->length($message, 5, 50000, ['message' => trans('validator.text')])
                 ->email($email, ['email' => 'Неправильный адрес email, необходим формат name@site.domen!']);
 

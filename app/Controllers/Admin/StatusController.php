@@ -53,7 +53,7 @@ class StatusController extends AdminController
 
             $validator
                 ->equal($token, $_SESSION['token'], trans('validator.token'))
-                ->length($name, 5, 30, ['name' => 'Слишком длинное или короткое название статуса!'])
+                ->length($name, 3, 30, ['name' => 'Слишком длинное или короткое название статуса!'])
                 ->regex($color, '|^#+[A-f0-9]{6}$|', ['color' => 'Недопустимый формат цвета статуса! (пример #ff0000)'], false);
 
             if ($validator->isValid()) {
@@ -102,7 +102,7 @@ class StatusController extends AdminController
 
             $validator
                 ->equal($token, $_SESSION['token'], trans('validator.token'))
-                ->length($name, 5, 30, ['name' => 'Слишком длинное или короткое название статуса!'])
+                ->length($name, 3, 30, ['name' => 'Слишком длинное или короткое название статуса!'])
                 ->regex($color, '|^#+[A-f0-9]{6}$|', ['color' => 'Недопустимый формат цвета статуса! (пример #ff0000)'], false);
 
             if ($validator->isValid()) {
