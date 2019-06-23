@@ -37,7 +37,7 @@
 
                     <div class="message">
                         {{ $data->type === 'out' ? trans('messages.you') . ': ' : '' }}
-                        {!! truncateWord(bbCode($data->text)) !!}
+                        {!! bbCodeTruncate($data->text) !!}
                     </div>
                     @unless ($data->reading)
                         <span class="badge badge-info">{{ trans('messages.new') }}</span>

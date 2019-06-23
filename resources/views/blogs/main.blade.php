@@ -40,7 +40,7 @@
                     <a href="/blogs/{{ $data->category->id }}"><span class="badge badge-light">{{ $data->category->name }}</span></a>
 
                     <p class="card-text">
-                        {!! truncateWord(bbCode($data->text), 200) !!}
+                        {!! bbCodeTruncate($data->text, 100) !!}
                     </p>
                     <a href="/articles/{{ $data->id }}" class="btn btn-sm btn-light border">Читать дальше →</a>
                 </div>

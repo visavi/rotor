@@ -30,7 +30,7 @@
         </div>
 
         <div>
-            {!! truncateWord(bbCode($data->text), 200) !!}<br>
+            {!! bbCodeTruncate($data->text, 100) !!}<br>
             {{ trans('blogs.blog') }}: <a href="/blogs/{{ $data->category_id }}">{{ $data->name }}</a><br>
             {{ trans('main.author') }}: {!! $data->user->getProfile() !!}  ({{ dateFixed($data->created_at) }})
         </div>
