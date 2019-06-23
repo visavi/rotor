@@ -36,7 +36,6 @@ translate = {
         list_text: 'Элемент списка',
         clean: 'Очистка тегов',
         sticker: 'Стикер',
-        nextpage: 'Разделение страниц',
         cutpage: 'Обрезка страницы',
         preview: 'Просмотр',
         enter_title: 'Введите название...',

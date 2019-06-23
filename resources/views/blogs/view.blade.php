@@ -44,11 +44,6 @@
     <hr>
 
     {!! $blog->text !!}
-
-    @if ($page->total > 1)
-        {!! pagination($page) !!}
-    @endif
-
     {{ trans('main.author') }}: {!! $blog->user->getProfile() !!} ({{ dateFixed($blog->created_at) }})<br>
 
     <i class="fa fa-tag"></i> {!! $tags !!}<hr>

@@ -50,9 +50,7 @@
     <i class="fa fa-quote-right"></i> [quote={{ trans('pages.quote_author') }}]{{ trans('pages.quote') }}[/quote]{!! bbCode('[quote=' . trans('pages.quote_author')  . ']' . trans('pages.quote') . '[/quote]') !!}<br>
 
     <i class="fa fa-code"></i> [code]{{ trans('pages.code') }}[/code]{!! bbCode('[code]' . trans('pages.code') . '[/code]') !!}<br>
-    <i class="fa fa-exchange-alt"></i> [nextpage] - {{ trans('pages.nextpage') }}<br>
-    <i class="fa fa-cut"></i> [cut] - {{ trans('pages.cutpage') }}<br><br>
-
+    <i class="fa fa-cut"></i> [cut] - {{ trans('pages.cutpage') }}<br>
     <i class="fa fa-eraser"></i> {{ trans('pages.clean_text') }}<br>
     <i class="fa fa-smile"></i> {{ trans('pages.sticker') }}<br>
     <i class="fa fa-check-square"></i> {{ trans('pages.preview') }}<br><br>

@@ -15,7 +15,7 @@
 @stop
 
 @section('content')
-    <div class="form next">
+    <div class="form">
         <form action="/blogs/create" method="post">
             @csrf
             <div class="form-group{{ hasError('cid') }}">
@@ -63,8 +63,7 @@
         </form>
     </div><br>
 
-    {{ trans('blogs.text_create1') }}<br>
-    {{ trans('blogs.text_create2') }}<br><br>
+    {{ trans('blogs.text_create1') }}<br><br>
 
     <a href="/rules">{{ trans('main.rules') }}</a> /
     <a href="/stickers">{{ trans('main.stickers') }}</a> /

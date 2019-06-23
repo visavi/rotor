@@ -84,7 +84,6 @@ mySettings = {
             {name: ':heart', openWith: ' :heart ', className: 'col5-4'},
             {name: ':moder', openWith: ' :moder ', className: 'col5-5'}
         ]},
-        {title: translate.editor.nextpage, name: '<i class="fa fa-exchange-alt"></i>', className: 'bb-nextpage', openWith: '[nextpage]'},
         {title: translate.editor.cutpage, name: '<i class="fa fa-cut"></i>', className: 'bb-cutpage', openWith: '[cut]'},
         {title: translate.editor.preview, name: '<i class="fa fa-check-square"></i>', classname: 'bb-preview',  call: 'preview'}
     ]

@@ -23,7 +23,7 @@
 @stop
 
 @section('content')
-    <div class="form next">
+    <div class="form">
         <form action="/admin/articles/move/{{ $blog->id }}" method="post">
             @csrf
             <div class="form-group{{ hasError('cid') }}">

@@ -88,36 +88,24 @@ class BlogController extends BaseController
             abort(404, 'Данной статьи не существует!');
         }
 
-        $text = preg_split('|\[nextpage\](<br * /?>)*|', $blog->text, -1, PREG_SPLIT_NO_EMPTY);
+        $reader = Reader::query()
+            ->where('relate_type', Blog::class)
+            ->where('relate_id', $blog->id)
+            ->where('ip', getIp())
+            ->first();
 
-        $total = \count($text);
-        $page = paginate(1, $total);
+        if (! $reader) {
+            Reader::query()->create([
+                'relate_type' => Blog::class,
+                'relate_id'   => $blog->id,
+                'ip'          => getIp(),
+                'created_at'  => SITETIME,
+            ]);
 
-        if ($page->current === 1) {
-            $reader = Reader::query()
-                ->where('relate_type', Blog::class)
-                ->where('relate_id', $blog->id)
-                ->where('ip', getIp())
-                ->first();
-
-            if (! $reader) {
-                Reader::query()->create([
-                    'relate_type' => Blog::class,
-                    'relate_id'   => $blog->id,
-                    'ip'          => getIp(),
-                    'created_at'  => SITETIME,
-                ]);
-
-                $blog->increment('visits');
-            }
+            $blog->increment('visits');
         }
 
-        $end = ($total < $page->offset + 1) ? $total : $page->offset + 1;
-
-        for ($i = $page->offset; $i < $end; $i++) {
-            $blog->text = bbCode($text[$i]) . '<br>';
-        }
-
+        $blog->text = bbCode($blog->text) . '<br>';
         $tagsList = preg_split('/[\s]*[,][\s]*/', $blog->tags);
 
         $tags = '';
@@ -126,7 +114,7 @@ class BlogController extends BaseController
             $tags .= $comma . '<a href="/blogs/tags/' . urlencode($value) . '">' . $value . '</a>';
         }
 
-        return view('blogs/view', compact('blog', 'tags', 'page'));
+        return view('blogs/view', compact('blog', 'tags'));
     }
 
     /**
@@ -515,8 +503,6 @@ class BlogController extends BaseController
         if (! $blog) {
             abort(404, 'Данной статьи не существует!');
         }
-
-        $blog->text = preg_replace('|\[nextpage\](<br * /?>)*|', '', $blog->text);
 
         return view('blogs/print', compact('blog'));
     }

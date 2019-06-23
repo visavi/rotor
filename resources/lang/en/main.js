@@ -36,7 +36,6 @@ translate = {
         list_text: 'List item',
         clean: 'Tag cleaning',
         sticker: 'Sticker',
-        nextpage: 'Page splitting',
         cutpage: 'Crop page',
         preview: 'Preview',
         enter_title: 'Enter the title...',
