@@ -29,7 +29,6 @@
     @if ($blogs->isNotEmpty())
         @foreach ($blogs as $data)
             <div class="card mb-3">
-                {!! $data->getFirstImage() !!}
                 <div class="card-body">
                     <h2 class="card-title"><a href="/articles/{{ $data->id }}">{{ $data->title }}</a> <small>(Рейтинг: {!! formatNum($data->rating) !!})</small></h2>
 
