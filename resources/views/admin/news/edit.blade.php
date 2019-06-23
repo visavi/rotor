@@ -34,7 +34,7 @@
             </div>
 
             @if ($news->image && file_exists(HOME . $news->image))
-                <a href="{{ $news->image }}">{!! resizeImage($news->image, ['width' => 100, 'alt' => $news['title']]) !!}</a><br>
+                <a href="{{ $news->image }}">{!! resizeImage($news->image, ['width' => 100, 'alt' => $news->title]) !!}</a><br>
                 <b>{{ basename($news->image) }}</b> ({{ formatFileSize(HOME . $news->image) }})<br><br>
             @endif
 

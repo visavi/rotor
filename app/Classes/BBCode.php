@@ -120,6 +120,7 @@ class BBCode
     public function parse($source): string
     {
         $source = nl2br($source, false);
+        $source = str_replace('[cut]', '', $source);
 
         foreach (self::$parsers as $parser) {
             $iterate = $parser['iterate'] ?? 1;

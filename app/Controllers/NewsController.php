@@ -39,13 +39,12 @@ class NewsController extends BaseController
      */
     public function view(int $id): string
     {
+        /** @var News $news */
         $news = News::query()->find($id);
 
         if (! $news) {
             abort(404, 'Новость не существует, возможно она была удалена!');
         }
-
-        $news['text'] = str_replace('[cut]', '', $news['text']);
 
         $comments = Comment::query()
             ->where('relate_type', News::class)
@@ -86,7 +85,7 @@ class NewsController extends BaseController
                 ->equal($token, $_SESSION['token'], trans('validator.token'))
                 ->false($flood->isFlood(), ['msg' => trans('validator.flood', ['sec' => $flood->getPeriod()])])
                 ->length($msg, 5, setting('comment_length'), ['msg' => trans('validator.text')])
-                ->empty($news['closed'], ['msg' => 'Комментирование данной новости запрещено!']);
+                ->empty($news->closed, ['msg' => 'Комментирование данной новости запрещено!']);
 
             if ($validator->isValid()) {
                 $msg = antimat($msg);

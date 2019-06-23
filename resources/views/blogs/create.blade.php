@@ -15,7 +15,7 @@
 @stop
 
 @section('content')
-    <div class="form">
+    <div class="form cut">
         <form action="/blogs/create" method="post">
             @csrf
             <div class="form-group{{ hasError('cid') }}">

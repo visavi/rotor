@@ -22,7 +22,7 @@
 @stop
 
 @section('content')
-    <div class="form">
+    <div class="form cut">
         <form action="/articles/edit/{{ $blog->id }}" method="post">
             @csrf
             <div class="form-group{{ hasError('cid') }}">
