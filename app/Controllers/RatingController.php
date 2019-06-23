@@ -19,7 +19,7 @@ class RatingController extends BaseController
         parent::__construct();
 
         if (! getUser()) {
-            abort(403, 'Для изменения или просмотра рейтинга небходимо авторизоваться!');
+            abort(403, 'Для изменения или просмотра рейтинга необходимо авторизоваться!');
         }
     }
 

@@ -71,7 +71,7 @@ class PhotoController extends BaseController
     public function create(Request $request, Validator $validator, Flood $flood): string
     {
         if (! getUser()) {
-            abort(403, 'Для добавления фотографий небходимо авторизоваться!');
+            abort(403, 'Для добавления фотографий необходимо авторизоваться!');
         }
 
         if ($request->isMethod('post')) {
@@ -278,7 +278,7 @@ class PhotoController extends BaseController
         }
 
         if (! getUser()) {
-            abort(403, 'Для редактирования комментариев небходимо авторизоваться!');
+            abort(403, 'Для редактирования комментариев необходимо авторизоваться!');
         }
 
         $comment = Comment::query()
@@ -342,7 +342,7 @@ class PhotoController extends BaseController
         $token = check($request->input('token'));
 
         if (! getUser()) {
-            abort(403, 'Для удаления фотографий небходимо авторизоваться!');
+            abort(403, 'Для удаления фотографий необходимо авторизоваться!');
         }
 
         /** @var Photo $photo */

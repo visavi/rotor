@@ -483,7 +483,7 @@ class DownController extends BaseController
         $page = int($request->input('page', 1));
 
         if (! getUser()) {
-            abort(403, 'Для редактирования комментариев небходимо авторизоваться!');
+            abort(403, 'Для редактирования комментариев необходимо авторизоваться!');
         }
 
         $comment = Comment::query()

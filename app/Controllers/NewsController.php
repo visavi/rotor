@@ -165,7 +165,7 @@ class NewsController extends BaseController
         }
 
         if (! getUser()) {
-            abort(403, 'Для редактирования комментариев небходимо авторизоваться!');
+            abort(403, 'Для редактирования комментариев необходимо авторизоваться!');
         }
 
         $comment = Comment::query()
