@@ -5,7 +5,7 @@
 @stop
 
 @section('keywords', $blog->tags)
-@section('description', truncateWord(bbCode($blog->text)))
+@section('description', truncateDescription(bbCode($blog->text)))
 
 @section('header')
     @if ($blog->user->id === getUser('id'))

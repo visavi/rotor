@@ -34,13 +34,13 @@
                     <h2 class="card-title"><a href="/articles/{{ $data->id }}">{{ $data->title }}</a> <small>(Рейтинг: {!! formatNum($data->rating) !!})</small></h2>
 
                     @if ($data->category->parent->id)
-                        <a href="/blogs/{{ $category->parent->id }}" class="text-secondary">{{ $category->parent->name }}</a> /
+                        <a href="/blogs/{{ $category->parent->id }}"><span class="badge badge-light">{{ $category->parent->name }}</span></a> /
                     @endif
 
-                    <a href="/blogs/{{ $data->category->id }}" class="text-secondary">{{ $data->category->name }}</a>
+                    <a href="/blogs/{{ $data->category->id }}"><span class="badge badge-light">{{ $data->category->name }}</span></a>
 
                     <p class="card-text">
-                        {!! truncateWord(bbCode($data->text), 500) !!}
+                        {!! truncateWord(bbCode($data->text), 200) !!}
                     </p>
                     <a href="/articles/{{ $data->id }}" class="btn btn-sm btn-light border">Читать дальше →</a>
                 </div>

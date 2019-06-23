@@ -96,7 +96,7 @@ class TopicController extends BaseController
             }
         }
 
-        $description = $posts->first() ? truncateWord(bbCode($posts->first()->text)) : $topic->title;
+        $description = $posts->first() ? truncateDescription(bbCode($posts->first()->text)) : $topic->title;
 
         return view('forums/topic', compact('topic', 'posts', 'page', 'vote', 'description'));
     }
@@ -625,7 +625,7 @@ class TopicController extends BaseController
             ->orderBy('created_at')
             ->get();
 
-        $description = $posts->first() ? truncateWord(bbCode($posts->first()->text)) : $topic->title;
+        $description = $posts->first() ? truncateDescription(bbCode($posts->first()->text)) : $topic->title;
 
         return view('forums/print', compact('topic', 'posts', 'description'));
     }

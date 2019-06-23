@@ -967,36 +967,97 @@ function shuffleAssoc(&$array)
     return true;
 }
 
+/*function closetags($html)
+{
+    //$html = str_replace(['[nextpage]', '[cut]'], '', $html);
+
+    preg_match_all('#<([a-z]+)(?:=.*)?(?<![/])>#iU', $html, $result);
+    $openTags = $result[1];
+
+    preg_match_all('#</([a-z]+)>#iU', $html, $result);
+    $closedTags = $result[1];
+
+    if ($openTags === $closedTags) {
+        return $html;
+    }
+
+    print_r($html);
+    var_dump($closedTags, $openTags);
+
+    $openTags = array_reverse($openTags);
+    foreach ($openTags as $key => $value) {
+        if (! in_array($value, $closedTags)) {
+            $html .= '</'. $value .'>';
+        } else {
+            unset($closedTags[array_search($value, $closedTags)]);
+        }
+    }
+    print_r($html);
+
+    return $html;
+}*/
+
+/*function truncateWord2($value, $words = 20, $end = '...')
+{
+    $value = Str::words($value, $words, $end);
+
+    return closetags($value);
+}*/
+
 /**
- * Возвращает обрезанную до заданного количества слов строку
+ * Возвращает обрезанную до заданного количества букв строке
+ *
+ * @param  string $value Исходная строка
+ * @param  int    $limit Максимальное количество символов в результате
+ * @param  string $end
+ * @return string         Обрезанная строка
+ */
+function truncateString(string $value, int $limit = 100, string $end = '...')
+{
+    $value = strip_tags($value, '<br>');
+
+    if (mb_strlen($value, 'utf-8') <= $limit) {
+        return $value;
+    }
+
+    $string = mb_substr($value, 0, $limit + 1);
+    if ($lastSpace = mb_strrpos($string, ' ', 'utf-8')) {
+        $string = mb_substr($string, 0, $lastSpace, 'utf-8');
+    } else {
+        $string = mb_substr($string, 0, $limit, 'utf-8');
+    }
+
+    return $string . $end;
+}
+
+/**
+ * Возвращает обрезанную до заданного количества слов строке
  *
  * @param  string $value Исходная строка
  * @param  int    $words Максимальное количество слов в результате
  * @param  string $end
  * @return string         Обрезанная строка
  */
-function truncateWord($value, $words = 20, $end = '...')
+function truncateWord(string $value, int $words = 20, string $end = '...')
 {
-    $value = strip_tags(preg_replace('/\s+/', ' ', $value));
-    $value = preg_replace('/&#?[a-z0-9]{2,8};/i', '', $value);
+    $value = strip_tags($value, '<br>');
 
     return Str::words($value, $words, $end);
 }
 
 /**
- * Возвращает обрезанную до заданного количества букв строку
+ * Возвращает обрезанную строку с удалением перевода строки
  *
- * @param  string $value Исходная строка
- * @param  int    $words Максимальное количество слов в результате
+ * @param  string $value
+ * @param  int    $words
  * @param  string $end
- * @return string         Обрезанная строка
+ * @return string
  */
-function truncateString($value, $words = 100, $end = '...')
+function truncateDescription(string $value, int $words = 20, string $end = '')
 {
     $value = strip_tags(preg_replace('/\s+/', ' ', $value));
-    $value = preg_replace('/&#?[a-z0-9]{2,8};/i', '', $value);
 
-    return Str::limit($value, $words, $end);
+    return Str::words($value, $words, $end);
 }
 
 /**
