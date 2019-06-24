@@ -111,6 +111,24 @@ class Blog extends BaseModel
     }
 
     /**
+     * Возвращает сокращенный текст статьи
+     *
+     * @return string
+     */
+    public function shortText(): string
+    {
+        $more = '<div class="mt-1"><a href="/articles/'. $this->id .'" class="btn btn-sm btn-info">Читать дальше &raquo;</a></div>';
+
+        if (stripos($this->text, '[cut]') !== false) {
+            $this->text = bbCode(current(explode('[cut]', $this->text)));
+        } else {
+            $this->text = bbCodeTruncate($this->text, 100);
+        }
+
+        return $this->text . $more;
+    }
+
+    /**
      * Возвращает размер шрифта для облака тегов
      *
      * @param int   $count

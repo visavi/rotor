@@ -39,9 +39,8 @@
                     <a href="/blogs/{{ $data->category->id }}"><span class="badge badge-light">{{ $data->category->name }}</span></a>
 
                     <p class="card-text">
-                        {!! bbCodeTruncate($data->text, 100) !!}
+                        {!! $data->shortText() !!}
                     </p>
-                    <a href="/articles/{{ $data->id }}" class="btn btn-sm btn-light border">Читать дальше →</a>
                 </div>
                 <div class="card-footer text-muted">
                     {{ trans('main.author') }}: {!! $data->user->getProfile() !!} ({{ dateFixed($data->created_at) }})

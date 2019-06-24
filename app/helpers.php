@@ -827,7 +827,7 @@ function lastNews()
                 echo '<i class="far fa-circle fa-lg text-muted"></i> <a href="/news/' . $data->id . '">' . $data->title . '</a> (' . $data->count_comments . ') <i class="fa fa-caret-down news-title"></i><br>';
 
                 if (stripos($data->text, '[cut]') !== false) {
-                    $data->text = current(explode('[cut]', $data->text)) . ' <a href="/news/'. $data->id .'" class="badge badge-success">Читать далее &raquo;</a>';
+                    $data->text = current(explode('[cut]', $data->text)) . ' <a href="/news/'. $data->id .'" class="badge badge-success">Читать дальше &raquo;</a>';
                 }
 
                 echo '<div class="news-text" style="display: none;">' . bbCode($data->text) . '<br>';
@@ -2068,7 +2068,7 @@ function pagination($page)
     }
 
     if (empty($page->crumbs)) {
-        $page->crumbs = 1;
+        $page->crumbs = 2;
     }
 
     $url     = Arr::except($_GET, 'page');
