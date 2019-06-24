@@ -77,8 +77,7 @@ $wrap->setOption('environment', 'default');
         ];
 
         foreach ($keys as $key) {
-
-            echo $key . ' - ' . var_export(env($key), true) . '<br>';
+            echo $key . ' - ' . trim(var_export(env($key), true), "'") . '<br>';
         }
         ?>
         <p>Не забудьте изменить значение APP_KEY, эти данные необходимы для шифрования cookies и паролей в сессиях</p>
