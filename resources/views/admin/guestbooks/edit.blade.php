@@ -22,8 +22,8 @@
         <form action="/admin/guestbooks/edit/{{ $post->id }}?page={{ $page }}" method="post">
             @csrf
             <div class="form-group{{ hasError('msg') }}">
-                <label for="msg">{{ trans('guestbooks.message') }}:</label>
-                <textarea class="form-control markItUp" id="msg" rows="5" name="msg" placeholder="{{ trans('guestbooks.message') }}" required>{{ getInput('msg', $post->text) }}</textarea>
+                <label for="msg">{{ trans('main.message') }}:</label>
+                <textarea class="form-control markItUp" id="msg" rows="5" name="msg" placeholder="{{ trans('main.message') }}" required>{{ getInput('msg', $post->text) }}</textarea>
                 <div class="invalid-feedback">{{ textError('msg') }}</div>
             </div>
 

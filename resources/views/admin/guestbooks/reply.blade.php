@@ -18,14 +18,14 @@
 @section('content')
     <div class="alert alert-info">
         <i class="fa fa-pencil-alt"></i> <b>{{ $post->user->login }}</b> <small>({{ dateFixed($post->created_at) }})</small><br>
-        <div>{{ trans('guestbooks.message') }}: {!! bbCode($post->text) !!}</div>
+        <div>{{ trans('main.message') }}: {!! bbCode($post->text) !!}</div>
     </div>
 
     <div class="form">
         <form action="/admin/guestbooks/reply/{{ $post->id }}?page={{ $page }}" method="post">
             @csrf
             <div class="form-group{{ hasError('reply') }}">
-                <label for="reply">{{ trans('guestbooks.message') }}:</label>
+                <label for="reply">{{ trans('main.message') }}:</label>
                 <textarea class="form-control markItUp" id="reply" rows="5" name="reply" required>{{ getInput('reply', $post->reply) }}</textarea>
                 <div class="invalid-feedback">{{ textError('reply') }}</div>
             </div>
