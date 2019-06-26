@@ -38,14 +38,15 @@
 
         <div class="form-group{{ hasError('title') }}">
             <label for="inputTitle">{{ trans('loads.down_title') }}:</label>
-            <input class="form-control" id="inputTitle" name="title" value="{{ getInput('title') }}" required>
+            <input class="form-control" id="inputTitle" name="title" value="{{ getInput('title') }}" maxlength="50" required>
             <div class="invalid-feedback">{{ textError('title') }}</div>
         </div>
 
         <div class="form-group{{ hasError('text') }}">
             <label for="text">{{ trans('loads.down_text') }}:</label>
-            <textarea class="form-control markItUp" id="text" rows="10" name="text" required>{{ getInput('text') }}</textarea>
+            <textarea class="form-control markItUp" id="text" rows="10" name="text" maxlength="5000" required>{{ getInput('text') }}</textarea>
             <div class="invalid-feedback">{{ textError('text') }}</div>
+            <span class="js-textarea-counter"></span>
         </div>
 
         <div class="custom-file{{ hasError('files') }}">

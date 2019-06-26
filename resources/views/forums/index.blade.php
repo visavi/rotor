@@ -38,7 +38,7 @@
             <div class="b">
                 <i class="fa fa-file-alt fa-lg text-muted"></i>
                 <b><a href="/forums/{{ $forum->id }}">{{ $forum->title }}</a></b>
-                ({{ $forum->count_topics }}/{{ $forum->count_posts }})
+                ({{ $forum->count_topics + $forum->children->sum('count_topics') }}/{{ $forum->count_posts + $forum->children->sum('count_posts') }})
 
                 @if ($forum->description)
                     <p><small>{{ $forum->description }}</small></p>

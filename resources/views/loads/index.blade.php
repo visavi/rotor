@@ -35,10 +35,11 @@
         <div class="b">
             <i class="fa fa-folder-open"></i>
             <b><a href="/loads/{{ $category->id }}">{{ $category->name }}</a></b>
+
             @if ($category->new)
-                ({{ $category->count_downs }}/<span style="color:#ff0000">+{{ $category->new->count_downs }}</span>)<br>
+                ({{ $category->count_downs + $category->children->sum('count_downs') }}/<span style="color:#ff0000">+{{ $category->new->count_downs }}</span>)<br>
             @else
-                ({{ $category->count_downs }})<br>
+                ({{ $category->count_downs + $category->children->sum('count_downs') }})<br>
             @endif
         </div>
 

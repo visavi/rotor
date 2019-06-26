@@ -36,9 +36,9 @@
             <i class="fa fa-folder-open"></i> <b><a href="/blogs/{{ $data->id }}">{{ $data->name }}</a></b>
 
             @if ($data->new)
-                ({{ $data->count_blogs }}/<span style="color:#ff0000">+{{ $data->new->count_blogs }}</span>)
+                ({{ $data->count_blogs + $data->children->sum('count_blogs') }}/<span style="color:#ff0000">+{{ $data->new->count_blogs }}</span>)
             @else
-                ({{ $data->count_blogs }})
+                ({{ $data->count_blogs + $data->children->sum('count_blogs') }})
             @endif
         </div>
 
