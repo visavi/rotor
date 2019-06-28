@@ -119,7 +119,7 @@ class Blog extends BaseModel
     {
         $more = '<div class="mt-1"><a href="/articles/'. $this->id .'" class="btn btn-sm btn-info">Читать дальше &raquo;</a></div>';
 
-        if (stripos($this->text, '[cut]') !== false) {
+        if (strpos($this->text, '[cut]') !== false) {
             $this->text = bbCode(current(explode('[cut]', $this->text)));
         } else {
             $this->text = bbCodeTruncate($this->text, 100);
