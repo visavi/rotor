@@ -4,7 +4,7 @@
     {{ trans('photos.album') }} {{ $user->login }} ({{ trans('main.page_num', ['page' => $page->current]) }})
 @stop
 
-@section('headers')
+@section('header')
     <h1>{{ trans('photos.album') }} {{ $user->login }}</h1>
 @stop
 

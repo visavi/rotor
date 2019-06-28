@@ -1,5 +1,5 @@
 <?php
-$cond  = empty($paste) ? 0 : 1;
+$cond  = empty($paste) ? false : true;
 $click = $cond ? 'return pasteImage(this);' : false;
 ?>
 
@@ -8,7 +8,9 @@ $click = $cond ? 'return pasteImage(this);' : false;
         @foreach ($files as $file)
             <span class="js-image">
                 {!! resizeImage($file->hash, ['width' => 100, 'onclick' => $click]) !!}
-                <a href="#" onclick="return deleteImage(this);" data-id="{{ $file->id }}" data-type="{{ $type }}" data-token="{{ $_SESSION['token'] }}"><i class="fas fa-times"></i></a>
+                @if (! $file->relate_id)
+                    <a href="#" onclick="return deleteImage(this);" data-id="{{ $file->id }}" data-type="{{ $type }}" data-token="{{ $_SESSION['token'] }}"><i class="fas fa-times"></i></a>
+                @endif
             </span>
         @endforeach
     @endif

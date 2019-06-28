@@ -390,7 +390,8 @@ class AjaxController extends BaseController
         }
 
         $validator->equal($token, $_SESSION['token'], trans('validator.token'))
-            ->true($file->user_id === getUser('id') || isAdmin(), 'Удаление невозможно, вы не автор данного файла!');
+            ->true($file->user_id === getUser('id') || isAdmin(), 'Удаление невозможно, вы не автор данного файла!')
+            ->true(! $file->relate_id || isAdmin(), 'Нельзя удалять уже прикрепленный файл!');
 
         if ($validator->isValid()) {
 
