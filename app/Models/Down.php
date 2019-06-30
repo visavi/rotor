@@ -130,16 +130,15 @@ class Down extends BaseModel
     }
 
     /**
-     * Обрезает текст
+     * Возвращает сокращенный текст описания
      *
-     * @param int $limit
+     * @param int $words
      * @return string
      */
-    public function cutText($limit = 200): string
+    public function shortText($words = 50): string
     {
-        if (\strlen($this->text) > $limit) {
-            $this->text = strip_tags(bbCode($this->text), '<br>');
-            $this->text = mb_substr($this->text, 0, mb_strrpos(mb_substr($this->text, 0, $limit), ' ')) . '...';
+        if (\strlen($this->text) > $words) {
+            $this->text = bbCodeTruncate($this->text, $words);
         }
 
         return $this->text;
@@ -164,18 +163,20 @@ class Down extends BaseModel
     public function uploadAndConvertFile(UploadedFile $file): array
     {
         $upload = $this->uploadFile($file);
-        $this->convertVideo($file, $upload['path']);
+        $this->convertVideo($upload);
 
         return $upload;
     }
 
     /**
-     * @param UploadedFile $file
-     * @param int          $path
+     * Конвертирует видео
+     *
+     * @param array $upload
+     * @return void
      */
-    public function convertVideo(UploadedFile  $file, $path): void
+    public function convertVideo(array $upload): void
     {
-        $isVideo = strpos($file->getClientMimeType(), 'video/') !== false;
+        $isVideo = strpos($upload['mime'], 'video/') !== false;
 
         // Обработка видео
         if ($isVideo && env('FFMPEG_ENABLED')) {
@@ -189,18 +190,18 @@ class Down extends BaseModel
 
             $ffmpeg = FFMpeg::create($ffconfig);
 
-            $video = $ffmpeg->open(HOME . $path);
+            $video = $ffmpeg->open(HOME . $upload['path']);
 
             // Сохраняем скрин с 5 секунды
             $frame = $video->frame(TimeCode::fromSeconds(5));
-            $frame->save(HOME . $path . '.jpg');
+            $frame->save(HOME . $upload['path'] . '.jpg');
 
             File::query()->create([
                 'relate_id'   => $this->id,
                 'relate_type' => self::class,
-                'hash'        => $path . '.jpg',
+                'hash'        => $upload['path'] . '.jpg',
                 'name'        => 'screenshot.jpg',
-                'size'        => filesize(HOME . $path . '.jpg'),
+                'size'        => filesize(HOME . $upload['path'] . '.jpg'),
                 'user_id'     => getUser('id'),
                 'created_at'  => SITETIME,
             ]);
@@ -208,15 +209,15 @@ class Down extends BaseModel
             // Перекодируем видео в h264
             $ffprobe = FFProbe::create($ffconfig);
             $video = $ffprobe
-                ->streams(HOME . $path)
+                ->streams(HOME . $upload['path'])
                 ->videos()
                 ->first();
 
-            if ($video && $video->get('codec_name') !== 'h264' && $file->getClientOriginalExtension() === 'mp4') {
+            if ($video && $upload['extension'] === 'mp4' && $video->get('codec_name') !== 'h264') {
                 $format = new X264('libmp3lame', 'libx264');
-                $video->save($format, HOME . $path . '.convert');
+                $video->save($format, HOME . $upload['path'] . '.convert');
 
-                rename(HOME . $path . '.convert', HOME . $path);
+                rename(HOME . $upload['path'] . '.convert', HOME . $upload['path']);
             }
         }
     }

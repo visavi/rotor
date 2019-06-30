@@ -27,7 +27,7 @@
         </div>
 
         <div>
-            {!! $data->cutText() !!}<br>
+            {!! $data->shortText() !!}<br>
 
             {{ trans('loads.load') }}: <a href="/loads/{{ $data->category->id }}">{{ $data->category->name }}</a><br>
             {{ trans('main.rating') }}: {{ $rating }}<br>

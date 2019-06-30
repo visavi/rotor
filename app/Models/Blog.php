@@ -113,16 +113,17 @@ class Blog extends BaseModel
     /**
      * Возвращает сокращенный текст статьи
      *
+     * @param int $words
      * @return string
      */
-    public function shortText(): string
+    public function shortText($words = 100): string
     {
         $more = '<div class="mt-1"><a href="/articles/'. $this->id .'" class="btn btn-sm btn-info">Читать дальше &raquo;</a></div>';
 
         if (strpos($this->text, '[cut]') !== false) {
             $this->text = bbCode(current(explode('[cut]', $this->text)));
         } else {
-            $this->text = bbCodeTruncate($this->text, 100);
+            $this->text = bbCodeTruncate($this->text, $words);
         }
 
         return $this->text . $more;

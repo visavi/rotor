@@ -9,7 +9,6 @@ use Illuminate\Http\UploadedFile;
 use Intervention\Image\Constraint;
 use Intervention\Image\ImageManagerStatic as Image;
 
-
 trait UploadTrait
 {
     /**
@@ -21,6 +20,7 @@ trait UploadTrait
      */
     public function uploadFile(UploadedFile $file, $record = true): array
     {
+        $mime      = $file->getClientMimeType();
         $extension = strtolower($file->getClientOriginalExtension());
         $basename  = getBodyName($file->getClientOriginalName());
         $basename  = utfSubstr($basename, 0, 50) . '.' . $extension;
@@ -65,6 +65,7 @@ trait UploadTrait
             'id'        => $upload->id ?? 0,
             'path'      => $path,
             'extension' => $extension,
+            'mime'      => $mime,
         ];
     }
 }
