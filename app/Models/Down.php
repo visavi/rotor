@@ -162,21 +162,21 @@ class Down extends BaseModel
      */
     public function uploadAndConvertFile(UploadedFile $file): array
     {
-        $upload = $this->uploadFile($file);
-        $this->convertVideo($upload);
+        $file = $this->uploadFile($file);
+        $this->convertVideo($file);
 
-        return $upload;
+        return $file;
     }
 
     /**
      * Конвертирует видео
      *
-     * @param array $upload
+     * @param array $file
      * @return void
      */
-    public function convertVideo(array $upload): void
+    public function convertVideo(array $file): void
     {
-        $isVideo = strpos($upload['mime'], 'video/') !== false;
+        $isVideo = strpos($file['mime'], 'video/') !== false;
 
         // Обработка видео
         if ($isVideo && env('FFMPEG_ENABLED')) {
@@ -189,19 +189,18 @@ class Down extends BaseModel
             ];
 
             $ffmpeg = FFMpeg::create($ffconfig);
-
-            $video = $ffmpeg->open(HOME . $upload['path']);
+            $video = $ffmpeg->open(HOME . $file['path']);
 
             // Сохраняем скрин с 5 секунды
             $frame = $video->frame(TimeCode::fromSeconds(5));
-            $frame->save(HOME . $upload['path'] . '.jpg');
+            $frame->save(HOME . $file['path'] . '.jpg');
 
             File::query()->create([
                 'relate_id'   => $this->id,
                 'relate_type' => self::class,
-                'hash'        => $upload['path'] . '.jpg',
+                'hash'        => $file['path'] . '.jpg',
                 'name'        => 'screenshot.jpg',
-                'size'        => filesize(HOME . $upload['path'] . '.jpg'),
+                'size'        => filesize(HOME . $file['path'] . '.jpg'),
                 'user_id'     => getUser('id'),
                 'created_at'  => SITETIME,
             ]);
@@ -209,15 +208,15 @@ class Down extends BaseModel
             // Перекодируем видео в h264
             $ffprobe = FFProbe::create($ffconfig);
             $video = $ffprobe
-                ->streams(HOME . $upload['path'])
+                ->streams(HOME . $file['path'])
                 ->videos()
                 ->first();
 
-            if ($video && $upload['extension'] === 'mp4' && $video->get('codec_name') !== 'h264') {
+            if ($video && $file['extension'] === 'mp4' && $video->get('codec_name') !== 'h264') {
                 $format = new X264('libmp3lame', 'libx264');
-                $video->save($format, HOME . $upload['path'] . '.convert');
+                $video->save($format, HOME . $file['path'] . '.convert');
 
-                rename(HOME . $upload['path'] . '.convert', HOME . $upload['path']);
+                rename(HOME . $file['path'] . '.convert', HOME . $file['path']);
             }
         }
     }
