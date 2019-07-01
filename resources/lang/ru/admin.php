@@ -42,6 +42,13 @@ return [
         'confirm_unban' => 'Вы действительно хотите разбанить пользователя?',
     ],
 
+    'blacklists' => [
+        'email'      => 'Email',
+        'logins'     => 'Логины',
+        'domains'    => 'Домены',
+        'empty_list' => 'Список еще пуст!',
+    ],
+
     'caches' => [
         'files'        => 'Файлы',
         'images'       => 'Изображения',

@@ -24,5 +24,6 @@ Disallow: /notebooks
 Disallow: /authlogs
 Disallow: /key
 Disallow: /walls
+Disallow: /users
 
 Sitemap: /sitemap.xml
