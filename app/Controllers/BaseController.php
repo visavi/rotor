@@ -110,7 +110,7 @@ Class BaseController
 
                 ipBan(true);
                 saveErrorLog(666);
-                unlink($filename);
+                @unlink($filename);
             }
         }
     }

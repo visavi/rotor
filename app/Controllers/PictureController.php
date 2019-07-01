@@ -64,9 +64,9 @@ class PictureController extends BaseController
                 $img->fit(48);
                 $img->save($avatar);
 
-                $upload = $this->user->uploadFile($photo, false);
+                $file = $this->user->uploadFile($photo, false);
 
-                $this->user->picture = $upload['path'];
+                $this->user->picture = $file['path'];
                 $this->user->avatar  = str_replace(HOME, '', $avatar);
                 $this->user->save();
 

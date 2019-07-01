@@ -47,9 +47,6 @@
                 @foreach ($down->getFiles() as $file)
                     @if ($file->hash && file_exists(HOME . $file->hash))
 
-                        <b>{{ $file->name }}</b> ({{ formatSize($file->size) }})<br>
-                        <a class="btn btn-success" href="/downs/download/{{ $file->id }}"><i class="fa fa-download"></i> {{ trans('main.download') }}</a><br>
-
                         @if ($file->extension === 'mp3')
                             <audio preload="none" controls style="max-width:100%;">
                                 <source src="{{ $file->hash }}" type="audio/mp3">
@@ -59,14 +56,17 @@
                         @if ($file->extension === 'mp4')
                             <?php $poster = file_exists(HOME . $file->hash . '.jpg') ? $file->hash . '.jpg' : null; ?>
 
-                           <video width="640" height="360" style="max-width:100%;" poster="{{ $poster }}" preload="none" controls playsinline>
-                               <source src="{{ $file->hash }}" type="video/mp4">
-                           </video>
+                            <video width="640" height="360" style="max-width:100%;" poster="{{ $poster }}" preload="none" controls playsinline>
+                                <source src="{{ $file->hash }}" type="video/mp4">
+                            </video>
                         @endif
 
+                        <b>{{ $file->name }}</b> ({{ formatSize($file->size) }})<br>
                         @if ($file->extension === 'zip')
                             <a href="/downs/zip/{{ $file->id }}">{{ trans('loads.view_archive') }}</a><br>
                         @endif
+
+                        <a class="btn btn-success" href="/downs/download/{{ $file->id }}"><i class="fa fa-download"></i> {{ trans('main.download') }}</a><br>
                     @else
                         <i class="fa fa-download"></i> {{ trans('main.file_not_found') }}
                     @endif
@@ -76,7 +76,7 @@
         @endif
 
         @if ($down->getImages()->isNotEmpty())
-            <div class="mt-3">
+            <div class="mt-2">
                 @foreach ($down->getImages() as $image)
                     <a href="{{ $image->hash }}" class="gallery" data-group="{{ $down->id }}">{!! resizeImage($image->hash, ['alt' => $down->title]) !!}</a><br>
                 @endforeach
@@ -86,7 +86,7 @@
         {!! showError(trans('main.not_uploaded')) !!}
     @endif
 
-    <div class="mt-3">
+    <div class="mt-2">
         <i class="fa fa-comment"></i> <a href="/downs/comments/{{ $down->id }}">{{ trans('main.comments') }}</a> ({{ $down->count_comments }})
         <a href="/downs/end/{{ $down->id }}">&raquo;</a><br>
 

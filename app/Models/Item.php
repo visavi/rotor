@@ -80,16 +80,15 @@ class Item extends BaseModel
     }
 
     /**
-     * Обрезает текст
+     * Возвращает сокращенный текст объявления
      *
-     * @param int $limit
+     * @param int $words
      * @return string
      */
-    public function cutText($limit = 200): string
+    public function shortText($words = 50): string
     {
-        if (\strlen($this->text) > $limit) {
-            $this->text = strip_tags(bbCode($this->text), '<br>');
-            $this->text = mb_substr($this->text, 0, mb_strrpos(mb_substr($this->text, 0, $limit), ' ')) . '...';
+        if (\strlen($this->text) > $words) {
+            $this->text = bbCodeTruncate($this->text, $words);
         }
 
         return $this->text;
