@@ -138,6 +138,6 @@ class SettingsSeeder extends AbstractSeed
         $table = $this->table('settings');
         $table->insert($data)->save();
 
-        clearCache('settings');
+        clearCache(['settings']);
     }
 }

@@ -77,7 +77,9 @@ class GuestbookController extends BaseController
                 'created_at' => SITETIME,
             ]);
 
+            clearCache(['statguestbook']);
             $flood->saveState();
+
             sendNotify($msg, '/guestbooks', 'Гостевая книга');
             setFlash('success', 'Сообщение успешно добавлено!');
         } else {

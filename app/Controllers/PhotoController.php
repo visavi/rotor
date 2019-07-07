@@ -103,7 +103,7 @@ class PhotoController extends BaseController
                     ->where('user_id', getUser('id'))
                     ->update(['relate_id' => $photo->id]);
 
-                clearCache('recentphotos');
+                clearCache(['statphotos', 'recentphotos']);
                 $flood->saveState();
 
                 setFlash('success', 'Фотография успешно загружена!');

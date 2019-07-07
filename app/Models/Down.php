@@ -162,10 +162,10 @@ class Down extends BaseModel
      */
     public function uploadAndConvertFile(UploadedFile $file): array
     {
-        $file = $this->uploadFile($file);
-        $this->convertVideo($file);
+        $uploadFile = $this->uploadFile($file);
+        $this->convertVideo($uploadFile);
 
-        return $file;
+        return $uploadFile;
     }
 
     /**

@@ -99,7 +99,6 @@ class PictureController extends BaseController
         }
 
         if ($validator->isValid()) {
-
             deleteFile(HOME . $this->user->picture);
             deleteFile(HOME . $this->user->avatar);
 

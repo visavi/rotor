@@ -104,7 +104,7 @@ class ModuleController extends AdminController
         $moduleConfig = include $modulePath . '/module.php';
         $module->createSymlink($modulePath);
         $module->migrate($modulePath);
-        clearCache('routes');
+        clearCache(['routes']);
 
         $result = 'Модуль успешно установлен!';
 
@@ -160,7 +160,7 @@ class ModuleController extends AdminController
         }
 
         $module->deleteSymlink($modulePath);
-        clearCache('routes');
+        clearCache(['routes']);
 
         if ($disable) {
             $module->update([

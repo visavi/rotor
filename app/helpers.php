@@ -333,7 +333,7 @@ function statsOnline()
         file_put_contents(STORAGE . '/temp/online.dat', json_encode($online), LOCK_EX);
     }
 
-    return json_decode(file_get_contents(STORAGE . '/temp/online.dat'));
+    return json_decode(file_get_contents(STORAGE . '/temp/online.dat'), false);
 }
 
 /**
@@ -364,7 +364,7 @@ function statsCounter()
         file_put_contents(STORAGE . '/temp/counter.dat', json_encode($counts), LOCK_EX);
     }
 
-    return json_decode(file_get_contents(STORAGE . '/temp/counter.dat'));
+    return json_decode(file_get_contents(STORAGE . '/temp/counter.dat'), false);
 }
 
 /**
@@ -400,7 +400,7 @@ function statsUsers()
         $new  = User::query()->where('created_at', '>', $startDay)->count();
 
         if ($new) {
-            $stat = $stat . '/+' . $new;
+            $stat .= '/+' . $new;
         }
 
         file_put_contents(STORAGE . '/temp/statusers.dat', $stat, LOCK_EX);
@@ -490,7 +490,7 @@ function statsPhotos()
         $totalNew = Photo::query()->where('created_at', '>', strtotime('-3 day', SITETIME))->count();
 
         if ($totalNew) {
-            $stat = $stat . '/+' . $totalNew;
+            $stat .= '/+' . $totalNew;
         }
 
         file_put_contents(STORAGE . '/temp/statphotos.dat', $stat, LOCK_EX);
@@ -613,7 +613,7 @@ function statsBlog()
         $totalnew  = Blog::query()->where('created_at', '>', strtotime('-3 day', SITETIME))->count();
 
         if ($totalnew) {
-            $stat = $stat . '/+' . $totalnew;
+            $stat .= '/+' . $totalnew;
         }
 
         file_put_contents(STORAGE . '/temp/statblog.dat', $stat, LOCK_EX);
@@ -719,7 +719,7 @@ function statsBoard()
         $totalnew  = Item::query()->where('updated_at', '>', strtotime('-3 day', SITETIME))->count();
 
         if ($totalnew) {
-            $stat = $stat . '/+' . $totalnew;
+            $stat .= '/+' . $totalnew;
         }
 
         file_put_contents(STORAGE . '/temp/statboard.dat', $stat, LOCK_EX);
@@ -820,7 +820,7 @@ function lastNews()
             file_put_contents(STORAGE . '/temp/lastnews.dat', json_encode($news, JSON_UNESCAPED_UNICODE), LOCK_EX);
         }
 
-        $news = json_decode(file_get_contents(STORAGE . '/temp/lastnews.dat'));
+        $news = json_decode(file_get_contents(STORAGE . '/temp/lastnews.dat'), false);
 
         if ($news) {
             foreach ($news as $data) {
@@ -1079,7 +1079,7 @@ function getAdvertUser()
             saveAdvertUser();
         }
 
-        $datafile = json_decode(file_get_contents(STORAGE . '/temp/adverts.dat'));
+        $datafile = json_decode(file_get_contents(STORAGE . '/temp/adverts.dat'), false);
 
         if ($datafile) {
             $total = count($datafile);
@@ -1142,7 +1142,7 @@ function recentPhotos($show = 5)
         file_put_contents(STORAGE . '/temp/recentphotos.dat', json_encode($recent, JSON_UNESCAPED_UNICODE), LOCK_EX);
     }
 
-    $photos = json_decode(file_get_contents(STORAGE . '/temp/recentphotos.dat'));
+    $photos = json_decode(file_get_contents(STORAGE . '/temp/recentphotos.dat'), false);
 
     if ($photos) {
         foreach ($photos as $photo) {
@@ -1170,7 +1170,7 @@ function recentTopics($show = 5)
         file_put_contents(STORAGE . '/temp/recenttopics.dat', json_encode($lastTopics, JSON_UNESCAPED_UNICODE), LOCK_EX);
     }
 
-    $topics = json_decode(file_get_contents(STORAGE . '/temp/recenttopics.dat'));
+    $topics = json_decode(file_get_contents(STORAGE . '/temp/recenttopics.dat'), false);
 
     if ($topics) {
         foreach ($topics as $topic) {
@@ -1199,7 +1199,7 @@ function recentFiles($show = 5)
         file_put_contents(STORAGE . '/temp/recentfiles.dat', json_encode($lastFiles, JSON_UNESCAPED_UNICODE), LOCK_EX);
     }
 
-    $files = json_decode(file_get_contents(STORAGE . '/temp/recentfiles.dat'));
+    $files = json_decode(file_get_contents(STORAGE . '/temp/recentfiles.dat'), false);
 
     if ($files) {
         foreach ($files as $file) {
@@ -1225,7 +1225,7 @@ function recentBlogs($show = 5)
         file_put_contents(STORAGE . '/temp/recentblog.dat', json_encode($lastBlogs, JSON_UNESCAPED_UNICODE), LOCK_EX);
     }
 
-    $blogs = json_decode(file_get_contents(STORAGE . '/temp/recentblog.dat'));
+    $blogs = json_decode(file_get_contents(STORAGE . '/temp/recentblog.dat'), false);
 
     if ($blogs) {
         foreach ($blogs as $blog) {
@@ -1252,7 +1252,7 @@ function recentBoards($show = 5)
         file_put_contents(STORAGE . '/temp/recentboard.dat', json_encode($lastItems, JSON_UNESCAPED_UNICODE), LOCK_EX);
     }
 
-    $items = json_decode(file_get_contents(STORAGE . '/temp/recentboard.dat'));
+    $items = json_decode(file_get_contents(STORAGE . '/temp/recentboard.dat'), false);
 
     if ($items) {
         foreach ($items as $item) {
@@ -1495,19 +1495,18 @@ function deleteDir($dir)
 }
 
 /**
- * Удаляет файл и превью
+ * Удаляет файл
  *
  * @param string $path путь к файлу
- * @param bool   $thumbDelete
  * @return bool
  */
-function deleteFile($path, $thumbDelete = true)
+function deleteFile(string $path)
 {
     if (file_exists($path) && is_file($path)) {
         unlink($path);
     }
 
-    if ($thumbDelete) {
+    if (\in_array(getExtension($path), ['jpg', 'jpeg', 'gif', 'png'], true)) {
         $thumb = ltrim(str_replace([HOME, '/'], ['', '_'], $path), '_');
         $thumb = UPLOADS . '/thumbnails/' . $thumb;
 
@@ -1583,13 +1582,20 @@ function performance()
 /**
  * Очистка кеш-файлов
  *
- * @param string $filename
+ * @param array $files
  * @return bool результат выполнения
  */
-function clearCache(string $filename = null)
+function clearCache(array $files = [])
 {
-    if ($filename) {
-        return deleteFile(STORAGE . '/temp/' . $filename . '.dat', false);
+    if ($files) {
+        foreach ($files as $file) {
+            $file = STORAGE . '/temp/' . $file . '.dat';
+            if (file_exists($file) && is_file($file)) {
+                unlink($file);
+            }
+        }
+
+        return true;
     }
 
     $files = glob(STORAGE . '/temp/*.dat');
@@ -2224,7 +2230,7 @@ function getQueryLog()
 function ipBan($save = false)
 {
     if (! $save && file_exists(STORAGE . '/temp/ipban.dat')) {
-        $ipBan = json_decode(file_get_contents(STORAGE . '/temp/ipban.dat'));
+        $ipBan = json_decode(file_get_contents(STORAGE . '/temp/ipban.dat'), false);
     } else {
         $ipBan = Ban::query()->pluck('ip')->all();
         file_put_contents(STORAGE . '/temp/ipban.dat', json_encode($ipBan), LOCK_EX);
@@ -2394,7 +2400,7 @@ function getCourses()
         }
     }
 
-    $courses = @json_decode(file_get_contents(STORAGE . '/temp/courses.dat'));
+    $courses = @json_decode(file_get_contents(STORAGE . '/temp/courses.dat'), false);
 
     return view('app/_courses', compact('courses'));
 }

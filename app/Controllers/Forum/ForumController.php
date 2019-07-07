@@ -198,7 +198,7 @@ class ForumController extends BaseController
                     VoteAnswer::query()->insert($prepareAnswers);
                 }
 
-                clearCache('recenttopics');
+                clearCache(['statforum', 'recenttopics']);
                 $flood->saveState();
 
                 setFlash('success', 'Новая тема успешно создана!');
