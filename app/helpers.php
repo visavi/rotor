@@ -1506,7 +1506,7 @@ function deleteFile(string $path)
         unlink($path);
     }
 
-    if (\in_array(getExtension($path), ['jpg', 'jpeg', 'gif', 'png'], true)) {
+    if (in_array(getExtension($path), ['jpg', 'jpeg', 'gif', 'png'], true)) {
         $thumb = ltrim(str_replace([HOME, '/'], ['', '_'], $path), '_');
         $thumb = UPLOADS . '/thumbnails/' . $thumb;
 

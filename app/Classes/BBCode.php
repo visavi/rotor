@@ -308,7 +308,7 @@ class BBCode
      */
     public function only($only = null)
     {
-        $only = \is_array($only) ? $only : \func_get_args();
+        $only = is_array($only) ? $only : func_get_args();
         self::$parsers = $this->arrayOnly($only);
         return $this;
     }
@@ -321,7 +321,7 @@ class BBCode
      */
     public function except($except = null)
     {
-        $except = \is_array($except) ? $except : \func_get_args();
+        $except = is_array($except) ? $except : func_get_args();
         self::$parsers = $this->arrayExcept($except);
         return $this;
     }
