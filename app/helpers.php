@@ -198,7 +198,7 @@ function intar($numbers)
 {
     if ($numbers) {
         if (is_array($numbers)) {
-            $numbers = array_map('\intval', $numbers);
+            $numbers = array_map('intval', $numbers);
         } else {
             $numbers = [(int) $numbers];
         }
@@ -1034,7 +1034,7 @@ function truncateString(string $value, int $limit = 100, string $end = '...'): s
         $string = mb_substr($string, 0, $limit, 'utf-8');
     }
 
-    return $string . $end;
+    return trim($string) . $end;
 }
 
 /**
@@ -1049,7 +1049,7 @@ function truncateWord(string $value, int $words = 20, string $end = '...'): stri
 {
     $value = strip_tags($value);
 
-    return Str::words($value, $words, $end);
+    return Str::words(trim($value), $words, $end);
 }
 
 /**
@@ -1064,7 +1064,7 @@ function truncateDescription(string $value, int $words = 20, string $end = ''): 
 {
     $value = strip_tags(preg_replace('/\s+/', ' ', $value));
 
-    return Str::words($value, $words, $end);
+    return Str::words(trim($value), $words, $end);
 }
 
 /**

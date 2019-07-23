@@ -4,7 +4,7 @@
     {{ $blog->title }}
 @stop
 
-@section('description', truncateDescription(bbCode($blog->text)))
+@section('description', truncateDescription(bbCode($blog->text, false)))
 
 @section('content')
 

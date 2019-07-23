@@ -1,6 +1,8 @@
 @extends('layout')
 
-@section('title', trans('index.banned_list'))
+@section('title')
+    {{ trans('index.banned_list') }}
+@stop
 
 @section('breadcrumb')
     <nav>

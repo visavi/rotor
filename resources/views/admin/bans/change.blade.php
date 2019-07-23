@@ -1,6 +1,8 @@
 @extends('layout')
 
-@section('title', trans('admin.bans.change_ban') . ' ' . $user->login)
+@section('title')
+    {{ trans('admin.bans.change_ban') }} {{ $user->login }}
+@stop
 
 @section('breadcrumb')
     <nav>

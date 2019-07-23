@@ -61,6 +61,12 @@ class TopicController extends BaseController
             ->orderBy('created_at')
             ->get();
 
+        if ($page->current === 1) {
+            $firstPost = $posts->first();
+        } else {
+            $firstPost = Post::query()->where('topic_id', $topic->id)->orderBy('created_at')->first();
+        }
+
         if ($topic->count_posts > $topic->bookmark_posts && getUser()) {
             Bookmark::query()
                 ->where('topic_id', $topic->id)
@@ -96,7 +102,7 @@ class TopicController extends BaseController
             }
         }
 
-        $description = $posts->first() ? truncateDescription(bbCode($posts->first()->text)) : $topic->title;
+        $description = $firstPost ? truncateDescription(bbCode($firstPost->text, false)) : $topic->title;
 
         return view('forums/topic', compact('topic', 'posts', 'page', 'vote', 'description'));
     }
@@ -142,7 +148,7 @@ class TopicController extends BaseController
 
         if ($files && $validator->isValid()) {
             $validator
-                ->lte(\count($files), setting('maxfiles'), ['files' => 'Разрешено загружать не более ' . setting('maxfiles') . ' файлов'])
+                ->lte(count($files), setting('maxfiles'), ['files' => 'Разрешено загружать не более ' . setting('maxfiles') . ' файлов'])
                 ->gte(getUser('point'), setting('forumloadpoints'), 'У вас недостаточно актива для загрузки файлов!');
 
             $rules = [
@@ -164,7 +170,7 @@ class TopicController extends BaseController
                 $post->created_at + 600 > SITETIME &&
                 getUser('id') === $post->user_id &&
                 (utfStrlen($msg) + utfStrlen($post->text) <= setting('forumtextlength')) &&
-                \count($files) + $post->files->count() <= setting('maxfiles')
+                count($files) + $post->files->count() <= setting('maxfiles')
             ) {
 
                 $newpost = $post->text . "\n\n" . '[i][size=1]Добавлено через ' . makeTime(SITETIME - $post->created_at) . ' сек.[/size][/i]' . "\n" . $msg;
@@ -246,7 +252,7 @@ class TopicController extends BaseController
             abort(404, 'Данной темы не существует!');
         }
 
-        $isModer = \in_array(getUser('id'), array_map('\intval', explode(',', (string) $topic->moderators)), true);
+        $isModer = in_array(getUser('id'), array_map('intval', explode(',', (string) $topic->moderators)), true);
 
         $validator->equal($token, $_SESSION['token'], trans('validator.token'))
             ->true(getUser(), 'Для закрытия тем необходимо авторизоваться')
@@ -394,7 +400,7 @@ class TopicController extends BaseController
                         }
                     }
 
-                    $validator->between(\count($answers), 2, 10, ['answers' => 'Недостаточное количество вариантов ответов!']);
+                    $validator->between(count($answers), 2, 10, ['answers' => 'Недостаточное количество вариантов ответов!']);
                 }
             }
 
@@ -480,7 +486,7 @@ class TopicController extends BaseController
             abort('default', 'Редактирование невозможно, данная тема закрыта!');
         }
 
-        $isModer = \in_array(getUser('id'), array_map('\intval', explode(',', (string) $post->moderators)), true);
+        $isModer = in_array(getUser('id'), array_map('intval', explode(',', (string) $post->moderators)), true);
 
         if (! $isModer && $post->user_id !== getUser('id')) {
             abort('default', 'Редактировать сообщения может только автор или кураторы темы!');
@@ -625,7 +631,7 @@ class TopicController extends BaseController
             ->orderBy('created_at')
             ->get();
 
-        $description = $posts->first() ? truncateDescription(bbCode($posts->first()->text)) : $topic->title;
+        $description = $posts->first() ? truncateDescription(bbCode($posts->first()->text, false)) : $topic->title;
 
         return view('forums/print', compact('topic', 'posts', 'description'));
     }

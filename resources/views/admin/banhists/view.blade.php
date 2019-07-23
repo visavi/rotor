@@ -1,6 +1,8 @@
 @extends('layout')
 
-@section('title', trans('admin.banhists.view_history') . ' ' . $user->login)
+@section('title')
+    {{ trans('admin.banhists.view_history') }} {{ $user->login }}
+@stop
 
 @section('breadcrumb')
     <nav>

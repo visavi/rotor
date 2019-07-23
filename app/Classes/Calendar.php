@@ -17,7 +17,7 @@ class Calendar
     public function getCalendar($time = SITETIME): string
     {
         [$date['day'], $date['month'], $date['year']] = explode('.', dateFixed($time, 'j.n.Y'));
-        $date       = array_map('\intval', $date);
+        $date       = array_map('intval', $date);
         $startMonth = mktime(0, 0, 0, $date['month'], 1, $date['year']);
         $endMonth   = strtotime('+1 month', $startMonth);
 
