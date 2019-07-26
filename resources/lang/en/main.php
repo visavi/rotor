@@ -71,6 +71,10 @@ return [
     'all_comments'      => 'All comments',
     'continue'          => 'Continue',
     'copy'              => 'Copy',
+    'note'              => 'Note',
+    'total'             => 'Total',
+    'record'            => 'Record',
+    'analysis'          => 'Analysis',
 
     'request'        => 'Request',
     'not_matter'     => 'Not matter',
@@ -91,6 +95,7 @@ return [
     'cost'              => 'Cost',
     'cash_money'        => 'You have in stock',
     'user_login'        => 'User login',
+    'users'             => 'Пользователи',
     'total_users'       => 'Total users',
     'empty_users'       => 'No users yet!',
     'reputation'        => 'Reputation',
@@ -152,6 +157,18 @@ return [
     'november'  => 'November',
     'december'  => 'December',
 
+    'minutes' => 'Минуты',
+    'hours'   => 'Часы',
+    'days'    => 'Дни',
+
+    'plural_years'   => 'years',
+    'plural_months'  => 'months',
+    'plural_weeks'   => 'weeks',
+    'plural_days'    => 'days',
+    'plural_hours'   => 'hours',
+    'plural_minutes' => 'minutes',
+    'plural_seconds' => 'seconds',
+
     'male'   => 'Male',
     'female' => 'Female',
 
@@ -162,4 +179,7 @@ return [
     'user'   => 'User',
     'pended' => 'Pended',
     'banned' => 'Banned',
+
+    'ban'   => 'Ban',
+    'unban' => 'Unban',
 ];

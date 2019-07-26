@@ -74,6 +74,7 @@ return [
     'note'              => 'Заметка',
     'total'             => 'Всего',
     'record'            => 'Запись',
+    'analysis'          => 'Анализ',
 
     'request'        => 'Запрос',
     'not_matter'     => 'Не имеет значения',
@@ -94,6 +95,7 @@ return [
     'cost'              => 'Цена',
     'cash_money'        => 'У вас в наличии',
     'user_login'        => 'Логин пользователя',
+    'users'             => 'Пользователи',
     'total_users'       => 'Всего пользователей',
     'empty_users'       => 'Пользователей еще нет!',
     'reputation'        => 'Репутация',
@@ -155,9 +157,9 @@ return [
     'november'  => 'Ноября',
     'december'  => 'Декабря',
 
-    'minutes' => 'Минуты',
-    'hours'   => 'Часы',
-    'days'    => 'Дни',
+    'minutes' => 'Minutes',
+    'hours'   => 'Hours',
+    'days'    => 'Days',
 
     'plural_years'   => 'год,года,лет',
     'plural_months'  => 'месяц,месяца,месяцев',

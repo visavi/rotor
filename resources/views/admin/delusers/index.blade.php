@@ -1,7 +1,7 @@
 @extends('layout')
 
 @section('title')
-    Чистка пользователей
+    {{ trans('index.user_cleaning') }}
 @stop
 
 @section('breadcrumb')
@@ -9,63 +9,60 @@
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
             <li class="breadcrumb-item"><a href="/admin">{{ trans('index.panel') }}</a></li>
-            <li class="breadcrumb-item active">Чистка пользователей</li>
+            <li class="breadcrumb-item active">{{ trans('index.user_cleaning') }}</li>
         </ol>
     </nav>
 @stop
 
 @section('content')
     @if ($users->isEmpty())
-        Удалить пользователей которые не посещали сайт:<br>
+        {{ trans('admin.delusers.condition') }}:<br>
 
         <div class="form">
             <form action="/admin/delusers" method="post">
 
                 <div class="form-group">
-                    <label for="period">Период:</label>
+                    <label for="period">{{ trans('main.period') }}:</label>
                     <select class="form-control" id="period" name="period">
-                        <option value="1825">5 лет</option>
-                        <option value="1460">4 года</option>
-                        <option value="1095">3 года</option>
-                        <option value="730">2 года</option>
-                        <option value="550">1.5 года</option>
-                        <option value="365">1 год</option>
-                        <option value="180">0.5 года</option>
+                        <option value="1825">{{ formatTime(1825 * 86400) }}</option>
+                        <option value="1460">{{ formatTime(1460 * 86400) }}</option>
+                        <option value="1095">{{ formatTime(1095 * 86400) }}</option>
+                        <option value="730">{{ formatTime(730 * 86400) }}</option>
+                        <option value="365">{{ formatTime(365 * 86400) }}</option>
+                        <option value="180">{{ formatTime(180 * 86400) }}</option>
                     </select>
                 </div>
 
                 <div class="form-group">
-                    <label for="point">Минимум актива:</label>
+                    <label for="point">{{ trans('admin.delusers.minimum_asset') }}:</label>
                     <input type="text" class="form-control" id="point" name="point"  value="0" required>
                 </div>
 
-                <button class="btn btn-primary">Анализ</button>
+                <button class="btn btn-primary">{{ trans('main.analysis') }}</button>
             </form>
         </div><br>
 
         {{ trans('main.total_users') }}: <b>{{ $total }}</b><br><br>
     @else
 
-        Будут удалены пользователи не посещавшие сайт более <b>{{ $period }}</b> дней <br>
-        И имеющие в своем активе не более {{ plural($point, setting('scorename')) }}<br><br>
+        {{ trans('admin.delusers.deleted_condition') }} {{ formatTime($period) }}<br>
+        {{ trans('admin.delusers.asset_condition') }} {{ plural($point, setting('scorename')) }}<br><br>
 
-        <b>Список:</b>
+        <b>{{ trans('main.users') }}:</b>
 
         @foreach ($users as $user)
-
             <?php $comma = $loop->first ? '' : ',' ?>
-
             {{ $comma }} {!! $user->getProfile() !!}
         @endforeach
 
-        <br><br>Будет удалено пользователей: <b>{{ $users->count() }}</b><br>
+        <br><br>{{ trans('admin.delusers.deleted_users') }}: <b>{{ $users->count() }}</b><br>
 
         <form action="/admin/delusers/clear" method="post">
             @csrf
             <input type="hidden" name="period" value="{{ $period }}">
             <input type="hidden" name="point" value="{{ $point }}">
 
-            <button class="btn btn-primary">Удалить пользователей</button>
+            <button class="btn btn-primary">{{ trans('admin.delusers.delete_users') }}</button>
         </form><br>
     @endif
 @stop
