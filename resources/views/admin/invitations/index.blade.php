@@ -1,7 +1,7 @@
 @extends('layout')
 
 @section('title')
-    Приглашения
+    {{ trans('index.invitations') }}
 @stop
 
 @section('breadcrumb')
@@ -9,20 +9,20 @@
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
             <li class="breadcrumb-item"><a href="/admin">{{ trans('index.panel') }}</a></li>
-            <li class="breadcrumb-item active">Приглашения</li>
+            <li class="breadcrumb-item active">{{ trans('index.invitations') }}</li>
         </ol>
     </nav>
 @stop
 
 @section('content')
     @if (! setting('invite'))
-        <i class="fa fa-exclamation-circle"></i> <span style="color:#ff0000"><b>Регистрация по приглашения выключена!</b></span><br><br>
+        <i class="fa fa-exclamation-circle"></i> <span class="text-danger">{{ trans('admin.invitations.hint') }}</span><br><br>
     @endif
 
     @if ($used)
-        <a href="/admin/invitations">Неиспользованные</a> / <b>Использованные</b><hr>
+        <a href="/admin/invitations">{{ trans('admin.invitations.unused') }}</a> / <b>{{ trans('admin.invitations.used') }}</b><hr>
     @else
-        <b>Неиспользованные</b> / <a href="/admin/invitations?used=1">Использованные</a><hr>
+        <b>{{ trans('admin.invitations.unused') }}</b> / <a href="/admin/invitations?used=1">{{ trans('admin.invitations.used') }}</a><hr>
     @endif
 
     @if ($invites->isNotEmpty())
@@ -36,27 +36,27 @@
                 </div>
 
                 <div>
-                    Владелец: {!! $invite->user->getProfile() !!}<br>
+                    {{ trans('admin.invitations.owner') }}: {!! $invite->user->getProfile() !!}<br>
 
                     @if ($invite->invite_user_id)
-                        Приглашенный: {!! $invite->inviteUser->getProfile() !!}<br>
+                        {{ trans('admin.invitations.invited') }}: {!! $invite->inviteUser->getProfile() !!}<br>
                     @endif
 
-                    Создан: {{ dateFixed($invite->created_at) }}<br>
+                    {{ trans('main.created') }}: {{ dateFixed($invite->created_at) }}<br>
                 </div>
             @endforeach
 
-            <button class="btn btn-sm btn-danger">Удалить выбранное</button>
+            <button class="btn btn-sm btn-danger">{{ trans('main.delete_selected') }}</button>
         </form>
 
     {!! pagination($page) !!}
 
-    Всего ключей: <b>{{ $page->total }}</b><br><br>
+        {{ trans('main.total') }}: <b>{{ $page->total }}</b><br><br>
 
     @else
-        {!! showError('Приглашений еще нет!') !!}
+        {!! showError(trans('admin.invitations.empty_invitations')) !!}
     @endif
 
-    <i class="fa fa-check"></i> <a href="/admin/invitations/create">Создать ключи</a><br>
-    <i class="fa fa-key"></i> <a href="/admin/invitations/keys">Список ключей</a><br>
+    <i class="fa fa-check"></i> <a href="/admin/invitations/create">{{ trans('admin.invitations.create_keys') }}</a><br>
+    <i class="fa fa-key"></i> <a href="/admin/invitations/keys">{{ trans('admin.invitations.list_keys') }}</a><br>
 @stop
