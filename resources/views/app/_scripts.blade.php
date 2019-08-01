@@ -2,7 +2,7 @@
 @if (file_exists(HOME . '/assets/modules/compiled.js'))
     <script src="/assets/modules/compiled.js"></script>
 @else
-    <script src="/assets/js/jquery-3.3.1.min.js"></script>
+    <script src="/assets/js/jquery.min.js"></script>
     <script src="/assets/js/bootstrap.bundle.min.js"></script>
     <script src="/assets/js/bootstrap-colorpicker.min.js"></script>
     <script src="/assets/js/prettify.js"></script>

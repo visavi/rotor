@@ -12,7 +12,7 @@ let mix = require('laravel-mix');
  */
 
 mix.scripts([
-    'public/assets/js/jquery-3.3.1.min.js',
+    'public/assets/js/jquery.min.js',
     'public/assets/js/bootstrap.bundle.min.js',
     'public/assets/js/bootstrap-colorpicker.min.js',
     'public/assets/js/prettify.js',
