@@ -9,7 +9,7 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 
-class FilesController extends AdminController
+class FileController extends AdminController
 {
     private $file;
     private $path;
@@ -78,7 +78,10 @@ class FilesController extends AdminController
     {
         $fileName = $this->path ? '/' . $this->file : $this->file;
 
-        if (! preg_match('#^([a-z0-9_\-/]+|)$#', $this->path) || ! preg_match('#^[a-z0-9_\-/]+$#', $this->file)) {
+        if (
+            ($this->path && ! preg_match('#^([a-z0-9_\-/]+|)$#', $this->path))
+            || ! preg_match('#^[a-z0-9_\-/]+$#', $this->file)
+        ) {
             abort(404, 'Недопустимое название страницы!');
         }
 
@@ -95,12 +98,10 @@ class FilesController extends AdminController
             $msg   = $request->input('msg');
 
             if ($token === $_SESSION['token']) {
-
                 file_put_contents(RESOURCES . '/views/' . $this->path . $fileName . '.blade.php', $msg);
 
                 setFlash('success', 'Файл успешно сохранен!');
                 redirect ('/admin/files/edit?path=' . $this->path . '&file=' . $this->file);
-
             } else {
                 setInput($request->all());
                 setFlash('danger', trans('validator.token'));
@@ -146,9 +147,7 @@ class FilesController extends AdminController
             }
 
             if ($validator->isValid()) {
-
                 if ($filename) {
-
                     file_put_contents(RESOURCES . '/views/' . $this->path . $fileName . '.blade.php', '');
                     chmod(RESOURCES.'/views/' . $this->path . $fileName . '.blade.php', 0666);
 
@@ -163,7 +162,6 @@ class FilesController extends AdminController
                     setFlash('success', 'Новая директория успешно создана!');
                     redirect('/admin/files?path=' . $this->path . $dirName);
                 }
-
             } else {
                 setInput($request->all());
                 setFlash('danger', $validator->getErrors());
@@ -204,7 +202,6 @@ class FilesController extends AdminController
         }
 
         if ($validator->isValid()) {
-
             if ($filename) {
                 unlink(RESOURCES . '/views/' . $this->path . $fileName . '.blade.php');
                 setFlash('success', 'Файл успешно удален!');
@@ -212,7 +209,6 @@ class FilesController extends AdminController
                 deleteDir(RESOURCES . '/views/' . $this->path . $dirName);
                 setFlash('success', 'Директория успешно удалена!');
             }
-
         } else {
             setFlash('danger', $validator->getErrors());
         }

@@ -383,10 +383,10 @@ return FastRoute\cachedDispatcher(static function(RouteCollector $r) {
         $r->addRoute(['GET', 'POST'], '/delusers', [App\Controllers\Admin\DelUserController::class, 'index']);
         $r->post('/delusers/clear', [App\Controllers\Admin\DelUserController::class, 'clear']);
 
-        $r->get('/files', [App\Controllers\Admin\FilesController::class, 'index']);
-        $r->addRoute(['GET', 'POST'], '/files/edit', [App\Controllers\Admin\FilesController::class, 'edit']);
-        $r->addRoute(['GET', 'POST'], '/files/create', [App\Controllers\Admin\FilesController::class, 'create']);
-        $r->get('/files/delete', [App\Controllers\Admin\FilesController::class, 'delete']);
+        $r->get('/files', [App\Controllers\Admin\FileController::class, 'index']);
+        $r->addRoute(['GET', 'POST'], '/files/edit', [App\Controllers\Admin\FileController::class, 'edit']);
+        $r->addRoute(['GET', 'POST'], '/files/create', [App\Controllers\Admin\FileController::class, 'create']);
+        $r->get('/files/delete', [App\Controllers\Admin\FileController::class, 'delete']);
 
         $r->get('/stickers', [App\Controllers\Admin\StickerController::class, 'index']);
         $r->get('/stickers/{id:\d+}', [App\Controllers\Admin\StickerController::class, 'category']);

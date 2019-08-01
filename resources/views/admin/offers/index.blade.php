@@ -79,7 +79,7 @@
 
         {{ trans('offers.total') }}: <b>{{ $page->total }}</b><br><br>
     @else
-        {!! showError(trans('offers.empty_offers')) !!}
+        {!! showError(trans('main.empty_records')) !!}
     @endif
 
     @if (isAdmin('boss'))

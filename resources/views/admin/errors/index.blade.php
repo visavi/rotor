@@ -1,7 +1,7 @@
 @extends('layout')
 
 @section('title')
-    Ошибки / Автобаны
+    {{ trans('index.errors') }}
 @stop
 
 @section('breadcrumb')
@@ -9,14 +9,14 @@
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
             <li class="breadcrumb-item"><a href="/admin">{{ trans('index.panel') }}</a></li>
-            <li class="breadcrumb-item active">Ошибки / Автобаны</li>
+            <li class="breadcrumb-item active">{{ trans('index.errors') }}</li>
         </ol>
     </nav>
 @stop
 
 @section('content')
     @if (empty(setting('errorlog')))
-        <span class="text-danger"><b>Внимание! Запись логов выключена в настройках!</b></span><br>
+        <span class="text-danger">{{ trans('admin.errors.hint') }}</span><br>
     @endif
 
     <ol class="breadcrumb">
@@ -39,21 +39,21 @@
                 <b>{{ $data->request }}</b> ({{ dateFixed($data->created_at) }})
             </div>
             <div>
-                Referer: {{ $data->referer ?: 'Не определено' }}<br>
-                Пользователь: {!! $data->user->getProfile() !!}<br>
+                Referer: {{ $data->referer ?: trans('main.undefined') }}<br>
+                {{ trans('main.user') }}: {!! $data->user->getProfile() !!}<br>
                 <span class="data">({{ $data->brow }}, {{ $data->ip }})</span>
             </div>
         @endforeach
 
         {!! pagination($page) !!}
 
-        Всего записей: <b>{{ $page->total }}</b><br><br>
+        {{ trans('main.total') }}: <b>{{ $page->total }}</b><br><br>
 
         @if (isAdmin('boss'))
-            <i class="fa fa-trash-alt"></i> <a href="/admin/errors/clear?token={{ $_SESSION['token'] }}">Очистить</a><br>
+            <i class="fa fa-trash-alt"></i> <a href="/admin/errors/clear?token={{ $_SESSION['token'] }}">{{ trans('main.clear') }}</a><br>
         @endif
 
     @else
-        {!! showError('Записей еще нет!') !!}
+        {!! showError(trans('main.empty_records')) !!}
     @endif
 @stop

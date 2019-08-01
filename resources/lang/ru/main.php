@@ -52,6 +52,7 @@ return [
     'comments'          => 'Комментарии',
     'empty_comments'    => 'Комментариев еще нет!',
     'empty_messages'    => 'Сообщений еще нет!',
+    'empty_records'     => 'Записей еще нет!',
     'my'                => 'Мои',
     'new'               => 'Новые',
     'all'               => 'Все',
@@ -75,6 +76,8 @@ return [
     'total'             => 'Всего',
     'record'            => 'Запись',
     'analysis'          => 'Анализ',
+    'version'           => 'Версия',
+    'undefined'         => 'Не определено',
 
     'request'        => 'Запрос',
     'not_matter'     => 'Не имеет значения',
@@ -90,7 +93,6 @@ return [
     'or'             => 'Или',
     'full'           => 'Полный',
     'search_request' => 'Поиск запроса',
-    'version'        => 'Версия',
 
     'cost'              => 'Цена',
     'cash_money'        => 'У вас в наличии',
@@ -157,9 +159,9 @@ return [
     'november'  => 'Ноября',
     'december'  => 'Декабря',
 
-    'minutes' => 'Minutes',
-    'hours'   => 'Hours',
-    'days'    => 'Days',
+    'minutes' => 'Минуты',
+    'hours'   => 'Часы',
+    'days'    => 'Дни',
 
     'plural_years'   => 'год,года,лет',
     'plural_months'  => 'месяц,месяца,месяцев',

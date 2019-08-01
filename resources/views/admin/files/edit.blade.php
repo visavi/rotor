@@ -1,7 +1,7 @@
 @extends('layout')
 
 @section('title')
-    {{ 'Редактирование файла '.$path.$fileName.'.blade.php' }}
+    {{ trans('admin.files.file_editing') . ' ' . $path . $fileName . '.blade.php' }}
 @stop
 
 @section('breadcrumb')
@@ -9,9 +9,11 @@
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
             <li class="breadcrumb-item"><a href="/admin">{{ trans('index.panel') }}</a></li>
-            <li class="breadcrumb-item"><a href="/admin/files">Редактирование страниц</a></li>
-            <li class="breadcrumb-item"><a href="/admin/files?path={{ $path }}">{{ $path }}</a></li>
-            <li class="breadcrumb-item active">Редактирование файла</li>
+            <li class="breadcrumb-item"><a href="/admin/files">{{ trans('index.pages_editing') }}</a></li>
+            @if ($path)
+                <li class="breadcrumb-item"><a href="/admin/files?path={{ $path }}">{{ $path }}</a></li>
+            @endif
+            <li class="breadcrumb-item active">{{ trans('admin.files.file_editing') }}</li>
         </ol>
     </nav>
 @stop
@@ -25,9 +27,9 @@
                 <div class="invalid-feedback">{{ textError('msg') }}</div>
             </div>
 
-            <button class="btn btn-primary">Редактировать</button>
+            <button class="btn btn-primary">{{ trans('main.edit') }}</button>
         </form>
     </div><br>
 
-    <p class="text-muted font-italic">Нажмите Ctrl+Enter для перевода строки, Shift+Enter для вставки линии</p>
+    <p class="text-muted font-italic">{{ trans('admin.files.edit_hint') }}</p>
 @stop

@@ -52,6 +52,7 @@ return [
     'comments'          => 'Comments',
     'empty_comments'    => 'No comments yet!',
     'empty_messages'    => 'No messages yet!',
+    'empty_records'     => 'No records yet!',
     'my'                => 'My',
     'new'               => 'New',
     'all'               => 'All',
@@ -75,6 +76,8 @@ return [
     'total'             => 'Total',
     'record'            => 'Record',
     'analysis'          => 'Analysis',
+    'version'           => 'Version',
+    'undefined'         => 'Undefined',
 
     'request'        => 'Request',
     'not_matter'     => 'Not matter',
@@ -90,7 +93,6 @@ return [
     'or'             => 'Or',
     'full'           => 'Full',
     'search_request' => 'Search request',
-    'version'        => 'Version',
 
     'cost'              => 'Cost',
     'cash_money'        => 'You have in stock',
@@ -157,9 +159,9 @@ return [
     'november'  => 'November',
     'december'  => 'December',
 
-    'minutes' => 'Минуты',
-    'hours'   => 'Часы',
-    'days'    => 'Дни',
+    'minutes' => 'Minutes',
+    'hours'   => 'Hours',
+    'days'    => 'Days',
 
     'plural_years'   => 'years',
     'plural_months'  => 'months',

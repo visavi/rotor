@@ -6,7 +6,6 @@ return [
     'edit_offer'        => 'Изменить',
     'offers'            => 'Предложения',
     'problems'          => 'Проблемы',
-    'empty_offers'      => 'Записей еще нет!',
     'total'             => 'Всего записей',
     'official_response' => 'Официальный ответ',
     'closed_comments'   => 'Комментирование закрыто!',
