@@ -78,6 +78,7 @@ return [
     'analysis'          => 'Analysis',
     'version'           => 'Version',
     'undefined'         => 'Undefined',
+    'automatically'     => 'Automatically',
 
     'request'        => 'Request',
     'not_matter'     => 'Not matter',

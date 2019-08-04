@@ -134,7 +134,7 @@
                 <label for="themes">Тема:</label>
 
                 <select class="form-control" name="themes" id="themes">
-                    <option value="0">Автоматически</option>
+                    <option value="0">{{ trans('main.automatically') }}</option>
 
                     @foreach ($allThemes as $theme)
                         <?php $selected = ($theme === $inputThemes) ? ' selected' : ''; ?>

@@ -23,7 +23,7 @@
 
                 <?php $inputThemes = getInput('themes', $user->themes); ?>
                 <select class="form-control" name="themes" id="themes">
-                    <option value="0">{{ trans('users.automatically') }}</option>
+                    <option value="0">{{ trans('main.automatically') }}</option>
 
                     @foreach ($setting['themes'] as $theme)
                         <?php $selected = ($theme === $inputThemes) ? ' selected' : ''; ?>

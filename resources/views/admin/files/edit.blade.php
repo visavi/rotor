@@ -1,7 +1,7 @@
 @extends('layout')
 
 @section('title')
-    {{ trans('admin.files.file_editing') . ' ' . $path . $fileName . '.blade.php' }}
+    {{ trans('admin.files.file_editing') }} {{ $path . $fileName }}.blade.php
 @stop
 
 @section('breadcrumb')

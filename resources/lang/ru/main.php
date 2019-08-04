@@ -78,6 +78,7 @@ return [
     'analysis'          => 'Анализ',
     'version'           => 'Версия',
     'undefined'         => 'Не определено',
+    'automatically'     => 'Автоматически',
 
     'request'        => 'Запрос',
     'not_matter'     => 'Не имеет значения',

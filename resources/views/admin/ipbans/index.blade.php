@@ -1,7 +1,7 @@
 @extends('layout')
 
 @section('title')
-    IP-бан панель
+    {{ trans('index.ip_ban') }}
 @stop
 
 @section('breadcrumb')
@@ -9,13 +9,13 @@
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
             <li class="breadcrumb-item"><a href="/admin">{{ trans('index.panel') }}</a></li>
-            <li class="breadcrumb-item active">IP-бан панель</li>
+            <li class="breadcrumb-item active">{{ trans('index.ip_ban') }}</li>
         </ol>
     </nav>
 @stop
 
 @section('content')
-    <a href="/admin/errors?code=666">История автобанов</a><br>
+    <a href="/admin/errors?code=666">{{ trans('admin.ipbans.history') }}</a><br>
 
     @if ($logs->isNotEmpty())
 
@@ -27,26 +27,25 @@
                     <i class="fa fa-file"></i> <b>{{ $log->ip }}</b>
                 </div>
 
-                <div>Добавлено:
-
+                <div>{{ trans('main.added') }}:
                     @if ($log->user->id)
-                        <b>{!! $log->user->getProfile() !!}</b><br>
+                        <b>{!! $log->user->getProfile() !!}</b>
                     @else
-                        <b>Автоматически</b><br>
+                        <b>{{ trans('main.automatically') }}</b>
                     @endif
 
-                    Время: {{ dateFixed($log->created_at) }}
+                    ({{ dateFixed($log->created_at) }})
                 </div>
             @endforeach
 
-            <button class="btn btn-sm btn-danger">Удалить выбранное</button>
+            <button class="btn btn-sm btn-danger">{{ trans('main.delete_selected') }}</button>
         </form>
 
         {!! pagination($page) !!}
 
-        Всего заблокировано: <b>{{ $page->total }}</b><br><br>
+        {{ trans('main.total') }}: <b>{{ $page->total }}</b><br><br>
     @else
-        {!! showError('В бан-листе пока пусто!') !!}
+        {!! showError(trans('admin.ipbans.empty_ip')) !!}
     @endif
 
     <div class="form">
@@ -54,21 +53,20 @@
             @csrf
             <div class="form-inline">
                 <div class="form-group{{ hasError('ip') }}">
-                    <input type="text" class="form-control" id="ip" name="ip" maxlength="15" value="{{ getInput('ip') }}" placeholder="IP-адрес" required>
+                    <input type="text" class="form-control" id="ip" name="ip" maxlength="15" value="{{ getInput('ip') }}" placeholder="IP-address" required>
                 </div>
 
-                <button class="btn btn-primary">Добавить</button>
+                <button class="btn btn-primary">{{ trans('main.add') }}</button>
             </div>
             <div class="invalid-feedback">{{ textError('ip') }}</div>
         </form>
     </div><br>
 
     <p class="text-muted font-italic">
-        Примеры банов: 127.0.0.1 без отступов и пробелов<br>
-        Или по маске 127.0.0.* , 127.0.*.* , будут забанены все IP совпадающие по начальным цифрам
+        {!! trans('admin.ipbans.hint') !!}
     </p>
 
     @if ($logs->isNotEmpty() && isAdmin('boss'))
-        <i class="fa fa-times"></i> <a href="/admin/ipbans/clear?token={{ $_SESSION['token'] }}" onclick="return confirm('Вы действительно хотите очистить список IP?')">Очистить список</a><br>
+        <i class="fa fa-times"></i> <a href="/admin/ipbans/clear?token={{ $_SESSION['token'] }}" onclick="return confirm('{{ trans('admin.ipbans.confirm_clear') }}')">{{ trans('main.clear') }}</a><br>
     @endif
 @stop

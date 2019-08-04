@@ -105,7 +105,6 @@ return [
     'empty_found' => 'По вашему запросу ничего не найдено!',
 
     'theme'                => 'Тема',
-    'automatically'        => 'Автоматически',
     'language'             => 'Язык',
     'time_shifting'        => 'Временной сдвиг',
     'receive_notification' => 'Получать уведомления об ответах',
