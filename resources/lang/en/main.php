@@ -79,6 +79,7 @@ return [
     'version'           => 'Version',
     'undefined'         => 'Undefined',
     'automatically'     => 'Automatically',
+    'type'              => 'Type',
 
     'request'        => 'Request',
     'not_matter'     => 'Not matter',
@@ -185,4 +186,13 @@ return [
 
     'ban'   => 'Ban',
     'unban' => 'Unban',
+
+    'refresh'          => 'Refresh',
+    'install'          => 'Install',
+    'installed'        => 'Installed',
+    'not_installed'    => 'Not installed',
+    'enable'           => 'Enable',
+    'disable'          => 'Disable',
+    'disabled'         => 'Disabled',
+    'update_available' => 'Update available',
 ];

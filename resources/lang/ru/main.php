@@ -79,6 +79,7 @@ return [
     'version'           => 'Версия',
     'undefined'         => 'Не определено',
     'automatically'     => 'Автоматически',
+    'type'              => 'Тип',
 
     'request'        => 'Запрос',
     'not_matter'     => 'Не имеет значения',
@@ -185,4 +186,13 @@ return [
 
     'ban'   => 'Бан',
     'unban' => 'Разбан',
+
+    'refresh'          => 'Обновить',
+    'install'          => 'Установить',
+    'installed'        => 'Установлен',
+    'not_installed'    => 'Не установлен',
+    'enable'           => 'Включить',
+    'disable'          => 'Выключить',
+    'disabled'         => 'Выключен',
+    'update_available' => 'Доступно обновление',
 ];
