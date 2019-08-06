@@ -1,7 +1,7 @@
 @extends('layout')
 
 @section('title')
-    Правила сайта
+    {{ trans('index.site_rules') }}
 @stop
 
 @section('header')
@@ -9,7 +9,7 @@
         <a class="btn btn-success" href="/admin/rules/edit">Редактировать</a>
     </div><br>
 
-    <h1>Правила сайта</h1>
+    <h1>{{ trans('index.site_rules') }}</h1>
 @stop
 
 @section('breadcrumb')
@@ -17,7 +17,7 @@
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
             <li class="breadcrumb-item"><a href="/admin">{{ trans('index.panel') }}</a></li>
-            <li class="breadcrumb-item active">Правила сайта</li>
+            <li class="breadcrumb-item active">{{ trans('index.site_rules') }}</li>
         </ol>
     </nav>
 @stop
@@ -28,10 +28,10 @@
             {!! bbCode($rules->text) !!}
             <hr>
 
-            Последнее изменение: {{ dateFixed($rules->created_at) }}
+            {{ trans('main.date') }}: {{ dateFixed($rules->created_at) }}
         </div>
         <br>
     @else
-        {!! showError('Правила сайта еще не установлены!') !!}
+        {!! showError(trans('admin.rules.empty_rules')) !!}
     @endif
 @stop

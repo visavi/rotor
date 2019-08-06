@@ -80,6 +80,8 @@ return [
     'undefined'         => 'Undefined',
     'automatically'     => 'Automatically',
     'type'              => 'Type',
+    'execute'           => 'Execute',
+    'action'            => 'Action',
 
     'request'        => 'Request',
     'not_matter'     => 'Not matter',
@@ -195,4 +197,6 @@ return [
     'disable'          => 'Disable',
     'disabled'         => 'Disabled',
     'update_available' => 'Update available',
+    'allow'            => 'Allow',
+    'disallow'         => 'Disallow',
 ];

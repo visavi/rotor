@@ -80,6 +80,8 @@ return [
     'undefined'         => 'Не определено',
     'automatically'     => 'Автоматически',
     'type'              => 'Тип',
+    'execute'           => 'Выполнить',
+    'action'            => 'Действие',
 
     'request'        => 'Запрос',
     'not_matter'     => 'Не имеет значения',
@@ -195,4 +197,6 @@ return [
     'disable'          => 'Выключить',
     'disabled'         => 'Выключен',
     'update_available' => 'Доступно обновление',
+    'allow'            => 'Разрешить',
+    'disallow'         => 'Запретить',
 ];

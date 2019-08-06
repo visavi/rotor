@@ -51,7 +51,7 @@ mySettings = {
         {title: translate.editor.code, name: '<i class="fa fa-code"></i>', className: 'bb-code', openWith: '[code]', closeWith: '[/code]'},
 
         {separator: '---------------'},
-        {title: translate.editor.underline, name: '<i class="fa fa-list-ul"></i>', className: 'bb-unorderedlist', multiline:true, openBlockWith: '[list]\n', closeBlockWith: '\n[/list]', placeHolder: translate.editor.list_text},
+        {title: translate.editor.unorderedlist, name: '<i class="fa fa-list-ul"></i>', className: 'bb-unorderedlist', multiline:true, openBlockWith: '[list]\n', closeBlockWith: '\n[/list]', placeHolder: translate.editor.list_text},
         {title: translate.editor.orderedlist, name: '<i class="fa fa-list-ol"></i>', className: 'bb-orderedlist', multiline:true, openBlockWith: '[list=1]\n', closeBlockWith: '\n[/list]', placeHolder: translate.editor.list_text},
 
         {separator: '---------------'},

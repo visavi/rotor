@@ -34,7 +34,7 @@
                     <div class="b">
                         <i class="fa fa-file"></i>
                         <b>{!! $data->relate->author ? $data->relate->author->getProfile() : $data->relate->user->getProfile() !!}</b>
-                        <small>({{ dateFixed($data->relate->created_at, "d.m.y / H:i:s") }})</small>
+                        <small>({{ dateFixed($data->relate->created_at, 'd.m.y / H:i:s') }})</small>
 
                         <div class="float-right">
                             @if (isAdmin())

@@ -1,7 +1,7 @@
 @extends('layout')
 
 @section('title')
-    Ожидающие регистрации
+    {{ trans('index.pending_list') }}
 @stop
 
 @section('breadcrumb')
@@ -9,7 +9,7 @@
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
             <li class="breadcrumb-item"><a href="/admin">{{ trans('index.panel') }}</a></li>
-            <li class="breadcrumb-item active">Ожидающие регистрации</li>
+            <li class="breadcrumb-item active">{{ trans('index.pending_list') }}</li>
         </ol>
     </nav>
 @stop
@@ -20,9 +20,9 @@
         <i class="fa fa-exclamation-circle"></i>
 
         @if (setting('regkeys'))
-            <span class="text-success">Включено подтверждение регистраций!</span>
+            <span class="text-success">{{ trans('admin.reglists.enabled') }}</span>
         @else
-            <span class="text-danger">Подтверждение регистрации выключено!</span>
+            <span class="text-danger">{{ trans('admin.reglists.disabled') }}</span>
         @endif
     </div>
 
@@ -37,29 +37,29 @@
                     (email: {{ $user->email }})
                 </div>
 
-                <div>Зарегистрирован: {{ dateFixed($user->created_at, 'd.m.Y') }}</div>
+                <div>{{ trans('main.registration_date') }}: {{ dateFixed($user->created_at, 'd.m.Y') }}</div>
             @endforeach
 
             <?php $inputAction = getInput('action'); ?>
             <div class="form-inline mt-3">
                 <div class="form-group{{ hasError('action') }}">
                     <select class="form-control" name="action">
-                        <option>Выберите действие</option>
-                        <option value="yes"{{ $inputAction === 'yes' ? ' selected' : '' }}>Разрешить</option>
-                        <option value="no"{{ $inputAction === 'no' ? ' selected' : '' }}>Запретить</option>
+                        <option>{{ trans('main.action') }}</option>
+                        <option value="yes"{{ $inputAction === 'yes' ? ' selected' : '' }}>{{ trans('main.allow') }}</option>
+                        <option value="no"{{ $inputAction === 'no' ? ' selected' : '' }}>{{ trans('main.disallow') }}</option>
                     </select>
                 </div>
 
-                <button class="btn btn-primary">Выполнить</button>
+                <button class="btn btn-primary">{{ trans('main.execute') }}</button>
             </div>
             <div class="invalid-feedback">{{ textError('action') }}</div>
         </form>
 
         {!! pagination($page) !!}
 
-       Всего ожидающих: <b>{{ $page->total }}</b><br><br>
+        {{ trans('main.total') }}: <b>{{ $page->total }}</b><br><br>
 
     @else
-        {!! showError('Нет пользователей требующих подтверждения регистрации!!') !!}
+        {!! showError(trans('admin.reglists.empty_users')) !!}
     @endif
 @stop
