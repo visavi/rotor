@@ -88,6 +88,24 @@ $(function() {
 
     $('.phone').mask('0 000 000-00-00');
 
+/*    $(window).scroll(function(){$(this).scrollTop()>200?$(".scrollup").fadeIn():$(".scrollup").fadeOut()});window.onload=function(){if(location.hash){var t=location.hash.replace("#","");document.getElementById(t).scrollIntoView(!0)}},$(function(){$(".scrollup").click(function(){$("html, body").animate({scrollTop:0},500)}),$('a[href^="#"]').click(function(){elementClick=$(this).attr("href"),destination=$(elementClick).offset().top,$("html, body").animate({scrollTop:destination},500)})});*/
+
+    $(window).scroll(function () {
+        if ($(this).scrollTop() > 200) {
+            $('.scrollup').fadeIn();
+        } else {
+            $('.scrollup').fadeOut();
+        }
+    });
+
+    $('.scrollup').click(function () {
+        $("html, body").animate({
+            scrollTop: 0
+        }, 600);
+        return false;
+    });
+
+
  /*   if ($('.markItUpEditor').val().length > 0) {
         window.onbeforeunload = function() {
             return "You're about to end your session, are you sure?";

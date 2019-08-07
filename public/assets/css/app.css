@@ -204,3 +204,22 @@ blockquote small:before {
 .carousel-control-next, .carousel-control-prev {
     width: auto;
 }
+
+.scrollup {
+  position: fixed;
+  bottom: 30px;
+  right: 30px;
+  display: none;
+  cursor: pointer;
+  opacity: .5;
+}
+
+.scrollup:before {
+  content: "\f139";
+  font-family: FontAwesome;
+  font-size: 35px;
+}
+
+.scrollup:hover {
+  opacity: 1;
+}

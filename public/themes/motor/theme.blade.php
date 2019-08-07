@@ -82,6 +82,7 @@
         </div>
     </div>
 </div>
+<div class="scrollup"></div>
 @yield('scripts')
 @stack('scripts')
 </body>
