@@ -1,8 +1,8 @@
 @section('header')
-    <h1>Стоимость и цены</h1>
+    <h1>{{ trans('settings.prices') }}</h1>
 @stop
 
-<form action="/admin/settings?act=price" method="post">
+<form action="/admin/settings?act=prices" method="post">
     @csrf
     <div class="form-group{{ hasError('sets[sendmoneypoint]') }}">
         <label for="sendmoneypoint">Актива для перечисления денег:</label>
@@ -52,5 +52,5 @@
         <div class="invalid-feedback">{{ textError('sets[registermoney]') }}</div>
     </div>
 
-    <button class="btn btn-primary">Сохранить</button>
+    <button class="btn btn-primary">{{ trans('main.save') }}</button>
 </form>

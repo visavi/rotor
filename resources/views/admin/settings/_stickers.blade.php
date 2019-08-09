@@ -1,8 +1,8 @@
 @section('header')
-    <h1>Стикеры</h1>
+    <h1>{{ trans('settings.stickers') }}</h1>
 @stop
 
-<form action="/admin/settings?act=sticker" method="post">
+<form action="/admin/settings?act=stickers" method="post">
     @csrf
     <div class="form-group{{ hasError('sets[stickermaxsize]') }}">
         <label for="stickermaxsize">Максимальный вес стикера (kb):</label>
@@ -24,5 +24,11 @@
         <div class="invalid-feedback">{{ textError('sets[stickerminweight]') }}</div>
     </div>
 
-    <button class="btn btn-primary">Сохранить</button>
+    <div class="form-group{{ hasError('sets[stickerlist]') }}">
+        <label for="stickerlist">Стикеров на стр.:</label>
+        <input type="number" class="form-control" id="stickerlist" name="sets[stickerlist]" maxlength="2" value="{{ getInput('sets.stickerlist', $settings['stickerlist']) }}" required>
+        <div class="invalid-feedback">{{ textError('sets[stickerlist]') }}</div>
+    </div>
+
+    <button class="btn btn-primary">{{ trans('main.save') }}</button>
 </form>

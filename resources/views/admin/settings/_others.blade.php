@@ -1,8 +1,8 @@
 @section('header')
-    <h1>Прочее / Другое</h1>
+    <h1>{{ trans('settings.others') }}</h1>
 @stop
 
-<form action="/admin/settings?act=other" method="post">
+<form action="/admin/settings?act=others" method="post">
     @csrf
     <div class="custom-control custom-checkbox">
         <input type="hidden" value="0" name="sets[errorlog]">
@@ -46,11 +46,17 @@
         <div class="invalid-feedback">{{ textError('sets[statusdef]') }}</div>
     </div>
 
+    <div class="form-group{{ hasError('sets[guestsuser]') }}">
+        <label for="guestsuser">Неавторизованный пользователь:</label>
+        <input type="text" class="form-control" id="guestsuser" name="sets[guestsuser]" maxlength="20" value="{{ getInput('sets.guestsuser', $settings['guestsuser']) }}" required>
+        <div class="invalid-feedback">{{ textError('sets[guestsuser]') }}</div>
+    </div>
+
     <div class="custom-control custom-checkbox">
         <input type="hidden" value="0" name="sets[addbansend]">
         <input type="checkbox" class="custom-control-input" value="1" name="sets[addbansend]" id="addbansend"{{ getInput('sets.addbansend', $settings['addbansend']) ? ' checked' : '' }}>
         <label class="custom-control-label" for="addbansend">Объяснение из бана</label>
     </div>
 
-    <button class="btn btn-primary">Сохранить</button>
+    <button class="btn btn-primary">{{ trans('main.save') }}</button>
 </form>

@@ -1,8 +1,8 @@
 @section('header')
-    <h1>Реклама на сайте</h1>
+    <h1>{{ trans('settings.adverts') }}</h1>
 @stop
 
-<form action="/admin/settings?act=advert" method="post">
+<form action="/admin/settings?act=adverts" method="post">
     @csrf
     <div class="form-group{{ hasError('sets[rekusershow]') }}">
         <label for="rekusershow">Кол. рекламных ссылок:</label>
@@ -46,5 +46,5 @@
         <div class="invalid-feedback">{{ textError('sets[rekuserpost]') }}</div>
     </div>
 
-    <button class="btn btn-primary">Сохранить</button>
+    <button class="btn btn-primary">{{ trans('main.save') }}</button>
 </form>

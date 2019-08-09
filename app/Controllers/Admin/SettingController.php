@@ -32,7 +32,7 @@ class SettingController extends AdminController
      */
     public function index(Request $request, Validator $validator): string
     {
-        $act = check($request->input('act', 'main'));
+        $act = check($request->input('act', 'mains'));
 
         if (! \in_array($act, Setting::getActions(), true)) {
             abort(404, 'Недопустимая страница!');

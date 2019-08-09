@@ -1,8 +1,8 @@
 @section('header')
-    <h1>Загрузка изображений</h1>
+    <h1>{{ trans('settings.images') }}</h1>
 @stop
 
-<form action="/admin/settings?act=image" method="post">
+<form action="/admin/settings?act=images" method="post">
     @csrf
     <div class="form-group{{ hasError('sets[filesize]') }}">
         <label for="filesize">Максимальный вес фото (Mb):</label>
@@ -34,9 +34,8 @@
     <img src="/assets/img/images/watermark.png" alt="watermark" title="{{ siteUrl() }}/assets/img/images/watermark.png"><br>
 
     <p class="text-muted font-italic">
-        Не устанавливайте слишком большие размеры веса и размера изображений, так как может не хватить процессорного времени для обработки<br>
-        При изменении размера превью, необходимо вручную очистить кэш изображений
+        При изменении размера превью, необходимо очистить кэш изображений
     </p>
 
-    <button class="btn btn-primary">Сохранить</button>
+    <button class="btn btn-primary">{{ trans('main.save') }}</button>
 </form>

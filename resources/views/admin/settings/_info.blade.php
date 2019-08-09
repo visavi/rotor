@@ -1,5 +1,5 @@
 @section('header')
-    <h1>Вывод информации</h1>
+    <h1>{{ trans('settings.info') }}</h1>
 @stop
 
 <form action="/admin/settings?act=info" method="post">
@@ -44,5 +44,5 @@
         На сколько минут запоминать IP пользователя
     </p>
 
-    <button class="btn btn-primary">Сохранить</button>
+    <button class="btn btn-primary">{{ trans('main.save') }}</button>
 </form>

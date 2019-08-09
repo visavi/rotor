@@ -1,8 +1,8 @@
 @section('header')
-    <h1>Блоги</h1>
+    <h1>{{ trans('settings.blogs') }}</h1>
 @stop
 
-<form action="/admin/settings?act=blog" method="post">
+<form action="/admin/settings?act=blogs" method="post">
     @csrf
     <div class="form-group{{ hasError('sets[blogpost]') }}">
         <label for="blogpost">Статей на страницу:</label>
@@ -40,5 +40,5 @@
         <label class="custom-control-label" for="blog_create">Разрешать пользователям публиковать статьи</label>
     </div>
 
-    <button class="btn btn-primary">Сохранить</button>
+    <button class="btn btn-primary">{{ trans('main.save') }}</button>
 </form>

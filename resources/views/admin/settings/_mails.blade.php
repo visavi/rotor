@@ -1,8 +1,8 @@
 @section('header')
-    <h1>Почта / Рассылка</h1>
+    <h1>{{ trans('settings.mails') }}</h1>
 @stop
 
-<form action="/admin/settings?act=mail" method="post">
+<form action="/admin/settings?act=mails" method="post">
     @csrf
     <div class="form-group{{ hasError('sets[sendprivatmailday]') }}">
         <label for="sendprivatmailday">Кол. дней перед отправкой уведомления о привате на email:</label>
@@ -16,5 +16,5 @@
         <div class="invalid-feedback">{{ textError('sets[sendmailpacket]') }}</div>
     </div>
 
-    <button class="btn btn-primary">Сохранить</button>
+    <button class="btn btn-primary">{{ trans('main.save') }}</button>
 </form>

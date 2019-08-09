@@ -1,8 +1,8 @@
 @section('header')
-    <h1>Загруз-центр</h1>
+    <h1>{{ trans('settings.loads') }}</h1>
 @stop
 
-<form action="/admin/settings?act=load" method="post">
+<form action="/admin/settings?act=loads" method="post">
     @csrf
     <div class="form-group{{ hasError('sets[maxfiles]') }}">
         <label for="maxfiles">Одновременно загружаемое кол. файлов:</label>
@@ -50,5 +50,5 @@
         <label class="custom-control-label" for="downupload">Разрешать загружать файлы пользователям</label>
     </div>
 
-    <button class="btn btn-primary">Сохранить</button>
+    <button class="btn btn-primary">{{ trans('main.save') }}</button>
 </form>

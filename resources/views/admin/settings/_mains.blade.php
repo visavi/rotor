@@ -1,5 +1,5 @@
 @section('header')
-    <h1>Основные настройки</h1>
+    <h1>{{ trans('settings.mains') }}</h1>
 @stop
 
 <form action="/admin/settings" method="post">
@@ -157,5 +157,5 @@
         Для регистрация необходимо ввести специальный пригласительный ключ
     </p>
 
-    <button class="btn btn-primary">Сохранить</button>
+    <button class="btn btn-primary">{{ trans('main.save') }}</button>
 </form>

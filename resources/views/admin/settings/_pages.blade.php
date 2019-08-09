@@ -1,8 +1,8 @@
 @section('header')
-    <h1>Постраничная навигация</h1>
+    <h1>{{ trans('settings.pages') }}</h1>
 @stop
 
-<form action="/admin/settings?act=page" method="post">
+<form action="/admin/settings?act=pages" method="post">
     @csrf
     <div class="form-group{{ hasError('sets[userlist]') }}">
         <label for="userlist">Пользователей в юзерлисте:</label>
@@ -14,12 +14,6 @@
         <label for="onlinelist">Пользователей в онлайне:</label>
         <input type="number" class="form-control" id="onlinelist" name="sets[onlinelist]" maxlength="2" value="{{ getInput('sets.onlinelist', $settings['onlinelist']) }}" required>
         <div class="invalid-feedback">{{ textError('sets[onlinelist]') }}</div>
-    </div>
-
-    <div class="form-group{{ hasError('sets[stickerlist]') }}">
-        <label for="stickerlist">Стикеров на стр.:</label>
-        <input type="number" class="form-control" id="stickerlist" name="sets[stickerlist]" maxlength="2" value="{{ getInput('sets.stickerlist', $settings['stickerlist']) }}" required>
-        <div class="invalid-feedback">{{ textError('sets[stickerlist]') }}</div>
     </div>
 
     <div class="form-group{{ hasError('sets[avtorlist]') }}">
@@ -106,5 +100,11 @@
         <div class="invalid-feedback">{{ textError('sets[ratinglist]') }}</div>
     </div>
 
-    <button class="btn btn-primary">Сохранить</button>
+    <div class="form-group{{ hasError('sets[allvotes]') }}">
+        <label for="allvotes">Кол-во голосований на стр.:</label>
+        <input type="number" class="form-control" id="allvotes" name="sets[allvotes]" maxlength="2" value="{{ getInput('sets.allvotes', $settings['allvotes']) }}" required>
+        <div class="invalid-feedback">{{ textError('sets[allvotes]') }}</div>
+    </div>
+
+    <button class="btn btn-primary">{{ trans('main.save') }}</button>
 </form>

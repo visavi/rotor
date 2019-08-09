@@ -1,8 +1,8 @@
 @section('header')
-    <h1>Защита / Безопасность</h1>
+    <h1>{{ trans('settings.protects') }}</h1>
 @stop
 
-<form action="/admin/settings?act=protect" method="post">
+<form action="/admin/settings?act=protects" method="post">
     @csrf
     <div class="form-group{{ hasError('sets[captcha_symbols]') }}">
         <label for="captcha_symbols">Допустимые символы captcha [a-z0-9]:</label>
@@ -56,5 +56,5 @@
         <div class="invalid-feedback">{{ textError('sets[recaptcha_private]') }}</div>
     </div>
 
-    <button class="btn btn-primary">Сохранить</button>
+    <button class="btn btn-primary">{{ trans('main.save') }}</button>
 </form>

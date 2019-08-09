@@ -1,8 +1,8 @@
 @section('header')
-    <h1>Предложения / Проблемы</h1>
+    <h1>{{ trans('settings.offers') }}</h1>
 @stop
 
-<form action="/admin/settings?act=offer" method="post">
+<form action="/admin/settings?act=offers" method="post">
     @csrf
     <div class="form-group{{ hasError('sets[postoffers]') }}">
         <label for="postoffers">Предложений на страницу:</label>
@@ -22,5 +22,5 @@
         <div class="invalid-feedback">{{ textError('sets[addofferspoint]') }}</div>
     </div>
 
-    <button class="btn btn-primary">Сохранить</button>
+    <button class="btn btn-primary">{{ trans('main.save') }}</button>
 </form>
