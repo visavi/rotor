@@ -5,7 +5,7 @@
 <form action="/admin/settings" method="post">
     @csrf
     <div class="form-group{{ hasError('sets[title]') }}">
-        <label for="title">{{ trans('settings.page_description') }}:</label>
+        <label for="title">{{ trans('settings.page_title') }}:</label>
         <input type="text" class="form-control" id="title" name="sets[title]" maxlength="100" value="{{ getInput('sets.title', $settings['title']) }}" required>
         <div class="invalid-feedback">{{ textError('sets[title]') }}</div>
     </div>

@@ -5,13 +5,13 @@
 <form action="/admin/settings?act=messages" method="post">
     @csrf
     <div class="form-group{{ hasError('sets[privatpost]') }}">
-        <label for="privatpost">Писем в привате на стр.:</label>
+        <label for="privatpost">{{ trans('settings.messages_per_page') }}:</label>
         <input type="number" class="form-control" id="privatpost" name="sets[privatpost]" maxlength="2" value="{{ getInput('sets.privatpost', $settings['privatpost']) }}" required>
         <div class="invalid-feedback">{{ textError('sets[privatpost]') }}</div>
     </div>
 
     <div class="form-group{{ hasError('sets[privatprotect]') }}">
-        <label for="privatprotect">Порог выключения защитной картинки:</label>
+        <label for="privatprotect">{{ trans('settings.messages_captcha') }}:</label>
         <input type="number" class="form-control" id="privatprotect" name="sets[privatprotect]" maxlength="4" value="{{ getInput('sets.privatprotect', $settings['privatprotect']) }}" required>
         <div class="invalid-feedback">{{ textError('sets[privatprotect]') }}</div>
     </div>
