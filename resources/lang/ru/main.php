@@ -119,6 +119,7 @@ return [
     'files'                 => 'Файлы',
     'file_not_found'        => 'Файл не найден',
     'not_uploaded'          => 'Файлы еще не загружены!',
+    'server_limit'          => 'Ограничение сервера',
 
     'next'     => 'Вперед',
     'previous' => 'Назад',

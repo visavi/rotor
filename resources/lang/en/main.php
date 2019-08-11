@@ -119,6 +119,7 @@ return [
     'files'                 => 'Files',
     'file_not_found'        => 'File not found',
     'not_uploaded'          => 'Files not uploaded!',
+    'server_limit'          => 'Server limitation',
 
     'next'     => 'Next',
     'previous' => 'Previous',

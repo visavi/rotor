@@ -39,7 +39,6 @@ class SettingController extends AdminController
         }
 
         if ($request->isMethod('post')) {
-
             $sets  = check($request->input('sets'));
             $mods  = check($request->input('mods'));
             $opt   = check($request->input('opt'));
@@ -74,8 +73,23 @@ class SettingController extends AdminController
             }
         }
 
+        $counters = [
+            trans('main.disable'),
+            'Хосты | Хосты всего',
+            'Хиты | Хиты всего',
+            'Хиты | Хосты',
+            'Хиты всего | Хосты всего',
+            'Графический',
+        ];
+
+        $statsite = [
+            'Сайт открыт',
+            'Закрыто для гостей',
+            'Закрыто для всех',
+        ];
+
         $settings = Setting::query()->pluck('value', 'name')->all();
 
-        return view('admin/settings/index', compact('settings', 'act'));
+        return view('admin/settings/index', compact('settings', 'act', 'counters', 'statsite'));
     }
 }
