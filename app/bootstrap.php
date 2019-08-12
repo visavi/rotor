@@ -35,12 +35,12 @@ if (env('APP_DEBUG') && class_exists(Run::class)) {
     $whoops = new Run();
 
     if (Whoops\Util\Misc::isCommandLine()) {
-        $whoops->pushHandler(new PlainTextHandler);
+        $whoops->prependHandler(new PlainTextHandler);
     } else {
-        $whoops->pushHandler(new PrettyPageHandler);
+        $whoops->prependHandler(new PrettyPageHandler);
     }
 
-    $whoops->pushHandler(static function() {
+    $whoops->prependHandler(static function() {
         $_SERVER = Arr::except($_SERVER, array_keys($_ENV));
         $_ENV    = [];
     });
