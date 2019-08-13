@@ -34,7 +34,7 @@
                 <div class="b">
                     <input type="checkbox" name="choice[]" value="{{ $user->id }}">
                      {!! $user->getGender() !!} <b>{!! $user->getProfile() !!}</b>
-                    (email: {{ $user->email }})
+                    ({{ trans('users.email') }}: {{ $user->email }})
                 </div>
 
                 <div>{{ trans('main.registration_date') }}: {{ dateFixed($user->created_at, 'd.m.Y') }}</div>

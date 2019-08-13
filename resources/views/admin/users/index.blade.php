@@ -1,7 +1,7 @@
 @extends('layout')
 
 @section('title')
-    Пользователи
+    {{ trans('index.users') }}
 @stop
 
 @section('breadcrumb')
@@ -9,7 +9,7 @@
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
             <li class="breadcrumb-item"><a href="/admin">{{ trans('index.panel') }}</a></li>
-            <li class="breadcrumb-item active">Пользователи</li>
+            <li class="breadcrumb-item active">{{ trans('index.users') }}</li>
         </ol>
     </nav>
 @stop
@@ -19,10 +19,10 @@
         <form action="/admin/users/edit" method="get">
             <div class="form-inline">
                 <div class="form-group{{ hasError('user') }}">
-                    <input type="text" class="form-control" id="user" name="user" maxlength="20" value="{{ getInput('user') }}" placeholder="Логин пользователя" required>
+                    <input type="text" class="form-control" id="user" name="user" maxlength="20" value="{{ getInput('user') }}" placeholder="{{ trans('main.user_login') }}" required>
                 </div>
 
-                <button class="btn btn-primary">Редактировать</button>
+                <button class="btn btn-primary">{{ trans('main.edit') }}</button>
             </div>
             <div class="invalid-feedback">{{ textError('user') }}</div>
         </form>
@@ -58,7 +58,7 @@
     <a class="badge badge-pill badge-success" href="/admin/users/search?q=z">Z</a>
     <br><br>
 
-    <h3>Список последних зарегистрированных</h3>
+    <h3>{{ trans('users.last_registered') }}</h3>
 
     @if ($users->isNotEmpty())
         @foreach ($users as $user)
@@ -69,8 +69,8 @@
                 </div>
 
                 <b><a href="/admin/users/edit?user={{ $user->login }}">{{ $user->login }}</a></b>
-                (email: {{ $user->email }})<br>
-                Зарегистрирован: {{ dateFixed($user->created_at, 'd.m.Y') }}
+                ({{ trans('users.email') }}: {{ $user->email }})<br>
+                {{ trans('users.registered') }}: {{ dateFixed($user->created_at, 'd.m.Y') }}
             </div>
         @endforeach
 

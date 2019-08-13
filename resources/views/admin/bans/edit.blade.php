@@ -29,7 +29,7 @@
 
     @if ($user->level === 'banned' && $user->timeban > SITETIME)
         <div class="form">
-            <b><span style="color:#ff0000">{{ trans('users.user_banned') }}</span></b><br>
+            <div class="p-1 bg-danger text-white">{{ trans('users.user_banned') }}</div>
             {{ trans('users.ending_ban') }}: {{ formatTime($user->timeban - SITETIME) }}<br>
         </div>
 

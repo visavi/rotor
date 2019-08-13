@@ -68,7 +68,7 @@
             </div>
 
             <div class="form-group{{ hasError('email') }}">
-                <label for="inputEmail">Email:</label>
+                <label for="inputEmail">{{ trans('users.email') }}:</label>
                 <input class="form-control" name="email" id="inputEmail" maxlength="50" value="{{ getInput('email') }}" required>
                 <div class="invalid-feedback">{{ textError('email') }}</div>
             </div>

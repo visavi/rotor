@@ -9,7 +9,7 @@
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
             <li class="breadcrumb-item"><a href="/admin">{{ trans('index.panel') }}</a></li>
-            <li class="breadcrumb-item"><a href="/admin/users">Пользователи</a></li>
+            <li class="breadcrumb-item"><a href="/admin/users">{{ trans('index.users') }}</a></li>
             <li class="breadcrumb-item active">{{ trans('index.search_users') }}</li>
         </ol>
     </nav>
@@ -29,7 +29,7 @@
                     ({{ plural($user->point, setting('scorename')) }})<br>
 
                     @if ($user->name )
-                        Имя: {{ $user->name }}
+                        {{ trans('users.name') }}: {{ $user->name }}
                     @endif
                 </div>
             @endforeach
@@ -37,9 +37,8 @@
 
         {!! pagination($page) !!}
 
-        Найдено совпадений: {{ $page->total }}<br><br>
-
+        {{ trans('users.total_found') }}: {{ $page->total }}<br><br>
     @else
-        {!! showError('Пользователи не найдены!') !!}
+        {!! showError(trans('users.empty_found')) !!}
     @endif
 @stop
