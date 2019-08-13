@@ -1,7 +1,7 @@
 @extends('layout')
 
 @section('title')
-    Денежные операции {{ $user->login }}
+    {{ trans('index.cash_transactions') }} {{ $user->login }}
 @stop
 
 @section('breadcrumb')
@@ -9,8 +9,8 @@
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
             <li class="breadcrumb-item"><a href="/admin">{{ trans('index.panel') }}</a></li>
-            <li class="breadcrumb-item"><a href="/admin/transfers">Денежные операции</a></li>
-            <li class="breadcrumb-item active">Денежные операции {{ $user->login }}</li>
+            <li class="breadcrumb-item"><a href="/admin/transfers">{{ trans('index.cash_transactions') }}</a></li>
+            <li class="breadcrumb-item active">{{ trans('index.cash_transactions') }} {{ $user->login }}</li>
         </ol>
     </nav>
 @stop
@@ -31,17 +31,17 @@
             </div>
 
             <div>
-                Кому: {!! $data->recipientUser->getProfile() !!}<br>
-                Сумма: {{ plural($data->total, setting('moneyname')) }}<br>
-                Комментарий: {!! bbCode($data->text) !!}<br>
+                {{ trans('transfers.transfer_for') }}: {!! $data->recipientUser->getProfile() !!}<br>
+                {{ trans('main.amount') }}: {{ plural($data->total, setting('moneyname')) }}<br>
+                {{ trans('main.comment') }}: {!! bbCode($data->text) !!}<br>
             </div>
         @endforeach
 
         {!! pagination($page) !!}
 
-    Всего операций: <b>{{ $page->total }}</b><br><br>
+        {{ trans('main.total') }}: <b>{{ $page->total }}</b><br><br>
 
     @else
-        {!! showError('Истории операций еще нет!') !!}
+        {!! showError(trans('transfers.empty_transfers')) !!}
     @endif
 @stop

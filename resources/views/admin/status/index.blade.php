@@ -1,16 +1,16 @@
 @extends('layout')
 
 @section('title')
-    Статусы пользователей
+    {{ trans('index.user_statuses') }}
 @stop
 
 @section('header')
     <div class="float-right">
-        <a class="btn btn-success" href="/admin/status/create">Создать</a>
+        <a class="btn btn-success" href="/admin/status/create">{{ trans('main.create') }}</a>
     </div><br>
 
 
-    <h1>Статусы пользователей</h1>
+    <h1>{{ trans('index.user_statuses') }}</h1>
 @stop
 
 @section('breadcrumb')
@@ -18,7 +18,7 @@
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
             <li class="breadcrumb-item"><a href="/admin">{{ trans('index.panel') }}</a></li>
-            <li class="breadcrumb-item active">Статусы пользователей</li>
+            <li class="breadcrumb-item active">{{ trans('index.user_statuses') }}</li>
         </ol>
     </nav>
 @stop
@@ -28,7 +28,7 @@
 
         <div class="card">
             <h2 class="card-header">
-                Список
+                {{ trans('admin.status.list') }}
             </h2>
 
             <ul class="list-group list-group-flush">
@@ -41,19 +41,19 @@
                         <small>({{ $status->topoint }} - {{ $status->point }})</small>
 
                         <div class="float-right">
-                            <a data-toggle="tooltip" title="Редактировать" href="/admin/status/edit?id={{ $status->id }}"><i class="fa fa-pencil-alt text-muted"></i></a>
-                            <a data-toggle="tooltip" title="Удалить" href="/admin/status/delete?id={{ $status->id }}&amp;token={{ $_SESSION['token'] }}" onclick="return confirm('Вы уверены что хотите удалить выбранный статус?')"><i class="fa fa-trash-alt text-muted"></i></a>
+                            <a data-toggle="tooltip" title="{{ trans('main.edit') }}" href="/admin/status/edit?id={{ $status->id }}"><i class="fa fa-pencil-alt text-muted"></i></a>
+                            <a data-toggle="tooltip" title="{{ trans('main.delete') }}" href="/admin/status/delete?id={{ $status->id }}&amp;token={{ $_SESSION['token'] }}" onclick="return confirm('{{ trans('admin.status.confirm_delete') }}')"><i class="fa fa-trash-alt text-muted"></i></a>
                         </div>
                     </li>
                 @endforeach
             </ul>
 
             <div class="card-footer">
-                Всего статусов: <b>{{ $statuses->count() }}</b>
+                {{ trans('main.total') }}: <b>{{ $statuses->count() }}</b>
             </div>
         </div><br>
 
     @else
-        {!! showError('Статусы еще не назначены!') !!}
+        {!! showError(trans('admin.status.empty_statuses')) !!}
     @endif
 @stop

@@ -46,6 +46,7 @@ return [
     'views'             => 'Views',
     'date'              => 'Date',
     'status'            => 'Status',
+    'color'             => 'Color',
     'download'          => 'Download',
     'downloads'         => 'Downloads',
     'comment'           => 'Comment',
@@ -82,6 +83,7 @@ return [
     'type'              => 'Type',
     'execute'           => 'Execute',
     'action'            => 'Action',
+    'amount'            => 'Amount',
 
     'request'        => 'Request',
     'not_matter'     => 'Not matter',
@@ -200,4 +202,7 @@ return [
     'update_available' => 'Update available',
     'allow'            => 'Allow',
     'disallow'         => 'Disallow',
+
+    'from' => 'From',
+    'to'   => 'To',
 ];

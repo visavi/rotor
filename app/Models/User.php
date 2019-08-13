@@ -200,7 +200,7 @@ class User extends BaseModel
             }
 
             if (\in_array($this->level, self::ADMIN_GROUPS, true)) {
-                $admin = ' <i class="fas fa-sm fa-crown text-danger"></i>';
+                $admin = ' <i class="fas fa-xs fa-star text-info"></i>';
             }
 
             return '<a class="author" href="/users/' . $this->login . '" data-login="' . $this->login . '">' . $name . '</a>' . $admin;

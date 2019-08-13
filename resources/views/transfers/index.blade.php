@@ -33,14 +33,14 @@
                 @endif
 
                 <div class="form-group{{ hasError('money') }}">
-                    <label for="inputMoney">{{ trans('transfers.sum') }}:</label>
-                    <input name="money" class="form-control" id="inputMoney" placeholder="{{ trans('transfers.sum') }}" value="{{ getInput('money') }}" required>
+                    <label for="inputMoney">{{ trans('main.amount') }}:</label>
+                    <input name="money" class="form-control" id="inputMoney" placeholder="{{ trans('main.amount') }}" value="{{ getInput('money') }}" required>
                     <div class="invalid-feedback">{{ textError('money') }}</div>
                 </div>
 
                 <div class="form-group{{ hasError('msg') }}">
-                    <label for="msg">{{ trans('transfers.comment') }}:</label>
-                    <textarea class="form-control markItUp" maxlength="{{ setting('comment_length') }}" id="msg" rows="5" name="msg" placeholder="{{ trans('transfers.comment') }}">{{ getInput('msg') }}</textarea>
+                    <label for="msg">{{ trans('main.comment') }}:</label>
+                    <textarea class="form-control markItUp" maxlength="{{ setting('comment_length') }}" id="msg" rows="5" name="msg" placeholder="{{ trans('main.comment') }}">{{ getInput('msg') }}</textarea>
                     <div class="invalid-feedback">{{ textError('msg') }}</div>
                     <span class="js-textarea-counter"></span>
                 </div>
