@@ -1,7 +1,6 @@
 <?php
 
 return [
-    'title'                   => 'Объявления',
     'category'                => 'Категория',
     'categories'              => 'Категории',
     'my_items'                => 'Мои объявления',

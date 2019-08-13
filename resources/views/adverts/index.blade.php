@@ -1,7 +1,7 @@
 @extends('layout')
 
 @section('title')
-    {{ trans('adverts.title') }}
+    {{ trans('index.advertising') }}
 @stop
 
 @section('header')
@@ -9,7 +9,7 @@
         <a class="btn btn-success" href="/adverts/create">{{ trans('adverts.create_advert') }}</a>
     </div><br>
 
-    <h1>{{ trans('adverts.title') }}</h1>
+    <h1>{{ trans('index.advertising') }}</h1>
 @stop
 
 @section('breadcrumb')
@@ -17,7 +17,7 @@
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
             <li class="breadcrumb-item"><a href="/menu">{{ trans('main.menu') }}</a></li>
-            <li class="breadcrumb-item active">{{ trans('adverts.title') }}</li>
+            <li class="breadcrumb-item active">{{ trans('index.advertising') }}</li>
         </ol>
     </nav>
 @stop

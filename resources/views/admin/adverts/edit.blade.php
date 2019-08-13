@@ -9,7 +9,7 @@
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
             <li class="breadcrumb-item"><a href="/admin">{{ trans('index.panel') }}</a></li>
-            <li class="breadcrumb-item"><a href="/admin/adverts">{{ trans('adverts.user_advert') }}</a></li>
+            <li class="breadcrumb-item"><a href="/admin/adverts">{{ trans('index.advertising') }}</a></li>
             <li class="breadcrumb-item active">{{ trans('adverts.edit_advert') }}</li>
         </ol>
     </nav>

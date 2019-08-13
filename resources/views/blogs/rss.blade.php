@@ -16,7 +16,7 @@
             <description>{{ $blog->text }}</description>
             <author>{{ $blog->user->login }}</author>
             <pubDate>{{ date('r', $blog->created_at) }}</pubDate>
-            <category>{{ trans('blogs.blogs') }}</category>
+            <category>{{ trans('index.blogs') }}</category>
             <guid>{{ siteUrl() }}/articles/{{ $blog->id }}</guid>
         </item>
     @endforeach

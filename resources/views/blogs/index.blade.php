@@ -1,7 +1,7 @@
 @extends('layout')
 
 @section('title')
-    {{ trans('blogs.blogs') }} - {{ trans('blogs.blogs_list') }}
+    {{ trans('index.blogs') }} - {{ trans('blogs.blogs_list') }}
 @stop
 
 @section('header')
@@ -12,14 +12,14 @@
         </div><br>
     @endif
 
-    <h1>{{ trans('blogs.blogs') }}</h1>
+    <h1>{{ trans('index.blogs') }}</h1>
 @stop
 
 @section('breadcrumb')
     <nav>
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
-            <li class="breadcrumb-item active">{{ trans('blogs.blogs') }}</li>
+            <li class="breadcrumb-item active">{{ trans('index.blogs') }}</li>
         </ol>
     </nav>
 @stop

@@ -5,14 +5,14 @@
 @stop
 
 @section('header')
-    <h1>{{ trans('boards.my_items') }} <small>({{ trans('boards.title') }}: {{ $page->total }})</small></h1>
+    <h1>{{ trans('boards.my_items') }} <small>({{ trans('index.boards') }}: {{ $page->total }})</small></h1>
 @stop
 
 @section('breadcrumb')
     <nav>
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
-            <li class="breadcrumb-item"><a href="/boards">{{ trans('boards.title') }}</a></li>
+            <li class="breadcrumb-item"><a href="/boards">{{ trans('index.boards') }}</a></li>
             <li class="breadcrumb-item active">{{ trans('boards.my_items') }}</li>
         </ol>
     </nav>

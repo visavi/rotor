@@ -1,7 +1,7 @@
 @extends('layout')
 
 @section('title')
-    {{ trans('blogs.blogs') }} - {{ trans('blogs.new_comments') }} ({{ trans('main.page_num', ['page' => $page->current]) }})
+    {{ trans('index.blogs') }} - {{ trans('blogs.new_comments') }} ({{ trans('main.page_num', ['page' => $page->current]) }})
 @stop
 
 @section('header')
@@ -12,7 +12,7 @@
     <nav>
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
-            <li class="breadcrumb-item"><a href="/blogs">{{ trans('blogs.blogs') }}</a></li>
+            <li class="breadcrumb-item"><a href="/blogs">{{ trans('index.blogs') }}</a></li>
             <li class="breadcrumb-item active">{{ trans('blogs.new_comments') }}</li>
         </ol>
     </nav>
