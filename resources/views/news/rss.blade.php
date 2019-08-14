@@ -14,7 +14,7 @@
             <description>{{ $news->text }}</description>
             <author>{{ $news->user->login }}</author>
             <pubDate>{{ date('r', $news->created_at) }}</pubDate>
-            <category>{{ trans('news.site_news') }}</category>
+            <category>{{ trans('index.news') }}</category>
             <guid>{{ siteUrl() }}/news/{{ $news->id }}</guid>
         </item>
     @endforeach

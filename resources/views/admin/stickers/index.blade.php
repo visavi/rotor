@@ -1,7 +1,7 @@
 @extends('layout')
 
 @section('title')
-    {{ trans('stickers.title') }}
+    {{ trans('index.stickers') }}
 @stop
 
 @section('header')
@@ -9,7 +9,7 @@
         <a class="btn btn-success" href="/admin/stickers/sticker/create">{{ trans('main.upload') }}</a>
     </div><br>
 
-    <h1>{{ trans('stickers.title') }}</h1>
+    <h1>{{ trans('index.stickers') }}</h1>
 @stop
 
 @section('breadcrumb')
@@ -17,7 +17,7 @@
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
             <li class="breadcrumb-item"><a href="/admin">{{ trans('index.panel') }}</a></li>
-            <li class="breadcrumb-item active">{{ trans('stickers.title') }}</li>
+            <li class="breadcrumb-item active">{{ trans('index.stickers') }}</li>
         </ol>
     </nav>
 @stop

@@ -1,7 +1,6 @@
 <?php
 
 return [
-    'title'           => 'Money transfer',
     'in_stock'        => 'In stock',
     'transfer_for'    => 'Transfer for',
     'transfer'        => 'Transfer',

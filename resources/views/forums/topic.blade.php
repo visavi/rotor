@@ -14,7 +14,7 @@
     <nav>
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
-            <li class="breadcrumb-item"><a href="/forums">{{ trans('forums.forum') }}</a></li>
+            <li class="breadcrumb-item"><a href="/forums">{{ trans('index.forums') }}</a></li>
 
             @if ($topic->forum->parent->id)
                 <li class="breadcrumb-item"><a href="/forums/{{ $topic->forum->parent->id }}">{{ $topic->forum->parent->title }}</a></li>

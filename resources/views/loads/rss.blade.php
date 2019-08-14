@@ -15,7 +15,7 @@
             <description>{{ $down->text }}</description>
             <author>{{ $down->user->login }}</author>
             <pubDate>{{ date('r', $down->created_at) }}</pubDate>
-            <category>{{ trans('loads.title') }}</category>
+            <category>{{ trans('index.loads') }}</category>
             <guid>{{ siteUrl() }}/down/{{ $down->id }}</guid>
         </item>
     @endforeach

@@ -8,7 +8,7 @@
     <nav>
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
-            <li class="breadcrumb-item"><a href="/stickers">{{ trans('stickers.title') }}</a></li>
+            <li class="breadcrumb-item"><a href="/stickers">{{ trans('index.stickers') }}</a></li>
             <li class="breadcrumb-item active">{{ $category->name }}</li>
         </ol>
     </nav>

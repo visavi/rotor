@@ -1,7 +1,6 @@
 <?php
 
 return [
-    'title'                   => 'Стикеры',
     'empty_categories'        => 'Категории еще не созданы!',
     'empty_stickers'          => 'Стикеры не найдены!',
     'total_stickers'          => 'Всего стикеров',

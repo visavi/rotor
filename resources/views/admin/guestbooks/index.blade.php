@@ -1,7 +1,7 @@
 @extends('layout')
 
 @section('title')
-    {{ trans('guestbooks.title') }}
+    {{ trans('index.guestbooks') }}
 @stop
 
 @section('breadcrumb')
@@ -9,7 +9,7 @@
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
             <li class="breadcrumb-item"><a href="/admin">{{ trans('index.panel') }}</a></li>
-            <li class="breadcrumb-item active">{{ trans('guestbooks.title') }}</li>
+            <li class="breadcrumb-item active">{{ trans('index.guestbooks') }}</li>
             <li class="breadcrumb-item"><a href="/guestbooks?page={{ $page->current }}">{{ trans('main.review') }}</a></li>
         </ol>
     </nav>

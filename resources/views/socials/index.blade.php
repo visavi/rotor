@@ -1,7 +1,7 @@
 @extends('layout')
 
 @section('title')
-    {{ trans('socials.title') }}
+    {{ trans('index.social_networks') }}
 @stop
 
 @section('breadcrumb')
@@ -9,7 +9,7 @@
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
             <li class="breadcrumb-item"><a href="/menu">{{ trans('main.menu') }}</a></li>
-            <li class="breadcrumb-item active">{{ trans('socials.title') }}</li>
+            <li class="breadcrumb-item active">{{ trans('index.social_networks') }}</li>
         </ol>
     </nav>
 @stop
@@ -34,7 +34,7 @@
             </div>
         @endforeach
 
-        <br>{{ trans('socials.total') }}: <b>{{ $socials->count() }}</b><br>
+        <br>{{ trans('main.total') }}: <b>{{ $socials->count() }}</b><br>
 
     @else
         {!! showError(trans('socials.empty_records')) !!}

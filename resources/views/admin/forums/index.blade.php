@@ -1,7 +1,7 @@
 @extends('layout')
 
 @section('title')
-    {{ trans('forums.forum') }}
+    {{ trans('index.forums') }}
 @stop
 
 @section('breadcrumb')
@@ -9,7 +9,7 @@
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
             <li class="breadcrumb-item"><a href="/admin">{{ trans('index.panel') }}</a></li>
-            <li class="breadcrumb-item active">{{ trans('forums.forum') }}</li>
+            <li class="breadcrumb-item active">{{ trans('index.forums') }}</li>
             <li class="breadcrumb-item"><a href="/forums">{{ trans('main.review') }}</a></li>
         </ol>
     </nav>

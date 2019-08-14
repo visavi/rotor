@@ -1,7 +1,7 @@
 @extends('layout')
 
 @section('title')
-    {{ trans('votes.title') }} ({{ trans('main.page_num', ['page' => $page->current]) }})
+    {{ trans('index.votes') }} ({{ trans('main.page_num', ['page' => $page->current]) }})
 @stop
 
 @section('header')
@@ -11,14 +11,14 @@
         </div><br>
     @endif
 
-    <h1>{{ trans('votes.title') }}</h1>
+    <h1>{{ trans('index.votes') }}</h1>
 @stop
 
 @section('breadcrumb')
     <nav>
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
-            <li class="breadcrumb-item active">{{ trans('votes.title') }}</li>
+            <li class="breadcrumb-item active">{{ trans('index.votes') }}</li>
         </ol>
     </nav>
 @stop

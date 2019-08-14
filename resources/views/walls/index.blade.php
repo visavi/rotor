@@ -50,7 +50,7 @@
 
         {!! pagination($page) !!}
 
-        {{ trans('walls.total') }}: <b>{{ $page->total }}</b><br><br>
+        {{ trans('main.total') }}: <b>{{ $page->total }}</b><br><br>
 
     @else
         {!! showError(trans('walls.empty_messages')) !!}

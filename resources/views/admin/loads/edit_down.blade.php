@@ -9,7 +9,7 @@
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
             <li class="breadcrumb-item"><a href="/admin">{{ trans('index.panel') }}</a></li>
-            <li class="breadcrumb-item"><a href="/admin/loads">{{ trans('loads.title') }}</a></li>
+            <li class="breadcrumb-item"><a href="/admin/loads">{{ trans('index.loads') }}</a></li>
 
             @if ($down->category->parent->id)
                 <li class="breadcrumb-item"><a href="/admin/loads/{{ $down->category->parent->id }}">{{ $down->category->parent->name }}</a></li>

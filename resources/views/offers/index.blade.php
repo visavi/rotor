@@ -1,24 +1,24 @@
 @extends('layout')
 
 @section('title')
-    {{ trans('offers.title') }}
+    {{ trans('index.offers') }}
 @stop
 
 @section('header')
     @if (getUser())
         <div class="float-right">
-            <a class="btn btn-success" href="/offers/create?type={{ $type }}">{{ trans('offers.add_offer') }}</a>
+            <a class="btn btn-success" href="/offers/create?type={{ $type }}">{{ trans('main.add') }}</a>
         </div><br>
     @endif
 
-    <h1>{{ trans('offers.title') }}</h1>
+    <h1>{{ trans('index.offers') }}</h1>
 @stop
 
 @section('breadcrumb')
     <nav>
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
-            <li class="breadcrumb-item active">{{ trans('offers.title') }}</li>
+            <li class="breadcrumb-item active">{{ trans('index.offers') }}</li>
 
             @if (isAdmin('admin'))
                 <li class="breadcrumb-item"><a href="/admin/offers/{{ $type }}?page={{ $page->current }}">{{ trans('main.management') }}</a></li>
@@ -66,7 +66,7 @@
 
         {!! pagination($page) !!}
 
-        {{ trans('offers.total') }}: <b>{{ $page->total }}</b><br><br>
+        {{ trans('main.total') }}: <b>{{ $page->total }}</b><br><br>
     @else
         {!! showError(trans('main.empty_records')) !!}
     @endif

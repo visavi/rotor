@@ -1,18 +1,18 @@
 @extends('layout')
 
 @section('title')
-    {{ trans('guestbooks.title') }} ({{ trans('main.page_num', ['page' => $page->current]) }})
+    {{ trans('index.guestbooks') }} ({{ trans('main.page_num', ['page' => $page->current]) }})
 @stop
 
 @section('header')
-    <h1>{{ trans('guestbooks.title') }}</h1>
+    <h1>{{ trans('index.guestbooks') }}</h1>
 @stop
 
 @section('breadcrumb')
     <nav>
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
-            <li class="breadcrumb-item active">{{ trans('guestbooks.title') }}</li>
+            <li class="breadcrumb-item active">{{ trans('index.guestbooks') }}</li>
         </ol>
     </nav>
 @stop

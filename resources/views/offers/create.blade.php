@@ -8,7 +8,7 @@
     <nav>
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
-            <li class="breadcrumb-item"><a href="/offers/offer">{{ trans('offers.title') }}</a></li>
+            <li class="breadcrumb-item"><a href="/offers/offer">{{ trans('index.offers') }}</a></li>
             <li class="breadcrumb-item active">{{ trans('offers.adding_record') }}</li>
         </ol>
     </nav>
@@ -30,18 +30,18 @@
                 </div>
 
                 <div class="form-group{{ hasError('title') }}">
-                    <label for="inputTitle">{{ trans('offers.name') }}:</label>
+                    <label for="inputTitle">{{ trans('main.title') }}:</label>
                     <input type="text" class="form-control" id="inputTitle" name="title" maxlength="50" value="{{ getInput('title') }}" required>
                     <div class="invalid-feedback">{{ textError('title') }}</div>
                 </div>
 
                 <div class="form-group{{ hasError('text') }}">
-                    <label for="text">{{ trans('offers.text') }}:</label>
+                    <label for="text">{{ trans('main.text') }}:</label>
                     <textarea class="form-control markItUp" id="text" rows="5" name="text" required>{{ getInput('text') }}</textarea>
                     <div class="invalid-feedback">{{ textError('text') }}</div>
                 </div>
 
-                <button class="btn btn-primary">{{ trans('offers.add_offer') }}</button>
+                <button class="btn btn-primary">{{ trans('main.add') }}</button>
             </form>
         </div><br>
 

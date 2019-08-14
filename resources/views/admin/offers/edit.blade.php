@@ -9,7 +9,7 @@
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
             <li class="breadcrumb-item"><a href="/admin">{{ trans('index.panel') }}</a></li>
-            <li class="breadcrumb-item"><a href="/admin/offers/{{ $offer->type }}">{{ trans('offers.title') }}</a></li>
+            <li class="breadcrumb-item"><a href="/admin/offers/{{ $offer->type }}">{{ trans('index.offers') }}</a></li>
             <li class="breadcrumb-item"><a href="/admin/offers/{{ $offer->id }}">{{ $offer->title }}</a></li>
             <li class="breadcrumb-item active">{{ trans('offers.editing_record') }}</li>
         </ol>
@@ -33,13 +33,13 @@
             </div>
 
             <div class="form-group{{ hasError('title') }}">
-                <label for="inputTitle">{{ trans('offers.name') }}:</label>
+                <label for="inputTitle">{{ trans('main.title') }}:</label>
                 <input type="text" class="form-control" id="inputTitle" name="title" maxlength="50" value="{{ getInput('title', $offer->title) }}" required>
                 <div class="invalid-feedback">{{ textError('title') }}</div>
             </div>
 
             <div class="form-group{{ hasError('text') }}">
-                <label for="text">{{ trans('offers.text') }}:</label>
+                <label for="text">{{ trans('main.text') }}:</label>
                 <textarea class="form-control markItUp" id="text" rows="5" name="text" required>{{ getInput('text', $offer->text) }}</textarea>
                 <div class="invalid-feedback">{{ textError('text') }}</div>
             </div>
@@ -50,7 +50,7 @@
                 <label class="custom-control-label" for="closed">{{ trans('main.close_comments') }}</label>
             </div>
 
-            <button class="btn btn-primary">{{ trans('offers.edit_offer') }}</button>
+            <button class="btn btn-primary">{{ trans('main.change') }}</button>
         </form>
     </div>
 @stop

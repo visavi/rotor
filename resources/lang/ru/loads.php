@@ -1,8 +1,6 @@
 <?php
 
 return [
-    'title'                  => 'Загрузки',
-    'load_name'              => 'Название',
     'down_title'             => 'Название',
     'down_text'              => 'Описание',
     'create_down'            => 'Добавить',

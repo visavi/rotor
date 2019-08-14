@@ -1,7 +1,6 @@
 <?php
 
 return [
-    'site_news'            => 'Site news',
     'empty_news'           => 'No news yet!',
     'confirm_delete'       => 'Do you really want to delete this news?',
     'all_comments'         => 'All comments',

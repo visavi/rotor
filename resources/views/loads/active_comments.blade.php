@@ -1,7 +1,7 @@
 @extends('layout')
 
 @section('title')
-    {{ trans('loads.title') }} - {{ trans('loads.active_comments', ['user' => $user->login]) }} ({{ trans('main.page_num', ['page' => $page->current]) }})
+    {{ trans('index.loads') }} - {{ trans('loads.active_comments', ['user' => $user->login]) }} ({{ trans('main.page_num', ['page' => $page->current]) }})
 @stop
 
 @section('header')
@@ -12,7 +12,7 @@
     <nav>
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
-            <li class="breadcrumb-item"><a href="/loads">{{ trans('loads.title') }}</a></li>
+            <li class="breadcrumb-item"><a href="/loads">{{ trans('index.loads') }}</a></li>
             <li class="breadcrumb-item active">{{ trans('loads.active_comments', ['user' => $user->login]) }}</li>
         </ol>
     </nav>

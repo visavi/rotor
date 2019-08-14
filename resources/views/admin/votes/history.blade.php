@@ -9,7 +9,7 @@
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
             <li class="breadcrumb-item"><a href="/admin">{{ trans('index.panel') }}</a></li>
-            <li class="breadcrumb-item"><a href="/admin/votes">{{ trans('votes.title') }}</a></li>
+            <li class="breadcrumb-item"><a href="/admin/votes">{{ trans('index.votes') }}</a></li>
             <li class="breadcrumb-item active">{{ trans('votes.archive_votes') }}</li>
         </ol>
     </nav>

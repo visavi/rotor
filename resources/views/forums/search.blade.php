@@ -8,7 +8,7 @@
     <nav>
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
-            <li class="breadcrumb-item"><a href="/forums">{{ trans('forums.forum') }}</a></li>
+            <li class="breadcrumb-item"><a href="/forums">{{ trans('index.forums') }}</a></li>
             <li class="breadcrumb-item active">{{ trans('forums.title_search') }}</li>
         </ol>
     </nav>

@@ -1,7 +1,7 @@
 @extends('layout')
 
 @section('title')
-    {{ trans('transfers.title') }}
+    {{ trans('index.money_transfer') }}
 @stop
 
 @section('breadcrumb')
@@ -9,7 +9,7 @@
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
             <li class="breadcrumb-item"><a href="/menu">{{ trans('main.menu') }}</a></li>
-            <li class="breadcrumb-item active">{{ trans('transfers.title') }}</li>
+            <li class="breadcrumb-item active">{{ trans('index.money_transfer') }}</li>
         </ol>
     </nav>
 @stop

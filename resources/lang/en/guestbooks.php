@@ -1,7 +1,6 @@
 <?php
 
 return [
-    'title'          => 'Guest book',
     'answer'         => 'Answer',
     'title_edit'     => 'Editing message',
     'title_reply'    => 'Reply message',
