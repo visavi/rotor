@@ -47,7 +47,7 @@ class SitemapController extends BaseController
      */
     public function page(string $page): string
     {
-        if (! \in_array($page, $this->pages, true)) {
+        if (! in_array($page, $this->pages, true)) {
             abort(404);
         }
 

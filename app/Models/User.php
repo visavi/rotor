@@ -199,7 +199,7 @@ class User extends BaseModel
                 $name = '<span style="color:' . $color . '">' . $name . '</span>';
             }
 
-            if (\in_array($this->level, self::ADMIN_GROUPS, true)) {
+            if (in_array($this->level, self::ADMIN_GROUPS, true)) {
                 $admin = ' <i class="fas fa-xs fa-star text-info"></i>';
             }
 

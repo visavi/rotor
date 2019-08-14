@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Models;
 
 use App\Traits\UploadTrait;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 
@@ -22,6 +23,7 @@ use Illuminate\Database\Eloquent\Relations\MorphMany;
  * @property int updated_at
  * @property int expires_at
  * @property Board category
+ * @property Collection files
  */
 class Item extends BaseModel
 {
@@ -87,7 +89,7 @@ class Item extends BaseModel
      */
     public function shortText($words = 50): string
     {
-        if (\strlen($this->text) > $words) {
+        if (strlen($this->text) > $words) {
             $this->text = bbCodeTruncate($this->text, $words);
         }
 
@@ -102,7 +104,7 @@ class Item extends BaseModel
      */
     public function delete(): ?bool
     {
-        $this->files->each(function($file) {
+        $this->files->each(static function($file) {
             deleteFile(HOME . $file->hash);
             $file->delete();
         });

@@ -47,7 +47,7 @@ class BanController extends AdminController
             abort(404, trans('validator.user'));
         }
 
-        if (\in_array($user->level, User::ADMIN_GROUPS, true)) {
+        if (in_array($user->level, User::ADMIN_GROUPS, true)) {
             abort('default', 'Запрещено банить администрацию сайта!');
         }
 

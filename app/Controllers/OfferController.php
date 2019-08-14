@@ -162,7 +162,7 @@ class OfferController extends BaseController
             abort(404, 'Данного предложения или проблемы не существует!');
         }
 
-        if (! \in_array($offer->status, ['wait', 'process'])) {
+        if (! in_array($offer->status, ['wait', 'process'])) {
             abort('default', 'Данное предложение или проблема уже решена или закрыта!');
         }
 

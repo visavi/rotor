@@ -55,6 +55,7 @@ class News extends BaseModel
 
     /**
      * Возвращает иконку в зависимости от статуса
+     *
      * @return string иконка новостей
      */
     public function getIcon(): string

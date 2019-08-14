@@ -28,7 +28,7 @@ trait UploadTrait
         $fullPath  = $this->uploadPath . '/' . $filename;
         $path      = str_replace(HOME, '', $fullPath);
 
-        if (\in_array($extension, ['jpg', 'jpeg', 'gif', 'png'], true)) {
+        if (in_array($extension, ['jpg', 'jpeg', 'gif', 'png'], true)) {
             $img = Image::make($file);
 
             if ($img->getWidth() <= 100 && $img->getHeight() <= 100) {

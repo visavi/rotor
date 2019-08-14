@@ -137,7 +137,7 @@ class Down extends BaseModel
      */
     public function shortText($words = 50): string
     {
-        if (\strlen($this->text) > $words) {
+        if (strlen($this->text) > $words) {
             $this->text = bbCodeTruncate($this->text, $words);
         }
 

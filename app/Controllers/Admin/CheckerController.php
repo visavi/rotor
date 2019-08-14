@@ -86,7 +86,7 @@ class CheckerController extends AdminController
             if (is_file($dir . '/' . $file)) {
                 $ext = getExtension($file);
 
-                if (! \in_array($ext, explode(',', setting('nocheck')), true)) {
+                if (! in_array($ext, explode(',', setting('nocheck')), true)) {
                     $state[] = $dir . '/' . $file . ' / ' . dateFixed(filemtime($dir . '/' . $file), 'd.m.Y H:i') . ' / ' . formatFileSize($dir . '/' . $file);
                 }
             } else {

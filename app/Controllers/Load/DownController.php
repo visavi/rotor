@@ -631,7 +631,7 @@ class DownController extends BaseController
                 $ext = getExtension($document->getName());
 
                 header('Content-type: image/' . $ext);
-                header('Content-Length: ' . \strlen($content));
+                header('Content-Length: ' . strlen($content));
                 header('Content-Disposition: inline; filename="' . $document->getName() . '";');
                 exit($content);
             }

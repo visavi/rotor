@@ -129,7 +129,7 @@ class UserController extends AdminController
                 ->regex($icq, '#^[0-9]{5,10}$#', ['icq' => 'Недопустимый формат ICQ, только цифры от 5 до 10 символов!'], false)
                 ->regex($skype, '#^[a-z]{1}[0-9a-z\_\.\-]{5,31}$#', ['skype' => 'Недопустимый формат Skype, только латинские символы от 6 до 32!'], false)
                 ->length($status, 3, 20, ['status' => 'Слишком длинный или короткий статус!'], false)
-                ->true(\in_array($themes, $allThemes, true) || empty($themes), ['themes' => 'Данная тема не установлена на сайте!'])
+                ->true(in_array($themes, $allThemes, true) || empty($themes), ['themes' => 'Данная тема не установлена на сайте!'])
                 ->length($info, 0, 1000, ['info' => 'Слишком большая информация о себе, не более 1000 символов!']);
 
             if ($validator->isValid()) {

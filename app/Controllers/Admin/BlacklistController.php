@@ -32,7 +32,7 @@ class BlacklistController extends AdminController
         $request    = Request::createFromGlobals();
         $this->type = $request->input('type', 'email');
 
-        if (! \in_array($this->type, $types, true)) {
+        if (! in_array($this->type, $types, true)) {
             abort(404, 'Указанный тип не найден!');
         }
     }

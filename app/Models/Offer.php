@@ -53,7 +53,6 @@ class Offer extends BaseModel
         self::ISSUE => 'Проблемы',
     ];
 
-
     /**
      * Indicates if the model should be timestamped.
      *
@@ -110,18 +109,20 @@ class Offer extends BaseModel
      */
     public function getStatus(): string
     {
+        $statuses = self::$statuses;
+
         switch ($this->status) {
             case 'process':
-                $status = '<i class="fa fa-spinner"></i> <b><span style="color:#0000ff">В процессе</span></b>';
+                $status = '<i class="fa fa-spinner"></i> <b><span style="color:#0000ff">' . $statuses['process'] . '</span></b>';
                 break;
             case 'done':
-                $status = '<i class="fa fa-check-circle"></i> <b><span style="color:#00cc00">Выполнено</span></b>';
+                $status = '<i class="fa fa-check-circle"></i> <b><span style="color:#00cc00">' . $statuses['done'] . '</span></b>';
                 break;
             case 'cancel':
-                $status = '<i class="fa fa-times-circle"></i> <b><span style="color:#ff0000">Закрыто</span></b>';
+                $status = '<i class="fa fa-times-circle"></i> <b><span style="color:#ff0000">' . $statuses['cancel'] . '</span></b>';
                 break;
             default:
-                $status = '<i class="fa fa-question-circle"></i> <b><span style="color:#ffa500">Под вопросом</span></b>';
+                $status = '<i class="fa fa-question-circle"></i> <b><span style="color:#ffa500">' . $statuses['wait'] . '</span></b>';
         }
 
         return $status;

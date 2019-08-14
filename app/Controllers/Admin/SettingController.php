@@ -34,7 +34,7 @@ class SettingController extends AdminController
     {
         $act = check($request->input('act', 'mains'));
 
-        if (! \in_array($act, Setting::getActions(), true)) {
+        if (! in_array($act, Setting::getActions(), true)) {
             abort(404, 'Недопустимая страница!');
         }
 
