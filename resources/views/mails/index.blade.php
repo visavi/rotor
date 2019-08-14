@@ -1,14 +1,14 @@
 @extends('layout')
 
 @section('title')
-    {{ trans('mails.feedback') }}
+    {{ trans('index.mails') }}
 @stop
 
 @section('breadcrumb')
     <nav>
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
-            <li class="breadcrumb-item active">{{ trans('mails.feedback') }}</li>
+            <li class="breadcrumb-item active">{{ trans('index.mails') }}</li>
         </ol>
     </nav>
 @stop

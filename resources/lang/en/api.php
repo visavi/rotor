@@ -1,12 +1,11 @@
 <?php
 
 return [
-    'title'            => 'API интерфейс',
-    'page_main'        => 'Главная страница с описанием интерфейса',
-    'page_users'       => 'Возвращает данные пользователя. GET: Параметры: token, ответ: массив данных из профиля пользователя',
-    'page_messages'    => 'Возвращает приватные письма пользователя - GET: Параметры: token, count = 10, Ответ: total - кол. сообщений, messages - массив приватных сообщений',
-    'page_forums'      => 'Возвращает сообщения из темы в форуме - GET: Параметры: token, id, Ответ: id - id темы, author - автор темы, title - заголовок темы, messages - массив постов',
-    'text_description' => 'Для доступа к данным нужен API-ключ, которые можно получить на странице мои данные',
-    'text_example'     => 'Пример использования',
-    'text_return'      => 'Возвращает json',
+    'page_main'        => 'Interface description home page',
+    'page_users'       => 'Returns user data. GET: Options: token, Answer: array of data from user profile',
+    'page_messages'    => 'Returns user private messages - GET: Options: token, count = 10, Answer: total - count posts, messages - array of private messages',
+    'page_forums'      => 'Returns posts from a forum topic - GET: Options: token, id, Answer: id - id темы, author - topic author, title - topic title, messages - array of posts',
+    'text_description' => 'To access the data you need an API key, which can be obtained on the My Data page',
+    'text_example'     => 'Usage example',
+    'text_return'      => 'Returns json',
 ];

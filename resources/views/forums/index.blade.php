@@ -1,7 +1,7 @@
 @extends('layout')
 
 @section('title')
-    {{ trans('forums.title') }}
+    {{ trans('index.forums') }}
 @stop
 
 @section('header')
@@ -11,7 +11,7 @@
         </div><br>
     @endif
 
-    <h1>{{ trans('forums.title') }} {{ setting('title') }}</h1>
+    <h1>{{ trans('index.forums') }} {{ setting('title') }}</h1>
 @stop
 
 @section('breadcrumb')

@@ -22,7 +22,7 @@
 @stop
 
 @section('content')
-    {{ trans('loads.total_files') }}: {{ $page->total }}<hr>
+    {{ trans('main.total') }}: {{ $page->total }}<hr>
 
     @if ($documents)
         @foreach ($documents as $key => $document)

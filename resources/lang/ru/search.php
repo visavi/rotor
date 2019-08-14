@@ -1,7 +1,6 @@
 <?php
 
 return [
-    'title'     => 'Поиск по сайту',
     'help_text' => '
     Откройте в редакторе файлов страницу:<br>
     <code>search/index</code><br><br>

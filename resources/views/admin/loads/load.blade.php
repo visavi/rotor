@@ -7,7 +7,7 @@
 @section('header')
     @if (! $category->closed && getUser())
         <div class="float-right">
-            <a class="btn btn-success" href="/downs/create?cid={{ $category->id }}">{{ trans('loads.create_down') }}</a>
+            <a class="btn btn-success" href="/downs/create?cid={{ $category->id }}">{{ trans('main.add') }}</a>
         </div><br>
     @endif
 

@@ -1,7 +1,6 @@
 <?php
 
 return [
-    'title'                => 'Галерея',
     'photos'               => 'Фото',
     'albums'               => 'Альбомы',
     'album'                => 'Альбом',

@@ -1,7 +1,7 @@
 @extends('layout')
 
 @section('title')
-    {{ trans('messages.private_messages') }}
+    {{ trans('index.messages') }}
 @stop
 
 @section('breadcrumb')
@@ -9,7 +9,7 @@
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
             <li class="breadcrumb-item"><a href="/menu">{{ trans('main.menu') }}</a></li>
-            <li class="breadcrumb-item">{{ trans('messages.messages') }}</li>
+            <li class="breadcrumb-item">{{ trans('index.messages') }}</li>
         </ol>
     </nav>
 @stop

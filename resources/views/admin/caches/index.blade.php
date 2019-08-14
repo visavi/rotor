@@ -30,7 +30,7 @@
             </form>
         </div>
 
-        <br>{{ trans('admin.caches.total_files') }}: {{ count($files) }}<br><br>
+        <br>{{ trans('main.total') }}: {{ count($files) }}<br><br>
 
     @else
         {!! showError(trans('admin.caches.empty_files')) !!}

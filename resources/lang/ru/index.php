@@ -23,6 +23,7 @@ return [
     'messages'       => 'Сообщения',
     'chat'           => 'Чат',
     'user_search'    => 'Поиск пользователя',
+    'statistics'     => 'Статистика посещений',
 
     'menu'           => 'Меню',
     'login'          => 'Авторизация',
@@ -73,6 +74,7 @@ return [
     'notebook'           => 'Блокнот',
     'advertising'        => 'Реклама',
     'reputation_history' => 'История репутации',
+    'reputation_edit'    => 'Изменения репутации',
     'auth_history'       => 'История авторизаций',
     'money_transfer'     => 'Перевод денег',
     'wall_posts'         => 'Стена сообщений',

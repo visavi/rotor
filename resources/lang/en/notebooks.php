@@ -1,7 +1,6 @@
 <?php
 
 return [
-    'title'       => 'Notebook',
     'subtitle'    => 'Private note',
     'info'        => 'Here you can store snippets of messages or any other important information',
     'last_edited' => 'Last edited',

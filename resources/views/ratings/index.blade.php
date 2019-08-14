@@ -1,7 +1,7 @@
 @extends('layout')
 
 @section('title')
-    {{ trans('ratings.title') }} {{ $user->login }}
+    {{ trans('index.reputation_edit') }} {{ $user->login }}
 @stop
 
 @section('breadcrumb')
@@ -9,7 +9,7 @@
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
             <li class="breadcrumb-item"><a href="/users/{{ $user->login }}">{{ $user->login }}</a></li>
-            <li class="breadcrumb-item active">{{ trans('ratings.title') }}</li>
+            <li class="breadcrumb-item active">{{ trans('index.reputation_edit') }}</li>
         </ol>
     </nav>
 @stop

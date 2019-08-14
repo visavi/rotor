@@ -11,7 +11,7 @@
             <li class="breadcrumb-item"><a href="/users/{{ $user->login }}">{{ $user->login }}</a></li>
 
             @if (getUser('id') !== $user->id)
-                <li class="breadcrumb-item"><a href="/users/{{ $user->login }}/rating">{{ trans('ratings.title') }}</a></li>
+                <li class="breadcrumb-item"><a href="/users/{{ $user->login }}/rating">{{ trans('index.reputation_edit') }}</a></li>
             @endif
 
             <li class="breadcrumb-item active">{{ trans('ratings.votes_received') }}</li>

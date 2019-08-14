@@ -7,7 +7,7 @@
 @section('header')
     @if (getUser())
         <div class="float-right">
-            <a class="btn btn-success" href="/downs/create">{{ trans('loads.create_down') }}</a>
+            <a class="btn btn-success" href="/downs/create">{{ trans('main.add') }}</a>
         </div><br>
     @endif
 
@@ -25,10 +25,10 @@
 
 @section('content')
     @if (getUser())
-        {{ trans('main.my') }}: <a href="/downs/active/files">{{ trans('loads.downs') }}</a>, <a href="/downs/active/comments">{{ trans('loads.comments') }}</a> /
+        {{ trans('main.my') }}: <a href="/downs/active/files">{{ trans('loads.downs') }}</a>, <a href="/downs/active/comments">{{ trans('main.comments') }}</a> /
     @endif
 
-    {{ trans('main.new') }}: <a href="/downs">{{ trans('loads.downs') }}</a>, <a href="/downs/comments">{{ trans('loads.comments') }}</a>
+    {{ trans('main.new') }}: <a href="/downs">{{ trans('loads.downs') }}</a>, <a href="/downs/comments">{{ trans('main.comments') }}</a>
     <hr>
 
     @foreach ($categories as $category)

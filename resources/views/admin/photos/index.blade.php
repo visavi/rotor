@@ -1,7 +1,7 @@
 @extends('layout')
 
 @section('title')
-    {{ trans('photos.title') }}
+    {{ trans('index.photos') }}
 @stop
 
 @section('header')
@@ -11,7 +11,7 @@
         </div><br>
     @endif
 
-    <h1>{{ trans('photos.title') }}</h1>
+    <h1>{{ trans('index.photos') }}</h1>
 @stop
 
 @section('breadcrumb')
@@ -19,7 +19,7 @@
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
             <li class="breadcrumb-item"><a href="/admin">{{ trans('index.panel') }}</a></li>
-            <li class="breadcrumb-item active">{{ trans('photos.title') }}</li>
+            <li class="breadcrumb-item active">{{ trans('index.photos') }}</li>
             <li class="breadcrumb-item"><a href="/photos?page={{ $page->current }}">{{ trans('main.review') }}</a></li>
         </ol>
     </nav>

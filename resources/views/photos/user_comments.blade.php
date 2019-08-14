@@ -12,7 +12,7 @@
     <nav>
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
-            <li class="breadcrumb-item"><a href="/photos">{{ trans('photos.title') }}</a></li>
+            <li class="breadcrumb-item"><a href="/photos">{{ trans('index.photos') }}</a></li>
             <li class="breadcrumb-item active">{{ trans('main.comments') }} {{ $user->login }}</li>
         </ol>
     </nav>

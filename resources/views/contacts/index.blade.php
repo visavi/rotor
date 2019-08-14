@@ -1,7 +1,7 @@
 @extends('layout')
 
 @section('title')
-    {{ trans('contacts.title') }}
+    {{ trans('index.contacts') }}
 @stop
 
 @section('breadcrumb')
@@ -9,7 +9,7 @@
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
             <li class="breadcrumb-item"><a href="/menu">{{ trans('main.menu') }}</a></li>
-            <li class="breadcrumb-item active">{{ trans('contacts.title') }}</li>
+            <li class="breadcrumb-item active">{{ trans('index.contacts') }}</li>
         </ol>
     </nav>
 @stop
@@ -50,7 +50,7 @@
 
         {!! pagination($page) !!}
 
-        {{ trans('contacts.total') }}: <b>{{ $page->total }}</b><br>
+        {{ trans('main.total') }}: <b>{{ $page->total }}</b><br>
     @else
         {!! showError(trans('contacts.empty_list')) !!}
     @endif

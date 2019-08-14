@@ -1,7 +1,7 @@
 @extends('layout')
 
 @section('title')
-    {{ trans('ignores.title') }}
+    {{ trans('index.ignores') }}
 @stop
 
 @section('breadcrumb')
@@ -9,7 +9,7 @@
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
             <li class="breadcrumb-item"><a href="/menu">{{ trans('main.menu') }}</a></li>
-            <li class="breadcrumb-item active">{{ trans('ignores.title') }}</li>
+            <li class="breadcrumb-item active">{{ trans('index.ignores') }}</li>
         </ol>
     </nav>
 @stop
@@ -51,7 +51,7 @@
 
         {!! pagination($page) !!}
 
-        {{ trans('ignores.total') }}: <b>{{ $page->total }}</b><br>
+        {{ trans('main.total') }}: <b>{{ $page->total }}</b><br>
     @else
         {!! showError(trans('ignores.empty_list')) !!}
     @endif

@@ -31,7 +31,7 @@
 
     <p class="text-muted font-italic">
         {{ trans('mails.recovery_text1') }}
-        <a href="/mails">{{ trans('mails.feedback') }}</a>
+        <a href="/mails">{{ trans('index.mails') }}</a>
     </p>
 
     <p>

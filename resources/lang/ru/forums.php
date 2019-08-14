@@ -9,7 +9,6 @@ return [
     'top_posts'            => 'Топ постов',
     'create_forum'         => 'Создать раздел',
     'create_topic'         => 'Создать тему',
-    'title'                => 'Форум',
     'title_active_posts'   => 'Список сообщений :user',
     'title_active_topics'  => 'Список тем :user',
     'title_bookmarks'      => 'Мои закладки',

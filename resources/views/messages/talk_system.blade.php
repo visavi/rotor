@@ -9,7 +9,7 @@
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
             <li class="breadcrumb-item"><a href="/menu">{{ trans('main.menu') }}</a></li>
-            <li class="breadcrumb-item"><a href="/messages">{{ trans('messages.private_messages') }}</a></li>
+            <li class="breadcrumb-item"><a href="/messages">{{ trans('index.messages') }}</a></li>
             <li class="breadcrumb-item active">{{ trans('messages.notifications') }}</li>
         </ol>
     </nav>
@@ -45,7 +45,7 @@
         {!! showError(trans('messages.empty_notifications')) !!}
     @endif
 
-    {{ trans('messages.total_notifications') }}: <b>{{ $page->total }}</b><br><br>
+    {{ trans('main.total') }}: <b>{{ $page->total }}</b><br><br>
 
     @if ($page->total)
         <i class="fa fa-times"></i> <a href="/messages/delete/0?token={{ $_SESSION['token'] }}">{{ trans('messages.delete_talk') }}</a><br>
