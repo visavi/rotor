@@ -109,7 +109,7 @@ class Offer extends BaseModel
      */
     public function getStatus(): string
     {
-        $statuses = self::$statuses;
+        $statuses = self::STATUSES;
 
         switch ($this->status) {
             case 'process':
