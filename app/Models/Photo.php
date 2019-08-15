@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Models;
 
 use App\Traits\UploadTrait;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 
 /**
@@ -18,6 +19,7 @@ use Illuminate\Database\Eloquent\Relations\MorphMany;
  * @property int rating
  * @property int closed
  * @property int count_comments
+ * @property Collection files
  */
 class Photo extends BaseModel
 {
@@ -72,7 +74,7 @@ class Photo extends BaseModel
      */
     public function delete(): ?bool
     {
-        $this->files->each(function($file) {
+        $this->files->each(static function($file) {
             deleteFile(HOME . $file->hash);
             $file->delete();
         });

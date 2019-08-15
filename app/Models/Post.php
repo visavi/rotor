@@ -87,7 +87,7 @@ class Post extends BaseModel
      */
     public function delete(): ?bool
     {
-        $this->files->each(function($file) {
+        $this->files->each(static function($file) {
             deleteFile(HOME . $file->hash);
             $file->delete();
         });

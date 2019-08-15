@@ -28,8 +28,7 @@ class CheckerController extends AdminController
      */
     public function index(): string
     {
-        $files = $this->scanFiles('../');
-        $files = str_replace('..//', '', $files);
+        $files = $this->scanFiles(BASEDIR);
         $diff  = [];
 
         if (file_exists(STORAGE . '/temp/checker.dat')) {
@@ -54,8 +53,7 @@ class CheckerController extends AdminController
 
         if ($token === $_SESSION['token']) {
             if (is_writable(STORAGE . '/temp')) {
-                $files = $this->scanFiles('../');
-                $files = str_replace('..//', '', $files);
+                $files = $this->scanFiles(BASEDIR);
 
                 file_put_contents(STORAGE . '/temp/checker.dat', json_encode($files), LOCK_EX);
 
@@ -95,6 +93,6 @@ class CheckerController extends AdminController
             }
         }
 
-        return $state;
+        return str_replace(BASEDIR, '', $state);
     }
 }
