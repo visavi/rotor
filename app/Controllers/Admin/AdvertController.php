@@ -56,10 +56,10 @@ class AdvertController extends AdminController
             $bold  = empty($request->input('bold')) ? 0 : 1;
 
             $validator->equal($token, $_SESSION['token'], trans('validator.token'))
-                ->regex($site, '|^https?://([а-яa-z0-9_\-\.])+(\.([а-яa-z0-9\/\-?_=#])+)+$|iu', ['site' => 'Недопустимый адрес сайта!. Разрешены символы [а-яa-z0-9_-.?=#/]!'])
-                ->length($site, 5, 50, ['site' => 'Слишком длинный или короткий адрес ссылки!'])
+                ->regex($site, '|^https?://([а-яa-z0-9_\-\.])+(\.([а-яa-z0-9\/\-?_=#])+)+$|iu', ['site' => trans('validator.url')])
+                ->length($site, 5, 50, ['site' => trans('validator.url_text')])
                 ->length($name, 5, 35, ['name' => trans('validator.title')])
-                ->regex($color, '|^#+[A-f0-9]{6}$|', ['color' => 'Недопустимый формат цвета ссылки! (пример #ff0000)'], false);
+                ->regex($color, '|^#+[A-f0-9]{6}$|', ['color' => trans('validator.color')], false);
 
             if ($validator->isValid()) {
 

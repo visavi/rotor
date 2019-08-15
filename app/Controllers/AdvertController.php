@@ -95,10 +95,10 @@ class AdvertController extends BaseController
             $validator->equal($token, $_SESSION['token'], trans('validator.token'))
                 ->gte(getUser('point'), setting('rekuserpoint'), 'Для покупки рекламы вам необходимо набрать '.plural(50, setting('scorename')).'!')
                 ->true(captchaVerify(), ['protect' => trans('validator.captcha')])
-                ->regex($site, '|^https?://([а-яa-z0-9_\-\.])+(\.([а-яa-z0-9\/\-?_=#])+)+$|iu', ['site' => 'Недопустимый адрес сайта!. Разрешены символы [а-яa-z0-9_-.?=#/]!'])
-                ->length($site, 5, 100, ['site' => 'Слишком длинный или короткий адрес ссылки!'])
+                ->regex($site, '|^https?://([а-яa-z0-9_\-\.])+(\.([а-яa-z0-9\/\-?_=#])+)+$|iu', ['site' => trans('validator.url')])
+                ->length($site, 5, 100, ['site' => trans('validator.url_text')])
                 ->length($name, 5, 35, ['name' => trans('validator.title')])
-                ->regex($color, '|^#+[A-f0-9]{6}$|', ['color' => 'Недопустимый формат цвета ссылки! (пример #ff0000)'], false)
+                ->regex($color, '|^#+[A-f0-9]{6}$|', ['color' => trans('validator.color')], false)
                 ->gte(getUser('money'), $price, ['Для покупки рекламы у вас недостаточно денег!']);
 
             if ($validator->isValid()) {

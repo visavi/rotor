@@ -65,7 +65,7 @@ class BlacklistController extends AdminController
 
             if ($type === 'domain') {
                 $value = siteDomain($value);
-                $validator->regex($value, '#([а-яa-z0-9_\-\.])+(\.([а-яa-z0-9\/])+)+$#u', ['value' => 'Недопустимый адрес сайта!']);
+                $validator->regex($value, '#([а-яa-z0-9_\-\.])+(\.([а-яa-z0-9\/])+)+$#u', ['value' => trans('validator.site')]);
             }
 
             $duplicate = BlackList::query()->where('type', $type)->where('value', $value)->first();

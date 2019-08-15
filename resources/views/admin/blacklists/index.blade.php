@@ -52,7 +52,7 @@
             @csrf
             <div class="form-inline">
                 <div class="form-group{{ hasError('value') }}">
-                    <input type="text" class="form-control" id="value" name="value" maxlength="100" value="{{ getInput('value') }}" placeholder="{{ trans('main.record') }}cd -" required>
+                    <input type="text" class="form-control" id="value" name="value" maxlength="100" value="{{ getInput('value') }}" placeholder="{{ trans('main.record') }}" required>
                 </div>
 
                 <button class="btn btn-primary">{{ trans('main.add') }}</button>

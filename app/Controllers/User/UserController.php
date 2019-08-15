@@ -329,8 +329,8 @@ class UserController extends BaseController
             $gender   = $request->input('gender') === 'male' ? 'male' : 'female';
 
             $validator->equal($token, $_SESSION['token'], trans('validator.token'))
-                ->regex($site, '#^https?://([а-яa-z0-9_\-\.])+(\.([а-яa-z0-9\/])+)+$#u', ['site' => 'Недопустимый адрес сайта, необходим формата http://my_site.domen!'], false)
-                ->regex($birthday, '#^[0-9]{2}+\.[0-9]{2}+\.[0-9]{4}$#', ['birthday' => 'Недопустимый формат даты рождения, необходим формат дд.мм.гггг!'], false)
+                ->regex($site, '#^https?://([а-яa-z0-9_\-\.])+(\.([а-яa-z0-9\/])+)+$#u', ['site' => trans('validator.site')], false)
+                ->regex($birthday, '#^[0-9]{2}+\.[0-9]{2}+\.[0-9]{4}$#', ['birthday' => trans('validator.date')], false)
                 ->regex($phone, '#^\d{11}$#', ['phone' => trans('validator.phone')], false)
                 ->regex($icq, '#^\d{5,10}$#', ['icq' => 'Недопустимый формат ICQ, только цифры от 5 до 10 символов!'], false)
                 ->regex($skype, '#^[a-z]{1}[0-9a-z\_\.\-]{5,31}$#', ['skype' => 'Недопустимый формат Skype, только латинские символы от 6 до 32!'], false)

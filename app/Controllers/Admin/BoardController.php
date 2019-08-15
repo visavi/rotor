@@ -347,7 +347,6 @@ class BoardController extends AdminController
         $token = check($request->input('token'));
 
         if ($token === $_SESSION['token']) {
-
             restatement('boards');
 
             setFlash('success', 'Объявления успешно пересчитаны!');
