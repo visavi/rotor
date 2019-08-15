@@ -8,7 +8,6 @@
     @stack('styles')
     <link rel="stylesheet" href="/themes/sky/css/style.css" media="screen">
     <link rel="alternate" href="/news/rss" title="RSS News" type="application/rss+xml">
-    <meta name="keywords" content="@yield('keywords', setting('keywords'))">
     <meta name="description" content="@yield('description', setting('description'))">
     <meta name="generator" content="Rotor {{ VERSION }}">
 </head>

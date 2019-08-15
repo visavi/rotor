@@ -107,7 +107,7 @@ class OfferController extends BaseController
                 ->length($title, 5, 50, ['title' => trans('validator.title')])
                 ->length($text, 5, 1000, ['text' => trans('validator.text')])
                 ->false($flood->isFlood(), ['msg' => trans('validator.flood', ['sec' => $flood->getPeriod()])])
-                ->in($type, array_keys(Offer::TYPES), ['type' => 'Выбран неверный тип записи! (Необходимо предложение или проблема)'])
+                ->in($type, Offer::TYPES, ['type' => 'Выбран неверный тип записи! (Необходимо предложение или проблема)'])
                 ->gte(getUser('point'), setting('addofferspoint'), ['Для добавления предложения или проблемы вам необходимо набрать ' . plural(setting('addofferspoint'), setting('scorename')) . '!']);
 
             if ($validator->isValid()) {
@@ -176,7 +176,7 @@ class OfferController extends BaseController
             $validator->equal($token, $_SESSION['token'], trans('validator.token'))
                 ->length($title, 5, 50, ['title' => trans('validator.title')])
                 ->length($text, 5, 1000, ['text' => trans('validator.text')])
-                ->in($type, array_keys(Offer::TYPES), ['type' => 'Выбран неверный тип записи! (Необходимо предложение или проблема)']);
+                ->in($type, Offer::TYPES, ['type' => 'Выбран неверный тип записи! (Необходимо предложение или проблема)']);
 
             if ($validator->isValid()) {
 

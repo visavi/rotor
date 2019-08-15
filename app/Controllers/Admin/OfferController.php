@@ -114,7 +114,7 @@ class OfferController extends AdminController
             $validator->equal($token, $_SESSION['token'], trans('validator.token'))
                 ->length($title, 5, 50, ['title' => trans('validator.title')])
                 ->length($text, 5, 1000, ['text' => trans('validator.text')])
-                ->in($type, array_keys(Offer::TYPES), ['type' => 'Выбран неверный тип записи! (Необходимо предложение или проблема)']);
+                ->in($type, Offer::TYPES, ['type' => 'Выбран неверный тип записи! (Необходимо предложение или проблема)']);
 
             if ($validator->isValid()) {
 
@@ -165,7 +165,7 @@ class OfferController extends AdminController
 
             $validator->equal($token, $_SESSION['token'], trans('validator.token'))
                 ->length($reply, 5, 3000, ['reply' => trans('validator.text')])
-                ->in($status, array_keys(Offer::STATUSES), ['status' => 'Недопустимый статус предложения или проблемы!']);
+                ->in($status, Offer::STATUSES, ['status' => 'Недопустимый статус предложения или проблемы!']);
 
             if ($validator->isValid()) {
 

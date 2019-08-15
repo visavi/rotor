@@ -62,12 +62,10 @@
 @@stop
 </pre><br>
 
-    Дополнительно можно указать произвольные ключевые слова и описание заполнив переменные setting('keywords') и setting('description')<br>
+    Дополнительно можно указать произвольные описание заполнив переменную setting('description')<br>
 
 <pre class="prettyprint linenums">
 @@section('description', 'Описание страницы')
-
-@@section('keywords', 'Ключевые слова')
 </pre><br>
 
     Посмотрите пример страниц в виде <a href="/files/docs">документации Rotor</a><br>

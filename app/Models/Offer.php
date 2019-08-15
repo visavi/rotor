@@ -36,10 +36,10 @@ class Offer extends BaseModel
      * Статусы
      */
     public const STATUSES = [
-        self::DONE    => 'Выполнено',
-        self::WAIT    => 'Под вопросом',
-        self::CANCEL  => 'Закрыто',
-        self::PROCESS => 'В процессе',
+        self::DONE,
+        self::WAIT,
+        self::CANCEL,
+        self::PROCESS,
     ];
 
     public const OFFER = 'offer';
@@ -49,8 +49,8 @@ class Offer extends BaseModel
      * Типы
      */
     public const TYPES = [
-        self::OFFER => 'Предложения',
-        self::ISSUE => 'Проблемы',
+        self::OFFER,
+        self::ISSUE,
     ];
 
     /**
@@ -109,20 +109,18 @@ class Offer extends BaseModel
      */
     public function getStatus(): string
     {
-        $statuses = self::STATUSES;
-
         switch ($this->status) {
             case 'process':
-                $status = '<i class="fa fa-spinner"></i> <b><span style="color:#0000ff">' . $statuses['process'] . '</span></b>';
+                $status = '<span class="font-weight-bold text-primary"><i class="fa fa-spinner"></i> ' . trans('offers.process') . '</span>';
                 break;
             case 'done':
-                $status = '<i class="fa fa-check-circle"></i> <b><span style="color:#00cc00">' . $statuses['done'] . '</span></b>';
+                $status = '<span class="font-weight-bold text-success"><i class="fa fa-check-circle"></i> ' . trans('offers.done') . '</span>';
                 break;
             case 'cancel':
-                $status = '<i class="fa fa-times-circle"></i> <b><span style="color:#ff0000">' . $statuses['cancel'] . '</span></b>';
+                $status = '<span class="font-weight-bold text-danger"><i class="fa fa-times-circle"></i> ' . trans('offers.cancel') . '</span>';
                 break;
             default:
-                $status = '<i class="fa fa-question-circle"></i> <b><span style="color:#ffa500">' . $statuses['wait'] . '</span></b>';
+                $status = '<span class="font-weight-bold text-warning"><i class="fa fa-question-circle"></i> ' . trans('offers.wait') . '</span>';
         }
 
         return $status;

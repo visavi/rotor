@@ -4,7 +4,6 @@
     {{ $blog->title }}
 @stop
 
-@section('keywords', $blog->tags)
 @section('description', truncateDescription(bbCode($blog->text, false)))
 
 @section('header')

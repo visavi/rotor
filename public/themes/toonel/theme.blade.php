@@ -8,8 +8,7 @@
     @stack('styles')
     <link rel="stylesheet" href="/themes/toonel/css/style.css"/>
     <link rel="alternate" href="/news/rss" title="RSS News" type="application/rss+xml"/>
-    <meta name="keywords" content="%KEYWORDS%"/>
-    <meta name="description" content="%DESCRIPTION%"/>
+    <meta name="description" content="@yield('description', setting('description'))">
     <meta name="generator" content="Rotor {{ VERSION }}"/>
 </head>
 <body>

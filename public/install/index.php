@@ -121,9 +121,9 @@ $wrap->setOption('environment', 'default');
 
         if (extension_loaded('mbstring')) {
             $version = getModuleSetting('mbstring', ['oniguruma version', 'Multibyte regex (oniguruma) version']);
-            echo '<i class="fa fa-plus-circle"></i> Расширение Mbstring ('.$version.'): <b><span style="color:#00cc00">ОК</span></b><br>';
+            echo '<i class="fa fa-plus-circle"></i> Расширение MbString ('.$version.'): <b><span style="color:#00cc00">ОК</span></b><br>';
         } else {
-            echo '<i class="fa fa-minus-circle"></i> Расширение Mbstring: <b><span style="color:#ff0000">Ошибка</span></b> (Расширение не загружено)<br>';
+            echo '<i class="fa fa-minus-circle"></i> Расширение MbString: <b><span style="color:#ff0000">Ошибка</span></b> (Расширение не загружено)<br>';
             $errorCritical = 1;
         }
 

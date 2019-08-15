@@ -68,7 +68,6 @@ class SettingsSeeder extends AbstractSeed
             ['name'  => 'incount', 'value' => 5],
             ['name'  => 'invite', 'value' => 0],
             ['name'  => 'ipbanlist', 'value' => 10],
-            ['name'  => 'keywords', 'value' => 'Ключевые слова вашего сайта'],
             ['name'  => 'lastnews', 'value' => 5],
             ['name'  => 'language', 'value' => 'ru'],
             ['name'  => 'language_fallback', 'value' => 'ru'],

@@ -11,7 +11,6 @@
     <link rel="alternate" href="/news/rss" title="RSS News" type="application/rss+xml">
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <meta name="description" content="@yield('description', setting('description'))">
-    <meta name="keywords" content="@yield('keywords', setting('keywords'))">
     <meta name="generator" content="Rotor {{ VERSION }}">
 </head>
 <body>

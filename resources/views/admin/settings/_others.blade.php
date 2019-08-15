@@ -16,12 +16,6 @@
         <div class="invalid-feedback">{{ textError('sets[description]') }}</div>
     </div>
 
-    <div class="form-group{{ hasError('sets[keywords]') }}">
-        <label for="keywords">{{ trans('settings.keywords') }}:</label>
-        <input type="text" class="form-control" id="keywords" name="sets[keywords]" maxlength="250" value="{{ getInput('sets.keywords', $settings['keywords']) }}" required>
-        <div class="invalid-feedback">{{ textError('sets[keywords]') }}</div>
-    </div>
-
     <div class="form-group{{ hasError('sets[nocheck]') }}">
         <label for="nocheck">{{ trans('settings.unscannable_ext') }}:</label>
         <input type="text" class="form-control" id="nocheck" name="sets[nocheck]" maxlength="100" value="{{ getInput('sets.nocheck', $settings['nocheck']) }}" required>

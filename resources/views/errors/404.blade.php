@@ -6,7 +6,6 @@
 
 @section('header', '')
 @section('description', trans('errors.error') . ' 404')
-@section('keywords', '')
 
 @section('content')
 
