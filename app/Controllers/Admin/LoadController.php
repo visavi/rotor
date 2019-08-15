@@ -21,7 +21,7 @@ class LoadController extends AdminController
         parent::__construct();
 
         if (! isAdmin(User::ADMIN)) {
-            abort(403, 'Доступ запрещен!');
+            abort(403, trans('errors.forbidden'));
         }
     }
 
@@ -51,7 +51,7 @@ class LoadController extends AdminController
     public function create(Request $request, Validator $validator): void
     {
         if (! isAdmin(User::BOSS)) {
-            abort(403, 'Доступ запрещен!');
+            abort(403, trans('errors.forbidden'));
         }
 
         $token = check($request->input('token'));
@@ -91,7 +91,7 @@ class LoadController extends AdminController
     public function edit(int $id, Request $request, Validator $validator): string
     {
         if (! isAdmin(User::BOSS)) {
-            abort(403, 'Доступ запрещен!');
+            abort(403, trans('errors.forbidden'));
         }
 
         /** @var Load $load */
@@ -153,7 +153,7 @@ class LoadController extends AdminController
     public function delete(int $id, Request $request, Validator $validator): void
     {
         if (! isAdmin(User::BOSS)) {
-            abort(403, 'Доступ запрещен!');
+            abort(403, trans('errors.forbidden'));
         }
 
         /** @var Load $load */
@@ -194,7 +194,7 @@ class LoadController extends AdminController
     public function restatement(Request $request): void
     {
         if (! isAdmin(User::BOSS)) {
-            abort(403, 'Доступ запрещен!');
+            abort(403, trans('errors.forbidden'));
         }
 
         $token = check($request->input('token'));
@@ -370,7 +370,7 @@ class LoadController extends AdminController
         }
 
         if (! isAdmin(User::BOSS)) {
-            abort(403, 'Доступ запрещен!');
+            abort(403, trans('errors.forbidden'));
         }
 
         if ($token === $_SESSION['token']) {

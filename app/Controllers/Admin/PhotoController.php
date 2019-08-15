@@ -12,18 +12,6 @@ use Illuminate\Http\Request;
 class PhotoController extends AdminController
 {
     /**
-     * Конструктор
-     */
-    public function __construct()
-    {
-        parent::__construct();
-
-        if (! isAdmin()) {
-            abort(403, 'Доступ запрещен!');
-        }
-    }
-
-    /**
      * Главная страница
      *
      * @return string

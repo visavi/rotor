@@ -17,7 +17,7 @@ class CheckerController extends AdminController
         parent::__construct();
 
         if (! isAdmin(User::BOSS)) {
-            abort(403, 'Доступ запрещен!');
+            abort(403, trans('errors.forbidden'));
         }
     }
 

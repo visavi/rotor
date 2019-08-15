@@ -31,7 +31,7 @@ class SpamController extends AdminController
         parent::__construct();
 
         if (! isAdmin(User::MODER)) {
-            abort(403, 'Доступ запрещен!');
+            abort(403, trans('errors.forbidden'));
         }
 
         $this->types = [

@@ -21,7 +21,7 @@ Class AdminController extends BaseController
         parent::__construct();
 
         if (! isAdmin()) {
-            abort(403, 'Доступ запрещен!');
+            abort(403, trans('errors.forbidden'));
         }
 
         Log::query()->create([
@@ -76,7 +76,7 @@ Class AdminController extends BaseController
     public function phpinfo(): string
     {
         if (! isAdmin(User::ADMIN)) {
-            abort(403, 'Доступ запрещен!');
+            abort(403, trans('errors.forbidden'));
         }
 
         $iniInfo = null;

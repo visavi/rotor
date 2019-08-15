@@ -18,7 +18,7 @@ class VoteController extends AdminController
         parent::__construct();
 
         if (! isAdmin(User::MODER)) {
-            abort(403, 'Доступ запрещен!');
+            abort(403, trans('errors.forbidden'));
         }
     }
 
@@ -150,7 +150,7 @@ class VoteController extends AdminController
         }
 
         if (! isAdmin(User::BOSS)) {
-            abort(403, 'Доступ запрещен!');
+            abort(403, trans('errors.forbidden'));
         }
 
         if ($token === $_SESSION['token']) {
@@ -220,7 +220,7 @@ class VoteController extends AdminController
     public function restatement(Request $request): void
     {
         if (! isAdmin(User::BOSS)) {
-            abort(403, 'Доступ запрещен!');
+            abort(403, trans('errors.forbidden'));
         }
 
         $token = check($request->input('token'));

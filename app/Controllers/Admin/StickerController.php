@@ -21,7 +21,7 @@ class StickerController extends AdminController
         parent::__construct();
 
         if (! isAdmin(User::ADMIN)) {
-            abort(403, 'Доступ запрещен!');
+            abort(403, trans('errors.forbidden'));
         }
     }
 

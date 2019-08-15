@@ -20,7 +20,7 @@ class NewsController extends AdminController
         parent::__construct();
 
         if (! isAdmin(User::ADMIN)) {
-            abort(403, 'Доступ запрещен!');
+            abort(403, trans('errors.forbidden'));
         }
     }
 
@@ -181,7 +181,7 @@ class NewsController extends AdminController
     public function restatement(Request $request): void
     {
         if (! isAdmin(User::BOSS)) {
-            abort(403, 'Доступ запрещен!');
+            abort(403, trans('errors.forbidden'));
         }
 
         $token = check($request->input('token'));

@@ -68,7 +68,7 @@ class BoardController extends AdminController
     public function categories(): string
     {
         if (! isAdmin(User::BOSS)) {
-            abort(403, 'Доступ запрещен!');
+            abort(403, trans('errors.forbidden'));
         }
 
         $boards = Board::query()
@@ -90,7 +90,7 @@ class BoardController extends AdminController
     public function create(Request $request, Validator $validator): void
     {
         if (! isAdmin(User::BOSS)) {
-            abort(403, 'Доступ запрещен!');
+            abort(403, trans('errors.forbidden'));
         }
 
         $token = check($request->input('token'));
@@ -130,7 +130,7 @@ class BoardController extends AdminController
     public function edit(int $id, Request $request, Validator $validator): string
     {
         if (! isAdmin(User::BOSS)) {
-            abort(403, 'Доступ запрещен!');
+            abort(403, trans('errors.forbidden'));
         }
 
         /** @var Board $board */
@@ -191,7 +191,7 @@ class BoardController extends AdminController
     public function delete(int $id, Request $request, Validator $validator): void
     {
         if (! isAdmin(User::BOSS)) {
-            abort(403, 'Доступ запрещен!');
+            abort(403, trans('errors.forbidden'));
         }
 
         /** @var Board $board */
@@ -341,7 +341,7 @@ class BoardController extends AdminController
     public function restatement(Request $request): void
     {
         if (! isAdmin(User::BOSS)) {
-            abort(403, 'Доступ запрещен!');
+            abort(403, trans('errors.forbidden'));
         }
 
         $token = check($request->input('token'));
