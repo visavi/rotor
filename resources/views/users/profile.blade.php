@@ -46,18 +46,6 @@
                             <div class="invalid-feedback">{{ textError('phone') }}</div>
                         </div>
 
-                        <div class="form-group{{ hasError('icq') }}">
-                            <label for="inputIcq">ICQ:</label>
-                            <input class="form-control" id="inputIcq" name="icq" maxlength="10" value="{{ getInput('icq', $user->icq) }}">
-                            <div class="invalid-feedback">{{ textError('icq') }}</div>
-                        </div>
-
-                        <div class="form-group{{ hasError('skype') }}">
-                            <label for="inputSkype">Skype:</label>
-                            <input class="form-control" id="inputSkype" name="skype" maxlength="32" value="{{ getInput('skype', $user->skype) }}">
-                            <div class="invalid-feedback">{{ textError('skype') }}</div>
-                        </div>
-
                         <div class="form-group{{ hasError('site') }}">
                             <label for="inputSite">{{ trans('users.site') }}:</label>
                             <input class="form-control" id="inputSite" name="site" maxlength="50" value="{{ getInput('site', $user->site) }}">

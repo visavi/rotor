@@ -107,8 +107,6 @@ class UserController extends AdminController
             $city      = check($request->input('city'));
             $site      = check($request->input('site'));
             $birthday  = check($request->input('birthday'));
-            $icq       = preg_replace('/\D/', '', $request->input('icq'));
-            $skype     = check(strtolower($request->input('skype')));
             $point     = int($request->input('point'));
             $money     = int($request->input('money'));
             $status    = check($request->input('status'));
@@ -126,8 +124,6 @@ class UserController extends AdminController
                 ->regex($site, '#^https?://([а-яa-z0-9_\-\.])+(\.([а-яa-z0-9\/])+)+$#u', ['site' => trans('validator.url')], false)
                 ->regex($birthday, '#^[0-9]{2}+\.[0-9]{2}+\.[0-9]{4}$#', ['birthday' => trans('validator.date')], false)
                 ->regex($created, '#^[0-9]{2}+\.[0-9]{2}+\.[0-9]{4}$#', ['created' => trans('validator.date')], false)
-                ->regex($icq, '#^[0-9]{5,10}$#', ['icq' => 'Недопустимый формат ICQ, только цифры от 5 до 10 символов!'], false)
-                ->regex($skype, '#^[a-z]{1}[0-9a-z\_\.\-]{5,31}$#', ['skype' => 'Недопустимый формат Skype, только латинские символы от 6 до 32!'], false)
                 ->length($status, 3, 20, ['status' => 'Слишком длинный или короткий статус!'], false)
                 ->true(in_array($themes, $allThemes, true) || empty($themes), ['themes' => 'Данная тема не установлена на сайте!'])
                 ->length($info, 0, 1000, ['info' => 'Слишком большая информация о себе, не более 1000 символов!']);
@@ -156,8 +152,6 @@ class UserController extends AdminController
                     'city'       => $city,
                     'site'       => $site,
                     'birthday'   => $birthday,
-                    'icq'        => $icq,
-                    'skype'      => $skype,
                     'point'      => $point,
                     'money'      => $money,
                     'status'     => $status,

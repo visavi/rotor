@@ -322,8 +322,6 @@ class UserController extends BaseController
             $country  = check($request->input('country'));
             $city     = check($request->input('city'));
             $phone    = preg_replace('/\D/', '', $request->input('phone'));
-            $icq      = preg_replace('/\D/', '', $request->input('icq'));
-            $skype    = check(strtolower($request->input('skype')));
             $site     = check($request->input('site'));
             $birthday = check($request->input('birthday'));
             $gender   = $request->input('gender') === 'male' ? 'male' : 'female';
@@ -332,8 +330,6 @@ class UserController extends BaseController
                 ->regex($site, '#^https?://([а-яa-z0-9_\-\.])+(\.([а-яa-z0-9\/])+)+$#u', ['site' => trans('validator.site')], false)
                 ->regex($birthday, '#^[0-9]{2}+\.[0-9]{2}+\.[0-9]{4}$#', ['birthday' => trans('validator.date')], false)
                 ->regex($phone, '#^\d{11}$#', ['phone' => trans('validator.phone')], false)
-                ->regex($icq, '#^\d{5,10}$#', ['icq' => 'Недопустимый формат ICQ, только цифры от 5 до 10 символов!'], false)
-                ->regex($skype, '#^[a-z]{1}[0-9a-z\_\.\-]{5,31}$#', ['skype' => 'Недопустимый формат Skype, только латинские символы от 6 до 32!'], false)
                 ->length($info, 0, 1000, ['info' => 'Слишком большая информация о себе, не более 1000 символов!'])
                 ->length($name, 3, 20, ['name' => 'Слишком длинное или короткое имя!'], false);
 
@@ -348,8 +344,6 @@ class UserController extends BaseController
                     'country'  => $country,
                     'city'     => $city,
                     'phone'    => $phone,
-                    'icq'      => $icq,
-                    'skype'    => $skype,
                     'site'     => $site,
                     'birthday' => $birthday,
                     'info'     => $info,

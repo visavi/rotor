@@ -76,14 +76,6 @@
                     {{ trans('users.phone') }}: {{ $user->phone }}<br>
                 @endif
 
-                @if (! empty($user->icq))
-                    ICQ: {{ $user->icq }}<br>
-                @endif
-
-                @if (! empty($user->skype))
-                    Skype: {{ $user->skype }}<br>
-                @endif
-
                 {{ trans('users.visits') }}: {{ $user->visits }}<br>
                 {{ trans('users.forum_posts') }}: {{ $user->allforum }}<br>
                 {{ trans('users.guest_posts') }}: {{ $user->allguest }}<br>

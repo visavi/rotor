@@ -55,8 +55,6 @@ class ApiController extends BaseController
             'country'   => $user->country,
             'city'      => $user->city,
             'site'      => $user->site,
-            'icq'       => $user->icq,
-            'skype'     => $user->skype,
             'gender'    => $user->gender,
             'birthday'  => $user->birthday,
             'newwall'   => $user->newwall,

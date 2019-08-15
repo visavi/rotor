@@ -29,8 +29,6 @@ use Illuminate\Database\Query\JoinClause;
  * @property string info
  * @property string site
  * @property string phone
- * @property string icq
- * @property string skype
  * @property string gender
  * @property string birthday
  * @property int visits
