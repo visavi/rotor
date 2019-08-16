@@ -24,7 +24,7 @@ class BackupController extends AdminController
             abort(403, trans('errors.forbidden'));
         }
 
-        if (\function_exists('set_time_limit')) {
+        if (function_exists('set_time_limit')) {
             set_time_limit(600);
         }
 
@@ -61,9 +61,9 @@ class BackupController extends AdminController
             $level  = int($request->input('level'));
 
             $validator->equal($token, $_SESSION['token'], trans('validator.token'))
-                ->notEmpty($sheets, ['sheets' => 'Не выбраны таблицы для сохранения!'])
-                ->in($method, ['none', 'gzip', 'bzip'], ['method' => 'Неправильный метод сжатия!'])
-                ->between($level, 0, 9, ['level' => 'Неправильная степень сжатия!']);
+                ->notEmpty($sheets, ['sheets' => trans('admin.backup.no_tables_save')])
+                ->in($method, ['none', 'gzip', 'bzip'], ['method' => trans('admin.backup.wrong_compression_method')])
+                ->between($level, 0, 9, ['level' => trans('admin.backup.wrong_compression_ratio')]);
 
             if ($validator->isValid()) {
 
@@ -75,10 +75,9 @@ class BackupController extends AdminController
                 $fp = $this->fopen(STORAGE.'/backups/'.$filename, 'w', $method, $level);
 
                 foreach ($selectTables as $table) {
-
                     $show = DB::connection()->selectOne("SHOW CREATE TABLE `{$table->Name}`");
 
-                    $this->fwrite($fp, "--\n-- Структура таблицы `{$table->Name}`\n--\n\n", $method);
+                    $this->fwrite($fp, "--\n-- Structure table `{$table->Name}`\n--\n\n", $method);
                     $this->fwrite($fp, "DROP TABLE IF EXISTS `{$table->Name}`;\n{$show->{'Create Table'}};\n\n", $method);
 
                     $total = DB::connection()->table($table->Name)->count();
@@ -87,11 +86,10 @@ class BackupController extends AdminController
                         continue;
                     }
 
-                    $this->fwrite($fp, "--\n-- Дамп данных таблицы `{$table->Name}`\n--\n\n", $method);
+                    $this->fwrite($fp, "--\n-- Dump table `{$table->Name}`\n--\n\n", $method);
                     $this->fwrite($fp, "INSERT INTO `{$table->Name}` VALUES ", $method);
 
                     for ($i = 0; $i < $total; $i += $limit) {
-
                         $cols = DB::connection()->table($table->Name)->lockForUpdate()->limit($limit)->offset($i)->get();
 
                         foreach ($cols as $key => $col) {
@@ -99,7 +97,8 @@ class BackupController extends AdminController
                             $columns = [];
 
                             foreach ($records as $record) {
-                                $columns[] = $record ? is_int($record) ? $record : '"' . str_replace('"', '&quot;', $record) . '"' : 'NULL';
+                                $record = is_int($record) ? $record : '"' . str_replace('"', '&quot;', $record) . '"';
+                                $columns[] = $record ?: 'NULL';
                             }
 
                             $this->fwrite($fp, ($key || $i ? ',' : '') . '(' . implode(',', $columns) . ')', $method);
@@ -113,7 +112,7 @@ class BackupController extends AdminController
 
                 $this->fclose($fp, $method);
 
-                setFlash('success', 'База данных успешно обработана и сохранена!');
+                setFlash('success', trans('admin.backup.database_success_saved'));
                 redirect('/admin/backups');
             } else {
                 setInput($request->all());
@@ -123,8 +122,8 @@ class BackupController extends AdminController
 
         $tables = DB::connection()->select('SHOW TABLE STATUS');
 
-        $bzopen = \function_exists('bzopen') ? true : false;
-        $gzopen = \function_exists('gzopen') ? true : false;
+        $bzopen = function_exists('bzopen') ? true : false;
+        $gzopen = function_exists('gzopen') ? true : false;
 
         $levels = range(0, 9);
 
@@ -144,15 +143,14 @@ class BackupController extends AdminController
         $file  = check($request->input('file'));
 
         $validator->equal($token, $_SESSION['token'], trans('validator.token'))
-            ->notEmpty($file, 'Не передано название бэкапа для удаления!')
-            ->regex($file, '|^[\w\.\-]+$|i', 'Недопустимое название бэкапа!')
-            ->true(file_exists(STORAGE.'/backups/'.$file), 'Файла для удаления не существует!');
+            ->notEmpty($file, trans('admin.backup.backup_not_indicated'))
+            ->regex($file, '|^[\w\.\-]+$|i', trans('admin.backup.invalid_backup_name'))
+            ->true(file_exists(STORAGE.'/backups/'.$file), trans('admin.backup.backup_not_exist'));
 
         if ($validator->isValid()) {
-
             unlink(STORAGE.'/backups/'.$file);
 
-            setFlash('success', 'Бэкап успешно удален!');
+            setFlash('success', trans('admin.backup.backup_success_deleted'));
         } else {
             setFlash('danger', $validator->getErrors());
         }

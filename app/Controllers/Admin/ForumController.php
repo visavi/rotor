@@ -620,7 +620,7 @@ class ForumController extends AdminController
         }
 
         $validator->equal($token, $_SESSION['token'], trans('validator.token'))
-            ->true($del, 'Отсутствуют выбранные сообщения для удаления!');
+            ->true($del, trans('validator.deletion'));
 
         if ($validator->isValid()) {
 

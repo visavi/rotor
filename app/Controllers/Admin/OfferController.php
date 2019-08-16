@@ -233,7 +233,7 @@ class OfferController extends AdminController
         $type  = $request->input('type') === Offer::OFFER ? Offer::OFFER : Offer::ISSUE;
 
         $validator->equal($token, $_SESSION['token'], trans('validator.token'))
-            ->true($del, 'Отсутствуют выбранные записи для удаления!');
+            ->true($del, trans('validator.deletion'));
 
         if ($validator->isValid()) {
 

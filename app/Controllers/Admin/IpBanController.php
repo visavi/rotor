@@ -87,7 +87,7 @@ class IpBanController extends AdminController
         $del   = intar($request->input('del'));
 
         $validator->equal($token, $_SESSION['token'], trans('validator.token'))
-            ->true($del, 'Отсутствуют выбранные ip для удаления!');
+            ->true($del, trans('validator.deletion'));
 
         if ($validator->isValid()) {
 

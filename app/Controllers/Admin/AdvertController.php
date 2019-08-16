@@ -72,7 +72,7 @@ class AdvertController extends AdminController
 
                 saveAdvertUser();
 
-                setFlash('success', 'Рекламная ссылка успешно изменена!');
+                setFlash('success', trans('main.record_changed_success'));
                 redirect('/admin/adverts?page=' . $page);
             } else {
                 setInput($request->all());
@@ -97,15 +97,14 @@ class AdvertController extends AdminController
         $del   = intar($request->input('del'));
 
         $validator->equal($token, $_SESSION['token'], trans('validator.token'))
-            ->true($del, 'Отсутствуют выбранные записи для удаления!');
+            ->true($del, trans('validator.deletion'));
 
         if ($validator->isValid()) {
-
             Advert::query()->whereIn('id', $del)->delete();
 
             saveAdvertUser();
 
-            setFlash('success', 'Выбранные записи успешно удалены!');
+            setFlash('success', trans('main.records_deleted_success'));
         } else {
             setFlash('danger', $validator->getErrors());
         }

@@ -205,4 +205,13 @@ return [
 
     'from' => 'От',
     'to'   => 'До',
+
+    'record_added_success'    => 'Запись успешно добавлена!',
+    'record_changed_success'  => 'Запись успешно изменена!',
+    'record_deleted_success'  => 'Запись успешно удалена!',
+    'records_deleted_success' => 'Записи успешно удалены!',
+    'records_cleared_success' => 'Записи успешно очищены!',
+    'record_not_found'        => 'Выбранная запись не найдена!',
+    '' => '',
+    '' => '',
 ];

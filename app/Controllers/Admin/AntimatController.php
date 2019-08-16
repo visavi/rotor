@@ -38,10 +38,10 @@ class AntimatController extends AdminController
 
             $validator
                 ->equal($token, $_SESSION['token'], trans('validator.token'))
-                ->notEmpty($word, 'Вы не ввели слово для занесения в список!');
+                ->notEmpty($word, trans('admin.antimat.not_enter_word'));
 
             $duplicate = Antimat::query()->where('string', $word)->first();
-            $validator->empty($duplicate, 'Введенное слово уже имеется в списке!');
+            $validator->empty($duplicate, trans('admin.antimat.word_listed'));
 
             if ($validator->isValid()) {
 
@@ -49,7 +49,7 @@ class AntimatController extends AdminController
                     'string' => $word
                 ]);
 
-                setFlash('success', 'Слово успешно добавлено!');
+                setFlash('success', trans('main.record_added_success'));
                 redirect('/admin/antimat');
 
             } else {
@@ -79,13 +79,12 @@ class AntimatController extends AdminController
         $validator->equal($token, $_SESSION['token'], trans('validator.token'));
 
         $word = Antimat::query()->find($id);
-        $validator->notEmpty($word, 'Выбранное для удаления слово не найдено!');
+        $validator->notEmpty($word, trans('main.record_not_found'));
 
         if ($validator->isValid()) {
-
             $word->delete();
 
-            setFlash('success', 'Слово успешно удалено!');
+            setFlash('success', trans('main.record_deleted_success'));
         } else {
             setFlash('danger', $validator->getErrors());
         }
@@ -106,13 +105,12 @@ class AntimatController extends AdminController
 
         $validator
             ->equal($token, $_SESSION['token'], trans('validator.token'))
-            ->true(isAdmin(User::BOSS), 'Очищать список может только владелец!');
+            ->true(isAdmin(User::BOSS), trans('admin.antimat.owner_clear'));
 
         if ($validator->isValid()) {
-
             Antimat::query()->truncate();
 
-            setFlash('success', 'Список успешно очищен!');
+            setFlash('success', trans('main.records_cleared_success'));
         } else {
             setFlash('danger', $validator->getErrors());
         }

@@ -221,7 +221,7 @@ class InvitationController extends AdminController
         $used  = $request->input('used') ? 1 : 0;
 
         $validator->equal($token, $_SESSION['token'], trans('validator.token'))
-            ->true($del, 'Отсутствуют выбранные записи для удаления!');
+            ->true($del, trans('validator.deletion'));
 
         if ($validator->isValid()) {
             Invite::query()->whereIn('id', $del)->delete();

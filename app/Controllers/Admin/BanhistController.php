@@ -84,7 +84,7 @@ class BanhistController extends AdminController
         $login = check($request->input('user'));
 
         $validator->equal($token, $_SESSION['token'], trans('validator.token'))
-            ->true($del, 'Отсутствуют выбранные записи для удаления!');
+            ->true($del, trans('validator.deletion'));
 
         if ($validator->isValid()) {
             Banhist::query()->whereIn('id', $del)->delete();

@@ -145,7 +145,7 @@ class IgnoreController extends BaseController
         $del   = intar($request->input('del'));
 
         $validator->equal($token, $_SESSION['token'], trans('validator.token'))
-            ->true($del, 'Отсутствуют выбранные пользователи для удаления!');
+            ->true($del, trans('validator.deletion'));
 
         if ($validator->isValid()) {
 
