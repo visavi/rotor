@@ -37,3 +37,11 @@ mix.styles([
     'public/assets/js/colorbox/colorbox.css',
     'public/assets/css/app.css'
 ], 'public/assets/modules/compiled.css');
+
+mix.options({
+    cleanCss: {
+        level: {
+            1: { specialComments: 'none'}
+        }
+    }
+});
