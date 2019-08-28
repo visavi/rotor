@@ -58,7 +58,7 @@ class AdvertController extends AdminController
             $validator->equal($token, $_SESSION['token'], trans('validator.token'))
                 ->regex($site, '|^https?://([а-яa-z0-9_\-\.])+(\.([а-яa-z0-9\/\-?_=#])+)+$|iu', ['site' => trans('validator.url')])
                 ->length($site, 5, 50, ['site' => trans('validator.url_text')])
-                ->length($name, 5, 35, ['name' => trans('validator.title')])
+                ->length($name, 5, 35, ['name' => trans('validator.text')])
                 ->regex($color, '|^#+[A-f0-9]{6}$|', ['color' => trans('validator.color')], false);
 
             if ($validator->isValid()) {

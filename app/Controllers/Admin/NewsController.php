@@ -71,7 +71,7 @@ class NewsController extends AdminController
             $top    = empty($request->input('top')) ? 0 : 1;
 
             $validator->equal($token, $_SESSION['token'], trans('validator.token'))
-                ->length($title, 5, 50, ['title' => trans('validator.title')])
+                ->length($title, 5, 50, ['title' => trans('validator.text')])
                 ->length($text, 5, 10000, ['text' => trans('validator.text')]);
 
             $rules = [
@@ -127,7 +127,7 @@ class NewsController extends AdminController
             $top    = empty($request->input('top')) ? 0 : 1;
 
             $validator->equal($token, $_SESSION['token'], trans('validator.token'))
-                ->length($title, 5, 50, ['title' => trans('validator.title')])
+                ->length($title, 5, 50, ['title' => trans('validator.text')])
                 ->length($text, 5, 10000, ['text' => trans('validator.text')]);
 
             $rules = [

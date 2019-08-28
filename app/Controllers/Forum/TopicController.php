@@ -379,7 +379,7 @@ class TopicController extends BaseController
             $answers  = check((array) $request->input('answers'));
 
             $validator->equal($token, $_SESSION['token'], trans('validator.token'))
-                ->length($title, 5, 50, ['title' => trans('validator.title')]);
+                ->length($title, 5, 50, ['title' => trans('validator.text')]);
 
             if ($post) {
                 $validator->length($msg, 5, setting('forumtextlength'), ['msg' => trans('validator.text')]);

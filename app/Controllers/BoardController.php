@@ -124,7 +124,7 @@ class BoardController extends BaseController
 
             $validator
                 ->equal($token, $_SESSION['token'], trans('validator.token'))
-                ->length($title, 5, 50, ['title' => trans('validator.title')])
+                ->length($title, 5, 50, ['title' => trans('validator.text')])
                 ->length($text, 50, 5000, ['text' => trans('validator.text')])
                 ->regex($phone, '#^\d{11}$#', ['phone' => trans('validator.phone')], false)
                 ->false($flood->isFlood(), ['msg' => trans('validator.flood', ['sec' => $flood->getPeriod()])])
@@ -211,7 +211,7 @@ class BoardController extends BaseController
 
             $validator
                 ->equal($token, $_SESSION['token'], trans('validator.token'))
-                ->length($title, 5, 50, ['title' => trans('validator.title')])
+                ->length($title, 5, 50, ['title' => trans('validator.text')])
                 ->length($text, 50, 5000, ['text' => trans('validator.text')])
                 ->regex($phone, '#^\d{11}$#', ['phone' => trans('validator.phone')], false)
                 ->notEmpty($board, ['category' => 'Категории для данного объявления не существует!'])

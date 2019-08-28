@@ -111,7 +111,7 @@ class ForumController extends BaseController
             $validator->equal($token, $_SESSION['token'], trans('validator.token'))
                 ->notEmpty($forum, ['fid' => 'Форума для новой темы не существует!'])
                 ->false($flood->isFlood(), ['msg' => trans('validator.flood', ['sec' => $flood->getPeriod()])])
-                ->length($title, 5, 50, ['title' => trans('validator.title')])
+                ->length($title, 5, 50, ['title' => trans('validator.text')])
                 ->length($msg, 5, setting('forumtextlength'), ['msg' => trans('validator.text')]);
 
             if ($forum) {

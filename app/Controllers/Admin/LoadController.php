@@ -58,7 +58,7 @@ class LoadController extends AdminController
         $name  = check($request->input('name'));
 
         $validator->equal($token, $_SESSION['token'], trans('validator.token'))
-            ->length($name, 3, 50, ['title' => trans('validator.title')]);
+            ->length($name, 3, 50, ['title' => trans('validator.text')]);
 
         if ($validator->isValid()) {
 
@@ -114,7 +114,7 @@ class LoadController extends AdminController
             $closed = empty($request->input('closed')) ? 0 : 1;
 
             $validator->equal($token, $_SESSION['token'], trans('validator.token'))
-                ->length($name, 3, 50, ['title' => trans('validator.title')])
+                ->length($name, 3, 50, ['title' => trans('validator.text')])
                 ->notEqual($parent, $load->id, ['parent' => 'Недопустимый выбор родительского раздела!']);
 
             if (! empty($parent) && $load->children->isNotEmpty()) {
@@ -285,7 +285,7 @@ class LoadController extends AdminController
             $category = Load::query()->find($category);
 
             $validator->equal($token, $_SESSION['token'], trans('validator.token'))
-                ->length($title, 5, 50, ['title' => trans('validator.title')])
+                ->length($title, 5, 50, ['title' => trans('validator.text')])
                 ->length($text, 50, 5000, ['text' => trans('validator.text')])
                 ->notEmpty($category, ['category' => 'Категории для данного файла не существует!']);
 

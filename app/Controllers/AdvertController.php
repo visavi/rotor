@@ -97,7 +97,7 @@ class AdvertController extends BaseController
                 ->true(captchaVerify(), ['protect' => trans('validator.captcha')])
                 ->regex($site, '|^https?://([а-яa-z0-9_\-\.])+(\.([а-яa-z0-9\/\-?_=#])+)+$|iu', ['site' => trans('validator.url')])
                 ->length($site, 5, 100, ['site' => trans('validator.url_text')])
-                ->length($name, 5, 35, ['name' => trans('validator.title')])
+                ->length($name, 5, 35, ['name' => trans('validator.text')])
                 ->regex($color, '|^#+[A-f0-9]{6}$|', ['color' => trans('validator.color')], false)
                 ->gte(getUser('money'), $price, ['Для покупки рекламы у вас недостаточно денег!']);
 

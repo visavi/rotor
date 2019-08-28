@@ -85,7 +85,7 @@ class StickerController extends AdminController
         $name  = check($request->input('name'));
 
         $validator->equal($token, $_SESSION['token'], trans('validator.token'))
-            ->length($name, 3, 50, ['name' => trans('validator.title')]);
+            ->length($name, 3, 50, ['name' => trans('validator.text')]);
 
         if ($validator->isValid()) {
 
@@ -126,7 +126,7 @@ class StickerController extends AdminController
             $name  = check($request->input('name'));
 
             $validator->equal($token, $_SESSION['token'], trans('validator.token'))
-                ->length($name, 3, 50, ['name' => trans('validator.title')]);
+                ->length($name, 3, 50, ['name' => trans('validator.text')]);
 
             if ($validator->isValid()) {
 

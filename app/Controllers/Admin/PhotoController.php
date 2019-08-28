@@ -55,7 +55,7 @@ class PhotoController extends AdminController
             $closed = empty($request->input('closed')) ? 0 : 1;
 
             $validator->equal($token, $_SESSION['token'], trans('validator.token'))
-                ->length($title, 5, 50, ['title' => trans('validator.title')])
+                ->length($title, 5, 50, ['title' => trans('validator.text')])
                 ->length($text, 0, 1000, ['text' => 'Слишком длинное описание!']);
 
             if ($validator->isValid()) {

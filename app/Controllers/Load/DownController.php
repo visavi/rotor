@@ -81,7 +81,7 @@ class DownController extends BaseController
             $files = (array) $request->file('files');
 
             $validator->equal($token, $_SESSION['token'], trans('validator.token'))
-                ->length($title, 5, 50, ['title' => trans('validator.title')])
+                ->length($title, 5, 50, ['title' => trans('validator.text')])
                 ->length($text, 50, 5000, ['text' => trans('validator.text')]);
 
             $duplicate = Down::query()->where('title', $title)->where('id', '<>', $down->id)->count();
@@ -200,7 +200,7 @@ class DownController extends BaseController
 
             $validator
                 ->equal($token, $_SESSION['token'], trans('validator.token'))
-                ->length($title, 5, 50, ['title' => trans('validator.title')])
+                ->length($title, 5, 50, ['title' => trans('validator.text')])
                 ->length($text, 50, 5000, ['text' => trans('validator.text')])
                 ->false($flood->isFlood(), ['msg' => trans('validator.flood', ['sec' => $flood->getPeriod()])])
                 ->notEmpty($category, ['category' => 'Категории для данного файла не существует!']);

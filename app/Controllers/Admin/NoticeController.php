@@ -57,7 +57,7 @@ class NoticeController extends AdminController
             $validator->equal($token, $_SESSION['token'], trans('validator.token'))
                 ->regex($type, '|^[a-z0-9_\-]+$|i', ['type' => 'Недопустимое название типа шаблона!'])
                 ->length($type, 3, 20, ['type' => 'Слишком длинный или короткий тип шаблона!'])
-                ->length($name, 5, 100, ['name' => trans('validator.title')])
+                ->length($name, 5, 100, ['name' => trans('validator.text')])
                 ->length($text, 10, 65000, ['text' => trans('validator.text')]);
 
             $duplicate = Notice::query()->where('type', $type)->first();
@@ -112,7 +112,7 @@ class NoticeController extends AdminController
             $protect = empty($request->input('protect')) ? 0 : 1;
 
             $validator->equal($token, $_SESSION['token'], trans('validator.token'))
-                ->length($name, 5, 100, ['name' => trans('validator.title')])
+                ->length($name, 5, 100, ['name' => trans('validator.text')])
                 ->length($text, 10, 65000, ['text' => trans('validator.text')]);
 
             if ($validator->isValid()) {

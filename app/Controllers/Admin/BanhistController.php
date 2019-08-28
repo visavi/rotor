@@ -89,7 +89,7 @@ class BanhistController extends AdminController
         if ($validator->isValid()) {
             Banhist::query()->whereIn('id', $del)->delete();
 
-            setFlash('success', 'Выбранные записи успешно удалены!');
+            setFlash('success', trans('main.records_deleted_success'));
         } else {
             setFlash('danger', $validator->getErrors());
         }

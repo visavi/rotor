@@ -48,7 +48,7 @@ class ForumController extends AdminController
         $title = check($request->input('title'));
 
         $validator->equal($token, $_SESSION['token'], trans('validator.token'))
-            ->length($title, 5, 50, ['title' => trans('validator.title')]);
+            ->length($title, 5, 50, ['title' => trans('validator.text')]);
 
         if ($validator->isValid()) {
 
@@ -105,7 +105,7 @@ class ForumController extends AdminController
             $closed      = empty($request->input('closed')) ? 0 : 1;
 
             $validator->equal($token, $_SESSION['token'], trans('validator.token'))
-                ->length($title, 5, 50, ['title' => trans('validator.title')])
+                ->length($title, 5, 50, ['title' => trans('validator.text')])
                 ->length($description, 0, 100, ['description' => trans('validator.text')])
                 ->notEqual($parent, $forum->id, ['parent' => 'Недопустимый выбор родительского раздела!']);
 
@@ -261,7 +261,7 @@ class ForumController extends AdminController
             $closed     = empty($request->input('closed')) ? 0 : 1;
 
             $validator->equal($token, $_SESSION['token'], trans('validator.token'))
-                ->length($title, 5, 50, ['title' => trans('validator.title')])
+                ->length($title, 5, 50, ['title' => trans('validator.text')])
                 ->length($note, 0, 250, ['note' => 'Слишком длинное объявление!']);
 
             if ($validator->isValid()) {

@@ -155,7 +155,7 @@ class BlogController extends BaseController
 
             $validator
                 ->equal($token, $_SESSION['token'], trans('validator.token'))
-                ->length($title, 5, 50, ['title' => trans('validator.title')])
+                ->length($title, 5, 50, ['title' => trans('validator.text')])
                 ->length($text, 100, setting('maxblogpost'), ['text' => trans('validator.text')])
                 ->length($tags, 2, 50, ['tags' => 'Слишком длинные или короткие метки статьи!'])
                 ->notEmpty($category, ['cid' => 'Категории для статьи не существует или она закрыта!']);
@@ -266,7 +266,7 @@ class BlogController extends BaseController
 
             $validator
                 ->equal($token, $_SESSION['token'], trans('validator.token'))
-                ->length($title, 5, 50, ['title' => trans('validator.title')])
+                ->length($title, 5, 50, ['title' => trans('validator.text')])
                 ->length($text, 100, setting('maxblogpost'), ['text' => trans('validator.text')])
                 ->length($tags, 2, 50, ['tags' => 'Слишком длинные или короткие метки статьи!'])
                 ->false($flood->isFlood(), ['msg' => trans('validator.flood', ['sec' => $flood->getPeriod()])])

@@ -212,4 +212,5 @@ return [
     'records_deleted_success' => 'Записи успешно удалены!',
     'records_cleared_success' => 'Записи успешно очищены!',
     'record_not_found'        => 'Выбранная запись не найдена!',
+    'record_exists'           => 'Запись уже существует!',
 ];
