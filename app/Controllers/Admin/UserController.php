@@ -126,7 +126,7 @@ class UserController extends AdminController
                 ->regex($created, '#^[0-9]{2}+\.[0-9]{2}+\.[0-9]{4}$#', ['created' => trans('validator.date')], false)
                 ->length($status, 3, 20, ['status' => 'Слишком длинный или короткий статус!'], false)
                 ->true(in_array($themes, $allThemes, true) || empty($themes), ['themes' => 'Данная тема не установлена на сайте!'])
-                ->length($info, 0, 1000, ['info' => 'Слишком большая информация о себе, не более 1000 символов!']);
+                ->length($info, 0, 1000, ['info' => 'Слишком большая информация о себе!']);
 
             if ($validator->isValid()) {
 

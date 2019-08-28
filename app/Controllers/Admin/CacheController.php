@@ -37,7 +37,7 @@ class CacheController extends AdminController
             $view = view('admin/caches/index', compact('files'));
         } else {
             $images = glob(UPLOADS.'/thumbnails/*.{gif,png,jpg,jpeg}', GLOB_BRACE);
-            $page   = paginate(20, \count($images));
+            $page   = paginate(20, count($images));
 
             $images = \array_slice($images, $page->offset, $page->limit);
 

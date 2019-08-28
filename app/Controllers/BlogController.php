@@ -610,8 +610,8 @@ class BlogController extends BaseController
             $_SESSION['findresult'] = $result;
         }
 
-        $total = \count($_SESSION['findresult']);
-        $page = paginate(setting('blogpost'), $total);
+        $total = count($_SESSION['findresult']);
+        $page  = paginate(setting('blogpost'), $total);
 
         $blogs = Blog::query()
             ->select('blogs.*', 'categories.name')
@@ -864,7 +864,7 @@ class BlogController extends BaseController
                         $_SESSION['blogfindres'] = $result;
                     }
 
-                    $total = \count($_SESSION['blogfindres']);
+                    $total = count($_SESSION['blogfindres']);
                     $page  = paginate(setting('blogpost'), $total);
 
                     if ($total > 0) {
@@ -907,7 +907,7 @@ class BlogController extends BaseController
                         $_SESSION['blogfindres'] = $result;
                     }
 
-                    $total = \count($_SESSION['blogfindres']);
+                    $total = count($_SESSION['blogfindres']);
                     $page  = paginate(setting('blogpost'), $total);
 
                     if ($total > 0) {

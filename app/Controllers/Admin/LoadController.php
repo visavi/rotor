@@ -293,7 +293,7 @@ class LoadController extends AdminController
             $validator->empty($duplicate, ['title' => 'Загрузка с аналогичный названием уже существует!']);
 
             $existFiles = $down->files ? $down->files->count() : 0;
-            $validator->lte(\count($files) + $existFiles, 5, ['files' => 'Разрешено загружать не более 5 файлов']);
+            $validator->lte(count($files) + $existFiles, 5, ['files' => 'Разрешено загружать не более 5 файлов']);
 
             if ($validator->isValid()) {
 

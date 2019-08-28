@@ -37,9 +37,9 @@ class Validator
         }
 
         if (mb_strlen($input, 'utf-8') < $min) {
-            $this->addError($label, ' (Не менее ' . $min . ' симв.)');
+            $this->addError($label, trans('validator.length_min', ['length' => $min]));
         } elseif (mb_strlen($input, 'utf-8') > $max) {
-            $this->addError($label, ' (Не более ' . $max . ' симв.)');
+            $this->addError($label, trans('validator.length_max', ['length' => $max]));
         }
 
         return $this;
@@ -57,7 +57,7 @@ class Validator
     public function between($input, $min, $max, $label): Validator
     {
         if ($input < $min || $input > $max) {
-            $this->addError($label, ' (От ' . $min . ' до ' . $max . ')');
+            $this->addError($label, trans('validator.between', ['min' => $min, 'max' => $max]));
         }
 
         return $this;
@@ -352,9 +352,9 @@ class Validator
      * Проверяет файл
      *
      * @param UploadedFile|null $input
-     * @param array                              $rules
-     * @param mixed                              $label
-     * @param bool                               $required
+     * @param array             $rules
+     * @param mixed             $label
+     * @param bool              $required
      * @return Validator
      */
     public function file($input, $rules, $label, $required = true): Validator
@@ -382,11 +382,11 @@ class Validator
         $extension = strtolower($input->getClientOriginalExtension());
 
         if (! in_array($extension, $rules['extensions'], true)) {
-            $this->addError([$key => 'Недопустимое расширение файла!']);
+            $this->addError([$key => trans('validator.extension')]);
         }
 
         if (isset($rules['maxsize']) && $input->getSize() > $rules['maxsize']) {
-            $this->addError([$key => 'Максимальный вес файла ' . formatSize($rules['maxsize']) . '!']);
+            $this->addError([$key => trans('validator.size_max', ['size' => formatSize($rules['maxsize'])])]);
         }
 
         if (in_array($extension, ['jpg', 'jpeg', 'gif', 'png'], true)) {
@@ -394,16 +394,16 @@ class Validator
 
             if (isset($rules['maxweight'])) {
                 if ($width > $rules['maxweight'] || $height > $rules['maxweight']) {
-                    $this->addError([$key => 'Максимальный размер картинки '. $rules['maxweight'] . 'px!']);
+                    $this->addError([$key => trans('validator.weight_max', ['weight' => $rules['maxweight']])]);
                 }
             }
 
             if (isset($rules['minweight'])) {
                 if ($width < $rules['minweight'] || $height < $rules['minweight']) {
-                    $this->addError([$key => 'Минимальный размер картинки ' . $rules['minweight'] . 'px!']);
+                    $this->addError([$key => trans('validator.weight_min', ['weight' => $rules['minweight']])]);
                 }
             } elseif (empty($width) || empty($height)) {
-                $this->addError([$key => 'Размер картинки слишком маленький!']);
+                $this->addError([$key => trans('validator.weight_empty')]);
             }
         }
 
@@ -427,9 +427,9 @@ class Validator
         }
 
         if (isset($this->errors[$key])) {
-            $this->errors[] = $error.$description;
+            $this->errors[] = $error . ' ' . $description;
         } else {
-            $this->errors[$key] = $error.$description;
+            $this->errors[$key] = $error . ' ' . $description;
         }
     }
 

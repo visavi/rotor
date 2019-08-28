@@ -48,7 +48,7 @@ class BanController extends AdminController
         }
 
         if (in_array($user->level, User::ADMIN_GROUPS, true)) {
-            abort('default', 'Запрещено банить администрацию сайта!');
+            abort('default', trans('admin.bans.forbidden_ban'));
         }
 
         if ($request->isMethod('post')) {
@@ -59,11 +59,11 @@ class BanController extends AdminController
             $notice = check($request->input('notice'));
 
             $validator->equal($token, $_SESSION['token'], trans('validator.token'))
-                ->false($user->level === User::BANNED && $user->timeban > SITETIME, 'Данный аккаунт уже заблокирован!')
-                ->gt($time, 0, ['time' => 'Вы не указали время бана!'])
-                ->in($type, ['minutes', 'hours', 'days'], ['type' => 'Не выбрано время бана!'])
+                ->false($user->level === User::BANNED && $user->timeban > SITETIME, trans('admin.bans.user_banned'))
+                ->gt($time, 0, ['time' => trans('admin.bans.time_not_indicated')])
+                ->in($type, ['minutes', 'hours', 'days'], ['type' => trans('admin.bans.time_not_selected')])
                 ->length($reason, 5, 1000, ['reason' => trans('validator.text')])
-                ->length($notice, 0, 1000, ['notice' => 'Слишком большая заметка, не более 1000 символов!']);
+                ->length($notice, 0, 1000, ['notice' => trans('validator.text_long')]);
 
             if ($validator->isValid()) {
 
@@ -95,7 +95,7 @@ class BanController extends AdminController
                     'updated_at'   => SITETIME,
                 ]);
 
-                setFlash('success', 'Пользователь успешно заблокирован!');
+                setFlash('success', trans('admin.bans.success_banned'));
                 redirect('/admin/bans/edit?user=' . $user->login);
             } else {
                 setInput($request->all());
@@ -124,7 +124,7 @@ class BanController extends AdminController
         }
 
         if ($user->level !== User::BANNED || $user->timeban < SITETIME) {
-            abort('default', 'Данный пользователь не забанен!');
+            abort('default', trans('admin.bans.user_not_banned'));
         }
 
         if ($request->isMethod('post')) {
@@ -136,7 +136,7 @@ class BanController extends AdminController
             $term    = $timeban - SITETIME;
 
             $validator->equal($token, $_SESSION['token'], trans('validator.token'))
-                ->gt($term, 0, ['timeban' => 'Слишком маленькое время бана!'])
+                ->gt($term, 0, ['timeban' => trans('admin.bans.time_empty')])
                 ->length($reason, 5, 1000, ['reason' => trans('validator.text')]);
 
             if ($validator->isValid()) {
@@ -155,7 +155,7 @@ class BanController extends AdminController
                     'created_at'   => SITETIME,
                 ]);
 
-                setFlash('success', 'Данные успешно изменены!');
+                setFlash('success', trans('main.record_changed_success'));
                 redirect('/admin/bans/edit?user=' . $user->login);
             } else {
                 setInput($request->all());
@@ -185,7 +185,7 @@ class BanController extends AdminController
         }
 
         if ($user->level !== User::BANNED || $user->timeban < SITETIME) {
-            abort('default', 'Данный пользователь не забанен!');
+            abort('default', trans('admin.bans.user_not_banned'));
         }
 
         $validator->equal($token, $_SESSION['token'], trans('validator.token'));
@@ -204,7 +204,7 @@ class BanController extends AdminController
                 'created_at'   => SITETIME,
             ]);
 
-            setFlash('success', 'Пользователь успешно разбанен!');
+            setFlash('success', trans('admin.bans.success_unbanned'));
         } else {
             setFlash('danger', $validator->getErrors());
         }

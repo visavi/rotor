@@ -97,7 +97,7 @@ class VoteController extends AdminController
                 }
             }
 
-            $validator->between(\count($answers), 2, 10, ['answer' => 'Недостаточное количество вариантов ответов!']);
+            $validator->between(count($answers), 2, 10, ['answer' => 'Недостаточное количество вариантов ответов!']);
 
             if ($validator->isValid()) {
 

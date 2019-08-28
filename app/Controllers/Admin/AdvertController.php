@@ -45,7 +45,7 @@ class AdvertController extends AdminController
         $link = Advert::query()->find($id);
 
         if (! $link) {
-            abort(404, 'Данной ссылки не существует!');
+            abort(404, trans('main.record_not_found'));
         }
 
         if ($request->isMethod('post')) {

@@ -113,7 +113,7 @@ class IgnoreController extends BaseController
             $msg   = check($request->input('msg'));
 
             $validator->equal($token, $_SESSION['token'], ['msg' => trans('validator.token')])
-                ->length($msg, 0, 1000, ['msg' => 'Слишком большая заметка, не более 1000 символов!']);
+                ->length($msg, 0, 1000, ['msg' => 'Слишком большая заметка!']);
 
             if ($validator->isValid()) {
 

@@ -88,8 +88,8 @@ class DownController extends BaseController
             $validator->empty($duplicate, ['title' => 'Загрузка с аналогичный названием уже существует!']);
 
             $existFiles = $down->files ? $down->files->count() : 0;
-            $validator->notEmpty(\count($files) + $existFiles, ['files' => 'Необходимо загрузить хотя бы 1 файл']);
-            $validator->lte(\count($files) + $existFiles, setting('maxfiles'), ['files' => 'Разрешено загружать не более ' . setting('maxfiles') . ' файлов']);
+            $validator->notEmpty(count($files) + $existFiles, ['files' => 'Необходимо загрузить хотя бы 1 файл']);
+            $validator->lte(count($files) + $existFiles, setting('maxfiles'), ['files' => 'Разрешено загружать не более ' . setting('maxfiles') . ' файлов']);
 
             if ($validator->isValid()) {
 
@@ -213,7 +213,7 @@ class DownController extends BaseController
             }
 
             $validator->notEmpty($files, ['files' => 'Необходимо загрузить хотя бы 1 файл']);
-            $validator->lte(\count($files), setting('maxfiles'), ['files' => 'Разрешено загружать не более ' . setting('maxfiles') . ' файлов']);
+            $validator->lte(count($files), setting('maxfiles'), ['files' => 'Разрешено загружать не более ' . setting('maxfiles') . ' файлов']);
 
             if ($validator->isValid()) {
                 $rules = [

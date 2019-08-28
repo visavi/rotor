@@ -59,7 +59,7 @@ class SearchController extends BaseController
 
             $findme = implode(' ', $arrfind);
 
-            if ($type === 2 && \count($findmewords) > 1) {
+            if ($type === 2 && count($findmewords) > 1) {
                 $findme = "\"$find\"";
             }
 
@@ -86,7 +86,7 @@ class SearchController extends BaseController
                     $_SESSION['loadfindres'] = $result;
                 }
 
-                $total = \count($_SESSION['loadfindres']);
+                $total = count($_SESSION['loadfindres']);
 
                 if ($total > 0) {
                     $page = paginate(setting('downlist'), $total);
@@ -126,7 +126,7 @@ class SearchController extends BaseController
                     $_SESSION['loadfindres'] = $result;
                 }
 
-                $total = \count($_SESSION['loadfindres']);
+                $total = count($_SESSION['loadfindres']);
 
                 if ($total > 0) {
                     $page = paginate(setting('downlist'), $total);

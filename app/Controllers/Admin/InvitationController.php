@@ -147,7 +147,7 @@ class InvitationController extends AdminController
 
             Invite::query()->insert($newKeys);
 
-            $text = 'Вы получили пригласительные ключи в количестве ' . \count($listKeys) . 'шт.'.PHP_EOL.'Список ключей: '.implode(', ', $listKeys).PHP_EOL.'С помощью этих ключей вы можете пригласить ваших друзей на наш сайт!';
+            $text = 'Вы получили пригласительные ключи в количестве ' . count($listKeys) . 'шт.'.PHP_EOL.'Список ключей: '.implode(', ', $listKeys).PHP_EOL.'С помощью этих ключей вы можете пригласить ваших друзей на наш сайт!';
             $user->sendMessage(null, $text);
 
             setFlash('success', 'Ключи успешно отправлены!');

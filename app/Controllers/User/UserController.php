@@ -63,7 +63,7 @@ class UserController extends BaseController
             $token  = check($request->input('token'));
 
             $validator->equal($token, $_SESSION['token'], ['notice' => trans('validator.token')])
-                ->length($notice, 0, 1000, ['notice' => 'Слишком большая заметка, не более 1000 символов!']);
+                ->length($notice, 0, 1000, ['notice' => 'Слишком большая заметка!']);
 
             if ($validator->isValid()) {
 
@@ -330,7 +330,7 @@ class UserController extends BaseController
                 ->regex($site, '#^https?://([а-яa-z0-9_\-\.])+(\.([а-яa-z0-9\/])+)+$#u', ['site' => trans('validator.site')], false)
                 ->regex($birthday, '#^[0-9]{2}+\.[0-9]{2}+\.[0-9]{4}$#', ['birthday' => trans('validator.date')], false)
                 ->regex($phone, '#^\d{11}$#', ['phone' => trans('validator.phone')], false)
-                ->length($info, 0, 1000, ['info' => 'Слишком большая информация о себе, не более 1000 символов!'])
+                ->length($info, 0, 1000, ['info' => 'Слишком большая информация о себе!'])
                 ->length($name, 3, 20, ['name' => 'Слишком длинное или короткое имя!'], false);
 
             if ($validator->isValid()) {
