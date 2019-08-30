@@ -9,7 +9,7 @@ class CalendarTest extends \Tests\TestCase
      */
     private $calendar;
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
         $this->calendar = new Calendar();
