@@ -22,7 +22,7 @@
 
     <div class="b">
         <i class="fab fa-forumbee fa-lg text-muted"></i>
-        <b><a href="/forums">{{ trans('index.forums') }}</a></b> ({{  statsForum() }})
+        <b><a href="/forums">{{ trans('index.forums') }}</a></b> ({{ statsForum() }})
     </div>
     {{ recentTopics() }}
 

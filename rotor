@@ -3,18 +3,26 @@
 
 use Phinx\Config\Config;
 use Phinx\Console\Command\AbstractCommand;
-use Phinx\Console\PhinxApplication;
+use Symfony\Component\Console\Application;
 use Symfony\Component\Console\Event\ConsoleCommandEvent;
 use Symfony\Component\Console\ConsoleEvents;
 use Symfony\Component\EventDispatcher\EventDispatcher;
 
 require __DIR__ . '/app/bootstrap.php';
 
-$app = new PhinxApplication();
+$app = new Application();
 $app->setName('Rotor by Vantuz - http://visavi.net');
 $app->setVersion(VERSION);
 
 $app->addCommands([
+    new \Phinx\Console\Command\Init(),
+    new \Phinx\Console\Command\Create(),
+    new \Phinx\Console\Command\Migrate(),
+    new \Phinx\Console\Command\Rollback(),
+    new \Phinx\Console\Command\Status(),
+    new \Phinx\Console\Command\Breakpoint(),
+    new \Phinx\Console\Command\SeedCreate(),
+    new \Phinx\Console\Command\SeedRun(),
     new \App\Commands\AppConfigure(),
     new \App\Commands\AppState(),
     new \App\Commands\KeyGenerate(),
