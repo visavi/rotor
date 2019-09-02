@@ -19,7 +19,7 @@ class IgnoreController extends BaseController
         parent::__construct();
 
         if (! getUser()) {
-            abort(403, 'Для просмотра игнор-листа необходимо авторизоваться!');
+            abort(403, trans('main.not_authorized'));
         }
     }
 

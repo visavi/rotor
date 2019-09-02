@@ -188,7 +188,7 @@ class BoardController extends BaseController
     public function edit(int $id, Request $request, Validator $validator): string
     {
         if (! getUser()) {
-            abort(403, 'Для редактирования объявления необходимо авторизоваться!');
+            abort(403, trans('main.not_authorized'));
         }
 
         /** @var Item $item */
@@ -267,7 +267,7 @@ class BoardController extends BaseController
         $token = check($request->input('token'));
 
         if (! getUser()) {
-            abort(403, 'Для редактирования объявления необходимо авторизоваться!');
+            abort(403, trans('main.not_authorized'));
         }
 
         /** @var Item $item */
@@ -322,7 +322,7 @@ class BoardController extends BaseController
         $token = check($request->input('token'));
 
         if (! getUser()) {
-            abort(403, 'Для редактирования объявления необходимо авторизоваться!');
+            abort(403, trans('main.not_authorized'));
         }
 
         /** @var Item $item */
@@ -358,7 +358,7 @@ class BoardController extends BaseController
     public function active(): string
     {
         if (! getUser()) {
-            abort(403, 'Для просмотра своих объявлений необходимо авторизоваться!');
+            abort(403, trans('main.not_authorized'));
         }
 
         $total = Item::query()->where('user_id', getUser('id'))->count();

@@ -244,7 +244,7 @@ class BBCodeTest extends \Tests\TestCase
         $parseText = bbCode($text);
         $parseText = trim(preg_replace('/\s\s+/', '', $parseText));
 
-        $this->assertSame('<div class="hiding"><span class="font-weight-bold">Скрытый контент:</span> Для просмотра необходимо авторизоваться!</div>', $parseText);
+        $this->assertSame('<div class="hiding"><span class="font-weight-bold">Скрытый контент:</span> ' . trans('main.not_authorized') . '</div>', $parseText);
     }
 
     /**

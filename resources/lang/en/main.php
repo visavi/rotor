@@ -130,9 +130,6 @@ return [
     'pluses'   => 'Pluses',
     'minuses'  => 'Minuses',
 
-    'not_authorized'  => 'To add a message you need to be logged in!',
-    'not_logged'      => 'You must be logged in to view the site!',
-
     'your_vote'   => 'Your vote',
     'select_vote' => 'Select vote',
     'sucks'       => 'Sucks',
@@ -205,4 +202,6 @@ return [
 
     'from' => 'From',
     'to'   => 'To',
+
+    'not_authorized'  => 'You must be logged in to perform actions!',
 ];

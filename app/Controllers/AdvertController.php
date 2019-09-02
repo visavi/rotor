@@ -54,7 +54,7 @@ class AdvertController extends BaseController
     public function create(Request $request, Validator $validator): string
     {
         if (! getUser()) {
-            abort(403, 'Для покупки рекламы необходимо авторизоваться!');
+            abort(403, trans('main.not_authorized'));
         }
 
         if (getUser('point') < setting('rekuserpoint')) {

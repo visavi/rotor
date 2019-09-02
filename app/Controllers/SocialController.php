@@ -21,7 +21,7 @@ class SocialController extends BaseController
         parent::__construct();
 
         if (! $this->user = getUser()) {
-            abort(403, 'Для управления социальными сетями необходимо авторизоваться!');
+            abort(403, trans('main.not_authorized'));
         }
     }
 

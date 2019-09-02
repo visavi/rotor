@@ -60,7 +60,7 @@ class WallController extends BaseController
     public function create($login, Request $request, Validator $validator, Flood $flood): void
     {
         if (! getUser()) {
-            abort(403, 'Для отправки сообщений необходимо авторизоваться!');
+            abort(403, trans('main.not_authorized'));
         }
 
         $user = getUserByLogin($login);

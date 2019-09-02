@@ -81,7 +81,7 @@ class NewsController extends BaseController
             $msg   = check($request->input('msg'));
             $token = check($request->input('token'));
 
-            $validator->true(getUser(), 'Чтобы добавить комментарий необходимо авторизоваться')
+            $validator->true(getUser(), trans('main.not_authorized'))
                 ->equal($token, $_SESSION['token'], trans('validator.token'))
                 ->false($flood->isFlood(), ['msg' => trans('validator.flood', ['sec' => $flood->getPeriod()])])
                 ->length($msg, 5, setting('comment_length'), ['msg' => trans('validator.text')])
@@ -165,7 +165,7 @@ class NewsController extends BaseController
         }
 
         if (! getUser()) {
-            abort(403, 'Для редактирования комментариев необходимо авторизоваться!');
+            abort(403, trans('main.not_authorized'));
         }
 
         $comment = Comment::query()

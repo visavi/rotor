@@ -255,7 +255,7 @@ class TopicController extends BaseController
         $isModer = in_array(getUser('id'), array_map('intval', explode(',', (string) $topic->moderators)), true);
 
         $validator->equal($token, $_SESSION['token'], trans('validator.token'))
-            ->true(getUser(), 'Для закрытия тем необходимо авторизоваться')
+            ->true(getUser(), trans('main.not_authorized'))
             ->notEmpty($del, 'Отстутствуют выбранные сообщения для удаления!')
             ->empty($topic->closed, 'Редактирование невозможно. Данная тема закрыта!')
             ->equal($isModer, true, 'Удалять сообщения могут только кураторы темы!');
@@ -304,7 +304,7 @@ class TopicController extends BaseController
         $topic = Topic::query()->find($id);
 
         $validator->equal($token, $_SESSION['token'], trans('validator.token'))
-            ->true(getUser(), 'Для закрытия тем необходимо авторизоваться')
+            ->true(getUser(), trans('main.not_authorized'))
             ->gte(getUser('point'), setting('editforumpoint'), 'Для закрытия тем вам необходимо набрать ' . plural(setting('editforumpoint'), setting('scorename')) . '!')
             ->notEmpty($topic, 'Выбранная вами тема не существует, возможно она была удалена!')
             ->equal($topic->user_id, getUser('id'), 'Вы не автор данной темы!')

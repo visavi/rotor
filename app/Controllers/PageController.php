@@ -134,7 +134,7 @@ class PageController extends BaseController
         $currentYear    = \date('Y');
 
         if (! $user = getUser()) {
-            abort(403, 'Для того чтобы получить сюрприз, необходимо авторизоваться!');
+            abort(403, trans('main.not_authorized'));
         }
 
         if (strtotime(date('d.m.Y')) > strtotime($surprise['requiredDate'].'.'.date('Y'))) {

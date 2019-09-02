@@ -225,7 +225,7 @@ class OfferController extends BaseController
             $msg   = check($request->input('msg'));
 
             $validator
-                ->true(getUser(), 'Для добавления комментария необходимо авторизоваться!')
+                ->true(getUser(), trans('main.not_authorized'))
                 ->equal($token, $_SESSION['token'], trans('validator.token'))
                 ->length($msg, 5, setting('comment_length'), ['msg' => trans('validator.text')])
                 ->false($flood->isFlood(), ['msg' => trans('validator.flood', ['sec' => $flood->getPeriod()])])
@@ -298,7 +298,7 @@ class OfferController extends BaseController
         }
 
         if (! getUser()) {
-            abort(403, 'Для редактирования комментариев необходимо авторизоваться!');
+            abort(403, trans('main.not_authorized'));
         }
 
         $comment = Comment::query()

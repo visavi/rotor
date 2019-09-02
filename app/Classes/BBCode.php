@@ -246,7 +246,7 @@ class BBCode
     public function hiddenText($match): string
     {
         return '<div class="hiding">
-                <span class="font-weight-bold">Скрытый контент:</span> ' . (getUser() ? $match[1] : 'Для просмотра необходимо авторизоваться!') .
+                <span class="font-weight-bold">Скрытый контент:</span> ' . (getUser() ? $match[1] : trans('main.not_authorized')) .
             '</div>';
     }
 

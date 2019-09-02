@@ -48,7 +48,6 @@ class BlogController extends AdminController
             ->length($name, 3, 50, ['name' => trans('validator.text')]);
 
         if ($validator->isValid()) {
-
             $max = Category::query()->max('sort') + 1;
 
             /** @var Category $category */
@@ -57,7 +56,7 @@ class BlogController extends AdminController
                 'sort'  => $max,
             ]);
 
-            setFlash('success', 'Новый раздел успешно создан!');
+            setFlash('success', trans('blogs.category_success_created'));
             redirect('/admin/blogs/edit/' . $category->id);
         } else {
             setInput($request->all());
@@ -85,7 +84,7 @@ class BlogController extends AdminController
         $category = Category::query()->with('children')->find($id);
 
         if (! $category) {
-            abort(404, 'Данного раздела не существует!');
+            abort(404, trans('blogs.category_not_exist'));
         }
 
         $categories = Category::query()
@@ -102,14 +101,13 @@ class BlogController extends AdminController
 
             $validator->equal($token, $_SESSION['token'], trans('validator.token'))
                 ->length($name, 3, 50, ['title' => trans('validator.text')])
-                ->notEqual($parent, $category->id, ['parent' => 'Недопустимый выбор родительского раздела!']);
+                ->notEqual($parent, $category->id, ['parent' => trans('blogs.category_not_exist')]);
 
             if (! empty($parent) && $category->children->isNotEmpty()) {
-                $validator->addError(['parent' => 'Текущий раздел имеет подразделы!']);
+                $validator->addError(['parent' => trans('blogs.category_has_subcategories')]);
             }
 
             if ($validator->isValid()) {
-
                 $category->update([
                     'parent_id' => $parent,
                     'name'      => $name,
@@ -117,7 +115,7 @@ class BlogController extends AdminController
                     'closed'    => $closed,
                 ]);
 
-                setFlash('success', 'Раздел успешно отредактирован!');
+                setFlash('success', trans('blogs.category_success_edited'));
                 redirect('/admin/blogs');
             } else {
                 setInput($request->all());
@@ -147,24 +145,23 @@ class BlogController extends AdminController
         $category = Category::query()->with('children')->find($id);
 
         if (! $category) {
-            abort(404, 'Данного раздела не существует!');
+            abort(404, trans('blogs.category_not_exist'));
         }
 
         $token = check($request->input('token'));
 
         $validator->equal($token, $_SESSION['token'], trans('validator.token'))
-            ->true($category->children->isEmpty(), 'Удаление невозможно! Данный раздел имеет подразделы!');
+            ->true($category->children->isEmpty(), trans('blogs.category_has_subcategories'));
 
         $article = Blog::query()->where('category_id', $category->id)->first();
         if ($article) {
-            $validator->addError('Удаление невозможно! В данном разделе имеются статьи!');
+            $validator->addError(trans('blogs.articles_in_category'));
         }
 
         if ($validator->isValid()) {
-
             $category->delete();
 
-            setFlash('success', 'Раздел успешно удален!');
+            setFlash('success', trans('blogs.category_success_deleted'));
         } else {
             setFlash('danger', $validator->getErrors());
         }
@@ -187,10 +184,9 @@ class BlogController extends AdminController
         $token = check($request->input('token'));
 
         if ($token === $_SESSION['token']) {
-
             restatement('blogs');
 
-            setFlash('success', 'Данные успешно пересчитаны!');
+            setFlash('success', trans('blogs.success_recounted'));
         } else {
             setFlash('danger', trans('validator.token'));
         }
@@ -209,7 +205,7 @@ class BlogController extends AdminController
         $category = Category::query()->with('parent')->find($id);
 
         if (! $category) {
-            abort(404, 'Данного раздела не существует!');
+            abort(404, trans('blogs.category_not_exist'));
         }
 
         $total = Blog::query()->where('category_id', $id)->count();
@@ -241,11 +237,10 @@ class BlogController extends AdminController
         $blog = Blog::query()->find($id);
 
         if (! $blog) {
-            abort(404, 'Данной статьи не существует!');
+            abort(404, trans('blogs.article_not_exist'));
         }
 
         if ($request->isMethod('post')) {
-
             $token = check($request->input('token'));
             $title = check($request->input('title'));
             $text  = check($request->input('text'));
@@ -255,10 +250,9 @@ class BlogController extends AdminController
                 ->equal($token, $_SESSION['token'], trans('validator.token'))
                 ->length($title, 5, 50, ['title' => trans('validator.text')])
                 ->length($text, 100, setting('maxblogpost'), ['text' => trans('validator.text')])
-                ->length($tags, 2, 50, ['tags' => 'Слишком длинные или короткие метки статьи!']);
+                ->length($tags, 2, 50, ['tags' => trans('blogs.article_error_tags')]);
 
             if ($validator->isValid()) {
-
                 $blog->update([
                     'title' => $title,
                     'text'  => $text,
@@ -266,7 +260,7 @@ class BlogController extends AdminController
                 ]);
 
                 clearCache(['statblog', 'recentblog']);
-                setFlash('success', 'Статья успешно отредактирована!');
+                setFlash('success', trans('blogs.article_success_edited'));
                 redirect('/articles/'.$blog->id);
             } else {
                 setInput($request->all());
@@ -297,11 +291,10 @@ class BlogController extends AdminController
         $blog = Blog::query()->find($id);
 
         if (! $blog) {
-            abort(404, 'Данной статьи не существует!');
+            abort(404, trans('blogs.article_not_exist'));
         }
 
         if ($request->isMethod('post')) {
-
             $token = check($request->input('token'));
             $cid   = int($request->input('cid'));
 
@@ -310,15 +303,14 @@ class BlogController extends AdminController
 
             $validator
                 ->equal($token, $_SESSION['token'], trans('validator.token'))
-                ->notEmpty($category, ['cid' => 'Категории для статьи не существует!']);
+                ->notEmpty($category, ['cid' => trans('blogs.category_not_exist')]);
 
             if ($category) {
-                $validator->empty($category->closed, ['cid' => 'В данном разделе запрещено создавать статьи!']);
-                $validator->notEqual($blog->category_id, $category->id, ['cid' => 'Нельзя переносить статью в этот же раздел!']);
+                $validator->empty($category->closed, ['cid' => trans('blogs.category_closed')]);
+                $validator->notEqual($blog->category_id, $category->id, ['cid' => trans('blogs.article_error_moving')]);
             }
 
             if ($validator->isValid()) {
-
                 // Обновление счетчиков
                 $category->increment('count_blogs');
                 Category::query()->where('id', $blog->category_id)->decrement('count_blogs');
@@ -327,7 +319,7 @@ class BlogController extends AdminController
                     'category_id' => $category->id,
                 ]);
 
-                setFlash('success', 'Статья успешно перенесена!');
+                setFlash('success', trans('blogs.article_success_moved'));
                 redirect('/articles/'.$blog->id);
             } else {
                 setInput($request->all());
@@ -362,20 +354,19 @@ class BlogController extends AdminController
         $blog = Blog::query()->find($id);
 
         if (! $blog) {
-            abort(404, 'Данной статьи не существует!');
+            abort(404, trans('blogs.article_not_exist'));
         }
 
         $validator->equal($token, $_SESSION['token'], trans('validator.token'));
 
         if ($validator->isValid()) {
-
             $blog->comments()->delete();
             $blog->delete();
 
             $blog->category->decrement('count_blogs');
 
             clearCache(['statblog', 'recentblog']);
-            setFlash('success', 'Статья успешно удалена!');
+            setFlash('success', trans('blogs.article_success_deleted'));
         } else {
             setFlash('danger', $validator->getErrors());
         }

@@ -20,7 +20,7 @@ class PictureController extends BaseController
         parent::__construct();
 
         if (! $this->user = getUser()) {
-            abort(403, 'Чтобы загружать фотографии необходимо авторизоваться!');
+            abort(403, trans('main.not_authorized'));
         }
     }
 

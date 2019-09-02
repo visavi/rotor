@@ -25,7 +25,7 @@ class MessageController extends BaseController
         parent::__construct();
 
         if (! $this->user = getUser()) {
-            abort(403, 'Для просмотра писем необходимо авторизоваться!');
+            abort(403, trans('main.not_authorized'));
         }
     }
 

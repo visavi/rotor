@@ -20,7 +20,7 @@ class NotebookController extends BaseController
         parent::__construct();
 
         if (! getUser()) {
-            abort(403, 'Для управления блокнотом, необходимо авторизоваться!');
+            abort(403, trans('main.not_authorized'));
         }
 
         $this->note = Notebook::query()

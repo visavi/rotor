@@ -175,7 +175,7 @@ class DownController extends BaseController
         }
 
         if (! $user = getUser()) {
-            abort(403, 'Для загрузки файлов необходимо авторизоваться!');
+            abort(403, trans('main.not_authorized'));
         }
 
         $loads = Load::query()
@@ -293,7 +293,7 @@ class DownController extends BaseController
 
         $validator
             ->equal($token, $_SESSION['token'], ['score' => trans('validator.token')])
-            ->true(getUser(), ['score' => 'Для голосования необходимо авторизоваться!'])
+            ->true(getUser(), ['score' => trans('main.not_authorized')])
             ->between($score, 1, 5, ['score' => 'Необходимо поставить оценку!'])
             ->notEmpty($down->active, ['score' => 'Данный файл еще не проверен модератором!'])
             ->notEqual($down->user_id, getUser('id'), ['score' => 'Нельзя голосовать за свой файл!']);
@@ -411,7 +411,7 @@ class DownController extends BaseController
             $msg   = check($request->input('msg'));
 
             $validator
-                ->true(getUser(), 'Для добавления комментария необходимо авторизоваться!')
+                ->true(getUser(), trans('main.not_authorized'))
                 ->equal($token, $_SESSION['token'], trans('validator.token'))
                 ->length($msg, 5, setting('comment_length'), ['msg' => trans('validator.text')])
                 ->false($flood->isFlood(), ['msg' => trans('validator.flood', ['sec' => $flood->getPeriod()])]);
@@ -483,7 +483,7 @@ class DownController extends BaseController
         $page = int($request->input('page', 1));
 
         if (! getUser()) {
-            abort(403, 'Для редактирования комментариев необходимо авторизоваться!');
+            abort(403, trans('main.not_authorized'));
         }
 
         $comment = Comment::query()

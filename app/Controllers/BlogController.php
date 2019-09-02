@@ -30,7 +30,7 @@ class BlogController extends BaseController
             ->get();
 
         if ($categories->isEmpty()) {
-            abort('default', 'Разделы блогов еще не созданы!');
+            abort('default', trans('blogs.categories_not_created'));
         }
 
         return view('blogs/index', compact('categories'));
@@ -47,7 +47,7 @@ class BlogController extends BaseController
         $category = Category::query()->with('parent')->find($id);
 
         if (! $category) {
-            abort(404, 'Данного раздела не существует!');
+            abort(404, trans('blogs.category_not_exist'));
         }
 
         $total = Blog::query()->where('category_id', $id)->count();
@@ -85,7 +85,7 @@ class BlogController extends BaseController
             ->first();
 
         if (! $blog) {
-            abort(404, 'Данной статьи не существует!');
+            abort(404, trans('blogs.article_not_exist'));
         }
 
         $reader = Reader::query()
@@ -128,18 +128,18 @@ class BlogController extends BaseController
     public function edit(int $id, Request $request, Validator $validator): string
     {
         if (! getUser()) {
-            abort(403, 'Для редактирования статьи необходимо авторизоваться!');
+            abort(403, trans('main.not_authorized'));
         }
 
         /** @var Blog $blog */
         $blog = Blog::query()->find($id);
 
         if (! $blog) {
-            abort(404, 'Данной статьи не существует!');
+            abort(404, trans('blogs.article_not_exist'));
         }
 
         if ($blog->user_id !== getUser('id')) {
-            abort('default', 'Изменение невозможно, вы не автор данной статьи!');
+            abort('default', trans('main.article_not_author'));
         }
 
         if ($request->isMethod('post')) {
@@ -157,11 +157,11 @@ class BlogController extends BaseController
                 ->equal($token, $_SESSION['token'], trans('validator.token'))
                 ->length($title, 5, 50, ['title' => trans('validator.text')])
                 ->length($text, 100, setting('maxblogpost'), ['text' => trans('validator.text')])
-                ->length($tags, 2, 50, ['tags' => 'Слишком длинные или короткие метки статьи!'])
-                ->notEmpty($category, ['cid' => 'Категории для статьи не существует или она закрыта!']);
+                ->length($tags, 2, 50, ['tags' => trans('blogs.article_error_tags')])
+                ->notEmpty($category, ['cid' => trans('blogs.category_not_exist')]);
 
             if ($category) {
-                $validator->empty($category->closed, ['cid' => 'В данном разделе запрещено создавать статьи!']);
+                $validator->empty($category->closed, ['cid' => trans('blogs.category_closed')]);
             }
 
             if ($validator->isValid()) {
@@ -180,7 +180,7 @@ class BlogController extends BaseController
                 ]);
 
                 clearCache(['statblog', 'recentblog']);
-                setFlash('success', 'Статья успешно отредактирована!');
+                setFlash('success', trans('blogs.article_success_edited'));
                 redirect('/articles/' . $blog->id);
             } else {
                 setInput($request->all());
@@ -237,11 +237,11 @@ class BlogController extends BaseController
         $cid = int($request->input('cid'));
 
         if (! isAdmin() && ! setting('blog_create')) {
-            abort('default', 'Публикация статей запрещена администрацией сайта!');
+            abort('default', trans('main.articles_closed'));
         }
 
         if (! getUser()) {
-            abort(403, 'Для публикации статей необходимо авторизоваться!');
+            abort(403, trans('main.not_authorized'));
         }
 
         $cats = Category::query()
@@ -251,7 +251,7 @@ class BlogController extends BaseController
             ->get();
 
         if (! $cats) {
-            abort(404, 'Разделы блогов еще не созданы!');
+            abort(404, trans('blogs.categories_not_created'));
         }
 
         if ($request->isMethod('post')) {
@@ -270,10 +270,10 @@ class BlogController extends BaseController
                 ->length($text, 100, setting('maxblogpost'), ['text' => trans('validator.text')])
                 ->length($tags, 2, 50, ['tags' => 'Слишком длинные или короткие метки статьи!'])
                 ->false($flood->isFlood(), ['msg' => trans('validator.flood', ['sec' => $flood->getPeriod()])])
-                ->notEmpty($category, ['cid' => 'Категории для новой статьи не существует или она закрыта!']);
+                ->notEmpty($category, ['cid' => trans('blogs.category_not_exist')]);
 
             if ($category) {
-                $validator->empty($category->closed, ['cid' => 'В данном разделе запрещено создавать статьи!']);
+                $validator->empty($category->closed, ['cid' => trans('blogs.category_closed')]);
             }
 
             if ($validator->isValid()) {
@@ -304,7 +304,7 @@ class BlogController extends BaseController
                 clearCache(['statblog', 'recentblog']);
                 $flood->saveState();
 
-                setFlash('success', 'Статья успешно опубликована!');
+                setFlash('success', trans('blogs.article_success_created'));
                 redirect('/articles/' . $blog->id);
             } else {
                 setInput($request->all());
@@ -336,7 +336,7 @@ class BlogController extends BaseController
         $blog = Blog::query()->find($id);
 
         if (! $blog) {
-            abort(404, 'Данной статьи не существует!');
+            abort(404, trans('blogs.article_not_exist'));
         }
 
         if ($request->isMethod('post')) {
@@ -345,7 +345,7 @@ class BlogController extends BaseController
             $msg   = check($request->input('msg'));
 
             $validator
-                ->true(getUser(), 'Для добавления комментария необходимо авторизоваться!')
+                ->true(getUser(), trans('main.not_authorized'))
                 ->equal($token, $_SESSION['token'], trans('validator.token'))
                 ->length($msg, 5, setting('comment_length'), ['msg' => trans('validator.text')])
                 ->false($flood->isFlood(), ['msg' => trans('validator.flood', ['sec' => $flood->getPeriod()])]);
@@ -418,11 +418,11 @@ class BlogController extends BaseController
         $blog = Blog::query()->find($id);
 
         if (! $blog) {
-            abort(404, 'Данной статьи не существует!');
+            abort(404, trans('blogs.article_not_exist'));
         }
 
         if (! getUser()) {
-            abort(403, 'Для редактирования комментариев необходимо авторизоваться!');
+            abort(403, trans('main.not_authorized'));
         }
 
         $comment = Comment::query()
@@ -477,7 +477,7 @@ class BlogController extends BaseController
         $blog = Blog::query()->find($id);
 
         if (! $blog) {
-            abort(404, 'Выбранная вами статья не существует, возможно она была удалена!');
+            abort(404, trans('blogs.article_not_exist'));
         }
 
         $total = Comment::query()
@@ -501,7 +501,7 @@ class BlogController extends BaseController
         $blog = Blog::query()->find($id);
 
         if (! $blog) {
-            abort(404, 'Данной статьи не существует!');
+            abort(404, trans('blogs.article_not_exist'));
         }
 
         return view('blogs/print', compact('blog'));
@@ -537,7 +537,7 @@ class BlogController extends BaseController
         $blog = Blog::query()->where('id', $id)->with('lastComments')->first();
 
         if (! $blog) {
-            abort(404, 'Статья не найдена!');
+            abort(404, trans('blogs.article_not_exist'));
         }
 
         return view('blogs/rss_comments', compact('blog'));
@@ -752,7 +752,7 @@ class BlogController extends BaseController
         $blog = Blog::query()->find($id);
 
         if (! $blog) {
-            abort(404, 'Данной статьи не существует!');
+            abort(404, trans('blogs.article_not_exist'));
         }
 
         $total = Comment::query()
@@ -812,7 +812,7 @@ class BlogController extends BaseController
         $where = int($request->input('where'));
 
         if (! getUser()) {
-            abort(403, 'Чтобы использовать поиск, необходимо авторизоваться!');
+            abort(403, trans('main.not_authorized'));
         }
 
         if (empty($find)) {

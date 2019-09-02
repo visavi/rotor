@@ -461,7 +461,7 @@ class UserController extends BaseController
     public function setting(Request $request, Validator $validator): string
     {
         if (! $user = getUser()) {
-            abort(403, 'Для изменения настроек необходимо авторизоваться!');
+            abort(403, trans('main.not_authorized'));
         }
 
         $setting['themes']    = array_map('basename', glob(HOME . '/themes/*', GLOB_ONLYDIR));
@@ -512,7 +512,7 @@ class UserController extends BaseController
     public function account(): string
     {
         if (! $user = getUser()) {
-            abort(403, 'Для изменения данных необходимо авторизоваться!');
+            abort(403, trans('main.not_authorized'));
         }
 
         return view('users/account', compact('user'));
@@ -528,7 +528,7 @@ class UserController extends BaseController
     public function changeMail(Request $request, Validator $validator): void
     {
         if (! $user = getUser()) {
-            abort(403, 'Для изменения данных необходимо авторизоваться!');
+            abort(403, trans('main.not_authorized'));
         }
 
         $token    = check($request->input('token'));
@@ -589,7 +589,7 @@ class UserController extends BaseController
     public function editMail(Request $request, Validator $validator): void
     {
         if (! $user = getUser()) {
-            abort(403, 'Для изменения данных необходимо авторизоваться!');
+            abort(403, trans('main.not_authorized'));
         }
 
         $key = check($request->input('key'));
@@ -637,7 +637,7 @@ class UserController extends BaseController
     public function editStatus(Request $request, Validator $validator): void
     {
         if (! $user = getUser()) {
-            abort(403, 'Для изменения данных необходимо авторизоваться!');
+            abort(403, trans('main.not_authorized'));
         }
 
         $token  = check($request->input('token'));
@@ -683,7 +683,7 @@ class UserController extends BaseController
     public function editPassword(Request $request, Validator $validator): void
     {
         if (! $user = getUser()) {
-            abort(403, 'Для изменения данных необходимо авторизоваться!');
+            abort(403, trans('main.not_authorized'));
         }
 
         $token    = check($request->input('token'));
@@ -733,7 +733,7 @@ class UserController extends BaseController
     public function apikey(Request $request): void
     {
         if (! $user = getUser()) {
-            abort(403, 'Для изменения данных необходимо авторизоваться!');
+            abort(403, trans('main.not_authorized'));
         }
 
         $token = check($request->input('token'));

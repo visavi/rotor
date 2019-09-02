@@ -27,7 +27,7 @@ class TransferController extends BaseController
         parent::__construct();
 
         if (! getUser()) {
-            abort(403, 'Для совершения операций необходимо авторизоваться!');
+            abort(403, trans('main.not_authorized'));
         }
 
         $login      = check($request->input('user'));
