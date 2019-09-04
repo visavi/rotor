@@ -1656,7 +1656,7 @@ function view($view, array $params = [], array $mergeData = []): string
  */
 function trans($key, array $replace = [], $locale = null)
 {
-    return Lang::trans($key, $replace, $locale);
+    return Lang::get($key, $replace, $locale);
 }
 
 /**
@@ -1670,7 +1670,7 @@ function trans($key, array $replace = [], $locale = null)
  */
 function trans_choice($key, $number, array $replace = [], $locale = null)
 {
-    return Lang::transChoice($key, $number, $replace, $locale);
+    return Lang::choice($key, $number, $replace, $locale);
 }
 
 /**

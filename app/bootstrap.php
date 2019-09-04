@@ -3,12 +3,13 @@
 use Dotenv\Dotenv;
 use Illuminate\Container\Container;
 use Illuminate\Database\Capsule\Manager as DB;
+use Illuminate\Events\Dispatcher;
 use Illuminate\Filesystem\Filesystem;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Facade;
 use Illuminate\Translation\FileLoader;
 use Illuminate\Translation\Translator;
-use Jenssegers\Blade\Blade;
+use Illuminate\View\ViewServiceProvider;
 use Whoops\Handler\PlainTextHandler;
 use Whoops\Handler\PrettyPageHandler;
 use Whoops\Run;
@@ -59,8 +60,7 @@ $db->addConnection([
     'collation' => env('DB_COLLATION'),
 ]);
 
-/*use Illuminate\Events\Dispatcher;
-$db->setEventDispatcher(new Dispatcher(new Container));*/
+/*$db->setEventDispatcher(new Dispatcher(new Container));*/
 $db->setAsGlobal();
 $db->bootEloquent();
 $db::connection()->enableQueryLog();
@@ -69,18 +69,24 @@ $db::connection()->enableQueryLog();
  * Setup a new app instance container
  */
 $app = new Container();
-$app->singleton('app', Container::class);
 
-$app->singleton('view', static function () {
-    $view = new Blade([
-        HOME . '/themes/' . setting('themes') . '/views',
-        RESOURCES . '/views',
-        HOME . '/themes',
-    ], STORAGE . '/caches');
+$app->singleton('files', static function () {
+    return new Filesystem();
+});
 
-    $view->compiler()->withoutDoubleEncoding();
+$app->singleton('events', static function () {
+    return new Dispatcher();
+});
 
-    return $view;
+$app->singleton('config', static function () {
+    return [
+        'view.paths' => [
+            HOME . '/themes/' . setting('themes') . '/views',
+            RESOURCES . '/views',
+            HOME . '/themes',
+        ],
+        'view.compiled' => STORAGE . '/caches',
+    ];
 });
 
 $app->singleton('translator', static function () {
@@ -96,6 +102,8 @@ $app->singleton('translator', static function () {
 
     return $translator;
 });
+
+(new ViewServiceProvider($app))->register();
 
 /**
  * Set $app as FacadeApplication handler
