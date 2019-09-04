@@ -47,7 +47,8 @@ use Symfony\Component\Console\Output\NullOutput;
  * Форматирует вывод времени из секунд
  *
  * @param  string $time секунды
- * @return string       форматированный вывод
+ *
+ * @return string форматированный вывод
  */
 function makeTime($time)
 {
@@ -58,9 +59,10 @@ function makeTime($time)
 /**
  * Форматирует время с учетом часовых поясов
  *
- * @param  int     $timestamp секунды
- * @param  string  $format    формат времени
- * @return string             форматированный вывод
+ * @param int    $timestamp секунды
+ * @param string $format    формат времени
+ *
+ * @return string форматированный вывод
  */
 function dateFixed($timestamp, $format = 'd.m.y / H:i')
 {
@@ -97,8 +99,9 @@ function dateFixed($timestamp, $format = 'd.m.y / H:i')
 /**
  * Конвертирует строку в кодировку utf-8
  *
- * @param  string $str строка
- * @return string      конвертированная строка
+ * @param string $str строка
+ *
+ * @return string конвертированная строка
  */
 function winToUtf($str)
 {
@@ -108,8 +111,9 @@ function winToUtf($str)
 /**
  * Преобразует строку в нижний регистр
  *
- * @param  string $str строка
- * @return string      преобразованная строка
+ * @param string $str строка
+ *
+ * @return string преобразованная строка
  */
 function utfLower($str)
 {
@@ -119,10 +123,11 @@ function utfLower($str)
 /**
  * Обрезает строку
  *
- * @param string  $str    строка
- * @param int     $start  начало позиции
- * @param int     $length конец позиции
- * @return string         обрезанная строка
+ * @param string $str    строка
+ * @param int    $start  начало позиции
+ * @param int    $length конец позиции
+ *
+ * @return string обрезанная строка
  */
 function utfSubstr($str, $start, $length = null)
 {
@@ -137,7 +142,8 @@ function utfSubstr($str, $start, $length = null)
  * Возвращает длину строки
  *
  * @param string $str строка
- * @return int        длина строка
+ *
+ * @return int длина строка
  */
 function utfStrlen($str)
 {
@@ -147,7 +153,8 @@ function utfStrlen($str)
 /**
  * Определяет является ли кодировка utf-8
  *
- * @param  string $str строка
+ * @param string $str строка
+ *
  * @return bool
  */
 function isUtf($str)
@@ -158,9 +165,10 @@ function isUtf($str)
 /**
  * Преобразует специальные символы в HTML-сущности
  *
- * @param  mixed $string       строка или массив строк
- * @param  bool  $doubleEncode преобразовывать существующие html-сущности
- * @return mixed               обработанные данные
+ * @param mixed $string       строка или массив строк
+ * @param bool  $doubleEncode преобразовывать существующие html-сущности
+ *
+ * @return mixed обработанные данные
  */
 function check($string, $doubleEncode = true)
 {
@@ -180,8 +188,9 @@ function check($string, $doubleEncode = true)
 /**
  * Преобразует в положительное число
  *
- * @param  string $num число
- * @return int         обработанные данные
+ * @param string $num число
+ *
+ * @return int обработанные данные
  */
 function int($num)
 {
@@ -191,8 +200,9 @@ function int($num)
 /**
  * Преобразует все элементы массива в int
  *
- * @param  mixed $numbers массив или число
- * @return array          обработанные данные
+ * @param mixed $numbers массив или число
+ *
+ * @return array обработанные данные
  */
 function intar($numbers)
 {
@@ -210,9 +220,10 @@ function intar($numbers)
 /**
  * Возвращает размер в человекочитаемом формате
  *
- * @param  int     $bytes     размер в байтах
- * @param  integer $precision кол. символов после запятой
- * @return string             форматированный вывод размера
+ * @param int $bytes     размер в байтах
+ * @param int $precision кол. символов после запятой
+ *
+ * @return string форматированный вывод размера
  */
 function formatSize($bytes, $precision = 2)
 {
@@ -228,8 +239,9 @@ function formatSize($bytes, $precision = 2)
 /**
  * Возвращает размер файла человекочитаемом формате
  *
- * @param  string     $file путь к файлу
- * @return int|string       размер в читаемом формате
+ * @param string $file путь к файлу
+ *
+ * @return int|string размер в читаемом формате
  */
 function formatFileSize($file)
 {
@@ -243,8 +255,9 @@ function formatFileSize($file)
 /**
  * Возвращает время в человекочитаемом формате
  *
- * @param  string $time кол. секунд timestamp
- * @return string       время в читаемом формате
+ * @param string $time кол. секунд timestamp
+ *
+ * @return string время в читаемом формате
  */
 function formatTime($time)
 {
@@ -272,8 +285,9 @@ function formatTime($time)
 /**
  * Очищает строку от мата по базе слов
  *
- * @param  string $str строка
- * @return string      обработанная строка
+ * @param string $str строка
+ *
+ * @return string обработанная строка
  */
 function antimat($str)
 {
@@ -283,8 +297,9 @@ function antimat($str)
 /**
  * Возвращает рейтинг в виде звезд
  *
- * @param  float  $rating рейтинг
- * @return string         преобразованный рейтинг
+ * @param float $rating рейтинг
+ *
+ * @return string преобразованный рейтинг
  */
 function ratingVote($rating)
 {
@@ -307,6 +322,7 @@ function ratingVote($rating)
  * Возвращает календарь
  *
  * @param int $time
+ *
  * @return string календарь
  */
 function getCalendar($time = SITETIME): string
@@ -577,8 +593,9 @@ function statsInvite()
 /**
  * Возвращает следующею и предыдущую фотографию в галерее
  *
- * @param  int   $id Id фотографи
- * @return mixed     массив данных
+ * @param int $id Id фотографий
+ *
+ * @return mixed массив данных
  */
 function photoNavigation($id)
 {
@@ -731,8 +748,9 @@ function statsBoard()
 /**
  * Обфусцирует email
  *
- * @param  string $email email
- * @return string       обфусцированный email
+ * @param string $email email
+ *
+ * @return string обфусцированный email
  */
 function cryptMail($email)
 {
@@ -749,7 +767,8 @@ function cryptMail($email)
 /**
  * Частично скрывает email
  *
- * @param  string $email
+ * @param string $email
+ *
  * @return string
  */
 function hideMail($email)
@@ -758,8 +777,7 @@ function hideMail($email)
 }
 
 /**
- * Возвращает статистику текущих голосований из кэш-файла,
- * предварительно сформировав этот файл, если он устарел
+ * Возвращает статистику текущих голосований из кэш-файла
  *
  * @return string Статистика текущий голосований
  */
@@ -782,8 +800,7 @@ function statVotes()
 }
 
 /**
- * Возвращает дату последней новости из кэш-файла,
- * предварительно сформировав этот файл, если он устарел
+ * Возвращает дату последней новости из кэш-файла
  *
  * @return string Дата последней новости
  */
@@ -861,7 +878,8 @@ function checkAuth()
  * Возвращает является ли пользователь администратором
  *
  * @param string $level уровень доступа
- * @return bool         является ли пользователь администратором
+ *
+ * @return bool является ли пользователь администратором
  */
 function isAdmin($level = User::EDITOR)
 {
@@ -871,8 +889,9 @@ function isAdmin($level = User::EDITOR)
 /**
  * Возвращает имеет ли пользователь доступ по уровню
  *
- * @param  string $level уровень доступа
- * @return bool          разрешен ли доступ
+ * @param string $level уровень доступа
+ *
+ * @return bool разрешен ли доступ
  */
 function access($level)
 {
@@ -884,8 +903,9 @@ function access($level)
 /**
  * Возвращает иконку расширения
  *
- * @param  string $ext расширение файла
- * @return string      иконка
+ * @param string $ext расширение файла
+ *
+ * @return string иконка
  */
 function icons($ext)
 {
@@ -949,8 +969,9 @@ function icons($ext)
 /**
  * Перемешивает элементы ассоциативного массива, сохраняя ключи
  *
- * @param  array &$array Исходный массив, переданный по ссылке
- * @return bool          Флаг успешного выполнения операции
+ * @param array &$array Исходный массив, переданный по ссылке
+ *
+ * @return bool Флаг успешного выполнения операции
  */
 function shuffleAssoc(&$array)
 {
@@ -971,6 +992,7 @@ function shuffleAssoc(&$array)
  * Закрывает bb-теги
  *
  * @param string $html
+ *
  * @return string
  */
 function closeTags(string $html): string
@@ -1001,6 +1023,7 @@ function closeTags(string $html): string
  * @param string $value
  * @param int    $words
  * @param string $end
+ *
  * @return string
  */
 function bbCodeTruncate(string $value, int $words = 20, string $end = '...'): string
@@ -1014,10 +1037,11 @@ function bbCodeTruncate(string $value, int $words = 20, string $end = '...'): st
 /**
  * Возвращает обрезанную до заданного количества букв строке
  *
- * @param  string $value Исходная строка
- * @param  int    $limit Максимальное количество символов в результате
- * @param  string $end
- * @return string         Обрезанная строка
+ * @param string $value Исходная строка
+ * @param int    $limit Максимальное количество символов в результате
+ * @param string $end
+ *
+ * @return string Обрезанная строка
  */
 function truncateString(string $value, int $limit = 100, string $end = '...'): string
 {
@@ -1040,10 +1064,11 @@ function truncateString(string $value, int $limit = 100, string $end = '...'): s
 /**
  * Возвращает обрезанную до заданного количества слов строке
  *
- * @param  string $value Исходная строка
- * @param  int    $words Максимальное количество слов в результате
- * @param  string $end
- * @return string         Обрезанная строка
+ * @param string $value Исходная строка
+ * @param int    $words Максимальное количество слов в результате
+ * @param string $end
+ *
+ * @return string Обрезанная строка
  */
 function truncateWord(string $value, int $words = 20, string $end = '...'): string
 {
@@ -1055,9 +1080,10 @@ function truncateWord(string $value, int $words = 20, string $end = '...'): stri
 /**
  * Возвращает обрезанную строку с удалением перевода строки
  *
- * @param  string $value
- * @param  int    $words
- * @param  string $end
+ * @param string $value
+ * @param int    $words
+ * @param string $end
+ *
  * @return string
  */
 function truncateDescription(string $value, int $words = 20, string $end = ''): string
@@ -1127,7 +1153,8 @@ function saveAdvertUser()
 /**
  * Выводит последние фотографии
  *
- * @param  int  $show  Количество последних фотографий
+ * @param int $show Количество последних фотографий
+ *
  * @return string|void Список фотографий
  */
 function recentPhotos($show = 5)
@@ -1160,8 +1187,9 @@ function recentPhotos($show = 5)
 /**
  * Выводит последние темы форума
  *
- * @param  int    $show Количество последних тем форума
- * @return string|void  Список тем
+ * @param int $show Количество последних тем форума
+ *
+ * @return string|void Список тем
  */
 function recentTopics($show = 5)
 {
@@ -1183,8 +1211,9 @@ function recentTopics($show = 5)
 /**
  * Выводит последние файлы в загрузках
  *
- * @param  int    $show Количество последних файлов в загрузках
- * @return string|void  Список файлов
+ * @param int $show Количество последних файлов в загрузках
+ *
+ * @return string|void Список файлов
  */
 function recentFiles($show = 5)
 {
@@ -1211,8 +1240,9 @@ function recentFiles($show = 5)
 /**
  * Выводит последние статьи в блогах
  *
- * @param  int    $show Количество последних статей в блогах
- * @return string|void  Список статей
+ * @param int $show Количество последних статей в блогах
+ *
+ * @return string|void Список статей
  */
 function recentBlogs($show = 5)
 {
@@ -1237,8 +1267,9 @@ function recentBlogs($show = 5)
 /**
  * Выводит последние объявления
  *
- * @param  int    $show Количество последних объявлений
- * @return string|void  Список объявлений
+ * @param int $show Количество последних объявлений
+ *
+ * @return string|void Список объявлений
  */
 function recentBoards($show = 5)
 {
@@ -1282,7 +1313,8 @@ function statsOffers()
 /**
  * Пересчитывает счетчики
  *
- * @param  string $mode сервис счетчиков
+ * @param string $mode сервис счетчиков
+ *
  * @return void
  */
 function restatement($mode)
@@ -1329,8 +1361,9 @@ function restatement($mode)
 /**
  * Возвращает количество строк в файле
  *
- * @param  string $file путь к файлу
- * @return int          количество строк
+ * @param string $file путь к файлу
+ *
+ * @return int количество строк
  */
 function counterString($file)
 {
@@ -1345,8 +1378,9 @@ function counterString($file)
 /**
  * Форматирует вывод числа
  *
- * @param  int    $num число
- * @return string      форматированное число
+ * @param int $num число
+ *
+ * @return string форматированное число
  */
 function formatNum($num)
 {
@@ -1364,7 +1398,8 @@ function formatNum($num)
 /**
  * Форматирует вывод числа
  *
- * @param  int $num
+ * @param int $num
+ *
  * @return bool|string
  */
 function formatShortNum($num)
@@ -1395,9 +1430,10 @@ function formatShortNum($num)
 /**
  * Обрабатывает и уменьшает изображение
  *
- * @param  string $path   путь к изображению
- * @param  array  $params параметры изображения
- * @return array          обработанные параметры
+ * @param string $path   путь к изображению
+ * @param array  $params параметры изображения
+ *
+ * @return array обработанные параметры
  */
 function resizeProcess($path, array $params = [])
 {
@@ -1458,9 +1494,10 @@ function resizeProcess($path, array $params = [])
 /**
  * Возвращает уменьшенное изображение
  *
- * @param  string $path   путь к изображению
- * @param  array  $params параметры изображения
- * @return string         уменьшенное изображение
+ * @param string $path   путь к изображению
+ * @param array  $params параметры изображения
+ *
+ * @return string уменьшенное изображение
  */
 function resizeImage($path, array $params = [])
 {
@@ -1479,7 +1516,8 @@ function resizeImage($path, array $params = [])
 /**
  * Удаляет директорию рекурсивно
  *
- * @param string $dir  путь к директории
+ * @param string $dir путь к директории
+ *
  * @return void
  */
 function deleteDir($dir)
@@ -1498,6 +1536,7 @@ function deleteDir($dir)
  * Удаляет файл
  *
  * @param string $path путь к файлу
+ *
  * @return bool
  */
 function deleteFile(string $path)
@@ -1524,6 +1563,8 @@ function deleteFile(string $path)
  * @param string $text     текст сообщения
  * @param string $pageUrl  путь к странице
  * @param string $pageName название страницу
+ *
+ * @return void
  */
 function sendNotify(string $text, string $pageUrl, string $pageName)
 {
@@ -1545,9 +1586,10 @@ function sendNotify(string $text, string $pageUrl, string $pageName)
 /**
  * Возвращает приватное сообщение
  *
- * @param  string $type    тип сообщения
- * @param  array  $replace массив заменяемых параметров
- * @return string          сформированный текст
+ * @param string $type    тип сообщения
+ * @param array  $replace массив заменяемых параметров
+ *
+ * @return string сформированный текст
  */
 function textNotice($type, array $replace = [])
 {
@@ -1583,6 +1625,7 @@ function performance()
  * Очистка кеш-файлов
  *
  * @param array $files
+ *
  * @return bool результат выполнения
  */
 function clearCache(array $files = [])
@@ -1618,6 +1661,7 @@ function clearCache(array $files = [])
  * Возвращает текущую страницу
  *
  * @param string $url
+ *
  * @return string текущая страница
  */
 function returnUrl($url = null)
@@ -1639,7 +1683,8 @@ function returnUrl($url = null)
  * @param string $view   имя шаблона
  * @param array  $params массив параметров
  * @param array  $mergeData
- * @return string         сформированный код
+ *
+ * @return string сформированный код
  */
 function view($view, array $params = [], array $mergeData = []): string
 {
@@ -1649,9 +1694,10 @@ function view($view, array $params = [], array $mergeData = []): string
 /**
  * Translate the given message.
  *
- * @param  string  $key
- * @param  array   $replace
- * @param  string  $locale
+ * @param string $key
+ * @param array  $replace
+ * @param string $locale
+ *
  * @return string
  */
 function __($key, array $replace = [], $locale = null)
@@ -1662,10 +1708,11 @@ function __($key, array $replace = [], $locale = null)
 /**
  * Translates the given message based on a count.
  *
- * @param  string              $key
- * @param  int|array|Countable $number
- * @param  array               $replace
- * @param  string              $locale
+ * @param string              $key
+ * @param int|array|Countable $number
+ * @param array               $replace
+ * @param string              $locale
+ *
  * @return string
  */
 function choice($key, $number, array $replace = [], $locale = null)
@@ -1676,9 +1723,10 @@ function choice($key, $number, array $replace = [], $locale = null)
 /**
  * Сохраняет страницы с ошибками
  *
- * @param  integer $code    код ошибки
- * @param  string  $message текст ошибки
- * @return string  сформированная страница с ошибкой
+ * @param int    $code    код ошибки
+ * @param string $message текст ошибки
+ *
+ * @return string сформированная страница с ошибкой
  */
 function abort($code, $message = null)
 {
@@ -1719,6 +1767,7 @@ function abort($code, $message = null)
  * Saves error logs
  *
  * @param mixed $code
+ *
  * @return void
  */
 function saveErrorLog($code)
@@ -1739,8 +1788,9 @@ function saveErrorLog($code)
 /**
  * Переадресовывает пользователя
  *
- * @param  string  $url       адрес переадресации
- * @param  bool    $permanent постоянное перенаправление
+ * @param string $url       адрес переадресации
+ * @param bool   $permanent постоянное перенаправление
+ *
  * @return void
  */
 function redirect($url, $permanent = false)
@@ -1761,7 +1811,8 @@ function redirect($url, $permanent = false)
  * Сохраняет flash уведомления
  *
  * @param string $status статус уведомления
- * @param mixed $message массив или текст с уведомлениями
+ * @param mixed  $message массив или текст с уведомлениями
+ *
  * @return void
  */
 function setFlash($status, $message)
@@ -1772,7 +1823,8 @@ function setFlash($status, $message)
 /**
  * Возвращает ошибку
  *
- * @param  mixed $errors ошибки
+ * @param mixed $errors ошибки
+ *
  * @return string сформированный блок с ошибкой
  */
 function showError($errors)
@@ -1799,6 +1851,7 @@ function setInput(array $data)
  *
  * @param string $name имя поля
  * @param string $default
+ *
  * @return mixed сохраненное значение
  */
 function getInput($name, $default = null)
@@ -1822,6 +1875,7 @@ function getInput($name, $default = null)
  * Подсвечивает блок с полем для ввода сообщения
  *
  * @param string $field имя поля
+ *
  * @return string CSS класс ошибки
  */
 function hasError($field)
@@ -1834,8 +1888,9 @@ function hasError($field)
 /**
  * Возвращает блок с текстом ошибки
  *
- * @param  string $field имя поля
- * @return string        блоки ошибки
+ * @param string $field имя поля
+ *
+ * @return string блоки ошибки
  */
 function textError($field)
 {
@@ -1845,11 +1900,12 @@ function textError($field)
 /**
  * Отправляет уведомления на email
  *
- * @param  mixed   $to      Получатель
- * @param  string  $subject Тема письма
- * @param  string  $body    Текст сообщения
- * @param  array   $params  Дополнительные параметры
- * @return bool             Результат отправки
+ * @param mixed  $to      Получатель
+ * @param string $subject Тема письма
+ * @param string $body    Текст сообщения
+ * @param array  $params  Дополнительные параметры
+ *
+ * @return bool Результат отправки
  */
 function sendMail($to, $subject, $body, array $params = [])
 {
@@ -1891,7 +1947,8 @@ function sendMail($to, $subject, $body, array $params = [])
 /**
  * Возвращает расширение файла
  *
- * @param  string $filename имя файла
+ * @param string $filename имя файла
+ *
  * @return string расширение
  */
 function getExtension($filename)
@@ -1902,7 +1959,8 @@ function getExtension($filename)
 /**
  * Возвращает имя файла без расширения
  *
- * @param  string $filename имя файла
+ * @param string $filename имя файла
+ *
  * @return string имя без расширения
  */
 function getBodyName($filename)
@@ -1913,9 +1971,10 @@ function getBodyName($filename)
 /**
  * Склоняет числа
  *
- * @param  integer $num  число
- * @param  mixed   $forms массив склоняемых слов (один, два, много)
- * @return string  форматированная строка
+ * @param int   $num   число
+ * @param mixed $forms массив склоняемых слов (один, два, много)
+ *
+ * @return string форматированная строка
  */
 function plural($num, $forms)
 {
@@ -1945,9 +2004,10 @@ function plural($num, $forms)
 /**
  * Обрабатывает BB-код
  *
- * @param  string  $text  Необработанный текст
- * @param  bool    $parse Обрабатывать или вырезать код
- * @return string         Обработанный текст
+ * @param string $text  Необработанный текст
+ * @param bool   $parse Обрабатывать или вырезать код
+ *
+ * @return string Обработанный текст
  */
 function bbCode($text, $parse = true)
 {
@@ -1980,6 +2040,7 @@ function getIp()
  * Определяет браузер
  *
  * @param string|null $userAgent
+ *
  * @return string браузер и версия браузера
  */
 function getBrowser($userAgent = null)
@@ -1999,7 +2060,8 @@ function getBrowser($userAgent = null)
  *
  * @param string|null $key     ключ массива
  * @param string|null $default значение по умолчанию
- * @return mixed               данные
+ *
+ * @return mixed данные
  */
 function server($key = null, $default = null)
 {
@@ -2020,7 +2082,8 @@ function server($key = null, $default = null)
 /**
  * Возвращает объект пользователя по логину
  *
- * @param  string    $login логин пользователя
+ * @param string $login логин пользователя
+ *
  * @return Builder|Model|null
  */
 function getUserByLogin($login): ?User
@@ -2031,7 +2094,8 @@ function getUserByLogin($login): ?User
 /**
  * Возвращает объект пользователя по id
  *
- * @param  int $id ID пользователя
+ * @param int $id ID пользователя
+ *
  * @return Builder|Model|null
  */
 function getUserById(int $id): ?User
@@ -2042,7 +2106,8 @@ function getUserById(int $id): ?User
 /**
  * Возвращает данные пользователя по ключу
  *
- * @param  string $key ключ массива
+ * @param string $key ключ массива
+ *
  * @return User|mixed
  */
 function getUser($key = null)
@@ -2064,8 +2129,9 @@ function getUser($key = null)
 /**
  * Генерирует постраничную навигация
  *
- * @param  object $page данные страниц
- * @return string       сформированный блок
+ * @param object $page данные страниц
+ *
+ * @return string сформированный блок
  */
 function pagination($page)
 {
@@ -2134,9 +2200,10 @@ function pagination($page)
 /**
  * Обрабатывает постраничную навигацию
  *
- * @param  int    $limit элементов на страницу
- * @param  int    $total всего элементов
- * @return object        массив подготовленных данных
+ * @param int $limit элементов на страницу
+ * @param int $total всего элементов
+ *
+ * @return object массив подготовленных данных
  */
 function paginate(int $limit, int $total)
 {
@@ -2159,9 +2226,10 @@ function paginate(int $limit, int $total)
 /**
  * Возвращает сформированный код base64 картинки
  *
- * @param string  $path   путь к картинке
- * @param array   $params параметры
- * @return string         сформированный код
+ * @param string $path   путь к картинке
+ * @param array  $params параметры
+ *
+ * @return string сформированный код
  */
 function imageBase64($path, array $params = [])
 {
@@ -2189,8 +2257,9 @@ function imageBase64($path, array $params = [])
 /**
  * Выводит прогресс-бар
  *
- * @param  int    $percent
- * @param  string $title
+ * @param int    $percent
+ * @param string $title
+ *
  * @return string
  */
 function progressBar($percent, $title = null)
@@ -2204,6 +2273,7 @@ function progressBar($percent, $title = null)
 
 /**
  * Возвращает форматированный список запросов
+ *
  * @return array
  */
 function getQueryLog()
@@ -2224,8 +2294,9 @@ function getQueryLog()
 /**
  * Выводит список забаненных ip
  *
- * @param  bool $save нужно ли сбросить кеш
- * @return array      массив IP
+ * @param bool $save нужно ли сбросить кеш
+ *
+ * @return array массив IP
  */
 function ipBan($save = false)
 {
@@ -2242,8 +2313,9 @@ function ipBan($save = false)
 /**
  * Возвращает настройки сайта по ключу
  *
- * @param  string $key ключ массива
- * @return mixed       данные
+ * @param string $key ключ массива
+ *
+ * @return mixed данные
  */
 function setting($key = null)
 {
@@ -2268,6 +2340,7 @@ function setting($key = null)
  * Устанавливает настройки сайта
  *
  * @param array $setting массив настроек
+ *
  * @return void
  */
 function setSetting($setting)
@@ -2303,8 +2376,9 @@ function saveSettings()
 /**
  * Возвращает путь к сайту
  *
- * @param  bool   $parse выводить протокол
- * @return string        адрес сайта
+ * @param bool $parse выводить протокол
+ *
+ * @return string адрес сайта
  */
 function siteUrl($parse = false)
 {
@@ -2320,8 +2394,9 @@ function siteUrl($parse = false)
 /**
  * Возвращает имя сайта из ссылки
  *
- * @param  string $url ссылка на сайт
- * @return string      имя сайта
+ * @param string $url ссылка на сайт
+ *
+ * @return string имя сайта
  */
 function siteDomain($url)
 {
@@ -2335,7 +2410,8 @@ function siteDomain($url)
 /**
  * Получает версию
  *
- * @param  string $version
+ * @param string $version
+ *
  * @return string
  */
 function parseVersion($version)
@@ -2367,6 +2443,7 @@ function captchaVerify(): bool
  * Возвращает уникальное имя
  *
  * @param string $extension
+ *
  * @return string
  */
 function uniqueName(string $extension = null): string
@@ -2410,6 +2487,7 @@ function getCourses()
  *
  * @param Command $command
  * @param array   $arguments
+ *
  * @return void
  */
 function runCommand(Command $command, array $arguments = [])
