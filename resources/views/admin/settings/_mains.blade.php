@@ -1,53 +1,53 @@
 @section('header')
-    <h1>{{ trans('settings.mains') }}</h1>
+    <h1>{{ __('settings.mains') }}</h1>
 @stop
 
 <form action="/admin/settings" method="post">
     @csrf
     <div class="form-group{{ hasError('sets[title]') }}">
-        <label for="title">{{ trans('settings.page_title') }}:</label>
+        <label for="title">{{ __('settings.page_title') }}:</label>
         <input type="text" class="form-control" id="title" name="sets[title]" maxlength="100" value="{{ getInput('sets.title', $settings['title']) }}" required>
         <div class="invalid-feedback">{{ textError('sets[title]') }}</div>
     </div>
 
     <div class="form-group{{ hasError('sets[logos]') }}">
-        <label for="logos">{{ trans('settings.caption_top') }}:</label>
+        <label for="logos">{{ __('settings.caption_top') }}:</label>
         <input type="text" class="form-control" id="logos" name="sets[logos]" maxlength="100" value="{{ getInput('sets.logos', $settings['logos']) }}" required>
         <div class="invalid-feedback">{{ textError('sets[logos]') }}</div>
     </div>
 
     <div class="form-group{{ hasError('sets[copy]') }}">
-        <label for="copy">{{ trans('settings.caption_bottom') }}:</label>
+        <label for="copy">{{ __('settings.caption_bottom') }}:</label>
         <input type="text" class="form-control" id="copy" name="sets[copy]" maxlength="100" value="{{ getInput('sets.copy', $settings['copy']) }}" required>
         <div class="invalid-feedback">{{ textError('sets[copy]') }}</div>
     </div>
 
     <div class="form-group{{ hasError('sets[logotip]') }}">
-        <label for="logotip">{{ trans('settings.logotype') }}:</label>
+        <label for="logotip">{{ __('settings.logotype') }}:</label>
         <input type="text" class="form-control" id="logotip" name="sets[logotip]" maxlength="100" value="{{ getInput('sets.logotip', $settings['logotip']) }}" required>
         <div class="invalid-feedback">{{ textError('sets[logotip]') }}</div>
     </div>
 
     <div class="form-group{{ hasError('sets[floodstime]') }}">
-        <label for="floodstime">{{ trans('settings.antiflood') }}:</label>
+        <label for="floodstime">{{ __('settings.antiflood') }}:</label>
         <input type="number" class="form-control" id="floodstime" name="sets[floodstime]" maxlength="3" value="{{ getInput('sets.floodstime', $settings['floodstime']) }}" required>
         <div class="invalid-feedback">{{ textError('sets[floodstime]') }}</div>
     </div>
 
     <div class="form-group{{ hasError('sets[doslimit]') }}">
-        <label for="doslimit">{{ trans('settings.request_limit') }}:</label>
+        <label for="doslimit">{{ __('settings.request_limit') }}:</label>
         <input type="number" class="form-control" id="doslimit" name="sets[doslimit]" maxlength="3" value="{{ getInput('sets.doslimit', $settings['doslimit']) }}" required>
         <div class="invalid-feedback">{{ textError('sets[doslimit]') }}</div>
     </div>
 
     <div class="form-group{{ hasError('sets[timezone]') }}">
-        <label for="timezone">{{ trans('settings.timezone') }}:</label>
+        <label for="timezone">{{ __('settings.timezone') }}:</label>
         <input type="text" class="form-control" id="timezone" name="sets[timezone]" maxlength="50" value="{{ getInput('sets.timezone', $settings['timezone']) }}" required>
         <div class="invalid-feedback">{{ textError('sets[timezone]') }}</div>
     </div>
 
     <div class="form-group{{ hasError('sets[currency]') }}">
-        <label for="currency">{{ trans('settings.currency') }}:</label>
+        <label for="currency">{{ __('settings.currency') }}:</label>
         <input type="text" class="form-control" id="currency" name="sets[currency]" maxlength="10" value="{{ getInput('sets.currency', $settings['currency']) }}" required>
         <div class="invalid-feedback">{{ textError('sets[currency]') }}</div>
     </div>
@@ -56,7 +56,7 @@
     <?php $inputLang = getInput('language', $settings['language']); ?>
 
     <div class="form-group{{ hasError('sets[language]') }}">
-        <label for="language">{{ trans('settings.language') }}:</label>
+        <label for="language">{{ __('settings.language') }}:</label>
         <select class="form-control" id="language" name="sets[language]">
 
             @foreach ($languages as $language)
@@ -71,7 +71,7 @@
     <?php $inputLangFallback = getInput('language_fallback', $settings['language_fallback']); ?>
 
     <div class="form-group{{ hasError('sets[language_fallback]') }}">
-        <label for="language_fallback">{{ trans('settings.fallback_language') }}:</label>
+        <label for="language_fallback">{{ __('settings.fallback_language') }}:</label>
         <select class="form-control" id="language_fallback" name="sets[language_fallback]">
 
             @foreach ($languages as $language)
@@ -84,14 +84,14 @@
     </div>
 
     <p class="text-muted font-italic">
-        {{ trans('settings.fallback_language_hint') }}
+        {{ __('settings.fallback_language_hint') }}
     </p>
 
     <?php $themes = array_map('basename', glob(HOME . '/themes/*', GLOB_ONLYDIR)); ?>
     <?php $inputThemes = getInput('sets.themes', $settings['themes']); ?>
 
     <div class="form-group{{ hasError('sets[themes]') }}">
-        <label for="themes">{{ trans('settings.wap_theme') }}:</label>
+        <label for="themes">{{ __('settings.wap_theme') }}:</label>
         <select class="form-control" id="themes" name="sets[themes]">
 
             @foreach ($themes as $theme)
@@ -106,9 +106,9 @@
     <?php $inputThemes = getInput('sets.webthemes', $settings['webthemes']); ?>
 
     <div class="form-group{{ hasError('sets[webthemes]') }}">
-        <label for="webthemes">{{ trans('settings.web_theme') }}:</label>
+        <label for="webthemes">{{ __('settings.web_theme') }}:</label>
         <select class="form-control" id="webthemes" name="sets[webthemes]">
-            <option value="0">{{ trans('main.disable') }}</option>
+            <option value="0">{{ __('main.disable') }}</option>
 
             @foreach ($themes as $theme)
                 <?php $selected = ($inputThemes === $theme) ? ' selected' : ''; ?>
@@ -122,7 +122,7 @@
     <?php $inputSite = getInput('sets.closedsite', $settings['closedsite']); ?>
 
     <div class="form-group{{ hasError('sets[closedsite]') }}">
-        <label for="closedsite">{{ trans('settings.access_site') }}:</label>
+        <label for="closedsite">{{ __('settings.access_site') }}:</label>
         <select class="form-control" id="closedsite" name="sets[closedsite]">
 
             @foreach ($statsite as $key => $stat)
@@ -137,24 +137,24 @@
     <div class="custom-control custom-checkbox">
         <input type="hidden" value="0" name="sets[openreg]">
         <input type="checkbox" class="custom-control-input" value="1" name="sets[openreg]" id="openreg"{{ getInput('sets.openreg', $settings['openreg']) ? ' checked' : '' }}>
-        <label class="custom-control-label" for="openreg">{{ trans('settings.registration_allow') }}</label>
+        <label class="custom-control-label" for="openreg">{{ __('settings.registration_allow') }}</label>
     </div>
 
     <div class="custom-control custom-checkbox">
         <input type="hidden" value="0" name="sets[regkeys]">
         <input type="checkbox" class="custom-control-input" value="1" name="sets[regkeys]" id="regkeys"{{ getInput('sets.regkeys', $settings['regkeys']) ? ' checked' : '' }}>
-        <label class="custom-control-label" for="regkeys">{{ trans('settings.registration_confirm') }}</label>
+        <label class="custom-control-label" for="regkeys">{{ __('settings.registration_confirm') }}</label>
     </div>
 
     <div class="custom-control custom-checkbox">
         <input type="hidden" value="0" name="sets[invite]">
         <input type="checkbox" class="custom-control-input" value="1" name="sets[invite]" id="invite"{{ getInput('sets.invite', $settings['invite']) ? ' checked' : '' }}>
-        <label class="custom-control-label" for="invite">{{ trans('settings.registration_invite') }}</label>
+        <label class="custom-control-label" for="invite">{{ __('settings.registration_invite') }}</label>
     </div>
 
     <p class="text-muted font-italic">
-        {{ trans('settings.registration_invite_hint') }}
+        {{ __('settings.registration_invite_hint') }}
     </p>
 
-    <button class="btn btn-primary">{{ trans('main.save') }}</button>
+    <button class="btn btn-primary">{{ __('main.save') }}</button>
 </form>

@@ -68,7 +68,7 @@ class BoardController extends AdminController
     public function categories(): string
     {
         if (! isAdmin(User::BOSS)) {
-            abort(403, trans('errors.forbidden'));
+            abort(403, __('errors.forbidden'));
         }
 
         $boards = Board::query()
@@ -90,14 +90,14 @@ class BoardController extends AdminController
     public function create(Request $request, Validator $validator): void
     {
         if (! isAdmin(User::BOSS)) {
-            abort(403, trans('errors.forbidden'));
+            abort(403, __('errors.forbidden'));
         }
 
         $token = check($request->input('token'));
         $name  = check($request->input('name'));
 
-        $validator->equal($token, $_SESSION['token'], trans('validator.token'))
-            ->length($name, 3, 50, ['name' => trans('validator.text')]);
+        $validator->equal($token, $_SESSION['token'], __('validator.token'))
+            ->length($name, 3, 50, ['name' => __('validator.text')]);
 
         if ($validator->isValid()) {
 
@@ -130,7 +130,7 @@ class BoardController extends AdminController
     public function edit(int $id, Request $request, Validator $validator): string
     {
         if (! isAdmin(User::BOSS)) {
-            abort(403, trans('errors.forbidden'));
+            abort(403, __('errors.forbidden'));
         }
 
         /** @var Board $board */
@@ -152,8 +152,8 @@ class BoardController extends AdminController
             $sort   = check($request->input('sort'));
             $closed = empty($request->input('closed')) ? 0 : 1;
 
-            $validator->equal($token, $_SESSION['token'], trans('validator.token'))
-                ->length($name, 3, 50, ['name' => trans('validator.text')])
+            $validator->equal($token, $_SESSION['token'], __('validator.token'))
+                ->length($name, 3, 50, ['name' => __('validator.text')])
                 ->notEqual($parent, $board->id, ['parent' => 'Недопустимый выбор родительского раздела!']);
 
             if (! empty($parent) && $board->children->isNotEmpty()) {
@@ -191,7 +191,7 @@ class BoardController extends AdminController
     public function delete(int $id, Request $request, Validator $validator): void
     {
         if (! isAdmin(User::BOSS)) {
-            abort(403, trans('errors.forbidden'));
+            abort(403, __('errors.forbidden'));
         }
 
         /** @var Board $board */
@@ -203,7 +203,7 @@ class BoardController extends AdminController
 
         $token = check($request->input('token'));
 
-        $validator->equal($token, $_SESSION['token'], trans('validator.token'))
+        $validator->equal($token, $_SESSION['token'], __('validator.token'))
             ->true($board->children->isEmpty(), 'Удаление невозможно! Данный раздел имеет подразделы!');
 
         $item = Item::query()->where('board_id', $board->id)->first();
@@ -252,10 +252,10 @@ class BoardController extends AdminController
             $board = Board::query()->find($bid);
 
             $validator
-                ->equal($token, $_SESSION['token'], trans('validator.token'))
-                ->length($title, 5, 50, ['title' => trans('validator.text')])
-                ->length($text, 50, 5000, ['text' => trans('validator.text')])
-                ->regex($phone, '#^\d{11}$#', ['phone' => trans('validator.phone')], false)
+                ->equal($token, $_SESSION['token'], __('validator.token'))
+                ->length($title, 5, 50, ['title' => __('validator.text')])
+                ->length($text, 50, 5000, ['text' => __('validator.text')])
+                ->regex($phone, '#^\d{11}$#', ['phone' => __('validator.phone')], false)
                 ->notEmpty($board, ['bid' => 'Категории для данного объявления не существует!']);
 
             if ($board) {
@@ -315,7 +315,7 @@ class BoardController extends AdminController
             abort(404, 'Данного объявления не существует!');
         }
 
-        $validator->equal($token, $_SESSION['token'], trans('validator.token'));
+        $validator->equal($token, $_SESSION['token'], __('validator.token'));
 
         if ($validator->isValid()) {
 
@@ -341,7 +341,7 @@ class BoardController extends AdminController
     public function restatement(Request $request): void
     {
         if (! isAdmin(User::BOSS)) {
-            abort(403, trans('errors.forbidden'));
+            abort(403, __('errors.forbidden'));
         }
 
         $token = check($request->input('token'));
@@ -351,7 +351,7 @@ class BoardController extends AdminController
 
             setFlash('success', 'Объявления успешно пересчитаны!');
         } else {
-            setFlash('danger', trans('validator.token'));
+            setFlash('danger', __('validator.token'));
         }
 
         redirect('/admin/boards');

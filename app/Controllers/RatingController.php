@@ -19,7 +19,7 @@ class RatingController extends BaseController
         parent::__construct();
 
         if (! getUser()) {
-            abort(403, trans('main.not_authorized'));
+            abort(403, __('main.not_authorized'));
         }
     }
 
@@ -64,8 +64,8 @@ class RatingController extends BaseController
             $token = check($request->input('token'));
             $text  = check($request->input('text'));
 
-            $validator->equal($token, $_SESSION['token'], trans('validator.token'))
-                ->length($text, 5, 250, ['text' => trans('validator.text')]);
+            $validator->equal($token, $_SESSION['token'], __('validator.token'))
+                ->length($text, 5, 250, ['text' => __('validator.text')]);
 
             if ($vote === 'minus' && getUser('rating') < 1) {
                 $validator->addError('Уменьшать репутацию могут только пользователи с положительным рейтингом!');
@@ -181,7 +181,7 @@ class RatingController extends BaseController
         $validator
             ->true($request->ajax(), 'Это не ajax запрос!')
             ->true(isAdmin(User::ADMIN), 'Удалять рейтинг могут только администраторы')
-            ->equal($token, $_SESSION['token'], trans('validator.token'))
+            ->equal($token, $_SESSION['token'], __('validator.token'))
             ->notEmpty($id, ['Не выбрана запись для удаление!']);
 
         if ($validator->isValid()) {

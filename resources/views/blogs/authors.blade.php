@@ -1,15 +1,15 @@
 @extends('layout')
 
 @section('title')
-    {{ trans('blogs.authors') }}
+    {{ __('blogs.authors') }}
 @stop
 
 @section('breadcrumb')
     <nav>
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
-            <li class="breadcrumb-item"><a href="/blogs">{{ trans('index.blogs') }}</a></li>
-            <li class="breadcrumb-item active">{{ trans('blogs.authors') }}</li>
+            <li class="breadcrumb-item"><a href="/blogs">{{ __('index.blogs') }}</a></li>
+            <li class="breadcrumb-item active">{{ __('blogs.authors') }}</li>
         </ol>
     </nav>
 @stop
@@ -18,13 +18,13 @@
     @if ($blogs->isNotEmpty())
         @foreach ($blogs as $data)
             <i class="fa fa-pencil-alt"></i>
-            <b><a href="/blogs/active/articles?user={{ $data->login }}">{{ $data->login }}</a></b> ({{ $data->cnt }} {{ trans('blogs.all_articles') }} / {{ $data->count_comments }} {{ trans('main.comments') }})<br>
+            <b><a href="/blogs/active/articles?user={{ $data->login }}">{{ $data->login }}</a></b> ({{ $data->cnt }} {{ __('blogs.all_articles') }} / {{ $data->count_comments }} {{ __('main.comments') }})<br>
         @endforeach
 
         {!! pagination($page) !!}
 
-        {{ trans('blogs.total_authors') }}: <b>{{ $page->total }}</b><br><br>
+        {{ __('blogs.total_authors') }}: <b>{{ $page->total }}</b><br><br>
     @else
-        {!! showError(trans('blogs.empty_articles')) !!}
+        {!! showError(__('blogs.empty_articles')) !!}
     @endif
 @stop

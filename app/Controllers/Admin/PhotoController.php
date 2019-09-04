@@ -54,8 +54,8 @@ class PhotoController extends AdminController
             $text   = check($request->input('text'));
             $closed = empty($request->input('closed')) ? 0 : 1;
 
-            $validator->equal($token, $_SESSION['token'], trans('validator.token'))
-                ->length($title, 5, 50, ['title' => trans('validator.text')])
+            $validator->equal($token, $_SESSION['token'], __('validator.token'))
+                ->length($title, 5, 50, ['title' => __('validator.text')])
                 ->length($text, 0, 1000, ['text' => 'Слишком длинное описание!']);
 
             if ($validator->isValid()) {
@@ -105,7 +105,7 @@ class PhotoController extends AdminController
             abort(404, 'Данной фотографии не существует!');
         }
 
-        $validator->equal($token, $_SESSION['token'], trans('validator.token'));
+        $validator->equal($token, $_SESSION['token'], __('validator.token'));
 
         if ($validator->isValid()) {
 
@@ -139,7 +139,7 @@ class PhotoController extends AdminController
                 setFlash('success', 'Комментарии успешно пересчитаны!');
                 redirect('/admin/photos');
             } else {
-                abort('default', trans('validator.token'));
+                abort('default', __('validator.token'));
             }
         } else {
             abort('default', 'Пересчитывать комментарии могут только суперадмины!');

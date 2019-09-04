@@ -75,20 +75,20 @@ function dateFixed($timestamp, $format = 'd.m.y / H:i')
     $yesterday = date('d.m.y', strtotime('-1 day', SITETIME + $shift));
 
     $replaces = [
-        $today      => trans('main.today'),
-        $yesterday  => trans('main.yesterday'),
-        'January'   => trans('main.january'),
-        'February'  => trans('main.february'),
-        'March'     => trans('main.march'),
-        'April'     => trans('main.april'),
-        'May'       => trans('main.may'),
-        'June'      => trans('main.june'),
-        'July'      => trans('main.july'),
-        'August'    => trans('main.august'),
-        'September' => trans('main.september'),
-        'October'   => trans('main.october'),
-        'November'  => trans('main.november'),
-        'December'  => trans('main.december'),
+        $today      => __('main.today'),
+        $yesterday  => __('main.yesterday'),
+        'January'   => __('main.january'),
+        'February'  => __('main.february'),
+        'March'     => __('main.march'),
+        'April'     => __('main.april'),
+        'May'       => __('main.may'),
+        'June'      => __('main.june'),
+        'July'      => __('main.july'),
+        'August'    => __('main.august'),
+        'September' => __('main.september'),
+        'October'   => __('main.october'),
+        'November'  => __('main.november'),
+        'December'  => __('main.december'),
     ];
 
     return strtr($dateStamp, $replaces);
@@ -249,13 +249,13 @@ function formatFileSize($file)
 function formatTime($time)
 {
     $units = [
-        trans('main.plural_years')   => 31536000,
-        trans('main.plural_months')  => 2592000,
-        trans('main.plural_weeks')   => 604800,
-        trans('main.plural_days')    => 86400,
-        trans('main.plural_hours')   => 3600,
-        trans('main.plural_minutes') => 60,
-        trans('main.plural_seconds') => 1,
+        __('main.plural_years')   => 31536000,
+        __('main.plural_months')  => 2592000,
+        __('main.plural_weeks')   => 604800,
+        __('main.plural_days')    => 86400,
+        __('main.plural_hours')   => 3600,
+        __('main.plural_minutes') => 60,
+        __('main.plural_seconds') => 1,
     ];
 
     foreach ($units as $unit => $seconds) {
@@ -1654,7 +1654,7 @@ function view($view, array $params = [], array $mergeData = []): string
  * @param  string  $locale
  * @return string
  */
-function trans($key, array $replace = [], $locale = null)
+function __($key, array $replace = [], $locale = null)
 {
     return Lang::get($key, $replace, $locale);
 }
@@ -1668,7 +1668,7 @@ function trans($key, array $replace = [], $locale = null)
  * @param  string              $locale
  * @return string
  */
-function trans_choice($key, $number, array $replace = [], $locale = null)
+function choice($key, $number, array $replace = [], $locale = null)
 {
     return Lang::choice($key, $number, $replace, $locale);
 }

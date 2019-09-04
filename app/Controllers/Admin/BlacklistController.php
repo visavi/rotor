@@ -24,7 +24,7 @@ class BlacklistController extends AdminController
         parent::__construct();
 
         if (! isAdmin(User::ADMIN)) {
-            abort(403, trans('errors.forbidden'));
+            abort(403, __('errors.forbidden'));
         }
 
         $types = ['email', 'login', 'domain'];
@@ -33,7 +33,7 @@ class BlacklistController extends AdminController
         $this->type = $request->input('type', 'email');
 
         if (! in_array($this->type, $types, true)) {
-            abort(404, trans('admin.blacklists.type_not_found'));
+            abort(404, __('admin.blacklists.type_not_found'));
         }
     }
 
@@ -52,24 +52,24 @@ class BlacklistController extends AdminController
             $token = check($request->input('token'));
             $value = check(utfLower($request->input('value')));
 
-            $validator->equal($token, $_SESSION['token'], trans('validator.token'))
-                ->length($value, 1, 100, ['value' => trans('validator.text')]);
+            $validator->equal($token, $_SESSION['token'], __('validator.token'))
+                ->length($value, 1, 100, ['value' => __('validator.text')]);
 
             if ($type === 'email') {
-                $validator->regex($value, '#^([a-z0-9_\-\.])+\@([a-z0-9_\-\.])+(\.([a-z0-9])+)+$#', ['value' => trans('validator.email')]);
+                $validator->regex($value, '#^([a-z0-9_\-\.])+\@([a-z0-9_\-\.])+(\.([a-z0-9])+)+$#', ['value' => __('validator.email')]);
             }
 
             if ($type === 'login') {
-                $validator->regex($value, '|^[a-z0-9\-]+$|', ['value' => trans('admin.blacklists.invalid_login')]);
+                $validator->regex($value, '|^[a-z0-9\-]+$|', ['value' => __('admin.blacklists.invalid_login')]);
             }
 
             if ($type === 'domain') {
                 $value = siteDomain($value);
-                $validator->regex($value, '#([а-яa-z0-9_\-\.])+(\.([а-яa-z0-9\/])+)+$#u', ['value' => trans('validator.site')]);
+                $validator->regex($value, '#([а-яa-z0-9_\-\.])+(\.([а-яa-z0-9\/])+)+$#u', ['value' => __('validator.site')]);
             }
 
             $duplicate = BlackList::query()->where('type', $type)->where('value', $value)->first();
-            $validator->empty($duplicate, ['value' => trans('main.record_exists')]);
+            $validator->empty($duplicate, ['value' => __('main.record_exists')]);
 
             if ($validator->isValid()) {
 
@@ -80,7 +80,7 @@ class BlacklistController extends AdminController
                     'created_at' => SITETIME,
                 ]);
 
-                setFlash('success', trans('main.record_added_success'));
+                setFlash('success', __('main.record_added_success'));
                 redirect('/admin/blacklists?type=' . $type);
             } else {
                 setInput($request->all());
@@ -116,13 +116,13 @@ class BlacklistController extends AdminController
         $del   = intar($request->input('del'));
         $type  = $this->type;
 
-        $validator->equal($token, $_SESSION['token'], trans('validator.token'))
-            ->true($del, trans('validator.deletion'));
+        $validator->equal($token, $_SESSION['token'], __('validator.token'))
+            ->true($del, __('validator.deletion'));
 
         if ($validator->isValid()) {
             BlackList::query()->where('type', $type)->whereIn('id', $del)->delete();
 
-            setFlash('success', trans('main.records_deleted_success'));
+            setFlash('success', __('main.records_deleted_success'));
         } else {
             setFlash('danger', $validator->getErrors());
         }

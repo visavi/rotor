@@ -17,7 +17,7 @@ class CacheController extends AdminController
         parent::__construct();
 
         if (! isAdmin(User::BOSS)) {
-            abort(403, trans('errors.forbidden'));
+            abort(403, __('errors.forbidden'));
         }
     }
 
@@ -74,7 +74,7 @@ class CacheController extends AdminController
 
             setFlash('success', 'Кеш успешно очищен!');
         } else {
-            setFlash('danger', trans('validator.token'));
+            setFlash('danger', __('validator.token'));
         }
 
         redirect('/admin/caches?type=' . $type);

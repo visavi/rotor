@@ -1,24 +1,24 @@
 @extends('layout')
 
 @section('title')
-    {{ trans('index.votes') }} ({{ trans('main.page_num', ['page' => $page->current]) }})
+    {{ __('index.votes') }} ({{ __('main.page_num', ['page' => $page->current]) }})
 @stop
 
 @section('header')
     @if (getUser())
         <div class="float-right">
-            <a class="btn btn-success" href="/votes/create">{{ trans('main.create') }}</a><br>
+            <a class="btn btn-success" href="/votes/create">{{ __('main.create') }}</a><br>
         </div><br>
     @endif
 
-    <h1>{{ trans('index.votes') }}</h1>
+    <h1>{{ __('index.votes') }}</h1>
 @stop
 
 @section('breadcrumb')
     <nav>
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
-            <li class="breadcrumb-item active">{{ trans('index.votes') }}</li>
+            <li class="breadcrumb-item active">{{ __('index.votes') }}</li>
         </ol>
     </nav>
 @stop
@@ -32,18 +32,18 @@
             </div>
             <div>
                 @if ($vote->topic->id)
-                    {{ trans('forums.topic') }}: <a href="/topics/{{ $vote->topic->id }}">{{ $vote->topic->title }}</a><br>
+                    {{ __('forums.topic') }}: <a href="/topics/{{ $vote->topic->id }}">{{ $vote->topic->title }}</a><br>
                 @endif
 
-                {{ trans('main.created') }}: {{ dateFixed($vote->created_at) }}<br>
-                {{ trans('main.votes') }}: {{ $vote->count }}<br>
+                {{ __('main.created') }}: {{ dateFixed($vote->created_at) }}<br>
+                {{ __('main.votes') }}: {{ $vote->count }}<br>
             </div>
         @endforeach
 
         {!! pagination($page) !!}
     @else
-        {!! showError(trans('votes.empty_votes')) !!}
+        {!! showError(__('votes.empty_votes')) !!}
     @endif
 
-    <i class="fa fa-briefcase"></i> <a href="/votes/history">{{ trans('votes.archive_votes') }}</a><br>
+    <i class="fa fa-briefcase"></i> <a href="/votes/history">{{ __('votes.archive_votes') }}</a><br>
 @stop

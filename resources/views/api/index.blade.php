@@ -1,30 +1,30 @@
 @extends('layout')
 
 @section('title')
-    {{ trans('index.api_interface') }}
+    {{ __('index.api_interface') }}
 @stop
 
 @section('breadcrumb')
     <nav>
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
-            <li class="breadcrumb-item active">{{ trans('index.api_interface') }}</li>
+            <li class="breadcrumb-item active">{{ __('index.api_interface') }}</li>
         </ol>
     </nav>
 @stop
 
 @section('content')
-    <i class="fa fa-cog"></i> <b><a href="/api">api</a></b> - {{ trans('api.page_main') }}<br>
-    <i class="fa fa-cog"></i> <b><a href="/api/users">api/users</a></b> - {{ trans('api.page_users') }}<br>
-    <i class="fa fa-cog"></i> <b><a href="/api/messages">api/messages</a></b> {{ trans('api.page_messages') }}<br>
-    <i class="fa fa-cog"></i> <b><a href="/api/forums">api/forums</a></b> {{ trans('api.page_forums') }}<br>
+    <i class="fa fa-cog"></i> <b><a href="/api">api</a></b> - {{ __('api.page_main') }}<br>
+    <i class="fa fa-cog"></i> <b><a href="/api/users">api/users</a></b> - {{ __('api.page_users') }}<br>
+    <i class="fa fa-cog"></i> <b><a href="/api/messages">api/messages</a></b> {{ __('api.page_messages') }}<br>
+    <i class="fa fa-cog"></i> <b><a href="/api/forums">api/forums</a></b> {{ __('api.page_forums') }}<br>
 
-    <br>{{ trans('api.text_description') }}<br><br>
+    <br>{{ __('api.text_description') }}<br><br>
 
-    {{ trans('api.text_example') }}
+    {{ __('api.text_example') }}
 <pre class="prettyprint linenums">/api/users?token=key</pre>
 
-    {{ trans('api.text_return') }}
+    {{ __('api.text_return') }}
 <pre class="prettyprint linenums">
 {
   "login": "admin",

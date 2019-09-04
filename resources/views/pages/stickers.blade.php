@@ -1,14 +1,14 @@
 @extends('layout')
 
 @section('title')
-    {{ trans('index.stickers') }}
+    {{ __('index.stickers') }}
 @stop
 
 @section('breadcrumb')
     <nav>
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
-            <li class="breadcrumb-item active">{{ trans('index.stickers') }}</li>
+            <li class="breadcrumb-item active">{{ __('index.stickers') }}</li>
         </ol>
     </nav>
 @stop
@@ -21,6 +21,6 @@
             </div>
         @endforeach
     @else
-        {!! showError(trans('stickers.empty_categories')) !!}
+        {!! showError(__('stickers.empty_categories')) !!}
     @endif
 @stop

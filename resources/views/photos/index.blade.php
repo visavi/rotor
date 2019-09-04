@@ -1,27 +1,27 @@
 @extends('layout')
 
 @section('title')
-    {{ trans('index.photos') }} ({{ trans('main.page_num', ['page' => $page->current]) }})
+    {{ __('index.photos') }} ({{ __('main.page_num', ['page' => $page->current]) }})
 @stop
 
 @section('header')
     @if (getUser())
         <div class="float-right">
-            <a class="btn btn-success" href="/photos/create">{{ trans('main.add') }}</a><br>
+            <a class="btn btn-success" href="/photos/create">{{ __('main.add') }}</a><br>
         </div><br>
     @endif
 
-    <h1>{{ trans('index.photos') }}</h1>
+    <h1>{{ __('index.photos') }}</h1>
 @stop
 
 @section('breadcrumb')
     <nav>
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
-            <li class="breadcrumb-item active">{{ trans('index.photos') }}</li>
+            <li class="breadcrumb-item active">{{ __('index.photos') }}</li>
 
             @if (isAdmin())
-                <li class="breadcrumb-item"><a href="/admin/photos?page={{ $page->current }}">{{ trans('main.management') }}</a></li>
+                <li class="breadcrumb-item"><a href="/admin/photos?page={{ $page->current }}">{{ __('main.management') }}</a></li>
             @endif
         </ol>
     </nav>
@@ -29,22 +29,22 @@
 
 @section('content')
     @if (getUser())
-        {{ trans('main.my') }}:
-        <a href="/photos/albums/{{ getUser('login') }}">{{ trans('photos.photos') }}</a>,
-        <a href="/photos/comments/active/{{ getUser('login') }}">{{ trans('main.comments') }}</a> /
+        {{ __('main.my') }}:
+        <a href="/photos/albums/{{ getUser('login') }}">{{ __('photos.photos') }}</a>,
+        <a href="/photos/comments/active/{{ getUser('login') }}">{{ __('main.comments') }}</a> /
     @endif
 
-    {{ trans('main.all') }}:
-    <a href="/photos/albums">{{ trans('photos.albums') }}</a>,
-    <a href="/photos/comments">{{ trans('main.comments') }}</a> /
-    <a href="/photos/top">{{ trans('photos.top_photos') }}</a>
+    {{ __('main.all') }}:
+    <a href="/photos/albums">{{ __('photos.albums') }}</a>,
+    <a href="/photos/comments">{{ __('main.comments') }}</a> /
+    <a href="/photos/top">{{ __('photos.top_photos') }}</a>
 
     @if ($photos->isNotEmpty())
         @foreach ($photos as $photo)
 
             <div class="b"><i class="fa fa-image"></i>
                 <b><a href="/photos/{{ $photo->id }}">{{ $photo->title }}</a></b>
-                ({{ trans('main.rating') }}: {!! formatNum($photo->rating) !!})
+                ({{ __('main.rating') }}: {!! formatNum($photo->rating) !!})
             </div>
 
             <div>
@@ -82,17 +82,17 @@
                     {!! bbCode($photo->text) !!}<br>
                 @endif
 
-                {{ trans('main.added') }}: {!! $photo->user->getProfile() !!} ({{ dateFixed($photo->created_at) }})<br>
-                <a href="/photos/comments/{{ $photo->id }}">{{ trans('main.comments') }}</a> ({{ $photo->count_comments }})
+                {{ __('main.added') }}: {!! $photo->user->getProfile() !!} ({{ dateFixed($photo->created_at) }})<br>
+                <a href="/photos/comments/{{ $photo->id }}">{{ __('main.comments') }}</a> ({{ $photo->count_comments }})
                 <a href="/photos/end/{{ $photo->id }}">&raquo;</a>
             </div>
         @endforeach
 
         {!! pagination($page) !!}
 
-        {{ trans('photos.total_photos') }}: <b>{{ $page->total }}</b><br><br>
+        {{ __('photos.total_photos') }}: <b>{{ $page->total }}</b><br><br>
 
     @else
-        {!! showError(trans('photos.empty_photos')) !!}
+        {!! showError(__('photos.empty_photos')) !!}
     @endif
 @stop

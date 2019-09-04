@@ -31,7 +31,7 @@
             @else
                 <a title="Страница авторизации" class="menu" href="/login">Вход</a> |
                 <a title="Страница регистрации" class="menu"
-                   href="/register">{{ trans('index.register') }}</a>
+                   href="/register">{{ __('index.register') }}</a>
             @endif
         </td>
         <td class="t4"></td>

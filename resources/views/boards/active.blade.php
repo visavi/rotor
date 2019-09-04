@@ -1,19 +1,19 @@
 @extends('layout')
 
 @section('title')
-    {{ trans('boards.my_items') }}
+    {{ __('boards.my_items') }}
 @stop
 
 @section('header')
-    <h1>{{ trans('boards.my_items') }} <small>({{ trans('index.boards') }}: {{ $page->total }})</small></h1>
+    <h1>{{ __('boards.my_items') }} <small>({{ __('index.boards') }}: {{ $page->total }})</small></h1>
 @stop
 
 @section('breadcrumb')
     <nav>
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
-            <li class="breadcrumb-item"><a href="/boards">{{ trans('index.boards') }}</a></li>
-            <li class="breadcrumb-item active">{{ trans('boards.my_items') }}</li>
+            <li class="breadcrumb-item"><a href="/boards">{{ __('index.boards') }}</a></li>
+            <li class="breadcrumb-item active">{{ __('boards.my_items') }}</li>
         </ol>
     </nav>
 @stop
@@ -37,9 +37,9 @@
                                         <i class="fa fa-user-circle"></i> {!! $item->user->getProfile() !!} / {{ dateFixed($item->created_at) }}<br>
 
                                         @if ($item->expires_at > SITETIME)
-                                            <i class="fas fa-clock"></i> {{ trans('boards.expires_in') }} {{ formatTime($item->expires_at - SITETIME) }}
+                                            <i class="fas fa-clock"></i> {{ __('boards.expires_in') }} {{ formatTime($item->expires_at - SITETIME) }}
                                         @else
-                                            <span class="badge badge-danger">{{ trans('boards.not_active_item') }}</span>
+                                            <span class="badge badge-danger">{{ __('boards.not_active_item') }}</span>
                                         @endif
                                     </p>
                                 </div>
@@ -59,6 +59,6 @@
         {!! pagination($page) !!}
 
     @else
-        {!! showError(trans('boards.empty_items')) !!}
+        {!! showError(__('boards.empty_items')) !!}
     @endif
 @stop

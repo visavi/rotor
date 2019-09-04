@@ -44,16 +44,16 @@ class GuestbookController extends BaseController
         $msg   = check($request->input('msg'));
         $token = check($request->input('token'));
 
-        $validator->equal($token, $_SESSION['token'], ['msg' => trans('validator.token')])
-            ->length($msg, 5, setting('guesttextlength'), ['msg' => trans('validator.text')])
-            ->false($flood->isFlood(), ['msg' => trans('validator.flood', ['sec' => $flood->getPeriod()])]);
+        $validator->equal($token, $_SESSION['token'], ['msg' => __('validator.token')])
+            ->length($msg, 5, setting('guesttextlength'), ['msg' => __('validator.text')])
+            ->false($flood->isFlood(), ['msg' => __('validator.flood', ['sec' => $flood->getPeriod()])]);
 
         /* Проверка для гостей */
         if (! getUser() && setting('bookadds')) {
-            $validator->true(captchaVerify(), ['protect' => trans('validator.captcha')]);
+            $validator->true(captchaVerify(), ['protect' => __('validator.captcha')]);
             $validator->false(strpos($msg, '//'), ['msg' => 'Текст сообщения не должен содержать ссылок!']);
         } else {
-            $validator->true(getUser(), ['msg' => trans('main.not_authorized')]);
+            $validator->true(getUser(), ['msg' => __('main.not_authorized')]);
         }
 
         if ($validator->isValid()) {
@@ -120,8 +120,8 @@ class GuestbookController extends BaseController
             $msg   = check($request->input('msg'));
             $token = check($request->input('token'));
 
-            $validator->equal($token, $_SESSION['token'], ['msg' => trans('validator.token')])
-                ->length($msg, 5, setting('guesttextlength'), ['msg' => trans('validator.text')]);
+            $validator->equal($token, $_SESSION['token'], ['msg' => __('validator.token')])
+                ->length($msg, 5, setting('guesttextlength'), ['msg' => __('validator.text')]);
 
             if ($validator->isValid()) {
 

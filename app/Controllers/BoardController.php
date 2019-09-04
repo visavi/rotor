@@ -123,11 +123,11 @@ class BoardController extends BaseController
             $board = Board::query()->find($bid);
 
             $validator
-                ->equal($token, $_SESSION['token'], trans('validator.token'))
-                ->length($title, 5, 50, ['title' => trans('validator.text')])
-                ->length($text, 50, 5000, ['text' => trans('validator.text')])
-                ->regex($phone, '#^\d{11}$#', ['phone' => trans('validator.phone')], false)
-                ->false($flood->isFlood(), ['msg' => trans('validator.flood', ['sec' => $flood->getPeriod()])])
+                ->equal($token, $_SESSION['token'], __('validator.token'))
+                ->length($title, 5, 50, ['title' => __('validator.text')])
+                ->length($text, 50, 5000, ['text' => __('validator.text')])
+                ->regex($phone, '#^\d{11}$#', ['phone' => __('validator.phone')], false)
+                ->false($flood->isFlood(), ['msg' => __('validator.flood', ['sec' => $flood->getPeriod()])])
                 ->notEmpty($board, ['category' => 'Категории для данного объявления не существует!']);
 
             if ($board) {
@@ -188,7 +188,7 @@ class BoardController extends BaseController
     public function edit(int $id, Request $request, Validator $validator): string
     {
         if (! getUser()) {
-            abort(403, trans('main.not_authorized'));
+            abort(403, __('main.not_authorized'));
         }
 
         /** @var Item $item */
@@ -210,10 +210,10 @@ class BoardController extends BaseController
             $board = Board::query()->find($bid);
 
             $validator
-                ->equal($token, $_SESSION['token'], trans('validator.token'))
-                ->length($title, 5, 50, ['title' => trans('validator.text')])
-                ->length($text, 50, 5000, ['text' => trans('validator.text')])
-                ->regex($phone, '#^\d{11}$#', ['phone' => trans('validator.phone')], false)
+                ->equal($token, $_SESSION['token'], __('validator.token'))
+                ->length($title, 5, 50, ['title' => __('validator.text')])
+                ->length($text, 50, 5000, ['text' => __('validator.text')])
+                ->regex($phone, '#^\d{11}$#', ['phone' => __('validator.phone')], false)
                 ->notEmpty($board, ['category' => 'Категории для данного объявления не существует!'])
                 ->equal($item->user_id, getUser('id'), 'Изменение невозможно, вы не автор данного объявления!');
 
@@ -267,7 +267,7 @@ class BoardController extends BaseController
         $token = check($request->input('token'));
 
         if (! getUser()) {
-            abort(403, trans('main.not_authorized'));
+            abort(403, __('main.not_authorized'));
         }
 
         /** @var Item $item */
@@ -277,7 +277,7 @@ class BoardController extends BaseController
             abort(404, 'Данного объявления не существует!');
         }
 
-        $validator->equal($token, $_SESSION['token'], trans('validator.token'))
+        $validator->equal($token, $_SESSION['token'], __('validator.token'))
             ->equal($item->user_id, getUser('id'), 'Изменение невозможно, вы не автор данного объявления!');
 
         if ($validator->isValid()) {
@@ -322,7 +322,7 @@ class BoardController extends BaseController
         $token = check($request->input('token'));
 
         if (! getUser()) {
-            abort(403, trans('main.not_authorized'));
+            abort(403, __('main.not_authorized'));
         }
 
         /** @var Item $item */
@@ -332,7 +332,7 @@ class BoardController extends BaseController
             abort(404, 'Данного объявления не существует!');
         }
 
-        $validator->equal($token, $_SESSION['token'], trans('validator.token'))
+        $validator->equal($token, $_SESSION['token'], __('validator.token'))
             ->equal($item->user_id, getUser('id'), 'Удаление невозможно, вы не автор данного объявления!');
 
         if ($validator->isValid()) {
@@ -358,7 +358,7 @@ class BoardController extends BaseController
     public function active(): string
     {
         if (! getUser()) {
-            abort(403, trans('main.not_authorized'));
+            abort(403, __('main.not_authorized'));
         }
 
         $total = Item::query()->where('user_id', getUser('id'))->count();

@@ -1,33 +1,33 @@
 @extends('layout')
 
 @section('title')
-    {{ trans('loads.top_downs') }} ({{ trans('main.page_num', ['page' => $page->current]) }})
+    {{ __('loads.top_downs') }} ({{ __('main.page_num', ['page' => $page->current]) }})
 @stop
 
 @section('header')
-    <h1>{{ trans('loads.top_downs') }}</h1>
+    <h1>{{ __('loads.top_downs') }}</h1>
 @stop
 
 @section('breadcrumb')
     <nav>
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
-            <li class="breadcrumb-item"><a href="/loads">{{ trans('index.loads') }}</a></li>
-            <li class="breadcrumb-item active">{{ trans('loads.top_downs') }}</li>
+            <li class="breadcrumb-item"><a href="/loads">{{ __('index.loads') }}</a></li>
+            <li class="breadcrumb-item active">{{ __('loads.top_downs') }}</li>
         </ol>
     </nav>
 @stop
 
 @section('content')
-    {{ trans('main.sort') }}:
+    {{ __('main.sort') }}:
     <?php $active = ($order === 'loads') ? 'success' : 'light'; ?>
-    <a href="/loads/top?sort=loads" class="badge badge-{{ $active }}">{{ trans('main.downloads') }}</a>
+    <a href="/loads/top?sort=loads" class="badge badge-{{ $active }}">{{ __('main.downloads') }}</a>
 
     <?php $active = ($order === 'rated') ? 'success' : 'light'; ?>
-    <a href="/loads/top?sort=rated" class="badge badge-{{ $active }}">{{ trans('main.rating') }}</a>
+    <a href="/loads/top?sort=rated" class="badge badge-{{ $active }}">{{ __('main.rating') }}</a>
 
     <?php $active = ($order === 'count_comments') ? 'success' : 'light'; ?>
-    <a href="/loads/top?sort=comments" class="badge badge-{{ $active }}">{{ trans('main.comments') }}</a>
+    <a href="/loads/top?sort=comments" class="badge badge-{{ $active }}">{{ __('main.comments') }}</a>
     <hr>
 
     @if ($downs->isNotEmpty())
@@ -41,16 +41,16 @@
             </div>
 
             <div>
-                {{ trans('loads.load') }}: <a href="/loads/{{ $data->category->id }}">{{ $data->category->name }}</a><br>
-                {{ trans('main.rating') }}: {{ $rating }}<br>
-                {{ trans('main.downloads') }}: {{ $data->loads }}<br>
-                <a href="/downs/comments/{{ $data->id }}">{{ trans('main.comments') }}</a> ({{ $data->count_comments }})
+                {{ __('loads.load') }}: <a href="/loads/{{ $data->category->id }}">{{ $data->category->name }}</a><br>
+                {{ __('main.rating') }}: {{ $rating }}<br>
+                {{ __('main.downloads') }}: {{ $data->loads }}<br>
+                <a href="/downs/comments/{{ $data->id }}">{{ __('main.comments') }}</a> ({{ $data->count_comments }})
                 <a href="/downs/end/{{ $data->id }}">&raquo;</a>
             </div>
         @endforeach
 
         {!! pagination($page) !!}
     @else
-        {!! showError(trans('loads.empty_downs')) !!}
+        {!! showError(__('loads.empty_downs')) !!}
     @endif
 @stop

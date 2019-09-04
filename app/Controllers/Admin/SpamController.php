@@ -31,7 +31,7 @@ class SpamController extends AdminController
         parent::__construct();
 
         if (! isAdmin(User::MODER)) {
-            abort(403, trans('errors.forbidden'));
+            abort(403, __('errors.forbidden'));
         }
 
         $this->types = [
@@ -98,7 +98,7 @@ class SpamController extends AdminController
 
         $validator
             ->true($request->ajax(), 'Это не ajax запрос!')
-            ->equal($token, $_SESSION['token'], trans('validator.token'))
+            ->equal($token, $_SESSION['token'], __('validator.token'))
             ->notEmpty($id, 'Не выбрана запись для удаление!');
 
         if ($validator->isValid()) {

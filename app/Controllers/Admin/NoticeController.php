@@ -19,7 +19,7 @@ class NoticeController extends AdminController
         parent::__construct();
 
         if (! isAdmin(User::BOSS)) {
-            abort(403, trans('errors.forbidden'));
+            abort(403, __('errors.forbidden'));
         }
     }
 
@@ -54,11 +54,11 @@ class NoticeController extends AdminController
             $text    = check($request->input('text'));
             $protect = empty($request->input('protect')) ? 0 : 1;
 
-            $validator->equal($token, $_SESSION['token'], trans('validator.token'))
+            $validator->equal($token, $_SESSION['token'], __('validator.token'))
                 ->regex($type, '|^[a-z0-9_\-]+$|i', ['type' => 'Недопустимое название типа шаблона!'])
                 ->length($type, 3, 20, ['type' => 'Слишком длинный или короткий тип шаблона!'])
-                ->length($name, 5, 100, ['name' => trans('validator.text')])
-                ->length($text, 10, 65000, ['text' => trans('validator.text')]);
+                ->length($name, 5, 100, ['name' => __('validator.text')])
+                ->length($text, 10, 65000, ['text' => __('validator.text')]);
 
             $duplicate = Notice::query()->where('type', $type)->first();
             $validator->empty($duplicate, ['type' => 'Данный тип уже имеетеся в списке!']);
@@ -111,9 +111,9 @@ class NoticeController extends AdminController
             $text    = check($request->input('text'));
             $protect = empty($request->input('protect')) ? 0 : 1;
 
-            $validator->equal($token, $_SESSION['token'], trans('validator.token'))
-                ->length($name, 5, 100, ['name' => trans('validator.text')])
-                ->length($text, 10, 65000, ['text' => trans('validator.text')]);
+            $validator->equal($token, $_SESSION['token'], __('validator.token'))
+                ->length($name, 5, 100, ['name' => __('validator.text')])
+                ->length($text, 10, 65000, ['text' => __('validator.text')]);
 
             if ($validator->isValid()) {
 
@@ -153,7 +153,7 @@ class NoticeController extends AdminController
 
         $token = check($request->input('token'));
 
-        $validator->equal($token, $_SESSION['token'], trans('validator.token'))
+        $validator->equal($token, $_SESSION['token'], __('validator.token'))
             ->notEmpty($notice, 'Не найден шаблон для удаления!')
             ->empty($notice->protect, 'Запрещено удалять защищенный шаблон!');
 

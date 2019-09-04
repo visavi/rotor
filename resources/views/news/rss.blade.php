@@ -1,7 +1,7 @@
 @extends('layout_rss')
 
 @section('title')
-    {{ trans('news.rss_title') }}
+    {{ __('news.rss_title') }}
 @stop
 
 @section('content')
@@ -14,7 +14,7 @@
             <description>{{ $news->text }}</description>
             <author>{{ $news->user->login }}</author>
             <pubDate>{{ date('r', $news->created_at) }}</pubDate>
-            <category>{{ trans('index.news') }}</category>
+            <category>{{ __('index.news') }}</category>
             <guid>{{ siteUrl() }}/news/{{ $news->id }}</guid>
         </item>
     @endforeach

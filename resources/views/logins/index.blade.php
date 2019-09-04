@@ -1,15 +1,15 @@
 @extends('layout')
 
 @section('title')
-    {{ trans('index.auth_history') }}
+    {{ __('index.auth_history') }}
 @stop
 
 @section('breadcrumb')
     <nav>
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
-            <li class="breadcrumb-item"><a href="/menu">{{ trans('main.menu') }}</a></li>
-            <li class="breadcrumb-item active">{{ trans('index.auth_history') }}</li>
+            <li class="breadcrumb-item"><a href="/menu">{{ __('main.menu') }}</a></li>
+            <li class="breadcrumb-item active">{{ __('index.auth_history') }}</li>
         </ol>
     </nav>
 @stop
@@ -19,9 +19,9 @@
         @foreach($logins as $data)
             <div class="b">
                 @if ($data->type)
-                    <i class="fa fa-sign-in-alt"></i> <b>{{ trans('logins.authorization') }}</b>
+                    <i class="fa fa-sign-in-alt"></i> <b>{{ __('logins.authorization') }}</b>
                 @else
-                    <i class="fa fa-sync"></i> <b>{{ trans('logins.autologin') }}</b>
+                    <i class="fa fa-sync"></i> <b>{{ __('logins.autologin') }}</b>
                 @endif
 
                 <small>({{ dateFixed($data->created_at) }})</small>
@@ -36,6 +36,6 @@
 
         {!! pagination($page) !!}
     @else
-        {!! showError(trans('logins.empty_history')) !!}
+        {!! showError(__('logins.empty_history')) !!}
     @endif
 @stop

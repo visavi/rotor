@@ -103,10 +103,10 @@ class OfferController extends BaseController
             $title = check($request->input('title'));
             $text  = check($request->input('text'));
 
-            $validator->equal($token, $_SESSION['token'], trans('validator.token'))
-                ->length($title, 5, 50, ['title' => trans('validator.text')])
-                ->length($text, 5, 1000, ['text' => trans('validator.text')])
-                ->false($flood->isFlood(), ['msg' => trans('validator.flood', ['sec' => $flood->getPeriod()])])
+            $validator->equal($token, $_SESSION['token'], __('validator.token'))
+                ->length($title, 5, 50, ['title' => __('validator.text')])
+                ->length($text, 5, 1000, ['text' => __('validator.text')])
+                ->false($flood->isFlood(), ['msg' => __('validator.flood', ['sec' => $flood->getPeriod()])])
                 ->in($type, Offer::TYPES, ['type' => 'Выбран неверный тип записи! (Необходимо предложение или проблема)'])
                 ->gte(getUser('point'), setting('addofferspoint'), ['Для добавления предложения или проблемы вам необходимо набрать ' . plural(setting('addofferspoint'), setting('scorename')) . '!']);
 
@@ -173,9 +173,9 @@ class OfferController extends BaseController
             $text  = check($request->input('text'));
             $type  = check($request->input('type'));
 
-            $validator->equal($token, $_SESSION['token'], trans('validator.token'))
-                ->length($title, 5, 50, ['title' => trans('validator.text')])
-                ->length($text, 5, 1000, ['text' => trans('validator.text')])
+            $validator->equal($token, $_SESSION['token'], __('validator.token'))
+                ->length($title, 5, 50, ['title' => __('validator.text')])
+                ->length($text, 5, 1000, ['text' => __('validator.text')])
                 ->in($type, Offer::TYPES, ['type' => 'Выбран неверный тип записи! (Необходимо предложение или проблема)']);
 
             if ($validator->isValid()) {
@@ -225,10 +225,10 @@ class OfferController extends BaseController
             $msg   = check($request->input('msg'));
 
             $validator
-                ->true(getUser(), trans('main.not_authorized'))
-                ->equal($token, $_SESSION['token'], trans('validator.token'))
-                ->length($msg, 5, setting('comment_length'), ['msg' => trans('validator.text')])
-                ->false($flood->isFlood(), ['msg' => trans('validator.flood', ['sec' => $flood->getPeriod()])])
+                ->true(getUser(), __('main.not_authorized'))
+                ->equal($token, $_SESSION['token'], __('validator.token'))
+                ->length($msg, 5, setting('comment_length'), ['msg' => __('validator.text')])
+                ->false($flood->isFlood(), ['msg' => __('validator.flood', ['sec' => $flood->getPeriod()])])
                 ->empty($offer->closed, ['msg' => 'Комментирование данной записи закрыто!']);
 
             if ($validator->isValid()) {
@@ -298,7 +298,7 @@ class OfferController extends BaseController
         }
 
         if (! getUser()) {
-            abort(403, trans('main.not_authorized'));
+            abort(403, __('main.not_authorized'));
         }
 
         $comment = Comment::query()
@@ -321,8 +321,8 @@ class OfferController extends BaseController
             $page  = int($request->input('page', 1));
 
             $validator
-                ->equal($token, $_SESSION['token'], trans('validator.token'))
-                ->length($msg, 5, setting('comment_length'), ['msg' => trans('validator.text')]);
+                ->equal($token, $_SESSION['token'], __('validator.token'))
+                ->length($msg, 5, setting('comment_length'), ['msg' => __('validator.text')]);
 
             if ($validator->isValid()) {
                 $msg = antimat($msg);

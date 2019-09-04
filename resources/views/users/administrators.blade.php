@@ -1,14 +1,14 @@
 @extends('layout')
 
 @section('title')
-    {{ trans('index.admins') }}
+    {{ __('index.admins') }}
 @stop
 
 @section('breadcrumb')
     <nav>
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
-            <li class="breadcrumb-item active">{{ trans('index.admins') }}</li>
+            <li class="breadcrumb-item active">{{ __('index.admins') }}</li>
         </ol>
     </nav>
 @stop
@@ -29,16 +29,16 @@
             @endforeach
         </div>
 
-        {{ trans('users.total_administration') }}: <b>{{ $users->count() }}</b><br><br>
+        {{ __('users.total_administration') }}: <b>{{ $users->count() }}</b><br><br>
 
         @if (getUser())
-            <h3>{{ trans('users.fast_mail') }}</h3>
+            <h3>{{ __('users.fast_mail') }}</h3>
 
             <div class="form">
                 <form method="post" action="/messages/send">
                     @csrf
                     <div class="form-group">
-                        <label for="user">{{ trans('users.choose_addressee') }}:</label>
+                        <label for="user">{{ __('users.choose_addressee') }}:</label>
                         <select class="form-control" id="user" name="user">
                             @foreach($users as $user)
                                 <option value="{{ $user->login }}">{{ $user->login }}</option>
@@ -47,7 +47,7 @@
                     </div>
 
                     <div class="form-group">
-                        <label for="msg">{{ trans('main.message') }}:</label>
+                        <label for="msg">{{ __('main.message') }}:</label>
                         <textarea class="form-control markItUp" maxlength="{{ setting('comment_length') }}" id="msg" rows="5" name="msg" required></textarea>
                         <span class="js-textarea-counter"></span>
                     </div>
@@ -56,11 +56,11 @@
                         {!! view('app/_captcha') !!}
                     @endif
 
-                    <button class="btn btn-primary">{{ trans('main.send') }}</button>
+                    <button class="btn btn-primary">{{ __('main.send') }}</button>
                 </form>
             </div><br>
         @endif
     @else
-        {!! showError(trans('users.empty_administration')) !!}
+        {!! showError(__('users.empty_administration')) !!}
     @endif
 @stop

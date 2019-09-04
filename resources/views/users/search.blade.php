@@ -1,14 +1,14 @@
 @extends('layout')
 
 @section('title')
-    {{ trans('index.search_users') }}
+    {{ __('index.search_users') }}
 @stop
 
 @section('breadcrumb')
     <nav>
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
-            <li class="breadcrumb-item active">{{ trans('index.search_users') }}</li>
+            <li class="breadcrumb-item active">{{ __('index.search_users') }}</li>
         </ol>
     </nav>
 @stop
@@ -18,12 +18,12 @@
         <form method="get" action="/searchusers/search">
 
             <div class="form-group{{ hasError('find') }}">
-                <label for="find">{{ trans('users.login_or_username') }}:</label>
-                <input type="text" class="form-control" id="find" name="find" maxlength="50" placeholder="{{ trans('users.login_or_username') }}" value="{{ getInput('find') }}" required>
+                <label for="find">{{ __('users.login_or_username') }}:</label>
+                <input type="text" class="form-control" id="find" name="find" maxlength="50" placeholder="{{ __('users.login_or_username') }}" value="{{ getInput('find') }}" required>
                 <div class="invalid-feedback">{{ textError('find') }}</div>
             </div>
 
-            <button class="btn btn-primary">{{ trans('main.search') }}</button>
+            <button class="btn btn-primary">{{ __('main.search') }}</button>
         </form>
     </div><br>
 
@@ -57,6 +57,6 @@
     <br><br>
 
     <p class="text-muted font-italic">
-        {!! trans('users.search_text') !!}
+        {!! __('users.search_text') !!}
     </p>
 @stop

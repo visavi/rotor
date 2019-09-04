@@ -1,15 +1,15 @@
 @extends('layout')
 
 @section('title')
-    {{ trans('index.phpinfo') }}
+    {{ __('index.phpinfo') }}
 @stop
 
 @section('breadcrumb')
     <nav>
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
-            <li class="breadcrumb-item"><a href="/admin">{{ trans('index.panel') }}</a></li>
-            <li class="breadcrumb-item active">{{ trans('index.phpinfo') }}</li>
+            <li class="breadcrumb-item"><a href="/admin">{{ __('index.panel') }}</a></li>
+            <li class="breadcrumb-item active">{{ __('index.phpinfo') }}</li>
         </ol>
     </nav>
 @stop

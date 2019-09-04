@@ -18,7 +18,7 @@ class VoteController extends AdminController
         parent::__construct();
 
         if (! isAdmin(User::MODER)) {
-            abort(403, trans('errors.forbidden'));
+            abort(403, __('errors.forbidden'));
         }
     }
 
@@ -85,9 +85,9 @@ class VoteController extends AdminController
             $title   = check($request->input('title'));
             $answers = check((array) $request->input('answers'));
 
-            $validator->equal($token, $_SESSION['token'], trans('validator.token'));
+            $validator->equal($token, $_SESSION['token'], __('validator.token'));
 
-            $validator->length($title, 5, 100, ['title' => trans('validator.text')]);
+            $validator->length($title, 5, 100, ['title' => __('validator.text')]);
             $answers = array_unique(array_diff($answers, ['']));
 
             foreach ($answers as $answer) {
@@ -150,7 +150,7 @@ class VoteController extends AdminController
         }
 
         if (! isAdmin(User::BOSS)) {
-            abort(403, trans('errors.forbidden'));
+            abort(403, __('errors.forbidden'));
         }
 
         if ($token === $_SESSION['token']) {
@@ -163,7 +163,7 @@ class VoteController extends AdminController
 
             setFlash('success', 'Голосование успешно удалено!');
         } else {
-            setFlash('danger', trans('validator.token'));
+            setFlash('danger', __('validator.token'));
         }
 
         redirect('/admin/votes');
@@ -201,7 +201,7 @@ class VoteController extends AdminController
 
             setFlash('success', 'Голосование успешно ' . $type . '!');
         } else {
-            setFlash('danger', trans('validator.token'));
+            setFlash('danger', __('validator.token'));
         }
 
         if (empty($closed)) {
@@ -220,7 +220,7 @@ class VoteController extends AdminController
     public function restatement(Request $request): void
     {
         if (! isAdmin(User::BOSS)) {
-            abort(403, trans('errors.forbidden'));
+            abort(403, __('errors.forbidden'));
         }
 
         $token = check($request->input('token'));
@@ -231,7 +231,7 @@ class VoteController extends AdminController
 
             setFlash('success', 'Голосования успешно пересчитаны!');
         } else {
-            setFlash('danger', trans('validator.token'));
+            setFlash('danger', __('validator.token'));
         }
 
         redirect('/admin/votes');

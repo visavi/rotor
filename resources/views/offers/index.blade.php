@@ -1,27 +1,27 @@
 @extends('layout')
 
 @section('title')
-    {{ trans('index.offers') }}
+    {{ __('index.offers') }}
 @stop
 
 @section('header')
     @if (getUser())
         <div class="float-right">
-            <a class="btn btn-success" href="/offers/create?type={{ $type }}">{{ trans('main.add') }}</a>
+            <a class="btn btn-success" href="/offers/create?type={{ $type }}">{{ __('main.add') }}</a>
         </div><br>
     @endif
 
-    <h1>{{ trans('index.offers') }}</h1>
+    <h1>{{ __('index.offers') }}</h1>
 @stop
 
 @section('breadcrumb')
     <nav>
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
-            <li class="breadcrumb-item active">{{ trans('index.offers') }}</li>
+            <li class="breadcrumb-item active">{{ __('index.offers') }}</li>
 
             @if (isAdmin('admin'))
-                <li class="breadcrumb-item"><a href="/admin/offers/{{ $type }}?page={{ $page->current }}">{{ trans('main.management') }}</a></li>
+                <li class="breadcrumb-item"><a href="/admin/offers/{{ $type }}?page={{ $page->current }}">{{ __('main.management') }}</a></li>
             @endif
         </ol>
     </nav>
@@ -29,45 +29,45 @@
 
 @section('content')
     @if ($type === 'offer')
-        <a class="btn btn-primary btn-sm" href="/offers/offer">{{ trans('offers.offers') }} <span class="badge badge-light">{{ $page->total }}</span></a>
-        <a class="btn btn-light btn-sm" href="/offers/issue">{{ trans('offers.problems') }} <span class="badge badge-light">{{ $page->otherTotal }}</span></a>
+        <a class="btn btn-primary btn-sm" href="/offers/offer">{{ __('offers.offers') }} <span class="badge badge-light">{{ $page->total }}</span></a>
+        <a class="btn btn-light btn-sm" href="/offers/issue">{{ __('offers.problems') }} <span class="badge badge-light">{{ $page->otherTotal }}</span></a>
     @else
-        <a class="btn btn-light btn-sm" href="/offers/offer">{{ trans('offers.offers') }} <span class="badge badge-light">{{ $page->otherTotal }}</span></a>
-        <a class="btn btn-primary btn-sm" href="/offers/issue">{{ trans('offers.problems') }} <span class="badge badge-light">{{ $page->total }}</span></a>
+        <a class="btn btn-light btn-sm" href="/offers/offer">{{ __('offers.offers') }} <span class="badge badge-light">{{ $page->otherTotal }}</span></a>
+        <a class="btn btn-primary btn-sm" href="/offers/issue">{{ __('offers.problems') }} <span class="badge badge-light">{{ $page->total }}</span></a>
     @endif
 
     @if ($offers->isNotEmpty())
-        <br>{{ trans('main.sort') }}:
+        <br>{{ __('main.sort') }}:
         <?php $active = ($order === 'rating') ? 'success' : 'light'; ?>
-        <a href="/offers/{{ $type }}?sort=rating" class="badge badge-{{ $active }}">{{ trans('main.votes') }}</a>
+        <a href="/offers/{{ $type }}?sort=rating" class="badge badge-{{ $active }}">{{ __('main.votes') }}</a>
 
         <?php $active = ($order === 'created_at') ? 'success' : 'light'; ?>
-        <a href="/offers/{{ $type }}?sort=time" class="badge badge-{{ $active }}">{{ trans('main.date') }}</a>
+        <a href="/offers/{{ $type }}?sort=time" class="badge badge-{{ $active }}">{{ __('main.date') }}</a>
 
         <?php $active = ($order === 'status') ? 'success' : 'light'; ?>
-        <a href="/offers/{{ $type }}?sort=status" class="badge badge-{{ $active }}">{{ trans('main.status') }}</a>
+        <a href="/offers/{{ $type }}?sort=status" class="badge badge-{{ $active }}">{{ __('main.status') }}</a>
 
         <?php $active = ($order === 'count_comments') ? 'success' : 'light'; ?>
-        <a href="/offers/{{ $type }}?sort=comments" class="badge badge-{{ $active }}">{{ trans('main.comments') }}</a>
+        <a href="/offers/{{ $type }}?sort=comments" class="badge badge-{{ $active }}">{{ __('main.comments') }}</a>
         <hr>
 
         @foreach ($offers as $data)
             <div class="b">
                 <i class="fa fa-file"></i>
-                <b><a href="/offers/{{ $data->id }}">{{ $data->title }}</a></b> ({{ trans('main.votes') }}: {{ $data->rating }})<br>
+                <b><a href="/offers/{{ $data->id }}">{{ $data->title }}</a></b> ({{ __('main.votes') }}: {{ $data->rating }})<br>
                 {!! $data->getStatus() !!}
             </div>
 
             <div>{!! bbCode($data->text) !!}<br>
-            {{ trans('main.added') }}: {!! $data->user->getProfile() !!} ({{ dateFixed($data->created_at) }})<br>
-            <a href="/offers/comments/{{ $data->id }}">{{ trans('main.comments') }}</a> ({{ $data->count_comments }})
+            {{ __('main.added') }}: {!! $data->user->getProfile() !!} ({{ dateFixed($data->created_at) }})<br>
+            <a href="/offers/comments/{{ $data->id }}">{{ __('main.comments') }}</a> ({{ $data->count_comments }})
             <a href="/offers/end/{{ $data->id }}">&raquo;</a></div>
         @endforeach
 
         {!! pagination($page) !!}
 
-        {{ trans('main.total') }}: <b>{{ $page->total }}</b><br><br>
+        {{ __('main.total') }}: <b>{{ $page->total }}</b><br><br>
     @else
-        {!! showError(trans('main.empty_records')) !!}
+        {!! showError(__('main.empty_records')) !!}
     @endif
 @stop

@@ -1,18 +1,18 @@
 @extends('layout')
 
 @section('title')
-    {{ trans('index.users') }} ({{ trans('main.page_num', ['page' => $page->current]) }})
+    {{ __('index.users') }} ({{ __('main.page_num', ['page' => $page->current]) }})
 @stop
 
 @section('header')
-    <h1>{{ trans('index.users') }}</h1>
+    <h1>{{ __('index.users') }}</h1>
 @stop
 
 @section('breadcrumb')
     <nav>
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
-            <li class="breadcrumb-item active">{{ trans('index.users') }}</li>
+            <li class="breadcrumb-item active">{{ __('index.users') }}</li>
         </ol>
     </nav>
 @stop
@@ -36,10 +36,10 @@
             </div>
 
             <div>
-                {{ trans('index.forums') }}: {{ $data->allforum }} | {{ trans('index.guestbooks') }}: {{ $data->allguest }} | {{ trans('main.comments') }}: {{ $data->allcomments }}<br>
-                {{ trans('users.visits') }}: {{ $data->visits }}<br>
-                {{ trans('users.moneys') }}: {{ $data->money }}<br>
-                {{ trans('main.registration_date') }}: {{ dateFixed($data->created_at, 'd.m.Y') }}
+                {{ __('index.forums') }}: {{ $data->allforum }} | {{ __('index.guestbooks') }}: {{ $data->allguest }} | {{ __('main.comments') }}: {{ $data->allcomments }}<br>
+                {{ __('users.visits') }}: {{ $data->visits }}<br>
+                {{ __('users.moneys') }}: {{ $data->money }}<br>
+                {{ __('main.registration_date') }}: {{ dateFixed($data->created_at, 'd.m.Y') }}
             </div>
         @endforeach
 
@@ -49,20 +49,20 @@
             <form action="/users" method="post">
                 <div class="form-inline">
                     <div class="form-group{{ hasError('user') }}">
-                        <input type="text" class="form-control" id="user" name="user" maxlength="20" value="{{ getInput('user', $user) }}" placeholder="{{ trans('main.user_login') }}" required>
+                        <input type="text" class="form-control" id="user" name="user" maxlength="20" value="{{ getInput('user', $user) }}" placeholder="{{ __('main.user_login') }}" required>
                     </div>
 
-                    <button class="btn btn-primary">{{ trans('main.search') }}</button>
+                    <button class="btn btn-primary">{{ __('main.search') }}</button>
                 </div>
                 <div class="invalid-feedback">{{ textError('user') }}</div>
             </form>
         </div><br>
 
-        {{ trans('main.total_users') }}: <b>{{ $page->total }}</b><br><br>
+        {{ __('main.total_users') }}: <b>{{ $page->total }}</b><br><br>
     @else
-        {!! showError(trans('main.empty_users')) !!}
+        {!! showError(__('main.empty_users')) !!}
     @endif
 
-    <i class="fa fa-users"></i> <a href="/who">{{ trans('users.novices') }}</a><br>
-    <i class="fas fa-search"></i> <a href="/searchusers">{{ trans('index.search_users') }}</a><br>
+    <i class="fa fa-users"></i> <a href="/who">{{ __('users.novices') }}</a><br>
+    <i class="fas fa-search"></i> <a href="/searchusers">{{ __('index.search_users') }}</a><br>
 @stop

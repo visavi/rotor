@@ -19,7 +19,7 @@ class AntimatController extends AdminController
         parent::__construct();
 
         if (! isAdmin(User::MODER)) {
-            abort(403, trans('errors.forbidden'));
+            abort(403, __('errors.forbidden'));
         }
     }
 
@@ -37,11 +37,11 @@ class AntimatController extends AdminController
             $word  = check(utfLower($request->input('word')));
 
             $validator
-                ->equal($token, $_SESSION['token'], trans('validator.token'))
-                ->notEmpty($word, trans('admin.antimat.not_enter_word'));
+                ->equal($token, $_SESSION['token'], __('validator.token'))
+                ->notEmpty($word, __('admin.antimat.not_enter_word'));
 
             $duplicate = Antimat::query()->where('string', $word)->first();
-            $validator->empty($duplicate, trans('admin.antimat.word_listed'));
+            $validator->empty($duplicate, __('admin.antimat.word_listed'));
 
             if ($validator->isValid()) {
 
@@ -49,7 +49,7 @@ class AntimatController extends AdminController
                     'string' => $word
                 ]);
 
-                setFlash('success', trans('main.record_added_success'));
+                setFlash('success', __('main.record_added_success'));
                 redirect('/admin/antimat');
 
             } else {
@@ -76,15 +76,15 @@ class AntimatController extends AdminController
         $token = check($request->input('token'));
         $id    = int($request->input('id'));
 
-        $validator->equal($token, $_SESSION['token'], trans('validator.token'));
+        $validator->equal($token, $_SESSION['token'], __('validator.token'));
 
         $word = Antimat::query()->find($id);
-        $validator->notEmpty($word, trans('main.record_not_found'));
+        $validator->notEmpty($word, __('main.record_not_found'));
 
         if ($validator->isValid()) {
             $word->delete();
 
-            setFlash('success', trans('main.record_deleted_success'));
+            setFlash('success', __('main.record_deleted_success'));
         } else {
             setFlash('danger', $validator->getErrors());
         }
@@ -104,13 +104,13 @@ class AntimatController extends AdminController
         $token = check($request->input('token'));
 
         $validator
-            ->equal($token, $_SESSION['token'], trans('validator.token'))
-            ->true(isAdmin(User::BOSS), trans('admin.antimat.owner_clear'));
+            ->equal($token, $_SESSION['token'], __('validator.token'))
+            ->true(isAdmin(User::BOSS), __('admin.antimat.owner_clear'));
 
         if ($validator->isValid()) {
             Antimat::query()->truncate();
 
-            setFlash('success', trans('main.records_cleared_success'));
+            setFlash('success', __('main.records_cleared_success'));
         } else {
             setFlash('danger', $validator->getErrors());
         }

@@ -25,7 +25,7 @@ class MessageController extends BaseController
         parent::__construct();
 
         if (! $this->user = getUser()) {
-            abort(403, trans('main.not_authorized'));
+            abort(403, __('main.not_authorized'));
         }
     }
 
@@ -80,7 +80,7 @@ class MessageController extends BaseController
             $user = getUserByLogin($login);
 
             if (! $user) {
-                abort(404, trans('validator.user'));
+                abort(404, __('validator.user'));
             }
 
             if ($user->id === $this->user->id) {
@@ -135,16 +135,16 @@ class MessageController extends BaseController
         $user = getUserByLogin($login);
 
         if (! $user) {
-            abort(404, trans('validator.user'));
+            abort(404, __('validator.user'));
         }
 
-        $validator->equal($token, $_SESSION['token'], ['msg' => trans('validator.token')])
-            ->length($msg, 5, setting('comment_length'), ['msg' => trans('validator.text')])
-            ->false($flood->isFlood(), ['msg' => trans('validator.flood', ['sec' => $flood->getPeriod()])])
+        $validator->equal($token, $_SESSION['token'], ['msg' => __('validator.token')])
+            ->length($msg, 5, setting('comment_length'), ['msg' => __('validator.text')])
+            ->false($flood->isFlood(), ['msg' => __('validator.flood', ['sec' => $flood->getPeriod()])])
             ->notEqual($user->id, $this->user->id, 'Нельзя отправлять письмо самому себе!');
 
         if (! captchaVerify() && $this->user->point < setting('privatprotect')) {
-            $validator->addError(['protect' => trans('validator.captcha')]);
+            $validator->addError(['protect' => __('validator.captcha')]);
         }
 
         // Проверка на игнор
@@ -203,7 +203,7 @@ class MessageController extends BaseController
             ->where('author_id', $uid)
             ->count();
 
-        $validator->equal($token, $_SESSION['token'], trans('validator.token'))
+        $validator->equal($token, $_SESSION['token'], __('validator.token'))
             ->notEmpty($total, ['user' => 'Переписки с данным пользователем не существует!'])
             ->empty(getUser('newprivat'), 'У вас имеются непрочитанные сообщения!');
 

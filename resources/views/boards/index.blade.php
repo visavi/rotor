@@ -1,20 +1,20 @@
 @extends('layout')
 
 @section('title')
-    {{ trans('index.boards') }}
+    {{ __('index.boards') }}
 @stop
 
 @section('header')
     @if (getUser())
         <div class="float-right">
-            <a class="btn btn-success" href="/items/create?bid={{ $board->id ?? 0 }}">{{ trans('main.add') }}</a><br>
+            <a class="btn btn-success" href="/items/create?bid={{ $board->id ?? 0 }}">{{ __('main.add') }}</a><br>
         </div><br>
     @endif
 
     @if ($board)
-        <h1>{{ $board->name }} <small>({{ trans('index.boards') }}: {{ $board->count_items }})</small></h1>
+        <h1>{{ $board->name }} <small>({{ __('index.boards') }}: {{ $board->count_items }})</small></h1>
     @else
-        <h1>{{ trans('index.boards') }}</h1>
+        <h1>{{ __('index.boards') }}</h1>
     @endif
 @stop
 
@@ -24,7 +24,7 @@
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
 
             @if ($board)
-                <li class="breadcrumb-item"><a href="/boards">{{ trans('index.boards') }}</a></li>
+                <li class="breadcrumb-item"><a href="/boards">{{ __('index.boards') }}</a></li>
 
                 @if ($board->parent->id)
                     <li class="breadcrumb-item"><a href="/boards/{{ $board->parent->id }}">{{ $board->parent->name }}</a></li>
@@ -32,13 +32,13 @@
                 <li class="breadcrumb-item active">{{ $board->name }}</li>
 
                 @if (isAdmin())
-                    <li class="breadcrumb-item"><a href="/admin/boards/{{ $board->id  }}?page={{ $page->current }}">{{ trans('main.management') }}</a></li>
+                    <li class="breadcrumb-item"><a href="/admin/boards/{{ $board->id  }}?page={{ $page->current }}">{{ __('main.management') }}</a></li>
                 @endif
             @else
-                <li class="breadcrumb-item active">{{ trans('index.boards') }}</li>
+                <li class="breadcrumb-item active">{{ __('index.boards') }}</li>
 
                 @if (isAdmin())
-                    <li class="breadcrumb-item"><a href="/admin/boards?page={{ $page->current }}">{{ trans('main.management') }}</a></li>
+                    <li class="breadcrumb-item"><a href="/admin/boards?page={{ $page->current }}">{{ __('main.management') }}</a></li>
                 @endif
             @endif
         </ol>
@@ -48,7 +48,7 @@
 @section('content')
     @if (getUser())
         <div class="mb-3">
-            <i class="far fa-list-alt"></i> <a href="/boards/active">{{ trans('boards.my_items') }}</a>
+            <i class="far fa-list-alt"></i> <a href="/boards/active">{{ __('boards.my_items') }}</a>
         </div>
     @endif
 
@@ -95,6 +95,6 @@
 
         {!! pagination($page) !!}
     @else
-        {!! showError(trans('boards.empty_items')) !!}
+        {!! showError(__('boards.empty_items')) !!}
     @endif
 @stop

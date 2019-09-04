@@ -19,7 +19,7 @@ class SettingController extends AdminController
         parent::__construct();
 
         if (! isAdmin(User::BOSS)) {
-            abort(403, trans('errors.forbidden'));
+            abort(403, __('errors.forbidden'));
         }
     }
 
@@ -44,7 +44,7 @@ class SettingController extends AdminController
             $opt   = check($request->input('opt'));
             $token = check($request->input('token'));
 
-            $validator->equal($token, $_SESSION['token'], ['msg' => trans('validator.token')])
+            $validator->equal($token, $_SESSION['token'], ['msg' => __('validator.token')])
                 ->notEmpty($sets, ['sets' => 'Не переданы настройки сайта']);
 
             foreach ($sets as $name => $value) {
@@ -74,7 +74,7 @@ class SettingController extends AdminController
         }
 
         $counters = [
-            trans('main.disable'),
+            __('main.disable'),
             'Хосты | Хосты всего',
             'Хиты | Хиты всего',
             'Хиты | Хосты',

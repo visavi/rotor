@@ -41,14 +41,14 @@ class ForumController extends AdminController
     public function create(Request $request, Validator $validator): void
     {
         if (! isAdmin(User::BOSS)) {
-            abort(403, trans('errors.forbidden'));
+            abort(403, __('errors.forbidden'));
         }
 
         $token = check($request->input('token'));
         $title = check($request->input('title'));
 
-        $validator->equal($token, $_SESSION['token'], trans('validator.token'))
-            ->length($title, 5, 50, ['title' => trans('validator.text')]);
+        $validator->equal($token, $_SESSION['token'], __('validator.token'))
+            ->length($title, 5, 50, ['title' => __('validator.text')]);
 
         if ($validator->isValid()) {
 
@@ -81,7 +81,7 @@ class ForumController extends AdminController
     public function edit(int $id, Request $request, Validator $validator): string
     {
         if (! isAdmin(User::BOSS)) {
-            abort(403, trans('errors.forbidden'));
+            abort(403, __('errors.forbidden'));
         }
 
         /** @var Forum $forum */
@@ -104,9 +104,9 @@ class ForumController extends AdminController
             $sort        = check($request->input('sort'));
             $closed      = empty($request->input('closed')) ? 0 : 1;
 
-            $validator->equal($token, $_SESSION['token'], trans('validator.token'))
-                ->length($title, 5, 50, ['title' => trans('validator.text')])
-                ->length($description, 0, 100, ['description' => trans('validator.text')])
+            $validator->equal($token, $_SESSION['token'], __('validator.token'))
+                ->length($title, 5, 50, ['title' => __('validator.text')])
+                ->length($description, 0, 100, ['description' => __('validator.text')])
                 ->notEqual($parent, $forum->id, ['parent' => 'Недопустимый выбор родительского раздела!']);
 
             if (! empty($parent) && $forum->children->isNotEmpty()) {
@@ -146,7 +146,7 @@ class ForumController extends AdminController
     public function delete(int $id, Request $request, Validator $validator): void
     {
         if (! isAdmin(User::BOSS)) {
-            abort(403, trans('errors.forbidden'));
+            abort(403, __('errors.forbidden'));
         }
 
         /** @var Forum $forum */
@@ -158,7 +158,7 @@ class ForumController extends AdminController
 
         $token = check($request->input('token'));
 
-        $validator->equal($token, $_SESSION['token'], trans('validator.token'))
+        $validator->equal($token, $_SESSION['token'], __('validator.token'))
             ->true($forum->children->isEmpty(), 'Удаление невозможно! Данный раздел имеет подфорумы!');
 
         $topic = Topic::query()->where('forum_id', $forum->id)->first();
@@ -186,7 +186,7 @@ class ForumController extends AdminController
     public function restatement(Request $request): void
     {
         if (! isAdmin(User::BOSS)) {
-            abort(403, trans('errors.forbidden'));
+            abort(403, __('errors.forbidden'));
         }
 
         $token = check($request->input('token'));
@@ -197,7 +197,7 @@ class ForumController extends AdminController
 
             setFlash('success', 'Данные успешно пересчитаны!');
         } else {
-            setFlash('danger', trans('validator.token'));
+            setFlash('danger', __('validator.token'));
         }
 
         redirect('/admin/forums');
@@ -260,8 +260,8 @@ class ForumController extends AdminController
             $locked     = empty($request->input('locked')) ? 0 : 1;
             $closed     = empty($request->input('closed')) ? 0 : 1;
 
-            $validator->equal($token, $_SESSION['token'], trans('validator.token'))
-                ->length($title, 5, 50, ['title' => trans('validator.text')])
+            $validator->equal($token, $_SESSION['token'], __('validator.token'))
+                ->length($title, 5, 50, ['title' => __('validator.text')])
                 ->length($note, 0, 250, ['note' => 'Слишком длинное объявление!']);
 
             if ($validator->isValid()) {
@@ -312,7 +312,7 @@ class ForumController extends AdminController
             /** @var Forum $forum */
             $forum = Forum::query()->find($fid);
 
-            $validator->equal($token, $_SESSION['token'], trans('validator.token'))
+            $validator->equal($token, $_SESSION['token'], __('validator.token'))
                 ->notEmpty($forum, ['forum' => 'Выбранного раздела не существует!']);
 
             if ($forum) {
@@ -410,7 +410,7 @@ class ForumController extends AdminController
             endswitch;
 
         } else {
-            setFlash('danger', trans('validator.token'));
+            setFlash('danger', __('validator.token'));
         }
 
         redirect('/admin/topics/' . $topic->id . '?page=' . $page);
@@ -437,7 +437,7 @@ class ForumController extends AdminController
             abort(404, 'Данной темы не существует!');
         }
 
-        $validator->equal($token, $_SESSION['token'], trans('validator.token'));
+        $validator->equal($token, $_SESSION['token'], __('validator.token'));
 
         if ($validator->isValid()) {
 
@@ -559,8 +559,8 @@ class ForumController extends AdminController
             $msg     = check($request->input('msg'));
             $delfile = intar($request->input('delfile'));
 
-            $validator->equal($token, $_SESSION['token'], trans('validator.token'))
-                ->length($msg, 5, setting('forumtextlength'), ['msg' => trans('validator.text')]);
+            $validator->equal($token, $_SESSION['token'], __('validator.token'))
+                ->length($msg, 5, setting('forumtextlength'), ['msg' => __('validator.text')]);
 
             if ($validator->isValid()) {
 
@@ -619,8 +619,8 @@ class ForumController extends AdminController
             abort(404, 'Данной темы не существует!');
         }
 
-        $validator->equal($token, $_SESSION['token'], trans('validator.token'))
-            ->true($del, trans('validator.deletion'));
+        $validator->equal($token, $_SESSION['token'], __('validator.token'))
+            ->true($del, __('validator.deletion'));
 
         if ($validator->isValid()) {
 

@@ -1,24 +1,24 @@
 @extends('layout')
 
 @section('title')
-    {{ trans('index.forums') }}
+    {{ __('index.forums') }}
 @stop
 
 @section('header')
     @if (getUser())
         <div class="float-right">
-            <a class="btn btn-success" href="/forums/create">{{ trans('forums.create_topic') }}</a>
+            <a class="btn btn-success" href="/forums/create">{{ __('forums.create_topic') }}</a>
         </div><br>
     @endif
 
-    <h1>{{ trans('index.forums') }} {{ setting('title') }}</h1>
+    <h1>{{ __('index.forums') }} {{ setting('title') }}</h1>
 @stop
 
 @section('breadcrumb')
     <nav>
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
-            <li class="breadcrumb-item active">{{ trans('index.forums') }}</li>
+            <li class="breadcrumb-item active">{{ __('index.forums') }}</li>
         </ol>
     </nav>
 @stop
@@ -27,10 +27,10 @@
     @include('ads/_forum')
 
     @if (getUser())
-        {{ trans('main.my') }}: <a href="/forums/active/topics">{{ trans('forums.topics') }}</a>, <a href="/forums/active/posts">{{ trans('forums.posts') }}</a>, <a href="/forums/bookmarks">{{ trans('forums.bookmarks') }}</a> /
+        {{ __('main.my') }}: <a href="/forums/active/topics">{{ __('forums.topics') }}</a>, <a href="/forums/active/posts">{{ __('forums.posts') }}</a>, <a href="/forums/bookmarks">{{ __('forums.bookmarks') }}</a> /
     @endif
 
-    {{ trans('main.new') }}: <a href="/topics">{{ trans('forums.topics') }}</a>, <a href="/posts">{{ trans('forums.posts') }}</a>
+    {{ __('main.new') }}: <a href="/topics">{{ __('forums.topics') }}</a>, <a href="/posts">{{ __('forums.posts') }}</a>
     <hr/>
 
     @if ($forums->isNotEmpty())
@@ -54,22 +54,22 @@
                 @endif
 
                 @if ($forum->lastTopic->lastPost->id)
-                        {{ trans('forums.topic') }}: <a href="/topics/end/{{ $forum->lastTopic->id }}">{{ $forum->lastTopic->title }}</a>
+                        {{ __('forums.topic') }}: <a href="/topics/end/{{ $forum->lastTopic->id }}">{{ $forum->lastTopic->title }}</a>
                     <br/>
-                        {{ trans('forums.post') }}: {{ $forum->lastTopic->lastPost->user->getName() }} ({{ dateFixed($forum->lastTopic->lastPost->created_at) }})
+                        {{ __('forums.post') }}: {{ $forum->lastTopic->lastPost->user->getName() }} ({{ dateFixed($forum->lastTopic->lastPost->created_at) }})
                 @else
-                    {{ trans('forums.empty_topics') }}
+                    {{ __('forums.empty_topics') }}
                 @endif
             </div>
         @endforeach
     @else
-        {!! showError(trans('forums.empty_forums')) !!}
+        {!! showError(__('forums.empty_forums')) !!}
     @endif
 
     <br/>
-    <a href="/rules">{{ trans('main.rules') }}</a> /
-    <a href="/forums/top/topics">{{ trans('forums.top_topics') }}</a> /
-    <a href="/forums/top/posts">{{ trans('forums.top_posts') }}</a> /
-    <a href="/forums/search">{{ trans('main.search') }}</a> /
-    <a href="/forums/rss">{{ trans('main.rss') }}</a><br/>
+    <a href="/rules">{{ __('main.rules') }}</a> /
+    <a href="/forums/top/topics">{{ __('forums.top_topics') }}</a> /
+    <a href="/forums/top/posts">{{ __('forums.top_posts') }}</a> /
+    <a href="/forums/search">{{ __('main.search') }}</a> /
+    <a href="/forums/rss">{{ __('main.rss') }}</a><br/>
 @stop

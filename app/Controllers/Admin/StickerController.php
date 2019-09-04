@@ -21,7 +21,7 @@ class StickerController extends AdminController
         parent::__construct();
 
         if (! isAdmin(User::ADMIN)) {
-            abort(403, trans('errors.forbidden'));
+            abort(403, __('errors.forbidden'));
         }
     }
 
@@ -84,8 +84,8 @@ class StickerController extends AdminController
         $token = check($request->input('token'));
         $name  = check($request->input('name'));
 
-        $validator->equal($token, $_SESSION['token'], trans('validator.token'))
-            ->length($name, 3, 50, ['name' => trans('validator.text')]);
+        $validator->equal($token, $_SESSION['token'], __('validator.token'))
+            ->length($name, 3, 50, ['name' => __('validator.text')]);
 
         if ($validator->isValid()) {
 
@@ -125,8 +125,8 @@ class StickerController extends AdminController
             $token = check($request->input('token'));
             $name  = check($request->input('name'));
 
-            $validator->equal($token, $_SESSION['token'], trans('validator.token'))
-                ->length($name, 3, 50, ['name' => trans('validator.text')]);
+            $validator->equal($token, $_SESSION['token'], __('validator.token'))
+                ->length($name, 3, 50, ['name' => __('validator.text')]);
 
             if ($validator->isValid()) {
 
@@ -165,7 +165,7 @@ class StickerController extends AdminController
 
         $token = check($request->input('token'));
 
-        $validator->equal($token, $_SESSION['token'], trans('validator.token'));
+        $validator->equal($token, $_SESSION['token'], __('validator.token'));
 
         $sticker = Sticker::query()->where('category_id', $category->id)->first();
         if ($sticker) {
@@ -210,7 +210,7 @@ class StickerController extends AdminController
             $code    = check(utfLower($request->input('code')));
             $sticker = $request->file('sticker');
 
-            $validator->equal($token, $_SESSION['token'], trans('validator.token'))
+            $validator->equal($token, $_SESSION['token'], __('validator.token'))
                 ->length($code, 2, 20, ['code' => 'Слишком длинный или короткий код стикера!'])
                 ->regex($code, '|^:+[a-яa-z0-9_\-/\(\)]+$|i', ['code' => 'Код стикера должен начинаться с двоеточия. Разрешены буквы, цифры и дефис!']);
 
@@ -276,7 +276,7 @@ class StickerController extends AdminController
             $code  = check(utfLower($request->input('code')));
             $cid   = int($request->input('cid'));
 
-            $validator->equal($token, $_SESSION['token'], trans('validator.token'))
+            $validator->equal($token, $_SESSION['token'], __('validator.token'))
                 ->length($code, 2, 20, ['code' => 'Слишком длинный или короткий код стикера!'])
                 ->regex($code, '|^:+[a-яa-z0-9_\-/\(\)]+$|i', ['code' => 'Код стикера должен начинаться с двоеточия. Разрешены буквы, цифры и дефис!']);
 
@@ -332,7 +332,7 @@ class StickerController extends AdminController
         $token    = check($request->input('token'));
         $category = $sticker->category->id;
 
-        $validator->equal($token, $_SESSION['token'], trans('validator.token'));
+        $validator->equal($token, $_SESSION['token'], __('validator.token'));
 
         if ($validator->isValid()) {
 

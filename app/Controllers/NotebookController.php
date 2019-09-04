@@ -20,7 +20,7 @@ class NotebookController extends BaseController
         parent::__construct();
 
         if (! getUser()) {
-            abort(403, trans('main.not_authorized'));
+            abort(403, __('main.not_authorized'));
         }
 
         $this->note = Notebook::query()
@@ -50,7 +50,7 @@ class NotebookController extends BaseController
             $msg   = check($request->input('msg'));
 
             $validator
-                ->equal($token, $_SESSION['token'], ['msg' => trans('validator.token')])
+                ->equal($token, $_SESSION['token'], ['msg' => __('validator.token')])
                 ->length($msg, 0, 10000, ['msg' => 'Слишком длинная запись!'], false);
 
             if ($validator->isValid()) {

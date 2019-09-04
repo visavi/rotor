@@ -18,7 +18,7 @@ class DelUserController extends AdminController
         parent::__construct();
 
         if (! isAdmin(User::BOSS)) {
-            abort(403, trans('errors.forbidden'));
+            abort(403, __('errors.forbidden'));
         }
     }
 
@@ -69,7 +69,7 @@ class DelUserController extends AdminController
         $point  = check($request->input('point'));
 
         $validator
-            ->equal($token, $_SESSION['token'], trans('validator.token'))
+            ->equal($token, $_SESSION['token'], __('validator.token'))
             ->gte($period, 180, 'Указанно недопустимое время для удаления!');
 
         $users = User::query()

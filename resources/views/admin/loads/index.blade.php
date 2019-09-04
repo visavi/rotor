@@ -1,15 +1,15 @@
 @extends('layout')
 
 @section('title')
-    {{ trans('index.loads') }}
+    {{ __('index.loads') }}
 @stop
 
 @section('breadcrumb')
     <nav>
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
-            <li class="breadcrumb-item"><a href="/admin">{{ trans('index.panel') }}</a></li>
-            <li class="breadcrumb-item active">{{ trans('index.loads') }}</li>
+            <li class="breadcrumb-item"><a href="/admin">{{ __('index.panel') }}</a></li>
+            <li class="breadcrumb-item active">{{ __('index.loads') }}</li>
         </ol>
     </nav>
 @stop
@@ -29,7 +29,7 @@
                 @if (isAdmin('boss'))
                     <div class="float-right">
                         <a href="/admin/loads/edit/{{ $category->id }}"><i class="fa fa-pencil-alt"></i></a>
-                        <a href="/admin/loads/delete/{{ $category->id }}?token={{ $_SESSION['token'] }}" onclick="return confirm('{{ trans('loads.confirm_delete_load') }}')"><i class="fa fa-times"></i></a>
+                        <a href="/admin/loads/delete/{{ $category->id }}?token={{ $_SESSION['token'] }}" onclick="return confirm('{{ __('loads.confirm_delete_load') }}')"><i class="fa fa-times"></i></a>
                     </div>
                 @endif
             </div>
@@ -46,7 +46,7 @@
 
                         @if (isAdmin('boss'))
                                 <a href="/admin/loads/edit/{{ $child->id }}"><i class="fa fa-pencil-alt"></i></a>
-                                <a href="/admin/loads/delete/{{ $child->id }}?token={{ $_SESSION['token'] }}" onclick="return confirm('{{ trans('loads.confirm_delete_load') }}')"><i class="fa fa-times"></i></a>
+                                <a href="/admin/loads/delete/{{ $child->id }}?token={{ $_SESSION['token'] }}" onclick="return confirm('{{ __('loads.confirm_delete_load') }}')"><i class="fa fa-times"></i></a>
                         @endif
                         <br>
                     @endforeach
@@ -54,7 +54,7 @@
             </div>
         @endforeach
     @else
-        {!! showError(trans('loads.empty_loads')) !!}
+        {!! showError(__('loads.empty_loads')) !!}
     @endif
 
     @if (isAdmin('boss'))
@@ -63,15 +63,15 @@
                 @csrf
                 <div class="form-inline">
                     <div class="form-group{{ hasError('name') }}">
-                        <input type="text" class="form-control" id="name" name="name" maxlength="50" value="{{ getInput('name') }}" placeholder="{{ trans('loads.load') }}" required>
+                        <input type="text" class="form-control" id="name" name="name" maxlength="50" value="{{ getInput('name') }}" placeholder="{{ __('loads.load') }}" required>
                     </div>
 
-                    <button class="btn btn-primary">{{ trans('loads.create_load') }}</button>
+                    <button class="btn btn-primary">{{ __('loads.create_load') }}</button>
                 </div>
                 <div class="invalid-feedback">{{ textError('name') }}</div>
             </form>
         </div>
 
-        <i class="fa fa-sync"></i> <a href="/admin/loads/restatement?token={{ $_SESSION['token'] }}">{{ trans('main.recount') }}</a><br>
+        <i class="fa fa-sync"></i> <a href="/admin/loads/restatement?token={{ $_SESSION['token'] }}">{{ __('main.recount') }}</a><br>
     @endif
 @stop

@@ -1,15 +1,15 @@
 @extends('layout')
 
 @section('title')
-    {{ trans('index.pending_list') }}
+    {{ __('index.pending_list') }}
 @stop
 
 @section('breadcrumb')
     <nav>
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
-            <li class="breadcrumb-item"><a href="/admin">{{ trans('index.panel') }}</a></li>
-            <li class="breadcrumb-item active">{{ trans('index.pending_list') }}</li>
+            <li class="breadcrumb-item"><a href="/admin">{{ __('index.panel') }}</a></li>
+            <li class="breadcrumb-item active">{{ __('index.pending_list') }}</li>
         </ol>
     </nav>
 @stop
@@ -20,9 +20,9 @@
         <i class="fa fa-exclamation-circle"></i>
 
         @if (setting('regkeys'))
-            <span class="text-success">{{ trans('admin.reglists.enabled') }}</span>
+            <span class="text-success">{{ __('admin.reglists.enabled') }}</span>
         @else
-            <span class="text-danger">{{ trans('admin.reglists.disabled') }}</span>
+            <span class="text-danger">{{ __('admin.reglists.disabled') }}</span>
         @endif
     </div>
 
@@ -34,32 +34,32 @@
                 <div class="b">
                     <input type="checkbox" name="choice[]" value="{{ $user->id }}">
                      {!! $user->getGender() !!} <b>{!! $user->getProfile() !!}</b>
-                    ({{ trans('users.email') }}: {{ $user->email }})
+                    ({{ __('users.email') }}: {{ $user->email }})
                 </div>
 
-                <div>{{ trans('main.registration_date') }}: {{ dateFixed($user->created_at, 'd.m.Y') }}</div>
+                <div>{{ __('main.registration_date') }}: {{ dateFixed($user->created_at, 'd.m.Y') }}</div>
             @endforeach
 
             <?php $inputAction = getInput('action'); ?>
             <div class="form-inline mt-3">
                 <div class="form-group{{ hasError('action') }}">
                     <select class="form-control" name="action">
-                        <option>{{ trans('main.action') }}</option>
-                        <option value="yes"{{ $inputAction === 'yes' ? ' selected' : '' }}>{{ trans('main.allow') }}</option>
-                        <option value="no"{{ $inputAction === 'no' ? ' selected' : '' }}>{{ trans('main.disallow') }}</option>
+                        <option>{{ __('main.action') }}</option>
+                        <option value="yes"{{ $inputAction === 'yes' ? ' selected' : '' }}>{{ __('main.allow') }}</option>
+                        <option value="no"{{ $inputAction === 'no' ? ' selected' : '' }}>{{ __('main.disallow') }}</option>
                     </select>
                 </div>
 
-                <button class="btn btn-primary">{{ trans('main.execute') }}</button>
+                <button class="btn btn-primary">{{ __('main.execute') }}</button>
             </div>
             <div class="invalid-feedback">{{ textError('action') }}</div>
         </form>
 
         {!! pagination($page) !!}
 
-        {{ trans('main.total') }}: <b>{{ $page->total }}</b><br><br>
+        {{ __('main.total') }}: <b>{{ $page->total }}</b><br><br>
 
     @else
-        {!! showError(trans('admin.reglists.empty_users')) !!}
+        {!! showError(__('admin.reglists.empty_users')) !!}
     @endif
 @stop

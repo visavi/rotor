@@ -31,9 +31,9 @@ class MailController extends BaseController
                 $email = getUser('email');
             }
 
-            $validator->true(captchaVerify(), ['protect' => trans('validator.captcha')])
+            $validator->true(captchaVerify(), ['protect' => __('validator.captcha')])
                 ->length($name, 3, 100, ['name' => 'Слишком длинное или короткое имя'])
-                ->length($message, 5, 50000, ['message' => trans('validator.text')])
+                ->length($message, 5, 50000, ['message' => __('validator.text')])
                 ->email($email, ['email' => 'Неправильный адрес email, необходим формат name@site.domen!']);
 
             if ($validator->isValid()) {
@@ -75,10 +75,10 @@ class MailController extends BaseController
 
             $user = User::query()->where('login', $login)->orWhere('email', $login)->first();
             if (! $user) {
-                abort('default', trans('validator.user'));
+                abort('default', __('validator.user'));
             }
 
-            $validator->true(captchaVerify(), ['protect' => trans('validator.captcha')])
+            $validator->true(captchaVerify(), ['protect' => __('validator.captcha')])
                 ->lte($user['timepasswd'], SITETIME, ['user' => 'Восстанавливать пароль можно не чаще чем раз в 12 часов!']);
 
             if ($validator->isValid()) {

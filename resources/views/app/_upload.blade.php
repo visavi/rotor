@@ -25,12 +25,12 @@ $click = $cond ? 'return pasteImage(this);' : false;
 
 <label class="btn btn-sm btn-secondary" for="image">
     <input id="image" type="file" name="image" accept="image/*" onchange="return submitImage(this, {{ $cond }});" data-id="{{ $id ?? 0 }}" data-type="{{ $type }}" data-token="{{ $_SESSION['token'] }}" hidden>
-    {{ trans('main.attach_image') }}&hellip;
+    {{ __('main.attach_image') }}&hellip;
 </label><br>
 
 <p class="text-muted font-italic">
-    {{ trans('main.max_file_upload') }}: {{ setting('maxfiles') }}<br>
-    {{ trans('main.max_file_weight') }}: {{ formatSize(setting('filesize')) }}<br>
-    {{ trans('main.valid_file_extensions') }}: jpg, jpeg, gif, png<br>
-    {{ trans('main.min_image_size') }}: 100px
+    {{ __('main.max_file_upload') }}: {{ setting('maxfiles') }}<br>
+    {{ __('main.max_file_weight') }}: {{ formatSize(setting('filesize')) }}<br>
+    {{ __('main.valid_file_extensions') }}: jpg, jpeg, gif, png<br>
+    {{ __('main.min_image_size') }}: 100px
 </p>

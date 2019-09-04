@@ -1,7 +1,7 @@
 @extends('layout')
 
 @section('title')
-    {{ trans('index.note') }} {{ $user->login }}
+    {{ __('index.note') }} {{ $user->login }}
 @stop
 
 @section('breadcrumb')
@@ -9,7 +9,7 @@
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
             <li class="breadcrumb-item"><a href="/users/{{ $user->login }}">{{ $user->login }}</a></li>
-            <li class="breadcrumb-item active">{{ trans('index.note') }}</li>
+            <li class="breadcrumb-item active">{{ __('index.note') }}</li>
         </ol>
     </nav>
 @stop
@@ -19,12 +19,12 @@
         <form action="/users/{{ $user->login }}/note" method="post">
             @csrf
             <div class="form-group{{ hasError('notice') }}">
-                <label for="notice">{{ trans('index.note') }}:</label>
+                <label for="notice">{{ __('index.note') }}:</label>
                 <textarea class="form-control markItUp" id="notice" rows="5" name="notice" required>{{ getInput('notice', $user->note->text) }}</textarea>
                 <div class="invalid-feedback">{{ textError('notice') }}</div>
             </div>
 
-            <button class="btn btn-primary">{{ trans('main.save') }}</button>
+            <button class="btn btn-primary">{{ __('main.save') }}</button>
         </form>
     </div>
 @stop

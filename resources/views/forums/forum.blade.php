@@ -1,13 +1,13 @@
 @extends('layout')
 
 @section('title')
-    {{ $forum->title }} ({{ trans('main.page_num', ['page' => $page->current]) }})
+    {{ $forum->title }} ({{ __('main.page_num', ['page' => $page->current]) }})
 @stop
 
 @section('header')
     @if (! $forum->closed && getUser())
         <div class="float-right">
-            <a class="btn btn-success" href="/forums/create?fid={{ $forum->id }}">{{ trans('forums.create_topic') }}</a>
+            <a class="btn btn-success" href="/forums/create?fid={{ $forum->id }}">{{ __('forums.create_topic') }}</a>
         </div><br>
     @endif
 
@@ -18,7 +18,7 @@
     <nav>
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
-            <li class="breadcrumb-item"><a href="/forums">{{ trans('index.forums') }}</a></li>
+            <li class="breadcrumb-item"><a href="/forums">{{ __('index.forums') }}</a></li>
 
             @if ($forum->parent->id)
                 <li class="breadcrumb-item"><a href="/forums/{{ $forum->parent->id }}">{{ $forum->parent->title }}</a></li>
@@ -27,7 +27,7 @@
             <li class="breadcrumb-item active">{{ $forum->title }}</li>
 
             @if (isAdmin())
-                <li class="breadcrumb-item"><a href="/admin/forums/{{  $forum->id  }}?page={{ $page->current }}">{{ trans('main.management') }}</a></li>
+                <li class="breadcrumb-item"><a href="/admin/forums/{{  $forum->id  }}?page={{ $page->current }}">{{ __('main.management') }}</a></li>
             @endif
         </ol>
     </nav>
@@ -44,13 +44,13 @@
 
             @if ($child->lastTopic->id)
                 <div>
-                    {{ trans('forums.topic') }}: <a href="/topics/end/{{ $child->lastTopic->id }}">{{ $child->lastTopic->title }}</a><br>
+                    {{ __('forums.topic') }}: <a href="/topics/end/{{ $child->lastTopic->id }}">{{ $child->lastTopic->title }}</a><br>
                     @if ($child->lastTopic->lastPost->id)
-                        {{ trans('forums.post') }}: {{ $child->lastTopic->lastPost->user->getName() }} ({{ dateFixed($child->lastTopic->lastPost->created_at) }})
+                        {{ __('forums.post') }}: {{ $child->lastTopic->lastPost->user->getName() }} ({{ dateFixed($child->lastTopic->lastPost->created_at) }})
                     @endif
                 </div>
             @else
-                <div>{{ trans('forums.empty_topics') }}</div>
+                <div>{{ __('forums.empty_topics') }}</div>
             @endif
         @endforeach
 
@@ -67,7 +67,7 @@
             <div>
                 @if ($topic->lastPost)
                     {!! $topic->pagination() !!}
-                    {{ trans('forums.post') }}: {{ $topic->lastPost->user->getName() }} ({{ dateFixed($topic->lastPost->created_at) }})
+                    {{ __('forums.post') }}: {{ $topic->lastPost->user->getName() }} ({{ dateFixed($topic->lastPost->created_at) }})
                 @endif
             </div>
         @endforeach
@@ -75,13 +75,13 @@
         {!! pagination($page) !!}
 
     @elseif ($forum->closed)
-        {!! showError(trans('forums.closed_forum')) !!}
+        {!! showError(__('forums.closed_forum')) !!}
     @else
-        {!! showError(trans('forums.empty_topics')) !!}
+        {!! showError(__('forums.empty_topics')) !!}
     @endif
 
-    <a href="/rules">{{ trans('main.rules') }}</a> /
-    <a href="/forums/top/topics">{{ trans('forums.top_topics') }}</a> /
-    <a href="/forums/top/posts">{{ trans('forums.top_posts') }}</a> /
-    <a href="/forums/search?fid={{ $forum->id }}">{{ trans('main.search') }}</a><br>
+    <a href="/rules">{{ __('main.rules') }}</a> /
+    <a href="/forums/top/topics">{{ __('forums.top_topics') }}</a> /
+    <a href="/forums/top/posts">{{ __('forums.top_posts') }}</a> /
+    <a href="/forums/search?fid={{ $forum->id }}">{{ __('main.search') }}</a><br>
 @stop

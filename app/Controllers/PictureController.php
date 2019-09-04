@@ -20,7 +20,7 @@ class PictureController extends BaseController
         parent::__construct();
 
         if (! $this->user = getUser()) {
-            abort(403, trans('main.not_authorized'));
+            abort(403, __('main.not_authorized'));
         }
     }
 
@@ -38,7 +38,7 @@ class PictureController extends BaseController
             $token = check($request->input('token'));
             $photo = $request->file('photo');
 
-            $validator->equal($token, $_SESSION['token'], ['photo' => trans('validator.token')]);
+            $validator->equal($token, $_SESSION['token'], ['photo' => __('validator.token')]);
 
             $rules = [
                 'maxsize'   => setting('filesize'),
@@ -92,7 +92,7 @@ class PictureController extends BaseController
     {
         $token = check($request->input('token'));
 
-        $validator->equal($token, $_SESSION['token'], ['photo' => trans('validator.token')]);
+        $validator->equal($token, $_SESSION['token'], ['photo' => __('validator.token')]);
 
         if (! $this->user->picture) {
             $validator->addError('Фотографии для удаления не существует!');

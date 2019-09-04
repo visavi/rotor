@@ -1,19 +1,19 @@
 @extends('layout')
 
 @section('title')
-    {{ trans('index.loads') }} - {{ trans('loads.active_downs', ['user' => $user->login]) }} ({{ trans('main.page_num', ['page' => $page->current]) }})
+    {{ __('index.loads') }} - {{ __('loads.active_downs', ['user' => $user->login]) }} ({{ __('main.page_num', ['page' => $page->current]) }})
 @stop
 
 @section('header')
-    <h1>{{ trans('loads.active_downs', ['user' => $user->login]) }}</h1>
+    <h1>{{ __('loads.active_downs', ['user' => $user->login]) }}</h1>
 @stop
 
 @section('breadcrumb')
     <nav>
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
-            <li class="breadcrumb-item"><a href="/loads">{{ trans('index.loads') }}</a></li>
-            <li class="breadcrumb-item active">{{ trans('loads.active_downs', ['user' => $user->login]) }}</li>
+            <li class="breadcrumb-item"><a href="/loads">{{ __('index.loads') }}</a></li>
+            <li class="breadcrumb-item active">{{ __('loads.active_downs', ['user' => $user->login]) }}</li>
         </ol>
     </nav>
 @stop
@@ -21,10 +21,10 @@
 @section('content')
     @if ($user->id === getUser('id'))
         <?php $type = ($active === 1) ? 'success' : 'light'; ?>
-        <a href="/downs/active/files?active=1" class="badge badge-{{ $type }}">{{ trans('loads.verified') }}</a>
+        <a href="/downs/active/files?active=1" class="badge badge-{{ $type }}">{{ __('loads.verified') }}</a>
 
         <?php $type = ($active === 0) ? 'success' : 'light'; ?>
-        <a href="/downs/active/files?active=0" class="badge badge-{{ $type }}">{{ trans('loads.pending') }}</a>
+        <a href="/downs/active/files?active=0" class="badge badge-{{ $type }}">{{ __('loads.pending') }}</a>
     @endif
 
     @if ($downs->isNotEmpty())
@@ -36,16 +36,16 @@
                 <b><a href="/downs/{{ $down->id }}">{{ $down->title }}</a></b> ({{ $down->count_comments }})
             </div>
             <div>
-                {{ trans('loads.load') }}: <a href="/loads/{{ $down->category->id }}">{{ $down->category->name }}</a><br>
-                {{ trans('main.rating') }}: {{ $rating }}<br>
-                {{ trans('main.downloads') }}: {{ $down->loads }}<br>
-                {{ trans('main.author') }}: {!! $down->user->getProfile() !!} ({{ dateFixed($down->created_at) }})
+                {{ __('loads.load') }}: <a href="/loads/{{ $down->category->id }}">{{ $down->category->name }}</a><br>
+                {{ __('main.rating') }}: {{ $rating }}<br>
+                {{ __('main.downloads') }}: {{ $down->loads }}<br>
+                {{ __('main.author') }}: {!! $down->user->getProfile() !!} ({{ dateFixed($down->created_at) }})
             </div>
 
         @endforeach
 
         {!! pagination($page) !!}
     @else
-        {!! showError(trans('loads.empty_downs')) !!}
+        {!! showError(__('loads.empty_downs')) !!}
     @endif
 @stop

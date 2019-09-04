@@ -71,7 +71,7 @@ class PhotoController extends BaseController
     public function create(Request $request, Validator $validator, Flood $flood): string
     {
         if (! getUser()) {
-            abort(403, trans('main.not_authorized'));
+            abort(403, __('main.not_authorized'));
         }
 
         if ($request->isMethod('post')) {
@@ -81,10 +81,10 @@ class PhotoController extends BaseController
             $text   = check($request->input('text'));
             $closed = empty($request->input('closed')) ? 0 : 1;
 
-            $validator->equal($token, $_SESSION['token'], trans('validator.token'))
-                ->length($title, 5, 50, ['title' => trans('validator.text')])
+            $validator->equal($token, $_SESSION['token'], __('validator.token'))
+                ->length($title, 5, 50, ['title' => __('validator.text')])
                 ->length($text, 0, 1000, ['text' => 'Слишком длинное описание!'])
-                ->false($flood->isFlood(), ['msg' => trans('validator.flood', ['sec' => $flood->getPeriod()])]);
+                ->false($flood->isFlood(), ['msg' => __('validator.flood', ['sec' => $flood->getPeriod()])]);
 
             if ($validator->isValid()) {
 
@@ -152,8 +152,8 @@ class PhotoController extends BaseController
             $text   = check($request->input('text'));
             $closed = empty($request->input('closed')) ? 0 : 1;
 
-            $validator->equal($token, $_SESSION['token'], trans('validator.token'))
-                ->length($title, 5, 50, ['title' => trans('validator.text')])
+            $validator->equal($token, $_SESSION['token'], __('validator.token'))
+                ->length($title, 5, 50, ['title' => __('validator.text')])
                 ->length($text, 0, 1000, ['text' => 'Слишком длинное описание!']);
 
             if ($validator->isValid()) {
@@ -201,10 +201,10 @@ class PhotoController extends BaseController
             $token = check($request->input('token'));
 
             $validator
-                ->true(getUser(), trans('main.not_authorized'))
-                ->equal($token, $_SESSION['token'], trans('validator.token'))
-                ->length($msg, 5, setting('comment_length'), ['msg' => trans('validator.text')])
-                ->false($flood->isFlood(), ['msg' => trans('validator.flood', ['sec' => $flood->getPeriod()])])
+                ->true(getUser(), __('main.not_authorized'))
+                ->equal($token, $_SESSION['token'], __('validator.token'))
+                ->length($msg, 5, setting('comment_length'), ['msg' => __('validator.text')])
+                ->false($flood->isFlood(), ['msg' => __('validator.flood', ['sec' => $flood->getPeriod()])])
                 ->empty($photo->closed, ['msg' => 'Комментирование данной фотографии запрещено!']);
 
             if ($validator->isValid()) {
@@ -278,7 +278,7 @@ class PhotoController extends BaseController
         }
 
         if (! getUser()) {
-            abort(403, trans('main.not_authorized'));
+            abort(403, __('main.not_authorized'));
         }
 
         $comment = Comment::query()
@@ -306,8 +306,8 @@ class PhotoController extends BaseController
             $token = check($request->input('token'));
 
             $validator
-                ->equal($token, $_SESSION['token'], trans('validator.token'))
-                ->length($msg, 5, setting('comment_length'), ['msg' => trans('validator.text')])
+                ->equal($token, $_SESSION['token'], __('validator.token'))
+                ->length($msg, 5, setting('comment_length'), ['msg' => __('validator.text')])
                 ->empty($comment->closed, 'Комментирование данной фотографии запрещено!');
 
             if ($validator->isValid()) {
@@ -342,7 +342,7 @@ class PhotoController extends BaseController
         $token = check($request->input('token'));
 
         if (! getUser()) {
-            abort(403, trans('main.not_authorized'));
+            abort(403, __('main.not_authorized'));
         }
 
         /** @var Photo $photo */
@@ -353,7 +353,7 @@ class PhotoController extends BaseController
         }
 
         $validator
-            ->equal($token, $_SESSION['token'], trans('validator.token'))
+            ->equal($token, $_SESSION['token'], __('validator.token'))
             ->empty($photo->count_comments, 'Запрещено удалять фотографии к которым имеются комментарии!');
 
         if ($validator->isValid()) {
@@ -431,7 +431,7 @@ class PhotoController extends BaseController
         $user = getUserByLogin($login);
 
         if (! $user) {
-            abort(404, trans('validator.user'));
+            abort(404, __('validator.user'));
         }
 
         $total = Photo::query()->where('user_id', $user->id)->count();
@@ -514,7 +514,7 @@ class PhotoController extends BaseController
         $user = getUserByLogin($login);
 
         if (! $user) {
-            abort(404, trans('validator.user'));
+            abort(404, __('validator.user'));
         }
 
         $total = Comment::query()

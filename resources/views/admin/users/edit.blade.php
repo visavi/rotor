@@ -1,16 +1,16 @@
 @extends('layout')
 
 @section('title')
-    {{ trans('users.edit_user') }} {{ $user->login }}
+    {{ __('users.edit_user') }} {{ $user->login }}
 @stop
 
 @section('breadcrumb')
     <nav>
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
-            <li class="breadcrumb-item"><a href="/admin">{{ trans('index.panel') }}</a></li>
-            <li class="breadcrumb-item"><a href="/admin/users">{{ trans('index.users') }}</a></li>
-            <li class="breadcrumb-item active">{{ trans('users.edit_user') }}</li>
+            <li class="breadcrumb-item"><a href="/admin">{{ __('index.panel') }}</a></li>
+            <li class="breadcrumb-item"><a href="/admin/users">{{ __('index.users') }}</a></li>
+            <li class="breadcrumb-item active">{{ __('users.edit_user') }}</li>
         </ol>
     </nav>
 @stop
@@ -19,7 +19,7 @@
     <h3>{!! $user->getProfile() !!} {{ $user->login }} #{{ $user->id }}</h3>
 
     @if ($user->id === getUser('id'))
-        <div class="p-1 my-1 bg-danger text-white">{{ trans('users.edit_user_notice') }}</div>
+        <div class="p-1 my-1 bg-danger text-white">{{ __('users.edit_user_notice') }}</div>
     @endif
 
     <div class="form">
@@ -27,7 +27,7 @@
             @csrf
             <?php $inputLevel = getInput('level', $user->level); ?>
             <div class="form-group">
-                <label for="level">{{ trans('users.position') }}:</label>
+                <label for="level">{{ __('users.position') }}:</label>
                 <select class="form-control" id="level" name="level">
                     @foreach($allGroups as $key => $level)
                         <?php $selected = ($key === $inputLevel) ? ' selected' : ''; ?>
@@ -38,91 +38,91 @@
             </div>
 
             <div class="form-group{{ hasError('password') }}">
-                <label for="password">{{ trans('users.new_password') }}:</label>
+                <label for="password">{{ __('users.new_password') }}:</label>
                 <input type="text" class="form-control" id="password" name="password" maxlength="50" value="{{ getInput('password') }}">
                 <div class="invalid-feedback">{{ textError('password') }}</div>
-                <span class="text-muted font-italic">{{ trans('users.password_hint') }}</span>
+                <span class="text-muted font-italic">{{ __('users.password_hint') }}</span>
             </div>
 
             <div class="form-group{{ hasError('email') }}">
-                <label for="email">{{ trans('users.email') }}:</label>
+                <label for="email">{{ __('users.email') }}:</label>
                 <input type="text" class="form-control" id="email" name="email" maxlength="50" value="{{ getInput('email', $user->email) }}" required>
                 <div class="invalid-feedback">{{ textError('email') }}</div>
             </div>
 
             <div class="form-group{{ hasError('name') }}">
-                <label for="name">{{ trans('users.name') }}:</label>
+                <label for="name">{{ __('users.name') }}:</label>
                 <input type="text" class="form-control" id="name" name="name" maxlength="20" value="{{ getInput('name', $user->name) }}">
                 <div class="invalid-feedback">{{ textError('name') }}</div>
             </div>
 
 
             <div class="form-group{{ hasError('country') }}">
-                <label for="country">{{ trans('users.country') }}:</label>
+                <label for="country">{{ __('users.country') }}:</label>
                 <input type="text" class="form-control" id="country" name="country" maxlength="30" value="{{ getInput('country', $user->country) }}">
                 <div class="invalid-feedback">{{ textError('country') }}</div>
             </div>
 
             <div class="form-group{{ hasError('city') }}">
-                <label for="city">{{ trans('users.city') }}:</label>
+                <label for="city">{{ __('users.city') }}:</label>
                 <input type="text" class="form-control" id="city" name="city" maxlength="50" value="{{ getInput('city', $user->city) }}">
                 <div class="invalid-feedback">{{ textError('city') }}</div>
             </div>
 
             <div class="form-group{{ hasError('site') }}">
-                <label for="site">{{ trans('users.site') }}:</label>
+                <label for="site">{{ __('users.site') }}:</label>
                 <input type="text" class="form-control" id="site" name="site" maxlength="50" value="{{ getInput('site', $user->site) }}">
                 <div class="invalid-feedback">{{ textError('site') }}</div>
             </div>
 
             <div class="form-group{{ hasError('created') }}">
-                <label for="created">{{ trans('users.registered') }}:</label>
+                <label for="created">{{ __('users.registered') }}:</label>
                 <input type="text" class="form-control" id="created" name="created" maxlength="10" value="{{ getInput('created', dateFixed($user->created_at, 'd.m.Y')) }}" required>
                 <div class="invalid-feedback">{{ textError('created') }}</div>
             </div>
 
             <div class="form-group{{ hasError('birthday') }}">
-                <label for="birthday">{{ trans('users.birthday') }}:</label>
+                <label for="birthday">{{ __('users.birthday') }}:</label>
                 <input type="text" class="form-control" id="birthday" name="birthday" maxlength="10" value="{{ getInput('birthday', $user->birthday) }}">
                 <div class="invalid-feedback">{{ textError('birthday') }}</div>
             </div>
 
             <div class="form-group{{ hasError('point') }}">
-                <label for="point">{{ trans('users.assets') }}:</label>
+                <label for="point">{{ __('users.assets') }}:</label>
                 <input type="text" class="form-control" id="point" name="point" maxlength="10" value="{{ getInput('point', $user->point) }}" required>
                 <div class="invalid-feedback">{{ textError('point') }}</div>
             </div>
 
             <div class="form-group{{ hasError('money') }}">
-                <label for="money">{{ trans('users.moneys') }}:</label>
+                <label for="money">{{ __('users.moneys') }}:</label>
                 <input type="text" class="form-control" id="money" name="money" maxlength="15" value="{{ getInput('money', $user->money) }}" required>
                 <div class="invalid-feedback">{{ textError('money') }}</div>
             </div>
 
             <div class="form-group{{ hasError('status') }}">
-                <label for="status">{{ trans('users.status') }}:</label>
+                <label for="status">{{ __('users.status') }}:</label>
                 <input type="text" class="form-control" id="status" name="status" maxlength="25" value="{{ getInput('status', $user->status) }}">
                 <div class="invalid-feedback">{{ textError('status') }}</div>
             </div>
 
             <div class="form-group{{ hasError('posrating') }}">
-                <label for="posrating">{{ trans('users.reputation') }} ({{ trans('main.pluses') }}):</label>
+                <label for="posrating">{{ __('users.reputation') }} ({{ __('main.pluses') }}):</label>
                 <input type="text" class="form-control" id="posrating" name="posrating" maxlength="10" value="{{ getInput('posrating', $user->posrating) }}" required>
                 <div class="invalid-feedback">{{ textError('posrating') }}</div>
             </div>
 
             <div class="form-group{{ hasError('negrating') }}">
-                <label for="negrating">{{ trans('users.reputation') }} ({{ trans('main.minuses') }}):</label>
+                <label for="negrating">{{ __('users.reputation') }} ({{ __('main.minuses') }}):</label>
                 <input type="text" class="form-control" id="negrating" name="negrating" maxlength="10" value="{{ getInput('negrating', $user->negrating) }}" required>
                 <div class="invalid-feedback">{{ textError('negrating') }}</div>
             </div>
 
             <?php $inputThemes = getInput('themes', $user->themes); ?>
             <div class="form-group{{ hasError('themes') }}">
-                <label for="themes">{{ trans('users.theme') }}:</label>
+                <label for="themes">{{ __('users.theme') }}:</label>
 
                 <select class="form-control" name="themes" id="themes">
-                    <option value="0">{{ trans('main.automatically') }}</option>
+                    <option value="0">{{ __('main.automatically') }}</option>
 
                     @foreach ($allThemes as $theme)
                         <?php $selected = ($theme === $inputThemes) ? ' selected' : ''; ?>
@@ -134,54 +134,54 @@
             </div>
 
             <?php $inputGender = getInput('gender', $user->gender); ?>
-            {{ trans('users.gender') }}:
+            {{ __('users.gender') }}:
             <div class="form-group{{ hasError('gender') }}">
                 <div class="custom-control custom-radio">
                     <input class="custom-control-input" type="radio" id="inputGenderMale" name="gender" value="male"{{ $inputGender === 'male' ? ' checked' : '' }}>
-                    <label class="custom-control-label" for="inputGenderMale">{{ trans('users.male') }}</label>
+                    <label class="custom-control-label" for="inputGenderMale">{{ __('users.male') }}</label>
                 </div>
                 <div class="custom-control custom-radio">
                     <input class="custom-control-input" type="radio" id="inputGenderFemale" name="gender" value="female"{{ $inputGender === 'female' ? ' checked' : '' }}>
-                    <label class="custom-control-label" for="inputGenderFemale">{{ trans('users.female') }}</label>
+                    <label class="custom-control-label" for="inputGenderFemale">{{ __('users.female') }}</label>
                 </div>
                 <div class="invalid-feedback">{{ textError('gender') }}</div>
             </div>
 
             <div class="form-group{{ hasError('info') }}">
-                <label for="info">{{ trans('users.about') }}:</label>
+                <label for="info">{{ __('users.about') }}:</label>
                 <textarea class="form-control markItUp" id="info" rows="5" name="info">{{ getInput('info', $user->info) }}</textarea>
                 <div class="invalid-feedback">{{ textError('info') }}</div>
             </div>
 
-            <button class="btn btn-primary">{{ trans('main.change') }}</button>
+            <button class="btn btn-primary">{{ __('main.change') }}</button>
         </form>
     </div><br>
 
-    <div class="b"><b>{{ trans('users.additional_info') }}</b></div>
+    <div class="b"><b>{{ __('users.additional_info') }}</b></div>
 
     @if ($user->level === 'pended')
         <div class="p-1 bg-danger text-white">
             <i class="fas fa-exclamation-triangle"></i>
-            {{ trans('users.user_not_active') }}
+            {{ __('users.user_not_active') }}
         </div>
     @endif
 
     @if ($user->level === 'banned' && $user->timeban > SITETIME)
         <div class="form">
-            <div class="p-1 bg-danger text-white">{{ trans('users.user_banned') }}</div>
-            {{ trans('users.ending_ban') }}: {{ formatTime($user->timeban - SITETIME) }}<br>
+            <div class="p-1 bg-danger text-white">{{ __('users.user_banned') }}</div>
+            {{ __('users.ending_ban') }}: {{ formatTime($user->timeban - SITETIME) }}<br>
 
             @if ($banhist)
-                {{ trans('users.term') }}: {{ formatTime($banhist->term) }}<br>
-                {{ trans('users.reason_ban') }}: {!! bbCode($banhist->reason) !!}<br>
-                {{ trans('users.banned') }}: {!! $banhist->sendUser->getProfile() !!}<br>
+                {{ __('users.term') }}: {{ formatTime($banhist->term) }}<br>
+                {{ __('users.reason_ban') }}: {!! bbCode($banhist->reason) !!}<br>
+                {{ __('users.banned') }}: {!! $banhist->sendUser->getProfile() !!}<br>
             @endif
         </div>
     @endif
 
-    {{ trans('users.last_visit') }}: {{ dateFixed($user->updated_at, 'j F Y / H:i') }}<br><br>
+    {{ __('users.last_visit') }}: {{ dateFixed($user->updated_at, 'j F Y / H:i') }}<br><br>
 
     @if (! in_array($user->level, $adminGroups, true))
-        <i class="fa fa-times"></i> <a href="/admin/users/delete?user={{ $user->login }}">{{ trans('main.delete') }}</a><br>
+        <i class="fa fa-times"></i> <a href="/admin/users/delete?user={{ $user->login }}">{{ __('main.delete') }}</a><br>
     @endif
 @stop

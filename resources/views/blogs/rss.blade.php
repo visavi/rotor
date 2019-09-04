@@ -1,7 +1,7 @@
 @extends('layout_rss')
 
 @section('title')
-    {{ trans('blogs.title_rss') }}
+    {{ __('blogs.title_rss') }}
 @stop
 
 @section('content')
@@ -16,7 +16,7 @@
             <description>{{ $blog->text }}</description>
             <author>{{ $blog->user->login }}</author>
             <pubDate>{{ date('r', $blog->created_at) }}</pubDate>
-            <category>{{ trans('index.blogs') }}</category>
+            <category>{{ __('index.blogs') }}</category>
             <guid>{{ siteUrl() }}/articles/{{ $blog->id }}</guid>
         </item>
     @endforeach

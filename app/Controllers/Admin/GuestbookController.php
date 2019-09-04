@@ -51,8 +51,8 @@ class GuestbookController extends AdminController
             $msg   = check($request->input('msg'));
             $token = check($request->input('token'));
 
-            $validator->equal($token, $_SESSION['token'], ['msg' => trans('validator.token')])
-                ->length($msg, 5, setting('guesttextlength'), ['msg' => trans('validator.text')]);
+            $validator->equal($token, $_SESSION['token'], ['msg' => __('validator.token')])
+                ->length($msg, 5, setting('guesttextlength'), ['msg' => __('validator.text')]);
 
             if ($validator->isValid()) {
 
@@ -97,8 +97,8 @@ class GuestbookController extends AdminController
             $reply = check($request->input('reply'));
             $token = check($request->input('token'));
 
-            $validator->equal($token, $_SESSION['token'], ['msg' => trans('validator.token')])
-                ->length($reply, 5, setting('guesttextlength'), ['msg' => trans('validator.text')]);
+            $validator->equal($token, $_SESSION['token'], ['msg' => __('validator.token')])
+                ->length($reply, 5, setting('guesttextlength'), ['msg' => __('validator.text')]);
 
             if ($validator->isValid()) {
 
@@ -132,8 +132,8 @@ class GuestbookController extends AdminController
         $token = check($request->input('token'));
         $del   = intar($request->input('del'));
 
-        $validator->equal($token, $_SESSION['token'], trans('validator.token'))
-            ->true($del, trans('validator.deletion'));
+        $validator->equal($token, $_SESSION['token'], __('validator.token'))
+            ->true($del, __('validator.deletion'));
 
         if ($validator->isValid()) {
             Guestbook::query()->whereIn('id', $del)->delete();
@@ -159,7 +159,7 @@ class GuestbookController extends AdminController
         $token = check($request->input('token'));
 
         $validator
-            ->equal($token, $_SESSION['token'], trans('validator.token'))
+            ->equal($token, $_SESSION['token'], __('validator.token'))
             ->true(isAdmin(User::BOSS), 'Очищать гостевую может только владелец!');
 
         if ($validator->isValid()) {

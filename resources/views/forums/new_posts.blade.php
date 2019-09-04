@@ -1,19 +1,19 @@
 @extends('layout')
 
 @section('title')
-    {{ trans('index.forums') }} - {{ trans('forums.title_new_posts') }} ({{ trans('main.page_num', ['page' => $page->current]) }})
+    {{ __('index.forums') }} - {{ __('forums.title_new_posts') }} ({{ __('main.page_num', ['page' => $page->current]) }})
 @stop
 
 @section('header')
-    <h1>{{ trans('forums.title_new_posts') }}</h1>
+    <h1>{{ __('forums.title_new_posts') }}</h1>
 @stop
 
 @section('breadcrumb')
     <nav>
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
-            <li class="breadcrumb-item"><a href="/forums">{{ trans('index.forums') }}</a></li>
-            <li class="breadcrumb-item active">{{ trans('forums.title_new_posts') }}</li>
+            <li class="breadcrumb-item"><a href="/forums">{{ __('index.forums') }}</a></li>
+            <li class="breadcrumb-item active">{{ __('forums.title_new_posts') }}</li>
         </ol>
     </nav>
 @stop
@@ -27,7 +27,7 @@
         <div>
             {!! bbCode($data->text) !!}<br>
 
-            {{ trans('main.posted') }}: {{ $data->user->login }} <small>({{ dateFixed($data->created_at) }})</small><br>
+            {{ __('main.posted') }}: {{ $data->user->login }} <small>({{ dateFixed($data->created_at) }})</small><br>
 
             @if (isAdmin())
                 <span class="data">({{ $data->brow }}, {{ $data->ip }})</span>

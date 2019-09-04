@@ -30,8 +30,8 @@ class ChatController extends AdminController
             $msg   = check($request->input('msg'));
             $token = check($request->input('token'));
 
-            $validator->equal($token, $_SESSION['token'], ['msg' => trans('validator.token')])
-                ->length($msg, 5, 1500, ['msg' => trans('validator.text')]);
+            $validator->equal($token, $_SESSION['token'], ['msg' => __('validator.token')])
+                ->length($msg, 5, 1500, ['msg' => __('validator.text')]);
 
             if ($validator->isValid()) {
 
@@ -113,8 +113,8 @@ class ChatController extends AdminController
             $msg   = check($request->input('msg'));
             $token = check($request->input('token'));
 
-            $validator->equal($token, $_SESSION['token'], ['msg' => trans('validator.token')])
-                ->length($msg, 5, 1500, ['msg' => trans('validator.text')]);
+            $validator->equal($token, $_SESSION['token'], ['msg' => __('validator.token')])
+                ->length($msg, 5, 1500, ['msg' => __('validator.text')]);
 
             if ($validator->isValid()) {
 
@@ -147,7 +147,7 @@ class ChatController extends AdminController
         $token = check($request->input('token'));
 
         $validator
-            ->equal($token, $_SESSION['token'], trans('validator.token'))
+            ->equal($token, $_SESSION['token'], __('validator.token'))
             ->true(isAdmin(User::BOSS), 'Очищать чат может только владелец!');
 
         if ($validator->isValid()) {

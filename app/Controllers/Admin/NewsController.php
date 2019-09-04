@@ -20,7 +20,7 @@ class NewsController extends AdminController
         parent::__construct();
 
         if (! isAdmin(User::ADMIN)) {
-            abort(403, trans('errors.forbidden'));
+            abort(403, __('errors.forbidden'));
         }
     }
 
@@ -70,9 +70,9 @@ class NewsController extends AdminController
             $closed = empty($request->input('closed')) ? 0 : 1;
             $top    = empty($request->input('top')) ? 0 : 1;
 
-            $validator->equal($token, $_SESSION['token'], trans('validator.token'))
-                ->length($title, 5, 50, ['title' => trans('validator.text')])
-                ->length($text, 5, 10000, ['text' => trans('validator.text')]);
+            $validator->equal($token, $_SESSION['token'], __('validator.token'))
+                ->length($title, 5, 50, ['title' => __('validator.text')])
+                ->length($text, 5, 10000, ['text' => __('validator.text')]);
 
             $rules = [
                 'maxsize'   => setting('filesize'),
@@ -126,9 +126,9 @@ class NewsController extends AdminController
             $closed = empty($request->input('closed')) ? 0 : 1;
             $top    = empty($request->input('top')) ? 0 : 1;
 
-            $validator->equal($token, $_SESSION['token'], trans('validator.token'))
-                ->length($title, 5, 50, ['title' => trans('validator.text')])
-                ->length($text, 5, 10000, ['text' => trans('validator.text')]);
+            $validator->equal($token, $_SESSION['token'], __('validator.token'))
+                ->length($title, 5, 50, ['title' => __('validator.text')])
+                ->length($text, 5, 10000, ['text' => __('validator.text')]);
 
             $rules = [
                 'maxsize'   => setting('filesize'),
@@ -181,7 +181,7 @@ class NewsController extends AdminController
     public function restatement(Request $request): void
     {
         if (! isAdmin(User::BOSS)) {
-            abort(403, trans('errors.forbidden'));
+            abort(403, __('errors.forbidden'));
         }
 
         $token = check($request->input('token'));
@@ -192,7 +192,7 @@ class NewsController extends AdminController
 
             setFlash('success', 'Комментарии успешно пересчитаны!');
         } else {
-            setFlash('danger', trans('validator.token'));
+            setFlash('danger', __('validator.token'));
         }
 
         redirect('/admin/news');
@@ -219,7 +219,7 @@ class NewsController extends AdminController
             abort(404, 'Новость не существует, возможно она была удалена!');
         }
 
-        $validator->equal($token, $_SESSION['token'], trans('validator.token'));
+        $validator->equal($token, $_SESSION['token'], __('validator.token'));
 
         if ($validator->isValid()) {
 

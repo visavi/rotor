@@ -27,7 +27,7 @@ class ActiveController extends BaseController
         $this->user = getUserByLogin($login);
 
         if (! $this->user) {
-            abort(404, trans('validator.user'));
+            abort(404, __('validator.user'));
         }
     }
 
@@ -106,7 +106,7 @@ class ActiveController extends BaseController
         $token = check($request->input('token'));
         $tid   = int($request->input('tid'));
 
-        $validator->equal($token, $_SESSION['token'], trans('validator.token'));
+        $validator->equal($token, $_SESSION['token'], __('validator.token'));
 
         $post = Post::query()
             ->where('id', $tid)

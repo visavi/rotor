@@ -1,22 +1,22 @@
 @extends('layout')
 
 @section('title')
-    {{ trans('blogs.title_tags') }}
+    {{ __('blogs.title_tags') }}
 @stop
 
 @section('breadcrumb')
     <nav>
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
-            <li class="breadcrumb-item"><a href="/blogs">{{ trans('index.blogs') }}</a></li>
-            <li class="breadcrumb-item"><a href="/blogs/tags">{{ trans('blogs.tag_cloud') }}</a></li>
-            <li class="breadcrumb-item active">{{ trans('blogs.title_tags') }}</li>
+            <li class="breadcrumb-item"><a href="/blogs">{{ __('index.blogs') }}</a></li>
+            <li class="breadcrumb-item"><a href="/blogs/tags">{{ __('blogs.tag_cloud') }}</a></li>
+            <li class="breadcrumb-item active">{{ __('blogs.title_tags') }}</li>
         </ol>
     </nav>
 @stop
 
 @section('content')
-    <p>{{ trans('blogs.found_in_tags') }}: {{ $page->total }}</p>
+    <p>{{ __('blogs.found_in_tags') }}: {{ $page->total }}</p>
 
     @foreach($blogs as $data)
 
@@ -26,10 +26,10 @@
         </div>
 
         <div>
-            {{ trans('blogs.blog') }}: <a href="/blogs/{{ $data->category_id }}">{{ $data->name }}</a><br>
-            {{ trans('main.views') }}: {{ $data->visits }}<br>
-            {{ trans('blogs.tags') }}: {{ $data->tags }}<br>
-            {{ trans('main.author') }}: {!! $data->user->getProfile() !!}  ({{ dateFixed($data->created_at) }})
+            {{ __('blogs.blog') }}: <a href="/blogs/{{ $data->category_id }}">{{ $data->name }}</a><br>
+            {{ __('main.views') }}: {{ $data->visits }}<br>
+            {{ __('blogs.tags') }}: {{ $data->tags }}<br>
+            {{ __('main.author') }}: {!! $data->user->getProfile() !!}  ({{ dateFixed($data->created_at) }})
         </div>
     @endforeach
 

@@ -19,7 +19,7 @@ class RuleController extends AdminController
         parent::__construct();
 
         if (! isAdmin(User::ADMIN)) {
-            abort(403, trans('errors.forbidden'));
+            abort(403, __('errors.forbidden'));
         }
     }
 
@@ -59,7 +59,7 @@ class RuleController extends AdminController
             $msg   = check($request->input('msg'));
 
             $validator
-                ->equal($token, $_SESSION['token'], trans('validator.token'))
+                ->equal($token, $_SESSION['token'], __('validator.token'))
                 ->notEmpty($msg, ['msg' => 'Вы не ввели текст с правилами сайта!']);
 
             if ($validator->isValid()) {

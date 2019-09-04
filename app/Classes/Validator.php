@@ -37,9 +37,9 @@ class Validator
         }
 
         if (mb_strlen($input, 'utf-8') < $min) {
-            $this->addError($label, trans('validator.length_min', ['length' => $min]));
+            $this->addError($label, __('validator.length_min', ['length' => $min]));
         } elseif (mb_strlen($input, 'utf-8') > $max) {
-            $this->addError($label, trans('validator.length_max', ['length' => $max]));
+            $this->addError($label, __('validator.length_max', ['length' => $max]));
         }
 
         return $this;
@@ -57,7 +57,7 @@ class Validator
     public function between($input, $min, $max, $label): Validator
     {
         if ($input < $min || $input > $max) {
-            $this->addError($label, trans('validator.between', ['min' => $min, 'max' => $max]));
+            $this->addError($label, __('validator.between', ['min' => $min, 'max' => $max]));
         }
 
         return $this;
@@ -382,11 +382,11 @@ class Validator
         $extension = strtolower($input->getClientOriginalExtension());
 
         if (! in_array($extension, $rules['extensions'], true)) {
-            $this->addError([$key => trans('validator.extension')]);
+            $this->addError([$key => __('validator.extension')]);
         }
 
         if (isset($rules['maxsize']) && $input->getSize() > $rules['maxsize']) {
-            $this->addError([$key => trans('validator.size_max', ['size' => formatSize($rules['maxsize'])])]);
+            $this->addError([$key => __('validator.size_max', ['size' => formatSize($rules['maxsize'])])]);
         }
 
         if (in_array($extension, ['jpg', 'jpeg', 'gif', 'png'], true)) {
@@ -394,16 +394,16 @@ class Validator
 
             if (isset($rules['maxweight'])) {
                 if ($width > $rules['maxweight'] || $height > $rules['maxweight']) {
-                    $this->addError([$key => trans('validator.weight_max', ['weight' => $rules['maxweight']])]);
+                    $this->addError([$key => __('validator.weight_max', ['weight' => $rules['maxweight']])]);
                 }
             }
 
             if (isset($rules['minweight'])) {
                 if ($width < $rules['minweight'] || $height < $rules['minweight']) {
-                    $this->addError([$key => trans('validator.weight_min', ['weight' => $rules['minweight']])]);
+                    $this->addError([$key => __('validator.weight_min', ['weight' => $rules['minweight']])]);
                 }
             } elseif (empty($width) || empty($height)) {
-                $this->addError([$key => trans('validator.weight_empty')]);
+                $this->addError([$key => __('validator.weight_empty')]);
             }
         }
 

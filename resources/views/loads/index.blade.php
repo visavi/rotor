@@ -1,34 +1,34 @@
 @extends('layout')
 
 @section('title')
-    {{ trans('index.loads') }}
+    {{ __('index.loads') }}
 @stop
 
 @section('header')
     @if (getUser())
         <div class="float-right">
-            <a class="btn btn-success" href="/downs/create">{{ trans('main.add') }}</a>
+            <a class="btn btn-success" href="/downs/create">{{ __('main.add') }}</a>
         </div><br>
     @endif
 
-    <h1>{{ trans('index.loads') }}</h1>
+    <h1>{{ __('index.loads') }}</h1>
 @stop
 
 @section('breadcrumb')
     <nav>
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
-            <li class="breadcrumb-item active">{{ trans('index.loads') }}</li>
+            <li class="breadcrumb-item active">{{ __('index.loads') }}</li>
         </ol>
     </nav>
 @stop
 
 @section('content')
     @if (getUser())
-        {{ trans('main.my') }}: <a href="/downs/active/files">{{ trans('loads.downs') }}</a>, <a href="/downs/active/comments">{{ trans('main.comments') }}</a> /
+        {{ __('main.my') }}: <a href="/downs/active/files">{{ __('loads.downs') }}</a>, <a href="/downs/active/comments">{{ __('main.comments') }}</a> /
     @endif
 
-    {{ trans('main.new') }}: <a href="/downs">{{ trans('loads.downs') }}</a>, <a href="/downs/comments">{{ trans('main.comments') }}</a>
+    {{ __('main.new') }}: <a href="/downs">{{ __('loads.downs') }}</a>, <a href="/downs/comments">{{ __('main.comments') }}</a>
     <hr>
 
     @foreach ($categories as $category)
@@ -58,7 +58,7 @@
     @endforeach
 
     <br>
-    <a href="/loads/top">{{ trans('loads.downs') }}</a> /
-    <a href="/loads/search">{{ trans('main.search') }}</a> /
-    <a href="/loads/rss">{{ trans('main.rss') }}</a><br>
+    <a href="/loads/top">{{ __('loads.downs') }}</a> /
+    <a href="/loads/search">{{ __('main.search') }}</a> /
+    <a href="/loads/rss">{{ __('main.rss') }}</a><br>
 @stop

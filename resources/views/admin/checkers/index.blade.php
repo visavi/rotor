@@ -1,22 +1,22 @@
 @extends('layout')
 
 @section('title')
-    {{ trans('index.site_scan') }}
+    {{ __('index.site_scan') }}
 @stop
 
 @section('breadcrumb')
     <nav>
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
-            <li class="breadcrumb-item"><a href="/admin">{{ trans('index.panel') }}</a></li>
-            <li class="breadcrumb-item active">{{ trans('index.site_scan') }}</li>
+            <li class="breadcrumb-item"><a href="/admin">{{ __('index.panel') }}</a></li>
+            <li class="breadcrumb-item active">{{ __('index.site_scan') }}</li>
         </ol>
     </nav>
 @stop
 
 @section('content')
     @if ($diff)
-        <b><span style="color:#ff0000">{{ trans('admin.checkers.new_files') }}:</span></b><br><br>
+        <b><span style="color:#ff0000">{{ __('admin.checkers.new_files') }}:</span></b><br><br>
 
         @if ($diff['left'])
             @foreach($diff['left'] as $file)
@@ -24,10 +24,10 @@
             @endforeach
             <br>
         @else
-            {!! showError(trans('admin.checkers.empty_changes')) !!}
+            {!! showError(__('admin.checkers.empty_changes')) !!}
         @endif
 
-        <b><span style="color:#ff0000">{{ trans('admin.checkers.old_files') }}:</span></b><br><br>
+        <b><span style="color:#ff0000">{{ __('admin.checkers.old_files') }}:</span></b><br><br>
 
         @if ($diff['right'])
             @foreach($diff['right'] as $file)
@@ -35,17 +35,17 @@
             @endforeach
             <br>
         @else
-            {!! showError(trans('admin.checkers.empty_changes')) !!}
+            {!! showError(__('admin.checkers.empty_changes')) !!}
         @endif
 
     @else
-        {!! showError(trans('admin.checkers.initial_scan')) !!}
+        {!! showError(__('admin.checkers.initial_scan')) !!}
     @endif
 
     <p class="text-muted font-italic">
-        {{ trans('admin.checkers.information_scan') }}<br>
-        {{ trans('admin.checkers.invalid_extensions') }}: {{ setting('nocheck') }}
+        {{ __('admin.checkers.information_scan') }}<br>
+        {{ __('admin.checkers.invalid_extensions') }}: {{ setting('nocheck') }}
     </p>
 
-    <p><a class="btn btn-primary" href="/admin/checkers/scan?token={{ $_SESSION['token'] }}"><i class="fa fa-sync"></i> {{ trans('admin.checkers.scan') }}</a></p>
+    <p><a class="btn btn-primary" href="/admin/checkers/scan?token={{ $_SESSION['token'] }}"><i class="fa fa-sync"></i> {{ __('admin.checkers.scan') }}</a></p>
 @stop

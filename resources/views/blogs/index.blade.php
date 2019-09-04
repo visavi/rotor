@@ -1,35 +1,35 @@
 @extends('layout')
 
 @section('title')
-    {{ trans('index.blogs') }} - {{ trans('blogs.blogs_list') }}
+    {{ __('index.blogs') }} - {{ __('blogs.blogs_list') }}
 @stop
 
 @section('header')
 
     @if (getUser())
         <div class="float-right">
-            <a class="btn btn-success" href="/blogs/create">{{ trans('blogs.add') }}</a>
+            <a class="btn btn-success" href="/blogs/create">{{ __('blogs.add') }}</a>
         </div><br>
     @endif
 
-    <h1>{{ trans('index.blogs') }}</h1>
+    <h1>{{ __('index.blogs') }}</h1>
 @stop
 
 @section('breadcrumb')
     <nav>
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
-            <li class="breadcrumb-item active">{{ trans('index.blogs') }}</li>
+            <li class="breadcrumb-item active">{{ __('index.blogs') }}</li>
         </ol>
     </nav>
 @stop
 
 @section('content')
     @if (getUser())
-        {{ trans('main.my') }}: <a href="/blogs/active/articles">{{ trans('blogs.articles') }}</a>, <a href="/blogs/active/comments">{{ trans('main.comments') }}</a> /
+        {{ __('main.my') }}: <a href="/blogs/active/articles">{{ __('blogs.articles') }}</a>, <a href="/blogs/active/comments">{{ __('main.comments') }}</a> /
     @endif
 
-    {{ trans('main.new') }}: <a href="/articles">{{ trans('blogs.articles') }}</a>, <a href="/articles/comments">{{ trans('main.comments') }}</a><hr>
+    {{ __('main.new') }}: <a href="/articles">{{ __('blogs.articles') }}</a>, <a href="/articles/comments">{{ __('main.comments') }}</a><hr>
 
     @foreach ($categories as $key => $data)
         <div class="b">
@@ -57,9 +57,9 @@
     @endforeach
 
     <br>
-    <a href="/blogs/top">{{ trans('blogs.top_articles') }}</a> /
-    <a href="/blogs/tags">{{ trans('blogs.tag_cloud') }}</a> /
-    <a href="/blogs/search">{{ trans('main.search') }}</a> /
-    <a href="/blogs/authors">{{ trans('blogs.authors') }}</a> /
-    <a href="/blogs/rss">{{ trans('main.rss') }}</a>
+    <a href="/blogs/top">{{ __('blogs.top_articles') }}</a> /
+    <a href="/blogs/tags">{{ __('blogs.tag_cloud') }}</a> /
+    <a href="/blogs/search">{{ __('main.search') }}</a> /
+    <a href="/blogs/authors">{{ __('blogs.authors') }}</a> /
+    <a href="/blogs/rss">{{ __('main.rss') }}</a>
 @stop

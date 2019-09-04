@@ -1,16 +1,16 @@
 @extends('layout')
 
 @section('title')
-    {{ trans('admin.chat.edit_message') }}
+    {{ __('admin.chat.edit_message') }}
 @stop
 
 @section('breadcrumb')
     <nav>
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
-            <li class="breadcrumb-item"><a href="/admin">{{ trans('index.panel') }}</a></li>
-            <li class="breadcrumb-item"><a href="/admin/chats">{{ trans('index.admin_chat') }}</a></li>
-            <li class="breadcrumb-item active">{{ trans('admin.chat.edit_message') }}</li>
+            <li class="breadcrumb-item"><a href="/admin">{{ __('index.panel') }}</a></li>
+            <li class="breadcrumb-item"><a href="/admin/chats">{{ __('index.admin_chat') }}</a></li>
+            <li class="breadcrumb-item active">{{ __('admin.chat.edit_message') }}</li>
         </ol>
     </nav>
 @stop
@@ -22,12 +22,12 @@
         <form action="/admin/chats/edit/{{ $post->id }}?page={{ $page }}" method="post">
             @csrf
             <div class="form-group{{ hasError('msg') }}">
-                <label for="msg">{{ trans('main.message') }}:</label>
-                <textarea class="form-control markItUp" id="msg" rows="5" name="msg" placeholder="{{ trans('main.message') }}" required>{{ getInput('msg', $post->text) }}</textarea>
+                <label for="msg">{{ __('main.message') }}:</label>
+                <textarea class="form-control markItUp" id="msg" rows="5" name="msg" placeholder="{{ __('main.message') }}" required>{{ getInput('msg', $post->text) }}</textarea>
                 <div class="invalid-feedback">{{ textError('msg') }}</div>
             </div>
 
-            <button class="btn btn-primary">{{ trans('main.change') }}</button>
+            <button class="btn btn-primary">{{ __('main.change') }}</button>
         </form>
     </div>
 @stop

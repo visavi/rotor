@@ -1,25 +1,25 @@
 @extends('layout')
 
 @section('title')
-    {{ $category->name }} ({{ trans('main.page_num', ['page' => $page->current]) }})
+    {{ $category->name }} ({{ __('main.page_num', ['page' => $page->current]) }})
 @stop
 
 @section('header')
 
     @if (! $category->closed && getUser())
         <div class="float-right">
-            <a class="btn btn-success" href="/blogs/create?cid={{ $category->id }}">{{ trans('blogs.add') }}</a>
+            <a class="btn btn-success" href="/blogs/create?cid={{ $category->id }}">{{ __('blogs.add') }}</a>
         </div><br>
     @endif
 
-    <h1>{{ $category->name }} <small>({{ trans('blogs.all_articles') }}: {{ $category->count_blogs }})</small></h1>
+    <h1>{{ $category->name }} <small>({{ __('blogs.all_articles') }}: {{ $category->count_blogs }})</small></h1>
 @stop
 
 @section('breadcrumb')
     <nav>
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
-            <li class="breadcrumb-item"><a href="/blogs">{{ trans('index.blogs') }}</a></li>
+            <li class="breadcrumb-item"><a href="/blogs">{{ __('index.blogs') }}</a></li>
 
             @if ($category->parent->id)
                 <li class="breadcrumb-item"><a href="/blogs/{{ $category->parent->id }}">{{ $category->parent->name }}</a></li>
@@ -28,7 +28,7 @@
             <li class="breadcrumb-item active">{{ $category->name }}</li>
 
             @if (isAdmin())
-                <li class="breadcrumb-item"><a href="/admin/blogs/{{ $category->id }}?page={{ $page->current }}">{{ trans('main.management') }}</a></li>
+                <li class="breadcrumb-item"><a href="/admin/blogs/{{ $category->id }}?page={{ $page->current }}">{{ __('main.management') }}</a></li>
             @endif
         </ol>
     </nav>
@@ -43,20 +43,20 @@
             </div>
             <div>
                 {!! $data->shortText() !!}<br>
-                {{ trans('main.author') }}: {!! $data->user->getProfile() !!} ({{ dateFixed($data->created_at) }})<br>
-                {{ trans('main.views') }}: {{ $data->visits }}<br>
-                <a href="/articles/comments/{{ $data->id }}">{{ trans('main.comments') }}</a> ({{ $data->count_comments }})
+                {{ __('main.author') }}: {!! $data->user->getProfile() !!} ({{ dateFixed($data->created_at) }})<br>
+                {{ __('main.views') }}: {{ $data->visits }}<br>
+                <a href="/articles/comments/{{ $data->id }}">{{ __('main.comments') }}</a> ({{ $data->count_comments }})
                 <a href="/articles/end/{{ $data->id }}">&raquo;</a>
             </div>
         @endforeach
 
         {!! pagination($page) !!}
     @else
-        {!! showError(trans('blogs.empty_articles')) !!}
+        {!! showError(__('blogs.empty_articles')) !!}
     @endif
 
-    <a href="/blogs/top">{{ trans('blogs.top_articles') }}</a> /
-    <a href="/blogs/tags">{{ trans('blogs.tag_cloud') }}</a> /
-    <a href="/blogs/search">{{ trans('main.search') }}</a> /
-    <a href="/blogs/authors">{{ trans('blogs.authors') }}</a>
+    <a href="/blogs/top">{{ __('blogs.top_articles') }}</a> /
+    <a href="/blogs/tags">{{ __('blogs.tag_cloud') }}</a> /
+    <a href="/blogs/search">{{ __('main.search') }}</a> /
+    <a href="/blogs/authors">{{ __('blogs.authors') }}</a>
 @stop

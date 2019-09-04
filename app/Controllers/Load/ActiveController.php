@@ -26,7 +26,7 @@ class ActiveController extends BaseController
         $this->user = getUserByLogin($login);
 
         if (! $this->user) {
-            abort(404, trans('validator.user'));
+            abort(404, __('validator.user'));
         }
     }
 

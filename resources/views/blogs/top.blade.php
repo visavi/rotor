@@ -1,34 +1,34 @@
 @extends('layout')
 
 @section('title')
-    {{ trans('blogs.top_articles') }} ({{ trans('main.page_num', ['page' => $page->current]) }})
+    {{ __('blogs.top_articles') }} ({{ __('main.page_num', ['page' => $page->current]) }})
 @stop
 
 @section('header')
-    <h1>{{ trans('blogs.top_articles') }}</h1>
+    <h1>{{ __('blogs.top_articles') }}</h1>
 @stop
 
 @section('breadcrumb')
     <nav>
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
-            <li class="breadcrumb-item"><a href="/blogs">{{ trans('index.blogs') }}</a></li>
-            <li class="breadcrumb-item active">{{ trans('blogs.top_articles') }}</li>
+            <li class="breadcrumb-item"><a href="/blogs">{{ __('index.blogs') }}</a></li>
+            <li class="breadcrumb-item active">{{ __('blogs.top_articles') }}</li>
         </ol>
     </nav>
 @stop
 
 @section('content')
-    {{ trans('main.sort') }}:
+    {{ __('main.sort') }}:
 
     <?php $active = ($order === 'visits') ? 'success' : 'light'; ?>
-    <a href="/blogs/top?sort=visits" class="badge badge-{{ $active }}">{{ trans('main.views') }}</a>
+    <a href="/blogs/top?sort=visits" class="badge badge-{{ $active }}">{{ __('main.views') }}</a>
 
     <?php $active = ($order === 'rating') ? 'success' : 'light'; ?>
-    <a href="/blogs/top?sort=rated" class="badge badge-{{ $active }}">{{ trans('main.rating') }}</a>
+    <a href="/blogs/top?sort=rated" class="badge badge-{{ $active }}">{{ __('main.rating') }}</a>
 
     <?php $active = ($order === 'count_comments') ? 'success' : 'light'; ?>
-    <a href="/blogs/top?sort=comments" class="badge badge-{{ $active }}">{{ trans('main.comments') }}</a>
+    <a href="/blogs/top?sort=comments" class="badge badge-{{ $active }}">{{ __('main.comments') }}</a>
     <hr>
 
     @if ($blogs->isNotEmpty())
@@ -40,16 +40,16 @@
             </div>
 
             <div>
-                {{ trans('blogs.blog') }}: <a href="/blogs/{{ $data->category_id }}">{{ $data->name }}</a><br>
-                {{ trans('main.author') }}: {!! $data->user->getProfile() !!}<br>
-                {{ trans('main.views') }}: {{ $data->visits }}<br>
-                <a href="/articles/comments/{{ $data->id }}">{{ trans('main.comments') }}</a> ({{ $data->count_comments }})
+                {{ __('blogs.blog') }}: <a href="/blogs/{{ $data->category_id }}">{{ $data->name }}</a><br>
+                {{ __('main.author') }}: {!! $data->user->getProfile() !!}<br>
+                {{ __('main.views') }}: {{ $data->visits }}<br>
+                <a href="/articles/comments/{{ $data->id }}">{{ __('main.comments') }}</a> ({{ $data->count_comments }})
                 <a href="/articles/end/{{ $data->id }}">&raquo;</a>
             </div>
         @endforeach
 
         {!! pagination($page) !!}
     @else
-        {!! showError(trans('blogs.empty_articles')) !!}
+        {!! showError(__('blogs.empty_articles')) !!}
     @endif
 @stop

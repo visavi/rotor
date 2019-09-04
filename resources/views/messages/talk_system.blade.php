@@ -1,16 +1,16 @@
 @extends('layout')
 
 @section('title')
-    {{ trans('messages.notifications') }}
+    {{ __('messages.notifications') }}
 @stop
 
 @section('breadcrumb')
     <nav>
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
-            <li class="breadcrumb-item"><a href="/menu">{{ trans('main.menu') }}</a></li>
-            <li class="breadcrumb-item"><a href="/messages">{{ trans('index.messages') }}</a></li>
-            <li class="breadcrumb-item active">{{ trans('messages.notifications') }}</li>
+            <li class="breadcrumb-item"><a href="/menu">{{ __('main.menu') }}</a></li>
+            <li class="breadcrumb-item"><a href="/messages">{{ __('index.messages') }}</a></li>
+            <li class="breadcrumb-item active">{{ __('messages.notifications') }}</li>
         </ol>
     </nav>
 @stop
@@ -29,10 +29,10 @@
                         {{  dateFixed($data->created_at) }}
                     </div>
 
-                    <b>{{ trans('messages.system') }}</b>
+                    <b>{{ __('messages.system') }}</b>
 
                     @unless ($data->reading)
-                        <br><span class="badge badge-info">{{ trans('messages.new') }}</span>
+                        <br><span class="badge badge-info">{{ __('messages.new') }}</span>
                     @endunless
                 </div>
                 <div class="message">{!! bbCode($data->text) !!}</div>
@@ -42,14 +42,14 @@
         {!! pagination($page) !!}
 
     @else
-        {!! showError(trans('messages.empty_notifications')) !!}
+        {!! showError(__('messages.empty_notifications')) !!}
     @endif
 
-    {{ trans('main.total') }}: <b>{{ $page->total }}</b><br><br>
+    {{ __('main.total') }}: <b>{{ $page->total }}</b><br><br>
 
     @if ($page->total)
-        <i class="fa fa-times"></i> <a href="/messages/delete/0?token={{ $_SESSION['token'] }}">{{ trans('messages.delete_talk') }}</a><br>
+        <i class="fa fa-times"></i> <a href="/messages/delete/0?token={{ $_SESSION['token'] }}">{{ __('messages.delete_talk') }}</a><br>
     @endif
-    <i class="fa fa-search"></i> <a href="/searchusers">{{ trans('index.user_search') }}</a><br>
-    <i class="fa fa-address-book"></i> <a href="/contacts">{{ trans('index.contacts') }}</a> / <a href="/ignores">{{ trans('index.ignores') }}</a><br>
+    <i class="fa fa-search"></i> <a href="/searchusers">{{ __('index.user_search') }}</a><br>
+    <i class="fa fa-address-book"></i> <a href="/contacts">{{ __('index.contacts') }}</a> / <a href="/ignores">{{ __('index.ignores') }}</a><br>
 @stop

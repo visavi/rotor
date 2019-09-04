@@ -1,16 +1,16 @@
 @extends('layout')
 
 @section('title')
-   {{ $offer->title }} - {{ trans('main.comments') }}
+   {{ $offer->title }} - {{ __('main.comments') }}
 @stop
 
 @section('breadcrumb')
     <nav>
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
-            <li class="breadcrumb-item"><a href="/offers/{{ $offer->type }}">{{ trans('index.offers') }}</a></li>
+            <li class="breadcrumb-item"><a href="/offers/{{ $offer->type }}">{{ __('index.offers') }}</a></li>
             <li class="breadcrumb-item"><a href="/offers/{{ $offer->id }}">{{ $offer->title }}</a></li>
-            <li class="breadcrumb-item active">{{ trans('main.comments') }}</li>
+            <li class="breadcrumb-item active">{{ __('main.comments') }}</li>
         </ol>
     </nav>
 @stop
@@ -28,19 +28,19 @@
                     @if (getUser())
                         <div class="float-right">
                             @if (getUser('id') !== $data->user_id)
-                                <a href="#" onclick="return postReply(this)" data-toggle="tooltip" title="{{ trans('main.reply') }}"><i class="fa fa-reply text-muted"></i></a>
+                                <a href="#" onclick="return postReply(this)" data-toggle="tooltip" title="{{ __('main.reply') }}"><i class="fa fa-reply text-muted"></i></a>
 
-                                <a href="#" onclick="return postQuote(this)" data-toggle="tooltip" title="{{ trans('main.quote') }}"><i class="fa fa-quote-right text-muted"></i></a>
+                                <a href="#" onclick="return postQuote(this)" data-toggle="tooltip" title="{{ __('main.quote') }}"><i class="fa fa-quote-right text-muted"></i></a>
 
-                                <a href="#" onclick="return sendComplaint(this)" data-type="{{ App\Models\Offer::class }}" data-id="{{ $data->id }}" data-token="{{ $_SESSION['token'] }}" data-page="{{ $page->current }}" rel="nofollow" data-toggle="tooltip" title="{{ trans('main.complain') }}"><i class="fa fa-bell text-muted"></i></a>
+                                <a href="#" onclick="return sendComplaint(this)" data-type="{{ App\Models\Offer::class }}" data-id="{{ $data->id }}" data-token="{{ $_SESSION['token'] }}" data-page="{{ $page->current }}" rel="nofollow" data-toggle="tooltip" title="{{ __('main.complain') }}"><i class="fa fa-bell text-muted"></i></a>
                             @endif
 
                             @if ($data->created_at + 600 > SITETIME && getUser('id') === $data->user->id)
-                                <a href="/offers/edit/{{ $offer->id }}/{{ $data->id }}?page={{ $page->current }}" data-toggle="tooltip" title="{{ trans('main.edit') }}"><i class="fa fa-pencil-alt text-muted"></i></a>
+                                <a href="/offers/edit/{{ $offer->id }}/{{ $data->id }}?page={{ $page->current }}" data-toggle="tooltip" title="{{ __('main.edit') }}"><i class="fa fa-pencil-alt text-muted"></i></a>
                             @endif
 
                             @if (isAdmin())
-                                <a href="#" onclick="return deleteComment(this)" data-rid="{{ $data->relate_id }}" data-id="{{ $data->id }}" data-type="{{ App\Models\Offer::class }}" data-token="{{ $_SESSION['token'] }}" data-toggle="tooltip" title="{{ trans('main.delete') }}"><i class="fa fa-times text-muted"></i></a>
+                                <a href="#" onclick="return deleteComment(this)" data-rid="{{ $data->relate_id }}" data-id="{{ $data->id }}" data-type="{{ App\Models\Offer::class }}" data-token="{{ $_SESSION['token'] }}" data-toggle="tooltip" title="{{ __('main.delete') }}"><i class="fa fa-times text-muted"></i></a>
                             @endif
                         </div>
                     @endif
@@ -60,7 +60,7 @@
 
         {!! pagination($page) !!}
     @else
-        {!! showError(trans('main.empty_comments')) !!}
+        {!! showError(__('main.empty_comments')) !!}
     @endif
 
     @if (getUser())
@@ -69,24 +69,24 @@
                 <form action="/offers/comments/{{ $offer->id }}" method="post">
                     @csrf
                     <div class="form-group{{ hasError('msg') }}">
-                        <label for="msg">{{ trans('main.message') }}:</label>
+                        <label for="msg">{{ __('main.message') }}:</label>
                         <textarea class="form-control markItUp" maxlength="{{ setting('comment_length') }}" id="msg" rows="5" name="msg" required>{{ getInput('msg') }}</textarea>
                         <div class="invalid-feedback">{{ textError('msg') }}</div>
                         <span class="js-textarea-counter"></span>
                     </div>
 
-                    <button class="btn btn-success">{{ trans('main.write') }}</button>
+                    <button class="btn btn-success">{{ __('main.write') }}</button>
                 </form>
             </div><br>
 
-            <a href="/rules">{{ trans('main.rules') }}</a> /
-            <a href="/stickers">{{ trans('main.stickers') }}</a> /
-            <a href="/tags">{{ trans('main.tags') }}</a><br><br>
+            <a href="/rules">{{ __('main.rules') }}</a> /
+            <a href="/stickers">{{ __('main.stickers') }}</a> /
+            <a href="/tags">{{ __('main.tags') }}</a><br><br>
 
         @else
-            {!! showError(trans('offers.closed_comments')) !!}
+            {!! showError(__('offers.closed_comments')) !!}
         @endif
     @else
-        {!! showError(trans('main.not_authorized')) !!}
+        {!! showError(__('main.not_authorized')) !!}
     @endif
 @stop

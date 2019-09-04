@@ -345,25 +345,25 @@ class User extends BaseModel
     {
         switch ($level) {
             case self::BOSS:
-                $status = trans('main.boss');
+                $status = __('main.boss');
                 break;
             case self::ADMIN:
-                $status = trans('main.admin');
+                $status = __('main.admin');
                 break;
             case self::MODER:
-                $status = trans('main.moder');
+                $status = __('main.moder');
                 break;
             case self::EDITOR:
-                $status = trans('main.editor');
+                $status = __('main.editor');
                 break;
             case self::USER:
-                $status = trans('main.user');
+                $status = __('main.user');
                 break;
             case self::PENDED:
-                $status = trans('main.pended');
+                $status = __('main.pended');
                 break;
             case self::BANNED:
-                $status = trans('main.banned');
+                $status = __('main.banned');
                 break;
             default: $status = setting('statusdef');
         }

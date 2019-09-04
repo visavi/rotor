@@ -19,7 +19,7 @@ class StatusController extends AdminController
         parent::__construct();
 
         if (! isAdmin(User::ADMIN)) {
-            abort(403, trans('errors.forbidden'));
+            abort(403, __('errors.forbidden'));
         }
     }
 
@@ -52,9 +52,9 @@ class StatusController extends AdminController
             $color   = check($request->input('color'));
 
             $validator
-                ->equal($token, $_SESSION['token'], trans('validator.token'))
+                ->equal($token, $_SESSION['token'], __('validator.token'))
                 ->length($name, 3, 30, ['name' => 'Слишком длинное или короткое название статуса!'])
-                ->regex($color, '|^#+[A-f0-9]{6}$|', ['color' => trans('validator.color')], false);
+                ->regex($color, '|^#+[A-f0-9]{6}$|', ['color' => __('validator.color')], false);
 
             if ($validator->isValid()) {
 
@@ -101,9 +101,9 @@ class StatusController extends AdminController
             $color   = check($request->input('color'));
 
             $validator
-                ->equal($token, $_SESSION['token'], trans('validator.token'))
+                ->equal($token, $_SESSION['token'], __('validator.token'))
                 ->length($name, 3, 30, ['name' => 'Слишком длинное или короткое название статуса!'])
-                ->regex($color, '|^#+[A-f0-9]{6}$|', ['color' => trans('validator.color')], false);
+                ->regex($color, '|^#+[A-f0-9]{6}$|', ['color' => __('validator.color')], false);
 
             if ($validator->isValid()) {
 
@@ -138,7 +138,7 @@ class StatusController extends AdminController
         $token = check($request->input('token'));
         $id    = int($request->input('id'));
 
-        $validator->equal($token, $_SESSION['token'], trans('validator.token'));
+        $validator->equal($token, $_SESSION['token'], __('validator.token'));
 
         $status = Status::query()->find($id);
         $validator->notEmpty($status, 'Выбранный для удаления статус не найден!');

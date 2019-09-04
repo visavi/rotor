@@ -7,7 +7,7 @@
 @section('header')
     @if ($item->user->id === getUser('id'))
         <div class="float-right">
-            <a class="btn btn-success" href="/items/edit/{{ $item->id }}">{{ trans('main.change') }}</a>
+            <a class="btn btn-success" href="/items/edit/{{ $item->id }}">{{ __('main.change') }}</a>
         </div><br>
     @endif
 
@@ -18,7 +18,7 @@
     <nav>
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
-            <li class="breadcrumb-item"><a href="/boards">{{ trans('index.boards') }}</a></li>
+            <li class="breadcrumb-item"><a href="/boards">{{ __('index.boards') }}</a></li>
 
             @if ($item->category->parent->id)
                 <li class="breadcrumb-item"><a href="/boards/{{ $item->category->parent->id }}">{{ $item->category->parent->name }}</a></li>
@@ -32,13 +32,13 @@
 
 @section('content')
     @if ($item->expires_at <= SITETIME)
-        <div class="alert alert-danger">{{ trans('boards.not_active_item') }}</div>
+        <div class="alert alert-danger">{{ __('boards.not_active_item') }}</div>
     @endif
 
     @if (isAdmin())
         <div>
-            <a href="/admin/items/edit/{{ $item->id }}">{{ trans('main.edit') }}</a> /
-            <a href="/admin/items/delete/{{ $item->id }}?token={{ $_SESSION['token'] }}" onclick="return confirm('{{ trans('boards.confirm_delete_item') }}')">{{ trans('main.delete') }}</a>
+            <a href="/admin/items/edit/{{ $item->id }}">{{ __('main.edit') }}</a> /
+            <a href="/admin/items/delete/{{ $item->id }}?token={{ $_SESSION['token'] }}" onclick="return confirm('{{ __('boards.confirm_delete_item') }}')">{{ __('main.delete') }}</a>
         </div>
     @endif
 
@@ -90,13 +90,13 @@
                             <p>
 
                                 @if ($item->phone)
-                                    <span class="badge badge-pill badge-primary">{{ trans('boards.phone') }}: {{ $item->phone }}</span><br>
+                                    <span class="badge badge-pill badge-primary">{{ __('boards.phone') }}: {{ $item->phone }}</span><br>
                                 @endif
 
                                 <i class="fa fa-user-circle"></i> {!! $item->user->getProfile() !!} / {{ dateFixed($item->updated_at) }}<br>
 
                                 @if ($item->expires_at > SITETIME)
-                                    <i class="fas fa-clock"></i> {{ trans('boards.expires_in') }} {{ formatTime($item->expires_at - SITETIME) }}
+                                    <i class="fas fa-clock"></i> {{ __('boards.expires_in') }} {{ formatTime($item->expires_at - SITETIME) }}
                                 @endif
                             </p>
                         </div>

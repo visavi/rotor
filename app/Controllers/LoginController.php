@@ -16,7 +16,7 @@ class LoginController extends BaseController
         parent::__construct();
 
         if (! getUser()) {
-            abort(403, trans('main.not_authorized'));
+            abort(403, __('main.not_authorized'));
         }
     }
 

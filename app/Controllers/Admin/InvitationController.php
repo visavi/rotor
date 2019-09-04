@@ -20,7 +20,7 @@ class InvitationController extends AdminController
         parent::__construct();
 
         if (! isAdmin(User::MODER)) {
-            abort(403, trans('errors.forbidden'));
+            abort(403, __('errors.forbidden'));
         }
     }
 
@@ -77,7 +77,7 @@ class InvitationController extends AdminController
             $token  = check($request->input('token'));
             $keys   = int($request->input('keys'));
 
-            $validator->equal($token, $_SESSION['token'], trans('validator.token'))
+            $validator->equal($token, $_SESSION['token'], __('validator.token'))
                 ->notEmpty($keys, ['keys' => 'Не указано число ключей!']);
 
             if ($validator->isValid()) {
@@ -123,7 +123,7 @@ class InvitationController extends AdminController
         /* @var User $user */
         $user = getUserByLogin($login);
 
-        $validator->equal($token, $_SESSION['token'], trans('validator.token'))
+        $validator->equal($token, $_SESSION['token'], __('validator.token'))
             ->notEmpty($user, ['user' => 'Пользователя с данным логином не существует!'])
             ->notEmpty($userkeys, ['userkeys' => 'Не указано число ключей!']);
 
@@ -170,7 +170,7 @@ class InvitationController extends AdminController
     {
         $token = check($request->input('token'));
 
-        $validator->equal($token, $_SESSION['token'], trans('validator.token'))
+        $validator->equal($token, $_SESSION['token'], __('validator.token'))
             ->true(isAdmin(User::BOSS), 'Рассылать ключи может только владелец');
 
         $users = User::query()->where('updated_at', '>', strtotime('-1 week', SITETIME))->get();
@@ -220,8 +220,8 @@ class InvitationController extends AdminController
         $del   = intar($request->input('del'));
         $used  = $request->input('used') ? 1 : 0;
 
-        $validator->equal($token, $_SESSION['token'], trans('validator.token'))
-            ->true($del, trans('validator.deletion'));
+        $validator->equal($token, $_SESSION['token'], __('validator.token'))
+            ->true($del, __('validator.deletion'));
 
         if ($validator->isValid()) {
             Invite::query()->whereIn('id', $del)->delete();

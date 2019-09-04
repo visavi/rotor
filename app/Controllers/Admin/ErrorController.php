@@ -29,7 +29,7 @@ class ErrorController extends AdminController
         parent::__construct();
 
         if (! isAdmin(User::BOSS)) {
-            abort(403, trans('errors.forbidden'));
+            abort(403, __('errors.forbidden'));
         }
 
         $request     = Request::createFromGlobals();
@@ -77,7 +77,7 @@ class ErrorController extends AdminController
         $token = check($request->input('token'));
 
         $validator
-            ->equal($token, $_SESSION['token'], trans('validator.token'))
+            ->equal($token, $_SESSION['token'], __('validator.token'))
             ->true(isAdmin(User::BOSS), 'Очищать логи может только владелец!');
 
         if ($validator->isValid()) {

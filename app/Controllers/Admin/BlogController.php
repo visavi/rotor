@@ -38,14 +38,14 @@ class BlogController extends AdminController
     public function create(Request $request, Validator $validator): void
     {
         if (! isAdmin(User::BOSS)) {
-            abort(403, trans('errors.forbidden'));
+            abort(403, __('errors.forbidden'));
         }
 
         $token = check($request->input('token'));
         $name  = check($request->input('name'));
 
-        $validator->equal($token, $_SESSION['token'], trans('validator.token'))
-            ->length($name, 3, 50, ['name' => trans('validator.text')]);
+        $validator->equal($token, $_SESSION['token'], __('validator.token'))
+            ->length($name, 3, 50, ['name' => __('validator.text')]);
 
         if ($validator->isValid()) {
             $max = Category::query()->max('sort') + 1;
@@ -56,7 +56,7 @@ class BlogController extends AdminController
                 'sort'  => $max,
             ]);
 
-            setFlash('success', trans('blogs.category_success_created'));
+            setFlash('success', __('blogs.category_success_created'));
             redirect('/admin/blogs/edit/' . $category->id);
         } else {
             setInput($request->all());
@@ -77,14 +77,14 @@ class BlogController extends AdminController
     public function edit(int $id, Request $request, Validator $validator): string
     {
         if (! isAdmin(User::BOSS)) {
-            abort(403, trans('errors.forbidden'));
+            abort(403, __('errors.forbidden'));
         }
 
         /** @var Category $category */
         $category = Category::query()->with('children')->find($id);
 
         if (! $category) {
-            abort(404, trans('blogs.category_not_exist'));
+            abort(404, __('blogs.category_not_exist'));
         }
 
         $categories = Category::query()
@@ -99,12 +99,12 @@ class BlogController extends AdminController
             $sort   = check($request->input('sort'));
             $closed = empty($request->input('closed')) ? 0 : 1;
 
-            $validator->equal($token, $_SESSION['token'], trans('validator.token'))
-                ->length($name, 3, 50, ['title' => trans('validator.text')])
-                ->notEqual($parent, $category->id, ['parent' => trans('blogs.category_not_exist')]);
+            $validator->equal($token, $_SESSION['token'], __('validator.token'))
+                ->length($name, 3, 50, ['title' => __('validator.text')])
+                ->notEqual($parent, $category->id, ['parent' => __('blogs.category_not_exist')]);
 
             if (! empty($parent) && $category->children->isNotEmpty()) {
-                $validator->addError(['parent' => trans('blogs.category_has_subcategories')]);
+                $validator->addError(['parent' => __('blogs.category_has_subcategories')]);
             }
 
             if ($validator->isValid()) {
@@ -115,7 +115,7 @@ class BlogController extends AdminController
                     'closed'    => $closed,
                 ]);
 
-                setFlash('success', trans('blogs.category_success_edited'));
+                setFlash('success', __('blogs.category_success_edited'));
                 redirect('/admin/blogs');
             } else {
                 setInput($request->all());
@@ -138,30 +138,30 @@ class BlogController extends AdminController
     public function delete(int $id, Request $request, Validator $validator): void
     {
         if (! isAdmin(User::BOSS)) {
-            abort(403, trans('errors.forbidden'));
+            abort(403, __('errors.forbidden'));
         }
 
         /** @var Category $category */
         $category = Category::query()->with('children')->find($id);
 
         if (! $category) {
-            abort(404, trans('blogs.category_not_exist'));
+            abort(404, __('blogs.category_not_exist'));
         }
 
         $token = check($request->input('token'));
 
-        $validator->equal($token, $_SESSION['token'], trans('validator.token'))
-            ->true($category->children->isEmpty(), trans('blogs.category_has_subcategories'));
+        $validator->equal($token, $_SESSION['token'], __('validator.token'))
+            ->true($category->children->isEmpty(), __('blogs.category_has_subcategories'));
 
         $article = Blog::query()->where('category_id', $category->id)->first();
         if ($article) {
-            $validator->addError(trans('blogs.articles_in_category'));
+            $validator->addError(__('blogs.articles_in_category'));
         }
 
         if ($validator->isValid()) {
             $category->delete();
 
-            setFlash('success', trans('blogs.category_success_deleted'));
+            setFlash('success', __('blogs.category_success_deleted'));
         } else {
             setFlash('danger', $validator->getErrors());
         }
@@ -178,7 +178,7 @@ class BlogController extends AdminController
     public function restatement(Request $request): void
     {
         if (! isAdmin(User::BOSS)) {
-            abort(403, trans('errors.forbidden'));
+            abort(403, __('errors.forbidden'));
         }
 
         $token = check($request->input('token'));
@@ -186,9 +186,9 @@ class BlogController extends AdminController
         if ($token === $_SESSION['token']) {
             restatement('blogs');
 
-            setFlash('success', trans('blogs.success_recounted'));
+            setFlash('success', __('blogs.success_recounted'));
         } else {
-            setFlash('danger', trans('validator.token'));
+            setFlash('danger', __('validator.token'));
         }
 
         redirect('/admin/blogs');
@@ -205,7 +205,7 @@ class BlogController extends AdminController
         $category = Category::query()->with('parent')->find($id);
 
         if (! $category) {
-            abort(404, trans('blogs.category_not_exist'));
+            abort(404, __('blogs.category_not_exist'));
         }
 
         $total = Blog::query()->where('category_id', $id)->count();
@@ -237,7 +237,7 @@ class BlogController extends AdminController
         $blog = Blog::query()->find($id);
 
         if (! $blog) {
-            abort(404, trans('blogs.article_not_exist'));
+            abort(404, __('blogs.article_not_exist'));
         }
 
         if ($request->isMethod('post')) {
@@ -247,10 +247,10 @@ class BlogController extends AdminController
             $tags  = check($request->input('tags'));
 
             $validator
-                ->equal($token, $_SESSION['token'], trans('validator.token'))
-                ->length($title, 5, 50, ['title' => trans('validator.text')])
-                ->length($text, 100, setting('maxblogpost'), ['text' => trans('validator.text')])
-                ->length($tags, 2, 50, ['tags' => trans('blogs.article_error_tags')]);
+                ->equal($token, $_SESSION['token'], __('validator.token'))
+                ->length($title, 5, 50, ['title' => __('validator.text')])
+                ->length($text, 100, setting('maxblogpost'), ['text' => __('validator.text')])
+                ->length($tags, 2, 50, ['tags' => __('blogs.article_error_tags')]);
 
             if ($validator->isValid()) {
                 $blog->update([
@@ -260,7 +260,7 @@ class BlogController extends AdminController
                 ]);
 
                 clearCache(['statblog', 'recentblog']);
-                setFlash('success', trans('blogs.article_success_edited'));
+                setFlash('success', __('blogs.article_success_edited'));
                 redirect('/articles/'.$blog->id);
             } else {
                 setInput($request->all());
@@ -291,7 +291,7 @@ class BlogController extends AdminController
         $blog = Blog::query()->find($id);
 
         if (! $blog) {
-            abort(404, trans('blogs.article_not_exist'));
+            abort(404, __('blogs.article_not_exist'));
         }
 
         if ($request->isMethod('post')) {
@@ -302,12 +302,12 @@ class BlogController extends AdminController
             $category = Category::query()->find($cid);
 
             $validator
-                ->equal($token, $_SESSION['token'], trans('validator.token'))
-                ->notEmpty($category, ['cid' => trans('blogs.category_not_exist')]);
+                ->equal($token, $_SESSION['token'], __('validator.token'))
+                ->notEmpty($category, ['cid' => __('blogs.category_not_exist')]);
 
             if ($category) {
-                $validator->empty($category->closed, ['cid' => trans('blogs.category_closed')]);
-                $validator->notEqual($blog->category_id, $category->id, ['cid' => trans('blogs.article_error_moving')]);
+                $validator->empty($category->closed, ['cid' => __('blogs.category_closed')]);
+                $validator->notEqual($blog->category_id, $category->id, ['cid' => __('blogs.article_error_moving')]);
             }
 
             if ($validator->isValid()) {
@@ -319,7 +319,7 @@ class BlogController extends AdminController
                     'category_id' => $category->id,
                 ]);
 
-                setFlash('success', trans('blogs.article_success_moved'));
+                setFlash('success', __('blogs.article_success_moved'));
                 redirect('/articles/'.$blog->id);
             } else {
                 setInput($request->all());
@@ -354,10 +354,10 @@ class BlogController extends AdminController
         $blog = Blog::query()->find($id);
 
         if (! $blog) {
-            abort(404, trans('blogs.article_not_exist'));
+            abort(404, __('blogs.article_not_exist'));
         }
 
-        $validator->equal($token, $_SESSION['token'], trans('validator.token'));
+        $validator->equal($token, $_SESSION['token'], __('validator.token'));
 
         if ($validator->isValid()) {
             $blog->comments()->delete();
@@ -366,7 +366,7 @@ class BlogController extends AdminController
             $blog->category->decrement('count_blogs');
 
             clearCache(['statblog', 'recentblog']);
-            setFlash('success', trans('blogs.article_success_deleted'));
+            setFlash('success', __('blogs.article_success_deleted'));
         } else {
             setFlash('danger', $validator->getErrors());
         }

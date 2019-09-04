@@ -1,16 +1,16 @@
 @extends('layout')
 
 @section('title')
-    {{ trans('admin.modules.module') }} {{ $moduleConfig['name'] }}
+    {{ __('admin.modules.module') }} {{ $moduleConfig['name'] }}
 @stop
 
 @section('breadcrumb')
     <nav>
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
-            <li class="breadcrumb-item"><a href="/admin">{{ trans('index.panel') }}</a></li>
-            <li class="breadcrumb-item"><a href="/admin/modules">{{ trans('index.modules') }}</a></li>
-            <li class="breadcrumb-item active">{{ trans('admin.modules.module') }} {{ $moduleConfig['name'] }}</li>
+            <li class="breadcrumb-item"><a href="/admin">{{ __('index.panel') }}</a></li>
+            <li class="breadcrumb-item"><a href="/admin/modules">{{ __('index.modules') }}</a></li>
+            <li class="breadcrumb-item active">{{ __('admin.modules.module') }} {{ $moduleConfig['name'] }}</li>
         </ol>
     </nav>
 @stop
@@ -18,17 +18,17 @@
 @section('header')
     @if ($module && ! $module['disabled'] && isset($moduleConfig['panel']))
         <div class="float-right">
-            <a class="btn btn-success" href="{{ $moduleConfig['panel'] }}">{{ trans('main.management') }}</a>
+            <a class="btn btn-success" href="{{ $moduleConfig['panel'] }}">{{ __('main.management') }}</a>
         </div><br>
     @endif
 
-    <h1>{{ trans('admin.modules.module') }} {{ $moduleConfig['name'] }}</h1>
+    <h1>{{ __('admin.modules.module') }} {{ $moduleConfig['name'] }}</h1>
 @stop
 
 @section('content')
     {{ $moduleConfig['description'] }}<br>
-    {{ trans('main.version') }}: {{ $moduleConfig['version'] }}<br>
-    {{ trans('main.author') }}: {{ $moduleConfig['author'] }} <a href="{{ $moduleConfig['homepage'] }}">{{ $moduleConfig['homepage'] }}</a><br>
+    {{ __('main.version') }}: {{ $moduleConfig['version'] }}<br>
+    {{ __('main.author') }}: {{ $moduleConfig['author'] }} <a href="{{ $moduleConfig['homepage'] }}">{{ $moduleConfig['homepage'] }}</a><br>
 
     @if (isset($moduleConfig['screenshots']))
         <?php $countScreens = count($moduleConfig['screenshots']); ?>
@@ -63,7 +63,7 @@
     @endif
 
     @if (isset($moduleConfig['migrations']))
-        <div class="mt-2 font-weight-bold">{{ trans('admin.modules.migrations') }}</div>
+        <div class="mt-2 font-weight-bold">{{ __('admin.modules.migrations') }}</div>
         @foreach ($moduleConfig['migrations'] as $migration)
             <i class="fas fa-database"></i> {{ $migration }}<br>
         @endforeach
@@ -71,28 +71,28 @@
 
 
     @if (isset($moduleConfig['symlink']))
-        <div class="mt-2 font-weight-bold">{{ trans('admin.modules.symlink') }}</div>
+        <div class="mt-2 font-weight-bold">{{ __('admin.modules.symlink') }}</div>
         <i class="fas fa-external-link-alt"></i> {{ $moduleConfig['symlink'] }}<br>
     @endif
 
     <br>
     @if ($module)
         @if (version_compare($moduleConfig['version'], $module->version, '>'))
-            <a class="btn btn-info" href="/admin/modules/install?module={{ $moduleName }}&amp;update=1">{{ trans('main.refresh') }}</a>
+            <a class="btn btn-info" href="/admin/modules/install?module={{ $moduleName }}&amp;update=1">{{ __('main.refresh') }}</a>
         @endif
 
         @if ($module['disabled'])
-            <a class="btn btn-success" href="/admin/modules/install?module={{ $moduleName }}&amp;enable=1">{{ trans('main.enable') }}</a>
+            <a class="btn btn-success" href="/admin/modules/install?module={{ $moduleName }}&amp;enable=1">{{ __('main.enable') }}</a>
         @else
-            <a class="btn btn-warning" href="/admin/modules/uninstall?module={{ $moduleName }}&amp;disable=1">{{ trans('main.disable') }}</a>
+            <a class="btn btn-warning" href="/admin/modules/uninstall?module={{ $moduleName }}&amp;disable=1">{{ __('main.disable') }}</a>
         @endif
 
-        <a class="btn btn-danger" href="/admin/modules/uninstall?module={{ $moduleName }}" onclick="return confirm('{{ trans('admin.modules.confirm_delete') }}')">{{ trans('main.delete') }}</a>
+        <a class="btn btn-danger" href="/admin/modules/uninstall?module={{ $moduleName }}" onclick="return confirm('{{ __('admin.modules.confirm_delete') }}')">{{ __('main.delete') }}</a>
 
         @if (isset($moduleConfig['migrations']))
-            <p class="text-muted font-italic">{{ trans('admin.modules.hint') }}</p>
+            <p class="text-muted font-italic">{{ __('admin.modules.hint') }}</p>
         @endif
     @else
-        <a class="btn btn-success" href="/admin/modules/install?module={{ $moduleName }}">{{ trans('main.install') }}</a>
+        <a class="btn btn-success" href="/admin/modules/install?module={{ $moduleName }}">{{ __('main.install') }}</a>
     @endif
 @stop

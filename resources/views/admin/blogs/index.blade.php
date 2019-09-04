@@ -1,16 +1,16 @@
 @extends('layout')
 
 @section('title')
-    {{ trans('index.blogs') }}
+    {{ __('index.blogs') }}
 @stop
 
 @section('breadcrumb')
     <nav>
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
-            <li class="breadcrumb-item"><a href="/admin">{{ trans('index.panel') }}</a></li>
-            <li class="breadcrumb-item active">{{ trans('index.blogs') }}</li>
-            <li class="breadcrumb-item"><a href="/blogs">{{ trans('main.review') }}</a></li>
+            <li class="breadcrumb-item"><a href="/admin">{{ __('index.panel') }}</a></li>
+            <li class="breadcrumb-item active">{{ __('index.blogs') }}</li>
+            <li class="breadcrumb-item"><a href="/blogs">{{ __('main.review') }}</a></li>
         </ol>
     </nav>
 @stop
@@ -30,7 +30,7 @@
             @if (isAdmin('boss'))
                 <div class="float-right">
                     <a href="/admin/blogs/edit/{{ $data->id }}"><i class="fa fa-pencil-alt"></i></a>
-                    <a href="/admin/blogs/delete/{{ $data->id }}?token={{ $_SESSION['token'] }}" onclick="return confirm('{{ trans('blogs.confirm_delete_blog') }}')"><i class="fa fa-times"></i></a>
+                    <a href="/admin/blogs/delete/{{ $data->id }}?token={{ $_SESSION['token'] }}" onclick="return confirm('{{ __('blogs.confirm_delete_blog') }}')"><i class="fa fa-times"></i></a>
                 </div>
             @endif
         </div>
@@ -47,7 +47,7 @@
 
                     @if (isAdmin('boss'))
                         <a href="/admin/blogs/edit/{{ $child->id }}"><i class="fa fa-pencil-alt"></i></a>
-                        <a href="/admin/blogs/delete/{{ $child->id }}?token={{ $_SESSION['token'] }}" onclick="return confirm('{{ trans('blogs.confirm_delete_blog') }}')"><i class="fa fa-times"></i></a>
+                        <a href="/admin/blogs/delete/{{ $child->id }}?token={{ $_SESSION['token'] }}" onclick="return confirm('{{ __('blogs.confirm_delete_blog') }}')"><i class="fa fa-times"></i></a>
                     @endif
                     <br/>
                 @endforeach
@@ -61,15 +61,15 @@
                 @csrf
                 <div class="form-inline">
                     <div class="form-group{{ hasError('name') }}">
-                        <input type="text" class="form-control" id="name" name="name" maxlength="50" value="{{ getInput('name') }}" placeholder="{{ trans('blogs.blog') }}" required>
+                        <input type="text" class="form-control" id="name" name="name" maxlength="50" value="{{ getInput('name') }}" placeholder="{{ __('blogs.blog') }}" required>
                     </div>
 
-                    <button class="btn btn-primary">{{ trans('main.create') }}</button>
+                    <button class="btn btn-primary">{{ __('main.create') }}</button>
                 </div>
                 <div class="invalid-feedback">{{ textError('name') }}</div>
             </form>
         </div>
 
-        <i class="fa fa-sync"></i> <a href="/admin/blogs/restatement?token={{ $_SESSION['token'] }}">{{ trans('main.recount') }}</a><br>
+        <i class="fa fa-sync"></i> <a href="/admin/blogs/restatement?token={{ $_SESSION['token'] }}">{{ __('main.recount') }}</a><br>
     @endif
 @stop

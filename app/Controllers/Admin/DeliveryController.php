@@ -19,7 +19,7 @@ class DeliveryController extends AdminController
         parent::__construct();
 
         if (! isAdmin(User::BOSS)) {
-            abort(403, trans('errors.forbidden'));
+            abort(403, __('errors.forbidden'));
         }
     }
 
@@ -39,8 +39,8 @@ class DeliveryController extends AdminController
             $type  = int($request->input('type'));
             $users = collect();
 
-            $validator->equal($token, $_SESSION['token'], ['msg' => trans('validator.token')])
-                ->length($msg, 5, setting('comment_length'), ['msg' => trans('validator.text')])
+            $validator->equal($token, $_SESSION['token'], ['msg' => __('validator.token')])
+                ->length($msg, 5, setting('comment_length'), ['msg' => __('validator.text')])
                 ->between($type, 1, 4, 'Вы не выбрали получаетелей рассылки!');
 
             // Рассылка пользователям, которые в онлайне

@@ -21,7 +21,7 @@ class LoadController extends AdminController
         parent::__construct();
 
         if (! isAdmin(User::ADMIN)) {
-            abort(403, trans('errors.forbidden'));
+            abort(403, __('errors.forbidden'));
         }
     }
 
@@ -51,14 +51,14 @@ class LoadController extends AdminController
     public function create(Request $request, Validator $validator): void
     {
         if (! isAdmin(User::BOSS)) {
-            abort(403, trans('errors.forbidden'));
+            abort(403, __('errors.forbidden'));
         }
 
         $token = check($request->input('token'));
         $name  = check($request->input('name'));
 
-        $validator->equal($token, $_SESSION['token'], trans('validator.token'))
-            ->length($name, 3, 50, ['title' => trans('validator.text')]);
+        $validator->equal($token, $_SESSION['token'], __('validator.token'))
+            ->length($name, 3, 50, ['title' => __('validator.text')]);
 
         if ($validator->isValid()) {
 
@@ -91,7 +91,7 @@ class LoadController extends AdminController
     public function edit(int $id, Request $request, Validator $validator): string
     {
         if (! isAdmin(User::BOSS)) {
-            abort(403, trans('errors.forbidden'));
+            abort(403, __('errors.forbidden'));
         }
 
         /** @var Load $load */
@@ -113,8 +113,8 @@ class LoadController extends AdminController
             $sort   = check($request->input('sort'));
             $closed = empty($request->input('closed')) ? 0 : 1;
 
-            $validator->equal($token, $_SESSION['token'], trans('validator.token'))
-                ->length($name, 3, 50, ['title' => trans('validator.text')])
+            $validator->equal($token, $_SESSION['token'], __('validator.token'))
+                ->length($name, 3, 50, ['title' => __('validator.text')])
                 ->notEqual($parent, $load->id, ['parent' => 'Недопустимый выбор родительского раздела!']);
 
             if (! empty($parent) && $load->children->isNotEmpty()) {
@@ -153,7 +153,7 @@ class LoadController extends AdminController
     public function delete(int $id, Request $request, Validator $validator): void
     {
         if (! isAdmin(User::BOSS)) {
-            abort(403, trans('errors.forbidden'));
+            abort(403, __('errors.forbidden'));
         }
 
         /** @var Load $load */
@@ -165,7 +165,7 @@ class LoadController extends AdminController
 
         $token = check($request->input('token'));
 
-        $validator->equal($token, $_SESSION['token'], trans('validator.token'))
+        $validator->equal($token, $_SESSION['token'], __('validator.token'))
             ->true($load->children->isEmpty(), 'Удаление невозможно! Данный раздел имеет подразделы!');
 
         $down = Down::query()->where('category_id', $load->id)->first();
@@ -194,7 +194,7 @@ class LoadController extends AdminController
     public function restatement(Request $request): void
     {
         if (! isAdmin(User::BOSS)) {
-            abort(403, trans('errors.forbidden'));
+            abort(403, __('errors.forbidden'));
         }
 
         $token = check($request->input('token'));
@@ -205,7 +205,7 @@ class LoadController extends AdminController
 
             setFlash('success', 'Данные успешно пересчитаны!');
         } else {
-            setFlash('danger', trans('validator.token'));
+            setFlash('danger', __('validator.token'));
         }
 
         redirect('/admin/loads');
@@ -284,9 +284,9 @@ class LoadController extends AdminController
             /** @var Load $category */
             $category = Load::query()->find($category);
 
-            $validator->equal($token, $_SESSION['token'], trans('validator.token'))
-                ->length($title, 5, 50, ['title' => trans('validator.text')])
-                ->length($text, 50, 5000, ['text' => trans('validator.text')])
+            $validator->equal($token, $_SESSION['token'], __('validator.token'))
+                ->length($title, 5, 50, ['title' => __('validator.text')])
+                ->length($text, 50, 5000, ['text' => __('validator.text')])
                 ->notEmpty($category, ['category' => 'Категории для данного файла не существует!']);
 
             $duplicate = Down::query()->where('title', $title)->where('id', '<>', $down->id)->count();
@@ -370,7 +370,7 @@ class LoadController extends AdminController
         }
 
         if (! isAdmin(User::BOSS)) {
-            abort(403, trans('errors.forbidden'));
+            abort(403, __('errors.forbidden'));
         }
 
         if ($token === $_SESSION['token']) {
@@ -385,7 +385,7 @@ class LoadController extends AdminController
             clearCache(['statload', 'recentfiles']);
             setFlash('success', 'Загрузка успешно удалена!');
         } else {
-            setFlash('danger', trans('validator.token'));
+            setFlash('danger', __('validator.token'));
         }
 
         redirect('/admin/loads/' . $down->category_id);
@@ -488,7 +488,7 @@ class LoadController extends AdminController
             clearCache(['statload', 'recentfiles']);
             setFlash('success', 'Загрузка успешно ' . $type . '!');
         } else {
-            setFlash('danger', trans('validator.token'));
+            setFlash('danger', __('validator.token'));
         }
 
         redirect('/admin/downs/edit/' . $down->id);

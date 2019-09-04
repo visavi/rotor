@@ -8,7 +8,7 @@
     <nav>
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
-            <li class="breadcrumb-item"><a href="/stickers">{{ trans('index.stickers') }}</a></li>
+            <li class="breadcrumb-item"><a href="/stickers">{{ __('index.stickers') }}</a></li>
             <li class="breadcrumb-item active">{{ $category->name }}</li>
         </ol>
     </nav>
@@ -25,8 +25,8 @@
 
         {!! pagination($page) !!}
 
-        {{ trans('stickers.total_stickers') }}: <b>{{ $page->total }}</b><br><br>
+        {{ __('stickers.total_stickers') }}: <b>{{ $page->total }}</b><br><br>
     @else
-        {!! showError(trans('stickers.empty_stickers')) !!}
+        {!! showError(__('stickers.empty_stickers')) !!}
     @endif
 @stop

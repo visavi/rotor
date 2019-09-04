@@ -1,11 +1,11 @@
 @extends('layout')
 
 @section('title')
-    {{ trans('errors.error') }}
+    {{ __('errors.error') }}
 @stop
 
 @section('header', '')
-@section('description', trans('errors.error'))
+@section('description', __('errors.error'))
 
 @section('content')
 
@@ -16,13 +16,13 @@
             <img src="/assets/img/errors/{{ basename($images[array_rand($images)]) }}" alt="error">
         </div>
         <div class="col-md-8 text-center">
-            <h1>{{ trans('errors.error') }}!</h1>
+            <h1>{{ __('errors.error') }}!</h1>
 
             <div class="lead">{{ $message }}</div>
 
             @if ($referer)
                 <div class="m-3">
-                    <i class="fa fa-arrow-circle-left"></i> <a href="{{ $referer }}">{{ trans('errors.return') }}</a><br>
+                    <i class="fa fa-arrow-circle-left"></i> <a href="{{ $referer }}">{{ __('errors.return') }}</a><br>
                 </div>
             @endif
         </div>

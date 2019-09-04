@@ -24,7 +24,7 @@ class UserController extends AdminController
         parent::__construct();
 
         if (! isAdmin(User::BOSS)) {
-            abort(403, trans('errors.forbidden'));
+            abort(403, __('errors.forbidden'));
         }
     }
 
@@ -85,7 +85,7 @@ class UserController extends AdminController
         $user  = getUserByLogin($login);
 
         if (! $user) {
-            abort(404, trans('validator.user'));
+            abort(404, __('validator.user'));
         }
 
         $allThemes   = array_map('basename', glob(HOME . '/themes/*', GLOB_ONLYDIR));
@@ -117,13 +117,13 @@ class UserController extends AdminController
             $info      = check($request->input('info'));
             $created   = check($request->input('created'));
 
-            $validator->equal($token, $_SESSION['token'], trans('validator.token'))
+            $validator->equal($token, $_SESSION['token'], __('validator.token'))
                 ->in($level, User::ALL_GROUPS, ['level' => 'Недопустимый уровень пользователя!'])
                 ->length($password, 6, 20, 'Слишком длинный или короткий новый пароль!', false)
-                ->email($email, ['email' => trans('validator.email')])
-                ->regex($site, '#^https?://([а-яa-z0-9_\-\.])+(\.([а-яa-z0-9\/])+)+$#u', ['site' => trans('validator.url')], false)
-                ->regex($birthday, '#^[0-9]{2}+\.[0-9]{2}+\.[0-9]{4}$#', ['birthday' => trans('validator.date')], false)
-                ->regex($created, '#^[0-9]{2}+\.[0-9]{2}+\.[0-9]{4}$#', ['created' => trans('validator.date')], false)
+                ->email($email, ['email' => __('validator.email')])
+                ->regex($site, '#^https?://([а-яa-z0-9_\-\.])+(\.([а-яa-z0-9\/])+)+$#u', ['site' => __('validator.url')], false)
+                ->regex($birthday, '#^[0-9]{2}+\.[0-9]{2}+\.[0-9]{4}$#', ['birthday' => __('validator.date')], false)
+                ->regex($created, '#^[0-9]{2}+\.[0-9]{2}+\.[0-9]{4}$#', ['created' => __('validator.date')], false)
                 ->length($status, 3, 20, ['status' => 'Слишком длинный или короткий статус!'], false)
                 ->true(in_array($themes, $allThemes, true) || empty($themes), ['themes' => 'Данная тема не установлена на сайте!'])
                 ->length($info, 0, 1000, ['info' => 'Слишком большая информация о себе!']);
@@ -198,7 +198,7 @@ class UserController extends AdminController
         $user  = getUserByLogin($login);
 
         if (! $user) {
-            abort(404, trans('validator.user'));
+            abort(404, __('validator.user'));
         }
 
         if ($request->isMethod('post')) {
@@ -211,7 +211,7 @@ class UserController extends AdminController
             $delcomments = empty($request->input('delcomments')) ? 0 : 1;
             $delimages   = empty($request->input('delimages')) ? 0 : 1;
 
-            $validator->equal($token, $_SESSION['token'], trans('validator.token'))
+            $validator->equal($token, $_SESSION['token'], __('validator.token'))
                 ->notIn($user->level, User::ADMIN_GROUPS, 'Запрещено удалять пользователей из группы администраторов!');
 
             if ($validator->isValid()) {

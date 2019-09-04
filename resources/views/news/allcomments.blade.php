@@ -1,15 +1,15 @@
 @extends('layout')
 
 @section('title')
-    {{ trans('main.last_comments') }}
+    {{ __('main.last_comments') }}
 @stop
 
 @section('breadcrumb')
     <nav>
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
-            <li class="breadcrumb-item"><a href="/news">{{ trans('index.news') }}</a></li>
-            <li class="breadcrumb-item active">{{ trans('main.last_comments') }}</li>
+            <li class="breadcrumb-item"><a href="/news">{{ __('index.news') }}</a></li>
+            <li class="breadcrumb-item active">{{ __('main.last_comments') }}</li>
         </ol>
     </nav>
 @stop
@@ -23,7 +23,7 @@
 
             <div>
                 {!! bbCode($data->text) !!}<br>
-                {{ trans('main.posted') }}: {!! $data->user->getProfile() !!} <small>({{ dateFixed($data->created_at) }})</small><br>
+                {{ __('main.posted') }}: {!! $data->user->getProfile() !!} <small>({{ dateFixed($data->created_at) }})</small><br>
 
                 @if (isAdmin())
                     <span class="data">({{ $data->brow }}, {{ $data->ip }})</span>
@@ -33,6 +33,6 @@
 
         {!! pagination($page) !!}
     @else
-        {!! showError(trans('main.empty_comments')) !!}
+        {!! showError(__('main.empty_comments')) !!}
     @endif
 @stop

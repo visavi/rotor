@@ -1,19 +1,19 @@
 @extends('layout')
 
 @section('title')
-    {{ trans('index.blogs') }} - {{ trans('blogs.new_comments') }} ({{ trans('main.page_num', ['page' => $page->current]) }})
+    {{ __('index.blogs') }} - {{ __('blogs.new_comments') }} ({{ __('main.page_num', ['page' => $page->current]) }})
 @stop
 
 @section('header')
-    <h1>{{ trans('blogs.new_comments') }}</h1>
+    <h1>{{ __('blogs.new_comments') }}</h1>
 @stop
 
 @section('breadcrumb')
     <nav>
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
-            <li class="breadcrumb-item"><a href="/blogs">{{ trans('index.blogs') }}</a></li>
-            <li class="breadcrumb-item active">{{ trans('blogs.new_comments') }}</li>
+            <li class="breadcrumb-item"><a href="/blogs">{{ __('index.blogs') }}</a></li>
+            <li class="breadcrumb-item active">{{ __('blogs.new_comments') }}</li>
         </ol>
     </nav>
 @stop
@@ -35,7 +35,7 @@
                 <div>
                     {!! bbCode($data->text) !!}<br>
 
-                    {{ trans('main.posted') }}: {!! $data->user->getProfile() !!} <small>({{ dateFixed($data->created_at) }})</small><br>
+                    {{ __('main.posted') }}: {!! $data->user->getProfile() !!} <small>({{ dateFixed($data->created_at) }})</small><br>
                     @if (isAdmin())
                         <span class="data">({{ $data->brow }}, {{ $data->ip }})</span>
                     @endif
@@ -45,6 +45,6 @@
 
         {!! pagination($page) !!}
     @else
-        {!! showError(trans('main.empty_comments')) !!}
+        {!! showError(__('main.empty_comments')) !!}
     @endif
 @stop

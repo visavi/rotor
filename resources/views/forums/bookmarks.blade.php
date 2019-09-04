@@ -1,15 +1,15 @@
 @extends('layout')
 
 @section('title')
-    {{ trans('forums.title_bookmarks') }}
+    {{ __('forums.title_bookmarks') }}
 @stop
 
 @section('breadcrumb')
     <nav>
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
-            <li class="breadcrumb-item"><a href="/forums">{{ trans('index.forums') }}</a></li>
-            <li class="breadcrumb-item active">{{ trans('forums.title_bookmarks') }}</li>
+            <li class="breadcrumb-item"><a href="/forums">{{ __('index.forums') }}</a></li>
+            <li class="breadcrumb-item active">{{ __('forums.title_bookmarks') }}</li>
         </ol>
     </nav>
 @stop
@@ -29,17 +29,17 @@
 
                 <div>
                     {!! $topic->topic->pagination() !!}
-                    {{ trans('main.author') }}: {{ $topic->topic->user->getName() }} /
-                    {{ trans('forums.latest') }}: {{ $topic->topic->lastPost->user->getName() }}
+                    {{ __('main.author') }}: {{ $topic->topic->user->getName() }} /
+                    {{ __('forums.latest') }}: {{ $topic->topic->lastPost->user->getName() }}
                     ({{ dateFixed($topic->topic->lastPost->created_at) }})
                 </div>
             @endforeach
 
-            <button class="btn btn-sm btn-danger">{{ trans('main.delete_selected') }}</button>
+            <button class="btn btn-sm btn-danger">{{ __('main.delete_selected') }}</button>
         </form>
 
         {!! pagination($page) !!}
     @else
-        {!! showError(trans('forums.empty_bookmarks')) !!}
+        {!! showError(__('forums.empty_bookmarks')) !!}
     @endif
 @stop

@@ -16,7 +16,7 @@ class BanController extends AdminController
         parent::__construct();
 
         if (! isAdmin(User::MODER)) {
-            abort(403, trans('errors.forbidden'));
+            abort(403, __('errors.forbidden'));
         }
     }
 
@@ -44,11 +44,11 @@ class BanController extends AdminController
         $user = User::query()->where('login', $login)->with('lastBan')->first();
 
         if (! $user) {
-            abort(404, trans('validator.user'));
+            abort(404, __('validator.user'));
         }
 
         if (in_array($user->level, User::ADMIN_GROUPS, true)) {
-            abort('default', trans('admin.bans.forbidden_ban'));
+            abort('default', __('admin.bans.forbidden_ban'));
         }
 
         if ($request->isMethod('post')) {
@@ -58,12 +58,12 @@ class BanController extends AdminController
             $reason = check($request->input('reason'));
             $notice = check($request->input('notice'));
 
-            $validator->equal($token, $_SESSION['token'], trans('validator.token'))
-                ->false($user->level === User::BANNED && $user->timeban > SITETIME, trans('admin.bans.user_banned'))
-                ->gt($time, 0, ['time' => trans('admin.bans.time_not_indicated')])
-                ->in($type, ['minutes', 'hours', 'days'], ['type' => trans('admin.bans.time_not_selected')])
-                ->length($reason, 5, 1000, ['reason' => trans('validator.text')])
-                ->length($notice, 0, 1000, ['notice' => trans('validator.text_long')]);
+            $validator->equal($token, $_SESSION['token'], __('validator.token'))
+                ->false($user->level === User::BANNED && $user->timeban > SITETIME, __('admin.bans.user_banned'))
+                ->gt($time, 0, ['time' => __('admin.bans.time_not_indicated')])
+                ->in($type, ['minutes', 'hours', 'days'], ['type' => __('admin.bans.time_not_selected')])
+                ->length($reason, 5, 1000, ['reason' => __('validator.text')])
+                ->length($notice, 0, 1000, ['notice' => __('validator.text_long')]);
 
             if ($validator->isValid()) {
 
@@ -95,7 +95,7 @@ class BanController extends AdminController
                     'updated_at'   => SITETIME,
                 ]);
 
-                setFlash('success', trans('admin.bans.success_banned'));
+                setFlash('success', __('admin.bans.success_banned'));
                 redirect('/admin/bans/edit?user=' . $user->login);
             } else {
                 setInput($request->all());
@@ -120,11 +120,11 @@ class BanController extends AdminController
         $user = User::query()->where('login', $login)->with('lastBan')->first();
 
         if (! $user) {
-            abort(404, trans('validator.user'));
+            abort(404, __('validator.user'));
         }
 
         if ($user->level !== User::BANNED || $user->timeban < SITETIME) {
-            abort('default', trans('admin.bans.user_not_banned'));
+            abort('default', __('admin.bans.user_not_banned'));
         }
 
         if ($request->isMethod('post')) {
@@ -135,9 +135,9 @@ class BanController extends AdminController
             $timeban = strtotime($timeban);
             $term    = $timeban - SITETIME;
 
-            $validator->equal($token, $_SESSION['token'], trans('validator.token'))
-                ->gt($term, 0, ['timeban' => trans('admin.bans.time_empty')])
-                ->length($reason, 5, 1000, ['reason' => trans('validator.text')]);
+            $validator->equal($token, $_SESSION['token'], __('validator.token'))
+                ->gt($term, 0, ['timeban' => __('admin.bans.time_empty')])
+                ->length($reason, 5, 1000, ['reason' => __('validator.text')]);
 
             if ($validator->isValid()) {
 
@@ -155,7 +155,7 @@ class BanController extends AdminController
                     'created_at'   => SITETIME,
                 ]);
 
-                setFlash('success', trans('main.record_changed_success'));
+                setFlash('success', __('main.record_changed_success'));
                 redirect('/admin/bans/edit?user=' . $user->login);
             } else {
                 setInput($request->all());
@@ -181,14 +181,14 @@ class BanController extends AdminController
         $user = User::query()->where('login', $login)->with('lastBan')->first();
 
         if (! $user) {
-            abort(404, trans('validator.user'));
+            abort(404, __('validator.user'));
         }
 
         if ($user->level !== User::BANNED || $user->timeban < SITETIME) {
-            abort('default', trans('admin.bans.user_not_banned'));
+            abort('default', __('admin.bans.user_not_banned'));
         }
 
-        $validator->equal($token, $_SESSION['token'], trans('validator.token'));
+        $validator->equal($token, $_SESSION['token'], __('validator.token'));
 
         if ($validator->isValid()) {
 
@@ -204,7 +204,7 @@ class BanController extends AdminController
                 'created_at'   => SITETIME,
             ]);
 
-            setFlash('success', trans('admin.bans.success_unbanned'));
+            setFlash('success', __('admin.bans.success_unbanned'));
         } else {
             setFlash('danger', $validator->getErrors());
         }

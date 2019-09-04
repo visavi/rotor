@@ -2,13 +2,13 @@
 <table>
     <thead>
         <tr>
-            <th class="text-center">{{ trans('main.mo') }}</th>
-            <th class="text-center">{{ trans('main.tu') }}</th>
-            <th class="text-center">{{ trans('main.we') }}</th>
-            <th class="text-center">{{ trans('main.th') }}</th>
-            <th class="text-center">{{ trans('main.fr') }}</th>
-            <th class="text-center text-danger">{{ trans('main.sa') }}</th>
-            <th class="text-center text-danger">{{ trans('main.su') }}</th>
+            <th class="text-center">{{ __('main.mo') }}</th>
+            <th class="text-center">{{ __('main.tu') }}</th>
+            <th class="text-center">{{ __('main.we') }}</th>
+            <th class="text-center">{{ __('main.th') }}</th>
+            <th class="text-center">{{ __('main.fr') }}</th>
+            <th class="text-center text-danger">{{ __('main.sa') }}</th>
+            <th class="text-center text-danger">{{ __('main.su') }}</th>
         </tr>
     </thead>
     <tbody>

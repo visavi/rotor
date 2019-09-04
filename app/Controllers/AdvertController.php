@@ -54,7 +54,7 @@ class AdvertController extends BaseController
     public function create(Request $request, Validator $validator): string
     {
         if (! getUser()) {
-            abort(403, trans('main.not_authorized'));
+            abort(403, __('main.not_authorized'));
         }
 
         if (getUser('point') < setting('rekuserpoint')) {
@@ -92,13 +92,13 @@ class AdvertController extends BaseController
                 $price += setting('rekuseroptprice');
             }
 
-            $validator->equal($token, $_SESSION['token'], trans('validator.token'))
+            $validator->equal($token, $_SESSION['token'], __('validator.token'))
                 ->gte(getUser('point'), setting('rekuserpoint'), 'Для покупки рекламы вам необходимо набрать '.plural(50, setting('scorename')).'!')
-                ->true(captchaVerify(), ['protect' => trans('validator.captcha')])
-                ->regex($site, '|^https?://([а-яa-z0-9_\-\.])+(\.([а-яa-z0-9\/\-?_=#])+)+$|iu', ['site' => trans('validator.url')])
-                ->length($site, 5, 100, ['site' => trans('validator.url_text')])
-                ->length($name, 5, 35, ['name' => trans('validator.text')])
-                ->regex($color, '|^#+[A-f0-9]{6}$|', ['color' => trans('validator.color')], false)
+                ->true(captchaVerify(), ['protect' => __('validator.captcha')])
+                ->regex($site, '|^https?://([а-яa-z0-9_\-\.])+(\.([а-яa-z0-9\/\-?_=#])+)+$|iu', ['site' => __('validator.url')])
+                ->length($site, 5, 100, ['site' => __('validator.url_text')])
+                ->length($name, 5, 35, ['name' => __('validator.text')])
+                ->regex($color, '|^#+[A-f0-9]{6}$|', ['color' => __('validator.color')], false)
                 ->gte(getUser('money'), $price, ['Для покупки рекламы у вас недостаточно денег!']);
 
             if ($validator->isValid()) {

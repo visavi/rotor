@@ -18,7 +18,7 @@ class ContactController extends BaseController
         parent::__construct();
 
         if (! getUser()) {
-            abort(403, trans('main.not_authorized'));
+            abort(403, __('main.not_authorized'));
         }
     }
 
@@ -37,7 +37,7 @@ class ContactController extends BaseController
             $page  = int($request->input('page', 1));
             $token = check($request->input('token'));
 
-            $validator->equal($token, $_SESSION['token'], trans('validator.token'));
+            $validator->equal($token, $_SESSION['token'], __('validator.token'));
 
             $user = getUserByLogin($login);
             $validator->notEmpty($user, ['user' => 'Данного пользователя не существует!']);
@@ -111,7 +111,7 @@ class ContactController extends BaseController
             $token = check($request->input('token'));
             $msg   = check($request->input('msg'));
 
-            $validator->equal($token, $_SESSION['token'], ['msg' => trans('validator.token')])
+            $validator->equal($token, $_SESSION['token'], ['msg' => __('validator.token')])
                 ->length($msg, 0, 1000, ['msg' => 'Слишком большая заметка!']);
 
             if ($validator->isValid()) {
@@ -144,8 +144,8 @@ class ContactController extends BaseController
         $token = check($request->input('token'));
         $del   = intar($request->input('del'));
 
-        $validator->equal($token, $_SESSION['token'], trans('validator.token'))
-            ->true($del, trans('validator.deletion'));
+        $validator->equal($token, $_SESSION['token'], __('validator.token'))
+            ->true($del, __('validator.deletion'));
 
         if ($validator->isValid()) {
 

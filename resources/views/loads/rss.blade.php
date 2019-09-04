@@ -1,7 +1,7 @@
 @extends('layout_rss')
 
 @section('title')
-    {{ trans('loads.rss_downs') }}
+    {{ __('loads.rss_downs') }}
 @stop
 
 @section('content')
@@ -15,7 +15,7 @@
             <description>{{ $down->text }}</description>
             <author>{{ $down->user->login }}</author>
             <pubDate>{{ date('r', $down->created_at) }}</pubDate>
-            <category>{{ trans('index.loads') }}</category>
+            <category>{{ __('index.loads') }}</category>
             <guid>{{ siteUrl() }}/down/{{ $down->id }}</guid>
         </item>
     @endforeach

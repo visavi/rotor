@@ -111,16 +111,16 @@ class Offer extends BaseModel
     {
         switch ($this->status) {
             case 'process':
-                $status = '<span class="font-weight-bold text-primary"><i class="fa fa-spinner"></i> ' . trans('offers.process') . '</span>';
+                $status = '<span class="font-weight-bold text-primary"><i class="fa fa-spinner"></i> ' . __('offers.process') . '</span>';
                 break;
             case 'done':
-                $status = '<span class="font-weight-bold text-success"><i class="fa fa-check-circle"></i> ' . trans('offers.done') . '</span>';
+                $status = '<span class="font-weight-bold text-success"><i class="fa fa-check-circle"></i> ' . __('offers.done') . '</span>';
                 break;
             case 'cancel':
-                $status = '<span class="font-weight-bold text-danger"><i class="fa fa-times-circle"></i> ' . trans('offers.cancel') . '</span>';
+                $status = '<span class="font-weight-bold text-danger"><i class="fa fa-times-circle"></i> ' . __('offers.cancel') . '</span>';
                 break;
             default:
-                $status = '<span class="font-weight-bold text-warning"><i class="fa fa-question-circle"></i> ' . trans('offers.wait') . '</span>';
+                $status = '<span class="font-weight-bold text-warning"><i class="fa fa-question-circle"></i> ' . __('offers.wait') . '</span>';
         }
 
         return $status;

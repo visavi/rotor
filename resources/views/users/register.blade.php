@@ -1,14 +1,14 @@
 @extends('layout')
 
 @section('title')
-    {{ trans('index.register') }}
+    {{ __('index.register') }}
 @stop
 
 @section('breadcrumb')
     <nav>
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
-            <li class="breadcrumb-item active">{{ trans('index.register') }}</li>
+            <li class="breadcrumb-item active">{{ __('index.register') }}</li>
         </ol>
     </nav>
 @stop
@@ -17,16 +17,16 @@
     @if (setting('regkeys'))
         <div class="alert alert-danger">
             <i class="fa fa-pencil-alt text-muted"></i>
-            <b>{{ trans('users.confirm_registration') }}</b><br>
-            {{ trans('users.confirm_registration_hint') }}
+            <b>{{ __('users.confirm_registration') }}</b><br>
+            {{ __('users.confirm_registration_hint') }}
         </div>
     @endif
 
     @if (setting('invite'))
         <div class="alert alert-danger">
             <i class="fa fa-pencil-alt text-muted"></i>
-            <b>{{ trans('users.invite_registration') }}</b><br>
-            {{ trans('users.invite_registration_hint') }}
+            <b>{{ __('users.invite_registration') }}</b><br>
+            {{ __('users.invite_registration_hint') }}
         </div>
     @endif
 
@@ -36,7 +36,7 @@
             <span class="badge badge-primary">{{ $_SESSION['social']->network }}</span> {{ $_SESSION['social']->first_name }} {{ $_SESSION['social']->last_name }} {{ isset($_SESSION['social']->nickname) ? '('.$_SESSION['social']->nickname.')' : '' }}
         </div>
         <div class="bg-info text-light p-1 mb-3">
-            {!! trans('users.social_auth_text') !!}
+            {!! __('users.social_auth_text') !!}
         </div>
     @endif
 
@@ -48,34 +48,34 @@
         <form action="/register" method="post">
 
             <div class="form-group{{ hasError('login') }}">
-                <label for="inputLogin">{{ trans('users.login') }}:</label>
+                <label for="inputLogin">{{ __('users.login') }}:</label>
                 <input class="form-control" name="login" id="inputLogin" maxlength="20" value="{{ getInput('login') }}" required>
                 <div class="invalid-feedback">{{ textError('login') }}</div>
-                <span class="text-muted font-italic">{{ trans('users.login_requirements') }}</span>
+                <span class="text-muted font-italic">{{ __('users.login_requirements') }}</span>
             </div>
 
             <div class="form-group{{ hasError('password') }}">
-                <label for="inputPassword">{{ trans('users.password') }}:</label>
+                <label for="inputPassword">{{ __('users.password') }}:</label>
                 <input class="form-control" name="password" type="password" id="inputPassword" maxlength="20" required>
                 <div class="invalid-feedback">{{ textError('password') }}</div>
-                <span class="text-muted font-italic">{{ trans('users.password_requirements') }}</span>
+                <span class="text-muted font-italic">{{ __('users.password_requirements') }}</span>
             </div>
 
             <div class="form-group{{ hasError('password2') }}">
-                <label for="inputPassword2">{{ trans('users.confirm_password') }}:</label>
+                <label for="inputPassword2">{{ __('users.confirm_password') }}:</label>
                 <input class="form-control" name="password2" type="password" id="inputPassword2" maxlength="20" required>
                 <div class="invalid-feedback">{{ textError('password2') }}</div>
             </div>
 
             <div class="form-group{{ hasError('email') }}">
-                <label for="inputEmail">{{ trans('users.email') }}:</label>
+                <label for="inputEmail">{{ __('users.email') }}:</label>
                 <input class="form-control" name="email" id="inputEmail" maxlength="50" value="{{ getInput('email') }}" required>
                 <div class="invalid-feedback">{{ textError('email') }}</div>
             </div>
 
             @if (setting('invite'))
                 <div class="form-group{{ hasError('invite') }}">
-                    <label for="inputInvite">{{ trans('users.invitation_key') }}:</label>
+                    <label for="inputInvite">{{ __('users.invitation_key') }}:</label>
                     <input class="form-control" name="invite" id="inputInvite" maxlength="32" value="{{ getInput('invite') }}" required>
                     <div class="invalid-feedback">{{ textError('invite') }}</div>
                 </div>
@@ -86,21 +86,21 @@
             <div class="form-group{{ hasError('gender') }}">
                 <div class="custom-control custom-radio">
                     <input class="custom-control-input" type="radio" id="inputGenderMale" name="gender" value="male"{{ $inputGender === 'male' ? ' checked' : '' }}>
-                    <label class="custom-control-label" for="inputGenderMale">{{ trans('main.male') }}</label>
+                    <label class="custom-control-label" for="inputGenderMale">{{ __('main.male') }}</label>
                 </div>
                 <div class="custom-control custom-radio">
                     <input class="custom-control-input" type="radio" id="inputGenderFemale" name="gender" value="female"{{ $inputGender === 'female' ? ' checked' : '' }}>
-                    <label class="custom-control-label" for="inputGenderFemale">{{ trans('main.female') }}</label>
+                    <label class="custom-control-label" for="inputGenderFemale">{{ __('main.female') }}</label>
                 </div>
                 <div class="invalid-feedback">{{ textError('gender') }}</div>
             </div>
 
             {!! view('app/_captcha') !!}
 
-            <button class="btn btn-primary">{{ trans('index.register') }}</button>
+            <button class="btn btn-primary">{{ __('index.register') }}</button>
         </form>
     </div>
     <br>
 
-    {!! trans('users.register_text') !!}<br>
+    {!! __('users.register_text') !!}<br>
 @stop

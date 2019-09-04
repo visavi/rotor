@@ -1,15 +1,15 @@
 @extends('layout')
 
 @section('title')
-    {{ trans('blogs.tag_cloud') }}
+    {{ __('blogs.tag_cloud') }}
 @stop
 
 @section('breadcrumb')
     <nav>
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
-            <li class="breadcrumb-item"><a href="/blogs">{{ trans('index.blogs') }}</a></li>
-            <li class="breadcrumb-item active">{{ trans('blogs.tag_cloud') }}</li>
+            <li class="breadcrumb-item"><a href="/blogs">{{ __('index.blogs') }}</a></li>
+            <li class="breadcrumb-item active">{{ __('blogs.tag_cloud') }}</li>
         </ol>
     </nav>
 @stop

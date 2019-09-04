@@ -80,9 +80,9 @@ class DownController extends BaseController
             $text  = check($request->input('text'));
             $files = (array) $request->file('files');
 
-            $validator->equal($token, $_SESSION['token'], trans('validator.token'))
-                ->length($title, 5, 50, ['title' => trans('validator.text')])
-                ->length($text, 50, 5000, ['text' => trans('validator.text')]);
+            $validator->equal($token, $_SESSION['token'], __('validator.token'))
+                ->length($title, 5, 50, ['title' => __('validator.text')])
+                ->length($text, 50, 5000, ['text' => __('validator.text')]);
 
             $duplicate = Down::query()->where('title', $title)->where('id', '<>', $down->id)->count();
             $validator->empty($duplicate, ['title' => 'Загрузка с аналогичный названием уже существует!']);
@@ -175,7 +175,7 @@ class DownController extends BaseController
         }
 
         if (! $user = getUser()) {
-            abort(403, trans('main.not_authorized'));
+            abort(403, __('main.not_authorized'));
         }
 
         $loads = Load::query()
@@ -199,10 +199,10 @@ class DownController extends BaseController
             $category = Load::query()->find($cid);
 
             $validator
-                ->equal($token, $_SESSION['token'], trans('validator.token'))
-                ->length($title, 5, 50, ['title' => trans('validator.text')])
-                ->length($text, 50, 5000, ['text' => trans('validator.text')])
-                ->false($flood->isFlood(), ['msg' => trans('validator.flood', ['sec' => $flood->getPeriod()])])
+                ->equal($token, $_SESSION['token'], __('validator.token'))
+                ->length($title, 5, 50, ['title' => __('validator.text')])
+                ->length($text, 50, 5000, ['text' => __('validator.text')])
+                ->false($flood->isFlood(), ['msg' => __('validator.flood', ['sec' => $flood->getPeriod()])])
                 ->notEmpty($category, ['category' => 'Категории для данного файла не существует!']);
 
             if ($category) {
@@ -292,8 +292,8 @@ class DownController extends BaseController
         }
 
         $validator
-            ->equal($token, $_SESSION['token'], ['score' => trans('validator.token')])
-            ->true(getUser(), ['score' => trans('main.not_authorized')])
+            ->equal($token, $_SESSION['token'], ['score' => __('validator.token')])
+            ->true(getUser(), ['score' => __('main.not_authorized')])
             ->between($score, 1, 5, ['score' => 'Необходимо поставить оценку!'])
             ->notEmpty($down->active, ['score' => 'Данный файл еще не проверен модератором!'])
             ->notEqual($down->user_id, getUser('id'), ['score' => 'Нельзя голосовать за свой файл!']);
@@ -411,10 +411,10 @@ class DownController extends BaseController
             $msg   = check($request->input('msg'));
 
             $validator
-                ->true(getUser(), trans('main.not_authorized'))
-                ->equal($token, $_SESSION['token'], trans('validator.token'))
-                ->length($msg, 5, setting('comment_length'), ['msg' => trans('validator.text')])
-                ->false($flood->isFlood(), ['msg' => trans('validator.flood', ['sec' => $flood->getPeriod()])]);
+                ->true(getUser(), __('main.not_authorized'))
+                ->equal($token, $_SESSION['token'], __('validator.token'))
+                ->length($msg, 5, setting('comment_length'), ['msg' => __('validator.text')])
+                ->false($flood->isFlood(), ['msg' => __('validator.flood', ['sec' => $flood->getPeriod()])]);
 
             if ($validator->isValid()) {
 
@@ -483,7 +483,7 @@ class DownController extends BaseController
         $page = int($request->input('page', 1));
 
         if (! getUser()) {
-            abort(403, trans('main.not_authorized'));
+            abort(403, __('main.not_authorized'));
         }
 
         $comment = Comment::query()
@@ -506,8 +506,8 @@ class DownController extends BaseController
             $page  = int($request->input('page', 1));
 
             $validator
-                ->equal($token, $_SESSION['token'], trans('validator.token'))
-                ->length($msg, 5, setting('comment_length'), ['msg' => trans('validator.text')]);
+                ->equal($token, $_SESSION['token'], __('validator.token'))
+                ->length($msg, 5, setting('comment_length'), ['msg' => __('validator.text')]);
 
             if ($validator->isValid()) {
                 $msg = antimat($msg);

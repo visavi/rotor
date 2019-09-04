@@ -1,30 +1,30 @@
 @extends('layout')
 
 @section('title')
-    {{ trans('index.complains') }}
+    {{ __('index.complains') }}
 @stop
 
 @section('breadcrumb')
     <nav>
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
-            <li class="breadcrumb-item"><a href="/admin">{{ trans('index.panel') }}</a></li>
-            <li class="breadcrumb-item active">{{ trans('index.complains') }}</li>
+            <li class="breadcrumb-item"><a href="/admin">{{ __('index.panel') }}</a></li>
+            <li class="breadcrumb-item active">{{ __('index.complains') }}</li>
         </ol>
     </nav>
 @stop
 
 @section('content')
     <?php $active = ($type === 'post') ? 'success' : 'light'; ?>
-    <a href="/admin/spam?type=post" class="badge badge-{{ $active }}">{{ trans('index.forums') }} {{ $total['post'] }}</a>
+    <a href="/admin/spam?type=post" class="badge badge-{{ $active }}">{{ __('index.forums') }} {{ $total['post'] }}</a>
     <?php $active = ($type === 'guest') ? 'success' : 'light'; ?>
-    <a href="/admin/spam?type=guest" class="badge badge-{{ $active }}">{{ trans('index.guestbooks') }} {{ $total['guest'] }}</a>
+    <a href="/admin/spam?type=guest" class="badge badge-{{ $active }}">{{ __('index.guestbooks') }} {{ $total['guest'] }}</a>
     <?php $active = ($type === 'message') ? 'success' : 'light'; ?>
-    <a href="/admin/spam?type=message" class="badge badge-{{ $active }}">{{ trans('index.messages') }} {{ $total['message'] }}</a>
+    <a href="/admin/spam?type=message" class="badge badge-{{ $active }}">{{ __('index.messages') }} {{ $total['message'] }}</a>
     <?php $active = ($type === 'wall') ? 'success' : 'light'; ?>
-    <a href="/admin/spam?type=wall" class="badge badge-{{ $active }}">{{ trans('index.wall_posts') }} {{ $total['wall'] }}</a>
+    <a href="/admin/spam?type=wall" class="badge badge-{{ $active }}">{{ __('index.wall_posts') }} {{ $total['wall'] }}</a>
     <?php $active = ($type === 'comment') ? 'success' : 'light'; ?>
-    <a href="/admin/spam?type=comment" class="badge badge-{{ $active }}">{{ trans('main.comments') }} {{ $total['comment'] }}</a>
+    <a href="/admin/spam?type=comment" class="badge badge-{{ $active }}">{{ __('main.comments') }} {{ $total['comment'] }}</a>
     <br><br>
 
     @if ($records->isNotEmpty())
@@ -38,18 +38,18 @@
 
                         <div class="float-right">
                             @if (isAdmin())
-                                <a href="#" onclick="return deleteSpam(this)" data-id="{{ $data->id }}" data-token="{{ $_SESSION['token'] }}" data-toggle="tooltip" title="{{ trans('main.delete') }}"><i class="fa fa-times"></i></a>
+                                <a href="#" onclick="return deleteSpam(this)" data-id="{{ $data->id }}" data-token="{{ $_SESSION['token'] }}" data-toggle="tooltip" title="{{ __('main.delete') }}"><i class="fa fa-times"></i></a>
                             @endif
                         </div>
                     </div>
                     <div>{!! bbCode($data->relate->text) !!}</div>
                 @else
                     <div class="b">
-                        <i class="fa fa-file"></i> <b>{{ trans('admin.spam.message_not_found') }}</b>
+                        <i class="fa fa-file"></i> <b>{{ __('admin.spam.message_not_found') }}</b>
 
                         <div class="float-right">
                             @if (isAdmin())
-                                <a href="#" onclick="return deleteSpam(this)" data-id="{{ $data->id }}" data-token="{{ $_SESSION['token'] }}" data-toggle="tooltip" title="{{ trans('main.delete') }}"><i class="fa fa-times"></i></a>
+                                <a href="#" onclick="return deleteSpam(this)" data-id="{{ $data->id }}" data-token="{{ $_SESSION['token'] }}" data-toggle="tooltip" title="{{ __('main.delete') }}"><i class="fa fa-times"></i></a>
                             @endif
                         </div>
                     </div>
@@ -57,15 +57,15 @@
 
                 <div>
                     @if ($data->path)
-                        <a href="{{ $data->path }}">{{ trans('admin.spam.go_to_message') }}</a><br>
+                        <a href="{{ $data->path }}">{{ __('admin.spam.go_to_message') }}</a><br>
                     @endif
-                    {{ trans('main.sent') }}: {!! $data->user->getProfile() !!} ({{ dateFixed($data->created_at) }})
+                    {{ __('main.sent') }}: {!! $data->user->getProfile() !!} ({{ dateFixed($data->created_at) }})
                 </div>
             </div>
         @endforeach
 
         {!! pagination($page) !!}
     @else
-        {!! showError(trans('admin.spam.empty_spam')) !!}
+        {!! showError(__('admin.spam.empty_spam')) !!}
     @endif
 @stop

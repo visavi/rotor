@@ -1,21 +1,21 @@
 @extends('layout')
 
 @section('title')
-    {{ trans('index.ip_ban') }}
+    {{ __('index.ip_ban') }}
 @stop
 
 @section('breadcrumb')
     <nav>
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
-            <li class="breadcrumb-item"><a href="/admin">{{ trans('index.panel') }}</a></li>
-            <li class="breadcrumb-item active">{{ trans('index.ip_ban') }}</li>
+            <li class="breadcrumb-item"><a href="/admin">{{ __('index.panel') }}</a></li>
+            <li class="breadcrumb-item active">{{ __('index.ip_ban') }}</li>
         </ol>
     </nav>
 @stop
 
 @section('content')
-    <a href="/admin/errors?code=666">{{ trans('admin.ipbans.history') }}</a><br>
+    <a href="/admin/errors?code=666">{{ __('admin.ipbans.history') }}</a><br>
 
     @if ($logs->isNotEmpty())
 
@@ -27,25 +27,25 @@
                     <i class="fa fa-file"></i> <b>{{ $log->ip }}</b>
                 </div>
 
-                <div>{{ trans('main.added') }}:
+                <div>{{ __('main.added') }}:
                     @if ($log->user->id)
                         <b>{!! $log->user->getProfile() !!}</b>
                     @else
-                        <b>{{ trans('main.automatically') }}</b>
+                        <b>{{ __('main.automatically') }}</b>
                     @endif
 
                     ({{ dateFixed($log->created_at) }})
                 </div>
             @endforeach
 
-            <button class="btn btn-sm btn-danger">{{ trans('main.delete_selected') }}</button>
+            <button class="btn btn-sm btn-danger">{{ __('main.delete_selected') }}</button>
         </form>
 
         {!! pagination($page) !!}
 
-        {{ trans('main.total') }}: <b>{{ $page->total }}</b><br><br>
+        {{ __('main.total') }}: <b>{{ $page->total }}</b><br><br>
     @else
-        {!! showError(trans('admin.ipbans.empty_ip')) !!}
+        {!! showError(__('admin.ipbans.empty_ip')) !!}
     @endif
 
     <div class="form">
@@ -56,17 +56,17 @@
                     <input type="text" class="form-control" id="ip" name="ip" maxlength="15" value="{{ getInput('ip') }}" placeholder="IP-address" required>
                 </div>
 
-                <button class="btn btn-primary">{{ trans('main.add') }}</button>
+                <button class="btn btn-primary">{{ __('main.add') }}</button>
             </div>
             <div class="invalid-feedback">{{ textError('ip') }}</div>
         </form>
     </div><br>
 
     <p class="text-muted font-italic">
-        {!! trans('admin.ipbans.hint') !!}
+        {!! __('admin.ipbans.hint') !!}
     </p>
 
     @if ($logs->isNotEmpty() && isAdmin('boss'))
-        <i class="fa fa-times"></i> <a href="/admin/ipbans/clear?token={{ $_SESSION['token'] }}" onclick="return confirm('{{ trans('admin.ipbans.confirm_clear') }}')">{{ trans('main.clear') }}</a><br>
+        <i class="fa fa-times"></i> <a href="/admin/ipbans/clear?token={{ $_SESSION['token'] }}" onclick="return confirm('{{ __('admin.ipbans.confirm_clear') }}')">{{ __('main.clear') }}</a><br>
     @endif
 @stop

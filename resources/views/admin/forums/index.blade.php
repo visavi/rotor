@@ -1,16 +1,16 @@
 @extends('layout')
 
 @section('title')
-    {{ trans('index.forums') }}
+    {{ __('index.forums') }}
 @stop
 
 @section('breadcrumb')
     <nav>
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
-            <li class="breadcrumb-item"><a href="/admin">{{ trans('index.panel') }}</a></li>
-            <li class="breadcrumb-item active">{{ trans('index.forums') }}</li>
-            <li class="breadcrumb-item"><a href="/forums">{{ trans('main.review') }}</a></li>
+            <li class="breadcrumb-item"><a href="/admin">{{ __('index.panel') }}</a></li>
+            <li class="breadcrumb-item active">{{ __('index.forums') }}</li>
+            <li class="breadcrumb-item"><a href="/forums">{{ __('main.review') }}</a></li>
         </ol>
     </nav>
 @stop
@@ -30,7 +30,7 @@
                 @if (isAdmin('boss'))
                     <div class="float-right">
                         <a href="/admin/forums/edit/{{ $forum->id }}"><i class="fa fa-pencil-alt"></i></a>
-                        <a href="/admin/forums/delete/{{ $forum->id }}?token={{ $_SESSION['token'] }}" onclick="return confirm('{{ trans('forums.confirm_delete_forum') }}')"><i class="fa fa-times"></i></a>
+                        <a href="/admin/forums/delete/{{ $forum->id }}?token={{ $_SESSION['token'] }}" onclick="return confirm('{{ __('forums.confirm_delete_forum') }}')"><i class="fa fa-times"></i></a>
                     </div>
                 @endif
             </div>
@@ -43,23 +43,23 @@
 
                         @if (isAdmin('boss'))
                             <a href="/admin/forums/edit/{{ $child->id }}"><i class="fa fa-pencil-alt"></i></a>
-                            <a href="/admin/forums/delete/{{ $child->id }}?token={{ $_SESSION['token'] }}" onclick="return confirm('{{ trans('forums.confirm_delete_forum') }}')"><i class="fa fa-times"></i></a>
+                            <a href="/admin/forums/delete/{{ $child->id }}?token={{ $_SESSION['token'] }}" onclick="return confirm('{{ __('forums.confirm_delete_forum') }}')"><i class="fa fa-times"></i></a>
                         @endif
                         <br/>
                     @endforeach
                 @endif
 
                 @if ($forum->lastTopic->lastPost->id)
-                        {{ trans('forums.topic') }}: <a href="/admin/topics/end/{{ $forum->lastTopic->id }}">{{ $forum->lastTopic->title }}</a>
+                        {{ __('forums.topic') }}: <a href="/admin/topics/end/{{ $forum->lastTopic->id }}">{{ $forum->lastTopic->title }}</a>
                     <br/>
-                        {{ trans('forums.post') }}: {{ $forum->lastTopic->lastPost->user->getName() }} ({{ dateFixed($forum->lastTopic->lastPost->created_at) }})
+                        {{ __('forums.post') }}: {{ $forum->lastTopic->lastPost->user->getName() }} ({{ dateFixed($forum->lastTopic->lastPost->created_at) }})
                 @else
-                    {{ trans('forums.empty_posts') }}
+                    {{ __('forums.empty_posts') }}
                 @endif
             </div>
         @endforeach
     @else
-        {!! showError(trans('forums.empty_forums')) !!}
+        {!! showError(__('forums.empty_forums')) !!}
     @endif
 
     @if (isAdmin('boss'))
@@ -68,15 +68,15 @@
                 @csrf
                 <div class="form-inline">
                     <div class="form-group{{ hasError('title') }}">
-                        <input type="text" class="form-control" id="title" name="title" maxlength="50" value="{{ getInput('title') }}" placeholder="{{ trans('forums.forum') }}" required>
+                        <input type="text" class="form-control" id="title" name="title" maxlength="50" value="{{ getInput('title') }}" placeholder="{{ __('forums.forum') }}" required>
                     </div>
 
-                    <button class="btn btn-primary">{{ trans('forums.create_forum') }}</button>
+                    <button class="btn btn-primary">{{ __('forums.create_forum') }}</button>
                 </div>
                 <div class="invalid-feedback">{{ textError('title') }}</div>
             </form>
         </div>
 
-        <i class="fa fa-sync"></i> <a href="/admin/forums/restatement?token={{ $_SESSION['token'] }}">{{ trans('main.recount') }}</a><br>
+        <i class="fa fa-sync"></i> <a href="/admin/forums/restatement?token={{ $_SESSION['token'] }}">{{ __('main.recount') }}</a><br>
     @endif
 @stop

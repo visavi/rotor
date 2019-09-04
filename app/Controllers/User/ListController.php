@@ -47,7 +47,7 @@ class ListController extends BaseController
                 setFlash('success', 'Позиция в рейтинге: '.$position);
                 redirect('/users?page='.$end.'&user='.$user);
             } else {
-                setFlash('danger', trans('validator.user'));
+                setFlash('danger', __('validator.user'));
             }
         }
 
@@ -106,7 +106,7 @@ class ListController extends BaseController
                 setFlash('success', 'Позиция в рейтинге: '.$position);
                 redirect('/authoritylists?page='.$end.'&user='.$user);
             } else {
-                setFlash('danger', trans('validator.user'));
+                setFlash('danger', __('validator.user'));
             }
         }
 
@@ -150,7 +150,7 @@ class ListController extends BaseController
                 setFlash('success', 'Позиция в рейтинге: '.$position);
                 redirect('/ratinglists?page='.$end.'&user='.$user);
             } else {
-                setFlash('danger', trans('validator.user'));
+                setFlash('danger', __('validator.user'));
             }
         }
 

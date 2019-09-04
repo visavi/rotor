@@ -108,18 +108,18 @@ class ForumController extends BaseController
             /** @var Forum $forum */
             $forum = Forum::query()->find($fid);
 
-            $validator->equal($token, $_SESSION['token'], trans('validator.token'))
+            $validator->equal($token, $_SESSION['token'], __('validator.token'))
                 ->notEmpty($forum, ['fid' => 'Форума для новой темы не существует!'])
-                ->false($flood->isFlood(), ['msg' => trans('validator.flood', ['sec' => $flood->getPeriod()])])
-                ->length($title, 5, 50, ['title' => trans('validator.text')])
-                ->length($msg, 5, setting('forumtextlength'), ['msg' => trans('validator.text')]);
+                ->false($flood->isFlood(), ['msg' => __('validator.flood', ['sec' => $flood->getPeriod()])])
+                ->length($title, 5, 50, ['title' => __('validator.text')])
+                ->length($msg, 5, setting('forumtextlength'), ['msg' => __('validator.text')]);
 
             if ($forum) {
                 $validator->empty($forum->closed, ['fid' => 'В данном форуме запрещено создавать темы!']);
             }
 
             if ($vote) {
-                $validator->length($question, 5, 100, ['question' => trans('validator.text')]);
+                $validator->length($question, 5, 100, ['question' => __('validator.text')]);
                 $answers = array_unique(array_diff($answers, ['']));
 
                 foreach ($answers as $answer) {

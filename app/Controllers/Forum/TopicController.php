@@ -136,10 +136,10 @@ class TopicController extends BaseController
             abort(404, 'Выбранная вами тема не существует, возможно она была удалена!');
         }
 
-        $validator->equal($token, $_SESSION['token'], ['msg' => trans('validator.token')])
+        $validator->equal($token, $_SESSION['token'], ['msg' => __('validator.token')])
             ->empty($topic->closed, ['msg' => 'Запрещено писать в закрытую тему!'])
-            ->false($flood->isFlood(), ['msg' => trans('validator.flood', ['sec' => $flood->getPeriod()])])
-            ->length($msg, 5, setting('forumtextlength'), ['msg' => trans('validator.text')]);
+            ->false($flood->isFlood(), ['msg' => __('validator.flood', ['sec' => $flood->getPeriod()])])
+            ->length($msg, 5, setting('forumtextlength'), ['msg' => __('validator.text')]);
 
         // Проверка сообщения на схожесть
         /** @var Post $post */
@@ -254,8 +254,8 @@ class TopicController extends BaseController
 
         $isModer = in_array(getUser('id'), array_map('intval', explode(',', (string) $topic->moderators)), true);
 
-        $validator->equal($token, $_SESSION['token'], trans('validator.token'))
-            ->true(getUser(), trans('main.not_authorized'))
+        $validator->equal($token, $_SESSION['token'], __('validator.token'))
+            ->true(getUser(), __('main.not_authorized'))
             ->notEmpty($del, 'Отстутствуют выбранные сообщения для удаления!')
             ->empty($topic->closed, 'Редактирование невозможно. Данная тема закрыта!')
             ->equal($isModer, true, 'Удалять сообщения могут только кураторы темы!');
@@ -303,8 +303,8 @@ class TopicController extends BaseController
         /** @var Topic $topic */
         $topic = Topic::query()->find($id);
 
-        $validator->equal($token, $_SESSION['token'], trans('validator.token'))
-            ->true(getUser(), trans('main.not_authorized'))
+        $validator->equal($token, $_SESSION['token'], __('validator.token'))
+            ->true(getUser(), __('main.not_authorized'))
             ->gte(getUser('point'), setting('editforumpoint'), 'Для закрытия тем вам необходимо набрать ' . plural(setting('editforumpoint'), setting('scorename')) . '!')
             ->notEmpty($topic, 'Выбранная вами тема не существует, возможно она была удалена!')
             ->equal($topic->user_id, getUser('id'), 'Вы не автор данной темы!')
@@ -378,15 +378,15 @@ class TopicController extends BaseController
             $question = check($request->input('question'));
             $answers  = check((array) $request->input('answers'));
 
-            $validator->equal($token, $_SESSION['token'], trans('validator.token'))
-                ->length($title, 5, 50, ['title' => trans('validator.text')]);
+            $validator->equal($token, $_SESSION['token'], __('validator.token'))
+                ->length($title, 5, 50, ['title' => __('validator.text')]);
 
             if ($post) {
-                $validator->length($msg, 5, setting('forumtextlength'), ['msg' => trans('validator.text')]);
+                $validator->length($msg, 5, setting('forumtextlength'), ['msg' => __('validator.text')]);
             }
 
             if ($vote) {
-                $validator->length($question, 5, 100, ['question' => trans('validator.text')]);
+                $validator->length($question, 5, 100, ['question' => __('validator.text')]);
 
                 if ($answers) {
                     $validator->empty($vote->count, ['question' => 'Изменение вариантов ответа доступно только до голосований!']);
@@ -501,8 +501,8 @@ class TopicController extends BaseController
             $msg     = check($request->input('msg'));
             $delfile = intar($request->input('delfile'));
 
-            $validator->equal($token, $_SESSION['token'], trans('validator.token'))
-                ->length($msg, 5, setting('forumtextlength'), ['msg' => trans('validator.text')]);
+            $validator->equal($token, $_SESSION['token'], __('validator.token'))
+                ->length($msg, 5, setting('forumtextlength'), ['msg' => __('validator.text')]);
 
             if ($validator->isValid()) {
 
@@ -565,7 +565,7 @@ class TopicController extends BaseController
         $poll  = int($request->input('poll'));
         $page  = int($request->input('page'));
 
-        $validator->equal($token, $_SESSION['token'], trans('validator.token'));
+        $validator->equal($token, $_SESSION['token'], __('validator.token'));
 
         if ($vote->closed) {
             $validator->addError('Данное голосование закрыто!');

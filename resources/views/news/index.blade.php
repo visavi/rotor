@@ -1,21 +1,21 @@
 @extends('layout')
 
 @section('title')
-    {{ trans('index.news') }} ({{ trans('main.page_num', ['page' => $page->current]) }})
+    {{ __('index.news') }} ({{ __('main.page_num', ['page' => $page->current]) }})
 @stop
 
 @section('header')
-    <h1>{{ trans('index.news') }}</h1>
+    <h1>{{ __('index.news') }}</h1>
 @stop
 
 @section('breadcrumb')
     <nav>
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
-            <li class="breadcrumb-item active">{{ trans('index.news') }}</li>
+            <li class="breadcrumb-item active">{{ __('index.news') }}</li>
 
             @if (isAdmin('moder'))
-                <li class="breadcrumb-item"><a href="/admin/news">{{ trans('main.management') }}</a></li>
+                <li class="breadcrumb-item"><a href="/admin/news">{{ __('main.management') }}</a></li>
             @endif
         </ol>
     </nav>
@@ -37,17 +37,17 @@
 
             <div class="clearfix">{!! $data->shortText() !!}</div>
             <div>
-                {{ trans('main.added') }}: {!! $data->user->getProfile() !!}<br>
-                <a href="/news/comments/{{ $data->id }}">{{ trans('main.comments') }}</a> ({{ $data->count_comments }})
+                {{ __('main.added') }}: {!! $data->user->getProfile() !!}<br>
+                <a href="/news/comments/{{ $data->id }}">{{ __('main.comments') }}</a> ({{ $data->count_comments }})
                 <a href="/news/end/{{ $data->id }}">&raquo;</a>
             </div>
         @endforeach
 
         {!! pagination($page) !!}
     @else
-        {!! showError(trans('news.empty_news')) !!}
+        {!! showError(__('news.empty_news')) !!}
     @endif
 
-    <i class="fa fa-rss"></i> <a href="/news/rss">{{ trans('main.rss') }}</a><br>
-    <i class="fa fa-comment"></i> <a href="/news/allcomments">{{ trans('main.last_comments') }}</a><br>
+    <i class="fa fa-rss"></i> <a href="/news/rss">{{ __('main.rss') }}</a><br>
+    <i class="fa fa-comment"></i> <a href="/news/allcomments">{{ __('main.last_comments') }}</a><br>
 @stop

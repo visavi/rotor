@@ -45,7 +45,7 @@ class AdvertController extends AdminController
         $link = Advert::query()->find($id);
 
         if (! $link) {
-            abort(404, trans('main.record_not_found'));
+            abort(404, __('main.record_not_found'));
         }
 
         if ($request->isMethod('post')) {
@@ -55,11 +55,11 @@ class AdvertController extends AdminController
             $color = check($request->input('color'));
             $bold  = empty($request->input('bold')) ? 0 : 1;
 
-            $validator->equal($token, $_SESSION['token'], trans('validator.token'))
-                ->regex($site, '|^https?://([а-яa-z0-9_\-\.])+(\.([а-яa-z0-9\/\-?_=#])+)+$|iu', ['site' => trans('validator.url')])
-                ->length($site, 5, 50, ['site' => trans('validator.url_text')])
-                ->length($name, 5, 35, ['name' => trans('validator.text')])
-                ->regex($color, '|^#+[A-f0-9]{6}$|', ['color' => trans('validator.color')], false);
+            $validator->equal($token, $_SESSION['token'], __('validator.token'))
+                ->regex($site, '|^https?://([а-яa-z0-9_\-\.])+(\.([а-яa-z0-9\/\-?_=#])+)+$|iu', ['site' => __('validator.url')])
+                ->length($site, 5, 50, ['site' => __('validator.url_text')])
+                ->length($name, 5, 35, ['name' => __('validator.text')])
+                ->regex($color, '|^#+[A-f0-9]{6}$|', ['color' => __('validator.color')], false);
 
             if ($validator->isValid()) {
 
@@ -72,7 +72,7 @@ class AdvertController extends AdminController
 
                 saveAdvertUser();
 
-                setFlash('success', trans('main.record_changed_success'));
+                setFlash('success', __('main.record_changed_success'));
                 redirect('/admin/adverts?page=' . $page);
             } else {
                 setInput($request->all());
@@ -96,15 +96,15 @@ class AdvertController extends AdminController
         $token = check($request->input('token'));
         $del   = intar($request->input('del'));
 
-        $validator->equal($token, $_SESSION['token'], trans('validator.token'))
-            ->true($del, trans('validator.deletion'));
+        $validator->equal($token, $_SESSION['token'], __('validator.token'))
+            ->true($del, __('validator.deletion'));
 
         if ($validator->isValid()) {
             Advert::query()->whereIn('id', $del)->delete();
 
             saveAdvertUser();
 
-            setFlash('success', trans('main.records_deleted_success'));
+            setFlash('success', __('main.records_deleted_success'));
         } else {
             setFlash('danger', $validator->getErrors());
         }

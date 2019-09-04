@@ -21,7 +21,7 @@ class SocialController extends BaseController
         parent::__construct();
 
         if (! $this->user = getUser()) {
-            abort(403, trans('main.not_authorized'));
+            abort(403, __('main.not_authorized'));
         }
     }
 
@@ -92,7 +92,7 @@ class SocialController extends BaseController
 
         $social = Social::query()->where('user_id', $this->user->id)->find($id);
 
-        $validator->equal($token, $_SESSION['token'], trans('validator.token'))
+        $validator->equal($token, $_SESSION['token'], __('validator.token'))
             ->notEmpty($social, 'Не найдена привязка к социальной сети!');
 
         if ($validator->isValid()) {

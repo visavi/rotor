@@ -1,15 +1,15 @@
 @extends('layout')
 
 @section('title')
-    {{ trans('photos.top_photos') }}
+    {{ __('photos.top_photos') }}
 @stop
 
 @section('breadcrumb')
     <nav>
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
-            <li class="breadcrumb-item"><a href="/photos">{{ trans('index.photos') }}</a></li>
-            <li class="breadcrumb-item active">{{ trans('photos.top_photos') }}</li>
+            <li class="breadcrumb-item"><a href="/photos">{{ __('index.photos') }}</a></li>
+            <li class="breadcrumb-item active">{{ __('photos.top_photos') }}</li>
         </ol>
     </nav>
 @stop
@@ -17,12 +17,12 @@
 @section('content')
     @if ($photos->isNotEmpty())
 
-        {{ trans('main.sort') }}:
+        {{ __('main.sort') }}:
         <?php $active = ($order === 'rating') ? 'success' : 'light'; ?>
-        <a href="/photos/top?sort=rating" class="badge badge-{{ $active }}">{{ trans('main.rating') }}</a>
+        <a href="/photos/top?sort=rating" class="badge badge-{{ $active }}">{{ __('main.rating') }}</a>
 
         <?php $active = ($order === 'count_comments') ? 'success' : 'light'; ?>
-        <a href="/photos/top?sort=comments" class="badge badge-{{ $active }}">{{ trans('main.comments') }}</a>
+        <a href="/photos/top?sort=comments" class="badge badge-{{ $active }}">{{ __('main.comments') }}</a>
         <hr>
 
         @foreach ($photos as $photo)
@@ -64,14 +64,14 @@
 
                 <br>{!! bbCode($photo->text) !!}<br>
 
-                    {{ trans('main.added') }}: {!! $photo->user->getProfile() !!} ({{ dateFixed($photo->created_at) }})<br>
-                <a href="/photos/comments/{{ $photo->id }}">{{ trans('main.comments') }}</a> ({{ $photo->count_comments }})
+                    {{ __('main.added') }}: {!! $photo->user->getProfile() !!} ({{ dateFixed($photo->created_at) }})<br>
+                <a href="/photos/comments/{{ $photo->id }}">{{ __('main.comments') }}</a> ({{ $photo->count_comments }})
                 <a href="/photos/end/{{ $photo->id }}">&raquo;</a>
             </div>
         @endforeach
 
         {!! pagination($page) !!}
     @else
-        {!! showError(trans('photos.empty_photos')) !!}
+        {!! showError(__('photos.empty_photos')) !!}
     @endif
 @stop

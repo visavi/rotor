@@ -1,16 +1,16 @@
 @extends('layout')
 
 @section('title')
-    {{ trans('index.search_users') }}
+    {{ __('index.search_users') }}
 @stop
 
 @section('breadcrumb')
     <nav>
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
-            <li class="breadcrumb-item"><a href="/admin">{{ trans('index.panel') }}</a></li>
-            <li class="breadcrumb-item"><a href="/admin/users">{{ trans('index.users') }}</a></li>
-            <li class="breadcrumb-item active">{{ trans('index.search_users') }}</li>
+            <li class="breadcrumb-item"><a href="/admin">{{ __('index.panel') }}</a></li>
+            <li class="breadcrumb-item"><a href="/admin/users">{{ __('index.users') }}</a></li>
+            <li class="breadcrumb-item active">{{ __('index.search_users') }}</li>
         </ol>
     </nav>
 @stop
@@ -29,7 +29,7 @@
                     ({{ plural($user->point, setting('scorename')) }})<br>
 
                     @if ($user->name )
-                        {{ trans('users.name') }}: {{ $user->name }}
+                        {{ __('users.name') }}: {{ $user->name }}
                     @endif
                 </div>
             @endforeach
@@ -37,8 +37,8 @@
 
         {!! pagination($page) !!}
 
-        {{ trans('users.total_found') }}: {{ $page->total }}<br><br>
+        {{ __('users.total_found') }}: {{ $page->total }}<br><br>
     @else
-        {!! showError(trans('users.empty_found')) !!}
+        {!! showError(__('users.empty_found')) !!}
     @endif
 @stop

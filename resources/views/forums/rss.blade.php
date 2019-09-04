@@ -1,7 +1,7 @@
 @extends('layout_rss')
 
 @section('title')
-    {{ trans('forums.title_rss') }}
+    {{ __('forums.title_rss') }}
 @stop
 
 @section('content')
@@ -17,7 +17,7 @@
                 <description>{{ $postText }}</description>
                 <author>{{ $topic->lastPost->user->login }}</author>
                 <pubDate>{{ date('r', $topic->updated_at) }}</pubDate>
-                <category>{{ trans('forums.topics') }}</category>
+                <category>{{ __('forums.topics') }}</category>
                 <guid>{{ siteUrl() }}/topics/{{ $topic->id }}</guid>
             </item>
         @endif

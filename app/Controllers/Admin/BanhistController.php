@@ -16,7 +16,7 @@ class BanhistController extends AdminController
         parent::__construct();
 
         if (! isAdmin(User::MODER)) {
-            abort(403, trans('errors.forbidden'));
+            abort(403, __('errors.forbidden'));
         }
     }
 
@@ -52,7 +52,7 @@ class BanhistController extends AdminController
         $user  = getUserByLogin($login);
 
         if (! $user) {
-            abort(404, trans('validator.user'));
+            abort(404, __('validator.user'));
         }
 
         $total = Banhist::query()->where('user_id', $user->id)->count();
@@ -83,13 +83,13 @@ class BanhistController extends AdminController
         $del   = intar($request->input('del'));
         $login = check($request->input('user'));
 
-        $validator->equal($token, $_SESSION['token'], trans('validator.token'))
-            ->true($del, trans('validator.deletion'));
+        $validator->equal($token, $_SESSION['token'], __('validator.token'))
+            ->true($del, __('validator.deletion'));
 
         if ($validator->isValid()) {
             Banhist::query()->whereIn('id', $del)->delete();
 
-            setFlash('success', trans('main.records_deleted_success'));
+            setFlash('success', __('main.records_deleted_success'));
         } else {
             setFlash('danger', $validator->getErrors());
         }

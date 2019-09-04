@@ -21,7 +21,7 @@ class OfferController extends AdminController
         parent::__construct();
 
         if (! isAdmin(User::ADMIN)) {
-            abort(403, trans('errors.forbidden'));
+            abort(403, __('errors.forbidden'));
         }
     }
 
@@ -111,9 +111,9 @@ class OfferController extends AdminController
             $type   = check($request->input('type'));
             $closed = empty($request->input('closed')) ? 0 : 1;
 
-            $validator->equal($token, $_SESSION['token'], trans('validator.token'))
-                ->length($title, 5, 50, ['title' => trans('validator.text')])
-                ->length($text, 5, 1000, ['text' => trans('validator.text')])
+            $validator->equal($token, $_SESSION['token'], __('validator.token'))
+                ->length($title, 5, 50, ['title' => __('validator.text')])
+                ->length($text, 5, 1000, ['text' => __('validator.text')])
                 ->in($type, Offer::TYPES, ['type' => 'Выбран неверный тип записи! (Необходимо предложение или проблема)']);
 
             if ($validator->isValid()) {
@@ -163,8 +163,8 @@ class OfferController extends AdminController
             $status = check($request->input('status'));
             $closed = empty($request->input('closed')) ? 0 : 1;
 
-            $validator->equal($token, $_SESSION['token'], trans('validator.token'))
-                ->length($reply, 5, 3000, ['reply' => trans('validator.text')])
+            $validator->equal($token, $_SESSION['token'], __('validator.token'))
+                ->length($reply, 5, 3000, ['reply' => __('validator.text')])
                 ->in($status, Offer::STATUSES, ['status' => 'Недопустимый статус предложения или проблемы!']);
 
             if ($validator->isValid()) {
@@ -201,7 +201,7 @@ class OfferController extends AdminController
     public function restatement(Request $request): void
     {
         if (! isAdmin(User::BOSS)) {
-            abort(403, trans('errors.forbidden'));
+            abort(403, __('errors.forbidden'));
         }
 
         $token = check($request->input('token'));
@@ -212,7 +212,7 @@ class OfferController extends AdminController
 
             setFlash('success', 'Комментарии успешно пересчитаны!');
         } else {
-            setFlash('danger', trans('validator.token'));
+            setFlash('danger', __('validator.token'));
         }
 
         redirect('/admin/offers');
@@ -232,8 +232,8 @@ class OfferController extends AdminController
         $del   = intar($request->input('del'));
         $type  = $request->input('type') === Offer::OFFER ? Offer::OFFER : Offer::ISSUE;
 
-        $validator->equal($token, $_SESSION['token'], trans('validator.token'))
-            ->true($del, trans('validator.deletion'));
+        $validator->equal($token, $_SESSION['token'], __('validator.token'))
+            ->true($del, __('validator.deletion'));
 
         if ($validator->isValid()) {
 

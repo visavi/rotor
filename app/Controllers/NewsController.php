@@ -81,10 +81,10 @@ class NewsController extends BaseController
             $msg   = check($request->input('msg'));
             $token = check($request->input('token'));
 
-            $validator->true(getUser(), trans('main.not_authorized'))
-                ->equal($token, $_SESSION['token'], trans('validator.token'))
-                ->false($flood->isFlood(), ['msg' => trans('validator.flood', ['sec' => $flood->getPeriod()])])
-                ->length($msg, 5, setting('comment_length'), ['msg' => trans('validator.text')])
+            $validator->true(getUser(), __('main.not_authorized'))
+                ->equal($token, $_SESSION['token'], __('validator.token'))
+                ->false($flood->isFlood(), ['msg' => __('validator.flood', ['sec' => $flood->getPeriod()])])
+                ->length($msg, 5, setting('comment_length'), ['msg' => __('validator.text')])
                 ->empty($news->closed, ['msg' => 'Комментирование данной новости запрещено!']);
 
             if ($validator->isValid()) {
@@ -165,7 +165,7 @@ class NewsController extends BaseController
         }
 
         if (! getUser()) {
-            abort(403, trans('main.not_authorized'));
+            abort(403, __('main.not_authorized'));
         }
 
         $comment = Comment::query()
@@ -187,8 +187,8 @@ class NewsController extends BaseController
             $token = check($request->input('token'));
 
             $validator
-                ->equal($token, $_SESSION['token'], trans('validator.token'))
-                ->length($msg, 5, setting('comment_length'), ['msg' => trans('validator.text')]);
+                ->equal($token, $_SESSION['token'], __('validator.token'))
+                ->length($msg, 5, setting('comment_length'), ['msg' => __('validator.text')]);
 
             if ($validator->isValid()) {
                 $msg = antimat($msg);

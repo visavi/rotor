@@ -67,13 +67,13 @@ class Banhist extends BaseModel
     {
         switch ($this->type) {
             case self::BAN:
-                $type = '<span class="text-danger">'. trans('main.ban') .'</span>';
+                $type = '<span class="text-danger">'. __('main.ban') .'</span>';
                 break;
             case self::UNBAN:
-                $type = '<span class="text-success">'. trans('main.unban') .'</span>';
+                $type = '<span class="text-success">'. __('main.unban') .'</span>';
                 break;
             default:
-                $type = '<span class="text-warning">'. trans('main.changed') .'</span>';
+                $type = '<span class="text-warning">'. __('main.changed') .'</span>';
                 break;
         }
 

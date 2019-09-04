@@ -19,7 +19,7 @@ class BookmarkController extends BaseController
         parent::__construct();
 
         if (! getUser()) {
-            abort(403, trans('main.not_authorized'));
+            abort(403, __('main.not_authorized'));
         }
     }
 
@@ -63,7 +63,7 @@ class BookmarkController extends BaseController
         $token = check($request->input('token'));
         $tid   = int($request->input('tid'));
 
-        $validator->equal($token, $_SESSION['token'], trans('validator.token'));
+        $validator->equal($token, $_SESSION['token'], __('validator.token'));
 
         /** @var Topic $topic */
         $topic = Topic::query()->find($tid);
@@ -105,7 +105,7 @@ class BookmarkController extends BaseController
         $topicIds = intar($request->input('del'));
         $page     = int($request->input('page'));
 
-        $validator->equal($token, $_SESSION['token'], trans('validator.token'))
+        $validator->equal($token, $_SESSION['token'], __('validator.token'))
             ->notEmpty($topicIds, 'Отсутствуют выбранные закладки!');
 
         if ($validator->isValid()) {

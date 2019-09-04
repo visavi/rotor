@@ -24,7 +24,7 @@ class WallController extends BaseController
         $user = getUserByLogin($login);
 
         if (! $user) {
-            abort(404, trans('validator.user'));
+            abort(404, __('validator.user'));
         }
 
         $total   = Wall::query()->where('user_id', $user->id)->count();
@@ -60,22 +60,22 @@ class WallController extends BaseController
     public function create($login, Request $request, Validator $validator, Flood $flood): void
     {
         if (! getUser()) {
-            abort(403, trans('main.not_authorized'));
+            abort(403, __('main.not_authorized'));
         }
 
         $user = getUserByLogin($login);
 
         if (! $user) {
-            abort(404, trans('validator.user'));
+            abort(404, __('validator.user'));
         }
 
         if ($request->isMethod('post')) {
             $token = check($request->input('token'));
             $msg   = check($request->input('msg'));
 
-            $validator->equal($token, $_SESSION['token'], trans('validator.token'))
-                ->length($msg, 5, setting('comment_length'), ['msg' => trans('validator.text')])
-                ->false($flood->isFlood(), ['msg' => trans('validator.flood', ['sec' => $flood->getPeriod()])]);
+            $validator->equal($token, $_SESSION['token'], __('validator.token'))
+                ->length($msg, 5, setting('comment_length'), ['msg' => __('validator.text')])
+                ->false($flood->isFlood(), ['msg' => __('validator.flood', ['sec' => $flood->getPeriod()])]);
 
             $ignoring = Ignore::query()
                 ->where('user_id', $user->id)
@@ -135,9 +135,9 @@ class WallController extends BaseController
 
         $validator
             ->true($request->ajax(), 'Это не ajax запрос!')
-            ->equal($token, $_SESSION['token'], trans('validator.token'))
+            ->equal($token, $_SESSION['token'], __('validator.token'))
             ->notEmpty($id, 'Не выбрана запись для удаление!')
-            ->notEmpty($user, trans('validator.user'))
+            ->notEmpty($user, __('validator.user'))
             ->true(isAdmin() || $user->id === getUser('id'), 'Записи может удалять только владелец и администрация!');
 
         if ($validator->isValid()) {

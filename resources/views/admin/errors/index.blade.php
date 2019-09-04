@@ -1,22 +1,22 @@
 @extends('layout')
 
 @section('title')
-    {{ trans('index.errors') }}
+    {{ __('index.errors') }}
 @stop
 
 @section('breadcrumb')
     <nav>
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
-            <li class="breadcrumb-item"><a href="/admin">{{ trans('index.panel') }}</a></li>
-            <li class="breadcrumb-item active">{{ trans('index.errors') }}</li>
+            <li class="breadcrumb-item"><a href="/admin">{{ __('index.panel') }}</a></li>
+            <li class="breadcrumb-item active">{{ __('index.errors') }}</li>
         </ol>
     </nav>
 @stop
 
 @section('content')
     @if (empty(setting('errorlog')))
-        <span class="text-danger">{{ trans('admin.errors.hint') }}</span><br>
+        <span class="text-danger">{{ __('admin.errors.hint') }}</span><br>
     @endif
 
     <ol class="breadcrumb">
@@ -39,21 +39,21 @@
                 <b>{{ $data->request }}</b> ({{ dateFixed($data->created_at) }})
             </div>
             <div>
-                Referer: {{ $data->referer ?: trans('main.undefined') }}<br>
-                {{ trans('main.user') }}: {!! $data->user->getProfile() !!}<br>
+                Referer: {{ $data->referer ?: __('main.undefined') }}<br>
+                {{ __('main.user') }}: {!! $data->user->getProfile() !!}<br>
                 <span class="data">({{ $data->brow }}, {{ $data->ip }})</span>
             </div>
         @endforeach
 
         {!! pagination($page) !!}
 
-        {{ trans('main.total') }}: <b>{{ $page->total }}</b><br><br>
+        {{ __('main.total') }}: <b>{{ $page->total }}</b><br><br>
 
         @if (isAdmin('boss'))
-            <i class="fa fa-trash-alt"></i> <a href="/admin/errors/clear?token={{ $_SESSION['token'] }}">{{ trans('main.clear') }}</a><br>
+            <i class="fa fa-trash-alt"></i> <a href="/admin/errors/clear?token={{ $_SESSION['token'] }}">{{ __('main.clear') }}</a><br>
         @endif
 
     @else
-        {!! showError(trans('main.empty_records')) !!}
+        {!! showError(__('main.empty_records')) !!}
     @endif
 @stop

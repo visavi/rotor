@@ -1,21 +1,21 @@
 @extends('layout')
 
 @section('title')
-    {{ trans('pages.online') }}
+    {{ __('pages.online') }}
 @stop
 
 @section('breadcrumb')
     <nav>
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
-            <li class="breadcrumb-item active">{{ trans('pages.online') }}</li>
+            <li class="breadcrumb-item active">{{ __('pages.online') }}</li>
         </ol>
     </nav>
 @stop
 
 @section('content')
-    {{ trans('pages.total_online') }}: <b>{{ $all }}</b><br>
-    {{ trans('pages.authorized') }}:  <b>{{ $total }}</b><br><br>
+    {{ __('pages.total_online') }}: <b>{{ $all }}</b><br>
+    {{ __('pages.authorized') }}:  <b>{{ $total }}</b><br><br>
 
 
     @if ($online->isNotEmpty())
@@ -26,7 +26,7 @@
                     {!! $data->user->getAvatar() !!}
                 </div>
 
-                <b>{!! $data->user->getProfile() !!}</b> ({{ trans('pages.time_on_site') }}: {{ dateFixed($data->updated_at, 'H:i:s') }})
+                <b>{!! $data->user->getProfile() !!}</b> ({{ __('pages.time_on_site') }}: {{ dateFixed($data->updated_at, 'H:i:s') }})
             </div>
 
             @if (isAdmin())
@@ -37,14 +37,14 @@
         @endforeach
         {!! pagination($page) !!}
     @else
-        {!! showError(trans('main.empty_users')) !!}
+        {!! showError(__('main.empty_users')) !!}
     @endif
 
     <i class="fa fa-users"></i>
 
     @if ($guests)
-        <a href="/online">{{ trans('pages.hide_guests') }}</a><br>
+        <a href="/online">{{ __('pages.hide_guests') }}</a><br>
     @else
-        <a href="/online/all">{{ trans('pages.show_guests') }}</a><br>
+        <a href="/online/all">{{ __('pages.show_guests') }}</a><br>
     @endif
 @stop

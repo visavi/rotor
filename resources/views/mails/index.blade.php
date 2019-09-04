@@ -1,14 +1,14 @@
 @extends('layout')
 
 @section('title')
-    {{ trans('index.mails') }}
+    {{ __('index.mails') }}
 @stop
 
 @section('breadcrumb')
     <nav>
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
-            <li class="breadcrumb-item active">{{ trans('index.mails') }}</li>
+            <li class="breadcrumb-item active">{{ __('index.mails') }}</li>
         </ol>
     </nav>
 @stop
@@ -19,7 +19,7 @@
 
             @if (! getUser())
                 <div class="form-group{{ hasError('name') }}">
-                    <label for="inputName">{{ trans('mails.name') }}:</label>
+                    <label for="inputName">{{ __('mails.name') }}:</label>
                     <input type="text" class="form-control" id="inputName" name="name" maxlength="100" value="{{ getInput('name') }}" required>
                     <div class="invalid-feedback">{{ textError('name') }}</div>
                 </div>
@@ -27,23 +27,23 @@
 
             @if (empty(getUser('email')))
                 <div class="form-group{{ hasError('email') }}">
-                    <label for="inputEmail">{{ trans('mails.email') }}:</label>
+                    <label for="inputEmail">{{ __('mails.email') }}:</label>
                     <input type="text" class="form-control" id="inputEmail" name="email" maxlength="50" value="{{ getInput('email') }}" required>
                     <div class="invalid-feedback">{{ textError('email') }}</div>
                 </div>
             @endif
 
             <div class="form-group{{ hasError('message') }}">
-                <label for="message">{{ trans('mails.message') }}:</label>
+                <label for="message">{{ __('mails.message') }}:</label>
                 <textarea class="form-control markItUp" id="message" rows="5" name="message" required>{{ getInput('message') }}</textarea>
                 <div class="invalid-feedback">{{ textError('message') }}</div>
             </div>
 
             {!! view('app/_captcha') !!}
 
-            <button class="btn btn-primary">{{ trans('main.send') }}</button>
+            <button class="btn btn-primary">{{ __('main.send') }}</button>
         </form>
     </div><br>
 
-    {{ trans('mails.feedback_text') }}<br><br>
+    {{ __('mails.feedback_text') }}<br><br>
 @stop

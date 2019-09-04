@@ -1,16 +1,16 @@
 @extends('layout')
 
 @section('title')
-    {{ trans('index.cash_transactions') }} {{ $user->login }}
+    {{ __('index.cash_transactions') }} {{ $user->login }}
 @stop
 
 @section('breadcrumb')
     <nav>
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
-            <li class="breadcrumb-item"><a href="/admin">{{ trans('index.panel') }}</a></li>
-            <li class="breadcrumb-item"><a href="/admin/transfers">{{ trans('index.cash_transactions') }}</a></li>
-            <li class="breadcrumb-item active">{{ trans('index.cash_transactions') }} {{ $user->login }}</li>
+            <li class="breadcrumb-item"><a href="/admin">{{ __('index.panel') }}</a></li>
+            <li class="breadcrumb-item"><a href="/admin/transfers">{{ __('index.cash_transactions') }}</a></li>
+            <li class="breadcrumb-item active">{{ __('index.cash_transactions') }} {{ $user->login }}</li>
         </ol>
     </nav>
 @stop
@@ -31,17 +31,17 @@
             </div>
 
             <div>
-                {{ trans('transfers.transfer_for') }}: {!! $data->recipientUser->getProfile() !!}<br>
-                {{ trans('main.amount') }}: {{ plural($data->total, setting('moneyname')) }}<br>
-                {{ trans('main.comment') }}: {!! bbCode($data->text) !!}<br>
+                {{ __('transfers.transfer_for') }}: {!! $data->recipientUser->getProfile() !!}<br>
+                {{ __('main.amount') }}: {{ plural($data->total, setting('moneyname')) }}<br>
+                {{ __('main.comment') }}: {!! bbCode($data->text) !!}<br>
             </div>
         @endforeach
 
         {!! pagination($page) !!}
 
-        {{ trans('main.total') }}: <b>{{ $page->total }}</b><br><br>
+        {{ __('main.total') }}: <b>{{ $page->total }}</b><br><br>
 
     @else
-        {!! showError(trans('transfers.empty_transfers')) !!}
+        {!! showError(__('transfers.empty_transfers')) !!}
     @endif
 @stop

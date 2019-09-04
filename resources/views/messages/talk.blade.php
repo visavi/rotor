@@ -1,16 +1,16 @@
 @extends('layout')
 
 @section('title')
-    {{ trans('messages.dialogue_with', ['user' => $user->getName()]) }}
+    {{ __('messages.dialogue_with', ['user' => $user->getName()]) }}
 @stop
 
 @section('breadcrumb')
     <nav>
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
-            <li class="breadcrumb-item"><a href="/menu">{{ trans('main.menu') }}</a></li>
-            <li class="breadcrumb-item"><a href="/messages">{{ trans('index.messages') }}</a></li>
-            <li class="breadcrumb-item active">{{ trans('messages.dialogue') }}</li>
+            <li class="breadcrumb-item"><a href="/menu">{{ __('main.menu') }}</a></li>
+            <li class="breadcrumb-item"><a href="/messages">{{ __('index.messages') }}</a></li>
+            <li class="breadcrumb-item active">{{ __('messages.dialogue') }}</li>
         </ol>
     </nav>
 @stop
@@ -19,7 +19,7 @@
     @if (getUser()->isIgnore($user))
         <div class="p-1 bg-danger text-white">
             <i class="fas fa-exclamation-triangle"></i>
-            {{ trans('messages.warning') }}
+            {{ __('messages.warning') }}
         </div>
     @endif
 
@@ -39,14 +39,14 @@
                         {{  dateFixed($data->created_at) }}
 
                         @if ($data->type === 'in')
-                            <a href="#" onclick="return sendComplaint(this)" data-type="{{ App\Models\Message::class }} " data-id="{{ $data->id }}" data-token="{{ $_SESSION['token'] }}" rel="nofollow" title="{{ trans('main.complaint') }}"><i class="fa fa-bell text-muted"></i></a>
+                            <a href="#" onclick="return sendComplaint(this)" data-type="{{ App\Models\Message::class }} " data-id="{{ $data->id }}" data-token="{{ $_SESSION['token'] }}" rel="nofollow" title="{{ __('main.complaint') }}"><i class="fa fa-bell text-muted"></i></a>
                         @endif
                     </div>
 
                     <b>{!! $author->getProfile() !!}</b>
 
                     @unless ($data->reading)
-                        <br><span class="badge badge-info">{{ trans('messages.new') }}</span>
+                        <br><span class="badge badge-info">{{ __('messages.new') }}</span>
                     @endunless
                 </div>
                 <div class="message">{!! bbCode($data->text) !!}</div>
@@ -55,7 +55,7 @@
 
         {!! pagination($page) !!}
     @else
-        {!! showError(trans('messages.empty_dialogue')) !!}
+        {!! showError(__('messages.empty_dialogue')) !!}
     @endif
 
     <br>
@@ -63,8 +63,8 @@
         <form action="/messages/send?user={{ $user->login }}" method="post">
             @csrf
             <div class="form-group{{ hasError('msg') }}">
-                <label for="msg">{{ trans('main.message') }}:</label>
-                <textarea class="form-control markItUp" maxlength="{{ setting('comment_length') }}" id="msg" rows="5" name="msg" placeholder="{{ trans('main.message') }}" required>{{ getInput('msg') }}</textarea>
+                <label for="msg">{{ __('main.message') }}:</label>
+                <textarea class="form-control markItUp" maxlength="{{ setting('comment_length') }}" id="msg" rows="5" name="msg" placeholder="{{ __('main.message') }}" required>{{ getInput('msg') }}</textarea>
                 <div class="invalid-feedback">{{ textError('msg') }}</div>
                 <span class="js-textarea-counter"></span>
             </div>
@@ -73,16 +73,16 @@
                 {!! view('app/_captcha') !!}
             @endif
 
-            <button class="btn btn-primary">{{ trans('main.write') }}</button>
+            <button class="btn btn-primary">{{ __('main.write') }}</button>
         </form>
     </div><br>
 
-    {{ trans('main.total') }}: <b>{{ $page->total }}</b><br><br>
+    {{ __('main.total') }}: <b>{{ $page->total }}</b><br><br>
 
     @if ($page->total)
-        <i class="fa fa-times"></i> <a href="/messages/delete/{{ $user->id }}?token={{ $_SESSION['token'] }}">{{ trans('messages.delete_talk') }}</a><br>
+        <i class="fa fa-times"></i> <a href="/messages/delete/{{ $user->id }}?token={{ $_SESSION['token'] }}">{{ __('messages.delete_talk') }}</a><br>
     @endif
 
-    <i class="fa fa-search"></i> <a href="/searchusers">{{ trans('index.user_search') }}</a><br>
-    <i class="fa fa-address-book"></i> <a href="/contacts">{{ trans('index.contacts') }}</a> / <a href="/ignores">{{ trans('index.ignores') }}</a><br>
+    <i class="fa fa-search"></i> <a href="/searchusers">{{ __('index.user_search') }}</a><br>
+    <i class="fa fa-address-book"></i> <a href="/contacts">{{ __('index.contacts') }}</a> / <a href="/ignores">{{ __('index.ignores') }}</a><br>
 @stop

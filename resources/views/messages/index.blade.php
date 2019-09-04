@@ -1,15 +1,15 @@
 @extends('layout')
 
 @section('title')
-    {{ trans('index.messages') }}
+    {{ __('index.messages') }}
 @stop
 
 @section('breadcrumb')
     <nav>
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
-            <li class="breadcrumb-item"><a href="/menu">{{ trans('main.menu') }}</a></li>
-            <li class="breadcrumb-item">{{ trans('index.messages') }}</li>
+            <li class="breadcrumb-item"><a href="/menu">{{ __('main.menu') }}</a></li>
+            <li class="breadcrumb-item">{{ __('index.messages') }}</li>
         </ol>
     </nav>
 @stop
@@ -26,21 +26,21 @@
                 <div class="media-body">
                     <div class="text-muted float-right">
                         {{  dateFixed($data->created_at) }}
-                        <a href="/messages/delete/{{ (int) $data->author->id }}?token={{ $_SESSION['token'] }}&amp;page={{ $page->current }}" onclick="return confirm('{{ trans('messages.delete_confirm') }}')" data-toggle="tooltip" title="{{ trans('main.delete') }}"><i class="fa fa-times"></i></a>
+                        <a href="/messages/delete/{{ (int) $data->author->id }}?token={{ $_SESSION['token'] }}&amp;page={{ $page->current }}" onclick="return confirm('{{ __('messages.delete_confirm') }}')" data-toggle="tooltip" title="{{ __('main.delete') }}"><i class="fa fa-times"></i></a>
                     </div>
 
                     @if ($data->author->id)
                         <b>{!! $data->author->getProfile() !!}</b>
                     @else
-                        <b>{{ trans('messages.system') }}</b><br>
+                        <b>{{ __('messages.system') }}</b><br>
                     @endif
 
                     <div class="message">
-                        {{ $data->type === 'out' ? trans('messages.you') . ': ' : '' }}
+                        {{ $data->type === 'out' ? __('messages.you') . ': ' : '' }}
                         {!! bbCodeTruncate($data->text) !!}
                     </div>
                     @unless ($data->reading)
-                        <span class="badge badge-info">{{ trans('messages.new') }}</span>
+                        <span class="badge badge-info">{{ __('messages.new') }}</span>
                     @endunless
                 </div>
             </div>
@@ -48,11 +48,11 @@
 
         {!! pagination($page) !!}
     @else
-        {!! showError(trans('main.empty_messages')) !!}
+        {!! showError(__('main.empty_messages')) !!}
     @endif
 
-    <i class="fa fa-search"></i> <a href="/searchusers">{{ trans('index.user_search') }}</a><br>
-    <i class="fa fa-address-book"></i> <a href="/contacts">{{ trans('index.contacts') }}</a> / <a href="/ignores">{{ trans('index.ignores') }}</a><br>
+    <i class="fa fa-search"></i> <a href="/searchusers">{{ __('index.user_search') }}</a><br>
+    <i class="fa fa-address-book"></i> <a href="/contacts">{{ __('index.contacts') }}</a> / <a href="/ignores">{{ __('index.ignores') }}</a><br>
 @stop
 
 @push('styles')

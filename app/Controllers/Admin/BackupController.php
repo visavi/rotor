@@ -21,7 +21,7 @@ class BackupController extends AdminController
         parent::__construct();
 
         if (! isAdmin(User::BOSS)) {
-            abort(403, trans('errors.forbidden'));
+            abort(403, __('errors.forbidden'));
         }
 
         if (function_exists('set_time_limit')) {
@@ -60,10 +60,10 @@ class BackupController extends AdminController
             $method = check($request->input('method'));
             $level  = int($request->input('level'));
 
-            $validator->equal($token, $_SESSION['token'], trans('validator.token'))
-                ->notEmpty($sheets, ['sheets' => trans('admin.backup.no_tables_save')])
-                ->in($method, ['none', 'gzip', 'bzip'], ['method' => trans('admin.backup.wrong_compression_method')])
-                ->between($level, 0, 9, ['level' => trans('admin.backup.wrong_compression_ratio')]);
+            $validator->equal($token, $_SESSION['token'], __('validator.token'))
+                ->notEmpty($sheets, ['sheets' => __('admin.backup.no_tables_save')])
+                ->in($method, ['none', 'gzip', 'bzip'], ['method' => __('admin.backup.wrong_compression_method')])
+                ->between($level, 0, 9, ['level' => __('admin.backup.wrong_compression_ratio')]);
 
             if ($validator->isValid()) {
 
@@ -112,7 +112,7 @@ class BackupController extends AdminController
 
                 $this->fclose($fp, $method);
 
-                setFlash('success', trans('admin.backup.database_success_saved'));
+                setFlash('success', __('admin.backup.database_success_saved'));
                 redirect('/admin/backups');
             } else {
                 setInput($request->all());
@@ -142,15 +142,15 @@ class BackupController extends AdminController
         $token = check($request->input('token'));
         $file  = check($request->input('file'));
 
-        $validator->equal($token, $_SESSION['token'], trans('validator.token'))
-            ->notEmpty($file, trans('admin.backup.backup_not_indicated'))
-            ->regex($file, '|^[\w\.\-]+$|i', trans('admin.backup.invalid_backup_name'))
-            ->true(file_exists(STORAGE.'/backups/'.$file), trans('admin.backup.backup_not_exist'));
+        $validator->equal($token, $_SESSION['token'], __('validator.token'))
+            ->notEmpty($file, __('admin.backup.backup_not_indicated'))
+            ->regex($file, '|^[\w\.\-]+$|i', __('admin.backup.invalid_backup_name'))
+            ->true(file_exists(STORAGE.'/backups/'.$file), __('admin.backup.backup_not_exist'));
 
         if ($validator->isValid()) {
             unlink(STORAGE.'/backups/'.$file);
 
-            setFlash('success', trans('admin.backup.backup_success_deleted'));
+            setFlash('success', __('admin.backup.backup_success_deleted'));
         } else {
             setFlash('danger', $validator->getErrors());
         }

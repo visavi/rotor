@@ -4,7 +4,7 @@
     <div class="invalid-feedback">{{ textError('protect') }}</div>
 @else
     <div class="form-group{{ hasError('protect') }}">
-        <label for="protect">{{ trans('main.verification_code') }}:</label><br>
+        <label for="protect">{{ __('main.verification_code') }}:</label><br>
         <img src="/captcha" onclick="this.src='/captcha?'+Math.random()" class="rounded" alt="" style="cursor: pointer;"><br>
         <input class="form-control" name="protect" id="protect" maxlength="6" required>
         <div class="invalid-feedback">{{ textError('protect') }}</div>

@@ -1,22 +1,22 @@
 @extends('layout')
 
 @section('title')
-    {{ trans('main.search_request') }} {{ $find }}
+    {{ __('main.search_request') }} {{ $find }}
 @stop
 
 @section('breadcrumb')
     <nav>
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
-            <li class="breadcrumb-item"><a href="/loads">{{ trans('index.loads') }}</a></li>
-            <li class="breadcrumb-item"><a href="/loads/search">{{ trans('loads.search') }}</a></li>
-            <li class="breadcrumb-item active">{{ trans('main.search_request') }}</li>
+            <li class="breadcrumb-item"><a href="/loads">{{ __('index.loads') }}</a></li>
+            <li class="breadcrumb-item"><a href="/loads/search">{{ __('loads.search') }}</a></li>
+            <li class="breadcrumb-item active">{{ __('main.search_request') }}</li>
         </ol>
     </nav>
 @stop
 
 @section('content')
-    {{ trans('loads.found_title') }}: <b>{{ $page->total }}</b><br><br>
+    {{ __('loads.found_title') }}: <b>{{ $page->total }}</b><br><br>
 
     @foreach ($downs as $data)
         <?php $rating = $data->rated ? round($data->rating / $data->rated, 1) : 0; ?>
@@ -27,10 +27,10 @@
         </div>
 
         <div>
-            {{ trans('loads.load') }}: <a href="/loads/{{ $data->category->id }}">{{ $data->category->name }}</a><br>
-            {{ trans('main.rating') }}: {{ $rating }}<br>
-            {{ trans('main.downloads') }}: {{ $data->loads }}<br>
-            {{ trans('main.author') }}: {!! $data->user->getProfile() !!} ({{ dateFixed($data->created_at) }})
+            {{ __('loads.load') }}: <a href="/loads/{{ $data->category->id }}">{{ $data->category->name }}</a><br>
+            {{ __('main.rating') }}: {{ $rating }}<br>
+            {{ __('main.downloads') }}: {{ $data->loads }}<br>
+            {{ __('main.author') }}: {!! $data->user->getProfile() !!} ({{ dateFixed($data->created_at) }})
         </div>
     @endforeach
 

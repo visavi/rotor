@@ -18,7 +18,7 @@ class TransferController extends AdminController
         parent::__construct();
 
         if (! isAdmin(User::MODER)) {
-            abort(403, trans('errors.forbidden'));
+            abort(403, __('errors.forbidden'));
         }
     }
 
@@ -53,7 +53,7 @@ class TransferController extends AdminController
         $login = check($request->input('user'));
 
         if (! $user = getUserByLogin($login)) {
-            abort(404, trans('validator.user'));
+            abort(404, __('validator.user'));
         }
 
         $total = Transfer::query()->where('user_id', $user->id)->count();

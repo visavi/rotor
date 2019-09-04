@@ -35,11 +35,11 @@
                 </div>
 
                 <div class="menu">
-                    <a href="/forums">{{ trans('index.forums') }}</a> &bull;
-                    <a href="/guestbooks">{{ trans('index.guestbooks') }}</a> &bull;
-                    <a href="/news">{{ trans('index.news') }}</a> &bull;
-                    <a href="/loads">{{ trans('index.loads') }}</a> &bull;
-                    <a href="/blogs">{{ trans('index.blogs') }}</a>
+                    <a href="/forums">{{ __('index.forums') }}</a> &bull;
+                    <a href="/guestbooks">{{ __('index.guestbooks') }}</a> &bull;
+                    <a href="/news">{{ __('index.news') }}</a> &bull;
+                    <a href="/loads">{{ __('index.loads') }}</a> &bull;
+                    <a href="/blogs">{{ __('index.blogs') }}</a>
 
                     <span class="mright">
                         @yield('menu')

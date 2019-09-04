@@ -1,14 +1,14 @@
 @extends('layout')
 
 @section('title')
-    {{ trans('index.statistics') }}
+    {{ __('index.statistics') }}
 @stop
 
 @section('breadcrumb')
     <nav>
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
-            <li class="breadcrumb-item active">{{ trans('index.statistics') }}</li>
+            <li class="breadcrumb-item active">{{ __('index.statistics') }}</li>
         </ol>
     </nav>
 @stop
@@ -17,32 +17,32 @@
     <div class="row mb-3">
 
         <div class="col-md-6 col-12">
-            {{ trans('counters.users_total') }}: <b>{{ $online[1] }}</b><br>
-            {{ trans('counters.authorized_total') }}: <b>{{ $online[0] }}</b><br>
-            {{ trans('counters.guest_total') }}: <b>{{ ($online[1] - $online[0]) }}</b><br><br>
+            {{ __('counters.users_total') }}: <b>{{ $online[1] }}</b><br>
+            {{ __('counters.authorized_total') }}: <b>{{ $online[0] }}</b><br>
+            {{ __('counters.guest_total') }}: <b>{{ ($online[1] - $online[0]) }}</b><br><br>
 
-            {{ trans('counters.hosts_total') }}: <b>{{ $count->allhosts }}</b><br>
-            {{ trans('counters.hits_total') }}: <b>{{ $count->allhits }}</b><br>
+            {{ __('counters.hosts_total') }}: <b>{{ $count->allhosts }}</b><br>
+            {{ __('counters.hits_total') }}: <b>{{ $count->allhits }}</b><br>
         </div>
 
         <div class="col-md-6 col-12">
-            {{ trans('counters.hosts_hour') }}: <b>{{ $count->hosts24 }}</b><br>
-            {{ trans('counters.hits_hour') }}: <b>{{ $count->hits24 }}</b><br><br>
+            {{ __('counters.hosts_hour') }}: <b>{{ $count->hosts24 }}</b><br>
+            {{ __('counters.hits_hour') }}: <b>{{ $count->hits24 }}</b><br><br>
 
-            {{ trans('counters.hosts_day') }}: <b>{{ $count->dayhosts }}</b><br>
-            {{ trans('counters.hits_day') }}: <b>{{ $count->dayhits }}</b><br><br>
+            {{ __('counters.hosts_day') }}: <b>{{ $count->dayhosts }}</b><br>
+            {{ __('counters.hits_day') }}: <b>{{ $count->dayhits }}</b><br><br>
         </div>
     </div>
 
-    <h3>{{ trans('counters.dynamics_day') }}</h3>
-    <span class="badge badge-pill badge-primary">{{ trans('counters.hosts') }}</span>
-    <span class="badge badge-pill badge-warning">{{ trans('counters.hits') }}</span>
+    <h3>{{ __('counters.dynamics_day') }}</h3>
+    <span class="badge badge-pill badge-primary">{{ __('counters.hosts') }}</span>
+    <span class="badge badge-pill badge-warning">{{ __('counters.hits') }}</span>
 
     <div class="ct-chart24 ct-perfect-fourth"></div>
 
-    <h3>{{ trans('counters.dynamics_month') }}</h3>
-    <span class="badge badge-pill badge-primary">{{ trans('counters.hosts') }}</span>
-    <span class="badge badge-pill badge-warning">{{ trans('counters.hits') }}</span>
+    <h3>{{ __('counters.dynamics_month') }}</h3>
+    <span class="badge badge-pill badge-primary">{{ __('counters.hosts') }}</span>
+    <span class="badge badge-pill badge-warning">{{ __('counters.hits') }}</span>
     <div class="ct-chart31 ct-perfect-fourth"></div>
 @stop
 

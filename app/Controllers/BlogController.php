@@ -30,7 +30,7 @@ class BlogController extends BaseController
             ->get();
 
         if ($categories->isEmpty()) {
-            abort('default', trans('blogs.categories_not_created'));
+            abort('default', __('blogs.categories_not_created'));
         }
 
         return view('blogs/index', compact('categories'));
@@ -47,7 +47,7 @@ class BlogController extends BaseController
         $category = Category::query()->with('parent')->find($id);
 
         if (! $category) {
-            abort(404, trans('blogs.category_not_exist'));
+            abort(404, __('blogs.category_not_exist'));
         }
 
         $total = Blog::query()->where('category_id', $id)->count();
@@ -85,7 +85,7 @@ class BlogController extends BaseController
             ->first();
 
         if (! $blog) {
-            abort(404, trans('blogs.article_not_exist'));
+            abort(404, __('blogs.article_not_exist'));
         }
 
         $reader = Reader::query()
@@ -128,18 +128,18 @@ class BlogController extends BaseController
     public function edit(int $id, Request $request, Validator $validator): string
     {
         if (! getUser()) {
-            abort(403, trans('main.not_authorized'));
+            abort(403, __('main.not_authorized'));
         }
 
         /** @var Blog $blog */
         $blog = Blog::query()->find($id);
 
         if (! $blog) {
-            abort(404, trans('blogs.article_not_exist'));
+            abort(404, __('blogs.article_not_exist'));
         }
 
         if ($blog->user_id !== getUser('id')) {
-            abort('default', trans('main.article_not_author'));
+            abort('default', __('main.article_not_author'));
         }
 
         if ($request->isMethod('post')) {
@@ -154,14 +154,14 @@ class BlogController extends BaseController
             $category = Category::query()->find($cid);
 
             $validator
-                ->equal($token, $_SESSION['token'], trans('validator.token'))
-                ->length($title, 5, 50, ['title' => trans('validator.text')])
-                ->length($text, 100, setting('maxblogpost'), ['text' => trans('validator.text')])
-                ->length($tags, 2, 50, ['tags' => trans('blogs.article_error_tags')])
-                ->notEmpty($category, ['cid' => trans('blogs.category_not_exist')]);
+                ->equal($token, $_SESSION['token'], __('validator.token'))
+                ->length($title, 5, 50, ['title' => __('validator.text')])
+                ->length($text, 100, setting('maxblogpost'), ['text' => __('validator.text')])
+                ->length($tags, 2, 50, ['tags' => __('blogs.article_error_tags')])
+                ->notEmpty($category, ['cid' => __('blogs.category_not_exist')]);
 
             if ($category) {
-                $validator->empty($category->closed, ['cid' => trans('blogs.category_closed')]);
+                $validator->empty($category->closed, ['cid' => __('blogs.category_closed')]);
             }
 
             if ($validator->isValid()) {
@@ -180,7 +180,7 @@ class BlogController extends BaseController
                 ]);
 
                 clearCache(['statblog', 'recentblog']);
-                setFlash('success', trans('blogs.article_success_edited'));
+                setFlash('success', __('blogs.article_success_edited'));
                 redirect('/articles/' . $blog->id);
             } else {
                 setInput($request->all());
@@ -237,11 +237,11 @@ class BlogController extends BaseController
         $cid = int($request->input('cid'));
 
         if (! isAdmin() && ! setting('blog_create')) {
-            abort('default', trans('main.articles_closed'));
+            abort('default', __('main.articles_closed'));
         }
 
         if (! getUser()) {
-            abort(403, trans('main.not_authorized'));
+            abort(403, __('main.not_authorized'));
         }
 
         $cats = Category::query()
@@ -251,7 +251,7 @@ class BlogController extends BaseController
             ->get();
 
         if (! $cats) {
-            abort(404, trans('blogs.categories_not_created'));
+            abort(404, __('blogs.categories_not_created'));
         }
 
         if ($request->isMethod('post')) {
@@ -265,15 +265,15 @@ class BlogController extends BaseController
             $category = Category::query()->find($cid);
 
             $validator
-                ->equal($token, $_SESSION['token'], trans('validator.token'))
-                ->length($title, 5, 50, ['title' => trans('validator.text')])
-                ->length($text, 100, setting('maxblogpost'), ['text' => trans('validator.text')])
+                ->equal($token, $_SESSION['token'], __('validator.token'))
+                ->length($title, 5, 50, ['title' => __('validator.text')])
+                ->length($text, 100, setting('maxblogpost'), ['text' => __('validator.text')])
                 ->length($tags, 2, 50, ['tags' => 'Слишком длинные или короткие метки статьи!'])
-                ->false($flood->isFlood(), ['msg' => trans('validator.flood', ['sec' => $flood->getPeriod()])])
-                ->notEmpty($category, ['cid' => trans('blogs.category_not_exist')]);
+                ->false($flood->isFlood(), ['msg' => __('validator.flood', ['sec' => $flood->getPeriod()])])
+                ->notEmpty($category, ['cid' => __('blogs.category_not_exist')]);
 
             if ($category) {
-                $validator->empty($category->closed, ['cid' => trans('blogs.category_closed')]);
+                $validator->empty($category->closed, ['cid' => __('blogs.category_closed')]);
             }
 
             if ($validator->isValid()) {
@@ -304,7 +304,7 @@ class BlogController extends BaseController
                 clearCache(['statblog', 'recentblog']);
                 $flood->saveState();
 
-                setFlash('success', trans('blogs.article_success_created'));
+                setFlash('success', __('blogs.article_success_created'));
                 redirect('/articles/' . $blog->id);
             } else {
                 setInput($request->all());
@@ -336,7 +336,7 @@ class BlogController extends BaseController
         $blog = Blog::query()->find($id);
 
         if (! $blog) {
-            abort(404, trans('blogs.article_not_exist'));
+            abort(404, __('blogs.article_not_exist'));
         }
 
         if ($request->isMethod('post')) {
@@ -345,10 +345,10 @@ class BlogController extends BaseController
             $msg   = check($request->input('msg'));
 
             $validator
-                ->true(getUser(), trans('main.not_authorized'))
-                ->equal($token, $_SESSION['token'], trans('validator.token'))
-                ->length($msg, 5, setting('comment_length'), ['msg' => trans('validator.text')])
-                ->false($flood->isFlood(), ['msg' => trans('validator.flood', ['sec' => $flood->getPeriod()])]);
+                ->true(getUser(), __('main.not_authorized'))
+                ->equal($token, $_SESSION['token'], __('validator.token'))
+                ->length($msg, 5, setting('comment_length'), ['msg' => __('validator.text')])
+                ->false($flood->isFlood(), ['msg' => __('validator.flood', ['sec' => $flood->getPeriod()])]);
 
             if ($validator->isValid()) {
 
@@ -418,11 +418,11 @@ class BlogController extends BaseController
         $blog = Blog::query()->find($id);
 
         if (! $blog) {
-            abort(404, trans('blogs.article_not_exist'));
+            abort(404, __('blogs.article_not_exist'));
         }
 
         if (! getUser()) {
-            abort(403, trans('main.not_authorized'));
+            abort(403, __('main.not_authorized'));
         }
 
         $comment = Comment::query()
@@ -445,8 +445,8 @@ class BlogController extends BaseController
             $page  = int($request->input('page', 1));
 
             $validator
-                ->equal($token, $_SESSION['token'], trans('validator.token'))
-                ->length($msg, 5, setting('comment_length'), ['msg' => trans('validator.text')]);
+                ->equal($token, $_SESSION['token'], __('validator.token'))
+                ->length($msg, 5, setting('comment_length'), ['msg' => __('validator.text')]);
 
             if ($validator->isValid()) {
                 $msg = antimat($msg);
@@ -477,7 +477,7 @@ class BlogController extends BaseController
         $blog = Blog::query()->find($id);
 
         if (! $blog) {
-            abort(404, trans('blogs.article_not_exist'));
+            abort(404, __('blogs.article_not_exist'));
         }
 
         $total = Comment::query()
@@ -501,7 +501,7 @@ class BlogController extends BaseController
         $blog = Blog::query()->find($id);
 
         if (! $blog) {
-            abort(404, trans('blogs.article_not_exist'));
+            abort(404, __('blogs.article_not_exist'));
         }
 
         return view('blogs/print', compact('blog'));
@@ -537,7 +537,7 @@ class BlogController extends BaseController
         $blog = Blog::query()->where('id', $id)->with('lastComments')->first();
 
         if (! $blog) {
-            abort(404, trans('blogs.article_not_exist'));
+            abort(404, __('blogs.article_not_exist'));
         }
 
         return view('blogs/rss_comments', compact('blog'));
@@ -689,7 +689,7 @@ class BlogController extends BaseController
         $user  = getUserByLogin($login);
 
         if (! $user) {
-            abort(404, trans('validator.user'));
+            abort(404, __('validator.user'));
         }
 
         $total = Blog::query()->where('user_id', $user->id)->count();
@@ -716,7 +716,7 @@ class BlogController extends BaseController
         $user  = getUserByLogin($login);
 
         if (! $user) {
-            abort(404, trans('validator.user'));
+            abort(404, __('validator.user'));
         }
 
         $total = Comment::query()
@@ -752,7 +752,7 @@ class BlogController extends BaseController
         $blog = Blog::query()->find($id);
 
         if (! $blog) {
-            abort(404, trans('blogs.article_not_exist'));
+            abort(404, __('blogs.article_not_exist'));
         }
 
         $total = Comment::query()
@@ -812,7 +812,7 @@ class BlogController extends BaseController
         $where = int($request->input('where'));
 
         if (! getUser()) {
-            abort(403, trans('main.not_authorized'));
+            abort(403, __('main.not_authorized'));
         }
 
         if (empty($find)) {

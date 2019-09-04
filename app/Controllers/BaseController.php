@@ -21,7 +21,7 @@ Class BaseController
 
         // Сайт закрыт для гостей
         if (setting('closedsite') === 1 && ! getUser() && ! $request->is('register', 'login', 'recovery', 'captcha')) {
-            setFlash('danger', trans('main.not_authorized'));
+            setFlash('danger', __('main.not_authorized'));
             redirect('/login');
         }
 

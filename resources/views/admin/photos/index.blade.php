@@ -1,26 +1,26 @@
 @extends('layout')
 
 @section('title')
-    {{ trans('index.photos') }}
+    {{ __('index.photos') }}
 @stop
 
 @section('header')
     @if (getUser())
         <div class="float-right">
-            <a class="btn btn-success" href="/photos/create">{{ trans('main.add') }}</a><br>
+            <a class="btn btn-success" href="/photos/create">{{ __('main.add') }}</a><br>
         </div><br>
     @endif
 
-    <h1>{{ trans('index.photos') }}</h1>
+    <h1>{{ __('index.photos') }}</h1>
 @stop
 
 @section('breadcrumb')
     <nav>
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
-            <li class="breadcrumb-item"><a href="/admin">{{ trans('index.panel') }}</a></li>
-            <li class="breadcrumb-item active">{{ trans('index.photos') }}</li>
-            <li class="breadcrumb-item"><a href="/photos?page={{ $page->current }}">{{ trans('main.review') }}</a></li>
+            <li class="breadcrumb-item"><a href="/admin">{{ __('index.panel') }}</a></li>
+            <li class="breadcrumb-item active">{{ __('index.photos') }}</li>
+            <li class="breadcrumb-item"><a href="/photos?page={{ $page->current }}">{{ __('main.review') }}</a></li>
         </ol>
     </nav>
 @stop
@@ -34,8 +34,8 @@
                 <b><a href="/photos/{{ $photo->id }}">{{ $photo->title }}</a></b>
 
                 <div class="float-right">
-                    <a href="/admin/photos/edit/{{ $photo->id }}?page={{ $page->current }}" data-toggle="tooltip" title="{{ trans('main.edit') }}"><i class="fas fa-pencil-alt text-muted"></i></a>
-                    <a href="/admin/photos/delete/{{ $photo->id }}?page={{ $page->current }}&amp;token={{ $_SESSION['token'] }}" onclick="return confirm('{{ trans('photos.confirm_delete_photo') }}')" data-toggle="tooltip" title="{{ trans('main.delete') }}"><i class="fas fa-times text-muted"></i></a>
+                    <a href="/admin/photos/edit/{{ $photo->id }}?page={{ $page->current }}" data-toggle="tooltip" title="{{ __('main.edit') }}"><i class="fas fa-pencil-alt text-muted"></i></a>
+                    <a href="/admin/photos/delete/{{ $photo->id }}?page={{ $page->current }}&amp;token={{ $_SESSION['token'] }}" onclick="return confirm('{{ __('photos.confirm_delete_photo') }}')" data-toggle="tooltip" title="{{ __('main.delete') }}"><i class="fas fa-times text-muted"></i></a>
                 </div>
             </div>
 
@@ -74,20 +74,20 @@
                     {!! bbCode($photo->text) !!}<br>
                 @endif
 
-                    {{ trans('main.added') }}: {!! $photo->user->getProfile() !!} ({{ dateFixed($photo->created_at) }})<br>
-                <a href="/photos/comments/{{ $photo->id }}">{{ trans('main.comments') }}</a> ({{ $photo->count_comments }})
+                    {{ __('main.added') }}: {!! $photo->user->getProfile() !!} ({{ dateFixed($photo->created_at) }})<br>
+                <a href="/photos/comments/{{ $photo->id }}">{{ __('main.comments') }}</a> ({{ $photo->count_comments }})
                 <a href="/photos/end/{{ $photo->id }}">&raquo;</a>
             </div>
         @endforeach
 
         {!! pagination($page) !!}
 
-        {{ trans('photos.total_photos') }}: <b>{{ $page->total }}</b><br><br>
+        {{ __('photos.total_photos') }}: <b>{{ $page->total }}</b><br><br>
 
         @if (isAdmin('boss'))
-            <i class="fa fa-sync"></i> <a href="/admin/photos/restatement?token={{ $_SESSION['token'] }}">{{ trans('main.recount') }}</a><br>
+            <i class="fa fa-sync"></i> <a href="/admin/photos/restatement?token={{ $_SESSION['token'] }}">{{ __('main.recount') }}</a><br>
         @endif
     @else
-        {!! showError(trans('photos.empty_photos')) !!}
+        {!! showError(__('photos.empty_photos')) !!}
     @endif
 @stop

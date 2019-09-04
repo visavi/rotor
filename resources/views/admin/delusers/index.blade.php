@@ -1,28 +1,28 @@
 @extends('layout')
 
 @section('title')
-    {{ trans('index.user_cleaning') }}
+    {{ __('index.user_cleaning') }}
 @stop
 
 @section('breadcrumb')
     <nav>
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
-            <li class="breadcrumb-item"><a href="/admin">{{ trans('index.panel') }}</a></li>
-            <li class="breadcrumb-item active">{{ trans('index.user_cleaning') }}</li>
+            <li class="breadcrumb-item"><a href="/admin">{{ __('index.panel') }}</a></li>
+            <li class="breadcrumb-item active">{{ __('index.user_cleaning') }}</li>
         </ol>
     </nav>
 @stop
 
 @section('content')
     @if ($users->isEmpty())
-        {{ trans('admin.delusers.condition') }}:<br>
+        {{ __('admin.delusers.condition') }}:<br>
 
         <div class="form">
             <form action="/admin/delusers" method="post">
 
                 <div class="form-group">
-                    <label for="period">{{ trans('main.period') }}:</label>
+                    <label for="period">{{ __('main.period') }}:</label>
                     <select class="form-control" id="period" name="period">
                         <option value="1825">{{ formatTime(1825 * 86400) }}</option>
                         <option value="1460">{{ formatTime(1460 * 86400) }}</option>
@@ -34,35 +34,35 @@
                 </div>
 
                 <div class="form-group">
-                    <label for="point">{{ trans('admin.delusers.minimum_asset') }}:</label>
+                    <label for="point">{{ __('admin.delusers.minimum_asset') }}:</label>
                     <input type="text" class="form-control" id="point" name="point"  value="0" required>
                 </div>
 
-                <button class="btn btn-primary">{{ trans('main.analysis') }}</button>
+                <button class="btn btn-primary">{{ __('main.analysis') }}</button>
             </form>
         </div><br>
 
-        {{ trans('main.total_users') }}: <b>{{ $total }}</b><br><br>
+        {{ __('main.total_users') }}: <b>{{ $total }}</b><br><br>
     @else
 
-        {{ trans('admin.delusers.deleted_condition') }} {{ formatTime($period) }}<br>
-        {{ trans('admin.delusers.asset_condition') }} {{ plural($point, setting('scorename')) }}<br><br>
+        {{ __('admin.delusers.deleted_condition') }} {{ formatTime($period) }}<br>
+        {{ __('admin.delusers.asset_condition') }} {{ plural($point, setting('scorename')) }}<br><br>
 
-        <b>{{ trans('main.users') }}:</b>
+        <b>{{ __('main.users') }}:</b>
 
         @foreach ($users as $user)
             <?php $comma = $loop->first ? '' : ',' ?>
             {{ $comma }} {!! $user->getProfile() !!}
         @endforeach
 
-        <br><br>{{ trans('admin.delusers.deleted_users') }}: <b>{{ $users->count() }}</b><br>
+        <br><br>{{ __('admin.delusers.deleted_users') }}: <b>{{ $users->count() }}</b><br>
 
         <form action="/admin/delusers/clear" method="post">
             @csrf
             <input type="hidden" name="period" value="{{ $period }}">
             <input type="hidden" name="point" value="{{ $point }}">
 
-            <button class="btn btn-primary">{{ trans('admin.delusers.delete_users') }}</button>
+            <button class="btn btn-primary">{{ __('admin.delusers.delete_users') }}</button>
         </form><br>
     @endif
 @stop

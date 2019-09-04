@@ -22,7 +22,7 @@ class FileController extends AdminController
         parent::__construct();
 
         if (! isAdmin(User::BOSS)) {
-            abort(403, trans('errors.forbidden'));
+            abort(403, __('errors.forbidden'));
         }
 
         $request    = Request::createFromGlobals();
@@ -104,7 +104,7 @@ class FileController extends AdminController
                 redirect ('/admin/files/edit?path=' . $this->path . '&file=' . $this->file);
             } else {
                 setInput($request->all());
-                setFlash('danger', trans('validator.token'));
+                setFlash('danger', __('validator.token'));
             }
         }
 
@@ -134,7 +134,7 @@ class FileController extends AdminController
             $fileName = $this->path ? '/' . $filename : $filename;
             $dirName  = $this->path ? '/' . $dirname : $dirname;
 
-            $validator->equal($token, $_SESSION['token'], trans('validator.token'));
+            $validator->equal($token, $_SESSION['token'], __('validator.token'));
 
             if ($filename) {
                 $validator->length($filename, 1, 30, ['filename' => 'Необходимо ввести название файла!']);
@@ -191,7 +191,7 @@ class FileController extends AdminController
         $fileName = $this->path ? '/' . $filename : $filename;
         $dirName  = $this->path ? '/' . $dirname : $dirname;
 
-        $validator->equal($token, $_SESSION['token'], trans('validator.token'));
+        $validator->equal($token, $_SESSION['token'], __('validator.token'));
 
         if ($filename) {
             $validator->true(file_exists(RESOURCES . '/views/' . $this->path . $fileName . '.blade.php'), 'Данного файла не существует!');

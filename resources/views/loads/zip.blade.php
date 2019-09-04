@@ -1,14 +1,14 @@
 @extends('layout')
 
 @section('title')
-    {{ trans('loads.view_archive') }} {{ $down->title }}
+    {{ __('loads.view_archive') }} {{ $down->title }}
 @stop
 
 @section('breadcrumb')
     <nav>
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
-            <li class="breadcrumb-item"><a href="/loads">{{ trans('index.loads') }}</a></li>
+            <li class="breadcrumb-item"><a href="/loads">{{ __('index.loads') }}</a></li>
 
             @if ($down->category->parent->id)
                 <li class="breadcrumb-item"><a href="/loads/{{ $down->category->parent->id }}">{{ $down->category->parent->name }}</a></li>
@@ -16,20 +16,20 @@
 
             <li class="breadcrumb-item"><a href="/loads/{{ $down->category->id }}">{{ $down->category->name }}</a></li>
             <li class="breadcrumb-item"><a href="/downs/{{ $down->id }}">{{ $down->title }}</a></li>
-            <li class="breadcrumb-item active">{{ trans('loads.view_archive') }}</li>
+            <li class="breadcrumb-item active">{{ __('loads.view_archive') }}</li>
         </ol>
     </nav>
 @stop
 
 @section('content')
-    {{ trans('main.total') }}: {{ $page->total }}<hr>
+    {{ __('main.total') }}: {{ $page->total }}<hr>
 
     @if ($documents)
         @foreach ($documents as $key => $document)
 
             @if ($document->isFolder())
                 <i class="fa fa-folder-open"></i>
-                <b>{{ trans('loads.directory') }} {{ rtrim($document->getName(), '/') }}</b><br>
+                <b>{{ __('loads.directory') }} {{ rtrim($document->getName(), '/') }}</b><br>
             @else
                 <?php $ext = getExtension($document->getName()) ?>
 
@@ -48,6 +48,6 @@
 
         {!! pagination($page) !!}
     @else
-        {!! showError(trans('loads.empty_archive')) !!}
+        {!! showError(__('loads.empty_archive')) !!}
     @endif
 @stop

@@ -15,7 +15,7 @@ class ReglistController extends AdminController
         parent::__construct();
 
         if (! isAdmin(User::MODER)) {
-            abort(403, trans('errors.forbidden'));
+            abort(403, __('errors.forbidden'));
         }
     }
 
@@ -34,7 +34,7 @@ class ReglistController extends AdminController
             $choice = intar($request->input('choice'));
             $action = check($request->input('action'));
 
-            $validator->equal($token, $_SESSION['token'], trans('validator.token'))
+            $validator->equal($token, $_SESSION['token'], __('validator.token'))
                 ->notEmpty($choice, 'Отсутствуют выбранные пользователи!')
                 ->in($action, ['yes', 'no'], ['action' => 'Необходимо выбрать действие!']);
 

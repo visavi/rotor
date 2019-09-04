@@ -74,9 +74,9 @@
                         </li>
 
                         @if (!getUser())
-                            <li><a href="/register"><span class="l"></span><span class="r"></span><span class="t">{{ trans('index.register') }}</span></a></li>
+                            <li><a href="/register"><span class="l"></span><span class="r"></span><span class="t">{{ __('index.register') }}</span></a></li>
                         @else
-                            <li><a href="/logout?token={{ $_SESSION['token'] }}" onclick="return logout(this)"><span class="l"></span><span class="r"></span><span class="t">{{ trans('index.logout') }}</span></a></li>
+                            <li><a href="/logout?token={{ $_SESSION['token'] }}" onclick="return logout(this)"><span class="l"></span><span class="r"></span><span class="t">{{ __('index.logout') }}</span></a></li>
                         @endif
 
             </ul></div>
@@ -101,7 +101,7 @@
 
                         @if (isAdmin())
                             <div class="nmenu">
-                                <i class="fa fa-wrench"></i> <a href="/admin">{{ trans('index.panel') }}</a>
+                                <i class="fa fa-wrench"></i> <a href="/admin">{{ __('index.panel') }}</a>
 
                                 @if (statsSpam()>0)
                                     &bull; <a href="/admin/spam"><span style="color:#ff0000">Жалобы</span></a>
@@ -126,7 +126,7 @@
 
                         <input value="Войти" type="submit"></form>
 
-                        <a href="/register">{{ trans('index.register') }}</a><br>
+                        <a href="/register">{{ __('index.register') }}</a><br>
                         <a href="/recovery">Забыли пароль?</a>
                     @endif
 
