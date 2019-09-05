@@ -3,7 +3,7 @@ Rotor
 
 [Description in Russian](https://github.com/visavi/rotor/blob/master/readme_ru.md)
 
-[![Php Version](https://img.shields.io/badge/php-%3E%3D%207.1.3-brightgreen.svg)](https://php.net)
+[![Php Version](https://img.shields.io/badge/php-%3E%3D%207.2.0-brightgreen.svg)](https://php.net)
 [![Latest Stable Version](https://poser.pugx.org/visavi/rotor/v/stable)](https://packagist.org/packages/visavi/rotor)
 [![Total Downloads](https://poser.pugx.org/visavi/rotor/downloads)](https://packagist.org/packages/visavi/rotor)
 [![Latest Unstable Version](https://poser.pugx.org/visavi/rotor/v/unstable)](https://packagist.org/packages/visavi/rotor)
@@ -62,7 +62,7 @@ composer create-project --stability=dev visavi/rotor .
 
 ### Requirements
 
-Minimal PHP version required for PHP 7.1.3 and MySQL 5.5.3 engine
+Minimal PHP version required for PHP 7.2.0 and MySQL 5.5.3 engine
 
 If MySQL version is lower than 5.5.3, then it is necessary to install in the .env file
 `DB_COLLATION=utf8_unicode_ci`

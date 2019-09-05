@@ -82,16 +82,16 @@ $wrap->setOption('environment', 'default');
         ?>
         <p>Не забудьте изменить значение APP_KEY, эти данные необходимы для шифрования cookies и паролей в сессиях</p>
 
-        <p>Минимальная версия PHP необходимая для работы движка PHP 7.1.3 и MySQL 5.5.3</p>
+        <p>Минимальная версия PHP необходимая для работы движка PHP 7.2.0 и MySQL 5.5.3</p>
 
         <p style="font-size: 15px; font-weight: bold">Проверка требований</p>
         <?php
         $errorSettings = 0;
 
-        if (version_compare(PHP_VERSION, '7.1.3') > 0) {
-            echo '<i class="fa fa-plus-circle"></i> Версия PHP 7.1.3 и выше: <b><span style="color:#00cc00">ОК</span></b> (Версия ' . parseVersion(PHP_VERSION) . ')<br>';
+        if (version_compare(PHP_VERSION, '7.2.0') > 0) {
+            echo '<i class="fa fa-plus-circle"></i> Версия PHP 7.2.0 и выше: <b><span style="color:#00cc00">ОК</span></b> (Версия ' . parseVersion(PHP_VERSION) . ')<br>';
         } else {
-            echo '<i class="fa fa-minus-circle"></i> Версия PHP 7.1.3 и выше: <b><span style="color:#ff0000">Ошибка</span></b>  (Версия ' . parseVersion(PHP_VERSION) . ')<br>';
+            echo '<i class="fa fa-minus-circle"></i> Версия PHP 7.2.0 и выше: <b><span style="color:#ff0000">Ошибка</span></b>  (Версия ' . parseVersion(PHP_VERSION) . ')<br>';
             $errorCritical = 1;
         }
 
