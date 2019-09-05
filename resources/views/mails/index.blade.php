@@ -44,6 +44,4 @@
             <button class="btn btn-primary">{{ __('main.send') }}</button>
         </form>
     </div><br>
-
-    {{ __('mails.feedback_text') }}<br><br>
 @stop
