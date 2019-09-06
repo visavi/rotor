@@ -42,6 +42,21 @@
 
     <h3 class="mt-3">reCaptcha</h3>
 
+    <?php $inputCaptcha = getInput('sets.captcha_type', $settings['captcha_type']); ?>
+
+    <div class="form-group{{ hasError('sets[captcha_type]') }}">
+        <label for="captcha_type">{{ __('main.type') }}:</label>
+        <select class="form-control" id="captcha_type" name="sets[captcha_type]">
+
+            @foreach ($protects as $captcha)
+                <?php $selected = ($captcha === $inputCaptcha) ? ' selected' : ''; ?>
+                <option value="{{ $captcha }}"{{ $selected }}>{{ $captcha }}</option>
+            @endforeach
+
+        </select>
+        <div class="invalid-feedback">{{ textError('sets[captcha_type]') }}</div>
+    </div>
+
     <div class="form-group{{ hasError('sets[recaptcha_public]') }}">
         <label for="recaptcha_public">{{ __('settings.captcha_public') }}:</label>
         <input type="hidden" name="opt[recaptcha_public]" value="1">

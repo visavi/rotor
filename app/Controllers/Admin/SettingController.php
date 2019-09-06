@@ -88,8 +88,14 @@ class SettingController extends AdminController
             'Закрыто для всех',
         ];
 
+        $protects = [
+            'graphical',
+            'recaptcha_v2',
+            'recaptcha_v3',
+        ];
+
         $settings = Setting::query()->pluck('value', 'name')->all();
 
-        return view('admin/settings/index', compact('settings', 'act', 'counters', 'statsite'));
+        return view('admin/settings/index', compact('settings', 'act', 'counters', 'statsite', 'protects'));
     }
 }

@@ -35,6 +35,7 @@ class SettingsSeeder extends AbstractSeed
             ['name'  => 'captcha_offset', 'value' => 5],
             ['name'  => 'captcha_spaces', 'value' => 0],
             ['name'  => 'captcha_symbols', 'value' => '1234567890'],
+            ['name'  => 'captcha_type', 'value' => 'graphical'],
             ['name'  => 'chatpost', 'value' => 10],
             ['name'  => 'closedsite', 'value' => 0],
             ['name'  => 'comment_length', 'value' => 1000],
