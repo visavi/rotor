@@ -16,7 +16,6 @@
 
 @section('content')
     <div class="mb-3 font-weight-bold">
-
         <i class="fa fa-exclamation-circle"></i>
 
         @if (setting('regkeys'))

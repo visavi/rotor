@@ -48,7 +48,7 @@
                 <div class="message">{!! bbCode($post->text) !!}</div>
 
                 @if ($post->edit_user_id)
-                    <small><i class="fa fa-exclamation-circle"></i> {{ __('main.changed') }}: {!! $post->editUser->getProfile() !!} ({{ dateFixed($post->updated_at) }})</small><br>
+                    <small><i class="fa fa-exclamation-circle text-danger"></i> {{ __('main.changed') }}: {!! $post->editUser->getProfile() !!} ({{ dateFixed($post->updated_at) }})</small><br>
                 @endif
 
                 <span class="data">({{ $post->brow }}, {{ $post->ip }})</span>
