@@ -2430,13 +2430,26 @@ function captchaVerify(): bool
 {
     $request = Request::createFromGlobals();
 
-    if (setting('recaptcha_public') && setting('recaptcha_private')) {
+    if (setting('captcha_type') === 'recaptcha_v2') {
         $recaptcha = new ReCaptcha(setting('recaptcha_private'));
         $response = $recaptcha->verify($request->input('g-recaptcha-response'), getIp());
         return $response->isSuccess();
     }
 
-    return check(strtolower($request->input('protect'))) === $_SESSION['protect'];
+    if (setting('captcha_type') === 'recaptcha_v3') {
+        $recaptcha = new ReCaptcha(setting('recaptcha_private'));
+        $response = $recaptcha->setExpectedHostname($_SERVER['SERVER_NAME'])
+            ->setScoreThreshold(0.5)
+            ->verify($request->input('protect'), getIp());
+
+        return $response->isSuccess();
+    }
+
+    if (setting('captcha_type') === 'graphical') {
+        return check(strtolower($request->input('protect'))) === $_SESSION['protect'];
+    }
+
+    return false;
 }
 
 /**
