@@ -247,7 +247,7 @@ class UserController extends BaseController
      * @return string
      * @throws ErrorException
      */
-    public function login(Request $request/*, Validator $validator*/): string
+    public function login(Request $request): string
     {
         if (getUser()) {
             abort(403, 'Вы уже авторизованы!');
