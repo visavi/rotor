@@ -562,7 +562,7 @@ class UserController extends BaseController
         $validator->empty($changeMail, 'Вы уже отправили код подтверждения на новый адрес почты!');
 
         if ($validator->isValid()) {
-            $genkey = Str::random(\mt_rand(15,20));
+            $genkey = Str::random(mt_rand(15,20));
 
             $subject = 'Изменение email на сайте '.setting('title');
             $message = 'Здравствуйте, '.$user->login.'<br>Вами была произведена операция по изменению адреса электронной почты<br><br>Для того, чтобы изменить email, необходимо подтвердить новый адрес почты<br>Перейдите по данной ссылке:<br><br><a href="'.siteUrl(true).'/accounts/editmail?key='.$genkey.'">'.siteUrl(true).'/accounts/editmail?key='.$genkey.'</a><br><br>Ссылка будет дейстительной в течение суток до '.date('j.m.y / H:i', strtotime('+1 day', SITETIME)).'<br>Для изменения адреса необходимо быть авторизованным на сайте<br>Если это сообщение попало к вам по ошибке или вы не собираетесь менять email, то просто проигнорируйте данное письмо';
@@ -668,7 +668,7 @@ class UserController extends BaseController
         if ($validator->isValid()) {
             $user->update([
                 'status' => $status,
-                'money'  => DB::connection()->raw('money - '.$cost),
+                'money'  => DB::connection()->raw('money - ' . $cost),
             ]);
             $user->saveStatus();
 
@@ -715,8 +715,8 @@ class UserController extends BaseController
                 'password' => password_hash($newpass, PASSWORD_BCRYPT),
             ]);
 
-            $subject = 'Изменение пароля на сайте '.setting('title');
-            $message = 'Здравствуйте, '.getUser('login').'<br>Вами была произведена операция по изменению пароля<br><br><b>Ваш новый пароль: '.$newpass.'</b><br>Сохраните его в надежном месте<br><br>Данные инициализации:<br>IP: '.getIp().'<br>Браузер: '.getBrowser().'<br>Время: '.date('j.m.y / H:i', SITETIME);
+            $subject = 'Изменение пароля на сайте ' . setting('title');
+            $message = 'Здравствуйте, ' . getUser('login') . '<br>Вами была произведена операция по изменению пароля<br><br><b>Ваш новый пароль: ' . $newpass . '</b><br>Сохраните его в надежном месте<br><br>Данные инициализации:<br>IP: ' . getIp() . '<br>Браузер: ' . getBrowser() . '<br>Время: ' . date('j.m.y / H:i', SITETIME);
 
             $body = view('mailer.default', compact('subject', 'message'));
             sendMail($user->email, $subject, $body);

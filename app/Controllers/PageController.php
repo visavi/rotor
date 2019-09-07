@@ -128,10 +128,10 @@ class PageController extends BaseController
     {
         $surprise['requiredDate']  = '10.01';
 
-        $surpriseMoney  = \mt_rand(10000, 50000);
-        $surprisePoint  = \mt_rand(150, 250);
-        $surpriseRating = \mt_rand(3, 10);
-        $currentYear    = \date('Y');
+        $surpriseMoney  = mt_rand(10000, 50000);
+        $surprisePoint  = mt_rand(150, 250);
+        $surpriseRating = mt_rand(3, 10);
+        $currentYear    = date('Y');
 
         if (! $user = getUser()) {
             abort(403, __('main.not_authorized'));

@@ -86,7 +86,7 @@ class InvitationController extends AdminController
 
                 for ($i = 0; $i < $keys; $i++) {
                     $newKeys[] = [
-                        'hash'       => Str::random(\mt_rand(12, 15)),
+                        'hash'       => Str::random(mt_rand(12, 15)),
                         'user_id'    => getUser('id'),
                         'created_at' => SITETIME,
                     ];
@@ -134,7 +134,7 @@ class InvitationController extends AdminController
 
             for ($i = 0; $i < $userkeys; $i++) {
 
-                $key = Str::random(\mt_rand(12, 15));
+                $key = Str::random(mt_rand(12, 15));
 
                 $listKeys[] = $key;
 
@@ -185,7 +185,7 @@ class InvitationController extends AdminController
 
             /** @var User $user */
             foreach ($users as $user) {
-                $key = Str::random(\mt_rand(12, 15));
+                $key = Str::random(mt_rand(12, 15));
 
                 Invite::query()->create([
                     'hash'       => $key,
