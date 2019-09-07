@@ -66,7 +66,6 @@ class BanController extends AdminController
                 ->length($notice, 0, 1000, ['notice' => __('validator.text_long')]);
 
             if ($validator->isValid()) {
-
                 if ($type === 'days') {
                     $time *= 86400;
                 } elseif ($type === 'hours') {
@@ -140,7 +139,6 @@ class BanController extends AdminController
                 ->length($reason, 5, 1000, ['reason' => __('validator.text')]);
 
             if ($validator->isValid()) {
-
                 $user->update([
                     'level'   => User::BANNED,
                     'timeban' => $timeban,
@@ -191,7 +189,6 @@ class BanController extends AdminController
         $validator->equal($token, $_SESSION['token'], __('validator.token'));
 
         if ($validator->isValid()) {
-
             $user->update([
                 'level'   => User::USER,
                 'timeban' => null,

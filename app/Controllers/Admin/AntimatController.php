@@ -44,7 +44,6 @@ class AntimatController extends AdminController
             $validator->empty($duplicate, __('admin.antimat.word_listed'));
 
             if ($validator->isValid()) {
-
                 Antimat::query()->create([
                     'string' => $word
                 ]);

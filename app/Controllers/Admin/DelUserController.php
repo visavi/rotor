@@ -80,7 +80,6 @@ class DelUserController extends AdminController
         $validator->true($users->isNotEmpty(), 'Отсутствуют пользователи для удаления!');
 
         if ($validator->isValid()) {
-
             foreach ($users as $user) {
                 $user->deleteAlbum();
                 $user->delete();

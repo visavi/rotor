@@ -52,7 +52,6 @@ class ContactController extends BaseController
             }
 
             if ($validator->isValid()) {
-
                 Contact::query()->create([
                     'user_id'    => getUser('id'),
                     'contact_id' => $user->id,
@@ -115,7 +114,6 @@ class ContactController extends BaseController
                 ->length($msg, 0, 1000, ['msg' => 'Слишком большая заметка!']);
 
             if ($validator->isValid()) {
-
                 $contact->update([
                     'text' => $msg,
                 ]);
@@ -148,7 +146,6 @@ class ContactController extends BaseController
             ->true($del, __('validator.deletion'));
 
         if ($validator->isValid()) {
-
             Contact::query()
                 ->where('user_id', getUser('id'))
                 ->whereIn('id', $del)

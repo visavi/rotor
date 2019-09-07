@@ -135,7 +135,6 @@ class ForumController extends BaseController
             /* TODO: Сделать проверку поиска похожей темы */
 
             if ($validator->isValid()) {
-
                 $title = antimat($title);
                 $msg   = antimat($msg);
 

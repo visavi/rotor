@@ -129,7 +129,6 @@ class UserController extends AdminController
                 ->length($info, 0, 1000, ['info' => 'Слишком большая информация о себе!']);
 
             if ($validator->isValid()) {
-
                 if ($password) {
                     $text     = '<br>Новый пароль пользователя: ' . $password;
                     $password = password_hash($password, PASSWORD_BCRYPT);
@@ -215,7 +214,6 @@ class UserController extends AdminController
                 ->notIn($user->level, User::ADMIN_GROUPS, 'Запрещено удалять пользователей из группы администраторов!');
 
             if ($validator->isValid()) {
-
                 if ($loginblack) {
                     $duplicate = BlackList::query()->where('type', 'login')->where('value', $user->login)->first();
                     if (! $duplicate) {

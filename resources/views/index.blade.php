@@ -15,7 +15,7 @@
     <div class="b">
         <i class="fa fa-comment fa-lg text-muted"></i> <b><a href="/pages/recent">{{ __('index.communication') }}</a></b>
     </div>
-    <i class="far fa-circle fa-lg text-muted"></i> <a class="index" href="/guestbooks">{{ __('index.guestbooks') }}</a> ({{  statsGuestbook() }})<br>
+    <i class="far fa-circle fa-lg text-muted"></i> <a class="index" href="/guestbooks">{{ __('index.guestbooks') }}</a> ({{ statsGuestbook() }})<br>
     <i class="far fa-circle fa-lg text-muted"></i> <a href="/photos">{{ __('index.photos') }}</a> ({{ statsPhotos() }})<br>
     <i class="far fa-circle fa-lg text-muted"></i> <a href="/votes">{{ __('index.votes') }}</a> ({{ statVotes()}})<br>
     <i class="far fa-circle fa-lg text-muted"></i> <a href="/offers">{{ __('index.offers') }}</a> ({{ statsOffers() }})<br>

@@ -92,7 +92,6 @@ class DownController extends BaseController
             $validator->lte(count($files) + $existFiles, setting('maxfiles'), ['files' => 'Разрешено загружать не более ' . setting('maxfiles') . ' файлов']);
 
             if ($validator->isValid()) {
-
                 $rules = [
                     'maxsize'    => setting('fileupload'),
                     'extensions' => explode(',', setting('allowextload')),
@@ -105,7 +104,6 @@ class DownController extends BaseController
             }
 
             if ($validator->isValid()) {
-
                 $down->update([
                     'title' => $title,
                     'text'  => $text,
@@ -228,7 +226,6 @@ class DownController extends BaseController
             }
 
             if ($validator->isValid()) {
-
                 /** @var Down $down */
                 $down = Down::query()->create([
                     'category_id' => $category->id,
@@ -299,7 +296,6 @@ class DownController extends BaseController
             ->notEqual($down->user_id, getUser('id'), ['score' => 'Нельзя голосовать за свой файл!']);
 
         if ($validator->isValid()) {
-
             $polling = Polling::query()
                 ->where('relate_type', Down::class)
                 ->where('relate_id', $down->id)
@@ -307,7 +303,6 @@ class DownController extends BaseController
                 ->first();
 
             if ($polling) {
-
                 $down->increment('rating', $score - $polling->vote);
 
                 $polling->update([
@@ -417,7 +412,6 @@ class DownController extends BaseController
                 ->false($flood->isFlood(), ['msg' => __('validator.flood', ['sec' => $flood->getPeriod()])]);
 
             if ($validator->isValid()) {
-
                 $msg = antimat($msg);
 
                 /** @var Comment $comment */

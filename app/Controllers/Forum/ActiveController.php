@@ -116,7 +116,6 @@ class ActiveController extends BaseController
         $validator->true($post, 'Данного сообщения не существует!');
 
         if ($validator->isValid()) {
-
             $post->delete();
             $post->topic->decrement('count_posts');
             $post->topic->forum->decrement('count_posts');

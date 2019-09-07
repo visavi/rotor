@@ -111,7 +111,6 @@ class OfferController extends BaseController
                 ->gte(getUser('point'), setting('addofferspoint'), ['Для добавления предложения или проблемы вам необходимо набрать ' . plural(setting('addofferspoint'), setting('scorename')) . '!']);
 
             if ($validator->isValid()) {
-
                 $title = antimat($title);
                 $text  = antimat($text);
 
@@ -179,7 +178,6 @@ class OfferController extends BaseController
                 ->in($type, Offer::TYPES, ['type' => 'Выбран неверный тип записи! (Необходимо предложение или проблема)']);
 
             if ($validator->isValid()) {
-
                 $title = antimat($title);
                 $text  = antimat($text);
 
@@ -232,7 +230,6 @@ class OfferController extends BaseController
                 ->empty($offer->closed, ['msg' => 'Комментирование данной записи закрыто!']);
 
             if ($validator->isValid()) {
-
                 $msg = antimat($msg);
 
                 /** @var Comment $comment */

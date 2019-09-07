@@ -59,7 +59,6 @@ class PhotoController extends AdminController
                 ->length($text, 0, 1000, ['text' => 'Слишком длинное описание!']);
 
             if ($validator->isValid()) {
-
                 $text = antimat($text);
 
                 $photo->update([
@@ -108,7 +107,6 @@ class PhotoController extends AdminController
         $validator->equal($token, $_SESSION['token'], __('validator.token'));
 
         if ($validator->isValid()) {
-
             $photo->comments()->delete();
             $photo->delete();
 

@@ -61,7 +61,6 @@ class LoadController extends AdminController
             ->length($name, 3, 50, ['title' => __('validator.text')]);
 
         if ($validator->isValid()) {
-
             $max = Load::query()->max('sort') + 1;
 
             /** @var Load $load */
@@ -122,7 +121,6 @@ class LoadController extends AdminController
             }
 
             if ($validator->isValid()) {
-
                 $load->update([
                     'parent_id' => $parent,
                     'name'      => $name,
@@ -174,7 +172,6 @@ class LoadController extends AdminController
         }
 
         if ($validator->isValid()) {
-
             $load->delete();
 
             setFlash('success', 'Раздел успешно удален!');

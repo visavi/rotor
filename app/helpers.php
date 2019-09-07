@@ -2432,12 +2432,16 @@ function captchaVerify(): bool
 
     if (setting('captcha_type') === 'recaptcha_v2') {
         $recaptcha = new ReCaptcha(setting('recaptcha_private'));
-        $response = $recaptcha->verify($request->input('g-recaptcha-response'), getIp());
+
+        $response = $recaptcha->setExpectedHostname($_SERVER['SERVER_NAME'])
+            ->verify($request->input('g-recaptcha-response'), getIp());
+
         return $response->isSuccess();
     }
 
     if (setting('captcha_type') === 'recaptcha_v3') {
         $recaptcha = new ReCaptcha(setting('recaptcha_private'));
+
         $response = $recaptcha->setExpectedHostname($_SERVER['SERVER_NAME'])
             ->setScoreThreshold(0.5)
             ->verify($request->input('protect'), getIp());

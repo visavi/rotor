@@ -82,7 +82,6 @@ class NewsController extends AdminController
             $validator->file($image, $rules, ['image' => 'Не удалось загрузить фотографию!'], false);
 
             if ($validator->isValid()) {
-
                 // Удаление старой картинки
                 if ($image) {
                     deleteFile(HOME . $news->image);
@@ -138,7 +137,6 @@ class NewsController extends AdminController
             $validator->file($image, $rules, ['image' => 'Не удалось загрузить фотографию!'], false);
 
             if ($validator->isValid()) {
-
                 if ($image) {
                     $file = (new News())->uploadFile($image, false);
                 }
@@ -222,7 +220,6 @@ class NewsController extends AdminController
         $validator->equal($token, $_SESSION['token'], __('validator.token'));
 
         if ($validator->isValid()) {
-
             deleteFile(HOME . $news->image);
 
             $news->comments()->delete();

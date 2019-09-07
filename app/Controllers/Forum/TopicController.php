@@ -162,7 +162,6 @@ class TopicController extends BaseController
         }
 
         if ($validator->isValid()) {
-
             $msg = antimat($msg);
 
             if (
@@ -261,7 +260,6 @@ class TopicController extends BaseController
             ->equal($isModer, true, 'Удалять сообщения могут только кураторы темы!');
 
         if ($validator->isValid()) {
-
             // ------ Удаление загруженных файлов -------//
             $files = File::query()
                 ->where('relate_type', Post::class)
@@ -311,7 +309,6 @@ class TopicController extends BaseController
             ->empty($topic->closed, 'Данная тема уже закрыта!');
 
         if ($validator->isValid()) {
-
             $topic->update(['closed' => 1]);
 
             $vote = Vote::query()->where('topic_id', $topic->id)->first();
@@ -505,7 +502,6 @@ class TopicController extends BaseController
                 ->length($msg, 5, setting('forumtextlength'), ['msg' => __('validator.text')]);
 
             if ($validator->isValid()) {
-
                 $msg = antimat($msg);
 
                 $post->update([
@@ -590,7 +586,6 @@ class TopicController extends BaseController
         }
 
         if ($validator->isValid()) {
-
             $vote->increment('count');
             $voteAnswer->increment('result');
 

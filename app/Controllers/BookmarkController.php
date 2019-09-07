@@ -70,7 +70,6 @@ class BookmarkController extends BaseController
         $validator->true($topic, 'Данной темы не существует!');
 
         if ($validator->isValid()) {
-
             $bookmark = Bookmark::query()
                 ->where('topic_id', $tid)
                 ->where('user_id', getUser('id'))
@@ -109,7 +108,6 @@ class BookmarkController extends BaseController
             ->notEmpty($topicIds, 'Отсутствуют выбранные закладки!');
 
         if ($validator->isValid()) {
-
             Bookmark::query()
                 ->whereIn('topic_id', $topicIds)
                 ->where('user_id', getUser('id'))

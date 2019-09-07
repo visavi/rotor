@@ -85,7 +85,6 @@ class WallController extends BaseController
             $validator->empty($ignoring, 'Вы внесены в игнор-лист получателя!');
 
             if ($validator->isValid()) {
-
                 if ($user->id !== getUser('id')) {
                     $user->increment('newwall');
                 }
@@ -141,7 +140,6 @@ class WallController extends BaseController
             ->true(isAdmin() || $user->id === getUser('id'), 'Записи может удалять только владелец и администрация!');
 
         if ($validator->isValid()) {
-
             Wall::query()
                 ->where('id', $id)
                 ->where('user_id', $user->id)

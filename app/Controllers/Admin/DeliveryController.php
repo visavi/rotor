@@ -73,7 +73,6 @@ class DeliveryController extends AdminController
             }
 
             if ($validator->isValid()) {
-
                 foreach ($users as $user) {
                     $user->sendMessage(null, $msg);
                 }

@@ -165,7 +165,6 @@ class BlogController extends BaseController
             }
 
             if ($validator->isValid()) {
-
                 // Обновление счетчиков
                 if ($blog->category_id !== $category->id) {
                     $category->increment('count_blogs');
@@ -277,7 +276,6 @@ class BlogController extends BaseController
             }
 
             if ($validator->isValid()) {
-
                 $text = antimat($text);
 
                 /** @var Blog $blog */
@@ -351,7 +349,6 @@ class BlogController extends BaseController
                 ->false($flood->isFlood(), ['msg' => __('validator.flood', ['sec' => $flood->getPeriod()])]);
 
             if ($validator->isValid()) {
-
                 $msg = antimat($msg);
 
                 /** @var Comment $comment */

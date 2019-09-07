@@ -64,7 +64,6 @@ class NoticeController extends AdminController
             $validator->empty($duplicate, ['type' => 'Данный тип уже имеетеся в списке!']);
 
             if ($validator->isValid()) {
-
                 /** @var Notice $notice */
                 $notice = Notice::query()->create([
                     'type'       => $type,
@@ -116,7 +115,6 @@ class NoticeController extends AdminController
                 ->length($text, 10, 65000, ['text' => __('validator.text')]);
 
             if ($validator->isValid()) {
-
                 $notice->update([
                     'name'       => $name,
                     'text'       => $text,
@@ -158,7 +156,6 @@ class NoticeController extends AdminController
             ->empty($notice->protect, 'Запрещено удалять защищенный шаблон!');
 
         if ($validator->isValid()) {
-
             $notice->delete();
 
             setFlash('success', 'Выбранный шаблон успешно удален!');

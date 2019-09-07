@@ -124,7 +124,6 @@ class GuestbookController extends BaseController
                 ->length($msg, 5, setting('guesttextlength'), ['msg' => __('validator.text')]);
 
             if ($validator->isValid()) {
-
                 $msg = antimat($msg);
 
                 $post->update([

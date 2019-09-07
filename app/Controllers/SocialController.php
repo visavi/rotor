@@ -96,7 +96,6 @@ class SocialController extends BaseController
             ->notEmpty($social, 'Не найдена привязка к социальной сети!');
 
         if ($validator->isValid()) {
-
             $social->delete();
 
             setFlash('success', 'Привязка к социальной сети успешно удалена!');

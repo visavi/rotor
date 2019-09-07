@@ -87,7 +87,6 @@ class PhotoController extends BaseController
                 ->false($flood->isFlood(), ['msg' => __('validator.flood', ['sec' => $flood->getPeriod()])]);
 
             if ($validator->isValid()) {
-
                 /** @var Photo $photo */
                 $photo = Photo::query()->create([
                     'user_id'    => getUser('id'),
@@ -357,12 +356,10 @@ class PhotoController extends BaseController
             ->empty($photo->count_comments, 'Запрещено удалять фотографии к которым имеются комментарии!');
 
         if ($validator->isValid()) {
-
             $photo->comments()->delete();
             $photo->delete();
 
             setFlash('success', 'Фотография успешно удалена!');
-
         } else {
             setFlash('danger', $validator->getErrors());
         }

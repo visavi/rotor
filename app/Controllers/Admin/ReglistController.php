@@ -39,9 +39,7 @@ class ReglistController extends AdminController
                 ->in($action, ['yes', 'no'], ['action' => 'Необходимо выбрать действие!']);
 
             if ($validator->isValid()) {
-
                 if ($action === 'yes') {
-
                     User::query()
                         ->whereIn('id', $choice)
                         ->update([

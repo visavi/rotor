@@ -23,6 +23,7 @@ class UserController extends BaseController
      * Анкета пользователя
      *
      * @param string $login
+     *
      * @return string
      */
     public function index(string $login): string
@@ -45,6 +46,7 @@ class UserController extends BaseController
      * @param string    $login
      * @param Request   $request
      * @param Validator $validator
+     *
      * @return string
      */
     public function note(string $login, Request $request, Validator $validator): string
@@ -58,7 +60,6 @@ class UserController extends BaseController
         }
 
         if ($request->isMethod('post')) {
-
             $notice = check($request->input('notice'));
             $token  = check($request->input('token'));
 
@@ -66,7 +67,6 @@ class UserController extends BaseController
                 ->length($notice, 0, 1000, ['notice' => 'Слишком большая заметка!']);
 
             if ($validator->isValid()) {
-
                 $user->note()->updateOrCreate([], [
                     'text'         => $notice,
                     'edit_user_id' => getUser('id'),
@@ -90,6 +90,7 @@ class UserController extends BaseController
      *
      * @param Request   $request
      * @param Validator $validator
+     *
      * @return string
      * @throws ErrorException
      */
@@ -177,7 +178,6 @@ class UserController extends BaseController
 
                 // Регистрация аккаунта
                 if ($validator->isValid()) {
-
                     if (setting('regkeys')) {
                         $activateKey  = Str::random();
                         $activateLink = siteUrl(true).'/key?code=' . $activateKey;
@@ -243,31 +243,38 @@ class UserController extends BaseController
      * Авторизация
      *
      * @param Request $request
+     *
      * @return string
      * @throws ErrorException
      */
-    public function login(Request $request): string
+    public function login(Request $request/*, Validator $validator*/): string
     {
         if (getUser()) {
             abort(403, 'Вы уже авторизованы!');
         }
 
         $cooklog = isset($_COOKIE['login']) ? check($_COOKIE['login']): '';
+
         if ($request->isMethod('post')) {
             if ($request->has('login') && $request->has('pass')) {
-                $return   = $request->input('return');
-                $login    = check(utfLower($request->input('login')));
-                $pass     = trim($request->input('pass'));
-                $remember = $request->input('remember');
+               if (captchaVerify()) {
+                   $return   = $request->input('return');
+                   $login    = check(utfLower($request->input('login')));
+                   $pass     = trim($request->input('pass'));
+                   $remember = $request->input('remember');
 
-                /** @var User $user */
-                if ($user = User::auth($login, $pass, $remember)) {
-                    setFlash('success', 'Добро пожаловать, '.$user->login.'!');
-                    redirect($return ?? '/');
-                }
+                   /** @var User $user */
+                   if ($user = User::auth($login, $pass, $remember)) {
+                       setFlash('success', 'Добро пожаловать, ' . $user->login . '!');
+                       redirect($return ?? '/');
+                   }
 
-                setInput($request->all());
-                setFlash('danger', 'Ошибка авторизации. Неправильный логин или пароль!');
+                   setInput($request->all());
+                   setFlash('danger', 'Неправильный логин или пароль!');
+               } else {
+                   setInput($request->all());
+                   setFlash('danger', __('validator.captcha'));
+               }
             }
 
             if ($request->has('token')) {
@@ -282,6 +289,7 @@ class UserController extends BaseController
      * Выход
      *
      * @param Request $request
+     *
      * @return void
      */
     public function logout(Request $request): void
@@ -306,6 +314,7 @@ class UserController extends BaseController
      *
      * @param Request   $request
      * @param Validator $validator
+     *
      * @return string
      */
     public function profile(Request $request, Validator $validator): string
@@ -334,7 +343,6 @@ class UserController extends BaseController
                 ->length($name, 3, 20, ['name' => 'Слишком длинное или короткое имя!'], false);
 
             if ($validator->isValid()) {
-
                 $country = utfSubstr($country, 0, 30);
                 $city    = utfSubstr($city, 0, 50);
 
@@ -366,6 +374,7 @@ class UserController extends BaseController
      *
      * @param Request   $request
      * @param Validator $validator
+     *
      * @return string
      */
     public function key(Request $request, Validator $validator): string
@@ -404,7 +413,6 @@ class UserController extends BaseController
             $validator->empty($blackDomain, ['email' => 'Домен от вашего адреса email занесен в черный список!']);
 
             if ($validator->isValid()) {
-
                 $activateKey  = Str::random();
                 $activateLink = siteUrl(true).'/key?code=' . $activateKey;
 
@@ -456,6 +464,7 @@ class UserController extends BaseController
      *
      * @param Request   $request
      * @param Validator $validator
+     *
      * @return string
      */
     public function setting(Request $request, Validator $validator): string
@@ -484,7 +493,6 @@ class UserController extends BaseController
                 ->regex($timezone, '|^[\-\+]{0,1}[0-9]{1,2}$|', ['timezone' => 'Недопустимое значение временного сдвига. (Допустимый диапазон -12 — +12 часов)!']);
 
             if ($validator->isValid()) {
-
                 $user->update([
                     'themes'    => $themes,
                     'timezone'  => $timezone,
@@ -523,6 +531,7 @@ class UserController extends BaseController
      *
      * @param Request   $request
      * @param Validator $validator
+     *
      * @return void
      */
     public function changeMail(Request $request, Validator $validator): void
@@ -553,7 +562,6 @@ class UserController extends BaseController
         $validator->empty($changeMail, 'Вы уже отправили код подтверждения на новый адрес почты!');
 
         if ($validator->isValid()) {
-
             $genkey = Str::random(\mt_rand(15,20));
 
             $subject = 'Изменение email на сайте '.setting('title');
@@ -583,6 +591,7 @@ class UserController extends BaseController
      *
      * @param Request   $request
      * @param Validator $validator
+     *
      * @return void
      * @throws Exception
      */
@@ -612,7 +621,6 @@ class UserController extends BaseController
         }
 
         if ($validator->isValid()) {
-
             $user->update([
                 'email' => $changeMail->mail,
             ]);
@@ -632,6 +640,7 @@ class UserController extends BaseController
      *
      * @param Request   $request
      * @param Validator $validator
+     *
      * @return void
      */
     public function editStatus(Request $request, Validator $validator): void
@@ -657,7 +666,6 @@ class UserController extends BaseController
         }
 
         if ($validator->isValid()) {
-
             $user->update([
                 'status' => $status,
                 'money'  => DB::connection()->raw('money - '.$cost),
@@ -678,6 +686,7 @@ class UserController extends BaseController
      *
      * @param Request   $request
      * @param Validator $validator
+     *
      * @return void
      */
     public function editPassword(Request $request, Validator $validator): void
@@ -702,7 +711,6 @@ class UserController extends BaseController
         }
 
         if ($validator->isValid()) {
-
             $user->update([
                 'password' => password_hash($newpass, PASSWORD_BCRYPT),
             ]);
@@ -728,6 +736,7 @@ class UserController extends BaseController
      * Генерация ключа
      *
      * @param Request $request
+     *
      * @return void
      */
     public function apikey(Request $request): void

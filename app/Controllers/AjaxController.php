@@ -394,7 +394,6 @@ class AjaxController extends BaseController
             ->true(! $file->relate_id || isAdmin(), 'Нельзя удалять уже прикрепленный файл!');
 
         if ($validator->isValid()) {
-
             deleteFile(HOME . $file->hash);
             $file->delete();
 

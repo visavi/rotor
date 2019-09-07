@@ -47,7 +47,6 @@ class PictureController extends BaseController
             $validator->file($photo, $rules, ['photo' => 'Не удалось загрузить фотографию!']);
 
             if ($validator->isValid()) {
-
                 //-------- Удаляем старую фотку и аватар ----------//
                 if ($this->user->picture) {
                     deleteFile(HOME . $this->user->picture);

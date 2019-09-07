@@ -63,7 +63,6 @@ class RuleController extends AdminController
                 ->notEmpty($msg, ['msg' => 'Вы не ввели текст с правилами сайта!']);
 
             if ($validator->isValid()) {
-
                 $rules->fill([
                     'text'       => $msg,
                     'created_at' => SITETIME,

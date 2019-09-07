@@ -232,7 +232,6 @@ class VoteController extends BaseController
             $validator->between(count($answers), 2, 10, ['answer' => 'Недостаточное количество вариантов ответов!']);
 
             if ($validator->isValid()) {
-
                 /** @var Vote $vote */
                 $vote = Vote::query()->create([
                     'title'      => $question,

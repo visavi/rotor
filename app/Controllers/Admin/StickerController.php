@@ -88,7 +88,6 @@ class StickerController extends AdminController
             ->length($name, 3, 50, ['name' => __('validator.text')]);
 
         if ($validator->isValid()) {
-
             /** @var StickersCategory $category */
             $category = StickersCategory::query()->create([
                 'name'       => $name,
@@ -129,7 +128,6 @@ class StickerController extends AdminController
                 ->length($name, 3, 50, ['name' => __('validator.text')]);
 
             if ($validator->isValid()) {
-
                 $category->update([
                     'name'       => $name,
                     'updated_at' => SITETIME,
@@ -173,7 +171,6 @@ class StickerController extends AdminController
         }
 
         if ($validator->isValid()) {
-
             $category->delete();
 
             setFlash('success', 'Категория успешно удалена!');
@@ -229,7 +226,6 @@ class StickerController extends AdminController
             $validator->file($sticker, $rules, ['sticker' => 'Не удалось загрузить изображение!']);
 
             if ($validator->isValid()) {
-
                 $newName = uniqueName($sticker->getClientOriginalExtension());
                 $path    = (new Sticker())->uploadPath . '/' . $newName;
                 $sticker->move((new Sticker())->uploadPath, $newName);
@@ -287,7 +283,6 @@ class StickerController extends AdminController
             $validator->notEmpty($category, ['category' => 'Данной категории не существует!']);
 
             if ($validator->isValid()) {
-
                 $sticker->update([
                     'code'        => $code,
                     'category_id' => $cid,
@@ -335,7 +330,6 @@ class StickerController extends AdminController
         $validator->equal($token, $_SESSION['token'], __('validator.token'));
 
         if ($validator->isValid()) {
-
             deleteFile(HOME . $sticker->name);
             $sticker->delete();
 

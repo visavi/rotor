@@ -135,7 +135,6 @@ class BoardController extends BaseController
             }
 
             if ($validator->isValid()) {
-
                 /** @var Item $item */
                 $item = Item::query()->create([
                     'board_id'   => $board->id,
@@ -222,7 +221,6 @@ class BoardController extends BaseController
             }
 
             if ($validator->isValid()) {
-
                 // Обновление счетчиков
                 if ($item->board_id !== $board->id) {
                     $board->increment('count_items');
@@ -281,7 +279,6 @@ class BoardController extends BaseController
             ->equal($item->user_id, getUser('id'), 'Изменение невозможно, вы не автор данного объявления!');
 
         if ($validator->isValid()) {
-
             if ($item->expires_at > SITETIME) {
                 $type = 'снято с публикации';
                 $item->update([
@@ -336,7 +333,6 @@ class BoardController extends BaseController
             ->equal($item->user_id, getUser('id'), 'Удаление невозможно, вы не автор данного объявления!');
 
         if ($validator->isValid()) {
-
             $item->delete();
 
             $item->category->decrement('count_items');

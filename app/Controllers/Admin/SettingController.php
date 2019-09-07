@@ -54,7 +54,6 @@ class SettingController extends AdminController
             }
 
             if ($validator->isValid()) {
-
                 foreach ($sets as $name => $value) {
                     if (isset($mods[$name])) {
                         $value *= $mods[$name];

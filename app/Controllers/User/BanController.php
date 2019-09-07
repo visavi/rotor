@@ -58,7 +58,6 @@ class BanController extends BaseController
                 ->length($msg, 5, 1000, ['text' => __('validator.text')]);
 
             if ($validator->isValid()) {
-
                 $message = 'Объяснение нарушения: '.antimat($msg);
 
                 $sendUser->sendMessage($user, $message);

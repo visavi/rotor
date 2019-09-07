@@ -34,7 +34,6 @@ class ChatController extends AdminController
                 ->length($msg, 5, 1500, ['msg' => __('validator.text')]);
 
             if ($validator->isValid()) {
-
                 $post = Chat::query()->orderBy('created_at')->first();
 
                 if (
@@ -117,7 +116,6 @@ class ChatController extends AdminController
                 ->length($msg, 5, 1500, ['msg' => __('validator.text')]);
 
             if ($validator->isValid()) {
-
                 $post->update([
                     'text'         => $msg,
                     'edit_user_id' => getUser('id'),
@@ -151,7 +149,6 @@ class ChatController extends AdminController
             ->true(isAdmin(User::BOSS), 'Очищать чат может только владелец!');
 
         if ($validator->isValid()) {
-
              Chat::query()->truncate();
 
             setFlash('success', 'Админ-чат успешно очищен!');
