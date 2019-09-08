@@ -28,7 +28,7 @@ class ErrorController extends AdminController
     {
         parent::__construct();
 
-        if (! isAdmin(User::BOSS)) {
+        if (! isAdmin(User::ADMIN)) {
             abort(403, __('errors.forbidden'));
         }
 

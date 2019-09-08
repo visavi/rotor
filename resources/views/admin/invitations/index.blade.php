@@ -16,7 +16,10 @@
 
 @section('content')
     @if (! setting('invite'))
-        <i class="fa fa-exclamation-circle"></i> <span class="text-danger">{{ __('admin.invitations.hint') }}</span><br><br>
+        <div class="mb-3 font-weight-bold">
+            <i class="fa fa-exclamation-circle"></i>
+            <span class="text-danger font-weight-bold">{{ __('admin.invitations.hint') }}</span>
+        </div>
     @endif
 
     @if ($used)

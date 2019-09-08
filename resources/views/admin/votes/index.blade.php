@@ -7,7 +7,7 @@
 @section('header')
     @if (getUser())
         <div class="float-right">
-            <a class="btn btn-success" href="/votes/create">{{ __('main.create') }}</a><br>
+            <a class="btn btn-success" href="/votes/create">{{ __('main.create') }}</a>
         </div><br>
     @endif
 
@@ -37,9 +37,9 @@
 
                     @if (isAdmin('boss'))
                         <a href="/admin/votes/delete/{{ $vote->id }}?token={{ $_SESSION['token'] }}" onclick="return confirm('{{ __('votes.confirm_delete') }}')" data-toggle="tooltip" title="{{ __('main.delete') }}"><i class="fa fa-times text-muted"></i></a>
+                    @endif
                 </div>
 
-                @endif
             </div>
             <div>
                 @if ($vote->topic->id)
