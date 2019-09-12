@@ -138,11 +138,11 @@
             <div class="form-group{{ hasError('gender') }}">
                 <div class="custom-control custom-radio">
                     <input class="custom-control-input" type="radio" id="inputGenderMale" name="gender" value="male"{{ $inputGender === 'male' ? ' checked' : '' }}>
-                    <label class="custom-control-label" for="inputGenderMale">{{ __('users.male') }}</label>
+                    <label class="custom-control-label" for="inputGenderMale">{{ __('main.male') }}</label>
                 </div>
                 <div class="custom-control custom-radio">
                     <input class="custom-control-input" type="radio" id="inputGenderFemale" name="gender" value="female"{{ $inputGender === 'female' ? ' checked' : '' }}>
-                    <label class="custom-control-label" for="inputGenderFemale">{{ __('users.female') }}</label>
+                    <label class="custom-control-label" for="inputGenderFemale">{{ __('main.female') }}</label>
                 </div>
                 <div class="invalid-feedback">{{ textError('gender') }}</div>
             </div>
