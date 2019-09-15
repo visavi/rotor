@@ -54,11 +54,13 @@
                         @endif
                     </div>
 
-                    @if ($data->user_id)
-                        <b>{!! $data->user->getProfile() !!}</b> <small>({{ dateFixed($data->created_at) }})</small><br>
-                        {!! $data->user->getStatus() !!}
+                    @if ($data->user->id)
+                            <b>{!! $data->user->getProfile() !!}</b> <small>({{ dateFixed($data->created_at) }})</small><br>
+                            {!! $data->user->getStatus() !!}
+                    @elseif($data->user_id === 0)
+                            <b class="author" data-login="{{ setting('guestsuser') }}">{{ setting('guestsuser') }}</b> <small>({{ dateFixed($data->created_at) }})</small>
                     @else
-                        <b class="author" data-login="{{ setting('guestsuser') }}">{{ setting('guestsuser') }}</b> <small>({{ dateFixed($data->created_at) }})</small>
+                            <b class="author" data-login="Удаленный">Удаленный</b> <small>({{ dateFixed($data->created_at) }})</small>
                     @endif
                 </div>
 

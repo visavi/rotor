@@ -17,7 +17,7 @@
 @section('content')
     @if ($messages->isNotEmpty())
         @foreach ($messages as $data)
-            <?php $link = $data->author->id ? '/' . $data->author->login : ''; ?>
+            <?php $link = $data->author->id ? '/' . $data->author->login : '/' . $data->author_id; ?>
             <div class="media border-bottom p-2" data-href="/messages/talk{{ $link }}">
                 <div class="img mr-3">
                     {!! $data->author->getAvatar() !!}
@@ -31,6 +31,8 @@
 
                     @if ($data->author->id)
                         <b>{!! $data->author->getProfile() !!}</b>
+                    @elseif($data->author_id)
+                        <b>Удаленный</b>
                     @else
                         <b>{{ __('messages.system') }}</b><br>
                     @endif
