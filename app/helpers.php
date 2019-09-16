@@ -1577,7 +1577,7 @@ function sendNotify(string $text, string $pageUrl, string $pageName)
         foreach ($usersAnswer as $login) {
             $user = getUserByLogin($login);
             if ($user && $user->notify) {
-                $user->sendMessage(null, 'Пользователь @' . (getUser('login') ?? setting('guestsuser')) . ' упомянул вас на странице [b][url=' . $pageUrl . ']' . $pageName . '[/url][/b]' . PHP_EOL . 'Текст сообщения: ' . $text);
+                $user->sendMessage(null, 'Пользователь @' . (getUser('login') ?? setting('deleted_user')) . ' упомянул вас на странице [b][url=' . $pageUrl . ']' . $pageName . '[/url][/b]' . PHP_EOL . 'Текст сообщения: ' . $text);
             }
         }
     }

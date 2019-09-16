@@ -32,7 +32,7 @@
                     @if ($data->author->id)
                         <b>{!! $data->author->getProfile() !!}</b>
                     @elseif($data->author_id)
-                        <b>Удаленный</b>
+                        <b>{{ setting('deleted_user') }}</b>
                     @else
                         <b>{{ __('messages.system') }}</b><br>
                     @endif

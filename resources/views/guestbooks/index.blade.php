@@ -60,7 +60,7 @@
                     @elseif($data->user_id === 0)
                             <b class="author" data-login="{{ setting('guestsuser') }}">{{ setting('guestsuser') }}</b> <small>({{ dateFixed($data->created_at) }})</small>
                     @else
-                            <b class="author" data-login="Удаленный">Удаленный</b> <small>({{ dateFixed($data->created_at) }})</small>
+                            <b class="author" data-login="{{ setting('deleted_user') }}">{{ setting('deleted_user') }}</b> <small>({{ dateFixed($data->created_at) }})</small>
                     @endif
                 </div>
 

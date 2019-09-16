@@ -43,6 +43,7 @@ class SettingsSeeder extends AbstractSeed
             ['name'  => 'copy', 'value' => '© Rotor'],
             ['name'  => 'copyfoto', 'value' => 1],
             ['name'  => 'currency', 'value' => 'руб'],
+            ['name'  => 'deleted_user', 'value' => 'Удаленный'],
             ['name'  => 'description', 'value' => 'Краткое описание вашего сайта'],
             ['name'  => 'doslimit', 'value' => 0],
             ['name'  => 'downcomm', 'value' => 10],

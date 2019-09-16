@@ -44,6 +44,6 @@ class BaseModel extends Model
      */
     public function getLoginAttribute($value): string
     {
-        return $value ?? setting('guestsuser');
+        return $value ?? setting('deleted_user');
     }
 }

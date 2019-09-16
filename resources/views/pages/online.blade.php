@@ -26,7 +26,11 @@
                     {!! $data->user->getAvatar() !!}
                 </div>
 
+                @if ($data->user->id)
                 <b>{!! $data->user->getProfile() !!}</b> ({{ __('pages.time_on_site') }}: {{ dateFixed($data->updated_at, 'H:i:s') }})
+                @else
+                    <b>{{ setting('guestsuser') }}</b> ({{ __('pages.time_on_site') }}: {{ dateFixed($data->updated_at, 'H:i:s') }})
+                @endif
             </div>
 
             @if (isAdmin())

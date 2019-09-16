@@ -46,6 +46,12 @@
         <div class="invalid-feedback">{{ textError('sets[guestsuser]') }}</div>
     </div>
 
+    <div class="form-group{{ hasError('sets[deleted_user]') }}">
+        <label for="deleted_user">{{ __('settings.deleted_user') }}:</label>
+        <input type="text" class="form-control" id="deleted_user" name="sets[deleted_user]" maxlength="20" value="{{ getInput('sets.deleted_user', $settings['deleted_user']) }}" required>
+        <div class="invalid-feedback">{{ textError('sets[deleted_user]') }}</div>
+    </div>
+
     <div class="custom-control custom-checkbox">
         <input type="hidden" value="0" name="sets[addbansend]">
         <input type="checkbox" class="custom-control-input" value="1" name="sets[addbansend]" id="addbansend"{{ getInput('sets.addbansend', $settings['addbansend']) ? ' checked' : '' }}>
