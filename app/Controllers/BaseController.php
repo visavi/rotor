@@ -16,7 +16,7 @@ Class BaseController
     {
         $request = Request::createFromGlobals();
 
-        if (! $this->ipBan($request)) {
+        if (! $this->isBanned($request)) {
             $this->frequencyLimit();
 
             // Сайт закрыт для гостей
@@ -46,7 +46,7 @@ Class BaseController
      *
      * @return bool
      */
-    private function ipBan(Request $request): bool
+    private function isBanned(Request $request): bool
     {
         if (($ipBan = ipBan()) && ! isAdmin()) {
 
