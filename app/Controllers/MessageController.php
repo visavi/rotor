@@ -71,30 +71,31 @@ class MessageController extends BaseController
     /**
      * Диалог
      *
-     * @param string $login
+     * @param int $id
+     *
      * @return string
      */
-    public function talk(?string $login = null): string
+    public function talk(int $id): string
     {
-        if ($login) {
-            $user = getUserByLogin($login);
+        $user = getUserById($id);
 
-            if (! $user) {
-                abort(404, __('validator.user'));
-            }
-
-            if ($user->id === $this->user->id) {
-                abort('default', 'Отсутствует переписка с самим собой!');
-            }
-        } else {
+        if (! $user) {
             $user = new User();
-            $user->id = 0;
+            $user->id = $id;
         }
 
         $total = Message::query()
             ->where('user_id', $this->user->id)
             ->where('author_id', $user->id)
             ->count();
+
+        if (! $total) {
+            abort('default', 'История переписки отсутствует!');
+        }
+
+        if ($user->id === $this->user->id) {
+            abort('default', 'Отсутствует переписка с самим собой!');
+        }
 
         $page  = paginate(setting('privatpost'), $total);
 

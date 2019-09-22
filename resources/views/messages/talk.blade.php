@@ -58,24 +58,26 @@
         {!! showError(__('messages.empty_dialogue')) !!}
     @endif
 
-    <br>
-    <div class="form">
-        <form action="/messages/send?user={{ $user->login }}" method="post">
-            @csrf
-            <div class="form-group{{ hasError('msg') }}">
-                <label for="msg">{{ __('main.message') }}:</label>
-                <textarea class="form-control markItUp" maxlength="{{ setting('comment_length') }}" id="msg" rows="5" name="msg" placeholder="{{ __('main.message') }}" required>{{ getInput('msg') }}</textarea>
-                <div class="invalid-feedback">{{ textError('msg') }}</div>
-                <span class="js-textarea-counter"></span>
-            </div>
+    @if ($user->exists)
+        <br>
+        <div class="form">
+            <form action="/messages/send?user={{ $user->login }}" method="post">
+                @csrf
+                <div class="form-group{{ hasError('msg') }}">
+                    <label for="msg">{{ __('main.message') }}:</label>
+                    <textarea class="form-control markItUp" maxlength="{{ setting('comment_length') }}" id="msg" rows="5" name="msg" placeholder="{{ __('main.message') }}" required>{{ getInput('msg') }}</textarea>
+                    <div class="invalid-feedback">{{ textError('msg') }}</div>
+                    <span class="js-textarea-counter"></span>
+                </div>
 
-            @if (getUser('point') < setting('privatprotect'))
-                {!! view('app/_captcha') !!}
-            @endif
+                @if (getUser('point') < setting('privatprotect'))
+                    {!! view('app/_captcha') !!}
+                @endif
 
-            <button class="btn btn-primary">{{ __('main.write') }}</button>
-        </form>
-    </div><br>
+                <button class="btn btn-primary">{{ __('main.write') }}</button>
+            </form>
+        </div><br>
+    @endif
 
     {{ __('main.total') }}: <b>{{ $page->total }}</b><br><br>
 

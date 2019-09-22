@@ -17,8 +17,7 @@
 @section('content')
     @if ($messages->isNotEmpty())
         @foreach ($messages as $data)
-            <?php $link = $data->author->id ? '/' . $data->author->login : '/' . $data->author_id; ?>
-            <div class="media border-bottom p-2" data-href="/messages/talk{{ $link }}">
+            <div class="media border-bottom p-2" data-href="/messages/talk/{{ $data->author_id }}">
                 <div class="img mr-3">
                     {!! $data->author->getAvatar() !!}
                     {!! $data->author->getOnline() !!}
@@ -26,15 +25,13 @@
                 <div class="media-body">
                     <div class="text-muted float-right">
                         {{  dateFixed($data->created_at) }}
-                        <a href="/messages/delete/{{ (int) $data->author->id }}?token={{ $_SESSION['token'] }}&amp;page={{ $page->current }}" onclick="return confirm('{{ __('messages.delete_confirm') }}')" data-toggle="tooltip" title="{{ __('main.delete') }}"><i class="fa fa-times"></i></a>
+                        <a href="/messages/delete/{{ $data->author_id }}?token={{ $_SESSION['token'] }}&amp;page={{ $page->current }}" onclick="return confirm('{{ __('messages.delete_confirm') }}')" data-toggle="tooltip" title="{{ __('main.delete') }}"><i class="fa fa-times"></i></a>
                     </div>
 
-                    @if ($data->author->id)
-                        <b>{!! $data->author->getProfile() !!}</b>
-                    @elseif($data->author_id)
-                        <b>{{ setting('deleted_user') }}</b>
+                    @if($data->author_id === 0)
+                        <b>{{ __('messages.system') }}</b>
                     @else
-                        <b>{{ __('messages.system') }}</b><br>
+                        <b>{!! $data->author->getProfile() !!}</b>
                     @endif
 
                     <div class="message">

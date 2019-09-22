@@ -236,7 +236,7 @@ return FastRoute\cachedDispatcher(static function(RouteCollector $r) {
     /* Личные сообщения */
     $r->addGroup('/messages', static function (RouteCollector $r) {
         $r->get('', [App\Controllers\MessageController::class, 'index']);
-        $r->get('/talk[/{login:[\w\-]+}]', [App\Controllers\MessageController::class, 'talk']);
+        $r->get('/talk/{id:\d+}', [App\Controllers\MessageController::class, 'talk']);
         $r->get('/delete/{uid:\d+}', [App\Controllers\MessageController::class, 'delete']);
         $r->addRoute(['GET', 'POST'], '/send', [App\Controllers\MessageController::class, 'send']);
     });
