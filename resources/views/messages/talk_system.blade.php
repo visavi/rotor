@@ -17,12 +17,12 @@
 
 @section('content')
     @if ($messages->isNotEmpty())
-
         @foreach ($messages as $data)
             <div class="post">
                 <div class="b">
                     <div class="img">
-                        {!! $user->getAvatar() !!}
+                        <img class="avatar" src="/assets/img/images/avatar_system.png" alt="">
+                        <div class="online bg-success" title="Online"></div>
                     </div>
 
                     <div class="text-muted float-right">

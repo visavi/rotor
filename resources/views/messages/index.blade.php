@@ -19,8 +19,13 @@
         @foreach ($messages as $data)
             <div class="media border-bottom p-2" data-href="/messages/talk/{{ $data->author_id }}">
                 <div class="img mr-3">
-                    {!! $data->author->getAvatar() !!}
-                    {!! $data->author->getOnline() !!}
+                    @if($data->author_id === 0)
+                        <img class="avatar" src="/assets/img/images/avatar_system.png" alt="">
+                        <div class="online bg-success" title="Online"></div>
+                    @else
+                        {!! $data->author->getAvatar() !!}
+                        {!! $data->author->getOnline() !!}
+                    @endif
                 </div>
                 <div class="media-body">
                     <div class="text-muted float-right">

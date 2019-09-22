@@ -456,7 +456,7 @@ class User extends BaseModel
     public function getAvatar(): string
     {
         if (! $this->id) {
-            return '<img class="avatar" src="/assets/img/images/avatar_guest.png" alt=""> ';
+            return '<img class="avatar" src="/assets/img/images/avatar_default.png" alt=""> ';
         }
 
         if ($this->avatar && file_exists(HOME . '/' . $this->avatar)) {
@@ -466,6 +466,11 @@ class User extends BaseModel
         return $this->defaultAvatar();
     }
 
+    /**
+     * Временный метод
+     *
+     * @return string
+     */
     public function getAvatarImage(): string
     {
         if ($this->avatar && file_exists(HOME . '/' . $this->avatar)) {

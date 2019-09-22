@@ -46,17 +46,16 @@
                         </div>
                     @endif
 
-                    <div class="img">
-                        {!! $data->user->getAvatar() !!}
-
-                        @if ($data->user_id)
-                            {!! $data->user->getOnline() !!}
-                        @endif
-                    </div>
-
                     @if($data->user_id === 0)
+                        <div class="img">
+                            <img class="avatar" src="/assets/img/images/avatar_guest.png" alt="">
+                        </div>
                         <b class="author" data-login="{{ setting('guestsuser') }}">{{ setting('guestsuser') }}</b> <small>({{ dateFixed($data->created_at) }})</small>
                     @else
+                        <div class="img">
+                            {!! $data->user->getAvatar() !!}
+                            {!! $data->user->getOnline() !!}
+                        </div>
                         <b>{!! $data->user->getProfile() !!}</b> <small>({{ dateFixed($data->created_at) }})</small><br>
                         {!! $data->user->getStatus() !!}
                     @endif

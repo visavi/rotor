@@ -22,13 +22,15 @@
 
         @foreach ($online as $data)
             <div class="b">
-                <div class="img">
-                    {!! $data->user->getAvatar() !!}
-                </div>
-
                 @if ($data->user->id)
-                <b>{!! $data->user->getProfile() !!}</b> ({{ __('pages.time_on_site') }}: {{ dateFixed($data->updated_at, 'H:i:s') }})
+                    <div class="img">
+                        {!! $data->user->getAvatar() !!}
+                    </div>
+                    <b>{!! $data->user->getProfile() !!}</b> ({{ __('pages.time_on_site') }}: {{ dateFixed($data->updated_at, 'H:i:s') }})
                 @else
+                    <div class="img">
+                        <img class="avatar" src="/assets/img/images/avatar_guest.png" alt="">
+                    </div>
                     <b>{{ setting('guestsuser') }}</b> ({{ __('pages.time_on_site') }}: {{ dateFixed($data->updated_at, 'H:i:s') }})
                 @endif
             </div>
