@@ -10,7 +10,7 @@ return FastRoute\cachedDispatcher(static function(RouteCollector $r) {
 
     $r->get('/captcha', [App\Controllers\HomeController::class, 'captcha']);
     $r->get('/language/{lang:[a-z]+}',[App\Controllers\HomeController::class, 'language']);
-    $r->addRoute(['GET', 'POST'], '/banip', [App\Controllers\HomeController::class, 'banip']);
+    $r->addRoute(['GET', 'POST'], '/ipban', [App\Controllers\HomeController::class, 'ipban']);
 
     /* Карта сайта */
     $r->get('/sitemap.xml', [App\Controllers\SitemapController::class, 'index']);

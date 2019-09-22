@@ -16,25 +16,26 @@ Class BaseController
     {
         $request = Request::createFromGlobals();
 
-        $this->ipBan($request);
-        $this->frequencyLimit();
+        if (! $this->ipBan($request)) {
+            $this->frequencyLimit();
 
-        // Сайт закрыт для гостей
-        if (setting('closedsite') === 1 && ! getUser() && ! $request->is('register', 'login', 'recovery', 'captcha')) {
-            setFlash('danger', __('main.not_authorized'));
-            redirect('/login');
-        }
+            // Сайт закрыт для гостей
+            if (setting('closedsite') === 1 && ! getUser() && ! $request->is('register', 'login', 'recovery', 'captcha')) {
+                setFlash('danger', __('main.not_authorized'));
+                redirect('/login');
+            }
 
-        // Сайт закрыт для всех
-        if (setting('closedsite') === 2 && ! isAdmin() && ! $request->is('closed', 'login')) {
-            redirect('/closed');
-        }
+            // Сайт закрыт для всех
+            if (setting('closedsite') === 2 && ! isAdmin() && ! $request->is('closed', 'login')) {
+                redirect('/closed');
+            }
 
-        [$path, $name] = explode('\\', static::class);
+            [$path, $name] = explode('\\', static::class);
 
-        if ($path === 'Modules') {
-            View::addNamespace($name, MODULES . '/' . $name . '/resources/views');
-            Lang::addNamespace($name, MODULES . '/' . $name . '/resources/lang');
+            if ($path === 'Modules') {
+                View::addNamespace($name, MODULES . '/' . $name . '/resources/views');
+                Lang::addNamespace($name, MODULES . '/' . $name . '/resources/lang');
+            }
         }
     }
 
@@ -42,9 +43,10 @@ Class BaseController
      * Проверка на ip-бан
      *
      * @param Request $request
-     * @return void
+     *
+     * @return bool
      */
-    private function ipBan(Request $request): void
+    private function ipBan(Request $request): bool
     {
         if (($ipBan = ipBan()) && ! isAdmin()) {
 
@@ -60,11 +62,17 @@ Class BaseController
                     }
                 }
 
-                if ($matches === 4 && ! $request->is('banip', 'captcha')) {
-                    redirect('/banip');
+                if ($matches === 4) {
+                    if ($request->is('ipban', 'captcha')) {
+                        return true;
+                    }
+
+                    redirect('/ipban');
                 }
             }
         }
+
+        return false;
     }
 
     /**
@@ -99,9 +107,9 @@ Class BaseController
 
             /* Автоматическая блокировка */
             if (counterString($filename) > setting('doslimit')) {
-                    $banip = Ban::query()->where('ip', getIp())->first();
+                    $ipban = Ban::query()->where('ip', getIp())->first();
 
-                    if (! $banip) {
+                    if (! $ipban) {
                         DB::connection()->insert(
                             'insert ignore into ban (`ip`, `created_at`) values (?, ?);',
                             [getIp(), SITETIME]

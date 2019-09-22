@@ -54,7 +54,7 @@ class HomeController extends BaseController
      * @return string
      * @throws \Exception
      */
-    public function banip(Request $request): string
+    public function ipban(Request $request): string
     {
         $ban = Ban::query()
             ->where('ip', getIp())
@@ -64,8 +64,12 @@ class HomeController extends BaseController
             redirect('/');
         }
 
-        if (! $ban->user_id && $request->isMethod('post') && captchaVerify()) {
-
+        if (
+            ! $ban->user_id
+            && $ban->created_at < strtotime('-1 minute', SITETIME)
+            && $request->isMethod('post')
+            && captchaVerify()
+        ) {
             $ban->delete();
             ipBan(true);
 
@@ -75,7 +79,7 @@ class HomeController extends BaseController
 
         header($_SERVER['SERVER_PROTOCOL'] . ' 429 Too Many Requests');
 
-        return view('pages/banip', compact('ban'));
+        return view('pages/ipban', compact('ban'));
     }
 
     /**
