@@ -124,15 +124,10 @@ class UserController extends BaseController
                     ->length($invite, 12, 15, ['invite' => 'Слишком длинный или короткий пригласительный ключ!'], setting('invite'))
                     ->length($login, 3, 20, ['login' => 'Слишком длинный или короткий логин!'])
                     ->length($password, 6, 20, ['password' => 'Слишком длинный или короткий пароль!'])
-                    ->equal($password, $password2, ['password2' => 'Введенные пароли отличаются друг от друга!']);
-
-                if (ctype_digit($password)) {
-                    $validator->addError(['password' => 'Запрещен пароль состоящий только из цифр, используйте буквы!']);
-                }
-
-                if (substr_count($login, '-') > 2) {
-                    $validator->addError(['login' => 'Запрещено использовать в логине слишком много дефисов!']);
-                }
+                    ->equal($password, $password2, ['password2' => 'Введенные пароли отличаются друг от друга!'])
+                    ->false(ctype_digit($login), ['login' => 'Запрещен логин состоящий только из цифр, используйте буквы!'])
+                    ->false(ctype_digit($password), ['password' => 'Запрещен пароль состоящий только из цифр, используйте буквы!'])
+                    ->false(substr_count($login, '-') > 2, ['login' => 'Запрещено использовать в логине слишком много дефисов!']);
 
                 if (! empty($login)) {
                     // Проверка логина на существование
