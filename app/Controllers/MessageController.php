@@ -184,7 +184,7 @@ class MessageController extends BaseController
             setFlash('danger', $validator->getErrors());
         }
 
-        redirect('/messages/talk/' . $user->login);
+        redirect('/messages/talk/' . $user->id);
     }
 
     /**
