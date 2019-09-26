@@ -24,7 +24,7 @@
                         {!! $user->getOnline() !!}
                     </div>
 
-                    <b><a href="/admin/users/edit?user={{ $user->login }}">{{ $user->login }}</a></b>
+                    <b><a href="/users/{{ $user->login }}">{{ $user->login }}</a></b>
                     ({{ plural($user->point, setting('scorename')) }})
                 </div>
             @endforeach
