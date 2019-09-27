@@ -173,6 +173,8 @@ class UserController extends BaseController
 
                 // Регистрация аккаунта
                 if ($validator->isValid()) {
+                    $activateLink = null;
+
                     if (setting('regkeys')) {
                         $activateKey  = Str::random();
                         $activateLink = siteUrl(true).'/key?code=' . $activateKey;
