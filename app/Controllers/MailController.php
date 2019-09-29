@@ -73,7 +73,7 @@ class MailController extends BaseController
         if ($request->isMethod('post')) {
             $login = check($request->input('user'));
 
-            $user = User::query()->where('login', $login)->orWhere('email', $login)->first();
+            $user = getUserByLoginOrEmail($login);
             if (! $user) {
                 abort('default', __('validator.user'));
             }
