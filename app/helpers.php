@@ -2104,6 +2104,20 @@ function getUserById(int $id): ?User
 }
 
 /**
+ * Возвращает объект пользователя по логину или email
+ *
+ * @param string $login логин или email пользователя
+ *
+ * @return Builder|Model|null
+ */
+function getUserByLoginOrEmail($login): ?User
+{
+    $field = strpos($login, '@') ? 'email' : 'login';
+
+    return User::query()->where($field, $login)->first();
+}
+
+/**
  * Возвращает данные пользователя по ключу
  *
  * @param string $key ключ массива

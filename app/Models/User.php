@@ -235,10 +235,9 @@ class User extends BaseModel
 
         if (! empty($login) && ! empty($password)) {
 
-            $user = getUserByLogin($login);
+            $user = getUserByLoginOrEmail($login);
 
             if ($user && password_verify($password, $user['password'])) {
-
                 if ($remember) {
                     setcookie('login', $user->login, strtotime('+1 year', SITETIME), '/', $domain);
                     setcookie('password', md5($user->password . env('APP_KEY')), strtotime('+1 year', SITETIME), '/', $domain, false, true);

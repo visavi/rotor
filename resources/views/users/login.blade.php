@@ -32,8 +32,8 @@
         <form method="post">
 
             <div class="form-group">
-                <label for="inputLogin">{{ __('users.login') }}:</label>
-                <input class="form-control" name="login" id="inputLogin" maxlength="20" value="{{ getInput('login') }}" required>
+                <label for="inputLogin">{{ __('users.login_or_email') }}:</label>
+                <input class="form-control" name="login" id="inputLogin" maxlength="50" value="{{ getInput('login') }}" required>
 
                 <label for="inputPassword">{{ __('users.password') }}:</label>
                 <input class="form-control" name="pass" type="password" id="inputPassword" maxlength="20" required>

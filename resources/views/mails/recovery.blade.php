@@ -18,8 +18,8 @@
         <form method="post" action="/recovery">
 
             <div class="form-group{{ hasError('user') }}">
-                <label for="inputUser">{{ __('mails.login_or_email') }}:</label>
-                <input class="form-control" name="user" id="inputUser" value="{{ getInput('user', $cookieLogin) }}" maxlength="100" required>
+                <label for="inputUser">{{ __('users.login_or_email') }}:</label>
+                <input class="form-control" name="user" id="inputUser" value="{{ getInput('user', $cookieLogin) }}" maxlength="50" required>
                 <div class="invalid-feedback">{{ textError('user') }}</div>
             </div>
 

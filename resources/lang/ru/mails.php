@@ -2,7 +2,6 @@
 
 return [
     'password_recovery'   => 'Восстановление пароля',
-    'login_or_email'      => 'Логин или email',
     'restore'             => 'Восстановить',
     'name'                => 'Имя',
     'email'               => 'Email',

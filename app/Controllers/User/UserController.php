@@ -106,16 +106,17 @@ class UserController extends BaseController
 
         if ($request->isMethod('post')) {
             if ($request->has('login') && $request->has('password')) {
-                $login       = check($request->input('login'));
-                $password    = trim($request->input('password'));
-                $password2   = trim($request->input('password2'));
-                $invite      = setting('invite') ? check($request->input('invite')) : '';
-                $email       = strtolower(check($request->input('email')));
-                $domain      = utfSubstr(strrchr($email, '@'), 1);
-                $gender      = $request->input('gender') === 'male' ? 'male' : 'female';
-                $level       = User::USER;
-                $activateKey = null;
-                $invitation  = null;
+                $login        = check($request->input('login'));
+                $password     = trim($request->input('password'));
+                $password2    = trim($request->input('password2'));
+                $invite       = setting('invite') ? check($request->input('invite')) : '';
+                $email        = strtolower(check($request->input('email')));
+                $domain       = utfSubstr(strrchr($email, '@'), 1);
+                $gender       = $request->input('gender') === 'male' ? 'male' : 'female';
+                $level        = User::USER;
+                $activateLink = null;
+                $activateKey  = null;
+                $invitation   = null;
 
                 $validator->true(captchaVerify(), ['protect' => __('validator.captcha')])
                     ->regex($login, '|^[a-z0-9\-]+$|i', ['login' => 'Недопустимые символы в логине. Разрешены знаки латинского алфавита, цифры и дефис!'])
@@ -173,8 +174,6 @@ class UserController extends BaseController
 
                 // Регистрация аккаунта
                 if ($validator->isValid()) {
-                    $activateLink = null;
-
                     if (setting('regkeys')) {
                         $activateKey  = Str::random();
                         $activateLink = siteUrl(true).'/key?code=' . $activateKey;
