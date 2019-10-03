@@ -17,7 +17,7 @@
 @section('content')
     @if ($messages->isNotEmpty())
         @foreach ($messages as $data)
-            <div class="media border-bottom p-2" data-href="/messages/talk/{{ $data->author_id }}">
+            <div class="media border-bottom p-2 message-block" data-href="/messages/talk/{{ $data->author_id }}">
                 <div class="img mr-3">
                     @if($data->author_id === 0)
                         <img class="avatar" src="/assets/img/images/avatar_system.png" alt="">
@@ -58,18 +58,6 @@
     <i class="fa fa-search"></i> <a href="/searchusers">{{ __('index.user_search') }}</a><br>
     <i class="fa fa-address-book"></i> <a href="/contacts">{{ __('index.contacts') }}</a> / <a href="/ignores">{{ __('index.ignores') }}</a><br>
 @stop
-
-@push('styles')
-    <style>
-        .media {
-            cursor: pointer;
-        }
-
-        .media:hover {
-            background-color: #e9ecef;
-        }
-    </style>
-@endpush
 
 @push('scripts')
     <script>

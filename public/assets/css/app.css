@@ -223,3 +223,12 @@ blockquote small:before {
 .scrollup:hover {
   opacity: 1;
 }
+
+.message-block {
+  cursor: pointer;
+  display: block;
+}
+
+.message-block:hover {
+  background-color: #eee;
+}
