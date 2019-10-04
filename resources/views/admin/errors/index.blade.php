@@ -40,7 +40,7 @@
             </div>
             <div>
                 Referer: {{ $data->referer ?: __('main.undefined') }}<br>
-                {{ __('main.user') }}: {!! $data->user->getProfile() !!}<br>
+                {{ __('main.user') }}: {!! $data->user->exists ? $data->user->getProfile() : setting('guestsuser') !!}<br>
                 <span class="data">({{ $data->brow }}, {{ $data->ip }})</span>
             </div>
         @endforeach
