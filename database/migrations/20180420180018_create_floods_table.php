@@ -10,7 +10,7 @@ class CreateFloodsTable extends AbstractMigration
     public function change()
     {
         if (! $this->hasTable('floods')) {
-            $table = $this->table('floods', ['engine' => env('DB_ENGINE'), 'collation' => env('DB_COLLATION')]);
+            $table = $this->table('floods', ['engine' => config('DB_ENGINE'), 'collation' => config('DB_COLLATION')]);
             $table
                 ->addColumn('user_id', 'integer', ['null' => true])
                 ->addColumn('page', 'string', ['limit' => 30])

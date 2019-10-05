@@ -526,5 +526,5 @@ return FastRoute\cachedDispatcher(static function(RouteCollector $r) {
     }
 }, [
     'cacheFile'     => STORAGE . '/temp/routes.dat',
-    'cacheDisabled' => env('APP_DEBUG'),
+    'cacheDisabled' => config('APP_DEBUG'),
 ]);

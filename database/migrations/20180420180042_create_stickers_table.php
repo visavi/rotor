@@ -10,7 +10,7 @@ class CreateStickersTable extends AbstractMigration
     public function change(): void
     {
         if (! $this->hasTable('stickers')) {
-            $table = $this->table('stickers', ['engine' => env('DB_ENGINE'), 'collation' => env('DB_COLLATION')]);
+            $table = $this->table('stickers', ['engine' => config('DB_ENGINE'), 'collation' => config('DB_COLLATION')]);
             $table
                 ->addColumn('category_id', 'integer')
                 ->addColumn('name', 'string', ['limit' => 100])

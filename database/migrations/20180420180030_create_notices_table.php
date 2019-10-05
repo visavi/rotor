@@ -10,7 +10,7 @@ class CreateNoticesTable extends AbstractMigration
     public function change()
     {
         if (! $this->hasTable('notices')) {
-            $table = $this->table('notices', ['engine' => env('DB_ENGINE'), 'collation' => env('DB_COLLATION')]);
+            $table = $this->table('notices', ['engine' => config('DB_ENGINE'), 'collation' => config('DB_COLLATION')]);
             $table
                 ->addColumn('type', 'string', ['limit' => 20])
                 ->addColumn('name', 'string', ['limit' => 100])

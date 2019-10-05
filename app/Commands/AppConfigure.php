@@ -69,7 +69,7 @@ class AppConfigure extends AbstractCommand
             $file = RESOURCES . '/lang/' . $language . '/main.js';
             $link = HOME . '/assets/modules/' . $language . '.js';
 
-            deleteFile($link, false);
+            deleteFile($link);
 
             if (file_exists($file)) {
                 @symlink($file, $link);

@@ -240,11 +240,11 @@ class User extends BaseModel
             if ($user && password_verify($password, $user['password'])) {
                 if ($remember) {
                     setcookie('login', $user->login, strtotime('+1 year', SITETIME), '/', $domain);
-                    setcookie('password', md5($user->password . env('APP_KEY')), strtotime('+1 year', SITETIME), '/', $domain, false, true);
+                    setcookie('password', md5($user->password . config('APP_KEY')), strtotime('+1 year', SITETIME), '/', $domain, false, true);
                 }
 
                 $_SESSION['id']       = $user->id;
-                $_SESSION['password'] = md5(env('APP_KEY') . $user->password);
+                $_SESSION['password'] = md5(config('APP_KEY') . $user->password);
 
                 // Сохранение привязки к соц. сетям
                 if (! empty($_SESSION['social'])) {
@@ -323,10 +323,10 @@ class User extends BaseModel
             if ($social && $user = getUserById($social->user_id)) {
 
                 setcookie('login', $user->login, strtotime('+1 year', SITETIME), '/', $domain);
-                setcookie('password', md5($user->password . env('APP_KEY')), strtotime('+1 year', SITETIME), '/', $domain, false, true);
+                setcookie('password', md5($user->password . config('APP_KEY')), strtotime('+1 year', SITETIME), '/', $domain, false, true);
 
                 $_SESSION['id']       = $user->id;
-                $_SESSION['password'] = md5(env('APP_KEY') . $user->password);
+                $_SESSION['password'] = md5(config('APP_KEY') . $user->password);
 
                 setFlash('success', 'Добро пожаловать, ' . $user->login . '!');
                 redirect('/');

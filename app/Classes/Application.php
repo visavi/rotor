@@ -15,11 +15,10 @@ class Application
 {
     public function __construct()
     {
-        if (env('APP_NEW') && file_exists(HOME . '/install/')) {
+        if (config('APP_NEW') && file_exists(HOME . '/install/')) {
             redirect('/install/index.php');
         }
 
-        ob_start();
         session_start();
         date_default_timezone_set(setting('timezone'));
 
@@ -94,11 +93,11 @@ class Application
 
             $user = getUserByLogin($cookLogin);
 
-            if ($user && $cookLogin === $user->login && $cookPass === md5($user->password . env('APP_KEY'))) {
+            if ($user && $cookLogin === $user->login && $cookPass === md5($user->password . config('APP_KEY'))) {
                 session_regenerate_id(true);
 
                 $_SESSION['id']       = $user->id;
-                $_SESSION['password'] = md5(env('APP_KEY') . $user->password);
+                $_SESSION['password'] = md5(config('APP_KEY') . $user->password);
 
                 User::saveVisit($user);
             }

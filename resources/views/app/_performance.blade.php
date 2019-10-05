@@ -10,7 +10,7 @@
     <li class="list-inline-item" data-toggle="tooltip" title="{{ __('index.loading_speed') }}"><i class="fa fa-rocket"></i> {{ round(microtime(true) - STARTTIME, 4) }} {{ __('index.seconds') }}</li>
 </ul>
 
-@if (env('APP_DEBUG'))
+@if (config('APP_DEBUG'))
 <pre class="text-left prettyprint linenums pre-scrollable">
 @foreach ($queries as $key=> $query)
 {{ $query['query'] }} ({{ number_format($query['time'] /1000, 5) }} {{ __('index.seconds') }})

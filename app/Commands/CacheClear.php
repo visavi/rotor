@@ -42,6 +42,8 @@ class CacheClear extends AbstractCommand
         $cacheFiles = array_diff($cacheFiles, [
             STORAGE.'/temp/checker.dat',
             STORAGE.'/temp/counter7.dat',
+            STORAGE.'/temp/config.dat',
+            STORAGE.'/temp/routes.dat',
         ]);
 
         if ($cacheFiles) {

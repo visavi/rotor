@@ -10,7 +10,7 @@ class CreateContactsTable extends AbstractMigration
     public function change()
     {
         if (! $this->hasTable('contacts')) {
-            $table = $this->table('contacts', ['engine' => env('DB_ENGINE'), 'collation' => env('DB_COLLATION')]);
+            $table = $this->table('contacts', ['engine' => config('DB_ENGINE'), 'collation' => config('DB_COLLATION')]);
             $table
                 ->addColumn('user_id', 'integer')
                 ->addColumn('contact_id', 'integer')

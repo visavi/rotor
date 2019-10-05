@@ -1,11 +1,9 @@
 <?php
 
-use Dotenv\Dotenv;
 use Illuminate\Container\Container;
 use Illuminate\Database\Capsule\Manager as DB;
 use Illuminate\Events\Dispatcher;
 use Illuminate\Filesystem\Filesystem;
-use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Facade;
 use Illuminate\Translation\FileLoader;
 use Illuminate\Translation\Translator;
@@ -31,12 +29,7 @@ define('VERSION', '8.0-dev');
 
 require_once BASEDIR . '/vendor/autoload.php';
 
-if (! env('APP_ENV')) {
-    $dotenv = Dotenv::create(BASEDIR);
-    $dotenv->load();
-}
-
-if (env('APP_DEBUG') && class_exists(Run::class)) {
+if (config('APP_DEBUG') && class_exists(Run::class)) {
     $whoops = new Run();
 
     if (Whoops\Util\Misc::isCommandLine()) {
@@ -45,23 +38,19 @@ if (env('APP_DEBUG') && class_exists(Run::class)) {
         $whoops->prependHandler(new PrettyPageHandler);
     }
 
-    $whoops->prependHandler(static function() {
-        $_SERVER = Arr::except($_SERVER, array_keys($_ENV));
-        $_ENV    = [];
-    });
     $whoops->register();
 }
 
 $db = new DB();
 $db->addConnection([
-    'driver'    => env('DB_DRIVER'),
-    'port'      => env('DB_PORT'),
-    'host'      => env('DB_HOST'),
-    'database'  => env('DB_DATABASE'),
-    'username'  => env('DB_USERNAME'),
-    'password'  => env('DB_PASSWORD'),
-    'charset'   => env('DB_CHARSET'),
-    'collation' => env('DB_COLLATION'),
+    'driver'    => config('DB_DRIVER'),
+    'port'      => config('DB_PORT'),
+    'host'      => config('DB_HOST'),
+    'database'  => config('DB_DATABASE'),
+    'username'  => config('DB_USERNAME'),
+    'password'  => config('DB_PASSWORD'),
+    'charset'   => config('DB_CHARSET'),
+    'collation' => config('DB_COLLATION'),
 ]);
 
 /*$db->setEventDispatcher(new Dispatcher(new Container));*/

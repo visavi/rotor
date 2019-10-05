@@ -10,7 +10,7 @@ class CreateCounters31Table extends AbstractMigration
     public function change()
     {
         if (! $this->hasTable('counters31')) {
-            $table = $this->table('counters31', ['engine' => env('DB_ENGINE'), 'collation' => env('DB_COLLATION')]);
+            $table = $this->table('counters31', ['engine' => config('DB_ENGINE'), 'collation' => config('DB_COLLATION')]);
             $table
                 ->addColumn('period', 'datetime')
                 ->addColumn('hosts', 'integer')

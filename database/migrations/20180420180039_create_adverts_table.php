@@ -10,7 +10,7 @@ class CreateAdvertsTable extends AbstractMigration
     public function change()
     {
         if (! $this->hasTable('adverts')) {
-            $table = $this->table('adverts', ['engine' => env('DB_ENGINE'), 'collation' => env('DB_COLLATION')]);
+            $table = $this->table('adverts', ['engine' => config('DB_ENGINE'), 'collation' => config('DB_COLLATION')]);
             $table
                 ->addColumn('site', 'string', ['limit' => 100])
                 ->addColumn('name', 'string', ['limit' => 50])

@@ -10,7 +10,7 @@ class CreateRulesTable extends AbstractMigration
     public function change()
     {
         if (! $this->hasTable('rules')) {
-            $table = $this->table('rules', ['engine' => env('DB_ENGINE'), 'collation' => env('DB_COLLATION')]);
+            $table = $this->table('rules', ['engine' => config('DB_ENGINE'), 'collation' => config('DB_COLLATION')]);
             $table
                 ->addColumn('text', 'text', ['null' => true])
                 ->addColumn('created_at', 'integer')

@@ -28,6 +28,7 @@ $app->addCommands([
     new \App\Commands\KeyGenerate(),
     new \App\Commands\CacheClear(),
     new \App\Commands\RouteClear(),
+    new \App\Commands\ConfigClear(),
 ]);
 
 $dispatcher = new EventDispatcher();

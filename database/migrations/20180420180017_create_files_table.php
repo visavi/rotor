@@ -10,7 +10,7 @@ class CreateFilesTable extends AbstractMigration
     public function change()
     {
         if (! $this->hasTable('files')) {
-            $table = $this->table('files', ['engine' => env('DB_ENGINE'), 'collation' => env('DB_COLLATION')]);
+            $table = $this->table('files', ['engine' => config('DB_ENGINE'), 'collation' => config('DB_COLLATION')]);
             $table
                 ->addColumn('relate_type', 'string', ['limit' => 50])
                 ->addColumn('relate_id', 'integer')

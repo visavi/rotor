@@ -10,7 +10,7 @@ class CreateNewsTable extends AbstractMigration
     public function change()
     {
         if (! $this->hasTable('news')) {
-            $table = $this->table('news', ['engine' => env('DB_ENGINE'), 'collation' => env('DB_COLLATION')]);
+            $table = $this->table('news', ['engine' => config('DB_ENGINE'), 'collation' => config('DB_COLLATION')]);
             $table
                 ->addColumn('title', 'string', ['limit' => 100])
                 ->addColumn('text', 'text', ['null' => true])

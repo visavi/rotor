@@ -11,7 +11,7 @@ class CreateSocialsTable extends AbstractMigration
     public function change()
     {
         if (! $this->hasTable('socials')) {
-            $table = $this->table('socials', ['engine' => env('DB_ENGINE'), 'collation' => env('DB_COLLATION')]);
+            $table = $this->table('socials', ['engine' => config('DB_ENGINE'), 'collation' => config('DB_COLLATION')]);
             $table
                 ->addColumn('user_id', 'integer')
                 ->addColumn('network', 'string')

@@ -10,7 +10,7 @@ class CreateLogsTable extends AbstractMigration
     public function change()
     {
         if (! $this->hasTable('logs')) {
-            $table = $this->table('logs', ['engine' => env('DB_ENGINE'), 'collation' => env('DB_COLLATION')]);
+            $table = $this->table('logs', ['engine' => config('DB_ENGINE'), 'collation' => config('DB_COLLATION')]);
             $table
                 ->addColumn('user_id', 'integer')
                 ->addColumn('request', 'string', ['null' => true])

@@ -10,7 +10,7 @@ class CreateVotesTable extends AbstractMigration
     public function change()
     {
         if (! $this->hasTable('votes')) {
-            $table = $this->table('votes', ['engine' => env('DB_ENGINE'), 'collation' => env('DB_COLLATION')]);
+            $table = $this->table('votes', ['engine' => config('DB_ENGINE'), 'collation' => config('DB_COLLATION')]);
             $table
                 ->addColumn('title', 'string', ['limit' => 100])
                 ->addColumn('count', 'integer', ['default' => 0])

@@ -10,7 +10,7 @@ class CreateBookmarksTable extends AbstractMigration
     public function change()
     {
         if (! $this->hasTable('bookmarks')) {
-            $table = $this->table('bookmarks', ['engine' => env('DB_ENGINE'), 'collation' => env('DB_COLLATION')]);
+            $table = $this->table('bookmarks', ['engine' => config('DB_ENGINE'), 'collation' => config('DB_COLLATION')]);
             $table
                 ->addColumn('user_id', 'integer')
                 ->addColumn('topic_id', 'integer')

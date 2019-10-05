@@ -11,8 +11,8 @@
             <title>RSS - {{ setting('title') }}</title>
             <link>{{ siteUrl() }}/</link>
         </image>
-        <managingEditor>{{ env('SITE_EMAIL') }} ({{ env('SITE_ADMIN') }})</managingEditor>
-        <webMaster>{{ env('SITE_EMAIL') }} ({{ env('SITE_ADMIN') }})</webMaster>
+        <managingEditor>{{ config('SITE_EMAIL') }} ({{ config('SITE_ADMIN') }})</managingEditor>
+        <webMaster>{{ config('SITE_EMAIL') }} ({{ config('SITE_ADMIN') }})</webMaster>
         <lastBuildDate>{{ date('r', SITETIME) }}</lastBuildDate>
         @yield('content')
     </channel>

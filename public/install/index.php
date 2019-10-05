@@ -3,6 +3,7 @@
 use App\Commands\AppConfigure;
 use App\Commands\AppState;
 use App\Commands\CacheClear;
+use App\Commands\ConfigClear;
 use App\Commands\KeyGenerate;
 use App\Commands\RouteClear;
 use App\Models\News;
@@ -31,7 +32,7 @@ $wrap->setOption('environment', 'default');
 <html lang="ru">
 <head>
     <title>
-        <?= env('APP_NEW') ? 'Установка' : 'Обновление' ?> Rotor
+        <?= config('APP_NEW') ? 'Установка' : 'Обновление' ?> Rotor
     </title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
@@ -77,7 +78,7 @@ $wrap->setOption('environment', 'default');
         ];
 
         foreach ($keys as $key) {
-            echo $key . ' - ' . trim(var_export(env($key), true), "'") . '<br>';
+            echo $key . ' - ' . trim(var_export(config($key), true), "'") . '<br>';
         }
         ?>
         <p>Не забудьте изменить значение APP_KEY, эти данные необходимы для шифрования cookies и паролей в сессиях</p>
@@ -201,19 +202,19 @@ $wrap->setOption('environment', 'default');
             </span><br>
 
             <b>Настройки БД по умолчанию</b><br>
-            Тип хранилища: <?= env('DB_ENGINE') ?><br>
-            Кодировка: <?= env('DB_CHARSET') ?><br>
-            Сопоставление: <?= env('DB_COLLATION') ?><br>
+            Тип хранилища: <?= config('DB_ENGINE') ?><br>
+            Кодировка: <?= config('DB_CHARSET') ?><br>
+            Сопоставление: <?= config('DB_COLLATION') ?><br>
             <br>
 
-            <p><a style="font-size: 18px" href="?act=status">Проверить статус</a> (Выполняется <?= env('APP_NEW') ? 'установка' : 'обновление' ?>)</p><br>
+            <p><a style="font-size: 18px" href="?act=status">Проверить статус</a> (Выполняется <?= config('APP_NEW') ? 'установка' : 'обновление' ?>)</p><br>
         <?php else: ?>
             <b><span style="color:#ff0000">Имеются критические ошибки!</span></b><br>
             Вы не сможете приступить к установке, пока не устраните все ошибки<br><br>
         <?php endif; ?>
     <?php endif; ?>
 
-    <?php if (env('APP_NEW')): ?>
+    <?php if (config('APP_NEW')): ?>
         <?php if ($request->input('act') === 'status'): ?>
             <h1>Шаг 2 - проверка статуса (установка)</h1>
 
@@ -345,6 +346,7 @@ $wrap->setOption('environment', 'default');
             runCommand(new KeyGenerate());
             runCommand(new CacheClear());
             runCommand(new RouteClear());
+            runCommand(new ConfigClear());
             ?>
         <?php endif; ?>
 
@@ -374,6 +376,7 @@ $wrap->setOption('environment', 'default');
             <?php
             runCommand(new CacheClear());
             runCommand(new RouteClear());
+            runCommand(new ConfigClear());
             ?>
         <?php endif; ?>
     <?php endif; ?>

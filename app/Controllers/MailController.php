@@ -42,7 +42,7 @@ class MailController extends BaseController
 
                 $subject = 'Письмо с сайта ' . setting('title');
                 $body = view('mailer.default', compact('subject', 'message'));
-                sendMail(env('SITE_EMAIL'), $subject, $body, ['from' => [$email => $name]]);
+                sendMail(config('SITE_EMAIL'), $subject, $body, ['from' => [$email => $name]]);
 
                 setFlash('success', 'Ваше письмо успешно отправлено!');
                 redirect('/');

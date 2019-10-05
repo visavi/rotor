@@ -10,7 +10,7 @@ class CreateIgnoringTable extends AbstractMigration
     public function change()
     {
         if (! $this->hasTable('ignoring')) {
-            $table = $this->table('ignoring', ['engine' => env('DB_ENGINE'), 'collation' => env('DB_COLLATION')]);
+            $table = $this->table('ignoring', ['engine' => config('DB_ENGINE'), 'collation' => config('DB_COLLATION')]);
             $table
                 ->addColumn('user_id', 'integer')
                 ->addColumn('ignore_id', 'integer')

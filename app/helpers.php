@@ -38,6 +38,7 @@ use Illuminate\Support\Facades\View;
 use Illuminate\Support\Str;
 use Intervention\Image\Constraint;
 use Intervention\Image\ImageManagerStatic as Image;
+use josegonzalez\Dotenv\Loader;
 use ReCaptcha\ReCaptcha;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\ArrayInput;
@@ -866,7 +867,7 @@ function checkAuth()
         /** @var User $user */
         $user = User::query()->find($_SESSION['id']);
 
-        if ($user && $_SESSION['password'] === md5(env('APP_KEY') . $user->password)) {
+        if ($user && $_SESSION['password'] === md5(config('APP_KEY') . $user->password)) {
             return $user;
         }
     }
@@ -1910,7 +1911,7 @@ function textError($field)
 function sendMail($to, $subject, $body, array $params = [])
 {
     if (empty($params['from'])) {
-        $params['from'] = [env('SITE_EMAIL') => env('SITE_ADMIN')];
+        $params['from'] = [config('SITE_EMAIL') => config('SITE_ADMIN')];
     }
 
     $message = (new Swift_Message())
@@ -1918,20 +1919,20 @@ function sendMail($to, $subject, $body, array $params = [])
         ->setSubject($subject)
         ->setBody($body, 'text/html')
         ->setFrom($params['from'])
-        ->setReturnPath(env('SITE_EMAIL'));
+        ->setReturnPath(config('SITE_EMAIL'));
 
-    if (env('MAIL_DRIVER') === 'smtp') {
+    if (config('MAIL_DRIVER') === 'smtp') {
         $transport = (new Swift_SmtpTransport())
-            ->setHost(env('MAIL_HOST'))
-            ->setPort(env('MAIL_PORT'))
-            ->setEncryption(env('MAIL_ENCRYPTION'))
-            ->setUsername(env('MAIL_USERNAME'))
-            ->setPassword(env('MAIL_PASSWORD'));
+            ->setHost(config('MAIL_HOST'))
+            ->setPort(config('MAIL_PORT'))
+            ->setEncryption(config('MAIL_ENCRYPTION'))
+            ->setUsername(config('MAIL_USERNAME'))
+            ->setPassword(config('MAIL_PASSWORD'));
     } else {
         $transport = new Swift_SendmailTransport();
 
-        if (env('MAIL_PATH')) {
-            $transport->setCommand(env('MAIL_PATH'));
+        if (config('MAIL_PATH')) {
+            $transport->setCommand(config('MAIL_PATH'));
         }
     }
 
@@ -2396,7 +2397,7 @@ function saveSettings()
  */
 function siteUrl($parse = false)
 {
-    $url = env('SITE_URL');
+    $url = config('SITE_URL');
 
     if ($parse) {
         $url = Str::startsWith($url, '//') ? 'http:' . $url : $url;
@@ -2552,7 +2553,39 @@ function buildVersion()
  *
  * @return string
  */
-function csrf_field()
+function csrf_field(): string
 {
     return '<input type="hidden" name="token" value="' . $_SESSION['token'] . '">';
+}
+
+/**
+ * Return config
+ *
+ * @param string $key
+ * @param mixed $default
+ *
+ * @return mixed
+ */
+function config(string $key, $default = null)
+{
+    static $config;
+
+    if (! $config) {
+        $configPath = STORAGE . '/temp/config.dat';
+
+        if (file_exists($configPath)) {
+            $config = require $configPath;
+        } else {
+            $loader = Loader::load(BASEDIR . '/.env');
+            $config = $loader->toArray();
+
+            if (! $config['APP_DEBUG']) {
+                file_put_contents(
+                    $configPath, '<?php return ' . var_export($config, true) . ';'
+                );
+            }
+        }
+    }
+
+    return $config[$key] ?? $default;
 }

@@ -10,7 +10,7 @@ class CreateVoteanswerTable extends AbstractMigration
     public function change()
     {
         if (! $this->hasTable('voteanswer')) {
-            $table = $this->table('voteanswer', ['engine' => env('DB_ENGINE'), 'collation' => env('DB_COLLATION')]);
+            $table = $this->table('voteanswer', ['engine' => config('DB_ENGINE'), 'collation' => config('DB_COLLATION')]);
             $table
                 ->addColumn('vote_id', 'integer')
                 ->addColumn('answer', 'string', ['limit' => 50])

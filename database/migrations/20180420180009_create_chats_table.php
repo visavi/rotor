@@ -10,7 +10,7 @@ class CreateChatsTable extends AbstractMigration
     public function change()
     {
         if (! $this->hasTable('chats')) {
-            $table = $this->table('chats', ['engine' => env('DB_ENGINE'), 'collation' => env('DB_COLLATION')]);
+            $table = $this->table('chats', ['engine' => config('DB_ENGINE'), 'collation' => config('DB_COLLATION')]);
             $table
                 ->addColumn('user_id', 'integer')
                 ->addColumn('text', 'text', ['null' => true])

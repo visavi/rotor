@@ -10,7 +10,7 @@ class CreateOffersTable extends AbstractMigration
     public function change()
     {
         if (! $this->hasTable('offers')) {
-            $table = $this->table('offers', ['engine' => env('DB_ENGINE'), 'collation' => env('DB_COLLATION')]);
+            $table = $this->table('offers', ['engine' => config('DB_ENGINE'), 'collation' => config('DB_COLLATION')]);
             $table
                 ->addColumn('type', 'string', ['limit' => 20])
                 ->addColumn('title', 'string', ['limit' => 50])

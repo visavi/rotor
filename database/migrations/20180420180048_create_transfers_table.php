@@ -10,7 +10,7 @@ class CreateTransfersTable extends AbstractMigration
     public function change()
     {
         if (! $this->hasTable('transfers')) {
-            $table = $this->table('transfers', ['engine' => env('DB_ENGINE'), 'collation' => env('DB_COLLATION')]);
+            $table = $this->table('transfers', ['engine' => config('DB_ENGINE'), 'collation' => config('DB_COLLATION')]);
             $table
                 ->addColumn('user_id', 'integer')
                 ->addColumn('recipient_id', 'integer')

@@ -10,7 +10,7 @@ class CreateRatingTable extends AbstractMigration
     public function change()
     {
         if (! $this->hasTable('rating')) {
-            $table = $this->table('rating', ['engine' => env('DB_ENGINE'), 'collation' => env('DB_COLLATION')]);
+            $table = $this->table('rating', ['engine' => config('DB_ENGINE'), 'collation' => config('DB_COLLATION')]);
             $table
                 ->addColumn('user_id', 'integer')
                 ->addColumn('recipient_id', 'integer')
