@@ -27,13 +27,14 @@ script:
   - vendor/bin/phpunit --coverage-clover build/logs/clover.xml --stderr
 
 env:
-  - APP_ENV=testing
-  - APP_NEW=true
-  - DB_HOST=127.0.0.1
-  - DB_DRIVER=mysql
-  - DB_DATABASE=test
-  - DB_USERNAME=root
-  - DB_PASSWORD=
+  global:
+    - APP_ENV=testing
+    - APP_NEW=true
+    - DB_HOST=127.0.0.1
+    - DB_DRIVER=mysql
+    - DB_DATABASE=test
+    - DB_USERNAME=root
+    - DB_PASSWORD=
 
 after_success:
   - travis_retry php vendor/bin/php-coveralls -v
