@@ -2577,8 +2577,7 @@ function config(string $key, $default = null)
             $config = require $configPath;
         } else {*/
             $loader = new Loader(BASEDIR . '/.env');
-            $config = array_replace($loader->parse()->toArray(), $_ENV);
-
+            $config = array_replace($loader->parse()->toArray(), getenv());
 /*            if (! $config['APP_DEBUG']) {
                 file_put_contents(
                     $configPath, '<?php return ' . var_export($config, true) . ';'
