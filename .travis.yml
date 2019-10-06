@@ -10,8 +10,8 @@ php:
 
 cache:
   directories:
-    - $HOME/.composer/cache/files
-    - $HOME/.cache/composer/files
+    - $HOME/.composer/cache
+    - $HOME/.cache/composer
 
 before_script:
   - cp .env.example .env
@@ -27,14 +27,13 @@ script:
   - vendor/bin/phpunit --coverage-clover build/logs/clover.xml --stderr
 
 env:
-  global:
-    - APP_ENV=testing
-    - APP_NEW=true
-    - DB_HOST=127.0.0.1
-    - DB_DRIVER=mysql
-    - DB_DATABASE=test
-    - DB_USERNAME=root
-    - DB_PASSWORD=
+  - APP_ENV=testing
+  - APP_NEW=true
+  - DB_HOST=127.0.0.1
+  - DB_DRIVER=mysql
+  - DB_DATABASE=test
+  - DB_USERNAME=root
+  - DB_PASSWORD=
 
 after_success:
   - travis_retry php vendor/bin/php-coveralls -v
