@@ -2572,13 +2572,12 @@ function config(string $key, $default = null)
 
     if (! $config) {
         $configPath = STORAGE . '/temp/config.dat';
-        $envPath    = BASEDIR . '/.env';
 
         if (file_exists($configPath)) {
             $config = require $configPath;
-        } elseif (file_exists($envPath)) {
-            $loader = Loader::load($envPath);
-            $config = $loader->toArray();
+        } else {
+            $loader = new Loader(BASEDIR . '/.env');
+            $config = $loader->parse()->toArray();
 
             if (! $config['APP_DEBUG']) {
                 file_put_contents(
@@ -2588,5 +2587,5 @@ function config(string $key, $default = null)
         }
     }
 
-    return $config[$key] ?? env($key, $default);
+    return $config[$key] ?? $default;
 }

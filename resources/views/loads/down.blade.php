@@ -93,7 +93,7 @@
         {{ __('main.rating') }}: {!! ratingVote($rating) !!}<br>
         {{ __('main.votes') }}: <b>{{ $down->rated }}</b><br>
         {{ __('main.downloads') }}: <b>{{ $down->loads }}</b><br>
-        {{ __('main.created') }}: {!! $down->user->getProfile() !!} ({{ dateFixed($down->created_at) }})<br><br>
+        {{ __('main.author') }}: {!! $down->user->getProfile() !!} ({{ dateFixed($down->created_at) }})<br><br>
     </div>
 
     @if (getUser() && getUser('id') !== $down->user_id)

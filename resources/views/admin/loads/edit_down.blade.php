@@ -44,6 +44,8 @@
         <form action="/admin/downs/edit/{{ $down->id }}" method="post" enctype="multipart/form-data">
             @csrf
             <div class="form-group{{ hasError('category') }}">
+                {{ __('main.author') }}: {!! $down->user->getProfile() !!} ({{ dateFixed($down->created_at) }})<br><br>
+
                 <label for="inputCategory">{{ __('loads.load') }}:</label>
 
                 <?php $inputCategory = getInput('category', $down->category_id); ?>
@@ -64,13 +66,13 @@
             </div>
 
             <div class="form-group{{ hasError('title') }}">
-                <label for="title">{{ __('main.down_title') }}:</label>
+                <label for="title">{{ __('loads.down_title') }}:</label>
                 <input class="form-control" name="title" id="title" maxlength="50" value="{{ getInput('title', $down->title) }}" required>
                 <div class="invalid-feedback">{{ textError('title') }}</div>
             </div>
 
             <div class="form-group{{ hasError('text') }}">
-                <label for="text">{{ __('main.down_text') }}:</label>
+                <label for="text">{{ __('loads.down_text') }}:</label>
                 <textarea class="form-control markItUp" id="text" name="text" rows="5">{{ getInput('text', $down->text) }}</textarea>
                 <div class="invalid-feedback">{{ textError('text') }}</div>
             </div>
