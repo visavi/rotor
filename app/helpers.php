@@ -2571,19 +2571,22 @@ function config(string $key, $default = null)
     static $config;
 
     if (! $config) {
-/*        $configPath = STORAGE . '/temp/config.dat';
+        $configPath = STORAGE . '/temp/config.dat';
 
         if (file_exists($configPath)) {
             $config = require $configPath;
-        } else {*/
+        } else {
             $loader = new Loader(BASEDIR . '/.env');
-            $config = array_replace($loader->parse()->toArray(), getenv());
-/*            if (! $config['APP_DEBUG']) {
+            $params = $loader->parse()->toArray();
+            $getenv = array_intersect_key($params, getenv());
+            $config = array_replace($params, $getenv);
+
+            if (! $config['APP_DEBUG']) {
                 file_put_contents(
                     $configPath, '<?php return ' . var_export($config, true) . ';'
                 );
-            }*/
-        /*}*/
+            }
+        }
     }
 
     return $config[$key] ?? $default;
