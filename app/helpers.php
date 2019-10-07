@@ -2578,7 +2578,7 @@ function config(string $key, $default = null)
         } else {
             $loader = new Loader(BASEDIR . '/.env');
             $params = $loader->parse()->toArray();
-            $getenv = array_intersect_key($params, getenv());
+            $getenv = array_intersect_key(getenv(), $params);
             $config = array_replace($params, $getenv);
 
             if (! $config['APP_DEBUG']) {
