@@ -6,6 +6,8 @@ namespace App\Controllers\Admin;
 
 use App\Models\User;
 use Illuminate\Http\Request;
+use Symfony\Component\Finder\Finder;
+use Symfony\Component\Finder\SplFileInfo;
 
 class CheckerController extends AdminController
 {
@@ -28,10 +30,10 @@ class CheckerController extends AdminController
      */
     public function index(): string
     {
-        $files = $this->scanFiles(BASEDIR);
         $diff  = [];
 
         if (file_exists(STORAGE . '/temp/checker.dat')) {
+            $files = $this->scanFiles(BASEDIR);
             $filesScan = json_decode(file_get_contents(STORAGE . '/temp/checker.dat'));
 
             $diff['left']  = array_diff($files, $filesScan);
@@ -76,23 +78,23 @@ class CheckerController extends AdminController
      */
     private function scanFiles($dir): array
     {
-        static $state;
+        $state = [];
+        $excludeFiles = preg_filter('/^/', '*.', explode(',', setting('nocheck')));
 
-        $files = preg_grep('/^([^.])/', scandir($dir, SCANDIR_SORT_ASCENDING));
+        $finder = new Finder();
+        $files  = $finder->in($dir)
+            ->files()
+            ->notName($excludeFiles);
 
-        foreach ($files as $file) {
-            if (is_file($dir . '/' . $file)) {
-                $ext = getExtension($file);
-
-                if (! in_array($ext, explode(',', setting('nocheck')), true)) {
-                    $state[] = $dir . '/' . $file . ' / ' . dateFixed(filemtime($dir . '/' . $file), 'd.m.Y H:i') . ' / ' . formatFileSize($dir . '/' . $file);
-                }
-            } else {
-                $state[] = $dir . '/' . $file;
-                $this->scanFiles($dir . '/' . $file);
-            }
+        if (file_exists(BASEDIR . '/.gitignore')) {
+            $files->ignoreVCSIgnored(true);
         }
 
-        return str_replace(BASEDIR, '', $state);
+        /** @var SplFileInfo $file */
+        foreach ($files as $file) {
+            $state[] = $file->getRelativePathname() . ' / ' . dateFixed($file->getMTime(), 'd.m.Y H:i') .' / ' . formatSize($file->getSize());
+        }
+
+        return $state;
     }
 }
