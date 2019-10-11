@@ -52,7 +52,7 @@
     @endif
 
     @if ($topic->note)
-        <div class="p-1 bg-info text-white">{!! bbCode($topic->note) !!}</div>
+        <div class="p-1 my-1 bg-info text-white">{!! bbCode($topic->note) !!}</div>
     @endif
 
     <hr>

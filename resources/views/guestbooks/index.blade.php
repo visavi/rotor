@@ -46,7 +46,7 @@
                         </div>
                     @endif
 
-                    @if($data->user_id === 0)
+                    @if ($data->user_id === 0)
                         <div class="img">
                             <img class="avatar" src="/assets/img/images/avatar_guest.png" alt="">
                         </div>

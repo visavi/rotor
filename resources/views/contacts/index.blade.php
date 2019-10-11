@@ -22,7 +22,7 @@
             @foreach ($contacts as $contact)
                 <div class="b">
                     <div class="float-right">
-                        <a href="/messages/talk/{{ $contact->contactor->id }}" data-toggle="tooltip" title="{{ __('main.write') }}"><i class="fa fa-reply text-muted"></i></a>
+                        <a href="/messages/talk/{{ $contact->contactor->login }}" data-toggle="tooltip" title="{{ __('main.write') }}"><i class="fa fa-reply text-muted"></i></a>
                         <a href="/contacts/note/{{ $contact->id }}" data-toggle="tooltip" title="{{ __('main.note') }}"><i class="fa fa-sticky-note text-muted"></i></a>
                         <a href="/transfers?user={{ $contact->contactor->login }}" data-toggle="tooltip" title="{{ __('contacts.transfer') }}"><i class="fa fa-money-bill-alt text-muted"></i></a>
                         <input type="checkbox" name="del[]" value="{{ $contact->id }}">

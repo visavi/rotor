@@ -17,14 +17,13 @@
 
 @section('content')
     @if (getUser()->isIgnore($user))
-        <div class="p-1 bg-danger text-white">
+        <div class="p-1 my-1 bg-danger text-white">
             <i class="fas fa-exclamation-triangle"></i>
             {{ __('messages.warning') }}
         </div>
     @endif
 
     @if ($messages->isNotEmpty())
-
         @foreach ($messages as $data)
 
             <?php $author = $data->type === 'in' ? $data->author : $data->user; ?>

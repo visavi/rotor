@@ -24,7 +24,7 @@
 
 @section('content')
     @if ($user->level === 'pended')
-        <div class="p-1 bg-danger text-white">
+        <div class="p-1 my-1 bg-danger text-white">
             <i class="fas fa-exclamation-triangle"></i>
             {{ __('users.user_not_active') }}
         </div>
@@ -154,7 +154,7 @@
             <i class="fa fa-address-book"></i> {{ __('users.add_to') }}
             <a href="/contacts?user={{ $user->login }}">{{ __('index.contacts') }}</a> /
             <a href="/ignores?user={{ $user->login }}">{{ __('index.ignores') }}</a><br>
-            <i class="fa fa-envelope"></i> <a href="/messages/talk/{{ $user->id }}">{{ __('users.send_message') }}</a><br>
+            <i class="fa fa-envelope"></i> <a href="/messages/talk/{{ $user->login }}">{{ __('users.send_message') }}</a><br>
             <i class="fa fa-money-bill-alt"></i> <a href="/transfers?user={{ $user->login }}">{{ __('index.money_transfer') }}</a><br>
 
             @if (isAdmin('moder'))

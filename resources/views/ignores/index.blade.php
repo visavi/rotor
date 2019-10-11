@@ -23,7 +23,7 @@
                 <div class="b">
 
                     <div class="float-right">
-                        <a href="/messages/talk/{{ $data->ignoring->id }}" data-toggle="tooltip" title="{{ __('main.write') }}"><i class="fa fa-reply text-muted"></i></a>
+                        <a href="/messages/talk/{{ $data->ignoring->login }}" data-toggle="tooltip" title="{{ __('main.write') }}"><i class="fa fa-reply text-muted"></i></a>
                         <a href="/ignores/note/{{ $data->id }}" data-toggle="tooltip" title="{{ __('main.note') }}"><i class="fa fa-sticky-note text-muted"></i></a>
                         <input type="checkbox" name="del[]" value="{{ $data->id }}">
                     </div>

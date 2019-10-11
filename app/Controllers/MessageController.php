@@ -71,17 +71,21 @@ class MessageController extends BaseController
     /**
      * Диалог
      *
-     * @param int $id
+     * @param string $login
      *
      * @return string
      */
-    public function talk(int $id): string
+    public function talk(string $login): string
     {
-        $user = getUserById($id);
-
-        if (! $user) {
+        if (is_numeric($login)) {
             $user = new User();
-            $user->id = $id;
+            $user->id = $login;
+        } else {
+            $user = getUserByLogin($login);
+
+            if (! $user) {
+                abort(404, __('validator.user'));
+            }
         }
 
         $total = Message::query()
@@ -89,15 +93,11 @@ class MessageController extends BaseController
             ->where('author_id', $user->id)
             ->count();
 
-        if (! $total) {
-            abort('default', 'История переписки отсутствует!');
-        }
-
         if ($user->id === $this->user->id) {
             abort('default', 'Отсутствует переписка с самим собой!');
         }
 
-        $page  = paginate(setting('privatpost'), $total);
+        $page = paginate(setting('privatpost'), $total);
 
         $messages = Message::query()
             ->where('user_id', $this->user->id)
@@ -184,7 +184,7 @@ class MessageController extends BaseController
             setFlash('danger', $validator->getErrors());
         }
 
-        redirect('/messages/talk/' . $user->id);
+        redirect('/messages/talk/' . $user->login);
     }
 
     /**

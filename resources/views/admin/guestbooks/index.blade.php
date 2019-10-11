@@ -36,7 +36,7 @@
                             <input type="checkbox" name="del[]" value="{{ $data->id }}">
                         </div>
 
-                        @if($data->user_id === 0)
+                        @if ($data->user_id === 0)
                             <b class="author" data-login="{{ setting('guestsuser') }}">{{ setting('guestsuser') }}</b> <small>({{ dateFixed($data->created_at) }})</small>
                         @else
                             <b>{!! $data->user->getProfile() !!}</b> <small>({{ dateFixed($data->created_at) }})</small><br>

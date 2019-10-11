@@ -160,7 +160,7 @@
     <div class="b"><b>{{ __('users.additional_info') }}</b></div>
 
     @if ($user->level === 'pended')
-        <div class="p-1 bg-danger text-white">
+        <div class="p-1 my-1 bg-danger text-white">
             <i class="fas fa-exclamation-triangle"></i>
             {{ __('users.user_not_active') }}
         </div>
@@ -168,7 +168,7 @@
 
     @if ($user->level === 'banned' && $user->timeban > SITETIME)
         <div class="form">
-            <div class="p-1 bg-danger text-white">{{ __('users.user_banned') }}</div>
+            <div class="p-1 my-1 bg-danger text-white">{{ __('users.user_banned') }}</div>
             {{ __('users.ending_ban') }}: {{ formatTime($user->timeban - SITETIME) }}<br>
 
             @if ($banhist)

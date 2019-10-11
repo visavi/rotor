@@ -71,7 +71,7 @@
     @endif
 
     @if (! $existBoss)
-        <div class="p-1 bg-danger text-white">
+        <div class="p-1 my-1 bg-danger text-white">
             <i class="fas fa-exclamation-triangle"></i>
             Внимание! Отсутствует профиль суперадмина<br>
             В базе данных не найден пользователь с правами boss
@@ -79,7 +79,7 @@
     @endif
 
     @if (file_exists(HOME.'/install'))
-        <div class="p-1 bg-danger text-white">
+        <div class="p-1 my-1 bg-danger text-white">
             <i class="fas fa-exclamation-triangle"></i>
             Внимание! Необходимо удалить директорию install<br>
             Наличие этой директории может нарушить безопасность сайта. Удалите ее прямо сейчас!
