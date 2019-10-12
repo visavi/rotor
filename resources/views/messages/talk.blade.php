@@ -37,6 +37,10 @@
                     <div class="text-muted float-right">
                         {{  dateFixed($data->created_at) }}
 
+                        @if ($data->type === 'out')
+                            <i class="fas {{ $data->recipient_read ? 'fa-check-double' : 'fa-check' }} text-success"></i>
+                        @endif
+
                         @if ($data->type === 'in')
                             <a href="#" onclick="return sendComplaint(this)" data-type="{{ App\Models\Message::class }} " data-id="{{ $data->id }}" data-token="{{ $_SESSION['token'] }}" rel="nofollow" title="{{ __('main.complain') }}"><i class="fa fa-bell text-muted"></i></a>
                         @endif
@@ -48,7 +52,11 @@
                         <br><span class="badge badge-info">{{ __('messages.new') }}</span>
                     @endunless
                 </div>
-                <div class="message">{!! bbCode($data->text) !!}</div>
+                <div class="message">
+
+
+                    {!! bbCode($data->text) !!}
+                </div>
             </div>
         @endforeach
 
@@ -81,7 +89,7 @@
     {{ __('main.total') }}: <b>{{ $page->total }}</b><br><br>
 
     @if ($page->total)
-        <i class="fa fa-times"></i> <a href="/messages/delete/{{ $user->id }}?token={{ $_SESSION['token'] }}">{{ __('messages.delete_talk') }}</a><br>
+        <i class="fa fa-times"></i> <a href="/messages/delete/{{ $user->id }}?token={{ $_SESSION['token'] }}" onclick="return confirm('{{ __('messages.delete_confirm') }}')">{{ __('messages.delete_talk') }}</a><br>
     @endif
 
     <i class="fa fa-search"></i> <a href="/searchusers">{{ __('index.user_search') }}</a><br>

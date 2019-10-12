@@ -40,23 +40,28 @@ class MessageController extends BaseController
             ->count('author_id');
         $page = paginate(setting('privatpost'), $total);
 
-        $latestMessage = Message::query()
+        $lastMessage = Message::query()
             ->select('author_id', DB::connection()->raw('max(created_at) as last_created_at'))
             ->where('user_id', $this->user->id)
             ->groupBy('author_id');
 
         $messages = Message::query()
-            ->joinSub($latestMessage, 'latest_message', static function (JoinClause $join) {
-                $join->on('messages.created_at', 'latest_message.last_created_at')
-                ->whereRaw('messages.author_id = latest_message.author_id');
+            ->select('m1.*', 'last_message.last_created_at', 'm2.reading as recipient_read')
+            ->from('messages as m1')
+            ->joinSub($lastMessage, 'last_message', static function (JoinClause $join) {
+                $join->on('m1.created_at', 'last_message.last_created_at')
+                ->whereRaw('m1.author_id = last_message.author_id');
             })
-            ->where('user_id', $this->user->id)
-            ->orderBy('created_at', 'desc')
+            ->leftJoin('messages as m2', static function (JoinClause $join) {
+                $join->on('m1.user_id', 'm2.author_id')
+                    ->whereRaw('m1.created_at = m2.created_at');
+            })
+            ->where('m1.user_id', $this->user->id)
+            ->orderBy('m1.created_at', 'desc')
             ->offset($page->offset)
             ->limit($page->limit)
             ->with('author')
             ->get();
-
 
         if ($this->user->newprivat) {
             $this->user->update([
@@ -100,9 +105,15 @@ class MessageController extends BaseController
         $page = paginate(setting('privatpost'), $total);
 
         $messages = Message::query()
-            ->where('user_id', $this->user->id)
-            ->where('author_id', $user->id)
-            ->orderBy('created_at', 'desc')
+            ->select('m1.*', 'm2.reading as recipient_read')
+            ->from('messages as m1')
+            ->leftJoin('messages as m2', static function (JoinClause $join) {
+                $join->on('m1.user_id', 'm2.author_id')
+                    ->whereRaw('m1.created_at = m2.created_at');
+            })
+            ->where('m1.user_id', $this->user->id)
+            ->where('m1.author_id', $user->id)
+            ->orderBy('m1.created_at', 'desc')
             ->offset($page->offset)
             ->limit($page->limit)
             ->with('user', 'author')

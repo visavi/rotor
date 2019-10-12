@@ -31,7 +31,7 @@
                 <div class="media-body">
                     <div class="text-muted float-right">
                         {{  dateFixed($data->created_at) }}
-                        <a href="/messages/delete/{{ $data->author_id }}?token={{ $_SESSION['token'] }}&amp;page={{ $page->current }}" onclick="return confirm('{{ __('messages.delete_confirm') }}')" data-toggle="tooltip" title="{{ __('main.delete') }}"><i class="fa fa-times"></i></a>
+                        <i class="fas fa-xs {{ $data->recipient_read ? 'fa-check-double' : 'fa-check' }} text-success"></i>
                     </div>
 
                     @if ($data->author_id === 0)
