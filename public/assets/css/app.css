@@ -226,7 +226,6 @@ blockquote small:before {
 
 .message-block {
   cursor: pointer;
-  display: block;
 }
 
 .message-block:hover {
