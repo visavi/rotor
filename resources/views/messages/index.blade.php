@@ -31,7 +31,10 @@
                 <div class="media-body">
                     <div class="text-muted float-right">
                         {{  dateFixed($data->created_at) }}
-                        <i class="fas fa-xs {{ $data->recipient_read ? 'fa-check-double' : 'fa-check' }} text-success"></i>
+
+                        @if ($data->type === 'out')
+                            <i class="fas fa-xs {{ $data->recipient_read ? 'fa-check-double' : 'fa-check' }} text-success"></i>
+                        @endif
                     </div>
 
                     @if ($data->author_id === 0)

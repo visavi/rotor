@@ -37,12 +37,10 @@
                     <div class="text-muted float-right">
                         {{  dateFixed($data->created_at) }}
 
-                        @if ($data->type === 'out')
-                            <i class="fas {{ $data->recipient_read ? 'fa-check-double' : 'fa-check' }} text-success"></i>
-                        @endif
-
                         @if ($data->type === 'in')
                             <a href="#" onclick="return sendComplaint(this)" data-type="{{ App\Models\Message::class }} " data-id="{{ $data->id }}" data-token="{{ $_SESSION['token'] }}" rel="nofollow" title="{{ __('main.complain') }}"><i class="fa fa-bell text-muted"></i></a>
+                        @else
+                            <i class="fas {{ $data->recipient_read ? 'fa-check-double' : 'fa-check' }} text-success"></i>
                         @endif
                     </div>
 
