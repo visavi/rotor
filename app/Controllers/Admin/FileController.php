@@ -71,12 +71,16 @@ class FileController extends AdminController
     /**
      * Редактирование файла
      *
-     * @param Request $request
+     * @param Request   $request
+     * @param Validator $validator
+     *
      * @return string
      */
-    public function edit(Request $request): string
+    public function edit(Request $request, Validator $validator): string
     {
-        $fileName = $this->path ? '/' . $this->file : $this->file;
+        $path     = $this->path;
+        $file     = $path ? '/' . $this->file : $this->file;
+        $writable = is_writable(RESOURCES . '/views/' . $path . $file . '.blade.php');
 
         if (
             ($this->path && ! preg_match('#^([a-z0-9_\-/]+|)$#', $this->path))
@@ -85,32 +89,31 @@ class FileController extends AdminController
             abort(404, 'Недопустимое название страницы!');
         }
 
-        if (! file_exists(RESOURCES . '/views/' . $this->path . $fileName . '.blade.php')) {
+        if (! file_exists(RESOURCES . '/views/' . $this->path . $file . '.blade.php')) {
             abort(404, 'Данного файла не существует!');
-        }
-
-        if (! is_writable(RESOURCES . '/views/' . $this->path . $fileName . '.blade.php')) {
-            abort('default', 'Файл недоступен для записи!');
         }
 
         if ($request->isMethod('post')) {
             $token = check($request->input('token'));
             $msg   = $request->input('msg');
 
-            if ($token === $_SESSION['token']) {
-                file_put_contents(RESOURCES . '/views/' . $this->path . $fileName . '.blade.php', $msg);
+            $validator->equal($token, $_SESSION['token'], __('validator.token'))
+                ->true($writable, ['msg' => __('admin.files.writable')]);
+
+            if ($validator->isValid()) {
+                file_put_contents(RESOURCES . '/views/' . $this->path . $file . '.blade.php', $msg);
 
                 setFlash('success', 'Файл успешно сохранен!');
                 redirect ('/admin/files/edit?path=' . $this->path . '&file=' . $this->file);
             } else {
                 setInput($request->all());
-                setFlash('danger', __('validator.token'));
+                setFlash('danger', $validator->getErrors());
             }
         }
 
-        $contest = file_get_contents(RESOURCES . '/views/' . $this->path . $fileName . '.blade.php');
+        $contest = file_get_contents(RESOURCES . '/views/' . $path . $file . '.blade.php');
 
-        return view('admin/files/edit', ['contest' => $contest, 'path' => $this->path, 'fileName' => $fileName]);
+        return view('admin/files/edit', compact('contest', 'path', 'file', 'writable'));
     }
 
     /**
@@ -118,6 +121,7 @@ class FileController extends AdminController
      *
      * @param Request   $request
      * @param Validator $validator
+     *
      * @return string
      */
     public function create(Request $request, Validator $validator): string
@@ -176,6 +180,7 @@ class FileController extends AdminController
      *
      * @param Request   $request
      * @param Validator $validator
+     *
      * @return void
      */
     public function delete(Request $request, Validator $validator): void

@@ -1,7 +1,7 @@
 @extends('layout')
 
 @section('title')
-    {{ __('admin.files.file_editing') }} {{ $path . $fileName }}.blade.php
+    {{ __('admin.files.file_editing') }} {{ $path . $file }}.blade.php
 @stop
 
 @section('breadcrumb')
@@ -19,11 +19,19 @@
 @stop
 
 @section('content')
+    @if (! $writable)
+        <div class="p-1 my-1 bg-danger text-white">
+            <i class="fas fa-exclamation-triangle"></i>
+            {{ __('admin.files.writable') }}
+        </div>
+    @endif
+
     <div class="form">
         <form method="post">
             @csrf
             <div class="form-group{{ hasError('msg') }}">
-                <textarea class="form-control markItUpHtml" rows="25" name="msg">{{ getInput('msg', $contest) }}</textarea>
+                <label for="msg">{{ __('main.text') }}:</label>
+                <textarea class="form-control markItUpHtml" rows="25" id="msg" name="msg">{{ getInput('msg', $contest) }}</textarea>
                 <div class="invalid-feedback">{{ textError('msg') }}</div>
             </div>
 
