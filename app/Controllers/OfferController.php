@@ -243,6 +243,11 @@ class OfferController extends BaseController
                     'brow'        => getBrowser(),
                 ]);
 
+                $user = getUser();
+                $user->increment('allcomments');
+                $user->increment('point');
+                $user->increment('money', 5);
+
                 $offer->increment('count_comments');
 
                 $flood->saveState();

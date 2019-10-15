@@ -425,6 +425,11 @@ class DownController extends BaseController
                     'brow'        => getBrowser(),
                 ]);
 
+                $user = getUser();
+                $user->increment('allcomments');
+                $user->increment('point');
+                $user->increment('money', 5);
+
                 $down->increment('count_comments');
 
                 $flood->saveState();
