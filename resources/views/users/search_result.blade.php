@@ -32,11 +32,11 @@
 
         @if (isset($page))
             {!! pagination($page) !!}
-            {{ __('users.total_found') }}: <b>{{ $page->total }}</b><br>
+            {{ __('main.total_found') }}: <b>{{ $page->total }}</b><br>
         @else
-            {{ __('users.total_found') }}: <b>{{ $users->count() }}</b><br>
+            {{ __('main.total_found') }}: <b>{{ $users->count() }}</b><br>
         @endif
     @else
-        {!! showError(__('users.empty_found')) !!}
+        {!! showError(__('main.empty_found')) !!}
     @endif
 @stop

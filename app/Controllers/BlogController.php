@@ -879,7 +879,7 @@ class BlogController extends BaseController
                     }
 
                     setInput($request->all());
-                    setFlash('danger', 'По вашему запросу ничего не найдено!');
+                    setFlash('danger', __('main.empty_found'));
                     redirect('/blogs/search');
                 }
                 // --------------------------- Поиск в текте -------------------------------//
@@ -922,12 +922,12 @@ class BlogController extends BaseController
                     }
 
                     setInput($request->all());
-                    setFlash('danger', 'По вашему запросу ничего не найдено!');
+                    setFlash('danger', __('main.empty_found'));
                     redirect('/blogs/search');
                 }
         } else {
             setInput($request->all());
-            setFlash('danger', ['find' => 'Запрос должен содержать от 3 до 50 символов!']);
+            setFlash('danger', ['find' => __('main.request_requirements')]);
             redirect('/blogs/search');
         }
     }

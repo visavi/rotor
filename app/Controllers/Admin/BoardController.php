@@ -137,7 +137,7 @@ class BoardController extends AdminController
         $board = Board::query()->with('children')->find($id);
 
         if (! $board) {
-            abort(404, 'Данного раздела не существует!');
+            abort(404, __('boards.category_not_exist'));
         }
 
         $boards = Board::query()
@@ -198,7 +198,7 @@ class BoardController extends AdminController
         $board = Board::query()->with('children')->find($id);
 
         if (! $board) {
-            abort(404, 'Данного раздела не существует!');
+            abort(404, __('boards.category_not_exist'));
         }
 
         $token = check($request->input('token'));

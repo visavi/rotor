@@ -88,7 +88,7 @@ class ForumController extends AdminController
         $forum = Forum::query()->with('children')->find($id);
 
         if (! $forum) {
-            abort(404, 'Данного раздела не существует!');
+            abort(404, __('forums.forum_not_exist'));
         }
 
         $forums = Forum::query()
@@ -153,7 +153,7 @@ class ForumController extends AdminController
         $forum = Forum::query()->with('children')->find($id);
 
         if (! $forum) {
-            abort(404, 'Данного раздела не существует!');
+            abort(404, __('forums.forum_not_exist'));
         }
 
         $token = check($request->input('token'));
@@ -215,7 +215,7 @@ class ForumController extends AdminController
         $forum = Forum::query()->with('parent', 'children.lastTopic.lastPost.user')->find($id);
 
         if (! $forum) {
-            abort(404, 'Данного раздела не существует!');
+            abort(404, __('forums.forum_not_exist'));
         }
 
         $total = Topic::query()->where('forum_id', $forum->id)->count();
@@ -248,7 +248,7 @@ class ForumController extends AdminController
         $topic = Topic::query()->find($id);
 
         if (! $topic) {
-            abort(404, 'Данной темы не существует!');
+            abort(404, __('forums.topic_not_exist'));
         }
 
         if ($request->isMethod('post')) {
@@ -302,7 +302,7 @@ class ForumController extends AdminController
         $topic = Topic::query()->find($id);
 
         if (! $topic) {
-            abort(404, 'Данной темы не существует!');
+            abort(404, __('forums.topic_not_exist'));
         }
 
         if ($request->isMethod('post')) {
@@ -366,7 +366,7 @@ class ForumController extends AdminController
         $topic = Topic::query()->find($id);
 
         if (! $topic) {
-            abort(404, 'Данной темы не существует!');
+            abort(404, __('forums.topic_not_exist'));
         }
 
         if ($token === $_SESSION['token']) {
@@ -434,7 +434,7 @@ class ForumController extends AdminController
         $topic = Topic::query()->find($id);
 
         if (! $topic) {
-            abort(404, 'Данной темы не существует!');
+            abort(404, __('forums.topic_not_exist'));
         }
 
         $validator->equal($token, $_SESSION['token'], __('validator.token'));
@@ -484,7 +484,7 @@ class ForumController extends AdminController
         $topic = Topic::query()->where('id', $id)->with('forum.parent')->first();
 
         if (! $topic) {
-            abort(404, 'Данной темы не существует!');
+            abort(404, __('forums.topic_not_exist'));
         }
 
         $total = Post::query()->where('topic_id', $topic->id)->count();
@@ -550,7 +550,7 @@ class ForumController extends AdminController
         $post = Post::query()->find($id);
 
         if (! $post) {
-            abort(404, 'Данного сообщения не существует!');
+            abort(404, __('forums.post_not_exist'));
         }
 
         if ($request->isMethod('post')) {
@@ -616,7 +616,7 @@ class ForumController extends AdminController
         $topic = Topic::query()->where('id', $tid)->first();
 
         if (! $topic) {
-            abort(404, 'Данной темы не существует!');
+            abort(404, __('forums.topic_not_exist'));
         }
 
         $validator->equal($token, $_SESSION['token'], __('validator.token'))

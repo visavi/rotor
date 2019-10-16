@@ -67,7 +67,7 @@ class BookmarkController extends BaseController
 
         /** @var Topic $topic */
         $topic = Topic::query()->find($tid);
-        $validator->true($topic, 'Данной темы не существует!');
+        $validator->true($topic, __('forums.topic_not_exist'));
 
         if ($validator->isValid()) {
             $bookmark = Bookmark::query()
