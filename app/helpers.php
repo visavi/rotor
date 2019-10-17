@@ -256,12 +256,17 @@ function formatFileSize($file)
 /**
  * Возвращает время в человекочитаемом формате
  *
- * @param string $time кол. секунд timestamp
+ * @param int $time   кол. секунд timestamp
+ * @param int $crumbs кол. элементов
  *
  * @return string время в читаемом формате
  */
-function formatTime($time)
+function formatTime(int $time, int $crumbs = 2): string
 {
+    if ($time < 1) {
+        return '0';
+    }
+
     $units = [
         __('main.plural_years')   => 31536000,
         __('main.plural_months')  => 2592000,
@@ -271,15 +276,18 @@ function formatTime($time)
         __('main.plural_seconds') => 1,
     ];
 
+    $return = [];
+
     foreach ($units as $unit => $seconds) {
-        $format = round($time / $seconds);
+        $format = floor($time / $seconds);
+        $time  %= $seconds;
 
         if ($format >= 1) {
-            return plural($format, $unit);
+            $return[] = plural($format, $unit);
         }
     }
 
-    return 0;
+    return implode(' ', array_slice($return, 0, $crumbs));
 }
 
 /**
