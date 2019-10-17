@@ -51,7 +51,7 @@ class ForumController extends BaseController
         $forum = Forum::query()->with('parent', 'children.lastTopic.lastPost.user')->find($id);
 
         if (! $forum) {
-            abort(404, 'Данного раздела не существует!');
+            abort(404, __('forums.forum_not_exist'));
         }
 
         $total = Topic::query()->where('forum_id', $forum->id)->count();
@@ -305,7 +305,7 @@ class ForumController extends BaseController
                 }
 
                 setInput($request->all());
-                setFlash('danger', 'По вашему запросу ничего не найдено!');
+                setFlash('danger', __('main.empty_found'));
                 redirect('/forums/search');
             }
 
@@ -346,13 +346,13 @@ class ForumController extends BaseController
                 }
 
                 setInput($request->all());
-                setFlash('danger', 'По вашему запросу ничего не найдено!');
+                setFlash('danger', __('main.empty_found'));
                 redirect('/forums/search');
             }
 
         } else {
             setInput($request->all());
-            setFlash('danger', ['find' => 'Запрос должен содержать от 3 до 50 символов!']);
+            setFlash('danger', ['find' => __('main.request_requirements')]);
             redirect('/forums/search');
         }
     }
@@ -390,7 +390,7 @@ class ForumController extends BaseController
         $topic = Topic::query()->find($id);
 
         if (! $topic) {
-            abort(404, 'Данной темы не существует!');
+            abort(404, __('forums.topic_not_exist'));
         }
 
         $posts = Post::query()

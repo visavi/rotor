@@ -37,8 +37,8 @@
 
         {!! pagination($page) !!}
 
-        {{ __('users.total_found') }}: {{ $page->total }}<br><br>
+        {{ __('main.total_found') }}: {{ $page->total }}<br><br>
     @else
-        {!! showError(__('users.empty_found')) !!}
+        {!! showError(__('main.empty_found')) !!}
     @endif
 @stop

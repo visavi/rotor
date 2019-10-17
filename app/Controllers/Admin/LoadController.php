@@ -97,7 +97,7 @@ class LoadController extends AdminController
         $load = Load::query()->with('children')->find($id);
 
         if (! $load) {
-            abort(404, 'Данного раздела не существует!');
+            abort(404, __('loads.category_not_exist'));
         }
 
         $loads = Load::query()
@@ -158,7 +158,7 @@ class LoadController extends AdminController
         $load = Load::query()->with('children')->find($id);
 
         if (! $load) {
-            abort(404, 'Данного раздела не существует!');
+            abort(404, __('loads.category_not_exist'));
         }
 
         $token = check($request->input('token'));

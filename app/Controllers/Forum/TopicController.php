@@ -41,7 +41,7 @@ class TopicController extends BaseController
             ->first();
 
         if (! $topic) {
-            abort(404, 'Данной темы не существует!');
+            abort(404, __('forums.topic_not_exist'));
         }
 
         $total = Post::query()->where('topic_id', $topic->id)->count();
@@ -123,7 +123,7 @@ class TopicController extends BaseController
         $files = (array) $request->file('files');
 
         if (! $user = getUser()) {
-            abort(403, 'Авторизуйтесь для добавления сообщения!');
+            abort(403, __('main.not_authorized'));
         }
 
         $topic = Topic::query()
@@ -248,7 +248,7 @@ class TopicController extends BaseController
         $topic = Topic::query()->find($id);
 
         if (! $topic) {
-            abort(404, 'Данной темы не существует!');
+            abort(404, __('forums.topic_not_exist'));
         }
 
         $isModer = in_array(getUser('id'), array_map('intval', explode(',', (string) $topic->moderators)), true);
@@ -476,7 +476,7 @@ class TopicController extends BaseController
             ->first();
 
         if (! $post) {
-            abort(404, 'Данного сообщения не существует!');
+            abort(404, __('forums.post_not_exist'));
         }
 
         if ($post->closed) {
@@ -617,7 +617,7 @@ class TopicController extends BaseController
         $topic = Topic::query()->find($id);
 
         if (! $topic) {
-            abort(404, 'Данной темы не существует!');
+            abort(404, __('forums.topic_not_exist'));
         }
 
         $posts = Post::query()

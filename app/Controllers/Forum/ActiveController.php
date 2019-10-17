@@ -113,7 +113,7 @@ class ActiveController extends BaseController
             ->with('topic.forum')
             ->first();
 
-        $validator->true($post, 'Данного сообщения не существует!');
+        $validator->true($post, __('forums.post_not_exist'));
 
         if ($validator->isValid()) {
             $post->delete();
