@@ -159,7 +159,7 @@ class HelperTest extends \Tests\TestCase
     public function testFormatTime(): void
     {
         $formatTime = formatTime(0);
-        $this->assertSame(0, $formatTime);
+        $this->assertSame('0', $formatTime);
 
         $formatTime = formatTime(60);
         $this->assertSame('1 минута', $formatTime);
