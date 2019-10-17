@@ -169,7 +169,6 @@ return [
 
     'plural_years'   => 'years',
     'plural_months'  => 'months',
-    'plural_weeks'   => 'weeks',
     'plural_days'    => 'days',
     'plural_hours'   => 'hours',
     'plural_minutes' => 'minutes',

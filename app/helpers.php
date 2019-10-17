@@ -265,7 +265,6 @@ function formatTime($time)
     $units = [
         __('main.plural_years')   => 31536000,
         __('main.plural_months')  => 2592000,
-        __('main.plural_weeks')   => 604800,
         __('main.plural_days')    => 86400,
         __('main.plural_hours')   => 3600,
         __('main.plural_minutes') => 60,
@@ -273,10 +272,10 @@ function formatTime($time)
     ];
 
     foreach ($units as $unit => $seconds) {
-        $format = $time / $seconds;
+        $format = round($time / $seconds);
 
         if ($format >= 1) {
-            return plural(round($format), $unit);
+            return plural($format, $unit);
         }
     }
 

@@ -169,7 +169,6 @@ return [
 
     'plural_years'   => 'год,года,лет',
     'plural_months'  => 'месяц,месяца,месяцев',
-    'plural_weeks'   => 'неделя,недели,недель',
     'plural_days'    => 'день,дня,дней',
     'plural_hours'   => 'час,часа,часов',
     'plural_minutes' => 'минута,минуты,минут',
