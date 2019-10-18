@@ -20,7 +20,7 @@ class NewController extends BaseController
         $total = Topic::query()->count();
 
         if (! $total) {
-            abort('default', 'Созданных тем еще нет!');
+            abort('default', __('forums.topics_not_created'));
         }
 
         if ($total > 500) {
@@ -49,7 +49,7 @@ class NewController extends BaseController
         $total = Post::query()->count();
 
         if (! $total) {
-            abort('default', 'Созданных сообщений еще нет!');
+            abort('default', __('forums.posts_not_created'));
         }
 
         if ($total > 500) {

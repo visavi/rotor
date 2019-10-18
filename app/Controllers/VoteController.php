@@ -224,12 +224,12 @@ class VoteController extends BaseController
 
             foreach ($answers as $answer) {
                 if (utfStrlen($answer) > 50) {
-                    $validator->addError(['answer' => 'Длина вариантов ответа не должна быть более 50 символов!']);
+                    $validator->addError(['answer' => __('votes.answer_wrong_length')]);
                     break;
                 }
             }
 
-            $validator->between(count($answers), 2, 10, ['answer' => 'Недостаточное количество вариантов ответов!']);
+            $validator->between(count($answers), 2, 10, ['answer' => __('votes.answer_not_enough')]);
 
             if ($validator->isValid()) {
                 /** @var Vote $vote */

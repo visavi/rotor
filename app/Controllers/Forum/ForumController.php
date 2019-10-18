@@ -33,7 +33,7 @@ class ForumController extends BaseController
             ->get();
 
         if ($forums->isEmpty()) {
-            abort('default', 'Разделы форума еще не созданы!');
+            abort('default', __('forums.empty_forums'));
         }
 
         return view('forums/index', compact('forums'));
@@ -89,7 +89,7 @@ class ForumController extends BaseController
             ->get();
 
         if ($forums->isEmpty()) {
-            abort('default', 'Разделы форума еще не созданы!');
+            abort('default', __('forums.empty_forums'));
         }
 
         if (! $user = getUser()) {
@@ -115,7 +115,7 @@ class ForumController extends BaseController
                 ->length($msg, 5, setting('forumtextlength'), ['msg' => __('validator.text')]);
 
             if ($forum) {
-                $validator->empty($forum->closed, ['fid' => 'В данном форуме запрещено создавать темы!']);
+                $validator->empty($forum->closed, ['fid' => __('forums.forum_closed')]);
             }
 
             if ($vote) {
@@ -124,12 +124,12 @@ class ForumController extends BaseController
 
                 foreach ($answers as $answer) {
                     if (utfStrlen($answer) > 50) {
-                        $validator->addError(['answers' => 'Длина вариантов ответа не должна быть более 50 символов!']);
+                        $validator->addError(['answers' => __('votes.answer_wrong_length')]);
                         break;
                     }
                 }
 
-                $validator->between(count($answers), 2, 10, ['answers' => 'Недостаточное количество вариантов ответов!']);
+                $validator->between(count($answers), 2, 10, ['answers' => __('votes.answer_not_enough')]);
             }
 
             /* TODO: Сделать проверку поиска похожей темы */
@@ -200,7 +200,7 @@ class ForumController extends BaseController
                 clearCache(['statforum', 'recenttopics']);
                 $flood->saveState();
 
-                setFlash('success', 'Новая тема успешно создана!');
+                setFlash('success', __('forums.topic_success_created'));
                 redirect('/topics/'.$topic->id);
             } else {
                 setInput($request->all());
@@ -234,7 +234,7 @@ class ForumController extends BaseController
                 ->get();
 
             if ($forums->isEmpty()) {
-                abort('default', 'Разделы форума еще не созданы!');
+                abort('default', __('forums.empty_forums'));
             }
 
             return view('forums/search', compact('forums', 'fid'));
@@ -372,7 +372,7 @@ class ForumController extends BaseController
             ->get();
 
         if ($topics->isEmpty()) {
-            abort('default', 'Нет тем для отображения!');
+            abort('default', __('forums.topics_not_created'));
         }
 
         return view('forums/rss', compact('topics'));

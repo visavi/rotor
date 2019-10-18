@@ -42,7 +42,7 @@ class ActiveController extends BaseController
         $total = Topic::query()->where('user_id', $user->id)->count();
 
         if (! $total) {
-            abort('default', 'Созданных тем еще нет!');
+            abort('default', __('forums.topics_not_created'));
         }
 
         $page = paginate(setting('forumtem'), $total);
@@ -69,7 +69,7 @@ class ActiveController extends BaseController
         $total = Post::query()->where('user_id', $user->id)->count();
 
         if (! $total) {
-            abort('default', 'Созданных сообщений еще нет!');
+            abort('default', __('forums.posts_not_created'));
         }
 
         $page = paginate(setting('forumpost'), $total);
@@ -100,7 +100,7 @@ class ActiveController extends BaseController
         }
 
         if (! isAdmin()) {
-            abort(403, 'Удалять сообщения могут только модераторы!');
+            abort(403, __('forums.posts_deleted_moderators'));
         }
 
         $token = check($request->input('token'));

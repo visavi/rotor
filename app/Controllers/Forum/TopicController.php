@@ -133,7 +133,7 @@ class TopicController extends BaseController
             ->first();
 
         if (! $topic) {
-            abort(404, 'Выбранная вами тема не существует, возможно она была удалена!');
+            abort(404, __('forums.topic_not_exist'));
         }
 
         $validator->equal($token, $_SESSION['token'], ['msg' => __('validator.token')])
@@ -304,7 +304,7 @@ class TopicController extends BaseController
         $validator->equal($token, $_SESSION['token'], __('validator.token'))
             ->true(getUser(), __('main.not_authorized'))
             ->gte(getUser('point'), setting('editforumpoint'), 'Для закрытия тем вам необходимо набрать ' . plural(setting('editforumpoint'), setting('scorename')) . '!')
-            ->notEmpty($topic, 'Выбранная вами тема не существует, возможно она была удалена!')
+            ->notEmpty($topic, __('forums.topic_not_exist'))
             ->equal($topic->user_id, getUser('id'), 'Вы не автор данной темы!')
             ->empty($topic->closed, 'Данная тема уже закрыта!');
 
@@ -339,7 +339,7 @@ class TopicController extends BaseController
     public function edit(int $id, Request $request, Validator $validator): string
     {
         if (! getUser()) {
-            abort(403, 'Авторизуйтесь для изменения темы!');
+            abort(403, __('main.not_authorized'));
         }
 
         if (getUser('point') < setting('editforumpoint')) {
@@ -350,7 +350,7 @@ class TopicController extends BaseController
         $topic = Topic::query()->find($id);
 
         if (! $topic) {
-            abort(404, 'Выбранная вами тема не существует, возможно она была удалена!');
+            abort(404, __('forums.topic_not_exist'));
         }
 
         if ($topic->user_id !== getUser('id')) {
@@ -392,12 +392,12 @@ class TopicController extends BaseController
 
                     foreach ($answers as $answer) {
                         if (utfStrlen($answer) > 50) {
-                            $validator->addError(['answers' => 'Длина вариантов ответа не должна быть более 50 символов!']);
+                            $validator->addError(['answers' => __('votes.answer_wrong_length')]);
                             break;
                         }
                     }
 
-                    $validator->between(count($answers), 2, 10, ['answers' => 'Недостаточное количество вариантов ответов!']);
+                    $validator->between(count($answers), 2, 10, ['answers' => __('votes.answer_not_enough')]);
                 }
             }
 
@@ -466,7 +466,7 @@ class TopicController extends BaseController
         $page = int($request->input('page'));
 
         if (! getUser()) {
-            abort(403, 'Авторизуйтесь для изменения сообщения!');
+            abort(403, __('main.not_authorized'));
         }
 
         $post = Post::query()
@@ -548,7 +548,7 @@ class TopicController extends BaseController
     public function vote(int $id, Request $request, Validator $validator): void
     {
         if (! getUser()) {
-            abort(403, 'Авторизуйтесь для голосования!');
+            abort(403, __('main.not_authorized'));
         }
 
         $vote = Vote::query()->where('topic_id', $id)->first();
@@ -646,7 +646,7 @@ class TopicController extends BaseController
             ->count();
 
         if (! $countTopics) {
-            abort(404, 'Выбранная вами тема не существует, возможно она была удалена!');
+            abort(404, __('forums.topic_not_exist'));
         }
 
         $end = ceil($countTopics / setting('forumpost'));
@@ -665,7 +665,7 @@ class TopicController extends BaseController
         $topic = Topic::query()->find($id);
 
         if (! $topic) {
-            abort(404, 'Выбранная вами тема не существует, возможно она была удалена!');
+            abort(404, __('forums.topic_not_exist'));
         }
 
         $end = ceil($topic->count_posts / setting('forumpost'));
