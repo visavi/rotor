@@ -1674,7 +1674,7 @@ function clearCache(array $files = [])
  */
 function returnUrl($url = null)
 {
-    $request = Request::createFromGlobals();
+    $request = request();
 
     if ($request->is('/', 'login', 'register', 'recovery', 'restore', 'ban', 'closed')) {
         return false;
@@ -1738,7 +1738,6 @@ function choice($key, $number, array $replace = [], $locale = null)
  */
 function abort($code, $message = null)
 {
-    $request  = Request::createFromGlobals();
     $protocol = server('SERVER_PROTOCOL');
     $referer  = server('HTTP_REFERER');
 
@@ -1759,7 +1758,7 @@ function abort($code, $message = null)
 
     saveErrorLog($code);
 
-    if ($request->ajax()) {
+    if (request()->ajax()) {
         header($protocol . ' 200 OK');
 
         exit(json_encode([
@@ -2038,7 +2037,7 @@ function bbCode($text, $parse = true)
  */
 function getIp()
 {
-    $cf = new CloudFlare();
+    $cf = new CloudFlare(request());
     $ip = $cf->ip();
 
     return $ip === '::1' ? '127.0.0.1' : $ip;
@@ -2064,6 +2063,22 @@ function getBrowser($userAgent = null)
 }
 
 /**
+ * Возращает объект Request
+ *
+ * @return Request
+ */
+function request(): Request
+{
+    static $request;
+
+    if (! $request) {
+        $request = Request::createFromGlobals();
+    }
+
+    return $request;
+}
+
+/**
  * Возвращает серверные переменные
  *
  * @param string|null $key     ключ массива
@@ -2073,8 +2088,7 @@ function getBrowser($userAgent = null)
  */
 function server($key = null, $default = null)
 {
-    $request = Request::createFromGlobals();
-    $server  = $request->server($key, $default);
+    $server  = request()->server($key, $default);
 
     if ($key === 'REQUEST_URI') {
         $server = urldecode($server);
@@ -2229,8 +2243,7 @@ function pagination($page)
  */
 function paginate(int $limit, int $total)
 {
-    $request = Request::createFromGlobals();
-    $current = int($request->input('page'));
+    $current = int(request()->input('page'));
 
     if ($current < 1) {
         $current = 1;
@@ -2450,7 +2463,7 @@ function parseVersion($version)
  */
 function captchaVerify(): bool
 {
-    $request = Request::createFromGlobals();
+    $request = request();
 
     if (setting('captcha_type') === 'recaptcha_v2') {
         $recaptcha = new ReCaptcha(setting('recaptcha_private'));

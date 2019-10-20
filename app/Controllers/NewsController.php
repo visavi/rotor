@@ -8,7 +8,6 @@ use App\Classes\Validator;
 use App\Models\Comment;
 use App\Models\Flood;
 use App\Models\News;
-
 use Illuminate\Http\Request;
 
 class NewsController extends BaseController

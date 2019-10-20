@@ -32,8 +32,7 @@ class ErrorController extends AdminController
             abort(403, __('errors.forbidden'));
         }
 
-        $request     = Request::createFromGlobals();
-        $this->code  = int($request->input('code', 404));
+        $this->code  = int(request()->input('code', 404));
         $this->lists = [403 => 'Ошибки 403', 404 => 'Ошибки 404', 405 => 'Ошибки 405', 666 => 'Автобаны'];
 
         if (! isset($this->lists[$this->code])) {

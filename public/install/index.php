@@ -8,14 +8,13 @@ use App\Commands\KeyGenerate;
 use App\Commands\RouteClear;
 use App\Models\News;
 use App\Models\User;
-use Illuminate\Http\Request;
 
 ob_start();
 define('DIR', dirname(__DIR__, 2));
 include_once DIR . '/app/bootstrap.php';
 include_once APP . '/helpers.php';
 
-$request = Request::createFromGlobals();
+$request = request();
 
 $app  = new Phinx\Console\PhinxApplication();
 $wrap = new Phinx\Wrapper\TextWrapper($app);

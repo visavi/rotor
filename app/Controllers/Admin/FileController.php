@@ -25,7 +25,7 @@ class FileController extends AdminController
             abort(403, __('errors.forbidden'));
         }
 
-        $request    = Request::createFromGlobals();
+        $request    = request();
         $this->file = ltrim(check($request->input('file')), '/');
         $this->path = rtrim(check($request->input('path')), '/');
 

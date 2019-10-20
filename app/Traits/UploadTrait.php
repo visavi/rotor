@@ -14,9 +14,10 @@ trait UploadTrait
     /**
      * Загружает изображение
      *
-     * @param  UploadedFile $file объект изображения
+     * @param  UploadedFile $file   объект изображения
      * @param  bool         $record
-     * @return array              путь загруженного файла
+     *
+     * @return array                путь загруженного файла
      */
     public function uploadFile(UploadedFile $file, $record = true): array
     {

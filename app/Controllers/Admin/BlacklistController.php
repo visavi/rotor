@@ -29,8 +29,7 @@ class BlacklistController extends AdminController
 
         $types = ['email', 'login', 'domain'];
 
-        $request    = Request::createFromGlobals();
-        $this->type = $request->input('type', 'email');
+        $this->type = request()->input('type', 'email');
 
         if (! in_array($this->type, $types, true)) {
             abort(404, __('admin.blacklists.type_not_found'));

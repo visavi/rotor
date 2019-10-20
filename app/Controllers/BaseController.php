@@ -14,7 +14,7 @@ Class BaseController
 {
     public function __construct()
     {
-        $request = Request::createFromGlobals();
+        $request = request();
 
         if (! $this->isBanned($request)) {
             $this->frequencyLimit();

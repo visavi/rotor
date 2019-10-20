@@ -62,7 +62,7 @@ class Application
         }
 
         $container = new Container();
-        $container->set(Request::class, Request::createFromGlobals());
+        $container->set(Request::class, request());
 
         return $container->call($controller, $params);
     }
@@ -111,7 +111,7 @@ class Application
      */
     private function checkAuth(): void
     {
-        $request = Request::createFromGlobals();
+        $request = request();
 
         if ($user = checkAuth()) {
 

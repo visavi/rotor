@@ -43,9 +43,9 @@ class CloudFlare
      */
     private $request;
 
-    public function __construct()
+    public function __construct(Request $request)
     {
-        $this->request = Request::createFromGlobals();
+        $this->request = $request;
     }
 
     /**
