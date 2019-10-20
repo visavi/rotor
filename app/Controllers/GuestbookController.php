@@ -67,10 +67,8 @@ class GuestbookController extends BaseController
                 getUser()->increment('money', 5);
             }
 
-            $username = getUser() ? getUser('id') : 0;
-
             Guestbook::query()->create([
-                'user_id'    => $username,
+                'user_id'    => getUser('id'),
                 'text'       => $msg,
                 'ip'         => getIp(),
                 'brow'       => getBrowser(),

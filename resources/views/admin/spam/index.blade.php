@@ -32,8 +32,20 @@
             <div class="post">
                 @if ($data->relate)
                     <div class="b">
-                        <i class="fa fa-file"></i>
-                        <b>{!! $data->relate->author ? $data->relate->author->getProfile() : $data->relate->user->getProfile() !!}</b>
+                        @if ($data->relate->user_id || $data->relate->author_id)
+                            <?php $user = $data->relate->author ?? $data->relate->user; ?>
+                            <div class="img">
+                                {!! $user->getAvatar() !!}
+                                {!! $user->getOnline() !!}
+                            </div>
+                            <b>{!! $user->getProfile() !!}</b>
+                        @else
+                            <div class="img">
+                                <img class="avatar" src="/assets/img/images/avatar_guest.png" alt="">
+                            </div>
+                            <b>{{ setting('guestsuser') }}</b>
+                        @endif
+
                         <small>({{ dateFixed($data->relate->created_at, 'd.m.y / H:i:s') }})</small>
 
                         <div class="float-right">

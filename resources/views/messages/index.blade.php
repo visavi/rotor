@@ -20,12 +20,12 @@
             <?php $login = $data->author->exists ? $data->author->login : $data->author_id ?>
             <div class="media border-bottom p-2 message-block" data-href="/messages/talk/{{ $login }}">
                 <div class="img mr-3">
-                    @if ($data->author_id === 0)
-                        <img class="avatar" src="/assets/img/images/avatar_system.png" alt="">
-                        <div class="online bg-success" title="Online"></div>
-                    @else
+                    @if ($data->author_id)
                         {!! $data->author->getAvatar() !!}
                         {!! $data->author->getOnline() !!}
+                    @else
+                        <img class="avatar" src="/assets/img/images/avatar_system.png" alt="">
+                        <div class="online bg-success" title="Online"></div>
                     @endif
                 </div>
                 <div class="media-body">
@@ -37,10 +37,10 @@
                         @endif
                     </div>
 
-                    @if ($data->author_id === 0)
-                        <b>{{ __('messages.system') }}</b>
-                    @else
+                    @if ($data->author_id)
                         <b>{!! $data->author->getProfile() !!}</b>
+                    @else
+                        <b>{{ __('messages.system') }}</b>
                     @endif
 
                     <div class="message">
