@@ -71,7 +71,7 @@
                 <?php $maxproc = round(($data * 100) / $vote->max); ?>
 
                 <b>{{ $key }}</b> ({{ __('forums.votes') }}: {{ $data }})<br>
-                {!! progressBar($maxproc, $proc.'%') !!}
+                {!! progressBar($maxproc, $proc . '%') !!}
             @endforeach
         @else
             <form action="/topics/votes/{{ $topic->id }}?page={{ $page->current }}" method="post">

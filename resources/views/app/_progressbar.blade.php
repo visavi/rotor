@@ -1,4 +1,7 @@
 <div class="progress">
-    <div class="progress-bar progress-bar-warning" style="width:{{ $percent }}%;"></div>
-    <span class="progress-completed">{{ $title }}</span>
+    @if ($percent == 100)
+        <div class="progress-bar bg-success" style="width:{{ $percent }}%;">{{ $title }}</div>
+    @else
+        <div class="progress-bar bg-danger" style="width:{{ $percent }}%;">{{ $title }}</div>
+    @endif
 </div>
