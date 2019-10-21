@@ -588,7 +588,7 @@ class ForumController extends AdminController
                     }
                 }
 
-                setFlash('success', 'Сообщение успешно отредактировано!');
+                setFlash('success', __('main.message_edited_success'));
                 redirect('/admin/topics/' . $post->topic_id . '?page=' . $page);
             } else {
                 setInput($request->all());

@@ -54,6 +54,7 @@ use Symfony\Component\Console\Output\NullOutput;
 function makeTime($time)
 {
     $format = $time < 3600 ? 'i:s' : 'H:i:s';
+
     return gmdate($format, $time);
 }
 

@@ -109,7 +109,7 @@ return [
     'reputation'        => 'Reputation',
     'registration_date' => 'Registration date',
 
-    'max_file_upload'       => 'You can upload files',
+    'max_file_upload'       => 'Maximum upload files',
     'max_file_weight'       => 'Maximum file weight',
     'min_image_size'        => 'Minimum image size',
     'max_image_size'        => 'Maximum image size',

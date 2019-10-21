@@ -59,7 +59,7 @@ class ChatController extends AdminController
                     ]);
                 }
 
-                setFlash('success', 'Сообщение успешно добавлено!');
+                setFlash('success', __('main.message_added_success'));
                 redirect ('/admin/chats');
             } else {
                 setInput($request->all());
@@ -122,7 +122,7 @@ class ChatController extends AdminController
                     'updated_at'   => SITETIME,
                 ]);
 
-                setFlash('success', 'Сообщение успешно отредактировано!');
+                setFlash('success', __('main.message_edited_success'));
                 redirect('/admin/chats?page=' . $page);
             } else {
                 setInput($request->all());

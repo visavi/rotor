@@ -230,7 +230,7 @@ class PhotoController extends BaseController
                 $flood->saveState();
                 sendNotify($msg, '/photos/comment/' . $photo->id . '/' . $comment->id, $photo->title);
 
-                setFlash('success', 'Комментарий успешно добавлен!');
+                setFlash('success', __('main.comment_added_success'));
                 redirect('/photos/end/' . $photo->id);
             } else {
                 setInput($request->all());
@@ -316,7 +316,7 @@ class PhotoController extends BaseController
                     'text' => $msg,
                 ]);
 
-                setFlash('success', 'Комментарий успешно отредактирован!');
+                setFlash('success', __('main.comment_edited_success'));
                 redirect('/photos/comments/' . $photo->id . '?page=' . $page);
             } else {
                 setInput($request->all());

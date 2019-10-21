@@ -112,7 +112,7 @@ return [
     'reputation'        => 'Репутация',
     'registration_date' => 'Дата регистрации',
 
-    'max_file_upload'       => 'Можно загрузить файлов',
+    'max_file_upload'       => 'Максимум загружаемых файлов',
     'max_file_weight'       => 'Максимальный вес файла',
     'min_image_size'        => 'Минимальный размер изображения',
     'max_image_size'        => 'Максимальный размер изображения',
@@ -205,6 +205,10 @@ return [
     'from' => 'От',
     'to'   => 'До',
 
+    'message_added_success'   => 'Сообщение успешно добавлено!',
+    'message_edited_success'  => 'Сообщение успешно отредактировано!',
+    'comment_added_success'   => 'Комментарий успешно добавлен!',
+    'comment_edited_success'  => 'Комментарий успешно отредактирован!',
     'record_added_success'    => 'Запись успешно добавлена!',
     'record_changed_success'  => 'Запись успешно изменена!',
     'record_deleted_success'  => 'Запись успешно удалена!',

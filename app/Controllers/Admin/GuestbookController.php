@@ -64,7 +64,7 @@ class GuestbookController extends AdminController
                     'updated_at'   => SITETIME,
                 ]);
 
-                setFlash('success', 'Сообщение успешно отредактировано!');
+                setFlash('success', __('main.message_edited_success'));
                 redirect('/admin/guestbooks?page=' . $page);
             } else {
                 setInput($request->all());

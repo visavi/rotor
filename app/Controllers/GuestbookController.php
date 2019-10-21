@@ -79,7 +79,7 @@ class GuestbookController extends BaseController
             $flood->saveState();
 
             sendNotify($msg, '/guestbooks', 'Гостевая книга');
-            setFlash('success', 'Сообщение успешно добавлено!');
+            setFlash('success', __('main.message_added_success'));
         } else {
             setInput($request->all());
             setFlash('danger', $validator->getErrors());
@@ -130,7 +130,7 @@ class GuestbookController extends BaseController
                     'updated_at'   => SITETIME,
                 ]);
 
-                setFlash('success', 'Сообщение успешно отредактировано!');
+                setFlash('success', __('main.message_edited_success'));
                 redirect('/guestbooks');
             } else {
                 setInput($request->all());

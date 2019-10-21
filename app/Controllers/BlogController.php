@@ -372,7 +372,7 @@ class BlogController extends BaseController
                 $flood->saveState();
                 sendNotify($msg, '/articles/comment/' . $blog->id . '/' . $comment->id, $blog->title);
 
-                setFlash('success', 'Комментарий успешно добавлен!');
+                setFlash('success', __('main.comment_added_success'));
                 redirect('/articles/end/' . $blog->id);
             } else {
                 setInput($request->all());
@@ -452,7 +452,7 @@ class BlogController extends BaseController
                     'text' => $msg,
                 ]);
 
-                setFlash('success', 'Комментарий успешно отредактирован!');
+                setFlash('success', __('main.comment_edited_success'));
                 redirect('/articles/comments/' . $blog->id . '?page=' . $page);
             } else {
                 setInput($request->all());

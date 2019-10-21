@@ -137,19 +137,19 @@ class TopicController extends BaseController
         }
 
         $validator->equal($token, $_SESSION['token'], ['msg' => __('validator.token')])
-            ->empty($topic->closed, ['msg' => 'Запрещено писать в закрытую тему!'])
+            ->empty($topic->closed, ['msg' => __('forums.topic_closed')])
             ->false($flood->isFlood(), ['msg' => __('validator.flood', ['sec' => $flood->getPeriod()])])
             ->length($msg, 5, setting('forumtextlength'), ['msg' => __('validator.text')]);
 
         // Проверка сообщения на схожесть
         /** @var Post $post */
         $post = Post::query()->where('topic_id', $topic->id)->orderBy('id', 'desc')->first();
-        $validator->notEqual($msg, $post->text, ['msg' => 'Ваше сообщение повторяет предыдущий пост!']);
+        $validator->notEqual($msg, $post->text, ['msg' => __('forums.post_repeat')]);
 
         if ($files && $validator->isValid()) {
             $validator
-                ->lte(count($files), setting('maxfiles'), ['files' => 'Разрешено загружать не более ' . setting('maxfiles') . ' файлов'])
-                ->gte(getUser('point'), setting('forumloadpoints'), 'У вас недостаточно актива для загрузки файлов!');
+                ->lte(count($files), setting('maxfiles'), ['files' => __('validator.files_max', ['max' => setting('maxfiles')])])
+                ->gte(getUser('point'), setting('forumloadpoints'),  __('validator.active_upload'));
 
             $rules = [
                 'maxsize'    => setting('forumloadsize'),
@@ -157,7 +157,7 @@ class TopicController extends BaseController
             ];
 
             foreach ($files as $file) {
-                $validator->file($file, $rules, ['files' => 'Не удалось загрузить файл!']);
+                $validator->file($file, $rules, ['files' => __('validator.failed_upload')]);
             }
         }
 
@@ -172,11 +172,9 @@ class TopicController extends BaseController
                 count($files) + $post->files->count() <= setting('maxfiles')
             ) {
 
-                $newpost = $post->text . "\n\n" . '[i][size=1]Добавлено через ' . makeTime(SITETIME - $post->created_at) . ' сек.[/size][/i]' . "\n" . $msg;
+                $newpost = $post->text . PHP_EOL . PHP_EOL . '[i][size=1]' . __('forums.post_added_after', ['sec' => makeTime(SITETIME - $post->created_at)]) . '[/size][/i]' . PHP_EOL . $msg;
 
-                $post->update([
-                    'text' => $newpost,
-                ]);
+                $post->update(['text' => $newpost]);
             } else {
 
                 $post = Post::query()->create([
@@ -220,7 +218,7 @@ class TopicController extends BaseController
                 }
             }
 
-            setFlash('success', 'Сообщение успешно добавлено!');
+            setFlash('success', __('main.message_added_success'));
 
         } else {
             setInput($request->all());
@@ -256,7 +254,7 @@ class TopicController extends BaseController
         $validator->equal($token, $_SESSION['token'], __('validator.token'))
             ->true(getUser(), __('main.not_authorized'))
             ->notEmpty($del, 'Отстутствуют выбранные сообщения для удаления!')
-            ->empty($topic->closed, 'Редактирование невозможно. Данная тема закрыта!')
+            ->empty($topic->closed, __('forums.topic_closed'))
             ->equal($isModer, true, 'Удалять сообщения могут только кураторы темы!');
 
         if ($validator->isValid()) {
@@ -306,7 +304,7 @@ class TopicController extends BaseController
             ->gte(getUser('point'), setting('editforumpoint'), 'Для закрытия тем вам необходимо набрать ' . plural(setting('editforumpoint'), setting('scorename')) . '!')
             ->notEmpty($topic, __('forums.topic_not_exist'))
             ->equal($topic->user_id, getUser('id'), 'Вы не автор данной темы!')
-            ->empty($topic->closed, 'Данная тема уже закрыта!');
+            ->empty($topic->closed, __('forums.topic_closed'));
 
         if ($validator->isValid()) {
             $topic->update(['closed' => 1]);
@@ -358,7 +356,7 @@ class TopicController extends BaseController
         }
 
         if ($topic->closed) {
-            abort('default', ' Изменение невозможно, данная тема закрыта!');
+            abort('default', __('forums.topic_closed'));
         }
 
         $post = Post::query()->where('topic_id', $topic->id)
@@ -480,7 +478,7 @@ class TopicController extends BaseController
         }
 
         if ($post->closed) {
-            abort('default', 'Редактирование невозможно, данная тема закрыта!');
+            abort('default', __('forums.topic_closed'));
         }
 
         $isModer = in_array(getUser('id'), array_map('intval', explode(',', (string) $post->moderators)), true);
@@ -526,7 +524,7 @@ class TopicController extends BaseController
                     }
                 }
 
-                setFlash('success', 'Сообщение успешно отредактировано!');
+                setFlash('success', __('main.message_edited_success'));
                 redirect('/topics/' . $post->topic_id . '?page=' . $page);
             } else {
                 setInput($request->all());

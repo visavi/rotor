@@ -435,7 +435,7 @@ class DownController extends BaseController
                 $flood->saveState();
                 sendNotify($msg, '/downs/comment/' . $down->id . '/' . $comment->id, $down->title);
 
-                setFlash('success', 'Комментарий успешно добавлен!');
+                setFlash('success', __('main.comment_added_success'));
                 redirect('/downs/end/' . $down->id);
             } else {
                 setInput($request->all());
@@ -515,7 +515,7 @@ class DownController extends BaseController
                     'text' => $msg,
                 ]);
 
-                setFlash('success', 'Комментарий успешно отредактирован!');
+                setFlash('success', __('main.comment_edited_success'));
                 redirect('/downs/comments/' . $id . '?page=' . $page);
             } else {
                 setInput($request->all());

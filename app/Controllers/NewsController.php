@@ -110,7 +110,7 @@ class NewsController extends BaseController
                 $flood->saveState();
                 sendNotify($msg, '/news/comment/' . $news->id . '/' . $comment->id, $news->title);
 
-                setFlash('success', 'Комментарий успешно добавлен!');
+                setFlash('success', __('main.comment_added_success'));
 
                 if ($request->has('read')) {
                     redirect('/news/' . $news->id);
@@ -196,7 +196,7 @@ class NewsController extends BaseController
                     'text' => $msg,
                 ]);
 
-                setFlash('success', 'Комментарий успешно отредактирован!');
+                setFlash('success', __('main.comment_edited_success'));
                 redirect('/news/comments/' . $news->id . '?page=' . $page);
             } else {
                 setInput($request->all());
