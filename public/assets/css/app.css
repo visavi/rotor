@@ -189,13 +189,20 @@ blockquote small:before {
 
 .carousel-control-prev-icon,
 .carousel-control-next-icon {
-  box-shadow: 0 1px 0.4rem rgba(0, 0, 0, 0.5);
-  background-color: rgba(0, 0, 0, 0.3);
-  border-radius: 50%;
+  background-image: none;
+  width: auto;
+  color: #ccc;
+  font-family: FontAwesome;
+  font-size: 25px;
 }
 
-.carousel-control-next, .carousel-control-prev {
-    width: auto;
+.carousel-control-next-icon:after {
+  content: "\f138";
+
+}
+
+.carousel-control-prev-icon:after {
+  content: "\f137";
 }
 
 .scrollup {
