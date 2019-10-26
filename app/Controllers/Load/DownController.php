@@ -41,11 +41,11 @@ class DownController extends BaseController
             ->first();
 
         if (! $down) {
-            abort(404, 'Данная загрузка не найдена!');
+            abort(404, __('loads.down_not_exist'));
         }
 
         if (! isAdmin(User::ADMIN) && (! $down->active && $down->user_id !== getUser('id'))) {
-            abort('default', 'Данный файл еще не проверен модератором!');
+            abort('default', __('loads.down_not_verified'));
         }
 
         $rating = $down->rated ? round($down->rating / $down->rated, 1) : 0;
@@ -67,11 +67,11 @@ class DownController extends BaseController
         $down = Down::query()->where('user_id', getUser('id'))->find($id);
 
         if (! $down) {
-            abort(404, 'Файла не существует или вы не автор данной загрузки!');
+            abort(404, __('loads.down_not_exist'));
         }
 
         if ($down->active) {
-            abort('default', 'Данный файл уже проверен модератором!');
+            abort('default', __('loads.down_verified'));
         }
 
         if ($request->isMethod('post')) {
@@ -138,7 +138,7 @@ class DownController extends BaseController
         $down = Down::query()->where('user_id', getUser('id'))->find($id);
 
         if (! $down) {
-            abort(404, 'Файла не существует или вы не автор данной загрузки!');
+            abort(404, __('loads.down_not_exist'));
         }
 
         /** @var File $file */
@@ -183,7 +183,7 @@ class DownController extends BaseController
             ->get();
 
         if ($loads->isEmpty()) {
-            abort('default', 'Разделы загрузок еще не созданы!');
+            abort('default', __('loads.empty_loads'));
         }
 
         if ($request->isMethod('post')) {
@@ -201,7 +201,7 @@ class DownController extends BaseController
                 ->length($title, 5, 50, ['title' => __('validator.text')])
                 ->length($text, 50, 5000, ['text' => __('validator.text')])
                 ->false($flood->isFlood(), ['msg' => __('validator.flood', ['sec' => $flood->getPeriod()])])
-                ->notEmpty($category, ['category' => 'Категории для данного файла не существует!']);
+                ->notEmpty($category, ['category' => __('loads.category_not_exist')]);
 
             if ($category) {
                 $validator->empty($category->closed, ['category' => 'В данный раздел запрещено публиковать файлы!']);
@@ -285,14 +285,14 @@ class DownController extends BaseController
         $down = Down::query()->find($id);
 
         if (! $down) {
-            abort(404, 'Данного файла не существует!');
+            abort(404, __('loads.down_not_exist'));
         }
 
         $validator
             ->equal($token, $_SESSION['token'], ['score' => __('validator.token')])
             ->true(getUser(), ['score' => __('main.not_authorized')])
             ->between($score, 1, 5, ['score' => 'Необходимо поставить оценку!'])
-            ->notEmpty($down->active, ['score' => 'Данный файл еще не проверен модератором!'])
+            ->notEmpty($down->active, ['score' => __('loads.down_not_verified')])
             ->notEqual($down->user_id, getUser('id'), ['score' => 'Нельзя голосовать за свой файл!']);
 
         if ($validator->isValid()) {
@@ -344,11 +344,11 @@ class DownController extends BaseController
         $file = File::query()->where('relate_type', Down::class)->find($id);
 
         if (! $file || ! $file->relate) {
-            abort(404, 'Данного файла не существует!');
+            abort(404, __('loads.down_not_exist'));
         }
 
         if (! $file->relate->active && ! isAdmin(User::ADMIN)) {
-            abort('default', 'Данный файл еще не проверен модератором!');
+            abort('default', __('loads.down_not_verified'));
         }
 
         $validator->true(file_exists(HOME . $file->hash), 'Файла для скачивания не существует!');
@@ -393,11 +393,11 @@ class DownController extends BaseController
         $down = Down::query()->find($id);
 
         if (! $down) {
-            abort(404, 'Данного файла не существует!');
+            abort(404, __('loads.down_not_exist'));
         }
 
         if (! $down->active) {
-            abort('default', 'Данный файл еще не проверен модератором!');
+            abort('default', __('loads.down_not_verified'));
         }
 
         if ($request->isMethod('post')) {
@@ -476,7 +476,7 @@ class DownController extends BaseController
         $down = Down::query()->find($id);
 
         if (! $down) {
-            abort(404, 'Данного файла не существует!');
+            abort(404, __('loads.down_not_exist'));
         }
 
         $page = int($request->input('page', 1));
@@ -538,7 +538,7 @@ class DownController extends BaseController
         $down = Down::query()->find($id);
 
         if (! $down) {
-            abort(404, 'Данного файла не существует!');
+            abort(404, __('loads.down_not_exist'));
         }
 
         $total = Comment::query()
@@ -562,11 +562,11 @@ class DownController extends BaseController
         $file = File::query()->where('relate_type', Down::class)->find($id);
 
         if (! $file || ! $file->relate) {
-            abort(404, 'Данного файла не существует!');
+            abort(404, __('loads.down_not_exist'));
         }
 
         if (! $file->relate->active && ! isAdmin(User::ADMIN)) {
-            abort('default', 'Данный файл еще не проверен модератором!');
+            abort('default', __('loads.down_not_verified'));
         }
 
         if ($file->extension !== 'zip') {
@@ -604,11 +604,11 @@ class DownController extends BaseController
         $file = File::query()->where('relate_type', Down::class)->find($id);
 
         if (! $file || ! $file->relate) {
-            abort(404, 'Данного файла не существует!');
+            abort(404, __('loads.down_not_exist'));
         }
 
         if (! $file->relate->active && ! isAdmin(User::ADMIN)) {
-            abort('default', 'Данный файл еще не проверен модератором!');
+            abort('default', __('loads.down_not_verified'));
         }
 
         if ($file->extension !== 'zip') {
@@ -658,7 +658,7 @@ class DownController extends BaseController
         $down = Down::query()->where('id', $id)->with('lastComments')->first();
 
         if (! $down) {
-            abort(404, 'Данного файла не существует!');
+            abort(404, __('loads.down_not_exist'));
         }
 
         return view('loads/rss_comments', compact('down'));
@@ -677,7 +677,7 @@ class DownController extends BaseController
         $down = Down::query()->find($id);
 
         if (! $down) {
-            abort(404, 'Данного файла не существует!');
+            abort(404, __('loads.down_not_exist'));
         }
 
         $total = Comment::query()

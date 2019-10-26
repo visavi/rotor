@@ -25,7 +25,7 @@ class LoadController extends BaseController
             ->get();
 
         if ($categories->isEmpty()) {
-            abort('default', 'Разделы загрузок еще не созданы!');
+            abort('default', __('loads.empty_loads'));
         }
 
         return view('loads/index', compact('categories'));
@@ -44,7 +44,7 @@ class LoadController extends BaseController
         $category = Load::query()->with('parent')->find($id);
 
         if (! $category) {
-            abort(404, 'Данной категории не существует!');
+            abort(404, __('loads.category_not_exist'));
         }
 
         $total = Down::query()->where('category_id', $category->id)->where('active', 1)->count();
@@ -90,7 +90,7 @@ class LoadController extends BaseController
             ->get();
 
         if ($downs->isEmpty()) {
-            abort('default', 'Файлы не найдены!');
+            abort('default', __('loads.downs_not_found'));
         }
 
         return view('loads/rss', compact('downs'));

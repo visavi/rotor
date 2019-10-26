@@ -221,7 +221,7 @@ class LoadController extends AdminController
         $category = Load::query()->with('parent')->find($id);
 
         if (! $category) {
-            abort(404, 'Данной категории не существует!');
+            abort(404, __('loads.category_not_exist'));
         }
 
         $total = Down::query()->where('category_id', $category->id)->where('active', 1)->count();
@@ -268,7 +268,7 @@ class LoadController extends AdminController
         $down = Down::query()->find($id);
 
         if (! $down) {
-            abort(404, 'Данного файла не существует!');
+            abort(404, __('loads.down_not_exist'));
         }
 
         if ($request->isMethod('post')) {
@@ -284,7 +284,7 @@ class LoadController extends AdminController
             $validator->equal($token, $_SESSION['token'], __('validator.token'))
                 ->length($title, 5, 50, ['title' => __('validator.text')])
                 ->length($text, 50, 5000, ['text' => __('validator.text')])
-                ->notEmpty($category, ['category' => 'Категории для данного файла не существует!']);
+                ->notEmpty($category, ['category' => __('loads.category_not_exist')]);
 
             $duplicate = Down::query()->where('title', $title)->where('id', '<>', $down->id)->count();
             $validator->empty($duplicate, ['title' => 'Загрузка с аналогичный названием уже существует!']);
@@ -455,7 +455,7 @@ class LoadController extends AdminController
         $token = check($request->input('token'));
 
         if (! $down) {
-            abort(404, 'Данного файла не существует!');
+            abort(404, __('loads.down_not_exist'));
         }
 
         if ($token === $_SESSION['token']) {

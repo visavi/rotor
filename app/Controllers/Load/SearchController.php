@@ -33,7 +33,7 @@ class SearchController extends BaseController
                 ->get();
 
             if ($categories->isEmpty()) {
-                abort('default', 'Разделы загрузок еще не созданы!');
+                abort('default', __('loads.empty_loads'));
             }
 
             return view('loads/search', compact('categories', 'cid'));
