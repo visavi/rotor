@@ -104,7 +104,7 @@ class ChatController extends AdminController
         }
 
         if ($post->created_at + 600 < SITETIME) {
-            abort('default', 'Редактирование невозможно, прошло более 10 минут!');
+            abort('default', __('main.editing_impossible'));
         }
 
         if ($request->isMethod('post')) {

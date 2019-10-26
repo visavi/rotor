@@ -23,7 +23,7 @@ use Illuminate\Support\Arr;
 class TopicController extends BaseController
 {
     /**
-     * Главная страница
+     * Main page
      *
      * @param int $id
      * @return string
@@ -108,7 +108,7 @@ class TopicController extends BaseController
     }
 
     /**
-     * Создание сообщения
+     * Message Creation
      *
      * @param int       $id
      * @param Request   $request
@@ -229,7 +229,7 @@ class TopicController extends BaseController
     }
 
     /**
-     * Удаление сообщений
+     * Delete messages
      *
      * @param int       $id
      * @param Request   $request
@@ -253,9 +253,9 @@ class TopicController extends BaseController
 
         $validator->equal($token, $_SESSION['token'], __('validator.token'))
             ->true(getUser(), __('main.not_authorized'))
-            ->notEmpty($del, 'Отстутствуют выбранные сообщения для удаления!')
+            ->notEmpty($del, __('validator.deletion'))
             ->empty($topic->closed, __('forums.topic_closed'))
-            ->equal($isModer, true, 'Удалять сообщения могут только кураторы темы!');
+            ->equal($isModer, true, __('forums.posts_deleted_curators'));
 
         if ($validator->isValid()) {
             // ------ Удаление загруженных файлов -------//
@@ -276,7 +276,7 @@ class TopicController extends BaseController
             $topic->decrement('count_posts', $delPosts);
             $topic->forum->decrement('count_posts', $delPosts);
 
-            setFlash('success', 'Выбранные сообщения успешно удалены!');
+            setFlash('success', __('main.messages_deleted_success'));
         } else {
             setFlash('danger', $validator->getErrors());
         }
@@ -285,7 +285,7 @@ class TopicController extends BaseController
     }
 
     /**
-     * Закрытие темы
+     * Close topic
      *
      * @param int       $id
      * @param Request   $request
@@ -301,9 +301,9 @@ class TopicController extends BaseController
 
         $validator->equal($token, $_SESSION['token'], __('validator.token'))
             ->true(getUser(), __('main.not_authorized'))
-            ->gte(getUser('point'), setting('editforumpoint'), 'Для закрытия тем вам необходимо набрать ' . plural(setting('editforumpoint'), setting('scorename')) . '!')
+            ->gte(getUser('point'), setting('editforumpoint'), __('forums.topic_edited_points', ['point' => plural(setting('editforumpoint'), setting('scorename'))]))
             ->notEmpty($topic, __('forums.topic_not_exist'))
-            ->equal($topic->user_id, getUser('id'), 'Вы не автор данной темы!')
+            ->equal($topic->user_id, getUser('id'), __('forums.topic_not_author'))
             ->empty($topic->closed, __('forums.topic_closed'));
 
         if ($validator->isValid()) {
@@ -318,7 +318,7 @@ class TopicController extends BaseController
                 $vote->pollings()->delete();
             }
 
-            setFlash('success', 'Тема успешно закрыта!');
+            setFlash('success', __('forums.topic_success_closed'));
         } else {
             setFlash('danger', $validator->getErrors());
         }
@@ -327,7 +327,7 @@ class TopicController extends BaseController
     }
 
     /**
-     * Редактирование темы
+     * Topic editing
      *
      * @param int       $id
      * @param Request   $request
@@ -341,7 +341,7 @@ class TopicController extends BaseController
         }
 
         if (getUser('point') < setting('editforumpoint')) {
-            abort('default', 'У вас недостаточно актива для изменения темы!');
+            abort('default', __('forums.topic_edited_points', ['point' => plural(setting('editforumpoint'), setting('scorename'))]));
         }
 
         /** @var Topic $topic */
@@ -352,7 +352,7 @@ class TopicController extends BaseController
         }
 
         if ($topic->user_id !== getUser('id')) {
-            abort('default', 'Изменение невозможно, вы не автор данной темы!');
+            abort('default', __('forums.topic_not_author'));
         }
 
         if ($topic->closed) {
@@ -384,7 +384,7 @@ class TopicController extends BaseController
                 $validator->length($question, 5, 100, ['question' => __('validator.text')]);
 
                 if ($answers) {
-                    $validator->empty($vote->count, ['question' => 'Изменение вариантов ответа доступно только до голосований!']);
+                    $validator->empty($vote->count, ['question' => __('votes.answer_changed_impossible')]);
 
                     $answers = array_unique(array_diff($answers, ['']));
 
@@ -435,7 +435,7 @@ class TopicController extends BaseController
                     }
                 }
 
-                setFlash('success', 'Тема успешно изменена!');
+                setFlash('success', __('forums.topic_success_changed'));
                 redirect('/topics/' . $topic->id);
 
             } else {
@@ -452,7 +452,7 @@ class TopicController extends BaseController
     }
 
     /**
-     * Редактирование сообщения
+     * Post editing
      *
      * @param int       $id
      * @param Request   $request
@@ -484,11 +484,11 @@ class TopicController extends BaseController
         $isModer = in_array(getUser('id'), array_map('intval', explode(',', (string) $post->moderators)), true);
 
         if (! $isModer && $post->user_id !== getUser('id')) {
-            abort('default', 'Редактировать сообщения может только автор или кураторы темы!');
+            abort('default', __('forums.posts_edited_curators'));
         }
 
         if (! $isModer && $post->created_at + 600 < SITETIME) {
-            abort('default', 'Редактирование невозможно, прошло более 10 минут!');
+            abort('default', __('main.editing_impossible'));
         }
 
         if ($request->isMethod('post')) {
@@ -500,10 +500,8 @@ class TopicController extends BaseController
                 ->length($msg, 5, setting('forumtextlength'), ['msg' => __('validator.text')]);
 
             if ($validator->isValid()) {
-                $msg = antimat($msg);
-
                 $post->update([
-                    'text'         => $msg,
+                    'text'         => antimat($msg),
                     'edit_user_id' => getUser('id'),
                     'updated_at'   => SITETIME,
                 ]);
@@ -536,7 +534,7 @@ class TopicController extends BaseController
     }
 
     /**
-     * Голосование
+     * Voting
      *
      * @param int       $id
      * @param Request   $request
@@ -552,7 +550,7 @@ class TopicController extends BaseController
         $vote = Vote::query()->where('topic_id', $id)->first();
 
         if (! $vote) {
-            abort(404, 'Голосование не найдено!');
+            abort(404, __('votes.voting_not_found'));
         }
 
         $token = check($request->input('token'));
@@ -562,7 +560,7 @@ class TopicController extends BaseController
         $validator->equal($token, $_SESSION['token'], __('validator.token'));
 
         if ($vote->closed) {
-            $validator->addError('Данное голосование закрыто!');
+            $validator->addError(__('votes.voting_closed'));
         }
 
         $polling = $vote->pollings()
@@ -570,7 +568,7 @@ class TopicController extends BaseController
             ->first();
 
         if ($polling) {
-            $validator->addError('Вы уже проголосовали в этом опросе!');
+            $validator->addError(__('votes.voting_passed'));
         }
 
         /** @var VoteAnswer $voteAnswer */
@@ -580,7 +578,7 @@ class TopicController extends BaseController
             ->first();
 
         if (! $voteAnswer) {
-            $validator->addError('Вы не выбрали вариант ответа!');
+            $validator->addError(__('votes.answer_not_chosen'));
         }
 
         if ($validator->isValid()) {
@@ -595,7 +593,7 @@ class TopicController extends BaseController
                 'created_at'  => SITETIME,
             ]);
 
-            setFlash('success', 'Ваш голос успешно принят!');
+            setFlash('success', __('votes.voting_success'));
         } else {
             setFlash('danger', $validator->getErrors());
         }
@@ -604,7 +602,7 @@ class TopicController extends BaseController
     }
 
     /**
-     * Печать темы
+     * Print topic
      *
      * @param int $id
      * @return string
@@ -630,7 +628,7 @@ class TopicController extends BaseController
     }
 
     /**
-     * Переход к сообщению
+     * Forward to message
      *
      * @param int $id
      * @param int $pid
@@ -652,7 +650,7 @@ class TopicController extends BaseController
     }
 
     /**
-     * Переадресация к последнему сообщению
+     * Forward to the last message
      *
      * @param $id
      * @return void

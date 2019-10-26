@@ -381,7 +381,7 @@ class ForumController extends AdminController
                         $vote->pollings()->delete();
                     }
 
-                    setFlash('success', 'Тема успешно закрыта!');
+                    setFlash('success', __('forums.topic_success_closed'));
                     break;
 
                 case 'open':
@@ -635,7 +635,7 @@ class ForumController extends AdminController
             // Обновление счетчиков
             $topic->restatement();
 
-            setFlash('success', 'Выбранные сообщения успешно удалены!');
+            setFlash('success', __('main.messages_deleted_success'));
         } else {
             setFlash('danger', $validator->getErrors());
         }

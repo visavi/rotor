@@ -139,7 +139,7 @@ class GuestbookController extends AdminController
             Guestbook::query()->whereIn('id', $del)->delete();
 
             clearCache(['statguestbook']);
-            setFlash('success', 'Выбранные сообщения успешно удалены!');
+            setFlash('success', __('main.messages_deleted_success'));
         } else {
             setFlash('danger', $validator->getErrors());
         }
