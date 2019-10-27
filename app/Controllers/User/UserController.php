@@ -206,7 +206,7 @@ class UserController extends BaseController
                     }
 
                     // ----- Уведомление в приват ----//
-                    $textNotice = textNotice('register', ['%username%' => $login]);
+                    $textNotice = textNotice('register', ['username' => $login]);
                     $user->sendMessage(null, $textNotice);
 
                     // --- Уведомление о регистрации на email ---//

@@ -289,7 +289,7 @@ class PhotoController extends BaseController
             ->first();
 
         if (! $comment) {
-            abort('default', 'Комментарий удален или вы не автор этого комментария!');
+            abort('default', __('main.comment_deleted'));
         }
 
         if ($comment->closed) {

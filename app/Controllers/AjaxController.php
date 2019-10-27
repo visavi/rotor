@@ -324,7 +324,7 @@ class AjaxController extends BaseController
 
         $validator
             ->equal($token, $_SESSION['token'], __('validator.token'))
-            ->lt($countFiles, setting('maxfiles'), 'Разрешено загружать не более ' . setting('maxfiles') . ' файлов!');
+            ->lt($countFiles, setting('maxfiles'), __('validator.files_max', ['max' => setting('maxfiles')]));
 
         if ($validator->isValid()) {
             $rules = [

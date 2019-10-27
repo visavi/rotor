@@ -174,7 +174,7 @@ class NewsController extends BaseController
             ->first();
 
         if (! $comment) {
-            abort('default', 'Комментарий удален или вы не автор этого комментария!');
+            abort('default', __('main.comment_deleted'));
         }
 
         if ($comment->created_at + 600 < SITETIME) {

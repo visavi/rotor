@@ -1609,7 +1609,7 @@ function textNotice($type, array $replace = [])
     }
 
     foreach ($replace as $key => $val) {
-        $message->text = str_replace($key, $val, $message->text);
+        $message->text = str_replace('%' . $key . '%', $val, $message->text);
     }
 
     return $message->text;

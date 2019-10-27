@@ -287,10 +287,10 @@ class LoadController extends AdminController
                 ->notEmpty($category, ['category' => __('loads.category_not_exist')]);
 
             $duplicate = Down::query()->where('title', $title)->where('id', '<>', $down->id)->count();
-            $validator->empty($duplicate, ['title' => 'Загрузка с аналогичный названием уже существует!']);
+            $validator->empty($duplicate, ['title' => __('loads.down_name_exists')]);
 
             $existFiles = $down->files ? $down->files->count() : 0;
-            $validator->lte(count($files) + $existFiles, 5, ['files' => 'Разрешено загружать не более 5 файлов']);
+            $validator->lte(count($files) + $existFiles, setting('maxfiles'), ['files' => __('validator.files_max', ['max' => setting('maxfiles')])]);
 
             if ($validator->isValid()) {
 
@@ -301,7 +301,7 @@ class LoadController extends AdminController
                 ];
 
                 foreach ($files as $file) {
-                    $validator->file($file, $rules, ['files' => 'Не удалось загрузить файл!']);
+                    $validator->file($file, $rules, ['files' => __('validator.failed_upload')]);
                 }
             }
 
@@ -325,7 +325,7 @@ class LoadController extends AdminController
                 }
 
                 if (! $down->active) {
-                    $text = 'Уведомеление об изменении файла.' . PHP_EOL . 'Ваш файл [b][url=/downs/' . $down->id . ']' . $down->title . '[/url][/b] был отредактирован модератором, возможно от вас потребуются дополнительные исправления!';
+                    $text = textNotice('down_change', ['url' => '/downs/' . $down->id, 'title' => $down->title]);
                     $down->user->sendMessage(null, $text);
                 }
 
@@ -363,7 +363,7 @@ class LoadController extends AdminController
         $down  = Down::query()->find($id);
 
         if (! $down) {
-            abort(404, 'Файла не существует!');
+            abort(404, __('loads.down_not_exist'));
         }
 
         if (! isAdmin(User::BOSS)) {
@@ -402,19 +402,19 @@ class LoadController extends AdminController
         $down = Down::query()->find($id);
 
         if (! $down) {
-            abort(404, 'Файла не существует!');
+            abort(404, __('loads.down_not_exist'));
         }
 
         /** @var File $file */
         $file = File::query()->where('relate_id', $down->id)->find($fid);
 
         if (! $file) {
-            abort(404, 'Файла не существует!');
+            abort(404, __('loads.down_not_exist'));
         }
 
         deleteFile(HOME . $file->hash);
 
-        setFlash('success', 'Файл успешно удален!');
+        setFlash('success', __('loads.file_deleted_success'));
         $file->delete();
 
         redirect('/admin/downs/edit/' . $down->id);
@@ -471,14 +471,14 @@ class LoadController extends AdminController
                 $type = 'опубликована' ;
                 $down->category->increment('count_downs');
 
-                $text = 'Уведомеление о публикации файла.' . PHP_EOL . 'Ваш файл <a href="/downs/' . $down->id . '">' . $down->title . '</a> успешно прошел проверку и добавлен в загрузки';
+                $text = textNotice('down_publish', ['url' => '/downs/' . $down->id, 'title' => $down->title]);
                 $down->user->sendMessage(null, $text);
 
             } else {
                 $type = 'снята с публикации';
                 $down->category->decrement('count_downs');
 
-                $text = 'Уведомеление о снятии с публикации.' . PHP_EOL . 'Ваш файл <a href="/downs/' . $down->id . '">' . $down->title . '</a> снят с публикации из загрузок';
+                $text = textNotice('down_unpublish', ['url' => '/downs/' . $down->id, 'title' => $down->title]);
                 $down->user->sendMessage(null, $text);
             }
 

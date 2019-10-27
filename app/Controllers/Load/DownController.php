@@ -85,11 +85,11 @@ class DownController extends BaseController
                 ->length($text, 50, 5000, ['text' => __('validator.text')]);
 
             $duplicate = Down::query()->where('title', $title)->where('id', '<>', $down->id)->count();
-            $validator->empty($duplicate, ['title' => 'Загрузка с аналогичный названием уже существует!']);
+            $validator->empty($duplicate, ['title' => __('loads.down_name_exists')]);
 
             $existFiles = $down->files ? $down->files->count() : 0;
-            $validator->notEmpty(count($files) + $existFiles, ['files' => 'Необходимо загрузить хотя бы 1 файл']);
-            $validator->lte(count($files) + $existFiles, setting('maxfiles'), ['files' => 'Разрешено загружать не более ' . setting('maxfiles') . ' файлов']);
+            $validator->notEmpty(count($files) + $existFiles, ['files' => __('validator.upload_one_file')]);
+            $validator->lte(count($files) + $existFiles, setting('maxfiles'), ['files' => __('validator.files_max', ['max' => setting('maxfiles')])]);
 
             if ($validator->isValid()) {
                 $rules = [
@@ -99,7 +99,7 @@ class DownController extends BaseController
                 ];
 
                 foreach ($files as $file) {
-                    $validator->file($file, $rules, ['files' => 'Не удалось загрузить файл!']);
+                    $validator->file($file, $rules, ['files' => __('validator.failed_upload')]);
                 }
             }
 
@@ -114,7 +114,7 @@ class DownController extends BaseController
                 }
 
                 clearCache(['statload', 'recentfiles']);
-                setFlash('success', 'Загрузка успешно отредактирована!');
+                setFlash('success', __('loads.down_edited_success'));
                 redirect('/downs/' . $down->id);
             } else {
                 setInput($request->all());
@@ -145,12 +145,12 @@ class DownController extends BaseController
         $file = File::query()->where('relate_id', $down->id)->find($fid);
 
         if (! $file) {
-            abort(404, 'Файла не существует!');
+            abort(404, __('loads.down_not_exist'));
         }
 
         deleteFile(HOME . $file->hash);
 
-        setFlash('success', 'Файл успешно удален!');
+        setFlash('success', __('loads.file_deleted_success'));
         $file->delete();
 
         redirect('/downs/edit/' . $down->id);
@@ -204,14 +204,14 @@ class DownController extends BaseController
                 ->notEmpty($category, ['category' => __('loads.category_not_exist')]);
 
             if ($category) {
-                $validator->empty($category->closed, ['category' => 'В данный раздел запрещено публиковать файлы!']);
+                $validator->empty($category->closed, ['category' => __('loads.category_closed')]);
 
                 $duplicate = Down::query()->where('title', $title)->count();
-                $validator->empty($duplicate, ['title' => 'Загрузка с аналогичный названием уже существует!']);
+                $validator->empty($duplicate, ['title' => __('loads.down_name_exists')]);
             }
 
-            $validator->notEmpty($files, ['files' => 'Необходимо загрузить хотя бы 1 файл']);
-            $validator->lte(count($files), setting('maxfiles'), ['files' => 'Разрешено загружать не более ' . setting('maxfiles') . ' файлов']);
+            $validator->notEmpty($files, ['files' => __('validator.upload_one_file')]);
+            $validator->lte(count($files), setting('maxfiles'), ['files' => __('validator.files_max', ['max' => setting('maxfiles')])]);
 
             if ($validator->isValid()) {
                 $rules = [
@@ -221,7 +221,7 @@ class DownController extends BaseController
                 ];
 
                 foreach ($files as $file) {
-                    $validator->file($file, $rules, ['files' => 'Не удалось загрузить файл!']);
+                    $validator->file($file, $rules, ['files' => __('validator.failed_upload')]);
                 }
             }
 
@@ -247,7 +247,7 @@ class DownController extends BaseController
                     $admins = User::query()->whereIn('level', [User::BOSS, User::ADMIN])->get();
 
                     if ($admins->isNotEmpty()) {
-                        $text = 'Уведомеление о публикации файла.' . PHP_EOL . 'Новый файл [b][url=/admin/downs/edit/' . $down->id . ']' . $down->title . '[/url][/b] требует подтверждения на публикацию!';
+                        $text = textNotice('down_upload', ['url' => '/admin/downs/edit/' . $down->id, 'title' => $down->title]);
 
                         foreach ($admins as $admin) {
                             $admin->sendMessage($user, $text);
@@ -257,7 +257,7 @@ class DownController extends BaseController
 
                 $flood->saveState();
 
-                setFlash('success', 'Файл успешно загружен!');
+                setFlash('success', __('loads.file_uploaded_success'));
                 redirect('/downs/' . $down->id);
             } else {
                 setInput($request->all());
@@ -291,9 +291,9 @@ class DownController extends BaseController
         $validator
             ->equal($token, $_SESSION['token'], ['score' => __('validator.token')])
             ->true(getUser(), ['score' => __('main.not_authorized')])
-            ->between($score, 1, 5, ['score' => 'Необходимо поставить оценку!'])
+            ->between($score, 1, 5, ['score' => __('loads.down_voted_required')])
             ->notEmpty($down->active, ['score' => __('loads.down_not_verified')])
-            ->notEqual($down->user_id, getUser('id'), ['score' => 'Нельзя голосовать за свой файл!']);
+            ->notEqual($down->user_id, getUser('id'), ['score' => __('loads.down_voted_forbidden')]);
 
         if ($validator->isValid()) {
             $polling = Polling::query()
@@ -323,7 +323,7 @@ class DownController extends BaseController
                 $down->increment('rated');
             }
 
-            setFlash('success', 'Оценка успешно принята!');
+            setFlash('success', __('loads.down_voted_success'));
         } else {
             setFlash('danger', $validator->getErrors());
         }
@@ -351,7 +351,7 @@ class DownController extends BaseController
             abort('default', __('loads.down_not_verified'));
         }
 
-        $validator->true(file_exists(HOME . $file->hash), 'Файла для скачивания не существует!');
+        $validator->true(file_exists(HOME . $file->hash), __('loads.down_not_exist'));
 
         if ($validator->isValid()) {
             $reader = Reader::query()
@@ -492,7 +492,7 @@ class DownController extends BaseController
             ->first();
 
         if (! $comment) {
-            abort('default', 'Комментарий удален или вы не автор этого комментария!');
+            abort('default', __('main.comment_deleted'));
         }
 
         if ($comment->created_at + 600 < SITETIME) {
@@ -570,7 +570,7 @@ class DownController extends BaseController
         }
 
         if ($file->extension !== 'zip') {
-            abort('default', 'Просматривать можно только ZIP архивы!');
+            abort('default', __('loads.archive_only_zip'));
         }
 
         try {
@@ -585,7 +585,7 @@ class DownController extends BaseController
             $documents = \array_slice($getDocuments, $page->offset, $page->limit, true);
 
         } catch (Exception $e) {
-            abort('default', 'Не удалось открыть архив!');
+            abort('default', __('loads.archive_not_open'));
         }
 
         return view('loads/zip', compact('down', 'file', 'documents', 'page', 'viewExt'));
@@ -612,7 +612,7 @@ class DownController extends BaseController
         }
 
         if ($file->extension !== 'zip') {
-            abort('default', 'Просматривать можно только ZIP архивы!');
+            abort('default', __('loads.archive_only_zip'));
         }
 
         try {
@@ -641,7 +641,7 @@ class DownController extends BaseController
 
             $down = $file->relate;
         } catch (Exception $e) {
-            abort('default', 'Не удалось прочитать файл!');
+            abort('default', __('loads.file_not_read'));
         }
 
         return view('loads/zip_view', compact('down', 'file', 'document', 'content'));
