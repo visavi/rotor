@@ -205,6 +205,7 @@ return [
     'from' => 'От',
     'to'   => 'До',
 
+    'text_missing'             => 'Отсутствует текст сообщения!',
     'message_added_success'    => 'Сообщение успешно добавлено!',
     'message_edited_success'   => 'Сообщение успешно отредактировано!',
     'messages_deleted_success' => 'Сообщения успешно удалены!',

@@ -49,6 +49,16 @@ class AddDownsToNotices extends AbstractMigration
                 'created_at' => SITETIME,
                 'updated_at' => SITETIME,
                 'protect'    => 1,
+            ],
+            [
+                'type'      => 'notify',
+                'name'      => 'Упоминание пользователя',
+                'text'      => 'Пользователь @%login% упомянул вас на странице [b][url=%url%]%title%[/url][/b]
+Текст сообщения: %text%',
+                'user_id'    => 1,
+                'created_at' => SITETIME,
+                'updated_at' => SITETIME,
+                'protect'    => 1,
             ]
         ];
 

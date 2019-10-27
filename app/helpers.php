@@ -1569,13 +1569,13 @@ function deleteFile(string $path)
 /**
  * Отправляет уведомление об упоминании в приват
  *
- * @param string $text     текст сообщения
- * @param string $pageUrl  путь к странице
- * @param string $pageName название страницу
+ * @param string $text  текст сообщения
+ * @param string $url   путь к странице
+ * @param string $title название страницу
  *
  * @return void
  */
-function sendNotify(string $text, string $pageUrl, string $pageName)
+function sendNotify(string $text, string $url, string $title)
 {
     /*$parseText = preg_replace('|\[quote(.*?)\](.*?)\[/quote\]|s', '', $text);*/
     preg_match_all('/(?<=^|\s|=)@([\w\-]+)/', $text, $matches);
@@ -1586,7 +1586,8 @@ function sendNotify(string $text, string $pageUrl, string $pageName)
         foreach ($usersAnswer as $login) {
             $user = getUserByLogin($login);
             if ($user && $user->notify) {
-                $user->sendMessage(null, 'Пользователь @' . getUser('login') . ' упомянул вас на странице [b][url=' . $pageUrl . ']' . $pageName . '[/url][/b]' . PHP_EOL . 'Текст сообщения: ' . $text);
+                $notify = textNotice('notify', ['login' => getUser('login'), 'url' => $url, 'title' => $title, 'text' => $text]);
+                $user->sendMessage(null, $notify);
             }
         }
     }
@@ -1605,7 +1606,7 @@ function textNotice($type, array $replace = [])
     $message = Notice::query()->where('type', $type)->first();
 
     if (! $message) {
-        return 'Отсутствует текст сообщения!';
+        return __('main.text_missing');
     }
 
     foreach ($replace as $key => $val) {
