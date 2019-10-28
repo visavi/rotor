@@ -62,8 +62,8 @@ class IgnoreController extends BaseController
                 ]);
 
                 if (! $user->isIgnore(getUser())) {
-                    $message = 'Пользователь @' . getUser('login') . '[/b] добавил вас в свой игнор-лист!';
-                    $user->sendMessage(null, $message);
+                    $text = textNotice('ignore', ['login' => getUser('login')]);
+                    $user->sendMessage(null, $text);
                 }
 
                 setFlash('success', 'Пользователь успешно добавлен в игнор-лист!');

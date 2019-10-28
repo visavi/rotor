@@ -128,10 +128,10 @@ class PageController extends BaseController
     {
         $surprise['requiredDate']  = '10.01';
 
-        $surpriseMoney  = mt_rand(10000, 50000);
-        $surprisePoint  = mt_rand(150, 250);
-        $surpriseRating = mt_rand(3, 10);
-        $currentYear    = date('Y');
+        $money  = mt_rand(10000, 50000);
+        $point  = mt_rand(150, 250);
+        $rating = mt_rand(3, 10);
+        $year   = date('Y');
 
         if (! $user = getUser()) {
             abort(403, __('main.not_authorized'));
@@ -143,32 +143,29 @@ class PageController extends BaseController
 
         $existSurprise = Surprise::query()
             ->where('user_id', $user->id)
-            ->where('year', $currentYear)
+            ->where('year', $year)
             ->first();
 
         if ($existSurprise) {
             abort('default', 'В этом году сюрприз уже получен');
         }
 
-
-        $pointText = null;
-
         if ($user->point >= 50) {
-            $user->increment('point', $surprisePoint);
-            $pointText = plural($surprisePoint, setting('scorename')) . PHP_EOL;
+            $user->increment('point', $point);
+        } else {
+            $point = 0;
         }
 
-        $user->increment('money', $surpriseMoney);
-        $user->increment('posrating', $surpriseRating);
+        $user->increment('money', $money);
+        $user->increment('posrating', $rating);
         $user->update(['rating' => $user->posrating - $user->negrating]);
 
-        $text = 'Поздравляем с новым ' . $currentYear . ' годом!' . PHP_EOL . 'В качестве сюрприза вы получаете ' . PHP_EOL . $pointText . plural($surpriseMoney, setting('moneyname')) . PHP_EOL . $surpriseRating . ' рейтинга репутации' . PHP_EOL . 'Ура!!!';
-
+        $text = textNotice('surprise', ['year' => $year, 'point' => plural($point, setting('scorename')), 'money' => plural($money, setting('moneyname')), 'rating' => $rating]);
         $user->sendMessage(null, $text);
 
         Surprise::query()->create([
             'user_id'    => $user->id,
-            'year'       => $currentYear,
+            'year'       => $year,
             'created_at' => SITETIME,
         ]);
 

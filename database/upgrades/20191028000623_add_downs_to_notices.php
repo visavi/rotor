@@ -12,8 +12,8 @@ class AddDownsToNotices extends AbstractMigration
         $rows = [
             [
                 'type'      => 'down_upload',
-                'name'      => 'Уведомеление о загрузке файла',
-                'text'      => 'Уведомеление о загрузке файла.
+                'name'      => 'Уведомление о загрузке файла',
+                'text'      => 'Уведомление о загрузке файла.
 Новый файл [b][url=%url%]%title%[/url][/b] требует подтверждения на публикацию!',
                 'user_id'    => 1,
                 'created_at' => SITETIME,
@@ -22,8 +22,8 @@ class AddDownsToNotices extends AbstractMigration
             ],
             [
                 'type'      => 'down_publish',
-                'name'      => 'Уведомеление о публикации файла',
-                'text'      => 'Уведомеление о публикации файла.
+                'name'      => 'Уведомление о публикации файла',
+                'text'      => 'Уведомление о публикации файла.
 Ваш файл [b][url=%url%]%title%[/url][/b] успешно прошел проверку и добавлен в загрузки',
                 'user_id'    => 1,
                 'created_at' => SITETIME,
@@ -32,8 +32,8 @@ class AddDownsToNotices extends AbstractMigration
             ],
             [
                 'type'      => 'down_unpublish',
-                'name'      => 'Уведомеление о снятии с публикации',
-                'text'      => 'Уведомеление о снятии с публикации.
+                'name'      => 'Уведомление о снятии с публикации',
+                'text'      => 'Уведомление о снятии с публикации.
 Ваш файл [b][url=%url%]%title%[/url][/b] снят с публикации из загрузок',
                 'user_id'    => 1,
                 'created_at' => SITETIME,
@@ -42,8 +42,8 @@ class AddDownsToNotices extends AbstractMigration
             ],
             [
                 'type'      => 'down_change',
-                'name'      => 'Уведомеление об изменении файла',
-                'text'      => 'Уведомеление об изменении файла.
+                'name'      => 'Уведомление об изменении файла',
+                'text'      => 'Уведомление об изменении файла.
 Ваш файл [b][url=%url%]%title%[/url][/b] был отредактирован модератором, возможно от вас потребуются дополнительные исправления!',
                 'user_id'    => 1,
                 'created_at' => SITETIME,
@@ -74,5 +74,6 @@ class AddDownsToNotices extends AbstractMigration
         $this->execute("DELETE FROM notices WHERE type='down_publish';");
         $this->execute("DELETE FROM notices WHERE type='down_unpublish';");
         $this->execute("DELETE FROM notices WHERE type='down_change';");
+        $this->execute("DELETE FROM notices WHERE type='notify';");
     }
 }

@@ -84,19 +84,15 @@ class RatingController extends BaseController
                 ]);
 
                 if ($vote === 'plus') {
-                    $text = 'Пользователь @' . getUser('login') . ' поставил вам плюс! (Ваш рейтинг: ' . ($user['rating'] + 1) . ')' . PHP_EOL . 'Комментарий: ' . $text;
-
                     $user->increment('posrating');
                     $user->update(['rating' => $user->posrating - $user->negrating]);
                 } else {
-
-                    $text = 'Пользователь @' . getUser('login') . ' поставил вам минус! (Ваш рейтинг: ' . ($user['rating'] - 1) . ')' . PHP_EOL . 'Комментарий: ' . $text;
-
                     $user->increment('negrating');
                     $user->update(['rating' => $user->posrating - $user->negrating]);
                 }
 
-                $user->sendMessage(null, $text);
+                $message = textNotice('rating', ['login' => getUser('login'), 'rating' => $user->rating, 'comment' => $text, 'vote' => __('main.' . $vote)]);
+                $user->sendMessage(null, $message);
 
                 setFlash('success', 'Репутация успешно изменена!');
                 redirect('/users/'.$user->login);

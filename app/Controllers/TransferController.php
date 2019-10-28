@@ -78,11 +78,9 @@ class TransferController extends BaseController
                 getUser()->decrement('money', $money);
                 $this->user->increment('money', $money);
 
-                $comment = $msg ?? 'Не указано';
-                $message = 'Пользователь @' . getUser('login') . ' перечислил вам ' . plural($money, setting('moneyname')) . PHP_EOL . 'Примечание: ' . $comment;
-
-                // Уведомление по привату
-                $this->user->sendMessage(null, $message);
+                $comment = $msg ?? 'Не указан';
+                $text = textNotice('transfer', ['login' => getUser('login'), 'money' => plural($money, setting('moneyname')), 'comment' => $comment]);
+                $this->user->sendMessage(null, $text);
 
                 // Запись логов
                 Transfer::query()->create([
