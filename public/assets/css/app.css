@@ -61,12 +61,6 @@ blockquote small:before {
   box-shadow: 0 0 0 0.2rem rgba(40, 167, 69, 0.25);
 }
 
-.prettyprint {
-  font-size: 100%;
-  border-radius: 4px;
-  margin-bottom: 0;
-}
-
 .spoiler {
   margin-bottom: 5px;
 }
