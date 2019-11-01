@@ -124,7 +124,7 @@ class InvitationController extends AdminController
         $user = getUserByLogin($login);
 
         $validator->equal($token, $_SESSION['token'], __('validator.token'))
-            ->notEmpty($user, ['user' => 'Пользователя с данным логином не существует!'])
+            ->notEmpty($user, ['user' => __('validator.user')])
             ->notEmpty($userkeys, ['userkeys' => 'Не указано число ключей!']);
 
         if ($validator->isValid()) {

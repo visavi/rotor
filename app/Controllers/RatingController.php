@@ -176,7 +176,7 @@ class RatingController extends BaseController
 
         $validator
             ->true($request->ajax(), 'Это не ajax запрос!')
-            ->true(isAdmin(User::ADMIN), 'Удалять рейтинг могут только администраторы')
+            ->true(isAdmin(User::ADMIN), __('main.page_only_admins'))
             ->equal($token, $_SESSION['token'], __('validator.token'))
             ->notEmpty($id, ['Не выбрана запись для удаление!']);
 

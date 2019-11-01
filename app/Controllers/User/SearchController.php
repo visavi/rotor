@@ -11,7 +11,7 @@ use Illuminate\Http\Request;
 class SearchController extends BaseController
 {
     /**
-     * Главная страница
+     * Main page
      *
      * @return string
      */
@@ -21,9 +21,10 @@ class SearchController extends BaseController
     }
 
     /**
-     * Поиск пользователя
+     * User search
      *
      * @param Request $request
+     *
      * @return string
      */
     public function search(Request $request): string
@@ -33,7 +34,7 @@ class SearchController extends BaseController
 
         if ($strlen < 2 || $strlen > 20) {
             setInput($request->all());
-            setFlash('danger', ['find' => 'Слишком короткий или длинный запрос, от 2 до 20 символов!']);
+            setFlash('danger', ['find' => __('main.request_requirements')]);
             redirect('/searchusers');
         }
 
@@ -48,9 +49,10 @@ class SearchController extends BaseController
     }
 
     /**
-     * Поиск по первой букве
+     * First letter search
      *
      * @param string $letter
+     *
      * @return string
      */
     public function sort(string $letter): string

@@ -46,7 +46,7 @@
         {!! pagination($page) !!}
 
         <div class="form">
-            <form action="/authoritylist" method="post">
+            <form action="/authoritylists" method="post">
                 <div class="form-inline">
                     <div class="form-group{{ hasError('user') }}">
                         <input type="text" class="form-control" id="user" name="user" maxlength="20" value="{{ getInput('user', $user) }}" placeholder="{{ __('main.user_login') }}" required>

@@ -20,7 +20,7 @@ use Illuminate\Support\Str;
 class UserController extends BaseController
 {
     /**
-     * Анкета пользователя
+     * User profile
      *
      * @param string $login
      *
@@ -29,7 +29,7 @@ class UserController extends BaseController
     public function index(string $login): string
     {
         if (! $user = getUserByLogin($login)) {
-            abort(404, 'Пользователя с данным логином не существует!');
+            abort(404, __('validator.user'));
         }
 
         $invite  = Invite::query()->where('invite_user_id', $user->id)->first();
@@ -41,7 +41,7 @@ class UserController extends BaseController
     }
 
     /**
-     * Заметка
+     * Note
      *
      * @param string    $login
      * @param Request   $request
@@ -52,11 +52,11 @@ class UserController extends BaseController
     public function note(string $login, Request $request, Validator $validator): string
     {
         if (! isAdmin()) {
-            abort(403, 'Данная страница доступна только администрации!');
+            abort(403, __('main.page_only_admins'));
         }
 
         if (! $user = getUserByLogin($login)) {
-            abort(404, 'Пользователя с данным логином не существует!');
+            abort(404, __('validator.user'));
         }
 
         if ($request->isMethod('post')) {
@@ -86,7 +86,7 @@ class UserController extends BaseController
     }
 
     /**
-     * Регистрация
+     * Registration
      *
      * @param Request   $request
      * @param Validator $validator
@@ -119,9 +119,9 @@ class UserController extends BaseController
                 $invitation   = null;
 
                 $validator->true(captchaVerify(), ['protect' => __('validator.captcha')])
-                    ->regex($login, '|^[a-z0-9\-]+$|i', ['login' => 'Недопустимые символы в логине. Разрешены знаки латинского алфавита, цифры и дефис!'])
+                    ->regex($login, '|^[a-z0-9\-]+$|i', ['login' => __('validator.login')])
                     ->regex(utfSubstr($login, 0, 1), '|^[a-z0-9]+$|i', ['login' => 'Логин должен начинаться с буквы или цифры!'])
-                    ->email($email, ['email' => 'Вы ввели неверный адрес email, необходим формат name@site.domen!'])
+                    ->email($email, ['email' => __('validator.email')])
                     ->length($invite, 12, 15, ['invite' => 'Слишком длинный или короткий пригласительный ключ!'], setting('invite'))
                     ->length($login, 3, 20, ['login' => 'Слишком длинный или короткий логин!'])
                     ->length($password, 6, 20, ['password' => 'Слишком длинный или короткий пароль!'])
@@ -236,7 +236,7 @@ class UserController extends BaseController
     }
 
     /**
-     * Авторизация
+     * Login
      *
      * @param Request $request
      *
@@ -282,7 +282,7 @@ class UserController extends BaseController
     }
 
     /**
-     * Выход
+     * Exit
      *
      * @param Request $request
      *
@@ -306,7 +306,7 @@ class UserController extends BaseController
     }
 
     /**
-     * Редактирование профиля
+     * Profile editing
      *
      * @param Request   $request
      * @param Validator $validator
@@ -366,7 +366,7 @@ class UserController extends BaseController
     }
 
     /**
-     * Подтверждение регистрации
+     * Confirmation of registration
      *
      * @param Request   $request
      * @param Validator $validator
@@ -456,7 +456,7 @@ class UserController extends BaseController
     }
 
     /**
-     * Настройки
+     * Settings
      *
      * @param Request   $request
      * @param Validator $validator
@@ -509,7 +509,7 @@ class UserController extends BaseController
     }
 
     /**
-     * Данные пользователя
+     * User data
      *
      * @return string
      */
@@ -523,7 +523,7 @@ class UserController extends BaseController
     }
 
     /**
-     * Инициализация изменения email
+     * Initialize email change
      *
      * @param Request   $request
      * @param Validator $validator
@@ -583,7 +583,7 @@ class UserController extends BaseController
     }
 
     /**
-     * Изменение email
+     * Email change
      *
      * @param Request   $request
      * @param Validator $validator
@@ -632,7 +632,7 @@ class UserController extends BaseController
     }
 
     /**
-     * Изменение статуса
+     * Status change
      *
      * @param Request   $request
      * @param Validator $validator
@@ -678,7 +678,7 @@ class UserController extends BaseController
     }
 
     /**
-     * Изменение пароля
+     * Password change
      *
      * @param Request   $request
      * @param Validator $validator
@@ -729,7 +729,7 @@ class UserController extends BaseController
     }
 
     /**
-     * Генерация ключа
+     * Key generation
      *
      * @param Request $request
      *
@@ -758,7 +758,7 @@ class UserController extends BaseController
     }
 
     /**
-     * Пользователи онлайн
+     * Online users
      *
      * @return string
      */

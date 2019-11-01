@@ -11,7 +11,7 @@ use Illuminate\Http\Request;
 class ListController extends BaseController
 {
     /**
-     * Список пользователей
+     * Users list
      *
      * @param Request $request
      * @return string
@@ -40,11 +40,11 @@ class ListController extends BaseController
                 ->keys()
                 ->first();
 
-            if ($position) {
+            if ($position !== null) {
                 ++$position;
                 $end = ceil($position / $page->limit);
 
-                setFlash('success', 'Позиция в рейтинге: '.$position);
+                setFlash('success', __('users.rating_position', ['position' => $position]));
                 redirect('/users?page='.$end.'&user='.$user);
             } else {
                 setFlash('danger', __('validator.user'));
@@ -55,7 +55,7 @@ class ListController extends BaseController
     }
 
     /**
-     * Список админов
+     * Admins List
      *
      * @return string
      */
@@ -70,7 +70,7 @@ class ListController extends BaseController
     }
 
     /**
-     * Рейтинг репутации
+     * Reputation rating
      *
      * @param Request $request
      * @return string
@@ -99,11 +99,11 @@ class ListController extends BaseController
                 ->keys()
                 ->first();
 
-            if ($position) {
+            if ($position !== null) {
                 ++$position;
                 $end = ceil($position / $page->limit);
 
-                setFlash('success', 'Позиция в рейтинге: '.$position);
+                setFlash('success', __('users.rating_position', ['position' => $position]));
                 redirect('/authoritylists?page='.$end.'&user='.$user);
             } else {
                 setFlash('danger', __('validator.user'));
@@ -114,7 +114,7 @@ class ListController extends BaseController
     }
 
     /**
-     * Рейтинг толстосумов
+     * Riches rating
      *
      * @param Request $request
      * @return string
@@ -143,11 +143,11 @@ class ListController extends BaseController
                 ->keys()
                 ->first();
 
-            if ($position) {
+            if ($position !== null) {
                 ++$position;
                 $end = ceil($position / $page->limit);
 
-                setFlash('success', 'Позиция в рейтинге: '.$position);
+                setFlash('success', __('users.rating_position', ['position' => $position]));
                 redirect('/ratinglists?page='.$end.'&user='.$user);
             } else {
                 setFlash('danger', __('validator.user'));
