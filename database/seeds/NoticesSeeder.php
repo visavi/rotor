@@ -139,6 +139,15 @@ class NoticesSeeder extends AbstractSeed
                 'created_at' => SITETIME,
                 'updated_at' => SITETIME,
                 'protect'    => 1,
+            ],
+            [
+                'type'      => 'explain',
+                'name'      => 'Объяснение нарушения',
+                'text'      => 'Объяснение нарушения: %message%',
+                'user_id'    => 1,
+                'created_at' => SITETIME,
+                'updated_at' => SITETIME,
+                'protect'    => 1,
             ]
         ];
 

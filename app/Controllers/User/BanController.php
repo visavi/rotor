@@ -13,7 +13,7 @@ use Illuminate\Http\Request;
 class BanController extends BaseController
 {
     /**
-     * Бан пользователя
+     * User Ban
      *
      * @param Request   $request
      * @param Validator $validator
@@ -22,11 +22,11 @@ class BanController extends BaseController
     public function ban(Request $request, Validator $validator): string
     {
         if (! $user = getUser()) {
-            abort(403, 'Вы не авторизованы!');
+            abort(403, __('main.not_authorized'));
         }
 
         if ($user->level !== User::BANNED) {
-            abort('default', 'Вы не забанены или срок бана истек!');
+            abort('default', __('users.not_banned'));
         }
 
         if ($user->timeban <= SITETIME) {
@@ -36,7 +36,7 @@ class BanController extends BaseController
                 'timeban' => 0,
             ]);
 
-            setFlash('success', 'Поздравляем! Время вашего бана истекло!');
+            setFlash('success', __('users.ban_expired'));
             redirect('/');
         }
 
@@ -49,24 +49,26 @@ class BanController extends BaseController
         if ($banhist && $request->isMethod('post')) {
             $msg = check($request->input('msg'));
 
-            $sendUser = getUserById($banhist->send_user_id);
+            $admins = User::query()->whereIn('level', [User::BOSS, User::ADMIN])->get();
 
             $validator
-                ->true(setting('addbansend'), 'Писать объяснительные запрещено администрацией!')
-                ->true($banhist->explain, 'Вы уже писали объяснение!')
-                ->true($sendUser->id, 'Пользователь который вас забанил не найден!')
+                ->true(setting('addbansend'), __('users.explain_forbidden'))
+                ->true($banhist->explain, __('users.explain_repeat'))
+                ->true($admins->isNotEmpty(), __('users.admins_not_found'))
                 ->length($msg, 5, 1000, ['text' => __('validator.text')]);
 
             if ($validator->isValid()) {
-                $message = 'Объяснение нарушения: '.antimat($msg);
+                $text = textNotice('explanation', ['message' => antimat($msg)]);
 
-                $sendUser->sendMessage($user, $message);
+                foreach ($admins as $admin) {
+                    $admin->sendMessage($user, $text);
+                }
 
                 $banhist->update([
                     'explain' => 0
                 ]);
 
-                setFlash('success', 'Объяснение успешно отправлено!');
+                setFlash('success', __('users.explain_sent_success'));
                 redirect('/ban');
             } else {
                 setInput($request->all());
