@@ -8,7 +8,7 @@
     @if ($banhist)
         <b><span style="color:#ff0000">{{ __('users.reason_ban') }}: {!! bbCode($banhist->reason) !!}</span></b><br><br>
 
-        @if ($banhist->explain && setting('addbansend'))
+        @if (! $banhist->explain && setting('addbansend'))
             <div class="form">
                 <form method="post" action="/ban">
 

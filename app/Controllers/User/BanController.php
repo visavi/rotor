@@ -53,19 +53,19 @@ class BanController extends BaseController
 
             $validator
                 ->true(setting('addbansend'), __('users.explain_forbidden'))
-                ->true($banhist->explain, __('users.explain_repeat'))
+                ->false($banhist->explain, __('users.explain_repeat'))
                 ->true($admins->isNotEmpty(), __('users.admins_not_found'))
                 ->length($msg, 5, 1000, ['text' => __('validator.text')]);
 
             if ($validator->isValid()) {
-                $text = textNotice('explanation', ['message' => antimat($msg)]);
+                $text = textNotice('explain', ['message' => antimat($msg)]);
 
                 foreach ($admins as $admin) {
                     $admin->sendMessage($user, $text);
                 }
 
                 $banhist->update([
-                    'explain' => 0
+                    'explain' => 1
                 ]);
 
                 setFlash('success', __('users.explain_sent_success'));

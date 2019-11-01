@@ -219,6 +219,7 @@ blockquote small:before {
 }
 
 .message-block {
+  overflow: hidden;
   cursor: pointer;
 }
 
