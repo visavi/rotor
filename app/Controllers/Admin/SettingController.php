@@ -8,6 +8,7 @@ use App\Classes\Validator;
 use App\Models\Setting;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 
 class SettingController extends AdminController
 {
@@ -62,7 +63,7 @@ class SettingController extends AdminController
                     Setting::query()->where('name', $name)->update(['value' => $value]);
                 }
 
-                saveSettings();
+                clearCache(['settings']);
 
                 setFlash('success', 'Настройки сайта успешно изменены!');
                 redirect('/admin/settings?act=' . $act);

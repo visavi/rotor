@@ -29,7 +29,7 @@
     <div class="b">
         <i class="fa fa-download fa-lg text-muted"></i> <b><a href="/loads">{{ __('index.loads') }}</a></b> ({{ statsLoad() }})
     </div>
-    {{ recentFiles() }}
+    {{ recentDowns() }}
 
     <div class="b">
         <i class="fa fa-globe fa-lg text-muted"></i>

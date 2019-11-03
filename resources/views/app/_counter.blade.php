@@ -1,17 +1,17 @@
 @if (setting('incount') === 1)
-    <a href="/counters">{{ $count->dayhosts }} | {{ $count->allhosts }}</a><br>
+    <a href="/counters">{{ $counter['dayhosts'] }} | {{ $counter['allhosts'] }}</a><br>
 @endif
 
 @if (setting('incount') === 2)
-    <a href="/counters">{{ $count->dayhits }} | {{ $count->allhits }}</a><br>
+    <a href="/counters">{{ $counter['dayhits'] }} | {{ $counter['allhits'] }}</a><br>
 @endif
 
 @if (setting('incount') === 3)
-    <a href="/counters">{{ $count->dayhosts }} | {{ $count->dayhits }}</a><br>
+    <a href="/counters">{{ $counter['dayhosts'] }} | {{ $counter['dayhits'] }}</a><br>
 @endif
 
 @if (setting('incount') === 4)
-    <a href="/counters">{{ $count->allhosts }} | {{ $count->allhits }}</a><br>
+    <a href="/counters">{{ $counter['allhosts'] }} | {{ $counter['allhits'] }}</a><br>
 @endif
 
 @if (setting('incount') === 5)

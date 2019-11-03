@@ -9,6 +9,7 @@ use App\Models\News;
 use App\Models\Setting;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 
 class NewsController extends AdminController
 {
@@ -96,7 +97,7 @@ class NewsController extends AdminController
                     'image'  => $file['path'] ?? $news->image,
                  ]);
 
-                clearCache(['statnews', 'lastnews']);
+                clearCache(['statNews', 'lastNews']);
                 setFlash('success', 'Новость успешно отредактирована!');
                 redirect('/admin/news/edit/' . $news->id . '?page=' . $page);
             } else {
@@ -155,10 +156,10 @@ class NewsController extends AdminController
                 // Выводим на главную если там нет новостей
                 if ($top && empty(setting('lastnews'))) {
                     Setting::query()->where('name', 'lastnews')->update(['value' => 1]);
-                    saveSettings();
+                    clearCache(['settings']);
                 }
 
-                clearCache(['statnews', 'lastnews']);
+                clearCache(['statNews', 'lastNews']);
                 setFlash('success', 'Новость успешно добавлена!');
                 redirect('/admin/news/edit/' . $news->id);
             } else {

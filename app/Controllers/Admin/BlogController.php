@@ -259,7 +259,7 @@ class BlogController extends AdminController
                     'tags'  => $tags,
                 ]);
 
-                clearCache(['statblog', 'recentblog']);
+                clearCache(['statBlogs', 'recentBlogs']);
                 setFlash('success', __('blogs.article_success_edited'));
                 redirect('/articles/'.$blog->id);
             } else {
@@ -365,7 +365,7 @@ class BlogController extends AdminController
 
             $blog->category->decrement('count_blogs');
 
-            clearCache(['statblog', 'recentblog']);
+            clearCache(['statBlogs', 'recentBlogs']);
             setFlash('success', __('blogs.article_success_deleted'));
         } else {
             setFlash('danger', $validator->getErrors());

@@ -15,7 +15,7 @@
 {{ recentTopics() }}
 
 <div class="b"><i class="fa fa-download fa-lg text-muted"></i> <b>{{ __('index.recent_files') }}</b></div>
-{{ recentFiles() }}
+{{ recentDowns() }}
 
 <div class="b"><i class="fa fa-globe fa-lg text-muted"></i> <b>{{ __('index.recent_articles') }}</b></div>
 {{ recentBlogs() }}

@@ -4,12 +4,11 @@ declare(strict_types=1);
 
 namespace App\Commands;
 
-use Illuminate\Support\Facades\Cache;
 use Phinx\Console\Command\AbstractCommand;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
-class CacheClear extends AbstractCommand
+class ViewClear extends AbstractCommand
 {
     /**
      * {@inheritdoc}
@@ -18,8 +17,8 @@ class CacheClear extends AbstractCommand
     {
         parent::configure();
 
-        $this->setName('cache:clear')
-             ->setDescription('Flush the application cache');
+        $this->setName('view:clear')
+             ->setDescription('Flush the view cache');
     }
 
     /**
@@ -31,8 +30,14 @@ class CacheClear extends AbstractCommand
      */
     protected function execute(InputInterface $input, OutputInterface $output): void
     {
-        Cache::flush();
+        $cacheFiles = glob(STORAGE . '/views/*.php');
 
-        $output->writeln('<info>Cache cleared successfully.</info>');
+        if ($cacheFiles) {
+            foreach ($cacheFiles as $file) {
+                unlink($file);
+            }
+        }
+
+        $output->writeln('<info>View cleared successfully.</info>');
     }
 }

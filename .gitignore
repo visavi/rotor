@@ -1,7 +1,7 @@
 /storage/antidos
 /storage/backups
 /storage/caches
-/storage/temp
+#/storage/views
 /public/uploads/files
 /public/uploads/avatars
 /public/uploads/counters

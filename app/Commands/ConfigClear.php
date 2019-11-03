@@ -30,10 +30,9 @@ class ConfigClear extends AbstractCommand
      */
     protected function execute(InputInterface $input, OutputInterface $output): void
     {
-        if (file_exists(STORAGE . '/temp/config.dat')) {
-            unlink (STORAGE . '/temp/config.dat');
+        if (file_exists(STORAGE . '/caches/config.php')) {
+            unlink (STORAGE . '/caches/config.php');
         }
-
 
         $output->writeln('<info>Config cleared successfully.</info>');
     }

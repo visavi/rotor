@@ -6,6 +6,7 @@ namespace App\Classes;
 
 use App\Models\Sticker;
 use Illuminate\Database\Capsule\Manager as DB;
+use Illuminate\Support\Facades\Cache;
 
 /**
  * Класс обработки BB-кодов
@@ -261,7 +262,7 @@ class BBCode
         static $listStickers;
 
         if (empty($listStickers)) {
-            if (! file_exists(STORAGE . '/temp/stickers.dat')) {
+            $listStickers = Cache::rememberForever('stickers', static function () {
                 $stickers = Sticker::query()
                     ->select('code', 'name')
                     ->orderBy(DB::connection()->raw('CHAR_LENGTH(code)'), 'desc')
@@ -270,15 +271,12 @@ class BBCode
 
                 $stickers = array_column($stickers, 'name', 'code');
 
-                $stickers = array_map(static function($sticker) {
+                return array_map(
+                    static function($sticker) {
                         return '<img src="' . $sticker . '" alt="' . basename($sticker) . '">';
                     }, $stickers
                 );
-
-                file_put_contents(STORAGE . '/temp/stickers.dat', json_encode($stickers));
-            }
-
-            $listStickers = json_decode(file_get_contents(STORAGE . '/temp/stickers.dat'), true);
+            });
         }
 
         return strtr($source, $listStickers);

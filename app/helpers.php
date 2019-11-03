@@ -33,6 +33,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Lang;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\Str;
@@ -348,17 +349,15 @@ function getCalendar($time = SITETIME): string
  */
 function statsOnline()
 {
-    if (@filemtime(STORAGE . '/temp/online.dat') < time() - 60) {
-        $metrika = new Metrika();
-        $metrika->getCounter();
-
+    return Cache::remember('online', 60, static function () {
         $online[] = Online::query()->whereNotNull('user_id')->count();
         $online[] = Online::query()->count();
 
-        file_put_contents(STORAGE . '/temp/online.dat', json_encode($online), LOCK_EX);
-    }
+        $metrika = new Metrika();
+        $metrika->getCounter($online[1]);
 
-    return json_decode(file_get_contents(STORAGE . '/temp/online.dat'), false);
+        return $online;
+    });
 }
 
 /**
@@ -384,12 +383,11 @@ function showOnline()
  */
 function statsCounter()
 {
-    if (@filemtime(STORAGE . '/temp/counter.dat') < time() - 30) {
-        $counts = Counter::query()->first();
-        file_put_contents(STORAGE . '/temp/counter.dat', json_encode($counts), LOCK_EX);
-    }
+    return Cache::remember('counter', 30, static function () {
+        $counter = Counter::query()->first();
 
-    return json_decode(file_get_contents(STORAGE . '/temp/counter.dat'), false);
+        return $counter ? $counter->toArray() : [];
+    });
 }
 
 /**
@@ -402,10 +400,10 @@ function showCounter()
     $metrika = new Metrika();
     $metrika->saveStatistic();
 
-    $count = statsCounter();
+    $counter = statsCounter();
 
     if (setting('incount') > 0) {
-        return view('app/_counter', compact('count'));
+        return view('app/_counter', compact('counter'));
     }
 
     return null;
@@ -418,7 +416,7 @@ function showCounter()
  */
 function statsUsers()
 {
-    if (@filemtime(STORAGE . '/temp/statusers.dat') < time() - 3600) {
+    return Cache::remember('statUsers', 600, static function () {
         $startDay = mktime(0, 0, 0, dateFixed(SITETIME, 'n'));
 
         $stat = User::query()->count();
@@ -428,10 +426,8 @@ function statsUsers()
             $stat .= '/+' . $new;
         }
 
-        file_put_contents(STORAGE . '/temp/statusers.dat', $stat, LOCK_EX);
-    }
-
-    return file_get_contents(STORAGE . '/temp/statusers.dat');
+        return $stat;
+    });
 }
 
 /**
@@ -441,13 +437,9 @@ function statsUsers()
  */
 function statsAdmins()
 {
-    if (@filemtime(STORAGE . '/temp/statadmins.dat') < time() - 3600) {
-        $total = User::query()->whereIn('level', User::ADMIN_GROUPS)->count();
-
-        file_put_contents(STORAGE . '/temp/statadmins.dat', $total, LOCK_EX);
-    }
-
-    return file_get_contents(STORAGE . '/temp/statadmins.dat');
+    return Cache::remember('statAdmins', 600, static function () {
+        return User::query()->whereIn('level', User::ADMIN_GROUPS)->count();
+    });
 }
 
 /**
@@ -510,7 +502,7 @@ function statsIpBanned()
  */
 function statsPhotos()
 {
-    if (@filemtime(STORAGE . '/temp/statphotos.dat') < time() - 900) {
+    return Cache::remember('statPhotos', 900, static function () {
         $stat     = Photo::query()->count();
         $totalNew = Photo::query()->where('created_at', '>', strtotime('-3 day', SITETIME))->count();
 
@@ -518,10 +510,8 @@ function statsPhotos()
             $stat .= '/+' . $totalNew;
         }
 
-        file_put_contents(STORAGE . '/temp/statphotos.dat', $stat, LOCK_EX);
-    }
-
-    return file_get_contents(STORAGE . '/temp/statphotos.dat');
+        return $stat;
+    });
 }
 
 /**
@@ -531,7 +521,9 @@ function statsPhotos()
  */
 function statsNews()
 {
-    return News::query()->count();
+    return Cache::remember('statNews', 300, static function () {
+        return News::query()->count();
+    });
 }
 
 /**
@@ -579,8 +571,8 @@ function statsStickers()
  */
 function statsChecker()
 {
-    if (file_exists(STORAGE . '/temp/checker.dat')) {
-        return dateFixed(filemtime(STORAGE . '/temp/checker.dat'), 'j.m.y');
+    if (file_exists(STORAGE . '/caches/checker.php')) {
+        return dateFixed(filemtime(STORAGE . '/caches/checker.php'), 'j.m.y');
     }
 
     return 0;
@@ -634,18 +626,16 @@ function photoNavigation($id)
  */
 function statsBlog()
 {
-    if (@filemtime(STORAGE . '/temp/statblog.dat') < time() - 900) {
-        $stat      = Blog::query()->count();
-        $totalnew  = Blog::query()->where('created_at', '>', strtotime('-3 day', SITETIME))->count();
+    return Cache::remember('statBlogs', 900, static function () {
+        $stat     = Blog::query()->count();
+        $totalnew = Blog::query()->where('created_at', '>', strtotime('-3 day', SITETIME))->count();
 
         if ($totalnew) {
             $stat .= '/+' . $totalnew;
         }
 
-        file_put_contents(STORAGE . '/temp/statblog.dat', $stat, LOCK_EX);
-    }
-
-    return file_get_contents(STORAGE . '/temp/statblog.dat');
+        return $stat;
+    });
 }
 
 /**
@@ -655,14 +645,12 @@ function statsBlog()
  */
 function statsForum()
 {
-    if (@filemtime(STORAGE . '/temp/statforum.dat') < time() - 600) {
+    return Cache::remember('statForums', 600, static function () {
         $topics = Topic::query()->count();
         $posts  = Post::query()->count();
 
-        file_put_contents(STORAGE . '/temp/statforum.dat', $topics . '/' . $posts, LOCK_EX);
-    }
-
-    return file_get_contents(STORAGE . '/temp/statforum.dat');
+        return $topics . '/' . $posts;
+    });
 }
 
 /**
@@ -672,13 +660,9 @@ function statsForum()
  */
 function statsGuestbook()
 {
-    if (@filemtime(STORAGE . '/temp/statguestbook.dat') < time() - 600) {
-        $total = Guestbook::query()->count();
-
-        file_put_contents(STORAGE . '/temp/statguestbook.dat', $total, LOCK_EX);
-    }
-
-    return file_get_contents(STORAGE . '/temp/statguestbook.dat');
+    return Cache::remember('statGuestbooks', 600, static function () {
+        return Guestbook::query()->count();
+    });
 }
 
 /**
@@ -708,19 +692,15 @@ function statsNewChat()
  */
 function statsLoad()
 {
-    if (@filemtime(STORAGE . '/temp/statload.dat') < time() - 900) {
+    return Cache::remember('statLoads', 900, static function () {
         $totalLoads = Load::query()->sum('count_downs');
 
         $totalNew = Down::query()->where('active', 1)
             ->where('created_at', '>', strtotime('-3 day', SITETIME))
             ->count();
 
-        $stat = $totalNew ? $totalLoads . '/+' . $totalNew : $totalLoads;
-
-        file_put_contents(STORAGE . '/temp/statload.dat', $stat, LOCK_EX);
-    }
-
-    return file_get_contents(STORAGE . '/temp/statload.dat');
+        return $totalNew ? $totalLoads . '/+' . $totalNew : $totalLoads;
+    });
 }
 
 /**
@@ -740,7 +720,7 @@ function statsNewLoad()
  */
 function statsBoard()
 {
-    if (@filemtime(STORAGE . '/temp/statboard.dat') < time() - 900) {
+    return Cache::remember('statBoards', 900, static function () {
         $stat      = Item::query()->where('expires_at', '>', SITETIME)->count();
         $totalnew  = Item::query()->where('updated_at', '>', strtotime('-3 day', SITETIME))->count();
 
@@ -748,10 +728,8 @@ function statsBoard()
             $stat .= '/+' . $totalnew;
         }
 
-        file_put_contents(STORAGE . '/temp/statboard.dat', $stat, LOCK_EX);
-    }
-
-    return file_get_contents(STORAGE . '/temp/statboard.dat');
+        return $stat;
+    });
 }
 
 /**
@@ -792,7 +770,7 @@ function hideMail($email)
  */
 function statVotes()
 {
-    if (@filemtime(STORAGE . '/temp/statvote.dat') < time() - 900) {
+    return Cache::remember('statVotes', 900, static function () {
         $votes = Vote::query()
             ->selectRaw('count(*) AS cnt, ifnull(sum(count), 0) AS sum')
             ->where('closed', 0)
@@ -802,10 +780,8 @@ function statVotes()
             $votes->cnt = $votes->sum = 0;
         }
 
-        file_put_contents(STORAGE . '/temp/statvote.dat', $votes->cnt . '/' . $votes->sum, LOCK_EX);
-    }
-
-    return file_get_contents(STORAGE . '/temp/statvote.dat');
+        return $votes->cnt . '/' . $votes->sum;
+    });
 }
 
 /**
@@ -815,17 +791,30 @@ function statVotes()
  */
 function statsNewsDate()
 {
-    if (@filemtime(STORAGE . '/temp/statnews.dat') < time() - 900) {
-
+    return Cache::remember('statNewsDate', 900, static function () {
         $news = News::query()->orderBy('created_at', 'desc')->first();
-        $stat = $news ? $news->created_at : 0;
 
-        file_put_contents(STORAGE . '/temp/statnews.dat', $stat, LOCK_EX);
+        return $news ? dateFixed($news->created_at, 'd.m.y') : 0;
+    });
+}
+
+/**
+ * Кеширует последние новости
+ *
+ * @return string|void новость
+ */
+function statLastNews()
+{
+    if (setting('lastnews') > 0) {
+        return Cache::remember('lastNews', 1800, static function () {
+            return News::query()
+                ->where('top', 1)
+                ->orderBy('created_at', 'desc')
+                ->limit(setting('lastnews'))
+                ->get()
+                ->toArray();
+        });
     }
-
-    $statnews = file_get_contents(STORAGE . '/temp/statnews.dat');
-
-    return dateFixed($statnews, 'd.m.y');
 }
 
 /**
@@ -835,31 +824,19 @@ function statsNewsDate()
  */
 function lastNews()
 {
-    if (setting('lastnews') > 0) {
-        if (@filemtime(STORAGE . '/temp/lastnews.dat') < time() - 1800) {
-            $news = News::query()
-                ->where('top', 1)
-                ->orderBy('created_at', 'desc')
-                ->limit(setting('lastnews'))
-                ->get();
+    $news = statLastNews();
 
-            file_put_contents(STORAGE . '/temp/lastnews.dat', json_encode($news, JSON_UNESCAPED_UNICODE), LOCK_EX);
-        }
+    if ($news) {
+        foreach ($news as $data) {
+            echo '<i class="far fa-circle fa-lg text-muted"></i> <a href="/news/' . $data['id'] . '">' . $data['title'] . '</a> (' . $data['count_comments'] . ') <i class="fa fa-caret-down news-title"></i><br>';
 
-        $news = json_decode(file_get_contents(STORAGE . '/temp/lastnews.dat'), false);
-
-        if ($news) {
-            foreach ($news as $data) {
-                echo '<i class="far fa-circle fa-lg text-muted"></i> <a href="/news/' . $data->id . '">' . $data->title . '</a> (' . $data->count_comments . ') <i class="fa fa-caret-down news-title"></i><br>';
-
-                if (strpos($data->text, '[cut]') !== false) {
-                    $data->text = current(explode('[cut]', $data->text)) . ' <a href="/news/'. $data->id .'" class="badge badge-success">Читать дальше &raquo;</a>';
-                }
-
-                echo '<div class="news-text" style="display: none;">' . bbCode($data->text) . '<br>';
-                echo '<a href="/news/comments/' . $data->id . '">Комментарии</a> ';
-                echo '<a href="/news/end/' . $data->id . '">&raquo;</a></div>';
+            if (strpos($data['text'], '[cut]') !== false) {
+                $data['text'] = current(explode('[cut]', $data['text'])) . ' <a href="/news/'. $data['id'] .'" class="badge badge-success">Читать дальше &raquo;</a>';
             }
+
+            echo '<div class="news-text" style="display: none;">' . bbCode($data['text']) . '<br>';
+            echo '<a href="/news/comments/' . $data['id'] . '">Комментарии</a> ';
+            echo '<a href="/news/end/' . $data['id'] . '">&raquo;</a></div>';
         }
     }
 }
@@ -1102,6 +1079,43 @@ function truncateDescription(string $value, int $words = 20, string $end = ''): 
     return Str::words(trim($value), $words, $end);
 }
 
+
+/**
+ * Кэширует ссылки пользовательской рекламы
+ *
+ * @return array Список ссылок
+ */
+function statAdverts()
+{
+    if (setting('rekusershow')) {
+        return Cache::remember('adverts', 1800, static function () {
+
+            $data = Advert::query()->where('deleted_at', '>', SITETIME)->get();
+
+            $links = [];
+            if ($data->isNotEmpty()) {
+                foreach ($data as $val) {
+                    if ($val['color']) {
+                        $val['name'] = '<span style="color:' . $val->color . '">' . $val->name . '</span>';
+                    }
+
+                    $link = '<a href="' . $val->site . '" target="_blank" rel="nofollow">' . $val->name . '</a>';
+
+                    if ($val->bold) {
+                        $link = '<b>' . $link . '</b>';
+                    }
+
+                    $links[] = $link;
+                }
+            }
+
+            return $links;
+        });
+    }
+
+    return [];
+}
+
 /**
  * Возвращает HTML пользовательской рекламы
  *
@@ -1109,54 +1123,19 @@ function truncateDescription(string $value, int $words = 20, string $end = ''): 
  */
 function getAdvertUser()
 {
-    if (setting('rekusershow')) {
-        if (@filemtime(STORAGE . '/temp/adverts.dat') < time() - 1800) {
-            saveAdvertUser();
-        }
+    $adverts = statAdverts();
 
-        $datafile = json_decode(file_get_contents(STORAGE . '/temp/adverts.dat'), false);
+    if ($adverts) {
+        $total = count($adverts);
+        $show  = setting('rekusershow') > $total ? $total : setting('rekusershow');
 
-        if ($datafile) {
-            $total = count($datafile);
-            $show  = setting('rekusershow') > $total ? $total : setting('rekusershow');
+        $links  = Arr::random($adverts, $show);
+        $result = implode('<br>', $links);
 
-            $links  = Arr::random($datafile, $show);
-            $result = implode('<br>', $links);
-
-            return view('adverts/_links', compact('result'));
-        }
+        return view('adverts/_links', compact('result'));
     }
 
     return false;
-}
-
-/**
- * Кэширует ссылки пользовательской рекламы
- *
- * @return void Список ссылок
- */
-function saveAdvertUser()
-{
-    $data = Advert::query()->where('deleted_at', '>', SITETIME)->get();
-
-    $links = [];
-    if ($data->isNotEmpty()) {
-        foreach ($data as $val) {
-            if ($val['color']) {
-                $val['name'] = '<span style="color:' . $val->color . '">' . $val->name . '</span>';
-            }
-
-            $link = '<a href="' . $val->site . '" target="_blank" rel="nofollow">' . $val->name . '</a>';
-
-            if ($val->bold) {
-                $link = '<b>' . $link . '</b>';
-            }
-
-            $links[] = $link;
-        }
-    }
-
-    file_put_contents(STORAGE . '/temp/adverts.dat', json_encode($links, JSON_UNESCAPED_UNICODE), LOCK_EX);
 }
 
 /**
@@ -1168,24 +1147,21 @@ function saveAdvertUser()
  */
 function recentPhotos($show = 5)
 {
-    if (@filemtime(STORAGE . '/temp/recentphotos.dat') < time() - 1800) {
-        $recent = Photo::query()
+    $photos = Cache::remember('recentPhotos', 1800, static function () use ($show) {
+        return Photo::query()
             ->orderBy('created_at', 'desc')
             ->limit($show)
             ->with('files')
-            ->get();
-
-        file_put_contents(STORAGE . '/temp/recentphotos.dat', json_encode($recent, JSON_UNESCAPED_UNICODE), LOCK_EX);
-    }
-
-    $photos = json_decode(file_get_contents(STORAGE . '/temp/recentphotos.dat'), false);
+            ->get()
+            ->toArray();
+    });
 
     if ($photos) {
         foreach ($photos as $photo) {
-            $file = current($photo->files);
+            $file = current($photo['files']);
 
             if ($file) {
-                echo '<a href="/photos/' . $photo->id . '">' . resizeImage($file->hash, ['alt' => $photo->title, 'class' => 'rounded', 'style' => 'width: 100px;']) . '</a>';
+                echo '<a href="/photos/' . $photo['id'] . '">' . resizeImage($file['hash'], ['alt' => $photo['title'], 'class' => 'rounded', 'style' => 'width: 100px;']) . '</a>';
             }
         }
 
@@ -1202,17 +1178,18 @@ function recentPhotos($show = 5)
  */
 function recentTopics($show = 5)
 {
-    if (@filemtime(STORAGE . '/temp/recenttopics.dat') < time() - 180) {
-        $lastTopics = Topic::query()->orderBy('updated_at', 'desc')->limit($show)->get();
-        file_put_contents(STORAGE . '/temp/recenttopics.dat', json_encode($lastTopics, JSON_UNESCAPED_UNICODE), LOCK_EX);
-    }
-
-    $topics = json_decode(file_get_contents(STORAGE . '/temp/recenttopics.dat'), false);
+    $topics = Cache::remember('recentTopics', 300, static function () use ($show) {
+        return Topic::query()
+            ->orderBy('updated_at', 'desc')
+            ->limit($show)
+            ->get()
+            ->toArray();
+    });
 
     if ($topics) {
         foreach ($topics as $topic) {
-            echo '<i class="far fa-circle fa-lg text-muted"></i>  <a href="/topics/' . $topic->id . '">' . $topic->title . '</a> (' . $topic->count_posts . ')';
-            echo '<a href="/topics/end/' . $topic->id . '">&raquo;</a><br>';
+            echo '<i class="far fa-circle fa-lg text-muted"></i>  <a href="/topics/' . $topic['id'] . '">' . $topic['title'] . '</a> (' . $topic['count_posts'] . ')';
+            echo '<a href="/topics/end/' . $topic['id'] . '">&raquo;</a><br>';
         }
     }
 }
@@ -1224,24 +1201,21 @@ function recentTopics($show = 5)
  *
  * @return string|void Список файлов
  */
-function recentFiles($show = 5)
+function recentDowns($show = 5)
 {
-    if (@filemtime(STORAGE . '/temp/recentfiles.dat') < time() - 600) {
-        $lastFiles = Down::query()
+    $files = Cache::remember('recentDowns', 600, static function () use ($show) {
+        return Down::query()
             ->where('active', 1)
             ->orderBy('created_at', 'desc')
             ->limit($show)
             ->with('category')
-            ->get();
-
-        file_put_contents(STORAGE . '/temp/recentfiles.dat', json_encode($lastFiles, JSON_UNESCAPED_UNICODE), LOCK_EX);
-    }
-
-    $files = json_decode(file_get_contents(STORAGE . '/temp/recentfiles.dat'), false);
+            ->get()
+            ->toArray();
+    });
 
     if ($files) {
         foreach ($files as $file) {
-            echo '<i class="far fa-circle fa-lg text-muted"></i>  <a href="/downs/' . $file->id . '">' . $file->title . '</a> (' . $file->count_comments . ')<br>';
+            echo '<i class="far fa-circle fa-lg text-muted"></i>  <a href="/downs/' . $file['id'] . '">' . $file['title'] . '</a> (' . $file['count_comments'] . ')<br>';
         }
     }
 }
@@ -1255,20 +1229,17 @@ function recentFiles($show = 5)
  */
 function recentBlogs($show = 5)
 {
-    if (@filemtime(STORAGE . '/temp/recentblog.dat') < time() - 600) {
-        $lastBlogs = Blog::query()
+    $blogs = Cache::remember('recentBlogs', 600, static function () use ($show) {
+        return Blog::query()
             ->orderBy('created_at', 'desc')
             ->limit($show)
-            ->get();
-
-        file_put_contents(STORAGE . '/temp/recentblog.dat', json_encode($lastBlogs, JSON_UNESCAPED_UNICODE), LOCK_EX);
-    }
-
-    $blogs = json_decode(file_get_contents(STORAGE . '/temp/recentblog.dat'), false);
+            ->get()
+            ->toArray();
+    });
 
     if ($blogs) {
         foreach ($blogs as $blog) {
-            echo '<i class="far fa-circle fa-lg text-muted"></i> <a href="/articles/' . $blog->id . '">' . $blog->title . '</a> (' . $blog->count_comments . ')<br>';
+            echo '<i class="far fa-circle fa-lg text-muted"></i> <a href="/articles/' . $blog['id'] . '">' . $blog['title'] . '</a> (' . $blog['count_comments'] . ')<br>';
         }
     }
 }
@@ -1282,21 +1253,18 @@ function recentBlogs($show = 5)
  */
 function recentBoards($show = 5)
 {
-    if (@filemtime(STORAGE . '/temp/recentboard.dat') < time() - 600) {
-        $lastItems = Item::query()
+    $items = Cache::remember('recentBoards', 600, static function () use ($show) {
+        return Item::query()
             ->where('expires_at', '>', SITETIME)
             ->orderBy('created_at', 'desc')
             ->limit($show)
-            ->get();
-
-        file_put_contents(STORAGE . '/temp/recentboard.dat', json_encode($lastItems, JSON_UNESCAPED_UNICODE), LOCK_EX);
-    }
-
-    $items = json_decode(file_get_contents(STORAGE . '/temp/recentboard.dat'), false);
+            ->get()
+            ->toArray();
+    });
 
     if ($items) {
         foreach ($items as $item) {
-            echo '<i class="far fa-circle fa-lg text-muted"></i> <a href="/items/' . $item->id . '">' . $item->title . '</a><br>';
+            echo '<i class="far fa-circle fa-lg text-muted"></i> <a href="/items/' . $item['id'] . '">' . $item['title'] . '</a><br>';
         }
     }
 }
@@ -1309,14 +1277,12 @@ function recentBoards($show = 5)
  */
 function statsOffers()
 {
-    if (@filemtime(STORAGE . '/temp/offers.dat') < time() - 10800) {
+    return Cache::remember('offers', 600, static function () {
         $offers   = Offer::query()->where('type', 'offer')->count();
         $problems = Offer::query()->where('type', 'issue')->count();
 
-        file_put_contents(STORAGE . '/temp/offers.dat', $offers . '/' . $problems, LOCK_EX);
-    }
-
-    return file_get_contents(STORAGE . '/temp/offers.dat');
+        return $offers . '/' . $problems;
+    });
 }
 
 /**
@@ -1634,35 +1600,21 @@ function performance()
 /**
  * Очистка кеш-файлов
  *
- * @param array $files
+ * @param array $keys
  *
  * @return bool результат выполнения
  */
-function clearCache(array $files = [])
+function clearCache(array $keys = [])
 {
-    if ($files) {
-        foreach ($files as $file) {
-            $file = STORAGE . '/temp/' . $file . '.dat';
-            if (file_exists($file) && is_file($file)) {
-                unlink($file);
-            }
+    if ($keys) {
+        foreach ($keys as $key) {
+            Cache::forget($key);
         }
 
         return true;
     }
 
-    $files = glob(STORAGE . '/temp/*.dat');
-    $files = array_diff($files, [
-        STORAGE . '/temp/checker.dat',
-        STORAGE . '/temp/counter7.dat',
-        STORAGE . '/temp/ipban.dat'
-    ]);
-
-    if ($files) {
-        foreach ($files as $file) {
-            unlink($file);
-        }
-    }
+    Cache::flush();
 
     return true;
 }
@@ -2331,20 +2283,19 @@ function getQueryLog()
 /**
  * Выводит список забаненных ip
  *
- * @param bool $save нужно ли сбросить кеш
+ * @param bool $clear нужно ли сбросить кеш
  *
  * @return array массив IP
  */
-function ipBan($save = false)
+function ipBan($clear = false)
 {
-    if (! $save && file_exists(STORAGE . '/temp/ipban.dat')) {
-        $ipBan = json_decode(file_get_contents(STORAGE . '/temp/ipban.dat'), false);
-    } else {
-        $ipBan = Ban::query()->pluck('ip')->all();
-        file_put_contents(STORAGE . '/temp/ipban.dat', json_encode($ipBan), LOCK_EX);
+    if ($clear) {
+        clearCache(['ipBan']);
     }
 
-    return $ipBan;
+    return Cache::rememberForever('ipBan', static function () {
+        return Ban::query()->pluck('ip')->all();
+    });
 }
 
 /**
@@ -2357,13 +2308,23 @@ function ipBan($save = false)
 function setting($key = null)
 {
     if (! Registry::has('settings')) {
-        if (! file_exists(STORAGE . '/temp/settings.dat')) {
-            saveSettings();
-        }
+        $settings = Cache::rememberForever('settings', static function () {
+            $settings = Setting::query()->pluck('value', 'name')->all();
 
-        $setting = json_decode(file_get_contents(STORAGE . '/temp/settings.dat'), true);
+            return array_map(static function ($value) {
+                if (is_numeric($value)) {
+                    return strpos($value, '.') === false ? (int) $value : (float) $value;
+                }
 
-        Registry::set('settings', $setting);
+                if ($value === '') {
+                    return null;
+                }
+
+                return $value;
+            }, $settings);
+        });
+
+        Registry::set('settings', $settings);
     }
 
     if (! $key) {
@@ -2384,30 +2345,6 @@ function setSetting($setting)
 {
     $setting = array_merge(Registry::get('settings'), $setting);
     Registry::set('settings', $setting);
-}
-
-/**
- * Кеширует настройки сайта
- *
- * @return void
- */
-function saveSettings()
-{
-    $settings = Setting::query()->pluck('value', 'name')->all();
-
-    $settings = array_map(static function ($value) {
-        if (is_numeric($value)) {
-            return strpos($value, '.') === false ? (int) $value : (float) $value;
-        }
-
-        if ($value === '') {
-            return null;
-        }
-
-        return $value;
-    }, $settings);
-
-    file_put_contents(STORAGE . '/temp/settings.dat', json_encode($settings, JSON_UNESCAPED_UNICODE), LOCK_EX);
 }
 
 /**
@@ -2513,25 +2450,17 @@ function uniqueName(string $extension = null): string
  * Возвращает курсы валют
  *
  * @return string
- * @throws ErrorException
  */
 function getCourses()
 {
-    if (
-        @filesize(STORAGE . '/temp/courses.dat') === 0 ||
-        @filemtime(STORAGE . '/temp/courses.dat') < time() - 3600
-    ) {
+    $courses = Cache::remember('courses', 3600, static function () {
         $curl = new Curl();
         $curl->setConnectTimeout(3);
 
-        if ($query = $curl->get('https://www.cbr-xml-daily.ru/daily_json.js')) {
-            file_put_contents(STORAGE . '/temp/courses.dat', $query, LOCK_EX);
-        } else {
-           touch(STORAGE . '/temp/courses.dat', SITETIME);
-        }
-    }
+        $query = $curl->get('https://www.cbr-xml-daily.ru/daily_json.js');
 
-    $courses = @json_decode(file_get_contents(STORAGE . '/temp/courses.dat'), false);
+        return $query ? json_decode($query, false) : null;
+    });
 
     return view('app/_courses', compact('courses'));
 }
@@ -2593,7 +2522,7 @@ function config(string $key, $default = null)
     static $config;
 
     if (! $config) {
-        $configPath = STORAGE . '/temp/config.dat';
+        $configPath = STORAGE . '/caches/config.php';
 
         if (file_exists($configPath)) {
             $config = require $configPath;
