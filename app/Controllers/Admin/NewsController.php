@@ -156,7 +156,7 @@ class NewsController extends AdminController
                 // Выводим на главную если там нет новостей
                 if ($top && empty(setting('lastnews'))) {
                     Setting::query()->where('name', 'lastnews')->update(['value' => 1]);
-                    clearCache(['settings']);
+                    clearCache('settings');
                 }
 
                 clearCache(['statNews', 'lastNews']);

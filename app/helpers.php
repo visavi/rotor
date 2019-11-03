@@ -1600,13 +1600,17 @@ function performance()
 /**
  * Очистка кеш-файлов
  *
- * @param array $keys
+ * @param string|array $keys
  *
  * @return bool результат выполнения
  */
-function clearCache(array $keys = [])
+function clearCache($keys = null)
 {
     if ($keys) {
+        if (!is_array($keys)) {
+            $keys = [$keys];
+        }
+
         foreach ($keys as $key) {
             Cache::forget($key);
         }
@@ -2290,7 +2294,7 @@ function getQueryLog()
 function ipBan($clear = false)
 {
     if ($clear) {
-        clearCache(['ipBan']);
+        clearCache('ipBan');
     }
 
     return Cache::rememberForever('ipBan', static function () {

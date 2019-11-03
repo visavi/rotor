@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Controllers\Admin;
 
+use App\Commands\RouteClear;
 use App\Models\Module;
 use App\Models\User;
 use Exception;
@@ -104,7 +105,8 @@ class ModuleController extends AdminController
         $moduleConfig = include $modulePath . '/module.php';
         $module->createSymlink($modulePath);
         $module->migrate($modulePath);
-        clearCache(['routes']);
+
+        runCommand(new RouteClear());
 
         $result = 'Модуль успешно установлен!';
 
@@ -160,7 +162,8 @@ class ModuleController extends AdminController
         }
 
         $module->deleteSymlink($modulePath);
-        clearCache(['routes']);
+
+        runCommand(new RouteClear());
 
         if ($disable) {
             $module->update([

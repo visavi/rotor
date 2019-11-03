@@ -63,7 +63,7 @@ class SettingController extends AdminController
                     Setting::query()->where('name', $name)->update(['value' => $value]);
                 }
 
-                clearCache(['settings']);
+                clearCache('settings');
 
                 setFlash('success', 'Настройки сайта успешно изменены!');
                 redirect('/admin/settings?act=' . $act);

@@ -236,7 +236,7 @@ class StickerController extends AdminController
                     'code'        => $code,
                 ]);
 
-                clearCache(['stickers']);
+                clearCache('stickers');
                 setFlash('success', 'Стикер успешно загружен!');
                 redirect('/admin/stickers/' . $cid);
             } else {
@@ -288,7 +288,7 @@ class StickerController extends AdminController
                     'category_id' => $cid,
                 ]);
 
-                clearCache(['stickers']);
+                clearCache('stickers');
                 setFlash('success', 'Стикер успешно отредактирован!');
                 redirect('/admin/stickers/' . $cid . '?page=' . $page);
             } else {
@@ -333,7 +333,7 @@ class StickerController extends AdminController
             deleteFile(HOME . $sticker->name);
             $sticker->delete();
 
-            clearCache(['stickers']);
+            clearCache('stickers');
             setFlash('success', 'Стикер успешно удален!');
         } else {
             setFlash('danger', $validator->getErrors());
