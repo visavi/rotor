@@ -2463,7 +2463,7 @@ function getCourses()
 
         $query = $curl->get('https://www.cbr-xml-daily.ru/daily_json.js');
 
-        return $query ? json_decode($query, false) : null;
+        return $query ? json_decode($query, true) : null;
     });
 
     return view('app/_courses', compact('courses'));
