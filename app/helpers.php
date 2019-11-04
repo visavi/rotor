@@ -791,11 +791,13 @@ function statVotes()
  */
 function statsNewsDate()
 {
-    return Cache::remember('statNewsDate', 900, static function () {
+    $newsDate = Cache::remember('statNewsDate', 900, static function () {
         $news = News::query()->orderBy('created_at', 'desc')->first();
 
-        return $news ? dateFixed($news->created_at, 'd.m.y') : 0;
+        return $news->created_at ?? 0;
     });
+
+    return $newsDate ? dateFixed($newsDate, 'd.m.y') : 0;
 }
 
 /**
