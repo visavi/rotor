@@ -6,6 +6,7 @@ namespace App\Controllers\Admin;
 
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 use Symfony\Component\Finder\Finder;
 use Symfony\Component\Finder\SplFileInfo;
 
@@ -30,11 +31,11 @@ class CheckerController extends AdminController
      */
     public function index(): string
     {
-        $diff  = [];
+        $diff = [];
 
-        if (file_exists(STORAGE . '/temp/checker.dat')) {
+        if (file_exists(STORAGE . '/caches/checker.php')) {
             $files = $this->scanFiles(BASEDIR);
-            $filesScan = json_decode(file_get_contents(STORAGE . '/temp/checker.dat'));
+            $filesScan = json_decode(file_get_contents(STORAGE . '/caches/checker.php'), true);
 
             $diff['left']  = array_diff($files, $filesScan);
             $diff['right'] = array_diff($filesScan, $files);
@@ -54,15 +55,11 @@ class CheckerController extends AdminController
         $token = check($request->input('token'));
 
         if ($token === $_SESSION['token']) {
-            if (is_writable(STORAGE . '/temp')) {
-                $files = $this->scanFiles(BASEDIR);
+            $files = $this->scanFiles(BASEDIR);
 
-                file_put_contents(STORAGE . '/temp/checker.dat', json_encode($files), LOCK_EX);
+            file_put_contents(STORAGE . '/caches/checker.php', json_encode($files));
 
-                setFlash('success', 'Сайт успешно отсканирован!');
-            } else {
-                setFlash('danger', 'Директория temp недоступна для записи!');
-            }
+            setFlash('success', 'Сайт успешно просканирован!');
         } else {
             setFlash('danger', __('validator.token'));
         }

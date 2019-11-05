@@ -30,8 +30,8 @@ class RouteClear extends AbstractCommand
      */
     protected function execute(InputInterface $input, OutputInterface $output): void
     {
-        if (file_exists(STORAGE . '/temp/routes.dat')) {
-            unlink (STORAGE . '/temp/routes.dat');
+        if (file_exists(STORAGE . '/caches/routes.php')) {
+            unlink (STORAGE . '/caches/routes.php');
         }
 
         $output->writeln('<info>Routes cleared successfully.</info>');

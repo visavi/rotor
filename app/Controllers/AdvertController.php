@@ -116,7 +116,7 @@ class AdvertController extends BaseController
 
                 getUser()->decrement('money', $price);
 
-                saveAdvertUser();
+                clearCache('adverts');
 
                 setFlash('success', 'Рекламная ссылка успешно размещена');
                 redirect('/adverts');

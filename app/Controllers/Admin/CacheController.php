@@ -32,14 +32,14 @@ class CacheController extends AdminController
         $type = check($request->input('type', 'files'));
 
         if ($type === 'files') {
-            $files = glob(STORAGE . '/temp/*.dat');
+            $files = glob(STORAGE . '/caches/{*/*/*,*.php}', GLOB_BRACE);
 
             $view = view('admin/caches/index', compact('files'));
         } else {
-            $images = glob(UPLOADS.'/thumbnails/*.{gif,png,jpg,jpeg}', GLOB_BRACE);
+            $images = glob(UPLOADS . '/thumbnails/*.{gif,png,jpg,jpeg}', GLOB_BRACE);
             $page   = paginate(20, count($images));
 
-            $images = \array_slice($images, $page->offset, $page->limit);
+            $images = array_slice($images, $page->offset, $page->limit);
 
             $view = view('admin/caches/images', compact('images', 'page'));
         }
@@ -59,7 +59,6 @@ class CacheController extends AdminController
         $type  = check($request->input('type', 'files'));
 
         if ($token === $_SESSION['token']) {
-
             if ($type === 'files') {
                 clearCache();
             } else {

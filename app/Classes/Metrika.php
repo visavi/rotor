@@ -13,20 +13,16 @@ class Metrika
     /**
      * Генерирует счетчик
      *
+     * @param int $online
+     *
      * @return void
      */
-    public function getCounter(): void
+    public function getCounter($online): void
     {
-        if (file_exists(STORAGE . '/temp/counter.dat')) {
-            $count = json_decode(file_get_contents(STORAGE . '/temp/counter.dat'));
-        } else {
-            $count = (object) ['dayhosts' => 0, 'dayhits' => 0];
-        }
+        $counter = Counter::query()->first();
 
-        if (file_exists(STORAGE . '/temp/online.dat')) {
-            $online = last(json_decode(file_get_contents(STORAGE . '/temp/online.dat')));
-        } else {
-            $online = 0;
+        if (! $counter) {
+            $counter = (object) ['dayhosts' => 0, 'dayhits' => 0];
         }
 
         // ----------------------------------------------------------------------//
@@ -41,8 +37,8 @@ class Metrika
             $pos = 42;
         }
 
-        imagettftext($img, 6, 0, 14, 7, $color, HOME . '/assets/fonts/font.ttf', (string) formatShortNum($count->dayhosts));
-        imagettftext($img, 6, 0, 14, 13, $color, HOME . '/assets/fonts/font.ttf', (string) formatShortNum($count->dayhits));
+        imagettftext($img, 6, 0, 14, 7, $color, HOME . '/assets/fonts/font.ttf', (string) formatShortNum($counter->dayhosts));
+        imagettftext($img, 6, 0, 14, 13, $color, HOME . '/assets/fonts/font.ttf', (string) formatShortNum($counter->dayhits));
         imagettftext($img, 12, 0, $pos, 13, $color, HOME . '/assets/fonts/font.ttf', (string) $online);
 
         imagepng($img, UPLOADS . '/counters/counter_new.png');

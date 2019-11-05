@@ -67,7 +67,7 @@ class PhotoController extends AdminController
                     'closed' => $closed
                 ]);
 
-                clearCache(['statphotos', 'recentphotos']);
+                clearCache(['statPhotos', 'recentPhotos']);
                 setFlash('success', 'Фотография успешно отредактирована!');
                 redirect('/admin/photos?page=' . $page);
             } else {
@@ -110,7 +110,7 @@ class PhotoController extends AdminController
             $photo->comments()->delete();
             $photo->delete();
 
-            clearCache(['statphotos', 'recentphotos']);
+            clearCache(['statPhotos', 'recentPhotos']);
             setFlash('success', 'Фотография успешно удалена!');
         } else {
             setFlash('danger', $validator->getErrors());

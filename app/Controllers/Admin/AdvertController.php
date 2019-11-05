@@ -70,7 +70,7 @@ class AdvertController extends AdminController
                     'bold'  => $bold,
                 ]);
 
-                saveAdvertUser();
+                clearCache('adverts');
 
                 setFlash('success', __('main.record_changed_success'));
                 redirect('/admin/adverts?page=' . $page);
@@ -102,7 +102,7 @@ class AdvertController extends AdminController
         if ($validator->isValid()) {
             Advert::query()->whereIn('id', $del)->delete();
 
-            saveAdvertUser();
+            clearCache('adverts');
 
             setFlash('success', __('main.records_deleted_success'));
         } else {

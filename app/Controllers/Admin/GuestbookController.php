@@ -138,7 +138,7 @@ class GuestbookController extends AdminController
         if ($validator->isValid()) {
             Guestbook::query()->whereIn('id', $del)->delete();
 
-            clearCache(['statguestbook']);
+            clearCache('statGuestbooks');
             setFlash('success', __('main.messages_deleted_success'));
         } else {
             setFlash('danger', $validator->getErrors());
@@ -164,7 +164,7 @@ class GuestbookController extends AdminController
 
         if ($validator->isValid()) {
 
-            clearCache(['statguestbook']);
+            clearCache('statGuestbooks');
             Guestbook::query()->truncate();
 
             setFlash('success', 'Гостевая книга успешно очищена!');

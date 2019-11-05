@@ -13,6 +13,7 @@ use App\Models\Flood;
 use App\Models\Reader;
 use Illuminate\Database\Query\JoinClause;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 
 class BlogController extends BaseController
 {
@@ -178,7 +179,7 @@ class BlogController extends BaseController
                     'tags'        => $tags,
                 ]);
 
-                clearCache(['statblog', 'recentblog']);
+                clearCache(['statBlogs', 'recentBlogs']);
                 setFlash('success', __('blogs.article_success_edited'));
                 redirect('/articles/' . $blog->id);
             } else {
@@ -299,7 +300,7 @@ class BlogController extends BaseController
                     ->where('user_id', getUser('id'))
                     ->update(['relate_id' => $blog->id]);
 
-                clearCache(['statblog', 'recentblog']);
+                clearCache(['statBlogs', 'recentBlogs']);
                 $flood->saveState();
 
                 setFlash('success', __('blogs.article_success_created'));
@@ -547,8 +548,7 @@ class BlogController extends BaseController
      */
     public function tags(): string
     {
-        if (@filemtime(STORAGE . '/temp/tagcloud.dat') < time() - 3600) {
-
+        $tags = Cache::remember('tagCloud', 3600, static function () {
             $allTags = Blog::query()
                 ->select('tags')
                 ->pluck('tags')
@@ -562,10 +562,9 @@ class BlogController extends BaseController
             array_splice($allTags, 100);
             shuffleAssoc($allTags);
 
-            file_put_contents(STORAGE . '/temp/tagcloud.dat', json_encode($allTags, JSON_UNESCAPED_UNICODE), LOCK_EX);
-        }
+            return $allTags;
+        });
 
-        $tags = json_decode(file_get_contents(STORAGE . '/temp/tagcloud.dat'), true);
         $max = max($tags);
         $min = min($tags);
 

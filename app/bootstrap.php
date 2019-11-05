@@ -1,9 +1,12 @@
 <?php
 
+use Illuminate\Cache\CacheManager;
+use Illuminate\Cache\MemcachedConnector;
 use Illuminate\Container\Container;
 use Illuminate\Database\Capsule\Manager as DB;
 use Illuminate\Events\Dispatcher;
 use Illuminate\Filesystem\Filesystem;
+use Illuminate\Redis\RedisManager;
 use Illuminate\Support\Facades\Facade;
 use Illuminate\Translation\FileLoader;
 use Illuminate\Translation\Translator;
@@ -91,7 +94,7 @@ $app->singleton('view', static function ($app) {
     $resolver->register('blade', static function () use ($app) {
         $blade = new BladeCompiler(
             $app['files'],
-            STORAGE . '/caches'
+            STORAGE . '/views'
         );
 
         $blade->withoutDoubleEncoding();
@@ -110,6 +113,51 @@ $app->singleton('view', static function ($app) {
 
     return new Factory($resolver, $finder, $app['events']);
 });
+
+$app->singleton('config', static function () {
+    return [
+        'cache.default' => config('CACHE_DRIVER', 'file'),
+        'cache.prefix' => '',
+        'cache.stores.file' => [
+            'driver' => 'file',
+            'path'   => STORAGE . '/caches',
+        ],
+        'cache.stores.redis' => [
+            'driver'     => 'redis',
+            'connection' => 'default'
+        ],
+        'database.redis' => [
+            'cluster' => false,
+            'default' => [
+                'host'     => config('REDIS_HOST', '127.0.0.1'),
+                'password' => config('REDIS_PASSWORD'),
+                'port'     => config('REDIS_PORT', 6379),
+                'database' => 0,
+            ],
+        ],
+        'cache.stores.memcached' => [
+            'driver' => 'memcached',
+            'servers' => [
+                [
+                    'host'   => config('MEMCACHED_HOST', '127.0.0.1'),
+                    'port'   => config('MEMCACHED_PORT', 11211),
+                    'weight' => 100,
+                ],
+            ],
+        ],
+    ];
+});
+
+if (config('CACHE_DRIVER') === 'redis') {
+    $app['redis'] = new RedisManager($app, 'predis', $app['config']['database.redis']);
+}
+
+if (config('CACHE_DRIVER') === 'memcached') {
+    $app['memcached.connector'] = new MemcachedConnector();
+}
+
+$cacheManager = new CacheManager($app);
+$app->instance('cache', $cacheManager);
 
 /**
  * Set $app as FacadeApplication handler

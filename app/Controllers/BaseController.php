@@ -7,6 +7,7 @@ namespace App\Controllers;
 use App\Models\Ban;
 use Illuminate\Database\Capsule\Manager as DB;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Lang;
 use Illuminate\Support\Facades\View;
 
@@ -82,43 +83,27 @@ Class BaseController
      */
     private function frequencyLimit(): void
     {
-        if (setting('doslimit') && is_writable(STORAGE . '/antidos')) {
+        if (setting('doslimit')) {
+            $key = 'request_' . getIp();
+            Cache::remember($key, 60, static function () {
+                return 0;
+            });
 
-            $filename = STORAGE . '/antidos/' . getIp() . '.dat';
-
-            $dosfiles = glob(STORAGE . '/antidos/*.dat');
-            foreach ($dosfiles as $filename) {
-                $array_filemtime = @filemtime($filename);
-                if ($array_filemtime < (time() - 60)) {
-                    @unlink($filename);
-                }
-            }
-            /* Проверка на время */
-            if (file_exists($filename)) {
-                $file_dos = file($filename);
-                $file_str = explode('|', $file_dos[0]);
-                if ($file_str[0] < (time() - 60)) {
-                    @unlink($filename);
-                }
-            }
-            /* Запись логов */
-            $write = time().'|'.server('REQUEST_URI').'|'.server('HTTP_REFERER').'|'.getBrowser().'|'.getUser('id').'|';
-            file_put_contents($filename, $write . PHP_EOL, FILE_APPEND);
-
+            $requests = Cache::increment($key);
             /* Автоматическая блокировка */
-            if (counterString($filename) > setting('doslimit')) {
-                    $ipban = Ban::query()->where('ip', getIp())->first();
+            if ($requests > setting('doslimit')) {
+                $ipban = Ban::query()->where('ip', getIp())->first();
 
-                    if (! $ipban) {
-                        DB::connection()->insert(
-                            'insert ignore into ban (`ip`, `created_at`) values (?, ?);',
-                            [getIp(), SITETIME]
-                        );
-                    }
+                if (! $ipban) {
+                    DB::connection()->insert(
+                        'insert ignore into ban (`ip`, `created_at`) values (?, ?);',
+                        [getIp(), SITETIME]
+                    );
+                }
 
                 ipBan(true);
                 saveErrorLog(666);
-                @unlink($filename);
+                clearCache($key);
             }
         }
     }

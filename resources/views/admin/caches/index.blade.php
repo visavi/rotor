@@ -17,6 +17,10 @@
 @section('content')
     <i class="fa fa-eraser fa-2x"></i> <a href="/admin/caches" class="badge badge-success">{{ __('admin.caches.files') }}</a> / <a href="/admin/caches?type=image" class="badge badge-light">{{ __('admin.caches.images') }}</a><br><br>
 
+    <div>
+        Cache driver: <span class="badge badge-pill badge-primary">{{ config('CACHE_DRIVER') }}</span>
+    </div>
+
     @if ($files)
         @foreach ($files as $file)
 

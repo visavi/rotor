@@ -13,6 +13,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Query\JoinClause;
+use Illuminate\Support\Facades\Cache;
 
 /**
  * Class User
@@ -392,20 +393,15 @@ class User extends BaseModel
         $online = '<div class="online bg-danger" title="Оффлайн"></div>';
 
         if (! $visits) {
-            if (@filemtime(STORAGE . '/temp/visit.dat') < time() - 10) {
-
-                $onlines = Online::query()
+            $visits = Cache::remember('visit', 10, static function () {
+                return Online::query()
                     ->whereNotNull('user_id')
                     ->pluck('user_id', 'user_id')
                     ->all();
-
-                file_put_contents(STORAGE . '/temp/visit.dat', json_encode($onlines), LOCK_EX);
-            }
-
-            $visits = json_decode(file_get_contents(STORAGE . '/temp/visit.dat'));
+            });
         }
 
-        if (isset($visits->{$this->id})) {
+        if (isset($visits[$this->id])) {
             $online = '<div class="online bg-success" title="Онлайн"></div>';
         }
 
@@ -426,11 +422,10 @@ class User extends BaseModel
         }
 
         if (! $status) {
-            $this->saveStatus(3600);
-            $status = json_decode(file_get_contents(STORAGE . '/temp/status.dat'));
+            $status = $this->saveStatus(3600);
         }
 
-        return $status->{$this->id} ?? setting('statusdef');
+        return $status[$this->id] ?? setting('statusdef');
     }
 
     /**
@@ -483,12 +478,12 @@ class User extends BaseModel
      * Кеширует статусы пользователей
      *
      * @param  int $time время кеширования
-     * @return void
+     *
+     * @return array
      */
-    public function saveStatus($time = 0): void
+    public function saveStatus($time = 0): array
     {
-        if (empty($time) || @filemtime(STORAGE . '/temp/status.dat') < time() - $time) {
-
+        return Cache::remember('status', $time, static function () {
             $users = self::query()
                 ->select('users.id', 'users.status', 'status.name', 'status.color')
                 ->leftJoin('status', static function (JoinClause $join) {
@@ -513,8 +508,8 @@ class User extends BaseModel
                 $statuses[$user->id] = $user->name;
             }
 
-            file_put_contents(STORAGE . '/temp/status.dat', json_encode($statuses, JSON_UNESCAPED_UNICODE), LOCK_EX);
-        }
+            return $statuses;
+        });
     }
 
     /**

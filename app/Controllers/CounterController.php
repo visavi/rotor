@@ -16,8 +16,8 @@ class CounterController extends BaseController
      */
     public function index(): string
     {
-        $count   = statsCounter();
-        $online  = statsOnline();
+        $count  = statsCounter();
+        $online = statsOnline();
 
         $counts31 = [];
         $counters = Counter31::query()
