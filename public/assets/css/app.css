@@ -185,7 +185,7 @@ blockquote small:before {
 .carousel-control-next-icon {
   background-image: none;
   width: auto;
-  color: #ccc;
+  color: #5c5c5c;
   font-family: FontAwesome;
   font-size: 25px;
 }
