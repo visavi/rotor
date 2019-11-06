@@ -86,6 +86,10 @@ Create seeder `php rotor seed:create UsersSeeder`
 
 Performing seeder `php rotor seed:run` or `php rotor seed:run -s UsersSeeder` for a specific seed
 
+### Caching Settings
+
+If you set `APP_ENV = production`, then routes and project configuration settings will be cached
+
 ### Cron settings
 
 ```

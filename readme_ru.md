@@ -86,6 +86,10 @@ composer create-project --stability=dev visavi/rotor .
 
 Выполнение сида `php rotor seed:run` или `php rotor seed:run -s UsersSeeder` для отдельного сида
 
+### Кеширование настроек
+
+Если установить `APP_ENV=production`, то будут кешироваться роуты и настройки конфигурации проекта
+
 ### Настройки cron
 
 ```
