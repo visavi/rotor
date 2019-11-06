@@ -88,7 +88,7 @@ $wrap->setOption('environment', 'default');
         <?php
         $errorSettings = 0;
 
-        if (version_compare(PHP_VERSION, '7.2.0') > 0) {
+        if (PHP_VERSION_ID >= 70200) {
             echo '<i class="fa fa-plus-circle"></i> Версия PHP 7.2.0 и выше: <b><span style="color:#00cc00">ОК</span></b> (Версия ' . parseVersion(PHP_VERSION) . ')<br>';
         } else {
             echo '<i class="fa fa-minus-circle"></i> Версия PHP 7.2.0 и выше: <b><span style="color:#ff0000">Ошибка</span></b>  (Версия ' . parseVersion(PHP_VERSION) . ')<br>';
