@@ -2538,7 +2538,7 @@ function config(string $key, $default = null)
             $getenv = array_intersect_key(getenv(), $params);
             $config = array_replace($params, $getenv);
 
-            if (! $config['APP_DEBUG']) {
+            if (config('APP_ENV') === 'production') {
                 file_put_contents(
                     $configPath, '<?php return ' . var_export($config, true) . ';'
                 );
