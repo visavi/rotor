@@ -27,6 +27,8 @@
             <i class="fa fa-file-alt"></i> <b>{{ basename($file) }}</b> ({{ formatFileSize($file) }} / {{ dateFixed(filemtime($file)) }})<br>
         @endforeach
 
+        {!! pagination($page) !!}
+
         <div class="float-right">
             <form action="/admin/caches/clear" method="post">
                 @csrf
