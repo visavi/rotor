@@ -150,29 +150,30 @@
             <i class="fa fa-home"></i> <a href="{{ $user->site }}">{{ __('users.go_website') }} {{ $user->login }}</a><br>
         @endif
 
-        @if ($user->login !== getUser('login'))
-            <i class="fa fa-address-book"></i> {{ __('users.add_to') }}
-            <a href="/contacts?user={{ $user->login }}">{{ __('index.contacts') }}</a> /
-            <a href="/ignores?user={{ $user->login }}">{{ __('index.ignores') }}</a><br>
-            <i class="fa fa-envelope"></i> <a href="/messages/talk/{{ $user->login }}">{{ __('users.send_message') }}</a><br>
-            <i class="fa fa-money-bill-alt"></i> <a href="/transfers?user={{ $user->login }}">{{ __('index.money_transfer') }}</a><br>
+        @if (getUser())
+            @if ($user->login !== getUser('login'))
+                <i class="fa fa-address-book"></i> {{ __('users.add_to') }}
+                <a href="/contacts?user={{ $user->login }}">{{ __('index.contacts') }}</a> /
+                <a href="/ignores?user={{ $user->login }}">{{ __('index.ignores') }}</a><br>
+                <i class="fa fa-envelope"></i> <a href="/messages/talk/{{ $user->login }}">{{ __('users.send_message') }}</a><br>
+                <i class="fa fa-money-bill-alt"></i> <a href="/transfers?user={{ $user->login }}">{{ __('index.money_transfer') }}</a><br>
 
-            @if (isAdmin('moder'))
-                @if (setting('invite'))
-                    <i class="fa fa-ban"></i> <a href="/admin/invitations/send?user={{ $user->login }}&amp;token={{ $_SESSION['token'] }}">{{ __('users.send_invite') }}</a><br>
+                @if (isAdmin('moder'))
+                    @if (setting('invite'))
+                        <i class="fa fa-ban"></i> <a href="/admin/invitations/send?user={{ $user->login }}&amp;token={{ $_SESSION['token'] }}">{{ __('users.send_invite') }}</a><br>
+                    @endif
+                <i class="fa fa-ban"></i> <a href="/admin/bans/edit?user={{ $user->login }}">{{ __('index.ban_unban') }}</a><br>
+                <i class="fa fa-history"></i> <a href="/admin/banhists/view?user={{ $user->login }}">{{ __('index.ban_history') }}</a><br>
                 @endif
-            <i class="fa fa-ban"></i> <a href="/admin/bans/edit?user={{ $user->login }}">{{ __('index.ban_unban') }}</a><br>
-            <i class="fa fa-history"></i> <a href="/admin/banhists/view?user={{ $user->login }}">{{ __('index.ban_history') }}</a><br>
-            @endif
 
-            @if (isAdmin('boss'))
-                <i class="fa fa-wrench"></i> <a href="/admin/users/edit?user={{ $user->login }}">{{ __('main.edit') }}</a><br>
+                @if (isAdmin('boss'))
+                    <i class="fa fa-wrench"></i> <a href="/admin/users/edit?user={{ $user->login }}">{{ __('main.edit') }}</a><br>
+                @endif
+            @else
+                <i class="fa fa-user-circle"></i> <a href="/profile">{{ __('index.my_profile') }}</a><br>
+                <i class="fa fa-cog"></i> <a href="/accounts">{{ __('index.my_details') }}</a><br>
+                <i class="fa fa-wrench"></i> <a href="/settings">{{ __('index.my_settings') }}</a><br>
             @endif
-        @else
-            <i class="fa fa-user-circle"></i> <a href="/profile">{{ __('index.my_profile') }}</a><br>
-            <i class="fa fa-cog"></i> <a href="/accounts">{{ __('index.my_details') }}</a><br>
-            <i class="fa fa-wrench"></i> <a href="/settings">{{ __('index.my_settings') }}</a><br>
         @endif
-
     </div>
 @stop
