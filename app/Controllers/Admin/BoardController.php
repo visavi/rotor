@@ -33,31 +33,20 @@ class BoardController extends AdminController
             }
         }
 
-        $total = Item::query()
-            ->when($board, static function (Builder $query) use ($board) {
-                return $query->where('board_id', $board->id);
-            })
-            ->where('expires_at', '>', SITETIME)
-            ->count();
-
-        $page = paginate(10, $total);
-
         $items = Item::query()
             ->when($board, static function (Builder $query) use ($board) {
                 return $query->where('board_id', $board->id);
             })
             ->where('expires_at', '>', SITETIME)
-            ->orderBy('updated_at', 'desc')
-            ->limit($page->limit)
-            ->offset($page->offset)
+            ->orderByDesc('updated_at')
             ->with('category', 'user', 'files')
-            ->get();
+            ->paginate(Item::BOARD_PAGINATE);
 
         $boards = Board::query()
             ->where('parent_id', $board->id ?? 0)
             ->get();
 
-        return view('admin/boards/index', compact('items', 'page', 'board', 'boards'));
+        return view('admin/boards/index', compact('items', 'board', 'boards'));
     }
 
     /**

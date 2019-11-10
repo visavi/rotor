@@ -1,7 +1,7 @@
 @extends('layout')
 
 @section('title')
-    {{ __('votes.archive_votes') }} ({{ __('main.page_num', ['page' => $page->current]) }})
+    {{ __('votes.archive_votes') }} ({{ __('main.page_num', ['page' => $votes->currentPage()]) }})
 @stop
 
 @section('breadcrumb')
@@ -30,9 +30,9 @@
                 {{ __('main.votes') }}: {{ $vote->count }}<br>
             </div>
         @endforeach
-
-        {!! pagination($page) !!}
     @else
         {!! showError(__('votes.empty_votes')) !!}
     @endif
+
+    {{ $votes->links('app/_paginator') }}
 @stop

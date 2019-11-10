@@ -15,7 +15,7 @@
 @stop
 
 @section('content')
-    @if ($stickers)
+    @if ($stickers->isNotEmpty())
         @foreach ($stickers as $sticker)
             <div class="bg-light p-2 mb-1 border">
                 <img src="{{ $sticker['name'] }}" alt=""><br>
@@ -23,10 +23,10 @@
             </div>
         @endforeach
 
-        {!! pagination($page) !!}
-
-        {{ __('stickers.total_stickers') }}: <b>{{ $page->total }}</b><br><br>
+        {{ __('stickers.total_stickers') }}: <b>{{ $stickers->total() }}</b><br>
     @else
         {!! showError(__('stickers.empty_stickers')) !!}
     @endif
+
+    {{ $stickers->links('app/_paginator') }}
 @stop

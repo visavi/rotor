@@ -44,9 +44,6 @@ class TopicController extends BaseController
             abort(404, __('forums.topic_not_exist'));
         }
 
-        $total = Post::query()->where('topic_id', $topic->id)->count();
-        $page = paginate(setting('forumpost'), $total);
-
         $posts = Post::query()
             ->select('posts.*', 'pollings.vote')
             ->where('topic_id', $topic->id)
@@ -56,12 +53,10 @@ class TopicController extends BaseController
                     ->where('pollings.user_id', getUser('id'));
             })
             ->with('files', 'user', 'editUser')
-            ->offset($page->offset)
-            ->limit($page->limit)
             ->orderBy('created_at')
-            ->get();
+            ->paginate(setting('forumpost'));
 
-        if ($page->current === 1) {
+        if ($posts->onFirstPage()) {
             $firstPost = $posts->first();
         } else {
             $firstPost = Post::query()->where('topic_id', $topic->id)->orderBy('created_at')->first();
@@ -104,7 +99,7 @@ class TopicController extends BaseController
 
         $description = $firstPost ? truncateDescription(bbCode($firstPost->text, false)) : $topic->title;
 
-        return view('forums/topic', compact('topic', 'posts', 'page', 'vote', 'description'));
+        return view('forums/topic', compact('topic', 'posts', 'vote', 'description'));
     }
 
     /**
@@ -143,7 +138,7 @@ class TopicController extends BaseController
 
         // Проверка сообщения на схожесть
         /** @var Post $post */
-        $post = Post::query()->where('topic_id', $topic->id)->orderBy('id', 'desc')->first();
+        $post = Post::query()->where('topic_id', $topic->id)->orderByDesc('id')->first();
         $validator->notEqual($msg, $post->text, ['msg' => __('forums.post_repeat')]);
 
         if ($files && $validator->isValid()) {

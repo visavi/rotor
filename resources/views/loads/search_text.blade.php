@@ -16,7 +16,7 @@
 @stop
 
 @section('content')
-    {{ __('loads.found_text') }}: <b>{{ $page->total }}</b><br><br>
+    {{ __('loads.found_text') }}: <b>{{ $downs->total() }}</b><br><br>
 
     @foreach ($downs as $data)
         <?php $rating = $data->rated ? round($data->rating / $data->rated, 1) : 0; ?>
@@ -35,5 +35,5 @@
         </div>
     @endforeach
 
-    {!! pagination($page) !!}
+    {{ $downs->links('app/_paginator') }}
 @stop

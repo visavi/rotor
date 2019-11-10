@@ -44,7 +44,7 @@ class Antimat extends BaseModel
     public static function replace($str): string
     {
         $words = self::query()
-            ->orderBy(DB::connection()->raw('CHAR_LENGTH(string)'), 'desc')
+            ->orderByDesc(DB::connection()->raw('CHAR_LENGTH(string)'))
             ->pluck('string')
             ->all();
 

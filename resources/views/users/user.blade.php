@@ -156,7 +156,7 @@
                 <a href="/contacts?user={{ $user->login }}">{{ __('index.contacts') }}</a> /
                 <a href="/ignores?user={{ $user->login }}">{{ __('index.ignores') }}</a><br>
                 <i class="fa fa-envelope"></i> <a href="/messages/talk/{{ $user->login }}">{{ __('users.send_message') }}</a><br>
-                <i class="fa fa-money-bill-alt"></i> <a href="/transfers?user={{ $user->login }}">{{ __('index.money_transfer') }}</a><br>
+                <i class="fa fa-dollar-sign"></i> <a href="/transfers?user={{ $user->login }}">{{ __('index.money_transfer') }}</a><br>
 
                 @if (isAdmin('moder'))
                     @if (setting('invite'))

@@ -6,6 +6,8 @@ use Illuminate\Container\Container;
 use Illuminate\Database\Capsule\Manager as DB;
 use Illuminate\Events\Dispatcher;
 use Illuminate\Filesystem\Filesystem;
+use Illuminate\Http\Request;
+use Illuminate\Pagination\PaginationServiceProvider;
 use Illuminate\Redis\RedisManager;
 use Illuminate\Support\Facades\Facade;
 use Illuminate\Translation\FileLoader;
@@ -72,6 +74,10 @@ $app->singleton('files', static function () {
 
 $app->singleton('events', static function ($app) {
     return new Dispatcher($app);
+});
+
+$app->singleton('request', static function() {
+    return Request::capture();
 });
 
 $app->singleton('translator', static function ($app) {
@@ -158,6 +164,10 @@ if (config('CACHE_DRIVER') === 'memcached') {
 
 $cacheManager = new CacheManager($app);
 $app->instance('cache', $cacheManager);
+
+$pagination = new PaginationServiceProvider($app);
+$pagination->register();
+
 
 /**
  * Set $app as FacadeApplication handler

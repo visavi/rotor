@@ -1,7 +1,7 @@
 @extends('layout')
 
 @section('title')
-    {{ __('index.reputation_rating') }} ({{ __('main.page_num', ['page' => $page->current]) }})
+    {{ __('index.reputation_rating') }} ({{ __('main.page_num', ['page' => $users->currentPage()]) }})
 @stop
 
 @section('header')
@@ -26,7 +26,7 @@
                     {!! $data->getOnline() !!}
                 </div>
 
-                {{ ($page->offset + $key + 1) }}.
+                {{ $users->firstItem() + $key }}.
 
                 @if ($user === $data->login)
                     <b>{!! $data->getProfile('#ff0000') !!}</b>
@@ -43,9 +43,7 @@
             </div>
         @endforeach
 
-        {!! pagination($page) !!}
-
-        <div class="form">
+        <div class="form mt-3">
             <form action="/authoritylists" method="post">
                 <div class="form-inline">
                     <div class="form-group{{ hasError('user') }}">
@@ -58,8 +56,10 @@
             </form>
         </div><br>
 
-        {{ __('main.total_users') }}: <b>{{ $page->total }}</b><br><br>
+        {{ __('main.total_users') }}: <b>{{ $users->total() }}</b><br>
     @else
         {!! showError(__('main.empty_users')) !!}
     @endif
+
+    {{ $users->links('app/_paginator') }}
 @stop

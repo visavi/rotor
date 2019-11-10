@@ -18,17 +18,12 @@ class PhotoController extends AdminController
      */
     public function index(): string
     {
-        $total = Photo::query()->count();
-        $page  = paginate(setting('fotolist'), $total);
-
         $photos = Photo::query()
-            ->orderBy('created_at', 'desc')
-            ->offset($page->offset)
-            ->limit($page->limit)
+            ->orderByDesc('created_at')
             ->with('user')
-            ->get();
+            ->paginate(setting('fotolist'));
 
-        return view('admin/photos/index', compact('photos', 'page'));
+        return view('admin/photos/index', compact('photos'));
     }
 
     /**

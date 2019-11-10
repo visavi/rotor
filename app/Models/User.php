@@ -154,7 +154,7 @@ class User extends BaseModel
     {
         return $this->hasOne(Banhist::class, 'user_id', 'id')
             ->whereIn('type', ['ban', 'change'])
-            ->orderBy('created_at', 'desc')
+            ->orderByDesc('created_at')
             ->withDefault();
     }
 

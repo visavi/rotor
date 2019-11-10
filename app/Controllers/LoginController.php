@@ -25,16 +25,11 @@ class LoginController extends BaseController
      */
     public function index(): string
     {
-        $total = Login::query()->where('user_id', getUser('id'))->count();
-        $page = paginate(setting('loginauthlist'), $total);
-
         $logins = Login::query()
             ->where('user_id', getUser('id'))
-            ->orderBy('created_at', 'desc')
-            ->offset($page->offset)
-            ->limit($page->limit)
-            ->get();
+            ->orderByDesc('created_at')
+            ->paginate(setting('loginauthlist'));
 
-        return view('logins/index', compact('logins', 'page'));
+        return view('logins/index', compact('logins'));
     }
 }

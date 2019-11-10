@@ -104,19 +104,14 @@ class PageController extends BaseController
             abort(404, 'Данной категории не существует!');
         }
 
-        $total = Sticker::query()->where('category_id', $id)->count();
-        $page = paginate(setting('stickerlist'), $total);
-
         $stickers = Sticker::query()
             ->where('category_id', $id)
             ->orderBy(DB::connection()->raw('CHAR_LENGTH(`code`)'))
             ->orderBy('name')
-            ->limit($page->limit)
-            ->offset($page->offset)
             ->with('category')
-            ->get();
+            ->paginate(setting('stickerlist'));
 
-        return view('pages/stickers_category', compact('category', 'stickers', 'page'));
+        return view('pages/stickers_category', compact('category', 'stickers'));
     }
 
     /**
@@ -192,7 +187,7 @@ class PageController extends BaseController
     public function statusfaq(): string
     {
         $statuses = Status::query()
-            ->orderBy('topoint', 'desc')
+            ->orderByDesc('topoint')
             ->get();
 
         return view('pages/statusfaq', compact('statuses'));

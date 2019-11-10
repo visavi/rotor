@@ -16,7 +16,7 @@
 
 @section('content')
     @if ($topics->isNotEmpty())
-        <form action="/forums/bookmarks/delete?page={{ $page->current }}" method="post">
+        <form action="/forums/bookmarks/delete?page={{ $topics->currentPage() }}" method="post">
             @csrf
             @foreach ($topics as $topic)
                 <div class="b">
@@ -37,9 +37,9 @@
 
             <button class="btn btn-sm btn-danger">{{ __('main.delete_selected') }}</button>
         </form>
-
-        {!! pagination($page) !!}
     @else
         {!! showError(__('forums.empty_bookmarks')) !!}
     @endif
+
+    {{ $topics->links('app/_paginator') }}
 @stop

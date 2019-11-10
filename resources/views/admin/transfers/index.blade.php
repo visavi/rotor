@@ -16,7 +16,6 @@
 
 @section('content')
     @if ($transfers->isNotEmpty())
-
         @foreach ($transfers as $data)
             <div class="b">
                 <div class="img">
@@ -38,7 +37,7 @@
             </div>
         @endforeach
 
-        {!! pagination($page) !!}
+        {{ $transfers->links('app/_paginator') }}
 
         <div class="form">
             <form action="/admin/transfers/view" method="get">
@@ -53,7 +52,7 @@
             </form>
         </div>
 
-        {{ __('main.total') }}: <b>{{ $page->total }}</b><br><br>
+        {{ __('main.total') }}: <b>{{ $transfers->total() }}</b><br><br>
 
     @else
         {!! showError(__('transfers.empty_transfers')) !!}

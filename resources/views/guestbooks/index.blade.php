@@ -1,7 +1,7 @@
 @extends('layout')
 
 @section('title')
-    {{ __('index.guestbooks') }} ({{ __('main.page_num', ['page' => $page->current]) }})
+    {{ __('index.guestbooks') }} ({{ __('main.page_num', ['page' => $posts->currentPage()]) }})
 @stop
 
 @section('header')
@@ -23,7 +23,7 @@
     <a href="/tags">{{ __('main.tags') }}</a>
 
     @if (isAdmin())
-        / <a href="/admin/guestbooks?page={{ $page->current }}">{{ __('main.management') }}</a>
+        / <a href="/admin/guestbooks?page={{ $posts->currentPage() }}">{{ __('main.management') }}</a>
     @endif
     <hr>
 
@@ -36,7 +36,7 @@
                             <a href="#" onclick="return postReply(this)" data-toggle="tooltip" title="{{ __('main.reply') }}"><i class="fa fa-reply text-muted"></i></a>
                             <a href="#" onclick="return postQuote(this)" data-toggle="tooltip" title="{{ __('main.quote') }}"><i class="fa fa-quote-right text-muted"></i></a>
 
-                            <a href="#" onclick="return sendComplaint(this)" data-type="{{ App\Models\Guestbook::class }}" data-id="{{ $data->id }}" data-token="{{ $_SESSION['token'] }}" data-page="{{ $page->current }}" rel="nofollow" data-toggle="tooltip" title="{{ __('main.complain') }}"><i class="fa fa-bell text-muted"></i></a>
+                            <a href="#" onclick="return sendComplaint(this)" data-type="{{ App\Models\Guestbook::class }}" data-id="{{ $data->id }}" data-token="{{ $_SESSION['token'] }}" data-page="{{ $posts->currentPage() }}" rel="nofollow" data-toggle="tooltip" title="{{ __('main.complain') }}"><i class="fa fa-bell text-muted"></i></a>
                         </div>
                     @endif
 
@@ -76,12 +76,11 @@
                 @endif
             </div>
         @endforeach
-
-        {!! pagination($page) !!}
-
     @else
         {!! showError(__('main.empty_messages')) !!}
     @endif
+
+    {{ $posts->links('app/_paginator') }}
 
     @if (getUser())
         <div class="form">

@@ -50,18 +50,14 @@ class ErrorController extends AdminController
         $lists = $this->lists;
         $code  = $this->code;
 
-        $total = Error::query()->where('code', $code)->count();
-        $page = paginate(setting('loglist'), $total);
-
         $logs = Error::query()
             ->where('code', $code)
-            ->orderBy('created_at', 'desc')
-            ->offset($page->offset)
-            ->limit($page->limit)
+            ->orderByDesc('created_at')
             ->with('user')
-            ->get();
+            ->paginate(setting('loglist'))
+            ->appends(['code' => $code]);
 
-        return view('admin/errors/index', compact('logs', 'page', 'code', 'lists'));
+        return view('admin/errors/index', compact('logs', 'code', 'lists'));
     }
 
     /**

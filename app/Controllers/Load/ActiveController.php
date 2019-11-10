@@ -45,24 +45,18 @@ class ActiveController extends BaseController
             $active = 1;
         }
 
-        $total = Down::query()->where('active', $active)->where('user_id', $user->id)->count();
-
-        if ($total > 500) {
-            $total = 500;
-        }
-
-        $page = paginate(setting('downlist'), $total);
-
         $downs = Down::query()
             ->where('active', $active)
             ->where('user_id', $user->id)
-            ->orderBy('created_at', 'desc')
-            ->limit($page->limit)
-            ->offset($page->offset)
+            ->orderByDesc('created_at')
             ->with('category', 'user')
-            ->get();
+            ->paginate(setting('downlist'))
+            ->appends([
+                'user'   => $user->login,
+                'active' => $active,
+            ]);
 
-        return view('loads/active_files', compact('downs', 'page', 'user', 'active'));
+        return view('loads/active_files', compact('downs', 'user', 'active'));
     }
 
     /**
@@ -72,30 +66,19 @@ class ActiveController extends BaseController
      */
     public function comments(): string
     {
-        $user  = $this->user;
-        $total = Comment::query()
-            ->where('relate_type', Down::class)
-            ->where('user_id', $user->id)
-            ->count();
-
-        if ($total > 500) {
-            $total = 500;
-        }
-
-        $page = paginate(setting('downcomm'), $total);
+        $user = $this->user;
 
         $comments = Comment::query()
             ->select('comments.*', 'title', 'count_comments')
             ->where('relate_type', Down::class)
             ->where('comments.user_id', $user->id)
             ->leftJoin('downs', 'comments.relate_id', 'downs.id')
-            ->offset($page->offset)
-            ->limit($page->limit)
-            ->orderBy('comments.created_at', 'desc')
+            ->orderByDesc('comments.created_at')
             ->with('user')
-            ->get();
+            ->paginate(setting('downcomm'))
+            ->appends(['user' => $user->login]);
 
-        return view('loads/active_comments', compact('comments', 'page', 'user'));
+        return view('loads/active_comments', compact('comments', 'user'));
     }
 }
 

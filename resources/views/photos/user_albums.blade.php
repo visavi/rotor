@@ -1,7 +1,7 @@
 @extends('layout')
 
 @section('title')
-    {{ __('photos.album') }} {{ $user->login }} ({{ __('main.page_num', ['page' => $page->current]) }})
+    {{ __('photos.album') }} {{ $user->login }} ({{ __('main.page_num', ['page' => $photos->currentPage()]) }})
 @stop
 
 @section('header')
@@ -25,8 +25,8 @@
 
                 @if ($moder)
                     <div class="float-right">
-                        <a href="/photos/edit/{{ $photo->id }}?page={{ $page->current }}"><i class="fa fa-pencil-alt text-muted"></i></a>
-                        <a href="/photos/delete/{{ $photo->id }}?page={{ $page->current }}&amp;token={{ $_SESSION['token'] }}" onclick="return confirm('{{ __('photos.confirm_delete_photo') }}')"><i class="fa fa-times text-muted"></i></a>
+                        <a href="/photos/edit/{{ $photo->id }}?page={{ $photos->currentPage() }}"><i class="fa fa-pencil-alt text-muted"></i></a>
+                        <a href="/photos/delete/{{ $photo->id }}?page={{ $photos->currentPage() }}&amp;token={{ $_SESSION['token'] }}" onclick="return confirm('{{ __('photos.confirm_delete_photo') }}')"><i class="fa fa-times text-muted"></i></a>
                     </div>
                 @endif
 
@@ -73,10 +73,10 @@
             </div>
         @endforeach
 
-        {!! pagination($page) !!}
-
-        {{ __('photos.total_photos') }}: <b>{{ $page->total }}</b><br><br>
+        <br>{{ __('photos.total_photos') }}: <b>{{ $photos->total() }}</b><br>
     @else
         {!! showError(__('photos.empty_photos')) !!}
     @endif
+
+    {{ $photos->links('app/_paginator') }}
 @stop

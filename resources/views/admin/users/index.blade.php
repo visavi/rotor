@@ -73,10 +73,9 @@
                 {{ __('users.registered') }}: {{ dateFixed($user->created_at, 'd.m.Y') }}
             </div>
         @endforeach
-
-        {!! pagination($page) !!}
-
     @else
         {!! showError(__('main.empty_users')) !!}
     @endif
+
+    {{ $users->links('app/_paginator') }}
 @stop

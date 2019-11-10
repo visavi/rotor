@@ -13,21 +13,16 @@ class OnlineController extends BaseController
      */
     public function index()
     {
-        $total  = Online::query()->whereNotNull('user_id')->count();
-        $all    = Online::query()->count();
+        $other  = Online::query()->count();
         $guests = false;
-
-        $page = paginate(setting('onlinelist'), $total);
 
         $online = Online::query()
             ->whereNotNull('user_id')
             ->with('user')
-            ->orderBy('updated_at', 'desc')
-            ->offset($page->offset)
-            ->limit($page->limit)
-            ->get();
+            ->orderByDesc('updated_at')
+            ->paginate(setting('onlinelist'));
 
-        return view('pages/online', compact('online', 'page', 'total', 'all', 'guests'));
+        return view('pages/online', compact('online', 'other', 'guests'));
     }
 
     /**
@@ -35,18 +30,13 @@ class OnlineController extends BaseController
      */
     public function all()
     {
-        $all    = Online::query()->count();
-        $total  = Online::query()->whereNotNull('user_id')->count();
+        $other  = Online::query()->whereNotNull('user_id')->count();
         $guests = true;
 
-        $page = paginate(setting('onlinelist'), $all);
-
         $online = Online::with('user')
-            ->orderBy('updated_at', 'desc')
-            ->offset($page->offset)
-            ->limit($page->limit)
-            ->get();
+            ->orderByDesc('updated_at')
+            ->paginate(setting('onlinelist'));
 
-        return view('pages/online', compact('online', 'page', 'total', 'all', 'guests'));
+        return view('pages/online', compact('online', 'other', 'guests'));
     }
 }

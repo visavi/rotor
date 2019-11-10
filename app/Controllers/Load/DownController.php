@@ -443,23 +443,14 @@ class DownController extends BaseController
             }
         }
 
-        $total = Comment::query()
-            ->where('relate_type', Down::class)
-            ->where('relate_id', $id)
-            ->count();
-
-        $page = paginate(setting('downcomm'), $total);
-
         $comments = Comment::query()
             ->where('relate_type', Down::class)
             ->where('relate_id', $id)
             ->orderBy('created_at')
-            ->offset($page->offset)
-            ->limit($page->limit)
             ->with('user')
-            ->get();
+            ->paginate(setting('downcomm'));
 
-        return view('loads/comments', compact('down', 'comments', 'page'));
+        return view('loads/comments', compact('down', 'comments'));
     }
 
     /**
@@ -554,6 +545,7 @@ class DownController extends BaseController
      * Просмотр zip архива
      *
      * @param int $id
+     *
      * @return string
      */
     public function zip(int $id): string
@@ -578,17 +570,16 @@ class DownController extends BaseController
             $archive->openFile(HOME . $file->hash);
 
             $down         = $file->relate;
-            $page         = paginate(setting('ziplist'), $archive->count());
             $getDocuments = array_values($archive->getAllInfo());
+            $viewExt      = Down::getViewExt();
 
-            $viewExt   = Down::getViewExt();
-            $documents = \array_slice($getDocuments, $page->offset, $page->limit, true);
+            $documents = paginate($getDocuments, setting('ziplist'));
 
         } catch (Exception $e) {
             abort('default', __('loads.archive_not_open'));
         }
 
-        return view('loads/zip', compact('down', 'file', 'documents', 'page', 'viewExt'));
+        return view('loads/zip', compact('down', 'file', 'documents', 'viewExt'));
     }
 
     /**

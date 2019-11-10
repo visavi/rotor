@@ -20,18 +20,18 @@
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
             <li class="breadcrumb-item"><a href="/admin">{{ __('index.panel') }}</a></li>
             <li class="breadcrumb-item active">{{ __('index.offers') }}</li>
-            <li class="breadcrumb-item"><a href="/offers/{{ $type }}?page={{ $page->current }}">{{ __('main.review') }}</a></li>
+            <li class="breadcrumb-item"><a href="/offers/{{ $type }}?page={{ $offers->currentPage() }}">{{ __('main.review') }}</a></li>
         </ol>
     </nav>
 @stop
 
 @section('content')
     @if ($type === 'offer')
-        <a class="btn btn-primary btn-sm" href="/admin/offers/offer">{{ __('offers.offers') }} <span class="badge badge-light">{{ $page->total }}</span></a>
-        <a class="btn btn-light btn-sm" href="/admin/offers/issue">{{ __('offers.problems') }} <span class="badge badge-light">{{ $page->otherTotal }}</span></a>
+        <a class="btn btn-primary btn-sm" href="/admin/offers/offer">{{ __('offers.offers') }} <span class="badge badge-light">{{ $offers->total() }}</span></a>
+        <a class="btn btn-light btn-sm" href="/admin/offers/issue">{{ __('offers.problems') }} <span class="badge badge-light">{{ $otherCount }}</span></a>
     @else
-        <a class="btn btn-light btn-sm" href="/admin/offers/offer">{{ __('offers.offers') }} <span class="badge badge-light">{{ $page->otherTotal }}</span></a>
-        <a class="btn btn-primary btn-sm" href="/admin/offers/issue">{{ __('offers.problems') }} <span class="badge badge-light">{{ $page->total }}</span></a>
+        <a class="btn btn-light btn-sm" href="/admin/offers/offer">{{ __('offers.offers') }} <span class="badge badge-light">{{ $otherCount }}</span></a>
+        <a class="btn btn-primary btn-sm" href="/admin/offers/issue">{{ __('offers.problems') }} <span class="badge badge-light">{{ $offers->total() }}</span></a>
     @endif
 
     @if ($offers->isNotEmpty())
@@ -49,7 +49,7 @@
         <a href="/admin/offers/{{ $type }}?sort=comments" class="badge badge-{{ $active }}">{{ __('main.comments') }}</a>
         <hr>
 
-        <form action="/admin/offers/delete?type={{ $type }}&amp;page={{ $page->current }}" method="post">
+        <form action="/admin/offers/delete?type={{ $type }}&amp;page={{ $offers->currentPage() }}" method="post">
             @csrf
             @foreach ($offers as $data)
                 <div class="b">
@@ -75,12 +75,12 @@
             </div>
         </form>
 
-        {!! pagination($page) !!}
-
-        {{ __('main.total') }}: <b>{{ $page->total }}</b><br><br>
+        <br>{{ __('main.total') }}: <b>{{ $offers->total() }}</b><br>
     @else
         {!! showError(__('main.empty_records')) !!}
     @endif
+
+    {{ $offers->links('app/_paginator') }}
 
     @if (isAdmin('boss'))
         <i class="fa fa-sync"></i> <a href="/admin/offers/restatement?token={{ $_SESSION['token'] }}">{{ __('main.recount') }}</a><br>

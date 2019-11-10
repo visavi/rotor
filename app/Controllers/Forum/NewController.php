@@ -17,26 +17,12 @@ class NewController extends BaseController
      */
     public function topics(): string
     {
-        $total = Topic::query()->count();
-
-        if (! $total) {
-            abort('default', __('forums.topics_not_created'));
-        }
-
-        if ($total > 500) {
-            $total = 500;
-        }
-
-        $page = paginate(setting('forumtem'), $total);
-
         $topics = Topic::query()
-            ->orderBy('updated_at', 'desc')
-            ->limit($page->limit)
-            ->offset($page->offset)
+            ->orderByDesc('updated_at')
             ->with('forum', 'user', 'lastPost.user')
-            ->get();
+            ->paginate(setting('forumtem'));
 
-        return view('forums/new_topics', compact('topics', 'page'));
+        return view('forums/new_topics', compact('topics'));
     }
 
     /**
@@ -46,25 +32,11 @@ class NewController extends BaseController
      */
     public function posts(): string
     {
-        $total = Post::query()->count();
-
-        if (! $total) {
-            abort('default', __('forums.posts_not_created'));
-        }
-
-        if ($total > 500) {
-            $total = 500;
-        }
-
-        $page = paginate(setting('forumpost'), $total);
-
         $posts = Post::query()
-            ->orderBy('created_at', 'desc')
-            ->limit($page->limit)
-            ->offset($page->offset)
+            ->orderByDesc('created_at')
             ->with('topic', 'user')
-            ->get();
+            ->paginate(setting('forumpost'));
 
-        return view('forums/new_posts', compact('posts', 'page'));
+        return view('forums/new_posts', compact('posts'));
     }
 }

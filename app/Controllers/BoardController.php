@@ -34,31 +34,20 @@ class BoardController extends BaseController
             }
         }
 
-        $total = Item::query()
-            ->when($board, static function (Builder $query) use ($board) {
-                return $query->where('board_id', $board->id);
-            })
-            ->where('expires_at', '>', SITETIME)
-            ->count();
-
-        $page = paginate(10, $total);
-
         $items = Item::query()
             ->when($board, static function (Builder $query) use ($board) {
                 return $query->where('board_id', $board->id);
             })
             ->where('expires_at', '>', SITETIME)
-            ->orderBy('updated_at', 'desc')
-            ->limit($page->limit)
-            ->offset($page->offset)
+            ->orderByDesc('updated_at')
             ->with('category', 'user', 'files')
-            ->get();
+            ->paginate(Item::BOARD_PAGINATE);
 
         $boards = Board::query()
             ->where('parent_id', $board->id ?? 0)
             ->get();
 
-        return view('boards/index', compact('items', 'page', 'board', 'boards'));
+        return view('boards/index', compact('items', 'board', 'boards'));
     }
 
     /**
@@ -357,18 +346,12 @@ class BoardController extends BaseController
             abort(403, __('main.not_authorized'));
         }
 
-        $total = Item::query()->where('user_id', getUser('id'))->count();
-
-        $page = paginate(10, $total);
-
         $items = Item::query()
             ->where('user_id', getUser('id'))
-            ->orderBy('updated_at', 'desc')
-            ->limit($page->limit)
-            ->offset($page->offset)
+            ->orderByDesc('updated_at')
             ->with('category', 'user', 'files')
-            ->get();
+            ->paginate(Item::BOARD_PAGINATE);
 
-        return view('boards/active', compact('items', 'page'));
+        return view('boards/active', compact('items'));
     }
 }

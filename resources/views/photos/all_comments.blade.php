@@ -1,7 +1,7 @@
 @extends('layout')
 
 @section('title')
-    {{ __('photos.all_comments') }} ({{ __('main.page_num', ['page' => $page->current]) }})
+    {{ __('photos.all_comments') }} ({{ __('main.page_num', ['page' => $comments->currentPage()]) }})
 @stop
 
 @section('header')
@@ -40,10 +40,9 @@
                 </div>
             </div>
         @endforeach
-
-        {!! pagination($page) !!}
-
     @else
         {!! showError(__('main.empty_comments')) !!}
     @endif
+
+    {{ $comments->links('app/_paginator') }}
 @stop

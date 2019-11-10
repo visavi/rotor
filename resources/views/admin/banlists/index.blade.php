@@ -37,11 +37,11 @@
             </div>
         @endforeach
 
-        {!! pagination($page) !!}
-
-        {{ __('main.total_users') }}: <b>{{ $page->total }}</b><br><br>
+        <br>{{ __('main.total_users') }}: <b>{{ $users->total() }}</b><br>
 
     @else
         {!! showError(__('main.empty_users')) !!}
     @endif
+
+    {{ $users->links('app/_paginator') }}
 @stop

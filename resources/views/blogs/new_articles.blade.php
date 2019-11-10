@@ -1,7 +1,7 @@
 @extends('layout')
 
 @section('title')
-    {{ __('index.blogs') }} - {{ __('blogs.new_articles') }} ({{ __('main.page_num', ['page' => $page->current]) }})
+    {{ __('index.blogs') }} - {{ __('blogs.new_articles') }} ({{ __('main.page_num', ['page' => $blogs->currentPage()]) }})
 @stop
 
 @section('header')
@@ -32,9 +32,9 @@
                 {{ __('main.author') }}: {!! $data->user->getProfile() !!}  ({{  dateFixed($data->created_at) }})
             </div>
         @endforeach
-
-        {!! pagination($page) !!}
     @else
         {!! showError(__('blogs.empty_articles')) !!}
     @endif
+
+    {{ $blogs->links('app/_paginator') }}
 @stop

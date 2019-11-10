@@ -5,7 +5,7 @@
 @stop
 
 @section('header')
-    <h1>{{ __('boards.my_items') }} <small>({{ __('index.boards') }}: {{ $page->total }})</small></h1>
+    <h1>{{ __('boards.my_items') }} <small>({{ __('index.boards') }}: {{ $items->total() }})</small></h1>
 @stop
 
 @section('breadcrumb')
@@ -55,10 +55,9 @@
                 </div>
             </div>
         @endforeach
-
-        {!! pagination($page) !!}
-
     @else
         {!! showError(__('boards.empty_items')) !!}
     @endif
+
+    {{ $items->links('app/_paginator') }}
 @stop

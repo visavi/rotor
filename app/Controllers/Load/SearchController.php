@@ -47,7 +47,6 @@ class SearchController extends BaseController
 
         $strlen = utfStrlen($find);
         if ($strlen >= 3 && $strlen <= 50) {
-
             $findmewords = explode(' ', utfLower($find));
 
             $arrfind = [];
@@ -69,9 +68,7 @@ class SearchController extends BaseController
 
             // Поиск в названии
             if ($wheres === 'title') {
-
                 if (empty($_SESSION['loadfindres']) || $loadfind !== $_SESSION['loadfind']) {
-
                     $searchsec = ($section > 0) ? 'category_id = ' . $section . ' AND' : '';
 
                     $result = Down::query()
@@ -89,17 +86,20 @@ class SearchController extends BaseController
                 $total = count($_SESSION['loadfindres']);
 
                 if ($total > 0) {
-                    $page = paginate(setting('downlist'), $total);
-
                     $downs = Down::query()
                         ->whereIn('id', $_SESSION['loadfindres'])
-                        ->orderBy('created_at', 'desc')
-                        ->offset($page->offset)
-                        ->limit($page->limit)
+                        ->orderByDesc('created_at')
                         ->with('user', 'category')
-                        ->get();
+                        ->paginate(setting('downlist'))
+                        ->appends([
+                            'cid'     => $cid,
+                            'find'    => $find,
+                            'section' => $section,
+                            'where'   => $where,
+                            'type'    => $type,
+                        ]);
 
-                    return view('loads/search_title', compact('downs', 'page', 'find', 'type', 'where', 'section'));
+                    return view('loads/search_title', compact('downs', 'find', 'type', 'where', 'section'));
                 }
 
                 setInput($request->all());
@@ -109,9 +109,7 @@ class SearchController extends BaseController
 
             // Поиск в описании
             if ($wheres === 'text') {
-
                 if (empty($_SESSION['loadfindres']) || $loadfind !== $_SESSION['loadfind']) {
-
                     $searchsec = ($section > 0) ? 'category_id = ' . $section . ' AND' : '';
 
                     $result = Down::query()
@@ -129,17 +127,20 @@ class SearchController extends BaseController
                 $total = count($_SESSION['loadfindres']);
 
                 if ($total > 0) {
-                    $page = paginate(setting('downlist'), $total);
-
                     $downs = Down::query()
                         ->whereIn('id', $_SESSION['loadfindres'])
-                        ->orderBy('created_at', 'desc')
-                        ->offset($page->offset)
-                        ->limit($page->limit)
+                        ->orderByDesc('created_at')
                         ->with('user', 'category')
-                        ->get();
+                        ->paginate(setting('downlist'))
+                        ->appends([
+                            'cid'     => $cid,
+                            'find'    => $find,
+                            'section' => $section,
+                            'where'   => $where,
+                            'type'    => $type,
+                        ]);
 
-                    return view('loads/search_text', compact('downs', 'page', 'find', 'type', 'where', 'section'));
+                    return view('loads/search_text', compact('downs', 'find', 'type', 'where', 'section'));
                 }
 
                 setInput($request->all());

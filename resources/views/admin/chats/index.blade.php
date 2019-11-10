@@ -19,7 +19,6 @@
     <a href="/tags">{{ __('main.tags') }}</a><hr>
 
     @if ($posts->isNotEmpty())
-
         @foreach ($posts as $post)
             <div class="post">
                 <div class="b">
@@ -32,7 +31,7 @@
 
                     @if ($post->created_at + 600 > SITETIME && getUser('id') === $post->user_id)
                         <div class="float-right">
-                            <a href="/admin/chats/edit/{{ $post->id }}?page={{ $page->current }}" data-toggle="tooltip" title="{{ __('main.edit') }}"><i class="fas fa-pencil-alt text-muted"></i></a>
+                            <a href="/admin/chats/edit/{{ $post->id }}?page={{ $posts->currentPage() }}" data-toggle="tooltip" title="{{ __('main.edit') }}"><i class="fas fa-pencil-alt text-muted"></i></a>
                         </div>
                     @endif
 
@@ -54,11 +53,11 @@
                 <span class="data">({{ $post->brow }}, {{ $post->ip }})</span>
             </div>
         @endforeach
-
-        {!! pagination($page) !!}
     @else
         {!! showError(__('main.empty_messages')) !!}
     @endif
+
+    {{ $posts->links('app/_paginator') }}
 
     <div class="form">
         <form action="/admin/chats" method="post">
@@ -73,7 +72,7 @@
         </form>
     </div><br>
 
-    @if ($page->total > 0 && isAdmin('boss'))
+    @if ($posts->total() && isAdmin('boss'))
         <i class="fa fa-times"></i> <a href="/admin/chats/clear?token={{ $_SESSION['token'] }}" onclick="return confirm('{{ __('admin.chat.confirm_clear') }}')">{{ __('admin.chat.clear') }}</a><br>
     @endif
 @stop

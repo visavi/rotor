@@ -1,7 +1,7 @@
 @extends('layout')
 
 @section('title')
-    Все публикации ({{ __('main.page_num', ['page' => $page->current]) }})
+    Все публикации ({{ __('main.page_num', ['page' => $blogs->currentPage()]) }})
 @stop
 
 @section('header')
@@ -52,11 +52,11 @@
                 </div>
             </div>
         @endforeach
-
-        {!! pagination($page) !!}
     @else
         {!! showError(__('blogs.empty_articles')) !!}
     @endif
+
+    {{ $blogs->links('app/_paginator') }}
 
     <a href="/blogs/top">{{ __('blogs.top_articles') }}</a> /
     <a href="/blogs/tags">{{ __('blogs.tag_cloud') }}</a> /

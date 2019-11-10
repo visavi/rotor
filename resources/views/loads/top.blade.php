@@ -1,7 +1,7 @@
 @extends('layout')
 
 @section('title')
-    {{ __('loads.top_downs') }} ({{ __('main.page_num', ['page' => $page->current]) }})
+    {{ __('loads.top_downs') }} ({{ __('main.page_num', ['page' => $downs->currentPage()]) }})
 @stop
 
 @section('header')
@@ -31,7 +31,6 @@
     <hr>
 
     @if ($downs->isNotEmpty())
-
         @foreach ($downs as $data)
             <?php $rating = $data->rated ? round($data->rating / $data->rated, 1) : 0; ?>
 
@@ -48,9 +47,9 @@
                 <a href="/downs/end/{{ $data->id }}">&raquo;</a>
             </div>
         @endforeach
-
-        {!! pagination($page) !!}
     @else
         {!! showError(__('loads.empty_downs')) !!}
     @endif
+
+    {{ $downs->links('app/_paginator') }}
 @stop

@@ -38,24 +38,16 @@ class ActiveController extends BaseController
      */
     public function topics(): string
     {
-        $user  = $this->user;
-        $total = Topic::query()->where('user_id', $user->id)->count();
-
-        if (! $total) {
-            abort('default', __('forums.topics_not_created'));
-        }
-
-        $page = paginate(setting('forumtem'), $total);
+        $user = $this->user;
 
         $topics = Topic::query()
-            ->where('user_id', $user->id)
-            ->orderBy('updated_at', 'desc')
-            ->limit($page->limit)
-            ->offset($page->offset)
+            ->where('user_id', $this->user)
+            ->orderByDesc('updated_at')
             ->with('forum', 'user', 'lastPost.user')
-            ->get();
+            ->paginate(setting('forumtem'))
+            ->appends(['user' => $user->login]);
 
-        return view('forums/active_topics', compact('topics', 'user', 'page'));
+        return view('forums/active_topics', compact('topics', 'user'));
     }
 
     /**
@@ -65,24 +57,16 @@ class ActiveController extends BaseController
      */
     public function posts(): string
     {
-        $user  = $this->user;
-        $total = Post::query()->where('user_id', $user->id)->count();
-
-        if (! $total) {
-            abort('default', __('forums.posts_not_created'));
-        }
-
-        $page = paginate(setting('forumpost'), $total);
+        $user = $this->user;
 
         $posts = Post::query()
             ->where('user_id', $user->id)
-            ->orderBy('created_at', 'desc')
-            ->limit($page->limit)
-            ->offset($page->offset)
+            ->orderByDesc('created_at')
             ->with('topic', 'user')
-            ->get();
+            ->paginate(setting('forumpost'))
+            ->appends(['user' => $user->login]);
 
-        return view('forums/active_posts', compact('posts', 'user', 'page'));
+        return view('forums/active_posts', compact('posts', 'user'));
     }
 
     /**

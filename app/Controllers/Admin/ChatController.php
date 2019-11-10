@@ -67,17 +67,12 @@ class ChatController extends AdminController
             }
         }
 
-        $total = Chat::query()->count();
-        $page = paginate(setting('chatpost'), $total);
-
         $posts = Chat::query()
-            ->orderBy('created_at', 'desc')
-            ->limit($page->limit)
-            ->offset($page->offset)
+            ->orderByDesc('created_at')
             ->with('user', 'editUser')
-            ->get();
+            ->paginate(setting('chatpost'));
 
-        return view('admin/chats/index', compact('posts', 'page'));
+        return view('admin/chats/index', compact('posts'));
     }
 
     /**

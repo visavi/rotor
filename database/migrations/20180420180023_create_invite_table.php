@@ -12,7 +12,7 @@ class CreateInviteTable extends AbstractMigration
         if (! $this->hasTable('invite')) {
             $table = $this->table('invite', ['engine' => config('DB_ENGINE'), 'collation' => config('DB_COLLATION')]);
             $table
-                ->addColumn('hash', 'string', ['limit' => 15])
+                ->addColumn('hash', 'string', ['limit' => 16])
                 ->addColumn('user_id', 'integer')
                 ->addColumn('invite_user_id', 'integer', ['null' => true])
                 ->addColumn('used', 'boolean', ['default' => 0])

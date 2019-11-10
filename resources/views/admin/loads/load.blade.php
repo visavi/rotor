@@ -1,7 +1,7 @@
 @extends('layout')
 
 @section('title')
-    {{ $category->name }} ({{ __('main.page_num', ['page' => $page->current]) }})
+    {{ $category->name }} ({{ __('main.page_num', ['page' => $downs->currentPage()]) }})
 @stop
 
 @section('header')
@@ -28,7 +28,7 @@
             <li class="breadcrumb-item active">{{ $category->name }}</li>
 
             @if (isAdmin('admin'))
-                <li class="breadcrumb-item"><a href="/loads/{{ $category->id }}?page={{ $page->current }}">{{ __('main.review') }}</a></li>
+                <li class="breadcrumb-item"><a href="/loads/{{ $category->id }}?page={{ $downs->currentPage() }}">{{ __('main.review') }}</a></li>
             @endif
         </ol>
     </nav>
@@ -50,7 +50,7 @@
     <a href="/admin/loads/{{ $category->id }}?sort=comments" class="badge badge-{{ $active }}">{{ __('main.comments') }}</a>
     <hr>
 
-    @if ($page->current === 1 && $category->children->isNotEmpty())
+    @if ($downs->onFirstPage() && $category->children->isNotEmpty())
         <div class="act">
             @foreach ($category->children as $child)
                 <div class="b">
@@ -85,15 +85,13 @@
                 <a href="/downs/end/{{ $data->id }}">&raquo;</a>
             </div>
         @endforeach
-
-        {!! pagination($page) !!}
-    @else
-        @if (! $category->closed)
-            {!! showError(__('loads.empty_downs')) !!}
-        @endif
+    @elseif (! $category->closed)
+        {!! showError(__('loads.empty_downs')) !!}
     @endif
 
     @if ($category->closed)
         {!! showError(__('loads.closed_load')) !!}
     @endif
+
+    {{ $downs->links('app/_paginator') }}
 @stop

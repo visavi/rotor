@@ -17,7 +17,6 @@
 
 @section('content')
     @if ($transfers->isNotEmpty())
-
         @foreach ($transfers as $data)
             <div class="b">
                 <div class="img">
@@ -37,11 +36,10 @@
             </div>
         @endforeach
 
-        {!! pagination($page) !!}
-
-        {{ __('main.total') }}: <b>{{ $page->total }}</b><br><br>
-
+        {{ __('main.total') }}: <b>{{ $transfers->total() }}</b><br><br>
     @else
         {!! showError(__('transfers.empty_transfers')) !!}
     @endif
+
+    {{ $transfers->links('app/_paginator') }}
 @stop

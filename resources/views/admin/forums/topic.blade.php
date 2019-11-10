@@ -1,7 +1,7 @@
 @extends('layout')
 
 @section('title')
-    {{ $topic->title }} ({{ __('main.page_num', ['page' => $page->current]) }})
+    {{ $topic->title }} ({{ __('main.page_num', ['page' => $posts->currentPage()]) }})
 @stop
 
 @section('header')
@@ -45,22 +45,21 @@
     <hr>
 
     @if ($topic->closed)
-        <a href="/admin/topics/action/{{ $topic->id }}?type=open&amp;page={{ $page->current }}&amp;token={{ $_SESSION['token'] }}">{{ __('main.open') }}</a> /
+        <a href="/admin/topics/action/{{ $topic->id }}?type=open&amp;page={{ $posts->currentPage() }}&amp;token={{ $_SESSION['token'] }}">{{ __('main.open') }}</a> /
     @else
-        <a href="/admin/topics/action/{{ $topic->id }}?type=closed&amp;page={{ $page->current }}&amp;token={{ $_SESSION['token'] }}"  onclick="return confirm('{{ __('forums.confirm_close_topic') }}')">{{ __('main.close') }}</a> /
+        <a href="/admin/topics/action/{{ $topic->id }}?type=closed&amp;page={{ $posts->currentPage() }}&amp;token={{ $_SESSION['token'] }}"  onclick="return confirm('{{ __('forums.confirm_close_topic') }}')">{{ __('main.close') }}</a> /
     @endif
 
     @if ($topic->locked)
-        <a href="/admin/topics/action/{{ $topic->id }}?type=unlocked&amp;page={{ $page->current }}&amp;token={{ $_SESSION['token'] }}">{{ __('main.unlock') }}</a> /
+        <a href="/admin/topics/action/{{ $topic->id }}?type=unlocked&amp;page={{ $posts->currentPage() }}&amp;token={{ $_SESSION['token'] }}">{{ __('main.unlock') }}</a> /
     @else
-        <a href="/admin/topics/action/{{ $topic->id }}?type=locked&amp;page={{ $page->current }}&amp;token={{ $_SESSION['token'] }}">{{ __('main.lock') }}</a> /
+        <a href="/admin/topics/action/{{ $topic->id }}?type=locked&amp;page={{ $posts->currentPage() }}&amp;token={{ $_SESSION['token'] }}">{{ __('main.lock') }}</a> /
     @endif
 
     <a href="/admin/topics/edit/{{ $topic->id }}">{{ __('main.change') }}</a> /
     <a href="/admin/topics/move/{{ $topic->id }}">{{ __('main.move') }}</a> /
     <a href="/admin/topics/delete/{{ $topic->id }}?token={{ $_SESSION['token'] }}" onclick="return confirm('{{ __('forums.confirm_delete_topic') }}')">{{ __('main.delete') }}</a> /
-    <a href="/topics/{{ $topic->id }}?page={{ $page->current }}">{{ __('main.review') }}</a><br>
-
+    <a href="/topics/{{ $topic->id }}?page={{ $posts->currentPage() }}">{{ __('main.review') }}</a><br>
 
     @if ($vote)
         <h3>{{ $vote->title }}</h3>
@@ -74,7 +73,7 @@
                 {!! progressBar($maxproc, $proc . '%') !!}
             @endforeach
         @else
-            <form action="/topics/votes/{{ $topic->id }}?page={{ $page->current }}" method="post">
+            <form action="/topics/votes/{{ $topic->id }}?page={{ $posts->currentPage() }}" method="post">
                 @csrf
                 @foreach ($vote->answers as $answer)
                     <label><input name="poll" type="radio" value="{{ $answer->id }}"> {{ $answer->answer }}</label><br>
@@ -86,7 +85,7 @@
         {{ __('forums.total_votes') }}: {{ $vote->count }}
     @endif
 
-    <form action="/admin/posts/delete?tid={{ $topic->id }}&amp;page={{ $page->current }}" method="post">
+    <form action="/admin/posts/delete?tid={{ $topic->id }}&amp;page={{ $posts->currentPage() }}" method="post">
         @csrf
         <div class="p-1 bg-light text-right">
             <label for="all">{{ __('main.select_all') }}</label>
@@ -95,7 +94,7 @@
 
         @if ($posts->isNotEmpty())
             @foreach ($posts as $data)
-                <?php $num = ($page->offset + $loop->iteration ); ?>
+                <?php $num = $posts->firstItem() + $loop->index; ?>
                 <div class="post">
                     <div class="b" id="post_{{ $data->id }}">
                         <div class="float-right text-right">
@@ -105,10 +104,10 @@
 
                                     <a href="#" onclick="return postQuote(this)" title="{{ __('main.quote') }}"><i class="fa fa-quote-right text-muted"></i></a>
 
-                                    <a href="#" onclick="return sendComplaint(this)" data-type="{{ App\Models\Post::class }}" data-id="{{ $data->id }}" data-token="{{ $_SESSION['token'] }}" data-page="{{ $page->current }}" rel="nofollow" title="{{ __('main.complain') }}"><i class="fa fa-bell text-muted"></i></a>
+                                    <a href="#" onclick="return sendComplaint(this)" data-type="{{ App\Models\Post::class }}" data-id="{{ $data->id }}" data-token="{{ $_SESSION['token'] }}" data-page="{{ $posts->currentPage() }}" rel="nofollow" title="{{ __('main.complain') }}"><i class="fa fa-bell text-muted"></i></a>
                                 @endif
 
-                                <a href="/admin/posts/edit/{{ $data->id }}?page={{ $page->current }}" title="{{ __('main.edit') }}"><i class="fa fa-pencil-alt text-muted"></i></a>
+                                <a href="/admin/posts/edit/{{ $data->id }}?page={{ $posts->currentPage() }}" title="{{ __('main.edit') }}"><i class="fa fa-pencil-alt text-muted"></i></a>
 
                                 <input type="checkbox" name="del[]" value="{{ $data->id }}">
                             @endif
@@ -171,7 +170,7 @@
         </span>
     </form>
 
-    {!! pagination($page) !!}
+    {{ $posts->links('app/_paginator') }}
 
     @if (getUser())
         @if (empty($topic->closed))

@@ -32,17 +32,12 @@ class NewsController extends AdminController
      */
     public function index(): string
     {
-        $total = News::query()->count();
-        $page = paginate(setting('postnews'), $total);
-
         $news = News::query()
-            ->orderBy('created_at', 'desc')
-            ->offset($page->offset)
-            ->limit($page->limit)
+            ->orderByDesc('created_at')
             ->with('user')
-            ->get();
+            ->paginate(setting('postnews'));
 
-        return view('admin/news/index', compact('news', 'page'));
+        return view('admin/news/index', compact('news'));
     }
 
     /**

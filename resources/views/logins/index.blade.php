@@ -33,9 +33,9 @@
                 </span>
             </div>
         @endforeach
-
-        {!! pagination($page) !!}
     @else
         {!! showError(__('logins.empty_history')) !!}
     @endif
+
+    {{ $logins->links('app/_paginator') }}
 @stop

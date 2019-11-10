@@ -40,9 +40,9 @@
                 {!! bbCode($data->text) !!}
             </div>
         @endforeach
-
-        {!! pagination($page) !!}
     @else
         {!! showError(__('ratings.empty_ratings')) !!}
     @endif
+
+    {{ $ratings->links('app/_paginator') }}
 @stop

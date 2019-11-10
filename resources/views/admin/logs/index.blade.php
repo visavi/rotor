@@ -28,11 +28,10 @@
             </div>
         @endforeach
 
-        {!! pagination($page) !!}
-
-        <i class="fa fa-times"></i> <a href="/admin/logs/clear?token={{ $_SESSION['token'] }}" onclick="return confirm('{{ __('admin.logs.confirm_clear') }}')">{{ __('main.clear') }}</a><br>
-
+        <br><i class="fa fa-times"></i> <a href="/admin/logs/clear?token={{ $_SESSION['token'] }}" onclick="return confirm('{{ __('admin.logs.confirm_clear') }}')">{{ __('main.clear') }}</a><br>
     @else
         {!! showError(__('admin.logs.empty_logs')) !!}
     @endif
+
+    {{ $logs->links('app/_paginator') }}
 @stop

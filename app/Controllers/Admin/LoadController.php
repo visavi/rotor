@@ -224,10 +224,7 @@ class LoadController extends AdminController
             abort(404, __('loads.category_not_exist'));
         }
 
-        $total = Down::query()->where('category_id', $category->id)->where('active', 1)->count();
-        $page = paginate(setting('downlist'), $total);
-
-        $sort = check($request->input('sort'));
+        $sort = check($request->input('sort', 'time'));
 
         switch ($sort) {
             case 'rated':
@@ -246,12 +243,11 @@ class LoadController extends AdminController
         $downs = Down::query()
             ->where('category_id', $category->id)
             ->where('active', 1)
-            ->orderBy($order, 'desc')
-            ->offset($page->offset)
-            ->limit($page->limit)
-            ->get();
+            ->orderByDesc($order)
+            ->paginate(setting('downlist'))
+            ->appends(['sort' => $sort]);
 
-        return view('admin/loads/load', compact('category', 'downs', 'page', 'order'));
+        return view('admin/loads/load', compact('category', 'downs', 'order'));
     }
 
     /**
@@ -427,18 +423,13 @@ class LoadController extends AdminController
      */
     public function new(): string
     {
-        $total = Down::query()->where('active', 0)->count();
-        $page = paginate(setting('downlist'), $total);
-
         $downs = Down::query()
             ->where('active', 0)
-            ->orderBy('created_at', 'desc')
-            ->offset($page->offset)
-            ->limit($page->limit)
+            ->orderByDesc('created_at')
             ->with('user', 'category', 'files')
-            ->get();
+            ->paginate(setting('downlist'));
 
-        return view('admin/loads/new', compact('downs', 'page'));
+        return view('admin/loads/new', compact('downs'));
     }
 
     /**

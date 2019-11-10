@@ -30,20 +30,15 @@ class BookmarkController extends BaseController
      */
     public function index(): string
     {
-        $total = Bookmark::query()->where('user_id', getUser('id'))->count();
-        $page  = paginate(setting('forumtem'), $total);
-
         $topics = Bookmark::query()
             ->select('bookmarks.count_posts as bookmark_posts', 'bookmarks.topic_id', 'topics.*')
             ->where('bookmarks.user_id', getUser('id'))
             ->leftJoin('topics', 'bookmarks.topic_id', 'topics.id')
             ->with('topic.user', 'topic.lastPost.user')
-            ->orderBy('updated_at', 'desc')
-            ->offset($page->offset)
-            ->limit($page->limit)
-            ->get();
+            ->orderByDesc('updated_at')
+            ->paginate(setting('forumtem'));
 
-        return view('forums/bookmarks', compact('topics', 'page'));
+        return view('forums/bookmarks', compact('topics'));
     }
 
     /**

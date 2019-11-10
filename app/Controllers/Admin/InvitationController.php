@@ -34,18 +34,14 @@ class InvitationController extends AdminController
     {
         $used = $request->input('used') ? 1 : 0;
 
-        $total = Invite::query()->where('used', $used)->count();
-        $page = paginate(setting('listinvite'), $total);
-
         $invites = Invite::query()
             ->where('used', $used)
-            ->orderBy('created_at', 'desc')
-            ->limit($page->limit)
-            ->offset($page->offset)
+            ->orderByDesc('created_at')
             ->with('user', 'inviteUser')
-            ->get();
+            ->paginate(setting('listinvite'))
+            ->appends(['used' => $used]);
 
-        return view('admin/invitations/index', compact('invites', 'page', 'used'));
+        return view('admin/invitations/index', compact('invites', 'used'));
     }
 
     /**
@@ -58,7 +54,7 @@ class InvitationController extends AdminController
         $keys = Invite::query()
             ->where('user_id', getUser('id'))
             ->where('used', 0)
-            ->orderBy('created_at', 'desc')
+            ->orderByDesc('created_at')
             ->get();
 
         return view('admin/invitations/keys', compact('keys'));

@@ -30,9 +30,9 @@
                 @endif
             </div>
         @endforeach
-
-        {!! pagination($page) !!}
     @else
         {!! showError(__('main.empty_comments')) !!}
     @endif
+
+    {{ $comments->links('app/_paginator') }}
 @stop

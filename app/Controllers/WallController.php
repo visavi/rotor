@@ -27,17 +27,13 @@ class WallController extends BaseController
             abort(404, __('validator.user'));
         }
 
-        $total   = Wall::query()->where('user_id', $user->id)->count();
-        $page    = paginate(setting('wallpost'), $total);
         $newWall = getUser('newwall');
 
         $messages = Wall::query()
             ->where('user_id', $user->id)
-            ->offset($page->offset)
-            ->limit($page->limit)
-            ->orderBy('created_at', 'desc')
+            ->orderByDesc('created_at')
             ->with('user', 'author')
-            ->get();
+            ->paginate(setting('wallpost'));
 
         if ($newWall && $user->id === getUser('id')) {
             $user->update([
@@ -45,7 +41,7 @@ class WallController extends BaseController
             ]);
         }
 
-        return view('walls/index', compact('messages', 'user', 'page', 'newWall'));
+        return view('walls/index', compact('messages', 'user', 'newWall'));
     }
 
     /**

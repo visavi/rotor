@@ -218,20 +218,14 @@ class ForumController extends AdminController
             abort(404, __('forums.forum_not_exist'));
         }
 
-        $total = Topic::query()->where('forum_id', $forum->id)->count();
-
-        $page = paginate(setting('forumtem'), $total);
-
         $topics = Topic::query()
             ->where('forum_id', $forum->id)
-            ->orderBy('locked', 'desc')
-            ->orderBy('updated_at', 'desc')
-            ->offset($page->offset)
-            ->limit($page->limit)
+            ->orderByDesc('locked')
+            ->orderByDesc('updated_at')
             ->with('lastPost.user')
-            ->get();
+            ->paginate(setting('forumtem'));
 
-        return view('admin/forums/forum', compact('forum', 'topics', 'page'));
+        return view('admin/forums/forum', compact('forum', 'topics'));
     }
 
     /**
@@ -487,9 +481,6 @@ class ForumController extends AdminController
             abort(404, __('forums.topic_not_exist'));
         }
 
-        $total = Post::query()->where('topic_id', $topic->id)->count();
-        $page = paginate(setting('forumpost'), $total);
-
         $posts = Post::query()
             ->select('posts.*', 'pollings.vote')
             ->where('topic_id', $topic->id)
@@ -499,10 +490,8 @@ class ForumController extends AdminController
                     ->where('pollings.user_id', getUser('id'));
             })
             ->with('files', 'user', 'editUser')
-            ->offset($page->offset)
-            ->limit($page->limit)
             ->orderBy('created_at')
-            ->get();
+            ->paginate(setting('forumpost'));
 
         // Кураторы
         if ($topic->moderators) {
@@ -531,7 +520,7 @@ class ForumController extends AdminController
             }
         }
 
-        return view('admin/forums/topic', compact('topic', 'posts', 'page', 'vote'));
+        return view('admin/forums/topic', compact('topic', 'posts', 'vote'));
     }
 
     /**

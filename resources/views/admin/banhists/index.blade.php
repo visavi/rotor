@@ -16,44 +16,46 @@
 
 @section('content')
     @if ($records->isNotEmpty())
+        <form action="/admin/banhists/delete?page={{ $records->currentPage() }}" method="post">
+            @csrf
+            @foreach ($records as $data)
+                <div class="b">
 
-    <form action="/admin/banhists/delete?page={{ $page->current }}" method="post">
-        @csrf
-        @foreach ($records as $data)
-            <div class="b">
+                    <div class="float-right">
+                        <a href="/admin/bans/change?user={{ $data->user->login }}" data-toggle="tooltip" title="{{ __('main.change') }}"><i class="fa fa-pencil-alt"></i></a>
+                        <a href="/admin/banhists/view?user={{ $data->user->login }}" data-toggle="tooltip" title="{{ __('admin.banhists.history') }}"><i class="fa fa-history"></i></a>
+                        <input type="checkbox" name="del[]" value="{{ $data->id }}">
+                    </div>
 
-                <div class="float-right">
-                    <a href="/admin/bans/change?user={{ $data->user->login }}" data-toggle="tooltip" title="{{ __('main.change') }}"><i class="fa fa-pencil-alt"></i></a>
-                    <a href="/admin/banhists/view?user={{ $data->user->login }}" data-toggle="tooltip" title="{{ __('admin.banhists.history') }}"><i class="fa fa-history"></i></a>
-                    <input type="checkbox" name="del[]" value="{{ $data->id }}">
+                    <div class="img">
+                        {!! $data->user->getAvatar() !!}
+                        {!! $data->user->getOnline() !!}
+                    </div>
+
+                    <b>{!! $data->user->getProfile() !!}</b>
+
+                    <small>({{ dateFixed($data->created_at) }})</small><br>
                 </div>
+                <div>
+                    @if ($data->type !== 'unban')
+                        {{ __('users.reason_ban') }}: {!! bbCode($data->reason) !!}<br>
+                        {{ __('users.term') }}: {{ formatTime($data->term) }}<br>
+                    @endif
 
-                <div class="img">
-                    {!! $data->user->getAvatar() !!}
-                    {!! $data->user->getOnline() !!}
+                    {!! $data->getType() !!}: {!! $data->sendUser->getProfile() !!}<br>
+
                 </div>
+            @endforeach
 
-                <b>{!! $data->user->getProfile() !!}</b>
-
-                <small>({{ dateFixed($data->created_at) }})</small><br>
+            <div class="float-right">
+                <button class="btn btn-sm btn-danger">{{ __('main.delete_selected') }}</button>
             </div>
-            <div>
-                @if ($data->type !== 'unban')
-                    {{ __('users.reason_ban') }}: {!! bbCode($data->reason) !!}<br>
-                    {{ __('users.term') }}: {{ formatTime($data->term) }}<br>
-                @endif
+        </form>
+    @else
+        {!! showError(__('admin.banhists.empty_history')) !!}
+    @endif
 
-                {!! $data->getType() !!}: {!! $data->sendUser->getProfile() !!}<br>
-
-            </div>
-        @endforeach
-
-        <div class="float-right">
-            <button class="btn btn-sm btn-danger">{{ __('main.delete_selected') }}</button>
-        </div>
-    </form>
-
-    {!! pagination($page) !!}
+    {{ $records->links('app/_paginator') }}
 
     <div class="form mb-3">
         <form action="/admin/banhists/view" method="get">
@@ -68,8 +70,4 @@
             <div class="invalid-feedback">{{ textError('user') }}</div>
         </form>
     </div>
-
-    @else
-        {!! showError(__('admin.banhists.empty_history')) !!}
-    @endif
 @stop

@@ -50,11 +50,11 @@
                 {{ __('main.votes') }}: {{ $vote->count }}<br>
             </div>
         @endforeach
-
-        {!! pagination($page) !!}
     @else
         {!! showError(__('votes.empty_votes')) !!}
     @endif
+
+    {{ $votes->links('app/_paginator') }}
 
     @if (isAdmin('boss'))
         <i class="fa fa-sync"></i> <a href="/admin/votes/restatement?token={{ $_SESSION['token'] }}">{{ __('main.recount') }}</a><br>

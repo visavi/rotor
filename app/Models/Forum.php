@@ -79,7 +79,7 @@ class Forum extends BaseModel
     {
         $lastTopic = Topic::query()
             ->where('forum_id', $this->id)
-            ->orderBy('updated_at', 'desc')
+            ->orderByDesc('updated_at')
             ->first();
 
         $topic = Topic::query()
@@ -100,7 +100,7 @@ class Forum extends BaseModel
 
             $lastTopic = Topic::query()
                 ->whereIn('forum_id', $forumIds)
-                ->orderBy('updated_at', 'desc')
+                ->orderByDesc('updated_at')
                 ->first();
 
             $this->parent()->update([

@@ -75,9 +75,9 @@
                 </div>
             </div>
         @endforeach
-
-        {!! pagination($page) !!}
     @else
         {!! showError(__('admin.spam.empty_spam')) !!}
     @endif
+
+    {{ $records->links('app/_paginator') }}
 @stop

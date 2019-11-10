@@ -102,7 +102,7 @@ return FastRoute\cachedDispatcher(static function(RouteCollector $r) {
     $r->addGroup('/forums', static function (RouteCollector $r) {
         $r->get('', [App\Controllers\Forum\ForumController::class, 'index']);
         $r->get('/{id:\d+}', [App\Controllers\Forum\ForumController::class, 'forum']);
-        $r->get('/search', [App\Controllers\Forum\ForumController::class, 'search']);
+        $r->get('/search', [App\Controllers\Forum\SearchController::class, 'index']);
         $r->get('/active/{action:posts|topics}', [App\Controllers\Forum\ActiveController::class]);
         $r->post('/active/delete', [App\Controllers\Forum\ActiveController::class, 'delete']);
         $r->get('/top/posts', [App\Controllers\Forum\ForumController::class, 'topPosts']);

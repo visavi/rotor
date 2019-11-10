@@ -18,8 +18,7 @@
     <a href="/admin/errors?code=666">{{ __('admin.ipbans.history') }}</a><br>
 
     @if ($logs->isNotEmpty())
-
-        <form action="/admin/ipbans/delete?page={{ $page->current }}" method="post">
+        <form action="/admin/ipbans/delete?page={{ $logs->currentPage() }}" method="post">
             @csrf
             @foreach ($logs as $log)
                 <div class="b">
@@ -40,13 +39,12 @@
 
             <button class="btn btn-sm btn-danger">{{ __('main.delete_selected') }}</button>
         </form>
-
-        {!! pagination($page) !!}
-
-        {{ __('main.total') }}: <b>{{ $page->total }}</b><br><br>
+        <br>{{ __('main.total') }}: <b>{{ $logs->total() }}</b><br>
     @else
         {!! showError(__('admin.ipbans.empty_ip')) !!}
     @endif
+
+    {{ $logs->links('app/_paginator') }}
 
     <div class="form">
         <form action="/admin/ipbans" method="post">

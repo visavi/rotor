@@ -16,17 +16,12 @@ class GuestbookController extends AdminController
      */
     public function index()
     {
-        $total = Guestbook::query()->count();
-        $page = paginate(setting('bookpost'), $total);
-
         $posts = Guestbook::query()
-            ->orderBy('created_at', 'desc')
-            ->limit($page->limit)
-            ->offset($page->offset)
+            ->orderByDesc('created_at')
             ->with('user', 'editUser')
-            ->get();
+            ->paginate(setting('bookpost'));
 
-        return view('admin/guestbooks/index', compact('posts', 'page'));
+        return view('admin/guestbooks/index', compact('posts'));
     }
 
     /**

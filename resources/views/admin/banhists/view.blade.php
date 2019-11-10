@@ -17,8 +17,7 @@
 
 @section('content')
     @if ($banhist->isNotEmpty())
-
-        <form action="/admin/banhists/delete?user={{ $user->login }}&amp;page={{ $page->current }}" method="post">
+        <form action="/admin/banhists/delete?user={{ $user->login }}&amp;page={{ $banhist->currentPage() }}" method="post">
             @csrf
             @foreach ($banhist as $data)
                 <div class="b">
@@ -50,10 +49,9 @@
                 <button class="btn btn-sm btn-danger">{{ __('main.delete_selected') }}</button>
             </div>
         </form>
-
-        {!! pagination($page) !!}
-
     @else
         {!! showError(__('admin.banhists.empty_history')) !!}
     @endif
+
+    {{ $banhist->links('app/_paginator') }}
 @stop

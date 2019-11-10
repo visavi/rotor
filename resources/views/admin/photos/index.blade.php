@@ -20,7 +20,7 @@
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
             <li class="breadcrumb-item"><a href="/admin">{{ __('index.panel') }}</a></li>
             <li class="breadcrumb-item active">{{ __('index.photos') }}</li>
-            <li class="breadcrumb-item"><a href="/photos?page={{ $page->current }}">{{ __('main.review') }}</a></li>
+            <li class="breadcrumb-item"><a href="/photos?page={{ $photos->currentPage() }}">{{ __('main.review') }}</a></li>
         </ol>
     </nav>
 @stop
@@ -34,8 +34,8 @@
                 <b><a href="/photos/{{ $photo->id }}">{{ $photo->title }}</a></b>
 
                 <div class="float-right">
-                    <a href="/admin/photos/edit/{{ $photo->id }}?page={{ $page->current }}" data-toggle="tooltip" title="{{ __('main.edit') }}"><i class="fas fa-pencil-alt text-muted"></i></a>
-                    <a href="/admin/photos/delete/{{ $photo->id }}?page={{ $page->current }}&amp;token={{ $_SESSION['token'] }}" onclick="return confirm('{{ __('photos.confirm_delete_photo') }}')" data-toggle="tooltip" title="{{ __('main.delete') }}"><i class="fas fa-times text-muted"></i></a>
+                    <a href="/admin/photos/edit/{{ $photo->id }}?page={{ $photos->currentPage() }}" data-toggle="tooltip" title="{{ __('main.edit') }}"><i class="fas fa-pencil-alt text-muted"></i></a>
+                    <a href="/admin/photos/delete/{{ $photo->id }}?page={{ $photos->currentPage() }}&amp;token={{ $_SESSION['token'] }}" onclick="return confirm('{{ __('photos.confirm_delete_photo') }}')" data-toggle="tooltip" title="{{ __('main.delete') }}"><i class="fas fa-times text-muted"></i></a>
                 </div>
             </div>
 
@@ -80,9 +80,7 @@
             </div>
         @endforeach
 
-        {!! pagination($page) !!}
-
-        {{ __('photos.total_photos') }}: <b>{{ $page->total }}</b><br><br>
+        {{ __('photos.total_photos') }}: <b>{{ $photos->total() }}</b><br><br>
 
         @if (isAdmin('boss'))
             <i class="fa fa-sync"></i> <a href="/admin/photos/restatement?token={{ $_SESSION['token'] }}">{{ __('main.recount') }}</a><br>
@@ -90,4 +88,6 @@
     @else
         {!! showError(__('photos.empty_photos')) !!}
     @endif
+
+    {{ $photos->links('app/_paginator') }}
 @stop

@@ -57,19 +57,14 @@ class StickerController extends AdminController
             abort(404, 'Данной категории не существует!');
         }
 
-        $total = Sticker::query()->where('category_id', $id)->count();
-        $page = paginate(setting('stickerlist'), $total);
-
         $stickers = Sticker::query()
             ->where('category_id', $id)
             ->orderBy(DB::connection()->raw('CHAR_LENGTH(`code`)'))
             ->orderBy('name')
-            ->limit($page->limit)
-            ->offset($page->offset)
             ->with('category')
-            ->get();
+            ->paginate(setting('stickerlist'));
 
-        return view('admin/stickers/category', compact('category', 'stickers', 'page'));
+        return view('admin/stickers/category', compact('category', 'stickers'));
     }
 
     /**

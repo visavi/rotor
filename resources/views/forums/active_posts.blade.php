@@ -1,7 +1,7 @@
 @extends('layout')
 
 @section('title')
-    {{ __('index.forums') }} - {{ __('forums.title_active_posts', ['user' => $user->login]) }} ({{ __('main.page_num', ['page' => $page->current]) }})
+    {{ __('index.forums') }} - {{ __('forums.title_active_posts', ['user' => $user->login]) }} ({{ __('main.page_num', ['page' => $posts->currentPage()]) }})
 @stop
 
 @section('header')
@@ -19,28 +19,32 @@
 @stop
 
 @section('content')
-    @foreach ($posts as $data)
-        <div class="post">
-            <div class="b">
-                <i class="fa fa-file-alt"></i> <b><a href="/topics/{{ $data->topic_id }}/{{ $data->id }}">{{ $data->topic->title }}</a></b>
+    @if ($posts->isNotEmpty())
+        @foreach ($posts as $data)
+            <div class="post">
+                <div class="b">
+                    <i class="fa fa-file-alt"></i> <b><a href="/topics/{{ $data->topic_id }}/{{ $data->id }}">{{ $data->topic->title }}</a></b>
 
-                @if (isAdmin())
-                    <a href="#" class="float-right" onclick="return deletePost(this)" data-tid="{{ $data->id }}" data-token="{{ $_SESSION['token'] }}" data-toggle="tooltip" title="{{ __('main.delete') }}"><i class="fa fa-times"></i></a>
-                @endif
+                    @if (isAdmin())
+                        <a href="#" class="float-right" onclick="return deletePost(this)" data-tid="{{ $data->id }}" data-token="{{ $_SESSION['token'] }}" data-toggle="tooltip" title="{{ __('main.delete') }}"><i class="fa fa-times"></i></a>
+                    @endif
+                </div>
+                <div>
+                    {!! bbCode($data->text) !!}<br>
+
+                    {{ __('main.posted') }}: {{ $data->user->login }}
+                    <small>({{ dateFixed($data->created_at) }})</small>
+                    <br>
+
+                    @if (isAdmin())
+                        <span class="data">({{ $data->brow }}, {{ $data->ip }})</span>
+                    @endif
+                </div>
             </div>
-            <div>
-                {!! bbCode($data->text) !!}<br>
+        @endforeach
+    @else
+        {!! showError(__('forums.posts_not_created')) !!}
+    @endif
 
-                {{ __('main.posted') }}: {{ $data->user->login }}
-                <small>({{ dateFixed($data->created_at) }})</small>
-                <br>
-
-                @if (isAdmin())
-                    <span class="data">({{ $data->brow }}, {{ $data->ip }})</span>
-                @endif
-            </div>
-        </div>
-    @endforeach
-
-    {!! pagination($page) !!}
+    {{ $posts->links('app/_paginator') }}
 @stop

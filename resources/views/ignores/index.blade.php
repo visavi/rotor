@@ -16,8 +16,7 @@
 
 @section('content')
     @if ($ignores->isNotEmpty())
-
-        <form action="/ignores/delete?page={{ $page->current }}" method="post">
+        <form action="/ignores/delete?page={{ $ignores->currentPage() }}" method="post">
             @csrf
             @foreach ($ignores as $data)
                 <div class="b">
@@ -49,12 +48,12 @@
             </div>
         </form>
 
-        {!! pagination($page) !!}
-
-        {{ __('main.total') }}: <b>{{ $page->total }}</b><br>
+        <br>{{ __('main.total') }}: <b>{{ $ignores->total() }}</b><br>
     @else
         {!! showError(__('ignores.empty_list')) !!}
     @endif
+
+    {{ $ignores->links('app/_paginator') }}
 
     <div class="form my-3">
         <form method="post">

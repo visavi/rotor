@@ -119,18 +119,13 @@ class RatingController extends BaseController
             abort(404, 'Данного пользователя не существует!');
         }
 
-        $total = Rating::query()->where('recipient_id', $user->id)->count();
-        $page = paginate(setting('ratinglist'), $total);
-
         $ratings = Rating::query()
             ->where('recipient_id', $user->id)
-            ->orderBy('created_at', 'desc')
-            ->limit($page->limit)
-            ->offset($page->offset)
+            ->orderByDesc('created_at')
             ->with('user')
-            ->get();
+            ->paginate(setting('ratinglist'));
 
-        return view('ratings/rathistory', compact('ratings', 'user', 'page'));
+        return view('ratings/rathistory', compact('ratings', 'user'));
     }
 
     /**
@@ -147,18 +142,13 @@ class RatingController extends BaseController
             abort(404, 'Данного пользователя не существует!');
         }
 
-        $total = Rating::query()->where('user_id', $user->id)->count();
-        $page = paginate(setting('ratinglist'), $total);
-
         $ratings = Rating::query()
             ->where('user_id', $user->id)
-            ->orderBy('created_at', 'desc')
-            ->limit($page->limit)
-            ->offset($page->offset)
+            ->orderByDesc('created_at')
             ->with('recipient')
-            ->get();
+            ->paginate(setting('ratinglist'));
 
-        return view('ratings/rathistory_gave', compact('ratings', 'user', 'page'));
+        return view('ratings/rathistory_gave', compact('ratings', 'user'));
     }
 
     /**

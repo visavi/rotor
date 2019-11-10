@@ -166,7 +166,7 @@ class Topic extends BaseModel
     {
         $lastPost = Post::query()
             ->where('topic_id', $this->id)
-            ->orderBy('updated_at', 'desc')
+            ->orderByDesc('updated_at')
             ->first();
 
         $countPosts = Post::query()->where('topic_id', $this->id)->count();

@@ -18,22 +18,16 @@ class ListController extends BaseController
      */
     public function userlist(Request $request): string
     {
-        $total = User::query()->count();
-        $page = paginate(setting('userlist'), $total);
-
         $users = User::query()
-            ->orderBy('point', 'desc')
+            ->orderByDesc('point')
             ->orderBy('login')
-            ->offset($page->offset)
-            ->limit($page->limit)
-            ->get();
+            ->paginate(setting('userlist'));
 
         $user = check($request->input('user', getUser('login')));
 
         if ($request->isMethod('post')) {
-
             $position = User::query()
-                ->orderBy('point', 'desc')
+                ->orderByDesc('point')
                 ->orderBy('login')
                 ->get()
                 ->where('login', $user)
@@ -42,16 +36,16 @@ class ListController extends BaseController
 
             if ($position !== null) {
                 ++$position;
-                $end = ceil($position / $page->limit);
+                $end = ceil($position / setting('userlist'));
 
                 setFlash('success', __('users.rating_position', ['position' => $position]));
-                redirect('/users?page='.$end.'&user='.$user);
+                redirect('/users?page='.$end.'&user=' . $user);
             } else {
                 setFlash('danger', __('validator.user'));
             }
         }
 
-        return view('users/users', compact('users', 'page', 'user'));
+        return view('users/users', compact('users', 'user'));
     }
 
     /**
@@ -77,22 +71,17 @@ class ListController extends BaseController
      */
     public function authoritylist(Request $request): string
     {
-        $total = User::query()->count();
-        $page = paginate(setting('avtorlist'), $total);
-
         $users = User::query()
-            ->orderBy('rating', 'desc')
+            ->orderByDesc('rating')
             ->orderBy('login')
-            ->offset($page->offset)
-            ->limit($page->limit)
-            ->get();
+            ->paginate(setting('avtorlist'));
 
         $user = check($request->input('user', getUser('login')));
 
         if ($request->isMethod('post')) {
 
             $position = User::query()
-                ->orderBy('rating', 'desc')
+                ->orderByDesc('rating')
                 ->orderBy('login')
                 ->get()
                 ->where('login', $user)
@@ -101,16 +90,16 @@ class ListController extends BaseController
 
             if ($position !== null) {
                 ++$position;
-                $end = ceil($position / $page->limit);
+                $end = ceil($position / setting('avtorlist'));
 
                 setFlash('success', __('users.rating_position', ['position' => $position]));
-                redirect('/authoritylists?page='.$end.'&user='.$user);
+                redirect('/authoritylists?page=' . $end . '&user=' . $user);
             } else {
                 setFlash('danger', __('validator.user'));
             }
         }
 
-        return view('users/authoritylists', compact('users', 'page', 'user'));
+        return view('users/authoritylists', compact('users', 'user'));
     }
 
     /**
@@ -121,22 +110,17 @@ class ListController extends BaseController
      */
     public function ratinglist(Request $request): string
     {
-        $total = User::query()->count();
-        $page = paginate(setting('userlist'), $total);
-
         $users = User::query()
-            ->orderBy('money', 'desc')
+            ->orderByDesc('money')
             ->orderBy('login')
-            ->offset($page->offset)
-            ->limit($page->limit)
-            ->get();
+            ->paginate(setting('userlist'));
 
         $user = check($request->input('user', getUser('login')));
 
         if ($request->isMethod('post')) {
 
             $position = User::query()
-                ->orderBy('money', 'desc')
+                ->orderByDesc('money')
                 ->orderBy('login')
                 ->get()
                 ->where('login', $user)
@@ -145,7 +129,7 @@ class ListController extends BaseController
 
             if ($position !== null) {
                 ++$position;
-                $end = ceil($position / $page->limit);
+                $end = ceil($position / setting('userlist'));
 
                 setFlash('success', __('users.rating_position', ['position' => $position]));
                 redirect('/ratinglists?page='.$end.'&user='.$user);
@@ -154,6 +138,6 @@ class ListController extends BaseController
             }
         }
 
-        return view('users/ratinglists', compact('users', 'page', 'user'));
+        return view('users/ratinglists', compact('users', 'user'));
     }
 }

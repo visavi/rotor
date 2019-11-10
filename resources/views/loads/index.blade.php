@@ -58,7 +58,7 @@
     @endforeach
 
     <br>
-    <a href="/loads/top">{{ __('loads.downs') }}</a> /
+    <a href="/loads/top">{{ __('loads.top_downs') }}</a> /
     <a href="/loads/search">{{ __('main.search') }}</a> /
     <a href="/loads/rss">{{ __('main.rss') }}</a><br>
 @stop

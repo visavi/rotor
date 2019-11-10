@@ -1,7 +1,7 @@
 @extends('layout')
 
 @section('title')
-    {{ __('photos.albums') }} ({{ __('main.page_num', ['page' => $page->current]) }})
+    {{ __('photos.albums') }} ({{ __('main.page_num', ['page' => $albums->currentPage()]) }})
 @stop
 
 @section('header')
@@ -27,10 +27,10 @@
 
         @endforeach
 
-        {!! pagination($page) !!}
-
-        {{ __('photos.total_albums') }}: <b>{{ $page->total }}</b><br><br>
+        <br>{{ __('photos.total_albums') }}: <b>{{ $albums->total() }}</b><br>
     @else
         {!! showError(__('photos.empty_albums')) !!}
     @endif
+
+    {{ $albums->links('app/_paginator') }}
 @stop

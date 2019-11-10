@@ -67,16 +67,11 @@ class ReglistController extends AdminController
             }
         }
 
-        $total = User::query()->where('level', User::PENDED)->count();
-        $page = paginate(setting('reglist'), $total);
-
         $users = User::query()
             ->where('level', User::PENDED)
-            ->orderBy('created_at', 'desc')
-            ->offset($page->offset)
-            ->limit($page->limit)
-            ->get();
+            ->orderByDesc('created_at')
+            ->paginate(setting('reglist'));
 
-        return view('admin/reglists/index', compact('users', 'page'));
+        return view('admin/reglists/index', compact('users'));
     }
 }

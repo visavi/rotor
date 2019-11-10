@@ -43,7 +43,7 @@ class BanController extends BaseController
         $banhist = Banhist::query()
             ->where('user_id', $user->id)
             ->whereIn('type', ['ban', 'change'])
-            ->orderBy('created_at', 'desc')
+            ->orderByDesc('created_at')
             ->first();
 
         if ($banhist && $request->isMethod('post')) {

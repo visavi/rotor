@@ -32,13 +32,13 @@
                 <li class="breadcrumb-item active">{{ $board->name }}</li>
 
                 @if (isAdmin())
-                    <li class="breadcrumb-item"><a href="/admin/boards/{{ $board->id  }}?page={{ $page->current }}">{{ __('main.management') }}</a></li>
+                    <li class="breadcrumb-item"><a href="/admin/boards/{{ $board->id  }}?page={{ $items->currentPage() }}">{{ __('main.management') }}</a></li>
                 @endif
             @else
                 <li class="breadcrumb-item active">{{ __('index.boards') }}</li>
 
                 @if (isAdmin())
-                    <li class="breadcrumb-item"><a href="/admin/boards?page={{ $page->current }}">{{ __('main.management') }}</a></li>
+                    <li class="breadcrumb-item"><a href="/admin/boards?page={{ $items->currentPage() }}">{{ __('main.management') }}</a></li>
                 @endif
             @endif
         </ol>
@@ -92,9 +92,9 @@
                 </div>
             </div>
         @endforeach
-
-        {!! pagination($page) !!}
     @else
         {!! showError(__('boards.empty_items')) !!}
     @endif
+
+    {{ $items->links('app/_paginator') }}
 @stop

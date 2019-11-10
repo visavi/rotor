@@ -21,10 +21,10 @@
             <b><a href="/blogs/active/articles?user={{ $data->login }}">{{ $data->login }}</a></b> ({{ $data->cnt }} {{ __('blogs.all_articles') }} / {{ $data->count_comments }} {{ __('main.comments') }})<br>
         @endforeach
 
-        {!! pagination($page) !!}
-
-        {{ __('blogs.total_authors') }}: <b>{{ $page->total }}</b><br><br>
+        <br>{{ __('blogs.total_authors') }}: <b>{{ $blogs->total() }}</b><br>
     @else
         {!! showError(__('blogs.empty_articles')) !!}
     @endif
+
+    {{ $blogs->links('app/_paginator') }}
 @stop

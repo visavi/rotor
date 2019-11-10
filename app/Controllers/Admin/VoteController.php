@@ -29,18 +29,13 @@ class VoteController extends AdminController
      */
     public function index(): string
     {
-        $total = Vote::query()->where('closed', 0)->count();
-        $page = paginate(setting('allvotes'), $total);
-
         $votes = Vote::query()
             ->where('closed', 0)
-            ->orderBy('created_at', 'desc')
-            ->offset($page->offset)
-            ->limit($page->limit)
+            ->orderByDesc('created_at')
             ->with('topic')
-            ->get();
+            ->paginate(setting('allvotes'));
 
-        return view('admin/votes/index', compact('votes', 'page'));
+        return view('admin/votes/index', compact('votes'));
     }
 
     /**
@@ -50,18 +45,13 @@ class VoteController extends AdminController
      */
     public function history(): string
     {
-        $total = Vote::query()->where('closed', 0)->count();
-        $page = paginate(setting('allvotes'), $total);
-
         $votes = Vote::query()
             ->where('closed', 1)
-            ->orderBy('created_at', 'desc')
-            ->offset($page->offset)
-            ->limit($page->limit)
+            ->orderByDesc('created_at')
             ->with('topic')
-            ->get();
+            ->paginate(setting('allvotes'));
 
-        return view('admin/votes/history', compact('votes', 'page'));
+        return view('admin/votes/history', compact('votes'));
     }
 
     /**

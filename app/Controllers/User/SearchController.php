@@ -41,7 +41,7 @@ class SearchController extends BaseController
         $users = User::query()
             ->where('login', 'like', '%' . $find . '%')
             ->orWhere('name', 'like', '%' . $find . '%')
-            ->orderBy('point', 'desc')
+            ->orderByDesc('point')
             ->limit(setting('usersearch'))
             ->get();
 
@@ -59,19 +59,11 @@ class SearchController extends BaseController
     {
         $search = is_numeric($letter) ? "RLIKE '^[-0-9]'" : "LIKE '$letter%'";
 
-        $total = User::query()
-            ->whereRaw('login ' . $search)
-            ->count();
-
-        $page = paginate(setting('usersearch'), $total);
-
         $users = User::query()
             ->whereRaw('login ' . $search)
-            ->orderBy('point', 'desc')
-            ->offset($page->offset)
-            ->limit($page->limit)
-            ->get();
+            ->orderByDesc('point')
+            ->paginate(setting('usersearch'));
 
-        return view('users/search_result', compact('users', 'page'));
+        return view('users/search_result', compact('users'));
     }
 }

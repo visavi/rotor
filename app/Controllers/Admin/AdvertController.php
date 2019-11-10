@@ -17,18 +17,13 @@ class AdvertController extends AdminController
      */
     public function index(): string
     {
-        $total = Advert::query()->where('deleted_at', '>', SITETIME)->count();
-        $page = paginate(setting('rekuserpost'), $total);
-
         $records = Advert::query()
             ->where('deleted_at', '>', SITETIME)
-            ->limit($page->limit)
-            ->offset($page->offset)
-            ->orderBy('deleted_at', 'desc')
+            ->orderByDesc('deleted_at')
             ->with('user')
-            ->get();
+            ->paginate(setting('rekuserpost'));
 
-        return view('admin/adverts/index', compact('records', 'page'));
+        return view('admin/adverts/index', compact('records'));
     }
 
     /**

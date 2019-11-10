@@ -17,13 +17,11 @@
 @section('content')
     <i class="fa fa-eraser fa-2x"></i> <a href="/admin/caches" class="badge badge-light">{{ __('admin.caches.files') }}</a> / <a href="/admin/caches?type=image" class="badge badge-success">{{ __('admin.caches.images') }}</a><br><br>
 
-    @if ($images)
+    @if ($images->isNotEmpty())
         @foreach ($images as $image)
 
             <i class="fa fa-image"></i> <b>{{ basename($image) }}</b> ({{ formatFileSize($image) }} / {{ dateFixed(filemtime($image)) }})<br>
         @endforeach
-
-        {!! pagination($page) !!}
 
         <div class="float-right">
             <form action="/admin/caches/clear" method="post">
@@ -33,8 +31,10 @@
             </form>
         </div>
 
-        {{ __('admin.caches.total_images') }}: {{ $page->total }}<br><br>
+        <br>{{ __('main.total') }}: {{ $images->total() }}<br><br>
     @else
         {!! showError(__('admin.caches.empty_images')) !!}
     @endif
+
+    {{ $images->links('app/_paginator') }}
 @stop

@@ -16,7 +16,7 @@
 @stop
 
 @section('content')
-    <p>{{ __('forums.found_posts') }}: {{ $page->total }}</p>
+    <p>{{ __('forums.found_posts') }}: {{ $posts->total() }}</p>
 
     @foreach ($posts as $post)
         <div class="b">
@@ -29,5 +29,5 @@
         </div>
     @endforeach
 
-    {!! pagination($page) !!}
+    {{ $posts->links('app/_paginator') }}
 @stop

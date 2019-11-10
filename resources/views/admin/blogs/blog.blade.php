@@ -1,7 +1,7 @@
 @extends('layout')
 
 @section('title')
-    {{ $category->name }} ({{ __('main.page_num', ['page' => $page->current]) }})
+    {{ $category->name }} ({{ __('main.page_num', ['page' => $blogs->currentPage()]) }})
 @stop
 
 @section('header')
@@ -28,7 +28,7 @@
             <li class="breadcrumb-item active">{{ $category->name }}</li>
 
             @if (isAdmin())
-                <li class="breadcrumb-item"><a href="/blogs/{{ $category->id }}?page={{ $page->current }}">Обзор</a></li>
+                <li class="breadcrumb-item"><a href="/blogs/{{ $category->id }}?page={{ $blogs->currentPage() }}">Обзор</a></li>
             @endif
         </ol>
     </nav>
@@ -44,7 +44,7 @@
                 <div class="float-right">
                     <a href="/admin/articles/edit/{{ $data->id }}" title="{{ __('main.edit') }}"><i class="fa fa-pencil-alt text-muted"></i></a>
                     <a href="/admin/articles/move/{{ $data->id }}" title="{{ __('main.move') }}"><i class="fa fa-arrows-alt text-muted"></i></a>
-                    <a href="/admin/articles/delete/{{ $data->id }}?page={{ $page->current }}&amp;token={{ $_SESSION['token'] }}" onclick="return confirm('{{ __('blogs.confirm_delete_article') }}')" title="{{ __('main.delete') }}"><i class="fa fa-times text-muted"></i></a>
+                    <a href="/admin/articles/delete/{{ $data->id }}?page={{ $blogs->currentPage() }}&amp;token={{ $_SESSION['token'] }}" onclick="return confirm('{{ __('blogs.confirm_delete_article') }}')" title="{{ __('main.delete') }}"><i class="fa fa-times text-muted"></i></a>
                 </div>
 
             </div>
@@ -56,9 +56,9 @@
                 <a href="/articles/end/{{ $data->id }}">&raquo;</a>
             </div>
         @endforeach
-
-        {!! pagination($page) !!}
     @else
         {!! showError(__('blogs.empty_articles')) !!}
     @endif
+
+    {{ $blogs->links('app/_paginator') }}
 @stop

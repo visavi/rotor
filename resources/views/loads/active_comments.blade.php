@@ -1,7 +1,7 @@
 @extends('layout')
 
 @section('title')
-    {{ __('index.loads') }} - {{ __('loads.active_comments', ['user' => $user->login]) }} ({{ __('main.page_num', ['page' => $page->current]) }})
+    {{ __('index.loads') }} - {{ __('loads.active_comments', ['user' => $user->login]) }} ({{ __('main.page_num', ['page' => $comments->currentPage()]) }})
 @stop
 
 @section('header')
@@ -43,9 +43,9 @@
                 </div>
             </div>
         @endforeach
-
-        {!! pagination($page) !!}
     @else
         {!! showError(__('main.empty_comments')) !!}
     @endif
+
+    {{ $comments->links('app/_paginator') }}
 @stop

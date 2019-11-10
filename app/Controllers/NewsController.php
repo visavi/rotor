@@ -17,17 +17,12 @@ class NewsController extends BaseController
      */
     public function index()
     {
-        $total = News::query()->count();
-        $page = paginate(setting('postnews'), $total);
-
         $news = News::query()
-            ->orderBy('created_at', 'desc')
-            ->offset($page->offset)
-            ->limit($page->limit)
+            ->orderByDesc('created_at')
             ->with('user')
-            ->get();
+            ->paginate(setting('postnews'));
 
-        return view('news/index', compact('news', 'page'));
+        return view('news/index', compact('news'));
     }
 
     /**
@@ -49,7 +44,7 @@ class NewsController extends BaseController
             ->where('relate_type', News::class)
             ->where('relate_id', $id)
             ->limit(5)
-            ->orderBy('created_at', 'desc')
+            ->orderByDesc('created_at')
             ->with('user')
             ->get();
 
@@ -124,23 +119,14 @@ class NewsController extends BaseController
             }
         }
 
-        $total = Comment::query()
-            ->where('relate_type', News::class)
-            ->where('relate_id', $id)
-            ->count();
-
-        $page = paginate(setting('postnews'), $total);
-
         $comments = Comment::query()
             ->where('relate_type', News::class)
             ->where('relate_id', $id)
-            ->offset($page->offset)
-            ->limit($page->limit)
             ->orderBy('created_at')
             ->with('user')
-            ->get();
+            ->paginate(setting('postnews'));
 
-        return view('news/comments', compact('news', 'comments', 'page'));
+        return view('news/comments', compact('news', 'comments'));
     }
 
     /**
@@ -229,7 +215,7 @@ class NewsController extends BaseController
      */
     public function rss()
     {
-        $newses = News::query()->orderBy('created_at', 'desc')->limit(15)->get();
+        $newses = News::query()->orderByDesc('created_at')->limit(15)->get();
 
         if ($newses->isEmpty()) {
             abort('default', 'Новости не найдены!');
@@ -243,25 +229,16 @@ class NewsController extends BaseController
      */
     public function allComments()
     {
-        $total = Comment::query()->where('relate_type', News::class)->count();
-
-        if ($total > 500) {
-            $total = 500;
-        }
-
-        $page = paginate(setting('postnews'), $total);
 
         $comments = Comment::query()
             ->select('comments.*', 'title', 'count_comments')
             ->where('relate_type', News::class)
             ->leftJoin('news', 'comments.relate_id', 'news.id')
-            ->offset($page->offset)
-            ->limit($page->limit)
-            ->orderBy('created_at', 'desc')
+            ->orderByDesc('created_at')
             ->with('user')
-            ->get();
+            ->paginate(setting('postnews'));
 
-        return view('news/allcomments', compact('comments', 'page'));
+        return view('news/allcomments', compact('comments'));
     }
 
     /**

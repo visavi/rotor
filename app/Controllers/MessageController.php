@@ -34,12 +34,6 @@ class MessageController extends BaseController
      */
     public function index(): string
     {
-        $total = Message::query()
-            ->distinct()
-            ->where('user_id', $this->user->id)
-            ->count('author_id');
-        $page = paginate(setting('privatpost'), $total);
-
         $lastMessage = Message::query()
             ->select('author_id', DB::connection()->raw('max(created_at) as last_created_at'))
             ->where('user_id', $this->user->id)
@@ -57,11 +51,9 @@ class MessageController extends BaseController
                     ->whereRaw('m1.created_at = m2.created_at');
             })
             ->where('m1.user_id', $this->user->id)
-            ->orderBy('m1.created_at', 'desc')
-            ->offset($page->offset)
-            ->limit($page->limit)
+            ->orderByDesc('m1.created_at')
             ->with('author')
-            ->get();
+            ->paginate(setting('privatpost'));
 
         if ($this->user->newprivat) {
             $this->user->update([
@@ -70,7 +62,7 @@ class MessageController extends BaseController
             ]);
         }
 
-        return view('messages/index', compact('messages', 'page'));
+        return view('messages/index', compact('messages'));
     }
 
     /**
@@ -93,16 +85,9 @@ class MessageController extends BaseController
             }
         }
 
-        $total = Message::query()
-            ->where('user_id', $this->user->id)
-            ->where('author_id', $user->id)
-            ->count();
-
         if ($user->id === $this->user->id) {
             abort('default', 'Отсутствует переписка с самим собой!');
         }
-
-        $page = paginate(setting('privatpost'), $total);
 
         $messages = Message::query()
             ->select('m1.*', 'm2.reading as recipient_read')
@@ -113,11 +98,9 @@ class MessageController extends BaseController
             })
             ->where('m1.user_id', $this->user->id)
             ->where('m1.author_id', $user->id)
-            ->orderBy('m1.created_at', 'desc')
-            ->offset($page->offset)
-            ->limit($page->limit)
+            ->orderByDesc('m1.created_at')
             ->with('user', 'author')
-            ->get();
+            ->paginate(setting('privatpost'));
 
         // Прочитано
         Message::query()
@@ -127,7 +110,7 @@ class MessageController extends BaseController
 
         $view = $user->id ? 'messages/talk' : 'messages/talk_system';
 
-        return view($view, compact('messages', 'user', 'page'));
+        return view($view, compact('messages', 'user'));
     }
 
     /**

@@ -32,6 +32,7 @@ use Illuminate\Database\Capsule\Manager as DB;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
+use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Lang;
@@ -612,7 +613,7 @@ function photoNavigation($id)
 
     $prev = Photo::query()
         ->where('id', '<', $id)
-        ->orderBy('id', 'desc')
+        ->orderByDesc('id')
         ->pluck('id')
         ->first();
 
@@ -792,7 +793,7 @@ function statVotes()
 function statsNewsDate()
 {
     $newsDate = Cache::remember('statNewsDate', 900, static function () {
-        $news = News::query()->orderBy('created_at', 'desc')->first();
+        $news = News::query()->orderByDesc('created_at')->first();
 
         return $news->created_at ?? 0;
     });
@@ -811,7 +812,7 @@ function statLastNews()
         return Cache::remember('lastNews', 1800, static function () {
             return News::query()
                 ->where('top', 1)
-                ->orderBy('created_at', 'desc')
+                ->orderByDesc('created_at')
                 ->limit(setting('lastnews'))
                 ->get()
                 ->toArray();
@@ -1151,7 +1152,7 @@ function recentPhotos($show = 5)
 {
     $photos = Cache::remember('recentPhotos', 1800, static function () use ($show) {
         return Photo::query()
-            ->orderBy('created_at', 'desc')
+            ->orderByDesc('created_at')
             ->limit($show)
             ->with('files')
             ->get()
@@ -1182,7 +1183,7 @@ function recentTopics($show = 5)
 {
     $topics = Cache::remember('recentTopics', 300, static function () use ($show) {
         return Topic::query()
-            ->orderBy('updated_at', 'desc')
+            ->orderByDesc('updated_at')
             ->limit($show)
             ->get()
             ->toArray();
@@ -1208,7 +1209,7 @@ function recentDowns($show = 5)
     $files = Cache::remember('recentDowns', 600, static function () use ($show) {
         return Down::query()
             ->where('active', 1)
-            ->orderBy('created_at', 'desc')
+            ->orderByDesc('created_at')
             ->limit($show)
             ->with('category')
             ->get()
@@ -1233,7 +1234,7 @@ function recentBlogs($show = 5)
 {
     $blogs = Cache::remember('recentBlogs', 600, static function () use ($show) {
         return Blog::query()
-            ->orderBy('created_at', 'desc')
+            ->orderByDesc('created_at')
             ->limit($show)
             ->get()
             ->toArray();
@@ -1258,7 +1259,7 @@ function recentBoards($show = 5)
     $items = Cache::remember('recentBoards', 600, static function () use ($show) {
         return Item::query()
             ->where('expires_at', '>', SITETIME)
-            ->orderBy('created_at', 'desc')
+            ->orderByDesc('created_at')
             ->limit($show)
             ->get()
             ->toArray();
@@ -2123,99 +2124,22 @@ function getUser($key = null)
 }
 
 /**
- * Генерирует постраничную навигация
+ * Разбивает массив по страницам
  *
- * @param object $page данные страниц
+ * @param array $items
+ * @param int   $perPage
  *
- * @return string сформированный блок
+ * @return LengthAwarePaginator
  */
-function pagination($page)
+function paginate(array $items, int $perPage): LengthAwarePaginator
 {
-    if (empty($page->total)) {
-        return null;
-    }
+    $currentPage = LengthAwarePaginator::resolveCurrentPage();
+    $slice       = array_slice($items, $perPage * ($currentPage - 1), $perPage, true);
 
-    if (empty($page->crumbs)) {
-        $page->crumbs = 2;
-    }
+    $collection = new LengthAwarePaginator($slice, count($items), $perPage);
+    $collection->setPath(request()->url());
 
-    $url     = Arr::except($_GET, 'page');
-    $request = $url ? '&' . http_build_query($url) : null;
-
-    $pages   = [];
-    $pg_cnt  = (int) ceil($page->total / $page->limit);
-    $idx_fst = max($page->current - $page->crumbs, 1);
-    $idx_lst = min($page->current + $page->crumbs, $pg_cnt);
-
-    if ($page->current > $page->crumbs + 1) {
-        $pages[] = [
-            'page'  => 1,
-            'title' => '1 страница',
-            'name'  => 1,
-        ];
-        if ($page->current !== $page->crumbs + 2) {
-            $pages[] = [
-                'separator' => true,
-                'name'      => ' ... ',
-            ];
-        }
-    }
-
-    for ($i = $idx_fst; $i <= $idx_lst; $i++) {
-        if ($i === $page->current) {
-            $pages[] = [
-                'current' => true,
-                'name'    => $i,
-            ];
-        } else {
-            $pages[] = [
-                'page'  => $i,
-                'title' => $i . ' страница',
-                'name'  => $i,
-            ];
-        }
-    }
-
-    if ($page->current < $pg_cnt - $page->crumbs) {
-        if ($page->current !== $pg_cnt - $page->crumbs - 1) {
-            $pages[] = [
-                'separator' => true,
-                'name'      => ' ... ',
-            ];
-        }
-        $pages[] = [
-            'page'  => $pg_cnt,
-            'title' => $pg_cnt . ' страница',
-            'name'  => $pg_cnt,
-        ];
-    }
-
-    return view('app/_pagination', compact('pages', 'request'));
-}
-
-/**
- * Обрабатывает постраничную навигацию
- *
- * @param int $limit элементов на страницу
- * @param int $total всего элементов
- *
- * @return object массив подготовленных данных
- */
-function paginate(int $limit, int $total)
-{
-    $current = int(request()->input('page'));
-
-    if ($current < 1) {
-        $current = 1;
-    }
-
-    if ($total && $current * $limit >= $total) {
-        $current = (int) ceil($total / $limit);
-    }
-
-    $offset = $current * $limit - $limit;
-
-    return (object) compact('current', 'offset', 'limit', 'total');
+    return $collection;
 }
 
 /**

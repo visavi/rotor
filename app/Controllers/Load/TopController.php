@@ -18,14 +18,6 @@ class TopController extends BaseController
      */
     public function index(Request $request): string
     {
-        $total = Down::query()->where('active', 1)->count();
-
-        if ($total > 500) {
-            $total = 500;
-        }
-
-        $page = paginate(setting('downlist'), $total);
-
         $sort = check($request->input('sort'));
 
         switch ($sort) {
@@ -41,13 +33,12 @@ class TopController extends BaseController
 
         $downs = Down::query()
             ->where('active', 1)
-            ->orderBy($order, 'desc')
-            ->limit($page->limit)
-            ->offset($page->offset)
+            ->orderByDesc($order)
             ->with('category', 'user')
-            ->get();
+            ->paginate(setting('downlist'))
+            ->appends(['sort' => $sort]);
 
-        return view('loads/top', compact('downs', 'page', 'order'));
+        return view('loads/top', compact('downs', 'order'));
     }
 }
 

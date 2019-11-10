@@ -45,8 +45,6 @@ class BlacklistController extends AdminController
      */
     public function index(Request $request, Validator $validator): string
     {
-        $type = $this->type;
-
         if ($request->isMethod('post')) {
             $token = check($request->input('token'));
             $value = check(utfLower($request->input('value')));
@@ -87,18 +85,16 @@ class BlacklistController extends AdminController
             }
         }
 
-        $total = BlackList::query()->where('type', $type)->count();
-        $page = paginate(setting('blacklist'), $total);
+        $type = $this->type;
 
         $lists = BlackList::query()
             ->where('type', $type)
-            ->orderBy('created_at', 'desc')
-            ->limit($page->limit)
-            ->offset($page->offset)
+            ->orderByDesc('created_at')
             ->with('user')
-            ->get();
+            ->paginate(setting('blacklist'))
+            ->appends(['type' => $type]);
 
-        return view('admin/blacklists/index', compact('lists', 'type', 'page'));
+        return view('admin/blacklists/index', compact('lists', 'type'));
     }
 
     /**

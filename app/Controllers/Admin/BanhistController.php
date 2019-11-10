@@ -27,17 +27,12 @@ class BanhistController extends AdminController
      */
     public function index(): string
     {
-        $total = Banhist::query()->count();
-        $page = paginate(setting('listbanhist'), $total);
-
         $records = Banhist::query()
-            ->orderBy('created_at', 'desc')
-            ->limit($page->limit)
-            ->offset($page->offset)
+            ->orderByDesc('created_at')
             ->with('user', 'sendUser')
-            ->get();
+            ->paginate(setting('listbanhist'));
 
-        return view('admin/banhists/index', compact('records', 'page'));
+        return view('admin/banhists/index', compact('records'));
     }
 
     /**
@@ -55,18 +50,14 @@ class BanhistController extends AdminController
             abort(404, __('validator.user'));
         }
 
-        $total = Banhist::query()->where('user_id', $user->id)->count();
-        $page = paginate(setting('listbanhist'), $total);
-
         $banhist = Banhist::query()
             ->where('user_id', $user->id)
-            ->orderBy('created_at', 'desc')
-            ->offset($page->offset)
-            ->limit($page->limit)
+            ->orderByDesc('created_at')
             ->with('user', 'sendUser')
-            ->get();
+            ->paginate(setting('listbanhist'))
+            ->appends(['user' => $user->login]);
 
-        return view('admin/banhists/view', compact('user', 'banhist', 'page'));
+        return view('admin/banhists/view', compact('user', 'banhist'));
     }
 
     /**

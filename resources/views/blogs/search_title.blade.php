@@ -20,10 +20,9 @@
 @stop
 
 @section('content')
-    <p>{{ __('blogs.found_in_titles') }}: {{ $page->total }}</p>
+    <p>{{ __('blogs.found_in_title') }}: {{ $blogs->total() }}</p>
 
     @foreach ($blogs as $data)
-
         <div class="b">
             <i class="fa fa-pencil-alt"></i>
             <b><a href="/articles/{{ $data->id }}">{{ $data->title }}</a></b> ({!! formatNum($data->rating) !!})
@@ -36,5 +35,5 @@
         </div>
     @endforeach
 
-    {!! pagination($page) !!}
+    {{ $blogs->links('app/_paginator') }}
 @stop

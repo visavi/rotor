@@ -1,7 +1,7 @@
 @extends('layout')
 
 @section('title')
-    {{ __('index.photos') }} ({{ __('main.page_num', ['page' => $page->current]) }})
+    {{ __('index.photos') }} ({{ __('main.page_num', ['page' => $photos->currentPage()]) }})
 @stop
 
 @section('header')
@@ -21,7 +21,7 @@
             <li class="breadcrumb-item active">{{ __('index.photos') }}</li>
 
             @if (isAdmin())
-                <li class="breadcrumb-item"><a href="/admin/photos?page={{ $page->current }}">{{ __('main.management') }}</a></li>
+                <li class="breadcrumb-item"><a href="/admin/photos?page={{ $photos->currentPage() }}">{{ __('main.management') }}</a></li>
             @endif
         </ol>
     </nav>
@@ -88,11 +88,10 @@
             </div>
         @endforeach
 
-        {!! pagination($page) !!}
-
-        {{ __('photos.total_photos') }}: <b>{{ $page->total }}</b><br><br>
-
+        <br>{{ __('photos.total_photos') }}: <b>{{ $photos->total() }}</b><br>
     @else
         {!! showError(__('photos.empty_photos')) !!}
     @endif
+
+    {{ $photos->links('app/_paginator') }}
 @stop

@@ -1,7 +1,7 @@
 @extends('layout')
 
 @section('title')
-    {{ $forum->title }} ({{ __('main.page_num', ['page' => $page->current]) }})
+    {{ $forum->title }} ({{ __('main.page_num', ['page' => $topics->currentPage()]) }})
 @stop
 
 @section('header')
@@ -27,14 +27,14 @@
             <li class="breadcrumb-item active">{{ $forum->title }}</li>
 
             @if (isAdmin())
-                <li class="breadcrumb-item"><a href="/admin/forums/{{  $forum->id  }}?page={{ $page->current }}">{{ __('main.management') }}</a></li>
+                <li class="breadcrumb-item"><a href="/admin/forums/{{  $forum->id  }}?page={{ $topics->currentPage() }}">{{ __('main.management') }}</a></li>
             @endif
         </ol>
     </nav>
 @stop
 
 @section('content')
-    @if ($page->current === 1 && $forum->children->isNotEmpty())
+    @if ($topics->onFirstPage() && $forum->children->isNotEmpty())
         <div class="act">
 
         @foreach ($forum->children as $child)
@@ -71,14 +71,13 @@
                 @endif
             </div>
         @endforeach
-
-        {!! pagination($page) !!}
-
     @elseif ($forum->closed)
         {!! showError(__('forums.closed_forum')) !!}
     @else
         {!! showError(__('forums.empty_topics')) !!}
     @endif
+
+    {{ $topics->links('app/_paginator') }}
 
     <a href="/rules">{{ __('main.rules') }}</a> /
     <a href="/forums/top/topics">{{ __('forums.top_topics') }}</a> /

@@ -17,23 +17,13 @@ class NewController extends BaseController
      */
     public function files(): string
     {
-        $total = Down::query()->where('active', 1)->count();
-
-        if ($total > 500) {
-            $total = 500;
-        }
-
-        $page = paginate(setting('downlist'), $total);
-
         $downs = Down::query()
             ->where('active', 1)
-            ->orderBy('created_at', 'desc')
-            ->limit($page->limit)
-            ->offset($page->offset)
+            ->orderByDesc('created_at')
             ->with('category', 'user')
-            ->get();
+            ->paginate(setting('downlist'));
 
-        return view('loads/new_files', compact('downs', 'page'));
+        return view('loads/new_files', compact('downs'));
     }
 
     /**
@@ -43,24 +33,14 @@ class NewController extends BaseController
      */
     public function comments(): string
     {
-        $total = Comment::query()->where('relate_type', Down::class)->count();
-
-        if ($total > 500) {
-            $total = 500;
-        }
-
-        $page = paginate(setting('downcomm'), $total);
-
         $comments = Comment::query()
             ->select('comments.*', 'title', 'count_comments')
             ->where('relate_type', Down::class)
             ->leftJoin('downs', 'comments.relate_id', 'downs.id')
-            ->offset($page->offset)
-            ->limit($page->limit)
-            ->orderBy('comments.created_at', 'desc')
+            ->orderByDesc('comments.created_at')
             ->with('user')
-            ->get();
+            ->paginate(setting('downcomm'));
 
-        return view('loads/new_comments', compact('comments', 'page'));
+        return view('loads/new_comments', compact('comments'));
     }
 }

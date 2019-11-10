@@ -24,8 +24,7 @@
 
 @section('content')
     @if ($records->isNotEmpty())
-
-        <form action="/admin/adverts/delete?page={{ $page->current }}" method="post">
+        <form action="/admin/adverts/delete?page={{ $records->currentPage() }}" method="post">
             @csrf
             @foreach ($records as $data)
                 <div class="b">
@@ -33,7 +32,7 @@
                     <b><a href="{{ $data->site }}">{{ $data->name }}</a></b> ({!! $data->user->getProfile() !!})
 
                     <div class="float-right">
-                        <a href="/admin/adverts/edit/{{ $data->id }}?page={{ $page->current }}"><i class="fas fa-pencil-alt text-muted"></i></a>
+                        <a href="/admin/adverts/edit/{{ $data->id }}?page={{ $records->currentPage() }}"><i class="fas fa-pencil-alt text-muted"></i></a>
                         <input type="checkbox" name="del[]" value="{{ $data->id }}">
                     </div>
                 </div>
@@ -48,10 +47,10 @@
             </div>
         </form>
 
-        {!! pagination($page) !!}
-
-        {{ __('adverts.total_links') }}: <b>{{ $page->total }}</b><br><br>
+        <br>{{ __('adverts.total_links') }}: <b>{{ $records->total() }}</b><br>
     @else
         {!! showError(__('adverts.empty_links')) !!}
     @endif
+
+    {{ $records->links('app/_paginator') }}
 @stop

@@ -1,7 +1,7 @@
 @extends('layout')
 
 @section('title')
-    {{ __('loads.new_publications') }} ({{ __('main.page_num', ['page' => $page->current]) }})
+    {{ __('loads.new_publications') }} ({{ __('main.page_num', ['page' => $downs->currentPage()]) }})
 @stop
 
 @section('header')
@@ -42,9 +42,9 @@
                 {{ __('main.author') }}: {!! $data->user->getProfile() !!} ({{ dateFixed($data->created_at) }})
             </div>
         @endforeach
-
-        {!! pagination($page) !!}
     @else
         {!! showError(__('loads.empty_downs')) !!}
     @endif
+
+    {{ $downs->links('app/_paginator') }}
 @stop

@@ -22,14 +22,10 @@ class OfferController extends BaseController
      */
     public function index(Request $request, $type = 'offer'): string
     {
-        $otherType = $type === Offer::OFFER ? Offer::ISSUE : Offer::OFFER;
+        $otherType  = $type === Offer::OFFER ? Offer::ISSUE : Offer::OFFER;
+        $otherCount = Offer::query()->where('type', $otherType)->count();
 
-        $sort = check($request->input('sort'));
-
-        $total = Offer::query()->where('type', $type)->count();
-        $page = paginate(setting('postoffers'), $total);
-
-        $page->otherTotal = Offer::query()->where('type', $otherType)->count();
+        $sort = check($request->input('sort', 'rating'));
 
         switch ($sort) {
             case 'time':
@@ -47,13 +43,12 @@ class OfferController extends BaseController
 
         $offers = Offer::query()
             ->where('type', $type)
-            ->orderBy($order, 'desc')
-            ->offset($page->offset)
-            ->limit($page->limit)
+            ->orderByDesc($order)
             ->with('user')
-            ->get();
+            ->paginate(setting('postoffers'))
+            ->appends(['sort' => $sort]);
 
-        return view('offers/index', compact('offers', 'page', 'order', 'type'));
+        return view('offers/index', compact('offers', 'order', 'type', 'otherCount'));
     }
 
     /**
@@ -261,22 +256,13 @@ class OfferController extends BaseController
             }
         }
 
-        $total = Comment::query()
-            ->where('relate_type', Offer::class)
-            ->where('relate_id', $id)
-            ->count();
-
-        $page = paginate(setting('postcommoffers'), $total);
-
         $comments = Comment::query()
             ->where('relate_type', Offer::class)
             ->where('relate_id', $id)
             ->orderBy('created_at')
-            ->offset($page->offset)
-            ->limit($page->limit)
-            ->get();
+            ->paginate(setting('postcommoffers'));
 
-        return view('offers/comments', compact('offer', 'comments', 'page'));
+        return view('offers/comments', compact('offer', 'comments'));
     }
 
     /**

@@ -29,6 +29,8 @@ class Item extends BaseModel
 {
     use UploadTrait;
 
+    public const BOARD_PAGINATE = 10;
+
     /**
      * Indicates if the model should be timestamped.
      *

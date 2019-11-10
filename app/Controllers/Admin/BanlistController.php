@@ -24,18 +24,13 @@ class BanlistController extends AdminController
      */
     public function index(): string
     {
-        $total = User::query()->where('level', User::BANNED)->where('timeban', '>', SITETIME)->count();
-        $page = paginate(setting('reglist'), $total);
-
         $users = User::query()
             ->where('level', User::BANNED)
             ->where('timeban', '>', SITETIME)
             ->orderBy('timeban')
-            ->limit($page->limit)
-            ->offset($page->offset)
             ->with('lastBan')
-            ->get();
+            ->paginate(setting('reglist'));
 
-        return view('admin/banlists/index', compact('users', 'page'));
+        return view('admin/banlists/index', compact('users'));
     }
 }

@@ -35,10 +35,10 @@
             @endforeach
         </div>
 
-        {!! pagination($page) !!}
-
-        {{ __('main.total_found') }}: {{ $page->total }}<br><br>
+        {{ __('main.total_found') }}: {{ $users->total() }}<br><br>
     @else
         {!! showError(__('main.empty_found')) !!}
     @endif
+
+    {{ $users->links('app/_paginator') }}
 @stop

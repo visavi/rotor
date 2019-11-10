@@ -16,15 +16,14 @@
 
 @section('content')
     @if ($contacts->isNotEmpty())
-
-        <form action="/contacts/delete?page={{ $page->current }}" method="post">
+        <form action="/contacts/delete?page={{ $contacts->currentPage() }}" method="post">
             @csrf
             @foreach ($contacts as $contact)
                 <div class="b">
                     <div class="float-right">
                         <a href="/messages/talk/{{ $contact->contactor->login }}" data-toggle="tooltip" title="{{ __('main.write') }}"><i class="fa fa-reply text-muted"></i></a>
                         <a href="/contacts/note/{{ $contact->id }}" data-toggle="tooltip" title="{{ __('main.note') }}"><i class="fa fa-sticky-note text-muted"></i></a>
-                        <a href="/transfers?user={{ $contact->contactor->login }}" data-toggle="tooltip" title="{{ __('contacts.transfer') }}"><i class="fa fa-money-bill-alt text-muted"></i></a>
+                        <a href="/transfers?user={{ $contact->contactor->login }}" data-toggle="tooltip" title="{{ __('contacts.transfer') }}"><i class="fa fa-dollar-sign text-muted"></i></a>
                         <input type="checkbox" name="del[]" value="{{ $contact->id }}">
                     </div>
 
@@ -48,12 +47,12 @@
             </div>
         </form>
 
-        {!! pagination($page) !!}
-
-        {{ __('main.total') }}: <b>{{ $page->total }}</b><br>
+        <br>{{ __('main.total') }}: <b>{{ $contacts->total() }}</b><br>
     @else
         {!! showError(__('contacts.empty_list')) !!}
     @endif
+
+    {{ $contacts->links('app/_paginator') }}
 
     <div class="form my-3">
         <form method="post">

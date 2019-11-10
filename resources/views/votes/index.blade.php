@@ -1,7 +1,7 @@
 @extends('layout')
 
 @section('title')
-    {{ __('index.votes') }} ({{ __('main.page_num', ['page' => $page->current]) }})
+    {{ __('index.votes') }} ({{ __('main.page_num', ['page' => $votes->currentPage()]) }})
 @stop
 
 @section('header')
@@ -39,11 +39,11 @@
                 {{ __('main.votes') }}: {{ $vote->count }}<br>
             </div>
         @endforeach
-
-        {!! pagination($page) !!}
     @else
         {!! showError(__('votes.empty_votes')) !!}
     @endif
+
+    {{ $votes->links('app/_paginator') }}
 
     <i class="fa fa-briefcase"></i> <a href="/votes/history">{{ __('votes.archive_votes') }}</a><br>
 @stop

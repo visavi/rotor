@@ -29,17 +29,12 @@ class TransferController extends AdminController
      */
     public function index(): string
     {
-        $total = Transfer::query()->count();
-        $page = paginate(setting('listtransfers'), $total);
-
         $transfers = Transfer::query()
-            ->orderBy('created_at', 'desc')
-            ->limit($page->limit)
-            ->offset($page->offset)
+            ->orderByDesc('created_at')
             ->with('user', 'recipientUser')
-            ->get();
+            ->paginate(setting('listtransfers'));
 
-        return view('admin/transfers/index', compact('transfers', 'page'));
+        return view('admin/transfers/index', compact('transfers'));
     }
 
     /**
@@ -56,17 +51,13 @@ class TransferController extends AdminController
             abort(404, __('validator.user'));
         }
 
-        $total = Transfer::query()->where('user_id', $user->id)->count();
-        $page = paginate(setting('listtransfers'), $total);
-
         $transfers = Transfer::query()
             ->where('user_id', $user->id)
-            ->orderBy('created_at', 'desc')
-            ->limit($page->limit)
-            ->offset($page->offset)
+            ->orderByDesc('created_at')
             ->with('user', 'recipientUser')
-            ->get();
+            ->paginate(setting('listtransfers'))
+            ->appends(['user' => $login]);
 
-        return view('admin/transfers/view', compact('transfers', 'page', 'user'));
+        return view('admin/transfers/view', compact('transfers', 'user'));
     }
 }

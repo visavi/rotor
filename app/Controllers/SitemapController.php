@@ -68,7 +68,7 @@ class SitemapController extends BaseController
                     ->where('relate_type', Blog::class);
             })
             ->groupBy('blogs.id')
-            ->orderBy('last_time', 'desc')
+            ->orderByDesc('last_time')
             ->get();
 
         $locs = [];
@@ -104,7 +104,7 @@ class SitemapController extends BaseController
                     ->where('relate_type', News::class);
             })
             ->groupBy('news.id')
-            ->orderBy('last_time', 'desc')
+            ->orderByDesc('last_time')
             ->get();
 
         $locs = [];
@@ -133,7 +133,7 @@ class SitemapController extends BaseController
      */
     private function topics(): string
     {
-        $topics = Topic::query()->orderBy('updated_at', 'desc')->limit(15000)->get();
+        $topics = Topic::query()->orderByDesc('updated_at')->limit(15000)->get();
 
         $locs = [];
 
@@ -165,7 +165,7 @@ class SitemapController extends BaseController
                     ->where('relate_type', Down::class);
             })
             ->groupBy('downs.id')
-            ->orderBy('last_time', 'desc')
+            ->orderByDesc('last_time')
             ->get();
 
         $locs = [];

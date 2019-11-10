@@ -30,7 +30,7 @@ class StatusController extends AdminController
      */
     public function index(): string
     {
-        $statuses = Status::query()->orderBy('topoint', 'desc')->get();
+        $statuses = Status::query()->orderByDesc('topoint')->get();
 
         return view('admin/status/index', compact('statuses'));
     }

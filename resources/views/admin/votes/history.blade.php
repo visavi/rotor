@@ -41,9 +41,9 @@
                 {{ __('main.votes') }}: {{ $vote->count }}<br>
             </div>
         @endforeach
-
-        {!! pagination($page) !!}
     @else
         {!! showError(__('votes.empty_votes')) !!}
     @endif
+
+    {{ $votes->links('app/_paginator') }}
 @stop

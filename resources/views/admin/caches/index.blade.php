@@ -21,13 +21,11 @@
         Cache driver: <span class="badge badge-pill badge-primary">{{ config('CACHE_DRIVER') }}</span>
     </div>
 
-    @if ($files)
+    @if ($files->isNotEmpty())
         @foreach ($files as $file)
 
             <i class="fa fa-file-alt"></i> <b>{{ basename($file) }}</b> ({{ formatFileSize($file) }} / {{ dateFixed(filemtime($file)) }})<br>
         @endforeach
-
-        {!! pagination($page) !!}
 
         <div class="float-right">
             <form action="/admin/caches/clear" method="post">
@@ -36,9 +34,11 @@
             </form>
         </div>
 
-        <br>{{ __('main.total') }}: {{ count($files) }}<br><br>
+        <br>{{ __('main.total') }}: {{ $files->total() }}<br><br>
 
     @else
         {!! showError(__('admin.caches.empty_files')) !!}
     @endif
+
+    {{ $files->links('app/_paginator') }}
 @stop

@@ -26,7 +26,7 @@
                             <a href="#" onclick="return postReply(this)" title="{{ __('main.reply') }}"><i class="fa fa-reply text-muted"></i></a>
                             <a href="#" onclick="return postQuote(this)" title="{{ __('main.quote') }}"><i class="fa fa-quote-right text-muted"></i></a>
 
-                            <a href="#" onclick="return sendComplaint(this)" data-type="{{ App\Models\Wall::class }}" data-id="{{ $data->id }}" data-token="{{ $_SESSION['token'] }}" data-page="{{ $page->current }}" rel="nofollow" title="{{ __('main.complain') }}"><i class="fa fa-bell text-muted"></i></a>
+                            <a href="#" onclick="return sendComplaint(this)" data-type="{{ App\Models\Wall::class }}" data-id="{{ $data->id }}" data-token="{{ $_SESSION['token'] }}" data-page="{{ $messages->currentPage() }}" rel="nofollow" title="{{ __('main.complain') }}"><i class="fa fa-bell text-muted"></i></a>
                         @endif
 
                         @if (isAdmin() || $user->id === getUser('id'))
@@ -48,16 +48,14 @@
             </div>
         @endforeach
 
-        {!! pagination($page) !!}
-
-        {{ __('main.total') }}: <b>{{ $page->total }}</b><br><br>
-
+        <br>{{ __('main.total') }}: <b>{{ $messages->total() }}</b><br>
     @else
         {!! showError(__('walls.empty_messages')) !!}
     @endif
 
-    @if (getUser())
+    {{ $messages->links('app/_paginator') }}
 
+    @if (getUser())
         <div class="form">
             <form action="/walls/{{ $user->login }}/create" method="post">
                 @csrf

@@ -208,19 +208,13 @@ class BlogController extends AdminController
             abort(404, __('blogs.category_not_exist'));
         }
 
-        $total = Blog::query()->where('category_id', $id)->count();
-
-        $page = paginate(setting('blogpost'), $total);
-
         $blogs = Blog::query()
             ->where('category_id', $id)
-            ->orderBy('created_at', 'desc')
-            ->offset($page->offset)
-            ->limit($page->limit)
+            ->orderByDesc('created_at')
             ->with('user')
-            ->get();
+            ->paginate(setting('blogpost'));
 
-        return view('admin/blogs/blog', compact('blogs', 'category', 'page'));
+        return view('admin/blogs/blog', compact('blogs', 'category'));
     }
 
     /**

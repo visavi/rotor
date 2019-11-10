@@ -21,7 +21,7 @@
             <li class="breadcrumb-item active">{{ __('index.offers') }}</li>
 
             @if (isAdmin('admin'))
-                <li class="breadcrumb-item"><a href="/admin/offers/{{ $type }}?page={{ $page->current }}">{{ __('main.management') }}</a></li>
+                <li class="breadcrumb-item"><a href="/admin/offers/{{ $type }}?page={{ $offers->currentPage() }}">{{ __('main.management') }}</a></li>
             @endif
         </ol>
     </nav>
@@ -29,11 +29,11 @@
 
 @section('content')
     @if ($type === 'offer')
-        <a class="btn btn-primary btn-sm" href="/offers/offer">{{ __('offers.offers') }} <span class="badge badge-light">{{ $page->total }}</span></a>
-        <a class="btn btn-light btn-sm" href="/offers/issue">{{ __('offers.problems') }} <span class="badge badge-light">{{ $page->otherTotal }}</span></a>
+        <a class="btn btn-primary btn-sm" href="/offers/offer">{{ __('offers.offers') }} <span class="badge badge-light">{{ $offers->total() }}</span></a>
+        <a class="btn btn-light btn-sm" href="/offers/issue">{{ __('offers.problems') }} <span class="badge badge-light">{{ $otherCount }}</span></a>
     @else
-        <a class="btn btn-light btn-sm" href="/offers/offer">{{ __('offers.offers') }} <span class="badge badge-light">{{ $page->otherTotal }}</span></a>
-        <a class="btn btn-primary btn-sm" href="/offers/issue">{{ __('offers.problems') }} <span class="badge badge-light">{{ $page->total }}</span></a>
+        <a class="btn btn-light btn-sm" href="/offers/offer">{{ __('offers.offers') }} <span class="badge badge-light">{{ $otherCount }}</span></a>
+        <a class="btn btn-primary btn-sm" href="/offers/issue">{{ __('offers.problems') }} <span class="badge badge-light">{{ $offers->total() }}</span></a>
     @endif
 
     @if ($offers->isNotEmpty())
@@ -64,10 +64,10 @@
             <a href="/offers/end/{{ $data->id }}">&raquo;</a></div>
         @endforeach
 
-        {!! pagination($page) !!}
-
-        {{ __('main.total') }}: <b>{{ $page->total }}</b><br><br>
+        <br>{{ __('main.total') }}: <b>{{ $offers->total() }}</b><br>
     @else
         {!! showError(__('main.empty_records')) !!}
     @endif
+
+    {{ $offers->links('app/_paginator') }}
 @stop

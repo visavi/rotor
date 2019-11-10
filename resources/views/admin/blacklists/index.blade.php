@@ -24,8 +24,7 @@
     <br><br>
 
     @if ($lists->isNotEmpty())
-
-        <form action="/admin/blacklists/delete?type={{ $type }}&amp;page={{ $page->current }}" method="post">
+        <form action="/admin/blacklists/delete?type={{ $type }}&amp;page={{ $lists->currentPage() }}" method="post">
             @csrf
             @foreach ($lists as $list)
                 <div class="b">
@@ -40,12 +39,11 @@
 
             <button class="btn btn-sm btn-danger">{{ __('main.delete_selected') }}</button>
         </form>
-
-        {!! pagination($page) !!}
-
     @else
         {!! showError( __('admin.blacklists.empty_list') ) !!}
     @endif
+
+    {{ $lists->links('app/_paginator') }}
 
     <div class="form">
         <form action="/admin/blacklists?type={{ $type }}" method="post">
@@ -61,5 +59,5 @@
         </form>
     </div><br>
 
-    {{ __('main.total') }}: <b>{{ $page->total }}</b><br>
+    {{ __('main.total') }}: <b>{{ $lists->total() }}</b><br>
 @stop

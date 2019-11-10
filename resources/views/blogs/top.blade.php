@@ -1,7 +1,7 @@
 @extends('layout')
 
 @section('title')
-    {{ __('blogs.top_articles') }} ({{ __('main.page_num', ['page' => $page->current]) }})
+    {{ __('blogs.top_articles') }} ({{ __('main.page_num', ['page' => $blogs->currentPage()]) }})
 @stop
 
 @section('header')
@@ -47,9 +47,9 @@
                 <a href="/articles/end/{{ $data->id }}">&raquo;</a>
             </div>
         @endforeach
-
-        {!! pagination($page) !!}
     @else
         {!! showError(__('blogs.empty_articles')) !!}
     @endif
+
+    {{ $blogs->links('app/_paginator') }}
 @stop

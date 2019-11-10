@@ -1,7 +1,7 @@
 @extends('layout')
 
 @section('title')
-    {{ __('index.users') }} ({{ __('main.page_num', ['page' => $page->current]) }})
+    {{ __('index.users') }} ({{ __('main.page_num', ['page' => $users->currentPage()]) }})
 @stop
 
 @section('header')
@@ -26,10 +26,11 @@
                     {!! $data->getOnline() !!}
                 </div>
 
+                {{ $users->firstItem() + $key }}.
                 @if ($user === $data->login)
-                    {{ ($page->offset + $key + 1) }}. <b>{!! $data->getProfile('#ff0000') !!}</b>
+                    <b>{!! $data->getProfile('#ff0000') !!}</b>
                 @else
-                    {{ ($page->offset + $key + 1) }}. <b>{!! $data->getProfile() !!}</b>
+                    <b>{!! $data->getProfile() !!}</b>
                 @endif
                 ({{ plural($data->point, setting('scorename')) }})<br>
                 {!! $data->getStatus() !!}
@@ -43,9 +44,7 @@
             </div>
         @endforeach
 
-        {!! pagination($page) !!}
-
-        <div class="form">
+        <div class="form mt-3">
             <form action="/users" method="post">
                 <div class="form-inline">
                     <div class="form-group{{ hasError('user') }}">
@@ -58,10 +57,12 @@
             </form>
         </div><br>
 
-        {{ __('main.total_users') }}: <b>{{ $page->total }}</b><br><br>
+        {{ __('main.total_users') }}: <b>{{ $users->total() }}</b><br>
     @else
         {!! showError(__('main.empty_users')) !!}
     @endif
+
+    {{ $users->links('app/_paginator') }}
 
     <i class="fa fa-users"></i> <a href="/who">{{ __('users.novices') }}</a><br>
     <i class="fas fa-search"></i> <a href="/searchusers">{{ __('index.search_users') }}</a><br>

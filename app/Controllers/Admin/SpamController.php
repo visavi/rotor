@@ -64,15 +64,12 @@ class SpamController extends AdminController
         $type = check($request->input('type'));
         $type = isset($this->types[$type]) ? $type : 'post';
 
-        $page = paginate(setting('spamlist'),  $this->total[$type]);
-
         $records = Spam::query()
             ->where('relate_type', $this->types[$type])
-            ->orderBy('created_at', 'desc')
-            ->offset($page->offset)
-            ->limit($page->limit)
+            ->orderByDesc('created_at')
             ->with('relate.user', 'user')
-            ->get();
+            ->paginate(setting('spamlist'))
+            ->appends(['type' => $type]);
 
         if (in_array($type, ['message', 'wall'])) {
             $records->load('relate.author');
@@ -80,7 +77,7 @@ class SpamController extends AdminController
 
         $total = $this->total;
 
-        return view('admin/spam/index', compact('records', 'page', 'total', 'type'));
+        return view('admin/spam/index', compact('records', 'total', 'type'));
     }
 
     /**

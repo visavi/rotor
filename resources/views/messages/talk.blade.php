@@ -25,7 +25,6 @@
 
     @if ($messages->isNotEmpty())
         @foreach ($messages as $data)
-
             <?php $author = $data->type === 'in' ? $data->author : $data->user; ?>
             <div class="post">
                 <div class="b">
@@ -57,11 +56,11 @@
                 </div>
             </div>
         @endforeach
-
-        {!! pagination($page) !!}
     @else
         {!! showError(__('messages.empty_dialogue')) !!}
     @endif
+
+    {{ $messages->links('app/_paginator') }}
 
     @if ($user->exists)
         <br>
@@ -81,12 +80,12 @@
 
                 <button class="btn btn-primary">{{ __('main.write') }}</button>
             </form>
-        </div><br>
+        </div>
     @endif
 
-    {{ __('main.total') }}: <b>{{ $page->total }}</b><br><br>
+    <br>{{ __('main.total') }}: <b>{{ $messages->total() }}</b><br>
 
-    @if ($page->total)
+    @if ($messages->total())
         <i class="fa fa-times"></i> <a href="/messages/delete/{{ $user->id }}?token={{ $_SESSION['token'] }}" onclick="return confirm('{{ __('messages.delete_confirm') }}')">{{ __('messages.delete_talk') }}</a><br>
     @endif
 

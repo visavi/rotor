@@ -21,17 +21,12 @@ class PhotoController extends BaseController
      */
     public function index(): string
     {
-        $total = Photo::query()->count();
-        $page = paginate(setting('fotolist'), $total);
-
         $photos = Photo::query()
-            ->orderBy('created_at', 'desc')
-            ->offset($page->offset)
-            ->limit($page->limit)
+            ->orderByDesc('created_at')
             ->with('user', 'files')
-            ->get();
+            ->paginate(setting('fotolist'));
 
-        return view('photos/index', compact('photos', 'page'));
+        return view('photos/index', compact('photos'));
     }
 
     /**
@@ -238,22 +233,14 @@ class PhotoController extends BaseController
             }
         }
 
-        $total = Comment::query()
-            ->where('relate_type', Photo::class)
-            ->where('relate_id', $id)
-            ->count();
-        $page = paginate(setting('postgallery'), $total);
-
         $comments = Comment::query()
             ->where('relate_type', Photo::class)
             ->where('relate_id', $id)
-            ->offset($page->offset)
-            ->limit($page->limit)
             ->orderBy('created_at')
             ->with('user')
-            ->get();
+            ->paginate(setting('postgallery'));
 
-        return view('photos/comments', compact('photo', 'comments', 'page'));
+        return view('photos/comments', compact('photo', 'comments'));
     }
 
     /**
@@ -397,24 +384,15 @@ class PhotoController extends BaseController
      */
     public function albums(): string
     {
-        $total = Photo::query()
-            ->distinct()
-            ->join('users', 'photos.user_id', 'users.id')
-            ->count('user_id');
-
-        $page = paginate(setting('photogroup'), $total);
-
         $albums = Photo::query()
             ->select('user_id', 'login')
             ->selectRaw('count(*) as cnt, sum(count_comments) as count_comments')
             ->join('users', 'photos.user_id', 'users.id')
-            ->offset($page->offset)
-            ->limit($page->limit)
             ->groupBy('user_id')
-            ->orderBy('cnt', 'desc')
-            ->get();
+            ->orderByDesc('cnt')
+            ->paginate(setting('photogroup'));
 
-        return view('photos/albums', compact('albums', 'page'));
+        return view('photos/albums', compact('albums'));
     }
 
     /**
@@ -431,21 +409,15 @@ class PhotoController extends BaseController
             abort(404, __('validator.user'));
         }
 
-        $total = Photo::query()->where('user_id', $user->id)->count();
-
-        $page = paginate(setting('fotolist'), $total);
-
         $photos = Photo::query()
             ->where('user_id', $user->id)
-            ->offset($page->offset)
-            ->limit($page->limit)
-            ->orderBy('created_at', 'desc')
+            ->orderByDesc('created_at')
             ->with('user')
-            ->get();
+            ->paginate(setting('fotolist'));
 
         $moder = (getUser('id') === $user->id) ? 1 : 0;
 
-        return view('photos/user_albums', compact('photos', 'moder', 'page', 'user'));
+        return view('photos/user_albums', compact('photos', 'moder', 'user'));
     }
 
     /**
@@ -464,17 +436,13 @@ class PhotoController extends BaseController
             $order = 'rating';
         }
 
-        $total = Photo::query()->count();
-        $page = paginate(setting('fotolist'), $total);
-
         $photos = Photo::query()
-            ->orderBy($order, 'desc')
-            ->offset($page->offset)
-            ->limit($page->limit)
+            ->orderByDesc($order)
             ->with('user')
-            ->get();
+            ->paginate(setting('fotolist'))
+            ->appends(['sort' => $sort]);
 
-        return view('photos/top', compact('photos', 'page', 'order'));
+        return view('photos/top', compact('photos', 'order'));
     }
 
     /**
@@ -484,20 +452,15 @@ class PhotoController extends BaseController
      */
     public function allComments(): string
     {
-        $total = Comment::query()->where('relate_type', Photo::class)->count();
-        $page = paginate(setting('postgallery'), $total);
-
         $comments = Comment::query()
             ->select('comments.*', 'title')
             ->where('relate_type', Photo::class)
             ->leftJoin('photos', 'comments.relate_id', 'photos.id')
-            ->offset($page->offset)
-            ->limit($page->limit)
-            ->orderBy('comments.created_at', 'desc')
+            ->orderByDesc('comments.created_at')
             ->with('user')
-            ->get();
+            ->paginate(setting('postgallery'));
 
-        return view('photos/all_comments', compact('comments', 'page'));
+        return view('photos/all_comments', compact('comments'));
     }
 
     /**
@@ -514,25 +477,16 @@ class PhotoController extends BaseController
             abort(404, __('validator.user'));
         }
 
-        $total = Comment::query()
-            ->where('relate_type', Photo::class)
-            ->where('user_id', $user->id)
-            ->count();
-
-        $page = paginate(setting('postgallery'), $total);
-
         $comments = Comment::query()
             ->select('comments.*', 'title')
             ->where('relate_type', Photo::class)
             ->where('comments.user_id', $user->id)
             ->leftJoin('photos', 'comments.relate_id', 'photos.id')
-            ->offset($page->offset)
-            ->limit($page->limit)
-            ->orderBy('comments.created_at', 'desc')
+            ->orderByDesc('comments.created_at')
             ->with('user')
-            ->get();
+            ->paginate(setting('postgallery'));
 
-        return view('photos/user_comments', compact('comments', 'page', 'user'));
+        return view('photos/user_comments', compact('comments', 'user'));
     }
 
     /**

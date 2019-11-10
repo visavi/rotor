@@ -35,16 +35,11 @@ class UserController extends AdminController
      */
     public function index(): string
     {
-        $total = User::query()->count();
-        $page = paginate(setting('userlist'), $total);
-
         $users = User::query()
-            ->orderBy('created_at', 'desc')
-            ->offset($page->offset)
-            ->limit($page->limit)
-            ->get();
+            ->orderByDesc('created_at')
+            ->paginate(setting('userlist'));
 
-        return view('admin/users/index', compact('users', 'page'));
+        return view('admin/users/index', compact('users'));
     }
 
     /**
@@ -59,17 +54,13 @@ class UserController extends AdminController
 
         $search = $q === '1' ? "RLIKE '^[-0-9]'" : "LIKE '$q%'";
 
-        $total = User::query()->whereRaw('login ' . $search)->count();
-        $page = paginate(setting('usersearch'), $total);
-
         $users = User::query()
             ->whereRaw('login ' . $search)
-            ->offset($page->offset)
-            ->limit($page->limit)
-            ->orderBy('point', 'desc')
-            ->get();
+            ->orderByDesc('point')
+            ->paginate(setting('usersearch'))
+            ->appends(['q' => $q]);
 
-        return view('admin/users/search', compact('users', 'page'));
+        return view('admin/users/search', compact('users'));
     }
 
     /**
@@ -177,7 +168,7 @@ class UserController extends AdminController
         $banhist = Banhist::query()
             ->where('user_id', $user->id)
             ->whereIn('type', ['ban', 'change'])
-            ->orderBy('created_at', 'desc')
+            ->orderByDesc('created_at')
             ->first();
 
         return view('admin/users/edit', compact('user', 'banhist', 'allThemes', 'allGroups', 'adminGroups'));

@@ -265,7 +265,7 @@ class BBCode
             $listStickers = Cache::rememberForever('stickers', static function () {
                 $stickers = Sticker::query()
                     ->select('code', 'name')
-                    ->orderBy(DB::connection()->raw('CHAR_LENGTH(code)'), 'desc')
+                    ->orderByDesc(DB::connection()->raw('CHAR_LENGTH(code)'))
                     ->get()
                     ->toArray();
 

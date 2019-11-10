@@ -51,19 +51,13 @@ class BlogController extends BaseController
             abort(404, __('blogs.category_not_exist'));
         }
 
-        $total = Blog::query()->where('category_id', $id)->count();
-
-        $page = paginate(setting('blogpost'), $total);
-
         $blogs = Blog::query()
             ->where('category_id', $id)
-            ->orderBy('created_at', 'desc')
-            ->offset($page->offset)
-            ->limit($page->limit)
+            ->orderByDesc('created_at')
             ->with('user')
-            ->get();
+            ->paginate(setting('blogpost'));
 
-        return view('blogs/blog', compact('blogs', 'category', 'page'));
+        return view('blogs/blog', compact('blogs', 'category'));
     }
 
     /**
@@ -204,24 +198,15 @@ class BlogController extends BaseController
      */
     public function authors(): string
     {
-        $total = Blog::query()
-            ->distinct()
-            ->join('users', 'blogs.user_id', 'users.id')
-            ->count('user_id');
-
-        $page = paginate(setting('bloggroup'), $total);
-
         $blogs = Blog::query()
             ->select('user_id', 'login')
             ->selectRaw('count(*) as cnt, sum(count_comments) as count_comments')
             ->join('users', 'blogs.user_id', 'users.id')
-            ->offset($page->offset)
-            ->limit($page->limit)
             ->groupBy('user_id')
-            ->orderBy('cnt', 'desc')
-            ->get();
+            ->orderByDesc('cnt')
+            ->paginate(setting('bloggroup'));
 
-        return view('blogs/authors', compact('blogs', 'page'));
+        return view('blogs/authors', compact('blogs'));
     }
 
     /**
@@ -381,22 +366,13 @@ class BlogController extends BaseController
             }
         }
 
-        $total = Comment::query()
-            ->where('relate_type', Blog::class)
-            ->where('relate_id', $id)
-            ->count();
-
-        $page = paginate(setting('blogcomm'), $total);
-
         $comments = Comment::query()
             ->where('relate_type', Blog::class)
             ->where('relate_id', $id)
             ->orderBy('created_at')
-            ->offset($page->offset)
-            ->limit($page->limit)
-            ->get();
+            ->paginate(setting('blogcomm'));
 
-        return view('blogs/comments', compact('blog', 'comments', 'page'));
+        return view('blogs/comments', compact('blog', 'comments'));
     }
 
     /**
@@ -513,7 +489,7 @@ class BlogController extends BaseController
     public function rss(): string
     {
         $blogs = Blog::query()
-            ->orderBy('created_at', 'desc')
+            ->orderByDesc('created_at')
             ->limit(15)
             ->get();
 
@@ -591,9 +567,9 @@ class BlogController extends BaseController
         }
 
         if (
-            empty($_SESSION['findresult']) ||
-            empty($_SESSION['blogfind'])   ||
-            $tag !== $_SESSION['blogfind']
+            empty($_SESSION['findresult'])
+            || empty($_SESSION['blogfind'])
+            || $tag !== $_SESSION['blogfind']
         ) {
             $result = Blog::query()
                 ->select('id')
@@ -606,20 +582,15 @@ class BlogController extends BaseController
             $_SESSION['findresult'] = $result;
         }
 
-        $total = count($_SESSION['findresult']);
-        $page  = paginate(setting('blogpost'), $total);
-
         $blogs = Blog::query()
             ->select('blogs.*', 'categories.name')
             ->whereIn('blogs.id', $_SESSION['findresult'])
             ->join('categories', 'blogs.category_id', 'categories.id')
-            ->orderBy('created_at', 'desc')
-            ->offset($page->offset)
-            ->limit($page->limit)
+            ->orderByDesc('created_at')
             ->with('user')
-            ->get();
+            ->paginate(setting('blogpost'));
 
-        return view('blogs/tags_search', compact('blogs', 'tag', 'page'));
+        return view('blogs/tags_search', compact('blogs', 'tag'));
     }
 
     /**
@@ -629,21 +600,12 @@ class BlogController extends BaseController
      */
     public function newArticles(): string
     {
-        $total = Blog::query()->count();
-
-        if ($total > 500) {
-            $total = 500;
-        }
-        $page = paginate(setting('blogpost'), $total);
-
         $blogs = Blog::query()
-            ->orderBy('created_at', 'desc')
-            ->offset($page->offset)
-            ->limit($page->limit)
+            ->orderByDesc('created_at')
             ->with('user')
-            ->get();
+            ->paginate(setting('blogpost'));
 
-        return view('blogs/new_articles', compact('blogs', 'page'));
+        return view('blogs/new_articles', compact('blogs'));
     }
 
     /**
@@ -653,24 +615,15 @@ class BlogController extends BaseController
      */
     public function newComments(): string
     {
-        $total = Comment::query()->where('relate_type', Blog::class)->count();
-
-        if ($total > 500) {
-            $total = 500;
-        }
-        $page = paginate(setting('blogpost'), $total);
-
         $comments = Comment::query()
             ->select('comments.*', 'title', 'count_comments')
             ->where('relate_type', Blog::class)
             ->leftJoin('blogs', 'comments.relate_id', 'blogs.id')
-            ->offset($page->offset)
-            ->limit($page->limit)
-            ->orderBy('comments.created_at', 'desc')
+            ->orderByDesc('comments.created_at')
             ->with('user')
-            ->get();
+            ->paginate(setting('blogpost'));
 
-        return view('blogs/new_comments', compact('comments', 'page'));
+        return view('blogs/new_comments', compact('comments'));
     }
 
     /**
@@ -688,16 +641,12 @@ class BlogController extends BaseController
             abort(404, __('validator.user'));
         }
 
-        $total = Blog::query()->where('user_id', $user->id)->count();
-        $page  = paginate(setting('blogpost'), $total);
-
         $blogs = Blog::query()->where('user_id', $user->id)
-            ->offset($page->offset)
-            ->limit($page->limit)
-            ->orderBy('created_at', 'desc')
-            ->get();
+            ->orderByDesc('created_at')
+            ->paginate(setting('blogpost'))
+            ->appends(['user' => $user->login]);
 
-        return view('blogs/active_articles', compact('blogs', 'user', 'page'));
+        return view('blogs/active_articles', compact('blogs', 'user'));
     }
 
     /**
@@ -715,24 +664,17 @@ class BlogController extends BaseController
             abort(404, __('validator.user'));
         }
 
-        $total = Comment::query()
-            ->where('relate_type', Blog::class)
-            ->where('user_id', $user->id)
-            ->count();
-        $page = paginate(setting('blogpost'), $total);
-
         $comments = Comment::query()
             ->select('comments.*', 'title', 'count_comments')
             ->where('relate_type', Blog::class)
             ->where('comments.user_id', $user->id)
             ->leftJoin('blogs', 'comments.relate_id', 'blogs.id')
-            ->offset($page->offset)
-            ->limit($page->limit)
-            ->orderBy('comments.created_at', 'desc')
+            ->orderByDesc('comments.created_at')
             ->with('user')
-            ->get();
+            ->paginate(setting('blogpost'))
+            ->appends(['user' => $user->login]);
 
-            return view('blogs/active_comments', compact('comments', 'user', 'page'));
+        return view('blogs/active_comments', compact('comments', 'user'));
     }
 
     /**
@@ -780,19 +722,15 @@ class BlogController extends BaseController
             default: $order = 'visits';
         }
 
-        $total = Blog::query()->count();
-        $page = paginate(setting('blogpost'), $total);
-
         $blogs = Blog::query()
             ->select('blogs.*', 'categories.name')
             ->leftJoin('categories', 'blogs.category_id', 'categories.id')
-            ->offset($page->offset)
-            ->limit($page->limit)
-            ->orderBy($order, 'desc')
+            ->orderByDesc($order)
             ->with('user')
-            ->get();
+            ->paginate(setting('blogpost'))
+            ->appends(['sort' => $sort]);
 
-        return view('blogs/top', compact('blogs', 'order', 'page'));
+        return view('blogs/top', compact('blogs', 'order'));
     }
 
     /**
@@ -840,7 +778,6 @@ class BlogController extends BaseController
 
                 // ----------------------------- Поиск в названии -------------------------------//
                 if ($wheres === 'title') {
-
                     if ($type === 2) {
                         $arrfind[0] = $findme;
                     }
@@ -848,7 +785,6 @@ class BlogController extends BaseController
                     $search2 = isset($arrfind[2]) && $type !== 2 ? $types . " `title` LIKE '%" . $arrfind[2] . "%'" : '';
 
                     if (empty($_SESSION['blogfindres']) || $blogfind !== $_SESSION['blogfind']) {
-
                         $result = Blog::query()
                             ->select('id')
                             ->whereRaw("title like '%".$arrfind[0]."%'".$search1.$search2)
@@ -861,20 +797,22 @@ class BlogController extends BaseController
                     }
 
                     $total = count($_SESSION['blogfindres']);
-                    $page  = paginate(setting('blogpost'), $total);
 
                     if ($total > 0) {
                         $blogs = Blog::query()
                             ->select('blogs.*', 'categories.name')
                             ->whereIn('blogs.id', $_SESSION['blogfindres'])
                             ->join('categories', 'blogs.category_id', 'categories.id')
-                            ->orderBy('created_at', 'desc')
-                            ->offset($page->offset)
-                            ->limit($page->limit)
+                            ->orderByDesc('created_at')
                             ->with('user')
-                            ->get();
+                            ->paginate(setting('blogpost'))
+                            ->appends([
+                                'find'  => $find,
+                                'where' => $where,
+                                'type'  => $type,
+                            ]);
 
-                        return view('blogs/search_title', compact('blogs', 'find', 'page'));
+                        return view('blogs/search_title', compact('blogs', 'find'));
                     }
 
                     setInput($request->all());
@@ -883,7 +821,6 @@ class BlogController extends BaseController
                 }
                 // --------------------------- Поиск в текте -------------------------------//
                 if ($wheres === 'text') {
-
                     if ($type === 2) {
                         $arrfind[0] = $findme;
                     }
@@ -891,7 +828,6 @@ class BlogController extends BaseController
                     $search2 = isset($arrfind[2]) && $type !== 2 ? $types . " `text` LIKE '%" . $arrfind[2] . "%'" : '';
 
                     if (empty($_SESSION['blogfindres']) || $blogfind !== $_SESSION['blogfind']) {
-
                         $result = Blog::query()
                             ->select('id')
                             ->whereRaw("text like '%".$arrfind[0]."%'".$search1.$search2)
@@ -904,20 +840,22 @@ class BlogController extends BaseController
                     }
 
                     $total = count($_SESSION['blogfindres']);
-                    $page  = paginate(setting('blogpost'), $total);
 
                     if ($total > 0) {
                         $blogs = Blog::query()
                             ->select('blogs.*', 'categories.name')
                             ->whereIn('blogs.id', $_SESSION['blogfindres'])
                             ->join('categories', 'blogs.category_id', 'categories.id')
-                            ->orderBy('created_at', 'desc')
-                            ->offset($page->offset)
-                            ->limit($page->limit)
+                            ->orderByDesc('created_at')
                             ->with('user')
-                            ->get();
+                            ->paginate(setting('blogpost'))
+                            ->appends([
+                                'find'  => $find,
+                                'where' => $where,
+                                'type'  => $type,
+                            ]);
 
-                        return view('blogs/search_text', compact('blogs', 'find', 'page'));
+                        return view('blogs/search_text', compact('blogs', 'find'));
                     }
 
                     setInput($request->all());
@@ -938,17 +876,11 @@ class BlogController extends BaseController
      */
     public function main(): string
     {
-        $total = Blog::query()->count();
-
-        $page = paginate(setting('blogpost'), $total);
-
         $blogs = Blog::query()
-            ->orderBy('created_at', 'desc')
-            ->offset($page->offset)
-            ->limit($page->limit)
+            ->orderByDesc('created_at')
             ->with('user')
-            ->get();
+            ->paginate(setting('blogpost'));
 
-        return view('blogs/main', compact('blogs', 'page'));
+        return view('blogs/main', compact('blogs'));
     }
 }

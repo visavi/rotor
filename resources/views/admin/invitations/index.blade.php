@@ -29,8 +29,7 @@
     @endif
 
     @if ($invites->isNotEmpty())
-
-        <form action="/admin/invitations/delete?used={{ $used }}&amp;page={{ $page->current }}" method="post">
+        <form action="/admin/invitations/delete?used={{ $used }}&amp;page={{ $invites->currentPage() }}" method="post">
             @csrf
             @foreach ($invites as $invite)
                 <div class="b">
@@ -51,14 +50,12 @@
 
             <button class="btn btn-sm btn-danger">{{ __('main.delete_selected') }}</button>
         </form>
-
-    {!! pagination($page) !!}
-
-        {{ __('main.total') }}: <b>{{ $page->total }}</b><br><br>
-
+        <br>{{ __('main.total') }}: <b>{{ $invites->total() }}</b><br>
     @else
         {!! showError(__('admin.invitations.empty_invitations')) !!}
     @endif
+
+    {{ $invites->links('app/_paginator') }}
 
     <i class="fa fa-check"></i> <a href="/admin/invitations/create">{{ __('admin.invitations.create_keys') }}</a><br>
     <i class="fa fa-key"></i> <a href="/admin/invitations/keys">{{ __('admin.invitations.list_keys') }}</a><br>

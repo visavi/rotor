@@ -1,7 +1,7 @@
 @extends('layout')
 
 @section('title')
-    {{ __('index.blogs') }} - {{ __('blogs.title_active_articles', ['user' => $user->login]) }} ({{ __('main.page_num', ['page' => $page->current]) }})
+    {{ __('index.blogs') }} - {{ __('blogs.title_active_articles', ['user' => $user->login]) }} ({{ __('main.page_num', ['page' => $blogs->currentPage()]) }})
 @stop
 
 @section('header')
@@ -32,10 +32,10 @@
             </div>
         @endforeach
 
-        {!! pagination($page) !!}
-
-        {{ __('blogs.total_articles') }}: <b>{{ $page->total }}</b><br>
+        <br>{{ __('blogs.total_articles') }}: <b>{{ $blogs->total() }}</b><br>
     @else
         {!! showError(__('blogs.empty_articles')) !!}
     @endif
+
+    {{ $blogs->links('app/_paginator') }}
 @stop

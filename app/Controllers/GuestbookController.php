@@ -18,17 +18,12 @@ class GuestbookController extends BaseController
      */
     public function index(): string
     {
-        $total = Guestbook::query()->count();
-        $page  = paginate(setting('bookpost'), $total);
-
         $posts = Guestbook::query()
-            ->orderBy('created_at', 'desc')
-            ->limit($page->limit)
-            ->offset($page->offset)
+            ->orderByDesc('created_at')
             ->with('user', 'editUser')
-            ->get();
+            ->paginate(setting('bookpost'));
 
-        return view('guestbooks/index', compact('posts', 'page'));
+        return view('guestbooks/index', compact('posts'));
     }
 
     /**

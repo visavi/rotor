@@ -72,18 +72,13 @@ class ContactController extends BaseController
             }
         }
 
-        $total = Contact::query()->where('user_id', getUser('id'))->count();
-        $page = paginate(setting('contactlist'), $total);
-
         $contacts = Contact::query()
             ->where('user_id', getUser('id'))
-            ->orderBy('created_at', 'desc')
-            ->offset($page->offset)
-            ->limit($page->limit)
+            ->orderByDesc('created_at')
             ->with('contactor')
-            ->get();
+            ->paginate(setting('contactlist'));
 
-        return view('contacts/index', compact('contacts', 'page', 'login'));
+        return view('contacts/index', compact('contacts', 'login'));
     }
 
     /**

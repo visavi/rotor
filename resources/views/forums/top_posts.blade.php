@@ -49,9 +49,9 @@
 
             </div>
         @endforeach
-
-        {!! pagination($page) !!}
     @else
         {!! showError(__('forums.empty_posts')) !!}
     @endif
+
+    {{ $posts->links('app/_paginator') }}
 @stop

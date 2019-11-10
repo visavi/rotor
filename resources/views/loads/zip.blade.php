@@ -22,9 +22,9 @@
 @stop
 
 @section('content')
-    {{ __('main.total') }}: {{ $page->total }}<hr>
+    {{ __('main.total') }}: {{ $documents->total() }}<hr>
 
-    @if ($documents)
+    @if ($documents->isNotEmpty())
         @foreach ($documents as $key => $document)
 
             @if ($document->isFolder())
@@ -43,11 +43,10 @@
 
                 ({{ formatSize($document->getSize()) }})<br>
             @endif
-
         @endforeach
-
-        {!! pagination($page) !!}
     @else
         {!! showError(__('loads.empty_archive')) !!}
     @endif
+
+    {{ $documents->links('app/_paginator') }}
 @stop

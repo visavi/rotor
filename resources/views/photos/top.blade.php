@@ -69,9 +69,9 @@
                 <a href="/photos/end/{{ $photo->id }}">&raquo;</a>
             </div>
         @endforeach
-
-        {!! pagination($page) !!}
     @else
         {!! showError(__('photos.empty_photos')) !!}
     @endif
+
+    {{ $photos->links('app/_paginator') }}
 @stop

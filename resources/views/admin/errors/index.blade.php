@@ -32,7 +32,6 @@
     </ol>
 
     @if ($logs->isNotEmpty())
-
         @foreach ($logs as $data)
             <div class="b">
                 <i class="fa fa-file"></i>
@@ -45,14 +44,13 @@
             </div>
         @endforeach
 
-        {!! pagination($page) !!}
+        <br>{{ __('main.total') }}: <b>{{ $logs->total() }}</b><br>
 
-        {{ __('main.total') }}: <b>{{ $page->total }}</b><br><br>
+        {{ $logs->links('app/_paginator') }}
 
         @if (isAdmin('boss'))
             <i class="fa fa-trash-alt"></i> <a href="/admin/errors/clear?token={{ $_SESSION['token'] }}">{{ __('main.clear') }}</a><br>
         @endif
-
     @else
         {!! showError(__('main.empty_records')) !!}
     @endif

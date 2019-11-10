@@ -29,17 +29,12 @@ class LogController extends AdminController
      */
     public function index(): string
     {
-        $total = Log::query()->count();
-        $page = paginate(setting('loglist'), $total);
-
         $logs = Log::query()
-            ->orderBy('created_at', 'desc')
-            ->limit($page->limit)
-            ->offset($page->offset)
+            ->orderByDesc('created_at')
             ->with('user')
-            ->get();
+            ->paginate(setting('loglist'));
 
-        return view('admin/logs/index', compact('logs', 'page'));
+        return view('admin/logs/index', compact('logs'));
     }
 
     /**

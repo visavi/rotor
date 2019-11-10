@@ -60,17 +60,12 @@ class IpBanController extends AdminController
             }
         }
 
-        $total = Ban::query()->count();
-        $page = paginate(setting('ipbanlist'), $total);
-
         $logs = Ban::query()
-            ->orderBy('created_at', 'desc')
-            ->limit($page->limit)
-            ->offset($page->offset)
+            ->orderByDesc('created_at')
             ->with('user')
-            ->get();
+            ->paginate(setting('ipbanlist'));
 
-        return view('admin/ipbans/index', compact('logs', 'page'));
+        return view('admin/ipbans/index', compact('logs'));
     }
 
     /**

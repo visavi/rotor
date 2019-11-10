@@ -47,10 +47,7 @@ class LoadController extends BaseController
             abort(404, __('loads.category_not_exist'));
         }
 
-        $total = Down::query()->where('category_id', $category->id)->where('active', 1)->count();
-        $page = paginate(setting('downlist'), $total);
-
-        $sort = check($request->input('sort'));
+        $sort = check($request->input('sort', 'time'));
 
         switch ($sort) {
             case 'rated':
@@ -69,12 +66,11 @@ class LoadController extends BaseController
         $downs = Down::query()
             ->where('category_id', $category->id)
             ->where('active', 1)
-            ->orderBy($order, 'desc')
-            ->offset($page->offset)
-            ->limit($page->limit)
-            ->get();
+            ->orderByDesc($order)
+            ->paginate(setting('downlist'))
+            ->appends(['sort' => $sort]);
 
-        return view('loads/load', compact('category', 'downs', 'page', 'order'));
+        return view('loads/load', compact('category', 'downs', 'order'));
     }
 
     /**
@@ -85,7 +81,7 @@ class LoadController extends BaseController
     public function rss(): string
     {
         $downs = Down::query()
-            ->orderBy('created_at', 'desc')
+            ->orderByDesc('created_at')
             ->limit(15)
             ->get();
 

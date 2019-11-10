@@ -27,9 +27,9 @@
                 {{ __('forums.post') }}: {{ $data->lastPost->user->getName() }} ({{ dateFixed($data->lastPost->created_at) }})
             </div>
         @endforeach
-
-        {!! pagination($page) !!}
     @else
         {!! showError(__('forums.empty_topics')) !!}
     @endif
+
+    {{ $topics->links('app/_paginator') }}
 @stop

@@ -10,14 +10,14 @@
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
             <li class="breadcrumb-item"><a href="/admin">{{ __('index.panel') }}</a></li>
             <li class="breadcrumb-item active">{{ __('index.guestbooks') }}</li>
-            <li class="breadcrumb-item"><a href="/guestbooks?page={{ $page->current }}">{{ __('main.review') }}</a></li>
+            <li class="breadcrumb-item"><a href="/guestbooks?page={{ $posts->currentPage() }}">{{ __('main.review') }}</a></li>
         </ol>
     </nav>
 @stop
 
 @section('content')
     @if ($posts->isNotEmpty())
-        <form action="/admin/guestbooks/delete?page={{ $page->current }}" method="post">
+        <form action="/admin/guestbooks/delete?page={{ $posts->currentPage() }}" method="post">
             @csrf
             @foreach($posts as $data)
                 <div class="post">
@@ -31,8 +31,8 @@
                         </div>
 
                         <div class="float-right">
-                            <a href="/admin/guestbooks/reply/{{ $data->id }}?page={{ $page->current }}"><i class="fa fa-reply text-muted"></i></a>
-                            <a href="/admin/guestbooks/edit/{{ $data->id }}?page={{ $page->current }}"><i class="fas fa-pencil-alt text-muted"></i></a>
+                            <a href="/admin/guestbooks/reply/{{ $data->id }}?page={{ $posts->currentPage() }}"><i class="fa fa-reply text-muted"></i></a>
+                            <a href="/admin/guestbooks/edit/{{ $data->id }}?page={{ $posts->currentPage() }}"><i class="fas fa-pencil-alt text-muted"></i></a>
                             <input type="checkbox" name="del[]" value="{{ $data->id }}">
                         </div>
 
@@ -63,9 +63,9 @@
             </div>
         </form>
 
-        {!! pagination($page) !!}
+        {{ $posts->links('app/_paginator') }}
 
-        {{ __('guestbooks.total_messages') }}: <b>{{ $page->total }}</b><br><br>
+        {{ __('guestbooks.total_messages') }}: <b>{{ $posts->total() }}</b><br><br>
 
         @if (isAdmin('boss'))
             <i class="fa fa-times"></i> <a href="/admin/guestbooks/clear?token={{ $_SESSION['token'] }}" onclick="return confirm('{{ __('guestbooks.confirm_delete') }}')">{{ __('main.clear') }}</a><br>

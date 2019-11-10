@@ -29,19 +29,13 @@ class AdvertController extends BaseController
      */
     public function index(): string
     {
-        $total = Advert::query()->where('deleted_at', '>', SITETIME)->count();
-
-        $page = paginate(setting('rekuserpost'), $total);
-
         $adverts = Advert::query()
             ->where('deleted_at', '>', SITETIME)
-            ->limit($page->limit)
-            ->offset($page->offset)
-            ->orderBy('deleted_at', 'desc')
+            ->orderByDesc('deleted_at')
             ->with('user')
-            ->get();
+            ->paginate(setting('rekuserpost'));
 
-        return view('adverts/index', compact('adverts', 'page'));
+        return view('adverts/index', compact('adverts'));
     }
 
     /**

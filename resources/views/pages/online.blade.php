@@ -14,12 +14,10 @@
 @stop
 
 @section('content')
-    {{ __('pages.total_online') }}: <b>{{ $all }}</b><br>
-    {{ __('pages.authorized') }}:  <b>{{ $total }}</b><br><br>
-
+    {{ __('pages.total_online') }}: <b>{{ $guests ? $online->total() : $other }}</b><br>
+    {{ __('pages.authorized') }}:  <b>{{ $guests ? $other : $online->total() }}</b><br><br>
 
     @if ($online->isNotEmpty())
-
         @foreach ($online as $data)
             <div class="b">
                 @if ($data->user->id)
@@ -41,12 +39,13 @@
                 </div>
             @endif
         @endforeach
-        {!! pagination($page) !!}
     @else
         {!! showError(__('main.empty_users')) !!}
     @endif
 
-    <i class="fa fa-users"></i>
+    {{ $online->links('app/_paginator') }}
+
+    <br><i class="fa fa-users"></i>
 
     @if ($guests)
         <a href="/online">{{ __('pages.hide_guests') }}</a><br>

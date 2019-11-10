@@ -27,7 +27,7 @@
 
     @if ($users->isNotEmpty())
 
-        <form action="/admin/reglists?page={{ $page->current }}" method="post">
+        <form action="/admin/reglists?page={{ $users->currentPage() }}" method="post">
            @csrf
             @foreach ($users as $user)
                 <div class="b">
@@ -54,11 +54,10 @@
             <div class="invalid-feedback">{{ textError('action') }}</div>
         </form>
 
-        {!! pagination($page) !!}
-
-        {{ __('main.total') }}: <b>{{ $page->total }}</b><br><br>
-
+        <br>{{ __('main.total') }}: <b>{{ $users->total() }}</b><br>
     @else
         {!! showError(__('admin.reglists.empty_users')) !!}
     @endif
+
+    {{ $users->links('app/_paginator') }}
 @stop

@@ -1,7 +1,7 @@
 @extends('layout')
 
 @section('title')
-    {{ $news->title }} - {{ __('news.comments_title') }} ({{ __('main.page_num', ['page' => $page->current]) }})
+    {{ $news->title }} - {{ __('news.comments_title') }} ({{ __('main.page_num', ['page' => $comments->currentPage()]) }})
 @stop
 
 @section('header')
@@ -36,12 +36,12 @@
 
                                 <a href="#" onclick="return postQuote(this)" data-toggle="tooltip" title="{{ __('main.quote') }}"><i class="fa fa-quote-right text-muted"></i></a>
 
-                                <a href="#" onclick="return sendComplaint(this)" data-type="{{ App\Models\News::class }}" data-id="{{ $data->id }}" data-token="{{ $_SESSION['token'] }}" data-page="{{ $page->current }}" rel="nofollow" data-toggle="tooltip" title="{{ __('main.complain') }}"><i class="fa fa-bell text-muted"></i></a>
+                                <a href="#" onclick="return sendComplaint(this)" data-type="{{ App\Models\News::class }}" data-id="{{ $data->id }}" data-token="{{ $_SESSION['token'] }}" data-page="{{ $comments->currentPage() }}" rel="nofollow" data-toggle="tooltip" title="{{ __('main.complain') }}"><i class="fa fa-bell text-muted"></i></a>
 
                             @endif
 
                             @if ($data->created_at + 600 > SITETIME && $data->user_id === getUser('id'))
-                                <a href="/news/edit/{{ $news->id }}/{{ $data->id }}?page={{ $page->current }}" data-toggle="tooltip" title="{{ __('main.edit') }}"><i class="fa fa-pencil-alt text-muted"></i></a>
+                                <a href="/news/edit/{{ $news->id }}/{{ $data->id }}?page={{ $comments->currentPage() }}" data-toggle="tooltip" title="{{ __('main.edit') }}"><i class="fa fa-pencil-alt text-muted"></i></a>
                             @endif
 
                             @if (isAdmin())
@@ -64,12 +64,11 @@
                 @endif
             </div>
         @endforeach
-
-        {!! pagination($page) !!}
     @endif
 
-    @if (! $news->closed)
+    {{ $comments->links('app/_paginator') }}
 
+    @if (! $news->closed)
         @if ($comments->isEmpty())
             {!! showError(__('main.empty_comments')) !!}
         @endif

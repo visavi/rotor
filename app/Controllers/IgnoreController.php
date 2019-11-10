@@ -74,18 +74,13 @@ class IgnoreController extends BaseController
             }
         }
 
-        $total = Ignore::query()->where('user_id', getUser('id'))->count();
-        $page = paginate(setting('ignorlist'), $total);
-
         $ignores = Ignore::query()
             ->where('user_id', getUser('id'))
-            ->orderBy('created_at', 'desc')
-            ->offset($page->offset)
-            ->limit($page->limit)
+            ->orderByDesc('created_at')
             ->with('ignoring')
-            ->get();
+            ->paginate(setting('ignorlist'));
 
-        return view('ignores/index', compact('ignores', 'page', 'login'));
+        return view('ignores/index', compact('ignores', 'login'));
     }
 
     /**

@@ -19,22 +19,26 @@
 @stop
 
 @section('content')
-    @foreach ($posts as $data)
-        <div class="b">
-            <i class="fa fa-file-alt"></i> <b><a href="/topics/{{ $data->topic_id }}/{{ $data->id }}">{{ $data->topic->title }}</a></b>
-            ({{ $data->topic->count_posts }})
-        </div>
-        <div>
-            {!! bbCode($data->text) !!}<br>
+    @if ($posts->isNotEmpty())
+        @foreach ($posts as $data)
+            <div class="b">
+                <i class="fa fa-file-alt"></i> <b><a href="/topics/{{ $data->topic_id }}/{{ $data->id }}">{{ $data->topic->title }}</a></b>
+                ({{ $data->topic->count_posts }})
+            </div>
+            <div>
+                {!! bbCode($data->text) !!}<br>
 
-            {{ __('main.posted') }}: {{ $data->user->login }} <small>({{ dateFixed($data->created_at) }})</small><br>
+                {{ __('main.posted') }}: {{ $data->user->login }} <small>({{ dateFixed($data->created_at) }})</small><br>
 
-            @if (isAdmin())
-                <span class="data">({{ $data->brow }}, {{ $data->ip }})</span>
-            @endif
+                @if (isAdmin())
+                    <span class="data">({{ $data->brow }}, {{ $data->ip }})</span>
+                @endif
 
-        </div>
-    @endforeach
+            </div>
+        @endforeach
+    @else
+        {!! showError(__('forums.posts_not_created')) !!}
+    @endif
 
-    {!! pagination($page) !!}
+    {{ $posts->links('app/_paginator') }}
 @stop

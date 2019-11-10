@@ -26,7 +26,6 @@
 @section('content')
     @if ($news->isNotEmpty())
         @foreach ($news as $data)
-
             <div class="b">
                 <div class="float-right">
                     @if ($data->top)
@@ -39,7 +38,7 @@
                 <b><a href="/news/{{ $data->id }}">{{ $data->title }}</a></b><small> ({{ dateFixed($data->created_at) }})</small><br>
 
                 <div class="float-right">
-                    <a href="/admin/news/edit/{{ $data->id }}?page={{ $page->current }}" data-toggle="tooltip" title="{{ __('main.edit') }}"><i class="fas fa-pencil-alt text-muted"></i></a>
+                    <a href="/admin/news/edit/{{ $data->id }}?page={{ $news->currentPage() }}" data-toggle="tooltip" title="{{ __('main.edit') }}"><i class="fas fa-pencil-alt text-muted"></i></a>
                     <a href="/admin/news/delete/{{ $data->id }}?token={{ $_SESSION['token'] }}" data-toggle="tooltip" title="{{ __('main.delete') }}" onclick="return confirm('{{ __('news.confirm_delete') }}')"><i class="fas fa-times text-muted"></i></a>
                 </div>
 
@@ -59,12 +58,12 @@
             </div>
         @endforeach
 
-        {!! pagination($page) !!}
-
         {{ __('news.total_news') }}: <b>{{ $news->count() }}</b><br><br>
     @else
         {!! showError(__('news.empty_news')) !!}
     @endif
+
+    {{ $news->links('app/_paginator') }}
 
     @if (isAdmin('boss'))
         <i class="fa fa-sync"></i> <a href="/admin/news/restatement?token={{ $_SESSION['token'] }}">{{ __('main.recount') }}</a><br>

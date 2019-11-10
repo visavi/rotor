@@ -40,11 +40,11 @@
 
                                 <a href="#" onclick="return postQuote(this)" title="{{ __('main.quote') }}"><i class="fa fa-quote-right text-muted"></i></a>
 
-                                <a href="#" onclick="return sendComplaint(this)" data-type="{{ App\Models\Down::class }}" data-id="{{ $data->id }}" data-token="{{ $_SESSION['token'] }}" data-page="{{ $page->current }}" rel="nofollow" title="{{ __('main.complain') }}"><i class="fa fa-bell text-muted"></i></a>
+                                <a href="#" onclick="return sendComplaint(this)" data-type="{{ App\Models\Down::class }}" data-id="{{ $data->id }}" data-token="{{ $_SESSION['token'] }}" data-page="{{ $comments->currentPage() }}" rel="nofollow" title="{{ __('main.complain') }}"><i class="fa fa-bell text-muted"></i></a>
                             @endif
 
                             @if ($data->created_at + 600 > SITETIME && getUser('id') === $data->user->id)
-                                <a href="/downs/edit/{{ $down->id }}/{{ $data->id }}?page={{ $page->current }}"><i class="fa fa-pencil-alt text-muted"></i></a>
+                                <a href="/downs/edit/{{ $down->id }}/{{ $data->id }}?page={{ $comments->currentPage() }}"><i class="fa fa-pencil-alt text-muted"></i></a>
                             @endif
 
                             @if (isAdmin())
@@ -65,11 +65,11 @@
                 @endif
             </div>
         @endforeach
-
-        {!! pagination($page) !!}
     @else
         {!! showError(__('main.empty_comments')) !!}
     @endif
+
+    {{ $comments->links('app/_paginator') }}
 
     @if (getUser())
         <div class="form">
