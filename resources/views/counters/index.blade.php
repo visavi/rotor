@@ -15,22 +15,21 @@
 
 @section('content')
     <div class="row mb-3">
-
         <div class="col-md-6 col-12">
             {{ __('counters.users_total') }}: <b>{{ $online[1] }}</b><br>
             {{ __('counters.authorized_total') }}: <b>{{ $online[0] }}</b><br>
             {{ __('counters.guest_total') }}: <b>{{ ($online[1] - $online[0]) }}</b><br><br>
 
-            {{ __('counters.hosts_total') }}: <b>{{ $count->allhosts }}</b><br>
-            {{ __('counters.hits_total') }}: <b>{{ $count->allhits }}</b><br>
+            {{ __('counters.hosts_total') }}: <b>{{ $count['allhosts'] }}</b><br>
+            {{ __('counters.hits_total') }}: <b>{{ $count['allhits'] }}</b><br>
         </div>
 
         <div class="col-md-6 col-12">
-            {{ __('counters.hosts_hour') }}: <b>{{ $count->hosts24 }}</b><br>
-            {{ __('counters.hits_hour') }}: <b>{{ $count->hits24 }}</b><br><br>
+            {{ __('counters.hosts_hour') }}: <b>{{ $count['hosts24'] }}</b><br>
+            {{ __('counters.hits_hour') }}: <b>{{ $count['hits24'] }}</b><br><br>
 
-            {{ __('counters.hosts_day') }}: <b>{{ $count->dayhosts }}</b><br>
-            {{ __('counters.hits_day') }}: <b>{{ $count->dayhits }}</b><br><br>
+            {{ __('counters.hosts_day') }}: <b>{{ $count['dayhosts'] }}</b><br>
+            {{ __('counters.hits_day') }}: <b>{{ $count['dayhits'] }}</b><br><br>
         </div>
     </div>
 
