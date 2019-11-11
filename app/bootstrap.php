@@ -58,7 +58,6 @@ $db->addConnection([
     'collation' => config('DB_COLLATION'),
 ]);
 
-/*$db->setEventDispatcher(new Dispatcher(new Container));*/
 $db->setAsGlobal();
 $db->bootEloquent();
 $db::connection()->enableQueryLog();
@@ -77,7 +76,7 @@ $app->singleton('events', static function ($app) {
 });
 
 $app->singleton('request', static function() {
-    return Request::capture();
+    return request();
 });
 
 $app->singleton('translator', static function ($app) {
@@ -167,7 +166,6 @@ $app->instance('cache', $cacheManager);
 
 $pagination = new PaginationServiceProvider($app);
 $pagination->register();
-
 
 /**
  * Set $app as FacadeApplication handler

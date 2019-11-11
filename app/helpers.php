@@ -2033,7 +2033,7 @@ function request(): Request
     static $request;
 
     if (! $request) {
-        $request = Request::createFromGlobals();
+        $request = Request::capture();
     }
 
     return $request;
@@ -2049,7 +2049,7 @@ function request(): Request
  */
 function server($key = null, $default = null)
 {
-    $server  = request()->server($key, $default);
+    $server = request()->server($key, $default);
 
     if ($key === 'REQUEST_URI') {
         $server = urldecode($server);
