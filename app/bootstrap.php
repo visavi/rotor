@@ -154,11 +154,15 @@ $app->singleton('config', static function () {
 });
 
 if (config('CACHE_DRIVER') === 'redis') {
-    $app['redis'] = new RedisManager($app, 'predis', $app['config']['database.redis']);
+    $app->bind('redis', static function () use ($app) {
+        return new RedisManager($app, 'phpredis', $app['config']['database.redis']);
+    });
 }
 
 if (config('CACHE_DRIVER') === 'memcached') {
-    $app['memcached.connector'] = new MemcachedConnector();
+    $app->bind('memcached.connector', static function () {
+        return  new MemcachedConnector();
+    });
 }
 
 $cacheManager = new CacheManager($app);

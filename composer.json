@@ -27,7 +27,6 @@
         "illuminate/filesystem": "~6.4",
         "illuminate/redis": "~6.4",
         "illuminate/pagination": "~6.4",
-        "predis/predis": "^1.1",
         "mobiledetect/mobiledetectlib": "^2.8",
         "php-ffmpeg/php-ffmpeg": "~0.14",
         "swiftmailer/swiftmailer": "~6.2",
