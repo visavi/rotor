@@ -31,7 +31,7 @@
 
             @if ($data->image)
                 <div class="img">
-                    <a href="{{ $data->image }}">{!! resizeImage($data->image, ['width' => 100, 'alt' => $data->title]) !!}</a>
+                    <a href="{{ $data->image }}" class="gallery">{!! resizeImage($data->image, ['width' => 100, 'alt' => $data->title]) !!}</a>
                 </div>
             @endif
 

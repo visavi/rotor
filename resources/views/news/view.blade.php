@@ -24,7 +24,8 @@
 @section('content')
     @if ($news->image)
         <div class="img">
-            <a href="{{ $news->image }}">{!! resizeImage($news->image, ['width' => 100, 'alt' => $news->title]) !!}</a></div>
+            <a href="{{ $news->image }}" class="gallery">{!! resizeImage($news->image, ['width' => 100, 'alt' => $news->title]) !!}</a>
+        </div>
     @endif
 
     <div>{!! bbCode($news->text) !!}</div>
