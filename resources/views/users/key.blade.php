@@ -14,7 +14,7 @@
 @stop
 
 @section('content')
-    {{ __('users.welcome') }}, <b>{{ getUser('login') }}!</b><br>
+    {{ __('users.welcome', ['login' => getUser('login')]) }}<br>
     {{ __('users.confirm_enter_code') }}<br><br>
 
     <div class="form">
