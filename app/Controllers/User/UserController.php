@@ -64,7 +64,7 @@ class UserController extends BaseController
             $token  = check($request->input('token'));
 
             $validator->equal($token, $_SESSION['token'], ['notice' => __('validator.token')])
-                ->length($notice, 0, 1000, ['notice' => 'Слишком большая заметка!']);
+                ->length($notice, 0, 1000, ['notice' => __('users.note_to_big')]);
 
             if ($validator->isValid()) {
                 $user->note()->updateOrCreate([], [
@@ -73,7 +73,7 @@ class UserController extends BaseController
                     'updated_at'   => SITETIME,
                 ]);
 
-                setFlash('success', 'Заметка успешно сохранена!');
+                setFlash('success', __('users.note_saved_success'));
                 redirect('/users/'.$user->login);
 
             } else {
@@ -97,11 +97,11 @@ class UserController extends BaseController
     public function register(Request $request, Validator $validator): string
     {
         if (getUser()) {
-            abort(403, 'Вы уже регистрировались, запрещено создавать несколько аккаунтов!');
+            abort(403, __('users.already_registered'));
         }
 
         if (! setting('openreg')) {
-            abort('default', 'Регистрация временно приостановлена, пожалуйста зайдите позже!');
+            abort('default', __('users.registration_suspended'));
         }
 
         if ($request->isMethod('post')) {
@@ -120,46 +120,46 @@ class UserController extends BaseController
 
                 $validator->true(captchaVerify(), ['protect' => __('validator.captcha')])
                     ->regex($login, '|^[a-z0-9\-]+$|i', ['login' => __('validator.login')])
-                    ->regex(utfSubstr($login, 0, 1), '|^[a-z0-9]+$|i', ['login' => 'Логин должен начинаться с буквы или цифры!'])
+                    ->regex(utfSubstr($login, 0, 1), '|^[a-z0-9]+$|i', ['login' => __('users.login_begin_requirements')])
                     ->email($email, ['email' => __('validator.email')])
-                    ->length($invite, 12, 15, ['invite' => 'Слишком длинный или короткий пригласительный ключ!'], setting('invite'))
-                    ->length($login, 3, 20, ['login' => 'Слишком длинный или короткий логин!'])
-                    ->length($password, 6, 20, ['password' => 'Слишком длинный или короткий пароль!'])
-                    ->equal($password, $password2, ['password2' => 'Введенные пароли отличаются друг от друга!'])
-                    ->false(ctype_digit($login), ['login' => 'Запрещен логин состоящий только из цифр, используйте буквы!'])
-                    ->false(ctype_digit($password), ['password' => 'Запрещен пароль состоящий только из цифр, используйте буквы!'])
-                    ->false(substr_count($login, '-') > 2, ['login' => 'Запрещено использовать в логине слишком много дефисов!']);
+                    ->length($invite, 12, 15, ['invite' => __('users.invite_length_requirements')], setting('invite'))
+                    ->length($login, 3, 20, ['login' => __('users.login_length_requirements')])
+                    ->length($password, 6, 20, ['password' => __('users.password_length_requirements')])
+                    ->equal($password, $password2, ['password2' => __('users.passwords_different')])
+                    ->false(ctype_digit($login), ['login' => __('users.field_characters_requirements')])
+                    ->false(ctype_digit($password), ['password' => __('users.field_characters_requirements')])
+                    ->false(substr_count($login, '-') > 2, ['login' => __('users.login_hyphens_requirements')]);
 
                 if (! empty($login)) {
                     // Проверка логина на существование
                     $checkLogin = User::query()->where('login', $login)->count();
-                    $validator->empty($checkLogin, ['login' => 'Пользователь с данным логином уже зарегистрирован!']);
+                    $validator->empty($checkLogin, ['login' => __('users.login_already_exists')]);
 
                     // Проверка логина в черном списке
                     $blackLogin = Blacklist::query()
                         ->where('type', 'login')
                         ->where('value', strtolower($login))
                         ->count();
-                    $validator->empty($blackLogin, ['login' => 'Выбранный вами логин занесен в черный список!']);
+                    $validator->empty($blackLogin, ['login' => __('users.login_is_blacklisted')]);
                 }
 
                 // Проверка email на существование
                 $checkMail = User::query()->where('email', $email)->count();
-                $validator->empty($checkMail, ['email' => 'Указанный вами адрес email уже используется в системе!']);
+                $validator->empty($checkMail, ['email' => __('users.email_already_exists')]);
 
                 // Проверка домена от email в черном списке
                 $blackDomain = Blacklist::query()
                     ->where('type', 'domain')
                     ->where('value', $domain)
                     ->count();
-                $validator->empty($blackDomain, ['email' => 'Домен от вашего адреса email занесен в черный список!']);
+                $validator->empty($blackDomain, ['email' => __('users.domain_is_blacklisted')]);
 
                 // Проверка email в черном списке
                 $blackMail = Blacklist::query()
                     ->where('type', 'email')
                     ->where('value', $email)
                     ->count();
-                $validator->empty($blackMail, ['email' => 'Указанный вами адрес email занесен в черный список!']);
+                $validator->empty($blackMail, ['email' => __('users.email_is_blacklisted')]);
 
                 // Проверка пригласительного ключа
                 if (setting('invite')) {
@@ -169,7 +169,7 @@ class UserController extends BaseController
                         ->where('used', 0)
                         ->first();
 
-                    $validator->notEmpty($invitation, ['invite' => 'Ключ приглашения недействителен!']);
+                    $validator->notEmpty($invitation, ['invite' => __('users.invitation_invalid')]);
                 }
 
                 // Регистрация аккаунта
@@ -218,9 +218,8 @@ class UserController extends BaseController
 
                     User::auth($login, $password);
 
-                    setFlash('success', 'Добро пожаловать, ' . $login . '!');
+                    setFlash('success', __('users.welcome', ['login' => $login]));
                     redirect('/');
-
                 } else {
                     setInput($request->all());
                     setFlash('danger', $validator->getErrors());
