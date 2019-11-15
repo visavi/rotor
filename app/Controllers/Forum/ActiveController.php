@@ -41,7 +41,7 @@ class ActiveController extends BaseController
         $user = $this->user;
 
         $topics = Topic::query()
-            ->where('user_id', $this->user)
+            ->where('user_id', $user->id)
             ->orderByDesc('updated_at')
             ->with('forum', 'user', 'lastPost.user')
             ->paginate(setting('forumtem'))
