@@ -129,9 +129,9 @@ class WallController extends BaseController
         $user = getUserByLogin($login);
 
         $validator
-            ->true($request->ajax(), 'Это не ajax запрос!')
+            ->true($request->ajax(), __('validator.not_ajax'))
             ->equal($token, $_SESSION['token'], __('validator.token'))
-            ->notEmpty($id, 'Не выбрана запись для удаление!')
+            ->notEmpty($id, __('validator.deletion'))
             ->notEmpty($user, __('validator.user'))
             ->true(isAdmin() || $user->id === getUser('id'), 'Записи может удалять только владелец и администрация!');
 

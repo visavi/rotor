@@ -40,7 +40,7 @@ class ContactController extends BaseController
             $validator->equal($token, $_SESSION['token'], __('validator.token'));
 
             $user = getUserByLogin($login);
-            $validator->notEmpty($user, ['user' => 'Данного пользователя не существует!']);
+            $validator->notEmpty($user, ['user' => __('validator.user')]);
 
             if ($user) {
                 $validator->notEqual($user->login, getUser('login'), ['user' => 'Запрещено добавлять свой логин!']);

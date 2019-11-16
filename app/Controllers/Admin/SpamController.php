@@ -94,9 +94,9 @@ class SpamController extends AdminController
         $token = check($request->input('token'));
 
         $validator
-            ->true($request->ajax(), 'Это не ajax запрос!')
+            ->true($request->ajax(), __('validator.not_ajax'))
             ->equal($token, $_SESSION['token'], __('validator.token'))
-            ->notEmpty($id, 'Не выбрана запись для удаление!');
+            ->notEmpty($id, __('validator.deletion'));
 
         if ($validator->isValid()) {
 

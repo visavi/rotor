@@ -37,15 +37,15 @@ class RatingController extends BaseController
         $user = getUserByLogin($login);
 
         if (! $user) {
-            abort(404, 'Данного пользователя не существует!');
+            abort(404, __('validator.user'));
         }
 
         if (getUser('id') === $user->id) {
-            abort('default', 'Запрещено изменять репутацию самому себе!');
+            abort('default', __('ratings.reputation_yourself'));
         }
 
         if (getUser('point') < setting('editratingpoint')) {
-            abort('default', 'Для изменения репутации необходимо набрать '.plural(setting('editratingpoint'), setting('scorename')).'!');
+            abort('default', __('ratings.reputation_point', ['point' => plural(setting('editratingpoint'), setting('scorename'))]));
         }
 
         // Голосовать за того же пользователя можно через 90 дней
@@ -56,11 +56,10 @@ class RatingController extends BaseController
             ->first();
 
         if ($getRating) {
-            abort('default', 'Вы уже изменяли репутацию этому пользователю!');
+            abort('default', __('ratings.reputation_already_changed'));
         }
 
         if ($request->isMethod('post')) {
-
             $token = check($request->input('token'));
             $text  = check($request->input('text'));
 
@@ -68,11 +67,10 @@ class RatingController extends BaseController
                 ->length($text, 5, 250, ['text' => __('validator.text')]);
 
             if ($vote === 'minus' && getUser('rating') < 1) {
-                $validator->addError('Уменьшать репутацию могут только пользователи с положительным рейтингом!');
+                $validator->addError(__('ratings.reputation_positive'));
             }
 
             if ($validator->isValid()) {
-
                 $text = antimat($text);
 
                 Rating::query()->create([
@@ -94,7 +92,7 @@ class RatingController extends BaseController
                 $message = textNotice('rating', ['login' => getUser('login'), 'rating' => $user->rating, 'comment' => $text, 'vote' => __('main.' . $vote)]);
                 $user->sendMessage(null, $message);
 
-                setFlash('success', 'Репутация успешно изменена!');
+                setFlash('success', __('ratings.reputation_success_changed'));
                 redirect('/users/'.$user->login);
             } else {
                 setInput($request->all());
@@ -116,7 +114,7 @@ class RatingController extends BaseController
         $user = getUserByLogin($login);
 
         if (! $user) {
-            abort(404, 'Данного пользователя не существует!');
+            abort(404, __('validator.user'));
         }
 
         $ratings = Rating::query()
@@ -139,7 +137,7 @@ class RatingController extends BaseController
         $user = getUserByLogin($login);
 
         if (! $user) {
-            abort(404, 'Данного пользователя не существует!');
+            abort(404, __('validator.user'));
         }
 
         $ratings = Rating::query()
@@ -165,13 +163,12 @@ class RatingController extends BaseController
         $token = check($request->input('token'));
 
         $validator
-            ->true($request->ajax(), 'Это не ajax запрос!')
+            ->true($request->ajax(), __('validator.not_ajax'))
             ->true(isAdmin(User::ADMIN), __('main.page_only_admins'))
             ->equal($token, $_SESSION['token'], __('validator.token'))
-            ->notEmpty($id, ['Не выбрана запись для удаление!']);
+            ->notEmpty($id, [__('validator.deletion')]);
 
         if ($validator->isValid()) {
-
             $rating = Rating::query()->find($id);
 
             if ($rating) {
