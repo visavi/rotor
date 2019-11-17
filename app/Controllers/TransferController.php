@@ -61,15 +61,15 @@ class TransferController extends BaseController
         $validator
             ->equal($token, $_SESSION['token'], ['msg' => __('validator.token')])
             ->true($this->user, ['user' => __('validator.user')])
-            ->length($msg, 0, setting('comment_length'), ['msg' => 'Слишком длинный комментарий!'])
-            ->gte(getUser('point'), setting('sendmoneypoint'), ['money' => 'Для перевода денег вам необходимо набрать '.plural(setting('sendmoneypoint'), setting('scorename'))])
-            ->gt($money, 0, ['money' => 'Перевод невозможен указана неверная сумма!'])
-            ->lte($money, getUser('money'), ['money' => 'Недостаточно средств для перевода такого количества денег!']);
+            ->length($msg, 0, setting('comment_length'), ['msg' => __('validator.comment_long')])
+            ->gte(getUser('point'), setting('sendmoneypoint'), ['money' => __('transfers.transfer_point', ['point' => plural(setting('sendmoneypoint'), setting('scorename'))])])
+            ->gt($money, 0, ['money' => __('transfers.transfer_wrong_amount')])
+            ->lte($money, getUser('money'), ['money' => __('transfers.transfer_not_money')]);
 
         if ($this->user) {
             $validator
-                ->notEqual($this->user->id, getUser('id'), ['user' => 'Запрещено переводить деньги самому себе!'])
-                ->false($this->user->isIgnore(getUser()), ['user' => 'Вы внесены в игнор-лист получателя!']);
+                ->notEqual($this->user->id, getUser('id'), ['user' => __('transfers.transfer_yourself')])
+                ->false($this->user->isIgnore(getUser()), ['user' => __('ignores.you_are_ignoring')]);
         }
 
         if ($validator->isValid()) {
@@ -78,7 +78,7 @@ class TransferController extends BaseController
                 getUser()->decrement('money', $money);
                 $this->user->increment('money', $money);
 
-                $comment = $msg ?? 'Не указан';
+                $comment = $msg ?? __('ignores.not_specified');
                 $text = textNotice('transfer', ['login' => getUser('login'), 'money' => plural($money, setting('moneyname')), 'comment' => $comment]);
                 $this->user->sendMessage(null, $text);
 
@@ -92,7 +92,7 @@ class TransferController extends BaseController
                 ]);
             });
 
-            setFlash('success', 'Перевод успешно завершен!');
+            setFlash('success', __('transfers.transfer_success_completed'));
         } else {
             setInput($request->all());
             setFlash('danger', $validator->getErrors());

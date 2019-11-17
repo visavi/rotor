@@ -122,7 +122,7 @@ class OfferController extends BaseController
 
                 $flood->saveState();
 
-                setFlash('success', 'Запись успешно добавлена!');
+                setFlash('success', __('main.record_added_success'));
                 redirect('/offers/' . $offer->id);
             } else {
                 setInput($request->all());

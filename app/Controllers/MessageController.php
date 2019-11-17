@@ -148,7 +148,7 @@ class MessageController extends BaseController
             ->where('ignore_id', $this->user->id)
             ->first();
 
-        $validator->empty($ignoring, ['user' => 'Вы внесены в игнор-лист получателя!']);
+        $validator->empty($ignoring, ['user' => __('ignores.you_are_ignoring')]);
 
         if ($validator->isValid()) {
 

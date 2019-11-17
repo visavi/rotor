@@ -45,11 +45,11 @@ class VoteController extends BaseController
         $vote = Vote::query()->find($id);
 
         if (! $vote) {
-            abort(404, 'Данного голосования не существует!');
+            abort(404, __('votes.voting_not_exist'));
         }
 
         if ($vote->closed) {
-            abort('default', 'Данный опрос закрыт для голосования!');
+            abort('default', __('votes.voting_closed'));
         }
 
         $vote->answers = VoteAnswer::query()
@@ -58,7 +58,7 @@ class VoteController extends BaseController
             ->get();
 
         if ($vote->answers->isEmpty()) {
-            abort('default', 'Для данного голосования не созданы варианты ответов');
+            abort('default', __('votes.voting_not_answers'));
         }
 
         $vote->poll = $vote->pollings()
@@ -70,13 +70,13 @@ class VoteController extends BaseController
             $poll  = int($request->input('poll'));
 
             $validator->equal($token, $_SESSION['token'], __('validator.token'))
-                ->empty($vote->poll, 'Вы уже проголосовали в этом опросе!')
-                ->notEmpty($poll, 'Вы не выбрали вариант ответа!');
+                ->empty($vote->poll, __('votes.voting_passed'))
+                ->notEmpty($poll, __('votes.answer_not_chosen'));
 
             $answer = VoteAnswer::query()->where('id', $poll)->where('vote_id', $vote->id)->first();
 
             if ($poll) {
-                $validator->notEmpty($answer, 'Ответ для данного голосования не найден!');
+                $validator->notEmpty($answer, __('votes.answer_not_found'));
             }
 
             if ($validator->isValid()) {
@@ -91,7 +91,7 @@ class VoteController extends BaseController
                     'created_at'  => SITETIME,
                 ]);
 
-                setFlash('success', 'Ваш голос успешно принят!');
+                setFlash('success', __('votes.voting_success'));
                 redirect('/votes/'.$vote->id);
             } else {
                 setInput($request->all());
@@ -123,7 +123,7 @@ class VoteController extends BaseController
         $vote = Vote::query()->find($id);
 
         if (! $vote) {
-            abort(404, 'Данного голосования не существует!');
+            abort(404, __('votes.voting_not_exist'));
         }
 
         $voters = Polling::query()
@@ -164,11 +164,11 @@ class VoteController extends BaseController
         $vote = Vote::query()->find($id);
 
         if (! $vote) {
-            abort(404, 'Данного голосования не существует!');
+            abort(404, __('votes.voting_not_exist'));
         }
 
         if (! $vote->closed) {
-            abort('default', 'Данный опрос еще не в архиве!');
+            abort('default', __('votes.voting_not_archive'));
         }
 
         $vote->answers = VoteAnswer::query()
@@ -177,7 +177,7 @@ class VoteController extends BaseController
             ->get();
 
         if ($vote->answers->isEmpty()) {
-            abort('default', 'Для данного голосования не созданы варианты ответов');
+            abort('default', __('votes.voting_not_answers'));
         }
 
         $voted = Arr::pluck($vote->answers, 'result', 'answer');
@@ -238,7 +238,7 @@ class VoteController extends BaseController
 
                 VoteAnswer::query()->insert($prepareAnswers);
 
-                setFlash('success', 'Голосование успешно создано!');
+                setFlash('success', __('votes.voting_success_created'));
                 redirect('/votes/' . $vote->id);
             } else {
                 setInput($request->all());

@@ -67,7 +67,7 @@ class VoteController extends AdminController
         $vote = Vote::query()->where('id', $id)->first();
 
         if (! $vote) {
-            abort(404, 'Данного голосования не существует!');
+            abort(404, __('votes.voting_not_exist'));
         }
 
         if ($request->isMethod('post')) {
@@ -136,7 +136,7 @@ class VoteController extends AdminController
         $vote  = Vote::query()->where('id', $id)->first();
 
         if (! $vote) {
-            abort(404, 'Данного голосования не существует!');
+            abort(404, __('votes.voting_not_exist'));
         }
 
         if (! isAdmin(User::BOSS)) {
@@ -172,7 +172,7 @@ class VoteController extends AdminController
         $vote  = Vote::query()->where('id', $id)->first();
 
         if (! $vote) {
-            abort(404, 'Данного голосования не существует!');
+            abort(404, __('votes.voting_not_exist'));
         }
 
         if ($token === $_SESSION['token']) {

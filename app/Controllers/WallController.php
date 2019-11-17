@@ -78,7 +78,7 @@ class WallController extends BaseController
                 ->where('ignore_id', getUser('id'))
                 ->first();
 
-            $validator->empty($ignoring, 'Вы внесены в игнор-лист получателя!');
+            $validator->empty($ignoring, __('ignores.you_are_ignoring'));
 
             if ($validator->isValid()) {
                 if ($user->id !== getUser('id')) {
@@ -103,7 +103,7 @@ class WallController extends BaseController
 
                 $flood->saveState();
 
-                setFlash('success', 'Запись успешно добавлена!');
+                setFlash('success', __('main.record_added_success'));
             } else {
                 setInput($request->all());
                 setFlash('danger', $validator->getErrors());
@@ -128,12 +128,16 @@ class WallController extends BaseController
 
         $user = getUserByLogin($login);
 
+        if (! $user) {
+            abort(404, __('validator.user'));
+        }
+
         $validator
             ->true($request->ajax(), __('validator.not_ajax'))
             ->equal($token, $_SESSION['token'], __('validator.token'))
             ->notEmpty($id, __('validator.deletion'))
             ->notEmpty($user, __('validator.user'))
-            ->true(isAdmin() || $user->id === getUser('id'), 'Записи может удалять только владелец и администрация!');
+            ->true(isAdmin() || $user->id === getUser('id'), __('main.deleted_only_admins'));
 
         if ($validator->isValid()) {
             Wall::query()
