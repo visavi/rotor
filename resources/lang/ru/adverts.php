@@ -3,6 +3,7 @@
 return [
     'create_advert' => 'Разместить',
     'expires'       => 'Истекает',
+    'expired'       => 'Истекла',
     'color'         => 'Цвет',
     'bold'          => 'Жирный текст',
     'total_links'   => 'Всего ссылок',

@@ -33,6 +33,7 @@
 <div class="site">
     <div class="content">
         @yield('advertTop')
+        @yield('advertAdmin')
         @yield('advertUser')
         @yield('note')
         @yield('flash')

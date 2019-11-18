@@ -53,6 +53,7 @@
                 <div class="mcontentwide">
 
                     @yield('advertTop')
+                    @yield('advertAdmin')
                     @yield('advertUser')
                     @yield('note')
                     @yield('flash')

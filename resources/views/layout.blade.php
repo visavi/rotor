@@ -28,6 +28,10 @@
     @include('app/_scripts')
 @stop
 
+@section('advertAdmin')
+    {!! getAdvertAdmin() !!}
+@stop
+
 @section('advertUser')
     {!! getAdvertUser() !!}
 @stop

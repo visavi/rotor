@@ -54,6 +54,7 @@
     <div class="row">
         <div class="col-md-8 mt-4">
             @yield('advertTop')
+            @yield('advertAdmin')
             @yield('advertUser')
             {{--@yield('note')--}}
             @yield('flash')

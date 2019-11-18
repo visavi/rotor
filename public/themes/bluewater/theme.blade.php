@@ -51,6 +51,7 @@
         <div id="main">
             <div class="body_center">
                 @yield('advertTop')
+                @yield('advertAdmin')
                 @yield('advertUser')
                 @yield('note')
                 @yield('flash')

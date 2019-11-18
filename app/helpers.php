@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\AdminAdvert;
 use App\Classes\{BBCode, Calendar, Metrika, Registry, CloudFlare};
 use App\Models\Antimat;
 use App\Models\Ban;
@@ -1084,49 +1085,30 @@ function truncateDescription(string $value, int $words = 20, string $end = ''): 
 
 
 /**
- * Кэширует ссылки пользовательской рекламы
+ * Возвращает HTML админской рекламы
  *
- * @return array Список ссылок
+ * @return string
  */
-function statAdverts()
+function getAdvertAdmin()
 {
-    if (setting('rekusershow')) {
-        return Cache::remember('adverts', 1800, static function () {
+    $adverts = AdminAdvert::statAdverts();
 
-            $data = Advert::query()->where('deleted_at', '>', SITETIME)->get();
-
-            $links = [];
-            if ($data->isNotEmpty()) {
-                foreach ($data as $val) {
-                    if ($val['color']) {
-                        $val['name'] = '<span style="color:' . $val->color . '">' . $val->name . '</span>';
-                    }
-
-                    $link = '<a href="' . $val->site . '" target="_blank" rel="nofollow">' . $val->name . '</a>';
-
-                    if ($val->bold) {
-                        $link = '<b>' . $link . '</b>';
-                    }
-
-                    $links[] = $link;
-                }
-            }
-
-            return $links;
-        });
+    if ($adverts) {
+        $result  = Arr::random($adverts);
+        return view('adverts/_admin_links', compact('result'));
     }
 
-    return [];
+    return false;
 }
 
 /**
  * Возвращает HTML пользовательской рекламы
  *
- * @return string Сгенерированный HTML пользовательской рекламы
+ * @return string
  */
 function getAdvertUser()
 {
-    $adverts = statAdverts();
+    $adverts = Advert::statAdverts();
 
     if ($adverts) {
         $total = count($adverts);

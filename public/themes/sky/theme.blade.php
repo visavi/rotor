@@ -196,6 +196,7 @@
 
                                         <div>
                                             @yield('advertTop')
+                                            @yield('advertAdmin')
                                             @yield('advertUser')
                                             @yield('flash')
                                             @yield('breadcrumb')

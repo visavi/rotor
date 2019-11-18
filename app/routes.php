@@ -472,6 +472,8 @@ return FastRoute\cachedDispatcher(static function(RouteCollector $r) {
         $r->get('/photos/restatement', [App\Controllers\Admin\PhotoController::class, 'restatement']);
         $r->get('/photos/delete/{id:\d+}', [App\Controllers\Admin\PhotoController::class, 'delete']);
 
+        $r->addRoute(['GET', 'POST'], '/admin-adverts', [App\Controllers\Admin\AdminAdvertController::class, 'index']);
+
         $r->get('/adverts', [App\Controllers\Admin\AdvertController::class, 'index']);
         $r->addRoute(['GET', 'POST'], '/adverts/edit/{id:\d+}', [App\Controllers\Admin\AdvertController::class, 'edit']);
         $r->post('/adverts/delete', [App\Controllers\Admin\AdvertController::class, 'delete']);

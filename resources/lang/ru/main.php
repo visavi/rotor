@@ -214,6 +214,7 @@ return [
     'comment_edited_success'   => 'Комментарий успешно отредактирован!',
     'record_added_success'     => 'Запись успешно добавлена!',
     'record_changed_success'   => 'Запись успешно изменена!',
+    'record_saved_success'     => 'Запись успешно сохранена!',
     'record_deleted_success'   => 'Запись успешно удалена!',
     'records_deleted_success'  => 'Записи успешно удалены!',
     'records_cleared_success'  => 'Записи успешно очищены!',

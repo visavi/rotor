@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace App\Models;
 
+use Illuminate\Support\Facades\Cache;
+
 /**
  * Class Advert
  *
@@ -31,4 +33,40 @@ class Advert extends BaseModel
      * @var array
      */
     protected $guarded = [];
+
+    /**
+     * Кэширует ссылки пользовательской рекламы
+     *
+     * @return array Список ссылок
+     */
+    public static function statAdverts(): array
+    {
+        if (setting('rekusershow')) {
+            return Cache::remember('adverts', 1800, static function () {
+
+                $data = self::query()->where('deleted_at', '>', SITETIME)->get();
+
+                $links = [];
+                if ($data->isNotEmpty()) {
+                    foreach ($data as $val) {
+                        if ($val->color) {
+                            $val->name = '<span style="color:' . $val->color . '">' . $val->name . '</span>';
+                        }
+
+                        $link = '<a href="' . $val->site . '" target="_blank" rel="nofollow">' . $val->name . '</a>';
+
+                        if ($val->bold) {
+                            $link = '<b>' . $link . '</b>';
+                        }
+
+                        $links[] = $link;
+                    }
+                }
+
+                return $links;
+            });
+        }
+
+        return [];
+    }
 }
