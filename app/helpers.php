@@ -832,7 +832,7 @@ function lastNews()
 
     if ($news) {
         foreach ($news as $data) {
-            echo '<i class="far fa-circle fa-lg text-muted"></i> <a href="/news/' . $data['id'] . '">' . $data['title'] . '</a> (' . $data['count_comments'] . ') <i class="fa fa-caret-down news-title"></i><br>';
+            echo '<i class="far fa-circle fa-lg text-muted"></i> <a href="/news/' . $data['id'] . '">' . $data['title'] . '</a> (' . $data['count_comments'] . ') <i class="fas fa-angle-down news-title"></i><br>';
 
             if (strpos($data['text'], '[cut]') !== false) {
                 $data['text'] = current(explode('[cut]', $data['text'])) . ' <a href="/news/'. $data['id'] .'" class="badge badge-success">Читать дальше &raquo;</a>';

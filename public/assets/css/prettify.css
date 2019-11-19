@@ -39,9 +39,8 @@ pre.prettyprint, code.prettyprint {
 
 /* Specify class=linenums on a pre to get line numbering */
 .prettyprint ol.linenums {
-  padding: 8px 8px 8px 48px;
   margin: 0;
-  box-shadow: inset 40px 0 0 #fbfbfc, inset 41px 0 0 #ececf0;
+  box-shadow: inset 35px 0 0 #fbfbfc, inset 36px 0 0 #ececf0;
 }
 
 .prettyprint ol.linenums li {

@@ -55,7 +55,7 @@ $(function() {
 
     /* Show news on the main */
     $('.news-title').on('click', function() {
-        $(this).toggleClass('fa-caret-up');
+        $(this).toggleClass('fa-angle-up');
         $(this).nextAll(".news-text:first").slideToggle();
     });
 
@@ -556,4 +556,8 @@ function resendingCode()
     $('.js-resending-form').show();
 
     return false;
+}
+
+function showQueries() {
+    $('.js-queries').slideToggle();
 }

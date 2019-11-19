@@ -101,7 +101,7 @@ blockquote small:before {
   margin: 10px 0;
   border-radius: 3px;
   border: 1px solid #eee;
-  border-left: 5px #d9534f;
+  border-left: 5px solid #d9534f;
   background-color: #f8f8f8;
 }
 

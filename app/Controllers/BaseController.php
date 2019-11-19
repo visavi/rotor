@@ -50,7 +50,6 @@ Class BaseController
     private function isBanned(Request $request): bool
     {
         if (($ipBan = ipBan()) && ! isAdmin()) {
-
             $ipSplit = explode('.', getIp());
 
             foreach($ipBan as $ip) {

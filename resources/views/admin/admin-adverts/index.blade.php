@@ -62,7 +62,7 @@
                 <label class="custom-control-label" for="bold">{{ __('adverts.bold') }}</label>
             </div>
 
-            <button class="btn btn-primary">{{ __('main.change') }}</button>
+            <button class="btn btn-primary">{{ __('main.save') }}</button>
         </form>
     </div>
 @stop

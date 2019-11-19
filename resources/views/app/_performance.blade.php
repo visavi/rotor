@@ -1,4 +1,4 @@
-<ul class="list-inline hiding text-left">
+<ul class="list-inline hiding text-left" onclick="return showQueries();">
     <li class="list-inline-item" data-toggle="tooltip" title="{{ __('index.mysql_queries') }}"><i class="fa fa-database"></i> {{ count($queries) }}</li>
     <li class="list-inline-item" data-toggle="tooltip" title="{{ __('index.ram_consumption') }}"><i class="fa fa-bolt"></i> {{ formatSize(memory_get_usage()) }}</li>
 
@@ -11,7 +11,7 @@
 </ul>
 
 @if (config('APP_DEBUG'))
-<pre class="text-left prettyprint linenums pre-scrollable">
+<pre class="js-queries text-left prettyprint linenums pre-scrollable" style="display: none">
 @foreach ($queries as $key=> $query)
 {{ $query['query'] }} ({{ number_format($query['time'] /1000, 5) }} {{ __('index.seconds') }})
 @endforeach
