@@ -27,6 +27,16 @@
             <div class="b">
                 <i class="fa fa-file-alt fa-lg text-muted"></i>
                 <b><a href="/news/{{ $data->id }}">{{ $data->title }}</a></b><small> ({{ dateFixed($data->created_at) }})</small>
+
+                <div class="float-right js-rating">
+                    @if (getUser() && getUser('id') !== $data->user_id)
+                        <a class="post-rating-down{{ $data->vote === '-' ? ' active' : '' }}" href="#" onclick="return changeRating(this);" data-id="{{ $data->id }}" data-type="{{ App\Models\News::class }}" data-vote="-" data-token="{{ $_SESSION['token'] }}"><i class="fa fa-thumbs-down"></i></a>
+                    @endif
+                    <span>{!! formatNum($data->rating) !!}</span>
+                    @if (getUser() && getUser('id') !== $data->user_id)
+                        <a class="post-rating-up{{ $data->vote === '+' ? ' active' : '' }}" href="#" onclick="return changeRating(this);" data-id="{{ $data->id }}" data-type="{{ App\Models\News::class }}" data-vote="+" data-token="{{ $_SESSION['token'] }}"><i class="fa fa-thumbs-up"></i></a>
+                    @endif
+                </div>
             </div>
 
             @if ($data->image)

@@ -212,6 +212,7 @@ class AjaxController extends BaseController
             News::class,
             Photo::class,
             Offer::class,
+            News::class,
         ];
 
         $id    = int($request->input('id'));

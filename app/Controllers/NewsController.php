@@ -8,6 +8,7 @@ use App\Classes\Validator;
 use App\Models\Comment;
 use App\Models\Flood;
 use App\Models\News;
+use Illuminate\Database\Query\JoinClause;
 use Illuminate\Http\Request;
 
 class NewsController extends BaseController
@@ -18,6 +19,12 @@ class NewsController extends BaseController
     public function index()
     {
         $news = News::query()
+            ->select('news.*', 'pollings.vote')
+            ->leftJoin('pollings', static function (JoinClause $join) {
+                $join->on('news.id', 'pollings.relate_id')
+                    ->where('pollings.relate_type', News::class)
+                    ->where('pollings.user_id', getUser('id'));
+            })
             ->orderByDesc('created_at')
             ->with('user')
             ->paginate(setting('postnews'));
@@ -34,7 +41,14 @@ class NewsController extends BaseController
     public function view(int $id): string
     {
         /** @var News $news */
-        $news = News::query()->find($id);
+        $news = News::query()
+            ->select('news.*', 'pollings.vote')
+            ->leftJoin('pollings', static function (JoinClause $join) {
+                $join->on('news.id', 'pollings.relate_id')
+                    ->where('pollings.relate_type', News::class)
+                    ->where('pollings.user_id', getUser('id'));
+            })
+            ->find($id);
 
         if (! $news) {
             abort(404, 'Новость не существует, возможно она была удалена!');
