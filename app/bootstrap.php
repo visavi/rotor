@@ -6,7 +6,6 @@ use Illuminate\Container\Container;
 use Illuminate\Database\Capsule\Manager as DB;
 use Illuminate\Events\Dispatcher;
 use Illuminate\Filesystem\Filesystem;
-use Illuminate\Http\Request;
 use Illuminate\Pagination\PaginationServiceProvider;
 use Illuminate\Redis\RedisManager;
 use Illuminate\Support\Facades\Facade;
@@ -15,6 +14,7 @@ use Illuminate\Translation\Translator;
 use Illuminate\View\Compilers\BladeCompiler;
 use Illuminate\View\Engines\CompilerEngine;
 use Illuminate\View\Engines\EngineResolver;
+use Illuminate\View\Engines\PhpEngine;
 use Illuminate\View\Factory;
 use Illuminate\View\FileViewFinder;
 use Whoops\Handler\PlainTextHandler;
@@ -105,6 +105,10 @@ $app->singleton('view', static function ($app) {
         $blade->withoutDoubleEncoding();
 
         return new CompilerEngine($blade);
+    });
+
+    $resolver->register('php', static function () {
+        return new PhpEngine;
     });
 
     $finder = new FileViewFinder(
