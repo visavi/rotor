@@ -156,4 +156,7 @@ return [
     'domain_is_blacklisted'         => 'Домен от вашего адреса email занесен в черный список!',
     'email_is_blacklisted'          => 'Указанный вами адрес email занесен в черный список!',
     'invitation_invalid'            => 'Ключ приглашения недействителен!',
+    'photo_success_uploaded'        => 'Фотография успешно загружена!',
+    'photo_not_exist'               => 'Данной фотографии не существует!',
+    'photo_success_deleted'         => 'Фотография успешно удалена!',
 ];

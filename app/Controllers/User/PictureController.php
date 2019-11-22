@@ -2,9 +2,10 @@
 
 declare(strict_types=1);
 
-namespace App\Controllers;
+namespace App\Controllers\User;
 
 use App\Classes\Validator;
+use App\Controllers\BaseController;
 use Illuminate\Http\Request;
 use Intervention\Image\ImageManagerStatic as Image;
 
@@ -44,7 +45,7 @@ class PictureController extends BaseController
                 'maxsize'   => setting('filesize'),
                 'minweight' => 100,
             ];
-            $validator->file($photo, $rules, ['photo' => 'Не удалось загрузить фотографию!']);
+            $validator->file($photo, $rules, ['photo' => __('validator.upload_failed')]);
 
             if ($validator->isValid()) {
                 //-------- Удаляем старую фотку и аватар ----------//
@@ -53,7 +54,7 @@ class PictureController extends BaseController
                     deleteFile(HOME . $this->user->avatar);
 
                     $this->user->picture = null;
-                    $this->user->avatar = null;
+                    $this->user->avatar  = null;
                     $this->user->save();
                 }
 
@@ -69,7 +70,7 @@ class PictureController extends BaseController
                 $this->user->avatar  = str_replace(HOME, '', $avatar);
                 $this->user->save();
 
-                setFlash('success', 'Фотография успешно загружена!');
+                setFlash('success', __('users.photo_success_uploaded'));
                 redirect('/profile');
             }
 
@@ -94,7 +95,7 @@ class PictureController extends BaseController
         $validator->equal($token, $_SESSION['token'], ['photo' => __('validator.token')]);
 
         if (! $this->user->picture) {
-            $validator->addError('Фотографии для удаления не существует!');
+            $validator->addError(__('users.photo_not_exist'));
         }
 
         if ($validator->isValid()) {
@@ -102,10 +103,10 @@ class PictureController extends BaseController
             deleteFile(HOME . $this->user->avatar);
 
             $this->user->picture = null;
-            $this->user->avatar = null;
+            $this->user->avatar  = null;
             $this->user->save();
 
-            setFlash('success', 'Фотография успешно удалена!');
+            setFlash('success', __('users.photo_success_deleted'));
         } else {
             setFlash('danger', $validator->getErrors());
         }

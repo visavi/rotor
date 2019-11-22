@@ -333,7 +333,7 @@ class AjaxController extends BaseController
                 'minweight' => 100,
             ];
 
-            $validator->file($image, $rules, ['files' => 'Не удалось загрузить фотографию!']);
+            $validator->file($image, $rules, ['files' => __('validator.upload_failed')]);
         }
 
         if ($validator->isValid()) {

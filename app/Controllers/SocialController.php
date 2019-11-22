@@ -60,15 +60,15 @@ class SocialController extends BaseController
                         'created_at' => SITETIME,
                     ]);
 
-                    setFlash('success', 'Привязка успешно добавлена!');
+                    setFlash('success', __('socials.success_binding'));
                 } else {
-                    setFlash('danger', 'Данная социальная сеть уже привязана!');
+                    setFlash('danger',  __('socials.already_binding'));
                 }
 
                 redirect('/socials');
             }
 
-            setFlash('danger', 'Не удалось добавить привязку!');
+            setFlash('danger', __('socials.failed_binding'));
         }
 
         $socials = Social::query()
@@ -93,12 +93,12 @@ class SocialController extends BaseController
         $social = Social::query()->where('user_id', $this->user->id)->find($id);
 
         $validator->equal($token, $_SESSION['token'], __('validator.token'))
-            ->notEmpty($social, 'Не найдена привязка к социальной сети!');
+            ->notEmpty($social, __('socials.not_found_binding'));
 
         if ($validator->isValid()) {
             $social->delete();
 
-            setFlash('success', 'Привязка к социальной сети успешно удалена!');
+            setFlash('success', __('socials.success_deleted'));
         } else {
             setFlash('danger', $validator->getErrors());
         }

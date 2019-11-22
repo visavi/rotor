@@ -40,7 +40,7 @@ class PhotoController extends AdminController
         $photo = Photo::query()->find($id);
 
         if (! $photo) {
-            abort(404, 'Данной фотографии не существует!');
+            abort(404, __('photos.photo_not_exist'));
         }
 
         if ($request->isMethod('post')) {
@@ -96,7 +96,7 @@ class PhotoController extends AdminController
         $photo = Photo::query()->find($id);
 
         if (! $photo) {
-            abort(404, 'Данной фотографии не существует!');
+            abort(404, __('photos.photo_not_exist'));
         }
 
         $validator->equal($token, $_SESSION['token'], __('validator.token'));

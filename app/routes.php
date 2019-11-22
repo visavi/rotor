@@ -209,8 +209,8 @@ return FastRoute\cachedDispatcher(static function(RouteCollector $r) {
 
     /* Фото профиля */
     $r->addGroup('/pictures', static function (RouteCollector $r) {
-        $r->addRoute(['GET', 'POST'], '', [App\Controllers\PictureController::class, 'index']);
-        $r->get('/delete', [App\Controllers\PictureController::class, 'delete']);
+        $r->addRoute(['GET', 'POST'], '', [App\Controllers\User\PictureController::class, 'index']);
+        $r->get('/delete', [App\Controllers\User\PictureController::class, 'delete']);
     });
 
     /* Социальные сети */
