@@ -70,7 +70,7 @@ class OfferController extends BaseController
             ->first();
 
         if (! $offer) {
-            abort(404, 'Данного предложения или проблемы не существует!');
+            abort(404, __('main.record_not_found'));
         }
 
         return view('offers/view', compact('offer'));
@@ -87,7 +87,7 @@ class OfferController extends BaseController
     public function create(Request $request, Validator $validator, Flood $flood): string
     {
         if (! $user = getUser()) {
-            abort(403, 'Авторизуйтесь для добавления записи!');
+            abort(403, __('main.not_authorized'));
         }
 
         $type  = check($request->input('type'));
@@ -102,8 +102,8 @@ class OfferController extends BaseController
                 ->length($title, 5, 50, ['title' => __('validator.text')])
                 ->length($text, 5, 1000, ['text' => __('validator.text')])
                 ->false($flood->isFlood(), ['msg' => __('validator.flood', ['sec' => $flood->getPeriod()])])
-                ->in($type, Offer::TYPES, ['type' => 'Выбран неверный тип записи! (Необходимо предложение или проблема)'])
-                ->gte(getUser('point'), setting('addofferspoint'), ['Для добавления предложения или проблемы вам необходимо набрать ' . plural(setting('addofferspoint'), setting('scorename')) . '!']);
+                ->in($type, Offer::TYPES, ['type' => __('offers.invalid_type')])
+                ->gte(getUser('point'), setting('addofferspoint'), __('offers.condition_add', ['point' => plural(setting('addofferspoint'), setting('scorename'))]));
 
             if ($validator->isValid()) {
                 $title = antimat($title);
@@ -144,7 +144,7 @@ class OfferController extends BaseController
     public function edit(int $id, Request $request, Validator $validator): string
     {
         if (! $user = getUser()) {
-            abort(403, 'Авторизуйтесь для редактирования записи!');
+            abort(403, __('main.not_authorized'));
         }
 
         $offer = Offer::query()
@@ -153,11 +153,11 @@ class OfferController extends BaseController
             ->first();
 
         if (! $offer) {
-            abort(404, 'Данного предложения или проблемы не существует!');
+            abort(404, __('main.record_not_found'));
         }
 
         if (! in_array($offer->status, ['wait', 'process'])) {
-            abort('default', 'Данное предложение или проблема уже решена или закрыта!');
+            abort('default', __('offers.already_resolved'));
         }
 
         if ($request->isMethod('post')) {
@@ -170,7 +170,7 @@ class OfferController extends BaseController
             $validator->equal($token, $_SESSION['token'], __('validator.token'))
                 ->length($title, 5, 50, ['title' => __('validator.text')])
                 ->length($text, 5, 1000, ['text' => __('validator.text')])
-                ->in($type, Offer::TYPES, ['type' => 'Выбран неверный тип записи! (Необходимо предложение или проблема)']);
+                ->in($type, Offer::TYPES, ['type' => __('offers.invalid_type')]);
 
             if ($validator->isValid()) {
                 $title = antimat($title);
@@ -183,7 +183,7 @@ class OfferController extends BaseController
                     'updated_at' => SITETIME,
                 ]);
 
-                setFlash('success', 'Запись успешно изменена!');
+                setFlash('success', __('main.record_changed_success'));
                 redirect('/offers/' . $offer->id);
             } else {
                 setInput($request->all());
@@ -209,7 +209,7 @@ class OfferController extends BaseController
         $offer = Offer::query()->find($id);
 
         if (! $offer) {
-            abort(404, 'Данного предложения или проблемы не существует!');
+            abort(404, __('main.record_not_found'));
         }
 
         if ($request->isMethod('post')) {
@@ -222,7 +222,7 @@ class OfferController extends BaseController
                 ->equal($token, $_SESSION['token'], __('validator.token'))
                 ->length($msg, 5, setting('comment_length'), ['msg' => __('validator.text')])
                 ->false($flood->isFlood(), ['msg' => __('validator.flood', ['sec' => $flood->getPeriod()])])
-                ->empty($offer->closed, ['msg' => 'Комментирование данной записи закрыто!']);
+                ->empty($offer->closed, ['msg' => __('offers.closed_offer')]);
 
             if ($validator->isValid()) {
                 $msg = antimat($msg);
@@ -282,7 +282,7 @@ class OfferController extends BaseController
         $offer = Offer::query()->find($id);
 
         if (! $offer) {
-            abort(404, 'Данного предложения или проблемы не существует!');
+            abort(404, __('main.record_not_found'));
         }
 
         if (! getUser()) {
@@ -341,7 +341,7 @@ class OfferController extends BaseController
         $offer = Offer::query()->find($id);
 
         if (! $offer) {
-            abort(404, 'Данного предложения или проблемы не существует!');
+            abort(404, __('main.record_not_found'));
         }
 
         $total = Comment::query()
@@ -365,7 +365,7 @@ class OfferController extends BaseController
         $offer = Offer::query()->find($id);
 
         if (! $offer) {
-            abort(404, 'Данного предложения или проблемы не существует!');
+            abort(404, __('main.record_not_found'));
         }
 
         $total = Comment::query()

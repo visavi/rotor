@@ -51,7 +51,7 @@ class NotebookController extends BaseController
 
             $validator
                 ->equal($token, $_SESSION['token'], ['msg' => __('validator.token')])
-                ->length($msg, 0, 10000, ['msg' => 'Слишком длинная запись!'], false);
+                ->length($msg, 0, 10000, ['msg' => __('validator.text_long')], false);
 
             if ($validator->isValid()) {
 
@@ -60,7 +60,7 @@ class NotebookController extends BaseController
                     'created_at' => SITETIME,
                 ])->save();
 
-                setFlash('success', 'Запись успешно сохранена!');
+                setFlash('success', __('main.record_saved_success'));
             } else {
                 setInput($request->all());
                 setFlash('danger', $validator->getErrors());

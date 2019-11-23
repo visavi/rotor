@@ -49,7 +49,7 @@ class PhotoController extends BaseController
             ->first();
 
         if (! $photo) {
-            abort(404, 'Фотография не найдена');
+            abort(404, __('photos.photo_not_exist'));
         }
 
         return view('photos/view', compact('photo'));
@@ -77,7 +77,7 @@ class PhotoController extends BaseController
 
             $validator->equal($token, $_SESSION['token'], __('validator.token'))
                 ->length($title, 5, 50, ['title' => __('validator.text')])
-                ->length($text, 0, 1000, ['text' => 'Слишком длинное описание!'])
+                ->length($text, 0, 1000, ['text' => __('validator.text_long')])
                 ->false($flood->isFlood(), ['msg' => __('validator.flood', ['sec' => $flood->getPeriod()])]);
 
             if ($validator->isValid()) {
@@ -99,7 +99,7 @@ class PhotoController extends BaseController
                 clearCache(['statPhotos', 'recentPhotos']);
                 $flood->saveState();
 
-                setFlash('success', 'Фотография успешно загружена!');
+                setFlash('success', __('photos.photo_success_uploaded'));
                 redirect('/photos/' . $photo->id);
             } else {
                 setInput($request->all());
@@ -129,14 +129,14 @@ class PhotoController extends BaseController
         $page = int($request->input('page', 1));
 
         if (! getUser()) {
-            abort(403, 'Авторизуйтесь для редактирования фотографии!');
+            abort(403, __('main.not_authorized'));
         }
 
         /** @var Photo $photo */
         $photo = Photo::query()->where('user_id', getUser('id'))->find($id);
 
         if (! $photo) {
-            abort(404, 'Выбранное вами фото не найдено или вы не автор этой фотографии!');
+            abort(404, __('photos.photo_not_yours'));
         }
 
         if ($request->isMethod('post')) {
@@ -147,7 +147,7 @@ class PhotoController extends BaseController
 
             $validator->equal($token, $_SESSION['token'], __('validator.token'))
                 ->length($title, 5, 50, ['title' => __('validator.text')])
-                ->length($text, 0, 1000, ['text' => 'Слишком длинное описание!']);
+                ->length($text, 0, 1000, ['text' => __('validator.text_long')]);
 
             if ($validator->isValid()) {
                 $text = antimat($text);
@@ -158,7 +158,7 @@ class PhotoController extends BaseController
                     'closed' => $closed,
                 ]);
 
-                setFlash('success', 'Фотография успешно отредактирована!');
+                setFlash('success', __('photos.photo_success_edited'));
                 redirect('/photos/albums/' . getUser('login') . '?page=' . $page);
             } else {
                 setInput($request->all());
@@ -186,7 +186,7 @@ class PhotoController extends BaseController
         $photo = Photo::query()->find($id);
 
         if (! $photo) {
-            abort(404, 'Фотография не найдена!');
+            abort(404, __('photos.photo_not_exist'));
         }
 
         if ($request->isMethod('post')) {
@@ -198,7 +198,7 @@ class PhotoController extends BaseController
                 ->equal($token, $_SESSION['token'], __('validator.token'))
                 ->length($msg, 5, setting('comment_length'), ['msg' => __('validator.text')])
                 ->false($flood->isFlood(), ['msg' => __('validator.flood', ['sec' => $flood->getPeriod()])])
-                ->empty($photo->closed, ['msg' => 'Комментирование данной фотографии запрещено!']);
+                ->empty($photo->closed, ['msg' => __('photos.closed_comments')]);
 
             if ($validator->isValid()) {
                 $msg = antimat($msg);
@@ -259,7 +259,7 @@ class PhotoController extends BaseController
         $photo = Photo::query()->find($id);
 
         if (! $photo) {
-            abort(404, 'Фотография не найдена!');
+            abort(404, __('photos.photo_not_exist'));
         }
 
         if (! getUser()) {
@@ -278,10 +278,6 @@ class PhotoController extends BaseController
             abort('default', __('main.comment_deleted'));
         }
 
-        if ($comment->closed) {
-            abort('default', 'Редактирование невозможно, комментирование запрещено!');
-        }
-
         if ($comment->created_at + 600 < SITETIME) {
             abort('default', __('main.editing_impossible'));
         }
@@ -293,7 +289,7 @@ class PhotoController extends BaseController
             $validator
                 ->equal($token, $_SESSION['token'], __('validator.token'))
                 ->length($msg, 5, setting('comment_length'), ['msg' => __('validator.text')])
-                ->empty($comment->closed, 'Комментирование данной фотографии запрещено!');
+                ->empty($comment->closed, __('photos.closed_comments'));
 
             if ($validator->isValid()) {
                 $msg = antimat($msg);
@@ -334,18 +330,18 @@ class PhotoController extends BaseController
         $photo = Photo::query()->where('user_id', getUser('id'))->find($id);
 
         if (! $photo) {
-            abort(404, 'Выбранное вами фото не найдено или вы не автор этой фотографии!');
+            abort(404, __('photos.photo_not_yours'));
         }
 
         $validator
             ->equal($token, $_SESSION['token'], __('validator.token'))
-            ->empty($photo->count_comments, 'Запрещено удалять фотографии к которым имеются комментарии!');
+            ->empty($photo->count_comments, __('photos.photo_has_comments'));
 
         if ($validator->isValid()) {
             $photo->comments()->delete();
             $photo->delete();
 
-            setFlash('success', 'Фотография успешно удалена!');
+            setFlash('success', __('photos.photo_success_deleted'));
         } else {
             setFlash('danger', $validator->getErrors());
         }
@@ -364,7 +360,7 @@ class PhotoController extends BaseController
         $photo = Photo::query()->find($id);
 
         if (! $photo) {
-            abort(404, 'Выбранное вами фото не найдено, возможно оно было удалено!');
+            abort(404, __('photos.photo_not_exist'));
         }
 
         $total = Comment::query()
@@ -500,7 +496,7 @@ class PhotoController extends BaseController
         $photo = Photo::query()->find($id);
 
         if (! $photo) {
-            abort(404, 'Фотография не найдена!');
+            abort(404, __('photos.photo_not_exist'));
         }
 
         $total = Comment::query()

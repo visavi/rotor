@@ -101,7 +101,7 @@ class PageController extends BaseController
         $category = StickersCategory::query()->where('id', $id)->first();
 
         if (! $category) {
-            abort(404, 'Данной категории не существует!');
+            abort(404, __('stickers.category_not_exist'));
         }
 
         $stickers = Sticker::query()
@@ -133,7 +133,7 @@ class PageController extends BaseController
         }
 
         if (strtotime(date('d.m.Y')) > strtotime($surprise['requiredDate'].'.'.date('Y'))) {
-            abort('default', 'Срок получения сюрприза еще не начался или уже закончился!');
+            abort('default', __('pages.surprise_date_receipt'));
         }
 
         $existSurprise = Surprise::query()
@@ -142,7 +142,7 @@ class PageController extends BaseController
             ->first();
 
         if ($existSurprise) {
-            abort('default', 'В этом году сюрприз уже получен');
+            abort('default', __('pages.surprise_already_received'));
         }
 
         if ($user->point >= 50) {
@@ -164,7 +164,7 @@ class PageController extends BaseController
             'created_at' => SITETIME,
         ]);
 
-        setFlash('success', 'Сюрприз успешно получен!');
+        setFlash('success', __('pages.surprise_success_received'));
         redirect('/');
     }
 

@@ -51,7 +51,7 @@ class PhotoController extends AdminController
 
             $validator->equal($token, $_SESSION['token'], __('validator.token'))
                 ->length($title, 5, 50, ['title' => __('validator.text')])
-                ->length($text, 0, 1000, ['text' => 'Слишком длинное описание!']);
+                ->length($text, 0, 1000, ['text' => __('validator.text_long')]);
 
             if ($validator->isValid()) {
                 $text = antimat($text);

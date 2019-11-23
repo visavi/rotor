@@ -76,7 +76,7 @@ class OfferController extends AdminController
             ->first();
 
         if (! $offer) {
-            abort(404, 'Данного предложения или проблемы не существует!');
+            abort(404, __('main.record_not_found'));
         }
 
         return view('admin/offers/view', compact('offer'));
@@ -95,7 +95,7 @@ class OfferController extends AdminController
         $offer = Offer::query()->where('id', $id)->first();
 
         if (! $offer) {
-            abort(404, 'Данного предложения или проблемы не существует!');
+            abort(404, __('main.record_not_found'));
         }
 
         if ($request->isMethod('post')) {
@@ -109,7 +109,7 @@ class OfferController extends AdminController
             $validator->equal($token, $_SESSION['token'], __('validator.token'))
                 ->length($title, 5, 50, ['title' => __('validator.text')])
                 ->length($text, 5, 1000, ['text' => __('validator.text')])
-                ->in($type, Offer::TYPES, ['type' => 'Выбран неверный тип записи! (Необходимо предложение или проблема)']);
+                ->in($type, Offer::TYPES, ['type' => __('offers.invalid_type')]);
 
             if ($validator->isValid()) {
 
@@ -148,7 +148,7 @@ class OfferController extends AdminController
         $offer = Offer::query()->where('id', $id)->first();
 
         if (! $offer) {
-            abort(404, 'Данного предложения или проблемы не существует!');
+            abort(404, __('main.record_not_found'));
         }
 
         if ($request->isMethod('post')) {

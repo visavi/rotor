@@ -93,7 +93,7 @@ class NewsController extends BaseController
                 ->equal($token, $_SESSION['token'], __('validator.token'))
                 ->false($flood->isFlood(), ['msg' => __('validator.flood', ['sec' => $flood->getPeriod()])])
                 ->length($msg, 5, setting('comment_length'), ['msg' => __('validator.text')])
-                ->empty($news->closed, ['msg' => 'Комментирование данной новости запрещено!']);
+                ->empty($news->closed, ['msg' => __('news.closed_news')]);
 
             if ($validator->isValid()) {
                 $msg = antimat($msg);

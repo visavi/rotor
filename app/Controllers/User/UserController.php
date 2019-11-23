@@ -315,7 +315,7 @@ class UserController extends BaseController
     public function profile(Request $request, Validator $validator): string
     {
         if (! $user = getUser()) {
-            abort(403, 'Авторизуйтесь для изменения данных в профиле!');
+            abort(403, __('main.not_authorized'));
         }
 
         if ($request->isMethod('post')) {
@@ -376,7 +376,7 @@ class UserController extends BaseController
     {
         /* @var User $user */
         if (! $user = getUser()) {
-            abort(403, 'Для подтверждения регистрации  необходимо быть авторизованным!');
+            abort(403, __('main.not_authorized'));
         }
 
         if (! setting('regkeys')) {
