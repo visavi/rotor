@@ -74,4 +74,9 @@ return [
     'posts_edited_curators'    => 'Редактировать сообщения может только автор или кураторы темы!',
     'topic_edited_points'      => 'Для изменения и закрытия темы необходимо :point!',
     'topic_not_author'         => 'Вы не автор данной темы!',
+
+    'bookmark_success_deleted'   => 'Тема успешно удалена из закладок!',
+    'bookmark_success_added'     => 'Тема успешно добавлена в закладки!',
+    'bookmarks_missing'          => 'Отсутствуют выбранные закладки!',
+    'bookmarks_selected_deleted' => 'Выбранные темы успешно удалены из закладок!',
 ];

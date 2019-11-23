@@ -245,7 +245,7 @@ class UserController extends BaseController
     public function login(Request $request): string
     {
         if (getUser()) {
-            abort(403, 'Вы уже авторизованы!');
+            abort(403, __('main.already_authorized'));
         }
 
         $cooklog = isset($_COOKIE['login']) ? check($_COOKIE['login']): '';

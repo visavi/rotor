@@ -2,9 +2,10 @@
 
 declare(strict_types=1);
 
-namespace App\Controllers;
+namespace App\Controllers\Forum;
 
 use App\Classes\Validator;
+use App\Controllers\BaseController;
 use App\Models\Bookmark;
 use App\Models\Topic;
 use Illuminate\Http\Request;
@@ -72,7 +73,7 @@ class BookmarkController extends BaseController
 
             if ($bookmark) {
                 $bookmark->delete();
-                return json_encode(['status' => 'deleted', 'message' => 'Тема успешно удалена из закладок!']);
+                return json_encode(['status' => 'deleted', 'message' => __('forums.bookmark_success_deleted')]);
             }
 
             Bookmark::query()->create([
@@ -80,7 +81,7 @@ class BookmarkController extends BaseController
                 'topic_id'    => $tid,
                 'count_posts' => $topic->count_posts,
             ]);
-            return json_encode(['status' => 'added', 'message' => 'Тема успешно добавлена в закладки!']);
+            return json_encode(['status' => 'added', 'message' => __('forums.bookmark_success_added')]);
         }
 
         return json_encode(['status' => 'error', 'message' => current($validator->getErrors())]);
@@ -100,7 +101,7 @@ class BookmarkController extends BaseController
         $page     = int($request->input('page'));
 
         $validator->equal($token, $_SESSION['token'], __('validator.token'))
-            ->notEmpty($topicIds, 'Отсутствуют выбранные закладки!');
+            ->notEmpty($topicIds, __('forums.bookmarks_missing'));
 
         if ($validator->isValid()) {
             Bookmark::query()
@@ -108,7 +109,7 @@ class BookmarkController extends BaseController
                 ->where('user_id', getUser('id'))
                 ->delete();
 
-            setFlash('success', 'Выбранные темы успешно удалены из закладок!');
+            setFlash('success', __('forums.bookmarks_selected_deleted'));
         } else {
             setFlash('danger', $validator->getErrors());
         }

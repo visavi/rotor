@@ -14,7 +14,7 @@
 @stop
 
 @section('content')
-    <b>{{ __('mails.successful_recovery') }}</b><br>
+    <b>{{ __('mails.success_recovery') }}</b><br>
     {{ __('mails.details') }}:<br><br>
 
     {{ __('mails.login') }}: <b>{{ $login }}</b><br>

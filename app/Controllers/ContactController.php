@@ -43,12 +43,12 @@ class ContactController extends BaseController
             $validator->notEmpty($user, ['user' => __('validator.user')]);
 
             if ($user) {
-                $validator->notEqual($user->login, getUser('login'), ['user' => 'Запрещено добавлять свой логин!']);
+                $validator->notEqual($user->login, getUser('login'), ['user' => __('contacts.forbidden_yourself')]);
 
                 $totalContact = Contact::query()->where('user_id', getUser('id'))->count();
-                $validator->lte($totalContact, setting('limitcontact'), 'Контакт-лист переполнен (Максимум ' . setting('limitcontact') . ' пользователей!)');
+                $validator->lte($totalContact, setting('limitcontact'), __('contacts.contact_full', ['max' => setting('limitcontact')]));
 
-                $validator->false(getUser()->isContact($user), ['user' => 'Данный пользователь уже есть в контакт-листе!']);
+                $validator->false(getUser()->isContact($user), ['user' => __('contacts.already_contacts')]);
             }
 
             if ($validator->isValid()) {
@@ -63,7 +63,7 @@ class ContactController extends BaseController
                     $user->sendMessage(null, $text);
                 }
 
-                setFlash('success', 'Пользователь успешно добавлен в контакт-лист!');
+                setFlash('success', __('contacts.success_added'));
                 redirect('/contacts?page='.$page);
 
             } else {
@@ -97,23 +97,22 @@ class ContactController extends BaseController
             ->first();
 
         if (! $contact) {
-            abort(404, 'Запись не найдена');
+            abort(404, __('main.record_not_found'));
         }
 
         if ($request->isMethod('post')) {
-
             $token = check($request->input('token'));
             $msg   = check($request->input('msg'));
 
             $validator->equal($token, $_SESSION['token'], ['msg' => __('validator.token')])
-                ->length($msg, 0, 1000, ['msg' => 'Слишком большая заметка!']);
+                ->length($msg, 0, 1000, ['msg' => __('users.note_to_big')]);
 
             if ($validator->isValid()) {
                 $contact->update([
                     'text' => $msg,
                 ]);
 
-                setFlash('success', 'Заметка успешно отредактирована!');
+                setFlash('success', __('users.note_saved_success'));
                 redirect('/contacts');
             } else {
                 setInput($request->all());
@@ -146,7 +145,7 @@ class ContactController extends BaseController
                 ->whereIn('id', $del)
                 ->delete();
 
-            setFlash('success', 'Выбранные пользователи успешно удалены!');
+            setFlash('success', __('main.records_deleted_success'));
         } else {
             setFlash('danger', $validator->getErrors());
         }

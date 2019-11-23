@@ -44,13 +44,13 @@ class IgnoreController extends BaseController
             $validator->notEmpty($user, ['user' => __('validator.user')]);
 
             if ($user) {
-                $validator->notEqual($user->login, getUser('login'), ['user' => 'Запрещено добавлять свой логин!']);
+                $validator->notEqual($user->login, getUser('login'), ['user' => __('ignores.forbidden_yourself')]);
 
                 $totalIgnore = Ignore::query()->where('user_id', getUser('id'))->count();
-                $validator->lte($totalIgnore, setting('limitignore'), 'Игнор-лист переполнен (Максимум ' . setting('limitignore') . ' пользователей!)');
+                $validator->lte($totalIgnore, setting('limitignore'), __('ignores.ignore_full', ['max' => setting('limitignore')]));
 
-                $validator->false(getUser()->isIgnore($user), ['user' => 'Данный пользователь уже есть в игнор-листе!']);
-                $validator->notIn($user->level, User::ADMIN_GROUPS, ['user' => 'Запрещено добавлять в игнор администрацию сайта']);
+                $validator->false(getUser()->isIgnore($user), ['user' => __('ignores.already_ignore')]);
+                $validator->notIn($user->level, User::ADMIN_GROUPS, ['user' => __('ignores.forbidden_admins')]);
             }
 
             if ($validator->isValid()) {
@@ -66,7 +66,7 @@ class IgnoreController extends BaseController
                     $user->sendMessage(null, $text);
                 }
 
-                setFlash('success', 'Пользователь успешно добавлен в игнор-лист!');
+                setFlash('success', __('ignores.success_added'));
                 redirect('/ignores?page=' . $page);
             } else {
                 setInput($request->all());
@@ -99,16 +99,15 @@ class IgnoreController extends BaseController
             ->first();
 
         if (! $ignore) {
-            abort(404, 'Запись не найдена');
+            abort(404, __('main.record_not_found'));
         }
 
         if ($request->isMethod('post')) {
-
             $token = check($request->input('token'));
             $msg   = check($request->input('msg'));
 
             $validator->equal($token, $_SESSION['token'], ['msg' => __('validator.token')])
-                ->length($msg, 0, 1000, ['msg' => 'Слишком большая заметка!']);
+                ->length($msg, 0, 1000, ['msg' => __('users.note_to_big')]);
 
             if ($validator->isValid()) {
 
@@ -116,7 +115,7 @@ class IgnoreController extends BaseController
                     'text' => $msg,
                 ]);
 
-                setFlash('success', 'Заметка успешно отредактирована!');
+                setFlash('success', __('users.note_saved_success'));
                 redirect('/ignores');
             } else {
                 setInput($request->all());
@@ -149,7 +148,7 @@ class IgnoreController extends BaseController
                 ->whereIn('id', $del)
                 ->delete();
 
-            setFlash('success', 'Выбранные пользователи успешно удалены!');
+            setFlash('success', __('main.records_deleted_success'));
         } else {
             setFlash('danger', $validator->getErrors());
         }

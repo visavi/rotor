@@ -46,7 +46,7 @@ class GuestbookController extends BaseController
         /* Проверка для гостей */
         if (! getUser() && setting('bookadds')) {
             $validator->true(captchaVerify(), ['protect' => __('validator.captcha')]);
-            $validator->false(strpos($msg, '//'), ['msg' => 'Текст сообщения не должен содержать ссылок!']);
+            $validator->false(strpos($msg, '//'), ['msg' => __('guestbooks.without_links')]);
         } else {
             $validator->true(getUser(), ['msg' => __('main.not_authorized')]);
         }
@@ -73,7 +73,7 @@ class GuestbookController extends BaseController
             clearCache('statGuestbooks');
             $flood->saveState();
 
-            sendNotify($msg, '/guestbooks', 'Гостевая книга');
+            sendNotify($msg, '/guestbooks', __('index.guestbooks'));
             setFlash('success', __('main.message_added_success'));
         } else {
             setInput($request->all());
@@ -101,7 +101,7 @@ class GuestbookController extends BaseController
         $post = Guestbook::query()->where('user_id', getUser('id'))->find($id);
 
         if (! $post) {
-            abort('default', 'Сообщение удалено или вы не автор этого сообщения!');
+            abort('default', __('main.message_not_found'));
         }
 
         if ($post->created_at + 600 < SITETIME) {

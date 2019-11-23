@@ -128,6 +128,8 @@ return [
     'surprise_date_receipt'     => 'Срок получения сюрприза еще не начался или уже закончился!',
     'surprise_already_received' => 'В этом году сюрприз уже получен!',
     'surprise_success_received' => 'Сюрприз успешно получен!',
+
+    'ip_success_unbanned' => 'IP успешно разбанен!',
 ];
 
 

@@ -51,7 +51,7 @@ class NewsController extends BaseController
             ->find($id);
 
         if (! $news) {
-            abort(404, 'Новость не существует, возможно она была удалена!');
+            abort(404, __('news.news_not_exist'));
         }
 
         $comments = Comment::query()
@@ -82,7 +82,7 @@ class NewsController extends BaseController
         $news = News::query()->find($id);
 
         if (! $news) {
-            abort(404, 'Новость не существует, возможно она была удалена!');
+            abort(404, __('news.news_not_exist'));
         }
 
         if ($request->isMethod('post')) {
@@ -160,7 +160,7 @@ class NewsController extends BaseController
         $news = News::query()->find($id);
 
         if (! $news) {
-            abort(404, 'Новость не существует, возможно она была удалена!');
+            abort(404, __('news.news_not_exist'));
         }
 
         if (! getUser()) {
@@ -217,7 +217,7 @@ class NewsController extends BaseController
         $news = News::query()->find($id);
 
         if (! $news) {
-            abort(404, 'Данной новости не существует!');
+            abort(404, __('news.news_not_exist'));
         }
 
         $end = ceil($news->count_comments / setting('postnews'));
@@ -232,7 +232,7 @@ class NewsController extends BaseController
         $newses = News::query()->orderByDesc('created_at')->limit(15)->get();
 
         if ($newses->isEmpty()) {
-            abort('default', 'Новости не найдены!');
+            abort('default', __('news.empty_news'));
         }
 
         return view('news/rss', compact('newses'));
@@ -267,7 +267,7 @@ class NewsController extends BaseController
         $news = News::query()->find($id);
 
         if (! $news) {
-            abort(404, 'Данной новости не существует!');
+            abort(404, __('news.news_not_exist'));
         }
 
         $total = Comment::query()

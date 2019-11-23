@@ -55,7 +55,7 @@ class NewsController extends AdminController
         $page = int($request->input('page', 1));
 
         if (! $news) {
-            abort(404, 'Новость не существует, возможно она была удалена!');
+            abort(404, __('news.news_not_exist'));
         }
 
         if ($request->isMethod('post')) {
@@ -210,7 +210,7 @@ class NewsController extends AdminController
         $news = News::query()->find($id);
 
         if (! $news) {
-            abort(404, 'Новость не существует, возможно она была удалена!');
+            abort(404, __('news.news_not_exist'));
         }
 
         $validator->equal($token, $_SESSION['token'], __('validator.token'));

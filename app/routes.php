@@ -108,8 +108,8 @@ return FastRoute\cachedDispatcher(static function(RouteCollector $r) {
         $r->get('/top/posts', [App\Controllers\Forum\ForumController::class, 'topPosts']);
         $r->get('/top/topics', [App\Controllers\Forum\ForumController::class, 'topTopics']);
         $r->get('/rss', [App\Controllers\Forum\ForumController::class, 'rss']);
-        $r->get('/bookmarks', [App\Controllers\BookmarkController::class, 'index']);
-        $r->post('/bookmarks/{action:delete|perform}', [App\Controllers\BookmarkController::class]);
+        $r->get('/bookmarks', [App\Controllers\Forum\BookmarkController::class, 'index']);
+        $r->post('/bookmarks/{action:delete|perform}', [App\Controllers\Forum\BookmarkController::class]);
         $r->addRoute(['GET', 'POST'], '/create', [App\Controllers\Forum\ForumController::class, 'create']);
     });
 

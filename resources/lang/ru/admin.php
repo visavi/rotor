@@ -204,7 +204,6 @@ return [
     ],
 
     'spam' => [
-        'message_not_found' => 'Сообщение не найдено',
         'go_to_message'     => 'Перейти к сообщению',
         'empty_spam'        => 'Жалоб еще нет!',
     ],

@@ -57,7 +57,7 @@
                     <div>{!! bbCode($data->relate->text) !!}</div>
                 @else
                     <div class="b">
-                        <i class="fa fa-file"></i> <b>{{ __('admin.spam.message_not_found') }}</b>
+                        <i class="fa fa-file"></i> <b>{{ __('main.message_not_found') }}</b>
 
                         <div class="float-right">
                             @if (isAdmin())

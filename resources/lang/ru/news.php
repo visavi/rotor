@@ -13,4 +13,6 @@ return [
     'create_title'         => 'Создание новости',
     'show_on_the_homepage' => 'Показывать на главной',
     'edit_news_title'      => 'Редактирование новости',
+
+    'news_not_exist'      => 'Данной новости не существует!',
 ];

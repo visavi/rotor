@@ -73,7 +73,7 @@ class HomeController extends BaseController
             $ban->delete();
             ipBan(true);
 
-            setFlash('success', 'IP успешно разбанен!');
+            setFlash('success', __('pages.ip_success_unbanned'));
             redirect('/');
         }
 

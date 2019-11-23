@@ -86,7 +86,7 @@ class MessageController extends BaseController
         }
 
         if ($user->id === $this->user->id) {
-            abort('default', 'Отсутствует переписка с самим собой!');
+            abort('default', __('messages.empty_dialogue'));
         }
 
         $messages = Message::query()
@@ -136,7 +136,7 @@ class MessageController extends BaseController
         $validator->equal($token, $_SESSION['token'], ['msg' => __('validator.token')])
             ->length($msg, 5, setting('comment_length'), ['msg' => __('validator.text')])
             ->false($flood->isFlood(), ['msg' => __('validator.flood', ['sec' => $flood->getPeriod()])])
-            ->notEqual($user->id, $this->user->id, 'Нельзя отправлять письмо самому себе!');
+            ->notEqual($user->id, $this->user->id, __('messages.send_yourself'));
 
         if (! captchaVerify() && $this->user->point < setting('privatprotect')) {
             $validator->addError(['protect' => __('validator.captcha')]);
@@ -172,7 +172,7 @@ class MessageController extends BaseController
 
             $flood->saveState();
 
-            setFlash('success', 'Письмо успешно отправлено!');
+            setFlash('success', __('messages.success_sent'));
         } else {
             setInput($request->all());
             setFlash('danger', $validator->getErrors());
@@ -199,8 +199,8 @@ class MessageController extends BaseController
             ->count();
 
         $validator->equal($token, $_SESSION['token'], __('validator.token'))
-            ->notEmpty($total, ['user' => 'Переписки с данным пользователем не существует!'])
-            ->empty(getUser('newprivat'), 'У вас имеются непрочитанные сообщения!');
+            ->notEmpty($total, ['user' => __('messages.empty_dialogue')])
+            ->empty(getUser('newprivat'), __('messages.unread_messages'));
 
         if ($validator->isValid()) {
             Message::query()
@@ -208,7 +208,7 @@ class MessageController extends BaseController
                 ->where('author_id', $uid)
                 ->delete();
 
-            setFlash('success', 'Сообщения успешно удалены!');
+            setFlash('success', __('messages.success_deleted'));
         } else {
             setFlash('danger', $validator->getErrors());
         }

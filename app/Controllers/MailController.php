@@ -27,24 +27,23 @@ class MailController extends BaseController
             $email   = check($request->input('email'));
 
             if (getUser()) {
-                $name = getUser('login');
+                $name  = getUser('login');
                 $email = getUser('email');
             }
 
             $validator->true(captchaVerify(), ['protect' => __('validator.captcha')])
-                ->length($name, 3, 100, ['name' => 'Слишком длинное или короткое имя'])
+                ->length($name, 3, 100, ['name' => __('mails.name_short_or_long')])
                 ->length($message, 5, 50000, ['message' => __('validator.text')])
-                ->email($email, ['email' => 'Неправильный адрес email, необходим формат name@site.domen!']);
+                ->email($email, ['email' => __('validator.email')]);
 
             if ($validator->isValid()) {
-
                 $message .= '<br><br>IP: ' . getIp() . '<br>Браузер: ' . getBrowser() . '<br>Отправлено: ' . dateFixed(SITETIME, 'j.m.Y / H:i');
 
                 $subject = 'Письмо с сайта ' . setting('title');
                 $body = view('mailer.default', compact('subject', 'message'));
                 sendMail(config('SITE_EMAIL'), $subject, $body, ['from' => [$email => $name]]);
 
-                setFlash('success', 'Ваше письмо успешно отправлено!');
+                setFlash('success', __('mails.success_sent'));
                 redirect('/');
             } else {
                 setInput($request->all());
@@ -65,7 +64,7 @@ class MailController extends BaseController
     public function recovery(Request $request, Validator $validator): string
     {
         if (getUser()) {
-            abort('default', 'Вы авторизованы, восстановление пароля невозможно!');
+            abort('default', __('main.already_authorized'));
         }
 
         $cookieLogin = isset($_COOKIE['login']) ? check($_COOKIE['login']) : '';
@@ -79,7 +78,7 @@ class MailController extends BaseController
             }
 
             $validator->true(captchaVerify(), ['protect' => __('validator.captcha')])
-                ->lte($user['timepasswd'], SITETIME, ['user' => 'Восстанавливать пароль можно не чаще чем раз в 12 часов!']);
+                ->lte($user['timepasswd'], SITETIME, ['user' => __('mails.password_recovery_time')]);
 
             if ($validator->isValid()) {
                 $resetKey  = Str::random();
@@ -97,7 +96,7 @@ class MailController extends BaseController
                 $body = view('mailer.recovery', compact('subject', 'message', 'resetLink'));
                 sendMail($user['email'], $subject, $body);
 
-                setFlash('success', 'Инструкция по восстановлению пароля отправлена на ' . hideMail($user['email']) . '!');
+                setFlash('success', __('mails.recovery_instructions', ['email' => hideMail($user['email'])]));
                 redirect('/login');
             } else {
                 setInput($request->all());
@@ -118,22 +117,21 @@ class MailController extends BaseController
     public function restore(Request $request, Validator $validator): ?string
     {
         if (getUser()) {
-            abort(403, 'Вы авторизованы, восстановление пароля невозможно!');
+            abort(403, __('main.already_authorized'));
         }
 
         $key = check($request->input('key'));
 
         $user = User::query()->where('keypasswd', $key)->first();
         if (! $user) {
-            abort('default', 'Ключ для восстановления недействителен!');
+            abort('default', __('mails.secret_key_invalid'));
         }
 
-        $validator->notEmpty($key, 'Отсутствует секретный код в ссылке для восстановления пароля!')
-            ->notEmpty($user['keypasswd'], 'Данный пользователь не запрашивал восстановление пароля!')
-            ->gte($user['timepasswd'], SITETIME, 'Секретный ключ для восстановления уже устарел!');
+        $validator->notEmpty($key, __('mails.secret_key_missing'))
+            ->notEmpty($user['keypasswd'], __('mails.password_not_recovery'))
+            ->gte($user['timepasswd'], SITETIME, __('mails.secret_key_expired'));
 
         if ($validator->isValid()) {
-
             $newpass    = Str::random();
             $hashnewpas = password_hash($newpass, PASSWORD_BCRYPT);
 
@@ -167,19 +165,19 @@ class MailController extends BaseController
         $key = check($request->input('key'));
 
         if (! $key) {
-            abort('default', 'Отсутствует ключ для отписки от рассылки');
+            abort('default', __('mails.secret_key_missing'));
         }
 
         $user = User::query()->where('subscribe', $key)->first();
 
         if (! $user) {
-            abort('default', 'Ключ для отписки от рассылки устарел!');
+            abort('default', __('mails.secret_key_expired'));
         }
 
         $user->subscribe = null;
         $user->save();
 
-        setFlash('success', 'Вы успешно отписались от рассылки!');
+        setFlash('success', __('mails.success_unsubscribed'));
         redirect('/');
     }
 }
