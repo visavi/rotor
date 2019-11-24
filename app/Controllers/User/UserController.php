@@ -210,7 +210,7 @@ class UserController extends BaseController
                     $user->sendMessage(null, $textNotice);
 
                     // --- Уведомление о регистрации на email ---//
-                    $message = 'Добро пожаловать, ' . $login . '<br>Теперь вы зарегистрированный пользователь сайта <a href="' . siteUrl(true) . '">' . setting('title') . '</a> , сохраните ваш пароль и логин в надежном месте, они вам еще пригодятся. <br>Ваши данные для входа на сайт <br><b>Логин: ' . $login . '</b><br><b>Пароль: ' . $password . '</b><br><br>';
+                    $message = 'Добро пожаловать, ' . $login . '<br>Теперь вы зарегистрированный пользователь сайта <a href="' . siteUrl(true) . '">' . setting('title') . '</a> , сохраните ваш логин и пароль в надежном месте, они вам еще пригодятся. <br>Ваши данные для входа на сайт <br><b>Логин: ' . $login . '</b><br><b>Пароль: ' . $password . '</b><br><br>';
 
                     $subject = 'Регистрация на сайте ' . setting('title');
                     $body = view('mailer.register', compact('subject', 'message', 'activateKey', 'activateLink'));
@@ -416,7 +416,7 @@ class UserController extends BaseController
                 ]);
 
                 /* Уведомление о регистрации на email */
-                $message = 'Добро пожаловать, ' . $user->login . '<br>Теперь вы зарегистрированный пользователь сайта <a href="' . siteUrl(true) . '">' . setting('title') . '</a> , сохраните ваш пароль и логин в надежном месте, они вам еще пригодятся. <br><br>';
+                $message = 'Добро пожаловать, ' . $user->login . '<br>Теперь вы зарегистрированный пользователь сайта <a href="' . siteUrl(true) . '">' . setting('title') . '</a> , сохраните ваш логин и пароль в надежном месте, они вам еще пригодятся. <br><br>';
 
                 $subject = 'Регистрация на сайте ' . setting('title');
                 $body = view('mailer.register', compact('subject', 'message', 'activateKey', 'activateLink'));
@@ -538,27 +538,27 @@ class UserController extends BaseController
         $password = check($request->input('password'));
 
         $validator->equal($token, $_SESSION['token'], __('validator.token'))
-            ->notEqual($email, $user->email, ['email' => 'Новый адрес email должен отличаться от текущего!'])
-            ->email($email, ['email' => 'Неправильный адрес email, необходим формат name@site.domen!'])
-            ->true(password_verify($password, $user->password), ['password' => 'Введенный пароль не совпадает с данными в профиле!']);
+            ->notEqual($email, $user->email, ['email' => __('users.email_different')])
+            ->email($email, ['email' => __('validator.email')])
+            ->true(password_verify($password, $user->password), ['password' => __('users.password_different')]);
 
         $regMail = User::query()->where('email', $email)->first();
-        $validator->empty($regMail, ['email' => 'Указанный вами адрес email уже используется в системе!']);
+        $validator->empty($regMail, ['email' => __('users.email_already_exists')]);
 
         // Проверка email в черном списке
         $blackMail = BlackList::query()->where('type', 'email')->where('value', $email)->first();
-        $validator->empty($blackMail, ['email' => 'Указанный вами адрес email занесен в черный список!']);
+        $validator->empty($blackMail, ['email' => __('users.email_is_blacklisted')]);
 
         ChangeMail::query()->where('created_at', '<', SITETIME)->delete();
 
         $changeMail = ChangeMail::query()->where('user_id', $user->id)->first();
-        $validator->empty($changeMail, 'Вы уже отправили код подтверждения на новый адрес почты!');
+        $validator->empty($changeMail, __('users.confirm_already_sent'));
 
         if ($validator->isValid()) {
-            $genkey = Str::random(mt_rand(15,20));
+            $genkey = Str::random();
 
             $subject = 'Изменение email на сайте '.setting('title');
-            $message = 'Здравствуйте, '.$user->login.'<br>Вами была произведена операция по изменению адреса электронной почты<br><br>Для того, чтобы изменить email, необходимо подтвердить новый адрес почты<br>Перейдите по данной ссылке:<br><br><a href="'.siteUrl(true).'/accounts/editmail?key='.$genkey.'">'.siteUrl(true).'/accounts/editmail?key='.$genkey.'</a><br><br>Ссылка будет дейстительной в течение суток до '.date('j.m.y / H:i', strtotime('+1 day', SITETIME)).'<br>Для изменения адреса необходимо быть авторизованным на сайте<br>Если это сообщение попало к вам по ошибке или вы не собираетесь менять email, то просто проигнорируйте данное письмо';
+            $message = 'Здравствуйте, ' . $user->login . '<br>Вами была произведена операция по изменению адреса электронной почты<br><br>Для того, чтобы изменить email, необходимо подтвердить новый адрес почты<br>Перейдите по данной ссылке:<br><br><a href="' . siteUrl(true) . '/accounts/editmail?key=' . $genkey . '">' . siteUrl(true) . '/accounts/editmail?key=' . $genkey . '</a><br><br>Ссылка будет дейстительной в течение суток до ' . date('j.m.y / H:i', strtotime('+1 day', SITETIME)) . '<br>Для изменения адреса необходимо быть авторизованным на сайте<br>Если это сообщение попало к вам по ошибке или вы не собираетесь менять email, то просто проигнорируйте данное письмо';
 
             $body = view('mailer.default', compact('subject', 'message'));
             sendMail($email, $subject, $body);
@@ -570,7 +570,7 @@ class UserController extends BaseController
                 'created_at' => strtotime('+1 day', SITETIME),
             ]);
 
-            setFlash('success', 'На новый адрес почты отправлено письмо для подтверждения!');
+            setFlash('success', __('users.confirm_success_sent'));
         } else {
             setInput($request->all());
             setFlash('danger', $validator->getErrors());
@@ -600,17 +600,17 @@ class UserController extends BaseController
 
         $changeMail = ChangeMail::query()->where('hash', $key)->where('user_id', $user->id)->first();
 
-        $validator->notEmpty($key, 'Вы не ввели код изменения электронной почты!')
-            ->notEmpty($changeMail, 'Данный код изменения электронной почты не найден в списке!');
+        $validator->notEmpty($key, __('users.changed_code_empty'))
+            ->notEmpty($changeMail, __('users.changed_code_not_found'));
 
         if ($changeMail) {
-            $validator->notEqual($changeMail->mail, $user->mail, 'Новый адрес email должен отличаться от текущего!');
+            $validator->notEqual($changeMail->mail, $user->mail, __('users.email_different'));
 
             $regMail = User::query()->where('email', $changeMail->mail)->count();
-            $validator->empty($regMail, 'Указанный вами адрес email уже используется в системе!');
+            $validator->empty($regMail, __('users.email_already_exists'));
 
             $blackMail = BlackList::query()->where('type', 'email')->where('value', $changeMail->mail)->count();
-            $validator->empty($blackMail, 'Указанный вами адрес email занесен в черный список!');
+            $validator->empty($blackMail, __('users.email_is_blacklisted'));
         }
 
         if ($validator->isValid()) {
@@ -620,7 +620,7 @@ class UserController extends BaseController
 
             $changeMail->delete();
 
-            setFlash('success', 'Адрес электронной почты успешно изменен!');
+            setFlash('success', __('users.email_success_changed'));
         } else {
             setFlash('danger', $validator->getErrors());
         }
@@ -647,16 +647,11 @@ class UserController extends BaseController
         $cost   = $status ? setting('editstatusmoney') : 0;
 
         $validator->equal($token, $_SESSION['token'], __('validator.token'))
-            ->empty($user->ban, ['status' => 'Для изменения статуса у вас не должно быть нарушений!'])
-            ->notEqual($status, $user->status, ['status' => 'Новый статус должен отличаться от текущего!'])
-            ->gte($user->point, setting('editstatuspoint'), ['status' => 'У вас недостаточно актива для изменения статуса!'])
-            ->gte($user->money, setting('editstatusmoney'), ['status' => 'У вас недостаточно денег для изменения статуса!'])
-            ->length($status, 3, 20, ['status' => 'Слишком длинный или короткий статус!'], false);
-
-        if ($status) {
-            $checkStatus = User::query()->where('status', $status)->count();
-            $validator->empty($checkStatus, ['status' => 'Выбранный вами статус уже используется на сайте!']);
-        }
+            ->empty($user->ban, ['status' => __('users.status_changed_not_ban')])
+            ->notEqual($status, $user->status, ['status' => __('users.status_different')])
+            ->gte($user->point, setting('editstatuspoint'), ['status' => __('users.status_points')])
+            ->gte($user->money, setting('editstatusmoney'), ['status' => __('users.status_moneys')])
+            ->length($status, 3, 20, ['status' => __('users.status_short_or_long')], false);
 
         if ($validator->isValid()) {
             $user->update([
@@ -665,7 +660,7 @@ class UserController extends BaseController
             ]);
             $user->saveStatus();
 
-            setFlash('success', 'Ваш статус успешно изменен!');
+            setFlash('success', __('users.status_success_changed'));
         } else {
             setInput($request->all());
             setFlash('danger', $validator->getErrors());
@@ -694,13 +689,13 @@ class UserController extends BaseController
         $oldpass  = check($request->input('oldpass'));
 
         $validator->equal($token, $_SESSION['token'], __('validator.token'))
-            ->true(password_verify($oldpass, $user->password), ['oldpass' => 'Введенный пароль не совпадает с данными в профиле!'])
-            ->length($newpass, 6, 20, ['newpass' => 'Слишком длинный или короткий новый пароль!'])
-            ->notEqual(getUser('login'), $newpass, ['newpass' => 'Пароль и логин должны отличаться друг от друга!'])
-            ->equal($newpass, $newpass2, ['newpass2' => 'Новые пароли не одинаковые!']);
+            ->true(password_verify($oldpass, $user->password), ['oldpass' => __('users.password_different')])
+            ->length($newpass, 6, 20, ['newpass' => __('users.password_length_requirements')])
+            ->notEqual(getUser('login'), $newpass, ['newpass' => __('users.login_different')])
+            ->equal($newpass, $newpass2, ['newpass2' => __('users.passwords_different')]);
 
         if (ctype_digit($newpass)) {
-            $validator->addError(['newpass' => 'Запрещен пароль состоящий только из цифр, используйте буквы!']);
+            $validator->addError(['newpass' => __('users.field_characters_requirements')]);
         }
 
         if ($validator->isValid()) {
@@ -716,7 +711,7 @@ class UserController extends BaseController
 
             unset($_SESSION['id'], $_SESSION['password']);
 
-            setFlash('success', 'Пароль успешно изменен!');
+            setFlash('success', __('users.password_success_changed'));
             redirect('/login');
         } else {
             setInput($request->all());
@@ -746,7 +741,7 @@ class UserController extends BaseController
                 'apikey' => md5(getUser('login') . Str::random()),
             ]);
 
-            setFlash('success', 'Новый ключ успешно сгенерирован!');
+            setFlash('success', __('users.key_success_generated'));
         } else {
             setFlash('danger', __('validator.token'));
         }
