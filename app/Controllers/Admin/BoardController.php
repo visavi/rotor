@@ -89,7 +89,6 @@ class BoardController extends AdminController
             ->length($name, 3, 50, ['name' => __('validator.text')]);
 
         if ($validator->isValid()) {
-
             $max = Board::query()->max('sort') + 1;
 
             /** @var Board $board */
@@ -98,7 +97,7 @@ class BoardController extends AdminController
                 'sort'  => $max,
             ]);
 
-            setFlash('success', 'Новый раздел успешно создан!');
+            setFlash('success', __('boards.category_success_created'));
             redirect('/admin/boards/edit/' . $board->id);
         } else {
             setInput($request->all());
@@ -143,10 +142,10 @@ class BoardController extends AdminController
 
             $validator->equal($token, $_SESSION['token'], __('validator.token'))
                 ->length($name, 3, 50, ['name' => __('validator.text')])
-                ->notEqual($parent, $board->id, ['parent' => 'Недопустимый выбор родительского раздела!']);
+                ->notEqual($parent, $board->id, ['parent' => __('boards.category_parent_invalid')]);
 
             if (! empty($parent) && $board->children->isNotEmpty()) {
-                $validator->addError(['parent' => 'Текущий раздел имеет подразделы!']);
+                $validator->addError(['parent' => __('boards.category_has_subsections')]);
             }
 
             if ($validator->isValid()) {
@@ -158,7 +157,7 @@ class BoardController extends AdminController
                     'closed'    => $closed,
                 ]);
 
-                setFlash('success', 'Раздел успешно отредактирован!');
+                setFlash('success', __('boards.category_success_edited'));
                 redirect('/admin/boards/categories');
             } else {
                 setInput($request->all());
@@ -193,18 +192,18 @@ class BoardController extends AdminController
         $token = check($request->input('token'));
 
         $validator->equal($token, $_SESSION['token'], __('validator.token'))
-            ->true($board->children->isEmpty(), 'Удаление невозможно! Данный раздел имеет подразделы!');
+            ->true($board->children->isEmpty(), __('boards.category_has_subsections'));
 
         $item = Item::query()->where('board_id', $board->id)->first();
         if ($item) {
-            $validator->addError('Удаление невозможно! В данном разделе имеются объявления!');
+            $validator->addError(__('boards.category_has_items'));
         }
 
         if ($validator->isValid()) {
 
             $board->delete();
 
-            setFlash('success', 'Раздел успешно удален!');
+            setFlash('success', __('boards.category_success_deleted'));
         } else {
             setFlash('danger', $validator->getErrors());
         }
@@ -252,7 +251,6 @@ class BoardController extends AdminController
             }
 
             if ($validator->isValid()) {
-
                 // Обновление счетчиков
                 if ($item->board_id !== $board->id) {
                     $board->increment('count_items');
@@ -307,9 +305,7 @@ class BoardController extends AdminController
         $validator->equal($token, $_SESSION['token'], __('validator.token'));
 
         if ($validator->isValid()) {
-
             $item->delete();
-
             $item->category->decrement('count_items');
 
             clearCache(['statBoards', 'recentBoards']);
@@ -338,7 +334,7 @@ class BoardController extends AdminController
         if ($token === $_SESSION['token']) {
             restatement('boards');
 
-            setFlash('success', 'Объявления успешно пересчитаны!');
+            setFlash('success', __('boards.items_success_recounted'));
         } else {
             setFlash('danger', __('validator.token'));
         }

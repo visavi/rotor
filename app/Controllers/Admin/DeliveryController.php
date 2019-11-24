@@ -41,7 +41,7 @@ class DeliveryController extends AdminController
 
             $validator->equal($token, $_SESSION['token'], ['msg' => __('validator.token')])
                 ->length($msg, 5, setting('comment_length'), ['msg' => __('validator.text')])
-                ->between($type, 1, 4, 'Вы не выбрали получаетелей рассылки!');
+                ->between($type, 1, 4, __('admin.delivery.not_recipients_selected'));
 
             // Рассылка пользователям, которые в онлайне
             if ($type === 1) {
@@ -69,7 +69,7 @@ class DeliveryController extends AdminController
             });
 
             if ($users->isEmpty()) {
-                $validator->addError('Отсутствуют получатели рассылки!');
+                $validator->addError(__('admin.delivery.not_recipients'));
             }
 
             if ($validator->isValid()) {
@@ -77,7 +77,7 @@ class DeliveryController extends AdminController
                     $user->sendMessage(null, $msg);
                 }
 
-                setFlash('success', 'Сообщение успешно разослано!');
+                setFlash('success', __('admin.delivery.success_sent'));
                 redirect('/admin/delivery');
             } else {
                 setInput($request->all());

@@ -59,7 +59,7 @@ class CheckerController extends AdminController
 
             file_put_contents(STORAGE . '/caches/checker.php', json_encode($files));
 
-            setFlash('success', 'Сайт успешно просканирован!');
+            setFlash('success', __('admin.checkers.success_crawled'));
         } else {
             setFlash('danger', __('validator.token'));
         }

@@ -43,7 +43,7 @@ class ChatController extends AdminController
                     (utfStrlen($msg) + utfStrlen($post->text) <= 1500)
                 ) {
 
-                    $newpost = $post->text . "\n\n" . '[i][size=1]Добавлено через ' . makeTime(SITETIME - $post->created_at) . ' сек.[/size][/i]' . "\n" . $msg;
+                    $newpost = $post->text . PHP_EOL . PHP_EOL . '[i][size=1]' . __('admin.chat.post_added_after', ['sec' => makeTime(SITETIME - $post->created_at)]) . '[/size][/i]' . PHP_EOL . $msg;
 
                     $post->update([
                         'text' => $newpost,
@@ -95,7 +95,7 @@ class ChatController extends AdminController
         $post = Chat::query()->where('user_id', getUser('id'))->find($id);
 
         if (! $post) {
-            abort('default', 'Сообщение удалено или вы не автор этого сообщения!');
+            abort('default', __('main.message_deleted'));
         }
 
         if ($post->created_at + 600 < SITETIME) {
@@ -141,12 +141,12 @@ class ChatController extends AdminController
 
         $validator
             ->equal($token, $_SESSION['token'], __('validator.token'))
-            ->true(isAdmin(User::BOSS), 'Очищать чат может только владелец!');
+            ->true(isAdmin(User::BOSS), __('main.page_only_admins'));
 
         if ($validator->isValid()) {
              Chat::query()->truncate();
 
-            setFlash('success', 'Админ-чат успешно очищен!');
+            setFlash('success', __('admin.chat.success_cleared'));
         } else {
             setFlash('danger', $validator->getErrors());
         }

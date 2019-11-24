@@ -51,7 +51,7 @@ class AddOtherToNotices extends AbstractMigration
             ],
             [
                 'type'      => 'rating',
-                'name'      => 'Перевод денег',
+                'name'      => 'Изменение репутации',
                 'text'      => 'Пользователь @%login% поставил вам %vote%! (Ваш рейтинг: %rating%)
 Комментарий: %comment%',
                 'user_id'    => 1,

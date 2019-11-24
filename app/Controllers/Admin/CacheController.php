@@ -70,7 +70,7 @@ class CacheController extends AdminController
                 }
             }
 
-            setFlash('success', 'Кеш успешно очищен!');
+            setFlash('success', __('admin.caches.success_cleared'));
         } else {
             setFlash('danger', __('validator.token'));
         }
