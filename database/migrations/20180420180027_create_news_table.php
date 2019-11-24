@@ -20,6 +20,7 @@ class CreateNewsTable extends AbstractMigration
                 ->addColumn('count_comments', 'integer', ['default' => 0])
                 ->addColumn('closed', 'boolean', ['default' => 0])
                 ->addColumn('top', 'boolean', ['default' => 0])
+                ->addColumn('rating', 'integer', ['default' => 0])
                 ->addIndex('created_at')
                 ->create();
         }

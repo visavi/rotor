@@ -45,6 +45,8 @@ class BlacklistController extends AdminController
      */
     public function index(Request $request, Validator $validator): string
     {
+        $type = $this->type;
+
         if ($request->isMethod('post')) {
             $token = check($request->input('token'));
             $value = check(utfLower($request->input('value')));
@@ -84,8 +86,6 @@ class BlacklistController extends AdminController
                 setFlash('danger', $validator->getErrors());
             }
         }
-
-        $type = $this->type;
 
         $lists = BlackList::query()
             ->where('type', $type)

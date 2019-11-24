@@ -169,7 +169,7 @@ class DownController extends BaseController
         $cid = int($request->input('cid'));
 
         if (! isAdmin() && ! setting('downupload')) {
-            abort('default', 'Загрузка файлов запрещена администрацией сайта!');
+            abort('default', __('loads.down_closed'));
         }
 
         if (! $user = getUser()) {

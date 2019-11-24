@@ -12,7 +12,7 @@ class CreateGuestbooksTable extends AbstractMigration
         if (! $this->hasTable('guestbooks')) {
             $table = $this->table('guestbooks', ['engine' => config('DB_ENGINE'), 'collation' => config('DB_COLLATION')]);
             $table
-                ->addColumn('user_id', 'integer')
+                ->addColumn('user_id', 'integer', ['null' => true])
                 ->addColumn('text', 'text', ['null' => true])
                 ->addColumn('ip', 'string', ['limit' => 15])
                 ->addColumn('brow', 'string', ['limit' => 25])
