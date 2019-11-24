@@ -33,10 +33,15 @@ class ErrorController extends AdminController
         }
 
         $this->code  = int(request()->input('code', 404));
-        $this->lists = [403 => 'Ошибки 403', 404 => 'Ошибки 404', 405 => 'Ошибки 405', 666 => 'Автобаны'];
+        $this->lists = [
+            403 => __('admin.errors.errors', ['code' => 403]),
+            404 => __('admin.errors.errors', ['code' => 404]),
+            405 => __('admin.errors.errors', ['code' => 405]),
+            666 => __('admin.errors.autobans'),
+        ];
 
         if (! isset($this->lists[$this->code])) {
-            abort(404, 'Указанный лог-файл не существует!');
+            abort(404, __('admin.errors.logs_not_exist'));
         }
     }
 
@@ -73,13 +78,12 @@ class ErrorController extends AdminController
 
         $validator
             ->equal($token, $_SESSION['token'], __('validator.token'))
-            ->true(isAdmin(User::BOSS), 'Очищать логи может только владелец!');
+            ->true(isAdmin(User::BOSS), __('main.page_only_admins'));
 
         if ($validator->isValid()) {
-
             Error::query()->truncate();
 
-            setFlash('success', 'Логи успешно очищены!');
+            setFlash('success', __('admin.errors.success_cleared'));
         } else {
             setFlash('danger', $validator->getErrors());
         }

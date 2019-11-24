@@ -35,9 +35,8 @@ class DelUserController extends AdminController
         $point  = check($request->input('point'));
 
         if ($request->isMethod('post')) {
-
             if ($period < 180) {
-                abort('default', 'Указанно недопустимое время для удаления!');
+                abort('default', __('admin.delusers.invalid_period'));
             }
 
             $users = User::query()
@@ -46,7 +45,7 @@ class DelUserController extends AdminController
                 ->get();
 
             if ($users->isEmpty()) {
-                abort('default', 'Отсутствуют пользователи для удаления!');
+                abort('default', __('admin.delusers.users_not_found'));
             }
         }
 
@@ -70,14 +69,14 @@ class DelUserController extends AdminController
 
         $validator
             ->equal($token, $_SESSION['token'], __('validator.token'))
-            ->gte($period, 180, 'Указанно недопустимое время для удаления!');
+            ->gte($period, 180, __('admin.delusers.invalid_period'));
 
         $users = User::query()
             ->where('updated_at', '<', strtotime('-' . $period . ' days', SITETIME))
             ->where('point', '<=', $point)
             ->get();
 
-        $validator->true($users->isNotEmpty(), 'Отсутствуют пользователи для удаления!');
+        $validator->true($users->isNotEmpty(), __('admin.delusers.users_not_found'));
 
         if ($validator->isValid()) {
             foreach ($users as $user) {
@@ -85,7 +84,7 @@ class DelUserController extends AdminController
                 $user->delete();
             }
 
-            setFlash('success', 'Пользователи успешно удалены!');
+            setFlash('success', __('admin.delusers.success_deleted'));
         } else {
             setFlash('danger', $validator->getErrors());
         }
