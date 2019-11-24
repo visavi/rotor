@@ -29,7 +29,7 @@ class BoardController extends AdminController
             $board = Board::query()->find($id);
 
             if (! $board) {
-                abort(404, 'Категория не найдена!');
+                abort(404, __('boards.category_not_exist'));
             }
         }
 
@@ -226,7 +226,7 @@ class BoardController extends AdminController
         $item = Item::query()->find($id);
 
         if (! $item) {
-            abort(404, 'Данного объявления не существует!');
+            abort(404, __('boards.item_not_exist'));
         }
 
         if ($request->isMethod('post')) {
@@ -245,10 +245,10 @@ class BoardController extends AdminController
                 ->length($title, 5, 50, ['title' => __('validator.text')])
                 ->length($text, 50, 5000, ['text' => __('validator.text')])
                 ->regex($phone, '#^\d{11}$#', ['phone' => __('validator.phone')], false)
-                ->notEmpty($board, ['bid' => 'Категории для данного объявления не существует!']);
+                ->notEmpty($board, ['bid' => __('boards.category_not_exist')]);
 
             if ($board) {
-                $validator->empty($board->closed, ['bid' => 'В данный раздел запрещено добавлять объявления!']);
+                $validator->empty($board->closed, ['bid' => __('boards.category_closed')]);
             }
 
             if ($validator->isValid()) {
@@ -268,7 +268,7 @@ class BoardController extends AdminController
                 ]);
 
                 clearCache(['statBoards', 'recentBoards']);
-                setFlash('success', 'Объявление успешно отредактировано!');
+                setFlash('success', __('boards.item_success_edited'));
                 redirect('/admin/items/edit/' . $item->id);
             } else {
                 setInput($request->all());
@@ -301,7 +301,7 @@ class BoardController extends AdminController
         $item = Item::query()->find($id);
 
         if (! $item) {
-            abort(404, 'Данного объявления не существует!');
+            abort(404, __('boards.item_not_exist'));
         }
 
         $validator->equal($token, $_SESSION['token'], __('validator.token'));
@@ -313,7 +313,7 @@ class BoardController extends AdminController
             $item->category->decrement('count_items');
 
             clearCache(['statBoards', 'recentBoards']);
-            setFlash('success', 'Объявление успешно удалено!');
+            setFlash('success', __('boards.item_success_deleted'));
         } else {
             setFlash('danger', $validator->getErrors());
         }

@@ -39,7 +39,7 @@
                                         @if ($item->expires_at > SITETIME)
                                             <i class="fas fa-clock"></i> {{ __('boards.expires_in') }} {{ formatTime($item->expires_at - SITETIME) }}
                                         @else
-                                            <span class="badge badge-danger">{{ __('boards.not_active_item') }}</span>
+                                            <span class="badge badge-danger">{{ __('boards.item_not_active') }}</span>
                                         @endif
                                     </p>
                                 </div>

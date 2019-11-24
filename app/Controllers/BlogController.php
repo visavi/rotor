@@ -259,7 +259,7 @@ class BlogController extends BaseController
                 ->equal($token, $_SESSION['token'], __('validator.token'))
                 ->length($title, 5, 50, ['title' => __('validator.text')])
                 ->length($text, 100, setting('maxblogpost'), ['text' => __('validator.text')])
-                ->length($tags, 2, 50, ['tags' => 'Слишком длинные или короткие метки статьи!'])
+                ->length($tags, 2, 50, ['tags' => __('blogs.article_error_tags')])
                 ->false($flood->isFlood(), ['msg' => __('validator.flood', ['sec' => $flood->getPeriod()])])
                 ->notEmpty($category, ['cid' => __('blogs.category_not_exist')]);
 
@@ -500,7 +500,7 @@ class BlogController extends BaseController
             ->get();
 
         if ($blogs->isEmpty()) {
-            abort('default', 'Блоги не найдены!');
+            abort('default', __('blogs.categories_not_created'));
         }
 
         return view('blogs/rss', compact('blogs'));
@@ -568,7 +568,7 @@ class BlogController extends BaseController
         }
 
         if (utfStrlen($tag) < 2) {
-            setFlash('danger', 'Необходимо не менее 2-х символов в запросе!');
+            setFlash('danger', __('blogs.tag_search_rule'));
             redirect('/blogs/tags');
         }
 

@@ -32,7 +32,7 @@
 
 @section('content')
     @if ($item->expires_at <= SITETIME)
-        <div class="alert alert-danger">{{ __('boards.not_active_item') }}</div>
+        <div class="alert alert-danger">{{ __('boards.item_not_active') }}</div>
     @endif
 
     @if (isAdmin())

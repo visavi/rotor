@@ -136,8 +136,8 @@ class AjaxController extends BaseController
 
         $validator
             ->equal($token, $_SESSION['token'], __('validator.token'))
-            ->true($data, 'Выбранное вами сообщение для жалобы не существует!')
-            ->false($spam, 'Жалоба на данное сообщение уже отправлена!');
+            ->true($data, __('main.message_not_found'))
+            ->false($spam, __('ajax.complaint_already_sent'));
 
         if ($validator->isValid()) {
             Spam::query()->create([
@@ -167,7 +167,10 @@ class AjaxController extends BaseController
     public function delComment(Request $request, Validator $validator): string
     {
         if (! isAdmin()) {
-            return json_encode(['status' => 'error', 'message' => 'Not authorized']);
+            return json_encode([
+                'status'  => 'error',
+                'message' => __('main.not_authorized'),
+            ]);
         }
 
         $token = check($request->input('token'));
@@ -391,8 +394,8 @@ class AjaxController extends BaseController
         }
 
         $validator->equal($token, $_SESSION['token'], __('validator.token'))
-            ->true($file->user_id === getUser('id') || isAdmin(), 'Удаление невозможно, вы не автор данного файла!')
-            ->true(! $file->relate_id || isAdmin(), 'Нельзя удалять уже прикрепленный файл!');
+            ->true($file->user_id === getUser('id') || isAdmin(), __('ajax.image_not_author'))
+            ->true(! $file->relate_id || isAdmin(), __('ajax.image_delete_attached'));
 
         if ($validator->isValid()) {
             deleteFile(HOME . $file->hash);
@@ -420,7 +423,7 @@ class AjaxController extends BaseController
         if (! $request->ajax()) {
             exit(json_encode([
                 'status'  => 'error',
-                'message' => 'This is not ajax request'
+                'message' => __('validator.not_ajax')
             ]));
         }
 
@@ -437,7 +440,7 @@ class AjaxController extends BaseController
         if (! getUser()) {
             exit(json_encode([
                 'status'  => 'error',
-                'message' => 'Not authorized'
+                'message' => __('main.not_authorized')
             ]));
         }
 

@@ -136,7 +136,7 @@ class PhotoController extends BaseController
         $photo = Photo::query()->where('user_id', getUser('id'))->find($id);
 
         if (! $photo) {
-            abort(404, __('photos.photo_not_yours'));
+            abort(404, __('photos.photo_not_author'));
         }
 
         if ($request->isMethod('post')) {
@@ -330,7 +330,7 @@ class PhotoController extends BaseController
         $photo = Photo::query()->where('user_id', getUser('id'))->find($id);
 
         if (! $photo) {
-            abort(404, __('photos.photo_not_yours'));
+            abort(404, __('photos.photo_not_author'));
         }
 
         $validator

@@ -30,7 +30,7 @@ class BoardController extends BaseController
             $board = Board::query()->find($id);
 
             if (! $board) {
-                abort(404, 'Категория не найдена!');
+                abort(404, __('boards.category_not_exist'));
             }
         }
 
@@ -64,11 +64,11 @@ class BoardController extends BaseController
             ->find($id);
 
         if (! $item) {
-            abort(404, 'Объявление не найдено!');
+            abort(404, __('boards.item_not_exist'));
         }
 
         if ($item->expires_at <= SITETIME && $item->user_id !== getUser('id')) {
-            abort('default', 'Объявление не активно или истек срок размещения!');
+            abort('default', __('boards.item_not_active'));
         }
 
         return view('boards/view', compact('item'));
@@ -97,7 +97,7 @@ class BoardController extends BaseController
             ->get();
 
         if ($boards->isEmpty()) {
-            abort('default', 'Разделы объявлений еще не созданы!');
+            abort('default', __('boards.categories_not_created'));
         }
 
         if ($request->isMethod('post')) {
@@ -117,10 +117,10 @@ class BoardController extends BaseController
                 ->length($text, 50, 5000, ['text' => __('validator.text')])
                 ->regex($phone, '#^\d{11}$#', ['phone' => __('validator.phone')], false)
                 ->false($flood->isFlood(), ['msg' => __('validator.flood', ['sec' => $flood->getPeriod()])])
-                ->notEmpty($board, ['category' => 'Категории для данного объявления не существует!']);
+                ->notEmpty($board, ['category' => __('boards.category_not_exist')]);
 
             if ($board) {
-                $validator->empty($board->closed, ['category' => 'В данный раздел запрещено добавлять объявления!']);
+                $validator->empty($board->closed, ['category' => __('boards.category_closed')]);
             }
 
             if ($validator->isValid()) {
@@ -148,7 +148,7 @@ class BoardController extends BaseController
                 clearCache(['statBoards', 'recentBoards']);
                 $flood->saveState();
 
-                setFlash('success', 'Объявления успешно добавлено!');
+                setFlash('success', __('boards.item_success_added'));
                 redirect('/items/' . $item->id);
             } else {
                 setInput($request->all());
@@ -183,7 +183,7 @@ class BoardController extends BaseController
         $item = Item::query()->find($id);
 
         if (! $item) {
-            abort(404, 'Данного объявления не существует!');
+            abort(404, __('boards.item_not_exist'));
         }
 
         if ($request->isMethod('post')) {
@@ -202,11 +202,11 @@ class BoardController extends BaseController
                 ->length($title, 5, 50, ['title' => __('validator.text')])
                 ->length($text, 50, 5000, ['text' => __('validator.text')])
                 ->regex($phone, '#^\d{11}$#', ['phone' => __('validator.phone')], false)
-                ->notEmpty($board, ['category' => 'Категории для данного объявления не существует!'])
-                ->equal($item->user_id, getUser('id'), 'Изменение невозможно, вы не автор данного объявления!');
+                ->notEmpty($board, ['category' => __('boards.category_not_exist')])
+                ->equal($item->user_id, getUser('id'), __('boards.item_not_author'));
 
             if ($board) {
-                $validator->empty($board->closed, ['category' => 'В данный раздел запрещено добавлять объявления!']);
+                $validator->empty($board->closed, ['category' => __('boards.category_closed')]);
             }
 
             if ($validator->isValid()) {
@@ -225,7 +225,7 @@ class BoardController extends BaseController
                 ]);
 
                 clearCache(['statBoards', 'recentBoards']);
-                setFlash('success', 'Объявление успешно отредактировано!');
+                setFlash('success', __('boards.item_success_edited'));
                 redirect('/items/' . $item->id);
             } else {
                 setInput($request->all());
@@ -261,22 +261,22 @@ class BoardController extends BaseController
         $item = Item::query()->find($id);
 
         if (! $item) {
-            abort(404, 'Данного объявления не существует!');
+            abort(404, __('boards.item_not_exist'));
         }
 
         $validator->equal($token, $_SESSION['token'], __('validator.token'))
-            ->equal($item->user_id, getUser('id'), 'Изменение невозможно, вы не автор данного объявления!');
+            ->equal($item->user_id, getUser('id'), __('boards.item_not_author'));
 
         if ($validator->isValid()) {
             if ($item->expires_at > SITETIME) {
-                $type = 'снято с публикации';
+                $status = __('boards.item_success_unpublished');
                 $item->update([
                     'expires_at' => SITETIME,
                 ]);
 
                 $item->category->decrement('count_items');
             } else {
-                $type    = 'опубликовано';
+                $status  = __('boards.item_success_published');
                 $expired = strtotime('+1 month', $item->updated_at) <= SITETIME;
 
                 $item->update([
@@ -287,7 +287,7 @@ class BoardController extends BaseController
                 $item->category->increment('count_items');
             }
 
-            setFlash('success', 'Объявление успешно ' . $type . '!');
+            setFlash('success', $status);
         } else {
             setFlash('danger', $validator->getErrors());
         }
@@ -315,11 +315,11 @@ class BoardController extends BaseController
         $item = Item::query()->find($id);
 
         if (! $item) {
-            abort(404, 'Данного объявления не существует!');
+            abort(404, __('boards.item_not_exist'));
         }
 
         $validator->equal($token, $_SESSION['token'], __('validator.token'))
-            ->equal($item->user_id, getUser('id'), 'Удаление невозможно, вы не автор данного объявления!');
+            ->equal($item->user_id, getUser('id'), __('boards.item_not_author'));
 
         if ($validator->isValid()) {
             $item->delete();
@@ -327,7 +327,7 @@ class BoardController extends BaseController
             $item->category->decrement('count_items');
 
             clearCache(['statBoards', 'recentBoards']);
-            setFlash('success', 'Объявление успешно удалено!');
+            setFlash('success', __('boards.item_success_deleted'));
         } else {
             setFlash('danger', $validator->getErrors());
         }

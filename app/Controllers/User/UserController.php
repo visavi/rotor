@@ -260,12 +260,12 @@ class UserController extends BaseController
 
                    /** @var User $user */
                    if ($user = User::auth($login, $pass, $remember)) {
-                       setFlash('success', 'Добро пожаловать, ' . $user->login . '!');
+                       setFlash('success', __('users.welcome', ['login' => $user->login]));
                        redirect($return ?? '/');
                    }
 
                    setInput($request->all());
-                   setFlash('danger', 'Неправильный логин или пароль!');
+                   setFlash('danger', __('users.incorrect_login_or_password'));
                } else {
                    setInput($request->all());
                    setFlash('danger', __('validator.captcha'));
@@ -319,7 +319,6 @@ class UserController extends BaseController
         }
 
         if ($request->isMethod('post')) {
-
             $token    = check($request->input('token'));
             $info     = check($request->input('info'));
             $name     = check($request->input('name'));
@@ -334,8 +333,8 @@ class UserController extends BaseController
                 ->regex($site, '#^https?://([а-яa-z0-9_\-\.])+(\.([а-яa-z0-9\/])+)+$#u', ['site' => __('validator.site')], false)
                 ->regex($birthday, '#^[0-9]{2}+\.[0-9]{2}+\.[0-9]{4}$#', ['birthday' => __('validator.date')], false)
                 ->regex($phone, '#^\d{11}$#', ['phone' => __('validator.phone')], false)
-                ->length($info, 0, 1000, ['info' => 'Слишком большая информация о себе!'])
-                ->length($name, 3, 20, ['name' => 'Слишком длинное или короткое имя!'], false);
+                ->length($info, 0, 1000, ['info' => __('users.info_yourself_long')])
+                ->length($name, 3, 20, ['name' => __('users.name_short_or_long')], false);
 
             if ($validator->isValid()) {
                 $country = utfSubstr($country, 0, 30);
@@ -352,7 +351,7 @@ class UserController extends BaseController
                     'info'     => $info,
                 ]);
 
-                setFlash('success', 'Ваш профиль успешно изменен!');
+                setFlash('success', __('users.profile_success_changed'));
                 redirect('/profile');
 
             } else {
@@ -380,11 +379,11 @@ class UserController extends BaseController
         }
 
         if (! setting('regkeys')) {
-            abort('default', 'Подтверждение регистрации выключено на сайте!');
+            abort('default', __('users.confirm_registration_disabled'));
         }
 
         if ($user->level !== User::PENDED) {
-            abort(403, 'Вашему профилю не требуется подтверждение регистрации!');
+            abort(403, __('users.profile_not_confirmation'));
         }
 
         /* Повторная отправка */
@@ -396,16 +395,16 @@ class UserController extends BaseController
 
             $validator->equal($token, $_SESSION['token'], __('validator.token'))
                 ->true(captchaVerify(), ['protect' => __('validator.captcha')])
-                ->email($email, ['email' => 'Вы ввели неверный адрес email, необходим формат name@site.domen!']);
+                ->email($email, ['email' => __('validator.email')]);
 
             $regMail = User::query()->where('login', '<>', $user->login)->where('email', $email)->count();
-            $validator->empty($regMail, ['email' => 'Указанный вами адрес email уже используется в системе!']);
+            $validator->empty($regMail, ['email' => __('users.email_already_exists')]);
 
             $blackMail = BlackList::query()->where('type', 'email')->where('value', $email)->count();
-            $validator->empty($blackMail, ['email' => 'Указанный вами адрес email занесен в черный список!']);
+            $validator->empty($blackMail, ['email' => __('users.email_is_blacklisted')]);
 
             $blackDomain = Blacklist::query()->where('type', 'domain')->where('value', $domain)->count();
-            $validator->empty($blackDomain, ['email' => 'Домен от вашего адреса email занесен в черный список!']);
+            $validator->empty($blackDomain, ['email' => __('users.domain_is_blacklisted')]);
 
             if ($validator->isValid()) {
                 $activateKey  = Str::random();
@@ -424,7 +423,7 @@ class UserController extends BaseController
 
                 sendMail($email, $subject, $body);
 
-                setFlash('success', 'Новый код подтверждения успешно отправлен!');
+                setFlash('success', __('users.confirm_code_success_sent'));
                 redirect('/');
             } else {
                 setInput($request->all());
@@ -437,17 +436,16 @@ class UserController extends BaseController
             $code = check(trim($request->input('code')));
 
             if ($code === $user->confirmregkey) {
-
                 $user->update([
                     'confirmregkey' => null,
                     'level'         => User::USER,
                 ]);
 
-                setFlash('success', 'Аккаунт успешно активирован!');
+                setFlash('success', __('users.account_success_activated'));
                 redirect('/');
 
             } else {
-                setFlash('danger', 'Ключ не совпадает с данными, проверьте правильность ввода');
+                setFlash('danger', __('users.confirm_code_invalid'));
             }
         }
 
@@ -481,11 +479,11 @@ class UserController extends BaseController
             $subscribe = $request->input('subscribe') ? Str::random(32) : null;
 
             $validator->equal($token, $_SESSION['token'], __('validator.token'))
-                ->regex($themes, '|^[a-z0-9_\-]+$|i', ['themes' => 'Недопустимое название темы!'])
-                ->true(in_array($themes, $setting['themes'], true) || empty($themes), ['themes' => 'Данная тема не установлена на сайте!'])
-                ->regex($language, '|^[a-z]+$|', ['language' => 'Недопустимое название языка!'])
-                ->in($language, $setting['languages'], ['language' => 'Данный язык не установлен на сайте!'])
-                ->regex($timezone, '|^[\-\+]{0,1}[0-9]{1,2}$|', ['timezone' => 'Недопустимое значение временного сдвига. (Допустимый диапазон -12 — +12 часов)!']);
+                ->regex($themes, '|^[a-z0-9_\-]+$|i', ['themes' => __('users.theme_invalid')])
+                ->true(in_array($themes, $setting['themes'], true) || empty($themes), ['themes' => __('users.theme_not_installed')])
+                ->regex($language, '|^[a-z]+$|', ['language' => __('users.language_invalid')])
+                ->in($language, $setting['languages'], ['language' => __('users.language_not_installed')])
+                ->regex($timezone, '|^[\-\+]{0,1}[0-9]{1,2}$|', ['timezone' => __('users.timezone_invalid')]);
 
             if ($validator->isValid()) {
                 $user->update([
@@ -496,7 +494,7 @@ class UserController extends BaseController
                     'language'  => $language,
                 ]);
 
-                setFlash('success', 'Настройки успешно изменены!');
+                setFlash('success', __('users.settings_success_changed'));
                 redirect('/settings');
             } else {
                 setInput($request->all());

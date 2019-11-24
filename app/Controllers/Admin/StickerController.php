@@ -54,7 +54,7 @@ class StickerController extends AdminController
         $category = StickersCategory::query()->where('id', $id)->first();
 
         if (! $category) {
-            abort(404, 'Данной категории не существует!');
+            abort(404, __('stickers.category_not_exist'));
         }
 
         $stickers = Sticker::query()
@@ -112,7 +112,7 @@ class StickerController extends AdminController
         $category = StickersCategory::query()->find($id);
 
         if (! $category) {
-            abort(404, 'Данной категории не существует!');
+            abort(404, __('stickers.category_not_exist'));
         }
 
         if ($request->isMethod('post')) {
@@ -153,7 +153,7 @@ class StickerController extends AdminController
         $category = StickersCategory::query()->find($id);
 
         if (! $category) {
-            abort(404, 'Данной категории не существует!');
+            abort(404, __('stickers.category_not_exist'));
         }
 
         $token = check($request->input('token'));
@@ -207,7 +207,7 @@ class StickerController extends AdminController
                 ->regex($code, '|^:+[a-яa-z0-9_\-/\(\)]+$|i', ['code' => 'Код стикера должен начинаться с двоеточия. Разрешены буквы, цифры и дефис!']);
 
             $category = StickersCategory::query()->where('id', $cid)->first();
-            $validator->notEmpty($category, ['category' => 'Данной категории не существует!']);
+            $validator->notEmpty($category, ['category' => __('stickers.category_not_exist')]);
 
             $duplicate = Sticker::query()->where('code', $code)->first();
             $validator->empty($duplicate, ['code' => 'Стикер с данным кодом уже имеется в списке!']);
@@ -275,7 +275,7 @@ class StickerController extends AdminController
             $validator->empty($duplicate, ['code' => 'Стикер с данным кодом уже имеется в списке!']);
 
             $category = StickersCategory::query()->where('id', $cid)->first();
-            $validator->notEmpty($category, ['category' => 'Данной категории не существует!']);
+            $validator->notEmpty($category, ['category' => __('stickers.category_not_exist')]);
 
             if ($validator->isValid()) {
                 $sticker->update([

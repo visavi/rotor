@@ -329,7 +329,7 @@ class User extends BaseModel
                 $_SESSION['id']       = $user->id;
                 $_SESSION['password'] = md5(config('APP_KEY') . $user->password);
 
-                setFlash('success', 'Добро пожаловать, ' . $user->login . '!');
+                setFlash('success', __('users.welcome', ['login' => $user->login]));
                 redirect('/');
             }
         }

@@ -18,7 +18,7 @@ class AdvertController extends BaseController
         parent::__construct();
 
         if (! setting('rekusershow')) {
-            abort('default', 'Показ и размещение рекламы запрещено администрацией сайта!');
+            abort('default', __('adverts.advert_closed'));
         }
     }
 
@@ -52,12 +52,12 @@ class AdvertController extends BaseController
         }
 
         if (getUser('point') < setting('rekuserpoint')) {
-            abort('default', 'Для покупки рекламы вам необходимо набрать '.plural(50, setting('scorename')).'!');
+            abort('default', __('adverts.advert_point', ['point' => plural(50, setting('scorename'))]));
         }
 
         $total = Advert::query()->where('deleted_at', '>', SITETIME)->count();
         if ($total >= setting('rekusertotal')) {
-            abort('default', 'В данный момент нет свободных мест для размещения рекламы!');
+            abort('default', __('adverts.advert_not_seats'));
         }
 
         $advert = Advert::query()
@@ -66,7 +66,7 @@ class AdvertController extends BaseController
             ->first();
 
         if ($advert) {
-            abort('default', 'Вы уже разместили рекламу, запрещено добавлять несколько сайтов подряд!');
+            abort('default', __('adverts.advert_already_posted'));
         }
 
         if ($request->isMethod('post')) {
@@ -87,13 +87,13 @@ class AdvertController extends BaseController
             }
 
             $validator->equal($token, $_SESSION['token'], __('validator.token'))
-                ->gte(getUser('point'), setting('rekuserpoint'), 'Для покупки рекламы вам необходимо набрать '.plural(50, setting('scorename')).'!')
+                ->gte(getUser('point'), setting('rekuserpoint'), __('adverts.advert_point', ['point' => plural(50, setting('scorename'))]))
                 ->true(captchaVerify(), ['protect' => __('validator.captcha')])
                 ->regex($site, '|^https?://([а-яa-z0-9_\-\.])+(\.([а-яa-z0-9\/\-?_=#])+)+$|iu', ['site' => __('validator.url')])
                 ->length($site, 5, 100, ['site' => __('validator.url_text')])
                 ->length($name, 5, 35, ['name' => __('validator.text')])
                 ->regex($color, '|^#+[A-f0-9]{6}$|', ['color' => __('validator.color')], false)
-                ->gte(getUser('money'), $price, ['Для покупки рекламы у вас недостаточно денег!']);
+                ->gte(getUser('money'), $price, __('adverts.advert_not_money'));
 
             if ($validator->isValid()) {
                 Advert::query()->where('deleted_at', '<', SITETIME)->delete();
@@ -105,14 +105,14 @@ class AdvertController extends BaseController
                     'bold'       => $bold,
                     'user_id'    => getUser('id'),
                     'created_at' => SITETIME,
-                    'deleted_at' => SITETIME + (setting('rekusertime') * 3600),
+                    'deleted_at' => strtotime('+' . setting('rekusertime') . ' hours', SITETIME),
                 ]);
 
                 getUser()->decrement('money', $price);
 
                 clearCache('adverts');
 
-                setFlash('success', 'Рекламная ссылка успешно размещена');
+                setFlash('success', __('adverts.advert_success_posted'));
                 redirect('/adverts');
             } else {
                 setInput($request->all());
