@@ -33,23 +33,25 @@
                         {!! $data->user->getOnline() !!}
                     </div>
 
-                    <div class="float-right">
-                        @if (getUser('id') !== $data->user_id)
-                            <a href="#" onclick="return postReply(this)" title="{{ __('main.reply') }}"><i class="fa fa-reply text-muted"></i></a>
+                    @if (getUser())
+                        <div class="float-right">
+                            @if (getUser('id') !== $data->user_id)
+                                <a href="#" onclick="return postReply(this)" title="{{ __('main.reply') }}"><i class="fa fa-reply text-muted"></i></a>
 
-                            <a href="#" onclick="return postQuote(this)" title="{{ __('main.quote') }}"><i class="fa fa-quote-right text-muted"></i></a>
+                                <a href="#" onclick="return postQuote(this)" title="{{ __('main.quote') }}"><i class="fa fa-quote-right text-muted"></i></a>
 
-                            <a href="#" onclick="return sendComplaint(this)" data-type="{{ App\Models\Blog::class }}" data-id="{{ $data->id }}" data-token="{{ $_SESSION['token'] }}" data-page="{{ $comments->currentPage() }}" rel="nofollow" title="{{ __('main.complain') }}"><i class="fa fa-bell text-muted"></i></a>
-                        @endif
+                                <a href="#" onclick="return sendComplaint(this)" data-type="{{ App\Models\Blog::class }}" data-id="{{ $data->id }}" data-token="{{ $_SESSION['token'] }}" data-page="{{ $comments->currentPage() }}" rel="nofollow" title="{{ __('main.complain') }}"><i class="fa fa-bell text-muted"></i></a>
+                            @endif
 
-                        @if ($data->created_at + 600 > SITETIME && getUser('id') === $data->user->id)
-                            <a href="/articles/edit/{{ $blog->id }}/{{ $data->id }}?page={{ $comments->currentPage() }}" data-toggle="tooltip" title="{{ __('main.edit') }}"><i class="fa fa-pencil-alt text-muted"></i></a>
-                        @endif
+                            @if ($data->created_at + 600 > SITETIME && getUser('id') === $data->user->id)
+                                <a href="/articles/edit/{{ $blog->id }}/{{ $data->id }}?page={{ $comments->currentPage() }}" data-toggle="tooltip" title="{{ __('main.edit') }}"><i class="fa fa-pencil-alt text-muted"></i></a>
+                            @endif
 
-                        @if (isAdmin())
-                            <a href="#" onclick="return deleteComment(this)" data-rid="{{ $data->relate_id }}" data-id="{{ $data->id }}" data-type="{{ App\Models\Blog::class }}" data-token="{{ $_SESSION['token'] }}" data-toggle="tooltip" title="{{ __('main.delete') }}"><i class="fa fa-times text-muted"></i></a>
-                        @endif
-                    </div>
+                            @if (isAdmin())
+                                <a href="#" onclick="return deleteComment(this)" data-rid="{{ $data->relate_id }}" data-id="{{ $data->id }}" data-type="{{ App\Models\Blog::class }}" data-token="{{ $_SESSION['token'] }}" data-toggle="tooltip" title="{{ __('main.delete') }}"><i class="fa fa-times text-muted"></i></a>
+                            @endif
+                        </div>
+                    @endif
 
                     <b>{!! $data->user->getProfile() !!}</b> <small>({{ dateFixed($data->created_at) }})</small><br>
                     {!! $data->user->getStatus() !!}

@@ -86,11 +86,11 @@ class FileController extends AdminController
             ($this->path && ! preg_match('#^([a-z0-9_\-/]+|)$#', $this->path))
             || ! preg_match('#^[a-z0-9_\-/]+$#', $this->file)
         ) {
-            abort(404, 'Недопустимое название страницы!');
+            abort(404, __('admin.files.file_invalid'));
         }
 
         if (! file_exists(RESOURCES . '/views/' . $this->path . $file . '.blade.php')) {
-            abort(404, 'Данного файла не существует!');
+            abort(404, __('admin.files.file_not_exist'));
         }
 
         if ($request->isMethod('post')) {
@@ -103,7 +103,7 @@ class FileController extends AdminController
             if ($validator->isValid()) {
                 file_put_contents(RESOURCES . '/views/' . $this->path . $file . '.blade.php', $msg);
 
-                setFlash('success', 'Файл успешно сохранен!');
+                setFlash('success', __('admin.files.file_success_saved'));
                 redirect ('/admin/files/edit?path=' . $this->path . '&file=' . $this->file);
             } else {
                 setInput($request->all());
@@ -127,7 +127,7 @@ class FileController extends AdminController
     public function create(Request $request, Validator $validator): string
     {
         if (! is_writable(RESOURCES . '/views/' . $this->path)) {
-            abort('default', 'Директория ' . $this->path . ' недоступна для записи!');
+            abort('default', __('admin.files.directory_not_writable', ['dir' => $this->path]));
         }
 
         if ($request->isMethod('post')) {
@@ -141,13 +141,13 @@ class FileController extends AdminController
             $validator->equal($token, $_SESSION['token'], __('validator.token'));
 
             if ($filename) {
-                $validator->length($filename, 1, 30, ['filename' => 'Необходимо ввести название файла!']);
-                $validator->false(file_exists(RESOURCES . '/views/' . $this->path . $fileName . '.blade.php'), ['filename' => 'Файл с данным названием уже существует!']);
-                $validator->regex($filename, '|^[a-z0-9_\-]+$|', ['filename' => 'Недопустимое название файла!']);
+                $validator->length($filename, 1, 30, ['filename' => __('admin.files.file_required')]);
+                $validator->false(file_exists(RESOURCES . '/views/' . $this->path . $fileName . '.blade.php'), ['filename' => __('admin.files.file_exist')]);
+                $validator->regex($filename, '|^[a-z0-9_\-]+$|', ['filename' => __('admin.files.file_invalid')]);
             } else {
-                $validator->length($dirname, 1, 30, ['dirname' => 'Необходимо ввести название директории!']);
-                $validator->false(file_exists(RESOURCES . '/views/' . $this->path . $dirName), ['dirname' => 'Директория с данным названием уже существует!']);
-                $validator->regex($dirname, '|^[a-z0-9_\-]+$|', ['dirname' => 'Недопустимое название директории!']);
+                $validator->length($dirname, 1, 30, ['dirname' => __('admin.files.directory_required')]);
+                $validator->false(file_exists(RESOURCES . '/views/' . $this->path . $dirName), ['dirname' => __('admin.files.directory_exist')]);
+                $validator->regex($dirname, '|^[a-z0-9_\-]+$|', ['dirname' => __('admin.files.directory_invalid')]);
             }
 
             if ($validator->isValid()) {
@@ -155,7 +155,7 @@ class FileController extends AdminController
                     file_put_contents(RESOURCES . '/views/' . $this->path . $fileName . '.blade.php', '');
                     chmod(RESOURCES.'/views/' . $this->path . $fileName . '.blade.php', 0666);
 
-                    setFlash('success', 'Новый файл успешно создан!');
+                    setFlash('success', __('admin.files.file_success_created'));
                     redirect('/admin/files/edit?path=' . $this->path . '&file=' . $filename);
                 } else {
 
@@ -163,7 +163,7 @@ class FileController extends AdminController
                     mkdir(RESOURCES . '/views/' . $this->path . $dirName, 0777, true);
                     umask($old);
 
-                    setFlash('success', 'Новая директория успешно создана!');
+                    setFlash('success', __('admin.files.directory_success_created'));
                     redirect('/admin/files?path=' . $this->path . $dirName);
                 }
             } else {
@@ -186,7 +186,7 @@ class FileController extends AdminController
     public function delete(Request $request, Validator $validator): void
     {
         if (! is_writable(RESOURCES . '/views/' . $this->path)) {
-            abort('default', 'Директория ' . $this->path . ' недоступна для записи!');
+            abort('default', __('admin.files.directory_not_writable', ['dir' => $this->path]));
         }
 
         $token    = check($request->input('token'));
@@ -199,20 +199,20 @@ class FileController extends AdminController
         $validator->equal($token, $_SESSION['token'], __('validator.token'));
 
         if ($filename) {
-            $validator->true(file_exists(RESOURCES . '/views/' . $this->path . $fileName . '.blade.php'), 'Данного файла не существует!');
-            $validator->regex($filename, '|^[a-z0-9_\-]+$|', 'Недопустимое название файла!');
+            $validator->true(file_exists(RESOURCES . '/views/' . $this->path . $fileName . '.blade.php'), __('admin.files.file_not_exist'));
+            $validator->regex($filename, '|^[a-z0-9_\-]+$|', __('admin.files.file_invalid'));
         } else {
-            $validator->true(file_exists(RESOURCES . '/views/' . $this->path . $dirName), 'Данной директории не существует!');
-            $validator->regex($dirname, '|^[a-z0-9_\-]+$|', 'Недопустимое название директории!');
+            $validator->true(file_exists(RESOURCES . '/views/' . $this->path . $dirName), __('admin.files.directory_not_exist'));
+            $validator->regex($dirname, '|^[a-z0-9_\-]+$|', __('admin.files.directory_invalid'));
         }
 
         if ($validator->isValid()) {
             if ($filename) {
                 unlink(RESOURCES . '/views/' . $this->path . $fileName . '.blade.php');
-                setFlash('success', 'Файл успешно удален!');
+                setFlash('success', __('admin.files.file_success_deleted'));
             } else {
                 deleteDir(RESOURCES . '/views/' . $this->path . $dirName);
-                setFlash('success', 'Директория успешно удалена!');
+                setFlash('success', __('admin.files.directory_success_deleted'));
             }
         } else {
             setFlash('danger', $validator->getErrors());
