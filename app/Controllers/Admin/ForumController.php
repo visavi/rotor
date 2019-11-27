@@ -60,7 +60,7 @@ class ForumController extends AdminController
                 'sort'  => $max,
             ]);
 
-            setFlash('success', 'Новый раздел успешно создан!');
+            setFlash('success', __('forums.forum_success_created'));
             redirect('/admin/forums/edit/' . $forum->id);
         } else {
             setInput($request->all());
@@ -107,10 +107,10 @@ class ForumController extends AdminController
             $validator->equal($token, $_SESSION['token'], __('validator.token'))
                 ->length($title, 5, 50, ['title' => __('validator.text')])
                 ->length($description, 0, 100, ['description' => __('validator.text')])
-                ->notEqual($parent, $forum->id, ['parent' => 'Недопустимый выбор родительского раздела!']);
+                ->notEqual($parent, $forum->id, ['parent' => __('forums.forum_invalid')]);
 
             if (! empty($parent) && $forum->children->isNotEmpty()) {
-                $validator->addError(['parent' => 'Текущий раздел имеет подфорумы!']);
+                $validator->addError(['parent' => __('forums.forum_has_subforums')]);
             }
 
             if ($validator->isValid()) {
@@ -123,7 +123,7 @@ class ForumController extends AdminController
                     'closed'      => $closed,
                 ]);
 
-                setFlash('success', 'Раздел успешно отредактирован!');
+                setFlash('success', __('forums.forum_success_edited'));
                 redirect('/admin/forums');
             } else {
                 setInput($request->all());
@@ -159,18 +159,18 @@ class ForumController extends AdminController
         $token = check($request->input('token'));
 
         $validator->equal($token, $_SESSION['token'], __('validator.token'))
-            ->true($forum->children->isEmpty(), 'Удаление невозможно! Данный раздел имеет подфорумы!');
+            ->true($forum->children->isEmpty(), __('forums.forum_has_subforums'));
 
         $topic = Topic::query()->where('forum_id', $forum->id)->first();
         if ($topic) {
-            $validator->addError('Удаление невозможно! В данном разделе имеются темы!');
+            $validator->addError(__('forums.forum_has_topics'));
         }
 
         if ($validator->isValid()) {
 
             $forum->delete();
 
-            setFlash('success', 'Раздел успешно удален!');
+            setFlash('success', __('forums.forum_success_deleted'));
         } else {
             setFlash('danger', $validator->getErrors());
         }
@@ -195,7 +195,7 @@ class ForumController extends AdminController
 
             restatement('forums');
 
-            setFlash('success', 'Данные успешно пересчитаны!');
+            setFlash('success', __('main.success_recounted'));
         } else {
             setFlash('danger', __('validator.token'));
         }
@@ -256,7 +256,7 @@ class ForumController extends AdminController
 
             $validator->equal($token, $_SESSION['token'], __('validator.token'))
                 ->length($title, 5, 50, ['title' => __('validator.text')])
-                ->length($note, 0, 250, ['note' => 'Слишком длинное объявление!']);
+                ->length($note, 0, 250, ['note' => __('validator.text_long')]);
 
             if ($validator->isValid()) {
 
@@ -271,7 +271,7 @@ class ForumController extends AdminController
                 ]);
 
                 clearCache(['statForums', 'recentTopics']);
-                setFlash('success', 'Тема успешно отредактирована!');
+                setFlash('success', __('forums.topic_success_edited'));
                 redirect('/admin/forums/' . $topic->forum_id);
             } else {
                 setInput($request->all());
@@ -307,11 +307,11 @@ class ForumController extends AdminController
             $forum = Forum::query()->find($fid);
 
             $validator->equal($token, $_SESSION['token'], __('validator.token'))
-                ->notEmpty($forum, ['forum' => 'Выбранного раздела не существует!']);
+                ->notEmpty($forum, ['forum' => __('forums.forum_not_exist')]);
 
             if ($forum) {
-                $validator->empty($forum->closed, ['forum' => 'В закрытый раздел запрещено перемещать темы!']);
-                $validator->notEqual($topic->forum_id, $forum->id, ['forum' => 'Нельзя переносить тему в этот же раздел!']);
+                $validator->empty($forum->closed, ['forum' => __('forums.forum_closed')]);
+                $validator->notEqual($topic->forum_id, $forum->id, ['forum' => __('forums.forum_invalid')]);
             }
 
             if ($validator->isValid()) {
@@ -326,7 +326,7 @@ class ForumController extends AdminController
                 $topic->forum->restatement();
                 $oldTopic->forum->restatement();
 
-                setFlash('success', 'Тема успешно перенесена!');
+                setFlash('success', __('forums.topic_success_moved'));
                 redirect('/admin/forums/' . $topic->forum_id);
             } else {
                 setInput($request->all());

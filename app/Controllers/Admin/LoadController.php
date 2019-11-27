@@ -200,7 +200,7 @@ class LoadController extends AdminController
 
             restatement('loads');
 
-            setFlash('success', 'Данные успешно пересчитаны!');
+            setFlash('success', __('main.success_recounted'));
         } else {
             setFlash('danger', __('validator.token'));
         }

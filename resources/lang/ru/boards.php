@@ -36,5 +36,4 @@ return [
     'category_success_edited'  => 'Категория успешно отредактирована!',
     'category_has_items'       => 'В данной категории имеются объявления!',
     'category_success_deleted' => 'Категория успешно удалена!',
-    'items_success_recounted'  => 'Объявления успешно пересчитаны!',
 ];

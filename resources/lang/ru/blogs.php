@@ -52,7 +52,6 @@ return [
     'article_success_deleted'    => 'Статья успешно удалена!',
     'article_success_edited'     => 'Статья успешно отредактирована!',
     'article_success_moved'      => 'Статья успешно перенесена!',
-    'success_recounted'          => 'Данные успешно пересчитаны!',
     'category_closed'            => 'В данном разделе запрещено создавать статьи!',
     'article_error_tags'         => 'Слишком длинные или короткие метки статьи!',
     'article_error_moving'       => 'Нельзя переносить статью в этот же раздел!',

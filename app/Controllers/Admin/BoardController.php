@@ -334,7 +334,7 @@ class BoardController extends AdminController
         if ($token === $_SESSION['token']) {
             restatement('boards');
 
-            setFlash('success', __('boards.items_success_recounted'));
+            setFlash('success', __('main.success_recounted'));
         } else {
             setFlash('danger', __('validator.token'));
         }

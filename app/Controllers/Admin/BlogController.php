@@ -186,7 +186,7 @@ class BlogController extends AdminController
         if ($token === $_SESSION['token']) {
             restatement('blogs');
 
-            setFlash('success', __('blogs.success_recounted'));
+            setFlash('success', __('main.success_recounted'));
         } else {
             setFlash('danger', __('validator.token'));
         }
