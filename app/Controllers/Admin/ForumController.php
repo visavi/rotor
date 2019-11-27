@@ -51,7 +51,6 @@ class ForumController extends AdminController
             ->length($title, 5, 50, ['title' => __('validator.text')]);
 
         if ($validator->isValid()) {
-
             $max = Forum::query()->max('sort') + 1;
 
             /** @var Forum $forum */
@@ -114,7 +113,6 @@ class ForumController extends AdminController
             }
 
             if ($validator->isValid()) {
-
                 $forum->update([
                     'parent_id'   => $parent,
                     'title'       => $title,
@@ -167,7 +165,6 @@ class ForumController extends AdminController
         }
 
         if ($validator->isValid()) {
-
             $forum->delete();
 
             setFlash('success', __('forums.forum_success_deleted'));
@@ -192,7 +189,6 @@ class ForumController extends AdminController
         $token = check($request->input('token'));
 
         if ($token === $_SESSION['token']) {
-
             restatement('forums');
 
             setFlash('success', __('main.success_recounted'));
@@ -246,7 +242,6 @@ class ForumController extends AdminController
         }
 
         if ($request->isMethod('post')) {
-
             $token      = check($request->input('token'));
             $title      = check($request->input('title'));
             $note       = check($request->input('note'));
@@ -259,7 +254,6 @@ class ForumController extends AdminController
                 ->length($note, 0, 250, ['note' => __('validator.text_long')]);
 
             if ($validator->isValid()) {
-
                 $moderators = implode(',', preg_split('/[\s]*[,][\s]*/', $moderators));
 
                 $topic->update([
@@ -315,7 +309,6 @@ class ForumController extends AdminController
             }
 
             if ($validator->isValid()) {
-
                 $oldTopic = $topic->replicate();
 
                 $topic->update([
@@ -364,7 +357,6 @@ class ForumController extends AdminController
         }
 
         if ($token === $_SESSION['token']) {
-
             switch ($type):
                 case 'closed':
                     $topic->update(['closed' => 1]);
@@ -386,21 +378,21 @@ class ForumController extends AdminController
                         $vote->update(['closed' => 0]);
                     }
 
-                    setFlash('success', 'Тема успешно открыта!');
+                    setFlash('success', __('forums.topic_success_opened'));
                     break;
 
                 case 'locked':
                     $topic->update(['locked' => 1]);
-                    setFlash('success', 'Тема успешно закреплена!');
+                    setFlash('success', __('forums.topic_success_pinned'));
                     break;
 
                 case 'unlocked':
                     $topic->update(['locked' => 0]);
-                    setFlash('success', 'Тема успешно откреплена!');
+                    setFlash('success', __('forums.topic_success_unpinned'));
                     break;
 
                 default:
-                    setFlash('danger', 'Не выбрано действие для темы!');
+                    setFlash('danger', __('main.action_not_selected'));
             endswitch;
 
         } else {
@@ -434,7 +426,6 @@ class ForumController extends AdminController
         $validator->equal($token, $_SESSION['token'], __('validator.token'));
 
         if ($validator->isValid()) {
-
             // Удаление загруженных файлов
             $filtered = $topic->posts->load('files')->filter(static function ($post) {
                 return $post->files->isNotEmpty();
@@ -459,7 +450,7 @@ class ForumController extends AdminController
             $topic->forum->restatement();
 
             clearCache(['statForums', 'recentTopics']);
-            setFlash('success', 'Тема успешно удалена!');
+            setFlash('success', __('forums.topic_success_deleted'));
         } else {
             setFlash('danger', $validator->getErrors());
         }
@@ -507,7 +498,6 @@ class ForumController extends AdminController
                 ->first();
 
             if ($vote->answers->isNotEmpty()) {
-
                 $results = Arr::pluck($vote->answers, 'result', 'answer');
                 $max = max($results);
 
@@ -543,7 +533,6 @@ class ForumController extends AdminController
         }
 
         if ($request->isMethod('post')) {
-
             $token   = check($request->input('token'));
             $msg     = check($request->input('msg'));
             $delfile = intar($request->input('delfile'));
@@ -552,7 +541,6 @@ class ForumController extends AdminController
                 ->length($msg, 5, setting('forumtextlength'), ['msg' => __('validator.text')]);
 
             if ($validator->isValid()) {
-
                 $msg = antimat($msg);
 
                 $post->update([
@@ -612,7 +600,6 @@ class ForumController extends AdminController
             ->true($del, __('validator.deletion'));
 
         if ($validator->isValid()) {
-
             $posts = Post::query()
                 ->whereIn('id', $del)
                 ->get();
@@ -644,7 +631,7 @@ class ForumController extends AdminController
         $topic = Topic::query()->find($id);
 
         if (! $topic) {
-            abort(404, 'Выбранная вами тема не существует, возможно она была удалена!');
+            abort(404, __('forums.topic_not_exist'));
         }
 
         $end = ceil($topic->count_posts / setting('forumpost'));
