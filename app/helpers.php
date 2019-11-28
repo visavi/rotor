@@ -1042,7 +1042,7 @@ function truncateString(string $value, int $limit = 100, string $end = '...'): s
     }
 
     $string = mb_substr($value, 0, $limit + 1);
-    if ($lastSpace = mb_strrpos($string, ' ', 'utf-8')) {
+    if ($lastSpace = mb_strrpos($string, ' ', 0, 'utf-8')) {
         $string = mb_substr($string, 0, $lastSpace, 'utf-8');
     } else {
         $string = mb_substr($string, 0, $limit, 'utf-8');
