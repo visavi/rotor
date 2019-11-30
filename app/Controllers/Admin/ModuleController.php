@@ -60,7 +60,7 @@ class ModuleController extends AdminController
         $modulePath = MODULES . '/' . $moduleName;
 
         if (! preg_match('|^[A-Z][\w\-]+$|', $moduleName) || ! file_exists($modulePath)) {
-            abort('default', 'Данный модуль не найден!');
+            abort('default', __('admin.modules.module_not_found'));
         }
 
         $moduleConfig = include $modulePath . '/module.php';
@@ -96,7 +96,7 @@ class ModuleController extends AdminController
         $modulePath = MODULES . '/' . $moduleName;
 
         if (! preg_match('|^[A-Z][\w\-]+$|', $moduleName) || ! file_exists($modulePath)) {
-            abort('default', 'Данный модуль не найден!');
+            abort('default', __('admin.modules.module_not_found'));
         }
 
         /** @var Module $module */
@@ -108,7 +108,7 @@ class ModuleController extends AdminController
 
         runCommand(new RouteClear());
 
-        $result = 'Модуль успешно установлен!';
+        $result = __('admin.modules.module_success_installed');
 
         if ($module->exists) {
             if ($update) {
@@ -116,7 +116,7 @@ class ModuleController extends AdminController
                     'version'    => $moduleConfig['version'],
                     'updated_at' => SITETIME,
                 ]);
-                $result = 'Модуль успешно обновлен!';
+                $result = __('admin.modules.module_success_updated');
             }
 
             if ($enable) {
@@ -124,7 +124,7 @@ class ModuleController extends AdminController
                     'disabled' => 0,
                     'updated_at' => SITETIME,
                 ]);
-                $result = 'Модуль успешно включен!';
+                $result = __('admin.modules.module_success_enabled');
             }
         } else {
             $module->fill([
@@ -152,13 +152,13 @@ class ModuleController extends AdminController
         $modulePath = MODULES . '/' . $moduleName;
 
         if (! preg_match('|^[A-Z][\w\-]+$|', $moduleName) || ! file_exists($modulePath)) {
-            abort('default', 'Данный модуль не найден!');
+            abort('default', __('admin.modules.module_not_found'));
         }
 
         /** @var Module $module */
         $module = Module::query()->where('name', $moduleName)->first();
         if (! $module) {
-            abort('default', 'Данный модуль не найден!');
+            abort('default', __('admin.modules.module_not_found'));
         }
 
         $module->deleteSymlink($modulePath);
@@ -170,11 +170,11 @@ class ModuleController extends AdminController
                 'disabled' => 1,
                 'updated_at' => SITETIME,
             ]);
-            $result = 'Модуль успешно выключен!';
+            $result = __('admin.modules.module_success_disabled');
         } else {
             $module->rollback($modulePath);
             $module->delete();
-            $result = 'Модуль успешно удален!';
+            $result = __('admin.modules.module_success_deleted');
         }
 
         setFlash('success', $result);

@@ -57,12 +57,12 @@ class NoticeController extends AdminController
 
             $validator->equal($token, $_SESSION['token'], __('validator.token'))
                 ->regex($type, '|^[a-z0-9_\-]+$|i', ['type' => 'Недопустимое название типа шаблона!'])
-                ->length($type, 3, 20, ['type' => 'Слишком длинный или короткий тип шаблона!'])
+                ->length($type, 3, 20, ['type' => __('admin.notices.notice_length')])
                 ->length($name, 5, 100, ['name' => __('validator.text')])
                 ->length($text, 10, 65000, ['text' => __('validator.text')]);
 
             $duplicate = Notice::query()->where('type', $type)->first();
-            $validator->empty($duplicate, ['type' => 'Данный тип уже имеетеся в списке!']);
+            $validator->empty($duplicate, ['type' => __('admin.notices.notice_exists')]);
 
             if ($validator->isValid()) {
                 /** @var Notice $notice */
@@ -76,7 +76,7 @@ class NoticeController extends AdminController
                     'updated_at' => SITETIME,
                 ]);
 
-                setFlash('success', 'Шаблон успешно сохранен!');
+                setFlash('success', __('admin.notices.notice_success_saved'));
                 redirect('/admin/notices/edit/' . $notice->id);
 
             } else {
@@ -102,7 +102,7 @@ class NoticeController extends AdminController
         $notice = Notice::query()->find($id);
 
         if (! $notice) {
-            abort(404, 'Данного шаблона не существует!');
+            abort(404, __('admin.notices.notice_not_found'));
         }
 
         if ($request->isMethod('post')) {
@@ -124,7 +124,7 @@ class NoticeController extends AdminController
                     'updated_at' => SITETIME,
                 ]);
 
-                setFlash('success', 'Шаблон успешно сохранен!');
+                setFlash('success', __('admin.notices.notice_success_saved'));
                 redirect('/admin/notices/edit/' . $notice->id);
 
             } else {
@@ -153,13 +153,13 @@ class NoticeController extends AdminController
         $token = check($request->input('token'));
 
         $validator->equal($token, $_SESSION['token'], __('validator.token'))
-            ->notEmpty($notice, 'Не найден шаблон для удаления!')
-            ->empty($notice->protect, 'Запрещено удалять защищенный шаблон!');
+            ->notEmpty($notice, __('admin.notices.notice_not_found'))
+            ->empty($notice->protect, __('admin.notices.notice_protect'));
 
         if ($validator->isValid()) {
             $notice->delete();
 
-            setFlash('success', 'Выбранный шаблон успешно удален!');
+            setFlash('success', __('admin.notices.notice_success_deleted'));
         } else {
             setFlash('danger', $validator->getErrors());
         }

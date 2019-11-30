@@ -44,7 +44,7 @@ class LoadController extends BaseController
         $category = Load::query()->with('parent')->find($id);
 
         if (! $category) {
-            abort(404, __('loads.category_not_exist'));
+            abort(404, __('loads.load_not_exist'));
         }
 
         $sort = check($request->input('sort', 'time'));

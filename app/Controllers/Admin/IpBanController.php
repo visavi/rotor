@@ -37,10 +37,10 @@ class IpBanController extends AdminController
             $ip    = check($request->input('ip'));
 
             $validator->equal($token, $_SESSION['token'], __('validator.token'))
-                ->regex($ip, '|^[0-9]{1,3}\.[0-9,*]{1,3}\.[0-9,*]{1,3}\.[0-9,*]{1,3}$|', ['ip' => 'Вы ввели недопустимый IP-адрес для бана!']);
+                ->regex($ip, '|^[0-9]{1,3}\.[0-9,*]{1,3}\.[0-9,*]{1,3}\.[0-9,*]{1,3}$|', ['ip' => __('admin.ipbans.ip_invalid')]);
 
             $duplicate = Ban::query()->where('ip', $ip)->first();
-            $validator->empty($duplicate, ['ip' => 'Введенный IP уже имеетеся в списке!']);
+            $validator->empty($duplicate, ['ip' => __('admin.ipbans.ip_exists')]);
 
             if ($validator->isValid()) {
                 Ban::query()->create([
@@ -51,7 +51,7 @@ class IpBanController extends AdminController
 
                 ipBan(true);
 
-                setFlash('success', 'IP успешно занесен в список!');
+                setFlash('success', __('admin.ipbans.ip_success_added'));
                 redirect('/admin/ipbans');
             } else {
                 setInput($request->all());
@@ -87,7 +87,7 @@ class IpBanController extends AdminController
             Ban::query()->whereIn('id', $del)->delete();
             ipBan(true);
 
-            setFlash('success', 'Выбранные IP успешно удалены из списка!');
+            setFlash('success', __('admin.ipbans.ip_selected_deleted'));
         } else {
             setFlash('danger', $validator->getErrors());
         }
@@ -114,7 +114,7 @@ class IpBanController extends AdminController
             Ban::query()->truncate();
             ipBan(true);
 
-            setFlash('success', 'Список IP успешно очищен!');
+            setFlash('success', __('admin.ipbans.ip_success_cleared'));
         } else {
             setFlash('danger', $validator->getErrors());
         }

@@ -201,7 +201,7 @@ class OfferController extends AdminController
 
             restatement('offers');
 
-            setFlash('success', 'Комментарии успешно пересчитаны!');
+            setFlash('success', __('main.success_recounted'));
         } else {
             setFlash('danger', __('validator.token'));
         }

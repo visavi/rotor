@@ -200,10 +200,10 @@ class DownController extends BaseController
                 ->length($title, 5, 50, ['title' => __('validator.text')])
                 ->length($text, 50, 5000, ['text' => __('validator.text')])
                 ->false($flood->isFlood(), ['msg' => __('validator.flood', ['sec' => $flood->getPeriod()])])
-                ->notEmpty($category, ['category' => __('loads.category_not_exist')]);
+                ->notEmpty($category, ['category' => __('loads.load_not_exist')]);
 
             if ($category) {
-                $validator->empty($category->closed, ['category' => __('loads.category_closed')]);
+                $validator->empty($category->closed, ['category' => __('loads.load_closed')]);
 
                 $duplicate = Down::query()->where('title', $title)->count();
                 $validator->empty($duplicate, ['title' => __('loads.down_name_exists')]);

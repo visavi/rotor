@@ -70,7 +70,7 @@ class LoadController extends AdminController
                 'sort' => $max,
             ]);
 
-            setFlash('success', 'Новый раздел успешно создан!');
+            setFlash('success', __('loads.load_success_created'));
             redirect('/admin/loads/edit/' . $load->id);
         } else {
             setInput($request->all());
@@ -98,7 +98,7 @@ class LoadController extends AdminController
         $load = Load::query()->with('children')->find($id);
 
         if (! $load) {
-            abort(404, __('loads.category_not_exist'));
+            abort(404, __('loads.load_not_exist'));
         }
 
         $loads = Load::query()
@@ -115,10 +115,10 @@ class LoadController extends AdminController
 
             $validator->equal($token, $_SESSION['token'], __('validator.token'))
                 ->length($name, 3, 50, ['title' => __('validator.text')])
-                ->notEqual($parent, $load->id, ['parent' => 'Недопустимый выбор родительского раздела!']);
+                ->notEqual($parent, $load->id, ['parent' => __('loads.load_parent_invalid')]);
 
             if (! empty($parent) && $load->children->isNotEmpty()) {
-                $validator->addError(['parent' => 'Текущий раздел имеет подразделы!']);
+                $validator->addError(['parent' => __('loads.load_has_subcategories')]);
             }
 
             if ($validator->isValid()) {
@@ -129,7 +129,7 @@ class LoadController extends AdminController
                     'closed'    => $closed,
                 ]);
 
-                setFlash('success', 'Раздел успешно отредактирован!');
+                setFlash('success', __('loads.load_success_edited'));
                 redirect('/admin/loads');
             } else {
                 setInput($request->all());
@@ -159,23 +159,23 @@ class LoadController extends AdminController
         $load = Load::query()->with('children')->find($id);
 
         if (! $load) {
-            abort(404, __('loads.category_not_exist'));
+            abort(404, __('loads.load_not_exist'));
         }
 
         $token = check($request->input('token'));
 
         $validator->equal($token, $_SESSION['token'], __('validator.token'))
-            ->true($load->children->isEmpty(), 'Удаление невозможно! Данный раздел имеет подразделы!');
+            ->true($load->children->isEmpty(), __('loads.load_has_subcategories'));
 
         $down = Down::query()->where('category_id', $load->id)->first();
         if ($down) {
-            $validator->addError('Удаление невозможно! В данном разделе имеются загрузки!');
+            $validator->addError(__('loads.load_has_downs'));
         }
 
         if ($validator->isValid()) {
             $load->delete();
 
-            setFlash('success', 'Раздел успешно удален!');
+            setFlash('success', __('loads.load_success_deleted'));
         } else {
             setFlash('danger', $validator->getErrors());
         }
@@ -221,7 +221,7 @@ class LoadController extends AdminController
         $category = Load::query()->with('parent')->find($id);
 
         if (! $category) {
-            abort(404, __('loads.category_not_exist'));
+            abort(404, __('loads.load_not_exist'));
         }
 
         $sort = check($request->input('sort', 'time'));
@@ -280,7 +280,7 @@ class LoadController extends AdminController
             $validator->equal($token, $_SESSION['token'], __('validator.token'))
                 ->length($title, 5, 50, ['title' => __('validator.text')])
                 ->length($text, 50, 5000, ['text' => __('validator.text')])
-                ->notEmpty($category, ['category' => __('loads.category_not_exist')]);
+                ->notEmpty($category, ['category' => __('loads.load_not_exist')]);
 
             $duplicate = Down::query()->where('title', $title)->where('id', '<>', $down->id)->count();
             $validator->empty($duplicate, ['title' => __('loads.down_name_exists')]);
@@ -324,7 +324,7 @@ class LoadController extends AdminController
                 }
 
                 clearCache(['statLoads', 'recentDowns']);
-                setFlash('success', 'Загрузка успешно отредактирована!');
+                setFlash('success', __('loads.down_edited_success'));
                 redirect('/admin/downs/edit/' . $down->id);
             } else {
                 setInput($request->all());
@@ -373,7 +373,7 @@ class LoadController extends AdminController
             $down->delete();
 
             clearCache(['statLoads', 'recentDowns']);
-            setFlash('success', 'Загрузка успешно удалена!');
+            setFlash('success', __('loads.down_success_deleted'));
         } else {
             setFlash('danger', __('validator.token'));
         }
@@ -455,14 +455,14 @@ class LoadController extends AdminController
             ]);
 
             if ($active) {
-                $type = 'опубликована' ;
+                $status = __('loads.down_success_published');
                 $down->category->increment('count_downs');
 
                 $text = textNotice('down_publish', ['url' => '/downs/' . $down->id, 'title' => $down->title]);
                 $down->user->sendMessage(null, $text);
 
             } else {
-                $type = 'снята с публикации';
+                $status = __('loads.down_success_unpublished');
                 $down->category->decrement('count_downs');
 
                 $text = textNotice('down_unpublish', ['url' => '/downs/' . $down->id, 'title' => $down->title]);
@@ -470,7 +470,7 @@ class LoadController extends AdminController
             }
 
             clearCache(['statLoads', 'recentDowns']);
-            setFlash('success', 'Загрузка успешно ' . $type . '!');
+            setFlash('success', $status);
         } else {
             setFlash('danger', __('validator.token'));
         }

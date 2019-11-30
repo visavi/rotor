@@ -129,13 +129,13 @@ class PhotoController extends AdminController
             if ($token === $_SESSION['token']) {
                 restatement('photos');
 
-                setFlash('success', 'Комментарии успешно пересчитаны!');
+                setFlash('success', __('main.success_recounted'));
                 redirect('/admin/photos');
             } else {
                 abort('default', __('validator.token'));
             }
         } else {
-            abort('default', 'Пересчитывать комментарии могут только суперадмины!');
+            abort('default', __('main.page_only_owner'));
         }
     }
 }

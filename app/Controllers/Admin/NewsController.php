@@ -94,7 +94,7 @@ class NewsController extends AdminController
                  ]);
 
                 clearCache(['statNews', 'lastNews']);
-                setFlash('success', 'Новость успешно отредактирована!');
+                setFlash('success', __('news.news_success_edited'));
                 redirect('/admin/news/edit/' . $news->id . '?page=' . $page);
             } else {
                 setInput($request->all());
@@ -156,7 +156,7 @@ class NewsController extends AdminController
                 }
 
                 clearCache(['statNews', 'lastNews']);
-                setFlash('success', 'Новость успешно добавлена!');
+                setFlash('success', __('news.news_success_added'));
                 redirect('/admin/news/edit/' . $news->id);
             } else {
                 setInput($request->all());
@@ -182,10 +182,9 @@ class NewsController extends AdminController
         $token = check($request->input('token'));
 
         if ($token === $_SESSION['token']) {
-
             restatement('news');
 
-            setFlash('success', 'Комментарии успешно пересчитаны!');
+            setFlash('success', __('main.success_recounted'));
         } else {
             setFlash('danger', __('validator.token'));
         }
@@ -222,7 +221,7 @@ class NewsController extends AdminController
             $news->comments()->delete();
             $news->delete();
 
-            setFlash('success', 'Новость успешно удалена!');
+            setFlash('success', __('news.news_success_deleted'));
         } else {
             setFlash('danger', $validator->getErrors());
         }
