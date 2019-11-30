@@ -79,7 +79,6 @@ class ListController extends BaseController
         $user = check($request->input('user', getUser('login')));
 
         if ($request->isMethod('post')) {
-
             $position = User::query()
                 ->orderByDesc('rating')
                 ->orderBy('login')
@@ -118,7 +117,6 @@ class ListController extends BaseController
         $user = check($request->input('user', getUser('login')));
 
         if ($request->isMethod('post')) {
-
             $position = User::query()
                 ->orderByDesc('money')
                 ->orderBy('login')

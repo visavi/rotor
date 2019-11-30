@@ -8,6 +8,7 @@ use App\Classes\Validator;
 use App\Controllers\BaseController;
 use App\Models\Bookmark;
 use App\Models\Topic;
+use Exception;
 use Illuminate\Http\Request;
 
 class BookmarkController extends BaseController
@@ -48,7 +49,7 @@ class BookmarkController extends BaseController
      * @param Request   $request
      * @param Validator $validator
      * @return string
-     * @throws \Exception
+     * @throws Exception
      */
     public function perform(Request $request, Validator $validator): string
     {

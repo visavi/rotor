@@ -10,6 +10,7 @@ use App\Models\Vote;
 use App\Models\VoteAnswer;
 use Illuminate\Database\Capsule\Manager as DB;
 use Illuminate\Http\Request;
+use Throwable;
 
 class VoteController extends AdminController
 {
@@ -90,7 +91,6 @@ class VoteController extends AdminController
             $validator->between(count($answers), 2, 10, ['answer' => __('votes.answer_not_enough')]);
 
             if ($validator->isValid()) {
-
                 $vote->update([
                     'title' => $title,
                 ]);
@@ -103,7 +103,7 @@ class VoteController extends AdminController
 
                     if ($ans->exists) {
                         $ans->update(['answer' => $answer]);
-                    } else if ($countAnswers < 10) {
+                    } elseif ($countAnswers < 10) {
                         $ans->fill(['answer' => $answer])->save();
                         $countAnswers++;
                     }
@@ -128,7 +128,7 @@ class VoteController extends AdminController
      * @param int     $id
      * @param Request $request
      * @return void
-     * @throws \Throwable
+     * @throws Throwable
      */
     public function delete(int $id, Request $request): void
     {
@@ -176,7 +176,6 @@ class VoteController extends AdminController
         }
 
         if ($token === $_SESSION['token']) {
-
             $type   = 'открыто';
             $closed = $vote->closed ^ 1;
 
@@ -216,7 +215,6 @@ class VoteController extends AdminController
         $token = check($request->input('token'));
 
         if ($token === $_SESSION['token']) {
-
             restatement('votes');
 
             setFlash('success', 'Голосования успешно пересчитаны!');

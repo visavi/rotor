@@ -7,6 +7,7 @@ namespace App\Controllers\Admin;
 use App\Classes\Validator;
 use App\Models\Antimat;
 use App\Models\User;
+use Exception;
 use Illuminate\Http\Request;
 
 class AntimatController extends AdminController
@@ -68,7 +69,7 @@ class AntimatController extends AdminController
      * @param Request   $request
      * @param Validator $validator
      * @return void
-     * @throws \Exception
+     * @throws Exception
      */
     public function delete(Request $request, Validator $validator): void
     {
@@ -104,7 +105,7 @@ class AntimatController extends AdminController
 
         $validator
             ->equal($token, $_SESSION['token'], __('validator.token'))
-            ->true(isAdmin(User::BOSS), __('admin.antimat.owner_clear'));
+            ->true(isAdmin(User::BOSS), __('main.page_only_owner'));
 
         if ($validator->isValid()) {
             Antimat::query()->truncate();

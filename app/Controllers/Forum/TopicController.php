@@ -422,7 +422,7 @@ class TopicController extends BaseController
 
                             if ($ans->exists) {
                                 $ans->update(['answer' => $answer]);
-                            } else if ($countAnswers < 10) {
+                            } elseif ($countAnswers < 10) {
                                 $ans->fill(['answer' => $answer])->save();
                                 $countAnswers++;
                             }

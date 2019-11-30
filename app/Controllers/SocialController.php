@@ -7,6 +7,8 @@ namespace App\Controllers;
 use App\Classes\Validator;
 use App\Models\Social;
 use Curl\Curl;
+use ErrorException;
+use Exception;
 use Illuminate\Http\Request;
 
 class SocialController extends BaseController
@@ -30,7 +32,7 @@ class SocialController extends BaseController
      *
      * @param Request $request
      * @return string
-     * @throws \ErrorException
+     * @throws ErrorException
      */
     public function index(Request $request): string
     {
@@ -46,7 +48,6 @@ class SocialController extends BaseController
             );
 
             if ($network && empty($network->error)) {
-
                 $social = Social::query()
                     ->where('network', $network->network)
                     ->where('uid', $network->uid)
@@ -84,7 +85,7 @@ class SocialController extends BaseController
      * @param int       $id
      * @param Request   $request
      * @param Validator $validator
-     * @throws \Exception
+     * @throws Exception
      */
     public function delete(int $id, Request $request, Validator $validator): void
     {

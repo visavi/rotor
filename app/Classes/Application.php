@@ -87,7 +87,6 @@ class Application
     private function cookieAuth(): void
     {
         if (empty($_SESSION['id']) && isset($_COOKIE['login'], $_COOKIE['password'])) {
-
             $cookLogin = check($_COOKIE['login']);
             $cookPass  = check($_COOKIE['password']);
 
@@ -114,7 +113,6 @@ class Application
         $request = request();
 
         if ($user = checkAuth()) {
-
             Registry::set('user', $user);
 
             setSetting([
@@ -134,7 +132,6 @@ class Application
 
             // Получение ежедневного бонуса
             if ($user->timebonus < strtotime('-23 hours', SITETIME)) {
-
                 $user->increment('money', setting('bonusmoney'));
                 $user->update(['timebonus' => SITETIME]);
 

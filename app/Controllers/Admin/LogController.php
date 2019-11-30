@@ -48,7 +48,6 @@ class LogController extends AdminController
         $token = check($request->input('token'));
 
         if ($token === $_SESSION['token']) {
-
             Log::query()->truncate();
 
             setFlash('success', 'Лог-файл успешно очищен!');

@@ -9,6 +9,7 @@ use App\Models\Transfer;
 use App\Models\User;
 use Illuminate\Database\Capsule\Manager as DB;
 use Illuminate\Http\Request;
+use Throwable;
 
 class TransferController extends BaseController
 {
@@ -50,7 +51,7 @@ class TransferController extends BaseController
      * @param Request   $request
      * @param Validator $validator
      * @return void
-     * @throws \Throwable
+     * @throws Throwable
      */
     public function send(Request $request, Validator $validator): void
     {
@@ -73,7 +74,6 @@ class TransferController extends BaseController
         }
 
         if ($validator->isValid()) {
-
             DB::connection()->transaction(function () use ($money, $msg) {
                 getUser()->decrement('money', $money);
                 $this->user->increment('money', $money);

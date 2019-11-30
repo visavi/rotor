@@ -7,6 +7,7 @@ namespace App\Controllers\Admin;
 use App\Classes\Validator;
 use App\Models\Notice;
 use App\Models\User;
+use Exception;
 use Illuminate\Http\Request;
 
 class NoticeController extends AdminController
@@ -142,7 +143,7 @@ class NoticeController extends AdminController
      * @param Request   $request
      * @param Validator $validator
      * @return void
-     * @throws \Exception
+     * @throws Exception
      */
     public function delete(int $id, Request $request, Validator $validator): void
     {

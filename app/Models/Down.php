@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Models;
 
 use App\Traits\UploadTrait;
+use Exception;
 use FFMpeg\Coordinate\TimeCode;
 use FFMpeg\FFMpeg;
 use FFMpeg\FFProbe;
@@ -225,7 +226,7 @@ class Down extends BaseModel
      * Удаление загрузки и загруженных файлов
      *
      * @return bool|null
-     * @throws \Exception
+     * @throws Exception
      */
     public function delete(): ?bool
     {

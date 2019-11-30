@@ -21,6 +21,7 @@ use App\Models\{
     Spam,
     Wall
 };
+use Exception;
 use Illuminate\Http\Request;
 
 class AjaxController extends BaseController
@@ -205,7 +206,7 @@ class AjaxController extends BaseController
      *
      * @param Request $request
      * @return string
-     * @throws \Exception
+     * @throws Exception
      */
     public function rating(Request $request): string
     {
@@ -363,7 +364,7 @@ class AjaxController extends BaseController
      * @param Request   $request
      * @param Validator $validator
      * @return string
-     * @throws \Exception
+     * @throws Exception
      */
     public function deleteImage(Request $request, Validator $validator): string
     {

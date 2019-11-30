@@ -11,6 +11,7 @@ use App\Models\Post;
 use App\Models\Topic;
 use App\Models\User;
 use App\Models\Vote;
+use Exception;
 use Illuminate\Database\Query\JoinClause;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
@@ -139,7 +140,7 @@ class ForumController extends AdminController
      * @param Request   $request
      * @param Validator $validator
      * @return void
-     * @throws \Exception
+     * @throws Exception
      */
     public function delete(int $id, Request $request, Validator $validator): void
     {
@@ -409,7 +410,7 @@ class ForumController extends AdminController
      * @param Request   $request
      * @param Validator $validator
      * @return void
-     * @throws \Exception
+     * @throws Exception
      */
     public function deleteTopic(int $id, Request $request, Validator $validator): void
     {

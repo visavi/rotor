@@ -21,7 +21,6 @@ class MailController extends BaseController
     public function index(Request $request, Validator $validator): string
     {
         if ($request->isMethod('post')) {
-
             $message = nl2br(check($request->input('message')));
             $name    = check($request->input('name'));
             $email   = check($request->input('email'));

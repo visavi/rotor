@@ -8,6 +8,7 @@ use App\Classes\Validator;
 use App\Models\Sticker;
 use App\Models\StickersCategory;
 use App\Models\User;
+use Exception;
 use Illuminate\Database\Capsule\Manager as DB;
 use Illuminate\Http\Request;
 
@@ -145,7 +146,7 @@ class StickerController extends AdminController
      * @param int       $id
      * @param Request   $request
      * @param Validator $validator
-     * @throws \Exception
+     * @throws Exception
      */
     public function delete(int $id, Request $request, Validator $validator): void
     {
@@ -262,7 +263,6 @@ class StickerController extends AdminController
         }
 
         if ($request->isMethod('post')) {
-
             $token = check($request->input('token'));
             $code  = check(utfLower($request->input('code')));
             $cid   = int($request->input('cid'));
@@ -304,7 +304,7 @@ class StickerController extends AdminController
      * @param Request   $request
      * @param Validator $validator
      * @return void
-     * @throws \Exception
+     * @throws Exception
      */
     public function deleteSticker(int $id, Request $request, Validator $validator): void
     {

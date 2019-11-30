@@ -187,7 +187,6 @@ class DownController extends BaseController
         }
 
         if ($request->isMethod('post')) {
-
             $token = check($request->input('token'));
             $title = check($request->input('title'));
             $text  = check($request->input('text'));
@@ -401,7 +400,6 @@ class DownController extends BaseController
         }
 
         if ($request->isMethod('post')) {
-
             $token = check($request->input('token'));
             $msg   = check($request->input('msg'));
 
@@ -617,7 +615,6 @@ class DownController extends BaseController
             $content = $archive[$document->getName()];
 
             if ($document->getSize() > 0 && preg_match("/\.(gif|png|bmp|jpg|jpeg)$/", $document->getName())) {
-
                 $ext = getExtension($document->getName());
 
                 header('Content-type: image/' . $ext);

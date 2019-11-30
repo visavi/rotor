@@ -99,7 +99,6 @@ class OfferController extends AdminController
         }
 
         if ($request->isMethod('post')) {
-
             $token  = check($request->input('token'));
             $title  = check($request->input('title'));
             $text   = check($request->input('text'));
@@ -112,7 +111,6 @@ class OfferController extends AdminController
                 ->in($type, Offer::TYPES, ['type' => __('offers.invalid_type')]);
 
             if ($validator->isValid()) {
-
                 $title = antimat($title);
                 $text  = antimat($text);
 
@@ -152,7 +150,6 @@ class OfferController extends AdminController
         }
 
         if ($request->isMethod('post')) {
-
             $token  = check($request->input('token'));
             $reply  = check($request->input('reply'));
             $status = check($request->input('status'));
@@ -163,7 +160,6 @@ class OfferController extends AdminController
                 ->in($status, Offer::STATUSES, ['status' => 'Недопустимый статус предложения или проблемы!']);
 
             if ($validator->isValid()) {
-
                 $reply = antimat($reply);
 
                 $offer->update([
@@ -231,7 +227,6 @@ class OfferController extends AdminController
             ->true($del, __('validator.deletion'));
 
         if ($validator->isValid()) {
-
             Offer::query()->whereIn('id', $del)->delete();
 
             Polling::query()

@@ -57,7 +57,6 @@ class AdvertController extends AdminController
                 ->regex($color, '|^#+[A-f0-9]{6}$|', ['color' => __('validator.color')], false);
 
             if ($validator->isValid()) {
-
                 $link->update([
                     'site'  => $site,
                     'name'  => $name,

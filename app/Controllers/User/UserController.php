@@ -736,7 +736,6 @@ class UserController extends BaseController
         $token = check($request->input('token'));
 
         if ($token === $_SESSION['token']) {
-
             $user->update([
                 'apikey' => md5(getUser('login') . Str::random()),
             ]);

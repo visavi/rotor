@@ -8,6 +8,7 @@ use App\Classes\Validator;
 use App\Controllers\BaseController;
 use App\Models\Post;
 use App\Models\Topic;
+use Exception;
 use Illuminate\Http\Request;
 
 class ActiveController extends BaseController
@@ -75,7 +76,7 @@ class ActiveController extends BaseController
      * @param Request   $request
      * @param Validator $validator
      * @return string
-     * @throws \Exception
+     * @throws Exception
      */
     public function delete(Request $request, Validator $validator): string
     {

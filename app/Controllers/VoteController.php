@@ -202,7 +202,6 @@ class VoteController extends BaseController
     public function create(Request $request, Validator $validator): string
     {
         if ($request->isMethod('post')) {
-
             $token    = check($request->input('token'));
             $question = check($request->input('question'));
             $answers  = check($request->input('answer'));

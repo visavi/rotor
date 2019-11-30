@@ -7,6 +7,7 @@ namespace App\Controllers;
 use App\Classes\Validator;
 use App\Models\Rating;
 use App\Models\User;
+use Exception;
 use Illuminate\Http\Request;
 
 class RatingController extends BaseController
@@ -155,7 +156,7 @@ class RatingController extends BaseController
      * @param Request   $request
      * @param Validator $validator
      * @return void
-     * @throws \Exception
+     * @throws Exception
      */
     public function delete(Request $request, Validator $validator): void
     {

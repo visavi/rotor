@@ -54,7 +54,6 @@ class IgnoreController extends BaseController
             }
 
             if ($validator->isValid()) {
-
                 Ignore::query()->create([
                     'user_id'    => getUser('id'),
                     'ignore_id'  => $user->id,
@@ -110,7 +109,6 @@ class IgnoreController extends BaseController
                 ->length($msg, 0, 1000, ['msg' => __('users.note_to_big')]);
 
             if ($validator->isValid()) {
-
                 $ignore->update([
                     'text' => $msg,
                 ]);
@@ -142,7 +140,6 @@ class IgnoreController extends BaseController
             ->true($del, __('validator.deletion'));
 
         if ($validator->isValid()) {
-
             Ignore::query()
                 ->where('user_id', getUser('id'))
                 ->whereIn('id', $del)

@@ -103,7 +103,6 @@ class ChatController extends AdminController
         }
 
         if ($request->isMethod('post')) {
-
             $msg   = check($request->input('msg'));
             $token = check($request->input('token'));
 

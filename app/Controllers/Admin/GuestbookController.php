@@ -38,11 +38,10 @@ class GuestbookController extends AdminController
         $post = Guestbook::with('user')->find($id);
 
         if (! $post) {
-            abort(404, 'Сообщения для редактирования не существует!');
+            abort(404, __('main.message_not_found'));
         }
 
         if ($request->isMethod('post')) {
-
             $msg   = check($request->input('msg'));
             $token = check($request->input('token'));
 
@@ -50,7 +49,6 @@ class GuestbookController extends AdminController
                 ->length($msg, 5, setting('guesttextlength'), ['msg' => __('validator.text')]);
 
             if ($validator->isValid()) {
-
                 $msg = antimat($msg);
 
                 $post->update([
@@ -84,11 +82,10 @@ class GuestbookController extends AdminController
         $post = Guestbook::with('user')->find($id);
 
         if (! $post) {
-            abort(404, 'Сообщения для ответа не существует!');
+            abort(404, __('main.message_not_found'));
         }
 
         if ($request->isMethod('post')) {
-
             $reply = check($request->input('reply'));
             $token = check($request->input('token'));
 
@@ -96,14 +93,13 @@ class GuestbookController extends AdminController
                 ->length($reply, 5, setting('guesttextlength'), ['msg' => __('validator.text')]);
 
             if ($validator->isValid()) {
-
                 $reply = antimat($reply);
 
                 $post->update([
                     'reply' => $reply,
                 ]);
 
-                setFlash('success', 'Ответ успешно добавлен!');
+                setFlash('success', __('guestbooks.answer_success_added'));
                 redirect('/admin/guestbooks?page=' . $page);
             } else {
                 setInput($request->all());
@@ -155,14 +151,13 @@ class GuestbookController extends AdminController
 
         $validator
             ->equal($token, $_SESSION['token'], __('validator.token'))
-            ->true(isAdmin(User::BOSS), 'Очищать гостевую может только владелец!');
+            ->true(isAdmin(User::BOSS), __('main.page_only_owner'));
 
         if ($validator->isValid()) {
-
             clearCache('statGuestbooks');
             Guestbook::query()->truncate();
 
-            setFlash('success', 'Гостевая книга успешно очищена!');
+            setFlash('success', __('guestbooks.messages_success_cleared'));
         } else {
             setFlash('danger', $validator->getErrors());
         }

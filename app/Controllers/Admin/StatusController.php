@@ -7,6 +7,7 @@ namespace App\Controllers\Admin;
 use App\Classes\Validator;
 use App\Models\Status;
 use App\Models\User;
+use Exception;
 use Illuminate\Http\Request;
 
 class StatusController extends AdminController
@@ -57,7 +58,6 @@ class StatusController extends AdminController
                 ->regex($color, '|^#+[A-f0-9]{6}$|', ['color' => __('validator.color')], false);
 
             if ($validator->isValid()) {
-
                 Status::query()->create([
                     'topoint' => $topoint,
                     'point'   => $point,
@@ -106,7 +106,6 @@ class StatusController extends AdminController
                 ->regex($color, '|^#+[A-f0-9]{6}$|', ['color' => __('validator.color')], false);
 
             if ($validator->isValid()) {
-
                 $status->update([
                     'topoint' => $topoint,
                     'point'   => $point,
@@ -131,7 +130,7 @@ class StatusController extends AdminController
      * @param Request   $request
      * @param Validator $validator
      * @return void
-     * @throws \Exception
+     * @throws Exception
      */
     public function delete(Request $request, Validator $validator): void
     {
@@ -144,7 +143,6 @@ class StatusController extends AdminController
         $validator->notEmpty($status, 'Выбранный для удаления статус не найден!');
 
         if ($validator->isValid()) {
-
             $status->delete();
 
             setFlash('success', 'Статус успешно удален!');

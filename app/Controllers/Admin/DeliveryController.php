@@ -33,7 +33,6 @@ class DeliveryController extends AdminController
     public function index(Request $request, Validator $validator): string
     {
         if ($request->isMethod('post')) {
-
             $token = check($request->input('token'));
             $msg   = check($request->input('msg'));
             $type  = int($request->input('type'));

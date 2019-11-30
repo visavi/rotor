@@ -151,7 +151,6 @@ class MessageController extends BaseController
         $validator->empty($ignoring, ['user' => __('ignores.you_are_ignoring')]);
 
         if ($validator->isValid()) {
-
             $msg = antimat($msg);
             $user->increment('newprivat');
 

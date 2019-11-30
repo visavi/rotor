@@ -6,14 +6,14 @@ namespace App\Classes;
 
 class Registry
 {
-    static private $_instance;
+    private static $_instance;
 
     private $registry = [];
 
     public static function getInstance(): ?Registry
     {
         if (self::$_instance === null) {
-            self::$_instance = new self;
+            self::$_instance = new self();
         }
 
         return self::$_instance;

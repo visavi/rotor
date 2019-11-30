@@ -7,6 +7,7 @@ namespace App\Controllers\Admin;
 use App\Classes\Validator;
 use App\Models\Photo;
 use App\Models\User;
+use Exception;
 use Illuminate\Http\Request;
 
 class PhotoController extends AdminController
@@ -81,7 +82,7 @@ class PhotoController extends AdminController
      * @param Request   $request
      * @param Validator $validator
      * @return void
-     * @throws \Exception
+     * @throws Exception
      */
     public function delete(int $id, Request $request, Validator $validator): void
     {
@@ -126,7 +127,6 @@ class PhotoController extends AdminController
 
         if (isAdmin(User::BOSS)) {
             if ($token === $_SESSION['token']) {
-
                 restatement('photos');
 
                 setFlash('success', 'Комментарии успешно пересчитаны!');

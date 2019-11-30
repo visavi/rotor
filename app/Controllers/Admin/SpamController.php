@@ -12,6 +12,7 @@ use App\Models\Post;
 use App\Models\Spam;
 use App\Models\User;
 use App\Models\Wall;
+use Exception;
 use Illuminate\Http\Request;
 
 class SpamController extends AdminController
@@ -86,7 +87,7 @@ class SpamController extends AdminController
      * @param Request   $request
      * @param Validator $validator
      * @return void
-     * @throws \Exception
+     * @throws Exception
      */
     public function delete(Request $request, Validator $validator): void
     {
@@ -99,7 +100,6 @@ class SpamController extends AdminController
             ->notEmpty($id, __('validator.deletion'));
 
         if ($validator->isValid()) {
-
             $spam = Spam::query()->find($id);
 
             if ($spam) {

@@ -82,7 +82,7 @@ Class AdminController extends BaseController
         $iniInfo = null;
         $gdInfo  = null;
 
-        if (\function_exists('ini_get_all')) {
+        if (function_exists('ini_get_all')) {
             $iniInfo = ini_get_all();
         }
 

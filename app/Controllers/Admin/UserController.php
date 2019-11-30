@@ -12,6 +12,7 @@ use App\Models\File;
 use App\Models\Post;
 use App\Models\Topic;
 use App\Models\User;
+use Exception;
 use Illuminate\Http\Request;
 
 class UserController extends AdminController
@@ -88,7 +89,6 @@ class UserController extends AdminController
         }
 
         if ($request->isMethod('post')) {
-
             $token     = check($request->input('token'));
             $level     = check($request->input('level'));
             $password  = check($request->input('password'));
@@ -180,7 +180,7 @@ class UserController extends AdminController
      * @param Request   $request
      * @param Validator $validator
      * @return string
-     * @throws \Exception
+     * @throws Exception
      */
     public function delete(Request $request, Validator $validator): string
     {
@@ -279,7 +279,6 @@ class UserController extends AdminController
 
                 // Удаление комментариев
                 if ($delcomments) {
-
                     $deletes = Comment::query()
                         ->where('user_id', $user->id)
                         ->delete();

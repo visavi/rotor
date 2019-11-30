@@ -9,6 +9,7 @@ use App\Models\Down;
 use App\Models\File;
 use App\Models\Load;
 use App\Models\User;
+use Exception;
 use Illuminate\Http\Request;
 
 class LoadController extends AdminController
@@ -146,7 +147,7 @@ class LoadController extends AdminController
      * @param Request   $request
      * @param Validator $validator
      * @return void
-     * @throws \Exception
+     * @throws Exception
      */
     public function delete(int $id, Request $request, Validator $validator): void
     {
@@ -197,7 +198,6 @@ class LoadController extends AdminController
         $token = check($request->input('token'));
 
         if ($token === $_SESSION['token']) {
-
             restatement('loads');
 
             setFlash('success', __('main.success_recounted'));
@@ -289,7 +289,6 @@ class LoadController extends AdminController
             $validator->lte(count($files) + $existFiles, setting('maxfiles'), ['files' => __('validator.files_max', ['max' => setting('maxfiles')])]);
 
             if ($validator->isValid()) {
-
                 $rules = [
                     'maxsize'    => setting('fileupload'),
                     'extensions' => explode(',', setting('allowextload')),
@@ -302,7 +301,6 @@ class LoadController extends AdminController
             }
 
             if ($validator->isValid()) {
-
                 $oldDown = $down->replicate();
 
                 $down->update([
@@ -349,7 +347,7 @@ class LoadController extends AdminController
      * @param int     $id
      * @param Request $request
      * @return void
-     * @throws \Exception
+     * @throws Exception
      */
     public function deleteDown(int $id, Request $request): void
     {
@@ -367,7 +365,6 @@ class LoadController extends AdminController
         }
 
         if ($token === $_SESSION['token']) {
-
             if ($down->active) {
                 $down->category->decrement('count_downs');
             }
@@ -390,7 +387,7 @@ class LoadController extends AdminController
      * @param int $id
      * @param int $fid
      * @return void
-     * @throws \Exception
+     * @throws Exception
      */
     public function deleteFile(int $id, int $fid): void
     {
@@ -450,7 +447,6 @@ class LoadController extends AdminController
         }
 
         if ($token === $_SESSION['token']) {
-
             $active = $down->active ^ 1;
 
             $down->update([

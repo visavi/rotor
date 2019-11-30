@@ -9,6 +9,7 @@ use App\Models\Comment;
 use App\Models\File;
 use App\Models\Flood;
 use App\Models\Photo;
+use Exception;
 use Illuminate\Database\Query\JoinClause;
 use Illuminate\Http\Request;
 
@@ -314,7 +315,7 @@ class PhotoController extends BaseController
      * @param int       $id
      * @param Request   $request
      * @param Validator $validator
-     * @throws \Exception
+     * @throws Exception
      */
     public function delete(int $id, Request $request, Validator $validator): void
     {

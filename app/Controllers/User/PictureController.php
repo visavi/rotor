@@ -35,7 +35,6 @@ class PictureController extends BaseController
     public function index(Request $request, Validator $validator): string
     {
         if ($request->isMethod('post')) {
-
             $token = check($request->input('token'));
             $photo = $request->file('photo');
 

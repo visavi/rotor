@@ -91,7 +91,6 @@ class ForumController extends BaseController
         }
 
         if ($request->isMethod('post')) {
-
             $title    = check($request->input('title'));
             $msg      = check($request->input('msg'));
             $token    = check($request->input('token'));

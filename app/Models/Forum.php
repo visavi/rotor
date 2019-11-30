@@ -94,7 +94,6 @@ class Forum extends BaseModel
         ]);
 
         if ($this->parent->id) {
-
             $forumIds = $this->parent->children->pluck('id')->all();
             $forumIds[] = $this->parent->id;
 

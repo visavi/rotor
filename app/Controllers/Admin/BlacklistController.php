@@ -71,7 +71,6 @@ class BlacklistController extends AdminController
             $validator->empty($duplicate, ['value' => __('main.record_exists')]);
 
             if ($validator->isValid()) {
-
                 BlackList::query()->create([
                     'type'       => $type,
                     'value'      => $value,

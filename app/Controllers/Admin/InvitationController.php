@@ -74,10 +74,9 @@ class InvitationController extends AdminController
             $keys   = int($request->input('keys'));
 
             $validator->equal($token, $_SESSION['token'], __('validator.token'))
-                ->notEmpty($keys, ['keys' => 'Не указано число ключей!']);
+                ->notEmpty($keys, ['keys' => __('admin.invitations.keys_not_amount')]);
 
             if ($validator->isValid()) {
-
                 $newKeys = [];
 
                 for ($i = 0; $i < $keys; $i++) {
@@ -90,7 +89,7 @@ class InvitationController extends AdminController
 
                 Invite::query()->insert($newKeys);
 
-                setFlash('success', 'Ключи успешно созданы!');
+                setFlash('success', __('admin.invitations.keys_success_created'));
                 redirect('/admin/invitations');
             } else {
                 setInput($request->all());
@@ -121,10 +120,9 @@ class InvitationController extends AdminController
 
         $validator->equal($token, $_SESSION['token'], __('validator.token'))
             ->notEmpty($user, ['user' => __('validator.user')])
-            ->notEmpty($userkeys, ['userkeys' => 'Не указано число ключей!']);
+            ->notEmpty($userkeys, ['userkeys' => __('admin.invitations.keys_not_amount')]);
 
         if ($validator->isValid()) {
-
             $newKeys  = [];
             $listKeys = [];
 
@@ -146,7 +144,7 @@ class InvitationController extends AdminController
             $text = textNotice('invite', ['key' => implode(', ', $listKeys)]);
             $user->sendMessage(null, $text);
 
-            setFlash('success', 'Ключи успешно отправлены!');
+            setFlash('success', __('admin.invitations.keys_success_sent'));
             redirect('/admin/invitations');
         } else {
             setInput($request->all());
@@ -167,7 +165,7 @@ class InvitationController extends AdminController
         $token = check($request->input('token'));
 
         $validator->equal($token, $_SESSION['token'], __('validator.token'))
-            ->true(isAdmin(User::BOSS), 'Рассылать ключи может только владелец');
+            ->true(isAdmin(User::BOSS), __('main.page_only_owner'));
 
         $users = User::query()->where('updated_at', '>', strtotime('-1 week', SITETIME))->get();
 
@@ -175,10 +173,9 @@ class InvitationController extends AdminController
             return $value->id !== getUser('id');
         });
 
-        $validator->false($users->isEmpty(), 'Отсутствуют получатели ключей!');
+        $validator->false($users->isEmpty(), __('admin.invitations.keys_empty_recipients'));
 
         if ($validator->isValid()) {
-
             /** @var User $user */
             foreach ($users as $user) {
                 $key = Str::random(mt_rand(12, 15));
@@ -193,7 +190,7 @@ class InvitationController extends AdminController
                 $user->sendMessage(null, $text);
             }
 
-            setFlash('success', 'Ключи успешно отправлены! (' . $users->count() . ')');
+            setFlash('success', __('admin.invitations.keys_success_sent') . ' (' . $users->count() . ')');
             redirect('/admin/invitations');
         } else {
             setInput($request->all());
@@ -222,7 +219,7 @@ class InvitationController extends AdminController
         if ($validator->isValid()) {
             Invite::query()->whereIn('id', $del)->delete();
 
-            setFlash('success', 'Выбранные ключи успешно удалены!');
+            setFlash('success', __('admin.invitations.keys_success_deleted'));
         } else {
             setFlash('danger', $validator->getErrors());
         }

@@ -30,7 +30,6 @@ class BanController extends BaseController
         }
 
         if ($user->timeban <= SITETIME) {
-
             $user->update([
                 'level'   => User::USER,
                 'timeban' => 0,

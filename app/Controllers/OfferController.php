@@ -93,7 +93,6 @@ class OfferController extends BaseController
         $type  = check($request->input('type'));
 
         if ($request->isMethod('post')) {
-
             $token = check($request->input('token'));
             $title = check($request->input('title'));
             $text  = check($request->input('text'));

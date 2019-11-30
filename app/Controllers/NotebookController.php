@@ -54,7 +54,6 @@ class NotebookController extends BaseController
                 ->length($msg, 0, 10000, ['msg' => __('validator.text_long')], false);
 
             if ($validator->isValid()) {
-
                 $this->note->fill([
                     'text'       => $msg,
                     'created_at' => SITETIME,

@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Controllers;
 
 use App\Models\Ban;
+use Exception;
 use Gregwar\Captcha\PhraseBuilder;
 use Gregwar\Captcha\CaptchaBuilder;
 use Illuminate\Http\Request;
@@ -52,7 +53,7 @@ class HomeController extends BaseController
      *
      * @param Request $request
      * @return string
-     * @throws \Exception
+     * @throws Exception
      */
     public function ipban(Request $request): string
     {
@@ -90,7 +91,7 @@ class HomeController extends BaseController
     public function captcha(): void
     {
         header('Content-type: image/jpeg');
-        $phrase = new PhraseBuilder;
+        $phrase = new PhraseBuilder();
         $phrase = $phrase->build(setting('captcha_maxlength'), setting('captcha_symbols'));
 
         $builder = new CaptchaBuilder($phrase);

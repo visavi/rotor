@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Models;
 
 use App\Traits\UploadTrait;
+use Exception;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
@@ -83,7 +84,7 @@ class Post extends BaseModel
      * Удаление поста и загруженных файлов
      *
      * @return bool|null
-     * @throws \Exception
+     * @throws Exception
      */
     public function delete(): ?bool
     {

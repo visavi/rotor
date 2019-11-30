@@ -43,7 +43,6 @@ class IpBanController extends AdminController
             $validator->empty($duplicate, ['ip' => 'Введенный IP уже имеетеся в списке!']);
 
             if ($validator->isValid()) {
-
                 Ban::query()->create([
                     'ip'         => $ip,
                     'user_id'    => getUser('id'),
@@ -85,7 +84,6 @@ class IpBanController extends AdminController
             ->true($del, __('validator.deletion'));
 
         if ($validator->isValid()) {
-
             Ban::query()->whereIn('id', $del)->delete();
             ipBan(true);
 
@@ -110,10 +108,9 @@ class IpBanController extends AdminController
 
         $validator
             ->equal($token, $_SESSION['token'], __('validator.token'))
-            ->true(isAdmin(User::BOSS), 'Очищать список IP может только владелец!');
+            ->true(isAdmin(User::BOSS), __('main.page_only_owner'));
 
         if ($validator->isValid()) {
-
             Ban::query()->truncate();
             ipBan(true);
 

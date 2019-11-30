@@ -243,7 +243,6 @@ class NewsController extends BaseController
      */
     public function allComments()
     {
-
         $comments = Comment::query()
             ->select('comments.*', 'title', 'count_comments')
             ->where('relate_type', News::class)
