@@ -13,4 +13,9 @@ return [
     'create_title'         => 'Create news',
     'show_on_the_homepage' => 'Show on the homepage',
     'edit_news_title'      => 'Editing news',
+
+    'news_not_exist'       => 'This news does not exist!',
+    'news_success_edited'  => 'News successfully edited!',
+    'news_success_added'   => 'News successfully added!',
+    'news_success_deleted' => 'News successfully deleted!',
 ];

@@ -134,7 +134,7 @@ return [
 
     'photos_per_page' => 'Kол-во фото на стр.',
     'photos_comments' => 'Комментариев на страницу в галерее',
-    'photos_groups' => 'Групп на страницу в галерее',
+    'photos_groups'   => 'Групп на страницу в галерее',
 
     'points_transfer'     => 'Актива для перечисления денег',
     'points_rating_edit'  => 'Актива для изменения репутации',
@@ -164,11 +164,11 @@ return [
     'field_required'         => 'Поле :field обязательно для заполнения!',
     'settings_success_saved' => 'Настройки сайта успешно сохранены!',
 
-    'hosts_hosts_all'   => 'Хосты | Хосты всего',
-    'hits_hits_all'     => 'Хиты | Хиты всего',
-    'hits_hosts'        => 'Хиты | Хосты',
+    'hosts_hosts_all'    => 'Хосты | Хосты всего',
+    'hits_hits_all'      => 'Хиты | Хиты всего',
+    'hits_hosts'         => 'Хиты | Хосты',
     'hits_all_hosts_all' => 'Хиты всего | Хосты всего',
-    'graphical'         => 'Графический',
+    'graphical'          => 'Графический',
 
     'site_open'         => 'Сайт открыт',
     'site_closed_guest' => 'Закрыто для гостей',

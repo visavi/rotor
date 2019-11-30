@@ -51,7 +51,7 @@ class LangCompare extends AbstractCommand
         foreach ($langFiles as $file) {
             $array1 = require ($file);
 
-            $otherFile = str_replace($lang1, $lang2, $file);
+            $otherFile = str_replace('/' . $lang1 . '/', '/' . $lang2 . '/', $file);
             if (file_exists($otherFile)) {
                 $array2 = require ($otherFile);
 

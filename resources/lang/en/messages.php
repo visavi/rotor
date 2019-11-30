@@ -12,4 +12,8 @@ return [
     'dialogue_with'       => 'Dialogue with :user',
     'warning'             => 'Attention, given user is in ignore list!',
     'empty_dialogue'      => 'No correspondence history!',
+    'send_yourself'       => 'You cannot send a letter to yourself!',
+    'success_sent'        => 'Email sent successfully!',
+    'unread_messages'     => 'You have unread messages!',
+    'success_deleted'     => 'Messages successfully deleted!',
 ];

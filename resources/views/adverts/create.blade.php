@@ -58,7 +58,7 @@
         </form>
     </div><br>
 
-    {!! __('adverts.rules_text') !!}<br>
+    {!! __('adverts.rules_text', ['price' =>  plural(setting('rekuserprice'), setting('moneyname')), 'time' => setting('rekusertime'), 'optprice' => plural(setting('rekuseroptprice'), setting('moneyname'))]) !!}<br>
 @stop
 
 @push('scripts')
