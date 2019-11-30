@@ -109,19 +109,19 @@ class UserController extends AdminController
             $created   = check($request->input('created'));
 
             $validator->equal($token, $_SESSION['token'], __('validator.token'))
-                ->in($level, User::ALL_GROUPS, ['level' => 'Недопустимый уровень пользователя!'])
-                ->length($password, 6, 20, 'Слишком длинный или короткий новый пароль!', false)
+                ->in($level, User::ALL_GROUPS, ['level' => __('users.user_level_invalid')])
+                ->length($password, 6, 20, __('users.password_length_requirements'), false)
                 ->email($email, ['email' => __('validator.email')])
                 ->regex($site, '#^https?://([а-яa-z0-9_\-\.])+(\.([а-яa-z0-9\/])+)+$#u', ['site' => __('validator.url')], false)
                 ->regex($birthday, '#^[0-9]{2}+\.[0-9]{2}+\.[0-9]{4}$#', ['birthday' => __('validator.date')], false)
                 ->regex($created, '#^[0-9]{2}+\.[0-9]{2}+\.[0-9]{4}$#', ['created' => __('validator.date')], false)
-                ->length($status, 3, 20, ['status' => 'Слишком длинный или короткий статус!'], false)
-                ->true(in_array($themes, $allThemes, true) || empty($themes), ['themes' => 'Данная тема не установлена на сайте!'])
-                ->length($info, 0, 1000, ['info' => 'Слишком большая информация о себе!']);
+                ->length($status, 3, 20, ['status' => __('users.status_short_or_long')], false)
+                ->true(in_array($themes, $allThemes, true) || empty($themes), ['themes' => __('users.theme_not_installed')])
+                ->length($info, 0, 1000, ['info' => __('users.info_yourself_long')]);
 
             if ($validator->isValid()) {
                 if ($password) {
-                    $text     = '<br>Новый пароль пользователя: ' . $password;
+                    $text     = '<br>' . __('users.user_new_password', ['password' => $password]);
                     $password = password_hash($password, PASSWORD_BCRYPT);
                 } else {
                     $text     = null;
@@ -156,7 +156,7 @@ class UserController extends AdminController
 
                 $user->saveStatus();
 
-                setFlash('success', 'Данные пользователя успешно изменены!' . $text);
+                setFlash('success', __('users.user_success_changed') . $text);
                 redirect('/admin/users/edit?user=' . $user->login);
 
             } else {
@@ -192,7 +192,6 @@ class UserController extends AdminController
         }
 
         if ($request->isMethod('post')) {
-
             $token       = check($request->input('token'));
             $loginblack  = empty($request->input('loginblack')) ? 0 : 1;
             $mailblack   = empty($request->input('mailblack')) ? 0 : 1;
@@ -202,7 +201,7 @@ class UserController extends AdminController
             $delimages   = empty($request->input('delimages')) ? 0 : 1;
 
             $validator->equal($token, $_SESSION['token'], __('validator.token'))
-                ->notIn($user->level, User::ADMIN_GROUPS, 'Запрещено удалять пользователей из группы администраторов!');
+                ->notIn($user->level, User::ADMIN_GROUPS, __('users.admins_remove_forbidden'));
 
             if ($validator->isValid()) {
                 if ($loginblack) {
@@ -299,7 +298,7 @@ class UserController extends AdminController
 
                 $user->delete();
 
-                setFlash('success', 'Пользователь успешно удален!');
+                setFlash('success', __('users.user_success_deleted'));
                 redirect('/admin/users');
             } else {
                 setInput($request->all());

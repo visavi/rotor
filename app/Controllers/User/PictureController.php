@@ -44,7 +44,7 @@ class PictureController extends BaseController
                 'maxsize'   => setting('filesize'),
                 'minweight' => 100,
             ];
-            $validator->file($photo, $rules, ['photo' => __('validator.upload_failed')]);
+            $validator->file($photo, $rules, ['photo' => __('validator.image_upload_failed')]);
 
             if ($validator->isValid()) {
                 //-------- Удаляем старую фотку и аватар ----------//

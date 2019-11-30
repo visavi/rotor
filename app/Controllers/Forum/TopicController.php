@@ -152,7 +152,7 @@ class TopicController extends BaseController
             ];
 
             foreach ($files as $file) {
-                $validator->file($file, $rules, ['files' => __('validator.failed_upload')]);
+                $validator->file($file, $rules, ['files' => __('validator.file_upload_failed')]);
             }
         }
 

@@ -101,7 +101,7 @@ class OfferController extends BaseController
                 ->length($title, 5, 50, ['title' => __('validator.text')])
                 ->length($text, 5, 1000, ['text' => __('validator.text')])
                 ->false($flood->isFlood(), ['msg' => __('validator.flood', ['sec' => $flood->getPeriod()])])
-                ->in($type, Offer::TYPES, ['type' => __('offers.invalid_type')])
+                ->in($type, Offer::TYPES, ['type' => __('offers.type_invalid')])
                 ->gte(getUser('point'), setting('addofferspoint'), __('offers.condition_add', ['point' => plural(setting('addofferspoint'), setting('scorename'))]));
 
             if ($validator->isValid()) {
@@ -169,7 +169,7 @@ class OfferController extends BaseController
             $validator->equal($token, $_SESSION['token'], __('validator.token'))
                 ->length($title, 5, 50, ['title' => __('validator.text')])
                 ->length($text, 5, 1000, ['text' => __('validator.text')])
-                ->in($type, Offer::TYPES, ['type' => __('offers.invalid_type')]);
+                ->in($type, Offer::TYPES, ['type' => __('offers.type_invalid')]);
 
             if ($validator->isValid()) {
                 $title = antimat($title);
@@ -221,7 +221,7 @@ class OfferController extends BaseController
                 ->equal($token, $_SESSION['token'], __('validator.token'))
                 ->length($msg, 5, setting('comment_length'), ['msg' => __('validator.text')])
                 ->false($flood->isFlood(), ['msg' => __('validator.flood', ['sec' => $flood->getPeriod()])])
-                ->empty($offer->closed, ['msg' => __('offers.closed_offer')]);
+                ->empty($offer->closed, ['msg' => __('offers.offer_closed')]);
 
             if ($validator->isValid()) {
                 $msg = antimat($msg);

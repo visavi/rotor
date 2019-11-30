@@ -108,7 +108,7 @@ class OfferController extends AdminController
             $validator->equal($token, $_SESSION['token'], __('validator.token'))
                 ->length($title, 5, 50, ['title' => __('validator.text')])
                 ->length($text, 5, 1000, ['text' => __('validator.text')])
-                ->in($type, Offer::TYPES, ['type' => __('offers.invalid_type')]);
+                ->in($type, Offer::TYPES, ['type' => __('offers.type_invalid')]);
 
             if ($validator->isValid()) {
                 $title = antimat($title);
@@ -122,7 +122,7 @@ class OfferController extends AdminController
                     'updated_at' => SITETIME,
                 ]);
 
-                setFlash('success', 'Запись успешно изменена!');
+                setFlash('success', __('main.record_changed_success'));
                 redirect('/admin/offers/' . $offer->id);
             } else {
                 setInput($request->all());
@@ -157,7 +157,7 @@ class OfferController extends AdminController
 
             $validator->equal($token, $_SESSION['token'], __('validator.token'))
                 ->length($reply, 5, 3000, ['reply' => __('validator.text')])
-                ->in($status, Offer::STATUSES, ['status' => 'Недопустимый статус предложения или проблемы!']);
+                ->in($status, Offer::STATUSES, ['status' => __('offers.status_invalid')]);
 
             if ($validator->isValid()) {
                 $reply = antimat($reply);
@@ -170,7 +170,7 @@ class OfferController extends AdminController
                     'updated_at'    => SITETIME,
                 ]);
 
-                setFlash('success', 'Ответ успешно добавлен!');
+                setFlash('success', __('offers.answer_success_added'));
                 redirect('/admin/offers/' . $offer->id);
             } else {
                 setInput($request->all());
@@ -198,7 +198,6 @@ class OfferController extends AdminController
         $token = check($request->input('token'));
 
         if ($token === $_SESSION['token']) {
-
             restatement('offers');
 
             setFlash('success', __('main.success_recounted'));
@@ -239,7 +238,7 @@ class OfferController extends AdminController
                 ->whereIn('relate_id', $del)
                 ->delete();
 
-            setFlash('success', 'Выбранные записи успешно удалены!');
+            setFlash('success', __('main.records_deleted_success'));
         } else {
             setFlash('danger', $validator->getErrors());
         }

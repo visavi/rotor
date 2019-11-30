@@ -36,7 +36,7 @@ class SettingController extends AdminController
         $act = check($request->input('act', 'mains'));
 
         if (! in_array($act, Setting::getActions(), true)) {
-            abort(404, 'Недопустимая страница!');
+            abort(404, __('settings.page_invalid'));
         }
 
         if ($request->isMethod('post')) {
@@ -46,11 +46,11 @@ class SettingController extends AdminController
             $token = check($request->input('token'));
 
             $validator->equal($token, $_SESSION['token'], ['msg' => __('validator.token')])
-                ->notEmpty($sets, ['sets' => 'Не переданы настройки сайта']);
+                ->notEmpty($sets, ['sets' => __('settings.settings_empty')]);
 
             foreach ($sets as $name => $value) {
                 if (empty($opt[$name]) || ! empty($sets[$name])) {
-                    $validator->length($sets[$name], 1, 255, ['sets['.$name.']' => 'Поле '. check($name) .' обязательно для заполнения']);
+                    $validator->length($sets[$name], 1, 255, ['sets[' . $name . ']' => __('settings.field_required', ['field' => check($name)])]);
                 }
             }
 
@@ -65,7 +65,7 @@ class SettingController extends AdminController
 
                 clearCache('settings');
 
-                setFlash('success', 'Настройки сайта успешно изменены!');
+                setFlash('success', __('settings.settings_success_saved'));
                 redirect('/admin/settings?act=' . $act);
             } else {
                 setInput($request->all());
@@ -75,23 +75,23 @@ class SettingController extends AdminController
 
         $counters = [
             __('main.disable'),
-            'Хосты | Хосты всего',
-            'Хиты | Хиты всего',
-            'Хиты | Хосты',
-            'Хиты всего | Хосты всего',
-            'Графический',
+            __('settings.hosts_hosts_all'),
+            __('settings.hits_hits_all'),
+            __('settings.hits_hosts'),
+            __('settings.hits_all_hosts_all'),
+            __('settings.graphical'),
         ];
 
         $statsite = [
-            'Сайт открыт',
-            'Закрыто для гостей',
-            'Закрыто для всех',
+            __('settings.site_open'),
+            __('settings.site_closed_guest'),
+            __('settings.site_closed_all'),
         ];
 
         $protects = [
-            'graphical',
-            'recaptcha_v2',
-            'recaptcha_v3',
+            'graphical'    =>  __('settings.graphical'),
+            'recaptcha_v2' => 'Recaptcha v2',
+            'recaptcha_v3' => 'Recaptcha v3',
         ];
 
         $settings = Setting::query()->pluck('value', 'name')->all();

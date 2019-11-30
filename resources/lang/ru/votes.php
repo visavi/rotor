@@ -29,4 +29,8 @@ return [
     'answer_not_found'          => 'Ответ для голосования не найден!',
     'voting_not_archive'        => 'Данный опрос еще не в архиве!',
     'voting_success_created'    => 'Голосование успешно создано!',
+    'voting_success_changed'    => 'Голосование успешно изменено!',
+    'voting_success_deleted'    => 'Голосование успешно удалено!',
+    'voting_success_open'       => 'Голосование успешно открыто!',
+    'voting_success_closed'     => 'Голосование успешно закрыто!',
 ];

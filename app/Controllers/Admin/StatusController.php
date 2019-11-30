@@ -54,7 +54,7 @@ class StatusController extends AdminController
 
             $validator
                 ->equal($token, $_SESSION['token'], __('validator.token'))
-                ->length($name, 3, 30, ['name' => 'Слишком длинное или короткое название статуса!'])
+                ->length($name, 3, 30, ['name' => __('statuses.status_length')])
                 ->regex($color, '|^#+[A-f0-9]{6}$|', ['color' => __('validator.color')], false);
 
             if ($validator->isValid()) {
@@ -65,7 +65,7 @@ class StatusController extends AdminController
                     'color'   => $color,
                 ]);
 
-                setFlash('success', 'Статус успешно добавлен!');
+                setFlash('success', __('statuses.status_success_added'));
                 redirect('/admin/status');
             } else {
                 setInput($request->all());
@@ -90,7 +90,7 @@ class StatusController extends AdminController
         $status = Status::query()->find($id);
 
         if (! $status) {
-            abort(404, 'Выбранный вами статус не найден!');
+            abort(404, __('statuses.status_not_found'));
         }
 
         if ($request->isMethod('post')) {
@@ -102,7 +102,7 @@ class StatusController extends AdminController
 
             $validator
                 ->equal($token, $_SESSION['token'], __('validator.token'))
-                ->length($name, 3, 30, ['name' => 'Слишком длинное или короткое название статуса!'])
+                ->length($name, 3, 30, ['name' => __('statuses.status_length')])
                 ->regex($color, '|^#+[A-f0-9]{6}$|', ['color' => __('validator.color')], false);
 
             if ($validator->isValid()) {
@@ -113,7 +113,7 @@ class StatusController extends AdminController
                     'color'   => $color,
                 ]);
 
-                setFlash('success', 'Статус успешно изменен!');
+                setFlash('success', __('statuses.status_success_edited'));
                 redirect('/admin/status');
             } else {
                 setInput($request->all());
@@ -140,12 +140,12 @@ class StatusController extends AdminController
         $validator->equal($token, $_SESSION['token'], __('validator.token'));
 
         $status = Status::query()->find($id);
-        $validator->notEmpty($status, 'Выбранный для удаления статус не найден!');
+        $validator->notEmpty($status, __('statuses.status_not_found'));
 
         if ($validator->isValid()) {
             $status->delete();
 
-            setFlash('success', 'Статус успешно удален!');
+            setFlash('success', __('statuses.status_success_deleted'));
         } else {
             setFlash('danger', $validator->getErrors());
         }

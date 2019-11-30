@@ -190,4 +190,9 @@ return [
     'login_different'               => 'Логин и пароль должны отличаться друг от друга!',
     'password_success_changed'      => 'Пароль успешно изменен!',
     'key_success_generated'         => 'Новый ключ успешно сгенерирован!',
+    'user_level_invalid'            => 'Недопустимый уровень пользователя!',
+    'user_new_password'             => 'Новый пароль пользователя: :password!',
+    'user_success_changed'          => 'Данные пользователя успешно изменены!',
+    'admins_remove_forbidden'       => 'Запрещено удалять пользователей из группы администраторов!',
+    'user_success_deleted'          => 'Пользователь успешно удален!',
 ];

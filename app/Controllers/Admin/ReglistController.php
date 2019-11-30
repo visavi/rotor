@@ -35,8 +35,8 @@ class ReglistController extends AdminController
             $action = check($request->input('action'));
 
             $validator->equal($token, $_SESSION['token'], __('validator.token'))
-                ->notEmpty($choice, 'Отсутствуют выбранные пользователи!')
-                ->in($action, ['yes', 'no'], ['action' => 'Необходимо выбрать действие!']);
+                ->notEmpty($choice, __('admin.reglists.users_not_selected'))
+                ->in($action, ['yes', 'no'], ['action' => __('main.action_not_selected')]);
 
             if ($validator->isValid()) {
                 if ($action === 'yes') {
@@ -46,9 +46,8 @@ class ReglistController extends AdminController
                             'level' => User::USER
                         ]);
 
-                    setFlash('success', 'Выбранные пользователи успешно одобрены!');
+                    setFlash('success', __('admin.reglists.users_success_approved'));
                 } else {
-
                     $users = User::query()
                         ->whereIn('id', $choice)
                         ->get();
@@ -57,7 +56,7 @@ class ReglistController extends AdminController
                         $user->delete();
                     }
 
-                    setFlash('success', 'Выбранные пользователи успешно удалены!');
+                    setFlash('success', __('admin.reglists.users_success_deleted'));
                 }
 
                 redirect('/admin/reglists?page=' . $page);

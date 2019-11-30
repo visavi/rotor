@@ -1,7 +1,7 @@
 @extends('layout')
 
 @section('title')
-    {{ __('admin.status.edit_status') }}
+    {{ __('statuses.edit_status') }}
 @stop
 
 @section('breadcrumb')
@@ -10,7 +10,7 @@
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
             <li class="breadcrumb-item"><a href="/admin">{{ __('index.panel') }}</a></li>
             <li class="breadcrumb-item"><a href="/admin/status">{{ __('index.user_statuses') }}</a></li>
-            <li class="breadcrumb-item active">{{ __('admin.status.edit_status') }}</li>
+            <li class="breadcrumb-item active">{{ __('statuses.edit_status') }}</li>
         </ol>
     </nav>
 @stop

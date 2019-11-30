@@ -90,7 +90,7 @@ class StickerController extends AdminController
                 'created_at' => SITETIME,
             ]);
 
-            setFlash('success', 'Новая категория успешно создана!');
+            setFlash('success', __('stickers.category_success_created'));
             redirect('/admin/stickers/' . $category->id);
         } else {
             setInput($request->all());
@@ -129,7 +129,7 @@ class StickerController extends AdminController
                     'updated_at' => SITETIME,
                 ]);
 
-                setFlash('success', 'Категория успешно отредактирована!');
+                setFlash('success', __('stickers.category_success_changed'));
                 redirect('/admin/stickers');
             } else {
                 setInput($request->all());
@@ -163,13 +163,13 @@ class StickerController extends AdminController
 
         $sticker = Sticker::query()->where('category_id', $category->id)->first();
         if ($sticker) {
-            $validator->addError('Удаление невозможно! В данной категории имеются стикеры!');
+            $validator->addError(__('stickers.category_has_stickers'));
         }
 
         if ($validator->isValid()) {
             $category->delete();
 
-            setFlash('success', 'Категория успешно удалена!');
+            setFlash('success', __('stickers.category_success_deleted'));
         } else {
             setFlash('danger', $validator->getErrors());
         }
@@ -191,11 +191,11 @@ class StickerController extends AdminController
         $categories = StickersCategory::query()->get();
 
         if ($categories->isEmpty()) {
-            abort('default', 'Категории еще не созданы!');
+            abort('default', __('stickers.empty_categories'));
         }
 
         if (! is_writable(UPLOADS . '/stickers')) {
-            abort('default', 'Директория со стикерами недоступна для записи!');
+            abort('default', __('main.directory_not_writable'));
         }
 
         if ($request->isMethod('post')) {
@@ -204,14 +204,14 @@ class StickerController extends AdminController
             $sticker = $request->file('sticker');
 
             $validator->equal($token, $_SESSION['token'], __('validator.token'))
-                ->length($code, 2, 20, ['code' => 'Слишком длинный или короткий код стикера!'])
-                ->regex($code, '|^:+[a-яa-z0-9_\-/\(\)]+$|i', ['code' => 'Код стикера должен начинаться с двоеточия. Разрешены буквы, цифры и дефис!']);
+                ->length($code, 2, 20, ['code' => __('stickers.sticker_length')])
+                ->regex($code, '|^:+[a-яa-z0-9_\-/\(\)]+$|i', ['code' => __('stickers.sticker_requirements')]);
 
             $category = StickersCategory::query()->where('id', $cid)->first();
             $validator->notEmpty($category, ['category' => __('stickers.category_not_exist')]);
 
             $duplicate = Sticker::query()->where('code', $code)->first();
-            $validator->empty($duplicate, ['code' => 'Стикер с данным кодом уже имеется в списке!']);
+            $validator->empty($duplicate, ['code' => __('stickers.sticker_exists')]);
 
             $rules = [
                 'maxsize'   => setting('stickermaxsize'),
@@ -219,7 +219,7 @@ class StickerController extends AdminController
                 'minweight' => setting('stickerminweight'),
             ];
 
-            $validator->file($sticker, $rules, ['sticker' => 'Не удалось загрузить изображение!']);
+            $validator->file($sticker, $rules, ['sticker' => __('validator.image_upload_failed')]);
 
             if ($validator->isValid()) {
                 $newName = uniqueName($sticker->getClientOriginalExtension());
@@ -233,7 +233,7 @@ class StickerController extends AdminController
                 ]);
 
                 clearCache('stickers');
-                setFlash('success', 'Стикер успешно загружен!');
+                setFlash('success', __('stickers.sticker_success_created'));
                 redirect('/admin/stickers/' . $cid);
             } else {
                 setInput($request->all());
@@ -259,7 +259,7 @@ class StickerController extends AdminController
         $page    = int($request->input('page', 1));
 
         if (! $sticker) {
-            abort(404, 'Данного стикера не существует!');
+            abort(404, __('stickers.sticker_not_exist'));
         }
 
         if ($request->isMethod('post')) {
@@ -268,11 +268,11 @@ class StickerController extends AdminController
             $cid   = int($request->input('cid'));
 
             $validator->equal($token, $_SESSION['token'], __('validator.token'))
-                ->length($code, 2, 20, ['code' => 'Слишком длинный или короткий код стикера!'])
-                ->regex($code, '|^:+[a-яa-z0-9_\-/\(\)]+$|i', ['code' => 'Код стикера должен начинаться с двоеточия. Разрешены буквы, цифры и дефис!']);
+                ->length($code, 2, 20, ['code' => __('stickers.sticker_length')])
+                ->regex($code, '|^:+[a-яa-z0-9_\-/\(\)]+$|i', ['code' => __('stickers.sticker_requirements')]);
 
             $duplicate = Sticker::query()->where('code', $code)->where('id', '<>', $sticker->id)->first();
-            $validator->empty($duplicate, ['code' => 'Стикер с данным кодом уже имеется в списке!']);
+            $validator->empty($duplicate, ['code' => __('stickers.sticker_exists')]);
 
             $category = StickersCategory::query()->where('id', $cid)->first();
             $validator->notEmpty($category, ['category' => __('stickers.category_not_exist')]);
@@ -284,7 +284,7 @@ class StickerController extends AdminController
                 ]);
 
                 clearCache('stickers');
-                setFlash('success', 'Стикер успешно отредактирован!');
+                setFlash('success', __('stickers.sticker_success_changed'));
                 redirect('/admin/stickers/' . $cid . '?page=' . $page);
             } else {
                 setInput($request->all());
@@ -309,13 +309,13 @@ class StickerController extends AdminController
     public function deleteSticker(int $id, Request $request, Validator $validator): void
     {
         if (! is_writable(UPLOADS . '/stickers')) {
-            abort('default', 'Директория со стикерами недоступна для записи!');
+            abort('default', __('main.directory_not_writable'));
         }
 
         $sticker = Sticker::query()->where('id', $id)->first();
 
         if (! $sticker) {
-            abort(404, 'Данного стикера не существует!');
+            abort(404, __('stickers.sticker_not_exist'));
         }
 
         $page     = int($request->input('page', 1));
@@ -329,7 +329,7 @@ class StickerController extends AdminController
             $sticker->delete();
 
             clearCache('stickers');
-            setFlash('success', 'Стикер успешно удален!');
+            setFlash('success', __('stickers.sticker_success_deleted'));
         } else {
             setFlash('danger', $validator->getErrors());
         }

@@ -28,7 +28,7 @@
 
         <div class="card">
             <h2 class="card-header">
-                {{ __('admin.status.list') }}
+                {{ __('statuses.list') }}
             </h2>
 
             <ul class="list-group list-group-flush">
@@ -42,7 +42,7 @@
 
                         <div class="float-right">
                             <a data-toggle="tooltip" title="{{ __('main.edit') }}" href="/admin/status/edit?id={{ $status->id }}"><i class="fa fa-pencil-alt text-muted"></i></a>
-                            <a data-toggle="tooltip" title="{{ __('main.delete') }}" href="/admin/status/delete?id={{ $status->id }}&amp;token={{ $_SESSION['token'] }}" onclick="return confirm('{{ __('admin.status.confirm_delete') }}')"><i class="fa fa-trash-alt text-muted"></i></a>
+                            <a data-toggle="tooltip" title="{{ __('main.delete') }}" href="/admin/status/delete?id={{ $status->id }}&amp;token={{ $_SESSION['token'] }}" onclick="return confirm('{{ __('statuses.confirm_delete') }}')"><i class="fa fa-trash-alt text-muted"></i></a>
                         </div>
                     </li>
                 @endforeach
@@ -54,6 +54,6 @@
         </div><br>
 
     @else
-        {!! showError(__('admin.status.empty_statuses')) !!}
+        {!! showError(__('statuses.empty_statuses')) !!}
     @endif
 @stop

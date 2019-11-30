@@ -109,7 +109,7 @@ class VoteController extends AdminController
                     }
                 }
 
-                setFlash('success', 'Голосование успешно изменено!');
+                setFlash('success', __('votes.voting_success_changed'));
                 redirect('/admin/votes/edit/'.$vote->id);
             } else {
                 setInput($request->all());
@@ -151,7 +151,7 @@ class VoteController extends AdminController
                 $vote->pollings()->delete();
             });
 
-            setFlash('success', 'Голосование успешно удалено!');
+            setFlash('success', __('votes.voting_success_deleted'));
         } else {
             setFlash('danger', __('validator.token'));
         }
@@ -176,7 +176,7 @@ class VoteController extends AdminController
         }
 
         if ($token === $_SESSION['token']) {
-            $type   = 'открыто';
+            $status   = __('votes.voting_success_open');
             $closed = $vote->closed ^ 1;
 
             $vote->update([
@@ -185,10 +185,10 @@ class VoteController extends AdminController
 
             if ($closed) {
                 $vote->pollings()->delete();
-                $type = 'закрыто' ;
+                $status = __('votes.voting_success_closed');
             }
 
-            setFlash('success', 'Голосование успешно ' . $type . '!');
+            setFlash('success', $status);
         } else {
             setFlash('danger', __('validator.token'));
         }
@@ -217,7 +217,7 @@ class VoteController extends AdminController
         if ($token === $_SESSION['token']) {
             restatement('votes');
 
-            setFlash('success', 'Голосования успешно пересчитаны!');
+            setFlash('success', __('main.success_recounted'));
         } else {
             setFlash('danger', __('validator.token'));
         }

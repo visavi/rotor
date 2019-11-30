@@ -158,4 +158,19 @@ return [
     'stickers_max_weight' => 'Максимальный размер стикера',
     'stickers_min_weight' => 'Минимальный размер стикера',
     'stickers_per_page'   => 'Стикеров на стр.',
+
+    'page_invalid'           => 'Недопустимая страница!',
+    'settings_empty'         => 'Не переданы настройки сайта',
+    'field_required'         => 'Поле :field обязательно для заполнения!',
+    'settings_success_saved' => 'Настройки сайта успешно сохранены!',
+
+    'hosts_hosts_all'   => 'Хосты | Хосты всего',
+    'hits_hits_all'     => 'Хиты | Хиты всего',
+    'hits_hosts'        => 'Хиты | Хосты',
+    'hits_all_hosts_all' => 'Хиты всего | Хосты всего',
+    'graphical'         => 'Графический',
+
+    'site_open'         => 'Сайт открыт',
+    'site_closed_guest' => 'Закрыто для гостей',
+    'site_closed_all'   => 'Закрыто для всех',
 ];

@@ -220,7 +220,7 @@ class BBCodeTest extends \Tests\TestCase
         $parseText = bbCode($text);
         $parseText = trim(preg_replace('/\s\s+/', '', $parseText));
 
-        $this->assertSame('<div class="spoiler"><b class="spoiler-title">Развернуть для просмотра</b><div class="spoiler-text" style="display: none;">Спойлер</div></div>', $parseText);
+        $this->assertSame('<div class="spoiler"><b class="spoiler-title">' . __('main.expand_view') . '</b><div class="spoiler-text" style="display: none;">Спойлер</div></div>', $parseText);
     }
 
     /**
@@ -244,7 +244,7 @@ class BBCodeTest extends \Tests\TestCase
         $parseText = bbCode($text);
         $parseText = trim(preg_replace('/\s\s+/', '', $parseText));
 
-        $this->assertSame('<div class="hiding"><span class="font-weight-bold">Скрытый контент:</span> ' . __('main.not_authorized') . '</div>', $parseText);
+        $this->assertSame('<div class="hiding"><span class="font-weight-bold">' . __('main.hidden_content') . ':</span> ' . __('main.not_authorized') . '</div>', $parseText);
     }
 
     /**

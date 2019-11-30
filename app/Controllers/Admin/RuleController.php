@@ -60,7 +60,7 @@ class RuleController extends AdminController
 
             $validator
                 ->equal($token, $_SESSION['token'], __('validator.token'))
-                ->notEmpty($msg, ['msg' => 'Вы не ввели текст с правилами сайта!']);
+                ->notEmpty($msg, ['msg' => __('admin.rules.rules_empty')]);
 
             if ($validator->isValid()) {
                 $rules->fill([
@@ -68,9 +68,8 @@ class RuleController extends AdminController
                     'created_at' => SITETIME,
                 ])->save();
 
-                setFlash('success', 'Правила успешно изменены!');
+                setFlash('success', __('admin.rules.rules_success_saved'));
                 redirect('/admin/rules');
-
             } else {
                 setInput($request->all());
                 setFlash('danger', $validator->getErrors());

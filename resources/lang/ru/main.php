@@ -112,6 +112,8 @@ return [
     'empty_users'       => 'Пользователей еще нет!',
     'reputation'        => 'Репутация',
     'registration_date' => 'Дата регистрации',
+    'expand_view'       => 'Развернуть для просмотра',
+    'hidden_content'    => 'Скрытый контент',
 
     'max_file_upload'       => 'Максимум загружаемых файлов',
     'max_file_weight'       => 'Максимальный вес файла',
@@ -231,4 +233,5 @@ return [
     'deleted_only_admins'      => 'Записи могут удалять только администраторы!',
     'success_recounted'        => 'Данные успешно пересчитаны!',
     'action_not_selected'      => 'Не выбрано действие!',
+    'directory_not_writable'   => 'Директория недоступна для записи!',
 ];

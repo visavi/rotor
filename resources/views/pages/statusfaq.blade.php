@@ -8,15 +8,15 @@
     <nav>
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
-            <li class="breadcrumb-item active">{{ __('pages.user_statuses') }}</li>
+            <li class="breadcrumb-item active">{{ __('statuses.user_statuses') }}</li>
         </ol>
     </nav>
 @stop
 
 @section('content')
-    {{ __('pages.status_text1') }}<br>
-    {{ __('pages.status_text2') }}<br>
-    {{ __('pages.status_text3') }}<br><br>
+    {{ __('statuses.status_text1') }}<br>
+    {{ __('statuses.status_text2') }}<br>
+    {{ __('statuses.status_text3') }}<br><br>
 
     @if ($statuses->isNotEmpty())
         @foreach ($statuses as $status)
@@ -32,9 +32,9 @@
 
         <br>
     @else
-        {!! showError(__('pages.empty_statuses')) !!}
+        {!! showError(__('statuses.empty_statuses')) !!}
     @endif
 
-    {{ __('pages.status_text4') }}<br>
-    {{ __('pages.status_text5') }}<br><br>
+    {{ __('statuses.status_text4') }}<br>
+    {{ __('statuses.status_text5') }}<br><br>
 @stop

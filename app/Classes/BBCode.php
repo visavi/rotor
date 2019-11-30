@@ -229,7 +229,7 @@ class BBCode
      */
     public function spoilerText($match): string
     {
-        $title = empty($match[2]) ? 'Развернуть для просмотра' : $match[1];
+        $title = empty($match[2]) ? __('main.expand_view') : $match[1];
         $text  = empty($match[2]) ? $match[1] : $match[2];
 
         return '<div class="spoiler">
@@ -247,7 +247,8 @@ class BBCode
     public function hiddenText($match): string
     {
         return '<div class="hiding">
-                <span class="font-weight-bold">Скрытый контент:</span> ' . (getUser() ? $match[1] : __('main.not_authorized')) .
+                <span class="font-weight-bold">' . __('main.hidden_content') . ':</span> ' .
+                (getUser() ? $match[1] : __('main.not_authorized')) .
             '</div>';
     }
 

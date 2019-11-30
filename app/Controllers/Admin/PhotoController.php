@@ -64,7 +64,7 @@ class PhotoController extends AdminController
                 ]);
 
                 clearCache(['statPhotos', 'recentPhotos']);
-                setFlash('success', 'Фотография успешно отредактирована!');
+                setFlash('success', __('photos.photo_success_edited'));
                 redirect('/admin/photos?page=' . $page);
             } else {
                 setInput($request->all());
@@ -87,7 +87,7 @@ class PhotoController extends AdminController
     public function delete(int $id, Request $request, Validator $validator): void
     {
         if (! is_writable(UPLOADS . '/photos')) {
-            abort('default', 'Директория c фотографиями недоступна для записи!');
+            abort('default', __('main.directory_not_writable'));
         }
 
         $page  = int($request->input('page', 1));
@@ -107,7 +107,7 @@ class PhotoController extends AdminController
             $photo->delete();
 
             clearCache(['statPhotos', 'recentPhotos']);
-            setFlash('success', 'Фотография успешно удалена!');
+            setFlash('success', __('photos.photo_success_deleted'));
         } else {
             setFlash('danger', $validator->getErrors());
         }

@@ -88,7 +88,7 @@ class DownController extends BaseController
             $validator->empty($duplicate, ['title' => __('loads.down_name_exists')]);
 
             $existFiles = $down->files ? $down->files->count() : 0;
-            $validator->notEmpty(count($files) + $existFiles, ['files' => __('validator.upload_one_file')]);
+            $validator->notEmpty(count($files) + $existFiles, ['files' => __('validator.file_upload_one')]);
             $validator->lte(count($files) + $existFiles, setting('maxfiles'), ['files' => __('validator.files_max', ['max' => setting('maxfiles')])]);
 
             if ($validator->isValid()) {
@@ -99,7 +99,7 @@ class DownController extends BaseController
                 ];
 
                 foreach ($files as $file) {
-                    $validator->file($file, $rules, ['files' => __('validator.failed_upload')]);
+                    $validator->file($file, $rules, ['files' => __('validator.file_upload_failed')]);
                 }
             }
 
@@ -209,7 +209,7 @@ class DownController extends BaseController
                 $validator->empty($duplicate, ['title' => __('loads.down_name_exists')]);
             }
 
-            $validator->notEmpty($files, ['files' => __('validator.upload_one_file')]);
+            $validator->notEmpty($files, ['files' => __('validator.file_upload_one')]);
             $validator->lte(count($files), setting('maxfiles'), ['files' => __('validator.files_max', ['max' => setting('maxfiles')])]);
 
             if ($validator->isValid()) {
@@ -220,7 +220,7 @@ class DownController extends BaseController
                 ];
 
                 foreach ($files as $file) {
-                    $validator->file($file, $rules, ['files' => __('validator.failed_upload')]);
+                    $validator->file($file, $rules, ['files' => __('validator.file_upload_failed')]);
                 }
             }
 

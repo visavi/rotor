@@ -48,9 +48,9 @@
         <label for="captcha_type">{{ __('main.type') }}:</label>
         <select class="form-control" id="captcha_type" name="sets[captcha_type]">
 
-            @foreach ($protects as $captcha)
-                <?php $selected = ($captcha === $inputCaptcha) ? ' selected' : ''; ?>
-                <option value="{{ $captcha }}"{{ $selected }}>{{ $captcha }}</option>
+            @foreach ($protects as $key => $captcha)
+                <?php $selected = ($key === $inputCaptcha) ? ' selected' : ''; ?>
+                <option value="{{ $key }}"{{ $selected }}>{{ $captcha }}</option>
             @endforeach
 
         </select>
