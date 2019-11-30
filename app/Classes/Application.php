@@ -135,7 +135,7 @@ class Application
                 $user->increment('money', setting('bonusmoney'));
                 $user->update(['timebonus' => SITETIME]);
 
-                setFlash('success', 'Получен ежедневный бонус ' . plural(setting('bonusmoney'), setting('moneyname')) . '!');
+                setFlash('success', __('main.daily_bonus', ['money' => plural(setting('bonusmoney'), setting('moneyname'))]));
             }
         }
     }

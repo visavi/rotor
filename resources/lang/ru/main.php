@@ -114,6 +114,7 @@ return [
     'registration_date' => 'Дата регистрации',
     'expand_view'       => 'Развернуть для просмотра',
     'hidden_content'    => 'Скрытый контент',
+    'daily_bonus'       => 'Получен ежедневный бонус: :money',
 
     'max_file_upload'       => 'Максимум загружаемых файлов',
     'max_file_weight'       => 'Максимальный вес файла',

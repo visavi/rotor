@@ -30,6 +30,7 @@ $app->addCommands([
     new \App\Commands\CacheClear(),
     new \App\Commands\RouteClear(),
     new \App\Commands\ConfigClear(),
+    new \App\Commands\LangCompare(),
 ]);
 
 $dispatcher = new EventDispatcher();
