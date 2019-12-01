@@ -38,9 +38,9 @@ if (config('APP_DEBUG') && class_exists(Run::class)) {
     $whoops = new Run();
 
     if (Whoops\Util\Misc::isCommandLine()) {
-        $whoops->prependHandler(new PlainTextHandler);
+        $whoops->prependHandler(new PlainTextHandler());
     } else {
-        $whoops->prependHandler(new PrettyPageHandler);
+        $whoops->prependHandler(new PrettyPageHandler());
     }
 
     $whoops->register();
@@ -108,7 +108,7 @@ $app->singleton('view', static function ($app) {
     });
 
     $resolver->register('php', static function () {
-        return new PhpEngine;
+        return new PhpEngine();
     });
 
     $finder = new FileViewFinder(
