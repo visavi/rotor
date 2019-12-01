@@ -14,12 +14,14 @@ ob_start();
 define('DIR', dirname(__DIR__, 2));
 include_once DIR . '/app/bootstrap.php';
 
-$request = request();
+$request      = request();
+$phpVersion   = '7.2.0';
+$mysqlVersion = '5.5.3';
 
 $app  = new Phinx\Console\PhinxApplication();
 $wrap = new Phinx\Wrapper\TextWrapper($app);
 
-$app->setName('Rotor by Vantuz - http://visavi.net');
+$app->setName('Rotor by Vantuz - https://visavi.net');
 $app->setVersion(VERSION);
 
 $wrap->setOption('configuration', APP . '/migration.php');
@@ -55,7 +57,7 @@ $errors = [];
 <html lang="ru">
 <head>
     <title>
-        <?= config('APP_NEW') ? __('install.install') : __('install.upgrade') ?> Rotor
+        <?= config('APP_NEW') ? __('install.install') : __('install.update') ?> Rotor
     </title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
@@ -84,78 +86,79 @@ $errors = [];
             </div>
         </form>
 
-        <h1>Шаг 1 - проверка требований</h1>
+        <h1><?= __('install.step1') ?></h1>
 
-        <p style="color:#ff0000">
-            Если в процессе установки движка произойдет какая-либо ошибка, чтобы узнать причину ошибки включите вывод ошибок, измените значение APP_DEBUG на true
-        </p>
+        <div class="alert alert-info">
+            <?= __('install.debug') ?>
+        </div>
 
-        <p style="color:#ff0000">
-            Если вы обновляетесь с предыдущей версии Rotor, вам необходимо провести обновление базы данных, для этого значение APP_NEW должно быть false, после этого обновите текущую страницу</p>
+        <div class="alert alert-info">
+            <?= __('install.app_new') ?>
+        </div>
 
-        <p>Для установки движка, вам необходимо прописать данные от БД в файл .env</p>
+        <p><?= __('install.env') ?></p>
 
         <?php foreach ($keys as $key): ?>
             <b><?= $key ?></b> - <?= trim(var_export(config($key), true), "'") ?><br>
         <?php endforeach; ?>
         <br>
-        <p>Не забудьте изменить значение APP_KEY, эти данные необходимы для шифрования cookies и паролей в сессиях</p>
+        <p><?= __('install.app_key') ?></p>
 
-        <p>Минимальная версия PHP необходимая для работы движка PHP 7.2.0 и MySQL 5.5.3</p>
+        <p><?= __('install.requirements', ['php' => $phpVersion, 'mysql' => $mysqlVersion]) ?></p>
 
-        <p style="font-size: 15px; font-weight: bold">Проверка требований</p>
+        <p style="font-size: 15px; font-weight: bold"><?= __('install.check_requirements') ?></p>
 
-        <?php $errors['critical']['php'] = PHP_VERSION_ID >= 70200 ?>
+        <?php $errors['critical']['php'] = version_compare(PHP_VERSION, $phpVersion) >= 0 ?>
         <i class="fas fa-check-circle <?= $errors['critical']['php'] ? 'text-success' : 'fa-times-circle text-danger' ?>"></i>
-        Версия PHP 7.2.0: <b><?= parseVersion(PHP_VERSION) ?></b><br>
+        PHP: <b><?= parseVersion(PHP_VERSION) ?></b><br>
 
         <?php $errors['critical']['pdo_mysql'] = extension_loaded('pdo_mysql') ?>
         <i class="fas fa-check-circle <?= $errors['critical']['pdo_mysql'] ? 'text-success' : 'fa-times-circle text-danger' ?>"></i>
         <?php $version = strtok(getModuleSetting('pdo_mysql', ['Client API version', 'PDO Driver for MySQL, client library version']), '-'); ?>
-        Расширение PDO-MySQL: <b><?= $version ?></b><br>
+        PDO-MySQL: <b><?= $version ?></b><br>
 
         <?php $errors['simple']['bcmath'] = extension_loaded('bcmath') ?>
         <i class="fas fa-check-circle <?= $errors['simple']['bcmath'] ? 'text-success' : 'fa-times-circle text-danger' ?>"></i>
-        Расширение BCMath<br>
+        BCMath<br>
 
         <?php $errors['simple']['ctype'] = extension_loaded('ctype') ?>
         <i class="fas fa-check-circle <?= $errors['simple']['ctype'] ? 'text-success' : 'fa-times-circle text-danger' ?>"></i>
-        Расширение Ctype<br>
+        Ctype<br>
 
         <?php $errors['simple']['json'] = extension_loaded('json') ?>
         <i class="fas fa-check-circle <?= $errors['simple']['json'] ? 'text-success' : 'fa-times-circle text-danger' ?>"></i>
-        Расширение Json<br>
+        Json<br>
 
         <?php $errors['simple']['tokenizer'] = extension_loaded('tokenizer') ?>
         <i class="fas fa-check-circle <?= $errors['simple']['tokenizer'] ? 'text-success' : 'fa-times-circle text-danger' ?>"></i>
-        Расширение Tokenizer<br>
+        Tokenizer<br>
 
         <?php $errors['simple']['mbstring'] = extension_loaded('mbstring') ?>
         <i class="fas fa-check-circle <?= $errors['simple']['mbstring'] ? 'text-success' : 'fa-times-circle text-danger' ?>"></i>
         <?php $version = getModuleSetting('mbstring', ['oniguruma version', 'Multibyte regex (oniguruma) version']); ?>
-        Расширение MbString: <b><?= $version ?></b><br>
+        MbString: <b><?= $version ?></b><br>
 
         <?php $errors['simple']['openssl'] = extension_loaded('openssl') ?>
         <i class="fas fa-check-circle <?= $errors['simple']['openssl'] ? 'text-success' : 'fa-times-circle text-danger' ?>"></i>
         <?php $version = getModuleSetting('openssl', ['OpenSSL Library Version', 'OpenSSL Header Version']); ?>
-        Расширение OpenSSL: <b><?= $version ?></b><br>
+        OpenSSL: <b><?= $version ?></b><br>
 
         <?php $errors['simple']['xml'] = extension_loaded('xml') ?>
         <i class="fas fa-check-circle <?= $errors['simple']['xml'] ? 'text-success' : 'fa-times-circle text-danger' ?>"></i>
         <?php $version = getModuleSetting('xml', ['libxml2 Version']); ?>
-        Расширение XML: <b><?= $version ?></b><br>
+        XML: <b><?= $version ?></b><br>
 
         <?php $errors['simple']['gd'] = extension_loaded('gd') ?>
         <i class="fas fa-check-circle <?= $errors['simple']['gd'] ? 'text-success' : 'fa-times-circle text-danger' ?>"></i>
         <?php $version = getModuleSetting('gd', ['GD headers Version', 'GD library Version']); ?>
-        Библиотека GD: <b><?= $version ?></b><br>
+        GD: <b><?= $version ?></b><br>
 
         <?php $errors['simple']['curl'] = extension_loaded('curl') ?>
         <i class="fas fa-check-circle <?= $errors['simple']['curl'] ? 'text-success' : 'fa-times-circle text-danger' ?>"></i>
         <?php $version = getModuleSetting('curl', ['Curl Information', 'cURL Information']); ?>
-        Библиотека Curl: <b><?= $version ?></b><br>
+        Curl: <b><?= $version ?></b><br>
 
-        Для обработки видео желательно установить библиотеку FFmpeg<br><br>
+        <?= __('install.ffmpeg') ?><br><br>
 
         <p style="font-size: 15px; font-weight: bold">Права доступа</p>
 
@@ -177,64 +180,64 @@ $errors = [];
             <?= str_replace(DIR, '', $dir) ?>: <b><?= $chmod ?></b><br>
         <?php endforeach; ?>
 
-        <br>Дополнительно можете выставить права на директории и файлы с шаблонами внутри resources/views - это необходимо для редактирования шаблонов сайта<br><br>
+        <br><?= __('install.chmod_views') ?><br><br>
 
-        Если какой-то пункт выделен красным, необходимо зайти по FTP и выставить CHMOD разрешающую запись<br>
-        Некоторые настройки являются рекомендуемыми для полной совместимости, однако скрипт способен работать даже если рекомендуемые настройки не совпадают с текущими.<br><br>
+        <?= __('install.chmod') ?><br>
+        <?= __('install.errors') ?><br><br>
 
         <?php if (! in_array(false, $errors['critical'], true) && ! in_array(false, $errors['chmod'], true)): ?>
             <div class="alert alert-success">
-                <i class="fa fa-check-circle"></i> Вы можете продолжить установку движка!
+                <i class="fa fa-check-circle"></i> <?= __('install.continue') ?>
             </div>
 
             <?php if (! in_array(false, $errors['simple'], true)): ?>
-                Все модули и библиотеки присутствуют, настройки корректны, необходимые файлы и папки доступны для записи<br><br>
+                <?= __('install.requirements_pass') ?><br><br>
             <?php else: ?>
-                <div class="alert alert-warning">У вас имеются предупреждения!<br>
-                    Данные предупреждения не являются критическими, но тем не менее для полноценной, стабильной и безопасной работы движка желательно их устранить<br>
-                    Вы можете продолжить установку скрипта, но нет никаких гарантий, что движок будет работать стабильно
+                <div class="alert alert-warning"><?= __('install.requirements_warning') ?><br>
+                    <?= __('install.requirements_not_pass') ?><br>
+                    <?= __('install.continue_restrict') ?>
                 </div>
             <?php endif; ?>
 
-            <a style="font-size: 18px" href="?act=status&amp;lang=<?= $lang ?>">Проверить статус</a>
-            (Выполняется <?= config('APP_NEW') ? __('install.install') : __('install.upgrade') ?>)
+            <a style="font-size: 18px" href="?act=status&amp;lang=<?= $lang ?>"><?= __('install.check_status') ?></a>
+            (<?= __('install.performed') ?> <?= config('APP_NEW') ? __('install.install') : __('install.update') ?>)
         <?php else: ?>
             <div class="alert alert-danger">
-                <i class="fa fa-times-circle"></i> Имеются критические ошибки!<br>
-                Вы не сможете приступить к установке, пока не устраните критические ошибки
+                <i class="fa fa-times-circle"></i> <?= __('install.requirements_failed') ?><br>
+                <?= __('install.resolve_errors') ?>
             </div>
         <?php endif; ?>
     <?php endif; ?>
 
     <?php if (config('APP_NEW')): ?>
         <?php if ($request->input('act') === 'status'): ?>
-            <h1>Шаг 2 - проверка статуса (установка)</h1>
+            <h1><?= __('install.step2_install') ?></h1>
 
             <?= nl2br($wrap->getStatus()) ?>
 
-            <p><a style="font-size: 18px" href="?act=migrate&amp;lang=<?= $lang ?>">Выполнить миграции</a></p>
+            <p><a style="font-size: 18px" href="?act=migrate&amp;lang=<?= $lang ?>"><?= __('install.migrations') ?></a></p>
 
         <?php elseif ($request->input('act') === 'migrate'): ?>
-            <h1>Шаг 3 - выполнение миграций (установка)</h1>
+            <h1><?= __('install.step3_install') ?></h1>
 
             <?= nl2br($wrap->getMigrate()) ?>
 
-            <p><a style="font-size: 18px" href="?act=seed&amp;lang=<?= $lang ?>">Заполнить БД</a></p>
+            <p><a style="font-size: 18px" href="?act=seed&amp;lang=<?= $lang ?>"><?= __('install.seeds') ?></a></p>
 
         <?php elseif ($request->input('act') === 'seed'): ?>
 
-            <h1>Шаг 4 - заполнение БД (установка)</h1>
+            <h1><?= __('install.step4_install') ?>)</h1>
 
             <?= nl2br($wrap->getSeed()) ?>
 
-            <p><a style="font-size: 18px" href="?act=account&amp;lang=<?= $lang ?>">Создать администратора</a></p>
+            <p><a style="font-size: 18px" href="?act=account&amp;lang=<?= $lang ?>"><?= __('install.create_admin') ?></a></p>
         <?php elseif ($request->input('act') === 'account'): ?>
 
-            <h1>Шаг 5 - создание администратора (установка)</h1>
+            <h1><?= __('install.step5_install') ?></h1>
 
-            Прежде чем перейти к администрированию вашего сайта, необходимо создать аккаунт администратора.<br>
-            Перед тем как нажимать кнопку Создать, убедитесь, что на предыдущей странице нет уведомлений об ошибках, иначе процесс не сможет быть завершен удачно.<br>
-            После окончания инсталляции необходимо удалить директорию <b>install</b> со всем содержимым, пароль и остальные данные вы сможете поменять в своем профиле<br><br>
+            <?= __('install.create_admin_info') ?><br>
+            <?= __('install.create_admin_errors') ?><br>
+            <?= __('install.delete_install') ?><br><br>
 
             <?php
                 $login     = check($request->input('login'));
@@ -269,20 +272,19 @@ $errors = [];
                         'themes'     => 0,
                         'point'      => 500,
                         'money'      => 100000,
-                        'info'       => 'Администратор сайта',
-                        'status'     => 'Босс',
+                        'status'     => 'Boss',
                         'created_at' => SITETIME,
                     ]);
 
                     // -------------- Приват ---------------//
-                    $text = 'Привет, ' . $login . '! Поздравляем с успешной установкой нашего движка Rotor.'.PHP_EOL.'Новые версии, апгрейды, а также множество других дополнений вы найдете на нашем сайте [url=http://visavi.net]VISAVI.NET[/url]';
+                    $text = __('install.text_message', ['login' => $login]);
                     $user->sendMessage(null, $text);
 
                     // -------------- Новость ---------------//
-                    $textnews = 'Добро пожаловать на демонстрационную страницу движка Rotor'.PHP_EOL.'Rotor - функционально законченная система управления контентом с открытым кодом написанная на PHP. Она использует базу данных MySQL для хранения содержимого вашего сайта. Rotor является гибкой, мощной и интуитивно понятной системой с минимальными требованиями к хостингу, высоким уровнем защиты и является превосходным выбором для построения сайта любой степени сложности'.PHP_EOL.'Главной особенностью Rotor является низкая нагрузка на системные ресурсы, даже при очень большой аудитории сайта нагрузка не сервер будет минимальной, и вы не будете испытывать каких-либо проблем с отображением информации.'.PHP_EOL.'Движок Rotor вы можете скачать на официальном сайте [url=http://visavi.net]VISAVI.NET[/url]';
+                    $textnews = __('install.text_news');
 
                     $news = News::query()->create([
-                        'title'      => 'Добро пожаловать!',
+                        'title'      => __('install.welcome'),
                         'text'       => $textnews,
                         'user_id'    => $user->id,
                         'created_at' => SITETIME,
@@ -290,47 +292,37 @@ $errors = [];
 
                     redirect('?act=finish&lang=' . $lang);
 
-                } else {echo '<p style="color: #ff0000">Ошибка! Указанный вами адрес email уже используется в системе!</p>';}
-                } else {echo '<p style="color: #ff0000">Ошибка! Пользователь с данным логином уже зарегистрирован!</p>';}
-                } else {echo '<p style="color: #ff0000">Ошибка! Неправильный адрес email, необходим формат name@site.domen</p>';}
-                } else {echo '<p style="color: #ff0000">Ошибка! Веденные пароли отличаются друг от друга</p>';}
-                } else {echo '<p style="color: #ff0000">Ошибка! Недопустимые символы в логине. Разрешены только знаки латинского алфавита и цифры!</p>';}
-                } else {echo '<p style="color: #ff0000">Ошибка! Слишком длинный или короткий логин (От 3 до 20 символов)</p>';}
-
+                } else {echo '<div class="alert alert-danger">' . __('users.email_already_exists') . '</div>';}
+                } else {echo '<div class="alert alert-danger">' . __('users.login_already_exists') . '</div>';}
+                } else {echo '<div class="alert alert-danger">' . __('validator.email') . '</div>';}
+                } else {echo '<div class="alert alert-danger">' . __('users.passwords_different') . '</div>';}
+                } else {echo '<div class="alert alert-danger">' . __('validator.login') . '</div>';}
+                } else {echo '<div class="alert alert-danger">' . __('users.login_requirements') . '</div>';}
                 ?>
             <?php endif; ?>
 
             <div class="form">
                <form method="post" action="?act=account&amp;lang=<?= $lang ?>">
-                    Логин (max20):<br>
+                    <?= __('users.login') ?> (max20):<br>
                     <input class="form-control" name="login" maxlength="20" value="<?= $login ?>"><br>
-                    Пароль(max20):<br>
+                    <?= __('users.password') ?> (max20):<br>
                     <input class="form-control" name="password" type="password" maxlength="50"><br>
-                    Повторите пароль:<br>
+                    <?= __('users.confirm_password') ?>:<br>
                     <input class="form-control" name="password2" type="password" maxlength="50"><br>
-                    Адрес email:<br>
+                    <?= __('users.email') ?>:<br>
                     <input class="form-control" name="email" maxlength="100" value="<?= $email ?>"><br>
-                   <button class="btn btn-primary">Создать</button>
+                   <button class="btn btn-primary"><?= __('main.create') ?></button>
                 </form>
             </div><br>
-
-            Внимание, в поле логин разрешены только знаки латинского алфавита, цифры и знак дефис<br>
-            Все поля обязательны для заполнения<br>
-            Email будет нужен для восстановления пароля, пишите только свои данные<br>
-            Не нажимайте кнопку дважды, подождите до тех пор, пока процесс не завершится<br>
-            В поле ввода адреса сайта необходимо ввести адрес в который у вас распакован движок, если это поддомен или папка, то необходимо указать ее, к примеру http://wap.visavi.net<br><br>
-
+            <?= __('users.login_requirements') ?><br><br>
 
         <?php elseif ($request->input('act') === 'finish'): ?>
 
-            <h1>Установка завершена</h1>
-
+            <h1><?= __('install.install_completed') ?></h1>
             <p>
-                Поздравляем Вас, Rotor был успешно установлен на Ваш сервер. Вы можете перейти на главную страницу вашего сайта и посмотреть возможности скрипта<br><br>
-                Аккаунт администратора создан<br><br>
-                <a href="/">Перейти на главную страницу сайта</a><br>
+                <?= __('install.install') ?><br><br>
+                <a href="/"><?= __('install.main_page') ?></a><br>
             </p>
-            <p style="font-size: 20px">Удалите директорию install</p>
 
             <?php
             runCommand(new AppState());
@@ -344,26 +336,22 @@ $errors = [];
     <?php else: ?>
 
         <?php if ($request->input('act') === 'status'): ?>
-
-            <h1>Шаг 2 - проверка статуса (обновление)</h1>
+            <h1><?= __('install.step2_update') ?></h1>
             <?= nl2br($wrap->getStatus()) ?>
-            <a style="font-size: 18px" href="?act=migrate&amp;lang=<?= $lang ?>">Перейти к обновлению</a>
+            <a style="font-size: 18px" href="?act=migrate&amp;lang=<?= $lang ?>"><?= __('install.migrations') ?></a>
 
         <?php elseif ($request->input('act') === 'rollback'): ?>
             <?= nl2br($wrap->getRollback()) ?>
 
         <?php elseif ($request->input('act') === 'migrate'): ?>
 
-            <h1>Обновление завершено</h1>
-
+            <h1><?= __('install.update_completed') ?></h1>
             <?= nl2br($wrap->getMigrate()) ?>
 
             <p>
-                Поздравляем Вас, Rotor был успешно обновлен. Вы можете перейти на главную страницу вашего сайта и посмотреть возможности скрипта<br><br>
-                <a href="/">Перейти на главную страницу сайта</a><br>
+                <?= __('install.success_update') ?><br><br>
+                <a href="/"><?= __('install.main_page') ?></a><br>
             </p>
-
-            <p style="font-size: 20px">Удалите директорию install</p>
             <?php
             runCommand(new CacheClear());
             runCommand(new RouteClear());
@@ -384,8 +372,7 @@ $errors = [];
 function parsePHPModules() {
     ob_start();
     phpinfo(INFO_MODULES);
-    $s = ob_get_contents();
-    ob_end_clean();
+    $s = ob_get_clean();
     $s = strip_tags($s, '<h2><th><td>');
     $s = preg_replace('/<th[^>]*>([^<]+)<\/th>/', "<info>\\1</info>", $s);
     $s = preg_replace('/<td[^>]*>([^<]+)<\/td>/', "<info>\\1</info>", $s);
@@ -431,5 +418,5 @@ function getModuleSetting(string $pModuleName, array $pSettings)
         }
     }
 
-    return 'Не определено';
+    return __('main.undefined');
 }

@@ -146,7 +146,7 @@ npm run prod
 ### Author
 Author: Vantuz  
 Email: admin@visavi.net  
-Site: http://visavi.net  
+Site: https://visavi.net  
 Skype: vantuzilla  
 Phone: +79167407574  
 

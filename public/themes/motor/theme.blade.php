@@ -14,7 +14,7 @@
     <meta name="generator" content="Rotor {{ VERSION }}">
 </head>
 <body>
-<!--Design by Vantuz (http://visavi.net)-->
+<!--Design by Vantuz (https://visavi.net)-->
 
 <div id="wrapper">
     <div class="main" id="up">

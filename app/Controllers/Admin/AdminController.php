@@ -58,7 +58,7 @@ Class AdminController extends BaseController
     {
         $wrap = new TextWrapper($app);
 
-        $app->setName('Rotor by Vantuz - http://visavi.net');
+        $app->setName('Rotor by Vantuz - https://visavi.net');
         $app->setVersion(VERSION);
 
         $wrap->setOption('configuration', BASEDIR.'/app/migration.php');

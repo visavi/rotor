@@ -10,7 +10,7 @@ use Illuminate\Http\UploadedFile;
  * Class Validation data
  *
  * @license Code and contributions have MIT License
- * @link    http://visavi.net
+ * @link    https://visavi.net
  * @author  Alexander Grigorev <admin@visavi.net>
  */
 class Validator

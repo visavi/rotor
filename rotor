@@ -11,7 +11,7 @@ use Symfony\Component\EventDispatcher\EventDispatcher;
 require __DIR__ . '/app/bootstrap.php';
 
 $app = new Application();
-$app->setName('Rotor by Vantuz - http://visavi.net');
+$app->setName('Rotor by Vantuz - https://visavi.net');
 $app->setVersion(VERSION);
 
 $app->addCommands([

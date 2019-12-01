@@ -29,9 +29,9 @@
 
 <?php
 echo bbCode(check('[code]<?php
-echo bbCode(\'Текст сообщения [url=http://visavi.net]Visavi[/url]\');
+echo bbCode(\'Текст сообщения [url=https://visavi.net]Visavi[/url]\');
 /* Результат выполнения функции представлен ниже */
 ?>[/code]'));
 
-echo bbCode('Текст сообщения [url=http://visavi.net]Visavi[/url]').'<br>';
+echo bbCode('Текст сообщения [url=https://visavi.net]Visavi[/url]').'<br>';
 ?>

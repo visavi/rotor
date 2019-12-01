@@ -140,7 +140,7 @@ addRule('float', '0.75', 'Необходимо указывать сумму с 
 
 <h3 id="validateUrl">validateUrl</h3>
 <pre class="prettyprint linenums">
-addRule('url', 'http://visavi.net', 'Неверный формат адреса сайта!', true)
+addRule('url', 'https://visavi.net', 'Неверный формат адреса сайта!', true)
 </pre>
 Если передан required = false, то валидация сработает при пустой строке
 

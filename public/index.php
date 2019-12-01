@@ -4,7 +4,7 @@
  *
  * @package   Rotor
  * @author    Vantuz <admin@visavi.net>
- * @link      http://visavi.net
+ * @link      https://visavi.net
  * @copyright 2005-2019
  */
 
