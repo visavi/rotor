@@ -59,6 +59,7 @@ return [
     'all'               => 'All',
     'position'          => 'Position',
     'description'       => 'Description',
+    'select'            => 'Select',
     'select_all'        => 'Select all',
     'add'               => 'Add',
     'save'              => 'Save',

@@ -73,7 +73,7 @@ return [
     'phone'           => 'Phone',
     'site'            => 'Site',
     'birthday'        => 'Date of Birth',
-    'gender'          => 'Floor',
+    'gender'          => 'Gender',
     'about'           => 'About myself',
     'visits'          => 'Visits',
     'forum_topics'    => 'Forum topics',

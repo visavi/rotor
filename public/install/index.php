@@ -8,11 +8,11 @@ use App\Commands\KeyGenerate;
 use App\Commands\RouteClear;
 use App\Models\News;
 use App\Models\User;
+use Illuminate\Support\Facades\Lang;
 
 ob_start();
 define('DIR', dirname(__DIR__, 2));
 include_once DIR . '/app/bootstrap.php';
-include_once APP . '/helpers.php';
 
 $request = request();
 
@@ -25,17 +25,43 @@ $app->setVersion(VERSION);
 $wrap->setOption('configuration', APP . '/migration.php');
 $wrap->setOption('parser', 'php');
 $wrap->setOption('environment', 'default');
+
+$lang = check($request->input('lang', 'ru'));
+Lang::setLocale($lang);
+
+$languages = array_map('basename', glob(RESOURCES . '/lang/*', GLOB_ONLYDIR));
+
+$keys = [
+    'APP_ENV',
+    'APP_NEW',
+    'APP_DEBUG',
+    'DB_DRIVER',
+    'DB_HOST',
+    'DB_PORT',
+    'DB_DATABASE',
+    'DB_USERNAME',
+    'DB_ENGINE',
+    'DB_CHARSET',
+    'DB_COLLATION',
+    'SITE_ADMIN',
+    'SITE_EMAIL',
+    'SITE_URL',
+];
+
+$errors = [];
 ?>
 
 <!DOCTYPE html>
 <html lang="ru">
 <head>
     <title>
-        <?= config('APP_NEW') ? 'Установка' : 'Обновление' ?> Rotor
+        <?= config('APP_NEW') ? __('install.install') : __('install.upgrade') ?> Rotor
     </title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
     <link rel="image_src" href="/assets/img/images/icon.png">
+    <link rel="stylesheet" href="/assets/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/assets/css/fontawesome.min.css">
     <link rel="stylesheet" href="/themes/default/css/style.css">
 </head>
 <body>
@@ -44,8 +70,19 @@ $wrap->setOption('environment', 'default');
     <a href="/"><img src="/assets/img/images/logo.png" alt=""></a>
 </div>
 <div class="site">
-
     <?php if (! $request->has('act')): ?>
+        <form method="get">
+            <label for="language">Выберите язык - Select language:</label>
+            <div class="form-inline mb-3">
+                <select class="form-control" name="lang" id="language">
+                    <?php foreach ($languages as $language): ?>
+                    <?php $selected = ($language === $lang) ? ' selected' : ''; ?>
+                    <option value="<?= $language ?>"<?= $selected ?>><?= $language ?></option>
+                    <?php endforeach; ?>
+                </select>
+                <button class="btn btn-primary"><?= __('main.select') ?></button>
+            </div>
+        </form>
 
         <h1>Шаг 1 - проверка требований</h1>
 
@@ -58,103 +95,71 @@ $wrap->setOption('environment', 'default');
 
         <p>Для установки движка, вам необходимо прописать данные от БД в файл .env</p>
 
-        <?php
-        $keys = [
-            'APP_ENV',
-            'APP_NEW',
-            'APP_DEBUG',
-            'DB_DRIVER',
-            'DB_HOST',
-            'DB_PORT',
-            'DB_DATABASE',
-            'DB_USERNAME',
-            'DB_ENGINE',
-            'DB_CHARSET',
-            'DB_COLLATION',
-            'SITE_ADMIN',
-            'SITE_EMAIL',
-            'SITE_URL',
-        ];
-
-        foreach ($keys as $key) {
-            echo $key . ' - ' . trim(var_export(config($key), true), "'") . '<br>';
-        }
-        ?>
+        <?php foreach ($keys as $key): ?>
+            <b><?= $key ?></b> - <?= trim(var_export(config($key), true), "'") ?><br>
+        <?php endforeach; ?>
+        <br>
         <p>Не забудьте изменить значение APP_KEY, эти данные необходимы для шифрования cookies и паролей в сессиях</p>
 
         <p>Минимальная версия PHP необходимая для работы движка PHP 7.2.0 и MySQL 5.5.3</p>
 
         <p style="font-size: 15px; font-weight: bold">Проверка требований</p>
+
+        <?php $errors['critical']['php'] = PHP_VERSION_ID >= 70200 ?>
+        <i class="fas fa-check-circle <?= $errors['critical']['php'] ? 'text-success' : 'fa-times-circle text-danger' ?>"></i>
+        Версия PHP 7.2.0: <b><?= parseVersion(PHP_VERSION) ?></b><br>
+
+        <?php $errors['critical']['pdo_mysql'] = extension_loaded('pdo_mysql') ?>
+        <i class="fas fa-check-circle <?= $errors['critical']['pdo_mysql'] ? 'text-success' : 'fa-times-circle text-danger' ?>"></i>
+        <?php $version = strtok(getModuleSetting('pdo_mysql', ['Client API version', 'PDO Driver for MySQL, client library version']), '-'); ?>
+        Расширение PDO-MySQL: <b><?= $version ?></b><br>
+
+        <?php $errors['simple']['bcmath'] = extension_loaded('bcmath') ?>
+        <i class="fas fa-check-circle <?= $errors['simple']['bcmath'] ? 'text-success' : 'fa-times-circle text-danger' ?>"></i>
+        Расширение BCMath<br>
+
+        <?php $errors['simple']['ctype'] = extension_loaded('ctype') ?>
+        <i class="fas fa-check-circle <?= $errors['simple']['ctype'] ? 'text-success' : 'fa-times-circle text-danger' ?>"></i>
+        Расширение Ctype<br>
+
+        <?php $errors['simple']['json'] = extension_loaded('json') ?>
+        <i class="fas fa-check-circle <?= $errors['simple']['json'] ? 'text-success' : 'fa-times-circle text-danger' ?>"></i>
+        Расширение Json<br>
+
+        <?php $errors['simple']['tokenizer'] = extension_loaded('tokenizer') ?>
+        <i class="fas fa-check-circle <?= $errors['simple']['tokenizer'] ? 'text-success' : 'fa-times-circle text-danger' ?>"></i>
+        Расширение Tokenizer<br>
+
+        <?php $errors['simple']['mbstring'] = extension_loaded('mbstring') ?>
+        <i class="fas fa-check-circle <?= $errors['simple']['mbstring'] ? 'text-success' : 'fa-times-circle text-danger' ?>"></i>
+        <?php $version = getModuleSetting('mbstring', ['oniguruma version', 'Multibyte regex (oniguruma) version']); ?>
+        Расширение MbString: <b><?= $version ?></b><br>
+
+        <?php $errors['simple']['openssl'] = extension_loaded('openssl') ?>
+        <i class="fas fa-check-circle <?= $errors['simple']['openssl'] ? 'text-success' : 'fa-times-circle text-danger' ?>"></i>
+        <?php $version = getModuleSetting('openssl', ['OpenSSL Library Version', 'OpenSSL Header Version']); ?>
+        Расширение OpenSSL: <b><?= $version ?></b><br>
+
+        <?php $errors['simple']['xml'] = extension_loaded('xml') ?>
+        <i class="fas fa-check-circle <?= $errors['simple']['xml'] ? 'text-success' : 'fa-times-circle text-danger' ?>"></i>
+        <?php $version = getModuleSetting('xml', ['libxml2 Version']); ?>
+        Расширение XML: <b><?= $version ?></b><br>
+
+        <?php $errors['simple']['gd'] = extension_loaded('gd') ?>
+        <i class="fas fa-check-circle <?= $errors['simple']['gd'] ? 'text-success' : 'fa-times-circle text-danger' ?>"></i>
+        <?php $version = getModuleSetting('gd', ['GD headers Version', 'GD library Version']); ?>
+        Библиотека GD: <b><?= $version ?></b><br>
+
+        <?php $errors['simple']['curl'] = extension_loaded('curl') ?>
+        <i class="fas fa-check-circle <?= $errors['simple']['curl'] ? 'text-success' : 'fa-times-circle text-danger' ?>"></i>
+        <?php $version = getModuleSetting('curl', ['Curl Information', 'cURL Information']); ?>
+        Библиотека Curl: <b><?= $version ?></b><br>
+
+        Для обработки видео желательно установить библиотеку FFmpeg<br><br>
+
+        <p style="font-size: 15px; font-weight: bold">Права доступа</p>
+
         <?php
-        $errorSettings = 0;
-
-        if (PHP_VERSION_ID >= 70200) {
-            echo '<i class="fa fa-plus-circle"></i> Версия PHP 7.2.0 и выше: <b><span style="color:#00cc00">ОК</span></b> (Версия ' . parseVersion(PHP_VERSION) . ')<br>';
-        } else {
-            echo '<i class="fa fa-minus-circle"></i> Версия PHP 7.2.0 и выше: <b><span style="color:#ff0000">Ошибка</span></b>  (Версия ' . parseVersion(PHP_VERSION) . ')<br>';
-            $errorCritical = 1;
-        }
-
-        if (extension_loaded('pdo_mysql')) {
-
-            $version = strtok(getModuleSetting('pdo_mysql', ['Client API version', 'PDO Driver for MySQL, client library version']), '-');
-            echo '<i class="fa fa-plus-circle"></i> Расширение PDO-MySQL ('.$version.'): <b><span style="color:#00cc00">ОК</span></b><br>';
-        } else {
-            echo '<i class="fa fa-minus-circle"></i> Расширение PDO-MySQL: <b><span style="color:#ff0000">Ошибка</span></b> (Расширение не загружено)<br>';
-            $errorCritical = 1;
-        }
-
-        if (extension_loaded('openssl')) {
-            $version = getModuleSetting('openssl', ['OpenSSL Library Version', 'OpenSSL Header Version']);
-            echo '<i class="fa fa-plus-circle"></i> Расширение OpenSSL ('.$version.'): <b><span style="color:#00cc00">ОК</span></b><br>';
-        } else {
-            echo '<i class="fa fa-minus-circle"></i> Расширение OpenSSL: <b><span style="color:#ff0000">Ошибка</span></b> (Расширение не загружено)<br>';
-            $errorCritical = 1;
-        }
-
-        if (extension_loaded('tokenizer')) {
-            echo '<i class="fa fa-plus-circle"></i> Расширение Tokenizer: <b><span style="color:#00cc00">ОК</span></b><br>';
-        } else {
-            echo '<i class="fa fa-minus-circle"></i> Расширение Tokenizer: <b><span style="color:#ff0000">Ошибка</span></b> (Расширение не загружено)<br>';
-            $errorCritical = 1;
-        }
-
-        if (extension_loaded('mbstring')) {
-            $version = getModuleSetting('mbstring', ['oniguruma version', 'Multibyte regex (oniguruma) version']);
-            echo '<i class="fa fa-plus-circle"></i> Расширение MbString ('.$version.'): <b><span style="color:#00cc00">ОК</span></b><br>';
-        } else {
-            echo '<i class="fa fa-minus-circle"></i> Расширение MbString: <b><span style="color:#ff0000">Ошибка</span></b> (Расширение не загружено)<br>';
-            $errorCritical = 1;
-        }
-
-        if (extension_loaded('xml')) {
-            $version = getModuleSetting('xml', 'libxml2 Version');
-            echo '<i class="fa fa-plus-circle"></i> Расширение XML ('.$version.'): <b><span style="color:#00cc00">ОК</span></b><br>';
-        } else {
-            echo '<i class="fa fa-minus-circle"></i> Расширение XML: <b><span style="color:#ff0000">Ошибка</span></b> (Расширение не загружено)<br>';
-            $errorCritical = 1;
-        }
-
-        if (extension_loaded('gd')) {
-            $version = getModuleSetting('gd', ['GD headers Version', 'GD library Version']);
-            echo '<i class="fa fa-plus-circle"></i> Библиотека GD ('.$version.'): <b><span style="color:#00cc00">ОК</span></b><br>';
-        } else {
-            echo '<i class="fa fa-minus-circle"></i> Библиотека GD: <b><span style="color:#ffa500">Предупреждение</span></b> (Библиотека не загружена)<br>';
-            $errorSettings++;
-        }
-
-        if (extension_loaded('curl')) {
-            $version = getModuleSetting('curl', 'Curl Information');
-            echo '<i class="fa fa-plus-circle"></i> Библиотека Curl ('.$version.'): <b><span style="color:#00cc00">ОК</span></b><br>';
-        } else {
-            echo '<i class="fa fa-minus-circle"></i> Библиотека Curl: <b><span style="color:#ffa500">Предупреждение</span></b> (Библиотека не загружена)<br>';
-            $errorSettings++;
-        }
-
-        echo 'Для обработки видео желательно установить библиотеку FFmpeg<br>';
-
-        echo '<br><p style="font-size: 15px; font-weight: bold">Права доступа</p>';
-
         runCommand(new AppConfigure());
 
         $storage = glob(STORAGE . '/*', GLOB_ONLYDIR);
@@ -162,54 +167,42 @@ $wrap->setOption('environment', 'default');
         $modules = [HOME . '/assets/modules'];
 
         $dirs = array_merge($storage, $uploads, $modules);
+        ?>
 
-        $chmod_errors = 0;
+        <?php foreach ($dirs as $dir): ?>
+            <?php $chmod = decoct(fileperms($dir)) % 1000; ?>
+            <?php $errors['chmod'][$dir] = is_writable($dir); ?>
 
-        foreach ($dirs as $dir) {
+            <i class="fas fa-check-circle <?= $errors['chmod'][$dir] ? 'text-success' : 'fa-times-circle text-danger' ?>"></i>
+            <?= str_replace(DIR, '', $dir) ?>: <b><?= $chmod ?></b><br>
+        <?php endforeach; ?>
 
-            if (is_writable($dir)) {
-                $file_status = '<span style="color:#00cc00">ОК</span>';
-            } else {
-                $file_status = '<span style="color:#ff0000">Запрещено</span>';
-                $chmod_errors = 1;
-            }
-
-            $chmod_value = @decoct(@fileperms($dir)) % 1000;
-
-            echo '<i class="fa fa-check-circle"></i> '.str_replace(DIR, '', $dir).' <b> - ' . $file_status . '</b> (chmod ' . $chmod_value . ')<br>';
-        }
-?>
         <br>Дополнительно можете выставить права на директории и файлы с шаблонами внутри resources/views - это необходимо для редактирования шаблонов сайта<br><br>
 
         Если какой-то пункт выделен красным, необходимо зайти по FTP и выставить CHMOD разрешающую запись<br>
         Некоторые настройки являются рекомендуемыми для полной совместимости, однако скрипт способен работать даже если рекомендуемые настройки не совпадают с текущими.<br><br>
 
-        <?php if (empty($errorCritical) && empty($chmod_errors)): ?>
-            <i class="fa fa-check-circle"></i> <b><span style="color:#00cc00">Вы можете продолжить установку движка!</span></b><br><br>
+        <?php if (! in_array(false, $errors['critical'], true) && ! in_array(false, $errors['chmod'], true)): ?>
+            <div class="alert alert-success">
+                <i class="fa fa-check-circle"></i> Вы можете продолжить установку движка!
+            </div>
 
-            <?php if (empty($errorSettings)): ?>
+            <?php if (! in_array(false, $errors['simple'], true)): ?>
                 Все модули и библиотеки присутствуют, настройки корректны, необходимые файлы и папки доступны для записи<br><br>
             <?php else: ?>
-                <b><span style="color:#ffa500">У вас имеются предупреждения!</span></b> (Всего: <?= $errorSettings ?>)<br>
-                Данные предупреждения не являются критическими, но тем не менее для полноценной, стабильной и безопасной работы движка желательно их устранить<br>
-                Вы можете продолжить установку скрипта, но нет никаких гарантий, что движок будет работать стабильно<br><br>
+                <div class="alert alert-warning">У вас имеются предупреждения!<br>
+                    Данные предупреждения не являются критическими, но тем не менее для полноценной, стабильной и безопасной работы движка желательно их устранить<br>
+                    Вы можете продолжить установку скрипта, но нет никаких гарантий, что движок будет работать стабильно
+                </div>
             <?php endif; ?>
 
-            <span style="color:#ff0000">
-                Внимание, сопоставление и кодировка таблиц настраивается в файле .env,<br>
-                Требуемое сопоставление БД utf8mb4_unicode_ci<br>
-            </span><br>
-
-            <b>Настройки БД по умолчанию</b><br>
-            Тип хранилища: <?= config('DB_ENGINE') ?><br>
-            Кодировка: <?= config('DB_CHARSET') ?><br>
-            Сопоставление: <?= config('DB_COLLATION') ?><br>
-            <br>
-
-            <p><a style="font-size: 18px" href="?act=status">Проверить статус</a> (Выполняется <?= config('APP_NEW') ? 'установка' : 'обновление' ?>)</p><br>
+            <a style="font-size: 18px" href="?act=status&amp;lang=<?= $lang ?>">Проверить статус</a>
+            (Выполняется <?= config('APP_NEW') ? __('install.install') : __('install.upgrade') ?>)
         <?php else: ?>
-            <b><span style="color:#ff0000">Имеются критические ошибки!</span></b><br>
-            Вы не сможете приступить к установке, пока не устраните все ошибки<br><br>
+            <div class="alert alert-danger">
+                <i class="fa fa-times-circle"></i> Имеются критические ошибки!<br>
+                Вы не сможете приступить к установке, пока не устраните критические ошибки
+            </div>
         <?php endif; ?>
     <?php endif; ?>
 
@@ -219,14 +212,14 @@ $wrap->setOption('environment', 'default');
 
             <?= nl2br($wrap->getStatus()) ?>
 
-            <p><a style="font-size: 18px" href="?act=migrate">Выполнить миграции</a></p>
+            <p><a style="font-size: 18px" href="?act=migrate&amp;lang=<?= $lang ?>">Выполнить миграции</a></p>
 
         <?php elseif ($request->input('act') === 'migrate'): ?>
             <h1>Шаг 3 - выполнение миграций (установка)</h1>
 
             <?= nl2br($wrap->getMigrate()) ?>
 
-            <p><a style="font-size: 18px" href="?act=seed">Заполнить БД</a></p>
+            <p><a style="font-size: 18px" href="?act=seed&amp;lang=<?= $lang ?>">Заполнить БД</a></p>
 
         <?php elseif ($request->input('act') === 'seed'): ?>
 
@@ -234,7 +227,7 @@ $wrap->setOption('environment', 'default');
 
             <?= nl2br($wrap->getSeed()) ?>
 
-            <p><a style="font-size: 18px" href="?act=account">Создать администратора</a></p>
+            <p><a style="font-size: 18px" href="?act=account&amp;lang=<?= $lang ?>">Создать администратора</a></p>
         <?php elseif ($request->input('act') === 'account'): ?>
 
             <h1>Шаг 5 - создание администратора (установка)</h1>
@@ -295,7 +288,7 @@ $wrap->setOption('environment', 'default');
                         'created_at' => SITETIME,
                     ]);
 
-                    redirect('?act=finish');
+                    redirect('?act=finish&lang=' . $lang);
 
                 } else {echo '<p style="color: #ff0000">Ошибка! Указанный вами адрес email уже используется в системе!</p>';}
                 } else {echo '<p style="color: #ff0000">Ошибка! Пользователь с данным логином уже зарегистрирован!</p>';}
@@ -308,7 +301,7 @@ $wrap->setOption('environment', 'default');
             <?php endif; ?>
 
             <div class="form">
-               <form method="post">
+               <form method="post" action="?act=account&amp;lang=<?= $lang ?>">
                     Логин (max20):<br>
                     <input class="form-control" name="login" maxlength="20" value="<?= $login ?>"><br>
                     Пароль(max20):<br>
@@ -354,7 +347,7 @@ $wrap->setOption('environment', 'default');
 
             <h1>Шаг 2 - проверка статуса (обновление)</h1>
             <?= nl2br($wrap->getStatus()) ?>
-            <a style="font-size: 18px" href="?act=migrate">Перейти к обновлению</a>
+            <a style="font-size: 18px" href="?act=migrate&amp;lang=<?= $lang ?>">Перейти к обновлению</a>
 
         <?php elseif ($request->input('act') === 'rollback'): ?>
             <?= nl2br($wrap->getRollback()) ?>
@@ -383,6 +376,11 @@ $wrap->setOption('environment', 'default');
 </html>
 <?php
 
+/**
+ * Parse PHP modules
+ *
+ * @return array
+ */
 function parsePHPModules() {
     ob_start();
     phpinfo(INFO_MODULES);
@@ -393,7 +391,9 @@ function parsePHPModules() {
     $s = preg_replace('/<td[^>]*>([^<]+)<\/td>/', "<info>\\1</info>", $s);
     $vTmp = preg_split('/(<h2[^>]*>[^<]+<\/h2>)/', $s, -1, PREG_SPLIT_DELIM_CAPTURE);
     $vModules = [];
-    for ($i = 1; $i < count($vTmp); $i++) {
+    $iMax = count($vTmp);
+
+    for ($i = 1; $i < $iMax; $i++) {
         if (preg_match('/<h2[^>]*>([^<]+)<\/h2>/', $vTmp[$i], $vMat)) {
             $vName = trim($vMat[1]);
             $vTmp2 = explode("\n", $vTmp[$i + 1]);
@@ -409,27 +409,26 @@ function parsePHPModules() {
             }
         }
     }
+
     return $vModules;
 }
 
 /**
  * Get PHP module setting
  *
- * @param $pModuleName
- * @param $pSettings
- * @return mixed|string
+ * @param string $pModuleName
+ * @param array  $pSettings
+ *
+ * @return string
  */
-function getModuleSetting($pModuleName, $pSettings)
+function getModuleSetting(string $pModuleName, array $pSettings)
 {
     $vModules = parsePHPModules();
-    if (is_array($pSettings)) {
-        foreach ($pSettings as $pSetting) {
-            if (isset($vModules[$pModuleName][$pSetting])) {
-                return $vModules[$pModuleName][$pSetting];
-            }
+
+    foreach ($pSettings as $pSetting) {
+        if (isset($vModules[$pModuleName][$pSetting])) {
+            return $vModules[$pModuleName][$pSetting];
         }
-    } else if (isset($vModules[$pModuleName][$pSettings])) {
-        return $vModules[$pModuleName][$pSettings];
     }
 
     return 'Не определено';
