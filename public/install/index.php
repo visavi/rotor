@@ -12,7 +12,12 @@ use Illuminate\Support\Facades\Lang;
 
 ob_start();
 define('DIR', dirname(__DIR__, 2));
-include_once DIR . '/app/bootstrap.php';
+
+try {
+    include_once DIR . '/app/bootstrap.php';
+} catch (Exception $e) {
+    exit($e->getMessage());
+}
 
 $request      = request();
 $phpVersion   = '7.2.0';
@@ -31,6 +36,7 @@ $wrap->setOption('environment', 'default');
 $lang = check($request->input('lang', 'ru'));
 Lang::setLocale($lang);
 
+$errors    = [];
 $languages = array_map('basename', glob(RESOURCES . '/lang/*', GLOB_ONLYDIR));
 
 $keys = [
@@ -49,8 +55,6 @@ $keys = [
     'SITE_EMAIL',
     'SITE_URL',
 ];
-
-$errors = [];
 ?>
 
 <!DOCTYPE html>
@@ -110,12 +114,12 @@ $errors = [];
 
         <?php $errors['critical']['php'] = version_compare(PHP_VERSION, $phpVersion) >= 0 ?>
         <i class="fas fa-check-circle <?= $errors['critical']['php'] ? 'text-success' : 'fa-times-circle text-danger' ?>"></i>
-        PHP: <b><?= parseVersion(PHP_VERSION) ?></b><br>
+        PHP: <?= parseVersion(PHP_VERSION) ?><br>
 
         <?php $errors['critical']['pdo_mysql'] = extension_loaded('pdo_mysql') ?>
         <i class="fas fa-check-circle <?= $errors['critical']['pdo_mysql'] ? 'text-success' : 'fa-times-circle text-danger' ?>"></i>
         <?php $version = strtok(getModuleSetting('pdo_mysql', ['Client API version', 'PDO Driver for MySQL, client library version']), '-'); ?>
-        PDO-MySQL: <b><?= $version ?></b><br>
+        PDO-MySQL: <?= $version ?><br>
 
         <?php $errors['simple']['bcmath'] = extension_loaded('bcmath') ?>
         <i class="fas fa-check-circle <?= $errors['simple']['bcmath'] ? 'text-success' : 'fa-times-circle text-danger' ?>"></i>
@@ -136,27 +140,27 @@ $errors = [];
         <?php $errors['simple']['mbstring'] = extension_loaded('mbstring') ?>
         <i class="fas fa-check-circle <?= $errors['simple']['mbstring'] ? 'text-success' : 'fa-times-circle text-danger' ?>"></i>
         <?php $version = getModuleSetting('mbstring', ['oniguruma version', 'Multibyte regex (oniguruma) version']); ?>
-        MbString: <b><?= $version ?></b><br>
+        MbString: <?= $version ?><br>
 
         <?php $errors['simple']['openssl'] = extension_loaded('openssl') ?>
         <i class="fas fa-check-circle <?= $errors['simple']['openssl'] ? 'text-success' : 'fa-times-circle text-danger' ?>"></i>
         <?php $version = getModuleSetting('openssl', ['OpenSSL Library Version', 'OpenSSL Header Version']); ?>
-        OpenSSL: <b><?= $version ?></b><br>
+        OpenSSL: <?= $version ?><br>
 
         <?php $errors['simple']['xml'] = extension_loaded('xml') ?>
         <i class="fas fa-check-circle <?= $errors['simple']['xml'] ? 'text-success' : 'fa-times-circle text-danger' ?>"></i>
         <?php $version = getModuleSetting('xml', ['libxml2 Version']); ?>
-        XML: <b><?= $version ?></b><br>
+        XML: <?= $version ?><br>
 
         <?php $errors['simple']['gd'] = extension_loaded('gd') ?>
         <i class="fas fa-check-circle <?= $errors['simple']['gd'] ? 'text-success' : 'fa-times-circle text-danger' ?>"></i>
         <?php $version = getModuleSetting('gd', ['GD headers Version', 'GD library Version']); ?>
-        GD: <b><?= $version ?></b><br>
+        GD: <?= $version ?><br>
 
         <?php $errors['simple']['curl'] = extension_loaded('curl') ?>
         <i class="fas fa-check-circle <?= $errors['simple']['curl'] ? 'text-success' : 'fa-times-circle text-danger' ?>"></i>
         <?php $version = getModuleSetting('curl', ['Curl Information', 'cURL Information']); ?>
-        Curl: <b><?= $version ?></b><br>
+        Curl: <?= $version ?><br>
 
         <?= __('install.ffmpeg') ?><br><br>
 
@@ -177,7 +181,7 @@ $errors = [];
             <?php $errors['chmod'][$dir] = is_writable($dir); ?>
 
             <i class="fas fa-check-circle <?= $errors['chmod'][$dir] ? 'text-success' : 'fa-times-circle text-danger' ?>"></i>
-            <?= str_replace(DIR, '', $dir) ?>: <b><?= $chmod ?></b><br>
+            <?= str_replace(DIR, '', $dir) ?>: <?= $chmod ?><br>
         <?php endforeach; ?>
 
         <br><?= __('install.chmod_views') ?><br><br>
@@ -200,7 +204,7 @@ $errors = [];
             <?php endif; ?>
 
             <a style="font-size: 18px" href="?act=status&amp;lang=<?= $lang ?>"><?= __('install.check_status') ?></a>
-            (<?= __('install.performed') ?> <?= config('APP_NEW') ? __('install.install') : __('install.update') ?>)
+            (<?= config('APP_NEW') ? __('install.install') : __('install.update') ?>)
         <?php else: ?>
             <div class="alert alert-danger">
                 <i class="fa fa-times-circle"></i> <?= __('install.requirements_failed') ?><br>
