@@ -306,20 +306,28 @@ $keys = [
             <?php endif; ?>
 
             <div class="form">
-               <form method="post" action="?act=account&amp;lang=<?= $lang ?>">
-                    <?= __('users.login') ?> (max20):<br>
-                    <input class="form-control" name="login" maxlength="20" value="<?= $login ?>"><br>
-                    <?= __('users.password') ?> (max20):<br>
-                    <input class="form-control" name="password" type="password" maxlength="50"><br>
-                    <?= __('users.confirm_password') ?>:<br>
-                    <input class="form-control" name="password2" type="password" maxlength="50"><br>
-                    <?= __('users.email') ?>:<br>
-                    <input class="form-control" name="email" maxlength="100" value="<?= $email ?>"><br>
-                   <button class="btn btn-primary"><?= __('main.create') ?></button>
+                <form method="post" action="?act=account&amp;lang=<?= $lang ?>">
+                    <div class="form-group">
+                        <label for="login"><?= __('users.login') ?> (max20):</label>
+                        <input type="text" class="form-control" name="login" id="login" maxlength="20" value="<?= $login ?>">
+                        <span class="text-muted font-italic"><?= __('users.login_requirements') ?></span>
+                    </div>
+                    <div class="form-group">
+                        <label for="password"><?= __('users.password') ?> (max20):</label>
+                        <input class="form-control" name="password" id="password" type="password" maxlength="50">
+                    </div>
+                    <div class="form-group">
+                        <label for="password2"><?= __('users.confirm_password') ?>:</label>
+                        <input class="form-control" name="password2" id="password2" type="password" maxlength="50">
+                    </div>
+                    <div class="form-group">
+                        <label for="email"><?= __('users.email') ?>:</label>
+                        <input class="form-control" name="email" id="email" maxlength="50" value="<?= $email ?>">
+                    </div>
+
+                    <button class="btn btn-primary"><?= __('main.create') ?></button>
                 </form>
             </div><br>
-            <?= __('users.login_requirements') ?><br><br>
-
         <?php elseif ($request->input('act') === 'finish'): ?>
 
             <h1><?= __('install.install_completed') ?></h1>
