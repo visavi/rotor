@@ -1,4 +1,4 @@
-Rotor 
+Rotor - mobile cms
 =========
 
 [Description in Russian](https://github.com/visavi/rotor/blob/master/readme_ru.md)
@@ -13,7 +13,7 @@ Rotor
 [![Coverage Status](https://coveralls.io/repos/github/visavi/rotor/badge.svg?branch=master)](https://coveralls.io/github/visavi/rotor?branch=master)
 
 Welcome!
-We thank you for choosing to use our script for your site. Rotor is a functionally complete open source content management system written in PHP. It uses a MySQL database to store the contents of your site.
+We thank you for choosing to use our script for your site. Rotor mobile cms is a functionally complete open source content management system written in PHP. It uses a MySQL database to store the contents of your site.
 
 **Rotor** is a flexible, powerful and intuitive system with minimal hosting requirements, a high level of protection and an excellent choice for building a website of any complexity.
 

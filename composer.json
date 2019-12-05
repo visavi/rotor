@@ -1,7 +1,7 @@
 {
     "name": "visavi/rotor",
     "description": "Rotor",
-    "keywords": ["cms", "wap", "rotor"],
+    "keywords": ["php cms", "wap cms", "mobile cms"],
     "homepage": "https://visavi.net",
     "license": "GPL-3.0-only",
     "authors": [
