@@ -39,7 +39,8 @@ return [
     'calendar'        => 'Календарь',
     'online'          => 'На сайте',
 
-    'mysql_queries'   => 'MySQL запросы',
+    'db_queries'      => 'DB запросы',
+    'db_speed'        => 'DB скорость',
     'ram_consumption' => 'Потребление ОЗУ',
     'cpu_load'        => 'Загрузка CPU',
     'loading_speed'   => 'Загрузка страницы',

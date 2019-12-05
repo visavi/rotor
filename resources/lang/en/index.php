@@ -39,7 +39,8 @@ return [
     'calendar'        => 'Calendar',
     'online'          => 'Online',
 
-    'mysql_queries'   => 'MySQL queries',
+    'db_queries'      => 'DB queries',
+    'db_speed'        => 'DB speed',
     'ram_consumption' => 'Consumption of ram',
     'cpu_load'        => 'CPU load',
     'loading_speed'   => 'Loading speed',

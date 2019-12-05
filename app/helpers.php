@@ -1576,7 +1576,9 @@ function performance()
 {
     if (isAdmin() && setting('performance')) {
         $queries = getQueryLog();
-        return view('app/_performance', compact('queries'));
+        $timeQueries = array_sum(array_column($queries, 'time'));
+
+        return view('app/_performance', compact('queries', 'timeQueries'));
     }
 
     return null;
@@ -2092,7 +2094,6 @@ function getUserByLoginOrEmail($login): ?User
 function getUser($key = null)
 {
     if (Registry::has('user')) {
-
         $user = Registry::get('user');
 
         if ($key) {
