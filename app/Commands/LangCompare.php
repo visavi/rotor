@@ -55,13 +55,13 @@ class LangCompare extends AbstractCommand
             if (file_exists($otherFile)) {
                 $array2 = require ($otherFile);
 
-                $diff1 = array_diff_key($array1, $array2);
+                $diff1 = $this->arrayDiffKeyRecursive($array1, $array2);
 
                 if ($diff1) {
                     $output->writeln('<fg=blue>Not keys in file "' . $lang2 . '/' . basename($otherFile) . '"</> <comment>(' . implode(', ', array_keys($diff1)) . ')</comment>');
                 }
 
-                $diff2 = array_diff_key($array2, $array1);
+                $diff2 = $this->arrayDiffKeyRecursive($array2, $array1);
 
                 if ($diff2) {
                     $output->writeln('<fg=yellow>Extra keys in File "' . $lang1 . '/' . basename($otherFile) . '"</> <comment>(' . implode(', ', array_keys($diff2)) . ')</comment>');
@@ -75,5 +75,30 @@ class LangCompare extends AbstractCommand
                 $output->writeln('<error>File "' . $lang2 . '/' . basename($otherFile) . '" not found!</error>');
             }
         }
+    }
+
+    /**
+     * Recursive array diff key
+     *
+     * @param array $array1
+     * @param array $array2
+     *
+     * @return array
+     */
+    protected function arrayDiffKeyRecursive(array $array1, array $array2): array
+    {
+        $diff = array_diff_key($array1, $array2);
+
+        foreach ($array1 as $k => $v) {
+            if (is_array($array1[$k]) && is_array($array2[$k])) {
+                $diffRecursive = $this->arrayDiffKeyRecursive($array1[$k], $array2[$k]);
+
+                if ($diffRecursive) {
+                    $diff[$k] = $diffRecursive;
+                }
+            }
+        }
+
+        return $diff;
     }
 }

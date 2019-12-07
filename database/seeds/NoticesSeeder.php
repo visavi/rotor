@@ -16,12 +16,8 @@ class NoticesSeeder extends AbstractSeed
         $data = [
             [
                 'type'      => 'register',
-                'name'      => 'Приветствие при регистрации в приват',
-                'text'      => 'Добро пожаловать, %username%!
-Теперь Вы полноправный пользователь сайта, сохраните ваш логин и пароль в надежном месте, они пригодятся вам для входа на наш сайт.
-Перед посещением сайта рекомендуем вам ознакомиться с [url=/rules]правилами сайта[/url], это поможет Вам избежать неприятных ситуаций.
-Желаем приятно провести время.
-С уважением, администрация сайта!',
+                'name'      => __('seeds.notices.register_name'),
+                'text'      => __('seeds.notices.register_text'),
                 'user_id'    => 1,
                 'created_at' => SITETIME,
                 'updated_at' => SITETIME,
@@ -29,9 +25,8 @@ class NoticesSeeder extends AbstractSeed
             ],
             [
                 'type'      => 'down_upload',
-                'name'      => 'Уведомление о загрузке файла',
-                'text'      => 'Уведомеление о загрузке файла.
-Новый файл [b][url=%url%]%title%[/url][/b] требует подтверждения на публикацию!',
+                'name'      => __('seeds.notices.down_upload_name'),
+                'text'      => __('seeds.notices.down_upload_text'),
                 'user_id'    => 1,
                 'created_at' => SITETIME,
                 'updated_at' => SITETIME,
@@ -39,9 +34,8 @@ class NoticesSeeder extends AbstractSeed
             ],
             [
                 'type'      => 'down_publish',
-                'name'      => 'Уведомление о публикации файла',
-                'text'      => 'Уведомеление о публикации файла.
-Ваш файл [b][url=%url%]%title%[/url][/b] успешно прошел проверку и добавлен в загрузки',
+                'name'      => __('seeds.notices.down_publish_name'),
+                'text'      => __('seeds.notices.down_publish_text'),
                 'user_id'    => 1,
                 'created_at' => SITETIME,
                 'updated_at' => SITETIME,
@@ -49,9 +43,8 @@ class NoticesSeeder extends AbstractSeed
             ],
             [
                 'type'      => 'down_unpublish',
-                'name'      => 'Уведомление о снятии с публикации',
-                'text'      => 'Уведомление о снятии с публикации.
-Ваш файл [b][url=%url%]%title%[/url][/b] снят с публикации из загрузок',
+                'name'      => __('seeds.notices.down_unpublish_name'),
+                'text'      => __('seeds.notices.down_unpublish_text'),
                 'user_id'    => 1,
                 'created_at' => SITETIME,
                 'updated_at' => SITETIME,
@@ -59,9 +52,8 @@ class NoticesSeeder extends AbstractSeed
             ],
             [
                 'type'      => 'down_change',
-                'name'      => 'Уведомление об изменении файла',
-                'text'      => 'Уведомление об изменении файла.
-Ваш файл [b][url=%url%]%title%[/url][/b] был отредактирован модератором, возможно от вас потребуются дополнительные исправления!',
+                'name'      => __('seeds.notices.down_change_name'),
+                'text'      => __('seeds.notices.down_change_text'),
                 'user_id'    => 1,
                 'created_at' => SITETIME,
                 'updated_at' => SITETIME,
@@ -69,9 +61,8 @@ class NoticesSeeder extends AbstractSeed
             ],
             [
                 'type'      => 'notify',
-                'name'      => 'Упоминание пользователя',
-                'text'      => 'Пользователь @%login% упомянул вас на странице [b][url=%url%]%title%[/url][/b]
-Текст сообщения: %text%',
+                'name'      => __('seeds.notices.notify_name'),
+                'text'      => __('seeds.notices.notify_text'),
                 'user_id'    => 1,
                 'created_at' => SITETIME,
                 'updated_at' => SITETIME,
@@ -79,10 +70,8 @@ class NoticesSeeder extends AbstractSeed
             ],
             [
                 'type'      => 'invite',
-                'name'      => 'Отправка пригласительных ключей',
-                'text'      => 'Поздравляем! Вы получили пригласительные ключи
-Ваши ключи: %key%
-С помощью этих ключей вы можете пригласить ваших друзей на наш сайт!',
+                'name'      => __('seeds.notices.invite_name'),
+                'text'      => __('seeds.notices.invite_text'),
                 'user_id'    => 1,
                 'created_at' => SITETIME,
                 'updated_at' => SITETIME,
@@ -90,8 +79,8 @@ class NoticesSeeder extends AbstractSeed
             ],
             [
                 'type'      => 'contact',
-                'name'      => 'Добавление в контакт-лист',
-                'text'      => 'Пользователь @%login% добавил вас в свой контакт-лист!',
+                'name'      => __('seeds.notices.contact_name'),
+                'text'      => __('seeds.notices.contact_text'),
                 'user_id'    => 1,
                 'created_at' => SITETIME,
                 'updated_at' => SITETIME,
@@ -99,8 +88,8 @@ class NoticesSeeder extends AbstractSeed
             ],
             [
                 'type'      => 'ignore',
-                'name'      => 'Добавление в игнор-лист',
-                'text'      => 'Пользователь @%login% добавил вас в свой игнор-лист!',
+                'name'      => __('seeds.notices.ignore_name'),
+                'text'      => __('seeds.notices.ignore_text'),
                 'user_id'    => 1,
                 'created_at' => SITETIME,
                 'updated_at' => SITETIME,
@@ -108,9 +97,8 @@ class NoticesSeeder extends AbstractSeed
             ],
             [
                 'type'      => 'transfer',
-                'name'      => 'Перевод денег',
-                'text'      => 'Пользователь @%login% перечислил вам %money% 
-Комментарий: %comment%',
+                'name'      => __('seeds.notices.transfer_name'),
+                'text'      => __('seeds.notices.transfer_text'),
                 'user_id'    => 1,
                 'created_at' => SITETIME,
                 'updated_at' => SITETIME,
@@ -118,9 +106,8 @@ class NoticesSeeder extends AbstractSeed
             ],
             [
                 'type'      => 'rating',
-                'name'      => 'Изменение репутации',
-                'text'      => 'Пользователь @%login% поставил вам %vote%! (Ваш рейтинг: %rating%)
-Комментарий: %comment%',
+                'name'      => __('seeds.notices.rating_name'),
+                'text'      => __('seeds.notices.rating_text'),
                 'user_id'    => 1,
                 'created_at' => SITETIME,
                 'updated_at' => SITETIME,
@@ -128,13 +115,8 @@ class NoticesSeeder extends AbstractSeed
             ],
             [
                 'type'      => 'surprise',
-                'name'      => 'Новогодний сюрприз',
-                'text'      => 'Поздравляем с новым %year% годом!
-В качестве сюрприза вы получаете:
-%point% 
-%money%
-%rating% репутации
-Ура!!!',
+                'name'      => __('seeds.notices.surprise_name'),
+                'text'      => __('seeds.notices.surprise_text'),
                 'user_id'    => 1,
                 'created_at' => SITETIME,
                 'updated_at' => SITETIME,
@@ -142,8 +124,8 @@ class NoticesSeeder extends AbstractSeed
             ],
             [
                 'type'      => 'explain',
-                'name'      => 'Объяснение нарушения',
-                'text'      => 'Объяснение нарушения: %message%',
+                'name'      => __('seeds.notices.explain_name'),
+                'text'      => __('seeds.notices.explain_text'),
                 'user_id'    => 1,
                 'created_at' => SITETIME,
                 'updated_at' => SITETIME,
