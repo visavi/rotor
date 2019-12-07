@@ -45,4 +45,5 @@ return [
     'success_install'       => 'Congratulations, Rotor has been successfully installed!',
     'success_update'        => 'Congratulations, Rotor has been successfully updated!',
     'main_page'             => 'Go to the main page of the site',
+    'app_new_change'        => 'You must change the value of APP_NEW to false in the .env file',
 ];

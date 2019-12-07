@@ -4,6 +4,7 @@ return [
     'rules' => 'Общие правила для пользователей сайта %SITENAME%',
 
     'settings' => [
+        'language'       => 'ru',
         'currency'       => 'руб',
         'guest_user'     => 'Гость',
         'deleted_user'   => 'Удаленный аккаунт',

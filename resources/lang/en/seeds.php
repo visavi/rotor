@@ -4,6 +4,7 @@ return [
     'rules' => 'General rules for users of the site %SITENAME%',
 
     'settings' => [
+        'language'       => 'en',
         'currency'       => 'usd',
         'guest_user'     => 'Guest',
         'deleted_user'   => 'Deleted Account',

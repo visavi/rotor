@@ -83,7 +83,7 @@ return [
     'request_limit'            => 'Limit of requests with IP (0 - Off)',
     'timezone'                 => 'Time Zone',
     'currency'                 => 'Site Currency',
-    'language'                 => 'Tongue',
+    'language'                 => 'Language',
     'fallback_language'        => 'Reserve language',
     'fallback_language_hint'   => 'Reserve language is used when there is no translation of the main language',
     'wap_theme'                => 'Wap theme',

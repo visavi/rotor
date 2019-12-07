@@ -71,7 +71,7 @@ class SettingsSeeder extends AbstractSeed
             ['name'  => 'invite', 'value' => 0],
             ['name'  => 'ipbanlist', 'value' => 10],
             ['name'  => 'lastnews', 'value' => 5],
-            ['name'  => 'language', 'value' => 'ru'],
+            ['name'  => 'language', 'value' => __('seeds.settings.language')],
             ['name'  => 'language_fallback', 'value' => 'ru'],
             ['name'  => 'limitcontact', 'value' => 1000],
             ['name'  => 'limitignore', 'value' => 1000],

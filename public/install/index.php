@@ -277,6 +277,7 @@ $keys = [
                         'point'      => 500,
                         'money'      => 100000,
                         'status'     => 'Boss',
+                        'language'   => $lang,
                         'created_at' => SITETIME,
                     ]);
 
@@ -332,13 +333,22 @@ $keys = [
 
             <h1><?= __('install.install_completed') ?></h1>
             <p>
-                <?= __('install.install') ?><br><br>
+                <?= __('install.success_install') ?><br><br>
                 <a href="/"><?= __('install.main_page') ?></a><br>
             </p>
 
+
+            <?php if (is_writable(BASEDIR . '/.env')): ?>
+                <?php
+                runCommand(new AppState());
+                runCommand(new KeyGenerate());
+                ?>
+            <?php else: ?>
+                <div class="alert alert-danger">
+                    <?= __('install.app_new_change') ?>
+                </div>
+            <?php endif; ?>
             <?php
-            runCommand(new AppState());
-            runCommand(new KeyGenerate());
             runCommand(new CacheClear());
             runCommand(new RouteClear());
             runCommand(new ConfigClear());
