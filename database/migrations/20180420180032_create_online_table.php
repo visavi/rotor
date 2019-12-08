@@ -14,8 +14,8 @@ class CreateOnlineTable extends AbstractMigration
             $table
                 ->addColumn('ip', 'string', ['limit' => 15])
                 ->addColumn('brow', 'string', ['limit' => 25])
-                ->addColumn('updated_at', 'integer', ['null' => true])
                 ->addColumn('user_id', 'integer', ['null' => true])
+                ->addColumn('updated_at', 'integer', ['null' => true])
                 ->create();
         }
     }

@@ -7,7 +7,6 @@ namespace App\Models;
 /**
  * Class Online
  *
- * @property int id
  * @property string ip
  * @property string brow
  * @property int updated_at
@@ -21,6 +20,20 @@ class Online extends BaseModel
      * @var string
      */
     protected $table = 'online';
+
+    /**
+     * The primary key for the model.
+     *
+     * @var string
+     */
+    protected $primaryKey = 'uid';
+
+    /**
+     * Indicates if the IDs are auto-incrementing.
+     *
+     * @var bool
+     */
+    public $incrementing = false;
 
     /**
      * Indicates if the model should be timestamped.

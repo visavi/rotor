@@ -61,45 +61,53 @@ class Metrika
 
         $newHost = false;
 
-        if (getUser()) {
+        $ip     = getIp();
+        $brow   = getBrowser();
+        $userId = getUser('id');
+        $uid    = md5($ip.$brow);
+
+        if ($userId) {
             $online = Online::query()
-                ->where('ip', getIp())
-                ->orWhere('user_id', getUser('id'))
-                ->orderByRaw('user_id = ? desc', [getUser('id')])
+                ->where('uid', $uid)
+                ->orWhere('user_id', $userId)
                 ->first();
 
             if ($online) {
                 $online->update([
-                    'ip'         => getIp(),
-                    'brow'       => getBrowser(),
+                    'uid'        => $uid,
+                    'ip'         => $ip,
+                    'brow'       => $brow,
                     'updated_at' => SITETIME,
-                    'user_id'    => getUser('id'),
+                    'user_id'    => $userId,
                 ]);
             } else {
                 Online::query()->create([
-                    'ip'         => getIp(),
-                    'brow'       => getBrowser(),
+                    'uid'        => $uid,
+                    'ip'         => $ip,
+                    'brow'       => $brow,
                     'updated_at' => SITETIME,
-                    'user_id'    => getUser('id'),
+                    'user_id'    => $userId,
                 ]);
                 $newHost = true;
             }
         } else {
             $online = Online::query()
-                ->where('ip', getIp())
-                ->orderByRaw('user_id IS NULL desc')
+                ->where('id', $uid)
                 ->first();
 
             if ($online) {
                 $online->update([
-                    'brow'       => getBrowser(),
+                    'uid'        => $uid,
+                    'ip'         => $ip,
+                    'brow'       => $brow,
                     'updated_at' => SITETIME,
                     'user_id'    => null,
                 ]);
             } else {
                 Online::query()->create([
-                    'ip'         => getIp(),
-                    'brow'       => getBrowser(),
+                    'uid'        => $uid,
+                    'ip'         => $ip,
+                    'brow'       => $brow,
                     'updated_at' => SITETIME,
                 ]);
                 $newHost = true;
