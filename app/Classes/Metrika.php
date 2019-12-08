@@ -92,7 +92,7 @@ class Metrika
             }
         } else {
             $online = Online::query()
-                ->where('id', $uid)
+                ->where('uid', $uid)
                 ->first();
 
             if ($online) {
