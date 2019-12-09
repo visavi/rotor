@@ -56,10 +56,10 @@ class CreateUsersTable extends AbstractMigration
                 ->addIndex('email', ['unique' => true])
                 ->addIndex('login', ['unique' => true])
                 ->addIndex('level')
-                ->addIndex('themes')
                 ->addIndex('point')
                 ->addIndex('money')
                 ->addIndex('rating')
+                ->addIndex('created_at')
                 ->create();
         }
     }

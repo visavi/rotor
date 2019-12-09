@@ -418,7 +418,7 @@ function showCounter()
  */
 function statsUsers()
 {
-    return Cache::remember('statUsers', 600, static function () {
+    return Cache::remember('statUsers', 1800, static function () {
         $startDay = mktime(0, 0, 0, dateFixed(SITETIME, 'n'));
 
         $stat = User::query()->count();
@@ -439,7 +439,7 @@ function statsUsers()
  */
 function statsAdmins()
 {
-    return Cache::remember('statAdmins', 600, static function () {
+    return Cache::remember('statAdmins', 3600, static function () {
         return User::query()->whereIn('level', User::ADMIN_GROUPS)->count();
     });
 }
