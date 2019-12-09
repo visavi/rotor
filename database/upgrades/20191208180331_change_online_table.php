@@ -14,7 +14,8 @@ class ChangeOnlineTable extends AbstractMigration
         $table = $this->table('online', [
             'id'          => false,
             'primary_key' => 'uid',
-            'engine'      => 'MEMORY',
+            'engine'      => config('DB_ENGINE'),
+            'collation'   => config('DB_COLLATION'),
         ]);
 
         $table

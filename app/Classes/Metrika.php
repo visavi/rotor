@@ -81,7 +81,7 @@ class Metrika
                     'user_id'    => $userId,
                 ]);
             } else {
-                Online::query()->create([
+                Online::query()->insertOrIgnore([
                     'uid'        => $uid,
                     'ip'         => $ip,
                     'brow'       => $brow,
@@ -104,7 +104,7 @@ class Metrika
                     'user_id'    => null,
                 ]);
             } else {
-                Online::query()->create([
+                Online::query()->insertOrIgnore([
                     'uid'        => $uid,
                     'ip'         => $ip,
                     'brow'       => $brow,

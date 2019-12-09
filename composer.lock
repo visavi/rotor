@@ -2015,25 +2015,26 @@
         },
         {
             "name": "nelexa/zip",
-            "version": "3.1.12",
+            "version": "3.1.14",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Ne-Lexa/php-zip.git",
-                "reference": "ca068fa78ff37db9bce0064aed0297079587f43b"
+                "reference": "c420f191ddd599b705fbde4a38ae0afa5f5d461f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Ne-Lexa/php-zip/zipball/ca068fa78ff37db9bce0064aed0297079587f43b",
-                "reference": "ca068fa78ff37db9bce0064aed0297079587f43b",
+                "url": "https://api.github.com/repos/Ne-Lexa/php-zip/zipball/c420f191ddd599b705fbde4a38ae0afa5f5d461f",
+                "reference": "c420f191ddd599b705fbde4a38ae0afa5f5d461f",
                 "shasum": ""
             },
             "require": {
                 "ext-zlib": "*",
+                "paragonie/random_compat": ">=1 <9.99",
                 "php": "^5.5 || ^7.0",
                 "psr/http-message": "^1.0"
             },
             "require-dev": {
-                "phpunit/phpunit": "~4.8|~5.7",
+                "phpunit/phpunit": "^4.8|^5.7",
                 "zendframework/zend-diactoros": "^1.4"
             },
             "suggest": {
@@ -2043,6 +2044,12 @@
                 "ext-openssl": "Needed to support encrypt zip entries or use ext-mcrypt"
             },
             "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "3.1.x-dev",
+                    "dev-develop": "3.2.x-dev"
+                }
+            },
             "autoload": {
                 "psr-4": {
                     "PhpZip\\": "src/PhpZip"
@@ -2070,7 +2077,7 @@
                 "zipalign",
                 "ziparchive"
             ],
-            "time": "2019-07-25T20:08:42+00:00"
+            "time": "2019-12-09T09:17:55+00:00"
         },
         {
             "name": "nesbot/carbon",
@@ -2279,6 +2286,55 @@
                 "php"
             ],
             "time": "2019-11-08T13:50:10+00:00"
+        },
+        {
+            "name": "paragonie/random_compat",
+            "version": "v2.0.18",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/paragonie/random_compat.git",
+                "reference": "0a58ef6e3146256cc3dc7cc393927bcc7d1b72db"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/paragonie/random_compat/zipball/0a58ef6e3146256cc3dc7cc393927bcc7d1b72db",
+                "reference": "0a58ef6e3146256cc3dc7cc393927bcc7d1b72db",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.2.0"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "4.*|5.*"
+            },
+            "suggest": {
+                "ext-libsodium": "Provides a modern crypto API that can be used to generate random bytes."
+            },
+            "type": "library",
+            "autoload": {
+                "files": [
+                    "lib/random.php"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Paragon Initiative Enterprises",
+                    "email": "security@paragonie.com",
+                    "homepage": "https://paragonie.com"
+                }
+            ],
+            "description": "PHP 5.x polyfill for random_bytes() and random_int() from PHP 7",
+            "keywords": [
+                "csprng",
+                "polyfill",
+                "pseudorandom",
+                "random"
+            ],
+            "time": "2019-01-03T20:59:08+00:00"
         },
         {
             "name": "php-curl-class/php-curl-class",
