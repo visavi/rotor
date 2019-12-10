@@ -7,6 +7,7 @@ namespace App\Classes;
 use App\Models\Counter;
 use App\Models\Online;
 use Illuminate\Database\Capsule\Manager as DB;
+use Illuminate\Database\Eloquent\Builder;
 
 class Metrika
 {
@@ -66,53 +67,32 @@ class Metrika
         $userId = getUser('id');
         $uid    = md5($ip.$brow);
 
-        if ($userId) {
-            $online = Online::query()
-                ->where('uid', $uid)
-                ->orWhere('user_id', $userId)
-                ->first();
+        $online = Online::query()
+            ->where('uid', $uid)
+            ->when($userId, static function (Builder $query) use ($userId) {
+                return $query->where('user_id', $userId);
+            })
+            ->first();
 
-            if ($online) {
-                $online->update([
-                    'uid'        => $uid,
-                    'ip'         => $ip,
-                    'brow'       => $brow,
-                    'updated_at' => SITETIME,
-                    'user_id'    => $userId,
-                ]);
-            } else {
-                Online::query()->insertOrIgnore([
-                    'uid'        => $uid,
-                    'ip'         => $ip,
-                    'brow'       => $brow,
-                    'updated_at' => SITETIME,
-                    'user_id'    => $userId,
-                ]);
-                $newHost = true;
-            }
+        if ($online) {
+            $online->update([
+                'uid'        => $uid,
+                'ip'         => $ip,
+                'brow'       => $brow,
+                'updated_at' => SITETIME,
+                'user_id'    => $userId,
+            ]);
         } else {
-            $online = Online::query()
-                ->where('uid', $uid)
-                ->first();
-
-            if ($online) {
-                $online->update([
-                    'uid'        => $uid,
-                    'ip'         => $ip,
-                    'brow'       => $brow,
-                    'updated_at' => SITETIME,
-                    'user_id'    => null,
-                ]);
-            } else {
-                Online::query()->insertOrIgnore([
-                    'uid'        => $uid,
-                    'ip'         => $ip,
-                    'brow'       => $brow,
-                    'updated_at' => SITETIME,
-                ]);
-                $newHost = true;
-            }
+            Online::query()->insertOrIgnore([
+                'uid'        => $uid,
+                'ip'         => $ip,
+                'brow'       => $brow,
+                'updated_at' => SITETIME,
+                'user_id'    => $userId,
+            ]);
+            $newHost = true;
         }
+
         // -----------------------------------------------------------//
         $counter = Counter::query()->first();
 

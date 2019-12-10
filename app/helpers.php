@@ -2190,6 +2190,7 @@ function getQueryLog()
         }
         $formattedQueries[] = ['query' => $prep, 'time' => $query['time']];
     }
+
     return $formattedQueries;
 }
 
