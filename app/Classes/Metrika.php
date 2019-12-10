@@ -65,26 +65,23 @@ class Metrika
         $ip     = getIp();
         $brow   = getBrowser();
         $userId = getUser('id');
-        $uid    = md5($ip.$brow);
 
         $online = Online::query()
-            ->where('uid', $uid)
+            ->where('ip', $ip)
             ->when($userId, static function (Builder $query) use ($userId) {
-                return $query->where('user_id', $userId);
+                return $query->orWhere('user_id', $userId);
             })
             ->first();
 
         if ($online) {
             $online->update([
-                'uid'        => $uid,
                 'ip'         => $ip,
                 'brow'       => $brow,
                 'updated_at' => SITETIME,
                 'user_id'    => $userId,
             ]);
         } else {
-            Online::query()->insertOrIgnore([
-                'uid'        => $uid,
+            Online::query()->create([
                 'ip'         => $ip,
                 'brow'       => $brow,
                 'updated_at' => SITETIME,
