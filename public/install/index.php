@@ -34,7 +34,11 @@ $wrap->setOption('parser', 'php');
 $wrap->setOption('environment', 'default');
 
 $lang = check($request->input('lang', 'ru'));
-Lang::setLocale($lang);
+
+setSetting([
+    'language'          => $lang,
+    'language_fallback' => 'ru',
+]);
 
 $errors    = [];
 $languages = array_map('basename', glob(RESOURCES . '/lang/*', GLOB_ONLYDIR));

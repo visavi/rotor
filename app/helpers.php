@@ -2215,11 +2215,12 @@ function ipBan($clear = false)
 /**
  * Возвращает настройки сайта по ключу
  *
- * @param string $key ключ массива
+ * @param string $key     ключ массива
+ * @param string $default значение по умолчанию
  *
  * @return mixed данные
  */
-function setting($key = null)
+function setting($key = null, $default = null)
 {
     if (! Registry::has('settings')) {
         $settings = Cache::rememberForever('settings', static function () {
@@ -2245,20 +2246,20 @@ function setting($key = null)
         return Registry::get('settings');
     }
 
-    return Registry::get('settings')[$key] ?? null;
+    return Registry::get('settings')[$key] ?? $default;
 }
 
 /**
  * Устанавливает настройки сайта
  *
- * @param array $setting массив настроек
+ * @param array $settings массив настроек
  *
  * @return void
  */
-function setSetting($setting)
+function setSetting($settings)
 {
-    $setting = array_merge(Registry::get('settings'), $setting);
-    Registry::set('settings', $setting);
+    $settings = array_merge(Registry::get('settings', []), $settings);
+    Registry::set('settings', $settings);
 }
 
 /**

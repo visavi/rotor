@@ -19,16 +19,37 @@ class Registry
         return self::$instance;
     }
 
-    public static function set($key, $object): void
+    /**
+     * Set value
+     *
+     * @param mixed $key
+     * @param mixed $value
+     */
+    public static function set($key, $value): void
     {
-        self::getInstance()->registry[$key] = $object;
+        self::getInstance()->registry[$key] = $value;
     }
 
-    public static function get($key)
+    /**
+     * Get value
+     *
+     * @param mixed $key
+     * @param mixed $default
+     *
+     * @return mixed
+     */
+    public static function get($key, $default = null)
     {
-        return self::getInstance()->registry[$key];
+        return self::getInstance()->registry[$key] ?? $default;
     }
 
+    /**
+     * Check exists
+     *
+     * @param mixed $name
+     *
+     * @return bool
+     */
     public static function has($name): bool
     {
         if (! isset(self::getInstance()->registry[$name])) {
@@ -38,6 +59,11 @@ class Registry
         return true;
     }
 
+    /**
+     * Remove
+     *
+     * @param mixed $name
+     */
     public static function remove($name): void
     {
         if (self::has($name)) {

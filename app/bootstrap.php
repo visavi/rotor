@@ -56,6 +56,7 @@ $db->addConnection([
     'password'  => config('DB_PASSWORD'),
     'charset'   => config('DB_CHARSET'),
     'collation' => config('DB_COLLATION'),
+    'prefix'    => config('DB_PREFIX'),
 ]);
 
 $db->setAsGlobal();
