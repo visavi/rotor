@@ -15,14 +15,15 @@ return [
         'default_migration_table' => 'migrations',
         'default_database'        => 'default',
         'default' => [
-            'adapter'   => config('DB_DRIVER'),
-            'charset'   => config('DB_CHARSET'),
-            'collation' => config('DB_COLLATION'),
-            'port'      => config('DB_PORT'),
-            'host'      => config('DB_HOST'),
-            'name'      => config('DB_DATABASE'),
-            'user'      => config('DB_USERNAME'),
-            'pass'      => config('DB_PASSWORD'),
+            'adapter'      => config('DB_DRIVER'),
+            'charset'      => config('DB_CHARSET'),
+            'collation'    => config('DB_COLLATION'),
+            'port'         => config('DB_PORT'),
+            'host'         => config('DB_HOST'),
+            'name'         => config('DB_DATABASE'),
+            'user'         => config('DB_USERNAME'),
+            'pass'         => config('DB_PASSWORD'),
+            'table_prefix' => config('DB_PREFIX'),
         ]
     ]
 ];

@@ -167,7 +167,7 @@ class ModuleController extends AdminController
 
         if ($disable) {
             $module->update([
-                'disabled' => 1,
+                'disabled'   => 1,
                 'updated_at' => SITETIME,
             ]);
             $result = __('admin.modules.module_success_disabled');

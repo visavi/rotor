@@ -51,7 +51,7 @@ class Module extends BaseModel
         $migrationPath = $modulePath . '/migrations';
 
         if (file_exists($migrationPath)) {
-            $app = new PhinxApplication;
+            $app = new PhinxApplication();
             $app->add(new Migrate());
 
             /** @var Migrate $command */
@@ -78,7 +78,7 @@ class Module extends BaseModel
         $migrationPath = $modulePath . '/migrations';
 
         if (file_exists($migrationPath)) {
-            $app = new PhinxApplication;
+            $app = new PhinxApplication();
             $app->add(new Migrate());
 
             /** @var Migrate $command */

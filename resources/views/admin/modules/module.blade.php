@@ -69,7 +69,6 @@
         @endforeach
     @endif
 
-
     @if (isset($moduleConfig['symlink']))
         <div class="mt-2 font-weight-bold">{{ __('admin.modules.symlink') }}</div>
         <i class="fas fa-external-link-alt"></i> {{ $moduleConfig['symlink'] }}<br>
