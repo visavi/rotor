@@ -12,11 +12,14 @@ class ChangeOnlineTable extends AbstractMigration
         $this->table('online')->drop()->save();
 
         $table = $this->table('online', [
-            'engine'    => config('DB_ENGINE'),
-            'collation' => config('DB_COLLATION')
+            'id'          => false,
+            'primary_key' => 'uid',
+            'engine'      => config('DB_ENGINE'),
+            'collation'   => config('DB_COLLATION'),
         ]);
 
         $table
+            ->addColumn('uid', 'string', ['limit' => 32])
             ->addColumn('ip', 'string', ['limit' => 15])
             ->addColumn('brow', 'string', ['limit' => 25])
             ->addColumn('user_id', 'integer', ['null' => true])

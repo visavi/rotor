@@ -225,9 +225,9 @@ class User extends BaseModel
     /**
      * Авторизует пользователя
      *
-     * @param  string  $login    Логин
-     * @param  string  $password Пароль пользователя
-     * @param  boolean $remember Запомнить пароль
+     * @param  string $login    Логин
+     * @param  string $password Пароль пользователя
+     * @param  bool   $remember Запомнить пароль
      * @return Builder|Model|bool
      */
     public static function auth($login, $password, $remember = true)
@@ -246,6 +246,7 @@ class User extends BaseModel
 
                 $_SESSION['id']       = $user->id;
                 $_SESSION['password'] = md5(config('APP_KEY') . $user->password);
+                $_SESSION['online']   = null;
 
                 // Сохранение привязки к соц. сетям
                 if (! empty($_SESSION['social'])) {
@@ -257,41 +258,11 @@ class User extends BaseModel
                     ]);
                 }
 
-                return self::saveVisit($user, 1);
+                return $user->saveVisit(1);
             }
         }
 
         return false;
-    }
-
-    /**
-     * Сохраняет посещения
-     *
-     * @param User $user
-     * @param int  $type
-     * @return User
-     */
-    public static function saveVisit(User $user, int $type = 0): User
-    {
-        $authorization = Login::query()
-            ->where('user_id', $user->id)
-            ->where('created_at', '>', SITETIME - 60)
-            ->first();
-
-        if (! $authorization) {
-            Login::query()->create([
-                'user_id'    => $user->id,
-                'ip'         => getIp(),
-                'brow'       => getBrowser(),
-                'created_at' => SITETIME,
-                'type'       => $type,
-            ]);
-        }
-
-        $user->increment('visits');
-        $user->update(['updated_at' => SITETIME]);
-
-        return $user;
     }
 
     /**
@@ -333,6 +304,36 @@ class User extends BaseModel
                 redirect('/');
             }
         }
+    }
+
+    /**
+     * Сохраняет посещения
+     *
+     * @param int $type
+     *
+     * @return User
+     */
+    public function saveVisit(int $type = 0): User
+    {
+        $authorization = Login::query()
+            ->where('user_id', $this->id)
+            ->where('created_at', '>', SITETIME - 60)
+            ->first();
+
+        if (! $authorization) {
+            Login::query()->create([
+                'user_id'    => $this->id,
+                'ip'         => getIp(),
+                'brow'       => getBrowser(),
+                'created_at' => SITETIME,
+                'type'       => $type,
+           ]);
+        }
+
+        $this->increment('visits');
+        $this->update(['updated_at' => SITETIME]);
+
+        return $this;
     }
 
     /**
