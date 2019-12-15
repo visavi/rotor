@@ -76,7 +76,7 @@
     },
     "extra": {
         "branch-alias": {
-            "dev-master": "8.1-dev"
+            "dev-master": "8.2-dev"
         }
     },
     "config": {
