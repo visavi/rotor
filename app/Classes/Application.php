@@ -175,5 +175,9 @@ class Application
         if (empty($_SESSION['protect'])) {
             $_SESSION['protect'] = mt_rand(1000, 99999);
         }
+
+        if (empty($_SESSION['hits'])) {
+            $_SESSION['hits'] = 0;
+        }
     }
 }

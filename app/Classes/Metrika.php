@@ -55,6 +55,12 @@ class Metrika
      */
     public function saveStatistic(): void
     {
+        $_SESSION['hits']++;
+
+        if (isset($_SESSION['online']) && $_SESSION['online'] > SITETIME) {
+            return;
+        }
+
         $period = date('Y-m-d H:00:00', SITETIME);
         $day    = date('Y-m-d 00:00:00', SITETIME);
 
@@ -108,21 +114,26 @@ class Metrika
         }
 
         // -----------------------------------------------------------//
+        $hostsUpdate = [];
         if ($newHost) {
-            $counter->update([
+            $hostsUpdate = [
                 'allhosts' => DB::connection()->raw('allhosts + 1'),
-                'allhits'  => DB::connection()->raw('allhits + 1'),
                 'dayhosts' => DB::connection()->raw('dayhosts + 1'),
-                'dayhits'  => DB::connection()->raw('dayhits + 1'),
                 'hosts24'  => DB::connection()->raw('hosts24 + 1'),
-                'hits24'   => DB::connection()->raw('hits24 + 1'),
-            ]);
-        } else {
-            $counter->update([
-                'allhits' => DB::connection()->raw('allhits + 1'),
-                'dayhits' => DB::connection()->raw('dayhits + 1'),
-                'hits24'  => DB::connection()->raw('hits24 + 1'),
-            ]);
+            ];
         }
+
+        $hits = $_SESSION['hits'];
+
+        $hitsUpdate = [
+            'allhits' => DB::connection()->raw('allhits + ' . $hits),
+            'dayhits' => DB::connection()->raw('dayhits + ' . $hits),
+            'hits24'  => DB::connection()->raw('hits24 + ' . $hits),
+        ];
+
+        $counter->update(array_merge($hostsUpdate, $hitsUpdate));
+
+        $_SESSION['hits']   = 0;
+        $_SESSION['online'] = strtotime('+30 seconds', SITETIME);
     }
 }
