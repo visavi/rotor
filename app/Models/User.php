@@ -202,7 +202,7 @@ class User extends BaseModel
                 $admin = ' <i class="fas fa-xs fa-star text-info"></i>';
             }
 
-            return '<a class="author" href="/users/' . $this->login . '" data-login="' . $this->login . '">' . $name . '</a>' . $admin;
+            return '<a class="author" href="/users/' . $this->login . '" data-login="@' . $this->login . '">' . $name . '</a>' . $admin;
         }
 
         return '<span class="author" data-login="' . setting('deleted_user') . '">' . setting('deleted_user') . '</span>';

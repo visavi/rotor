@@ -159,7 +159,7 @@ function postReply(el)
     var author = post.find('.author').data('login');
 
     var separ = field.val().length ? '\n' : '';
-    field.focus().val(field.val() + separ + '@' + author + ', ');
+    field.focus().val(field.val() + separ + author + ', ');
 
     return false;
 }
@@ -179,7 +179,7 @@ function postQuote(el)
     var message = text.find("blockquote").remove().end().text();
 
     var separ = field.val().length ? '\n' : '';
-    field.focus().val(field.val() + separ + '[quote=@' + author + ' ' + date + ']' + $.trim(message) + '[/quote]\n');
+    field.focus().val(field.val() + separ + '[quote=' + author + ' ' + date + ']' + $.trim(message) + '[/quote]\n');
 
     return false;
 }

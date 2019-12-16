@@ -22,14 +22,6 @@
             @foreach($posts as $data)
                 <div class="post">
                     <div class="b">
-                        <div class="img">
-                            {!! $data->user->getAvatar() !!}
-
-                            @if ($data->user_id)
-                                {!! $data->user->getOnline() !!}
-                            @endif
-                        </div>
-
                         <div class="float-right">
                             <a href="/admin/guestbooks/reply/{{ $data->id }}?page={{ $posts->currentPage() }}"><i class="fa fa-reply text-muted"></i></a>
                             <a href="/admin/guestbooks/edit/{{ $data->id }}?page={{ $posts->currentPage() }}"><i class="fas fa-pencil-alt text-muted"></i></a>
@@ -37,10 +29,23 @@
                         </div>
 
                         @if ($data->user_id)
+                            <div class="img">
+                                {!! $data->user->getAvatar() !!}
+                                {!! $data->user->getOnline() !!}
+                            </div>
                             <b>{!! $data->user->getProfile() !!}</b> <small>({{ dateFixed($data->created_at) }})</small><br>
                             {!! $data->user->getStatus() !!}
                         @else
-                            <b class="author" data-login="{{ setting('guestsuser') }}">{{ setting('guestsuser') }}</b> <small>({{ dateFixed($data->created_at) }})</small>
+                            <div class="img">
+                                <img class="avatar" src="/assets/img/images/avatar_guest.png" alt="">
+                            </div>
+
+                            @if ($data->guest_name)
+                                <b class="author" data-login="{{ $data->guest_name }}">{{ $data->guest_name }}</b>
+                            @else
+                                <b class="author" data-login="{{ setting('guestsuser') }}">{{ setting('guestsuser') }}</b>
+                            @endif
+                            <small>({{ dateFixed($data->created_at) }})</small>
                         @endif
                     </div>
 

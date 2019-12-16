@@ -36,8 +36,9 @@ class GuestbookController extends BaseController
      */
     public function add(Request $request, Validator $validator, Flood $flood): void
     {
-        $msg   = check($request->input('msg'));
-        $token = check($request->input('token'));
+        $msg       = check($request->input('msg'));
+        $token     = check($request->input('token'));
+        $guestName = check($request->input('guest_name'));
 
         $validator->equal($token, $_SESSION['token'], ['msg' => __('validator.token')])
             ->length($msg, 5, setting('guesttextlength'), ['msg' => __('validator.text')])
@@ -47,6 +48,7 @@ class GuestbookController extends BaseController
         if (! getUser() && setting('bookadds')) {
             $validator->true(captchaVerify(), ['protect' => __('validator.captcha')]);
             $validator->false(strpos($msg, '//'), ['msg' => __('guestbooks.without_links')]);
+            $validator->length($guestName, 3, 20, ['name' => __('users.name_short_or_long')], false);
         } else {
             $validator->true(getUser(), ['msg' => __('main.not_authorized')]);
         }
@@ -55,6 +57,7 @@ class GuestbookController extends BaseController
             $msg = antimat($msg);
 
             if (getUser()) {
+                $guestName  = null;
                 $bookscores = setting('bookscores') ? 1 : 0;
 
                 getUser()->increment('allguest');
@@ -67,6 +70,7 @@ class GuestbookController extends BaseController
                 'text'       => $msg,
                 'ip'         => getIp(),
                 'brow'       => getBrowser(),
+                'guest_name' => $guestName,
                 'created_at' => SITETIME,
             ]);
 

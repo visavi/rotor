@@ -57,7 +57,13 @@
                         <div class="img">
                             <img class="avatar" src="/assets/img/images/avatar_guest.png" alt="">
                         </div>
-                        <b class="author" data-login="{{ setting('guestsuser') }}">{{ setting('guestsuser') }}</b> <small>({{ dateFixed($data->created_at) }})</small>
+
+                        @if ($data->guest_name)
+                            <b class="author" data-login="{{ $data->guest_name }}">{{ $data->guest_name }}</b>
+                        @else
+                            <b class="author" data-login="{{ setting('guestsuser') }}">{{ setting('guestsuser') }}</b>
+                        @endif
+                        <small>({{ dateFixed($data->created_at) }})</small>
                     @endif
                 </div>
 
@@ -102,6 +108,12 @@
         <div class="form">
             <form action="/guestbooks/add" method="post">
                 @csrf
+                <div class="form-group{{ hasError('guest_name') }}">
+                    <label for="inputName">{{ __('users.name') }}:</label>
+                    <input class="form-control" id="inputName" name="guest_name" maxlength="20" value="{{ getInput('guest_name') }}">
+                    <div class="invalid-feedback">{{ textError('guest_name') }}</div>
+                </div>
+
                 <div class="form-group{{ hasError('msg') }}">
                     <label for="msg">{{ __('main.message') }}:</label>
                     <textarea class="form-control" id="msg" rows="5" maxlength="{{ setting('guesttextlength') }}" name="msg" placeholder="{{ __('main.message') }}" required>{{ getInput('msg') }}</textarea>
