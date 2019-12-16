@@ -10,7 +10,7 @@ class AddGuestNameToGuestbooks extends AbstractMigration
     public function change(): void
     {
         $table = $this->table('guestbooks');
-        $table->addColumn('guest_name', 'string', ['limit' => 50, 'after' => 'reply', 'null' => true])
+        $table->addColumn('guest_name', 'string', ['limit' => 20, 'after' => 'reply', 'null' => true])
             ->update();
     }
 }

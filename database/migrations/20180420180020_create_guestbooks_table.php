@@ -18,6 +18,7 @@ class CreateGuestbooksTable extends AbstractMigration
                 ->addColumn('brow', 'string', ['limit' => 25])
                 ->addColumn('created_at', 'integer')
                 ->addColumn('reply', 'text', ['null' => true])
+                ->addColumn('guest_name', 'string', ['limit' => 20, 'null' => true])
                 ->addColumn('edit_user_id', 'integer', ['null' => true])
                 ->addColumn('updated_at', 'integer', ['null' => true])
                 ->addIndex('created_at')
