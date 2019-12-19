@@ -10,6 +10,7 @@ class SettingsSeeder extends AbstractSeed
     public function run(): void
     {
         $data = [
+            ['name'  => 'app_installed', 'value' => 1],
             ['name'  => 'addbansend', 'value' => 1],
             ['name'  => 'addofferspoint', 'value' => 50],
             ['name'  => 'advertpoint', 'value' => 2000],

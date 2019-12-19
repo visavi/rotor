@@ -1,10 +1,6 @@
 <?php
 
-/*if (config('APP_ENV') === 'testing') {
-    $migrations = BASEDIR . '/database/{migrations,upgrades}';
-} else {*/
-    $migrations = BASEDIR . '/database/' . (config('APP_NEW') ? 'migrations' : 'upgrades');
-//}
+$migrations = BASEDIR . '/database/' . (setting('app_installed') ? 'upgrades' : 'migrations');
 
 return [
     'paths' => [

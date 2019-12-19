@@ -1,14 +1,12 @@
 <?php
 
 use App\Commands\AppConfigure;
-use App\Commands\AppState;
 use App\Commands\CacheClear;
 use App\Commands\ConfigClear;
 use App\Commands\KeyGenerate;
 use App\Commands\RouteClear;
 use App\Models\News;
 use App\Models\User;
-use Illuminate\Support\Facades\Lang;
 
 ob_start();
 define('DIR', dirname(__DIR__, 2));
@@ -45,7 +43,6 @@ $languages = array_map('basename', glob(RESOURCES . '/lang/*', GLOB_ONLYDIR));
 
 $keys = [
     'APP_ENV',
-    'APP_NEW',
     'APP_DEBUG',
     'DB_DRIVER',
     'DB_HOST',
@@ -65,7 +62,7 @@ $keys = [
 <html lang="ru">
 <head>
     <title>
-        <?= config('APP_NEW') ? __('install.install') : __('install.update') ?> Rotor
+        <?= setting('app_installed') ? __('install.update') : __('install.install') ?> Rotor
     </title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
@@ -98,10 +95,6 @@ $keys = [
 
         <div class="alert alert-info">
             <?= __('install.debug') ?>
-        </div>
-
-        <div class="alert alert-info">
-            <?= __('install.app_new') ?>
         </div>
 
         <p><?= __('install.env') ?></p>
@@ -208,7 +201,7 @@ $keys = [
             <?php endif; ?>
 
             <a style="font-size: 18px" href="?act=status&amp;lang=<?= $lang ?>"><?= __('install.check_status') ?></a>
-            (<?= config('APP_NEW') ? __('install.install') : __('install.update') ?>)
+            (<?= setting('app_installed') ? __('install.update') : __('install.install') ?>)
         <?php else: ?>
             <div class="alert alert-danger">
                 <i class="fa fa-times-circle"></i> <?= __('install.requirements_failed') ?><br>
@@ -217,7 +210,7 @@ $keys = [
         <?php endif; ?>
     <?php endif; ?>
 
-    <?php if (config('APP_NEW')): ?>
+    <?php if (! setting('app_installed')): ?>
         <?php if ($request->input('act') === 'status'): ?>
             <h1><?= __('install.step2_install') ?></h1>
 
@@ -341,18 +334,8 @@ $keys = [
                 <a href="/"><?= __('install.main_page') ?></a><br>
             </p>
 
-
-            <?php if (is_writable(BASEDIR . '/.env')): ?>
-                <?php
-                runCommand(new AppState());
-                runCommand(new KeyGenerate());
-                ?>
-            <?php else: ?>
-                <div class="alert alert-danger">
-                    <?= __('install.app_new_change') ?>
-                </div>
-            <?php endif; ?>
             <?php
+            runCommand(new KeyGenerate());
             runCommand(new CacheClear());
             runCommand(new RouteClear());
             runCommand(new ConfigClear());

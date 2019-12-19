@@ -12,7 +12,6 @@ return [
     'install_completed'     => 'Installation completed',
     'update_completed'      => 'Update completed',
     'debug'                 => 'If during the installation of the engine any error occurs, to find out the cause of the error, enable error output, change the value of APP_DEBUG to true',
-    'app_new'               => 'If you are upgrading from a previous version of Rotor, you need to update the database, for this the value of APP_NEW should be false, then refresh the current page',
     'env'                   => 'To install the engine, you need to register data from the database into the .env file',
     'app_key'               => 'Do not forget to change the value of APP_KEY, this data is necessary to encrypt cookies and passwords in sessions',
     'requirements'          => 'The minimum version of PHP necessary for the PHP :php and MySQL :mysql engine to work',
@@ -45,5 +44,4 @@ return [
     'success_install'       => 'Congratulations, Rotor has been successfully installed!',
     'success_update'        => 'Congratulations, Rotor has been successfully updated!',
     'main_page'             => 'Go to the main page of the site',
-    'app_new_change'        => 'You must change the value of APP_NEW to false in the .env file',
 ];

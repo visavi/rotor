@@ -15,7 +15,7 @@ class Application
 {
     public function __construct()
     {
-        if (config('APP_NEW') && file_exists(HOME . '/install/')) {
+        if (! setting('app_installed') && file_exists(HOME . '/install/')) {
             redirect('/install/index.php');
         }
 

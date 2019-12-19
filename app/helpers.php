@@ -2223,21 +2223,25 @@ function ipBan($clear = false)
 function setting($key = null, $default = null)
 {
     if (! Registry::has('settings')) {
-        $settings = Cache::rememberForever('settings', static function () {
-            $settings = Setting::query()->pluck('value', 'name')->all();
+        try {
+            $settings = Cache::rememberForever('settings', static function () {
+                $settings = Setting::query()->pluck('value', 'name')->all();
 
-            return array_map(static function ($value) {
-                if (is_numeric($value)) {
-                    return strpos($value, '.') === false ? (int) $value : (float) $value;
-                }
+                return array_map(static function ($value) {
+                    if (is_numeric($value)) {
+                        return strpos($value, '.') === false ? (int) $value : (float) $value;
+                    }
 
-                if ($value === '') {
-                    return null;
-                }
+                    if ($value === '') {
+                        return null;
+                    }
 
-                return $value;
-            }, $settings);
-        });
+                    return $value;
+                }, $settings);
+            });
+        } catch (Exception $e) {
+            $settings = [];
+        }
 
         Registry::set('settings', $settings);
     }

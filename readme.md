@@ -43,11 +43,9 @@ The main feature of Rotor is low load on system resources and high speed, even w
 
 7. Set write permissions to all directories inside `public / uploads` and` storage` or execute the command `php rotor app:configure`
 
-8. If you are installing the engine for the first time, then you need to clear the / database / upgrades folder and the APP_NEW setting should be true; if you are upgrading from a previous version, then APP_NEW should be false.
+8. Migrate using the console command `php rotor migrate`
 
-9. Migrate using the console command `php rotor migrate`
-
-10. Fill out the database using the command `php rotor seed:run`
+9. Fill out the database using the command `php rotor seed:run`
 
 ### Installation by one command
 To install the stable version, go to the site directory in the console and execute the command

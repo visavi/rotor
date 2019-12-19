@@ -45,11 +45,13 @@ class KeyGenerate extends AbstractCommand
      */
     protected function writeNewEnvironmentFileWith($key): void
     {
-        file_put_contents(BASEDIR . '/.env', preg_replace(
-            $this->keyReplacementPattern(),
-            'APP_KEY=' . $key,
-            file_get_contents(BASEDIR . '/.env')
-        ));
+        if (is_writable(BASEDIR . '/.env')) {
+            file_put_contents(BASEDIR . '/.env', preg_replace(
+                $this->keyReplacementPattern(),
+                'APP_KEY=' . $key,
+                file_get_contents(BASEDIR . '/.env')
+            ));
+        }
     }
 
     /**
