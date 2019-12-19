@@ -68,15 +68,6 @@ $db::connection()->enableQueryLog();
  */
 $app = new Container();
 
-$app->singleton('db', static function () use ($db) {
-
-    $db->setAsGlobal();
-    $db->bootEloquent();
-    $db::connection()->enableQueryLog();
-
-    return  $db;
-});
-
 $app->singleton('files', static function () {
     return new Filesystem();
 });

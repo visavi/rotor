@@ -1,8 +1,10 @@
 <?php
 
+declare(strict_types=1);
+
 use Phinx\Migration\AbstractMigration;
 
-class AddGuestNameToGuestbooks extends AbstractMigration
+final class AddGuestNameToGuestbooks extends AbstractMigration
 {
     /**
      * Migrate Change.

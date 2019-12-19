@@ -1,6 +1,10 @@
 <?php
 
-$migrations = BASEDIR . '/database/' . (setting('app_installed') ? 'upgrades' : 'migrations');
+if (config('APP_NEW') === false) {
+    $migrations = BASEDIR . '/database/upgrades';
+} else {
+    $migrations = BASEDIR . '/database/' . (setting('app_installed') ? 'upgrades' : 'migrations');
+}
 
 return [
     'paths' => [
