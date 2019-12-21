@@ -60,7 +60,7 @@
         {!! showError(__('messages.empty_dialogue')) !!}
     @endif
 
-    {{ $messages->links('app/_paginator') }}
+    {{ $messages->links() }}
 
     @if ($user->exists)
         <br>

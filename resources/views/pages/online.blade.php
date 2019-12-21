@@ -43,7 +43,7 @@
         {!! showError(__('main.empty_users')) !!}
     @endif
 
-    {{ $online->links('app/_paginator') }}
+    {{ $online->links() }}
 
     <br><i class="fa fa-users"></i>
 

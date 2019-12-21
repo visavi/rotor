@@ -42,7 +42,7 @@
         {!! showError(__('messages.empty_notifications')) !!}
     @endif
 
-    {{ $messages->links('app/_paginator') }}
+    {{ $messages->links() }}
 
     <br>{{ __('main.total') }}: <b>{{ $messages->total() }}</b><br>
 

@@ -56,7 +56,7 @@
         {!! showError(__('blogs.empty_articles')) !!}
     @endif
 
-    {{ $blogs->links('app/_paginator') }}
+    {{ $blogs->links() }}
 
     <a href="/blogs/top">{{ __('blogs.top_articles') }}</a> /
     <a href="/blogs/tags">{{ __('blogs.tag_cloud') }}</a> /

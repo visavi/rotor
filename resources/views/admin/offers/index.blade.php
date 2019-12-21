@@ -80,7 +80,7 @@
         {!! showError(__('main.empty_records')) !!}
     @endif
 
-    {{ $offers->links('app/_paginator') }}
+    {{ $offers->links() }}
 
     @if (isAdmin('boss'))
         <i class="fa fa-sync"></i> <a href="/admin/offers/restatement?token={{ $_SESSION['token'] }}">{{ __('main.recount') }}</a><br>

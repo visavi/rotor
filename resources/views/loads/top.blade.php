@@ -51,5 +51,5 @@
         {!! showError(__('loads.empty_downs')) !!}
     @endif
 
-    {{ $downs->links('app/_paginator') }}
+    {{ $downs->links() }}
 @stop

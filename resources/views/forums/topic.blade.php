@@ -188,7 +188,7 @@
         </form>
     @endif
 
-    {{ $posts->links('app/_paginator') }}
+    {{ $posts->links() }}
 
     @if (getUser())
         @if (empty($topic->closed))

@@ -33,5 +33,5 @@
         {!! showError(__('admin.logs.empty_logs')) !!}
     @endif
 
-    {{ $logs->links('app/_paginator') }}
+    {{ $logs->links() }}
 @stop

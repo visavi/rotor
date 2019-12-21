@@ -55,7 +55,7 @@
         {!! showError(__('admin.banhists.empty_history')) !!}
     @endif
 
-    {{ $records->links('app/_paginator') }}
+    {{ $records->links() }}
 
     <div class="form mb-3">
         <form action="/admin/banhists/view" method="get">

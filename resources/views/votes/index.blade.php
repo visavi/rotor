@@ -43,7 +43,7 @@
         {!! showError(__('votes.empty_votes')) !!}
     @endif
 
-    {{ $votes->links('app/_paginator') }}
+    {{ $votes->links() }}
 
     <i class="fa fa-briefcase"></i> <a href="/votes/history">{{ __('votes.archive_votes') }}</a><br>
 @stop

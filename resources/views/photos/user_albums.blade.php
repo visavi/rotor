@@ -78,5 +78,5 @@
         {!! showError(__('photos.empty_photos')) !!}
     @endif
 
-    {{ $photos->links('app/_paginator') }}
+    {{ $photos->links() }}
 @stop

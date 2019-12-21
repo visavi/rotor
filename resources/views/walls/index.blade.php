@@ -53,7 +53,7 @@
         {!! showError(__('walls.empty_messages')) !!}
     @endif
 
-    {{ $messages->links('app/_paginator') }}
+    {{ $messages->links() }}
 
     @if (getUser())
         <div class="form">

@@ -40,5 +40,5 @@
         {!! showError(__('adverts.empty_links')) !!}
     @endif
 
-    {{ $adverts->links('app/_paginator') }}
+    {{ $adverts->links() }}
 @stop

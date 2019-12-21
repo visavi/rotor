@@ -93,5 +93,5 @@
         {!! showError(__('loads.closed_load')) !!}
     @endif
 
-    {{ $downs->links('app/_paginator') }}
+    {{ $downs->links() }}
 @stop

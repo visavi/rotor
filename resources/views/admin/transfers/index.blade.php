@@ -37,7 +37,7 @@
             </div>
         @endforeach
 
-        {{ $transfers->links('app/_paginator') }}
+        {{ $transfers->links() }}
 
         <div class="form">
             <form action="/admin/transfers/view" method="get">

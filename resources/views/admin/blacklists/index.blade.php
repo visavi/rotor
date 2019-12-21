@@ -43,7 +43,7 @@
         {!! showError( __('admin.blacklists.empty_list') ) !!}
     @endif
 
-    {{ $lists->links('app/_paginator') }}
+    {{ $lists->links() }}
 
     <div class="form">
         <form action="/admin/blacklists?type={{ $type }}" method="post">

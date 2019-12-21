@@ -53,5 +53,5 @@
         {!! showError(__('admin.banhists.empty_history')) !!}
     @endif
 
-    {{ $banhist->links('app/_paginator') }}
+    {{ $banhist->links() }}
 @stop

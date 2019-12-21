@@ -52,7 +52,7 @@
         {!! showError(__('contacts.empty_list')) !!}
     @endif
 
-    {{ $contacts->links('app/_paginator') }}
+    {{ $contacts->links() }}
 
     <div class="form my-3">
         <form method="post">

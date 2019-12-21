@@ -40,5 +40,5 @@
         {!! showError(__('admin.caches.empty_files')) !!}
     @endif
 
-    {{ $files->links('app/_paginator') }}
+    {{ $files->links() }}
 @stop

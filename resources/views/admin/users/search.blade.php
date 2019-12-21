@@ -40,5 +40,5 @@
         {!! showError(__('main.empty_found')) !!}
     @endif
 
-    {{ $users->links('app/_paginator') }}
+    {{ $users->links() }}
 @stop

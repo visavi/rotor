@@ -77,7 +77,7 @@
         {!! showError(__('forums.empty_topics')) !!}
     @endif
 
-    {{ $topics->links('app/_paginator') }}
+    {{ $topics->links() }}
 
     <a href="/rules">{{ __('main.rules') }}</a> /
     <a href="/forums/top/topics">{{ __('forums.top_topics') }}</a> /

@@ -46,5 +46,5 @@
         {!! showError(__('forums.posts_not_created')) !!}
     @endif
 
-    {{ $posts->links('app/_paginator') }}
+    {{ $posts->links() }}
 @stop

@@ -30,5 +30,5 @@
         </div>
     @endforeach
 
-    {{ $topics->links('app/_paginator') }}
+    {{ $topics->links() }}
 @stop

@@ -45,5 +45,5 @@
         {!! showError(__('votes.empty_votes')) !!}
     @endif
 
-    {{ $votes->links('app/_paginator') }}
+    {{ $votes->links() }}
 @stop

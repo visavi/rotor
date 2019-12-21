@@ -32,5 +32,5 @@
         {!! showError(__('photos.empty_albums')) !!}
     @endif
 
-    {{ $albums->links('app/_paginator') }}
+    {{ $albums->links() }}
 @stop

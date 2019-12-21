@@ -41,5 +41,5 @@
         {!! showError(__('transfers.empty_transfers')) !!}
     @endif
 
-    {{ $transfers->links('app/_paginator') }}
+    {{ $transfers->links() }}
 @stop

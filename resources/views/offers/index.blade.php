@@ -69,5 +69,5 @@
         {!! showError(__('main.empty_records')) !!}
     @endif
 
-    {{ $offers->links('app/_paginator') }}
+    {{ $offers->links() }}
 @stop

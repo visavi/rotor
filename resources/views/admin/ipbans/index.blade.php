@@ -44,7 +44,7 @@
         {!! showError(__('admin.ipbans.empty_ip')) !!}
     @endif
 
-    {{ $logs->links('app/_paginator') }}
+    {{ $logs->links() }}
 
     <div class="form">
         <form action="/admin/ipbans" method="post">

@@ -66,7 +66,7 @@
         @endforeach
     @endif
 
-    {{ $comments->links('app/_paginator') }}
+    {{ $comments->links() }}
 
     @if (! $news->closed)
         @if ($comments->isEmpty())

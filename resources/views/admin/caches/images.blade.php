@@ -36,5 +36,5 @@
         {!! showError(__('admin.caches.empty_images')) !!}
     @endif
 
-    {{ $images->links('app/_paginator') }}
+    {{ $images->links() }}
 @stop

@@ -59,5 +59,5 @@
         {!! showError(__('boards.empty_items')) !!}
     @endif
 
-    {{ $items->links('app/_paginator') }}
+    {{ $items->links() }}
 @stop

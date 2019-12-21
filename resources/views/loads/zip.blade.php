@@ -48,5 +48,5 @@
         {!! showError(__('loads.empty_archive')) !!}
     @endif
 
-    {{ $documents->links('app/_paginator') }}
+    {{ $documents->links() }}
 @stop

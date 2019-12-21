@@ -53,7 +53,7 @@
         {!! showError(__('ignores.empty_list')) !!}
     @endif
 
-    {{ $ignores->links('app/_paginator') }}
+    {{ $ignores->links() }}
 
     <div class="form my-3">
         <form method="post">

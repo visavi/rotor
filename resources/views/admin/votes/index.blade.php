@@ -54,7 +54,7 @@
         {!! showError(__('votes.empty_votes')) !!}
     @endif
 
-    {{ $votes->links('app/_paginator') }}
+    {{ $votes->links() }}
 
     @if (isAdmin('boss'))
         <i class="fa fa-sync"></i> <a href="/admin/votes/restatement?token={{ $_SESSION['token'] }}">{{ __('main.recount') }}</a><br>

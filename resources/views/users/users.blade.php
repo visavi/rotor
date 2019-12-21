@@ -62,7 +62,7 @@
         {!! showError(__('main.empty_users')) !!}
     @endif
 
-    {{ $users->links('app/_paginator') }}
+    {{ $users->links() }}
 
     <i class="fa fa-users"></i> <a href="/who">{{ __('users.novices') }}</a><br>
     <i class="fas fa-search"></i> <a href="/searchusers">{{ __('index.search_users') }}</a><br>

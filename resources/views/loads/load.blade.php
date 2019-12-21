@@ -84,7 +84,7 @@
         {!! showError(__('loads.closed_load')) !!}
     @endif
 
-    {{ $downs->links('app/_paginator') }}
+    {{ $downs->links() }}
 
     <a href="/loads/top">{{ __('loads.top_downs') }}</a> /
     <a href="/loads/search?cid={{ $category->id }}">{{ __('main.search') }}</a>

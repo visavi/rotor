@@ -79,5 +79,5 @@
         {!! showError(__('admin.spam.empty_spam')) !!}
     @endif
 
-    {{ $records->links('app/_paginator') }}
+    {{ $records->links() }}
 @stop

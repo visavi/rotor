@@ -60,5 +60,5 @@
         {!! showError(__('blogs.empty_articles')) !!}
     @endif
 
-    {{ $blogs->links('app/_paginator') }}
+    {{ $blogs->links() }}
 @stop

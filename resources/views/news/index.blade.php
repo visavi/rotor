@@ -56,7 +56,7 @@
         {!! showError(__('news.empty_news')) !!}
     @endif
 
-    {{ $news->links('app/_paginator') }}
+    {{ $news->links() }}
 
     <i class="fa fa-rss"></i> <a href="/news/rss">{{ __('main.rss') }}</a><br>
     <i class="fa fa-comment"></i> <a href="/news/allcomments">{{ __('main.last_comments') }}</a><br>

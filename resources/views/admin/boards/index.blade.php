@@ -91,7 +91,7 @@
         {!! showError(__('boards.empty_items')) !!}
     @endif
 
-    {{ $items->links('app/_paginator') }}
+    {{ $items->links() }}
 
     @if (isAdmin('boss'))
         <i class="far fa-list-alt"></i> <a href="/admin/boards/categories">{{ __('boards.categories') }}</a><br>

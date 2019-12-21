@@ -59,5 +59,5 @@
         {!! showError(__('admin.reglists.empty_users')) !!}
     @endif
 
-    {{ $users->links('app/_paginator') }}
+    {{ $users->links() }}
 @stop

@@ -61,5 +61,5 @@
         {!! showError(__('main.empty_users')) !!}
     @endif
 
-    {{ $users->links('app/_paginator') }}
+    {{ $users->links() }}
 @stop

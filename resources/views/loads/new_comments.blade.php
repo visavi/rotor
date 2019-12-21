@@ -47,5 +47,5 @@
         {!! showError(__('main.empty_comments')) !!}
     @endif
 
-    {{ $comments->links('app/_paginator') }}
+    {{ $comments->links() }}
 @stop

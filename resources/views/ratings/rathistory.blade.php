@@ -52,5 +52,5 @@
         {!! showError(__('ratings.empty_ratings')) !!}
     @endif
 
-    {{ $ratings->links('app/_paginator') }}
+    {{ $ratings->links() }}
 @stop

@@ -59,7 +59,7 @@
         @endforeach
     @endif
 
-    {{ $comments->links('app/_paginator') }}
+    {{ $comments->links() }}
 
     @if (empty($photo->closed))
         @if (empty($comments->total()))

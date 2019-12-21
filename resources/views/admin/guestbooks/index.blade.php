@@ -68,7 +68,7 @@
             </div>
         </form>
 
-        {{ $posts->links('app/_paginator') }}
+        {{ $posts->links() }}
 
         {{ __('guestbooks.total_messages') }}: <b>{{ $posts->total() }}</b><br><br>
 

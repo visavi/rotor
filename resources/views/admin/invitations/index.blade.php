@@ -55,7 +55,7 @@
         {!! showError(__('admin.invitations.empty_invitations')) !!}
     @endif
 
-    {{ $invites->links('app/_paginator') }}
+    {{ $invites->links() }}
 
     <i class="fa fa-check"></i> <a href="/admin/invitations/create">{{ __('admin.invitations.create_keys') }}</a><br>
     <i class="fa fa-key"></i> <a href="/admin/invitations/keys">{{ __('admin.invitations.list_keys') }}</a><br>

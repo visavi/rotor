@@ -175,7 +175,6 @@ $app->instance('cache', $cacheManager);
 
 $pagination = new PaginationServiceProvider($app);
 $pagination->register();
-//Paginator::defaultView('pagination::view');
 
 /**
  * Set $app as FacadeApplication handler

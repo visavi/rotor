@@ -7,6 +7,7 @@ namespace App\Controllers;
 use App\Models\Ban;
 use Illuminate\Database\Capsule\Manager as DB;
 use Illuminate\Http\Request;
+use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Lang;
 use Illuminate\Support\Facades\View;
@@ -30,6 +31,8 @@ Class BaseController
             if (setting('closedsite') === 2 && ! isAdmin() && ! $request->is('closed', 'login')) {
                 redirect('/closed');
             }
+
+            Paginator::$defaultView = 'app/_paginator';
 
             [$path, $name] = explode('\\', static::class);
 

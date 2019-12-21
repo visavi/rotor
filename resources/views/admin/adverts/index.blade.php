@@ -52,5 +52,5 @@
         {!! showError(__('adverts.empty_links')) !!}
     @endif
 
-    {{ $records->links('app/_paginator') }}
+    {{ $records->links() }}
 @stop

@@ -29,5 +29,5 @@
         </div>
     @endforeach
 
-    {{ $posts->links('app/_paginator') }}
+    {{ $posts->links() }}
 @stop

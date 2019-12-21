@@ -28,5 +28,5 @@
         {!! showError(__('stickers.empty_stickers')) !!}
     @endif
 
-    {{ $stickers->links('app/_paginator') }}
+    {{ $stickers->links() }}
 @stop

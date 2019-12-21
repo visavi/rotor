@@ -36,5 +36,5 @@
         {!! showError(__('forums.topics_not_created')) !!}
     @endif
 
-    {{ $topics->links('app/_paginator') }}
+    {{ $topics->links() }}
 @stop

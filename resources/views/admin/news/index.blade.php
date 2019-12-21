@@ -63,7 +63,7 @@
         {!! showError(__('news.empty_news')) !!}
     @endif
 
-    {{ $news->links('app/_paginator') }}
+    {{ $news->links() }}
 
     @if (isAdmin('boss'))
         <i class="fa fa-sync"></i> <a href="/admin/news/restatement?token={{ $_SESSION['token'] }}">{{ __('main.recount') }}</a><br>

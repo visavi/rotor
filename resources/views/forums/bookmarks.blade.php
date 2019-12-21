@@ -41,5 +41,5 @@
         {!! showError(__('forums.empty_bookmarks')) !!}
     @endif
 
-    {{ $topics->links('app/_paginator') }}
+    {{ $topics->links() }}
 @stop

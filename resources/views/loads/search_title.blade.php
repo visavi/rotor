@@ -34,5 +34,5 @@
         </div>
     @endforeach
 
-    {{ $downs->links('app/_paginator') }}
+    {{ $downs->links() }}
 @stop

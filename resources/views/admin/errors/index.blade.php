@@ -46,7 +46,7 @@
 
         <br>{{ __('main.total') }}: <b>{{ $logs->total() }}</b><br>
 
-        {{ $logs->links('app/_paginator') }}
+        {{ $logs->links() }}
 
         @if (isAdmin('boss'))
             <i class="fa fa-trash-alt"></i> <a href="/admin/errors/clear?token={{ $_SESSION['token'] }}">{{ __('main.clear') }}</a><br>

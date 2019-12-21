@@ -56,5 +56,5 @@
         {!! showError(__('forums.empty_topics')) !!}
     @endif
 
-    {{ $topics->links('app/_paginator') }}
+    {{ $topics->links() }}
 @stop
