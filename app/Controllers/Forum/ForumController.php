@@ -258,8 +258,8 @@ class ForumController extends BaseController
     public function topTopics(): string
     {
         $topics = Topic::query()
-            ->where('closed', 0)
             ->orderByDesc('count_posts')
+            ->orderByDesc('updated_at')
             ->with('forum', 'user', 'lastPost.user')
             ->paginate(setting('forumtem'));
 
