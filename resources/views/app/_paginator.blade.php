@@ -11,7 +11,7 @@
                 --}}{{-- Array Of Links --}}{{--
                 @if (is_array($element))
                     @foreach ($element as $page => $url)
-                        @if ($page == $paginator->currentPage())
+                        @if ($page === $paginator->currentPage())
                             <li class="page-item active" aria-current="page"><span class="page-link">{{ $page }}</span></li>
                         @else
                             <li class="page-item"><a class="page-link" href="{{ $url }}">{{ $page }}</a></li>
@@ -41,13 +41,17 @@
             <li class="page-item disabled" aria-disabled="true"><span class="page-link">...</span></li>
         @endif
 
-        @foreach (range(1, $paginator->lastPage()) as $i)
-            @if ($i >= $paginator->currentPage() - 2 && $i <= $paginator->currentPage() + 2)
-                @if ($i === $paginator->currentPage())
-                    <li class="page-item active"><span class="page-link">{{ $i }}</span></li>
-                @else
-                    <li class="page-item"><a class="page-link" href="{{ $paginator->url($i) }}">{{ $i }}</a></li>
-                @endif
+        @php
+            $startPage = ($paginator->currentPage() - 2) < 1 ? 1 : ($paginator->currentPage() - 2);
+            $endPage   = ($paginator->currentPage() + 2) > $paginator->lastPage() ? $paginator->lastPage() : ($paginator->currentPage() + 2);
+            $startPage = $startPage > $endPage ? $endPage : $startPage;
+        @endphp
+
+        @foreach (range($startPage, $endPage) as $page)
+            @if ($page === $paginator->currentPage())
+                <li class="page-item active"><span class="page-link">{{ $page }}</span></li>
+            @else
+                <li class="page-item"><a class="page-link" href="{{ $paginator->url($page) }}">{{ $page }}</a></li>
             @endif
         @endforeach
 
