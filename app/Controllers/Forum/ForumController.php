@@ -261,7 +261,11 @@ class ForumController extends BaseController
             ->orderByDesc('count_posts')
             ->orderByDesc('updated_at')
             ->with('forum', 'user', 'lastPost.user')
-            ->paginate(setting('forumtem'));
+            ->limit(100)
+            ->get()
+            ->all();
+
+        $topics = paginate($topics, setting('forumtem'));
 
         return view('forums/top', compact('topics'));
     }
@@ -283,8 +287,11 @@ class ForumController extends BaseController
             ->orderByDesc('rating')
             ->orderByDesc('created_at')
             ->with('topic', 'user')
-            ->paginate(setting('forumpost'))
-            ->appends(['period' => $period]);
+            ->limit(100)
+            ->get()
+            ->all();
+
+        $posts = paginate($posts, setting('forumpost'), ['period' => $period]);
 
         return view('forums/top_posts', compact('posts', 'period'));
     }

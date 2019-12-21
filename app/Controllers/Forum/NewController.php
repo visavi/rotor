@@ -20,7 +20,11 @@ class NewController extends BaseController
         $topics = Topic::query()
             ->orderByDesc('updated_at')
             ->with('forum', 'user', 'lastPost.user')
-            ->paginate(setting('forumtem'));
+            ->limit(100)
+            ->get()
+            ->all();
+
+        $topics = paginate($topics, setting('forumtem'));
 
         return view('forums/new_topics', compact('topics'));
     }
@@ -35,7 +39,11 @@ class NewController extends BaseController
         $posts = Post::query()
             ->orderByDesc('created_at')
             ->with('topic', 'user')
-            ->paginate(setting('forumpost'));
+            ->limit(100)
+            ->get()
+            ->all();
+
+        $posts = paginate($posts, setting('forumpost'));
 
         return view('forums/new_posts', compact('posts'));
     }

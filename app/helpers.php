@@ -2109,18 +2109,20 @@ function getUser($key = null)
 /**
  * Разбивает массив по страницам
  *
- * @param array $items
- * @param int   $perPage
+ * @param  array $items
+ * @param  int   $perPage
+ * @param  array $appends
  *
  * @return LengthAwarePaginator
  */
-function paginate(array $items, int $perPage): LengthAwarePaginator
+function paginate(array $items, int $perPage, array $appends = []): LengthAwarePaginator
 {
     $currentPage = LengthAwarePaginator::resolveCurrentPage();
     $slice       = array_slice($items, $perPage * ($currentPage - 1), $perPage, true);
 
     $collection = new LengthAwarePaginator($slice, count($items), $perPage);
     $collection->setPath(request()->url());
+    $collection->appends($appends);
 
     return $collection;
 }
