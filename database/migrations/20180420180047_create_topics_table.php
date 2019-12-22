@@ -23,8 +23,9 @@ class CreateTopicsTable extends AbstractMigration
                 ->addColumn('count_posts', 'integer')
                 ->addColumn('last_post_id', 'integer', ['null' => true])
                 ->addColumn('created_at', 'integer')
-                ->addIndex('forum_id')
-                ->addIndex('locked')
+                ->addIndex(['count_posts', 'updated_at'], ['name' => 'count_posts_time'])
+                ->addIndex(['user_id', 'updated_at'], ['name' => 'user_time'])
+                ->addIndex(['forum_id', 'locked', 'updated_at'], ['name' => 'forum_time'])
                 ->addIndex('updated_at');
 
             $mysql = $this->query('SHOW VARIABLES LIKE "version"')->fetch();

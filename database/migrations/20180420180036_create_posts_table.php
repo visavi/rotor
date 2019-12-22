@@ -22,8 +22,9 @@ class CreatePostsTable extends AbstractMigration
                 ->addColumn('edit_user_id', 'integer', ['null' => true])
                 ->addColumn('updated_at', 'integer', ['null' => true])
                 ->addIndex(['topic_id', 'created_at'], ['name' => 'topic_time'])
-                ->addIndex('created_at')
-                ->addIndex('user_id');
+                ->addIndex(['user_id', 'created_at'], ['name' => 'user_time'])
+                ->addIndex(['rating', 'created_at'], ['name' => 'rating_time'])
+                ->addIndex('created_at');
 
             $mysql = $this->query('SHOW VARIABLES LIKE "version"')->fetch();
 
