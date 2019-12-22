@@ -6,7 +6,7 @@ require 'recipe/common.php';
 set('default_stage', 'production');
 
 // Project name
-set('application', 'rotor');
+set('application', 'Site name');
 
 // Deploy path
 set('deploy_path', '/var/www/rotor');
@@ -44,7 +44,7 @@ set('rotor', static function () {
 });
 
 // Hosts
-host('rotor')
+host('hostname')
     ->roles('php')
     ->stage('production')
     ->configFile('~/.ssh/config')
@@ -96,8 +96,10 @@ task('deploy', [
 
 // [Optional] If deploy fails automatically unlock.
 after('deploy:failed', 'deploy:unlock');
-after('deploy', 'reload:php-fpm');
-after('deploy', 'success');
+
+// Reload php-fpm
+before('success', 'reload:php-fpm');
 
 // Migrate database before symlink new release.
 before('deploy:symlink', 'database:migrate');
+
