@@ -44,7 +44,8 @@
         "filp/whoops": "^2.5",
         "phpunit/phpunit": "^8.3",
         "phpstan/phpstan": "^0.11",
-        "php-coveralls/php-coveralls": "^2.1"
+        "php-coveralls/php-coveralls": "^2.1",
+        "deployer/deployer": "^6.7"
     },
     "scripts": {
         "phpstan": "phpstan analyse --no-progress -vvv",
