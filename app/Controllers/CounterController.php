@@ -21,11 +21,11 @@ class CounterController extends BaseController
 
         $counts31 = [];
         $counters = Counter31::query()
-            ->whereRaw('period BETWEEN NOW() - INTERVAL 31 DAY AND NOW()')
             ->orderByDesc('period')
+            ->limit(30)
             ->get();
 
-        for ($i = 0; $i <= 30; $i++) {
+        for ($i = 0; $i < 30; $i++) {
             $curDate = date('Y-m-d 00:00:00', strtotime("-$i day", SITETIME));
 
             $cnt = $counters->first(static function($item) use ($curDate) {
@@ -39,11 +39,11 @@ class CounterController extends BaseController
 
         $counts24 = [];
         $counters = Counter24::query()
-            ->whereRaw('period BETWEEN NOW() - INTERVAL 25 HOUR AND NOW()')
             ->orderByDesc('period')
+            ->limit(24)
             ->get();
 
-        for ($i = 0; $i <= 24; $i++) {
+        for ($i = 0; $i < 24; $i++) {
             $curHour = date('Y-m-d H:00:00', strtotime("-$i hour", SITETIME));
 
             $cnt = $counters->first(static function($item) use ($curHour) {
