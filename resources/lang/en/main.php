@@ -35,6 +35,7 @@ return [
     'posted'            => 'Posted',
     'added'             => 'Added',
     'sent'              => 'Sent',
+    'sent_out'          => 'Sent out',
     'menu'              => 'My menu',
     'verification_code' => 'Verification code',
     'pages'             => 'Pages',

@@ -18,6 +18,7 @@ return [
     'restore_text1'  => 'Remember and try not to forget the data anymore',
     'restore_text2'  => 'You can change the password in your profile',
 
+    'email_from_site'        => 'Email from site :sitename',
     'name_short_or_long'     => 'Too short or long name!',
     'success_sent'           => 'Email sent successfully!',
     'password_recovery_time' => 'You can recover your password no more than once per hour!',

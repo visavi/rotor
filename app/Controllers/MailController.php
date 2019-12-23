@@ -21,14 +21,19 @@ class MailController extends BaseController
     public function index(Request $request, Validator $validator): string
     {
         if ($request->isMethod('post')) {
-            $message = nl2br(check($request->input('message')));
+            $message = check($request->input('message'));
             $name    = check($request->input('name'));
             $email   = check($request->input('email'));
+
+            $message = bbCode($message);
+            $message = str_replace('/uploads/stickers', siteUrl().'/uploads/stickers', $message);
 
             if (getUser()) {
                 $name  = getUser('login');
                 $email = getUser('email');
             }
+
+
 
             $validator->true(captchaVerify(), ['protect' => __('validator.captcha')])
                 ->length($name, 3, 100, ['name' => __('mails.name_short_or_long')])
@@ -36,9 +41,9 @@ class MailController extends BaseController
                 ->email($email, ['email' => __('validator.email')]);
 
             if ($validator->isValid()) {
-                $message .= '<br><br>IP: ' . getIp() . '<br>Браузер: ' . getBrowser() . '<br>Отправлено: ' . dateFixed(SITETIME, 'j.m.Y / H:i');
+                $message .= '<br><br>IP: ' . getIp() . '<br>Browser: ' . getBrowser() . '<br>' . __('main.sent_out', [], setting('language')) . ': ' . dateFixed(SITETIME, 'j.m.Y / H:i');
 
-                $subject = 'Письмо с сайта ' . setting('title');
+                $subject = __('mails.email_from_site', ['sitename' => setting('title')], setting('language'));
                 $body = view('mailer.default', compact('subject', 'message'));
                 sendMail(config('SITE_EMAIL'), $subject, $body, ['from' => [$email => $name]]);
 
