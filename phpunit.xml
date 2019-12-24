@@ -6,6 +6,9 @@
     <filter>
         <whitelist addUncoveredFilesFromWhitelist="true">
             <directory suffix=".php">./app</directory>
+            <exclude>
+                <directory suffix=".php">./app/Controllers</directory>
+            </exclude>
         </whitelist>
     </filter>
     <testsuites>
