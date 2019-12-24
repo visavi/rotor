@@ -15,18 +15,22 @@
 @stop
 
 @section('content')
-    @if ($stickers->isNotEmpty())
-        @foreach ($stickers as $sticker)
-            <div class="bg-light p-2 mb-1 border">
-                <img src="{{ $sticker['name'] }}" alt=""><br>
-                <b>{{ $sticker['code'] }}</b>
+    <div class="container">
+        @if ($stickers->isNotEmpty())
+            <div class="row">
+                @foreach ($stickers as $sticker)
+                    <div class="col">
+                        <img src="{{ $sticker['name'] }}" alt="{{ $sticker['code'] }}"><br>
+                        <b>{{ $sticker['code'] }}</b>
+                    </div>
+                @endforeach
             </div>
-        @endforeach
 
-        {{ __('stickers.total_stickers') }}: <b>{{ $stickers->total() }}</b><br>
-    @else
-        {!! showError(__('stickers.empty_stickers')) !!}
-    @endif
+            {{ __('stickers.total_stickers') }}: <b>{{ $stickers->total() }}</b><br>
+        @else
+            {!! showError(__('stickers.empty_stickers')) !!}
+        @endif
 
-    {{ $stickers->links() }}
+        {{ $stickers->links() }}
+    </div>
 @stop

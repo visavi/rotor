@@ -32,6 +32,7 @@ class GuestbookController extends BaseController
      * @param Request   $request
      * @param Validator $validator
      * @param Flood     $flood
+     *
      * @return void
      */
     public function add(Request $request, Validator $validator, Flood $flood): void
@@ -48,7 +49,7 @@ class GuestbookController extends BaseController
         if (! getUser() && setting('bookadds')) {
             $validator->true(captchaVerify(), ['protect' => __('validator.captcha')]);
             $validator->false(strpos($msg, '//'), ['msg' => __('guestbooks.without_links')]);
-            $validator->length($guestName, 3, 20, ['name' => __('users.name_short_or_long')], false);
+            $validator->length($guestName, 3, 20, ['guest_name' => __('users.name_short_or_long')], false);
         } else {
             $validator->true(getUser(), ['msg' => __('main.not_authorized')]);
         }
@@ -93,6 +94,7 @@ class GuestbookController extends BaseController
      * @param int       $id
      * @param Request   $request
      * @param Validator $validator
+     *
      * @return string
      */
     public function edit(int $id, Request $request, Validator $validator): string
