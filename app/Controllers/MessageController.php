@@ -35,32 +35,29 @@ class MessageController extends BaseController
     public function index(): string
     {
         $lastMessage = Message::query()
-            ->select('author_id', DB::connection()->raw('max(created_at) as last_created_at'))
+            ->select(
+                'author_id',
+                DB::connection()->raw('max(created_at) as last_created_at'),
+                DB::connection()->raw('min(reading) as all_reading')
+            )
             ->where('user_id', $this->user->id)
             ->groupBy('author_id');
 
         $messages = Message::query()
-            ->select('m1.*', 'last_message.last_created_at', 'm2.reading as recipient_read')
+            ->select('m1.*', 'm2.last_created_at', 'm2.all_reading', 'm3.reading as recipient_read')
             ->from('messages as m1')
-            ->joinSub($lastMessage, 'last_message', static function (JoinClause $join) {
-                $join->on('m1.created_at', 'last_message.last_created_at')
-                ->whereRaw('m1.author_id = last_message.author_id');
+            ->joinSub($lastMessage, 'm2', static function (JoinClause $join) {
+                $join->on('m1.created_at', 'm2.last_created_at')
+                ->whereRaw('m1.author_id = m2.author_id');
             })
-            ->leftJoin('messages as m2', static function (JoinClause $join) {
-                $join->on('m1.user_id', 'm2.author_id')
-                    ->whereRaw('m1.created_at = m2.created_at');
+            ->leftJoin('messages as m3', static function (JoinClause $join) {
+                $join->on('m1.user_id', 'm3.author_id')
+                    ->whereRaw('m1.created_at = m3.created_at');
             })
             ->where('m1.user_id', $this->user->id)
             ->orderByDesc('m1.created_at')
             ->with('author')
             ->paginate(setting('privatpost'));
-
-        if ($this->user->newprivat) {
-            $this->user->update([
-                'newprivat'      => 0,
-                'sendprivatmail' => 0,
-            ]);
-        }
 
         return view('messages/index', compact('messages'));
     }

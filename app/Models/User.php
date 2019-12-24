@@ -656,4 +656,28 @@ class User extends BaseModel
 
         return parent::delete();
     }
+
+
+    /**
+     * Updates count messages
+     *
+     * return void
+     */
+    public function updatePrivate(): void
+    {
+        if ($this->newprivat) {
+            $countMessages = Message::query()
+                ->where('user_id', $this->id)
+                ->where('reading', 0)
+                ->count();
+
+            if ($countMessages !== $this->newprivat) {
+                $this->update([
+                    'newprivat'      => $countMessages,
+                    'sendprivatmail' => 0,
+                ]);
+            }
+
+        }
+    }
 }

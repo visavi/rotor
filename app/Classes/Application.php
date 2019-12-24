@@ -111,6 +111,7 @@ class Application
     {
         $request = request();
 
+        /** @var User $user */
         if ($user = checkAuth()) {
             Registry::set('user', $user);
 
@@ -128,6 +129,8 @@ class Application
             if ($user->level === User::PENDED && setting('regkeys') && ! $request->is('key', 'ban', 'login', 'logout')) {
                 redirect('/key?user=' . $user->login);
             }
+
+            $user->updatePrivate();
 
             // Получение ежедневного бонуса
             if ($user->timebonus < strtotime('-23 hours', SITETIME)) {

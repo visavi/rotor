@@ -449,7 +449,7 @@ function showVoteForm()
     return false;
 }
 
-
+/* Копирует текст в input */
 function copyToClipboard(el)
 {
     var form = $(el).closest('.input-group');
@@ -549,7 +549,7 @@ function deleteImage(el)
     return false;
 }
 
-/* Показывает форму для повторной отправки код подтверждения */
+/* Показывает форму для повторной отправки кода подтверждения */
 function resendingCode()
 {
     $('.js-resending-link').hide();
@@ -558,6 +558,7 @@ function resendingCode()
     return false;
 }
 
+/* Показывает панель с запросами */
 function showQueries() {
     $('.js-queries').slideToggle();
 }

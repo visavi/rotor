@@ -47,7 +47,7 @@
                         {{ $data->type === 'out' ? __('messages.you') . ': ' : '' }}
                         {!! bbCodeTruncate($data->text) !!}
                     </div>
-                    @unless ($data->reading)
+                    @unless ($data->all_reading)
                         <span class="badge badge-info">{{ __('messages.new') }}</span>
                     @endunless
                 </div>
