@@ -28,7 +28,6 @@ class SettingsSeeder extends AbstractSeed
             ['name'  => 'bookadds', 'value' => 1],
             ['name'  => 'bookpost', 'value' => 10],
             ['name'  => 'bookscores', 'value' => 0],
-            ['name'  => 'buildversion', 'value' => 0],
             ['name'  => 'captcha_angle', 'value' => 20],
             ['name'  => 'captcha_distortion', 'value' => 1],
             ['name'  => 'captcha_interpolation', 'value' => 1],

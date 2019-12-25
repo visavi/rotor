@@ -14,7 +14,7 @@
 @stop
 
 @section('content')
-    <i class="fa fa-key fa-lg"></i> <b><a href="/admin/upgrade">{{ __('main.version') }} {{ buildVersion() }}</a></b><br><br>
+    <i class="fa fa-key fa-lg"></i> <b><a href="/admin/upgrade">{{ __('main.version') }} {{ VERSION }}</a></b><br><br>
 
     <div class="b"><i class="fa fa-cog fa-lg text-muted"></i> <b>{{ __('main.editor') }}</b></div>
     <i class="far fa-circle fa-lg text-muted"></i> <a href="/admin/chats">{{ __('index.admin_chat') }}</a> ({{ statsChat() }})<br>
