@@ -112,9 +112,7 @@ class Application
         $request = request();
 
         /** @var User $user */
-        if ($user = checkAuth()) {
-            Registry::set('user', $user);
-
+        if ($user = getUser()) {
             setSetting([
                 'themes'   => $user->themes,
                 'language' => $user->language,

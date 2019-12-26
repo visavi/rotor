@@ -1,7 +1,7 @@
 <?php
 
 use App\Models\AdminAdvert;
-use App\Classes\{BBCode, Calendar, Metrika, Registry, CloudFlare};
+use App\Classes\{BBCode, Calendar, Metrika, CloudFlare};
 use App\Models\Antimat;
 use App\Models\Ban;
 use App\Models\Banhist;
@@ -2093,25 +2093,21 @@ function getUserByLoginOrEmail($login): ?User
  */
 function getUser($key = null)
 {
-    if (Registry::has('user')) {
-        $user = Registry::get('user');
+    static $user;
 
-        if ($key) {
-            return $user[$key] ?? null;
-        }
-
-        return $user;
+    if (! $user) {
+        $user = checkAuth();
     }
 
-    return null;
+    return $key ? ($user[$key] ?? null) : $user;
 }
 
 /**
  * Разбивает массив по страницам
  *
- * @param  array $items
- * @param  int   $perPage
- * @param  array $appends
+ * @param array $items
+ * @param int   $perPage
+ * @param array $appends
  *
  * @return LengthAwarePaginator
  */
@@ -2224,11 +2220,12 @@ function ipBan($clear = false)
  */
 function setting($key = null, $default = null)
 {
-    if (! Registry::has('settings')) {
+    static $settings;
+
+    if (! $settings) {
         try {
             $settings = Cache::rememberForever('settings', static function () {
                 $settings = Setting::query()->pluck('value', 'name')->all();
-
                 return array_map(static function ($value) {
                     if (is_numeric($value)) {
                         return strpos($value, '.') === false ? (int) $value : (float) $value;
@@ -2244,15 +2241,9 @@ function setting($key = null, $default = null)
         } catch (Exception $e) {
             $settings = [];
         }
-
-        Registry::set('settings', $settings);
     }
 
-    if (! $key) {
-        return Registry::get('settings');
-    }
-
-    return Registry::get('settings')[$key] ?? $default;
+    return $key ? ($settings[$key] ?? $default) : $settings;
 }
 
 /**
@@ -2264,8 +2255,7 @@ function setting($key = null, $default = null)
  */
 function setSetting($settings)
 {
-    $settings = array_merge(Registry::get('settings', []), $settings);
-    Registry::set('settings', $settings);
+    return array_merge(setting(), $settings);
 }
 
 /**
@@ -2404,20 +2394,6 @@ function runCommand(Command $command, array $arguments = [])
     } catch (Exception $e) {
         return;
     }
-}
-
-/**
- * Returns the build version
- *
- * @return string
- */
-function buildVersion()
-{
-    if (strpos(VERSION, '-')) {
-        return str_replace('-', '.' . setting('buildversion') . '-', VERSION);
-    }
-
-    return VERSION . '.' . setting('buildversion');
 }
 
 /**
