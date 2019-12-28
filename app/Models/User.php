@@ -423,7 +423,7 @@ class User extends BaseModel
         }
 
         if (! $status) {
-            $status = $this->saveStatus(3600);
+            $status = $this->getStatuses(6 * 3600);
         }
 
         return $status[$this->id] ?? setting('statusdef');
@@ -478,24 +478,23 @@ class User extends BaseModel
     /**
      * Кеширует статусы пользователей
      *
-     * @param  int $time время кеширования
+     * @param int $seconds время кеширования
      *
      * @return array
      */
-    public function saveStatus($time = 0): array
+    public function getStatuses(int $seconds): array
     {
-        return Cache::remember('status', $time, static function () {
+        return Cache::remember('status', $seconds, static function () {
             $users = self::query()
                 ->select('users.id', 'users.status', 'status.name', 'status.color')
                 ->leftJoin('status', static function (JoinClause $join) {
                     $join->whereRaw('users.point between status.topoint and status.point');
                 })
                 ->where('users.point', '>', 0)
-                ->get();
+                ->toBase()->get();
 
             $statuses = [];
             foreach ($users as $user) {
-
                 if ($user->status) {
                     $statuses[$user->id] = '<span style="color:#ff0000">' . $user->status . '</span>';
                     continue;

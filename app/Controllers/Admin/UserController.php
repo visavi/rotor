@@ -154,7 +154,7 @@ class UserController extends AdminController
                     'created_at' => strtotime($created),
                 ]);
 
-                $user->saveStatus();
+                clearCache('statuses');
 
                 setFlash('success', __('users.user_success_changed') . $text);
                 redirect('/admin/users/edit?user=' . $user->login);

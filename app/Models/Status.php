@@ -35,5 +35,4 @@ class Status extends BaseModel
      * @var array
      */
     protected $guarded = [];
-
 }
