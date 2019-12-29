@@ -1813,8 +1813,9 @@ function getInput($name, $default = null)
     }
 
     $session = json_decode($_SESSION['input'], true);
+    $input   = Arr::get($session, $name);
 
-    if ($input = Arr::get($session, $name)) {
+    if ($input !== null) {
         Arr::forget($session, $name);
 
         $_SESSION['input'] = json_encode($session);
@@ -2211,7 +2212,26 @@ function ipBan($clear = false)
 }
 
 /**
- * Возвращает настройки сайта по ключу
+ * Возвращает оригинальные настройки сайта по ключу
+ *
+ * @param string $key     ключ массива
+ * @param string $default значение по умолчанию
+ *
+ * @return mixed данные
+ */
+function originalSetting($key = null, $default = null)
+{
+    static $settings;
+
+    if (! $settings) {
+        $settings = Setting::getSettings();
+    }
+
+    return $key ? ($settings[$key] ?? $default) : $settings;
+}
+
+/**
+ * Возвращает пользовательские настройки сайта по ключу
  *
  * @param string $key     ключ массива
  * @param string $default значение по умолчанию
@@ -2220,42 +2240,14 @@ function ipBan($clear = false)
  */
 function setting($key = null, $default = null)
 {
-    static $settings;
+    $settings = originalSetting();
+    $userSets = Setting::get();
 
-    if (! $settings) {
-        try {
-            $settings = Cache::rememberForever('settings', static function () {
-                $settings = Setting::query()->pluck('value', 'name')->all();
-                return array_map(static function ($value) {
-                    if (is_numeric($value)) {
-                        return strpos($value, '.') === false ? (int) $value : (float) $value;
-                    }
-
-                    if ($value === '') {
-                        return null;
-                    }
-
-                    return $value;
-                }, $settings);
-            });
-        } catch (Exception $e) {
-            $settings = [];
-        }
+    if ($userSets) {
+        $settings = array_replace($settings, $userSets);
     }
 
     return $key ? ($settings[$key] ?? $default) : $settings;
-}
-
-/**
- * Устанавливает настройки сайта
- *
- * @param array $settings массив настроек
- *
- * @return void
- */
-function setSetting($settings)
-{
-    return array_merge(setting(), $settings);
 }
 
 /**

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Classes;
 
+use App\Models\Setting;
 use App\Models\User;
 use DI\Container;
 use FastRoute\Dispatcher;
@@ -113,7 +114,7 @@ class Application
 
         /** @var User $user */
         if ($user = getUser()) {
-            setSetting([
+            Setting::set([
                 'themes'   => $user->themes,
                 'language' => $user->language,
             ]);
@@ -147,25 +148,32 @@ class Application
      */
     private function setSetting(): void
     {
-        $browser = new Mobile_Detect();
+        $userSets = [];
+        $settings = Setting::getSettings();
+        $user     = getUser();
+        $browser  = new Mobile_Detect();
+        $isWeb    = ! $browser->isMobile() && ! $browser->isTablet();
 
-        if (! getUser() || empty(setting('themes'))) {
-            if (! empty(setting('webthemes')) && ! $browser->isMobile() && ! $browser->isTablet()) {
-                setSetting(['themes' => setting('webthemes')]);
-            }
+        $userSets['themes'] = $user ? $user['themes'] : 0;
+        $userSets['language'] = $user ? $user['language'] : $settings['language'];
+
+        if (empty($userSets['themes']) && ! empty($settings['webthemes']) && $isWeb) {
+            $userSets['themes'] = $settings['webthemes'];
         }
 
-        if (empty(setting('themes')) || ! file_exists(HOME . '/themes/' . setting('themes'))) {
-            setSetting(['themes' => 'default']);
+        if (! file_exists(HOME . '/themes/' . $userSets['themes'])) {
+            $userSets['themes'] = 'default';
         }
 
-        if (isset($_SESSION['language']) && ! getUser()) {
-            setSetting(['language' => $_SESSION['language']]);
+        if (isset($_SESSION['language']) && ! $user) {
+            $userSets['language'] = $_SESSION['language'];
         }
 
-        if (empty(setting('language')) || ! file_exists(RESOURCES . '/lang/' . setting('language'))) {
-            setSetting(['language' => 'ru']);
+        if (empty($userSets['language']) || ! file_exists(RESOURCES . '/lang/' . $userSets['language'])) {
+            $userSets['language'] = 'ru';
         }
+
+        Setting::set($userSets);
 
         /* Установка сессионных переменных */
         if (empty($_SESSION['token'])) {
