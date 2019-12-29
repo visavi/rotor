@@ -7,6 +7,7 @@ use App\Commands\KeyGenerate;
 use App\Commands\RouteClear;
 use App\Models\News;
 use App\Models\User;
+use Illuminate\Support\Facades\Lang;
 
 ob_start();
 define('DIR', dirname(__DIR__, 2));
@@ -33,10 +34,7 @@ $wrap->setOption('environment', 'default');
 
 $lang = check($request->input('lang', 'ru'));
 
-setSetting([
-    'language'          => $lang,
-    'language_fallback' => 'ru',
-]);
+Lang::setLocale($lang);
 
 $errors    = [];
 $languages = array_map('basename', glob(RESOURCES . '/lang/*', GLOB_ONLYDIR));
