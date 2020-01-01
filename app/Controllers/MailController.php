@@ -33,17 +33,15 @@ class MailController extends BaseController
                 $email = getUser('email');
             }
 
-
-
             $validator->true(captchaVerify(), ['protect' => __('validator.captcha')])
                 ->length($name, 3, 100, ['name' => __('mails.name_short_or_long')])
                 ->length($message, 5, 50000, ['message' => __('validator.text')])
                 ->email($email, ['email' => __('validator.email')]);
 
             if ($validator->isValid()) {
-                $message .= '<br><br>IP: ' . getIp() . '<br>Browser: ' . getBrowser() . '<br>' . __('main.sent_out', [], setting('language')) . ': ' . dateFixed(SITETIME, 'j.m.Y / H:i');
+                $message .= '<br><br>IP: ' . getIp() . '<br>Browser: ' . getBrowser() . '<br>' . __('main.sent_out', [], defaultSetting('language')) . ': ' . dateFixed(SITETIME, 'j.m.Y / H:i');
 
-                $subject = __('mails.email_from_site', ['sitename' => setting('title')], setting('language'));
+                $subject = __('mails.email_from_site', ['sitename' => setting('title')], defaultSetting('language'));
                 $body = view('mailer.default', compact('subject', 'message'));
                 sendMail(config('SITE_EMAIL'), $subject, $body, ['from' => [$email => $name]]);
 

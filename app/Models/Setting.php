@@ -101,7 +101,7 @@ class Setting extends BaseModel
      *
      * @param array $settings
      */
-    public static function set(array $settings): void
+    public static function setUserSettings(array $settings): void
     {
         self::$settings = $settings;
     }
@@ -111,7 +111,7 @@ class Setting extends BaseModel
      *
      * @return array
      */
-    public static function get(): array
+    public static function getUserSettings(): array
     {
         return self::$settings;
     }

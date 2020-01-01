@@ -2212,25 +2212,6 @@ function ipBan($clear = false)
 }
 
 /**
- * Возвращает оригинальные настройки сайта по ключу
- *
- * @param string $key     ключ массива
- * @param string $default значение по умолчанию
- *
- * @return mixed данные
- */
-function originalSetting($key = null, $default = null)
-{
-    static $settings;
-
-    if (! $settings) {
-        $settings = Setting::getSettings();
-    }
-
-    return $key ? ($settings[$key] ?? $default) : $settings;
-}
-
-/**
  * Возвращает пользовательские настройки сайта по ключу
  *
  * @param string $key     ключ массива
@@ -2240,11 +2221,29 @@ function originalSetting($key = null, $default = null)
  */
 function setting($key = null, $default = null)
 {
-    $settings = originalSetting();
-    $userSets = Setting::get();
+    static $settings;
 
-    if ($userSets) {
-        $settings = array_replace($settings, $userSets);
+    if (! $settings) {
+        $settings = array_replace(Setting::getSettings(), Setting::getUserSettings());
+    }
+
+    return $key ? ($settings[$key] ?? $default) : $settings;
+}
+
+/**
+ * Возвращает дефолтные настройки сайта по ключу
+ *
+ * @param string $key     ключ массива
+ * @param string $default значение по умолчанию
+ *
+ * @return mixed данные
+ */
+function defaultSetting($key = null, $default = null)
+{
+    static $settings;
+
+    if (! $settings) {
+        $settings = Setting::getSettings();
     }
 
     return $key ? ($settings[$key] ?? $default) : $settings;
