@@ -22,14 +22,12 @@ class Application
      */
     public function __construct()
     {
-        $this->settings = Setting::getSettings();
-
-        if (! $this->settings['app_installed'] && file_exists(HOME . '/install/')) {
+        if (empty(defaultSetting('app_installed')) && file_exists(HOME . '/install/')) {
             redirect('/install/index.php');
         }
 
         session_start();
-        date_default_timezone_set($this->settings['timezone']);
+        date_default_timezone_set(defaultSetting('timezone'));
 
         $this->setSetting();
         $this->cookieAuth();
@@ -101,10 +99,10 @@ class Application
         $isWeb    = ! $browser->isMobile() && ! $browser->isTablet();
 
         $userSets['themes'] = $user ? $user['themes'] : 0;
-        $userSets['language'] = $user ? $user['language'] : $this->settings['language'];
+        $userSets['language'] = $user ? $user['language'] : defaultSetting('language');
 
-        if (empty($userSets['themes']) && ! empty($this->settings['webthemes']) && $isWeb) {
-            $userSets['themes'] = $this->settings['webthemes'];
+        if (empty($userSets['themes']) && defaultSetting('webthemes') && $isWeb) {
+            $userSets['themes'] = defaultSetting('webthemes');
         }
 
         if (! file_exists(HOME . '/themes/' . $userSets['themes'])) {
@@ -175,7 +173,7 @@ class Application
             }
 
             // Подтверждение регистрации
-            if ($user->level === User::PENDED && $this->settings['regkeys'] && ! $request->is('key', 'ban', 'login', 'logout')) {
+            if ($user->level === User::PENDED && defaultSetting('regkeys') && ! $request->is('key', 'ban', 'login', 'logout')) {
                 redirect('/key?user=' . $user->login);
             }
 
@@ -183,10 +181,10 @@ class Application
 
             // Получение ежедневного бонуса
             if ($user->timebonus < strtotime('-23 hours', SITETIME)) {
-                $user->increment('money', $this->settings['bonusmoney']);
+                $user->increment('money', defaultSetting('bonusmoney'));
                 $user->update(['timebonus' => SITETIME]);
 
-                setFlash('success', __('main.daily_bonus', ['money' => plural($this->settings['bonusmoney'], $this->settings['moneyname'])]));
+                setFlash('success', __('main.daily_bonus', ['money' => plural(defaultSetting('bonusmoney'), defaultSetting('moneyname'))]));
             }
         }
     }

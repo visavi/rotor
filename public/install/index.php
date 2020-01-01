@@ -95,17 +95,17 @@ $keys = [
             <?= __('install.debug') ?>
         </div>
 
-        <p><?= __('install.env') ?></p>
+        <div><?= __('install.env') ?></div>
 
         <?php foreach ($keys as $key): ?>
             <b><?= $key ?></b> - <?= trim(var_export(config($key), true), "'") ?><br>
         <?php endforeach; ?>
         <br>
-        <p><?= __('install.app_key') ?></p>
+        <div><?= __('install.app_key') ?></div>
 
-        <p><?= __('install.requirements', ['php' => $phpVersion, 'mysql' => $mysqlVersion]) ?></p>
+        <div class="mb-3"><?= __('install.requirements', ['php' => $phpVersion, 'mysql' => $mysqlVersion]) ?></div>
 
-        <p style="font-size: 15px; font-weight: bold"><?= __('install.check_requirements') ?></p>
+        <h3><?= __('install.check_requirements') ?></h3>
 
         <?php $errors['critical']['php'] = version_compare(PHP_VERSION, $phpVersion) >= 0 ?>
         <i class="fas fa-check-circle <?= $errors['critical']['php'] ? 'text-success' : 'fa-times-circle text-danger' ?>"></i>
@@ -157,10 +157,11 @@ $keys = [
         <?php $version = getModuleSetting('curl', ['Curl Information', 'cURL Information']); ?>
         Curl: <?= $version ?><br>
 
-        <?= __('install.ffmpeg') ?><br><br>
+        <div class="mb-3">
+            <?= __('install.ffmpeg') ?>
+        </div>
 
-        <p style="font-size: 15px; font-weight: bold">Права доступа</p>
-
+        <h3>Права доступа</h3>
         <?php
         runCommand(new AppConfigure());
 
@@ -199,7 +200,7 @@ $keys = [
             <?php endif; ?>
 
             <a style="font-size: 18px" href="?act=status&amp;lang=<?= $lang ?>"><?= __('install.check_status') ?></a>
-            (<?= setting('app_installed') ? __('install.update') : __('install.install') ?>)
+            (<span class="text-danger font-weight-bold"><?= setting('app_installed') ? __('install.update') : __('install.install') ?></span>)
         <?php else: ?>
             <div class="alert alert-danger">
                 <i class="fa fa-times-circle"></i> <?= __('install.requirements_failed') ?><br>
@@ -208,129 +209,68 @@ $keys = [
         <?php endif; ?>
     <?php endif; ?>
 
-    <?php if (! setting('app_installed')): ?>
+    <!-- Обновление движка -->
+    <?php if (setting('app_installed')): ?>
+        <!-- Проверка статуса -->
+        <?php if ($request->input('act') === 'status'): ?>
+            <h1><?= __('install.step2_update') ?></h1>
+            <?= nl2br($wrap->getStatus()) ?>
+            <a style="font-size: 18px" href="?act=migrate&amp;lang=<?= $lang ?>"><?= __('install.migrations') ?></a>
+
+        <!-- Откат миграций -->
+        <?php elseif ($request->input('act') === 'rollback'): ?>
+            <?= nl2br($wrap->getRollback()) ?>
+
+        <!-- Применение миграций -->
+        <?php elseif ($request->input('act') === 'migrate'): ?>
+            <h1><?= __('install.update_completed') ?></h1>
+            <?= nl2br($wrap->getMigrate()) ?>
+
+            <div>
+                <div class="alert alert-success">
+                    <?= __('install.success_update') ?>
+                </div>
+
+                <a href="/"><?= __('install.main_page') ?></a><br>
+            </div>
+            <?php
+            runCommand(new CacheClear());
+            runCommand(new RouteClear());
+            runCommand(new ConfigClear());
+            ?>
+        <?php endif; ?>
+
+    <!-- Установка движка -->
+    <?php else: ?>
+        <!-- Проверка статуса -->
         <?php if ($request->input('act') === 'status'): ?>
             <h1><?= __('install.step2_install') ?></h1>
 
             <?= nl2br($wrap->getStatus()) ?>
 
-            <p><a style="font-size: 18px" href="?act=migrate&amp;lang=<?= $lang ?>"><?= __('install.migrations') ?></a></p>
+            <div>
+                <a style="font-size: 18px" href="?act=migrate&amp;lang=<?= $lang ?>"><?= __('install.migrations') ?></a>
+            </div>
 
+        <!-- Применение миграций -->
         <?php elseif ($request->input('act') === 'migrate'): ?>
             <h1><?= __('install.step3_install') ?></h1>
 
             <?= nl2br($wrap->getMigrate()) ?>
 
-            <p><a style="font-size: 18px" href="?act=seed&amp;lang=<?= $lang ?>"><?= __('install.seeds') ?></a></p>
+            <div>
+                <a style="font-size: 18px" href="?act=seed&amp;lang=<?= $lang ?>"><?= __('install.seeds') ?></a>
+            </div>
 
+        <!-- Заполнение БД -->
         <?php elseif ($request->input('act') === 'seed'): ?>
-
             <h1><?= __('install.step4_install') ?>)</h1>
 
             <?= nl2br($wrap->getSeed()) ?>
 
-            <p><a style="font-size: 18px" href="?act=account&amp;lang=<?= $lang ?>"><?= __('install.create_admin') ?></a></p>
-        <?php elseif ($request->input('act') === 'account'): ?>
-
-            <h1><?= __('install.step5_install') ?></h1>
-
-            <?= __('install.create_admin_info') ?><br>
-            <?= __('install.create_admin_errors') ?><br>
-            <?= __('install.delete_install') ?><br><br>
-
-            <?php
-                $login     = check($request->input('login'));
-                $password  = check($request->input('password'));
-                $password2 = check($request->input('password2'));
-                $email     = strtolower(check($request->input('email')));
-            ?>
-
-            <?php if ($request->isMethod('post')): ?>
-
-                <?php
-                $length = strlen($login);
-                if ($length <= 20 && $length >= 3) {
-                if (preg_match('|^[a-z0-9\-]+$|i', $login)) {
-                if ($password === $password2) {
-                if (preg_match('#^([a-z0-9_\-\.])+\@([a-z0-9_\-\.])+(\.([a-z0-9])+)+$#', $email)) {
-
-                // Проверка логина на существование
-                $checkLogin = User::query()->where('login', $login)->count();
-                if (! $checkLogin) {
-
-                // Проверка email на существование
-                $checkMail = User::query()->where('email', $email)->count();
-                if (! $checkMail) {
-
-                    $user = User::query()->create([
-                        'login'      => $login,
-                        'password'   => password_hash($password, PASSWORD_BCRYPT),
-                        'email'      => $email,
-                        'level'      => 'boss',
-                        'gender'     => 'male',
-                        'themes'     => 0,
-                        'point'      => 500,
-                        'money'      => 100000,
-                        'status'     => 'Boss',
-                        'language'   => $lang,
-                        'created_at' => SITETIME,
-                    ]);
-
-                    // -------------- Приват ---------------//
-                    $text = __('install.text_message', ['login' => $login]);
-                    $user->sendMessage(null, $text);
-
-                    // -------------- Новость ---------------//
-                    $textnews = __('install.text_news');
-
-                    $news = News::query()->create([
-                        'title'      => __('install.welcome'),
-                        'text'       => $textnews,
-                        'user_id'    => $user->id,
-                        'created_at' => SITETIME,
-                    ]);
-
-                    redirect('?act=finish&lang=' . $lang);
-
-                } else {echo '<div class="alert alert-danger">' . __('users.email_already_exists') . '</div>';}
-                } else {echo '<div class="alert alert-danger">' . __('users.login_already_exists') . '</div>';}
-                } else {echo '<div class="alert alert-danger">' . __('validator.email') . '</div>';}
-                } else {echo '<div class="alert alert-danger">' . __('users.passwords_different') . '</div>';}
-                } else {echo '<div class="alert alert-danger">' . __('validator.login') . '</div>';}
-                } else {echo '<div class="alert alert-danger">' . __('users.login_requirements') . '</div>';}
-                ?>
-            <?php endif; ?>
-
-            <div class="form">
-                <form method="post" action="?act=account&amp;lang=<?= $lang ?>">
-                    <div class="form-group">
-                        <label for="login"><?= __('users.login') ?> (max20):</label>
-                        <input type="text" class="form-control" name="login" id="login" maxlength="20" value="<?= $login ?>">
-                        <span class="text-muted font-italic"><?= __('users.login_requirements') ?></span>
-                    </div>
-                    <div class="form-group">
-                        <label for="password"><?= __('users.password') ?> (max20):</label>
-                        <input class="form-control" name="password" id="password" type="password" maxlength="50">
-                    </div>
-                    <div class="form-group">
-                        <label for="password2"><?= __('users.confirm_password') ?>:</label>
-                        <input class="form-control" name="password2" id="password2" type="password" maxlength="50">
-                    </div>
-                    <div class="form-group">
-                        <label for="email"><?= __('users.email') ?>:</label>
-                        <input class="form-control" name="email" id="email" maxlength="50" value="<?= $email ?>">
-                    </div>
-
-                    <button class="btn btn-primary"><?= __('main.create') ?></button>
-                </form>
-            </div><br>
-        <?php elseif ($request->input('act') === 'finish'): ?>
-
-            <h1><?= __('install.install_completed') ?></h1>
-            <p>
-                <?= __('install.success_install') ?><br><br>
-                <a href="/"><?= __('install.main_page') ?></a><br>
-            </p>
+            <div>
+                <a style="font-size: 18px" href="?act=account&amp;lang=<?= $lang ?>"><?= __('install.create_admin') ?></a>
+            </div>
 
             <?php
             runCommand(new KeyGenerate());
@@ -339,34 +279,115 @@ $keys = [
             runCommand(new ConfigClear());
             ?>
         <?php endif; ?>
+    <?php endif; ?>
 
-    <?php else: ?>
+    <!-- Создание админа -->
+    <?php if ($request->input('act') === 'account'): ?>
+        <h1><?= __('install.step5_install') ?></h1>
 
-        <?php if ($request->input('act') === 'status'): ?>
-            <h1><?= __('install.step2_update') ?></h1>
-            <?= nl2br($wrap->getStatus()) ?>
-            <a style="font-size: 18px" href="?act=migrate&amp;lang=<?= $lang ?>"><?= __('install.migrations') ?></a>
+        <?= __('install.create_admin_info') ?><br>
+        <?= __('install.create_admin_errors') ?><br>
+        <?= __('install.delete_install') ?><br><br>
 
-        <?php elseif ($request->input('act') === 'rollback'): ?>
-            <?= nl2br($wrap->getRollback()) ?>
+        <?php
+        $login     = check($request->input('login'));
+        $password  = check($request->input('password'));
+        $password2 = check($request->input('password2'));
+        $email     = strtolower(check($request->input('email')));
+        ?>
 
-        <?php elseif ($request->input('act') === 'migrate'): ?>
-
-            <h1><?= __('install.update_completed') ?></h1>
-            <?= nl2br($wrap->getMigrate()) ?>
-
-            <p>
-                <?= __('install.success_update') ?><br><br>
-                <a href="/"><?= __('install.main_page') ?></a><br>
-            </p>
+        <?php if ($request->isMethod('post')): ?>
             <?php
-            runCommand(new CacheClear());
-            runCommand(new RouteClear());
-            runCommand(new ConfigClear());
+            $length = strlen($login);
+            if ($length <= 20 && $length >= 3) {
+            if (preg_match('|^[a-z0-9\-]+$|i', $login)) {
+            if ($password === $password2) {
+            if (preg_match('#^([a-z0-9_\-\.])+\@([a-z0-9_\-\.])+(\.([a-z0-9])+)+$#', $email)) {
+
+            // Проверка логина на существование
+            $checkLogin = User::query()->where('login', $login)->count();
+            if (! $checkLogin) {
+
+            // Проверка email на существование
+            $checkMail = User::query()->where('email', $email)->count();
+            if (! $checkMail) {
+
+            $user = User::query()->create([
+                'login'      => $login,
+                'password'   => password_hash($password, PASSWORD_BCRYPT),
+                'email'      => $email,
+                'level'      => 'boss',
+                'gender'     => 'male',
+                'themes'     => 0,
+                'point'      => 500,
+                'money'      => 100000,
+                'status'     => 'Boss',
+                'language'   => $lang,
+                'created_at' => SITETIME,
+            ]);
+
+            // -------------- Приват ---------------//
+            $text = __('install.text_message', ['login' => $login]);
+            $user->sendMessage(null, $text);
+
+            // -------------- Новость ---------------//
+            $textnews = __('install.text_news');
+
+            $news = News::query()->create([
+                'title'      => __('install.welcome'),
+                'text'       => $textnews,
+                'user_id'    => $user->id,
+                'created_at' => SITETIME,
+            ]);
+
+            redirect('?act=finish&lang=' . $lang);
+
+            } else {echo '<div class="alert alert-danger">' . __('users.email_already_exists') . '</div>';}
+            } else {echo '<div class="alert alert-danger">' . __('users.login_already_exists') . '</div>';}
+            } else {echo '<div class="alert alert-danger">' . __('validator.email') . '</div>';}
+            } else {echo '<div class="alert alert-danger">' . __('users.passwords_different') . '</div>';}
+            } else {echo '<div class="alert alert-danger">' . __('validator.login') . '</div>';}
+            } else {echo '<div class="alert alert-danger">' . __('users.login_requirements') . '</div>';}
             ?>
         <?php endif; ?>
+
+        <div class="form">
+            <form method="post" action="?act=account&amp;lang=<?= $lang ?>">
+                <div class="form-group">
+                    <label for="login"><?= __('users.login') ?> (max20):</label>
+                    <input type="text" class="form-control" name="login" id="login" maxlength="20" value="<?= $login ?>">
+                    <span class="text-muted font-italic"><?= __('users.login_requirements') ?></span>
+                </div>
+                <div class="form-group">
+                    <label for="password"><?= __('users.password') ?> (max20):</label>
+                    <input class="form-control" name="password" id="password" type="password" maxlength="50">
+                </div>
+                <div class="form-group">
+                    <label for="password2"><?= __('users.confirm_password') ?>:</label>
+                    <input class="form-control" name="password2" id="password2" type="password" maxlength="50">
+                </div>
+                <div class="form-group">
+                    <label for="email"><?= __('users.email') ?>:</label>
+                    <input class="form-control" name="email" id="email" maxlength="50" value="<?= $email ?>">
+                </div>
+
+                <button class="btn btn-primary"><?= __('main.create') ?></button>
+            </form>
+        </div><br>
     <?php endif; ?>
- </div>
+
+    <!-- Завершение установки -->
+    <?php if ($request->input('act') === 'finish'): ?>
+        <h1><?= __('install.install_completed') ?></h1>
+        <div>
+            <div class="alert alert-success">
+                <?= __('install.success_install') ?>
+            </div>
+
+            <a href="/"><?= __('install.main_page') ?></a><br>
+        </div>
+    <?php endif; ?>
+</div>
 </body>
 </html>
 <?php
