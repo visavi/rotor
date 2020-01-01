@@ -30,7 +30,7 @@ define('RESOURCES', BASEDIR . '/resources');
 define('STORAGE', BASEDIR . '/storage');
 define('MODULES', BASEDIR . '/modules');
 define('SITETIME', time());
-define('VERSION', '8.4');
+define('VERSION', '8.5');
 
 require_once BASEDIR . '/vendor/autoload.php';
 
