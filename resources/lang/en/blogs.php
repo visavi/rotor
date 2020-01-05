@@ -18,7 +18,6 @@ return [
     'comments_list'          => 'Comment list :user',
     'top_articles'           => 'Top Articles',
     'tag_cloud'              => 'Tag Cloud',
-    'message'                => 'Message',
     'title_create'           => 'Publication of a new article',
     'text_create1'           => 'Tags must be between 2 and 20 chars. Not more than 50 chars long',
     'title_edit_blog'        => 'Editing a section',

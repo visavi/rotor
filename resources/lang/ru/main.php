@@ -237,4 +237,5 @@ return [
     'success_recounted'        => 'Данные успешно пересчитаны!',
     'action_not_selected'      => 'Не выбрано действие!',
     'directory_not_writable'   => 'Директория недоступна для записи!',
+    'closed_comments'          => 'Комментирование закрыто!',
 ];

@@ -84,7 +84,7 @@
             <a href="/tags">{{ __('main.tags') }}</a><br><br>
 
         @else
-            {!! showError(__('offers.closed_comments')) !!}
+            {!! showError(__('main.closed_comments')) !!}
         @endif
     @else
         {!! showError(__('main.not_authorized')) !!}

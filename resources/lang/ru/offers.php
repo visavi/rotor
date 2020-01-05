@@ -4,7 +4,6 @@ return [
     'offers'            => 'Предложения',
     'problems'          => 'Проблемы',
     'official_response' => 'Официальный ответ',
-    'closed_comments'   => 'Комментирование закрыто!',
     'adding_record'     => 'Добавление записи',
     'i_want_to'         => 'Я хотел бы...',
     'suggest_idea'      => 'Предложить идею',

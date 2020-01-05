@@ -4,7 +4,6 @@ return [
     'offers'            => 'Suggestions',
     'problems'          => 'Problems',
     'official_response' => 'Official answer',
-    'closed_comments'   => 'Commenting is closed!',
     'adding_record'     => 'Add Record',
     'i_want_to'         => 'I would like to...',
     'suggest_idea'      => 'To suggest an idea',

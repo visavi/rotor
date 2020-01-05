@@ -40,7 +40,7 @@
         <a href="/offers/end/{{ $offer->id }}">&raquo;</a><br>
 
         @if ($offer->closed)
-            <span class="text-danger">{{ __('offers.closed_comments') }}</span>
+            <span class="text-danger">{{ __('main.closed_comments') }}</span>
         @endif
 
     </div><br>

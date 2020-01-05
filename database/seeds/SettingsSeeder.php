@@ -116,7 +116,7 @@ class SettingsSeeder extends AbstractSeed
             ['name'  => 'sendmailpacket', 'value' => 3],
             ['name'  => 'sendmoneypoint', 'value' => 150],
             ['name'  => 'sendprivatmailday', 'value' => 3],
-            ['name'  => 'stickerlist', 'value' => 10],
+            ['name'  => 'stickerlist', 'value' => 20],
             ['name'  => 'stickermaxsize', 'value' => 1048576],
             ['name'  => 'stickermaxweight', 'value' => 500],
             ['name'  => 'stickerminweight', 'value' => 16],
