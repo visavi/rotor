@@ -118,11 +118,12 @@ class PhotoController extends BaseController
     }
 
     /**
-     * Редактирование фото
+     * Edit photo
      *
      * @param int       $id
      * @param Request   $request
      * @param Validator $validator
+     *
      * @return string
      */
     public function edit(int $id, Request $request, Validator $validator): string
@@ -173,12 +174,13 @@ class PhotoController extends BaseController
     }
 
     /**
-     * Список комментариев
+     * List comments
      *
      * @param int       $id
      * @param Request   $request
      * @param Validator $validator
      * @param Flood     $flood
+     *
      * @return string
      */
     public function comments(int $id, Request $request, Validator $validator, Flood $flood): string
@@ -190,47 +192,11 @@ class PhotoController extends BaseController
             abort(404, __('photos.photo_not_exist'));
         }
 
-        if ($request->isMethod('post')) {
-            $msg   = check($request->input('msg'));
-            $token = check($request->input('token'));
+        $comment = $photo->createComment($request, $validator, $flood);
 
-            $validator
-                ->true(getUser(), __('main.not_authorized'))
-                ->equal($token, $_SESSION['token'], __('validator.token'))
-                ->length($msg, 5, setting('comment_length'), ['msg' => __('validator.text')])
-                ->false($flood->isFlood(), ['msg' => __('validator.flood', ['sec' => $flood->getPeriod()])])
-                ->empty($photo->closed, ['msg' => __('photos.closed_comments')]);
-
-            if ($validator->isValid()) {
-                $msg = antimat($msg);
-
-                /** @var Comment $comment */
-                $comment = Comment::query()->create([
-                    'relate_type' => Photo::class,
-                    'relate_id'   => $photo->id,
-                    'text'        => $msg,
-                    'user_id'     => getUser('id'),
-                    'created_at'  => SITETIME,
-                    'ip'          => getIp(),
-                    'brow'        => getBrowser(),
-                ]);
-
-                $user = getUser();
-                $user->increment('allcomments');
-                $user->increment('point');
-                $user->increment('money', 5);
-
-                $photo->increment('count_comments');
-
-                $flood->saveState();
-                sendNotify($msg, '/photos/comment/' . $photo->id . '/' . $comment->id, $photo->title);
-
-                setFlash('success', __('main.comment_added_success'));
-                redirect('/photos/end/' . $photo->id);
-            } else {
-                setInput($request->all());
-                setFlash('danger', $validator->getErrors());
-            }
+        if ($comment) {
+            sendNotify($comment->text, '/photos/comment/' . $photo->id . '/' . $comment->id, $photo->title);
+            redirect('/photos/end/' . $photo->id);
         }
 
         $comments = Comment::query()
@@ -244,12 +210,13 @@ class PhotoController extends BaseController
     }
 
     /**
-     * Редактирование комментария
+     * Edit comment
      *
      * @param int       $id
      * @param int       $cid
      * @param Request   $request
      * @param Validator $validator
+     *
      * @return string
      */
     public function editComment(int $id, int $cid, Request $request, Validator $validator): string
@@ -267,54 +234,23 @@ class PhotoController extends BaseController
             abort(403, __('main.not_authorized'));
         }
 
-        $comment = Comment::query()
-            ->select('comments.*', 'photos.closed')
-            ->where('relate_type', Photo::class)
-            ->where('comments.id', $cid)
-            ->where('comments.user_id', getUser('id'))
-            ->leftJoin('photos', 'comments.relate_id', 'photos.id')
-            ->first();
+        $comment     = $photo->getComment($cid);
+        $editComment = $photo->editComment($comment, $request, $validator);
 
-        if (! $comment) {
-            abort('default', __('main.comment_deleted'));
+        if ($editComment) {
+            redirect('/photos/comments/' . $photo->id . '?page=' . $page);
         }
 
-        if ($comment->created_at + 600 < SITETIME) {
-            abort('default', __('main.editing_impossible'));
-        }
-
-        if ($request->isMethod('post')) {
-            $msg   = check($request->input('msg'));
-            $token = check($request->input('token'));
-
-            $validator
-                ->equal($token, $_SESSION['token'], __('validator.token'))
-                ->length($msg, 5, setting('comment_length'), ['msg' => __('validator.text')])
-                ->empty($comment->closed, __('photos.closed_comments'));
-
-            if ($validator->isValid()) {
-                $msg = antimat($msg);
-
-                $comment->update([
-                    'text' => $msg,
-                ]);
-
-                setFlash('success', __('main.comment_edited_success'));
-                redirect('/photos/comments/' . $photo->id . '?page=' . $page);
-            } else {
-                setInput($request->all());
-                setFlash('danger', $validator->getErrors());
-            }
-        }
         return view('photos/editcomment', compact('photo', 'comment', 'page'));
     }
 
     /**
-     * Удаление фотографий
+     * Delete photo
      *
      * @param int       $id
      * @param Request   $request
      * @param Validator $validator
+     *
      * @throws Exception
      */
     public function delete(int $id, Request $request, Validator $validator): void
@@ -351,7 +287,7 @@ class PhotoController extends BaseController
     }
 
     /**
-     * Переадресация на последнюю страницу
+     * Redirect last page
      *
      * @param int $id
      */

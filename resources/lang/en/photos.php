@@ -11,7 +11,6 @@ return [
     'empty_albums'           => 'There are no albums yet!',
     'confirm_delete_photo'   => 'Do you confirm the deletion of the photo?',
     'all_comments'           => 'All comments',
-    'closed_comments'        => 'Commenting on the photo is closed!',
     'create_photo'           => 'Adding a photo',
     'name'                   => 'Title',
     'description'            => 'Photo caption',

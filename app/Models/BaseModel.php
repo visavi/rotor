@@ -46,4 +46,22 @@ class BaseModel extends Model
     {
         return $value ?? setting('deleted_user');
     }
+
+    /**
+     * @param string $modelName
+     *
+     * @return bool|string
+     */
+/*    public static function resolveModel(string $modelName)
+    {
+        switch ($modelName):
+            case 'photos':
+                return Photo::class;
+            case 'guestbooks':
+                return Guestbook::class;
+            default:
+                return false;
+
+        endswitch;
+    }*/
 }

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Models;
 
+use App\Traits\CommentTrait;
 use App\Traits\UploadTrait;
 use Exception;
 use Illuminate\Database\Eloquent\Collection;
@@ -25,6 +26,7 @@ use Illuminate\Database\Eloquent\Relations\MorphMany;
 class Photo extends BaseModel
 {
     use UploadTrait;
+    use CommentTrait;
 
     /**
      * Indicates if the model should be timestamped.

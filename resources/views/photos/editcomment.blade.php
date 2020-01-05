@@ -19,17 +19,5 @@
 @section('content')
     <i class="fa fa-pencil-alt"></i> <b>{{ $comment->user->login }}</b> <small>({{ dateFixed($comment->created_at) }})</small><br><br>
 
-    <div class="form">
-        <form method="post">
-            @csrf
-            <div class="form-group{{ hasError('msg') }}">
-                <label for="msg">{{ __('main.message') }}:</label>
-                <textarea class="form-control markItUp" maxlength="{{ setting('comment_length') }}" id="msg" rows="5" name="msg" required>{{ getInput('msg', $comment->text) }}</textarea>
-                <div class="invalid-feedback">{{ textError('msg') }}</div>
-                <span class="js-textarea-counter"></span>
-            </div>
-
-            <button class="btn btn-success">{{ __('main.edit') }}</button>
-        </form>
-    </div><br>
+    @include('app/_comments_form', compact('comment'))
 @stop
