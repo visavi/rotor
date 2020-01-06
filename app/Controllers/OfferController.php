@@ -259,7 +259,7 @@ class OfferController extends BaseController
             ->where('relate_type', Offer::class)
             ->where('relate_id', $id)
             ->orderBy('created_at')
-            ->paginate(setting('postcommoffers'));
+            ->paginate(setting('comments_per_page'));
 
         return view('offers/comments', compact('offer', 'comments'));
     }
@@ -348,7 +348,7 @@ class OfferController extends BaseController
             ->where('relate_id', $offer->id)
             ->count();
 
-        $end = ceil($total / setting('postcommoffers'));
+        $end = ceil($total / setting('comments_per_page'));
         redirect('/offers/comments/' . $offer->id . '?page=' . $end);
     }
 
@@ -374,7 +374,7 @@ class OfferController extends BaseController
             ->orderBy('created_at')
             ->count();
 
-        $end = ceil($total / setting('postcommoffers'));
+        $end = ceil($total / setting('comments_per_page'));
         redirect('/offers/comments/' . $offer->id . '?page=' . $end . '#comment_' . $cid);
     }
 }

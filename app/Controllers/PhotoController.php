@@ -199,7 +199,7 @@ class PhotoController extends BaseController
                 ->equal($token, $_SESSION['token'], __('validator.token'))
                 ->length($msg, 5, setting('comment_length'), ['msg' => __('validator.text')])
                 ->false($flood->isFlood(), ['msg' => __('validator.flood', ['sec' => $flood->getPeriod()])])
-                ->empty($photo->closed, ['msg' => __('photos.closed_comments')]);
+                ->empty($photo->closed, ['msg' => __('main.closed_comments')]);
 
             if ($validator->isValid()) {
                 $msg = antimat($msg);
@@ -238,7 +238,7 @@ class PhotoController extends BaseController
             ->where('relate_id', $id)
             ->orderBy('created_at')
             ->with('user')
-            ->paginate(setting('postgallery'));
+            ->paginate(setting('comments_per_page'));
 
         return view('photos/comments', compact('photo', 'comments'));
     }
@@ -268,11 +268,9 @@ class PhotoController extends BaseController
         }
 
         $comment = Comment::query()
-            ->select('comments.*', 'photos.closed')
             ->where('relate_type', Photo::class)
-            ->where('comments.id', $cid)
-            ->where('comments.user_id', getUser('id'))
-            ->leftJoin('photos', 'comments.relate_id', 'photos.id')
+            ->where('id', $cid)
+            ->where('user_id', getUser('id'))
             ->first();
 
         if (! $comment) {
@@ -290,7 +288,7 @@ class PhotoController extends BaseController
             $validator
                 ->equal($token, $_SESSION['token'], __('validator.token'))
                 ->length($msg, 5, setting('comment_length'), ['msg' => __('validator.text')])
-                ->empty($comment->closed, __('photos.closed_comments'));
+                ->empty($photo->closed, __('main.closed_comments'));
 
             if ($validator->isValid()) {
                 $msg = antimat($msg);
@@ -369,7 +367,7 @@ class PhotoController extends BaseController
             ->where('relate_id', $photo->id)
             ->count();
 
-        $end = ceil($total / setting('postgallery'));
+        $end = ceil($total / setting('comments_per_page'));
         redirect('/photos/comments/' . $photo->id . '?page=' . $end);
     }
 
@@ -454,7 +452,7 @@ class PhotoController extends BaseController
             ->leftJoin('photos', 'comments.relate_id', 'photos.id')
             ->orderByDesc('comments.created_at')
             ->with('user')
-            ->paginate(setting('postgallery'));
+            ->paginate(setting('comments_per_page'));
 
         return view('photos/all_comments', compact('comments'));
     }
@@ -480,7 +478,7 @@ class PhotoController extends BaseController
             ->leftJoin('photos', 'comments.relate_id', 'photos.id')
             ->orderByDesc('comments.created_at')
             ->with('user')
-            ->paginate(setting('postgallery'));
+            ->paginate(setting('comments_per_page'));
 
         return view('photos/user_comments', compact('comments', 'user'));
     }
@@ -507,7 +505,7 @@ class PhotoController extends BaseController
             ->orderBy('created_at')
             ->count();
 
-        $end = ceil($total / setting('postgallery'));
+        $end = ceil($total / setting('comments_per_page'));
         redirect('/photos/comments/' . $photo->id . '?page=' . $end . '#comment_' . $cid);
     }
 }

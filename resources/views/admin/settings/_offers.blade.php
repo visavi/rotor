@@ -10,12 +10,6 @@
         <div class="invalid-feedback">{{ textError('sets[postoffers]') }}</div>
     </div>
 
-    <div class="form-group{{ hasError('sets[postcommoffers]') }}">
-        <label for="postcommoffers">{{ __('settings.offers_comments') }}:</label>
-        <input type="number" class="form-control" id="postcommoffers" name="sets[postcommoffers]" maxlength="2" value="{{ getInput('sets.postcommoffers', $settings['postcommoffers']) }}" required>
-        <div class="invalid-feedback">{{ textError('sets[postcommoffers]') }}</div>
-    </div>
-
     <div class="form-group{{ hasError('sets[addofferspoint]') }}">
         <label for="addofferspoint">{{ __('settings.offers_points') }}:</label>
         <input type="number" class="form-control" id="addofferspoint" name="sets[addofferspoint]" maxlength="4" value="{{ getInput('sets.addofferspoint', $settings['addofferspoint']) }}" required>

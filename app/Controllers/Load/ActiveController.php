@@ -75,7 +75,7 @@ class ActiveController extends BaseController
             ->leftJoin('downs', 'comments.relate_id', 'downs.id')
             ->orderByDesc('comments.created_at')
             ->with('user')
-            ->paginate(setting('downcomm'))
+            ->paginate(setting('comments_per_page'))
             ->appends(['user' => $user->login]);
 
         return view('loads/active_comments', compact('comments', 'user'));

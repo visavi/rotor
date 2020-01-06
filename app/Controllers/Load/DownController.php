@@ -446,7 +446,7 @@ class DownController extends BaseController
             ->where('relate_id', $id)
             ->orderBy('created_at')
             ->with('user')
-            ->paginate(setting('downcomm'));
+            ->paginate(setting('comments_per_page'));
 
         return view('loads/comments', compact('down', 'comments'));
     }
@@ -535,7 +535,7 @@ class DownController extends BaseController
             ->where('relate_id', $down->id)
             ->count();
 
-        $end = ceil($total / setting('downcomm'));
+        $end = ceil($total / setting('comments_per_page'));
         redirect('/downs/comments/' . $down->id . '?page=' . $end);
     }
 
@@ -675,7 +675,7 @@ class DownController extends BaseController
             ->orderBy('created_at')
             ->count();
 
-        $end = ceil($total / setting('downcomm'));
+        $end = ceil($total / setting('comments_per_page'));
         redirect('/downs/comments/' . $down->id . '?page=' . $end . '#comment_' . $cid);
     }
 }

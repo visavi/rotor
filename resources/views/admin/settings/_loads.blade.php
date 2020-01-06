@@ -17,12 +17,6 @@
         <div class="invalid-feedback">{{ textError('sets[downlist]') }}</div>
     </div>
 
-    <div class="form-group{{ hasError('sets[downcomm]') }}">
-        <label for="downcomm">{{ __('settings.loads_comments') }}:</label>
-        <input type="number" class="form-control" id="downcomm" name="sets[downcomm]" maxlength="2" value="{{ getInput('sets.downcomm', $settings['downcomm']) }}" required>
-        <div class="invalid-feedback">{{ textError('sets[downcomm]') }}</div>
-    </div>
-
     <div class="form-group{{ hasError('sets[ziplist]') }}">
         <label for="ziplist">{{ __('settings.loads_archives') }}:</label>
         <input type="number" class="form-control" id="ziplist" name="sets[ziplist]" maxlength="2" value="{{ getInput('sets.ziplist', $settings['ziplist']) }}" required>

@@ -374,7 +374,7 @@ class BlogController extends BaseController
             ->where('relate_type', Blog::class)
             ->where('relate_id', $id)
             ->orderBy('created_at')
-            ->paginate(setting('blogcomm'));
+            ->paginate(setting('comments_per_page'));
 
         return view('blogs/comments', compact('blog', 'comments'));
     }
@@ -463,7 +463,7 @@ class BlogController extends BaseController
             ->where('relate_id', $id)
             ->count();
 
-        $end = ceil($total / setting('blogpost'));
+        $end = ceil($total / setting('comments_per_page'));
         redirect('/articles/comments/' . $id . '?page=' . $end);
     }
 
@@ -625,7 +625,7 @@ class BlogController extends BaseController
             ->leftJoin('blogs', 'comments.relate_id', 'blogs.id')
             ->orderByDesc('comments.created_at')
             ->with('user')
-            ->paginate(setting('blogpost'));
+            ->paginate(setting('comments_per_page'));
 
         return view('blogs/new_comments', compact('comments'));
     }
@@ -675,7 +675,7 @@ class BlogController extends BaseController
             ->leftJoin('blogs', 'comments.relate_id', 'blogs.id')
             ->orderByDesc('comments.created_at')
             ->with('user')
-            ->paginate(setting('blogpost'))
+            ->paginate(setting('comments_per_page'))
             ->appends(['user' => $user->login]);
 
         return view('blogs/active_comments', compact('comments', 'user'));
@@ -704,7 +704,7 @@ class BlogController extends BaseController
             ->orderBy('created_at')
             ->count();
 
-        $end = ceil($total / setting('blogpost'));
+        $end = ceil($total / setting('comments_per_page'));
         redirect('/articles/comments/' . $blog->id . '?page=' . $end . '#comment_' . $cid);
     }
 

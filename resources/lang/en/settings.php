@@ -31,14 +31,14 @@ return [
     'adverts_per_page'    => 'Listing all links',
 
     'blogs_per_page' => 'Articles per page',
-    'blogs_comments' => 'Blog comments on page',
     'blogs_groups'   => 'Blog groups on page',
     'blogs_symbols'  => 'Qty. characters in the article ',
     'blogs_points'   => 'Asset to vote on articles',
     'blogs_publish'  => 'Allow users to publish articles',
 
-    'comments_symbols' => 'Characters in the comments',
-    'chat_per_page'    => 'Posts in admin chat on page',
+    'comments_symbols'  => 'Characters in the comments',
+    'comments_per_page' => 'Comments per page',
+    'chat_per_page'     => 'Posts in admin chat on page',
 
     'contacts_per_page'  => 'Listing in the contact list',
     'ignores_per_page'   => 'Listing on the ignore list',
@@ -68,7 +68,6 @@ return [
 
     'loads_max_files'   => 'Maximum load count. files',
     'loads_per_page'    => 'Files in downloads on page',
-    'loads_comments'    => 'Comments in downloads',
     'loads_archives'    => 'View archives on page',
     'loads_files_allow' => 'Allow users to upload files',
 
@@ -101,7 +100,6 @@ return [
     'news_per_page' => 'News per page',
 
     'offers_per_page' => 'Suggestions per page',
-    'offers_comments' => 'Comments per page',
     'offers_points'   => 'Asset to create a proposal or problem',
 
     'log_enable'      => 'Enable logging',
@@ -133,7 +131,6 @@ return [
     'votes_per_page'         => 'Number of votes on page',
 
     'photos_per_page' => 'Number of photos on page',
-    'photos_comments' => 'Comments on the page in the gallery',
     'photos_groups'   => 'Groups per page in the gallery',
 
     'points_transfer'     => 'Asset for money transfer',

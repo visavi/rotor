@@ -18,7 +18,7 @@
 
     <div class="form-group{{ hasError('sets[bookpost]') }}">
         <label for="bookpost">{{ __('settings.guestbooks_per_page') }}:</label>
-        <input type="number" class="form-control" id="postnews" name="sets[bookpost]" maxlength="2" value="{{ getInput('sets.bookpost', $settings['bookpost']) }}" required>
+        <input type="number" class="form-control" id="bookpost" name="sets[bookpost]" maxlength="2" value="{{ getInput('sets.bookpost', $settings['bookpost']) }}" required>
         <div class="invalid-feedback">{{ textError('sets[bookpost]') }}</div>
     </div>
 

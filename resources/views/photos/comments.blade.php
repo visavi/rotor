@@ -88,6 +88,6 @@
             {!! showError(__('main.not_authorized')) !!}
         @endif
     @else
-        {!! showError(__('photos.closed_comments')) !!}
+        {!! showError(__('main.closed_comments')) !!}
     @endif
 @stop

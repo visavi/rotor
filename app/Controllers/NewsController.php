@@ -138,7 +138,7 @@ class NewsController extends BaseController
             ->where('relate_id', $id)
             ->orderBy('created_at')
             ->with('user')
-            ->paginate(setting('postnews'));
+            ->paginate(setting('comments_per_page'));
 
         return view('news/comments', compact('news', 'comments'));
     }
@@ -169,8 +169,8 @@ class NewsController extends BaseController
 
         $comment = Comment::query()
             ->where('relate_type', News::class)
-            ->where('comments.id', $cid)
-            ->where('comments.user_id', getUser('id'))
+            ->where('id', $cid)
+            ->where('user_id', getUser('id'))
             ->first();
 
         if (! $comment) {
@@ -220,7 +220,7 @@ class NewsController extends BaseController
             abort(404, __('news.news_not_exist'));
         }
 
-        $end = ceil($news->count_comments / setting('postnews'));
+        $end = ceil($news->count_comments / setting('comments_per_page'));
         redirect('/news/comments/' . $id . '?page=' . $end);
     }
 
@@ -249,7 +249,7 @@ class NewsController extends BaseController
             ->leftJoin('news', 'comments.relate_id', 'news.id')
             ->orderByDesc('created_at')
             ->with('user')
-            ->paginate(setting('postnews'));
+            ->paginate(setting('comments_per_page'));
 
         return view('news/allcomments', compact('comments'));
     }
@@ -276,7 +276,7 @@ class NewsController extends BaseController
             ->orderBy('created_at')
             ->count();
 
-        $end = ceil($total / setting('postnews'));
+        $end = ceil($total / setting('comments_per_page'));
         redirect('/news/comments/' . $news->id . '?page=' . $end . '#comment_' . $cid);
     }
 }

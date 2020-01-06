@@ -10,12 +10,6 @@
         <div class="invalid-feedback">{{ textError('sets[fotolist]') }}</div>
     </div>
 
-    <div class="form-group{{ hasError('sets[postgallery]') }}">
-        <label for="postgallery">{{ __('settings.photos_comments') }}:</label>
-        <input type="number" class="form-control" id="postgallery" name="sets[postgallery]" maxlength="3" value="{{ getInput('sets.postgallery', $settings['postgallery']) }}" required>
-        <div class="invalid-feedback">{{ textError('sets[postgallery]') }}</div>
-    </div>
-
     <div class="form-group{{ hasError('sets[photogroup]') }}">
         <label for="photogroup">{{ __('settings.photos_groups') }}:</label>
         <input type="number" class="form-control" id="photogroup" name="sets[photogroup]" maxlength="2" value="{{ getInput('sets.photogroup', $settings['photogroup']) }}" required>

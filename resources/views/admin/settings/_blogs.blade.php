@@ -10,12 +10,6 @@
         <div class="invalid-feedback">{{ textError('sets[blogpost]') }}</div>
     </div>
 
-    <div class="form-group{{ hasError('sets[blogcomm]') }}">
-        <label for="blogcomm">{{ __('settings.blogs_comments') }}:</label>
-        <input type="number" class="form-control" id="blogcomm" name="sets[blogcomm]" maxlength="2" value="{{ getInput('sets.blogcomm', $settings['blogcomm']) }}" required>
-        <div class="invalid-feedback">{{ textError('sets[blogcomm]') }}</div>
-    </div>
-
     <div class="form-group{{ hasError('sets[bloggroup]') }}">
         <label for="bloggroup">{{ __('settings.blogs_groups') }}:</label>
         <input type="number" class="form-control" id="bloggroup" name="sets[bloggroup]" maxlength="2" value="{{ getInput('sets.bloggroup', $settings['bloggroup']) }}" required>

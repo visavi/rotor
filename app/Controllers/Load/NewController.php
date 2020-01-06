@@ -39,7 +39,7 @@ class NewController extends BaseController
             ->leftJoin('downs', 'comments.relate_id', 'downs.id')
             ->orderByDesc('comments.created_at')
             ->with('user')
-            ->paginate(setting('downcomm'));
+            ->paginate(setting('comments_per_page'));
 
         return view('loads/new_comments', compact('comments'));
     }
