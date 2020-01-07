@@ -124,7 +124,6 @@ return [
     'reglist_per_page'       => 'Users on the pending list',
     'invites_per_page'       => 'Invites to invitations',
     'walls_per_page'         => 'Posts on the wall of posts',
-    'walls_max_posts'        => 'Saved posts on the message wall',
     'history_login_per_page' => 'Authorization History',
     'transfers_per_page'     => 'Cash transactions',
     'ratinglist_per_page'    => 'Votes in ranking history',
