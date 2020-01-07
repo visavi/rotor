@@ -125,7 +125,6 @@ class SettingsSeeder extends AbstractSeed
             ['name'  => 'title', 'value' => 'Rotor'],
             ['name'  => 'userlist', 'value' => 10],
             ['name'  => 'usersearch', 'value' => 30],
-            ['name'  => 'wallmaxpost', 'value' => 1000],
             ['name'  => 'wallpost', 'value' => 10],
             ['name'  => 'webthemes', 'value' => 'motor'],
             ['name'  => 'ziplist', 'value' => 20],

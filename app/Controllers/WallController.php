@@ -92,15 +92,6 @@ class WallController extends BaseController
                     'created_at' => SITETIME,
                 ]);
 
-                DB::connection()->delete('
-                        DELETE FROM walls WHERE user_id = ? AND created_at < (
-                            SELECT min(created_at) FROM (
-                                SELECT created_at FROM walls WHERE user_id = ? ORDER BY created_at DESC LIMIT ?
-                            ) AS del
-                        );',
-                    [$user->id, $user->id, setting('wallmaxpost')]
-                );
-
                 $flood->saveState();
                 sendNotify($msg, '/walls/' . $user->login, __('index.wall_posts_login', ['login' => $user->login]));
 
