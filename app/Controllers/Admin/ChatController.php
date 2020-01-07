@@ -59,6 +59,8 @@ class ChatController extends AdminController
                     ]);
                 }
 
+                sendNotify($msg, '/admin/chats', __('index.admin_chat'));
+
                 setFlash('success', __('main.message_added_success'));
                 redirect ('/admin/chats');
             } else {

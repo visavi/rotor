@@ -80,6 +80,7 @@ return [
     'auth_history'       => 'История авторизаций',
     'money_transfer'     => 'Перевод денег',
     'wall_posts'         => 'Стена сообщений',
+    'wall_posts_login'   => 'Стена сообщений :login',
 
     'confirm_register' => 'Подтверждение регистрации',
     'banned'           => 'Вас забанили',

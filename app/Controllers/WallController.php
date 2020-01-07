@@ -102,6 +102,7 @@ class WallController extends BaseController
                 );
 
                 $flood->saveState();
+                sendNotify($msg, '/walls/' . $user->login, __('index.wall_posts_login', ['login' => $user->login]));
 
                 setFlash('success', __('main.record_added_success'));
             } else {

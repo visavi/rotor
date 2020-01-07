@@ -80,6 +80,7 @@ return [
     'auth_history'       => 'Authorization history',
     'money_transfer'     => 'Money transfer',
     'wall_posts'         => 'Wall posts',
+    'wall_posts_login'   => 'Wall posts :login',
 
     'confirm_register' => 'Confirmation of registration',
     'banned'           => 'You are banned',
