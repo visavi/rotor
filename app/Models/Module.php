@@ -9,6 +9,7 @@ use Phinx\Config\Config;
 use Phinx\Console\Command\Migrate;
 use Phinx\Console\PhinxApplication;
 use Phinx\Wrapper\TextWrapper;
+use Symfony\Component\Filesystem\Filesystem;
 
 /**
  * Class Module
@@ -39,7 +40,7 @@ class Module extends BaseModel
     /**
      * Assets modules path
      */
-    public $assetsPath = HOME . '/assets/modules';
+    public $assetsPath = HOME . '/assets/modules/';
 
     /**
      * Выполняет применение миграции
@@ -101,16 +102,13 @@ class Module extends BaseModel
      */
     public function createSymlink(string $modulePath): void
     {
-        $target = $modulePath . '/resources/assets';
-        $link   = $this->getLinkName($modulePath);
+        $filesystem  = new Filesystem();
+        $originPath  = $this->getLinkName($modulePath);
+        $modulesPath = $modulePath . '/resources/assets';
 
-        if (is_link($link)) {
-            unlink($link);
-        }
+        $relativePath = $filesystem->makePathRelative($modulesPath, $this->assetsPath);
 
-        if (file_exists($target)) {
-            symlink($target, $link);
-        }
+        $filesystem->symlink($relativePath, $originPath, true);
     }
 
     /**
@@ -135,6 +133,6 @@ class Module extends BaseModel
      */
     public function getLinkName(string $modulePath): string
     {
-        return $this->assetsPath . '/' . Str::plural(strtolower(basename($modulePath)));
+        return $this->assetsPath . Str::plural(strtolower(basename($modulePath)));
     }
 }
