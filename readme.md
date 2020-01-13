@@ -1,6 +1,8 @@
 Rotor - mobile cms
 =========
 
+![](/public/assets/img/images/logo.png)  
+
 [Description in Russian](https://github.com/visavi/rotor/blob/master/readme_ru.md)
 
 [![Php Version](https://img.shields.io/packagist/php-v/visavi/rotor)](https://php.net)
