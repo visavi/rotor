@@ -1,0 +1,48 @@
+<svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 4712 2400" preserveAspectRatio="none">
+  <polygon opacity="0.2" fill="#4E1800" points="1040.2,1912.9 1040.2,1711.2 0,1369.8 0,2400 3138.7,2400 1382.7,1823.7" />
+  <polygon opacity="0.2" fill="#646464" points="2690,418.4 3286.8,2161.9 4350.1,1388.4 "/>
+  <linearGradient id="gradient-1" gradientUnits="userSpaceOnUse" x1="2994.686" y1="1295.1405" x2="2947.686" y2="1311.1405">
+    <stop offset="0" style="stop-color:#000000"/>
+    <stop offset="1" style="stop-color:#000000;stop-opacity:0"/>
+  </linearGradient>
+  <polygon opacity="0.3" fill="url(#gradient-1)" points="2618.4,373.3 3262.2,2254 3286.8,2161.9 2690,418.4 "/>
+  <linearGradient id="gradient-2" gradientUnits="userSpaceOnUse" x1="3796.0203" y1="1785.3143" x2="3831.187" y2="1833.1477">
+    <stop offset="0" style="stop-color:#000000"/>
+    <stop offset="1" style="stop-color:#000000;stop-opacity:0"/>
+  </linearGradient>
+  <polygon opacity="0.3" fill="url(#gradient-2)" points="3286.8,2161.9 3262.2,2254 4406.8,1421.3 4350.1,1388.4 "/>
+  <polygon opacity="0.2" fill="#C5FF9D" points="0,0 0,838.8 1980.5,0 "/>
+  <polygon opacity="0.3" fill="#583A30" points="2690,418.4 1980.5,0 1040.2,398.2 1040.2,1912.9 3024.6,1396 "/>
+  <linearGradient id="gradient-3" gradientUnits="userSpaceOnUse" x1="1038.7261" y1="1187.1169" x2="979.2026" y2="1187.1169">
+    <stop offset="0" style="stop-color:#000000"/>
+    <stop offset="1" style="stop-color:#231F20;stop-opacity:0"/>
+  </linearGradient>
+  <polygon opacity="0.3" fill="url(#gradient-3)" points="1040.2,398.2 974.7,426 974.7,1976 1040.2,1912.9 "/>
+  <linearGradient id="gradient-4" gradientUnits="userSpaceOnUse" x1="1995.4419" y1="1662.8521" x2="2005.6919" y2="1702.3521">
+    <stop offset="0" style="stop-color:#000000"/>
+    <stop offset="1" style="stop-color:#000000;stop-opacity:0"/>
+  </linearGradient>
+  <polygon opacity="0.3" fill="url(#gradient-4)" points="3024.6,1396 1040.2,1912.9 974.7,1976 3039.1,1438.3 "/>
+  <linearGradient id="gradient-5" gradientUnits="userSpaceOnUse" x1="996.2665" y1="416.9094" x2="1014.2665" y2="459.7427">
+    <stop offset="0" style="stop-color:#000000"/>
+    <stop offset="1" style="stop-color:#231F20;stop-opacity:0"/>
+  </linearGradient>
+  <polygon opacity="0.3" fill="url(#gradient-5)" points="0,894 2032.4,34.8 1980.5,0 0,838.8 "/>
+  <linearGradient id="gradient-6" gradientUnits="userSpaceOnUse" x1="3344.2688" y1="795.9683" x2="3307.9355" y2="859.3016">
+    <stop offset="0" style="stop-color:#000000"/>
+    <stop offset="1" style="stop-color:#231F20;stop-opacity:0"/>
+  </linearGradient>
+  <polygon opacity="0.3" fill="url(#gradient-6)" points="1980.5,0 1897.1,35.3 4712,1695.1 4712,1598.4 "/>
+  <polygon opacity="0.2" fill="#999999" points="4712,0 1980.5,0 4712,1598.4 "/>
+  <path fill="#999999" d="M4350.1,170.1"/>
+  <linearGradient id="gradient-7" gradientUnits="userSpaceOnUse" x1="2197.5562" y1="2088.9697" x2="2174.2229" y2="2159.303">
+    <stop offset="0" style="stop-color:#000000"/>
+    <stop offset="1" style="stop-color:#000000;stop-opacity:0"/>
+  </linearGradient>
+  <polygon opacity="0.3" fill="url(#gradient-7)" points="1227.8,1864 2856.6,2400 3138.7,2400 1382.7,1823.7 "/>
+  <linearGradient id="gradient-8" gradientUnits="userSpaceOnUse" x1="534.8533" y1="1541.2555" x2="508.8533" y2="1620.2555">
+    <stop offset="0" style="stop-color:#000000"/>
+    <stop offset="1" style="stop-color:#000000;stop-opacity:0"/>
+  </linearGradient>
+  <polygon opacity="0.3" fill="url(#gradient-8)" points="0,1460 1040.2,1802.3 1040.2,1711.2 0,1369.8 "/>
+</svg>
