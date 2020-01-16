@@ -7,8 +7,7 @@
 @section('header')
     <div class="float-right">
         <a class="btn btn-success" href="/admin/status/create">{{ __('main.create') }}</a>
-    </div><br>
-
+    </div>
 
     <h1>{{ __('index.user_statuses') }}</h1>
 @stop
@@ -27,9 +26,9 @@
     @if ($statuses->isNotEmpty())
 
         <div class="card">
-            <h2 class="card-header">
+            <h5 class="card-header">
                 {{ __('statuses.list') }}
-            </h2>
+            </h5>
 
             <ul class="list-group list-group-flush">
                 @foreach ($statuses as $status)
