@@ -130,11 +130,11 @@
 
                         <div class="js-rating">
                             @if (getUser() && getUser('id') !== $data->user_id)
-                                <a class="post-rating-down{{ $data->vote === '-' ? ' active' : '' }}" href="#" onclick="return changeRating(this);" data-id="{{ $data->id }}" data-type="{{ App\Models\Post::class }}" data-vote="-" data-token="{{ $_SESSION['token'] }}"><i class="fa fa-minus"></i></a>
+                                <a class="post-rating-down{{ $data->vote === '-' ? ' active' : '' }}" href="#" onclick="return changeRating(this);" data-id="{{ $data->id }}" data-type="{{ App\Models\Post::class }}" data-vote="-" data-token="{{ $_SESSION['token'] }}"><i class="fas fa-angle-down"></i></a>
                             @endif
-                            <span>{!! formatNum($data->rating) !!}</span>
+                            <b><span>{!! formatNum($data->rating) !!}</span></b>
                             @if (getUser() && getUser('id') !== $data->user_id)
-                                <a class="post-rating-up{{ $data->vote === '+' ? ' active' : '' }}" href="#" onclick="return changeRating(this);" data-id="{{ $data->id }}" data-type="{{ App\Models\Post::class }}" data-vote="+" data-token="{{ $_SESSION['token'] }}"><i class="fa fa-plus"></i></a>
+                                <a class="post-rating-up{{ $data->vote === '+' ? ' active' : '' }}" href="#" onclick="return changeRating(this);" data-id="{{ $data->id }}" data-type="{{ App\Models\Post::class }}" data-vote="+" data-token="{{ $_SESSION['token'] }}"><i class="fas fa-angle-up"></i></a>
                             @endif
                         </div>
                     </div>
@@ -144,7 +144,7 @@
                         {!! $data->user->getOnline() !!}
                     </div>
 
-                    {{ $num }}. <b>{!! $data->user->getProfile() !!}</b> <small>({{ dateFixed($data->created_at) }})</small><br>
+                    {{ $num }}. <b>{!! $data->user->getProfile() !!}</b> <small class="text-muted font-italic">{{ dateFixed($data->created_at) }}</small><br>
                     {!! $data->user->getStatus() !!}
                 </div>
 
@@ -160,23 +160,22 @@
                                 {!! icons($ext) !!}
                                 <a href="{{ $file->hash }}">{{ $file->name }}</a> ({{ formatSize($file->size) }})<br>
                                 @if (in_array($ext, ['jpg', 'jpeg', 'gif', 'png']))
-                                    <a href="{{ $file->hash }}" class="gallery" data-group="{{ $data->id }}">{!! resizeImage($file->hash, ['alt' => $file->name]) !!}</a><br>
+                                    <a href="{{ $file->hash }}" class="gallery" data-group="{{ $data->id }}">{!! resizeImage($file->hash, ['alt' => $file->name]) !!}</a>
                                 @endif
                             @endforeach
                         </div>
                     @endif
 
                     @if ($data->edit_user_id)
-                        <small><i class="fa fa-exclamation-circle text-danger"></i> {{ __('main.changed') }}: {{ $data->editUser->getName() }} ({{ dateFixed($data->updated_at) }})</small><br>
+                        <div class="small"><i class="fa fa-exclamation-circle text-danger"></i> {{ __('main.changed') }}: {{ $data->editUser->getName() }} ({{ dateFixed($data->updated_at) }})</div>
                     @endif
 
                     @if (isAdmin())
-                        <div class="data">{{ $data->brow }}, {{ $data->ip }}</div>
+                        <div class="small text-muted font-italic">{{ $data->brow }}, {{ $data->ip }}</div>
                     @endif
                 </div>
             </div>
         @endforeach
-
     @else
         {!! showError(__('forums.empty_posts')) !!}
     @endif

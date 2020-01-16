@@ -55,7 +55,7 @@
                     @endif
 
                     @if ($data->user_id)
-                        <b>{!! $data->user->getProfile() !!}</b> <small><i>{{ dateFixed($data->created_at) }}</i></small><br>
+                        <b>{!! $data->user->getProfile() !!}</b> <small class="text-muted font-italic">{{ dateFixed($data->created_at) }}</small><br>
                         {!! $data->user->getStatus() !!}
                     @else
                         @if ($data->guest_name)
@@ -63,21 +63,21 @@
                         @else
                             <b class="author" data-login="{{ setting('guestsuser') }}">{{ setting('guestsuser') }}</b>
                         @endif
-                        <small><i>{{ dateFixed($data->created_at) }}</i>></small>
+                        <small><i>{{ dateFixed($data->created_at) }}</i></small>
                     @endif
 
                     <div class="message">{!! bbCode($data->text) !!}</div>
 
                     @if ($data->edit_user_id)
-                        <small><i class="fa fa-exclamation-circle text-danger"></i> {{ __('main.changed') }}: {{ $data->editUser->getName() }} ({{ dateFixed($data->updated_at) }})</small><br>
+                            <div class="small"><i class="fa fa-exclamation-circle text-danger"></i> {{ __('main.changed') }}: {{ $data->editUser->getName() }} ({{ dateFixed($data->updated_at) }})</div>
                     @endif
 
                     @if ($data->reply)
-                        <br><span style="color:#ff0000">{{ __('guestbooks.answer') }}: {!! bbCode($data->reply) !!}</span>
+                        <div class="text-danger">{{ __('guestbooks.answer') }}: {!! bbCode($data->reply) !!}</div>
                     @endif
 
                     @if (isAdmin())
-                        <div class="data">{{ $data->brow }}, {{ $data->ip }}</div>
+                        <div class="small text-muted font-italic">{{ $data->brow }}, {{ $data->ip }}</div>
                     @endif
                 </div>
             </div>
