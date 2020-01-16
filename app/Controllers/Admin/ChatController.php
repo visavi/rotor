@@ -37,10 +37,10 @@ class ChatController extends AdminController
                 $post = Chat::query()->orderBy('created_at')->first();
 
                 if (
-                    $post &&
-                    $post->created_at + 1800 > SITETIME &&
-                    getUser('id') === $post->user_id &&
-                    (utfStrlen($msg) + utfStrlen($post->text) <= 1500)
+                    $post
+                    && $post->created_at + 1800 > SITETIME
+                    && getUser('id') === $post->user_id
+                    && (utfStrlen($msg) + utfStrlen($post->text) <= 1500)
                 ) {
 
                     $newpost = $post->text . PHP_EOL . PHP_EOL . '[i][size=1]' . __('admin.chat.post_added_after', ['sec' => makeTime(SITETIME - $post->created_at)]) . '[/size][/i]' . PHP_EOL . $msg;

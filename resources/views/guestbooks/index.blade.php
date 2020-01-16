@@ -29,8 +29,16 @@
 
     @if ($posts->isNotEmpty())
         @foreach ($posts as $data)
-            <div class="post">
-                <div class="b">
+            <div class="media post bg-white p-3 border-bottom">
+                <div class="img">
+                @if ($data->user_id)
+                    {!! $data->user->getAvatar() !!}
+                    {!! $data->user->getOnline() !!}
+                @else
+                    <img class="avatar" src="/assets/img/images/avatar_guest.png" alt="">
+                @endif
+            </div>
+                <div class="media-body">
                     @if (getUser() && getUser('id') !== $data->user_id)
                         <div class="float-right">
                             <a href="#" onclick="return postReply(this)" data-toggle="tooltip" title="{{ __('main.reply') }}"><i class="fa fa-reply text-muted"></i></a>
@@ -47,39 +55,31 @@
                     @endif
 
                     @if ($data->user_id)
-                        <div class="img">
-                            {!! $data->user->getAvatar() !!}
-                            {!! $data->user->getOnline() !!}
-                        </div>
-                        <b>{!! $data->user->getProfile() !!}</b> <small>({{ dateFixed($data->created_at) }})</small><br>
+                        <b>{!! $data->user->getProfile() !!}</b> <small><i>{{ dateFixed($data->created_at) }}</i></small><br>
                         {!! $data->user->getStatus() !!}
                     @else
-                        <div class="img">
-                            <img class="avatar" src="/assets/img/images/avatar_guest.png" alt="">
-                        </div>
-
                         @if ($data->guest_name)
                             <b class="author" data-login="{{ $data->guest_name }}">{{ $data->guest_name }}</b>
                         @else
                             <b class="author" data-login="{{ setting('guestsuser') }}">{{ setting('guestsuser') }}</b>
                         @endif
-                        <small>({{ dateFixed($data->created_at) }})</small>
+                        <small><i>{{ dateFixed($data->created_at) }}</i>></small>
+                    @endif
+
+                    <div class="message">{!! bbCode($data->text) !!}</div>
+
+                    @if ($data->edit_user_id)
+                        <small><i class="fa fa-exclamation-circle text-danger"></i> {{ __('main.changed') }}: {{ $data->editUser->getName() }} ({{ dateFixed($data->updated_at) }})</small><br>
+                    @endif
+
+                    @if ($data->reply)
+                        <br><span style="color:#ff0000">{{ __('guestbooks.answer') }}: {!! bbCode($data->reply) !!}</span>
+                    @endif
+
+                    @if (isAdmin())
+                        <div class="data">{{ $data->brow }}, {{ $data->ip }}</div>
                     @endif
                 </div>
-
-                <div class="message">{!! bbCode($data->text) !!}</div>
-
-                @if ($data->edit_user_id)
-                    <small><i class="fa fa-exclamation-circle text-danger"></i> {{ __('main.changed') }}: {{ $data->editUser->getName() }} ({{ dateFixed($data->updated_at) }})</small><br>
-                @endif
-
-                @if (isAdmin())
-                    <span class="data">({{ $data->brow }}, {{ $data->ip }})</span>
-                @endif
-
-                @if ($data->reply)
-                    <br><span style="color:#ff0000">{{ __('guestbooks.answer') }}: {!! bbCode($data->reply) !!}</span>
-                @endif
             </div>
         @endforeach
     @else

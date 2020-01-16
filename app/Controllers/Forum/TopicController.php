@@ -160,11 +160,11 @@ class TopicController extends BaseController
             $msg = antimat($msg);
 
             if (
-                $post &&
-                $post->created_at + 600 > SITETIME &&
-                getUser('id') === $post->user_id &&
-                (utfStrlen($msg) + utfStrlen($post->text) <= setting('forumtextlength')) &&
-                count($files) + $post->files->count() <= setting('maxfiles')
+                $post
+                && $post->created_at + 600 > SITETIME
+                && getUser('id') === $post->user_id
+                && (utfStrlen($msg) + utfStrlen($post->text) <= setting('forumtextlength'))
+                && count($files) + $post->files->count() <= setting('maxfiles')
             ) {
 
                 $newpost = $post->text . PHP_EOL . PHP_EOL . '[i][size=1]' . __('forums.post_added_after', ['sec' => makeTime(SITETIME - $post->created_at)]) . '[/size][/i]' . PHP_EOL . $msg;

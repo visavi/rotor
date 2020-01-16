@@ -670,7 +670,6 @@ input::-webkit-outer-spin-button, input::-webkit-inner-spin-button {
   box-shadow: 0 0 0.125rem 0 rgba(0, 0, 0, 0.3);
 }
 .pagination .page-item.active .page-link {
-  background: none;
   -webkit-box-shadow: 0 0 0.125rem 0 rgba(0, 0, 0, 0.5);
   box-shadow: 0 0 0.125rem 0 rgba(0, 0, 0, 0.5);
 }

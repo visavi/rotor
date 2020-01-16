@@ -108,8 +108,8 @@
     @if ($posts->isNotEmpty())
         @foreach ($posts as $data)
             <?php $num = $posts->firstItem() + $loop->index; ?>
-            <div class="post">
-                <div class="b" id="post_{{ $data->id }}">
+            <div class="card post">
+                <div class="card-header" id="post_{{ $data->id }}">
                     <div class="float-right text-right">
                         @if (getUser())
                             @if (getUser('id') !== $data->user_id)
@@ -148,32 +148,32 @@
                     {!! $data->user->getStatus() !!}
                 </div>
 
-                <div class="message">
+                <div class="card-body">
                     {!! bbCode($data->text) !!}
+
+                    @if ($data->files->isNotEmpty())
+                        <div class="hiding">
+                            <i class="fa fa-paperclip"></i> <b>{{ __('main.attached_files') }}:</b><br>
+                            @foreach ($data->files as $file)
+                                <?php $ext = getExtension($file->hash); ?>
+
+                                {!! icons($ext) !!}
+                                <a href="{{ $file->hash }}">{{ $file->name }}</a> ({{ formatSize($file->size) }})<br>
+                                @if (in_array($ext, ['jpg', 'jpeg', 'gif', 'png']))
+                                    <a href="{{ $file->hash }}" class="gallery" data-group="{{ $data->id }}">{!! resizeImage($file->hash, ['alt' => $file->name]) !!}</a><br>
+                                @endif
+                            @endforeach
+                        </div>
+                    @endif
+
+                    @if ($data->edit_user_id)
+                        <small><i class="fa fa-exclamation-circle text-danger"></i> {{ __('main.changed') }}: {{ $data->editUser->getName() }} ({{ dateFixed($data->updated_at) }})</small><br>
+                    @endif
+
+                    @if (isAdmin())
+                        <div class="data">{{ $data->brow }}, {{ $data->ip }}</div>
+                    @endif
                 </div>
-
-                @if ($data->files->isNotEmpty())
-                    <div class="hiding">
-                        <i class="fa fa-paperclip"></i> <b>{{ __('main.attached_files') }}:</b><br>
-                        @foreach ($data->files as $file)
-                            <?php $ext = getExtension($file->hash); ?>
-
-                            {!! icons($ext) !!}
-                            <a href="{{ $file->hash }}">{{ $file->name }}</a> ({{ formatSize($file->size) }})<br>
-                            @if (in_array($ext, ['jpg', 'jpeg', 'gif', 'png']))
-                                <a href="{{ $file->hash }}" class="gallery" data-group="{{ $data->id }}">{!! resizeImage($file->hash, ['alt' => $file->name]) !!}</a><br>
-                            @endif
-                        @endforeach
-                    </div>
-                @endif
-
-                @if ($data->edit_user_id)
-                    <small><i class="fa fa-exclamation-circle text-danger"></i> {{ __('main.changed') }}: {{ $data->editUser->getName() }} ({{ dateFixed($data->updated_at) }})</small><br>
-                @endif
-
-                @if (isAdmin())
-                    <span class="data">({{ $data->brow }}, {{ $data->ip }})</span>
-                @endif
             </div>
         @endforeach
 
