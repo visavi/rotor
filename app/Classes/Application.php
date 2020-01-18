@@ -29,9 +29,9 @@ class Application
         session_start();
         date_default_timezone_set(defaultSetting('timezone'));
 
-        $this->setSetting();
         $this->cookieAuth();
         $this->checkAuth();
+        $this->setSetting();
     }
 
     /**
@@ -163,10 +163,10 @@ class Application
      */
     private function checkAuth(): void
     {
-        $request = request();
-
         /** @var User $user */
         if ($user = getUser()) {
+            $request = request();
+
             // Забанен
             if ($user->level === User::BANNED && ! $request->is('ban', 'rules', 'logout')) {
                 redirect('/ban?user=' . $user->login);
