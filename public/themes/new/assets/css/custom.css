@@ -22,6 +22,12 @@
     linear-gradient(-160deg, rgba(60, 162, 224, .25) 50%, rgba(241, 244, 245, .9) 50%),
     url("/themes/new/assets/img/rocky-mountain.jpg");
 }
+
+.media-body {
+  overflow:hidden;
+  text-overflow: ellipsis;
+}
+
 html, body {
    height: 100%;
    width: 100%}

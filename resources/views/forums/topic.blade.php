@@ -108,8 +108,12 @@
     @if ($posts->isNotEmpty())
         @foreach ($posts as $data)
             <?php $num = $posts->firstItem() + $loop->index; ?>
-            <div class="card post">
-                <div class="card-header" id="post_{{ $data->id }}">
+            <div class="media post bg-white p-3 mb-2 shadow-sm" id="post_{{ $data->id }}">
+                <div class="img d-none d-sm-block">
+                    {!! $data->user->getAvatar() !!}
+                    {!! $data->user->getOnline() !!}
+                </div>
+                <div class="media-body">
                     <div class="float-right text-right">
                         @if (getUser())
                             @if (getUser('id') !== $data->user_id)
@@ -139,17 +143,10 @@
                         </div>
                     </div>
 
-                    <div class="img">
-                        {!! $data->user->getAvatar() !!}
-                        {!! $data->user->getOnline() !!}
-                    </div>
-
                     {{ $num }}. <b>{!! $data->user->getProfile() !!}</b> <small class="text-muted font-italic">{{ dateFixed($data->created_at) }}</small><br>
-                    {!! $data->user->getStatus() !!}
-                </div>
+                    <span class="font-italic">{!! $data->user->getStatus() !!}</span>
 
-                <div class="card-body">
-                    {!! bbCode($data->text) !!}
+                    <div class="message">{!! bbCode($data->text) !!}</div>
 
                     @if ($data->files->isNotEmpty())
                         <div class="hiding">

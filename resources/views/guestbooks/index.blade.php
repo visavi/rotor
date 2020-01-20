@@ -29,15 +29,15 @@
 
     @if ($posts->isNotEmpty())
         @foreach ($posts as $data)
-            <div class="media post bg-white p-3 border-bottom">
-                <div class="img">
-                @if ($data->user_id)
-                    {!! $data->user->getAvatar() !!}
-                    {!! $data->user->getOnline() !!}
-                @else
-                    <img class="avatar" src="/assets/img/images/avatar_guest.png" alt="">
-                @endif
-            </div>
+            <div class="media post bg-white p-3 mb-2 shadow-sm">
+                <div class="img d-none d-sm-block">
+                    @if ($data->user_id)
+                        {!! $data->user->getAvatar() !!}
+                        {!! $data->user->getOnline() !!}
+                    @else
+                        <img class="avatar" src="/assets/img/images/avatar_guest.png" alt="">
+                    @endif
+                </div>
                 <div class="media-body">
                     @if (getUser() && getUser('id') !== $data->user_id)
                         <div class="float-right">
@@ -56,7 +56,7 @@
 
                     @if ($data->user_id)
                         <b>{!! $data->user->getProfile() !!}</b> <small class="text-muted font-italic">{{ dateFixed($data->created_at) }}</small><br>
-                        {!! $data->user->getStatus() !!}
+                        <span class="font-italic">{!! $data->user->getStatus() !!}</span>
                     @else
                         @if ($data->guest_name)
                             <b class="author" data-login="{{ $data->guest_name }}">{{ $data->guest_name }}</b>
