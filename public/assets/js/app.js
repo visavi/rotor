@@ -156,7 +156,7 @@ function postReply(el)
 
     var field  = $('.markItUpEditor');
     var post   = $(el).closest('.post');
-    var author = post.find('.author').data('login');
+    var author = post.find('.post-author').data('login');
 
     var separ = field.val().length ? '\n' : '';
     field.focus().val(field.val() + separ + author + ', ');
@@ -169,14 +169,12 @@ function postQuote(el)
 {
     postJump();
 
-    var field  = $('.markItUpEditor');
-    var post   = $(el).closest('.post');
-    var top    = post.find('.b');
-    var author = post.find('.author').data('login');
-    var date   = top.find('small').text();
-
-    var text    = post.find('.message').clone();
-    var message = text.find("blockquote").remove().end().text();
+    var field   = $('.markItUpEditor');
+    var post    = $(el).closest('.post');
+    var author  = post.find('.post-author').data('login');
+    var date    = post.find('.post-date').text();
+    var text    = post.find('.post-message').clone();
+    var message = text.find('blockquote').remove().end().text();
 
     var separ = field.val().length ? '\n' : '';
     field.focus().val(field.val() + separ + '[quote=' + author + ' ' + date + ']' + $.trim(message) + '[/quote]\n');
@@ -489,7 +487,6 @@ function submitImage(el, paste)
             }
 
             if (data.status === 'success') {
-
                 var template = $('.js-image-template').clone();
 
                 template.find('img').attr({

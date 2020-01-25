@@ -202,10 +202,10 @@ class User extends BaseModel
                 $admin = ' <i class="fas fa-xs fa-star text-info"></i>';
             }
 
-            return '<a class="author" href="/users/' . $this->login . '" data-login="@' . $this->login . '">' . $name . '</a>' . $admin;
+            return '<a class="post-author font-weight-bold" href="/users/' . $this->login . '" data-login="@' . $this->login . '">' . $name . '</a>' . $admin;
         }
 
-        return '<span class="author" data-login="' . setting('deleted_user') . '">' . setting('deleted_user') . '</span>';
+        return '<span class="post-author font-weight-bold" data-login="' . setting('deleted_user') . '">' . setting('deleted_user') . '</span>';
     }
 
     /**
@@ -440,7 +440,7 @@ class User extends BaseModel
         $color  = '#' . substr(dechex(crc32($this->login)), 0, 6);
         $letter = mb_strtoupper(utfSubstr($name, 0, 1), 'utf-8');
 
-        return '<div class="avatar" style="background:' . $color . '"><a href="/users/' . $this->login . '">' . $letter . '</a></div>';
+        return '<div class="img-fluid rounded-circle avatar-default" style="background:' . $color . '"><a href="/users/' . $this->login . '">' . $letter . '</a></div>';
     }
 
     /**
@@ -451,11 +451,11 @@ class User extends BaseModel
     public function getAvatar(): string
     {
         if (! $this->id) {
-            return '<img class="avatar" src="/assets/img/images/avatar_default.png" alt=""> ';
+            return '<img class="img-fluid rounded-circle" src="/assets/img/images/avatar_default.png" alt=""> ';
         }
 
         if ($this->avatar && file_exists(HOME . '/' . $this->avatar)) {
-            return '<a class="avatar" href="/users/' . $this->login . '"><img class="avatar" src="' . $this->avatar . '" alt=""></a> ';
+            return '<a href="/users/' . $this->login . '"><img class="img-fluid rounded-circle" src="' . $this->avatar . '" alt=""></a> ';
         }
 
         return $this->defaultAvatar();

@@ -2,7 +2,7 @@
     <div class="sidebar-header">
 
         @if ($user = getUser())
-            <div class="avatar">
+            <div class="">
                 {!! $user->getAvatar() !!}
             </div>
             <div class="username">

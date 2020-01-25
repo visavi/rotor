@@ -1,3 +1,10 @@
+.main-register {
+  background-image:url('/assets/img/mains/record.png');
+  background-position: 100% 85%;
+  background-size: auto 100%;
+  background-repeat:no-repeat;
+}
+
 .app-sidebar .sidebar-header {
   background-image: url("/themes/new/assets/img/sidebar-header.svg");
   background-repeat: no-repeat;

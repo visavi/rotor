@@ -30,7 +30,7 @@ class Application
         date_default_timezone_set(defaultSetting('timezone'));
 
         $this->cookieAuth();
-        $this->checkAuth();
+        $this->accessAuth();
         $this->setSetting();
     }
 
@@ -87,6 +87,62 @@ class Application
     }
 
     /**
+     * Авторизует по кукам
+     *
+     * @return void
+     */
+    private function cookieAuth(): void
+    {
+        if (empty($_SESSION['id']) && isset($_COOKIE['login'], $_COOKIE['password'])) {
+            $login    = check($_COOKIE['login']);
+            $password = check($_COOKIE['password']);
+
+            $user = getUserByLogin($login);
+
+            if ($user && $login === $user->login && $password === md5($user->password . config('APP_KEY'))) {
+                $_SESSION['id']       = $user->id;
+                $_SESSION['password'] = md5(config('APP_KEY') . $user->password);
+                $_SESSION['online']   = null;
+
+                $user->saveVisit();
+            }
+        }
+    }
+
+    /**
+     * Проверяет данные пользователя
+     *
+     * @return void
+     */
+    private function accessAuth(): void
+    {
+        /** @var User $user */
+        if ($user = getUser()) {
+            $request = request();
+
+            // Забанен
+            if ($user->level === User::BANNED && ! $request->is('ban', 'rules', 'logout')) {
+                redirect('/ban?user=' . $user->login);
+            }
+
+            // Подтверждение регистрации
+            if ($user->level === User::PENDED && defaultSetting('regkeys') && ! $request->is('key', 'ban', 'login', 'logout')) {
+                redirect('/key?user=' . $user->login);
+            }
+
+            $user->updatePrivate();
+
+            // Получение ежедневного бонуса
+            if ($user->timebonus < strtotime('-23 hours', SITETIME)) {
+                $user->increment('money', defaultSetting('bonusmoney'));
+                $user->update(['timebonus' => SITETIME]);
+
+                setFlash('success', __('main.daily_bonus', ['money' => plural(defaultSetting('bonusmoney'), defaultSetting('moneyname'))]));
+            }
+        }
+    }
+
+    /**
      * Устанавливает настройки
      *
      * @return void
@@ -95,6 +151,7 @@ class Application
     {
         $userSets = [];
         $user     = getUser();
+
         $browser  = new Mobile_Detect();
         $isWeb    = ! $browser->isMobile() && ! $browser->isTablet();
 
@@ -130,62 +187,6 @@ class Application
 
         if (empty($_SESSION['hits'])) {
             $_SESSION['hits'] = 0;
-        }
-    }
-
-    /**
-     * Авторизует по кукам
-     *
-     * @return void
-     */
-    private function cookieAuth(): void
-    {
-        if (empty($_SESSION['id']) && isset($_COOKIE['login'], $_COOKIE['password'])) {
-            $cookLogin = check($_COOKIE['login']);
-            $cookPass  = check($_COOKIE['password']);
-
-            $user = getUserByLogin($cookLogin);
-
-            if ($user && $cookLogin === $user->login && $cookPass === md5($user->password . config('APP_KEY'))) {
-                $_SESSION['id']       = $user->id;
-                $_SESSION['password'] = md5(config('APP_KEY') . $user->password);
-                $_SESSION['online']   = null;
-
-                $user->saveVisit();
-            }
-        }
-    }
-
-    /**
-     * Проверяет пользователя
-     *
-     * @return void
-     */
-    private function checkAuth(): void
-    {
-        /** @var User $user */
-        if ($user = getUser()) {
-            $request = request();
-
-            // Забанен
-            if ($user->level === User::BANNED && ! $request->is('ban', 'rules', 'logout')) {
-                redirect('/ban?user=' . $user->login);
-            }
-
-            // Подтверждение регистрации
-            if ($user->level === User::PENDED && defaultSetting('regkeys') && ! $request->is('key', 'ban', 'login', 'logout')) {
-                redirect('/key?user=' . $user->login);
-            }
-
-            $user->updatePrivate();
-
-            // Получение ежедневного бонуса
-            if ($user->timebonus < strtotime('-23 hours', SITETIME)) {
-                $user->increment('money', defaultSetting('bonusmoney'));
-                $user->update(['timebonus' => SITETIME]);
-
-                setFlash('success', __('main.daily_bonus', ['money' => plural(defaultSetting('bonusmoney'), defaultSetting('moneyname'))]));
-            }
         }
     }
 }

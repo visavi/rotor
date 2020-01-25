@@ -60,7 +60,7 @@ class PictureController extends BaseController
                 //-------- Генерируем аватар ----------//
                 $avatar = $this->user->uploadAvatarPath . '/' . uniqueName('png');
                 $img = Image::make($photo);
-                $img->fit(48);
+                $img->fit(64);
                 $img->save($avatar);
 
                 $file = $this->user->uploadFile($photo, false);

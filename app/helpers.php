@@ -846,51 +846,6 @@ function lastNews()
 }
 
 /**
- * Возвращает является ли пользователь авторизованным
- *
- * @return mixed
- */
-function checkAuth()
-{
-    if (isset($_SESSION['id'], $_SESSION['password'])) {
-        /** @var User $user */
-        $user = User::query()->find($_SESSION['id']);
-
-        if ($user && $_SESSION['password'] === md5(config('APP_KEY') . $user->password)) {
-            return $user;
-        }
-    }
-
-    return false;
-}
-
-/**
- * Возвращает является ли пользователь администратором
- *
- * @param string $level уровень доступа
- *
- * @return bool является ли пользователь администратором
- */
-function isAdmin($level = User::EDITOR)
-{
-    return access($level);
-}
-
-/**
- * Возвращает имеет ли пользователь доступ по уровню
- *
- * @param string $level уровень доступа
- *
- * @return bool разрешен ли доступ
- */
-function access($level)
-{
-    $access = array_flip(User::ALL_GROUPS);
-
-    return getUser() && isset($access[$level], $access[getUser('level')]) && $access[getUser('level')] <= $access[$level];
-}
-
-/**
  * Возвращает иконку расширения
  *
  * @param string $ext расширение файла
@@ -2045,6 +2000,50 @@ function server($key = null, $default = null)
     }
 
     return check($server);
+}
+
+/**
+ * Возвращает является ли пользователь авторизованным
+ *
+ * @return mixed
+ */
+function checkAuth()
+{
+    if (isset($_SESSION['id'], $_SESSION['password'])) {
+        $user = getUserById($_SESSION['id']);
+
+        if ($user && $_SESSION['password'] === md5(config('APP_KEY') . $user->password)) {
+            return $user;
+        }
+    }
+
+    return false;
+}
+
+/**
+ * Возвращает является ли пользователь администратором
+ *
+ * @param string $level уровень доступа
+ *
+ * @return bool является ли пользователь администратором
+ */
+function isAdmin($level = User::EDITOR)
+{
+    return access($level);
+}
+
+/**
+ * Возвращает имеет ли пользователь доступ по уровню
+ *
+ * @param string $level уровень доступа
+ *
+ * @return bool разрешен ли доступ
+ */
+function access($level)
+{
+    $access = array_flip(User::ALL_GROUPS);
+
+    return getUser() && isset($access[$level], $access[getUser('level')]) && $access[getUser('level')] <= $access[$level];
 }
 
 /**

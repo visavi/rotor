@@ -27,46 +27,132 @@
     @endif
     <hr>
 
+<style>
+    .post {
+        background: #fff;
+        padding: 10px 10px 10px 100px;
+    }
+
+    .post-header {
+        position: relative;
+    }
+
+    .post-user {
+        overflow: hidden;
+    }
+
+    .post-avatar {
+        float: left;
+        margin-right: 10px;
+        width: 64px;
+        height: 64px;
+        position: absolute;
+        left: -80px;
+    }
+
+    .user-status {
+        width: 16px;
+        height: 16px;
+        position: absolute;
+        border-radius: 50%;
+        bottom: 0;
+        right: 0;
+        z-index: 99;
+        border: 1px solid #fff;
+    }
+
+    .avatar-default {
+        height: 64px;
+        width: 64px;
+        text-align: center;
+        font-size: 40px;
+    }
+
+    .avatar-default a {
+        font-weight: bold;
+        text-decoration: none;
+        color: #fff;
+    }
+
+    @media (max-width: 768px) {
+        .post {
+            padding: 10px;
+        }
+
+        .post-header {
+            overflow: hidden;
+        }
+
+        .post-avatar {
+            float: left;
+            margin-right: 10px;
+            width: 48px;
+            height: 48px;
+            position: relative;
+            left: 0;
+            overflow: hidden;
+        }
+
+        .user-status {
+            width: 14px;
+            height: 14px;
+        }
+
+        .avatar-default {
+            height: 48px;
+            width: 48px;
+            font-size: 30px;
+        }
+    }
+</style>
+
     @if ($posts->isNotEmpty())
         @foreach ($posts as $data)
-            <div class="media post bg-white p-3 mb-2 shadow-sm">
-                <div class="img d-none d-sm-block">
-                    @if ($data->user_id)
-                        {!! $data->user->getAvatar() !!}
-                        {!! $data->user->getOnline() !!}
-                    @else
-                        <img class="avatar" src="/assets/img/images/avatar_guest.png" alt="">
-                    @endif
-                </div>
-                <div class="media-body">
-                    @if (getUser() && getUser('id') !== $data->user_id)
-                        <div class="float-right">
-                            <a href="#" onclick="return postReply(this)" data-toggle="tooltip" title="{{ __('main.reply') }}"><i class="fa fa-reply text-muted"></i></a>
-                            <a href="#" onclick="return postQuote(this)" data-toggle="tooltip" title="{{ __('main.quote') }}"><i class="fa fa-quote-right text-muted"></i></a>
-
-                            <a href="#" onclick="return sendComplaint(this)" data-type="{{ App\Models\Guestbook::class }}" data-id="{{ $data->id }}" data-token="{{ $_SESSION['token'] }}" data-page="{{ $posts->currentPage() }}" rel="nofollow" data-toggle="tooltip" title="{{ __('main.complain') }}"><i class="fa fa-bell text-muted"></i></a>
-                        </div>
-                    @endif
-
-                    @if ($data->created_at + 600 > SITETIME && getUser() && getUser('id') === $data->user_id)
-                        <div class="float-right">
-                            <a href="/guestbooks/edit/{{ $data->id }}" data-toggle="tooltip" title="{{ __('main.edit') }}"><i class="fa fa-pencil-alt text-muted"></i></a>
-                        </div>
-                    @endif
-
-                    @if ($data->user_id)
-                        <b>{!! $data->user->getProfile() !!}</b> <small class="text-muted font-italic">{{ dateFixed($data->created_at) }}</small><br>
-                        <span class="font-italic">{!! $data->user->getStatus() !!}</span>
-                    @else
-                        @if ($data->guest_name)
-                            <b class="author" data-login="{{ $data->guest_name }}">{{ $data->guest_name }}</b>
+            <div class="post mb-2 shadow">
+                <div class="post-header">
+                    <div class="post-avatar">
+                        @if ($data->user_id)
+                            {!! $data->user->getAvatar() !!}
+                            <div class="user-status bg-danger" title=""></div>
+                            {{--{!! $data->user->getOnline() !!}--}}
                         @else
-                            <b class="author" data-login="{{ setting('guestsuser') }}">{{ setting('guestsuser') }}</b>
+                            <img class="img-fluid rounded-circle" src="/assets/img/images/avatar_guest.png" alt="">
                         @endif
-                        <small><i>{{ dateFixed($data->created_at) }}</i></small>
-                    @endif
+                    </div>
+                    <div class="post-user">
+                        @if (getUser() && getUser('id') !== $data->user_id)
+                            <div class="float-right">
+                                <a href="#" onclick="return postReply(this)" data-toggle="tooltip" title="{{ __('main.reply') }}"><i class="fa fa-reply text-muted"></i></a>
+                                <a href="#" onclick="return postQuote(this)" data-toggle="tooltip" title="{{ __('main.quote') }}"><i class="fa fa-quote-right text-muted"></i></a>
 
-                    <div class="message">{!! bbCode($data->text) !!}</div>
+                                <a href="#" onclick="return sendComplaint(this)" data-type="{{ App\Models\Guestbook::class }}" data-id="{{ $data->id }}" data-token="{{ $_SESSION['token'] }}" data-page="{{ $posts->currentPage() }}" rel="nofollow" data-toggle="tooltip" title="{{ __('main.complain') }}"><i class="fa fa-bell text-muted"></i></a>
+                            </div>
+                        @endif
+
+                        @if ($data->created_at + 600 > SITETIME && getUser() && getUser('id') === $data->user_id)
+                            <div class="float-right">
+                                <a href="/guestbooks/edit/{{ $data->id }}" data-toggle="tooltip" title="{{ __('main.edit') }}"><i class="fa fa-pencil-alt text-muted"></i></a>
+                            </div>
+                        @endif
+
+                        @if ($data->user_id)
+                            {!! $data->user->getProfile() !!}
+                            <small class="post-date text-muted font-italic">{{ dateFixed($data->created_at) }}</small><br>
+                            <small class="font-italic">{!! $data->user->getStatus() !!}</small>
+                        @else
+                            @if ($data->guest_name)
+                                <span class="post-author font-weight-bold" data-login="{{ $data->guest_name }}">{{ $data->guest_name }}</span>
+                            @else
+                                <span class="post-author font-weight-bold" data-login="{{ setting('guestsuser') }}">{{ setting('guestsuser') }}</span>
+                            @endif
+                            <small class="post-date text-muted font-italic">{{ dateFixed($data->created_at) }}</small>
+                        @endif
+                    </div>
+                </div>
+                <div class="post-body border-top my-1 py-1">
+                    <div class="post-message">
+                        {!! bbCode($data->text) !!}
+                    </div>
 
                     @if ($data->edit_user_id)
                             <div class="small"><i class="fa fa-exclamation-circle text-danger"></i> {{ __('main.changed') }}: {{ $data->editUser->getName() }} ({{ dateFixed($data->updated_at) }})</div>
