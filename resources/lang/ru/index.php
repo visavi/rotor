@@ -46,11 +46,11 @@ return [
     'loading_speed'   => 'Загрузка страницы',
     'seconds'         => 'сек.',
 
-    'useful_information' => 'Полезная информация',
+    'information'        => 'Информация',
     'site_rules'         => 'Правила сайта',
     'tag_help'           => 'Справка по тегам',
     'stickers_help'      => 'Справка по стикерам',
-    'faq'                => 'FAQ (Чаво)',
+    'faq'                => 'FAQ',
     'api_interface'      => 'API интерфейс',
     'riches_rating'      => 'Рейтинг толстосумов',
     'reputation_rating'  => 'Рейтинг репутации',

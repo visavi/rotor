@@ -142,10 +142,10 @@ function showAttachForm()
 }
 
 /* Переход к форме ввода */
-function postJump() {
-
+function postJump()
+{
     $('html, body').animate({
-        scrollTop: ($('.form').offset().top)
+        scrollTop: ($('.post-form').offset().top)
     }, 500);
 }
 

@@ -265,7 +265,7 @@
     display: block;
 }
 
-@media (max-width: 480px) {
+@media (max-width: 768px) {
     .markItUpContainer ul {
         display: flex;
         flex-wrap: nowrap;

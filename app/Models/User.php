@@ -391,7 +391,7 @@ class User extends BaseModel
     {
         static $visits;
 
-        $online = '<div class="online bg-danger" title="Оффлайн"></div>';
+        $online = '<div class="user-status bg-danger" title="Оффлайн"></div>';
 
         if (! $visits) {
             $visits = Cache::remember('visit', 10, static function () {
@@ -403,7 +403,7 @@ class User extends BaseModel
         }
 
         if (isset($visits[$this->id])) {
-            $online = '<div class="online bg-success" title="Онлайн"></div>';
+            $online = '<div class="user-status bg-success" title="Онлайн"></div>';
         }
 
         return $online;
@@ -676,7 +676,41 @@ class User extends BaseModel
                     'sendprivatmail' => 0,
                 ]);
             }
+        }
+    }
 
+    /**
+     * Check Access
+     *
+     * return void
+     */
+    public function checkAccess(): void
+    {
+        $request = request();
+
+        // Banned
+        if ($this->level === self::BANNED && ! $request->is('ban', 'rules', 'logout')) {
+            redirect('/ban?user=' . $this->login);
+        }
+
+        // Confirm registration
+        if ($this->level === self::PENDED && setting('regkeys') && ! $request->is('key', 'ban', 'login', 'logout')) {
+            redirect('/key?user=' . $this->login);
+        }
+    }
+
+    /**
+     * Getting daily bonus
+     *
+     * return void
+     */
+    public function gettingBonus(): void
+    {
+        if ($this->timebonus < strtotime('-23 hours', SITETIME)) {
+            $this->increment('money', setting('bonusmoney'));
+            $this->update(['timebonus' => SITETIME]);
+
+            setFlash('success', __('main.daily_bonus', ['money' => plural(setting('bonusmoney'), setting('moneyname'))]));
         }
     }
 }

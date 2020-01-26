@@ -11,7 +11,6 @@ return [
     'status_success_edited'  => 'Status successfully changed!',
     'status_success_deleted' => 'Status successfully deleted!',
 
-    'user_statuses'  => 'User statuses',
     'status_text1'   => 'Depending on your activity on the site, you get a certain status',
     'status_text2'   => 'When you recruit a certain amount of an asset, your status changes to a higher one',
     'status_text3'   => 'Asset is the sum of posts on the forum, guest, in comments, etc.',

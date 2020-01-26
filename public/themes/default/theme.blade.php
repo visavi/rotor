@@ -1,59 +1,50 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="{{ setting('language') }}">
 <head>
-    <title>@yield('title') - {{ setting('title') }}</title>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-    <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
-    <link rel="image_src" href="/assets/img/images/icon.png">
-    @yield('styles')
-    @stack('styles')
-    <link rel="stylesheet" href="/themes/default/css/style.css">
-    <link rel="alternate" href="/news/rss" title="RSS News" type="application/rss+xml">
-    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <meta charset="utf-8">
+    <meta name="theme-color" content="#2e8cc2">
+    <meta name="viewport" content="width=device-width,initial-scale=1,shrink-to-fit=no">
     <meta name="description" content="@yield('description', setting('description'))">
     <meta name="generator" content="Rotor {{ VERSION }}">
+    <title>@yield('title') - {{ setting('title') }}</title>
+
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700" rel="stylesheet">
+    <link href="/favicon.ico" rel="icon">
+    <link href="/assets/img/images/icon.png" rel="image_src">
+    <link href="/news/rss" title="RSS News" type="application/rss+xml" rel="alternate">
+    @yield('styles')
+    @stack('styles')
+    <link href="/themes/default/assets/css/custom.css" rel="stylesheet">
 </head>
+
 <body>
+<div class="app">
+    @include('sidebar')
+    <div class="app-content">
 
-<div class="cs" id="up">
-    {{--<a href="/"><span class="logotype">{{ setting('title') }}</span></a><br>--}}
-    <a href="/"><img src="{{ setting('logotip') }}" alt="{{ setting('title') }}"></a><br>
-    {{ setting('logos') }}
-</div>
+        <div class="content-header">
+            @include('navbar')
+            @yield('breadcrumb')
+        </div>
 
-<div class="menu">
-    @yield('menu')
-
-    <div class="float-right">
-        <a href="/language/ru{{ returnUrl() }}">RU</a> /
-        <a href="/language/en{{ returnUrl() }}">EN</a>
+        <div class="content-body">
+            <div class="container">
+                @yield('advertTop')
+                @yield('advertAdmin')
+                @yield('advertUser')
+                @yield('note')
+                @yield('flash')
+                @yield('header')
+                @yield('content')
+                @yield('advertBottom')
+            </div>
+        </div>
     </div>
 </div>
 
-<div class="site">
-    <div class="content">
-        @yield('advertTop')
-        @yield('advertAdmin')
-        @yield('advertUser')
-        @yield('note')
-        @yield('flash')
-        @yield('breadcrumb')
-        @yield('header')
-        @yield('content')
-        @yield('advertBottom')
-    </div>
-</div>
-
-<div class="lol" id="down">
-    <a href="/">{{ setting('copy') }}</a><br>
-    @yield('online')
-    @yield('counter')
-</div>
-<div class="site" style="text-align:center">
-    @yield('performance')
-</div>
 <div class="scrollup"></div>
 @yield('scripts')
 @stack('scripts')
+<script src="/themes/default/assets/js/custom.js"></script>
 </body>
 </html>

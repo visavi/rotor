@@ -5,6 +5,17 @@
 @stop
 
 @section('header')
+    @if (getUser() || setting('bookadds'))
+        <div class="float-right">
+            <a class="btn btn-success" href="#" onclick="return postJump()">{{ __('main.write') }}</a>
+
+            @if (isAdmin())
+                <a class="btn btn-light" href="/admin/guestbooks?page={{ $posts->currentPage() }}"><i class="fas fa-wrench"></i></a>
+            @endif
+        </div>
+    @endif
+
+
     <h1>{{ __('index.guestbooks') }}</h1>
 @stop
 
@@ -18,152 +29,63 @@
 @stop
 
 @section('content')
-    <a href="/rules">{{ __('main.rules') }}</a> /
-    <a href="/stickers">{{ __('main.stickers') }}</a> /
-    <a href="/tags">{{ __('main.tags') }}</a>
-
-    @if (isAdmin())
-        / <a href="/admin/guestbooks?page={{ $posts->currentPage() }}">{{ __('main.management') }}</a>
-    @endif
-    <hr>
-
-<style>
-    .post {
-        background: #fff;
-        padding: 10px 10px 10px 100px;
-    }
-
-    .post-header {
-        position: relative;
-    }
-
-    .post-user {
-        overflow: hidden;
-    }
-
-    .post-avatar {
-        float: left;
-        margin-right: 10px;
-        width: 64px;
-        height: 64px;
-        position: absolute;
-        left: -80px;
-    }
-
-    .user-status {
-        width: 16px;
-        height: 16px;
-        position: absolute;
-        border-radius: 50%;
-        bottom: 0;
-        right: 0;
-        z-index: 99;
-        border: 1px solid #fff;
-    }
-
-    .avatar-default {
-        height: 64px;
-        width: 64px;
-        text-align: center;
-        font-size: 40px;
-    }
-
-    .avatar-default a {
-        font-weight: bold;
-        text-decoration: none;
-        color: #fff;
-    }
-
-    @media (max-width: 768px) {
-        .post {
-            padding: 10px;
-        }
-
-        .post-header {
-            overflow: hidden;
-        }
-
-        .post-avatar {
-            float: left;
-            margin-right: 10px;
-            width: 48px;
-            height: 48px;
-            position: relative;
-            left: 0;
-            overflow: hidden;
-        }
-
-        .user-status {
-            width: 14px;
-            height: 14px;
-        }
-
-        .avatar-default {
-            height: 48px;
-            width: 48px;
-            font-size: 30px;
-        }
-    }
-</style>
-
     @if ($posts->isNotEmpty())
-        @foreach ($posts as $data)
+        @foreach ($posts as $post)
             <div class="post mb-2 shadow">
                 <div class="post-header">
                     <div class="post-avatar">
-                        @if ($data->user_id)
-                            {!! $data->user->getAvatar() !!}
-                            <div class="user-status bg-danger" title=""></div>
-                            {{--{!! $data->user->getOnline() !!}--}}
+                        @if ($post->user_id)
+                            {!! $post->user->getAvatar() !!}
+                            {!! $post->user->getOnline() !!}
                         @else
                             <img class="img-fluid rounded-circle" src="/assets/img/images/avatar_guest.png" alt="">
                         @endif
                     </div>
                     <div class="post-user">
-                        @if (getUser() && getUser('id') !== $data->user_id)
+                        @if (getUser() && getUser('id') !== $post->user_id)
                             <div class="float-right">
                                 <a href="#" onclick="return postReply(this)" data-toggle="tooltip" title="{{ __('main.reply') }}"><i class="fa fa-reply text-muted"></i></a>
                                 <a href="#" onclick="return postQuote(this)" data-toggle="tooltip" title="{{ __('main.quote') }}"><i class="fa fa-quote-right text-muted"></i></a>
 
-                                <a href="#" onclick="return sendComplaint(this)" data-type="{{ App\Models\Guestbook::class }}" data-id="{{ $data->id }}" data-token="{{ $_SESSION['token'] }}" data-page="{{ $posts->currentPage() }}" rel="nofollow" data-toggle="tooltip" title="{{ __('main.complain') }}"><i class="fa fa-bell text-muted"></i></a>
+                                <a href="#" onclick="return sendComplaint(this)" data-type="{{ App\Models\Guestbook::class }}" data-id="{{ $post->id }}" data-token="{{ $_SESSION['token'] }}" data-page="{{ $posts->currentPage() }}" rel="nofollow" data-toggle="tooltip" title="{{ __('main.complain') }}"><i class="fa fa-bell text-muted"></i></a>
                             </div>
                         @endif
 
-                        @if ($data->created_at + 600 > SITETIME && getUser() && getUser('id') === $data->user_id)
+                        @if ($post->created_at + 600 > SITETIME && getUser() && getUser('id') === $post->user_id)
                             <div class="float-right">
-                                <a href="/guestbooks/edit/{{ $data->id }}" data-toggle="tooltip" title="{{ __('main.edit') }}"><i class="fa fa-pencil-alt text-muted"></i></a>
+                                <a href="/guestbooks/edit/{{ $post->id }}" data-toggle="tooltip" title="{{ __('main.edit') }}"><i class="fa fa-pencil-alt text-muted"></i></a>
                             </div>
                         @endif
 
-                        @if ($data->user_id)
-                            {!! $data->user->getProfile() !!}
-                            <small class="post-date text-muted font-italic">{{ dateFixed($data->created_at) }}</small><br>
-                            <small class="font-italic">{!! $data->user->getStatus() !!}</small>
+                        @if ($post->user_id)
+                            {!! $post->user->getProfile() !!}
+                            <small class="post-date text-muted font-italic">{{ dateFixed($post->created_at) }}</small><br>
+                            <small class="font-italic">{!! $post->user->getStatus() !!}</small>
                         @else
-                            @if ($data->guest_name)
-                                <span class="post-author font-weight-bold" data-login="{{ $data->guest_name }}">{{ $data->guest_name }}</span>
+                            @if ($post->guest_name)
+                                <span class="post-author font-weight-bold" data-login="{{ $post->guest_name }}">{{ $post->guest_name }}</span>
                             @else
                                 <span class="post-author font-weight-bold" data-login="{{ setting('guestsuser') }}">{{ setting('guestsuser') }}</span>
                             @endif
-                            <small class="post-date text-muted font-italic">{{ dateFixed($data->created_at) }}</small>
+                            <small class="post-date text-muted font-italic">{{ dateFixed($post->created_at) }}</small>
                         @endif
                     </div>
                 </div>
                 <div class="post-body border-top my-1 py-1">
                     <div class="post-message">
-                        {!! bbCode($data->text) !!}
+                        {!! bbCode($post->text) !!}
                     </div>
 
-                    @if ($data->edit_user_id)
-                            <div class="small"><i class="fa fa-exclamation-circle text-danger"></i> {{ __('main.changed') }}: {{ $data->editUser->getName() }} ({{ dateFixed($data->updated_at) }})</div>
+                    @if ($post->edit_user_id)
+                            <div class="small"><i class="fa fa-exclamation-circle text-danger"></i> {{ __('main.changed') }}: {{ $post->editUser->getName() }} ({{ dateFixed($post->updated_at) }})</div>
                     @endif
 
-                    @if ($data->reply)
-                        <div class="text-danger">{{ __('guestbooks.answer') }}: {!! bbCode($data->reply) !!}</div>
+                    @if ($post->reply)
+                        <div class="text-danger">{{ __('guestbooks.answer') }}: {!! bbCode($post->reply) !!}</div>
                     @endif
 
                     @if (isAdmin())
-                        <div class="small text-muted font-italic">{{ $data->brow }}, {{ $data->ip }}</div>
+                        <div class="small text-muted font-italic">{{ $post->brow }}, {{ $post->ip }}</div>
                     @endif
                 </div>
             </div>
@@ -175,7 +97,7 @@
     {{ $posts->links() }}
 
     @if (getUser())
-        <div class="form">
+        <div class="post-form p-3 my-2 shadow">
             <form action="/guestbooks/add" method="post">
                 @csrf
                 <div class="form-group{{ hasError('msg') }}">
@@ -190,7 +112,6 @@
         </div><br>
 
     @elseif (setting('bookadds'))
-
         <div class="form">
             <form action="/guestbooks/add" method="post">
                 @csrf
@@ -209,8 +130,7 @@
                 {!! view('app/_captcha') !!}
                 <button class="btn btn-primary">{{ __('main.write') }}</button>
             </form>
-        </div><br>
-
+        </div>
     @else
         {!! showError(__('main.not_authorized')) !!}
     @endif

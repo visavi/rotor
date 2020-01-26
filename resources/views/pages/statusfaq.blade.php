@@ -1,14 +1,14 @@
 @extends('layout')
 
 @section('title')
-    {{ __('pages.user_statuses') }}
+    {{ __('index.user_statuses') }}
 @stop
 
 @section('breadcrumb')
     <nav>
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
-            <li class="breadcrumb-item active">{{ __('statuses.user_statuses') }}</li>
+            <li class="breadcrumb-item active">{{ __('index.user_statuses') }}</li>
         </ol>
     </nav>
 @stop

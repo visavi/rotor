@@ -5,18 +5,13 @@ declare(strict_types=1);
 namespace App\Classes;
 
 use App\Models\Setting;
-use App\Models\User;
 use DI\Container;
 use FastRoute\Dispatcher;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
-use Mobile_Detect;
 
 class Application
 {
-    /** @var array */
-    public $settings;
-
     /**
      * Application constructor
      */
@@ -30,7 +25,6 @@ class Application
         date_default_timezone_set(defaultSetting('timezone'));
 
         $this->cookieAuth();
-        $this->accessAuth();
         $this->setSetting();
     }
 
@@ -110,71 +104,36 @@ class Application
     }
 
     /**
-     * Проверяет данные пользователя
-     *
-     * @return void
-     */
-    private function accessAuth(): void
-    {
-        /** @var User $user */
-        if ($user = getUser()) {
-            $request = request();
-
-            // Забанен
-            if ($user->level === User::BANNED && ! $request->is('ban', 'rules', 'logout')) {
-                redirect('/ban?user=' . $user->login);
-            }
-
-            // Подтверждение регистрации
-            if ($user->level === User::PENDED && defaultSetting('regkeys') && ! $request->is('key', 'ban', 'login', 'logout')) {
-                redirect('/key?user=' . $user->login);
-            }
-
-            $user->updatePrivate();
-
-            // Получение ежедневного бонуса
-            if ($user->timebonus < strtotime('-23 hours', SITETIME)) {
-                $user->increment('money', defaultSetting('bonusmoney'));
-                $user->update(['timebonus' => SITETIME]);
-
-                setFlash('success', __('main.daily_bonus', ['money' => plural(defaultSetting('bonusmoney'), defaultSetting('moneyname'))]));
-            }
-        }
-    }
-
-    /**
      * Устанавливает настройки
      *
      * @return void
      */
     private function setSetting(): void
     {
-        $userSets = [];
-        $user     = getUser();
+        $user = getUser();
 
-        $browser  = new Mobile_Detect();
-        $isWeb    = ! $browser->isMobile() && ! $browser->isTablet();
-
-        $userSets['themes'] = $user ? $user['themes'] : 0;
         $userSets['language'] = $user ? $user['language'] : defaultSetting('language');
+        $userSets['themes'] = $user ? $user['themes'] : defaultSetting('themes');
 
-        if (empty($userSets['themes']) && defaultSetting('webthemes') && $isWeb) {
-            $userSets['themes'] = defaultSetting('webthemes');
-        }
-
-        if (! file_exists(HOME . '/themes/' . $userSets['themes'])) {
-            $userSets['themes'] = 'default';
-        }
-
-        if (isset($_SESSION['language']) && ! $user) {
+        if (isset($_SESSION['language'])) {
             $userSets['language'] = $_SESSION['language'];
         }
 
-        if (empty($userSets['language']) || ! file_exists(RESOURCES . '/lang/' . $userSets['language'])) {
-            $userSets['language'] = 'ru';
+        if (! file_exists(RESOURCES . '/lang/' . $userSets['language'])) {
+            $userSets['language'] = defaultSetting('language');
+        }
+
+        if (! file_exists(HOME . '/themes/' . $userSets['themes'])) {
+            $userSets['themes'] = defaultSetting('themes');
         }
 
         Setting::setUserSettings($userSets);
+
+        if ($user) {
+            $user->checkAccess();
+            $user->updatePrivate();
+            $user->gettingBonus();
+        }
 
         /* Установка сессионных переменных */
         if (empty($_SESSION['token'])) {
@@ -182,7 +141,7 @@ class Application
         }
 
         if (empty($_SESSION['protect'])) {
-            $_SESSION['protect'] = mt_rand(1000, 99999);
+            $_SESSION['protect'] = mt_rand(10000, 99999);
         }
 
         if (empty($_SESSION['hits'])) {

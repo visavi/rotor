@@ -46,7 +46,7 @@ return [
     'loading_speed'   => 'Loading speed',
     'seconds'         => 'sec.',
 
-    'useful_information' => 'Useful information',
+    'information'        => 'Information',
     'site_rules'         => 'Site rules',
     'tag_help'           => 'Tag help',
     'stickers_help'      => 'Stickers help',

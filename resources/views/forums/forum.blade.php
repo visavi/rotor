@@ -8,7 +8,7 @@
     @if (! $forum->closed && getUser())
         <div class="float-right">
             <a class="btn btn-success" href="/forums/create?fid={{ $forum->id }}">{{ __('forums.create_topic') }}</a>
-        </div><br>
+        </div>
     @endif
 
     <h1>{{ $forum->title }}</h1>
