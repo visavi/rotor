@@ -31,7 +31,7 @@
 @section('content')
     @if ($posts->isNotEmpty())
         @foreach ($posts as $post)
-            <div class="post mb-2 shadow">
+            <div class="post mb-3 shadow">
                 <div class="post-header">
                     <div class="post-avatar">
                         @if ($post->user_id)
