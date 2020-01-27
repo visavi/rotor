@@ -24,7 +24,7 @@ class HelperTest extends \Tests\TestCase
     {
         $timestamp = 1117627200;
 
-        $this->assertSame('01.06.05 / 12:00', dateFixed($timestamp));
+        $this->assertSame('01.06.2005 / 12:00', dateFixed($timestamp));
         $this->assertSame('2005-06-01', dateFixed($timestamp, 'Y-m-d'));
         $this->assertSame(dateFixed(SITETIME), dateFixed(false));
     }

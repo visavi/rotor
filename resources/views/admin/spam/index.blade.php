@@ -46,7 +46,7 @@
                             <b>{{ setting('guestsuser') }}</b>
                         @endif
 
-                        <small>({{ dateFixed($data->relate->created_at, 'd.m.y / H:i:s') }})</small>
+                        <small>({{ dateFixed($data->relate->created_at, 'd.m.Y / H:i:s') }})</small>
 
                         <div class="float-right">
                             @if (isAdmin())

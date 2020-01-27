@@ -39,7 +39,7 @@ class MailController extends BaseController
                 ->email($email, ['email' => __('validator.email')]);
 
             if ($validator->isValid()) {
-                $message .= '<br><br>IP: ' . getIp() . '<br>Browser: ' . getBrowser() . '<br>' . __('main.sent_out', [], defaultSetting('language')) . ': ' . dateFixed(SITETIME, 'j.m.Y / H:i');
+                $message .= '<br><br>IP: ' . getIp() . '<br>Browser: ' . getBrowser() . '<br>' . __('main.sent_out', [], defaultSetting('language')) . ': ' . dateFixed(SITETIME, 'd.m.y / H:i');
 
                 $subject = __('mails.email_from_site', ['sitename' => setting('title')], defaultSetting('language'));
                 $body = view('mailer.default', compact('subject', 'message'));

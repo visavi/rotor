@@ -69,7 +69,7 @@ function makeTime($time)
  *
  * @return string форматированный вывод
  */
-function dateFixed($timestamp, $format = 'd.m.y / H:i')
+function dateFixed($timestamp, $format = 'd.m.Y / H:i')
 {
     if (! is_numeric($timestamp)) {
         $timestamp = SITETIME;
@@ -78,8 +78,8 @@ function dateFixed($timestamp, $format = 'd.m.y / H:i')
     $shift     = getUser('timezone') * 3600;
     $dateStamp = date($format, $timestamp + $shift);
 
-    $today     = date('d.m.y', SITETIME + $shift);
-    $yesterday = date('d.m.y', strtotime('-1 day', SITETIME + $shift));
+    $today     = date('d.m.Y', SITETIME + $shift);
+    $yesterday = date('d.m.Y', strtotime('-1 day', SITETIME + $shift));
 
     $replaces = [
         $today      => __('main.today'),
@@ -574,7 +574,7 @@ function statsStickers()
 function statsChecker()
 {
     if (file_exists(STORAGE . '/caches/checker.php')) {
-        return dateFixed(filemtime(STORAGE . '/caches/checker.php'), 'j.m.y');
+        return dateFixed(filemtime(STORAGE . '/caches/checker.php'), 'd.m.Y');
     }
 
     return 0;
@@ -799,7 +799,7 @@ function statsNewsDate()
         return $news->created_at ?? 0;
     });
 
-    return $newsDate ? dateFixed($newsDate, 'd.m.y') : 0;
+    return $newsDate ? dateFixed($newsDate, 'd.m.Y') : 0;
 }
 
 /**

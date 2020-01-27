@@ -89,7 +89,7 @@ class CheckerController extends AdminController
 
         /** @var SplFileInfo $file */
         foreach ($files as $file) {
-            $state[] = $file->getRelativePathname() . ' / ' . dateFixed($file->getMTime(), 'd.m.Y H:i') .' / ' . formatSize($file->getSize());
+            $state[] = $file->getRelativePathname() . ' / ' . dateFixed($file->getMTime(), 'd.m.y H:i') .' / ' . formatSize($file->getSize());
         }
 
         return $state;
