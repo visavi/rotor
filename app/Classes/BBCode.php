@@ -39,7 +39,7 @@ class BBCode
         ],
         'image' => [
             'pattern' => '%\[img\]((\w+://|//|/)[^\s()<>\[\]]+\.(jpg|png|gif|jpeg))\[/img\]%s',
-            'replace' => '<img src="$1" class="img-fluid" alt="image">',
+            'replace' => '<img src="$1" class="media-file img-fluid" alt="image">',
         ],
         'bold' => [
             'pattern' => '/\[b\](.+?)\[\/b\]/s',
@@ -72,12 +72,12 @@ class BBCode
         ],
         'quote' => [
             'pattern' => '/\[quote\](.+?)\[\/quote\]/s',
-            'replace' => '<blockquote>$1</blockquote>',
+            'replace' => '<blockquote class="blockquote">$1</blockquote>',
             'iterate' => 3,
         ],
         'namedQuote' => [
             'pattern' => '/\[quote\=(.+?)\](.+?)\[\/quote\]/s',
-            'replace' => '<blockquote>$2<small>$1</small></blockquote>',
+            'replace' => '<blockquote class="blockquote">$2<footer class="blockquote-footer">$1</footer></blockquote>',
             'iterate' => 3,
         ],
         'orderedList' => [
@@ -104,7 +104,7 @@ class BBCode
         ],
         'youtube' => [
             'pattern' => '/\[youtube\](.*youtu(?:\.be\/|be\.com\/.*(?:vi?\/?=?|embed\/)))([\w-]{11}).*\[\/youtube\]/U',
-            'replace' => '<div class="embed-responsive embed-responsive-16by9"><iframe class="embed-responsive-item" src="//www.youtube.com/embed/$2" allowfullscreen></iframe></div>',
+            'replace' => '<div class="media-file embed-responsive embed-responsive-16by9"><iframe class="embed-responsive-item" src="//www.youtube.com/embed/$2" allowfullscreen></iframe></div>',
         ],
         'username' => [
             'pattern' => '/(?<=^|\s)@([\w\-]{3,20}+)(?=(\s|,))/',
@@ -116,9 +116,10 @@ class BBCode
      * Обрабатывает текст
      *
      * @param  string $source текст содержаший BBCode
-     * @return string         распарсенный текст
+     *
+     * @return string распарсенный текст
      */
-    public function parse($source): string
+    public function parse(string $source): string
     {
         $source = nl2br($source, false);
         $source = str_replace('[cut]', '', $source);
@@ -134,7 +135,24 @@ class BBCode
                 }
             }
         }
-        return $source;
+        return $this->clearBreakLines($source);
+    }
+
+    /**
+     * Clear break lines
+     *
+     * @param string $source
+     *
+     * @return string
+     */
+    private function clearBreakLines(string $source): string
+    {
+        $tags = [
+            '</div><br>'        => '</div>',
+            '</blockquote><br>' => '</blockquote>',
+        ];
+
+        return strtr($source, $tags);
     }
 
     /**

@@ -109,7 +109,7 @@ class BBCodeTest extends \Tests\TestCase
         $text      = '[quote]Привет[/quote]';
         $parseText = bbCode($text);
 
-        $this->assertSame('<blockquote>Привет</blockquote>', $parseText);
+        $this->assertSame('<blockquote class="blockquote">Привет</blockquote>', $parseText);
     }
 
     /**
@@ -120,7 +120,7 @@ class BBCodeTest extends \Tests\TestCase
         $text      = '[quote=Имя]Привет[/quote]';
         $parseText = bbCode($text);
 
-        $this->assertSame('<blockquote>Привет<small>Имя</small></blockquote>', $parseText);
+        $this->assertSame('<blockquote class="blockquote">Привет<footer class="blockquote-footer">Имя</footer></blockquote>', $parseText);
     }
 
     /**
@@ -186,7 +186,7 @@ class BBCodeTest extends \Tests\TestCase
         $text      = '[img]http://rotor.ll/assets/images/img/logo.png[/img]';
         $parseText = bbCode($text);
 
-        $this->assertSame('<img src="http://rotor.ll/assets/images/img/logo.png" class="img-fluid" alt="image">', $parseText);
+        $this->assertSame('<img src="http://rotor.ll/assets/images/img/logo.png" class="media-file img-fluid" alt="image">', $parseText);
     }
 
     /**
@@ -255,7 +255,7 @@ class BBCodeTest extends \Tests\TestCase
         $text      = '[youtube]https://www.youtube.com/watch?v=85bkCmaOh4o[/youtube]';
         $parseText = bbCode($text);
 
-        $this->assertSame('<div class="embed-responsive embed-responsive-16by9"><iframe class="embed-responsive-item" src="//www.youtube.com/embed/85bkCmaOh4o" allowfullscreen></iframe></div>', $parseText);
+        $this->assertSame('<div class="media-file embed-responsive embed-responsive-16by9"><iframe class="embed-responsive-item" src="//www.youtube.com/embed/85bkCmaOh4o" allowfullscreen></iframe></div>', $parseText);
     }
 
     /**

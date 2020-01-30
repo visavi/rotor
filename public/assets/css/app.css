@@ -36,7 +36,7 @@
   height: 64px;
   width: 64px;
   text-align: center;
-  font-size: 40px;
+  font-size: 42px;
 }
 
 .avatar-default a {
@@ -48,6 +48,14 @@
 .post-form {
   background: #fff;
 }
+
+/*.post-menu {
+  display: none;
+}
+
+.post:hover .post-menu {
+  display: block;
+}*/
 
 @media (max-width: 768px) {
   .post {
@@ -76,7 +84,7 @@
   .avatar-default {
     height: 48px;
     width: 48px;
-    font-size: 30px;
+    font-size: 32px;
   }
 }
 /* New theme */
@@ -90,7 +98,12 @@ textarea.form-control {
   src: url('/assets/fonts/fa-solid-900.woff');
 }
 
-blockquote:before {
+.media-file {
+  max-width: 600px;
+  margin-bottom: 1rem;
+}
+
+.blockquote:before {
   content: "\f10d";
   line-height: 1.0em;
   font-size: 130%;
@@ -100,26 +113,12 @@ blockquote:before {
   color: #c73401;
 }
 
-blockquote {
+.blockquote {
   padding: 8px 15px;
   font-size: 95%;
   background:#f2f1f6;
-  border: 1px solid #ddd;
   border-left: 5px solid #ddd;
-  margin: 0;
   font-style:italic;
-  color:#543;
-  box-shadow: 2px 2px 15px #ccc;
-}
-
-blockquote small {
-  display: block;
-  font-size: 80%;
-  color: #868e96;
-}
-
-blockquote small:before {
-    content:'\2014 \00A0';
 }
 
 .is-invalid .form-control {
