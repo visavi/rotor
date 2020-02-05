@@ -32,52 +32,51 @@
     @if ($posts->isNotEmpty())
         @foreach ($posts as $post)
             <div class="post mb-3 shadow">
-                <div class="post-header">
-                    <div class="post-avatar">
-                        @if ($post->user_id)
-                            {!! $post->user->getAvatar() !!}
-                            {!! $post->user->getOnline() !!}
-                        @else
-                            <img class="img-fluid rounded-circle" src="/assets/img/images/avatar_guest.png" alt="">
-                        @endif
-                    </div>
-                    <div class="post-user">
-                        @if (getUser() && getUser('id') !== $post->user_id)
-                            <div class="post-menu float-right">
-                                <a href="#" onclick="return postReply(this)" data-toggle="tooltip" title="{{ __('main.reply') }}"><i class="fa fa-reply text-muted"></i></a>
-                                <a href="#" onclick="return postQuote(this)" data-toggle="tooltip" title="{{ __('main.quote') }}"><i class="fa fa-quote-right text-muted"></i></a>
-
-                                <a href="#" onclick="return sendComplaint(this)" data-type="{{ App\Models\Guestbook::class }}" data-id="{{ $post->id }}" data-token="{{ $_SESSION['token'] }}" data-page="{{ $posts->currentPage() }}" rel="nofollow" data-toggle="tooltip" title="{{ __('main.complain') }}"><i class="fa fa-bell text-muted"></i></a>
-                            </div>
-                        @endif
-
-                        @if ($post->created_at + 600 > SITETIME && getUser() && getUser('id') === $post->user_id)
-                            <div class="post-menu float-right">
-                                <a href="/guestbooks/edit/{{ $post->id }}" data-toggle="tooltip" title="{{ __('main.edit') }}"><i class="fa fa-pencil-alt text-muted"></i></a>
-                            </div>
-                        @endif
-
-                        @if ($post->user_id)
-                            {!! $post->user->getProfile() !!}
-                            <small class="post-date text-muted font-italic">{{ dateFixed($post->created_at) }}</small><br>
-                            <small class="font-italic">{!! $post->user->getStatus() !!}</small>
-                        @else
-                            @if ($post->guest_name)
-                                <span class="post-author font-weight-bold" data-login="{{ $post->guest_name }}">{{ $post->guest_name }}</span>
-                            @else
-                                <span class="post-author font-weight-bold" data-login="{{ setting('guestsuser') }}">{{ setting('guestsuser') }}</span>
-                            @endif
-                            <small class="post-date text-muted font-italic">{{ dateFixed($post->created_at) }}</small>
-                        @endif
-                    </div>
+                <div class="post-avatar">
+                    @if ($post->user_id)
+                        {!! $post->user->getAvatar() !!}
+                        {!! $post->user->getOnline() !!}
+                    @else
+                        <img class="img-fluid rounded-circle" src="/assets/img/images/avatar_guest.png" alt="">
+                    @endif
                 </div>
+                <div class="post-user">
+                    @if (getUser() && getUser('id') !== $post->user_id)
+                        <div class="post-menu float-right">
+                            <a href="#" onclick="return postReply(this)" data-toggle="tooltip" title="{{ __('main.reply') }}"><i class="fa fa-reply text-muted"></i></a>
+                            <a href="#" onclick="return postQuote(this)" data-toggle="tooltip" title="{{ __('main.quote') }}"><i class="fa fa-quote-right text-muted"></i></a>
+
+                            <a href="#" onclick="return sendComplaint(this)" data-type="{{ App\Models\Guestbook::class }}" data-id="{{ $post->id }}" data-token="{{ $_SESSION['token'] }}" data-page="{{ $posts->currentPage() }}" rel="nofollow" data-toggle="tooltip" title="{{ __('main.complain') }}"><i class="fa fa-bell text-muted"></i></a>
+                        </div>
+                    @endif
+
+                    @if ($post->created_at + 600 > SITETIME && getUser() && getUser('id') === $post->user_id)
+                        <div class="post-menu float-right">
+                            <a href="/guestbooks/edit/{{ $post->id }}" data-toggle="tooltip" title="{{ __('main.edit') }}"><i class="fa fa-pencil-alt text-muted"></i></a>
+                        </div>
+                    @endif
+
+                    @if ($post->user_id)
+                        {!! $post->user->getProfile() !!}
+                        <small class="post-date text-muted font-italic">{{ dateFixed($post->created_at) }}</small><br>
+                        <small class="font-italic">{!! $post->user->getStatus() !!}</small>
+                    @else
+                        @if ($post->guest_name)
+                            <span class="post-author font-weight-bold" data-login="{{ $post->guest_name }}">{{ $post->guest_name }}</span>
+                        @else
+                            <span class="post-author font-weight-bold" data-login="{{ setting('guestsuser') }}">{{ setting('guestsuser') }}</span>
+                        @endif
+                        <small class="post-date text-muted font-italic">{{ dateFixed($post->created_at) }}</small>
+                    @endif
+                </div>
+
                 <div class="post-body border-top my-1 py-1">
                     <div class="post-message">
                         {!! bbCode($post->text) !!}
                     </div>
 
                     @if ($post->edit_user_id)
-                            <div class="small"><i class="fa fa-exclamation-circle text-danger"></i> {{ __('main.changed') }}: {{ $post->editUser->getName() }} ({{ dateFixed($post->updated_at) }})</div>
+                        <div class="small"><i class="fa fa-exclamation-circle text-danger"></i> {{ __('main.changed') }}: {{ $post->editUser->getName() }} ({{ dateFixed($post->updated_at) }})</div>
                     @endif
 
                     @if ($post->reply)
