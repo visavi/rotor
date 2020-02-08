@@ -27,17 +27,7 @@
     width:99.9%;
     margin:5px 0;
 }
-.markItUpFooter {
-    width:100%;
-}
-.markItUpResizeHandle {
-    overflow:hidden;
-    width:22px; height:5px;
-    margin-left:auto;
-    margin-right:auto;
-    background-image:url(/assets/js/markitup/images/handle.png);
-    cursor:n-resize;
-}
+
 /***************************************************************************************/
 /* first row of buttons */
 .markItUpHeader ul li	{

@@ -84,7 +84,7 @@
                     @endif
 
                     @if (isAdmin())
-                        <div class="small text-muted font-italic">{{ $post->brow }}, {{ $post->ip }}</div>
+                        <div class="small text-muted font-italic mt-2">{{ $post->brow }}, {{ $post->ip }}</div>
                     @endif
                 </div>
             </div>
@@ -96,7 +96,7 @@
     {{ $posts->links() }}
 
     @if (getUser())
-        <div class="post-form p-3 my-2 shadow">
+        <div class="post-form p-2 my-2 shadow">
             <form action="/guestbooks/add" method="post">
                 @csrf
                 <div class="form-group{{ hasError('msg') }}">
@@ -111,7 +111,7 @@
         </div><br>
 
     @elseif (setting('bookadds'))
-        <div class="form">
+        <div class="post-form p-2 my-2 shadow">
             <form action="/guestbooks/add" method="post">
                 @csrf
                 <div class="form-group{{ hasError('guest_name') }}">

@@ -1357,7 +1357,7 @@ function resizeProcess($path, array $params = [])
     }
 
     if (empty($params['class'])) {
-        $params['class'] = 'img-fluid';
+        $params['class'] = 'media-file img-fluid';
     }
 
     if (empty($params['width'])) {

@@ -108,48 +108,52 @@
     @if ($posts->isNotEmpty())
         @foreach ($posts as $data)
             <?php $num = $posts->firstItem() + $loop->index; ?>
-            <div class="media post bg-white p-3 mb-2 shadow-sm" id="post_{{ $data->id }}">
-                <div class="img d-none d-sm-block">
+            <div class="post mb-3 shadow" id="post_{{ $data->id }}">
+                <div class="post-avatar">
                     {!! $data->user->getAvatar() !!}
                     {!! $data->user->getOnline() !!}
                 </div>
-                <div class="media-body">
-                    <div class="float-right text-right">
-                        @if (getUser())
-                            @if (getUser('id') !== $data->user_id)
-                                <a href="#" onclick="return postReply(this)" title="{{ __('main.reply') }}"><i class="fa fa-reply text-muted"></i></a>
 
-                                <a href="#" onclick="return postQuote(this)" title="{{ __('main.quote') }}"><i class="fa fa-quote-right text-muted"></i></a>
+                <div class="post-menu float-right">
+                    @if (getUser())
+                        @if (getUser('id') !== $data->user_id)
+                            <a href="#" onclick="return postReply(this)" title="{{ __('main.reply') }}"><i class="fa fa-reply text-muted"></i></a>
 
-                                <a href="#" onclick="return sendComplaint(this)" data-type="{{ App\Models\Post::class }}" data-id="{{ $data->id }}" data-token="{{ $_SESSION['token'] }}" data-page="{{ $posts->currentPage() }}" rel="nofollow" title="{{ __('main.complain') }}"><i class="fa fa-bell text-muted"></i></a>
-                            @endif
+                            <a href="#" onclick="return postQuote(this)" title="{{ __('main.quote') }}"><i class="fa fa-quote-right text-muted"></i></a>
 
-                            @if ($topic->isModer || (getUser('id') === $data->user_id && $data->created_at + 600 > SITETIME))
-                                <a href="/posts/edit/{{ $data->id }}?page={{ $posts->currentPage() }}" title="{{ __('main.edit') }}"><i class="fa fa-pencil-alt text-muted"></i></a>
-                                @if ($topic->isModer)
-                                    <input type="checkbox" name="del[]" value="{{ $data->id }}">
-                                @endif
-                            @endif
+                            <a href="#" onclick="return sendComplaint(this)" data-type="{{ App\Models\Post::class }}" data-id="{{ $data->id }}" data-token="{{ $_SESSION['token'] }}" data-page="{{ $posts->currentPage() }}" rel="nofollow" title="{{ __('main.complain') }}"><i class="fa fa-bell text-muted"></i></a>
                         @endif
 
-                        <div class="js-rating">
-                            @if (getUser() && getUser('id') !== $data->user_id)
-                                <a class="post-rating-down{{ $data->vote === '-' ? ' active' : '' }}" href="#" onclick="return changeRating(this);" data-id="{{ $data->id }}" data-type="{{ App\Models\Post::class }}" data-vote="-" data-token="{{ $_SESSION['token'] }}"><i class="fas fa-angle-down"></i></a>
+                        @if ($topic->isModer || (getUser('id') === $data->user_id && $data->created_at + 600 > SITETIME))
+                            <a href="/posts/edit/{{ $data->id }}?page={{ $posts->currentPage() }}" title="{{ __('main.edit') }}"><i class="fa fa-pencil-alt text-muted"></i></a>
+                            @if ($topic->isModer)
+                                <input type="checkbox" name="del[]" value="{{ $data->id }}">
                             @endif
-                            <b><span>{!! formatNum($data->rating) !!}</span></b>
-                            @if (getUser() && getUser('id') !== $data->user_id)
-                                <a class="post-rating-up{{ $data->vote === '+' ? ' active' : '' }}" href="#" onclick="return changeRating(this);" data-id="{{ $data->id }}" data-type="{{ App\Models\Post::class }}" data-vote="+" data-token="{{ $_SESSION['token'] }}"><i class="fas fa-angle-up"></i></a>
-                            @endif
-                        </div>
+                        @endif
+                    @endif
+
+                    <div class="js-rating text-right">
+                        @if (getUser() && getUser('id') !== $data->user_id)
+                            <a class="post-rating-down{{ $data->vote === '-' ? ' active' : '' }}" href="#" onclick="return changeRating(this);" data-id="{{ $data->id }}" data-type="{{ App\Models\Post::class }}" data-vote="-" data-token="{{ $_SESSION['token'] }}"><i class="fas fa-arrow-down"></i></a>
+                        @endif
+                        <b><span>{!! formatNum($data->rating) !!}</span></b>
+                        @if (getUser() && getUser('id') !== $data->user_id)
+                            <a class="post-rating-up{{ $data->vote === '+' ? ' active' : '' }}" href="#" onclick="return changeRating(this);" data-id="{{ $data->id }}" data-type="{{ App\Models\Post::class }}" data-vote="+" data-token="{{ $_SESSION['token'] }}"><i class="fas fa-arrow-up"></i></a>
+                        @endif
+                    </div>
+                </div>
+
+                {{ $num }}. {!! $data->user->getProfile() !!}
+                <small class="post-date text-muted font-italic">{{ dateFixed($data->created_at) }}</small><br>
+                <small class="font-italic">{!! $data->user->getStatus() !!}</small>
+
+                <div class="post-body border-top my-1 py-1">
+                    <div class="post-message">
+                        {!! bbCode($data->text) !!}
                     </div>
 
-                    {{ $num }}. <b>{!! $data->user->getProfile() !!}</b> <small class="text-muted font-italic">{{ dateFixed($data->created_at) }}</small><br>
-                    <span class="font-italic">{!! $data->user->getStatus() !!}</span>
-
-                    <div class="message">{!! bbCode($data->text) !!}</div>
-
                     @if ($data->files->isNotEmpty())
-                        <div class="hiding">
+                        <div class="post-media">
                             <i class="fa fa-paperclip"></i> <b>{{ __('main.attached_files') }}:</b><br>
                             @foreach ($data->files as $file)
                                 <?php $ext = getExtension($file->hash); ?>
@@ -168,7 +172,7 @@
                     @endif
 
                     @if (isAdmin())
-                        <div class="small text-muted font-italic">{{ $data->brow }}, {{ $data->ip }}</div>
+                        <div class="small text-muted font-italic mt-2">{{ $data->brow }}, {{ $data->ip }}</div>
                     @endif
                 </div>
             </div>
@@ -188,7 +192,7 @@
 
     @if (getUser())
         @if (empty($topic->closed))
-            <div class="form">
+            <div class="post-form p-2 my-2 shadow">
                 <form action="/topics/create/{{ $topic->id }}" method="post" enctype="multipart/form-data">
                     @csrf
                     <div class="form-group{{ hasError('msg') }}">

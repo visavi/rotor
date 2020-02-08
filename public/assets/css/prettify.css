@@ -4,47 +4,32 @@
 .prettyprint .fun { color: #dc322f; }
 .prettyprint .str { color: #D14; }
 .prettyprint .atv { color: #d44950; }
-.prettyprint .kwd, .prettyprint { color: #0A8; }
+.prettyprint .kwd { color: #0A8; }
 .prettyprint .tag { color: #2f6f9f; }
 .prettyprint .typ, .prettyprint .dec, .prettyprint .var { color: teal; }
 .prettyprint .atn { color: #4f9fcf; }
 .prettyprint .pln { color: #069; }
 
-pre.prettyprint code {
+.prettyprint {
   padding: 0;
-  margin: 0;
-  border: none;
+  margin-bottom: 1rem;
   display: block;
   white-space: pre;
-}
-
-pre.prettyprint, code.prettyprint {
   overflow: auto;
   word-wrap: normal;
   tab-size: 2;
-  display: block;
-}
-
-.prettyprint {
+  font-size: 87.5%;
   background-color: #f7f7f9;
-  border: 1px solid #e1e1e8;
-  font-size: 100%;
-  border-radius: 4px;
-  margin-bottom: 0;
-}
-
-.prettyprint.linenums {
-  padding: 0;
 }
 
 /* Specify class=linenums on a pre to get line numbering */
 .prettyprint ol.linenums {
   margin: 0;
-  box-shadow: inset 35px 0 0 #fbfbfc, inset 36px 0 0 #ececf0;
+  padding: .5rem 3rem;
+  box-shadow: inset 40px 0 0 #fbfbfc, inset 41px 0 0 #ececf0;
 }
 
 .prettyprint ol.linenums li {
   color: #bebec5;
   line-height: 18px;
-  text-shadow: 0 1px 0 #fff;
 }

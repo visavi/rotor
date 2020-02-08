@@ -158,7 +158,9 @@ function postReply(el)
     var post   = $(el).closest('.post');
     var author = post.find('.post-author').data('login');
 
-    var separ = field.val().length ? '\n' : '';
+    var $lastSymbol = field.val().slice(field.val().length - 1);
+    var separ = $.inArray($lastSymbol, ['', '\n']) !== -1 ? '' : '\n';
+
     field.focus().val(field.val() + separ + author + ', ');
 
     return false;
@@ -176,7 +178,9 @@ function postQuote(el)
     var text    = post.find('.post-message').clone();
     var message = text.find('blockquote').remove().end().text();
 
-    var separ = field.val().length ? '\n' : '';
+    var $lastSymbol = field.val().slice(field.val().length - 1);
+    var separ = $.inArray($lastSymbol, ['', '\n']) !== -1 ? '' : '\n';
+
     field.focus().val(field.val() + separ + '[quote=' + author + ' ' + date + ']' + $.trim(message) + '[/quote]\n');
 
     return false;

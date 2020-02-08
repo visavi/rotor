@@ -186,7 +186,7 @@ class BBCodeTest extends \Tests\TestCase
         $text      = '[img]http://rotor.ll/assets/images/img/logo.png[/img]';
         $parseText = bbCode($text);
 
-        $this->assertSame('<img src="http://rotor.ll/assets/images/img/logo.png" class="media-file img-fluid" alt="image">', $parseText);
+        $this->assertSame('<div class="media-file"><img src="http://rotor.ll/assets/images/img/logo.png" class="img-fluid" alt="image"></div>', $parseText);
     }
 
     /**

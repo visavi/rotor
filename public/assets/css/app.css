@@ -1,10 +1,10 @@
-body {
-  background-color: #ccc;
-}
-
 .post {
   background: #fff;
   padding: 10px;
+}
+
+.post-form {
+  background: #fff;
 }
 
 .post-avatar {
@@ -12,6 +12,15 @@ body {
   height: 64px;
   float: left;
   margin-right: 14px;
+}
+
+.post-media {
+  padding: 1.25rem;
+  margin-top: 1.25rem;
+  margin-bottom: 1.25rem;
+  border: 1px solid #eee;
+  border-radius: .25rem;
+  border-left: .25rem solid #d9534f;
 }
 
 .user-status {
@@ -29,6 +38,19 @@ body {
   overflow: hidden;
 }
 
+.avatar-default {
+  height: 64px;
+  width: 64px;
+  text-align: center;
+  font-size: 42px;
+}
+
+.avatar-default a {
+  font-weight: bold;
+  text-decoration: none;
+  color: #fff;
+}
+
 @media (max-width: 768px) {
   .post-avatar {
     width: 48px;
@@ -42,6 +64,19 @@ body {
     left: 32px;
     bottom: 14px;
   }
+
+  .avatar-default {
+    height: 48px;
+    width: 48px;
+    font-size: 32px;
+  }
+}
+
+.main-register {
+  background-image:url('/assets/img/mains/record.png');
+  background-position: 100% 85%;
+  background-size: auto 100%;
+  background-repeat:no-repeat;
 }
 
 
@@ -78,19 +113,6 @@ body {
   right: 0;
   z-index: 99;
   border: 1px solid #fff;
-}
-
-.avatar-default {
-  height: 64px;
-  width: 64px;
-  text-align: center;
-  font-size: 42px;
-}
-
-.avatar-default a {
-  font-weight: bold;
-  text-decoration: none;
-  color: #fff;
 }
 
 .post-form {
@@ -164,7 +186,7 @@ textarea.form-control {
 .blockquote {
   padding: 8px 15px;
   font-size: 95%;
-  background:#f2f1f6;
+  background:#f7f7f9;
   border-left: 5px solid #ddd;
   font-style:italic;
 }
@@ -226,15 +248,6 @@ textarea.form-control {
   border-radius: 4px;
 }
 
-.hiding {
-  padding: 10px;
-  margin: 10px 0;
-  border-radius: 3px;
-  border: 1px solid #eee;
-  border-left: 5px solid #d9534f;
-  background-color: #f8f8f8;
-}
-
 .post-rating-up.active {
   color: #fff;
   background-color: #78c062;
@@ -251,6 +264,7 @@ textarea.form-control {
   border-radius: 3px;
 }
 
+/*
 .progress {
   position: relative;
   max-width: 250px;
@@ -295,7 +309,9 @@ textarea.form-control {
   color: #fff;
   display: block;
 }
+*/
 
+/*
 .online {
   width: 14px;
   height: 14px;
@@ -310,6 +326,7 @@ textarea.form-control {
 .pagination {
   padding-top: 20px;
 }
+*/
 
 .carousel-control-prev-icon,
 .carousel-control-next-icon {

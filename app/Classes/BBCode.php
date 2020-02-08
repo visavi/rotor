@@ -39,7 +39,7 @@ class BBCode
         ],
         'image' => [
             'pattern' => '%\[img\]((\w+://|//|/)[^\s()<>\[\]]+\.(jpg|png|gif|jpeg))\[/img\]%s',
-            'replace' => '<img src="$1" class="media-file img-fluid" alt="image">',
+            'replace' => '<div class="media-file"><img src="$1" class="img-fluid" alt="image"></div>',
         ],
         'bold' => [
             'pattern' => '/\[b\](.+?)\[\/b\]/s',
@@ -148,8 +148,10 @@ class BBCode
     private function clearBreakLines(string $source): string
     {
         $tags = [
-            '</div><br>'        => '</div>',
-            '</blockquote><br>' => '</blockquote>',
+            '</div><br>'           => '</div>',
+            '</pre><br>'           => '</pre>',
+            '</blockquote><br>'    => '</blockquote>',
+            'pre-scrollable"><br>' => 'pre-scrollable">',
         ];
 
         return strtr($source, $tags);
