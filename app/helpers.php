@@ -1391,11 +1391,6 @@ function resizeProcess($path, array $params = [])
             $constraint->upsize();
         });
 
-        /*
-        $img->fit($params['width'], $params['width'], function ($constraint) {
-            $constraint->upsize();
-        });*/
-
         $img->save(UPLOADS . '/thumbnails/' . $thumb);
     }
 
@@ -2137,7 +2132,7 @@ function imageBase64($path, array $params = [])
     $data = file_get_contents($path);
 
     if (! isset($params['class'])) {
-        $params['class'] = 'img-fluid';
+        $params['class'] = 'media-file img-fluid';
     }
 
     if (empty($params['alt'])) {

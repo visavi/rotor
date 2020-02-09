@@ -8,7 +8,7 @@
     @if (getUser())
         <div class="float-right">
             <a class="btn btn-success" href="/photos/create">{{ __('main.add') }}</a><br>
-        </div><br>
+        </div>
     @endif
 
     <h1>{{ __('index.photos') }}</h1>
@@ -41,7 +41,7 @@
 
             <div>
                 <?php $countFiles = $photo->files->count() ?>
-                <div id="myCarousel{{ $loop->iteration }}" class="carousel slide" data-ride="carousel">
+                <div id="myCarousel{{ $loop->iteration }}" class="carousel slide media-file" data-ride="carousel">
                     @if ($countFiles > 1)
                         <ol class="carousel-indicators">
                             @for ($i = 0; $i < $countFiles; $i++)

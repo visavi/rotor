@@ -1,6 +1,11 @@
-.post {
+.post, .section {
   background: #fff;
-  padding: 10px;
+  padding: 1rem;
+}
+
+.section-header {
+  font-size: 1.1rem;
+  font-weight: 600;
 }
 
 .post-form {

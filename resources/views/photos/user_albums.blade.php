@@ -35,7 +35,7 @@
             </div>
             <div>
                 <?php $countFiles = $photo->files->count() ?>
-                <div id="myCarousel{{ $loop->iteration }}" class="carousel slide w-75" data-ride="carousel">
+                <div id="myCarousel{{ $loop->iteration }}" class="carousel slide media-file" data-ride="carousel">
                     @if ($countFiles > 1)
                         <ol class="carousel-indicators">
                             @for ($i = 0; $i < $countFiles; $i++)

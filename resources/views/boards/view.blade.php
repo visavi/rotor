@@ -52,7 +52,7 @@
                             <div class="col-md-12">
 
                                 <?php $countFiles = $item->files->count() ?>
-                                <div id="myCarousel" class="carousel slide" data-ride="carousel">
+                                <div id="myCarousel" class="carousel slide media-file" data-ride="carousel">
                                     @if ($countFiles > 1)
                                         <ol class="carousel-indicators">
                                             @for ($i = 0; $i < $countFiles; $i++)
