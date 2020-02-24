@@ -1,4 +1,4 @@
-let mix = require('laravel-mix');
+const mix = require('laravel-mix');
 
 /*
  |--------------------------------------------------------------------------
@@ -11,37 +11,32 @@ let mix = require('laravel-mix');
  |
  */
 
-mix.scripts([
-    'public/assets/js/jquery.min.js',
-    'public/assets/js/bootstrap.bundle.min.js',
-    'public/assets/js/bootstrap-colorpicker.min.js',
-    'public/assets/js/prettify.js',
-    'public/assets/js/bootbox.min.js',
-    'public/assets/js/toastr.min.js',
-    'public/assets/js/markitup/jquery.markitup.js',
-    'public/assets/js/markitup/markitup.set.js',
-    'public/assets/js/mediaelement/mediaelement-and-player.min.js',
-    'public/assets/js/colorbox/jquery.colorbox-min.js',
-    'public/assets/js/jquery.mask.min.js',
-    'public/assets/js/app.js'
-], 'public/assets/modules/compiled.js');
+mix.setPublicPath('./public');
 
-mix.styles([
-    'public/assets/css/bootstrap.min.css',
-    'public/assets/css/bootstrap-colorpicker.min.css',
-    'public/assets/css/fontawesome.min.css',
-    'public/assets/css/prettify.css',
-    'public/assets/css/toastr.min.css',
-    'public/assets/js/markitup/markitup.css',
-    'public/assets/js/mediaelement/mediaelementplayer.min.css',
-    'public/assets/js/colorbox/colorbox.css',
-    'public/assets/css/app.css'
-], 'public/assets/modules/compiled.css');
+mix.js('public/themes/default/src/js/app.js', 'public/themes/default/js')
+    .js('resources/lang/ru/main.js', 'public/assets/js/lang/ru.js')
+    .js('resources/lang/en/main.js', 'public/assets/js/lang/en.js')
+    .sass('public/themes/default/src/sass/app.scss', 'public/themes/default/css')
+    .version();
+
+mix.copy('node_modules/@fortawesome/fontawesome-free/webfonts/*', 'public/assets/fonts/');
+
+mix.webpackConfig({
+    resolve: {
+        alias: {
+            'js': path.resolve(__dirname, 'public/assets/js'),
+            'css': path.resolve(__dirname, 'public/assets/css'),
+        }
+    }
+});
 
 mix.options({
-    cleanCss: {
-        level: {
-            1: { specialComments: 'none'}
-        }
+    cssNano: {
+        discardComments: {
+            removeAll: true,
+        },
+    },
+    terser: {
+        extractComments: '',
     }
 });

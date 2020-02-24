@@ -20,14 +20,6 @@
     @include('ads/_bottom_all')
 @stop
 
-@section('styles')
-    @include('app/_styles')
-@stop
-
-@section('scripts')
-    @include('app/_scripts')
-@stop
-
 @section('advertAdmin')
     {!! getAdvertAdmin() !!}
 @stop

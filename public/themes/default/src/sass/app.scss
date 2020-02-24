@@ -1,0 +1,45 @@
+@import url(https://fonts.googleapis.com/css?family=Lato:300,400,400i,700);
+
+// This files are essential for the theme
+@import 'variables';
+@import 'customize-bootstrap';
+@import '~bootstrap/scss/bootstrap';
+
+// This styles are essential for theme
+@import 'app';
+@import 'helpers';
+
+// Component
+@import 'header';
+@import 'sidebar';
+@import 'sidebar-mini';
+
+// This styles are optional based on your preferance
+@import 'component/dropdown';
+@import 'component/button';
+@import 'component/app-title';
+@import 'component/tile';
+@import 'component/custom-radio-n-checkbox';
+@import 'component/toggle-button';
+@import 'component/material-half-bg';
+@import 'component/material-loader';
+@import 'component/button-spinner';
+@import 'component/widgets';
+@import 'component/chat';
+
+@import '~@fortawesome/fontawesome-free/scss/brands';
+@import '~@fortawesome/fontawesome-free/scss/regular';
+@import '~@fortawesome/fontawesome-free/scss/solid';
+@import "~@fortawesome/fontawesome-free/scss/fontawesome";
+@import '~bootstrap-colorpicker/src/sass/colorpicker';
+@import 'css/colorbox/colorbox';
+@import 'css/markitup/markitup';
+@import 'css/toastr';
+@import 'css/prettify';
+
+@import 'css/main';
+
+// Include the following style if you need RTL support
+// Also you will need to add dir="rtl" attribute to HTML tag
+
+//@import 'component/rtl';

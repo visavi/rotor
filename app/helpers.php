@@ -1,7 +1,7 @@
 <?php
 
 use App\Models\AdminAdvert;
-use App\Classes\{BBCode, Calendar, Metrika, CloudFlare};
+use App\Classes\{BBCode, Calendar, Metrika, CloudFlare, Mix};
 use App\Models\Antimat;
 use App\Models\Ban;
 use App\Models\Banhist;
@@ -2423,4 +2423,18 @@ function config(string $key, $default = null)
     }
 
     return $config[$key] ?? $default;
+}
+
+/**
+ * Get the path to a versioned Mix file.
+ *
+ * @param  string  $path
+ * @param  string  $manifestDirectory
+ *
+ * @return string
+ * @throws Exception
+ */
+function mix($path, $manifestDirectory = ''): string
+{
+    return (new Mix())(...func_get_args());
 }

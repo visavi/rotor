@@ -1,0 +1,49 @@
+// Page common styles
+
+::selection {
+  color: $white;
+  background-color: darken($body-bg,10%);
+}
+
+.app {
+  // On large devices make sidebar visible by default
+  // adding sidenav-toggled class will close sidebar
+  @media(min-width: 768px) {
+    &.sidenav-toggled {
+      .app-content { margin-left: 0; }
+      .app-sidebar { left: -$sidebar-width; }
+      .app-sidebar__overlay { visibility: hidden; }
+    }
+  }
+  // On small devices make sidebar collapsed by default
+  // adding sidenav-toggled class will open sidebar
+  @media(max-width: 767px) {
+    overflow-x: hidden;
+    .app-sidebar { left: -$sidebar-width; }
+    .app-sidebar__overlay { visibility: hidden; }
+    &.sidenav-toggled {
+      .app-content { margin-left: 0; }
+      .app-sidebar { left: 0; }
+      .app-sidebar__overlay { visibility: visible; }
+    }
+  }
+}
+
+.app-content {
+  min-height: calc(100vh - 50px);
+  margin-top: 50px;
+  padding: 30px;
+  background-color: $body-bg;
+  transition: margin-left 0.3s ease;
+  @media(min-width: 768px) { margin-left: $sidebar-width; }
+  @media(max-width: 767px) {
+    margin-top: 50px;
+    min-width: 100%;
+  }
+  @media(max-width: 480px) { padding: 15px; }
+  @media print {
+    margin: 0;
+    padding: 0;
+    background-color: #fff;
+  }
+}

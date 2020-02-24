@@ -4,15 +4,33 @@
   "description": "Rotor",
   "private": true,
   "scripts": {
-    "dev": "npm run development && rm mix-manifest.json",
-    "development": "NODE_ENV=development node_modules/webpack/bin/webpack.js --progress --hide-modules --config=node_modules/laravel-mix/setup/webpack.config.js",
+    "dev": "npm run development",
+    "development": "cross-env NODE_ENV=development node_modules/webpack/bin/webpack.js --progress --hide-modules --config=node_modules/laravel-mix/setup/webpack.config.js",
     "watch": "npm run development -- --watch",
-    "hot": "NODE_ENV=development node_modules/webpack-dev-server/bin/webpack-dev-server.js --inline --hot --config=node_modules/laravel-mix/setup/webpack.config.js && rm mix-manifest.json",
+    "watch-poll": "npm run watch -- --watch-poll",
+    "hot": "cross-env NODE_ENV=development node_modules/webpack-dev-server/bin/webpack-dev-server.js --inline --hot --config=node_modules/laravel-mix/setup/webpack.config.js",
     "prod": "npm run production",
-    "production": "NODE_ENV=production node_modules/webpack/bin/webpack.js --no-progress --hide-modules --config=node_modules/laravel-mix/setup/webpack.config.js && rm mix-manifest.json"
+    "production": "cross-env NODE_ENV=production node_modules/webpack/bin/webpack.js --no-progress --hide-modules --config=node_modules/laravel-mix/setup/webpack.config.js"
   },
   "dependencies": {
-    "laravel-mix": "^4.1.2"
+    "@fortawesome/fontawesome-free": "^5.12.1",
+    "bootbox": "^5.4.0",
+    "bootstrap": "^4.4.1",
+    "bootstrap-colorpicker": "^3.2.0",
+    "jquery": "^3.4.1",
+    "jquery-colorbox": "^1.6.4",
+    "jquery-mask-plugin": "^1.14.16",
+    "popper.js": "^1.16.0",
+    "toastr": "^2.1.4"
+  },
+  "devDependencies": {
+    "cross-env": "^7.0",
+    "laravel-mix": "^5.0.1",
+    "resolve-url-loader": "^3.1.1",
+    "sass": "^1.15.2",
+    "sass-loader": "^8.0.0",
+    "vue-template-compiler": "^2.6.11",
+    "webpack": "^4.41.6"
   },
   "repository": {
     "type": "git",
@@ -24,8 +42,5 @@
     "url": "https://github.com/visavi/rotor/issues"
   },
   "homepage": "https://github.com/visavi/rotor#readme",
-  "main": "webpack.mix.js",
-  "directories": {
-    "test": "tests"
-  }
+  "main": "webpack.mix.js"
 }

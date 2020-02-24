@@ -55,7 +55,7 @@
 
                         <div class="form-group{{ hasError('birthday') }}">
                             <label for="inputBirthday">{{ __('users.birthday') }} (dd.mm.yyyy):</label>
-                            <input class="form-control" id="inputBirthday" name="birthday" maxlength="10" value="{{ getInput('birthday', $user->birthday) }}">
+                            <input class="birthday form-control" id="inputBirthday" name="birthday" maxlength="10" value="{{ getInput('birthday', $user->birthday) }}">
                             <div class="invalid-feedback">{{ textError('birthday') }}</div>
                         </div>
 

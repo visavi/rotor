@@ -36,9 +36,9 @@
 
                 <div class="input-group colorpick">
                     <input class="form-control col-sm-4" id="color" name="color" type="text" maxlength="7" value="{{ getInput('color', $link->color) }}">
-                    <div class="input-group-append">
-                        <span class="input-group-text input-group-addon"><i></i></span>
-                    </div>
+                    <span class="input-group-append">
+                        <span class="input-group-text colorpicker-input-addon"><i></i></span>
+                    </span>
                 </div>
 
                 <div class="invalid-feedback">{{ textError('color') }}</div>

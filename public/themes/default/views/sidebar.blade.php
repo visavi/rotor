@@ -1,71 +1,52 @@
-<div class="app-sidebar">
-    <div class="sidebar-header">
-
+<!-- Sidebar menu-->
+<div class="app-sidebar__overlay" data-toggle="sidebar"></div>
+<aside class="app-sidebar">
+    <div class="app-sidebar__user">
         @if ($user = getUser())
-            <div class="">
-                {!! $user->getAvatar() !!}
-            </div>
-            <div class="username">
-                <span>{{ $user->getName() }}</span>
-                <small>{!! $user->getStatus() !!}</small>
+            <img class="app-sidebar__user-avatar" src="https://s3.amazonaws.com/uifaces/faces/twitter/jsa/48.jpg" alt="User Image">
+            <div>
+                <p class="app-sidebar__user-name">{!! getUser()->getProfile() !!}</p>
+                <p class="app-sidebar__user-designation">{!! getUser()->getStatus() !!}</p>
             </div>
         @else
-            <a class="btn btn-info" href="/login{{ returnUrl() }}" rel="nofollow">Авторизация</a>
-            <a class="btn btn-info" href="register" rel="nofollow">Регистрация</a>
+            <a href="/login{{ returnUrl() }}" rel="nofollow">{{ __('index.login') }}</a>
+            <a href="/register" rel="nofollow">{{ __('index.register') }}</a>
         @endif
     </div>
+    <ul class="app-menu">
+        <li>
+            <a class="app-menu__item" href="/forums">
+                <i class="app-menu__icon far fa-comment-alt"></i>
+                <span class="app-menu__label">{{ __('index.forums') }}</span>
+                <span class="badge badge-pill badge-light">{{ statsForum() }}</span>
+            </a>
+        </li>
 
-    <div id="sidebar-nav" class="sidebar-nav">
-        <ul>
-            <li>
-                <a href="/forums">
-                    <span class="sidebar-nav-icon far fa-comment-alt"></span>
-                    <span class="sidebar-nav-text">{{ __('index.forums') }}</span>
-                    <span class="badge badge-pill badge-info">{{ statsForum() }}</span>
-                </a>
-            </li>
-            <li>
-                <a href="/guestbooks">
-                    <span class="sidebar-nav-icon far fa-comment"></span>
-                    <span class="sidebar-nav-text">{{ __('index.guestbooks') }}</span>
-                    <span class="badge badge-pill badge-info">{{ statsGuestbook() }}</span>
-                </a>
-            </li>
-            <li>
-                <a href="#reference" data-toggle="collapse" aria-expanded="false" class="collapsed">
-                    <span class="sidebar-nav-icon fas fa-info-circle"></span>
-                    <span class="sidebar-nav-text">{{ __('index.information') }}</span>
-                    <i class="fas fa-angle-down"></i>
-                </a>
-                <ul id="reference" class="collapse" data-parent="#sidebar-nav" style="">
-                    <li><a href="/rules">{{ __('index.site_rules') }}</a></li>
-                    <li><a href="/tags">{{ __('index.tag_help') }}</a></li>
-                    <li><a href="/stickers">{{ __('index.stickers_help') }}</a></li>
-                    <li><a href="/faq">{{ __('index.faq') }}</a></li>
-                    <li><a href="/api">{{ __('index.api_interface') }}</a></li>
-                    <li><a href="/ratinglists">{{ __('index.riches_rating') }}</a></li>
-                    <li><a href="/authoritylists">{{ __('index.reputation_rating') }}</a></li>
-                    <li><a href="/statusfaq">{{ __('index.user_statuses') }}</a></li>
-                    <li><a href="/who">{{ __('index.who_online') }}</a></li>
-                </ul>
-            </li>
-        </ul>
-        @if ($user = getUser())
-            <hr>
-            <ul>
-                <li>
-                    <a href="/menu">
-                        <span class="sidebar-nav-icon fa fa-list"></span>
-                        <span class="sidebar-nav-text">Меню</span>
-                    </a>
-                </li>
-                <li>
-                    <a href="#">
-                        <span class="sidebar-nav-icon fa fa-power-off"></span>
-                        <span class="sidebar-nav-text">Log out</span>
-                    </a>
-                </li>
+        <li>
+            <a class="app-menu__item" href="/guestbooks">
+                <i class="app-menu__icon far fa-comment"></i>
+                <span class="app-menu__label">{{ __('index.guestbooks') }}</span>
+                <span class="badge badge-pill badge-light">{{ statsGuestbook() }}</span>
+            </a>
+        </li>
+
+        <li class="treeview">
+            <a class="app-menu__item" href="#" data-toggle="treeview">
+                <i class="app-menu__icon fas fa-info-circle"></i>
+                <span class="app-menu__label">{{ __('index.information') }}</span>
+                <i class="treeview-indicator fa fa-angle-right"></i>
+            </a>
+            <ul class="treeview-menu">
+                <li><a class="treeview-item" href="/rules"><i class="icon far fa-circle"></i> {{ __('index.site_rules') }}</a></li>
+                <li><a class="treeview-item" href="/tags"><i class="icon far fa-circle"></i> {{ __('index.tag_help') }}</a></li>
+                <li><a class="treeview-item" href="/stickers"><i class="icon far fa-circle"></i> {{ __('index.stickers_help') }}</a></li>
+                <li><a class="treeview-item" href="/faq"><i class="icon far fa-circle"></i> {{ __('index.faq') }}</a></li>
+                <li><a class="treeview-item" href="/api"><i class="icon far fa-circle"></i> {{ __('index.api_interface') }}</a></li>
+                <li><a class="treeview-item" href="/ratinglists"><i class="icon far fa-circle"></i> {{ __('index.riches_rating') }}</a></li>
+                <li><a class="treeview-item" href="/authoritylists"><i class="icon far fa-circle"></i> {{ __('index.reputation_rating') }}</a></li>
+                <li><a class="treeview-item" href="/statusfaq"><i class="icon far fa-circle"></i> {{ __('index.user_statuses') }}</a></li>
+                <li><a class="treeview-item" href="/who"><i class="icon far fa-circle"></i> {{ __('index.who_online') }}</a></li>
             </ul>
-        @endif
-    </div>
-</div>
+        </li>
+    </ul>
+</aside>

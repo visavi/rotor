@@ -1,0 +1,58 @@
+//
+// Application Variables
+//-----------------------------------------------------
+
+// Primary font
+$body-font: 'Lato', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+
+//
+// Theme Colors
+//
+$white: #fff;
+
+// Primary color is the main color of the application which is used
+// for navbar, active links and primary button.
+
+// ------ Primary Colors from google material design color palette ------
+// Blue  : #2196F3
+// Teal  : #009688
+// Green : #4CAF50
+// Brown : #795548
+// Purple: #673AB7
+
+$body-bg: #f1f4f5;
+$primary-color: #2e8cc2;
+
+// Complementry color is used to indecate the loading bar on the top
+// of the page with pace.js plugin
+$complementry-color: adjust_hue($primary-color, 180);
+
+// ------- Sidebar Width --------
+$sidebar-width: 260px;
+
+// Background color of navbar
+$navbar-color: #2e8cc2;
+
+// Background color of sidebar
+$sidebar-color: #222d32;
+
+// -- Suggested sidebar background colors
+// dark  : #222d32
+// light : #f8f8f8
+
+// Sidebar accent varible is used to determine the color of the links
+// of the sidebar. The allowed values are 'light' or 'dark' only
+$sidebar-accent: dark;
+
+// The following varibles indecate sidebar link color
+// and link hover color when using a dark sidebar color
+$sidebar-dark-color: #fff;
+$sidebar-dark-link-color: #fff;
+
+// The following varibles indecate sidebar link color
+// and link hover color when using a light sidebar color
+$sidebar-light-color: #000;
+$sidebar-light-link-color: #333;
+
+// Fontawesome fonts path
+$fa-font-path: '/assets/fonts';
