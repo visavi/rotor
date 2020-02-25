@@ -17,6 +17,7 @@
 /node_modules
 /vendor
 /upgrade
+public/mix-manifest.json
 composer.phar
 .env
 .idea/

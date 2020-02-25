@@ -137,9 +137,9 @@ If, when the server starts, the console displays information that port 8000 is b
 
 ### Webpack settings
 
-To compress css and js, you need to install npm and nodejs, then run the commands (Optional)
+To build css and js, you need to install npm and nodejs, then run the commands
 ```
-npm install
+npm ci
 npm run prod
 ```
 

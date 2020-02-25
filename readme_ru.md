@@ -137,9 +137,9 @@ try_files $uri $uri/ /index.php?$query_string;
 
 ### Настройки webpack
 
-Для сжатия css и js необходимо установить npm и nodejs, после этого запустить команды (Не обязательно)
+Для сборки css и js необходимо установить npm и nodejs, после этого запустить команды
 ```
-npm install
+npm ci
 npm run prod
 ```
 

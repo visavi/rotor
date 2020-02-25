@@ -71,8 +71,8 @@ task('database:migrate', static function () {
 })->onRoles('php')->once();
 
 desc('Npm install');
-task('npm', static function () {
-    run('cd {{release_path}} && npm install');
+task('deploy:npm', static function () {
+    run('cd {{release_path}} && npm ci');
     run('cd {{release_path}} && npm run prod');
 })->onStage('production')->local();
 
@@ -94,6 +94,9 @@ task('deploy', [
     'success'
 ]);
 
+// Npm ci and run
+after('deploy:update_code', 'deploy:npm');
+
 // [Optional] If deploy fails automatically unlock.
 after('deploy:failed', 'deploy:unlock');
 
@@ -102,4 +105,3 @@ before('success', 'reload:php-fpm');
 
 // Migrate database before symlink new release.
 before('deploy:symlink', 'database:migrate');
-

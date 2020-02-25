@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace App\Controllers;
 
-use App\Commands\AppSymlink;
 use App\Models\Ban;
 use Exception;
 use Gregwar\Captcha\PhraseBuilder;
@@ -124,10 +123,6 @@ class HomeController extends BaseController
                 ]);
             } else {
                 $_SESSION['language'] = $lang;
-            }
-
-            if (! file_exists(HOME . '/assets/modules/' . $lang . '.js')) {
-                runCommand(new AppSymlink());
             }
         }
 

@@ -25,7 +25,6 @@ $app->addCommands([
     new \Phinx\Console\Command\SeedRun(),
     new \App\Commands\AppConfigure(),
     new \App\Commands\AppPermission(),
-    new \App\Commands\AppSymlink(),
     new \App\Commands\KeyGenerate(),
     new \App\Commands\ViewClear(),
     new \App\Commands\CacheClear(),

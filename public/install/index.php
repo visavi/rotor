@@ -1,7 +1,6 @@
 <?php
 
 use App\Commands\AppPermission;
-use App\Commands\AppSymlink;
 use App\Commands\CacheClear;
 use App\Commands\ConfigClear;
 use App\Commands\KeyGenerate;
@@ -165,7 +164,6 @@ $keys = [
         <h3>Права доступа</h3>
         <?php
         runCommand(new AppPermission());
-        runCommand(new AppSymlink());
 
         $storage = glob(STORAGE . '/*', GLOB_ONLYDIR);
         $uploads = glob(UPLOADS . '/*', GLOB_ONLYDIR);
