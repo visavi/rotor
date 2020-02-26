@@ -74,7 +74,6 @@ class Banhist extends BaseModel
                 break;
             default:
                 $type = '<span class="text-warning">'. __('main.changed') .'</span>';
-                break;
         }
 
         return $type;

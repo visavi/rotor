@@ -1648,7 +1648,6 @@ function abort($code, $message = null)
            break;
        default:
            header($protocol . ' 400 Bad Request');
-           break;
    }
 
     saveErrorLog($code);

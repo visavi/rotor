@@ -11,7 +11,7 @@
     <link href="/favicon.ico" rel="icon">
     <link href="/assets/img/images/icon.png" rel="image_src">
     <link href="/news/rss" title="RSS News" type="application/rss+xml" rel="alternate">
-    <link rel="stylesheet" type="text/css" href="{{ mix('/themes/default/css/app.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ mix('/themes/default/dist/app.css') }}">
     @stack('styles')
 </head>
 <body class="app sidebar">
@@ -48,7 +48,7 @@
 </main>
 
 <script src="{{ mix('/assets/js/lang/' . setting('language') .'.js') }}"></script>
-<script src="{{ mix('/themes/default/js/app.js') }}"></script>
+<script src="{{ mix('/themes/default/dist/app.js') }}"></script>
 @stack('scripts')
 </body>
 </html>

@@ -44,7 +44,6 @@ class Application
                 break;
             default:
                 abort(404);
-                break;
         }
     }
 
