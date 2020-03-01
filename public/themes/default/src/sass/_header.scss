@@ -75,6 +75,7 @@
 	line-height: 20px;
 	color: #fff;
 	transition: background-color 0.3s ease;
+	text-decoration: none !important;
 	&:hover,
 	&:focus {
 		background: rgba(0, 0, 0, 0.1);

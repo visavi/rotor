@@ -1,11 +1,7 @@
 @extends(setting('themes') . '/theme')
 
-@section('menu')
-    @include('app/_menu')
-@stop
-
-@section('note')
-    @include('app/_note')
+@section('header')
+    <h1>@yield('title')</h1>
 @stop
 
 @section('flash')
@@ -38,8 +34,4 @@
 
 @section('performance')
     {!! performance() !!}
-@stop
-
-@section('header')
-    <h1>@yield('title')</h1>
 @stop

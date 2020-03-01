@@ -47,3 +47,20 @@
     background-color: #fff;
   }
 }
+
+.light-text { font-weight: 300 !important; }
+
+.semibold-text { font-weight: 600 !important; }
+
+.line-head {
+  padding-bottom: 10px;
+  border-bottom: 1px solid #ddd;
+}
+
+.badge-notify {
+  position: relative;
+  top: -10px;
+  right: 10px;
+  margin-right: -18px;
+  background-color: red;
+}

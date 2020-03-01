@@ -36,11 +36,10 @@
         </ul>
     </div>--}}
     {{--<div class="tile">--}}
+        @yield('flash')
         @yield('advertTop')
         @yield('advertAdmin')
         @yield('advertUser')
-        @yield('note')
-        @yield('flash')
 
         @yield('content')
         @yield('advertBottom')
