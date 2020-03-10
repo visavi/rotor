@@ -27,20 +27,24 @@ class KeyGenerate extends AbstractCommand
      *
      * @param InputInterface $input
      * @param OutputInterface $output
-     * @return void
+     *
+     * @return int
      */
-    protected function execute(InputInterface $input, OutputInterface $output): void
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $key = Str::random(32);
         $this->writeNewEnvironmentFileWith($key);
 
         $output->writeln('<info>Application key ['.$key.'] set successfully.</info>');
+
+        return 0;
     }
 
     /**
      * Write a new environment file with the given key.
      *
      * @param  string  $key
+     *
      * @return void
      */
     protected function writeNewEnvironmentFileWith($key): void

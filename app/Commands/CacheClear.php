@@ -27,12 +27,15 @@ class CacheClear extends AbstractCommand
      *
      * @param InputInterface $input
      * @param OutputInterface $output
-     * @return void
+     *
+     * @return int
      */
-    protected function execute(InputInterface $input, OutputInterface $output): void
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         Cache::flush();
 
         $output->writeln('<info>Cache cleared successfully.</info>');
+
+        return 0;
     }
 }

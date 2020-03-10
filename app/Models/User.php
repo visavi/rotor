@@ -469,10 +469,10 @@ class User extends BaseModel
     public function getAvatarImage(): string
     {
         if ($this->avatar && file_exists(HOME . '/' . $this->avatar)) {
-            return '<img src="' . $this->avatar . '" alt="" class="avatar-image">';
+            return '<img src="' . $this->avatar . '" alt="" class="img-fluid rounded-circle">';
         }
 
-        return '<img class="avatar-image" src="/assets/img/images/avatar_guest.png" alt="">';
+        return '<img class="img-fluid rounded-circle" src="/assets/img/images/avatar_guest.png" alt="">';
     }
 
     /**

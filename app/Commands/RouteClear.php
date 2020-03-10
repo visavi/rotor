@@ -26,14 +26,17 @@ class RouteClear extends AbstractCommand
      *
      * @param InputInterface $input
      * @param OutputInterface $output
-     * @return void
+     *
+     * @return int
      */
-    protected function execute(InputInterface $input, OutputInterface $output): void
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         if (file_exists(STORAGE . '/caches/routes.php')) {
             unlink (STORAGE . '/caches/routes.php');
         }
 
         $output->writeln('<info>Routes cleared successfully.</info>');
+
+        return 0;
     }
 }

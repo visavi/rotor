@@ -29,21 +29,22 @@ class LangCompare extends AbstractCommand
      *
      * @param InputInterface $input
      * @param OutputInterface $output
-     * @return void
+     *
+     * @return int
      */
-    protected function execute(InputInterface $input, OutputInterface $output): void
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $lang1 = $input->getArgument('lang1');
         $lang2 = $input->getArgument('lang2');
 
         if (!file_exists(RESOURCES . '/lang/' . $lang1)) {
             $output->writeln('<error>Lang "' . $lang1 . '" not found</error>');
-            return;
+            return 1;
         }
 
         if (!file_exists(RESOURCES . '/lang/' . $lang2)) {
             $output->writeln('<error>Lang "' . $lang2 . '" not found</error>');
-            return;
+            return 1;
         }
 
         $langFiles = glob(RESOURCES . '/lang/' . $lang1 . '/*.php');
@@ -75,6 +76,8 @@ class LangCompare extends AbstractCommand
                 $output->writeln('<error>File "' . $lang2 . '/' . basename($otherFile) . '" not found!</error>');
             }
         }
+
+        return 0;
     }
 
     /**

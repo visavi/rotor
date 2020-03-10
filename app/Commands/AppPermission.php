@@ -28,9 +28,9 @@ class AppPermission extends AbstractCommand
      * @param InputInterface $input
      * @param OutputInterface $output
      *
-     * @return void
+     * @return int
      */
-    protected function execute(InputInterface $input, OutputInterface $output): void
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $storage = glob(STORAGE . '/*', GLOB_ONLYDIR);
         $uploads = glob(UPLOADS . '/*', GLOB_ONLYDIR);
@@ -42,5 +42,7 @@ class AppPermission extends AbstractCommand
         $filesystem->chmod($dirs, 0777);
 
         $output->writeln('<info>Permissions set successfully.</info>');
+
+        return 0;
     }
 }

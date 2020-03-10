@@ -109,6 +109,10 @@ $(function() {
             return "You're about to end your session, are you sure?";
         }
     }*/
+
+    $('.js-messages-block').on('show.bs.dropdown', function () {
+        getNewMessages();
+    })
 });
 
 /* Экранирование символов */
@@ -561,4 +565,24 @@ resendingCode = function()
 /* Показывает панель с запросами */
 showQueries = function() {
     $('.js-queries').slideToggle();
+};
+
+/* Get new messages */
+getNewMessages = function() {
+    $.ajax({
+        dataType: 'json',
+        type: 'get',
+        url: '/messages/new',
+        success: function(data) {
+            if (data.status === 'error') {
+                return false;
+            }
+
+            if (data.status === 'success') {
+                $('.js-messages-block').find('.js-messages').empty().append(data.messages);
+            }
+        }
+    });
+
+    return false;
 };

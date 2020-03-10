@@ -19,14 +19,14 @@
         "cbschuld/browser.php": "~1.9",
         "gregwar/captcha": "^1.1",
         "google/recaptcha": "~1.2",
-        "illuminate/database": "~6.8",
-        "illuminate/http": "~6.8",
-        "illuminate/translation": "~6.8",
-        "illuminate/view": "~6.8",
-        "illuminate/cache": "~6.8",
-        "illuminate/filesystem": "~6.8",
-        "illuminate/redis": "~6.8",
-        "illuminate/pagination": "~6.8",
+        "illuminate/database": "~7.1",
+        "illuminate/http": "~7.1",
+        "illuminate/translation": "~7.1",
+        "illuminate/view": "~7.1",
+        "illuminate/cache": "~7.1",
+        "illuminate/filesystem": "~7.1",
+        "illuminate/redis": "~7.1",
+        "illuminate/pagination": "~7.1",
         "php-ffmpeg/php-ffmpeg": "~0.14",
         "swiftmailer/swiftmailer": "~6.2",
         "josegonzalez/dotenv": "^3.2",
@@ -42,7 +42,7 @@
     "require-dev": {
         "filp/whoops": "^2.5",
         "phpunit/phpunit": "^8.3",
-        "phpstan/phpstan": "^0.11",
+        "phpstan/phpstan": "^0.12",
         "php-coveralls/php-coveralls": "^2.1",
         "deployer/deployer": "^6.7"
     },
@@ -81,7 +81,7 @@
     },
     "config": {
         "platform": {
-            "php": "7.2.0"
+            "php": "7.2.5"
         }
     }
 }

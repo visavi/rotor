@@ -29,10 +29,10 @@ class AppConfigure extends AbstractCommand
      * @param  InputInterface  $input
      * @param  OutputInterface  $output
      *
-     * @return void
+     * @return int
      * @throws Exception
      */
-    protected function execute(InputInterface $input, OutputInterface $output): void
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $command = $this->getApplication()->find('app:permission');
         $command->run($input, new NullOutput());
@@ -41,5 +41,7 @@ class AppConfigure extends AbstractCommand
         $command->run($input, new NullOutput());
 
         $output->writeln('<info>Application successfully configured.</info>');
+
+        return 0;
     }
 }

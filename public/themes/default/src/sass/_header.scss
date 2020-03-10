@@ -10,7 +10,6 @@
 	background-color: $navbar-color;
 	z-index: 1030;
 	padding-right: 15px;
-	@media(min-width: 768px) { padding-right: 30px }
 	@media print { display: none; }
 }
 
@@ -18,7 +17,6 @@
 	flex: 1 0 auto;
 	color: #fff;
 	text-align: center;
-	font-family: 'Niconne';
 	padding: 0 15px;
 	font-size: 26px;
 	font-weight: 400;
@@ -145,11 +143,14 @@
 	}
 }
 
-.app-notification__message,
+.app-notification__author,
 .app-notification__meta {
 	margin-bottom: 0;
 }
 
-.app-notification__icon { padding-right: 10px; }
-.app-notification__message { line-height: 1.2; }
-.app-notification__meta { @extend .text-muted; }
+.app-notification__icon {
+	padding-right: 10px;
+	width: 48px;
+}
+.app-notification__author { line-height: 1.2; }
+.app-notification__meta { @extend .text-muted; @extend .small; }

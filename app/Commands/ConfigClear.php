@@ -26,14 +26,17 @@ class ConfigClear extends AbstractCommand
      *
      * @param InputInterface $input
      * @param OutputInterface $output
-     * @return void
+     *
+     * @return int
      */
-    protected function execute(InputInterface $input, OutputInterface $output): void
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         if (file_exists(STORAGE . '/caches/config.php')) {
             unlink (STORAGE . '/caches/config.php');
         }
 
         $output->writeln('<info>Config cleared successfully.</info>');
+
+        return 0;
     }
 }

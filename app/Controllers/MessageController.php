@@ -211,4 +211,35 @@ class MessageController extends BaseController
 
         redirect('/messages?page=' . $page);
     }
+
+    /**
+     * New messages
+     *
+     * @return string
+     */
+    public function newMessages(): string
+    {
+        if (! request()->ajax()) {
+            redirect('/');
+        }
+
+        $messages = Message::query()
+            ->select(
+                'author_id',
+                DB::connection()->raw('max(created_at) as last_created_at')
+            )
+            ->where('user_id', $this->user->id)
+            ->where('reading', 0)
+            ->groupBy('author_id')
+            ->limit(3)
+            ->get();
+
+        if ($messages->isNotEmpty()) {
+            $view = view('messages/_new', compact('messages'));
+
+            return json_encode(['status' => 'success', 'messages' => $view]);
+        }
+
+        return json_encode(['status'  => 'error']);
+    }
 }

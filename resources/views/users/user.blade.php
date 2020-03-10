@@ -5,12 +5,7 @@
 @stop
 
 @section('header')
-    <div class="avatar-box">
-        <div class="avatar-box_image">{!! $user->getAvatar() !!}</div>
-        <h1 class="avatar-box_login">
-            {{ $user->login }} <small>#{{ $user->id }}</small>
-        </h1>
-    </div>
+    <h1>{{ $user->login }} <small>#{{ $user->id }}</small></h1>
 @stop
 
 @section('breadcrumb')
