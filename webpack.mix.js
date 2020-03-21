@@ -14,9 +14,9 @@ const mix = require('laravel-mix');
 mix.setPublicPath('./public');
 
 mix.js('public/themes/default/src/js/app.js', 'public/themes/default/dist')
-    .js('resources/lang/ru/main.js', 'public/assets/js/lang/ru.js')
-    .js('resources/lang/en/main.js', 'public/assets/js/lang/en.js')
     .sass('public/themes/default/src/sass/app.scss', 'public/themes/default/dist')
+    .js('resources/lang/*/main.js', 'public/assets/js/dist/lang.js')
+    .extract()
     .version();
 
 mix.copy('node_modules/@fortawesome/fontawesome-free/webfonts/*', 'public/assets/fonts/');

@@ -1,8 +1,9 @@
-$(function() {
+$(function(){
+    var currentLang = $('html').attr('lang');
+    translate = window['translate_' + currentLang];
 
     prettyPrint();
-
-    bootbox.setDefaults({ locale: translate.language });
+    bootbox.setDefaults({ locale: 'ru' });
 
     toastr.options = {
         'toastClass' : 'toastr',

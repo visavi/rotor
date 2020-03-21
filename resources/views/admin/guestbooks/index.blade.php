@@ -58,7 +58,7 @@
                     <span class="data">({{ $data->brow }}, {{ $data->ip }})</span>
 
                     @if ($data->reply)
-                        <br><span style="color:#ff0000">{{ __('main.reply') }}: {!! bbCode($data->reply) !!}</span>
+                        <br><span style="color:#ff0000">{{ __('guestbooks.answer') }}: {!! bbCode($data->reply) !!}</span>
                     @endif
                 </div>
             @endforeach

@@ -1,6 +1,9 @@
 // ----------------------------------------------------------------------------
 // markItUp bb-code setting!
 // ----------------------------------------------------------------------------
+var currentLang = $('html').attr('lang');
+var translate = window['translate_' + currentLang];
+
 mySettings = {
     previewParserPath: '/ajax/bbcode', // path to your BBCode parser
     previewAutoRefresh: false,

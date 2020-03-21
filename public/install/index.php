@@ -19,7 +19,7 @@ try {
 }
 
 $request      = request();
-$phpVersion   = '7.2.0';
+$phpVersion   = '7.2.5';
 $mysqlVersion = '5.5.3';
 
 $app  = new Phinx\Console\PhinxApplication();
