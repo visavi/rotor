@@ -17,7 +17,7 @@
 @section('content')
     <i class="fa fa-pencil-alt text-muted"></i> <b>{!! $post->user->login !!}</b> ({{ dateFixed($post->created_at) }})<br><br>
 
-    <div class="form">
+    <div class="post-form p-2 shadow">
         <form action="/guestbooks/edit/{{ $post->id }}" method="post">
             @csrf
             <div class="form-group{{ hasError('msg') }}">

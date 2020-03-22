@@ -34,19 +34,19 @@
 
     @if ($posts->isNotEmpty())
         @foreach ($posts as $data)
-            <div class="b">
+            <div class="section mb-3 shadow">
                 <i class="fa fa-file-alt"></i> <b><a href="/topics/{{ $data->topic_id }}/{{ $data->id }}">{{ $data->topic->title }}</a></b>
                 ({{ __('main.rating') }}: {{ $data->rating }})
-            </div>
-            <div>
-                {!! bbCode($data->text) !!}<br>
 
-                {{ __('main.posted') }}: {{ $data->user->login }} <small>({{ dateFixed($data->created_at) }})</small><br>
+                <div class="post-message">
+                    {!! bbCode($data->text) !!}<br>
 
-                @if (isAdmin())
-                    <span class="data">({{ $data->brow }}, {{ $data->ip }})</span>
-                @endif
+                    {{ __('main.posted') }}: {{ $data->user->login }} <small>({{ dateFixed($data->created_at) }})</small>
 
+                    @if (isAdmin())
+                        <div class="small text-muted font-italic mt-2">({{ $data->brow }}, {{ $data->ip }})</div>
+                    @endif
+                </div>
             </div>
         @endforeach
     @else

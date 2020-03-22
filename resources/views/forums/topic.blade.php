@@ -114,38 +114,42 @@
                     {!! $data->user->getOnline() !!}
                 </div>
 
-                <div class="post-menu float-right">
-                    @if (getUser())
-                        @if (getUser('id') !== $data->user_id)
-                            <a href="#" onclick="return postReply(this)" title="{{ __('main.reply') }}"><i class="fa fa-reply text-muted"></i></a>
+                <div class="post-user d-flex align-items-center">
+                    <div class="flex-grow-1">
+                        {{ $num }}. {!! $data->user->getProfile() !!}
+                        <small class="post-date text-muted font-italic">{{ dateFixed($data->created_at) }}</small><br>
+                        <small class="font-italic">{!! $data->user->getStatus() !!}</small>
+                    </div>
 
-                            <a href="#" onclick="return postQuote(this)" title="{{ __('main.quote') }}"><i class="fa fa-quote-right text-muted"></i></a>
+                    <div class="post-menu text-right">
+                        @if (getUser())
+                            @if (getUser('id') !== $data->user_id)
+                                <a href="#" onclick="return postReply(this)" title="{{ __('main.reply') }}"><i class="fa fa-reply text-muted"></i></a>
 
-                            <a href="#" onclick="return sendComplaint(this)" data-type="{{ App\Models\Post::class }}" data-id="{{ $data->id }}" data-token="{{ $_SESSION['token'] }}" data-page="{{ $posts->currentPage() }}" rel="nofollow" title="{{ __('main.complain') }}"><i class="fa fa-bell text-muted"></i></a>
-                        @endif
+                                <a href="#" onclick="return postQuote(this)" title="{{ __('main.quote') }}"><i class="fa fa-quote-right text-muted"></i></a>
 
-                        @if ($topic->isModer || (getUser('id') === $data->user_id && $data->created_at + 600 > SITETIME))
-                            <a href="/posts/edit/{{ $data->id }}?page={{ $posts->currentPage() }}" title="{{ __('main.edit') }}"><i class="fa fa-pencil-alt text-muted"></i></a>
-                            @if ($topic->isModer)
-                                <input type="checkbox" name="del[]" value="{{ $data->id }}">
+                                <a href="#" onclick="return sendComplaint(this)" data-type="{{ App\Models\Post::class }}" data-id="{{ $data->id }}" data-token="{{ $_SESSION['token'] }}" data-page="{{ $posts->currentPage() }}" rel="nofollow" title="{{ __('main.complain') }}"><i class="fa fa-bell text-muted"></i></a>
+                            @endif
+
+                            @if ($topic->isModer || (getUser('id') === $data->user_id && $data->created_at + 600 > SITETIME))
+                                <a href="/posts/edit/{{ $data->id }}?page={{ $posts->currentPage() }}" title="{{ __('main.edit') }}"><i class="fa fa-pencil-alt text-muted"></i></a>
+                                @if ($topic->isModer)
+                                    <input type="checkbox" name="del[]" value="{{ $data->id }}">
+                                @endif
                             @endif
                         @endif
-                    @endif
 
-                    <div class="js-rating text-right">
-                        @if (getUser() && getUser('id') !== $data->user_id)
-                            <a class="post-rating-down{{ $data->vote === '-' ? ' active' : '' }}" href="#" onclick="return changeRating(this);" data-id="{{ $data->id }}" data-type="{{ App\Models\Post::class }}" data-vote="-" data-token="{{ $_SESSION['token'] }}"><i class="fas fa-arrow-down"></i></a>
-                        @endif
-                        <b><span>{!! formatNum($data->rating) !!}</span></b>
-                        @if (getUser() && getUser('id') !== $data->user_id)
-                            <a class="post-rating-up{{ $data->vote === '+' ? ' active' : '' }}" href="#" onclick="return changeRating(this);" data-id="{{ $data->id }}" data-type="{{ App\Models\Post::class }}" data-vote="+" data-token="{{ $_SESSION['token'] }}"><i class="fas fa-arrow-up"></i></a>
-                        @endif
+                        <div class="js-rating">
+                            @if (getUser() && getUser('id') !== $data->user_id)
+                                <a class="post-rating-down{{ $data->vote === '-' ? ' active' : '' }}" href="#" onclick="return changeRating(this);" data-id="{{ $data->id }}" data-type="{{ App\Models\Post::class }}" data-vote="-" data-token="{{ $_SESSION['token'] }}"><i class="fas fa-arrow-down"></i></a>
+                            @endif
+                            <b><span>{!! formatNum($data->rating) !!}</span></b>
+                            @if (getUser() && getUser('id') !== $data->user_id)
+                                <a class="post-rating-up{{ $data->vote === '+' ? ' active' : '' }}" href="#" onclick="return changeRating(this);" data-id="{{ $data->id }}" data-type="{{ App\Models\Post::class }}" data-vote="+" data-token="{{ $_SESSION['token'] }}"><i class="fas fa-arrow-up"></i></a>
+                            @endif
+                        </div>
                     </div>
                 </div>
-
-                {{ $num }}. {!! $data->user->getProfile() !!}
-                <small class="post-date text-muted font-italic">{{ dateFixed($data->created_at) }}</small><br>
-                <small class="font-italic">{!! $data->user->getStatus() !!}</small>
 
                 <div class="post-body border-top my-1 py-1">
                     <div class="post-message">
@@ -168,7 +172,9 @@
                     @endif
 
                     @if ($data->edit_user_id)
-                        <div class="small"><i class="fa fa-exclamation-circle text-danger"></i> {{ __('main.changed') }}: {{ $data->editUser->getName() }} ({{ dateFixed($data->updated_at) }})</div>
+                        <div class="small">
+                            <i class="fa fa-exclamation-circle text-danger"></i> {{ __('main.changed') }}: {{ $data->editUser->getName() }} ({{ dateFixed($data->updated_at) }})
+                        </div>
                     @endif
 
                     @if (isAdmin())

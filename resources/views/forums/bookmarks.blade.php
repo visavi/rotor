@@ -19,15 +19,13 @@
         <form action="/forums/bookmarks/delete?page={{ $topics->currentPage() }}" method="post">
             @csrf
             @foreach ($topics as $topic)
-                <div class="b">
+                <div class="section mb-3 shadow">
                     <input type="checkbox" name="del[]" value="{{ $topic->id }}">
 
                     <i class="fa {{ $topic->topic->getIcon() }} text-muted"></i>
                     <b><a href="/topics/{{ $topic->id }}">{{ $topic->title }}</a></b>
                     ({{ $topic->count_posts }}{!! ($topic->count_posts > $topic->bookmark_posts) ? '/<span style="color:#00cc00">+' . ($topic->count_posts - $topic->bookmark_posts) . '</span>' : '' !!})
-                </div>
 
-                <div>
                     {!! $topic->topic->pagination() !!}
                     {{ __('main.author') }}: {{ $topic->topic->user->getName() }} /
                     {{ __('forums.latest') }}: {{ $topic->topic->lastPost->user->getName() }}

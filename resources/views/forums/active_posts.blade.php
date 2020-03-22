@@ -21,23 +21,21 @@
 @section('content')
     @if ($posts->isNotEmpty())
         @foreach ($posts as $data)
-            <div class="post">
-                <div class="b">
-                    <i class="fa fa-file-alt"></i> <b><a href="/topics/{{ $data->topic_id }}/{{ $data->id }}">{{ $data->topic->title }}</a></b>
+            <div class="post mb-3 shadow">
+                <i class="fa fa-file-alt"></i> <b><a href="/topics/{{ $data->topic_id }}/{{ $data->id }}">{{ $data->topic->title }}</a></b>
 
-                    @if (isAdmin())
-                        <a href="#" class="float-right" onclick="return deletePost(this)" data-tid="{{ $data->id }}" data-token="{{ $_SESSION['token'] }}" data-toggle="tooltip" title="{{ __('main.delete') }}"><i class="fa fa-times"></i></a>
-                    @endif
-                </div>
-                <div>
+                @if (isAdmin())
+                    <a href="#" class="float-right" onclick="return deletePost(this)" data-tid="{{ $data->id }}" data-token="{{ $_SESSION['token'] }}" data-toggle="tooltip" title="{{ __('main.delete') }}"><i class="fa fa-times"></i></a>
+                @endif
+
+                <div class="post-message">
                     {!! bbCode($data->text) !!}<br>
 
                     {{ __('main.posted') }}: {{ $data->user->login }}
                     <small>({{ dateFixed($data->created_at) }})</small>
-                    <br>
 
                     @if (isAdmin())
-                        <span class="data">({{ $data->brow }}, {{ $data->ip }})</span>
+                        <div class="small text-muted font-italic mt-2">({{ $data->brow }}, {{ $data->ip }})</div>
                     @endif
                 </div>
             </div>

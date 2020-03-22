@@ -19,11 +19,10 @@
     <p>{{ __('forums.found_topics') }}: {{ $topics->total() }}</p>
 
     @foreach ($topics as $topic)
-        <div class="b">
+        <div class="section mb-3 shadow">
             <i class="fa {{ $topic->getIcon() }} text-muted"></i>
             <b><a href="/topics/{{ $topic->id }}">{{ $topic->title }}</a></b> ({{ $topic->count_posts }})
-        </div>
-        <div>
+
             {!! $topic->pagination() !!}
             {{ __('forums.forum') }}: <a href="/topics/{{ $topic->forum->id }}">{{ $topic->forum->title }}</a><br>
             {{ __('forums.post') }}: {{ $topic->lastPost->user->getName() }} ({{ dateFixed($topic->lastPost->created_at) }})

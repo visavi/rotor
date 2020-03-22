@@ -17,11 +17,10 @@
 @section('content')
     @if ($topics->isNotEmpty())
         @foreach ($topics as $data)
-            <div class="b">
+            <div class="section mb-3 shadow">
                 <i class="fa {{ $data->getIcon() }} text-muted"></i>
                 <b><a href="/topics/{{ $data->id }}">{{ $data->title }}</a></b> ({{ $data->count_posts }})
-            </div>
-            <div>
+
                 {!! $data->pagination() !!}
                 {{ __('main.author') }}: {{ $data->user->getName() }}<br>
                 {{ __('forums.post') }}: {{ $data->lastPost->user->getName() }} ({{ dateFixed($data->lastPost->created_at) }})

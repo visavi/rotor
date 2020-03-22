@@ -19,13 +19,14 @@
     <p>{{ __('forums.found_posts') }}: {{ $posts->total() }}</p>
 
     @foreach ($posts as $post)
-        <div class="b">
+        <div class="post mb-3 shadow">
             <i class="fa fa-file-alt"></i> <b><a href="/topics/{{ $post->topic_id }}/{{ $post->id }}">{{ $post->topic->title }}</a></b>
-        </div>
 
-        <div>{!! bbCode($post->text) !!}<br>
-            {{ __('forums.forum') }}: <a href="/topics/{{ $post->topic->forum->id }}">{{ $post->topic->forum->title }}</a><br>
-            {{ __('main.posted') }}: {!! $post->user->getProfile() !!} <small>({{ dateFixed($post->created_at) }})</small><br>
+            <div class="post-message">
+                {!! bbCode($post->text) !!}<br>
+                {{ __('forums.forum') }}: <a href="/topics/{{ $post->topic->forum->id }}">{{ $post->topic->forum->title }}</a><br>
+                {{ __('main.posted') }}: {!! $post->user->getProfile() !!} <small>({{ dateFixed($post->created_at) }})</small><br>
+            </div>
         </div>
     @endforeach
 
