@@ -1,4 +1,5 @@
-.post, .section {
+/* New theme */
+.section {
   background: #fff;
   padding: 1rem;
 }
@@ -8,18 +9,11 @@
   font-weight: 600;
 }
 
-.post-form {
+.section-form {
   background: #fff;
 }
 
-.post-avatar {
-  width: 64px;
-  height: 64px;
-  float: left;
-  margin-right: 14px;
-}
-
-.post-media {
+.section-media {
   padding: 1.25rem;
   margin-top: 1.25rem;
   margin-bottom: 1.25rem;
@@ -28,18 +22,7 @@
   border-left: .25rem solid #d9534f;
 }
 
-.user-status {
-  width: 18px;
-  height: 18px;
-  position: relative;
-  border-radius: 50%;
-  z-index: 1;
-  border: 1px solid #fff;
-  left: 44px;
-  bottom: 18px;
-}
-
-.post-body {
+.section-body {
   overflow: hidden;
 }
 
@@ -56,8 +39,26 @@
   color: #fff;
 }
 
+.user-avatar {
+  width: 64px;
+  height: 64px;
+  float: left;
+  margin-right: 14px;
+}
+
+.user-status {
+  width: 18px;
+  height: 18px;
+  position: relative;
+  border-radius: 50%;
+  z-index: 1;
+  border: 1px solid #fff;
+  left: 44px;
+  bottom: 18px;
+}
+
 @media (max-width: 768px) {
-  .post-avatar {
+  .user-avatar {
     width: 48px;
     height: 48px;
     margin-right: 10px;
@@ -76,7 +77,7 @@
     font-size: 32px;
   }
 
-  .post-user {
+  .section-user {
     min-height: 48px;
   }
 }
@@ -88,84 +89,9 @@
   background-repeat:no-repeat;
 }
 
-
-
-/* New theme */
-/*.post {
-  background: #fff;
-  padding: 10px 10px 10px 100px;
+.cursor-pointer {
+  cursor: pointer;
 }
-
-.post-header {
-  position: relative;
-}
-
-.post-user {
-  overflow: hidden;
-}
-
-.post-avatar {
-  float: left;
-  margin-right: 10px;
-  width: 64px;
-  height: 64px;
-  position: absolute;
-  left: -80px;
-}
-
-.user-status {
-  width: 16px;
-  height: 16px;
-  position: absolute;
-  border-radius: 50%;
-  bottom: 0;
-  right: 0;
-  z-index: 99;
-  border: 1px solid #fff;
-}
-
-.post-form {
-  background: #fff;
-}*/
-
-/*.post-menu {
-  display: none;
-}
-
-.post:hover .post-menu {
-  display: block;
-}*/
-
-/*@media (max-width: 768px) {
-  .post {
-    padding: 10px;
-  }
-
-  .post-header {
-    overflow: hidden;
-  }
-
-  .post-avatar {
-    float: left;
-    margin-right: 10px;
-    width: 48px;
-    height: 48px;
-    position: relative;
-    left: 0;
-    overflow: hidden;
-  }
-
-  .user-status {
-    width: 14px;
-    height: 14px;
-  }
-
-  .avatar-default {
-    height: 48px;
-    width: 48px;
-    font-size: 32px;
-  }
-}*/
 /* New theme */
 
 textarea.form-control {

@@ -31,8 +31,8 @@
 @section('content')
     @if ($posts->isNotEmpty())
         @foreach ($posts as $post)
-            <div class="post mb-3 shadow">
-                <div class="post-avatar">
+            <div class="section mb-3 shadow">
+                <div class="user-avatar">
                     @if ($post->user_id)
                         {!! $post->user->getAvatar() !!}
                         {!! $post->user->getOnline() !!}
@@ -41,7 +41,7 @@
                     @endif
                 </div>
 
-                <div class="post-user d-flex align-items-center">
+                <div class="section-user d-flex align-items-center">
                     <div class="flex-grow-1">
                         @if ($post->user_id)
                             {!! $post->user->getProfile() !!}
@@ -58,7 +58,7 @@
                     </div>
 
                     @if (getUser() && getUser('id') !== $post->user_id)
-                        <div class="post-menu">
+                        <div class="text-right">
                             <a href="#" onclick="return postReply(this)" data-toggle="tooltip" title="{{ __('main.reply') }}"><i class="fa fa-reply text-muted"></i></a>
                             <a href="#" onclick="return postQuote(this)" data-toggle="tooltip" title="{{ __('main.quote') }}"><i class="fa fa-quote-right text-muted"></i></a>
 
@@ -67,13 +67,13 @@
                     @endif
 
                     @if ($post->created_at + 600 > SITETIME && getUser() && getUser('id') === $post->user_id)
-                        <div class="post-menu">
+                        <div class="text-right">
                             <a href="/guestbooks/edit/{{ $post->id }}" data-toggle="tooltip" title="{{ __('main.edit') }}"><i class="fa fa-pencil-alt text-muted"></i></a>
                         </div>
                     @endif
                 </div>
 
-                <div class="post-body border-top my-1 py-1">
+                <div class="section-body border-top my-1 py-1">
                     <div class="post-message">
                         {!! bbCode($post->text) !!}
                     </div>
@@ -99,7 +99,7 @@
     {{ $posts->links() }}
 
     @if (getUser())
-        <div class="post-form p-2 my-2 shadow">
+        <div class="section-form p-2 my-2 shadow">
             <form action="/guestbooks/add" method="post">
                 @csrf
                 <div class="form-group{{ hasError('msg') }}">
@@ -114,7 +114,7 @@
         </div><br>
 
     @elseif (setting('bookadds'))
-        <div class="post-form p-2 my-2 shadow">
+        <div class="section-form p-2 my-2 shadow">
             <form action="/guestbooks/add" method="post">
                 @csrf
                 <div class="form-group{{ hasError('guest_name') }}">

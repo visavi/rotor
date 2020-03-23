@@ -19,7 +19,7 @@
     <p>{{ __('forums.found_posts') }}: {{ $posts->total() }}</p>
 
     @foreach ($posts as $post)
-        <div class="post mb-3 shadow">
+        <div class="section mb-3 shadow">
             <i class="fa fa-file-alt"></i> <b><a href="/topics/{{ $post->topic_id }}/{{ $post->id }}">{{ $post->topic->title }}</a></b>
 
             <div class="post-message">

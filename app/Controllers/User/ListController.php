@@ -114,14 +114,15 @@ class ListController extends BaseController
             ->orderBy('login')
             ->paginate(setting('userlist'));
 
-        $user = check($request->input('user', getUser('login')));
+        $login = check($request->input('user', getUser('login')));
 
         if ($request->isMethod('post')) {
             $position = User::query()
                 ->orderByDesc('money')
                 ->orderBy('login')
+                ->toBase()
                 ->get()
-                ->where('login', $user)
+                ->where('login', $login)
                 ->keys()
                 ->first();
 
@@ -130,12 +131,12 @@ class ListController extends BaseController
                 $end = ceil($position / setting('userlist'));
 
                 setFlash('success', __('users.rating_position', ['position' => $position]));
-                redirect('/ratinglists?page='.$end.'&user='.$user);
+                redirect('/ratinglists?page='.$end.'&user='.$login);
             } else {
                 setFlash('danger', __('validator.user'));
             }
         }
 
-        return view('users/ratinglists', compact('users', 'user'));
+        return view('users/ratinglists', compact('users', 'login'));
     }
 }

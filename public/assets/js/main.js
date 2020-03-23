@@ -149,7 +149,7 @@ showAttachForm = function()
 postJump = function()
 {
     $('html, body').animate({
-        scrollTop: ($('.post-form').offset().top)
+        scrollTop: ($('.section-form').offset().top)
     }, 500);
 };
 

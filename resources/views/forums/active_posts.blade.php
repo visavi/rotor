@@ -21,7 +21,7 @@
 @section('content')
     @if ($posts->isNotEmpty())
         @foreach ($posts as $data)
-            <div class="post mb-3 shadow">
+            <div class="section mb-3 shadow">
                 <i class="fa fa-file-alt"></i> <b><a href="/topics/{{ $data->topic_id }}/{{ $data->id }}">{{ $data->topic->title }}</a></b>
 
                 @if (isAdmin())

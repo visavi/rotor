@@ -19,35 +19,38 @@
 
 @section('content')
     @if ($users->isNotEmpty())
-        @foreach($users as $key => $data)
-            <div class="b">
-                <div class="img">
-                    {!! $data->getAvatar() !!}
-                    {!! $data->getOnline() !!}
+        @foreach($users as $key => $user)
+            <div class="section mb-3 shadow">
+                <div class="user-avatar">
+                    {!! $user->getAvatar() !!}
+                    {!! $user->getOnline() !!}
                 </div>
 
-                {{ $users->firstItem() + $key }}.
+                <div class="section-user">
+                    {{ $users->firstItem() + $key }}.
 
-                @if ($user === $data->login)
-                    <b>{!! $data->getProfile('#ff0000') !!}</b>
-                @else
-                    <b>{!! $data->getProfile() !!}</b>
-                @endif
-                ({{ plural($data->money, setting('moneyname')) }})<br>
-                {!! $data->getStatus() !!}
-            </div>
+                    @if ($user === $user->login)
+                        <b>{!! $user->getProfile('#ff0000') !!}</b>
+                    @else
+                        <b>{!! $user->getProfile() !!}</b>
+                    @endif
 
-            <div>
-                {{ __('main.pluses') }}: {{ $data->posrating }} / {{ __('main.minuses') }}: {{ $data->negrating }}<br>
-                {{ __('main.registration_date') }}: {{ dateFixed($data->created_at, 'd.m.Y') }}
+                    ({{ plural($user->money, setting('moneyname')) }})<br>
+                    {!! $user->getStatus() !!}
+                </div>
+
+                <div class="section-body border-top my-1 py-1">
+                    {{ __('main.pluses') }}: {{ $user->posrating }} / {{ __('main.minuses') }}: {{ $user->negrating }}<br>
+                    {{ __('main.registration_date') }}: {{ dateFixed($user->created_at, 'd.m.Y') }}
+                </div>
             </div>
         @endforeach
 
-        <div class="form mt-3">
+        <div class="mt-3">
             <form action="/ratinglists" method="post">
                 <div class="form-inline">
                     <div class="form-group{{ hasError('user') }}">
-                        <input type="text" class="form-control" id="user" name="user" maxlength="20" value="{{ getInput('user', $user) }}" placeholder="{{ __('main.user_login') }}" required>
+                        <input type="text" class="form-control" id="user" name="user" maxlength="20" value="{{ getInput('user', $login) }}" placeholder="{{ __('main.user_login') }}" required>
                     </div>
 
                     <button class="btn btn-primary">{{ __('main.search') }}</button>

@@ -44,6 +44,8 @@
         @yield('content')
         @yield('advertBottom')
     {{--</div>--}}
+
+    @yield('performance')
 </main>
 
 <script src="{{ mix('/assets/js/dist/manifest.js') }}"></script>

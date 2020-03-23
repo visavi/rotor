@@ -199,7 +199,7 @@ class User extends BaseModel
             }
 
             if (in_array($this->level, self::ADMIN_GROUPS, true)) {
-                $admin = ' <i class="fas fa-xs fa-star text-info"></i>';
+                $admin = ' <i class="fas fa-xs fa-star text-info" title="' . $this->getLevel() . '"></i>';
             }
 
             return '<a class="post-author font-weight-bold" href="/users/' . $this->login . '" data-login="@' . $this->login . '">' . $name . '</a>' . $admin;
@@ -391,7 +391,7 @@ class User extends BaseModel
     {
         static $visits;
 
-        $online = '<div class="user-status bg-danger" title="Оффлайн"></div>';
+        $online = '';
 
         if (! $visits) {
             $visits = Cache::remember('visit', 10, static function () {

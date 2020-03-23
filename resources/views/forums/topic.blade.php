@@ -108,20 +108,20 @@
     @if ($posts->isNotEmpty())
         @foreach ($posts as $data)
             <?php $num = $posts->firstItem() + $loop->index; ?>
-            <div class="post mb-3 shadow" id="post_{{ $data->id }}">
-                <div class="post-avatar">
+            <div class="section mb-3 shadow" id="post_{{ $data->id }}">
+                <div class="user-avatar">
                     {!! $data->user->getAvatar() !!}
                     {!! $data->user->getOnline() !!}
                 </div>
 
-                <div class="post-user d-flex align-items-center">
+                <div class="section-user d-flex align-items-center">
                     <div class="flex-grow-1">
                         {{ $num }}. {!! $data->user->getProfile() !!}
                         <small class="post-date text-muted font-italic">{{ dateFixed($data->created_at) }}</small><br>
                         <small class="font-italic">{!! $data->user->getStatus() !!}</small>
                     </div>
 
-                    <div class="post-menu text-right">
+                    <div class="text-right">
                         @if (getUser())
                             @if (getUser('id') !== $data->user_id)
                                 <a href="#" onclick="return postReply(this)" title="{{ __('main.reply') }}"><i class="fa fa-reply text-muted"></i></a>
@@ -151,13 +151,13 @@
                     </div>
                 </div>
 
-                <div class="post-body border-top my-1 py-1">
+                <div class="section-body border-top my-1 py-1">
                     <div class="post-message">
                         {!! bbCode($data->text) !!}
                     </div>
 
                     @if ($data->files->isNotEmpty())
-                        <div class="post-media">
+                        <div class="section-media">
                             <i class="fa fa-paperclip"></i> <b>{{ __('main.attached_files') }}:</b><br>
                             @foreach ($data->files as $file)
                                 <?php $ext = getExtension($file->hash); ?>
@@ -198,7 +198,7 @@
 
     @if (getUser())
         @if (empty($topic->closed))
-            <div class="post-form p-2 my-2 shadow">
+            <div class="section-form p-2 my-2 shadow">
                 <form action="/topics/create/{{ $topic->id }}" method="post" enctype="multipart/form-data">
                     @csrf
                     <div class="form-group{{ hasError('msg') }}">
