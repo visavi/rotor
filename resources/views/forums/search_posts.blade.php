@@ -22,7 +22,7 @@
         <div class="section mb-3 shadow">
             <i class="fa fa-file-alt"></i> <b><a href="/topics/{{ $post->topic_id }}/{{ $post->id }}">{{ $post->topic->title }}</a></b>
 
-            <div class="post-message">
+            <div class="section-message">
                 {!! bbCode($post->text) !!}<br>
                 {{ __('forums.forum') }}: <a href="/topics/{{ $post->topic->forum->id }}">{{ $post->topic->forum->title }}</a><br>
                 {{ __('main.posted') }}: {!! $post->user->getProfile() !!} <small>({{ dateFixed($post->created_at) }})</small><br>

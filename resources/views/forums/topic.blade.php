@@ -117,7 +117,7 @@
                 <div class="section-user d-flex align-items-center">
                     <div class="flex-grow-1">
                         {{ $num }}. {!! $data->user->getProfile() !!}
-                        <small class="post-date text-muted font-italic">{{ dateFixed($data->created_at) }}</small><br>
+                        <small class="section-date text-muted font-italic">{{ dateFixed($data->created_at) }}</small><br>
                         <small class="font-italic">{!! $data->user->getStatus() !!}</small>
                     </div>
 
@@ -152,7 +152,7 @@
                 </div>
 
                 <div class="section-body border-top my-1 py-1">
-                    <div class="post-message">
+                    <div class="section-message">
                         {!! bbCode($data->text) !!}
                     </div>
 

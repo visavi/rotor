@@ -25,7 +25,7 @@
                 <i class="fa fa-file-alt"></i> <b><a href="/topics/{{ $data->topic_id }}/{{ $data->id }}">{{ $data->topic->title }}</a></b>
                 ({{ $data->topic->count_posts }})
 
-                <div class="post-message">
+                <div class="section-message">
                     {!! bbCode($data->text) !!}<br>
 
                     {{ __('main.posted') }}: {{ $data->user->login }} <small>({{ dateFixed($data->created_at) }})</small>

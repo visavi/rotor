@@ -45,15 +45,15 @@
                     <div class="flex-grow-1">
                         @if ($post->user_id)
                             {!! $post->user->getProfile() !!}
-                            <small class="post-date text-muted font-italic">{{ dateFixed($post->created_at) }}</small><br>
+                            <small class="section-date text-muted font-italic">{{ dateFixed($post->created_at) }}</small><br>
                             <small class="font-italic">{!! $post->user->getStatus() !!}</small>
                         @else
                             @if ($post->guest_name)
-                                <span class="post-author font-weight-bold" data-login="{{ $post->guest_name }}">{{ $post->guest_name }}</span>
+                                <span class="section-author font-weight-bold" data-login="{{ $post->guest_name }}">{{ $post->guest_name }}</span>
                             @else
-                                <span class="post-author font-weight-bold" data-login="{{ setting('guestsuser') }}">{{ setting('guestsuser') }}</span>
+                                <span class="section-author font-weight-bold" data-login="{{ setting('guestsuser') }}">{{ setting('guestsuser') }}</span>
                             @endif
-                            <small class="post-date text-muted font-italic">{{ dateFixed($post->created_at) }}</small>
+                            <small class="section-date text-muted font-italic">{{ dateFixed($post->created_at) }}</small>
                         @endif
                     </div>
 
@@ -74,7 +74,7 @@
                 </div>
 
                 <div class="section-body border-top my-1 py-1">
-                    <div class="post-message">
+                    <div class="section-message">
                         {!! bbCode($post->text) !!}
                     </div>
 
@@ -87,7 +87,9 @@
                     @endif
 
                     @if (isAdmin())
-                        <div class="small text-muted font-italic mt-2">{{ $post->brow }}, {{ $post->ip }}</div>
+                        <div class="small text-muted font-italic mt-2">
+                            {{ $post->brow }}, {{ $post->ip }}
+                        </div>
                     @endif
                 </div>
             </div>

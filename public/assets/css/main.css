@@ -92,15 +92,14 @@
 .cursor-pointer {
   cursor: pointer;
 }
+
+.btn-light {
+  border: 1px solid #e1e1e8;
+}
 /* New theme */
 
 textarea.form-control {
   resize: vertical;
-}
-
-@font-face {
-  font-family: FontAwesome;
-  src: url('/assets/fonts/fa-solid-900.woff');
 }
 
 .media-file {
@@ -112,7 +111,8 @@ textarea.form-control {
   content: "\f10d";
   line-height: 1.0em;
   font-size: 130%;
-  font-family: FontAwesome;
+  font-family: "Font Awesome 5 Free";
+  font-weight: 900;
   float: left;
   margin-right: 10px;
   color: #c73401;
@@ -154,7 +154,8 @@ textarea.form-control {
 
 .spoiler:before {
   content: "\f0da";
-  font-family: FontAwesome;
+  font-family: "Font Awesome 5 Free";
+  font-weight: 900;
   font-size: 17px;
   color: #bbb;
   margin: 0 5px 0 2px;
@@ -162,7 +163,8 @@ textarea.form-control {
 
 .spoiler.spoiler-open:before {
   content: "\f0d7";
-  font-family: FontAwesome;
+  font-family: "Font Awesome 5 Free";
+  font-weight: 900;
   font-size: 17px;
   color: #bbb;
   margin: 0 5px 0 2px;
@@ -199,86 +201,28 @@ textarea.form-control {
   border-radius: 3px;
 }
 
-/*
-.progress {
-  position: relative;
-  max-width: 250px;
-  height: 15px;
-  margin-bottom: 10px;
-}
-
-.img {
-  float:left;
-  margin-right : 10px;
-}
-
-.avatar-box {
-  height: 48px;
-  margin-bottom: 10px;
-}
-
-.avatar-box a {
-  display: block;
-  border: none !important;
-}
-.avatar-box_image {
-  float: left;
-}
-.avatar-box_login{
-  float: left;
-  margin-left: 10px;
-}
-
-.avatar {
-  height: 48px;
-  width: 48px;
-  line-height: 48px;
-  text-align: center;
-  border-radius: 50%;
-}
-
-.avatar a {
-  text-decoration: none;
-  font-size: 30px;
-  font-weight: bold;
-  color: #fff;
-  display: block;
-}
-*/
-
-/*
-.online {
-  width: 14px;
-  height: 14px;
-  position: relative;
-  border-radius: 7px;
-  margin-top: -14px;
-  right: -34px;
-  z-index: 99;
-  border: 2px solid #fff;
-}
-
-.pagination {
-  padding-top: 20px;
-}
-*/
-
 .carousel-control-prev-icon,
 .carousel-control-next-icon {
   background-image: none;
-  width: auto;
-  color: #5c5c5c;
-  font-family: FontAwesome;
+  font-family: "Font Awesome 5 Free";
+  font-weight: 900;
   font-size: 25px;
 }
 
 .carousel-control-next-icon:after {
   content: "\f138";
-
 }
 
 .carousel-control-prev-icon:after {
   content: "\f137";
+}
+
+
+.carousel-indicators li {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  box-shadow: inset 0px 0px 1px 1px rgba(0, 0, 0, 0.5);
 }
 
 .scrollup {
@@ -287,17 +231,18 @@ textarea.form-control {
   right: 30px;
   display: none;
   cursor: pointer;
-  opacity: .5;
+  opacity: .2;
 }
 
 .scrollup:before {
   content: "\f139";
-  font-family: FontAwesome;
-  font-size: 35px;
+  font-family: "Font Awesome 5 Free";
+  font-weight: 900;
+  font-size: 30px;
 }
 
 .scrollup:hover {
-  opacity: 1;
+  opacity: .5;
 }
 
 .message-block {

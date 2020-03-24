@@ -46,7 +46,7 @@
             </div>
         @endforeach
 
-        <div class="mt-3">
+        <div class="my-3">
             <form action="/ratinglists" method="post">
                 <div class="form-inline">
                     <div class="form-group{{ hasError('user') }}">
@@ -57,7 +57,7 @@
                 </div>
                 <div class="invalid-feedback">{{ textError('user') }}</div>
             </form>
-        </div><br>
+        </div>
 
         {{ __('main.total_users') }}: <b>{{ $users->total() }}</b><br>
     @else

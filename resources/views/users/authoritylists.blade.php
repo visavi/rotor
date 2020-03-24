@@ -20,30 +20,32 @@
 @section('content')
     @if ($users->isNotEmpty())
         @foreach($users as $key => $data)
-            <div class="b">
-                <div class="img">
+            <div class="section mb-3 shadow">
+                <div class="user-avatar">
                     {!! $data->getAvatar() !!}
                     {!! $data->getOnline() !!}
                 </div>
 
-                {{ $users->firstItem() + $key }}.
+                <div class="section-user">
+                    {{ $users->firstItem() + $key }}.
 
-                @if ($user === $data->login)
-                    <b>{!! $data->getProfile('#ff0000') !!}</b>
-                @else
-                    <b>{!! $data->getProfile() !!}</b>
-                @endif
-                ({{ __('main.reputation') }}: {{ $data->rating }})<br>
-                {!! $data->getStatus() !!}
-            </div>
+                    @if ($user === $data->login)
+                        <b>{!! $data->getProfile('#ff0000') !!}</b>
+                    @else
+                        <b>{!! $data->getProfile() !!}</b>
+                    @endif
+                    ({{ __('main.reputation') }}: {{ $data->rating }})<br>
+                    {!! $data->getStatus() !!}
+                </div>
 
-            <div>
-                {{ __('main.pluses') }}: {{ $data->posrating }} / {{ __('main.minuses') }}: {{ $data->negrating }}<br>
-                {{ __('main.registration_date') }}: {{ dateFixed($data->created_at, 'd.m.Y') }}
+                <div class="section-body border-top my-1 py-1">
+                    {{ __('main.pluses') }}: {{ $data->posrating }} / {{ __('main.minuses') }}: {{ $data->negrating }}<br>
+                    {{ __('main.registration_date') }}: {{ dateFixed($data->created_at, 'd.m.Y') }}
+                </div>
             </div>
         @endforeach
 
-        <div class="form mt-3">
+        <div class="my-3">
             <form action="/authoritylists" method="post">
                 <div class="form-inline">
                     <div class="form-group{{ hasError('user') }}">
@@ -54,7 +56,7 @@
                 </div>
                 <div class="invalid-feedback">{{ textError('user') }}</div>
             </form>
-        </div><br>
+        </div>
 
         {{ __('main.total_users') }}: <b>{{ $users->total() }}</b><br>
     @else

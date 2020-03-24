@@ -47,11 +47,11 @@
 
     @yield('performance')
 </main>
-
 <script src="{{ mix('/assets/js/dist/manifest.js') }}"></script>
 <script src="{{ mix('/assets/js/dist/vendor.js') }}"></script>
 <script src="{{ mix('/assets/js/dist/lang.js') }}"></script>
 <script src="{{ mix('/themes/default/dist/app.js') }}"></script>
 @stack('scripts')
+<div class="scrollup"></div>
 </body>
 </html>

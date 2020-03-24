@@ -28,7 +28,7 @@
                     <a href="#" class="float-right" onclick="return deletePost(this)" data-tid="{{ $data->id }}" data-token="{{ $_SESSION['token'] }}" data-toggle="tooltip" title="{{ __('main.delete') }}"><i class="fa fa-times"></i></a>
                 @endif
 
-                <div class="post-message">
+                <div class="section-message">
                     {!! bbCode($data->text) !!}<br>
 
                     {{ __('main.posted') }}: {{ $data->user->login }}

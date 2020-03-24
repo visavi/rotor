@@ -10,56 +10,76 @@
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
             <li class="breadcrumb-item"><a href="/admin">{{ __('index.panel') }}</a></li>
             <li class="breadcrumb-item active">{{ __('index.guestbooks') }}</li>
-            <li class="breadcrumb-item"><a href="/guestbooks?page={{ $posts->currentPage() }}">{{ __('main.review') }}</a></li>
         </ol>
     </nav>
+@stop
+
+@section('header')
+    @if (getUser() || setting('bookadds'))
+        <div class="float-right">
+            <a class="btn btn-light" href="/guestbooks?page={{ $posts->currentPage() }}"><i class="fas fa-wrench"></i></a>
+        </div>
+    @endif
+
+
+    <h1>{{ __('index.guestbooks') }}</h1>
 @stop
 
 @section('content')
     @if ($posts->isNotEmpty())
         <form action="/admin/guestbooks/delete?page={{ $posts->currentPage() }}" method="post">
             @csrf
-            @foreach($posts as $data)
-                <div class="post">
-                    <div class="b">
-                        <div class="float-right">
-                            <a href="/admin/guestbooks/reply/{{ $data->id }}?page={{ $posts->currentPage() }}"><i class="fa fa-reply text-muted"></i></a>
-                            <a href="/admin/guestbooks/edit/{{ $data->id }}?page={{ $posts->currentPage() }}"><i class="fas fa-pencil-alt text-muted"></i></a>
-                            <input type="checkbox" name="del[]" value="{{ $data->id }}">
-                        </div>
-
-                        @if ($data->user_id)
-                            <div class="img">
-                                {!! $data->user->getAvatar() !!}
-                                {!! $data->user->getOnline() !!}
-                            </div>
-                            <b>{!! $data->user->getProfile() !!}</b> <small>({{ dateFixed($data->created_at) }})</small><br>
-                            {!! $data->user->getStatus() !!}
+            @foreach($posts as $post)
+                <div class="section mb-3 shadow">
+                    <div class="user-avatar">
+                        @if ($post->user_id)
+                            {!! $post->user->getAvatar() !!}
+                            {!! $post->user->getOnline() !!}
                         @else
-                            <div class="img">
-                                <img class="avatar" src="/assets/img/images/avatar_guest.png" alt="">
-                            </div>
-
-                            @if ($data->guest_name)
-                                <b class="author" data-login="{{ $data->guest_name }}">{{ $data->guest_name }}</b>
-                            @else
-                                <b class="author" data-login="{{ setting('guestsuser') }}">{{ setting('guestsuser') }}</b>
-                            @endif
-                            <small>({{ dateFixed($data->created_at) }})</small>
+                            <img class="avatar" src="/assets/img/images/avatar_guest.png" alt="">
                         @endif
                     </div>
 
-                    <div class="message">{!! bbCode($data->text) !!}</div>
+                    <div class="section-user d-flex align-items-center">
+                        <div class="flex-grow-1">
+                            @if ($post->user_id)
+                                {!! $post->user->getProfile() !!}
+                                <small class="section-date text-muted font-italic">{{ dateFixed($post->created_at) }}</small><br>
+                                <small class="font-italic">{!! $post->user->getStatus() !!}</small>
+                            @else
+                                @if ($post->guest_name)
+                                    <span class="section-author font-weight-bold" data-login="{{ $post->guest_name }}">{{ $post->guest_name }}</span>
+                                @else
+                                    <span class="section-author font-weight-bold" data-login="{{ setting('guestsuser') }}">{{ setting('guestsuser') }}</span>
+                                @endif
+                                <small class="section-date text-muted font-italic">{{ dateFixed($post->created_at) }}</small>
+                            @endif
+                        </div>
 
-                    @if ($data->edit_user_id)
-                        <small><i class="fa fa-exclamation-circle text-danger"></i> {{ __('main.changed') }}: {{ $data->editUser->getName() }} ({{ dateFixed($data->updated_at) }})</small><br>
-                    @endif
+                        <div class="text-right">
+                            <a href="/admin/guestbooks/reply/{{ $post->id }}?page={{ $posts->currentPage() }}"><i class="fa fa-reply text-muted"></i></a>
+                            <a href="/admin/guestbooks/edit/{{ $post->id }}?page={{ $posts->currentPage() }}"><i class="fas fa-pencil-alt text-muted"></i></a>
+                            <input type="checkbox" name="del[]" value="{{ $post->id }}">
+                        </div>
+                    </div>
 
-                    <span class="data">({{ $data->brow }}, {{ $data->ip }})</span>
+                    <div class="section-body border-top my-1 py-1">
+                        <div class="section-message">
+                            {!! bbCode($post->text) !!}
+                        </div>
 
-                    @if ($data->reply)
-                        <br><span style="color:#ff0000">{{ __('guestbooks.answer') }}: {!! bbCode($data->reply) !!}</span>
-                    @endif
+                        @if ($post->edit_user_id)
+                                <div class="small"><i class="fa fa-exclamation-circle text-danger"></i> {{ __('main.changed') }}: {{ $post->editUser->getName() }} ({{ dateFixed($post->updated_at) }})</div>
+                        @endif
+
+                        @if ($post->reply)
+                            <div class="text-danger">{{ __('guestbooks.answer') }}: {!! bbCode($post->reply) !!}</div>
+                        @endif
+
+                        <div class="small text-muted font-italic mt-2">
+                            {{ $post->brow }}, {{ $post->ip }}
+                        </div>
+                    </div>
                 </div>
             @endforeach
 
