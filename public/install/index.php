@@ -132,6 +132,10 @@ $keys = [
         <i class="fas fa-check-circle <?= $errors['simple']['tokenizer'] ? 'text-success' : 'fa-times-circle text-danger' ?>"></i>
         Tokenizer<br>
 
+        <?php $errors['simple']['fileinfo'] = extension_loaded('fileinfo') ?>
+        <i class="fas fa-check-circle <?= $errors['simple']['fileinfo'] ? 'text-success' : 'fa-times-circle text-danger' ?>"></i>
+        Fileinfo<br>
+
         <?php $errors['simple']['mbstring'] = extension_loaded('mbstring') ?>
         <i class="fas fa-check-circle <?= $errors['simple']['mbstring'] ? 'text-success' : 'fa-times-circle text-danger' ?>"></i>
         <?php $version = getModuleSetting('mbstring', ['oniguruma version', 'Multibyte regex (oniguruma) version']); ?>
