@@ -21,6 +21,7 @@ class CreateTopicsTable extends AbstractMigration
                 ->addColumn('note', 'string', ['null' => true])
                 ->addColumn('updated_at', 'integer', ['null' => true])
                 ->addColumn('count_posts', 'integer')
+                ->addColumn('visits', 'integer', ['default' => 0])
                 ->addColumn('last_post_id', 'integer', ['null' => true])
                 ->addColumn('created_at', 'integer')
                 ->addIndex(['count_posts', 'updated_at'], ['name' => 'count_posts_time'])

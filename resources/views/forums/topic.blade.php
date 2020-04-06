@@ -39,6 +39,10 @@
         / <a href="#" onclick="return bookmark(this)" data-tid="{{ $topic->id }}" data-token="{{ $_SESSION['token'] }}" data-from="{{ __('forums.from_bookmarks') }}"  data-to="{{ __('forums.to_bookmarks') }}">{{ $bookmark }}</a>
     @endif
 
+    <div class="float-right" data-toggle="tooltip" title="{{ __('main.views') }}">
+        <i class="far fa-eye"></i> {{ $topic->visits }}
+    </div>
+
     @if ($topic->curators)
        <div>
             <span class="badge badge-warning">

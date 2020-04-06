@@ -89,22 +89,7 @@ class BlogController extends BaseController
             abort(404, __('blogs.article_not_exist'));
         }
 
-        $reader = Reader::query()
-            ->where('relate_type', Blog::class)
-            ->where('relate_id', $blog->id)
-            ->where('ip', getIp())
-            ->first();
-
-        if (! $reader) {
-            Reader::query()->create([
-                'relate_type' => Blog::class,
-                'relate_id'   => $blog->id,
-                'ip'          => getIp(),
-                'created_at'  => SITETIME,
-            ]);
-
-            $blog->increment('visits');
-        }
+        Reader::countingStat($blog, 'visits');
 
         $blog->text = bbCode($blog->text) . '<br>';
         $tagsList = preg_split('/[\s]*[,][\s]*/', $blog->tags);

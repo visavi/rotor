@@ -53,6 +53,13 @@ class Blog extends BaseModel
     public $uploadPath = UPLOADS . '/blogs';
 
     /**
+     * Counting field
+     *
+     * @var string
+     */
+    public $countingField = 'visits';
+
+    /**
      * Возвращает комментарии блогов
      *
      * @return MorphMany

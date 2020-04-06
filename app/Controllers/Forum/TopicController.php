@@ -9,6 +9,7 @@ use App\Models\File;
 use App\Models\Polling;
 use App\Models\Post;
 use App\Models\Bookmark;
+use App\Models\Reader;
 use App\Models\Topic;
 use App\Models\User;
 use App\Models\Vote;
@@ -69,13 +70,16 @@ class TopicController extends BaseController
                 ->update(['count_posts' => $topic->count_posts]);
         }
 
-        // Кураторы
+        // Curators
         if ($topic->moderators) {
             $topic->curators = User::query()->whereIn('id', explode(',', $topic->moderators))->get();
             $topic->isModer = $topic->curators->where('id', getUser('id'))->isNotEmpty();
         }
 
-        // Голосование
+        // Visits
+        Reader::countingStat($topic);
+
+        // Votes
         $vote = Vote::query()->where('topic_id', $topic->id)->first();
 
         if ($vote) {

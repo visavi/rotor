@@ -68,6 +68,13 @@ class Down extends BaseModel
     public static $viewExt = ['xml', 'wml', 'asp', 'aspx', 'shtml', 'htm', 'phtml', 'html', 'php', 'htt', 'dat', 'tpl', 'htaccess', 'pl', 'js', 'jsp', 'css', 'txt', 'sql', 'gif', 'png', 'bmp', 'wbmp', 'jpg', 'jpeg', 'env', 'gitignore', 'json', 'yml', 'md'];
 
     /**
+     * Counting field
+     *
+     * @var string
+     */
+    public $countingField = 'loads';
+
+    /**
      * Возвращает категорию загрузок
      *
      * @return BelongsTo

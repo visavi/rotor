@@ -353,23 +353,7 @@ class DownController extends BaseController
         $validator->true(file_exists(HOME . $file->hash), __('loads.down_not_exist'));
 
         if ($validator->isValid()) {
-            $reader = Reader::query()
-                ->where('relate_type', Down::class)
-                ->where('relate_id', $file->relate->id)
-                ->where('ip', getIp())
-                ->first();
-
-            if (! $reader) {
-                Reader::query()->create([
-                    'relate_type' => Down::class,
-                    'relate_id'   => $file->relate->id,
-                    'ip'          => getIp(),
-                    'created_at'  => SITETIME,
-                ]);
-
-                $file->relate->increment('loads');
-            }
-
+            Reader::countingStat($file->relate);
             $file->download();
         } else {
             setFlash('danger', $validator->getErrors());

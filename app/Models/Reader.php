@@ -4,6 +4,9 @@ declare(strict_types=1);
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Model;
+
 /**
  * Class Reader
  *
@@ -29,4 +32,28 @@ class Reader extends BaseModel
      */
     protected $guarded = [];
 
+    /**
+     * Counting stat
+     *
+     * @param  Builder|Model|object  $model
+     */
+    public static function countingStat(object $model): void
+    {
+        $reader = self::query()
+            ->where('relate_type', get_class($model))
+            ->where('relate_id', $model->id)
+            ->where('ip', getIp())
+            ->first();
+
+        if (! $reader) {
+            self::query()->create([
+                'relate_type' => get_class($model),
+                'relate_id'   => $model->id,
+                'ip'          => getIp(),
+                'created_at'  => SITETIME,
+            ]);
+
+            $model->increment($model->countingField);
+        }
+    }
 }

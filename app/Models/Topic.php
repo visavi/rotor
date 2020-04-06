@@ -45,6 +45,13 @@ class Topic extends BaseModel
     protected $guarded = [];
 
     /**
+     * Counting field
+     *
+     * @var string
+     */
+    public $countingField = 'visits';
+
+    /**
      * Возвращает сообщения
      *
      * @return HasMany
