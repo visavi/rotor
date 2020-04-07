@@ -1933,9 +1933,8 @@ function bbCode($text, $parse = true)
 function getIp()
 {
     $cf = new CloudFlare(request());
-    $ip = $cf->ip();
 
-    return $ip === '::1' ? '127.0.0.1' : $ip;
+    return $cf->ip();
 }
 
 /**
@@ -1954,7 +1953,10 @@ function getBrowser($userAgent = null)
 
     $brow = $browser->getBrowser();
     $version = implode('.', array_slice(explode('.', $browser->getVersion()), 0, 2));
-    return mb_substr($version === 'unknown' ? $brow : $brow . ' ' . $version, 0, 25, 'utf-8');
+
+    $browser = $version === Browser::VERSION_UNKNOWN ? $brow : $brow . ' ' . $version;
+
+    return mb_substr($browser, 0, 25, 'utf-8');
 }
 
 /**
