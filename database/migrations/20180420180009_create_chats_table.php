@@ -14,7 +14,7 @@ class CreateChatsTable extends AbstractMigration
             $table
                 ->addColumn('user_id', 'integer')
                 ->addColumn('text', 'text', ['null' => true])
-                ->addColumn('ip', 'string', ['limit' => 15])
+                ->addColumn('ip', 'varbinary', ['limit' => 16])
                 ->addColumn('brow', 'string', ['limit' => 25])
                 ->addColumn('created_at', 'integer', ['null' => true])
                 ->addColumn('edit_user_id', 'integer', ['null' => true])

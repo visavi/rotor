@@ -15,7 +15,7 @@ class CreateLogsTable extends AbstractMigration
                 ->addColumn('user_id', 'integer')
                 ->addColumn('request', 'string', ['null' => true])
                 ->addColumn('referer', 'string', ['null' => true])
-                ->addColumn('ip', 'string', ['limit' => 15])
+                ->addColumn('ip', 'varbinary', ['limit' => 16])
                 ->addColumn('brow', 'string', ['limit' => 25])
                 ->addColumn('created_at', 'integer')
                 ->addIndex('created_at')

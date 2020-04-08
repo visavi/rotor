@@ -16,7 +16,7 @@ class CreateCommentsTable extends AbstractMigration
                 ->addColumn('relate_type', 'string', ['limit' => 50])
                 ->addColumn('relate_id', 'integer')
                 ->addColumn('text', 'text', ['null' => true])
-                ->addColumn('ip', 'string', ['limit' => 15])
+                ->addColumn('ip', 'varbinary', ['limit' => 16])
                 ->addColumn('brow', 'string', ['limit' => 25])
                 ->addColumn('created_at', 'integer')
                 ->addIndex(['relate_type', 'relate_id'], ['name' => 'relate_type'])
