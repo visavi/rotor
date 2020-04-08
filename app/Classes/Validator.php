@@ -28,6 +28,7 @@ class Validator
      * @param  int    $max
      * @param  mixed  $label
      * @param  bool   $required
+     *
      * @return Validator
      */
     public function length($input, $min, $max, $label, $required = true): Validator
@@ -52,6 +53,7 @@ class Validator
      * @param  int   $min
      * @param  int   $max
      * @param  mixed $label
+     *
      * @return Validator
      */
     public function between($input, $min, $max, $label): Validator
@@ -69,6 +71,7 @@ class Validator
      * @param  int   $input
      * @param  int   $input2
      * @param  mixed $label
+     *
      * @return Validator
      */
     public function gt($input, $input2, $label): Validator
@@ -86,6 +89,7 @@ class Validator
      * @param  int   $input
      * @param  int   $input2
      * @param  mixed $label
+     *
      * @return Validator
      */
     public function gte($input, $input2, $label): Validator
@@ -103,6 +107,7 @@ class Validator
      * @param  int   $input
      * @param  int   $input2
      * @param  mixed $label
+     *
      * @return Validator
      */
     public function lt($input, $input2, $label): Validator
@@ -120,6 +125,7 @@ class Validator
      * @param  int   $input
      * @param  int   $input2
      * @param  mixed $label
+     *
      * @return Validator
      */
     public function lte($input, $input2, $label): Validator
@@ -137,6 +143,7 @@ class Validator
      * @param  mixed $input
      * @param  mixed $input2
      * @param  mixed $label
+     *
      * @return Validator
      */
     public function equal($input, $input2, $label): Validator
@@ -154,6 +161,7 @@ class Validator
      * @param  mixed $input
      * @param  mixed $input2
      * @param  mixed $label
+     *
      * @return Validator
      */
     public function notEqual($input, $input2, $label): Validator
@@ -170,6 +178,7 @@ class Validator
      *
      * @param  mixed $input
      * @param  mixed $label
+     *
      * @return Validator
      */
     public function empty($input, $label): Validator
@@ -186,6 +195,7 @@ class Validator
      *
      * @param  mixed $input
      * @param  mixed $label
+     *
      * @return Validator
      */
     public function notEmpty($input, $label): Validator
@@ -202,6 +212,7 @@ class Validator
      *
      * @param  mixed $input
      * @param  mixed $label
+     *
      * @return Validator
      */
     public function true($input, $label): Validator
@@ -218,6 +229,7 @@ class Validator
      *
      * @param  mixed $input
      * @param  mixed $label
+     *
      * @return Validator
      */
     public function false($input, $label): Validator
@@ -235,6 +247,7 @@ class Validator
      * @param  mixed $input
      * @param  array $haystack
      * @param  mixed $label
+     *
      * @return Validator
      */
     public function in($input, $haystack, $label): Validator
@@ -252,6 +265,7 @@ class Validator
      * @param  mixed $input
      * @param  array $haystack
      * @param  mixed $label
+     *
      * @return Validator
      */
     public function notIn($input, $haystack, $label): Validator
@@ -270,6 +284,7 @@ class Validator
      * @param  string $pattern
      * @param  mixed  $label
      * @param  bool   $required
+     *
      * @return Validator
      */
     public function regex($input, $pattern, $label, $required = true): Validator
@@ -286,11 +301,12 @@ class Validator
     }
 
     /**
-     * Тестирует на число в плавающей точкой
+     * Check float
      *
      * @param  float $input
      * @param  mixed $label
      * @param  bool  $required
+     *
      * @return Validator
      */
     public function float($input, $label, $required = true): Validator
@@ -312,6 +328,7 @@ class Validator
      * @param  string $input
      * @param  mixed  $label
      * @param  bool   $required
+     *
      * @return Validator
      */
     public function url($input, $label, $required = true): Validator
@@ -333,6 +350,7 @@ class Validator
      * @param  string $input
      * @param  mixed  $label
      * @param  bool   $required
+     *
      * @return Validator
      */
     public function email($input, $label, $required = true): Validator
@@ -349,12 +367,35 @@ class Validator
     }
 
     /**
+     * Check IP address
+     *
+     * @param  string $input
+     * @param  mixed  $label
+     * @param  bool   $required
+     *
+     * @return Validator
+     */
+    public function ip($input, $label, $required = true): Validator
+    {
+        if (! $required && blank($input)) {
+            return $this;
+        }
+
+        if (filter_var($input, FILTER_VALIDATE_IP) === false) {
+            $this->addError($label);
+        }
+
+        return $this;
+    }
+
+    /**
      * Проверяет файл
      *
      * @param UploadedFile|null $input
      * @param array             $rules
      * @param mixed             $label
      * @param bool              $required
+     *
      * @return Validator
      */
     public function file($input, $rules, $label, $required = true): Validator
@@ -413,8 +454,9 @@ class Validator
     /**
      * Добавляет ошибки в массив
      *
-     * @param  mixed  $error текст ошибки
+     * @param  mixed  $error       текст ошибки
      * @param  string $description
+     *
      * @return void
      */
     public function addError($error, $description = null): void

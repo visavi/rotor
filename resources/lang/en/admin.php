@@ -189,9 +189,6 @@ return [
     'ipbans' => [
         'history'             => 'History of the autobahns',
         'empty_ip'            => 'The ban list is still empty!',
-        'hint'                => '
-        Ban examples: 127.0.0.1 without indentation or spaces<br>
-        Or by mask 127.0.0. *, 127.0. *. *, All IPs matching the initial digits will be banned',
         'confirm_clear'       => 'Do you really want to clear the IP list?',
         'ip_invalid'          => 'You entered an invalid IP address',
         'ip_exists'           => 'The IP you entered is already on the list!',

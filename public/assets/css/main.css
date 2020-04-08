@@ -1,7 +1,7 @@
 /* New theme */
 .section {
   background: #fff;
-  padding: 1rem;
+  padding: 1rem 1rem .5rem;
 }
 
 .section-header {

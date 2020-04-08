@@ -52,16 +52,22 @@ class HomeController extends BaseController
      * Бан по IP
      *
      * @param Request $request
+     *
      * @return string
      * @throws Exception
      */
     public function ipban(Request $request): string
     {
-        $ban = Ban::query()
-            ->where('ip', getIp())
-            ->first();
+        $ipBan = ipBan();
+
+        if (! isset($ipBan[getIp()])) {
+            redirect('/');
+        }
+
+        $ban = Ban::query()->find($ipBan[getIp()]);
 
         if (! $ban) {
+            ipBan(true);
             redirect('/');
         }
 
@@ -108,7 +114,8 @@ class HomeController extends BaseController
     /**
      * Быстрое изменение языка
      *
-     * @param string  $lang
+     * @param string $lang
+     *
      * @param Request $request
      */
     public function language(string $lang, Request $request): void

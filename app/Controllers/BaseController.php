@@ -52,27 +52,12 @@ Class BaseController
      */
     private function isBanned(Request $request): bool
     {
-        if (($ipBan = ipBan()) && ! isAdmin()) {
-            $ipSplit = explode('.', getIp());
-
-            foreach($ipBan as $ip) {
-                $matches = 0;
-                $dbSplit = explode('.', $ip);
-
-                foreach($ipSplit as $key => $split) {
-                    if (isset($dbSplit[$key]) && ($split === $dbSplit[$key] || $dbSplit[$key] === '*')) {
-                        ++$matches;
-                    }
-                }
-
-                if ($matches === 4) {
-                    if ($request->is('ipban', 'captcha')) {
-                        return true;
-                    }
-
-                    redirect('/ipban');
-                }
+        if (! isAdmin() && isset(ipBan()[getIp()])) {
+            if ($request->is('ipban', 'captcha')) {
+                return true;
             }
+
+            redirect('/ipban');
         }
 
         return false;

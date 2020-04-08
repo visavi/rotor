@@ -34,6 +34,7 @@ return [
     'author'            => 'Author',
     'posted'            => 'Posted',
     'added'             => 'Added',
+    'added_by'          => 'Added by',
     'sent'              => 'Sent',
     'sent_out'          => 'Sent out',
     'menu'              => 'My menu',

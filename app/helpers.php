@@ -2202,7 +2202,7 @@ function ipBan($clear = false)
     }
 
     return Cache::rememberForever('ipBan', static function () {
-        return Ban::query()->pluck('ip')->all();
+        return Ban::query()->get()->pluck('id', 'ip')->all();
     });
 }
 
