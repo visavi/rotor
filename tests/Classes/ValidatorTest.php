@@ -372,6 +372,27 @@ class ValidatorTest extends \Tests\TestCase
     }
 
     /**
+     * Validate IP address
+     */
+    public function testIp(): void
+    {
+        $this->validator->ip('127.0.0.1', 'error');
+        $this->assertTrue($this->validator->isValid());
+
+        $this->validator->ip(null, 'error', false);
+        $this->assertTrue($this->validator->isValid());
+
+        $this->validator->ip('::1', 'error');
+        $this->assertTrue($this->validator->isValid());
+
+        $this->validator->ip('127.0.0.256', 'error');
+        $this->assertFalse($this->validator->isValid());
+
+        $this->validator->ip('fe80::200:5aee:feaa:20a2::', 'error');
+        $this->assertFalse($this->validator->isValid());
+    }
+
+    /**
      * Тестирует добавление ошибки
      */
     public function testAddError(): void
