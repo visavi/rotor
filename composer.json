@@ -31,7 +31,7 @@
         "php-ffmpeg/php-ffmpeg": "~0.14",
         "swiftmailer/swiftmailer": "~6.2",
         "josegonzalez/dotenv": "^3.2",
-        "robmorgan/phinx": "^0.11",
+        "robmorgan/phinx": "^0.12",
         "php-curl-class/php-curl-class": "^8.7",
         "visavi/cleanup": "^1.5",
         "visavi/crontask":  "^1.2",

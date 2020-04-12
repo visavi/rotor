@@ -11,7 +11,7 @@ class ChangeIpInGuestbooks extends AbstractMigration
     public function up()
     {
         $table = $this->table('guestbooks');
-        $table->addColumn('ip_new', 'varbinary', ['limit' => 16, 'null' => true, 'after' => 'ip'])
+        $table->addColumn('ip_new', 'varbinary', ['limit' => 16, 'after' => 'ip'])
             ->update();
 
         $this->execute("UPDATE guestbooks SET ip=if(ip NOT REGEXP '^((25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$', '127.0.0.1', ip);");
