@@ -39,7 +39,7 @@ class IpBanController extends AdminController
             $validator->equal($token, $_SESSION['token'], __('validator.token'))
                 ->ip($ip, ['ip' => __('admin.ipbans.ip_invalid')]);
 
-            $duplicate = Ban::query()->where('ip', $ip)->first();
+            $duplicate = Ban::query()->where('ip', inet_pton($ip))->first();
             $validator->empty($duplicate, ['ip' => __('admin.ipbans.ip_exists')]);
 
             if ($validator->isValid()) {

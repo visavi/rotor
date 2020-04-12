@@ -58,13 +58,9 @@ class HomeController extends BaseController
      */
     public function ipban(Request $request): string
     {
-        $ipBan = ipBan();
-
-        if (! isset($ipBan[getIp()])) {
-            redirect('/');
-        }
-
-        $ban = Ban::query()->find($ipBan[getIp()]);
+        $ban = Ban::query()
+            ->where('ip', inet_pton(getIp()))
+            ->first();
 
         if (! $ban) {
             ipBan(true);

@@ -42,7 +42,7 @@ class Reader extends BaseModel
         $reader = self::query()
             ->where('relate_type', get_class($model))
             ->where('relate_id', $model->id)
-            ->where('ip', getIp())
+            ->where('ip', inet_pton(getIp()))
             ->first();
 
         if (! $reader) {
