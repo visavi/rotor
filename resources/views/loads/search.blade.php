@@ -15,7 +15,7 @@
 @stop
 
 @section('content')
-    <div class="form">
+    <div class="section-form p-2 shadow">
         <form action="/loads/search">
             <input type="hidden" name="cid" value="{{ $cid }}">
 

@@ -44,7 +44,7 @@
     <div class="mb-3" id="uLogin" data-ulogin="display=panel;fields=first_name,last_name,photo;optional=sex,email,nickname;providers=vkontakte,odnoklassniki,mailru,facebook,google,yandex,instagram;redirect_uri={{ siteUrl() }}/register;mobilebuttons=0;">
     </div>
 
-    <div class="form">
+    <div class="section-form p-2 shadow">
         <form action="/register" method="post">
 
             <div class="form-group{{ hasError('login') }}">
@@ -100,7 +100,6 @@
             <button class="btn btn-primary">{{ __('index.register') }}</button>
         </form>
     </div>
-    <br>
 
     {!! __('users.register_text') !!}<br>
 @stop

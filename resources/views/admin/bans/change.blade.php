@@ -27,7 +27,7 @@
 
     {{ __('users.ending_ban') }}: {{ formatTime($user->timeban - SITETIME) }}<br>
 
-    <div class="form">
+    <div class="section-form p-2 shadow">
         <form method="post" action="/admin/bans/change?user={{ $user->login }}">
             @csrf
             <div class="form-group{{ hasError('timeban') }}">

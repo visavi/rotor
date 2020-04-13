@@ -25,7 +25,7 @@
 @section('content')
     <i class="fa fa-pencil-alt"></i> <b>{{ $comment->user->login }}</b> <small>({{ dateFixed($comment->created_at) }})</small><br><br>
 
-    <div class="form">
+    <div class="section-form p-2 shadow">
         <form action="/articles/edit/{{ $comment->relate_id }}/{{ $comment->id }}?page={{ $page }}" method="post">
             @csrf
             <div class="form-group{{ hasError('msg') }}">
@@ -37,5 +37,5 @@
 
             <button class="btn btn-primary">{{ __('main.edit') }}</button>
         </form>
-    </div><br>
+    </div>
 @stop

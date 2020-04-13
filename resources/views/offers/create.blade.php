@@ -16,7 +16,7 @@
 
 @section('content')
     @if (getUser('point') >= setting('addofferspoint'))
-        <div class="form">
+        <div class="section-form p-2 shadow">
             <form action="/offers/create" method="post">
                 @csrf
                 <?php $inputType = getInput('type', $type); ?>
@@ -43,7 +43,7 @@
 
                 <button class="btn btn-primary">{{ __('main.add') }}</button>
             </form>
-        </div><br>
+        </div>
 
     @else
         {!! showError(__('offers.condition_add', ['point' => plural(setting('addofferspoint'), setting('scorename'))])) !!}

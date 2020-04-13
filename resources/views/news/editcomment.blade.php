@@ -19,7 +19,7 @@
 @section('content')
     <i class="fa fa-pencil-alt"></i> <b>{{ $comment->user->login }}</b> <small>({{ dateFixed($comment->created_at) }})</small><br><br>
 
-    <div class="form">
+    <div class="section-form p-2 shadow">
         <form method="post">
             @csrf
             <div class="form-group{{ hasError('msg') }}">

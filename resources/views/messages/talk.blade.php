@@ -26,14 +26,22 @@
     @if ($messages->isNotEmpty())
         @foreach ($messages as $data)
             <?php $author = $data->type === 'in' ? $data->author : $data->user; ?>
-            <div class="post">
-                <div class="b">
-                    <div class="img">
-                        {!! $author->getAvatar() !!}
-                        {!! $author->getOnline() !!}
+            <div class="section mb-3 shadow">
+                <div class="user-avatar">
+                    {!! $author->getAvatar() !!}
+                    {!! $author->getOnline() !!}
+                </div>
+
+                <div class="section-user d-flex align-items-center">
+                    <div class="flex-grow-1">
+                        <b>{!! $author->getProfile() !!}</b>
+
+                        @unless ($data->reading)
+                            <br><span class="badge badge-info">{{ __('messages.new') }}</span>
+                        @endunless
                     </div>
 
-                    <div class="text-muted float-right">
+                    <div class="section-date text-muted font-italic small">
                         {{  dateFixed($data->created_at) }}
 
                         @if ($data->type === 'in')
@@ -42,17 +50,12 @@
                             <i class="fas {{ $data->recipient_read ? 'fa-check-double' : 'fa-check' }} text-success"></i>
                         @endif
                     </div>
-
-                    <b>{!! $author->getProfile() !!}</b>
-
-                    @unless ($data->reading)
-                        <br><span class="badge badge-info">{{ __('messages.new') }}</span>
-                    @endunless
                 </div>
-                <div class="message">
 
-
-                    {!! bbCode($data->text) !!}
+                <div class="section-body border-top my-1 py-1">
+                    <div class="section-message">
+                        {!! bbCode($data->text) !!}
+                    </div>
                 </div>
             </div>
         @endforeach
@@ -63,8 +66,7 @@
     {{ $messages->links() }}
 
     @if ($user->exists)
-        <br>
-        <div class="form">
+        <div class="section-form p-2 shadow">
             <form action="/messages/send?user={{ $user->login }}" method="post">
                 @csrf
                 <div class="form-group{{ hasError('msg') }}">

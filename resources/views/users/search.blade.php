@@ -14,7 +14,7 @@
 @stop
 
 @section('content')
-    <div class="form">
+    <div class="section-form p-2 shadow">
         <form method="get" action="/searchusers/search">
 
             <div class="form-group{{ hasError('find') }}">
@@ -25,7 +25,7 @@
 
             <button class="btn btn-primary">{{ __('main.search') }}</button>
         </form>
-    </div><br>
+    </div>
 
     <a class="badge badge-pill badge-success" href="/searchusers/1">0-9</a>
     <a class="badge badge-pill badge-success" href="/searchusers/a">A</a>

@@ -30,7 +30,7 @@
                         <i class="far fa-sticky-note"></i> <b>{{ $log->ip }}</b>
                     </div>
 
-                    <div class="section-body border-top my-1 py-1">
+                    <div class="section-message">
                         {{ __('main.added_by') }}:
                         @if ($log->user->id)
                             {!! $log->user->getProfile() !!}

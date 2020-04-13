@@ -15,7 +15,7 @@
 @stop
 
 @section('content')
-    <div class="form">
+    <div class="section-form p-2 shadow">
         <form action="/users/{{ $user->login }}/note" method="post">
             @csrf
             <div class="form-group{{ hasError('notice') }}">

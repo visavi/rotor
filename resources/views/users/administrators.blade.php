@@ -34,7 +34,7 @@
         @if (getUser())
             <h3>{{ __('users.fast_mail') }}</h3>
 
-            <div class="form">
+            <div class="section-form p-2 shadow">
                 <form method="post" action="/messages/send">
                     @csrf
                     <div class="form-group">
@@ -58,7 +58,7 @@
 
                     <button class="btn btn-primary">{{ __('main.send') }}</button>
                 </form>
-            </div><br>
+            </div>
         @endif
     @else
         {!! showError(__('users.empty_administration')) !!}

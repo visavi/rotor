@@ -15,7 +15,7 @@
 @stop
 
 @section('content')
-    <div class="form">
+    <div class="section-form p-2 shadow">
 
         @if ($advert->id)
             @if ($advert->deleted_at > SITETIME)

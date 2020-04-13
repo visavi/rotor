@@ -1,7 +1,7 @@
 /* New theme */
 .section {
   background: #fff;
-  padding: 1rem 1rem .5rem;
+  padding: 1rem;
 }
 
 .section-header {
@@ -245,11 +245,13 @@ textarea.form-control {
   opacity: .5;
 }
 
+
 .message-block {
   overflow: hidden;
   cursor: pointer;
 }
 
-.message-block:hover {
+.message-block:hover,
+.message-block:focus {
   background-color: #eee;
 }

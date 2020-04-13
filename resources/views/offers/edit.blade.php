@@ -15,7 +15,7 @@
 @stop
 
 @section('content')
-    <div class="form">
+    <div class="section-form p-2 shadow">
         <form action="/offers/edit/{{ $offer->id }}" method="post">
             @csrf
             <div class="form-group{{ hasError('type') }}">

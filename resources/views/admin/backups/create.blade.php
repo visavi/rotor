@@ -19,7 +19,7 @@
     @if ($tables)
         {{ __('admin.backup.total_tables') }}: <b>{{ count($tables) }}</b><br><br>
 
-        <div class="form">
+        <div class="section-form p-2 shadow">
             <form action="/admin/backups/create" method="post">
                 @csrf
                 <input type="checkbox" id="all" onchange="var o=this.form.elements;for(var i=0;i&lt;o.length;i++)o[i].checked=this.checked"> <b><label for="all">{{ __('main.select_all') }}</label></b>
@@ -73,7 +73,7 @@
 
                 <button class="btn btn-primary">{{ __('main.create') }}</button>
             </form>
-        </div><br>
+        </div>
     @else
         {!! showError(__('admin.backup.empty_tables')) !!}
     @endif

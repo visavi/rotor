@@ -82,7 +82,7 @@
         @endif
 
         @if (getUser())
-            <div class="form">
+            <div class="section-form p-2 shadow">
                 <form action="/news/comments/{{ $news->id }}?read=1" method="post">
                     @csrf
                     <div class="form-group{{ hasError('msg') }}">
@@ -96,7 +96,6 @@
                 </form>
             </div>
 
-            <br>
             <a href="/rules">{{ __('main.rules') }}</a> /
             <a href="/stickers">{{ __('main.stickers') }}</a> /
             <a href="/tags">{{ __('main.tags') }}</a><br><br>

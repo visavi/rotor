@@ -28,7 +28,7 @@
     <div class="mb-3" id="uLogin" data-ulogin="display=panel;fields=first_name,last_name,photo;optional=sex,email,nickname;providers=vkontakte,odnoklassniki,mailru,facebook,google,yandex,instagram;hidden=;redirect_uri={{ siteUrl() }}/login;mobilebuttons=0;">
     </div>
 
-    <div class="form">
+    <div class="section-form p-2 shadow">
         <form method="post">
 
             <div class="form-group">
@@ -49,7 +49,7 @@
             <button class="btn btn-primary">{{ __('users.enter') }}</button>
         </form>
     </div>
-    <br>
+
     <a href="/register">{{ __('index.register') }}</a><br>
     <a href="/recovery">{{ __('users.forgot_password') }}</a><br><br>
 @stop

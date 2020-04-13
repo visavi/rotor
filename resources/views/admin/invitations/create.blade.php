@@ -17,7 +17,7 @@
 
 @section('content')
     <h3>{{ __('admin.invitations.key_generation') }}</h3>
-    <div class="form">
+    <div class="section-form p-2 shadow">
         <form action="/admin/invitations/create" method="post">
             @csrf
             <?php $inputKeys = (int) getInput('keys'); ?>
@@ -35,10 +35,10 @@
 
             <button class="btn btn-primary">{{ __('main.create') }}</button>
         </form>
-    </div><br>
+    </div>
 
     <h3>{{ __('admin.invitations.send_to_user') }}</h3>
-    <div class="form">
+    <div class="section-form p-2 shadow">
         <form action="/admin/invitations/send" method="post">
             @csrf
             <div class="form-group{{ hasError('user') }}">
@@ -64,16 +64,16 @@
 
             <button class="btn btn-primary">{{ __('main.send') }}</button>
         </form>
-    </div><br>
+    </div>
 
     @if (isAdmin('boss'))
         <h3>{{ __('admin.invitations.sending_keys') }}</h3>
-        <div class="form">
+        <div class="section-form p-2 shadow">
             {{ __('admin.invitations.send_to_active_users') }}:<br>
             <form action="/admin/invitations/mail" method="post">
                 @csrf
                 <button class="btn btn-primary">{{ __('main.send') }}</button>
             </form>
-        </div><br>
+        </div>
     @endif
 @stop

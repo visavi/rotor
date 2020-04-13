@@ -48,7 +48,7 @@
                     <b>{!! $data->user->getProfile() !!}</b> <small>({{ dateFixed($data->created_at) }})</small><br>
                     {!! $data->user->getStatus() !!}
                 </div>
-                <div class="message">
+                <div class="section-message">
                     {!! bbCode($data->text) !!}
                 </div>
 
@@ -67,7 +67,7 @@
         @endif
 
         @if (getUser())
-            <div class="form">
+            <div class="section-form p-2 shadow">
                 <form action="/photos/comments/{{ $photo->id }}" method="post">
                     @csrf
                     <div class="form-group{{ hasError('msg') }}">
@@ -79,7 +79,7 @@
 
                     <button class="btn btn-success">{{ __('main.write') }}</button>
                 </form>
-            </div><br>
+            </div>
 
             <a href="/rules">{{ __('main.rules') }}</a> /
             <a href="/stickers">{{ __('main.stickers') }}</a> /

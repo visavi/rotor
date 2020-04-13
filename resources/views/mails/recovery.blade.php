@@ -14,7 +14,7 @@
 @stop
 
 @section('content')
-    <div class="form">
+    <div class="section-form p-2 shadow">
         <form method="post" action="/recovery">
 
             <div class="form-group{{ hasError('user') }}">
@@ -27,7 +27,7 @@
 
             <button class="btn btn-primary">{{ __('mails.restore') }}</button>
         </form>
-    </div><br>
+    </div>
 
     <p class="text-muted font-italic">
         {{ __('mails.recovery_text1') }}

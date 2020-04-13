@@ -15,7 +15,7 @@
 @stop
 
 @section('content')
-    <div class="form">
+    <div class="section-form p-2 shadow">
         <form action="/blogs/search">
             <div class="form-group{{ hasError('find') }}">
                 <label for="inputFind">{{ __('main.request') }}:</label>

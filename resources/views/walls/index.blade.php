@@ -42,7 +42,7 @@
                     <b>{!! $data->author->getProfile() !!}</b> <small>({{ dateFixed($data->created_at) }})</small><br>
                     {!! $data->author->getStatus() !!}
                 </div>
-                <div class="message">
+                <div class="section-message">
                     {!! bbCode($data->text) !!}
                 </div>
             </div>
@@ -56,7 +56,7 @@
     {{ $messages->links() }}
 
     @if (getUser())
-        <div class="form">
+        <div class="section-form p-2 shadow">
             <form action="/walls/{{ $user->login }}/create" method="post">
                 @csrf
                 <div class="form-group{{ hasError('msg') }}">
@@ -67,7 +67,7 @@
 
                 <button class="btn btn-primary">{{ __('main.write') }}</button>
             </form>
-        </div><br>
+        </div>
 
     @else
         {!! showError(__('main.not_authorized')) !!}

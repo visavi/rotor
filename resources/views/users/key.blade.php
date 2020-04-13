@@ -17,19 +17,19 @@
     {{ __('users.welcome', ['login' => getUser('login')]) }}<br>
     {{ __('users.confirm_enter_code') }}<br><br>
 
-    <div class="form">
+    <div class="section-form p-2 shadow">
         <label for="code">{{ __('users.confirm_code') }}:</label>
         <form method="get" action="/key">
             <input class="form-control" name="code" id="code" maxlength="30" required>
             <button class="btn btn-primary">{{ __('main.confirm') }}</button>
         </form>
-    </div><br>
+    </div>
 
     <?php $checkEmail = getInput('email') ? true : false; ?>
     <?php $display = $checkEmail ? '' : ' style="display: none"'; ?>
 
     <div class="js-resending-form"{!! $display !!}>
-        <div class="form">
+        <div class="section-form p-2 shadow">
             <form method="post" action="/key">
                 @csrf
                 <div class="form-group{{ hasError('email') }}">
@@ -41,7 +41,7 @@
                 {!! view('app/_captcha') !!}
                 <button class="btn btn-primary">{{ __('users.resend_code') }}</button>
             </form>
-        </div><br>
+        </div>
 
         <p class="text-muted font-italic">
             {{ __('users.old_code_invalid') }}

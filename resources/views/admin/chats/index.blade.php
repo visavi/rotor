@@ -44,7 +44,9 @@
                     {!! $post->user->getStatus() !!}
                 </div>
 
-                <div class="message">{!! bbCode($post->text) !!}</div>
+                <div class="section-message">
+                    {!! bbCode($post->text) !!}
+                </div>
 
                 @if ($post->edit_user_id)
                     <small><i class="fa fa-exclamation-circle text-danger"></i> {{ __('main.changed') }}: {!! $post->editUser->getProfile() !!} ({{ dateFixed($post->updated_at) }})</small><br>
@@ -59,7 +61,7 @@
 
     {{ $posts->links() }}
 
-    <div class="form">
+    <div class="section-form p-2 shadow">
         <form action="/admin/chats" method="post">
             @csrf
             <div class="form-group{{ hasError('msg') }}">
@@ -70,7 +72,7 @@
 
             <button class="btn btn-primary">{{ __('main.write') }}</button>
         </form>
-    </div><br>
+    </div>
 
     @if ($posts->total() && isAdmin('boss'))
         <i class="fa fa-times"></i> <a href="/admin/chats/clear?token={{ $_SESSION['token'] }}" onclick="return confirm('{{ __('admin.chat.confirm_clear') }}')">{{ __('admin.chat.clear') }}</a><br>

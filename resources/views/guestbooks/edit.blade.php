@@ -29,5 +29,5 @@
 
             <button class="btn btn-primary">{{ __('main.edit') }}</button>
         </form>
-    </div><br>
+    </div>
 @stop

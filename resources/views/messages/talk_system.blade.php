@@ -18,24 +18,31 @@
 @section('content')
     @if ($messages->isNotEmpty())
         @foreach ($messages as $data)
-            <div class="post">
-                <div class="b">
-                    <div class="img">
-                        <img class="avatar" src="/assets/img/images/avatar_system.png" alt="">
-                        <div class="online bg-success" title="Online"></div>
+            <div class="section mb-3 shadow">
+                <div class="user-avatar">
+                    <img class="img-fluid rounded-circle avatar-default" src="/assets/img/images/avatar_system.png" alt="">
+                    <div class="user-status bg-success" title="Online"></div>
+                </div>
+
+                <div class="section-user d-flex align-items-center">
+                    <div class="flex-grow-1">
+                        <b>{{ __('messages.system') }}</b>
+
+                        @unless ($data->reading)
+                            <br><span class="badge badge-info">{{ __('messages.new') }}</span>
+                        @endunless
                     </div>
 
-                    <div class="text-muted float-right">
+                    <div class="section-date text-muted font-italic small">
                         {{  dateFixed($data->created_at) }}
                     </div>
-
-                    <b>{{ __('messages.system') }}</b>
-
-                    @unless ($data->reading)
-                        <br><span class="badge badge-info">{{ __('messages.new') }}</span>
-                    @endunless
                 </div>
-                <div class="message">{!! bbCode($data->text) !!}</div>
+
+                <div class="section-body border-top my-1 py-1">
+                    <div class="section-message">
+                        {!! bbCode($data->text) !!}
+                    </div>
+                </div>
             </div>
         @endforeach
     @else

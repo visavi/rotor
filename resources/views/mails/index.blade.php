@@ -14,7 +14,7 @@
 @stop
 
 @section('content')
-    <div class="form">
+    <div class="section-form p-2 shadow">
         <form method="post" action="/mails">
 
             @if (! getUser())
@@ -43,5 +43,5 @@
 
             <button class="btn btn-primary">{{ __('main.send') }}</button>
         </form>
-    </div><br>
+    </div>
 @stop

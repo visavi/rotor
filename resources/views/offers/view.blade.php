@@ -87,7 +87,7 @@
 
     @if (getUser())
         @if (! $offer->closed)
-            <div class="form">
+            <div class="section-form p-2 shadow">
                 <form action="/offers/comments/{{ $offer->id }}" method="post">
                     @csrf
                     <div class="form-group{{ hasError('msg') }}">
@@ -100,7 +100,7 @@
                     <button class="btn btn-primary">{{ __('main.write') }}</button>
                 </form>
             </div>
-            <br>
+
             <a href="/rules">{{ __('main.rules') }}</a> /
             <a href="/stickers">{{ __('main.stickers') }}</a> /
             <a href="/tags">{{ __('main.tags') }}</a><br><br>

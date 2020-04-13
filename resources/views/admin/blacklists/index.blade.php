@@ -45,7 +45,7 @@
 
     {{ $lists->links() }}
 
-    <div class="form">
+    <div class="section-form p-2 shadow">
         <form action="/admin/blacklists?type={{ $type }}" method="post">
             @csrf
             <div class="form-inline">
@@ -57,7 +57,7 @@
             </div>
             <div class="invalid-feedback">{{ textError('value') }}</div>
         </form>
-    </div><br>
+    </div>
 
     {{ __('main.total') }}: <b>{{ $lists->total() }}</b><br>
 @stop

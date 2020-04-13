@@ -17,7 +17,7 @@
 @stop
 
 @section('content')
-    <div class="form">
+    <div class="section-form p-2 shadow">
         <form action="/admin/users/delete?user={{ $user->login }}" method="post">
             @csrf
             <b>{{ __('users.add_to_blacklist') }}:</b><br>

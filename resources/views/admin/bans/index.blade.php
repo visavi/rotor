@@ -16,7 +16,7 @@
 
 @section('content')
     <label for="user">{{ __('main.user_login') }}:</label><br>
-    <div class="form">
+    <div class="section-form p-2 shadow">
         <form method="get" action="/admin/bans/edit">
             <div class="form-inline">
                 <div class="form-group{{ hasError('user') }}">

@@ -35,10 +35,7 @@
 
 @section('content')
     @if ($topics->onFirstPage() && $forum->children->isNotEmpty())
-        <div class="act">
-
         @foreach ($forum->children as $child)
-
             <div class="section mb-3 shadow border-left border-info">
                 <i class="fa fa-file-alt fa-lg text-muted"></i>
                 <b><a href="/forums/{{ $child->id }}">{{ $child->title }}</a></b> ({{ $child->count_topics }}/{{ $child->count_posts }})
@@ -56,8 +53,6 @@
 
             </div>
         @endforeach
-
-        </div>
         <hr>
     @endif
 

@@ -55,7 +55,7 @@
                     {!! $data->user->getStatus() !!}
                 </div>
 
-                <div class="message">
+                <div class="section-message">
                     {!! bbCode($data->text) !!}<br>
                 </div>
 
@@ -74,7 +74,7 @@
         @endif
 
         @if (getUser())
-            <div class="form">
+            <div class="section-form p-2 shadow">
                 <form action="/news/comments/{{ $news->id }}" method="post">
                     @csrf
                     <div class="form-group{{ hasError('msg') }}">
@@ -87,10 +87,10 @@
                     <button class="btn btn-success">{{ __('main.write') }}</button>
                 </form>
             </div>
-        <br>
-        <a href="/rules">{{ __('main.rules') }}</a> /
-        <a href="/stickers">{{ __('main.stickers') }}</a> /
-        <a href="/tags">{{ __('main.tags') }}</a><br><br>
+
+            <a href="/rules">{{ __('main.rules') }}</a> /
+            <a href="/stickers">{{ __('main.stickers') }}</a> /
+            <a href="/tags">{{ __('main.tags') }}</a><br><br>
         @else
             {!! showError(__('main.not_authorized')) !!}
         @endif

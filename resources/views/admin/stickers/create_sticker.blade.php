@@ -16,7 +16,7 @@
 @stop
 
 @section('content')
-    <div class="form">
+    <div class="section-form p-2 shadow">
         <form action="/admin/stickers/sticker/create" method="post" enctype="multipart/form-data">
             @csrf
             <div class="form-group{{ hasError('category') }}">
@@ -47,7 +47,7 @@
 
             <button class="btn btn-primary">{{ __('main.upload') }}</button>
         </form>
-    </div><br>
+    </div>
 
     <p class="text-muted font-italic">
         {{ __('stickers.valid_sticker_code') }}<br>

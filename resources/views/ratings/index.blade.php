@@ -15,7 +15,7 @@
 @stop
 
 @section('content')
-    <div class="form">
+    <div class="section-form p-2 shadow">
         <form method="post">
             @csrf
             <label for="inputRating">{{ __('main.rating') }}</label>
@@ -34,7 +34,7 @@
 
             <button class="btn btn-primary">{{ __('main.continue') }}</button>
         </form>
-    </div><br>
+    </div>
 
     <i class="fa fa-briefcase"></i> <a href="/ratings/{{ $user->login }}">{{ __('ratings.history') }}</a><br>
 @stop

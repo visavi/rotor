@@ -16,7 +16,7 @@
 @stop
 
 @section('content')
-    <div class="form">
+    <div class="section-form p-2 shadow">
         <form action="/notebooks/edit" method="post">
             @csrf
             <div class="form-group{{ hasError('msg') }}">
@@ -27,7 +27,7 @@
 
             <button class="btn btn-primary">{{ __('main.save') }}</button>
         </form>
-    </div><br>
+    </div>
 
     {{ __('notebooks.info_edit') }}<br><br>
 @stop

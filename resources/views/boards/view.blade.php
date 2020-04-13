@@ -86,7 +86,9 @@
 
                     <div class="row">
                         <div class="col-md-10">
-                            <div class="message">{!! bbCode($item->text) !!}</div>
+                            <div class="section-message">
+                                {!! bbCode($item->text) !!}
+                            </div>
                             <p>
 
                                 @if ($item->phone)

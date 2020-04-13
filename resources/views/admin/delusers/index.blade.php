@@ -18,7 +18,7 @@
     @if ($users->isEmpty())
         {{ __('admin.delusers.condition') }}:<br>
 
-        <div class="form">
+        <div class="section-form p-2 shadow">
             <form action="/admin/delusers" method="post">
 
                 <div class="form-group">
@@ -40,7 +40,7 @@
 
                 <button class="btn btn-primary">{{ __('main.analysis') }}</button>
             </form>
-        </div><br>
+        </div>
 
         {{ __('main.total_users') }}: <b>{{ $total }}</b><br><br>
     @else

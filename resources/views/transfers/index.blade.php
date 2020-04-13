@@ -18,7 +18,7 @@
     {{ __('transfers.in_stock') }}: {{ plural(getUser('money'), setting('moneyname')) }}<br><br>
 
     @if (getUser('point') >= setting('sendmoneypoint'))
-        <div class="form">
+        <div class="section-form p-2 shadow">
             <form action="/transfers/send" method="post">
                 @csrf
                 @if ($user)
@@ -47,7 +47,7 @@
 
                 <button class="btn btn-primary">{{ __('transfers.transfer') }}</button>
             </form>
-        </div><br>
+        </div>
     @else
        {!! showError(__('transfers.transfer_point', ['point' => plural(setting('sendmoneypoint'), setting('scorename'))])) !!}
     @endif

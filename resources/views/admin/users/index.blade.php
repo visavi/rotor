@@ -15,7 +15,7 @@
 @stop
 
 @section('content')
-    <div class="form">
+    <div class="section-form p-2 shadow">
         <form action="/admin/users/edit" method="get">
             <div class="form-inline">
                 <div class="form-group{{ hasError('user') }}">
@@ -27,7 +27,6 @@
             <div class="invalid-feedback">{{ textError('user') }}</div>
         </form>
     </div>
-    <br>
 
     <a class="badge badge-pill badge-success" href="/admin/users/search?q=1">0-9</a>
     <a class="badge badge-pill badge-success" href="/admin/users/search?q=a">A</a>

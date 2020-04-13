@@ -9,7 +9,7 @@
         <b><span style="color:#ff0000">{{ __('users.reason_ban') }}: {!! bbCode($banhist->reason) !!}</span></b><br><br>
 
         @if (! $banhist->explain && setting('addbansend'))
-            <div class="form">
+            <div class="section-form p-2 shadow">
                 <form method="post" action="/ban">
 
                   <div class="form-group{{ hasError('msg') }}">
@@ -20,7 +20,7 @@
 
                     <button class="btn btn-primary">{{ __('main.send') }}</button>
                 </form>
-            </div><br>
+            </div>
 
             {!! __('users.ban_text') !!}<br>
         @endif

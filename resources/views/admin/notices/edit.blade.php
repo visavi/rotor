@@ -24,7 +24,7 @@
 
     <span class="badge badge-info">{{ __('main.type') }}: {{ $notice->type }}</span><br>
 
-    <div class="form">
+    <div class="section-form p-2 shadow">
         <form action="/admin/notices/edit/{{ $notice->id }}" method="post">
             @csrf
             <div class="form-group{{ hasError('name') }}">

@@ -72,7 +72,9 @@
 
                                     <h5><a href="/items/{{ $item->id }}">{{ $item->title }}</a></h5>
                                     <small><i class="fas fa-angle-right"></i> <a href="/boards/{{ $item->category->id }}">{{ $item->category->name }}</a></small>
-                                    <div class="message">{!! $item->shortText() !!}</div>
+                                    <div class="section-message">
+                                        {!! $item->shortText() !!}
+                                    </div>
                                     <p><i class="fa fa-user-circle"></i> {!! $item->user->getProfile() !!} / {{ dateFixed($item->created_at) }}</p>
                                 </div>
 

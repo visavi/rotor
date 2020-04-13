@@ -18,7 +18,7 @@
 @section('content')
     <i class="fa fa-pencil-alt text-muted"></i> <b>{!! $post->user->login !!}</b> ({{ dateFixed($post->created_at) }})<br><br>
 
-    <div class="form">
+    <div class="section-form p-2 shadow">
         <form action="/admin/chats/edit/{{ $post->id }}?page={{ $page }}" method="post">
             @csrf
             <div class="form-group{{ hasError('msg') }}">

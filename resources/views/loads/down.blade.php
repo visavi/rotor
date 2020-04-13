@@ -37,7 +37,7 @@
         </div><br>
     @endif
 
-    <div class="message">
+    <div class="section-message">
         {!! bbCode($down->text) !!}
     </div>
 

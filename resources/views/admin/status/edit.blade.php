@@ -16,7 +16,7 @@
 @stop
 
 @section('content')
-    <div class="form">
+    <div class="section-form p-2 shadow">
         <form method="post">
             @csrf
             <div class="form-group">

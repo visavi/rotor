@@ -132,7 +132,7 @@
                         {!! $data->user->getStatus() !!}
                     </div>
 
-                    <div class="message">
+                    <div class="section-message">
                         {!! bbCode($data->text) !!}
                     </div>
 
@@ -174,7 +174,7 @@
 
     @if (getUser())
         @if (empty($topic->closed))
-            <div class="form">
+            <div class="section-form p-2 shadow">
                 <form action="/topics/create/{{ $topic->id }}" method="post" enctype="multipart/form-data">
                     @csrf
                     <div class="form-group{{ hasError('msg') }}">
@@ -209,7 +209,7 @@
 
                     <button class="btn btn-primary">{{ __('main.write') }}</button>
                 </form>
-            </div><br>
+            </div>
 
         @else
             {!! showError(__('forums.topic_closed')) !!}

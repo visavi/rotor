@@ -15,7 +15,7 @@
 @stop
 
 @section('content')
-    <div class="form">
+    <div class="section-form p-2 shadow">
         <form method="post" action="/settings">
             @csrf
             <div class="form-group{{ hasError('themes') }}">

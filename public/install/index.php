@@ -355,7 +355,7 @@ $keys = [
             ?>
         <?php endif; ?>
 
-        <div class="form">
+        <div class="section-form p-2 shadow">
             <form method="post" action="?act=account&amp;lang=<?= $lang ?>">
                 <div class="form-group">
                     <label for="login"><?= __('users.login') ?> (max20):</label>
@@ -377,7 +377,7 @@ $keys = [
 
                 <button class="btn btn-primary"><?= __('main.create') ?></button>
             </form>
-        </div><br>
+        </div>
     <?php endif; ?>
 
     <!-- Завершение установки -->

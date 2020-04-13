@@ -14,7 +14,7 @@
 @stop
 
 @section('content')
-    <div class="form">
+    <div class="section-form p-2 shadow">
         @if (!empty($user->picture) && file_exists(HOME . '/' . $user->picture))
             {!! resizeImage($user->picture, ['alt' => $user['login'], 'class' => 'img-fluid rounded']) !!}
         @else
@@ -33,7 +33,7 @@
             </div>
             <button class="btn btn-primary">{{ __('main.add') }}</button>
         </form>
-    </div><br>
+    </div>
 
     {{ __('main.valid_file_extensions') }}: jpg, jpeg, gif, png<br>
     {{ __('main.max_file_weight') }}: {{ formatSize(setting('filesize')) }}<br>

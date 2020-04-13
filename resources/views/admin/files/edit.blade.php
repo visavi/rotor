@@ -26,7 +26,7 @@
         </div>
     @endif
 
-    <div class="form">
+    <div class="section-form p-2 shadow">
         <form method="post">
             @csrf
             <div class="form-group{{ hasError('msg') }}">
@@ -37,7 +37,7 @@
 
             <button class="btn btn-primary">{{ __('main.edit') }}</button>
         </form>
-    </div><br>
+    </div>
 
     <p class="text-muted font-italic">{{ __('admin.files.edit_hint') }}</p>
 @stop

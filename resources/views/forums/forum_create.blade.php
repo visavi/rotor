@@ -15,7 +15,7 @@
 @stop
 
 @section('content')
-    <div class="form">
+    <div class="section-form p-2 shadow">
         <form action="/forums/create" method="post">
             @csrf
             <div class="form-group{{ hasError('fid') }}">
@@ -78,7 +78,7 @@
             </div>
             <button class="btn btn-primary">{{ __('forums.create_topic') }}</button>
         </form>
-    </div><br>
+    </div>
 
     {{ __('forums.create_rule1') }}<br>
     <a href="/rules">{{ __('main.rules') }}</a><br>

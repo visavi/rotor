@@ -16,7 +16,7 @@
 @stop
 
 @section('content')
-    <div class="form">
+    <div class="section-form p-2 shadow">
         <form action="/admin/rules/edit" method="post">
             @csrf
             <div class="form-group{{ hasError('msg') }}">
@@ -26,7 +26,7 @@
             </div>
             <button class="btn btn-primary">{{ __('main.edit') }}</button>
         </form>
-    </div><br>
+    </div>
 
     <b>{{ __('admin.rules.variables') }}:</b><br>
 

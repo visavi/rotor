@@ -17,7 +17,7 @@
 @stop
 
 @section('content')
-    <div class="form">
+    <div class="section-form p-2 shadow">
         <form action="/admin/votes/edit/{{ $vote->id }}" method="post">
             @csrf
             <div class="form-group{{ hasError('title') }}">
@@ -45,7 +45,7 @@
 
             <button class="btn btn-primary">{{ __('main.change') }}</button>
         </form>
-    </div><br>
+    </div>
 
     <p class="text-muted font-italic">{{ __('votes.hint_text') }}</p>
 @stop
