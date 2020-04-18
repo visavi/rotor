@@ -1,9 +1,11 @@
 <?php
 
+namespace Tests;
+
 use App\Models\Antimat;
 use Illuminate\Http\UploadedFile;
 
-class HelperTest extends \Tests\TestCase
+class HelperTest extends TestCase
 {
     /**
      * Testing makeTime

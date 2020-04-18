@@ -2,6 +2,8 @@
 
 namespace Tests;
 
+use ReflectionException;
+
 class TestCase extends \PHPUnit\Framework\TestCase
 {
     /**
@@ -12,11 +14,11 @@ class TestCase extends \PHPUnit\Framework\TestCase
      * @param array  $parameters Array of parameters to pass into method.
      *
      * @return mixed Method return.
-     * @throws \ReflectionException
+     * @throws ReflectionException
      */
     public function callMethod($object, $methodName, array $parameters = [])
     {
-        $reflection = new \ReflectionClass(\get_class($object));
+        $reflection = new \ReflectionClass(get_class($object));
         $method = $reflection->getMethod($methodName);
         $method->setAccessible(true);
 

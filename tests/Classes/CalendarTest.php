@@ -1,5 +1,7 @@
 <?php
 
+namespace Tests\Classes;
+
 use App\Classes\Calendar;
 
 class CalendarTest extends \Tests\TestCase

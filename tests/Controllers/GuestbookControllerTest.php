@@ -1,5 +1,7 @@
 <?php
 
+namespace Tests\Controllers;
+
 use App\Models\Guestbook;
 
 class GuestbookControllerTest extends \Tests\TestCase

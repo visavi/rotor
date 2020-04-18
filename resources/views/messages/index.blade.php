@@ -37,6 +37,10 @@
                         @else
                             <b>{{ __('messages.system') }}</b>
                         @endif
+
+                        @unless ($data->all_reading)
+                            <span class="badge badge-info">{{ __('messages.new') }}</span>
+                        @endunless
                     </div>
 
                     <div class="section-date text-muted font-italic small">
@@ -48,14 +52,11 @@
                     </div>
                 </div>
 
-                <div class="section-body my-1 py-1">
+                <div class="section-body border-top my-1 py-1">
                     <div class="section-message">
                         {{ $data->type === 'out' ? __('messages.you') . ': ' : '' }}
                         {!! bbCodeTruncate($data->text) !!}
                     </div>
-                    @unless ($data->all_reading)
-                        <span class="badge badge-info">{{ __('messages.new') }}</span>
-                    @endunless
                 </div>
             </div>
         @endforeach

@@ -37,7 +37,7 @@
                         <b>{!! $author->getProfile() !!}</b>
 
                         @unless ($data->reading)
-                            <br><span class="badge badge-info">{{ __('messages.new') }}</span>
+                            <span class="badge badge-info">{{ __('messages.new') }}</span>
                         @endunless
                     </div>
 

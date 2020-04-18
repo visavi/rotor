@@ -36,34 +36,41 @@
     @if ($forums->isNotEmpty())
         @foreach ($forums as $forum)
             <div class="section mb-3 shadow">
-                <div class="section-header py-1 position-relative">
+                <div class="section-header d-flex align-items-center py-1 position-relative">
+                    <div class="flex-grow-1">
+                        <i class="fa fa-file-alt fa-lg text-muted"></i>
+                        <a href="/forums/{{ $forum->id }}" class="section-title stretched-link position-relative">{{ $forum->title }}</a>
+                        <span class="badge badge-pill badge-light">{{ formatShortNum($forum->count_topics + $forum->children->sum('count_topics')) }}/{{ formatShortNum($forum->count_posts + $forum->children->sum('count_posts')) }}</span>
+
+                        @if ($forum->description)
+                            <div class="section-description text-muted small">{{ $forum->description }}</div>
+                        @endif
+                    </div>
+
                     @if ($forum->children->isNotEmpty())
-                        <div class="float-right">
+                        <div>
                             <a data-toggle="collapse" class="stretched-link" href="#section_{{ $forum->id }}">
                                 <i class="fas fa-angle-down"></i>
                             </a>
                         </div>
                     @endif
-                    <i class="fa fa-file-alt fa-lg text-muted"></i>
-                    <a href="/forums/{{ $forum->id }}" class="stretched-link position-relative">{{ $forum->title }}</a>
-                    <span class="badge badge-pill badge-light">{{ formatShortNum($forum->count_topics + $forum->children->sum('count_topics')) }}/{{ formatShortNum($forum->count_posts + $forum->children->sum('count_posts')) }}</span>
-
-                    @if ($forum->description)
-                        <div class="section-description text-muted small">{{ $forum->description }}</div>
+                </div>
+                <div>
+                    @if ($forum->children->isNotEmpty())
+                        <div class="collapse" id="section_{{ $forum->id }}">
+                            <div class="section-content border-top p-2">
+                                @foreach ($forum->children as $child)
+                                    <div>
+                                        <i class="fas fa-angle-right"></i> <a href="/forums/{{ $child->id }}">{{ $child->title }}</a>
+                                        <span class="badge badge-pill badge-light">{{ $child->count_topics }}/{{ $child->count_posts }}</span>
+                                    </div>
+                                @endforeach
+                            </div>
+                        </div>
                     @endif
                 </div>
-                @if ($forum->children->isNotEmpty())
-                    <div class="section-content border-top collapse" id="section_{{ $forum->id }}">
-                        <div class="p-2">
-                            @foreach ($forum->children as $child)
-                                <i class="fas fa-angle-right"></i> <a href="/forums/{{ $child->id }}">{{ $child->title }}</a>
-                                <span class="badge badge-pill badge-light">{{ $child->count_topics }}/{{ $child->count_posts }}</span><br>
-                            @endforeach
-                        </div>
-                    </div>
-                @endif
 
-                <div class="section-body border-top">
+                <div class="section-body border-top py-1">
                     @if ($forum->lastTopic->lastPost->id)
                         {{ __('forums.topic') }}: <a href="/topics/end/{{ $forum->lastTopic->id }}">{{ $forum->lastTopic->title }}</a>
                         <br/>

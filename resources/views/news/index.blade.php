@@ -24,32 +24,42 @@
 @section('content')
     @if ($news->isNotEmpty())
         @foreach ($news as $data)
-            <div class="b">
-                <i class="fa fa-file-alt fa-lg text-muted"></i>
-                <b><a href="/news/{{ $data->id }}">{{ $data->title }}</a></b><small> ({{ dateFixed($data->created_at) }})</small>
+            <div class="section mb-3 shadow">
+                <div class="d-flex align-items-center">
+                    <div class="section-header flex-grow-1">
+                        <i class="fa fa-file-alt fa-lg text-muted"></i>
+                        <b><a class="section-title" href="/news/{{ $data->id }}">{{ $data->title }}</a></b>
+                    </div>
 
-                <div class="float-right js-rating">
-                    @if (getUser() && getUser('id') !== $data->user_id)
-                        <a class="post-rating-down{{ $data->vote === '-' ? ' active' : '' }}" href="#" onclick="return changeRating(this);" data-id="{{ $data->id }}" data-type="{{ App\Models\News::class }}" data-vote="-" data-token="{{ $_SESSION['token'] }}"><i class="fa fa-thumbs-down"></i></a>
-                    @endif
-                    <span>{!! formatNum($data->rating) !!}</span>
-                    @if (getUser() && getUser('id') !== $data->user_id)
-                        <a class="post-rating-up{{ $data->vote === '+' ? ' active' : '' }}" href="#" onclick="return changeRating(this);" data-id="{{ $data->id }}" data-type="{{ App\Models\News::class }}" data-vote="+" data-token="{{ $_SESSION['token'] }}"><i class="fa fa-thumbs-up"></i></a>
-                    @endif
+                    <div class="section-date text-muted font-italic small">
+                        {{ dateFixed($data->created_at) }}
+                    </div>
+
+                    <div class="js-rating">
+                        @if (getUser() && getUser('id') !== $data->user_id)
+                            <a class="post-rating-down{{ $data->vote === '-' ? ' active' : '' }}" href="#" onclick="return changeRating(this);" data-id="{{ $data->id }}" data-type="{{ App\Models\News::class }}" data-vote="-" data-token="{{ $_SESSION['token'] }}"><i class="fa fa-thumbs-down"></i></a>
+                        @endif
+                        <span>{!! formatNum($data->rating) !!}</span>
+                        @if (getUser() && getUser('id') !== $data->user_id)
+                            <a class="post-rating-up{{ $data->vote === '+' ? ' active' : '' }}" href="#" onclick="return changeRating(this);" data-id="{{ $data->id }}" data-type="{{ App\Models\News::class }}" data-vote="+" data-token="{{ $_SESSION['token'] }}"><i class="fa fa-thumbs-up"></i></a>
+                        @endif
+                    </div>
                 </div>
-            </div>
 
-            @if ($data->image)
-                <div class="img">
-                    <a href="{{ $data->image }}" class="gallery">{!! resizeImage($data->image, ['width' => 100, 'alt' => $data->title]) !!}</a>
+                <div class="section-content">
+                    @if ($data->image)
+                        <div class="img">
+                            <a href="{{ $data->image }}" class="gallery">{!! resizeImage($data->image, ['width' => 100, 'alt' => $data->title]) !!}</a>
+                        </div>
+                    @endif
+
+                    <div class="clearfix">{!! $data->shortText() !!}</div>
+                    <div>
+                        {{ __('main.added') }}: {!! $data->user->getProfile() !!}<br>
+                        <a href="/news/comments/{{ $data->id }}">{{ __('main.comments') }}</a> ({{ $data->count_comments }})
+                        <a href="/news/end/{{ $data->id }}">&raquo;</a>
+                    </div>
                 </div>
-            @endif
-
-            <div class="clearfix">{!! $data->shortText() !!}</div>
-            <div>
-                {{ __('main.added') }}: {!! $data->user->getProfile() !!}<br>
-                <a href="/news/comments/{{ $data->id }}">{{ __('main.comments') }}</a> ({{ $data->count_comments }})
-                <a href="/news/end/{{ $data->id }}">&raquo;</a>
             </div>
         @endforeach
     @else

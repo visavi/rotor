@@ -1,5 +1,7 @@
 <?php
 
+namespace Tests\Classes;
+
 class BBCodeTest extends \Tests\TestCase
 {
     /**

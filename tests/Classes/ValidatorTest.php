@@ -1,7 +1,10 @@
 <?php
 
+namespace Tests\Classes;
+
 use App\Classes\Validator;
 use Illuminate\Http\UploadedFile;
+use stdClass;
 
 class ValidatorTest extends \Tests\TestCase
 {
