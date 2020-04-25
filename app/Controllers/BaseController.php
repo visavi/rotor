@@ -82,10 +82,10 @@ Class BaseController
                 $ipban = Ban::query()->where('ip', inet_pton(getIp()))->first();
 
                 if (! $ipban) {
-                    DB::connection()->insert(
-                        'insert ignore into ban (`ip`, `created_at`) values (?, ?);',
-                        [inet_pton(getIp()), SITETIME]
-                    );
+                    Ban::query()->insertOrIgnore([
+                        'ip'         => inet_pton(getIp()),
+                        'created_at' => SITETIME,
+                    ]);
                 }
 
                 ipBan(true);

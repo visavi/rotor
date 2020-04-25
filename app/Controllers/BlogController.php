@@ -355,9 +355,8 @@ class BlogController extends BaseController
             }
         }
 
-        $comments = Comment::query()
-            ->where('relate_type', Blog::class)
-            ->where('relate_id', $id)
+        $comments = $blog->comments()
+            ->with('user')
             ->orderBy('created_at')
             ->paginate(setting('comments_per_page'));
 

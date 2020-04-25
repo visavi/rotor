@@ -127,7 +127,6 @@ class InvitationController extends AdminController
             $listKeys = [];
 
             for ($i = 0; $i < $userkeys; $i++) {
-
                 $key = Str::random();
 
                 $listKeys[] = $key;

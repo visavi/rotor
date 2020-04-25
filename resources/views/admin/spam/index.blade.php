@@ -29,37 +29,48 @@
 
     @if ($records->isNotEmpty())
         @foreach ($records as $data)
-            <div class="post">
+            <div class="section mb-3 shadow">
                 @if ($data->relate)
-                    <div class="b">
-                        @if ($data->relate->user_id || $data->relate->author_id)
-                            <?php $user = $data->relate->author ?? $data->relate->user; ?>
-                            <div class="img">
-                                {!! $user->getAvatar() !!}
-                                {!! $user->getOnline() !!}
-                            </div>
-                            <b>{!! $user->getProfile() !!}</b>
-                        @else
-                            <div class="img">
-                                <img class="avatar" src="/assets/img/images/avatar_guest.png" alt="">
-                            </div>
-                            <b>{{ setting('guestsuser') }}</b>
-                        @endif
+                    @if ($data->relate->user_id || $data->relate->author_id)
+                        <?php $user = $data->relate->author ?? $data->relate->user; ?>
 
-                        <small>({{ dateFixed($data->relate->created_at, 'd.m.Y / H:i:s') }})</small>
+                        <div class="user-avatar">
+                            {!! $user->getAvatar() !!}
+                            {!! $user->getOnline() !!}
+                        </div>
 
-                        <div class="float-right">
+                        <b>{!! $user->getProfile() !!}</b>
+                    @else
+                        <div class="user-avatar">
+                            <img class="img-fluid rounded-circle avatar-default" src="/assets/img/images/avatar_guest.png" alt="">
+                        </div>
+                        <b>{{ setting('guestsuser') }}</b>
+                    @endif
+
+                    <div class="section-user d-flex align-items-center">
+                        <div class="flex-grow-1">
+
+
+                            <small>({{ dateFixed($data->relate->created_at, 'd.m.Y / H:i:s') }})</small>
+                        </div>
+
+                        <div class="text-right">
                             @if (isAdmin())
                                 <a href="#" onclick="return deleteSpam(this)" data-id="{{ $data->id }}" data-token="{{ $_SESSION['token'] }}" data-toggle="tooltip" title="{{ __('main.delete') }}"><i class="fa fa-times"></i></a>
                             @endif
                         </div>
                     </div>
-                    <div>{!! bbCode($data->relate->text) !!}</div>
+
+                    <div class="section-body border-top my-1 py-1">
+                        <div class="section-message">
+                            {!! bbCode($data->relate->text) !!}
+                        </div>
+                    </div>
                 @else
                     <div class="b">
                         <i class="fa fa-file"></i> <b>{{ __('main.message_not_found') }}</b>
 
-                        <div class="float-right">
+                        <div class="text-right">
                             @if (isAdmin())
                                 <a href="#" onclick="return deleteSpam(this)" data-id="{{ $data->id }}" data-token="{{ $_SESSION['token'] }}" data-toggle="tooltip" title="{{ __('main.delete') }}"><i class="fa fa-times"></i></a>
                             @endif

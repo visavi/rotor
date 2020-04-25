@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace App\Classes;
 
 use App\Models\Counter;
+use App\Models\Counter24;
+use App\Models\Counter31;
 use App\Models\Online;
 use Illuminate\Database\Capsule\Manager as DB;
 use Illuminate\Database\Eloquent\Builder;
@@ -91,7 +93,7 @@ class Metrika
         } else {
             Online::query()->insertOrIgnore([
                 'uid'        => $uid,
-                'ip'         => $ip,
+                'ip'         => inet_pton($ip),
                 'brow'       => $brow,
                 'updated_at' => SITETIME,
                 'user_id'    => $userId,
@@ -107,13 +109,31 @@ class Metrika
         }
 
         if (date('Y-m-d 00:00:00', strtotime($counter->period)) !== $day) {
-            DB::connection()->insert('insert ignore into counters31 (period, hosts, hits) values (?, ?, ?);', [$day, $counter->dayhosts, $counter->dayhits]);
-            DB::connection()->update('update counters set period=?, dayhosts=?, dayhits=?;', [$period, 0, 0]);
+            Counter31::query()->insertOrIgnore([
+               'period' => $period,
+               'hosts'  => $counter->dayhosts,
+               'hits'   => $counter->dayhits,
+           ]);
+
+            $counter->update([
+                'period'   => $period,
+                'dayhosts' => 0,
+                'dayhits'  => 0,
+            ]);
         }
 
         if ($counter->period !== $period) {
-            DB::connection()->insert('insert ignore into counters24 (period, hosts, hits) values (?, ?, ?);', [$period, $counter->hosts24, $counter->hits24]);
-            DB::connection()->update('update counters set period=?, hosts24=?, hits24=?;', [$period, 0, 0]);
+            Counter24::query()->insertOrIgnore([
+                'period' => $period,
+                'hosts'  => $counter->hosts24,
+                'hits'   => $counter->hits24,
+            ]);
+
+            $counter->update([
+                'period'  => $period,
+                'hosts24' => 0,
+                'hits24'  => 0,
+            ]);
         }
 
         // -----------------------------------------------------------//

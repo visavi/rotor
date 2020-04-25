@@ -37,7 +37,7 @@
                         {!! $post->user->getAvatar() !!}
                         {!! $post->user->getOnline() !!}
                     @else
-                        <img class="img-fluid rounded-circle" src="/assets/img/images/avatar_guest.png" alt="">
+                        <img class="img-fluid rounded-circle avatar-default" src="/assets/img/images/avatar_guest.png" alt="">
                     @endif
                 </div>
 

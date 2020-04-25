@@ -126,9 +126,7 @@ class VoteController extends BaseController
             abort(404, __('votes.voting_not_exist'));
         }
 
-        $voters = Polling::query()
-            ->where('relate_type', Vote::class)
-            ->where('relate_id', $vote->id)
+        $voters = $vote->pollings()
             ->limit(50)
             ->with('user')
             ->get();
