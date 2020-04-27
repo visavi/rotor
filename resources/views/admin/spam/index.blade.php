@@ -15,74 +15,77 @@
 @stop
 
 @section('content')
-    <?php $active = ($type === 'post') ? 'success' : 'light'; ?>
-    <a href="/admin/spam?type=post" class="badge badge-{{ $active }}">{{ __('index.forums') }} {{ $total['post'] }}</a>
-    <?php $active = ($type === 'guest') ? 'success' : 'light'; ?>
-    <a href="/admin/spam?type=guest" class="badge badge-{{ $active }}">{{ __('index.guestbooks') }} {{ $total['guest'] }}</a>
-    <?php $active = ($type === 'message') ? 'success' : 'light'; ?>
-    <a href="/admin/spam?type=message" class="badge badge-{{ $active }}">{{ __('index.messages') }} {{ $total['message'] }}</a>
-    <?php $active = ($type === 'wall') ? 'success' : 'light'; ?>
-    <a href="/admin/spam?type=wall" class="badge badge-{{ $active }}">{{ __('index.wall_posts') }} {{ $total['wall'] }}</a>
-    <?php $active = ($type === 'comment') ? 'success' : 'light'; ?>
-    <a href="/admin/spam?type=comment" class="badge badge-{{ $active }}">{{ __('main.comments') }} {{ $total['comment'] }}</a>
-    <br><br>
+    <div class="mb-3">
+        <?php $active = ($type === 'post') ? 'success' : 'light'; ?>
+        <a href="/admin/spam?type=post" class="badge badge-{{ $active }}">{{ __('index.forums') }} {{ $total['post'] }}</a>
+        <?php $active = ($type === 'guest') ? 'success' : 'light'; ?>
+        <a href="/admin/spam?type=guest" class="badge badge-{{ $active }}">{{ __('index.guestbooks') }} {{ $total['guest'] }}</a>
+        <?php $active = ($type === 'message') ? 'success' : 'light'; ?>
+        <a href="/admin/spam?type=message" class="badge badge-{{ $active }}">{{ __('index.messages') }} {{ $total['message'] }}</a>
+        <?php $active = ($type === 'wall') ? 'success' : 'light'; ?>
+        <a href="/admin/spam?type=wall" class="badge badge-{{ $active }}">{{ __('index.wall_posts') }} {{ $total['wall'] }}</a>
+        <?php $active = ($type === 'comment') ? 'success' : 'light'; ?>
+        <a href="/admin/spam?type=comment" class="badge badge-{{ $active }}">{{ __('main.comments') }} {{ $total['comment'] }}</a>
+    </div>
 
     @if ($records->isNotEmpty())
-        @foreach ($records as $data)
+        @foreach ($records as $record)
             <div class="section mb-3 shadow">
-                @if ($data->relate)
-                    @if ($data->relate->user_id || $data->relate->author_id)
-                        <?php $user = $data->relate->author ?? $data->relate->user; ?>
-
-                        <div class="user-avatar">
-                            {!! $user->getAvatar() !!}
-                            {!! $user->getOnline() !!}
-                        </div>
-
-                        <b>{!! $user->getProfile() !!}</b>
-                    @else
-                        <div class="user-avatar">
-                            <img class="img-fluid rounded-circle avatar-default" src="/assets/img/images/avatar_guest.png" alt="">
-                        </div>
-                        <b>{{ setting('guestsuser') }}</b>
-                    @endif
-
-                    <div class="section-user d-flex align-items-center">
-                        <div class="flex-grow-1">
-
-
-                            <small>({{ dateFixed($data->relate->created_at, 'd.m.Y / H:i:s') }})</small>
-                        </div>
-
-                        <div class="text-right">
-                            @if (isAdmin())
-                                <a href="#" onclick="return deleteSpam(this)" data-id="{{ $data->id }}" data-token="{{ $_SESSION['token'] }}" data-toggle="tooltip" title="{{ __('main.delete') }}"><i class="fa fa-times"></i></a>
-                            @endif
-                        </div>
-                    </div>
-
-                    <div class="section-body border-top my-1 py-1">
-                        <div class="section-message">
-                            {!! bbCode($data->relate->text) !!}
-                        </div>
+                <?php $user = $record->getRelateUser(); ?>
+                @if ($user)
+                    <div class="user-avatar">
+                        {!! $user->getAvatar() !!}
+                        {!! $user->getOnline() !!}
                     </div>
                 @else
-                    <div class="b">
-                        <i class="fa fa-file"></i> <b>{{ __('main.message_not_found') }}</b>
-
-                        <div class="text-right">
-                            @if (isAdmin())
-                                <a href="#" onclick="return deleteSpam(this)" data-id="{{ $data->id }}" data-token="{{ $_SESSION['token'] }}" data-toggle="tooltip" title="{{ __('main.delete') }}"><i class="fa fa-times"></i></a>
-                            @endif
-                        </div>
+                    <div class="user-avatar">
+                        <img class="img-fluid rounded-circle avatar-default" src="/assets/img/images/avatar_guest.png" alt="">
                     </div>
                 @endif
 
-                <div>
-                    @if ($data->path)
-                        <a href="{{ $data->path }}">{{ __('admin.spam.go_to_message') }}</a><br>
+                <div class="section-user d-flex align-items-center">
+                    <div class="flex-grow-1">
+                        @if ($record->relate->id)
+                            @if ($user)
+                                <b>{!! $user->getProfile() !!}</b>
+                            @else
+                                <b>{{ setting('guestsuser') }}</b>
+                            @endif
+
+                            <small class="section-date text-muted font-italic">
+                                {{ dateFixed($record->relate->created_at, 'd.m.Y / H:i:s') }}
+                            </small>
+                        @else
+                            <b>{{ __('main.message_not_found') }}</b>
+                        @endif
+                    </div>
+
+                    <div class="text-right">
+                        @if (isAdmin())
+                            <a href="#" onclick="return deleteSpam(this)" data-id="{{ $record->id }}" data-token="{{ $_SESSION['token'] }}" data-toggle="tooltip" title="{{ __('main.delete') }}"><i class="fa fa-times"></i></a>
+                        @endif
+                    </div>
+                </div>
+
+                <div class="section-body border-top my-1 py-1">
+                    @if ($record->relate->id)
+                        <div class="section-message">
+                            {!! bbCode($record->relate->text) !!}
+                        </div>
+
+                        @if ($record->path)
+                            <div class="mt-2">
+                                <a href="{{ $record->path }}">{{ __('admin.spam.go_to_message') }}</a>
+                            </div>
+                        @endif
                     @endif
-                    {{ __('main.sent') }}: {!! $data->user->getProfile() !!} ({{ dateFixed($data->created_at) }})
+
+                    <div>
+                        {{ __('main.sent') }}: {!! $record->user->getProfile() !!}
+                        <small class="section-date text-muted font-italic">
+                            {{ dateFixed($record->created_at) }}
+                        </small>
+                    </div>
                 </div>
             </div>
         @endforeach

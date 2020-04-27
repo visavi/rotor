@@ -281,8 +281,7 @@ deletePost = function(el)
 
             if (data.status === 'success') {
                 notification('success', translate.message_deleted);
-
-                $(el).closest('.post').hide('slow');
+                $(el).closest('.section').hide('slow');
             }
         }
     });
@@ -312,8 +311,7 @@ deleteComment = function(el)
 
                     if (data.status === 'success') {
                         notification('success', translate.message_deleted);
-
-                        $(el).closest('.post').hide('slow');
+                        $(el).closest('.section').hide('slow');
                     }
                 }
             });
@@ -380,8 +378,7 @@ deleteRating = function(el)
 
                     if (data.status === 'success') {
                         notification('success', translate.record_deleted);
-
-                        $(el).closest('.post').hide('slow');
+                        $(el).closest('.section').hide('slow');
                     }
                 }
             });
@@ -408,8 +405,7 @@ deleteSpam = function(el)
 
             if (data.status === 'success') {
                 notification('success', translate.record_deleted);
-
-                $(el).closest('.post').hide('slow');
+                $(el).closest('.section').hide('slow');
             }
         }
     });
@@ -436,8 +432,7 @@ deleteWall = function(el)
 
                     if (data.status === 'success') {
                         notification('success', translate.record_deleted);
-
-                        $(el).closest('.post').hide('slow');
+                        $(el).closest('.section').hide('slow');
                     }
                 }
             });

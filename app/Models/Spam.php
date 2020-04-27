@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
 
 /**
@@ -46,6 +47,20 @@ class Spam extends BaseModel
      */
     public function relate(): MorphTo
     {
-        return $this->morphTo('relate');
+        return $this->morphTo('relate')->withDefault();
+    }
+
+    /**
+     * Возвращает связанные сообщения
+     *
+     * @return User
+     */
+    public function getRelateUser(): ?User
+    {
+        if ($this->relate->user_id || $this->relate->author_id) {
+            return $this->relate->author ?? $this->relate->user;
+        }
+
+        return null;
     }
 }
