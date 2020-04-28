@@ -47,7 +47,7 @@ class Spam extends BaseModel
      */
     public function relate(): MorphTo
     {
-        return $this->morphTo('relate')->withDefault();
+        return $this->morphTo('relate');
     }
 
     /**
@@ -57,6 +57,10 @@ class Spam extends BaseModel
      */
     public function getRelateUser(): ?User
     {
+        if (! $this->relate) {
+            return null;
+        }
+
         if ($this->relate->user_id || $this->relate->author_id) {
             return $this->relate->author ?? $this->relate->user;
         }

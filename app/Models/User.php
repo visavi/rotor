@@ -694,7 +694,7 @@ class User extends BaseModel
         }
 
         // Confirm registration
-        if ($this->level === self::PENDED && setting('regkeys') && ! $request->is('key', 'ban', 'login', 'logout')) {
+        if ($this->level === self::PENDED && setting('regkeys') && ! $request->is('key', 'ban', 'login', 'logout', 'captcha')) {
             redirect('/key?user=' . $this->login);
         }
     }

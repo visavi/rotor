@@ -45,7 +45,7 @@
 
                 <div class="section-user d-flex align-items-center">
                     <div class="flex-grow-1">
-                        @if ($record->relate->id)
+                        @if ($record->relate)
                             @if ($user)
                                 <b>{!! $user->getProfile() !!}</b>
                             @else
@@ -68,7 +68,7 @@
                 </div>
 
                 <div class="section-body border-top my-1 py-1">
-                    @if ($record->relate->id)
+                    @if ($record->relate)
                         <div class="section-message">
                             {!! bbCode($record->relate->text) !!}
                         </div>
