@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Relations\MorphTo;
+
 /**
  * Class Comment
  *
@@ -31,4 +33,21 @@ class Comment extends BaseModel
      * @var array
      */
     protected $guarded = [];
+
+    /**
+     * Возвращает связанные объекты
+     *
+     * @return MorphTo
+     */
+    public function relate(): MorphTo
+    {
+        return $this->morphTo('relate');
+    }
+
+    /**
+     * Morph name
+     *
+     * @var string
+     */
+    public static $morphName = 'comments';
 }

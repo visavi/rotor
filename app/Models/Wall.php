@@ -32,6 +32,13 @@ class Wall extends BaseModel
     protected $guarded = [];
 
     /**
+     * Morph name
+     *
+     * @var string
+     */
+    public static $morphName = 'walls';
+
+    /**
      * Возвращает связь пользователей
      *
      * @return BelongsTo

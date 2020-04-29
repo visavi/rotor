@@ -34,6 +34,13 @@ class Message extends BaseModel
     protected $guarded = [];
 
     /**
+     * Morph name
+     *
+     * @var string
+     */
+    public static $morphName = 'messages';
+
+    /**
      * Возвращает связь пользователей
      *
      * @return BelongsTo

@@ -54,6 +54,13 @@ class Item extends BaseModel
     public $uploadPath = UPLOADS . '/boards';
 
     /**
+     * Morph name
+     *
+     * @var string
+     */
+    public static $morphName = 'items';
+
+    /**
      * Возвращает категорию объявлений
      *
      * @return BelongsTo

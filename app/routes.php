@@ -32,7 +32,7 @@ return FastRoute\cachedDispatcher(static function(RouteCollector $r) {
     });
 
     /* Гостевая книга */
-    $r->addGroup('/guestbooks', static function (RouteCollector $r) {
+    $r->addGroup('/guestbook', static function (RouteCollector $r) {
         $r->get('', [App\Controllers\GuestbookController::class, 'index']);
         $r->post('/add', [App\Controllers\GuestbookController::class, 'add']);
         $r->addRoute(['GET', 'POST'], '/edit/{id:\d+}', [App\Controllers\GuestbookController::class, 'edit']);
@@ -414,11 +414,11 @@ return FastRoute\cachedDispatcher(static function(RouteCollector $r) {
         $r->get('/news/restatement', [App\Controllers\Admin\NewsController::class, 'restatement']);
         $r->get('/news/delete/{id:\d+}', [App\Controllers\Admin\NewsController::class, 'delete']);
 
-        $r->get('/guestbooks', [App\Controllers\Admin\GuestbookController::class, 'index']);
-        $r->addRoute(['GET', 'POST'], '/guestbooks/edit/{id:\d+}', [App\Controllers\Admin\GuestbookController::class, 'edit']);
-        $r->addRoute(['GET', 'POST'], '/guestbooks/reply/{id:\d+}', [App\Controllers\Admin\GuestbookController::class, 'reply']);
-        $r->post('/guestbooks/delete', [App\Controllers\Admin\GuestbookController::class, 'delete']);
-        $r->get('/guestbooks/clear', [App\Controllers\Admin\GuestbookController::class, 'clear']);
+        $r->get('/guestbook', [App\Controllers\Admin\GuestbookController::class, 'index']);
+        $r->addRoute(['GET', 'POST'], '/guestbook/edit/{id:\d+}', [App\Controllers\Admin\GuestbookController::class, 'edit']);
+        $r->addRoute(['GET', 'POST'], '/guestbook/reply/{id:\d+}', [App\Controllers\Admin\GuestbookController::class, 'reply']);
+        $r->post('/guestbook/delete', [App\Controllers\Admin\GuestbookController::class, 'delete']);
+        $r->get('/guestbook/clear', [App\Controllers\Admin\GuestbookController::class, 'clear']);
 
         $r->get('/transfers', [App\Controllers\Admin\TransferController::class, 'index']);
         $r->get('/transfers/view', [App\Controllers\Admin\TransferController::class, 'view']);

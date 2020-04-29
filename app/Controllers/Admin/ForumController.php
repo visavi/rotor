@@ -478,7 +478,7 @@ class ForumController extends AdminController
             ->where('topic_id', $topic->id)
             ->leftJoin('pollings', static function (JoinClause $join) {
                 $join->on('posts.id', 'pollings.relate_id')
-                    ->where('pollings.relate_type', Post::class)
+                    ->where('pollings.relate_type', Post::$morphName)
                     ->where('pollings.user_id', getUser('id'));
             })
             ->with('files', 'user', 'editUser')

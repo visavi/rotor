@@ -4,7 +4,7 @@ return [
     'mains'      => 'Основные настройки',
     'mails'      => 'Почта и рассылка',
     'info'       => 'Вывод информации',
-    'guestbooks' => 'Гостевая',
+    'guestbook'  => 'Гостевая',
     'news'       => 'Новости',
     'comments'   => 'Комментарии',
     'forums'     => 'Форум',
@@ -50,10 +50,10 @@ return [
     'posts_symbols'        => 'Символов в сообщении форума',
     'forums_upload_points' => 'Актива для загрузки файлов',
 
-    'guestbooks_guests_allow' => 'Разрешить гостям писать в гостевой',
-    'guestbooks_points_add'   => 'Начислять баллы в гостевой',
-    'guestbooks_per_page'     => 'Сообщений в гостевой на стр',
-    'guestbooks_symbols'      => 'Символов в сообщении гостевой',
+    'guestbook_guests_allow' => 'Разрешить гостям писать в гостевой',
+    'guestbook_points_add'   => 'Начислять баллы в гостевой',
+    'guestbook_per_page'     => 'Сообщений в гостевой на стр',
+    'guestbook_symbols'      => 'Символов в сообщении гостевой',
 
     'images_reduction_size' => 'Уменьшение фото при загрузке',
     'images_preview_size'   => 'Размер превью',

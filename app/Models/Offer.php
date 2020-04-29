@@ -68,6 +68,13 @@ class Offer extends BaseModel
     protected $guarded = [];
 
     /**
+     * Morph name
+     *
+     * @var string
+     */
+    public static $morphName = 'offers';
+
+    /**
      * Возвращает связь с голосованием
      *
      * @return morphOne

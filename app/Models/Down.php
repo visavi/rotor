@@ -14,6 +14,7 @@ use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
+use Illuminate\Database\Eloquent\Relations\MorphOne;
 use Illuminate\Http\UploadedFile;
 
 /**
@@ -61,6 +62,13 @@ class Down extends BaseModel
     public $uploadPath = UPLOADS . '/files';
 
     /**
+     * Counting field
+     *
+     * @var string
+     */
+    public $countingField = 'loads';
+
+    /**
      * Список расширений доступных для просмотра в архиве
      *
      * @var array
@@ -68,11 +76,11 @@ class Down extends BaseModel
     public static $viewExt = ['xml', 'wml', 'asp', 'aspx', 'shtml', 'htm', 'phtml', 'html', 'php', 'htt', 'dat', 'tpl', 'htaccess', 'pl', 'js', 'jsp', 'css', 'txt', 'sql', 'gif', 'png', 'bmp', 'wbmp', 'jpg', 'jpeg', 'env', 'gitignore', 'json', 'yml', 'md'];
 
     /**
-     * Counting field
+     * Morph name
      *
      * @var string
      */
-    public $countingField = 'loads';
+    public static $morphName = 'downs';
 
     /**
      * Возвращает категорию загрузок
@@ -93,6 +101,16 @@ class Down extends BaseModel
     }
 
     /**
+     * Возвращает связь с голосованием
+     *
+     * @return morphOne
+     */
+    public function polling(): morphOne
+    {
+        return $this->morphOne(Polling::class, 'relate')->where('user_id', getUser('id'));
+    }
+
+    /**
      * Возвращает последнии комментарии к файлу
      *
      * @param int $limit
@@ -101,7 +119,7 @@ class Down extends BaseModel
     public function lastComments($limit = 15): HasMany
     {
         return $this->hasMany(Comment::class, 'relate_id')
-            ->where('relate_type', self::class)
+            ->where('relate_type', $this->getMorphClass())
             ->limit($limit);
     }
 
@@ -203,14 +221,12 @@ class Down extends BaseModel
             $frame = $video->frame(TimeCode::fromSeconds(5));
             $frame->save(HOME . $file['path'] . '.jpg');
 
-            File::query()->create([
-                'relate_id'   => $this->id,
-                'relate_type' => self::class,
-                'hash'        => $file['path'] . '.jpg',
-                'name'        => 'screenshot.jpg',
-                'size'        => filesize(HOME . $file['path'] . '.jpg'),
-                'user_id'     => getUser('id'),
-                'created_at'  => SITETIME,
+            $this->files()->create([
+                'hash'       => $file['path'] . '.jpg',
+                'name'       => 'screenshot.jpg',
+                'size'       => filesize(HOME . $file['path'] . '.jpg'),
+                'user_id'    => getUser('id'),
+                'created_at' => SITETIME,
             ]);
 
             // Перекодируем видео в h264

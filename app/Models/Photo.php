@@ -48,6 +48,13 @@ class Photo extends BaseModel
     public $uploadPath = UPLOADS . '/photos';
 
     /**
+     * Morph name
+     *
+     * @var string
+     */
+    public static $morphName = 'photos';
+
+    /**
      * Возвращает комментарии фотографий
      *
      * @return MorphMany

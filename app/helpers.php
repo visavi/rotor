@@ -662,7 +662,7 @@ function statsForum()
  */
 function statsGuestbook()
 {
-    return Cache::remember('statGuestbooks', 600, static function () {
+    return Cache::remember('statGuestbook', 600, static function () {
         return Guestbook::query()->count();
     });
 }

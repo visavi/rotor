@@ -1,7 +1,7 @@
 @extends('layout')
 
 @section('title')
-    {{ __('index.guestbooks') }} ({{ __('main.page_num', ['page' => $posts->currentPage()]) }})
+    {{ __('index.guestbook') }} ({{ __('main.page_num', ['page' => $posts->currentPage()]) }})
 @stop
 
 @section('header')
@@ -10,20 +10,20 @@
             <a class="btn btn-success" href="#" onclick="return postJump()">{{ __('main.write') }}</a>
 
             @if (isAdmin())
-                <a class="btn btn-light" href="/admin/guestbooks?page={{ $posts->currentPage() }}"><i class="fas fa-wrench"></i></a>
+                <a class="btn btn-light" href="/admin/guestbook?page={{ $posts->currentPage() }}"><i class="fas fa-wrench"></i></a>
             @endif
         </div>
     @endif
 
 
-    <h1>{{ __('index.guestbooks') }}</h1>
+    <h1>{{ __('index.guestbook') }}</h1>
 @stop
 
 @section('breadcrumb')
     <nav>
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
-            <li class="breadcrumb-item active">{{ __('index.guestbooks') }}</li>
+            <li class="breadcrumb-item active">{{ __('index.guestbook') }}</li>
         </ol>
     </nav>
 @stop
@@ -62,13 +62,13 @@
                             <a href="#" onclick="return postReply(this)" data-toggle="tooltip" title="{{ __('main.reply') }}"><i class="fa fa-reply text-muted"></i></a>
                             <a href="#" onclick="return postQuote(this)" data-toggle="tooltip" title="{{ __('main.quote') }}"><i class="fa fa-quote-right text-muted"></i></a>
 
-                            <a href="#" onclick="return sendComplaint(this)" data-type="{{ App\Models\Guestbook::class }}" data-id="{{ $post->id }}" data-token="{{ $_SESSION['token'] }}" data-page="{{ $posts->currentPage() }}" rel="nofollow" data-toggle="tooltip" title="{{ __('main.complain') }}"><i class="fa fa-bell text-muted"></i></a>
+                            <a href="#" onclick="return sendComplaint(this)" data-type="{{ $post->getMorphClass() }}" data-id="{{ $post->id }}" data-token="{{ $_SESSION['token'] }}" data-page="{{ $posts->currentPage() }}" rel="nofollow" data-toggle="tooltip" title="{{ __('main.complain') }}"><i class="fa fa-bell text-muted"></i></a>
                         </div>
                     @endif
 
                     @if ($post->created_at + 600 > SITETIME && getUser() && getUser('id') === $post->user_id)
                         <div class="text-right">
-                            <a href="/guestbooks/edit/{{ $post->id }}" data-toggle="tooltip" title="{{ __('main.edit') }}"><i class="fa fa-pencil-alt text-muted"></i></a>
+                            <a href="/guestbook/edit/{{ $post->id }}" data-toggle="tooltip" title="{{ __('main.edit') }}"><i class="fa fa-pencil-alt text-muted"></i></a>
                         </div>
                     @endif
                 </div>
@@ -83,7 +83,7 @@
                     @endif
 
                     @if ($post->reply)
-                        <div class="text-danger">{{ __('guestbooks.answer') }}: {!! bbCode($post->reply) !!}</div>
+                        <div class="text-danger">{{ __('guestbook.answer') }}: {!! bbCode($post->reply) !!}</div>
                     @endif
 
                     @if (isAdmin())
@@ -102,7 +102,7 @@
 
     @if (getUser())
         <div class="section-form p-2 my-2 shadow">
-            <form action="/guestbooks/add" method="post">
+            <form action="/guestbook/add" method="post">
                 @csrf
                 <div class="form-group{{ hasError('msg') }}">
                     <label for="msg">{{ __('main.message') }}:</label>
@@ -117,7 +117,7 @@
 
     @elseif (setting('bookadds'))
         <div class="section-form p-2 my-2 shadow">
-            <form action="/guestbooks/add" method="post">
+            <form action="/guestbook/add" method="post">
                 @csrf
                 <div class="form-group{{ hasError('guest_name') }}">
                     <label for="inputName">{{ __('users.name') }}:</label>

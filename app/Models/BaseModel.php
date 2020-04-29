@@ -6,6 +6,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\Relation;
 
 /**
  * Class BaseModel
@@ -25,6 +26,32 @@ class BaseModel extends Model
     protected $casts = [
         'user_id' => 'int',
     ];
+
+    /**
+     * Bootstrap services.
+     *
+     * @return void
+     */
+    public static function boot()
+    {
+        parent::boot();
+
+        Relation::morphMap([
+           Down::$morphName      => Down::class,
+           Blog::$morphName      => Blog::class,
+           Photo::$morphName     => Photo::class,
+           Offer::$morphName     => Offer::class,
+           News::$morphName      => News::class,
+           Topic::$morphName     => Topic::class,
+           Post::$morphName      => Post::class,
+           Guestbook::$morphName => Guestbook::class,
+           Message::$morphName   => Message::class,
+           Wall::$morphName      => Wall::class,
+           Comment::$morphName   => Comment::class,
+           Vote::$morphName      => Vote::class,
+           Item::$morphName      => Item::class,
+        ]);
+    }
 
     /**
      * Возвращает связь пользователей

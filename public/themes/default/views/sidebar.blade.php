@@ -23,9 +23,9 @@
         </li>
 
         <li>
-            <a class="app-menu__item" href="/guestbooks">
+            <a class="app-menu__item" href="/guestbook">
                 <i class="app-menu__icon far fa-comment"></i>
-                <span class="app-menu__label">{{ __('index.guestbooks') }}</span>
+                <span class="app-menu__label">{{ __('index.guestbook') }}</span>
                 <span class="badge badge-pill badge-light">{{ statsGuestbook() }}</span>
             </a>
         </li>

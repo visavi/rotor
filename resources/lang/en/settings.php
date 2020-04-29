@@ -4,7 +4,7 @@ return [
     'mains'      => 'Basic settings',
     'mails'      => 'Mail and Newsletter',
     'info'       => 'Information output',
-    'guestbooks' => 'Guest',
+    'guestbook'  => 'Guest',
     'news'       => 'News',
     'comments'   => 'Comments',
     'forums'     => 'Forum',
@@ -50,10 +50,10 @@ return [
     'posts_symbols'        => 'Characters in a forum post',
     'forums_upload_points' => 'Asset to upload files',
 
-    'guestbooks_guests_allow' => 'Allow guests to write in guestbook',
-    'guestbooks_points_add'   => 'To earn points in the guest room',
-    'guestbooks_per_page'     => 'Guest posts on page',
-    'guestbooks_symbols'      => 'Characters in guest message',
+    'guestbook_guests_allow' => 'Allow guests to write in guestbook',
+    'guestbook_points_add'   => 'To earn points in the guest room',
+    'guestbook_per_page'     => 'Guest posts on page',
+    'guestbook_symbols'      => 'Characters in guest message',
 
     'images_reduction_size' => 'Reducing photos when uploading',
     'images_preview_size'   => 'Size preview',

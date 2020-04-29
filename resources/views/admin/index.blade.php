@@ -18,7 +18,7 @@
 
     <div class="b"><i class="fa fa-cog fa-lg text-muted"></i> <b>{{ __('main.editor') }}</b></div>
     <i class="far fa-circle fa-lg text-muted"></i> <a href="/admin/chats">{{ __('index.admin_chat') }}</a> ({{ statsChat() }})<br>
-    <i class="far fa-circle fa-lg text-muted"></i> <a href="/admin/guestbooks">{{ __('index.guestbooks') }}</a> ({{ statsGuestbook() }})<br>
+    <i class="far fa-circle fa-lg text-muted"></i> <a href="/admin/guestbook">{{ __('index.guestbook') }}</a> ({{ statsGuestbook() }})<br>
     <i class="far fa-circle fa-lg text-muted"></i> <a href="/admin/forums">{{ __('index.forums') }}</a> ({{ statsForum() }})<br>
     <i class="far fa-circle fa-lg text-muted"></i> <a href="/admin/photos">{{ __('index.photos') }}</a> ({{ statsPhotos() }})<br>
     <i class="far fa-circle fa-lg text-muted"></i> <a href="/admin/blogs">{{ __('index.blogs') }}</a> ({{ statsBlog() }})<br>

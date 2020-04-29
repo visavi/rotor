@@ -38,6 +38,13 @@ class Vote extends BaseModel
     protected $guarded = [];
 
     /**
+     * Morph name
+     *
+     * @var string
+     */
+    public static $morphName = 'votes';
+
+    /**
      * Возвращает топик
      *
      * @return BelongsTo

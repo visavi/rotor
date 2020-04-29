@@ -60,6 +60,13 @@ class Blog extends BaseModel
     public $countingField = 'visits';
 
     /**
+     * Morph name
+     *
+     * @var string
+     */
+    public static $morphName = 'articles';
+
+    /**
      * Возвращает комментарии блогов
      *
      * @return MorphMany

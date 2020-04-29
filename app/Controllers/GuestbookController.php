@@ -23,7 +23,7 @@ class GuestbookController extends BaseController
             ->with('user', 'editUser')
             ->paginate(setting('bookpost'));
 
-        return view('guestbooks/index', compact('posts'));
+        return view('guestbook/index', compact('posts'));
     }
 
     /**
@@ -48,7 +48,7 @@ class GuestbookController extends BaseController
         /* Проверка для гостей */
         if (! getUser() && setting('bookadds')) {
             $validator->true(captchaVerify(), ['protect' => __('validator.captcha')]);
-            $validator->false(strpos($msg, '//'), ['msg' => __('guestbooks.without_links')]);
+            $validator->false(strpos($msg, '//'), ['msg' => __('guestbook.without_links')]);
             $validator->length($guestName, 3, 20, ['guest_name' => __('users.name_short_or_long')], false);
         } else {
             $validator->true(getUser(), ['msg' => __('main.not_authorized')]);
@@ -75,17 +75,17 @@ class GuestbookController extends BaseController
                 'created_at' => SITETIME,
             ]);
 
-            clearCache('statGuestbooks');
+            clearCache('statGuestbook');
             $flood->saveState();
 
-            sendNotify($msg, '/guestbooks', __('index.guestbooks'));
+            sendNotify($msg, '/guestbook', __('index.guestbooks'));
             setFlash('success', __('main.message_added_success'));
         } else {
             setInput($request->all());
             setFlash('danger', $validator->getErrors());
         }
 
-        redirect('/guestbooks');
+        redirect('/guestbook');
     }
 
     /**
@@ -131,13 +131,13 @@ class GuestbookController extends BaseController
                 ]);
 
                 setFlash('success', __('main.message_edited_success'));
-                redirect('/guestbooks');
+                redirect('/guestbook');
             } else {
                 setInput($request->all());
                 setFlash('danger', $validator->getErrors());
             }
         }
 
-        return view('guestbooks/edit', compact('post'));
+        return view('guestbook/edit', compact('post'));
     }
 }

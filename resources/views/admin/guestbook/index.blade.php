@@ -1,7 +1,7 @@
 @extends('layout')
 
 @section('title')
-    {{ __('index.guestbooks') }}
+    {{ __('index.guestbook') }}
 @stop
 
 @section('breadcrumb')
@@ -9,7 +9,7 @@
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
             <li class="breadcrumb-item"><a href="/admin">{{ __('index.panel') }}</a></li>
-            <li class="breadcrumb-item active">{{ __('index.guestbooks') }}</li>
+            <li class="breadcrumb-item active">{{ __('index.guestbook') }}</li>
         </ol>
     </nav>
 @stop
@@ -17,17 +17,17 @@
 @section('header')
     @if (getUser() || setting('bookadds'))
         <div class="float-right">
-            <a class="btn btn-light" href="/guestbooks?page={{ $posts->currentPage() }}"><i class="fas fa-wrench"></i></a>
+            <a class="btn btn-light" href="/guestbook?page={{ $posts->currentPage() }}"><i class="fas fa-wrench"></i></a>
         </div>
     @endif
 
 
-    <h1>{{ __('index.guestbooks') }}</h1>
+    <h1>{{ __('index.guestbook') }}</h1>
 @stop
 
 @section('content')
     @if ($posts->isNotEmpty())
-        <form action="/admin/guestbooks/delete?page={{ $posts->currentPage() }}" method="post">
+        <form action="/admin/guestbook/delete?page={{ $posts->currentPage() }}" method="post">
             @csrf
             @foreach($posts as $post)
                 <div class="section mb-3 shadow">
@@ -57,8 +57,8 @@
                         </div>
 
                         <div class="text-right">
-                            <a href="/admin/guestbooks/reply/{{ $post->id }}?page={{ $posts->currentPage() }}"><i class="fa fa-reply text-muted"></i></a>
-                            <a href="/admin/guestbooks/edit/{{ $post->id }}?page={{ $posts->currentPage() }}"><i class="fas fa-pencil-alt text-muted"></i></a>
+                            <a href="/admin/guestbook/reply/{{ $post->id }}?page={{ $posts->currentPage() }}"><i class="fa fa-reply text-muted"></i></a>
+                            <a href="/admin/guestbook/edit/{{ $post->id }}?page={{ $posts->currentPage() }}"><i class="fas fa-pencil-alt text-muted"></i></a>
                             <input type="checkbox" name="del[]" value="{{ $post->id }}">
                         </div>
                     </div>
@@ -73,7 +73,7 @@
                         @endif
 
                         @if ($post->reply)
-                            <div class="text-danger">{{ __('guestbooks.answer') }}: {!! bbCode($post->reply) !!}</div>
+                            <div class="text-danger">{{ __('guestbook.answer') }}: {!! bbCode($post->reply) !!}</div>
                         @endif
 
                         <div class="small text-muted font-italic mt-2">
@@ -90,10 +90,10 @@
 
         {{ $posts->links() }}
 
-        {{ __('guestbooks.total_messages') }}: <b>{{ $posts->total() }}</b><br><br>
+        {{ __('guestbook.total_messages') }}: <b>{{ $posts->total() }}</b><br><br>
 
         @if (isAdmin('boss'))
-            <i class="fa fa-times"></i> <a href="/admin/guestbooks/clear?token={{ $_SESSION['token'] }}" onclick="return confirm('{{ __('guestbooks.confirm_delete') }}')">{{ __('main.clear') }}</a><br>
+            <i class="fa fa-times"></i> <a href="/admin/guestbook/clear?token={{ $_SESSION['token'] }}" onclick="return confirm('{{ __('guestbook.confirm_delete') }}')">{{ __('main.clear') }}</a><br>
         @endif
     @else
         {!! showError(__('main.empty_messages')) !!}

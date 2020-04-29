@@ -3,7 +3,7 @@
 return [
     'news'           => 'News',
     'communication'  => 'Communication',
-    'guestbooks'     => 'Guest book',
+    'guestbook'      => 'Guest book',
     'photos'         => 'Photo gallery',
     'votes'          => 'Voting',
     'offers'         => 'Suggestions / Problems',

@@ -22,7 +22,7 @@ class NewsController extends BaseController
             ->select('news.*', 'pollings.vote')
             ->leftJoin('pollings', static function (JoinClause $join) {
                 $join->on('news.id', 'pollings.relate_id')
-                    ->where('pollings.relate_type', News::class)
+                    ->where('pollings.relate_type', News::$morphName)
                     ->where('pollings.user_id', getUser('id'));
             })
             ->orderByDesc('created_at')
@@ -45,7 +45,7 @@ class NewsController extends BaseController
             ->select('news.*', 'pollings.vote')
             ->leftJoin('pollings', static function (JoinClause $join) {
                 $join->on('news.id', 'pollings.relate_id')
-                    ->where('pollings.relate_type', News::class)
+                    ->where('pollings.relate_type', News::$morphName)
                     ->where('pollings.user_id', getUser('id'));
             })
             ->find($id);
@@ -54,15 +54,12 @@ class NewsController extends BaseController
             abort(404, __('news.news_not_exist'));
         }
 
-        $comments = Comment::query()
-            ->where('relate_type', News::class)
-            ->where('relate_id', $id)
+        $comments = $news->comments()
             ->limit(5)
             ->orderByDesc('created_at')
             ->with('user')
-            ->get();
-
-        $comments = $comments->reverse();
+            ->get()
+            ->reverse();
 
         return view('news/view', compact('news', 'comments'));
     }
@@ -99,9 +96,7 @@ class NewsController extends BaseController
                 $msg = antimat($msg);
 
                 /** @var Comment $comment */
-                $comment = Comment::query()->create([
-                    'relate_type' => News::class,
-                    'relate_id'   => $news->id,
+                $comment = $news->comments()->create([
                     'text'        => $msg,
                     'user_id'     => getUser('id'),
                     'created_at'  => SITETIME,
@@ -133,9 +128,7 @@ class NewsController extends BaseController
             }
         }
 
-        $comments = Comment::query()
-            ->where('relate_type', News::class)
-            ->where('relate_id', $id)
+        $comments = $news->comments()
             ->orderBy('created_at')
             ->with('user')
             ->paginate(setting('comments_per_page'));
@@ -167,8 +160,8 @@ class NewsController extends BaseController
             abort(403, __('main.not_authorized'));
         }
 
-        $comment = Comment::query()
-            ->where('relate_type', News::class)
+        /** @var Comment $comment */
+        $comment = $news->comments()
             ->where('id', $cid)
             ->where('user_id', getUser('id'))
             ->first();
@@ -245,7 +238,7 @@ class NewsController extends BaseController
     {
         $comments = Comment::query()
             ->select('comments.*', 'title', 'count_comments')
-            ->where('relate_type', News::class)
+            ->where('relate_type', News::$morphName)
             ->leftJoin('news', 'comments.relate_id', 'news.id')
             ->orderByDesc('created_at')
             ->with('user')
@@ -269,9 +262,7 @@ class NewsController extends BaseController
             abort(404, __('news.news_not_exist'));
         }
 
-        $total = Comment::query()
-            ->where('relate_type', News::class)
-            ->where('relate_id', $id)
+        $total = $news->comments()
             ->where('id', '<=', $cid)
             ->orderBy('created_at')
             ->count();

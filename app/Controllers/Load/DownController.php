@@ -34,7 +34,7 @@ class DownController extends BaseController
             ->where('downs.id', $id)
             ->leftJoin('pollings', static function (JoinClause $join) {
                 $join->on('downs.id', 'pollings.relate_id')
-                    ->where('pollings.relate_type', Down::class)
+                    ->where('pollings.relate_type', Down::$morphName)
                     ->where('pollings.user_id', getUser('id'));
             })
             ->with('category.parent')
@@ -110,7 +110,7 @@ class DownController extends BaseController
                 ]);
 
                 foreach ($files as $file) {
-                    $down->uploadFile($file);
+                    $down->uploadAndConvertFile($file);
                 }
 
                 clearCache(['statLoads', 'recentDowns']);
@@ -142,7 +142,7 @@ class DownController extends BaseController
         }
 
         /** @var File $file */
-        $file = File::query()->where('relate_id', $down->id)->find($fid);
+        $file = $down->files()->find($fid);
 
         if (! $file) {
             abort(404, __('loads.down_not_exist'));
@@ -295,12 +295,7 @@ class DownController extends BaseController
             ->notEqual($down->user_id, getUser('id'), ['score' => __('loads.down_voted_forbidden')]);
 
         if ($validator->isValid()) {
-            $polling = Polling::query()
-                ->where('relate_type', Down::class)
-                ->where('relate_id', $down->id)
-                ->where('user_id', getUser('id'))
-                ->first();
-
+            $polling = $down->polling()->first();
             if ($polling) {
                 $down->increment('rating', $score - $polling->vote);
 
@@ -308,11 +303,8 @@ class DownController extends BaseController
                     'vote'       => $score,
                     'created_at' => SITETIME
                 ]);
-
             } else {
-                Polling::query()->create([
-                    'relate_type' => Down::class,
-                    'relate_id'   => $down->id,
+                $down->polling()->create([
                     'user_id'     => getUser('id'),
                     'vote'        => $score,
                     'created_at'  => SITETIME,
@@ -340,7 +332,7 @@ class DownController extends BaseController
     public function download(int $id, Validator $validator): void
     {
         /** @var File $file */
-        $file = File::query()->where('relate_type', Down::class)->find($id);
+        $file = File::query()->where('relate_type', Down::$morphName)->find($id);
 
         if (! $file || ! $file->relate) {
             abort(404, __('loads.down_not_exist'));
@@ -397,9 +389,7 @@ class DownController extends BaseController
                 $msg = antimat($msg);
 
                 /** @var Comment $comment */
-                $comment = Comment::query()->create([
-                    'relate_type' => Down::class,
-                    'relate_id'   => $down->id,
+                $comment = $down->comments()->create([
                     'text'        => $msg,
                     'user_id'     => getUser('id'),
                     'created_at'  => SITETIME,
@@ -425,9 +415,7 @@ class DownController extends BaseController
             }
         }
 
-        $comments = Comment::query()
-            ->where('relate_type', Down::class)
-            ->where('relate_id', $id)
+        $comments = $down->comments()
             ->orderBy('created_at')
             ->with('user')
             ->paginate(setting('comments_per_page'));
@@ -458,8 +446,7 @@ class DownController extends BaseController
             abort(403, __('main.not_authorized'));
         }
 
-        $comment = Comment::query()
-            ->where('relate_type', Down::class)
+        $comment = $down->comments()
             ->where('id', $cid)
             ->where('user_id', getUser('id'))
             ->first();
@@ -514,10 +501,7 @@ class DownController extends BaseController
             abort(404, __('loads.down_not_exist'));
         }
 
-        $total = Comment::query()
-            ->where('relate_type', Down::class)
-            ->where('relate_id', $down->id)
-            ->count();
+        $total = $down->comments()->count();
 
         $end = ceil($total / setting('comments_per_page'));
         redirect('/downs/comments/' . $down->id . '?page=' . $end);
@@ -533,7 +517,7 @@ class DownController extends BaseController
     public function zip(int $id): string
     {
         /** @var File $file */
-        $file = File::query()->where('relate_type', Down::class)->find($id);
+        $file = File::query()->where('relate_type', Down::$morphName)->find($id);
 
         if (! $file || ! $file->relate) {
             abort(404, __('loads.down_not_exist'));
@@ -574,7 +558,7 @@ class DownController extends BaseController
     public function zipView(int $id, int $fid): string
     {
         /** @var File $file */
-        $file = File::query()->where('relate_type', Down::class)->find($id);
+        $file = File::query()->where('relate_type', Down::$morphName)->find($id);
 
         if (! $file || ! $file->relate) {
             abort(404, __('loads.down_not_exist'));
@@ -591,8 +575,6 @@ class DownController extends BaseController
         try {
             $archive = new ZipFile();
             $archive->openFile(HOME . $file->hash);
-
-            /** @var ZipFile $archive */
             $getDocuments = array_values($archive->getAllInfo());
             $document     = $getDocuments[$fid] ?? null;
 
@@ -652,9 +634,7 @@ class DownController extends BaseController
             abort(404, __('loads.down_not_exist'));
         }
 
-        $total = Comment::query()
-            ->where('relate_type', Down::class)
-            ->where('relate_id', $id)
+        $total = $down->comments()
             ->where('id', '<=', $cid)
             ->orderBy('created_at')
             ->count();

@@ -35,19 +35,19 @@ class Reader extends BaseModel
     /**
      * Counting stat
      *
-     * @param  Builder|Model|object  $model
+     * @param BaseModel $model
      */
-    public static function countingStat(object $model): void
+    public static function countingStat(BaseModel $model): void
     {
         $reader = self::query()
-            ->where('relate_type', get_class($model))
+            ->where('relate_type', $model->getMorphClass())
             ->where('relate_id', $model->id)
             ->where('ip', inet_pton(getIp()))
             ->first();
 
         if (! $reader) {
             self::query()->create([
-                'relate_type' => get_class($model),
+                'relate_type' => $model->getMorphClass(),
                 'relate_id'   => $model->id,
                 'ip'          => getIp(),
                 'created_at'  => SITETIME,

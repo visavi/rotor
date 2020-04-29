@@ -51,6 +51,13 @@ class Post extends BaseModel
     public $uploadPath = UPLOADS . '/forums';
 
     /**
+     * Morph name
+     *
+     * @var string
+     */
+    public static $morphName = 'posts';
+
+    /**
      * Возвращает связь пользователей
      *
      * @return BelongsTo

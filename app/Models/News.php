@@ -46,6 +46,13 @@ class News extends BaseModel
     public $uploadPath = UPLOADS . '/news';
 
     /**
+     * Morph name
+     *
+     * @var string
+     */
+    public static $morphName = 'news';
+
+    /**
      * Возвращает комментарии новостей
      */
     public function comments(): MorphMany

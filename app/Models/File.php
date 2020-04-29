@@ -37,7 +37,7 @@ class File extends BaseModel
     protected $guarded = [];
 
     /**
-     * Возвращает связанные модели
+     * Возвращает связанные объекты
      *
      * @return MorphTo
      */

@@ -52,6 +52,13 @@ class Topic extends BaseModel
     public $countingField = 'visits';
 
     /**
+     * Morph name
+     *
+     * @var string
+     */
+    public static $morphName = 'topics';
+
+    /**
      * Возвращает сообщения
      *
      * @return HasMany

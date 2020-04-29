@@ -1,15 +1,15 @@
 @extends('layout')
 
 @section('title')
-    {{ __('guestbooks.title_edit') }}
+    {{ __('guestbook.title_edit') }}
 @stop
 
 @section('breadcrumb')
     <nav>
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
-            <li class="breadcrumb-item"><a href="/">{{ __('index.guestbooks') }}</a></li>
-            <li class="breadcrumb-item active">{{ __('guestbooks.title_edit') }}</li>
+            <li class="breadcrumb-item"><a href="/">{{ __('index.guestbook') }}</a></li>
+            <li class="breadcrumb-item active">{{ __('guestbook.title_edit') }}</li>
         </ol>
     </nav>
 @stop
@@ -18,7 +18,7 @@
     <i class="fa fa-pencil-alt text-muted"></i> <b>{!! $post->user->login !!}</b> ({{ dateFixed($post->created_at) }})<br><br>
 
     <div class="section-form p-2 shadow">
-        <form action="/guestbooks/edit/{{ $post->id }}" method="post">
+        <form action="/guestbook/edit/{{ $post->id }}" method="post">
             @csrf
             <div class="form-group{{ hasError('msg') }}">
                 <label for="msg">{{ __('main.message') }}:</label>

@@ -89,7 +89,7 @@ class BlogController extends BaseController
             abort(404, __('blogs.article_not_exist'));
         }
 
-        Reader::countingStat($blog, 'visits');
+        Reader::countingStat($blog);
 
         $blog->text = bbCode($blog->text) . '<br>';
         $tagsList = preg_split('/[\s]*[,][\s]*/', $blog->tags);

@@ -15,17 +15,11 @@
 @stop
 
 @section('content')
+
     <div class="mb-3">
-        <?php $active = ($type === 'post') ? 'success' : 'light'; ?>
-        <a href="/admin/spam?type=post" class="badge badge-{{ $active }}">{{ __('index.forums') }} {{ $total['post'] }}</a>
-        <?php $active = ($type === 'guest') ? 'success' : 'light'; ?>
-        <a href="/admin/spam?type=guest" class="badge badge-{{ $active }}">{{ __('index.guestbooks') }} {{ $total['guest'] }}</a>
-        <?php $active = ($type === 'message') ? 'success' : 'light'; ?>
-        <a href="/admin/spam?type=message" class="badge badge-{{ $active }}">{{ __('index.messages') }} {{ $total['message'] }}</a>
-        <?php $active = ($type === 'wall') ? 'success' : 'light'; ?>
-        <a href="/admin/spam?type=wall" class="badge badge-{{ $active }}">{{ __('index.wall_posts') }} {{ $total['wall'] }}</a>
-        <?php $active = ($type === 'comment') ? 'success' : 'light'; ?>
-        <a href="/admin/spam?type=comment" class="badge badge-{{ $active }}">{{ __('main.comments') }} {{ $total['comment'] }}</a>
+        @foreach ($types as $key => $value)
+            <a class="badge badge-{{ $key === $type ? 'success' : 'light' }}" href="/admin/spam?type={{ $key }}">{{ $value }} {{ $total[$key] }}</a>
+        @endforeach
     </div>
 
     @if ($records->isNotEmpty())

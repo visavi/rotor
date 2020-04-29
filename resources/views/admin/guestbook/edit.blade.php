@@ -1,7 +1,7 @@
 @extends('layout')
 
 @section('title')
-    {{ __('guestbooks.title_edit') }}
+    {{ __('guestbook.title_edit') }}
 @stop
 
 @section('breadcrumb')
@@ -9,8 +9,8 @@
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
             <li class="breadcrumb-item"><a href="/admin">{{ __('index.panel') }}</a></li>
-            <li class="breadcrumb-item"><a href="/admin/guestbooks">{{ __('index.guestbooks') }}</a></li>
-            <li class="breadcrumb-item active">{{ __('guestbooks.title_edit') }}</li>
+            <li class="breadcrumb-item"><a href="/admin/guestbook">{{ __('index.guestbook') }}</a></li>
+            <li class="breadcrumb-item active">{{ __('guestbook.title_edit') }}</li>
         </ol>
     </nav>
 @stop
@@ -19,7 +19,7 @@
     <i class="fa fa-pencil-alt"></i> <b>{{ $post->user->login }}</b> <small>({{ dateFixed($post->created_at) }})</small><br><br>
 
     <div class="section-form p-2 shadow">
-        <form action="/admin/guestbooks/edit/{{ $post->id }}?page={{ $page }}" method="post">
+        <form action="/admin/guestbook/edit/{{ $post->id }}?page={{ $page }}" method="post">
             @csrf
             <div class="form-group{{ hasError('msg') }}">
                 <label for="msg">{{ __('main.message') }}:</label>

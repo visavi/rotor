@@ -3,7 +3,7 @@
 return [
     'news'           => 'Новости',
     'communication'  => 'Общение',
-    'guestbooks'     => 'Гостевая',
+    'guestbook'      => 'Гостевая',
     'photos'         => 'Фотогалерея',
     'votes'          => 'Голосования',
     'offers'         => 'Предложения / Проблемы',

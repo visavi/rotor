@@ -41,7 +41,7 @@ class Spam extends BaseModel
     protected $guarded = [];
 
     /**
-     * Возвращает связанные сообщения
+     * Возвращает связанные объекты
      *
      * @return MorphTo
      */
@@ -51,7 +51,7 @@ class Spam extends BaseModel
     }
 
     /**
-     * Возвращает связанные сообщения
+     * Возвращает объект пользователя
      *
      * @return User
      */

@@ -19,34 +19,30 @@
         <span class="text-danger">{{ __('admin.errors.hint') }}</span><br>
     @endif
 
-    <ol class="breadcrumb">
+    <div class="mb-3">
         @foreach ($lists as $key => $value)
-            <li class="breadcrumb-item">
-                @if ($key === $code)
-                    <b>{{ $value }}</b>
-                @else
-                    <a href="/admin/errors?code={{ $key }}">{{ $value }}</a>
-                @endif
-            </li>
+            <a class="badge badge-{{ $key === $code ? 'success' : 'light' }}" href="/admin/errors?code={{ $key }}">{{ $value }}</a>
         @endforeach
-    </ol>
+    </div>
 
     @if ($logs->isNotEmpty())
         @foreach ($logs as $data)
-            <div class="b">
-                <i class="fa fa-file"></i>
-                <b>{{ $data->request }}</b> ({{ dateFixed($data->created_at) }})
-            </div>
-            <div>
-                Referer: {{ $data->referer ?: __('main.undefined') }}<br>
-                {{ __('main.user') }}: {!! $data->user->exists ? $data->user->getProfile() : setting('guestsuser') !!}<br>
-                <span class="data">({{ $data->brow }}, {{ $data->ip }})</span>
+            <div class="section mb-3 shadow">
+                <span class="section-title">{{ $data->request }}</span>
+                <small class="section-date text-muted font-italic">{{ dateFixed($data->created_at) }}</small>
+
+                <div class="section-body  border-top my-1 py-1">
+                    Referer: {{ $data->referer ?: __('main.undefined') }}<br>
+                    {{ __('main.user') }}: {!! $data->user->exists ? $data->user->getProfile() : setting('guestsuser') !!}
+                    <div class="small text-muted font-italic mt-2">{{ $data->brow }}, {{ $data->ip }}</div>
+                </div>
             </div>
         @endforeach
 
-        <br>{{ __('main.total') }}: <b>{{ $logs->total() }}</b><br>
 
         {{ $logs->links() }}
+
+        {{ __('main.total') }}: <b>{{ $logs->total() }}</b><br>
 
         @if (isAdmin('boss'))
             <i class="fa fa-trash-alt"></i> <a href="/admin/errors/clear?token={{ $_SESSION['token'] }}">{{ __('main.clear') }}</a><br>

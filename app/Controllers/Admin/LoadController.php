@@ -315,7 +315,7 @@ class LoadController extends AdminController
                 }
 
                 foreach ($files as $file) {
-                    $down->uploadFile($file);
+                    $down->uploadAndConvertFile($file);
                 }
 
                 if (! $down->active) {
@@ -399,7 +399,7 @@ class LoadController extends AdminController
         }
 
         /** @var File $file */
-        $file = File::query()->where('relate_id', $down->id)->find($fid);
+        $file = $down->files()->find($fid);
 
         if (! $file) {
             abort(404, __('loads.down_not_exist'));

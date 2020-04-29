@@ -22,6 +22,13 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 class Guestbook extends BaseModel
 {
     /**
+     * The table associated with the model.
+     *
+     * @var string
+     */
+    protected $table = 'guestbook';
+
+    /**
      * Indicates if the model should be timestamped.
      *
      * @var bool
@@ -44,4 +51,11 @@ class Guestbook extends BaseModel
     {
         return $this->belongsTo(User::class, 'edit_user_id')->withDefault();
     }
+
+    /**
+     * Morph name
+     *
+     * @var string
+     */
+    public static $morphName = 'guestbook';
 }

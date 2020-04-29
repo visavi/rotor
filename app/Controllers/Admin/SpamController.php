@@ -23,6 +23,11 @@ class SpamController extends AdminController
     private $types;
 
     /**
+     * @var string
+     */
+    private $type;
+
+    /**
      * @var array
      */
     private $total = [];
@@ -36,12 +41,15 @@ class SpamController extends AdminController
         }
 
         $this->types = [
-            'post'    => Post::class,
-            'guest'   => Guestbook::class,
-            'message' => Message::class,
-            'wall'    => Wall::class,
-            'comment' => Comment::class,
+            'posts'     => __('index.forums'),
+            'guestbook' => __('index.guestbook'),
+            'messages'  => __('index.messages'),
+            'walls'     => __('index.wall_posts'),
+            'comments'  => __('main.comments'),
         ];
+
+        $type = check(request()->input('type'));
+        $this->type = isset($this->types[$type]) ? $type : 'post';
 
         $spam = Spam::query()
             ->selectRaw('relate_type, count(*) as total')
@@ -50,24 +58,23 @@ class SpamController extends AdminController
             ->all();
 
         foreach ($this->types as $key => $value) {
-            $this->total[$key] = $spam[$value] ?? 0;
+            $this->total[$key] = $spam[$key] ?? 0;
         }
     }
 
     /**
      * Главная страница
      *
-     * @param Request $request
      * @return string
      */
-    public function index(Request $request): string
+    public function index(): string
     {
-        $type = check($request->input('type'));
-        $type = isset($this->types[$type]) ? $type : 'post';
+        $type  = $this->type;
+        $types = $this->types;
 
         /** @var Spam $records */
         $records = Spam::query()
-            ->where('relate_type', $this->types[$type])
+            ->where('relate_type', $type)
             ->orderByDesc('created_at')
             ->with('user')
             ->paginate(setting('spamlist'))
@@ -81,7 +88,7 @@ class SpamController extends AdminController
 
         $total = $this->total;
 
-        return view('admin/spam/index', compact('records', 'total', 'type'));
+        return view('admin/spam/index', compact('records', 'total', 'type', 'types'));
     }
 
     /**

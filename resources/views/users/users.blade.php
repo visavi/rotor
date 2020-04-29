@@ -37,7 +37,7 @@
             </div>
 
             <div>
-                {{ __('index.forums') }}: {{ $data->allforum }} | {{ __('index.guestbooks') }}: {{ $data->allguest }} | {{ __('main.comments') }}: {{ $data->allcomments }}<br>
+                {{ __('index.forums') }}: {{ $data->allforum }} | {{ __('index.guestbook') }}: {{ $data->allguest }} | {{ __('main.comments') }}: {{ $data->allcomments }}<br>
                 {{ __('users.visits') }}: {{ $data->visits }}<br>
                 {{ __('users.moneys') }}: {{ $data->money }}<br>
                 {{ __('main.registration_date') }}: {{ dateFixed($data->created_at, 'd.m.Y') }}

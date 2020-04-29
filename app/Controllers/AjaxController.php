@@ -23,6 +23,7 @@ use App\Models\{
 };
 use Exception;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 
 class AjaxController extends BaseController
 {
@@ -68,68 +69,28 @@ class AjaxController extends BaseController
         $token = check($request->input('token'));
 
         switch ($type):
-            case Guestbook::class:
-                $data = $type::query()->find($id);
-                $path = '/guestbooks?page='.$page;
+            case Guestbook::$morphName:
+                $data = Guestbook::query()->find($id);
+                $path = '/guestbook?page='.$page;
                 break;
 
-            case Post::class:
-                $data = $type::query()->find($id);
+            case Post::$morphName:
+                $data = Post::query()->find($id);
                 $path = '/topics/' . $data->topic_id . '?page='.$page;
                 break;
 
-            case Message::class:
-                $data = $type::query()->find($id);
+            case Message::$morphName:
+                $data = Message::query()->find($id);
                 break;
 
-            case Wall::class:
-                $data = $type::query()->find($id);
+            case Wall::$morphName:
+                $data = Wall::query()->find($id);
                 $path = '/walls/' . $data->user->login . '?page='.$page;
                 break;
 
-            case News::class:
-                $data = Comment::query()
-                    ->where('relate_type', $type)
-                    ->where('id', $id)
-                    ->first();
-                $type = Comment::class;
-                $path = '/news/comments/' . $data->relate_id . '?page='.$page;
-                break;
-
-            case Blog::class:
-                $data = Comment::query()
-                    ->where('relate_type', $type)
-                    ->where('id', $id)
-                    ->first();
-                $type = Comment::class;
-                $path = '/articles/comments/' . $data->relate_id . '?page=' . $page;
-                break;
-
-            case Photo::class:
-                $data = Comment::query()
-                    ->where('relate_type', $type)
-                    ->where('id', $id)
-                    ->first();
-                $type = Comment::class;
-                $path = '/photos/comments/' . $data->relate_id . '?page='.$page;
-                break;
-
-            case Offer::class:
-                $data = Comment::query()
-                    ->where('relate_type', $type)
-                    ->where('id', $id)
-                    ->first();
-                $type = Comment::class;
-                $path = '/offers/comments/' . $data->relate_id . '?page='.$page;
-                break;
-
-            case Down::class:
-                $data = Comment::query()
-                    ->where('relate_type', $type)
-                    ->where('id', $id)
-                    ->first();
-                $type = Comment::class;
-                $path = '/downs/comments/' . $data->relate_id . '?page='.$page;
+            case Comment::$morphName:
+                $data = Comment::query()->find($id);
+                $path = '/' . $data->relate_type . '/comments/' . $data->relate_id . '?page='.$page;
                 break;
         endswitch;
 
@@ -154,7 +115,7 @@ class AjaxController extends BaseController
 
         return json_encode([
             'status'  => 'error',
-            'message' => current($validator->getErrors())
+            'message' => current($validator->getErrors()),
         ]);
     }
 
@@ -213,7 +174,6 @@ class AjaxController extends BaseController
         $types = [
             Post::class,
             Blog::class,
-            News::class,
             Photo::class,
             Offer::class,
             News::class,

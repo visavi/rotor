@@ -2,15 +2,15 @@
 
 use Phinx\Migration\AbstractMigration;
 
-class CreateGuestbooksTable extends AbstractMigration
+class CreateGuestbookTable extends AbstractMigration
 {
     /**
      * Change Method.
      */
     public function change()
     {
-        if (! $this->hasTable('guestbooks')) {
-            $table = $this->table('guestbooks', ['engine' => config('DB_ENGINE'), 'collation' => config('DB_COLLATION')]);
+        if (! $this->hasTable('guestbook')) {
+            $table = $this->table('guestbook', ['engine' => config('DB_ENGINE'), 'collation' => config('DB_COLLATION')]);
             $table
                 ->addColumn('user_id', 'integer', ['null' => true])
                 ->addColumn('text', 'text', ['null' => true])

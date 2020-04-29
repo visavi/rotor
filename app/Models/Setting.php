@@ -47,7 +47,7 @@ class Setting extends BaseModel
             'mains',
             'mails',
             'info',
-            'guestbooks',
+            'guestbook',
             'news',
             'comments',
             'forums',

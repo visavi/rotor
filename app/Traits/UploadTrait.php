@@ -51,14 +51,12 @@ trait UploadTrait
         }
 
         if ($record) {
-            $upload = File::query()->create([
-                'relate_id'   => (int) $this->id,
-                'relate_type' => static::class,
-                'hash'        => $path,
-                'name'        => $basename,
-                'size'        => filesize($fullPath),
-                'user_id'     => getUser('id'),
-                'created_at'  => SITETIME,
+            $upload = $this->files()->create([
+                'hash'       => $path,
+                'name'       => $basename,
+                'size'       => filesize($fullPath),
+                'user_id'    => getUser('id'),
+                'created_at' => SITETIME,
             ]);
         }
 
