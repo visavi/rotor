@@ -92,7 +92,7 @@ class PhotoController extends BaseController
                 ]);
 
                 File::query()
-                    ->where('relate_type', Photo::class)
+                    ->where('relate_type', Photo::$morphName)
                     ->where('relate_id', 0)
                     ->where('user_id', getUser('id'))
                     ->update(['relate_id' => $photo->id]);
@@ -109,7 +109,7 @@ class PhotoController extends BaseController
         }
 
         $files = File::query()
-            ->where('relate_type', Photo::class)
+            ->where('relate_type', Photo::$morphName)
             ->where('relate_id', 0)
             ->where('user_id', getUser('id'))
             ->get();

@@ -5,10 +5,9 @@ declare(strict_types=1);
 namespace App\Controllers;
 
 use App\Classes\Validator;
-use App\Models\{
+use App\Models\{BaseModel,
     Blog,
     Comment,
-    Down,
     File,
     Guestbook,
     Message,
@@ -16,14 +15,12 @@ use App\Models\{
     News,
     Offer,
     Photo,
-    Polling,
     Post,
     Spam,
-    Wall
-};
+    Wall};
 use Exception;
+use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Http\Request;
-use Illuminate\Support\Str;
 
 class AjaxController extends BaseController
 {
@@ -150,7 +147,9 @@ class AjaxController extends BaseController
                 ->delete();
 
             if ($delComments) {
-                $type::query()->find($rid)->decrement('count_comments');
+                /** @var BaseModel $model */
+                $model = Relation::getMorphedModel($type);
+                $model::query()->find($rid)->decrement('count_comments');
             }
 
             return json_encode(['status' => 'success']);
@@ -172,11 +171,11 @@ class AjaxController extends BaseController
     public function rating(Request $request): string
     {
         $types = [
-            Post::class,
-            Blog::class,
-            Photo::class,
-            Offer::class,
-            News::class,
+            Post::$morphName,
+            Blog::$morphName,
+            Photo::$morphName,
+            Offer::$morphName,
+            News::$morphName,
         ];
 
         $id    = int($request->input('id'));
@@ -196,22 +195,19 @@ class AjaxController extends BaseController
             return json_encode(['status' => 'error', 'message' => 'Type invalid']);
         }
 
-        /** @var Post $post */
-        $post = $type::query()
-            ->where('user_id', '<>', getUser('id'))
+        /** @var BaseModel $model */
+        $model = Relation::getMorphedModel($type);
+
+        $post = $model::query()
             ->where('id', $id)
+            ->where('user_id', '<>', getUser('id'))
             ->first();
 
         if (! $post) {
             return json_encode(['status' => 'error', 'message' => 'Record not found']);
         }
 
-        $polling = Polling::query()
-            ->where('relate_type', $type)
-            ->where('relate_id', $id)
-            ->where('user_id', getUser('id'))
-            ->first();
-
+        $polling = $post->polling()->first();
         $cancel = false;
 
         if ($polling) {
@@ -222,9 +218,7 @@ class AjaxController extends BaseController
             $polling->delete();
             $cancel = true;
         } else {
-            Polling::query()->create([
-                'relate_type' => $type,
-                'relate_id'   => $id,
+            $post->polling()->create([
                 'user_id'     => getUser('id'),
                 'vote'        => $vote,
                 'created_at'  => SITETIME,
@@ -254,9 +248,9 @@ class AjaxController extends BaseController
     public function uploadImage(Request $request, Validator $validator): string
     {
         $types = [
-            Blog::class,
-            Item::class,
-            Photo::class,
+            Blog::$morphName,
+            Item::$morphName,
+            Photo::$morphName,
         ];
 
         $image = $request->file('image');
@@ -268,8 +262,11 @@ class AjaxController extends BaseController
             return json_encode(['status' => 'error', 'message' => 'Type invalid']);
         }
 
+        /** @var BaseModel $class */
+        $class = Relation::getMorphedModel($type);
+
         if ($id) {
-            $model = $type::query()->where('user_id', getUser('id'))->find($id);
+            $model = $class::query()->where('user_id', getUser('id'))->find($id);
 
             if (! $model) {
                 return json_encode([
@@ -278,12 +275,10 @@ class AjaxController extends BaseController
                 ]);
             }
         } else {
-            $model = new $type();
+            $model = new $class();
         }
 
-        $countFiles = File::query()
-            ->where('relate_type', $type)
-            ->where('relate_id', $id)
+        $countFiles = $model->files()
             ->where('user_id', getUser('id'))
             ->count();
 
@@ -329,9 +324,9 @@ class AjaxController extends BaseController
     public function deleteImage(Request $request, Validator $validator): string
     {
         $types = [
-            Blog::class,
-            Item::class,
-            Photo::class,
+            Blog::$morphName,
+            Item::$morphName,
+            Photo::$morphName,
         ];
 
         $id    = int($request->input('id'));
@@ -359,7 +354,6 @@ class AjaxController extends BaseController
             ->true(! $file->relate_id || isAdmin(), __('ajax.image_delete_attached'));
 
         if ($validator->isValid()) {
-            deleteFile(HOME . $file->hash);
             $file->delete();
 
             return json_encode([

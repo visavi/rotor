@@ -31,7 +31,7 @@
                 <div class="invalid-feedback">{{ textError('text') }}</div>
             </div>
 
-            @include('app/_upload', ['files' => $files, 'type' => App\Models\Photo::class])
+            @include('app/_upload', ['files' => $files, 'type' => App\Models\Photo::$morphName])
 
             <div class="custom-control custom-checkbox">
                 <input type="hidden" value="0" name="closed">

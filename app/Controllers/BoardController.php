@@ -139,7 +139,7 @@ class BoardController extends BaseController
                 $item->category->increment('count_items');
 
                 File::query()
-                    ->where('relate_type', Item::class)
+                    ->where('relate_type', Item::$morphName)
                     ->where('relate_id', 0)
                     ->where('user_id', getUser('id'))
                     ->update(['relate_id' => $item->id]);
@@ -156,7 +156,7 @@ class BoardController extends BaseController
         }
 
         $files = File::query()
-            ->where('relate_type', Item::class)
+            ->where('relate_type', Item::$morphName)
             ->where('relate_id', 0)
             ->where('user_id', getUser('id'))
             ->get();

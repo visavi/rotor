@@ -115,7 +115,6 @@ class Item extends BaseModel
     public function delete(): ?bool
     {
         $this->files->each(static function($file) {
-            deleteFile(HOME . $file->hash);
             $file->delete();
         });
 

@@ -8,6 +8,7 @@ use App\Traits\UploadTrait;
 use Exception;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
+use Illuminate\Database\Eloquent\Relations\MorphOne;
 
 /**
  * Class Photo
@@ -75,6 +76,16 @@ class Photo extends BaseModel
     }
 
     /**
+     * Возвращает связь с голосованием
+     *
+     * @return morphOne
+     */
+    public function polling(): morphOne
+    {
+        return $this->morphOne(Polling::class, 'relate')->where('user_id', getUser('id'));
+    }
+
+    /**
      * Удаление фото и загруженных файлов
      *
      * @return bool|null
@@ -83,7 +94,6 @@ class Photo extends BaseModel
     public function delete(): ?bool
     {
         $this->files->each(static function($file) {
-            deleteFile(HOME . $file->hash);
             $file->delete();
         });
 

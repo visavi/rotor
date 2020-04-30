@@ -9,6 +9,7 @@ use Exception;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
+use Illuminate\Database\Eloquent\Relations\MorphOne;
 
 /**
  * Class Post
@@ -88,6 +89,16 @@ class Post extends BaseModel
     }
 
     /**
+     * Возвращает связь с голосованием
+     *
+     * @return morphOne
+     */
+    public function polling(): morphOne
+    {
+        return $this->morphOne(Polling::class, 'relate')->where('user_id', getUser('id'));
+    }
+
+    /**
      * Удаление поста и загруженных файлов
      *
      * @return bool|null
@@ -96,7 +107,6 @@ class Post extends BaseModel
     public function delete(): ?bool
     {
         $this->files->each(static function($file) {
-            deleteFile(HOME . $file->hash);
             $file->delete();
         });
 

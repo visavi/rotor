@@ -49,7 +49,7 @@
                     @foreach ($blog->files as $file)
                         <span class="js-image">
                             {!! resizeImage($file->hash, ['width' => 100, 'onclick' => 'return pasteImage(this);']) !!}
-                            <a href="#" onclick="return deleteImage(this);" data-id="{{ $file->id }}" data-type="{{ App\Models\Blog::class }}"  data-token="{{ $_SESSION['token'] }}"><i class="fas fa-times"></i></a>
+                            <a href="#" onclick="return deleteImage(this);" data-id="{{ $file->id }}" data-type="{{ $blog->getMorphClass() }}"  data-token="{{ $_SESSION['token'] }}"><i class="fas fa-times"></i></a>
                         </span>
                     @endforeach
                 @endif

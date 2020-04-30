@@ -42,11 +42,11 @@
                 <b><a href="/articles/{{ $data->id }}">{{ $data->title }}</a></b>
                 <div class="float-right js-rating">
                     @if (getUser() && getUser('id') !== $data->user_id)
-                        <a class="post-rating-down<?= $data->vote === '-' ? ' active' : '' ?>" href="#" onclick="return changeRating(this);" data-id="{{ $data->id }}" data-type="{{ App\Models\Blog::class }}" data-vote="-" data-token="{{ $_SESSION['token'] }}"><i class="fa fa-thumbs-down"></i></a>
+                        <a class="post-rating-down<?= $data->vote === '-' ? ' active' : '' ?>" href="#" onclick="return changeRating(this);" data-id="{{ $data->id }}" data-type="{{ $data->getMorphClass() }}" data-vote="-" data-token="{{ $_SESSION['token'] }}"><i class="fa fa-thumbs-down"></i></a>
                     @endif
                     <span>{!! formatNum($data->rating) !!}</span>
                     @if (getUser() && getUser('id') !== $data->user_id)
-                        <a class="post-rating-up<?= $data->vote === '+' ? ' active' : '' ?>" href="#" onclick="return changeRating(this);" data-id="{{ $data->id }}" data-type="{{ App\Models\Blog::class }}" data-vote="+" data-token="{{ $_SESSION['token'] }}"><i class="fa fa-thumbs-up"></i></a>
+                        <a class="post-rating-up<?= $data->vote === '+' ? ' active' : '' ?>" href="#" onclick="return changeRating(this);" data-id="{{ $data->id }}" data-type="{{ $data->getMorphClass() }}" data-vote="+" data-token="{{ $_SESSION['token'] }}"><i class="fa fa-thumbs-up"></i></a>
                     @endif
                 </div>
             </div>

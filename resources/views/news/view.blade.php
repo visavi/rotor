@@ -35,11 +35,11 @@
 
         <div class="js-rating">{{ __('main.rating') }}:
             @if (getUser() && getUser('id') !== $news->user_id)
-                <a class="post-rating-down<?= $news->vote === '-' ? ' active' : '' ?>" href="#" onclick="return changeRating(this);" data-id="{{ $news->id }}" data-type="{{ App\Models\News::class }}" data-vote="-" data-token="{{ $_SESSION['token'] }}"><i class="fa fa-thumbs-down"></i></a>
+                <a class="post-rating-down<?= $news->vote === '-' ? ' active' : '' ?>" href="#" onclick="return changeRating(this);" data-id="{{ $news->id }}" data-type="{{ $news->getMorphClass() }}" data-vote="-" data-token="{{ $_SESSION['token'] }}"><i class="fa fa-thumbs-down"></i></a>
             @endif
             <span>{!! formatNum($news->rating) !!}</span>
             @if (getUser() && getUser('id') !== $news->user_id)
-                <a class="post-rating-up<?= $news->vote === '+' ? ' active' : '' ?>" href="#" onclick="return changeRating(this);" data-id="{{ $news->id }}" data-type="{{ App\Models\News::class }}" data-vote="+" data-token="{{ $_SESSION['token'] }}"><i class="fa fa-thumbs-up"></i></a>
+                <a class="post-rating-up<?= $news->vote === '+' ? ' active' : '' ?>" href="#" onclick="return changeRating(this);" data-id="{{ $news->id }}" data-type="{{ $news->getMorphClass() }}" data-vote="+" data-token="{{ $_SESSION['token'] }}"><i class="fa fa-thumbs-up"></i></a>
             @endif
         </div>
     </div><br>

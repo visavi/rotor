@@ -14,7 +14,6 @@ use App\Models\Comment;
 use App\Models\Down;
 use App\Models\Flood;
 use App\Models\Reader;
-use App\Models\Polling;
 use Illuminate\Database\Query\JoinClause;
 use Illuminate\Http\Request;
 use PhpZip\ZipFile;
@@ -332,7 +331,7 @@ class DownController extends BaseController
     public function download(int $id, Validator $validator): void
     {
         /** @var File $file */
-        $file = File::query()->where('relate_type', Down::$morphName)->find($id);
+        $file = File::query()->find($id);
 
         if (! $file || ! $file->relate) {
             abort(404, __('loads.down_not_exist'));
@@ -517,7 +516,7 @@ class DownController extends BaseController
     public function zip(int $id): string
     {
         /** @var File $file */
-        $file = File::query()->where('relate_type', Down::$morphName)->find($id);
+        $file = File::query()->find($id);
 
         if (! $file || ! $file->relate) {
             abort(404, __('loads.down_not_exist'));
@@ -558,7 +557,7 @@ class DownController extends BaseController
     public function zipView(int $id, int $fid): string
     {
         /** @var File $file */
-        $file = File::query()->where('relate_type', Down::$morphName)->find($id);
+        $file = File::query()->find($id);
 
         if (! $file || ! $file->relate) {
             abort(404, __('loads.down_not_exist'));

@@ -6,6 +6,7 @@ namespace App\Models;
 
 use App\Traits\UploadTrait;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
+use Illuminate\Database\Eloquent\Relations\MorphOne;
 
 /**
  * Class News
@@ -58,6 +59,16 @@ class News extends BaseModel
     public function comments(): MorphMany
     {
         return $this->morphMany(Comment::class, 'relate');
+    }
+
+    /**
+     * Возвращает связь с голосованием
+     *
+     * @return morphOne
+     */
+    public function polling(): morphOne
+    {
+        return $this->morphOne(Polling::class, 'relate')->where('user_id', getUser('id'));
     }
 
     /**

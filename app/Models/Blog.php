@@ -10,6 +10,7 @@ use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
+use Illuminate\Database\Eloquent\Relations\MorphOne;
 
 /**
  * Class Blog
@@ -110,6 +111,16 @@ class Blog extends BaseModel
     }
 
     /**
+     * Возвращает связь с голосованием
+     *
+     * @return morphOne
+     */
+    public function polling(): morphOne
+    {
+        return $this->morphOne(Polling::class, 'relate')->where('user_id', getUser('id'));
+    }
+
+    /**
      * Возвращает путь к первому файлу
      *
      * @return mixed код изображения
@@ -178,7 +189,6 @@ class Blog extends BaseModel
     public function delete(): ?bool
     {
         $this->files->each(static function($file) {
-            deleteFile(HOME . $file->hash);
             $file->delete();
         });
 

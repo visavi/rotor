@@ -55,7 +55,7 @@ class BlogController extends BaseController
             ->select('blogs.*', 'pollings.vote')
             ->leftJoin('pollings', static function (JoinClause $join) {
                 $join->on('blogs.id', 'pollings.relate_id')
-                    ->where('pollings.relate_type', Blog::class)
+                    ->where('pollings.relate_type', Blog::$morphName)
                     ->where('pollings.user_id', getUser('id'));
             })
             ->where('category_id', $id)
@@ -79,7 +79,7 @@ class BlogController extends BaseController
             ->where('blogs.id', $id)
             ->leftJoin('pollings', static function (JoinClause $join) {
                 $join->on('blogs.id', 'pollings.relate_id')
-                    ->where('pollings.relate_type', Blog::class)
+                    ->where('pollings.relate_type', Blog::$morphName)
                     ->where('pollings.user_id', getUser('id'));
             })
             ->with('category.parent')
@@ -270,7 +270,7 @@ class BlogController extends BaseController
                 getUser()->increment('money', 100);
 
                 File::query()
-                    ->where('relate_type', Blog::class)
+                    ->where('relate_type', Blog::$morphName)
                     ->where('relate_id', 0)
                     ->where('user_id', getUser('id'))
                     ->update(['relate_id' => $blog->id]);
@@ -287,7 +287,7 @@ class BlogController extends BaseController
         }
 
         $files = File::query()
-            ->where('relate_type', Blog::class)
+            ->where('relate_type', Blog::$morphName)
             ->where('relate_id', 0)
             ->where('user_id', getUser('id'))
             ->get();
@@ -327,9 +327,7 @@ class BlogController extends BaseController
                 $msg = antimat($msg);
 
                 /** @var Comment $comment */
-                $comment = Comment::query()->create([
-                    'relate_type' => Blog::class,
-                    'relate_id'   => $blog->id,
+                $comment = $blog->comments()->create([
                     'text'        => $msg,
                     'user_id'     => getUser('id'),
                     'created_at'  => SITETIME,
@@ -387,8 +385,7 @@ class BlogController extends BaseController
             abort(403, __('main.not_authorized'));
         }
 
-        $comment = Comment::query()
-            ->where('relate_type', Blog::class)
+        $comment = $blog->comments()
             ->where('id', $cid)
             ->where('user_id', getUser('id'))
             ->first();
@@ -442,10 +439,7 @@ class BlogController extends BaseController
             abort(404, __('blogs.article_not_exist'));
         }
 
-        $total = Comment::query()
-            ->where('relate_type', Blog::class)
-            ->where('relate_id', $id)
-            ->count();
+        $total = $blog->comments()->count();
 
         $end = ceil($total / setting('comments_per_page'));
         redirect('/articles/comments/' . $id . '?page=' . $end);
@@ -605,7 +599,7 @@ class BlogController extends BaseController
     {
         $comments = Comment::query()
             ->select('comments.*', 'title', 'count_comments')
-            ->where('relate_type', Blog::class)
+            ->where('relate_type', Blog::$morphName)
             ->leftJoin('blogs', 'comments.relate_id', 'blogs.id')
             ->orderByDesc('comments.created_at')
             ->with('user')
@@ -654,7 +648,7 @@ class BlogController extends BaseController
 
         $comments = Comment::query()
             ->select('comments.*', 'title', 'count_comments')
-            ->where('relate_type', Blog::class)
+            ->where('relate_type', Blog::$morphName)
             ->where('comments.user_id', $user->id)
             ->leftJoin('blogs', 'comments.relate_id', 'blogs.id')
             ->orderByDesc('comments.created_at')
@@ -681,9 +675,7 @@ class BlogController extends BaseController
             abort(404, __('blogs.article_not_exist'));
         }
 
-        $total = Comment::query()
-            ->where('relate_type', Blog::class)
-            ->where('relate_id', $id)
+        $total = $blog->comments()
             ->where('id', '<=', $cid)
             ->orderBy('created_at')
             ->count();
