@@ -6,6 +6,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Database\Eloquent\Relations\MorphOne;
 
 /**
@@ -85,6 +86,16 @@ class Offer extends BaseModel
     }
 
     /**
+     * Возвращает связь с комментариями
+     *
+     * @return MorphMany
+     */
+    public function comments(): MorphMany
+    {
+        return $this->morphMany(Comment::class, 'relate');
+    }
+
+    /**
      * Возвращает связь пользователей
      *
      * @return BelongsTo
@@ -103,7 +114,7 @@ class Offer extends BaseModel
     public function lastComments($limit = 15): HasMany
     {
         return $this->hasMany(Comment::class, 'relate_id')
-            ->where('relate_type', self::class)
+            ->where('relate_type', self::$morphName)
             ->orderBy('created_at')
             ->with('user')
             ->limit($limit);

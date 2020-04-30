@@ -43,7 +43,7 @@ class PhotoController extends BaseController
             ->where('photos.id', $id)
             ->leftJoin('pollings', static function (JoinClause $join) {
                 $join->on('photos.id', 'pollings.relate_id')
-                    ->where('pollings.relate_type', Photo::class)
+                    ->where('pollings.relate_type', Photo::$morphName)
                     ->where('pollings.user_id', getUser('id'));
             })
             ->with('user')
@@ -205,9 +205,7 @@ class PhotoController extends BaseController
                 $msg = antimat($msg);
 
                 /** @var Comment $comment */
-                $comment = Comment::query()->create([
-                    'relate_type' => Photo::class,
-                    'relate_id'   => $photo->id,
+                $comment = $photo->comments()->create([
                     'text'        => $msg,
                     'user_id'     => getUser('id'),
                     'created_at'  => SITETIME,
@@ -233,9 +231,7 @@ class PhotoController extends BaseController
             }
         }
 
-        $comments = Comment::query()
-            ->where('relate_type', Photo::class)
-            ->where('relate_id', $id)
+        $comments = $photo->comments()
             ->orderBy('created_at')
             ->with('user')
             ->paginate(setting('comments_per_page'));
@@ -267,8 +263,7 @@ class PhotoController extends BaseController
             abort(403, __('main.not_authorized'));
         }
 
-        $comment = Comment::query()
-            ->where('relate_type', Photo::class)
+        $comment = $photo->comments()
             ->where('id', $cid)
             ->where('user_id', getUser('id'))
             ->first();
@@ -362,10 +357,7 @@ class PhotoController extends BaseController
             abort(404, __('photos.photo_not_exist'));
         }
 
-        $total = Comment::query()
-            ->where('relate_type', Photo::class)
-            ->where('relate_id', $photo->id)
-            ->count();
+        $total = $photo->comments()->count();
 
         $end = ceil($total / setting('comments_per_page'));
         redirect('/photos/comments/' . $photo->id . '?page=' . $end);
@@ -448,7 +440,7 @@ class PhotoController extends BaseController
     {
         $comments = Comment::query()
             ->select('comments.*', 'title')
-            ->where('relate_type', Photo::class)
+            ->where('relate_type', Photo::$morphName)
             ->leftJoin('photos', 'comments.relate_id', 'photos.id')
             ->orderByDesc('comments.created_at')
             ->with('user')
@@ -473,7 +465,7 @@ class PhotoController extends BaseController
 
         $comments = Comment::query()
             ->select('comments.*', 'title')
-            ->where('relate_type', Photo::class)
+            ->where('relate_type', Photo::$morphName)
             ->where('comments.user_id', $user->id)
             ->leftJoin('photos', 'comments.relate_id', 'photos.id')
             ->orderByDesc('comments.created_at')
@@ -498,9 +490,7 @@ class PhotoController extends BaseController
             abort(404, __('photos.photo_not_exist'));
         }
 
-        $total = Comment::query()
-            ->where('relate_type', Photo::class)
-            ->where('relate_id', $id)
+        $total = $photo->comments()
             ->where('id', '<=', $cid)
             ->orderBy('created_at')
             ->count();

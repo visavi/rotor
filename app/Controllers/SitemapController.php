@@ -65,7 +65,7 @@ class SitemapController extends BaseController
             ->selectRaw('blogs.*, max(c.created_at) as last_time')
             ->leftJoin('comments as c', static function (JoinClause $join) {
                 $join->on('blogs.id', 'c.relate_id')
-                    ->where('relate_type', Blog::class);
+                    ->where('relate_type', Blog::$morphName);
             })
             ->groupBy('blogs.id')
             ->orderByDesc('last_time')
@@ -101,7 +101,7 @@ class SitemapController extends BaseController
             ->selectRaw('news.*, max(c.created_at) as last_time')
             ->leftJoin('comments as c', static function (JoinClause $join) {
                 $join->on('news.id', 'c.relate_id')
-                    ->where('relate_type', News::class);
+                    ->where('relate_type', News::$morphName);
             })
             ->groupBy('news.id')
             ->orderByDesc('last_time')
@@ -162,7 +162,7 @@ class SitemapController extends BaseController
             ->selectRaw('downs.*, max(c.created_at) as last_time')
             ->leftJoin('comments as c', static function (JoinClause $join) {
                 $join->on('downs.id', 'c.relate_id')
-                    ->where('relate_type', Down::class);
+                    ->where('relate_type', Down::$morphName);
             })
             ->groupBy('downs.id')
             ->orderByDesc('last_time')

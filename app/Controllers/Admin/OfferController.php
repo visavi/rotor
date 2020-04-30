@@ -229,12 +229,12 @@ class OfferController extends AdminController
             Offer::query()->whereIn('id', $del)->delete();
 
             Polling::query()
-                ->where('relate_type', Offer::class)
+                ->where('relate_type', Offer::$morphName)
                 ->whereIn('relate_id', $del)
                 ->delete();
 
             Comment::query()
-                ->where('relate_type', Offer::class)
+                ->where('relate_type', Offer::$morphName)
                 ->whereIn('relate_id', $del)
                 ->delete();
 

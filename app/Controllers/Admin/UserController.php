@@ -236,13 +236,12 @@ class UserController extends AdminController
                     // Удаление загруженных файлов
                     if ($posts) {
                         $files = File::query()
-                            ->where('relate_type', Post::class)
+                            ->where('relate_type', Post::$morphName)
                             ->whereIn('relate_id', $posts)
                             ->get();
 
                         if ($files->isNotEmpty()) {
                             foreach ($files as $file) {
-                                deleteFile(HOME . $file->hash);
                                 $file->delete();
                             }
                         }
@@ -260,13 +259,12 @@ class UserController extends AdminController
                     // Удаление загруженных файлов
                     if ($posts) {
                         $files = File::query()
-                            ->where('relate_type', Post::class)
+                            ->where('relate_type', Post::$morphName)
                             ->whereIn('relate_id', $posts)
                             ->get();
 
                         if ($files->isNotEmpty()) {
                             foreach ($files as $file) {
-                                deleteFile(HOME . $file->hash);
                                 $file->delete();
                             }
                         }

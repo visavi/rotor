@@ -64,7 +64,7 @@ class OfferController extends BaseController
             ->where('offers.id', $id)
             ->leftJoin('pollings', static function (JoinClause $join) {
                 $join->on('offers.id', 'pollings.relate_id')
-                    ->where('pollings.relate_type', Offer::class)
+                    ->where('pollings.relate_type', Offer::$morphName)
                     ->where('pollings.user_id', getUser('id'));
             })
             ->first();
@@ -227,9 +227,7 @@ class OfferController extends BaseController
                 $msg = antimat($msg);
 
                 /** @var Comment $comment */
-                $comment = Comment::query()->create([
-                    'relate_type' => Offer::class,
-                    'relate_id'   => $offer->id,
+                $comment = $offer->comments()->create([
                     'text'        => $msg,
                     'user_id'     => getUser('id'),
                     'created_at'  => SITETIME,
@@ -255,9 +253,7 @@ class OfferController extends BaseController
             }
         }
 
-        $comments = Comment::query()
-            ->where('relate_type', Offer::class)
-            ->where('relate_id', $id)
+        $comments = $offer->comments()
             ->orderBy('created_at')
             ->paginate(setting('comments_per_page'));
 
@@ -288,8 +284,7 @@ class OfferController extends BaseController
             abort(403, __('main.not_authorized'));
         }
 
-        $comment = Comment::query()
-            ->where('relate_type', Offer::class)
+        $comment = $offer->comments()
             ->where('id', $cid)
             ->where('user_id', getUser('id'))
             ->first();
@@ -343,10 +338,7 @@ class OfferController extends BaseController
             abort(404, __('main.record_not_found'));
         }
 
-        $total = Comment::query()
-            ->where('relate_type', Offer::class)
-            ->where('relate_id', $offer->id)
-            ->count();
+        $total = $offer->comments()->count();
 
         $end = ceil($total / setting('comments_per_page'));
         redirect('/offers/comments/' . $offer->id . '?page=' . $end);
@@ -367,9 +359,7 @@ class OfferController extends BaseController
             abort(404, __('main.record_not_found'));
         }
 
-        $total = Comment::query()
-            ->where('relate_type', Offer::class)
-            ->where('relate_id', $id)
+        $total = $offer->comments()
             ->where('id', '<=', $cid)
             ->orderBy('created_at')
             ->count();

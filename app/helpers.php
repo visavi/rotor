@@ -1243,24 +1243,24 @@ function restatement($mode)
 
         case 'blogs':
             DB::connection()->update('update categories set count_blogs = (select count(*) from blogs where categories.id = blogs.category_id)');
-            DB::connection()->update('update blogs set count_comments = (select count(*) from comments where relate_type = "' . addslashes(Blog::class) . '" and blogs.id = comments.relate_id)');
+            DB::connection()->update('update blogs set count_comments = (select count(*) from comments where relate_type = "' . Blog::$morphName . '" and blogs.id = comments.relate_id)');
             break;
 
         case 'loads':
             DB::connection()->update('update loads set count_downs = (select count(*) from downs where loads.id = downs.category_id and active = ?)', [1]);
-            DB::connection()->update('update downs set count_comments = (select count(*) from comments where relate_type = "' . addslashes(Down::class) . '" and downs.id = comments.relate_id)');
+            DB::connection()->update('update downs set count_comments = (select count(*) from comments where relate_type = "' . Down::$morphName . '" and downs.id = comments.relate_id)');
             break;
 
         case 'news':
-            DB::connection()->update('update news set count_comments = (select count(*) from comments where relate_type = "' . addslashes(News::class) . '" and news.id = comments.relate_id)');
+            DB::connection()->update('update news set count_comments = (select count(*) from comments where relate_type = "' . News::$morphName . '" and news.id = comments.relate_id)');
             break;
 
         case 'photos':
-            DB::connection()->update('update photos set count_comments = (select count(*) from comments where relate_type = "' . addslashes(Photo::class) . '" and photos.id = comments.relate_id)');
+            DB::connection()->update('update photos set count_comments = (select count(*) from comments where relate_type = "' . Photo::$morphName . '" and photos.id = comments.relate_id)');
             break;
 
         case 'offers':
-            DB::connection()->update('update offers set count_comments = (select count(*) from comments where relate_type = "' . addslashes(Offer::class) . '" and offers.id = comments.relate_id)');
+            DB::connection()->update('update offers set count_comments = (select count(*) from comments where relate_type = "' . Offer::$morphName . '" and offers.id = comments.relate_id)');
             break;
 
         case 'boards':

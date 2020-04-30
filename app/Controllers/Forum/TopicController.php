@@ -50,7 +50,7 @@ class TopicController extends BaseController
             ->where('topic_id', $topic->id)
             ->leftJoin('pollings', static function (JoinClause $join) {
                 $join->on('posts.id', 'pollings.relate_id')
-                    ->where('pollings.relate_type', Post::class)
+                    ->where('pollings.relate_type', Post::$morphName)
                     ->where('pollings.user_id', getUser('id'));
             })
             ->with('files', 'user', 'editUser')
@@ -259,13 +259,12 @@ class TopicController extends BaseController
         if ($validator->isValid()) {
             // ------ Удаление загруженных файлов -------//
             $files = File::query()
-                ->where('relate_type', Post::class)
+                ->where('relate_type', Post::$morphName)
                 ->whereIn('relate_id', $del)
                 ->get();
 
             if ($files->isNotEmpty()) {
                 foreach ($files as $file) {
-                    deleteFile(HOME . $file->hash);
                     $file->delete();
                 }
             }
@@ -466,6 +465,7 @@ class TopicController extends BaseController
             abort(403, __('main.not_authorized'));
         }
 
+        /** @var Post $post */
         $post = Post::query()
             ->select('posts.*', 'moderators', 'closed')
             ->leftJoin('topics', 'posts.topic_id', 'topics.id')
@@ -507,15 +507,12 @@ class TopicController extends BaseController
 
                 // ------ Удаление загруженных файлов -------//
                 if ($delfile) {
-                    $files = File::query()
-                        ->where('relate_type', Post::class)
-                        ->where('relate_id', $post->id)
+                    $files = $post->files()
                         ->whereIn('id', $delfile)
                         ->get();
 
                     if ($files->isNotEmpty()) {
                         foreach ($files as $file) {
-                            deleteFile(HOME . $file->hash);
                             $file->delete();
                         }
                     }

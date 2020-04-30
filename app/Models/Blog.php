@@ -86,7 +86,7 @@ class Blog extends BaseModel
     public function lastComments($limit = 15): HasMany
     {
         return $this->hasMany(Comment::class, 'relate_id')
-            ->where('relate_type', self::class)
+            ->where('relate_type', self::$morphName)
             ->limit($limit);
     }
 

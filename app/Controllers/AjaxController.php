@@ -5,19 +5,7 @@ declare(strict_types=1);
 namespace App\Controllers;
 
 use App\Classes\Validator;
-use App\Models\{BaseModel,
-    Blog,
-    Comment,
-    File,
-    Guestbook,
-    Message,
-    Item,
-    News,
-    Offer,
-    Photo,
-    Post,
-    Spam,
-    Wall};
+use App\Models\{BaseModel, Blog, Comment, Down, File, Guestbook, Message, Item, News, Offer, Photo, Post, Spam, Wall};
 use Exception;
 use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Http\Request;
@@ -59,7 +47,7 @@ class AjaxController extends BaseController
     public function complaint(Request $request, Validator $validator): string
     {
         $path  = null;
-        $data  = false;
+        $model = false;
         $id    = int($request->input('id'));
         $type  = check($request->input('type'));
         $page  = check($request->input('page'));
@@ -67,27 +55,32 @@ class AjaxController extends BaseController
 
         switch ($type):
             case Guestbook::$morphName:
-                $data = Guestbook::query()->find($id);
+                $model = Guestbook::query()->find($id);
                 $path = '/guestbook?page='.$page;
                 break;
 
             case Post::$morphName:
-                $data = Post::query()->find($id);
-                $path = '/topics/' . $data->topic_id . '?page='.$page;
+                $model = Post::query()->find($id);
+                $path = '/topics/' . $model->topic_id . '?page='.$page;
                 break;
 
             case Message::$morphName:
-                $data = Message::query()->find($id);
+                $model = Message::query()->find($id);
                 break;
 
             case Wall::$morphName:
-                $data = Wall::query()->find($id);
-                $path = '/walls/' . $data->user->login . '?page='.$page;
+                $model = Wall::query()->find($id);
+                $path = '/walls/' . $model->user->login . '?page='.$page;
                 break;
 
-            case Comment::$morphName:
-                $data = Comment::query()->find($id);
-                $path = '/' . $data->relate_type . '/comments/' . $data->relate_id . '?page='.$page;
+            case News::$morphName:
+            case Blog::$morphName:
+            case Photo::$morphName:
+            case Offer::$morphName:
+            case Down::$morphName:
+                $model = Comment::query()->find($id);
+                $path = '/' . $model->relate_type . '/comments/' . $model->relate_id . '?page='.$page;
+                $type = 'comments';
                 break;
         endswitch;
 
@@ -95,13 +88,13 @@ class AjaxController extends BaseController
 
         $validator
             ->equal($token, $_SESSION['token'], __('validator.token'))
-            ->true($data, __('main.message_not_found'))
+            ->true($model, __('main.message_not_found'))
             ->false($spam, __('ajax.complaint_already_sent'));
 
         if ($validator->isValid()) {
             Spam::query()->create([
                 'relate_type' => $type,
-                'relate_id'   => $data->id,
+                'relate_id'   => $model->id,
                 'user_id'     => getUser('id'),
                 'path'        => $path,
                 'created_at'  => SITETIME,
@@ -147,9 +140,13 @@ class AjaxController extends BaseController
                 ->delete();
 
             if ($delComments) {
-                /** @var BaseModel $model */
-                $model = Relation::getMorphedModel($type);
-                $model::query()->find($rid)->decrement('count_comments');
+                /** @var BaseModel $class */
+                $class = Relation::getMorphedModel($type);
+                $model = $class::query()->find($rid);
+
+                if ($model) {
+                    $model->decrement('count_comments');
+                }
             }
 
             return json_encode(['status' => 'success']);

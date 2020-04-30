@@ -552,15 +552,12 @@ class ForumController extends AdminController
 
                 // ------ Удаление загруженных файлов -------//
                 if ($delfile) {
-                    $files = File::query()
-                        ->where('relate_type', Post::class)
-                        ->where('relate_id', $post->id)
+                    $files = $post->files()
                         ->whereIn('id', $delfile)
                         ->get();
 
                     if ($files->isNotEmpty()) {
                         foreach ($files as $file) {
-                            deleteFile(HOME . $file->hash);
                             $file->delete();
                         }
                     }

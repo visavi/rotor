@@ -70,7 +70,7 @@ class ActiveController extends BaseController
 
         $comments = Comment::query()
             ->select('comments.*', 'title', 'count_comments')
-            ->where('relate_type', Down::class)
+            ->where('relate_type', Down::$morphName)
             ->where('comments.user_id', $user->id)
             ->leftJoin('downs', 'comments.relate_id', 'downs.id')
             ->orderByDesc('comments.created_at')

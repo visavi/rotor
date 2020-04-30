@@ -49,7 +49,7 @@ class SpamController extends AdminController
         ];
 
         $type = check(request()->input('type'));
-        $this->type = isset($this->types[$type]) ? $type : 'post';
+        $this->type = isset($this->types[$type]) ? $type : 'posts';
 
         $spam = Spam::query()
             ->selectRaw('relate_type, count(*) as total')
