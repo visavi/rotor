@@ -6,7 +6,7 @@ namespace App\Controllers\Admin;
 
 use App\Classes\Validator;
 use App\Models\Article;
-use App\Models\Category;
+use App\Models\Blog;
 use App\Models\User;
 use Exception;
 use Illuminate\Http\Request;
@@ -20,7 +20,7 @@ class ArticleController extends AdminController
      */
     public function index(): string
     {
-        $categories = Category::query()
+        $categories = Blog::query()
             ->where('parent_id', 0)
             ->orderBy('sort')
             ->with('children', 'new', 'children.new')
@@ -49,10 +49,10 @@ class ArticleController extends AdminController
             ->length($name, 3, 50, ['name' => __('validator.text')]);
 
         if ($validator->isValid()) {
-            $max = Category::query()->max('sort') + 1;
+            $max = Blog::query()->max('sort') + 1;
 
-            /** @var Category $category */
-            $category = Category::query()->create([
+            /** @var Blog $category */
+            $category = Blog::query()->create([
                 'name'  => $name,
                 'sort'  => $max,
             ]);
@@ -81,14 +81,14 @@ class ArticleController extends AdminController
             abort(403, __('errors.forbidden'));
         }
 
-        /** @var Category $category */
-        $category = Category::query()->with('children')->find($id);
+        /** @var Blog $category */
+        $category = Blog::query()->with('children')->find($id);
 
         if (! $category) {
             abort(404, __('blogs.category_not_exist'));
         }
 
-        $categories = Category::query()
+        $categories = Blog::query()
             ->where('parent_id', 0)
             ->orderBy('sort')
             ->get();
@@ -142,8 +142,8 @@ class ArticleController extends AdminController
             abort(403, __('errors.forbidden'));
         }
 
-        /** @var Category $category */
-        $category = Category::query()->with('children')->find($id);
+        /** @var Blog $category */
+        $category = Blog::query()->with('children')->find($id);
 
         if (! $category) {
             abort(404, __('blogs.category_not_exist'));
@@ -203,7 +203,7 @@ class ArticleController extends AdminController
      */
     public function blog(int $id): string
     {
-        $category = Category::query()->with('parent')->find($id);
+        $category = Blog::query()->with('parent')->find($id);
 
         if (! $category) {
             abort(404, __('blogs.category_not_exist'));
@@ -226,7 +226,7 @@ class ArticleController extends AdminController
      * @param Validator $validator
      * @return string
      */
-    public function editBlog(int $id, Request $request, Validator $validator): string
+    public function editArticle(int $id, Request $request, Validator $validator): string
     {
         /** @var Article $article */
         $article = Article::query()->find($id);
@@ -263,13 +263,7 @@ class ArticleController extends AdminController
             }
         }
 
-        $categories = Category::query()
-            ->where('parent_id', 0)
-            ->with('children')
-            ->orderBy('sort')
-            ->get();
-
-        return view('admin/blogs/edit_blog', compact('article', 'categories'));
+        return view('admin/blogs/edit_blog', compact('article'));
     }
 
     /**
@@ -280,7 +274,7 @@ class ArticleController extends AdminController
      * @param Validator $validator
      * @return string
      */
-    public function moveBlog(int $id, Request $request, Validator $validator): string
+    public function moveArticle(int $id, Request $request, Validator $validator): string
     {
         /** @var Article $article */
         $article = Article::query()->find($id);
@@ -293,8 +287,8 @@ class ArticleController extends AdminController
             $token = check($request->input('token'));
             $cid   = int($request->input('cid'));
 
-            /** @var Category $category */
-            $category = Category::query()->find($cid);
+            /** @var Blog $category */
+            $category = Blog::query()->find($cid);
 
             $validator
                 ->equal($token, $_SESSION['token'], __('validator.token'))
@@ -322,7 +316,7 @@ class ArticleController extends AdminController
             }
         }
 
-        $categories = Category::query()
+        $categories = Blog::query()
             ->where('parent_id', 0)
             ->with('children')
             ->orderBy('sort')
@@ -340,7 +334,7 @@ class ArticleController extends AdminController
      * @return void
      * @throws Exception
      */
-    public function deleteBlog(int $id, Request $request, Validator $validator): void
+    public function deleteArticle(int $id, Request $request, Validator $validator): void
     {
         $page  = int($request->input('page', 1));
         $token = check($request->input('token'));

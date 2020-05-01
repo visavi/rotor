@@ -500,9 +500,9 @@ return FastRoute\cachedDispatcher(static function(RouteCollector $r) {
         $r->addRoute(['GET', 'POST'], '/blogs/edit/{id:\d+}', [App\Controllers\Admin\ArticleController::class, 'edit']);
         $r->get('/blogs/delete/{id:\d+}', [App\Controllers\Admin\ArticleController::class, 'delete']);
         $r->get('/blogs/{id:\d+}', [App\Controllers\Admin\ArticleController::class, 'blog']);
-        $r->addRoute(['GET', 'POST'], '/articles/edit/{id:\d+}', [App\Controllers\Admin\ArticleController::class, 'editBlog']);
-        $r->addRoute(['GET', 'POST'], '/articles/move/{id:\d+}', [App\Controllers\Admin\ArticleController::class, 'moveBlog']);
-        $r->get('/articles/delete/{id:\d+}', [App\Controllers\Admin\ArticleController::class, 'deleteBlog']);
+        $r->addRoute(['GET', 'POST'], '/articles/edit/{id:\d+}', [App\Controllers\Admin\ArticleController::class, 'editArticle']);
+        $r->addRoute(['GET', 'POST'], '/articles/move/{id:\d+}', [App\Controllers\Admin\ArticleController::class, 'moveArticle']);
+        $r->get('/articles/delete/{id:\d+}', [App\Controllers\Admin\ArticleController::class, 'deleteArticle']);
 
         /* Доска объявлений */
         $r->get('/boards[/{id:\d+}]', [App\Controllers\Admin\BoardController::class, 'index']);

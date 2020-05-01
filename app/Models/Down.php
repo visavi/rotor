@@ -253,7 +253,7 @@ class Down extends BaseModel
      */
     public function delete(): ?bool
     {
-        $this->files->each(static function($file) {
+        $this->files->each(static function(File $file) {
             $file->delete();
         });
 

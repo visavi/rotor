@@ -26,7 +26,7 @@ use Illuminate\Database\Eloquent\Relations\MorphOne;
  * @property int count_comments
  * @property int created_at
  * @property Collection files
- * @property Category category
+ * @property Blog category
  */
 class Article extends BaseModel
 {
@@ -97,7 +97,7 @@ class Article extends BaseModel
      */
     public function category(): BelongsTo
     {
-        return $this->belongsTo(Category::class, 'category_id')->withDefault();
+        return $this->belongsTo(Blog::class, 'category_id')->withDefault();
     }
 
     /**
@@ -188,7 +188,7 @@ class Article extends BaseModel
      */
     public function delete(): ?bool
     {
-        $this->files->each(static function($file) {
+        $this->files->each(static function(File $file) {
             $file->delete();
         });
 

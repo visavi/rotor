@@ -16,28 +16,28 @@
 @stop
 
 @section('content')
-    @foreach ($categories as $key => $data)
+    @foreach ($categories as $key => $category)
 
         <div class="b">
-            <i class="fa fa-folder-open"></i> <b><a href="/admin/blogs/{{ $data->id }}">{{ $data->name }}</a></b>
+            <i class="fa fa-folder-open"></i> <b><a href="/admin/blogs/{{ $category->id }}">{{ $category->name }}</a></b>
 
-            @if ($data->new)
-                ({{ $data->count_articles }}/<span style="color:#ff0000">+{{ $data->new->count_articles }}</span>)
+            @if ($category->new)
+                ({{ $category->count_articles }}/<span style="color:#ff0000">+{{ $category->new->count_articles }}</span>)
             @else
-                ({{ $data->count_articles }})
+                ({{ $category->count_articles }})
             @endif
 
             @if (isAdmin('boss'))
                 <div class="float-right">
-                    <a href="/admin/blogs/edit/{{ $data->id }}"><i class="fa fa-pencil-alt"></i></a>
-                    <a href="/admin/blogs/delete/{{ $data->id }}?token={{ $_SESSION['token'] }}" onclick="return confirm('{{ __('blogs.confirm_delete_blog') }}')"><i class="fa fa-times"></i></a>
+                    <a href="/admin/blogs/edit/{{ $category->id }}"><i class="fa fa-pencil-alt"></i></a>
+                    <a href="/admin/blogs/delete/{{ $category->id }}?token={{ $_SESSION['token'] }}" onclick="return confirm('{{ __('blogs.confirm_delete_blog') }}')"><i class="fa fa-times"></i></a>
                 </div>
             @endif
         </div>
 
         <div>
-            @if ($data->children->isNotEmpty())
-                @foreach ($data->children as $child)
+            @if ($category->children->isNotEmpty())
+                @foreach ($category->children as $child)
                     <i class="fa fa-angle-right"></i> <b><a href="/admin/blogs/{{ $child->id }}">{{ $child->name }}</a></b>
                     @if ($child->new)
                         ({{ $child->count_articles }}/<span style="color:#ff0000">+{{ $child->new->count_articles }}</span>)

@@ -20,7 +20,7 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
  * @property int closed
  * @property Collection children
  */
-class Category extends BaseModel
+class Blog extends BaseModel
 {
     /**
      * Indicates if the model should be timestamped.

@@ -32,12 +32,12 @@
                 <?php $inputCategory = getInput('cid', $article->category_id); ?>
                 <select class="form-control" id="inputCategory" name="cid">
 
-                    @foreach ($categories as $data)
-                        <option value="{{ $data->id }}"{{ ($inputCategory === $data->id && ! $data->closed) ? ' selected' : '' }}{{ $data->closed ? ' disabled' : '' }}>{{ $data->name }}</option>
+                    @foreach ($categories as $category)
+                        <option value="{{ $category->id }}"{{ ($inputCategory === $category->id && ! $category->closed) ? ' selected' : '' }}{{ $category->closed ? ' disabled' : '' }}>{{ $category->name }}</option>
 
-                        @if ($data->children->isNotEmpty())
-                            @foreach($data->children as $datasub)
-                                <option value="{{ $datasub->id }}"{{ ($inputCategory === $datasub->id && !$datasub->closed) ? ' selected' : '' }}{{ $datasub->closed ? ' disabled' : '' }}>– {{ $datasub->name }}</option>
+                        @if ($category->children->isNotEmpty())
+                            @foreach($category->children as $categorysub)
+                                <option value="{{ $categorysub->id }}"{{ ($inputCategory === $categorysub->id && !$categorysub->closed) ? ' selected' : '' }}{{ $categorysub->closed ? ' disabled' : '' }}>– {{ $categorysub->name }}</option>
                             @endforeach
                         @endif
                     @endforeach

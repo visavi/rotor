@@ -6,7 +6,7 @@ namespace App\Controllers;
 
 use App\Classes\Validator;
 use App\Models\Article;
-use App\Models\Category;
+use App\Models\Blog;
 use App\Models\Comment;
 use App\Models\File;
 use App\Models\Flood;
@@ -24,7 +24,7 @@ class ArticleController extends BaseController
      */
     public function index(): string
     {
-        $categories = Category::query()
+        $categories = Blog::query()
             ->where('parent_id', 0)
             ->orderBy('sort')
             ->with('children', 'new', 'children.new')
@@ -45,7 +45,7 @@ class ArticleController extends BaseController
      */
     public function blog(int $id): string
     {
-        $category = Category::query()->with('parent')->find($id);
+        $category = Blog::query()->with('parent')->find($id);
 
         if (! $category) {
             abort(404, __('blogs.category_not_exist'));
@@ -130,15 +130,14 @@ class ArticleController extends BaseController
         }
 
         if ($request->isMethod('post')) {
-
             $token = check($request->input('token'));
             $cid   = int($request->input('cid'));
             $title = check($request->input('title'));
             $text  = check($request->input('text'));
             $tags  = check($request->input('tags'));
 
-            /** @var Category $category */
-            $category = Category::query()->find($cid);
+            /** @var Blog $category */
+            $category = Blog::query()->find($cid);
 
             $validator
                 ->equal($token, $_SESSION['token'], __('validator.token'))
@@ -155,7 +154,7 @@ class ArticleController extends BaseController
                 // Обновление счетчиков
                 if ($article->category_id !== $category->id) {
                     $category->increment('count_articles');
-                    Category::query()->where('id', $article->category_id)->decrement('count_articles');
+                    Blog::query()->where('id', $article->category_id)->decrement('count_articles');
                 }
 
                 $article->update([
@@ -174,7 +173,7 @@ class ArticleController extends BaseController
             }
         }
 
-        $categories = Category::query()
+        $categories = Blog::query()
             ->where('parent_id', 0)
             ->with('children')
             ->orderBy('sort')
@@ -221,13 +220,13 @@ class ArticleController extends BaseController
             abort(403, __('main.not_authorized'));
         }
 
-        $cats = Category::query()
+        $categories = Blog::query()
             ->where('parent_id', 0)
             ->with('children')
             ->orderBy('sort')
             ->get();
 
-        if (! $cats) {
+        if (! $categories) {
             abort(404, __('blogs.categories_not_created'));
         }
 
@@ -237,8 +236,8 @@ class ArticleController extends BaseController
             $text  = check($request->input('text'));
             $tags  = check($request->input('tags'));
 
-            /** @var Category $category */
-            $category = Category::query()->find($cid);
+            /** @var Blog $category */
+            $category = Blog::query()->find($cid);
 
             $validator
                 ->equal($token, $_SESSION['token'], __('validator.token'))
@@ -293,7 +292,7 @@ class ArticleController extends BaseController
             ->where('user_id', getUser('id'))
             ->get();
 
-        return view('blogs/create', compact('cats', 'cid', 'files'));
+        return view('blogs/create', compact('categories', 'cid', 'files'));
     }
 
     /**
@@ -565,9 +564,9 @@ class ArticleController extends BaseController
         }
 
         $articles = Article::query()
-            ->select('articles.*', 'categories.name')
+            ->select('articles.*', 'blogs.name')
             ->whereIn('articles.id', $_SESSION['findresult'])
-            ->join('categories', 'articles.category_id', 'categories.id')
+            ->join('blogs', 'articles.category_id', 'blogs.id')
             ->orderByDesc('created_at')
             ->with('user')
             ->paginate(setting('blogpost'));
@@ -703,8 +702,8 @@ class ArticleController extends BaseController
         }
 
         $articles = Article::query()
-            ->select('articles.*', 'categories.name')
-            ->leftJoin('categories', 'articles.category_id', 'categories.id')
+            ->select('articles.*', 'blogs.name')
+            ->leftJoin('blogs', 'articles.category_id', 'blogs.id')
             ->orderByDesc($order)
             ->with('user')
             ->paginate(setting('blogpost'))
@@ -780,9 +779,9 @@ class ArticleController extends BaseController
 
                     if ($total > 0) {
                         $articles = Article::query()
-                            ->select('articles.*', 'categories.name')
+                            ->select('articles.*', 'blogs.name')
                             ->whereIn('articles.id', $_SESSION['blogfindres'])
-                            ->join('categories', 'articles.category_id', 'categories.id')
+                            ->join('blogs', 'articles.category_id', 'blogs.id')
                             ->orderByDesc('created_at')
                             ->with('user')
                             ->paginate(setting('blogpost'))
@@ -823,9 +822,9 @@ class ArticleController extends BaseController
 
                     if ($total > 0) {
                         $articles = Article::query()
-                            ->select('articles.*', 'categories.name')
+                            ->select('articles.*', 'blogs.name')
                             ->whereIn('articles.id', $_SESSION['blogfindres'])
-                            ->join('categories', 'articles.category_id', 'categories.id')
+                            ->join('blogs', 'articles.category_id', 'blogs.id')
                             ->orderByDesc('created_at')
                             ->with('user')
                             ->paginate(setting('blogpost'))

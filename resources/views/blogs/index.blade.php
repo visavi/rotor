@@ -31,20 +31,20 @@
 
     {{ __('main.new') }}: <a href="/articles">{{ __('blogs.articles') }}</a>, <a href="/articles/comments">{{ __('main.comments') }}</a><hr>
 
-    @foreach ($categories as $key => $data)
+    @foreach ($categories as $key => $category)
         <div class="b">
-            <i class="fa fa-folder-open"></i> <b><a href="/blogs/{{ $data->id }}">{{ $data->name }}</a></b>
+            <i class="fa fa-folder-open"></i> <b><a href="/blogs/{{ $category->id }}">{{ $category->name }}</a></b>
 
-            @if ($data->new)
-                ({{ $data->count_articles + $data->children->sum('count_articles') }}/<span style="color:#ff0000">+{{ $data->new->count_articles }}</span>)
+            @if ($category->new)
+                ({{ $category->count_articles + $category->children->sum('count_articles') }}/<span style="color:#ff0000">+{{ $category->new->count_articles }}</span>)
             @else
-                ({{ $data->count_articles + $data->children->sum('count_articles') }})
+                ({{ $category->count_articles + $category->children->sum('count_articles') }})
             @endif
         </div>
 
         <div>
-            @if ($data->children->isNotEmpty())
-                @foreach ($data->children as $child)
+            @if ($category->children->isNotEmpty())
+                @foreach ($category->children as $child)
                     <i class="fa fa-angle-right"></i> <b><a href="/blogs/{{ $child->id }}">{{ $child->name }}</a></b>
                     @if ($child->new)
                         ({{ $child->count_articles }}/<span style="color:#ff0000">+{{ $child->new->count_articles }}</span>)
