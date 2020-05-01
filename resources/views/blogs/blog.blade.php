@@ -12,7 +12,7 @@
         </div><br>
     @endif
 
-    <h1>{{ $category->name }} <small>({{ __('blogs.all_articles') }}: {{ $category->count_blogs }})</small></h1>
+    <h1>{{ $category->name }} <small>({{ __('blogs.all_articles') }}: {{ $category->count_articles }})</small></h1>
 @stop
 
 @section('breadcrumb')

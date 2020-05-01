@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Controllers;
 
-use App\Models\Blog;
+use App\Models\Article;
 use App\Models\Down;
 use App\Models\News;
 use App\Models\Topic;
@@ -61,13 +61,13 @@ class SitemapController extends BaseController
      */
     private function blogs(): string
     {
-        $blogs = Blog::query()
-            ->selectRaw('blogs.*, max(c.created_at) as last_time')
+        $blogs = Article::query()
+            ->selectRaw('articles.*, max(c.created_at) as last_time')
             ->leftJoin('comments as c', static function (JoinClause $join) {
-                $join->on('blogs.id', 'c.relate_id')
-                    ->where('relate_type', Blog::$morphName);
+                $join->on('articles.id', 'c.relate_id')
+                    ->where('relate_type', Article::$morphName);
             })
-            ->groupBy('blogs.id')
+            ->groupBy('articles.id')
             ->orderByDesc('last_time')
             ->get();
 

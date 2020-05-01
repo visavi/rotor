@@ -28,7 +28,7 @@ use Illuminate\Database\Eloquent\Relations\MorphOne;
  * @property Collection files
  * @property Category category
  */
-class Blog extends BaseModel
+class Article extends BaseModel
 {
     use UploadTrait;
 
@@ -51,7 +51,7 @@ class Blog extends BaseModel
      *
      * @var string
      */
-    public $uploadPath = UPLOADS . '/blogs';
+    public $uploadPath = UPLOADS . '/articles';
 
     /**
      * Counting field

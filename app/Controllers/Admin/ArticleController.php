@@ -5,13 +5,13 @@ declare(strict_types=1);
 namespace App\Controllers\Admin;
 
 use App\Classes\Validator;
-use App\Models\Blog;
+use App\Models\Article;
 use App\Models\Category;
 use App\Models\User;
 use Exception;
 use Illuminate\Http\Request;
 
-class BlogController extends AdminController
+class ArticleController extends AdminController
 {
     /**
      * Главная страница
@@ -154,7 +154,7 @@ class BlogController extends AdminController
         $validator->equal($token, $_SESSION['token'], __('validator.token'))
             ->true($category->children->isEmpty(), __('blogs.category_has_subcategories'));
 
-        $article = Blog::query()->where('category_id', $category->id)->first();
+        $article = Article::query()->where('category_id', $category->id)->first();
         if ($article) {
             $validator->addError(__('blogs.articles_in_category'));
         }
@@ -209,7 +209,7 @@ class BlogController extends AdminController
             abort(404, __('blogs.category_not_exist'));
         }
 
-        $blogs = Blog::query()
+        $blogs = Article::query()
             ->where('category_id', $id)
             ->orderByDesc('created_at')
             ->with('user')
@@ -228,8 +228,8 @@ class BlogController extends AdminController
      */
     public function editBlog(int $id, Request $request, Validator $validator): string
     {
-        /** @var Blog $blog */
-        $blog = Blog::query()->find($id);
+        /** @var Article $blog */
+        $blog = Article::query()->find($id);
 
         if (! $blog) {
             abort(404, __('blogs.article_not_exist'));
@@ -254,7 +254,7 @@ class BlogController extends AdminController
                     'tags'  => $tags,
                 ]);
 
-                clearCache(['statBlogs', 'recentBlogs']);
+                clearCache(['statArticles', 'recentArticles']);
                 setFlash('success', __('blogs.article_success_edited'));
                 redirect('/articles/'.$blog->id);
             } else {
@@ -282,8 +282,8 @@ class BlogController extends AdminController
      */
     public function moveBlog(int $id, Request $request, Validator $validator): string
     {
-        /** @var Blog $blog */
-        $blog = Blog::query()->find($id);
+        /** @var Article $blog */
+        $blog = Article::query()->find($id);
 
         if (! $blog) {
             abort(404, __('blogs.article_not_exist'));
@@ -307,8 +307,8 @@ class BlogController extends AdminController
 
             if ($validator->isValid()) {
                 // Обновление счетчиков
-                $category->increment('count_blogs');
-                Category::query()->where('id', $blog->category_id)->decrement('count_blogs');
+                $category->increment('count_articles');
+                Category::query()->where('id', $blog->category_id)->decrement('count_articles');
 
                 $blog->update([
                     'category_id' => $category->id,
@@ -345,8 +345,8 @@ class BlogController extends AdminController
         $page  = int($request->input('page', 1));
         $token = check($request->input('token'));
 
-        /** @var Blog $blog */
-        $blog = Blog::query()->find($id);
+        /** @var Article $blog */
+        $blog = Article::query()->find($id);
 
         if (! $blog) {
             abort(404, __('blogs.article_not_exist'));
@@ -358,9 +358,9 @@ class BlogController extends AdminController
             $blog->comments()->delete();
             $blog->delete();
 
-            $blog->category->decrement('count_blogs');
+            $blog->category->decrement('count_articles');
 
-            clearCache(['statBlogs', 'recentBlogs']);
+            clearCache(['statArticles', 'recentArticles']);
             setFlash('success', __('blogs.article_success_deleted'));
         } else {
             setFlash('danger', $validator->getErrors());

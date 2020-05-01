@@ -16,7 +16,7 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
  * @property int sort
  * @property int parent_id
  * @property string name
- * @property int count_blogs
+ * @property int count_articles
  * @property int closed
  * @property Collection children
  */
@@ -63,8 +63,8 @@ class Category extends BaseModel
      */
     public function new(): hasOne
     {
-        return $this->hasOne(Blog::class, 'category_id')
-            ->selectRaw('category_id, count(*) as count_blogs')
+        return $this->hasOne(Article::class, 'category_id')
+            ->selectRaw('category_id, count(*) as count_articles')
             ->where('created_at', '>', strtotime('-3 day', SITETIME))
             ->groupBy('category_id');
     }

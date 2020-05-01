@@ -1,10 +1,5 @@
 <?php
 
-use App\Models\Blog;
-use App\Models\Down;
-use App\Models\Item;
-use App\Models\Photo;
-use App\Models\Post;
 use Phinx\Migration\AbstractMigration;
 
 class ChangeRelateTypeInFiles extends AbstractMigration
@@ -14,11 +9,11 @@ class ChangeRelateTypeInFiles extends AbstractMigration
      */
     public function up()
     {
-        $this->execute('UPDATE files SET relate_type="articles" WHERE relate_type="' . addslashes(Blog::class) . '";');
-        $this->execute('UPDATE files SET relate_type="downs" WHERE relate_type="' . addslashes(Down::class) . '";');
-        $this->execute('UPDATE files SET relate_type="items" WHERE relate_type="' . addslashes(Item::class) . '";');
-        $this->execute('UPDATE files SET relate_type="photos" WHERE relate_type="' . addslashes(Photo::class) . '";');
-        $this->execute('UPDATE files SET relate_type="posts" WHERE relate_type="' . addslashes(Post::class) . '";');
+        $this->execute('UPDATE files SET relate_type="articles" WHERE relate_type="App\\Models\\Blog";');
+        $this->execute('UPDATE files SET relate_type="downs" WHERE relate_type="App\\Models\\Down";');
+        $this->execute('UPDATE files SET relate_type="items" WHERE relate_type="App\\Models\\Item";');
+        $this->execute('UPDATE files SET relate_type="photos" WHERE relate_type="App\\Models\\Photo";');
+        $this->execute('UPDATE files SET relate_type="posts" WHERE relate_type="App\\Models\\Post";');
 
         $table = $this->table('files');
         $table->changeColumn('relate_type', 'string', ['limit' => 10])
@@ -34,10 +29,10 @@ class ChangeRelateTypeInFiles extends AbstractMigration
         $table->changeColumn('relate_type', 'string', ['limit' => 50])
             ->save();
 
-        $this->execute('UPDATE files SET relate_type="' . addslashes(Blog::class) . '" WHERE relate_type="articles";');
-        $this->execute('UPDATE files SET relate_type="' . addslashes(Down::class) . '" WHERE relate_type="downs";');
-        $this->execute('UPDATE files SET relate_type="' . addslashes(Item::class) . '" WHERE relate_type="items";');
-        $this->execute('UPDATE files SET relate_type="' . addslashes(Photo::class) . '" WHERE relate_type="photos";');
-        $this->execute('UPDATE files SET relate_type="' . addslashes(Post::class) . '" WHERE relate_type="posts";');
+        $this->execute('UPDATE files SET relate_type="App\\Models\\Blog" WHERE relate_type="articles";');
+        $this->execute('UPDATE files SET relate_type="App\\Models\\Down" WHERE relate_type="downs";');
+        $this->execute('UPDATE files SET relate_type="App\\Models\\Item" WHERE relate_type="items";');
+        $this->execute('UPDATE files SET relate_type="App\\Models\\Photo" WHERE relate_type="photos";');
+        $this->execute('UPDATE files SET relate_type="App\\Models\\Post" WHERE relate_type="posts";');
     }
 }

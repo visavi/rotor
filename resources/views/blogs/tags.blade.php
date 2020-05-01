@@ -17,7 +17,7 @@
 @section('content')
     <div style="text-align:center">
         @foreach ($tags as $key => $val)
-            <?php $fontsize = App\Models\Blog::logTagSize($val, $min, $max); ?>
+            <?php $fontsize = App\Models\Article::logTagSize($val, $min, $max); ?>
 
             <a href="/blogs/tags/{{ urlencode($key) }}"><span style="font-size:{{ $fontsize }}pt">{{ $key }}</span></a>
         @endforeach

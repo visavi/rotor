@@ -40,32 +40,32 @@ return FastRoute\cachedDispatcher(static function(RouteCollector $r) {
 
     /* Категория блогов */
     $r->addGroup('/blogs', static function (RouteCollector $r) {
-        $r->get('', [App\Controllers\BlogController::class, 'index']);
-        $r->get('/{id:\d+}', [App\Controllers\BlogController::class, 'blog']);
-        $r->get('/tags', [App\Controllers\BlogController::class, 'tags']);
-        $r->get('/tags/{tag:.*}', [App\Controllers\BlogController::class, 'searchTag']);
-        $r->get('/authors', [App\Controllers\BlogController::class, 'authors']);
-        $r->get('/active/articles', [App\Controllers\BlogController::class, 'userArticles']);
-        $r->get('/active/comments', [App\Controllers\BlogController::class, 'userComments']);
-        $r->get('/top', [App\Controllers\BlogController::class, 'top']);
-        $r->get('/rss', [App\Controllers\BlogController::class, 'rss']);
-        $r->addRoute(['GET', 'POST'], '/create', [App\Controllers\BlogController::class, 'create']);
-        $r->addRoute(['GET', 'POST'], '/search', [App\Controllers\BlogController::class, 'search']);
-        $r->get('/main', [App\Controllers\BlogController::class, 'main']);
+        $r->get('', [App\Controllers\ArticleController::class, 'index']);
+        $r->get('/{id:\d+}', [App\Controllers\ArticleController::class, 'blog']);
+        $r->get('/tags', [App\Controllers\ArticleController::class, 'tags']);
+        $r->get('/tags/{tag:.*}', [App\Controllers\ArticleController::class, 'searchTag']);
+        $r->get('/authors', [App\Controllers\ArticleController::class, 'authors']);
+        $r->get('/active/articles', [App\Controllers\ArticleController::class, 'userArticles']);
+        $r->get('/active/comments', [App\Controllers\ArticleController::class, 'userComments']);
+        $r->get('/top', [App\Controllers\ArticleController::class, 'top']);
+        $r->get('/rss', [App\Controllers\ArticleController::class, 'rss']);
+        $r->addRoute(['GET', 'POST'], '/create', [App\Controllers\ArticleController::class, 'create']);
+        $r->addRoute(['GET', 'POST'], '/search', [App\Controllers\ArticleController::class, 'search']);
+        $r->get('/main', [App\Controllers\ArticleController::class, 'main']);
     });
 
     /* Статьи блогов */
     $r->addGroup('/articles', static function (RouteCollector $r) {
-        $r->get('', [App\Controllers\BlogController::class, 'newArticles']);
-        $r->get('/{id:\d+}', [App\Controllers\BlogController::class, 'view']);
-        $r->get('/print/{id:\d+}', [App\Controllers\BlogController::class, 'print']);
-        $r->get('/rss/{id:\d+}', [App\Controllers\BlogController::class, 'rssComments']);
-        $r->get('/comments', [App\Controllers\BlogController::class, 'newComments']);
-        $r->get('/end/{id:\d+}', [App\Controllers\BlogController::class, 'end']);
-        $r->get('/comment/{id:\d+}/{cid:\d+}', [App\Controllers\BlogController::class, 'viewComment']);
-        $r->addRoute(['GET', 'POST'], '/edit/{id:\d+}', [App\Controllers\BlogController::class, 'edit']);
-        $r->addRoute(['GET', 'POST'], '/comments/{id:\d+}', [App\Controllers\BlogController::class, 'comments']);
-        $r->addRoute(['GET', 'POST'], '/edit/{id:\d+}/{cid:\d+}', [App\Controllers\BlogController::class, 'editComment']);
+        $r->get('', [App\Controllers\ArticleController::class, 'newArticles']);
+        $r->get('/{id:\d+}', [App\Controllers\ArticleController::class, 'view']);
+        $r->get('/print/{id:\d+}', [App\Controllers\ArticleController::class, 'print']);
+        $r->get('/rss/{id:\d+}', [App\Controllers\ArticleController::class, 'rssComments']);
+        $r->get('/comments', [App\Controllers\ArticleController::class, 'newComments']);
+        $r->get('/end/{id:\d+}', [App\Controllers\ArticleController::class, 'end']);
+        $r->get('/comment/{id:\d+}/{cid:\d+}', [App\Controllers\ArticleController::class, 'viewComment']);
+        $r->addRoute(['GET', 'POST'], '/edit/{id:\d+}', [App\Controllers\ArticleController::class, 'edit']);
+        $r->addRoute(['GET', 'POST'], '/comments/{id:\d+}', [App\Controllers\ArticleController::class, 'comments']);
+        $r->addRoute(['GET', 'POST'], '/edit/{id:\d+}/{cid:\d+}', [App\Controllers\ArticleController::class, 'editComment']);
     });
 
     /* Новости */
@@ -494,15 +494,15 @@ return FastRoute\cachedDispatcher(static function(RouteCollector $r) {
         $r->post('/posts/delete', [App\Controllers\Admin\ForumController::class, 'deletePosts']);
         $r->get('/topics/end/{id:\d+}', [App\Controllers\Admin\ForumController::class, 'end']);
 
-        $r->get('/blogs', [App\Controllers\Admin\BlogController::class, 'index']);
-        $r->post('/blogs/create', [App\Controllers\Admin\BlogController::class, 'create']);
-        $r->get('/blogs/restatement', [App\Controllers\Admin\BlogController::class, 'restatement']);
-        $r->addRoute(['GET', 'POST'], '/blogs/edit/{id:\d+}', [App\Controllers\Admin\BlogController::class, 'edit']);
-        $r->get('/blogs/delete/{id:\d+}', [App\Controllers\Admin\BlogController::class, 'delete']);
-        $r->get('/blogs/{id:\d+}', [App\Controllers\Admin\BlogController::class, 'blog']);
-        $r->addRoute(['GET', 'POST'], '/articles/edit/{id:\d+}', [App\Controllers\Admin\BlogController::class, 'editBlog']);
-        $r->addRoute(['GET', 'POST'], '/articles/move/{id:\d+}', [App\Controllers\Admin\BlogController::class, 'moveBlog']);
-        $r->get('/articles/delete/{id:\d+}', [App\Controllers\Admin\BlogController::class, 'deleteBlog']);
+        $r->get('/blogs', [App\Controllers\Admin\ArticleController::class, 'index']);
+        $r->post('/blogs/create', [App\Controllers\Admin\ArticleController::class, 'create']);
+        $r->get('/blogs/restatement', [App\Controllers\Admin\ArticleController::class, 'restatement']);
+        $r->addRoute(['GET', 'POST'], '/blogs/edit/{id:\d+}', [App\Controllers\Admin\ArticleController::class, 'edit']);
+        $r->get('/blogs/delete/{id:\d+}', [App\Controllers\Admin\ArticleController::class, 'delete']);
+        $r->get('/blogs/{id:\d+}', [App\Controllers\Admin\ArticleController::class, 'blog']);
+        $r->addRoute(['GET', 'POST'], '/articles/edit/{id:\d+}', [App\Controllers\Admin\ArticleController::class, 'editBlog']);
+        $r->addRoute(['GET', 'POST'], '/articles/move/{id:\d+}', [App\Controllers\Admin\ArticleController::class, 'moveBlog']);
+        $r->get('/articles/delete/{id:\d+}', [App\Controllers\Admin\ArticleController::class, 'deleteBlog']);
 
         /* Доска объявлений */
         $r->get('/boards[/{id:\d+}]', [App\Controllers\Admin\BoardController::class, 'index']);

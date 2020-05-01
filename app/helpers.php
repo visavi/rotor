@@ -6,7 +6,7 @@ use App\Models\Antimat;
 use App\Models\Ban;
 use App\Models\Banhist;
 use App\Models\BlackList;
-use App\Models\Blog;
+use App\Models\Article;
 use App\Models\Item;
 use App\Models\Load;
 use App\Models\Chat;
@@ -628,9 +628,9 @@ function photoNavigation($id)
  */
 function statsBlog()
 {
-    return Cache::remember('statBlogs', 900, static function () {
-        $stat     = Blog::query()->count();
-        $totalnew = Blog::query()->where('created_at', '>', strtotime('-3 day', SITETIME))->count();
+    return Cache::remember('statArticles', 900, static function () {
+        $stat     = Article::query()->count();
+        $totalnew = Article::query()->where('created_at', '>', strtotime('-3 day', SITETIME))->count();
 
         if ($totalnew) {
             $stat .= '/+' . $totalnew;
@@ -1167,10 +1167,10 @@ function recentDowns($show = 5)
  *
  * @return string|void Список статей
  */
-function recentBlogs($show = 5)
+function recentArticles($show = 5)
 {
-    $blogs = Cache::remember('recentBlogs', 600, static function () use ($show) {
-        return Blog::query()
+    $blogs = Cache::remember('recentArticles', 600, static function () use ($show) {
+        return Article::query()
             ->orderByDesc('created_at')
             ->limit($show)
             ->get()
@@ -1242,8 +1242,8 @@ function restatement($mode)
             break;
 
         case 'blogs':
-            DB::connection()->update('update categories set count_blogs = (select count(*) from blogs where categories.id = blogs.category_id)');
-            DB::connection()->update('update blogs set count_comments = (select count(*) from comments where relate_type = "' . Blog::$morphName . '" and blogs.id = comments.relate_id)');
+            DB::connection()->update('update categories set count_articles = (select count(*) from articles where categories.id = articles.category_id)');
+            DB::connection()->update('update articles set count_comments = (select count(*) from comments where relate_type = "' . Article::$morphName . '" and articles.id = comments.relate_id)');
             break;
 
         case 'loads':

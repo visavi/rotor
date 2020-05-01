@@ -37,19 +37,19 @@ class BaseModel extends Model
         parent::boot();
 
         Relation::morphMap([
-           Down::$morphName      => Down::class,
-           Blog::$morphName      => Blog::class,
-           Photo::$morphName     => Photo::class,
-           Offer::$morphName     => Offer::class,
-           News::$morphName      => News::class,
-           Topic::$morphName     => Topic::class,
-           Post::$morphName      => Post::class,
-           Guestbook::$morphName => Guestbook::class,
-           Message::$morphName   => Message::class,
-           Wall::$morphName      => Wall::class,
-           Comment::$morphName   => Comment::class,
-           Vote::$morphName      => Vote::class,
-           Item::$morphName      => Item::class,
+            Down::$morphName      => Down::class,
+            Article::$morphName   => Article::class,
+            Photo::$morphName     => Photo::class,
+            Offer::$morphName     => Offer::class,
+            News::$morphName      => News::class,
+            Topic::$morphName     => Topic::class,
+            Post::$morphName      => Post::class,
+            Guestbook::$morphName => Guestbook::class,
+            Message::$morphName   => Message::class,
+            Wall::$morphName      => Wall::class,
+            Comment::$morphName   => Comment::class,
+            Vote::$morphName      => Vote::class,
+            Item::$morphName      => Item::class,
         ]);
     }
 

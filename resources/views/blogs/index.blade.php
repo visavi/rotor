@@ -36,9 +36,9 @@
             <i class="fa fa-folder-open"></i> <b><a href="/blogs/{{ $data->id }}">{{ $data->name }}</a></b>
 
             @if ($data->new)
-                ({{ $data->count_blogs + $data->children->sum('count_blogs') }}/<span style="color:#ff0000">+{{ $data->new->count_blogs }}</span>)
+                ({{ $data->count_articles + $data->children->sum('count_articles') }}/<span style="color:#ff0000">+{{ $data->new->count_articles }}</span>)
             @else
-                ({{ $data->count_blogs + $data->children->sum('count_blogs') }})
+                ({{ $data->count_articles + $data->children->sum('count_articles') }})
             @endif
         </div>
 
@@ -47,9 +47,9 @@
                 @foreach ($data->children as $child)
                     <i class="fa fa-angle-right"></i> <b><a href="/blogs/{{ $child->id }}">{{ $child->name }}</a></b>
                     @if ($child->new)
-                        ({{ $child->count_blogs }}/<span style="color:#ff0000">+{{ $child->new->count_blogs }}</span>)
+                        ({{ $child->count_articles }}/<span style="color:#ff0000">+{{ $child->new->count_articles }}</span>)
                     @else
-                        ({{ $child->count_blogs }})
+                        ({{ $child->count_articles }})
                     @endif
                 @endforeach
             @endif

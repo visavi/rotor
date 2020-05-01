@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace App\Controllers;
 
 use App\Classes\Validator;
-use App\Models\Blog;
+use App\Models\Article;
 use App\Models\Category;
 use App\Models\Comment;
 use App\Models\File;
@@ -15,7 +15,7 @@ use Illuminate\Database\Query\JoinClause;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
 
-class BlogController extends BaseController
+class ArticleController extends BaseController
 {
     /**
      * Главная страница
@@ -51,11 +51,11 @@ class BlogController extends BaseController
             abort(404, __('blogs.category_not_exist'));
         }
 
-        $blogs = Blog::query()
-            ->select('blogs.*', 'pollings.vote')
+        $blogs = Article::query()
+            ->select('articles.*', 'pollings.vote')
             ->leftJoin('pollings', static function (JoinClause $join) {
-                $join->on('blogs.id', 'pollings.relate_id')
-                    ->where('pollings.relate_type', Blog::$morphName)
+                $join->on('articles.id', 'pollings.relate_id')
+                    ->where('pollings.relate_type', Article::$morphName)
                     ->where('pollings.user_id', getUser('id'));
             })
             ->where('category_id', $id)
@@ -74,12 +74,12 @@ class BlogController extends BaseController
      */
     public function view(int $id): string
     {
-        $blog = Blog::query()
-            ->select('blogs.*', 'pollings.vote')
-            ->where('blogs.id', $id)
+        $blog = Article::query()
+            ->select('articles.*', 'pollings.vote')
+            ->where('articles.id', $id)
             ->leftJoin('pollings', static function (JoinClause $join) {
-                $join->on('blogs.id', 'pollings.relate_id')
-                    ->where('pollings.relate_type', Blog::$morphName)
+                $join->on('articles.id', 'pollings.relate_id')
+                    ->where('pollings.relate_type', Article::$morphName)
                     ->where('pollings.user_id', getUser('id'));
             })
             ->with('category.parent')
@@ -117,8 +117,8 @@ class BlogController extends BaseController
             abort(403, __('main.not_authorized'));
         }
 
-        /** @var Blog $blog */
-        $blog = Blog::query()->find($id);
+        /** @var Article $blog */
+        $blog = Article::query()->find($id);
 
         if (! $blog) {
             abort(404, __('blogs.article_not_exist'));
@@ -153,8 +153,8 @@ class BlogController extends BaseController
             if ($validator->isValid()) {
                 // Обновление счетчиков
                 if ($blog->category_id !== $category->id) {
-                    $category->increment('count_blogs');
-                    Category::query()->where('id', $blog->category_id)->decrement('count_blogs');
+                    $category->increment('count_articles');
+                    Category::query()->where('id', $blog->category_id)->decrement('count_articles');
                 }
 
                 $blog->update([
@@ -164,7 +164,7 @@ class BlogController extends BaseController
                     'tags'        => $tags,
                 ]);
 
-                clearCache(['statBlogs', 'recentBlogs']);
+                clearCache(['statArticles', 'recentArticles']);
                 setFlash('success', __('blogs.article_success_edited'));
                 redirect('/articles/' . $blog->id);
             } else {
@@ -189,10 +189,10 @@ class BlogController extends BaseController
      */
     public function authors(): string
     {
-        $blogs = Blog::query()
+        $blogs = Article::query()
             ->select('user_id', 'login')
             ->selectRaw('count(*) as cnt, sum(count_comments) as count_comments')
-            ->join('users', 'blogs.user_id', 'users.id')
+            ->join('users', 'articles.user_id', 'users.id')
             ->groupBy('user_id')
             ->orderByDesc('cnt')
             ->paginate(setting('bloggroup'));
@@ -254,8 +254,8 @@ class BlogController extends BaseController
             if ($validator->isValid()) {
                 $text = antimat($text);
 
-                /** @var Blog $blog */
-                $blog = Blog::query()->create([
+                /** @var Article $blog */
+                $blog = Article::query()->create([
                     'category_id' => $cid,
                     'user_id'     => getUser('id'),
                     'title'       => $title,
@@ -264,18 +264,18 @@ class BlogController extends BaseController
                     'created_at'  => SITETIME,
                 ]);
 
-                $category->increment('count_blogs');
+                $category->increment('count_articles');
 
                 getUser()->increment('point', 5);
                 getUser()->increment('money', 100);
 
                 File::query()
-                    ->where('relate_type', Blog::$morphName)
+                    ->where('relate_type', Article::$morphName)
                     ->where('relate_id', 0)
                     ->where('user_id', getUser('id'))
                     ->update(['relate_id' => $blog->id]);
 
-                clearCache(['statBlogs', 'recentBlogs']);
+                clearCache(['statArticles', 'recentArticles']);
                 $flood->saveState();
 
                 setFlash('success', __('blogs.article_success_created'));
@@ -287,7 +287,7 @@ class BlogController extends BaseController
         }
 
         $files = File::query()
-            ->where('relate_type', Blog::$morphName)
+            ->where('relate_type', Article::$morphName)
             ->where('relate_id', 0)
             ->where('user_id', getUser('id'))
             ->get();
@@ -306,8 +306,8 @@ class BlogController extends BaseController
      */
     public function comments(int $id, Request $request, Validator $validator, Flood $flood): string
     {
-        /** @var Blog $blog */
-        $blog = Blog::query()->find($id);
+        /** @var Article $blog */
+        $blog = Article::query()->find($id);
 
         if (! $blog) {
             abort(404, __('blogs.article_not_exist'));
@@ -374,8 +374,8 @@ class BlogController extends BaseController
     {
         $page = int($request->input('page', 1));
 
-        /** @var Blog $blog */
-        $blog = Blog::query()->find($id);
+        /** @var Article $blog */
+        $blog = Article::query()->find($id);
 
         if (! $blog) {
             abort(404, __('blogs.article_not_exist'));
@@ -433,7 +433,7 @@ class BlogController extends BaseController
      */
     public function end(int $id): void
     {
-        $blog = Blog::query()->find($id);
+        $blog = Article::query()->find($id);
 
         if (! $blog) {
             abort(404, __('blogs.article_not_exist'));
@@ -453,8 +453,8 @@ class BlogController extends BaseController
      */
     public function print(int $id): string
     {
-        /** @var Blog $blog */
-        $blog = Blog::query()->find($id);
+        /** @var Article $blog */
+        $blog = Article::query()->find($id);
 
         if (! $blog) {
             abort(404, __('blogs.article_not_exist'));
@@ -470,7 +470,7 @@ class BlogController extends BaseController
      */
     public function rss(): string
     {
-        $blogs = Blog::query()
+        $blogs = Article::query()
             ->orderByDesc('created_at')
             ->limit(15)
             ->get();
@@ -490,7 +490,7 @@ class BlogController extends BaseController
      */
     public function rssComments(int $id): string
     {
-        $blog = Blog::query()->where('id', $id)->with('lastComments')->first();
+        $blog = Article::query()->where('id', $id)->with('lastComments')->first();
 
         if (! $blog) {
             abort(404, __('blogs.article_not_exist'));
@@ -507,7 +507,7 @@ class BlogController extends BaseController
     public function tags(): string
     {
         $tags = Cache::remember('tagCloud', 3600, static function () {
-            $allTags = Blog::query()
+            $allTags = Article::query()
                 ->select('tags')
                 ->pluck('tags')
                 ->all();
@@ -553,7 +553,7 @@ class BlogController extends BaseController
             || empty($_SESSION['blogfind'])
             || $tag !== $_SESSION['blogfind']
         ) {
-            $result = Blog::query()
+            $result = Article::query()
                 ->select('id')
                 ->where('tags', 'like', '%'.$tag.'%')
                 ->limit(500)
@@ -564,10 +564,10 @@ class BlogController extends BaseController
             $_SESSION['findresult'] = $result;
         }
 
-        $blogs = Blog::query()
-            ->select('blogs.*', 'categories.name')
-            ->whereIn('blogs.id', $_SESSION['findresult'])
-            ->join('categories', 'blogs.category_id', 'categories.id')
+        $blogs = Article::query()
+            ->select('articles.*', 'categories.name')
+            ->whereIn('articles.id', $_SESSION['findresult'])
+            ->join('categories', 'articles.category_id', 'categories.id')
             ->orderByDesc('created_at')
             ->with('user')
             ->paginate(setting('blogpost'));
@@ -582,7 +582,7 @@ class BlogController extends BaseController
      */
     public function newArticles(): string
     {
-        $blogs = Blog::query()
+        $blogs = Article::query()
             ->orderByDesc('created_at')
             ->with('user')
             ->paginate(setting('blogpost'));
@@ -599,8 +599,8 @@ class BlogController extends BaseController
     {
         $comments = Comment::query()
             ->select('comments.*', 'title', 'count_comments')
-            ->where('relate_type', Blog::$morphName)
-            ->leftJoin('blogs', 'comments.relate_id', 'blogs.id')
+            ->where('relate_type', Article::$morphName)
+            ->leftJoin('articles', 'comments.relate_id', 'articles.id')
             ->orderByDesc('comments.created_at')
             ->with('user')
             ->paginate(setting('comments_per_page'));
@@ -623,7 +623,7 @@ class BlogController extends BaseController
             abort(404, __('validator.user'));
         }
 
-        $blogs = Blog::query()->where('user_id', $user->id)
+        $blogs = Article::query()->where('user_id', $user->id)
             ->orderByDesc('created_at')
             ->paginate(setting('blogpost'))
             ->appends(['user' => $user->login]);
@@ -648,9 +648,9 @@ class BlogController extends BaseController
 
         $comments = Comment::query()
             ->select('comments.*', 'title', 'count_comments')
-            ->where('relate_type', Blog::$morphName)
+            ->where('relate_type', Article::$morphName)
             ->where('comments.user_id', $user->id)
-            ->leftJoin('blogs', 'comments.relate_id', 'blogs.id')
+            ->leftJoin('articles', 'comments.relate_id', 'articles.id')
             ->orderByDesc('comments.created_at')
             ->with('user')
             ->paginate(setting('comments_per_page'))
@@ -668,8 +668,8 @@ class BlogController extends BaseController
      */
     public function viewComment(int $id, int $cid): void
     {
-        /** @var Blog $blog */
-        $blog = Blog::query()->find($id);
+        /** @var Article $blog */
+        $blog = Article::query()->find($id);
 
         if (! $blog) {
             abort(404, __('blogs.article_not_exist'));
@@ -702,9 +702,9 @@ class BlogController extends BaseController
             default: $order = 'visits';
         }
 
-        $blogs = Blog::query()
-            ->select('blogs.*', 'categories.name')
-            ->leftJoin('categories', 'blogs.category_id', 'categories.id')
+        $blogs = Article::query()
+            ->select('articles.*', 'categories.name')
+            ->leftJoin('categories', 'articles.category_id', 'categories.id')
             ->orderByDesc($order)
             ->with('user')
             ->paginate(setting('blogpost'))
@@ -765,7 +765,7 @@ class BlogController extends BaseController
                     $search2 = isset($arrfind[2]) && $type !== 2 ? $types . " `title` LIKE '%" . $arrfind[2] . "%'" : '';
 
                     if (empty($_SESSION['blogfindres']) || $blogfind !== $_SESSION['blogfind']) {
-                        $result = Blog::query()
+                        $result = Article::query()
                             ->select('id')
                             ->whereRaw("title like '%".$arrfind[0]."%'".$search1.$search2)
                             ->limit(500)
@@ -779,10 +779,10 @@ class BlogController extends BaseController
                     $total = count($_SESSION['blogfindres']);
 
                     if ($total > 0) {
-                        $blogs = Blog::query()
-                            ->select('blogs.*', 'categories.name')
-                            ->whereIn('blogs.id', $_SESSION['blogfindres'])
-                            ->join('categories', 'blogs.category_id', 'categories.id')
+                        $blogs = Article::query()
+                            ->select('articles.*', 'categories.name')
+                            ->whereIn('articles.id', $_SESSION['blogfindres'])
+                            ->join('categories', 'articles.category_id', 'categories.id')
                             ->orderByDesc('created_at')
                             ->with('user')
                             ->paginate(setting('blogpost'))
@@ -808,7 +808,7 @@ class BlogController extends BaseController
                     $search2 = isset($arrfind[2]) && $type !== 2 ? $types . " `text` LIKE '%" . $arrfind[2] . "%'" : '';
 
                     if (empty($_SESSION['blogfindres']) || $blogfind !== $_SESSION['blogfind']) {
-                        $result = Blog::query()
+                        $result = Article::query()
                             ->select('id')
                             ->whereRaw("text like '%".$arrfind[0]."%'".$search1.$search2)
                             ->limit(500)
@@ -822,10 +822,10 @@ class BlogController extends BaseController
                     $total = count($_SESSION['blogfindres']);
 
                     if ($total > 0) {
-                        $blogs = Blog::query()
-                            ->select('blogs.*', 'categories.name')
-                            ->whereIn('blogs.id', $_SESSION['blogfindres'])
-                            ->join('categories', 'blogs.category_id', 'categories.id')
+                        $blogs = Article::query()
+                            ->select('articles.*', 'categories.name')
+                            ->whereIn('articles.id', $_SESSION['blogfindres'])
+                            ->join('categories', 'articles.category_id', 'categories.id')
                             ->orderByDesc('created_at')
                             ->with('user')
                             ->paginate(setting('blogpost'))
@@ -856,7 +856,7 @@ class BlogController extends BaseController
      */
     public function main(): string
     {
-        $blogs = Blog::query()
+        $blogs = Article::query()
             ->orderByDesc('created_at')
             ->with('user')
             ->paginate(setting('blogpost'));

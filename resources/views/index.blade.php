@@ -66,7 +66,7 @@
         <i class="fa fa-globe fa-lg text-muted"></i>
         <b><a href="/blogs">{{ __('index.blogs') }}</a></b> ({{ statsBlog() }})
     </div>
-    {{ recentBlogs() }}
+    {{ recentArticles() }}
 
     <div class="b">
         <i class="fa fa-list-alt fa-lg text-muted"></i>

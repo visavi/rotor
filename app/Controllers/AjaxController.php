@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace App\Controllers;
 
 use App\Classes\Validator;
-use App\Models\{BaseModel, Blog, Comment, Down, File, Guestbook, Message, Item, News, Offer, Photo, Post, Spam, Wall};
+use App\Models\{BaseModel, Article, Comment, Down, File, Guestbook, Message, Item, News, Offer, Photo, Post, Spam, Wall};
 use Exception;
 use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Http\Request;
@@ -74,7 +74,7 @@ class AjaxController extends BaseController
                 break;
 
             case News::$morphName:
-            case Blog::$morphName:
+            case Article::$morphName:
             case Photo::$morphName:
             case Offer::$morphName:
             case Down::$morphName:
@@ -169,7 +169,7 @@ class AjaxController extends BaseController
     {
         $types = [
             Post::$morphName,
-            Blog::$morphName,
+            Article::$morphName,
             Photo::$morphName,
             Offer::$morphName,
             News::$morphName,
@@ -245,7 +245,7 @@ class AjaxController extends BaseController
     public function uploadImage(Request $request, Validator $validator): string
     {
         $types = [
-            Blog::$morphName,
+            Article::$morphName,
             Item::$morphName,
             Photo::$morphName,
         ];
@@ -321,7 +321,7 @@ class AjaxController extends BaseController
     public function deleteImage(Request $request, Validator $validator): string
     {
         $types = [
-            Blog::$morphName,
+            Article::$morphName,
             Item::$morphName,
             Photo::$morphName,
         ];

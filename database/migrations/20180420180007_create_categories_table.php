@@ -15,7 +15,7 @@ class CreateCategoriesTable extends AbstractMigration
                 ->addColumn('sort', 'integer', ['default' => 0])
                 ->addColumn('parent_id', 'integer', ['default' => 0])
                 ->addColumn('name', 'string', ['limit' => 100])
-                ->addColumn('count_blogs', 'integer', ['default' => 0])
+                ->addColumn('count_articles', 'integer', ['default' => 0])
                 ->addColumn('closed', 'boolean', ['default' => 0])
                 ->create();
         }

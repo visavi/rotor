@@ -2,15 +2,15 @@
 
 use Phinx\Migration\AbstractMigration;
 
-class CreateBlogsTable extends AbstractMigration
+class CreateArticlesTable extends AbstractMigration
 {
     /**
      * Migrate Change.
      */
     public function change()
     {
-        if (! $this->hasTable('blogs')) {
-            $table = $this->table('blogs', ['engine' => config('DB_ENGINE'), 'collation' => config('DB_COLLATION')]);
+        if (! $this->hasTable('articles')) {
+            $table = $this->table('articles', ['engine' => config('DB_ENGINE'), 'collation' => config('DB_COLLATION')]);
             $table
                 ->addColumn('category_id', 'integer')
                 ->addColumn('user_id', 'integer')
