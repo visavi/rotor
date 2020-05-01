@@ -15,16 +15,16 @@
 @stop
 
 @section('content')
-    @if ($blogs->isNotEmpty())
-        @foreach ($blogs as $data)
+    @if ($articles->isNotEmpty())
+        @foreach ($articles as $article)
             <i class="fa fa-pencil-alt"></i>
-            <b><a href="/blogs/active/articles?user={{ $data->login }}">{{ $data->login }}</a></b> ({{ $data->cnt }} {{ __('blogs.all_articles') }} / {{ $data->count_comments }} {{ __('main.comments') }})<br>
+            <b><a href="/blogs/active/articles?user={{ $article->login }}">{{ $article->login }}</a></b> ({{ $article->cnt }} {{ __('blogs.all_articles') }} / {{ $article->count_comments }} {{ __('main.comments') }})<br>
         @endforeach
 
-        <br>{{ __('blogs.total_authors') }}: <b>{{ $blogs->total() }}</b><br>
+        <br>{{ __('blogs.total_authors') }}: <b>{{ $articles->total() }}</b><br>
     @else
         {!! showError(__('blogs.empty_articles')) !!}
     @endif
 
-    {{ $blogs->links() }}
+    {{ $articles->links() }}
 @stop

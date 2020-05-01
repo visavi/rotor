@@ -1,7 +1,7 @@
 @extends('layout')
 
 @section('title')
-    {{ __('index.blogs') }} - {{ __('blogs.new_articles') }} ({{ __('main.page_num', ['page' => $blogs->currentPage()]) }})
+    {{ __('index.blogs') }} - {{ __('blogs.new_articles') }} ({{ __('main.page_num', ['page' => $articles->currentPage()]) }})
 @stop
 
 @section('header')
@@ -19,22 +19,22 @@
 @stop
 
 @section('content')
-    @if ($blogs->isNotEmpty())
-        @foreach ($blogs as $data)
+    @if ($articles->isNotEmpty())
+        @foreach ($articles as $article)
             <div class="b">
                 <i class="fa fa-pencil-alt"></i>
-                <b><a href="/articles/{{ $data->id }}">{{ $data->title }}</a></b> ({!! formatNum($data->rating) !!})
+                <b><a href="/articles/{{ $article->id }}">{{ $article->title }}</a></b> ({!! formatNum($article->rating) !!})
             </div>
 
             <div>
-                {{ __('blogs.blog') }}: <a href="/blogs/{{ $data->category_id }}">{{ $data->category->name }}</a><br>
-                {{ __('main.views') }}: {{ $data->visits }}<br>
-                {{ __('main.author') }}: {!! $data->user->getProfile() !!}  ({{  dateFixed($data->created_at) }})
+                {{ __('blogs.blog') }}: <a href="/blogs/{{ $article->category_id }}">{{ $article->category->name }}</a><br>
+                {{ __('main.views') }}: {{ $article->visits }}<br>
+                {{ __('main.author') }}: {!! $article->user->getProfile() !!}  ({{  dateFixed($article->created_at) }})
             </div>
         @endforeach
     @else
         {!! showError(__('blogs.empty_articles')) !!}
     @endif
 
-    {{ $blogs->links() }}
+    {{ $articles->links() }}
 @stop

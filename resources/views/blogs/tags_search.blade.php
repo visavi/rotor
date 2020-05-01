@@ -16,21 +16,21 @@
 @stop
 
 @section('content')
-    <p>{{ __('blogs.found_in_tags') }}: {{ $blogs->total() }}</p>
+    <p>{{ __('blogs.found_in_tags') }}: {{ $articles->total() }}</p>
 
-    @foreach($blogs as $data)
+    @foreach($articles as $article)
         <div class="b">
             <i class="fa fa-pencil-alt"></i>
-            <b><a href="/articles/{{ $data->id }}">{{ $data->title }}</a></b> (<?=formatNum($data->rating)?>)
+            <b><a href="/articles/{{ $article->id }}">{{ $article->title }}</a></b> ({!! formatNum($article->rating) !!})
         </div>
 
         <div>
-            {{ __('blogs.blog') }}: <a href="/blogs/{{ $data->category_id }}">{{ $data->name }}</a><br>
-            {{ __('main.views') }}: {{ $data->visits }}<br>
-            {{ __('blogs.tags') }}: {{ $data->tags }}<br>
-            {{ __('main.author') }}: {!! $data->user->getProfile() !!}  ({{ dateFixed($data->created_at) }})
+            {{ __('blogs.blog') }}: <a href="/blogs/{{ $article->category_id }}">{{ $article->name }}</a><br>
+            {{ __('main.views') }}: {{ $article->visits }}<br>
+            {{ __('blogs.tags') }}: {{ $article->tags }}<br>
+            {{ __('main.author') }}: {!! $article->user->getProfile() !!}  ({{ dateFixed($article->created_at) }})
         </div>
     @endforeach
 
-    {{ $blogs->links() }}
+    {{ $articles->links() }}
 @stop

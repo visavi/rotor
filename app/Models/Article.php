@@ -13,7 +13,7 @@ use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Database\Eloquent\Relations\MorphOne;
 
 /**
- * Class Blog
+ * Class Article
  *
  * @property int id
  * @property int category_id

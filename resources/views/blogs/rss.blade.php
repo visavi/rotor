@@ -6,18 +6,18 @@
 
 @section('content')
 
-    @foreach ($blogs as $blog)
-        <?php $blog->text = bbCode($blog->text); ?>
-        <?php $blog->text = str_replace('/uploads/stickers', siteUrl().'/uploads/stickers', $blog->text); ?>
+    @foreach ($articles as $article)
+        <?php $article->text = bbCode($article->text); ?>
+        <?php $article->text = str_replace('/uploads/stickers', siteUrl().'/uploads/stickers', $article->text); ?>
 
         <item>
-            <title>{{ $blog->title }}</title>
-            <link>{{ siteUrl() }}/articles/{{ $blog->id }}</link>
-            <description>{{ $blog->text }}</description>
-            <author>{{ $blog->user->login }}</author>
-            <pubDate>{{ date('r', $blog->created_at) }}</pubDate>
+            <title>{{ $article->title }}</title>
+            <link>{{ siteUrl() }}/articles/{{ $article->id }}</link>
+            <description>{{ $article->text }}</description>
+            <author>{{ $article->user->login }}</author>
+            <pubDate>{{ date('r', $article->created_at) }}</pubDate>
             <category>{{ __('index.blogs') }}</category>
-            <guid>{{ siteUrl() }}/articles/{{ $blog->id }}</guid>
+            <guid>{{ siteUrl() }}/articles/{{ $article->id }}</guid>
         </item>
     @endforeach
 @stop

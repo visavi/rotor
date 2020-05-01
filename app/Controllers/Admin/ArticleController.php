@@ -209,13 +209,13 @@ class ArticleController extends AdminController
             abort(404, __('blogs.category_not_exist'));
         }
 
-        $blogs = Article::query()
+        $articles = Article::query()
             ->where('category_id', $id)
             ->orderByDesc('created_at')
             ->with('user')
             ->paginate(setting('blogpost'));
 
-        return view('admin/blogs/blog', compact('blogs', 'category'));
+        return view('admin/blogs/blog', compact('articles', 'category'));
     }
 
     /**
@@ -228,10 +228,10 @@ class ArticleController extends AdminController
      */
     public function editBlog(int $id, Request $request, Validator $validator): string
     {
-        /** @var Article $blog */
-        $blog = Article::query()->find($id);
+        /** @var Article $article */
+        $article = Article::query()->find($id);
 
-        if (! $blog) {
+        if (! $article) {
             abort(404, __('blogs.article_not_exist'));
         }
 
@@ -248,7 +248,7 @@ class ArticleController extends AdminController
                 ->length($tags, 2, 50, ['tags' => __('blogs.article_error_tags')]);
 
             if ($validator->isValid()) {
-                $blog->update([
+                $article->update([
                     'title' => $title,
                     'text'  => $text,
                     'tags'  => $tags,
@@ -256,7 +256,7 @@ class ArticleController extends AdminController
 
                 clearCache(['statArticles', 'recentArticles']);
                 setFlash('success', __('blogs.article_success_edited'));
-                redirect('/articles/'.$blog->id);
+                redirect('/articles/' . $article->id);
             } else {
                 setInput($request->all());
                 setFlash('danger', $validator->getErrors());
@@ -269,7 +269,7 @@ class ArticleController extends AdminController
             ->orderBy('sort')
             ->get();
 
-        return view('admin/blogs/edit_blog', compact('blog', 'categories'));
+        return view('admin/blogs/edit_blog', compact('article', 'categories'));
     }
 
     /**
@@ -282,10 +282,10 @@ class ArticleController extends AdminController
      */
     public function moveBlog(int $id, Request $request, Validator $validator): string
     {
-        /** @var Article $blog */
-        $blog = Article::query()->find($id);
+        /** @var Article $article */
+        $article = Article::query()->find($id);
 
-        if (! $blog) {
+        if (! $article) {
             abort(404, __('blogs.article_not_exist'));
         }
 
@@ -302,20 +302,20 @@ class ArticleController extends AdminController
 
             if ($category) {
                 $validator->empty($category->closed, ['cid' => __('blogs.category_closed')]);
-                $validator->notEqual($blog->category_id, $category->id, ['cid' => __('blogs.article_error_moving')]);
+                $validator->notEqual($article->category_id, $category->id, ['cid' => __('blogs.article_error_moving')]);
             }
 
             if ($validator->isValid()) {
                 // Обновление счетчиков
                 $category->increment('count_articles');
-                Category::query()->where('id', $blog->category_id)->decrement('count_articles');
+                Category::query()->where('id', $article->category_id)->decrement('count_articles');
 
-                $blog->update([
+                $article->update([
                     'category_id' => $category->id,
                 ]);
 
                 setFlash('success', __('blogs.article_success_moved'));
-                redirect('/articles/'.$blog->id);
+                redirect('/articles/' . $article->id);
             } else {
                 setInput($request->all());
                 setFlash('danger', $validator->getErrors());
@@ -328,7 +328,7 @@ class ArticleController extends AdminController
             ->orderBy('sort')
             ->get();
 
-        return view('admin/blogs/move_blog', compact('blog', 'categories'));
+        return view('admin/blogs/move_blog', compact('article', 'categories'));
     }
 
     /**
@@ -345,20 +345,20 @@ class ArticleController extends AdminController
         $page  = int($request->input('page', 1));
         $token = check($request->input('token'));
 
-        /** @var Article $blog */
-        $blog = Article::query()->find($id);
+        /** @var Article $article */
+        $article = Article::query()->find($id);
 
-        if (! $blog) {
+        if (! $article) {
             abort(404, __('blogs.article_not_exist'));
         }
 
         $validator->equal($token, $_SESSION['token'], __('validator.token'));
 
         if ($validator->isValid()) {
-            $blog->comments()->delete();
-            $blog->delete();
+            $article->comments()->delete();
+            $article->delete();
 
-            $blog->category->decrement('count_articles');
+            $article->category->decrement('count_articles');
 
             clearCache(['statArticles', 'recentArticles']);
             setFlash('success', __('blogs.article_success_deleted'));
@@ -366,6 +366,6 @@ class ArticleController extends AdminController
             setFlash('danger', $validator->getErrors());
         }
 
-        redirect('/admin/blogs/' . $blog->category_id . '?page=' . $page);
+        redirect('/admin/blogs/' . $article->category_id . '?page=' . $page);
     }
 }

@@ -1,7 +1,7 @@
 @extends('layout')
 
 @section('title')
-    {{ $category->name }} ({{ __('main.page_num', ['page' => $blogs->currentPage()]) }})
+    {{ $category->name }} ({{ __('main.page_num', ['page' => $articles->currentPage()]) }})
 @stop
 
 @section('header')
@@ -28,37 +28,37 @@
             <li class="breadcrumb-item active">{{ $category->name }}</li>
 
             @if (isAdmin())
-                <li class="breadcrumb-item"><a href="/blogs/{{ $category->id }}?page={{ $blogs->currentPage() }}">Обзор</a></li>
+                <li class="breadcrumb-item"><a href="/blogs/{{ $category->id }}?page={{ $articles->currentPage() }}">Обзор</a></li>
             @endif
         </ol>
     </nav>
 @stop
 
 @section('content')
-    @if ($blogs->isNotEmpty())
-        @foreach ($blogs as $data)
+    @if ($articles->isNotEmpty())
+        @foreach ($articles as $article)
             <div class="b">
                 <i class="fa fa-pencil-alt"></i>
-                <b><a href="/articles/{{ $data->id }}">{{ $data->title }}</a></b> ({!! formatNum($data->rating) !!})
+                <b><a href="/articles/{{ $article->id }}">{{ $article->title }}</a></b> ({!! formatNum($article->rating) !!})
 
                 <div class="float-right">
-                    <a href="/admin/articles/edit/{{ $data->id }}" title="{{ __('main.edit') }}"><i class="fa fa-pencil-alt text-muted"></i></a>
-                    <a href="/admin/articles/move/{{ $data->id }}" title="{{ __('main.move') }}"><i class="fa fa-arrows-alt text-muted"></i></a>
-                    <a href="/admin/articles/delete/{{ $data->id }}?page={{ $blogs->currentPage() }}&amp;token={{ $_SESSION['token'] }}" onclick="return confirm('{{ __('blogs.confirm_delete_article') }}')" title="{{ __('main.delete') }}"><i class="fa fa-times text-muted"></i></a>
+                    <a href="/admin/articles/edit/{{ $article->id }}" title="{{ __('main.edit') }}"><i class="fa fa-pencil-alt text-muted"></i></a>
+                    <a href="/admin/articles/move/{{ $article->id }}" title="{{ __('main.move') }}"><i class="fa fa-arrows-alt text-muted"></i></a>
+                    <a href="/admin/articles/delete/{{ $article->id }}?page={{ $articles->currentPage() }}&amp;token={{ $_SESSION['token'] }}" onclick="return confirm('{{ __('blogs.confirm_delete_article') }}')" title="{{ __('main.delete') }}"><i class="fa fa-times text-muted"></i></a>
                 </div>
 
             </div>
             <div>
-                {!! $data->shortText() !!}<br>
-                {{ __('main.author') }}: {!! $data->user->getProfile() !!} ({{ dateFixed($data->created_at) }})<br>
-                {{ __('main.views') }}: {{ $data->visits }}<br>
-                <a href="/articles/comments/{{ $data->id }}">{{ __('main.comments') }}</a> ({{ $data->count_comments }})
-                <a href="/articles/end/{{ $data->id }}">&raquo;</a>
+                {!! $article->shortText() !!}<br>
+                {{ __('main.author') }}: {!! $article->user->getProfile() !!} ({{ dateFixed($article->created_at) }})<br>
+                {{ __('main.views') }}: {{ $article->visits }}<br>
+                <a href="/articles/comments/{{ $article->id }}">{{ __('main.comments') }}</a> ({{ $article->count_comments }})
+                <a href="/articles/end/{{ $article->id }}">&raquo;</a>
             </div>
         @endforeach
     @else
         {!! showError(__('blogs.empty_articles')) !!}
     @endif
 
-    {{ $blogs->links() }}
+    {{ $articles->links() }}
 @stop

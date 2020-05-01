@@ -1,7 +1,7 @@
 @extends('layout')
 
 @section('title')
-    {{ __('index.blogs') }} - {{ __('blogs.title_active_articles', ['user' => $user->login]) }} ({{ __('main.page_num', ['page' => $blogs->currentPage()]) }})
+    {{ __('index.blogs') }} - {{ __('blogs.title_active_articles', ['user' => $user->login]) }} ({{ __('main.page_num', ['page' => $articles->currentPage()]) }})
 @stop
 
 @section('header')
@@ -19,23 +19,23 @@
 @stop
 
 @section('content')
-    @if ($blogs->isNotEmpty())
-        @foreach ($blogs as $data)
+    @if ($articles->isNotEmpty())
+        @foreach ($articles as $article)
             <div class="b">
                 <i class="fa fa-pencil-alt"></i>
-                <b><a href="/articles/{{ $data->id }}">{{ $data->title }}</a></b> ({!! formatNum($data->rating) !!})
+                <b><a href="/articles/{{ $article->id }}">{{ $article->title }}</a></b> ({!! formatNum($article->rating) !!})
             </div>
 
-            <div>{{ __('main.author') }}: {!! $data->user->getProfile() !!} ({{ dateFixed($data->created_at) }})<br>
-                <i class="fa fa-comment"></i> <a href="/articles/comments/{{ $data->id }}">{{ __('main.comments') }}</a> ({{ $data->count_comments }})
-                <a href="/articles/end/{{ $data->id }}">&raquo;</a>
+            <div>{{ __('main.author') }}: {!! $article->user->getProfile() !!} ({{ dateFixed($article->created_at) }})<br>
+                <i class="fa fa-comment"></i> <a href="/articles/comments/{{ $article->id }}">{{ __('main.comments') }}</a> ({{ $article->count_comments }})
+                <a href="/articles/end/{{ $article->id }}">&raquo;</a>
             </div>
         @endforeach
 
-        <br>{{ __('blogs.total_articles') }}: <b>{{ $blogs->total() }}</b><br>
+        <br>{{ __('blogs.total_articles') }}: <b>{{ $articles->total() }}</b><br>
     @else
         {!! showError(__('blogs.empty_articles')) !!}
     @endif
 
-    {{ $blogs->links() }}
+    {{ $articles->links() }}
 @stop

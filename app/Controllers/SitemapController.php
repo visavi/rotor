@@ -17,7 +17,7 @@ class SitemapController extends BaseController
      */
     public $pages = [
         'news',
-        'blogs',
+        'articles',
         'topics',
         'downs',
     ];
@@ -55,13 +55,13 @@ class SitemapController extends BaseController
     }
 
     /**
-     * Генерируем блоги
+     * Генерируем статьи
      *
      * @return string
      */
-    private function blogs(): string
+    private function articles(): string
     {
-        $blogs = Article::query()
+        $articles = Article::query()
             ->selectRaw('articles.*, max(c.created_at) as last_time')
             ->leftJoin('comments as c', static function (JoinClause $join) {
                 $join->on('articles.id', 'c.relate_id')
@@ -73,14 +73,14 @@ class SitemapController extends BaseController
 
         $locs = [];
 
-        foreach ($blogs as $blog) {
-            $changeTime = ($blog->last_time > $blog->created_at) ? $blog->last_time : $blog->created_at;
+        foreach ($articles as $article) {
+            $changeTime = ($article->last_time > $article->created_at) ? $article->last_time : $article->created_at;
 
             // Обновлено менее 1 месяца
             $new = SITETIME < strtotime('+1 month', $changeTime);
 
             $locs[] = [
-                'loc'        => siteUrl(true) . '/articles/' . $blog->id,
+                'loc'        => siteUrl(true) . '/articles/' . $article->id,
                 'lastmod'    => date('c', $changeTime),
                 'changefreq' => $new ? 'weekly' : 'monthly',
                 'priority'   => $new ? '1.0' : '0.5',

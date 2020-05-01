@@ -38,7 +38,7 @@ class ArticleController extends BaseController
     }
 
     /**
-     * Список блогов
+     * Список статей
      *
      * @param int $id
      * @return string
@@ -51,7 +51,7 @@ class ArticleController extends BaseController
             abort(404, __('blogs.category_not_exist'));
         }
 
-        $blogs = Article::query()
+        $articles = Article::query()
             ->select('articles.*', 'pollings.vote')
             ->leftJoin('pollings', static function (JoinClause $join) {
                 $join->on('articles.id', 'pollings.relate_id')
@@ -63,7 +63,7 @@ class ArticleController extends BaseController
             ->with('user')
             ->paginate(setting('blogpost'));
 
-        return view('blogs/blog', compact('blogs', 'category'));
+        return view('blogs/blog', compact('articles', 'category'));
     }
 
     /**
@@ -74,7 +74,8 @@ class ArticleController extends BaseController
      */
     public function view(int $id): string
     {
-        $blog = Article::query()
+        /** @var Article $article */
+        $article = Article::query()
             ->select('articles.*', 'pollings.vote')
             ->where('articles.id', $id)
             ->leftJoin('pollings', static function (JoinClause $join) {
@@ -85,14 +86,14 @@ class ArticleController extends BaseController
             ->with('category.parent')
             ->first();
 
-        if (! $blog) {
+        if (! $article) {
             abort(404, __('blogs.article_not_exist'));
         }
 
-        Reader::countingStat($blog);
+        Reader::countingStat($article);
 
-        $blog->text = bbCode($blog->text) . '<br>';
-        $tagsList = preg_split('/[\s]*[,][\s]*/', $blog->tags);
+        $article->text = bbCode($article->text) . '<br>';
+        $tagsList = preg_split('/[\s]*[,][\s]*/', $article->tags);
 
         $tags = '';
         foreach ($tagsList as $key => $value) {
@@ -100,7 +101,7 @@ class ArticleController extends BaseController
             $tags .= $comma . '<a href="/blogs/tags/' . urlencode($value) . '">' . $value . '</a>';
         }
 
-        return view('blogs/view', compact('blog', 'tags'));
+        return view('blogs/view', compact('article', 'tags'));
     }
 
     /**
@@ -117,14 +118,14 @@ class ArticleController extends BaseController
             abort(403, __('main.not_authorized'));
         }
 
-        /** @var Article $blog */
-        $blog = Article::query()->find($id);
+        /** @var Article $article */
+        $article = Article::query()->find($id);
 
-        if (! $blog) {
+        if (! $article) {
             abort(404, __('blogs.article_not_exist'));
         }
 
-        if ($blog->user_id !== getUser('id')) {
+        if ($article->user_id !== getUser('id')) {
             abort('default', __('main.article_not_author'));
         }
 
@@ -152,12 +153,12 @@ class ArticleController extends BaseController
 
             if ($validator->isValid()) {
                 // Обновление счетчиков
-                if ($blog->category_id !== $category->id) {
+                if ($article->category_id !== $category->id) {
                     $category->increment('count_articles');
-                    Category::query()->where('id', $blog->category_id)->decrement('count_articles');
+                    Category::query()->where('id', $article->category_id)->decrement('count_articles');
                 }
 
-                $blog->update([
+                $article->update([
                     'category_id' => $category->id,
                     'title'       => $title,
                     'text'        => $text,
@@ -166,7 +167,7 @@ class ArticleController extends BaseController
 
                 clearCache(['statArticles', 'recentArticles']);
                 setFlash('success', __('blogs.article_success_edited'));
-                redirect('/articles/' . $blog->id);
+                redirect('/articles/' . $article->id);
             } else {
                 setInput($request->all());
                 setFlash('danger', $validator->getErrors());
@@ -179,7 +180,7 @@ class ArticleController extends BaseController
             ->orderBy('sort')
             ->get();
 
-        return view('blogs/edit', compact('blog', 'categories'));
+        return view('blogs/edit', compact('article', 'categories'));
     }
 
     /**
@@ -189,7 +190,7 @@ class ArticleController extends BaseController
      */
     public function authors(): string
     {
-        $blogs = Article::query()
+        $articles = Article::query()
             ->select('user_id', 'login')
             ->selectRaw('count(*) as cnt, sum(count_comments) as count_comments')
             ->join('users', 'articles.user_id', 'users.id')
@@ -197,7 +198,7 @@ class ArticleController extends BaseController
             ->orderByDesc('cnt')
             ->paginate(setting('bloggroup'));
 
-        return view('blogs/authors', compact('blogs'));
+        return view('blogs/authors', compact('articles'));
     }
 
     /**
@@ -216,7 +217,7 @@ class ArticleController extends BaseController
             abort('default', __('main.articles_closed'));
         }
 
-        if (! getUser()) {
+        if (! $user = getUser()) {
             abort(403, __('main.not_authorized'));
         }
 
@@ -254,10 +255,10 @@ class ArticleController extends BaseController
             if ($validator->isValid()) {
                 $text = antimat($text);
 
-                /** @var Article $blog */
-                $blog = Article::query()->create([
+                /** @var Article $article */
+                $article = Article::query()->create([
                     'category_id' => $cid,
-                    'user_id'     => getUser('id'),
+                    'user_id'     => $user->id,
                     'title'       => $title,
                     'text'        => $text,
                     'tags'        => $tags,
@@ -266,20 +267,20 @@ class ArticleController extends BaseController
 
                 $category->increment('count_articles');
 
-                getUser()->increment('point', 5);
-                getUser()->increment('money', 100);
+                $user->increment('point', 5);
+                $user->increment('money', 100);
 
                 File::query()
                     ->where('relate_type', Article::$morphName)
                     ->where('relate_id', 0)
                     ->where('user_id', getUser('id'))
-                    ->update(['relate_id' => $blog->id]);
+                    ->update(['relate_id' => $article->id]);
 
                 clearCache(['statArticles', 'recentArticles']);
                 $flood->saveState();
 
                 setFlash('success', __('blogs.article_success_created'));
-                redirect('/articles/' . $blog->id);
+                redirect('/articles/' . $article->id);
             } else {
                 setInput($request->all());
                 setFlash('danger', $validator->getErrors());
@@ -306,10 +307,10 @@ class ArticleController extends BaseController
      */
     public function comments(int $id, Request $request, Validator $validator, Flood $flood): string
     {
-        /** @var Article $blog */
-        $blog = Article::query()->find($id);
+        /** @var Article $article */
+        $article = Article::query()->find($id);
 
-        if (! $blog) {
+        if (! $article) {
             abort(404, __('blogs.article_not_exist'));
         }
 
@@ -324,11 +325,9 @@ class ArticleController extends BaseController
                 ->false($flood->isFlood(), ['msg' => __('validator.flood', ['sec' => $flood->getPeriod()])]);
 
             if ($validator->isValid()) {
-                $msg = antimat($msg);
-
                 /** @var Comment $comment */
-                $comment = $blog->comments()->create([
-                    'text'        => $msg,
+                $comment = $article->comments()->create([
+                    'text'        => antimat($msg),
                     'user_id'     => getUser('id'),
                     'created_at'  => SITETIME,
                     'ip'          => getIp(),
@@ -340,25 +339,25 @@ class ArticleController extends BaseController
                 $user->increment('point');
                 $user->increment('money', 5);
 
-                $blog->increment('count_comments');
+                $article->increment('count_comments');
 
                 $flood->saveState();
-                sendNotify($msg, '/articles/comment/' . $blog->id . '/' . $comment->id, $blog->title);
+                sendNotify($msg, '/articles/comment/' . $article->id . '/' . $comment->id, $article->title);
 
                 setFlash('success', __('main.comment_added_success'));
-                redirect('/articles/end/' . $blog->id);
+                redirect('/articles/end/' . $article->id);
             } else {
                 setInput($request->all());
                 setFlash('danger', $validator->getErrors());
             }
         }
 
-        $comments = $blog->comments()
+        $comments = $article->comments()
             ->with('user')
             ->orderBy('created_at')
             ->paginate(setting('comments_per_page'));
 
-        return view('blogs/comments', compact('blog', 'comments'));
+        return view('blogs/comments', compact('article', 'comments'));
     }
 
     /**
@@ -374,10 +373,10 @@ class ArticleController extends BaseController
     {
         $page = int($request->input('page', 1));
 
-        /** @var Article $blog */
-        $blog = Article::query()->find($id);
+        /** @var Article $article */
+        $article = Article::query()->find($id);
 
-        if (! $blog) {
+        if (! $article) {
             abort(404, __('blogs.article_not_exist'));
         }
 
@@ -385,7 +384,7 @@ class ArticleController extends BaseController
             abort(403, __('main.not_authorized'));
         }
 
-        $comment = $blog->comments()
+        $comment = $article->comments()
             ->where('id', $cid)
             ->where('user_id', getUser('id'))
             ->first();
@@ -415,14 +414,14 @@ class ArticleController extends BaseController
                 ]);
 
                 setFlash('success', __('main.comment_edited_success'));
-                redirect('/articles/comments/' . $blog->id . '?page=' . $page);
+                redirect('/articles/comments/' . $article->id . '?page=' . $page);
             } else {
                 setInput($request->all());
                 setFlash('danger', $validator->getErrors());
             }
         }
 
-        return view('blogs/editcomment', compact('blog', 'comment', 'page'));
+        return view('blogs/editcomment', compact('article', 'comment', 'page'));
     }
 
     /**
@@ -433,13 +432,14 @@ class ArticleController extends BaseController
      */
     public function end(int $id): void
     {
-        $blog = Article::query()->find($id);
+        /** @var Article $article */
+        $article = Article::query()->find($id);
 
-        if (! $blog) {
+        if (! $article) {
             abort(404, __('blogs.article_not_exist'));
         }
 
-        $total = $blog->comments()->count();
+        $total = $article->comments()->count();
 
         $end = ceil($total / setting('comments_per_page'));
         redirect('/articles/comments/' . $id . '?page=' . $end);
@@ -453,14 +453,14 @@ class ArticleController extends BaseController
      */
     public function print(int $id): string
     {
-        /** @var Article $blog */
-        $blog = Article::query()->find($id);
+        /** @var Article $article */
+        $article = Article::query()->find($id);
 
-        if (! $blog) {
+        if (! $article) {
             abort(404, __('blogs.article_not_exist'));
         }
 
-        return view('blogs/print', compact('blog'));
+        return view('blogs/print', compact('article'));
     }
 
     /**
@@ -470,16 +470,16 @@ class ArticleController extends BaseController
      */
     public function rss(): string
     {
-        $blogs = Article::query()
+        $article = Article::query()
             ->orderByDesc('created_at')
             ->limit(15)
             ->get();
 
-        if ($blogs->isEmpty()) {
-            abort('default', __('blogs.categories_not_created'));
+        if ($article->isEmpty()) {
+            abort('default', __('blogs.article_not_exist'));
         }
 
-        return view('blogs/rss', compact('blogs'));
+        return view('blogs/rss', compact('article'));
     }
 
     /**
@@ -490,13 +490,13 @@ class ArticleController extends BaseController
      */
     public function rssComments(int $id): string
     {
-        $blog = Article::query()->where('id', $id)->with('lastComments')->first();
+        $article = Article::query()->where('id', $id)->with('lastComments')->first();
 
-        if (! $blog) {
+        if (! $article) {
             abort(404, __('blogs.article_not_exist'));
         }
 
-        return view('blogs/rss_comments', compact('blog'));
+        return view('blogs/rss_comments', compact('article'));
     }
 
     /**
@@ -564,7 +564,7 @@ class ArticleController extends BaseController
             $_SESSION['findresult'] = $result;
         }
 
-        $blogs = Article::query()
+        $articles = Article::query()
             ->select('articles.*', 'categories.name')
             ->whereIn('articles.id', $_SESSION['findresult'])
             ->join('categories', 'articles.category_id', 'categories.id')
@@ -572,7 +572,7 @@ class ArticleController extends BaseController
             ->with('user')
             ->paginate(setting('blogpost'));
 
-        return view('blogs/tags_search', compact('blogs', 'tag'));
+        return view('blogs/tags_search', compact('articles', 'tag'));
     }
 
     /**
@@ -582,12 +582,12 @@ class ArticleController extends BaseController
      */
     public function newArticles(): string
     {
-        $blogs = Article::query()
+        $articles = Article::query()
             ->orderByDesc('created_at')
             ->with('user')
             ->paginate(setting('blogpost'));
 
-        return view('blogs/new_articles', compact('blogs'));
+        return view('blogs/new_articles', compact('articles'));
     }
 
     /**
@@ -623,12 +623,12 @@ class ArticleController extends BaseController
             abort(404, __('validator.user'));
         }
 
-        $blogs = Article::query()->where('user_id', $user->id)
+        $articles = Article::query()->where('user_id', $user->id)
             ->orderByDesc('created_at')
             ->paginate(setting('blogpost'))
             ->appends(['user' => $user->login]);
 
-        return view('blogs/active_articles', compact('blogs', 'user'));
+        return view('blogs/active_articles', compact('articles', 'user'));
     }
 
     /**
@@ -668,20 +668,20 @@ class ArticleController extends BaseController
      */
     public function viewComment(int $id, int $cid): void
     {
-        /** @var Article $blog */
-        $blog = Article::query()->find($id);
+        /** @var Article $article */
+        $article = Article::query()->find($id);
 
-        if (! $blog) {
+        if (! $article) {
             abort(404, __('blogs.article_not_exist'));
         }
 
-        $total = $blog->comments()
+        $total = $article->comments()
             ->where('id', '<=', $cid)
             ->orderBy('created_at')
             ->count();
 
         $end = ceil($total / setting('comments_per_page'));
-        redirect('/articles/comments/' . $blog->id . '?page=' . $end . '#comment_' . $cid);
+        redirect('/articles/comments/' . $article->id . '?page=' . $end . '#comment_' . $cid);
     }
 
     /**
@@ -702,7 +702,7 @@ class ArticleController extends BaseController
             default: $order = 'visits';
         }
 
-        $blogs = Article::query()
+        $articles = Article::query()
             ->select('articles.*', 'categories.name')
             ->leftJoin('categories', 'articles.category_id', 'categories.id')
             ->orderByDesc($order)
@@ -710,7 +710,7 @@ class ArticleController extends BaseController
             ->paginate(setting('blogpost'))
             ->appends(['sort' => $sort]);
 
-        return view('blogs/top', compact('blogs', 'order'));
+        return view('blogs/top', compact('articles', 'order'));
     }
 
     /**
@@ -779,7 +779,7 @@ class ArticleController extends BaseController
                     $total = count($_SESSION['blogfindres']);
 
                     if ($total > 0) {
-                        $blogs = Article::query()
+                        $articles = Article::query()
                             ->select('articles.*', 'categories.name')
                             ->whereIn('articles.id', $_SESSION['blogfindres'])
                             ->join('categories', 'articles.category_id', 'categories.id')
@@ -792,7 +792,7 @@ class ArticleController extends BaseController
                                 'type'  => $type,
                             ]);
 
-                        return view('blogs/search_title', compact('blogs', 'find'));
+                        return view('blogs/search_title', compact('articles', 'find'));
                     }
 
                     setInput($request->all());
@@ -822,7 +822,7 @@ class ArticleController extends BaseController
                     $total = count($_SESSION['blogfindres']);
 
                     if ($total > 0) {
-                        $blogs = Article::query()
+                        $articles = Article::query()
                             ->select('articles.*', 'categories.name')
                             ->whereIn('articles.id', $_SESSION['blogfindres'])
                             ->join('categories', 'articles.category_id', 'categories.id')
@@ -835,7 +835,7 @@ class ArticleController extends BaseController
                                 'type'  => $type,
                             ]);
 
-                        return view('blogs/search_text', compact('blogs', 'find'));
+                        return view('blogs/search_text', compact('articles', 'find'));
                     }
 
                     setInput($request->all());
@@ -856,11 +856,11 @@ class ArticleController extends BaseController
      */
     public function main(): string
     {
-        $blogs = Article::query()
+        $articles = Article::query()
             ->orderByDesc('created_at')
             ->with('user')
             ->paginate(setting('blogpost'));
 
-        return view('blogs/main', compact('blogs'));
+        return view('blogs/main', compact('articles'));
     }
 }

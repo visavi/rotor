@@ -34,7 +34,6 @@
                     <option value="0">---</option>
 
                     @foreach ($categories as $data)
-
                         @if ($data->id === $category->id)
                             @continue
                         @endif

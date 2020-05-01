@@ -1169,7 +1169,7 @@ function recentDowns($show = 5)
  */
 function recentArticles($show = 5)
 {
-    $blogs = Cache::remember('recentArticles', 600, static function () use ($show) {
+    $articles = Cache::remember('recentArticles', 600, static function () use ($show) {
         return Article::query()
             ->orderByDesc('created_at')
             ->limit($show)
@@ -1177,9 +1177,9 @@ function recentArticles($show = 5)
             ->toArray();
     });
 
-    if ($blogs) {
-        foreach ($blogs as $blog) {
-            echo '<i class="far fa-circle fa-lg text-muted"></i> <a href="/articles/' . $blog['id'] . '">' . $blog['title'] . '</a> (' . $blog['count_comments'] . ')<br>';
+    if ($articles) {
+        foreach ($articles as $article) {
+            echo '<i class="far fa-circle fa-lg text-muted"></i> <a href="/articles/' . $article['id'] . '">' . $article['title'] . '</a> (' . $article['count_comments'] . ')<br>';
         }
     }
 }

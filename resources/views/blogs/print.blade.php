@@ -1,18 +1,18 @@
 @extends('layout_simple')
 
 @section('title')
-    {{ $blog->title }}
+    {{ $article->title }}
 @stop
 
-@section('description', truncateDescription(bbCode($blog->text, false)))
+@section('description', truncateDescription(bbCode($article->text, false)))
 
 @section('content')
 
-    <h1>{{ $blog->title }}</h1>
+    <h1>{{ $article->title }}</h1>
 
-    {!! bbCode($blog->text) !!}
+    {!! bbCode($article->text) !!}
 
     <br><br>
 
-    URL: <a href="{{ siteUrl() }}/articles/{{ $blog->id }}">{{ siteUrl(true) }}/articles/{{ $blog->id }}</a>
+    URL: <a href="{{ siteUrl() }}/articles/{{ $article->id }}">{{ siteUrl(true) }}/articles/{{ $article->id }}</a>
 @stop

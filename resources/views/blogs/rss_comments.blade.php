@@ -1,23 +1,23 @@
 @extends('layout_rss')
 
 @section('title')
-    {{ $blog->title }}
+    {{ $article->title }}
 @stop
 
 @section('content')
 
-    @foreach ($blog->lastComments as $data)
-        <?php $data->text = bbCode($data->text); ?>
-        <?php $data->text = str_replace('/uploads/stickers', siteUrl().'/uploads/stickers', $data->text); ?>
+    @foreach ($article->lastComments as $comment)
+        <?php $comment->text = bbCode($comment->text); ?>
+        <?php $comment->text = str_replace('/uploads/stickers', siteUrl().'/uploads/stickers', $comment->text); ?>
 
         <item>
-            <title>{{ $data->text }}</title>
-            <link>{{ siteUrl() }}/articles/comments/{{ $blog->id }}</link>
-            <description>{{ $blog->title }}</description>
-            <author>{{ $data->user->login }}</author>
-            <pubDate>{{ date('r', $data->created_at) }}</pubDate>
+            <title>{{ $comment->text }}</title>
+            <link>{{ siteUrl() }}/articles/comments/{{ $article->id }}</link>
+            <description>{{ $article->title }}</description>
+            <author>{{ $comment->user->login }}</author>
+            <pubDate>{{ date('r', $comment->created_at) }}</pubDate>
             <category>{{ __('main.comments') }}</category>
-            <guid>{{ siteUrl() }}/articles/comments/{{ $blog->id }}?pid={{ $data->id }}</guid>
+            <guid>{{ siteUrl() }}/articles/comments/{{ $article->id }}?pid={{ $comment->id }}</guid>
         </item>
     @endforeach
 @stop

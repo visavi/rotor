@@ -10,13 +10,13 @@
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
             <li class="breadcrumb-item"><a href="/blogs">{{ __('index.blogs') }}</a></li>
 
-            @if ($blog->category->parent->id)
-                <li class="breadcrumb-item"><a href="/blogs/{{ $blog->category->parent->id }}">{{ $blog->category->parent->name }}</a></li>
+            @if ($article->category->parent->id)
+                <li class="breadcrumb-item"><a href="/blogs/{{ $article->category->parent->id }}">{{ $article->category->parent->name }}</a></li>
             @endif
 
-            <li class="breadcrumb-item"><a href="/blogs/{{ $blog->category->id }}">{{ $blog->category->name }}</a></li>
-            <li class="breadcrumb-item"><a href="/articles/{{ $blog->id }}">{{ $blog->title }}</a></li>
-            <li class="breadcrumb-item"><a href="/articles/comments/{{ $blog->id }}">{{ __('main.comments') }}</a></li>
+            <li class="breadcrumb-item"><a href="/blogs/{{ $article->category->id }}">{{ $article->category->name }}</a></li>
+            <li class="breadcrumb-item"><a href="/articles/{{ $article->id }}">{{ $article->title }}</a></li>
+            <li class="breadcrumb-item"><a href="/articles/comments/{{ $article->id }}">{{ __('main.comments') }}</a></li>
             <li class="breadcrumb-item active">{{ __('blogs.title_edit_comment') }}</li>
         </ol>
     </nav>

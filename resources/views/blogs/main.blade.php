@@ -1,7 +1,7 @@
 @extends('layout')
 
 @section('title')
-    Все публикации ({{ __('main.page_num', ['page' => $blogs->currentPage()]) }})
+    Все публикации ({{ __('main.page_num', ['page' => $articles->currentPage()]) }})
 @stop
 
 @section('header')
@@ -26,28 +26,28 @@
 @stop
 
 @section('content')
-    @if ($blogs->isNotEmpty())
-        @foreach ($blogs as $data)
+    @if ($articles->isNotEmpty())
+        @foreach ($articles as $article)
             <div class="card mb-3">
                 <div class="card-body">
-                    <h2 class="card-title"><a href="/articles/{{ $data->id }}">{{ $data->title }}</a> <small>(Рейтинг: {!! formatNum($data->rating) !!})</small></h2>
+                    <h2 class="card-title"><a href="/articles/{{ $article->id }}">{{ $article->title }}</a> <small>(Рейтинг: {!! formatNum($article->rating) !!})</small></h2>
 
-                    @if ($data->category->parent->id)
+                    @if ($article->category->parent->id)
                         <a href="/blogs/{{ $category->parent->id }}"><span class="badge badge-light">{{ $category->parent->name }}</span></a> /
                     @endif
 
-                    <a href="/blogs/{{ $data->category->id }}"><span class="badge badge-light">{{ $data->category->name }}</span></a>
+                    <a href="/blogs/{{ $article->category->id }}"><span class="badge badge-light">{{ $article->category->name }}</span></a>
 
                     <p class="card-text">
-                        {!! $data->shortText() !!}
+                        {!! $article->shortText() !!}
                     </p>
                 </div>
                 <div class="card-footer text-muted">
-                    {{ __('main.author') }}: {!! $data->user->getProfile() !!} ({{ dateFixed($data->created_at) }})
-                    {{ __('main.views') }}: {{ $data->visits }}
+                    {{ __('main.author') }}: {!! $article->user->getProfile() !!} ({{ dateFixed($article->created_at) }})
+                    {{ __('main.views') }}: {{ $article->visits }}
                     <div class="float-right">
-                        <a href="/articles/comments/{{ $data->id }}">{{ __('main.comments') }}</a> ({{ $data->count_comments }})
-                        <a href="/articles/end/{{ $data->id }}">&raquo;</a>
+                        <a href="/articles/comments/{{ $article->id }}">{{ __('main.comments') }}</a> ({{ $article->count_comments }})
+                        <a href="/articles/end/{{ $article->id }}">&raquo;</a>
                     </div>
                 </div>
             </div>
@@ -56,7 +56,7 @@
         {!! showError(__('blogs.empty_articles')) !!}
     @endif
 
-    {{ $blogs->links() }}
+    {{ $articles->links() }}
 
     <a href="/blogs/top">{{ __('blogs.top_articles') }}</a> /
     <a href="/blogs/tags">{{ __('blogs.tag_cloud') }}</a> /

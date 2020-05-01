@@ -1,7 +1,7 @@
 @extends('layout')
 
 @section('title')
-    {{ __('blogs.title_move_article') }} {{ $blog->title }}
+    {{ __('blogs.title_move_article') }} {{ $article->title }}
 @stop
 
 @section('breadcrumb')
@@ -11,12 +11,12 @@
             <li class="breadcrumb-item"><a href="/admin">{{ __('index.panel') }}</a></li>
             <li class="breadcrumb-item"><a href="/admin/blogs">{{ __('index.blogs') }}</a></li>
 
-            @if ($blog->category->parent->id)
-                <li class="breadcrumb-item"><a href="/admin/blogs/{{ $blog->category->parent->id }}">{{ $blog->category->parent->name }}</a></li>
+            @if ($article->category->parent->id)
+                <li class="breadcrumb-item"><a href="/admin/blogs/{{ $article->category->parent->id }}">{{ $article->category->parent->name }}</a></li>
             @endif
 
-            <li class="breadcrumb-item"><a href="/admin/blogs/{{ $blog->category->id }}">{{ $blog->category->name }}</a></li>
-            <li class="breadcrumb-item"><a href="/articles/{{ $blog->id }}">{{ $blog->title }}</a></li>
+            <li class="breadcrumb-item"><a href="/admin/blogs/{{ $article->category->id }}">{{ $article->category->name }}</a></li>
+            <li class="breadcrumb-item"><a href="/articles/{{ $article->id }}">{{ $article->title }}</a></li>
             <li class="breadcrumb-item active">{{ __('blogs.title_move_article') }}</li>
         </ol>
     </nav>
@@ -24,12 +24,12 @@
 
 @section('content')
     <div class="form cut">
-        <form action="/admin/articles/move/{{ $blog->id }}" method="post">
+        <form action="/admin/articles/move/{{ $article->id }}" method="post">
             @csrf
             <div class="form-group{{ hasError('cid') }}">
                 <label for="inputCategory">{{ __('blogs.blog') }}</label>
 
-                <?php $inputCategory = getInput('cid', $blog->category_id); ?>
+                <?php $inputCategory = getInput('cid', $article->category_id); ?>
                 <select class="form-control" id="inputCategory" name="cid">
 
                     @foreach ($categories as $data)

@@ -20,24 +20,24 @@
 
 @section('content')
     @if ($comments->isNotEmpty())
-        @foreach ($comments as $data)
+        @foreach ($comments as $comment)
             <div class="post">
                 <div class="b">
-                    <i class="fa fa-comment"></i> <b><a href="/articles/comments/{{ $data->relate_id }}">{{ $data->title }}</a></b> ({{ $data->count_comments }})
+                    <i class="fa fa-comment"></i> <b><a href="/articles/comments/{{ $comment->relate_id }}">{{ $comment->title }}</a></b> ({{ $comment->count_comments }})
 
                     <div class="float-right">
                         @if (isAdmin())
-                            <a href="#" onclick="return deleteComment(this)" data-rid="{{ $data->relate_id }}" data-id="{{ $data->id }}" data-type="{{ $data->relate->getMorphClass() }}" data-token="{{ $_SESSION['token'] }}" data-toggle="tooltip" title="Удалить"><i class="fa fa-times text-muted"></i></a>
+                            <a href="#" onclick="return deleteComment(this)" data-rid="{{ $comment->relate_id }}" data-id="{{ $comment->id }}" data-type="{{ $comment->relate->getMorphClass() }}" data-token="{{ $_SESSION['token'] }}" data-toggle="tooltip" title="Удалить"><i class="fa fa-times text-muted"></i></a>
                         @endif
                     </div>
                 </div>
 
                 <div>
-                    {!! bbCode($data->text) !!}<br>
+                    {!! bbCode($comment->text) !!}<br>
 
-                    {{ __('main.posted') }}: {!! $data->user->getProfile() !!} <small>({{ dateFixed($data->created_at) }})</small><br>
+                    {{ __('main.posted') }}: {!! $comment->user->getProfile() !!} <small>({{ dateFixed($comment->created_at) }})</small><br>
                     @if (isAdmin())
-                        <span class="data">({{ $data->brow }}, {{ $data->ip }})</span>
+                        <span class="data">({{ $comment->brow }}, {{ $comment->ip }})</span>
                     @endif
                 </div>
             </div>
