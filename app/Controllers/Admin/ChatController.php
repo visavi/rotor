@@ -20,8 +20,10 @@ class ChatController extends AdminController
      */
     public function index(Request $request, Validator $validator): string
     {
-        if (getUser('newchat') !== statsNewChat()) {
-            getUser()->update([
+        $user = getUser();
+
+        if ($user->newchat !== statsNewChat()) {
+            $user->update([
                 'newchat' => statsNewChat()
             ]);
         }
@@ -39,7 +41,7 @@ class ChatController extends AdminController
                 if (
                     $post
                     && $post->created_at + 1800 > SITETIME
-                    && getUser('id') === $post->user_id
+                    && $user->id === $post->user_id
                     && (utfStrlen($msg) + utfStrlen($post->text) <= 1500)
                 ) {
 
@@ -51,7 +53,7 @@ class ChatController extends AdminController
 
                 } else {
                     Chat::query()->create([
-                        'user_id'    => getUser('id'),
+                        'user_id'    => $user->id,
                         'text'       => $msg,
                         'ip'         => getIp(),
                         'brow'       => getBrowser(),
@@ -87,14 +89,14 @@ class ChatController extends AdminController
      */
     public function edit(int $id, Request $request, Validator $validator): string
     {
-        $page  = int($request->input('page', 1));
+        $page = int($request->input('page', 1));
 
-        if (! getUser()) {
+        if (! $user = getUser()) {
             abort(403);
         }
 
         /** @var Chat $post */
-        $post = Chat::query()->where('user_id', getUser('id'))->find($id);
+        $post = Chat::query()->where('user_id', $user->id)->find($id);
 
         if (! $post) {
             abort('default', __('main.message_deleted'));
@@ -114,7 +116,7 @@ class ChatController extends AdminController
             if ($validator->isValid()) {
                 $post->update([
                     'text'         => $msg,
-                    'edit_user_id' => getUser('id'),
+                    'edit_user_id' => $user->id,
                     'updated_at'   => SITETIME,
                 ]);
 

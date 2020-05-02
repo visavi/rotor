@@ -47,11 +47,11 @@ class AdvertController extends BaseController
      */
     public function create(Request $request, Validator $validator): string
     {
-        if (! getUser()) {
+        if (! $user = getUser()) {
             abort(403, __('main.not_authorized'));
         }
 
-        if (getUser('point') < setting('rekuserpoint')) {
+        if ($user->point < setting('rekuserpoint')) {
             abort('default', __('adverts.advert_point', ['point' => plural(50, setting('scorename'))]));
         }
 
@@ -61,7 +61,7 @@ class AdvertController extends BaseController
         }
 
         $advert = Advert::query()
-            ->where('user_id', getUser('id'))
+            ->where('user_id', $user->id)
             ->where('deleted_at', '>', SITETIME)
             ->first();
 
@@ -87,13 +87,13 @@ class AdvertController extends BaseController
             }
 
             $validator->equal($token, $_SESSION['token'], __('validator.token'))
-                ->gte(getUser('point'), setting('rekuserpoint'), __('adverts.advert_point', ['point' => plural(50, setting('scorename'))]))
+                ->gte($user->point, setting('rekuserpoint'), __('adverts.advert_point', ['point' => plural(50, setting('scorename'))]))
                 ->true(captchaVerify(), ['protect' => __('validator.captcha')])
                 ->regex($site, '|^https?://([а-яa-z0-9_\-\.])+(\.([а-яa-z0-9\/\-?_=#])+)+$|iu', ['site' => __('validator.url')])
                 ->length($site, 5, 100, ['site' => __('validator.url_text')])
                 ->length($name, 5, 35, ['name' => __('validator.text')])
                 ->regex($color, '|^#+[A-f0-9]{6}$|', ['color' => __('validator.color')], false)
-                ->gte(getUser('money'), $price, __('adverts.advert_not_money'));
+                ->gte($user->money, $price, __('adverts.advert_not_money'));
 
             if ($validator->isValid()) {
                 Advert::query()->where('deleted_at', '<', SITETIME)->delete();
@@ -103,12 +103,12 @@ class AdvertController extends BaseController
                     'name'       => $name,
                     'color'      => $color,
                     'bold'       => $bold,
-                    'user_id'    => getUser('id'),
+                    'user_id'    => $user->id,
                     'created_at' => SITETIME,
                     'deleted_at' => strtotime('+' . setting('rekusertime') . ' hours', SITETIME),
                 ]);
 
-                getUser()->decrement('money', $price);
+                $user->decrement('money', $price);
 
                 clearCache('adverts');
 

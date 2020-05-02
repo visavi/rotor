@@ -57,13 +57,13 @@ class GuestbookController extends BaseController
         if ($validator->isValid()) {
             $msg = antimat($msg);
 
-            if (getUser()) {
+            if ($user = getUser()) {
                 $guestName  = null;
                 $bookscores = setting('bookscores') ? 1 : 0;
 
-                getUser()->increment('allguest');
-                getUser()->increment('point', $bookscores);
-                getUser()->increment('money', 5);
+                $user->increment('allguest');
+                $user->increment('point', $bookscores);
+                $user->increment('money', 5);
             }
 
             Guestbook::query()->create([
