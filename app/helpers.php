@@ -2176,13 +2176,22 @@ function getQueryLog()
 {
     $queries = DB::connection()->getQueryLog();
     $formattedQueries = [];
+
     foreach ($queries as $query) {
-        $prep = $query['query'];
-        foreach ($query['bindings'] as $binding) {
-            $binding = is_int($binding) ? $binding : "'{$binding}'";
-            $prep = preg_replace("#\?#", $binding, $prep, 1);
+        foreach ($query['bindings'] as $key => $binding) {
+            if (is_string($binding)) {
+                if (ctype_print($binding)) {
+                    $query['bindings'][$key] = "'$binding'";
+                } else {
+                    $query['bindings'][$key] = '[binary]';
+                }
+            }
         }
-        $formattedQueries[] = ['query' => $prep, 'time' => $query['time']];
+
+        $sql = str_replace('?', '%s', $query['query']);
+        $sql = vsprintf($sql, $query['bindings']);
+
+        $formattedQueries[] = ['query' => $sql, 'time' => $query['time']];
     }
 
     return $formattedQueries;

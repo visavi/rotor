@@ -36,6 +36,7 @@ class ChatController extends AdminController
                 ->length($msg, 5, 1500, ['msg' => __('validator.text')]);
 
             if ($validator->isValid()) {
+                /** @var Chat $post */
                 $post = Chat::query()->orderBy('created_at')->first();
 
                 if (

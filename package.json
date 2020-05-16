@@ -15,9 +15,9 @@
   "dependencies": {
     "@fortawesome/fontawesome-free": "^5.13.0",
     "bootbox": "^5.4.0",
-    "bootstrap": "^4.4.1",
+    "bootstrap": "^4.5.0",
     "bootstrap-colorpicker": "^3.2.0",
-    "jquery": "^3.5.0",
+    "jquery": "^3.5.1",
     "jquery-colorbox": "^1.6.4",
     "jquery-mask-plugin": "^1.14.16",
     "popper.js": "^1.16.0",
