@@ -1676,7 +1676,7 @@ function saveErrorLog($code)
     if (setting('errorlog') && in_array($code, [403, 404, 405, 666], true)) {
         Error::query()->create([
             'code'       => $code,
-            'request'    => utfSubstr(server('REQUEST_URI'), 0, 200),
+            'request'    => utfSubstr(request()->getRequestUri(), 0, 200),
             'referer'    => utfSubstr(server('HTTP_REFERER'), 0, 200),
             'user_id'    => getUser('id'),
             'ip'         => getIp(),
@@ -1985,17 +1985,7 @@ function request(): Request
  */
 function server($key = null, $default = null)
 {
-    $server = request()->server($key, $default);
-
-    if ($key === 'REQUEST_URI') {
-        $server = urldecode($server);
-    }
-
-    if ($key === 'PHP_SELF') {
-        $server = current(explode('?', server('REQUEST_URI')));
-    }
-
-    return check($server);
+    return check(request()->server($key, $default));
 }
 
 /**
@@ -2180,11 +2170,7 @@ function getQueryLog()
     foreach ($queries as $query) {
         foreach ($query['bindings'] as $key => $binding) {
             if (is_string($binding)) {
-                if (ctype_print($binding)) {
-                    $query['bindings'][$key] = "'$binding'";
-                } else {
-                    $query['bindings'][$key] = '[binary]';
-                }
+                $query['bindings'][$key] = ctype_print($binding) ? "'$binding'" : '[binary]';
             }
         }
 

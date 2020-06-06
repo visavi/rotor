@@ -76,7 +76,7 @@ class Application
     {
         $dispatcher = require APP . '/routes.php';
 
-        return $dispatcher->dispatch(server('REQUEST_METHOD'), server('PHP_SELF'));
+        return $dispatcher->dispatch(request()->getMethod(), request()->getPathInfo());
     }
 
     /**

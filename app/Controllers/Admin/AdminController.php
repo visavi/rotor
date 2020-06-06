@@ -26,7 +26,7 @@ Class AdminController extends BaseController
 
         Log::query()->create([
             'user_id'    => getUser('id'),
-            'request'    => server('REQUEST_URI'),
+            'request'    => request()->getRequestUri(),
             'referer'    => server('HTTP_REFERER'),
             'ip'         => getIp(),
             'brow'       => getBrowser(),

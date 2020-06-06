@@ -68,7 +68,7 @@ class Flood extends BaseModel
 
         $flood = self::query()
             ->where('user_id', getUser('id'))
-            ->where('page', server('PHP_SELF'))
+            ->where('page', request()->getPathInfo())
             ->exists();
 
         if ($flood) {
@@ -94,7 +94,7 @@ class Flood extends BaseModel
 
         self::query()->create([
             'user_id'    => getUser('id'),
-            'page'       => server('PHP_SELF'),
+            'page'       => request()->getPathInfo(),
             'created_at' => SITETIME + $period,
         ]);
     }
