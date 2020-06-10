@@ -22,7 +22,7 @@
             <div class="form-group{{ hasError('parent') }}">
                 <label for="parent">{{ __('forums.parent_forum') }}</label>
 
-                <?php $inputParent = getInput('parent', $forum->parent_id); ?>
+                <?php $inputParent = (int) getInput('parent', $forum->parent_id); ?>
 
                 <select class="form-control" id="parent" name="parent">
                     <option value="0">---</option>

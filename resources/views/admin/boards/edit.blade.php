@@ -29,7 +29,7 @@
             <div class="form-group{{ hasError('parent') }}">
                 <label for="parent">{{ __('boards.parent_category') }}</label>
 
-                <?php $inputParent = getInput('parent', $board->parent_id); ?>
+                <?php $inputParent = (int) getInput('parent', $board->parent_id); ?>
 
                 <select class="form-control" id="parent" name="parent">
                     <option value="0">---</option>

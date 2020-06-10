@@ -21,7 +21,7 @@
             <div class="form-group{{ hasError('cid') }}">
                 <label for="inputCategory">{{ __('blogs.blog') }}</label>
 
-                <?php $inputCategory = getInput('cid', $cid); ?>
+                <?php $inputCategory = (int) getInput('cid', $cid); ?>
                 <select class="form-control" id="inputCategory" name="cid">
 
                     @foreach ($categories as $category)

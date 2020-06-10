@@ -25,7 +25,7 @@
             <div class="form-group{{ hasError('category') }}">
                 <label for="inputCategory">{{ __('stickers.category') }}</label>
 
-                <?php $inputCategory = getInput('cid', $sticker->category->id); ?>
+                <?php $inputCategory = (int) getInput('cid', $sticker->category->id); ?>
                 <select class="form-control" id="inputCategory" name="cid">
                     @foreach ($categories as $category)
                         <option value="{{ $category->id }}"{{ ($inputCategory === $category->id) ? ' selected' : '' }}>{{ $category->name }}</option>

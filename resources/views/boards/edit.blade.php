@@ -42,7 +42,7 @@
             <div class="form-group{{ hasError('bid') }}">
                 <label for="inputCategory">{{ __('boards.category') }}</label>
 
-                <?php $inputCategory = getInput('bid', $item->board_id); ?>
+                <?php $inputCategory = (int) getInput('bid', $item->board_id); ?>
                 <select class="form-control" id="inputCategory" name="bid">
 
                     @foreach ($boards as $data)

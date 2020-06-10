@@ -9,7 +9,7 @@ use App\Models\Board;
 use App\Models\Item;
 use App\Models\User;
 use Exception;
-use Illuminate\Database\Query\Builder;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 
 class BoardController extends AdminController

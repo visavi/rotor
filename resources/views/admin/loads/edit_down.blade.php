@@ -48,7 +48,7 @@
 
                 <label for="inputCategory">{{ __('loads.load') }}:</label>
 
-                <?php $inputCategory = getInput('category', $down->category_id); ?>
+                <?php $inputCategory = (int) getInput('category', $down->category_id); ?>
                 <select class="form-control" id="inputCategory" name="category">
                     @foreach ($categories as $category)
 

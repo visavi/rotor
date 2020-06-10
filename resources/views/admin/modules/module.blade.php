@@ -32,7 +32,7 @@
 
     @if (isset($moduleConfig['screenshots']))
         <?php $countScreens = count($moduleConfig['screenshots']); ?>
-        <div id="myCarousel" class="carousel slide" data-ride="carousel">
+        <div id="myCarousel" class="carousel slide media-file my-3" data-ride="carousel">
             @if ($countScreens > 1)
                 <ol class="carousel-indicators">
                     @for ($i = 0; $i < $countScreens; $i++)
