@@ -21,7 +21,7 @@ class DeletePending extends Task
                 ->where('created_at', '<', strtotime('-1 day', SITETIME))
                 ->get();
 
-            foreach($users as $user) {
+            foreach ($users as $user) {
                 $user->delete();
             }
         }

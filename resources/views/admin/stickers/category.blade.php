@@ -25,7 +25,7 @@
 
 @section('content')
     @if ($stickers->isNotEmpty())
-        @foreach($stickers as $sticker)
+        @foreach ($stickers as $sticker)
             <div class="bg-light p-2 mb-1 border">
                 <div class="float-right">
                     <a href="/admin/stickers/sticker/edit/{{ $sticker->id }}?page={{ $stickers->currentPage() }}" data-toggle="tooltip" title="{{ __('main.edit') }}"><i class="fa fa-pencil-alt"></i></a>

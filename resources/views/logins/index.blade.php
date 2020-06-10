@@ -16,7 +16,7 @@
 
 @section('content')
     @if ($logins->isNotEmpty())
-        @foreach($logins as $data)
+        @foreach ($logins as $data)
             <div class="b">
                 @if ($data->type)
                     <i class="fa fa-sign-in-alt"></i> <b>{{ __('logins.authorization') }}</b>

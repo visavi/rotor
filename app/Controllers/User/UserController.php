@@ -260,7 +260,7 @@ class UserController extends BaseController
 
                    /** @var User $user */
                    if ($user = User::auth($login, $pass, $remember)) {
-                       setFlash('success', __('users.welcome', ['login' => $user->login]));
+                       setFlash('success', __('users.welcome', ['login' => $user->getName()]));
                        redirect($return ?? '/');
                    }
 
@@ -416,7 +416,7 @@ class UserController extends BaseController
                 ]);
 
                 /* Уведомление о регистрации на email */
-                $message = 'Добро пожаловать, ' . $user->login . '<br>Теперь вы зарегистрированный пользователь сайта <a href="' . siteUrl(true) . '">' . setting('title') . '</a> , сохраните ваш логин и пароль в надежном месте, они вам еще пригодятся. <br><br>';
+                $message = 'Добро пожаловать, ' . $user->getName() . '<br>Теперь вы зарегистрированный пользователь сайта <a href="' . siteUrl(true) . '">' . setting('title') . '</a> , сохраните ваш логин и пароль в надежном месте, они вам еще пригодятся. <br><br>';
 
                 $subject = 'Регистрация на сайте ' . setting('title');
                 $body = view('mailer.register', compact('subject', 'message', 'activateKey', 'activateLink'));
@@ -558,7 +558,7 @@ class UserController extends BaseController
             $genkey = Str::random();
 
             $subject = 'Изменение email на сайте '.setting('title');
-            $message = 'Здравствуйте, ' . $user->login . '<br>Вами была произведена операция по изменению адреса электронной почты<br><br>Для того, чтобы изменить email, необходимо подтвердить новый адрес почты<br>Перейдите по данной ссылке:<br><br><a href="' . siteUrl(true) . '/accounts/editmail?key=' . $genkey . '">' . siteUrl(true) . '/accounts/editmail?key=' . $genkey . '</a><br><br>Ссылка будет дейстительной в течение суток до ' . date('j.m.y / H:i', strtotime('+1 day', SITETIME)) . '<br>Для изменения адреса необходимо быть авторизованным на сайте<br>Если это сообщение попало к вам по ошибке или вы не собираетесь менять email, то просто проигнорируйте данное письмо';
+            $message = 'Здравствуйте, ' . $user->getName() . '<br>Вами была произведена операция по изменению адреса электронной почты<br><br>Для того, чтобы изменить email, необходимо подтвердить новый адрес почты<br>Перейдите по данной ссылке:<br><br><a href="' . siteUrl(true) . '/accounts/editmail?key=' . $genkey . '">' . siteUrl(true) . '/accounts/editmail?key=' . $genkey . '</a><br><br>Ссылка будет дейстительной в течение суток до ' . date('j.m.y / H:i', strtotime('+1 day', SITETIME)) . '<br>Для изменения адреса необходимо быть авторизованным на сайте<br>Если это сообщение попало к вам по ошибке или вы не собираетесь менять email, то просто проигнорируйте данное письмо';
 
             $body = view('mailer.default', compact('subject', 'message'));
             sendMail($email, $subject, $body);

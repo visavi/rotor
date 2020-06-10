@@ -12,7 +12,7 @@ class ResizeAvatarsInUsers extends AbstractMigration
     {
         $rows = $this->fetchAll('SELECT id, avatar, picture FROM users');
 
-        foreach($rows as $row) {
+        foreach ($rows as $row) {
             $avatar = HOME . $row['avatar'];
             $picture = HOME . $row['picture'];
 

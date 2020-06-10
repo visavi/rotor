@@ -26,7 +26,7 @@
                     <option value="{{ $board->id }}"{{ ($bid === $board->id && ! $board->closed) ? ' selected' : '' }}{{ $board->closed ? ' disabled' : '' }}>{{ $board->name }}</option>
 
                     @if ($board->children->isNotEmpty())
-                        @foreach($board->children as $boardsub)
+                        @foreach ($board->children as $boardsub)
                             <option value="{{ $boardsub->id }}"{{ $bid === $boardsub->id && ! $boardsub->closed ? ' selected' : '' }}{{ $boardsub->closed ? ' disabled' : '' }}>– {{ $boardsub->name }}</option>
                         @endforeach
                     @endif

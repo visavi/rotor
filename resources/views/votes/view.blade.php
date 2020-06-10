@@ -22,7 +22,7 @@
     @if (empty($show) && (empty($vote->poll) && getUser()))
         <form action="/votes/{{ $vote->id }}" method="post">
             @csrf
-            @foreach($vote->answers as $answer)
+            @foreach ($vote->answers as $answer)
                 <label><input name="poll" type="radio" value="{{ $answer['id'] }}"> {{ $answer['answer'] }}</label><br>
             @endforeach
             <br>

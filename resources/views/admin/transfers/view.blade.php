@@ -1,7 +1,7 @@
 @extends('layout')
 
 @section('title')
-    {{ __('index.cash_transactions') }} {{ $user->login }}
+    {{ __('index.cash_transactions') }} {{ $user->getName() }}
 @stop
 
 @section('breadcrumb')
@@ -10,7 +10,7 @@
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
             <li class="breadcrumb-item"><a href="/admin">{{ __('index.panel') }}</a></li>
             <li class="breadcrumb-item"><a href="/admin/transfers">{{ __('index.cash_transactions') }}</a></li>
-            <li class="breadcrumb-item active">{{ __('index.cash_transactions') }} {{ $user->login }}</li>
+            <li class="breadcrumb-item active">{{ __('index.cash_transactions') }} {{ $user->getName() }}</li>
         </ol>
     </nav>
 @stop

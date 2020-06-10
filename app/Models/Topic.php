@@ -19,6 +19,7 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
  * @property int closed
  * @property int locked
  * @property int count_posts
+ * @property int visits
  * @property int updated_at
  * @property string moderators
  * @property string note

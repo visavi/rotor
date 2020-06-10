@@ -1,11 +1,11 @@
 @extends('layout')
 
 @section('title')
-    {{ __('index.forums') }} - {{ __('forums.title_active_topics', ['user' => $user->login]) }} ({{ __('main.page_num', ['page' => $topics->currentPage()]) }})
+    {{ __('index.forums') }} - {{ __('forums.title_active_topics', ['user' => $user->getName()]) }} ({{ __('main.page_num', ['page' => $topics->currentPage()]) }})
 @stop
 
 @section('header')
-    <h1>{{ __('forums.title_active_topics', ['user' => $user->login]) }}</h1>
+    <h1>{{ __('forums.title_active_topics', ['user' => $user->getName()]) }}</h1>
 @stop
 
 @section('breadcrumb')
@@ -13,7 +13,7 @@
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
             <li class="breadcrumb-item"><a href="/forums">{{ __('index.forums') }}</a></li>
-            <li class="breadcrumb-item active">{{ __('forums.title_active_topics', ['user' => $user->login]) }}</li>
+            <li class="breadcrumb-item active">{{ __('forums.title_active_topics', ['user' => $user->getName()]) }}</li>
         </ol>
     </nav>
 @stop

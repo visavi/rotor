@@ -19,7 +19,7 @@ class DeleteFiles extends Task
             ->where('created_at', '<', strtotime('-1 day', SITETIME))
             ->get();
 
-        foreach($files as $file) {
+        foreach ($files as $file) {
             $file->delete();
         }
     }

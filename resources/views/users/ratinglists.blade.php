@@ -19,7 +19,7 @@
 
 @section('content')
     @if ($users->isNotEmpty())
-        @foreach($users as $key => $user)
+        @foreach ($users as $key => $user)
             <div class="section mb-3 shadow">
                 <div class="user-avatar">
                     {!! $user->getAvatar() !!}

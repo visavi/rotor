@@ -1,11 +1,11 @@
 @extends('layout')
 
 @section('title')
-    {{ __('main.comments') }} {{ $user->login }} ({{ __('main.page_num', ['page' => $comments->currentPage()]) }})
+    {{ __('main.comments') }} {{ $user->getName() }} ({{ __('main.page_num', ['page' => $comments->currentPage()]) }})
 @stop
 
 @section('header')
-    <h1>{{ __('main.comments') }} {{ $user->login }}</h1>
+    <h1>{{ __('main.comments') }} {{ $user->getName() }}</h1>
 @stop
 
 @section('breadcrumb')
@@ -13,7 +13,7 @@
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
             <li class="breadcrumb-item"><a href="/photos">{{ __('index.photos') }}</a></li>
-            <li class="breadcrumb-item active">{{ __('main.comments') }} {{ $user->login }}</li>
+            <li class="breadcrumb-item active">{{ __('main.comments') }} {{ $user->getName() }}</li>
         </ol>
     </nav>
 @stop

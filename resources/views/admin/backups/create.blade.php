@@ -63,7 +63,7 @@
                 <div class="form-group">
                     <label for="level">{{ __('admin.backup.compress_ratio') }}:</label>
                     <select class="form-control" id="level" name="level">
-                        @foreach($levels as $key => $level)
+                        @foreach ($levels as $key => $level)
                             <?php $selected = ($key === $inputLevel) ? ' selected' : ''; ?>
                             <option value="{{ $key }}"{{ $selected }}>{{ $level }}</option>
                         @endforeach

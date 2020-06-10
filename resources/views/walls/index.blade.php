@@ -1,14 +1,14 @@
 @extends('layout')
 
 @section('title')
-    {{ __('index.wall_posts') }} {{ $user->login }}
+    {{ __('index.wall_posts') }} {{ $user->getName() }}
 @stop
 
 @section('content')
     <nav>
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
-            <li class="breadcrumb-item"><a href="/users/{{ $user->login }}">{{ $user->login }}</a></li>
+            <li class="breadcrumb-item"><a href="/users/{{ $user->getName() }}">{{ $user->getName() }}</a></li>
             <li class="breadcrumb-item active">{{ __('index.wall_posts') }}</li>
         </ol>
     </nav>

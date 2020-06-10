@@ -19,7 +19,7 @@
 
 @section('content')
     @if ($users->isNotEmpty())
-        @foreach($users as $key => $data)
+        @foreach ($users as $key => $data)
             <div class="b">
                 <div class="img">
                     {!! $data->getAvatar() !!}

@@ -26,7 +26,7 @@
                     <option value="{{ $data->id }}"{{ ($cid === $data->id && ! $data->closed) ? ' selected' : '' }}{{ $data->closed ? ' disabled' : '' }}>{{ $data->name }}</option>
 
                     @if ($data->children->isNotEmpty())
-                        @foreach($data->children as $datasub)
+                        @foreach ($data->children as $datasub)
                             <option value="{{ $datasub->id }}"{{ $cid === $datasub->id && ! $datasub->closed ? ' selected' : '' }}{{ $datasub->closed ? ' disabled' : '' }}>– {{ $datasub->name }}</option>
                         @endforeach
                     @endif

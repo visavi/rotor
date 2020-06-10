@@ -26,7 +26,7 @@
 
 @section('content')
     @if ($files)
-        @foreach($files as $file)
+        @foreach ($files as $file)
             <i class="fa fa-archive"></i> <b>{{ basename($file) }}</b> ({{ formatFileSize($file) }})
             (<a href="/admin/backups/delete?file={{ basename($file) }}&amp;token={{ $_SESSION['token'] }}">{{ __('main.delete') }}</a>)<br>
         @endforeach

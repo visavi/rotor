@@ -178,7 +178,7 @@ function isUtf($str)
 function check($string, $doubleEncode = true)
 {
     if (is_array($string)) {
-        foreach($string as $key => $val) {
+        foreach ($string as $key => $val) {
             $string[$key] = check($val, $doubleEncode);
         }
     } else {
@@ -925,7 +925,7 @@ function shuffleAssoc(&$array)
     shuffle($keys);
     $new = [];
 
-    foreach($keys as $key) {
+    foreach ($keys as $key) {
         $new[$key] = $array[$key];
     }
 
@@ -1434,7 +1434,7 @@ function deleteDir($dir)
 {
     if (file_exists($dir)) {
         if ($files = glob($dir . '/*')) {
-            foreach($files as $file) {
+            foreach ($files as $file) {
                 is_dir($file) ? deleteDir($file) : unlink($file);
             }
         }

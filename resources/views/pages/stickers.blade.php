@@ -15,7 +15,7 @@
 
 @section('content')
     @if ($categories->isNotEmpty())
-        @foreach($categories as $category)
+        @foreach ($categories as $category)
             <div class="bg-light p-2 mb-1 border">
                 <i class="far fa-smile"></i>  <b><a href="/stickers/{{ $category->id }}">{{ $category->name }}</a></b> ({{ $category->cnt }})
             </div>

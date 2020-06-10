@@ -16,7 +16,7 @@
 @section('content')
     @if ($users->isNotEmpty())
         <div class="mb-3">
-            @foreach($users as $user)
+            @foreach ($users as $user)
                 <div  class="text-truncate bg-light my-1">
                     <div class="img">
                         {!! $user->getAvatar() !!}
@@ -40,7 +40,7 @@
                     <div class="form-group">
                         <label for="user">{{ __('users.choose_addressee') }}:</label>
                         <select class="form-control" id="user" name="user">
-                            @foreach($users as $user)
+                            @foreach ($users as $user)
                                 <option value="{{ $user->login }}">{{ $user->login }}</option>
                             @endforeach
                         </select>

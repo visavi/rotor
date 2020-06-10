@@ -67,7 +67,7 @@
                     {!! $user->getOnline() !!}
                 </div>
 
-                <b><a href="/admin/users/edit?user={{ $user->login }}">{{ $user->login }}</a></b>
+                <b><a href="/admin/users/edit?user={{ $user->login }}">{{ $user->getName() }}</a></b>
                 ({{ __('users.email') }}: {{ $user->email }})<br>
                 {{ __('users.registered') }}: {{ dateFixed($user->created_at, 'd.m.Y') }}
             </div>

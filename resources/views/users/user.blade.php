@@ -1,18 +1,18 @@
 @extends('layout')
 
 @section('title')
-    {{ __('index.account') }} {{ $user->login }}
+    {{ __('index.account') }} {{ $user->getName() }}
 @stop
 
 @section('header')
-    <h1>{{ $user->login }} <small>#{{ $user->id }}</small></h1>
+    <h1>{{ $user->getName() }} <small>{{ $user->login }} #{{ $user->id }}</small></h1>
 @stop
 
 @section('breadcrumb')
     <nav>
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
-            <li class="breadcrumb-item active">{{ __('index.account') }} {{ $user->login }}</li>
+            <li class="breadcrumb-item active">{{ __('index.account') }} {{ $user->getName() }}</li>
         </ol>
     </nav>
 @stop
@@ -103,7 +103,7 @@
             <div class="col-md-6">
                 @if (!empty($user->picture) && file_exists(HOME . '/' . $user->picture))
                     <a class="gallery" href="{{ $user->picture }}">
-                        {!! resizeImage($user->picture, ['alt' => $user->login, 'class' => 'float-right img-fluid rounded']) !!}</a>
+                        {!! resizeImage($user->picture, ['alt' => $user->getName(), 'class' => 'float-right img-fluid rounded']) !!}</a>
                 @else
                     <img src="/assets/img/images/photo.png" alt="Photo" class="float-right img-fluid rounded">
                 @endif
@@ -142,7 +142,7 @@
         <i class="fa fa-sticky-note"></i> <a href="/walls/{{ $user->login }}">{{ __('index.wall_posts') }}</a> ({{ $user->getCountWall() }})<br>
 
         @if (!empty($user->site))
-            <i class="fa fa-home"></i> <a href="{{ $user->site }}">{{ __('users.go_website') }} {{ $user->login }}</a><br>
+            <i class="fa fa-home"></i> <a href="{{ $user->site }}">{{ __('users.go_website') }} {{ $user->getName() }}</a><br>
         @endif
 
         @if (getUser())

@@ -15,7 +15,7 @@
     </div>
     <ul class="app-menu">
         <li>
-            <a class="app-menu__item" href="/forums">
+            <a class="app-menu__item{{ request()->is('forums*', 'topics*') ? ' active' : '' }}" href="/forums">
                 <i class="app-menu__icon far fa-comment-alt"></i>
                 <span class="app-menu__label">{{ __('index.forums') }}</span>
                 <span class="badge badge-pill badge-light">{{ statsForum() }}</span>
@@ -23,7 +23,7 @@
         </li>
 
         <li>
-            <a class="app-menu__item" href="/guestbook">
+            <a class="app-menu__item{{ request()->is('guestbook*') ? ' active' : '' }}" href="/guestbook">
                 <i class="app-menu__icon far fa-comment"></i>
                 <span class="app-menu__label">{{ __('index.guestbook') }}</span>
                 <span class="badge badge-pill badge-light">{{ statsGuestbook() }}</span>

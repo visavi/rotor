@@ -55,7 +55,7 @@
                         <option value="{{ $category->id }}"{{ ($inputCategory === $category->id && ! $category->closed) ? ' selected' : '' }}{{ $category->closed ? ' disabled' : '' }}>{{ $category->name }}</option>
 
                         @if ($category->children->isNotEmpty())
-                            @foreach($category->children as $datasub)
+                            @foreach ($category->children as $datasub)
                                 <option value="{{ $datasub->id }}"{{ $inputCategory === $datasub->id && ! $datasub->closed ? ' selected' : '' }}{{ $datasub->closed ? ' disabled' : '' }}>– {{ $datasub->name }}</option>
                             @endforeach
                         @endif

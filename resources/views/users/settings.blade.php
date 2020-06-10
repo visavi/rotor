@@ -51,7 +51,7 @@
                 <label for="timezone">{{ __('users.time_shifting') }} {{ dateFixed(SITETIME, 'H:i') }}:</label>
 
                 <select class="form-control" name="timezone" id="timezone">
-                    @foreach($setting['timezones'] as $timezone)
+                    @foreach ($setting['timezones'] as $timezone)
                         <?php $selected = ($timezone === $inputTimezone) ? ' selected' : ''; ?>
                         <option value="{{ $timezone }}"{{ $selected }}>{{ $timezone }}</option>
                     @endforeach

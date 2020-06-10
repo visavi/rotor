@@ -18,7 +18,7 @@
     @if ($users->isNotEmpty())
 
         <div class="mb-3">
-            @foreach($users as $user)
+            @foreach ($users as $user)
                 <div  class="text-truncate bg-light my-1">
                     <div class="img">
                         {!! $user->getAvatar() !!}

@@ -1,7 +1,7 @@
 @extends('layout')
 
 @section('title')
-    {{ __('admin.bans.user_ban') }} {{ $user->login }}
+    {{ __('admin.bans.user_ban') }} {{ $user->getName() }}
 @stop
 
 @section('breadcrumb')
@@ -10,7 +10,7 @@
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
             <li class="breadcrumb-item"><a href="/admin">{{ __('index.panel') }}</a></li>
             <li class="breadcrumb-item"><a href="/admin/bans">{{ __('index.ban_unban') }}</a></li>
-            <li class="breadcrumb-item active">{{ __('admin.bans.user_ban') }} {{ $user->login }}</li>
+            <li class="breadcrumb-item active">{{ __('admin.bans.user_ban') }} {{ $user->getName() }}</li>
         </ol>
     </nav>
 @stop

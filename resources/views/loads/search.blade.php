@@ -37,7 +37,7 @@
                         <option value="{{ $data->id }}"{{ $selected }}>{{ $data->name }}</option>
 
                         @if ($data->children)
-                            @foreach($data->children as $datasub)
+                            @foreach ($data->children as $datasub)
                                 <?php $selected = ($inputSection === $datasub->id) ? ' selected' : ''; ?>
                                 <option value="{{ $datasub->id }}"{{ $selected }}>– {{ $datasub->name }}</option>
                             @endforeach

@@ -1,7 +1,7 @@
 @extends('layout')
 
 @section('title')
-    {{ __('users.edit_user') }} {{ $user->login }}
+    {{ __('users.edit_user') }} {{ $user->getName() }}
 @stop
 
 @section('breadcrumb')
@@ -29,7 +29,7 @@
             <div class="form-group">
                 <label for="level">{{ __('users.position') }}:</label>
                 <select class="form-control" id="level" name="level">
-                    @foreach($allGroups as $key => $level)
+                    @foreach ($allGroups as $key => $level)
                         <?php $selected = ($key === $inputLevel) ? ' selected' : ''; ?>
                         <option value="{{ $key }}"{{ $selected }}>{{ $level }}</option>
                     @endforeach

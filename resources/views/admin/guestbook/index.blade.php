@@ -29,7 +29,7 @@
     @if ($posts->isNotEmpty())
         <form action="/admin/guestbook/delete?page={{ $posts->currentPage() }}" method="post">
             @csrf
-            @foreach($posts as $post)
+            @foreach ($posts as $post)
                 <div class="section mb-3 shadow">
                     <div class="user-avatar">
                         @if ($post->user_id)

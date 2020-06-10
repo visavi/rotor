@@ -18,7 +18,7 @@
 
     @if ($online->isNotEmpty())
 
-        @foreach($online as $key => $value)
+        @foreach ($online as $key => $value)
             {{ $comma = (empty($key)) ? '' : ', ' }}
             {!! $value->user->getGender() !!} <b>{!! $value->user->getProfile() !!}</b>
         @endforeach
@@ -32,7 +32,7 @@
 
     @if ($birthdays->isNotEmpty())
 
-        @foreach($birthdays as $key => $value)
+        @foreach ($birthdays as $key => $value)
             {{ $comma = (empty($key)) ? '' : ', ' }}
             {!! $value->getGender() !!} <b>{!! $value->getProfile() !!}</b>
         @endforeach
@@ -45,7 +45,7 @@
     <div class="b"><b>{{ __('users.novices') }}:</b></div>
 
     @if ($novices->isNotEmpty())
-        @foreach($novices as $key => $value)
+        @foreach ($novices as $key => $value)
             {{ $comma = (empty($key)) ? '' : ', ' }}
             {!! $value->getGender() !!} <b>{!! $value->getProfile() !!}</b>
         @endforeach

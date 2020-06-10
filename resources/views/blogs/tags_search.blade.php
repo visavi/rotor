@@ -18,7 +18,7 @@
 @section('content')
     <p>{{ __('blogs.found_in_tags') }}: {{ $articles->total() }}</p>
 
-    @foreach($articles as $article)
+    @foreach ($articles as $article)
         <div class="b">
             <i class="fa fa-pencil-alt"></i>
             <b><a href="/articles/{{ $article->id }}">{{ $article->title }}</a></b> ({!! formatNum($article->rating) !!})

@@ -24,7 +24,7 @@
 
 @section('content')
     @if ($adverts->isNotEmpty())
-        @foreach($adverts as $data)
+        @foreach ($adverts as $data)
             <div class="b">
                 <i class="fa fa-check-circle"></i>
                 <b><a href="{{ $data->site }}">{{ $data->name }}</a></b> ({!! $data->user->getProfile() !!})

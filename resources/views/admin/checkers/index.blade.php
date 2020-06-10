@@ -19,7 +19,7 @@
         <b><span style="color:#ff0000">{{ __('admin.checkers.new_files') }}:</span></b><br><br>
 
         @if ($diff['left'])
-            @foreach($diff['left'] as $file)
+            @foreach ($diff['left'] as $file)
                 <i class="fa fa-plus-circle text-success"></i> {{ $file }}<br>
             @endforeach
             <br>
@@ -30,7 +30,7 @@
         <b><span style="color:#ff0000">{{ __('admin.checkers.old_files') }}:</span></b><br><br>
 
         @if ($diff['right'])
-            @foreach($diff['right'] as $file)
+            @foreach ($diff['right'] as $file)
                 <i class="fa fa-minus-circle text-danger"></i> {{ $file }}<br>
             @endforeach
             <br>

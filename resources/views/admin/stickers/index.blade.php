@@ -24,7 +24,7 @@
 
 @section('content')
     @if ($categories->isNotEmpty())
-        @foreach($categories as $category)
+        @foreach ($categories as $category)
             <div class="bg-light p-2 mb-1 border">
                 <div class="float-right">
                     <a href="/admin/stickers/edit/{{ $category->id }}" data-toggle="tooltip" title="{{ __('main.edit') }}"><i class="fa fa-pencil-alt"></i></a>

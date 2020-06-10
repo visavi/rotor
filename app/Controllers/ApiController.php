@@ -111,7 +111,6 @@ class ApiController extends BaseController
 
         $msg = [];
         foreach ($messages as $data) {
-
             $data->text = bbCode($data->text);
 
             $msg[] = [
@@ -168,7 +167,6 @@ class ApiController extends BaseController
 
         $messages = [];
         foreach ($posts as $post) {
-
             $post->text = bbCode($post->text);
 
             $messages[] = [
