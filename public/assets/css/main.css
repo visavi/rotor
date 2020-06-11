@@ -220,6 +220,13 @@ textarea.form-control {
   font-family: "Font Awesome 5 Free";
   font-weight: 900;
   font-size: 25px;
+  height: 35px;
+  width: 35px;
+  background-color: rgba(0, 0, 0, 0.5);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .carousel-control-next-icon:after {
@@ -229,7 +236,6 @@ textarea.form-control {
 .carousel-control-prev-icon:after {
   content: "\f137";
 }
-
 
 .carousel-indicators li {
   width: 10px;
