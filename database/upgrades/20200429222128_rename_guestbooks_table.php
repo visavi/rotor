@@ -7,7 +7,7 @@ class RenameGuestbooksTable extends AbstractMigration
     /**
      * Migrate Up.
      */
-    public function up()
+    public function up(): void
     {
         $table = $this->table('guestbooks');
         $table->rename('guestbook')->update();
@@ -16,7 +16,7 @@ class RenameGuestbooksTable extends AbstractMigration
     /**
      * Migrate Down.
      */
-    public function down()
+    public function down(): void
     {
         $table = $this->table('guestbook');
         $table->rename('guestbooks')->update();

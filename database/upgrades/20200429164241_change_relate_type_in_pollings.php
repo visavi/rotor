@@ -7,7 +7,7 @@ class ChangeRelateTypeInPollings extends AbstractMigration
     /**
      * Migrate Up.
      */
-    public function up()
+    public function up(): void
     {
         $this->execute('UPDATE pollings SET relate_type="articles" WHERE relate_type="App\\Models\\Blog";');
         $this->execute('UPDATE pollings SET relate_type="downs" WHERE relate_type="App\\Models\\Down";');
@@ -25,7 +25,7 @@ class ChangeRelateTypeInPollings extends AbstractMigration
     /**
      * Migrate Down.
      */
-    public function down()
+    public function down(): void
     {
         $table = $this->table('pollings');
         $table->changeColumn('relate_type', 'string', ['limit' => 50])

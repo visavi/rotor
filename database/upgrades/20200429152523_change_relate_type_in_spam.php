@@ -7,7 +7,7 @@ class ChangeRelateTypeInSpam extends AbstractMigration
     /**
      * Migrate Up.
      */
-    public function up()
+    public function up(): void
     {
         $this->execute('UPDATE spam SET relate_type="posts" WHERE relate_type="App\\Models\\Post";');
         $this->execute('UPDATE spam SET relate_type="guestbook" WHERE relate_type="App\\Models\\Guestbook";');
@@ -23,7 +23,7 @@ class ChangeRelateTypeInSpam extends AbstractMigration
     /**
      * Migrate Down.
      */
-    public function down()
+    public function down(): void
     {
         $table = $this->table('spam');
         $table->changeColumn('relate_type', 'string', ['limit' => 50])

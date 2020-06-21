@@ -8,7 +8,7 @@ class ResizeAvatarsInUsers extends AbstractMigration
     /**
      * Migrate Up.
      */
-    public function up()
+    public function up(): void
     {
         $rows = $this->fetchAll('SELECT id, avatar, picture FROM users');
 
@@ -31,7 +31,7 @@ class ResizeAvatarsInUsers extends AbstractMigration
     /**
      * Migrate Down.
      */
-    public function down()
+    public function down(): void
     {
 
     }

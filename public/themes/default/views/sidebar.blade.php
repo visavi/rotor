@@ -3,7 +3,9 @@
 <aside class="app-sidebar">
     <div class="app-sidebar__user">
         @if ($user = getUser())
-            <img class="app-sidebar__user-avatar" src="https://s3.amazonaws.com/uifaces/faces/twitter/jsa/48.jpg" alt="User Image">
+            <div class="app-sidebar__user-avatar">
+                {!! getUser()->getAvatar() !!}
+            </div>
             <div>
                 <p class="app-sidebar__user-name"><a href="/users/{{ $user->login }}">{{ $user->getName() }}</a></p>
                 <p class="app-sidebar__user-designation">{!! getUser()->getStatus() !!}</p>

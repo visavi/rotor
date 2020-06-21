@@ -184,7 +184,7 @@ function check($string, $doubleEncode = true)
     } else {
         $string = htmlspecialchars($string, ENT_QUOTES, 'UTF-8', $doubleEncode);
         $search = [chr(0), "\x00", "\x1A", chr(226) . chr(128) . chr(174)];
-        $string = trim(str_replace($search, [], $string));
+        $string = str_replace($search, [], $string);
     }
 
     return $string;
@@ -1919,10 +1919,10 @@ function bbCode($text, $parse = true)
         return $bbCode->clear($text);
     }
 
-    $text = $bbCode->parse($text);
-    $text = $bbCode->parseStickers($text);
+    $checkText = check($text);
+    $parseText = $bbCode->parse($checkText);
 
-    return $text;
+    return $bbCode->parseStickers($parseText);
 }
 
 /**
@@ -2316,7 +2316,7 @@ function captchaVerify(): bool
     }
 
     if (setting('captcha_type') === 'graphical') {
-        return check(strtolower($request->input('protect'))) === $_SESSION['protect'];
+        return strtolower($request->input('protect')) === $_SESSION['protect'];
     }
 
     return false;

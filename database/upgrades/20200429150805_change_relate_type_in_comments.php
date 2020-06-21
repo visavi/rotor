@@ -7,7 +7,7 @@ class ChangeRelateTypeInComments extends AbstractMigration
     /**
      * Migrate Up.
      */
-    public function up()
+    public function up(): void
     {
         $this->execute('UPDATE comments SET relate_type="downs" WHERE relate_type="App\\Models\\Down";');
         $this->execute('UPDATE comments SET relate_type="photos" WHERE relate_type="App\\Models\\Photo";');
@@ -23,7 +23,7 @@ class ChangeRelateTypeInComments extends AbstractMigration
     /**
      * Migrate Down.
      */
-    public function down()
+    public function down(): void
     {
         $table = $this->table('comments');
         $table->changeColumn('relate_type', 'string', ['limit' => 50])

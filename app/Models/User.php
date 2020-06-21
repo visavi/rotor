@@ -269,8 +269,8 @@ class User extends BaseModel
      * Авторизует через социальные сети
      *
      * @param string $token идентификатор Ulogin
+     *
      * @return void
-     * @throws ErrorException
      */
     public static function socialAuth($token): void
     {

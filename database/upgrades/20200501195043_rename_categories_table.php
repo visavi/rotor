@@ -7,7 +7,7 @@ class RenameCategoriesTable extends AbstractMigration
     /**
      * Migrate Up.
      */
-    public function up()
+    public function up(): void
     {
         $table = $this->table('categories');
         $table->rename('blogs')->update();
@@ -16,7 +16,7 @@ class RenameCategoriesTable extends AbstractMigration
     /**
      * Migrate Down.
      */
-    public function down()
+    public function down(): void
     {
         $table = $this->table('blogs');
         $table->rename('categories')->update();

@@ -8,7 +8,7 @@ class ChangeThemeInUsers extends AbstractMigration
     /**
      * Migrate Up.
      */
-    public function up()
+    public function up(): void
     {
         $this->execute("UPDATE users SET themes='default';");
     }
@@ -16,7 +16,7 @@ class ChangeThemeInUsers extends AbstractMigration
     /**
      * Migrate Down.
      */
-    public function down()
+    public function down(): void
     {
 
     }

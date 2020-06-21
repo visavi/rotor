@@ -37,25 +37,22 @@ class GuestbookController extends BaseController
      */
     public function add(Request $request, Validator $validator, Flood $flood): void
     {
-        $msg       = check($request->input('msg'));
-        $token     = check($request->input('token'));
-        $guestName = check($request->input('guest_name'));
-
-        $validator->equal($token, $_SESSION['token'], ['msg' => __('validator.token')])
-            ->length($msg, 5, setting('guesttextlength'), ['msg' => __('validator.text')])
+        $validator->equal($request->input('token'), $_SESSION['token'], ['msg' => __('validator.token')])
+            ->length($request->input('msg'), 5, setting('guesttextlength'), ['msg' => __('validator.text')])
             ->false($flood->isFlood(), ['msg' => __('validator.flood', ['sec' => $flood->getPeriod()])]);
 
         /* Проверка для гостей */
         if (! getUser() && setting('bookadds')) {
             $validator->true(captchaVerify(), ['protect' => __('validator.captcha')]);
-            $validator->false(strpos($msg, '//'), ['msg' => __('guestbook.without_links')]);
-            $validator->length($guestName, 3, 20, ['guest_name' => __('users.name_short_or_long')], false);
+            $validator->false(strpos($request->input('msg'), '//'), ['msg' => __('guestbook.without_links')]);
+            $validator->length($request->input('guest_name'), 3, 20, ['guest_name' => __('users.name_short_or_long')], false);
         } else {
             $validator->true(getUser(), ['msg' => __('main.not_authorized')]);
         }
 
         if ($validator->isValid()) {
-            $msg = antimat($msg);
+            $msg       = antimat($request->input('msg'));
+            $guestName = $request->input('guest_name');
 
             if ($user = getUser()) {
                 $guestName  = null;
@@ -115,17 +112,14 @@ class GuestbookController extends BaseController
         }
 
         if ($request->isMethod('post')) {
-            $msg   = check($request->input('msg'));
-            $token = check($request->input('token'));
-
-            $validator->equal($token, $_SESSION['token'], ['msg' => __('validator.token')])
-                ->length($msg, 5, setting('guesttextlength'), ['msg' => __('validator.text')]);
+            $validator->equal($request->input('token'), $_SESSION['token'], ['msg' => __('validator.token')])
+                ->length($request->input('msg'), 5, setting('guesttextlength'), ['msg' => __('validator.text')]);
 
             if ($validator->isValid()) {
-                $msg = antimat($msg);
+
 
                 $post->update([
-                    'text'         => $msg,
+                    'text'         => antimat($request->input('msg')),
                     'edit_user_id' => getUser('id'),
                     'updated_at'   => SITETIME,
                 ]);

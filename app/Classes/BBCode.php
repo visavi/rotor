@@ -198,7 +198,7 @@ class BBCode
      */
     public function listReplace($match): string
     {
-        $li = preg_split('/<br[^>]*>\R/', $match[1], -1, PREG_SPLIT_NO_EMPTY);
+        $li = preg_split('/<br>\R/', $match[1], -1, PREG_SPLIT_NO_EMPTY);
 
         if (empty($li)) {
             return $match[0];
@@ -235,8 +235,8 @@ class BBCode
      */
     public function highlightCode($match): string
     {
-        //Чтобы bb-код и стикеры не работали внутри тега [code]
-        $match[1] = strtr($match[1], [':' => '&#58;', '[' => '&#91;']);
+        //Чтобы bb-код, стикеры и логины не работали внутри тега [code]
+        $match[1] = strtr($match[1], [':' => '&#58;', '[' => '&#91;', '@' => '&#64;']);
 
         return '<pre class="prettyprint linenums pre-scrollable">' . $match[1] . '</pre>';
     }

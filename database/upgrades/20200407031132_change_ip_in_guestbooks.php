@@ -8,7 +8,7 @@ class ChangeIpInGuestbooks extends AbstractMigration
     /**
      * Migrate Up.
      */
-    public function up()
+    public function up(): void
     {
         $table = $this->table('guestbooks');
         $table->addColumn('ip_new', 'varbinary', ['limit' => 16, 'after' => 'ip'])
@@ -27,7 +27,7 @@ class ChangeIpInGuestbooks extends AbstractMigration
     /**
      * Migrate Down.
      */
-    public function down()
+    public function down(): void
     {
         $table = $this->table('guestbooks');
         $table->addColumn('ip_new', 'string', ['limit' => 15, 'after' => 'ip'])

@@ -13,11 +13,9 @@ $(function(){
 
     $('.markItUp').markItUp(mySettings).on('input', function () {
         var maxlength = $(this).attr('maxlength');
-        var text      = $(this).val()
-            .replace(/(\r\n|\n|\r)/g, "\r\n")
-            .trim();
+        var text      = $(this).val().replace(/(\r\n|\n|\r)/g, "\r\n");
 
-        var currentLength = escapeHtml(text).length;
+        var currentLength = text.length;
         var counter = $('.js-textarea-counter');
 
         if (currentLength > maxlength) {
@@ -115,20 +113,6 @@ $(function(){
         getNewMessages();
     })
 });
-
-/* Экранирование символов */
-escapeHtml = function(str)
-{
-    var map = {
-        '&': '&amp;',
-        '<': '&lt;',
-        '>': '&gt;',
-        '"': '&quot;',
-        "'": '&#039;',
-    };
-
-    return str.replace(/[&<>"']/g, function(m) {return map[m];});
-};
 
 /* Вывод уведомлений */
 notification = function(type, title, message, optionsOverride)
