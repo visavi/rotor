@@ -117,8 +117,7 @@ class TopicController extends BaseController
      */
     public function create(int $id, Request $request, Validator $validator, Flood $flood): void
     {
-        $msg   = check($request->input('msg'));
-        $token = check($request->input('token'));
+        $msg   = $request->input('msg');
         $files = (array) $request->file('files');
 
         if (! $user = getUser()) {
@@ -135,7 +134,7 @@ class TopicController extends BaseController
             abort(404, __('forums.topic_not_exist'));
         }
 
-        $validator->equal($token, $_SESSION['token'], ['msg' => __('validator.token')])
+        $validator->equal($request->input('token'), $_SESSION['token'], ['msg' => __('validator.token')])
             ->empty($topic->closed, ['msg' => __('forums.topic_closed')])
             ->false($flood->isFlood(), ['msg' => __('validator.flood', ['sec' => $flood->getPeriod()])])
             ->length($msg, 5, setting('forumtextlength'), ['msg' => __('validator.text')]);
@@ -237,7 +236,6 @@ class TopicController extends BaseController
      */
     public function delete(int $id, Request $request, Validator $validator): void
     {
-        $token = check($request->input('token'));
         $del   = intar($request->input('del'));
         $page  = int($request->input('page'));
 
@@ -250,7 +248,7 @@ class TopicController extends BaseController
 
         $isModer = in_array(getUser('id'), array_map('intval', explode(',', (string) $topic->moderators)), true);
 
-        $validator->equal($token, $_SESSION['token'], __('validator.token'))
+        $validator->equal($request->input('token'), $_SESSION['token'], __('validator.token'))
             ->true(getUser(), __('main.not_authorized'))
             ->notEmpty($del, __('validator.deletion'))
             ->empty($topic->closed, __('forums.topic_closed'))
@@ -292,12 +290,10 @@ class TopicController extends BaseController
      */
     public function close(int $id, Request $request, Validator $validator): void
     {
-        $token = check($request->input('token'));
-
         /** @var Topic $topic */
         $topic = Topic::query()->find($id);
 
-        $validator->equal($token, $_SESSION['token'], __('validator.token'))
+        $validator->equal($request->input('token'), $_SESSION['token'], __('validator.token'))
             ->true(getUser(), __('main.not_authorized'))
             ->gte(getUser('point'), setting('editforumpoint'), __('forums.topic_edited_points', ['point' => plural(setting('editforumpoint'), setting('scorename'))]))
             ->notEmpty($topic, __('forums.topic_not_exist'))
@@ -365,13 +361,12 @@ class TopicController extends BaseController
         $vote = Vote::query()->where('topic_id', $id)->first();
 
         if ($request->isMethod('post')) {
-            $token    = check($request->input('token'));
-            $title    = check($request->input('title'));
-            $msg      = check($request->input('msg'));
-            $question = check($request->input('question'));
-            $answers  = check((array) $request->input('answers'));
+            $title    = $request->input('title');
+            $msg      = $request->input('msg');
+            $question = $request->input('question');
+            $answers  = (array) $request->input('answers');
 
-            $validator->equal($token, $_SESSION['token'], __('validator.token'))
+            $validator->equal($request->input('token'), $_SESSION['token'], __('validator.token'))
                 ->length($title, 5, 50, ['title' => __('validator.text')]);
 
             if ($post) {
@@ -491,11 +486,10 @@ class TopicController extends BaseController
         }
 
         if ($request->isMethod('post')) {
-            $token   = check($request->input('token'));
-            $msg     = check($request->input('msg'));
+            $msg     = $request->input('msg');
             $delfile = intar($request->input('delfile'));
 
-            $validator->equal($token, $_SESSION['token'], __('validator.token'))
+            $validator->equal($request->input('token'), $_SESSION['token'], __('validator.token'))
                 ->length($msg, 5, setting('forumtextlength'), ['msg' => __('validator.text')]);
 
             if ($validator->isValid()) {
@@ -549,11 +543,10 @@ class TopicController extends BaseController
             abort(404, __('votes.voting_not_found'));
         }
 
-        $token = check($request->input('token'));
         $poll  = int($request->input('poll'));
         $page  = int($request->input('page'));
 
-        $validator->equal($token, $_SESSION['token'], __('validator.token'));
+        $validator->equal($request->input('token'), $_SESSION['token'], __('validator.token'));
 
         if ($vote->closed) {
             $validator->addError(__('votes.voting_closed'));

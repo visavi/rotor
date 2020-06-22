@@ -24,7 +24,7 @@ class ActiveController extends BaseController
     {
         parent::__construct();
 
-        $login      = check($request->input('user', getUser('login')));
+        $login      = $request->input('user', getUser('login'));
         $this->user = getUserByLogin($login);
 
         if (! $this->user) {
@@ -88,13 +88,10 @@ class ActiveController extends BaseController
             abort(403, __('forums.posts_deleted_moderators'));
         }
 
-        $token = check($request->input('token'));
-        $tid   = int($request->input('tid'));
-
-        $validator->equal($token, $_SESSION['token'], __('validator.token'));
+        $validator->equal($request->input('token'), $_SESSION['token'], __('validator.token'));
 
         $post = Post::query()
-            ->where('id', $tid)
+            ->where('id', int($request->input('tid')))
             ->with('topic.forum')
             ->first();
 

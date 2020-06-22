@@ -57,10 +57,9 @@ class BookmarkController extends BaseController
             redirect('/');
         }
 
-        $token = check($request->input('token'));
         $tid   = int($request->input('tid'));
 
-        $validator->equal($token, $_SESSION['token'], __('validator.token'));
+        $validator->equal($request->input('token'), $_SESSION['token'], __('validator.token'));
 
         /** @var Topic $topic */
         $topic = Topic::query()->find($tid);
@@ -97,16 +96,14 @@ class BookmarkController extends BaseController
      */
     public function delete(Request $request, Validator $validator): void
     {
-        $token    = check($request->input('token'));
         $topicIds = intar($request->input('del'));
-        $page     = int($request->input('page'));
 
-        $validator->equal($token, $_SESSION['token'], __('validator.token'))
+        $validator->equal($request->input('token'), $_SESSION['token'], __('validator.token'))
             ->notEmpty($topicIds, __('forums.bookmarks_missing'));
 
         if ($validator->isValid()) {
             Bookmark::query()
-                ->whereIn('topic_id', $topicIds)
+                ->whereIn('topic_id', intar($request->input('del')))
                 ->where('user_id', getUser('id'))
                 ->delete();
 
@@ -115,6 +112,6 @@ class BookmarkController extends BaseController
             setFlash('danger', $validator->getErrors());
         }
 
-        redirect('/forums/bookmarks?page=' . $page);
+        redirect('/forums/bookmarks?page=' . int($request->input('page')));
     }
 }

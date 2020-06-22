@@ -91,17 +91,16 @@ class ForumController extends BaseController
         }
 
         if ($request->isMethod('post')) {
-            $title    = check($request->input('title'));
-            $msg      = check($request->input('msg'));
-            $token    = check($request->input('token'));
+            $title    = $request->input('title');
+            $msg      = $request->input('msg');
             $vote     = empty($request->input('vote')) ? 0 : 1;
-            $question = check($request->input('question'));
-            $answers  = check((array) $request->input('answers'));
+            $question = $request->input('question');
+            $answers  = (array) $request->input('answers');
 
             /** @var Forum $forum */
             $forum = Forum::query()->find($fid);
 
-            $validator->equal($token, $_SESSION['token'], __('validator.token'))
+            $validator->equal($request->input('token'), $_SESSION['token'], __('validator.token'))
                 ->notEmpty($forum, ['fid' => 'Форума для новой темы не существует!'])
                 ->false($flood->isFlood(), ['msg' => __('validator.flood', ['sec' => $flood->getPeriod()])])
                 ->length($title, 5, 50, ['title' => __('validator.text')])

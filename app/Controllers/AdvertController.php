@@ -111,7 +111,6 @@ class AdvertController extends BaseController
                 $user->decrement('money', $price);
 
                 clearCache('adverts');
-
                 setFlash('success', __('adverts.advert_success_posted'));
                 redirect('/adverts');
             } else {

@@ -65,7 +65,6 @@ class AdvertController extends AdminController
                 ]);
 
                 clearCache('adverts');
-
                 setFlash('success', __('main.record_changed_success'));
                 redirect('/admin/adverts?page=' . $page);
             } else {
@@ -97,7 +96,6 @@ class AdvertController extends AdminController
             Advert::query()->whereIn('id', $del)->delete();
 
             clearCache('adverts');
-
             setFlash('success', __('main.records_deleted_success'));
         } else {
             setFlash('danger', $validator->getErrors());

@@ -45,10 +45,9 @@ class ForumController extends AdminController
             abort(403, __('errors.forbidden'));
         }
 
-        $token = check($request->input('token'));
-        $title = check($request->input('title'));
+        $title = $request->input('title');
 
-        $validator->equal($token, $_SESSION['token'], __('validator.token'))
+        $validator->equal($request->input('token'), $_SESSION['token'], __('validator.token'))
             ->length($title, 5, 50, ['title' => __('validator.text')]);
 
         if ($validator->isValid()) {
@@ -97,14 +96,13 @@ class ForumController extends AdminController
             ->get();
 
         if ($request->isMethod('post')) {
-            $token       = check($request->input('token'));
             $parent      = int($request->input('parent'));
-            $title       = check($request->input('title'));
-            $description = check($request->input('description'));
-            $sort        = check($request->input('sort'));
+            $title       = $request->input('title');
+            $description = $request->input('description');
+            $sort        = int($request->input('sort'));
             $closed      = empty($request->input('closed')) ? 0 : 1;
 
-            $validator->equal($token, $_SESSION['token'], __('validator.token'))
+            $validator->equal($request->input('token'), $_SESSION['token'], __('validator.token'))
                 ->length($title, 5, 50, ['title' => __('validator.text')])
                 ->length($description, 0, 100, ['description' => __('validator.text')])
                 ->notEqual($parent, $forum->id, ['parent' => __('forums.forum_invalid')]);
@@ -155,9 +153,7 @@ class ForumController extends AdminController
             abort(404, __('forums.forum_not_exist'));
         }
 
-        $token = check($request->input('token'));
-
-        $validator->equal($token, $_SESSION['token'], __('validator.token'))
+        $validator->equal($request->input('token'), $_SESSION['token'], __('validator.token'))
             ->true($forum->children->isEmpty(), __('forums.forum_has_subforums'));
 
         $topic = Topic::query()->where('forum_id', $forum->id)->first();
@@ -187,9 +183,7 @@ class ForumController extends AdminController
             abort(403, __('errors.forbidden'));
         }
 
-        $token = check($request->input('token'));
-
-        if ($token === $_SESSION['token']) {
+        if ($request->input('token') === $_SESSION['token']) {
             restatement('forums');
 
             setFlash('success', __('main.success_recounted'));
@@ -243,14 +237,13 @@ class ForumController extends AdminController
         }
 
         if ($request->isMethod('post')) {
-            $token      = check($request->input('token'));
-            $title      = check($request->input('title'));
-            $note       = check($request->input('note'));
-            $moderators = check($request->input('moderators'));
+            $title      = $request->input('title');
+            $note       = $request->input('note');
+            $moderators = $request->input('moderators');
             $locked     = empty($request->input('locked')) ? 0 : 1;
             $closed     = empty($request->input('closed')) ? 0 : 1;
 
-            $validator->equal($token, $_SESSION['token'], __('validator.token'))
+            $validator->equal($request->input('token'), $_SESSION['token'], __('validator.token'))
                 ->length($title, 5, 50, ['title' => __('validator.text')])
                 ->length($note, 0, 250, ['note' => __('validator.text_long')]);
 
@@ -295,13 +288,12 @@ class ForumController extends AdminController
         }
 
         if ($request->isMethod('post')) {
-            $token = check($request->input('token'));
-            $fid   = int($request->input('fid'));
+            $fid = int($request->input('fid'));
 
             /** @var Forum $forum */
             $forum = Forum::query()->find($fid);
 
-            $validator->equal($token, $_SESSION['token'], __('validator.token'))
+            $validator->equal($request->input('token'), $_SESSION['token'], __('validator.token'))
                 ->notEmpty($forum, ['forum' => __('forums.forum_not_exist')]);
 
             if ($forum) {
@@ -346,9 +338,7 @@ class ForumController extends AdminController
      */
     public function actionTopic(int $id, Request $request): void
     {
-        $page  = int($request->input('page', 1));
-        $token = check($request->input('token'));
-        $type  = check($request->input('type'));
+        $page = int($request->input('page', 1));
 
         /** @var Topic $topic */
         $topic = Topic::query()->find($id);
@@ -357,8 +347,8 @@ class ForumController extends AdminController
             abort(404, __('forums.topic_not_exist'));
         }
 
-        if ($token === $_SESSION['token']) {
-            switch ($type):
+        if ($request->input('token') === $_SESSION['token']) {
+            switch ($request->input('type')):
                 case 'closed':
                     $topic->update(['closed' => 1]);
 
@@ -414,8 +404,7 @@ class ForumController extends AdminController
      */
     public function deleteTopic(int $id, Request $request, Validator $validator): void
     {
-        $page  = int($request->input('page', 1));
-        $token = check($request->input('token'));
+        $page = int($request->input('page', 1));
 
         /** @var Topic $topic */
         $topic = Topic::query()->find($id);
@@ -424,7 +413,7 @@ class ForumController extends AdminController
             abort(404, __('forums.topic_not_exist'));
         }
 
-        $validator->equal($token, $_SESSION['token'], __('validator.token'));
+        $validator->equal($request->input('token'), $_SESSION['token'], __('validator.token'));
 
         if ($validator->isValid()) {
             // Удаление загруженных файлов
@@ -534,11 +523,10 @@ class ForumController extends AdminController
         }
 
         if ($request->isMethod('post')) {
-            $token   = check($request->input('token'));
-            $msg     = check($request->input('msg'));
+            $msg     = $request->input('msg');
             $delfile = intar($request->input('delfile'));
 
-            $validator->equal($token, $_SESSION['token'], __('validator.token'))
+            $validator->equal($request->input('token'), $_SESSION['token'], __('validator.token'))
                 ->length($msg, 5, setting('forumtextlength'), ['msg' => __('validator.text')]);
 
             if ($validator->isValid()) {
@@ -583,10 +571,9 @@ class ForumController extends AdminController
      */
     public function deletePosts(Request $request, Validator $validator): void
     {
-        $tid   = int($request->input('tid'));
-        $page  = int($request->input('page', 1));
-        $token = check($request->input('token'));
-        $del   = intar($request->input('del'));
+        $tid  = int($request->input('tid'));
+        $page = int($request->input('page', 1));
+        $del  = intar($request->input('del'));
 
         $topic = Topic::query()->where('id', $tid)->first();
 
@@ -594,7 +581,7 @@ class ForumController extends AdminController
             abort(404, __('forums.topic_not_exist'));
         }
 
-        $validator->equal($token, $_SESSION['token'], __('validator.token'))
+        $validator->equal($request->input('token'), $_SESSION['token'], __('validator.token'))
             ->true($del, __('validator.deletion'));
 
         if ($validator->isValid()) {

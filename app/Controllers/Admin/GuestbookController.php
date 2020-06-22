@@ -42,10 +42,9 @@ class GuestbookController extends AdminController
         }
 
         if ($request->isMethod('post')) {
-            $msg   = check($request->input('msg'));
-            $token = check($request->input('token'));
+            $msg = $request->input('msg');
 
-            $validator->equal($token, $_SESSION['token'], ['msg' => __('validator.token')])
+            $validator->equal($request->input('token'), $_SESSION['token'], ['msg' => __('validator.token')])
                 ->length($msg, 5, setting('guesttextlength'), ['msg' => __('validator.text')]);
 
             if ($validator->isValid()) {
@@ -86,15 +85,12 @@ class GuestbookController extends AdminController
         }
 
         if ($request->isMethod('post')) {
-            $reply = check($request->input('reply'));
-            $token = check($request->input('token'));
+            $reply = $request->input('reply');
 
-            $validator->equal($token, $_SESSION['token'], ['msg' => __('validator.token')])
+            $validator->equal($request->input('token'), $_SESSION['token'], ['msg' => __('validator.token')])
                 ->length($reply, 5, setting('guesttextlength'), ['msg' => __('validator.text')]);
 
             if ($validator->isValid()) {
-                $reply = antimat($reply);
-
                 $post->update([
                     'reply' => $reply,
                 ]);
@@ -119,11 +115,10 @@ class GuestbookController extends AdminController
      */
     public function delete(Request $request, Validator $validator): void
     {
-        $page  = int($request->input('page', 1));
-        $token = check($request->input('token'));
-        $del   = intar($request->input('del'));
+        $page = int($request->input('page', 1));
+        $del  = intar($request->input('del'));
 
-        $validator->equal($token, $_SESSION['token'], __('validator.token'))
+        $validator->equal($request->input('token'), $_SESSION['token'], __('validator.token'))
             ->true($del, __('validator.deletion'));
 
         if ($validator->isValid()) {
@@ -147,15 +142,13 @@ class GuestbookController extends AdminController
      */
     public function clear(Request $request, Validator $validator): void
     {
-        $token = check($request->input('token'));
-
         $validator
-            ->equal($token, $_SESSION['token'], __('validator.token'))
+            ->equal($request->input('token'), $_SESSION['token'], __('validator.token'))
             ->true(isAdmin(User::BOSS), __('main.page_only_owner'));
 
         if ($validator->isValid()) {
-            clearCache('statGuestbook');
             Guestbook::query()->truncate();
+            clearCache('statGuestbook');
 
             setFlash('success', __('guestbook.messages_success_cleared'));
         } else {

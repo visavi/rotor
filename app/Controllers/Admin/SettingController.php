@@ -64,7 +64,6 @@ class SettingController extends AdminController
                 }
 
                 clearCache('settings');
-
                 setFlash('success', __('settings.settings_success_saved'));
                 redirect('/admin/settings?act=' . $act);
             } else {

@@ -21,7 +21,7 @@ class SearchController extends BaseController
     public function index(Request $request): ?string
     {
         $fid     = int($request->input('fid'));
-        $find    = check($request->input('find'));
+        $find    = $request->input('find');
         $type    = int($request->input('type'));
         $where   = int($request->input('where'));
         $period  = int($request->input('period'));

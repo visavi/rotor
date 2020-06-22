@@ -660,7 +660,6 @@ class UserController extends BaseController
             ]);
 
             clearCache('statuses');
-
             setFlash('success', __('users.status_success_changed'));
         } else {
             setInput($request->all());

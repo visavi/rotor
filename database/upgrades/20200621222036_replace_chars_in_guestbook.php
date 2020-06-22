@@ -12,6 +12,15 @@ class ReplaceCharsInGuestbook extends AbstractMigration
         $this->execute("UPDATE guestbook SET text = replace(`text`, '&amp;', '&')");
         $this->execute("UPDATE guestbook SET text = replace(`text`, '&quot;', '\"')");
         $this->execute("UPDATE guestbook SET text = replace(`text`, '&#039;', \"'\")");
+        $this->execute("UPDATE guestbook SET text = replace(`text`, '&#39;', \"'\")");
+        $this->execute("UPDATE guestbook SET text = replace(`text`, '&#36;', '$')");
+        $this->execute("UPDATE guestbook SET text = replace(`text`, '&#92;', '\\\')");
+        $this->execute("UPDATE guestbook SET text = replace(`text`, '&#124;', '|')");
+        $this->execute("UPDATE guestbook SET text = replace(`text`, '&#94;', '^')");
+        $this->execute("UPDATE guestbook SET text = replace(`text`, '&#96;', '`')");
+        $this->execute("UPDATE guestbook SET text = replace(`text`, '&#37;', '%')");
+        $this->execute("UPDATE guestbook SET text = replace(`text`, '&#58;', ':')");
+        $this->execute("UPDATE guestbook SET text = replace(`text`, '&#64;', '@')");
         $this->execute("UPDATE guestbook SET text = replace(`text`, '&lt;', '<')");
         $this->execute("UPDATE guestbook SET text = replace(`text`, '&gt;', '>')");
     }

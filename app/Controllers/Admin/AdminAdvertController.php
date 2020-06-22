@@ -51,7 +51,6 @@ class AdminAdvertController extends AdminController
                 );
 
                 clearCache('adminAdverts');
-
                 setFlash('success', __('main.record_saved_success'));
                 redirect('/admin/admin-adverts');
             } else {
