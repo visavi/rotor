@@ -100,7 +100,7 @@ class HelperTest extends TestCase
         $this->assertSame('&lt;br&gt;', check('&lt;br&gt;', false));
         $this->assertSame(['&lt;br&gt;', '&lt;html&gt;'], check(['<br>', '<html>']));
         $this->assertSame('', check(chr(0). "\x00". "\x1A". chr(226) . chr(128) . chr(174)));
-        $this->assertSame('test', check(' test '));
+        $this->assertSame(' test ', check(' test '));
     }
 
     /**
