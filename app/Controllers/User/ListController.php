@@ -14,6 +14,7 @@ class ListController extends BaseController
      * Users list
      *
      * @param Request $request
+     *
      * @return string
      */
     public function userlist(Request $request): string
@@ -23,7 +24,7 @@ class ListController extends BaseController
             ->orderBy('login')
             ->paginate(setting('userlist'));
 
-        $user = check($request->input('user', getUser('login')));
+        $user = $request->input('user', getUser('login'));
 
         if ($request->isMethod('post')) {
             $position = User::query()
@@ -67,6 +68,7 @@ class ListController extends BaseController
      * Reputation rating
      *
      * @param Request $request
+     *
      * @return string
      */
     public function authoritylist(Request $request): string
@@ -76,7 +78,7 @@ class ListController extends BaseController
             ->orderBy('login')
             ->paginate(setting('avtorlist'));
 
-        $user = check($request->input('user', getUser('login')));
+        $user = $request->input('user', getUser('login'));
 
         if ($request->isMethod('post')) {
             $position = User::query()
@@ -105,6 +107,7 @@ class ListController extends BaseController
      * Riches rating
      *
      * @param Request $request
+     *
      * @return string
      */
     public function ratinglist(Request $request): string
@@ -114,7 +117,7 @@ class ListController extends BaseController
             ->orderBy('login')
             ->paginate(setting('userlist'));
 
-        $login = check($request->input('user', getUser('login')));
+        $login = $request->input('user', getUser('login'));
 
         if ($request->isMethod('post')) {
             $position = User::query()

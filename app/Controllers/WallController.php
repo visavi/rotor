@@ -8,7 +8,6 @@ use App\Classes\Validator;
 use App\Models\Flood;
 use App\Models\Ignore;
 use App\Models\Wall;
-use Illuminate\Database\Capsule\Manager as DB;
 use Illuminate\Http\Request;
 
 class WallController extends BaseController
@@ -17,6 +16,7 @@ class WallController extends BaseController
      * Главная страница
      *
      * @param string $login
+     *
      * @return string
      */
     public function index(string $login): string
@@ -51,6 +51,7 @@ class WallController extends BaseController
      * @param Request   $request
      * @param Validator $validator
      * @param Flood     $flood
+     *
      * @return void
      */
     public function create($login, Request $request, Validator $validator, Flood $flood): void
@@ -66,10 +67,9 @@ class WallController extends BaseController
         }
 
         if ($request->isMethod('post')) {
-            $token = check($request->input('token'));
-            $msg   = check($request->input('msg'));
+            $msg = $request->input('msg');
 
-            $validator->equal($token, $_SESSION['token'], __('validator.token'))
+            $validator->equal($request->input('token'), $_SESSION['token'], __('validator.token'))
                 ->length($msg, 5, setting('comment_length'), ['msg' => __('validator.text')])
                 ->false($flood->isFlood(), ['msg' => __('validator.flood', ['sec' => $flood->getPeriod()])]);
 
@@ -111,13 +111,12 @@ class WallController extends BaseController
      * @param string    $login
      * @param Request   $request
      * @param Validator $validator
+     *
      * @return void
      */
     public function delete(string $login, Request $request, Validator $validator): void
     {
-        $id    = int($request->input('id'));
-        $token = check($request->input('token'));
-
+        $id   = int($request->input('id'));
         $user = getUserByLogin($login);
 
         if (! $user) {
@@ -126,7 +125,7 @@ class WallController extends BaseController
 
         $validator
             ->true($request->ajax(), __('validator.not_ajax'))
-            ->equal($token, $_SESSION['token'], __('validator.token'))
+            ->equal($request->input('token'), $_SESSION['token'], __('validator.token'))
             ->notEmpty($id, __('validator.deletion'))
             ->notEmpty($user, __('validator.user'))
             ->true(isAdmin() || $user->id === getUser('id'), __('main.deleted_only_admins'));

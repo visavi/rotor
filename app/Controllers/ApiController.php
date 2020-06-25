@@ -26,6 +26,7 @@ class ApiController extends BaseController
      * Api пользователей
      *
      * @param Request $request
+     *
      * @return void
      */
     public function users(Request $request): void
@@ -33,7 +34,7 @@ class ApiController extends BaseController
         header('Content-type: application/json');
         header('Content-Disposition: inline; filename="users.json";');
 
-        $token = check($request->input('token'));
+        $token = $request->input('token');
 
         if (! $token) {
             echo json_encode(['error' => 'no token']);
@@ -74,6 +75,7 @@ class ApiController extends BaseController
      * Api приватных сообщений
      *
      * @param Request $request
+     *
      * @return void
      */
     public function messages(Request $request): void
@@ -81,7 +83,7 @@ class ApiController extends BaseController
         header('Content-type: application/json');
         header('Content-Disposition: inline; filename="messages.json";');
 
-        $token = check($request->input('token'));
+        $token = $request->input('token');
         $count = int($request->input('count', 10));
 
         if (! $token) {
@@ -132,6 +134,7 @@ class ApiController extends BaseController
      * Api постов темы в форуме
      *
      * @param Request $request
+     *
      * @return void
      */
     public function forums(Request $request): void
@@ -139,7 +142,7 @@ class ApiController extends BaseController
         header('Content-type: application/json');
         header('Content-Disposition: inline; filename="forums.json";');
 
-        $token = check($request->input('token'));
+        $token = $request->input('token');
         $id    = int($request->input('id'));
 
         if (! $token) {

@@ -15,12 +15,13 @@ class SearchController extends BaseController
      * Поиск
      *
      * @param Request $request
+     *
      * @return string
      */
     public function index(Request $request): ?string
     {
         $cid     = int($request->input('cid'));
-        $find    = check($request->input('find'));
+        $find    = $request->input('find');
         $type    = int($request->input('type'));
         $where   = int($request->input('where'));
         $section = int($request->input('section'));

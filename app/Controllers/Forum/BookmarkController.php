@@ -48,6 +48,7 @@ class BookmarkController extends BaseController
      *
      * @param Request   $request
      * @param Validator $validator
+     *
      * @return string
      * @throws Exception
      */
@@ -92,6 +93,7 @@ class BookmarkController extends BaseController
      *
      * @param Request   $request
      * @param Validator $validator
+     *
      * @return void
      */
     public function delete(Request $request, Validator $validator): void

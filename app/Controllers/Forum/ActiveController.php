@@ -75,6 +75,7 @@ class ActiveController extends BaseController
      *
      * @param Request   $request
      * @param Validator $validator
+     *
      * @return string
      * @throws Exception
      */

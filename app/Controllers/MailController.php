@@ -16,14 +16,15 @@ class MailController extends BaseController
      *
      * @param Request   $request
      * @param Validator $validator
+     *
      * @return string
      */
     public function index(Request $request, Validator $validator): string
     {
         if ($request->isMethod('post')) {
-            $message = check($request->input('message'));
-            $name    = check($request->input('name'));
-            $email   = check($request->input('email'));
+            $message = $request->input('message');
+            $name    = $request->input('name');
+            $email   = $request->input('email');
 
             $message = bbCode($message);
             $message = str_replace('/uploads/stickers', siteUrl().'/uploads/stickers', $message);
@@ -61,6 +62,7 @@ class MailController extends BaseController
      *
      * @param Request   $request
      * @param Validator $validator
+     *
      * @return string
      */
     public function recovery(Request $request, Validator $validator): string
@@ -69,12 +71,10 @@ class MailController extends BaseController
             abort('default', __('main.already_authorized'));
         }
 
-        $cookieLogin = isset($_COOKIE['login']) ? check($_COOKIE['login']) : '';
+        $cookieLogin = $_COOKIE['login'] ?? '';
 
         if ($request->isMethod('post')) {
-            $login = check($request->input('user'));
-
-            $user = getUserByLoginOrEmail($login);
+            $user = getUserByLoginOrEmail($request->input('user'));
             if (! $user) {
                 abort('default', __('validator.user'));
             }
@@ -114,6 +114,7 @@ class MailController extends BaseController
      *
      * @param Request   $request
      * @param Validator $validator
+     *
      * @return string
      */
     public function restore(Request $request, Validator $validator): ?string
@@ -122,7 +123,7 @@ class MailController extends BaseController
             abort(403, __('main.already_authorized'));
         }
 
-        $key = check($request->input('key'));
+        $key = $request->input('key');
 
         $user = User::query()->where('keypasswd', $key)->first();
         if (! $user) {
@@ -164,7 +165,7 @@ class MailController extends BaseController
      */
     public function unsubscribe(Request $request): void
     {
-        $key = check($request->input('key'));
+        $key = $request->input('key');
 
         if (! $key) {
             abort('default', __('mails.secret_key_missing'));

@@ -201,4 +201,14 @@ class HelperTest extends TestCase
 
         $this->assertSame('<div class="star-rating fa-lg text-danger"><i class="fas fa-star"></i><i class="fas fa-star-half-alt"></i><i class="far fa-star"></i><i class="far fa-star"></i><i class="far fa-star"></i>( 1.5 )</div>', ratingVote(1.5));
     }
+
+    /**
+     * Testing bbCode
+     */
+    public function testBbCode(): void
+    {
+        $this->assertSame('<strong>Hello</strong> <img src="/uploads/stickers/D.gif" alt="D.gif"> &lt;br&gt; <u>world</u>', bbCode('[b]Hello[/b] :D <br> [u]world[/u]'));
+
+        $this->assertSame('Hello :D world', bbCode('[b]Hello[/b] :D [u]world[/u]', false));
+    }
 }

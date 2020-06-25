@@ -18,6 +18,7 @@ class OfferController extends BaseController
      *
      * @param string  $type
      * @param Request $request
+     *
      * @return string
      */
     public function index(Request $request, $type = 'offer'): string
@@ -25,7 +26,7 @@ class OfferController extends BaseController
         $otherType  = $type === Offer::OFFER ? Offer::ISSUE : Offer::OFFER;
         $otherCount = Offer::query()->where('type', $otherType)->count();
 
-        $sort = check($request->input('sort', 'rating'));
+        $sort = $request->input('sort', 'rating');
 
         switch ($sort) {
             case 'time':
@@ -55,6 +56,7 @@ class OfferController extends BaseController
      * Просмотр записи
      *
      * @param int $id
+     *
      * @return string
      */
     public function view(int $id): string
@@ -82,6 +84,7 @@ class OfferController extends BaseController
      * @param Request   $request
      * @param Validator $validator
      * @param Flood     $flood
+     *
      * @return string
      */
     public function create(Request $request, Validator $validator, Flood $flood): string
@@ -90,14 +93,13 @@ class OfferController extends BaseController
             abort(403, __('main.not_authorized'));
         }
 
-        $type  = check($request->input('type'));
+        $type = $request->input('type');
 
         if ($request->isMethod('post')) {
-            $token = check($request->input('token'));
-            $title = check($request->input('title'));
-            $text  = check($request->input('text'));
+            $title = $request->input('title');
+            $text  = $request->input('text');
 
-            $validator->equal($token, $_SESSION['token'], __('validator.token'))
+            $validator->equal($request->input('token'), $_SESSION['token'], __('validator.token'))
                 ->length($title, 5, 50, ['title' => __('validator.text')])
                 ->length($text, 5, 1000, ['text' => __('validator.text')])
                 ->false($flood->isFlood(), ['msg' => __('validator.flood', ['sec' => $flood->getPeriod()])])
@@ -138,6 +140,7 @@ class OfferController extends BaseController
      * @param int       $id
      * @param Request   $request
      * @param Validator $validator
+     *
      * @return string
      */
     public function edit(int $id, Request $request, Validator $validator): string
@@ -160,13 +163,11 @@ class OfferController extends BaseController
         }
 
         if ($request->isMethod('post')) {
+            $title = $request->input('title');
+            $text  = $request->input('text');
+            $type  = $request->input('type');
 
-            $token = check($request->input('token'));
-            $title = check($request->input('title'));
-            $text  = check($request->input('text'));
-            $type  = check($request->input('type'));
-
-            $validator->equal($token, $_SESSION['token'], __('validator.token'))
+            $validator->equal($request->input('token'), $_SESSION['token'], __('validator.token'))
                 ->length($title, 5, 50, ['title' => __('validator.text')])
                 ->length($text, 5, 1000, ['text' => __('validator.text')])
                 ->in($type, Offer::TYPES, ['type' => __('offers.type_invalid')]);
@@ -200,6 +201,7 @@ class OfferController extends BaseController
      * @param Request   $request
      * @param Validator $validator
      * @param Flood     $flood
+     *
      * @return string
      */
     public function comments(int $id, Request $request, Validator $validator, Flood $flood): string
@@ -212,13 +214,11 @@ class OfferController extends BaseController
         }
 
         if ($request->isMethod('post')) {
-
-            $token = check($request->input('token'));
-            $msg   = check($request->input('msg'));
+            $msg = $request->input('msg');
 
             $validator
                 ->true(getUser(), __('main.not_authorized'))
-                ->equal($token, $_SESSION['token'], __('validator.token'))
+                ->equal($request->input('token'), $_SESSION['token'], __('validator.token'))
                 ->length($msg, 5, setting('comment_length'), ['msg' => __('validator.text')])
                 ->false($flood->isFlood(), ['msg' => __('validator.flood', ['sec' => $flood->getPeriod()])])
                 ->empty($offer->closed, ['msg' => __('offers.offer_closed')]);
@@ -267,6 +267,7 @@ class OfferController extends BaseController
      * @param int       $cid
      * @param Request   $request
      * @param Validator $validator
+     *
      * @return string
      */
     public function editComment(int $id, int $cid, Request $request, Validator $validator): string
@@ -298,12 +299,11 @@ class OfferController extends BaseController
         }
 
         if ($request->isMethod('post')) {
-            $token = check($request->input('token'));
-            $msg   = check($request->input('msg'));
-            $page  = int($request->input('page', 1));
+            $msg  = $request->input('msg');
+            $page = int($request->input('page', 1));
 
             $validator
-                ->equal($token, $_SESSION['token'], __('validator.token'))
+                ->equal($request->input('token'), $_SESSION['token'], __('validator.token'))
                 ->length($msg, 5, setting('comment_length'), ['msg' => __('validator.text')]);
 
             if ($validator->isValid()) {

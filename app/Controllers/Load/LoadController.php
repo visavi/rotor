@@ -36,6 +36,7 @@ class LoadController extends BaseController
      *
      * @param int     $id
      * @param Request $request
+     *
      * @return string
      */
     public function load(int $id, Request $request): string
@@ -47,7 +48,7 @@ class LoadController extends BaseController
             abort(404, __('loads.load_not_exist'));
         }
 
-        $sort = check($request->input('sort', 'time'));
+        $sort = $request->input('sort', 'time');
 
         switch ($sort) {
             case 'rated':

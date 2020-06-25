@@ -22,7 +22,7 @@ class ActiveController extends BaseController
     {
         parent::__construct();
 
-        $login      = check($request->input('user', getUser('login')));
+        $login      = $request->input('user', getUser('login'));
         $this->user = getUserByLogin($login);
 
         if (! $this->user) {
@@ -34,6 +34,7 @@ class ActiveController extends BaseController
      * Мои файлы
      *
      * @param Request $request
+     *
      * @return string
      */
     public function files(Request $request): string

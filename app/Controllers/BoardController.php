@@ -19,6 +19,7 @@ class BoardController extends BaseController
      * Главная страница
      *
      * @param int $id
+     *
      * @return string
      */
     public function index(int $id = null): string
@@ -54,6 +55,7 @@ class BoardController extends BaseController
      * Просмотр объявления
      *
      * @param int $id
+     *
      * @return string
      */
     public function view(int $id): string
@@ -80,6 +82,7 @@ class BoardController extends BaseController
      * @param Request   $request
      * @param Validator $validator
      * @param Flood     $flood
+     *
      * @return string
      */
     public function create(Request $request, Validator $validator, Flood $flood): string
@@ -101,9 +104,8 @@ class BoardController extends BaseController
         }
 
         if ($request->isMethod('post')) {
-            $token = check($request->input('token'));
-            $title = check($request->input('title'));
-            $text  = check($request->input('text'));
+            $title = $request->input('title');
+            $text  = $request->input('text');
             $price = int($request->input('price'));
             $phone = preg_replace('/\D/', '', $request->input('phone'));
 
@@ -111,7 +113,7 @@ class BoardController extends BaseController
             $board = Board::query()->find($bid);
 
             $validator
-                ->equal($token, $_SESSION['token'], __('validator.token'))
+                ->equal($request->input('token'), $_SESSION['token'], __('validator.token'))
                 ->length($title, 5, 50, ['title' => __('validator.text')])
                 ->length($text, 50, 5000, ['text' => __('validator.text')])
                 ->regex($phone, '#^\d{11}$#', ['phone' => __('validator.phone')], false)
@@ -170,6 +172,7 @@ class BoardController extends BaseController
      * @param int       $id
      * @param Request   $request
      * @param Validator $validator
+     *
      * @return string
      */
     public function edit(int $id, Request $request, Validator $validator): string
@@ -186,18 +189,17 @@ class BoardController extends BaseController
         }
 
         if ($request->isMethod('post')) {
-            $token = check($request->input('token'));
             $bid   = int($request->input('bid'));
-            $title = check($request->input('title'));
-            $text  = check($request->input('text'));
-            $price = check($request->input('price'));
+            $title = $request->input('title');
+            $text  = $request->input('text');
+            $price = int($request->input('price'));
             $phone = preg_replace('/\D/', '', $request->input('phone'));
 
             /** @var Board $board */
             $board = Board::query()->find($bid);
 
             $validator
-                ->equal($token, $_SESSION['token'], __('validator.token'))
+                ->equal($request->input('token'), $_SESSION['token'], __('validator.token'))
                 ->length($title, 5, 50, ['title' => __('validator.text')])
                 ->length($text, 50, 5000, ['text' => __('validator.text')])
                 ->regex($phone, '#^\d{11}$#', ['phone' => __('validator.phone')], false)
@@ -250,8 +252,6 @@ class BoardController extends BaseController
      */
     public function close(int $id, Request $request, Validator $validator): void
     {
-        $token = check($request->input('token'));
-
         if (! getUser()) {
             abort(403, __('main.not_authorized'));
         }
@@ -263,7 +263,7 @@ class BoardController extends BaseController
             abort(404, __('boards.item_not_exist'));
         }
 
-        $validator->equal($token, $_SESSION['token'], __('validator.token'))
+        $validator->equal($request->input('token'), $_SESSION['token'], __('validator.token'))
             ->equal($item->user_id, getUser('id'), __('boards.item_not_author'));
 
         if ($validator->isValid()) {
@@ -300,12 +300,11 @@ class BoardController extends BaseController
      * @param int       $id
      * @param Request   $request
      * @param Validator $validator
+     *
      * @throws Exception
      */
     public function delete(int $id, Request $request, Validator $validator): void
     {
-        $token = check($request->input('token'));
-
         if (! getUser()) {
             abort(403, __('main.not_authorized'));
         }
@@ -317,7 +316,7 @@ class BoardController extends BaseController
             abort(404, __('boards.item_not_exist'));
         }
 
-        $validator->equal($token, $_SESSION['token'], __('validator.token'))
+        $validator->equal($request->input('token'), $_SESSION['token'], __('validator.token'))
             ->equal($item->user_id, getUser('id'), __('boards.item_not_author'));
 
         if ($validator->isValid()) {

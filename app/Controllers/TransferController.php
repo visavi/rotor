@@ -31,8 +31,7 @@ class TransferController extends BaseController
             abort(403, __('main.not_authorized'));
         }
 
-        $login      = check($request->input('user'));
-        $this->user = getUserByLogin($login);
+        $this->user = getUserByLogin($request->input('user'));
     }
 
     /**
@@ -50,17 +49,17 @@ class TransferController extends BaseController
      *
      * @param Request   $request
      * @param Validator $validator
+     *
      * @return void
      * @throws Throwable
      */
     public function send(Request $request, Validator $validator): void
     {
         $money = int($request->input('money'));
-        $msg   = check($request->input('msg'));
-        $token = check($request->input('token'));
+        $msg   = $request->input('msg');
 
         $validator
-            ->equal($token, $_SESSION['token'], ['msg' => __('validator.token')])
+            ->equal($request->input('token'), $_SESSION['token'], ['msg' => __('validator.token')])
             ->true($this->user, ['user' => __('validator.user')])
             ->length($msg, 0, setting('comment_length'), ['msg' => __('validator.comment_long')])
             ->gte(getUser('point'), setting('sendmoneypoint'), ['money' => __('transfers.transfer_point', ['point' => plural(setting('sendmoneypoint'), setting('scorename'))])])

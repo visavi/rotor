@@ -35,6 +35,7 @@ class VoteController extends BaseController
      * @param int       $id
      * @param Request   $request
      * @param Validator $validator
+     *
      * @return string
      */
     public function view(int $id, Request $request, Validator $validator): string
@@ -66,10 +67,9 @@ class VoteController extends BaseController
             ->first();
 
         if ($request->isMethod('post')) {
-            $token = check($request->input('token'));
-            $poll  = int($request->input('poll'));
+            $poll = int($request->input('poll'));
 
-            $validator->equal($token, $_SESSION['token'], __('validator.token'))
+            $validator->equal($request->input('token'), $_SESSION['token'], __('validator.token'))
                 ->empty($vote->poll, __('votes.voting_passed'))
                 ->notEmpty($poll, __('votes.answer_not_chosen'));
 
@@ -115,6 +115,7 @@ class VoteController extends BaseController
      * Проголосовавшие
      *
      * @param int $id
+     *
      * @return string
      */
     public function voters(int $id): string
@@ -195,16 +196,16 @@ class VoteController extends BaseController
      *
      * @param Request   $request
      * @param Validator $validator
+     *
      * @return string
      */
     public function create(Request $request, Validator $validator): string
     {
         if ($request->isMethod('post')) {
-            $token    = check($request->input('token'));
-            $question = check($request->input('question'));
-            $answers  = check($request->input('answer'));
+            $question = $request->input('question');
+            $answers  = $request->input('answer');
 
-            $validator->equal($token, $_SESSION['token'], __('validator.token'))
+            $validator->equal($request->input('token'), $_SESSION['token'], __('validator.token'))
                 ->length($question, 5, 100, ['question' => __('validator.text')]);
 
             $answers = array_unique(array_diff($answers, ['']));

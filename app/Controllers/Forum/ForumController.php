@@ -43,6 +43,7 @@ class ForumController extends BaseController
      * Страница списка тем
      *
      * @param int $id
+     *
      * @return string
      */
     public function forum(int $id): string
@@ -70,6 +71,7 @@ class ForumController extends BaseController
      * @param Request   $request
      * @param Validator $validator
      * @param Flood     $flood
+     *
      * @return string
      */
     public function create(Request $request, Validator $validator, Flood $flood): string
@@ -228,6 +230,7 @@ class ForumController extends BaseController
      * RSS постов
      *
      * @param int $id
+     *
      * @return string
      */
     public function rssPosts(int $id): string
@@ -273,6 +276,7 @@ class ForumController extends BaseController
      * Последние сообщения
      *
      * @param Request $request
+     *
      * @return string
      */
     public function topPosts(Request $request): string

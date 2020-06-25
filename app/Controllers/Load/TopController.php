@@ -14,11 +14,12 @@ class TopController extends BaseController
      * Топ файлов
      *
      * @param Request $request
+     *
      * @return string
      */
     public function index(Request $request): string
     {
-        $sort = check($request->input('sort'));
+        $sort = $request->input('sort');
 
         switch ($sort) {
             case 'rated':

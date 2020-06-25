@@ -16,6 +16,7 @@ class SearchController extends BaseController
      * Поиск
      *
      * @param Request $request
+     *
      * @return string
      */
     public function index(Request $request): ?string

@@ -7,7 +7,6 @@ namespace App\Controllers;
 use App\Classes\Validator;
 use App\Models\Social;
 use Curl\Curl;
-use ErrorException;
 use Exception;
 use Illuminate\Http\Request;
 
@@ -31,18 +30,16 @@ class SocialController extends BaseController
      * Главная страница
      *
      * @param Request $request
+     *
      * @return string
-     * @throws ErrorException
      */
     public function index(Request $request): string
     {
-        $token = check($request->input('token'));
-
         if ($request->isMethod('post')) {
             $curl    = new Curl();
             $network = $curl->get('//ulogin.ru/token.php',
                 [
-                    'token' => $token,
+                    'token' => $request->input('token'),
                     'host'  => $_SERVER['HTTP_HOST']
                 ]
             );
@@ -85,15 +82,14 @@ class SocialController extends BaseController
      * @param int       $id
      * @param Request   $request
      * @param Validator $validator
+     *
      * @throws Exception
      */
     public function delete(int $id, Request $request, Validator $validator): void
     {
-        $token = check($request->input('token'));
-
         $social = Social::query()->where('user_id', $this->user->id)->find($id);
 
-        $validator->equal($token, $_SESSION['token'], __('validator.token'))
+        $validator->equal($request->input('token'), $_SESSION['token'], __('validator.token'))
             ->notEmpty($social, __('socials.not_found_binding'));
 
         if ($validator->isValid()) {

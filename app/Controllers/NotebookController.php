@@ -30,8 +30,10 @@ class NotebookController extends BaseController
 
     /**
      * Главная страница
+     *
+     * @return string
      */
-    public function index()
+    public function index(): string
     {
         return view('notebooks/index', ['note' => $this->note]);
     }
@@ -41,16 +43,16 @@ class NotebookController extends BaseController
      *
      * @param Request   $request
      * @param Validator $validator
+     *
      * @return string
      */
     public function edit(Request $request, Validator $validator): string
     {
         if ($request->isMethod('post')) {
-            $token = check($request->input('token'));
-            $msg   = check($request->input('msg'));
+            $msg = $request->input('msg');
 
             $validator
-                ->equal($token, $_SESSION['token'], ['msg' => __('validator.token')])
+                ->equal($request->input('token'), $_SESSION['token'], ['msg' => __('validator.token')])
                 ->length($msg, 0, 10000, ['msg' => __('validator.text_long')], false);
 
             if ($validator->isValid()) {

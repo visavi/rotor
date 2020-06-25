@@ -24,6 +24,7 @@ class DownController extends BaseController
      * Просмотр загрузки
      *
      * @param int $id
+     *
      * @return string
      */
     public function index(int $id): string
@@ -58,6 +59,7 @@ class DownController extends BaseController
      * @param int       $id
      * @param Request   $request
      * @param Validator $validator
+     *
      * @return string
      */
     public function edit(int $id, Request $request, Validator $validator): string
@@ -74,12 +76,11 @@ class DownController extends BaseController
         }
 
         if ($request->isMethod('post')) {
-            $token = check($request->input('token'));
-            $title = check($request->input('title'));
-            $text  = check($request->input('text'));
+            $title = $request->input('title');
+            $text  = $request->input('text');
             $files = (array) $request->file('files');
 
-            $validator->equal($token, $_SESSION['token'], __('validator.token'))
+            $validator->equal($request->input('token'), $_SESSION['token'], __('validator.token'))
                 ->length($title, 5, 50, ['title' => __('validator.text')])
                 ->length($text, 50, 5000, ['text' => __('validator.text')]);
 
@@ -129,6 +130,7 @@ class DownController extends BaseController
      *
      * @param int $id
      * @param int $fid
+     *
      * @throws Exception
      */
     public function deleteFile(int $id, int $fid): void
@@ -161,6 +163,7 @@ class DownController extends BaseController
      * @param Request   $request
      * @param Validator $validator
      * @param Flood     $flood
+     *
      * @return string
      */
     public function create(Request $request, Validator $validator, Flood $flood): string
@@ -186,16 +189,15 @@ class DownController extends BaseController
         }
 
         if ($request->isMethod('post')) {
-            $token = check($request->input('token'));
-            $title = check($request->input('title'));
-            $text  = check($request->input('text'));
+            $title = $request->input('title');
+            $text  = $request->input('text');
             $files = (array) $request->file('files');
 
             /** @var Load $category */
             $category = Load::query()->find($cid);
 
             $validator
-                ->equal($token, $_SESSION['token'], __('validator.token'))
+                ->equal($request->input('token'), $_SESSION['token'], __('validator.token'))
                 ->length($title, 5, 50, ['title' => __('validator.text')])
                 ->length($text, 50, 5000, ['text' => __('validator.text')])
                 ->false($flood->isFlood(), ['msg' => __('validator.flood', ['sec' => $flood->getPeriod()])])
@@ -272,11 +274,11 @@ class DownController extends BaseController
      * @param int       $id
      * @param Request   $request
      * @param Validator $validator
+     *
      * @return void
      */
     public function vote(int $id, Request $request, Validator $validator): void
     {
-        $token = check($request->input('token'));
         $score = int($request->input('score'));
 
         /** @var Down $down */
@@ -287,7 +289,7 @@ class DownController extends BaseController
         }
 
         $validator
-            ->equal($token, $_SESSION['token'], ['score' => __('validator.token')])
+            ->equal($request->input('token'), $_SESSION['token'], ['score' => __('validator.token')])
             ->true(getUser(), ['score' => __('main.not_authorized')])
             ->between($score, 1, 5, ['score' => __('loads.down_voted_required')])
             ->notEmpty($down->active, ['score' => __('loads.down_not_verified')])
@@ -326,6 +328,7 @@ class DownController extends BaseController
      *
      * @param int       $id
      * @param Validator $validator
+     *
      * @return void
      */
     public function download(int $id, Validator $validator): void
@@ -359,6 +362,7 @@ class DownController extends BaseController
      * @param Request   $request
      * @param Validator $validator
      * @param Flood     $flood
+     *
      * @return string
      */
     public function comments(int $id, Request $request, Validator $validator, Flood $flood): string
@@ -375,21 +379,18 @@ class DownController extends BaseController
         }
 
         if ($request->isMethod('post')) {
-            $token = check($request->input('token'));
-            $msg   = check($request->input('msg'));
+            $msg = $request->input('msg');
 
             $validator
                 ->true(getUser(), __('main.not_authorized'))
-                ->equal($token, $_SESSION['token'], __('validator.token'))
+                ->equal($request->input('token'), $_SESSION['token'], __('validator.token'))
                 ->length($msg, 5, setting('comment_length'), ['msg' => __('validator.text')])
                 ->false($flood->isFlood(), ['msg' => __('validator.flood', ['sec' => $flood->getPeriod()])]);
 
             if ($validator->isValid()) {
-                $msg = antimat($msg);
-
                 /** @var Comment $comment */
                 $comment = $down->comments()->create([
-                    'text'        => $msg,
+                    'text'        => antimat($msg),
                     'user_id'     => getUser('id'),
                     'created_at'  => SITETIME,
                     'ip'          => getIp(),
@@ -429,6 +430,7 @@ class DownController extends BaseController
      * @param int       $cid
      * @param Request   $request
      * @param Validator $validator
+     *
      * @return string
      */
     public function editComment(int $id, int $cid, Request $request, Validator $validator): string
@@ -459,12 +461,11 @@ class DownController extends BaseController
         }
 
         if ($request->isMethod('post')) {
-            $token = check($request->input('token'));
-            $msg   = check($request->input('msg'));
-            $page  = int($request->input('page', 1));
+            $msg  = $request->input('msg');
+            $page = int($request->input('page', 1));
 
             $validator
-                ->equal($token, $_SESSION['token'], __('validator.token'))
+                ->equal($request->input('token'), $_SESSION['token'], __('validator.token'))
                 ->length($msg, 5, setting('comment_length'), ['msg' => __('validator.text')]);
 
             if ($validator->isValid()) {
@@ -489,6 +490,7 @@ class DownController extends BaseController
      * Переадресация на последнюю страницу
      *
      * @param int $id
+     *
      * @return void
      */
     public function end(int $id): void
@@ -552,6 +554,7 @@ class DownController extends BaseController
      *
      * @param int $id
      * @param int $fid
+     *
      * @return string
      */
     public function zipView(int $id, int $fid): string
@@ -604,6 +607,7 @@ class DownController extends BaseController
      * RSS комментариев
      *
      * @param int $id
+     *
      * @return string
      */
     public function rss(int $id): string
@@ -622,6 +626,7 @@ class DownController extends BaseController
      *
      * @param int $id
      * @param int $cid
+     *
      * @return void
      */
     public function viewComment(int $id, int $cid): void

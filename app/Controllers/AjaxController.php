@@ -28,11 +28,12 @@ class AjaxController extends BaseController
      * Возвращает bbCode для предпросмотра
      *
      * @param Request $request
+     *
      * @return string
      */
     public function bbCode(Request $request): string
     {
-        $message = check($request->input('data'));
+        $message = $request->input('data');
 
         return view('app/_bbcode', compact('message'));
     }
@@ -42,6 +43,7 @@ class AjaxController extends BaseController
      *
      * @param Request   $request
      * @param Validator $validator
+     *
      * @return string
      */
     public function complaint(Request $request, Validator $validator): string
@@ -49,9 +51,8 @@ class AjaxController extends BaseController
         $path  = null;
         $model = false;
         $id    = int($request->input('id'));
-        $type  = check($request->input('type'));
-        $page  = check($request->input('page'));
-        $token = check($request->input('token'));
+        $type  = $request->input('type');
+        $page  = $request->input('page');
 
         switch ($type):
             case Guestbook::$morphName:
@@ -87,7 +88,7 @@ class AjaxController extends BaseController
         $spam = Spam::query()->where(['relate_type' => $type, 'relate_id' => $id])->first();
 
         $validator
-            ->equal($token, $_SESSION['token'], __('validator.token'))
+            ->equal($request->input('token'), $_SESSION['token'], __('validator.token'))
             ->true($model, __('main.message_not_found'))
             ->false($spam, __('ajax.complaint_already_sent'));
 
@@ -114,6 +115,7 @@ class AjaxController extends BaseController
      *
      * @param Request   $request
      * @param Validator $validator
+     *
      * @return string
      */
     public function delComment(Request $request, Validator $validator): string
@@ -125,12 +127,11 @@ class AjaxController extends BaseController
             ]);
         }
 
-        $token = check($request->input('token'));
-        $type  = check($request->input('type'));
-        $rid   = int($request->input('rid'));
-        $id    = int($request->input('id'));
+        $type = $request->input('type');
+        $rid  = int($request->input('rid'));
+        $id   = int($request->input('id'));
 
-        $validator->equal($token, $_SESSION['token'], __('validator.token'));
+        $validator->equal($request->input('token'), $_SESSION['token'], __('validator.token'));
 
         if ($validator->isValid()) {
             $delComments = Comment::query()
@@ -162,6 +163,7 @@ class AjaxController extends BaseController
      * Изменяет рейтинг
      *
      * @param Request $request
+     *
      * @return string
      * @throws Exception
      */
@@ -175,12 +177,11 @@ class AjaxController extends BaseController
             News::$morphName,
         ];
 
-        $id    = int($request->input('id'));
-        $type  = check($request->input('type'));
-        $vote  = check($request->input('vote'));
-        $token = check($request->input('token'));
+        $id   = int($request->input('id'));
+        $type = $request->input('type');
+        $vote = $request->input('vote');
 
-        if ($token !== $_SESSION['token']) {
+        if ($request->input('token') !== $_SESSION['token']) {
             return json_encode(['status' => 'error', 'message' => 'Invalid token']);
         }
 
@@ -240,6 +241,7 @@ class AjaxController extends BaseController
      *
      * @param Request   $request
      * @param Validator $validator
+     *
      * @return string
      */
     public function uploadImage(Request $request, Validator $validator): string
@@ -250,10 +252,9 @@ class AjaxController extends BaseController
             Photo::$morphName,
         ];
 
-        $image = $request->file('image');
         $id    = int($request->input('id'));
-        $type  = check($request->input('type'));
-        $token = check($request->input('token'));
+        $image = $request->file('image');
+        $type  = $request->input('type');
 
         if (! in_array($type, $types, true)) {
             return json_encode(['status' => 'error', 'message' => 'Type invalid']);
@@ -280,7 +281,7 @@ class AjaxController extends BaseController
             ->count();
 
         $validator
-            ->equal($token, $_SESSION['token'], __('validator.token'))
+            ->equal($request->input('token'), $_SESSION['token'], __('validator.token'))
             ->lt($countFiles, setting('maxfiles'), __('validator.files_max', ['max' => setting('maxfiles')]));
 
         if ($validator->isValid()) {
@@ -315,6 +316,7 @@ class AjaxController extends BaseController
      *
      * @param Request   $request
      * @param Validator $validator
+     *
      * @return string
      * @throws Exception
      */
@@ -326,9 +328,8 @@ class AjaxController extends BaseController
             Photo::$morphName,
         ];
 
-        $id    = int($request->input('id'));
-        $type  = check($request->input('type'));
-        $token = check($request->input('token'));
+        $id   = int($request->input('id'));
+        $type = $request->input('type');
 
         if (! in_array($type, $types, true)) {
             return json_encode(['status' => 'error', 'message' => 'Type invalid']);
@@ -346,7 +347,7 @@ class AjaxController extends BaseController
             ]);
         }
 
-        $validator->equal($token, $_SESSION['token'], __('validator.token'))
+        $validator->equal($request->input('token'), $_SESSION['token'], __('validator.token'))
             ->true($file->user_id === getUser('id') || isAdmin(), __('ajax.image_not_author'))
             ->true(! $file->relate_id || isAdmin(), __('ajax.image_delete_attached'));
 
@@ -368,6 +369,7 @@ class AjaxController extends BaseController
      * Возвращает является ли запрос ajax
      *
      * @param Request $request
+     *
      * @return mixed
      */
     private function checkAjax(Request $request)

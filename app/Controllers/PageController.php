@@ -94,6 +94,7 @@ class PageController extends BaseController
      * Стикеры
      *
      * @param int $id
+     *
      * @return string
      */
     public function stickersCategory(int $id): string

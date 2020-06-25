@@ -11,7 +11,6 @@ use App\Models\ChangeMail;
 use App\Models\Invite;
 use App\Models\Online;
 use App\Models\User;
-use ErrorException;
 use Exception;
 use Illuminate\Database\Capsule\Manager as DB;
 use Illuminate\Http\Request;
@@ -60,10 +59,9 @@ class UserController extends BaseController
         }
 
         if ($request->isMethod('post')) {
-            $notice = check($request->input('notice'));
-            $token  = check($request->input('token'));
+            $notice = $request->input('notice');
 
-            $validator->equal($token, $_SESSION['token'], ['notice' => __('validator.token')])
+            $validator->equal($request->input('token'), $_SESSION['token'], ['notice' => __('validator.token')])
                 ->length($notice, 0, 1000, ['notice' => __('users.note_to_big')]);
 
             if ($validator->isValid()) {
@@ -92,7 +90,6 @@ class UserController extends BaseController
      * @param Validator $validator
      *
      * @return string
-     * @throws ErrorException
      */
     public function register(Request $request, Validator $validator): string
     {
@@ -106,11 +103,11 @@ class UserController extends BaseController
 
         if ($request->isMethod('post')) {
             if ($request->has('login') && $request->has('password')) {
-                $login        = check($request->input('login'));
+                $login        = $request->input('login');
                 $password     = trim($request->input('password'));
                 $password2    = trim($request->input('password2'));
-                $invite       = setting('invite') ? check($request->input('invite')) : '';
-                $email        = strtolower(check($request->input('email')));
+                $invite       = setting('invite') ? $request->input('invite') : '';
+                $email        = strtolower($request->input('email'));
                 $domain       = utfSubstr(strrchr($email, '@'), 1);
                 $gender       = $request->input('gender') === 'male' ? 'male' : 'female';
                 $level        = User::USER;
@@ -240,7 +237,6 @@ class UserController extends BaseController
      * @param Request $request
      *
      * @return string
-     * @throws ErrorException
      */
     public function login(Request $request): string
     {
@@ -248,13 +244,13 @@ class UserController extends BaseController
             abort(403, __('main.already_authorized'));
         }
 
-        $cooklog = isset($_COOKIE['login']) ? check($_COOKIE['login']): '';
+        $cooklog = $_COOKIE['login'] ?? '';
 
         if ($request->isMethod('post')) {
             if ($request->has('login') && $request->has('pass')) {
                if (captchaVerify()) {
                    $return   = $request->input('return');
-                   $login    = check(utfLower($request->input('login')));
+                   $login    = utfLower($request->input('login'));
                    $pass     = trim($request->input('pass'));
                    $remember = $request->input('remember');
 
@@ -289,10 +285,9 @@ class UserController extends BaseController
      */
     public function logout(Request $request): void
     {
-        $token  = check($request->input('token'));
         $domain = siteDomain(siteUrl());
 
-        if ($token === $_SESSION['token']) {
+        if ($request->input('token') === $_SESSION['token']) {
             $_SESSION = [];
             setcookie('password', '', strtotime('-1 hour', SITETIME), '/', $domain, false, true);
             setcookie(session_name(), '', strtotime('-1 hour', SITETIME), '/', '');
@@ -319,17 +314,16 @@ class UserController extends BaseController
         }
 
         if ($request->isMethod('post')) {
-            $token    = check($request->input('token'));
-            $info     = check($request->input('info'));
-            $name     = check($request->input('name'));
-            $country  = check($request->input('country'));
-            $city     = check($request->input('city'));
+            $info     = $request->input('info');
+            $name     = $request->input('name');
+            $country  = $request->input('country');
+            $city     = $request->input('city');
             $phone    = preg_replace('/\D/', '', $request->input('phone'));
-            $site     = check($request->input('site'));
-            $birthday = check($request->input('birthday'));
+            $site     = $request->input('site');
+            $birthday = $request->input('birthday');
             $gender   = $request->input('gender') === 'male' ? 'male' : 'female';
 
-            $validator->equal($token, $_SESSION['token'], __('validator.token'))
+            $validator->equal($request->input('token'), $_SESSION['token'], __('validator.token'))
                 ->regex($site, '#^https?://([а-яa-z0-9_\-\.])+(\.([а-яa-z0-9\/])+)+$#u', ['site' => __('validator.site')], false)
                 ->regex($birthday, '#^[0-9]{2}+\.[0-9]{2}+\.[0-9]{4}$#', ['birthday' => __('validator.date')], false)
                 ->regex($phone, '#^\d{11}$#', ['phone' => __('validator.phone')], false)
@@ -388,12 +382,10 @@ class UserController extends BaseController
 
         /* Повторная отправка */
         if ($request->has('email') && $request->isMethod('post')) {
-
-            $token  = check($request->input('token'));
-            $email  = strtolower(check($request->input('email')));
+            $email  = strtolower($request->input('email'));
             $domain = utfSubstr(strrchr($email, '@'), 1);
 
-            $validator->equal($token, $_SESSION['token'], __('validator.token'))
+            $validator->equal($request->input('token'), $_SESSION['token'], __('validator.token'))
                 ->true(captchaVerify(), ['protect' => __('validator.captcha')])
                 ->email($email, ['email' => __('validator.email')]);
 
@@ -433,7 +425,7 @@ class UserController extends BaseController
 
         /* Подтверждение кода */
         if ($request->has('code')) {
-            $code = check(trim($request->input('code')));
+            $code = trim($request->input('code'));
 
             if ($code === $user->confirmregkey) {
                 $user->update([
@@ -471,14 +463,13 @@ class UserController extends BaseController
         $setting['timezones'] = range(-12, 12);
 
         if ($request->isMethod('post')) {
-            $token     = check($request->input('token'));
-            $themes    = check($request->input('themes'));
-            $timezone  = check($request->input('timezone', 0));
-            $language  = check($request->input('language'));
+            $themes    = $request->input('themes');
+            $timezone  = $request->input('timezone', 0);
+            $language  = $request->input('language');
             $notify    = $request->input('notify') ? 1 : 0;
             $subscribe = $request->input('subscribe') ? Str::random(32) : null;
 
-            $validator->equal($token, $_SESSION['token'], __('validator.token'))
+            $validator->equal($request->input('token'), $_SESSION['token'], __('validator.token'))
                 ->regex($themes, '|^[a-z0-9_\-]+$|i', ['themes' => __('users.theme_invalid')])
                 ->true(in_array($themes, $setting['themes'], true) || empty($themes), ['themes' => __('users.theme_not_installed')])
                 ->regex($language, '|^[a-z]+$|', ['language' => __('users.language_invalid')])
@@ -533,11 +524,10 @@ class UserController extends BaseController
             abort(403, __('main.not_authorized'));
         }
 
-        $token    = check($request->input('token'));
-        $email    = check(strtolower($request->input('email')));
-        $password = check($request->input('password'));
+        $email    = strtolower($request->input('email'));
+        $password = $request->input('password');
 
-        $validator->equal($token, $_SESSION['token'], __('validator.token'))
+        $validator->equal($request->input('token'), $_SESSION['token'], __('validator.token'))
             ->notEqual($email, $user->email, ['email' => __('users.email_different')])
             ->email($email, ['email' => __('validator.email')])
             ->true(password_verify($password, $user->password), ['password' => __('users.password_different')]);
@@ -594,7 +584,7 @@ class UserController extends BaseController
             abort(403, __('main.not_authorized'));
         }
 
-        $key = check($request->input('key'));
+        $key = $request->input('key');
 
         ChangeMail::query()->where('created_at', '<', SITETIME)->delete();
 
@@ -642,11 +632,10 @@ class UserController extends BaseController
             abort(403, __('main.not_authorized'));
         }
 
-        $token  = check($request->input('token'));
-        $status = check($request->input('status'));
+        $status = $request->input('status');
         $cost   = $status ? setting('editstatusmoney') : 0;
 
-        $validator->equal($token, $_SESSION['token'], __('validator.token'))
+        $validator->equal($request->input('token'), $_SESSION['token'], __('validator.token'))
             ->empty($user->ban, ['status' => __('users.status_changed_not_ban')])
             ->notEqual($status, $user->status, ['status' => __('users.status_different')])
             ->gte($user->point, setting('editstatuspoint'), ['status' => __('users.status_points')])
@@ -683,12 +672,11 @@ class UserController extends BaseController
             abort(403, __('main.not_authorized'));
         }
 
-        $token    = check($request->input('token'));
-        $newpass  = check($request->input('newpass'));
-        $newpass2 = check($request->input('newpass2'));
-        $oldpass  = check($request->input('oldpass'));
+        $newpass  = $request->input('newpass');
+        $newpass2 = $request->input('newpass2');
+        $oldpass  = $request->input('oldpass');
 
-        $validator->equal($token, $_SESSION['token'], __('validator.token'))
+        $validator->equal($request->input('token'), $_SESSION['token'], __('validator.token'))
             ->true(password_verify($oldpass, $user->password), ['oldpass' => __('users.password_different')])
             ->length($newpass, 6, 20, ['newpass' => __('users.password_length_requirements')])
             ->notEqual(getUser('login'), $newpass, ['newpass' => __('users.login_different')])
@@ -733,9 +721,7 @@ class UserController extends BaseController
             abort(403, __('main.not_authorized'));
         }
 
-        $token = check($request->input('token'));
-
-        if ($token === $_SESSION['token']) {
+        if ($request->input('token') === $_SESSION['token']) {
             $user->update([
                 'apikey' => md5(getUser('login') . Str::random()),
             ]);

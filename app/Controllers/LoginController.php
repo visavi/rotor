@@ -22,6 +22,8 @@ class LoginController extends BaseController
 
     /**
      * Главная страница
+     *
+     * @return string
      */
     public function index(): string
     {

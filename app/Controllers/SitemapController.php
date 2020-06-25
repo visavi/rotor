@@ -24,8 +24,10 @@ class SitemapController extends BaseController
 
     /**
      * Генерируем главную страницу
+     *
+     *  @return string
      */
-    public function index()
+    public function index(): string
     {
         $locs = [];
 
@@ -43,6 +45,7 @@ class SitemapController extends BaseController
      * Вызывает страницу
      *
      * @param $page
+     *
      * @return string
      */
     public function page(string $page): string

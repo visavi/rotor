@@ -41,6 +41,7 @@ class ArticleController extends BaseController
      * Список статей
      *
      * @param int $id
+     *
      * @return string
      */
     public function blog(int $id): string
@@ -70,6 +71,7 @@ class ArticleController extends BaseController
      * Просмотр статьи
      *
      * @param int $id
+     *
      * @return string
      */
     public function view(int $id): string
@@ -110,6 +112,7 @@ class ArticleController extends BaseController
      * @param int       $id
      * @param Request   $request
      * @param Validator $validator
+     *
      * @return string
      */
     public function edit(int $id, Request $request, Validator $validator): string
@@ -130,17 +133,16 @@ class ArticleController extends BaseController
         }
 
         if ($request->isMethod('post')) {
-            $token = check($request->input('token'));
             $cid   = int($request->input('cid'));
-            $title = check($request->input('title'));
-            $text  = check($request->input('text'));
-            $tags  = check($request->input('tags'));
+            $title = $request->input('title');
+            $text  = $request->input('text');
+            $tags  = $request->input('tags');
 
             /** @var Blog $category */
             $category = Blog::query()->find($cid);
 
             $validator
-                ->equal($token, $_SESSION['token'], __('validator.token'))
+                ->equal($request->input('token'), $_SESSION['token'], __('validator.token'))
                 ->length($title, 5, 50, ['title' => __('validator.text')])
                 ->length($text, 100, setting('maxblogpost'), ['text' => __('validator.text')])
                 ->length($tags, 2, 50, ['tags' => __('blogs.article_error_tags')])
@@ -206,6 +208,7 @@ class ArticleController extends BaseController
      * @param Request   $request
      * @param Validator $validator
      * @param Flood     $flood
+     *
      * @return string
      */
     public function create(Request $request, Validator $validator, Flood $flood): string
@@ -231,16 +234,15 @@ class ArticleController extends BaseController
         }
 
         if ($request->isMethod('post')) {
-            $token = check($request->input('token'));
-            $title = check($request->input('title'));
-            $text  = check($request->input('text'));
-            $tags  = check($request->input('tags'));
+            $title = $request->input('title');
+            $text  = $request->input('text');
+            $tags  = $request->input('tags');
 
             /** @var Blog $category */
             $category = Blog::query()->find($cid);
 
             $validator
-                ->equal($token, $_SESSION['token'], __('validator.token'))
+                ->equal($request->input('token'), $_SESSION['token'], __('validator.token'))
                 ->length($title, 5, 50, ['title' => __('validator.text')])
                 ->length($text, 100, setting('maxblogpost'), ['text' => __('validator.text')])
                 ->length($tags, 2, 50, ['tags' => __('blogs.article_error_tags')])
@@ -302,6 +304,7 @@ class ArticleController extends BaseController
      * @param Request   $request
      * @param Validator $validator
      * @param Flood     $flood
+     *
      * @return string
      */
     public function comments(int $id, Request $request, Validator $validator, Flood $flood): string
@@ -314,12 +317,12 @@ class ArticleController extends BaseController
         }
 
         if ($request->isMethod('post')) {
-            $token = check($request->input('token'));
-            $msg   = check($request->input('msg'));
+
+            $msg = $request->input('msg');
 
             $validator
                 ->true(getUser(), __('main.not_authorized'))
-                ->equal($token, $_SESSION['token'], __('validator.token'))
+                ->equal($request->input('token'), $_SESSION['token'], __('validator.token'))
                 ->length($msg, 5, setting('comment_length'), ['msg' => __('validator.text')])
                 ->false($flood->isFlood(), ['msg' => __('validator.flood', ['sec' => $flood->getPeriod()])]);
 
@@ -366,6 +369,7 @@ class ArticleController extends BaseController
      * @param int       $cid
      * @param Request   $request
      * @param Validator $validator
+     *
      * @return string
      */
     public function editComment(int $id, int $cid, Request $request, Validator $validator): string
@@ -397,12 +401,11 @@ class ArticleController extends BaseController
         }
 
         if ($request->isMethod('post')) {
-            $token = check($request->input('token'));
-            $msg   = check($request->input('msg'));
-            $page  = int($request->input('page', 1));
+            $msg  = $request->input('msg');
+            $page = int($request->input('page', 1));
 
             $validator
-                ->equal($token, $_SESSION['token'], __('validator.token'))
+                ->equal($request->input('token'), $_SESSION['token'], __('validator.token'))
                 ->length($msg, 5, setting('comment_length'), ['msg' => __('validator.text')]);
 
             if ($validator->isValid()) {
@@ -427,6 +430,7 @@ class ArticleController extends BaseController
      * Переадресация на последнюю страницу
      *
      * @param int $id
+     *
      * @return void
      */
     public function end(int $id): void
@@ -448,6 +452,7 @@ class ArticleController extends BaseController
      * Печать
      *
      * @param int $id
+     *
      * @return string
      */
     public function print(int $id): string
@@ -485,6 +490,7 @@ class ArticleController extends BaseController
      * RSS комментариев к блогу
      *
      * @param int $id
+     *
      * @return string
      */
     public function rssComments(int $id): string
@@ -532,6 +538,7 @@ class ArticleController extends BaseController
      * Поиск по тегам
      *
      * @param string $tag
+     *
      * @return string
      */
     public function searchTag(string $tag): string
@@ -611,11 +618,12 @@ class ArticleController extends BaseController
      * Статьи пользователя
      *
      * @param Request $request
+     *
      * @return string
      */
     public function userArticles(Request $request): string
     {
-        $login = check($request->input('user', getUser('login')));
+        $login = $request->input('user', getUser('login'));
         $user  = getUserByLogin($login);
 
         if (! $user) {
@@ -634,11 +642,12 @@ class ArticleController extends BaseController
      * Комментарии пользователя
      *
      * @param Request $request
+     *
      * @return string
      */
     public function userComments(Request $request): string
     {
-        $login = check($request->input('user', getUser('login')));
+        $login = $request->input('user', getUser('login'));
         $user  = getUserByLogin($login);
 
         if (! $user) {
@@ -663,6 +672,7 @@ class ArticleController extends BaseController
      *
      * @param $id
      * @param $cid
+     *
      * @return void
      */
     public function viewComment(int $id, int $cid): void
@@ -687,11 +697,12 @@ class ArticleController extends BaseController
      * Топ статей
      *
      * @param Request $request
+     *
      * @return string
      */
     public function top(Request $request): string
     {
-        $sort = check($request->input('sort', 'visits'));
+        $sort = $request->input('sort', 'visits');
 
         switch ($sort) {
             case 'rated': $order = 'rating';
@@ -716,11 +727,12 @@ class ArticleController extends BaseController
      * Поиск
      *
      * @param Request $request
+     *
      * @return string
      */
     public function search(Request $request): ?string
     {
-        $find  = check($request->input('find'));
+        $find  = $request->input('find');
         $type  = int($request->input('type'));
         $where = int($request->input('where'));
 

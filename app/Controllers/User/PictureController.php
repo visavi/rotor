@@ -35,10 +35,9 @@ class PictureController extends BaseController
     public function index(Request $request, Validator $validator): string
     {
         if ($request->isMethod('post')) {
-            $token = check($request->input('token'));
             $photo = $request->file('photo');
 
-            $validator->equal($token, $_SESSION['token'], ['photo' => __('validator.token')]);
+            $validator->equal($request->input('token'), $_SESSION['token'], ['photo' => __('validator.token')]);
 
             $rules = [
                 'maxsize'   => setting('filesize'),
@@ -89,9 +88,7 @@ class PictureController extends BaseController
      */
     public function delete(Request $request, Validator $validator): void
     {
-        $token = check($request->input('token'));
-
-        $validator->equal($token, $_SESSION['token'], ['photo' => __('validator.token')]);
+        $validator->equal($request->input('token'), $_SESSION['token'], ['photo' => __('validator.token')]);
 
         if (! $this->user->picture) {
             $validator->addError(__('users.photo_not_exist'));

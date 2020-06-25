@@ -17,6 +17,7 @@ class BanController extends BaseController
      *
      * @param Request   $request
      * @param Validator $validator
+     *
      * @return string
      */
     public function ban(Request $request, Validator $validator): string
@@ -46,7 +47,7 @@ class BanController extends BaseController
             ->first();
 
         if ($banhist && $request->isMethod('post')) {
-            $msg = check($request->input('msg'));
+            $msg = $request->input('msg');
 
             $admins = User::query()->whereIn('level', [User::BOSS, User::ADMIN])->get();
 

@@ -30,6 +30,7 @@ class RatingController extends BaseController
      * @param string    $login
      * @param Request   $request
      * @param Validator $validator
+     *
      * @return string
      */
     public function index(string $login, Request $request, Validator $validator): string
@@ -61,10 +62,9 @@ class RatingController extends BaseController
         }
 
         if ($request->isMethod('post')) {
-            $token = check($request->input('token'));
-            $text  = check($request->input('text'));
+            $text = $request->input('text');
 
-            $validator->equal($token, $_SESSION['token'], __('validator.token'))
+            $validator->equal($request->input('token'), $_SESSION['token'], __('validator.token'))
                 ->length($text, 5, 250, ['text' => __('validator.text')]);
 
             if ($vote === 'minus' && getUser('rating') < 1) {
@@ -108,6 +108,7 @@ class RatingController extends BaseController
      *  Полученные голоса
      *
      * @param string $login
+     *
      * @return string
      */
     public function received(string $login): string
@@ -131,6 +132,7 @@ class RatingController extends BaseController
      *  Отданные голоса
      *
      * @param string $login
+     *
      * @return string
      */
     public function gave(string $login): string
@@ -155,18 +157,18 @@ class RatingController extends BaseController
      *
      * @param Request   $request
      * @param Validator $validator
+     *
      * @return void
      * @throws Exception
      */
     public function delete(Request $request, Validator $validator): void
     {
-        $id    = int($request->input('id'));
-        $token = check($request->input('token'));
+        $id = int($request->input('id'));
 
         $validator
             ->true($request->ajax(), __('validator.not_ajax'))
             ->true(isAdmin(User::ADMIN), __('main.page_only_admins'))
-            ->equal($token, $_SESSION['token'], __('validator.token'))
+            ->equal($request->input('token'), $_SESSION['token'], __('validator.token'))
             ->notEmpty($id, [__('validator.deletion')]);
 
         if ($validator->isValid()) {

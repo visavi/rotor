@@ -43,6 +43,7 @@ class AdvertController extends BaseController
      *
      * @param Request   $request
      * @param Validator $validator
+     *
      * @return string
      */
     public function create(Request $request, Validator $validator): string
@@ -70,10 +71,10 @@ class AdvertController extends BaseController
         }
 
         if ($request->isMethod('post')) {
-            $token = check($request->input('token'));
-            $site  = check($request->input('site'));
-            $name  = check($request->input('name'));
-            $color = check($request->input('color'));
+
+            $site  = $request->input('site');
+            $name  = $request->input('name');
+            $color = $request->input('color');
             $bold  = empty($request->input('bold')) ? 0 : 1;
 
             $price = setting('rekuserprice');
@@ -86,7 +87,7 @@ class AdvertController extends BaseController
                 $price += setting('rekuseroptprice');
             }
 
-            $validator->equal($token, $_SESSION['token'], __('validator.token'))
+            $validator->equal($request->input('token'), $_SESSION['token'], __('validator.token'))
                 ->gte($user->point, setting('rekuserpoint'), __('adverts.advert_point', ['point' => plural(50, setting('scorename'))]))
                 ->true(captchaVerify(), ['protect' => __('validator.captcha')])
                 ->regex($site, '|^https?://([а-яa-z0-9_\-\.])+(\.([а-яa-z0-9\/\-?_=#])+)+$|iu', ['site' => __('validator.url')])

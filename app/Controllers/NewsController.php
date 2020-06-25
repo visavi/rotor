@@ -15,8 +15,10 @@ class NewsController extends BaseController
 {
     /**
      * Главная страница
+     *
+     * @return string
      */
-    public function index()
+    public function index(): string
     {
         $news = News::query()
             ->select('news.*', 'pollings.vote')
@@ -35,7 +37,8 @@ class NewsController extends BaseController
     /**
      * Вывод новости
      *
-     * @param int $id
+     * @param int
+     *
      * @return string
      */
     public function view(int $id): string
@@ -71,6 +74,7 @@ class NewsController extends BaseController
      * @param Request   $request
      * @param Validator $validator
      * @param Flood     $flood
+     *
      * @return string
      */
     public function comments(int $id, Request $request, Validator $validator, Flood $flood): string
@@ -83,11 +87,10 @@ class NewsController extends BaseController
         }
 
         if ($request->isMethod('post')) {
-            $msg   = check($request->input('msg'));
-            $token = check($request->input('token'));
+            $msg = check($request->input('msg'));
 
             $validator->true(getUser(), __('main.not_authorized'))
-                ->equal($token, $_SESSION['token'], __('validator.token'))
+                ->equal($request->input('token'), $_SESSION['token'], __('validator.token'))
                 ->false($flood->isFlood(), ['msg' => __('validator.flood', ['sec' => $flood->getPeriod()])])
                 ->length($msg, 5, setting('comment_length'), ['msg' => __('validator.text')])
                 ->empty($news->closed, ['msg' => __('news.closed_news')]);
@@ -143,6 +146,7 @@ class NewsController extends BaseController
      * @param int       $cid
      * @param Request   $request
      * @param Validator $validator
+     *
      * @return string
      */
     public function editComment(int $id, int $cid, Request $request, Validator $validator): string
@@ -175,11 +179,10 @@ class NewsController extends BaseController
         }
 
         if ($request->isMethod('post')) {
-            $msg   = check($request->input('msg'));
-            $token = check($request->input('token'));
+            $msg = $request->input('msg');
 
             $validator
-                ->equal($token, $_SESSION['token'], __('validator.token'))
+                ->equal($request->input('token'), $_SESSION['token'], __('validator.token'))
                 ->length($msg, 5, setting('comment_length'), ['msg' => __('validator.text')]);
 
             if ($validator->isValid()) {
@@ -219,8 +222,10 @@ class NewsController extends BaseController
 
     /**
      * Rss новостей
+     *
+     * @return string
      */
-    public function rss()
+    public function rss(): string
     {
         $newses = News::query()->orderByDesc('created_at')->limit(15)->get();
 
@@ -233,8 +238,10 @@ class NewsController extends BaseController
 
     /**
      * Все комментарии
+     *
+     * @return string
      */
-    public function allComments()
+    public function allComments(): string
     {
         $comments = Comment::query()
             ->select('comments.*', 'title', 'count_comments')

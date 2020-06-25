@@ -111,7 +111,6 @@ class HomeController extends BaseController
      * Быстрое изменение языка
      *
      * @param string $lang
-     *
      * @param Request $request
      */
     public function language(string $lang, Request $request): void

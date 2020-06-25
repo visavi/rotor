@@ -27,6 +27,7 @@ class ContactController extends BaseController
      *
      * @param Request   $request
      * @param Validator $validator
+     *
      * @return string
      */
     public function index(Request $request, Validator $validator): string
@@ -35,9 +36,8 @@ class ContactController extends BaseController
 
         if ($request->isMethod('post')) {
             $page  = int($request->input('page', 1));
-            $token = check($request->input('token'));
 
-            $validator->equal($token, $_SESSION['token'], __('validator.token'));
+            $validator->equal($request->input('token'), $_SESSION['token'], __('validator.token'));
 
             $user = getUserByLogin($login);
             $validator->notEmpty($user, ['user' => __('validator.user')]);
@@ -87,6 +87,7 @@ class ContactController extends BaseController
      * @param int       $id
      * @param Request   $request
      * @param Validator $validator
+     *
      * @return string
      */
     public function note(int $id, Request $request, Validator $validator): string
@@ -101,10 +102,9 @@ class ContactController extends BaseController
         }
 
         if ($request->isMethod('post')) {
-            $token = check($request->input('token'));
-            $msg   = check($request->input('msg'));
+            $msg = $request->input('msg');
 
-            $validator->equal($token, $_SESSION['token'], ['msg' => __('validator.token')])
+            $validator->equal($request->input('token'), $_SESSION['token'], ['msg' => __('validator.token')])
                 ->length($msg, 0, 1000, ['msg' => __('users.note_to_big')]);
 
             if ($validator->isValid()) {
@@ -128,15 +128,15 @@ class ContactController extends BaseController
      *
      * @param Request   $request
      * @param Validator $validator
+     *
      * @return void
      */
     public function delete(Request $request, Validator $validator): void
     {
-        $page  = int($request->input('page', 1));
-        $token = check($request->input('token'));
-        $del   = intar($request->input('del'));
+        $page = int($request->input('page', 1));
+        $del  = intar($request->input('del'));
 
-        $validator->equal($token, $_SESSION['token'], __('validator.token'))
+        $validator->equal($request->input('token'), $_SESSION['token'], __('validator.token'))
             ->true($del, __('validator.deletion'));
 
         if ($validator->isValid()) {

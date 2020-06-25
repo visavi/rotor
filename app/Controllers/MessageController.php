@@ -31,6 +31,8 @@ class MessageController extends BaseController
 
     /**
      * Главная страница
+     *
+     * @return string
      */
     public function index(): string
     {
@@ -116,13 +118,13 @@ class MessageController extends BaseController
      * @param Request   $request
      * @param Validator $validator
      * @param Flood     $flood
+     *
      * @return void
      */
     public function send(Request $request, Validator $validator, Flood $flood): void
     {
-        $login = check($request->input('user'));
-        $token = check($request->input('token'));
-        $msg   = check($request->input('msg'));
+        $login = $request->input('user');
+        $msg   = $request->input('msg');
 
         $user = getUserByLogin($login);
 
@@ -130,7 +132,7 @@ class MessageController extends BaseController
             abort(404, __('validator.user'));
         }
 
-        $validator->equal($token, $_SESSION['token'], ['msg' => __('validator.token')])
+        $validator->equal($request->input('token'), $_SESSION['token'], ['msg' => __('validator.token')])
             ->length($msg, 5, setting('comment_length'), ['msg' => __('validator.text')])
             ->false($flood->isFlood(), ['msg' => __('validator.flood', ['sec' => $flood->getPeriod()])])
             ->notEqual($user->id, $this->user->id, __('messages.send_yourself'));
@@ -186,15 +188,14 @@ class MessageController extends BaseController
      */
     public function delete(int $uid, Request $request, Validator $validator): void
     {
-        $token = check($request->input('token'));
-        $page  = int($request->input('page', 1));
+        $page = int($request->input('page', 1));
 
         $total = Message::query()
             ->where('user_id', $this->user->id)
             ->where('author_id', $uid)
             ->count();
 
-        $validator->equal($token, $_SESSION['token'], __('validator.token'))
+        $validator->equal($request->input('token'), $_SESSION['token'], __('validator.token'))
             ->notEmpty($total, ['user' => __('messages.empty_dialogue')])
             ->empty(getUser('newprivat'), __('messages.unread_messages'));
 

@@ -27,6 +27,7 @@ class TopicController extends BaseController
      * Main page
      *
      * @param int $id
+     *
      * @return string
      */
     public function index(int $id): string
@@ -113,6 +114,7 @@ class TopicController extends BaseController
      * @param Request   $request
      * @param Validator $validator
      * @param Flood     $flood
+     *
      * @return void
      */
     public function create(int $id, Request $request, Validator $validator, Flood $flood): void
@@ -232,6 +234,7 @@ class TopicController extends BaseController
      * @param int       $id
      * @param Request   $request
      * @param Validator $validator
+     *
      * @return void
      */
     public function delete(int $id, Request $request, Validator $validator): void
@@ -286,6 +289,7 @@ class TopicController extends BaseController
      * @param int       $id
      * @param Request   $request
      * @param Validator $validator
+     *
      * @return void
      */
     public function close(int $id, Request $request, Validator $validator): void
@@ -326,6 +330,7 @@ class TopicController extends BaseController
      * @param int       $id
      * @param Request   $request
      * @param Validator $validator
+     *
      * @return string
      */
     public function edit(int $id, Request $request, Validator $validator): string
@@ -450,6 +455,7 @@ class TopicController extends BaseController
      * @param int       $id
      * @param Request   $request
      * @param Validator $validator
+     *
      * @return string
      */
     public function editPost(int $id, Request $request, Validator $validator): string
@@ -529,6 +535,7 @@ class TopicController extends BaseController
      * @param int       $id
      * @param Request   $request
      * @param Validator $validator
+     *
      * @return void
      */
     public function vote(int $id, Request $request, Validator $validator): void
@@ -594,6 +601,7 @@ class TopicController extends BaseController
      * Print topic
      *
      * @param int $id
+     *
      * @return string
      */
     public function print(int $id): string
@@ -621,6 +629,7 @@ class TopicController extends BaseController
      *
      * @param int $id
      * @param int $pid
+     *
      * @return void
      */
     public function viewpost(int $id, int $pid): void
@@ -642,6 +651,7 @@ class TopicController extends BaseController
      * Forward to the last message
      *
      * @param $id
+     *
      * @return void
      */
     public function end(int $id): void

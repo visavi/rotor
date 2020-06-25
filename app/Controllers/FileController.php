@@ -12,6 +12,7 @@ class FileController extends BaseController
      * Главная страница
      *
      * @param string $page
+     *
      * @return string
      */
     public function index(string $page = 'index'): string

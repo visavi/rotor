@@ -29,7 +29,7 @@ class SearchController extends BaseController
      */
     public function search(Request $request): string
     {
-        $find   = check($request->input('find'));
+        $find   = $request->input('find');
         $strlen = utfStrlen($find);
 
         if ($strlen < 2 || $strlen > 20) {

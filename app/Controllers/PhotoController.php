@@ -34,6 +34,7 @@ class PhotoController extends BaseController
      * Просмотр полной фотографии
      *
      * @param int $id
+     *
      * @return string
      */
     public function view(int $id): string
@@ -62,6 +63,7 @@ class PhotoController extends BaseController
      * @param Request   $request
      * @param Validator $validator
      * @param Flood     $flood
+     *
      * @return string
      */
     public function create(Request $request, Validator $validator, Flood $flood): string
@@ -71,12 +73,11 @@ class PhotoController extends BaseController
         }
 
         if ($request->isMethod('post')) {
-            $token  = check($request->input('token'));
-            $title  = check($request->input('title'));
-            $text   = check($request->input('text'));
+            $title  = $request->input('title');
+            $text   = $request->input('text');
             $closed = empty($request->input('closed')) ? 0 : 1;
 
-            $validator->equal($token, $_SESSION['token'], __('validator.token'))
+            $validator->equal($request->input('token'), $_SESSION['token'], __('validator.token'))
                 ->length($title, 5, 50, ['title' => __('validator.text')])
                 ->length($text, 0, 1000, ['text' => __('validator.text_long')])
                 ->false($flood->isFlood(), ['msg' => __('validator.flood', ['sec' => $flood->getPeriod()])]);
@@ -123,6 +124,7 @@ class PhotoController extends BaseController
      * @param int       $id
      * @param Request   $request
      * @param Validator $validator
+     *
      * @return string
      */
     public function edit(int $id, Request $request, Validator $validator): string
@@ -141,12 +143,11 @@ class PhotoController extends BaseController
         }
 
         if ($request->isMethod('post')) {
-            $token  = check($request->input('token'));
-            $title  = check($request->input('title'));
-            $text   = check($request->input('text'));
+            $title  = $request->input('title');
+            $text   = $request->input('text');
             $closed = empty($request->input('closed')) ? 0 : 1;
 
-            $validator->equal($token, $_SESSION['token'], __('validator.token'))
+            $validator->equal($request->input('token'), $_SESSION['token'], __('validator.token'))
                 ->length($title, 5, 50, ['title' => __('validator.text')])
                 ->length($text, 0, 1000, ['text' => __('validator.text_long')]);
 
@@ -179,6 +180,7 @@ class PhotoController extends BaseController
      * @param Request   $request
      * @param Validator $validator
      * @param Flood     $flood
+     *
      * @return string
      */
     public function comments(int $id, Request $request, Validator $validator, Flood $flood): string
@@ -191,12 +193,11 @@ class PhotoController extends BaseController
         }
 
         if ($request->isMethod('post')) {
-            $msg   = check($request->input('msg'));
-            $token = check($request->input('token'));
+            $msg = $request->input('msg');
 
             $validator
                 ->true(getUser(), __('main.not_authorized'))
-                ->equal($token, $_SESSION['token'], __('validator.token'))
+                ->equal($request->input('token'), $_SESSION['token'], __('validator.token'))
                 ->length($msg, 5, setting('comment_length'), ['msg' => __('validator.text')])
                 ->false($flood->isFlood(), ['msg' => __('validator.flood', ['sec' => $flood->getPeriod()])])
                 ->empty($photo->closed, ['msg' => __('main.closed_comments')]);
@@ -246,6 +247,7 @@ class PhotoController extends BaseController
      * @param int       $cid
      * @param Request   $request
      * @param Validator $validator
+     *
      * @return string
      */
     public function editComment(int $id, int $cid, Request $request, Validator $validator): string
@@ -277,11 +279,10 @@ class PhotoController extends BaseController
         }
 
         if ($request->isMethod('post')) {
-            $msg   = check($request->input('msg'));
-            $token = check($request->input('token'));
+            $msg = $request->input('msg');
 
             $validator
-                ->equal($token, $_SESSION['token'], __('validator.token'))
+                ->equal($request->input('token'), $_SESSION['token'], __('validator.token'))
                 ->length($msg, 5, setting('comment_length'), ['msg' => __('validator.text')])
                 ->empty($photo->closed, __('main.closed_comments'));
 
@@ -308,13 +309,12 @@ class PhotoController extends BaseController
      * @param int       $id
      * @param Request   $request
      * @param Validator $validator
+     *
      * @throws Exception
      */
     public function delete(int $id, Request $request, Validator $validator): void
     {
         $page = int($request->input('page', 1));
-
-        $token = check($request->input('token'));
 
         if (! getUser()) {
             abort(403, __('main.not_authorized'));
@@ -328,7 +328,7 @@ class PhotoController extends BaseController
         }
 
         $validator
-            ->equal($token, $_SESSION['token'], __('validator.token'))
+            ->equal($request->input('token'), $_SESSION['token'], __('validator.token'))
             ->empty($photo->count_comments, __('photos.photo_has_comments'));
 
         if ($validator->isValid()) {
@@ -385,6 +385,7 @@ class PhotoController extends BaseController
      * Альбом пользователя
      *
      * @param string $login
+     *
      * @return string
      */
     public function album(string $login): string
@@ -410,11 +411,12 @@ class PhotoController extends BaseController
      * Альбом пользователя
      *
      * @param Request $request
+     *
      * @return string
      */
     public function top(Request $request): string
     {
-        $sort = check($request->input('sort', 'rating'));
+        $sort = $request->input('sort', 'rating');
 
         if ($sort === 'comments') {
             $order = 'count_comments';
@@ -453,6 +455,7 @@ class PhotoController extends BaseController
      * Выводит комментарии пользователя
      *
      * @param string $login
+     *
      * @return string
      */
     public function UserComments($login): string

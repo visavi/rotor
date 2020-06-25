@@ -6,7 +6,6 @@ namespace App\Models;
 
 use App\Traits\UploadTrait;
 use Curl\Curl;
-use ErrorException;
 use Exception;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
