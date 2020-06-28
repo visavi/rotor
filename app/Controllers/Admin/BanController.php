@@ -35,13 +35,12 @@ class BanController extends AdminController
      *
      * @param Request   $request
      * @param Validator $validator
+     *
      * @return string
      */
     public function edit(Request $request, Validator $validator): string
     {
-        $login = check($request->input('user'));
-
-        $user = User::query()->where('login', $login)->with('lastBan')->first();
+        $user = User::query()->where('login', $request->input('user'))->with('lastBan')->first();
 
         if (! $user) {
             abort(404, __('validator.user'));
@@ -52,13 +51,12 @@ class BanController extends AdminController
         }
 
         if ($request->isMethod('post')) {
-            $token  = check($request->input('token'));
             $time   = int($request->input('time'));
-            $type   = check($request->input('type'));
-            $reason = check($request->input('reason'));
-            $notice = check($request->input('notice'));
+            $type   = $request->input('type');
+            $reason = $request->input('reason');
+            $notice = $request->input('notice');
 
-            $validator->equal($token, $_SESSION['token'], __('validator.token'))
+            $validator->equal($request->input('token'), $_SESSION['token'], __('validator.token'))
                 ->false($user->level === User::BANNED && $user->timeban > SITETIME, __('admin.bans.user_banned'))
                 ->gt($time, 0, ['time' => __('admin.bans.time_not_indicated')])
                 ->in($type, ['minutes', 'hours', 'days'], ['type' => __('admin.bans.time_not_selected')])
@@ -110,13 +108,12 @@ class BanController extends AdminController
      *
      * @param Request   $request
      * @param Validator $validator
+     *
      * @return string
      */
     public function change(Request $request, Validator $validator): string
     {
-        $login = check($request->input('user'));
-
-        $user = User::query()->where('login', $login)->with('lastBan')->first();
+        $user = User::query()->where('login', $request->input('user'))->with('lastBan')->first();
 
         if (! $user) {
             abort(404, __('validator.user'));
@@ -127,14 +124,13 @@ class BanController extends AdminController
         }
 
         if ($request->isMethod('post')) {
-            $token   = check($request->input('token'));
-            $timeban = check($request->input('timeban'));
-            $reason  = check($request->input('reason'));
+            $timeban = int($request->input('timeban'));
+            $reason  = $request->input('reason');
 
             $timeban = strtotime($timeban);
             $term    = $timeban - SITETIME;
 
-            $validator->equal($token, $_SESSION['token'], __('validator.token'))
+            $validator->equal($request->input('token'), $_SESSION['token'], __('validator.token'))
                 ->gt($term, 0, ['timeban' => __('admin.bans.time_empty')])
                 ->length($reason, 5, 1000, ['reason' => __('validator.text')]);
 
@@ -169,14 +165,12 @@ class BanController extends AdminController
      *
      * @param Request   $request
      * @param Validator $validator
+     *
      * @return void
      */
     public function unban(Request $request, Validator $validator): void
     {
-        $token = check($request->input('token'));
-        $login = check($request->input('user'));
-
-        $user = User::query()->where('login', $login)->with('lastBan')->first();
+        $user = User::query()->where('login', $request->input('user'))->with('lastBan')->first();
 
         if (! $user) {
             abort(404, __('validator.user'));
@@ -186,7 +180,7 @@ class BanController extends AdminController
             abort('default', __('admin.bans.user_not_banned'));
         }
 
-        $validator->equal($token, $_SESSION['token'], __('validator.token'));
+        $validator->equal($request->input('token'), $_SESSION['token'], __('validator.token'));
 
         if ($validator->isValid()) {
             $user->update([

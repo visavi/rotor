@@ -30,6 +30,7 @@ class GuestbookController extends AdminController
      * @param int       $id
      * @param Request   $request
      * @param Validator $validator
+     *
      * @return string
      */
     public function edit(int $id, Request $request, Validator $validator): string
@@ -73,6 +74,7 @@ class GuestbookController extends AdminController
      * @param int       $id
      * @param Request   $request
      * @param Validator $validator
+     *
      * @return string
      */
     public function reply(int $id, Request $request, Validator $validator): string
@@ -111,6 +113,7 @@ class GuestbookController extends AdminController
      *
      * @param Request   $request
      * @param Validator $validator
+     *
      * @return void
      */
     public function delete(Request $request, Validator $validator): void
@@ -138,6 +141,7 @@ class GuestbookController extends AdminController
      *
      * @param Request   $request
      * @param Validator $validator
+     *
      * @return void
      */
     public function clear(Request $request, Validator $validator): void

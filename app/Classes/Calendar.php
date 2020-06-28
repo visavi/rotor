@@ -12,6 +12,7 @@ class Calendar
      * Возвращает календарь
      *
      * @param int $time
+     *
      * @return string календарь
      */
     public function getCalendar($time = SITETIME): string
@@ -42,9 +43,10 @@ class Calendar
     /**
      * Формирует календарь
      *
-     * @param  int   $month месяц
-     * @param  int   $year  год
-     * @return array        сформированный массив
+     * @param int $month месяц
+     * @param int $year  год
+     *
+     * @return array сформированный массив
      */
     protected function makeCalendar($month, $year): array
     {

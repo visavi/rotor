@@ -12,10 +12,10 @@ class Mix
     /**
      * Get the path to a versioned Mix file.
      *
-     * @param  string  $path
-     * @param  string  $manifestDirectory
-     * @return string
+     * @param string $path
+     * @param string $manifestDirectory
      *
+     * @return string
      * @throws Exception
      */
     public function __invoke($path, $manifestDirectory = '')

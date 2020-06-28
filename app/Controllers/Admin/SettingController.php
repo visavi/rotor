@@ -29,11 +29,12 @@ class SettingController extends AdminController
      *
      * @param Request   $request
      * @param Validator $validator
+     *
      * @return string
      */
     public function index(Request $request, Validator $validator): string
     {
-        $act = check($request->input('act', 'mains'));
+        $act = $request->input('act', 'mains');
 
         if (! in_array($act, Setting::getActions(), true)) {
             abort(404, __('settings.page_invalid'));
@@ -43,9 +44,8 @@ class SettingController extends AdminController
             $sets  = check($request->input('sets'));
             $mods  = check($request->input('mods'));
             $opt   = check($request->input('opt'));
-            $token = check($request->input('token'));
 
-            $validator->equal($token, $_SESSION['token'], ['msg' => __('validator.token')])
+            $validator->equal($request->input('token'), $_SESSION['token'], ['msg' => __('validator.token')])
                 ->notEmpty($sets, ['sets' => __('settings.settings_empty')]);
 
             foreach ($sets as $name => $value) {

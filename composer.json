@@ -42,7 +42,7 @@
     },
     "require-dev": {
         "filp/whoops": "^2.7",
-        "phpunit/phpunit": "^8.7",
+        "phpunit/phpunit": "^8.5",
         "phpstan/phpstan": "^0.12",
         "php-coveralls/php-coveralls": "^2.2",
         "deployer/deployer": "^6.8"

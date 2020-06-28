@@ -28,17 +28,17 @@ class DeliveryController extends AdminController
      *
      * @param Request   $request
      * @param Validator $validator
+     *
      * @return string
      */
     public function index(Request $request, Validator $validator): string
     {
         if ($request->isMethod('post')) {
-            $token = check($request->input('token'));
-            $msg   = check($request->input('msg'));
+            $msg   = $request->input('msg');
             $type  = int($request->input('type'));
             $users = collect();
 
-            $validator->equal($token, $_SESSION['token'], ['msg' => __('validator.token')])
+            $validator->equal($request->input('token'), $_SESSION['token'], ['msg' => __('validator.token')])
                 ->length($msg, 5, setting('comment_length'), ['msg' => __('validator.text')])
                 ->between($type, 1, 4, __('admin.delivery.not_recipients_selected'));
 

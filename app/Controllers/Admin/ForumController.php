@@ -75,6 +75,7 @@ class ForumController extends AdminController
      * @param int       $id
      * @param Request   $request
      * @param Validator $validator
+     *
      * @return string
      */
     public function edit(int $id, Request $request, Validator $validator): string
@@ -137,6 +138,7 @@ class ForumController extends AdminController
      * @param int       $id
      * @param Request   $request
      * @param Validator $validator
+     *
      * @return void
      * @throws Exception
      */
@@ -198,6 +200,7 @@ class ForumController extends AdminController
      * Просмотр тем раздела
      *
      * @param int $id
+     *
      * @return string
      */
     public function forum(int $id): string
@@ -225,6 +228,7 @@ class ForumController extends AdminController
      * @param int       $id
      * @param Request   $request
      * @param Validator $validator
+     *
      * @return string
      */
     public function editTopic(int $id, Request $request, Validator $validator): string
@@ -276,6 +280,7 @@ class ForumController extends AdminController
      * @param int       $id
      * @param Request   $request
      * @param Validator $validator
+     *
      * @return string
      */
     public function moveTopic(int $id, Request $request, Validator $validator): string
@@ -334,6 +339,7 @@ class ForumController extends AdminController
      *
      * @param int     $id
      * @param Request $request
+     *
      * @return void
      */
     public function actionTopic(int $id, Request $request): void
@@ -399,6 +405,7 @@ class ForumController extends AdminController
      * @param int       $id
      * @param Request   $request
      * @param Validator $validator
+     *
      * @return void
      * @throws Exception
      */
@@ -452,6 +459,7 @@ class ForumController extends AdminController
      * Просмотр темы
      *
      * @param int $id
+     *
      * @return string
      */
     public function topic(int $id): string
@@ -509,6 +517,7 @@ class ForumController extends AdminController
      * @param int       $id
      * @param Request   $request
      * @param Validator $validator
+     *
      * @return string
      */
     public function editPost(int $id, Request $request, Validator $validator): string
@@ -567,6 +576,7 @@ class ForumController extends AdminController
      *
      * @param Request   $request
      * @param Validator $validator
+     *
      * @return void
      */
     public function deletePosts(Request $request, Validator $validator): void
@@ -607,8 +617,9 @@ class ForumController extends AdminController
     /**
      * Переадресация к последнему сообщению
      *
+     * @param int $id
+     *
      * @return void
-     * @param $id
      */
     public function end(int $id): void
     {

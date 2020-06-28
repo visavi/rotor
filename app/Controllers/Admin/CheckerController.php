@@ -48,13 +48,12 @@ class CheckerController extends AdminController
      * Сканирование сайта
      *
      * @param Request $request
+     *
      * @return void
      */
     public function scan(Request $request): void
     {
-        $token = check($request->input('token'));
-
-        if ($token === $_SESSION['token']) {
+        if ($request->input('token') === $_SESSION['token']) {
             $files = $this->scanFiles(BASEDIR);
 
             file_put_contents(STORAGE . '/caches/checker.php', json_encode($files));
@@ -71,6 +70,7 @@ class CheckerController extends AdminController
      * Сканирует директорию сайта
      *
      * @param string $dir
+     *
      * @return array
      */
     private function scanFiles($dir): array

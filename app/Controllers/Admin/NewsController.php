@@ -10,7 +10,6 @@ use App\Models\Setting;
 use App\Models\User;
 use Exception;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Cache;
 
 class NewsController extends AdminController
 {
@@ -47,6 +46,7 @@ class NewsController extends AdminController
      * @param int       $id
      * @param Request   $request
      * @param Validator $validator
+     *
      * @return string
      */
     public function edit(int $id, Request $request, Validator $validator): string
@@ -60,14 +60,13 @@ class NewsController extends AdminController
         }
 
         if ($request->isMethod('post')) {
-            $token  = check($request->input('token'));
-            $title  = check($request->input('title'));
-            $text   = check($request->input('text'));
+            $title  = $request->input('title');
+            $text   = $request->input('text');
             $image  = $request->file('image');
             $closed = empty($request->input('closed')) ? 0 : 1;
             $top    = empty($request->input('top')) ? 0 : 1;
 
-            $validator->equal($token, $_SESSION['token'], __('validator.token'))
+            $validator->equal($request->input('token'), $_SESSION['token'], __('validator.token'))
                 ->length($title, 5, 50, ['title' => __('validator.text')])
                 ->length($text, 5, 10000, ['text' => __('validator.text')]);
 
@@ -110,19 +109,19 @@ class NewsController extends AdminController
      *
      * @param Request   $request
      * @param Validator $validator
+     *
      * @return string
      */
     public function create(Request $request, Validator $validator): string
     {
         if ($request->isMethod('post')) {
-            $token  = check($request->input('token'));
-            $title  = check($request->input('title'));
-            $text   = check($request->input('text'));
+            $title  = $request->input('title');
+            $text   = $request->input('text');
             $image  = $request->file('image');
             $closed = empty($request->input('closed')) ? 0 : 1;
             $top    = empty($request->input('top')) ? 0 : 1;
 
-            $validator->equal($token, $_SESSION['token'], __('validator.token'))
+            $validator->equal($request->input('token'), $_SESSION['token'], __('validator.token'))
                 ->length($title, 5, 50, ['title' => __('validator.text')])
                 ->length($text, 5, 10000, ['text' => __('validator.text')]);
 
@@ -171,6 +170,7 @@ class NewsController extends AdminController
      * Пересчет комментариев
      *
      * @param Request $request
+     *
      * @return void
      */
     public function restatement(Request $request): void
@@ -179,9 +179,7 @@ class NewsController extends AdminController
             abort(403, __('errors.forbidden'));
         }
 
-        $token = check($request->input('token'));
-
-        if ($token === $_SESSION['token']) {
+        if ($request->input('token') === $_SESSION['token']) {
             restatement('news');
 
             setFlash('success', __('main.success_recounted'));
@@ -198,13 +196,13 @@ class NewsController extends AdminController
      * @param int       $id
      * @param Request   $request
      * @param Validator $validator
+     *
      * @return void
      * @throws Exception
      */
     public function delete(int $id, Request $request, Validator $validator): void
     {
-        $page  = int($request->input('page', 1));
-        $token = check($request->input('token'));
+        $page = int($request->input('page', 1));
 
         /** @var News $news */
         $news = News::query()->find($id);
@@ -213,7 +211,7 @@ class NewsController extends AdminController
             abort(404, __('news.news_not_exist'));
         }
 
-        $validator->equal($token, $_SESSION['token'], __('validator.token'));
+        $validator->equal($request->input('token'), $_SESSION['token'], __('validator.token'));
 
         if ($validator->isValid()) {
             deleteFile(HOME . $news->image);

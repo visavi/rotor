@@ -44,7 +44,7 @@ class SitemapController extends BaseController
     /**
      * Вызывает страницу
      *
-     * @param $page
+     * @param string $page
      *
      * @return string
      */

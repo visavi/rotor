@@ -19,7 +19,7 @@ class TopController extends BaseController
      */
     public function index(Request $request): string
     {
-        $sort = $request->input('sort');
+        $sort = check($request->input('sort'));
 
         switch ($sort) {
             case 'rated':

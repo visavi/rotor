@@ -41,13 +41,12 @@ class TransferController extends AdminController
      * Просмотр всех переводов
      *
      * @param Request $request
+     *
      * @return string
      */
     public function view(Request $request): string
     {
-        $login = check($request->input('user'));
-
-        if (! $user = getUserByLogin($login)) {
+        if (! $user = getUserByLogin($request->input('user'))) {
             abort(404, __('validator.user'));
         }
 
@@ -56,7 +55,7 @@ class TransferController extends AdminController
             ->orderByDesc('created_at')
             ->with('user', 'recipientUser')
             ->paginate(setting('listtransfers'))
-            ->appends(['user' => $login]);
+            ->appends(['user' => $user->login]);
 
         return view('admin/transfers/view', compact('transfers', 'user'));
     }

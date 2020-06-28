@@ -18,6 +18,7 @@ class BoardController extends AdminController
      * Главная страница
      *
      * @param int $id
+     *
      * @return string
      */
     public function index($id = null): string
@@ -74,6 +75,7 @@ class BoardController extends AdminController
      *
      * @param Request   $request
      * @param Validator $validator
+     *
      * @return void
      */
     public function create(Request $request, Validator $validator): void
@@ -82,10 +84,9 @@ class BoardController extends AdminController
             abort(403, __('errors.forbidden'));
         }
 
-        $token = check($request->input('token'));
-        $name  = check($request->input('name'));
+        $name = $request->input('name');
 
-        $validator->equal($token, $_SESSION['token'], __('validator.token'))
+        $validator->equal($request->input('token'), $_SESSION['token'], __('validator.token'))
             ->length($name, 3, 50, ['name' => __('validator.text')]);
 
         if ($validator->isValid()) {
@@ -113,6 +114,7 @@ class BoardController extends AdminController
      * @param int       $id
      * @param Request   $request
      * @param Validator $validator
+     *
      * @return string
      */
     public function edit(int $id, Request $request, Validator $validator): string
@@ -134,13 +136,12 @@ class BoardController extends AdminController
             ->get();
 
         if ($request->isMethod('post')) {
-            $token  = check($request->input('token'));
             $parent = int($request->input('parent'));
-            $name   = check($request->input('name'));
-            $sort   = check($request->input('sort'));
+            $name   = $request->input('name');
+            $sort   = int($request->input('sort'));
             $closed = empty($request->input('closed')) ? 0 : 1;
 
-            $validator->equal($token, $_SESSION['token'], __('validator.token'))
+            $validator->equal($request->input('token'), $_SESSION['token'], __('validator.token'))
                 ->length($name, 3, 50, ['name' => __('validator.text')])
                 ->notEqual($parent, $board->id, ['parent' => __('boards.category_parent_invalid')]);
 
@@ -174,6 +175,7 @@ class BoardController extends AdminController
      * @param int       $id
      * @param Request   $request
      * @param Validator $validator
+     *
      * @throws Exception
      */
     public function delete(int $id, Request $request, Validator $validator): void
@@ -189,9 +191,7 @@ class BoardController extends AdminController
             abort(404, __('boards.category_not_exist'));
         }
 
-        $token = check($request->input('token'));
-
-        $validator->equal($token, $_SESSION['token'], __('validator.token'))
+        $validator->equal($request->input('token'), $_SESSION['token'], __('validator.token'))
             ->true($board->children->isEmpty(), __('boards.category_has_subsections'));
 
         $item = Item::query()->where('board_id', $board->id)->first();
@@ -217,6 +217,7 @@ class BoardController extends AdminController
      * @param int       $id
      * @param Request   $request
      * @param Validator $validator
+     *
      * @return string
      */
     public function editItem(int $id, Request $request, Validator $validator): string
@@ -229,18 +230,17 @@ class BoardController extends AdminController
         }
 
         if ($request->isMethod('post')) {
-            $token = check($request->input('token'));
             $bid   = int($request->input('bid'));
-            $title = check($request->input('title'));
-            $text  = check($request->input('text'));
-            $price = check($request->input('price'));
+            $title = $request->input('title');
+            $text  = $request->input('text');
+            $price = int($request->input('price'));
             $phone = preg_replace('/\D/', '', $request->input('phone'));
 
             /** @var Board $board */
             $board = Board::query()->find($bid);
 
             $validator
-                ->equal($token, $_SESSION['token'], __('validator.token'))
+                ->equal($request->input('token'), $_SESSION['token'], __('validator.token'))
                 ->length($title, 5, 50, ['title' => __('validator.text')])
                 ->length($text, 50, 5000, ['text' => __('validator.text')])
                 ->regex($phone, '#^\d{11}$#', ['phone' => __('validator.phone')], false)
@@ -289,12 +289,11 @@ class BoardController extends AdminController
      * @param int       $id
      * @param Request   $request
      * @param Validator $validator
+     *
      * @throws Exception
      */
     public function deleteItem(int $id, Request $request, Validator $validator): void
     {
-        $token = check($request->input('token'));
-
         /** @var Item $item */
         $item = Item::query()->find($id);
 
@@ -302,7 +301,7 @@ class BoardController extends AdminController
             abort(404, __('boards.item_not_exist'));
         }
 
-        $validator->equal($token, $_SESSION['token'], __('validator.token'));
+        $validator->equal($request->input('token'), $_SESSION['token'], __('validator.token'));
 
         if ($validator->isValid()) {
             $item->delete();
@@ -321,6 +320,7 @@ class BoardController extends AdminController
      * Пересчет голосов
      *
      * @param Request $request
+     *
      * @return void
      */
     public function restatement(Request $request): void
@@ -329,9 +329,7 @@ class BoardController extends AdminController
             abort(403, __('errors.forbidden'));
         }
 
-        $token = check($request->input('token'));
-
-        if ($token === $_SESSION['token']) {
+        if ($request->input('token') === $_SESSION['token']) {
             restatement('boards');
 
             setFlash('success', __('main.success_recounted'));

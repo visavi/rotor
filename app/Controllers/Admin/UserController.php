@@ -47,6 +47,7 @@ class UserController extends AdminController
      * Поиск пользователей
      *
      * @param Request $request
+     *
      * @return string
      */
     public function search(Request $request): string
@@ -69,12 +70,12 @@ class UserController extends AdminController
      *
      * @param Request   $request
      * @param Validator $validator
+     *
      * @return string
      */
     public function edit(Request $request, Validator $validator): string
     {
-        $login = check($request->input('user'));
-        $user  = getUserByLogin($login);
+        $user = getUserByLogin($request->input('user'));
 
         if (! $user) {
             abort(404, __('validator.user'));
@@ -89,26 +90,25 @@ class UserController extends AdminController
         }
 
         if ($request->isMethod('post')) {
-            $token     = check($request->input('token'));
-            $level     = check($request->input('level'));
-            $password  = check($request->input('password'));
-            $email     = check($request->input('email'));
-            $name      = check($request->input('name'));
-            $country   = check($request->input('country'));
-            $city      = check($request->input('city'));
-            $site      = check($request->input('site'));
-            $birthday  = check($request->input('birthday'));
+            $level     = $request->input('level');
+            $password  = $request->input('password');
+            $email     = $request->input('email');
+            $name      = $request->input('name');
+            $country   = $request->input('country');
+            $city      = $request->input('city');
+            $site      = $request->input('site');
+            $birthday  = $request->input('birthday');
             $point     = int($request->input('point'));
             $money     = int($request->input('money'));
-            $status    = check($request->input('status'));
+            $status    = $request->input('status');
             $posrating = int($request->input('posrating'));
             $negrating = int($request->input('negrating'));
-            $themes    = check($request->input('themes'));
+            $themes    = $request->input('themes');
             $gender    = $request->input('gender') === 'male' ? 'male' : 'female';
-            $info      = check($request->input('info'));
-            $created   = check($request->input('created'));
+            $info      = $request->input('info');
+            $created   = $request->input('created');
 
-            $validator->equal($token, $_SESSION['token'], __('validator.token'))
+            $validator->equal($request->input('token'), $_SESSION['token'], __('validator.token'))
                 ->in($level, User::ALL_GROUPS, ['level' => __('users.user_level_invalid')])
                 ->length($password, 6, 20, __('users.password_length_requirements'), false)
                 ->email($email, ['email' => __('validator.email')])
@@ -178,20 +178,19 @@ class UserController extends AdminController
      *
      * @param Request   $request
      * @param Validator $validator
+     *
      * @return string
      * @throws Exception
      */
     public function delete(Request $request, Validator $validator): string
     {
-        $login = check($request->input('user'));
-        $user  = getUserByLogin($login);
+        $user = getUserByLogin($request->input('user'));
 
         if (! $user) {
             abort(404, __('validator.user'));
         }
 
         if ($request->isMethod('post')) {
-            $token       = check($request->input('token'));
             $loginblack  = empty($request->input('loginblack')) ? 0 : 1;
             $mailblack   = empty($request->input('mailblack')) ? 0 : 1;
             $deltopics   = empty($request->input('deltopics')) ? 0 : 1;
@@ -199,7 +198,7 @@ class UserController extends AdminController
             $delcomments = empty($request->input('delcomments')) ? 0 : 1;
             $delimages   = empty($request->input('delimages')) ? 0 : 1;
 
-            $validator->equal($token, $_SESSION['token'], __('validator.token'))
+            $validator->equal($request->input('token'), $_SESSION['token'], __('validator.token'))
                 ->notIn($user->level, User::ADMIN_GROUPS, __('users.admins_remove_forbidden'));
 
             if ($validator->isValid()) {

@@ -22,7 +22,7 @@ class SearchController extends BaseController
     public function index(Request $request): ?string
     {
         $fid     = int($request->input('fid'));
-        $find    = $request->input('find');
+        $find    = check($request->input('find'));
         $type    = int($request->input('type'));
         $where   = int($request->input('where'));
         $period  = int($request->input('period'));

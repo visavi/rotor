@@ -28,15 +28,15 @@ class IpBanController extends AdminController
      *
      * @param Request   $request
      * @param Validator $validator
+     *
      * @return string
      */
     public function index(Request $request, Validator $validator): string
     {
         if ($request->isMethod('post')) {
-            $token = check($request->input('token'));
-            $ip    = check($request->input('ip'));
+            $ip = $request->input('ip');
 
-            $validator->equal($token, $_SESSION['token'], __('validator.token'))
+            $validator->equal($request->input('token'), $_SESSION['token'], __('validator.token'))
                 ->ip($ip, ['ip' => __('admin.ipbans.ip_invalid')]);
 
             $duplicate = Ban::query()->where('ip', inet_pton($ip))->first();
@@ -72,15 +72,15 @@ class IpBanController extends AdminController
      *
      * @param Request   $request
      * @param Validator $validator
+     *
      * @return void
      */
     public function delete(Request $request, Validator $validator): void
     {
-        $page  = int($request->input('page', 1));
-        $token = check($request->input('token'));
-        $del   = intar($request->input('del'));
+        $page = int($request->input('page', 1));
+        $del  = intar($request->input('del'));
 
-        $validator->equal($token, $_SESSION['token'], __('validator.token'))
+        $validator->equal($request->input('token'), $_SESSION['token'], __('validator.token'))
             ->true($del, __('validator.deletion'));
 
         if ($validator->isValid()) {
@@ -100,14 +100,13 @@ class IpBanController extends AdminController
      *
      * @param Request   $request
      * @param Validator $validator
+     *
      * @return void
      */
     public function clear(Request $request, Validator $validator): void
     {
-        $token = check($request->input('token'));
-
         $validator
-            ->equal($token, $_SESSION['token'], __('validator.token'))
+            ->equal($request->input('token'), $_SESSION['token'], __('validator.token'))
             ->true(isAdmin(User::BOSS), __('main.page_only_owner'));
 
         if ($validator->isValid()) {

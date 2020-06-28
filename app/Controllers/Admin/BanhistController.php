@@ -39,12 +39,12 @@ class BanhistController extends AdminController
      * История банов
      *
      * @param Request $request
+     *
      * @return string
      */
     public function view(Request $request): string
     {
-        $login = check($request->input('user'));
-        $user  = getUserByLogin($login);
+        $user = getUserByLogin($request->input('user'));
 
         if (! $user) {
             abort(404, __('validator.user'));
@@ -65,16 +65,16 @@ class BanhistController extends AdminController
      *
      * @param Request   $request
      * @param Validator $validator
+     *
      * @return void
      */
     public function delete(Request $request, Validator $validator): void
     {
         $page  = int($request->input('page', 1));
-        $token = check($request->input('token'));
         $del   = intar($request->input('del'));
-        $login = check($request->input('user'));
+        $login = $request->input('user');
 
-        $validator->equal($token, $_SESSION['token'], __('validator.token'))
+        $validator->equal($request->input('token'), $_SESSION['token'], __('validator.token'))
             ->true($del, __('validator.deletion'));
 
         if ($validator->isValid()) {

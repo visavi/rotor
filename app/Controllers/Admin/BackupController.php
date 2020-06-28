@@ -49,23 +49,23 @@ class BackupController extends AdminController
      *
      * @param Request   $request
      * @param Validator $validator
+     *
      * @return string
      */
     public function create(Request $request, Validator $validator): string
     {
         if ($request->isMethod('post')) {
-            $token  = check($request->input('token'));
-            $sheets = check($request->input('sheets'));
-            $method = check($request->input('method'));
+            $sheets = $request->input('sheets');
+            $method = $request->input('method');
             $level  = int($request->input('level'));
 
-            $validator->equal($token, $_SESSION['token'], __('validator.token'))
+            $validator->equal($request->input('token'), $_SESSION['token'], __('validator.token'))
                 ->notEmpty($sheets, ['sheets' => __('admin.backup.no_tables_save')])
                 ->in($method, ['none', 'gzip', 'bzip'], ['method' => __('admin.backup.wrong_compression_method')])
                 ->between($level, 0, 9, ['level' => __('admin.backup.wrong_compression_ratio')]);
 
             if ($validator->isValid()) {
-                $selectTables = DB::connection()->select('SHOW TABLE STATUS where name IN("' . implode('","', $sheets) . '")');
+                $selectTables = DB::connection()->select('SHOW TABLE STATUS where name IN("' . implode('","', check($sheets)) . '")');
 
                 $limit    = 3000;
                 $filename = 'backup_'.$this->date.'.sql';
@@ -133,14 +133,14 @@ class BackupController extends AdminController
      *
      * @param Request   $request
      * @param Validator $validator
+     *
      * @return void
      */
     public function delete(Request $request, Validator $validator): void
     {
-        $token = check($request->input('token'));
-        $file  = check($request->input('file'));
+        $file = $request->input('file');
 
-        $validator->equal($token, $_SESSION['token'], __('validator.token'))
+        $validator->equal($request->input('token'), $_SESSION['token'], __('validator.token'))
             ->notEmpty($file, __('admin.backup.backup_not_indicated'))
             ->regex($file, '|^[\w\.\-]+$|i', __('admin.backup.invalid_backup_name'))
             ->true(file_exists(STORAGE.'/backups/'.$file), __('admin.backup.backup_not_exist'));
@@ -163,6 +163,7 @@ class BackupController extends AdminController
      * @param string $mode
      * @param string $method
      * @param int $level
+     *
      * @return bool|resource
      */
     private function fopen($name, $mode, $method, $level)

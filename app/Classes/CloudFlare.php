@@ -62,6 +62,7 @@ class CloudFlare
      * Executes a callback on a trusted request.
      *
      * @param  Closure $callback
+     *
      * @return mixed
      */
     public function onTrustedRequest(Closure $callback)

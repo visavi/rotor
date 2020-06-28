@@ -416,7 +416,7 @@ class PhotoController extends BaseController
      */
     public function top(Request $request): string
     {
-        $sort = $request->input('sort', 'rating');
+        $sort = check($request->input('sort', 'rating'));
 
         if ($sort === 'comments') {
             $order = 'count_comments';

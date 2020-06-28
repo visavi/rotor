@@ -48,7 +48,7 @@ class LoadController extends BaseController
             abort(404, __('loads.load_not_exist'));
         }
 
-        $sort = $request->input('sort', 'time');
+        $sort = check($request->input('sort', 'time'));
 
         switch ($sort) {
             case 'rated':

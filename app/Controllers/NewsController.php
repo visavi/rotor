@@ -205,9 +205,9 @@ class NewsController extends BaseController
     /**
      * Переадресация на последнюю страницу
      *
-     * @param $id
+     * @param int $id
      */
-    public function end($id): void
+    public function end(int $id): void
     {
         /** @var News $news */
         $news = News::query()->find($id);

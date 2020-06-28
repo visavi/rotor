@@ -52,11 +52,12 @@ class ModuleController extends AdminController
      * Просмотр модуля
      *
      * @param Request $request
+     *
      * @return string
      */
     public function module(Request $request): string
     {
-        $moduleName = check($request->input('module'));
+        $moduleName = $request->input('module');
         $modulePath = MODULES . '/' . $moduleName;
 
         if (! preg_match('|^[A-Z][\w\-]+$|', $moduleName) || ! file_exists($modulePath)) {
@@ -86,11 +87,12 @@ class ModuleController extends AdminController
      * Установка модуля
      *
      * @param Request $request
+     *
      * @return void
      */
     public function install(Request $request): void
     {
-        $moduleName = check($request->input('module'));
+        $moduleName = $request->input('module');
         $enable     = int($request->input('enable'));
         $update     = int($request->input('update'));
         $modulePath = MODULES . '/' . $moduleName;
@@ -142,12 +144,13 @@ class ModuleController extends AdminController
      * Удаление/Выключение модуля
      *
      * @param Request $request
+     *
      * @return void
      * @throws Exception
      */
     public function uninstall(Request $request): void
     {
-        $moduleName = check($request->input('module'));
+        $moduleName = $request->input('module');
         $disable    = int($request->input('disable'));
         $modulePath = MODULES . '/' . $moduleName;
 

@@ -41,6 +41,7 @@ class BlacklistController extends AdminController
      *
      * @param Request   $request
      * @param Validator $validator
+     *
      * @return string
      */
     public function index(Request $request, Validator $validator): string
@@ -48,10 +49,9 @@ class BlacklistController extends AdminController
         $type = $this->type;
 
         if ($request->isMethod('post')) {
-            $token = check($request->input('token'));
-            $value = check(utfLower($request->input('value')));
+            $value = utfLower($request->input('value'));
 
-            $validator->equal($token, $_SESSION['token'], __('validator.token'))
+            $validator->equal($request->input('token'), $_SESSION['token'], __('validator.token'))
                 ->length($value, 1, 100, ['value' => __('validator.text')]);
 
             if ($type === 'email') {
@@ -101,16 +101,16 @@ class BlacklistController extends AdminController
      *
      * @param Request   $request
      * @param Validator $validator
+     *
      * @return void
      */
     public function delete(Request $request, Validator $validator): void
     {
-        $page  = int($request->input('page', 1));
-        $token = check($request->input('token'));
-        $del   = intar($request->input('del'));
-        $type  = $this->type;
+        $page = int($request->input('page', 1));
+        $del  = intar($request->input('del'));
+        $type = $this->type;
 
-        $validator->equal($token, $_SESSION['token'], __('validator.token'))
+        $validator->equal($request->input('token'), $_SESSION['token'], __('validator.token'))
             ->true($del, __('validator.deletion'));
 
         if ($validator->isValid()) {

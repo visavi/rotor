@@ -41,19 +41,19 @@ class StatusController extends AdminController
      *
      * @param Request   $request
      * @param Validator $validator
+     *
      * @return string
      */
     public function create(Request $request, Validator $validator): string
     {
         if ($request->isMethod('post')) {
-            $token   = check($request->input('token'));
             $topoint = int($request->input('topoint'));
             $point   = int($request->input('point'));
-            $name    = check($request->input('name'));
-            $color   = check($request->input('color'));
+            $name    = $request->input('name');
+            $color   = $request->input('color');
 
             $validator
-                ->equal($token, $_SESSION['token'], __('validator.token'))
+                ->equal($request->input('token'), $_SESSION['token'], __('validator.token'))
                 ->length($name, 3, 30, ['name' => __('statuses.status_length')])
                 ->regex($color, '|^#+[A-f0-9]{6}$|', ['color' => __('validator.color')], false);
 
@@ -81,6 +81,7 @@ class StatusController extends AdminController
      *
      * @param Request   $request
      * @param Validator $validator
+     *
      * @return string
      */
     public function edit(Request $request, Validator $validator): string
@@ -94,14 +95,13 @@ class StatusController extends AdminController
         }
 
         if ($request->isMethod('post')) {
-            $token   = check($request->input('token'));
             $topoint = int($request->input('topoint'));
             $point   = int($request->input('point'));
-            $name    = check($request->input('name'));
-            $color   = check($request->input('color'));
+            $name    = $request->input('name');
+            $color   = $request->input('color');
 
             $validator
-                ->equal($token, $_SESSION['token'], __('validator.token'))
+                ->equal($request->input('token'), $_SESSION['token'], __('validator.token'))
                 ->length($name, 3, 30, ['name' => __('statuses.status_length')])
                 ->regex($color, '|^#+[A-f0-9]{6}$|', ['color' => __('validator.color')], false);
 
@@ -129,15 +129,15 @@ class StatusController extends AdminController
      *
      * @param Request   $request
      * @param Validator $validator
+     *
      * @return void
      * @throws Exception
      */
     public function delete(Request $request, Validator $validator): void
     {
-        $token = check($request->input('token'));
-        $id    = int($request->input('id'));
+        $id = int($request->input('id'));
 
-        $validator->equal($token, $_SESSION['token'], __('validator.token'));
+        $validator->equal($request->input('token'), $_SESSION['token'], __('validator.token'));
 
         $status = Status::query()->find($id);
         $validator->notEmpty($status, __('statuses.status_not_found'));

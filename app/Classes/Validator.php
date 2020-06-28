@@ -23,11 +23,11 @@ class Validator
     /**
      * Проверяет длину строки
      *
-     * @param  string $input
-     * @param  int    $min
-     * @param  int    $max
-     * @param  mixed  $label
-     * @param  bool   $required
+     * @param string $input
+     * @param int    $min
+     * @param int    $max
+     * @param mixed  $label
+     * @param bool   $required
      *
      * @return Validator
      */
@@ -49,10 +49,10 @@ class Validator
     /**
      * Проверяет число на вхождение в диапазон
      *
-     * @param  int   $input
-     * @param  int   $min
-     * @param  int   $max
-     * @param  mixed $label
+     * @param int   $input
+     * @param int   $min
+     * @param int   $max
+     * @param mixed $label
      *
      * @return Validator
      */
@@ -68,9 +68,9 @@ class Validator
     /**
      * Проверяет на больше чем число
      *
-     * @param  int   $input
-     * @param  int   $input2
-     * @param  mixed $label
+     * @param int   $input
+     * @param int   $input2
+     * @param mixed $label
      *
      * @return Validator
      */
@@ -86,9 +86,9 @@ class Validator
     /**
      * Проверяет на больше чем или равно
      *
-     * @param  int   $input
-     * @param  int   $input2
-     * @param  mixed $label
+     * @param int   $input
+     * @param int   $input2
+     * @param mixed $label
      *
      * @return Validator
      */
@@ -104,9 +104,9 @@ class Validator
     /**
      * Проверяет на меньше чем число
      *
-     * @param  int   $input
-     * @param  int   $input2
-     * @param  mixed $label
+     * @param int   $input
+     * @param int   $input2
+     * @param mixed $label
      *
      * @return Validator
      */
@@ -122,9 +122,9 @@ class Validator
     /**
      * Проверяет на меньше чем или равно
      *
-     * @param  int   $input
-     * @param  int   $input2
-     * @param  mixed $label
+     * @param int   $input
+     * @param int   $input2
+     * @param mixed $label
      *
      * @return Validator
      */
@@ -140,9 +140,9 @@ class Validator
     /**
      * Проверяет эквивалентны ли данные
      *
-     * @param  mixed $input
-     * @param  mixed $input2
-     * @param  mixed $label
+     * @param mixed $input
+     * @param mixed $input2
+     * @param mixed $label
      *
      * @return Validator
      */
@@ -158,9 +158,9 @@ class Validator
     /**
      * Проверяет не эквивалентны ли данные
      *
-     * @param  mixed $input
-     * @param  mixed $input2
-     * @param  mixed $label
+     * @param mixed $input
+     * @param mixed $input2
+     * @param mixed $label
      *
      * @return Validator
      */
@@ -176,8 +176,8 @@ class Validator
     /**
      * Проверяет пустые ли данные
      *
-     * @param  mixed $input
-     * @param  mixed $label
+     * @param mixed $input
+     * @param mixed $label
      *
      * @return Validator
      */
@@ -193,8 +193,8 @@ class Validator
     /**
      * Проверяет не пустые ли данные
      *
-     * @param  mixed $input
-     * @param  mixed $label
+     * @param mixed $input
+     * @param mixed $label
      *
      * @return Validator
      */
@@ -210,8 +210,8 @@ class Validator
     /**
      * Проверяет на true
      *
-     * @param  mixed $input
-     * @param  mixed $label
+     * @param mixed $input
+     * @param mixed $label
      *
      * @return Validator
      */
@@ -227,8 +227,8 @@ class Validator
     /**
      * Проверяет на false
      *
-     * @param  mixed $input
-     * @param  mixed $label
+     * @param mixed $input
+     * @param mixed $label
      *
      * @return Validator
      */
@@ -244,9 +244,9 @@ class Validator
     /**
      * Проверяет на вхождение в массив
      *
-     * @param  mixed $input
-     * @param  array $haystack
-     * @param  mixed $label
+     * @param mixed $input
+     * @param array $haystack
+     * @param mixed $label
      *
      * @return Validator
      */
@@ -262,9 +262,9 @@ class Validator
     /**
      * Проверяет на не вхождение в массив
      *
-     * @param  mixed $input
-     * @param  array $haystack
-     * @param  mixed $label
+     * @param mixed $input
+     * @param array $haystack
+     * @param mixed $label
      *
      * @return Validator
      */
@@ -280,10 +280,10 @@ class Validator
     /**
      * Проверяет по регулярному выражению
      *
-     * @param  string $input
-     * @param  string $pattern
-     * @param  mixed  $label
-     * @param  bool   $required
+     * @param string $input
+     * @param string $pattern
+     * @param mixed  $label
+     * @param bool   $required
      *
      * @return Validator
      */
@@ -303,9 +303,9 @@ class Validator
     /**
      * Check float
      *
-     * @param  float $input
-     * @param  mixed $label
-     * @param  bool  $required
+     * @param float $input
+     * @param mixed $label
+     * @param bool  $required
      *
      * @return Validator
      */
@@ -325,9 +325,9 @@ class Validator
     /**
      * Проверяет адрес сайта
      *
-     * @param  string $input
-     * @param  mixed  $label
-     * @param  bool   $required
+     * @param string $input
+     * @param mixed  $label
+     * @param bool   $required
      *
      * @return Validator
      */
@@ -347,9 +347,9 @@ class Validator
     /**
      * Проверяет email
      *
-     * @param  string $input
-     * @param  mixed  $label
-     * @param  bool   $required
+     * @param string $input
+     * @param mixed  $label
+     * @param bool   $required
      *
      * @return Validator
      */
@@ -369,9 +369,9 @@ class Validator
     /**
      * Check IP address
      *
-     * @param  string $input
-     * @param  mixed  $label
-     * @param  bool   $required
+     * @param string $input
+     * @param mixed  $label
+     * @param bool   $required
      *
      * @return Validator
      */
@@ -454,8 +454,8 @@ class Validator
     /**
      * Добавляет ошибки в массив
      *
-     * @param  mixed  $error       текст ошибки
-     * @param  string $description
+     * @param mixed  $error       текст ошибки
+     * @param string $description
      *
      * @return void
      */

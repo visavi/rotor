@@ -650,7 +650,7 @@ class TopicController extends BaseController
     /**
      * Forward to the last message
      *
-     * @param $id
+     * @param int $id
      *
      * @return void
      */

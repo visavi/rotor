@@ -670,8 +670,8 @@ class ArticleController extends BaseController
     /**
      * Переход к сообщению
      *
-     * @param $id
-     * @param $cid
+     * @param int $id
+     * @param int $cid
      *
      * @return void
      */
@@ -702,7 +702,7 @@ class ArticleController extends BaseController
      */
     public function top(Request $request): string
     {
-        $sort = $request->input('sort', 'visits');
+        $sort = check($request->input('sort', 'visits'));
 
         switch ($sort) {
             case 'rated': $order = 'rating';
@@ -732,7 +732,7 @@ class ArticleController extends BaseController
      */
     public function search(Request $request): ?string
     {
-        $find  = $request->input('find');
+        $find  = check($request->input('find'));
         $type  = int($request->input('type'));
         $where = int($request->input('where'));
 

@@ -25,11 +25,12 @@ class CacheController extends AdminController
      * Главная страница
      *
      * @param Request $request
+     *
      * @return string
      */
     public function index(Request $request): string
     {
-        $type = check($request->input('type', 'files'));
+        $type = $request->input('type', 'files');
 
         if ($type === 'files') {
             $files = glob(STORAGE . '/caches/{*/*/*,*.php}', GLOB_BRACE);
@@ -50,14 +51,15 @@ class CacheController extends AdminController
      * Очистка кеша
      *
      * @param Request $request
+     *
      * @return void
      */
     public function clear(Request $request): void
     {
-        $token = check($request->input('token'));
-        $type  = check($request->input('type', 'files'));
 
-        if ($token === $_SESSION['token']) {
+        $type = $request->input('type', 'files');
+
+        if ($request->input('token') === $_SESSION['token']) {
             if ($type === 'files') {
                 clearCache();
             } else {

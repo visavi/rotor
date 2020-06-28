@@ -29,16 +29,16 @@ class AntimatController extends AdminController
      *
      * @param Request   $request
      * @param Validator $validator
+     *
      * @return string
      */
     public function index(Request $request, Validator $validator): string
     {
         if ($request->isMethod('post')) {
-            $token = check($request->input('token'));
-            $word  = check(utfLower($request->input('word')));
+            $word = utfLower($request->input('word'));
 
             $validator
-                ->equal($token, $_SESSION['token'], __('validator.token'))
+                ->equal($request->input('token'), $_SESSION['token'], __('validator.token'))
                 ->notEmpty($word, __('admin.antimat.not_enter_word'));
 
             $duplicate = Antimat::query()->where('string', $word)->first();
@@ -68,15 +68,15 @@ class AntimatController extends AdminController
      *
      * @param Request   $request
      * @param Validator $validator
+     *
      * @return void
      * @throws Exception
      */
     public function delete(Request $request, Validator $validator): void
     {
-        $token = check($request->input('token'));
-        $id    = int($request->input('id'));
+        $id = int($request->input('id'));
 
-        $validator->equal($token, $_SESSION['token'], __('validator.token'));
+        $validator->equal($request->input('token'), $_SESSION['token'], __('validator.token'));
 
         $word = Antimat::query()->find($id);
         $validator->notEmpty($word, __('main.record_not_found'));
@@ -97,14 +97,13 @@ class AntimatController extends AdminController
      *
      * @param Request   $request
      * @param Validator $validator
+     *
      * @return void
      */
     public function clear(Request $request, Validator $validator): void
     {
-        $token = check($request->input('token'));
-
         $validator
-            ->equal($token, $_SESSION['token'], __('validator.token'))
+            ->equal($request->input('token'), $_SESSION['token'], __('validator.token'))
             ->true(isAdmin(User::BOSS), __('main.page_only_owner'));
 
         if ($validator->isValid()) {

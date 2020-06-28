@@ -26,13 +26,14 @@ class DelUserController extends AdminController
      * Главная страница
      *
      * @param Request $request
+     *
      * @return string
      */
     public function index(Request $request): string
     {
         $users  = collect();
-        $period = check($request->input('period'));
-        $point  = check($request->input('point'));
+        $period = int($request->input('period'));
+        $point  = int($request->input('point'));
 
         if ($request->isMethod('post')) {
             if ($period < 180) {
@@ -59,16 +60,16 @@ class DelUserController extends AdminController
      *
      * @param Request   $request
      * @param Validator $validator
+     *
      * @return void
      */
     public function clear(Request $request, Validator $validator): void
     {
-        $token  = check($request->input('token'));
-        $period = check($request->input('period'));
-        $point  = check($request->input('point'));
+        $period = int($request->input('period'));
+        $point  = int($request->input('point'));
 
         $validator
-            ->equal($token, $_SESSION['token'], __('validator.token'))
+            ->equal($request->input('token'), $_SESSION['token'], __('validator.token'))
             ->gte($period, 180, __('admin.delusers.invalid_period'));
 
         $users = User::query()

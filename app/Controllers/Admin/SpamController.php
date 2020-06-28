@@ -48,7 +48,7 @@ class SpamController extends AdminController
             'comments'  => __('main.comments'),
         ];
 
-        $type = check(request()->input('type'));
+        $type = request()->input('type');
         $this->type = isset($this->types[$type]) ? $type : 'posts';
 
         $spam = Spam::query()
@@ -96,17 +96,17 @@ class SpamController extends AdminController
      *
      * @param Request   $request
      * @param Validator $validator
+     *
      * @return void
      * @throws Exception
      */
     public function delete(Request $request, Validator $validator): void
     {
-        $id    = int($request->input('id'));
-        $token = check($request->input('token'));
+        $id = int($request->input('id'));
 
         $validator
             ->true($request->ajax(), __('validator.not_ajax'))
-            ->equal($token, $_SESSION['token'], __('validator.token'))
+            ->equal($request->input('token'), $_SESSION['token'], __('validator.token'))
             ->notEmpty($id, __('validator.deletion'));
 
         if ($validator->isValid()) {

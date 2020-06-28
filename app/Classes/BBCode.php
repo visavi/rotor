@@ -115,7 +115,7 @@ class BBCode
     /**
      * Обрабатывает текст
      *
-     * @param  string $source текст содержаший BBCode
+     * @param string $source текст содержаший BBCode
      *
      * @return string распарсенный текст
      */
@@ -161,7 +161,8 @@ class BBCode
      * Очищает текст от BB-кодов
      *
      * @param  string $source неочищенный текст
-     * @return string         очищенный текст
+     *
+     * @return string очищенный текст
      */
     public function clear($source): string
     {
@@ -172,7 +173,8 @@ class BBCode
      * Обрабатывает ссылки
      *
      * @param  array  $match ссылка
-     * @return string        обработанная ссылка
+     *
+     * @return string обработанная ссылка
      */
     public function urlReplace($match): string
     {
@@ -193,7 +195,8 @@ class BBCode
     /**
      * Обрабатывет списки
      *
-     * @param  array  $match список
+     * @param array $match список
+     *
      * @return string обработанный список
      */
     public function listReplace($match): string
@@ -217,8 +220,9 @@ class BBCode
     /**
      * Обрабатывает размер текста
      *
-     * @param  callable $match массив элементов
-     * @return string   обработанный текст
+     * @param callable $match массив элементов
+     *
+     * @return string обработанный текст
      */
     public function fontSize($match): string
     {
@@ -230,8 +234,9 @@ class BBCode
     /**
      * Подсвечивает код
      *
-     * @param  callable $match массив элементов
-     * @return string          текст с подсветкой
+     * @param callable $match массив элементов
+     *
+     * @return string текст с подсветкой
      */
     public function highlightCode($match): string
     {
@@ -244,8 +249,9 @@ class BBCode
     /**
      * Скрывает текст под спойлер
      *
-     * @param  callable $match массив элементов
-     * @return string          код спойлера
+     * @param callable $match массив элементов
+     *
+     * @return string код спойлера
      */
     public function spoilerText($match): string
     {
@@ -261,8 +267,9 @@ class BBCode
     /**
      * Скрывате текст от неавторизованных пользователей
      *
-     * @param  callable $match массив элементов
-     * @return string          скрытый код
+     * @param callable $match массив элементов
+     *
+     * @return string скрытый код
      */
     public function hiddenText($match): string
     {
@@ -275,10 +282,11 @@ class BBCode
     /**
      * Обрабатывет стикеры
      *
-     * @param $source
+     * @param string $source
+     *
      * @return string Обработанный текст
      */
-    public function parseStickers($source): string
+    public function parseStickers(string $source): string
     {
         static $listStickers;
 
@@ -306,9 +314,10 @@ class BBCode
     /**
      * Добавляет или переопределяет парсер
      *
-     * @param  string $name    Parser name
-     * @param  string $pattern Pattern
-     * @param  string $replace Replace pattern
+     * @param string $name    Parser name
+     * @param string $pattern Pattern
+     * @param string $replace Replace pattern
+     *
      * @return void
      */
     public function setParser($name, $pattern, $replace): void
@@ -322,7 +331,8 @@ class BBCode
     /**
      * Устанавливает список доступных парсеров
      *
-     * @param  mixed  $only parsers
+     * @param mixed $only parsers
+     *
      * @return object BBCode object
      */
     public function only($only = null)
@@ -335,7 +345,8 @@ class BBCode
     /**
      * Исключает парсеры из набора
      *
-     * @param  mixed  $except parsers
+     * @param mixed $except parsers
+     *
      * @return object BBCode object
      */
     public function except($except = null)
@@ -358,7 +369,8 @@ class BBCode
     /**
      * Filters all parsers that you don´t want
      *
-     * @param  array $only chosen parsers
+     * @param array $only chosen parsers
+     *
      * @return array parsers
      */
     private function arrayOnly(array $only): array
@@ -370,6 +382,7 @@ class BBCode
      * Removes the parsers that you don´t want
      *
      * @param array $excepts
+     *
      * @return array parsers
      */
     private function arrayExcept(array $excepts): array

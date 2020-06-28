@@ -70,14 +70,13 @@ class ErrorController extends AdminController
      *
      * @param Request   $request
      * @param Validator $validator
+     *
      * @return void
      */
     public function clear(Request $request, Validator $validator): void
     {
-        $token = check($request->input('token'));
-
         $validator
-            ->equal($token, $_SESSION['token'], __('validator.token'))
+            ->equal($request->input('token'), $_SESSION['token'], __('validator.token'))
             ->true(isAdmin(User::BOSS), __('main.page_only_admins'));
 
         if ($validator->isValid()) {

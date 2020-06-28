@@ -28,6 +28,7 @@ class InvitationController extends AdminController
      * Главная страница
      *
      * @param Request $request
+     *
      * @return string
      */
     public function index(Request $request): string
@@ -65,15 +66,15 @@ class InvitationController extends AdminController
      *
      * @param Request   $request
      * @param Validator $validator
+     *
      * @return string
      */
     public function create(Request $request, Validator $validator): string
     {
         if ($request->isMethod('post')) {
-            $token  = check($request->input('token'));
-            $keys   = int($request->input('keys'));
+            $keys = int($request->input('keys'));
 
-            $validator->equal($token, $_SESSION['token'], __('validator.token'))
+            $validator->equal($request->input('token'), $_SESSION['token'], __('validator.token'))
                 ->notEmpty($keys, ['keys' => __('admin.invitations.keys_not_amount')]);
 
             if ($validator->isValid()) {
@@ -107,18 +108,17 @@ class InvitationController extends AdminController
      *
      * @param Request   $request
      * @param Validator $validator
+     *
      * @return void
      */
     public function send(Request $request, Validator $validator): void
     {
-        $token    = check($request->input('token'));
-        $login    = check($request->input('user'));
         $userkeys = int($request->input('userkeys'));
 
         /* @var User $user */
-        $user = getUserByLogin($login);
+        $user = getUserByLogin($request->input('user'));
 
-        $validator->equal($token, $_SESSION['token'], __('validator.token'))
+        $validator->equal($request->input('token'), $_SESSION['token'], __('validator.token'))
             ->notEmpty($user, ['user' => __('validator.user')])
             ->notEmpty($userkeys, ['userkeys' => __('admin.invitations.keys_not_amount')]);
 
@@ -157,13 +157,12 @@ class InvitationController extends AdminController
      *
      * @param Request   $request
      * @param Validator $validator
+     *
      * @return void
      */
     public function mail(Request $request, Validator $validator): void
     {
-        $token = check($request->input('token'));
-
-        $validator->equal($token, $_SESSION['token'], __('validator.token'))
+        $validator->equal($request->input('token'), $_SESSION['token'], __('validator.token'))
             ->true(isAdmin(User::BOSS), __('main.page_only_owner'));
 
         $users = User::query()->where('updated_at', '>', strtotime('-1 week', SITETIME))->get();
@@ -203,16 +202,16 @@ class InvitationController extends AdminController
      *
      * @param Request   $request
      * @param Validator $validator
+     *
      * @return void
      */
     public function delete(Request $request, Validator $validator): void
     {
         $page  = int($request->input('page', 1));
-        $token = check($request->input('token'));
         $del   = intar($request->input('del'));
         $used  = $request->input('used') ? 1 : 0;
 
-        $validator->equal($token, $_SESSION['token'], __('validator.token'))
+        $validator->equal($request->input('token'), $_SESSION['token'], __('validator.token'))
             ->true($del, __('validator.deletion'));
 
         if ($validator->isValid()) {

@@ -25,13 +25,12 @@ class AdminAdvertController extends AdminController
             ->firstOrNew([]);
 
         if ($request->isMethod('post')) {
-            $token = check($request->input('token'));
-            $site  = check($request->input('site'));
-            $name  = check($request->input('name'));
-            $color = check($request->input('color'));
+            $site  = $request->input('site');
+            $name  = $request->input('name');
+            $color = $request->input('color');
             $bold  = empty($request->input('bold')) ? 0 : 1;
 
-            $validator->equal($token, $_SESSION['token'], __('validator.token'))
+            $validator->equal($request->input('token'), $_SESSION['token'], __('validator.token'))
                 ->regex($site, '|^https?://([а-яa-z0-9_\-\.])+(\.([а-яa-z0-9\/\-?_=#])+)+$|iu', ['site' => __('validator.url')])
                 ->length($site, 5, 100, ['site' => __('validator.url_text')])
                 ->length($name, 5, 35, ['name' => __('validator.text')])

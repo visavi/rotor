@@ -48,6 +48,7 @@ class RuleController extends AdminController
      *
      * @param Request   $request
      * @param Validator $validator
+     *
      * @return string
      */
     public function edit(Request $request, Validator $validator): string
@@ -55,11 +56,10 @@ class RuleController extends AdminController
         $rules = Rule::query()->firstOrNew([]);
 
         if ($request->isMethod('post')) {
-            $token = check($request->input('token'));
-            $msg   = check($request->input('msg'));
+            $msg = $request->input('msg');
 
             $validator
-                ->equal($token, $_SESSION['token'], __('validator.token'))
+                ->equal($request->input('token'), $_SESSION['token'], __('validator.token'))
                 ->notEmpty($msg, ['msg' => __('admin.rules.rules_empty')]);
 
             if ($validator->isValid()) {

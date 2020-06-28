@@ -41,13 +41,12 @@ class LogController extends AdminController
      * Очистка логов
      *
      * @param Request $request
+     *
      * @return void
      */
     public function clear(Request $request): void
     {
-        $token = check($request->input('token'));
-
-        if ($token === $_SESSION['token']) {
+        if ($request->input('token') === $_SESSION['token']) {
             Log::query()->truncate();
 
             setFlash('success', __('admin.logs.success_cleared'));

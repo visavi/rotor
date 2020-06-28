@@ -48,6 +48,7 @@ class StickerController extends AdminController
      * Просмотр стикеров по категориям
      *
      * @param int $id
+     *
      * @return string
      */
     public function category(int $id): string
@@ -73,14 +74,15 @@ class StickerController extends AdminController
      *
      * @param Request   $request
      * @param Validator $validator
+     *
      * @return void
      */
     public function create(Request $request, Validator $validator): void
     {
-        $token = check($request->input('token'));
-        $name  = check($request->input('name'));
 
-        $validator->equal($token, $_SESSION['token'], __('validator.token'))
+        $name = $request->input('name');
+
+        $validator->equal($request->input('token'), $_SESSION['token'], __('validator.token'))
             ->length($name, 3, 50, ['name' => __('validator.text')]);
 
         if ($validator->isValid()) {
@@ -106,6 +108,7 @@ class StickerController extends AdminController
      * @param int       $id
      * @param Request   $request
      * @param Validator $validator
+     *
      * @return string
      */
     public function edit(int $id, Request $request, Validator $validator): string
@@ -117,10 +120,9 @@ class StickerController extends AdminController
         }
 
         if ($request->isMethod('post')) {
-            $token = check($request->input('token'));
-            $name  = check($request->input('name'));
+            $name = $request->input('name');
 
-            $validator->equal($token, $_SESSION['token'], __('validator.token'))
+            $validator->equal($request->input('token'), $_SESSION['token'], __('validator.token'))
                 ->length($name, 3, 50, ['name' => __('validator.text')]);
 
             if ($validator->isValid()) {
@@ -146,6 +148,7 @@ class StickerController extends AdminController
      * @param int       $id
      * @param Request   $request
      * @param Validator $validator
+     *
      * @throws Exception
      */
     public function delete(int $id, Request $request, Validator $validator): void
@@ -157,9 +160,7 @@ class StickerController extends AdminController
             abort(404, __('stickers.category_not_exist'));
         }
 
-        $token = check($request->input('token'));
-
-        $validator->equal($token, $_SESSION['token'], __('validator.token'));
+        $validator->equal($request->input('token'), $_SESSION['token'], __('validator.token'));
 
         $sticker = Sticker::query()->where('category_id', $category->id)->first();
         if ($sticker) {
@@ -182,6 +183,7 @@ class StickerController extends AdminController
      *
      * @param Request   $request
      * @param Validator $validator
+     *
      * @return string
      */
     public function createSticker(Request $request, Validator $validator): string
@@ -199,11 +201,10 @@ class StickerController extends AdminController
         }
 
         if ($request->isMethod('post')) {
-            $token   = check($request->input('token'));
-            $code    = check(utfLower($request->input('code')));
+            $code    = utfLower($request->input('code'));
             $sticker = $request->file('sticker');
 
-            $validator->equal($token, $_SESSION['token'], __('validator.token'))
+            $validator->equal($request->input('token'), $_SESSION['token'], __('validator.token'))
                 ->length($code, 2, 20, ['code' => __('stickers.sticker_length')])
                 ->regex($code, '|^:+[a-яa-z0-9_\-/\(\)]+$|i', ['code' => __('stickers.sticker_requirements')]);
 
@@ -250,6 +251,7 @@ class StickerController extends AdminController
      * @param int       $id
      * @param Request   $request
      * @param Validator $validator
+     *
      * @return string
      */
     public function editSticker(int $id, Request $request, Validator $validator): string
@@ -263,11 +265,10 @@ class StickerController extends AdminController
         }
 
         if ($request->isMethod('post')) {
-            $token = check($request->input('token'));
-            $code  = check(utfLower($request->input('code')));
+            $code  = utfLower($request->input('code'));
             $cid   = int($request->input('cid'));
 
-            $validator->equal($token, $_SESSION['token'], __('validator.token'))
+            $validator->equal($request->input('token'), $_SESSION['token'], __('validator.token'))
                 ->length($code, 2, 20, ['code' => __('stickers.sticker_length')])
                 ->regex($code, '|^:+[a-яa-z0-9_\-/\(\)]+$|i', ['code' => __('stickers.sticker_requirements')]);
 
@@ -303,6 +304,7 @@ class StickerController extends AdminController
      * @param int       $id
      * @param Request   $request
      * @param Validator $validator
+     *
      * @return void
      * @throws Exception
      */
@@ -319,10 +321,9 @@ class StickerController extends AdminController
         }
 
         $page     = int($request->input('page', 1));
-        $token    = check($request->input('token'));
         $category = $sticker->category->id;
 
-        $validator->equal($token, $_SESSION['token'], __('validator.token'));
+        $validator->equal($request->input('token'), $_SESSION['token'], __('validator.token'));
 
         if ($validator->isValid()) {
             deleteFile(HOME . $sticker->name);

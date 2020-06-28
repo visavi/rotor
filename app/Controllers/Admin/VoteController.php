@@ -61,6 +61,7 @@ class VoteController extends AdminController
      * @param int       $id
      * @param Request   $request
      * @param Validator $validator
+     *
      * @return string
      */
     public function edit(int $id, Request $request, Validator $validator): string
@@ -72,11 +73,10 @@ class VoteController extends AdminController
         }
 
         if ($request->isMethod('post')) {
-            $token   = check($request->input('token'));
-            $title   = check($request->input('title'));
-            $answers = check((array) $request->input('answers'));
+            $title   = $request->input('title');
+            $answers = (array) $request->input('answers');
 
-            $validator->equal($token, $_SESSION['token'], __('validator.token'));
+            $validator->equal($request->input('token'), $_SESSION['token'], __('validator.token'));
 
             $validator->length($title, 5, 100, ['title' => __('validator.text')]);
             $answers = array_unique(array_diff($answers, ['']));
@@ -127,13 +127,13 @@ class VoteController extends AdminController
      *
      * @param int     $id
      * @param Request $request
+     *
      * @return void
      * @throws Throwable
      */
     public function delete(int $id, Request $request): void
     {
-        $token = check($request->input('token'));
-        $vote  = Vote::query()->where('id', $id)->first();
+        $vote = Vote::query()->where('id', $id)->first();
 
         if (! $vote) {
             abort(404, __('votes.voting_not_exist'));
@@ -143,8 +143,7 @@ class VoteController extends AdminController
             abort(403, __('errors.forbidden'));
         }
 
-        if ($token === $_SESSION['token']) {
-
+        if ($request->input('token') === $_SESSION['token']) {
             DB::connection()->transaction(static function () use ($vote) {
                 $vote->delete();
                 $vote->answers()->delete();
@@ -164,18 +163,18 @@ class VoteController extends AdminController
      *
      * @param int     $id
      * @param Request $request
+     *
      * @return void
      */
     public function close(int $id, Request $request): void
     {
-        $token = check($request->input('token'));
-        $vote  = Vote::query()->where('id', $id)->first();
+        $vote = Vote::query()->where('id', $id)->first();
 
         if (! $vote) {
             abort(404, __('votes.voting_not_exist'));
         }
 
-        if ($token === $_SESSION['token']) {
+        if ($request->input('token') === $_SESSION['token']) {
             $status   = __('votes.voting_success_open');
             $closed = $vote->closed ^ 1;
 
@@ -204,6 +203,7 @@ class VoteController extends AdminController
      * Пересчет голосов
      *
      * @param Request $request
+     *
      * @return void
      */
     public function restatement(Request $request): void
@@ -212,9 +212,7 @@ class VoteController extends AdminController
             abort(403, __('errors.forbidden'));
         }
 
-        $token = check($request->input('token'));
-
-        if ($token === $_SESSION['token']) {
+        if ($request->input('token') === $_SESSION['token']) {
             restatement('votes');
 
             setFlash('success', __('main.success_recounted'));

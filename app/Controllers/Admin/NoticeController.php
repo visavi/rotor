@@ -44,18 +44,18 @@ class NoticeController extends AdminController
      *
      * @param Request   $request
      * @param Validator $validator
+     *
      * @return string
      */
     public function create(Request $request, Validator $validator): string
     {
         if ($request->isMethod('post')) {
-            $token   = check($request->input('token'));
-            $type    = check($request->input('type'));
-            $name    = check($request->input('name'));
-            $text    = check($request->input('text'));
+            $type    = $request->input('type');
+            $name    = $request->input('name');
+            $text    = $request->input('text');
             $protect = empty($request->input('protect')) ? 0 : 1;
 
-            $validator->equal($token, $_SESSION['token'], __('validator.token'))
+            $validator->equal($request->input('token'), $_SESSION['token'], __('validator.token'))
                 ->regex($type, '|^[a-z0-9_\-]+$|i', ['type' => 'Недопустимое название типа шаблона!'])
                 ->length($type, 3, 20, ['type' => __('admin.notices.notice_length')])
                 ->length($name, 5, 100, ['name' => __('validator.text')])
@@ -94,6 +94,7 @@ class NoticeController extends AdminController
      * @param int       $id
      * @param Request   $request
      * @param Validator $validator
+     *
      * @return string
      */
     public function edit(int $id, Request $request, Validator $validator): string
@@ -106,12 +107,11 @@ class NoticeController extends AdminController
         }
 
         if ($request->isMethod('post')) {
-            $token   = check($request->input('token'));
-            $name    = check($request->input('name'));
-            $text    = check($request->input('text'));
+            $name    = $request->input('name');
+            $text    = $request->input('text');
             $protect = empty($request->input('protect')) ? 0 : 1;
 
-            $validator->equal($token, $_SESSION['token'], __('validator.token'))
+            $validator->equal($request->input('token'), $_SESSION['token'], __('validator.token'))
                 ->length($name, 5, 100, ['name' => __('validator.text')])
                 ->length($text, 10, 65000, ['text' => __('validator.text')]);
 
@@ -142,6 +142,7 @@ class NoticeController extends AdminController
      * @param int       $id
      * @param Request   $request
      * @param Validator $validator
+     *
      * @return void
      * @throws Exception
      */
@@ -150,9 +151,7 @@ class NoticeController extends AdminController
         /** @var Notice $notice */
         $notice = Notice::query()->find($id);
 
-        $token = check($request->input('token'));
-
-        $validator->equal($token, $_SESSION['token'], __('validator.token'))
+        $validator->equal($request->input('token'), $_SESSION['token'], __('validator.token'))
             ->notEmpty($notice, __('admin.notices.notice_not_found'))
             ->empty($notice->protect, __('admin.notices.notice_protect'));
 

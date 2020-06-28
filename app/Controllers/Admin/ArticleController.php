@@ -34,6 +34,7 @@ class ArticleController extends AdminController
      *
      * @param Request   $request
      * @param Validator $validator
+     *
      * @return void
      */
     public function create(Request $request, Validator $validator): void
@@ -42,10 +43,9 @@ class ArticleController extends AdminController
             abort(403, __('errors.forbidden'));
         }
 
-        $token = check($request->input('token'));
-        $name  = check($request->input('name'));
+        $name = $request->input('name');
 
-        $validator->equal($token, $_SESSION['token'], __('validator.token'))
+        $validator->equal($request->input('token'), $_SESSION['token'], __('validator.token'))
             ->length($name, 3, 50, ['name' => __('validator.text')]);
 
         if ($validator->isValid()) {
@@ -73,6 +73,7 @@ class ArticleController extends AdminController
      * @param int       $id
      * @param Request   $request
      * @param Validator $validator
+     *
      * @return string
      */
     public function edit(int $id, Request $request, Validator $validator): string
@@ -94,13 +95,13 @@ class ArticleController extends AdminController
             ->get();
 
         if ($request->isMethod('post')) {
-            $token  = check($request->input('token'));
+
             $parent = int($request->input('parent'));
-            $name   = check($request->input('name'));
-            $sort   = check($request->input('sort'));
+            $name   = $request->input('name');
+            $sort   = int($request->input('sort'));
             $closed = empty($request->input('closed')) ? 0 : 1;
 
-            $validator->equal($token, $_SESSION['token'], __('validator.token'))
+            $validator->equal($request->input('token'), $_SESSION['token'], __('validator.token'))
                 ->length($name, 3, 50, ['title' => __('validator.text')])
                 ->notEqual($parent, $category->id, ['parent' => __('blogs.category_not_exist')]);
 
@@ -133,6 +134,7 @@ class ArticleController extends AdminController
      * @param int       $id
      * @param Request   $request
      * @param Validator $validator
+     *
      * @return void
      * @throws Exception
      */
@@ -149,9 +151,7 @@ class ArticleController extends AdminController
             abort(404, __('blogs.category_not_exist'));
         }
 
-        $token = check($request->input('token'));
-
-        $validator->equal($token, $_SESSION['token'], __('validator.token'))
+        $validator->equal($request->input('token'), $_SESSION['token'], __('validator.token'))
             ->true($category->children->isEmpty(), __('blogs.category_has_subcategories'));
 
         $article = Article::query()->where('category_id', $category->id)->first();
@@ -174,6 +174,7 @@ class ArticleController extends AdminController
      * Пересчет данных
      *
      * @param Request $request
+     *
      * @return void
      */
     public function restatement(Request $request): void
@@ -182,9 +183,7 @@ class ArticleController extends AdminController
             abort(403, __('errors.forbidden'));
         }
 
-        $token = check($request->input('token'));
-
-        if ($token === $_SESSION['token']) {
+        if ($request->input('token') === $_SESSION['token']) {
             restatement('blogs');
 
             setFlash('success', __('main.success_recounted'));
@@ -199,6 +198,7 @@ class ArticleController extends AdminController
      * Список блогов
      *
      * @param int $id
+     *
      * @return string
      */
     public function blog(int $id): string
@@ -224,6 +224,7 @@ class ArticleController extends AdminController
      * @param int       $id
      * @param Request   $request
      * @param Validator $validator
+     *
      * @return string
      */
     public function editArticle(int $id, Request $request, Validator $validator): string
@@ -236,13 +237,12 @@ class ArticleController extends AdminController
         }
 
         if ($request->isMethod('post')) {
-            $token = check($request->input('token'));
-            $title = check($request->input('title'));
-            $text  = check($request->input('text'));
-            $tags  = check($request->input('tags'));
+            $title = $request->input('title');
+            $text  = $request->input('text');
+            $tags  = $request->input('tags');
 
             $validator
-                ->equal($token, $_SESSION['token'], __('validator.token'))
+                ->equal($request->input('token'), $_SESSION['token'], __('validator.token'))
                 ->length($title, 5, 50, ['title' => __('validator.text')])
                 ->length($text, 100, setting('maxblogpost'), ['text' => __('validator.text')])
                 ->length($tags, 2, 50, ['tags' => __('blogs.article_error_tags')]);
@@ -272,6 +272,7 @@ class ArticleController extends AdminController
      * @param int       $id
      * @param Request   $request
      * @param Validator $validator
+     *
      * @return string
      */
     public function moveArticle(int $id, Request $request, Validator $validator): string
@@ -284,14 +285,13 @@ class ArticleController extends AdminController
         }
 
         if ($request->isMethod('post')) {
-            $token = check($request->input('token'));
-            $cid   = int($request->input('cid'));
+            $cid = int($request->input('cid'));
 
             /** @var Blog $category */
             $category = Blog::query()->find($cid);
 
             $validator
-                ->equal($token, $_SESSION['token'], __('validator.token'))
+                ->equal($request->input('token'), $_SESSION['token'], __('validator.token'))
                 ->notEmpty($category, ['cid' => __('blogs.category_not_exist')]);
 
             if ($category) {
@@ -331,13 +331,13 @@ class ArticleController extends AdminController
      * @param int       $id
      * @param Request   $request
      * @param Validator $validator
+     *
      * @return void
      * @throws Exception
      */
     public function deleteArticle(int $id, Request $request, Validator $validator): void
     {
-        $page  = int($request->input('page', 1));
-        $token = check($request->input('token'));
+        $page = int($request->input('page', 1));
 
         /** @var Article $article */
         $article = Article::query()->find($id);
@@ -346,7 +346,7 @@ class ArticleController extends AdminController
             abort(404, __('blogs.article_not_exist'));
         }
 
-        $validator->equal($token, $_SESSION['token'], __('validator.token'));
+        $validator->equal($request->input('token'), $_SESSION['token'], __('validator.token'));
 
         if ($validator->isValid()) {
             $article->comments()->delete();

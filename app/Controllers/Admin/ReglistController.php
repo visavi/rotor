@@ -24,17 +24,17 @@ class ReglistController extends AdminController
      *
      * @param Request   $request
      * @param Validator $validator
+     *
      * @return string
      */
     public function index(Request $request, Validator $validator): string
     {
         if ($request->isMethod('post')) {
             $page   = int($request->input('page', 1));
-            $token  = check($request->input('token'));
             $choice = intar($request->input('choice'));
-            $action = check($request->input('action'));
+            $action = $request->input('action');
 
-            $validator->equal($token, $_SESSION['token'], __('validator.token'))
+            $validator->equal($request->input('token'), $_SESSION['token'], __('validator.token'))
                 ->notEmpty($choice, __('admin.reglists.users_not_selected'))
                 ->in($action, ['yes', 'no'], ['action' => __('main.action_not_selected')]);
 

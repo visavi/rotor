@@ -94,10 +94,9 @@ class FileController extends AdminController
         }
 
         if ($request->isMethod('post')) {
-            $token = check($request->input('token'));
-            $msg   = $request->input('msg');
+            $msg = $request->input('msg');
 
-            $validator->equal($token, $_SESSION['token'], __('validator.token'))
+            $validator->equal($request->input('token'), $_SESSION['token'], __('validator.token'))
                 ->true($writable, ['msg' => __('admin.files.writable')]);
 
             if ($validator->isValid()) {
@@ -131,14 +130,13 @@ class FileController extends AdminController
         }
 
         if ($request->isMethod('post')) {
-            $token    = check($request->input('token'));
             $filename = check($request->input('filename'));
             $dirname  = check($request->input('dirname'));
 
             $fileName = $this->path ? '/' . $filename : $filename;
             $dirName  = $this->path ? '/' . $dirname : $dirname;
 
-            $validator->equal($token, $_SESSION['token'], __('validator.token'));
+            $validator->equal($request->input('token'), $_SESSION['token'], __('validator.token'));
 
             if ($filename) {
                 $validator->length($filename, 1, 30, ['filename' => __('admin.files.file_required')]);
@@ -189,14 +187,13 @@ class FileController extends AdminController
             abort('default', __('admin.files.directory_not_writable', ['dir' => $this->path]));
         }
 
-        $token    = check($request->input('token'));
         $filename = check($request->input('filename'));
         $dirname  = check($request->input('dirname'));
 
         $fileName = $this->path ? '/' . $filename : $filename;
         $dirName  = $this->path ? '/' . $dirname : $dirname;
 
-        $validator->equal($token, $_SESSION['token'], __('validator.token'));
+        $validator->equal($request->input('token'), $_SESSION['token'], __('validator.token'));
 
         if ($filename) {
             $validator->true(file_exists(RESOURCES . '/views/' . $this->path . $fileName . '.blade.php'), __('admin.files.file_not_exist'));

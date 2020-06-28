@@ -47,6 +47,7 @@ class LoadController extends AdminController
      *
      * @param Request   $request
      * @param Validator $validator
+     *
      * @return void
      */
     public function create(Request $request, Validator $validator): void
@@ -55,10 +56,9 @@ class LoadController extends AdminController
             abort(403, __('errors.forbidden'));
         }
 
-        $token = check($request->input('token'));
-        $name  = check($request->input('name'));
+        $name = $request->input('name');
 
-        $validator->equal($token, $_SESSION['token'], __('validator.token'))
+        $validator->equal($request->input('token'), $_SESSION['token'], __('validator.token'))
             ->length($name, 3, 50, ['title' => __('validator.text')]);
 
         if ($validator->isValid()) {
@@ -86,6 +86,7 @@ class LoadController extends AdminController
      * @param int       $id
      * @param Request   $request
      * @param Validator $validator
+     *
      * @return string
      */
     public function edit(int $id, Request $request, Validator $validator): string
@@ -107,13 +108,12 @@ class LoadController extends AdminController
             ->get();
 
         if ($request->isMethod('post')) {
-            $token  = check($request->input('token'));
             $parent = int($request->input('parent'));
-            $name   = check($request->input('name'));
-            $sort   = check($request->input('sort'));
+            $name   = $request->input('name');
+            $sort   = int($request->input('sort'));
             $closed = empty($request->input('closed')) ? 0 : 1;
 
-            $validator->equal($token, $_SESSION['token'], __('validator.token'))
+            $validator->equal($request->input('token'), $_SESSION['token'], __('validator.token'))
                 ->length($name, 3, 50, ['title' => __('validator.text')])
                 ->notEqual($parent, $load->id, ['parent' => __('loads.load_parent_invalid')]);
 
@@ -146,6 +146,7 @@ class LoadController extends AdminController
      * @param int       $id
      * @param Request   $request
      * @param Validator $validator
+     *
      * @return void
      * @throws Exception
      */
@@ -162,9 +163,7 @@ class LoadController extends AdminController
             abort(404, __('loads.load_not_exist'));
         }
 
-        $token = check($request->input('token'));
-
-        $validator->equal($token, $_SESSION['token'], __('validator.token'))
+        $validator->equal($request->input('token'), $_SESSION['token'], __('validator.token'))
             ->true($load->children->isEmpty(), __('loads.load_has_subcategories'));
 
         $down = Down::query()->where('category_id', $load->id)->first();
@@ -187,6 +186,7 @@ class LoadController extends AdminController
      * Пересчет данных
      *
      * @param Request $request
+     *
      * @return void
      */
     public function restatement(Request $request): void
@@ -195,9 +195,7 @@ class LoadController extends AdminController
             abort(403, __('errors.forbidden'));
         }
 
-        $token = check($request->input('token'));
-
-        if ($token === $_SESSION['token']) {
+        if ($request->input('token') === $_SESSION['token']) {
             restatement('loads');
 
             setFlash('success', __('main.success_recounted'));
@@ -213,6 +211,7 @@ class LoadController extends AdminController
      *
      * @param int     $id
      * @param Request $request
+     *
      * @return string
      */
     public function load(int $id, Request $request): string
@@ -256,6 +255,7 @@ class LoadController extends AdminController
      * @param int       $id
      * @param Request   $request
      * @param Validator $validator
+     *
      * @return string
      */
     public function editDown(int $id, Request $request, Validator $validator): string
@@ -268,16 +268,15 @@ class LoadController extends AdminController
         }
 
         if ($request->isMethod('post')) {
-            $token    = check($request->input('token'));
-            $category = check($request->input('category'));
-            $title    = check($request->input('title'));
-            $text     = check($request->input('text'));
+            $category = int($request->input('category'));
+            $title    = $request->input('title');
+            $text     = $request->input('text');
             $files    = (array) $request->file('files');
 
             /** @var Load $category */
             $category = Load::query()->find($category);
 
-            $validator->equal($token, $_SESSION['token'], __('validator.token'))
+            $validator->equal($request->input('token'), $_SESSION['token'], __('validator.token'))
                 ->length($title, 5, 50, ['title' => __('validator.text')])
                 ->length($text, 50, 5000, ['text' => __('validator.text')])
                 ->notEmpty($category, ['category' => __('loads.load_not_exist')]);
@@ -346,13 +345,12 @@ class LoadController extends AdminController
      *
      * @param int     $id
      * @param Request $request
+     *
      * @return void
      * @throws Exception
      */
     public function deleteDown(int $id, Request $request): void
     {
-        $token = check($request->input('token'));
-
         /** @var Down $down */
         $down  = Down::query()->find($id);
 
@@ -364,7 +362,7 @@ class LoadController extends AdminController
             abort(403, __('errors.forbidden'));
         }
 
-        if ($token === $_SESSION['token']) {
+        if ($request->input('token') === $_SESSION['token']) {
             if ($down->active) {
                 $down->category->decrement('count_downs');
             }
@@ -386,6 +384,7 @@ class LoadController extends AdminController
      *
      * @param int $id
      * @param int $fid
+     *
      * @return void
      * @throws Exception
      */
@@ -434,19 +433,19 @@ class LoadController extends AdminController
      *
      * @param int     $id
      * @param Request $request
+     *
      * @return void
      */
     public function publish(int $id, Request $request): void
     {
         /** @var Down $down */
         $down  = Down::query()->find($id);
-        $token = check($request->input('token'));
 
         if (! $down) {
             abort(404, __('loads.down_not_exist'));
         }
 
-        if ($token === $_SESSION['token']) {
+        if ($request->input('token') === $_SESSION['token']) {
             $active = $down->active ^ 1;
 
             $down->update([

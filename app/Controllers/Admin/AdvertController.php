@@ -32,6 +32,7 @@ class AdvertController extends AdminController
      * @param int       $id
      * @param Request   $request
      * @param Validator $validator
+     *
      * @return string
      */
     public function edit(int $id, Request $request, Validator $validator): string
@@ -44,13 +45,12 @@ class AdvertController extends AdminController
         }
 
         if ($request->isMethod('post')) {
-            $token = check($request->input('token'));
-            $site  = check($request->input('site'));
-            $name  = check($request->input('name'));
-            $color = check($request->input('color'));
+            $site  = $request->input('site');
+            $name  = $request->input('name');
+            $color = $request->input('color');
             $bold  = empty($request->input('bold')) ? 0 : 1;
 
-            $validator->equal($token, $_SESSION['token'], __('validator.token'))
+            $validator->equal($request->input('token'), $_SESSION['token'], __('validator.token'))
                 ->regex($site, '|^https?://([а-яa-z0-9_\-\.])+(\.([а-яa-z0-9\/\-?_=#])+)+$|iu', ['site' => __('validator.url')])
                 ->length($site, 5, 50, ['site' => __('validator.url_text')])
                 ->length($name, 5, 35, ['name' => __('validator.text')])
@@ -81,15 +81,15 @@ class AdvertController extends AdminController
      *
      * @param Request   $request
      * @param Validator $validator
+     *
      * @return void
      */
     public function delete(Request $request, Validator $validator): void
     {
-        $page  = int($request->input('page', 1));
-        $token = check($request->input('token'));
-        $del   = intar($request->input('del'));
+        $page = int($request->input('page', 1));
+        $del  = intar($request->input('del'));
 
-        $validator->equal($token, $_SESSION['token'], __('validator.token'))
+        $validator->equal($request->input('token'), $_SESSION['token'], __('validator.token'))
             ->true($del, __('validator.deletion'));
 
         if ($validator->isValid()) {

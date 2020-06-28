@@ -30,6 +30,7 @@ class OfferController extends AdminController
      *
      * @param string  $type
      * @param Request $request
+     *
      * @return string
      */
     public function index(Request $request, $type = Offer::OFFER): string
@@ -67,6 +68,7 @@ class OfferController extends AdminController
      * Просмотр записи
      *
      * @param int $id
+     *
      * @return string
      */
     public function view(int $id): string
@@ -88,6 +90,7 @@ class OfferController extends AdminController
      * @param int       $id
      * @param Request   $request
      * @param Validator $validator
+     *
      * @return string
      */
     public function edit(int $id, Request $request, Validator $validator): string
@@ -99,13 +102,12 @@ class OfferController extends AdminController
         }
 
         if ($request->isMethod('post')) {
-            $token  = check($request->input('token'));
-            $title  = check($request->input('title'));
-            $text   = check($request->input('text'));
-            $type   = check($request->input('type'));
+            $title  = $request->input('title');
+            $text   = $request->input('text');
+            $type   = $request->input('type');
             $closed = empty($request->input('closed')) ? 0 : 1;
 
-            $validator->equal($token, $_SESSION['token'], __('validator.token'))
+            $validator->equal($request->input('token'), $_SESSION['token'], __('validator.token'))
                 ->length($title, 5, 50, ['title' => __('validator.text')])
                 ->length($text, 5, 1000, ['text' => __('validator.text')])
                 ->in($type, Offer::TYPES, ['type' => __('offers.type_invalid')]);
@@ -139,6 +141,7 @@ class OfferController extends AdminController
      * @param int       $id
      * @param Request   $request
      * @param Validator $validator
+     *
      * @return string
      */
     public function reply(int $id, Request $request, Validator $validator): string
@@ -150,12 +153,11 @@ class OfferController extends AdminController
         }
 
         if ($request->isMethod('post')) {
-            $token  = check($request->input('token'));
-            $reply  = check($request->input('reply'));
-            $status = check($request->input('status'));
+            $reply  = $request->input('reply');
+            $status = $request->input('status');
             $closed = empty($request->input('closed')) ? 0 : 1;
 
-            $validator->equal($token, $_SESSION['token'], __('validator.token'))
+            $validator->equal($request->input('token'), $_SESSION['token'], __('validator.token'))
                 ->length($reply, 5, 3000, ['reply' => __('validator.text')])
                 ->in($status, Offer::STATUSES, ['status' => __('offers.status_invalid')]);
 
@@ -187,6 +189,7 @@ class OfferController extends AdminController
      * Пересчет комментариев
      *
      * @param Request $request
+     *
      * @return void
      */
     public function restatement(Request $request): void
@@ -195,9 +198,7 @@ class OfferController extends AdminController
             abort(403, __('errors.forbidden'));
         }
 
-        $token = check($request->input('token'));
-
-        if ($token === $_SESSION['token']) {
+        if ($request->input('token') === $_SESSION['token']) {
             restatement('offers');
 
             setFlash('success', __('main.success_recounted'));
@@ -213,16 +214,16 @@ class OfferController extends AdminController
      *
      * @param Request   $request
      * @param Validator $validator
+     *
      * @return void
      */
     public function delete(Request $request, Validator $validator): void
     {
-        $page  = int($request->input('page', 1));
-        $token = check($request->input('token'));
-        $del   = intar($request->input('del'));
-        $type  = $request->input('type') === Offer::OFFER ? Offer::OFFER : Offer::ISSUE;
+        $page = int($request->input('page', 1));
+        $del  = intar($request->input('del'));
+        $type = $request->input('type') === Offer::OFFER ? Offer::OFFER : Offer::ISSUE;
 
-        $validator->equal($token, $_SESSION['token'], __('validator.token'))
+        $validator->equal($request->input('token'), $_SESSION['token'], __('validator.token'))
             ->true($del, __('validator.deletion'));
 
         if ($validator->isValid()) {

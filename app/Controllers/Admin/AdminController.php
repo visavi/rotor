@@ -52,6 +52,7 @@ Class AdminController extends BaseController
      * Проверка обновлений
      *
      * @param PhinxApplication $app
+     *
      * @return string
      */
     public function upgrade(PhinxApplication $app): string

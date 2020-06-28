@@ -33,6 +33,7 @@ class PhotoController extends AdminController
      * @param int       $id
      * @param Request   $request
      * @param Validator $validator
+     *
      * @return string
      */
     public function edit(int $id, Request $request, Validator $validator): string
@@ -45,12 +46,11 @@ class PhotoController extends AdminController
         }
 
         if ($request->isMethod('post')) {
-            $token  = check($request->input('token'));
-            $title  = check($request->input('title'));
-            $text   = check($request->input('text'));
+            $title  = $request->input('title');
+            $text   = $request->input('text');
             $closed = empty($request->input('closed')) ? 0 : 1;
 
-            $validator->equal($token, $_SESSION['token'], __('validator.token'))
+            $validator->equal($request->input('token'), $_SESSION['token'], __('validator.token'))
                 ->length($title, 5, 50, ['title' => __('validator.text')])
                 ->length($text, 0, 1000, ['text' => __('validator.text_long')]);
 
@@ -81,6 +81,7 @@ class PhotoController extends AdminController
      * @param int       $id
      * @param Request   $request
      * @param Validator $validator
+     *
      * @return void
      * @throws Exception
      */
@@ -90,8 +91,7 @@ class PhotoController extends AdminController
             abort('default', __('main.directory_not_writable'));
         }
 
-        $page  = int($request->input('page', 1));
-        $token = check($request->input('token'));
+        $page = int($request->input('page', 1));
 
         /** @var Photo $photo */
         $photo = Photo::query()->find($id);
@@ -100,7 +100,7 @@ class PhotoController extends AdminController
             abort(404, __('photos.photo_not_exist'));
         }
 
-        $validator->equal($token, $_SESSION['token'], __('validator.token'));
+        $validator->equal($request->input('token'), $_SESSION['token'], __('validator.token'));
 
         if ($validator->isValid()) {
             $photo->comments()->delete();
@@ -119,14 +119,13 @@ class PhotoController extends AdminController
      * Пересчет комментариев
      *
      * @param Request $request
+     *
      * @return void
      */
     public function restatement(Request $request): void
     {
-        $token = check($request->input('token'));
-
         if (isAdmin(User::BOSS)) {
-            if ($token === $_SESSION['token']) {
+            if ($request->input('token') === $_SESSION['token']) {
                 restatement('photos');
 
                 setFlash('success', __('main.success_recounted'));
