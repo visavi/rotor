@@ -55,7 +55,7 @@ class BackupController extends AdminController
     public function create(Request $request, Validator $validator): string
     {
         if ($request->isMethod('post')) {
-            $sheets = $request->input('sheets');
+            $sheets = check($request->input('sheets'));
             $method = $request->input('method');
             $level  = int($request->input('level'));
 
@@ -65,7 +65,7 @@ class BackupController extends AdminController
                 ->between($level, 0, 9, ['level' => __('admin.backup.wrong_compression_ratio')]);
 
             if ($validator->isValid()) {
-                $selectTables = DB::connection()->select('SHOW TABLE STATUS where name IN("' . implode('","', check($sheets)) . '")');
+                $selectTables = DB::connection()->select('SHOW TABLE STATUS where name IN("' . implode('","', $sheets) . '")');
 
                 $limit    = 3000;
                 $filename = 'backup_'.$this->date.'.sql';

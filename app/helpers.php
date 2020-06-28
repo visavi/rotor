@@ -1985,7 +1985,7 @@ function request(): Request
  */
 function server($key = null, $default = null)
 {
-    return check(request()->server($key, $default));
+    return request()->server($key, $default);
 }
 
 /**

@@ -294,10 +294,10 @@ $keys = [
         <?= __('install.delete_install') ?><br><br>
 
         <?php
-        $login     = check($request->input('login'));
-        $password  = check($request->input('password'));
-        $password2 = check($request->input('password2'));
-        $email     = strtolower(check($request->input('email')));
+        $login     = $request->input('login');
+        $password  = $request->input('password');
+        $password2 = $request->input('password2');
+        $email     = strtolower($request->input('email'));
         ?>
 
         <?php if ($request->isMethod('post')): ?>

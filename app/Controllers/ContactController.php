@@ -32,7 +32,7 @@ class ContactController extends BaseController
      */
     public function index(Request $request, Validator $validator): string
     {
-        $login = check($request->input('user'));
+        $login = $request->input('user');
 
         if ($request->isMethod('post')) {
             $page  = int($request->input('page', 1));

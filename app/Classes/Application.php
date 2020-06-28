@@ -87,8 +87,8 @@ class Application
     private function cookieAuth(): void
     {
         if (empty($_SESSION['id']) && isset($_COOKIE['login'], $_COOKIE['password'])) {
-            $login    = check($_COOKIE['login']);
-            $password = check($_COOKIE['password']);
+            $login    = $_COOKIE['login'];
+            $password = $_COOKIE['password'];
 
             $user = getUserByLogin($login);
 

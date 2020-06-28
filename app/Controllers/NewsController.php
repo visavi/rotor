@@ -87,7 +87,7 @@ class NewsController extends BaseController
         }
 
         if ($request->isMethod('post')) {
-            $msg = check($request->input('msg'));
+            $msg = $request->input('msg');
 
             $validator->true(getUser(), __('main.not_authorized'))
                 ->equal($request->input('token'), $_SESSION['token'], __('validator.token'))
