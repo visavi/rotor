@@ -69,7 +69,7 @@ class BoardController extends BaseController
             abort(404, __('boards.item_not_exist'));
         }
 
-        if ($item->expires_at <= SITETIME && $item->user_id !== getUser('id')) {
+        if ($item->expires_at <= SITETIME && getUser() && getUser('id') !== $item->user_id) {
             abort('default', __('boards.item_not_active'));
         }
 

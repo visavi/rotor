@@ -8,11 +8,15 @@ use App\Classes\Validator;
 use App\Controllers\BaseController;
 use App\Models\Post;
 use App\Models\Topic;
+use App\Models\User;
 use Exception;
 use Illuminate\Http\Request;
 
 class ActiveController extends BaseController
 {
+    /**
+     * @var User
+     */
     public $user;
 
     /**

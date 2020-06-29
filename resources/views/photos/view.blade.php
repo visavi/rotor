@@ -21,7 +21,7 @@
        <a href="/admin/photos/delete/{{ $photo->id }}?token={{ $_SESSION['token'] }}" onclick="return confirm('{{ __('photos.confirm_delete_photo') }}')">{{ __('main.delete') }}</a>
     @endif
 
-    @if ($photo->user->id === getUser('id') && ! isAdmin())
+    @if (getUser() && getUser('id') === $photo->user->id && ! isAdmin())
         <a href="/photos/edit/{{ $photo->id }}">{{ __('main.edit') }}</a> /
         <a href="/photos/delete/{{ $photo->id }}?token={{ $_SESSION['token'] }}" onclick="return confirm('{{ __('photos.confirm_delete_photo') }}')">{{ __('main.delete') }}</a>
     @endif

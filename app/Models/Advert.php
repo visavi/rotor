@@ -49,11 +49,13 @@ class Advert extends BaseModel
                 $links = [];
                 if ($data->isNotEmpty()) {
                     foreach ($data as $val) {
+                        $name = check($val->name);
+
                         if ($val->color) {
-                            $val->name = '<span style="color:' . $val->color . '">' . $val->name . '</span>';
+                            $val->name = '<span style="color:' . $val->color . '">' . $name . '</span>';
                         }
 
-                        $link = '<a href="' . $val->site . '" target="_blank" rel="nofollow">' . $val->name . '</a>';
+                        $link = '<a href="' . $val->site . '" target="_blank" rel="nofollow">' . $name . '</a>';
 
                         if ($val->bold) {
                             $link = '<b>' . $link . '</b>';

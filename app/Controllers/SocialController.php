@@ -6,12 +6,16 @@ namespace App\Controllers;
 
 use App\Classes\Validator;
 use App\Models\Social;
+use App\Models\User;
 use Curl\Curl;
 use Exception;
 use Illuminate\Http\Request;
 
 class SocialController extends BaseController
 {
+    /**
+     * @var User
+     */
     public $user;
 
     /**

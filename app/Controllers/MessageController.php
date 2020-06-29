@@ -15,6 +15,9 @@ use Illuminate\Http\Request;
 
 class MessageController extends BaseController
 {
+    /**
+     * @var User
+     */
     public $user;
 
     /**

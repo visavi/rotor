@@ -5,7 +5,7 @@
 @stop
 
 @section('header')
-    @if ($item->user->id === getUser('id'))
+    @if (getUser() && getUser('id') === $item->user->id)
         <div class="float-right">
             <a class="btn btn-success" href="/items/edit/{{ $item->id }}">{{ __('main.change') }}</a>
         </div><br>

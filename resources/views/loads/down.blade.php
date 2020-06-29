@@ -31,7 +31,7 @@
     @if (! $down->active)
         <div class="p-1 bg-warning text-dark">
             <i class="fas fa-exclamation-triangle"></i> {{ __('loads.pending_down1') }}<br>
-            @if ($down->user_id === getUser('id'))
+            @if (getUser() && getUser('id') === $down->user_id)
                 <i class="fa fa-pencil-alt"></i> <a href="/downs/edit/{{ $down->id }}">{{ __('main.edit') }}</a>
             @endif
         </div><br>

@@ -44,7 +44,7 @@ class DownController extends BaseController
             abort(404, __('loads.down_not_exist'));
         }
 
-        if (! isAdmin(User::ADMIN) && (! $down->active && $down->user_id !== getUser('id'))) {
+        if (! isAdmin(User::ADMIN) && (! $down->active && getUser() && getUser('id') !== $down->user_id)) {
             abort('default', __('loads.down_not_verified'));
         }
 

@@ -22,7 +22,7 @@
     <div class="b">
         {!! $offer->getStatus() !!}
 
-        @if (in_array($offer->status, ['wait', 'process']) && getUser('id') === $offer->user_id)
+        @if (in_array($offer->status, ['wait', 'process']) && getUser() && getUser('id') === $offer->user_id)
             <div class="float-right">
                 <a title="{{ __('main.edit') }}" href="/offers/edit/{{ $offer->id }}"><i class="fa fa-pencil-alt text-muted"></i></a>
             </div>

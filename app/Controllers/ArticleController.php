@@ -117,7 +117,7 @@ class ArticleController extends BaseController
      */
     public function edit(int $id, Request $request, Validator $validator): string
     {
-        if (! getUser()) {
+        if (! $user = getUser()) {
             abort(403, __('main.not_authorized'));
         }
 
@@ -128,7 +128,7 @@ class ArticleController extends BaseController
             abort(404, __('blogs.article_not_exist'));
         }
 
-        if ($article->user_id !== getUser('id')) {
+        if ($user->id !== $article->user_id) {
             abort('default', __('main.article_not_author'));
         }
 
@@ -274,7 +274,7 @@ class ArticleController extends BaseController
                 File::query()
                     ->where('relate_type', Article::$morphName)
                     ->where('relate_id', 0)
-                    ->where('user_id', getUser('id'))
+                    ->where('user_id', $user->id)
                     ->update(['relate_id' => $article->id]);
 
                 clearCache(['statArticles', 'recentArticles']);
@@ -291,7 +291,7 @@ class ArticleController extends BaseController
         $files = File::query()
             ->where('relate_type', Article::$morphName)
             ->where('relate_id', 0)
-            ->where('user_id', getUser('id'))
+            ->where('user_id', $user->id)
             ->get();
 
         return view('blogs/create', compact('categories', 'cid', 'files'));
@@ -317,11 +317,11 @@ class ArticleController extends BaseController
         }
 
         if ($request->isMethod('post')) {
-
-            $msg = $request->input('msg');
+            $user = getUser();
+            $msg  = $request->input('msg');
 
             $validator
-                ->true(getUser(), __('main.not_authorized'))
+                ->true($user, __('main.not_authorized'))
                 ->equal($request->input('token'), $_SESSION['token'], __('validator.token'))
                 ->length($msg, 5, setting('comment_length'), ['msg' => __('validator.text')])
                 ->false($flood->isFlood(), ['msg' => __('validator.flood', ['sec' => $flood->getPeriod()])]);
@@ -330,13 +330,12 @@ class ArticleController extends BaseController
                 /** @var Comment $comment */
                 $comment = $article->comments()->create([
                     'text'        => antimat($msg),
-                    'user_id'     => getUser('id'),
+                    'user_id'     => $user->id,
                     'created_at'  => SITETIME,
                     'ip'          => getIp(),
                     'brow'        => getBrowser(),
                 ]);
 
-                $user = getUser();
                 $user->increment('allcomments');
                 $user->increment('point');
                 $user->increment('money', 5);
@@ -383,13 +382,13 @@ class ArticleController extends BaseController
             abort(404, __('blogs.article_not_exist'));
         }
 
-        if (! getUser()) {
+        if (! $user = getUser()) {
             abort(403, __('main.not_authorized'));
         }
 
         $comment = $article->comments()
             ->where('id', $cid)
-            ->where('user_id', getUser('id'))
+            ->where('user_id', $user->id)
             ->first();
 
         if (! $comment) {

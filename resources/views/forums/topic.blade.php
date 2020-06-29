@@ -30,7 +30,7 @@
     <a href="/topics/print/{{ $topic->id }}">{{ __('main.print') }}</a> / <a href="/topics/rss/{{ $topic->id }}">{{ __('main.rss') }}</a>
 
     @if (getUser())
-        @if (! $topic->closed && $topic->user->id === getUser('id') && getUser('point') >= setting('editforumpoint'))
+        @if (! $topic->closed && getUser('id') === $topic->user->id && getUser('point') >= setting('editforumpoint'))
            / <a href="/topics/close/{{ $topic->id }}?token={{ $_SESSION['token'] }}" onclick="return confirm('{{ __('forums.confirm_close_topic') }}')">{{ __('main.close') }}</a>
            / <a href="/topics/edit/{{ $topic->id }}">{{ __('main.edit') }}</a>
         @endif

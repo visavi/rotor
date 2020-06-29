@@ -35,7 +35,7 @@ class WallController extends BaseController
             ->with('user', 'author')
             ->paginate(setting('wallpost'));
 
-        if ($newWall && $user->id === getUser('id')) {
+        if ($newWall && getUser('id') === $user->id) {
             $user->update([
                 'newwall' => 0,
             ]);
@@ -81,7 +81,7 @@ class WallController extends BaseController
             $validator->empty($ignoring, __('ignores.you_are_ignoring'));
 
             if ($validator->isValid()) {
-                if ($user->id !== getUser('id')) {
+                if (getUser() && getUser('id') !== $user->id) {
                     $user->increment('newwall');
                 }
 
@@ -128,7 +128,7 @@ class WallController extends BaseController
             ->equal($request->input('token'), $_SESSION['token'], __('validator.token'))
             ->notEmpty($id, __('validator.deletion'))
             ->notEmpty($user, __('validator.user'))
-            ->true(isAdmin() || $user->id === getUser('id'), __('main.deleted_only_admins'));
+            ->true(isAdmin() || getUser('id') === $user->id, __('main.deleted_only_admins'));
 
         if ($validator->isValid()) {
             Wall::query()

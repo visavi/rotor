@@ -40,7 +40,7 @@
 
                             @endif
 
-                            @if ($data->created_at + 600 > SITETIME && $data->user_id === getUser('id'))
+                            @if ($data->created_at + 600 > SITETIME && getUser('id') === $data->user_id)
                                 <a href="/news/edit/{{ $news->id }}/{{ $data->id }}?page={{ $comments->currentPage() }}" data-toggle="tooltip" title="{{ __('main.edit') }}"><i class="fa fa-pencil-alt text-muted"></i></a>
                             @endif
 

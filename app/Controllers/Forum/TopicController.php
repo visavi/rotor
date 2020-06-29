@@ -32,12 +32,14 @@ class TopicController extends BaseController
      */
     public function index(int $id): string
     {
+        $user = getUser();
+
         $topic = Topic::query()
             ->select('topics.*', 'bookmarks.count_posts as bookmark_posts')
             ->where('topics.id', $id)
-            ->leftJoin('bookmarks', static function (JoinClause $join) {
+            ->leftJoin('bookmarks', static function (JoinClause $join) use ($user) {
                 $join->on('topics.id', 'bookmarks.topic_id')
-                    ->where('bookmarks.user_id', getUser('id'));
+                    ->where('bookmarks.user_id', $user->id);
             })
             ->with('forum.parent')
             ->first();
@@ -49,10 +51,10 @@ class TopicController extends BaseController
         $posts = Post::query()
             ->select('posts.*', 'pollings.vote')
             ->where('topic_id', $topic->id)
-            ->leftJoin('pollings', static function (JoinClause $join) {
+            ->leftJoin('pollings', static function (JoinClause $join) use ($user) {
                 $join->on('posts.id', 'pollings.relate_id')
                     ->where('pollings.relate_type', Post::$morphName)
-                    ->where('pollings.user_id', getUser('id'));
+                    ->where('pollings.user_id', $user->id);
             })
             ->with('files', 'user', 'editUser')
             ->orderBy('created_at')
@@ -64,17 +66,17 @@ class TopicController extends BaseController
             $firstPost = Post::query()->where('topic_id', $topic->id)->orderBy('created_at')->first();
         }
 
-        if ($topic->bookmark_posts && $topic->count_posts > $topic->bookmark_posts && getUser()) {
+        if ($user && $topic->bookmark_posts && $topic->count_posts > $topic->bookmark_posts) {
             Bookmark::query()
                 ->where('topic_id', $topic->id)
-                ->where('user_id', getUser('id'))
+                ->where('user_id', $user->id)
                 ->update(['count_posts' => $topic->count_posts]);
         }
 
         // Curators
         if ($topic->moderators) {
             $topic->curators = User::query()->whereIn('id', explode(',', $topic->moderators))->get();
-            $topic->isModer = $topic->curators->where('id', getUser('id'))->isNotEmpty();
+            $topic->isModer = $topic->curators->where('id', $user->id)->isNotEmpty();
         }
 
         // Visits
@@ -85,7 +87,7 @@ class TopicController extends BaseController
 
         if ($vote) {
             $vote->poll = $vote->pollings()
-                ->where('user_id', getUser('id'))
+                ->where('user_id', $user->id)
                 ->first();
 
             if ($vote->answers->isNotEmpty()) {
@@ -149,7 +151,7 @@ class TopicController extends BaseController
         if ($files && $validator->isValid()) {
             $validator
                 ->lte(count($files), setting('maxfiles'), ['files' => __('validator.files_max', ['max' => setting('maxfiles')])])
-                ->gte(getUser('point'), setting('forumloadpoints'),  __('validator.active_upload'));
+                ->gte($user->point, setting('forumloadpoints'),  __('validator.active_upload'));
 
             $rules = [
                 'maxsize'    => setting('forumloadsize'),
@@ -167,7 +169,7 @@ class TopicController extends BaseController
             if (
                 $post
                 && $post->created_at + 600 > SITETIME
-                && getUser('id') === $post->user_id
+                && $user->id === $post->user_id
                 && (utfStrlen($msg) + utfStrlen($post->text) <= setting('forumtextlength'))
                 && count($files) + $post->files->count() <= setting('maxfiles')
             ) {
@@ -179,7 +181,7 @@ class TopicController extends BaseController
 
                 $post = Post::query()->create([
                     'topic_id'   => $topic->id,
-                    'user_id'    => getUser('id'),
+                    'user_id'    => $user->id,
                     'text'       => $msg,
                     'created_at' => SITETIME,
                     'ip'         => getIp(),
@@ -242,6 +244,10 @@ class TopicController extends BaseController
         $del   = intar($request->input('del'));
         $page  = int($request->input('page'));
 
+        if (! $user = getUser()) {
+            abort(403, __('main.not_authorized'));
+        }
+
         /** @var Topic $topic */
         $topic = Topic::query()->find($id);
 
@@ -249,10 +255,9 @@ class TopicController extends BaseController
             abort(404, __('forums.topic_not_exist'));
         }
 
-        $isModer = in_array(getUser('id'), array_map('intval', explode(',', (string) $topic->moderators)), true);
+        $isModer = in_array($user->id, array_map('intval', explode(',', (string) $topic->moderators)), true);
 
         $validator->equal($request->input('token'), $_SESSION['token'], __('validator.token'))
-            ->true(getUser(), __('main.not_authorized'))
             ->notEmpty($del, __('validator.deletion'))
             ->empty($topic->closed, __('forums.topic_closed'))
             ->equal($isModer, true, __('forums.posts_deleted_curators'));
@@ -294,14 +299,17 @@ class TopicController extends BaseController
      */
     public function close(int $id, Request $request, Validator $validator): void
     {
+        if (! $user = getUser()) {
+            abort(403, __('main.not_authorized'));
+        }
+
         /** @var Topic $topic */
         $topic = Topic::query()->find($id);
 
         $validator->equal($request->input('token'), $_SESSION['token'], __('validator.token'))
-            ->true(getUser(), __('main.not_authorized'))
-            ->gte(getUser('point'), setting('editforumpoint'), __('forums.topic_edited_points', ['point' => plural(setting('editforumpoint'), setting('scorename'))]))
+            ->gte($user->point, setting('editforumpoint'), __('forums.topic_edited_points', ['point' => plural(setting('editforumpoint'), setting('scorename'))]))
             ->notEmpty($topic, __('forums.topic_not_exist'))
-            ->equal($topic->user_id, getUser('id'), __('forums.topic_not_author'))
+            ->equal($topic->user_id, $user->id, __('forums.topic_not_author'))
             ->empty($topic->closed, __('forums.topic_closed'));
 
         if ($validator->isValid()) {
@@ -335,11 +343,11 @@ class TopicController extends BaseController
      */
     public function edit(int $id, Request $request, Validator $validator): string
     {
-        if (! getUser()) {
+        if (! $user = getUser()) {
             abort(403, __('main.not_authorized'));
         }
 
-        if (getUser('point') < setting('editforumpoint')) {
+        if ($user->point < setting('editforumpoint')) {
             abort('default', __('forums.topic_edited_points', ['point' => plural(setting('editforumpoint'), setting('scorename'))]));
         }
 
@@ -350,7 +358,7 @@ class TopicController extends BaseController
             abort(404, __('forums.topic_not_exist'));
         }
 
-        if ($topic->user_id !== getUser('id')) {
+        if ($topic->user_id !== $user->id) {
             abort('default', __('forums.topic_not_author'));
         }
 
@@ -406,7 +414,7 @@ class TopicController extends BaseController
                 if ($post) {
                     $post->update([
                         'text'         => $msg,
-                        'edit_user_id' => getUser('id'),
+                        'edit_user_id' => $user->id,
                         'updated_at'   => SITETIME,
                     ]);
                 }
@@ -462,7 +470,7 @@ class TopicController extends BaseController
     {
         $page = int($request->input('page'));
 
-        if (! getUser()) {
+        if (! $user = getUser()) {
             abort(403, __('main.not_authorized'));
         }
 
@@ -481,9 +489,9 @@ class TopicController extends BaseController
             abort('default', __('forums.topic_closed'));
         }
 
-        $isModer = in_array(getUser('id'), array_map('intval', explode(',', (string) $post->moderators)), true);
+        $isModer = in_array($user->id, array_map('intval', explode(',', (string) $post->moderators)), true);
 
-        if (! $isModer && $post->user_id !== getUser('id')) {
+        if (! $isModer && $post->user_id !== $user->id) {
             abort('default', __('forums.posts_edited_curators'));
         }
 
@@ -501,7 +509,7 @@ class TopicController extends BaseController
             if ($validator->isValid()) {
                 $post->update([
                     'text'         => antimat($msg),
-                    'edit_user_id' => getUser('id'),
+                    'edit_user_id' => $user->id,
                     'updated_at'   => SITETIME,
                 ]);
 
@@ -540,7 +548,7 @@ class TopicController extends BaseController
      */
     public function vote(int $id, Request $request, Validator $validator): void
     {
-        if (! getUser()) {
+        if (! $user = getUser()) {
             abort(403, __('main.not_authorized'));
         }
 
@@ -560,7 +568,7 @@ class TopicController extends BaseController
         }
 
         $polling = $vote->pollings()
-            ->where('user_id', getUser('id'))
+            ->where('user_id', $user->id)
             ->first();
 
         if ($polling) {
@@ -584,7 +592,7 @@ class TopicController extends BaseController
             Polling::query()->create([
                 'relate_type' => Vote::class,
                 'relate_id'   => $vote->id,
-                'user_id'     => getUser('id'),
+                'user_id'     => $user->id,
                 'vote'        => '+',
                 'created_at'  => SITETIME,
             ]);

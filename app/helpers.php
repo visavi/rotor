@@ -1050,6 +1050,7 @@ function getAdvertAdmin()
 
     if ($adverts) {
         $result  = Arr::random($adverts);
+
         return view('adverts/_admin_links', compact('result'));
     }
 

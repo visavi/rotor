@@ -254,15 +254,15 @@ class PhotoController extends BaseController
     {
         $page = int($request->input('page', 1));
 
+        if (! getUser()) {
+            abort(403, __('main.not_authorized'));
+        }
+
         /** @var Photo $photo */
         $photo = Photo::query()->find($id);
 
         if (! $photo) {
             abort(404, __('photos.photo_not_exist'));
-        }
-
-        if (! getUser()) {
-            abort(403, __('main.not_authorized'));
         }
 
         $comment = $photo->comments()
@@ -402,7 +402,7 @@ class PhotoController extends BaseController
             ->with('user')
             ->paginate(setting('fotolist'));
 
-        $moder = (getUser('id') === $user->id) ? 1 : 0;
+        $moder = getUser() && getUser('id') === $user->id ? 1 : 0;
 
         return view('photos/user_albums', compact('photos', 'moder', 'user'));
     }

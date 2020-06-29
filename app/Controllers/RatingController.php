@@ -13,13 +13,18 @@ use Illuminate\Http\Request;
 class RatingController extends BaseController
 {
     /**
+     * @var User
+     */
+    public $user;
+
+    /**
      * Конструктор
      */
     public function __construct()
     {
         parent::__construct();
 
-        if (! getUser()) {
+        if (! $this->user = getUser()) {
             abort(403, __('main.not_authorized'));
         }
     }
@@ -42,17 +47,17 @@ class RatingController extends BaseController
             abort(404, __('validator.user'));
         }
 
-        if (getUser('id') === $user->id) {
+        if ($this->user->id === $user->id) {
             abort('default', __('ratings.reputation_yourself'));
         }
 
-        if (getUser('point') < setting('editratingpoint')) {
+        if ($this->user->point < setting('editratingpoint')) {
             abort('default', __('ratings.reputation_point', ['point' => plural(setting('editratingpoint'), setting('scorename'))]));
         }
 
         // Голосовать за того же пользователя можно через 90 дней
         $getRating = Rating::query()
-            ->where('user_id', getUser('id'))
+            ->where('user_id', $this->user->id)
             ->where('recipient_id', $user->id)
             ->where('created_at', '>', strtotime('-3 month', SITETIME))
             ->first();
@@ -67,7 +72,7 @@ class RatingController extends BaseController
             $validator->equal($request->input('token'), $_SESSION['token'], __('validator.token'))
                 ->length($text, 5, 250, ['text' => __('validator.text')]);
 
-            if ($vote === 'minus' && getUser('rating') < 1) {
+            if ($vote === 'minus' && $this->user->rating < 1) {
                 $validator->addError(__('ratings.reputation_positive'));
             }
 
@@ -75,7 +80,7 @@ class RatingController extends BaseController
                 $text = antimat($text);
 
                 Rating::query()->create([
-                    'user_id'      => getUser('id'),
+                    'user_id'      => $this->user->id,
                     'recipient_id' => $user->id,
                     'text'         => $text,
                     'vote'         => $vote === 'plus' ? '+' : '-',
@@ -90,7 +95,7 @@ class RatingController extends BaseController
                     $user->update(['rating' => $user->posrating - $user->negrating]);
                 }
 
-                $message = textNotice('rating', ['login' => getUser('login'), 'rating' => $user->rating, 'comment' => $text, 'vote' => __('main.' . $vote)]);
+                $message = textNotice('rating', ['login' => $this->user->login, 'rating' => $user->rating, 'comment' => $text, 'vote' => __('main.' . $vote)]);
                 $user->sendMessage(null, $message);
 
                 setFlash('success', __('ratings.reputation_success_changed'));

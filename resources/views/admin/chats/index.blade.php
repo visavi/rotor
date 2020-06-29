@@ -22,14 +22,14 @@
         @foreach ($posts as $post)
             <div class="post">
                 <div class="b">
-                    @if (getUser('id') !== $post->user_id)
+                    @if (getUser() && getUser('id') !== $post->user_id)
                         <div class="float-right">
                             <a href="#" onclick="return postReply(this)" data-toggle="tooltip" title="{{ __('main.reply') }}"><i class="fa fa-reply text-muted"></i></a>
                             <a href="#" onclick="return postQuote(this)" data-toggle="tooltip" title="{{ __('main.quote') }}"><i class="fa fa-quote-right text-muted"></i></a>
                         </div>
                     @endif
 
-                    @if ($post->created_at + 600 > SITETIME && getUser('id') === $post->user_id)
+                    @if ($post->created_at + 600 > SITETIME && getUser() && getUser('id') === $post->user_id)
                         <div class="float-right">
                             <a href="/admin/chats/edit/{{ $post->id }}?page={{ $posts->currentPage() }}" data-toggle="tooltip" title="{{ __('main.edit') }}"><i class="fas fa-pencil-alt text-muted"></i></a>
                         </div>

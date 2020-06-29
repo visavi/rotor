@@ -7,7 +7,7 @@
 @section('description', truncateDescription(bbCode($article->text, false)))
 
 @section('header')
-    @if ($article->user->id === getUser('id'))
+    @if (getUser() && getUser('id') === $article->user->id)
         <div class="float-right">
             <a class="btn btn-success" href="/articles/edit/{{ $article->id }}">{{ __('main.change') }}</a>
         </div><br>

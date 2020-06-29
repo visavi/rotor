@@ -47,11 +47,13 @@ class AdminAdvert extends BaseModel
             $links = [];
             if ($data->isNotEmpty()) {
                 foreach ($data as $val) {
+                    $name = check($val->name);
+
                     if ($val->color) {
-                        $val->name = '<span style="color:' . $val->color . '">' . $val->name . '</span>';
+                        $val->name = '<span style="color:' . $val->color . '">' . $name . '</span>';
                     }
 
-                    $link = '<a href="' . $val->site . '" target="_blank">' . $val->name . '</a>';
+                    $link = '<a href="' . $val->site . '" target="_blank">' . $name . '</a>';
 
                     if ($val->bold) {
                         $link = '<b>' . $link . '</b>';

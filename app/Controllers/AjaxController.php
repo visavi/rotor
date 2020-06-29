@@ -348,7 +348,7 @@ class AjaxController extends BaseController
         }
 
         $validator->equal($request->input('token'), $_SESSION['token'], __('validator.token'))
-            ->true($file->user_id === getUser('id') || isAdmin(), __('ajax.image_not_author'))
+            ->true(getUser('id') === $file->user_id || isAdmin(), __('ajax.image_not_author'))
             ->true(! $file->relate_id || isAdmin(), __('ajax.image_delete_attached'));
 
         if ($validator->isValid()) {

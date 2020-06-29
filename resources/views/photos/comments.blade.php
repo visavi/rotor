@@ -35,7 +35,7 @@
                                 <a href="#" onclick="return sendComplaint(this)" data-type="{{ $data->relate->getMorphClass() }}" data-id="{{ $data->id }}" data-token="{{ $_SESSION['token'] }}" data-page="{{ $comments->currentPage() }}" rel="nofollow" title="{{ __('main.complain') }}"><i class="fa fa-bell text-muted"></i></a>
                             @endif
 
-                            @if ($data->created_at + 600 > SITETIME && $data->user_id === getUser('id'))
+                            @if ($data->created_at + 600 > SITETIME && getUser('id') === $data->user_id)
                                 <a href="/photos/edit/{{ $photo->id }}/{{ $data->id }}?page={{ $comments->currentPage() }}" title="{{ __('main.edit') }}"><i class="fa fa-pencil-alt text-muted"></i></a>
                             @endif
 

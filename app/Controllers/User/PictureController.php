@@ -6,11 +6,15 @@ namespace App\Controllers\User;
 
 use App\Classes\Validator;
 use App\Controllers\BaseController;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Intervention\Image\ImageManagerStatic as Image;
 
 class PictureController extends BaseController
 {
+    /**
+     * @var User
+     */
     public $user;
 
     /**

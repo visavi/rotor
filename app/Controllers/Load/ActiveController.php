@@ -7,10 +7,14 @@ namespace App\Controllers\Load;
 use App\Controllers\BaseController;
 use App\Models\Comment;
 use App\Models\Down;
+use App\Models\User;
 use Illuminate\Http\Request;
 
 class ActiveController extends BaseController
 {
+    /**
+     * @var User
+     */
     public $user;
 
     /**
@@ -42,7 +46,7 @@ class ActiveController extends BaseController
         $active = int($request->input('active', 1));
         $user   = $this->user;
 
-        if ($user->id !== getUser('id')) {
+        if (getUser() && getUser('id') !== $user->id) {
             $active = 1;
         }
 
