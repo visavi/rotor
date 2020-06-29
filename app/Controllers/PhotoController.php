@@ -68,7 +68,7 @@ class PhotoController extends BaseController
      */
     public function create(Request $request, Validator $validator, Flood $flood): string
     {
-        if (! getUser()) {
+        if (! $user = getUser()) {
             abort(403, __('main.not_authorized'));
         }
 
@@ -85,7 +85,7 @@ class PhotoController extends BaseController
             if ($validator->isValid()) {
                 /** @var Photo $photo */
                 $photo = Photo::query()->create([
-                    'user_id'    => getUser('id'),
+                    'user_id'    => $user->id,
                     'title'      => $title,
                     'text'       => antimat($text),
                     'created_at' => SITETIME,
@@ -95,7 +95,7 @@ class PhotoController extends BaseController
                 File::query()
                     ->where('relate_type', Photo::$morphName)
                     ->where('relate_id', 0)
-                    ->where('user_id', getUser('id'))
+                    ->where('user_id', $user->id)
                     ->update(['relate_id' => $photo->id]);
 
                 clearCache(['statPhotos', 'recentPhotos']);
@@ -112,7 +112,7 @@ class PhotoController extends BaseController
         $files = File::query()
             ->where('relate_type', Photo::$morphName)
             ->where('relate_id', 0)
-            ->where('user_id', getUser('id'))
+            ->where('user_id', $user->id)
             ->get();
 
         return view('photos/create', compact('files'));
@@ -131,12 +131,12 @@ class PhotoController extends BaseController
     {
         $page = int($request->input('page', 1));
 
-        if (! getUser()) {
+        if (! $user = getUser()) {
             abort(403, __('main.not_authorized'));
         }
 
         /** @var Photo $photo */
-        $photo = Photo::query()->where('user_id', getUser('id'))->find($id);
+        $photo = Photo::query()->where('user_id', $user->id)->find($id);
 
         if (! $photo) {
             abort(404, __('photos.photo_not_author'));
@@ -161,7 +161,7 @@ class PhotoController extends BaseController
                 ]);
 
                 setFlash('success', __('photos.photo_success_edited'));
-                redirect('/photos/albums/' . getUser('login') . '?page=' . $page);
+                redirect('/photos/albums/' . $user->login . '?page=' . $page);
             } else {
                 setInput($request->all());
                 setFlash('danger', $validator->getErrors());
@@ -193,10 +193,11 @@ class PhotoController extends BaseController
         }
 
         if ($request->isMethod('post')) {
-            $msg = $request->input('msg');
+            $user = getUser();
+            $msg  = $request->input('msg');
 
             $validator
-                ->true(getUser(), __('main.not_authorized'))
+                ->true($user, __('main.not_authorized'))
                 ->equal($request->input('token'), $_SESSION['token'], __('validator.token'))
                 ->length($msg, 5, setting('comment_length'), ['msg' => __('validator.text')])
                 ->false($flood->isFlood(), ['msg' => __('validator.flood', ['sec' => $flood->getPeriod()])])
@@ -208,13 +209,12 @@ class PhotoController extends BaseController
                 /** @var Comment $comment */
                 $comment = $photo->comments()->create([
                     'text'        => $msg,
-                    'user_id'     => getUser('id'),
+                    'user_id'     => $user->id,
                     'created_at'  => SITETIME,
                     'ip'          => getIp(),
                     'brow'        => getBrowser(),
                 ]);
 
-                $user = getUser();
                 $user->increment('allcomments');
                 $user->increment('point');
                 $user->increment('money', 5);
@@ -254,7 +254,7 @@ class PhotoController extends BaseController
     {
         $page = int($request->input('page', 1));
 
-        if (! getUser()) {
+        if (! $user = getUser()) {
             abort(403, __('main.not_authorized'));
         }
 
@@ -267,7 +267,7 @@ class PhotoController extends BaseController
 
         $comment = $photo->comments()
             ->where('id', $cid)
-            ->where('user_id', getUser('id'))
+            ->where('user_id', $user->id)
             ->first();
 
         if (! $comment) {
@@ -316,12 +316,12 @@ class PhotoController extends BaseController
     {
         $page = int($request->input('page', 1));
 
-        if (! getUser()) {
+        if (! $user = getUser()) {
             abort(403, __('main.not_authorized'));
         }
 
         /** @var Photo $photo */
-        $photo = Photo::query()->where('user_id', getUser('id'))->find($id);
+        $photo = Photo::query()->where('user_id', $user->id)->find($id);
 
         if (! $photo) {
             abort(404, __('photos.photo_not_author'));
@@ -340,7 +340,7 @@ class PhotoController extends BaseController
             setFlash('danger', $validator->getErrors());
         }
 
-        redirect('/photos/albums/' . getUser('login') . '?page=' . $page);
+        redirect('/photos/albums/' . $user->login . '?page=' . $page);
     }
 
     /**

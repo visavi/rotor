@@ -15,7 +15,7 @@
 @stop
 
 @section('content')
-    <i class="fa fa-pencil-alt text-muted"></i> <b>{!! $post->user->login !!}</b> ({{ dateFixed($post->created_at) }})<br><br>
+    <i class="fa fa-pencil-alt text-muted"></i> <b>{!! $post->user->getName() !!}</b> ({{ dateFixed($post->created_at) }})<br><br>
 
     <div class="section-form p-2 shadow">
         <form action="/guestbook/edit/{{ $post->id }}" method="post">

@@ -191,7 +191,7 @@ class User extends BaseModel
     {
         if ($this->id) {
             $admin = null;
-            $name  = $this->getName();
+            $name  = check($this->getName());
 
             if ($color) {
                 $name = '<span style="color:' . $color . '">' . $name . '</span>';

@@ -29,9 +29,9 @@ class MailController extends BaseController
             $message = bbCode($message);
             $message = str_replace('/uploads/stickers', siteUrl().'/uploads/stickers', $message);
 
-            if (getUser()) {
-                $name  = getUser('login');
-                $email = getUser('email');
+            if ($user = getUser()) {
+                $name  = $user->login;
+                $email = $user->email;
             }
 
             $validator->true(captchaVerify(), ['protect' => __('validator.captcha')])

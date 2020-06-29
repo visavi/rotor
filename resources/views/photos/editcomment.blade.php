@@ -17,7 +17,7 @@
 @stop
 
 @section('content')
-    <i class="fa fa-pencil-alt"></i> <b>{{ $comment->user->login }}</b> <small>({{ dateFixed($comment->created_at) }})</small><br><br>
+    <i class="fa fa-pencil-alt"></i> <b>{{ $comment->user->getName() }}</b> <small>({{ dateFixed($comment->created_at) }})</small><br><br>
 
     <div class="section-form p-2 shadow">
         <form method="post">

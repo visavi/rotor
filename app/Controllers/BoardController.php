@@ -143,7 +143,7 @@ class BoardController extends BaseController
                 File::query()
                     ->where('relate_type', Item::$morphName)
                     ->where('relate_id', 0)
-                    ->where('user_id', getUser('id'))
+                    ->where('user_id', $user->id)
                     ->update(['relate_id' => $item->id]);
 
                 clearCache(['statBoards', 'recentBoards']);
@@ -160,7 +160,7 @@ class BoardController extends BaseController
         $files = File::query()
             ->where('relate_type', Item::$morphName)
             ->where('relate_id', 0)
-            ->where('user_id', getUser('id'))
+            ->where('user_id', $user->id)
             ->get();
 
         return view('boards/create', compact('boards', 'bid', 'files'));
@@ -177,7 +177,7 @@ class BoardController extends BaseController
      */
     public function edit(int $id, Request $request, Validator $validator): string
     {
-        if (! getUser()) {
+        if (! $user = getUser()) {
             abort(403, __('main.not_authorized'));
         }
 
@@ -204,7 +204,7 @@ class BoardController extends BaseController
                 ->length($text, 50, 5000, ['text' => __('validator.text')])
                 ->regex($phone, '#^\d{11}$#', ['phone' => __('validator.phone')], false)
                 ->notEmpty($board, ['category' => __('boards.category_not_exist')])
-                ->equal($item->user_id, getUser('id'), __('boards.item_not_author'));
+                ->equal($item->user_id, $user->id, __('boards.item_not_author'));
 
             if ($board) {
                 $validator->empty($board->closed, ['category' => __('boards.category_closed')]);
@@ -252,7 +252,7 @@ class BoardController extends BaseController
      */
     public function close(int $id, Request $request, Validator $validator): void
     {
-        if (! getUser()) {
+        if (! $user = getUser()) {
             abort(403, __('main.not_authorized'));
         }
 
@@ -264,7 +264,7 @@ class BoardController extends BaseController
         }
 
         $validator->equal($request->input('token'), $_SESSION['token'], __('validator.token'))
-            ->equal($item->user_id, getUser('id'), __('boards.item_not_author'));
+            ->equal($item->user_id, $user->id, __('boards.item_not_author'));
 
         if ($validator->isValid()) {
             if ($item->expires_at > SITETIME) {
@@ -305,7 +305,7 @@ class BoardController extends BaseController
      */
     public function delete(int $id, Request $request, Validator $validator): void
     {
-        if (! getUser()) {
+        if (! $user = getUser()) {
             abort(403, __('main.not_authorized'));
         }
 
@@ -317,7 +317,7 @@ class BoardController extends BaseController
         }
 
         $validator->equal($request->input('token'), $_SESSION['token'], __('validator.token'))
-            ->equal($item->user_id, getUser('id'), __('boards.item_not_author'));
+            ->equal($item->user_id, $user->id, __('boards.item_not_author'));
 
         if ($validator->isValid()) {
             $item->delete();
@@ -340,12 +340,12 @@ class BoardController extends BaseController
      */
     public function active(): string
     {
-        if (! getUser()) {
+        if (! $user = getUser()) {
             abort(403, __('main.not_authorized'));
         }
 
         $items = Item::query()
-            ->where('user_id', getUser('id'))
+            ->where('user_id', $user->id)
             ->orderByDesc('updated_at')
             ->with('category', 'user', 'files')
             ->paginate(Item::BOARD_PAGINATE);

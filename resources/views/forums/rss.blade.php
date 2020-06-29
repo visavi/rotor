@@ -15,7 +15,7 @@
                 <title>{{ $topic->title }}</title>
                 <link>{{ siteUrl() }}/topics/{{ $topic->id }}</link>
                 <description>{{ $postText }}</description>
-                <author>{{ $topic->lastPost->user->login }}</author>
+                <author>{{ $topic->lastPost->user->getName() }}</author>
                 <pubDate>{{ date('r', $topic->updated_at) }}</pubDate>
                 <category>{{ __('forums.topics') }}</category>
                 <guid>{{ siteUrl() }}/topics/{{ $topic->id }}</guid>

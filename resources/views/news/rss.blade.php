@@ -12,7 +12,7 @@
             <title>{{ $news->title }}</title>
             <link>{{  siteUrl() }}/news/{{ $news->id }}</link>
             <description>{{ $news->text }}</description>
-            <author>{{ $news->user->login }}</author>
+            <author>{{ $news->user->getName() }}</author>
             <pubDate>{{ date('r', $news->created_at) }}</pubDate>
             <category>{{ __('index.news') }}</category>
             <guid>{{ siteUrl() }}/news/{{ $news->id }}</guid>

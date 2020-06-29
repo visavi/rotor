@@ -13,7 +13,7 @@
             <title>{{ $data->text }}</title>
             <link>{{ siteUrl() }}/down/comments/{{ $down->id }}</link>
             <description>{{ $down->title }}</description>
-            <author>{{ $data->user->login }}</author>
+            <author>{{ $data->user->getName() }}</author>
             <pubDate>{{ date('r', $data->created_at) }}</pubDate>
             <category>{{ __('main.comments') }}</category>
             <guid>{{ siteUrl() }}/down/comments/{{ $down->id }}?pid={{ $data->id }}</guid>

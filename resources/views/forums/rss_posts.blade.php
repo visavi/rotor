@@ -14,7 +14,7 @@
             <title>{{ $data->text }}</title>
             <link>{{ siteUrl() }}/topics/{{ $topic->id }}/{{ $data->id }}</link>
             <description>{{ $topic->title }} </description>
-            <author>{{ $data->user->login }}</author>
+            <author>{{ $data->user->getName() }}</author>
             <pubDate>{{ date('r', $data->created_at) }}</pubDate>
             <category>{{ __('forums.posts') }}</category>
             <guid>{{ siteUrl() }}/topics/{{ $topic->id }}/{{  $data->id }}</guid>

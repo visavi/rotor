@@ -13,7 +13,7 @@
             <title>{{ $down->title }}</title>
             <link>{{ siteUrl() }}/down/{{ $down->id }}</link>
             <description>{{ $down->text }}</description>
-            <author>{{ $down->user->login }}</author>
+            <author>{{ $down->user->getName() }}</author>
             <pubDate>{{ date('r', $down->created_at) }}</pubDate>
             <category>{{ __('index.loads') }}</category>
             <guid>{{ siteUrl() }}/down/{{ $down->id }}</guid>

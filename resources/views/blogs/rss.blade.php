@@ -14,7 +14,7 @@
             <title>{{ $article->title }}</title>
             <link>{{ siteUrl() }}/articles/{{ $article->id }}</link>
             <description>{{ $article->text }}</description>
-            <author>{{ $article->user->login }}</author>
+            <author>{{ $article->user->getName() }}</author>
             <pubDate>{{ date('r', $article->created_at) }}</pubDate>
             <category>{{ __('index.blogs') }}</category>
             <guid>{{ siteUrl() }}/articles/{{ $article->id }}</guid>

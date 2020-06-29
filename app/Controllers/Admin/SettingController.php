@@ -41,9 +41,9 @@ class SettingController extends AdminController
         }
 
         if ($request->isMethod('post')) {
-            $sets  = check($request->input('sets'));
-            $mods  = check($request->input('mods'));
-            $opt   = check($request->input('opt'));
+            $sets  = $request->input('sets');
+            $mods  = $request->input('mods');
+            $opt   = $request->input('opt');
 
             $validator->equal($request->input('token'), $_SESSION['token'], ['msg' => __('validator.token')])
                 ->notEmpty($sets, ['sets' => __('settings.settings_empty')]);
