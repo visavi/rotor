@@ -103,8 +103,6 @@ $app->singleton('view', static function ($app) {
             STORAGE . '/views'
         );
 
-        $blade->withoutDoubleEncoding();
-
         return new CompilerEngine($blade);
     });
 

@@ -1731,6 +1731,8 @@ function setFlash($status, $message)
  */
 function showError($errors)
 {
+    $errors = check($errors);
+
     if (is_array($errors)) {
         $errors = implode('<br><i class="fa fa-exclamation-circle fa-lg text-danger"></i> ', $errors);
     }

@@ -50,7 +50,7 @@ class SettingController extends AdminController
 
             foreach ($sets as $name => $value) {
                 if (empty($opt[$name]) || ! empty($sets[$name])) {
-                    $validator->length($sets[$name], 1, 255, ['sets[' . $name . ']' => __('settings.field_required', ['field' => check($name)])]);
+                    $validator->length($sets[$name], 1, 255, ['sets[' . $name . ']' => __('settings.field_required', ['field' => $name])]);
                 }
             }
 

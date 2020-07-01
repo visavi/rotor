@@ -32,6 +32,14 @@
             </a>
         </li>
 
+        <li>
+            <a class="app-menu__item{{ request()->is('news*') ? ' active' : '' }}" href="/news">
+                <i class="app-menu__icon far fa-comment"></i>
+                <span class="app-menu__label">{{ __('index.news') }}</span>
+                <span class="badge badge-pill badge-light">{{ statsNews() }}</span>
+            </a>
+        </li>
+
         <li class="treeview">
             <a class="app-menu__item" href="#" data-toggle="treeview">
                 <i class="app-menu__icon fas fa-info-circle"></i>
