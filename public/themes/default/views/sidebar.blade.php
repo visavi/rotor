@@ -1,20 +1,44 @@
 <!-- Sidebar menu-->
 <div class="app-sidebar__overlay" data-toggle="sidebar"></div>
 <aside class="app-sidebar">
-    <div class="app-sidebar__user">
-        @if ($user = getUser())
+    @if ($user = getUser())
+        <div class="app-sidebar__user">
             <div class="app-sidebar__user-avatar">
-                {!! getUser()->getAvatar() !!}
+                {!! $user->getAvatar() !!}
             </div>
             <div>
                 <p class="app-sidebar__user-name"><a href="/users/{{ $user->login }}">{{ $user->getName() }}</a></p>
-                <p class="app-sidebar__user-designation">{!! getUser()->getStatus() !!}</p>
+                <p class="app-sidebar__user-designation">{!! $user->getStatus() !!}</p>
             </div>
-        @else
-            <a href="/login{{ returnUrl() }}" rel="nofollow">{{ __('index.login') }}</a>
-            <a href="/register" rel="nofollow">{{ __('index.register') }}</a>
-        @endif
-    </div>
+        </div>
+    @else
+        <div class="app-sidebar__user" href="#collapseLogin" data-toggle="collapse">
+            <div class="app-sidebar__user-avatar">
+                <img class="img-fluid rounded-circle avatar-default" src="/assets/img/images/avatar_guest.png" alt="">
+            </div>
+            <div>
+                <p class="app-sidebar__user-name">{{ __('users.enter') }}</p>
+            </div>
+        </div>
+
+        <div class="collapse" id="collapseLogin">
+            <ul class="">
+                <li>
+                    <a class="{{ request()->is('login') ? ' active' : '' }}" href="/login{{ returnUrl() }}" rel="nofollow">
+                        <i class="app-menu__icon fas fa-sign-in-alt"></i>
+                        <span class="app-menu__label">{{ __('index.login') }}</span>
+                    </a>
+                </li>
+                <li>
+                    <a class="{{ request()->is('register') ? ' active' : '' }}" href="/register" rel="nofollow">
+                        <i class="app-menu__icon far fa-user"></i>
+                        <span class="app-menu__label">{{ __('index.register') }}</span>
+                    </a>
+                </li>
+            </ul>
+        </div>
+    @endif
+
     <ul class="app-menu">
         <li>
             <a class="app-menu__item{{ request()->is('forums*', 'topics*') ? ' active' : '' }}" href="/forums">
