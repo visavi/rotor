@@ -1,16 +1,15 @@
-// Componant: Sidebar
+// Component: Sidebar
 
 .app-sidebar {
   position: fixed;
   top: 0;
   bottom: 0;
-  left: 0;
   padding-top: 70px;
   width: $sidebar-width;
   overflow: auto;
   z-index: 10;
   background-color: $sidebar-color;
-  box-shadow: 0px 8px 17px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 8px 17px rgba(0, 0, 0, 0.2);
   transition: left 0.3s ease,
   width 0.3s ease;
   &::-webkit-scrollbar { width: 6px; }

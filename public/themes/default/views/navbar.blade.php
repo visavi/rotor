@@ -3,7 +3,10 @@
     <a class="app-header__logo" href="/">{{ setting('title') }}</a>
 
     <!-- Sidebar toggle button-->
-    <a class="app-sidebar__toggle" href="#" data-toggle="sidebar" aria-label="Show Sidebar"></a>
+    <a class="app-icon icon-toggle" href="#" data-toggle="sidebar" aria-label="Show Sidebar"></a>
+    @if (! getUser())
+        <a class="app-icon icon-login" href="/login" aria-label="{{ __('index.login') }}"></a>
+    @endif
 
     <!-- Navbar Right Menu-->
     <ul class="app-nav">

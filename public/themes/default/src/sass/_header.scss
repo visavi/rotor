@@ -1,15 +1,13 @@
-/*----- Componant: Top Navigation Bar ----- */
+/*----- Component: Top Navigation Bar ----- */
 
 .app-header {
   position: fixed;
-  left: 0;
-  right: 0;
   top: 0;
   width: 100%;
+  max-width: inherit;
   display: flex;
   background-color: $navbar-color;
   z-index: 1030;
-  padding-right: 15px;
   @media print { display: none; }
 }
 
@@ -39,25 +37,37 @@
   }
 }
 
-.app-sidebar__toggle {
+.app-icon {
   padding: 0 15px;
   font-family: "Font Awesome 5 Free";
   font-weight: 900;
   color: #fff;
   line-height: 2.4;
   transition: background-color 0.3s ease;
-  @media(max-width: 767px) { order: -1; }
   @media(min-width: 768px) { display: none; }
-  &:before {
-    content: "\f0c9";
-    font-size: 21px;
-  }
   &:focus,
   &:hover {
     color: #fff;
     background-color: darken($navbar-color, 10);
     text-decoration: none;
   }
+}
+
+.icon-toggle {
+  &:before {
+    content: "\f0c9";
+    font-size: 21px;
+  }
+  @media(max-width: 767px) { order: -1; }
+}
+
+
+.icon-login {
+  &:before {
+    content: "\f2f6";
+    font-size: 21px;
+  }
+  @media(max-width: 767px) { order: 1; }
 }
 
 .app-nav {

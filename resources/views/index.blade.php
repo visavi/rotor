@@ -10,37 +10,6 @@
 @stop
 
 @section('content')
-
-    @if (!getUser())
-        <div class="row">
-            <div class="col-6">
-                <div class="card">
-                    <div class="card-body main-register">
-                        <h5 class="card-title mb-3">Сообщество разработчиков Visavi.net</h5>
-                        <p class="card-text">
-                            Зарегистрируйте бесплатный аккаут сегодня!<br>
-                            Вы сможете общаться на форуме, вести блог и загружать файлы
-                        </p>
-                        <a class="btn btn-success mt-2" href="/register">Присоединиться бесплатно</a>
-                    </div>
-                </div>
-            </div>
-        </div>
-    @endif
-
-    <div class="row">
-        <div class="col-6">
-            <div class="card">
-                <div class="card-body main-register">
-                    <h5 class="card-title mb-3"><a href="/news">{{ __('index.news') }}</a> <span class="badge badge-pill badge-light">{{ statsNewsDate() }}</span></h5>
-                    <p class="card-text">
-                        {{ lastNews() }}
-                    </p>
-                </div>
-            </div>
-        </div>
-    </div>
-
     <i class="far fa-circle fa-lg text-muted"></i> <a href="/news">{{ __('index.news') }}</a> ({{ statsNewsDate() }})<br> {{ lastNews() }}
 
     <div class="b">

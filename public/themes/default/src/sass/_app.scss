@@ -8,6 +8,10 @@
 .app {
   // On large devices make sidebar visible by default
   // adding sidenav-toggled class will close sidebar
+  max-width: $app-width;
+  margin-left: auto;
+  margin-right: auto;
+
   @media(min-width: 768px) {
     &.sidenav-toggled {
       .app-content { margin-left: 0; }
@@ -45,6 +49,10 @@
     margin: 0;
     padding: 0;
     background-color: #fff;
+  }
+
+  @media(min-width: calc(#{$app-width} + 1px)) {
+      padding-right: 0;
   }
 }
 
