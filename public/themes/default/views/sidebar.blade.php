@@ -12,7 +12,7 @@
             </div>
         </div>
     @else
-        <div class="app-sidebar__user" href="#collapseLogin" data-toggle="collapse">
+        <div class="app-sidebar__user" data-target="#collapseLogin" data-toggle="collapse">
             <div class="app-sidebar__user-avatar">
                 <img class="img-fluid rounded-circle avatar-default" src="/assets/img/images/avatar_guest.png" alt="">
             </div>
@@ -22,17 +22,17 @@
         </div>
 
         <div class="collapse" id="collapseLogin">
-            <ul class="">
+            <ul class="app-sidebar__login">
                 <li>
-                    <a class="{{ request()->is('login') ? ' active' : '' }}" href="/login{{ returnUrl() }}" rel="nofollow">
+                    <a href="/login{{ returnUrl() }}" rel="nofollow">
                         <i class="app-menu__icon fas fa-sign-in-alt"></i>
                         <span class="app-menu__label">{{ __('index.login') }}</span>
                     </a>
                 </li>
                 <li>
-                    <a class="{{ request()->is('register') ? ' active' : '' }}" href="/register" rel="nofollow">
+                    <a href="/register" rel="nofollow">
                         <i class="app-menu__icon far fa-user"></i>
-                        <span class="app-menu__label">{{ __('index.register') }}</span>
+                        <span class="app-menu__label ">{{ __('index.register') }}</span>
                     </a>
                 </li>
             </ul>
@@ -58,7 +58,7 @@
 
         <li>
             <a class="app-menu__item{{ request()->is('news*') ? ' active' : '' }}" href="/news">
-                <i class="app-menu__icon far fa-comment"></i>
+                <i class="app-menu__icon far fa-newspaper"></i>
                 <span class="app-menu__label">{{ __('index.news') }}</span>
                 <span class="badge badge-pill badge-light">{{ statsNews() }}</span>
             </a>

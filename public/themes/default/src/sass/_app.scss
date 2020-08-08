@@ -8,6 +8,7 @@
 .app {
   // On large devices make sidebar visible by default
   // adding sidenav-toggled class will close sidebar
+  background-color: $app-bg;
   max-width: $app-width;
   margin-left: auto;
   margin-right: auto;
@@ -36,23 +37,23 @@
 .app-content {
   min-height: calc(100vh - 50px);
   margin-top: 50px;
-  padding: 30px;
+  padding: 20px;
   background-color: $body-bg;
   transition: margin-left 0.3s ease;
-  @media(min-width: 768px) { margin-left: $sidebar-width; }
+  @media(min-width: 768px) {
+    margin-left: $sidebar-width;
+    padding: 30px;
+  }
   @media(max-width: 767px) {
     margin-top: 50px;
     min-width: 100%;
+    padding: 5px;
   }
-  @media(max-width: 480px) { padding: 15px; }
+
   @media print {
     margin: 0;
     padding: 0;
     background-color: #fff;
-  }
-
-  @media(min-width: calc(#{$app-width} + 1px)) {
-      padding-right: 0;
   }
 }
 
