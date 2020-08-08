@@ -65,16 +65,18 @@ $keys = [
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
     <link rel="image_src" href="/assets/img/images/icon.png">
-    <link rel="stylesheet" href="/assets/css/bootstrap.min.css">
-    <link rel="stylesheet" href="/assets/css/fontawesome.min.css">
-    <link rel="stylesheet" href="/themes/default/css/style.css">
+    <link rel="stylesheet" href="/install/assets/bootstrap.min.css">
 </head>
-<body>
 
-<div class="cs" id="up">
-    <a href="/"><img src="/assets/img/images/logo.png" alt=""></a>
-</div>
-<div class="site">
+<body class="bg-light">
+<div class="container border bg-white px-5">
+    <div class="py-5 text-center">
+        <a href="/"><img class="d-block mx-auto mb-4" src="/assets/img/images/logo_big.png" alt=""></a>
+        <h2>Mobile CMS</h2>
+    </div>
+
+    <div class="row">
+        <div class="col-12 mb-4">
     <?php if (! $request->has('act')): ?>
         <form method="get">
             <label for="language">Выберите язык - Select language:</label>
@@ -95,103 +97,113 @@ $keys = [
             <?= __('install.debug') ?>
         </div>
 
-        <div><?= __('install.env') ?></div>
-
-        <?php foreach ($keys as $key): ?>
-            <b><?= $key ?></b> - <?= trim(var_export(config($key), true), "'") ?><br>
-        <?php endforeach; ?>
-        <br>
-        <div><?= __('install.app_key') ?></div>
+        <div class="row mb-4">
+            <div class="col-12">
+                <div class="card bg-light">
+                    <div class="card-body">
+                        <h5 class="card-title"><?= __('install.env') ?></h5>
+                        <p class="card-text">
+                            <?php foreach ($keys as $key): ?>
+                                <?= $key ?> - <?= trim(var_export(config($key), true), "'") ?><br>
+                            <?php endforeach; ?>
+                        </p>
+                        <span class="text-danger font-italic"><?= __('install.app_key') ?></span>
+                    </div>
+                </div>
+            </div>
+        </div>
 
         <div class="mb-3"><?= __('install.requirements', ['php' => $phpVersion, 'mysql' => $mysqlVersion]) ?></div>
 
-        <h3><?= __('install.check_requirements') ?></h3>
+        <div class="row mb-4">
+            <div class="col-sm-6">
+                <div class="card bg-light">
+                    <div class="card-body">
+                        <h5 class="card-title"><?= __('install.check_requirements') ?></h5>
+                        <p class="card-text">
+                            <?php $errors['critical']['php'] = version_compare(PHP_VERSION, $phpVersion) >= 0 ?>
+                            <span class="<?= $errors['critical']['php'] ? 'text-success' : 'text-danger' ?>">PHP: <?= parseVersion(PHP_VERSION) ?></span><br>
 
-        <?php $errors['critical']['php'] = version_compare(PHP_VERSION, $phpVersion) >= 0 ?>
-        <i class="fas fa-check-circle <?= $errors['critical']['php'] ? 'text-success' : 'fa-times-circle text-danger' ?>"></i>
-        PHP: <?= parseVersion(PHP_VERSION) ?><br>
+                            <?php $errors['critical']['pdo_mysql'] = extension_loaded('pdo_mysql') ?>
+                            <?php $version = strtok(getModuleSetting('pdo_mysql', ['Client API version', 'PDO Driver for MySQL, client library version']), '-'); ?>
+                            <span class="<?= $errors['critical']['pdo_mysql'] ? 'text-success' : 'text-danger' ?>">PDO-MySQL: <?= $version ?></span><br>
 
-        <?php $errors['critical']['pdo_mysql'] = extension_loaded('pdo_mysql') ?>
-        <i class="fas fa-check-circle <?= $errors['critical']['pdo_mysql'] ? 'text-success' : 'fa-times-circle text-danger' ?>"></i>
-        <?php $version = strtok(getModuleSetting('pdo_mysql', ['Client API version', 'PDO Driver for MySQL, client library version']), '-'); ?>
-        PDO-MySQL: <?= $version ?><br>
+                            <?php $errors['simple']['bcmath'] = extension_loaded('bcmath') ?>
+                            <span class="<?= $errors['simple']['bcmath'] ? 'text-success' : 'text-danger' ?>">BCMath</span><br>
 
-        <?php $errors['simple']['bcmath'] = extension_loaded('bcmath') ?>
-        <i class="fas fa-check-circle <?= $errors['simple']['bcmath'] ? 'text-success' : 'fa-times-circle text-danger' ?>"></i>
-        BCMath<br>
+                            <?php $errors['simple']['ctype'] = extension_loaded('ctype') ?>
+                            <span class="<?= $errors['simple']['ctype'] ? 'text-success' : 'text-danger' ?>">Ctype</span><br>
 
-        <?php $errors['simple']['ctype'] = extension_loaded('ctype') ?>
-        <i class="fas fa-check-circle <?= $errors['simple']['ctype'] ? 'text-success' : 'fa-times-circle text-danger' ?>"></i>
-        Ctype<br>
+                            <?php $errors['simple']['json'] = extension_loaded('json') ?>
+                            <span class="<?= $errors['simple']['json'] ? 'text-success' : 'text-danger' ?>">Json</span><br>
 
-        <?php $errors['simple']['json'] = extension_loaded('json') ?>
-        <i class="fas fa-check-circle <?= $errors['simple']['json'] ? 'text-success' : 'fa-times-circle text-danger' ?>"></i>
-        Json<br>
+                            <?php $errors['simple']['tokenizer'] = extension_loaded('tokenizer') ?>
+                            <span class="<?= $errors['simple']['tokenizer'] ? 'text-success' : 'text-danger' ?>">Tokenizer</span><br>
 
-        <?php $errors['simple']['tokenizer'] = extension_loaded('tokenizer') ?>
-        <i class="fas fa-check-circle <?= $errors['simple']['tokenizer'] ? 'text-success' : 'fa-times-circle text-danger' ?>"></i>
-        Tokenizer<br>
+                            <?php $errors['simple']['fileinfo'] = extension_loaded('fileinfo') ?>
+                            <span class="<?= $errors['simple']['fileinfo'] ? 'text-success' : 'text-danger' ?>">Fileinfo</span><br>
 
-        <?php $errors['simple']['fileinfo'] = extension_loaded('fileinfo') ?>
-        <i class="fas fa-check-circle <?= $errors['simple']['fileinfo'] ? 'text-success' : 'fa-times-circle text-danger' ?>"></i>
-        Fileinfo<br>
+                            <?php $errors['simple']['mbstring'] = extension_loaded('mbstring') ?>
+                            <?php $version = getModuleSetting('mbstring', ['oniguruma version', 'Multibyte regex (oniguruma) version']); ?>
+                            <span class="<?= $errors['simple']['mbstring'] ? 'text-success' : 'text-danger' ?>">MbString: <?= $version ?></span><br>
 
-        <?php $errors['simple']['mbstring'] = extension_loaded('mbstring') ?>
-        <i class="fas fa-check-circle <?= $errors['simple']['mbstring'] ? 'text-success' : 'fa-times-circle text-danger' ?>"></i>
-        <?php $version = getModuleSetting('mbstring', ['oniguruma version', 'Multibyte regex (oniguruma) version']); ?>
-        MbString: <?= $version ?><br>
+                            <?php $errors['simple']['openssl'] = extension_loaded('openssl') ?>
+                            <?php $version = getModuleSetting('openssl', ['OpenSSL Library Version', 'OpenSSL Header Version']); ?>
+                            <span class="<?= $errors['simple']['openssl'] ? 'text-success' : 'text-danger' ?>">OpenSSL: <?= $version ?></span><br>
 
-        <?php $errors['simple']['openssl'] = extension_loaded('openssl') ?>
-        <i class="fas fa-check-circle <?= $errors['simple']['openssl'] ? 'text-success' : 'fa-times-circle text-danger' ?>"></i>
-        <?php $version = getModuleSetting('openssl', ['OpenSSL Library Version', 'OpenSSL Header Version']); ?>
-        OpenSSL: <?= $version ?><br>
+                            <?php $errors['simple']['xml'] = extension_loaded('xml') ?>
+                            <?php $version = getModuleSetting('xml', ['libxml2 Version']); ?>
+                            <span class="<?= $errors['simple']['xml'] ? 'text-success' : 'text-danger' ?>">XML: <?= $version ?></span><br>
 
-        <?php $errors['simple']['xml'] = extension_loaded('xml') ?>
-        <i class="fas fa-check-circle <?= $errors['simple']['xml'] ? 'text-success' : 'fa-times-circle text-danger' ?>"></i>
-        <?php $version = getModuleSetting('xml', ['libxml2 Version']); ?>
-        XML: <?= $version ?><br>
+                            <?php $errors['simple']['gd'] = extension_loaded('gd') ?>
+                            <?php $version = getModuleSetting('gd', ['GD headers Version', 'GD library Version']); ?>
+                            <span class="<?= $errors['simple']['gd'] ? 'text-success' : 'text-danger' ?>">GD: <?= $version ?></span><br>
 
-        <?php $errors['simple']['gd'] = extension_loaded('gd') ?>
-        <i class="fas fa-check-circle <?= $errors['simple']['gd'] ? 'text-success' : 'fa-times-circle text-danger' ?>"></i>
-        <?php $version = getModuleSetting('gd', ['GD headers Version', 'GD library Version']); ?>
-        GD: <?= $version ?><br>
+                            <?php $errors['simple']['curl'] = extension_loaded('curl') ?>
+                            <?php $version = getModuleSetting('curl', ['Curl Information', 'cURL Information']); ?>
+                            <span class="<?= $errors['simple']['curl'] ? 'text-success' : 'text-danger' ?>">Curl: <?= $version ?></span><br>
+                            <span class="font-italic my-3">
+                                <?= __('install.ffmpeg') ?>
+                            </span>
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <div class="card bg-light">
+                    <div class="card-body">
+                        <h5 class="card-title"><?= __('install.chmod_rights') ?></h5>
+                        <p class="card-text">
+                            <?php
+                            runCommand(new AppPermission());
 
-        <?php $errors['simple']['curl'] = extension_loaded('curl') ?>
-        <i class="fas fa-check-circle <?= $errors['simple']['curl'] ? 'text-success' : 'fa-times-circle text-danger' ?>"></i>
-        <?php $version = getModuleSetting('curl', ['Curl Information', 'cURL Information']); ?>
-        Curl: <?= $version ?><br>
+                            $storage = glob(STORAGE . '/*', GLOB_ONLYDIR);
+                            $uploads = glob(UPLOADS . '/*', GLOB_ONLYDIR);
+                            $modules = [HOME . '/assets/modules'];
 
-        <div class="mb-3">
-            <?= __('install.ffmpeg') ?>
+                            $dirs = array_merge($storage, $uploads, $modules);
+                            ?>
+
+                            <?php foreach ($dirs as $dir): ?>
+                                <?php $chmod = decoct(fileperms($dir)) % 1000; ?>
+                                <?php $errors['chmod'][$dir] = is_writable($dir); ?>
+
+                                <span class="<?= $errors['chmod'][$dir] ? 'text-success' : 'text-danger' ?>"><?= str_replace(DIR, '', $dir) ?>: <?= $chmod ?></span><br>
+                            <?php endforeach; ?>
+                        </p>
+                    </div>
+                </div>
+            </div>
         </div>
 
-        <h3>Права доступа</h3>
-        <?php
-        runCommand(new AppPermission());
-
-        $storage = glob(STORAGE . '/*', GLOB_ONLYDIR);
-        $uploads = glob(UPLOADS . '/*', GLOB_ONLYDIR);
-        $modules = [HOME . '/assets/modules'];
-
-        $dirs = array_merge($storage, $uploads, $modules);
-        ?>
-
-        <?php foreach ($dirs as $dir): ?>
-            <?php $chmod = decoct(fileperms($dir)) % 1000; ?>
-            <?php $errors['chmod'][$dir] = is_writable($dir); ?>
-
-            <i class="fas fa-check-circle <?= $errors['chmod'][$dir] ? 'text-success' : 'fa-times-circle text-danger' ?>"></i>
-            <?= str_replace(DIR, '', $dir) ?>: <?= $chmod ?><br>
-        <?php endforeach; ?>
-
-        <br><?= __('install.chmod_views') ?><br><br>
+        <?= __('install.chmod_views') ?><br><br>
 
         <?= __('install.chmod') ?><br>
         <?= __('install.errors') ?><br><br>
 
         <?php if (! in_array(false, $errors['critical'], true) && ! in_array(false, $errors['chmod'], true)): ?>
             <div class="alert alert-success">
-                <i class="fa fa-check-circle"></i> <?= __('install.continue') ?>
+                <?= __('install.continue') ?>
             </div>
 
             <?php if (! in_array(false, $errors['simple'], true)): ?>
@@ -203,11 +215,11 @@ $keys = [
                 </div>
             <?php endif; ?>
 
-            <a style="font-size: 18px" href="?act=status&amp;lang=<?= $lang ?>"><?= __('install.check_status') ?></a>
-            (<span class="text-danger font-weight-bold"><?= setting('app_installed') ? __('install.update') : __('install.install') ?></span>)
+            <a class="btn btn-primary" style="font-size: 18px" href="?act=status&amp;lang=<?= $lang ?>"><?= __('install.check_status') ?></a>
+            <span class="text-info font-weight-bold"><?= setting('app_installed') ? __('install.update') : __('install.install') ?></span>
         <?php else: ?>
             <div class="alert alert-danger">
-                <i class="fa fa-times-circle"></i> <?= __('install.requirements_failed') ?><br>
+                <?= __('install.requirements_failed') ?><br>
                 <?= __('install.resolve_errors') ?>
             </div>
         <?php endif; ?>
@@ -219,7 +231,7 @@ $keys = [
         <?php if ($request->input('act') === 'status'): ?>
             <h1><?= __('install.step2_update') ?></h1>
             <?= nl2br($wrap->getStatus()) ?>
-            <a style="font-size: 18px" href="?act=migrate&amp;lang=<?= $lang ?>"><?= __('install.migrations') ?></a>
+            <a class="btn btn-primary" href="?act=migrate&amp;lang=<?= $lang ?>"><?= __('install.migrations') ?></a>
 
         <!-- Откат миграций -->
         <?php elseif ($request->input('act') === 'rollback'): ?>
@@ -235,7 +247,7 @@ $keys = [
                     <?= __('install.success_update') ?>
                 </div>
 
-                <a href="/"><?= __('install.main_page') ?></a><br>
+                <a class="btn btn-primary" href="/"><?= __('install.main_page') ?></a><br>
             </div>
             <?php
             runCommand(new CacheClear());
@@ -253,7 +265,7 @@ $keys = [
             <?= nl2br($wrap->getStatus()) ?>
 
             <div>
-                <a style="font-size: 18px" href="?act=migrate&amp;lang=<?= $lang ?>"><?= __('install.migrations') ?></a>
+                <a class="btn btn-primary" href="?act=migrate&amp;lang=<?= $lang ?>"><?= __('install.migrations') ?></a>
             </div>
 
         <!-- Применение миграций -->
@@ -263,7 +275,7 @@ $keys = [
             <?= nl2br($wrap->getMigrate()) ?>
 
             <div>
-                <a style="font-size: 18px" href="?act=seed&amp;lang=<?= $lang ?>"><?= __('install.seeds') ?></a>
+                <a class="btn btn-primary" href="?act=seed&amp;lang=<?= $lang ?>"><?= __('install.seeds') ?></a>
             </div>
 
         <!-- Заполнение БД -->
@@ -273,7 +285,7 @@ $keys = [
             <?= nl2br($wrap->getSeed()) ?>
 
             <div>
-                <a style="font-size: 18px" href="?act=account&amp;lang=<?= $lang ?>"><?= __('install.create_admin') ?></a>
+                <a class="btn btn-primary" href="?act=account&amp;lang=<?= $lang ?>"><?= __('install.create_admin') ?></a>
             </div>
 
             <?php
@@ -316,6 +328,7 @@ $keys = [
             $checkMail = User::query()->where('email', $email)->count();
             if (! $checkMail) {
 
+            /** @var User $user */
             $user = User::query()->create([
                 'login'      => $login,
                 'password'   => password_hash($password, PASSWORD_BCRYPT),
@@ -343,6 +356,8 @@ $keys = [
                 'user_id'    => $user->id,
                 'created_at' => SITETIME,
             ]);
+
+            User::auth($login, $password);
 
             redirect('?act=finish&lang=' . $lang);
 
@@ -388,9 +403,15 @@ $keys = [
                 <?= __('install.success_install') ?>
             </div>
 
-            <a href="/"><?= __('install.main_page') ?></a><br>
+            <a class="btn btn-primary" href="/"><?= __('install.main_page') ?></a><br>
         </div>
     <?php endif; ?>
+
+    <footer class="my-5 pt-5 text-muted text-center text-small">
+        <p class="mb-1">&copy; 2005-<?= date('Y') ?> VISAVI.NET</p>
+    </footer>
+</div>
+</div>
 </div>
 </body>
 </html>

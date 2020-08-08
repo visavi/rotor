@@ -23,7 +23,6 @@ $app->addCommands([
     new \Phinx\Console\Command\Breakpoint(),
     new \Phinx\Console\Command\SeedCreate(),
     new \Phinx\Console\Command\SeedRun(),
-    new \App\Commands\AppConfigure(),
     new \App\Commands\AppPermission(),
     new \App\Commands\KeyGenerate(),
     new \App\Commands\ViewClear(),

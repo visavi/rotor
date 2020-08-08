@@ -127,8 +127,9 @@ $app->singleton('config', static function () {
         'cache.default' => config('CACHE_DRIVER', 'file'),
         'cache.prefix' => '',
         'cache.stores.file' => [
-            'driver' => 'file',
-            'path'   => STORAGE . '/caches',
+            'driver'     => 'file',
+            'path'       => STORAGE . '/caches',
+            'permission' => '0666',
         ],
         'cache.stores.redis' => [
             'driver'     => 'redis',
