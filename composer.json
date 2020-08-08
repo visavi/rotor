@@ -57,7 +57,7 @@
             "@php rotor route:clear --ansi"
         ],
         "post-create-project-cmd": [
-            "@php rotor app:configure --ansi",
+            "@php rotor app:permission --ansi",
             "@php rotor key:generate --ansi"
         ]
     },

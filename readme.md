@@ -43,7 +43,7 @@ The main feature of Rotor is low load on system resources and high speed, even w
 
 6. Configure the .env configuration file, the environment, the data for accessing the database, the administrator's login and email, and the data for sending mail, sendmail or smtp. If you install CMS manually, then rename the configuration file .env.example to .env (The file is not tracked by git, so there can be 2 different files on the server and on the local site with different environments specified in APP_ENV)
 
-7. Set write permissions to all directories inside `public / uploads` and` storage` or execute the command `php rotor app:configure`
+7. Set write permissions to all directories inside `public / uploads` and` storage` or execute the command `php rotor app:permission`
 
 8. Migrate using the console command `php rotor migrate`
 
