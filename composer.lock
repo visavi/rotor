@@ -70,7 +70,7 @@
         },
         {
             "name": "cakephp/collection",
-            "version": "4.1.1",
+            "version": "4.1.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/cakephp/collection.git",
@@ -116,16 +116,16 @@
         },
         {
             "name": "cakephp/core",
-            "version": "4.1.1",
+            "version": "4.1.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/cakephp/core.git",
-                "reference": "d988765de7ff5f7c3588fb236001712e4bd8fe2e"
+                "reference": "66a9a275d2608265d4cf7cf34edabd601c183441"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/cakephp/core/zipball/d988765de7ff5f7c3588fb236001712e4bd8fe2e",
-                "reference": "d988765de7ff5f7c3588fb236001712e4bd8fe2e",
+                "url": "https://api.github.com/repos/cakephp/core/zipball/66a9a275d2608265d4cf7cf34edabd601c183441",
+                "reference": "66a9a275d2608265d4cf7cf34edabd601c183441",
                 "shasum": ""
             },
             "require": {
@@ -162,20 +162,20 @@
                 "core",
                 "framework"
             ],
-            "time": "2020-06-14T20:03:17+00:00"
+            "time": "2020-07-31T16:15:46+00:00"
         },
         {
             "name": "cakephp/database",
-            "version": "4.1.1",
+            "version": "4.1.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/cakephp/database.git",
-                "reference": "ef40f24b00acd4f14bc5fc59a9ab3a54ca2199fc"
+                "reference": "386a133019f4b0bcb48063fd27e06b2f6eb092bb"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/cakephp/database/zipball/ef40f24b00acd4f14bc5fc59a9ab3a54ca2199fc",
-                "reference": "ef40f24b00acd4f14bc5fc59a9ab3a54ca2199fc",
+                "url": "https://api.github.com/repos/cakephp/database/zipball/386a133019f4b0bcb48063fd27e06b2f6eb092bb",
+                "reference": "386a133019f4b0bcb48063fd27e06b2f6eb092bb",
                 "shasum": ""
             },
             "require": {
@@ -211,20 +211,20 @@
                 "database abstraction",
                 "pdo"
             ],
-            "time": "2020-07-17T17:29:56+00:00"
+            "time": "2020-08-05T17:37:43+00:00"
         },
         {
             "name": "cakephp/datasource",
-            "version": "4.1.1",
+            "version": "4.1.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/cakephp/datasource.git",
-                "reference": "dce9c84f504c034a12c3ff4cc5963c63ef2f5dd0"
+                "reference": "4514e256c3da3c88c0cb4754218a217f9f20ec1d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/cakephp/datasource/zipball/dce9c84f504c034a12c3ff4cc5963c63ef2f5dd0",
-                "reference": "dce9c84f504c034a12c3ff4cc5963c63ef2f5dd0",
+                "url": "https://api.github.com/repos/cakephp/datasource/zipball/4514e256c3da3c88c0cb4754218a217f9f20ec1d",
+                "reference": "4514e256c3da3c88c0cb4754218a217f9f20ec1d",
                 "shasum": ""
             },
             "require": {
@@ -263,20 +263,20 @@
                 "entity",
                 "query"
             ],
-            "time": "2020-06-13T02:24:58+00:00"
+            "time": "2020-07-21T05:44:43+00:00"
         },
         {
             "name": "cakephp/utility",
-            "version": "4.1.1",
+            "version": "4.1.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/cakephp/utility.git",
-                "reference": "263d25a8b2f6d054a9164ba49f58dbdd1a011513"
+                "reference": "d67455631d4bef771acb5521914d6d44fe46bed6"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/cakephp/utility/zipball/263d25a8b2f6d054a9164ba49f58dbdd1a011513",
-                "reference": "263d25a8b2f6d054a9164ba49f58dbdd1a011513",
+                "url": "https://api.github.com/repos/cakephp/utility/zipball/d67455631d4bef771acb5521914d6d44fe46bed6",
+                "reference": "d67455631d4bef771acb5521914d6d44fe46bed6",
                 "shasum": ""
             },
             "require": {
@@ -316,7 +316,7 @@
                 "string",
                 "utility"
             ],
-            "time": "2020-06-22T08:33:27+00:00"
+            "time": "2020-08-08T09:03:06+00:00"
         },
         {
             "name": "cbschuld/browser.php",
@@ -688,16 +688,16 @@
         },
         {
             "name": "egulias/email-validator",
-            "version": "2.1.18",
+            "version": "2.19.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/egulias/EmailValidator.git",
-                "reference": "cfa3d44471c7f5bfb684ac2b0da7114283d78441"
+                "reference": "840d5603eb84cc81a6a0382adac3293e57c1c64c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/egulias/EmailValidator/zipball/cfa3d44471c7f5bfb684ac2b0da7114283d78441",
-                "reference": "cfa3d44471c7f5bfb684ac2b0da7114283d78441",
+                "url": "https://api.github.com/repos/egulias/EmailValidator/zipball/840d5603eb84cc81a6a0382adac3293e57c1c64c",
+                "reference": "840d5603eb84cc81a6a0382adac3293e57c1c64c",
                 "shasum": ""
             },
             "require": {
@@ -742,7 +742,7 @@
                 "validation",
                 "validator"
             ],
-            "time": "2020-06-16T20:11:17+00:00"
+            "time": "2020-08-08T21:28:19+00:00"
         },
         {
             "name": "evenement/evenement",
@@ -960,7 +960,7 @@
         },
         {
             "name": "illuminate/cache",
-            "version": "v7.23.2",
+            "version": "v7.24.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/illuminate/cache.git",
@@ -1011,7 +1011,7 @@
         },
         {
             "name": "illuminate/container",
-            "version": "v7.23.2",
+            "version": "v7.24.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/illuminate/container.git",
@@ -1058,7 +1058,7 @@
         },
         {
             "name": "illuminate/contracts",
-            "version": "v7.23.2",
+            "version": "v7.24.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/illuminate/contracts.git",
@@ -1102,16 +1102,16 @@
         },
         {
             "name": "illuminate/database",
-            "version": "v7.23.2",
+            "version": "v7.24.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/illuminate/database.git",
-                "reference": "14a0af930d78e100c152939f502427027ecef2f0"
+                "reference": "8cbfd89fbda0bf969339a87816660c140473800e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/illuminate/database/zipball/14a0af930d78e100c152939f502427027ecef2f0",
-                "reference": "14a0af930d78e100c152939f502427027ecef2f0",
+                "url": "https://api.github.com/repos/illuminate/database/zipball/8cbfd89fbda0bf969339a87816660c140473800e",
+                "reference": "8cbfd89fbda0bf969339a87816660c140473800e",
                 "shasum": ""
             },
             "require": {
@@ -1160,11 +1160,11 @@
                 "orm",
                 "sql"
             ],
-            "time": "2020-08-06T14:56:13+00:00"
+            "time": "2020-08-07T15:06:43+00:00"
         },
         {
             "name": "illuminate/events",
-            "version": "v7.23.2",
+            "version": "v7.24.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/illuminate/events.git",
@@ -1209,7 +1209,7 @@
         },
         {
             "name": "illuminate/filesystem",
-            "version": "v7.23.2",
+            "version": "v7.24.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/illuminate/filesystem.git",
@@ -1264,7 +1264,7 @@
         },
         {
             "name": "illuminate/http",
-            "version": "v7.23.2",
+            "version": "v7.24.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/illuminate/http.git",
@@ -1316,7 +1316,7 @@
         },
         {
             "name": "illuminate/pagination",
-            "version": "v7.23.2",
+            "version": "v7.24.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/illuminate/pagination.git",
@@ -1361,7 +1361,7 @@
         },
         {
             "name": "illuminate/redis",
-            "version": "v7.23.2",
+            "version": "v7.24.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/illuminate/redis.git",
@@ -1409,7 +1409,7 @@
         },
         {
             "name": "illuminate/session",
-            "version": "v7.23.2",
+            "version": "v7.24.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/illuminate/session.git",
@@ -1460,7 +1460,7 @@
         },
         {
             "name": "illuminate/support",
-            "version": "v7.23.2",
+            "version": "v7.24.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/illuminate/support.git",
@@ -1522,7 +1522,7 @@
         },
         {
             "name": "illuminate/translation",
-            "version": "v7.23.2",
+            "version": "v7.24.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/illuminate/translation.git",
@@ -1568,7 +1568,7 @@
         },
         {
             "name": "illuminate/view",
-            "version": "v7.23.2",
+            "version": "v7.24.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/illuminate/view.git",
@@ -5973,16 +5973,16 @@
         },
         {
             "name": "phpstan/phpstan",
-            "version": "0.12.36",
+            "version": "0.12.37",
             "source": {
                 "type": "git",
                 "url": "https://github.com/phpstan/phpstan.git",
-                "reference": "eaeff985e395ff4e7aebf3251a43fca6c9be1af3"
+                "reference": "5e16d83e6eb2dd784fbdaeaece5e2bca72e4f68a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phpstan/phpstan/zipball/eaeff985e395ff4e7aebf3251a43fca6c9be1af3",
-                "reference": "eaeff985e395ff4e7aebf3251a43fca6c9be1af3",
+                "url": "https://api.github.com/repos/phpstan/phpstan/zipball/5e16d83e6eb2dd784fbdaeaece5e2bca72e4f68a",
+                "reference": "5e16d83e6eb2dd784fbdaeaece5e2bca72e4f68a",
                 "shasum": ""
             },
             "require": {
@@ -6025,7 +6025,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2020-08-05T09:29:40+00:00"
+            "time": "2020-08-09T14:32:41+00:00"
         },
         {
             "name": "phpunit/php-code-coverage",

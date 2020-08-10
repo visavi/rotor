@@ -13,7 +13,7 @@ return [
     'update_completed'      => 'Update completed',
     'debug'                 => 'If during the installation of the engine any error occurs, to find out the cause of the error, enable error output, change the value of APP_DEBUG to true',
     'env'                   => 'To install the engine, you need to register data from the database into the .env file',
-    'app_key'               => 'Do not forget to change the value of APP_KEY, this data is necessary to encrypt cookies and passwords in sessions',
+    'app_key'               => 'Do not forget to change the APP_KEY value, this data is required for hashing cookies and passwords in sessions',
     'requirements'          => 'The minimum version of PHP necessary for the PHP :php and MySQL :mysql engine to work',
     'check_requirements'    => 'Verification of requirements',
     'ffmpeg'                => 'For processing video, it is advisable to install the FFmpeg library',

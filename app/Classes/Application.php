@@ -17,9 +17,9 @@ class Application
      */
     public function __construct()
     {
-        /*if (empty(defaultSetting('app_installed')) && file_exists(HOME . '/install/')) {
+        if (empty(defaultSetting('app_installed')) && file_exists(HOME . '/install/')) {
             redirect('/install/index.php');
-        }*/
+        }
 
         session_start();
         date_default_timezone_set(defaultSetting('timezone'));
