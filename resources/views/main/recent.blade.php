@@ -21,4 +21,4 @@
 {{ recentArticles() }}
 
 <div class="b"><i class="fa fa-image fa-lg text-muted"></i> <b>{{ __('index.recent_photos') }}</b></div>
-{{  recentPhotos() }}
+{!! recentPhotos() !!}

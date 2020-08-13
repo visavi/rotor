@@ -10,17 +10,32 @@
 @stop
 
 @section('content')
-
-
-    <i class="far fa-circle fa-lg text-muted"></i> <a href="/news">{{ __('index.news') }}</a> ({{ statsNewsDate() }})<br> {{ lastNews() }}
-
-    <div class="b">
-        <i class="fa fa-comment fa-lg text-muted"></i> <b><a href="/pages/recent">{{ __('index.communication') }}</a></b>
+    <div class="card mb-3">
+        <div class="card-body">
+            <h5 class="card-title">
+                <i class="far fa-circle fa-lg text-muted"></i>
+                <a href="/news">{{ __('index.news') }}</a> ({{ statsNewsDate() }})
+            </h5>
+            <div class="card-text">
+                {!! lastNews() !!}
+            </div>
+        </div>
     </div>
-    <i class="far fa-circle fa-lg text-muted"></i> <a class="index" href="/guestbook">{{ __('index.guestbook') }}</a> ({{ statsGuestbook() }})<br>
-    <i class="far fa-circle fa-lg text-muted"></i> <a href="/photos">{{ __('index.photos') }}</a> ({{ statsPhotos() }})<br>
-    <i class="far fa-circle fa-lg text-muted"></i> <a href="/votes">{{ __('index.votes') }}</a> ({{ statVotes()}})<br>
-    <i class="far fa-circle fa-lg text-muted"></i> <a href="/offers">{{ __('index.offers') }}</a> ({{ statsOffers() }})<br>
+
+    <div class="card mb-3">
+        <div class="card-body">
+            <h5 class="card-title">
+                <i class="fa fa-comment fa-lg text-muted"></i>
+                <a href="/pages/recent">{{ __('index.communication') }}</a>
+            </h5>
+            <p class="card-text">
+                <i class="far fa-circle fa-lg text-muted"></i> <a class="index" href="/guestbook">{{ __('index.guestbook') }}</a> ({{ statsGuestbook() }})<br>
+                <i class="far fa-circle fa-lg text-muted"></i> <a href="/photos">{{ __('index.photos') }}</a> ({{ statsPhotos() }})<br>
+                <i class="far fa-circle fa-lg text-muted"></i> <a href="/votes">{{ __('index.votes') }}</a> ({{ statVotes()}})<br>
+                <i class="far fa-circle fa-lg text-muted"></i> <a href="/offers">{{ __('index.offers') }}</a> ({{ statsOffers() }})<br>
+            </p>
+        </div>
+    </div>
 
     <div class="card mb-3">
         <div class="card-header">
@@ -30,7 +45,7 @@
             </h5>
         </div>
         <div class="card-body">
-            {{ recentTopics() }}
+            {!! recentTopics() !!}
         </div>
     </div>
 
@@ -42,7 +57,7 @@
             </h5>
         </div>
         <div class="card-body">
-            {{ recentDowns() }}
+            {!! recentDowns() !!}
         </div>
     </div>
 
@@ -54,7 +69,7 @@
             </h5>
         </div>
         <div class="card-body">
-            {{ recentArticles() }}
+            {!! recentArticles() !!}
         </div>
     </div>
 
@@ -66,7 +81,7 @@
             </h5>
         </div>
         <div class="card-body">
-            {{ recentBoards() }}
+            {!! recentBoards() !!}
         </div>
     </div>
 

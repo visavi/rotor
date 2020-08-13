@@ -803,14 +803,16 @@ function statsNewsDate()
 }
 
 /**
- * Кеширует последние новости
+ * Возвращает последние новости
  *
  * @return string|void новость
  */
-function statLastNews()
+function lastNews()
 {
+    $news = null;
+
     if (setting('lastnews') > 0) {
-        return Cache::remember('lastNews', 1800, static function () {
+        $news = Cache::remember('lastNews', 1800, static function () {
             return News::query()
                 ->where('top', 1)
                 ->orderByDesc('created_at')
@@ -819,30 +821,8 @@ function statLastNews()
                 ->toArray();
         });
     }
-}
 
-/**
- * Возвращает последние новости
- *
- * @return string|void новость
- */
-function lastNews()
-{
-    $news = statLastNews();
-
-    if ($news) {
-        foreach ($news as $data) {
-            echo '<i class="far fa-circle fa-lg text-muted"></i> <a href="/news/' . $data['id'] . '">' . $data['title'] . '</a> (' . $data['count_comments'] . ') <i class="fas fa-angle-down news-title"></i><br>';
-
-            if (strpos($data['text'], '[cut]') !== false) {
-                $data['text'] = current(explode('[cut]', $data['text'])) . ' <a href="/news/'. $data['id'] .'" class="badge badge-success">Читать дальше &raquo;</a>';
-            }
-
-            echo '<div class="news-text" style="display: none;">' . bbCode($data['text']) . '<br>';
-            echo '<a href="/news/comments/' . $data['id'] . '">Комментарии</a> ';
-            echo '<a href="/news/end/' . $data['id'] . '">&raquo;</a></div>';
-        }
-    }
+    return view('widgets/_news', compact('news'));
 }
 
 /**
@@ -1097,17 +1077,7 @@ function recentPhotos($show = 5)
             ->toArray();
     });
 
-    if ($photos) {
-        foreach ($photos as $photo) {
-            $file = current($photo['files']);
-
-            if ($file) {
-                echo '<a href="/photos/' . $photo['id'] . '">' . resizeImage($file['hash'], ['alt' => $photo['title'], 'class' => 'rounded', 'style' => 'width: 100px;']) . '</a>';
-            }
-        }
-
-        echo '<br>';
-    }
+    return view('widgets/_photos', compact('photos'));
 }
 
 /**
@@ -1127,12 +1097,7 @@ function recentTopics($show = 5)
             ->toArray();
     });
 
-    if ($topics) {
-        foreach ($topics as $topic) {
-            echo '<i class="far fa-circle fa-lg text-muted"></i>  <a href="/topics/' . $topic['id'] . '">' . $topic['title'] . '</a> (' . $topic['count_posts'] . ')';
-            echo '<a href="/topics/end/' . $topic['id'] . '">&raquo;</a><br>';
-        }
-    }
+    return view('widgets/_topics', compact('topics'));
 }
 
 /**
@@ -1144,7 +1109,7 @@ function recentTopics($show = 5)
  */
 function recentDowns($show = 5)
 {
-    $files = Cache::remember('recentDowns', 600, static function () use ($show) {
+    $downs = Cache::remember('recentDowns', 600, static function () use ($show) {
         return Down::query()
             ->where('active', 1)
             ->orderByDesc('created_at')
@@ -1154,11 +1119,7 @@ function recentDowns($show = 5)
             ->toArray();
     });
 
-    if ($files) {
-        foreach ($files as $file) {
-            echo '<i class="far fa-circle fa-lg text-muted"></i>  <a href="/downs/' . $file['id'] . '">' . $file['title'] . '</a> (' . $file['count_comments'] . ')<br>';
-        }
-    }
+    return view('widgets/_downs', compact('downs'));
 }
 
 /**
@@ -1178,11 +1139,7 @@ function recentArticles($show = 5)
             ->toArray();
     });
 
-    if ($articles) {
-        foreach ($articles as $article) {
-            echo '<i class="far fa-circle fa-lg text-muted"></i> <a href="/articles/' . $article['id'] . '">' . $article['title'] . '</a> (' . $article['count_comments'] . ')<br>';
-        }
-    }
+    return view('widgets/_articles', compact('articles'));
 }
 
 /**
@@ -1203,11 +1160,7 @@ function recentBoards($show = 5)
             ->toArray();
     });
 
-    if ($items) {
-        foreach ($items as $item) {
-            echo '<i class="far fa-circle fa-lg text-muted"></i> <a href="/items/' . $item['id'] . '">' . $item['title'] . '</a><br>';
-        }
-    }
+    return view('widgets/_boards', compact('items'));
 }
 
 
