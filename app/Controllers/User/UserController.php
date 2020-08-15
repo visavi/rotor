@@ -207,7 +207,7 @@ class UserController extends BaseController
                     $user->sendMessage(null, $textNotice);
 
                     // --- Уведомление о регистрации на email ---//
-                    $message = 'Добро пожаловать, ' . $login . '<br>Теперь вы зарегистрированный пользователь сайта <a href="' . siteUrl(true) . '">' . setting('title') . '</a> , сохраните ваш логин и пароль в надежном месте, они вам еще пригодятся. <br>Ваши данные для входа на сайт <br><b>Логин: ' . $login . '</b><br><b>Пароль: ' . $password . '</b><br><br>';
+                    $message = 'Добро пожаловать, ' . $login . '<br>Теперь вы зарегистрированный пользователь сайта <a href="' . siteUrl(true) . '">' . setting('title') . '</a> , сохраните ваш логин и пароль в надежном месте, они вам еще пригодятся. <br>Ваши данные для входа на сайт <br><b>Логин: ' . $login . '</b><br><b>Пароль: ' . $password . '</b>';
 
                     $subject = 'Регистрация на ' . setting('title');
                     $body = view('mailer.register', compact('subject', 'message', 'activateKey', 'activateLink'));
@@ -408,7 +408,7 @@ class UserController extends BaseController
                 ]);
 
                 /* Уведомление о регистрации на email */
-                $message = 'Добро пожаловать, ' . $user->getName() . '<br>Теперь вы зарегистрированный пользователь сайта <a href="' . siteUrl(true) . '">' . setting('title') . '</a> , сохраните ваш логин и пароль в надежном месте, они вам еще пригодятся. <br><br>';
+                $message = 'Добро пожаловать, ' . $user->getName() . '<br>Теперь вы зарегистрированный пользователь сайта <a href="' . siteUrl(true) . '">' . setting('title') . '</a> , сохраните ваш логин и пароль в надежном месте, они вам еще пригодятся.';
 
                 $subject = 'Регистрация на ' . setting('title');
                 $body = view('mailer.register', compact('subject', 'message', 'activateKey', 'activateLink'));
