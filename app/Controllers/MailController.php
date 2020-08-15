@@ -80,7 +80,7 @@ class MailController extends BaseController
             }
 
             $validator->true(captchaVerify(), ['protect' => __('validator.captcha')])
-                ->lte($user['timepasswd'], SITETIME, ['user' => __('mails.password_recovery_time')]);
+                ->lte($user->timepasswd, SITETIME, ['user' => __('mails.password_recovery_time')]);
 
             if ($validator->isValid()) {
                 $resetKey  = Str::random();
@@ -92,13 +92,13 @@ class MailController extends BaseController
                 ]);
 
                 //Инструкция по восстановлению пароля на email
-                $subject = 'Восстановление пароля на сайте ' . setting('title');
-                $message = 'Здравствуйте, ' . $user['login'] . '<br>Вами была произведена операция по восстановлению пароля на сайте <a href="' . siteUrl(true) . '">' . setting('title') . '</a><br><br>Данные отправителя:<br>Ip: ' . getIp() . '<br>Браузер: ' . getBrowser() . '<br>Отправлено: ' . date('j.m.Y / H:i', SITETIME) . '<br><br>Для того чтобы восстановить пароль, вам необходимо нажать на кнопку восстановления<br>Если это письмо попало к вам по ошибке или вы не собираетесь восстанавливать пароль, то просто проигнорируйте его';
+                $subject = 'Восстановление пароля на ' . setting('title');
+                $message = 'Здравствуйте, ' . $user->getName() . '<br>Вами была произведена операция по восстановлению пароля на сайте <a href="' . siteUrl(true) . '">' . setting('title') . '</a><br><br>Данные отправителя:<br>Ip: ' . getIp() . '<br>Браузер: ' . getBrowser() . '<br>Отправлено: ' . date('j.m.Y / H:i', SITETIME) . '<br><br>Для того чтобы восстановить пароль, вам необходимо нажать на кнопку восстановления<br>Если это письмо попало к вам по ошибке или вы не собираетесь восстанавливать пароль, то просто проигнорируйте его';
 
                 $body = view('mailer.recovery', compact('subject', 'message', 'resetLink'));
-                sendMail($user['email'], $subject, $body);
+                sendMail($user->email, $subject, $body);
 
-                setFlash('success', __('mails.recovery_instructions', ['email' => hideMail($user['email'])]));
+                setFlash('success', __('mails.recovery_instructions', ['email' => hideMail($user->email)]));
                 redirect('/login');
             } else {
                 setInput($request->all());
@@ -125,14 +125,15 @@ class MailController extends BaseController
 
         $key = $request->input('key');
 
+        /** @var User $user */
         $user = User::query()->where('keypasswd', $key)->first();
         if (! $user) {
             abort('default', __('mails.secret_key_invalid'));
         }
 
         $validator->notEmpty($key, __('mails.secret_key_missing'))
-            ->notEmpty($user['keypasswd'], __('mails.password_not_recovery'))
-            ->gte($user['timepasswd'], SITETIME, __('mails.secret_key_expired'));
+            ->notEmpty($user->keypasswd, __('mails.password_not_recovery'))
+            ->gte($user->timepasswd, SITETIME, __('mails.secret_key_expired'));
 
         if ($validator->isValid()) {
             $newpass    = Str::random();
@@ -145,13 +146,13 @@ class MailController extends BaseController
             ]);
 
             // Восстановление пароля на email
-            $subject = 'Восстановление пароля на сайте ' . setting('title');
-            $message = 'Здравствуйте, ' . $user['login'] . '<br>Ваши новые данные для входа на на сайт <a href="' . siteUrl(true) . '">' . setting('title') . '</a><br><b>Логин: ' . $user['login'] . '</b><br><b>Пароль: ' . $newpass . '</b><br><br>Запомните и постарайтесь больше не забывать данные <br>Пароль вы сможете поменять в своем профиле<br>Всего наилучшего!';
+            $subject = 'Восстановление пароля на ' . setting('title');
+            $message = 'Здравствуйте, ' . $user->getName() . '<br>Ваши новые данные для входа на на сайт <a href="' . siteUrl(true) . '">' . setting('title') . '</a><br><b>Логин: ' . $user->login . '</b><br><b>Пароль: ' . $newpass . '</b><br><br>Запомните и постарайтесь больше не забывать данные <br>Пароль вы сможете поменять в своем профиле<br>Всего наилучшего!';
 
             $body = view('mailer.default', compact('subject', 'message'));
-            sendMail($user['email'], $subject, $body);
+            sendMail($user->email, $subject, $body);
 
-            return view('mails/restore', ['login' => $user['login'], 'password' => $newpass]);
+            return view('mails/restore', ['login' => $user->login, 'password' => $newpass]);
         }
 
         setFlash('danger', current($validator->getErrors()));

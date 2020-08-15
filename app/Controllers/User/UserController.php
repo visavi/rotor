@@ -67,7 +67,7 @@ class UserController extends BaseController
             if ($validator->isValid()) {
                 $user->note()->updateOrCreate([], [
                     'text'         => $notice,
-                    'edit_user_id' => getUser('id'),
+                    'edit_user_id' => $user->id,
                     'updated_at'   => SITETIME,
                 ]);
 
@@ -209,7 +209,7 @@ class UserController extends BaseController
                     // --- Уведомление о регистрации на email ---//
                     $message = 'Добро пожаловать, ' . $login . '<br>Теперь вы зарегистрированный пользователь сайта <a href="' . siteUrl(true) . '">' . setting('title') . '</a> , сохраните ваш логин и пароль в надежном месте, они вам еще пригодятся. <br>Ваши данные для входа на сайт <br><b>Логин: ' . $login . '</b><br><b>Пароль: ' . $password . '</b><br><br>';
 
-                    $subject = 'Регистрация на сайте ' . setting('title');
+                    $subject = 'Регистрация на ' . setting('title');
                     $body = view('mailer.register', compact('subject', 'message', 'activateKey', 'activateLink'));
                     sendMail($email, $subject, $body);
 
@@ -410,7 +410,7 @@ class UserController extends BaseController
                 /* Уведомление о регистрации на email */
                 $message = 'Добро пожаловать, ' . $user->getName() . '<br>Теперь вы зарегистрированный пользователь сайта <a href="' . siteUrl(true) . '">' . setting('title') . '</a> , сохраните ваш логин и пароль в надежном месте, они вам еще пригодятся. <br><br>';
 
-                $subject = 'Регистрация на сайте ' . setting('title');
+                $subject = 'Регистрация на ' . setting('title');
                 $body = view('mailer.register', compact('subject', 'message', 'activateKey', 'activateLink'));
 
                 sendMail($email, $subject, $body);
@@ -547,7 +547,7 @@ class UserController extends BaseController
         if ($validator->isValid()) {
             $genkey = Str::random();
 
-            $subject = 'Изменение email на сайте '.setting('title');
+            $subject = 'Изменение email на '.setting('title');
             $message = 'Здравствуйте, ' . $user->getName() . '<br>Вами была произведена операция по изменению адреса электронной почты<br><br>Для того, чтобы изменить email, необходимо подтвердить новый адрес почты<br>Перейдите по данной ссылке:<br><br><a href="' . siteUrl(true) . '/accounts/editmail?key=' . $genkey . '">' . siteUrl(true) . '/accounts/editmail?key=' . $genkey . '</a><br><br>Ссылка будет дейстительной в течение суток до ' . date('j.m.y / H:i', strtotime('+1 day', SITETIME)) . '<br>Для изменения адреса необходимо быть авторизованным на сайте<br>Если это сообщение попало к вам по ошибке или вы не собираетесь менять email, то просто проигнорируйте данное письмо';
 
             $body = view('mailer.default', compact('subject', 'message'));
@@ -679,7 +679,7 @@ class UserController extends BaseController
         $validator->equal($request->input('token'), $_SESSION['token'], __('validator.token'))
             ->true(password_verify($oldpass, $user->password), ['oldpass' => __('users.password_different')])
             ->length($newpass, 6, 20, ['newpass' => __('users.password_length_requirements')])
-            ->notEqual(getUser('login'), $newpass, ['newpass' => __('users.login_different')])
+            ->notEqual($user->login, $newpass, ['newpass' => __('users.login_different')])
             ->equal($newpass, $newpass2, ['newpass2' => __('users.passwords_different')]);
 
         if (ctype_digit($newpass)) {
@@ -691,8 +691,8 @@ class UserController extends BaseController
                 'password' => password_hash($newpass, PASSWORD_BCRYPT),
             ]);
 
-            $subject = 'Изменение пароля на сайте ' . setting('title');
-            $message = 'Здравствуйте, ' . getUser('login') . '<br>Вами была произведена операция по изменению пароля<br><br><b>Ваш новый пароль: ' . $newpass . '</b><br>Сохраните его в надежном месте<br><br>Данные инициализации:<br>IP: ' . getIp() . '<br>Браузер: ' . getBrowser() . '<br>Время: ' . date('j.m.y / H:i', SITETIME);
+            $subject = 'Изменение пароля на ' . setting('title');
+            $message = 'Здравствуйте, ' . $user->getName() . '<br>Вами была произведена операция по изменению пароля<br><br><b>Ваш новый пароль: ' . $newpass . '</b><br>Сохраните его в надежном месте<br><br>Данные инициализации:<br>IP: ' . getIp() . '<br>Браузер: ' . getBrowser() . '<br>Время: ' . date('j.m.y / H:i', SITETIME);
 
             $body = view('mailer.default', compact('subject', 'message'));
             sendMail($user->email, $subject, $body);
@@ -723,7 +723,7 @@ class UserController extends BaseController
 
         if ($request->input('token') === $_SESSION['token']) {
             $user->update([
-                'apikey' => md5(getUser('login') . Str::random()),
+                'apikey' => md5($user->login . Str::random()),
             ]);
 
             setFlash('success', __('users.key_success_generated'));

@@ -2029,7 +2029,7 @@ function getUserByLoginOrEmail($login): ?User
 /**
  * Возвращает данные пользователя по ключу
  *
- * @param string $key ключ массива
+ * @param string|null $key ключ массива
  *
  * @return User|mixed
  */
