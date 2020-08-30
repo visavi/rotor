@@ -44,8 +44,7 @@
         @yield('content')
         @yield('advertBottom')
     {{--</div>--}}
-
-    @yield('performance')
+    @include('footer')
 </main>
 <script src="{{ mix('/assets/js/dist/manifest.js') }}"></script>
 <script src="{{ mix('/assets/js/dist/vendor.js') }}"></script>

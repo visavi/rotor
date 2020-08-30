@@ -105,7 +105,7 @@
   cursor: pointer;
 }
 
-.btn-light, .badge-light {
+.btn-light, .badge-light, .alert-light {
   border: 1px solid #e1e1e8;
 }
 

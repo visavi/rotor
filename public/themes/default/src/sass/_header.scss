@@ -103,8 +103,7 @@
 
 .app-search__input {
   border: 0;
-  padding: 5px 10px;
-  padding-right: 30px;
+  padding: 5px 30px 5px 10px;
   border-radius: 2px;
   background-color: rgba(255,255,255,0.8);
   transition: background-color 0.3s ease;
@@ -142,7 +141,7 @@
 }
 .app-notification__item {
   display: flex;
-  padding: 8px 20px;
+  padding: 8px 10px;
   color: inherit;
   border-bottom: 1px solid #ddd;
   transition: background-color 0.3s ease;
@@ -161,7 +160,6 @@
 
 .app-notification__icon {
   padding-right: 10px;
-  width: 48px;
 }
 .app-notification__author { line-height: 1.2; }
 .app-notification__meta { @extend .text-muted; @extend .small; }

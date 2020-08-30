@@ -14,6 +14,7 @@
     "require": {
         "php": "^7.2.5",
         "ext-gd": "*",
+        "ext-pdo": "*",
         "ext-json": "*",
         "ext-mbstring": "*",
         "ext-fileinfo": "*",

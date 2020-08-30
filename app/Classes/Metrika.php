@@ -10,6 +10,7 @@ use App\Models\Counter31;
 use App\Models\Online;
 use Illuminate\Database\Capsule\Manager as DB;
 use Illuminate\Database\Eloquent\Builder;
+use PDOException;
 
 class Metrika
 {
@@ -20,9 +21,9 @@ class Metrika
      *
      * @return void
      */
-    public function getCounter($online): void
+    public function getCounter(int $online): void
     {
-        $counter = Counter::query()->first();
+        $counter = $this->getResultCounter();
 
         if (! $counter) {
             $counter = (object) ['dayhosts' => 0, 'dayhits' => 0];
@@ -68,42 +69,31 @@ class Metrika
 
         Online::query()->where('updated_at', '<', SITETIME - setting('timeonline'))->delete();
 
-        $newHost = false;
-
         $ip     = getIp();
         $brow   = getBrowser();
         $userId = getUser('id');
         $uid    = md5($ip . $brow);
 
-        $online = Online::query()
-            ->where('uid', $uid)
-            ->when($userId, static function (Builder $query) use ($userId) {
-                return $query->orWhere('user_id', $userId);
-            })
-            ->first();
-
-        if ($online) {
-            $online->update([
-                'uid'        => $uid,
-                'ip'         => $ip,
-                'brow'       => $brow,
-                'updated_at' => SITETIME,
-                'user_id'    => $userId,
-            ]);
-        } else {
-            Online::query()->insertOrIgnore([
-                'uid'        => $uid,
-                'ip'         => inet_pton($ip),
-                'brow'       => $brow,
-                'updated_at' => SITETIME,
-                'user_id'    => $userId,
-            ]);
-            $newHost = true;
+        try {
+            $online = Online::query()
+                ->where('uid', $uid)
+                ->when($userId, static function (Builder $query) use ($userId) {
+                    return $query->orWhere('user_id', $userId);
+                })
+                ->updateOrCreate([], [
+                    'uid'        => $uid,
+                    'ip'         => $ip,
+                    'brow'       => $brow,
+                    'updated_at' => SITETIME,
+                    'user_id'    => $userId,
+                ]);
+            $newHost = $online->wasRecentlyCreated;
+        } catch (PDOException $e) {
+            $newHost = false;
         }
 
         // -----------------------------------------------------------//
-        $counter = Counter::query()->first();
-
+        $counter = $this->getResultCounter();
         if (! $counter) {
             return;
         }
@@ -158,5 +148,15 @@ class Metrika
 
         $_SESSION['hits']   = 0;
         $_SESSION['online'] = strtotime('+30 seconds', SITETIME);
+    }
+
+    /**
+     * Returns counter result
+     *
+     * @return Counter|object|null
+     */
+    private function getResultCounter()
+    {
+        return Counter::query()->first();
     }
 }
