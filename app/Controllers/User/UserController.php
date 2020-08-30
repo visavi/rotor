@@ -252,7 +252,7 @@ class UserController extends BaseController
                    $return   = $request->input('return');
                    $login    = utfLower($request->input('login'));
                    $pass     = trim($request->input('pass'));
-                   $remember = $request->input('remember');
+                   $remember = $request->boolean('remember');
 
                    /** @var User $user */
                    if ($user = User::auth($login, $pass, $remember)) {
@@ -588,6 +588,7 @@ class UserController extends BaseController
 
         ChangeMail::query()->where('created_at', '<', SITETIME)->delete();
 
+        /** @var ChangeMail $changeMail */
         $changeMail = ChangeMail::query()->where('hash', $key)->where('user_id', $user->id)->first();
 
         $validator->notEmpty($key, __('users.changed_code_empty'))

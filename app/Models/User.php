@@ -184,8 +184,9 @@ class User extends BaseModel
     /**
      * Возвращает ссылку на профиль пользователя
      *
-     * @param  string $color цвет логина
-     * @return string        путь к профилю
+     * @param string|null $color цвет логина
+     *
+     * @return string путь к профилю
      */
     public function getProfile($color = null): string
     {
@@ -227,25 +228,15 @@ class User extends BaseModel
      * @param  string $login    Логин
      * @param  string $password Пароль пользователя
      * @param  bool   $remember Запомнить пароль
-     * @return Builder|Model|bool
+     * @return Builder|User|bool
      */
-    public static function auth($login, $password, $remember = true)
+    public static function auth(string $login, string $password, bool $remember = true)
     {
-        $domain = siteDomain(siteUrl());
-
         if (! empty($login) && ! empty($password)) {
-
             $user = getUserByLoginOrEmail($login);
 
             if ($user && password_verify($password, $user->password)) {
-                if ($remember) {
-                    setcookie('login', $user->login, strtotime('+1 year', SITETIME), '/', $domain);
-                    setcookie('password', md5($user->password . config('APP_KEY')), strtotime('+1 year', SITETIME), '/', $domain, false, true);
-                }
-
-                $_SESSION['id']       = $user->id;
-                $_SESSION['password'] = md5(config('APP_KEY') . $user->password);
-                $_SESSION['online']   = null;
+                (new static())->rememberUser($user, $remember);
 
                 // Сохранение привязки к соц. сетям
                 if (! empty($_SESSION['social'])) {
@@ -257,7 +248,7 @@ class User extends BaseModel
                     ]);
                 }
 
-                return $user->saveVisit(1);
+                return $user;
             }
         }
 
@@ -271,10 +262,8 @@ class User extends BaseModel
      *
      * @return void
      */
-    public static function socialAuth($token): void
+    public static function socialAuth(string $token): void
     {
-        $domain = siteDomain(siteUrl());
-
         $curl = new Curl();
         $network = $curl->get('//ulogin.ru/token.php',
             [
@@ -286,53 +275,19 @@ class User extends BaseModel
         if ($network && empty($network->error)) {
             $_SESSION['social'] = $network;
 
+            /** @var Social $social */
             $social = Social::query()
                 ->where('network', $network->network)
                 ->where('uid', $network->uid)
                 ->first();
 
             if ($social && $user = getUserById($social->user_id)) {
-
-                setcookie('login', $user->login, strtotime('+1 year', SITETIME), '/', $domain);
-                setcookie('password', md5($user->password . config('APP_KEY')), strtotime('+1 year', SITETIME), '/', $domain, false, true);
-
-                $_SESSION['id']       = $user->id;
-                $_SESSION['password'] = md5(config('APP_KEY') . $user->password);
+                (new static())->rememberUser($user);
 
                 setFlash('success', __('users.welcome', ['login' => $user->getName()]));
                 redirect('/');
             }
         }
-    }
-
-    /**
-     * Сохраняет посещения
-     *
-     * @param int $type
-     *
-     * @return User
-     */
-    public function saveVisit(int $type = 0): User
-    {
-        $authorization = Login::query()
-            ->where('user_id', $this->id)
-            ->where('created_at', '>', SITETIME - 60)
-            ->first();
-
-        if (! $authorization) {
-            Login::query()->create([
-                'user_id'    => $this->id,
-                'ip'         => getIp(),
-                'brow'       => getBrowser(),
-                'created_at' => SITETIME,
-                'type'       => $type,
-           ]);
-        }
-
-        $this->increment('visits');
-        $this->update(['updated_at' => SITETIME]);
-
-        return $this;
     }
 
     /**
@@ -555,10 +510,10 @@ class User extends BaseModel
      * Отправляет приватное сообщение
      *
      * @param  User|null $author Отправитель
-     * @param  int       $text   текст сообщения
+     * @param  string    $text   текст сообщения
      * @return bool              результат отправки
      */
-    public function sendMessage(?User $author, $text): bool
+    public function sendMessage(?User $author, string $text): bool
     {
         Message::query()->create([
             'user_id'    => $this->id,
@@ -711,5 +666,55 @@ class User extends BaseModel
 
             setFlash('success', __('main.daily_bonus', ['money' => plural(setting('bonusmoney'), setting('moneyname'))]));
         }
+    }
+
+    /**
+     * Сохраняет посещения
+     *
+     * @param int $type
+     *
+     * @return void
+     */
+    public function saveVisit(int $type = 0): void
+    {
+        $authorization = Login::query()
+            ->where('user_id', $this->id)
+            ->where('created_at', '>', SITETIME - 60)
+            ->first();
+
+        if (! $authorization) {
+            Login::query()->create([
+                'user_id'    => $this->id,
+                'ip'         => getIp(),
+                'brow'       => getBrowser(),
+                'created_at' => SITETIME,
+                'type'       => $type,
+           ]);
+        }
+
+        $this->increment('visits');
+        $this->update(['updated_at' => SITETIME]);
+    }
+
+    /**
+     * Remember user
+     *
+     * @param User $user
+     * @param bool $remember
+     */
+    private function rememberUser(User $user, bool $remember = false): void
+    {
+        $domain = siteDomain(siteUrl());
+
+        if ($remember) {
+            setcookie('login', $user->login, strtotime('+1 year', SITETIME), '/', $domain);
+            setcookie('password', md5($user->password . config('APP_KEY')), strtotime('+1 year', SITETIME), '/', $domain, false, true);
+        }
+
+        $_SESSION['id']       = $user->id;
+        $_SESSION['password'] = md5(config('APP_KEY') . $user->password);
+        $_SESSION['online']   = null;
+
+        $user->saveVisit(1);
     }
 }

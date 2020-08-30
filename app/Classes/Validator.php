@@ -359,7 +359,7 @@ class Validator
             return $this;
         }
 
-        if (! preg_match('#^([a-z0-9_\-\.])+\@([a-z0-9_\-\.])+(\.([a-z0-9])+)+$#', $input)) {
+        if (filter_var($input, FILTER_VALIDATE_EMAIL) === false) {
             $this->addError($label);
         }
 
