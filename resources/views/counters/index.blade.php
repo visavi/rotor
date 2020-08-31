@@ -16,9 +16,9 @@
 @section('content')
     <div class="row mb-3">
         <div class="col-md-6 col-12">
-            {{ __('counters.users_total') }}: <b>{{ $online[1] }}</b><br>
+            {{ __('counters.users_total') }}: <b>{{ ($online[0] + $online[1]) }}</b><br>
             {{ __('counters.authorized_total') }}: <b>{{ $online[0] }}</b><br>
-            {{ __('counters.guest_total') }}: <b>{{ ($online[1] - $online[0]) }}</b><br><br>
+            {{ __('counters.guest_total') }}: <b>{{ $online[1] }}</b><br><br>
 
             {{ __('counters.hosts_total') }}: <b>{{ $count['allhosts'] }}</b><br>
             {{ __('counters.hits_total') }}: <b>{{ $count['allhits'] }}</b><br>

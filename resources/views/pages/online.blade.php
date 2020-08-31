@@ -14,30 +14,46 @@
 @stop
 
 @section('content')
-    {{ __('pages.total_online') }}: <b>{{ $guests ? $online->total() : $other }}</b><br>
-    {{ __('pages.authorized') }}:  <b>{{ $guests ? $other : $online->total() }}</b><br><br>
+    @if ($guests)
+        {{ __('pages.total_online') }}: <b>{{ $online->total() }}</b><br>
+    @else
+        {{ __('pages.authorized') }}: <b>{{ $online->total() }}</b><br>
+    @endif
 
     @if ($online->isNotEmpty())
         @foreach ($online as $data)
-            <div class="b">
-                @if ($data->user->id)
-                    <div class="img">
+            <div class="section mb-3 shadow">
+                <div class="user-avatar">
+                    @if ($data->user_id)
                         {!! $data->user->getAvatar() !!}
+                    @else
+                        <img class="img-fluid rounded-circle avatar-default" src="/assets/img/images/avatar_guest.png" alt="">
+                    @endif
+                </div>
+
+                <div class="section-user d-flex align-items-center">
+                    <div class="flex-grow-1">
+                        @if ($data->user_id)
+                            {!! $data->user->getProfile() !!}
+                            <small class="section-date text-muted font-italic">{{ dateFixed($data->updated_at, 'H:i:s') }}</small><br>
+                            <small class="font-italic">{!! $data->user->getStatus() !!}</small>
+                        @else
+
+                            <span class="section-author font-weight-bold" data-login="{{ setting('guestsuser') }}">{{ setting('guestsuser') }}</span>
+
+                            <small class="section-date text-muted font-italic">{{ dateFixed($data->updated_at, 'H:i:s') }}</small>
+                        @endif
                     </div>
-                    <b>{!! $data->user->getProfile() !!}</b> ({{ __('pages.time_on_site') }}: {{ dateFixed($data->updated_at, 'H:i:s') }})
-                @else
-                    <div class="img">
-                        <img class="avatar" src="/assets/img/images/avatar_guest.png" alt="">
+                </div>
+
+                @if (isAdmin())
+                    <div class="section-body border-top my-1 py-1">
+                        <div class="small text-muted font-italic mt-2">
+                            {{ $data->brow }}, {{ $data->ip }}
+                        </div>
                     </div>
-                    <b>{{ setting('guestsuser') }}</b> ({{ __('pages.time_on_site') }}: {{ dateFixed($data->updated_at, 'H:i:s') }})
                 @endif
             </div>
-
-            @if (isAdmin())
-                <div>
-                    <span class="data">({{ $data->brow }}, {{ $data->ip }})</span>
-                </div>
-            @endif
         @endforeach
     @else
         {!! showError(__('main.empty_users')) !!}

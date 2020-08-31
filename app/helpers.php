@@ -352,13 +352,13 @@ function getCalendar($time = SITETIME): string
 function statsOnline()
 {
     return Cache::remember('online', 60, static function () {
-        $online[] = Online::query()->whereNotNull('user_id')->count();
-        $online[] = Online::query()->count();
+        $users  = Online::query()->distinct('user_id')->whereNotNull('user_id')->count();
+        $guests = Online::query()->whereNull('user_id')->count();
 
         $metrika = new Metrika();
-        $metrika->getCounter($online[1]);
+        $metrika->getCounter($users + $guests);
 
-        return $online;
+        return [$users, $guests];
     });
 }
 

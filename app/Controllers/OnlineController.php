@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Controllers;
 
 use App\Models\Online;
+use Illuminate\Database\Query\JoinClause;
 
 class OnlineController extends BaseController
 {
@@ -15,16 +16,22 @@ class OnlineController extends BaseController
      */
     public function index(): string
     {
-        $other  = Online::query()->count();
         $guests = false;
 
         $online = Online::query()
-            ->whereNotNull('user_id')
+            ->select('o1.*')
+            ->from('online as o1')
+            ->leftJoin('online as o2', static function (JoinClause $join) {
+                $join->on('o1.user_id', 'o2.user_id')
+                    ->on('o1.updated_at', '<', 'o2.updated_at');
+            })
+            ->whereNull('o2.updated_at')
+            ->whereNotNull('o1.user_id')
             ->with('user')
             ->orderByDesc('updated_at')
             ->paginate(setting('onlinelist'));
 
-        return view('pages/online', compact('online', 'other', 'guests'));
+        return view('pages/online', compact('online', 'guests'));
     }
 
     /**
@@ -34,13 +41,20 @@ class OnlineController extends BaseController
      */
     public function all(): string
     {
-        $other  = Online::query()->whereNotNull('user_id')->count();
         $guests = true;
 
-        $online = Online::with('user')
+        $online = Online::query()
+            ->select('o1.*')
+            ->from('online as o1')
+            ->leftJoin('online as o2', static function (JoinClause $join) {
+                $join->on('o1.user_id', 'o2.user_id')
+                    ->on('o1.updated_at', '<', 'o2.updated_at');
+            })
+            ->whereNull('o2.updated_at')
+            ->with('user')
             ->orderByDesc('updated_at')
             ->paginate(setting('onlinelist'));
 
-        return view('pages/online', compact('online', 'other', 'guests'));
+        return view('pages/online', compact('online', 'guests'));
     }
 }

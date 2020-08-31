@@ -9,7 +9,6 @@ use App\Models\Counter24;
 use App\Models\Counter31;
 use App\Models\Online;
 use Illuminate\Database\Capsule\Manager as DB;
-use Illuminate\Database\Eloquent\Builder;
 use PDOException;
 
 class Metrika
@@ -77,9 +76,6 @@ class Metrika
         try {
             $online = Online::query()
                 ->where('uid', $uid)
-                ->when($userId, static function (Builder $query) use ($userId) {
-                    return $query->orWhere('user_id', $userId);
-                })
                 ->updateOrCreate([], [
                     'uid'        => $uid,
                     'ip'         => $ip,

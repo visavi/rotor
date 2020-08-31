@@ -80,7 +80,6 @@ return [
     'authorized'   => 'Authorized',
     'hide_guests'  => 'Hide guests',
     'show_guests'  => 'Show guests',
-    'time_on_site' => 'Time',
 
     'empty_rules' => 'Site rules have not yet been established!',
 

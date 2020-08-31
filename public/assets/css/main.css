@@ -2,6 +2,7 @@
 .section {
   background: #fff;
   padding: 1rem;
+  overflow: hidden;
 }
 
 .section-header {
