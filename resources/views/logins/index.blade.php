@@ -17,20 +17,21 @@
 @section('content')
     @if ($logins->isNotEmpty())
         @foreach ($logins as $data)
-            <div class="b">
-                @if ($data->type)
-                    <i class="fa fa-sign-in-alt"></i> <b>{{ __('logins.authorization') }}</b>
-                @else
-                    <i class="fa fa-sync"></i> <b>{{ __('logins.autologin') }}</b>
-                @endif
+            <div class="section mb-3 shadow">
+                <h5>
+                    <i class="fa fa-sign-in-alt"></i> {{ $data->getType() }}
+                    <small class="section-date text-muted font-italic">{{ dateFixed($data->created_at) }}</small>
+                </h5>
 
-                <small>({{ dateFixed($data->created_at) }})</small>
-            </div>
-            <div>
-                <span class="data">
-                    Browser: {{ $data->brow }} /
-                    IP: {{ $data->ip }}
-                </span>
+
+
+                <div class="section-body border-top my-1 py-1">
+                    <div class="small text-muted font-italic mt-2">
+                        Browser: {{ $data->brow }} /
+                        IP: {{ $data->ip }}
+                    </div>
+                </div>
+
             </div>
         @endforeach
     @else

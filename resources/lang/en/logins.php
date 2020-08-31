@@ -1,7 +1,8 @@
 <?php
 
 return [
-    'authorization' => 'Authorization',
-    'autologin'     => 'Auto Login',
+    'auth'          => 'Authorization',
+    'cookie'        => 'Login by cookie',
+    'social'        => 'Social network',
     'empty_history' => 'No authorization history',
 ];

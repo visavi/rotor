@@ -1,4 +1,4 @@
-<footer class="container">
+<footer>
     @yield('counter')
     @yield('online')
     @yield('performance')

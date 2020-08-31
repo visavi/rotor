@@ -248,6 +248,8 @@ class User extends BaseModel
                     ]);
                 }
 
+                $user->saveVisit(Login::AUTH);
+
                 return $user;
             }
         }
@@ -265,8 +267,7 @@ class User extends BaseModel
     public static function socialAuth(string $token): void
     {
         $curl = new Curl();
-        $network = $curl->get('//ulogin.ru/token.php',
-            [
+        $network = $curl->get('//ulogin.ru/token.php', [
                 'token' => $token,
                 'host'  => $_SERVER['HTTP_HOST']
             ]
@@ -283,6 +284,8 @@ class User extends BaseModel
 
             if ($social && $user = getUserById($social->user_id)) {
                 (new static())->rememberUser($user);
+
+                $user->saveVisit(Login::SOCIAL);
 
                 setFlash('success', __('users.welcome', ['login' => $user->getName()]));
                 redirect('/');
@@ -671,11 +674,11 @@ class User extends BaseModel
     /**
      * Сохраняет посещения
      *
-     * @param int $type
+     * @param string $type
      *
      * @return void
      */
-    public function saveVisit(int $type = 0): void
+    public function saveVisit(string $type): void
     {
         $authorization = Login::query()
             ->where('user_id', $this->id)
@@ -714,7 +717,5 @@ class User extends BaseModel
         $_SESSION['id']       = $user->id;
         $_SESSION['password'] = md5(config('APP_KEY') . $user->password);
         $_SESSION['online']   = null;
-
-        $user->saveVisit(1);
     }
 }

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Classes;
 
+use App\Models\Login;
 use App\Models\Setting;
 use DI\Container;
 use FastRoute\Dispatcher;
@@ -97,7 +98,7 @@ class Application
                 $_SESSION['password'] = md5(config('APP_KEY') . $user->password);
                 $_SESSION['online']   = null;
 
-                $user->saveVisit();
+                $user->saveVisit(Login::COOKIE);
             }
         }
     }

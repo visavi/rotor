@@ -16,6 +16,10 @@ namespace App\Models;
  */
 class Login extends BaseModel
 {
+    public const AUTH   = 'auth';
+    public const COOKIE = 'cookie';
+    public const SOCIAL = 'social';
+
     /**
      * The table associated with the model.
      *
@@ -36,4 +40,9 @@ class Login extends BaseModel
      * @var array
      */
     protected $guarded = [];
+
+    public function getType()
+    {
+        return __('logins.' . $this->type);
+    }
 }
