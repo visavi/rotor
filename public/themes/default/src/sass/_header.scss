@@ -30,6 +30,9 @@
       background-color: lighten( $navbar-color, 5% );
     }
   }
+  @media(max-width: 360px) {
+    display: none;
+  }
   &:focus,
   &:hover {
     text-decoration: none;
@@ -74,6 +77,7 @@
   @extend .list-unstyled;
   display: flex;
   margin-bottom: 0;
+  margin-left: auto;
   justify-content: flex-end;
   @media(min-width: 768px) { flex: 1 0 auto; }
 }

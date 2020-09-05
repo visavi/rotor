@@ -23,15 +23,12 @@
                     <small class="section-date text-muted font-italic">{{ dateFixed($data->created_at) }}</small>
                 </h5>
 
-
-
                 <div class="section-body border-top my-1 py-1">
                     <div class="small text-muted font-italic mt-2">
                         Browser: {{ $data->brow }} /
                         IP: {{ $data->ip }}
                     </div>
                 </div>
-
             </div>
         @endforeach
     @else

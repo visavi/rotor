@@ -25,25 +25,13 @@
         @yield('breadcrumb')
     </div>
 
-{{--    <div class="app-title">
-        <div>
-            <h1><i class="fa fa-file-code-o"></i> Documentation</h1>
-            <p>Documentation of vali admin</p>
-        </div>
-        <ul class="app-breadcrumb breadcrumb">
-            <li class="breadcrumb-item"><i class="fa fa-home fa-lg"></i></li>
-            <li class="breadcrumb-item"><a href="#">Documentation</a></li>
-        </ul>
-    </div>--}}
-    {{--<div class="tile">--}}
-        @yield('flash')
-        @yield('advertTop')
-        @yield('advertAdmin')
-        @yield('advertUser')
+    @yield('flash')
+    @yield('advertTop')
+    @yield('advertAdmin')
+    @yield('advertUser')
 
-        @yield('content')
-        @yield('advertBottom')
-    {{--</div>--}}
+    @yield('content')
+    @yield('advertBottom')
     @include('footer')
 </main>
 <script src="{{ mix('/assets/js/dist/manifest.js') }}"></script>

@@ -283,7 +283,7 @@ class User extends BaseModel
                 ->first();
 
             if ($social && $user = getUserById($social->user_id)) {
-                (new static())->rememberUser($user);
+                (new static())->rememberUser($user, true);
 
                 $user->saveVisit(Login::SOCIAL);
 
