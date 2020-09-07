@@ -77,7 +77,7 @@ class GuestbookController extends BaseController
             clearCache('statGuestbook');
             $flood->saveState();
 
-            sendNotify($msg, '/guestbook', __('index.guestbooks'));
+            sendNotify($msg, '/guestbook', __('index.guestbook'));
             setFlash('success', __('main.message_added_success'));
         } else {
             setInput($request->all());

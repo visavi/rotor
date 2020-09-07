@@ -70,7 +70,7 @@
         },
         {
             "name": "cakephp/core",
-            "version": "4.1.3",
+            "version": "4.1.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/cakephp/core.git",
@@ -120,16 +120,16 @@
         },
         {
             "name": "cakephp/database",
-            "version": "4.1.3",
+            "version": "4.1.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/cakephp/database.git",
-                "reference": "b5342110aca5dea9c902c2e12d2077ea2c11eecb"
+                "reference": "87489db357c4472e8a03acf0d2256d22a134c71e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/cakephp/database/zipball/b5342110aca5dea9c902c2e12d2077ea2c11eecb",
-                "reference": "b5342110aca5dea9c902c2e12d2077ea2c11eecb",
+                "url": "https://api.github.com/repos/cakephp/database/zipball/87489db357c4472e8a03acf0d2256d22a134c71e",
+                "reference": "87489db357c4472e8a03acf0d2256d22a134c71e",
                 "shasum": ""
             },
             "require": {
@@ -165,20 +165,20 @@
                 "database abstraction",
                 "pdo"
             ],
-            "time": "2020-08-14T17:56:57+00:00"
+            "time": "2020-08-30T12:31:16+00:00"
         },
         {
             "name": "cakephp/datasource",
-            "version": "4.1.3",
+            "version": "4.1.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/cakephp/datasource.git",
-                "reference": "4514e256c3da3c88c0cb4754218a217f9f20ec1d"
+                "reference": "87fa1b40eb819bac382e93cf496db6321ae86e11"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/cakephp/datasource/zipball/4514e256c3da3c88c0cb4754218a217f9f20ec1d",
-                "reference": "4514e256c3da3c88c0cb4754218a217f9f20ec1d",
+                "url": "https://api.github.com/repos/cakephp/datasource/zipball/87fa1b40eb819bac382e93cf496db6321ae86e11",
+                "reference": "87fa1b40eb819bac382e93cf496db6321ae86e11",
                 "shasum": ""
             },
             "require": {
@@ -217,11 +217,11 @@
                 "entity",
                 "query"
             ],
-            "time": "2020-07-21T05:44:43+00:00"
+            "time": "2020-08-26T08:52:15+00:00"
         },
         {
             "name": "cakephp/utility",
-            "version": "4.1.3",
+            "version": "4.1.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/cakephp/utility.git",
@@ -1992,16 +1992,16 @@
         },
         {
             "name": "opis/closure",
-            "version": "3.5.6",
+            "version": "3.5.7",
             "source": {
                 "type": "git",
                 "url": "https://github.com/opis/closure.git",
-                "reference": "e8d34df855b0a0549a300cb8cb4db472556e8aa9"
+                "reference": "4531e53afe2fc660403e76fb7644e95998bff7bf"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/opis/closure/zipball/e8d34df855b0a0549a300cb8cb4db472556e8aa9",
-                "reference": "e8d34df855b0a0549a300cb8cb4db472556e8aa9",
+                "url": "https://api.github.com/repos/opis/closure/zipball/4531e53afe2fc660403e76fb7644e95998bff7bf",
+                "reference": "4531e53afe2fc660403e76fb7644e95998bff7bf",
                 "shasum": ""
             },
             "require": {
@@ -2049,7 +2049,7 @@
                 "serialization",
                 "serialize"
             ],
-            "time": "2020-08-11T08:46:50+00:00"
+            "time": "2020-09-06T17:02:15+00:00"
         },
         {
             "name": "paragonie/random_compat",

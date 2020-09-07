@@ -1,0 +1,17 @@
+// This files are essential for the theme
+@import 'variables';
+@import '~bootstrap/scss/bootstrap';
+
+@import '~@fortawesome/fontawesome-free/scss/brands';
+@import '~@fortawesome/fontawesome-free/scss/regular';
+@import '~@fortawesome/fontawesome-free/scss/solid';
+@import "~@fortawesome/fontawesome-free/scss/fontawesome";
+@import '~bootstrap-colorpicker/src/sass/colorpicker';
+
+@import 'css/colorbox/colorbox';
+@import 'css/markitup/markitup';
+@import 'css/toastr';
+@import 'css/prettify';
+@import 'css/main';
+
+@import 'style';
