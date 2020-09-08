@@ -11,14 +11,34 @@
     </nav>
 @stop
 
-<div class="b"><i class="fab fa-forumbee fa-lg text-muted"></i> <b>{{ __('index.recent_topics') }}</b></div>
-{{ recentTopics() }}
+<div class="section mb-3 shadow">
+    <div class="section-title">
+        <i class="fab fa-forumbee fa-lg text-muted"></i>
+        {{ __('index.recent_topics') }}
+    </div>
+    {!! recentTopics() !!}
+</div>
 
-<div class="b"><i class="fa fa-download fa-lg text-muted"></i> <b>{{ __('index.recent_files') }}</b></div>
-{{ recentDowns() }}
+<div class="section mb-3 shadow">
+    <div class="section-title">
+        <i class="fa fa-download fa-lg text-muted"></i>
+        {{ __('index.recent_files') }}
+    </div>
+    {!! recentDowns() !!}
+</div>
 
-<div class="b"><i class="fa fa-globe fa-lg text-muted"></i> <b>{{ __('index.recent_articles') }}</b></div>
-{{ recentArticles() }}
+<div class="section mb-3 shadow">
+    <div class="section-title">
+        <i class="fa fa-globe fa-lg text-muted"></i>
+        {{ __('index.recent_articles') }}
+    </div>
+    {!! recentArticles() !!}
+</div>
 
-<div class="b"><i class="fa fa-image fa-lg text-muted"></i> <b>{{ __('index.recent_photos') }}</b></div>
-{!! recentPhotos() !!}
+<div class="section mb-3 shadow">
+    <div class="section-title">
+        <i class="fa fa-image fa-lg text-muted"></i>
+        {{ __('index.recent_photos') }}
+    </div>
+    {!! recentPhotos() !!}
+</div>

@@ -1,4 +1,5 @@
 @if ($news)
+    <div class="section-body my-1 py-1">
     @foreach ($news as $data)
         <i class="far fa-circle fa-lg text-muted"></i> <a href="/news/{{ $data['id'] }}">{{ $data['title'] }}</a> ({{ $data['count_comments'] }}) <i class="fas fa-angle-down news-title"></i><br>
 
@@ -14,4 +15,5 @@
             <a href="/news/end/{{ $data['id'] }}">&raquo;</a>
         </div>
     @endforeach
+    </div>
 @endif

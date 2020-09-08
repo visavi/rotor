@@ -15,9 +15,7 @@
             <i class="far fa-circle fa-lg text-muted"></i>
             <a href="/news" class="">{{ __('index.news') }}</a> ({{ statsNewsDate() }})
         </div>
-        <div class="section-body my-1 py-1">
-            {!! lastNews() !!}
-        </div>
+        {!! lastNews() !!}
     </div>
 
     <div class="section mb-3 shadow">
@@ -38,9 +36,7 @@
             <i class="fab fa-forumbee fa-lg text-muted"></i>
             <a href="/forums">{{ __('index.forums') }}</a> ({{ statsForum() }})
         </div>
-        <div class="section-body my-1 py-1">
-            {!! recentTopics() !!}
-        </div>
+        {!! recentTopics() !!}
     </div>
 
     <div class="section mb-3 shadow">
@@ -48,9 +44,7 @@
             <i class="fa fa-download fa-lg text-muted"></i>
             <a href="/loads">{{ __('index.loads') }}</a> ({{ statsLoad() }})
         </div>
-        <div class="section-body my-1 py-1">
-            {!! recentDowns() !!}
-        </div>
+        {!! recentDowns() !!}
     </div>
 
     <div class="section mb-3 shadow">
@@ -58,9 +52,7 @@
             <i class="fa fa-globe fa-lg text-muted"></i>
             <a href="/blogs">{{ __('index.blogs') }}</a> ({{ statsBlog() }})
         </div>
-        <div class="section-body my-1 py-1">
-            {!! recentArticles() !!}
-        </div>
+        {!! recentArticles() !!}
     </div>
 
     <div class="section mb-3 shadow">
@@ -68,9 +60,7 @@
             <i class="fa fa-list-alt fa-lg text-muted"></i>
             <a href="/boards">{{ __('index.boards') }}</a> ({{ statsBoard() }})
         </div>
-        <div class="section-body my-1 py-1">
-            {!! recentBoards() !!}
-        </div>
+        {!! recentBoards() !!}
     </div>
 
     <div class="section mb-3 shadow">
