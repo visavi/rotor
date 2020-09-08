@@ -62,7 +62,7 @@ composer create-project --stability=dev visavi/rotor .
 
 ### Requirements
 
-Minimal PHP version required for PHP 7.2.5 and MySQL 5.5.3 engine
+Minimal PHP version required for PHP 7.3.0 and MySQL 5.5.3 engine
 
 If MySQL version is lower than 5.5.3, then it is necessary to install in the .env file
 `DB_COLLATION=utf8_unicode_ci`

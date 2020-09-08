@@ -1,19 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<phpunit bootstrap="app/bootstrap.php" colors="true" cacheResult="false">
-    <php>
-        <server name="SERVER_NAME" value="rotor.ll" />
-    </php>
-    <filter>
-        <whitelist addUncoveredFilesFromWhitelist="true">
-            <directory suffix=".php">./app</directory>
-            <exclude>
-                <directory suffix=".php">./app/Controllers</directory>
-            </exclude>
-        </whitelist>
-    </filter>
-    <testsuites>
-        <testsuite name="Rotor Test Suite">
-            <directory>./tests</directory>
-        </testsuite>
-    </testsuites>
+<phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" bootstrap="app/bootstrap.php" colors="true" cacheResult="false" xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/9.3/phpunit.xsd">
+  <coverage includeUncoveredFiles="true">
+    <include>
+      <directory suffix=".php">./app</directory>
+    </include>
+    <exclude>
+      <directory suffix=".php">./app/Controllers</directory>
+    </exclude>
+  </coverage>
+  <php>
+    <server name="SERVER_NAME" value="rotor.ll"/>
+  </php>
+  <testsuites>
+    <testsuite name="Rotor Test Suite">
+      <directory>./tests</directory>
+    </testsuite>
+  </testsuites>
 </phpunit>

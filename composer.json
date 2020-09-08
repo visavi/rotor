@@ -12,7 +12,7 @@
         }
     ],
     "require": {
-        "php": "^7.2.5",
+        "php": "^7.3.0",
         "ext-gd": "*",
         "ext-pdo": "*",
         "ext-json": "*",
@@ -21,14 +21,14 @@
         "cbschuld/browser.php": "~1.9",
         "gregwar/captcha": "^1.1",
         "google/recaptcha": "~1.2",
-        "illuminate/database": "~7.25",
-        "illuminate/http": "~7.25",
-        "illuminate/translation": "~7.25",
-        "illuminate/view": "~7.25",
-        "illuminate/cache": "~7.25",
-        "illuminate/filesystem": "~7.25",
-        "illuminate/redis": "~7.25",
-        "illuminate/pagination": "~7.25",
+        "illuminate/database": "~8.0",
+        "illuminate/http": "~8.0",
+        "illuminate/translation": "~8.0",
+        "illuminate/view": "~8.0",
+        "illuminate/cache": "~8.0",
+        "illuminate/filesystem": "~8.0",
+        "illuminate/redis": "~8.0",
+        "illuminate/pagination": "~8.0",
         "php-ffmpeg/php-ffmpeg": "~0.16",
         "swiftmailer/swiftmailer": "~6.2",
         "josegonzalez/dotenv": "^3.2",
@@ -43,7 +43,7 @@
     },
     "require-dev": {
         "filp/whoops": "^2.7",
-        "phpunit/phpunit": "^8.5",
+        "phpunit/phpunit": "^9.3",
         "phpstan/phpstan": "^0.12",
         "php-coveralls/php-coveralls": "^2.2",
         "deployer/deployer": "^6.8"
@@ -83,7 +83,7 @@
     },
     "config": {
         "platform": {
-            "php": "7.2.5"
+            "php": "7.3.0"
         }
     }
 }
