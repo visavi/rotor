@@ -9,6 +9,10 @@
             "name": "Alexander Grigorev",
             "email": "admin@visavi.net",
             "homepage": "https://visavi.net"
+        },
+        {
+            "name": "Rotor Community",
+            "homepage": "https://github.com/visavi/rotor/graphs/contributors"
         }
     ],
     "require": {
@@ -84,6 +88,8 @@
     "config": {
         "platform": {
             "php": "7.3.0"
-        }
+        },
+        "optimize-autoloader": true,
+        "sort-packages": true
     }
 }
