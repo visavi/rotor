@@ -10,7 +10,8 @@ class ChangeThemeInUsers extends AbstractMigration
      */
     public function up(): void
     {
-        $this->execute("UPDATE users SET themes='default';");
+        $this->execute("UPDATE users SET themes='mobile' WHERE themes='default';");
+        $this->execute("UPDATE users SET themes='default' WHERE themes NOT IN('mobile', 'motor');");
     }
 
     /**

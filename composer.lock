@@ -914,7 +914,7 @@
         },
         {
             "name": "illuminate/bus",
-            "version": "v8.0.2",
+            "version": "v8.0.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/illuminate/bus.git",
@@ -963,7 +963,7 @@
         },
         {
             "name": "illuminate/cache",
-            "version": "v8.0.2",
+            "version": "v8.0.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/illuminate/cache.git",
@@ -1016,16 +1016,16 @@
         },
         {
             "name": "illuminate/collections",
-            "version": "v8.0.2",
+            "version": "v8.0.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/illuminate/collections.git",
-                "reference": "446310d53bf58905bf2fb0152d9df9a169fc3aa9"
+                "reference": "22e701e35a70456f3d1c986060486c11b51fc3d4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/illuminate/collections/zipball/446310d53bf58905bf2fb0152d9df9a169fc3aa9",
-                "reference": "446310d53bf58905bf2fb0152d9df9a169fc3aa9",
+                "url": "https://api.github.com/repos/illuminate/collections/zipball/22e701e35a70456f3d1c986060486c11b51fc3d4",
+                "reference": "22e701e35a70456f3d1c986060486c11b51fc3d4",
                 "shasum": ""
             },
             "require": {
@@ -1059,11 +1059,11 @@
             ],
             "description": "The Illuminate Collections package.",
             "homepage": "https://laravel.com",
-            "time": "2020-09-08T12:37:36+00:00"
+            "time": "2020-09-10T19:50:27+00:00"
         },
         {
             "name": "illuminate/container",
-            "version": "v8.0.2",
+            "version": "v8.0.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/illuminate/container.git",
@@ -1110,7 +1110,7 @@
         },
         {
             "name": "illuminate/contracts",
-            "version": "v8.0.2",
+            "version": "v8.0.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/illuminate/contracts.git",
@@ -1154,16 +1154,16 @@
         },
         {
             "name": "illuminate/database",
-            "version": "v8.0.2",
+            "version": "v8.0.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/illuminate/database.git",
-                "reference": "6decd445e59d891247a11cca716c9f6d18f25c18"
+                "reference": "66b51381794aa9b01d202ae5a8e4183e798e8947"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/illuminate/database/zipball/6decd445e59d891247a11cca716c9f6d18f25c18",
-                "reference": "6decd445e59d891247a11cca716c9f6d18f25c18",
+                "url": "https://api.github.com/repos/illuminate/database/zipball/66b51381794aa9b01d202ae5a8e4183e798e8947",
+                "reference": "66b51381794aa9b01d202ae5a8e4183e798e8947",
                 "shasum": ""
             },
             "require": {
@@ -1214,11 +1214,11 @@
                 "orm",
                 "sql"
             ],
-            "time": "2020-09-09T17:11:47+00:00"
+            "time": "2020-09-10T19:35:29+00:00"
         },
         {
             "name": "illuminate/events",
-            "version": "v8.0.2",
+            "version": "v8.0.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/illuminate/events.git",
@@ -1269,7 +1269,7 @@
         },
         {
             "name": "illuminate/filesystem",
-            "version": "v8.0.2",
+            "version": "v8.0.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/illuminate/filesystem.git",
@@ -1327,7 +1327,7 @@
         },
         {
             "name": "illuminate/http",
-            "version": "v8.0.2",
+            "version": "v8.0.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/illuminate/http.git",
@@ -1381,7 +1381,7 @@
         },
         {
             "name": "illuminate/macroable",
-            "version": "v8.0.2",
+            "version": "v8.0.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/illuminate/macroable.git",
@@ -1423,16 +1423,16 @@
         },
         {
             "name": "illuminate/pagination",
-            "version": "v8.0.2",
+            "version": "v8.0.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/illuminate/pagination.git",
-                "reference": "9bf67cb12a07372048822b48862ed441897be725"
+                "reference": "d01a85772ba7c15f6c03303f40d4ef9db16e07a9"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/illuminate/pagination/zipball/9bf67cb12a07372048822b48862ed441897be725",
-                "reference": "9bf67cb12a07372048822b48862ed441897be725",
+                "url": "https://api.github.com/repos/illuminate/pagination/zipball/d01a85772ba7c15f6c03303f40d4ef9db16e07a9",
+                "reference": "d01a85772ba7c15f6c03303f40d4ef9db16e07a9",
                 "shasum": ""
             },
             "require": {
@@ -1465,11 +1465,11 @@
             ],
             "description": "The Illuminate Pagination package.",
             "homepage": "https://laravel.com",
-            "time": "2020-09-08T15:41:20+00:00"
+            "time": "2020-09-10T12:38:01+00:00"
         },
         {
             "name": "illuminate/pipeline",
-            "version": "v8.0.2",
+            "version": "v8.0.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/illuminate/pipeline.git",
@@ -1513,7 +1513,7 @@
         },
         {
             "name": "illuminate/redis",
-            "version": "v8.0.2",
+            "version": "v8.0.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/illuminate/redis.git",
@@ -1563,7 +1563,7 @@
         },
         {
             "name": "illuminate/session",
-            "version": "v8.0.2",
+            "version": "v8.0.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/illuminate/session.git",
@@ -1615,7 +1615,7 @@
         },
         {
             "name": "illuminate/support",
-            "version": "v8.0.2",
+            "version": "v8.0.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/illuminate/support.git",
@@ -1678,7 +1678,7 @@
         },
         {
             "name": "illuminate/translation",
-            "version": "v8.0.2",
+            "version": "v8.0.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/illuminate/translation.git",
@@ -1726,7 +1726,7 @@
         },
         {
             "name": "illuminate/view",
-            "version": "v8.0.2",
+            "version": "v8.0.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/illuminate/view.git",
@@ -2023,16 +2023,16 @@
         },
         {
             "name": "nesbot/carbon",
-            "version": "2.39.1",
+            "version": "2.39.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/briannesbitt/Carbon.git",
-                "reference": "7af467873250583cc967a59ee9df29fabab193c1"
+                "reference": "326efde1bc09077a26cb77f6e2e32e13f06c27f2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/briannesbitt/Carbon/zipball/7af467873250583cc967a59ee9df29fabab193c1",
-                "reference": "7af467873250583cc967a59ee9df29fabab193c1",
+                "url": "https://api.github.com/repos/briannesbitt/Carbon/zipball/326efde1bc09077a26cb77f6e2e32e13f06c27f2",
+                "reference": "326efde1bc09077a26cb77f6e2e32e13f06c27f2",
                 "shasum": ""
             },
             "require": {
@@ -2108,7 +2108,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2020-09-04T13:11:37+00:00"
+            "time": "2020-09-10T12:16:42+00:00"
         },
         {
             "name": "neutron/temporary-filesystem",
