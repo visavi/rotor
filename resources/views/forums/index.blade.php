@@ -39,7 +39,7 @@
                 <div class="section-header d-flex align-items-center py-1 position-relative">
                     <div class="flex-grow-1">
                         <i class="fa fa-file-alt fa-lg text-muted"></i>
-                        <a href="/forums/{{ $forum->id }}" class="section-title stretched-link position-relative">{{ $forum->title }}</a>
+                        <a href="/forums/{{ $forum->id }}" class="section-title position-relative">{{ $forum->title }}</a>
                         <span class="badge badge-pill badge-light">{{ formatShortNum($forum->count_topics + $forum->children->sum('count_topics')) }}/{{ formatShortNum($forum->count_posts + $forum->children->sum('count_posts')) }}</span>
 
                         @if ($forum->description)
