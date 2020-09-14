@@ -54,7 +54,7 @@ use Symfony\Component\Console\Output\NullOutput;
  *
  * @return string форматированный вывод
  */
-function makeTime($time)
+function makeTime(string $time)
 {
     $format = $time < 3600 ? 'i:s' : 'H:i:s';
 
@@ -64,12 +64,12 @@ function makeTime($time)
 /**
  * Форматирует время с учетом часовых поясов
  *
- * @param int    $timestamp секунды
- * @param string $format    формат времени
+ * @param int|null $timestamp секунды
+ * @param string   $format    формат времени
  *
  * @return string форматированный вывод
  */
-function dateFixed($timestamp, $format = 'd.m.Y / H:i')
+function dateFixed(?int $timestamp, $format = 'd.m.Y / H:i')
 {
     if (! is_numeric($timestamp)) {
         $timestamp = SITETIME;
@@ -108,7 +108,7 @@ function dateFixed($timestamp, $format = 'd.m.Y / H:i')
  *
  * @return string конвертированная строка
  */
-function winToUtf($str)
+function winToUtf(string $str)
 {
     return mb_convert_encoding($str, 'utf-8', 'windows-1251');
 }
@@ -120,7 +120,7 @@ function winToUtf($str)
  *
  * @return string преобразованная строка
  */
-function utfLower($str)
+function utfLower(string $str)
 {
     return mb_strtolower($str, 'utf-8');
 }
@@ -128,13 +128,13 @@ function utfLower($str)
 /**
  * Обрезает строку
  *
- * @param string $str    строка
- * @param int    $start  начало позиции
- * @param int    $length конец позиции
+ * @param string   $str    строка
+ * @param int      $start  начало позиции
+ * @param int|null $length конец позиции
  *
  * @return string обрезанная строка
  */
-function utfSubstr($str, $start, $length = null)
+function utfSubstr(string $str, int $start, $length = null)
 {
     if (! $length) {
         $length = utfStrlen($str);
@@ -150,7 +150,7 @@ function utfSubstr($str, $start, $length = null)
  *
  * @return int длина строка
  */
-function utfStrlen($str)
+function utfStrlen(string $str)
 {
     return mb_strlen($str, 'utf-8');
 }
@@ -162,7 +162,7 @@ function utfStrlen($str)
  *
  * @return bool
  */
-function isUtf($str)
+function isUtf(string $str)
 {
     return mb_check_encoding($str, 'utf-8');
 }
@@ -193,7 +193,7 @@ function check($string, $doubleEncode = true)
 /**
  * Преобразует в положительное число
  *
- * @param string $num число
+ * @param int|string $num число
  *
  * @return int обработанные данные
  */
@@ -230,7 +230,7 @@ function intar($numbers)
  *
  * @return string форматированный вывод размера
  */
-function formatSize($bytes, $precision = 2)
+function formatSize(int $bytes, int $precision = 2)
 {
     $units = ['B','Kb','Mb','Gb','Tb'];
     $pow   = floor(($bytes ? log($bytes) : 0) / log(1000));
@@ -248,7 +248,7 @@ function formatSize($bytes, $precision = 2)
  *
  * @return int|string размер в читаемом формате
  */
-function formatFileSize($file)
+function formatFileSize(string $file)
 {
     if (file_exists($file) && is_file($file)) {
         return formatSize(filesize($file));
@@ -301,7 +301,7 @@ function formatTime(int $time, int $crumbs = 2): string
  *
  * @return string обработанная строка
  */
-function antimat($str)
+function antimat(string $str)
 {
     return Antimat::replace($str);
 }
@@ -309,7 +309,7 @@ function antimat($str)
 /**
  * Возвращает рейтинг в виде звезд
  *
- * @param float $rating рейтинг
+ * @param int|float $rating рейтинг
  *
  * @return string преобразованный рейтинг
  */
@@ -600,7 +600,7 @@ function statsInvite()
  *
  * @return mixed массив данных
  */
-function photoNavigation($id)
+function photoNavigation(int $id)
 {
     if (! $id) {
         return false;
@@ -741,7 +741,7 @@ function statsBoard()
  *
  * @return string обфусцированный email
  */
-function cryptMail($email)
+function cryptMail(string $email)
 {
     $output  = '';
     $symbols = str_split($email);
@@ -760,7 +760,7 @@ function cryptMail($email)
  *
  * @return string
  */
-function hideMail($email)
+function hideMail(string $email)
 {
     return preg_replace('/(?<=.).(?=.*@)/u', '*', $email);
 }
@@ -794,6 +794,7 @@ function statVotes()
 function statsNewsDate()
 {
     $newsDate = Cache::remember('statNewsDate', 900, static function () {
+        /** @var News $news */
         $news = News::query()->orderByDesc('created_at')->first();
 
         return $news->created_at ?? 0;
@@ -832,7 +833,7 @@ function lastNews()
  *
  * @return string иконка
  */
-function icons($ext)
+function icons(string $ext)
 {
     switch ($ext) {
         case 'php':
@@ -898,7 +899,7 @@ function icons($ext)
  *
  * @return bool Флаг успешного выполнения операции
  */
-function shuffleAssoc(&$array)
+function shuffleAssoc(array &$array)
 {
     $keys = array_keys($array);
 
@@ -1186,7 +1187,7 @@ function statsOffers()
  *
  * @return void
  */
-function restatement($mode)
+function restatement(string $mode)
 {
     switch ($mode) {
         case 'forums':
@@ -1234,7 +1235,7 @@ function restatement($mode)
  *
  * @return int количество строк
  */
-function counterString($file)
+function counterString(string $file)
 {
     $countLines = 0;
     if (file_exists($file)) {
@@ -1251,7 +1252,7 @@ function counterString($file)
  *
  * @return string форматированное число
  */
-function formatNum($num)
+function formatNum(int $num)
 {
     if ($num > 0) {
         return '<span style="color:#00aa00">+' . $num . '</span>';
@@ -1271,7 +1272,7 @@ function formatNum($num)
  *
  * @return bool|string
  */
-function formatShortNum($num)
+function formatShortNum(int $num)
 {
     if (! is_numeric($num)) {
         return false;
@@ -1304,7 +1305,7 @@ function formatShortNum($num)
  *
  * @return array обработанные параметры
  */
-function resizeProcess($path, array $params = [])
+function resizeProcess(string $path, array $params = [])
 {
     if (empty($params['alt'])) {
         $params['alt'] = basename($path);
@@ -1363,7 +1364,7 @@ function resizeProcess($path, array $params = [])
  *
  * @return string уменьшенное изображение
  */
-function resizeImage($path, array $params = [])
+function resizeImage(string $path, array $params = [])
 {
     $image = resizeProcess($path, $params);
 
@@ -1384,7 +1385,7 @@ function resizeImage($path, array $params = [])
  *
  * @return void
  */
-function deleteDir($dir)
+function deleteDir(string $dir)
 {
     if (file_exists($dir)) {
         if ($files = glob($dir . '/*')) {
@@ -1456,8 +1457,9 @@ function sendNotify(string $text, string $url, string $title)
  *
  * @return string сформированный текст
  */
-function textNotice($type, array $replace = [])
+function textNotice(string $type, array $replace = [])
 {
+    /** @var Notice $message */
     $message = Notice::query()->where('type', $type)->first();
 
     if (! $message) {
@@ -1491,7 +1493,7 @@ function performance()
 /**
  * Очистка кеш-файлов
  *
- * @param string|array $keys
+ * @param string|array|null $keys
  *
  * @return bool результат выполнения
  */
@@ -1517,11 +1519,11 @@ function clearCache($keys = null)
 /**
  * Возвращает текущую страницу
  *
- * @param string $url
+ * @param string|null $url
  *
  * @return string текущая страница
  */
-function returnUrl($url = null)
+function returnUrl(?string $url = null)
 {
     $request = request();
 
@@ -1543,7 +1545,7 @@ function returnUrl($url = null)
  *
  * @return string сформированный код
  */
-function view($view, array $params = [], array $mergeData = []): string
+function view(string $view, array $params = [], array $mergeData = []): string
 {
     return View::make($view, $params, $mergeData)->render();
 }
@@ -1551,13 +1553,13 @@ function view($view, array $params = [], array $mergeData = []): string
 /**
  * Translate the given message.
  *
- * @param string $key
- * @param array  $replace
- * @param string $locale
+ * @param string      $key
+ * @param array       $replace
+ * @param string|null $locale
  *
  * @return string
  */
-function __($key, array $replace = [], $locale = null)
+function __(string $key, array $replace = [], $locale = null)
 {
     return Lang::get($key, $replace, $locale);
 }
@@ -1568,11 +1570,11 @@ function __($key, array $replace = [], $locale = null)
  * @param string              $key
  * @param int|array|Countable $number
  * @param array               $replace
- * @param string              $locale
+ * @param string|null         $locale
  *
  * @return string
  */
-function choice($key, $number, array $replace = [], $locale = null)
+function choice(string $key, $number, array $replace = [], $locale = null)
 {
     return Lang::choice($key, $number, $replace, $locale);
 }
@@ -1580,12 +1582,12 @@ function choice($key, $number, array $replace = [], $locale = null)
 /**
  * Сохраняет страницы с ошибками
  *
- * @param int    $code    код ошибки
- * @param string $message текст ошибки
+ * @param int         $code    код ошибки
+ * @param string|null $message текст ошибки
  *
  * @return string сформированная страница с ошибкой
  */
-function abort($code, $message = null)
+function abort(int $code, $message = null)
 {
     $protocol = server('SERVER_PROTOCOL');
     $referer  = server('HTTP_REFERER');
@@ -1648,7 +1650,7 @@ function saveErrorLog($code)
  *
  * @return void
  */
-function redirect($url, $permanent = false)
+function redirect(string $url, $permanent = false)
 {
     if (isset($_SESSION['captcha'])) {
         $_SESSION['captcha'] = null;
@@ -1670,7 +1672,7 @@ function redirect($url, $permanent = false)
  *
  * @return void
  */
-function setFlash($status, $message)
+function setFlash(string $status, $message)
 {
     $_SESSION['flash'][$status] = $message;
 }
@@ -1678,7 +1680,7 @@ function setFlash($status, $message)
 /**
  * Возвращает ошибку
  *
- * @param mixed $errors ошибки
+ * @param string|array $errors ошибки
  *
  * @return string сформированный блок с ошибкой
  */
@@ -1706,12 +1708,12 @@ function setInput(array $data)
 /**
  * Возвращает значение из POST данных
  *
- * @param string $name имя поля
- * @param string $default
+ * @param string      $name имя поля
+ * @param string|null $default
  *
  * @return mixed сохраненное значение
  */
-function getInput($name, $default = null)
+function getInput(string $name, $default = null)
 {
     if (empty($_SESSION['input'])) {
         return $default;
@@ -1736,7 +1738,7 @@ function getInput($name, $default = null)
  *
  * @return string CSS класс ошибки
  */
-function hasError($field)
+function hasError(string  $field)
 {
     $isValid = isset($_SESSION['flash']['danger']) ? ' is-valid' : '';
 
@@ -1758,14 +1760,14 @@ function textError($field)
 /**
  * Отправляет уведомления на email
  *
- * @param mixed  $to      Получатель
+ * @param string $to      Получатель
  * @param string $subject Тема письма
  * @param string $body    Текст сообщения
  * @param array  $params  Дополнительные параметры
  *
  * @return bool Результат отправки
  */
-function sendMail($to, $subject, $body, array $params = [])
+function sendMail(string $to, string $subject, string $body, array $params = [])
 {
     if (empty($params['from'])) {
         $params['from'] = [config('SITE_EMAIL') => config('SITE_ADMIN')];
@@ -1809,7 +1811,7 @@ function sendMail($to, $subject, $body, array $params = [])
  *
  * @return string расширение
  */
-function getExtension($filename)
+function getExtension(string $filename)
 {
     return pathinfo($filename, PATHINFO_EXTENSION);
 }
@@ -1821,7 +1823,7 @@ function getExtension($filename)
  *
  * @return string имя без расширения
  */
-function getBodyName($filename)
+function getBodyName(string $filename)
 {
     return pathinfo($filename, PATHINFO_FILENAME);
 }
@@ -1834,7 +1836,7 @@ function getBodyName($filename)
  *
  * @return string форматированная строка
  */
-function plural($num, $forms)
+function plural(int $num, $forms)
 {
     if (! is_array($forms)) {
         $forms = explode(',', $forms);
@@ -1867,7 +1869,7 @@ function plural($num, $forms)
  *
  * @return string Обработанный текст
  */
-function bbCode($text, $parse = true)
+function bbCode(string $text, $parse = true)
 {
     $bbCode = new BBCode();
 
@@ -1981,7 +1983,7 @@ function isAdmin($level = User::EDITOR)
  *
  * @return bool разрешен ли доступ
  */
-function access($level)
+function access(string $level)
 {
     $access = array_flip(User::ALL_GROUPS);
 
@@ -1995,7 +1997,7 @@ function access($level)
  *
  * @return Builder|Model|null
  */
-function getUserByLogin($login): ?User
+function getUserByLogin(string $login): ?User
 {
     return User::query()->where('login', $login)->first();
 }
@@ -2019,7 +2021,7 @@ function getUserById(int $id): ?User
  *
  * @return Builder|Model|null
  */
-function getUserByLoginOrEmail($login): ?User
+function getUserByLoginOrEmail(string $login): ?User
 {
     $field = strpos($login, '@') ? 'email' : 'login';
 
@@ -2073,7 +2075,7 @@ function paginate(array $items, int $perPage, array $appends = []): LengthAwareP
  *
  * @return string сформированный код
  */
-function imageBase64($path, array $params = [])
+function imageBase64(string $path, array $params = [])
 {
     $type = getExtension($path);
     $data = file_get_contents($path);
@@ -2099,12 +2101,12 @@ function imageBase64($path, array $params = [])
 /**
  * Выводит прогресс-бар
  *
- * @param int    $percent
- * @param string $title
+ * @param int                   $percent
+ * @param int|float|string|null $title
  *
  * @return string
  */
-function progressBar($percent, $title = null)
+function progressBar(int $percent, $title = null)
 {
     if (! $title) {
         $title = $percent . '%';
@@ -2160,8 +2162,8 @@ function ipBan($clear = false)
 /**
  * Возвращает пользовательские настройки сайта по ключу
  *
- * @param string $key     ключ массива
- * @param string $default значение по умолчанию
+ * @param string|null $key     ключ массива
+ * @param string|null $default значение по умолчанию
  *
  * @return mixed данные
  */
@@ -2179,8 +2181,8 @@ function setting($key = null, $default = null)
 /**
  * Возвращает дефолтные настройки сайта по ключу
  *
- * @param string $key     ключ массива
- * @param string $default значение по умолчанию
+ * @param string|null $key     ключ массива
+ * @param string|null $default значение по умолчанию
  *
  * @return mixed данные
  */
@@ -2220,7 +2222,7 @@ function siteUrl($parse = false)
  *
  * @return string имя сайта
  */
-function siteDomain($url)
+function siteDomain(string $url)
 {
     $url = strtolower($url);
     $url = str_replace(['http://www.', 'http://', 'https://', '//'], '', $url);
@@ -2236,7 +2238,7 @@ function siteDomain($url)
  *
  * @return string
  */
-function parseVersion($version)
+function parseVersion(string $version)
 {
     $ver = explode('.', strtok($version, '-'));
 
@@ -2281,7 +2283,7 @@ function captchaVerify(): bool
 /**
  * Возвращает уникальное имя
  *
- * @param string $extension
+ * @param string|null $extension
  *
  * @return string
  */
@@ -2386,7 +2388,7 @@ function config(string $key, $default = null)
  * @return string
  * @throws Exception
  */
-function mix($path, $manifestDirectory = ''): string
+function mix(string $path, $manifestDirectory = ''): string
 {
     return (new Mix())(...func_get_args());
 }
