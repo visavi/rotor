@@ -18,16 +18,16 @@ class GuestbookControllerTest extends \Tests\TestCase
 
         /** @var Guestbook $getGuest */
         $getGuest = Guestbook::query()->find($guest->id);
-        $this->assertEquals('Test text message', $getGuest->text);
+        self::assertEquals('Test text message', $getGuest->text);
 
         $guest->update(['text' => 'Test simple message']);
 
         $getGuest = Guestbook::query()->find($guest->id);
-        $this->assertEquals('Test simple message', $getGuest->text);
+        self::assertEquals('Test simple message', $getGuest->text);
 
         $guest->delete();
 
         $getGuest = Guestbook::query()->find($guest->id);
-        $this->assertNull($getGuest);
+        self::assertNull($getGuest);
     }
 }

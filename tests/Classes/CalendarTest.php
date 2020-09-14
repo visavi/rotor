@@ -25,11 +25,11 @@ class CalendarTest extends \Tests\TestCase
     {
         $makeCalendar = $this->callMethod($this->calendar, 'makeCalendar', [1, 1980]);
 
-        $this->assertIsArray($makeCalendar);
-        $this->assertCount(5, $makeCalendar);
-        $this->assertNull($makeCalendar[4][5]);
-        $this->assertNull($makeCalendar[0][0]);
-        $this->assertSame(1, $makeCalendar[0][1]);
+        self::assertIsArray($makeCalendar);
+        self::assertCount(5, $makeCalendar);
+        self::assertNull($makeCalendar[4][5]);
+        self::assertNull($makeCalendar[0][0]);
+        self::assertSame(1, $makeCalendar[0][1]);
     }
 
     /**
@@ -40,6 +40,6 @@ class CalendarTest extends \Tests\TestCase
         $expected = file_get_contents('tests/_data/calendar.txt');
         $calendar = preg_replace('/\s+/', '', $this->calendar->getCalendar(315586800));
 
-        $this->assertSame(trim($expected), $calendar);
+        self::assertSame(trim($expected), $calendar);
     }
 }

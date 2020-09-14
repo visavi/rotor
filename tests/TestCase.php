@@ -16,7 +16,7 @@ class TestCase extends \PHPUnit\Framework\TestCase
      * @return mixed Method return.
      * @throws ReflectionException
      */
-    public function callMethod($object, $methodName, array $parameters = [])
+    public function callMethod(object $object, string $methodName, array $parameters = [])
     {
         $reflection = new \ReflectionClass(get_class($object));
         $method = $reflection->getMethod($methodName);

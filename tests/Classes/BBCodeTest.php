@@ -26,7 +26,7 @@ class BBCodeTest extends \Tests\TestCase
         $text      = '[code]<?php var_dump([1,2,4]);[/code]';
         $parseText = $this->bbCode->parse($text);
 
-        $this->assertSame('<pre class="prettyprint linenums pre-scrollable"><?php var_dump(&#91;1,2,4]);</pre>', $parseText);
+        self::assertSame('<pre class="prettyprint linenums pre-scrollable"><?php var_dump(&#91;1,2,4]);</pre>', $parseText);
     }
 
     /**
@@ -37,7 +37,7 @@ class BBCodeTest extends \Tests\TestCase
         $text      = '[b]Привет[/b]';
         $parseText = $this->bbCode->parse($text);
 
-        $this->assertSame('<strong>Привет</strong>', $parseText);
+        self::assertSame('<strong>Привет</strong>', $parseText);
     }
 
     /**
@@ -48,7 +48,7 @@ class BBCodeTest extends \Tests\TestCase
         $text      = '[i]Привет[/i]';
         $parseText = $this->bbCode->parse($text);
 
-        $this->assertSame('<em>Привет</em>', $parseText);
+        self::assertSame('<em>Привет</em>', $parseText);
     }
 
     /**
@@ -59,7 +59,7 @@ class BBCodeTest extends \Tests\TestCase
         $text      = '[u]Привет[/u]';
         $parseText = $this->bbCode->parse($text);
 
-        $this->assertSame('<u>Привет</u>', $parseText);
+        self::assertSame('<u>Привет</u>', $parseText);
     }
 
     /**
@@ -70,7 +70,7 @@ class BBCodeTest extends \Tests\TestCase
         $text      = '[s]Привет[/s]';
         $parseText = $this->bbCode->parse($text);
 
-        $this->assertSame('<del>Привет</del>', $parseText);
+        self::assertSame('<del>Привет</del>', $parseText);
     }
 
     /**
@@ -81,7 +81,7 @@ class BBCodeTest extends \Tests\TestCase
         $text      = '[size=5]Привет[/size]';
         $parseText = $this->bbCode->parse($text);
 
-        $this->assertSame('<span style="font-size:x-large">Привет</span>', $parseText);
+        self::assertSame('<span style="font-size:x-large">Привет</span>', $parseText);
     }
 
     /**
@@ -92,7 +92,7 @@ class BBCodeTest extends \Tests\TestCase
         $text      = '[color=#ff0000]Привет[/color]';
         $parseText = $this->bbCode->parse($text);
 
-        $this->assertSame('<span style="color:#ff0000">Привет</span>', $parseText);
+        self::assertSame('<span style="color:#ff0000">Привет</span>', $parseText);
     }
 
     /**
@@ -103,7 +103,7 @@ class BBCodeTest extends \Tests\TestCase
         $text      = '[color=#ff0000]П[color=#00ff00]р[color=#0000ff]и[/color][color=#00ff00]в[/color][/color]ет[/color]';
         $parseText = $this->bbCode->parse($text);
 
-        $this->assertSame('<span style="color:#ff0000">П<span style="color:#00ff00">р<span style="color:#0000ff">и</span><span style="color:#00ff00">в</span></span>ет</span>', $parseText);
+        self::assertSame('<span style="color:#ff0000">П<span style="color:#00ff00">р<span style="color:#0000ff">и</span><span style="color:#00ff00">в</span></span>ет</span>', $parseText);
     }
 
     /**
@@ -114,7 +114,7 @@ class BBCodeTest extends \Tests\TestCase
         $text      = '[center]Привет[/center]';
         $parseText = $this->bbCode->parse($text);
 
-        $this->assertSame('<div style="text-align:center;">Привет</div>', $parseText);
+        self::assertSame('<div style="text-align:center;">Привет</div>', $parseText);
     }
 
     /**
@@ -125,7 +125,7 @@ class BBCodeTest extends \Tests\TestCase
         $text      = '[quote]Привет[/quote]';
         $parseText = $this->bbCode->parse($text);
 
-        $this->assertSame('<blockquote class="blockquote">Привет</blockquote>', $parseText);
+        self::assertSame('<blockquote class="blockquote">Привет</blockquote>', $parseText);
     }
 
     /**
@@ -136,7 +136,7 @@ class BBCodeTest extends \Tests\TestCase
         $text      = '[quote=Имя]Привет[/quote]';
         $parseText = $this->bbCode->parse($text);
 
-        $this->assertSame('<blockquote class="blockquote">Привет<footer class="blockquote-footer">Имя</footer></blockquote>', $parseText);
+        self::assertSame('<blockquote class="blockquote">Привет<footer class="blockquote-footer">Имя</footer></blockquote>', $parseText);
     }
 
     /**
@@ -147,7 +147,7 @@ class BBCodeTest extends \Tests\TestCase
         $text      = 'http://сайт.рф http://сайт.рф/http://сайт.рф:80';
         $parseText = $this->bbCode->parse($text);
 
-        $this->assertSame('<a href="http://сайт.рф" target="_blank" rel="nofollow">http://сайт.рф</a> <a href="http://сайт.рф/http://сайт.рф:80" target="_blank" rel="nofollow">http://сайт.рф/http://сайт.рф:80</a>', $parseText);
+        self::assertSame('<a href="http://сайт.рф" target="_blank" rel="nofollow">http://сайт.рф</a> <a href="http://сайт.рф/http://сайт.рф:80" target="_blank" rel="nofollow">http://сайт.рф/http://сайт.рф:80</a>', $parseText);
     }
 
     /**
@@ -158,7 +158,7 @@ class BBCodeTest extends \Tests\TestCase
         $text      = 'http://rotor.ll';
         $parseText = $this->bbCode->parse($text);
 
-        $this->assertSame('<a href="//rotor.ll">http://rotor.ll</a>', $parseText);
+        self::assertSame('<a href="//rotor.ll">http://rotor.ll</a>', $parseText);
     }
 
     /**
@@ -169,7 +169,7 @@ class BBCodeTest extends \Tests\TestCase
         $text      = 'https://rotor.ll/dir/index.php?name=name&name2=name2#anchor';
         $parseText = $this->bbCode->parse($text);
 
-        $this->assertSame('<a href="//rotor.ll/dir/index.php?name=name&name2=name2#anchor">https://rotor.ll/dir/index.php?name=name&name2=name2#anchor</a>', $parseText);
+        self::assertSame('<a href="//rotor.ll/dir/index.php?name=name&name2=name2#anchor">https://rotor.ll/dir/index.php?name=name&name2=name2#anchor</a>', $parseText);
     }
 
     /**
@@ -180,7 +180,7 @@ class BBCodeTest extends \Tests\TestCase
         $text      = '[url]https://rotor.ll[/url]';
         $parseText = $this->bbCode->parse($text);
 
-        $this->assertSame('<a href="//rotor.ll">https://rotor.ll</a>', $parseText);
+        self::assertSame('<a href="//rotor.ll">https://rotor.ll</a>', $parseText);
     }
 
     /**
@@ -191,7 +191,7 @@ class BBCodeTest extends \Tests\TestCase
         $text      = '[url=http://rotor.ll/dir/index.php?name=name&name2=name2#anchor]Сайт[/url] [url=https://site.com/http://site.net:80/]Sitename[/url]';
         $parseText = $this->bbCode->parse($text);
 
-        $this->assertSame('<a href="//rotor.ll/dir/index.php?name=name&name2=name2#anchor">Сайт</a> <a href="https://site.com/http://site.net:80/" target="_blank" rel="nofollow">Sitename</a>', $parseText);
+        self::assertSame('<a href="//rotor.ll/dir/index.php?name=name&name2=name2#anchor">Сайт</a> <a href="https://site.com/http://site.net:80/" target="_blank" rel="nofollow">Sitename</a>', $parseText);
     }
 
     /**
@@ -202,7 +202,7 @@ class BBCodeTest extends \Tests\TestCase
         $text      = '[img]http://rotor.ll/assets/images/img/logo.png[/img]';
         $parseText = $this->bbCode->parse($text);
 
-        $this->assertSame('<div class="media-file"><img src="http://rotor.ll/assets/images/img/logo.png" class="img-fluid" alt="image"></div>', $parseText);
+        self::assertSame('<div class="media-file"><img src="http://rotor.ll/assets/images/img/logo.png" class="img-fluid" alt="image"></div>', $parseText);
     }
 
     /**
@@ -213,7 +213,7 @@ class BBCodeTest extends \Tests\TestCase
         $text      = '[list=1]Список'.PHP_EOL.'список2[/list]';
         $parseText = $this->bbCode->parse($text);
 
-        $this->assertSame('<ol><li>Список</li><li>список2</li></ol>', $parseText);
+        self::assertSame('<ol><li>Список</li><li>список2</li></ol>', $parseText);
     }
 
     /**
@@ -224,7 +224,7 @@ class BBCodeTest extends \Tests\TestCase
         $text      = '[list]Список[/list]';
         $parseText = $this->bbCode->parse($text);
 
-        $this->assertSame('<ul><li>Список</li></ul>', $parseText);
+        self::assertSame('<ul><li>Список</li></ul>', $parseText);
     }
 
     /**
@@ -236,7 +236,7 @@ class BBCodeTest extends \Tests\TestCase
         $parseText = $this->bbCode->parse($text);
         $parseText = trim(preg_replace('/\s\s+/', '', $parseText));
 
-        $this->assertSame('<div class="spoiler"><b class="spoiler-title">' . __('main.expand_view') . '</b><div class="spoiler-text" style="display: none;">Спойлер</div></div>', $parseText);
+        self::assertSame('<div class="spoiler"><b class="spoiler-title">' . __('main.expand_view') . '</b><div class="spoiler-text" style="display: none;">Спойлер</div></div>', $parseText);
     }
 
     /**
@@ -248,7 +248,7 @@ class BBCodeTest extends \Tests\TestCase
         $parseText = $this->bbCode->parse($text);
         $parseText = trim(preg_replace('/\s\s+/', '', $parseText));
 
-        $this->assertSame('<div class="spoiler"><b class="spoiler-title">Открыть</b><div class="spoiler-text" style="display: none;">Спойлер</div></div>', $parseText);
+        self::assertSame('<div class="spoiler"><b class="spoiler-title">Открыть</b><div class="spoiler-text" style="display: none;">Спойлер</div></div>', $parseText);
     }
 
     /**
@@ -260,7 +260,7 @@ class BBCodeTest extends \Tests\TestCase
         $parseText = $this->bbCode->parse($text);
         $parseText = trim(preg_replace('/\s\s+/', '', $parseText));
 
-        $this->assertSame('<div class="hiding"><span class="font-weight-bold">' . __('main.hidden_content') . ':</span> ' . __('main.not_authorized') . '</div>', $parseText);
+        self::assertSame('<div class="hiding"><span class="font-weight-bold">' . __('main.hidden_content') . ':</span> ' . __('main.not_authorized') . '</div>', $parseText);
     }
 
     /**
@@ -271,7 +271,7 @@ class BBCodeTest extends \Tests\TestCase
         $text      = '[youtube]https://www.youtube.com/watch?v=85bkCmaOh4o[/youtube]';
         $parseText = $this->bbCode->parse($text);
 
-        $this->assertSame('<div class="media-file embed-responsive embed-responsive-16by9"><iframe class="embed-responsive-item" src="//www.youtube.com/embed/85bkCmaOh4o" allowfullscreen></iframe></div>', $parseText);
+        self::assertSame('<div class="media-file embed-responsive embed-responsive-16by9"><iframe class="embed-responsive-item" src="//www.youtube.com/embed/85bkCmaOh4o" allowfullscreen></iframe></div>', $parseText);
     }
 
     /**
@@ -282,7 +282,7 @@ class BBCodeTest extends \Tests\TestCase
         $text      = 'Привет :D :hello';
         $parseText = $this->bbCode->parseStickers($text);
 
-        $this->assertSame('Привет <img src="/uploads/stickers/D.gif" alt="D.gif"> <img src="/uploads/stickers/hello.gif" alt="hello.gif">', $parseText);
+        self::assertSame('Привет <img src="/uploads/stickers/D.gif" alt="D.gif"> <img src="/uploads/stickers/hello.gif" alt="hello.gif">', $parseText);
     }
 
     /**
@@ -293,6 +293,6 @@ class BBCodeTest extends \Tests\TestCase
         $text      = '[center][b]Привет[/b] [i]Привет[/i][/center]';
         $parseText = $this->bbCode->clear($text);
 
-        $this->assertSame('Привет Привет', $parseText);
+        self::assertSame('Привет Привет', $parseText);
     }
 }
