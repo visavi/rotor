@@ -2,6 +2,7 @@
 
 namespace Tests;
 
+use ReflectionClass;
 use ReflectionException;
 
 class TestCase extends \PHPUnit\Framework\TestCase
@@ -18,7 +19,7 @@ class TestCase extends \PHPUnit\Framework\TestCase
      */
     public function callMethod(object $object, string $methodName, array $parameters = [])
     {
-        $reflection = new \ReflectionClass(get_class($object));
+        $reflection = new ReflectionClass(get_class($object));
         $method = $reflection->getMethod($methodName);
         $method->setAccessible(true);
 

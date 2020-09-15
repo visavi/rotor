@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ruleset name="Rotor">
+    <description>Rotor coding standard</description>
+    <arg value="wsp"/>
+    <arg name="colors"/>
+    <arg name="encoding" value="utf-8"/>
+    <config name="installed_paths" value="../../slevomat/coding-standard"/>
+
+    <!-- Стандартный набор правил PSR2  -->
+    <rule ref="PSR2">
+        <exclude name="PSR2.Namespaces.UseDeclaration.MultipleDeclarations"/><!-- Разрешаем групповые USE  -->
+    </rule>
+
+    <!-- Проверка декларации declare(strict_types=1)  -->
+    <rule ref="SlevomatCodingStandard.TypeHints.DeclareStrictTypes">
+        <exclude name="SlevomatCodingStandard.TypeHints.DeclareStrictTypes.IncorrectWhitespaceBetweenOpenTagAndDeclare" />
+        <exclude name="SlevomatCodingStandard.TypeHints.DeclareStrictTypes.IncorrectStrictTypesFormat" />
+    </rule>
+
+    <!-- Проверка type hint аргументов функции  -->
+    <rule ref="Squiz.Commenting.FunctionComment.ScalarTypeHintMissing"/>
+    <rule ref="Squiz.Commenting.FunctionComment.TypeHintMissing"/>
+    <!-- или -->
+    <rule ref="SlevomatCodingStandard.TypeHints.ParameterTypeHintSpacing"/>
+
+    <!-- Проверка type hint возвращаемого значения функции  -->
+    <rule ref="SlevomatCodingStandard.TypeHints.ReturnTypeHintSpacing"/>
+
+    <!-- Must have  -->
+    <rule ref="Generic.Classes.DuplicateClassName"/> <!-- Проверка дубликатов имен классов  -->
+    <rule ref="Generic.Files.OneClassPerFile"/> <!-- Проверка единственного класса в файле -->
+    <rule ref="Generic.Files.OneInterfacePerFile"/> <!-- Проверка единственного интерфейса в файле -->
+    <rule ref="Generic.Files.OneTraitPerFile"/> <!-- Проверка единственного трейта в файле -->
+    <rule ref="Generic.Files.InlineHTML"/> <!-- Проверка что файл содержит только php код -->
+    <rule ref="Generic.NamingConventions.CamelCapsFunctionName"/> <!-- Проврека именования функций -->
+    <rule ref="Generic.NamingConventions.ConstructorName"/> <!-- Проврека именования конструкторов (запрет php4 style) -->
+    <rule ref="Generic.PHP.CharacterBeforePHPOpeningTag"/> <!-- Проверка что файл начинается с тега <?php  -->
+    <rule ref="Generic.PHP.DisallowAlternativePHPTags"/> <!-- Запрет альтернативных php тегов  -->
+    <rule ref="Generic.PHP.DisallowShortOpenTag"/> <!-- Запрет коротких тегов  -->
+
+    <file>app</file>
+</ruleset>
