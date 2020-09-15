@@ -99,7 +99,7 @@ class Metrika
                'period' => $period,
                'hosts'  => $counter->dayhosts,
                'hits'   => $counter->dayhits,
-           ]);
+            ]);
 
             $counter->update([
                 'period'   => $period,

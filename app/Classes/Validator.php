@@ -31,7 +31,7 @@ class Validator
      *
      * @return Validator
      */
-    public function length($input, $min, $max, $label, $required = true): Validator
+    public function length(string $input, int $min, int $max, $label, bool $required = true): Validator
     {
         if (! $required && blank($input)) {
             return $this;
@@ -49,10 +49,10 @@ class Validator
     /**
      * Проверяет число на вхождение в диапазон
      *
-     * @param int   $input
-     * @param int   $min
-     * @param int   $max
-     * @param mixed $label
+     * @param int|float $input
+     * @param int|float $min
+     * @param int|float $max
+     * @param mixed     $label
      *
      * @return Validator
      */
@@ -68,9 +68,9 @@ class Validator
     /**
      * Проверяет на больше чем число
      *
-     * @param int   $input
-     * @param int   $input2
-     * @param mixed $label
+     * @param int|float $input
+     * @param int|float $input2
+     * @param mixed     $label
      *
      * @return Validator
      */
@@ -86,9 +86,9 @@ class Validator
     /**
      * Проверяет на больше чем или равно
      *
-     * @param int   $input
-     * @param int   $input2
-     * @param mixed $label
+     * @param int|float $input
+     * @param int|float $input2
+     * @param mixed     $label
      *
      * @return Validator
      */
@@ -104,9 +104,9 @@ class Validator
     /**
      * Проверяет на меньше чем число
      *
-     * @param int   $input
-     * @param int   $input2
-     * @param mixed $label
+     * @param int|float $input
+     * @param int|float $input2
+     * @param mixed     $label
      *
      * @return Validator
      */
@@ -122,9 +122,9 @@ class Validator
     /**
      * Проверяет на меньше чем или равно
      *
-     * @param int   $input
-     * @param int   $input2
-     * @param mixed $label
+     * @param int|float $input
+     * @param int|float $input2
+     * @param mixed     $label
      *
      * @return Validator
      */
@@ -250,7 +250,7 @@ class Validator
      *
      * @return Validator
      */
-    public function in($input, $haystack, $label): Validator
+    public function in($input, array $haystack, $label): Validator
     {
         if (! is_array($haystack) || ! in_array($input, $haystack, true)) {
             $this->addError($label);
@@ -268,7 +268,7 @@ class Validator
      *
      * @return Validator
      */
-    public function notIn($input, $haystack, $label): Validator
+    public function notIn($input, array $haystack, $label): Validator
     {
         if (! is_array($haystack) || in_array($input, $haystack, true)) {
             $this->addError($label);
@@ -280,14 +280,14 @@ class Validator
     /**
      * Проверяет по регулярному выражению
      *
-     * @param string $input
+     * @param mixed  $input
      * @param string $pattern
      * @param mixed  $label
      * @param bool   $required
      *
      * @return Validator
      */
-    public function regex($input, $pattern, $label, $required = true): Validator
+    public function regex($input, string $pattern, $label, bool $required = true): Validator
     {
         if (! $required && blank($input)) {
             return $this;
@@ -309,7 +309,7 @@ class Validator
      *
      * @return Validator
      */
-    public function float($input, $label, $required = true): Validator
+    public function float(float $input, $label, bool $required = true): Validator
     {
         if (! $required && blank($input)) {
             return $this;
@@ -331,7 +331,7 @@ class Validator
      *
      * @return Validator
      */
-    public function url($input, $label, $required = true): Validator
+    public function url(string $input, $label, bool $required = true): Validator
     {
         if (! $required && blank($input)) {
             return $this;
@@ -353,7 +353,7 @@ class Validator
      *
      * @return Validator
      */
-    public function email($input, $label, $required = true): Validator
+    public function email(string $input, $label, bool $required = true): Validator
     {
         if (! $required && blank($input)) {
             return $this;
@@ -375,7 +375,7 @@ class Validator
      *
      * @return Validator
      */
-    public function ip($input, $label, $required = true): Validator
+    public function ip(string $input, $label, bool $required = true): Validator
     {
         if (! $required && blank($input)) {
             return $this;
@@ -398,7 +398,7 @@ class Validator
      *
      * @return Validator
      */
-    public function file($input, $rules, $label, $required = true): Validator
+    public function file(?UploadedFile $input, array $rules, $label, bool $required = true): Validator
     {
         if (! $required && blank($input)) {
             return $this;
@@ -454,8 +454,8 @@ class Validator
     /**
      * Добавляет ошибки в массив
      *
-     * @param mixed  $error       текст ошибки
-     * @param string $description
+     * @param mixed       $error       текст ошибки
+     * @param string|null $description
      *
      * @return void
      */

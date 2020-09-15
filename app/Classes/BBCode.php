@@ -160,11 +160,11 @@ class BBCode
     /**
      * Очищает текст от BB-кодов
      *
-     * @param  string $source неочищенный текст
+     * @param string $source неочищенный текст
      *
      * @return string очищенный текст
      */
-    public function clear($source): string
+    public function clear(string $source): string
     {
         return preg_replace('/\[(.*?)\]/', '', $source);
     }
@@ -172,11 +172,11 @@ class BBCode
     /**
      * Обрабатывает ссылки
      *
-     * @param  array  $match ссылка
+     * @param array $match ссылка
      *
      * @return string обработанная ссылка
      */
-    public function urlReplace($match): string
+    public function urlReplace(array $match): string
     {
         $name = $match[3] ?? $match[1];
 
@@ -199,7 +199,7 @@ class BBCode
      *
      * @return string обработанный список
      */
-    public function listReplace($match): string
+    public function listReplace(array $match): string
     {
         $li = preg_split('/<br>\R/', $match[1], -1, PREG_SPLIT_NO_EMPTY);
 
@@ -220,11 +220,11 @@ class BBCode
     /**
      * Обрабатывает размер текста
      *
-     * @param callable $match массив элементов
+     * @param array $match массив элементов
      *
      * @return string обработанный текст
      */
-    public function fontSize($match): string
+    public function fontSize(array $match): string
     {
         $sizes = [1 => 'x-small', 2 => 'small', 3 => 'medium', 4 => 'large', 5 => 'x-large'];
 
@@ -234,11 +234,11 @@ class BBCode
     /**
      * Подсвечивает код
      *
-     * @param callable $match массив элементов
+     * @param array $match массив элементов
      *
      * @return string текст с подсветкой
      */
-    public function highlightCode($match): string
+    public function highlightCode(array $match): string
     {
         //Чтобы bb-код, стикеры и логины не работали внутри тега [code]
         $match[1] = strtr($match[1], [':' => '&#58;', '[' => '&#91;', '@' => '&#64;']);
@@ -249,11 +249,11 @@ class BBCode
     /**
      * Скрывает текст под спойлер
      *
-     * @param callable $match массив элементов
+     * @param array $match массив элементов
      *
      * @return string код спойлера
      */
-    public function spoilerText($match): string
+    public function spoilerText(array $match): string
     {
         $title = empty($match[2]) ? __('main.expand_view') : $match[1];
         $text  = empty($match[2]) ? $match[1] : $match[2];
@@ -267,11 +267,11 @@ class BBCode
     /**
      * Скрывате текст от неавторизованных пользователей
      *
-     * @param callable $match массив элементов
+     * @param array $match массив элементов
      *
      * @return string скрытый код
      */
-    public function hiddenText($match): string
+    public function hiddenText(array $match): string
     {
         return '<div class="hiding">
                 <span class="font-weight-bold">' . __('main.hidden_content') . ':</span> ' .
@@ -301,9 +301,10 @@ class BBCode
                 $stickers = array_column($stickers, 'name', 'code');
 
                 return array_map(
-                    static function($sticker) {
+                    static function ($sticker) {
                         return '<img src="' . $sticker . '" alt="' . basename($sticker) . '">';
-                    }, $stickers
+                    },
+                    $stickers
                 );
             });
         }
@@ -320,7 +321,7 @@ class BBCode
      *
      * @return void
      */
-    public function setParser($name, $pattern, $replace): void
+    public function setParser(string $name, string $pattern, string $replace): void
     {
         self::$parsers[$name] = [
             'pattern' => $pattern,

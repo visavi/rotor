@@ -18,7 +18,7 @@ class Mix
      * @return string
      * @throws Exception
      */
-    public function __invoke($path, $manifestDirectory = '')
+    public function __invoke(string $path, string $manifestDirectory = '')
     {
         static $manifests = [];
 

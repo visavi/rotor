@@ -15,7 +15,7 @@ class Calendar
      *
      * @return string календарь
      */
-    public function getCalendar($time = SITETIME): string
+    public function getCalendar(int $time = SITETIME): string
     {
         [$date['day'], $date['month'], $date['year']] = explode('.', dateFixed($time, 'j.n.Y'));
         $date       = array_map('intval', $date);
@@ -48,7 +48,7 @@ class Calendar
      *
      * @return array сформированный массив
      */
-    protected function makeCalendar($month, $year): array
+    protected function makeCalendar(int $month, int $year): array
     {
         $date = date('w', mktime(0, 0, 0, $month, 1, $year));
 

@@ -1592,19 +1592,19 @@ function abort(int $code, $message = null)
     $protocol = server('SERVER_PROTOCOL');
     $referer  = server('HTTP_REFERER');
 
-   switch ($code) {
-       case 403:
-           header($protocol . ' 403 Forbidden');
-           break;
-       case 404:
-           header($protocol . ' 404 Not Found');
-           break;
-       case 405:
-           header($protocol . ' 405 Method Not Allowed');
-           break;
-       default:
-           header($protocol . ' 400 Bad Request');
-   }
+    switch ($code) {
+        case 403:
+            header($protocol . ' 403 Forbidden');
+            break;
+        case 404:
+            header($protocol . ' 404 Not Found');
+            break;
+        case 405:
+            header($protocol . ' 405 Method Not Allowed');
+            break;
+        default:
+            header($protocol . ' 400 Bad Request');
+    }
 
     saveErrorLog($code);
 
@@ -2370,7 +2370,8 @@ function config(string $key, $default = null)
 
             if (config('APP_ENV') === 'production') {
                 file_put_contents(
-                    $configPath, '<?php return ' . var_export($config, true) . ';'
+                    $configPath,
+                    '<?php return ' . var_export($config, true) . ';'
                 );
             }
         }

@@ -54,7 +54,7 @@ class Application
      * @param array $router
      * @return mixed
      */
-    private function call($router)
+    private function call(array $router)
     {
         [, $controller, $params] = $router;
 
@@ -112,8 +112,8 @@ class Application
     {
         $user = getUser();
 
-        $userSets['language'] = $user ? $user->language : defaultSetting('language');
-        $userSets['themes'] = $user ? $user->themes : defaultSetting('themes');
+        $userSets['language'] = $user->language ?? defaultSetting('language');
+        $userSets['themes'] = $user->themes ?? defaultSetting('themes');
 
         if (isset($_SESSION['language'])) {
             $userSets['language'] = $_SESSION['language'];
