@@ -11,7 +11,7 @@ use Phinx\Console\PhinxApplication;
 use Phinx\Wrapper\TextWrapper;
 use Illuminate\Database\Capsule\Manager as DB;
 
-Class AdminController extends BaseController
+class AdminController extends BaseController
 {
     /**
      * AdminController constructor.

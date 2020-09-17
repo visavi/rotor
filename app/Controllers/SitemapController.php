@@ -173,7 +173,6 @@ class SitemapController extends BaseController
 
         $locs = [];
         foreach ($downs as $down) {
-
             $changeTime = ($down->last_time > $down->created_at) ? $down->last_time : $down->created_at;
 
             // Обновлено менее 1 месяца

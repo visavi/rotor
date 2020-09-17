@@ -194,7 +194,7 @@ class VoteController extends AdminController
 
         if (empty($closed)) {
             redirect('/admin/votes');
-        }  else {
+        } else {
             redirect('/admin/votes/history');
         }
     }

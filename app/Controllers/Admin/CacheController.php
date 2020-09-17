@@ -67,7 +67,7 @@ class CacheController extends AdminController
 
                 if ($images) {
                     foreach ($images as $image) {
-                        unlink ($image);
+                        unlink($image);
                     }
                 }
             }

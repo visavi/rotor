@@ -46,8 +46,7 @@ class AdminAdvertController extends AdminController
                         'user_id'    => getUser('id'),
                         'created_at' => SITETIME,
                         'deleted_at' => SITETIME + 7 * 86400,
-                    ]
-                );
+                    ]);
 
                 clearCache('adminAdverts');
                 setFlash('success', __('main.record_saved_success'));

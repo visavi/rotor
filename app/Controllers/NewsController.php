@@ -124,7 +124,6 @@ class NewsController extends BaseController
                 }
 
                 redirect('/news/end/' . $news->id . '');
-
             } else {
                 setInput($request->all());
                 setFlash('danger', $validator->getErrors());

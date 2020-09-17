@@ -113,4 +113,3 @@ class ActiveController extends BaseController
         return json_encode(['status' => 'error', 'message' => current($validator->getErrors())]);
     }
 }
-

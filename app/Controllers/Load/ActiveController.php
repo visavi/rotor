@@ -86,4 +86,3 @@ class ActiveController extends BaseController
         return view('loads/active_comments', compact('comments', 'user'));
     }
 }
-

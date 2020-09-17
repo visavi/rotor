@@ -78,7 +78,6 @@ class NoticeController extends AdminController
 
                 setFlash('success', __('admin.notices.notice_success_saved'));
                 redirect('/admin/notices/edit/' . $notice->id);
-
             } else {
                 setInput($request->all());
                 setFlash('danger', $validator->getErrors());
@@ -126,7 +125,6 @@ class NoticeController extends AdminController
 
                 setFlash('success', __('admin.notices.notice_success_saved'));
                 redirect('/admin/notices/edit/' . $notice->id);
-
             } else {
                 setInput($request->all());
                 setFlash('danger', $validator->getErrors());

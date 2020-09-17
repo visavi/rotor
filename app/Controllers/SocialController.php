@@ -41,7 +41,8 @@ class SocialController extends BaseController
     {
         if ($request->isMethod('post')) {
             $curl    = new Curl();
-            $network = $curl->get('//ulogin.ru/token.php',
+            $network = $curl->get(
+                '//ulogin.ru/token.php',
                 [
                     'token' => $request->input('token'),
                     'host'  => $_SERVER['HTTP_HOST']
@@ -64,7 +65,7 @@ class SocialController extends BaseController
 
                     setFlash('success', __('socials.success_binding'));
                 } else {
-                    setFlash('danger',  __('socials.already_binding'));
+                    setFlash('danger', __('socials.already_binding'));
                 }
 
                 redirect('/socials');

@@ -541,7 +541,6 @@ class DownController extends BaseController
             $viewExt      = Down::getViewExt();
 
             $documents = paginate($getDocuments, setting('ziplist'));
-
         } catch (Exception $e) {
             abort('default', __('loads.archive_not_open'));
         }

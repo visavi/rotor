@@ -40,7 +40,6 @@ class SearchController extends BaseController
             }
 
             return view('forums/search', compact('forums', 'fid'));
-
         }
 
         $find = str_replace(['@', '+', '-', '*', '~', '<', '>', '(', ')', '"', "'"], '', $find);
@@ -51,7 +50,6 @@ class SearchController extends BaseController
 
         $strlen = utfStrlen($find);
         if ($strlen >= 3 && $strlen <= 50) {
-
             $findmewords = explode(' ', utfLower($find));
 
             $arrfind = [];
@@ -155,7 +153,6 @@ class SearchController extends BaseController
                 setFlash('danger', __('main.empty_found'));
                 redirect('/forums/search');
             }
-
         } else {
             setInput($request->all());
             setFlash('danger', ['find' => __('main.request_requirements')]);
@@ -163,4 +160,3 @@ class SearchController extends BaseController
         }
     }
 }
-

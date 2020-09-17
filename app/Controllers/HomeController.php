@@ -67,8 +67,7 @@ class HomeController extends BaseController
             redirect('/');
         }
 
-        if (
-            ! $ban->user_id
+        if (! $ban->user_id
             && $ban->created_at < strtotime('-1 minute', SITETIME)
             && $request->isMethod('post')
             && captchaVerify()
@@ -97,7 +96,7 @@ class HomeController extends BaseController
         $phrase = $phrase->build(setting('captcha_maxlength'), setting('captcha_symbols'));
 
         $builder = new CaptchaBuilder($phrase);
-        $builder->setBackgroundColor(mt_rand(200,255), mt_rand(200,255), mt_rand(200,255));
+        $builder->setBackgroundColor(mt_rand(200, 255), mt_rand(200, 255), mt_rand(200, 255));
         $builder->setMaxOffset(setting('captcha_offset'));
         $builder->setMaxAngle(setting('captcha_angle'));
         $builder->setDistortion(setting('captcha_distortion'));

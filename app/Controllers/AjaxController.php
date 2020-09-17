@@ -54,7 +54,7 @@ class AjaxController extends BaseController
         $type  = $request->input('type');
         $page  = $request->input('page');
 
-        switch ($type):
+        switch ($type) :
             case Guestbook::$morphName:
                 $model = Guestbook::query()->find($id);
                 $path = '/guestbook?page='.$page;

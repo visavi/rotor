@@ -71,7 +71,6 @@ class AdvertController extends BaseController
         }
 
         if ($request->isMethod('post')) {
-
             $site  = $request->input('site');
             $name  = $request->input('name');
             $color = $request->input('color');

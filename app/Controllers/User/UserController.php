@@ -73,7 +73,6 @@ class UserController extends BaseController
 
                 setFlash('success', __('users.note_saved_success'));
                 redirect('/users/'.$user->login);
-
             } else {
                 setInput($request->all());
                 setFlash('danger', $validator->getErrors());
@@ -248,24 +247,24 @@ class UserController extends BaseController
 
         if ($request->isMethod('post')) {
             if ($request->has('login') && $request->has('pass')) {
-               if (captchaVerify()) {
-                   $return   = $request->input('return');
-                   $login    = utfLower($request->input('login'));
-                   $pass     = trim($request->input('pass'));
-                   $remember = $request->boolean('remember');
+                if (captchaVerify()) {
+                    $return   = $request->input('return');
+                    $login    = utfLower($request->input('login'));
+                    $pass     = trim($request->input('pass'));
+                    $remember = $request->boolean('remember');
 
-                   /** @var User $user */
-                   if ($user = User::auth($login, $pass, $remember)) {
-                       setFlash('success', __('users.welcome', ['login' => $user->getName()]));
-                       redirect($return ?? '/');
-                   }
+                    /** @var User $user */
+                    if ($user = User::auth($login, $pass, $remember)) {
+                        setFlash('success', __('users.welcome', ['login' => $user->getName()]));
+                        redirect($return ?? '/');
+                    }
 
-                   setInput($request->all());
-                   setFlash('danger', __('users.incorrect_login_or_password'));
-               } else {
-                   setInput($request->all());
-                   setFlash('danger', __('validator.captcha'));
-               }
+                    setInput($request->all());
+                    setFlash('danger', __('users.incorrect_login_or_password'));
+                } else {
+                    setInput($request->all());
+                    setFlash('danger', __('validator.captcha'));
+                }
             }
 
             if ($request->has('token')) {
@@ -347,7 +346,6 @@ class UserController extends BaseController
 
                 setFlash('success', __('users.profile_success_changed'));
                 redirect('/profile');
-
             } else {
                 setInput($request->all());
                 setFlash('danger', $validator->getErrors());
@@ -435,7 +433,6 @@ class UserController extends BaseController
 
                 setFlash('success', __('users.account_success_activated'));
                 redirect('/');
-
             } else {
                 setFlash('danger', __('users.confirm_code_invalid'));
             }

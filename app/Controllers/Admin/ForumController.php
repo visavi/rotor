@@ -354,7 +354,7 @@ class ForumController extends AdminController
         }
 
         if ($request->input('token') === $_SESSION['token']) {
-            switch ($request->input('type')):
+            switch ($request->input('type')) :
                 case 'closed':
                     $topic->update(['closed' => 1]);
 
@@ -391,7 +391,6 @@ class ForumController extends AdminController
                 default:
                     setFlash('danger', __('main.action_not_selected'));
             endswitch;
-
         } else {
             setFlash('danger', __('validator.token'));
         }
@@ -428,7 +427,7 @@ class ForumController extends AdminController
                 return $post->files->isNotEmpty();
             });
 
-            $filtered->each(static function(Post $post) {
+            $filtered->each(static function (Post $post) {
                 $post->delete();
             });
 
@@ -599,7 +598,7 @@ class ForumController extends AdminController
                 ->whereIn('id', $del)
                 ->get();
 
-            $posts->each(static function(Post $post) {
+            $posts->each(static function (Post $post) {
                 $post->delete();
             });
 

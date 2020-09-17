@@ -39,19 +39,16 @@ class ChatController extends AdminController
                 /** @var Chat $post */
                 $post = Chat::query()->orderBy('created_at')->first();
 
-                if (
-                    $post
+                if ($post
                     && $post->created_at + 1800 > SITETIME
                     && $user->id === $post->user_id
                     && (utfStrlen($msg) + utfStrlen($post->text) <= 1500)
                 ) {
-
                     $newpost = $post->text . PHP_EOL . PHP_EOL . '[i][size=1]' . __('admin.chat.post_added_after', ['sec' => makeTime(SITETIME - $post->created_at)]) . '[/size][/i]' . PHP_EOL . $msg;
 
                     $post->update([
                         'text' => $newpost,
                     ]);
-
                 } else {
                     Chat::query()->create([
                         'user_id'    => $user->id,
@@ -65,7 +62,7 @@ class ChatController extends AdminController
                 sendNotify($msg, '/admin/chats', __('index.admin_chat'));
 
                 setFlash('success', __('main.message_added_success'));
-                redirect ('/admin/chats');
+                redirect('/admin/chats');
             } else {
                 setInput($request->all());
                 setFlash('danger', $validator->getErrors());

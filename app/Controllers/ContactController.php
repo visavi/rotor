@@ -65,7 +65,6 @@ class ContactController extends BaseController
 
                 setFlash('success', __('contacts.success_added'));
                 redirect('/contacts?page='.$page);
-
             } else {
                 setInput($request->all());
                 setFlash('danger', $validator->getErrors());

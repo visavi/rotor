@@ -95,7 +95,6 @@ class ArticleController extends AdminController
             ->get();
 
         if ($request->isMethod('post')) {
-
             $parent = int($request->input('parent'));
             $name   = $request->input('name');
             $sort   = int($request->input('sort'));
@@ -302,7 +301,7 @@ class ArticleController extends AdminController
             if ($validator->isValid()) {
                 // Обновление счетчиков
                 $category->increment('count_articles');
-                Category::query()->where('id', $article->category_id)->decrement('count_articles');
+                Blog::query()->where('id', $article->category_id)->decrement('count_articles');
 
                 $article->update([
                     'category_id' => $category->id,

@@ -29,8 +29,7 @@ class FileController extends AdminController
         $this->file = ltrim(check($request->input('file')), '/');
         $this->path = rtrim(check($request->input('path')), '/');
 
-        if (
-            empty($this->path) ||
+        if (empty($this->path) ||
             ! file_exists(RESOURCES . '/views/' . $this->path) ||
             ! is_dir(RESOURCES . '/views/' . $this->path) ||
             Str::contains($this->path, '.') ||
@@ -82,8 +81,7 @@ class FileController extends AdminController
         $file     = $path ? '/' . $this->file : $this->file;
         $writable = is_writable(RESOURCES . '/views/' . $path . $file . '.blade.php');
 
-        if (
-            ($this->path && ! preg_match('#^([a-z0-9_\-/]+|)$#', $this->path))
+        if (($this->path && ! preg_match('#^([a-z0-9_\-/]+|)$#', $this->path))
             || ! preg_match('#^[a-z0-9_\-/]+$#', $this->file)
         ) {
             abort(404, __('admin.files.file_invalid'));
@@ -103,7 +101,7 @@ class FileController extends AdminController
                 file_put_contents(RESOURCES . '/views/' . $this->path . $file . '.blade.php', $msg);
 
                 setFlash('success', __('admin.files.file_success_saved'));
-                redirect ('/admin/files/edit?path=' . $this->path . '&file=' . $this->file);
+                redirect('/admin/files/edit?path=' . $this->path . '&file=' . $this->file);
             } else {
                 setInput($request->all());
                 setFlash('danger', $validator->getErrors());
@@ -156,7 +154,6 @@ class FileController extends AdminController
                     setFlash('success', __('admin.files.file_success_created'));
                     redirect('/admin/files/edit?path=' . $this->path . '&file=' . $filename);
                 } else {
-
                     $old = umask(0);
                     mkdir(RESOURCES . '/views/' . $this->path . $dirName, 0777, true);
                     umask($old);

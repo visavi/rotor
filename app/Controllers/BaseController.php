@@ -11,7 +11,7 @@ use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Lang;
 use Illuminate\Support\Facades\View;
 
-Class BaseController
+class BaseController
 {
     public function __construct()
     {

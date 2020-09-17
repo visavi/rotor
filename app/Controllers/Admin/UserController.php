@@ -157,7 +157,6 @@ class UserController extends AdminController
                 clearCache('statuses');
                 setFlash('success', __('users.user_success_changed') . $text);
                 redirect('/admin/users/edit?user=' . $user->login);
-
             } else {
                 setInput($request->all());
                 setFlash('danger', $validator->getErrors());

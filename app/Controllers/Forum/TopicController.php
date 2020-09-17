@@ -91,7 +91,6 @@ class TopicController extends BaseController
                 ->first();
 
             if ($vote->answers->isNotEmpty()) {
-
                 $results = Arr::pluck($vote->answers, 'result', 'answer');
                 $max = max($results);
 
@@ -151,7 +150,7 @@ class TopicController extends BaseController
         if ($files && $validator->isValid()) {
             $validator
                 ->lte(count($files), setting('maxfiles'), ['files' => __('validator.files_max', ['max' => setting('maxfiles')])])
-                ->gte($user->point, setting('forumloadpoints'),  __('validator.active_upload'));
+                ->gte($user->point, setting('forumloadpoints'), __('validator.active_upload'));
 
             $rules = [
                 'maxsize'    => setting('forumloadsize'),
@@ -166,19 +165,16 @@ class TopicController extends BaseController
         if ($validator->isValid()) {
             $msg = antimat($msg);
 
-            if (
-                $post
+            if ($post
                 && $post->created_at + 600 > SITETIME
                 && $user->id === $post->user_id
                 && (utfStrlen($msg) + utfStrlen($post->text) <= setting('forumtextlength'))
                 && count($files) + $post->files->count() <= setting('maxfiles')
             ) {
-
                 $newpost = $post->text . PHP_EOL . PHP_EOL . '[i][size=1]' . __('forums.post_added_after', ['sec' => makeTime(SITETIME - $post->created_at)]) . '[/size][/i]' . PHP_EOL . $msg;
 
                 $post->update(['text' => $newpost]);
             } else {
-
                 $post = Post::query()->create([
                     'topic_id'   => $topic->id,
                     'user_id'    => $user->id,
@@ -221,7 +217,6 @@ class TopicController extends BaseController
             }
 
             setFlash('success', __('main.message_added_success'));
-
         } else {
             setInput($request->all());
             setFlash('danger', $validator->getErrors());
@@ -317,7 +312,6 @@ class TopicController extends BaseController
 
             $vote = Vote::query()->where('topic_id', $topic->id)->first();
             if ($vote) {
-
                 $vote->closed = 1;
                 $vote->save();
 
@@ -443,7 +437,6 @@ class TopicController extends BaseController
 
                 setFlash('success', __('forums.topic_success_changed'));
                 redirect('/topics/' . $topic->id);
-
             } else {
                 setInput($request->all());
                 setFlash('danger', $validator->getErrors());

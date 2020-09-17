@@ -51,7 +51,6 @@ class AntimatController extends AdminController
 
                 setFlash('success', __('main.record_added_success'));
                 redirect('/admin/antimat');
-
             } else {
                 setInput($request->all());
                 setFlash('danger', $validator->getErrors());

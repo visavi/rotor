@@ -460,7 +460,6 @@ class LoadController extends AdminController
 
                 $text = textNotice('down_publish', ['url' => '/downs/' . $down->id, 'title' => $down->title]);
                 $down->user->sendMessage(null, $text);
-
             } else {
                 $status = __('loads.down_success_unpublished');
                 $down->category->decrement('count_downs');

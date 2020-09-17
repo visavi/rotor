@@ -21,8 +21,7 @@ class PageController extends BaseController
      */
     public function index(string $page = 'index'): string
     {
-        if (
-            $page === 'menu'  ||
+        if ($page === 'menu'  ||
             ! preg_match('|^[a-z0-9_\-]+$|i', $page) ||
             ! file_exists(RESOURCES . '/views/main/' . $page . '.blade.php')
         ) {

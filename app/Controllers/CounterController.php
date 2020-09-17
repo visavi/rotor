@@ -28,7 +28,7 @@ class CounterController extends BaseController
         for ($i = 0; $i < 30; $i++) {
             $curDate = date('Y-m-d 00:00:00', strtotime("-$i day", SITETIME));
 
-            $cnt = $counters->first(static function($item) use ($curDate) {
+            $cnt = $counters->first(static function ($item) use ($curDate) {
                 return $item->period === $curDate;
             });
 
@@ -46,7 +46,7 @@ class CounterController extends BaseController
         for ($i = 0; $i < 24; $i++) {
             $curHour = date('Y-m-d H:00:00', strtotime("-$i hour", SITETIME));
 
-            $cnt = $counters->first(static function($item) use ($curHour) {
+            $cnt = $counters->first(static function ($item) use ($curHour) {
                 return $item->period === $curHour;
             });
 

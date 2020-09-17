@@ -148,7 +148,6 @@ class SearchController extends BaseController
                 setFlash('danger', __('main.empty_found'));
                 redirect('/loads/search');
             }
-
         } else {
             setInput($request->all());
             setFlash('danger', ['find' => __('main.request_requirements')]);
@@ -156,4 +155,3 @@ class SearchController extends BaseController
         }
     }
 }
-

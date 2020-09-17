@@ -50,11 +50,11 @@ use Symfony\Component\Console\Output\NullOutput;
 /**
  * Форматирует вывод времени из секунд
  *
- * @param  string $time секунды
+ * @param int $time секунды
  *
  * @return string форматированный вывод
  */
-function makeTime(string $time)
+function makeTime(int $time)
 {
     $format = $time < 3600 ? 'i:s' : 'H:i:s';
 
@@ -887,7 +887,8 @@ function icons(string $ext)
         case 'pdf':
             $ico = 'file-pdf';
             break;
-        default: $ico = 'file';
+        default:
+            $ico = 'file';
     }
     return '<i class="far fa-' . $ico . '"></i>';
 }
@@ -1582,12 +1583,12 @@ function choice(string $key, $number, array $replace = [], $locale = null)
 /**
  * Сохраняет страницы с ошибками
  *
- * @param int         $code    код ошибки
+ * @param int|string  $code    код ошибки
  * @param string|null $message текст ошибки
  *
  * @return string сформированная страница с ошибкой
  */
-function abort(int $code, $message = null)
+function abort($code, $message = null)
 {
     $protocol = server('SERVER_PROTOCOL');
     $referer  = server('HTTP_REFERER');
@@ -1738,7 +1739,7 @@ function getInput(string $name, $default = null)
  *
  * @return string CSS класс ошибки
  */
-function hasError(string  $field)
+function hasError(string $field)
 {
     $isValid = isset($_SESSION['flash']['danger']) ? ' is-valid' : '';
 
@@ -1752,7 +1753,7 @@ function hasError(string  $field)
  *
  * @return string блоки ошибки
  */
-function textError($field)
+function textError(string $field)
 {
     return $_SESSION['flash']['danger'][$field] ?? null;
 }

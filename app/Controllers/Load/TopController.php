@@ -42,4 +42,3 @@ class TopController extends BaseController
         return view('loads/top', compact('downs', 'order'));
     }
 }
-

@@ -17,7 +17,7 @@ class BoardController extends AdminController
     /**
      * Главная страница
      *
-     * @param int $id
+     * @param int|null $id
      *
      * @return string
      */
@@ -150,7 +150,6 @@ class BoardController extends AdminController
             }
 
             if ($validator->isValid()) {
-
                 $board->update([
                     'parent_id' => $parent,
                     'name'      => $name,
@@ -200,7 +199,6 @@ class BoardController extends AdminController
         }
 
         if ($validator->isValid()) {
-
             $board->delete();
 
             setFlash('success', __('boards.category_success_deleted'));
