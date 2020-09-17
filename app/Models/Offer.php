@@ -143,5 +143,4 @@ class Offer extends BaseModel
 
         return $status;
     }
-
 }

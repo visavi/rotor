@@ -23,15 +23,15 @@ class Validator
     /**
      * Проверяет длину строки
      *
-     * @param string $input
-     * @param int    $min
-     * @param int    $max
-     * @param mixed  $label
-     * @param bool   $required
+     * @param mixed $input
+     * @param int   $min
+     * @param int   $max
+     * @param mixed $label
+     * @param bool  $required
      *
      * @return Validator
      */
-    public function length(string $input, int $min, int $max, $label, bool $required = true): Validator
+    public function length($input, int $min, int $max, $label, bool $required = true): Validator
     {
         if (! $required && blank($input)) {
             return $this;
@@ -303,13 +303,13 @@ class Validator
     /**
      * Check float
      *
-     * @param float $input
+     * @param mixed $input
      * @param mixed $label
      * @param bool  $required
      *
      * @return Validator
      */
-    public function float(float $input, $label, bool $required = true): Validator
+    public function float($input, $label, bool $required = true): Validator
     {
         if (! $required && blank($input)) {
             return $this;
@@ -325,13 +325,13 @@ class Validator
     /**
      * Проверяет адрес сайта
      *
-     * @param string $input
-     * @param mixed  $label
-     * @param bool   $required
+     * @param mixed $input
+     * @param mixed $label
+     * @param bool  $required
      *
      * @return Validator
      */
-    public function url(string $input, $label, bool $required = true): Validator
+    public function url($input, $label, bool $required = true): Validator
     {
         if (! $required && blank($input)) {
             return $this;
@@ -347,13 +347,13 @@ class Validator
     /**
      * Проверяет email
      *
-     * @param string $input
-     * @param mixed  $label
-     * @param bool   $required
+     * @param mixed $input
+     * @param mixed $label
+     * @param bool  $required
      *
      * @return Validator
      */
-    public function email(string $input, $label, bool $required = true): Validator
+    public function email($input, $label, bool $required = true): Validator
     {
         if (! $required && blank($input)) {
             return $this;
@@ -369,13 +369,13 @@ class Validator
     /**
      * Check IP address
      *
-     * @param string $input
-     * @param mixed  $label
-     * @param bool   $required
+     * @param mixed $input
+     * @param mixed $label
+     * @param bool  $required
      *
      * @return Validator
      */
-    public function ip(string $input, $label, bool $required = true): Validator
+    public function ip($input, $label, bool $required = true): Validator
     {
         if (! $required && blank($input)) {
             return $this;

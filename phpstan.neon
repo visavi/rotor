@@ -5,5 +5,6 @@ parameters:
         - Illuminate\Http\Request
     paths:
         - app
-    bootstrap: app/bootstrap.php
+    bootstrapFiles:
+        - app/bootstrap.php
     reportUnmatchedIgnoredErrors: false

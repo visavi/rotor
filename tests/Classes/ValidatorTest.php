@@ -430,7 +430,6 @@ class ValidatorTest extends \Tests\TestCase
         $image  = UploadedFile::fake()->image('avatar.jpg');
         $image2 = UploadedFile::fake()->image('avatar.jpg', 100, 100);
         $image3 = UploadedFile::fake()->image('avatar.tiff');
-        $image4 = new StdClass();
 
         $rules = [
             'maxweight' => 50,
@@ -464,10 +463,6 @@ class ValidatorTest extends \Tests\TestCase
 
         $this->validator->clearErrors();
         $this->validator->file($image, $rules, 'error');
-        self::assertFalse($this->validator->isValid());
-
-        $this->validator->clearErrors();
-        $this->validator->file($image4, $rules, 'error');
         self::assertFalse($this->validator->isValid());
     }
 }

@@ -206,7 +206,6 @@ class Down extends BaseModel
 
         // Обработка видео
         if ($isVideo && config('FFMPEG_ENABLED')) {
-
             $ffconfig = [
                 'ffmpeg.binaries'  => config('FFMPEG_PATH'),
                 'ffprobe.binaries' => config('FFPROBE_PATH'),
@@ -253,7 +252,7 @@ class Down extends BaseModel
      */
     public function delete(): ?bool
     {
-        $this->files->each(static function(File $file) {
+        $this->files->each(static function (File $file) {
             $file->delete();
         });
 

@@ -8,7 +8,6 @@ use App\Traits\UploadTrait;
 use Curl\Curl;
 use Exception;
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Query\JoinClause;
@@ -270,8 +269,7 @@ class User extends BaseModel
         $network = $curl->get('//ulogin.ru/token.php', [
                 'token' => $token,
                 'host'  => $_SERVER['HTTP_HOST']
-            ]
-        );
+            ]);
 
         if ($network && empty($network->error)) {
             $_SESSION['social'] = $network;
@@ -323,7 +321,8 @@ class User extends BaseModel
             case self::BANNED:
                 $status = __('main.banned');
                 break;
-            default: $status = setting('statusdef');
+            default:
+                $status = setting('statusdef');
         }
 
         return $status;
@@ -520,7 +519,7 @@ class User extends BaseModel
     {
         Message::query()->create([
             'user_id'    => $this->id,
-            'author_id'  => $author ? $author->id : 0,
+            'author_id'  => $author->id ?? 0,
             'text'       => $text,
             'created_at' => SITETIME,
         ]);
@@ -692,7 +691,7 @@ class User extends BaseModel
                 'brow'       => getBrowser(),
                 'created_at' => SITETIME,
                 'type'       => $type,
-           ]);
+            ]);
         }
 
         $this->increment('visits');
