@@ -50,11 +50,11 @@ class LangCompare extends AbstractCommand
         $langFiles = glob(RESOURCES . '/lang/' . $lang1 . '/*.php');
 
         foreach ($langFiles as $file) {
-            $array1 = require ($file);
+            $array1 = require($file);
 
             $otherFile = str_replace('/' . $lang1 . '/', '/' . $lang2 . '/', $file);
             if (file_exists($otherFile)) {
-                $array2 = require ($otherFile);
+                $array2 = require($otherFile);
 
                 $diff1 = $this->arrayDiffKeyRecursive($array1, $array2);
 
@@ -71,7 +71,6 @@ class LangCompare extends AbstractCommand
                 if (empty($diff1) && empty($diff2)) {
                     $output->writeln('<info>File "' . $lang1 . '/' . basename($otherFile) . '" identical!</info>');
                 }
-
             } else {
                 $output->writeln('<error>File "' . $lang2 . '/' . basename($otherFile) . '" not found!</error>');
             }

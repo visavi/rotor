@@ -15,7 +15,6 @@ class DeletePending extends Task
     public function run()
     {
         if (setting('regkeys')) {
-
             $users = User::query()
                 ->where('level', User::PENDED)
                 ->where('created_at', '<', strtotime('-1 day', SITETIME))

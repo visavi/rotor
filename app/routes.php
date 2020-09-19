@@ -1,15 +1,16 @@
 <?php
+declare(strict_types = 1);
 
 use App\Models\Module;
 use FastRoute\RouteCollector;
 
-return FastRoute\cachedDispatcher(static function(RouteCollector $r) {
+return FastRoute\cachedDispatcher(static function (RouteCollector $r) {
     $r->get('/', [App\Controllers\HomeController::class, 'index']);
     $r->get('/closed', [App\Controllers\HomeController::class, 'closed']);
-    $r->get('/search',[App\Controllers\HomeController::class, 'search']);
+    $r->get('/search', [App\Controllers\HomeController::class, 'search']);
 
     $r->get('/captcha', [App\Controllers\HomeController::class, 'captcha']);
-    $r->get('/language/{lang:[a-z]+}',[App\Controllers\HomeController::class, 'language']);
+    $r->get('/language/{lang:[a-z]+}', [App\Controllers\HomeController::class, 'language']);
     $r->addRoute(['GET', 'POST'], '/ipban', [App\Controllers\HomeController::class, 'ipban']);
 
     /* Карта сайта */

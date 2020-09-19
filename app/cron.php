@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types = 1);
+
 use Crontask\TaskList;
 
 require __DIR__ . '/bootstrap.php';

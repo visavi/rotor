@@ -19,4 +19,3 @@ class DeleteReaders extends Task
             ->delete();
     }
 }
-

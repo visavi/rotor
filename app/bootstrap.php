@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types = 1);
+
 use Illuminate\Cache\CacheManager;
 use Illuminate\Cache\MemcachedConnector;
 use Illuminate\Container\Container;
@@ -76,7 +78,7 @@ $app->singleton('events', static function ($app) {
     return new Dispatcher($app);
 });
 
-$app->singleton('request', static function() {
+$app->singleton('request', static function () {
     return request();
 });
 

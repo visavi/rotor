@@ -27,7 +27,6 @@ class AddSubscribers extends Task
 
         if ($deliveryUsers->isNotEmpty()) {
             foreach ($deliveryUsers as $user) {
-
                 $subject = $user->newprivat . ' непрочитанных сообщений (' . setting('title') . ')';
 
                 $message = 'Здравствуйте ' . $user->getName() . '!<br>У вас имеются непрочитанные сообщения (' . $user->newprivat . ' шт.) на сайте ' . setting('title') . '<br>Прочитать свои сообщения вы можете по адресу <a href="' . siteUrl(true) . '/messages">' . siteUrl(true) . '/messages</a><br><br><small>Если вы не хотите получать эти email, пожалуйста, <a href="'.siteUrl(true).'/unsubscribe?key='.$user->subscribe.'">откажитесь от подписки</a></small>';

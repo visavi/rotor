@@ -26,4 +26,3 @@ class DeleteLogs extends Task
             ->delete();
     }
 }
-

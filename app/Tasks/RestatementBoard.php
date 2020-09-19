@@ -16,4 +16,3 @@ class RestatementBoard extends Task
         restatement('boards');
     }
 }
-

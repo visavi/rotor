@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types = 1);
+
 if (config('APP_NEW') === false) {
     $migrations = BASEDIR . '/database/upgrades';
 } else {
