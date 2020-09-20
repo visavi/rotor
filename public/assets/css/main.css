@@ -1,7 +1,7 @@
 /* New theme */
 .section {
   background: #fff;
-  padding: 1rem;
+  padding: 15px;
   overflow: hidden;
 }
 
@@ -72,6 +72,10 @@
 }
 
 @media (max-width: 768px) {
+  .section {
+    padding: 10px;
+  }
+
   .user-avatar {
     width: 48px;
     height: 48px;
