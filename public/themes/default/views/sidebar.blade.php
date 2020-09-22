@@ -4,10 +4,10 @@
     @if ($user = getUser())
         <div class="app-sidebar__user" data-target="#collapseLogin" data-toggle="collapse">
             <div class="app-sidebar__user-avatar">
-                {!! $user->getAvatar() !!}
+                {!! $user->getAvatarImage() !!}
             </div>
             <div>
-                <p class="app-sidebar__user-name"><a href="/users/{{ $user->login }}">{{ $user->getName() }}</a></p>
+                <p class="app-sidebar__user-name">{{ $user->getName() }}</p>
                 <p class="app-sidebar__user-designation">{!! $user->getStatus() !!}</p>
             </div>
         </div>
