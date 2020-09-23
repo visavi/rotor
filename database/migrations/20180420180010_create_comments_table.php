@@ -13,7 +13,7 @@ class CreateCommentsTable extends AbstractMigration
             $table = $this->table('comments', ['engine' => config('DB_ENGINE'), 'collation' => config('DB_COLLATION')]);
             $table
                 ->addColumn('user_id', 'integer')
-                ->addColumn('relate_type', 'string', ['limit' => 50])
+                ->addColumn('relate_type', 'string', ['limit' => 10])
                 ->addColumn('relate_id', 'integer')
                 ->addColumn('text', 'text', ['null' => true])
                 ->addColumn('ip', 'varbinary', ['limit' => 16])

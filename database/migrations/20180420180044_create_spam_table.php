@@ -12,7 +12,7 @@ class CreateSpamTable extends AbstractMigration
         if (! $this->hasTable('spam')) {
             $table = $this->table('spam', ['engine' => config('DB_ENGINE'), 'collation' => config('DB_COLLATION')]);
             $table
-                ->addColumn('relate_type', 'string', ['limit' => 50])
+                ->addColumn('relate_type', 'string', ['limit' => 10])
                 ->addColumn('relate_id', 'integer')
                 ->addColumn('user_id', 'integer')
                 ->addColumn('created_at', 'integer')

@@ -12,7 +12,7 @@ class CreatePollingsTable extends AbstractMigration
         if (! $this->hasTable('pollings')) {
             $table = $this->table('pollings', ['engine' => config('DB_ENGINE'), 'collation' => config('DB_COLLATION')]);
             $table
-                ->addColumn('relate_type', 'string', ['limit' => 50])
+                ->addColumn('relate_type', 'string', ['limit' => 10])
                 ->addColumn('relate_id', 'integer')
                 ->addColumn('user_id', 'integer')
                 ->addColumn('vote', 'string', ['limit' => 1])

@@ -16,7 +16,7 @@ class CreateLoginTable extends AbstractMigration
                 ->addColumn('ip', 'varbinary', ['limit' => 16])
                 ->addColumn('brow', 'string', ['limit' => 25])
                 ->addColumn('created_at', 'integer')
-                ->addColumn('type', 'boolean', ['default' => 0])
+                ->addColumn('type', 'string', ['limit' => 10])
                 ->addIndex(['user_id', 'created_at'], ['name' => 'user_time'])
                 ->create();
         }
