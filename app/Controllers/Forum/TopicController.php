@@ -39,7 +39,7 @@ class TopicController extends BaseController
             ->where('topics.id', $id)
             ->leftJoin('bookmarks', static function (JoinClause $join) use ($user) {
                 $join->on('topics.id', 'bookmarks.topic_id')
-                    ->where('bookmarks.user_id', $user->id);
+                    ->where('bookmarks.user_id', $user->id ?? null);
             })
             ->with('forum.parent')
             ->first();
@@ -54,7 +54,7 @@ class TopicController extends BaseController
             ->leftJoin('pollings', static function (JoinClause $join) use ($user) {
                 $join->on('posts.id', 'pollings.relate_id')
                     ->where('pollings.relate_type', Post::$morphName)
-                    ->where('pollings.user_id', $user->id);
+                    ->where('pollings.user_id', $user->id ?? null);
             })
             ->with('files', 'user', 'editUser')
             ->orderBy('created_at')
@@ -76,7 +76,7 @@ class TopicController extends BaseController
         // Curators
         if ($topic->moderators) {
             $topic->curators = User::query()->whereIn('id', explode(',', $topic->moderators))->get();
-            $topic->isModer = $topic->curators->where('id', $user->id)->isNotEmpty();
+            $topic->isModer = $topic->curators->where('id', $user->id ?? null)->isNotEmpty();
         }
 
         // Visits
@@ -87,7 +87,7 @@ class TopicController extends BaseController
 
         if ($vote) {
             $vote->poll = $vote->pollings()
-                ->where('user_id', $user->id)
+                ->where('user_id', $user->id ?? null)
                 ->first();
 
             if ($vote->answers->isNotEmpty()) {

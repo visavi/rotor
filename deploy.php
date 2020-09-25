@@ -43,6 +43,10 @@ set('rotor', static function () {
     return parse('{{bin/php}} {{release_path}}/rotor');
 });
 
+set('bin/npm', function () {
+    return run('which npm');
+});
+
 // Hosts
 host('hostname')
     ->roles('php')
@@ -72,9 +76,9 @@ task('database:migrate', static function () {
 
 desc('Npm install');
 task('deploy:npm', static function () {
-    run('cd {{release_path}} && npm ci');
-    run('cd {{release_path}} && npm run prod');
-})->onStage('production')->local();
+    run("cd {{release_path}} && {{bin/npm}} ci");
+    run('cd {{release_path}} && {{bin/npm}} run prod');
+})->onStage('production')->once();
 
 desc('Deploy your project');
 task('deploy', [

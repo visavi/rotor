@@ -7,7 +7,6 @@
     <link rel="image_src" href="/assets/img/images/icon.png">
     <link rel="stylesheet" type="text/css" href="{{ mix('/themes/mobile/dist/app.css') }}">
     @stack('styles')
-    <link rel="stylesheet" href="/themes/mobile/css/style.css">
     <link rel="alternate" href="/news/rss" title="RSS News" type="application/rss+xml">
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <meta name="description" content="@yield('description', setting('description'))">

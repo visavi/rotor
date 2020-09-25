@@ -128,13 +128,13 @@ function utfLower(string $str)
 /**
  * Обрезает строку
  *
- * @param string   $str    строка
+ * @param mixed    $str    строка
  * @param int      $start  начало позиции
  * @param int|null $length конец позиции
  *
  * @return string обрезанная строка
  */
-function utfSubstr(string $str, int $start, $length = null)
+function utfSubstr($str, int $start, $length = null)
 {
     if (! $length) {
         $length = utfStrlen($str);
