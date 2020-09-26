@@ -1301,12 +1301,12 @@ function formatShortNum(int $num)
 /**
  * Обрабатывает и уменьшает изображение
  *
- * @param string $path   путь к изображению
+ * @param string|null $path   путь к изображению
  * @param array  $params параметры изображения
  *
  * @return array обработанные параметры
  */
-function resizeProcess(string $path, array $params = [])
+function resizeProcess(?string $path, array $params = [])
 {
     if (empty($params['alt'])) {
         $params['alt'] = basename($path);
@@ -1363,9 +1363,9 @@ function resizeProcess(string $path, array $params = [])
  * @param string $path   путь к изображению
  * @param array  $params параметры изображения
  *
- * @return string уменьшенное изображение
+ * @return string|null уменьшенное изображение
  */
-function resizeImage(string $path, array $params = [])
+function resizeImage(?string $path, array $params = [])
 {
     $image = resizeProcess($path, $params);
 

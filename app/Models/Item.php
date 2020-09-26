@@ -97,7 +97,7 @@ class Item extends BaseModel
      * @param int $words
      * @return string
      */
-    public function shortText($words = 50): string
+    public function shortText(int $words = 50): string
     {
         if (strlen($this->text) > $words) {
             $this->text = bbCodeTruncate($this->text, $words);
