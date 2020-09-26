@@ -16,4 +16,6 @@ return [
     'success_sent'        => 'Email sent successfully!',
     'unread_messages'     => 'You have unread messages!',
     'success_deleted'     => 'Messages successfully deleted!',
+    'new_messages'        => 'New messages',
+    'all_messages'        => 'All messages',
 ];

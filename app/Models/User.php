@@ -386,20 +386,6 @@ class User extends BaseModel
     }
 
     /**
-     * Возвращает аватар для пользователя по умолчанию
-     *
-     * @return string код аватара
-     */
-    public function defaultAvatar(): string
-    {
-        $name   = $this->name ?: $this->login;
-        $color  = '#' . substr(dechex(crc32($this->login)), 0, 6);
-        $letter = mb_strtoupper(utfSubstr($name, 0, 1), 'utf-8');
-
-        return '<div class="img-fluid rounded-circle avatar-default" style="background:' . $color . '"><a href="/users/' . $this->login . '">' . $letter . '</a></div>';
-    }
-
-    /**
      * Возвращает аватар пользователя
      *
      * @return string аватар пользователя
@@ -415,6 +401,20 @@ class User extends BaseModel
         }
 
         return $this->defaultAvatar();
+    }
+
+    /**
+     * Возвращает аватар для пользователя по умолчанию
+     *
+     * @return string код аватара
+     */
+    public function defaultAvatar(): string
+    {
+        $name   = $this->name ?: $this->login;
+        $color  = '#' . substr(dechex(crc32($this->login)), 0, 6);
+        $letter = mb_strtoupper(utfSubstr($name, 0, 1), 'utf-8');
+
+        return '<div class="img-fluid rounded-circle avatar-default" style="background:' . $color . '"><a href="/users/' . $this->login . '">' . $letter . '</a></div>';
     }
 
     /**

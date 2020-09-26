@@ -48,10 +48,9 @@
                     @endif
                 </a>
                 <ul class="app-notification dropdown-menu dropdown-menu-right">
-                    <li class="app-notification__title">Новых сообщений: {{ $user->newprivat }}</li>
-                    <div class="app-notification__content js-messages">
-                    </div>
-                    <li class="app-notification__footer"><a href="/messages">See all notifications.</a></li>
+                    <li class="app-notification__title">{{ __('messages.new_messages') }}: {{ $user->newprivat }}</li>
+                    <div class="app-notification__content js-messages"></div>
+                    <li class="app-notification__footer"><a href="/messages">{{ __('messages.all_messages') }}</a></li>
                 </ul>
             </li>
             <!-- User Menu-->
@@ -61,8 +60,8 @@
                 </a>
                 <ul class="app-notification dropdown-menu dropdown-menu-right">
                     <li><a class="dropdown-item" href="/users/{{ getUser('login') }}"><i class="fas fa-user fa-lg"></i> {{ __('index.my_account') }}</a></li>
-                    <li><a class="dropdown-item" href="/profile"><i class="fas fa-envelope fa-lg"></i> {{ __('index.my_profile') }}</a></li>
-                    <li><a class="dropdown-item" href="/accounts"><i class="fas fa-user fa-lg"></i> {{ __('index.my_details') }}</a></li>
+                    <li><a class="dropdown-item" href="/profile"><i class="fas fa-user-edit fa-lg"></i> {{ __('index.my_profile') }}</a></li>
+                    <li><a class="dropdown-item" href="/accounts"><i class="fas fa-user-cog fa-lg"></i> {{ __('index.my_details') }}</a></li>
                     <li><a class="dropdown-item" href="/settings"><i class="fas fa-cog fa-lg"></i> {{ __('index.my_settings') }}</a></li>
                     <li><a class="dropdown-item" href="/logout?token={{ $_SESSION['token'] }}"><i class="fas fa-sign-out-alt fa-lg"></i> {{ __('index.logout') }}</a></li>
                 </ul>

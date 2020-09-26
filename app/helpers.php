@@ -1316,10 +1316,6 @@ function resizeProcess(?string $path, array $params = [])
         $params['class'] = 'media-file img-fluid';
     }
 
-    if (empty($params['width'])) {
-        $params['width'] = setting('previewsize');
-    }
-
     if (! file_exists(HOME . $path) || ! is_file(HOME . $path)) {
         return [
             'path'   => '/assets/img/images/photo.png',
@@ -1330,7 +1326,7 @@ function resizeProcess(?string $path, array $params = [])
 
     [$width, $height] = getimagesize(HOME . $path);
 
-    if ($width <= $params['width'] && $height <= $params['width']) {
+    if ($width <= setting('previewsize') && $height <= setting('previewsize')) {
         return [
             'path'   => $path,
             'source' => $path,
@@ -1342,7 +1338,7 @@ function resizeProcess(?string $path, array $params = [])
 
     if (! file_exists(UPLOADS . '/thumbnails/' . $thumb)) {
         $img = Image::make(HOME . $path);
-        $img->resize($params['width'], $params['width'], static function (Constraint $constraint) {
+        $img->resize(setting('previewsize'), setting('previewsize'), static function (Constraint $constraint) {
             $constraint->aspectRatio();
             $constraint->upsize();
         });

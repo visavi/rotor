@@ -5,7 +5,7 @@
     ?>
     <li>
         <a class="app-notification__item" href="/messages/talk/{{ $login }}">
-            <span class="app-notification__icon">{!! $message->author->getAvatarImage() !!}</span>
+            <span class="app-notification__icon avatar-mini">{!! $message->author->getAvatarImage() !!}</span>
             <div>
                 <p class="app-notification__author">{{ $author }}</p>
                 <p class="app-notification__meta">{{ dateFixed($message->last_created_at) }}</p>
