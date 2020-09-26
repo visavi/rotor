@@ -97,7 +97,7 @@ class Down extends BaseModel
      */
     public function comments(): MorphMany
     {
-        return $this->morphMany(Comment::class, 'relate');
+        return $this->morphMany(Comment::class, 'relate')->with('relate');;
     }
 
     /**
@@ -116,10 +116,12 @@ class Down extends BaseModel
      * @param int $limit
      * @return HasMany
      */
-    public function lastComments($limit = 15): HasMany
+    public function lastComments(int $limit = 15): HasMany
     {
         return $this->hasMany(Comment::class, 'relate_id')
-            ->where('relate_type', $this->getMorphClass())
+            ->where('relate_type', self::$morphName)
+            ->orderBy('created_at', 'desc')
+            ->with('user')
             ->limit($limit);
     }
 

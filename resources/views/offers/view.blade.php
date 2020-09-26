@@ -56,7 +56,6 @@
     <div class="b"><i class="fa fa-comment"></i> <b>{{ __('main.last_comments') }}</b></div>
 
     @if ($offer->lastComments->isNotEmpty())
-
         @foreach ($offer->lastComments as $comment)
             <div class="b">
                 <div class="img">

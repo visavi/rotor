@@ -473,16 +473,16 @@ class ArticleController extends BaseController
      */
     public function rss(): string
     {
-        $article = Article::query()
+        $articles = Article::query()
             ->orderByDesc('created_at')
             ->limit(15)
             ->get();
 
-        if ($article->isEmpty()) {
+        if ($articles->isEmpty()) {
             abort('default', __('blogs.article_not_exist'));
         }
 
-        return view('blogs/rss', compact('article'));
+        return view('blogs/rss', compact('articles'));
     }
 
     /**
@@ -720,6 +720,8 @@ class ArticleController extends BaseController
             ->with('user')
             ->paginate(setting('blogpost'))
             ->appends(['sort' => $sort]);
+
+
 
         return view('blogs/top', compact('articles', 'order'));
     }

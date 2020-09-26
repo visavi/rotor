@@ -22,9 +22,13 @@ class ResizeAvatarsInUsers extends AbstractMigration
 
             deleteFile($avatar);
 
-            $img = Image::make($picture);
-            $img->fit(64);
-            $img->save($avatar);
+            try {
+                $img = Image::make($picture);
+                $img->fit(64);
+                $img->save($avatar);
+            } catch (Exception $e) {
+                // nothing
+            }
         }
     }
 
