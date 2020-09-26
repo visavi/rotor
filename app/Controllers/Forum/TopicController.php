@@ -583,7 +583,7 @@ class TopicController extends BaseController
             $voteAnswer->increment('result');
 
             Polling::query()->create([
-                'relate_type' => Vote::class,
+                'relate_type' => Vote::$morphName,
                 'relate_id'   => $vote->id,
                 'user_id'     => $user->id,
                 'vote'        => '+',

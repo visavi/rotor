@@ -30,7 +30,7 @@
       background-color: lighten( $navbar-color, 5% );
     }
   }
-  @media(max-width: 360px) {
+  @media(max-width: 320px) {
     display: none;
   }
   &:focus,

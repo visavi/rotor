@@ -84,7 +84,7 @@ class VoteController extends BaseController
                 $answer->increment('result');
 
                 Polling::query()->create([
-                    'relate_type' => Vote::class,
+                    'relate_type' => Vote::$morphName,
                     'relate_id'   => $vote->id,
                     'user_id'     => getUser('id'),
                     'vote'        => '+',
