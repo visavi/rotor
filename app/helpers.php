@@ -1994,11 +1994,11 @@ function access(string $level)
 /**
  * Возвращает объект пользователя по логину
  *
- * @param string $login логин пользователя
+ * @param string|null $login логин пользователя
  *
  * @return Builder|Model|null
  */
-function getUserByLogin(string $login): ?User
+function getUserByLogin(?string $login): ?User
 {
     return User::query()->where('login', $login)->first();
 }
@@ -2006,11 +2006,11 @@ function getUserByLogin(string $login): ?User
 /**
  * Возвращает объект пользователя по id
  *
- * @param int $id ID пользователя
+ * @param int|null $id ID пользователя
  *
  * @return Builder|Model|null
  */
-function getUserById(int $id): ?User
+function getUserById(?int $id): ?User
 {
     return User::query()->find($id);
 }
@@ -2018,11 +2018,11 @@ function getUserById(int $id): ?User
 /**
  * Возвращает объект пользователя по логину или email
  *
- * @param string $login логин или email пользователя
+ * @param string|null $login логин или email пользователя
  *
  * @return Builder|Model|null
  */
-function getUserByLoginOrEmail(string $login): ?User
+function getUserByLoginOrEmail(?string $login): ?User
 {
     $field = strpos($login, '@') ? 'email' : 'login';
 
@@ -2036,7 +2036,7 @@ function getUserByLoginOrEmail(string $login): ?User
  *
  * @return User|mixed
  */
-function getUser($key = null)
+function getUser(?string $key = null)
 {
     static $user;
 
