@@ -630,8 +630,6 @@ class DownController extends BaseController
      */
     public function viewComment(int $id, int $cid): void
     {
-        var_dump(444); exit;
-
         /** @var Down $down */
         $down = Down::query()->find($id);
 
