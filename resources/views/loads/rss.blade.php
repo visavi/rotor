@@ -11,12 +11,12 @@
 
         <item>
             <title>{{ $down->title }}</title>
-            <link>{{ siteUrl() }}/down/{{ $down->id }}</link>
+            <link>{{ siteUrl() }}/downs/{{ $down->id }}</link>
             <description>{{ $down->text }}</description>
             <author>{{ $down->user->getName() }}</author>
             <pubDate>{{ date('r', $down->created_at) }}</pubDate>
             <category>{{ __('index.loads') }}</category>
-            <guid>{{ siteUrl() }}/down/{{ $down->id }}</guid>
+            <guid>{{ siteUrl() }}/downs/{{ $down->id }}</guid>
         </item>
     @endforeach
 @stop

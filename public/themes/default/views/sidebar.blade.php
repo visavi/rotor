@@ -82,5 +82,20 @@
                 <span class="badge badge-pill badge-light">{{ statsNews() }}</span>
             </a>
         </li>
+
+        <li class="treeview">
+            <a class="app-menu__item{{ request()->is('blogs*', 'articles*') ? ' active' : '' }}" href="#" data-toggle="treeview">
+                <i class="app-menu__icon far fa-sticky-note"></i>
+                <span class="app-menu__label">{{ __('index.blogs') }}</span>
+                <i class="treeview-indicator fa fa-angle-down"></i>
+            </a>
+            <ul class="treeview-menu">
+                <li><a class="treeview-item" href="/blogs"><i class="icon far fa-circle"></i> {{ __('blogs.blogs_list') }}</a></li>
+                <li><a class="treeview-item" href="/blogs/main"><i class="icon far fa-circle"></i> {{ __('blogs.articles') }}</a></li>
+                <li><a class="treeview-item" href="/articles"><i class="icon far fa-circle"></i> {{ __('blogs.new_articles') }}</a></li>
+                <li><a class="treeview-item" href="/articles/comments"><i class="icon far fa-circle"></i> {{ __('blogs.new_comments') }}</a></li>
+                <li><a class="treeview-item" href="/blogs/top"><i class="icon far fa-circle"></i> {{ __('blogs.top_articles') }}</a></li>
+            </ul>
+        </li>
     </ul>
 </aside>

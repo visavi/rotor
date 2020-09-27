@@ -94,7 +94,6 @@
 
         @if ($posts->isNotEmpty())
             @foreach ($posts as $data)
-                <?php $num = $posts->firstItem() + $loop->index; ?>
                 <div class="post">
                     <div class="b" id="post_{{ $data->id }}">
                         <div class="float-right text-right">
@@ -128,7 +127,7 @@
                             {!! $data->user->getOnline() !!}
                         </div>
 
-                        {{ $num }}. <b>{!! $data->user->getProfile() !!}</b> <small>({{ dateFixed($data->created_at) }})</small><br>
+                        <b>{!! $data->user->getProfile() !!}</b> <small>({{ dateFixed($data->created_at) }})</small><br>
                         {!! $data->user->getStatus() !!}
                     </div>
 

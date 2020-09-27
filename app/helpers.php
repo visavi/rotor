@@ -2129,7 +2129,7 @@ function getQueryLog()
             }
         }
 
-        $sql = str_replace('?', '%s', $query['query']);
+        $sql = str_replace(['%', '?'], ['%%', '%s'], $query['query']);
         $sql = vsprintf($sql, $query['bindings']);
 
         $formattedQueries[] = ['query' => $sql, 'time' => $query['time']];

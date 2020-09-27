@@ -54,7 +54,7 @@ $(function(){
 
     /* Show news on the main */
     $('.news-title').on('click', function() {
-        $(this).toggleClass('fa-angle-up');
+        $(this).toggleClass('fa-rotate-180');
         $(this).nextAll(".news-text:first").slideToggle();
     });
 

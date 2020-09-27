@@ -88,6 +88,7 @@ return [
     'action'            => 'Action',
     'amount'            => 'Amount',
     'not_specified'     => 'Not specified',
+    'read_more'         => 'Read more',
 
     'request'              => 'Request',
     'not_matter'           => 'Not matter',

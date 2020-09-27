@@ -111,7 +111,6 @@
 
     @if ($posts->isNotEmpty())
         @foreach ($posts as $data)
-            <?php $num = $posts->firstItem() + $loop->index; ?>
             <div class="section mb-3 shadow" id="post_{{ $data->id }}">
                 <div class="user-avatar">
                     {!! $data->user->getAvatar() !!}
@@ -120,7 +119,7 @@
 
                 <div class="section-user d-flex align-items-center">
                     <div class="flex-grow-1">
-                        {{ $num }}. {!! $data->user->getProfile() !!}
+                        {!! $data->user->getProfile() !!}
                         <small class="section-date text-muted font-italic">{{ dateFixed($data->created_at) }}</small><br>
                         <small class="font-italic">{!! $data->user->getStatus() !!}</small>
                     </div>

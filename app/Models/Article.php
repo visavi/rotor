@@ -142,11 +142,12 @@ class Article extends BaseModel
      * Возвращает сокращенный текст статьи
      *
      * @param int $words
+     *
      * @return string
      */
-    public function shortText($words = 100): string
+    public function shortText(int $words = 100): string
     {
-        $more = '<div class="mt-1"><a href="/articles/'. $this->id .'" class="btn btn-sm btn-info">Читать дальше &raquo;</a></div>';
+        $more = view('app/_more', ['link' => '/articles/'. $this->id]);
 
         if (strpos($this->text, '[cut]') !== false) {
             $this->text = bbCode(current(explode('[cut]', $this->text)));
@@ -165,6 +166,7 @@ class Article extends BaseModel
      * @param float $maxCount
      * @param int   $minSize
      * @param int   $maxSize
+     *
      * @return int
      */
     public static function logTagSize($count, $minCount, $maxCount, $minSize = 10, $maxSize = 30): int

@@ -88,6 +88,7 @@ return [
     'action'            => 'Действие',
     'amount'            => 'Сумма',
     'not_specified'     => 'Не указан',
+    'read_more'         => 'Читать дальше',
 
     'request'              => 'Запрос',
     'not_matter'           => 'Не имеет значения',

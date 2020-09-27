@@ -5,7 +5,6 @@
 @stop
 
 @section('content')
-
     @foreach ($article->lastComments as $comment)
         <?php $comment->text = bbCode($comment->text); ?>
         <?php $comment->text = str_replace('/uploads/stickers', siteUrl().'/uploads/stickers', $comment->text); ?>
@@ -17,7 +16,7 @@
             <author>{{ $comment->user->getName() }}</author>
             <pubDate>{{ date('r', $comment->created_at) }}</pubDate>
             <category>{{ __('main.comments') }}</category>
-            <guid>{{ siteUrl() }}/articles/comments/{{ $article->id }}?pid={{ $comment->id }}</guid>
+            <guid>{{ siteUrl() }}/articles/comment/{{ $article->id }}/{{ $comment->id }}</guid>
         </item>
     @endforeach
 @stop

@@ -94,11 +94,13 @@ class News extends BaseModel
      */
     public function shortText(): string
     {
+        $more = null;
+
         if (strpos($this->text, '[cut]') !== false) {
             $this->text = current(explode('[cut]', $this->text));
-            $this->text .= '<div class="mt-1"><a href="/news/'. $this->id .'" class="btn btn-sm btn-info">Читать дальше &raquo;</a></div>';
+            $more = view('app/_more', ['link' => '/news/'. $this->id]);
         }
 
-        return bbCode($this->text);
+        return bbCode($this->text) . $more;
     }
 }
