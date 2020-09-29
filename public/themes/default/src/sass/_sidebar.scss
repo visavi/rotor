@@ -5,6 +5,7 @@
   top: 0;
   bottom: 0;
   padding-top: 70px;
+  padding-bottom: 20px;
   width: $sidebar-width;
   overflow: auto;
   z-index: 10;
@@ -25,16 +26,6 @@
     bottom: 0;
     right: 0;
     z-index: 9;
-  }
-}
-
-.app-sidebar__user {
-  display: flex;
-  align-items: center;
-  padding: 10px;
-  margin-bottom: 20px;
-  @if $sidebar-accent == dark {
-    color: #fff;
   }
 }
 
@@ -60,7 +51,6 @@
 .app-menu {
   @extend .list-unstyled;
   margin-bottom: 0;
-  padding-bottom: 40px;
 }
 
 .app-menu__item {
@@ -139,16 +129,4 @@
 .treeview-indicator {
   transform-origin: center;
   transition: transform 0.3s ease;
-}
-
-.app-sidebar__menu {
-  list-style: none;
-  padding: 0 20px;
-  font-size: 1.08em;
-  a {
-    color: #ffc107;
-  }
-  li {
-    padding-bottom: 10px;
-  }
 }
