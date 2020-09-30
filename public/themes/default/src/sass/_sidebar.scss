@@ -16,6 +16,21 @@
   &::-webkit-scrollbar { width: 6px; }
   &::-webkit-scrollbar-thumb { background: rgba(0,0,0,0.2); }
   @media print { display: none; }
+
+  .user-menu {
+    cursor: pointer;
+
+    .treeview-menu {
+      font-size: 1.08em;
+      a {
+        color: #ffc107;
+      }
+    }
+
+    .treeview-item {
+      padding: 10px 5px 10px 20px;
+    }
+  }
 }
 
 .app-sidebar__overlay {
