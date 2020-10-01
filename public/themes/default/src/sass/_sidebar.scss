@@ -4,7 +4,7 @@
   position: fixed;
   top: 0;
   bottom: 0;
-  padding-top: 70px;
+  padding-top: 50px;
   padding-bottom: 20px;
   width: $sidebar-width;
   overflow: auto;
@@ -20,15 +20,12 @@
   .user-menu {
     cursor: pointer;
 
-    .treeview-menu {
-      font-size: 1.08em;
-      a {
-        color: #ffc107;
-      }
+    .treeview-menu a {
+      color: #ffc107;
     }
 
     .treeview-item {
-      padding: 10px 5px 10px 20px;
+      padding: 5px 5px 5px 20px;
     }
   }
 }
@@ -61,6 +58,16 @@
   overflow: hidden;
   text-overflow: ellipsis;
   margin-bottom: 0;
+}
+
+.app-footer {
+  margin: 0 10px;
+  padding: 15px 5px;
+  border-top: 1px solid rgba(0,0,0, 0.25);
+  color: #fff;
+  a {
+    color: #fff;
+  }
 }
 
 .app-menu {

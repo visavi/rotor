@@ -12,7 +12,7 @@
     text-decoration:none;
     border: none;
 }
-.markItUpContainer  {
+.markItUpContainer {
     font:11px Verdana, Arial, Helvetica, sans-serif;
 }
 .markItUpEditor {
@@ -21,7 +21,7 @@
     display:block;
     overflow:auto;
 }
-.markItUpPreviewFrame	{
+.markItUpPreviewFrame {
     overflow:auto;
     background-color:#FFFFFF;
     width:99.9%;
@@ -30,12 +30,12 @@
 
 /***************************************************************************************/
 /* first row of buttons */
-.markItUpHeader ul li	{
+.markItUpHeader ul li {
     list-style:none;
     float:left;
     position:relative;
 }
-.markItUpHeader ul li:hover > ul{
+.markItUpHeader ul li:hover > ul {
     display:block;
 }
 .markItUpHeader ul .markItUpDropMenu {

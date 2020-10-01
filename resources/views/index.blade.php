@@ -7,6 +7,7 @@
 @section('header')
     @include('ads/_top')
     <h1>{{ setting('title') }}</h1>
+    <p>{{ setting('logos') }}</p>
 @stop
 
 @section('content')

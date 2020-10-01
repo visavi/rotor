@@ -19,14 +19,14 @@
                 @if (isAdmin())
                     <li>
                         <a class="treeview-item" href="/admin" rel="nofollow">
-                            <i class="app-menu__icon fas fa-wrench"></i>
+                            <i class="icon fas fa-wrench"></i>
                             {{ __('index.panel') }}
                         </a>
                     </li>
                 @endif
                 <li>
                     <a class="treeview-item" href="/menu" rel="nofollow">
-                        <i class="app-menu__icon fas fa-user-cog"></i>
+                        <i class="icon fas fa-user-cog"></i>
                         {{ __('index.menu') }}
                     </a>
                 </li>
@@ -45,13 +45,13 @@
             <ul class="treeview-menu">
                 <li>
                     <a class="treeview-item" href="/login{{ returnUrl() }}" rel="nofollow">
-                        <i class="app-menu__icon fas fa-sign-in-alt"></i>
+                        <i class="icon fas fa-sign-in-alt"></i>
                         {{ __('index.login') }}
                     </a>
                 </li>
                 <li>
                     <a class="treeview-item" href="/register" rel="nofollow">
-                        <i class="app-menu__icon far fa-user"></i>
+                        <i class="icon far fa-user"></i>
                         {{ __('index.register') }}
                     </a>
                 </li>
@@ -91,12 +91,23 @@
                 <i class="treeview-indicator fa fa-angle-down"></i>
             </a>
             <ul class="treeview-menu">
-                <li><a class="treeview-item{{ request()->is('blogs') ? ' active' : '' }}" href="/blogs"><i class="icon far fa-circle"></i> {{ __('blogs.blogs_list') }}</a></li>
-                <li><a class="treeview-item{{ request()->is('blogs/main') ? ' active' : '' }}" href="/blogs/main"><i class="icon far fa-circle"></i> {{ __('blogs.articles') }}</a></li>
-                <li><a class="treeview-item{{ request()->is('articles') ? ' active' : '' }}" href="/articles"><i class="icon far fa-circle"></i> {{ __('blogs.new_articles') }}</a></li>
-                <li><a class="treeview-item{{ request()->is('articles/comments') ? ' active' : '' }}" href="/articles/comments"><i class="icon far fa-circle"></i> {{ __('blogs.new_comments') }}</a></li>
-                <li><a class="treeview-item{{ request()->is('blogs/top') ? ' active' : '' }}" href="/blogs/top"><i class="icon far fa-circle"></i> {{ __('blogs.top_articles') }}</a></li>
+                <li><a class="treeview-item{{ request()->is('blogs') ? ' active' : '' }}" href="/blogs"><i class="icon fas fa-circle fa-xs"></i> {{ __('blogs.blogs_list') }}</a></li>
+                <li><a class="treeview-item{{ request()->is('blogs/main') ? ' active' : '' }}" href="/blogs/main"><i class="icon fas fa-circle fa-xs"></i> {{ __('blogs.articles') }}</a></li>
+                <li><a class="treeview-item{{ request()->is('articles') ? ' active' : '' }}" href="/articles"><i class="icon fas fa-circle fa-xs"></i> {{ __('blogs.new_articles') }}</a></li>
+                <li><a class="treeview-item{{ request()->is('articles/comments') ? ' active' : '' }}" href="/articles/comments"><i class="icon fas fa-circle fa-xs"></i> {{ __('blogs.new_comments') }}</a></li>
+                <li><a class="treeview-item{{ request()->is('blogs/top') ? ' active' : '' }}" href="/blogs/top"><i class="icon fas fa-circle fa-xs"></i> {{ __('blogs.top_articles') }}</a></li>
             </ul>
         </li>
     </ul>
+
+    <div class="app-footer">
+        <div class="float-right">
+            @yield('online')
+        </div>
+
+        <div>
+            <i class="fas fa-globe-americas"></i> <a href="/language/ru{{ returnUrl() }}">RU</a> /
+            <a href="/language/en{{ returnUrl() }}">EN</a>
+        </div>
+    </div>
 </aside>

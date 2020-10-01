@@ -257,8 +257,8 @@ textarea.form-control {
 
 .scrollup {
   position: fixed;
-  bottom: 30px;
-  right: 30px;
+  bottom: 20px;
+  right: 20px;
   display: none;
   cursor: pointer;
   opacity: .2;
@@ -274,7 +274,6 @@ textarea.form-control {
 .scrollup:hover {
   opacity: .5;
 }
-
 
 .message-block {
   overflow: hidden;

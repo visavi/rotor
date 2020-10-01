@@ -1,7 +1,5 @@
 <footer>
     @yield('counter')
-    @yield('online')
-    @yield('performance')
 
     <div class="float-right">
         <a target="_blank" href="https://telegram.me/visavinet"><i class="fab fa-telegram fa-2x" style="color: #0088cc"></i></a>
@@ -10,4 +8,6 @@
     </div>
 
     <div>&copy; Copyright 2005-2020 Visavi.net</div>
+
+    @yield('performance')
 </footer>
