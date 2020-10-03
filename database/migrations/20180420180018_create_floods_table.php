@@ -16,7 +16,7 @@ class CreateFloodsTable extends AbstractMigration
                 ->addColumn('page', 'string', ['limit' => 30])
                 ->addColumn('attempts', 'integer', ['default' => 0])
                 ->addColumn('created_at', 'integer')
-                ->addIndex('user_id')
+                ->addIndex('uid')
                 ->create();
         }
     }

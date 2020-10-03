@@ -37,7 +37,7 @@ class GuestbookController extends BaseController
      */
     public function add(Request $request, Validator $validator, Flood $flood): void
     {
-        $msg = $request->input('msg');
+        $msg  = $request->input('msg');
         $user = getUser();
 
         $validator->equal($request->input('token'), $_SESSION['token'], ['msg' => __('validator.token')])
