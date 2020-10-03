@@ -1,0 +1,15 @@
+// Component: Footer
+
+footer {
+  background-color: $body-bg;
+  padding: 30px;
+
+  @media(min-width: 768px) {
+    margin-left: $sidebar-width;
+
+  }
+
+  @media (max-width: 768px) {
+      padding: 10px;
+  }
+}

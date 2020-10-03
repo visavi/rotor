@@ -44,7 +44,9 @@
                 <label class="custom-control-label" for="remember">{{ __('users.remember_me') }}</label>
             </div>
 
-            {!! view('app/_captcha') !!}
+            @if ($isFlood)
+                {!! view('app/_captcha') !!}
+            @endif
 
             <button class="btn btn-primary">{{ __('users.enter') }}</button>
         </form>

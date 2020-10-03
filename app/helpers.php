@@ -1518,14 +1518,14 @@ function clearCache($keys = null)
  *
  * @param string|null $url
  *
- * @return string текущая страница
+ * @return string|null текущая страница
  */
-function returnUrl(?string $url = null)
+function returnUrl(?string $url = null): ?string
 {
     $request = request();
 
     if ($request->is('/', 'login', 'register', 'recovery', 'restore', 'ban', 'closed')) {
-        return false;
+        return null;
     }
 
     $query = $request->has('return') ? $request->input('return') : $request->path();

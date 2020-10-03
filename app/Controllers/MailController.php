@@ -68,7 +68,8 @@ class MailController extends BaseController
     public function recovery(Request $request, Validator $validator): string
     {
         if (getUser()) {
-            abort('default', __('main.already_authorized'));
+            setFlash('danger', __('main.already_authorized'));
+            redirect('/');
         }
 
         $cookieLogin = $_COOKIE['login'] ?? '';
@@ -120,7 +121,8 @@ class MailController extends BaseController
     public function restore(Request $request, Validator $validator): ?string
     {
         if (getUser()) {
-            abort(403, __('main.already_authorized'));
+            setFlash('danger', __('main.already_authorized'));
+            redirect('/');
         }
 
         $key = $request->input('key');

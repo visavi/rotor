@@ -61,8 +61,7 @@
 
     {{ $online->links() }}
 
-    <br><i class="fa fa-users"></i>
-
+    <i class="fa fa-users"></i>
     @if ($guests)
         <a href="/online">{{ __('pages.hide_guests') }}</a><br>
     @else

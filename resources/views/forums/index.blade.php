@@ -85,7 +85,6 @@
         {!! showError(__('forums.empty_forums')) !!}
     @endif
 
-    <br/>
     <a href="/rules">{{ __('main.rules') }}</a> /
     <a href="/forums/top/topics">{{ __('forums.top_topics') }}</a> /
     <a href="/forums/top/posts">{{ __('forums.top_posts') }}</a> /

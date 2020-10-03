@@ -38,25 +38,26 @@ class GuestbookController extends BaseController
     public function add(Request $request, Validator $validator, Flood $flood): void
     {
         $msg = $request->input('msg');
+        $user = getUser();
 
         $validator->equal($request->input('token'), $_SESSION['token'], ['msg' => __('validator.token')])
             ->length($msg, 5, setting('guesttextlength'), ['msg' => __('validator.text')])
             ->false($flood->isFlood(), ['msg' => __('validator.flood', ['sec' => $flood->getPeriod()])]);
 
         /* Проверка для гостей */
-        if (! getUser() && setting('bookadds')) {
+        if (! $user && setting('bookadds')) {
             $validator->true(captchaVerify(), ['protect' => __('validator.captcha')]);
             $validator->false(strpos($msg, '//'), ['msg' => __('guestbook.without_links')]);
             $validator->length($request->input('guest_name'), 3, 20, ['guest_name' => __('users.name_short_or_long')], false);
         } else {
-            $validator->true(getUser(), ['msg' => __('main.not_authorized')]);
+            $validator->true($user, ['msg' => __('main.not_authorized')]);
         }
 
         if ($validator->isValid()) {
             $msg       = antimat($msg);
             $guestName = $request->input('guest_name');
 
-            if ($user = getUser()) {
+            if ($user) {
                 $guestName  = null;
                 $bookscores = setting('bookscores') ? 1 : 0;
 
@@ -66,7 +67,7 @@ class GuestbookController extends BaseController
             }
 
             Guestbook::query()->create([
-                'user_id'    => getUser('id'),
+                'user_id'    => $user->id ?? null,
                 'text'       => $msg,
                 'ip'         => getIp(),
                 'brow'       => getBrowser(),
@@ -98,14 +99,14 @@ class GuestbookController extends BaseController
      */
     public function edit(int $id, Request $request, Validator $validator): string
     {
-        if (! getUser()) {
+        if (! $user = getUser()) {
             abort(403);
         }
 
         $msg = $request->input('msg');
 
         /** @var Guestbook $post */
-        $post = Guestbook::query()->where('user_id', getUser('id'))->find($id);
+        $post = Guestbook::query()->where('user_id', $user->id)->find($id);
 
         if (! $post) {
             abort('default', __('main.message_not_found'));
@@ -122,7 +123,7 @@ class GuestbookController extends BaseController
             if ($validator->isValid()) {
                 $post->update([
                     'text'         => antimat($msg),
-                    'edit_user_id' => getUser('id'),
+                    'edit_user_id' => $user->id,
                     'updated_at'   => SITETIME,
                 ]);
 

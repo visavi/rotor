@@ -8,6 +8,7 @@ use App\Classes\Validator;
 use App\Controllers\BaseController;
 use App\Models\BlackList;
 use App\Models\ChangeMail;
+use App\Models\Flood;
 use App\Models\Invite;
 use App\Models\Online;
 use App\Models\User;
@@ -237,18 +238,23 @@ class UserController extends BaseController
      *
      * @return string
      */
-    public function login(Request $request): string
+    public function login(Request $request, Validator $validator, Flood $flood): string
     {
         if (getUser()) {
-            abort(403, __('main.already_authorized'));
+            setFlash('danger', __('main.already_authorized'));
+            redirect('/');
         }
 
         $cooklog = $_COOKIE['login'] ?? '';
+        $isFlood = $flood->isFlood(1);
 
         if ($request->isMethod('post')) {
             if ($request->has('login') && $request->has('pass')) {
-                if (captchaVerify()) {
-                    $return   = $request->input('return');
+                if ($isFlood) {
+                    $validator->true(captchaVerify(), ['protect' => __('validator.captcha')]);
+                }
+
+                if ($validator->isValid()) {
                     $login    = utfLower($request->input('login'));
                     $pass     = trim($request->input('pass'));
                     $remember = $request->boolean('remember');
@@ -256,15 +262,18 @@ class UserController extends BaseController
                     /** @var User $user */
                     if ($user = User::auth($login, $pass, $remember)) {
                         setFlash('success', __('users.welcome', ['login' => $user->getName()]));
-                        redirect($return ?? '/');
+                        redirect($request->input('return') ?? '/');
                     }
 
+                    $flood->saveState(300);
                     setInput($request->all());
                     setFlash('danger', __('users.incorrect_login_or_password'));
                 } else {
                     setInput($request->all());
-                    setFlash('danger', __('validator.captcha'));
+                    setFlash('danger', $validator->getErrors());
                 }
+
+                redirect('/login');
             }
 
             if ($request->has('token')) {
@@ -272,7 +281,7 @@ class UserController extends BaseController
             }
         }
 
-        return view('users/login', compact('cooklog'));
+        return view('users/login', compact('cooklog', 'isFlood'));
     }
 
     /**

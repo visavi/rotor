@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace App\Models;
 
+use Illuminate\Database\Capsule\Manager as DB;
+
 /**
  * Class Flood
  *
@@ -60,18 +62,20 @@ class Flood extends BaseModel
     /**
      * Проверяет сообщение на флуд
      *
+     * @param int $attempts кол. попыток
+     *
      * @return bool
      */
-    public function isFlood(): bool
+    public function isFlood(int $attempts = 1): bool
     {
         self::query()->where('created_at', '<', SITETIME)->delete();
 
         $flood = self::query()
-            ->where('user_id', getUser('id'))
+            ->where('uid', $this->getUid())
             ->where('page', request()->getPathInfo())
-            ->exists();
+            ->first();
 
-        if ($flood) {
+        if ($flood && $flood->attempts >= $attempts) {
             return true;
         }
 
@@ -92,10 +96,22 @@ class Flood extends BaseModel
             return;
         }
 
-        self::query()->create([
-            'user_id'    => getUser('id'),
+        self::query()->updateOrCreate([
+            'uid' => $this->getUid(),
+        ], [
             'page'       => request()->getPathInfo(),
+            'attempts'   => DB::connection()->raw('attempts + 1'),
             'created_at' => SITETIME + $period,
         ]);
+    }
+
+    /**
+     * Get uid
+     *
+     * @return string
+     */
+    private function getUid(): string
+    {
+        return md5((string) getUser('id') ?? getIp());
     }
 }
