@@ -97,9 +97,9 @@ class Flood extends BaseModel
         }
 
         self::query()->updateOrCreate([
-            'uid' => $this->getUid(),
+            'uid'  => $this->getUid(),
+            'page' => request()->getPathInfo(),
         ], [
-            'page'       => request()->getPathInfo(),
             'attempts'   => DB::connection()->raw('attempts + 1'),
             'created_at' => SITETIME + $period,
         ]);

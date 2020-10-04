@@ -100,7 +100,7 @@
         </li>
     </ul>
 
-    <div class="app-footer">
+    <div class="app-sidebar__footer">
         <div class="float-right">
             @yield('online')
         </div>

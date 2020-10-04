@@ -1,4 +1,4 @@
-<footer>
+<footer class="app-footer">
     @yield('counter')
 
     <div class="float-right">

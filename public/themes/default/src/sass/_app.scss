@@ -2,7 +2,11 @@
 
 ::selection {
   color: $white;
-  background-color: darken($primary-color,10%);
+  background-color: darken($primary-color, 10%);
+}
+
+html {
+  height: 100%;
 }
 
 .app {
@@ -12,6 +16,9 @@
   max-width: $app-width;
   margin-left: auto;
   margin-right: auto;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
 
   @media(min-width: 768px) {
     &.sidenav-toggled {
@@ -35,17 +42,15 @@
 }
 
 .app-content {
-  min-height: calc(100vh - 50px);
+  flex: 1 0 auto;
   margin-top: 50px;
-  padding: 20px;
+  padding: 30px;
   background-color: $body-bg;
   transition: margin-left 0.3s ease;
   @media(min-width: 768px) {
     margin-left: $sidebar-width;
-    padding: 30px;
   }
   @media(max-width: 767px) {
-    margin-top: 50px;
     min-width: 100%;
     padding: 15px;
   }

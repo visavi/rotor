@@ -5,15 +5,15 @@
   overflow: hidden;
 }
 
+.section-body {
+  overflow: hidden;
+}
+
 .section-header {
 
 }
 
 .section-content {
-
-}
-
-.section-body {
 
 }
 
@@ -34,10 +34,6 @@
   border: 1px solid #eee;
   border-radius: .25rem;
   border-left: .25rem solid #d9534f;
-}
-
-.section-body {
-  overflow: hidden;
 }
 
 .avatar-default {

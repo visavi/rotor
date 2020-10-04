@@ -42,7 +42,7 @@
                 </div>
             </div>
             <div class="col-md-8">
-                @include ('admin/settings/_' . $act)
+                @include('admin/settings/_' . $act)
             </div>
         </div>
     </div>
