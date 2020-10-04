@@ -112,6 +112,6 @@ class Flood extends BaseModel
      */
     private function getUid(): string
     {
-        return md5((string) getUser('id') ?? getIp());
+        return md5((string) (getUser('id') ?? getIp()));
     }
 }
