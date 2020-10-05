@@ -6,7 +6,7 @@
 }
 
 .section-body {
-  overflow: hidden;
+  overflow-wrap: break-word;
 }
 
 .section-header {
@@ -99,13 +99,6 @@
   .section-user {
     min-height: 48px;
   }
-}
-
-.main-register {
-  background-image:url('/assets/img/mains/record.png');
-  background-position: 100% 85%;
-  background-size: auto 100%;
-  background-repeat:no-repeat;
 }
 
 .cursor-pointer {
@@ -279,4 +272,36 @@ textarea.form-control {
 .message-block:hover,
 .message-block:focus {
   background-color: #eee;
+}
+
+.pagination {
+  overflow-y: hidden;
+  @media(max-width: 768px) {
+    .page-item:first-child .page-link {
+      border-top-left-radius: 0.2rem;
+      border-bottom-left-radius: 0.2rem;
+    }
+
+    .page-link {
+      padding: 0.25rem 0.5rem;
+      font-size: 0.7875rem;
+      line-height: 1.5;
+    }
+  }
+}
+
+.performance {
+  cursor: pointer;
+  background-color: #f8f9fa;
+  border: 1px solid #e1e1e8;
+  margin: 10px 0;
+  padding: 10px;
+
+  .list-inline{
+    margin-bottom: 0;
+  }
+
+  @media(max-width: 767px) {
+    font-size: 0.75rem;
+  }
 }

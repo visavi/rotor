@@ -23,6 +23,7 @@ html {
   @media(min-width: 768px) {
     &.sidenav-toggled {
       .app-content { margin-left: 0; }
+      .app-footer { margin-left: 0; }
       .app-sidebar { left: -$sidebar-width; }
       .app-sidebar__overlay { visibility: hidden; }
     }
@@ -78,20 +79,4 @@ html {
   margin-right: -20px;
   background-color: red;
   width: 20px;
-}
-
-.pagination {
-  overflow-y: hidden;
-  @media(max-width: 768px) {
-    .page-item:first-child .page-link {
-      border-top-left-radius: 0.2rem;
-      border-bottom-left-radius: 0.2rem;
-    }
-
-    .page-link {
-      padding: 0.25rem 0.5rem;
-      font-size: 0.7875rem;
-      line-height: 1.5;
-    }
-  }
 }

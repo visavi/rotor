@@ -14,7 +14,7 @@
     <link rel="stylesheet" type="text/css" href="{{ mix('/themes/default/dist/app.css') }}">
     @stack('styles')
 </head>
-<body class="app sidebar">
+<body class="app">
 
 @include('navbar')
 @include('sidebar')
@@ -26,9 +26,12 @@
     </div>
 
     @yield('flash')
-    @yield('advertTop')
-    @yield('advertAdmin')
-    @yield('advertUser')
+
+    <div class="mb-2">
+        @yield('advertTop')
+        @yield('advertAdmin')
+        @yield('advertUser')
+    </div>
 
     @yield('content')
     @yield('advertBottom')

@@ -13,6 +13,7 @@
   box-shadow: 0 8px 17px rgba(0, 0, 0, 0.2);
   transition: left 0.3s ease,
   width 0.3s ease;
+  opacity: 0.95;
   &::-webkit-scrollbar { width: 6px; }
   &::-webkit-scrollbar-thumb { background: rgba(0,0,0,0.2); }
   @media print { display: none; }
@@ -25,7 +26,7 @@
     }
 
     .treeview-item {
-      padding: 5px 5px 5px 20px;
+      padding: 8px 20px;
     }
   }
 }

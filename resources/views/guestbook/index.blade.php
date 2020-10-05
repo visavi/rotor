@@ -15,7 +15,6 @@
         </div>
     @endif
 
-
     <h1>{{ __('index.guestbook') }}</h1>
 @stop
 

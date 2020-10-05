@@ -1,4 +1,4 @@
-<div class="alert alert-light pb-0 my-3 cursor-pointer" onclick="return showQueries();">
+<div class="performance" onclick="return showQueries();">
     <ul class="list-inline">
         <li class="list-inline-item" data-toggle="tooltip" title="{{ __('index.db_queries') }}"><i class="fas fa-database"></i> {{ count($queries) }}</li>
 

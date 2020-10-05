@@ -18,7 +18,7 @@
 @section('content')
     {{ __('main.cash_money') }}: <b>{{ plural(getUser('money'), setting('moneyname')) }}</b><br><br>
 
-    <div class="section-form p-2 shadow">
+    <div class="section-form mb-3 p-2 shadow">
         <form method="post" action="/adverts/create">
             @csrf
             <div class="form-group{{ hasError('site') }}">
@@ -58,7 +58,9 @@
         </form>
     </div>
 
-    {!! __('adverts.rules_text', ['price' =>  plural(setting('rekuserprice'), setting('moneyname')), 'time' => setting('rekusertime'), 'optprice' => plural(setting('rekuseroptprice'), setting('moneyname'))]) !!}<br>
+    <div class="text-muted font-italic">
+        {!! __('adverts.rules_text', ['price' =>  plural(setting('rekuserprice'), setting('moneyname')), 'time' => setting('rekusertime'), 'optprice' => plural(setting('rekuseroptprice'), setting('moneyname'))]) !!}
+    </div>
 @stop
 
 @push('scripts')
