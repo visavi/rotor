@@ -184,7 +184,7 @@ class UserController extends BaseController
                         'email'         => $email,
                         'level'         => $level,
                         'gender'        => $gender,
-                        'themes'        => 0,
+                        'themes'        => setting('themes'),
                         'point'         => 0,
                         'language'      => setting('language'),
                         'money'         => setting('registermoney'),

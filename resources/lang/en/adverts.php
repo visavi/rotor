@@ -13,12 +13,12 @@ return [
     'buy_for'       => 'Buy for',
     'rules_text'    => '
      Cost of posting links :price for :time hours<br>
-     Color and bold text optional, cost of each option :optprice<br>
-     The link scrolls on all pages of the site with other user links<br>
-     It is forbidden to use any profanity and obscene words in the title of the link<br>
-     Link address should not direct to direct downloading of any content<br>
-     Links to sites with alarms and porn are prohibited<br>
-     For violation of the rules punishment in the form of a ban is provided<br>',
+     Color and bold text optional, cost of each option :optprice<br>
+     The link scrolls on all pages of the site with other user links<br>
+     It is forbidden to use any profanity and obscene words in the title of the link<br>
+     Link address should not direct to direct downloading of any content<br>
+     Links to sites with alarms and porn are prohibited<br>
+     For violation of the rules punishment in the form of a ban is provided<br>',
     'edit_advert' => 'Link editing',
 
     'advert_closed'         => 'The display and placement of advertising is prohibited by the site administration!',

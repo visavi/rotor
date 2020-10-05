@@ -32,10 +32,10 @@ return [
 
     'ban_text' => '
     If moder banned you by mistake or you think that the ban is not deserved, then you can write an explanation of your violation<br>
-    If your explanation is considered and satisfied, then you will be banned.<br>',
+    If your explanation is considered and satisfied, then you will be banned.<br>',
     'ban_text2' => '
     By systematically ignoring administration alerts, your profile may be deleted<br>
-    Recovering a profile or data after that will be impossible<br>
+    Recovering a profile or data after that will be impossible<br>
     Be careful not to break more rules<br>',
 
     'welcome'              => 'Welcome :login!',
@@ -46,12 +46,12 @@ return [
     'confirm_text'         => '
     Until you confirm the registration, you will not be able to log in to the site <br>
     Account activation must be completed within 24 hours <br>
-    After 24 hours, unverified accounts are automatically deleted.',
+    After 24 hours, unverified accounts are automatically deleted.',
     'logout'               => 'Logout',
 
     'social_auth_text' => '
     The profile is not associated with any account on the site. Log in or register to link your account with a social network profile.<br>
-    Or select another social network to enter.',
+    Or select another social network to enter.',
     'login_or_email'     => 'Login or email',
     'login'              => 'Login',
     'password'           => 'Password',
@@ -98,13 +98,13 @@ return [
     'password_requirements'     => 'Minimum password length 6 characters',
     'register_text' => '
     Registering on the site means that you are familiar with and agree to the <b> <a href="/rules">rules</a></b> of our site<br>
-    All fields are required, you can add more complete information about yourself in your profile after registration<br>
-    Indicate the correct email, registration data will be sent to it',
+    All fields are required, you can add more complete information about yourself in your profile after registration<br>
+    Indicate the correct email, registration data will be sent to it',
 
     'login_or_username' => 'Login or username',
     'search_text'       => '
     If the search result did not return anything, then you can search by the first characters of the login<br>
-    In this case, a result similar to the request you entered will be displayed.',
+    In this case, a result similar to the request you entered will be displayed.',
 
     'theme'                => 'Subject',
     'language'             => 'Language',

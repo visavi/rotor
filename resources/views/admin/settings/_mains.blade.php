@@ -91,7 +91,7 @@
     <?php $inputThemes = getInput('sets.themes', $settings['themes']); ?>
 
     <div class="form-group{{ hasError('sets[themes]') }}">
-        <label for="themes">{{ __('settings.wap_theme') }}:</label>
+        <label for="themes">{{ __('settings.theme') }}:</label>
         <select class="form-control" id="themes" name="sets[themes]">
 
             @foreach ($themes as $theme)
@@ -101,22 +101,6 @@
 
         </select>
         <div class="invalid-feedback">{{ textError('sets[themes]') }}</div>
-    </div>
-
-    <?php $inputThemes = getInput('sets.webthemes', $settings['webthemes']); ?>
-
-    <div class="form-group{{ hasError('sets[webthemes]') }}">
-        <label for="webthemes">{{ __('settings.web_theme') }}:</label>
-        <select class="form-control" id="webthemes" name="sets[webthemes]">
-            <option value="0">{{ __('main.disable') }}</option>
-
-            @foreach ($themes as $theme)
-                <?php $selected = ($inputThemes === $theme) ? ' selected' : ''; ?>
-                <option value="{{ $theme }}"{{ $selected }}>{{ $theme }}</option>
-            @endforeach
-
-        </select>
-        <div class="invalid-feedback">{{ textError('sets[webthemes]') }}</div>
     </div>
 
     <?php $inputSite = getInput('sets.closedsite', $settings['closedsite']); ?>
