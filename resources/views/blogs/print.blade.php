@@ -7,7 +7,6 @@
 @section('description', truncateDescription(bbCode($article->text, false)))
 
 @section('content')
-
     <h1>{{ $article->title }}</h1>
 
     {!! bbCode($article->text) !!}

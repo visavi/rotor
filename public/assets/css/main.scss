@@ -6,7 +6,7 @@
 }
 
 .section-body {
-  overflow-wrap: break-word;
+  overflow: hidden;
 }
 
 .section-header {
@@ -15,6 +15,10 @@
 
 .section-content {
 
+}
+
+.section-message {
+  overflow-wrap: break-word;
 }
 
 .section-title {
