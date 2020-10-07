@@ -9,13 +9,13 @@ class ChangeRelateTypeInPollings extends AbstractMigration
      */
     public function up(): void
     {
-        $this->execute('UPDATE pollings SET relate_type="articles" WHERE relate_type="App\\Models\\Blog";');
-        $this->execute('UPDATE pollings SET relate_type="downs" WHERE relate_type="App\\Models\\Down";');
-        $this->execute('UPDATE pollings SET relate_type="news" WHERE relate_type="App\\Models\\News";');
-        $this->execute('UPDATE pollings SET relate_type="offers" WHERE relate_type="App\\Models\\Offer";');
-        $this->execute('UPDATE pollings SET relate_type="photos" WHERE relate_type="App\\Models\\Photo";');
-        $this->execute('UPDATE pollings SET relate_type="posts" WHERE relate_type="App\\Models\\Post";');
-        $this->execute('UPDATE pollings SET relate_type="votes" WHERE relate_type="App\\Models\\Vote";');
+        $this->execute('UPDATE pollings SET relate_type="articles" WHERE relate_type LIKE "%Blog";');
+        $this->execute('UPDATE pollings SET relate_type="downs" WHERE relate_type LIKE "%Down";');
+        $this->execute('UPDATE pollings SET relate_type="news" WHERE relate_type LIKE "%News";');
+        $this->execute('UPDATE pollings SET relate_type="offers" WHERE relate_type LIKE "%Offer";');
+        $this->execute('UPDATE pollings SET relate_type="photos" WHERE relate_type LIKE "%Photo";');
+        $this->execute('UPDATE pollings SET relate_type="posts" WHERE relate_type LIKE "%Post";');
+        $this->execute('UPDATE pollings SET relate_type="votes" WHERE relate_type LIKE "%Vote";');
 
         $table = $this->table('pollings');
         $table->changeColumn('relate_type', 'string', ['limit' => 10])

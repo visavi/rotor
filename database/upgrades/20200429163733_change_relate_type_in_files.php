@@ -9,11 +9,11 @@ class ChangeRelateTypeInFiles extends AbstractMigration
      */
     public function up(): void
     {
-        $this->execute('UPDATE files SET relate_type="articles" WHERE relate_type="App\\Models\\Blog";');
-        $this->execute('UPDATE files SET relate_type="downs" WHERE relate_type="App\\Models\\Down";');
-        $this->execute('UPDATE files SET relate_type="items" WHERE relate_type="App\\Models\\Item";');
-        $this->execute('UPDATE files SET relate_type="photos" WHERE relate_type="App\\Models\\Photo";');
-        $this->execute('UPDATE files SET relate_type="posts" WHERE relate_type="App\\Models\\Post";');
+        $this->execute('UPDATE files SET relate_type="articles" WHERE relate_type LIKE "%Blog";');
+        $this->execute('UPDATE files SET relate_type="downs" WHERE relate_type LIKE "%Down";');
+        $this->execute('UPDATE files SET relate_type="items" WHERE relate_type LIKE "%Item";');
+        $this->execute('UPDATE files SET relate_type="photos" WHERE relate_type LIKE "%Photo";');
+        $this->execute('UPDATE files SET relate_type="posts" WHERE relate_type LIKE "%Post";');
 
         $table = $this->table('files');
         $table->changeColumn('relate_type', 'string', ['limit' => 10])

@@ -9,9 +9,9 @@ class ChangeRelateTypeInReaders extends AbstractMigration
      */
     public function up(): void
     {
-        $this->execute('UPDATE readers SET relate_type="articles" WHERE relate_type="App\\Models\\Blog";');
-        $this->execute('UPDATE readers SET relate_type="downs" WHERE relate_type="App\\Models\\Down";');
-        $this->execute('UPDATE readers SET relate_type="topics" WHERE relate_type="App\\Models\\Topic";');
+        $this->execute('UPDATE readers SET relate_type="articles" WHERE relate_type LIKE "%Blog";');
+        $this->execute('UPDATE readers SET relate_type="downs" WHERE relate_type LIKE "%Down";');
+        $this->execute('UPDATE readers SET relate_type="topics" WHERE relate_type LIKE "%Topic";');
 
         $table = $this->table('readers');
         $table->changeColumn('relate_type', 'string', ['limit' => 10])

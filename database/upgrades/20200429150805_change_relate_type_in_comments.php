@@ -9,11 +9,11 @@ class ChangeRelateTypeInComments extends AbstractMigration
      */
     public function up(): void
     {
-        $this->execute('UPDATE comments SET relate_type="downs" WHERE relate_type="App\\Models\\Down";');
-        $this->execute('UPDATE comments SET relate_type="photos" WHERE relate_type="App\\Models\\Photo";');
-        $this->execute('UPDATE comments SET relate_type="articles" WHERE relate_type="App\\Models\\Blog";');
-        $this->execute('UPDATE comments SET relate_type="offers" WHERE relate_type="App\\Models\\Offer";');
-        $this->execute('UPDATE comments SET relate_type="news" WHERE relate_type="App\\Models\\News";');
+        $this->execute('UPDATE comments SET relate_type="downs" WHERE relate_type LIKE "%Down";');
+        $this->execute('UPDATE comments SET relate_type="photos" WHERE relate_type LIKE "%Photo";');
+        $this->execute('UPDATE comments SET relate_type="articles" WHERE relate_type LIKE "%Blog";');
+        $this->execute('UPDATE comments SET relate_type="offers" WHERE relate_type LIKE "%Offer";');
+        $this->execute('UPDATE comments SET relate_type="news" WHERE relate_type LIKE "%News";');
 
         $table = $this->table('comments');
         $table->changeColumn('relate_type', 'string', ['limit' => 10])
