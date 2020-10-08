@@ -100,14 +100,22 @@
         </li>
     </ul>
 
-    <div class="app-sidebar__footer">
-        <div class="float-right">
-            @yield('online')
-        </div>
+    <ul class="app-menu app-sidebar__footer">
+        <li class="app-search search-sidebar mr-0">
+            <form action="/search" method="get">
+                <input name="q" class="app-search__input" type="search" placeholder="{{ __('main.search') }}" required>
+                <button class="app-search__button"><i class="fa fa-search"></i></button>
+            </form>
+        </li>
 
-        <div>
-            <i class="fas fa-globe-americas"></i> <a href="/language/ru{{ returnUrl() }}">RU</a> /
+        <li>
+            <span class="float-right">
+                @yield('online')
+            </span>
+
+            <i class="fas fa-globe-americas"></i>
+            <a href="/language/ru{{ returnUrl() }}">RU</a> /
             <a href="/language/en{{ returnUrl() }}">EN</a>
-        </div>
-    </div>
+        </li>
+    </ul>
 </aside>

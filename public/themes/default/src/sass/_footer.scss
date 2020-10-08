@@ -4,12 +4,14 @@
   flex: 0 0 auto;
   background-color: $body-bg;
   padding: 10px 30px;
+  transition: margin-left 0.3s ease;
 
   @media(min-width: 768px) {
     margin-left: $sidebar-width;
   }
 
   @media (max-width: 768px) {
-      padding: 0 15px;
+    min-width: 100%;
+    padding: 0 15px;
   }
 }

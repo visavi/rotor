@@ -10,9 +10,11 @@
 
     <!-- Navbar Right Menu-->
     <ul class="app-nav">
-        <li class="app-search" style="display: none">
-            <input class="app-search__input" type="search" placeholder="Search">
-            <button class="app-search__button"><i class="fa fa-search"></i></button>
+        <li class="app-search search-navbar">
+            <form action="/search" method="get">
+                <input name="q" class="app-search__input" type="search" placeholder="{{ __('main.search') }}"required>
+                <button class="app-search__button"><i class="fa fa-search"></i></button>
+            </form>
         </li>
 
         <!--Notification Menu-->
