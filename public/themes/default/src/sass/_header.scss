@@ -100,18 +100,20 @@
   position: relative;
   display: flex;
   align-self: center;
-  margin-right: 15px;
   padding: 10px 0;
 }
 
-@media(max-width: 768px) {
-  .search-navbar {
+
+.search-navbar {
+  margin-right: 15px;
+
+  @media(max-width: 768px) {
     display: none;
   }
 }
 
-@media(min-width: 768px) {
-  .search-sidebar {
+.search-sidebar {
+  @media(min-width: 768px) {
     display: none;
   }
 }
