@@ -8,6 +8,7 @@ use Illuminate\Container\Container;
 use Illuminate\Database\Capsule\Manager as DB;
 use Illuminate\Events\Dispatcher;
 use Illuminate\Filesystem\Filesystem;
+use Illuminate\Log\LogManager;
 use Illuminate\Pagination\PaginationServiceProvider;
 use Illuminate\Redis\RedisManager;
 use Illuminate\Support\Facades\Facade;
@@ -108,8 +109,8 @@ $app->singleton('view', static function ($app) {
         return new CompilerEngine($blade);
     });
 
-    $resolver->register('php', static function () {
-        return new PhpEngine();
+    $resolver->register('php', static function () use ($app) {
+        return new PhpEngine($app['files']);
     });
 
     $finder = new FileViewFinder(
@@ -131,7 +132,6 @@ $app->singleton('config', static function () {
         'cache.stores.file' => [
             'driver'     => 'file',
             'path'       => STORAGE . '/caches',
-            'permission' => '0666',
         ],
         'cache.stores.redis' => [
             'driver'     => 'redis',
@@ -156,7 +156,18 @@ $app->singleton('config', static function () {
                 ],
             ],
         ],
+
+        'logging.default' => 'monolog',
+        'logging.channels.monolog' => [
+            'path' => STORAGE . '/logs/rotor.log',
+            'driver' => 'daily',
+            'level' => 'debug',
+        ],
     ];
+});
+
+$app->singleton('log', static function ($app) {
+    return new LogManager($app);
 });
 
 if (config('CACHE_DRIVER') === 'redis') {
@@ -167,7 +178,7 @@ if (config('CACHE_DRIVER') === 'redis') {
 
 if (config('CACHE_DRIVER') === 'memcached') {
     $app->bind('memcached.connector', static function () {
-        return  new MemcachedConnector();
+        return new MemcachedConnector();
     });
 }
 

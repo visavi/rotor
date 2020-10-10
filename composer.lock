@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "970f6a32eb30e57a3fa007794a43dacb",
+    "content-hash": "4f989c7ba61f2ecb02693b57868b6e5e",
     "packages": [
         {
             "name": "alchemy/binary-driver",
@@ -1383,6 +1383,51 @@
             "time": "2020-10-06T14:18:33+00:00"
         },
         {
+            "name": "illuminate/log",
+            "version": "v8.9.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/illuminate/log.git",
+                "reference": "15d4c06838ebe4b8a0df4d0201c7cf67b969f717"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/illuminate/log/zipball/15d4c06838ebe4b8a0df4d0201c7cf67b969f717",
+                "reference": "15d4c06838ebe4b8a0df4d0201c7cf67b969f717",
+                "shasum": ""
+            },
+            "require": {
+                "illuminate/contracts": "^8.0",
+                "illuminate/support": "^8.0",
+                "monolog/monolog": "^2.0",
+                "php": "^7.3"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "8.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Illuminate\\Log\\": ""
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Taylor Otwell",
+                    "email": "taylor@laravel.com"
+                }
+            ],
+            "description": "The Illuminate Log package.",
+            "homepage": "https://laravel.com",
+            "time": "2020-08-24T13:16:11+00:00"
+        },
+        {
             "name": "illuminate/macroable",
             "version": "v8.9.0",
             "source": {
@@ -1959,6 +2004,97 @@
             "time": "2020-02-19T09:02:13+00:00"
         },
         {
+            "name": "monolog/monolog",
+            "version": "2.1.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/Seldaek/monolog.git",
+                "reference": "f9eee5cec93dfb313a38b6b288741e84e53f02d5"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/Seldaek/monolog/zipball/f9eee5cec93dfb313a38b6b288741e84e53f02d5",
+                "reference": "f9eee5cec93dfb313a38b6b288741e84e53f02d5",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=7.2",
+                "psr/log": "^1.0.1"
+            },
+            "provide": {
+                "psr/log-implementation": "1.0.0"
+            },
+            "require-dev": {
+                "aws/aws-sdk-php": "^2.4.9 || ^3.0",
+                "doctrine/couchdb": "~1.0@dev",
+                "elasticsearch/elasticsearch": "^6.0",
+                "graylog2/gelf-php": "^1.4.2",
+                "php-amqplib/php-amqplib": "~2.4",
+                "php-console/php-console": "^3.1.3",
+                "php-parallel-lint/php-parallel-lint": "^1.0",
+                "phpspec/prophecy": "^1.6.1",
+                "phpunit/phpunit": "^8.5",
+                "predis/predis": "^1.1",
+                "rollbar/rollbar": "^1.3",
+                "ruflin/elastica": ">=0.90 <3.0",
+                "swiftmailer/swiftmailer": "^5.3|^6.0"
+            },
+            "suggest": {
+                "aws/aws-sdk-php": "Allow sending log messages to AWS services like DynamoDB",
+                "doctrine/couchdb": "Allow sending log messages to a CouchDB server",
+                "elasticsearch/elasticsearch": "Allow sending log messages to an Elasticsearch server via official client",
+                "ext-amqp": "Allow sending log messages to an AMQP server (1.0+ required)",
+                "ext-mbstring": "Allow to work properly with unicode symbols",
+                "ext-mongodb": "Allow sending log messages to a MongoDB server (via driver)",
+                "graylog2/gelf-php": "Allow sending log messages to a GrayLog2 server",
+                "mongodb/mongodb": "Allow sending log messages to a MongoDB server (via library)",
+                "php-amqplib/php-amqplib": "Allow sending log messages to an AMQP server using php-amqplib",
+                "php-console/php-console": "Allow sending log messages to Google Chrome",
+                "rollbar/rollbar": "Allow sending log messages to Rollbar",
+                "ruflin/elastica": "Allow sending log messages to an Elastic Search server"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "2.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Monolog\\": "src/Monolog"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Jordi Boggiano",
+                    "email": "j.boggiano@seld.be",
+                    "homepage": "http://seld.be"
+                }
+            ],
+            "description": "Sends your logs to files, sockets, inboxes, databases and various web services",
+            "homepage": "http://github.com/Seldaek/monolog",
+            "keywords": [
+                "log",
+                "logging",
+                "psr-3"
+            ],
+            "funding": [
+                {
+                    "url": "https://github.com/Seldaek",
+                    "type": "github"
+                },
+                {
+                    "url": "https://tidelift.com/funding/github/packagist/monolog/monolog",
+                    "type": "tidelift"
+                }
+            ],
+            "time": "2020-07-23T08:41:23+00:00"
+        },
+        {
             "name": "nelexa/zip",
             "version": "3.3.3",
             "source": {
@@ -2026,16 +2162,16 @@
         },
         {
             "name": "nesbot/carbon",
-            "version": "2.41.0",
+            "version": "2.41.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/briannesbitt/Carbon.git",
-                "reference": "8690b13ad4da6d54d692afea15aab30b36fee52e"
+                "reference": "91d8d8dca31936a137213d7c48f8ac981e501ff4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/briannesbitt/Carbon/zipball/8690b13ad4da6d54d692afea15aab30b36fee52e",
-                "reference": "8690b13ad4da6d54d692afea15aab30b36fee52e",
+                "url": "https://api.github.com/repos/briannesbitt/Carbon/zipball/91d8d8dca31936a137213d7c48f8ac981e501ff4",
+                "reference": "91d8d8dca31936a137213d7c48f8ac981e501ff4",
                 "shasum": ""
             },
             "require": {
@@ -2111,7 +2247,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2020-10-04T09:11:05+00:00"
+            "time": "2020-10-10T11:06:56+00:00"
         },
         {
             "name": "neutron/temporary-filesystem",
@@ -5714,23 +5850,23 @@
         },
         {
             "name": "guzzlehttp/guzzle",
-            "version": "7.1.1",
+            "version": "7.2.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/guzzle/guzzle.git",
-                "reference": "7427d6f99df41cc01f33cd59832f721c150ffdf3"
+                "reference": "0aa74dfb41ae110835923ef10a9d803a22d50e79"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/guzzle/guzzle/zipball/7427d6f99df41cc01f33cd59832f721c150ffdf3",
-                "reference": "7427d6f99df41cc01f33cd59832f721c150ffdf3",
+                "url": "https://api.github.com/repos/guzzle/guzzle/zipball/0aa74dfb41ae110835923ef10a9d803a22d50e79",
+                "reference": "0aa74dfb41ae110835923ef10a9d803a22d50e79",
                 "shasum": ""
             },
             "require": {
                 "ext-json": "*",
-                "guzzlehttp/promises": "^1.0",
-                "guzzlehttp/psr7": "^1.6.1",
-                "php": "^7.2.5",
+                "guzzlehttp/promises": "^1.4",
+                "guzzlehttp/psr7": "^1.7",
+                "php": "^7.2.5 || ^8.0",
                 "psr/http-client": "^1.0"
             },
             "provide": {
@@ -5738,8 +5874,8 @@
             },
             "require-dev": {
                 "ext-curl": "*",
-                "php-http/client-integration-tests": "dev-phpunit8",
-                "phpunit/phpunit": "^8.5.5",
+                "php-http/client-integration-tests": "^3.0",
+                "phpunit/phpunit": "^8.5.5 || ^9.3.5",
                 "psr/log": "^1.1"
             },
             "suggest": {
@@ -5808,7 +5944,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2020-09-30T08:51:17+00:00"
+            "time": "2020-10-10T11:47:56+00:00"
         },
         {
             "name": "guzzlehttp/promises",

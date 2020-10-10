@@ -66,10 +66,11 @@ function makeTime(int $time)
  *
  * @param int|null $timestamp секунды
  * @param string   $format    формат времени
+ * @param bool     $original  формат без изменения
  *
  * @return string форматированный вывод
  */
-function dateFixed(?int $timestamp, $format = 'd.m.Y / H:i')
+function dateFixed(?int $timestamp, string $format = 'd.m.Y / H:i', bool $original = false)
 {
     if (! is_numeric($timestamp)) {
         $timestamp = SITETIME;
@@ -77,6 +78,10 @@ function dateFixed(?int $timestamp, $format = 'd.m.Y / H:i')
 
     $shift     = getUser('timezone') * 3600;
     $dateStamp = date($format, $timestamp + $shift);
+
+    if ($original) {
+        return $dateStamp;
+    }
 
     $today     = date('d.m.Y', SITETIME + $shift);
     $yesterday = date('d.m.Y', strtotime('-1 day', SITETIME + $shift));
