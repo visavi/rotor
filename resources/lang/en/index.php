@@ -58,7 +58,7 @@ return [
     'who_online'         => 'Who is online',
 
     'recent_activity' => 'Recent activity',
-    'recent_topics'   => 'Recent Topics',
+    'recent_topics'   => 'Recent topics',
     'recent_files'    => 'Recent files',
     'recent_articles' => 'Recent articles',
     'recent_photos'   => 'Recent photos',
@@ -67,7 +67,7 @@ return [
     'profile_settings'   => 'Profile / Settings',
     'my_account'         => 'My account',
     'my_profile'         => 'My profile',
-    'my_details'         => 'My Details',
+    'my_details'         => 'My details',
     'my_settings'        => 'Settings',
     'social_networks'    => 'Social networks',
     'activity'           => 'Activity',

@@ -116,8 +116,7 @@ class HelperTest extends TestCase
         self::assertSame(1, int(-1));
         self::assertSame(1, int('-1'));
         self::assertSame(0, int([]));
-        self::assertSame(0, int([1]));
-        self::assertSame(0, int(['abc']));
+        self::assertSame(1, int([1]));
     }
 
     /**

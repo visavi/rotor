@@ -1,5 +1,6 @@
 /storage/backups
 /storage/caches
+/storage/logs
 /storage/views
 /public/uploads/files
 /public/uploads/avatars

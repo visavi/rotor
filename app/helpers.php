@@ -204,7 +204,7 @@ function check($string, $doubleEncode = true)
  */
 function int($num)
 {
-    return (int) abs($num);
+    return abs((int) $num);
 }
 
 /**
