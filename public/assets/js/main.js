@@ -324,7 +324,7 @@ changeRating = function(el)
             }
 
             if (data.status === 'success') {
-                rating = $(el).closest('.js-rating').find('span');
+                rating = $(el).closest('.js-rating').find('b');
 
                 $(el).closest('.js-rating').find('a').removeClass('active');
 

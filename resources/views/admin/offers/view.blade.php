@@ -33,7 +33,7 @@
         {{ __('main.added') }}: {!! $offer->user->getProfile() !!} ({{ dateFixed($offer->created_at) }})<br>
 
         <div class="js-rating">{{ __('main.rating') }}:
-            <span>{!! formatNum($offer->rating) !!}</span><br>
+            {!! formatNum($offer->rating) !!}<br>
         </div>
 
         <a href="/offers/comments/{{ $offer->id }}">{{ __('main.comments') }}</a> ({{ $offer->count_comments }})

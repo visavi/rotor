@@ -146,7 +146,7 @@
                             @if (getUser() && getUser('id') !== $data->user_id)
                                 <a class="post-rating-down{{ $data->vote === '-' ? ' active' : '' }}" href="#" onclick="return changeRating(this);" data-id="{{ $data->id }}" data-type="{{ $data->getMorphClass() }}" data-vote="-" data-token="{{ $_SESSION['token'] }}"><i class="fas fa-arrow-down"></i></a>
                             @endif
-                            <b><span>{!! formatNum($data->rating) !!}</span></b>
+                            <b>{!! formatNum($data->rating) !!}</b>
                             @if (getUser() && getUser('id') !== $data->user_id)
                                 <a class="post-rating-up{{ $data->vote === '+' ? ' active' : '' }}" href="#" onclick="return changeRating(this);" data-id="{{ $data->id }}" data-type="{{ $data->getMorphClass() }}" data-vote="+" data-token="{{ $_SESSION['token'] }}"><i class="fas fa-arrow-up"></i></a>
                             @endif

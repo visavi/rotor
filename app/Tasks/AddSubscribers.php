@@ -27,11 +27,12 @@ class AddSubscribers extends Task
 
         if ($deliveryUsers->isNotEmpty()) {
             foreach ($deliveryUsers as $user) {
-                $subject = $user->newprivat . ' непрочитанных сообщений (' . setting('title') . ')';
+                $subject = $user->newprivat . ' непрочитанных сообщений на ' . setting('title');
 
                 $message = 'Здравствуйте ' . $user->getName() . '!<br>У вас имеются непрочитанные сообщения (' . $user->newprivat . ' шт.) на сайте ' . setting('title') . '<br>Прочитать свои сообщения вы можете по адресу <a href="' . siteUrl(true) . '/messages">' . siteUrl(true) . '/messages</a><br><br><small>Если вы не хотите получать эти email, пожалуйста, <a href="'.siteUrl(true).'/unsubscribe?key='.$user->subscribe.'">откажитесь от подписки</a></small>';
 
                 $body = view('mailer.default', compact('subject', 'message'));
+                $body = $this->minifyHtml($body);
 
                 Mailing::query()->create([
                     'user_id'    => $user->id,
@@ -44,5 +45,24 @@ class AddSubscribers extends Task
                 $user->update(['sendprivatmail' => 1]);
             }
         }
+    }
+
+    /**
+     * Minify html
+     *
+     * @param string $body
+     *
+     * @return string
+     */
+    private function minifyHtml(string $body): string
+    {
+        $search = [
+            '/\>[^\S ]+/s',
+            '/[^\S ]+\</s',
+            '/(\s)+/s',
+        ];
+        $replace = ['>', '<', ' '];
+
+        return preg_replace($search, $replace, $body);
     }
 }
