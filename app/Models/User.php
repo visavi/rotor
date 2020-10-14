@@ -393,28 +393,16 @@ class User extends BaseModel
     public function getAvatar(): string
     {
         if (! $this->id) {
-            return '<img class="img-fluid rounded-circle avatar-default" src="/assets/img/images/avatar_default.png" alt=""> ';
+            return $this->getAvatarGuest();
         }
 
         if ($this->avatar && file_exists(HOME . '/' . $this->avatar)) {
-            return '<a href="/users/' . $this->login . '"><img class="img-fluid rounded-circle" src="' . $this->avatar . '" alt=""></a> ';
+            $avatar = $this->getAvatarImage();
+        } else {
+            $avatar = $this->getAvatarDefault();
         }
 
-        return $this->defaultAvatar();
-    }
-
-    /**
-     * Возвращает аватар для пользователя по умолчанию
-     *
-     * @return string код аватара
-     */
-    public function defaultAvatar(): string
-    {
-        $name   = $this->name ?: $this->login;
-        $color  = '#' . substr(dechex(crc32($this->login)), 0, 6);
-        $letter = mb_strtoupper(utfSubstr($name, 0, 1), 'utf-8');
-
-        return '<div class="img-fluid rounded-circle avatar-default" style="background:' . $color . '"><a href="/users/' . $this->login . '">' . $letter . '</a></div>';
+        return '<a href="/users/' . $this->login . '">' . $avatar . '</a> ';
     }
 
     /**
@@ -424,11 +412,39 @@ class User extends BaseModel
      */
     public function getAvatarImage(): string
     {
-        if ($this->avatar && file_exists(HOME . '/' . $this->avatar)) {
-            return '<img class="img-fluid rounded-circle" src="' . $this->avatar . '" alt="" >';
+        if (! $this->id) {
+            return $this->getAvatarGuest();
         }
 
-        return '<img class="img-fluid rounded-circle avatar-default" src="/assets/img/images/avatar_guest.png" alt="">';
+        if ($this->avatar && file_exists(HOME . '/' . $this->avatar)) {
+            return '<img class="avatar-default rounded-circle " src="' . $this->avatar . '" alt="">';
+        }
+
+        return $this->getAvatarDefault();
+    }
+
+    /**
+     * Get guest avatar
+     *
+     * @return string
+     */
+    public function getAvatarGuest()
+    {
+        return '<img class="avatar-default rounded-circle " src="/assets/img/images/avatar_guest.png" alt=""> ';
+    }
+
+    /**
+     * Возвращает аватар для пользователя по умолчанию
+     *
+     * @return string код аватара
+     */
+    private function getAvatarDefault(): string
+    {
+        $name   = $this->name ?: $this->login;
+        $color  = '#' . substr(dechex(crc32($this->login)), 0, 6);
+        $letter = mb_strtoupper(utfSubstr($name, 0, 1), 'utf-8');
+
+        return '<span class="avatar-default rounded-circle" style="background:' . $color . '">' . $letter . '</span>';
     }
 
     /**

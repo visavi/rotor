@@ -26,17 +26,14 @@
         @foreach ($records as $record)
             <div class="section mb-3 shadow">
                 <?php $user = $record->getRelateUser(); ?>
-                @if ($user)
-                    <div class="user-avatar">
+                <div class="user-avatar">
+                    @if ($user)
                         {!! $user->getAvatar() !!}
                         {!! $user->getOnline() !!}
-                    </div>
-                @else
-                    <div class="user-avatar">
-                        <img class="img-fluid rounded-circle avatar-default" src="/assets/img/images/avatar_guest.png" alt="">
-                    </div>
-                @endif
-
+                    @else
+                        <img class="avatar-default rounded-circle" src="/assets/img/images/avatar_guest.png" alt="">
+                    @endif
+                </div>
                 <div class="section-user d-flex align-items-center">
                     <div class="flex-grow-1">
                         @if ($record->relate)

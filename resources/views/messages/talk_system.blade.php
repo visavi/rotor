@@ -20,7 +20,7 @@
         @foreach ($messages as $data)
             <div class="section mb-3 shadow">
                 <div class="user-avatar">
-                    <img class="img-fluid rounded-circle avatar-default" src="/assets/img/images/avatar_system.png" alt="">
+                    <img class="avatar-default rounded-circle" src="/assets/img/images/avatar_system.png" alt="">
                     <div class="user-status bg-success" title="Online"></div>
                 </div>
 

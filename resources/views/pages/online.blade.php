@@ -27,7 +27,7 @@
                     @if ($data->user_id)
                         {!! $data->user->getAvatar() !!}
                     @else
-                        <img class="img-fluid rounded-circle avatar-default" src="/assets/img/images/avatar_guest.png" alt="">
+                        {!! $data->user->getAvatarGuest() !!}
                     @endif
                 </div>
 

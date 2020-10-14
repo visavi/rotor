@@ -45,17 +45,16 @@
   width: 64px;
   text-align: center;
   font-size: 42px;
+  display: inline-block;
+  font-weight: bold;
+  text-decoration: none;
+  color: #fff;
 }
 
 .avatar-mini > .avatar-default {
   height: 32px;
   width: 32px;
-}
-
-.avatar-default a {
-  font-weight: bold;
-  text-decoration: none;
-  color: #fff;
+  font-size: 21px;
 }
 
 .user-avatar {

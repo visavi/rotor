@@ -34,7 +34,7 @@
         @else
             <div class="app-menu__item" data-toggle="treeview">
                 <div class="app-sidebar__user-avatar">
-                    <img class="img-fluid rounded-circle avatar-default" src="/assets/img/images/avatar_guest.png" alt="">
+                    <img class="avatar-default rounded-circle" src="/assets/img/images/avatar_guest.png" alt="">
                 </div>
                 <div class="app-menu__label">
                     <p class="app-sidebar__user-name">{{ __('users.enter') }}</p>

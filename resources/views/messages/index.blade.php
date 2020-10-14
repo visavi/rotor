@@ -25,7 +25,7 @@
                         {!! $data->author->getAvatar() !!}
                         {!! $data->author->getOnline() !!}
                     @else
-                        <img class="img-fluid rounded-circle avatar-default" src="/assets/img/images/avatar_system.png" alt="">
+                        <img class="avatar-default rounded-circle" src="/assets/img/images/avatar_system.png" alt="">
                         <div class="user-status bg-success" title="Онлайн"></div>
                     @endif
                 </div>
