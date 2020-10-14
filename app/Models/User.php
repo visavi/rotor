@@ -406,7 +406,7 @@ class User extends BaseModel
     }
 
     /**
-     * Временный метод
+     * Возвращает изображение аватара
      *
      * @return string
      */
@@ -417,7 +417,7 @@ class User extends BaseModel
         }
 
         if ($this->avatar && file_exists(HOME . '/' . $this->avatar)) {
-            return '<img class="avatar-default rounded-circle " src="' . $this->avatar . '" alt="">';
+            return '<img class="avatar-default rounded-circle" src="' . $this->avatar . '" alt="">';
         }
 
         return $this->getAvatarDefault();
@@ -430,7 +430,7 @@ class User extends BaseModel
      */
     public function getAvatarGuest()
     {
-        return '<img class="avatar-default rounded-circle " src="/assets/img/images/avatar_guest.png" alt=""> ';
+        return '<img class="avatar-default rounded-circle" src="/assets/img/images/avatar_guest.png" alt=""> ';
     }
 
     /**

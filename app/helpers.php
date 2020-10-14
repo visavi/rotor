@@ -151,11 +151,11 @@ function utfSubstr($str, int $start, $length = null)
 /**
  * Возвращает длину строки
  *
- * @param string $str строка
+ * @param mixed $str строка
  *
  * @return int длина строка
  */
-function utfStrlen(string $str)
+function utfStrlen($str)
 {
     return mb_strlen($str, 'utf-8');
 }

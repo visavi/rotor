@@ -42,8 +42,7 @@ class SearchController extends BaseController
             ->where('login', 'like', '%' . $find . '%')
             ->orWhere('name', 'like', '%' . $find . '%')
             ->orderByDesc('point')
-            ->limit(setting('usersearch'))
-            ->get();
+            ->paginate(setting('usersearch'));
 
         return view('users/search_result', compact('users'));
     }
