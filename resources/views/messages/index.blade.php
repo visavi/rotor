@@ -46,7 +46,7 @@
                     <div class="section-date text-muted font-italic small">
                         {{  dateFixed($data->created_at) }}
 
-                        @if ($data->type === 'out')
+                        @if ($data->type === $data::OUT)
                             <i class="fas fa-xs {{ $data->recipient_read ? 'fa-check-double' : 'fa-check' }} text-success"></i>
                         @endif
                     </div>
@@ -54,7 +54,7 @@
 
                 <div class="section-body border-top my-1 py-1">
                     <div class="section-message">
-                        {{ $data->type === 'out' ? __('messages.you') . ': ' : '' }}
+                        {{ $data->type === $data::OUT ? __('messages.you') . ': ' : '' }}
                         {!! bbCodeTruncate($data->text) !!}
                     </div>
                 </div>

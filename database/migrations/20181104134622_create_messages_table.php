@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\Message;
 use Phinx\Migration\AbstractMigration;
 
 class CreateMessagesTable extends AbstractMigration
@@ -14,7 +15,7 @@ class CreateMessagesTable extends AbstractMigration
             ->addColumn('user_id', 'integer')
             ->addColumn('author_id', 'integer')
             ->addColumn('text', 'text', ['null' => true])
-            ->addColumn('type', 'enum', ['values' => ['in', 'out']])
+            ->addColumn('type', 'enum', ['values' => [Message::IN, Message::OUT]])
             ->addColumn('reading', 'boolean', ['default' => 0])
             ->addColumn('created_at', 'integer')
             ->addIndex(['user_id', 'author_id'], ['name' => 'user_id'])

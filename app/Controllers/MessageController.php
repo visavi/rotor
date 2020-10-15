@@ -160,13 +160,13 @@ class MessageController extends BaseController
                 'user_id'    => $user->id,
                 'author_id'  => $this->user->id,
                 'text'       => $msg,
-                'type'       => 'in',
+                'type'       => Message::IN,
                 'created_at' => SITETIME,
             ])->create([
                 'user_id'    => $this->user->id,
                 'author_id'  => $user->id,
                 'text'       => $msg,
-                'type'       => 'out',
+                'type'       => Message::OUT,
                 'reading'    => 1,
                 'created_at' => SITETIME,
             ]);

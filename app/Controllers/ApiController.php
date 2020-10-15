@@ -99,7 +99,7 @@ class ApiController extends BaseController
 
         $messages = Message::query()
             ->where('user_id', $user->id)
-            ->where('type', 'in')
+            ->where('type', Message::IN)
             ->orderByDesc('created_at')
             ->limit($count)
             ->get();

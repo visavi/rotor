@@ -19,6 +19,9 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  */
 class Message extends BaseModel
 {
+    public const IN   = 'in';   // Принятые
+    public const OUT  = 'out';  // Отправленные
+
     /**
      * Indicates if the model should be timestamped.
      *
