@@ -424,7 +424,7 @@ function showCounter()
 function statsUsers()
 {
     return Cache::remember('statUsers', 1800, static function () {
-        $startDay = mktime(0, 0, 0, dateFixed(SITETIME, 'n'));
+        $startDay = mktime(0, 0, 0, dateFixed(SITETIME, 'n', true));
 
         $stat = User::query()->count();
         $new  = User::query()->where('created_at', '>', $startDay)->count();

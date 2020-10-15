@@ -77,7 +77,7 @@
 
             <div class="form-group{{ hasError('created') }}">
                 <label for="created">{{ __('users.registered') }}:</label>
-                <input type="text" class="form-control" id="created" name="created" maxlength="10" value="{{ getInput('created', dateFixed($user->created_at, 'd.m.Y')) }}" required>
+                <input type="text" class="form-control" id="created" name="created" maxlength="10" value="{{ getInput('created', dateFixed($user->created_at, 'd.m.Y', true)) }}" required>
                 <div class="invalid-feedback">{{ textError('created') }}</div>
             </div>
 

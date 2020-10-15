@@ -28,6 +28,8 @@ class HelperTest extends TestCase
 
         self::assertSame('01.06.2005 / 12:00', dateFixed($timestamp));
         self::assertSame('2005-06-01', dateFixed($timestamp, 'Y-m-d'));
+        self::assertSame('1 Июня 2005', dateFixed($timestamp, 'j F Y'));
+        self::assertSame('1 June 2005', dateFixed($timestamp, 'j F Y', true));
         self::assertSame(dateFixed(SITETIME), dateFixed(null));
     }
 
