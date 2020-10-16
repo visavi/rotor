@@ -1,6 +1,5 @@
 <?php
 
-use Intervention\Image\ImageManagerStatic as Image;
 use Phinx\Migration\AbstractMigration;
 
 class ChangeIpInPosts extends AbstractMigration

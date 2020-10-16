@@ -50,7 +50,7 @@
                     @if ($forum->children->isNotEmpty())
                         <div>
                             <a data-toggle="collapse" class="stretched-link" href="#section_{{ $forum->id }}">
-                                <i class="fas fa-angle-down"></i>
+                                <i class="treeview-indicator fas fa-angle-down"></i>
                             </a>
                         </div>
                     @endif

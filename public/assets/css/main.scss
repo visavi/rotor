@@ -308,3 +308,11 @@ textarea.form-control {
     font-size: 0.75rem;
   }
 }
+
+.stretched-link {
+  &[aria-expanded="true"]{
+    .treeview-indicator {
+      transform: rotate(180deg);
+    }
+  }
+}

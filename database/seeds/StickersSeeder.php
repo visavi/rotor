@@ -24,8 +24,8 @@ class StickersSeeder extends AbstractSeed
         $table = $this->table('stickers');
 
         $data = [
-            ['category_id' => 1, 'name' => '/uploads/stickers/).gif', 'code' => ':)'],
-            ['category_id' => 1, 'name' => '/uploads/stickers/(.gif', 'code' => ':('],
+            ['category_id' => 1, 'name' => '/uploads/stickers/smile.gif', 'code' => ':)'],
+            ['category_id' => 1, 'name' => '/uploads/stickers/sad.gif', 'code' => ':('],
             ['category_id' => 1, 'name' => '/uploads/stickers/4moks.gif', 'code' => ':4moks'],
             ['category_id' => 1, 'name' => '/uploads/stickers/D.gif', 'code' => ':D'],
             ['category_id' => 1, 'name' => '/uploads/stickers/E.gif', 'code' => ':E'],

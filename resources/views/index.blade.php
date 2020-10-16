@@ -5,12 +5,13 @@
 @stop
 
 @section('header')
-    @include('ads/_top')
     <h1>{{ setting('title') }}</h1>
     <p>{{ setting('logos') }}</p>
 @stop
 
 @section('content')
+    @include('ads/_top')
+
     <div class="section mb-3 shadow">
         <div class="section-title">
             <i class="far fa-circle fa-lg text-muted"></i>

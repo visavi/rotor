@@ -302,7 +302,7 @@ class BBCode
 
                 return array_map(
                     static function ($sticker) {
-                        return '<img src="' . $sticker . '" alt="' . basename($sticker) . '">';
+                        return '<img src="' . $sticker . '" alt="' . getBodyName($sticker) . '">';
                     },
                     $stickers
                 );
