@@ -208,7 +208,7 @@ class HelperTest extends TestCase
      */
     public function testBbCode(): void
     {
-        self::assertSame('<strong>Hello</strong> <img src="/uploads/stickers/D.gif" alt="D.gif"> &lt;br&gt; <u>world</u>', bbCode('[b]Hello[/b] :D <br> [u]world[/u]'));
+        self::assertSame('<strong>Hello</strong> <img src="/uploads/stickers/D.gif" alt="D"> &lt;br&gt; <u>world</u>', bbCode('[b]Hello[/b] :D <br> [u]world[/u]'));
 
         self::assertSame('Hello :D world', bbCode('[b]Hello[/b] :D [u]world[/u]', false));
     }

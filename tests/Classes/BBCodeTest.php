@@ -282,7 +282,7 @@ class BBCodeTest extends \Tests\TestCase
         $text      = 'Привет :D :hello';
         $parseText = $this->bbCode->parseStickers($text);
 
-        self::assertSame('Привет <img src="/uploads/stickers/D.gif" alt="D.gif"> <img src="/uploads/stickers/hello.gif" alt="hello.gif">', $parseText);
+        self::assertSame('Привет <img src="/uploads/stickers/D.gif" alt="D"> <img src="/uploads/stickers/hello.gif" alt="hello">', $parseText);
     }
 
     /**
