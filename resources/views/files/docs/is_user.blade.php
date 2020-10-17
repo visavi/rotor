@@ -1,6 +1,4 @@
-@section('title')
-    Функция is_user
-@stop
+@section('title', 'Функция is_user')
 
 @section('breadcrumb')
     <nav>

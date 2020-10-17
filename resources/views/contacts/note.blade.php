@@ -1,8 +1,6 @@
 @extends('layout')
 
-@section('title')
-    {{ __('contacts.note_title') }} {{ $contact->contactor->login }}
-@stop
+@section('title', __('contacts.note_title') . ' ' . $contact->contactor->login)
 
 @section('breadcrumb')
     <nav>

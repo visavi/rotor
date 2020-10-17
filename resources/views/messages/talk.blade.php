@@ -1,8 +1,6 @@
 @extends('layout')
 
-@section('title')
-    {{ __('messages.dialogue_with', ['user' => $user->getName()]) }}
-@stop
+@section('title', __('messages.dialogue_with', ['user' => $user->getName()]))
 
 @section('breadcrumb')
     <nav>

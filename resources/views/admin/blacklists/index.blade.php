@@ -1,8 +1,6 @@
 @extends('layout')
 
-@section('title')
-    {{ __('index.blacklist') }}
-@stop
+@section('title', __('index.blacklist'))
 
 @section('breadcrumb')
     <nav>
@@ -40,7 +38,7 @@
             <button class="btn btn-sm btn-danger">{{ __('main.delete_selected') }}</button>
         </form>
     @else
-        {!! showError( __('admin.blacklists.empty_list') ) !!}
+        {!! showError( __('admin.blacklists.empty_list')) !!}
     @endif
 
     {{ $lists->links() }}

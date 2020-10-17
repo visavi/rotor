@@ -1,6 +1,4 @@
-@section('title')
-    Функция user_online
-@stop
+@section('title', 'Функция user_online')
 
 @section('breadcrumb')
     <nav>

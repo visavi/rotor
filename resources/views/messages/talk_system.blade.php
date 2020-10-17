@@ -1,8 +1,6 @@
 @extends('layout')
 
-@section('title')
-    {{ __('messages.notifications') }}
-@stop
+@section('title', __('messages.notifications'))
 
 @section('breadcrumb')
     <nav>

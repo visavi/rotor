@@ -1,8 +1,6 @@
 @extends('layout')
 
-@section('title')
-    {{ __('photos.top_photos') }}
-@stop
+@section('title', __('photos.top_photos'))
 
 @section('breadcrumb')
     <nav>

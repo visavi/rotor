@@ -1,8 +1,6 @@
 @extends('layout')
 
-@section('title')
-    {{ __('stickers.create_sticker') }}
-@stop
+@section('title', __('stickers.create_sticker'))
 
 @section('breadcrumb')
     <nav>

@@ -1,8 +1,6 @@
 @extends('layout')
 
-@section('title')
-    {{ $vote->title }}
-@stop
+@section('title', $vote->title)
 
 @section('breadcrumb')
     <nav>

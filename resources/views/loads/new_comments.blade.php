@@ -1,8 +1,6 @@
 @extends('layout')
 
-@section('title')
-    {{ __('index.loads') }} - {{ __('loads.new_comments') }} ({{ __('main.page_num', ['page' => $comments->currentPage()]) }})
-@stop
+@section('title', __('index.loads') . ' - ' . __('loads.new_comments') . ' (' . __('main.page_num', ['page' => $comments->currentPage()]) . ')')
 
 @section('header')
     <h1>{{ __('loads.new_comments') }}</h1>

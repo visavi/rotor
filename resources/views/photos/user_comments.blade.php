@@ -1,8 +1,6 @@
 @extends('layout')
 
-@section('title')
-    {{ __('main.comments') }} {{ $user->getName() }} ({{ __('main.page_num', ['page' => $comments->currentPage()]) }})
-@stop
+@section('title', __('main.comments') . ' ' . $user->getName() . ' (' . __('main.page_num', ['page' => $comments->currentPage()]) . ')')
 
 @section('header')
     <h1>{{ __('main.comments') }} {{ $user->getName() }}</h1>

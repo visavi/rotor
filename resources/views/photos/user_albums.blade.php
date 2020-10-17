@@ -1,11 +1,9 @@
 @extends('layout')
 
-@section('title')
-    {{ __('photos.album') }} {{ $user->login }} ({{ __('main.page_num', ['page' => $photos->currentPage()]) }})
-@stop
+@section('title', __('photos.album') . ' ' . $user->getName() . ' (' . __('main.page_num', ['page' => $photos->currentPage()]) . ')')
 
 @section('header')
-    <h1>{{ __('photos.album') }} {{ $user->login }}</h1>
+    <h1>{{ __('photos.album') }} {{ $user->getName() }}</h1>
 @stop
 
 @section('breadcrumb')
@@ -13,7 +11,7 @@
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
             <li class="breadcrumb-item"><a href="/photos">{{ __('index.photos') }}</a></li>
-            <li class="breadcrumb-item active">{{ __('photos.album') }} {{ $user->login }}</li>
+            <li class="breadcrumb-item active">{{ __('photos.album') }} {{ $user->getName() }}</li>
         </ol>
     </nav>
 @stop

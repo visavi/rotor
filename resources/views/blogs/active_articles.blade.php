@@ -1,8 +1,6 @@
 @extends('layout')
 
-@section('title')
-    {{ __('index.blogs') }} - {{ __('blogs.title_active_articles', ['user' => $user->getName()]) }} ({{ __('main.page_num', ['page' => $articles->currentPage()]) }})
-@stop
+@section('title', __('index.blogs') . ' - ' . __('blogs.title_active_articles', ['user' => $user->getName()]) . ' (' . __('main.page_num', ['page' => $articles->currentPage()])  . ')')
 
 @section('header')
     <h1>{{ __('blogs.title_active_articles', ['user' => $user->getName()]) }}</h1>

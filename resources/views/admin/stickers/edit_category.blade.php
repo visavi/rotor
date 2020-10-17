@@ -1,8 +1,6 @@
 @extends('layout')
 
-@section('title')
-    {{ __('stickers.edit_category') }} {{ $category->name }}
-@stop
+@section('title', __('stickers.edit_category') . ' ' . $category->name)
 
 @section('breadcrumb')
     <nav>

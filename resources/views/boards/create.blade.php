@@ -1,8 +1,6 @@
 @extends('layout')
 
-@section('title')
-    {{ __('boards.create_item') }}
-@stop
+@section('title', __('boards.create_item'))
 
 @section('breadcrumb')
     <nav>

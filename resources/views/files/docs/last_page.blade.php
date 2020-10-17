@@ -1,6 +1,4 @@
-@section('title')
-  Функция last_page
-@stop
+@section('title', 'Функция last_page')
 
 @section('breadcrumb')
     <nav>

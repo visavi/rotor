@@ -1,8 +1,6 @@
 @extends('layout')
 
-@section('title')
-    {{ __('index.votes') }} ({{ __('main.page_num', ['page' => $votes->currentPage()]) }})
-@stop
+@section('title', __('index.votes') . ' (' . __('main.page_num', ['page' => $votes->currentPage()]) . ')')
 
 @section('header')
     @if (getUser())

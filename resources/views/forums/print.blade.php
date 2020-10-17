@@ -1,8 +1,6 @@
 @extends('layout_simple')
 
-@section('title')
-    {{ $topic->title }}
-@stop
+@section('title', $topic->title)
 
 @section('description', $description)
 

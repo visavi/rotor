@@ -1,6 +1,4 @@
-@section('title')
-    Функция profile
-@stop
+@section('title', 'Функция profile')
 
 @section('breadcrumb')
     <nav>

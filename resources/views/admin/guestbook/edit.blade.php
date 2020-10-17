@@ -1,8 +1,6 @@
 @extends('layout')
 
-@section('title')
-    {{ __('guestbook.title_edit') }}
-@stop
+@section('title', __('guestbook.title_edit'))
 
 @section('breadcrumb')
     <nav>

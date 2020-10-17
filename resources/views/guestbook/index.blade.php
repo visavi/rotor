@@ -1,8 +1,6 @@
 @extends('layout')
 
-@section('title')
-    {{ __('index.guestbook') }} ({{ __('main.page_num', ['page' => $posts->currentPage()]) }})
-@stop
+@section('title', __('index.guestbook') . ' (' . __('main.page_num', ['page' => $posts->currentPage()]) . ')')
 
 @section('header')
     @if (getUser() || setting('bookadds'))

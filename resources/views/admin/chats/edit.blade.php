@@ -1,8 +1,6 @@
 @extends('layout')
 
-@section('title')
-    {{ __('admin.chat.edit_message') }}
-@stop
+@section('title', __('admin.chat.edit_message'))
 
 @section('breadcrumb')
     <nav>

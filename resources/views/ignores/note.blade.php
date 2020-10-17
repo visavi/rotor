@@ -1,8 +1,6 @@
 @extends('layout')
 
-@section('title')
-    {{ __('ignores.note_title') }} {{ $ignore->ignoring->login }}
-@stop
+@section('title', __('ignores.note_title') . ' ' . $ignore->ignoring->login)
 
 @section('breadcrumb')
     <nav>

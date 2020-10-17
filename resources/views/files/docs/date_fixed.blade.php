@@ -1,6 +1,4 @@
-@section('title')
-    Функция date_fixed
-@stop
+@section('title', 'Функция date_fixed')
 
 @section('breadcrumb')
     <nav>

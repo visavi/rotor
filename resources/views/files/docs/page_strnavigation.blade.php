@@ -1,6 +1,4 @@
-@section('title')
-    Функция page_strnavigation
-@stop
+@section('title', 'Функция page_strnavigation')
 
 @section('breadcrumb')
     <nav>

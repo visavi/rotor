@@ -1,8 +1,6 @@
 @extends('layout')
 
-@section('title')
-    {{ __('loads.view_archive') }} {{ $down->title }}
-@stop
+@section('title', __('loads.view_archive') . ' ' . $down->title)
 
 @section('breadcrumb')
     <nav>

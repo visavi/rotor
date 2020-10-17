@@ -1,8 +1,6 @@
 @extends('layout')
 
-@section('title')
-    {{ __('index.cash_transactions') }} {{ $user->getName() }}
-@stop
+@section('title', __('index.cash_transactions' . ' ' . $user->getName()))
 
 @section('breadcrumb')
     <nav>

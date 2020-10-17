@@ -1,8 +1,6 @@
 @extends('layout')
 
-@section('title')
-    {{ __('votes.archive_votes') }} ({{ __('main.page_num', ['page' => $votes->currentPage()]) }})
-@stop
+@section('title', __('votes.archive_votes') . ' (' . __('main.page_num', ['page' => $votes->currentPage()]) . ')')
 
 @section('breadcrumb')
     <nav>

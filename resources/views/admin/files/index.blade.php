@@ -1,8 +1,6 @@
 @extends('layout')
 
-@section('title')
-    {{ $path ?? __('index.pages_editing') }}
-@stop
+@section('title', $path ?? __('index.pages_editing'))
 
 @section('header')
     @if (getUser())

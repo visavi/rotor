@@ -1,8 +1,6 @@
 @extends('layout')
 
-@section('title')
-    {{ __('ratings.votes_gave') }} {{ $user->login }}
-@stop
+@section('title', __('ratings.votes_gave' . ' ' . $user->getName()))
 
 @section('breadcrumb')
     <nav>

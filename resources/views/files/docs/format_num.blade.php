@@ -1,6 +1,4 @@
-@section('title')
-    Функция format_num
-@stop
+@section('title', 'Функция format_num')
 
 @section('breadcrumb')
     <nav>

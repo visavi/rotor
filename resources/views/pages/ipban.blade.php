@@ -1,8 +1,6 @@
 @extends('layout_simple')
 
-@section('title')
-    {{ __('pages.banned') }}
-@stop
+@section('title', __('pages.banned'))
 
 @section('content')
 

@@ -1,14 +1,12 @@
 @extends('layout')
 
-@section('title')
-    {{ __('ratings.votes_received') }} {{ $user->login }}
-@stop
+@section('title', __('ratings.votes_received') . ' ' . $user->getName())
 
 @section('breadcrumb')
     <nav>
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
-            <li class="breadcrumb-item"><a href="/users/{{ $user->login }}">{{ $user->login }}</a></li>
+            <li class="breadcrumb-item"><a href="/users/{{ $user->login }}">{{ $user->getName() }}</a></li>
 
             @if (getUser() && getUser('id') !== $user->id)
                 <li class="breadcrumb-item"><a href="/users/{{ $user->login }}/rating">{{ __('index.reputation_edit') }}</a></li>

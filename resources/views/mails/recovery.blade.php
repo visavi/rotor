@@ -1,8 +1,6 @@
 @extends('layout')
 
-@section('title')
-    {{ __('mails.password_recovery') }}
-@stop
+@section('title', __('mails.password_recovery'))
 
 @section('breadcrumb')
     <nav>

@@ -8,6 +8,7 @@ return [
     'name'                   => 'Название',
     'article'                => 'Статья',
     'articles'               => 'Статьи',
+    'articles_all'           => 'Все публикации',
     'authors'                => 'Авторы',
     'tags'                   => 'Теги',
     'all_articles'           => 'Статей',

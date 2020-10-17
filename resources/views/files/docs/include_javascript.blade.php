@@ -1,6 +1,4 @@
-@section('title')
-    Функция include_javascript
-@stop
+@section('title', 'Функция include_javascript')
 
 @section('breadcrumb')
     <nav>

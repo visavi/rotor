@@ -1,8 +1,6 @@
 @extends('layout')
 
-@section('title')
-    {{ __('index.pending_list') }}
-@stop
+@section('title', __('index.pending_list'))
 
 @section('breadcrumb')
     <nav>

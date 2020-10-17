@@ -1,6 +1,4 @@
-@section('title')
-    Функция resize_image
-@stop
+@section('title', 'Функция resize_image')
 
 @section('breadcrumb')
     <nav>

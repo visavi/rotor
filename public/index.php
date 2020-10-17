@@ -5,7 +5,7 @@
  * @package   Rotor
  * @author    Vantuz <admin@visavi.net>
  * @link      https://visavi.net
- * @copyright 2005-2019
+ * @copyright 2005-2020
  */
 
 require __DIR__ . '/../app/bootstrap.php';

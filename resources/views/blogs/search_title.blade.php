@@ -1,8 +1,6 @@
 @extends('layout')
 
-@section('title')
-    {{ __('main.search_request') }} {{ $find }}
-@stop
+@section('title', __('main.search_request') . ' ' . $find)
 
 @section('header')
     <h1>{{ __('main.search_request') }}</h1>

@@ -1,6 +1,4 @@
-@section('title')
-    Функция redirect
-@stop
+@section('title', 'Функция redirect')
 
 @section('breadcrumb')
     <nav>

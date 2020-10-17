@@ -1,8 +1,6 @@
 @extends('layout')
 
-@section('title')
-    {{ __('users.edit_user') }} {{ $user->getName() }}
-@stop
+@section('title', __('users.edit_user') . ' ' . $user->getName())
 
 @section('breadcrumb')
     <nav>

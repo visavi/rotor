@@ -1,8 +1,6 @@
 @extends('layout')
 
-@section('title')
-    {{ __('index.email_templates') }}
-@stop
+@section('title', __('index.email_templates'))
 
 @section('header')
     <div class="float-right">

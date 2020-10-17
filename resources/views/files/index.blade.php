@@ -1,8 +1,6 @@
 @extends('layout')
 
-@section('title')
-    Собственные страницы сайта
-@stop
+@section('title', 'Собственные страницы сайта')
 
 @section('header')
     <h1>Как создать свои страницы</h1>
@@ -35,9 +33,7 @@
     </p>
 
 <pre class="prettyprint linenums">
-@@section('title')
-    Новый заголовок страницы
-@@stop
+@@section('title', 'Новый заголовок страницы')
 </pre><br>
 
     Значение в блоке title, будет подставлено в название страницы &lt;h1&gt;<br>

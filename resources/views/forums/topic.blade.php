@@ -1,8 +1,6 @@
 @extends('layout')
 
-@section('title')
-    {{ $topic->title }} ({{ __('main.page_num', ['page' => $posts->currentPage()]) }})
-@stop
+@section('title', $topic->title . ' (' . __('main.page_num', ['page' => $posts->currentPage()]) . ')')
 
 @section('description', $description)
 

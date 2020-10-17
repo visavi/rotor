@@ -1,8 +1,6 @@
 @extends('layout')
 
-@section('title')
-    {{ __('index.reputation_rating') }} ({{ __('main.page_num', ['page' => $users->currentPage()]) }})
-@stop
+@section('title', __('index.reputation_rating') . ' (' . __('main.page_num', ['page' => $users->currentPage()]) . ')')
 
 @section('header')
     <h1>{{ __('index.reputation_rating') }}</h1>

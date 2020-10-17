@@ -1,8 +1,6 @@
 @extends('layout')
 
-@section('title')
-    {{ $category->name }}
-@stop
+@section('title', $category->name)
 
 @section('header')
     <div class="float-right">

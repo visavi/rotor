@@ -1,6 +1,4 @@
-@section('title')
-    Функция check
-@stop
+@section('title', 'Функция check')
 
 @section('breadcrumb')
     <nav>

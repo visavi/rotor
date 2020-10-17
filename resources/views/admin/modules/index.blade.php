@@ -1,8 +1,6 @@
 @extends('layout')
 
-@section('title')
-    {{ __('index.modules') }}
-@stop
+@section('title', __('index.modules'))
 
 @section('breadcrumb')
     <nav>

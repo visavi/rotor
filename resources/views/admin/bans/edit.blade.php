@@ -1,8 +1,6 @@
 @extends('layout')
 
-@section('title')
-    {{ __('admin.bans.user_ban') }} {{ $user->getName() }}
-@stop
+@section('title', __('admin.bans.user_ban') . ' ' .$user->getName())
 
 @section('breadcrumb')
     <nav>

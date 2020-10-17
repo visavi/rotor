@@ -1,6 +1,4 @@
-@section('title')
-    Функция maketime
-@stop
+@section('title', 'Функция maketime')
 
 @section('breadcrumb')
     <nav>

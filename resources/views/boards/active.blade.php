@@ -1,8 +1,6 @@
 @extends('layout')
 
-@section('title')
-    {{ __('boards.my_items') }}
-@stop
+@section('title', __('boards.my_items'))
 
 @section('header')
     <h1>{{ __('boards.my_items') }} <small>({{ __('index.boards') }}: {{ $items->total() }})</small></h1>

@@ -1,8 +1,6 @@
 @extends('layout')
 
-@section('title')
-    {{ __('forums.title_move_topic') }} {{ $topic->title }}
-@stop
+@section('title', __('forums.title_move_topic') . ' ' . $topic->title)
 
 @section('breadcrumb')
     <nav>

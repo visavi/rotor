@@ -1,6 +1,4 @@
-@section('title')
-    Функция unlink_image
-@stop
+@section('title', 'Функция unlink_image')
 
 @section('breadcrumb')
     <nav>

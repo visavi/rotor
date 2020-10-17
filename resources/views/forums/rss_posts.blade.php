@@ -1,8 +1,6 @@
 @extends('layout_rss')
 
-@section('title')
-    {{ $topic->title }}
-@stop
+@section('title', $topic->title)
 
 @section('content')
 

@@ -1,8 +1,6 @@
 @extends('layout')
 
-@section('title')
-    {{ __('votes.edit_vote') }}
-@stop
+@section('title', __('votes.edit_vote'))
 
 @section('breadcrumb')
     <nav>

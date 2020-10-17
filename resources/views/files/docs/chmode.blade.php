@@ -1,6 +1,4 @@
-@section('title')
-    Функция chmode
-@stop
+@section('title', 'Функция chmode')
 
 @section('breadcrumb')
     <nav>

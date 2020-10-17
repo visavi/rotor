@@ -1,8 +1,6 @@
 @extends('layout')
 
-@section('title')
-    {{ __('loads.view_file') }} {{ $document->getName() }}
-@stop
+@section('title', __('loads.view_file') . ' ' . $document->getName())
 
 @section('breadcrumb')
     <nav>

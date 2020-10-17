@@ -1,8 +1,6 @@
 @extends('layout')
 
-@section('title')
-    {{ $category->name }} ({{ __('main.page_num', ['page' => $downs->currentPage()]) }})
-@stop
+@section('title', $category->name . ' (' . __('main.page_num', ['page' => $downs->currentPage()])  . ')')
 
 @section('header')
     @if (! $category->closed && getUser())

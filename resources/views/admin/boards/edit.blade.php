@@ -1,8 +1,6 @@
 @extends('layout')
 
-@section('title')
-    {{ __('boards.edit_category') }} {{ $board->name }}
-@stop
+@section('title', __('boards.edit_category') . ' ' . $board->name)
 
 @section('breadcrumb')
     <nav>

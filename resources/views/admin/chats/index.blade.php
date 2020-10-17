@@ -1,8 +1,6 @@
 @extends('layout')
 
-@section('title')
-    {{ __('index.admin_chat') }}
-@stop
+@section('title', __('index.admin_chat'))
 
 @section('breadcrumb')
     <nav>

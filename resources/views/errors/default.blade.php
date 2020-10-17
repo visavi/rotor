@@ -1,8 +1,6 @@
 @extends('layout')
 
-@section('title')
-    {{ __('errors.error') }}
-@stop
+@section('title', __('errors.error'))
 
 @section('header', '')
 @section('description', __('errors.error'))

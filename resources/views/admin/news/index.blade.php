@@ -1,8 +1,6 @@
 @extends('layout')
 
-@section('title')
-    {{ __('index.news') }}
-@stop
+@section('title', __('index.news'))
 
 @section('header')
     <div class="float-right">

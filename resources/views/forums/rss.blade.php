@@ -1,8 +1,6 @@
 @extends('layout_rss')
 
-@section('title')
-    {{ __('forums.title_rss') }}
-@stop
+@section('title', __('forums.title_rss'))
 
 @section('content')
 

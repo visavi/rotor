@@ -1,8 +1,6 @@
 @extends('layout')
 
-@section('title')
-    {{ __('admin.modules.module') }} {{ $moduleConfig['name'] }}
-@stop
+@section('title', __('admin.modules.module') . ' ' . $moduleConfig['name'])
 
 @section('breadcrumb')
     <nav>

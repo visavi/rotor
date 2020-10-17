@@ -1,8 +1,6 @@
 @extends('layout')
 
-@section('title')
-    {{ $forum->title }} ({{ __('main.page_num', ['page' => $topics->currentPage()]) }})
-@stop
+@section('title', $forum->title . ' (' . __('main.page_num', ['page' => $topics->currentPage()]) . ')')
 
 @section('header')
     <div class="float-right">

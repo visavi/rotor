@@ -1,6 +1,4 @@
-@section('title')
-  Функция show_admin_links
-@stop
+@section('title', 'Функция show_admin_links')
 
 @section('breadcrumb')
     <nav>

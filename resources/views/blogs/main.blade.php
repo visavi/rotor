@@ -1,8 +1,6 @@
 @extends('layout')
 
-@section('title')
-    Все публикации ({{ __('main.page_num', ['page' => $articles->currentPage()]) }})
-@stop
+@section('title', __('blogs.articles_all') . ' (' . __('main.page_num', ['page' => $articles->currentPage()]) . ')')
 
 @section('header')
 
@@ -12,7 +10,7 @@
         </div><br>
     @endif
 
-    <h1>Все публикации</h1>
+    <h1>{{ __('blogs.articles_all') }}</h1>
 @stop
 
 @section('breadcrumb')
@@ -20,7 +18,7 @@
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
             <li class="breadcrumb-item"><a href="/blogs">{{ __('index.blogs') }}</a></li>
-            <li class="breadcrumb-item active">Все публикации</li>
+            <li class="breadcrumb-item active">{{ __('blogs.articles_all') }}</li>
         </ol>
     </nav>
 @stop

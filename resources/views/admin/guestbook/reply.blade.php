@@ -1,8 +1,6 @@
 @extends('layout')
 
-@section('title')
-    {{ __('guestbook.title_reply') }}
-@stop
+@section('title', __('guestbook.title_reply'))
 
 @section('breadcrumb')
     <nav>

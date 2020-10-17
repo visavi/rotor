@@ -1,8 +1,6 @@
 @extends('layout')
 
-@section('title')
-    {{ $item->title }}
-@stop
+@section('title', $item->title)
 
 @section('header')
     @if (getUser() && getUser('id') === $item->user->id)

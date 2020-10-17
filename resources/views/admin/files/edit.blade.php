@@ -1,8 +1,6 @@
 @extends('layout')
 
-@section('title')
-    {{ __('admin.files.file_editing') }} {{ $path . $file }}.blade.php
-@stop
+@section('title', __('admin.files.file_editing') . ' ' . $path . $file . '.blade.php')
 
 @section('breadcrumb')
     <nav>

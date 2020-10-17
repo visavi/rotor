@@ -1,8 +1,6 @@
 @extends('layout')
 
-@section('title')
-    {{ __('admin.invitations.creation_keys') }}
-@stop
+@section('title', __('admin.invitations.creation_keys'))
 
 @section('breadcrumb')
     <nav>

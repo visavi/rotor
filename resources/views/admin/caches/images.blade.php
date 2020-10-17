@@ -1,8 +1,6 @@
 @extends('layout')
 
-@section('title')
-    {{ __('index.cache_clear') }}
-@stop
+@section('title', __('index.cache_clear'))
 
 @section('breadcrumb')
     <nav>

@@ -1,8 +1,6 @@
 @extends('layout')
 
-@section('title')
-    {{ __('forums.title_bookmarks') }}
-@stop
+@section('title', __('forums.title_bookmarks'))
 
 @section('breadcrumb')
     <nav>

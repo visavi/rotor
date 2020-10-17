@@ -1,8 +1,6 @@
 @extends('layout')
 
-@section('title')
-    {{ __('photos.albums') }} ({{ __('main.page_num', ['page' => $albums->currentPage()]) }})
-@stop
+@section('title', __('photos.albums') . ' (' . __('main.page_num', ['page' => $albums->currentPage()]) . ')')
 
 @section('header')
     <h1>{{ __('photos.albums') }}</h1>
@@ -23,7 +21,7 @@
         @foreach ($albums as $data)
 
             <i class="fa fa-image"></i>
-            <b><a href="/photos/albums/{{ $data->login }}">{{ $data->login }}</a></b> ({{ $data->cnt }} {{ __('photos.photos') }} / {{ $data->count_comments }} {{ __('main.comments') }})<br>
+            <b><a href="/photos/albums/{{ $data->user->login }}">{{ $data->user->getName() }}</a></b> ({{ $data->cnt }} {{ __('photos.photos') }} / {{ $data->count_comments }} {{ __('main.comments') }})<br>
 
         @endforeach
 

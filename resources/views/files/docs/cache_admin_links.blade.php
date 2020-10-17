@@ -1,6 +1,4 @@
-@section('title')
-    Функция cache_admin_links
-@stop
+@section('title', 'Функция cache_admin_links')
 
 @section('breadcrumb')
     <nav>

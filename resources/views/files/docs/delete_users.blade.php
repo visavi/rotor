@@ -1,6 +1,4 @@
-@section('title')
-    Функция delete_users
-@stop
+@section('title', 'Функция delete_users')
 
 @section('breadcrumb')
     <nav>

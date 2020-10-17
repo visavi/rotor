@@ -1,6 +1,4 @@
-@section('title')
-    Документация Rotor
-@stop
+@section('title', 'Документация Rotor')
 
 @section('breadcrumb')
     <nav>

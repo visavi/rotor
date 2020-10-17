@@ -1,8 +1,6 @@
 @extends('layout')
 
-@section('title')
-    {{ __('blogs.title_edit_comment') }}
-@stop
+@section('title', __('blogs.title_edit_comment'))
 
 @section('breadcrumb')
     <nav>

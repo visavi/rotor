@@ -1,6 +1,4 @@
-@section('title')
-    Функция cache_functions
-@stop
+@section('title', 'Функция cache_functions')
 
 @section('breadcrumb')
     <nav>

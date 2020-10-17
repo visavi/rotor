@@ -1,8 +1,6 @@
 @extends('layout')
 
-@section('title')
-    {{ __('index.photos') }} ({{ __('main.page_num', ['page' => $photos->currentPage()]) }})
-@stop
+@section('title', __('index.photos') . ' (' . __('main.page_num', ['page' => $photos->currentPage()]) .')')
 
 @section('header')
     @if (getUser())

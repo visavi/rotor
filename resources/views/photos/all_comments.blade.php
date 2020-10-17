@@ -1,8 +1,6 @@
 @extends('layout')
 
-@section('title')
-    {{ __('photos.all_comments') }} ({{ __('main.page_num', ['page' => $comments->currentPage()]) }})
-@stop
+@section('title', __('photos.all_comments') . ' (' . __('main.page_num', ['page' => $comments->currentPage()]) . ')')
 
 @section('header')
     <h1>{{ __('photos.all_comments') }}</h1>

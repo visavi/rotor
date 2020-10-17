@@ -1,8 +1,6 @@
 @extends('layout')
 
-@section('title')
-    {{ __('adverts.create_advert') }}
-@stop
+@section('title', __('adverts.create_advert'))
 
 @section('breadcrumb')
     <nav>

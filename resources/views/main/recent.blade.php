@@ -1,6 +1,4 @@
-@section('title')
-    {{ __('index.recent_activity') }}
-@stop
+@section('title', __('index.recent_activity'))
 
 @section('breadcrumb')
     <nav>

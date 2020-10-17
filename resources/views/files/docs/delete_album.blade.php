@@ -1,6 +1,4 @@
-@section('title')
-    Функция delete_album
-@stop
+@section('title', 'Функция delete_album')
 
 @section('breadcrumb')
     <nav>

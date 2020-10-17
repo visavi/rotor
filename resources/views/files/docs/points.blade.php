@@ -1,6 +1,4 @@
-@section('title')
-    Функция points
-@stop
+@section('title', 'Функция points')
 
 @section('breadcrumb')
     <nav>

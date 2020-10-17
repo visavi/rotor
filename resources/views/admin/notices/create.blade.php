@@ -1,8 +1,6 @@
 @extends('layout')
 
-@section('title')
-    {{ __('admin.notices.create') }}
-@stop
+@section('title', __('admin.notices.create'))
 
 @section('breadcrumb')
     <nav>

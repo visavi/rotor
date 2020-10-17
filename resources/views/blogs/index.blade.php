@@ -1,8 +1,6 @@
 @extends('layout')
 
-@section('title')
-    {{ __('index.blogs') }} - {{ __('blogs.blogs_list') }}
-@stop
+@section('title', __('index.blogs') . ' - ' . __('blogs.blogs_list'))
 
 @section('header')
 

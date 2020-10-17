@@ -1,8 +1,6 @@
 @extends('layout')
 
-@section('title')
-    {{ __('admin.backup.create_backup') }}
-@stop
+@section('title', __('admin.backup.create_backup'))
 
 @section('breadcrumb')
     <nav>

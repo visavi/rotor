@@ -1,8 +1,6 @@
 @extends('layout')
 
-@section('title')
-    {{ __('index.advertising') }}
-@stop
+@section('title', __('index.advertising'))
 
 @section('header')
 

@@ -1,6 +1,4 @@
-@section('title')
-    Class BBCode
-@stop
+@section('title', 'Class BBCode')
 
 @section('breadcrumb')
     <nav>

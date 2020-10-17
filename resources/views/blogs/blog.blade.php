@@ -1,8 +1,6 @@
 @extends('layout')
 
-@section('title')
-    {{ $category->name }} ({{ __('main.page_num', ['page' => $articles->currentPage()]) }})
-@stop
+@section('title', $category->name . ' (' . __('main.page_num', ['page' => $articles->currentPage()]) . ')')
 
 @section('header')
 

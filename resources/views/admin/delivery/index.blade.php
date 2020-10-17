@@ -1,8 +1,6 @@
 @extends('layout')
 
-@section('title')
-    {{ __('index.private_mailing') }}
-@stop
+@section('title', __('index.private_mailing'))
 
 @section('breadcrumb')
     <nav>

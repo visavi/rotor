@@ -1,8 +1,6 @@
 @extends('layout')
 
-@section('title')
-    {{ __('index.banned') }}
-@stop
+@section('title', __('index.banned'))
 
 @section('content')
     @if ($banhist)

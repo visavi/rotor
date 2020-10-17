@@ -1,6 +1,4 @@
-@section('title')
-    Функция progress_bar
-@stop
+@section('title', 'Функция progress_bar')
 
 @section('breadcrumb')
     <nav>

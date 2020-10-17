@@ -1,8 +1,6 @@
 @extends('layout')
 
-@section('title')
-   {{ $down->title }} - {{ __('main.comments') }}
-@stop
+@section('title', $down->title . ' - ' . __('main.comments'))
 
 @section('breadcrumb')
     <nav>

@@ -1,8 +1,6 @@
 @extends('layout')
 
-@section('title')
-    {{ __('admin.files.create_object') }}
-@stop
+@section('title', __('admin.files.create_object'))
 
 @section('breadcrumb')
     <nav>

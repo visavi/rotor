@@ -1,11 +1,9 @@
 @extends('layout')
 
-@section('title')
-    {{ __('index.loads') }} - {{ __('loads.active_downs', ['user' => $user->login]) }} ({{ __('main.page_num', ['page' => $downs->currentPage()]) }})
-@stop
+@section('title', __('index.loads') . ' - ' . __('loads.active_downs', ['user' => $user->getName()]) . ' (' . __('main.page_num', ['page' => $downs->currentPage()]) . ')')
 
 @section('header')
-    <h1>{{ __('loads.active_downs', ['user' => $user->login]) }}</h1>
+    <h1>{{ __('loads.active_downs', ['user' => $user->getName()]) }}</h1>
 @stop
 
 @section('breadcrumb')

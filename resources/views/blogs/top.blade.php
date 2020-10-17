@@ -1,8 +1,6 @@
 @extends('layout')
 
-@section('title')
-    {{ __('blogs.top_articles') }} ({{ __('main.page_num', ['page' => $articles->currentPage()]) }})
-@stop
+@section('title', __('blogs.top_articles') . ' (' . __('main.page_num', ['page' => $articles->currentPage()]) . ')')
 
 @section('header')
     <h1>{{ __('blogs.top_articles') }}</h1>

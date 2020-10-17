@@ -1,8 +1,6 @@
 @extends('layout')
 
-@section('title')
-    {{ __('news.edit_news_title') }} {{ $news->title }}
-@stop
+@section('title', __('news.edit_news_title') . ' ' . $news->title)
 
 @section('breadcrumb')
     <nav>

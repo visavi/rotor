@@ -1,8 +1,6 @@
 @extends('layout')
 
-@section('title')
-    {{ __('forums.title_top_topics') }}
-@stop
+@section('title', __('forums.title_top_topics'))
 
 @section('breadcrumb')
     <nav>

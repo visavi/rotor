@@ -1,6 +1,4 @@
-@section('title')
-    Class Validation
-@stop
+@section('title', 'Class Validation')
 
 @section('breadcrumb')
     <nav>

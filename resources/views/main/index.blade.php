@@ -1,6 +1,4 @@
-@section('title')
-    {{ __('index.information') }}
-@stop
+@section('title', __('index.information'))
 
 @section('breadcrumb')
     <nav>

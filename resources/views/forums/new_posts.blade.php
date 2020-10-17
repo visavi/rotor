@@ -1,8 +1,6 @@
 @extends('layout')
 
-@section('title')
-    {{ __('index.forums') }} - {{ __('forums.title_new_posts') }} ({{ __('main.page_num', ['page' => $posts->currentPage()]) }})
-@stop
+@section('title', __('index.forums') . ' - ' . __('forums.title_new_posts') . ' (' . __('main.page_num', ['page' => $posts->currentPage()]) . ')')
 
 @section('header')
     <h1>{{ __('forums.title_new_posts') }}</h1>

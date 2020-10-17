@@ -1,8 +1,6 @@
 @extends('layout')
 
-@section('title')
-    {{ __('offers.adding_record') }}
-@stop
+@section('title', __('offers.adding_record'))
 
 @section('breadcrumb')
     <nav>

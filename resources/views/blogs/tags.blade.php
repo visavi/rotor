@@ -1,8 +1,6 @@
 @extends('layout')
 
-@section('title')
-    {{ __('blogs.tag_cloud') }}
-@stop
+@section('title', __('blogs.tag_cloud'))
 
 @section('breadcrumb')
     <nav>

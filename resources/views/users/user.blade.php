@@ -1,8 +1,6 @@
 @extends('layout')
 
-@section('title')
-    {{ __('index.account') }} {{ $user->getName() }}
-@stop
+@section('title', __('index.account') . ' ' . $user->getName())
 
 @section('header')
     <h1>{{ $user->getName() }} <small>{{ $user->login }} #{{ $user->id }}</small></h1>

@@ -1,8 +1,6 @@
 @extends('layout')
 
-@section('title')
-    {{ $news->title }}
-@stop
+@section('title', $news->title)
 
 @section('description', truncateDescription(bbCode($news->text, false)))
 

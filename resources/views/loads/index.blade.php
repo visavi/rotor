@@ -1,8 +1,6 @@
 @extends('layout')
 
-@section('title')
-    {{ __('index.loads') }}
-@stop
+@section('title', __('index.loads'))
 
 @section('header')
     @if (getUser())

@@ -1,8 +1,6 @@
 @extends('layout')
 
-@section('title')
-    {{ __('pages.closed') }}
-@stop
+@section('title', __('pages.closed'))
 
 @section('content')
     {{ __('pages.closed_text1') }}<br>

@@ -1,8 +1,6 @@
 @extends('layout_rss')
 
-@section('title')
-    {{ __('loads.rss_downs') }}
-@stop
+@section('title', __('loads.rss_downs'))
 
 @section('content')
     @foreach ($downs as $down)

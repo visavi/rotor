@@ -1,8 +1,6 @@
 @extends('layout')
 
-@section('title')
-    {{ __('index.wall_posts') }} {{ $user->getName() }}
-@stop
+@section('title', __('index.wall_posts') . ' ' . $user->getName())
 
 @section('content')
     <nav>

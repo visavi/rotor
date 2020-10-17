@@ -1,8 +1,6 @@
 @extends('layout')
 
-@section('title')
-    {{ setting('logos') }}
-@stop
+@section('title', setting('logos'))
 
 @section('header')
     <h1>{{ setting('title') }}</h1>

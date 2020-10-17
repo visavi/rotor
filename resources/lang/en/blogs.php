@@ -8,6 +8,7 @@ return [
     'name'                   => 'Title',
     'article'                => 'Article',
     'articles'               => 'Articles',
+    'articles_all'           => 'All publications',
     'authors'                => 'Authors',
     'tags'                   => 'Tags',
     'all_articles'           => 'Articles',

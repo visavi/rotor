@@ -1,8 +1,6 @@
 @extends('layout_rss')
 
-@section('title')
-    {{ $article->title }}
-@stop
+@section('title', $article->title)
 
 @section('content')
     @foreach ($article->lastComments as $comment)

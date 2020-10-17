@@ -1,8 +1,6 @@
 @extends('layout')
 
-@section('title')
-    {{ __('errors.error') }} 405
-@stop
+@section('title', __('errors.error') . ' 405')
 
 @section('header', '')
 @section('description', __('errors.error') . ' 405')

@@ -1,6 +1,4 @@
-@section('title')
-    Функция addmail
-@stop
+@section('title', 'Функция addmail')
 
 @section('breadcrumb')
     <nav>

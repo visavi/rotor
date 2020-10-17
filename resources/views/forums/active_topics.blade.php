@@ -1,8 +1,6 @@
 @extends('layout')
 
-@section('title')
-    {{ __('index.forums') }} - {{ __('forums.title_active_topics', ['user' => $user->getName()]) }} ({{ __('main.page_num', ['page' => $topics->currentPage()]) }})
-@stop
+@section('title', __('index.forums') . ' - ' . __('forums.title_active_topics', ['user' => $user->getName()]) . ' (' . __('main.page_num', ['page' => $topics->currentPage()])  . ')')
 
 @section('header')
     <h1>{{ __('forums.title_active_topics', ['user' => $user->getName()]) }}</h1>

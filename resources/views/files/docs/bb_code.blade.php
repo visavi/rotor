@@ -1,6 +1,4 @@
-@section('title')
-    Функция bb_code
-@stop
+@section('title', 'Функция bb_code')
 
 @section('breadcrumb')
     <nav>

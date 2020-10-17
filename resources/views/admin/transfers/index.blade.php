@@ -1,8 +1,6 @@
 @extends('layout')
 
-@section('title')
-    {{ __('index.cash_transactions') }}
-@stop
+@section('title', __('index.cash_transactions'))
 
 @section('breadcrumb')
     <nav>
