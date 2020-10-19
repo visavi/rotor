@@ -334,7 +334,7 @@ class UserController extends BaseController
             $validator->equal($request->input('token'), $_SESSION['token'], __('validator.token'))
                 ->regex($site, '#^https?://([а-яa-z0-9_\-\.])+(\.([а-яa-z0-9\/])+)+$#u', ['site' => __('validator.site')], false)
                 ->regex($birthday, '#^[0-9]{2}+\.[0-9]{2}+\.[0-9]{4}$#', ['birthday' => __('validator.date')], false)
-                ->regex($phone, '#^\d{11}$#', ['phone' => __('validator.phone')], false)
+                ->phone($phone, ['phone' => __('validator.phone')], false)
                 ->length($info, 0, 1000, ['info' => __('users.info_yourself_long')])
                 ->length($name, 3, 20, ['name' => __('users.name_short_or_long')], false);
 

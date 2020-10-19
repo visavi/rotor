@@ -241,7 +241,7 @@ class BoardController extends AdminController
                 ->equal($request->input('token'), $_SESSION['token'], __('validator.token'))
                 ->length($title, 5, 50, ['title' => __('validator.text')])
                 ->length($text, 50, 5000, ['text' => __('validator.text')])
-                ->regex($phone, '#^\d{11}$#', ['phone' => __('validator.phone')], false)
+                ->phone($phone, ['phone' => __('validator.phone')], false)
                 ->notEmpty($board, ['bid' => __('boards.category_not_exist')]);
 
             if ($board) {

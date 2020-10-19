@@ -389,6 +389,28 @@ class Validator
     }
 
     /**
+     * Check phone
+     *
+     * @param mixed $input
+     * @param mixed $label
+     * @param bool  $required
+     *
+     * @return Validator
+     */
+    public function phone($input, $label, bool $required = true): Validator
+    {
+        if (! $required && blank($input)) {
+            return $this;
+        }
+
+        if (! preg_match('#^\d{11}$#', $input)) {
+            $this->addError($label);
+        }
+
+        return $this;
+    }
+
+    /**
      * Проверяет файл
      *
      * @param UploadedFile|null $input
