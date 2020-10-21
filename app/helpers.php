@@ -513,11 +513,7 @@ function statsPhotos()
         $stat     = Photo::query()->count();
         $totalNew = Photo::query()->where('created_at', '>', strtotime('-3 day', SITETIME))->count();
 
-        if ($totalNew) {
-            $stat .= '/+' . $totalNew;
-        }
-
-        return $stat;
+        return formatShortNum($stat) . ($totalNew  ? '/+' . $totalNew : '');
     });
 }
 
@@ -529,7 +525,7 @@ function statsPhotos()
 function statsNews()
 {
     return Cache::remember('statNews', 300, static function () {
-        return News::query()->count();
+        return formatShortNum(News::query()->count());
     });
 }
 
@@ -635,13 +631,9 @@ function statsBlog()
 {
     return Cache::remember('statArticles', 900, static function () {
         $stat     = Article::query()->count();
-        $totalnew = Article::query()->where('created_at', '>', strtotime('-3 day', SITETIME))->count();
+        $totalNew = Article::query()->where('created_at', '>', strtotime('-3 day', SITETIME))->count();
 
-        if ($totalnew) {
-            $stat .= '/+' . $totalnew;
-        }
-
-        return $stat;
+        return formatShortNum($stat) . ($totalNew  ? '/+' . $totalNew : '');
     });
 }
 
@@ -656,7 +648,7 @@ function statsForum()
         $topics = Topic::query()->count();
         $posts  = Post::query()->count();
 
-        return $topics . '/' . $posts;
+        return formatShortNum($topics) . '/' . formatShortNum($posts);
     });
 }
 
@@ -668,7 +660,7 @@ function statsForum()
 function statsGuestbook()
 {
     return Cache::remember('statGuestbook', 600, static function () {
-        return Guestbook::query()->count();
+        return formatShortNum(Guestbook::query()->count());
     });
 }
 
@@ -706,7 +698,7 @@ function statsLoad()
             ->where('created_at', '>', strtotime('-3 day', SITETIME))
             ->count();
 
-        return $totalNew ? $totalLoads . '/+' . $totalNew : $totalLoads;
+        return formatShortNum($totalLoads) . ($totalNew ? '/+' . $totalNew : '');
     });
 }
 
@@ -728,14 +720,10 @@ function statsNewLoad()
 function statsBoard()
 {
     return Cache::remember('statBoards', 900, static function () {
-        $stat      = Item::query()->where('expires_at', '>', SITETIME)->count();
-        $totalnew  = Item::query()->where('updated_at', '>', strtotime('-3 day', SITETIME))->count();
+        $stat      = formatShortNum(Item::query()->where('expires_at', '>', SITETIME)->count());
+        $totalNew  = Item::query()->where('updated_at', '>', strtotime('-3 day', SITETIME))->count();
 
-        if ($totalnew) {
-            $stat .= '/+' . $totalnew;
-        }
-
-        return $stat;
+        return formatShortNum($stat) . ($totalNew  ? '/+' . $totalNew : '');
     });
 }
 
@@ -1318,7 +1306,7 @@ function resizeProcess(?string $path, array $params = [])
     }
 
     if (empty($params['class'])) {
-        $params['class'] = 'media-file img-fluid';
+        $params['class'] = 'img-fluid';
     }
 
     if (! file_exists(HOME . $path) || ! is_file(HOME . $path)) {
@@ -2083,7 +2071,7 @@ function imageBase64(string $path, array $params = [])
     $data = file_get_contents($path);
 
     if (! isset($params['class'])) {
-        $params['class'] = 'media-file img-fluid';
+        $params['class'] = 'img-fluid';
     }
 
     if (empty($params['alt'])) {

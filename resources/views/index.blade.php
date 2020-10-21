@@ -13,7 +13,8 @@
     <div class="section mb-3 shadow">
         <div class="section-title">
             <i class="far fa-circle fa-lg text-muted"></i>
-            <a href="/news" class="">{{ __('index.news') }}</a> ({{ statsNewsDate() }})
+            <a href="/news" class="">{{ __('index.news') }}</a>
+            <span class="badge badge-light">{{ statsNewsDate() }}</span>
         </div>
         {!! lastNews() !!}
     </div>
@@ -34,7 +35,8 @@
     <div class="section mb-3 shadow">
         <div class="section-title">
             <i class="fab fa-forumbee fa-lg text-muted"></i>
-            <a href="/forums">{{ __('index.forums') }}</a> ({{ statsForum() }})
+            <a href="/forums">{{ __('index.forums') }}</a>
+            <span class="badge badge-light">{{ statsForum() }}</span>
         </div>
         {!! recentTopics() !!}
     </div>
@@ -42,7 +44,8 @@
     <div class="section mb-3 shadow">
         <div class="section-title">
             <i class="fa fa-download fa-lg text-muted"></i>
-            <a href="/loads">{{ __('index.loads') }}</a> ({{ statsLoad() }})
+            <a href="/loads">{{ __('index.loads') }}</a>
+            <span class="badge badge-light">{{ statsLoad() }}</span>
         </div>
         {!! recentDowns() !!}
     </div>
@@ -50,7 +53,8 @@
     <div class="section mb-3 shadow">
         <div class="section-title">
             <i class="fa fa-globe fa-lg text-muted"></i>
-            <a href="/blogs">{{ __('index.blogs') }}</a> ({{ statsBlog() }})
+            <a href="/blogs">{{ __('index.blogs') }}</a>
+            <span class="badge badge-light">{{ statsBlog() }}</span>
         </div>
         {!! recentArticles() !!}
     </div>
@@ -58,7 +62,8 @@
     <div class="section mb-3 shadow">
         <div class="section-title">
             <i class="fa fa-list-alt fa-lg text-muted"></i>
-            <a href="/boards">{{ __('index.boards') }}</a> ({{ statsBoard() }})
+            <a href="/boards">{{ __('index.boards') }}</a>
+            <span class="badge badge-light">{{ statsBoard() }}</span>
         </div>
         {!! recentBoards() !!}
     </div>

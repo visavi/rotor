@@ -42,7 +42,7 @@
             <div class="carousel-inner">
                 @foreach ($moduleConfig['screenshots'] as $key => $screenshot)
                     <div class="carousel-item{{ empty($key) ? ' active' : '' }}">
-                        {!! imageBase64($screenshot, ['class' => 'd-block w-100']) !!}
+                        {!! imageBase64($screenshot) !!}
                     </div>
                 @endforeach
             </div>

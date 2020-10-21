@@ -162,11 +162,12 @@
                             <i class="fa fa-paperclip"></i> <b>{{ __('main.attached_files') }}:</b><br>
                             @foreach ($data->files as $file)
                                 <?php $ext = getExtension($file->hash); ?>
-
-                                {!! icons($ext) !!}
-                                <a href="{{ $file->hash }}">{{ $file->name }}</a> ({{ formatSize($file->size) }})<br>
-                                @if (in_array($ext, ['jpg', 'jpeg', 'gif', 'png']))
-                                    <a href="{{ $file->hash }}" class="gallery" data-group="{{ $data->id }}">{!! resizeImage($file->hash, ['alt' => $file->name]) !!}</a>
+                                <div class="media-file">
+                                    {!! icons($ext) !!}
+                                    <a href="{{ $file->hash }}">{{ $file->name }}</a> ({{ formatSize($file->size) }})<br>
+                                    @if (in_array($ext, ['jpg', 'jpeg', 'gif', 'png']))
+                                        <a href="{{ $file->hash }}" class="gallery" data-group="{{ $data->id }}">{!! resizeImage($file->hash, ['alt' => $file->name]) !!}</a>
+                                </div>
                                 @endif
                             @endforeach
                         </div>
