@@ -1,10 +1,7 @@
-<!DOCTYPE html>
-<html lang="{{ setting('language') }}">
-<head>
-    <meta charset="utf-8">
-    <title>BBCode</title>
-</head>
-<body>
+@extends('layout_simple')
+
+@section('title', 'BBCode')
+
+@section('content')
     {!! bbCode($message) !!}
-</body>
-</html>
+@stop

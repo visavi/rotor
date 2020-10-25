@@ -18,8 +18,19 @@
 
     @if ($posts->isNotEmpty())
         @foreach ($posts as $post)
-            <div class="post">
-                <div class="b">
+            <div class="section mb-3 shadow">
+                <div class="user-avatar">
+                    {!! $post->user->getAvatar() !!}
+                    {!! $post->user->getOnline() !!}
+                </div>
+
+                <div class="section-user d-flex align-items-center">
+                    <div class="flex-grow-1">
+                        {!! $post->user->getProfile() !!}
+                        <small class="section-date text-muted font-italic">{{ dateFixed($post->created_at) }}</small><br>
+                        <small class="font-italic">{!! $post->user->getStatus() !!}</small>
+                    </div>
+
                     @if (getUser() && getUser('id') !== $post->user_id)
                         <div class="float-right">
                             <a href="#" onclick="return postReply(this)" data-toggle="tooltip" title="{{ __('main.reply') }}"><i class="fa fa-reply text-muted"></i></a>
@@ -32,25 +43,21 @@
                             <a href="/admin/chats/edit/{{ $post->id }}?page={{ $posts->currentPage() }}" data-toggle="tooltip" title="{{ __('main.edit') }}"><i class="fas fa-pencil-alt text-muted"></i></a>
                         </div>
                     @endif
+                </div>
 
-                        <div class="img">
-                            {!! $post->user->getAvatar() !!}
-                            {!! $post->user->getOnline() !!}
+                <div class="section-body border-top my-1 py-1">
+                    <div class="section-message">
+                        {!! bbCode($post->text) !!}
+                    </div>
+
+                    @if ($post->edit_user_id)
+                        <div class="small">
+                            <i class="fa fa-exclamation-circle text-danger"></i> {{ __('main.changed') }}: {!! $post->editUser->getProfile() !!} ({{ dateFixed($post->updated_at) }})
                         </div>
+                    @endif
 
-                    <b>{!! $post->user->getProfile() !!}</b> <small>({{ dateFixed($post->created_at) }})</small><br>
-                    {!! $post->user->getStatus() !!}
+                    <div class="small text-muted font-italic mt-2">{{ $post->brow }}, {{ $post->ip }}</div>
                 </div>
-
-                <div class="section-message">
-                    {!! bbCode($post->text) !!}
-                </div>
-
-                @if ($post->edit_user_id)
-                    <small><i class="fa fa-exclamation-circle text-danger"></i> {{ __('main.changed') }}: {!! $post->editUser->getProfile() !!} ({{ dateFixed($post->updated_at) }})</small><br>
-                @endif
-
-                <span class="data">({{ $post->brow }}, {{ $post->ip }})</span>
             </div>
         @endforeach
     @else

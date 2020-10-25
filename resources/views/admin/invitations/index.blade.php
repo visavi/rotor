@@ -1,6 +1,6 @@
 @extends('layout')
 
-@section('title', __('index.invitations') )
+@section('title', __('index.invitations'))
 
 @section('breadcrumb')
     <nav>

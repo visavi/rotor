@@ -1,6 +1,6 @@
 @extends('layout_simple')
 
-@section('title', $article->title )
+@section('title', $article->title)
 
 @section('description', truncateDescription(bbCode($article->text, false)))
 
