@@ -729,11 +729,23 @@ class UserController extends BaseController
         }
 
         if ($request->input('token') === $_SESSION['token']) {
+            $apiKey  = md5($user->login . Str::random());
+            $message = __('users.token_success_changed');
+
+            if ($request->input('action') === 'create') {
+                $message = __('users.token_success_created');
+            }
+
+            if ($request->input('action') === 'delete') {
+                $apiKey = '';
+                $message = __('users.token_success_deleted');
+            }
+
             $user->update([
-                'apikey' => md5($user->login . Str::random()),
+                'apikey' => $apiKey
             ]);
 
-            setFlash('success', __('users.key_success_generated'));
+            setFlash('success', $message);
         } else {
             setFlash('danger', __('validator.token'));
         }

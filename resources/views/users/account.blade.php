@@ -106,9 +106,10 @@
                     </div>
                 </div>
 
-                <button class="btn btn-primary">{{ __('main.change') }}</button>
+                <button class="btn btn-primary" name="action" value="change">{{ __('main.change') }}</button>
+                <button class="btn btn-danger" name="action" value="delete">{{ __('main.delete') }}</button>
             @else
-                <button class="btn btn-primary">{{ __('main.get') }}</button>
+                <button class="btn btn-primary" name="action" value="create">{{ __('main.create') }}</button>
             @endif
         </form>
 

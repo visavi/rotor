@@ -7,6 +7,7 @@ translate_ru = {
     message_deleted: 'Сообщение успешно удалено!',
     record_deleted: 'Запись успешно удалена!',
     photo_count: 'Фото {current} из {total}',
+    copied: 'Скопировано!',
 
     editor: {
         bold: 'Жирный текст',

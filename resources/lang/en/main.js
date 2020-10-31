@@ -7,6 +7,7 @@ translate_en = {
     message_deleted: 'Message successfully deleted!',
     record_deleted: 'Record successfully deleted!',
     photo_count: 'Photo {current} of {total}',
+    copied: 'Copied!',
 
     editor: {
         bold: 'Bold text',

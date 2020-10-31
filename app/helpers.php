@@ -1349,8 +1349,8 @@ function resizeProcess(?string $path, array $params = [])
 /**
  * Возвращает уменьшенное изображение
  *
- * @param string $path   путь к изображению
- * @param array  $params параметры изображения
+ * @param string|null $path   путь к изображению
+ * @param array       $params параметры изображения
  *
  * @return string|null уменьшенное изображение
  */

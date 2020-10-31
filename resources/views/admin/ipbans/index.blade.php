@@ -24,7 +24,7 @@
                         <input type="checkbox" name="del[]" value="{{ $log->id }}">
                     </div>
 
-                    <div class="section-header py-1">
+                    <div class="section-header">
                         <i class="far fa-sticky-note"></i> <b>{{ $log->ip }}</b>
                     </div>
 

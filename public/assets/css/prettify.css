@@ -12,7 +12,7 @@
 
 .prettyprint {
   padding: 0;
-  margin-bottom: 1rem;
+  margin: 0;
   display: block;
   white-space: pre;
   overflow: auto;

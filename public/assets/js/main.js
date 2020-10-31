@@ -439,6 +439,12 @@ copyToClipboard = function(el)
 {
     var form = $(el).closest('.input-group');
     form.find('input').select();
+
+    form.find('.input-group-append')
+        .attr('data-original-title', translate.copied)
+        .tooltip('update')
+        .tooltip('show');
+
     document.execCommand("copy");
 
     return false;

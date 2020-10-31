@@ -23,14 +23,14 @@
     @if ($news->isNotEmpty())
         @foreach ($news as $data)
             <div class="section mb-3 shadow">
-                <div class="d-flex align-items-center">
-                    <div class="section-header flex-grow-1">
+                <div class="section-header d-flex align-items-center">
+                    <div class="flex-grow-1">
                         <i class="fa fa-file-alt fa-lg text-muted"></i>
-                        <b><a class="section-title" href="/news/{{ $data->id }}">{{ $data->title }}</a></b>
-                    </div>
+                        <a class="section-title" href="/news/{{ $data->id }}">{{ $data->title }}</a>
 
-                    <div class="section-date text-muted font-italic small">
-                        {{ dateFixed($data->created_at) }}
+                        <small class="section-date text-muted font-italic">
+                            {{ dateFixed($data->created_at) }}
+                        </small>
                     </div>
 
                     <div class="js-rating">
@@ -46,8 +46,8 @@
 
                 <div class="section-content">
                     @if ($data->image)
-                        <div class="img">
-                            <a href="{{ $data->image }}" class="gallery">{!! resizeImage($data->image, ['width' => 100, 'alt' => $data->title]) !!}</a>
+                        <div class="float-left mr-3">
+                            <a href="{{ $data->image }}" class="gallery">{!! resizeImage($data->image, ['width' => 200, 'class' => 'img-thumbnail img-fluid', 'alt' => $data->title]) !!}</a>
                         </div>
                     @endif
 
