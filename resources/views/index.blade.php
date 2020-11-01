@@ -24,7 +24,7 @@
             <i class="fa fa-comment fa-lg text-muted"></i>
             <a href="/pages/recent">{{ __('index.communication') }}</a>
         </div>
-        <div class="section-body my-1 py-1">
+        <div class="section-body">
             <i class="far fa-circle fa-lg text-muted"></i> <a class="index" href="/guestbook">{{ __('index.guestbook') }}</a> ({{ statsGuestbook() }})<br>
             <i class="far fa-circle fa-lg text-muted"></i> <a href="/photos">{{ __('index.photos') }}</a> ({{ statsPhotos() }})<br>
             <i class="far fa-circle fa-lg text-muted"></i> <a href="/votes">{{ __('index.votes') }}</a> ({{ statVotes()}})<br>
@@ -73,7 +73,7 @@
             <i class="fa fa-cog fa-lg text-muted"></i>
             <a href="/pages">{{ __('index.pages') }}</a>
         </div>
-        <div class="section-body my-1 py-1">
+        <div class="section-body">
             <i class="far fa-circle fa-lg text-muted"></i> <a href="/files/docs">{{ __('index.docs') }}</a><br>
             <i class="far fa-circle fa-lg text-muted"></i> <a href="/search">{{ __('index.search') }}</a><br>
             <i class="far fa-circle fa-lg text-muted"></i> <a href="/mails">{{ __('index.mails') }}</a><br>
@@ -89,7 +89,7 @@
                     <i class="fa fa-chart-line fa-lg text-muted"></i>
                     {{ __('index.courses') }}
                 </div>
-                <div class="section-body my-1 py-1">
+                <div class="section-body">
                     {!! getCourses() !!}
                 </div>
             </div>
@@ -100,7 +100,7 @@
                     <i class="fa fa-calendar-alt fa-lg text-muted"></i>
                     {{ __('index.calendar') }}
                 </div>
-                <div class="section-body my-1 py-1">
+                <div class="section-body">
                     {!! getCalendar() !!}
                 </div>
             </div>

@@ -32,7 +32,7 @@
                     <a href="{{ $data->site }}">{{ $data->name }}</a>
                 </div>
 
-                <div class="section-body border-top my-1 py-1">
+                <div class="section-body border-top">
                     <i class="far fa-user"></i> {!! $data->user->getProfile() !!}
                     <small class="section-date text-muted font-italic">{{ __('adverts.expires') }}: {{ dateFixed($data->deleted_at) }}</small>
 

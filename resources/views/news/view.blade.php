@@ -20,49 +20,60 @@
 @stop
 
 @section('content')
-    @if ($news->image)
-        <div class="img">
-            <a href="{{ $news->image }}" class="gallery">{!! resizeImage($news->image, ['width' => 100, 'alt' => $news->title]) !!}</a>
-        </div>
-    @endif
-
-    <div>{!! bbCode($news->text) !!}</div>
-
-    <div style="clear:both;">
-        {{ __('main.added') }}: {!! $news->user->getProfile() !!} ({{ dateFixed($news->created_at) }})
-
-        <div class="js-rating">{{ __('main.rating') }}:
-            @if (getUser() && getUser('id') !== $news->user_id)
-                <a class="post-rating-down<?= $news->vote === '-' ? ' active' : '' ?>" href="#" onclick="return changeRating(this);" data-id="{{ $news->id }}" data-type="{{ $news->getMorphClass() }}" data-vote="-" data-token="{{ $_SESSION['token'] }}"><i class="fa fa-thumbs-down"></i></a>
+    <div class="mb-3">
+        <div class="section-content">
+            @if ($news->image)
+                <div class="float-left mr-3">
+                    <a href="{{ $news->image }}" class="gallery">{!! resizeImage($news->image, ['width' => 200, 'class' => 'img-thumbnail img-fluid', 'alt' => $news->title]) !!}</a>
+                </div>
             @endif
-            <b>{!! formatNum($news->rating) !!}</b>
-            @if (getUser() && getUser('id') !== $news->user_id)
-                <a class="post-rating-up<?= $news->vote === '+' ? ' active' : '' ?>" href="#" onclick="return changeRating(this);" data-id="{{ $news->id }}" data-type="{{ $news->getMorphClass() }}" data-vote="+" data-token="{{ $_SESSION['token'] }}"><i class="fa fa-thumbs-up"></i></a>
-            @endif
+
+            <div class="section-message">
+                {!! bbCode($news->text) !!}
+            </div>
         </div>
-    </div><br>
+
+        <div class="section-body">
+            {{ __('main.added') }}: {!! $news->user->getProfile() !!} <small class="section-date text-muted font-italic">{{ dateFixed($news->created_at) }}</small>
+
+            <div class="js-rating">{{ __('main.rating') }}:
+                @if (getUser() && getUser('id') !== $news->user_id)
+                    <a class="post-rating-down<?= $news->vote === '-' ? ' active' : '' ?>" href="#" onclick="return changeRating(this);" data-id="{{ $news->id }}" data-type="{{ $news->getMorphClass() }}" data-vote="-" data-token="{{ $_SESSION['token'] }}"><i class="fa fa-thumbs-down"></i></a>
+                @endif
+                <b>{!! formatNum($news->rating) !!}</b>
+                @if (getUser() && getUser('id') !== $news->user_id)
+                    <a class="post-rating-up<?= $news->vote === '+' ? ' active' : '' ?>" href="#" onclick="return changeRating(this);" data-id="{{ $news->id }}" data-type="{{ $news->getMorphClass() }}" data-vote="+" data-token="{{ $_SESSION['token'] }}"><i class="fa fa-thumbs-up"></i></a>
+                @endif
+            </div>
+        </div>
+    </div>
 
     @if ($comments->isNotEmpty())
-        <div class="b"><i class="fa fa-comment"></i> <b>{{ __('main.last_comments') }}</b></div>
+        <h5><i class="fa fa-comment"></i> {{ __('main.last_comments') }}</h5>
 
         @foreach ($comments as $comment)
-            <div class="post">
-                <div class="b">
-                    <div class="img">
-                        {!! $comment->user->getAvatar() !!}
-                        {!! $comment->user->getOnline() !!}
-                    </div>
-
-                    <b>{!! $comment->user->getProfile() !!}</b>
-                    <small> ({{ dateFixed($comment->created_at) }})</small><br>
-                    {!! $comment->user->getStatus() !!}
+            <div class="section mb-3 shadow">
+                <div class="user-avatar">
+                    {!! $comment->user->getAvatar() !!}
+                    {!! $comment->user->getOnline() !!}
                 </div>
 
-                <div>
-                    {!! bbCode($comment->text) !!}<br>
+                <div class="section-user d-flex align-items-center">
+                    <div class="flex-grow-1">
+                        {!! $comment->user->getProfile() !!}
+
+                        <small class="section-date text-muted font-italic">{{ dateFixed($comment->created_at) }}</small><br>
+                        <small class="font-italic">{!! $comment->user->getStatus() !!}</small>
+                    </div>
+                </div>
+
+                <div class="section-body border-top">
+                    <div class="section-message">
+                        {!! bbCode($comment->text) !!}
+                    </div>
 
                     @if (isAdmin())
-                     <span class="data">({{ $comment->brow }}, {{ $comment->ip }})</span>
+                        <div class="small text-muted font-italic mt-2">{{ $comment->brow }}, {{ $comment->ip }}</div>
                     @endif
                 </div>
             </div>

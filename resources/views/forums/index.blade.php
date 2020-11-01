@@ -68,7 +68,7 @@
                     @endif
                 </div>
 
-                <div class="section-body border-top py-1">
+                <div class="section-body border-top">
                     @if ($forum->lastTopic->lastPost->id)
                         {{ __('forums.topic') }}: <a href="/topics/end/{{ $forum->lastTopic->id }}">{{ $forum->lastTopic->title }}</a>
                         <br/>

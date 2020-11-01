@@ -36,7 +36,7 @@
                     {!! $data->getStatus() !!}
                 </div>
 
-                <div class="section-body border-top my-1 py-1">
+                <div class="section-body border-top">
                     {{ __('main.pluses') }}: {{ $data->posrating }} / {{ __('main.minuses') }}: {{ $data->negrating }}<br>
                     {{ __('main.registration_date') }}: {{ dateFixed($data->created_at, 'd.m.Y') }}
                 </div>

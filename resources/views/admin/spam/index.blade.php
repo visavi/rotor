@@ -56,7 +56,7 @@
                     </div>
                 </div>
 
-                <div class="section-body border-top my-1 py-1">
+                <div class="section-body border-top">
                     @if ($record->relate)
                         <div class="section-message">
                             {!! bbCode($record->relate->text) !!}

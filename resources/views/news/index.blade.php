@@ -51,7 +51,10 @@
                         </div>
                     @endif
 
-                    <div>{!! $data->shortText() !!}</div>
+                    <div class="section-message">
+                        {!! $data->shortText() !!}
+                    </div>
+
                     <div>
                         {{ __('main.added') }}: {!! $data->user->getProfile() !!}<br>
                         <a href="/news/comments/{{ $data->id }}">{{ __('main.comments') }}</a> ({{ $data->count_comments }})

@@ -23,6 +23,7 @@ use Illuminate\View\FileViewFinder;
 use Whoops\Handler\PlainTextHandler;
 use Whoops\Handler\PrettyPageHandler;
 use Whoops\Run;
+use Whoops\Util\Misc;
 
 define('STARTTIME', microtime(true));
 define('BASEDIR', dirname(__DIR__));
@@ -38,14 +39,12 @@ define('VERSION', '8.5');
 require_once BASEDIR . '/vendor/autoload.php';
 
 if (config('APP_DEBUG') && class_exists(Run::class)) {
+    $handler = Misc::isCommandLine() ?
+        new PlainTextHandler() :
+        new PrettyPageHandler();
+
     $whoops = new Run();
-
-    if (Whoops\Util\Misc::isCommandLine()) {
-        $whoops->prependHandler(new PlainTextHandler());
-    } else {
-        $whoops->prependHandler(new PrettyPageHandler());
-    }
-
+    $whoops->prependHandler($handler);
     $whoops->register();
 }
 

@@ -1,5 +1,5 @@
 @if ($photos)
-    <div class="section-body my-1 py-1">
+    <div class="section-body">
     @foreach ($photos as $photo)
         @php
             $file = current($photo['files']);

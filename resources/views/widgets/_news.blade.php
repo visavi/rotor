@@ -1,5 +1,5 @@
 @if ($news)
-    <div class="section-body my-1 py-1">
+    <div class="section-body">
     @foreach ($news as $data)
         <i class="far fa-circle fa-lg text-muted"></i>
         <a href="/news/{{ $data['id'] }}">{{ $data['title'] }}</a> ({{ $data['count_comments'] }})

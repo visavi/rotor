@@ -29,7 +29,7 @@
                 <span class="section-title">{{ $data->request }}</span>
                 <small class="section-date text-muted font-italic">{{ dateFixed($data->created_at) }}</small>
 
-                <div class="section-body border-top my-1 py-1">
+                <div class="section-body border-top">
                     Referer: {{ $data->referer ?: __('main.undefined') }}<br>
                     {{ __('main.user') }}: {!! $data->user->exists ? $data->user->getProfile() : setting('guestsuser') !!}
                     <div class="small text-muted font-italic mt-2">{{ $data->brow }}, {{ $data->ip }}</div>

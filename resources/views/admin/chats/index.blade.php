@@ -45,7 +45,7 @@
                     @endif
                 </div>
 
-                <div class="section-body border-top my-1 py-1">
+                <div class="section-body border-top">
                     <div class="section-message">
                         {!! bbCode($post->text) !!}
                     </div>
