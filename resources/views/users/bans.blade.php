@@ -7,7 +7,7 @@
         <b><span style="color:#ff0000">{{ __('users.reason_ban') }}: {!! bbCode($banhist->reason) !!}</span></b><br><br>
 
         @if (! $banhist->explain && setting('addbansend'))
-            <div class="section-form p-2 shadow">
+            <div class="section-form p-3 shadow">
                 <form method="post" action="/ban">
                     <div class="form-group{{ hasError('msg') }}">
                         <label for="msg">{{ __('users.explanation') }}:</label>

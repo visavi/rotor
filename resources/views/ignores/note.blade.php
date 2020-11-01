@@ -14,7 +14,7 @@
 @stop
 
 @section('content')
-    <div class="section-form p-2 shadow">
+    <div class="section-form p-3 shadow">
         <form method="post" action="/ignores/note/{{ $ignore->id }}">
             @csrf
             <div class="form-group{{ hasError('msg') }}">

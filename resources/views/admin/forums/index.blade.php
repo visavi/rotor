@@ -61,7 +61,7 @@
     @endif
 
     @if (isAdmin('boss'))
-        <div class="form my-3">
+        <div class="section-form my-3">
             <form action="/admin/forums/create" method="post">
                 @csrf
                 <div class="form-inline">

@@ -71,12 +71,12 @@ $keys = [
 <body class="bg-light">
 <div class="container border bg-white px-5">
     <div class="py-5 text-center">
-        <a href="/"><img class="d-block mx-auto mb-4" src="/assets/img/images/logo_big.png" alt=""></a>
+        <a href="/"><img class="d-block mx-auto mb-3" src="/assets/img/images/logo_big.png" alt=""></a>
         <h2>Mobile CMS</h2>
     </div>
 
     <div class="row">
-        <div class="col-12 mb-4">
+        <div class="col-12 mb-3">
     <?php if (! $request->has('act')): ?>
         <form method="get">
             <label for="language">Выберите язык - Select language:</label>
@@ -97,7 +97,7 @@ $keys = [
             <?= __('install.debug') ?>
         </div>
 
-        <div class="row mb-4">
+        <div class="row mb-3">
             <div class="col-12">
                 <div class="card bg-light">
                     <div class="card-body">
@@ -115,7 +115,7 @@ $keys = [
 
         <div class="mb-3"><?= __('install.requirements', ['php' => $phpVersion, 'mysql' => $mysqlVersion]) ?></div>
 
-        <div class="row mb-4">
+        <div class="row mb-3">
             <div class="col-sm-6">
                 <div class="card bg-light">
                     <div class="card-body">
@@ -370,7 +370,7 @@ $keys = [
             ?>
         <?php endif; ?>
 
-        <div class="section-form p-2 shadow">
+        <div class="section-form p-3 shadow">
             <form method="post" action="?act=account&amp;lang=<?= $lang ?>">
                 <div class="form-group">
                     <label for="login"><?= __('users.login') ?> (max20):</label>

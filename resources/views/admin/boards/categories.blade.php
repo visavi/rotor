@@ -42,7 +42,7 @@
         </div>
     @endforeach
 
-    <div class="form my-3">
+    <div class="section-form my-3">
         <form action="/admin/boards/create" method="post">
             @csrf
             <div class="form-inline">

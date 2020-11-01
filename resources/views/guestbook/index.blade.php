@@ -98,7 +98,7 @@
     {{ $posts->links() }}
 
     @if (getUser())
-        <div class="section-form p-2 my-2 shadow">
+        <div class="section-form p-3 my-2 shadow">
             <form action="/guestbook/add" method="post">
                 @csrf
                 <div class="form-group{{ hasError('msg') }}">
@@ -113,7 +113,7 @@
         </div><br>
 
     @elseif (setting('bookadds'))
-        <div class="section-form p-2 my-2 shadow">
+        <div class="section-form p-3 my-2 shadow">
             <form action="/guestbook/add" method="post">
                 @csrf
                 <div class="form-group{{ hasError('guest_name') }}">

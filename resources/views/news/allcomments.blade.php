@@ -15,17 +15,27 @@
 @section('content')
     @if ($comments->isNotEmpty())
         @foreach ($comments as $data)
-            <div class="b">
-                <i class="fa fa-comment"></i> <b><a href="/news/comment/{{ $data->relate_id }}/{{ $data->id }}">{{ $data->title }}</a></b> ({{ $data->count_comments }})
-            </div>
+            <div class="section mb-3 shadow">
+                <div class="section-header d-flex align-items-center">
+                    <div class="flex-grow-1">
+                        <i class="fa fa-comment fa-lg text-muted"></i>
+                        <b><a href="/news/comment/{{ $data->relate_id }}/{{ $data->id }}">{{ $data->title }}</a></b>
+                        <span class="badge badge-light">{{ $data->count_comments }}</span>
+                    </div>
+                </div>
 
-            <div>
-                {!! bbCode($data->text) !!}<br>
-                {{ __('main.posted') }}: {!! $data->user->getProfile() !!} <small>({{ dateFixed($data->created_at) }})</small><br>
+                <div class="section-body border-top">
+                    <div class="section-message">
+                        {!! $data->text !!}
+                    </div>
 
-                @if (isAdmin())
-                    <span class="data">({{ $data->brow }}, {{ $data->ip }})</span>
-                @endif
+                    {{ __('main.posted') }}: {!! $data->user->getProfile() !!}
+                    <small class="section-date text-muted font-italic">{{ dateFixed($data->created_at) }}</small>
+
+                    @if (isAdmin())
+                        <div class="small text-muted font-italic mt-2">{{ $data->brow }}, {{ $data->ip }}</div>
+                    @endif
+                </div>
             </div>
         @endforeach
     @else

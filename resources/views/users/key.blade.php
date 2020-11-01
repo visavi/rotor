@@ -15,7 +15,7 @@
     {{ __('users.welcome', ['login' => getUser('login')]) }}<br>
     {{ __('users.confirm_enter_code') }}<br><br>
 
-    <div class="section-form p-2 mb-3 shadow">
+    <div class="section-form p-3 mb-3 shadow">
         <label for="code">{{ __('users.confirm_code') }}:</label>
         <form method="get" action="/key">
             <input class="form-control" name="code" id="code" maxlength="30" required>
@@ -27,7 +27,7 @@
     <?php $display = $checkEmail ? '' : ' style="display: none"'; ?>
 
     <div class="js-resending-form"{!! $display !!}>
-        <div class="section-form p-2 my-3 shadow">
+        <div class="section-form p-3 my-3 shadow">
             <form method="post" action="/key">
                 @csrf
                 <div class="form-group{{ hasError('email') }}">

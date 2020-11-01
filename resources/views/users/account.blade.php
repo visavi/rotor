@@ -15,7 +15,7 @@
 @section('content')
     <h3>{{ __('users.change_email') }}</h3>
 
-    <div class="form mb-4">
+    <div class="section-form mb-3">
         <form method="post" action="/accounts/changemail">
             @csrf
             <div class="form-group{{ hasError('email') }}">
@@ -40,7 +40,7 @@
     <h3>{{ __('users.status_change') }}</h3>
 
     @if ($user->point >= setting('editstatuspoint'))
-        <div class="form mb-4">
+        <div class="section-form mb-3">
             <form method="post" action="/accounts/editstatus">
                 @csrf
                 <label for="status">{{ __('users.personal_status') }}:</label>
@@ -65,7 +65,7 @@
 
     <h3>{{ __('users.change_password') }}</h3>
 
-    <div class="form mb-4">
+    <div class="section-form mb-3">
         <form method="post" action="/accounts/editpassword">
             @csrf
             <div class="form-group{{ hasError('newpass') }}">
@@ -92,7 +92,7 @@
 
     <h3>{{ __('users.your_token') }}</h3>
 
-    <div class="form mb-4">
+    <div class="section-form mb-3">
         <form method="post" action="/accounts/apikey">
             @csrf
             @if ($user->apikey)

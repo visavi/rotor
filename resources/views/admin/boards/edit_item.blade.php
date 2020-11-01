@@ -28,7 +28,7 @@
 
     <a href="/admin/items/delete/{{ $item->id }}?token={{ $_SESSION['token'] }}" onclick="return confirm('{{ __('boards.confirm_delete') }}')">{{ __('main.delete') }}</a>
 
-    <div class="section-form p-2 shadow">
+    <div class="section-form p-3 shadow">
         <form action="/admin/items/edit/{{ $item->id }}" method="post">
             @csrf
             <div class="form-group{{ hasError('bid') }}">

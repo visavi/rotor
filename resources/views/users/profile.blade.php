@@ -13,7 +13,7 @@
 @stop
 
 @section('content')
-    <div class="section-form p-2 shadow">
+    <div class="section-form p-3 shadow">
         <form method="post" action="/profile">
             @csrf
             <div class="container-fluid">

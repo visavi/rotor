@@ -13,7 +13,7 @@
 @stop
 
 @section('content')
-    <div class="section-form p-2 shadow">
+    <div class="section-form p-3 shadow">
         <form action="/users/{{ $user->login }}/note" method="post">
             @csrf
             <div class="form-group{{ hasError('notice') }}">

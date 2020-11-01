@@ -24,7 +24,7 @@
     {{ __('main.messages') }}: {{ $topic->count_posts }}<br>
     {{ __('main.created') }}: {{ dateFixed($topic->created_at) }}<br>
 
-    <div class="form mb-3">
+    <div class="section-form mb-3">
         <form action="/admin/topics/move/{{ $topic->id }}" method="post">
             @csrf
             <div class="form-group{{ hasError('fid') }}">

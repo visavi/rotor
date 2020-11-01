@@ -13,7 +13,7 @@
 @stop
 
 @section('content')
-    <div class="section-form p-2 shadow">
+    <div class="section-form p-3 shadow">
         <form method="post">
             @csrf
             <label for="inputRating">{{ __('main.rating') }}</label>

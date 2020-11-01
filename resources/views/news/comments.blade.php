@@ -20,15 +20,21 @@
 @section('content')
     @if ($comments->isNotEmpty())
         @foreach ($comments as $data)
-            <div class="post" id="comment_{{ $data->id }}">
-                <div class="b">
-                    <div class="img">
-                        {!! $data->user->getAvatar() !!}
-                        {!! $data->user->getOnline() !!}
+            <div class="section mb-3 shadow" id="comment_{{ $data->id }}">
+                <div class="user-avatar">
+                    {!! $data->user->getAvatar() !!}
+                    {!! $data->user->getOnline() !!}
+                </div>
+
+                <div class="section-user d-flex align-items-center">
+                    <div class="flex-grow-1">
+                        {!! $data->user->getProfile() !!}
+                        <small class="section-date text-muted font-italic">{{ dateFixed($data->created_at) }}</small><br>
+                        <small class="font-italic">{!! $data->user->getStatus() !!}</small>
                     </div>
 
                     @if (getUser())
-                        <div class="float-right">
+                        <div class="text-right">
                             @if (getUser('id') !== $data->user_id)
                                 <a href="#" onclick="return postReply(this)" data-toggle="tooltip" title="{{ __('main.reply') }}"><i class="fa fa-reply text-muted"></i></a>
 
@@ -47,19 +53,17 @@
                             @endif
                         </div>
                     @endif
-
-                    <b>{!! $data->user->getProfile() !!}</b>
-                    <small> ({{ dateFixed($data->created_at) }})</small><br>
-                    {!! $data->user->getStatus() !!}
                 </div>
 
-                <div class="section-message">
-                    {!! bbCode($data->text) !!}<br>
-                </div>
+                <div class="section-body border-top">
+                    <div class="section-message">
+                        {!! bbCode($data->text) !!}
+                    </div>
 
                 @if (isAdmin())
-                    <span class="data">({{ $data->brow }}, {{ $data->ip }})</span>
+                    <div class="small text-muted font-italic mt-2">{{ $data->brow }}, {{ $data->ip }}</div>
                 @endif
+                </div>
             </div>
         @endforeach
     @endif
@@ -72,7 +76,7 @@
         @endif
 
         @if (getUser())
-            <div class="section-form p-2 shadow">
+            <div class="section-form p-3 mb-3 shadow">
                 <form action="/news/comments/{{ $news->id }}" method="post">
                     @csrf
                     <div class="form-group{{ hasError('msg') }}">

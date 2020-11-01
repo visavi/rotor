@@ -79,7 +79,7 @@
             </div>
         @endforeach
 
-        <div class="bg-light p-1 mb-3 border">
+        <div class="p-3 mb-3 shadow">
             <i class="fas fa-comments"></i> <b><a href="/news/comments/{{ $news->id }}">{{ __('news.all_comments') }}</a></b> ({{ $news->count_comments }})
             <a href="/news/end/{{ $news->id }}">&raquo;</a>
         </div>
@@ -91,7 +91,7 @@
         @endif
 
         @if (getUser())
-            <div class="section-form p-2 shadow">
+            <div class="section-form p-3 shadow">
                 <form action="/news/comments/{{ $news->id }}?read=1" method="post">
                     @csrf
                     <div class="form-group{{ hasError('msg') }}">

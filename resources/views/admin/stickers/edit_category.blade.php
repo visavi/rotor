@@ -15,7 +15,7 @@
 @stop
 
 @section('content')
-    <div class="form mb-3">
+    <div class="section-form mb-3">
         <form action="/admin/stickers/edit/{{ $category->id }}" method="post">
             @csrf
             <div class="form-group{{ hasError('name') }}">

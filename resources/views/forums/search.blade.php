@@ -13,7 +13,7 @@
 @stop
 
 @section('content')
-    <div class="section-form p-2 shadow">
+    <div class="section-form p-3 shadow">
         <form action="/forums/search">
             <input type="hidden" name="fid" value="{{ $fid }}">
 

@@ -21,7 +21,7 @@
 @stop
 
 @section('content')
-    <div class="form mb-3">
+    <div class="section-form mb-3">
         <form action="/admin/boards/edit/{{ $board->id }}" method="post">
             @csrf
             <div class="form-group{{ hasError('parent') }}">

@@ -52,7 +52,7 @@
 
     {{ $contacts->links() }}
 
-    <div class="form my-3">
+    <div class="section-form my-3">
         <form method="post">
             @csrf
             <div class="input-group{{ hasError('user') }}">

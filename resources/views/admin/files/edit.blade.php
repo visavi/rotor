@@ -24,7 +24,7 @@
         </div>
     @endif
 
-    <div class="section-form p-2 shadow">
+    <div class="section-form p-3 shadow">
         <form method="post">
             @csrf
             <div class="form-group{{ hasError('msg') }}">
