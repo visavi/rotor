@@ -164,12 +164,18 @@ postQuote = function(el)
     var author  = post.find('.section-author').data('login');
     var date    = post.find('.section-date').text();
     var text    = post.find('.section-message').clone();
-    var message = text.find('blockquote').remove().end().text();
+    var message = $.trim(text.find('blockquote').remove().end().text());
 
     var $lastSymbol = field.val().slice(field.val().length - 1);
     var separ = $.inArray($lastSymbol, ['', '\n']) !== -1 ? '' : '\n';
 
-    field.focus().val(field.val() + separ + '[quote=' + author + ' ' + date + ']' + $.trim(message) + '[/quote]\n');
+    if (!message) {
+        field.focus().val(field.val() + separ + author + ', ');
+
+        return false;
+    }
+
+    field.focus().val(field.val() + separ + '[quote=' + author + ' ' + date + ']' + message + '[/quote]\n');
 
     return false;
 };
