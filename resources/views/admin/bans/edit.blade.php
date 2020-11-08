@@ -26,7 +26,7 @@
     <i class="fa fa-history"></i> <b><a href="/admin/banhists/view?user={{ $user->login }}">{{ __('index.ban_history') }}</a></b><br><br>
 
     @if ($user->level === 'banned' && $user->timeban > SITETIME)
-        <div class="section-form p-3 shadow">
+        <div class="section-form shadow">
             <div class="p-1 my-1 bg-danger text-white">{{ __('users.user_banned') }}</div>
             {{ __('users.ending_ban') }}: {{ formatTime($user->timeban - SITETIME) }}<br>
         </div>
@@ -34,7 +34,7 @@
         <i class="fa fa-pencil-alt"></i> <a href="/admin/bans/change?user={{ $user->login }}">{{ __('main.change') }}</a><br>
         <i class="fa fa-check-circle"></i> <a href="/admin/bans/unban?user={{ $user->login }}&amp;token={{ $_SESSION['token'] }}" onclick="return confirm('{{ __('admin.bans.confirm_unban') }}')">{{ __('users.unban') }}</a><hr>
     @else
-        <div class="section-form p-3 shadow">
+        <div class="section-form shadow">
             <form method="post" action="/admin/bans/edit?user={{ $user->login }}">
                 @csrf
                 <div class="form-group{{ hasError('time') }}">

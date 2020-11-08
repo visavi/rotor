@@ -22,14 +22,16 @@
 @section('content')
     <div class="mb-3">
         <div class="section-content">
-            @if ($news->image)
-                <div class="float-left mr-3">
-                    <a href="{{ $news->image }}" class="gallery">{!! resizeImage($news->image, ['width' => 200, 'class' => 'img-thumbnail img-fluid', 'alt' => $news->title]) !!}</a>
-                </div>
-            @endif
+            <div class="section-message row mb-3">
+                @if ($news->image)
+                    <div class="col-sm-3">
+                        <a href="{{ $news->image }}" class="gallery">{!! resizeImage($news->image, ['width' => 200, 'class' => 'img-thumbnail img-fluid', 'alt' => $news->title]) !!}</a>
+                    </div>
+                @endif
 
-            <div class="section-message">
-                {!! bbCode($news->text) !!}
+                <div class="col">
+                    {!! bbCode($news->text) !!}
+                </div>
             </div>
         </div>
 
@@ -91,7 +93,7 @@
         @endif
 
         @if (getUser())
-            <div class="section-form p-3 shadow">
+            <div class="section-form shadow">
                 <form action="/news/comments/{{ $news->id }}?read=1" method="post">
                     @csrf
                     <div class="form-group{{ hasError('msg') }}">

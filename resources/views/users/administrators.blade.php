@@ -32,7 +32,7 @@
         @if (getUser())
             <h3>{{ __('users.fast_mail') }}</h3>
 
-            <div class="section-form p-3 shadow">
+            <div class="section-form shadow">
                 <form method="post" action="/messages/send">
                     @csrf
                     <div class="form-group">

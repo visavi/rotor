@@ -16,7 +16,7 @@
 @section('content')
     {{ __('main.cash_money') }}: <b>{{ plural(getUser('money'), setting('moneyname')) }}</b><br><br>
 
-    <div class="section-form mb-3 p-2 shadow">
+    <div class="section-form shadow mb-3">
         <form method="post" action="/adverts/create">
             @csrf
             <div class="form-group{{ hasError('site') }}">

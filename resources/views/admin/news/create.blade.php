@@ -14,7 +14,7 @@
 @stop
 
 @section('content')
-    <div class="section-form cut">
+    <div class="section-form shadow cut">
         <form action="/admin/news/create" method="post" enctype="multipart/form-data">
             @csrf
             <div class="form-group{{ hasError('title') }}">

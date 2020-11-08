@@ -43,7 +43,7 @@
 
     {{ $lists->links() }}
 
-    <div class="section-form p-3 shadow">
+    <div class="section-form shadow">
         <form action="/admin/blacklists?type={{ $type }}" method="post">
             @csrf
             <div class="form-inline">

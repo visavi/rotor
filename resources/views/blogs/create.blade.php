@@ -13,7 +13,7 @@
 @stop
 
 @section('content')
-    <div class="section-form cut">
+    <div class="section-form shadow cut">
         <form action="/blogs/create" method="post">
             @csrf
             <div class="form-group{{ hasError('cid') }}">

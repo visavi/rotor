@@ -45,14 +45,16 @@
                 </div>
 
                 <div class="section-content">
-                    @if ($data->image)
-                        <div class="float-left mr-3">
-                            <a href="{{ $data->image }}" class="gallery">{!! resizeImage($data->image, ['width' => 200, 'class' => 'img-thumbnail img-fluid', 'alt' => $data->title]) !!}</a>
-                        </div>
-                    @endif
+                    <div class="section-message row mb-3">
+                        @if ($data->image)
+                            <div class="col-sm-3">
+                                <a href="{{ $data->image }}" class="gallery">{!! resizeImage($data->image, ['class' => 'img-thumbnail img-fluid', 'alt' => $data->title]) !!}</a>
+                            </div>
+                        @endif
 
-                    <div class="section-message">
-                        {!! $data->shortText() !!}
+                        <div class="col">
+                            {!! $data->shortText() !!}
+                        </div>
                     </div>
 
                     <div>

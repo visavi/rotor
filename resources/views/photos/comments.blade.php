@@ -65,7 +65,7 @@
         @endif
 
         @if (getUser())
-            <div class="section-form p-3 shadow">
+            <div class="section-form shadow">
                 <form action="/photos/comments/{{ $photo->id }}" method="post">
                     @csrf
                     <div class="form-group{{ hasError('msg') }}">

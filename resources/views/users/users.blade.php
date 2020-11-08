@@ -42,7 +42,7 @@
             </div>
         @endforeach
 
-        <div class="section-form mt-3">
+        <div class="section-form shadow mt-3">
             <form action="/users" method="post">
                 <div class="form-inline">
                     <div class="form-group{{ hasError('user') }}">

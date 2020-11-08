@@ -16,7 +16,7 @@
     @if ($users->isEmpty())
         {{ __('admin.delusers.condition') }}:<br>
 
-        <div class="section-form p-3 shadow">
+        <div class="section-form shadow">
             <form action="/admin/delusers" method="post">
 
                 <div class="form-group">

@@ -54,7 +54,7 @@
     @endforeach
 
     @if (isAdmin('boss'))
-        <div class="section-form my-3">
+        <div class="section-form shadow my-3">
             <form action="/admin/blogs/create" method="post">
                 @csrf
                 <div class="form-inline">

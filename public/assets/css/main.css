@@ -30,6 +30,7 @@
 
 .section-form {
   background: #fff;
+  padding: 15px;
 }
 
 .section-media {
@@ -76,7 +77,7 @@
 }
 
 @media (max-width: 768px) {
-  .section {
+  .section, .section-form {
     padding: 10px;
   }
 

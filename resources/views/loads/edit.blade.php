@@ -25,7 +25,7 @@
         {{ __('loads.pending_down2') }}
     </div><br>
 
-    <div class="section-form mb-3">
+    <div class="section-form shadow mb-3">
         <form action="/downs/edit/{{ $down->id }}" method="post" enctype="multipart/form-data">
             @csrf
             <div class="form-group{{ hasError('title') }}">

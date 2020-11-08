@@ -64,7 +64,7 @@
     {{ $messages->links() }}
 
     @if ($user->exists)
-        <div class="section-form p-3 shadow">
+        <div class="section-form shadow">
             <form action="/messages/send?user={{ $user->login }}" method="post">
                 @csrf
                 <div class="form-group{{ hasError('msg') }}">

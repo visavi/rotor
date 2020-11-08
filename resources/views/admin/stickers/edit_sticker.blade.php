@@ -17,7 +17,7 @@
 @section('content')
     <img src="{{ $sticker->name }}" alt=""><br>
 
-    <div class="section-form p-3 shadow">
+    <div class="section-form shadow">
         <form action="/admin/stickers/sticker/edit/{{ $sticker->id }}?page={{ $page }}" method="post">
             @csrf
             <div class="form-group{{ hasError('category') }}">

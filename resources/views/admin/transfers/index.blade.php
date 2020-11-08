@@ -37,7 +37,7 @@
 
         {{ $transfers->links() }}
 
-        <div class="section-form p-3 shadow">
+        <div class="section-form shadow">
             <form action="/admin/transfers/view" method="get">
                 <div class="form-inline">
                     <div class="form-group{{ hasError('user') }}">

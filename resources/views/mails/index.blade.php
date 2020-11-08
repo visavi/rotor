@@ -12,7 +12,7 @@
 @stop
 
 @section('content')
-    <div class="section-form p-3 shadow">
+    <div class="section-form shadow">
         <form method="post" action="/mails">
 
             @if (! getUser())

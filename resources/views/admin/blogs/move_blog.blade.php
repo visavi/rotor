@@ -21,7 +21,7 @@
 @stop
 
 @section('content')
-    <div class="section-form cut">
+    <div class="section-form shadow cut">
         <form action="/admin/articles/move/{{ $article->id }}" method="post">
             @csrf
             <div class="form-group{{ hasError('cid') }}">

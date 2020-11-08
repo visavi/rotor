@@ -23,7 +23,7 @@
 @section('content')
     <i class="fa fa-pencil-alt"></i> <b>{{ $comment->user->getName() }}</b> <small>({{ dateFixed($comment->created_at) }})</small><br><br>
 
-    <div class="section-form p-3 shadow">
+    <div class="section-form shadow">
         <form action="/articles/edit/{{ $comment->relate_id }}/{{ $comment->id }}?page={{ $page }}" method="post">
             @csrf
             <div class="form-group{{ hasError('msg') }}">

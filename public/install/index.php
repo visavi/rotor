@@ -370,7 +370,7 @@ $keys = [
             ?>
         <?php endif; ?>
 
-        <div class="section-form p-3 shadow">
+        <div class="section-form shadow">
             <form method="post" action="?act=account&amp;lang=<?= $lang ?>">
                 <div class="form-group">
                     <label for="login"><?= __('users.login') ?> (max20):</label>

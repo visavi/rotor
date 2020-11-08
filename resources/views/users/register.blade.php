@@ -42,7 +42,7 @@
     <div class="mb-3" id="uLogin" data-ulogin="display=panel;fields=first_name,last_name,photo;optional=sex,email,nickname;providers=vkontakte,odnoklassniki,mailru,facebook,google,yandex,instagram;redirect_uri={{ siteUrl() }}/register;mobilebuttons=0;">
     </div>
 
-    <div class="section-form p-3 shadow">
+    <div class="section-form shadow">
         <form action="/register" method="post">
 
             <div class="form-group{{ hasError('login') }}">
