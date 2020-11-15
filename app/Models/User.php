@@ -538,6 +538,7 @@ class User extends BaseModel
             'author_id'  => $author->id ?? 0,
             'text'       => $text,
             'created_at' => SITETIME,
+            'type'       => Message::IN,
         ]);
 
         $this->increment('newprivat');

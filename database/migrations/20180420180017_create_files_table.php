@@ -19,7 +19,7 @@ class CreateFilesTable extends AbstractMigration
                 ->addColumn('size', 'integer')
                 ->addColumn('user_id', 'integer')
                 ->addColumn('created_at', 'integer')
-                ->addIndex(['relate_type', 'relate_id'], ['name' => 'relate_type'])
+                ->addIndex(['relate_type', 'relate_id'], ['name' => 'relate'])
                 ->addIndex('user_id')
                 ->addIndex('created_at')
                 ->create();

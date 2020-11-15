@@ -14,7 +14,7 @@ class CreateGuestbookTable extends AbstractMigration
             $table
                 ->addColumn('user_id', 'integer', ['null' => true])
                 ->addColumn('text', 'text', ['null' => true])
-                ->addColumn('ip', 'varbinary', ['limit' => 16])
+                ->addColumn('ip', 'string', ['limit' => 39])
                 ->addColumn('brow', 'string', ['limit' => 25])
                 ->addColumn('created_at', 'integer')
                 ->addColumn('reply', 'text', ['null' => true])

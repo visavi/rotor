@@ -767,7 +767,7 @@ function statVotes()
 {
     return Cache::remember('statVotes', 900, static function () {
         $votes = Vote::query()
-            ->selectRaw('count(*) AS cnt, ifnull(sum(count), 0) AS sum')
+            ->selectRaw('count(*) AS cnt, coalesce(sum(count), 0) AS sum')
             ->where('closed', 0)
             ->first();
 
@@ -1187,7 +1187,7 @@ function restatement(string $mode)
         case 'forums':
             DB::connection()->update('update topics set count_posts = (select count(*) from posts where topics.id = posts.topic_id)');
             DB::connection()->update('update forums set count_topics = (select count(*) from topics where forums.id = topics.forum_id)');
-            DB::connection()->update('update forums set count_posts = (select ifnull(sum(count_posts), 0) from topics where forums.id = topics.forum_id)');
+            DB::connection()->update('update forums set count_posts = (select coalesce(sum(count_posts), 0) from topics where forums.id = topics.forum_id)');
             break;
 
         case 'blogs':
@@ -1217,7 +1217,7 @@ function restatement(string $mode)
             break;
 
         case 'votes':
-            DB::connection()->update('update votes set count = (select ifnull(sum(result), 0) from voteanswer where votes.id = voteanswer.vote_id)');
+            DB::connection()->update('update votes set count = (select coalesce(sum(result), 0) from voteanswer where votes.id = voteanswer.vote_id)');
             break;
     }
 }
@@ -2120,6 +2120,8 @@ function getQueryLog()
             if (is_string($binding)) {
                 $query['bindings'][$key] = ctype_print($binding) ? "'$binding'" : '[binary]';
             }
+
+            $query['bindings'][$key] = $binding ?? 'null';
         }
 
         $sql = str_replace(['%', '?'], ['%%', '%s'], $query['query']);

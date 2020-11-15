@@ -82,18 +82,18 @@ class BaseModel extends Model
      *
      * @return string|false
      */
-    public function getIpAttribute($value)
+/*    public function getIpAttribute($value)
     {
         return inet_ntop($value);
-    }
+    }*/
 
     /**
      * Set packed IP
      *
      * @param string $value
      */
-    public function setIpAttribute($value): void
+/*    public function setIpAttribute($value): void
     {
         $this->attributes['ip'] = inet_pton($value);
-    }
+    }*/
 }

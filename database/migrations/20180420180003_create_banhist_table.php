@@ -14,7 +14,8 @@ class CreateBanhistTable extends AbstractMigration
             $table
                 ->addColumn('user_id', 'integer')
                 ->addColumn('send_user_id', 'integer')
-                ->addColumn('type', 'enum', ['values' => ['ban','unban','change']])
+                //->addColumn('type', 'enum', ['values' => ['ban','unban','change']])
+                ->addColumn('type', 'string', ['limit' => 10])
                 ->addColumn('reason', 'text', ['null' => true])
                 ->addColumn('term', 'integer', ['default' => 0])
                 ->addColumn('created_at', 'integer')

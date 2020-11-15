@@ -18,7 +18,7 @@ class CreateSpamTable extends AbstractMigration
                 ->addColumn('created_at', 'integer')
                 ->addColumn('path', 'string', ['limit' => 100, 'null' => true])
                 ->addIndex('created_at')
-                ->addIndex(['relate_type', 'relate_id'], ['name' => 'relate_type'])
+                ->addIndex(['relate_type', 'relate_id'], ['name' => 'spam_relate'])
                 ->create();
         }
     }

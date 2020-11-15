@@ -65,7 +65,7 @@ $keys = [
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
     <link rel="image_src" href="/assets/img/images/icon.png">
-    <link rel="stylesheet" href="/install/assets/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="/themes/default/dist/app.css">
 </head>
 
 <body class="bg-light">

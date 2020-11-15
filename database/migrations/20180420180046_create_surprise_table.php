@@ -13,7 +13,7 @@ class CreateSurpriseTable extends AbstractMigration
             $table = $this->table('surprise', ['engine' => config('DB_ENGINE'), 'collation' => config('DB_COLLATION')]);
             $table
                 ->addColumn('user_id', 'integer')
-                ->addColumn('year', 'year', ['limit' => 4])
+                ->addColumn('year', 'string', ['limit' => 4])
                 ->addColumn('created_at', 'integer')
                 ->addIndex('user_id')
                 ->create();

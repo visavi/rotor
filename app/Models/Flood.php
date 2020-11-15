@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace App\Models;
 
-use Illuminate\Database\Capsule\Manager as DB;
-
 /**
  * Class Flood
  *
@@ -100,9 +98,8 @@ class Flood extends BaseModel
             'uid'  => $this->getUid(),
             'page' => request()->getPathInfo(),
         ], [
-            'attempts'   => DB::connection()->raw('attempts + 1'),
             'created_at' => SITETIME + $period,
-        ]);
+        ])->increment('attempts');
     }
 
     /**

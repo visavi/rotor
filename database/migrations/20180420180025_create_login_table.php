@@ -13,7 +13,7 @@ class CreateLoginTable extends AbstractMigration
             $table = $this->table('login', ['engine' => config('DB_ENGINE'), 'collation' => config('DB_COLLATION')]);
             $table
                 ->addColumn('user_id', 'integer')
-                ->addColumn('ip', 'varbinary', ['limit' => 16])
+                ->addColumn('ip', 'string', ['limit' => 39])
                 ->addColumn('brow', 'string', ['limit' => 25])
                 ->addColumn('created_at', 'integer')
                 ->addColumn('type', 'string', ['limit' => 10])

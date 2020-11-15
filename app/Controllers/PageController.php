@@ -106,7 +106,7 @@ class PageController extends BaseController
 
         $stickers = Sticker::query()
             ->where('category_id', $id)
-            ->orderBy(DB::connection()->raw('CHAR_LENGTH(`code`)'))
+            ->orderBy(DB::connection()->raw('CHAR_LENGTH(code)'))
             ->orderBy('name')
             ->with('category')
             ->paginate(setting('stickerlist'));

@@ -24,16 +24,11 @@ class CreateTopicsTable extends AbstractMigration
                 ->addColumn('visits', 'integer', ['default' => 0])
                 ->addColumn('last_post_id', 'integer', ['null' => true])
                 ->addColumn('created_at', 'integer')
-                ->addIndex(['count_posts', 'updated_at'], ['name' => 'count_posts_time'])
-                ->addIndex(['user_id', 'updated_at'], ['name' => 'user_time'])
-                ->addIndex(['forum_id', 'locked', 'updated_at'], ['name' => 'forum_time'])
-                ->addIndex('updated_at');
-
-            $mysql = $this->query('SHOW VARIABLES LIKE "version"')->fetch();
-
-            if (config('DB_ENGINE') === 'MyISAM' || version_compare($mysql['Value'], '5.6.0', '>=')) {
-                $table->addIndex('title', ['type' => 'fulltext']);
-            }
+                ->addIndex(['count_posts', 'updated_at'], ['name' => 'topics_count_posts_time'])
+                ->addIndex(['user_id', 'updated_at'], ['name' => 'topics_user_time'])
+                ->addIndex(['forum_id', 'locked', 'updated_at'], ['name' => 'topics_forum_time'])
+                ->addIndex('updated_at')
+                ->addIndex('title', ['type' => 'fulltext']);
 
             $table->create();
         }

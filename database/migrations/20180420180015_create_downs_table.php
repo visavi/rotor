@@ -24,14 +24,9 @@ class CreateDownsTable extends AbstractMigration
                 ->addColumn('active', 'boolean', ['default' => 0])
                 ->addColumn('updated_at', 'integer', ['null' => true])
                 ->addIndex('category_id')
-                ->addIndex('created_at');
-
-            $mysql = $this->query('SHOW VARIABLES LIKE "version"')->fetch();
-
-            if (config('DB_ENGINE') === 'MyISAM' || version_compare($mysql['Value'], '5.6.0', '>=')) {
-                $table->addIndex('text', ['type' => 'fulltext']);
-                $table->addIndex('title', ['type' => 'fulltext']);
-            }
+                ->addIndex('created_at')
+                ->addIndex('text', ['type' => 'fulltext'])
+                ->addIndex('title', ['type' => 'fulltext']);
 
             $table->create();
         }
