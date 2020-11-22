@@ -52,7 +52,7 @@ class Advert extends BaseModel
                         $name = check($val->name);
 
                         if ($val->color) {
-                            $val->name = '<span style="color:' . $val->color . '">' . $name . '</span>';
+                            $name = '<span style="color:' . $val->color . '">' . $name . '</span>';
                         }
 
                         $link = '<a href="' . $val->site . '" target="_blank" rel="nofollow">' . $name . '</a>';
