@@ -66,7 +66,7 @@ class BaseModel extends Model
     /**
      * Возвращает логин пользователя
      *
-     * @param string $value
+     * @param string|null $value
      *
      * @return string
      */
@@ -74,26 +74,4 @@ class BaseModel extends Model
     {
         return $value ?? setting('deleted_user');
     }
-
-    /**
-     * Get packed IP
-     *
-     * @param string $value
-     *
-     * @return string|false
-     */
-/*    public function getIpAttribute($value)
-    {
-        return inet_ntop($value);
-    }*/
-
-    /**
-     * Set packed IP
-     *
-     * @param string $value
-     */
-/*    public function setIpAttribute($value): void
-    {
-        $this->attributes['ip'] = inet_pton($value);
-    }*/
 }

@@ -14,7 +14,7 @@ class CreateReadersTable extends AbstractMigration
             $table
                 ->addColumn('relate_type', 'string', ['limit' => 10])
                 ->addColumn('relate_id', 'integer')
-                ->addColumn('ip', 'string', ['limit' => 39])
+                ->addColumn('ip', 'string', ['limit' => 45])
                 ->addColumn('created_at', 'integer')
                 ->addIndex(['relate_type', 'relate_id', 'ip'], ['name' => 'readers_relate'])
                 ->create();

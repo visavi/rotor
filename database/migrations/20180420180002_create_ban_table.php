@@ -12,7 +12,7 @@ class CreateBanTable extends AbstractMigration
         if (! $this->hasTable('ban')) {
             $table = $this->table('ban', ['engine' => config('DB_ENGINE'), 'collation' => config('DB_COLLATION')]);
             $table
-                ->addColumn('ip', 'string', ['limit' => 39])
+                ->addColumn('ip', 'string', ['limit' => 45])
                 ->addColumn('user_id', 'integer', ['null' => true])
                 ->addColumn('created_at', 'integer')
                 ->addIndex('ip', ['unique' => true])

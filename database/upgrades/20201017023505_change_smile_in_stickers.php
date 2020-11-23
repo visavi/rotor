@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 use Phinx\Migration\AbstractMigration;
 
 class ChangeSmileInStickers extends AbstractMigration

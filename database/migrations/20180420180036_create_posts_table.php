@@ -17,7 +17,7 @@ class CreatePostsTable extends AbstractMigration
                 ->addColumn('text', 'text', ['null' => true])
                 ->addColumn('rating', 'integer', ['default' => 0])
                 ->addColumn('created_at', 'integer')
-                ->addColumn('ip', 'string', ['limit' => 39])
+                ->addColumn('ip', 'string', ['limit' => 45])
                 ->addColumn('brow', 'string', ['limit' => 25])
                 ->addColumn('edit_user_id', 'integer', ['null' => true])
                 ->addColumn('updated_at', 'integer', ['null' => true])

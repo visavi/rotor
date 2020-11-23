@@ -41,34 +41,35 @@ class Advert extends BaseModel
      */
     public static function statAdverts(): array
     {
-        if (setting('rekusershow')) {
-            return Cache::remember('adverts', 1800, static function () {
-
-                $data = self::query()->where('deleted_at', '>', SITETIME)->get();
-
-                $links = [];
-                if ($data->isNotEmpty()) {
-                    foreach ($data as $val) {
-                        $name = check($val->name);
-
-                        if ($val->color) {
-                            $name = '<span style="color:' . $val->color . '">' . $name . '</span>';
-                        }
-
-                        $link = '<a href="' . $val->site . '" target="_blank" rel="nofollow">' . $name . '</a>';
-
-                        if ($val->bold) {
-                            $link = '<b>' . $link . '</b>';
-                        }
-
-                        $links[] = $link;
-                    }
-                }
-
-                return $links;
-            });
+        if (! setting('rekusershow')) {
+            return [];
         }
 
-        return [];
+        return Cache::remember('adverts', 1800, static function () {
+            $data = self::query()->where('deleted_at', '>', SITETIME)->get();
+
+            if ($data->isEmpty()) {
+                return [];
+            }
+
+            $links = [];
+            foreach ($data as $val) {
+                $name = check($val->name);
+
+                if ($val->color) {
+                    $name = '<span style="color:' . $val->color . '">' . $name . '</span>';
+                }
+
+                $link = '<a href="' . $val->site . '" target="_blank" rel="nofollow">' . $name . '</a>';
+
+                if ($val->bold) {
+                    $link = '<b>' . $link . '</b>';
+                }
+
+                $links[] = $link;
+            }
+
+            return $links;
+        });
     }
 }

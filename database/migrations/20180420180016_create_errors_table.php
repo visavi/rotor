@@ -16,7 +16,7 @@ class CreateErrorsTable extends AbstractMigration
                 ->addColumn('request', 'string', ['null' => true])
                 ->addColumn('referer', 'string', ['null' => true])
                 ->addColumn('user_id', 'integer', ['null' => true])
-                ->addColumn('ip', 'string', ['limit' => 39])
+                ->addColumn('ip', 'string', ['limit' => 45])
                 ->addColumn('brow', 'string', ['limit' => 25])
                 ->addColumn('created_at', 'integer')
                 ->addIndex(['code', 'created_at'], ['name' => 'code'])
