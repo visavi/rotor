@@ -78,9 +78,9 @@ composer create-project --stability=dev visavi/rotor .
 
 Создание миграций `php rotor create CreateTestTable`
 
-Выполнение миграций `php rotor migrate` или `php rotor migrate -t 20110103081132` для отдельной миграции
+Выполнение миграций `php rotor migrate` или `php rotor migrate -t 20110103081132` для выполнения до определенной миграции
 
-Откат последней миграции `php rotor rollback` или `php rotor rollback -t 20120103083322` для отдельной миграции
+Откат последней миграции `php rotor rollback` или `php rotor rollback -t 20120103083322` для отката до определенной миграции
 
 Создание сида `php rotor seed:create UsersSeeder`
 

@@ -78,9 +78,9 @@ Current migration status `php rotor status`
 
 Create migrations `php rotor create CreateTestTable`
 
-Performing migrations `php rotor migrate` or `php rotor migrate -t 20110103081132` for a specific migration
+Performing migrations `php rotor migrate` or `php rotor migrate -t 20110103081132` to migrate to a specific version
 
-Rollback last migration `php rotor rollback` or `php rotor rollback -t 20120103083322` for a specific migration
+Rollback last migration `php rotor rollback` or `php rotor rollback -t 20120103083322` to rollback all migrations to a specific version
 
 Create seeder `php rotor seed:create UsersSeeder`
 
