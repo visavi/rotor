@@ -3,10 +3,19 @@ language: php
 services:
   - mysql
 
-php:
-  - 7.3
-  - 7.4
-  - 8.0
+matrix:
+  include:
+    - php: 7.3
+      os: linux
+      dist: trusty
+
+    - php: 7.4
+      os: linux
+      dist: trusty
+
+    - php: 8.0
+      os: linux
+      dist: trusty
 
 cache:
   directories:
