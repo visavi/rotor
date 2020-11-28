@@ -5,8 +5,9 @@ declare(strict_types=1);
 namespace App\Models;
 
 use App\Traits\UploadTrait;
-use Curl\Curl;
 use Exception;
+use GuzzleHttp\Client;
+use GuzzleHttp\Exception\GuzzleException;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasOne;
@@ -262,16 +263,22 @@ class User extends BaseModel
      * @param string $token идентификатор Ulogin
      *
      * @return void
+     * @throws GuzzleException
      */
     public static function socialAuth(string $token): void
     {
-        $curl = new Curl();
-        $network = $curl->get('//ulogin.ru/token.php', [
-                'token' => $token,
-                'host'  => $_SERVER['HTTP_HOST']
-            ]);
+        $client = new Client(['timeout' => 30.0]);
 
-        if ($network && empty($network->error)) {
+        $response = $client->get('//ulogin.ru/token.php', [
+            'query' => [
+                'token' => $token,
+                'host'  => $_SERVER['HTTP_HOST'],
+            ]
+        ]);
+
+        if ($response->getStatusCode() === 200) {
+            $network = json_decode($response->getBody()->getContents());
+
             $_SESSION['social'] = $network;
 
             /** @var Social $social */

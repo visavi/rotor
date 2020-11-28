@@ -17,6 +17,7 @@
     ],
     "require": {
         "php": "^7.3.0",
+        "ext-curl": "*",
         "ext-fileinfo": "*",
         "ext-gd": "*",
         "ext-json": "*",
@@ -25,6 +26,7 @@
         "cbschuld/browser.php": "~1.9",
         "google/recaptcha": "~1.2",
         "gregwar/captcha": "^1.1",
+        "guzzlehttp/guzzle": "^7.2",
         "illuminate/cache": "~8.10",
         "illuminate/database": "~8.10",
         "illuminate/filesystem": "~8.10",

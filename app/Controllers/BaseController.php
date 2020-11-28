@@ -78,11 +78,11 @@ class BaseController
             $requests = Cache::increment($key);
             /* Автоматическая блокировка */
             if ($requests > setting('doslimit')) {
-                $ipban = Ban::query()->where('ip', inet_pton(getIp()))->first();
+                $ipban = Ban::query()->where('ip', getIp())->first();
 
                 if (! $ipban) {
                     Ban::query()->insertOrIgnore([
-                        'ip'         => inet_pton(getIp()),
+                        'ip'         => getIp(),
                         'created_at' => SITETIME,
                     ]);
                 }

@@ -28,7 +28,7 @@ use App\Models\Spam;
 use App\Models\Topic;
 use App\Models\User;
 use App\Models\Vote;
-use Curl\Curl;
+use GuzzleHttp\Client;
 use Illuminate\Database\Capsule\Manager as DB;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
@@ -2296,12 +2296,12 @@ function uniqueName(string $extension = null): string
 function getCourses()
 {
     $courses = Cache::remember('courses', 3600, static function () {
-        $curl = new Curl();
-        $curl->setConnectTimeout(3);
+        $client = new Client(['timeout' => 3.0]);
+        $response = $client->get('//www.cbr-xml-daily.ru/daily_json.js');
 
-        $query = $curl->get('https://www.cbr-xml-daily.ru/daily_json.js');
+        $content = $response->getBody()->getContents();
 
-        return $query ? json_decode($query, true) : null;
+        return $content ? json_decode($content, true) : null;
     });
 
     return view('app/_courses', compact('courses'));

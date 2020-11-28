@@ -7,8 +7,9 @@ namespace App\Controllers;
 use App\Classes\Validator;
 use App\Models\Social;
 use App\Models\User;
-use Curl\Curl;
 use Exception;
+use GuzzleHttp\Client;
+use GuzzleHttp\Exception\GuzzleException;
 use Illuminate\Http\Request;
 
 class SocialController extends BaseController
@@ -36,20 +37,23 @@ class SocialController extends BaseController
      * @param Request $request
      *
      * @return string
+     * @throws GuzzleException
      */
     public function index(Request $request): string
     {
         if ($request->isMethod('post')) {
-            $curl    = new Curl();
-            $network = $curl->get(
-                '//ulogin.ru/token.php',
-                [
-                    'token' => $request->input('token'),
-                    'host'  => $_SERVER['HTTP_HOST']
-                ]
-            );
+            $client = new Client(['timeout' => 30.0]);
 
-            if ($network && empty($network->error)) {
+            $response = $client->get('//ulogin.ru/token.php', [
+                'query' => [
+                    'token' => $request->input('token'),
+                    'host' => $_SERVER['HTTP_HOST'],
+                ]
+            ]);
+
+            if ($response->getStatusCode() === 200) {
+                $network = json_decode($response->getBody()->getContents());
+
                 $social = Social::query()
                     ->where('network', $network->network)
                     ->where('uid', $network->uid)

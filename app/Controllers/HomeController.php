@@ -59,7 +59,7 @@ class HomeController extends BaseController
     public function ipban(Request $request): string
     {
         $ban = Ban::query()
-            ->where('ip', inet_pton(getIp()))
+            ->where('ip', getIp())
             ->first();
 
         if (! $ban) {
