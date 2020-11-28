@@ -730,11 +730,18 @@ class User extends BaseModel
      */
     private function rememberUser(User $user, bool $remember = false): void
     {
-        $domain = siteDomain(siteUrl());
-
         if ($remember) {
-            setcookie('login', $user->login, strtotime('+1 year', SITETIME), '/', $domain);
-            setcookie('password', md5($user->password . config('APP_KEY')), strtotime('+1 year', SITETIME), '/', $domain, false, true);
+            $options = [
+                'expires' => strtotime('+1 year', SITETIME),
+                'path' => '/',
+                'domain' => siteDomain(siteUrl()),
+                'secure' => false,
+                'httponly' => true,
+                'samesite' => 'Lax',
+            ];
+
+            setcookie('login', $user->login, $options);
+            setcookie('password', md5($user->password . config('APP_KEY')), $options);
         }
 
         $_SESSION['id']       = $user->id;

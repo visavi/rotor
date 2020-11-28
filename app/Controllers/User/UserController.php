@@ -293,11 +293,18 @@ class UserController extends BaseController
      */
     public function logout(Request $request): void
     {
-        $domain = siteDomain(siteUrl());
-
         if ($request->input('token') === $_SESSION['token']) {
+            $options = [
+                'expires' => strtotime('-1 hour', SITETIME),
+                'path' => '/',
+                'domain' => siteDomain(siteUrl()),
+                'secure' => false,
+                'httponly' => true,
+                'samesite' => 'Lax',
+            ];
+
             $_SESSION = [];
-            setcookie('password', '', strtotime('-1 hour', SITETIME), '/', $domain, false, true);
+            setcookie('password', '', $options);
             setcookie(session_name(), '', strtotime('-1 hour', SITETIME), '/', '');
             session_destroy();
         } else {
