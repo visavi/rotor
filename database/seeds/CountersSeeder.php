@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\Counter;
 use Phinx\Seed\AbstractSeed;
 
 class CountersSeeder extends AbstractSeed
@@ -9,6 +10,16 @@ class CountersSeeder extends AbstractSeed
      */
     public function run(): void
     {
-        //$this->execute("REPLACE INTO `counters` (`id`, `period`, `allhosts`, `allhits`, `dayhosts`, `dayhits`, `hosts24`, `hits24`) VALUES (1, '" . date('Y-m-d H:00:00') . "', '0', '0', '0', '0', '0', '0');");
+        Counter::query()->updateOrCreate([
+                'id' => 1
+            ], [
+                'period'   => date('Y-m-d H:00:00'),
+                'allhosts' => 0,
+                'allhits'  => 0,
+                'dayhosts' => 0,
+                'dayhits'  => 0,
+                'hosts24'  => 0,
+                'hits24'   => 0,
+            ]);
     }
 }
