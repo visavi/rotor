@@ -1,21 +1,32 @@
 <?php
 
-use Phinx\Migration\AbstractMigration;
+declare(strict_types=1);
 
-class CreateVoteanswerTable extends AbstractMigration
+use App\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+
+final class CreateVoteanswerTable extends Migration
 {
     /**
-     * Change Method.
+     * Migrate Up.
      */
-    public function change()
+    public function up(): void
     {
-        if (! $this->hasTable('voteanswer')) {
-            $table = $this->table('voteanswer', ['engine' => config('DB_ENGINE'), 'collation' => config('DB_COLLATION')]);
-            $table
-                ->addColumn('vote_id', 'integer')
-                ->addColumn('answer', 'string', ['limit' => 50])
-                ->addColumn('result', 'integer', ['default' => 0])
-                ->create();
+        if (! $this->schema->hasTable('voteanswer')) {
+            $this->schema->create('voteanswer', function (Blueprint $table) {
+                $table->increments('id');
+                $table->integer('vote_id');
+                $table->string('answer', 50);
+                $table->integer('result')->default(0);
+            });
         }
+    }
+
+    /**
+     * Migrate Down.
+     */
+    public function down(): void
+    {
+        $this->schema->dropIfExists('voteanswer');
     }
 }

@@ -1,34 +1,48 @@
 <?php
 
-use Phinx\Migration\AbstractMigration;
+declare(strict_types=1);
 
-class CreateDownsTable extends AbstractMigration
+use App\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+
+final class CreateDownsTable extends Migration
 {
     /**
-     * Change Method.
+     * Migrate Up.
      */
-    public function change()
+    public function up(): void
     {
-        if (! $this->hasTable('downs')) {
-            $table = $this->table('downs', ['engine' => config('DB_ENGINE'), 'collation' => config('DB_COLLATION')]);
-            $table
-                ->addColumn('category_id', 'integer')
-                ->addColumn('title', 'string', ['limit' => 100])
-                ->addColumn('text', 'text', ['null' => true])
-                ->addColumn('user_id', 'integer')
-                ->addColumn('created_at', 'integer')
-                ->addColumn('count_comments', 'integer', ['default' => 0])
-                ->addColumn('rating', 'integer', ['default' => 0])
-                ->addColumn('rated', 'integer', ['default' => 0])
-                ->addColumn('loads', 'integer', ['default' => 0])
-                ->addColumn('active', 'boolean', ['default' => 0])
-                ->addColumn('updated_at', 'integer', ['null' => true])
-                ->addIndex('category_id')
-                ->addIndex('created_at')
-                ->addIndex('text', ['type' => 'fulltext'])
-                ->addIndex('title', ['type' => 'fulltext']);
+        if (! $this->schema->hasTable('downs')) {
+            $this->schema->create('downs', function (Blueprint $table) {
+                $table->increments('id');
+                $table->integer('category_id');
+                $table->string('title', 100);
+                $table->text('text');
+                $table->integer('user_id');
+                $table->integer('count_comments')->default(0);
+                $table->integer('rating')->default(0);
+                $table->integer('rated')->default(0);
+                $table->integer('loads')->default(0);
+                $table->boolean('active')->default(false);
+                $table->integer('updated_at')->nullable();
+                $table->integer('created_at');
 
-            $table->create();
+                $table->index('category_id');
+                $table->index('created_at');
+            });
+
+            if (config('DB_DRIVER') === 'mysql') {
+                $this->db->getConnection()->statement('CREATE FULLTEXT INDEX title ON downs(title);');
+                $this->db->getConnection()->statement('CREATE FULLTEXT INDEX text ON downs(text);');
+            }
         }
+    }
+
+    /**
+     * Migrate Down.
+     */
+    public function down(): void
+    {
+        $this->schema->dropIfExists('downs');
     }
 }

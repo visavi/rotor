@@ -1,21 +1,34 @@
 <?php
 
-use Phinx\Migration\AbstractMigration;
+declare(strict_types=1);
 
-class CreateModulesTable extends AbstractMigration
+use App\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+
+final class CreateModulesTable extends Migration
 {
     /**
-     * Change Method.
+     * Migrate Up.
      */
-    public function change()
+    public function up(): void
     {
-        $table = $this->table('modules', ['engine' => config('DB_ENGINE'), 'collation' => config('DB_COLLATION')]);
-        $table
-            ->addColumn('name', 'string', ['limit' => 50])
-            ->addColumn('version', 'string', ['limit' => 10])
-            ->addColumn('disabled', 'boolean', ['default' => 0])
-            ->addColumn('updated_at', 'integer', ['null' => true])
-            ->addColumn('created_at', 'integer')
-            ->create();
+        if (! $this->schema->hasTable('modules')) {
+            $this->schema->create('modules', function (Blueprint $table) {
+                $table->increments('id');
+                $table->string('name', 50);
+                $table->string('version', 10);
+                $table->boolean('disabled')->default(false);
+                $table->integer('updated_at')->nullable();
+                $table->integer('created_at');
+            });
+        }
+    }
+
+    /**
+     * Migrate Down.
+     */
+    public function down(): void
+    {
+        $this->schema->dropIfExists('modules');
     }
 }

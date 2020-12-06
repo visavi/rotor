@@ -1,24 +1,36 @@
 <?php
 
-use Phinx\Migration\AbstractMigration;
+declare(strict_types=1);
 
-class CreateBlacklistTable extends AbstractMigration
+use App\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+
+final class CreateBlacklistTable extends Migration
 {
     /**
-     * Migrate Change.
+     * Migrate Up.
      */
-    public function change()
+    public function up(): void
     {
-        if (! $this->hasTable('blacklist')) {
-            $table = $this->table('blacklist', ['engine' => config('DB_ENGINE'), 'collation' => config('DB_COLLATION')]);
-            $table
-                ->addColumn('type', 'string', ['limit' => 30])
-                ->addColumn('value', 'string', ['limit' => 100])
-                ->addColumn('user_id', 'integer')
-                ->addColumn('created_at', 'integer')
-                ->addIndex('type')
-                ->addIndex('value')
-                ->create();
+        if (! $this->schema->hasTable('blacklist')) {
+            $this->schema->create('blacklist', function (Blueprint $table) {
+                $table->increments('id');
+                $table->string('type', 30);
+                $table->string('value', 100);
+                $table->integer('user_id');
+                $table->integer('created_at');
+
+                $table->index('type');
+                $table->index('value');
+            });
         }
+    }
+
+    /**
+     * Migrate Down.
+     */
+    public function down(): void
+    {
+        $this->schema->dropIfExists('blacklist');
     }
 }

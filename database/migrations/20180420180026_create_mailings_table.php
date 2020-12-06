@@ -1,25 +1,36 @@
 <?php
 
-use Phinx\Migration\AbstractMigration;
+declare(strict_types=1);
 
-class CreateMailingsTable extends AbstractMigration
+use App\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+
+final class CreateMailingsTable extends Migration
 {
     /**
-     * Change Method.
+     * Migrate Up.
      */
-    public function change()
+    public function up(): void
     {
-        if (! $this->hasTable('mailings')) {
-            $table = $this->table('mailings', ['engine' => config('DB_ENGINE'), 'collation' => config('DB_COLLATION')]);
-            $table
-                ->addColumn('user_id', 'integer')
-                ->addColumn('type', 'string', ['limit' => 30])
-                ->addColumn('subject', 'string', ['limit' => 100])
-                ->addColumn('text', 'text', ['null' => true])
-                ->addColumn('sent', 'boolean', ['default' => 0])
-                ->addColumn('created_at', 'integer')
-                ->addColumn('sent_at', 'integer', ['null' => true])
-                ->create();
+        if (! $this->schema->hasTable('mailings')) {
+            $this->schema->create('mailings', function (Blueprint $table) {
+                $table->increments('id');
+                $table->integer('user_id');
+                $table->string('type', 30);
+                $table->string('subject', 100);
+                $table->text('text');
+                $table->boolean('sent')->default(false);
+                $table->integer('sent_at')->nullable();
+                $table->integer('created_at');
+            });
         }
+    }
+
+    /**
+     * Migrate Down.
+     */
+    public function down(): void
+    {
+        $this->schema->dropIfExists('mailings');
     }
 }

@@ -1,26 +1,39 @@
 <?php
 
-use App\Models\Message;
-use Phinx\Migration\AbstractMigration;
+declare(strict_types=1);
 
-class CreateMessagesTable extends AbstractMigration
+use App\Migrations\Migration;
+use App\Models\Message;
+use Illuminate\Database\Schema\Blueprint;
+
+final class CreateMessagesTable extends Migration
 {
     /**
-     * Change Method.
+     * Migrate Up.
      */
-    public function change()
+    public function up(): void
     {
-        $table = $this->table('messages', ['engine' => config('DB_ENGINE'), 'collation' => config('DB_COLLATION')]);
-        $table
-            ->addColumn('user_id', 'integer')
-            ->addColumn('author_id', 'integer')
-            ->addColumn('text', 'text', ['null' => true])
-            //->addColumn('type', 'enum', ['values' => [Message::IN, Message::OUT]])
-            ->addColumn('type', 'string', ['limit' => 3])
-            ->addColumn('reading', 'boolean', ['default' => 0])
-            ->addColumn('created_at', 'integer')
-            ->addIndex(['user_id', 'author_id'], ['name' => 'user_id'])
-            ->addIndex('created_at')
-            ->create();
+        if (! $this->schema->hasTable('messages')) {
+            $this->schema->create('messages', function (Blueprint $table) {
+                $table->increments('id');
+                $table->integer('user_id');
+                $table->integer('author_id');
+                $table->text('text');
+                $table->enum('type', [Message::IN, Message::OUT]);
+                $table->boolean('reading')->default(false);
+                $table->integer('created_at');
+
+                $table->index(['user_id', 'author_id']);
+                $table->index('created_at');
+            });
+        }
+    }
+
+    /**
+     * Migrate Down.
+     */
+    public function down(): void
+    {
+        $this->schema->dropIfExists('messages');
     }
 }

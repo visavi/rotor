@@ -1,26 +1,38 @@
 <?php
 
-use Phinx\Migration\AbstractMigration;
+declare(strict_types=1);
 
-class CreateTransfersTable extends AbstractMigration
+use App\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+
+final class CreateTransfersTable extends Migration
 {
     /**
-     * Change Method.
+     * Migrate Up.
      */
-    public function change()
+    public function up(): void
     {
-        if (! $this->hasTable('transfers')) {
-            $table = $this->table('transfers', ['engine' => config('DB_ENGINE'), 'collation' => config('DB_COLLATION')]);
-            $table
-                ->addColumn('user_id', 'integer')
-                ->addColumn('recipient_id', 'integer')
-                ->addColumn('text', 'text', ['null' => true])
-                ->addColumn('total', 'integer', ['default' => 0])
-                ->addColumn('created_at', 'integer')
-                ->addIndex('user_id')
-                ->addIndex('recipient_id')
-                ->addIndex('created_at')
-                ->create();
+        if (! $this->schema->hasTable('transfers')) {
+            $this->schema->create('transfers', function (Blueprint $table) {
+                $table->increments('id');
+                $table->integer('user_id');
+                $table->integer('recipient_id');
+                $table->text('text');
+                $table->integer('total')->default(0);
+                $table->integer('created_at');
+
+                $table->index('user_id');
+                $table->index('recipient_id');
+                $table->index('created_at');
+            });
         }
+    }
+
+    /**
+     * Migrate Down.
+     */
+    public function down(): void
+    {
+        $this->schema->dropIfExists('transfers');
     }
 }

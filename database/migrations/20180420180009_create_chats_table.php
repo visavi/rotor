@@ -1,26 +1,38 @@
 <?php
 
-use Phinx\Migration\AbstractMigration;
+declare(strict_types=1);
 
-class CreateChatsTable extends AbstractMigration
+use App\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+
+final class CreateChatsTable extends Migration
 {
     /**
-     * Change Method.
+     * Migrate Up.
      */
-    public function change()
+    public function up(): void
     {
-        if (! $this->hasTable('chats')) {
-            $table = $this->table('chats', ['engine' => config('DB_ENGINE'), 'collation' => config('DB_COLLATION')]);
-            $table
-                ->addColumn('user_id', 'integer')
-                ->addColumn('text', 'text', ['null' => true])
-                ->addColumn('ip', 'string', ['limit' => 45])
-                ->addColumn('brow', 'string', ['limit' => 25])
-                ->addColumn('created_at', 'integer', ['null' => true])
-                ->addColumn('edit_user_id', 'integer', ['null' => true])
-                ->addColumn('updated_at', 'integer', ['null' => true])
-                ->addIndex('created_at')
-                ->create();
+        if (! $this->schema->hasTable('chats')) {
+            $this->schema->create('chats', function (Blueprint $table) {
+                $table->increments('id');
+                $table->integer('user_id');
+                $table->text('text');
+                $table->ipAddress('ip');
+                $table->string('brow', 25);
+                $table->integer('edit_user_id')->nullable();
+                $table->integer('updated_at')->nullable();
+                $table->integer('created_at');
+
+                $table->index('created_at');
+            });
         }
+    }
+
+    /**
+     * Migrate Down.
+     */
+    public function down(): void
+    {
+        $this->schema->dropIfExists('chats');
     }
 }

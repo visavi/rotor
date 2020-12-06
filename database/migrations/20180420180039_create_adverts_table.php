@@ -1,25 +1,36 @@
 <?php
 
-use Phinx\Migration\AbstractMigration;
+declare(strict_types=1);
 
-class CreateAdvertsTable extends AbstractMigration
+use App\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+
+final class CreateAdvertsTable extends Migration
 {
     /**
-     * Change Method.
+     * Migrate Up.
      */
-    public function change()
+    public function up(): void
     {
-        if (! $this->hasTable('adverts')) {
-            $table = $this->table('adverts', ['engine' => config('DB_ENGINE'), 'collation' => config('DB_COLLATION')]);
-            $table
-                ->addColumn('site', 'string', ['limit' => 100])
-                ->addColumn('name', 'string', ['limit' => 50])
-                ->addColumn('color', 'string', ['limit' => 10, 'null' => true])
-                ->addColumn('bold', 'boolean', ['default' => 0])
-                ->addColumn('user_id', 'integer')
-                ->addColumn('created_at', 'integer')
-                ->addColumn('deleted_at', 'integer', ['null' => true])
-                ->create();
+        if (! $this->schema->hasTable('adverts')) {
+            $this->schema->create('adverts', function (Blueprint $table) {
+                $table->increments('id');
+                $table->string('site', 100);
+                $table->string('name', 50);
+                $table->string('color', 10)->nullable();
+                $table->boolean('bold')->default(false);
+                $table->integer('user_id');
+                $table->integer('created_at');
+                $table->integer('deleted_at')->nullable();
+            });
         }
+    }
+
+    /**
+     * Migrate Down.
+     */
+    public function down(): void
+    {
+        $this->schema->dropIfExists('adverts');
     }
 }

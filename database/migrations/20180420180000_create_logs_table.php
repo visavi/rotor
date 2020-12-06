@@ -1,25 +1,37 @@
 <?php
 
-use Phinx\Migration\AbstractMigration;
+declare(strict_types=1);
 
-class CreateLogsTable extends AbstractMigration
+use App\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+
+final class CreateLogsTable extends Migration
 {
     /**
-     * Migrate Change.
+     * Migrate Up.
      */
-    public function change()
+    public function up(): void
     {
-        if (! $this->hasTable('logs')) {
-            $table = $this->table('logs', ['engine' => config('DB_ENGINE'), 'collation' => config('DB_COLLATION')]);
-            $table
-                ->addColumn('user_id', 'integer')
-                ->addColumn('request', 'string', ['null' => true])
-                ->addColumn('referer', 'string', ['null' => true])
-                ->addColumn('ip', 'string', ['limit' => 45])
-                ->addColumn('brow', 'string', ['limit' => 25])
-                ->addColumn('created_at', 'integer')
-                ->addIndex('created_at')
-                ->create();
+        if (! $this->schema->hasTable('logs')) {
+            $this->schema->create('logs', function (Blueprint $table) {
+                $table->increments('id');
+                $table->integer('user_id');
+                $table->string('request')->nullable();
+                $table->string('referer')->nullable();
+                $table->ipAddress('ip');
+                $table->string('brow', 25);
+                $table->integer('created_at');
+
+                $table->index('created_at');
+            });
         }
+    }
+
+    /**
+     * Migrate Down.
+     */
+    public function down(): void
+    {
+        $this->schema->dropIfExists('logs');
     }
 }

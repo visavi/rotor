@@ -1,25 +1,37 @@
 <?php
 
-use Phinx\Migration\AbstractMigration;
+declare(strict_types=1);
 
-class CreateSpamTable extends AbstractMigration
+use App\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+
+final class CreateSpamTable extends Migration
 {
     /**
-     * Change Method.
+     * Migrate Up.
      */
-    public function change()
+    public function up(): void
     {
-        if (! $this->hasTable('spam')) {
-            $table = $this->table('spam', ['engine' => config('DB_ENGINE'), 'collation' => config('DB_COLLATION')]);
-            $table
-                ->addColumn('relate_type', 'string', ['limit' => 10])
-                ->addColumn('relate_id', 'integer')
-                ->addColumn('user_id', 'integer')
-                ->addColumn('created_at', 'integer')
-                ->addColumn('path', 'string', ['limit' => 100, 'null' => true])
-                ->addIndex('created_at')
-                ->addIndex(['relate_type', 'relate_id'], ['name' => 'spam_relate'])
-                ->create();
+        if (! $this->schema->hasTable('spam')) {
+            $this->schema->create('spam', function (Blueprint $table) {
+                $table->increments('id');
+                $table->string('relate_type', 10);
+                $table->integer('relate_id');
+                $table->integer('user_id');
+                $table->string('path', 100)->nullable();
+                $table->integer('created_at');
+
+                $table->index('created_at');
+                $table->index(['relate_type', 'relate_id']);
+            });
         }
+    }
+
+    /**
+     * Migrate Down.
+     */
+    public function down(): void
+    {
+        $this->schema->dropIfExists('spam');
     }
 }

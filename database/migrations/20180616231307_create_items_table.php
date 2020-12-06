@@ -1,30 +1,42 @@
 <?php
 
-use Phinx\Migration\AbstractMigration;
+declare(strict_types=1);
 
-class CreateItemsTable extends AbstractMigration
+use App\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+
+final class CreateItemsTable extends Migration
 {
     /**
-     * Change Method.
+     * Migrate Up.
      */
-    public function change()
+    public function up(): void
     {
-        if (! $this->hasTable('items')) {
-            $table = $this->table('items', ['engine' => config('DB_ENGINE'), 'collation' => config('DB_COLLATION')]);
-            $table
-                ->addColumn('board_id', 'integer')
-                ->addColumn('title', 'string', ['limit' => 100])
-                ->addColumn('text', 'text', ['null' => true])
-                ->addColumn('user_id', 'integer')
-                ->addColumn('price', 'integer', ['default' => 0])
-                ->addColumn('phone', 'string', ['limit' => 15, 'null' => true])
-                ->addColumn('created_at', 'integer')
-                ->addColumn('updated_at', 'integer')
-                ->addColumn('expires_at', 'integer')
-                ->addIndex('board_id')
-                ->addIndex('expires_at')
-                ->addIndex('created_at')
-                ->create();
+        if (! $this->schema->hasTable('items')) {
+            $this->schema->create('items', function (Blueprint $table) {
+                $table->increments('id');
+                $table->integer('board_id');
+                $table->string('title', 100);
+                $table->text('text');
+                $table->integer('user_id');
+                $table->integer('price')->default(0);
+                $table->string('phone', 15)->nullable();
+                $table->integer('created_at');
+                $table->integer('updated_at');
+                $table->integer('expires_at');
+
+                $table->index('board_id');
+                $table->index('expires_at');
+                $table->index('created_at');
+            });
         }
+    }
+
+    /**
+     * Migrate Down.
+     */
+    public function down(): void
+    {
+        $this->schema->dropIfExists('items');
     }
 }

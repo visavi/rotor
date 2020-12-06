@@ -1,24 +1,36 @@
 <?php
 
-use Phinx\Migration\AbstractMigration;
+declare(strict_types=1);
 
-class CreateLoginTable extends AbstractMigration
+use App\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+
+final class CreateLoginTable extends Migration
 {
     /**
-     * Change Method.
+     * Migrate Up.
      */
-    public function change()
+    public function up(): void
     {
-        if (! $this->hasTable('login')) {
-            $table = $this->table('login', ['engine' => config('DB_ENGINE'), 'collation' => config('DB_COLLATION')]);
-            $table
-                ->addColumn('user_id', 'integer')
-                ->addColumn('ip', 'string', ['limit' => 45])
-                ->addColumn('brow', 'string', ['limit' => 25])
-                ->addColumn('created_at', 'integer')
-                ->addColumn('type', 'string', ['limit' => 10])
-                ->addIndex(['user_id', 'created_at'], ['name' => 'user_time'])
-                ->create();
+        if (! $this->schema->hasTable('login')) {
+            $this->schema->create('login', function (Blueprint $table) {
+                $table->increments('id');
+                $table->integer('user_id');
+                $table->ipAddress('ip');
+                $table->string('brow', 25);
+                $table->string('type', 10);
+                $table->integer('created_at');
+
+                $table->index(['user_id', 'created_at']);
+            });
         }
+    }
+
+    /**
+     * Migrate Down.
+     */
+    public function down(): void
+    {
+        $this->schema->dropIfExists('login');
     }
 }

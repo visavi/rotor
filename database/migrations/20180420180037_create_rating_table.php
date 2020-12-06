@@ -1,24 +1,36 @@
 <?php
 
-use Phinx\Migration\AbstractMigration;
+declare(strict_types=1);
 
-class CreateRatingTable extends AbstractMigration
+use App\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+
+final class CreateRatingTable extends Migration
 {
     /**
-     * Change Method.
+     * Migrate Up.
      */
-    public function change()
+    public function up(): void
     {
-        if (! $this->hasTable('rating')) {
-            $table = $this->table('rating', ['engine' => config('DB_ENGINE'), 'collation' => config('DB_COLLATION')]);
-            $table
-                ->addColumn('user_id', 'integer')
-                ->addColumn('recipient_id', 'integer')
-                ->addColumn('text', 'text', ['null' => true])
-                ->addColumn('vote', 'string', ['limit' => 1])
-                ->addColumn('created_at', 'integer')
-                ->addIndex('user_id')
-                ->create();
+        if (! $this->schema->hasTable('rating')) {
+            $this->schema->create('rating', function (Blueprint $table) {
+                $table->increments('id');
+                $table->integer('user_id');
+                $table->integer('recipient_id');
+                $table->text('text');
+                $table->string('vote', 1);
+                $table->integer('created_at');
+
+                $table->index('user_id');
+            });
         }
+    }
+
+    /**
+     * Migrate Down.
+     */
+    public function down(): void
+    {
+        $this->schema->dropIfExists('rating');
     }
 }

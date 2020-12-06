@@ -1,28 +1,40 @@
 <?php
 
-use Phinx\Migration\AbstractMigration;
+declare(strict_types=1);
 
-class CreateFilesTable extends AbstractMigration
+use App\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+
+final class CreateFilesTable extends Migration
 {
     /**
-     * Change Method.
+     * Migrate Up.
      */
-    public function change()
+    public function up(): void
     {
-        if (! $this->hasTable('files')) {
-            $table = $this->table('files', ['engine' => config('DB_ENGINE'), 'collation' => config('DB_COLLATION')]);
-            $table
-                ->addColumn('relate_type', 'string', ['limit' => 10])
-                ->addColumn('relate_id', 'integer')
-                ->addColumn('hash', 'string', ['limit' => 100])
-                ->addColumn('name', 'string', ['limit' => 60])
-                ->addColumn('size', 'integer')
-                ->addColumn('user_id', 'integer')
-                ->addColumn('created_at', 'integer')
-                ->addIndex(['relate_type', 'relate_id'], ['name' => 'relate'])
-                ->addIndex('user_id')
-                ->addIndex('created_at')
-                ->create();
+        if (! $this->schema->hasTable('files')) {
+            $this->schema->create('files', function (Blueprint $table) {
+                $table->increments('id');
+                $table->string('relate_type', 10);
+                $table->integer('relate_id');
+                $table->string('hash', 100);
+                $table->string('name', 60);
+                $table->integer('size');
+                $table->integer('user_id');
+                $table->integer('created_at');
+
+                $table->index(['relate_type', 'relate_id']);
+                $table->index('user_id');
+                $table->index('created_at');
+            });
         }
+    }
+
+    /**
+     * Migrate Down.
+     */
+    public function down(): void
+    {
+        $this->schema->dropIfExists('files');
     }
 }

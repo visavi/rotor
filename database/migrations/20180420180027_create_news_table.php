@@ -1,28 +1,40 @@
 <?php
 
-use Phinx\Migration\AbstractMigration;
+declare(strict_types=1);
 
-class CreateNewsTable extends AbstractMigration
+use App\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+
+final class CreateNewsTable extends Migration
 {
     /**
-     * Change Method.
+     * Migrate Up.
      */
-    public function change()
+    public function up(): void
     {
-        if (! $this->hasTable('news')) {
-            $table = $this->table('news', ['engine' => config('DB_ENGINE'), 'collation' => config('DB_COLLATION')]);
-            $table
-                ->addColumn('title', 'string', ['limit' => 100])
-                ->addColumn('text', 'text', ['null' => true])
-                ->addColumn('user_id', 'integer')
-                ->addColumn('image', 'string', ['limit' => 100, 'null' => true])
-                ->addColumn('created_at', 'integer')
-                ->addColumn('count_comments', 'integer', ['default' => 0])
-                ->addColumn('closed', 'boolean', ['default' => 0])
-                ->addColumn('top', 'boolean', ['default' => 0])
-                ->addColumn('rating', 'integer', ['default' => 0])
-                ->addIndex('created_at')
-                ->create();
+        if (! $this->schema->hasTable('news')) {
+            $this->schema->create('news', function (Blueprint $table) {
+                $table->increments('id');
+                $table->string('title', 100);
+                $table->text('text');
+                $table->integer('user_id');
+                $table->string('image', 100)->nullable();
+                $table->integer('count_comments')->default(0);
+                $table->boolean('closed')->default(false);
+                $table->boolean('top')->default(false);
+                $table->integer('rating')->default(0);
+                $table->integer('created_at');
+
+                $table->index('created_at');
+            });
         }
+    }
+
+    /**
+     * Migrate Down.
+     */
+    public function down(): void
+    {
+        $this->schema->dropIfExists('news');
     }
 }

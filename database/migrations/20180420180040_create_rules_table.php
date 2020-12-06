@@ -1,20 +1,31 @@
 <?php
 
-use Phinx\Migration\AbstractMigration;
+declare(strict_types=1);
 
-class CreateRulesTable extends AbstractMigration
+use App\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+
+final class CreateRulesTable extends Migration
 {
     /**
-     * Change Method.
+     * Migrate Up.
      */
-    public function change()
+    public function up(): void
     {
-        if (! $this->hasTable('rules')) {
-            $table = $this->table('rules', ['engine' => config('DB_ENGINE'), 'collation' => config('DB_COLLATION')]);
-            $table
-                ->addColumn('text', 'text', ['null' => true])
-                ->addColumn('created_at', 'integer')
-                ->create();
+        if (! $this->schema->hasTable('rules')) {
+            $this->schema->create('rules', function (Blueprint $table) {
+                $table->increments('id');
+                $table->text('text');
+                $table->integer('created_at');
+            });
         }
+    }
+
+    /**
+     * Migrate Down.
+     */
+    public function down(): void
+    {
+        $this->schema->dropIfExists('rules');
     }
 }

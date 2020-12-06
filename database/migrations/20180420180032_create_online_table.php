@@ -1,29 +1,33 @@
 <?php
 
-use Phinx\Migration\AbstractMigration;
+declare(strict_types=1);
 
-class CreateOnlineTable extends AbstractMigration
+use App\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+
+final class CreateOnlineTable extends Migration
 {
     /**
-     * Change Method.
+     * Migrate Up.
      */
-    public function change()
+    public function up(): void
     {
-        if (! $this->hasTable('online')) {
-            $table = $this->table('online', [
-                'id'          => false,
-                'primary_key' => 'uid',
-                'engine'      => config('DB_ENGINE'),
-                'collation'   => config('DB_COLLATION'),
-            ]);
-
-            $table
-                ->addColumn('uid', 'string', ['limit' => 32])
-                ->addColumn('ip', 'string', ['limit' => 45])
-                ->addColumn('brow', 'string', ['limit' => 25])
-                ->addColumn('user_id', 'integer', ['null' => true])
-                ->addColumn('updated_at', 'integer', ['null' => true])
-                ->create();
+        if (! $this->schema->hasTable('online')) {
+            $this->schema->create('online', function (Blueprint $table) {
+                $table->string('uid', 32)->primary();
+                $table->ipAddress('ip');
+                $table->string('brow', 25);
+                $table->integer('user_id')->nullable();
+                $table->integer('updated_at')->nullable();
+            });
         }
+    }
+
+    /**
+     * Migrate Down.
+     */
+    public function down(): void
+    {
+        $this->schema->dropIfExists('online');
     }
 }

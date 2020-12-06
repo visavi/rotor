@@ -1,22 +1,34 @@
 <?php
 
-use Phinx\Migration\AbstractMigration;
+declare(strict_types=1);
 
-class CreateCounters24Table extends AbstractMigration
+use App\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+
+final class CreateCounters24Table extends Migration
 {
     /**
-     * Change Method.
+     * Migrate Up.
      */
-    public function change()
+    public function up(): void
     {
-        if (! $this->hasTable('counters24')) {
-            $table = $this->table('counters24', ['engine' => config('DB_ENGINE'), 'collation' => config('DB_COLLATION')]);
-            $table
-                ->addColumn('period', 'datetime')
-                ->addColumn('hosts', 'integer')
-                ->addColumn('hits', 'integer')
-                ->addIndex('period', ['unique' => true])
-                ->create();
+        if (! $this->schema->hasTable('counters24')) {
+            $this->schema->create('counters24', function (Blueprint $table) {
+                $table->increments('id');
+                $table->dateTime('period');
+                $table->integer('hosts');
+                $table->integer('hits');
+
+                $table->unique('period');
+            });
         }
+    }
+
+    /**
+     * Migrate Down.
+     */
+    public function down(): void
+    {
+        $this->schema->dropIfExists('counters24');
     }
 }

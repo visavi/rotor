@@ -1,23 +1,35 @@
 <?php
 
-use Phinx\Migration\AbstractMigration;
+declare(strict_types=1);
 
-class CreateBookmarksTable extends AbstractMigration
+use App\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+
+final class CreateBookmarksTable extends Migration
 {
     /**
-     * Change Method.
+     * Migrate Up.
      */
-    public function change()
+    public function up(): void
     {
-        if (! $this->hasTable('bookmarks')) {
-            $table = $this->table('bookmarks', ['engine' => config('DB_ENGINE'), 'collation' => config('DB_COLLATION')]);
-            $table
-                ->addColumn('user_id', 'integer')
-                ->addColumn('topic_id', 'integer')
-                ->addColumn('count_posts', 'integer')
-                ->addIndex('topic_id')
-                ->addIndex('user_id')
-                ->create();
+        if (! $this->schema->hasTable('bookmarks')) {
+            $this->schema->create('bookmarks', function (Blueprint $table) {
+                $table->increments('id');
+                $table->integer('user_id');
+                $table->integer('topic_id');
+                $table->integer('count_posts');
+
+                $table->index('topic_id');
+                $table->index('user_id');
+            });
         }
+    }
+
+    /**
+     * Migrate Down.
+     */
+    public function down(): void
+    {
+        $this->schema->dropIfExists('bookmarks');
     }
 }

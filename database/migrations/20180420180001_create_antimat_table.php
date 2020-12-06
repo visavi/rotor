@@ -1,19 +1,30 @@
 <?php
 
-use Phinx\Migration\AbstractMigration;
+declare(strict_types=1);
 
-class CreateAntimatTable extends AbstractMigration
+use App\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+
+final class CreateAntimatTable extends Migration
 {
     /**
-     * Migrate Change.
+     * Migrate Up.
      */
-    public function change()
+    public function up(): void
     {
-        if (! $this->hasTable('antimat')) {
-            $table = $this->table('antimat', ['engine' => config('DB_ENGINE'), 'collation' => config('DB_COLLATION')]);
-            $table
-                ->addColumn('string', 'string', ['limit' => 100])
-                ->create();
+        if (! $this->schema->hasTable('antimat')) {
+            $this->schema->create('antimat', function (Blueprint $table) {
+                $table->increments('id');
+                $table->string('string', 100);
+            });
         }
+    }
+
+    /**
+     * Migrate Down.
+     */
+    public function down(): void
+    {
+        $this->schema->dropIfExists('antimat');
     }
 }

@@ -1,26 +1,37 @@
 <?php
 
-use Phinx\Migration\AbstractMigration;
+declare(strict_types=1);
 
-class CreateForumsTable extends AbstractMigration
+use App\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+
+final class CreateForumsTable extends Migration
 {
     /**
-     * Change Method.
+     * Migrate Up.
      */
-    public function change()
+    public function up(): void
     {
-        if (! $this->hasTable('forums')) {
-            $table = $this->table('forums', ['engine' => config('DB_ENGINE'), 'collation' => config('DB_COLLATION')]);
-            $table
-                ->addColumn('sort', 'integer', ['default' => 0])
-                ->addColumn('parent_id', 'integer', ['default' => 0])
-                ->addColumn('title', 'string', ['limit' => 50])
-                ->addColumn('description', 'string', ['limit' => 100, 'null' => true])
-                ->addColumn('last_topic_id', 'integer', ['default' => 0])
-                ->addColumn('closed', 'boolean', ['default' => 0])
-                ->addColumn('count_topics', 'integer', ['default' => 0])
-                ->addColumn('count_posts', 'integer', ['default' => 0])
-                ->create();
+        if (! $this->schema->hasTable('forums')) {
+            $this->schema->create('forums', function (Blueprint $table) {
+                $table->increments('id');
+                $table->integer('sort')->default(0);
+                $table->integer('parent_id')->default(0);
+                $table->string('title', 50);
+                $table->string('description', 100)->nullable();
+                $table->integer('last_topic_id')->default(0);
+                $table->boolean('closed')->default(false);
+                $table->integer('count_topics')->default(0);
+                $table->integer('count_posts')->default(0);
+            });
         }
+    }
+
+    /**
+     * Migrate Down.
+     */
+    public function down(): void
+    {
+        $this->schema->dropIfExists('forums');
     }
 }

@@ -1,24 +1,36 @@
 <?php
 
-use Phinx\Migration\AbstractMigration;
+declare(strict_types=1);
 
-class CreateStatusTable extends AbstractMigration
+use App\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+
+final class CreateStatusTable extends Migration
 {
     /**
-     * Change Method.
+     * Migrate Up.
      */
-    public function change()
+    public function up(): void
     {
-        if (! $this->hasTable('status')) {
-            $table = $this->table('status', ['engine' => config('DB_ENGINE'), 'collation' => config('DB_COLLATION')]);
-            $table
-                ->addColumn('topoint', 'integer')
-                ->addColumn('point', 'integer')
-                ->addColumn('name', 'string', ['limit' => 50])
-                ->addColumn('color', 'string', ['limit' => 10, 'null' => true])
-                ->addIndex('point')
-                ->addIndex('topoint')
-                ->create();
+        if (! $this->schema->hasTable('status')) {
+            $this->schema->create('status', function (Blueprint $table) {
+                $table->increments('id');
+                $table->integer('topoint');
+                $table->integer('point');
+                $table->string('name', 50);
+                $table->string('color', 10)->nullable();
+
+                $table->index('point');
+                $table->index('topoint');
+            });
         }
+    }
+
+    /**
+     * Migrate Down.
+     */
+    public function down(): void
+    {
+        $this->schema->dropIfExists('status');
     }
 }

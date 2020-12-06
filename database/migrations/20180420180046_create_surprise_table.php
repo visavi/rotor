@@ -1,22 +1,34 @@
 <?php
 
-use Phinx\Migration\AbstractMigration;
+declare(strict_types=1);
 
-class CreateSurpriseTable extends AbstractMigration
+use App\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+
+final class CreateSurpriseTable extends Migration
 {
     /**
-     * Change Method.
+     * Migrate Up.
      */
-    public function change()
+    public function up(): void
     {
-        if (! $this->hasTable('surprise')) {
-            $table = $this->table('surprise', ['engine' => config('DB_ENGINE'), 'collation' => config('DB_COLLATION')]);
-            $table
-                ->addColumn('user_id', 'integer')
-                ->addColumn('year', 'string', ['limit' => 4])
-                ->addColumn('created_at', 'integer')
-                ->addIndex('user_id')
-                ->create();
+        if (! $this->schema->hasTable('surprise')) {
+            $this->schema->create('surprise', function (Blueprint $table) {
+                $table->increments('id');
+                $table->integer('user_id');
+                $table->year('year');
+                $table->integer('created_at');
+
+                $table->index('user_id');
+            });
         }
+    }
+
+    /**
+     * Migrate Down.
+     */
+    public function down(): void
+    {
+        $this->schema->dropIfExists('surprise');
     }
 }

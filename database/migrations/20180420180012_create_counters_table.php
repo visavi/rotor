@@ -1,25 +1,36 @@
 <?php
 
-use Phinx\Migration\AbstractMigration;
+declare(strict_types=1);
 
-class CreateCountersTable extends AbstractMigration
+use App\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+
+final class CreateCountersTable extends Migration
 {
     /**
-     * Change Method.
+     * Migrate Up.
      */
-    public function change()
+    public function up(): void
     {
-        if (! $this->hasTable('counters')) {
-            $table = $this->table('counters', ['engine' => config('DB_ENGINE'), 'collation' => config('DB_COLLATION')]);
-            $table
-                ->addColumn('period', 'datetime')
-                ->addColumn('allhosts', 'integer')
-                ->addColumn('allhits', 'integer')
-                ->addColumn('dayhosts', 'integer')
-                ->addColumn('dayhits', 'integer')
-                ->addColumn('hosts24', 'integer')
-                ->addColumn('hits24', 'integer')
-                ->create();
+        if (! $this->schema->hasTable('counters')) {
+            $this->schema->create('counters', function (Blueprint $table) {
+                $table->increments('id');
+                $table->dateTime('period');
+                $table->integer('allhosts');
+                $table->integer('allhits');
+                $table->integer('dayhosts');
+                $table->integer('dayhits');
+                $table->integer('hosts24');
+                $table->integer('hits24');
+            });
         }
+    }
+
+    /**
+     * Migrate Down.
+     */
+    public function down(): void
+    {
+        $this->schema->dropIfExists('counters');
     }
 }

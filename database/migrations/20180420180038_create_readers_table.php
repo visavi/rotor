@@ -1,23 +1,35 @@
 <?php
 
-use Phinx\Migration\AbstractMigration;
+declare(strict_types=1);
 
-class CreateReadersTable extends AbstractMigration
+use App\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+
+final class CreateReadersTable extends Migration
 {
     /**
-     * Change Method.
+     * Migrate Up.
      */
-    public function change()
+    public function up(): void
     {
-        if (! $this->hasTable('readers')) {
-            $table = $this->table('readers', ['engine' => config('DB_ENGINE'), 'collation' => config('DB_COLLATION')]);
-            $table
-                ->addColumn('relate_type', 'string', ['limit' => 10])
-                ->addColumn('relate_id', 'integer')
-                ->addColumn('ip', 'string', ['limit' => 45])
-                ->addColumn('created_at', 'integer')
-                ->addIndex(['relate_type', 'relate_id', 'ip'], ['name' => 'readers_relate'])
-                ->create();
+        if (! $this->schema->hasTable('readers')) {
+            $this->schema->create('readers', function (Blueprint $table) {
+                $table->increments('id');
+                $table->string('relate_type', 10);
+                $table->integer('relate_id');
+                $table->ipAddress('ip');
+                $table->integer('created_at');
+
+                $table->index(['relate_type', 'relate_id', 'ip']);
+            });
         }
+    }
+
+    /**
+     * Migrate Down.
+     */
+    public function down(): void
+    {
+        $this->schema->dropIfExists('readers');
     }
 }

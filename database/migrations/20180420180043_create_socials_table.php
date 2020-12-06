@@ -1,24 +1,35 @@
-
 <?php
 
-use Phinx\Migration\AbstractMigration;
+declare(strict_types=1);
 
-class CreateSocialsTable extends AbstractMigration
+use App\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+
+final class CreateSocialsTable extends Migration
 {
     /**
-     * Change Method.
+     * Migrate Up.
      */
-    public function change()
+    public function up(): void
     {
-        if (! $this->hasTable('socials')) {
-            $table = $this->table('socials', ['engine' => config('DB_ENGINE'), 'collation' => config('DB_COLLATION')]);
-            $table
-                ->addColumn('user_id', 'integer')
-                ->addColumn('network', 'string')
-                ->addColumn('uid', 'string')
-                ->addColumn('created_at', 'integer')
-                ->addIndex('user_id')
-                ->create();
+        if (! $this->schema->hasTable('socials')) {
+            $this->schema->create('socials', function (Blueprint $table) {
+                $table->increments('id');
+                $table->integer('user_id');
+                $table->string('network');
+                $table->string('uid');
+                $table->integer('created_at');
+
+                $table->index('user_id');
+            });
         }
+    }
+
+    /**
+     * Migrate Down.
+     */
+    public function down(): void
+    {
+        $this->schema->dropIfExists('socials');
     }
 }

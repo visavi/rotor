@@ -1,22 +1,34 @@
 <?php
 
-use Phinx\Migration\AbstractMigration;
+declare(strict_types=1);
 
-class CreateBanTable extends AbstractMigration
+use App\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+
+final class CreateBanTable extends Migration
 {
     /**
-     * Migrate Change.
+     * Migrate Up.
      */
-    public function change()
+    public function up(): void
     {
-        if (! $this->hasTable('ban')) {
-            $table = $this->table('ban', ['engine' => config('DB_ENGINE'), 'collation' => config('DB_COLLATION')]);
-            $table
-                ->addColumn('ip', 'string', ['limit' => 45])
-                ->addColumn('user_id', 'integer', ['null' => true])
-                ->addColumn('created_at', 'integer')
-                ->addIndex('ip', ['unique' => true])
-                ->create();
+        if (! $this->schema->hasTable('ban')) {
+            $this->schema->create('ban', function (Blueprint $table) {
+                $table->increments('id');
+                $table->ipAddress('ip');
+                $table->integer('user_id')->nullable();
+                $table->integer('created_at');
+
+                $table->unique('ip');
+            });
         }
+    }
+
+    /**
+     * Migrate Down.
+     */
+    public function down(): void
+    {
+        $this->schema->dropIfExists('ban');
     }
 }

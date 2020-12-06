@@ -1,26 +1,38 @@
 <?php
 
-use Phinx\Migration\AbstractMigration;
+declare(strict_types=1);
 
-class CreateNoticesTable extends AbstractMigration
+use App\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+
+final class CreateNoticesTable extends Migration
 {
     /**
-     * Change Method.
+     * Migrate Up.
      */
-    public function change()
+    public function up(): void
     {
-        if (! $this->hasTable('notices')) {
-            $table = $this->table('notices', ['engine' => config('DB_ENGINE'), 'collation' => config('DB_COLLATION')]);
-            $table
-                ->addColumn('type', 'string', ['limit' => 20])
-                ->addColumn('name', 'string', ['limit' => 100])
-                ->addColumn('text', 'text', ['null' => true])
-                ->addColumn('user_id', 'integer')
-                ->addColumn('created_at', 'integer')
-                ->addColumn('updated_at', 'integer')
-                ->addColumn('protect', 'boolean', ['default' => 0])
-                ->addIndex('type', ['unique' => true])
-                ->create();
+        if (! $this->schema->hasTable('notices')) {
+            $this->schema->create('notices', function (Blueprint $table) {
+                $table->increments('id');
+                $table->string('type', 20);
+                $table->string('name', 100);
+                $table->text('text');
+                $table->integer('user_id');
+                $table->boolean('protect')->default(false);
+                $table->integer('updated_at')->nullable();
+                $table->integer('created_at');
+
+                $table->unique('type');
+            });
         }
+    }
+
+    /**
+     * Migrate Down.
+     */
+    public function down(): void
+    {
+        $this->schema->dropIfExists('notices');
     }
 }

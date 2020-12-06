@@ -1,28 +1,39 @@
 <?php
 
-use Phinx\Migration\AbstractMigration;
+declare(strict_types=1);
 
-class CreateBanhistTable extends AbstractMigration
+use App\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+
+final class CreateBanhistTable extends Migration
 {
     /**
-     * Migrate Change.
+     * Migrate Up.
      */
-    public function change()
+    public function up(): void
     {
-        if (! $this->hasTable('banhist')) {
-            $table = $this->table('banhist', ['engine' => config('DB_ENGINE'), 'collation' => config('DB_COLLATION')]);
-            $table
-                ->addColumn('user_id', 'integer')
-                ->addColumn('send_user_id', 'integer')
-                //->addColumn('type', 'enum', ['values' => ['ban','unban','change']])
-                ->addColumn('type', 'string', ['limit' => 10])
-                ->addColumn('reason', 'text', ['null' => true])
-                ->addColumn('term', 'integer', ['default' => 0])
-                ->addColumn('created_at', 'integer')
-                ->addColumn('explain', 'boolean', ['default' => 0])
-                ->addIndex('user_id')
-                ->addIndex('created_at')
-                ->create();
+        if (! $this->schema->hasTable('banhist')) {
+            $this->schema->create('banhist', function (Blueprint $table) {
+                $table->increments('id');
+                $table->integer('user_id');
+                $table->integer('send_user_id');
+                $table->enum('type', ['ban','unban','change']);
+                $table->text('reason');
+                $table->integer('term')->default(0);
+                $table->integer('created_at');
+                $table->boolean('explain')->default(false);
+
+                $table->index('user_id');
+                $table->index('created_at');
+            });
         }
+    }
+
+    /**
+     * Migrate Down.
+     */
+    public function down(): void
+    {
+        $this->schema->dropIfExists('banhist');
     }
 }

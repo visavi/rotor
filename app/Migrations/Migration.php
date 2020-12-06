@@ -29,6 +29,7 @@ class Migration extends AbstractMigration
             'charset'   => config('DB_CHARSET'),
             'collation' => config('DB_COLLATION'),
             'prefix'    => config('DB_PREFIX'),
+            'engine'    => config('DB_ENGINE'),
         ]);
 
         $this->db->setAsGlobal();

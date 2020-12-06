@@ -1,26 +1,38 @@
 <?php
 
-use Phinx\Migration\AbstractMigration;
+declare(strict_types=1);
 
-class CreateInviteTable extends AbstractMigration
+use App\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+
+final class CreateInviteTable extends Migration
 {
     /**
-     * Change Method.
+     * Migrate Up.
      */
-    public function change()
+    public function up(): void
     {
-        if (! $this->hasTable('invite')) {
-            $table = $this->table('invite', ['engine' => config('DB_ENGINE'), 'collation' => config('DB_COLLATION')]);
-            $table
-                ->addColumn('hash', 'string', ['limit' => 16])
-                ->addColumn('user_id', 'integer')
-                ->addColumn('invite_user_id', 'integer', ['null' => true])
-                ->addColumn('used', 'boolean', ['default' => 0])
-                ->addColumn('created_at', 'integer')
-                ->addIndex('used')
-                ->addIndex('created_at')
-                ->addIndex('user_id')
-                ->create();
+        if (! $this->schema->hasTable('invite')) {
+            $this->schema->create('invite', function (Blueprint $table) {
+                $table->increments('id');
+                $table->string('hash', 16);
+                $table->integer('user_id');
+                $table->integer('invite_user_id')->nullable();
+                $table->boolean('used')->default(false);
+                $table->integer('created_at');
+
+                $table->index('used');
+                $table->index('user_id');
+                $table->index('created_at');
+            });
         }
+    }
+
+    /**
+     * Migrate Down.
+     */
+    public function down(): void
+    {
+        $this->schema->dropIfExists('invite');
     }
 }

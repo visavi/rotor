@@ -1,19 +1,32 @@
 <?php
 
-use Phinx\Migration\AbstractMigration;
+declare(strict_types=1);
 
-class CreateStickersCategoriesTable extends AbstractMigration
+use App\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+
+final class CreateStickersCategoriesTable extends Migration
 {
     /**
-     * Change Method.
+     * Migrate Up.
      */
-    public function change(): void
+    public function up(): void
     {
-        $table = $this->table('stickers_categories', ['engine' => config('DB_ENGINE'), 'collation' => config('DB_COLLATION')]);
-        $table
-            ->addColumn('name', 'string', ['limit' => 50])
-            ->addColumn('updated_at', 'integer', ['null' => true])
-            ->addColumn('created_at', 'integer')
-            ->create();
+        if (! $this->schema->hasTable('stickers_categories')) {
+            $this->schema->create('stickers_categories', function (Blueprint $table) {
+                $table->increments('id');
+                $table->string('name', 50);
+                $table->integer('updated_at')->nullable();
+                $table->integer('created_at');
+            });
+        }
+    }
+
+    /**
+     * Migrate Down.
+     */
+    public function down(): void
+    {
+        $this->schema->dropIfExists('stickers_categories');
     }
 }

@@ -1,23 +1,35 @@
 <?php
 
-use Phinx\Migration\AbstractMigration;
+declare(strict_types=1);
 
-class CreateNotesTable extends AbstractMigration
+use App\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+
+final class CreateNotesTable extends Migration
 {
     /**
-     * Change Method.
+     * Migrate Up.
      */
-    public function change()
+    public function up(): void
     {
-        if (! $this->hasTable('notes')) {
-            $table = $this->table('notes', ['engine' => config('DB_ENGINE'), 'collation' => config('DB_COLLATION')]);
-            $table
-                ->addColumn('user_id', 'integer')
-                ->addColumn('text', 'text', ['null' => true])
-                ->addColumn('edit_user_id', 'integer')
-                ->addColumn('updated_at', 'integer')
-                ->addIndex('user_id', ['unique' => true])
-                ->create();
+        if (! $this->schema->hasTable('notes')) {
+            $this->schema->create('notes', function (Blueprint $table) {
+                $table->increments('id');
+                $table->integer('user_id');
+                $table->text('text');
+                $table->integer('edit_user_id');
+                $table->integer('updated_at');
+
+                $table->unique('user_id');
+            });
         }
+    }
+
+    /**
+     * Migrate Down.
+     */
+    public function down(): void
+    {
+        $this->schema->dropIfExists('notes');
     }
 }

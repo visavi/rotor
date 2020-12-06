@@ -1,23 +1,35 @@
 <?php
 
-use Phinx\Migration\AbstractMigration;
+declare(strict_types=1);
 
-class CreateFloodsTable extends AbstractMigration
+use App\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+
+final class CreateFloodsTable extends Migration
 {
     /**
-     * Change Method.
+     * Migrate Up.
      */
-    public function change()
+    public function up(): void
     {
-        if (! $this->hasTable('floods')) {
-            $table = $this->table('floods', ['engine' => config('DB_ENGINE'), 'collation' => config('DB_COLLATION')]);
-            $table
-                ->addColumn('uid', 'string', ['limit' => 32])
-                ->addColumn('page', 'string', ['limit' => 30])
-                ->addColumn('attempts', 'integer', ['default' => 0])
-                ->addColumn('created_at', 'integer')
-                ->addIndex('uid')
-                ->create();
+        if (! $this->schema->hasTable('floods')) {
+            $this->schema->create('floods', function (Blueprint $table) {
+                $table->increments('id');
+                $table->string('uid', 32);
+                $table->string('page', 30);
+                $table->integer('attempts')->default(0);
+                $table->integer('created_at');
+
+                $table->index('uid');
+            });
         }
+    }
+
+    /**
+     * Migrate Down.
+     */
+    public function down(): void
+    {
+        $this->schema->dropIfExists('floods');
     }
 }

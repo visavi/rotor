@@ -1,32 +1,44 @@
 <?php
 
-use Phinx\Migration\AbstractMigration;
+declare(strict_types=1);
 
-class CreateOffersTable extends AbstractMigration
+use App\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+
+final class CreateOffersTable extends Migration
 {
     /**
-     * Change Method.
+     * Migrate Up.
      */
-    public function change()
+    public function up(): void
     {
-        if (! $this->hasTable('offers')) {
-            $table = $this->table('offers', ['engine' => config('DB_ENGINE'), 'collation' => config('DB_COLLATION')]);
-            $table
-                ->addColumn('type', 'string', ['limit' => 20])
-                ->addColumn('title', 'string', ['limit' => 50])
-                ->addColumn('text', 'text', ['null' => true])
-                ->addColumn('user_id', 'integer')
-                ->addColumn('rating', 'integer', ['default' => 0])
-                ->addColumn('created_at', 'integer')
-                ->addColumn('status', 'string', ['limit' => 20])
-                ->addColumn('count_comments', 'integer', ['default' => 0])
-                ->addColumn('closed', 'boolean', ['default' => 0])
-                ->addColumn('reply', 'text', ['null' => true])
-                ->addColumn('reply_user_id', 'integer', ['null' => true])
-                ->addColumn('updated_at', 'integer', ['null' => true])
-                ->addIndex('created_at')
-                ->addIndex('rating')
-                ->create();
+        if (! $this->schema->hasTable('offers')) {
+            $this->schema->create('offers', function (Blueprint $table) {
+                $table->increments('id');
+                $table->string('type', 20);
+                $table->string('title', 50);
+                $table->text('text');
+                $table->integer('user_id');
+                $table->integer('rating')->default(0);
+                $table->string('status', 20);
+                $table->integer('count_comments')->default(0);
+                $table->boolean('closed')->default(false);
+                $table->text('reply')->nullable();
+                $table->integer('reply_user_id')->nullable();
+                $table->integer('updated_at')->nullable();
+                $table->integer('created_at');
+
+                $table->index('rating');
+                $table->index('created_at');
+            });
         }
+    }
+
+    /**
+     * Migrate Down.
+     */
+    public function down(): void
+    {
+        $this->schema->dropIfExists('offers');
     }
 }

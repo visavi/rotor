@@ -1,26 +1,30 @@
 <?php
 
-use Phinx\Migration\AbstractMigration;
+declare(strict_types=1);
 
-class CreateSettingsTable extends AbstractMigration
+use App\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+
+final class CreateSettingsTable extends Migration
 {
     /**
-     * Change Method.
+     * Migrate Up.
      */
-    public function change()
+    public function up(): void
     {
-        if (! $this->hasTable('settings')) {
-
-            $table = $this->table('settings', [
-                'id'          => false,
-                'primary_key' => 'name',
-                'engine'      => config('DB_ENGINE'),
-                'collation'   => config('DB_COLLATION')
-            ]);
-            $table
-                ->addColumn('name', 'string', ['limit' => 25])
-                ->addColumn('value', 'string')
-                ->create();
+        if (! $this->schema->hasTable('settings')) {
+            $this->schema->create('settings', function (Blueprint $table) {
+                $table->string('name', 25)->primary();
+                $table->string('value');
+            });
         }
+    }
+
+    /**
+     * Migrate Down.
+     */
+    public function down(): void
+    {
+        $this->schema->dropIfExists('settings');
     }
 }

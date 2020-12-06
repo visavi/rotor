@@ -1,26 +1,38 @@
 <?php
 
-use Phinx\Migration\AbstractMigration;
+declare(strict_types=1);
 
-class CreateErrorsTable extends AbstractMigration
+use App\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+
+final class CreateErrorsTable extends Migration
 {
     /**
-     * Change Method.
+     * Migrate Up.
      */
-    public function change()
+    public function up(): void
     {
-        if (! $this->hasTable('errors')) {
-            $table = $this->table('errors', ['engine' => config('DB_ENGINE'), 'collation' => config('DB_COLLATION')]);
-            $table
-                ->addColumn('code', 'integer')
-                ->addColumn('request', 'string', ['null' => true])
-                ->addColumn('referer', 'string', ['null' => true])
-                ->addColumn('user_id', 'integer', ['null' => true])
-                ->addColumn('ip', 'string', ['limit' => 45])
-                ->addColumn('brow', 'string', ['limit' => 25])
-                ->addColumn('created_at', 'integer')
-                ->addIndex(['code', 'created_at'], ['name' => 'code'])
-                ->create();
+        if (! $this->schema->hasTable('errors')) {
+            $this->schema->create('errors', function (Blueprint $table) {
+                $table->increments('id');
+                $table->integer('code');
+                $table->string('request')->nullable();
+                $table->string('referer')->nullable();
+                $table->integer('user_id')->nullable();
+                $table->ipAddress('ip');
+                $table->string('brow', 25);
+                $table->integer('created_at');
+
+                $table->index(['code', 'created_at']);
+            });
         }
+    }
+
+    /**
+     * Migrate Down.
+     */
+    public function down(): void
+    {
+        $this->schema->dropIfExists('errors');
     }
 }

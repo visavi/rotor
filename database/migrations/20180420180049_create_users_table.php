@@ -1,67 +1,79 @@
 <?php
 
-use Phinx\Migration\AbstractMigration;
+declare(strict_types=1);
 
-class CreateUsersTable extends AbstractMigration
+use App\Migrations\Migration;
+use App\Models\User;
+use Illuminate\Database\Schema\Blueprint;
+
+final class CreateUsersTable extends Migration
 {
     /**
-     * Change Method.
+     * Migrate Up.
      */
-    public function change()
+    public function up(): void
     {
-        if (! $this->hasTable('users')) {
-            $table = $this->table('users', ['engine' => config('DB_ENGINE'), 'collation' => config('DB_COLLATION')]);
-            $table
-                ->addColumn('login', 'string', ['limit' => 20])
-                ->addColumn('password', 'string', ['limit' => 128])
-                ->addColumn('email', 'string', ['limit' => 50])
-                ->addColumn('level', 'string', ['limit' => 20, 'default' => 'guest'])
-                ->addColumn('name', 'string', ['limit' => 20, 'null' => true])
-                ->addColumn('country', 'string', ['limit' => 30, 'null' => true])
-                ->addColumn('city', 'string', ['limit' => 50, 'null' => true])
-                ->addColumn('language', 'string', ['limit' => 2, 'null' => true])
-                ->addColumn('info', 'text', ['null' => true])
-                ->addColumn('site', 'string', ['limit' => 50, 'null' => true])
-                ->addColumn('phone', 'string', ['limit' => 15, 'null' => true])
-                //->addColumn('gender', 'enum', ['values' => ['male','female']])
-                ->addColumn('gender', 'string', ['limit' => 10])
-                ->addColumn('birthday', 'string', ['limit' => 10, 'null' => true])
-                ->addColumn('visits', 'integer', ['default' => 0])
-                ->addColumn('newprivat', 'integer', ['default' => 0])
-                ->addColumn('newwall', 'integer', ['default' => 0])
-                ->addColumn('allforum', 'integer', ['default' => 0])
-                ->addColumn('allguest', 'integer', ['default' => 0])
-                ->addColumn('allcomments', 'integer', ['default' => 0])
-                ->addColumn('themes', 'string', ['limit' => 20, 'null' => true])
-                ->addColumn('timezone', 'string', ['limit' => 3, 'default' => 0])
-                ->addColumn('point', 'integer', ['default' => 0])
-                ->addColumn('money', 'integer', ['default' => 0])
-                ->addColumn('timeban', 'integer', ['null' => true])
-                ->addColumn('status', 'string', ['limit' => 50, 'null' => true])
-                ->addColumn('avatar', 'string', ['limit' => 100, 'null' => true])
-                ->addColumn('picture', 'string', ['limit' => 100, 'null' => true])
-                ->addColumn('rating', 'integer', ['default' => 0])
-                ->addColumn('posrating', 'integer', ['default' => 0])
-                ->addColumn('negrating', 'integer', ['default' => 0])
-                ->addColumn('keypasswd', 'string', ['limit' => 20, 'null' => true])
-                ->addColumn('timepasswd', 'integer', ['default' => 0])
-                ->addColumn('sendprivatmail', 'boolean', ['default' => 0])
-                ->addColumn('timebonus', 'integer', ['default' => 0])
-                ->addColumn('confirmregkey', 'string', ['limit' => 30, 'null' => true])
-                ->addColumn('newchat', 'integer', ['null' => true])
-                ->addColumn('notify', 'boolean', ['default' => 1])
-                ->addColumn('apikey', 'string', ['limit' => 32, 'null' => true])
-                ->addColumn('subscribe', 'string', ['limit' => 32, 'null' => true])
-                ->addColumn('updated_at', 'integer', ['null' => true])
-                ->addColumn('created_at', 'integer')
-                ->addIndex('email', ['unique' => true])
-                ->addIndex('login', ['unique' => true])
-                ->addIndex('level')
-                ->addIndex('point')
-                ->addIndex('money')
-                ->addIndex('rating')
-                ->addIndex('created_at')
-                ->create();
+        if (! $this->schema->hasTable('users')) {
+            $this->schema->create('users', function (Blueprint $table) {
+                $table->increments('id');
+                $table->string('login', 20);
+                $table->string('password', 128);
+                $table->string('email');
+                $table->string('level', 20)->default(USER::PENDED);
+                $table->string('name', 20)->nullable();
+                $table->string('country', 30)->nullable();
+                $table->string('city', 50)->nullable();
+                $table->string('language', 2)->nullable();
+                $table->text('info')->nullable();
+                $table->string('site', 50)->nullable();
+                $table->string('phone', 15)->nullable();
+                $table->enum('gender', ['male','female']);
+                $table->string('birthday', 10)->nullable();
+                $table->integer('visits')->default(0);
+                $table->integer('newprivat')->default(0);
+                $table->integer('newwall')->default(0);
+                $table->integer('allforum')->default(0);
+                $table->integer('allguest')->default(0);
+                $table->integer('allcomments')->default(0);
+                $table->string('themes', 20)->nullable();
+                $table->string('timezone', 3)->default('0');
+                $table->integer('point')->default(0);
+                $table->integer('money')->default(0);
+                $table->integer('timeban')->nullable();
+                $table->string('status', 50)->nullable();
+                $table->string('avatar', 100)->nullable();
+                $table->string('picture', 100)->nullable();
+                $table->integer('rating')->default(0);
+                $table->integer('posrating')->default(0);
+                $table->integer('negrating')->default(0);
+                $table->string('keypasswd', 20)->nullable();
+                $table->integer('timepasswd')->default(0);
+                $table->boolean('sendprivatmail')->default(false);
+                $table->integer('timebonus')->default(0);
+                $table->string('confirmregkey', 30)->nullable();
+                $table->integer('newchat')->nullable();
+                $table->boolean('notify')->default(true);
+                $table->string('apikey', 32)->nullable();
+                $table->string('subscribe', 32)->nullable();
+                $table->integer('updated_at')->nullable();
+                $table->integer('created_at');
+
+                $table->unique('login');
+                $table->unique('email');
+                $table->index('level');
+                $table->index('point');
+                $table->index('money');
+                $table->index('rating');
+                $table->index('created_at');
+            });
         }
+    }
+
+    /**
+     * Migrate Down.
+     */
+    public function down(): void
+    {
+        $this->schema->dropIfExists('users');
     }
 }

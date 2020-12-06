@@ -1,24 +1,36 @@
 <?php
 
-use Phinx\Migration\AbstractMigration;
+declare(strict_types=1);
 
-class CreateWallsTable extends AbstractMigration
+use App\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+
+final class CreateWallsTable extends Migration
 {
     /**
-     * Change Method.
+     * Migrate Up.
      */
-    public function change()
+    public function up(): void
     {
-        if (! $this->hasTable('walls')) {
-            $table = $this->table('walls', ['engine' => config('DB_ENGINE'), 'collation' => config('DB_COLLATION')]);
-            $table
-                ->addColumn('user_id', 'integer')
-                ->addColumn('author_id', 'integer')
-                ->addColumn('text', 'text', ['null' => true])
-                ->addColumn('created_at', 'integer')
-                ->addIndex('user_id')
-                ->addIndex('created_at')
-                ->create();
+        if (! $this->schema->hasTable('walls')) {
+            $this->schema->create('walls', function (Blueprint $table) {
+                $table->increments('id');
+                $table->integer('user_id');
+                $table->integer('author_id');
+                $table->text('text');
+                $table->integer('created_at');
+
+                $table->index('user_id');
+                $table->index('created_at');
+            });
         }
+    }
+
+    /**
+     * Migrate Down.
+     */
+    public function down(): void
+    {
+        $this->schema->dropIfExists('walls');
     }
 }

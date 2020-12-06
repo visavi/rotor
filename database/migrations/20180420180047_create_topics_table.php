@@ -1,36 +1,50 @@
 <?php
 
-use Phinx\Migration\AbstractMigration;
+declare(strict_types=1);
 
-class CreateTopicsTable extends AbstractMigration
+use App\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+
+final class CreateTopicsTable extends Migration
 {
     /**
-     * Change Method.
+     * Migrate Up.
      */
-    public function change()
+    public function up(): void
     {
-        if (! $this->hasTable('topics')) {
-            $table = $this->table('topics', ['engine' => config('DB_ENGINE'), 'collation' => config('DB_COLLATION')]);
-            $table
-                ->addColumn('forum_id', 'integer')
-                ->addColumn('title', 'string', ['limit' => 50])
-                ->addColumn('user_id', 'integer')
-                ->addColumn('closed', 'boolean', ['default' => 0])
-                ->addColumn('locked', 'boolean', ['default' => 0])
-                ->addColumn('moderators', 'string', ['null' => true])
-                ->addColumn('note', 'string', ['null' => true])
-                ->addColumn('updated_at', 'integer', ['null' => true])
-                ->addColumn('count_posts', 'integer')
-                ->addColumn('visits', 'integer', ['default' => 0])
-                ->addColumn('last_post_id', 'integer', ['null' => true])
-                ->addColumn('created_at', 'integer')
-                ->addIndex(['count_posts', 'updated_at'], ['name' => 'topics_count_posts_time'])
-                ->addIndex(['user_id', 'updated_at'], ['name' => 'topics_user_time'])
-                ->addIndex(['forum_id', 'locked', 'updated_at'], ['name' => 'topics_forum_time'])
-                ->addIndex('updated_at')
-                ->addIndex('title', ['type' => 'fulltext']);
+        if (! $this->schema->hasTable('topics')) {
+            $this->schema->create('topics', function (Blueprint $table) {
+                $table->increments('id');
+                $table->integer('forum_id');
+                $table->string('title', 50);
+                $table->integer('user_id');
+                $table->boolean('closed')->default(false);
+                $table->boolean('locked')->default(false);
+                $table->string('moderators')->nullable();
+                $table->string('note')->nullable();
+                $table->integer('count_posts');
+                $table->integer('visits')->default(0);
+                $table->integer('last_post_id')->nullable();
+                $table->integer('updated_at')->nullable();
+                $table->integer('created_at');
 
-            $table->create();
+                $table->index(['count_posts', 'updated_at']);
+                $table->index(['user_id', 'updated_at']);
+                $table->index(['forum_id', 'locked', 'updated_at']);
+                $table->index('updated_at');
+            });
+
+            if (config('DB_DRIVER') === 'mysql') {
+                $this->db->getConnection()->statement('CREATE FULLTEXT INDEX text ON topics(title);');
+            }
         }
+    }
+
+    /**
+     * Migrate Down.
+     */
+    public function down(): void
+    {
+        $this->schema->dropIfExists('topics');
     }
 }
