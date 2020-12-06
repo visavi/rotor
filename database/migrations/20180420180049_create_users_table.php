@@ -18,7 +18,7 @@ final class CreateUsersTable extends Migration
                 $table->increments('id');
                 $table->string('login', 20);
                 $table->string('password', 128);
-                $table->string('email');
+                $table->string('email', 100);
                 $table->string('level', 20)->default(USER::PENDED);
                 $table->string('name', 20)->nullable();
                 $table->string('country', 30)->nullable();
