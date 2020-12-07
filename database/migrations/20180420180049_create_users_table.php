@@ -19,7 +19,7 @@ final class CreateUsersTable extends Migration
                 $table->string('login', 20);
                 $table->string('password', 128);
                 $table->string('email', 100);
-                $table->string('level', 20)->default(USER::PENDED);
+                $table->string('level', 20)->default(User::PENDED);
                 $table->string('name', 20)->nullable();
                 $table->string('country', 30)->nullable();
                 $table->string('city', 50)->nullable();
@@ -27,7 +27,7 @@ final class CreateUsersTable extends Migration
                 $table->text('info')->nullable();
                 $table->string('site', 50)->nullable();
                 $table->string('phone', 15)->nullable();
-                $table->enum('gender', ['male','female']);
+                $table->enum('gender', [User::MALE, User::FEMALE]);
                 $table->string('birthday', 10)->nullable();
                 $table->integer('visits')->default(0);
                 $table->integer('newprivat')->default(0);

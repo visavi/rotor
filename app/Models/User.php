@@ -107,6 +107,13 @@ class User extends BaseModel
     ];
 
     /**
+     * Genders
+     */
+    public const MALE   = 'male';
+    public const FEMALE = 'female';
+
+
+    /**
      * Indicates if the model should be timestamped.
      *
      * @var bool

@@ -22,8 +22,6 @@ final class CreateAdminAdvertsTable extends Migration
                 $table->integer('user_id');
                 $table->integer('created_at');
                 $table->integer('deleted_at')->nullable();
-
-                $table->index('created_at');
             });
         }
     }
