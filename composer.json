@@ -24,6 +24,7 @@
         "ext-mbstring": "*",
         "ext-pdo": "*",
         "cbschuld/browser.php": "~1.9",
+        "doctrine/dbal": "^3.0",
         "google/recaptcha": "~1.2",
         "gregwar/captcha": "^1.1",
         "guzzlehttp/guzzle": "^7.2",
