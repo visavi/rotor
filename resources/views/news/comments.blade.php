@@ -19,37 +19,37 @@
 
 @section('content')
     @if ($comments->isNotEmpty())
-        @foreach ($comments as $data)
-            <div class="section mb-3 shadow" id="comment_{{ $data->id }}">
+        @foreach ($comments as $comment)
+            <div class="section mb-3 shadow" id="comment_{{ $comment->id }}">
                 <div class="user-avatar">
-                    {!! $data->user->getAvatar() !!}
-                    {!! $data->user->getOnline() !!}
+                    {!! $comment->user->getAvatar() !!}
+                    {!! $comment->user->getOnline() !!}
                 </div>
 
                 <div class="section-user d-flex align-items-center">
                     <div class="flex-grow-1">
-                        {!! $data->user->getProfile() !!}
-                        <small class="section-date text-muted font-italic">{{ dateFixed($data->created_at) }}</small><br>
-                        <small class="font-italic">{!! $data->user->getStatus() !!}</small>
+                        {!! $comment->user->getProfile() !!}
+                        <small class="section-date text-muted font-italic">{{ dateFixed($comment->created_at) }}</small><br>
+                        <small class="font-italic">{!! $comment->user->getStatus() !!}</small>
                     </div>
 
                     @if (getUser())
                         <div class="text-right">
-                            @if (getUser('id') !== $data->user_id)
+                            @if (getUser('id') !== $comment->user_id)
                                 <a href="#" onclick="return postReply(this)" data-toggle="tooltip" title="{{ __('main.reply') }}"><i class="fa fa-reply text-muted"></i></a>
 
                                 <a href="#" onclick="return postQuote(this)" data-toggle="tooltip" title="{{ __('main.quote') }}"><i class="fa fa-quote-right text-muted"></i></a>
 
-                                <a href="#" onclick="return sendComplaint(this)" data-type="{{ $data->relate->getMorphClass() }}" data-id="{{ $data->id }}" data-token="{{ $_SESSION['token'] }}" data-page="{{ $comments->currentPage() }}" rel="nofollow" data-toggle="tooltip" title="{{ __('main.complain') }}"><i class="fa fa-bell text-muted"></i></a>
+                                <a href="#" onclick="return sendComplaint(this)" data-type="{{ $comment->relate->getMorphClass() }}" data-id="{{ $comment->id }}" data-token="{{ $_SESSION['token'] }}" data-page="{{ $comments->currentPage() }}" rel="nofollow" data-toggle="tooltip" title="{{ __('main.complain') }}"><i class="fa fa-bell text-muted"></i></a>
 
                             @endif
 
-                            @if ($data->created_at + 600 > SITETIME && getUser('id') === $data->user_id)
-                                <a href="/news/edit/{{ $news->id }}/{{ $data->id }}?page={{ $comments->currentPage() }}" data-toggle="tooltip" title="{{ __('main.edit') }}"><i class="fa fa-pencil-alt text-muted"></i></a>
+                            @if ($comment->created_at + 600 > SITETIME && getUser('id') === $comment->user_id)
+                                <a href="/news/edit/{{ $news->id }}/{{ $comment->id }}?page={{ $comments->currentPage() }}" data-toggle="tooltip" title="{{ __('main.edit') }}"><i class="fa fa-pencil-alt text-muted"></i></a>
                             @endif
 
                             @if (isAdmin())
-                                <a href="#" onclick="return deleteComment(this)" data-rid="{{ $data->relate_id }}" data-id="{{ $data->id }}" data-type="{{ $data->relate->getMorphClass() }}" data-token="{{ $_SESSION['token'] }}" data-toggle="tooltip" title="{{ __('main.delete') }}"><i class="fa fa-times text-muted"></i></a>
+                                <a href="#" onclick="return deleteComment(this)" data-rid="{{ $comment->relate_id }}" data-id="{{ $comment->id }}" data-type="{{ $comment->relate->getMorphClass() }}" data-token="{{ $_SESSION['token'] }}" data-toggle="tooltip" title="{{ __('main.delete') }}"><i class="fa fa-times text-muted"></i></a>
                             @endif
                         </div>
                     @endif
@@ -57,11 +57,11 @@
 
                 <div class="section-body border-top">
                     <div class="section-message">
-                        {!! bbCode($data->text) !!}
+                        {!! bbCode($comment->text) !!}
                     </div>
 
                 @if (isAdmin())
-                    <div class="small text-muted font-italic mt-2">{{ $data->brow }}, {{ $data->ip }}</div>
+                    <div class="small text-muted font-italic mt-2">{{ $comment->brow }}, {{ $comment->ip }}</div>
                 @endif
                 </div>
             </div>

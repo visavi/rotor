@@ -1,6 +1,10 @@
 @extends('layout')
 
-@section('title', $article->title . ' - ' . __('main.comments'))
+@section('title', $article->title . ' - ' . __('main.comments') . ' (' . __('main.page_num', ['page' => $comments->currentPage()]) . ')')
+
+@section('header')
+    <h1>{{ $article->title }} - {{ __('main.comments') }}</h1>
+@stop
 
 @section('breadcrumb')
     <nav>
@@ -24,24 +28,31 @@
 
     @if ($comments->isNotEmpty())
         @foreach ($comments as $comment)
-            <div class="post" id="comment_{{ $comment->id }}">
-                <div class="b">
-                    <div class="img">
-                        {!! $comment->user->getAvatar() !!}
-                        {!! $comment->user->getOnline() !!}
+            <div class="section mb-3 shadow" id="comment_{{ $comment->id }}">
+                <div class="user-avatar">
+                    {!! $comment->user->getAvatar() !!}
+                    {!! $comment->user->getOnline() !!}
+                </div>
+
+                <div class="section-user d-flex align-items-center">
+                    <div class="flex-grow-1">
+                        {!! $comment->user->getProfile() !!}
+                        <small class="section-date text-muted font-italic">{{ dateFixed($comment->created_at) }}</small><br>
+                        <small class="font-italic">{!! $comment->user->getStatus() !!}</small>
                     </div>
 
                     @if (getUser())
-                        <div class="float-right">
+                        <div class="text-right">
                             @if (getUser('id') !== $comment->user_id)
-                                <a href="#" onclick="return postReply(this)" title="{{ __('main.reply') }}"><i class="fa fa-reply text-muted"></i></a>
+                                <a href="#" onclick="return postReply(this)" data-toggle="tooltip" title="{{ __('main.reply') }}"><i class="fa fa-reply text-muted"></i></a>
 
-                                <a href="#" onclick="return postQuote(this)" title="{{ __('main.quote') }}"><i class="fa fa-quote-right text-muted"></i></a>
+                                <a href="#" onclick="return postQuote(this)" data-toggle="tooltip" title="{{ __('main.quote') }}"><i class="fa fa-quote-right text-muted"></i></a>
 
-                                <a href="#" onclick="return sendComplaint(this)" data-type="{{ $comment->relate->getMorphClass() }}" data-id="{{ $comment->id }}" data-token="{{ $_SESSION['token'] }}" data-page="{{ $comments->currentPage() }}" rel="nofollow" title="{{ __('main.complain') }}"><i class="fa fa-bell text-muted"></i></a>
+                                <a href="#" onclick="return sendComplaint(this)" data-type="{{ $comment->relate->getMorphClass() }}" data-id="{{ $comment->id }}" data-token="{{ $_SESSION['token'] }}" data-page="{{ $comments->currentPage() }}" rel="nofollow" data-toggle="tooltip" title="{{ __('main.complain') }}"><i class="fa fa-bell text-muted"></i></a>
+
                             @endif
 
-                            @if ($comment->created_at + 600 > SITETIME && getUser('id') === $comment->user->id)
+                            @if ($comment->created_at + 600 > SITETIME && getUser('id') === $comment->user_id)
                                 <a href="/articles/edit/{{ $article->id }}/{{ $comment->id }}?page={{ $comments->currentPage() }}" data-toggle="tooltip" title="{{ __('main.edit') }}"><i class="fa fa-pencil-alt text-muted"></i></a>
                             @endif
 
@@ -50,17 +61,17 @@
                             @endif
                         </div>
                     @endif
-
-                    <b>{!! $comment->user->getProfile() !!}</b> <small>({{ dateFixed($comment->created_at) }})</small><br>
-                    {!! $comment->user->getStatus() !!}
-                </div>
-                <div class="section-message">
-                    {!! bbCode($comment->text) !!}<br>
                 </div>
 
-                @if (isAdmin())
-                    <span class="data">({{ $comment->brow }}, {{ $comment->ip }})</span>
-                @endif
+                <div class="section-body border-top">
+                    <div class="section-message">
+                        {!! bbCode($comment->text) !!}
+                    </div>
+
+                    @if (isAdmin())
+                        <div class="small text-muted font-italic mt-2">{{ $comment->brow }}, {{ $comment->ip }}</div>
+                    @endif
+                </div>
             </div>
         @endforeach
     @else
@@ -70,7 +81,7 @@
     {{ $comments->links() }}
 
     @if (getUser())
-        <div class="section-form shadow">
+        <div class="section-form mb-3 shadow">
             <form action="/articles/comments/{{ $article->id }}" method="post">
                 @csrf
                 <div class="form-group{{ hasError('msg') }}">

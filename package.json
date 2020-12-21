@@ -14,7 +14,7 @@
   },
   "dependencies": {
     "@fortawesome/fontawesome-free": "^5.15.1",
-    "bootbox": "^5.5.1",
+    "bootbox": "^5.5.2",
     "bootstrap": "^4.5.3",
     "bootstrap-colorpicker": "^3.2.0",
     "jquery": "^3.5.1",
@@ -24,10 +24,10 @@
     "toastr": "^2.1.4"
   },
   "devDependencies": {
-    "cross-env": "^7.0.2",
+    "cross-env": "^7.0.3",
     "laravel-mix": "^5.0.9",
     "resolve-url-loader": "^3.1.2",
-    "sass": "^1.29.0",
+    "sass": "^1.30.0",
     "sass-loader": "^8.0.0",
     "vue-template-compiler": "^2.6.12",
     "webpack": "^4.44.2"
