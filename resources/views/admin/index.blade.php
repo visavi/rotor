@@ -64,7 +64,7 @@
         <i class="far fa-circle fa-lg text-muted"></i> <a href="/admin/delivery">{{ __('index.private_mailing') }}</a><br>
         <i class="far fa-circle fa-lg text-muted"></i> <a href="/admin/logs">{{ __('index.logs_visits') }}</a><br>
         <i class="far fa-circle fa-lg text-muted"></i> <a href="/admin/notices">{{ __('index.email_templates') }}</a><br>
-        <i class="far fa-circle fa-lg text-muted"></i> <a href="/admin/files">{{ __('index.pages_editing') }}</a><br>
+        <i class="far fa-circle fa-lg text-muted"></i> <a href="/admin/files">{{ __('index.page_editor') }}</a><br>
         <i class="far fa-circle fa-lg text-muted"></i> <a href="/admin/delusers">{{ __('index.user_cleaning') }}</a><br>
         <i class="far fa-circle fa-lg text-muted"></i> <a href="/admin/modules">{{ __('index.modules') }}</a><br>
     @endif

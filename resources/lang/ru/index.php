@@ -112,7 +112,7 @@ return [
     'private_mailing'   => 'Приват-рассылка',
     'logs_visits'       => 'Логи посещений',
     'email_templates'   => 'Шаблоны писем',
-    'pages_editing'     => 'Редактирование страниц',
+    'page_editor'       => 'Редактор страниц',
     'user_cleaning'     => 'Чистка пользователей',
     'modules'           => 'Модули',
 ];

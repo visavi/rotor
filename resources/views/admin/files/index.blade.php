@@ -1,6 +1,6 @@
 @extends('layout')
 
-@section('title', $path ?? __('index.pages_editing'))
+@section('title', $path ?? __('index.page_editor'))
 
 @section('header')
     @if (getUser())
@@ -9,7 +9,7 @@
         </div><br>
     @endif
 
-    <h1>{{ $path ?? __('index.pages_editing') }}</h1>
+    <h1>{{ $path ?? __('index.page_editor') }}</h1>
 @stop
 
 @section('breadcrumb')
@@ -19,7 +19,7 @@
             <li class="breadcrumb-item"><a href="/admin">{{ __('index.panel') }}</a></li>
 
             @if ($path)
-                <li class="breadcrumb-item"><a href="/admin/files">{{ __('index.pages_editing') }}</a></li>
+                <li class="breadcrumb-item"><a href="/admin/files">{{ __('index.page_editor') }}</a></li>
 
                 <?php $dirNames = []; ?>
                 @foreach ($directories as $directory)
@@ -30,7 +30,7 @@
                 @endforeach
             @endif
 
-            <li class="breadcrumb-item active">{{ $path ?? __('index.pages_editing') }}</li>
+            <li class="breadcrumb-item active">{{ $path ?? __('index.page_editor') }}</li>
         </ol>
     </nav>
 @stop

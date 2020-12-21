@@ -25,6 +25,7 @@ final class CreateArticlesTable extends Migration
                 $table->integer('count_comments')->default(0);
                 $table->integer('created_at');
 
+                $table->index('category_id');
                 $table->index('user_id');
                 $table->index('created_at');
             });

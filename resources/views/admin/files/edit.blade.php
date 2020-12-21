@@ -7,7 +7,7 @@
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
             <li class="breadcrumb-item"><a href="/admin">{{ __('index.panel') }}</a></li>
-            <li class="breadcrumb-item"><a href="/admin/files">{{ __('index.pages_editing') }}</a></li>
+            <li class="breadcrumb-item"><a href="/admin/files">{{ __('index.page_editor') }}</a></li>
             @if ($path)
                 <li class="breadcrumb-item"><a href="/admin/files?path={{ $path }}">{{ $path }}</a></li>
             @endif

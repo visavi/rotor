@@ -112,7 +112,7 @@ return [
     'private_mailing'   => 'Private newsletter',
     'logs_visits'       => 'Visit logs',
     'email_templates'   => 'Email templates',
-    'pages_editing'     => 'Page editing',
+    'page_editor'       => 'Page editor',
     'user_cleaning'     => 'User cleaning',
     'modules'           => 'Modules',
 ];

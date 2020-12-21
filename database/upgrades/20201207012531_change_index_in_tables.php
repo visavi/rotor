@@ -41,8 +41,13 @@ final class ChangeIndexInTables extends Migration
         });
 
         $this->schema->table('articles', function (Blueprint $table) {
+            $checkIndex = $this->db->getConnection()->select('SHOW INDEXES FROM articles WHERE Key_name="category_id"');
+            if ($checkIndex) {
+                $table->dropIndex('category_id');
+            }
             $table->dropIndex('user_id');
             $table->dropIndex('created_at');
+            $table->index('category_id');
             $table->index('user_id');
             $table->index('created_at');
         });
