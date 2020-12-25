@@ -13,46 +13,68 @@
     </nav>
 @stop
 
-@section('content')
+@section('header')
     @if (isAdmin())
-        <a href="/admin/photos/edit/{{ $photo->id }}">{{ __('main.edit') }}</a> /
-       <a href="/admin/photos/delete/{{ $photo->id }}?token={{ $_SESSION['token'] }}" onclick="return confirm('{{ __('photos.confirm_delete_photo') }}')">{{ __('main.delete') }}</a>
+        <div class="dropdown float-right">
+            <button class="btn btn-light dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <i class="fas fa-wrench"></i>
+            </button>
+            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                <a class="dropdown-item" href="/admin/photos/edit/{{ $photo->id }}">{{ __('main.edit') }}</a>
+                <a class="dropdown-item" href="/admin/photos/delete/{{ $photo->id }}?token={{ $_SESSION['token'] }}" onclick="return confirm('{{ __('photos.confirm_delete_photo') }}')">{{ __('main.delete') }}</a>
+            </div>
+        </div>
     @endif
+
 
     @if (getUser() && getUser('id') === $photo->user->id && ! isAdmin())
-        <a href="/photos/edit/{{ $photo->id }}">{{ __('main.edit') }}</a> /
-        <a href="/photos/delete/{{ $photo->id }}?token={{ $_SESSION['token'] }}" onclick="return confirm('{{ __('photos.confirm_delete_photo') }}')">{{ __('main.delete') }}</a>
+        <div class="dropdown float-right">
+            <button class="btn btn-light dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <i class="fas fa-wrench"></i>
+            </button>
+            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                <a class="dropdown-item" href="/photos/edit/{{ $photo->id }}">{{ __('main.edit') }}</a>
+                <a class="dropdown-item" href="/photos/delete/{{ $photo->id }}?token={{ $_SESSION['token'] }}" onclick="return confirm('{{ __('photos.confirm_delete_photo') }}')">{{ __('main.delete') }}</a>
+            </div>
+        </div>
     @endif
 
-    <div>
+    <h1>{{ $photo->title }}</h1>
+@stop
+
+@section('content')
+    <div class="section mb-3 shadow">
         @foreach ($photo->files as $file)
-            <a href="{{ $file->hash }}" class="gallery" data-group="{{ $photo->id }}"><img class="img-fluid" src="{{ $file->hash }}" alt="image"></a><br>
+            <div class="mb-3">
+                <a href="{{ $file->hash }}" class="gallery" data-group="{{ $photo->id }}"><img class="img-fluid" src="{{ $file->hash }}" alt="image"></a>
+            </div>
         @endforeach
 
-        @if ($photo->text)
-            {!! bbCode($photo->text) !!}<br>
-        @endif
+        <div class="section-content">
+            @if ($photo->text)
+                {!! bbCode($photo->text) !!}<br>
+            @endif
 
-        <div class="js-rating">{{ __('main.rating') }}:
-            @if (getUser() && getUser('id') !== $photo->user_id)
-                <a class="post-rating-down<?= $photo->vote === '-' ? ' active' : '' ?>" href="#" onclick="return changeRating(this);" data-id="{{ $photo->id }}" data-type="{{ $photo->getMorphClass() }}" data-vote="-" data-token="{{ $_SESSION['token'] }}"><i class="fa fa-thumbs-down"></i></a>
-            @endif
-            <b>{!! formatNum($photo->rating) !!}</b>
-            @if (getUser() && getUser('id') !== $photo->user_id)
-                <a class="post-rating-up<?= $photo->vote === '+' ? ' active' : '' ?>" href="#" onclick="return changeRating(this);" data-id="{{ $photo->id }}" data-type="{{ $photo->getMorphClass() }}" data-vote="+" data-token="{{ $_SESSION['token'] }}"><i class="fa fa-thumbs-up"></i></a>
-            @endif
-        </div>
+            <div class="my-2 js-rating">{{ __('main.rating') }}:
+                @if (getUser() && getUser('id') !== $photo->user_id)
+                    <a class="post-rating-down<?= $photo->vote === '-' ? ' active' : '' ?>" href="#" onclick="return changeRating(this);" data-id="{{ $photo->id }}" data-type="{{ $photo->getMorphClass() }}" data-vote="-" data-token="{{ $_SESSION['token'] }}"><i class="fa fa-thumbs-down"></i></a>
+                @endif
+                <b>{!! formatNum($photo->rating) !!}</b>
+                @if (getUser() && getUser('id') !== $photo->user_id)
+                    <a class="post-rating-up<?= $photo->vote === '+' ? ' active' : '' ?>" href="#" onclick="return changeRating(this);" data-id="{{ $photo->id }}" data-type="{{ $photo->getMorphClass() }}" data-vote="+" data-token="{{ $_SESSION['token'] }}"><i class="fa fa-thumbs-up"></i></a>
+                @endif
+            </div>
 
             {{ __('main.added') }}: {!! $photo->user->getProfile() !!} ({{ dateFixed($photo->created_at) }})<br>
-        <a href="/photos/comments/{{ $photo->id }}">{{ __('main.comments') }}</a> ({{ $photo->count_comments }})
-        <a href="/photos/end/{{ $photo->id }}">&raquo;</a>
+            <a href="/photos/comments/{{ $photo->id }}">{{ __('main.comments') }}</a> ({{ $photo->count_comments }})
+            <a href="/photos/end/{{ $photo->id }}">&raquo;</a>
+        </div>
     </div>
-    <br>
 
     <?php $nav = photoNavigation($photo->id); ?>
 
     @if ($nav['next'] || $nav['prev'])
-        <div class="section-form shadow" style="text-align:center">
+        <div class="section shadow text-center font-weight-bold">
             @if ($nav['next'])
                 <a href="/photos/{{ $nav['next'] }}">&laquo; {{ __('main.previous') }}</a> &nbsp;
             @endif

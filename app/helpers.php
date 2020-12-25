@@ -2296,12 +2296,16 @@ function uniqueName(string $extension = null): string
 function getCourses()
 {
     $courses = Cache::remember('courses', 3600, static function () {
-        $client = new Client(['timeout' => 3.0]);
-        $response = $client->get('//www.cbr-xml-daily.ru/daily_json.js');
+        try {
+            $client = new Client(['timeout' => 3.0]);
+            $response = $client->get('//www.cbr-xml-daily.ru/daily_json.js');
 
-        $content = $response->getBody()->getContents();
+            $content = json_decode($response->getBody()->getContents(), true);
+        } catch (Exception $e) {
+            $content = null;
+        }
 
-        return $content ? json_decode($content, true) : null;
+        return $content;
     });
 
     return view('app/_courses', compact('courses'));

@@ -19,10 +19,14 @@
 @section('content')
     @if ($albums->isNotEmpty())
         @foreach ($albums as $data)
+            <div class="section mb-3 shadow">
+                <div class="section-title">
+                    <i class="fa fa-image"></i>
+                    <a class="" href="/photos/albums/{{ $data->user->login }}">{{ $data->user->getName() }}</a>
+                </div>
 
-            <i class="fa fa-image"></i>
-            <b><a href="/photos/albums/{{ $data->user->login }}">{{ $data->user->getName() }}</a></b> ({{ $data->cnt }} {{ __('photos.photos') }} / {{ $data->count_comments }} {{ __('main.comments') }})<br>
-
+                {{ $data->cnt }} {{ __('photos.photos') }} / {{ $data->count_comments }} {{ __('main.comments') }}
+            </div>
         @endforeach
 
         <br>{{ __('photos.total_albums') }}: <b>{{ $albums->total() }}</b><br>

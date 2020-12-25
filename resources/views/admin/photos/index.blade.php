@@ -38,35 +38,7 @@
             </div>
 
             <div>
-                <?php $countFiles = $photo->files->count() ?>
-                <div id="myCarousel{{ $loop->iteration }}" class="carousel slide media-file" data-ride="carousel">
-                    @if ($countFiles > 1)
-                        <ol class="carousel-indicators">
-                            @for ($i = 0; $i < $countFiles; $i++)
-                                <li data-target="#myCarousel{{ $loop->iteration }}" data-slide-to="{{ $i }}"{!! empty($i) ? ' class="active"' : '' !!}></li>
-                            @endfor
-                        </ol>
-                    @endif
-
-                    <div class="carousel-inner">
-                        @foreach ($photo->files as $file)
-                            <div class="carousel-item{{ $loop->first ? ' active' : '' }}">
-                                <a href="/photos/{{ $photo->id }}">{!! resizeImage($file->hash, ['alt' => $photo->title]) !!}</a>
-                            </div>
-                        @endforeach
-                    </div>
-
-                    @if ($countFiles > 1)
-                        <a class="carousel-control-prev" href="#myCarousel{{ $loop->iteration }}" role="button" data-slide="prev">
-                            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                            <span class="sr-only">Previous</span>
-                        </a>
-                        <a class="carousel-control-next" href="#myCarousel{{ $loop->iteration }}" role="button" data-slide="next">
-                            <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                            <span class="sr-only">Next</span>
-                        </a>
-                    @endif
-                </div>
+                @include('app/_carousel', ['model' => $photo, 'path' => '/photos'])
 
                 @if ($photo->text)
                     {!! bbCode($photo->text) !!}<br>

@@ -18,31 +18,35 @@
 @section('content')
     @if ($users->isNotEmpty())
         @foreach ($users as $key => $data)
-            <div class="b">
-                <div class="img">
+            <div class="section mb-3 shadow">
+                <div class="user-avatar">
                     {!! $data->getAvatar() !!}
                     {!! $data->getOnline() !!}
                 </div>
 
-                {{ $users->firstItem() + $key }}.
-                @if ($user === $data->login)
-                    <b>{!! $data->getProfile('#ff0000') !!}</b>
-                @else
-                    <b>{!! $data->getProfile() !!}</b>
-                @endif
-                ({{ plural($data->point, setting('scorename')) }})<br>
-                {!! $data->getStatus() !!}
-            </div>
+                <div class="section-user d-flex align-items-center">
+                    <div class="flex-grow-1">
+                        {{ $users->firstItem() + $key }}.
+                        @if ($user === $data->login)
+                            {!! $data->getProfile('#ff0000') !!}
+                        @else
+                            {!! $data->getProfile() !!}
+                        @endif
+                        ({{ plural($data->point, setting('scorename')) }})<br>
+                        <small class="font-italic">{!! $data->getStatus() !!}</small>
+                    </div>
+                </div>
 
-            <div>
-                {{ __('index.forums') }}: {{ $data->allforum }} | {{ __('index.guestbook') }}: {{ $data->allguest }} | {{ __('main.comments') }}: {{ $data->allcomments }}<br>
-                {{ __('users.visits') }}: {{ $data->visits }}<br>
-                {{ __('users.moneys') }}: {{ $data->money }}<br>
-                {{ __('main.registration_date') }}: {{ dateFixed($data->created_at, 'd.m.Y') }}
+                <div class="section-body border-top">
+                    {{ __('index.forums') }}: {{ $data->allforum }} | {{ __('index.guestbook') }}: {{ $data->allguest }} | {{ __('main.comments') }}: {{ $data->allcomments }}<br>
+                    {{ __('users.visits') }}: {{ $data->visits }}<br>
+                    {{ __('users.moneys') }}: {{ $data->money }}<br>
+                    {{ __('main.registration_date') }}: {{ dateFixed($data->created_at, 'd.m.Y') }}
+                </div>
             </div>
         @endforeach
 
-        <div class="section-form shadow mt-3">
+        <div class="section-form mb-3 shadow">
             <form action="/users" method="post">
                 <div class="form-inline">
                     <div class="form-group{{ hasError('user') }}">
@@ -53,7 +57,7 @@
                 </div>
                 <div class="invalid-feedback">{{ textError('user') }}</div>
             </form>
-        </div><br>
+        </div>
 
         {{ __('main.total_users') }}: <b>{{ $users->total() }}</b><br>
     @else

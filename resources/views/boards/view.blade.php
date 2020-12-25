@@ -46,37 +46,9 @@
                 <div class="card-body">
 
                     @if ($item->files->isNotEmpty())
-                        <div class="row mb-3">
+                        <div class="row">
                             <div class="col-md-12">
-
-                                <?php $countFiles = $item->files->count() ?>
-                                <div id="myCarousel" class="carousel slide media-file" data-ride="carousel">
-                                    @if ($countFiles > 1)
-                                        <ol class="carousel-indicators">
-                                            @for ($i = 0; $i < $countFiles; $i++)
-                                                <li data-target="#myCarousel" data-slide-to="{{ $i }}"{!! empty($i) ? ' class="active"' : '' !!}></li>
-                                            @endfor
-                                        </ol>
-                                    @endif
-
-                                    <div class="carousel-inner">
-                                        @foreach ($item->files as $file)
-                                            <div class="carousel-item{{ $loop->first ? ' active' : '' }}">
-                                                {!! resizeImage($file->hash, ['alt' => $item->title]) !!}
-                                            </div>
-                                        @endforeach
-                                    </div>
-
-                                    @if ($countFiles > 1)
-                                        <a class="carousel-control-prev" href="#myCarousel" role="button" data-slide="prev">
-                                            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                                            <span class="sr-only">Previous</span>
-                                        </a>
-                                        <a class="carousel-control-next" href="#myCarousel" role="button" data-slide="next">
-                                            <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                                            <span class="sr-only">Next</span>
-                                        </a>
-                                    @endif
+                                @include('app/_carousel', ['model' => $item])
                                 </div>
                             </div>
                         </div>
@@ -88,7 +60,6 @@
                                 {!! bbCode($item->text) !!}
                             </div>
                             <p>
-
                                 @if ($item->phone)
                                     <span class="badge badge-pill badge-primary">{{ __('boards.phone') }}: {{ $item->phone }}</span><br>
                                 @endif
