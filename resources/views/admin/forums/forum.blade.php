@@ -5,7 +5,7 @@
 @section('header')
     <div class="float-right">
         <a class="btn btn-success" href="/forums/create?fid={{ $forum->id }}">{{ __('forums.create_topic') }}</a>
-    </div><br>
+    </div>
 
     <h1>{{ $forum->title }}</h1>
 @stop

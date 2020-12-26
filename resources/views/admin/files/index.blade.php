@@ -6,7 +6,7 @@
     @if (getUser())
         <div class="float-right">
             <a class="btn btn-success" href="/admin/files/create?path={{ $path }}">{{ __('main.create') }}</a><br>
-        </div><br>
+        </div>
     @endif
 
     <h1>{{ $path ?? __('index.page_editor') }}</h1>

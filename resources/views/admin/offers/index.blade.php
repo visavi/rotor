@@ -6,7 +6,7 @@
     @if (getUser())
         <div class="float-right">
             <a class="btn btn-success" href="/offers/create?type={{ $type }}">{{ __('main.add') }}</a><br>
-        </div><br>
+        </div>
     @endif
 
     <h1>{{ __('index.offers') }}</h1>

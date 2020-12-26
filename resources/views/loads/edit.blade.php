@@ -23,7 +23,7 @@
     <div class="p-1 bg-warning text-dark">
         <i class="fas fa-exclamation-triangle"></i> {{ __('loads.pending_down1') }}<br>
         {{ __('loads.pending_down2') }}
-    </div><br>
+    </div>
 
     <div class="section-form shadow mb-3">
         <form action="/downs/edit/{{ $down->id }}" method="post" enctype="multipart/form-data">

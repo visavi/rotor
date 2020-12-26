@@ -110,7 +110,7 @@
 
                 <button class="btn btn-primary">{{ __('main.write') }}</button>
             </form>
-        </div><br>
+        </div>
 
     @elseif (setting('bookadds'))
         <div class="section-form shadow my-3">

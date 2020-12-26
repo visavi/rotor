@@ -17,7 +17,7 @@
     @if ($notice->protect)
         <div class="p-1 bg-warning text-dark">
             <i class="fa fa-exclamation-circle"></i> {{ __('admin.notices.edit_system_template') }}
-        </div><br>
+        </div>
     @endif
 
     <span class="badge badge-info">{{ __('main.type') }}: {{ $notice->type }}</span><br>

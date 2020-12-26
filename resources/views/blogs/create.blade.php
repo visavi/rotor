@@ -59,7 +59,7 @@
 
             <button class="btn btn-primary">{{ __('blogs.add') }}</button>
         </form>
-    </div><br>
+    </div>
 
     {{ __('blogs.text_create1') }}<br><br>
 

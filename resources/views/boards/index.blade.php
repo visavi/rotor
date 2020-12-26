@@ -6,7 +6,7 @@
     @if (getUser())
         <div class="float-right">
             <a class="btn btn-success" href="/items/create?bid={{ $board->id ?? 0 }}">{{ __('main.add') }}</a><br>
-        </div><br>
+        </div>
     @endif
 
     @if ($board)

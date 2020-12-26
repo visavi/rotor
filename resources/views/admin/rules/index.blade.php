@@ -5,7 +5,7 @@
 @section('header')
     <div class="float-right">
         <a class="btn btn-success" href="/admin/rules/edit">Редактировать</a>
-    </div><br>
+    </div>
 
     <h1>{{ __('index.site_rules') }}</h1>
 @stop

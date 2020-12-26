@@ -15,11 +15,17 @@
 @section('content')
     @if ($articles->isNotEmpty())
         @foreach ($articles as $article)
-            <i class="fa fa-pencil-alt"></i>
-            <b><a href="/blogs/active/articles?user={{ $article->login }}">{{ $article->login }}</a></b> ({{ $article->cnt }} {{ __('blogs.all_articles') }} / {{ $article->count_comments }} {{ __('main.comments') }})<br>
+            <div class="section mb-3 shadow">
+                <div class="section-title">
+                    <i class="fa fa-pencil-alt"></i>
+                    <a href="/blogs/active/articles?user={{ $article->login }}">{{ $article->login }}</a>
+                </div>
+
+                {{ $article->cnt }} {{ __('blogs.all_articles') }} / {{ $article->count_comments }} {{ __('main.comments') }}
+            </div>
         @endforeach
 
-        <br>{{ __('blogs.total_authors') }}: <b>{{ $articles->total() }}</b><br>
+        {{ __('blogs.total_authors') }}: <b>{{ $articles->total() }}</b><br>
     @else
         {!! showError(__('blogs.empty_articles')) !!}
     @endif

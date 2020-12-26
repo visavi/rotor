@@ -5,7 +5,7 @@
 @section('header')
     <div class="float-right">
         <a class="btn btn-success" href="/adverts/create">{{ __('adverts.create_advert') }}</a>
-    </div><br>
+    </div>
 
     <h1>{{ __('index.advertising') }}</h1>
 @stop

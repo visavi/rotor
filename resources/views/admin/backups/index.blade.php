@@ -6,7 +6,7 @@
     @if (getUser())
         <div class="float-right">
             <a class="btn btn-success" href="/admin/backups/create">{{ __('admin.backup.create_backup') }}</a><br>
-        </div><br>
+        </div>
     @endif
 
     <h1>{{ __('index.backup') }}</h1>

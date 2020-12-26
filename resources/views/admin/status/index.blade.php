@@ -48,8 +48,7 @@
             <div class="card-footer">
                 {{ __('main.total') }}: <b>{{ $statuses->count() }}</b>
             </div>
-        </div><br>
-
+        </div>
     @else
         {!! showError(__('statuses.empty_statuses')) !!}
     @endif

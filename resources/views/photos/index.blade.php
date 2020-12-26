@@ -60,9 +60,9 @@
                     </div>
                 </div>
 
-                @include('app/_carousel', ['model' => $photo, 'path' => '/photos'])
-
                 <div class="section-content">
+                    @include('app/_carousel', ['model' => $photo, 'path' => '/photos'])
+
                     @if ($photo->text)
                         {!! bbCode($photo->text) !!}<br>
                     @endif
@@ -74,7 +74,7 @@
             </div>
         @endforeach
 
-        <br>{{ __('photos.total_photos') }}: <b>{{ $photos->total() }}</b><br>
+        {{ __('photos.total_photos') }}: <b>{{ $photos->total() }}</b><br>
     @else
         {!! showError(__('photos.empty_photos')) !!}
     @endif

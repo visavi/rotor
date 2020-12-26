@@ -5,6 +5,32 @@
 @section('description', $description)
 
 @section('header')
+    @if (isAdmin())
+        <div class="btn-group float-right">
+            <button type="button" class="btn btn-light dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <i class="fas fa-wrench"></i>
+            </button>
+            <div class="dropdown-menu">
+                @if ($topic->closed)
+                    <a class="dropdown-item" href="/admin/topics/action/{{ $topic->id }}?type=open&amp;page={{ $posts->currentPage() }}&amp;token={{ $_SESSION['token'] }}">{{ __('main.open') }}</a>
+                @else
+                    <a class="dropdown-item" href="/admin/topics/action/{{ $topic->id }}?type=closed&amp;page={{ $posts->currentPage() }}&amp;token={{ $_SESSION['token'] }}">{{ __('main.close') }}</a>
+                @endif
+
+                @if ($topic->locked)
+                    <a class="dropdown-item" href="/admin/topics/action/{{ $topic->id }}?type=unlocked&amp;page={{ $posts->currentPage() }}&amp;token={{ $_SESSION['token'] }}">{{ __('main.unlock') }}</a>
+                @else
+                    <a class="dropdown-item" href="/admin/topics/action/{{ $topic->id }}?type=locked&amp;page={{ $posts->currentPage() }}&amp;token={{ $_SESSION['token'] }}">{{ __('main.lock') }}</a>
+                @endif
+
+                <a class="dropdown-item" href="/admin/topics/edit/{{ $topic->id }}">{{ __('main.change') }}</a>
+                <a class="dropdown-item" href="/admin/topics/move/{{ $topic->id }}">{{ __('main.move') }}</a>
+                <a class="dropdown-item" href="/admin/topics/delete/{{ $topic->id }}?token={{ $_SESSION['token'] }}" onclick="return confirm('{{ __('forums.confirm_delete_topic') }}')">{{ __('main.delete') }}</a>
+                <a class="dropdown-item" href="/admin/topics/{{ $topic->id }}?page={{ $posts->currentPage() }}">{{ __('main.management') }}</a>
+            </div>
+        </div>
+    @endif
+
     <h1>{{ $topic->title }}</h1>
 @stop
 
@@ -56,27 +82,7 @@
     @if ($topic->note)
         <div class="p-1 my-1 bg-info text-white">{!! bbCode($topic->note) !!}</div>
     @endif
-
     <hr>
-
-    @if (isAdmin())
-        @if ($topic->closed)
-            <a href="/admin/topics/action/{{ $topic->id }}?type=open&amp;page={{ $posts->currentPage() }}&amp;token={{ $_SESSION['token'] }}">{{ __('main.open') }}</a> /
-        @else
-            <a href="/admin/topics/action/{{ $topic->id }}?type=closed&amp;page={{ $posts->currentPage() }}&amp;token={{ $_SESSION['token'] }}">{{ __('main.close') }}</a> /
-        @endif
-
-        @if ($topic->locked)
-            <a href="/admin/topics/action/{{ $topic->id }}?type=unlocked&amp;page={{ $posts->currentPage() }}&amp;token={{ $_SESSION['token'] }}">{{ __('main.unlock') }}</a> /
-        @else
-            <a href="/admin/topics/action/{{ $topic->id }}?type=locked&amp;page={{ $posts->currentPage() }}&amp;token={{ $_SESSION['token'] }}">{{ __('main.lock') }}</a> /
-        @endif
-
-        <a href="/admin/topics/edit/{{ $topic->id }}">{{ __('main.change') }}</a> /
-        <a href="/admin/topics/move/{{ $topic->id }}">{{ __('main.move') }}</a> /
-        <a href="/admin/topics/delete/{{ $topic->id }}?token={{ $_SESSION['token'] }}" onclick="return confirm('{{ __('forums.confirm_delete_topic') }}')">{{ __('main.delete') }}</a> /
-        <a href="/admin/topics/{{ $topic->id }}?page={{ $posts->currentPage() }}">{{ __('main.management') }}</a><br>
-    @endif
 
     @if ($vote)
         <h3>{{ $vote->title }}</h3>
@@ -235,8 +241,7 @@
 
                     <button class="btn btn-primary">{{ __('main.write') }}</button>
                 </form>
-            </div><br>
-
+            </div>
         @else
             {!! showError(__('forums.topic_closed')) !!}
         @endif

@@ -6,7 +6,7 @@
     @if (! $category->closed && getUser())
         <div class="float-right">
             <a class="btn btn-success" href="/blogs/create?cid={{ $category->id }}">{{ __('blogs.add') }}</a>
-        </div><br>
+        </div>
     @endif
 
     <h1>{{ $category->name }} <small>({{ __('blogs.all_articles') }}: {{ $category->count_articles }})</small></h1>

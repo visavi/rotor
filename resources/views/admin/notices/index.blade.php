@@ -5,7 +5,7 @@
 @section('header')
     <div class="float-right">
         <a class="btn btn-success" href="/admin/notices/create">{{ __('main.add') }}</a>
-    </div><br>
+    </div>
 
     <h1>{{ __('index.email_templates') }}</h1>
 @stop

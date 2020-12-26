@@ -5,7 +5,7 @@
 @section('header')
     <div class="float-right">
         <a class="btn btn-success" href="/admin/stickers/sticker/create">{{ __('main.upload') }}</a>
-    </div><br>
+    </div>
 
     <h1>{{ __('index.stickers') }}</h1>
 @stop

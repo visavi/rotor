@@ -7,7 +7,7 @@
     @if (getUser())
         <div class="float-right">
             <a class="btn btn-success" href="/blogs/create">{{ __('blogs.add') }}</a>
-        </div><br>
+        </div>
     @endif
 
     <h1>{{ __('blogs.articles_all') }}</h1>
@@ -28,10 +28,10 @@
         @foreach ($articles as $article)
             <div class="card mb-3">
                 <div class="card-body">
-                    <h2 class="card-title"><a href="/articles/{{ $article->id }}">{{ $article->title }}</a> <small>(Рейтинг: {!! formatNum($article->rating) !!})</small></h2>
+                    <h3 class="card-title"><a href="/articles/{{ $article->id }}">{{ $article->title }}</a> <small>(Рейтинг: {!! formatNum($article->rating) !!})</small></h3>
 
                     @if ($article->category->parent->id)
-                        <a href="/blogs/{{ $category->parent->id }}"><span class="badge badge-light">{{ $category->parent->name }}</span></a> /
+                        <a href="/blogs/{{ $article->category->parent->id }}"><span class="badge badge-light">{{ $article->category->parent->name }}</span></a> /
                     @endif
 
                     <a href="/blogs/{{ $article->category->id }}"><span class="badge badge-light">{{ $article->category->name }}</span></a>

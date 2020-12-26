@@ -24,7 +24,7 @@
     @if (! $down->active)
         <div class="p-1 bg-warning text-dark">
             <i class="fas fa-exclamation-triangle"></i> {{ __('loads.pending_down1') }}
-        </div><br>
+        </div>
     @endif
 
     @if (isAdmin('boss'))

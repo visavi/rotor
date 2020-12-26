@@ -6,7 +6,7 @@
     @if (getUser() && getUser('id') === $item->user->id)
         <div class="float-right">
             <a class="btn btn-success" href="/items/edit/{{ $item->id }}">{{ __('main.change') }}</a>
-        </div><br>
+        </div>
     @endif
 
     <h1>{{ $item->title }}</h1>

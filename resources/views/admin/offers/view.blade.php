@@ -40,14 +40,13 @@
         @if ($offer->closed)
             <span class="text-danger">{{ __('main.closed_comments') }}</span>
         @endif
-
-    </div><br>
+    </div>
 
     @if ($offer->reply)
         <div class="b"><b>{{ __('offers.official_response') }}</b></div>
         <div class="q">
             {!! bbCode($offer->reply) !!}<br>
             {!! $offer->replyUser->getProfile() !!} ({{ dateFixed($offer->updated_at) }})
-        </div><br>
+        </div>
     @endif
 @stop

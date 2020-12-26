@@ -17,7 +17,7 @@
     @if ($module && ! $module['disabled'] && isset($moduleConfig['panel']))
         <div class="float-right">
             <a class="btn btn-success" href="{{ $moduleConfig['panel'] }}">{{ __('main.management') }}</a>
-        </div><br>
+        </div>
     @endif
 
     <h1>{{ __('admin.modules.module') }} {{ $moduleConfig['name'] }}</h1>

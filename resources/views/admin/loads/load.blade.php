@@ -6,7 +6,7 @@
     @if (! $category->closed && getUser())
         <div class="float-right">
             <a class="btn btn-success" href="/downs/create?cid={{ $category->id }}">{{ __('main.add') }}</a>
-        </div><br>
+        </div>
     @endif
 
     <h1>{{ $category->name }}</h1>

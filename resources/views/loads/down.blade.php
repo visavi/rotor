@@ -32,7 +32,7 @@
             @if (getUser() && getUser('id') === $down->user_id)
                 <i class="fa fa-pencil-alt"></i> <a href="/downs/edit/{{ $down->id }}">{{ __('main.edit') }}</a>
             @endif
-        </div><br>
+        </div>
     @endif
 
     <div class="section-message">

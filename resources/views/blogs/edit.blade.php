@@ -66,7 +66,7 @@
 
             <button class="btn btn-primary">{{ __('main.change') }}</button>
         </form>
-    </div><br>
+    </div>
 
     <a href="/rules">{{ __('main.rules') }}</a> /
     <a href="/stickers">{{ __('main.stickers') }}</a> /

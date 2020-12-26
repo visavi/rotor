@@ -6,7 +6,7 @@
     @if (getUser())
         <div class="float-right">
             <a class="btn btn-success" href="/downs/create">{{ __('main.add') }}</a>
-        </div><br>
+        </div>
     @endif
 
     <h1>{{ __('index.loads') }}</h1>

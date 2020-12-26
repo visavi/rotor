@@ -41,14 +41,14 @@
                 <a class="post-rating-up{{ $offer->vote === '+' ? ' active' : '' }}" href="#" onclick="return changeRating(this);" data-id="{{ $offer->id }}" data-type="{{ $offer->getMorphClass() }}" data-vote="+" data-token="{{ $_SESSION['token'] }}"><i class="fa fa-thumbs-up"></i></a>
             @endif
         </div>
-    </div><br>
+    </div>
 
     @if ($offer->reply)
         <div class="b"><b>{{ __('offers.official_response') }}</b></div>
         <div class="q">
             {!! bbCode($offer->reply) !!}<br>
             {!! $offer->replyUser->getProfile() !!} ({{ dateFixed($offer->updated_at) }})
-        </div><br>
+        </div>
     @endif
 
     <div class="b"><i class="fa fa-comment"></i> <b>{{ __('main.last_comments') }}</b></div>
@@ -76,8 +76,7 @@
         <div class="act">
             <b><a href="/offers/comments/{{ $offer->id }}">{{ __('main.all_comments') }}</a></b> ({{ $offer->count_comments }})
             <a href="/offers/end/{{ $offer->id }}">&raquo;</a>
-        </div><br>
-
+        </div>
     @else
         {!! showError(__('main.empty_comments')) !!}
     @endif
