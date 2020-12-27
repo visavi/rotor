@@ -2,35 +2,45 @@
 
 @section('title', $offer->title)
 
+@section('header')
+    <div class="float-right">
+        @if (getUser())
+            @if (in_array($offer->status, ['wait', 'process']) && getUser('id') === $offer->user_id)
+                <a class="btn btn-success" title="{{ __('main.edit') }}" href="/offers/edit/{{ $offer->id }}">{{ __('main.change') }}</a>
+            @endif
+
+            @if (isAdmin())
+                <a class="btn btn-light" href="/admin/offers/{{ $offer->id }}"><i class="fas fa-wrench"></i></a>
+            @endif
+        @endif
+    </div>
+
+    <h1>{{ $offer->title }}</h1>
+@stop
+
 @section('breadcrumb')
     <nav>
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
             <li class="breadcrumb-item"><a href="/offers/{{ $offer->type }}">{{ __('index.offers') }}</a></li>
             <li class="breadcrumb-item active">{{ $offer->title }}</li>
-
-            @if (isAdmin('admin'))
-                <li class="breadcrumb-item"><a href="/admin/offers/{{ $offer->id }}">{{ __('main.management') }}</a></li>
-            @endif
         </ol>
     </nav>
 @stop
 
 @section('content')
-    <div class="b">
-        {!! $offer->getStatus() !!}
+    <div class="btn btn-spinner">ededed3</div>
 
-        @if (in_array($offer->status, ['wait', 'process']) && getUser() && getUser('id') === $offer->user_id)
-            <div class="float-right">
-                <a title="{{ __('main.edit') }}" href="/offers/edit/{{ $offer->id }}"><i class="fa fa-pencil-alt text-muted"></i></a>
-            </div>
-        @endif
-    </div>
-
-    <div>
-        {!! bbCode($offer->text) !!}<br><br>
+    <div class="section-content mb-3">
+        <div class="section-body">
+            {!! bbCode($offer->text) !!}
+        </div>
 
         {{ __('main.added') }}: {!! $offer->user->getProfile() !!} ({{ dateFixed($offer->created_at) }})<br>
+
+        <div class="my-3">
+            {!! $offer->getStatus() !!}
+        </div>
 
         <div class="js-rating">{{ __('main.rating') }}:
             @if (getUser() && getUser('id') !== $offer->user_id)

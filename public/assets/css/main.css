@@ -109,7 +109,11 @@
   cursor: pointer;
 }
 
-.btn-light, .badge-light, .alert-light {
+.btn-light, .badge-light {
+  border-color: #ebebeb;
+}
+
+.badge-light {
   border: 1px solid #e1e1e8;
 }
 

@@ -17,14 +17,9 @@
 @import 'component/dropdown';
 @import 'component/button';
 @import 'component/app-title';
-@import 'component/tile';
 @import 'component/custom-radio-n-checkbox';
 @import 'component/toggle-button';
-@import 'component/material-half-bg';
-@import 'component/material-loader';
-@import 'component/button-spinner';
 @import 'component/widgets';
-@import 'component/chat';
 
 @import '~@fortawesome/fontawesome-free/scss/brands';
 @import '~@fortawesome/fontawesome-free/scss/regular';
@@ -37,8 +32,3 @@
 @import 'css/prettify';
 
 @import 'css/main';
-
-// Include the following style if you need RTL support
-// Also you will need to add dir="rtl" attribute to HTML tag
-
-//@import 'component/rtl';
