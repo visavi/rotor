@@ -14,31 +14,29 @@
 @stop
 
 @section('header')
-    @if (isAdmin())
-        <div class="btn-group float-right">
-            <button type="button" class="btn btn-light dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                <i class="fas fa-wrench"></i>
-            </button>
-            <div class="dropdown-menu">
-                <a class="dropdown-item" href="/admin/photos/edit/{{ $photo->id }}">{{ __('main.edit') }}</a>
-                <a class="dropdown-item" href="/admin/photos/delete/{{ $photo->id }}?token={{ $_SESSION['token'] }}" onclick="return confirm('{{ __('photos.confirm_delete_photo') }}')">{{ __('main.delete') }}</a>
+    @if (getUser())
+        @if (isAdmin())
+            <div class="btn-group float-right">
+                <button type="button" class="btn btn-light dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <i class="fas fa-wrench"></i>
+                </button>
+                <div class="dropdown-menu">
+                    <a class="dropdown-item" href="/admin/photos/edit/{{ $photo->id }}">{{ __('main.edit') }}</a>
+                    <a class="dropdown-item" href="/admin/photos/delete/{{ $photo->id }}?token={{ $_SESSION['token'] }}" onclick="return confirm('{{ __('photos.confirm_delete_photo') }}')">{{ __('main.delete') }}</a>
+                </div>
             </div>
-        </div>
-    @endif
-
-
-    @if (getUser() && getUser('id') === $photo->user->id && ! isAdmin())
-        <div class="btn-group float-right">
-            <button type="button" class="btn btn-light dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                <i class="fas fa-wrench"></i>
-            </button>
-            <div class="dropdown-menu">
-                <a class="dropdown-item" href="/photos/edit/{{ $photo->id }}">{{ __('main.edit') }}</a>
-                <a class="dropdown-item" href="/photos/delete/{{ $photo->id }}?token={{ $_SESSION['token'] }}" onclick="return confirm('{{ __('photos.confirm_delete_photo') }}')">{{ __('main.delete') }}</a>
+        @elseif (getUser('id') === $photo->user->id)
+            <div class="btn-group float-right">
+                <button type="button" class="btn btn-light dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <i class="fas fa-wrench"></i>
+                </button>
+                <div class="dropdown-menu">
+                    <a class="dropdown-item" href="/photos/edit/{{ $photo->id }}">{{ __('main.edit') }}</a>
+                    <a class="dropdown-item" href="/photos/delete/{{ $photo->id }}?token={{ $_SESSION['token'] }}" onclick="return confirm('{{ __('photos.confirm_delete_photo') }}')">{{ __('main.delete') }}</a>
+                </div>
             </div>
-        </div>
+        @endif
     @endif
-
     <h1>{{ $photo->title }}</h1>
 @stop
 

@@ -19,8 +19,8 @@
 @section('content')
     @if ($comments->isNotEmpty())
         @foreach ($comments as $comment)
-            <div class="post">
-                <div class="b">
+            <div class="section mb-3 shadow">
+                <div class="section-title">
                     <i class="fa fa-comment"></i>
                     <b><a href="/articles/comment/{{ $comment->relate_id}}/{{ $comment->id}}">{{ $comment->title }}</a></b> ({{ $comment->count_comments }})
 
@@ -31,7 +31,7 @@
                     </div>
                 </div>
 
-                <div>
+                <div class="section-content">
                     {!! bbCode($comment->text) !!}<br>
 
                     {{ __('main.posted') }}: {!! $comment->user->getProfile() !!} <small>({{ dateFixed($comment->created_at) }})</small><br>

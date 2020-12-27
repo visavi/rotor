@@ -723,8 +723,6 @@ class ArticleController extends BaseController
             ->paginate(setting('blogpost'))
             ->appends(['sort' => $sort]);
 
-
-
         return view('blogs/top', compact('articles', 'order'));
     }
 

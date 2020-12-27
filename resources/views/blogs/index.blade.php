@@ -7,6 +7,10 @@
     @if (getUser())
         <div class="float-right">
             <a class="btn btn-success" href="/blogs/create">{{ __('blogs.add') }}</a>
+
+            @if (isAdmin())
+                <a class="btn btn-light" href="/admin/blogs"><i class="fas fa-wrench"></i></a>
+            @endif
         </div>
     @endif
 

@@ -20,7 +20,7 @@
 @stop
 
 @section('content')
-    <div class="section-form shadow cut">
+    <div class="section-form mb-3 shadow cut">
         <form action="/articles/edit/{{ $article->id }}" method="post">
             @csrf
             <div class="form-group{{ hasError('cid') }}">

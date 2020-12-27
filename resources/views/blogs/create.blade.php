@@ -13,7 +13,7 @@
 @stop
 
 @section('content')
-    <div class="section-form shadow cut">
+    <div class="section-form mb-3 shadow cut">
         <form action="/blogs/create" method="post">
             @csrf
             <div class="form-group{{ hasError('cid') }}">
@@ -61,7 +61,7 @@
         </form>
     </div>
 
-    {{ __('blogs.text_create1') }}<br><br>
+    <p class="text-muted font-italic">{{ __('blogs.text_create1') }}</p>
 
     <a href="/rules">{{ __('main.rules') }}</a> /
     <a href="/stickers">{{ __('main.stickers') }}</a> /
