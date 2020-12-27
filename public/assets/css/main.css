@@ -109,12 +109,12 @@
   cursor: pointer;
 }
 
-.btn-light, .badge-light {
-  border-color: #ebebeb;
+.badge {
+  border: 1px solid transparent;
 }
 
 .badge-light {
-  border: 1px solid #e1e1e8;
+  border: 1px solid #ebebeb;
 }
 
 textarea.form-control {

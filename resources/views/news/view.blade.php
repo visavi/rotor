@@ -38,7 +38,8 @@
         <div class="section-body">
             {{ __('main.added') }}: {!! $news->user->getProfile() !!} <small class="section-date text-muted font-italic">{{ dateFixed($news->created_at) }}</small>
 
-            <div class="js-rating">{{ __('main.rating') }}:
+            <div class="js-rating">
+                {{ __('main.rating') }}:
                 @if (getUser() && getUser('id') !== $news->user_id)
                     <a class="post-rating-down<?= $news->vote === '-' ? ' active' : '' ?>" href="#" onclick="return changeRating(this);" data-id="{{ $news->id }}" data-type="{{ $news->getMorphClass() }}" data-vote="-" data-token="{{ $_SESSION['token'] }}"><i class="fa fa-thumbs-down"></i></a>
                 @endif
@@ -93,7 +94,7 @@
         @endif
 
         @if (getUser())
-            <div class="section-form shadow">
+            <div class="section-form mb-3 shadow">
                 <form action="/news/comments/{{ $news->id }}?read=1" method="post">
                     @csrf
                     <div class="form-group{{ hasError('msg') }}">

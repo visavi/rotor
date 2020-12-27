@@ -79,7 +79,7 @@
         </form>
     </div>
 
-    @if ($posts->total() && isAdmin('boss'))
+    @if ($posts->isNotEmpty() && isAdmin('boss'))
         <i class="fa fa-times"></i> <a href="/admin/chats/clear?token={{ $_SESSION['token'] }}" onclick="return confirm('{{ __('admin.chat.confirm_clear') }}')">{{ __('admin.chat.clear') }}</a><br>
     @endif
 @stop

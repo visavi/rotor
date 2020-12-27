@@ -71,7 +71,7 @@
     {{ $comments->links() }}
 
     @if (empty($photo->closed))
-        @if (empty($comments->total()))
+        @if ($comments->isEmpty())
             {!! showError(__('main.empty_comments')) !!}
         @endif
 

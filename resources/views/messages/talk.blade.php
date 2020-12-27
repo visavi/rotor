@@ -85,7 +85,7 @@
 
     <br>{{ __('main.total') }}: <b>{{ $messages->total() }}</b><br>
 
-    @if ($messages->total())
+    @if ($messages->isNotEmpty())
         <i class="fa fa-times"></i> <a href="/messages/delete/{{ $user->id }}?token={{ $_SESSION['token'] }}" onclick="return confirm('{{ __('messages.delete_confirm') }}')">{{ __('messages.delete_talk') }}</a><br>
     @endif
 

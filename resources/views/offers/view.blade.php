@@ -29,71 +29,87 @@
 @stop
 
 @section('content')
-    <div class="btn btn-spinner">ededed3</div>
+    <div class="mb-3">
+        <div class="section-content">
+            <div class="section-message">
+                {!! bbCode($offer->text) !!}
+            </div>
+        </div>
 
-    <div class="section-content mb-3">
         <div class="section-body">
-            {!! bbCode($offer->text) !!}
-        </div>
+            {{ __('main.added') }}: {!! $offer->user->getProfile() !!} ({{ dateFixed($offer->created_at) }})<br>
 
-        {{ __('main.added') }}: {!! $offer->user->getProfile() !!} ({{ dateFixed($offer->created_at) }})<br>
+            <div class="my-3">
+                {!! $offer->getStatus() !!}
+            </div>
 
-        <div class="my-3">
-            {!! $offer->getStatus() !!}
-        </div>
-
-        <div class="js-rating">{{ __('main.rating') }}:
-            @if (getUser() && getUser('id') !== $offer->user_id)
-                <a class="post-rating-down{{ $offer->vote === '-' ? ' active' : '' }}" href="#" onclick="return changeRating(this);" data-id="{{ $offer->id }}" data-type="{{ $offer->getMorphClass() }}" data-vote="-" data-token="{{ $_SESSION['token'] }}"><i class="fa fa-thumbs-down"></i></a>
-            @endif
-            <b>{!! formatNum($offer->rating) !!}</b>
-            @if (getUser() && getUser('id') !== $offer->user_id)
-                <a class="post-rating-up{{ $offer->vote === '+' ? ' active' : '' }}" href="#" onclick="return changeRating(this);" data-id="{{ $offer->id }}" data-type="{{ $offer->getMorphClass() }}" data-vote="+" data-token="{{ $_SESSION['token'] }}"><i class="fa fa-thumbs-up"></i></a>
-            @endif
+            <div class="js-rating">
+                {{ __('main.rating') }}:
+                @if (getUser() && getUser('id') !== $offer->user_id)
+                    <a class="post-rating-down{{ $offer->vote === '-' ? ' active' : '' }}" href="#" onclick="return changeRating(this);" data-id="{{ $offer->id }}" data-type="{{ $offer->getMorphClass() }}" data-vote="-" data-token="{{ $_SESSION['token'] }}"><i class="fa fa-thumbs-down"></i></a>
+                @endif
+                <b>{!! formatNum($offer->rating) !!}</b>
+                @if (getUser() && getUser('id') !== $offer->user_id)
+                    <a class="post-rating-up{{ $offer->vote === '+' ? ' active' : '' }}" href="#" onclick="return changeRating(this);" data-id="{{ $offer->id }}" data-type="{{ $offer->getMorphClass() }}" data-vote="+" data-token="{{ $_SESSION['token'] }}"><i class="fa fa-thumbs-up"></i></a>
+                @endif
+            </div>
         </div>
     </div>
 
     @if ($offer->reply)
-        <div class="b"><b>{{ __('offers.official_response') }}</b></div>
-        <div class="q">
-            {!! bbCode($offer->reply) !!}<br>
-            {!! $offer->replyUser->getProfile() !!} ({{ dateFixed($offer->updated_at) }})
+        <div class="section mb-3 shadow">
+            <h6>{{ __('offers.official_response') }}</h6>
+            <div class="section-message">
+                {!! bbCode($offer->reply) !!}<br>
+                {!! $offer->replyUser->getProfile() !!} ({{ dateFixed($offer->updated_at) }})
+            </div>
         </div>
     @endif
 
-    <div class="b"><i class="fa fa-comment"></i> <b>{{ __('main.last_comments') }}</b></div>
-
     @if ($offer->lastComments->isNotEmpty())
-        @foreach ($offer->lastComments as $comment)
-            <div class="b">
-                <div class="img">
+        <h5><i class="fa fa-comment"></i> {{ __('main.last_comments') }}</h5>
+
+        @foreach ($offer->lastComments(5)->get() as $comment)
+            <div class="section mb-3 shadow">
+                <div class="user-avatar">
                     {!! $comment->user->getAvatar() !!}
                     {!! $comment->user->getOnline() !!}
                 </div>
 
-                <b>{!! $comment->user->getProfile() !!}</b>
-                <small>({{ dateFixed($comment->created_at) }})</small><br>
-                {!! $comment->user->getStatus() !!}
-            </div>
+                <div class="section-user d-flex align-items-center">
+                    <div class="flex-grow-1">
+                        {!! $comment->user->getProfile() !!}
 
-            <div>{!! bbCode($comment->text) !!}<br>
-                @if (isAdmin())
-                    <span class="data">({{ $comment->brow }}, {{ $comment->ip }})</span>
-                @endif
+                        <small class="section-date text-muted font-italic">{{ dateFixed($comment->created_at) }}</small><br>
+                        <small class="font-italic">{!! $comment->user->getStatus() !!}</small>
+
+                    </div>
+                </div>
+
+                <div class="section-body border-top">
+                    <div class="section-message">
+                        {!! bbCode($comment->text) !!}<br>
+                        @if (isAdmin())
+                            <div class="small text-muted font-italic mt-2">{{ $comment->brow }}, {{ $comment->ip }}</div>
+                        @endif
+                    </div>
+                </div>
             </div>
         @endforeach
 
-        <div class="act">
-            <b><a href="/offers/comments/{{ $offer->id }}">{{ __('main.all_comments') }}</a></b> ({{ $offer->count_comments }})
+        <div class="p-3 mb-3 shadow">
+            <i class="fas fa-comments"></i> <b><a href="/offers/comments/{{ $offer->id }}">{{ __('main.all_comments') }}</a></b> ({{ $offer->count_comments }})
             <a href="/offers/end/{{ $offer->id }}">&raquo;</a>
         </div>
-    @else
-        {!! showError(__('main.empty_comments')) !!}
     @endif
 
-    @if (getUser())
-        @if (! $offer->closed)
-            <div class="section-form shadow">
+    @if (! $offer->closed)
+        @if ($offer->lastComments->isEmpty())
+            {!! showError(__('main.empty_comments')) !!}
+        @endif
+
+        @if (getUser())
+            <div class="section-form mb-3 shadow">
                 <form action="/offers/comments/{{ $offer->id }}" method="post">
                     @csrf
                     <div class="form-group{{ hasError('msg') }}">

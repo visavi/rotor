@@ -62,14 +62,16 @@
                 </div>
             </div>
         @endforeach
-    @else
-        {!! showError(__('main.empty_comments')) !!}
     @endif
 
     {{ $comments->links() }}
 
     @if (getUser())
-        @if (empty($offer->closed))
+        @if (! $offer->closed)
+            @if ($comments->isEmpty())
+                {!! showError(__('main.empty_comments')) !!}
+            @endif
+
             <div class="section-form mb-3 shadow">
                 <form action="/offers/comments/{{ $offer->id }}" method="post">
                     @csrf

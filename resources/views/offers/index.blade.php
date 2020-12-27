@@ -26,16 +26,18 @@
 @stop
 
 @section('content')
-    @if ($type === 'offer')
-        <a class="btn btn-primary btn-sm" href="/offers/offer">{{ __('offers.offers') }} <span class="badge badge-light">{{ $offers->total() }}</span></a>
-        <a class="btn btn-light btn-sm" href="/offers/issue">{{ __('offers.problems') }} <span class="badge badge-light">{{ $otherCount }}</span></a>
-    @else
-        <a class="btn btn-light btn-sm" href="/offers/offer">{{ __('offers.offers') }} <span class="badge badge-light">{{ $otherCount }}</span></a>
-        <a class="btn btn-primary btn-sm" href="/offers/issue">{{ __('offers.problems') }} <span class="badge badge-light">{{ $offers->total() }}</span></a>
-    @endif
+    <div class="mb-3">
+        @if ($type === 'offer')
+            <a class="btn btn-primary btn-sm" href="/offers/offer">{{ __('offers.offers') }} <span class="badge badge-light">{{ $offers->total() }}</span></a>
+            <a class="btn btn-light btn-sm" href="/offers/issue">{{ __('offers.problems') }} <span class="badge badge-light">{{ $otherCount }}</span></a>
+        @else
+            <a class="btn btn-light btn-sm" href="/offers/offer">{{ __('offers.offers') }} <span class="badge badge-light">{{ $otherCount }}</span></a>
+            <a class="btn btn-primary btn-sm" href="/offers/issue">{{ __('offers.problems') }} <span class="badge badge-light">{{ $offers->total() }}</span></a>
+        @endif
+    </div>
 
     @if ($offers->isNotEmpty())
-        <br>{{ __('main.sort') }}:
+        {{ __('main.sort') }}:
         <?php $active = ($order === 'rating') ? 'success' : 'light'; ?>
         <a href="/offers/{{ $type }}?sort=rating" class="badge badge-{{ $active }}">{{ __('main.votes') }}</a>
 

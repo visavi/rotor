@@ -51,7 +51,7 @@
 
     <br>{{ __('main.total') }}: <b>{{ $messages->total() }}</b><br>
 
-    @if ($messages->total())
+    @if ($messages->isNotEmpty())
         <i class="fa fa-times"></i> <a href="/messages/delete/0?token={{ $_SESSION['token'] }}">{{ __('messages.delete_talk') }}</a><br>
     @endif
     <i class="fa fa-search"></i> <a href="/searchusers">{{ __('index.user_search') }}</a><br>

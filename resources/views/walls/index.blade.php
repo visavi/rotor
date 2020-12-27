@@ -2,7 +2,7 @@
 
 @section('title', __('index.wall_posts') . ' ' . $user->getName())
 
-@section('content')
+@section('breadcrumb')
     <nav>
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
@@ -10,17 +10,32 @@
             <li class="breadcrumb-item active">{{ __('index.wall_posts') }}</li>
         </ol>
     </nav>
+@endsection
 
+@section('content')
     @if ($newWall)
-        <div style="text-align:center"><b><span style="color:#ff0000">{{ __('walls.new') }}: {{ $newWall }}</span></b></div>
+        <div class="font-weight-bold text-danger text-center my-3">
+            {{ __('walls.new') }}: {{ $newWall }}
+        </div>
     @endif
 
     @if ($messages->isNotEmpty())
         @foreach ($messages as $data)
-            <div class="post">
-                <div class="b">
+            <div class="section mb-3 shadow">
+                <div class="user-avatar">
+                    {!! $data->author->getAvatar() !!}
+                    {!! $data->author->getOnline() !!}
+                </div>
+
+                <div class="section-user d-flex align-items-center">
+                    <div class="flex-grow-1">
+                        {!! $data->author->getProfile() !!}
+                        <small class="section-date text-muted font-italic">{{ dateFixed($data->created_at) }}</small><br>
+                        <small class="font-italic">{!! $data->author->getStatus() !!}</small>
+                    </div>
+
                     @if (getUser())
-                        <div class="float-right">
+                        <div class="text-right">
                             @if (getUser('id') !== $data->author_id)
                                 <a href="#" onclick="return postReply(this)" title="{{ __('main.reply') }}"><i class="fa fa-reply text-muted"></i></a>
                                 <a href="#" onclick="return postQuote(this)" title="{{ __('main.quote') }}"><i class="fa fa-quote-right text-muted"></i></a>
@@ -33,22 +48,17 @@
                             @endif
                         </div>
                     @endif
-
-                    <div class="img">
-                        {!! $data->author->getAvatar() !!}
-                        {!! $data->author->getOnline() !!}
-                    </div>
-
-                    <b>{!! $data->author->getProfile() !!}</b> <small>({{ dateFixed($data->created_at) }})</small><br>
-                    {!! $data->author->getStatus() !!}
                 </div>
-                <div class="section-message">
-                    {!! bbCode($data->text) !!}
+
+                <div class="section-body border-top">
+                    <div class="section-message">
+                        {!! bbCode($data->text) !!}
+                    </div>
                 </div>
             </div>
         @endforeach
 
-        <br>{{ __('main.total') }}: <b>{{ $messages->total() }}</b><br>
+        {{ __('main.total') }}: <b>{{ $messages->total() }}</b><br>
     @else
         {!! showError(__('walls.empty_messages')) !!}
     @endif
