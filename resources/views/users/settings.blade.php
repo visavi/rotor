@@ -6,7 +6,7 @@
     <nav>
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
-            <li class="breadcrumb-item"><a href="/users/{{ $user->getName() }}">{{ $user->login }}</a></li>
+            <li class="breadcrumb-item"><a href="/users/{{ $user->login }}">{{ $user->getName() }}</a></li>
             <li class="breadcrumb-item active">{{ __('index.my_settings') }}</li>
         </ol>
     </nav>

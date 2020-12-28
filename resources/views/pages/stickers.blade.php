@@ -14,8 +14,10 @@
 @section('content')
     @if ($categories->isNotEmpty())
         @foreach ($categories as $category)
-            <div class="bg-light p-2 mb-1 border">
-                <i class="far fa-smile"></i>  <b><a href="/stickers/{{ $category->id }}">{{ $category->name }}</a></b> ({{ $category->cnt }})
+            <div class="section mb-3 shadow">
+                <div class="section-title">
+                    <i class="far fa-smile"></i> <a href="/stickers/{{ $category->id }}">{{ $category->name }}</a> ({{ $category->cnt }})
+                </div>
             </div>
         @endforeach
     @else

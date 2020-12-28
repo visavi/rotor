@@ -15,17 +15,19 @@
 @section('content')
     @if ($votes->isNotEmpty())
         @foreach ($votes as $vote)
-            <div class="b">
-                <i class="fa fa-briefcase"></i>
-                <b><a href="/votes/history/{{ $vote->id }}">{{ $vote->title }}</a></b>
-            </div>
-            <div>
-                @if ($vote->topic->id)
-                    {{ __('forums.topic') }}: <a href="/topics/{{ $vote->topic->id }}">{{ $vote->topic->title }}</a><br>
-                @endif
+            <div class="section mb-3 shadow">
+                <div class="section-title">
+                    <i class="fa fa-briefcase"></i>
+                    <a href="/votes/history/{{ $vote->id }}">{{ $vote->title }}</a>
+                </div>
+                <div class="section-body">
+                    @if ($vote->topic->id)
+                        {{ __('forums.topic') }}: <a href="/topics/{{ $vote->topic->id }}">{{ $vote->topic->title }}</a><br>
+                    @endif
 
-                {{ __('main.created') }}: {{ dateFixed($vote->created_at) }}<br>
-                {{ __('main.votes') }}: {{ $vote->count }}<br>
+                    {{ __('main.created') }}: {{ dateFixed($vote->created_at) }}<br>
+                    {{ __('main.votes') }}: {{ $vote->count }}
+                </div>
             </div>
         @endforeach
     @else

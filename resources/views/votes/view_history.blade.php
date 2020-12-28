@@ -14,6 +14,7 @@
 @stop
 
 @section('content')
+    <div class="section mb-3 shadow">
     @foreach ($info['voted'] as $key => $data)
         <?php $proc = round(($data * 100) / $info['sum'], 1); ?>
         <?php $maxproc = round(($data * 100) / $info['max']); ?>
@@ -21,6 +22,7 @@
         <b>{{ $key }}</b> ({{ __('main.votes') }}: {{ $data }})<br>
         {!! progressBar($maxproc, $proc . '%') !!}
     @endforeach
+    </div>
 
     {{ __('votes.options') }}: <b>{{ count($info['voted']) }}</b><br>
     {{ __('votes.voted') }}: <b>{{ $vote->count }}</b><br><br>

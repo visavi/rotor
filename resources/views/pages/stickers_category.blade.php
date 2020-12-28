@@ -13,11 +13,11 @@
 @stop
 
 @section('content')
-    <div class="container">
+    <div class="container section mb-3 shadow">
         @if ($stickers->isNotEmpty())
             <div class="row">
                 @foreach ($stickers as $sticker)
-                    <div class="col">
+                    <div class="col-md-3 col-sm-6">
                         <img src="{{ $sticker['name'] }}" alt="{{ $sticker['code'] }}"><br>
                         <b>{{ $sticker['code'] }}</b>
                     </div>
@@ -28,7 +28,7 @@
         @else
             {!! showError(__('stickers.empty_stickers')) !!}
         @endif
-
-        {{ $stickers->links() }}
     </div>
+
+    {{ $stickers->links() }}
 @stop

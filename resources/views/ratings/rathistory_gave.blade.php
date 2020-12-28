@@ -24,18 +24,20 @@
 
     @if ($ratings->isNotEmpty())
         @foreach ($ratings as $data)
-            <div class="b">
-                @if ($data->vote === '-')
-                    <i class="fa fa-thumbs-down text-danger"></i>
-                @else
-                    <i class="fa fa-thumbs-up text-success"></i>
-                @endif
+            <div class="section-form mb-3 shadow">
+                <div class="section-content">
+                    @if ($data->vote === '-')
+                        <i class="fa fa-thumbs-down text-danger"></i>
+                    @else
+                        <i class="fa fa-thumbs-up text-success"></i>
+                    @endif
 
-                <b>{!! $data->recipient->getProfile() !!}</b> ({{ dateFixed($data->created_at) }})
-            </div>
-            <div>
-                {{ __('main.comment') }}:
-                {!! bbCode($data->text) !!}
+                    <b>{!! $data->recipient->getProfile() !!}</b> ({{ dateFixed($data->created_at) }})
+                </div>
+                <div class="section-message">
+                    {{ __('main.comment') }}:
+                    {!! bbCode($data->text) !!}
+                </div>
             </div>
         @endforeach
     @else

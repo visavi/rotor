@@ -24,8 +24,8 @@
 
     @if ($ratings->isNotEmpty())
         @foreach ($ratings as $data)
-            <div class="post">
-                <div class="b">
+            <div class="section-form mb-3 shadow">
+                <div class="section-content">
                     @if ($data->vote === '-')
                         <i class="fa fa-thumbs-down text-danger"></i>
                     @else
@@ -40,7 +40,7 @@
                         @endif
                     </div>
                 </div>
-                <div>
+                <div class="section-message">
                     {{ __('main.comment') }}:
                     {!! bbCode($data->text) !!}
                 </div>

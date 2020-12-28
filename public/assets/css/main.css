@@ -317,3 +317,10 @@ textarea.form-control {
 .stretched-link[aria-expanded=true] .treeview-indicator {
   transform: rotate(180deg);
 }
+
+.progress {
+  position: relative;
+  max-width: 500px;
+  height: 15px;
+  margin-bottom: 10px;
+}

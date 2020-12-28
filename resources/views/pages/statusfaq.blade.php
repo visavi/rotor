@@ -18,7 +18,6 @@
 
     @if ($statuses->isNotEmpty())
         @foreach ($statuses as $status)
-
             <i class="fa fa-user-circle"></i>
 
             @if ($status->color)

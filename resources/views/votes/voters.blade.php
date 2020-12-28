@@ -14,11 +14,15 @@
 @stop
 
 @section('content')
-    <i class="fa fa-chart-bar"></i> {{ __('main.votes') }}: {{ $vote->count }}<br><br>
+    <div class="mb-3">
+        <i class="fa fa-chart-bar"></i> {{ __('main.votes') }}: {{ $vote->count }}
+    </div>
 
     @if ($voters->isNotEmpty())
+        <div class="section mb-3 shadow">
         @foreach ($voters as $voter)
-            {!! $voter->user->getGender() !!} {!! $voter->user->getProfile() !!} ({{ dateFixed($voter->created_at) }})<br>
+            {!! $voter->user->getGender() !!} {!! $voter->user->getProfile() !!} ({{ dateFixed($voter->created_at) }})
+        </div>
         @endforeach
     @else
         {!! showError(__('votes.empty_voted')) !!}
