@@ -12,7 +12,7 @@
 @stop
 
 @section('content')
-    <div class="section-form shadow">
+    <div class="section-form mb-3 shadow">
         <form method="get" action="/searchusers/search">
 
             <div class="form-group{{ hasError('find') }}">

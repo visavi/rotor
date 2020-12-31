@@ -82,7 +82,6 @@
 
                         <small class="section-date text-muted font-italic">{{ dateFixed($comment->created_at) }}</small><br>
                         <small class="font-italic">{!! $comment->user->getStatus() !!}</small>
-
                     </div>
                 </div>
 

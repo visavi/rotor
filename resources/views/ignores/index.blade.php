@@ -16,28 +16,36 @@
     @if ($ignores->isNotEmpty())
         <form action="/ignores/delete?page={{ $ignores->currentPage() }}" method="post">
             @csrf
-            @foreach ($ignores as $data)
-                <div class="b">
-
-                    <div class="float-right">
-                        <a href="/messages/talk/{{ $data->ignoring->login }}" data-toggle="tooltip" title="{{ __('main.write') }}"><i class="fa fa-reply text-muted"></i></a>
-                        <a href="/ignores/note/{{ $data->id }}" data-toggle="tooltip" title="{{ __('main.note') }}"><i class="fa fa-sticky-note text-muted"></i></a>
-                        <input type="checkbox" name="del[]" value="{{ $data->id }}">
+            @foreach ($ignores as $ignore)
+                <div class="section mb-3 shadow">
+                    <div class="user-avatar">
+                        {!! $ignore->ignoring->getAvatar() !!}
+                        {!! $ignore->ignoring->getOnline() !!}
                     </div>
 
-                    <div class="img">
-                        {!! $data->ignoring->getAvatar() !!}
-                        {!! $data->ignoring->getOnline() !!}
+                    <div class="section-user d-flex align-items-center">
+                        <div class="flex-grow-1">
+                            {!! $ignore->ignoring->getProfile() !!}
+
+                            <small class="section-date text-muted font-italic">{{ dateFixed($ignore->created_at) }}</small><br>
+                            <small class="font-italic">{!! $ignore->ignoring->getStatus() !!}</small>
+                        </div>
+
+                        <div class="text-right">
+                            <a href="/messages/talk/{{ $ignore->ignoring->login }}" data-toggle="tooltip" title="{{ __('main.write') }}"><i class="fa fa-reply text-muted"></i></a>
+                            <a href="/ignores/note/{{ $ignore->id }}" data-toggle="tooltip" title="{{ __('main.note') }}"><i class="fa fa-sticky-note text-muted"></i></a>
+                            <input type="checkbox" name="del[]" value="{{ $ignore->id }}">
+                        </div>
                     </div>
-
-                    <b>{!! $data->ignoring->getProfile() !!}</b> <small>({{ dateFixed($data->created_at) }})</small><br>
-                    {!! $data->ignoring->getStatus() !!}
-                </div>
-
-                <div>
-                    @if ($data->text)
-                        {{ __('main.note') }}: {!! bbCode($data->text) !!}<br>
-                    @endif
+                    <div class="section-body border-top">
+                        <div class="section-message">
+                            @if ($ignore->text)
+                                {{ __('main.note') }}: {!! bbCode($ignore->text) !!}
+                            @else
+                                {{ __('main.empty_notes') }}
+                            @endif
+                        </div>
+                    </div>
                 </div>
             @endforeach
 
@@ -46,7 +54,7 @@
             </div>
         </form>
 
-        <br>{{ __('main.total') }}: <b>{{ $ignores->total() }}</b><br>
+        {{ __('main.total') }}: <b>{{ $ignores->total() }}</b><br>
     @else
         {!! showError(__('ignores.empty_list')) !!}
     @endif
@@ -63,9 +71,9 @@
 
                 <input type="text" class="form-control" id="user" name="user" maxlength="20" value="{{ getInput('user', $login) }}" placeholder="{{ __('main.user_login') }}" required>
 
-                <span class="input-group-btn">
+                <div class="input-group-append">
                     <button class="btn btn-primary">{{ __('main.add') }}</button>
-                </span>
+                </div>
             </div>
             <div class="invalid-feedback">{{ textError('user') }}</div>
         </form>

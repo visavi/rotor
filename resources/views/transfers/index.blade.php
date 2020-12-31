@@ -20,7 +20,7 @@
             <form action="/transfers/send" method="post">
                 @csrf
                 @if ($user)
-                    <i class="fa fa-dollar-sign"></i> {{ __('transfers.transfer_for') }} <b>{{ $user->getName() }}</b>:<br><br>
+                    <i class="fas fa-coins"></i> {{ __('transfers.transfer_for') }} <b>{{ $user->getName() }}</b>:<br><br>
                     <input type="hidden" name="user" value="{{ $user->login }}">
                 @else
                     <div class="form-group{{ hasError('user') }}">

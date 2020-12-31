@@ -56,6 +56,7 @@ return [
     'empty_comments'    => 'No comments yet!',
     'empty_messages'    => 'No messages yet!',
     'empty_records'     => 'No records yet!',
+    'empty_notes'       => 'No notes yet!',
     'my'                => 'My',
     'new'               => 'New',
     'all'               => 'All',

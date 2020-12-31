@@ -13,7 +13,7 @@
 @stop
 
 @section('content')
-    <div class="section-form shadow">
+    <div class="section-form mb-3 shadow">
         <form action="/admin/users/edit" method="get">
             <div class="form-inline">
                 <div class="form-group{{ hasError('user') }}">

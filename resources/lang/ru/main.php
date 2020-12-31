@@ -56,6 +56,7 @@ return [
     'empty_comments'    => 'Комментариев еще нет!',
     'empty_messages'    => 'Сообщений еще нет!',
     'empty_records'     => 'Записей еще нет!',
+    'empty_notes'       => 'Заметок еще нет!',
     'my'                => 'Мои',
     'new'               => 'Новые',
     'all'               => 'Все',

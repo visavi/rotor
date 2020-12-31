@@ -53,9 +53,9 @@
 
             <input type="text" class="form-control" name="word" placeholder="{{ __('admin.antimat.enter_word') }}" required>
 
-            <span class="input-group-btn">
+            <div class="input-group-append">
                 <button class="btn btn-primary">{{ __('main.add') }}</button>
-            </span>
+            </div>
         </div>
     </form>
 @stop
