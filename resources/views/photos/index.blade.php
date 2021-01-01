@@ -3,11 +3,15 @@
 @section('title', __('index.photos') . ' (' . __('main.page_num', ['page' => $photos->currentPage()]) .')')
 
 @section('header')
-    @if (getUser())
-        <div class="float-right">
-            <a class="btn btn-success" href="/photos/create">{{ __('main.add') }}</a><br>
-        </div>
-    @endif
+    <div class="float-right">
+        @if (getUser())
+            <a class="btn btn-success" href="/photos/create">{{ __('main.add') }}</a>
+
+            @if (isAdmin())
+                <a class="btn btn-light" href="/admin/photos?page={{ $photos->currentPage() }}"><i class="fas fa-wrench"></i></a>
+            @endif
+        @endif
+    </div>
 
     <h1>{{ __('index.photos') }}</h1>
 @stop
@@ -17,10 +21,6 @@
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
             <li class="breadcrumb-item active">{{ __('index.photos') }}</li>
-
-            @if (isAdmin())
-                <li class="breadcrumb-item"><a href="/admin/photos?page={{ $photos->currentPage() }}">{{ __('main.management') }}</a></li>
-            @endif
         </ol>
     </nav>
 @stop

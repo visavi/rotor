@@ -19,13 +19,13 @@ class NotebookController extends BaseController
     {
         parent::__construct();
 
-        if (! getUser()) {
+        if (! $user = getUser()) {
             abort(403, __('main.not_authorized'));
         }
 
         $this->note = Notebook::query()
-            ->where('user_id', getUser('id'))
-            ->firstOrNew(['user_id' => getUser('id')]);
+            ->where('user_id', $user->id)
+            ->firstOrNew(['user_id' => $user->id]);
     }
 
     /**

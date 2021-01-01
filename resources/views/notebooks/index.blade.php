@@ -13,15 +13,19 @@
 @stop
 
 @section('content')
-    {{ __('notebooks.info') }}<br><br>
+    <div class="mb-3">
+        {{ __('notebooks.info') }}
+    </div>
 
     @if ($note->text)
-        <div>{{ __('notebooks.subtitle') }}:<br>
+        <div class="mb-3">
+            {{ __('notebooks.subtitle') }}:<br>
             {!! bbCode($note->text) !!}
         </div>
-        <br>
 
-        {{ __('notebooks.last_edited') }}: {{ dateFixed($note->created_at) }}<br><br>
+        <p class="text-muted font-italic">
+            {{ __('notebooks.last_edited') }}: {{ dateFixed($note->created_at) }}
+        </p>
     @else
         {!! showError(__('notebooks.empty_note')) !!}
     @endif

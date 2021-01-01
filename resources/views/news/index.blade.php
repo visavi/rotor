@@ -3,6 +3,12 @@
 @section('title', __('index.news') . ' (' . __('main.page_num', ['page' => $news->currentPage()]) . ')')
 
 @section('header')
+    @if (isAdmin('moder'))
+        <div class="float-right">
+            <a class="btn btn-light" href="/admin/news"><i class="fas fa-wrench"></i></a>
+        </div>
+    @endif
+
     <h1>{{ __('index.news') }}</h1>
 @stop
 
@@ -11,10 +17,6 @@
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
             <li class="breadcrumb-item active">{{ __('index.news') }}</li>
-
-            @if (isAdmin('moder'))
-                <li class="breadcrumb-item"><a href="/admin/news">{{ __('main.management') }}</a></li>
-            @endif
         </ol>
     </nav>
 @stop
