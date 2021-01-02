@@ -18,7 +18,7 @@
 
     @if ($user->lastBan->id)
         {{ __('users.last_ban') }}: {{ dateFixed($user->lastBan->created_at) }}<br>
-        {{ __('users.banned') }}: <b>{!! $user->lastBan->sendUser->getProfile() !!}</b><br>
+        {{ __('users.banned') }}: {!! $user->lastBan->sendUser->getProfile() !!}<br>
         {{ __('users.term') }}: {{ formatTime($user->lastBan->term) }}<br>
         {{ __('users.reason_ban') }}: {!! bbCode($user->lastBan->reason) !!}<br>
     @endif

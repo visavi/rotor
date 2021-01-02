@@ -16,7 +16,7 @@
     @if ($users->isNotEmpty())
         @foreach ($users as $user)
             <div class="b">
-                {!! $user->getGender() !!} <b>{!! $user->getProfile() !!}</b>
+                {!! $user->getGender() !!} {!! $user->getProfile() !!}
 
                 @if ($user->lastBan->created_at)
                     ({{ dateFixed($user->lastBan->created_at) }})
@@ -27,7 +27,7 @@
                 {{ __('users.ending_ban') }}: {{ formatTime($user->timeban - SITETIME) }}<br>
 
                 @if ($user->lastBan->id)
-                    {{ __('users.banned') }}: <b>{!! $user->lastBan->sendUser->getProfile() !!}</b><br>
+                    {{ __('users.banned') }}: {!! $user->lastBan->sendUser->getProfile() !!}<br>
                     {{ __('users.reason_ban') }}: {!! bbCode($user->lastBan->reason) !!}<br>
                 @endif
 

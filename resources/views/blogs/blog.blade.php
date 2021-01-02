@@ -45,7 +45,7 @@
                         </div>
                     </div>
 
-                    <div class="float-right js-rating">
+                    <div class="text-right js-rating">
                         @if (getUser() && getUser('id') !== $article->user_id)
                             <a class="post-rating-down<?= $article->vote === '-' ? ' active' : '' ?>" href="#" onclick="return changeRating(this);" data-id="{{ $article->id }}" data-type="{{ $article->getMorphClass() }}" data-vote="-" data-token="{{ $_SESSION['token'] }}"><i class="fa fa-thumbs-down"></i></a>
                         @endif

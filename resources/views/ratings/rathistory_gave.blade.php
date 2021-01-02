@@ -32,7 +32,7 @@
                         <i class="fa fa-thumbs-up text-success"></i>
                     @endif
 
-                    <b>{!! $data->recipient->getProfile() !!}</b> ({{ dateFixed($data->created_at) }})
+                    {!! $data->recipient->getProfile() !!} ({{ dateFixed($data->created_at) }})
                 </div>
                 <div class="section-message">
                     {{ __('main.comment') }}:

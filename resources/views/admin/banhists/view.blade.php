@@ -29,7 +29,7 @@
                         {!! $data->user->getOnline() !!}
                     </div>
 
-                    <b>{!! $data->user->getProfile() !!}</b> ({{ dateFixed($data->created_at) }})
+                    {!! $data->user->getProfile() !!} ({{ dateFixed($data->created_at) }})
                 </div>
 
                 <div>

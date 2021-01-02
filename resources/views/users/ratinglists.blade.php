@@ -28,9 +28,9 @@
                     {{ $users->firstItem() + $key }}.
 
                     @if ($user === $user->login)
-                        <b>{!! $user->getProfile('#ff0000') !!}</b>
+                        {!! $user->getProfile('#ff0000') !!}
                     @else
-                        <b>{!! $user->getProfile() !!}</b>
+                        {!! $user->getProfile() !!}
                     @endif
 
                     ({{ plural($user->money, setting('moneyname')) }})<br>

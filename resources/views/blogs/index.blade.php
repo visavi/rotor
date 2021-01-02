@@ -31,12 +31,13 @@
         {{ __('main.my') }}: <a href="/blogs/active/articles">{{ __('blogs.articles') }}</a>, <a href="/blogs/active/comments">{{ __('main.comments') }}</a> /
     @endif
 
-    {{ __('main.new') }}: <a href="/articles">{{ __('blogs.articles') }}</a>, <a href="/articles/comments">{{ __('main.comments') }}</a><hr>
+    {{ __('main.new') }}: <a href="/articles">{{ __('blogs.articles') }}</a>, <a href="/articles/comments">{{ __('main.comments') }}</a>
+    <hr>
 
     @foreach ($categories as $key => $category)
         <div class="section mb-3 shadow">
             <div class="section-title">
-                <i class="fa fa-folder-open"></i> <b><a href="/blogs/{{ $category->id }}">{{ $category->name }}</a></b>
+                <i class="fa fa-folder-open"></i> <a href="/blogs/{{ $category->id }}">{{ $category->name }}</a>
 
                 @if ($category->new)
                     ({{ $category->count_articles + $category->children->sum('count_articles') }}/<span style="color:#ff0000">+{{ $category->new->count_articles }}</span>)

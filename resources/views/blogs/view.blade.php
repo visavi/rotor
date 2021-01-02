@@ -45,8 +45,8 @@
 @stop
 
 @section('content')
-    <a href="/articles/print/{{ $article->id }}">{{ __('main.print') }}</a> /
-    <a href="/articles/rss/{{ $article->id }}">{{ __('main.rss') }}</a>
+    <i class="fas fa-print"></i> <a class="mr-3" href="/articles/print/{{ $article->id }}">{{ __('main.print') }}</a>
+    <i class="fas fa-rss"></i> <a href="/articles/rss/{{ $article->id }}">{{ __('main.rss') }}</a>
     <hr>
 
     <div class="mb-3">

@@ -21,7 +21,7 @@
                         {!! $user->getOnline() !!}
                     </div>
 
-                    <b>{!! $user->getProfile() !!}</b>
+                    {!! $user->getProfile() !!}
                     ({{ $user->getLevel() }})
                 </div>
             @endforeach

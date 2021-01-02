@@ -12,44 +12,66 @@
 @stop
 
 @section('content')
-    <div class="b"><b>{{ __('index.users') }}:</b></div>
+    <div class="section mb-3 shadow">
+        <div class="section-title">
+            {{ __('index.users') }}
+        </div>
 
-    @if ($online->isNotEmpty())
+        <div class="section-body">
+            @if ($online->isNotEmpty())
+                @foreach ($online as $key => $value)
+                    {{ $comma = (empty($key)) ? '' : ', ' }}
+                    {!! $value->user->getGender() !!} {!! $value->user->getProfile() !!}
+                @endforeach
 
-        @foreach ($online as $key => $value)
-            {{ $comma = (empty($key)) ? '' : ', ' }}
-            {!! $value->user->getGender() !!} <b>{!! $value->user->getProfile() !!}</b>
-        @endforeach
+                <div class="mt-3">
+                    {{ __('main.total_users') }}: {{ $online->count() }}
+                </div>
+            @else
+                {!! showError(__('main.empty_users')) !!}
+            @endif
+        </div>
+    </div>
 
-        <br>{{ __('main.total_users') }}: {{ $online->count() }}<br><br>
-    @else
-        {!! showError(__('main.empty_users')) !!}
-    @endif
+    <div class="section mb-3 shadow">
+        <div class="section-title">
+            {{ __('users.birthdays') }}
+        </div>
 
-    <div class="b"><b>{{ __('users.birthdays') }}:</b></div>
+        <div class="section-body">
+            @if ($birthdays->isNotEmpty())
+                @foreach ($birthdays as $key => $value)
+                    {{ $comma = (empty($key)) ? '' : ', ' }}
+                    {!! $value->getGender() !!} {!! $value->getProfile() !!}
+                @endforeach
 
-    @if ($birthdays->isNotEmpty())
+                <div class="mt-3">
+                    {{ __('users.total_birthdays') }}: {{ $birthdays->count() }}
+                </div>
+            @else
+                {!! showError(__('users.empty_birthdays')) !!}
+            @endif
+        </div>
+    </div>
 
-        @foreach ($birthdays as $key => $value)
-            {{ $comma = (empty($key)) ? '' : ', ' }}
-            {!! $value->getGender() !!} <b>{!! $value->getProfile() !!}</b>
-        @endforeach
+    <div class="section mb-3 shadow">
+        <div class="section-title">
+            {{ __('users.novices') }}
+        </div>
 
-        <br>{{ __('users.total_birthdays') }}: {{ $birthdays->count() }}<br><br>
-    @else
-        {!! showError(__('users.empty_birthdays')) !!}
-    @endif
+        <div class="section-body">
+            @if ($novices->isNotEmpty())
+                @foreach ($novices as $key => $value)
+                    {{ $comma = (empty($key)) ? '' : ', ' }}
+                    {!! $value->getGender() !!} {!! $value->getProfile() !!}
+                @endforeach
 
-    <div class="b"><b>{{ __('users.novices') }}:</b></div>
-
-    @if ($novices->isNotEmpty())
-        @foreach ($novices as $key => $value)
-            {{ $comma = (empty($key)) ? '' : ', ' }}
-            {!! $value->getGender() !!} <b>{!! $value->getProfile() !!}</b>
-        @endforeach
-
-        <br>{{ __('users.total_novices') }}: {{ $novices->count() }}<br><br>
-    @else
-        {!! showError(__('users.empty_novices')) !!}
-    @endif
+                <div class="mt-3">
+                    {{ __('users.total_novices') }}: {{ $novices->count() }}
+                </div>
+            @else
+                {!! showError(__('users.empty_novices')) !!}
+            @endif
+        </div>
+    </div>
 @stop

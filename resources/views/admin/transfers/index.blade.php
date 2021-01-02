@@ -21,7 +21,7 @@
                     {!! $data->user->getOnline() !!}
                 </div>
 
-                <b>{!! $data->user->getProfile() !!}</b>
+                {!! $data->user->getProfile() !!}
 
                 <small>({{ dateFixed($data->created_at) }})</small><br>
 

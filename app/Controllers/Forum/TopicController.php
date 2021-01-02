@@ -207,6 +207,7 @@ class TopicController extends BaseController
                 }
             }
 
+            clearCache(['statForums', 'recentTopics']);
             $flood->saveState();
             sendNotify($msg, '/topics/' . $topic->id . '/' . $post->id, $topic->title);
 

@@ -28,9 +28,9 @@
                     {{ $users->firstItem() + $key }}.
 
                     @if ($user === $data->login)
-                        <b>{!! $data->getProfile('#ff0000') !!}</b>
+                        {!! $data->getProfile('#ff0000') !!}
                     @else
-                        <b>{!! $data->getProfile() !!}</b>
+                        {!! $data->getProfile() !!}
                     @endif
                     ({{ __('main.reputation') }}: {{ $data->rating }})<br>
                     {!! $data->getStatus() !!}

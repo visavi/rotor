@@ -35,20 +35,21 @@
     @if ($topics->onFirstPage() && $forum->children->isNotEmpty())
         @foreach ($forum->children as $child)
             <div class="section mb-3 shadow border-left border-info">
-                <i class="fa fa-file-alt fa-lg text-muted"></i>
-                <b><a href="/forums/{{ $child->id }}">{{ $child->title }}</a></b> ({{ $child->count_topics }}/{{ $child->count_posts }})
-
-            @if ($child->lastTopic->id)
-                <div>
-                    {{ __('forums.topic') }}: <a href="/topics/end/{{ $child->lastTopic->id }}">{{ $child->lastTopic->title }}</a><br>
-                    @if ($child->lastTopic->lastPost->id)
-                        {{ __('forums.post') }}: {{ $child->lastTopic->lastPost->user->getName() }} ({{ dateFixed($child->lastTopic->lastPost->created_at) }})
-                    @endif
+                <div class="section-title">
+                    <i class="fa fa-file-alt fa-lg text-muted"></i>
+                    <a href="/forums/{{ $child->id }}">{{ $child->title }}</a> ({{ $child->count_topics }}/{{ $child->count_posts }})
                 </div>
-            @else
-                <div>{{ __('forums.empty_topics') }}</div>
-            @endif
 
+                @if ($child->lastTopic->id)
+                    <div>
+                        {{ __('forums.topic') }}: <a href="/topics/end/{{ $child->lastTopic->id }}">{{ $child->lastTopic->title }}</a><br>
+                        @if ($child->lastTopic->lastPost->id)
+                            {{ __('forums.post') }}: {{ $child->lastTopic->lastPost->user->getName() }} ({{ dateFixed($child->lastTopic->lastPost->created_at) }})
+                        @endif
+                    </div>
+                @else
+                    <div>{{ __('forums.empty_topics') }}</div>
+                @endif
             </div>
         @endforeach
         <hr>

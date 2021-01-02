@@ -125,7 +125,7 @@
                             {!! $data->user->getOnline() !!}
                         </div>
 
-                        <b>{!! $data->user->getProfile() !!}</b> <small>({{ dateFixed($data->created_at) }})</small><br>
+                        {!! $data->user->getProfile() !!} <small>({{ dateFixed($data->created_at) }})</small><br>
                         {!! $data->user->getStatus() !!}
                     </div>
 

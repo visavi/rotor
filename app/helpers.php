@@ -511,7 +511,7 @@ function statsPhotos()
 {
     return Cache::remember('statPhotos', 900, static function () {
         $stat     = Photo::query()->count();
-        $totalNew = Photo::query()->where('created_at', '>', strtotime('-3 day', SITETIME))->count();
+        $totalNew = Photo::query()->where('created_at', '>', strtotime('-1 day', SITETIME))->count();
 
         return formatShortNum($stat) . ($totalNew  ? '/+' . $totalNew : '');
     });
@@ -525,7 +525,13 @@ function statsPhotos()
 function statsNews()
 {
     return Cache::remember('statNews', 300, static function () {
-        return formatShortNum(News::query()->count());
+        $total = News::query()->count();
+
+        $totalNew = News::query()
+            ->where('created_at', '>', strtotime('-1 day', SITETIME))
+            ->count();
+
+        return formatShortNum($total) . ($totalNew  ? '/+' . $totalNew : '');
     });
 }
 
@@ -627,11 +633,11 @@ function photoNavigation(int $id)
  *
  * @return string количество статей
  */
-function statsBlog()
+function statsBlog(): string
 {
     return Cache::remember('statArticles', 900, static function () {
         $stat     = Article::query()->count();
-        $totalNew = Article::query()->where('created_at', '>', strtotime('-3 day', SITETIME))->count();
+        $totalNew = Article::query()->where('created_at', '>', strtotime('-1 day', SITETIME))->count();
 
         return formatShortNum($stat) . ($totalNew  ? '/+' . $totalNew : '');
     });
@@ -642,25 +648,35 @@ function statsBlog()
  *
  * @return string количество тем и сообщений
  */
-function statsForum()
+function statsForum(): string
 {
     return Cache::remember('statForums', 600, static function () {
         $topics = Topic::query()->count();
         $posts  = Post::query()->count();
 
-        return formatShortNum($topics) . '/' . formatShortNum($posts);
+        $totalNew = Post::query()
+            ->where('created_at', '>', strtotime('-1 day', SITETIME))
+            ->count();
+
+        return formatShortNum($topics) . '/' . formatShortNum($posts) . ($totalNew  ? '/+' . $totalNew : '');
     });
 }
 
 /**
  * Возвращает количество сообщений в гостевой книге
  *
- * @return int количество сообщений
+ * @return string количество сообщений
  */
-function statsGuestbook()
+function statsGuestbook(): string
 {
     return Cache::remember('statGuestbook', 600, static function () {
-        return formatShortNum(Guestbook::query()->count());
+        $total = Guestbook::query()->count();
+
+        $totalNew = Guestbook::query()
+            ->where('created_at', '>', strtotime('-1 day', SITETIME))
+            ->count();
+
+        return formatShortNum($total) . ($totalNew  ? '/+' . $totalNew : '');
     });
 }
 
@@ -669,9 +685,17 @@ function statsGuestbook()
  *
  * @return int количество сообщений
  */
-function statsChat()
+function statsChat(): string
 {
-    return Chat::query()->count();
+    return Cache::remember('statChat', 3600, static function () {
+        $total = Chat::query()->count();
+
+        $totalNew = Chat::query()
+            ->where('created_at', '>', strtotime('-1 day', SITETIME))
+            ->count();
+
+        return formatShortNum($total) . ($totalNew  ? '/+' . $totalNew : '');
+    });
 }
 
 /**
@@ -689,13 +713,13 @@ function statsNewChat()
  *
  * @return string количество файлов
  */
-function statsLoad()
+function statsLoad(): string
 {
     return Cache::remember('statLoads', 900, static function () {
         $totalLoads = Load::query()->sum('count_downs');
 
         $totalNew = Down::query()->where('active', 1)
-            ->where('created_at', '>', strtotime('-3 day', SITETIME))
+            ->where('created_at', '>', strtotime('-1 day', SITETIME))
             ->count();
 
         return formatShortNum($totalLoads) . ($totalNew ? '/+' . $totalNew : '');
@@ -705,7 +729,7 @@ function statsLoad()
 /**
  * Возвращает количество новых файлов
  *
- * @return string количество файлов
+ * @return int количество файлов
  */
 function statsNewLoad()
 {
@@ -717,11 +741,11 @@ function statsNewLoad()
  *
  * @return string количество статей
  */
-function statsBoard()
+function statsBoard(): string
 {
     return Cache::remember('statBoards', 900, static function () {
         $stat      = formatShortNum(Item::query()->where('expires_at', '>', SITETIME)->count());
-        $totalNew  = Item::query()->where('updated_at', '>', strtotime('-3 day', SITETIME))->count();
+        $totalNew  = Item::query()->where('updated_at', '>', strtotime('-1 day', SITETIME))->count();
 
         return formatShortNum($stat) . ($totalNew  ? '/+' . $totalNew : '');
     });
@@ -1264,12 +1288,12 @@ function formatNum(int $num)
  *
  * @param int $num
  *
- * @return bool|string
+ * @return string
  */
 function formatShortNum(int $num)
 {
     if (! is_numeric($num)) {
-        return false;
+        return '0b';
     }
 
     if ($num > 1000000000000) {

@@ -23,7 +23,7 @@
                         {!! $user->getOnline() !!}
                     </div>
 
-                    <b>{!! $user->getProfile() !!}</b>
+                    {!! $user->getProfile() !!}
                     ({{ $user->getLevel() }})<br>
 
                     @if (isAdmin('boss'))

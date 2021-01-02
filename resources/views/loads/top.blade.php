@@ -32,17 +32,26 @@
         @foreach ($downs as $data)
             <?php $rating = $data->rated ? round($data->rating / $data->rated, 1) : 0; ?>
 
-            <div class="b">
-                <i class="fa fa-file"></i>
-                <b><a href="/downs/{{ $data->id }}">{{ $data->title }}</a></b> ({{ $data->count_comments }})
-            </div>
+            <div class="section mb-3 shadow">
+                <div class="section-header d-flex align-items-center">
+                    <div class="flex-grow-1">
+                        <div class="section-title">
+                            <i class="fa fa-file"></i>
+                            <a href="/downs/{{ $data->id }}">{{ $data->title }}</a>
+                        </div>
+                    </div>
 
-            <div>
-                {{ __('loads.load') }}: <a href="/loads/{{ $data->category->id }}">{{ $data->category->name }}</a><br>
-                {{ __('main.rating') }}: {{ $rating }}<br>
-                {{ __('main.downloads') }}: {{ $data->loads }}<br>
-                <a href="/downs/comments/{{ $data->id }}">{{ __('main.comments') }}</a> ({{ $data->count_comments }})
-                <a href="/downs/end/{{ $data->id }}">&raquo;</a>
+                    <div class="text-right js-rating">
+                        <b>{!! formatNum($rating) !!}</b>
+                    </div>
+                </div>
+
+                <div class="section-content">
+                    {{ __('loads.load') }}: <a href="/loads/{{ $data->category->id }}">{{ $data->category->name }}</a><br>
+                    {{ __('main.downloads') }}: {{ $data->loads }}<br>
+                    <a href="/downs/comments/{{ $data->id }}">{{ __('main.comments') }}</a> ({{ $data->count_comments }})
+                    <a href="/downs/end/{{ $data->id }}">&raquo;</a>
+                </div>
             </div>
         @endforeach
     @else

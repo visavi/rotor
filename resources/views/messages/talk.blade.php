@@ -32,7 +32,7 @@
 
                 <div class="section-user d-flex align-items-center">
                     <div class="flex-grow-1">
-                        <b>{!! $author->getProfile() !!}</b>
+                        {!! $author->getProfile() !!}
 
                         @unless ($data->reading)
                             <span class="badge badge-info">{{ __('messages.new') }}</span>

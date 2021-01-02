@@ -36,7 +36,7 @@
                     <div class="flex-grow-1">
                         @if ($record->relate)
                             @if ($user)
-                                <b>{!! $user->getProfile() !!}</b>
+                                {!! $user->getProfile() !!}
                             @else
                                 <b>{{ setting('guestsuser') }}</b>
                             @endif

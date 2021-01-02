@@ -31,7 +31,7 @@
                 <div class="section-user d-flex align-items-center">
                     <div class="flex-grow-1">
                         @if ($data->author_id)
-                            <b>{!! $data->author->getProfile() !!}</b>
+                            {!! $data->author->getProfile() !!}
                         @else
                             <b>{{ __('messages.system') }}</b>
                         @endif
