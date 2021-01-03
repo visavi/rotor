@@ -5,6 +5,7 @@
 @section('header')
     <div class="float-right">
         <a class="btn btn-success" href="/forums/create?fid={{ $forum->id }}">{{ __('forums.create_topic') }}</a>
+        <a class="btn btn-light" href="/forums/{{ $forum->id  }}?page={{ $topics->currentPage() }}"><i class="fas fa-wrench"></i></a>
     </div>
 
     <h1>{{ $forum->title }}</h1>
@@ -22,7 +23,6 @@
             @endif
 
             <li class="breadcrumb-item active">{{ $forum->title }}</li>
-            <li class="breadcrumb-item"><a href="/forums/{{ $forum->id  }}?page={{ $topics->currentPage() }}">{{ __('main.review') }}</a></li>
         </ol>
     </nav>
 @stop

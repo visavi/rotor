@@ -3,11 +3,15 @@
 @section('title', __('index.forums'))
 
 @section('header')
-    @if (getUser())
-        <div class="float-right">
+    <div class="float-right">
+        @if (getUser())
             <a class="btn btn-success" href="/forums/create">{{ __('forums.create_topic') }}</a>
-        </div>
-    @endif
+
+            @if (isAdmin())
+                <a class="btn btn-light" href="/admin/forums"><i class="fas fa-wrench"></i></a>
+            @endif
+        @endif
+    </div>
 
     <h1>{{ __('index.forums') }}</h1>
 @stop
@@ -71,7 +75,7 @@
                 <div class="section-body border-top">
                     @if ($forum->lastTopic->lastPost->id)
                         {{ __('forums.topic') }}: <a href="/topics/end/{{ $forum->lastTopic->id }}">{{ $forum->lastTopic->title }}</a>
-                        <br/>
+                        <br>
                         {{ __('forums.post') }}: {{ $forum->lastTopic->lastPost->user->getName() }} ({{ dateFixed($forum->lastTopic->lastPost->created_at) }})
                     @else
                         {{ __('forums.empty_topics') }}
@@ -87,5 +91,5 @@
     <a href="/forums/top/topics">{{ __('forums.top_topics') }}</a> /
     <a href="/forums/top/posts">{{ __('forums.top_posts') }}</a> /
     <a href="/forums/search">{{ __('main.search') }}</a> /
-    <a href="/forums/rss">{{ __('main.rss') }}</a><br/>
+    <a href="/forums/rss">{{ __('main.rss') }}</a><br>
 @stop

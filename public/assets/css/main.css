@@ -197,11 +197,15 @@ textarea.form-control {
 }
 
 .spoiler-text {
-  padding: 9px 14px;
+  padding: 10px 15px;
   margin: 5px 0;
   background-color: #f7f7f9;
-  border: 1px solid #e1e1e8;
-  border-radius: 4px;
+}
+
+.hidden-text {
+  padding: 10px 15px;
+  margin: 5px 0;
+  background-color: #f7f7f9;
 }
 
 .post-rating-up.active {

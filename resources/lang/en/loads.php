@@ -4,6 +4,7 @@ return [
     'down_title'             => 'Title',
     'down_text'              => 'Description',
     'load'                   => 'Section',
+    'loads_list'             => 'List of sections',
     'downs'                  => 'Files',
     'top_downs'              => 'Top Files',
     'empty_loads'            => 'Download sections not yet created!',
@@ -71,6 +72,6 @@ return [
     'load_has_downs'           => 'There are downloads in this section!',
     'load_success_deleted'     => 'Section deleted successfully!',
     'down_success_deleted'     => 'Download successfully deleted!',
-    'down_success_published'   => 'Ad successfully posted!',
-    'down_success_unpublished' => 'Ad successfully removed from publication!',
+    'down_success_published'   => 'Download successfully posted!',
+    'down_success_unpublished' => 'Download successfully removed from publication!',
 ];

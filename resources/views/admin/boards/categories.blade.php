@@ -36,7 +36,7 @@
 
                     <a href="/admin/boards/edit/{{ $child->id }}"><i class="fa fa-pencil-alt"></i></a>
                     <a href="/admin/boards/delete/{{ $child->id }}?token={{ $_SESSION['token'] }}" onclick="return confirm('{{ __('boards.confirm_delete_category') }}')"><i class="fa fa-times"></i></a>
-                    <br/>
+                    <br>
                 @endforeach
             @endif
         </div>

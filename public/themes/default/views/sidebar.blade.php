@@ -98,6 +98,20 @@
                 <li><a class="treeview-item{{ request()->is('blogs/top') ? ' active' : '' }}" href="/blogs/top"><i class="icon fas fa-circle fa-xs"></i> {{ __('blogs.top_articles') }}</a></li>
             </ul>
         </li>
+
+        <li class="treeview{{ request()->is('loads*', 'downs*') ? ' is-expanded' : '' }}">
+            <a class="app-menu__item" href="#" data-toggle="treeview">
+                <i class="app-menu__icon far fa-sticky-note"></i>
+                <span class="app-menu__label">{{ __('index.loads') }}</span>
+                <i class="treeview-indicator fa fa-angle-down"></i>
+            </a>
+            <ul class="treeview-menu">
+                <li><a class="treeview-item{{ request()->is('loads') ? ' active' : '' }}" href="/loads"><i class="icon fas fa-circle fa-xs"></i> {{ __('loads.loads_list') }}</a></li>
+                <li><a class="treeview-item{{ request()->is('downs') ? ' active' : '' }}" href="/downs"><i class="icon fas fa-circle fa-xs"></i> {{ __('loads.new_downs') }}</a></li>
+                <li><a class="treeview-item{{ request()->is('downs/comments') ? ' active' : '' }}" href="/downs/comments"><i class="icon fas fa-circle fa-xs"></i> {{ __('loads.new_comments') }}</a></li>
+                <li><a class="treeview-item{{ request()->is('loads/top') ? ' active' : '' }}" href="/loads/top"><i class="icon fas fa-circle fa-xs"></i> {{ __('loads.top_downs') }}</a></li>
+            </ul>
+        </li>
     </ul>
 
     <ul class="app-menu app-sidebar__footer">

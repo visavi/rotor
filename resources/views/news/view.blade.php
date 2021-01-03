@@ -10,13 +10,26 @@
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
             <li class="breadcrumb-item"><a href="/news">{{ __('index.news') }}</a></li>
             <li class="breadcrumb-item active">{{ $news->title }}</li>
-
-            @if (isAdmin())
-                <li class="breadcrumb-item"><a href="/admin/news/edit/{{ $news->id }}">{{ __('main.edit') }}</a></li>
-                <li class="breadcrumb-item"><a href="/admin/news/delete/{{ $news->id }}?token={{ $_SESSION['token'] }}" onclick="return confirm('{{ __('news.confirm_delete') }}')">{{ __('main.delete') }}</a></li>
-            @endif
         </ol>
     </nav>
+@stop
+
+@section('header')
+    @if (isAdmin())
+        <div class="float-right">
+            <div class="btn-group">
+                <button type="button" class="btn btn-light dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <i class="fas fa-wrench"></i>
+                </button>
+                <div class="dropdown-menu">
+                    <a class="dropdown-item" href="/admin/news/edit/{{ $news->id }}">{{ __('main.edit') }}</a>
+                    <a class="dropdown-item" href="/admin/news/delete/{{ $news->id }}?token={{ $_SESSION['token'] }}" onclick="return confirm('{{ __('news.confirm_delete') }}')">{{ __('main.delete') }}</a>
+                </div>
+            </div>
+        </div>
+    @endif
+
+    <h1>{{ $news->title }}</h1>
 @stop
 
 @section('content')

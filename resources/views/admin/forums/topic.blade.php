@@ -134,7 +134,7 @@
                     </div>
 
                     @if ($data->files->isNotEmpty())
-                        <div class="hiding">
+                        <div class="hidden-text">
                             <i class="fa fa-paperclip"></i> <b>{{ __('main.attached_files') }}:</b><br>
                             @foreach ($data->files as $file)
                                 <?php $ext = getExtension($file->hash); ?>

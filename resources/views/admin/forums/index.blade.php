@@ -8,52 +8,61 @@
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
             <li class="breadcrumb-item"><a href="/admin">{{ __('index.panel') }}</a></li>
             <li class="breadcrumb-item active">{{ __('index.forums') }}</li>
-            <li class="breadcrumb-item"><a href="/forums">{{ __('main.review') }}</a></li>
         </ol>
     </nav>
+@stop
+
+@section('header')
+    <div class="float-right">
+        <a class="btn btn-light" href="/forums"><i class="fas fa-eye"></i></a>
+    </div>
+
+    <h1>{{ __('index.forums') }}</h1>
 @stop
 
 @section('content')
     @if ($forums->isNotEmpty())
         @foreach ($forums as $forum)
-            <div class="b">
-                <i class="fa fa-file-alt fa-lg text-muted"></i>
-                <b><a href="/admin/forums/{{ $forum->id }}">{{ $forum->title }}</a></b>
-                ({{ $forum->count_topics }}/{{ $forum->count_posts }})
+            <div class="section mb-3 shadow">
+                <div class="section-title">
+                    <i class="fa fa-file-alt fa-lg text-muted"></i>
+                    <a href="/admin/forums/{{ $forum->id }}">{{ $forum->title }}</a>
+                    ({{ $forum->count_topics }}/{{ $forum->count_posts }})
 
-                @if ($forum->description)
-                    <p><small>{{ $forum->description }}</small></p>
-                @endif
+                    @if (isAdmin('boss'))
+                        <div class="float-right">
+                            <a href="/admin/forums/edit/{{ $forum->id }}"><i class="fa fa-pencil-alt"></i></a>
+                            <a href="/admin/forums/delete/{{ $forum->id }}?token={{ $_SESSION['token'] }}" onclick="return confirm('{{ __('forums.confirm_delete_forum') }}')"><i class="fa fa-times"></i></a>
+                        </div>
+                    @endif
 
-                @if (isAdmin('boss'))
-                    <div class="float-right">
-                        <a href="/admin/forums/edit/{{ $forum->id }}"><i class="fa fa-pencil-alt"></i></a>
-                        <a href="/admin/forums/delete/{{ $forum->id }}?token={{ $_SESSION['token'] }}" onclick="return confirm('{{ __('forums.confirm_delete_forum') }}')"><i class="fa fa-times"></i></a>
-                    </div>
-                @endif
-            </div>
+                    @if ($forum->description)
+                        <div class="small font-italic">{{ $forum->description }}</div>
+                    @endif
+                </div>
 
-            <div>
-                @if ($forum->children->isNotEmpty())
-                    @foreach ($forum->children as $child)
-                        <i class="fa fa-copy text-muted"></i> <b><a href="/admin/forums/{{ $child->id }}">{{ $child->title }}</a></b>
-                        ({{ $child->count_topics }}/{{ $child->count_posts }})
+                <div class="section-content">
+                    @if ($forum->children->isNotEmpty())
+                        @foreach ($forum->children as $child)
+                            <i class="fa fa-copy text-muted"></i> <b><a href="/admin/forums/{{ $child->id }}">{{ $child->title }}</a></b>
+                            ({{ $child->count_topics }}/{{ $child->count_posts }})
 
-                        @if (isAdmin('boss'))
-                            <a href="/admin/forums/edit/{{ $child->id }}"><i class="fa fa-pencil-alt"></i></a>
-                            <a href="/admin/forums/delete/{{ $child->id }}?token={{ $_SESSION['token'] }}" onclick="return confirm('{{ __('forums.confirm_delete_forum') }}')"><i class="fa fa-times"></i></a>
-                        @endif
-                        <br/>
-                    @endforeach
-                @endif
+                            @if (isAdmin('boss'))
+                                <a href="/admin/forums/edit/{{ $child->id }}"><i class="fa fa-pencil-alt"></i></a>
+                                <a href="/admin/forums/delete/{{ $child->id }}?token={{ $_SESSION['token'] }}" onclick="return confirm('{{ __('forums.confirm_delete_forum') }}')"><i class="fa fa-times"></i></a>
+                            @endif
+                            <br>
+                        @endforeach
+                    @endif
 
-                @if ($forum->lastTopic->lastPost->id)
-                        {{ __('forums.topic') }}: <a href="/admin/topics/end/{{ $forum->lastTopic->id }}">{{ $forum->lastTopic->title }}</a>
-                    <br/>
-                        {{ __('forums.post') }}: {{ $forum->lastTopic->lastPost->user->getName() }} ({{ dateFixed($forum->lastTopic->lastPost->created_at) }})
-                @else
-                    {{ __('forums.empty_posts') }}
-                @endif
+                    @if ($forum->lastTopic->lastPost->id)
+                            {{ __('forums.topic') }}: <a href="/admin/topics/end/{{ $forum->lastTopic->id }}">{{ $forum->lastTopic->title }}</a>
+                        <br>
+                            {{ __('forums.post') }}: {{ $forum->lastTopic->lastPost->user->getName() }} ({{ dateFixed($forum->lastTopic->lastPost->created_at) }})
+                    @else
+                        {{ __('forums.empty_posts') }}
+                    @endif
+                </div>
             </div>
         @endforeach
     @else

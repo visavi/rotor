@@ -4,6 +4,7 @@ return [
     'down_title'             => 'Название',
     'down_text'              => 'Описание',
     'load'                   => 'Раздел',
+    'loads_list'             => 'Список разделов',
     'downs'                  => 'Файлы',
     'top_downs'              => 'Топ файлов',
     'empty_loads'            => 'Разделы загрузок еще не созданы!',
@@ -71,6 +72,6 @@ return [
     'load_has_downs'           => 'В данном разделе имеются загрузки!',
     'load_success_deleted'     => 'Раздел успешно удален!',
     'down_success_deleted'     => 'Загрузка успешно удалена!',
-    'down_success_published'   => 'Объявление успешно опубликовано!',
-    'down_success_unpublished' => 'Объявление успешно снято с публикации!',
+    'down_success_published'   => 'Загрузка успешно опубликована!',
+    'down_success_unpublished' => 'Загрузка успешно снята с публикации!',
 ];
