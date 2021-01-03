@@ -21,10 +21,13 @@
 @stop
 
 @section('content')
-    {{ __('loads.file_size') }}: {{ formatSize($document->getSize()) }}<hr>
+    {{ __('loads.file_size') }}: {{ formatSize($document->getSize()) }}
+    <hr>
 
     @if ($content)
-        <pre class="prettyprint linenums">{{ $content }}</pre><br>
+        <div class="mb-3">
+            <pre class="prettyprint linenums">{{ $content }}</pre>
+        </div>
     @else
         {!! showError(__('loads.empty_file')) !!}
     @endif

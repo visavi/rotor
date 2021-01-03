@@ -23,21 +23,33 @@
 
         <?php $type = ($active === 0) ? 'success' : 'light'; ?>
         <a href="/downs/active/files?active=0" class="badge badge-{{ $type }}">{{ __('loads.pending') }}</a>
+        <hr>
     @endif
 
     @if ($downs->isNotEmpty())
         @foreach ($downs as $down)
             <?php $rating = $down->rated ? round($down->rating / $down->rated, 1) : 0; ?>
 
-            <div class="b">
-                <i class="fa fa-file"></i>
-                <b><a href="/downs/{{ $down->id }}">{{ $down->title }}</a></b> ({{ $down->count_comments }})
-            </div>
-            <div>
-                {{ __('loads.load') }}: <a href="/loads/{{ $down->category->id }}">{{ $down->category->name }}</a><br>
-                {{ __('main.rating') }}: {{ $rating }}<br>
-                {{ __('main.downloads') }}: {{ $down->loads }}<br>
-                {{ __('main.author') }}: {!! $down->user->getProfile() !!} ({{ dateFixed($down->created_at) }})
+            <div class="section mb-3 shadow">
+                <div class="section-header d-flex align-items-center">
+                    <div class="flex-grow-1">
+                        <div class="section-title">
+                            <i class="fa fa-file"></i>
+                            <a href="/downs/{{ $down->id }}">{{ $down->title }}</a>
+                        </div>
+                    </div>
+
+                    <div class="text-right js-rating">
+                        <b>{!! formatNum($rating) !!}</b>
+                    </div>
+                </div>
+
+                <div class="section-content">
+                    {{ __('loads.load') }}: <a href="/loads/{{ $down->category->id }}">{{ $down->category->name }}</a><br>
+                    {{ __('main.downloads') }}: {{ $down->loads }}<br>
+                    {{ __('main.author') }}: {!! $down->user->getProfile() !!}
+                    <small>({{ dateFixed($down->created_at) }})</small>
+                </div>
             </div>
         @endforeach
     @else

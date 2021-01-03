@@ -22,7 +22,9 @@
             <div>
                 {{ __('admin.logs.page') }}: {{ $log->request }}<br>
                 {{ __('admin.logs.referer') }}: {{ $log->referer }}<br>
-                <small><span class="data">({{ $log->brow }}, {{ $log->ip }})</span></small>
+                <div class="small text-muted font-italic mt-2">
+                    {{ $log->brow }}, {{ $log->ip }}
+                </div>
             </div>
         @endforeach
 

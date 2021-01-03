@@ -19,24 +19,27 @@
 @section('content')
     @if ($comments->isNotEmpty())
         @foreach ($comments as $data)
-            <div class="post">
-                <div class="b">
+            <div class="section mb-3 shadow">
+                <div class="section-title">
                     <i class="fa fa-comment"></i>
-                    <b><a href="/downs/comment/{{ $data->relate_id }}/{{ $data->id }}">{{ $data->title }}</a></b> ({{ $data->count_comments }})
+                    <a href="/downs/comment/{{ $data->relate_id }}/{{ $data->id }}">{{ $data->title }}</a> ({{ $data->count_comments }})
 
-                    <div class="float-right">
-                        @if (isAdmin())
+                    @if (isAdmin())
+                        <div class="float-right">
                             <a href="#" onclick="return deleteComment(this)" data-rid="{{ $data->relate_id }}" data-id="{{ $data->id }}" data-type="{{ $data->relate->getMorphClass() }}" data-token="{{ $_SESSION['token'] }}" data-toggle="tooltip" title="{{ __('main.delete') }}"><i class="fa fa-times text-muted"></i></a>
-                        @endif
-                    </div>
+                        </div>
+                    @endif
                 </div>
 
-                <div>
+                <div class="section-content">
                     {!! bbCode($data->text) !!}<br>
 
-                    {{ __('main.posted') }}: {!! $data->user->getProfile() !!} <small>({{ dateFixed($data->created_at) }})</small><br>
+                    {{ __('main.posted') }}: {!! $data->user->getProfile() !!}
+                    <small>({{ dateFixed($data->created_at) }})</small><br>
                     @if (isAdmin())
-                        <span class="data">({{ $data->brow }}, {{ $data->ip }})</span>
+                        <div class="small text-muted font-italic mt-2">
+                            {{ $data->brow }}, {{ $data->ip }}
+                        </div>
                     @endif
                 </div>
             </div>

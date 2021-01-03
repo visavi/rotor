@@ -20,28 +20,31 @@
 @stop
 
 @section('content')
-    {{ __('main.total') }}: {{ $documents->total() }}<hr>
+    {{ __('main.total') }}: {{ $documents->total() }}
+    <hr>
 
     @if ($documents->isNotEmpty())
-        @foreach ($documents as $key => $document)
+        <div class="mb-3">
+            @foreach ($documents as $key => $document)
 
-            @if ($document->isFolder())
-                <i class="fa fa-folder-open"></i>
-                <b>{{ __('loads.directory') }} {{ rtrim($document->getName(), '/') }}</b><br>
-            @else
-                <?php $ext = getExtension($document->getName()) ?>
-
-                {!! icons($ext) !!}
-
-                @if (in_array($ext, $viewExt, true))
-                    <a href="/downs/zip/{{ $file->id }}/{{ $key }}">{{ $document->getName() }}</a>
+                @if ($document->isFolder())
+                    <i class="fa fa-folder-open"></i>
+                    <b>{{ __('loads.directory') }} {{ rtrim($document->getName(), '/') }}</b><br>
                 @else
-                    {{ $document->getName() }}
-                @endif
+                    <?php $ext = getExtension($document->getName()) ?>
 
-                ({{ formatSize($document->getSize()) }})<br>
-            @endif
-        @endforeach
+                    {!! icons($ext) !!}
+
+                    @if (in_array($ext, $viewExt, true))
+                        <a href="/downs/zip/{{ $file->id }}/{{ $key }}">{{ $document->getName() }}</a>
+                    @else
+                        {{ $document->getName() }}
+                    @endif
+
+                    ({{ formatSize($document->getSize()) }})<br>
+                @endif
+            @endforeach
+        </div>
     @else
         {!! showError(__('loads.empty_archive')) !!}
     @endif

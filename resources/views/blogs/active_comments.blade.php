@@ -22,7 +22,7 @@
             <div class="section mb-3 shadow">
                 <div class="section-title">
                     <i class="fa fa-comment"></i>
-                    <b><a href="/articles/comment/{{ $comment->relate_id}}/{{ $comment->id}}">{{ $comment->title }}</a></b> ({{ $comment->count_comments }})
+                    <a href="/articles/comment/{{ $comment->relate_id}}/{{ $comment->id}}">{{ $comment->title }}</a> ({{ $comment->count_comments }})
 
                     <div class="float-right">
                         @if (isAdmin())
@@ -36,7 +36,9 @@
 
                     {{ __('main.posted') }}: {!! $comment->user->getProfile() !!} <small>({{ dateFixed($comment->created_at) }})</small><br>
                     @if (isAdmin())
-                        <span class="data">({{ $comment->brow }}, {{ $comment->ip }})</span>
+                        <div class="small text-muted font-italic mt-2">
+                            {{ $comment->brow }}, {{ $comment->ip }}
+                        </div>
                     @endif
                 </div>
             </div>

@@ -12,7 +12,7 @@
 @stop
 
 @section('content')
-    <div class="section-form shadow">
+    <div class="section-form mb-3 shadow">
         <form method="post" action="/recovery">
 
             <div class="form-group{{ hasError('user') }}">

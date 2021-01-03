@@ -15,14 +15,18 @@
     @if ($users->isNotEmpty())
         <div class="mb-3">
             @foreach ($users as $user)
-                <div  class="text-truncate bg-light my-1">
-                    <div class="img">
+                <div class="section mb-3 shadow">
+                    <div class="user-avatar">
                         {!! $user->getAvatar() !!}
                         {!! $user->getOnline() !!}
                     </div>
 
-                    {!! $user->getProfile() !!}
-                    ({{ $user->getLevel() }})
+                    <div class="section-user d-flex align-items-center">
+                        <div class="flex-grow-1">
+                            {!! $user->getProfile() !!}<br>
+                            <small class="font-italic">{{ $user->getLevel() }}</small>
+                        </div>
+                    </div>
                 </div>
             @endforeach
         </div>
@@ -30,7 +34,7 @@
         {{ __('users.total_administration') }}: <b>{{ $users->count() }}</b><br><br>
 
         @if (getUser())
-            <h3>{{ __('users.fast_mail') }}</h3>
+            <h5>{{ __('users.fast_mail') }}</h5>
 
             <div class="section-form shadow">
                 <form method="post" action="/messages/send">

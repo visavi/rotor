@@ -1266,11 +1266,11 @@ function counterString(string $file)
 /**
  * Форматирует вывод числа
  *
- * @param int $num число
+ * @param int|float $num число
  *
  * @return string форматированное число
  */
-function formatNum(int $num)
+function formatNum($num)
 {
     if ($num > 0) {
         return '<span style="color:#00aa00">+' . $num . '</span>';

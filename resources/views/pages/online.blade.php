@@ -12,11 +12,13 @@
 @stop
 
 @section('content')
-    @if ($guests)
-        {{ __('pages.total_online') }}: <b>{{ $online->total() }}</b><br>
-    @else
-        {{ __('pages.authorized') }}: <b>{{ $online->total() }}</b><br>
-    @endif
+    <div class="mb-3">
+        @if ($guests)
+            {{ __('pages.total_online') }}: <b>{{ $online->total() }}</b><br>
+        @else
+            {{ __('pages.authorized') }}: <b>{{ $online->total() }}</b><br>
+        @endif
+    </div>
 
     @if ($online->isNotEmpty())
         @foreach ($online as $data)

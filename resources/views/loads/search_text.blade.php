@@ -19,17 +19,20 @@
     @foreach ($downs as $data)
         <?php $rating = $data->rated ? round($data->rating / $data->rated, 1) : 0; ?>
 
-        <div class="b">
-            <i class="fa fa-file"></i>
-            <b><a href="/downs/{{ $data->id }}">{{ $data->title }}</a></b> ({{ $data->count_comments }})
-        </div>
+        <div class="section mb-3 shadow">
+            <div class="section-title">
+                <i class="fa fa-file"></i>
+                <a href="/downs/{{ $data->id }}">{{ $data->title }}</a> ({{ $data->count_comments }})
+            </div>
 
-        <div>
-            {!! $data->shortText() !!}<br>
+            <div class="section-content">
+                {!! $data->shortText() !!}<br>
 
-            {{ __('loads.load') }}: <a href="/loads/{{ $data->category->id }}">{{ $data->category->name }}</a><br>
-            {{ __('main.rating') }}: {{ $rating }}<br>
-            {{ __('main.author') }}: {!! $data->user->getProfile() !!} ({{ dateFixed($data->created_at) }})
+                {{ __('loads.load') }}: <a href="/loads/{{ $data->category->id }}">{{ $data->category->name }}</a><br>
+                {{ __('main.rating') }}: {{ $rating }}<br>
+                {{ __('main.author') }}: {!! $data->user->getProfile() !!}
+                <small>({{ dateFixed($data->created_at) }})</small>
+            </div>
         </div>
     @endforeach
 

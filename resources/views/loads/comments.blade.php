@@ -20,12 +20,14 @@
 
             <li class="breadcrumb-item"><a href="/downs/{{ $down->id }}">{{ $down->title }}</a></li>
             <li class="breadcrumb-item active">{{ __('main.comments') }}</li>
-            <li class="breadcrumb-item"><a href="/downs/rss/{{ $down->id }}">{{ __('main.rss') }}</a></li>
         </ol>
     </nav>
 @stop
 
 @section('content')
+    <i class="fas fa-rss"></i> <a href="/downs/rss/{{ $down->id }}">{{ __('main.rss') }}</a>
+    <hr>
+
     @if ($comments->isNotEmpty())
         @foreach ($comments as $comment)
             <div class="section mb-3 shadow" id="comment_{{ $comment->id }}">

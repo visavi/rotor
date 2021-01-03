@@ -24,7 +24,8 @@
 @stop
 
 @section('content')
-    <a href="/articles/rss/{{ $article->id }}">{{ __('main.rss') }}</a><hr>
+    <i class="fas fa-rss"></i> <a href="/articles/rss/{{ $article->id }}">{{ __('main.rss') }}</a>
+    <hr>
 
     @if ($comments->isNotEmpty())
         @foreach ($comments as $comment)

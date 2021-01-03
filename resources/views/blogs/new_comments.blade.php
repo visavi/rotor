@@ -21,21 +21,24 @@
         @foreach ($comments as $comment)
             <div class="section mb-3 shadow">
                 <div class="section-title">
-                    <i class="fa fa-comment"></i> <b><a href="/articles/comments/{{ $comment->relate_id }}">{{ $comment->title }}</a></b> ({{ $comment->count_comments }})
+                    <i class="fa fa-comment"></i> <a href="/articles/comments/{{ $comment->relate_id }}">{{ $comment->title }}</a> ({{ $comment->count_comments }})
 
-                    <div class="float-right">
-                        @if (isAdmin())
+                    @if (isAdmin())
+                        <div class="float-right">
                             <a href="#" onclick="return deleteComment(this)" data-rid="{{ $comment->relate_id }}" data-id="{{ $comment->id }}" data-type="{{ $comment->relate->getMorphClass() }}" data-token="{{ $_SESSION['token'] }}" data-toggle="tooltip" title="Удалить"><i class="fa fa-times text-muted"></i></a>
-                        @endif
-                    </div>
+                        </div>
+                    @endif
                 </div>
 
                 <div class="section-content">
                     {!! bbCode($comment->text) !!}<br>
 
-                    {{ __('main.posted') }}: {!! $comment->user->getProfile() !!} <small>({{ dateFixed($comment->created_at) }})</small><br>
+                    {{ __('main.posted') }}: {!! $comment->user->getProfile() !!}
+                    <small>({{ dateFixed($comment->created_at) }})</small><br>
                     @if (isAdmin())
-                        <span class="data">({{ $comment->brow }}, {{ $comment->ip }})</span>
+                        <div class="small text-muted font-italic mt-2">
+                            {{ $comment->brow }}, {{ $comment->ip }}
+                        </div>
                     @endif
                 </div>
             </div>

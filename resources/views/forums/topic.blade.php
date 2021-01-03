@@ -51,7 +51,8 @@
 @stop
 
 @section('content')
-    <a href="/topics/print/{{ $topic->id }}">{{ __('main.print') }}</a> / <a href="/topics/rss/{{ $topic->id }}">{{ __('main.rss') }}</a>
+    <i class="fas fa-print"></i> <a class="mr-3" href="/topics/print/{{ $topic->id }}">{{ __('main.print') }}</a>
+    <i class="fas fa-rss"></i> <a href="/topics/rss/{{ $topic->id }}">{{ __('main.rss') }}</a>
 
     @if (getUser())
         @if (! $topic->closed && getUser('id') === $topic->user->id && getUser('point') >= setting('editforumpoint'))

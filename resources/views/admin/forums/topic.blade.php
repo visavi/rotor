@@ -153,7 +153,9 @@
                     @endif
 
                     @if (isAdmin())
-                        <span class="data">({{ $data->brow }}, {{ $data->ip }})</span>
+                        <div class="small text-muted font-italic mt-2">
+                            {{ $data->brow }}, {{ $data->ip }}
+                        </div>
                     @endif
                 </div>
             @endforeach
