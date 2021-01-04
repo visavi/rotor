@@ -13,11 +13,11 @@
 @stop
 
 @section('content')
-    <div class="section-form shadow">
+    <div class="section-form mb-3 shadow">
         <form action="/forums/create" method="post">
             @csrf
             <div class="form-group{{ hasError('fid') }}">
-                <label for="inputForum">{{ __('forums.forum') }}</label>
+                <label for="inputForum">{{ __('forums.forum') }}:</label>
                 <select class="form-control" id="inputForum" name="fid">
 
                     @foreach ($forums as $data)

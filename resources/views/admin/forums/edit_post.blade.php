@@ -21,7 +21,9 @@
 @stop
 
 @section('content')
-    <i class="fa fa-pencil-alt"></i> <b>{{ $post->user->getName() }}</b> <small>({{ dateFixed($post->created_at) }})</small><br><br>
+    <p>
+        <i class="fa fa-pencil-alt"></i> <b>{{ $post->user->getName() }}</b> <small>({{ dateFixed($post->created_at) }})</small>
+    </p>
 
     <div class="section-form shadow">
         <form action="/admin/posts/edit/{{ $post->id }}?page={{ $page }}" method="post">

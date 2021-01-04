@@ -14,7 +14,7 @@
 
 @section('header')
     <div class="float-right">
-        <a class="btn btn-light" href="/forums"><i class="fas fa-eye"></i></a>
+        <a class="btn btn-light" href="/forums"><i class="fas fa-wrench"></i></a>
     </div>
 
     <h1>{{ __('index.forums') }}</h1>

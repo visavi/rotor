@@ -3,6 +3,30 @@
 @section('title', $topic->title . ' (' . __('main.page_num', ['page' => $posts->currentPage()]) . ')')
 
 @section('header')
+    <div class="btn-group float-right">
+        <button type="button" class="btn btn-light dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            <i class="fas fa-wrench"></i>
+        </button>
+        <div class="dropdown-menu">
+            @if ($topic->closed)
+                <a class="dropdown-item" href="/admin/topics/action/{{ $topic->id }}?type=open&amp;page={{ $posts->currentPage() }}&amp;token={{ $_SESSION['token'] }}">{{ __('main.open') }}</a>
+            @else
+                <a class="dropdown-item" href="/admin/topics/action/{{ $topic->id }}?type=closed&amp;page={{ $posts->currentPage() }}&amp;token={{ $_SESSION['token'] }}"  onclick="return confirm('{{ __('forums.confirm_close_topic') }}')">{{ __('main.close') }}</a>
+            @endif
+
+            @if ($topic->locked)
+                <a class="dropdown-item" href="/admin/topics/action/{{ $topic->id }}?type=unlocked&amp;page={{ $posts->currentPage() }}&amp;token={{ $_SESSION['token'] }}">{{ __('main.unlock') }}</a>
+            @else
+                <a class="dropdown-item" href="/admin/topics/action/{{ $topic->id }}?type=locked&amp;page={{ $posts->currentPage() }}&amp;token={{ $_SESSION['token'] }}">{{ __('main.lock') }}</a>
+            @endif
+
+            <a class="dropdown-item" href="/admin/topics/edit/{{ $topic->id }}">{{ __('main.change') }}</a>
+            <a class="dropdown-item" href="/admin/topics/move/{{ $topic->id }}">{{ __('main.move') }}</a>
+            <a class="dropdown-item" href="/admin/topics/delete/{{ $topic->id }}?token={{ $_SESSION['token'] }}" onclick="return confirm('{{ __('forums.confirm_delete_topic') }}')">{{ __('main.delete') }}</a>
+            <a class="dropdown-item" href="/topics/{{ $topic->id }}?page={{ $posts->currentPage() }}">{{ __('main.review') }}</a>
+        </div>
+    </div>
+
     <h1>{{ $topic->title }}</h1>
 @stop
 
@@ -29,7 +53,9 @@
             <span class="badge badge-warning">
                 <i class="fa fa-wrench"></i> {{ __('forums.topic_curators') }}:
                 @foreach ($topic->curators as $key => $curator)
-                    <?php $comma = (empty($key)) ? '' : ', '; ?>
+                    @php
+                        $comma = (empty($key)) ? '' : ', ';
+                    @endphp
                     {{ $comma }}{!! $curator->getProfile() !!}
                 @endforeach
             </span>
@@ -40,68 +66,63 @@
         <div class="p-1 my-1 bg-info text-white">{!! bbCode($topic->note) !!}</div>
     @endif
 
-    <hr>
-
-    @if ($topic->closed)
-        <a href="/admin/topics/action/{{ $topic->id }}?type=open&amp;page={{ $posts->currentPage() }}&amp;token={{ $_SESSION['token'] }}">{{ __('main.open') }}</a> /
-    @else
-        <a href="/admin/topics/action/{{ $topic->id }}?type=closed&amp;page={{ $posts->currentPage() }}&amp;token={{ $_SESSION['token'] }}"  onclick="return confirm('{{ __('forums.confirm_close_topic') }}')">{{ __('main.close') }}</a> /
-    @endif
-
-    @if ($topic->locked)
-        <a href="/admin/topics/action/{{ $topic->id }}?type=unlocked&amp;page={{ $posts->currentPage() }}&amp;token={{ $_SESSION['token'] }}">{{ __('main.unlock') }}</a> /
-    @else
-        <a href="/admin/topics/action/{{ $topic->id }}?type=locked&amp;page={{ $posts->currentPage() }}&amp;token={{ $_SESSION['token'] }}">{{ __('main.lock') }}</a> /
-    @endif
-
-    <a href="/admin/topics/edit/{{ $topic->id }}">{{ __('main.change') }}</a> /
-    <a href="/admin/topics/move/{{ $topic->id }}">{{ __('main.move') }}</a> /
-    <a href="/admin/topics/delete/{{ $topic->id }}?token={{ $_SESSION['token'] }}" onclick="return confirm('{{ __('forums.confirm_delete_topic') }}')">{{ __('main.delete') }}</a> /
-    <a href="/topics/{{ $topic->id }}?page={{ $posts->currentPage() }}">{{ __('main.review') }}</a><br>
-
     @if ($vote)
-        <h3>{{ $vote->title }}</h3>
+        <h5>{{ $vote->title }}</h5>
 
-        @if ($vote->poll || $vote->closed || ! getUser())
-            @foreach ($vote->voted as $key => $data)
-                <?php $proc = round(($data * 100) / $vote->sum, 1); ?>
-                <?php $maxproc = round(($data * 100) / $vote->max); ?>
+        <div class="mb-3">
+            @if ($vote->poll || $vote->closed)
+                @foreach ($vote->voted as $key => $data)
+                    @php
+                        $proc = round(($data * 100) / $vote->sum, 1);
+                        $maxproc = round(($data * 100) / $vote->max);
+                    @endphp
 
-                <b>{{ $key }}</b> ({{ __('forums.votes') }}: {{ $data }})<br>
-                {!! progressBar($maxproc, $proc . '%') !!}
-            @endforeach
-        @else
-            <form action="/topics/votes/{{ $topic->id }}?page={{ $posts->currentPage() }}" method="post">
-                @csrf
-                @foreach ($vote->answers as $answer)
-                    <label><input name="poll" type="radio" value="{{ $answer->id }}"> {{ $answer->answer }}</label><br>
+                    <b>{{ $key }}</b> ({{ __('forums.votes') }}: {{ $data }})<br>
+                    {!! progressBar($maxproc, $proc . '%') !!}
                 @endforeach
-                <br><button class="btn btn-sm btn-primary">{{ __('forums.vote') }}</button>
-            </form><br>
-        @endif
+            @else
+                <form class="mb-3" action="/topics/votes/{{ $topic->id }}?page={{ $posts->currentPage() }}" method="post">
+                    @csrf
+                    @foreach ($vote->answers as $answer)
+                        <label><input name="poll" type="radio" value="{{ $answer->id }}"> {{ $answer->answer }}</label><br>
+                    @endforeach
+                    <button class="btn btn-sm btn-primary">{{ __('forums.vote') }}</button>
+                </form>
+            @endif
 
-        {{ __('forums.total_votes') }}: {{ $vote->count }}
+            {{ __('forums.total_votes') }}: {{ $vote->count }}
+        </div>
     @endif
 
     <form action="/admin/posts/delete?tid={{ $topic->id }}&amp;page={{ $posts->currentPage() }}" method="post">
         @csrf
-        <div class="p-1 bg-light text-right">
+
+        <div class="bg-light p-1 my-1 text-right">
             <label for="all">{{ __('main.select_all') }}</label>
             <input type="checkbox" id="all" onchange="var o=this.form.elements;for(var i=0;i&lt;o.length;i++)o[i].checked=this.checked">
         </div>
 
         @if ($posts->isNotEmpty())
             @foreach ($posts as $data)
-                <div class="post">
-                    <div class="b" id="post_{{ $data->id }}">
-                        <div class="float-right text-right">
+                <div class="section mb-3 shadow" id="post_{{ $data->id }}">
+                    <div class="user-avatar">
+                        {!! $data->user->getAvatar() !!}
+                        {!! $data->user->getOnline() !!}
+                    </div>
+
+                    <div class="section-user d-flex align-items-center">
+                        <div class="flex-grow-1">
+                            {!! $data->user->getProfile() !!}
+                            <small class="section-date text-muted font-italic">({{ dateFixed($data->created_at) }})</small><br>
+                            <small class="font-italic">{!! $data->user->getStatus() !!}</small>
+                        </div>
+
+                        <div class="text-right">
                             @if (getUser())
                                 @if (getUser('id') !== $data->user_id)
                                     <a href="#" onclick="return postReply(this)" title="{{ __('main.reply') }}"><i class="fa fa-reply text-muted"></i></a>
 
                                     <a href="#" onclick="return postQuote(this)" title="{{ __('main.quote') }}"><i class="fa fa-quote-right text-muted"></i></a>
-
-                                    <a href="#" onclick="return sendComplaint(this)" data-type="{{ $data->getMorphClass() }}" data-id="{{ $data->id }}" data-token="{{ $_SESSION['token'] }}" data-page="{{ $posts->currentPage() }}" rel="nofollow" title="{{ __('main.complain') }}"><i class="fa fa-bell text-muted"></i></a>
                                 @endif
 
                                 <a href="/admin/posts/edit/{{ $data->id }}?page={{ $posts->currentPage() }}" title="{{ __('main.edit') }}"><i class="fa fa-pencil-alt text-muted"></i></a>
@@ -119,44 +140,37 @@
                                 @endif
                             </div>
                         </div>
-
-                        <div class="img">
-                            {!! $data->user->getAvatar() !!}
-                            {!! $data->user->getOnline() !!}
+                    </div>
+                    <div class="section-body border-top">
+                        <div class="section-message">
+                            {!! bbCode($data->text) !!}
                         </div>
 
-                        {!! $data->user->getProfile() !!} <small>({{ dateFixed($data->created_at) }})</small><br>
-                        {!! $data->user->getStatus() !!}
-                    </div>
+                        @if ($data->files->isNotEmpty())
+                            <div class="section-media">
+                                <i class="fa fa-paperclip"></i> <b>{{ __('main.attached_files') }}:</b><br>
+                                @foreach ($data->files as $file)
+                                    <?php $ext = getExtension($file->hash); ?>
 
-                    <div class="section-message">
-                        {!! bbCode($data->text) !!}
-                    </div>
+                                    {!! icons($ext) !!}
+                                    <a href="{{ $file->hash }}">{{ $file->name }}</a> ({{ formatSize($file->size) }})<br>
+                                    @if (in_array($ext, ['jpg', 'jpeg', 'gif', 'png']))
+                                        <a href="{{ $file->hash }}" class="gallery" data-group="{{ $data->id }}">{!! resizeImage($file->hash, ['alt' => $file->name]) !!}</a><br>
+                                    @endif
+                                @endforeach
+                            </div>
+                        @endif
 
-                    @if ($data->files->isNotEmpty())
-                        <div class="hidden-text">
-                            <i class="fa fa-paperclip"></i> <b>{{ __('main.attached_files') }}:</b><br>
-                            @foreach ($data->files as $file)
-                                <?php $ext = getExtension($file->hash); ?>
+                        @if ($data->edit_user_id)
+                            <div class="small">
+                                <i class="fa fa-exclamation-circle text-danger"></i> {{ __('main.changed') }}: {{ $data->editUser->getName() }} ({{ dateFixed($data->updated_at) }})
+                            </div>
+                        @endif
 
-                                {!! icons($ext) !!}
-                                <a href="{{ $file->hash }}">{{ $file->name }}</a> ({{ formatSize($file->size) }})<br>
-                                @if (in_array($ext, ['jpg', 'jpeg', 'gif', 'png']))
-                                    <a href="{{ $file->hash }}" class="gallery" data-group="{{ $data->id }}">{!! resizeImage($file->hash, ['alt' => $file->name]) !!}</a><br>
-                                @endif
-                            @endforeach
-                        </div>
-                    @endif
-
-                    @if ($data->edit_user_id)
-                        <small><i class="fa fa-exclamation-circle text-danger"></i> {{ __('main.changed') }}: {{ $data->editUser->getName() }} ({{ dateFixed($data->updated_at) }})</small><br>
-                    @endif
-
-                    @if (isAdmin())
                         <div class="small text-muted font-italic mt-2">
                             {{ $data->brow }}, {{ $data->ip }}
                         </div>
-                    @endif
+                    </div>
                 </div>
             @endforeach
 
@@ -173,7 +187,7 @@
 
     @if (getUser())
         @if (empty($topic->closed))
-            <div class="section-form shadow">
+            <div class="section-form mb-3 shadow">
                 <form action="/topics/create/{{ $topic->id }}" method="post" enctype="multipart/form-data">
                     @csrf
                     <div class="form-group{{ hasError('msg') }}">

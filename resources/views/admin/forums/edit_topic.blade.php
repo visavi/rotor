@@ -20,7 +20,7 @@
 @stop
 
 @section('content')
-    <div class="section-form shadow mb-3">
+    <div class="section-form mb-3 shadow">
         <form action="/admin/topics/edit/{{ $topic->id }}" method="post">
             @csrf
             <div class="form-group{{ hasError('title') }}">

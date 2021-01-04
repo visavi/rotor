@@ -13,12 +13,9 @@
 @stop
 
 @section('header')
-    @if (getUser() || setting('bookadds'))
-        <div class="float-right">
-            <a class="btn btn-light" href="/guestbook?page={{ $posts->currentPage() }}"><i class="fas fa-wrench"></i></a>
-        </div>
-    @endif
-
+    <div class="float-right">
+        <a class="btn btn-light" href="/guestbook?page={{ $posts->currentPage() }}"><i class="fas fa-wrench"></i></a>
+    </div>
 
     <h1>{{ __('index.guestbook') }}</h1>
 @stop

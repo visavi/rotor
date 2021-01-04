@@ -52,16 +52,16 @@
 
 @section('content')
     <i class="fas fa-print"></i> <a class="mr-3" href="/topics/print/{{ $topic->id }}">{{ __('main.print') }}</a>
-    <i class="fas fa-rss"></i> <a href="/topics/rss/{{ $topic->id }}">{{ __('main.rss') }}</a>
+    <i class="fas fa-rss"></i> <a class="mr-3" href="/topics/rss/{{ $topic->id }}">{{ __('main.rss') }}</a>
 
     @if (getUser())
         @if (! $topic->closed && getUser('id') === $topic->user->id && getUser('point') >= setting('editforumpoint'))
-           / <a href="/topics/close/{{ $topic->id }}?token={{ $_SESSION['token'] }}" onclick="return confirm('{{ __('forums.confirm_close_topic') }}')">{{ __('main.close') }}</a>
-           / <a href="/topics/edit/{{ $topic->id }}">{{ __('main.edit') }}</a>
+            <i class="fas fa-lock"></i> <a class="mr-3" href="/topics/close/{{ $topic->id }}?token={{ $_SESSION['token'] }}" onclick="return confirm('{{ __('forums.confirm_close_topic') }}')">{{ __('main.close') }}</a>
+            <i class="fas fa-pencil-alt"></i> <a class="mr-3" href="/topics/edit/{{ $topic->id }}">{{ __('main.edit') }}</a>
         @endif
 
         <?php $bookmark = $topic->bookmark_posts ? __('forums.from_bookmarks') : __('forums.to_bookmarks'); ?>
-        / <a href="#" onclick="return bookmark(this)" data-tid="{{ $topic->id }}" data-token="{{ $_SESSION['token'] }}" data-from="{{ __('forums.from_bookmarks') }}"  data-to="{{ __('forums.to_bookmarks') }}">{{ $bookmark }}</a>
+        <i class="fas fa-bookmark"></i> <a class="mr-3" href="#" onclick="return bookmark(this)" data-tid="{{ $topic->id }}" data-token="{{ $_SESSION['token'] }}" data-from="{{ __('forums.from_bookmarks') }}"  data-to="{{ __('forums.to_bookmarks') }}">{{ $bookmark }}</a>
     @endif
 
     <div class="float-right" data-toggle="tooltip" title="{{ __('main.views') }}">
@@ -86,27 +86,29 @@
     <hr>
 
     @if ($vote)
-        <h3>{{ $vote->title }}</h3>
+        <h5>{{ $vote->title }}</h5>
 
-        @if ($vote->poll || $vote->closed || ! getUser())
-            @foreach ($vote->voted as $key => $data)
-                <?php $proc = round(($data * 100) / $vote->sum, 1); ?>
-                <?php $maxproc = round(($data * 100) / $vote->max); ?>
+        <div class="mb-3">
+            @if ($vote->poll || $vote->closed || ! getUser())
+                @foreach ($vote->voted as $key => $data)
+                    <?php $proc = round(($data * 100) / $vote->sum, 1); ?>
+                    <?php $maxproc = round(($data * 100) / $vote->max); ?>
 
-                <b>{{ $key }}</b> ({{ __('forums.votes') }}: {{ $data }})<br>
-                {!! progressBar($maxproc, $proc . '%') !!}
-            @endforeach
-        @else
-            <form action="/topics/votes/{{ $topic->id }}?page={{ $posts->currentPage() }}" method="post">
-                @csrf
-                @foreach ($vote->answers as $answer)
-                    <label><input name="poll" type="radio" value="{{ $answer->id }}"> {{ $answer->answer }}</label><br>
+                    <b>{{ $key }}</b> ({{ __('forums.votes') }}: {{ $data }})<br>
+                    {!! progressBar($maxproc, $proc . '%') !!}
                 @endforeach
-                <br><button class="btn btn-sm btn-primary">{{ __('forums.vote') }}</button>
-            </form><br>
-        @endif
+            @else
+                <form class="mb-3" action="/topics/votes/{{ $topic->id }}?page={{ $posts->currentPage() }}" method="post">
+                    @csrf
+                    @foreach ($vote->answers as $answer)
+                        <label><input name="poll" type="radio" value="{{ $answer->id }}"> {{ $answer->answer }}</label><br>
+                    @endforeach
+                    <button class="btn btn-sm btn-primary">{{ __('forums.vote') }}</button>
+                </form>
+            @endif
 
-        {{ __('forums.total_votes') }}: {{ $vote->count }}
+            {{ __('forums.total_votes') }}: {{ $vote->count }}
+        </div>
     @endif
 
     @if ($topic->isModer)
