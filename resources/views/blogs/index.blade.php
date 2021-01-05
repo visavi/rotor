@@ -3,7 +3,6 @@
 @section('title', __('index.blogs') . ' - ' . __('blogs.blogs_list'))
 
 @section('header')
-
     @if (getUser())
         <div class="float-right">
             <a class="btn btn-success" href="/blogs/create">{{ __('blogs.add') }}</a>
@@ -37,7 +36,8 @@
     @foreach ($categories as $key => $category)
         <div class="section mb-3 shadow">
             <div class="section-title">
-                <i class="fa fa-folder-open"></i> <a href="/blogs/{{ $category->id }}">{{ $category->name }}</a>
+                <i class="fa fa-folder-open"></i>
+                <a href="/blogs/{{ $category->id }}">{{ $category->name }}</a>
 
                 @if ($category->new)
                     ({{ $category->count_articles + $category->children->sum('count_articles') }}/<span style="color:#ff0000">+{{ $category->new->count_articles }}</span>)
@@ -46,10 +46,12 @@
                 @endif
             </div>
 
-            <div>
+            <div class="section-content">
                 @if ($category->children->isNotEmpty())
                     @foreach ($category->children as $child)
-                        <i class="fa fa-angle-right"></i> <b><a href="/blogs/{{ $child->id }}">{{ $child->name }}</a></b>
+                        <i class="fa fa-angle-right"></i>
+                        <b><a href="/blogs/{{ $child->id }}">{{ $child->name }}</a></b>
+
                         @if ($child->new)
                             ({{ $child->count_articles }}/<span style="color:#ff0000">+{{ $child->new->count_articles }}</span>)
                         @else

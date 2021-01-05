@@ -1215,7 +1215,7 @@ function restatement(string $mode)
             break;
 
         case 'blogs':
-            DB::connection()->update('update categories set count_articles = (select count(*) from articles where categories.id = articles.category_id)');
+            DB::connection()->update('update blogs set count_articles = (select count(*) from articles where blogs.id = articles.category_id)');
             DB::connection()->update('update articles set count_comments = (select count(*) from comments where relate_type = "' . Article::$morphName . '" and articles.id = comments.relate_id)');
             break;
 

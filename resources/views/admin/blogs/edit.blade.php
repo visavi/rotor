@@ -20,7 +20,7 @@
 @stop
 
 @section('content')
-    <div class="section-form shadow mb-3">
+    <div class="section-form mb-3 shadow">
         <form action="/admin/blogs/edit/{{ $category->id }}" method="post">
             @csrf
             <div class="form-group{{ hasError('parent') }}">
@@ -60,7 +60,6 @@
                 <input type="checkbox" class="custom-control-input" value="1" name="closed" id="closed"{{ getInput('closed', $category->closed) ? ' checked' : '' }}>
                 <label class="custom-control-label" for="closed">{{ __('main.close') }}</label>
             </div>
-
 
             <button class="btn btn-primary">{{ __('main.change') }}</button>
         </form>

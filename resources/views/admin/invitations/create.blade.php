@@ -15,7 +15,7 @@
 
 @section('content')
     <h3>{{ __('admin.invitations.key_generation') }}</h3>
-    <div class="section-form shadow">
+    <div class="section-form mb-3 shadow">
         <form action="/admin/invitations/create" method="post">
             @csrf
             <?php $inputKeys = (int) getInput('keys'); ?>
@@ -36,7 +36,7 @@
     </div>
 
     <h3>{{ __('admin.invitations.send_to_user') }}</h3>
-    <div class="section-form shadow">
+    <div class="section-form mb-3 shadow">
         <form action="/admin/invitations/send" method="post">
             @csrf
             <div class="form-group{{ hasError('user') }}">
@@ -66,7 +66,7 @@
 
     @if (isAdmin('boss'))
         <h3>{{ __('admin.invitations.sending_keys') }}</h3>
-        <div class="section-form shadow">
+        <div class="section-form mb-3 shadow">
             {{ __('admin.invitations.send_to_active_users') }}:<br>
             <form action="/admin/invitations/mail" method="post">
                 @csrf

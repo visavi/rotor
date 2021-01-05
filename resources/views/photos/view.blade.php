@@ -72,7 +72,7 @@
     <?php $nav = photoNavigation($photo->id); ?>
 
     @if ($nav['next'] || $nav['prev'])
-        <div class="section shadow text-center font-weight-bold">
+        <div class="section mb-3 shadow text-center font-weight-bold">
             @if ($nav['next'])
                 <a href="/photos/{{ $nav['next'] }}">&laquo; {{ __('main.previous') }}</a> &nbsp;
             @endif

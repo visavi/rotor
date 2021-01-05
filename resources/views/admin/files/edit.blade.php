@@ -24,7 +24,7 @@
         </div>
     @endif
 
-    <div class="section-form shadow">
+    <div class="section-form mb-3 shadow">
         <form method="post">
             @csrf
             <div class="form-group{{ hasError('msg') }}">

@@ -2,59 +2,70 @@
 
 @section('title', __('index.blogs'))
 
+@section('header')
+    <div class="float-right">
+        <a class="btn btn-light" href="/blogs"><i class="fas fa-wrench"></i></a>
+    </div>
+
+    <h1>{{ __('index.blogs') }}</h1>
+@stop
+
 @section('breadcrumb')
     <nav>
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
             <li class="breadcrumb-item"><a href="/admin">{{ __('index.panel') }}</a></li>
             <li class="breadcrumb-item active">{{ __('index.blogs') }}</li>
-            <li class="breadcrumb-item"><a href="/blogs">{{ __('main.review') }}</a></li>
         </ol>
     </nav>
 @stop
 
 @section('content')
     @foreach ($categories as $key => $category)
+        <div class="section mb-3 shadow">
+            <div class="section-title">
+                <i class="fa fa-folder-open"></i>
+                <a href="/admin/blogs/{{ $category->id }}">{{ $category->name }}</a>
 
-        <div class="b">
-            <i class="fa fa-folder-open"></i> <b><a href="/admin/blogs/{{ $category->id }}">{{ $category->name }}</a></b>
+                @if ($category->new)
+                    ({{ $category->count_articles }}/<span style="color:#ff0000">+{{ $category->new->count_articles }}</span>)
+                @else
+                    ({{ $category->count_articles }})
+                @endif
 
-            @if ($category->new)
-                ({{ $category->count_articles }}/<span style="color:#ff0000">+{{ $category->new->count_articles }}</span>)
-            @else
-                ({{ $category->count_articles }})
-            @endif
+                @if (isAdmin('boss'))
+                    <div class="float-right">
+                        <a href="/admin/blogs/edit/{{ $category->id }}"><i class="fa fa-pencil-alt"></i></a>
+                        <a href="/admin/blogs/delete/{{ $category->id }}?token={{ $_SESSION['token'] }}" onclick="return confirm('{{ __('blogs.confirm_delete_blog') }}')"><i class="fa fa-times"></i></a>
+                    </div>
+                @endif
+            </div>
 
-            @if (isAdmin('boss'))
-                <div class="float-right">
-                    <a href="/admin/blogs/edit/{{ $category->id }}"><i class="fa fa-pencil-alt"></i></a>
-                    <a href="/admin/blogs/delete/{{ $category->id }}?token={{ $_SESSION['token'] }}" onclick="return confirm('{{ __('blogs.confirm_delete_blog') }}')"><i class="fa fa-times"></i></a>
-                </div>
-            @endif
-        </div>
+            <div class="section-content">
+                @if ($category->children->isNotEmpty())
+                    @foreach ($category->children as $child)
+                        <i class="fa fa-angle-right"></i>
+                        <b><a href="/admin/blogs/{{ $child->id }}">{{ $child->name }}</a></b>
 
-        <div>
-            @if ($category->children->isNotEmpty())
-                @foreach ($category->children as $child)
-                    <i class="fa fa-angle-right"></i> <b><a href="/admin/blogs/{{ $child->id }}">{{ $child->name }}</a></b>
-                    @if ($child->new)
-                        ({{ $child->count_articles }}/<span style="color:#ff0000">+{{ $child->new->count_articles }}</span>)
-                    @else
-                        ({{ $child->count_articles }})
-                    @endif
+                        @if ($child->new)
+                            ({{ $child->count_articles }}/<span style="color:#ff0000">+{{ $child->new->count_articles }}</span>)
+                        @else
+                            ({{ $child->count_articles }})
+                        @endif
 
-                    @if (isAdmin('boss'))
-                        <a href="/admin/blogs/edit/{{ $child->id }}"><i class="fa fa-pencil-alt"></i></a>
-                        <a href="/admin/blogs/delete/{{ $child->id }}?token={{ $_SESSION['token'] }}" onclick="return confirm('{{ __('blogs.confirm_delete_blog') }}')"><i class="fa fa-times"></i></a>
-                    @endif
-                    <br>
-                @endforeach
-            @endif
+                        @if (isAdmin('boss'))
+                            <a href="/admin/blogs/edit/{{ $child->id }}"><i class="fa fa-pencil-alt"></i></a>
+                            <a href="/admin/blogs/delete/{{ $child->id }}?token={{ $_SESSION['token'] }}" onclick="return confirm('{{ __('blogs.confirm_delete_blog') }}')"><i class="fa fa-times"></i></a>
+                        @endif
+                        <br>
+                    @endforeach
+                @endif
+            </div>
         </div>
     @endforeach
 
     @if (isAdmin('boss'))
-        <div class="section-form shadow my-3">
+        <div class="section-form my-3 shadow">
             <form action="/admin/blogs/create" method="post">
                 @csrf
                 <div class="form-inline">

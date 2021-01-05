@@ -25,7 +25,7 @@
         <i class="fa fa-pencil-alt"></i> <b>{{ $post->user->getName() }}</b> <small>({{ dateFixed($post->created_at) }})</small>
     </p>
 
-    <div class="section-form shadow">
+    <div class="section-form mb-3 shadow">
         <form action="/admin/posts/edit/{{ $post->id }}?page={{ $page }}" method="post">
             @csrf
             <div class="form-group{{ hasError('msg') }}">

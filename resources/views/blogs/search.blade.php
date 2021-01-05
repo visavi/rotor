@@ -13,7 +13,7 @@
 @stop
 
 @section('content')
-    <div class="section-form shadow">
+    <div class="section-form mb-3 shadow">
         <form action="/blogs/search">
             <div class="form-group{{ hasError('find') }}">
                 <label for="inputFind">{{ __('main.request') }}:</label>

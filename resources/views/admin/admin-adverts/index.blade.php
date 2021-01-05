@@ -13,8 +13,7 @@
 @stop
 
 @section('content')
-    <div class="section-form shadow">
-
+    <div class="section-form mb-3 shadow">
         @if ($advert->id)
             @if ($advert->deleted_at > SITETIME)
                 <div class="bg-success text-light p-1 mb-3">

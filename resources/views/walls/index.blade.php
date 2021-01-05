@@ -66,7 +66,7 @@
     {{ $messages->links() }}
 
     @if (getUser())
-        <div class="section-form shadow">
+        <div class="section-form mb-3 shadow">
             <form action="/walls/{{ $user->login }}/create" method="post">
                 @csrf
                 <div class="form-group{{ hasError('msg') }}">
