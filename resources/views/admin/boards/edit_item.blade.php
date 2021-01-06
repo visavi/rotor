@@ -26,9 +26,10 @@
         <div class="alert alert-danger">{{ __('boards.item_not_active') }}</div>
     @endif
 
-    <a href="/admin/items/delete/{{ $item->id }}?token={{ $_SESSION['token'] }}" onclick="return confirm('{{ __('boards.confirm_delete') }}')">{{ __('main.delete') }}</a>
+    <i class="fas fa-times"></i> <a class="mr-3" href="/admin/items/delete/{{ $item->id }}?token={{ $_SESSION['token'] }}" onclick="return confirm('{{ __('boards.confirm_delete') }}')">{{ __('main.delete') }}</a>
+    <hr>
 
-    <div class="section-form shadow">
+    <div class="section-form mb-3 shadow">
         <form action="/admin/items/edit/{{ $item->id }}" method="post">
             @csrf
             <div class="form-group{{ hasError('bid') }}">
@@ -75,7 +76,7 @@
                 <div class="invalid-feedback">{{ textError('phone') }}</div>
             </div>
 
-            <div class="js-images">
+            <div class="js-images mb-3">
                 @if ($item->files->isNotEmpty())
                     @foreach ($item->files as $file)
                         <span class="js-image">

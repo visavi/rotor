@@ -17,31 +17,33 @@
         <form action="/admin/banhists/delete?page={{ $records->currentPage() }}" method="post">
             @csrf
             @foreach ($records as $data)
-                <div class="b">
-
-                    <div class="float-right">
-                        <a href="/admin/bans/change?user={{ $data->user->login }}" data-toggle="tooltip" title="{{ __('main.change') }}"><i class="fa fa-pencil-alt"></i></a>
-                        <a href="/admin/banhists/view?user={{ $data->user->login }}" data-toggle="tooltip" title="{{ __('admin.banhists.history') }}"><i class="fa fa-history"></i></a>
-                        <input type="checkbox" name="del[]" value="{{ $data->id }}">
-                    </div>
-
-                    <div class="img">
+                <div class="section mb-3 shadow">
+                    <div class="user-avatar">
                         {!! $data->user->getAvatar() !!}
                         {!! $data->user->getOnline() !!}
                     </div>
 
-                    {!! $data->user->getProfile() !!}
+                    <div class="section-user d-flex align-items-center">
+                        <div class="flex-grow-1">
+                            {!! $data->user->getProfile() !!}
+                            <small class="section-date text-muted font-italic">{{ dateFixed($data->created_at) }}</small>
+                        </div>
 
-                    <small>({{ dateFixed($data->created_at) }})</small><br>
-                </div>
-                <div>
-                    @if ($data->type !== 'unban')
-                        {{ __('users.reason_ban') }}: {!! bbCode($data->reason) !!}<br>
-                        {{ __('users.term') }}: {{ formatTime($data->term) }}<br>
-                    @endif
+                        <div class="text-right">
+                            <a href="/admin/bans/change?user={{ $data->user->login }}" data-toggle="tooltip" title="{{ __('main.change') }}"><i class="fa fa-pencil-alt"></i></a>
+                            <a href="/admin/banhists/view?user={{ $data->user->login }}" data-toggle="tooltip" title="{{ __('admin.banhists.history') }}"><i class="fa fa-history"></i></a>
+                            <input type="checkbox" name="del[]" value="{{ $data->id }}">
+                        </div>
+                    </div>
 
-                    {!! $data->getType() !!}: {!! $data->sendUser->getProfile() !!}<br>
+                    <div class="section-body border-top">
+                        @if ($data->type !== 'unban')
+                            {{ __('users.reason_ban') }}: {!! bbCode($data->reason) !!}<br>
+                            {{ __('users.term') }}: {{ formatTime($data->term) }}<br>
+                        @endif
 
+                        {!! $data->getType() !!}: {!! $data->sendUser->getProfile() !!}
+                    </div>
                 </div>
             @endforeach
 

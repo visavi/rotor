@@ -15,23 +15,34 @@
 @section('content')
     @if ($users->isNotEmpty())
         @foreach ($users as $user)
-            <div class="b">
-                {!! $user->getGender() !!} {!! $user->getProfile() !!}
+            <div class="section mb-3 shadow">
+                <div class="user-avatar">
+                    {!! $user->getAvatar() !!}
+                    {!! $user->getOnline() !!}
+                </div>
 
-                @if ($user->lastBan->created_at)
-                    ({{ dateFixed($user->lastBan->created_at) }})
-                @endif
-            </div>
+                <div class="section-user d-flex align-items-center">
+                    <div class="flex-grow-1">
+                        {!! $user->getGender() !!} {!! $user->getProfile() !!}
 
-            <div>
-                {{ __('users.ending_ban') }}: {{ formatTime($user->timeban - SITETIME) }}<br>
+                        @if ($user->lastBan->created_at)
+                            <small class="section-date text-muted font-italic">{{ dateFixed($user->lastBan->created_at) }}</small>
+                        @endif
+                    </div>
 
-                @if ($user->lastBan->id)
-                    {{ __('users.banned') }}: {!! $user->lastBan->sendUser->getProfile() !!}<br>
-                    {{ __('users.reason_ban') }}: {!! bbCode($user->lastBan->reason) !!}<br>
-                @endif
+                    <div class="text-right">
+                         <a href="/admin/bans/edit?user={{ $user->login }}"><i class="fa fa-pencil-alt"></i></a>
+                    </div>
+                </div>
 
-                <i class="fa fa-pencil-alt"></i> <a href="/admin/bans/edit?user={{ $user->login }}">{{ __('main.edit') }}</a>
+                <div class="section-body border-top">
+                    {{ __('users.ending_ban') }}: {{ formatTime($user->timeban - SITETIME) }}<br>
+
+                    @if ($user->lastBan->id)
+                        {{ __('users.banned') }}: {!! $user->lastBan->sendUser->getProfile() !!}<br>
+                        {{ __('users.reason_ban') }}: {!! bbCode($user->lastBan->reason) !!}<br>
+                    @endif
+                </div>
             </div>
         @endforeach
 

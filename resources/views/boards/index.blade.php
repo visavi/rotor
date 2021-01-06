@@ -3,11 +3,15 @@
 @section('title', __('index.boards'))
 
 @section('header')
-    @if (getUser())
-        <div class="float-right">
-            <a class="btn btn-success" href="/items/create?bid={{ $board->id ?? 0 }}">{{ __('main.add') }}</a><br>
-        </div>
-    @endif
+    <div class="float-right">
+        @if (getUser())
+            <a class="btn btn-success" href="/items/create?bid={{ $board->id ?? 0 }}">{{ __('main.add') }}</a>
+        @endif
+
+        @if (isAdmin())
+            <a class="btn btn-light" href="/admin/boards?page={{ $items->currentPage() }}"><i class="fas fa-wrench"></i></a>
+        @endif
+    </div>
 
     @if ($board)
         <h1>{{ $board->name }} <small>({{ __('index.boards') }}: {{ $board->count_items }})</small></h1>
@@ -34,10 +38,6 @@
                 @endif
             @else
                 <li class="breadcrumb-item active">{{ __('index.boards') }}</li>
-
-                @if (isAdmin())
-                    <li class="breadcrumb-item"><a href="/admin/boards?page={{ $items->currentPage() }}">{{ __('main.management') }}</a></li>
-                @endif
             @endif
         </ol>
     </nav>

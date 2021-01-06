@@ -16,33 +16,35 @@
 @section('content')
     @foreach ($boards as $board)
 
-        <div class="b">
-            <i class="fa fa-folder-open"></i> <b><a href="/admin/board/{{ $board->id }}">{{ $board->name }}</a></b>
+        <div class="section mb-3 shadow">
+            <div class="section-title">
+                <i class="fa fa-folder-open"></i> <a href="/admin/board/{{ $board->id }}">{{ $board->name }}</a>
 
-            ({{ $board->count_items }})
+                ({{ $board->count_items }})
 
-            <div class="float-right">
-                <a href="/admin/boards/edit/{{ $board->id }}"><i class="fa fa-pencil-alt"></i></a>
-                <a href="/admin/boards/delete/{{ $board->id }}?token={{ $_SESSION['token'] }}" onclick="return confirm('{{ __('boards.confirm_delete_category') }}')"><i class="fa fa-times"></i></a>
+                <div class="float-right">
+                    <a href="/admin/boards/edit/{{ $board->id }}"><i class="fa fa-pencil-alt"></i></a>
+                    <a href="/admin/boards/delete/{{ $board->id }}?token={{ $_SESSION['token'] }}" onclick="return confirm('{{ __('boards.confirm_delete_category') }}')"><i class="fa fa-times"></i></a>
+                </div>
             </div>
-        </div>
 
-        <div>
-            @if ($board->children->isNotEmpty())
-                @foreach ($board->children as $child)
-                    <i class="fa fa-angle-right"></i> <b><a href="/admin/boards/{{ $child->id }}">{{ $child->name }}</a></b>
+            <div class="section-content">
+                @if ($board->children->isNotEmpty())
+                    @foreach ($board->children as $child)
+                        <i class="fa fa-angle-right"></i> <b><a href="/admin/boards/{{ $child->id }}">{{ $child->name }}</a></b>
 
-                    ({{ $child->count_items }})
+                        ({{ $child->count_items }})
 
-                    <a href="/admin/boards/edit/{{ $child->id }}"><i class="fa fa-pencil-alt"></i></a>
-                    <a href="/admin/boards/delete/{{ $child->id }}?token={{ $_SESSION['token'] }}" onclick="return confirm('{{ __('boards.confirm_delete_category') }}')"><i class="fa fa-times"></i></a>
-                    <br>
-                @endforeach
-            @endif
+                        <a href="/admin/boards/edit/{{ $child->id }}"><i class="fa fa-pencil-alt"></i></a>
+                        <a href="/admin/boards/delete/{{ $child->id }}?token={{ $_SESSION['token'] }}" onclick="return confirm('{{ __('boards.confirm_delete_category') }}')"><i class="fa fa-times"></i></a>
+                        <br>
+                    @endforeach
+                @endif
+            </div>
         </div>
     @endforeach
 
-    <div class="section-form my-3">
+    <div class="section-form mb-3 shadow">
         <form action="/admin/boards/create" method="post">
             @csrf
             <div class="form-inline">

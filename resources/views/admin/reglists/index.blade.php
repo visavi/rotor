@@ -26,15 +26,28 @@
     @if ($users->isNotEmpty())
 
         <form action="/admin/reglists?page={{ $users->currentPage() }}" method="post">
-           @csrf
+            @csrf
             @foreach ($users as $user)
-                <div class="b">
-                    <input type="checkbox" name="choice[]" value="{{ $user->id }}">
-                     {!! $user->getGender() !!} {!! $user->getProfile() !!}
-                    ({{ __('users.email') }}: {{ $user->email }})
-                </div>
+                <div class="section mb-3 shadow">
+                    <div class="user-avatar">
+                        {!! $user->getAvatar() !!}
+                        {!! $user->getOnline() !!}
+                    </div>
 
-                <div>{{ __('main.registration_date') }}: {{ dateFixed($user->created_at, 'd.m.Y') }}</div>
+                    <div class="section-user d-flex align-items-center">
+                        <div class="flex-grow-1">
+                            {!! $user->getProfile() !!}
+                        </div>
+                        <div class="text-right">
+                            <input type="checkbox" name="choice[]" value="{{ $user->id }}">
+                        </div>
+                    </div>
+
+                    <div class="section-body border-top">
+                        {{ __('users.email') }}: {{ $user->email }}<br>
+                        {{ __('main.registration_date') }}: {{ dateFixed($user->created_at, 'd.m.Y') }}
+                    </div>
+                </div>
             @endforeach
 
             <?php $inputAction = getInput('action'); ?>

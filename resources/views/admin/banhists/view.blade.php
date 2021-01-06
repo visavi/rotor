@@ -18,28 +18,30 @@
         <form action="/admin/banhists/delete?user={{ $user->login }}&amp;page={{ $banhist->currentPage() }}" method="post">
             @csrf
             @foreach ($banhist as $data)
-                <div class="b">
-
-                    <div class="float-right">
-                        <input type="checkbox" name="del[]" value="{{ $data->id }}">
-                    </div>
-
-                    <div class="img">
+                <div class="section mb-3 shadow">
+                    <div class="user-avatar">
                         {!! $data->user->getAvatar() !!}
                         {!! $data->user->getOnline() !!}
                     </div>
 
-                    {!! $data->user->getProfile() !!} ({{ dateFixed($data->created_at) }})
-                </div>
+                    <div class="section-user d-flex align-items-center">
+                        <div class="flex-grow-1">
+                            {!! $data->user->getProfile() !!}
+                            <small class="section-date text-muted font-italic">{{ dateFixed($data->created_at) }}</small>
+                        </div>
+                        <div class="text-right">
+                            <input type="checkbox" name="del[]" value="{{ $data->id }}">
+                        </div>
+                    </div>
 
-                <div>
-                    @if ($data->type !== 'unban')
-                        {{ __('users.reason_ban') }}: {!! bbCode($data->reason) !!}<br>
-                        {{ __('users.term') }}: {{ formatTime($data->term) }}<br>
-                    @endif
+                    <div class="section-body border-top">
+                        @if ($data->type !== 'unban')
+                            {{ __('users.reason_ban') }}: {!! bbCode($data->reason) !!}<br>
+                            {{ __('users.term') }}: {{ formatTime($data->term) }}<br>
+                        @endif
 
-                    {!! $data->getType() !!}: {!! $data->sendUser->getProfile() !!}<br>
-
+                        {!! $data->getType() !!}: {!! $data->sendUser->getProfile() !!}<br>
+                    </div>
                 </div>
             @endforeach
 

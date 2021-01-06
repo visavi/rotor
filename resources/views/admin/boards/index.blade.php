@@ -3,6 +3,10 @@
 @section('title', __('index.boards'))
 
 @section('header')
+    <div class="float-right">
+        <a class="btn btn-light" href="/boards?page={{ $items->currentPage() }}"><i class="fas fa-wrench"></i></a>
+    </div>
+
     @if ($board)
         <h1>{{ $board->name }} <small>({{ __('index.boards') }}: {{ $board->count_items }})</small></h1>
     @else
@@ -29,10 +33,6 @@
                 @endif
             @else
                 <li class="breadcrumb-item active">{{ __('index.boards') }}</li>
-
-                @if (isAdmin())
-                    <li class="breadcrumb-item"><a href="/boards?page={{ $items->currentPage() }}">{{ __('main.review') }}</a></li>
-                @endif
             @endif
         </ol>
     </nav>

@@ -3,12 +3,15 @@
 @section('title', __('index.advertising'))
 
 @section('header')
-
-    @if (getUser())
-        <div class="float-right">
+    <div class="float-right">
+        @if (getUser())
             <a class="btn btn-success" href="/adverts/create">{{ __('adverts.create_advert') }}</a>
-        </div>
-    @endif
+        @endif
+
+        @if (isAdmin())
+            <a class="btn btn-light" href="/admin/adverts"><i class="fas fa-wrench"></i></a>
+        @endif
+    </div>
 
     <h1>{{ __('index.advertising') }}</h1>
 @stop

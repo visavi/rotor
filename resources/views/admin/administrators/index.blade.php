@@ -15,23 +15,21 @@
 @section('content')
     @if ($users->isNotEmpty())
 
-        <div class="mb-3">
-            @foreach ($users as $user)
-                <div  class="text-truncate bg-light my-1">
-                    <div class="img">
-                        {!! $user->getAvatar() !!}
-                        {!! $user->getOnline() !!}
-                    </div>
-
-                    {!! $user->getProfile() !!}
-                    ({{ $user->getLevel() }})<br>
-
-                    @if (isAdmin('boss'))
-                        <i class="fa fa-pencil-alt"></i> <a href="/admin/users/edit?user={{ $user->login }}">{{ __('main.change') }}</a><br>
-                    @endif
+        @foreach ($users as $user)
+            <div class="section mb-3 shadow">
+                <div class="user-avatar">
+                    {!! $user->getAvatar() !!}
+                    {!! $user->getOnline() !!}
                 </div>
-            @endforeach
-        </div>
+
+                {!! $user->getProfile() !!}
+                ({{ $user->getLevel() }})<br>
+
+                @if (isAdmin('boss'))
+                    <i class="fa fa-pencil-alt"></i> <a href="/admin/users/edit?user={{ $user->login }}">{{ __('main.change') }}</a><br>
+                @endif
+            </div>
+        @endforeach
 
         {{ __('users.total_administration') }}: <b>{{ $users->count() }}</b><br><br>
     @else

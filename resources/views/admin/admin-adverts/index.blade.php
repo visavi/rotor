@@ -16,11 +16,11 @@
     <div class="section-form mb-3 shadow">
         @if ($advert->id)
             @if ($advert->deleted_at > SITETIME)
-                <div class="bg-success text-light p-1 mb-3">
+                <div class="alert alert-success">
                     {{ __('adverts.expires') }}: {{ dateFixed($advert->deleted_at) }}
                 </div>
             @else
-                <div class="bg-danger text-light p-1 mb-3">
+                <div class="alert alert-danger">
                     {{ __('adverts.expired') }}: {{ dateFixed($advert->deleted_at) }}
                 </div>
             @endif

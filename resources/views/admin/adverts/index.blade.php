@@ -5,6 +5,7 @@
 @section('header')
     <div class="float-right">
         <a class="btn btn-success" href="/adverts/create">{{ __('adverts.create_advert') }}</a>
+        <a class="btn btn-light" href="/adverts"><i class="fas fa-wrench"></i></a>
     </div>
 
     <h1>{{ __('index.advertising') }}</h1>
@@ -25,19 +26,27 @@
         <form action="/admin/adverts/delete?page={{ $records->currentPage() }}" method="post">
             @csrf
             @foreach ($records as $data)
-                <div class="b">
-                    <i class="fa fa-check-circle"></i>
-                    <b><a href="{{ $data->site }}">{{ $data->name }}</a></b> ({!! $data->user->getProfile() !!})
+                <div class="section mb-3 shadow">
+                    <div class="section-title">
+                        <i class="fas fa-globe-americas"></i>
+                        <a href="{{ $data->site }}">{{ $data->name }}</a>
 
-                    <div class="float-right">
-                        <a href="/admin/adverts/edit/{{ $data->id }}?page={{ $records->currentPage() }}"><i class="fas fa-pencil-alt text-muted"></i></a>
-                        <input type="checkbox" name="del[]" value="{{ $data->id }}">
+                        <div class="float-right">
+                            <a href="/admin/adverts/edit/{{ $data->id }}?page={{ $records->currentPage() }}"><i class="fas fa-pencil-alt text-muted"></i></a>
+                            <input type="checkbox" name="del[]" value="{{ $data->id }}">
+                        </div>
+                    </div>
+
+                    <div class="section-body border-top">
+                        <i class="far fa-user"></i> {!! $data->user->getProfile() !!}
+                        <small class="section-date text-muted font-italic">{{ __('adverts.expires') }}: {{ dateFixed($data->deleted_at) }}</small>
+
+                        <div class="small text-muted font-italic mt-2">
+                            {{ __('adverts.color') }}: {!! $data->color ? '<span style="color:' . $data->color .'">'. $data->color .'</span>' : '<i class="fas fa-times text-danger"></i>' !!},
+                            {{ __('adverts.bold') }}: {!! $data->bold ? '<i class="fas fa-check text-success"></i>' : '<i class="fas fa-times text-danger"></i>' !!}
+                        </div>
                     </div>
                 </div>
-
-                {{ __('adverts.expires') }}: {{ dateFixed($data->deleted_at) }}<br>
-                {{ __('adverts.color') }}: {!! $data->color ? '<span style="color:' . $data->color .'">'. $data->color .'</span>' : '<i class="fas fa-times text-danger"></i>' !!},
-                {{ __('adverts.bold') }}: {!! $data->bold ? '<i class="fas fa-check text-success"></i>' : '<i class="fas fa-times text-danger"></i>' !!}<br>
             @endforeach
 
             <div class="float-right">
@@ -45,7 +54,7 @@
             </div>
         </form>
 
-        <br>{{ __('adverts.total_links') }}: <b>{{ $records->total() }}</b><br>
+        {{ __('adverts.total_links') }}: <b>{{ $records->total() }}</b><br>
     @else
         {!! showError(__('adverts.empty_links')) !!}
     @endif
