@@ -12,7 +12,7 @@
 @stop
 
 @section('content')
-    <div class="section-form shadow">
+    <div class="section-form mb-3 shadow">
         @if (!empty($user->picture) && file_exists(HOME . '/' . $user->picture))
             {!! resizeImage($user->picture, ['alt' => $user->getName(), 'class' => 'img-fluid rounded']) !!}
         @else

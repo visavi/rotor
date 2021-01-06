@@ -14,7 +14,7 @@
 @stop
 
 @section('content')
-    <div class="section-form shadow">
+    <div class="section-form mb-3 shadow">
         <form action="/admin/stickers/sticker/create" method="post" enctype="multipart/form-data">
             @csrf
             <div class="form-group{{ hasError('category') }}">

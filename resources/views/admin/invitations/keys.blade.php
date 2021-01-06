@@ -16,7 +16,10 @@
 @section('content')
     @if ($keys->isNotEmpty())
         {{ __('main.total') }}: {{ $keys->count() }}<br>
-        <textarea rows="10">{{ $keys->implode('hash', ',') }}</textarea><br><br>
+
+        <div class="form-group mb-3">
+            <textarea class="form-control" rows="10">{{ $keys->implode('hash', ',') }}</textarea>
+        </div>
     @else
         {!! showError(__('admin.invitations.empty_keys')) !!}
     @endif

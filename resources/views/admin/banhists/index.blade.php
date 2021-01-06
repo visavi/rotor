@@ -57,7 +57,7 @@
 
     {{ $records->links() }}
 
-    <div class="section-form shadow mb-3">
+    <div class="section-form mb-3 shadow">
         <form action="/admin/banhists/view" method="get">
             <b>{{ __('admin.banhists.search_user') }}:</b><br>
             <div class="form-inline">

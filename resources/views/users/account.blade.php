@@ -15,7 +15,7 @@
 @section('content')
     <h3>{{ __('users.change_email') }}</h3>
 
-    <div class="section-form shadow mb-3">
+    <div class="section-form mb-3 shadow">
         <form method="post" action="/accounts/changemail">
             @csrf
             <div class="form-group{{ hasError('email') }}">
@@ -40,7 +40,7 @@
     <h3>{{ __('users.status_change') }}</h3>
 
     @if ($user->point >= setting('editstatuspoint'))
-        <div class="section-form shadow mb-3">
+        <div class="section-form mb-3 shadow">
             <form method="post" action="/accounts/editstatus">
                 @csrf
                 <label for="status">{{ __('users.personal_status') }}:</label>

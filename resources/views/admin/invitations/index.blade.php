@@ -21,28 +21,36 @@
     @endif
 
     @if ($used)
-        <a href="/admin/invitations">{{ __('admin.invitations.unused') }}</a> / <b>{{ __('admin.invitations.used') }}</b><hr>
-    @else
-        <b>{{ __('admin.invitations.unused') }}</b> / <a href="/admin/invitations?used=1">{{ __('admin.invitations.used') }}</a><hr>
-    @endif
+        <div class="mb-3">
+            <a class="btn btn-light btn-sm" href="/admin/invitations">{{ __('admin.invitations.unused') }}</a> <a class="btn btn-primary btn-sm" href="/admin/invitations?used=1">{{ __('admin.invitations.used') }}</a>
+            @else
+                <a class="btn btn-primary btn-sm" href="/admin/invitations">{{ __('admin.invitations.unused') }}</a> <a class="btn btn-light btn-sm" href="/admin/invitations?used=1">{{ __('admin.invitations.used') }}</a>
+            @endif
+        </div>
+
 
     @if ($invites->isNotEmpty())
         <form action="/admin/invitations/delete?used={{ $used }}&amp;page={{ $invites->currentPage() }}" method="post">
             @csrf
             @foreach ($invites as $invite)
-                <div class="b">
-                    <input type="checkbox" name="del[]" value="{{ $invite->id }}">
-                    <b>{{ $invite->hash }}</b>
-                </div>
+                <div class="section mb-3 shadow">
+                    <div class="section-title">
+                        {{ $invite->hash }}
 
-                <div>
-                    {{ __('admin.invitations.owner') }}: {!! $invite->user->getProfile() !!}<br>
+                        <div class="float-right">
+                            <input type="checkbox" name="del[]" value="{{ $invite->id }}">
+                        </div>
+                    </div>
 
-                    @if ($invite->invite_user_id)
-                        {{ __('admin.invitations.invited') }}: {!! $invite->inviteUser->getProfile() !!}<br>
-                    @endif
+                    <div class="section-content">
+                        {{ __('admin.invitations.owner') }}: {!! $invite->user->getProfile() !!}<br>
 
-                    {{ __('main.created') }}: {{ dateFixed($invite->created_at) }}<br>
+                        @if ($invite->invite_user_id)
+                            {{ __('admin.invitations.invited') }}: {!! $invite->inviteUser->getProfile() !!}<br>
+                        @endif
+
+                        {{ __('main.created') }}: {{ dateFixed($invite->created_at) }}<br>
+                    </div>
                 </div>
             @endforeach
 

@@ -62,7 +62,7 @@
 
     {{ $contacts->links() }}
 
-    <div class="section-form shadow my-3">
+    <div class="section-form mb-3 shadow">
         <form method="post">
             @csrf
             <div class="input-group{{ hasError('user') }}">

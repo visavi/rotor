@@ -37,7 +37,7 @@
         {!! showError(__('stickers.empty_categories')) !!}
     @endif
 
-    <div class="section-form shadow my-3">
+    <div class="section-form mb-3 shadow">
         <form action="/admin/stickers/create" method="post">
             @csrf
             <div class="form-inline">

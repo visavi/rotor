@@ -37,7 +37,6 @@
             </div>
         @endforeach
 
-
         {{ $logs->links() }}
 
         {{ __('main.total') }}: <b>{{ $logs->total() }}</b><br>

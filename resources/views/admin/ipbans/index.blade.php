@@ -43,12 +43,13 @@
 
             <button class="btn btn-sm btn-danger float-right">{{ __('main.delete_selected') }}</button>
         </form>
-        <br>{{ __('main.total') }}: <b>{{ $logs->total() }}</b><br>
+
+        {{ $logs->links() }}
+
+        {{ __('main.total') }}: <b>{{ $logs->total() }}</b><br>
     @else
         {!! showError(__('admin.ipbans.empty_ip')) !!}
     @endif
-
-    {{ $logs->links() }}
 
     <div class="py-2 my-2">
         <form action="/admin/ipbans" method="post">

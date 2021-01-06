@@ -26,7 +26,7 @@
     <div class="mb-3" id="uLogin" data-ulogin="display=panel;fields=first_name,last_name,photo;optional=sex,email,nickname;providers=vkontakte,odnoklassniki,mailru,facebook,google,yandex,instagram;hidden=;redirect_uri={{ siteUrl() }}/login;mobilebuttons=0;">
     </div>
 
-    <div class="section-form shadow">
+    <div class="section-form mb-3 shadow">
         <form method="post">
 
             <div class="form-group">

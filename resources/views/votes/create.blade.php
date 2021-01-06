@@ -13,7 +13,7 @@
 @stop
 
 @section('content')
-    <div class="section-form shadow">
+    <div class="section-form mb-3 shadow">
         <form action="/votes/create" method="post">
             @csrf
             <div class="form-group{{ hasError('question') }}">

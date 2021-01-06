@@ -13,17 +13,19 @@
 @stop
 
 @section('content')
-    <span class="badge badge-success">PHP {{ parseVersion(PHP_VERSION) }}</span>
+    <div class="mb-3">
+        <span class="badge badge-success">PHP {{ parseVersion(PHP_VERSION) }}</span>
 
-    @if (zend_version())
-        <span class="badge badge-success">Zend {{ parseVersion(zend_version()) }}</span>
-    @endif
+        @if (zend_version())
+            <span class="badge badge-success">Zend {{ parseVersion(zend_version()) }}</span>
+        @endif
 
-    @if ($gdInfo)
-        <span class="badge badge-success">GD {{ $gdInfo }}</span>
-    @endif
+        @if ($gdInfo)
+            <span class="badge badge-success">GD {{ $gdInfo }}</span>
+        @endif
 
-    <span class="badge badge-success">MySQL {{ $mysqlVersion }}</span>
+        <span class="badge badge-success">MySQL {{ $mysqlVersion }}</span>
+    </div>
 
     @if ($iniInfo)
 

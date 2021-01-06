@@ -14,7 +14,7 @@
 
 @section('content')
     @if (getUser('point') >= setting('addofferspoint'))
-        <div class="section-form shadow">
+        <div class="section-form mb-3 shadow">
             <form action="/offers/create" method="post">
                 @csrf
                 <?php $inputType = getInput('type', $type); ?>

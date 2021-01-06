@@ -15,29 +15,35 @@
 @section('content')
     @if ($transfers->isNotEmpty())
         @foreach ($transfers as $data)
-            <div class="b">
-                <div class="img">
+            <div class="section mb-3 shadow">
+                <div class="user-avatar">
                     {!! $data->user->getAvatar() !!}
                     {!! $data->user->getOnline() !!}
                 </div>
 
-                {!! $data->user->getProfile() !!}
+                <div class="section-user d-flex align-items-center">
+                    <div class="flex-grow-1">
+                        {!! $data->user->getProfile() !!}
+                        <small class="section-date text-muted font-italic">({{ dateFixed($data->created_at) }})</small><br>
+                        <small class="font-italic">{!! $data->user->getStatus() !!}</small>
+                    </div>
 
-                <small>({{ dateFixed($data->created_at) }})</small><br>
+                    <div class="text-right">
+                        <a href="/admin/transfers/view?user={{ $data->user->login }}">{{ __('transfers.all_transfers') }}</a>
+                    </div>
+                </div>
 
-                <a href="/admin/transfers/view?user={{ $data->user->login }}">{{ __('transfers.all_transfers') }}</a>
-            </div>
-
-            <div>
-                {{ __('transfers.transfer_for') }}: {!! $data->recipientUser->getProfile() !!}<br>
-                {{ __('main.amount') }}: {{ plural($data->total, setting('moneyname')) }}<br>
-                {{ __('main.comment') }}: {!! bbCode($data->text) !!}<br>
+                <div class="section-body border-top">
+                    {{ __('transfers.transfer_for') }}: {!! $data->recipientUser->getProfile() !!}<br>
+                    {{ __('main.amount') }}: {{ plural($data->total, setting('moneyname')) }}<br>
+                    {{ __('main.comment') }}: {!! bbCode($data->text) !!}<br>
+                </div>
             </div>
         @endforeach
 
         {{ $transfers->links() }}
 
-        <div class="section-form shadow">
+        <div class="section-form mb-3 shadow">
             <form action="/admin/transfers/view" method="get">
                 <div class="form-inline">
                     <div class="form-group{{ hasError('user') }}">
@@ -50,8 +56,7 @@
             </form>
         </div>
 
-        {{ __('main.total') }}: <b>{{ $transfers->total() }}</b><br><br>
-
+        {{ __('main.total') }}: <b>{{ $transfers->total() }}</b><br>
     @else
         {!! showError(__('transfers.empty_transfers')) !!}
     @endif

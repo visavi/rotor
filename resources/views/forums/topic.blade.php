@@ -209,7 +209,7 @@
 
     @if (getUser())
         @if (empty($topic->closed))
-            <div class="section-form shadow my-3">
+            <div class="section-form mb-3 shadow">
                 <form action="/topics/create/{{ $topic->id }}" method="post" enctype="multipart/form-data">
                     @csrf
                     <div class="form-group{{ hasError('msg') }}">

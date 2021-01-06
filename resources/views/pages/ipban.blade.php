@@ -9,7 +9,7 @@
 
     @if (! $ban->user_id)
         @if ($ban->created_at < strtotime('-1 minute', SITETIME))
-            <div class="section-form shadow">
+            <div class="section-form mb-3 shadow">
                 <form method="post">
                     {!! view('app/_captcha') !!}
                     <button class="btn btn-primary">{{ __('main.confirm') }}</button>

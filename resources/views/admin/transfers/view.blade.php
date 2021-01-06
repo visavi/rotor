@@ -16,28 +16,32 @@
 @section('content')
     @if ($transfers->isNotEmpty())
         @foreach ($transfers as $data)
-            <div class="b">
-                <div class="img">
+            <div class="section mb-3 shadow">
+                <div class="user-avatar">
                     {!! $data->user->getAvatar() !!}
                     {!! $data->user->getOnline() !!}
                 </div>
 
-                {!! $data->user->getProfile() !!}
+                <div class="section-user d-flex align-items-center">
+                    <div class="flex-grow-1">
+                        {!! $data->user->getProfile() !!}
+                        <small class="section-date text-muted font-italic">({{ dateFixed($data->created_at) }})</small><br>
+                        <small class="font-italic">{!! $data->user->getStatus() !!}</small>
+                    </div>
+                </div>
 
-                <small>({{ dateFixed($data->created_at) }})</small><br>
-            </div>
-
-            <div>
-                {{ __('transfers.transfer_for') }}: {!! $data->recipientUser->getProfile() !!}<br>
-                {{ __('main.amount') }}: {{ plural($data->total, setting('moneyname')) }}<br>
-                {{ __('main.comment') }}: {!! bbCode($data->text) !!}<br>
+                <div class="section-body border-top">
+                    {{ __('transfers.transfer_for') }}: {!! $data->recipientUser->getProfile() !!}<br>
+                    {{ __('main.amount') }}: {{ plural($data->total, setting('moneyname')) }}<br>
+                    {{ __('main.comment') }}: {!! bbCode($data->text) !!}<br>
+                </div>
             </div>
         @endforeach
 
-        {{ __('main.total') }}: <b>{{ $transfers->total() }}</b><br><br>
+        {{ $transfers->links() }}
+
+        {{ __('main.total') }}: <b>{{ $transfers->total() }}</b><br>
     @else
         {!! showError(__('transfers.empty_transfers')) !!}
     @endif
-
-    {{ $transfers->links() }}
 @stop

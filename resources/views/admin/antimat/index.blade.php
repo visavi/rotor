@@ -16,11 +16,10 @@
     {!! __('admin.antimat.text') !!}<br>
 
     @if ($words->isNotEmpty())
-
-        <div class="card">
-            <h2 class="card-header">
+        <div class="card mb-3">
+            <h5 class="card-header">
                 {{ __('admin.antimat.words') }}
-            </h2>
+            </h5>
 
             <div class="card-body">
                 @foreach ($words as $data)
@@ -38,8 +37,6 @@
                 @endif
             </div>
         </div>
-        <br>
-
     @else
         {!! showError(__('admin.antimat.empty_words')) !!}
     @endif

@@ -19,7 +19,7 @@
         <div>{{ __('main.message') }}: {!! bbCode($post->text) !!}</div>
     </div>
 
-    <div class="section-form shadow">
+    <div class="section-form mb-3 shadow">
         <form action="/admin/guestbook/reply/{{ $post->id }}?page={{ $page }}" method="post">
             @csrf
             <div class="form-group{{ hasError('reply') }}">

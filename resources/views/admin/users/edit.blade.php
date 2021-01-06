@@ -20,7 +20,7 @@
         <div class="p-1 my-1 bg-danger text-white">{{ __('users.edit_user_notice') }}</div>
     @endif
 
-    <div class="section-form shadow">
+    <div class="section-form mb-3 shadow">
         <form method="post" action="/admin/users/edit?user={{ $user->login }}">
             @csrf
             <?php $inputLevel = getInput('level', $user->level); ?>
@@ -163,7 +163,7 @@
     @endif
 
     @if ($user->level === 'banned' && $user->timeban > SITETIME)
-        <div class="section-form shadow">
+        <div class="section-form mb-3 shadow">
             <div class="p-1 my-1 bg-danger text-white">{{ __('users.user_banned') }}</div>
             {{ __('users.ending_ban') }}: {{ formatTime($user->timeban - SITETIME) }}<br>
 
