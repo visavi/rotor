@@ -5,7 +5,7 @@
 @section('description', truncateDescription(bbCode($down->text, false)))
 
 @section('header')
-    @if (isAdmin())
+    @if (isAdmin('admin'))
         <div class="float-right">
             <a class="btn btn-light" href="/admin/downs/edit/{{ $down->id }}"><i class="fas fa-wrench"></i></a>
         </div>
@@ -31,19 +31,19 @@
 @stop
 
 @section('content')
-    <i class="fas fa-rss"></i> <a href="/downs/rss/{{ $down->id }}">{{ __('main.rss') }}</a>
+    @if (! $down->active)
+        <div class="alert alert-warning">
+            <i class="fas fa-exclamation-triangle"></i> {{ __('loads.pending_down1') }}<br>
+            @if (getUser() && getUser('id') === $down->user_id)
+                <i class="fa fa-pencil-alt"></i> <a href="/downs/edit/{{ $down->id }}">{{ __('main.edit') }}</a>
+            @endif
+        </div>
+    @endif
+
+    <i class="fas fa-rss"></i> <a class="mr-3" href="/downs/rss/{{ $down->id }}">{{ __('main.rss') }}</a>
     <hr>
 
     <div class="mb-3">
-        @if (! $down->active)
-            <div class="p-1 bg-warning text-dark">
-                <i class="fas fa-exclamation-triangle"></i> {{ __('loads.pending_down1') }}<br>
-                @if (getUser() && getUser('id') === $down->user_id)
-                    <i class="fa fa-pencil-alt"></i> <a href="/downs/edit/{{ $down->id }}">{{ __('main.edit') }}</a>
-                @endif
-            </div>
-        @endif
-
         <div class="section-message mb-3">
             {!! bbCode($down->text) !!}
         </div>

@@ -41,7 +41,9 @@
                 </div>
             @endforeach
 
-            <button class="btn btn-sm btn-danger float-right">{{ __('main.delete_selected') }}</button>
+            <div class="float-right">
+                <button class="btn btn-sm btn-danger">{{ __('main.delete_selected') }}</button>
+            </div>
         </form>
 
         {{ $logs->links() }}

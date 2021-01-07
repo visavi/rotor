@@ -2,6 +2,14 @@
 
 @section('title', __('index.loads'))
 
+@section('header')
+    <div class="float-right">
+        <a class="btn btn-light" href="/loads"><i class="fas fa-wrench"></i></a>
+    </div>
+
+    <h1>{{ __('index.loads') }}</h1>
+@stop
+
 @section('breadcrumb')
     <nav>
         <ol class="breadcrumb">
@@ -15,40 +23,42 @@
 @section('content')
     @if ($categories->isNotEmpty())
         @foreach ($categories as $category)
-            <div class="b">
-                <i class="fa fa-folder-open"></i>
-                <b><a href="/admin/loads/{{ $category->id }}">{{ $category->name }}</a></b>
-                @if ($category->new)
-                    ({{ $category->count_downs }}/<span style="color:#ff0000">+{{ $category->new->count_downs }}</span>)
-                @else
-                    ({{ $category->count_downs }})
-                @endif
+            <div class="section mb-3 shadow">
+                <div class="section-title">
+                    <i class="fa fa-folder-open"></i>
+                    <a href="/admin/loads/{{ $category->id }}">{{ $category->name }}</a>
+                    @if ($category->new)
+                        ({{ $category->count_downs }}/<span style="color:#ff0000">+{{ $category->new->count_downs }}</span>)
+                    @else
+                        ({{ $category->count_downs }})
+                    @endif
 
-                @if (isAdmin('boss'))
-                    <div class="float-right">
-                        <a href="/admin/loads/edit/{{ $category->id }}"><i class="fa fa-pencil-alt"></i></a>
-                        <a href="/admin/loads/delete/{{ $category->id }}?token={{ $_SESSION['token'] }}" onclick="return confirm('{{ __('loads.confirm_delete_load') }}')"><i class="fa fa-times"></i></a>
-                    </div>
-                @endif
-            </div>
+                    @if (isAdmin('boss'))
+                        <div class="float-right">
+                            <a href="/admin/loads/edit/{{ $category->id }}"><i class="fa fa-pencil-alt"></i></a>
+                            <a href="/admin/loads/delete/{{ $category->id }}?token={{ $_SESSION['token'] }}" onclick="return confirm('{{ __('loads.confirm_delete_load') }}')"><i class="fa fa-times"></i></a>
+                        </div>
+                    @endif
+                </div>
 
-            <div>
-                @if ($category->children->isNotEmpty())
-                    @foreach ($category->children as $child)
-                        <i class="fa fa-angle-right"></i> <b><a href="/admin/loads/{{ $child->id }}">{{ $child['name'] }}</a></b>
-                        @if ($child->new)
-                            ({{ $child->count_downs }}/<span style="color:#ff0000">+{{ $child->new->count_downs }}</span>)
-                        @else
-                            ({{ $child->count_downs }})
-                        @endif
+                <div>
+                    @if ($category->children->isNotEmpty())
+                        @foreach ($category->children as $child)
+                            <i class="fa fa-angle-right"></i> <b><a href="/admin/loads/{{ $child->id }}">{{ $child['name'] }}</a></b>
+                            @if ($child->new)
+                                ({{ $child->count_downs }}/<span style="color:#ff0000">+{{ $child->new->count_downs }}</span>)
+                            @else
+                                ({{ $child->count_downs }})
+                            @endif
 
-                        @if (isAdmin('boss'))
-                                <a href="/admin/loads/edit/{{ $child->id }}"><i class="fa fa-pencil-alt"></i></a>
-                                <a href="/admin/loads/delete/{{ $child->id }}?token={{ $_SESSION['token'] }}" onclick="return confirm('{{ __('loads.confirm_delete_load') }}')"><i class="fa fa-times"></i></a>
-                        @endif
-                        <br>
-                    @endforeach
-                @endif
+                            @if (isAdmin('boss'))
+                                    <a href="/admin/loads/edit/{{ $child->id }}"><i class="fa fa-pencil-alt"></i></a>
+                                    <a href="/admin/loads/delete/{{ $child->id }}?token={{ $_SESSION['token'] }}" onclick="return confirm('{{ __('loads.confirm_delete_load') }}')"><i class="fa fa-times"></i></a>
+                            @endif
+                            <br>
+                        @endforeach
+                    @endif
+                </div>
             </div>
         @endforeach
     @else

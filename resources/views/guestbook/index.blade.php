@@ -135,4 +135,8 @@
     @else
         {!! showError(__('main.not_authorized')) !!}
     @endif
+
+    <a href="/stickers">{{ __('main.stickers') }}</a>  /
+    <a href="/tags">{{ __('main.tags') }}</a>  /
+    <a href="/rules">{{ __('main.rules') }}</a>
 @stop

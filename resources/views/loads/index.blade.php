@@ -7,7 +7,7 @@
         @if (getUser())
             <a class="btn btn-success" href="/downs/create">{{ __('main.add') }}</a>
 
-            @if (isAdmin())
+            @if (isAdmin('admin'))
                 <a class="btn btn-light" href="/admin/loads"><i class="fas fa-wrench"></i></a>
             @endif
         @endif

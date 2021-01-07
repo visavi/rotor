@@ -23,14 +23,15 @@
 @section('content')
     @if ($categories->isNotEmpty())
         @foreach ($categories as $category)
-            <div class="bg-light p-2 mb-1 border">
-                <div class="float-right">
-                    <a href="/admin/stickers/edit/{{ $category->id }}" data-toggle="tooltip" title="{{ __('main.edit') }}"><i class="fa fa-pencil-alt"></i></a>
+            <div class="section mb-3 shadow">
+                <div class="section-title">
+                    <i class="far fa-smile"></i>  <b><a href="/admin/stickers/{{ $category->id }}">{{ $category->name }}</a></b> ({{ $category->cnt }})
 
-                    <a href="/admin/stickers/delete/{{ $category->id }}?token={{ $_SESSION['token'] }}" data-toggle="tooltip" title="{{ __('main.delete') }}" onclick="return confirm('{{ __('stickers.confirm_delete_category') }}')"><i class="fa fa-times"></i></a>
+                    <div class="float-right">
+                        <a href="/admin/stickers/edit/{{ $category->id }}" data-toggle="tooltip" title="{{ __('main.edit') }}"><i class="fa fa-pencil-alt"></i></a>
+                        <a href="/admin/stickers/delete/{{ $category->id }}?token={{ $_SESSION['token'] }}" data-toggle="tooltip" title="{{ __('main.delete') }}" onclick="return confirm('{{ __('stickers.confirm_delete_category') }}')"><i class="fa fa-times"></i></a>
+                    </div>
                 </div>
-
-                <i class="far fa-smile"></i>  <b><a href="/admin/stickers/{{ $category->id }}">{{ $category->name }}</a></b> ({{ $category->cnt }})
             </div>
         @endforeach
     @else

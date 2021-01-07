@@ -41,7 +41,7 @@
             <p class="text-muted font-italic">
                 {{ __('stickers.valid_sticker_code') }}
             </p>
-            <button class="btn btn-primary">{{ __('stickers.change') }}</button>
+            <button class="btn btn-primary">{{ __('main.change') }}</button>
         </form>
     </div>
 @stop

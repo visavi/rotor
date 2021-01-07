@@ -2,6 +2,14 @@
 
 @section('title', __('loads.edit_down') . ' ' . $down->title)
 
+@section('header')
+    <div class="float-right">
+        <a class="btn btn-light" href="/downs/{{ $down->id }}"><i class="fas fa-wrench"></i></a>
+    </div>
+
+    <h1>{{ __('loads.edit_down') . ' ' . $down->title }}</h1>
+@stop
+
 @section('breadcrumb')
     <nav>
         <ol class="breadcrumb">
@@ -15,27 +23,28 @@
 
             <li class="breadcrumb-item"><a href="/admin/loads/{{ $down->category->id }}">{{ $down->category->name }}</a></li>
             <li class="breadcrumb-item active">{{ __('loads.edit_down') }}</li>
-            <li class="breadcrumb-item"><a href="/downs/{{ $down->id }}">{{ __('main.review') }}</a></li>
         </ol>
     </nav>
 @stop
 
 @section('content')
     @if (! $down->active)
-        <div class="p-1 bg-warning text-dark">
+        <div class="alert alert-warning">
             <i class="fas fa-exclamation-triangle"></i> {{ __('loads.pending_down1') }}
         </div>
     @endif
 
     @if (isAdmin('boss'))
-        <i class="fa fa-pencil-alt"></i>
-
         @if ($down->active)
-            <a href="/admin/downs/publish/{{ $down->id }}?token={{ $_SESSION['token'] }}" onclick="return confirm('{{ __('loads.confirm_unpublish_down') }}')">{{ __('main.unpublish') }}</a> /
+            <i class="fa fa-pencil-alt"></i>
+            <a class="mr-3" href="/admin/downs/publish/{{ $down->id }}?token={{ $_SESSION['token'] }}" onclick="return confirm('{{ __('loads.confirm_unpublish_down') }}')">{{ __('main.unpublish') }}</a>
         @else
-            <a href="/admin/downs/publish/{{ $down->id }}?token={{ $_SESSION['token'] }}" onclick="return confirm('{{ __('loads.confirm_publish_down') }}')">{{ __('main.publish') }}</a> /
+            <i class="fa fa-pencil-alt"></i>
+            <a class="mr-3" href="/admin/downs/publish/{{ $down->id }}?token={{ $_SESSION['token'] }}" onclick="return confirm('{{ __('loads.confirm_publish_down') }}')">{{ __('main.publish') }}</a>
         @endif
-        <a href="/admin/downs/delete/{{ $down->id }}?token={{ $_SESSION['token'] }}" onclick="return confirm('{{ __('loads.confirm_delete_down') }}')">{{ __('main.delete') }}</a><br>
+
+        <i class="fas fa-times"></i> <a class="mr-3" href="/admin/downs/delete/{{ $down->id }}?token={{ $_SESSION['token'] }}" onclick="return confirm('{{ __('loads.confirm_delete_down') }}')">{{ __('main.delete') }}</a>
+        <hr>
     @endif
 
     <div class="section-form mb-3 shadow">

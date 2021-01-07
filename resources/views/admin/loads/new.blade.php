@@ -20,24 +20,29 @@
 @section('content')
     @if ($downs->isNotEmpty())
         @foreach ($downs as $data)
-            <div class="b">
-                <i class="fa fa-file"></i>
-                <b><a href="/downs/{{ $data->id }}">{{ $data->title }}</a></b> ({{ $data->count_comments }})
+            <div class="section mb-3 shadow">
+                <div class="section-header d-flex align-items-center">
+                    <div class="flex-grow-1">
+                        <div class="section-title">
+                            <i class="fa fa-file"></i>
+                            <a href="/downs/{{ $data->id }}">{{ $data->title }}</a> ({{ $data->count_comments }})
+                        </div>
+                    </div>
 
+                    <div class="text-right">
+                        <a href="/admin/downs/edit/{{ $data->id }}" title="{{ __('main.edit') }}"><i class="fa fa-pencil-alt"></i></a>
 
-                <div class="float-right">
-                    <a href="/admin/downs/edit/{{ $data->id }}" title="{{ __('main.edit') }}"><i class="fa fa-pencil-alt"></i></a>
-
-                    @if (isAdmin('boss'))
-                        <a href="/admin/downs/delete/{{ $data->id }}?token={{ $_SESSION['token'] }}"  title="{{ __('main.delete') }}" onclick="return confirm('{{ __('loads.confirm_delete_down') }}')"><i class="fa fa-times"></i></a>
-                    @endif
+                        @if (isAdmin('boss'))
+                            <a href="/admin/downs/delete/{{ $data->id }}?token={{ $_SESSION['token'] }}"  title="{{ __('main.delete') }}" onclick="return confirm('{{ __('loads.confirm_delete_down') }}')"><i class="fa fa-times"></i></a>
+                        @endif
+                    </div>
                 </div>
-            </div>
 
-            <div>
-                {{ __('loads.load') }}: <a href="/admin/loads/{{ $data->category->id }}">{{ $data->category->name }}</a><br>
-                {{ __('loads.files_images') }}: {{ $data->getFiles()->count() }}/{{ $data->getImages()->count() }}<br>
-                {{ __('main.author') }}: {!! $data->user->getProfile() !!} ({{ dateFixed($data->created_at) }})
+                <div class="section-content">
+                    {{ __('loads.load') }}: <a href="/admin/loads/{{ $data->category->id }}">{{ $data->category->name }}</a><br>
+                    {{ __('loads.files_images') }}: {{ $data->getFiles()->count() }}/{{ $data->getImages()->count() }}<br>
+                    {{ __('main.author') }}: {!! $data->user->getProfile() !!} ({{ dateFixed($data->created_at) }})
+                </div>
             </div>
         @endforeach
     @else

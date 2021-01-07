@@ -19,23 +19,30 @@
     <a href="/admin/blacklists?type=login" class="badge badge-{{ $active }}">{{ __('admin.blacklists.logins') }}</a>
     <?php $active = ($type === 'domain') ? 'success' : 'light'; ?>
     <a href="/admin/blacklists?type=domain" class="badge badge-{{ $active }}">{{ __('admin.blacklists.domains') }}</a>
-    <br><br>
+    <hr>
 
     @if ($lists->isNotEmpty())
         <form action="/admin/blacklists/delete?type={{ $type }}&amp;page={{ $lists->currentPage() }}" method="post">
             @csrf
             @foreach ($lists as $list)
-                <div class="b">
-                    <input type="checkbox" name="del[]" value="{{ $list->id }}">
+                <div class="section mb-3 shadow">
+                    <div class="section-title">
+                        <i class="fa fa-pencil-alt"></i> {{ $list->value }}
 
-                    <i class="fa fa-pencil-alt"></i> <b>{{ $list->value }}</b>
-                </div>
-                <div>
-                    {{ __('main.added') }}: {!! $list->user->getProfile() !!} ({{ dateFixed($list->created_at) }})
+                        <div class="float-right">
+                            <input type="checkbox" name="del[]" value="{{ $list->id }}">
+                        </div>
+                    </div>
+
+                    <div class="section-content">
+                        {{ __('main.added') }}: {!! $list->user->getProfile() !!} ({{ dateFixed($list->created_at) }})
+                    </div>
                 </div>
             @endforeach
 
-            <button class="btn btn-sm btn-danger">{{ __('main.delete_selected') }}</button>
+            <div class="float-right">
+                <button class="btn btn-sm btn-danger">{{ __('main.delete_selected') }}</button>
+            </div>
         </form>
     @else
         {!! showError( __('admin.blacklists.empty_list')) !!}
