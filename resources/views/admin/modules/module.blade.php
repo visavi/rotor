@@ -87,7 +87,7 @@
         <a class="btn btn-danger" href="/admin/modules/uninstall?module={{ $moduleName }}" onclick="return confirm('{{ __('admin.modules.confirm_delete') }}')">{{ __('main.delete') }}</a>
 
         @if (isset($moduleConfig['migrations']))
-            <p class="text-muted font-italic">{{ __('admin.modules.hint') }}</p>
+            <div class="text-muted font-italic my-3">{{ __('admin.modules.hint') }}</div>
         @endif
     @else
         <a class="btn btn-success" href="/admin/modules/install?module={{ $moduleName }}">{{ __('main.install') }}</a>

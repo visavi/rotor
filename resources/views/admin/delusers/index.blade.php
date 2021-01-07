@@ -43,7 +43,7 @@
         {{ __('main.total_users') }}: <b>{{ $total }}</b><br><br>
     @else
 
-        {{ __('admin.delusers.deleted_condition') }} {{ formatTime($period) }}<br>
+        {{ __('admin.delusers.deleted_condition') }} {{ formatTime($period * 86400) }}<br>
         {{ __('admin.delusers.asset_condition') }} {{ plural($point, setting('scorename')) }}<br><br>
 
         <b>{{ __('main.users') }}:</b>
@@ -53,7 +53,9 @@
             {{ $comma }} {!! $user->getProfile() !!}
         @endforeach
 
-        <br><br>{{ __('admin.delusers.deleted_users') }}: <b>{{ $users->count() }}</b><br>
+        <div class="my-3">
+            {{ __('admin.delusers.deleted_users') }}: <b>{{ $users->count() }}</b>
+        </div>
 
         <form action="/admin/delusers/clear" method="post">
             @csrf
@@ -61,6 +63,6 @@
             <input type="hidden" name="point" value="{{ $point }}">
 
             <button class="btn btn-primary">{{ __('admin.delusers.delete_users') }}</button>
-        </form><br>
+        </form>
     @endif
 @stop

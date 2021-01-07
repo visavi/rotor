@@ -15,7 +15,7 @@
 
 @section('content')
     @if ($notice->protect)
-        <div class="p-1 bg-warning text-dark">
+        <div class="alert alert-warning">
             <i class="fa fa-exclamation-circle"></i> {{ __('admin.notices.edit_system_template') }}
         </div>
     @endif

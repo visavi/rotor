@@ -13,9 +13,10 @@
 @stop
 
 @section('content')
-    {!! nl2br($wrap->getMigrate()) !!}
+    <div class="section mb-3 shadow">
+        {!! nl2br($wrap->getMigrate()) !!}
+    </div>
 
-    <br>
     <div class="alert alert-success">
         <i class="fa fa-check"></i> <b>База данных в актуальном состоянии</b>
     </div>

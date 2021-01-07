@@ -15,25 +15,32 @@
 @section('content')
     @if ($moduleNames)
         @foreach ($moduleNames as $name => $moduleConfig)
-            <i class="fas fa-plug"></i> <a class="font-weight-bold" href="/admin/modules/module?module={{ $name }}">{{ $moduleConfig['name'] }}</a> ({{ $name }})
+            <div class="section mb-3 shadow">
+                <div class="section-title">
 
-            @if (isset($moduleInstall[$name]))
-                <span class="badge badge-success">{{ __('main.installed') }}</span>
+                    <i class="fas fa-plug"></i> <a class="font-weight-bold" href="/admin/modules/module?module={{ $name }}">{{ $moduleConfig['name'] }}</a> ({{ $name }})
+                </div>
 
-                @if ($moduleInstall[$name]->disabled)
-                    <span class="badge badge-warning">{{ __('main.disabled') }}</span>
-                @endif
+                <div class="section-content">
+                    @if (isset($moduleInstall[$name]))
+                        <span class="badge badge-success">{{ __('main.installed') }}</span>
 
-                @if (version_compare($moduleConfig['version'], $moduleInstall[$name]->version, '>'))
-                    <span class="badge badge-info">{{ __('main.update_available') }} (v.{{ $moduleConfig['version'] }})</span>
-                @endif
-                <br>
-            @else
-                <span class="badge badge-danger">{{ __('main.not_installed') }}</span><br>
-            @endif
-            {{ $moduleConfig['description'] }}<br>
-            {{ __('main.version') }}: {{ $moduleConfig['version'] }}<br>
-            {{ __('main.author') }}: {{ $moduleConfig['author'] }} <a href="{{ $moduleConfig['homepage'] }}">{{ $moduleConfig['homepage'] }}</a><hr>
+                        @if ($moduleInstall[$name]->disabled)
+                            <span class="badge badge-warning">{{ __('main.disabled') }}</span>
+                        @endif
+
+                        @if (version_compare($moduleConfig['version'], $moduleInstall[$name]->version, '>'))
+                            <span class="badge badge-info">{{ __('main.update_available') }} (v.{{ $moduleConfig['version'] }})</span>
+                        @endif
+                        <br>
+                    @else
+                        <span class="badge badge-danger">{{ __('main.not_installed') }}</span><br>
+                    @endif
+                    {{ $moduleConfig['description'] }}<br>
+                    {{ __('main.version') }}: {{ $moduleConfig['version'] }}<br>
+                    {{ __('main.author') }}: {{ $moduleConfig['author'] }} <a href="{{ $moduleConfig['homepage'] }}">{{ $moduleConfig['homepage'] }}</a>
+                </div>
+            </div>
         @endforeach
     @else
         {!! showError(__('admin.modules.empty_modules')) !!}

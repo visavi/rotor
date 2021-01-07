@@ -18,7 +18,7 @@
 
 @section('content')
     @if (! $writable)
-        <div class="p-1 my-1 bg-danger text-white">
+        <div class="alert alert-danger">
             <i class="fas fa-exclamation-triangle"></i>
             {{ __('admin.files.writable') }}
         </div>

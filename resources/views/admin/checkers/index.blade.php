@@ -14,7 +14,7 @@
 
 @section('content')
     @if ($diff)
-        <b><span style="color:#ff0000">{{ __('admin.checkers.new_files') }}:</span></b><br><br>
+        <h5>{{ __('admin.checkers.new_files') }}:</h5>
 
         @if ($diff['left'])
             @foreach ($diff['left'] as $file)
@@ -25,7 +25,7 @@
             {!! showError(__('admin.checkers.empty_changes')) !!}
         @endif
 
-        <b><span style="color:#ff0000">{{ __('admin.checkers.old_files') }}:</span></b><br><br>
+        <h5>{{ __('admin.checkers.old_files') }}:</h5>
 
         @if ($diff['right'])
             @foreach ($diff['right'] as $file)

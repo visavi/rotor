@@ -19,30 +19,34 @@
 @section('content')
     <div class="container-fluid">
         <div class="row">
-            <div class="col-md-6 bg-light p-1">
-                <form action="/admin/files/create?path={{ $path }}" method="post">
-                    @csrf
-                    <div class="form-group{{ hasError('dirname') }}">
-                        <label for="dirname">{{ __('admin.files.directory_name') }}:</label>
-                        <input type="text" class="form-control" id="dirname" name="dirname" maxlength="30" value="{{ getInput('dirname') }}" required>
-                        <div class="invalid-feedback">{{ textError('dirname') }}</div>
-                    </div>
+            <div class="col-md-6">
+                <div class="section-form mb-3 shadow">
+                    <form action="/admin/files/create?path={{ $path }}" method="post">
+                        @csrf
+                        <div class="form-group{{ hasError('dirname') }}">
+                            <label for="dirname">{{ __('admin.files.directory_name') }}:</label>
+                            <input type="text" class="form-control" id="dirname" name="dirname" maxlength="30" value="{{ getInput('dirname') }}" required>
+                            <div class="invalid-feedback">{{ textError('dirname') }}</div>
+                        </div>
 
-                    <button class="btn btn-primary">{{ __('admin.files.create_directory') }}</button>
-                </form>
+                        <button class="btn btn-primary">{{ __('admin.files.create_directory') }}</button>
+                    </form>
+                </div>
             </div>
 
-            <div class="col-md-6 bg-light p-1">
-                <form action="/admin/files/create?path={{ $path }}" method="post">
-                    @csrf
-                    <div class="form-group{{ hasError('filename') }}">
-                        <label for="filename">{{ __('admin.files.file_name') }}:</label>
-                        <input type="text" class="form-control" id="filename" name="filename" maxlength="30" value="{{ getInput('filename') }}" required>
-                        <div class="invalid-feedback">{{ textError('filename') }}</div>
-                    </div>
+            <div class="col-md-6">
+                <div class="section-form mb-3 shadow">
+                    <form action="/admin/files/create?path={{ $path }}" method="post">
+                        @csrf
+                        <div class="form-group{{ hasError('filename') }}">
+                            <label for="filename">{{ __('admin.files.file_name') }}:</label>
+                            <input type="text" class="form-control" id="filename" name="filename" maxlength="30" value="{{ getInput('filename') }}" required>
+                            <div class="invalid-feedback">{{ textError('filename') }}</div>
+                        </div>
 
-                    <button class="btn btn-primary">{{ __('admin.files.create_file') }}</button>
-                </form>
+                        <button class="btn btn-primary">{{ __('admin.files.create_file') }}</button>
+                    </form>
+                </div>
             </div>
         </div>
 
