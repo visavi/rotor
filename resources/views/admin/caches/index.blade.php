@@ -13,17 +13,22 @@
 @stop
 
 @section('content')
-    <i class="fa fa-eraser fa-2x"></i> <a href="/admin/caches" class="badge badge-success">{{ __('admin.caches.files') }}</a> / <a href="/admin/caches?type=image" class="badge badge-light">{{ __('admin.caches.images') }}</a><br><br>
+    <a href="/admin/caches" class="badge badge-success">{{ __('admin.caches.files') }}</a>
+    <a href="/admin/caches?type=image" class="badge badge-light">{{ __('admin.caches.images') }}</a>
+    <hr>
 
-    <div>
+    <div class="mb-3">
         Cache driver: <span class="badge badge-pill badge-primary">{{ config('CACHE_DRIVER') }}</span>
     </div>
 
     @if ($files->isNotEmpty())
-        @foreach ($files as $file)
-
-            <i class="fa fa-file-alt"></i> <b>{{ basename($file) }}</b> ({{ formatFileSize($file) }} / {{ dateFixed(filemtime($file)) }})<br>
-        @endforeach
+        <div class="mb-3">
+            @foreach ($files as $file)
+                <div class="mb-1">
+                    <i class="fa fa-file-alt"></i> <b>{{ basename($file) }}</b> ({{ formatFileSize($file) }} / {{ dateFixed(filemtime($file)) }})
+                </div>
+            @endforeach
+        </div>
 
         <div class="float-right">
             <form action="/admin/caches/clear" method="post">
@@ -32,11 +37,10 @@
             </form>
         </div>
 
-        <br>{{ __('main.total') }}: {{ $files->total() }}<br><br>
+        {{ $files->links() }}
 
+        {{ __('main.total') }}: {{ $files->total() }}<br>
     @else
         {!! showError(__('admin.caches.empty_files')) !!}
     @endif
-
-    {{ $files->links() }}
 @stop

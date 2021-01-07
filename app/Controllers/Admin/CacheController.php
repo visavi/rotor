@@ -34,12 +34,12 @@ class CacheController extends AdminController
 
         if ($type === 'files') {
             $files = glob(STORAGE . '/caches/{*/*/*,*.php}', GLOB_BRACE);
-            $files = paginate($files, 20);
+            $files = paginate($files, 20, compact('type'));
 
             $view = view('admin/caches/index', compact('files'));
         } else {
             $images = glob(UPLOADS . '/thumbnails/*.{gif,png,jpg,jpeg}', GLOB_BRACE);
-            $images = paginate($images, 20);
+            $images = paginate($images, 20, compact('type'));
 
             $view = view('admin/caches/images', compact('images'));
         }

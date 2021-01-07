@@ -13,15 +13,20 @@
 @stop
 
 @section('content')
-    <i class="fa fa-eraser fa-2x"></i> <a href="/admin/caches" class="badge badge-light">{{ __('admin.caches.files') }}</a> / <a href="/admin/caches?type=image" class="badge badge-success">{{ __('admin.caches.images') }}</a><br><br>
+    <a href="/admin/caches" class="badge badge-light">{{ __('admin.caches.files') }}</a>
+    <a href="/admin/caches?type=image" class="badge badge-success">{{ __('admin.caches.images') }}</a>
+    <hr>
 
     @if ($images->isNotEmpty())
-        @foreach ($images as $image)
+        <div class="mb-3">
+            @foreach ($images as $image)
+                <div class="mb-1">
+                    <i class="fa fa-image"></i> <b>{{ basename($image) }}</b> ({{ formatFileSize($image) }} / {{ dateFixed(filemtime($image)) }})
+                </div>
+            @endforeach
+        </div>
 
-            <i class="fa fa-image"></i> <b>{{ basename($image) }}</b> ({{ formatFileSize($image) }} / {{ dateFixed(filemtime($image)) }})<br>
-        @endforeach
-
-        <div class="float-right">
+        <div class="float-right mb-3">
             <form action="/admin/caches/clear" method="post">
                 @csrf
                 <input type="hidden" name="type" value="image">
@@ -29,10 +34,10 @@
             </form>
         </div>
 
-        <br>{{ __('main.total') }}: {{ $images->total() }}<br><br>
+        {{ $images->links() }}
+
+        {{ __('main.total') }}: {{ $images->total() }}<br>
     @else
         {!! showError(__('admin.caches.empty_images')) !!}
     @endif
-
-    {{ $images->links() }}
 @stop

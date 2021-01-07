@@ -59,20 +59,24 @@
 
     @if ($users->isNotEmpty())
         @foreach ($users as $user)
-            <div  class="text-truncate bg-light my-1">
-                <div class="img">
+            <div class="section mb-3 shadow">
+                <div class="user-avatar">
                     {!! $user->getAvatar() !!}
                     {!! $user->getOnline() !!}
                 </div>
 
-                <b><a href="/admin/users/edit?user={{ $user->login }}">{{ $user->getName() }}</a></b>
-                ({{ __('users.email') }}: {{ $user->email }})<br>
-                {{ __('users.registered') }}: {{ dateFixed($user->created_at, 'd.m.Y') }}
+                <div class="section-content">
+                    <b><a href="/admin/users/edit?user={{ $user->login }}">{{ $user->getName() }}</a></b>
+                    ({{ plural($user->point, setting('scorename')) }})<br>
+
+                    {{ __('users.email') }}: {{ $user->email }}<br>
+                    {{ __('users.registered') }}: {{ dateFixed($user->created_at, 'd.m.Y') }}
+                </div>
             </div>
         @endforeach
+
+        {{ $users->links() }}
     @else
         {!! showError(__('main.empty_users')) !!}
     @endif
-
-    {{ $users->links() }}
 @stop

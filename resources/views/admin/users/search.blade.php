@@ -15,28 +15,27 @@
 
 @section('content')
     @if ($users->isNotEmpty())
-        <div class="mb-3">
-            @foreach ($users as $user)
-                <div  class="text-truncate bg-light my-1">
-                    <div class="img">
-                        {!! $user->getAvatar() !!}
-                        {!! $user->getOnline() !!}
-                    </div>
+        @foreach ($users as $user)
+            <div class="section mb-3 shadow">
+                <div class="user-avatar">
+                    {!! $user->getAvatar() !!}
+                    {!! $user->getOnline() !!}
+                </div>
 
+                <div class="section-content">
                     <b><a href="/admin/users/edit?user={{ $user->login }}">{{ $user->getName() }}</a></b>
                     ({{ plural($user->point, setting('scorename')) }})<br>
 
-                    @if ($user->name )
-                        {{ __('users.name') }}: {{ $user->name }}
-                    @endif
+                    {{ __('users.email') }}: {{ $user->email }}<br>
+                    {{ __('users.registered') }}: {{ dateFixed($user->created_at, 'd.m.Y') }}
                 </div>
-            @endforeach
-        </div>
+            </div>
+        @endforeach
+
+        {{ $users->links() }}
 
         {{ __('main.total_found') }}: {{ $users->total() }}<br><br>
     @else
         {!! showError(__('main.empty_found')) !!}
     @endif
-
-    {{ $users->links() }}
 @stop

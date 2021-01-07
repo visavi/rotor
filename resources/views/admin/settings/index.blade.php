@@ -15,7 +15,7 @@
 @section('content')
     <div class="container-fluid">
         <div class="row">
-            <div class="col-md-4 bg-light p-1">
+            <div class="col-md-4 section shadow">
                 <div class="nav flex-column nav-pills">
                     <a class="nav-link" href="/admin/settings?act=mains" id="mains">{{ __('settings.mains') }}</a>
                     <a class="nav-link" href="/admin/settings?act=mails" id="mails">{{ __('settings.mails') }}</a>
@@ -39,7 +39,7 @@
                     <a class="nav-link" href="/admin/settings?act=offers" id="offers">{{ __('settings.offers') }}</a>
                 </div>
             </div>
-            <div class="col-md-8">
+            <div class="col-md-8 section shadow">
                 @include('admin/settings/_' . $act)
             </div>
         </div>
