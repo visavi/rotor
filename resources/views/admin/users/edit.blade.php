@@ -14,7 +14,16 @@
 @stop
 
 @section('content')
-    <h3>{!! $user->getProfile() !!} {{ $user->login }} #{{ $user->id }}</h3>
+    <h3>
+        {!! $user->getProfile() !!}
+
+        <small>
+            @if ($user->login !== $user->getName())
+                ({{ $user->login }})
+            @endif
+            #{{ $user->id }}
+        </small>
+    </h3>
 
     @if (getUser('id') === $user->id)
         <div class="alert alert-danger">{{ __('users.edit_user_notice') }}</div>

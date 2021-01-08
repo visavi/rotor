@@ -297,7 +297,6 @@ return FastRoute\cachedDispatcher(static function (RouteCollector $r) {
     $r->get('/authlogs', [App\Controllers\LoginController::class, 'index']);
 
     $r->addRoute(['GET', 'POST'], '/ban', [App\Controllers\User\BanController::class, 'ban']);
-    $r->addRoute(['GET', 'POST'], '/who', [App\Controllers\User\UserController::class, 'who']);
 
     $r->get('/faq', [App\Controllers\PageController::class, 'faq']);
     $r->get('/statusfaq', [App\Controllers\PageController::class, 'statusfaq']);

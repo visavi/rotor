@@ -51,7 +51,6 @@ return [
     'faq'                => 'FAQ',
     'api_interface'      => 'Api interface',
     'user_statuses'      => 'User statuses',
-    'who_online'         => 'Who is online',
 
     'recent_activity' => 'Recent activity',
     'recent_topics'   => 'Recent topics',

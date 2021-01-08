@@ -51,7 +51,6 @@ return [
     'faq'                => 'FAQ',
     'api_interface'      => 'API интерфейс',
     'user_statuses'      => 'Статусы пользователей',
-    'who_online'         => 'Кто онлайн',
 
     'recent_activity' => 'Последняя активность',
     'recent_topics'   => 'Последние темы',

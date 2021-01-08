@@ -3,7 +3,16 @@
 @section('title', __('index.account') . ' ' . $user->getName())
 
 @section('header')
-    <h1>{{ $user->getName() }} <small>{{ $user->login }} #{{ $user->id }}</small></h1>
+    <h1>
+        {{ $user->getName() }}
+
+        <small>
+            @if ($user->login !== $user->getName())
+                ({{ $user->login }})
+            @endif
+            #{{ $user->id }}
+        </small>
+    </h1>
 @stop
 
 @section('breadcrumb')
@@ -38,7 +47,7 @@
         <div class="alert alert-info">{{ __('users.position') }}: <b>{{ $user->getLevel() }}</b></div>
     @endif
 
-    <div class="container-fluid">
+    <div class="container-fluid mb-3">
         <div class="row">
             <div class="col-md-6">
                 {{ __('users.status') }}: <b><a href="/statusfaq">{!! $user->getStatus() !!}</a></b><br>
@@ -106,7 +115,7 @@
                     <img src="/assets/img/images/photo.png" alt="Photo" class="float-right img-fluid rounded">
                 @endif
             </div>
-            <div class="col-md-12">
+            <div class="col-md-12 mt-3">
                 @if (!empty($user->info))
                     <div class="alert alert-warning">
                         <b>{{ __('users.about') }}:</b><br>
@@ -123,7 +132,7 @@
     </div>
 
     @if (isAdmin())
-    <div class="alert alert-success">
+    <div class="alert alert-success mb-3">
         <i class="fa fa-thumbtack"></i> <b>{{ __('main.note') }}:</b> (<a href="/users/{{ $user->login }}/note">{{ __('main.change') }}</a>)<br>
 
         @if (! empty($user->note->text))
@@ -136,7 +145,7 @@
         </div>
     @endif
 
-    <div class="alert alert-info">
+    <div class="alert alert-info mb-3">
         <i class="fa fa-sticky-note"></i> <a href="/walls/{{ $user->login }}">{{ __('index.wall_posts') }}</a> ({{ $user->getCountWall() }})<br>
 
         @if (!empty($user->site))

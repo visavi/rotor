@@ -109,13 +109,6 @@ return [
     'receive_newsletters'  => 'Receive newsletters',
     'newsletters_hint'     => 'Receive newsletters from the site by email',
 
-    'novices'         => 'Beginners',
-    'birthdays'       => 'Birthdays',
-    'total_birthdays' => 'Total birthday people',
-    'empty_birthdays' => 'Today there are no birthday!',
-    'total_novices'   => 'Total Newcomers',
-    'empty_novices'   => 'No newcomers yet!',
-
     'last_registered'  => 'List of last registered',
     'registered'       => 'Registered',
     'edit_user'        => 'Editing user',

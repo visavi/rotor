@@ -17,28 +17,29 @@
 
 @section('content')
     <div class="mb-3">
-        @if ($admins)
-            <a class="btn btn-light btn-sm" href="/users?sort={{ $sort }}">Пользователи <span class="badge badge-light">{{ statsUsers() }}</span></a>
-            <a class="btn btn-primary btn-sm" href="/users?admins=1&amp;sort={{ $sort }}">Админы <span class="badge badge-light">{{ statsAdmins() }}</span></a>
-        @else
-            <a class="btn btn-primary btn-sm" href="/users?sort={{ $sort }}">Пользователи <span class="badge badge-light">{{ statsUsers() }}</span></a>
-            <a class="btn btn-light btn-sm" href="/users?admins=1&amp;sort={{ $sort }}">Админы <span class="badge badge-light">{{ statsAdmins() }}</span></a>
-        @endif
+        <?php $active = ($type === 'users') ? 'primary' : 'light'; ?>
+        <a class="btn btn-{{ $active }} btn-sm" href="/users?type=users&amp;sort={{ $sort }}">{{ __('main.users') }} <span class="badge badge-light">{{ statsUsers() }}</span></a>
+
+        <?php $active = ($type === 'admins') ? 'primary' : 'light'; ?>
+        <a class="btn btn-{{ $active }} btn-sm" href="/users?type=admins&amp;sort={{ $sort }}">{{ __('main.admins') }} <span class="badge badge-light">{{ statsAdmins() }}</span></a>
+
+        <?php $active = ($type === 'birthdays') ? 'primary' : 'light'; ?>
+        <a class="btn btn-{{ $active }} btn-sm" href="/users?type=birthdays&amp;sort={{ $sort }}">{{ __('main.birthdays') }}</a>
     </div>
 
     @if ($users->isNotEmpty())
         {{ __('main.sort') }}:
         <?php $active = ($sort === 'point') ? 'success' : 'light'; ?>
-        <a href="/users?admins={{ $admins }}&amp;sort=point" class="badge badge-{{ $active }}">{{ __('users.assets') }}</a>
+        <a href="/users?type={{ $type }}&amp;sort=point" class="badge badge-{{ $active }}">{{ __('users.assets') }}</a>
 
         <?php $active = ($sort === 'rating') ? 'success' : 'light'; ?>
-        <a href="/users?admins={{ $admins }}&amp;sort=rating" class="badge badge-{{ $active }}">{{ __('users.reputation') }}</a>
+        <a href="/users?type={{ $type }}&amp;sort=rating" class="badge badge-{{ $active }}">{{ __('users.reputation') }}</a>
 
         <?php $active = ($sort === 'money') ? 'success' : 'light'; ?>
-        <a href="/users?admins={{ $admins }}&amp;sort=money" class="badge badge-{{ $active }}">{{ __('users.moneys') }}</a>
+        <a href="/users?type={{ $type }}&amp;sort=money" class="badge badge-{{ $active }}">{{ __('users.moneys') }}</a>
 
         <?php $active = ($sort === 'time') ? 'success' : 'light'; ?>
-        <a href="/users?admins={{ $admins }}&amp;sort=time" class="badge badge-{{ $active }}">{{ __('main.date') }}</a>
+        <a href="/users?type={{ $type }}&amp;sort=time" class="badge badge-{{ $active }}">{{ __('main.date') }}</a>
         <hr>
 
         @foreach ($users as $key => $data)
@@ -52,10 +53,11 @@
                     <div class="flex-grow-1">
                         {{ $users->firstItem() + $key }}.
                         @if ($user === $data->login)
-                            {!! $data->getProfile('#ff0000') !!}
+                            {!! $data->getProfile('#ff0000') !!}<br>
                         @else
-                            {!! $data->getProfile() !!}
+                            {!! $data->getProfile() !!}<br>
                         @endif
+
                         <small class="font-italic">{!! $data->getStatus() !!}</small>
                     </div>
                 </div>
@@ -70,7 +72,7 @@
         @endforeach
 
         <div class="section-form mb-3 shadow">
-            <form action="/users" method="post">
+            <form action="/users?type={{ $type }}&amp;sort={{ $sort }}" method="post">
                 <div class="form-inline">
                     <div class="form-group{{ hasError('user') }}">
                         <input type="text" class="form-control" id="user" name="user" maxlength="20" value="{{ getInput('user', $user) }}" placeholder="{{ __('main.user_login') }}" required>
@@ -91,6 +93,5 @@
         {!! showError(__('main.empty_users')) !!}
     @endif
 
-    <i class="fa fa-users"></i> <a href="/who">{{ __('users.novices') }}</a><br>
     <i class="fas fa-search"></i> <a href="/searchusers">{{ __('index.search_users') }}</a><br>
 @stop

@@ -759,27 +759,4 @@ class UserController extends BaseController
 
         redirect('/accounts');
     }
-
-    /**
-     * Online users
-     *
-     * @return string
-     */
-    public function who(): string
-    {
-        $online = Online::query()
-            ->whereNotNull('user_id')
-            ->with('user')
-            ->get();
-
-        $birthdays = User::query()
-            ->whereRaw('substr(birthday, 1, 5) = ?', date('d.m', SITETIME))
-            ->get();
-
-        $novices = User::query()
-            ->where('created_at', '>', strtotime('-1 day', SITETIME))
-            ->get();
-
-        return view('users/who', compact('online', 'birthdays', 'novices'));
-    }
 }

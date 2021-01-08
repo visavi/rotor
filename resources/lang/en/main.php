@@ -113,6 +113,8 @@ return [
     'cash_money'        => 'You have in stock',
     'user_login'        => 'User login',
     'users'             => 'Users',
+    'admins'            => 'Administrators',
+    'birthdays'         => 'Birthdays',
     'total_users'       => 'Total users',
     'empty_users'       => 'No users yet!',
     'reputation'        => 'Reputation',
