@@ -16,8 +16,6 @@ return [
     'search'         => 'Поиск по сайту',
     'mails'          => 'Обратная связь',
     'users'          => 'Пользователи',
-    'admins'         => 'Администраторы',
-    'administrators' => 'Администрация',
     'contacts'       => 'Контакт-лист',
     'ignores'        => 'Игнор-лист',
     'messages'       => 'Сообщения',
@@ -52,8 +50,6 @@ return [
     'stickers_help'      => 'Справка по стикерам',
     'faq'                => 'FAQ',
     'api_interface'      => 'API интерфейс',
-    'riches_rating'      => 'Рейтинг толстосумов',
-    'reputation_rating'  => 'Рейтинг репутации',
     'user_statuses'      => 'Статусы пользователей',
     'who_online'         => 'Кто онлайн',
 

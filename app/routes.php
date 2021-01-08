@@ -296,9 +296,6 @@ return FastRoute\cachedDispatcher(static function (RouteCollector $r) {
 
     $r->get('/authlogs', [App\Controllers\LoginController::class, 'index']);
 
-    $r->get('/administrators', [App\Controllers\User\ListController::class, 'adminlist']);
-    $r->addRoute(['GET', 'POST'], '/authoritylists', [App\Controllers\User\ListController::class, 'authoritylist']);
-    $r->addRoute(['GET', 'POST'], '/ratinglists', [App\Controllers\User\ListController::class, 'ratinglist']);
     $r->addRoute(['GET', 'POST'], '/ban', [App\Controllers\User\BanController::class, 'ban']);
     $r->addRoute(['GET', 'POST'], '/who', [App\Controllers\User\UserController::class, 'who']);
 
@@ -428,8 +425,6 @@ return FastRoute\cachedDispatcher(static function (RouteCollector $r) {
         $r->get('/users/search', [App\Controllers\Admin\UserController::class, 'search']);
         $r->addRoute(['GET', 'POST'], '/users/edit', [App\Controllers\Admin\UserController::class, 'edit']);
         $r->addRoute(['GET', 'POST'], '/users/delete', [App\Controllers\Admin\UserController::class, 'delete']);
-
-        $r->get('/administrators', [App\Controllers\Admin\AdminlistController::class, 'index']);
 
         $r->get('/invitations', [App\Controllers\Admin\InvitationController::class, 'index']);
         $r->addRoute(['GET', 'POST'], '/invitations/create', [App\Controllers\Admin\InvitationController::class, 'create']);

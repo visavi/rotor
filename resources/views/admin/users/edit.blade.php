@@ -17,7 +17,7 @@
     <h3>{!! $user->getProfile() !!} {{ $user->login }} #{{ $user->id }}</h3>
 
     @if (getUser('id') === $user->id)
-        <div class="p-1 my-1 bg-danger text-white">{{ __('users.edit_user_notice') }}</div>
+        <div class="alert alert-danger">{{ __('users.edit_user_notice') }}</div>
     @endif
 
     <div class="section-form mb-3 shadow">

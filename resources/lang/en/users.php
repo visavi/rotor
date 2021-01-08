@@ -16,11 +16,6 @@ return [
     'token_required'          => 'This token is required to work through',
     'api_interface'           => 'API interface',
 
-    'total_administration' => 'Total in administration',
-    'fast_mail'            => 'Fast Mail',
-    'choose_addressee'     => 'Select destination',
-    'empty_administration' => 'There is no administration yet!',
-
     'banned'       => 'Banned',
     'last_ban'     => 'The last ban',
     'reason_ban'   => 'Reason for the ban',
@@ -80,7 +75,7 @@ return [
     'forum_posts'     => 'Forum Posts',
     'guest_posts'     => 'Guest Messages',
     'assets'          => 'Assets',
-    'moneys'          => 'Money',
+    'moneys'          => 'Moneys',
     'invitation'      => 'Registered by invitation',
     'last_visit'      => 'Last visit',
     'empty_note'      => 'No Records Yet!',

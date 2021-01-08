@@ -43,13 +43,15 @@
                 </div>
             </div>
         @endforeach
+
+        {{ $messages->links() }}
     @else
         {!! showError(__('messages.empty_notifications')) !!}
     @endif
 
-    {{ $messages->links() }}
-
-    <br>{{ __('main.total') }}: <b>{{ $messages->total() }}</b><br>
+    <div class="mb-3">
+        {{ __('main.total') }}: <b>{{ $messages->total() }}</b>
+    </div>
 
     @if ($messages->isNotEmpty())
         <i class="fa fa-times"></i> <a href="/messages/delete/0?token={{ $_SESSION['token'] }}">{{ __('messages.delete_talk') }}</a><br>

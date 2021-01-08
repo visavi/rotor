@@ -20,14 +20,15 @@
         </div>
     @endif
 
-    @if ($used)
-        <div class="mb-3">
-            <a class="btn btn-light btn-sm" href="/admin/invitations">{{ __('admin.invitations.unused') }}</a> <a class="btn btn-primary btn-sm" href="/admin/invitations?used=1">{{ __('admin.invitations.used') }}</a>
-            @else
-                <a class="btn btn-primary btn-sm" href="/admin/invitations">{{ __('admin.invitations.unused') }}</a> <a class="btn btn-light btn-sm" href="/admin/invitations?used=1">{{ __('admin.invitations.used') }}</a>
-            @endif
-        </div>
-
+    <div class="mb-3">
+        @if ($used)
+            <a class="btn btn-light btn-sm" href="/admin/invitations">{{ __('admin.invitations.unused') }}</a>
+            <a class="btn btn-primary btn-sm" href="/admin/invitations?used=1">{{ __('admin.invitations.used') }}</a>
+        @else
+            <a class="btn btn-primary btn-sm" href="/admin/invitations">{{ __('admin.invitations.unused') }}</a>
+            <a class="btn btn-light btn-sm" href="/admin/invitations?used=1">{{ __('admin.invitations.used') }}</a>
+        @endif
+    </div>
 
     @if ($invites->isNotEmpty())
         <form action="/admin/invitations/delete?used={{ $used }}&amp;page={{ $invites->currentPage() }}" method="post">
@@ -54,14 +55,19 @@
                 </div>
             @endforeach
 
-            <button class="btn btn-sm btn-danger">{{ __('main.delete_selected') }}</button>
+            <div class="float-right">
+                <button class="btn btn-sm btn-danger">{{ __('main.delete_selected') }}</button>
+            </div>
         </form>
-        <br>{{ __('main.total') }}: <b>{{ $invites->total() }}</b><br>
+
+        {{ $invites->links() }}
+
+        <div class="mb-3">
+            {{ __('main.total') }}: <b>{{ $invites->total() }}</b>
+        </div>
     @else
         {!! showError(__('admin.invitations.empty_invitations')) !!}
     @endif
-
-    {{ $invites->links() }}
 
     <i class="fa fa-check"></i> <a href="/admin/invitations/create">{{ __('admin.invitations.create_keys') }}</a><br>
     <i class="fa fa-key"></i> <a href="/admin/invitations/keys">{{ __('admin.invitations.list_keys') }}</a><br>

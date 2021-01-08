@@ -91,9 +91,6 @@ class AdminController extends BaseController
             $gdInfo = parseVersion($gdInfo['GD Version']);
         }
 
-        $mysqlVersion = DB::connection()->selectOne('SHOW VARIABLES LIKE "version"');
-        $mysqlVersion = parseVersion($mysqlVersion->Value);
-
-        return view('admin/phpinfo', compact('iniInfo', 'gdInfo', 'mysqlVersion'));
+        return view('admin/phpinfo', compact('iniInfo', 'gdInfo'));
     }
 }

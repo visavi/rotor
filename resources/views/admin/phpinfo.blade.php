@@ -23,8 +23,6 @@
         @if ($gdInfo)
             <span class="badge badge-success">GD {{ $gdInfo }}</span>
         @endif
-
-        <span class="badge badge-success">MySQL {{ $mysqlVersion }}</span>
     </div>
 
     @if ($iniInfo)

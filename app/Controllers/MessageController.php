@@ -43,7 +43,7 @@ class MessageController extends BaseController
             ->select(
                 'author_id',
                 DB::connection()->raw('max(created_at) as last_created_at'),
-                DB::connection()->raw('min(reading) as all_reading')
+                DB::connection()->raw('min(case when reading then 1 else 0 end) as all_reading')
             )
             ->where('user_id', $this->user->id)
             ->groupBy('author_id');

@@ -57,11 +57,11 @@
                 </div>
             </div>
         @endforeach
+
+        {{ $messages->links() }}
     @else
         {!! showError(__('messages.empty_dialogue')) !!}
     @endif
-
-    {{ $messages->links() }}
 
     @if ($user->exists)
         <div class="section-form mb-3 shadow">
@@ -83,7 +83,9 @@
         </div>
     @endif
 
-    <br>{{ __('main.total') }}: <b>{{ $messages->total() }}</b><br>
+    <div class="mb-3">
+        {{ __('main.total') }}: <b>{{ $messages->total() }}</b>
+    </div>
 
     @if ($messages->isNotEmpty())
         <i class="fa fa-times"></i> <a href="/messages/delete/{{ $user->id }}?token={{ $_SESSION['token'] }}" onclick="return confirm('{{ __('messages.delete_confirm') }}')">{{ __('messages.delete_talk') }}</a><br>

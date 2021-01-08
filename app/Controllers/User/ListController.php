@@ -6,6 +6,7 @@ namespace App\Controllers\User;
 
 use App\Controllers\BaseController;
 use App\Models\User;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 
 class ListController extends BaseController
@@ -19,10 +20,33 @@ class ListController extends BaseController
      */
     public function userlist(Request $request): string
     {
+        $sort   = check($request->input('sort', 'point'));
+        $admins = int($request->input('admins', 0));
+
+        switch ($sort) {
+            case 'time':
+                $order = 'created_at';
+                break;
+            case 'rating':
+                $order = 'rating';
+                break;
+            case 'money':
+                $order = 'money';
+                break;
+            default:
+                $order = 'point';
+        }
+
         $users = User::query()
-            ->orderByDesc('point')
-            ->orderBy('login')
-            ->paginate(setting('userlist'));
+            ->when($admins, static function (Builder $query) {
+                return $query->whereIn('level', User::ADMIN_GROUPS);
+            })
+            ->orderByDesc($order)
+            ->paginate(setting('userlist'))
+            ->appends([
+                'admins' => $admins,
+                'sort'   => $sort,
+            ]);
 
         $user = $request->input('user', getUser('login'));
 
@@ -46,100 +70,6 @@ class ListController extends BaseController
             }
         }
 
-        return view('users/users', compact('users', 'user'));
-    }
-
-    /**
-     * Admins List
-     *
-     * @return string
-     */
-    public function adminlist(): string
-    {
-        $users = User::query()
-            ->whereIn('level', User::ADMIN_GROUPS)
-            ->orderByRaw("field(level, '".implode("','", User::ADMIN_GROUPS)."')")
-            ->get();
-
-        return view('users/administrators', compact('users'));
-    }
-
-    /**
-     * Reputation rating
-     *
-     * @param Request $request
-     *
-     * @return string
-     */
-    public function authoritylist(Request $request): string
-    {
-        $users = User::query()
-            ->orderByDesc('rating')
-            ->orderBy('login')
-            ->paginate(setting('avtorlist'));
-
-        $user = $request->input('user', getUser('login'));
-
-        if ($request->isMethod('post')) {
-            $position = User::query()
-                ->orderByDesc('rating')
-                ->orderBy('login')
-                ->get()
-                ->where('login', $user)
-                ->keys()
-                ->first();
-
-            if ($position !== null) {
-                ++$position;
-                $end = ceil($position / setting('avtorlist'));
-
-                setFlash('success', __('users.rating_position', ['position' => $position]));
-                redirect('/authoritylists?page=' . $end . '&user=' . $user);
-            } else {
-                setFlash('danger', __('validator.user'));
-            }
-        }
-
-        return view('users/authoritylists', compact('users', 'user'));
-    }
-
-    /**
-     * Riches rating
-     *
-     * @param Request $request
-     *
-     * @return string
-     */
-    public function ratinglist(Request $request): string
-    {
-        $users = User::query()
-            ->orderByDesc('money')
-            ->orderBy('login')
-            ->paginate(setting('userlist'));
-
-        $login = $request->input('user', getUser('login'));
-
-        if ($request->isMethod('post')) {
-            $position = User::query()
-                ->orderByDesc('money')
-                ->orderBy('login')
-                ->toBase()
-                ->get()
-                ->where('login', $login)
-                ->keys()
-                ->first();
-
-            if ($position !== null) {
-                ++$position;
-                $end = ceil($position / setting('userlist'));
-
-                setFlash('success', __('users.rating_position', ['position' => $position]));
-                redirect('/ratinglists?page='.$end.'&user='.$login);
-            } else {
-                setFlash('danger', __('validator.user'));
-            }
-        }
-
-        return view('users/ratinglists', compact('users', 'login'));
+        return view('users/users', compact('users', 'user', 'admins', 'sort'));
     }
 }

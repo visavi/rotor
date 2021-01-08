@@ -48,7 +48,6 @@
                 <i class="far fa-circle fa-lg text-muted"></i> <a href="/admin/banhists">{{ __('index.ban_history') }}</a> ({{ statsBanHist() }})<br>
                 <i class="far fa-circle fa-lg text-muted"></i> <a href="/admin/invitations">{{ __('index.invitations') }}</a> ({{ statsInvite() }})<br>
                 <i class="far fa-circle fa-lg text-muted"></i> <a href="/admin/transfers">{{ __('index.cash_transactions') }}</a><br>
-                <i class="far fa-circle fa-lg text-muted"></i> <a href="/admin/administrators">{{ __('index.admins') }}</a> ({{ statsAdmins() }})<br>
             </div>
         </div>
     @endif

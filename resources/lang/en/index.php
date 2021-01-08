@@ -16,8 +16,6 @@ return [
     'search'         => 'Site search',
     'mails'          => 'Feedback',
     'users'          => 'Users',
-    'admins'         => 'Admins',
-    'administrators' => 'Administration',
     'contacts'       => 'Contact list',
     'ignores'        => 'Ignore list',
     'messages'       => 'Messages',
@@ -52,8 +50,6 @@ return [
     'stickers_help'      => 'Stickers help',
     'faq'                => 'FAQ',
     'api_interface'      => 'Api interface',
-    'riches_rating'      => 'Riches rating',
-    'reputation_rating'  => 'Reputation rating',
     'user_statuses'      => 'User statuses',
     'who_online'         => 'Who is online',
 

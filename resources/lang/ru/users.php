@@ -16,11 +16,6 @@ return [
     'token_required'          => 'Данный токен необходим для работы через',
     'api_interface'           => 'API интерфейс',
 
-    'total_administration' => 'Всего в администрации',
-    'fast_mail'            => 'Быстрая почта',
-    'choose_addressee'     => 'Выберите адресат',
-    'empty_administration' => 'Администрации еще нет!',
-
     'banned'       => 'Забанил',
     'last_ban'     => 'Последний бан',
     'reason_ban'   => 'Причина бана',
@@ -80,7 +75,7 @@ return [
     'forum_posts'     => 'Сообщения в форуме',
     'guest_posts'     => 'Сообщения в гостевой',
     'assets'          => 'Актив',
-    'moneys'          => 'Денег',
+    'moneys'          => 'Деньги',
     'invitation'      => 'Зарегистрирован по приглашению',
     'last_visit'      => 'Последний визит',
     'empty_note'      => 'Записей еще нет!',

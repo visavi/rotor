@@ -14,8 +14,5 @@
 <i class="far fa-circle fa-lg text-muted"></i> <a href="/stickers">{{ __('index.stickers_help') }}</a><br>
 <i class="far fa-circle fa-lg text-muted"></i> <a href="/faq">{{ __('index.faq') }}</a><br>
 <i class="far fa-circle fa-lg text-muted"></i> <a href="/api">{{ __('index.api_interface') }}</a><br>
-
-<i class="far fa-circle fa-lg text-muted"></i> <a href="/ratinglists">{{ __('index.riches_rating') }}</a><br>
-<i class="far fa-circle fa-lg text-muted"></i> <a href="/authoritylists">{{ __('index.reputation_rating') }}</a><br>
 <i class="far fa-circle fa-lg text-muted"></i> <a href="/statusfaq">{{ __('index.user_statuses') }}</a><br>
 <i class="far fa-circle fa-lg text-muted"></i> <a href="/who">{{ __('index.who_online') }}</a><br>
