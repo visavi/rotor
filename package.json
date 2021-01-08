@@ -30,7 +30,7 @@
     "sass": "^1.32.2",
     "sass-loader": "^8.0.0",
     "vue-template-compiler": "^2.6.12",
-    "webpack": "^4.44.2"
+    "webpack": "^4.45.0"
   },
   "repository": {
     "type": "git",

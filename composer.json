@@ -16,7 +16,7 @@
         }
     ],
     "require": {
-        "php": "^7.3.0",
+        "php": ">=7.3.0",
         "ext-curl": "*",
         "ext-fileinfo": "*",
         "ext-gd": "*",
@@ -98,5 +98,7 @@
         },
         "optimize-autoloader": true,
         "sort-packages": true
-    }
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true
 }
