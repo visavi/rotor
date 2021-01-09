@@ -343,6 +343,9 @@ $keys = [
                 'created_at' => SITETIME,
             ]);
 
+            // ------------- Авторизация -----------//
+            User::auth($login, $password);
+
             // -------------- Приват ---------------//
             $text = __('install.text_message', ['login' => $login]);
             $user->sendMessage(null, $text);
@@ -356,8 +359,6 @@ $keys = [
                 'user_id'    => $user->id,
                 'created_at' => SITETIME,
             ]);
-
-            User::auth($login, $password);
 
             redirect('?act=finish&lang=' . $lang);
 
