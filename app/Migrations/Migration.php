@@ -6,6 +6,7 @@ namespace App\Migrations;
 
 use Illuminate\Database\Capsule\Manager as DB;
 use Illuminate\Database\Schema\Builder;
+use PDO;
 use Phinx\Migration\AbstractMigration;
 
 class Migration extends AbstractMigration
@@ -30,6 +31,9 @@ class Migration extends AbstractMigration
             'collation' => config('DB_COLLATION'),
             'prefix'    => config('DB_PREFIX'),
             'engine'    => config('DB_ENGINE'),
+            'options' => [
+                PDO::ATTR_PERSISTENT => true
+            ]
         ]);
 
         $this->db->setAsGlobal();

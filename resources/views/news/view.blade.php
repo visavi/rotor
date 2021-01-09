@@ -37,8 +37,8 @@
         <div class="section-content">
             <div class="section-message row mb-3">
                 @if ($news->image)
-                    <div class="col-sm-3">
-                        <a href="{{ $news->image }}" class="gallery">{!! resizeImage($news->image, ['width' => 200, 'class' => 'img-thumbnail img-fluid', 'alt' => $news->title]) !!}</a>
+                    <div class="col-sm-3 mb-3">
+                        <a href="{{ $news->image }}" class="gallery">{!! resizeImage($news->image, ['class' => 'img-thumbnail img-fluid', 'alt' => $news->title]) !!}</a>
                     </div>
                 @endif
 
