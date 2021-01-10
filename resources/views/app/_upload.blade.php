@@ -3,7 +3,7 @@ $cond  = empty($paste) ? false : true;
 $click = $cond ? 'return pasteImage(this);' : false;
 ?>
 
-<div class="js-images">
+<div class="js-images mb-3">
     @if ($files->isNotEmpty())
         @foreach ($files as $file)
             <span class="js-image">

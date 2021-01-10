@@ -9,6 +9,10 @@ use App\Models\News;
 use App\Models\User;
 use Illuminate\Support\Facades\Lang;
 
+ini_set('error_reporting', E_ALL);
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+
 ob_start();
 define('DIR', dirname(__DIR__, 2));
 

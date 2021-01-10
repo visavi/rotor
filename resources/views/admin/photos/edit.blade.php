@@ -30,7 +30,7 @@
                 <div class="invalid-feedback">{{ textError('text') }}</div>
             </div>
 
-            <div class="js-images">
+            <div class="js-images mb-3">
                 @if ($photo->files->isNotEmpty())
                     @foreach ($photo->files as $file)
                         <span class="js-image">

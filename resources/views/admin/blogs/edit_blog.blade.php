@@ -42,7 +42,7 @@
                 <div class="invalid-feedback">{{ textError('tags') }}</div>
             </div>
 
-            <div class="js-images">
+            <div class="js-images mb-3">
                 @if ($article->files->isNotEmpty())
                     @foreach ($article->files as $file)
                         <span class="js-image">
