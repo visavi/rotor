@@ -50,7 +50,8 @@
                             @else
                                 <span class="section-author font-weight-bold" data-login="{{ setting('guestsuser') }}">{{ setting('guestsuser') }}</span>
                             @endif
-                            <small class="section-date text-muted font-italic">{{ dateFixed($post->created_at) }}</small>
+                            <small class="section-date text-muted font-italic">{{ dateFixed($post->created_at) }}</small><br>
+                            <small class="font-italic">{{ setting('guestsuser') }}</small>
                         @endif
                     </div>
 
