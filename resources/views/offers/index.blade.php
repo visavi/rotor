@@ -68,10 +68,10 @@
             </div>
         @endforeach
 
+        {{ $offers->links() }}
+
         {{ __('main.total') }}: <b>{{ $offers->total() }}</b><br>
     @else
         {!! showError(__('main.empty_records')) !!}
     @endif
-
-    {{ $offers->links() }}
 @stop

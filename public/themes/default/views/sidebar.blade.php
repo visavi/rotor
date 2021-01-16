@@ -101,7 +101,7 @@
 
         <li class="treeview{{ request()->is('loads*', 'downs*') ? ' is-expanded' : '' }}">
             <a class="app-menu__item" href="#" data-toggle="treeview">
-                <i class="app-menu__icon far fa-sticky-note"></i>
+                <i class="app-menu__icon fas fa-download"></i>
                 <span class="app-menu__label">{{ __('index.loads') }}</span>
                 <i class="treeview-indicator fa fa-angle-down"></i>
             </a>

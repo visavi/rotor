@@ -46,13 +46,11 @@
                     </div>
                 </div>
 
-                @if (isAdmin())
-                    <div class="section-body border-top">
-                        <div class="small text-muted font-italic mt-2">
-                            {{ $data->brow }}, {{ $data->ip }}
-                        </div>
+                <div class="section-body border-top">
+                    <div class="small text-muted font-italic mt-2">
+                        {{ $data->brow }}{{ isAdmin() ? ', ' . $data->ip : '' }}
                     </div>
-                @endif
+                </div>
             </div>
         @endforeach
     @else

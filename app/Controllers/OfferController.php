@@ -26,7 +26,7 @@ class OfferController extends BaseController
         $otherType  = $type === Offer::OFFER ? Offer::ISSUE : Offer::OFFER;
         $otherCount = Offer::query()->where('type', $otherType)->count();
 
-        $sort = check($request->input('sort', 'rating'));
+        $sort = $request->input('sort', 'rating');
 
         switch ($sort) {
             case 'time':
