@@ -13,6 +13,7 @@ use App\Models\Invite;
 use App\Models\Online;
 use App\Models\User;
 use Exception;
+use GuzzleHttp\Exception\GuzzleException;
 use Illuminate\Database\Capsule\Manager as DB;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
@@ -234,9 +235,12 @@ class UserController extends BaseController
     /**
      * Login
      *
-     * @param Request $request
+     * @param Request   $request
+     * @param Validator $validator
+     * @param Flood     $flood
      *
      * @return string
+     * @throws GuzzleException
      */
     public function login(Request $request, Validator $validator, Flood $flood): string
     {

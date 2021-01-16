@@ -477,7 +477,8 @@ class User extends BaseModel
                     $join->whereRaw('users.point between status.topoint and status.point');
                 })
                 ->where('users.point', '>', 0)
-                ->toBase()->get();
+                ->toBase()
+                ->get();
 
             $statuses = [];
             foreach ($users as $user) {

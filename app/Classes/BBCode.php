@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Classes;
 
 use App\Models\Sticker;
+use App\Models\User;
 use Illuminate\Database\Capsule\Manager as DB;
 use Illuminate\Support\Facades\Cache;
 
@@ -107,8 +108,8 @@ class BBCode
             'replace' => '<div class="media-file embed-responsive embed-responsive-16by9"><iframe class="embed-responsive-item" src="//www.youtube.com/embed/$2" allowfullscreen></iframe></div>',
         ],
         'username' => [
-            'pattern' => '/(?<=^|\s)@([\w\-]{3,20}+)(?=(\s|,))/',
-            'replace' => '<a href="/users/$1">$0</a>',
+            'pattern'  => '/(?<=^|\s)@([\w\-]{3,20}+)(?=(\s|,))/',
+            'callback' => 'userReplace',
         ],
     ];
 
@@ -265,7 +266,7 @@ class BBCode
     }
 
     /**
-     * Скрывате текст от неавторизованных пользователей
+     * Скрывает текст от неавторизованных пользователей
      *
      * @param array $match массив элементов
      *
@@ -277,6 +278,33 @@ class BBCode
                 <span class="font-weight-bold">' . __('main.hidden_content') . ':</span> ' .
                 (getUser() ? $match[1] : __('main.not_authorized')) .
             '</div>';
+    }
+
+    /**
+     * Обрабатывает логины пользователей
+     *
+     * @param array $match
+     *
+     * @return string
+     */
+    public function userReplace(array $match): string
+    {
+        static $listUsers;
+
+        if (empty($listUsers)) {
+            $listUsers = Cache::remember('users', 3600, static function () {
+                return User::query()
+                    ->select('login', 'name')
+                    ->where('name', '<>', '')
+                    ->get()
+                    ->pluck('name', 'login')
+                    ->toArray();
+            });
+        }
+
+        $name = $listUsers[$match[1]] ?? $match[1];
+
+        return '<a href="/users/' . $match[1] . '">' . $name . '</a>';
     }
 
     /**
@@ -296,9 +324,8 @@ class BBCode
                     ->select('code', 'name')
                     ->orderByDesc(DB::connection()->raw('CHAR_LENGTH(code)'))
                     ->get()
+                    ->pluck('name', 'code')
                     ->toArray();
-
-                $stickers = array_column($stickers, 'name', 'code');
 
                 return array_map(
                     static function ($sticker) {
@@ -334,12 +361,13 @@ class BBCode
      *
      * @param mixed $only parsers
      *
-     * @return object BBCode object
+     * @return BBCode object
      */
-    public function only($only = null)
+    public function only($only = null): self
     {
         $only = is_array($only) ? $only : func_get_args();
         self::$parsers = $this->arrayOnly($only);
+
         return $this;
     }
 
@@ -348,12 +376,13 @@ class BBCode
      *
      * @param mixed $except parsers
      *
-     * @return object BBCode object
+     * @return BBCode object
      */
-    public function except($except = null)
+    public function except($except = null): self
     {
         $except = is_array($except) ? $except : func_get_args();
         self::$parsers = $this->arrayExcept($except);
+
         return $this;
     }
 
