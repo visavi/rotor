@@ -28,7 +28,7 @@
         @foreach ($articles as $article)
             <div class="card mb-3">
                 <div class="card-body">
-                    <h3 class="card-title"><a href="/articles/{{ $article->id }}">{{ $article->title }}</a> <small>(Рейтинг: {!! formatNum($article->rating) !!})</small></h3>
+                    <h5 class="card-title"><a href="/articles/{{ $article->id }}">{{ $article->title }}</a> <small>(Рейтинг: {!! formatNum($article->rating) !!})</small></h5>
 
                     @if ($article->category->parent->id)
                         <a href="/blogs/{{ $article->category->parent->id }}"><span class="badge badge-light">{{ $article->category->parent->name }}</span></a> /
@@ -50,11 +50,11 @@
                 </div>
             </div>
         @endforeach
+
+        {{ $articles->links() }}
     @else
         {!! showError(__('blogs.empty_articles')) !!}
     @endif
-
-    {{ $articles->links() }}
 
     <a href="/blogs/top">{{ __('blogs.top_articles') }}</a> /
     <a href="/blogs/tags">{{ __('blogs.tag_cloud') }}</a> /

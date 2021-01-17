@@ -562,7 +562,14 @@ getNewMessages = function () {
 var checkTimeout;
 /* Проверка логина */
 checkLogin = function (el) {
-    var field = $(el).closest('.form-group').find('.invalid-feedback');
+    var message = $(el).closest('.form-group').find('.invalid-feedback');
+
+    if ($(el).val().length < 3) {
+        $(el).removeClass('is-valid is-invalid');
+        message.empty();
+
+        return false;
+    }
 
     clearTimeout(checkTimeout);
 
@@ -577,12 +584,12 @@ checkLogin = function (el) {
             success: function (data) {
                 if (data.status === 'success') {
                     $(el).removeClass('is-invalid').addClass('is-valid');
-                    field.empty();
+                    message.empty();
                 }
 
                 if (data.status === 'error') {
                     $(el).removeClass('is-valid').addClass('is-invalid');
-                    field.text(data.message)
+                    message.text(data.message)
                 }
             }
         });

@@ -74,6 +74,13 @@ task('database:migrate', static function () {
     run('{{rotor}} migrate');
 })->onRoles('php')->once();
 
+desc('Cache clear');
+task('cache:clear', static function () {
+    run('{{rotor}} cache:clear');
+    run('{{rotor}} config:clear');
+    run('{{rotor}} route:clear');
+})->onRoles('php')->once();
+
 desc('Npm install');
 task('deploy:npm', static function () {
     run("cd {{release_path}} && {{bin/npm}} ci");
@@ -106,6 +113,9 @@ after('deploy:failed', 'deploy:unlock');
 
 // Reload php-fpm
 before('success', 'reload:php-fpm');
+
+// Cache clear
+before('success', 'cache:clear');
 
 // Migrate database before symlink new release.
 before('deploy:symlink', 'database:migrate');
