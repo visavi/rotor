@@ -16,17 +16,17 @@ class OfferController extends BaseController
     /**
      * Главная страница
      *
-     * @param string  $type
      * @param Request $request
+     * @param string  $type
      *
      * @return string
      */
-    public function index(Request $request, $type = 'offer'): string
+    public function index(Request $request, string $type = 'offer'): string
     {
         $otherType  = $type === Offer::OFFER ? Offer::ISSUE : Offer::OFFER;
         $otherCount = Offer::query()->where('type', $otherType)->count();
 
-        $sort = $request->input('sort', 'rating');
+        $sort = check($request->input('sort', 'rating'));
 
         switch ($sort) {
             case 'time':

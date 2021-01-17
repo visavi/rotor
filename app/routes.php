@@ -314,6 +314,7 @@ return FastRoute\cachedDispatcher(static function (RouteCollector $r) {
     $r->addRoute(['GET', 'POST'], '/register', [App\Controllers\User\UserController::class, 'register']);
     $r->addRoute(['GET', 'POST'], '/profile', [App\Controllers\User\UserController::class, 'profile']);
     $r->addRoute(['GET', 'POST'], '/settings', [App\Controllers\User\UserController::class, 'setting']);
+    $r->post('/check-login', [App\Controllers\User\UserController::class, 'checkLogin']);
 
     $r->get('/pages[/{page:[\w\-]+}]', [App\Controllers\PageController::class, 'index']);
     $r->get('/menu', [App\Controllers\PageController::class, 'menu']);

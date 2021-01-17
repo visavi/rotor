@@ -130,34 +130,34 @@ class UserController extends BaseController
 
                 if (! empty($login)) {
                     // Проверка логина на существование
-                    $checkLogin = User::query()->where('login', $login)->count();
-                    $validator->empty($checkLogin, ['login' => __('users.login_already_exists')]);
+                    $checkLogin = User::query()->where('login', $login)->exists();
+                    $validator->false($checkLogin, ['login' => __('users.login_already_exists')]);
 
                     // Проверка логина в черном списке
                     $blackLogin = Blacklist::query()
                         ->where('type', 'login')
                         ->where('value', strtolower($login))
-                        ->count();
-                    $validator->empty($blackLogin, ['login' => __('users.login_is_blacklisted')]);
+                        ->exists();
+                    $validator->false($blackLogin, ['login' => __('users.login_is_blacklisted')]);
                 }
 
                 // Проверка email на существование
-                $checkMail = User::query()->where('email', $email)->count();
-                $validator->empty($checkMail, ['email' => __('users.email_already_exists')]);
+                $checkMail = User::query()->where('email', $email)->exists();
+                $validator->false($checkMail, ['email' => __('users.email_already_exists')]);
 
                 // Проверка домена от email в черном списке
                 $blackDomain = Blacklist::query()
                     ->where('type', 'domain')
                     ->where('value', $domain)
-                    ->count();
-                $validator->empty($blackDomain, ['email' => __('users.domain_is_blacklisted')]);
+                    ->exists();
+                $validator->false($blackDomain, ['email' => __('users.domain_is_blacklisted')]);
 
                 // Проверка email в черном списке
                 $blackMail = Blacklist::query()
                     ->where('type', 'email')
                     ->where('value', $email)
-                    ->count();
-                $validator->empty($blackMail, ['email' => __('users.email_is_blacklisted')]);
+                    ->exists();
+                $validator->false($blackMail, ['email' => __('users.email_is_blacklisted')]);
 
                 // Проверка пригласительного ключа
                 if (setting('invite')) {
@@ -174,7 +174,7 @@ class UserController extends BaseController
                 if ($validator->isValid()) {
                     if (setting('regkeys')) {
                         $activateKey  = Str::random();
-                        $activateLink = siteUrl(true).'/key?code=' . $activateKey;
+                        $activateLink = siteUrl(true) . '/key?code=' . $activateKey;
                         $level        = User::PENDED;
                     }
 
@@ -762,5 +762,48 @@ class UserController extends BaseController
         }
 
         redirect('/accounts');
+    }
+
+    /**
+     * Проверка доступности логина
+     *
+     * @param Request   $request
+     * @param Validator $validator
+     *
+     * @return string
+     * @throws Exception
+     */
+    public function checkLogin(Request $request, Validator $validator): string
+    {
+        $login = $request->input('login');
+
+        $validator
+            ->true($request->ajax(), __('validator.not_ajax'))
+            ->regex($login, '|^[a-z0-9\-]+$|i', __('validator.login'))
+            ->regex(utfSubstr($login, 0, 1), '|^[a-z0-9]+$|i', __('users.login_begin_requirements'))
+            ->length($login, 3, 20, __('users.login_length_requirements'))
+            ->false(ctype_digit($login), __('users.field_characters_requirements'))
+            ->false(substr_count($login, '-') > 2, __('users.login_hyphens_requirements'));
+
+        if ($validator->isValid()) {
+            $existLogin = User::query()
+                ->where('login', $login)
+                ->exists();
+
+            $blackLogin = Blacklist::query()
+                ->where('type', 'login')
+                ->where('value', strtolower($login))
+                ->exists();
+
+            $validator
+                ->false($existLogin, __('users.login_already_exists'))
+                ->false($blackLogin, __('users.login_is_blacklisted'));
+        }
+
+        if ($validator->isValid()) {
+            return json_encode(['status' => 'success']);
+        }
+
+        return json_encode(['status' => 'error', 'message' => current($validator->getErrors())]);
     }
 }

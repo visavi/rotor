@@ -47,7 +47,7 @@
 
             <div class="form-group{{ hasError('login') }}">
                 <label for="inputLogin">{{ __('users.login') }}:</label>
-                <input class="form-control" name="login" id="inputLogin" maxlength="20" value="{{ getInput('login') }}" required>
+                <input onkeyup="return checkLogin(this);" class="form-control" name="login" id="inputLogin" maxlength="20" value="{{ getInput('login') }}" required>
                 <div class="invalid-feedback">{{ textError('login') }}</div>
                 <span class="text-muted font-italic">{{ __('users.login_requirements') }}</span>
             </div>

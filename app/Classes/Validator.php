@@ -491,9 +491,9 @@ class Validator
         }
 
         if (isset($this->errors[$key])) {
-            $this->errors[] = $error . ' ' . $description;
+            $this->errors[] = trim($error . ' ' . $description);
         } else {
-            $this->errors[$key] = $error . ' ' . $description;
+            $this->errors[$key] = trim($error . ' ' . $description);
         }
     }
 
