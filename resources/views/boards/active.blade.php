@@ -30,18 +30,20 @@
                                 <div class="col-md-7">
                                     <h5><a href="/items/{{ $item->id }}">{{ $item->title }}</a></h5>
                                     <small><i class="fas fa-angle-right"></i> <a href="/boards/{{ $item->category->id }}">{{ $item->category->name }}</a></small>
-                                    <div class="section-message">
+                                    <div class="section-message mb-3">
                                         {!! $item->shortText() !!}
                                     </div>
-                                    <p>
-                                        <i class="fa fa-user-circle"></i> {!! $item->user->getProfile() !!} / {{ dateFixed($item->created_at) }}<br>
+                                    <div>
+                                        <i class="fa fa-user-circle"></i> {!! $item->user->getProfile() !!}
+                                        <small class="section-date text-muted font-italic">{{ dateFixed($item->created_at) }}</small>
+                                        <br>
 
                                         @if ($item->expires_at > SITETIME)
                                             <i class="fas fa-clock"></i> {{ __('boards.expires_in') }} {{ formatTime($item->expires_at - SITETIME) }}
                                         @else
                                             <span class="badge badge-danger">{{ __('boards.item_not_active') }}</span>
                                         @endif
-                                    </p>
+                                    </div>
                                 </div>
 
                                 <div class="col-md-2">

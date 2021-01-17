@@ -3,9 +3,23 @@
 @section('title', $item->title)
 
 @section('header')
-    @if (getUser() && getUser('id') === $item->user->id)
+    @if (getUser())
         <div class="float-right">
-            <a class="btn btn-success" href="/items/edit/{{ $item->id }}">{{ __('main.change') }}</a>
+            @if (getUser('id') === $item->user->id)
+                <a class="btn btn-success" href="/items/edit/{{ $item->id }}">{{ __('main.change') }}</a>
+            @endif
+
+            @if (isAdmin())
+                <div class="btn-group">
+                    <button type="button" class="btn btn-light dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <i class="fas fa-wrench"></i>
+                    </button>
+                    <div class="dropdown-menu">
+                        <a class="dropdown-item" href="/admin/items/edit/{{ $item->id }}">{{ __('main.edit') }}</a>
+                        <a class="dropdown-item" href="/admin/items/delete/{{ $item->id }}?token={{ $_SESSION['token'] }}" onclick="return confirm('{{ __('boards.confirm_delete_item') }}')">{{ __('main.delete') }}</a>
+                    </div>
+                </div>
+            @endif
         </div>
     @endif
 
@@ -33,51 +47,38 @@
         <div class="alert alert-danger">{{ __('boards.item_not_active') }}</div>
     @endif
 
-    @if (isAdmin())
-        <div>
-            <a href="/admin/items/edit/{{ $item->id }}">{{ __('main.edit') }}</a> /
-            <a href="/admin/items/delete/{{ $item->id }}?token={{ $_SESSION['token'] }}" onclick="return confirm('{{ __('boards.confirm_delete_item') }}')">{{ __('main.delete') }}</a>
-        </div>
-    @endif
-
     <div class="row mb-3">
         <div class="col-md-12">
-            <div class="card">
-                <div class="card-body">
-
-                    @if ($item->files->isNotEmpty())
-                        <div class="row">
-                            <div class="col-md-12">
-                                @include('app/_carousel', ['model' => $item])
-                                </div>
-                            </div>
-                        </div>
-                    @endif
-
-                    <div class="row">
-                        <div class="col-md-10">
-                            <div class="section-message">
-                                {!! bbCode($item->text) !!}
-                            </div>
-                            <p>
-                                @if ($item->phone)
-                                    <span class="badge badge-pill badge-primary">{{ __('boards.phone') }}: {{ $item->phone }}</span><br>
-                                @endif
-
-                                <i class="fa fa-user-circle"></i> {!! $item->user->getProfile() !!} / {{ dateFixed($item->updated_at) }}<br>
-
-                                @if ($item->expires_at > SITETIME)
-                                    <i class="fas fa-clock"></i> {{ __('boards.expires_in') }} {{ formatTime($item->expires_at - SITETIME) }}
-                                @endif
-                            </p>
-                        </div>
-
-                        <div class="col-md-2">
-                            @if ($item->price)
-                                <button type="button" class="btn btn-info">{{ $item->price }} {{ setting('currency') }}</button>
-                            @endif
-                        </div>
+            @if ($item->files->isNotEmpty())
+                <div class="row">
+                    <div class="col-md-12">
+                        @include('app/_carousel', ['model' => $item])
                     </div>
+                </div>
+            @endif
+
+            <div class="row">
+                <div class="col-md-10">
+                    <div class="section-message mb-3">
+                        {!! bbCode($item->text) !!}
+                    </div>
+                    <div>
+                        @if ($item->phone)
+                            <span class="badge badge-pill badge-primary mb-3">{{ __('boards.phone') }}: {{ $item->phone }}</span><br>
+                        @endif
+
+                        <i class="fa fa-user-circle"></i> {!! $item->user->getProfile() !!} / {{ dateFixed($item->updated_at) }}<br>
+
+                        @if ($item->expires_at > SITETIME)
+                            <i class="fas fa-clock"></i> {{ __('boards.expires_in') }} {{ formatTime($item->expires_at - SITETIME) }}
+                        @endif
+                    </div>
+                </div>
+
+                <div class="col-md-2">
+                    @if ($item->price)
+                        <button type="button" class="btn btn-info">{{ $item->price }} {{ setting('currency') }}</button>
+                    @endif
                 </div>
             </div>
         </div>
