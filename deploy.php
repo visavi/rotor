@@ -65,20 +65,13 @@ task('reload:php-fpm', static function () {
 })->onRoles('php');
 
 desc('Env copy');
-task('deploy:env:copy', static function() {
+task('deploy:env:copy', static function () {
     run('cp -n {{release_path}}/.env.example {{release_path}}/.env');
 });
 
 desc('Migrate database');
 task('database:migrate', static function () {
     run('{{rotor}} migrate');
-})->onRoles('php')->once();
-
-desc('Cache clear');
-task('cache:clear', static function () {
-    run('{{rotor}} cache:clear');
-    run('{{rotor}} config:clear');
-    run('{{rotor}} route:clear');
 })->onRoles('php')->once();
 
 desc('Npm install');
@@ -113,9 +106,6 @@ after('deploy:failed', 'deploy:unlock');
 
 // Reload php-fpm
 before('success', 'reload:php-fpm');
-
-// Cache clear
-before('success', 'cache:clear');
 
 // Migrate database before symlink new release.
 before('deploy:symlink', 'database:migrate');

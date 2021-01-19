@@ -37,9 +37,9 @@ class Validator
             return $this;
         }
 
-        if (mb_strlen($input, 'utf-8') < $min) {
+        if (mb_strlen(trim($input), 'utf-8') < $min) {
             $this->addError($label, __('validator.length_min', ['length' => $min]));
-        } elseif (mb_strlen($input, 'utf-8') > $max) {
+        } elseif (mb_strlen(trim($input), 'utf-8') > $max) {
             $this->addError($label, __('validator.length_max', ['length' => $max]));
         }
 

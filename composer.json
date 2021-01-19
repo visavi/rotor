@@ -65,6 +65,7 @@
             "@php -r \"file_exists('.env') || copy('.env.example', '.env');\""
         ],
         "post-autoload-dump": [
+            "@php rotor cache:clear --ansi",
             "@php rotor config:clear --ansi",
             "@php rotor route:clear --ansi"
         ],
