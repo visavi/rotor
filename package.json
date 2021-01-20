@@ -15,7 +15,7 @@
   "dependencies": {
     "@fortawesome/fontawesome-free": "^5.15.2",
     "bootbox": "^5.5.2",
-    "bootstrap": "^4.5.3",
+    "bootstrap": "^4.6.0",
     "bootstrap-colorpicker": "^3.2.0",
     "jquery": "^3.5.1",
     "jquery-colorbox": "^1.6.4",
