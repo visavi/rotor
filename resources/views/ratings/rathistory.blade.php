@@ -18,9 +18,10 @@
 @stop
 
 @section('content')
-    <a href="/ratings/{{ $user->login }}/received" class="badge badge-success">{{ __('ratings.votes_received') }}</a>
-    <a href="/ratings/{{ $user->login }}/gave" class="badge badge-light">{{ __('ratings.votes_gave') }}</a>
-    <hr>
+    <div class="mb-3">
+        <a href="/ratings/{{ $user->login }}/received" class="badge badge-success">{{ __('ratings.votes_received') }}</a>
+        <a href="/ratings/{{ $user->login }}/gave" class="badge badge-light">{{ __('ratings.votes_gave') }}</a>
+    </div>
 
     @if ($ratings->isNotEmpty())
         @foreach ($ratings as $data)
@@ -32,7 +33,10 @@
                         <i class="fa fa-thumbs-up text-success"></i>
                     @endif
 
-                    {!! $data->user->getProfile() !!} ({{ dateFixed($data->created_at) }})
+                    {!! $data->user->getProfile() !!}
+                    <small class="section-date text-muted font-italic">
+                        {{ dateFixed($data->created_at) }}
+                    </small>
 
                     <div class="float-right">
                         @if (isAdmin())

@@ -15,7 +15,7 @@ return [
     'edit_news_title'      => 'Редактирование новости',
 
     'news_not_exist'       => 'Данной новости не существует!',
-    'news_success_edited'  => 'Новость успешно отредактирована!',
+    'news_success_edited'  => 'Новость успешно изменена!',
     'news_success_added'   => 'Новость успешно добавлена!',
     'news_success_deleted' => 'Новость успешно удалена!',
 ];

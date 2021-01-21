@@ -218,11 +218,11 @@ return [
 
     'text_missing'             => 'Отсутствует текст сообщения!',
     'message_added_success'    => 'Сообщение успешно добавлено!',
-    'message_edited_success'   => 'Сообщение успешно отредактировано!',
+    'message_edited_success'   => 'Сообщение успешно изменено!',
     'messages_deleted_success' => 'Сообщения успешно удалены!',
     'message_not_found'        => 'Сообщение не найдено!',
     'comment_added_success'    => 'Комментарий успешно добавлен!',
-    'comment_edited_success'   => 'Комментарий успешно отредактирован!',
+    'comment_edited_success'   => 'Комментарий успешно изменен!',
     'record_added_success'     => 'Запись успешно добавлена!',
     'record_changed_success'   => 'Запись успешно изменена!',
     'record_saved_success'     => 'Запись успешно сохранена!',

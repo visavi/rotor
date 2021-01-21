@@ -54,7 +54,9 @@
             </div>
         @endforeach
 
-        {{ __('photos.total_photos') }}: <b>{{ $photos->total() }}</b><br><br>
+        {{ $photos->links() }}
+
+        {{ __('photos.total_photos') }}: <b>{{ $photos->total() }}</b><br>
 
         @if (isAdmin('boss'))
             <i class="fa fa-sync"></i> <a href="/admin/photos/restatement?token={{ $_SESSION['token'] }}">{{ __('main.recount') }}</a><br>
@@ -62,6 +64,4 @@
     @else
         {!! showError(__('photos.empty_photos')) !!}
     @endif
-
-    {{ $photos->links() }}
 @stop

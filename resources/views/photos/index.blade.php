@@ -74,10 +74,10 @@
             </div>
         @endforeach
 
+        {{ $photos->links() }}
+
         {{ __('photos.total_photos') }}: <b>{{ $photos->total() }}</b><br>
     @else
         {!! showError(__('photos.empty_photos')) !!}
     @endif
-
-    {{ $photos->links() }}
 @stop

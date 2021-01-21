@@ -25,7 +25,7 @@ return [
     'category_closed'          => 'В данную категорию запрещено добавлять объявления!',
     'item_success_added'       => 'Объявления успешно добавлено!',
     'item_not_author'          => 'Вы не автор данного объявления!',
-    'item_success_edited'      => 'Объявление успешно отредактировано!',
+    'item_success_edited'      => 'Объявление успешно изменено!',
     'item_success_published'   => 'Объявление успешно опубликовано!',
     'item_success_unpublished' => 'Объявление успешно снято с публикации!',
     'item_success_deleted'     => 'Объявление успешно удалено!',
@@ -33,7 +33,7 @@ return [
     'category_success_created' => 'Новая категория успешно создана!',
     'category_parent_invalid'  => 'Недопустимый выбор родительской категории!',
     'category_has_subsections' => 'Текущая категория имеет подразделы!',
-    'category_success_edited'  => 'Категория успешно отредактирована!',
+    'category_success_edited'  => 'Категория успешно изменена!',
     'category_has_items'       => 'В данной категории имеются объявления!',
     'category_success_deleted' => 'Категория успешно удалена!',
 ];
