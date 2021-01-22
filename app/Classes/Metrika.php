@@ -102,7 +102,6 @@ class Metrika
             ]);
 
             $counter->update([
-                'period'   => $period,
                 'dayhosts' => 0,
                 'dayhits'  => 0,
             ]);
