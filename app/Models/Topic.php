@@ -133,7 +133,7 @@ class Topic extends BaseModel
      * @param  string $url
      * @return string сформированный блок
      */
-    public function pagination($url = '/topics'): ?string
+    public function pagination(string $url = '/topics'): ?string
     {
         if (! $this->count_posts) {
             return null;
@@ -188,7 +188,7 @@ class Topic extends BaseModel
 
         $this->update([
             'count_posts'  => $countPosts,
-            'last_post_id' => $lastPost ? $lastPost->id : 0,
+            'last_post_id' => $lastPost->id ?? 0,
         ]);
 
         $this->forum->restatement();

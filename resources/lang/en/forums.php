@@ -35,8 +35,6 @@ return [
     'title_search'         => 'Search the forum',
     'in_topics'            => 'In Themes',
     'in_posts'             => 'In Messages',
-    'found_posts'          => 'Found matches in posts',
-    'found_topics'         => 'Found matches in topics',
     'title_top_topics'     => 'Top Popular Themes',
     'title_top_posts'      => 'Top Popular Posts',
     'rating'               => 'Rating',

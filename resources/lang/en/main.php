@@ -107,7 +107,7 @@ return [
     'search_request'       => 'Search request',
     'total_found'          => 'Found matches',
     'empty_found'          => 'Your search did not match anything!',
-    'request_requirements' => 'The request must contain between 3 and 50 characters!',
+    'request_requirements' => 'The request must contain between 4 and 64 characters!',
 
     'cost'              => 'Cost',
     'cash_money'        => 'You have in stock',

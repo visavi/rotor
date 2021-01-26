@@ -38,14 +38,20 @@ define('VERSION', '9.0');
 
 require_once BASEDIR . '/vendor/autoload.php';
 
-if (config('APP_DEBUG') && class_exists(Run::class)) {
-    $handler = Misc::isCommandLine() ?
-        new PlainTextHandler() :
-        new PrettyPageHandler();
+if (config('APP_DEBUG')) {
+    if (class_exists(Run::class)) {
+        $handler = Misc::isCommandLine() ?
+            new PlainTextHandler() :
+            new PrettyPageHandler();
 
-    $whoops = new Run();
-    $whoops->prependHandler($handler);
-    $whoops->register();
+        $whoops = new Run();
+        $whoops->prependHandler($handler);
+        $whoops->register();
+    } else {
+        ini_set('error_reporting', E_ALL);
+        ini_set('display_errors', 1);
+        ini_set('display_startup_errors', 1);
+    }
 }
 
 $db = new DB();
