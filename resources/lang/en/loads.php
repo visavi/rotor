@@ -37,12 +37,7 @@ return [
     'create_load'            => 'Create Partition',
     'new_publications'       => 'New publications',
     'files_images'           => 'Files / Images',
-
-    'search'               => 'Search by file',
-    'in_title'             => 'In the name',
-    'in_text'              => 'In description',
-    'found_title'          => 'Found matches in title',
-    'found_text'           => 'Found matches in description',
+    'search'                 => 'Search by file',
 
     'pending_down1' => 'Attention! This download is pending moderator! ',
     'pending_down2' => 'After checking, you cannot edit the description and upload a file or a screenshot',

@@ -20,27 +20,26 @@ class SearchController extends BaseController
      *
      * @return string
      */
-    public function index(Request $request, Validator $validator)/*: ?string*/
+    public function index(Request $request, Validator $validator): string
     {
-        $find = $request->input('find');
+        $find = check($request->input('find'));
         $posts = collect();
 
         if ($find) {
-            $find = str_replace(['@', '+', '-', '*', '~', '<', '>', '(', ')', '"', "'"], '', $find);
-
             $validator->length($find, 4, 64, ['find' => __('main.request_requirements')]);
 
             if ($validator->isValid()) {
                 if (empty($_SESSION['forumfindres']) || $find !== $_SESSION['forumfind']) {
                     $findPosts = Post::query()
-                        ->selectRaw('id, MATCH (`text`) AGAINST (? IN BOOLEAN MODE) as score', [$find])
-                        ->whereRaw('MATCH (`text`) AGAINST (? IN BOOLEAN MODE)', [$find]);
+                        ->selectRaw('id, MATCH (text) AGAINST (? IN BOOLEAN MODE) as score', [$find])
+                        ->whereRaw('MATCH (text) AGAINST (? IN BOOLEAN MODE)', [$find]);
 
                     $result = Topic::query()
-                        ->selectRaw('last_post_id as id, MATCH (`title`) AGAINST (? IN BOOLEAN MODE) as score', [$find])
-                        ->whereRaw('MATCH (`title`) AGAINST (? IN BOOLEAN MODE)', [$find])
+                        ->selectRaw('last_post_id as id, MATCH (title) AGAINST (? IN BOOLEAN MODE) as score', [$find])
+                        ->whereRaw('MATCH (title) AGAINST (? IN BOOLEAN MODE)', [$find])
                         ->union($findPosts)
                         ->orderByDesc('score')
+                        //->orderByDesc('created_at')
                         ->limit(100)
                         ->pluck('id')
                         ->all();

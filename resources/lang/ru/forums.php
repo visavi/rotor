@@ -33,8 +33,6 @@ return [
     'title_new_topics'     => 'Новые темы',
     'title_rss'            => 'Темы форума',
     'title_search'         => 'Поиск по форуму',
-    'in_topics'            => 'В темах',
-    'in_posts'             => 'В сообщениях',
     'title_top_topics'     => 'Топ популярных тем',
     'title_top_posts'      => 'Топ популярных постов',
     'rating'               => 'Рейтинг',
