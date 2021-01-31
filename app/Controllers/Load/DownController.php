@@ -48,9 +48,7 @@ class DownController extends BaseController
             abort('default', __('loads.down_not_verified'));
         }
 
-        $rating = $down->rated ? round($down->rating / $down->rated, 1) : 0;
-
-        return view('loads/down', compact('down', 'rating'));
+        return view('loads/down', compact('down'));
     }
 
     /**

@@ -7,7 +7,6 @@ namespace App\Controllers\Load;
 use App\Classes\Validator;
 use App\Controllers\BaseController;
 use App\Models\Down;
-use App\Models\Load;
 use Illuminate\Http\Request;
 
 class SearchController extends BaseController
@@ -22,24 +21,28 @@ class SearchController extends BaseController
      */
     public function index(Request $request, Validator $validator): string
     {
-        $find = check($request->input('find'));
+        $find = rawurldecode($request->input('find', ''));
+        $find = trim(preg_replace("/[^\w\x7F-\xFF\s]/", ' ', $find));
         $downs = collect();
 
         if ($find) {
-            $validator->length($find, 4, 64, ['find' => __('main.request_requirements')]);
+            $validator->length($find, 3, 64, ['find' => __('main.request_requirements')]);
 
             if ($validator->isValid()) {
                 $downs = Down::query()
-                    ->selectRaw('downs.*, MATCH (title, text) AGAINST (? IN BOOLEAN MODE) as score', [$find])
                     ->where('active', 1)
-                    ->whereRaw('MATCH (title, text) AGAINST (? IN BOOLEAN MODE)', [$find])
+                    ->whereRaw('MATCH (title, text) AGAINST (? IN BOOLEAN MODE)', [$find . '*'])
                     ->with('user', 'category')
-                    ->orderByDesc('score')
-                    ->orderByDesc('created_at')
+                    ->limit(500)
                     ->paginate(setting('downlist'))
                     ->appends([
                         'find' => $find,
                     ]);
+
+                if ($downs->isEmpty()) {
+                    setFlash('danger', __('main.empty_found'));
+                    redirect('/loads/search');
+                }
             } else {
                 setInput($request->all());
                 setFlash('danger', $validator->getErrors());

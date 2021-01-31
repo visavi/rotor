@@ -15,7 +15,7 @@
 @section('content')
     <form method="get">
         <div class="input-group{{ hasError('find') }}">
-            <input name="find" class="form-control" id="inputFind" minlength="4" maxlength="64" placeholder="{{ __('main.request') }}" value="{{ getInput('find', $find) }}" required>
+            <input name="find" class="form-control" id="inputFind" minlength="3" maxlength="64" placeholder="{{ __('main.request') }}" value="{{ getInput('find', $find) }}" required>
 
             <div class="input-group-append">
                 <button class="btn btn-primary">{{ __('main.search') }}</button>

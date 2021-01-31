@@ -97,7 +97,7 @@
             <i class="fa fa-comment"></i> <a href="/downs/comments/{{ $down->id }}">{{ __('main.comments') }}</a> ({{ $down->count_comments }})
             <a href="/downs/end/{{ $down->id }}">&raquo;</a><br>
 
-            {{ __('main.rating') }}: {!! ratingVote($rating) !!}<br>
+            {{ __('main.rating') }}: {!! ratingVote($down->getCalculatedRating()) !!}<br>
             {{ __('main.votes') }}: <b>{{ $down->rated }}</b><br>
             {{ __('main.downloads') }}: <b>{{ $down->loads }}</b><br>
             {{ __('main.author') }}: {!! $down->user->getProfile() !!} ({{ dateFixed($down->created_at) }})

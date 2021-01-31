@@ -13,34 +13,34 @@
 @stop
 
 @section('content')
-    <form method="get">
-        <div class="input-group{{ hasError('find') }}">
-            <input name="find" class="form-control" id="inputFind" minlength="4" maxlength="64" placeholder="{{ __('main.request') }}" value="{{ getInput('find', $find) }}" required>
+    <div class="mb-3">
+        <form method="get">
+            <div class="input-group{{ hasError('find') }}">
+                <input name="find" class="form-control" id="inputFind" minlength="3" maxlength="64" placeholder="{{ __('main.request') }}" value="{{ getInput('find', $find) }}" required>
 
-            <div class="input-group-append">
-                <button class="btn btn-primary">{{ __('main.search') }}</button>
+                <div class="input-group-append">
+                    <button class="btn btn-primary">{{ __('main.search') }}</button>
+                </div>
             </div>
-        </div>
-        <div class="invalid-feedback">{{ textError('find') }}</div>
-    </form>
+            <div class="invalid-feedback">{{ textError('find') }}</div>
+        </form>
+    </div>
 
     @if ($downs->isNotEmpty())
-        <div class="my-3">{{ __('main.total_found') }}: {{ $downs->total() }}</div>
+        <div class="mb-3">{{ __('main.total_found') }}: {{ $downs->total() }}</div>
 
         @foreach ($downs as $data)
-            <?php $rating = $data->rated ? round($data->rating / $data->rated, 1) : 0; ?>
-
             <div class="section mb-3 shadow">
                 <div class="section-title">
                     <i class="fa fa-file"></i>
-                    <a href="/downs/{{ $data->id }}">{{ $data->title }}</a> ({{ $data->count_comments }})
+                    <a href="/downs/{{ $data->id }}">{{ $data->title }}</a>
                 </div>
 
                 <div class="section-content">
                     {!! $data->shortText() !!}<br>
 
                     {{ __('loads.load') }}: <a href="/loads/{{ $data->category->id }}">{{ $data->category->name }}</a><br>
-                    {{ __('main.rating') }}: {{ $rating }}<br>
+                    {{ __('main.rating') }}: {{ $data->getCalculatedRating() }}<br>
                     {{ __('main.author') }}: {!! $data->user->getProfile() !!}
                     <small class="section-date text-muted font-italic">{{ dateFixed($data->created_at) }}</small>
                 </div>

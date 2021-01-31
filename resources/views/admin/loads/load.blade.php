@@ -59,7 +59,6 @@
 
     @if ($downs->isNotEmpty())
         @foreach ($downs as $data)
-            <?php $rating = $data->rated ? round($data->rating / $data->rated, 1) : 0; ?>
             <div class="section mb-3 shadow">
                 <div class="section-header d-flex align-items-center">
                     <div class="flex-grow-1">
@@ -79,7 +78,7 @@
                 </div>
 
                 <div class="section-content">
-                    {{ __('main.rating') }}: {{ $rating }}<br>
+                    {{ __('main.rating') }}: {{ $data->getCalculatedRating() }}<br>
                     {{ __('main.downloads') }}: {{ $data->loads }}<br>
                     <a href="/downs/comments/{{ $data->id }}">{{ __('main.comments') }}</a> ({{ $data->count_comments }})
                     <a href="/downs/end/{{ $data->id }}">&raquo;</a>

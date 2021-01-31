@@ -28,8 +28,6 @@
 
     @if ($downs->isNotEmpty())
         @foreach ($downs as $down)
-            <?php $rating = $down->rated ? round($down->rating / $down->rated, 1) : 0; ?>
-
             <div class="section mb-3 shadow">
                 <div class="section-header d-flex align-items-center">
                     <div class="flex-grow-1">
@@ -40,7 +38,7 @@
                     </div>
 
                     <div class="text-right js-rating">
-                        <b>{!! formatNum($rating) !!}</b>
+                        <b>{!! formatNum($down->getCalculatedRating()) !!}</b>
                     </div>
                 </div>
 

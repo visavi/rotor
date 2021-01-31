@@ -26,7 +26,7 @@ class SearchController extends BaseController
         $posts = collect();
 
         if ($find) {
-            $validator->length($find, 4, 64, ['find' => __('main.request_requirements')]);
+            $validator->length($find, 3, 64, ['find' => __('main.request_requirements')]);
 
             if ($validator->isValid()) {
                 if (empty($_SESSION['forumfindres']) || $find !== $_SESSION['forumfind']) {
@@ -39,7 +39,6 @@ class SearchController extends BaseController
                         ->whereRaw('MATCH (title) AGAINST (? IN BOOLEAN MODE)', [$find])
                         ->union($findPosts)
                         ->orderByDesc('score')
-                        //->orderByDesc('created_at')
                         ->limit(100)
                         ->pluck('id')
                         ->all();

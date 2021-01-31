@@ -97,7 +97,7 @@ class Down extends BaseModel
      */
     public function comments(): MorphMany
     {
-        return $this->morphMany(Comment::class, 'relate')->with('relate');;
+        return $this->morphMany(Comment::class, 'relate')->with('relate');
     }
 
     /**
@@ -163,7 +163,7 @@ class Down extends BaseModel
      * @param int $words
      * @return string
      */
-    public function shortText($words = 50): string
+    public function shortText(int $words = 50): string
     {
         if (strlen($this->text) > $words) {
             $this->text = bbCodeTruncate($this->text, $words);
@@ -259,5 +259,15 @@ class Down extends BaseModel
         });
 
         return parent::delete();
+    }
+
+    /**
+     * Get calculated Rating
+     *
+     * @return float|int
+     */
+    public function getCalculatedRating()
+    {
+        return $this->rated ? round($this->rating / $this->rated, 1) : 0;
     }
 }
