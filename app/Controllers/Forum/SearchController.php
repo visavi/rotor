@@ -22,49 +22,50 @@ class SearchController extends BaseController
      */
     public function index(Request $request, Validator $validator): string
     {
-        $find = check($request->input('find'));
-        $posts = collect();
+        $find  = $request->input('find');
+        $type = $request->input('type') === 'title' ? 'title' : 'text';
+        $data  = collect();
 
         if ($find) {
-            $validator->length($find, 3, 64, ['find' => __('main.request_requirements')]);
+            $find = rawurldecode(trim(preg_replace('/[^\w\x7F-\xFF\s]/', ' ', $find)));
 
+            $validator->length($find, 3, 64, ['find' => __('main.request_length')]);
             if ($validator->isValid()) {
-                if (empty($_SESSION['forumfindres']) || $find !== $_SESSION['forumfind']) {
-                    $findPosts = Post::query()
-                        ->selectRaw('id, MATCH (text) AGAINST (? IN BOOLEAN MODE) as score', [$find])
-                        ->whereRaw('MATCH (text) AGAINST (? IN BOOLEAN MODE)', [$find]);
-
-                    $result = Topic::query()
-                        ->selectRaw('last_post_id as id, MATCH (title) AGAINST (? IN BOOLEAN MODE) as score', [$find])
-                        ->whereRaw('MATCH (title) AGAINST (? IN BOOLEAN MODE)', [$find])
-                        ->union($findPosts)
-                        ->orderByDesc('score')
-                        ->limit(100)
-                        ->pluck('id')
-                        ->all();
-
-                    $_SESSION['forumfind'] = $find;
-                    $_SESSION['forumfindres'] = $result;
+                if (config('DB_DRIVER') === 'mysql') {
+                    [$sql, $bindings] = ['MATCH (' . $type . ') AGAINST (? IN BOOLEAN MODE)', [$find . '*']];
+                } else {
+                    [$sql, $bindings] = [$type . ' ILIKE ?', ['%' . $find . '%']];
                 }
 
-                $validator->notEmpty($_SESSION['forumfindres'], ['find' => __('main.empty_found')]);
-            }
+                if ($type === 'title') {
+                    $data = Topic::query()
+                        ->whereRaw($sql, $bindings)
+                        ->with('forum', 'lastPost.user')
+                        ->paginate(setting('forumtem'))
+                        ->appends([
+                            'find' => $find,
+                        ]);
+                } else {
+                    $data = Post::query()
+                        ->whereRaw($sql, $bindings)
+                        ->with('user', 'topic.forum')
+                        ->paginate(setting('forumpost'))
+                        ->appends([
+                            'find' => $find,
+                        ]);
+                }
 
-            if ($validator->isValid()) {
-                $posts = Post::query()
-                    ->whereIn('id', $_SESSION['forumfindres'])
-                    ->with('user', 'topic.forum')
-                    ->orderByDesc('created_at')
-                    ->paginate(setting('forumpost'))
-                    ->appends([
-                        'find' => $find,
-                    ]);
+                if ($data->isEmpty()) {
+                    setInput($request->all());
+                    setFlash('danger', __('main.empty_found'));
+                    redirect('/forums/search');
+                }
             } else {
                 setInput($request->all());
                 setFlash('danger', $validator->getErrors());
             }
         }
 
-        return view('forums/search', compact('posts', 'find'));
+        return view('forums/search', compact('data', 'type', 'find'));
     }
 }

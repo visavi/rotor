@@ -858,7 +858,7 @@ class ArticleController extends BaseController
             }
         } else {
             setInput($request->all());
-            setFlash('danger', ['find' => __('main.request_requirements')]);
+            setFlash('danger', ['find' => __('main.request_length')]);
             redirect('/blogs/search');
         }
     }

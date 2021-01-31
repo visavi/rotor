@@ -21,25 +21,33 @@ class SearchController extends BaseController
      */
     public function index(Request $request, Validator $validator): string
     {
-        $find = rawurldecode($request->input('find', ''));
-        $find = trim(preg_replace("/[^\w\x7F-\xFF\s]/", ' ', $find));
+        $find  = $request->input('find');
         $downs = collect();
 
         if ($find) {
-            $validator->length($find, 3, 64, ['find' => __('main.request_requirements')]);
+            $find = rawurldecode(trim(preg_replace('/[^\w\x7F-\xFF\s]/', ' ', $find)));
 
+            $validator->length($find, 3, 64, ['find' => __('main.request_length')]);
             if ($validator->isValid()) {
+                if (config('DB_DRIVER') === 'mysql') {
+                    $search = 'MATCH (title, text) AGAINST (? IN BOOLEAN MODE)';
+                    $binding = $find . '*';
+                } else {
+                    $search = 'text ILIKE ?';
+                    $binding = '%' . $find . '%';
+                }
+
                 $downs = Down::query()
                     ->where('active', 1)
-                    ->whereRaw('MATCH (title, text) AGAINST (? IN BOOLEAN MODE)', [$find . '*'])
+                    ->whereRaw($search, [$binding])
                     ->with('user', 'category')
-                    ->limit(500)
                     ->paginate(setting('downlist'))
                     ->appends([
                         'find' => $find,
                     ]);
 
                 if ($downs->isEmpty()) {
+                    setInput($request->all());
                     setFlash('danger', __('main.empty_found'));
                     redirect('/loads/search');
                 }

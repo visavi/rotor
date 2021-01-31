@@ -23,6 +23,7 @@
                 </div>
             </div>
             <div class="invalid-feedback">{{ textError('find') }}</div>
+            <span class="text-muted font-italic"><?= __('main.request_requirements') ?></span>
         </form>
     </div>
 

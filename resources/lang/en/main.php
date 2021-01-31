@@ -107,6 +107,7 @@ return [
     'search_request'       => 'Search request',
     'total_found'          => 'Found matches',
     'empty_found'          => 'Your search did not match anything!',
+    'request_length'       => 'Too long or short request!',
     'request_requirements' => 'The request must contain between 3 and 64 characters!',
 
     'cost'              => 'Cost',

@@ -21,28 +21,52 @@
                 <button class="btn btn-primary">{{ __('main.search') }}</button>
             </div>
         </div>
+
+        <div class="custom-control custom-checkbox my-1">
+            <input type="checkbox" class="custom-control-input" value="title" name="type" id="type"{{ $type === 'title' ? ' checked' : '' }}>
+            <label class="custom-control-label" for="type">Искать в названиях тем</label>
+        </div>
         <div class="invalid-feedback">{{ textError('find') }}</div>
+        <span class="text-muted font-italic"><?= __('main.request_requirements') ?></span>
     </form>
 
-    @if ($posts->isNotEmpty())
-        <div class="my-3">{{ __('main.total_found') }}: {{ $posts->total() }}</div>
+    @if ($data->isNotEmpty())
+        <div class="my-3">{{ __('main.total_found') }}: {{ $data->total() }}</div>
 
-        @foreach ($posts as $post)
-            <div class="section mb-3 shadow">
-                <div class="section-title">
-                    <i class="fa fa-file-alt"></i>
-                    <a href="/topics/{{ $post->topic_id }}/{{ $post->id }}">{{ $post->topic->title }}</a>
+        @if ($type === 'text')
+            @foreach ($data as $post)
+                <div class="section mb-3 shadow">
+                    <div class="section-title">
+                        <i class="fa fa-file-alt"></i>
+                        <a href="/topics/{{ $post->topic_id }}/{{ $post->id }}">{{ $post->topic->title }}</a>
+                    </div>
+
+                    <div class="section-message">
+                        {!! bbCode($post->text) !!}<br>
+                        {{ __('forums.forum') }}: <a href="/topics/{{ $post->topic->forum->id }}">{{ $post->topic->forum->title }}</a><br>
+                        {{ __('main.posted') }}: {!! $post->user->getProfile() !!}
+                        <small class="section-date text-muted font-italic">{{ dateFixed($post->created_at) }}</small>
+                    </div>
                 </div>
+            @endforeach
+        @else
+            @foreach ($data as $topic)
+                <div class="section mb-3 shadow">
+                    <div class="section-title">
+                        <i class="fa {{ $topic->getIcon() }} text-muted"></i>
+                        <a href="/topics/{{ $topic->id }}">{{ $topic->title }}</a> ({{ $topic->count_posts }})
+                    </div>
 
-                <div class="section-message">
-                    {!! bbCode($post->text) !!}<br>
-                    {{ __('forums.forum') }}: <a href="/topics/{{ $post->topic->forum->id }}">{{ $post->topic->forum->title }}</a><br>
-                    {{ __('main.posted') }}: {!! $post->user->getProfile() !!}
-                    <small class="section-date text-muted font-italic">{{ dateFixed($post->created_at) }}</small>
+                    <div class="section-message">
+                        {!! $topic->pagination() !!}
+                        {{ __('forums.forum') }}: <a href="/topics/{{ $topic->forum->id }}">{{ $topic->forum->title }}</a><br>
+                        {{ __('forums.post') }}: {{ $topic->lastPost->user->getName() }}
+                        <small class="section-date text-muted font-italic">{{ dateFixed($topic->lastPost->created_at) }}</small>
+                    </div>
                 </div>
-            </div>
-        @endforeach
+            @endforeach
+        @endif
 
-        {{ $posts->links() }}
+        {{ $data->links() }}
     @endif
 @stop

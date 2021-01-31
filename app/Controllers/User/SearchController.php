@@ -34,7 +34,7 @@ class SearchController extends BaseController
 
         if ($strlen < 2 || $strlen > 20) {
             setInput($request->all());
-            setFlash('danger', ['find' => __('main.request_requirements')]);
+            setFlash('danger', ['find' => __('users.request_requirements')]);
             redirect('/searchusers');
         }
 
