@@ -14,7 +14,7 @@
 @stop
 
 @section('content')
-    <p>{{ __('blogs.found_in_tags') }}: {{ $articles->total() }}</p>
+    <p>{{ __('main.total_found') }}: {{ $articles->total() }}</p>
 
     @foreach ($articles as $article)
         <div class="section mb-3 shadow">

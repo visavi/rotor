@@ -29,6 +29,10 @@ final class CreateArticlesTable extends Migration
                 $table->index('user_id');
                 $table->index('created_at');
             });
+
+            if (config('DB_DRIVER') === 'mysql') {
+                $this->db->getConnection()->statement('CREATE FULLTEXT INDEX articles_title_text_fulltext ON articles(title, text);');
+            }
         }
     }
 

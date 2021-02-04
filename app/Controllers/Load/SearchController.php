@@ -40,9 +40,7 @@ class SearchController extends BaseController
                     ->whereRaw($sql, $bindings)
                     ->with('user', 'category')
                     ->paginate(setting('downlist'))
-                    ->appends([
-                        'find' => $find,
-                    ]);
+                    ->appends(compact('find'));
 
                 if ($downs->isEmpty()) {
                     setInput($request->all());

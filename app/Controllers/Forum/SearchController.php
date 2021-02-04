@@ -42,17 +42,13 @@ class SearchController extends BaseController
                         ->whereRaw($sql, $bindings)
                         ->with('forum', 'lastPost.user')
                         ->paginate(setting('forumtem'))
-                        ->appends([
-                            'find' => $find,
-                        ]);
+                        ->appends(compact('find', 'type'));
                 } else {
                     $data = Post::query()
                         ->whereRaw($sql, $bindings)
                         ->with('user', 'topic.forum')
                         ->paginate(setting('forumpost'))
-                        ->appends([
-                            'find' => $find,
-                        ]);
+                        ->appends(compact('find', 'type'));
                 }
 
                 if ($data->isEmpty()) {

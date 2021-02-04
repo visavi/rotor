@@ -30,11 +30,6 @@ return [
     'title_rss'              => 'RSS articles',
     'title_search'           => 'Blog Search',
     'title_tags'             => 'Tag Search',
-    'in_titles'              => 'In the headlines',
-    'in_text'                => 'In the text',
-    'found_in_title'         => 'Headings found',
-    'found_in_text'          => 'Found matches in text',
-    'found_in_tags'          => 'Found matches in tags',
     'confirm_delete_article' => 'Are you sure you want to delete this article?',
     'confirm_delete_blog'    => 'Are you sure you want to delete this section?',
 

@@ -560,7 +560,7 @@ class ArticleController extends BaseController
         ) {
             $result = Article::query()
                 ->select('id')
-                ->where('tags', 'like', '%'.$tag.'%')
+                ->where('tags', 'like', '%' . $tag . '%')
                 ->limit(500)
                 ->pluck('id')
                 ->all();
@@ -733,134 +733,40 @@ class ArticleController extends BaseController
      *
      * @return string
      */
-    public function search(Request $request): ?string
+    public function search(Request $request, Validator $validator): ?string
     {
-        $find  = check($request->input('find'));
-        $type  = int($request->input('type'));
-        $where = int($request->input('where'));
+        $find     = check($request->input('find'));
+        $articles = collect();
 
-        if (! getUser()) {
-            abort(403, __('main.not_authorized'));
-        }
+        if ($find) {
+            $find = rawurldecode(trim(preg_replace('/[^\w\x7F-\xFF\s]/', ' ', $find)));
 
-        if (empty($find)) {
-            return view('blogs/search');
-        }
-
-        if (! isUtf($find)) {
-            $find = winToUtf($find);
-        }
-
-        $strlen = utfStrlen($find);
-
-        if ($strlen >= 3 && $strlen <= 50) {
-            $findme = utfLower($find);
-            $findmewords = explode(' ', $findme);
-
-            $arrfind = [];
-            foreach ($findmewords as $valfind) {
-                if (utfStrlen($valfind) >= 3) {
-                    $arrfind[] = $valfind;
-                }
-            }
-            array_splice($arrfind, 3);
-
-                $types = empty($type) ? 'AND' : 'OR';
-                $wheres = empty($where) ? 'title' : 'text';
-
-                $blogfind = ($types . $wheres . $find);
-
-            // Поиск в названии
-            if ($wheres === 'title') {
-                if ($type === 2) {
-                    $arrfind[0] = $findme;
-                }
-                $search1 = isset($arrfind[1]) && $type !== 2 ? $types . " `title` LIKE '%" . $arrfind[1] . "%'" : '';
-                $search2 = isset($arrfind[2]) && $type !== 2 ? $types . " `title` LIKE '%" . $arrfind[2] . "%'" : '';
-
-                if (empty($_SESSION['blogfindres']) || $blogfind !== $_SESSION['blogfind']) {
-                    $result = Article::query()
-                        ->select('id')
-                        ->whereRaw("title like '%".$arrfind[0]."%'".$search1.$search2)
-                        ->limit(500)
-                        ->pluck('id')
-                        ->all();
-
-                    $_SESSION['blogfind'] = $blogfind;
-                    $_SESSION['blogfindres'] = $result;
+            $validator->length($find, 3, 64, ['find' => __('main.request_length')]);
+            if ($validator->isValid()) {
+                if (config('DB_DRIVER') === 'mysql') {
+                    [$sql, $bindings] = ['MATCH (title, text) AGAINST (? IN BOOLEAN MODE)', [$find . '*']];
+                } else {
+                    [$sql, $bindings] = ['title ILIKE ? OR text ILIKE ?', ['%' . $find . '%', '%' . $find . '%']];
                 }
 
-                $total = count($_SESSION['blogfindres']);
+                $articles = Article::query()
+                    ->whereRaw($sql, $bindings)
+                    ->with('user', 'category')
+                    ->paginate(setting('blogpost'))
+                    ->appends(compact('find'));
 
-                if ($total > 0) {
-                    $articles = Article::query()
-                        ->select('articles.*', 'blogs.name')
-                        ->whereIn('articles.id', $_SESSION['blogfindres'])
-                        ->join('blogs', 'articles.category_id', 'blogs.id')
-                        ->orderByDesc('created_at')
-                        ->with('user')
-                        ->paginate(setting('blogpost'))
-                        ->appends([
-                            'find'  => $find,
-                            'where' => $where,
-                            'type'  => $type,
-                        ]);
-
-                    return view('blogs/search_title', compact('articles', 'find'));
+                if ($articles->isEmpty()) {
+                    setInput($request->all());
+                    setFlash('danger', __('main.empty_found'));
+                    redirect('/loads/search');
                 }
-
+            } else {
                 setInput($request->all());
-                setFlash('danger', __('main.empty_found'));
-                redirect('/blogs/search');
+                setFlash('danger', $validator->getErrors());
             }
-            // Поиск в текте
-            if ($wheres === 'text') {
-                if ($type === 2) {
-                    $arrfind[0] = $findme;
-                }
-                $search1 = isset($arrfind[1]) && $type !== 2 ? $types . " `text` LIKE '%" . $arrfind[1] . "%'" : '';
-                $search2 = isset($arrfind[2]) && $type !== 2 ? $types . " `text` LIKE '%" . $arrfind[2] . "%'" : '';
-
-                if (empty($_SESSION['blogfindres']) || $blogfind !== $_SESSION['blogfind']) {
-                    $result = Article::query()
-                        ->select('id')
-                        ->whereRaw("text like '%".$arrfind[0]."%'".$search1.$search2)
-                        ->limit(500)
-                        ->pluck('id')
-                        ->all();
-
-                    $_SESSION['blogfind'] = $blogfind;
-                    $_SESSION['blogfindres'] = $result;
-                }
-
-                $total = count($_SESSION['blogfindres']);
-
-                if ($total > 0) {
-                    $articles = Article::query()
-                        ->select('articles.*', 'blogs.name')
-                        ->whereIn('articles.id', $_SESSION['blogfindres'])
-                        ->join('blogs', 'articles.category_id', 'blogs.id')
-                        ->orderByDesc('created_at')
-                        ->with('user')
-                        ->paginate(setting('blogpost'))
-                        ->appends([
-                            'find'  => $find,
-                            'where' => $where,
-                            'type'  => $type,
-                        ]);
-
-                    return view('blogs/search_text', compact('articles', 'find'));
-                }
-
-                setInput($request->all());
-                setFlash('danger', __('main.empty_found'));
-                redirect('/blogs/search');
-            }
-        } else {
-            setInput($request->all());
-            setFlash('danger', ['find' => __('main.request_length')]);
-            redirect('/blogs/search');
         }
+
+        return view('blogs/search', compact('articles', 'find'));
     }
 
     /**
