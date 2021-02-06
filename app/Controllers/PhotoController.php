@@ -23,6 +23,12 @@ class PhotoController extends BaseController
     public function index(): string
     {
         $photos = Photo::query()
+            ->select('photos.*', 'pollings.vote')
+            ->leftJoin('pollings', static function (JoinClause $join) {
+                $join->on('photos.id', 'pollings.relate_id')
+                    ->where('pollings.relate_type', Photo::$morphName)
+                    ->where('pollings.user_id', getUser('id'));
+            })
             ->orderByDesc('created_at')
             ->with('user', 'files')
             ->paginate(setting('fotolist'));
