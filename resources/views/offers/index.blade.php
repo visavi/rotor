@@ -27,13 +27,11 @@
 
 @section('content')
     <div class="mb-3">
-        @if ($type === 'offer')
-            <a class="btn btn-primary btn-sm" href="/offers/offer">{{ __('offers.offers') }} <span class="badge badge-light">{{ $offers->total() }}</span></a>
-            <a class="btn btn-light btn-sm" href="/offers/issue">{{ __('offers.problems') }} <span class="badge badge-light">{{ $otherCount }}</span></a>
-        @else
-            <a class="btn btn-light btn-sm" href="/offers/offer">{{ __('offers.offers') }} <span class="badge badge-light">{{ $otherCount }}</span></a>
-            <a class="btn btn-primary btn-sm" href="/offers/issue">{{ __('offers.problems') }} <span class="badge badge-light">{{ $offers->total() }}</span></a>
-        @endif
+        <?php $active = ($type === 'offer') ? 'primary' : 'light'; ?>
+        <a class="btn btn-{{ $active }} btn-sm" href="/offers/offer?sort={{ $sort }}">{{ __('offers.offers') }} <span class="badge badge-light">{{ $offerCount }}</span></a>
+
+        <?php $active = ($type === 'issue') ? 'primary' : 'light'; ?>
+        <a class="btn btn-{{ $active }} btn-sm" href="/offers/issue?sort={{ $sort }}">{{ __('offers.problems') }} <span class="badge badge-light">{{ $issueCount }}</span></a>
     </div>
 
     @if ($offers->isNotEmpty())
@@ -61,7 +59,8 @@
                 <div class="section-body">
                     {!! $data->getStatus() !!}<br>
                     {!! bbCode($data->text) !!}<br>
-                    {{ __('main.added') }}: {!! $data->user->getProfile() !!} ({{ dateFixed($data->created_at) }})<br>
+                    {{ __('main.added') }}: {!! $data->user->getProfile() !!}
+                    <small class="section-date text-muted font-italic">{{ dateFixed($data->created_at) }}</small><br>
                     <a href="/offers/comments/{{ $data->id }}">{{ __('main.comments') }}</a> ({{ $data->count_comments }})
                     <a href="/offers/end/{{ $data->id }}">&raquo;</a>
                 </div>

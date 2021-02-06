@@ -54,14 +54,14 @@
             </div>
         </form>
 
+        {{ $ignores->links() }}
+
         {{ __('main.total') }}: <b>{{ $ignores->total() }}</b><br>
     @else
         {!! showError(__('ignores.empty_list')) !!}
     @endif
 
-    {{ $ignores->links() }}
-
-    <div class="section-form mb-3 shadow">
+    <div class="section-form my-3 shadow">
         <form method="post">
             @csrf
             <div class="input-group{{ hasError('user') }}">

@@ -55,14 +55,14 @@
             </div>
         </form>
 
+        {{ $contacts->links() }}
+
         {{ __('main.total') }}: <b>{{ $contacts->total() }}</b><br>
     @else
         {!! showError(__('contacts.empty_list')) !!}
     @endif
 
-    {{ $contacts->links() }}
-
-    <div class="section-form mb-3 shadow">
+    <div class="section-form my-3 shadow">
         <form method="post">
             @csrf
             <div class="input-group{{ hasError('user') }}">

@@ -22,6 +22,7 @@ class ListController extends BaseController
     {
         $type = check($request->input('type', 'users'));
         $sort = check($request->input('sort', 'point'));
+        $user = $request->input('user', getUser('login'));
 
         switch ($sort) {
             case 'time':
@@ -46,12 +47,7 @@ class ListController extends BaseController
             })
             ->orderByDesc($order)
             ->paginate(setting('userlist'))
-            ->appends([
-                'type' => $type,
-                'sort' => $sort,
-            ]);
-
-        $user = $request->input('user', getUser('login'));
+            ->appends(compact('type', 'sort'));
 
         if ($request->isMethod('post')) {
             $position = User::query()

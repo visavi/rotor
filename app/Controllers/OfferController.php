@@ -23,8 +23,8 @@ class OfferController extends BaseController
      */
     public function index(Request $request, string $type = 'offer'): string
     {
-        $otherType  = $type === Offer::OFFER ? Offer::ISSUE : Offer::OFFER;
-        $otherCount = Offer::query()->where('type', $otherType)->count();
+        $offerCount = Offer::query()->where('type', Offer::OFFER)->count();
+        $issueCount = Offer::query()->where('type', Offer::ISSUE)->count();
 
         $sort = check($request->input('sort', 'rating'));
 
@@ -47,9 +47,9 @@ class OfferController extends BaseController
             ->orderByDesc($order)
             ->with('user')
             ->paginate(setting('postoffers'))
-            ->appends(['sort' => $sort]);
+            ->appends(compact('type', 'sort'));
 
-        return view('offers/index', compact('offers', 'order', 'type', 'otherCount'));
+        return view('offers/index', compact('offers', 'order', 'type', 'sort', 'offerCount', 'issueCount'));
     }
 
     /**
