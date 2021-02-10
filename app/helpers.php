@@ -1451,13 +1451,14 @@ function sendNotify(string $text, string $url, string $title)
     preg_match_all('/(?<=^|\s|=)@([\w\-]+)/', $text, $matches);
 
     if (! empty($matches[1])) {
-        $usersAnswer = array_unique(array_diff($matches[1], [getUser('login')]));
+        $login = getUser('login') ?? setting('guestsuser');
+        $usersAnswer = array_unique(array_diff($matches[1], [$login]));
 
-        foreach ($usersAnswer as $login) {
-            $user = getUserByLogin($login);
+        foreach ($usersAnswer as $user) {
+            $user = getUserByLogin($user);
+
             if ($user && $user->notify) {
-                $user = getUser('login') ?? setting('guestsuser');
-                $notify = textNotice('notify', ['login' => $user, 'url' => $url, 'title' => $title, 'text' => $text]);
+                $notify = textNotice('notify', compact('login', 'url', 'title', 'text'));
                 $user->sendMessage(null, $notify);
             }
         }
