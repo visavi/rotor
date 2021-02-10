@@ -1456,7 +1456,8 @@ function sendNotify(string $text, string $url, string $title)
         foreach ($usersAnswer as $login) {
             $user = getUserByLogin($login);
             if ($user && $user->notify) {
-                $notify = textNotice('notify', ['login' => getUser('login'), 'url' => $url, 'title' => $title, 'text' => $text]);
+                $user = getUser('login') ?? setting('guestsuser');
+                $notify = textNotice('notify', ['login' => $user, 'url' => $url, 'title' => $title, 'text' => $text]);
                 $user->sendMessage(null, $notify);
             }
         }
