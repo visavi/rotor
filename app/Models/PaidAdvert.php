@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Cache;
  * Class Advert
  *
  * @property int id
+ * @property string place
  * @property string site
  * @property string name
  * @property string color
@@ -18,7 +19,7 @@ use Illuminate\Support\Facades\Cache;
  * @property int created_at
  * @property int deleted_at
  */
-class AdminAdvert extends BaseModel
+class PaidAdvert extends BaseModel
 {
     /**
      * Indicates if the model should be timestamped.
@@ -35,13 +36,13 @@ class AdminAdvert extends BaseModel
     protected $guarded = [];
 
     /**
-     * Кэширует ссылки админской рекламы
+     * Кэширует ссылки платной рекламы
      *
      * @return array Список ссылок
      */
     public static function statAdverts(): array
     {
-        return Cache::remember('adminAdverts', 1800, static function () {
+        return Cache::remember('paidAdverts', 3600, static function () {
             $data = self::query()->where('deleted_at', '>', SITETIME)->get();
 
             $links = [];
@@ -59,7 +60,7 @@ class AdminAdvert extends BaseModel
                         $link = '<b>' . $link . '</b>';
                     }
 
-                    $links[] = $link;
+                    $links[$val->place][] = $link;
                 }
             }
 

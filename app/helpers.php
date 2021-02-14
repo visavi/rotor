@@ -1,6 +1,7 @@
 <?php
 
 use App\Models\AdminAdvert;
+use App\Models\PaidAdvert;
 use App\Classes\{BBCode, Calendar, Metrika, CloudFlare, Mix};
 use App\Models\Antimat;
 use App\Models\Ban;
@@ -1037,9 +1038,28 @@ function truncateDescription(string $value, int $words = 20, string $end = ''): 
     return Str::words(trim($value), $words, $end);
 }
 
+/**
+ * Возвращает код платной рекламы
+ *
+ * @param string $place
+ *
+ * @return string
+ */
+function getAdvertPaid(string $place)
+{
+    $adverts = PaidAdvert::statAdverts();
+
+    if (isset($adverts[$place])) {
+        $adverts = implode('<br>', $adverts[$place]);
+
+        return $adverts;
+    }
+
+    return false;
+}
 
 /**
- * Возвращает HTML админской рекламы
+ * Возвращает код админской рекламы
  *
  * @return string
  */
@@ -1057,7 +1077,7 @@ function getAdvertAdmin()
 }
 
 /**
- * Возвращает HTML пользовательской рекламы
+ * Возвращает код пользовательской рекламы
  *
  * @return string
  */
