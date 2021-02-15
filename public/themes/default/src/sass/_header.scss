@@ -186,5 +186,11 @@
 .app-notification__icon {
   padding-right: 10px;
 }
+
+.app-notification__cnt {
+  padding: 5px;
+  margin-left: auto;
+}
+
 .app-notification__author { line-height: 1.2; }
 .app-notification__meta { @extend .text-muted; @extend .small; }

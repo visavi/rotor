@@ -7,7 +7,7 @@ namespace App\Models;
 use Illuminate\Support\Facades\Cache;
 
 /**
- * Class Advert
+ * Class PaidAdvert
  *
  * @property int id
  * @property string place

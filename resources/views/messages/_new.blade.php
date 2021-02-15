@@ -10,6 +10,10 @@
                 <p class="app-notification__author">{{ $author }}</p>
                 <p class="app-notification__meta">{{ dateFixed($message->last_created_at) }}</p>
             </div>
+
+            <div class="app-notification__cnt">
+                <span class="badge badge-info">{{ $message->cnt }}</span>
+            </div>
         </a>
     </li>
 @endforeach

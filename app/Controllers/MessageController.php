@@ -232,6 +232,7 @@ class MessageController extends BaseController
                 'author_id',
                 DB::connection()->raw('max(created_at) as last_created_at')
             )
+            ->selectRaw('count(*) as cnt')
             ->where('user_id', $this->user->id)
             ->where('reading', 0)
             ->groupBy('author_id')
