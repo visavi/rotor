@@ -106,6 +106,10 @@ class Module extends BaseModel
         $originPath  = $this->getLinkName($modulePath);
         $modulesPath = $modulePath . '/resources/assets';
 
+        if (! file_exists($modulesPath)) {
+            return;
+        }
+
         $relativePath = $filesystem->makePathRelative($modulesPath, $this->assetsPath);
 
         $filesystem->symlink($relativePath, $originPath, true);
