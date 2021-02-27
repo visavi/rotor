@@ -68,7 +68,6 @@ class Module extends BaseModel
         }
     }
 
-
     /**
      * Выполняет откат миграций
      *
@@ -110,9 +109,7 @@ class Module extends BaseModel
             return;
         }
 
-        $relativePath = $filesystem->makePathRelative($modulesPath, $this->assetsPath);
-
-        $filesystem->symlink($relativePath, $originPath, true);
+        $filesystem->symlink($modulesPath, $originPath, true);
     }
 
     /**
@@ -122,11 +119,14 @@ class Module extends BaseModel
      */
     public function deleteSymlink(string $modulePath): void
     {
-        $link = $this->getLinkName($modulePath);
+        $originPath = $this->getLinkName($modulePath);
 
-        if (is_link($link)) {
-            unlink($link);
+        if (! file_exists($originPath)) {
+            return;
         }
+
+        $filesystem = new Filesystem();
+        $filesystem->remove($originPath);
     }
 
     /**
