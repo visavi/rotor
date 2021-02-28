@@ -15,12 +15,13 @@ final class CreatePaidAdvertsTable extends Migration
         if (! $this->schema->hasTable('paid_adverts')) {
             $this->schema->create('paid_adverts', function (Blueprint $table) {
                 $table->increments('id');
+                $table->integer('user_id');
                 $table->string('place', 20);
                 $table->string('site', 100);
-                $table->string('name', 50);
+                $table->json('names');
                 $table->string('color', 10)->nullable();
                 $table->boolean('bold')->default(false);
-                $table->integer('user_id');
+                $table->string('comment')->nullable();
                 $table->integer('created_at');
                 $table->integer('deleted_at')->nullable();
             });

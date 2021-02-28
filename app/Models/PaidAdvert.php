@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Casts\AsArrayObject;
 use Illuminate\Support\Facades\Cache;
 
 /**
@@ -21,6 +22,32 @@ use Illuminate\Support\Facades\Cache;
  */
 class PaidAdvert extends BaseModel
 {
+    public const TOP_ALL    = 'top_all';
+    public const TOP        = 'top';
+    public const FORUM      = 'forum';
+    public const BOTTOM_ALL = 'bottom_all';
+    public const BOTTOM     = 'bottom';
+
+    /**
+     * Места размещения
+     */
+    public const PLACES = [
+        self::TOP_ALL,
+        self::TOP,
+        self::FORUM,
+        self::BOTTOM_ALL,
+        self::BOTTOM,
+    ];
+
+    /**
+     * The attributes that should be cast to native types.
+     *
+     * @var array
+     */
+    protected $casts = [
+        'names' => 'json',
+    ];
+
     /**
      * Indicates if the model should be timestamped.
      *
@@ -48,19 +75,24 @@ class PaidAdvert extends BaseModel
             $links = [];
             if ($data->isNotEmpty()) {
                 foreach ($data as $val) {
-                    $name = check($val->name);
+                    $names = check($val->names);
 
-                    if ($val->color) {
-                        $name = '<span style="color:' . $val->color . '">' . $name . '</span>';
+                    $sites = [];
+                    foreach ($names as $name) {
+                        if ($val->color) {
+                            $name = '<span style="color:' . $val->color . '">' . $name . '</span>';
+                        }
+
+                        $link = '<a href="' . $val->site . '" target="_blank">' . $name . '</a>';
+
+                        if ($val->bold) {
+                            $link = '<b>' . $link . '</b>';
+                        }
+
+                        $sites[] =  $link;
                     }
 
-                    $link = '<a href="' . $val->site . '" target="_blank">' . $name . '</a>';
-
-                    if ($val->bold) {
-                        $link = '<b>' . $link . '</b>';
-                    }
-
-                    $links[$val->place][] = $link;
+                    $links[$val->place][] = $sites;
                 }
             }
 

@@ -475,6 +475,11 @@ return FastRoute\cachedDispatcher(static function (RouteCollector $r) {
         $r->addRoute(['GET', 'POST'], '/adverts/edit/{id:\d+}', [App\Controllers\Admin\AdvertController::class, 'edit']);
         $r->post('/adverts/delete', [App\Controllers\Admin\AdvertController::class, 'delete']);
 
+        $r->get('/paid-adverts', [App\Controllers\Admin\PaidAdvertController::class, 'index']);
+        $r->addRoute(['GET', 'POST'], '/paid-adverts/create', [App\Controllers\Admin\PaidAdvertController::class, 'create']);
+        $r->addRoute(['GET', 'POST'], '/paid-adverts/edit/{id:\d+}', [App\Controllers\Admin\PaidAdvertController::class, 'edit']);
+        $r->get('/paid-adverts/delete/{id:\d+}', [App\Controllers\Admin\PaidAdvertController::class, 'delete']);
+
         $r->get('/forums', [App\Controllers\Admin\ForumController::class, 'index']);
         $r->post('/forums/create', [App\Controllers\Admin\ForumController::class, 'create']);
         $r->addRoute(['GET', 'POST'], '/forums/edit/{id:\d+}', [App\Controllers\Admin\ForumController::class, 'edit']);

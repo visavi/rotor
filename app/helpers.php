@@ -1050,9 +1050,12 @@ function getAdvertPaid(string $place)
     $adverts = PaidAdvert::statAdverts();
 
     if (isset($adverts[$place])) {
-        $adverts = implode('<br>', $adverts[$place]);
+        $links = [];
+        foreach ($adverts[$place] as $advert) {
+            $links[] = Arr::random($advert);
+        }
 
-        return $adverts;
+        return implode('<br>', $links);
     }
 
     return false;
@@ -1905,7 +1908,7 @@ function plural(int $num, $forms)
  *
  * @return string Обработанный текст
  */
-function bbCode(string $text, $parse = true)
+function bbCode(string $text, bool $parse = true)
 {
     $bbCode = new BBCode();
 

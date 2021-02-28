@@ -6,7 +6,6 @@ namespace App\Controllers\Admin;
 
 use App\Models\User;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Cache;
 use Symfony\Component\Finder\Finder;
 use Symfony\Component\Finder\SplFileInfo;
 
@@ -89,7 +88,7 @@ class CheckerController extends AdminController
 
         /** @var SplFileInfo $file */
         foreach ($files as $file) {
-            $state[] = $file->getRelativePathname() . ' / ' . dateFixed($file->getMTime(), 'd.m.y H:i', true) .' / ' . formatSize($file->getSize());
+            $state[] = $file->getRelativePathname() . ' / ' . dateFixed($file->getMTime(), 'd.m.y H:i', true) . ' / ' . formatSize($file->getSize());
         }
 
         return $state;

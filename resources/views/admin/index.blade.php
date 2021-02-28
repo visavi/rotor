@@ -90,6 +90,7 @@
                 <i class="far fa-circle fa-lg text-muted"></i> <a href="/admin/notices">{{ __('index.email_templates') }}</a><br>
                 <i class="far fa-circle fa-lg text-muted"></i> <a href="/admin/files">{{ __('index.page_editor') }}</a><br>
                 <i class="far fa-circle fa-lg text-muted"></i> <a href="/admin/delusers">{{ __('index.user_cleaning') }}</a><br>
+                <i class="far fa-circle fa-lg text-muted"></i> <a href="/admin/paid-adverts">Платная реклама</a><br>
                 <i class="far fa-circle fa-lg text-muted"></i> <a href="/admin/modules">{{ __('index.modules') }}</a><br>
             </div>
         </div>
