@@ -24,7 +24,7 @@
                 <select class="form-control" name="place" id="place">
                     @foreach ($places as $place)
                         <?php $selected = ($place === $inputStatus) ? ' selected' : ''; ?>
-                        <option value="{{ $place }}"{{ $selected }}>{{ $place }}</option>
+                        <option value="{{ $place }}"{{ $selected }}>{{ __('admin.paid_adverts.' . $place) }}</option>
                     @endforeach
                 </select>
 
@@ -38,18 +38,17 @@
                 <div class="invalid-feedback">{{ textError('site') }}</div>
             </div>
 
-            <div class="form-group{{ hasError('name') }} js-advert-names">
-                <?php $names = array_diff((array) getInput('name'), ['']) ?>
+            <div class="form-group{{ hasError('names') }} js-advert-names">
+                <?php $names = array_values(array_diff((array) getInput('names'), [''])) ?>
 
                 @for ($i = 0; $i < max(1, count($names)); $i++)
-
                     @if ($i === 0)
-                        <label for="name{{ $i }}">{{ __('adverts.name') }}:</label>
+                        <label for="names{{ $i }}">{{ __('adverts.name') }}:</label>
                         <a onclick="return addAdvertName()" href="#" data-toggle="tooltip" title="{{ __('main.add') }}"><i class="fas fa-plus-square"></i></a>
-                        <input type="text" name="name[]" class="form-control" id="name{{ $i }}" value="{{ $names[$i] ?? '' }}" maxlength="35" placeholder="{{ __('adverts.name') }}">
+                        <input type="text" name="names[]" class="form-control" id="names{{ $i }}" value="{{ $names[$i] ?? '' }}" maxlength="35" placeholder="{{ __('adverts.name') }}">
                     @else
                         <div class="input-group mt-1">
-                            <input class="form-control" name="name[]" type="text" value="{{ $names[$i] ?? '' }}" maxlength="35" placeholder="{{ __('adverts.name') }}">
+                            <input class="form-control" name="names[]" type="text" value="{{ $names[$i] ?? '' }}" maxlength="35" placeholder="{{ __('adverts.name') }}">
                             <span class="input-group-append">
                                 <span class="input-group-text">
                                     <a onclick="return removeAdvertName(this)" href="#"><i class="fa fa-times"></i></a>
@@ -59,7 +58,7 @@
                     @endif
 
                 @endfor
-                <div class="invalid-feedback">{{ textError('name') }}</div>
+                <div class="invalid-feedback">{{ textError('names') }}</div>
             </div>
 
             <div class="form-group{{ hasError('color') }}">
@@ -81,6 +80,12 @@
                 <label class="custom-control-label" for="bold">{{ __('adverts.bold') }}</label>
             </div>
 
+            <div class="form-group{{ hasError('term') }}">
+                <label for="term">term:</label>
+                <input class="form-control" type="datetime-local" name="term" id="term" value="{{ getInput('term') }}" required>
+                <div class="invalid-feedback">{{ textError('term') }}</div>
+            </div>
+
             <div class="form-group{{ hasError('comment') }}">
                 <label for="message">comment:</label>
                 <textarea class="form-control markItUp" id="comment" rows="5" name="comment">{{ getInput('comment') }}</textarea>
@@ -96,7 +101,7 @@
     <script>
         function addAdvertName() {
             $('.js-advert-names').append('<div class="input-group mt-1">' +
-                '<input class="form-control" id="name" name="name[]" type="text" value="" maxlength="35" placeholder="<?= __('adverts.name') ?>">' +
+                '<input class="form-control" id="name" name="names[]" type="text" value="" maxlength="35" placeholder="<?= __('adverts.name') ?>">' +
                     '<span class="input-group-append">' +
                         '<span class="input-group-text">' +
                             '<a onclick="return removeAdvertName()" class="aaa" href="#"><i class="fa fa-times"></i></a>' +

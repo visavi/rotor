@@ -22,20 +22,10 @@
 
 @section('content')
     <div class="mb-3">
-        <?php $active = ($place === 'top_all') ? 'primary' : 'light'; ?>
-        <a class="btn btn-{{ $active }} btn-sm" href="/admin/paid-adverts?place=top_all">Все верх <span class="badge badge-light">{{ $totals['top_all'] }}</span></a>
-
-        <?php $active = ($place === 'top') ? 'primary' : 'light'; ?>
-        <a class="btn btn-{{ $active }} btn-sm" href="/admin/paid-adverts?place=top">Главная верх <span class="badge badge-light">{{ $totals['top'] }}</span></a>
-
-        <?php $active = ($place === 'forum') ? 'primary' : 'light'; ?>
-        <a class="btn btn-{{ $active }} btn-sm" href="/admin/paid-adverts?place=forum">Форум <span class="badge badge-light">{{ $totals['forum'] }}</span></a>
-
-        <?php $active = ($place === 'bottom_all') ? 'primary' : 'light'; ?>
-        <a class="btn btn-{{ $active }} btn-sm" href="/admin/paid-adverts?place=bottom_all">Все низ <span class="badge badge-light">{{ $totals['bottom_all'] }}</span></a>
-
-        <?php $active = ($place === 'bottom') ? 'primary' : 'light'; ?>
-        <a class="btn btn-{{ $active }} btn-sm" href="/admin/paid-adverts?place=bottom">Главная низ <span class="badge badge-light">{{ $totals['bottom'] }}</span></a>
+        @foreach ($places as $placeName)
+            <?php $active = ($place === $placeName) ? 'primary' : 'light'; ?>
+            <a class="btn btn-{{ $active }} btn-sm" href="/admin/paid-adverts?place={{ $placeName }}">{{ __('admin.paid_adverts.' . $placeName) }} <span class="badge badge-light">{{ $totals[$placeName] }}</span></a>
+        @endforeach
     </div>
 
     @if ($adverts->isNotEmpty())

@@ -70,7 +70,7 @@ class PaidAdvert extends BaseModel
     public static function statAdverts(): array
     {
         return Cache::remember('paidAdverts', 3600, static function () {
-            $data = self::query()->where('deleted_at', '>', SITETIME)->get();
+            $data = self::query()->where('deleted_at', '>', SITETIME)->orderBy('created_at')->get();
 
             $links = [];
             if ($data->isNotEmpty()) {

@@ -25,7 +25,7 @@
 
             <div class="form-group{{ hasError('answer') }}">
 
-                <?php $answers = array_diff((array) getInput('answer'), ['']) ?>
+                <?php $answers = array_values(array_diff((array) getInput('answer'), [''])) ?>
 
                 @for ($i = 0; $i < 10; $i++)
                     <label for="inputAnswer{{ $i }}">{{ __('votes.answer') }} {{ $i + 1 }}</label>
