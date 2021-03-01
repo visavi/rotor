@@ -51,7 +51,7 @@
                             <input class="form-control" name="names[]" type="text" value="{{ $names[$i] ?? '' }}" maxlength="35" placeholder="{{ __('adverts.name') }}">
                             <span class="input-group-append">
                                 <span class="input-group-text">
-                                    <a onclick="return removeAdvertName(this)" href="#"><i class="fa fa-times"></i></a>
+                                    <a class="js-advert-remove" href="#"><i class="fa fa-times"></i></a>
                                 </span>
                             </span>
                         </div>
@@ -104,7 +104,7 @@
                 '<input class="form-control" id="name" name="names[]" type="text" value="" maxlength="35" placeholder="<?= __('adverts.name') ?>">' +
                     '<span class="input-group-append">' +
                         '<span class="input-group-text">' +
-                            '<a onclick="return removeAdvertName()" class="aaa" href="#"><i class="fa fa-times"></i></a>' +
+                            '<a class="js-advert-remove" href="#"><i class="fa fa-times"></i></a>' +
                         '</span>' +
                     '</span>' +
             '</div>');
@@ -112,10 +112,10 @@
             return false;
         }
 
-        function removeAdvertName(el) {
-            $(el).closest('.input-group').remove();
+        $(document).on('click', '.js-advert-remove', function () {
+            $(this).closest('.input-group').remove();
 
             return false;
-        }
+        });
     </script>
 @endpush
