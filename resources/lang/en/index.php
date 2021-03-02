@@ -109,5 +109,6 @@ return [
     'email_templates'   => 'Email templates',
     'page_editor'       => 'Page editor',
     'user_cleaning'     => 'User cleaning',
+    'paid_adverts'      => 'Paid adverts',
     'modules'           => 'Modules',
 ];

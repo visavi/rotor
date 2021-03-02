@@ -54,6 +54,7 @@ return [
     'comment'           => 'Комментарий',
     'comments'          => 'Комментарии',
     'empty_comments'    => 'Комментариев еще нет!',
+    'empty_comment'     => 'Нет комментария!',
     'empty_messages'    => 'Сообщений еще нет!',
     'empty_records'     => 'Записей еще нет!',
     'empty_notes'       => 'Заметок еще нет!',

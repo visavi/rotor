@@ -45,7 +45,7 @@ class PaidAdvert extends BaseModel
      * @var array
      */
     protected $casts = [
-        'names' => 'json',
+        'names' => 'array',
     ];
 
     /**

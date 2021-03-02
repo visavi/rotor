@@ -1,13 +1,13 @@
 @extends('layout')
 
-@section('title', __('index.advertising'))
+@section('title', __('index.paid_adverts'))
 
 @section('header')
     <div class="float-right">
-        <a class="btn btn-success" href="/admin/paid-adverts/create">{{ __('adverts.create_advert') }}</a>
+        <a class="btn btn-success" href="/admin/paid-adverts/create">{{ __('main.create') }}</a>
     </div>
 
-    <h1>{{ __('index.advertising') }}</h1>
+    <h1>{{ __('index.paid_adverts') }}</h1>
 @stop
 
 @section('breadcrumb')
@@ -15,7 +15,7 @@
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
             <li class="breadcrumb-item"><a href="/admin">{{ __('index.panel') }}</a></li>
-            <li class="breadcrumb-item active">{{ __('index.advertising') }}</li>
+            <li class="breadcrumb-item active">{{ __('index.paid_adverts') }}</li>
         </ol>
     </nav>
 @stop
@@ -40,26 +40,26 @@
 
                     <div class="float-right">
                         <a href="/admin/paid-adverts/edit/{{ $data->id }}"><i class="fas fa-pencil-alt text-muted"></i></a>
-                        <a href="/admin/paid-adverts/delete/{{ $data->id }}?token={{ $_SESSION['token'] }}" onclick="return confirm('{{ __('photos.confirm_delete_photo') }}')"><i class="fa fa-times text-muted"></i></a>
+                        <a href="/admin/paid-adverts/delete/{{ $data->id }}?token={{ $_SESSION['token'] }}" onclick="return confirm('{{ __('admin.paid_adverts.confirm_delete_advert') }}')"><i class="fa fa-times text-muted"></i></a>
                     </div>
                 </div>
 
                 <div class="section-body border-top">
                     <div class="section-message">
-                        {!! bbCode($data->comment ?? 'Нет комментария') !!}
+                        {!! bbCode($data->comment ?? __('main.empty_comment')) !!}
                     </div>
 
                     <i class="far fa-user"></i> {!! $data->user->getProfile() !!}
-                    <small class="section-date text-muted font-italic">{{ __('adverts.expires') }}: {{ dateFixed($data->deleted_at) }}</small>
+                    <small class="section-date text-muted font-italic">{{ __('admin.paid_adverts.expires') }}: {{ dateFixed($data->deleted_at) }}</small>
 
                     <div class="small text-muted font-italic mt-2">
-                        {{ __('adverts.color') }}: {!! $data->color ? '<span style="color:' . $data->color .'">'. $data->color .'</span>' : '<i class="fas fa-times text-danger"></i>' !!},
-                        {{ __('adverts.bold') }}: {!! $data->bold ? '<i class="fas fa-check text-success"></i>' : '<i class="fas fa-times text-danger"></i>' !!}
+                        {{ __('admin.paid_adverts.color') }}: {!! $data->color ? '<span style="color:' . $data->color .'">'. $data->color .'</span>' : '<i class="fas fa-times text-danger"></i>' !!},
+                        {{ __('admin.paid_adverts.bold') }}: {!! $data->bold ? '<i class="fas fa-check text-success"></i>' : '<i class="fas fa-times text-danger"></i>' !!}
                     </div>
                 </div>
             </div>
         @endforeach
     @else
-        {!! showError(__('adverts.empty_links')) !!}
+        {!! showError(__('admin.paid_adverts.empty_links')) !!}
     @endif
 @stop

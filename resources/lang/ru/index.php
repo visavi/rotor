@@ -109,5 +109,6 @@ return [
     'email_templates'   => 'Шаблоны писем',
     'page_editor'       => 'Редактор страниц',
     'user_cleaning'     => 'Чистка пользователей',
+    'paid_adverts'      => 'Платная реклама',
     'modules'           => 'Модули',
 ];
