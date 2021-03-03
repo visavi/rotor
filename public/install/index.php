@@ -20,7 +20,8 @@ try {
 
 $request      = request();
 $phpVersion   = '7.3.0';
-$mysqlVersion = '5.5.3';
+$mysqlVersion = '5.7.8';
+$postgresVersion = '9.2';
 
 $app  = new Phinx\Console\PhinxApplication();
 $wrap = new Phinx\Wrapper\TextWrapper($app);
@@ -113,7 +114,7 @@ $keys = [
             </div>
         </div>
 
-        <div class="mb-3"><?= __('install.requirements', ['php' => $phpVersion, 'mysql' => $mysqlVersion]) ?></div>
+        <div class="mb-3"><?= __('install.requirements', ['php' => $phpVersion, 'mysql' => $mysqlVersion, 'pgsql' => $postgresVersion]) ?></div>
 
         <div class="row mb-3">
             <div class="col-sm-6">

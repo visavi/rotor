@@ -21,30 +21,41 @@ We thank you for choosing to use our script for your site. Rotor mobile cms is a
 
 The main feature of Rotor is low load on system resources and high speed, even with a very large audience of the site, the load on the server will be minimal, and you will not experience any problems with displaying information.
 
-### Actions at the first installation of the Rotor engine
+### Installing the Rotor engine (From the archive)
 
 1. Configure the site so that `public` is the root directory (Not necessary for apache)
-   If your site is in the public_html directory, then the contents of the public directory from the archive must be put in public_html, and everything else must be on the same level as public_html
-     In app / bootstrap.php and change the HOME constant
- `define('HOME', BASEDIR . '/public_html');`
 
 2. Unpack the archive
 
-3. Install and configure the dependency manager [Composer](https://getcomposer.org).
+3. Set up the .env configuration file, environment, data for accessing the database, administrator login and email, and data for sending emails, sendmail or smtp.
+
+4. Set, if necessary, write permissions to all directories inside `public/uploads` and `storage`
+
+5. Go to the main page of the site, you will be automatically transferred to the installer
+
+6. Complete all installer conditions
+
+### Installing the Rotor engine (From the repository)
+
+1. Configure the site so that `public` is the root directory (Not necessary for apache)
+
+2. Unpack the archive
+
+3. Configure the .env configuration file, the environment, the data for accessing the database, the administrator's login and email, and the data for sending mail, sendmail or smtp. If you install CMS manually, then rename the configuration file .env.example to .env
+
+4. Set write permissions to all directories inside `public/uploads` and `storage` or execute the command `php rotor app:permission`
+
+5. Install and configure the dependency manager [Composer](https://getcomposer.org).
    or you can download the finished package
     [composer.phar](https://getcomposer.org/composer.phar)
     and run it through the command
    `php composer.phar install`
 
-4. Go to the site directory run the command in the console `composer install`
+6. Go to the site directory run the command in the console `composer install`
 
-5. Create a database with utf8mb4 encoding and a user for it from the control panel on your server, during the installation of the script, you will need to enter this data to be connected to the .env file
+7. Create a database with utf8mb4 encoding and a user for it from the control panel on your server, during the installation of the script, you will need to enter this data to be connected to the .env file
 `CREATE DATABASE rotor CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;`  
-
-6. Configure the .env configuration file, the environment, the data for accessing the database, the administrator's login and email, and the data for sending mail, sendmail or smtp. If you install CMS manually, then rename the configuration file .env.example to .env (The file is not tracked by git, so there can be 2 different files on the server and on the local site with different environments specified in APP_ENV)
-
-7. Set write permissions to all directories inside `public / uploads` and` storage` or execute the command `php rotor app:permission`
-
+   
 8. Migrate using the console command `php rotor migrate`
 
 9. Fill out the database using the command `php rotor seed:run`
@@ -62,15 +73,7 @@ composer create-project --stability=dev visavi/rotor .
 
 ### Requirements
 
-Minimal PHP version required for PHP 7.3.0 and MySQL 5.5.3 engine
-
-If MySQL version is lower than 5.5.3, then it is necessary to install in the .env file
-`DB_COLLATION=utf8_unicode_ci`
-
-If you use the InnoDB data storage type, then for full-text search, version MySQL >= 5.6
-
-Storage type can be set to .env
-`DB_ENGINE=InnoDB`
+Minimal PHP version required for PHP 7.3.0, MySQL 5.7.8 or Postgres 9.2
 
 ### Migrations and database seeder
 

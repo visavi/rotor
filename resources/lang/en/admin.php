@@ -277,5 +277,9 @@ return [
         'term'                  => 'Term',
         'empty_links'           => 'There are no sponsored links yet!',
         'confirm_delete_advert' => 'Do you confirm deletion of the sponsored link?',
+        'not_found'             => 'Sponsored link not found!',
+        'place_invalid'         => 'Placement does not exist!',
+        'term_invalid'          => 'The placement period must be longer than the current time!',
+        'names_count'           => 'You must specify at least 1 name!',
     ],
 ];

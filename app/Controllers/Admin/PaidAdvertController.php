@@ -74,6 +74,7 @@ class PaidAdvertController extends AdminController
     public function create(Request $request, Validator $validator): string
     {
         $places = PaidAdvert::PLACES;
+        $advert = new PaidAdvert();
 
         if ($request->isMethod('post')) {
             $site  = $request->input('site');
@@ -88,13 +89,13 @@ class PaidAdvertController extends AdminController
             $names = array_unique(array_diff($names, ['']));
 
             $validator->equal($request->input('token'), $_SESSION['token'], __('validator.token'))
-                ->in($place, $places, ['place' => 'Неверно'])
+                ->in($place, $places, ['place' => __('admin.paid_adverts.place_invalid')])
                 ->url($site, ['site' => __('validator.url')])
                 ->length($site, 5, 100, ['site' => __('validator.url_text')])
                 ->regex($color, '|^#+[A-f0-9]{6}$|', ['color' => __('validator.color')], false)
-                ->gt($term, SITETIME, ['term' => 'term > current time'])
-                ->length($comment, 0, 1000, ['comment' => __('validator.text_long')])
-                ->gte(count($names), 1, ['names' => 'не менее 1 названия']);
+                ->gt($term, SITETIME, ['term' => __('admin.paid_adverts.term_invalid')])
+                ->length($comment, 0, 255, ['comment' => __('validator.text_long')])
+                ->gte(count($names), 1, ['names' => __('admin.paid_adverts.names_count')]);
 
             foreach ($names as $name) {
                 $validator->length($name, 5, 35, ['names' => __('validator.text')]);
@@ -115,15 +116,13 @@ class PaidAdvertController extends AdminController
                 ]);
 
                 clearCache('paidAdverts');
-                setFlash('success', __('adverts.advert_success_posted'));
+                setFlash('success', __('main.record_added_success'));
                 redirect('/admin/paid-adverts?place=' . $place);
             } else {
                 setInput($request->all());
                 setFlash('danger', $validator->getErrors());
             }
         }
-
-        $advert = new PaidAdvert();
 
         return view('admin/paid-adverts/create', compact('advert', 'places'));
     }
@@ -145,7 +144,7 @@ class PaidAdvertController extends AdminController
         $advert = PaidAdvert::query()->find($id);
 
         if (! $advert) {
-            abort(404, __('not found'));
+            abort(404, __('admin.paid_adverts.not_found'));
         }
 
         if ($request->isMethod('post')) {
@@ -161,13 +160,13 @@ class PaidAdvertController extends AdminController
             $names = array_unique(array_diff($names, ['']));
 
             $validator->equal($request->input('token'), $_SESSION['token'], __('validator.token'))
-                ->in($place, $places, ['place' => 'Неверно'])
+                ->in($place, $places, ['place' => __('admin.paid_adverts.place_invalid')])
                 ->url($site, ['site' => __('validator.url')])
                 ->length($site, 5, 100, ['site' => __('validator.url_text')])
                 ->regex($color, '|^#+[A-f0-9]{6}$|', ['color' => __('validator.color')], false)
-                ->gt($term, SITETIME, ['term' => 'term > current time'])
-                ->length($comment, 0, 1000, ['comment' => __('validator.text_long')])
-                ->gte(count($names), 1, ['names' => 'не менее 1 названия']);
+                ->gt($term, SITETIME, ['term' => __('admin.paid_adverts.term_invalid')])
+                ->length($comment, 0, 255, ['comment' => __('validator.text_long')])
+                ->gte(count($names), 1, ['names' => __('admin.paid_adverts.names_count')]);
 
             foreach ($names as $name) {
                 $validator->length($name, 5, 35, ['names' => __('validator.text')]);
@@ -186,7 +185,7 @@ class PaidAdvertController extends AdminController
                 ]);
 
                 clearCache('paidAdverts');
-                setFlash('success', __('adverts.advert_success_posted'));
+                setFlash('success', __('main.record_saved_success'));
                 redirect('/admin/paid-adverts?place=' . $place);
             } else {
                 setInput($request->all());
@@ -212,7 +211,7 @@ class PaidAdvertController extends AdminController
         $advert = PaidAdvert::query()->find($id);
 
         if (! $advert) {
-            abort(404, __('not found'));
+            abort(404, __('admin.paid_adverts.not_found'));
         }
 
         $validator->equal($request->input('token'), $_SESSION['token'], __('validator.token'));
@@ -221,7 +220,7 @@ class PaidAdvertController extends AdminController
             $advert->delete();
 
             clearCache('paidAdverts');
-            setFlash('success', __('boards.item_success_deleted'));
+            setFlash('success', __('main.record_deleted_success'));
         } else {
             setFlash('danger', $validator->getErrors());
         }
