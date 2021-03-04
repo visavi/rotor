@@ -28,12 +28,13 @@
 @section('content')
     @include('ads/_forum')
 
-    @if (getUser())
-        {{ __('main.my') }}: <a href="/forums/active/topics">{{ __('forums.topics') }}</a>, <a href="/forums/active/posts">{{ __('forums.posts') }}</a>, <a href="/forums/bookmarks">{{ __('forums.bookmarks') }}</a> /
-    @endif
+    <div class="my-2">
+        @if (getUser())
+            {{ __('main.my') }}: <a href="/forums/active/topics">{{ __('forums.topics') }}</a>, <a href="/forums/active/posts">{{ __('forums.posts') }}</a>, <a href="/forums/bookmarks">{{ __('forums.bookmarks') }}</a> /
+        @endif
 
-    {{ __('main.new') }}: <a href="/topics">{{ __('forums.topics') }}</a>, <a href="/posts">{{ __('forums.posts') }}</a>
-    <hr/>
+        {{ __('main.new') }}: <a href="/topics">{{ __('forums.topics') }}</a>, <a href="/posts">{{ __('forums.posts') }}</a>
+    </div>
 
     @if ($forums->isNotEmpty())
         @foreach ($forums as $forum)

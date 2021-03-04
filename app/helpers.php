@@ -55,7 +55,7 @@ use Symfony\Component\Console\Output\NullOutput;
  *
  * @return string форматированный вывод
  */
-function makeTime(int $time)
+function makeTime(int $time): string
 {
     $format = $time < 3600 ? 'i:s' : 'H:i:s';
 
@@ -71,7 +71,7 @@ function makeTime(int $time)
  *
  * @return string форматированный вывод
  */
-function dateFixed(?int $timestamp, string $format = 'd.m.Y / H:i', bool $original = false)
+function dateFixed(?int $timestamp, string $format = 'd.m.Y / H:i', bool $original = false): string
 {
     if (! is_numeric($timestamp)) {
         $timestamp = SITETIME;
@@ -114,7 +114,7 @@ function dateFixed(?int $timestamp, string $format = 'd.m.Y / H:i', bool $origin
  *
  * @return string конвертированная строка
  */
-function winToUtf(string $str)
+function winToUtf(string $str): string
 {
     return mb_convert_encoding($str, 'utf-8', 'windows-1251');
 }
@@ -126,7 +126,7 @@ function winToUtf(string $str)
  *
  * @return string преобразованная строка
  */
-function utfLower(string $str)
+function utfLower(string $str): string
 {
     return mb_strtolower($str, 'utf-8');
 }
@@ -140,7 +140,7 @@ function utfLower(string $str)
  *
  * @return string обрезанная строка
  */
-function utfSubstr($str, int $start, $length = null)
+function utfSubstr($str, int $start, $length = null): string
 {
     if (! $length) {
         $length = utfStrlen($str);
@@ -156,7 +156,7 @@ function utfSubstr($str, int $start, $length = null)
  *
  * @return int длина строка
  */
-function utfStrlen($str)
+function utfStrlen($str): int
 {
     return mb_strlen($str, 'utf-8');
 }
@@ -168,7 +168,7 @@ function utfStrlen($str)
  *
  * @return bool
  */
-function isUtf(string $str)
+function isUtf(string $str): bool
 {
     return mb_check_encoding($str, 'utf-8');
 }
@@ -179,9 +179,9 @@ function isUtf(string $str)
  * @param mixed $string       строка или массив строк
  * @param bool  $doubleEncode преобразовывать существующие html-сущности
  *
- * @return mixed обработанные данные
+ * @return array|string обработанные данные
  */
-function check($string, $doubleEncode = true)
+function check($string, bool $doubleEncode = true)
 {
     if (is_array($string)) {
         foreach ($string as $key => $val) {
@@ -203,7 +203,7 @@ function check($string, $doubleEncode = true)
  *
  * @return int обработанные данные
  */
-function int($num)
+function int($num): int
 {
     return abs((int) $num);
 }
@@ -211,11 +211,11 @@ function int($num)
 /**
  * Преобразует все элементы массива в int
  *
- * @param mixed $numbers массив или число
+ * @param array|int|string $numbers массив или число
  *
  * @return array обработанные данные
  */
-function intar($numbers)
+function intar($numbers): array
 {
     if ($numbers) {
         if (is_array($numbers)) {
@@ -236,7 +236,7 @@ function intar($numbers)
  *
  * @return string форматированный вывод размера
  */
-function formatSize(int $bytes, int $precision = 2)
+function formatSize(int $bytes, int $precision = 2): string
 {
     $units = ['B','Kb','Mb','Gb','Tb'];
     $pow   = floor(($bytes ? log($bytes) : 0) / log(1000));
@@ -307,7 +307,7 @@ function formatTime(int $time, int $crumbs = 2): string
  *
  * @return string обработанная строка
  */
-function antimat(string $str)
+function antimat(string $str): string
 {
     return Antimat::replace($str);
 }
@@ -319,7 +319,7 @@ function antimat(string $str)
  *
  * @return string преобразованный рейтинг
  */
-function ratingVote($rating)
+function ratingVote($rating): string
 {
     $rating = round($rating / 0.5) * 0.5;
 
@@ -343,7 +343,7 @@ function ratingVote($rating)
  *
  * @return string календарь
  */
-function getCalendar($time = SITETIME): string
+function getCalendar(int $time = SITETIME): string
 {
     $calendar = new Calendar();
 
@@ -355,7 +355,7 @@ function getCalendar($time = SITETIME): string
  *
  * @return array массив данных
  */
-function statsOnline()
+function statsOnline(): array
 {
     return Cache::remember('online', 60, static function () {
         $users  = Online::query()->distinct('user_id')->whereNotNull('user_id')->count();
@@ -373,7 +373,7 @@ function statsOnline()
  *
  * @return string
  */
-function showOnline()
+function showOnline(): ?string
 {
     $online = statsOnline();
 
@@ -389,7 +389,7 @@ function showOnline()
  *
  * @return array статистика посещений
  */
-function statsCounter()
+function statsCounter(): array
 {
     return Cache::remember('counter', 30, static function () {
         $counter = Counter::query()->first();
@@ -403,7 +403,7 @@ function statsCounter()
  *
  * @return string
  */
-function showCounter()
+function showCounter(): ?string
 {
     $metrika = new Metrika();
     $metrika->saveStatistic();
@@ -420,9 +420,9 @@ function showCounter()
 /**
  * Возвращает количество пользователей
  *
- * @return int количество пользователей
+ * @return string количество пользователей
  */
-function statsUsers()
+function statsUsers(): string
 {
     return Cache::remember('statUsers', 1800, static function () {
         $startDay = mktime(0, 0, 0, dateFixed(SITETIME, 'n', true));
@@ -443,7 +443,7 @@ function statsUsers()
  *
  * @return int количество администраторов
  */
-function statsAdmins()
+function statsAdmins(): int
 {
     return Cache::remember('statAdmins', 3600, static function () {
         return User::query()->whereIn('level', User::ADMIN_GROUPS)->count();
@@ -455,7 +455,7 @@ function statsAdmins()
  *
  * @return int количество жалоб
  */
-function statsSpam()
+function statsSpam(): int
 {
     return Spam::query()->count();
 }
@@ -465,7 +465,7 @@ function statsSpam()
  *
  * @return int количество забаненных
  */
-function statsBanned()
+function statsBanned(): int
 {
     return User::query()
         ->where('level', User::BANNED)
@@ -478,7 +478,7 @@ function statsBanned()
  *
  * @return int количество записей
  */
-function statsBanHist()
+function statsBanHist(): int
 {
     return Banhist::query()->count();
 }
@@ -488,7 +488,7 @@ function statsBanHist()
  *
  * @return int количество ожидающих
  */
-function statsRegList()
+function statsRegList(): int
 {
     return User::query()->where('level', User::PENDED)->count();
 }
@@ -498,7 +498,7 @@ function statsRegList()
  *
  * @return int количество забаненных
  */
-function statsIpBanned()
+function statsIpBanned(): int
 {
     return Ban::query()->count();
 }
@@ -506,9 +506,9 @@ function statsIpBanned()
 /**
  * Возвращает количество фотографий в галерее
  *
- * @return int количество фотографий
+ * @return string количество фотографий
  */
-function statsPhotos()
+function statsPhotos(): string
 {
     return Cache::remember('statPhotos', 900, static function () {
         $stat     = Photo::query()->count();
@@ -521,9 +521,9 @@ function statsPhotos()
 /**
  * Возвращает количество новостей
  *
- * @return int количество новостей
+ * @return string количество новостей
  */
-function statsNews()
+function statsNews(): string
 {
     return Cache::remember('statNews', 300, static function () {
         $total = News::query()->count();
@@ -541,7 +541,7 @@ function statsNews()
  *
  * @return string количество записей
  */
-function statsBlacklist()
+function statsBlacklist(): string
 {
     $blacklist = BlackList::query()
         ->selectRaw('type, count(*) as total')
@@ -559,7 +559,7 @@ function statsBlacklist()
  *
  * @return int количество записей
  */
-function statsAntimat()
+function statsAntimat(): int
 {
     return Antimat::query()->count();
 }
@@ -569,7 +569,7 @@ function statsAntimat()
  *
  * @return int количество стикеров
  */
-function statsStickers()
+function statsStickers(): int
 {
     return Sticker::query()->count();
 }
@@ -591,9 +591,9 @@ function statsChecker()
 /**
  * Возвращает количество приглашений на регистрацию
  *
- * @return int количество приглашений
+ * @return string количество приглашений
  */
-function statsInvite()
+function statsInvite(): string
 {
     $invited     = Invite::query()->where('used', 0)->count();
     $usedInvited = Invite::query()->where('used', 1)->count();
@@ -606,12 +606,12 @@ function statsInvite()
  *
  * @param int $id Id фотографий
  *
- * @return mixed массив данных
+ * @return array|null массив данных
  */
-function photoNavigation(int $id)
+function photoNavigation(int $id): ?array
 {
     if (! $id) {
-        return false;
+        return null;
     }
 
     $next = Photo::query()
@@ -684,7 +684,7 @@ function statsGuestbook(): string
 /**
  * Возвращает количество сообщений в админ-чате
  *
- * @return int количество сообщений
+ * @return string количество сообщений
  */
 function statsChat(): string
 {
@@ -702,11 +702,11 @@ function statsChat(): string
 /**
  * Возвращает время последнего сообщения в админ-чате
  *
- * @return string время сообщения
+ * @return int время сообщения
  */
-function statsNewChat()
+function statsNewChat(): int
 {
-    return Chat::query()->max('created_at');
+    return Chat::query()->max('created_at') ?? 0;
 }
 
 /**
@@ -732,7 +732,7 @@ function statsLoad(): string
  *
  * @return int количество файлов
  */
-function statsNewLoad()
+function statsNewLoad(): int
 {
     return Down::query()->where('active', 0)->count();
 }
@@ -759,7 +759,7 @@ function statsBoard(): string
  *
  * @return string обфусцированный email
  */
-function cryptMail(string $email)
+function cryptMail(string $email): string
 {
     $output  = '';
     $symbols = str_split($email);
@@ -778,7 +778,7 @@ function cryptMail(string $email)
  *
  * @return string
  */
-function hideMail(string $email)
+function hideMail(string $email): string
 {
     return preg_replace('/(?<=.).(?=.*@)/u', '*', $email);
 }
@@ -788,7 +788,7 @@ function hideMail(string $email)
  *
  * @return string Статистика текущий голосований
  */
-function statVotes()
+function statVotes(): string
 {
     return Cache::remember('statVotes', 900, static function () {
         $votes = Vote::query()
@@ -824,9 +824,9 @@ function statsNewsDate()
 /**
  * Возвращает последние новости
  *
- * @return string|void новость
+ * @return string новость
  */
-function lastNews()
+function lastNews(): string
 {
     $news = null;
 
@@ -836,8 +836,7 @@ function lastNews()
                 ->where('top', 1)
                 ->orderByDesc('created_at')
                 ->limit(setting('lastnews'))
-                ->get()
-                ->toArray();
+                ->get();
         });
     }
 
@@ -851,7 +850,7 @@ function lastNews()
  *
  * @return string иконка
  */
-function icons(string $ext)
+function icons(string $ext): string
 {
     switch ($ext) {
         case 'php':
@@ -930,6 +929,7 @@ function shuffleAssoc(array &$array)
     }
 
     $array = $new;
+
     return true;
 }
 
@@ -1106,17 +1106,16 @@ function getAdvertUser()
  *
  * @param int $show Количество последних фотографий
  *
- * @return string|void Список фотографий
+ * @return string Список фотографий
  */
-function recentPhotos($show = 5)
+function recentPhotos(int $show = 5): string
 {
     $photos = Cache::remember('recentPhotos', 1800, static function () use ($show) {
         return Photo::query()
             ->orderByDesc('created_at')
             ->limit($show)
             ->with('files')
-            ->get()
-            ->toArray();
+            ->get();
     });
 
     return view('widgets/_photos', compact('photos'));
@@ -1127,16 +1126,15 @@ function recentPhotos($show = 5)
  *
  * @param int $show Количество последних тем форума
  *
- * @return string|void Список тем
+ * @return string Список тем
  */
-function recentTopics($show = 5)
+function recentTopics(int $show = 5): string
 {
     $topics = Cache::remember('recentTopics', 300, static function () use ($show) {
         return Topic::query()
             ->orderByDesc('updated_at')
             ->limit($show)
-            ->get()
-            ->toArray();
+            ->get();
     });
 
     return view('widgets/_topics', compact('topics'));
@@ -1147,9 +1145,9 @@ function recentTopics($show = 5)
  *
  * @param int $show Количество последних файлов в загрузках
  *
- * @return string|void Список файлов
+ * @return string Список файлов
  */
-function recentDowns($show = 5)
+function recentDowns(int $show = 5): string
 {
     $downs = Cache::remember('recentDowns', 600, static function () use ($show) {
         return Down::query()
@@ -1157,8 +1155,7 @@ function recentDowns($show = 5)
             ->orderByDesc('created_at')
             ->limit($show)
             ->with('category')
-            ->get()
-            ->toArray();
+            ->get();
     });
 
     return view('widgets/_downs', compact('downs'));
@@ -1169,16 +1166,15 @@ function recentDowns($show = 5)
  *
  * @param int $show Количество последних статей в блогах
  *
- * @return string|void Список статей
+ * @return string Список статей
  */
-function recentArticles($show = 5)
+function recentArticles(int $show = 5): string
 {
     $articles = Cache::remember('recentArticles', 600, static function () use ($show) {
         return Article::query()
             ->orderByDesc('created_at')
             ->limit($show)
-            ->get()
-            ->toArray();
+            ->get();
     });
 
     return view('widgets/_articles', compact('articles'));
@@ -1189,17 +1185,16 @@ function recentArticles($show = 5)
  *
  * @param int $show Количество последних объявлений
  *
- * @return string|void Список объявлений
+ * @return string Список объявлений
  */
-function recentBoards($show = 5)
+function recentBoards(int $show = 5): string
 {
     $items = Cache::remember('recentBoards', 600, static function () use ($show) {
         return Item::query()
             ->where('expires_at', '>', SITETIME)
             ->orderByDesc('created_at')
             ->limit($show)
-            ->get()
-            ->toArray();
+            ->get();
     });
 
     return view('widgets/_boards', compact('items'));
@@ -1211,7 +1206,7 @@ function recentBoards($show = 5)
  *
  * @return string количество предложений и проблем
  */
-function statsOffers()
+function statsOffers(): string
 {
     return Cache::remember('offers', 600, static function () {
         $offers   = Offer::query()->where('type', 'offer')->count();
@@ -1293,7 +1288,7 @@ function counterString(string $file)
  *
  * @return string форматированное число
  */
-function formatNum($num)
+function formatNum($num): string
 {
     if ($num > 0) {
         return '<span style="color:#00aa00">+' . $num . '</span>';
@@ -1346,7 +1341,7 @@ function formatShortNum(int $num)
  *
  * @return array обработанные параметры
  */
-function resizeProcess(?string $path, array $params = [])
+function resizeProcess(?string $path, array $params = []): array
 {
     if (empty($params['alt'])) {
         $params['alt'] = basename($path);
@@ -1399,9 +1394,9 @@ function resizeProcess(?string $path, array $params = [])
  * @param string|null $path   путь к изображению
  * @param array       $params параметры изображения
  *
- * @return string|null уменьшенное изображение
+ * @return string уменьшенное изображение
  */
-function resizeImage(?string $path, array $params = [])
+function resizeImage(?string $path, array $params = []): string
 {
     $image = resizeProcess($path, $params);
 
@@ -1441,7 +1436,7 @@ function deleteDir(string $dir)
  *
  * @return bool
  */
-function deleteFile(string $path)
+function deleteFile(string $path): bool
 {
     if (file_exists($path) && is_file($path)) {
         unlink($path);
@@ -1496,7 +1491,7 @@ function sendNotify(string $text, string $url, string $title)
  *
  * @return string сформированный текст
  */
-function textNotice(string $type, array $replace = [])
+function textNotice(string $type, array $replace = []): string
 {
     /** @var Notice $message */
     $message = Notice::query()->where('type', $type)->first();
@@ -1515,9 +1510,9 @@ function textNotice(string $type, array $replace = [])
 /**
  * Возвращает блок статистики производительности
  *
- * @return string статистика производительности
+ * @return string|null статистика производительности
  */
-function performance()
+function performance(): ?string
 {
     if (isAdmin() && setting('performance')) {
         $queries = getQueryLog();
@@ -1536,7 +1531,7 @@ function performance()
  *
  * @return bool результат выполнения
  */
-function clearCache($keys = null)
+function clearCache($keys = null): bool
 {
     if ($keys) {
         if (!is_array($keys)) {
@@ -1598,7 +1593,7 @@ function view(string $view, array $params = [], array $mergeData = []): string
  *
  * @return string
  */
-function __(string $key, array $replace = [], $locale = null)
+function __(string $key, array $replace = [], $locale = null): string
 {
     return Lang::get($key, $replace, $locale);
 }
@@ -1613,7 +1608,7 @@ function __(string $key, array $replace = [], $locale = null)
  *
  * @return string
  */
-function choice(string $key, $number, array $replace = [], $locale = null)
+function choice(string $key, $number, array $replace = [], $locale = null): string
 {
     return Lang::choice($key, $number, $replace, $locale);
 }
@@ -1626,7 +1621,7 @@ function choice(string $key, $number, array $replace = [], $locale = null)
  *
  * @return string сформированная страница с ошибкой
  */
-function abort($code, $message = null)
+function abort($code, $message = null): string
 {
     $protocol = server('SERVER_PROTOCOL');
     $referer  = server('HTTP_REFERER');
@@ -1689,7 +1684,7 @@ function saveErrorLog($code)
  *
  * @return void
  */
-function redirect(string $url, $permanent = false)
+function redirect(string $url, bool $permanent = false)
 {
     if (isset($_SESSION['captcha'])) {
         $_SESSION['captcha'] = null;
@@ -1723,7 +1718,7 @@ function setFlash(string $status, $message)
  *
  * @return string сформированный блок с ошибкой
  */
-function showError($errors)
+function showError($errors): string
 {
     $errors = check($errors);
 
@@ -1750,9 +1745,9 @@ function setInput(array $data)
  * @param string      $name имя поля
  * @param string|null $default
  *
- * @return mixed сохраненное значение
+ * @return string|null сохраненное значение
  */
-function getInput(string $name, $default = null)
+function getInput(string $name, $default = null): ?string
 {
     if (empty($_SESSION['input'])) {
         return $default;
@@ -1777,7 +1772,7 @@ function getInput(string $name, $default = null)
  *
  * @return string CSS класс ошибки
  */
-function hasError(string $field)
+function hasError(string $field): string
 {
     $isValid = isset($_SESSION['flash']['danger']) ? ' is-valid' : '';
 
@@ -1789,9 +1784,9 @@ function hasError(string $field)
  *
  * @param string $field имя поля
  *
- * @return string блоки ошибки
+ * @return string|null блоки ошибки
  */
-function textError(string $field)
+function textError(string $field): ?string
 {
     return $_SESSION['flash']['danger'][$field] ?? null;
 }
@@ -1806,7 +1801,7 @@ function textError(string $field)
  *
  * @return bool Результат отправки
  */
-function sendMail(string $to, string $subject, string $body, array $params = [])
+function sendMail(string $to, string $subject, string $body, array $params = []): bool
 {
     if (empty($params['from'])) {
         $params['from'] = [config('SITE_EMAIL') => config('SITE_ADMIN')];
@@ -1850,7 +1845,7 @@ function sendMail(string $to, string $subject, string $body, array $params = [])
  *
  * @return string расширение
  */
-function getExtension(string $filename)
+function getExtension(string $filename): string
 {
     return pathinfo($filename, PATHINFO_EXTENSION);
 }
@@ -1862,7 +1857,7 @@ function getExtension(string $filename)
  *
  * @return string имя без расширения
  */
-function getBodyName(string $filename)
+function getBodyName(string $filename): string
 {
     return pathinfo($filename, PATHINFO_FILENAME);
 }
@@ -1875,7 +1870,7 @@ function getBodyName(string $filename)
  *
  * @return string форматированная строка
  */
-function plural(int $num, $forms)
+function plural(int $num, $forms): string
 {
     if (! is_array($forms)) {
         $forms = explode(',', $forms);
@@ -1908,7 +1903,7 @@ function plural(int $num, $forms)
  *
  * @return string Обработанный текст
  */
-function bbCode(string $text, bool $parse = true)
+function bbCode(string $text, bool $parse = true): string
 {
     $bbCode = new BBCode();
 
@@ -1927,7 +1922,7 @@ function bbCode(string $text, bool $parse = true)
  *
  * @return string IP пользователя
  */
-function getIp()
+function getIp(): string
 {
     $cf = new CloudFlare(request());
 
@@ -1941,7 +1936,7 @@ function getIp()
  *
  * @return string браузер и версия браузера
  */
-function getBrowser($userAgent = null)
+function getBrowser($userAgent = null): string
 {
     $browser = new Browser();
     if ($userAgent) {
@@ -2010,7 +2005,7 @@ function checkAuth()
  *
  * @return bool является ли пользователь администратором
  */
-function isAdmin($level = User::EDITOR)
+function isAdmin($level = User::EDITOR): bool
 {
     return access($level);
 }
@@ -2022,11 +2017,13 @@ function isAdmin($level = User::EDITOR)
  *
  * @return bool разрешен ли доступ
  */
-function access(string $level)
+function access(string $level): bool
 {
     $access = array_flip(User::ALL_GROUPS);
 
-    return getUser() && isset($access[$level], $access[getUser('level')]) && $access[getUser('level')] <= $access[$level];
+    return getUser()
+        && isset($access[$level], $access[getUser('level')])
+        && $access[getUser('level')] <= $access[$level];
 }
 
 /**
@@ -2114,7 +2111,7 @@ function paginate(array $items, int $perPage, array $appends = []): LengthAwareP
  *
  * @return string сформированный код
  */
-function imageBase64(string $path, array $params = [])
+function imageBase64(string $path, array $params = []): string
 {
     $type = getExtension($path);
     $data = file_get_contents($path);
@@ -2145,7 +2142,7 @@ function imageBase64(string $path, array $params = [])
  *
  * @return string
  */
-function progressBar(int $percent, $title = null)
+function progressBar(int $percent, $title = null): string
 {
     if (! $title) {
         $title = $percent . '%';
@@ -2159,7 +2156,7 @@ function progressBar(int $percent, $title = null)
  *
  * @return array
  */
-function getQueryLog()
+function getQueryLog(): array
 {
     $queries = DB::connection()->getQueryLog();
     $formattedQueries = [];
@@ -2189,7 +2186,7 @@ function getQueryLog()
  *
  * @return array массив IP
  */
-function ipBan($clear = false)
+function ipBan($clear = false): array
 {
     if ($clear) {
         clearCache('ipBan');
@@ -2206,7 +2203,7 @@ function ipBan($clear = false)
  * @param string|null $key     ключ массива
  * @param string|null $default значение по умолчанию
  *
- * @return mixed данные
+ * @return array|string|null данные
  */
 function setting($key = null, $default = null)
 {
@@ -2225,7 +2222,7 @@ function setting($key = null, $default = null)
  * @param string|null $key     ключ массива
  * @param string|null $default значение по умолчанию
  *
- * @return mixed данные
+ * @return array|string|null данные
  */
 function defaultSetting($key = null, $default = null)
 {
@@ -2245,7 +2242,7 @@ function defaultSetting($key = null, $default = null)
  *
  * @return string адрес сайта
  */
-function siteUrl($parse = false)
+function siteUrl(bool $parse = false): string
 {
     $url = config('SITE_URL');
 
@@ -2263,7 +2260,7 @@ function siteUrl($parse = false)
  *
  * @return string имя сайта
  */
-function siteDomain(string $url)
+function siteDomain(string $url): string
 {
     $url = strtolower($url);
     $url = str_replace(['http://www.', 'http://', 'https://', '//'], '', $url);
@@ -2279,7 +2276,7 @@ function siteDomain(string $url)
  *
  * @return string
  */
-function parseVersion(string $version)
+function parseVersion(string $version): string
 {
     $ver = explode('.', strtok($version, '-'));
 
@@ -2434,7 +2431,7 @@ function config(string $key, $default = null)
  * @return string
  * @throws Exception
  */
-function mix(string $path, $manifestDirectory = ''): string
+function mix(string $path, string $manifestDirectory = ''): string
 {
     return (new Mix())(...func_get_args());
 }
