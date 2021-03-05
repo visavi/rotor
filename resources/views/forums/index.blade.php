@@ -28,7 +28,7 @@
 @section('content')
     @include('ads/_forum')
 
-    <div class="my-2">
+    <div class="my-3 py-2 border-bottom">
         @if (getUser())
             {{ __('main.my') }}: <a href="/forums/active/topics">{{ __('forums.topics') }}</a>, <a href="/forums/active/posts">{{ __('forums.posts') }}</a>, <a href="/forums/bookmarks">{{ __('forums.bookmarks') }}</a> /
         @endif
