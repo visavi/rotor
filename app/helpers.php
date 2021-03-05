@@ -1742,10 +1742,10 @@ function setInput(array $data)
 /**
  * Возвращает значение из POST данных
  *
- * @param string      $name имя поля
- * @param array|string|null $default
+ * @param string $name имя поля
+ * @param mixed  $default
  *
- * @return string|null сохраненное значение
+ * @return mixed сохраненное значение
  */
 function getInput(string $name, $default = null)
 {
