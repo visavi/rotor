@@ -1743,11 +1743,11 @@ function setInput(array $data)
  * Возвращает значение из POST данных
  *
  * @param string      $name имя поля
- * @param string|null $default
+ * @param array|string|null $default
  *
  * @return string|null сохраненное значение
  */
-function getInput(string $name, $default = null): ?string
+function getInput(string $name, $default = null)
 {
     if (empty($_SESSION['input'])) {
         return $default;

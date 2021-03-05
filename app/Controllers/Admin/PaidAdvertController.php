@@ -111,6 +111,7 @@ class PaidAdvertController extends AdminController
                     'names'      => array_values($names),
                     'color'      => $color,
                     'bold'       => $bold,
+                    'comment'    => $comment,
                     'created_at' => SITETIME,
                     'deleted_at' => $term,
                 ]);
@@ -181,6 +182,7 @@ class PaidAdvertController extends AdminController
                     'names'      => array_values($names),
                     'color'      => $color,
                     'bold'       => $bold,
+                    'comment'    => $comment,
                     'deleted_at' => $term,
                 ]);
 
