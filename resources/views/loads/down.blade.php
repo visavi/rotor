@@ -50,7 +50,7 @@
 
         @if ($down->files->isNotEmpty())
             @if ($down->getFiles()->isNotEmpty())
-                <div class="mb-3">
+                <div class="media-file mb-3">
                     @foreach ($down->getFiles() as $file)
                         @if ($file->hash && file_exists(HOME . $file->hash))
 
@@ -84,7 +84,7 @@
 
             @if ($down->getImages()->isNotEmpty())
                 @foreach ($down->getImages() as $image)
-                    <div class="mb-3">
+                    <div class="media-file mb-3">
                         <a href="{{ $image->hash }}" class="gallery" data-group="{{ $down->id }}">{!! resizeImage($image->hash, ['alt' => $down->title]) !!}</a>
                     </div>
                 @endforeach

@@ -182,7 +182,7 @@ class User extends BaseModel
     public function getName(): string
     {
         if ($this->id) {
-            return $this->name ?: $this->login;
+            return check($this->name ?: $this->login);
         }
 
         return setting('deleted_user');
