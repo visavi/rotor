@@ -483,16 +483,16 @@ class User extends BaseModel
             $statuses = [];
             foreach ($users as $user) {
                 if ($user->status) {
-                    $statuses[$user->id] = '<span style="color:#ff0000">' . $user->status . '</span>';
+                    $statuses[$user->id] = '<span style="color:#ff0000">' . check($user->status) . '</span>';
                     continue;
                 }
 
                 if ($user->color) {
-                    $statuses[$user->id] = '<span style="color:' . $user->color . '">' . $user->name . '</span>';
+                    $statuses[$user->id] = '<span style="color:' . $user->color . '">' . check($user->name) . '</span>';
                     continue;
                 }
 
-                $statuses[$user->id] = $user->name;
+                $statuses[$user->id] = check($user->name);
             }
 
             return $statuses;

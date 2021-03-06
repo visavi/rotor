@@ -666,7 +666,7 @@ class UserController extends BaseController
                 'money'  => DB::connection()->raw('money - ' . $cost),
             ]);
 
-            clearCache('statuses');
+            clearCache('status');
             setFlash('success', __('users.status_success_changed'));
         } else {
             setInput($request->all());
