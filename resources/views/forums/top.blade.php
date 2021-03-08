@@ -25,7 +25,7 @@
             </div>
         @endforeach
     @else
-        {!! showError(__('forums.empty_topics')) !!}
+        {{ showError(__('forums.empty_topics')) }}
     @endif
 
     {{ $topics->links() }}

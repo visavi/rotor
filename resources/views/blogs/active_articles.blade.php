@@ -22,11 +22,11 @@
             <div class="section mb-3 shadow">
                 <div class="section-title">
                     <i class="fa fa-pencil-alt"></i>
-                    <a href="/articles/{{ $article->id }}">{{ $article->title }}</a> ({!! formatNum($article->rating) !!})
+                    <a href="/articles/{{ $article->id }}">{{ $article->title }}</a> ({{ formatNum($article->rating) }})
                 </div>
 
                 <div class="section-content">
-                    {{ __('main.author') }}: {!! $article->user->getProfile() !!} ({{ dateFixed($article->created_at) }})<br>
+                    {{ __('main.author') }}: {{ $article->user->getProfile() }} ({{ dateFixed($article->created_at) }})<br>
                     <i class="fa fa-comment"></i> <a href="/articles/comments/{{ $article->id }}">{{ __('main.comments') }}</a> ({{ $article->count_comments }})
                     <a href="/articles/end/{{ $article->id }}">&raquo;</a>
                 </div>
@@ -35,7 +35,7 @@
 
         {{ __('blogs.total_articles') }}: <b>{{ $articles->total() }}</b><br>
     @else
-        {!! showError(__('blogs.empty_articles')) !!}
+        {{ showError(__('blogs.empty_articles')) }}
     @endif
 
     {{ $articles->links() }}

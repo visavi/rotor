@@ -66,7 +66,7 @@
             </div>
         @endforeach
     @else
-        {!! showError(__('forums.empty_forums')) !!}
+        {{ showError(__('forums.empty_forums')) }}
     @endif
 
     @if (isAdmin('boss'))

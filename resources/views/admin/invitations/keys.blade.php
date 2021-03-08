@@ -21,6 +21,6 @@
             <textarea class="form-control" rows="10">{{ $keys->implode('hash', ',') }}</textarea>
         </div>
     @else
-        {!! showError(__('admin.invitations.empty_keys')) !!}
+        {{ showError(__('admin.invitations.empty_keys')) }}
     @endif
 @stop

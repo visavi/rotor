@@ -57,9 +57,9 @@
                 </div>
 
                 <div class="section-body">
-                    {!! $data->getStatus() !!}<br>
-                    {!! bbCode($data->text) !!}<br>
-                    {{ __('main.added') }}: {!! $data->user->getProfile() !!}
+                    {{ $data->getStatus() }}<br>
+                    {{ bbCode($data->text) }}<br>
+                    {{ __('main.added') }}: {{ $data->user->getProfile() }}
                     <small class="section-date text-muted font-italic">{{ dateFixed($data->created_at) }}</small><br>
                     <a href="/offers/comments/{{ $data->id }}">{{ __('main.comments') }}</a> ({{ $data->count_comments }})
                     <a href="/offers/end/{{ $data->id }}">&raquo;</a>
@@ -71,6 +71,6 @@
 
         {{ __('main.total') }}: <b>{{ $offers->total() }}</b><br>
     @else
-        {!! showError(__('main.empty_records')) !!}
+        {{ showError(__('main.empty_records')) }}
     @endif
 @stop

@@ -38,7 +38,7 @@
 
                 <div class="section-body border-top">
                     <div class="section-message">
-                        {!! bbCode($data->text) !!}
+                        {{ bbCode($data->text) }}
                     </div>
                 </div>
             </div>
@@ -46,7 +46,7 @@
 
         {{ $messages->links() }}
     @else
-        {!! showError(__('messages.empty_notifications')) !!}
+        {{ showError(__('messages.empty_notifications')) }}
     @endif
 
     <div class="mb-3">

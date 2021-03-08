@@ -26,7 +26,7 @@
         </div>
     @endif
 
-    <h1>{{ $article->title }} <small>({{ __('main.rating') }}: {!! formatNum($article->rating) !!})</small></h1>
+    <h1>{{ $article->title }} <small>({{ __('main.rating') }}: {{ formatNum($article->rating) }})</small></h1>
 @stop
 
 @section('breadcrumb')
@@ -51,7 +51,7 @@
 
     <div class="mb-3">
         {!! $article->text !!}
-        {{ __('main.author') }}: {!! $article->user->getProfile() !!} ({{ dateFixed($article->created_at) }})<br>
+        {{ __('main.author') }}: {{ $article->user->getProfile() }} ({{ dateFixed($article->created_at) }})<br>
 
         <div class="my-3 font-italic">
             <i class="fa fa-tag"></i> {!! $tags !!}
@@ -62,7 +62,7 @@
             @if (getUser() && getUser('id') !== $article->user_id)
                 <a class="post-rating-down<?= $article->vote === '-' ? ' active' : '' ?>" href="#" onclick="return changeRating(this);" data-id="{{ $article->id }}" data-type="{{ $article->getMorphClass() }}" data-vote="-" data-token="{{ $_SESSION['token'] }}"><i class="fa fa-thumbs-down"></i></a>
             @endif
-            <b>{!! formatNum($article->rating) !!}</b>
+            <b>{{ formatNum($article->rating) }}</b>
             @if (getUser() && getUser('id') !== $article->user_id)
                 <a class="post-rating-up<?= $article->vote === '+' ? ' active' : '' ?>" href="#" onclick="return changeRating(this);" data-id="{{ $article->id }}" data-type="{{ $article->getMorphClass() }}" data-vote="+" data-token="{{ $_SESSION['token'] }}"><i class="fa fa-thumbs-up"></i></a>
             @endif

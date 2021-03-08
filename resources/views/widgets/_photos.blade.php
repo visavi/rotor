@@ -2,7 +2,7 @@
     <div class="section-body">
     @foreach ($photos as $photo)
         @php
-            $file = current($photo->files);
+            $file = $photo->files()->first();
         @endphp
 
         @if ($file)

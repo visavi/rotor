@@ -44,10 +44,10 @@
                     </div>
 
                     <div class="section-content">
-                        {{ __('admin.invitations.owner') }}: {!! $invite->user->getProfile() !!}<br>
+                        {{ __('admin.invitations.owner') }}: {{ $invite->user->getProfile() }}<br>
 
                         @if ($invite->invite_user_id)
-                            {{ __('admin.invitations.invited') }}: {!! $invite->inviteUser->getProfile() !!}<br>
+                            {{ __('admin.invitations.invited') }}: {{ $invite->inviteUser->getProfile() }}<br>
                         @endif
 
                         {{ __('main.created') }}: {{ dateFixed($invite->created_at) }}<br>
@@ -66,7 +66,7 @@
             {{ __('main.total') }}: <b>{{ $invites->total() }}</b>
         </div>
     @else
-        {!! showError(__('admin.invitations.empty_invitations')) !!}
+        {{ showError(__('admin.invitations.empty_invitations')) }}
     @endif
 
     <i class="fa fa-check"></i> <a href="/admin/invitations/create">{{ __('admin.invitations.create_keys') }}</a><br>

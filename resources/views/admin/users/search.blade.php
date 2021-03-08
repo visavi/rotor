@@ -18,8 +18,8 @@
         @foreach ($users as $user)
             <div class="section mb-3 shadow">
                 <div class="user-avatar">
-                    {!! $user->getAvatar() !!}
-                    {!! $user->getOnline() !!}
+                    {{ $user->getAvatar() }}
+                    {{ $user->getOnline() }}
                 </div>
 
                 <div class="section-content">
@@ -36,6 +36,6 @@
 
         {{ __('main.total_found') }}: {{ $users->total() }}<br><br>
     @else
-        {!! showError(__('main.empty_found')) !!}
+        {{ showError(__('main.empty_found')) }}
     @endif
 @stop

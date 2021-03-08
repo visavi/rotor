@@ -16,7 +16,7 @@
 @section('content')
     <div class="alert alert-info">
         <i class="fa fa-pencil-alt"></i> <b>{{ $post->user->getName() }}</b> <small>({{ dateFixed($post->created_at) }})</small><br>
-        <div>{{ __('main.message') }}: {!! bbCode($post->text) !!}</div>
+        <div>{{ __('main.message') }}: {{ bbCode($post->text) }}</div>
     </div>
 
     <div class="section-form mb-3 shadow">

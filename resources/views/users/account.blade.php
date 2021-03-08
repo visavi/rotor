@@ -60,7 +60,7 @@
 
         </div>
     @else
-        {!! showError(__('users.status_change_condition', ['point' => plural(setting('editstatuspoint'), setting('scorename'))])) !!}
+        {{ showError(__('users.status_change_condition', ['point' => plural(setting('editstatuspoint'), setting('scorename'))])) }}
     @endif
 
     <h3>{{ __('users.change_password') }}</h3>

@@ -23,15 +23,15 @@
         @foreach ($messages as $data)
             <div class="section mb-3 shadow">
                 <div class="user-avatar">
-                    {!! $data->author->getAvatar() !!}
-                    {!! $data->author->getOnline() !!}
+                    {{ $data->author->getAvatar() }}
+                    {{ $data->author->getOnline() }}
                 </div>
 
                 <div class="section-user d-flex align-items-center">
                     <div class="flex-grow-1">
-                        {!! $data->author->getProfile() !!}
+                        {{ $data->author->getProfile() }}
                         <small class="section-date text-muted font-italic">{{ dateFixed($data->created_at) }}</small><br>
-                        <small class="font-italic">{!! $data->author->getStatus() !!}</small>
+                        <small class="font-italic">{{ $data->author->getStatus() }}</small>
                     </div>
 
                     @if (getUser())
@@ -52,7 +52,7 @@
 
                 <div class="section-body border-top">
                     <div class="section-message">
-                        {!! bbCode($data->text) !!}
+                        {{ bbCode($data->text) }}
                     </div>
                 </div>
             </div>
@@ -60,7 +60,7 @@
 
         {{ __('main.total') }}: <b>{{ $messages->total() }}</b><br>
     @else
-        {!! showError(__('walls.empty_messages')) !!}
+        {{ showError(__('walls.empty_messages')) }}
     @endif
 
     {{ $messages->links() }}
@@ -80,6 +80,6 @@
         </div>
 
     @else
-        {!! showError(__('main.not_authorized')) !!}
+        {{ showError(__('main.not_authorized')) }}
     @endif
 @stop

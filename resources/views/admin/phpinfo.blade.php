@@ -39,6 +39,6 @@
             @endforeach
         </table>
     @else
-        {!! showError('Функция ini_get_all запрещена в php.ini') !!}
+        {{ showError('Функция ini_get_all запрещена в php.ini') }}
     @endif
 @stop

@@ -38,6 +38,6 @@
 
         {{ __('main.total') }}: {{ $images->total() }}<br>
     @else
-        {!! showError(__('admin.caches.empty_images')) !!}
+        {{ showError(__('admin.caches.empty_images')) }}
     @endif
 @stop

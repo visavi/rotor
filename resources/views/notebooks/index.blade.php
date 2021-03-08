@@ -20,14 +20,14 @@
     @if ($note->text)
         <div class="mb-3">
             {{ __('notebooks.subtitle') }}:<br>
-            {!! bbCode($note->text) !!}
+            {{ bbCode($note->text) }}
         </div>
 
         <p class="text-muted font-italic">
             {{ __('notebooks.last_edited') }}: {{ dateFixed($note->created_at) }}
         </p>
     @else
-        {!! showError(__('notebooks.empty_note')) !!}
+        {{ showError(__('notebooks.empty_note')) }}
     @endif
 
     <i class="fa fa-pencil-alt"></i> <a href="/notebooks/edit">{{ __('main.edit') }}</a><br>

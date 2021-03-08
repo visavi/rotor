@@ -79,7 +79,7 @@
                                         {!! $item->shortText() !!}
                                     </div>
                                     <div>
-                                        <i class="fa fa-user-circle"></i> {!! $item->user->getProfile() !!}
+                                        <i class="fa fa-user-circle"></i> {{ $item->user->getProfile() }}
                                         <small class="section-date text-muted font-italic">
                                             {{ dateFixed($item->created_at) }}
                                         </small>
@@ -98,7 +98,7 @@
             </div>
         @endforeach
     @else
-        {!! showError(__('boards.empty_items')) !!}
+        {{ showError(__('boards.empty_items')) }}
     @endif
 
     {{ $items->links() }}

@@ -29,7 +29,7 @@
 
         <br>
     @else
-        {!! showError(__('statuses.empty_statuses')) !!}
+        {{ showError(__('statuses.empty_statuses')) }}
     @endif
 
     {{ __('statuses.status_text4') }}<br>

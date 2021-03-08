@@ -28,7 +28,7 @@
         @foreach ($articles as $article)
             <div class="card mb-3">
                 <div class="card-body">
-                    <h5 class="card-title"><a href="/articles/{{ $article->id }}">{{ $article->title }}</a> <small>(Рейтинг: {!! formatNum($article->rating) !!})</small></h5>
+                    <h5 class="card-title"><a href="/articles/{{ $article->id }}">{{ $article->title }}</a> <small>(Рейтинг: {{ formatNum($article->rating) }})</small></h5>
 
                     @if ($article->category->parent->id)
                         <a href="/blogs/{{ $article->category->parent->id }}"><span class="badge badge-light">{{ $article->category->parent->name }}</span></a> /
@@ -41,7 +41,7 @@
                     </p>
                 </div>
                 <div class="card-footer text-muted">
-                    {{ __('main.author') }}: {!! $article->user->getProfile() !!} ({{ dateFixed($article->created_at) }})
+                    {{ __('main.author') }}: {{ $article->user->getProfile() }} ({{ dateFixed($article->created_at) }})
                     {{ __('main.views') }}: {{ $article->visits }}
                     <div class="float-right">
                         <a href="/articles/comments/{{ $article->id }}">{{ __('main.comments') }}</a> ({{ $article->count_comments }})
@@ -53,7 +53,7 @@
 
         {{ $articles->links() }}
     @else
-        {!! showError(__('blogs.empty_articles')) !!}
+        {{ showError(__('blogs.empty_articles')) }}
     @endif
 
     <a href="/blogs/top">{{ __('blogs.top_articles') }}</a> /

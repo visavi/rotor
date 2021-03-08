@@ -43,20 +43,20 @@
                 @endif
 
                 <div class="col">
-                    {!! bbCode($news->text) !!}
+                    {{ bbCode($news->text) }}
                 </div>
             </div>
         </div>
 
         <div class="section-body">
-            {{ __('main.added') }}: {!! $news->user->getProfile() !!} <small class="section-date text-muted font-italic">{{ dateFixed($news->created_at) }}</small>
+            {{ __('main.added') }}: {{ $news->user->getProfile() }} <small class="section-date text-muted font-italic">{{ dateFixed($news->created_at) }}</small>
 
             <div class="js-rating">
                 {{ __('main.rating') }}:
                 @if (getUser() && getUser('id') !== $news->user_id)
                     <a class="post-rating-down<?= $news->vote === '-' ? ' active' : '' ?>" href="#" onclick="return changeRating(this);" data-id="{{ $news->id }}" data-type="{{ $news->getMorphClass() }}" data-vote="-" data-token="{{ $_SESSION['token'] }}"><i class="fa fa-thumbs-down"></i></a>
                 @endif
-                <b>{!! formatNum($news->rating) !!}</b>
+                <b>{{ formatNum($news->rating) }}</b>
                 @if (getUser() && getUser('id') !== $news->user_id)
                     <a class="post-rating-up<?= $news->vote === '+' ? ' active' : '' ?>" href="#" onclick="return changeRating(this);" data-id="{{ $news->id }}" data-type="{{ $news->getMorphClass() }}" data-vote="+" data-token="{{ $_SESSION['token'] }}"><i class="fa fa-thumbs-up"></i></a>
                 @endif
@@ -70,22 +70,22 @@
         @foreach ($comments as $comment)
             <div class="section mb-3 shadow">
                 <div class="user-avatar">
-                    {!! $comment->user->getAvatar() !!}
-                    {!! $comment->user->getOnline() !!}
+                    {{ $comment->user->getAvatar() }}
+                    {{ $comment->user->getOnline() }}
                 </div>
 
                 <div class="section-user d-flex align-items-center">
                     <div class="flex-grow-1">
-                        {!! $comment->user->getProfile() !!}
+                        {{ $comment->user->getProfile() }}
 
                         <small class="section-date text-muted font-italic">{{ dateFixed($comment->created_at) }}</small><br>
-                        <small class="font-italic">{!! $comment->user->getStatus() !!}</small>
+                        <small class="font-italic">{{ $comment->user->getStatus() }}</small>
                     </div>
                 </div>
 
                 <div class="section-body border-top">
                     <div class="section-message">
-                        {!! bbCode($comment->text) !!}
+                        {{ bbCode($comment->text) }}
                     </div>
 
                     @if (isAdmin())
@@ -103,7 +103,7 @@
 
     @if (! $news->closed)
         @if ($comments->isEmpty())
-            {!! showError(__('main.empty_comments')) !!}
+            {{ showError(__('main.empty_comments')) }}
         @endif
 
         @if (getUser())
@@ -125,9 +125,9 @@
             <a href="/stickers">{{ __('main.stickers') }}</a> /
             <a href="/tags">{{ __('main.tags') }}</a><br><br>
         @else
-            {!! showError(__('main.not_authorized')) !!}
+            {{ showError(__('main.not_authorized')) }}
         @endif
     @else
-        {!! showError(__('news.closed_news')) !!}
+        {{ showError(__('news.closed_news')) }}
     @endif
 @stop

@@ -23,13 +23,13 @@
 @section('content')
     @if ($rules)
         <div>
-            {!! bbCode($rules->text) !!}
+            {{ bbCode($rules->text) }}
             <hr>
 
             {{ __('main.date') }}: {{ dateFixed($rules->created_at) }}
         </div>
         <br>
     @else
-        {!! showError(__('admin.rules.empty_rules')) !!}
+        {{ showError(__('admin.rules.empty_rules')) }}
     @endif
 @stop

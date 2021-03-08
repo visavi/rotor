@@ -38,20 +38,20 @@
                     </div>
 
                     <div class="text-right js-rating">
-                        <b>{!! formatNum($down->getCalculatedRating()) !!}</b>
+                        <b>{{ formatNum($down->getCalculatedRating()) }}</b>
                     </div>
                 </div>
 
                 <div class="section-content">
                     {{ __('loads.load') }}: <a href="/loads/{{ $down->category->id }}">{{ $down->category->name }}</a><br>
                     {{ __('main.downloads') }}: {{ $down->loads }}<br>
-                    {{ __('main.author') }}: {!! $down->user->getProfile() !!}
+                    {{ __('main.author') }}: {{ $down->user->getProfile() }}
                     <small>({{ dateFixed($down->created_at) }})</small>
                 </div>
             </div>
         @endforeach
     @else
-        {!! showError(__('loads.empty_downs')) !!}
+        {{ showError(__('loads.empty_downs')) }}
     @endif
 
     {{ $downs->links() }}

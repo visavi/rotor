@@ -38,7 +38,7 @@
             {{ __('users.ending_ban') }}: {{ formatTime($user->timeban - SITETIME) }}<br>
 
             @if ($user->lastBan->id)
-                {{ __('users.reason_ban') }}: {!! bbCode($user->lastBan->reason) !!}<br>
+                {{ __('users.reason_ban') }}: {{ bbCode($user->lastBan->reason) }}<br>
             @endif
         </div>
     @endif
@@ -50,9 +50,9 @@
     <div class="container-fluid mb-3">
         <div class="row">
             <div class="col-md-6">
-                {{ __('users.status') }}: <b><a href="/statusfaq">{!! $user->getStatus() !!}</a></b><br>
+                {{ __('users.status') }}: <b><a href="/statusfaq">{{ $user->getStatus() }}</a></b><br>
 
-                {!! $user->getGender() !!}
+                {{ $user->getGender() }}
                 {{ __('users.gender') }}:
                 {{ $user->gender === 'male' ? __('main.male') : __('main.female') }}<br>
 
@@ -91,19 +91,19 @@
                 {{ __('main.registration_date') }}: {{ dateFixed($user->created_at, 'd.m.Y') }}<br>
 
                 @if ($invite)
-                    {{ __('users.invitation') }}: {!! $invite->user->getProfile() !!}<br>
+                    {{ __('users.invitation') }}: {{ $invite->user->getProfile() }}<br>
                 @endif
 
                 {{ __('users.last_visit') }}: {{ dateFixed($user->updated_at) }}<br>
 
                 @if (getUser())
-                    <a href="/ratings/{{ $user->login }}">{{ __('main.reputation') }}: <b>{!! formatNum($user->rating) !!}</b> (+{{  $user->posrating }}/-{{  $user->negrating }})</a><br>
+                    <a href="/ratings/{{ $user->login }}">{{ __('main.reputation') }}: <b>{{ formatNum($user->rating) }}</b> (+{{  $user->posrating }}/-{{  $user->negrating }})</a><br>
                     @if (getUser('login') !== $user->login)
                         <a href="/users/{{ $user->login }}/rating?vote=plus"><i class="fa fa-thumbs-up"></i><span style="color:#0099cc"> {{ __('main.plus') }}</span></a> /
                         <a href="/users/{{ $user->login }}/rating?vote=minus"><span style="color:#ff0000">{{ __('main.minus') }}</span> <i class="fa fa-thumbs-down"></i></a><br>
                     @endif
                 @else
-                    {{ __('main.reputation') }}: <b>{!! formatNum($user->rating) !!}</b> (+{{  $user->posrating }}/-{{  $user->negrating }})<br>
+                    {{ __('main.reputation') }}: <b>{{ formatNum($user->rating) }}</b> (+{{  $user->posrating }}/-{{  $user->negrating }})<br>
                 @endif
             </div>
 
@@ -119,7 +119,7 @@
                 @if (!empty($user->info))
                     <div class="alert alert-warning">
                         <b>{{ __('users.about') }}:</b><br>
-                        {!! bbCode($user->info) !!}
+                        {{ bbCode($user->info) }}
                     </div>
                 @endif
 
@@ -136,8 +136,8 @@
         <i class="fa fa-thumbtack"></i> <b>{{ __('main.note') }}:</b> (<a href="/users/{{ $user->login }}/note">{{ __('main.change') }}</a>)<br>
 
         @if (! empty($user->note->text))
-            {!! bbCode($user->note->text) !!}<br>
-            {{ __('main.changed') }}: {!! $user->note->editUser->getProfile() !!} ({{ dateFixed($user->note->updated_at) }})<br>
+            {{ bbCode($user->note->text) }}<br>
+            {{ __('main.changed') }}: {{ $user->note->editUser->getProfile() }} ({{ dateFixed($user->note->updated_at) }})<br>
         @else
             {{ __('users.empty_note') }}<br>
         @endif

@@ -19,13 +19,13 @@
             @foreach ($records as $data)
                 <div class="section mb-3 shadow">
                     <div class="user-avatar">
-                        {!! $data->user->getAvatar() !!}
-                        {!! $data->user->getOnline() !!}
+                        {{ $data->user->getAvatar() }}
+                        {{ $data->user->getOnline() }}
                     </div>
 
                     <div class="section-user d-flex align-items-center">
                         <div class="flex-grow-1">
-                            {!! $data->user->getProfile() !!}
+                            {{ $data->user->getProfile() }}
                             <small class="section-date text-muted font-italic">{{ dateFixed($data->created_at) }}</small>
                         </div>
 
@@ -38,11 +38,11 @@
 
                     <div class="section-body border-top">
                         @if ($data->type !== 'unban')
-                            {{ __('users.reason_ban') }}: {!! bbCode($data->reason) !!}<br>
+                            {{ __('users.reason_ban') }}: {{ bbCode($data->reason) }}<br>
                             {{ __('users.term') }}: {{ formatTime($data->term) }}<br>
                         @endif
 
-                        {!! $data->getType() !!}: {!! $data->sendUser->getProfile() !!}
+                        {{ $data->getType() }}: {{ $data->sendUser->getProfile() }}
                     </div>
                 </div>
             @endforeach
@@ -52,7 +52,7 @@
             </div>
         </form>
     @else
-        {!! showError(__('admin.banhists.empty_history')) !!}
+        {{ showError(__('admin.banhists.empty_history')) }}
     @endif
 
     {{ $records->links() }}

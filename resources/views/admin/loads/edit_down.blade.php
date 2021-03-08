@@ -51,7 +51,7 @@
         <form action="/admin/downs/edit/{{ $down->id }}" method="post" enctype="multipart/form-data">
             @csrf
             <div class="form-group{{ hasError('category') }}">
-                {{ __('main.author') }}: {!! $down->user->getProfile() !!} ({{ dateFixed($down->created_at) }})<br><br>
+                {{ __('main.author') }}: {{ $down->user->getProfile() }} ({{ dateFixed($down->created_at) }})<br><br>
 
                 <label for="inputCategory">{{ __('loads.load') }}:</label>
 

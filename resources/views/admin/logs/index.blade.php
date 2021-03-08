@@ -17,13 +17,13 @@
         @foreach ($logs as $log)
             <div class="section mb-3 shadow">
                 <div class="user-avatar">
-                    {!! $log->user->getAvatar() !!}
-                    {!! $log->user->getOnline() !!}
+                    {{ $log->user->getAvatar() }}
+                    {{ $log->user->getOnline() }}
                 </div>
 
                 <div class="section-user d-flex align-items-center">
                     <div class="flex-grow-1">
-                        {!! $log->user->getProfile() !!}
+                        {{ $log->user->getProfile() }}
                         <small class="section-date text-muted font-italic">{{  dateFixed($log->created_at) }}</small>
                     </div>
                 </div>
@@ -42,6 +42,6 @@
 
         <i class="fa fa-times"></i> <a href="/admin/logs/clear?token={{ $_SESSION['token'] }}" onclick="return confirm('{{ __('admin.logs.confirm_clear') }}')">{{ __('main.clear') }}</a><br>
     @else
-        {!! showError(__('admin.logs.empty_logs')) !!}
+        {{ showError(__('admin.logs.empty_logs')) }}
     @endif
 @stop

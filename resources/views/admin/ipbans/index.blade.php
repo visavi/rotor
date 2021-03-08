@@ -31,7 +31,7 @@
                     <div class="section-message">
                         {{ __('main.added_by') }}:
                         @if ($log->user->id)
-                            {!! $log->user->getProfile() !!}
+                            {{ $log->user->getProfile() }}
                         @else
                             {{ __('main.automatically') }}
                         @endif
@@ -50,7 +50,7 @@
 
         {{ __('main.total') }}: <b>{{ $logs->total() }}</b><br>
     @else
-        {!! showError(__('admin.ipbans.empty_ip')) !!}
+        {{ showError(__('admin.ipbans.empty_ip')) }}
     @endif
 
     <div class="py-2 my-2">

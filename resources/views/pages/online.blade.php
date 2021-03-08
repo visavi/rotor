@@ -25,18 +25,18 @@
             <div class="section mb-3 shadow">
                 <div class="user-avatar">
                     @if ($data->user_id)
-                        {!! $data->user->getAvatar() !!}
+                        {{ $data->user->getAvatar() }}
                     @else
-                        {!! $data->user->getAvatarGuest() !!}
+                        {{ $data->user->getAvatarGuest() }}
                     @endif
                 </div>
 
                 <div class="section-user d-flex align-items-center">
                     <div class="flex-grow-1">
                         @if ($data->user_id)
-                            {!! $data->user->getProfile() !!}
+                            {{ $data->user->getProfile() }}
                             <small class="section-date text-muted font-italic">{{ dateFixed($data->updated_at, 'H:i:s') }}</small><br>
-                            <small class="font-italic">{!! $data->user->getStatus() !!}</small>
+                            <small class="font-italic">{{ $data->user->getStatus() }}</small>
                         @else
 
                             <span class="section-author font-weight-bold" data-login="{{ setting('guestsuser') }}">{{ setting('guestsuser') }}</span>
@@ -54,7 +54,7 @@
             </div>
         @endforeach
     @else
-        {!! showError(__('main.empty_users')) !!}
+        {{ showError(__('main.empty_users')) }}
     @endif
 
     {{ $online->links() }}

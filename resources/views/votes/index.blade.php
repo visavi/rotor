@@ -40,7 +40,7 @@
             </div>
         @endforeach
     @else
-        {!! showError(__('votes.empty_votes')) !!}
+        {{ showError(__('votes.empty_votes')) }}
     @endif
 
     {{ $votes->links() }}

@@ -27,9 +27,9 @@
                 @endif
 
                 <div class="section-message">
-                    {!! bbCode($comment->text) !!}<br>
+                    {{ bbCode($comment->text) }}<br>
 
-                    {{ __('main.posted') }}: {!! $comment->user->getProfile() !!}
+                    {{ __('main.posted') }}: {{ $comment->user->getProfile() }}
                     <small>({{ dateFixed($comment->created_at) }})</small>
 
                     @if (isAdmin())
@@ -39,7 +39,7 @@
             </div>
         @endforeach
     @else
-        {!! showError(__('main.empty_comments')) !!}
+        {{ showError(__('main.empty_comments')) }}
     @endif
 
     {{ $comments->links() }}

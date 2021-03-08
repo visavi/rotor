@@ -26,7 +26,7 @@
 
             {{ __('stickers.total_stickers') }}: <b>{{ $stickers->total() }}</b><br>
         @else
-            {!! showError(__('stickers.empty_stickers')) !!}
+            {{ showError(__('stickers.empty_stickers')) }}
         @endif
     </div>
 

@@ -29,7 +29,7 @@
                         {!! $data->text !!}
                     </div>
 
-                    {{ __('main.posted') }}: {!! $data->user->getProfile() !!}
+                    {{ __('main.posted') }}: {{ $data->user->getProfile() }}
                     <small class="section-date text-muted font-italic">{{ dateFixed($data->created_at) }}</small>
 
                     @if (isAdmin())
@@ -39,7 +39,7 @@
             </div>
         @endforeach
     @else
-        {!! showError(__('main.empty_comments')) !!}
+        {{ showError(__('main.empty_comments')) }}
     @endif
 
     {{ $comments->links() }}

@@ -3,5 +3,5 @@
 @section('title', 'BBCode')
 
 @section('content')
-    {!! bbCode($message) !!}
+    {{ bbCode($message) }}
 @stop

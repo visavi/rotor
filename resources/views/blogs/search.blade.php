@@ -34,14 +34,14 @@
             <div class="section mb-3 shadow">
                 <div class="section-title">
                     <i class="fa fa-pencil-alt"></i>
-                    <a href="/articles/{{ $article->id }}">{{ $article->title }}</a> ({!! formatNum($article->rating) !!})
+                    <a href="/articles/{{ $article->id }}">{{ $article->title }}</a> ({{ formatNum($article->rating) }})
                 </div>
 
                 <div class="section-content">
                     {!! $article->shortText() !!}
 
                     {{ __('blogs.blog') }}: <a href="/blogs/{{ $article->category->id }}">{{ $article->category->name }}</a><br>
-                    {{ __('main.author') }}: {!! $article->user->getProfile() !!}
+                    {{ __('main.author') }}: {{ $article->user->getProfile() }}
                     <small class="section-date text-muted font-italic">{{ dateFixed($article->created_at) }}</small>
                 </div>
             </div>

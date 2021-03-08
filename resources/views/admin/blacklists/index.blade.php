@@ -35,7 +35,7 @@
                     </div>
 
                     <div class="section-content">
-                        {{ __('main.added') }}: {!! $list->user->getProfile() !!} ({{ dateFixed($list->created_at) }})
+                        {{ __('main.added') }}: {{ $list->user->getProfile() }} ({{ dateFixed($list->created_at) }})
                     </div>
                 </div>
             @endforeach
@@ -45,7 +45,7 @@
             </div>
         </form>
     @else
-        {!! showError( __('admin.blacklists.empty_list')) !!}
+        {{ showError( __('admin.blacklists.empty_list')) }}
     @endif
 
     {{ $lists->links() }}

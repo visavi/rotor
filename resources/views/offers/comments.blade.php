@@ -18,15 +18,15 @@
         @foreach ($comments as $comment)
             <div class="section mb-3 shadow" id="comment_{{ $comment->id }}">
                 <div class="user-avatar">
-                    {!! $comment->user->getAvatar() !!}
-                    {!! $comment->user->getOnline() !!}
+                    {{ $comment->user->getAvatar() }}
+                    {{ $comment->user->getOnline() }}
                 </div>
 
                 <div class="section-user d-flex align-items-center">
                     <div class="flex-grow-1">
-                        {!! $comment->user->getProfile() !!}
+                        {{ $comment->user->getProfile() }}
                         <small class="section-date text-muted font-italic">{{ dateFixed($comment->created_at) }}</small><br>
-                        <small class="font-italic">{!! $comment->user->getStatus() !!}</small>
+                        <small class="font-italic">{{ $comment->user->getStatus() }}</small>
                     </div>
 
                     @if (getUser())
@@ -53,7 +53,7 @@
 
                 <div class="section-body border-top">
                     <div class="section-message">
-                        {!! bbCode($comment->text) !!}
+                        {{ bbCode($comment->text) }}
                     </div>
 
                     @if (isAdmin())
@@ -69,7 +69,7 @@
     @if (getUser())
         @if (! $offer->closed)
             @if ($comments->isEmpty())
-                {!! showError(__('main.empty_comments')) !!}
+                {{ showError(__('main.empty_comments')) }}
             @endif
 
             <div class="section-form mb-3 shadow">
@@ -91,9 +91,9 @@
             <a href="/tags">{{ __('main.tags') }}</a><br><br>
 
         @else
-            {!! showError(__('main.closed_comments')) !!}
+            {{ showError(__('main.closed_comments')) }}
         @endif
     @else
-        {!! showError(__('main.not_authorized')) !!}
+        {{ showError(__('main.not_authorized')) }}
     @endif
 @stop

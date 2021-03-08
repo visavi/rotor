@@ -50,7 +50,7 @@
                 <label class="custom-control-label" for="bold">{{ __('adverts.bold') }}</label>
             </div>
 
-            {!! view('app/_captcha') !!}
+            {{ getCaptcha() }}
 
             <button class="btn btn-primary">{{ __('adverts.buy_for') }} <span class="js-price">{{ setting('rekuserprice') }}</span></button>
         </form>

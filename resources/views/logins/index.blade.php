@@ -30,7 +30,7 @@
             </div>
         @endforeach
     @else
-        {!! showError(__('logins.empty_history')) !!}
+        {{ showError(__('logins.empty_history')) }}
     @endif
 
     {{ $logins->links() }}

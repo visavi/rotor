@@ -17,13 +17,13 @@
         @foreach ($users as $user)
             <div class="section mb-3 shadow">
                 <div class="user-avatar">
-                    {!! $user->getAvatar() !!}
-                    {!! $user->getOnline() !!}
+                    {{ $user->getAvatar() }}
+                    {{ $user->getOnline() }}
                 </div>
 
                 <div class="section-user d-flex align-items-center">
                     <div class="flex-grow-1">
-                        {!! $user->getGender() !!} {!! $user->getProfile() !!}
+                        {{ $user->getGender() }} {{ $user->getProfile() }}
 
                         @if ($user->lastBan->created_at)
                             <small class="section-date text-muted font-italic">{{ dateFixed($user->lastBan->created_at) }}</small>
@@ -39,8 +39,8 @@
                     {{ __('users.ending_ban') }}: {{ formatTime($user->timeban - SITETIME) }}<br>
 
                     @if ($user->lastBan->id)
-                        {{ __('users.banned') }}: {!! $user->lastBan->sendUser->getProfile() !!}<br>
-                        {{ __('users.reason_ban') }}: {!! bbCode($user->lastBan->reason) !!}<br>
+                        {{ __('users.banned') }}: {{ $user->lastBan->sendUser->getProfile() }}<br>
+                        {{ __('users.reason_ban') }}: {{ bbCode($user->lastBan->reason) }}<br>
                     @endif
                 </div>
             </div>
@@ -49,7 +49,7 @@
         <br>{{ __('main.total_users') }}: <b>{{ $users->total() }}</b><br>
 
     @else
-        {!! showError(__('main.empty_users')) !!}
+        {{ showError(__('main.empty_users')) }}
     @endif
 
     {{ $users->links() }}

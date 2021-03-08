@@ -46,7 +46,7 @@
             @endforeach
         </div>
     @else
-        {!! showError(__('loads.empty_archive')) !!}
+        {{ showError(__('loads.empty_archive')) }}
     @endif
 
     {{ $documents->links() }}

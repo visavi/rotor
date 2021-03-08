@@ -26,13 +26,13 @@
             <?php $author = $data->type === $data::IN ? $data->author : $data->user; ?>
             <div class="section mb-3 shadow">
                 <div class="user-avatar">
-                    {!! $author->getAvatar() !!}
-                    {!! $author->getOnline() !!}
+                    {{ $author->getAvatar() }}
+                    {{ $author->getOnline() }}
                 </div>
 
                 <div class="section-user d-flex align-items-center">
                     <div class="flex-grow-1">
-                        {!! $author->getProfile() !!}
+                        {{ $author->getProfile() }}
 
                         @unless ($data->reading)
                             <span class="badge badge-info">{{ __('messages.new') }}</span>
@@ -52,7 +52,7 @@
 
                 <div class="section-body border-top">
                     <div class="section-message">
-                        {!! bbCode($data->text) !!}
+                        {{ bbCode($data->text) }}
                     </div>
                 </div>
             </div>
@@ -60,7 +60,7 @@
 
         {{ $messages->links() }}
     @else
-        {!! showError(__('messages.empty_dialogue')) !!}
+        {{ showError(__('messages.empty_dialogue')) }}
     @endif
 
     @if ($user->exists)
@@ -75,7 +75,7 @@
                 </div>
 
                 @if (getUser('point') < setting('privatprotect'))
-                    {!! view('app/_captcha') !!}
+                    {{ getCaptcha() }}
                 @endif
 
                 <button class="btn btn-primary">{{ __('main.write') }}</button>

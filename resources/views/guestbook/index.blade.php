@@ -31,19 +31,19 @@
             <div class="section mb-3 shadow">
                 <div class="user-avatar">
                     @if ($post->user_id)
-                        {!! $post->user->getAvatar() !!}
-                        {!! $post->user->getOnline() !!}
+                        {{ $post->user->getAvatar() }}
+                        {{ $post->user->getOnline() }}
                     @else
-                        {!! $post->user->getAvatarGuest() !!}
+                        {{ $post->user->getAvatarGuest() }}
                     @endif
                 </div>
 
                 <div class="section-user d-flex align-items-center">
                     <div class="flex-grow-1">
                         @if ($post->user_id)
-                            {!! $post->user->getProfile() !!}
+                            {{ $post->user->getProfile() }}
                             <small class="section-date text-muted font-italic">{{ dateFixed($post->created_at) }}</small><br>
-                            <small class="font-italic">{!! $post->user->getStatus() !!}</small>
+                            <small class="font-italic">{{ $post->user->getStatus() }}</small>
                         @else
                             @if ($post->guest_name)
                                 <span class="section-author font-weight-bold" data-login="{{ $post->guest_name }}">{{ $post->guest_name }}</span>
@@ -73,7 +73,7 @@
 
                 <div class="section-body border-top">
                     <div class="section-message">
-                        {!! bbCode($post->text) !!}
+                        {{ bbCode($post->text) }}
                     </div>
 
                     @if ($post->edit_user_id)
@@ -81,7 +81,7 @@
                     @endif
 
                     @if ($post->reply)
-                        <div class="text-danger">{{ __('guestbook.answer') }}: {!! bbCode($post->reply) !!}</div>
+                        <div class="text-danger">{{ __('guestbook.answer') }}: {{ bbCode($post->reply) }}</div>
                     @endif
 
                     @if (isAdmin())
@@ -93,7 +93,7 @@
             </div>
         @endforeach
     @else
-        {!! showError(__('main.empty_messages')) !!}
+        {{ showError(__('main.empty_messages')) }}
     @endif
 
     {{ $posts->links() }}
@@ -129,12 +129,12 @@
                     <div class="invalid-feedback">{{ textError('msg') }}</div>
                 </div>
 
-                {!! view('app/_captcha') !!}
+                {{ getCaptcha() }}
                 <button class="btn btn-primary">{{ __('main.write') }}</button>
             </form>
         </div>
     @else
-        {!! showError(__('main.not_authorized')) !!}
+        {{ showError(__('main.not_authorized')) }}
     @endif
 
     <a href="/stickers">{{ __('main.stickers') }}</a>  /

@@ -21,6 +21,6 @@
             </div>
         @endforeach
     @else
-        {!! showError(__('stickers.empty_categories')) !!}
+        {{ showError(__('stickers.empty_categories')) }}
     @endif
 @stop

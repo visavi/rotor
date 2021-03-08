@@ -27,22 +27,22 @@
             <div class="section mb-3 shadow">
                 <div class="section-title">
                     <i class="fa fa-image"></i>
-                    <a href="/photos/{{ $photo->id }}">{{ $photo->title }}</a> ({!! formatNum($photo->rating) !!})
+                    <a href="/photos/{{ $photo->id }}">{{ $photo->title }}</a> ({{ formatNum($photo->rating) }})
                 </div>
 
                 <div class="section-content">
                     @include('app/_carousel', ['model' => $photo])
 
-                    <br>{!! bbCode($photo->text) !!}<br>
+                    <br>{{ bbCode($photo->text) }}<br>
 
-                        {{ __('main.added') }}: {!! $photo->user->getProfile() !!} ({{ dateFixed($photo->created_at) }})<br>
+                        {{ __('main.added') }}: {{ $photo->user->getProfile() }} ({{ dateFixed($photo->created_at) }})<br>
                     <a href="/photos/comments/{{ $photo->id }}">{{ __('main.comments') }}</a> ({{ $photo->count_comments }})
                     <a href="/photos/end/{{ $photo->id }}">&raquo;</a>
                 </div>
             </div>
         @endforeach
     @else
-        {!! showError(__('photos.empty_photos')) !!}
+        {{ showError(__('photos.empty_photos')) }}
     @endif
 
     {{ $photos->links() }}

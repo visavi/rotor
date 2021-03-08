@@ -53,9 +53,9 @@
             </div>
         @endforeach
     @elseif ($forum->closed)
-        {!! showError(__('forums.closed_forum')) !!}
+        {{ showError(__('forums.closed_forum')) }}
     @else
-        {!! showError(__('forums.empty_topics')) !!}
+        {{ showError(__('forums.empty_topics')) }}
     @endif
 
     {{ $topics->links() }}

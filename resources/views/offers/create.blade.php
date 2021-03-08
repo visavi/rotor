@@ -44,6 +44,6 @@
         </div>
 
     @else
-        {!! showError(__('offers.condition_add', ['point' => plural(setting('addofferspoint'), setting('scorename'))])) !!}
+        {{ showError(__('offers.condition_add', ['point' => plural(setting('addofferspoint'), setting('scorename'))])) }}
     @endif
 @stop

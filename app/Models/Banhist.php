@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Support\HtmlString;
 
 /**
  * Class Banhist
@@ -61,9 +62,9 @@ class Banhist extends BaseModel
     /**
      * Возвращает тип бана
      *
-     * @return string тип бана
+     * @return HtmlString тип бана
      */
-    public function getType(): string
+    public function getType(): HtmlString
     {
         switch ($this->type) {
             case self::BAN:
@@ -76,6 +77,6 @@ class Banhist extends BaseModel
                 $type = '<span class="text-warning">'. __('main.changed') .'</span>';
         }
 
-        return $type;
+        return new HtmlString($type);
     }
 }

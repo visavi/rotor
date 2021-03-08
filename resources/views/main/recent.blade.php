@@ -14,7 +14,7 @@
         <i class="fab fa-forumbee fa-lg text-muted"></i>
         {{ __('index.recent_topics') }}
     </div>
-    {!! recentTopics() !!}
+    {{ recentTopics() }}
 </div>
 
 <div class="section mb-3 shadow">
@@ -22,7 +22,7 @@
         <i class="fa fa-download fa-lg text-muted"></i>
         {{ __('index.recent_files') }}
     </div>
-    {!! recentDowns() !!}
+    {{ recentDowns() }}
 </div>
 
 <div class="section mb-3 shadow">
@@ -30,7 +30,7 @@
         <i class="fa fa-globe fa-lg text-muted"></i>
         {{ __('index.recent_articles') }}
     </div>
-    {!! recentArticles() !!}
+    {{ recentArticles() }}
 </div>
 
 <div class="section mb-3 shadow">
@@ -38,5 +38,5 @@
         <i class="fa fa-image fa-lg text-muted"></i>
         {{ __('index.recent_photos') }}
     </div>
-    {!! recentPhotos() !!}
+    {{ recentPhotos() }}
 </div>

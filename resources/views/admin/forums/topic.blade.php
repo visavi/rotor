@@ -56,14 +56,14 @@
                     @php
                         $comma = (empty($key)) ? '' : ', ';
                     @endphp
-                    {{ $comma }}{!! $curator->getProfile() !!}
+                    {{ $comma }}{{ $curator->getProfile() }}
                 @endforeach
             </span>
         </div>
     @endif
 
     @if ($topic->note)
-        <div class="p-1 my-1 bg-info text-white">{!! bbCode($topic->note) !!}</div>
+        <div class="p-1 my-1 bg-info text-white">{{ bbCode($topic->note) }}</div>
     @endif
 
     @if ($vote)
@@ -106,15 +106,15 @@
             @foreach ($posts as $data)
                 <div class="section mb-3 shadow" id="post_{{ $data->id }}">
                     <div class="user-avatar">
-                        {!! $data->user->getAvatar() !!}
-                        {!! $data->user->getOnline() !!}
+                        {{ $data->user->getAvatar() }}
+                        {{ $data->user->getOnline() }}
                     </div>
 
                     <div class="section-user d-flex align-items-center">
                         <div class="flex-grow-1">
-                            {!! $data->user->getProfile() !!}
+                            {{ $data->user->getProfile() }}
                             <small class="section-date text-muted font-italic">({{ dateFixed($data->created_at) }})</small><br>
-                            <small class="font-italic">{!! $data->user->getStatus() !!}</small>
+                            <small class="font-italic">{{ $data->user->getStatus() }}</small>
                         </div>
 
                         <div class="text-right">
@@ -134,7 +134,7 @@
                                 @if (getUser() && getUser('id') !== $data->user_id)
                                     <a class="post-rating-down{{ $data->vote === '-' ? ' active' : '' }}" href="#" onclick="return changeRating(this);" data-id="{{ $data->id }}" data-type="{{ $data->getMorphClass() }}" data-vote="-" data-token="{{ $_SESSION['token'] }}"><i class="fa fa-minus"></i></a>
                                 @endif
-                                <b>{!! formatNum($data->rating) !!}</b>
+                                <b>{{ formatNum($data->rating) }}</b>
                                 @if (getUser() && getUser('id') !== $data->user_id)
                                     <a class="post-rating-up{{ $data->vote === '+' ? ' active' : '' }}" href="#" onclick="return changeRating(this);" data-id="{{ $data->id }}" data-type="{{ $data->getMorphClass() }}" data-vote="+" data-token="{{ $_SESSION['token'] }}"><i class="fa fa-plus"></i></a>
                                 @endif
@@ -143,7 +143,7 @@
                     </div>
                     <div class="section-body border-top">
                         <div class="section-message">
-                            {!! bbCode($data->text) !!}
+                            {{ bbCode($data->text) }}
                         </div>
 
                         @if ($data->files->isNotEmpty())
@@ -175,7 +175,7 @@
             @endforeach
 
         @else
-            {!! showError(__('forums.empty_posts')) !!}
+            {{ showError(__('forums.empty_posts')) }}
         @endif
 
         <span class="float-right">
@@ -225,10 +225,10 @@
             </div>
 
         @else
-            {!! showError(__('forums.topic_closed')) !!}
+            {{ showError(__('forums.topic_closed')) }}
         @endif
     @else
-        {!! showError(__('main.not_authorized')) !!}
+        {{ showError(__('main.not_authorized')) }}
     @endif
 
     <a href="/stickers">{{ __('main.stickers') }}</a>  /

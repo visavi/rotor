@@ -31,21 +31,21 @@
             </div>
 
             <div class="section-message">
-                {!! bbCode($offer->text) !!}
+                {{ bbCode($offer->text) }}
             </div>
         </div>
 
         <div class="section-body">
-            {{ __('main.added') }}: {!! $offer->user->getProfile() !!}
+            {{ __('main.added') }}: {{ $offer->user->getProfile() }}
             <small class="section-date text-muted font-italic">{{ dateFixed($offer->created_at) }}</small>
 
             <div class="my-3">
-                {!! $offer->getStatus() !!}
+                {{ $offer->getStatus() }}
             </div>
 
             <div class="js-rating">
                 {{ __('main.rating') }}:
-                <b>{!! formatNum($offer->rating) !!}</b><br>
+                <b>{{ formatNum($offer->rating) }}</b><br>
             </div>
 
             <a href="/offers/comments/{{ $offer->id }}">{{ __('main.comments') }}</a> ({{ $offer->count_comments }})
@@ -61,8 +61,8 @@
         <div class="section mb-3 shadow">
             <h5>{{ __('offers.official_response') }}</h5>
             <div class="section-message">
-                {!! bbCode($offer->reply) !!}<br>
-                {!! $offer->replyUser->getProfile() !!}
+                {{ bbCode($offer->reply) }}<br>
+                {{ $offer->replyUser->getProfile() }}
                 <small class="section-date text-muted font-italic">{{ dateFixed($offer->updated_at) }}</small>
             </div>
         </div>

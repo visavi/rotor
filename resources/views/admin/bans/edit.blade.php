@@ -14,13 +14,13 @@
 @stop
 
 @section('content')
-    <h3>{!! $user->getGender() !!} {!! $user->getProfile() !!}</h3>
+    <h3>{{ $user->getGender() }} {{ $user->getProfile() }}</h3>
 
     @if ($user->lastBan->id)
         {{ __('users.last_ban') }}: {{ dateFixed($user->lastBan->created_at) }}<br>
-        {{ __('users.banned') }}: {!! $user->lastBan->sendUser->getProfile() !!}<br>
+        {{ __('users.banned') }}: {{ $user->lastBan->sendUser->getProfile() }}<br>
         {{ __('users.term') }}: {{ formatTime($user->lastBan->term) }}<br>
-        {{ __('users.reason_ban') }}: {!! bbCode($user->lastBan->reason) !!}<br>
+        {{ __('users.reason_ban') }}: {{ bbCode($user->lastBan->reason) }}<br>
     @endif
 
     <i class="fa fa-history"></i> <b><a href="/admin/banhists/view?user={{ $user->login }}">{{ __('index.ban_history') }}</a></b><br><br>

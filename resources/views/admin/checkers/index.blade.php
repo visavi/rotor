@@ -22,7 +22,7 @@
             @endforeach
             <br>
         @else
-            {!! showError(__('admin.checkers.empty_changes')) !!}
+            {{ showError(__('admin.checkers.empty_changes')) }}
         @endif
 
         <h5>{{ __('admin.checkers.old_files') }}:</h5>
@@ -33,11 +33,11 @@
             @endforeach
             <br>
         @else
-            {!! showError(__('admin.checkers.empty_changes')) !!}
+            {{ showError(__('admin.checkers.empty_changes')) }}
         @endif
 
     @else
-        {!! showError(__('admin.checkers.initial_scan')) !!}
+        {{ showError(__('admin.checkers.initial_scan')) }}
     @endif
 
     <p class="text-muted font-italic">

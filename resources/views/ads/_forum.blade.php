@@ -1,3 +1,3 @@
 <div class="my-1">
-    {!! getAdvertPaid('forum') !!}
+    {{ getAdvertPaid('forum') }}
 </div>

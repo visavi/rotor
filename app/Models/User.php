@@ -13,6 +13,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Query\JoinClause;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\HtmlString;
 
 /**
  * Class User
@@ -177,12 +178,12 @@ class User extends BaseModel
     /**
      * Возвращает имя или логин пользователя
      *
-     * @return string
+     * @return HtmlString|string
      */
-    public function getName(): string
+    public function getName()
     {
         if ($this->id) {
-            return check($this->name ?: $this->login);
+            return new HtmlString(check($this->name ?: $this->login));
         }
 
         return setting('deleted_user');
@@ -193,13 +194,13 @@ class User extends BaseModel
      *
      * @param string|null $color цвет логина
      *
-     * @return string путь к профилю
+     * @return HtmlString путь к профилю
      */
-    public function getProfile($color = null): string
+    public function getProfile($color = null): HtmlString
     {
         if ($this->id) {
             $admin = null;
-            $name  = check($this->getName());
+            $name  = $this->getName();
 
             if ($color) {
                 $name = '<span style="color:' . $color . '">' . $name . '</span>';
@@ -209,24 +210,28 @@ class User extends BaseModel
                 $admin = ' <i class="fas fa-xs fa-star text-info" title="' . $this->getLevel() . '"></i>';
             }
 
-            return '<a class="section-author font-weight-bold" href="/users/' . $this->login . '" data-login="@' . $this->login . '">' . $name . '</a>' . $admin;
+            $html = '<a class="section-author font-weight-bold" href="/users/' . $this->login . '" data-login="@' . $this->login . '">' . $name . '</a>';
+
+            return new HtmlString($html . $admin);
         }
 
-        return '<span class="section-author font-weight-bold" data-login="' . setting('deleted_user') . '">' . setting('deleted_user') . '</span>';
+        $html = '<span class="section-author font-weight-bold" data-login="' . setting('deleted_user') . '">' . setting('deleted_user') . '</span>';
+
+        return new HtmlString($html);
     }
 
     /**
      * Возвращает пол пользователя
      *
-     * @return string пол пользователя
+     * @return HtmlString пол пользователя
      */
-    public function getGender(): string
+    public function getGender(): HtmlString
     {
         if ($this->gender === 'female') {
-            return '<i class="fa fa-female fa-lg"></i>';
+            return new HtmlString('<i class="fa fa-female fa-lg"></i>');
         }
 
-        return '<i class="fa fa-male fa-lg"></i>';
+        return new HtmlString('<i class="fa fa-male fa-lg"></i>');
     }
 
     /**
@@ -243,7 +248,7 @@ class User extends BaseModel
             $user = getUserByLoginOrEmail($login);
 
             if ($user && password_verify($password, $user->password)) {
-                (new static())->rememberUser($user, $remember);
+                (new self())->rememberUser($user, $remember);
 
                 // Сохранение привязки к соц. сетям
                 if (! empty($_SESSION['social'])) {
@@ -295,7 +300,7 @@ class User extends BaseModel
                 ->first();
 
             if ($social && $user = getUserById($social->user_id)) {
-                (new static())->rememberUser($user, true);
+                (new self())->rememberUser($user, true);
 
                 $user->saveVisit(Login::SOCIAL);
 
@@ -355,9 +360,9 @@ class User extends BaseModel
     /**
      * Возвращает онлайн-статус пользователя
      *
-     * @return string онлайн-статус
+     * @return HtmlString онлайн-статус
      */
-    public function getOnline(): string
+    public function getOnline(): HtmlString
     {
         static $visits;
 
@@ -376,15 +381,15 @@ class User extends BaseModel
             $online = '<div class="user-status bg-success" title="Онлайн"></div>';
         }
 
-        return $online;
+        return new HtmlString($online);
     }
 
     /**
      * Возвращает статус пользователя
      *
-     * @return string статус пользователя
+     * @return HtmlString|string статус пользователя
      */
-    public function getStatus(): string
+    public function getStatus()
     {
         static $status;
 
@@ -396,18 +401,22 @@ class User extends BaseModel
             $status = $this->getStatuses(6 * 3600);
         }
 
-        return $status[$this->id] ?? setting('statusdef');
+        if (isset($status[$this->id])) {
+            return new HtmlString($status[$this->id]);
+        }
+
+        return setting('statusdef');
     }
 
     /**
      * Возвращает аватар пользователя
      *
-     * @return string аватар пользователя
+     * @return HtmlString аватар пользователя
      */
-    public function getAvatar(): string
+    public function getAvatar(): HtmlString
     {
         if (! $this->id) {
-            return $this->getAvatarGuest();
+            return new HtmlString($this->getAvatarGuest());
         }
 
         if ($this->avatar && file_exists(HOME . '/' . $this->avatar)) {
@@ -416,22 +425,22 @@ class User extends BaseModel
             $avatar = $this->getAvatarDefault();
         }
 
-        return '<a href="/users/' . $this->login . '">' . $avatar . '</a> ';
+        return new HtmlString('<a href="/users/' . $this->login . '">' . $avatar . '</a> ');
     }
 
     /**
      * Возвращает изображение аватара
      *
-     * @return string
+     * @return HtmlString
      */
-    public function getAvatarImage(): string
+    public function getAvatarImage(): HtmlString
     {
         if (! $this->id) {
             return $this->getAvatarGuest();
         }
 
         if ($this->avatar && file_exists(HOME . '/' . $this->avatar)) {
-            return '<img class="avatar-default rounded-circle" src="' . $this->avatar . '" alt="">';
+            return new HtmlString('<img class="avatar-default rounded-circle" src="' . $this->avatar . '" alt="">');
         }
 
         return $this->getAvatarDefault();
@@ -440,25 +449,25 @@ class User extends BaseModel
     /**
      * Get guest avatar
      *
-     * @return string
+     * @return HtmlString
      */
-    public function getAvatarGuest()
+    public function getAvatarGuest(): HtmlString
     {
-        return '<img class="avatar-default rounded-circle" src="/assets/img/images/avatar_guest.png" alt=""> ';
+        return new HtmlString('<img class="avatar-default rounded-circle" src="/assets/img/images/avatar_guest.png" alt=""> ');
     }
 
     /**
      * Возвращает аватар для пользователя по умолчанию
      *
-     * @return string код аватара
+     * @return HtmlString код аватара
      */
-    private function getAvatarDefault(): string
+    private function getAvatarDefault(): HtmlString
     {
-        $name   = $this->name ?: $this->login;
+        $name   = $this->getName();
         $color  = '#' . substr(dechex(crc32($this->login)), 0, 6);
         $letter = mb_strtoupper(utfSubstr($name, 0, 1), 'utf-8');
 
-        return '<span class="avatar-default rounded-circle" style="background:' . $color . '">' . $letter . '</span>';
+        return new HtmlString('<span class="avatar-default rounded-circle" style="background:' . $color . '">' . $letter . '</span>');
     }
 
     /**

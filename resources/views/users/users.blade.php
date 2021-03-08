@@ -45,8 +45,8 @@
         @foreach ($users as $key => $data)
             <div class="section mb-3 shadow">
                 <div class="user-avatar">
-                    {!! $data->getAvatar() !!}
-                    {!! $data->getOnline() !!}
+                    {{ $data->getAvatar() }}
+                    {{ $data->getOnline() }}
                 </div>
 
                 <div class="section-user d-flex align-items-center">
@@ -55,16 +55,16 @@
                         @if ($user === $data->login)
                             {!! $data->getProfile('#ff0000') !!}<br>
                         @else
-                            {!! $data->getProfile() !!}<br>
+                            {{ $data->getProfile() }}<br>
                         @endif
 
-                        <small class="font-italic">{!! $data->getStatus() !!}</small>
+                        <small class="font-italic">{{ $data->getStatus() }}</small>
                     </div>
                 </div>
 
                 <div class="section-body border-top">
                     {{ __('users.assets') }}: {{ plural($data->point, setting('scorename')) }}<br>
-                    {{ __('users.reputation') }}: {!! formatNum($data->rating) !!}<br>
+                    {{ __('users.reputation') }}: {{ formatNum($data->rating) }}<br>
                     {{ __('users.moneys') }}: {{ plural($data->money, setting('moneyname')) }}<br>
                     {{ __('main.registration_date') }}: {{ dateFixed($data->created_at, 'd.m.Y') }}
                 </div>
@@ -90,7 +90,7 @@
             {{ __('main.total_users') }}: <b>{{ $users->total() }}</b>
         </div>
     @else
-        {!! showError(__('main.empty_users')) !!}
+        {{ showError(__('main.empty_users')) }}
     @endif
 
     <i class="fas fa-search"></i> <a href="/searchusers">{{ __('index.search_users') }}</a><br>

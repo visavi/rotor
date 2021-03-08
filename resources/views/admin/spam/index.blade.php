@@ -26,8 +26,8 @@
                 <?php $user = $record->getRelateUser(); ?>
                 <div class="user-avatar">
                     @if ($user)
-                        {!! $user->getAvatar() !!}
-                        {!! $user->getOnline() !!}
+                        {{ $user->getAvatar() }}
+                        {{ $user->getOnline() }}
                     @else
                         <img class="avatar-default rounded-circle" src="/assets/img/images/avatar_guest.png" alt="">
                     @endif
@@ -36,7 +36,7 @@
                     <div class="flex-grow-1">
                         @if ($record->relate)
                             @if ($user)
-                                {!! $user->getProfile() !!}
+                                {{ $user->getProfile() }}
                             @else
                                 <b>{{ setting('guestsuser') }}</b>
                             @endif
@@ -59,7 +59,7 @@
                 <div class="section-body border-top">
                     @if ($record->relate)
                         <div class="section-message">
-                            {!! bbCode($record->relate->text) !!}
+                            {{ bbCode($record->relate->text) }}
                         </div>
 
                         @if ($record->path)
@@ -70,7 +70,7 @@
                     @endif
 
                     <div>
-                        {{ __('main.sent') }}: {!! $record->user->getProfile() !!}
+                        {{ __('main.sent') }}: {{ $record->user->getProfile() }}
                         <small class="section-date text-muted font-italic">
                             {{ dateFixed($record->created_at) }}
                         </small>
@@ -79,7 +79,7 @@
             </div>
         @endforeach
     @else
-        {!! showError(__('admin.spam.empty_spam')) !!}
+        {{ showError(__('admin.spam.empty_spam')) }}
     @endif
 
     {{ $records->links() }}

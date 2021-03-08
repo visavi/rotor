@@ -18,22 +18,22 @@
         @foreach ($transfers as $data)
             <div class="section mb-3 shadow">
                 <div class="user-avatar">
-                    {!! $data->user->getAvatar() !!}
-                    {!! $data->user->getOnline() !!}
+                    {{ $data->user->getAvatar() }}
+                    {{ $data->user->getOnline() }}
                 </div>
 
                 <div class="section-user d-flex align-items-center">
                     <div class="flex-grow-1">
-                        {!! $data->user->getProfile() !!}
+                        {{ $data->user->getProfile() }}
                         <small class="section-date text-muted font-italic">({{ dateFixed($data->created_at) }})</small><br>
-                        <small class="font-italic">{!! $data->user->getStatus() !!}</small>
+                        <small class="font-italic">{{ $data->user->getStatus() }}</small>
                     </div>
                 </div>
 
                 <div class="section-body border-top">
-                    {{ __('transfers.transfer_for') }}: {!! $data->recipientUser->getProfile() !!}<br>
+                    {{ __('transfers.transfer_for') }}: {{ $data->recipientUser->getProfile() }}<br>
                     {{ __('main.amount') }}: {{ plural($data->total, setting('moneyname')) }}<br>
-                    {{ __('main.comment') }}: {!! bbCode($data->text) !!}<br>
+                    {{ __('main.comment') }}: {{ bbCode($data->text) }}<br>
                 </div>
             </div>
         @endforeach
@@ -42,6 +42,6 @@
 
         {{ __('main.total') }}: <b>{{ $transfers->total() }}</b><br>
     @else
-        {!! showError(__('transfers.empty_transfers')) !!}
+        {{ showError(__('transfers.empty_transfers')) }}
     @endif
 @stop

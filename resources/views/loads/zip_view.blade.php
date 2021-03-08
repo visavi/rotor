@@ -29,6 +29,6 @@
             <pre class="prettyprint linenums">{{ $content }}</pre>
         </div>
     @else
-        {!! showError(__('loads.empty_file')) !!}
+        {{ showError(__('loads.empty_file')) }}
     @endif
 @stop

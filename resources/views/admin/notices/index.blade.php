@@ -39,7 +39,7 @@
 
                 <div class="section-content">
                     <span class="badge badge-info">{{ __('main.type') }}: {{ $notice->type }}</span><br>
-                    {{ __('main.changed') }}: {!! $notice->user->getProfile() !!}
+                    {{ __('main.changed') }}: {{ $notice->user->getProfile() }}
                     <small class="section-date text-muted font-italic">{{ dateFixed($notice->updated_at) }}</small>
                 </div>
             </div>
@@ -47,6 +47,6 @@
 
         {{ __('main.total') }}: {{ $notices->count() }}<br>
     @else
-        {!! showError(__('admin.notices.empty_notices')) !!}
+        {{ showError(__('admin.notices.empty_notices')) }}
     @endif
 @stop

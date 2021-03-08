@@ -30,13 +30,13 @@
             @foreach ($users as $user)
                 <div class="section mb-3 shadow">
                     <div class="user-avatar">
-                        {!! $user->getAvatar() !!}
-                        {!! $user->getOnline() !!}
+                        {{ $user->getAvatar() }}
+                        {{ $user->getOnline() }}
                     </div>
 
                     <div class="section-user d-flex align-items-center">
                         <div class="flex-grow-1">
-                            {!! $user->getProfile() !!}
+                            {{ $user->getProfile() }}
                         </div>
                         <div class="text-right">
                             <input type="checkbox" name="choice[]" value="{{ $user->id }}">
@@ -67,7 +67,7 @@
 
         <br>{{ __('main.total') }}: <b>{{ $users->total() }}</b><br>
     @else
-        {!! showError(__('admin.reglists.empty_users')) !!}
+        {{ showError(__('admin.reglists.empty_users')) }}
     @endif
 
     {{ $users->links() }}

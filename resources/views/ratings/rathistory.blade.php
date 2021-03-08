@@ -33,7 +33,7 @@
                         <i class="fa fa-thumbs-up text-success"></i>
                     @endif
 
-                    {!! $data->user->getProfile() !!}
+                    {{ $data->user->getProfile() }}
                     <small class="section-date text-muted font-italic">
                         {{ dateFixed($data->created_at) }}
                     </small>
@@ -46,12 +46,12 @@
                 </div>
                 <div class="section-message">
                     {{ __('main.comment') }}:
-                    {!! bbCode($data->text) !!}
+                    {{ bbCode($data->text) }}
                 </div>
             </div>
         @endforeach
     @else
-        {!! showError(__('ratings.empty_ratings')) !!}
+        {{ showError(__('ratings.empty_ratings')) }}
     @endif
 
     {{ $ratings->links() }}

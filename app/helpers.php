@@ -39,6 +39,7 @@ use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Lang;
 use Illuminate\Support\Facades\View;
+use Illuminate\Support\HtmlString;
 use Illuminate\Support\Str;
 use Intervention\Image\Constraint;
 use Intervention\Image\ImageManagerStatic as Image;
@@ -213,9 +214,9 @@ function int($num): int
  *
  * @param array|int|string $numbers массив или число
  *
- * @return array обработанные данные
+ * @return array|null обработанные данные
  */
-function intar($numbers): array
+function intar($numbers): ?array
 {
     if ($numbers) {
         if (is_array($numbers)) {
@@ -238,7 +239,7 @@ function intar($numbers): array
  */
 function formatSize(int $bytes, int $precision = 2): string
 {
-    $units = ['B','Kb','Mb','Gb','Tb'];
+    $units = ['B', 'Kb', 'Mb', 'Gb', 'Tb'];
     $pow   = floor(($bytes ? log($bytes) : 0) / log(1000));
     $pow   = min($pow, count($units) - 1);
 
@@ -341,13 +342,13 @@ function ratingVote($rating): string
  *
  * @param int $time
  *
- * @return string календарь
+ * @return HtmlString календарь
  */
-function getCalendar(int $time = SITETIME): string
+function getCalendar(int $time = SITETIME): HtmlString
 {
     $calendar = new Calendar();
 
-    return $calendar->getCalendar($time);
+    return new HtmlString($calendar->getCalendar($time));
 }
 
 /**
@@ -371,14 +372,14 @@ function statsOnline(): array
 /**
  * Возвращает количество пользователей онлайн
  *
- * @return string
+ * @return HtmlString|null
  */
-function showOnline(): ?string
+function showOnline(): ?HtmlString
 {
     $online = statsOnline();
 
     if (setting('onlines')) {
-        return view('app/_online', compact('online'));
+        return new HtmlString(view('app/_online', compact('online')));
     }
 
     return null;
@@ -401,9 +402,9 @@ function statsCounter(): array
 /**
  * Выводит счетчик посещений
  *
- * @return string
+ * @return HtmlString|null
  */
-function showCounter(): ?string
+function showCounter(): ?HtmlString
 {
     $metrika = new Metrika();
     $metrika->saveStatistic();
@@ -411,7 +412,7 @@ function showCounter(): ?string
     $counter = statsCounter();
 
     if (setting('incount') > 0) {
-        return view('app/_counter', compact('counter'));
+        return new HtmlString(view('app/_counter', compact('counter')));
     }
 
     return null;
@@ -1025,13 +1026,13 @@ function truncateWord(string $value, int $words = 20, string $end = '...'): stri
 /**
  * Возвращает обрезанную строку с удалением перевода строки
  *
- * @param string $value
+ * @param HtmlString|string $value
  * @param int    $words
  * @param string $end
  *
  * @return string
  */
-function truncateDescription(string $value, int $words = 20, string $end = ''): string
+function truncateDescription($value, int $words = 20, string $end = ''): string
 {
     $value = strip_tags(preg_replace('/\s+/', ' ', $value));
 
@@ -1043,9 +1044,9 @@ function truncateDescription(string $value, int $words = 20, string $end = ''): 
  *
  * @param string $place
  *
- * @return string
+ * @return HtmlString|null
  */
-function getAdvertPaid(string $place)
+function getAdvertPaid(string $place): ?HtmlString
 {
     $adverts = PaidAdvert::statAdverts();
 
@@ -1055,36 +1056,36 @@ function getAdvertPaid(string $place)
             $links[] = Arr::random($advert);
         }
 
-        return implode('<br>', $links);
+        return new HtmlString(implode('<br>', $links));
     }
 
-    return false;
+    return null;
 }
 
 /**
  * Возвращает код админской рекламы
  *
- * @return string
+ * @return HtmlString|null
  */
-function getAdvertAdmin()
+function getAdvertAdmin(): ?HtmlString
 {
     $adverts = AdminAdvert::statAdverts();
 
     if ($adverts) {
         $result  = Arr::random($adverts);
 
-        return view('adverts/_admin_links', compact('result'));
+        return new HtmlString(view('adverts/_admin_links', compact('result')));
     }
 
-    return false;
+    return null;
 }
 
 /**
  * Возвращает код пользовательской рекламы
  *
- * @return string
+ * @return HtmlString|null
  */
-function getAdvertUser()
+function getAdvertUser(): ?HtmlString
 {
     $adverts = Advert::statAdverts();
 
@@ -1095,10 +1096,10 @@ function getAdvertUser()
         $links  = Arr::random($adverts, $show);
         $result = implode('<br>', $links);
 
-        return view('adverts/_links', compact('result'));
+        return new HtmlString(view('adverts/_links', compact('result')));
     }
 
-    return false;
+    return null;
 }
 
 /**
@@ -1106,9 +1107,9 @@ function getAdvertUser()
  *
  * @param int $show Количество последних фотографий
  *
- * @return string Список фотографий
+ * @return HtmlString Список фотографий
  */
-function recentPhotos(int $show = 5): string
+function recentPhotos(int $show = 5): HtmlString
 {
     $photos = Cache::remember('recentPhotos', 1800, static function () use ($show) {
         return Photo::query()
@@ -1118,7 +1119,7 @@ function recentPhotos(int $show = 5): string
             ->get();
     });
 
-    return view('widgets/_photos', compact('photos'));
+    return new HtmlString(view('widgets/_photos', compact('photos')));
 }
 
 /**
@@ -1126,9 +1127,9 @@ function recentPhotos(int $show = 5): string
  *
  * @param int $show Количество последних тем форума
  *
- * @return string Список тем
+ * @return HtmlString Список тем
  */
-function recentTopics(int $show = 5): string
+function recentTopics(int $show = 5): HtmlString
 {
     $topics = Cache::remember('recentTopics', 300, static function () use ($show) {
         return Topic::query()
@@ -1137,7 +1138,7 @@ function recentTopics(int $show = 5): string
             ->get();
     });
 
-    return view('widgets/_topics', compact('topics'));
+    return new HtmlString(view('widgets/_topics', compact('topics')));
 }
 
 /**
@@ -1145,9 +1146,9 @@ function recentTopics(int $show = 5): string
  *
  * @param int $show Количество последних файлов в загрузках
  *
- * @return string Список файлов
+ * @return HtmlString Список файлов
  */
-function recentDowns(int $show = 5): string
+function recentDowns(int $show = 5): HtmlString
 {
     $downs = Cache::remember('recentDowns', 600, static function () use ($show) {
         return Down::query()
@@ -1158,7 +1159,7 @@ function recentDowns(int $show = 5): string
             ->get();
     });
 
-    return view('widgets/_downs', compact('downs'));
+    return new HtmlString(view('widgets/_downs', compact('downs')));
 }
 
 /**
@@ -1166,9 +1167,9 @@ function recentDowns(int $show = 5): string
  *
  * @param int $show Количество последних статей в блогах
  *
- * @return string Список статей
+ * @return HtmlString Список статей
  */
-function recentArticles(int $show = 5): string
+function recentArticles(int $show = 5): HtmlString
 {
     $articles = Cache::remember('recentArticles', 600, static function () use ($show) {
         return Article::query()
@@ -1177,7 +1178,7 @@ function recentArticles(int $show = 5): string
             ->get();
     });
 
-    return view('widgets/_articles', compact('articles'));
+    return new HtmlString(view('widgets/_articles', compact('articles')));
 }
 
 /**
@@ -1185,9 +1186,9 @@ function recentArticles(int $show = 5): string
  *
  * @param int $show Количество последних объявлений
  *
- * @return string Список объявлений
+ * @return HtmlString Список объявлений
  */
-function recentBoards(int $show = 5): string
+function recentBoards(int $show = 5): HtmlString
 {
     $items = Cache::remember('recentBoards', 600, static function () use ($show) {
         return Item::query()
@@ -1197,7 +1198,7 @@ function recentBoards(int $show = 5): string
             ->get();
     });
 
-    return view('widgets/_boards', compact('items'));
+    return new HtmlString(view('widgets/_boards', compact('items')));
 }
 
 
@@ -1286,19 +1287,19 @@ function counterString(string $file)
  *
  * @param int|float $num число
  *
- * @return string форматированное число
+ * @return HtmlString форматированное число
  */
-function formatNum($num): string
+function formatNum($num): HtmlString
 {
     if ($num > 0) {
-        return '<span style="color:#00aa00">+' . $num . '</span>';
+        $data = '<span style="color:#00aa00">+' . $num . '</span>';
+    } elseif ($num < 0) {
+        $data = '<span style="color:#ff0000">' . $num . '</span>';
+    } else {
+        $data = '<span>0</span>';
     }
 
-    if ($num < 0) {
-        return '<span style="color:#ff0000">' . $num . '</span>';
-    }
-
-    return '<span>0</span>';
+    return new HtmlString($data);
 }
 
 /**
@@ -1510,15 +1511,15 @@ function textNotice(string $type, array $replace = []): string
 /**
  * Возвращает блок статистики производительности
  *
- * @return string|null статистика производительности
+ * @return HtmlString|null статистика производительности
  */
-function performance(): ?string
+function performance(): ?HtmlString
 {
     if (isAdmin() && setting('performance')) {
         $queries = getQueryLog();
         $timeQueries = array_sum(array_column($queries, 'time'));
 
-        return view('app/_performance', compact('queries', 'timeQueries'));
+        return new HtmlString(view('app/_performance', compact('queries', 'timeQueries')));
     }
 
     return null;
@@ -1716,9 +1717,9 @@ function setFlash(string $status, $message)
  *
  * @param string|array $errors ошибки
  *
- * @return string сформированный блок с ошибкой
+ * @return HtmlString сформированный блок с ошибкой
  */
-function showError($errors): string
+function showError($errors): HtmlString
 {
     $errors = check($errors);
 
@@ -1726,7 +1727,15 @@ function showError($errors): string
         $errors = implode('<br><i class="fa fa-exclamation-circle fa-lg text-danger"></i> ', $errors);
     }
 
-    return view('app/_error', compact('errors'));
+    return new HtmlString(view('app/_error', compact('errors')));
+}
+
+/**
+ * @return HtmlString
+ */
+function getCaptcha(): HtmlString
+{
+    return new HtmlString(view('app/_captcha'));
 }
 
 /**
@@ -1901,20 +1910,21 @@ function plural(int $num, $forms): string
  * @param string $text  Необработанный текст
  * @param bool   $parse Обрабатывать или вырезать код
  *
- * @return string Обработанный текст
+ * @return HtmlString Обработанный текст
  */
-function bbCode(string $text, bool $parse = true): string
+function bbCode(string $text, bool $parse = true): HtmlString
 {
     $bbCode = new BBCode();
+    $checkText = check($text);
 
     if (! $parse) {
-        return $bbCode->clear($text);
+        return new HtmlString($bbCode->clear($checkText));
     }
 
-    $checkText = check($text);
     $parseText = $bbCode->parse($checkText);
+    $parseText = $bbCode->parseStickers($parseText);
 
-    return $bbCode->parseStickers($parseText);
+    return new HtmlString($parseText);
 }
 
 /**
@@ -2337,9 +2347,9 @@ function uniqueName(string $extension = null): string
 /**
  * Возвращает курсы валют
  *
- * @return string
+ * @return HtmlString
  */
-function getCourses()
+function getCourses(): ?HtmlString
 {
     $courses = Cache::remember('courses', 3600, static function () {
         try {
@@ -2354,7 +2364,7 @@ function getCourses()
         return $content;
     });
 
-    return view('app/_courses', compact('courses'));
+    return new HtmlString(view('app/_courses', compact('courses')));
 }
 
 /**

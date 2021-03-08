@@ -49,7 +49,7 @@
                         @if (getUser() && getUser('id') !== $article->user_id)
                             <a class="post-rating-down<?= $article->vote === '-' ? ' active' : '' ?>" href="#" onclick="return changeRating(this);" data-id="{{ $article->id }}" data-type="{{ $article->getMorphClass() }}" data-vote="-" data-token="{{ $_SESSION['token'] }}"><i class="fa fa-thumbs-down"></i></a>
                         @endif
-                        <b>{!! formatNum($article->rating) !!}</b>
+                        <b>{{ formatNum($article->rating) }}</b>
                         @if (getUser() && getUser('id') !== $article->user_id)
                             <a class="post-rating-up<?= $article->vote === '+' ? ' active' : '' ?>" href="#" onclick="return changeRating(this);" data-id="{{ $article->id }}" data-type="{{ $article->getMorphClass() }}" data-vote="+" data-token="{{ $_SESSION['token'] }}"><i class="fa fa-thumbs-up"></i></a>
                         @endif
@@ -58,7 +58,7 @@
 
                 <div class="section-content">
                     {!! $article->shortText() !!}
-                    {{ __('main.author') }}: {!! $article->user->getProfile() !!} ({{ dateFixed($article->created_at) }})<br>
+                    {{ __('main.author') }}: {{ $article->user->getProfile() }} ({{ dateFixed($article->created_at) }})<br>
                     {{ __('main.views') }}: {{ $article->visits }}<br>
                     <a href="/articles/comments/{{ $article->id }}">{{ __('main.comments') }}</a> ({{ $article->count_comments }})
                     <a href="/articles/end/{{ $article->id }}">&raquo;</a>
@@ -66,7 +66,7 @@
             </div>
         @endforeach
     @else
-        {!! showError(__('blogs.empty_articles')) !!}
+        {{ showError(__('blogs.empty_articles')) }}
     @endif
 
     {{ $articles->links() }}

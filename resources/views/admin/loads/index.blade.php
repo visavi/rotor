@@ -62,7 +62,7 @@
             </div>
         @endforeach
     @else
-        {!! showError(__('loads.empty_loads')) !!}
+        {{ showError(__('loads.empty_loads')) }}
     @endif
 
     @if (isAdmin('boss'))

@@ -74,7 +74,7 @@
                     </div>
 
                     <div class="text-right js-rating">
-                        <b>{!! formatNum($data->getCalculatedRating()) !!}</b>
+                        <b>{{ formatNum($data->getCalculatedRating()) }}</b>
                     </div>
                 </div>
 
@@ -86,11 +86,11 @@
             </div>
         @endforeach
     @elseif (! $category->closed)
-        {!! showError(__('loads.empty_downs')) !!}
+        {{ showError(__('loads.empty_downs')) }}
     @endif
 
     @if ($category->closed)
-        {!! showError(__('loads.closed_load')) !!}
+        {{ showError(__('loads.closed_load')) }}
     @endif
 
     {{ $downs->links() }}

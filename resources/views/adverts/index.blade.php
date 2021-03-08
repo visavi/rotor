@@ -36,7 +36,7 @@
                 </div>
 
                 <div class="section-body border-top">
-                    <i class="far fa-user"></i> {!! $data->user->getProfile() !!}
+                    <i class="far fa-user"></i> {{ $data->user->getProfile() }}
                     <small class="section-date text-muted font-italic">{{ __('adverts.expires') }}: {{ dateFixed($data->deleted_at) }}</small>
 
                     <div class="small text-muted font-italic mt-2">
@@ -49,7 +49,7 @@
 
         {{ __('adverts.total_links') }}: <b>{{ $adverts->total() }}</b><br>
     @else
-        {!! showError(__('adverts.empty_links')) !!}
+        {{ showError(__('adverts.empty_links')) }}
     @endif
 
     {{ $adverts->links() }}

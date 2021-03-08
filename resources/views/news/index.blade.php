@@ -39,7 +39,7 @@
                         @if (getUser() && getUser('id') !== $data->user_id)
                             <a class="post-rating-down{{ $data->vote === '-' ? ' active' : '' }}" href="#" onclick="return changeRating(this);" data-id="{{ $data->id }}" data-type="{{ $data->getMorphClass() }}" data-vote="-" data-token="{{ $_SESSION['token'] }}"><i class="fa fa-thumbs-down"></i></a>
                         @endif
-                        <b>{!! formatNum($data->rating) !!}</b>
+                        <b>{{ formatNum($data->rating) }}</b>
                         @if (getUser() && getUser('id') !== $data->user_id)
                             <a class="post-rating-up{{ $data->vote === '+' ? ' active' : '' }}" href="#" onclick="return changeRating(this);" data-id="{{ $data->id }}" data-type="{{ $data->getMorphClass() }}" data-vote="+" data-token="{{ $_SESSION['token'] }}"><i class="fa fa-thumbs-up"></i></a>
                         @endif
@@ -60,7 +60,7 @@
                     </div>
 
                     <div>
-                        {{ __('main.added') }}: {!! $data->user->getProfile() !!}<br>
+                        {{ __('main.added') }}: {{ $data->user->getProfile() }}<br>
                         <a href="/news/comments/{{ $data->id }}">{{ __('main.comments') }}</a> ({{ $data->count_comments }})
                         <a href="/news/end/{{ $data->id }}">&raquo;</a>
                     </div>
@@ -68,7 +68,7 @@
             </div>
         @endforeach
     @else
-        {!! showError(__('news.empty_news')) !!}
+        {{ showError(__('news.empty_news')) }}
     @endif
 
     {{ $news->links() }}

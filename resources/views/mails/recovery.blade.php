@@ -21,7 +21,7 @@
                 <div class="invalid-feedback">{{ textError('user') }}</div>
             </div>
 
-            {!! view('app/_captcha') !!}
+            {{ getCaptcha() }}
 
             <button class="btn btn-primary">{{ __('mails.restore') }}</button>
         </form>

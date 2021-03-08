@@ -15,7 +15,7 @@
 
 @section('content')
     <h3>
-        {!! $user->getProfile() !!}
+        {{ $user->getProfile() }}
 
         <small>
             @if ($user->login !== $user->getName())
@@ -180,8 +180,8 @@
 
             @if ($banhist)
                 {{ __('users.term') }}: {{ formatTime($banhist->term) }}<br>
-                {{ __('users.reason_ban') }}: {!! bbCode($banhist->reason) !!}<br>
-                {{ __('users.banned') }}: {!! $banhist->sendUser->getProfile() !!}<br>
+                {{ __('users.reason_ban') }}: {{ bbCode($banhist->reason) }}<br>
+                {{ __('users.banned') }}: {{ $banhist->sendUser->getProfile() }}<br>
             @endif
         </div>
     @endif

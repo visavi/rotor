@@ -93,7 +93,7 @@
                 <div class="invalid-feedback">{{ textError('gender') }}</div>
             </div>
 
-            {!! view('app/_captcha') !!}
+            {{ getCaptcha() }}
 
             <button class="btn btn-primary">{{ __('index.register') }}</button>
         </form>

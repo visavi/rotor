@@ -27,7 +27,7 @@
                 @endif
 
                 <div class="section-message">
-                    {!! bbCode($data->text) !!}<br>
+                    {{ bbCode($data->text) }}<br>
 
                     {{ __('main.posted') }}: {{ $data->user->getName() }}
                     <small>({{ dateFixed($data->created_at) }})</small>
@@ -39,7 +39,7 @@
             </div>
         @endforeach
     @else
-        {!! showError(__('forums.posts_not_created')) !!}
+        {{ showError(__('forums.posts_not_created')) }}
     @endif
 
     {{ $posts->links() }}

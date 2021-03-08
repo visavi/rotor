@@ -55,7 +55,7 @@
                     </div>
 
                     <div>
-                        {{ __('main.added') }}: {!! $data->user->getProfile() !!}<br>
+                        {{ __('main.added') }}: {{ $data->user->getProfile() }}<br>
                         <a href="/news/comments/{{ $data->id }}">{{ __('main.comments') }}</a> ({{ $data->count_comments }})
                         <a href="/news/end/{{ $data->id }}">&raquo;</a>
                     </div>
@@ -65,7 +65,7 @@
 
         {{ __('news.total_news') }}: <b>{{ $news->count() }}</b><br><br>
     @else
-        {!! showError(__('news.empty_news')) !!}
+        {{ showError(__('news.empty_news')) }}
     @endif
 
     {{ $news->links() }}

@@ -4,7 +4,7 @@
 
 @section('content')
     @if ($banhist)
-        <b><span style="color:#ff0000">{{ __('users.reason_ban') }}: {!! bbCode($banhist->reason) !!}</span></b><br><br>
+        <b><span style="color:#ff0000">{{ __('users.reason_ban') }}: {{ bbCode($banhist->reason) }}</span></b><br><br>
 
         @if (! $banhist->explain && setting('addbansend'))
             <div class="section-form mb-3 shadow">

@@ -19,16 +19,16 @@
             @foreach ($contacts as $contact)
                 <div class="section mb-3 shadow">
                     <div class="user-avatar">
-                        {!! $contact->contactor->getAvatar() !!}
-                        {!! $contact->contactor->getOnline() !!}
+                        {{ $contact->contactor->getAvatar() }}
+                        {{ $contact->contactor->getOnline() }}
                     </div>
 
                     <div class="section-user d-flex align-items-center">
                         <div class="flex-grow-1">
-                            {!! $contact->contactor->getProfile() !!}
+                            {{ $contact->contactor->getProfile() }}
 
                             <small class="section-date text-muted font-italic">{{ dateFixed($contact->created_at) }}</small><br>
-                            <small class="font-italic">{!! $contact->contactor->getStatus() !!}</small>
+                            <small class="font-italic">{{ $contact->contactor->getStatus() }}</small>
                         </div>
 
                         <div class="text-right">
@@ -41,7 +41,7 @@
                     <div class="section-body border-top">
                         <div class="section-message">
                             @if ($contact->text)
-                                {{ __('main.note') }}: {!! bbCode($contact->text) !!}
+                                {{ __('main.note') }}: {{ bbCode($contact->text) }}
                             @else
                                 {{ __('main.empty_notes') }}
                             @endif
@@ -59,7 +59,7 @@
 
         {{ __('main.total') }}: <b>{{ $contacts->total() }}</b><br>
     @else
-        {!! showError(__('contacts.empty_list')) !!}
+        {{ showError(__('contacts.empty_list')) }}
     @endif
 
     <div class="section-form my-3 shadow">

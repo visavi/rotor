@@ -33,6 +33,6 @@
         {{ __('main.total') }}: <b>{{ $socials->count() }}</b><br>
 
     @else
-        {!! showError(__('socials.empty_records')) !!}
+        {{ showError(__('socials.empty_records')) }}
     @endif
 @stop

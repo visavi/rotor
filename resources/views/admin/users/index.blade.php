@@ -61,8 +61,8 @@
         @foreach ($users as $user)
             <div class="section mb-3 shadow">
                 <div class="user-avatar">
-                    {!! $user->getAvatar() !!}
-                    {!! $user->getOnline() !!}
+                    {{ $user->getAvatar() }}
+                    {{ $user->getOnline() }}
                 </div>
 
                 <div class="section-content">
@@ -77,6 +77,6 @@
 
         {{ $users->links() }}
     @else
-        {!! showError(__('main.empty_users')) !!}
+        {{ showError(__('main.empty_users')) }}
     @endif
 @stop

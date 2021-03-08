@@ -232,7 +232,7 @@ class AjaxController extends BaseController
         return json_encode([
             'status' => 'success',
             'cancel' => $cancel,
-            'rating' => formatNum($post['rating'])
+            'rating' => formatNum($post['rating'])->toHtml(),
         ]);
     }
 

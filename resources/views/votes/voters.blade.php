@@ -21,10 +21,10 @@
     @if ($voters->isNotEmpty())
         <div class="section mb-3 shadow">
         @foreach ($voters as $voter)
-            {!! $voter->user->getGender() !!} {!! $voter->user->getProfile() !!} ({{ dateFixed($voter->created_at) }})
+            {{ $voter->user->getGender() }} {{ $voter->user->getProfile() }} ({{ dateFixed($voter->created_at) }})
         </div>
         @endforeach
     @else
-        {!! showError(__('votes.empty_voted')) !!}
+        {{ showError(__('votes.empty_voted')) }}
     @endif
 @stop

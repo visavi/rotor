@@ -41,12 +41,12 @@
                 <div class="section-content">
                     {{ __('loads.load') }}: <a href="/admin/loads/{{ $data->category->id }}">{{ $data->category->name }}</a><br>
                     {{ __('loads.files_images') }}: {{ $data->getFiles()->count() }}/{{ $data->getImages()->count() }}<br>
-                    {{ __('main.author') }}: {!! $data->user->getProfile() !!} ({{ dateFixed($data->created_at) }})
+                    {{ __('main.author') }}: {{ $data->user->getProfile() }} ({{ dateFixed($data->created_at) }})
                 </div>
             </div>
         @endforeach
     @else
-        {!! showError(__('loads.empty_downs')) !!}
+        {{ showError(__('loads.empty_downs')) }}
     @endif
 
     {{ $downs->links() }}

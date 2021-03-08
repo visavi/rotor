@@ -19,16 +19,16 @@
             @foreach ($ignores as $ignore)
                 <div class="section mb-3 shadow">
                     <div class="user-avatar">
-                        {!! $ignore->ignoring->getAvatar() !!}
-                        {!! $ignore->ignoring->getOnline() !!}
+                        {{ $ignore->ignoring->getAvatar() }}
+                        {{ $ignore->ignoring->getOnline() }}
                     </div>
 
                     <div class="section-user d-flex align-items-center">
                         <div class="flex-grow-1">
-                            {!! $ignore->ignoring->getProfile() !!}
+                            {{ $ignore->ignoring->getProfile() }}
 
                             <small class="section-date text-muted font-italic">{{ dateFixed($ignore->created_at) }}</small><br>
-                            <small class="font-italic">{!! $ignore->ignoring->getStatus() !!}</small>
+                            <small class="font-italic">{{ $ignore->ignoring->getStatus() }}</small>
                         </div>
 
                         <div class="text-right">
@@ -40,7 +40,7 @@
                     <div class="section-body border-top">
                         <div class="section-message">
                             @if ($ignore->text)
-                                {{ __('main.note') }}: {!! bbCode($ignore->text) !!}
+                                {{ __('main.note') }}: {{ bbCode($ignore->text) }}
                             @else
                                 {{ __('main.empty_notes') }}
                             @endif
@@ -58,7 +58,7 @@
 
         {{ __('main.total') }}: <b>{{ $ignores->total() }}</b><br>
     @else
-        {!! showError(__('ignores.empty_list')) !!}
+        {{ showError(__('ignores.empty_list')) }}
     @endif
 
     <div class="section-form my-3 shadow">

@@ -42,9 +42,9 @@
                     </div>
 
                     <div class="section-message">
-                        {!! bbCode($post->text) !!}<br>
+                        {{ bbCode($post->text) }}<br>
                         {{ __('forums.forum') }}: <a href="/topics/{{ $post->topic->forum->id }}">{{ $post->topic->forum->title }}</a><br>
-                        {{ __('main.posted') }}: {!! $post->user->getProfile() !!}
+                        {{ __('main.posted') }}: {{ $post->user->getProfile() }}
                         <small class="section-date text-muted font-italic">{{ dateFixed($post->created_at) }}</small>
                     </div>
                 </div>

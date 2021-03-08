@@ -50,7 +50,7 @@
 
         @foreach ($users as $user)
             <?php $comma = $loop->first ? '' : ',' ?>
-            {{ $comma }} {!! $user->getProfile() !!}
+            {{ $comma }} {{ $user->getProfile() }}
         @endforeach
 
         <div class="my-3">

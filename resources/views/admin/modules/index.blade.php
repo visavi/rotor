@@ -43,6 +43,6 @@
             </div>
         @endforeach
     @else
-        {!! showError(__('admin.modules.empty_modules')) !!}
+        {{ showError(__('admin.modules.empty_modules')) }}
     @endif
 @stop

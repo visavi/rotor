@@ -20,7 +20,7 @@
 @stop
 
 @section('content')
-    {{ __('main.author') }}: {!! $topic->user->getProfile() !!}<br>
+    {{ __('main.author') }}: {{ $topic->user->getProfile() }}<br>
     {{ __('main.messages') }}: {{ $topic->count_posts }}<br>
     {{ __('main.created') }}: {{ dateFixed($topic->created_at) }}<br>
 

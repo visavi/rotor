@@ -18,26 +18,26 @@
             @foreach ($users as $user)
                 <div class="section mb-3 shadow">
                     <div class="user-avatar">
-                        {!! $user->getAvatar() !!}
-                        {!! $user->getOnline() !!}
+                        {{ $user->getAvatar() }}
+                        {{ $user->getOnline() }}
                     </div>
 
                     <div class="section-user d-flex align-items-center">
                         <div class="flex-grow-1">
-                            {!! $user->getProfile() !!}
+                            {{ $user->getProfile() }}
 
                             @if ($user->login !== $user->getName())
                                 ({{ $user->login }})
                             @endif
 
                             <br>
-                            <small class="font-italic">{!! $user->getStatus() !!}</small>
+                            <small class="font-italic">{{ $user->getStatus() }}</small>
                         </div>
                     </div>
 
                     <div class="section-body border-top">
                         {{ __('users.assets') }}: {{ plural($user->point, setting('scorename')) }}<br>
-                        {{ __('users.reputation') }}: {!! formatNum($user->rating) !!}<br>
+                        {{ __('users.reputation') }}: {{ formatNum($user->rating) }}<br>
                         {{ __('users.moneys') }}: {{ plural($user->money, setting('moneyname')) }}<br>
                         {{ __('main.registration_date') }}: {{ dateFixed($user->created_at, 'd.m.Y') }}
                     </div>
@@ -49,6 +49,6 @@
 
         {{ __('main.total_found') }}: <b>{{ $users->total() }}</b><br>
     @else
-        {!! showError(__('main.empty_found')) !!}
+        {{ showError(__('main.empty_found')) }}
     @endif
 @stop

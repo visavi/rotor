@@ -304,7 +304,7 @@ class BBCode
 
         $name = $listUsers[$match[1]] ?? $match[1];
 
-        return '<a href="/users/' . $match[1] . '">' . $name . '</a>';
+        return '<a href="/users/' . $match[1] . '">' . check($name) . '</a>';
     }
 
     /**

@@ -27,7 +27,7 @@
 
         {{ __('blogs.total_authors') }}: <b>{{ $articles->total() }}</b><br>
     @else
-        {!! showError(__('blogs.empty_articles')) !!}
+        {{ showError(__('blogs.empty_articles')) }}
     @endif
 
     {{ $articles->links() }}

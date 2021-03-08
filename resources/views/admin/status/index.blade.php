@@ -31,7 +31,7 @@
             <ul class="list-group list-group-flush">
                 @foreach ($statuses as $status)
                     <li class="list-group-item">
-                        <span{!! $status->color ? ' style="color:' . $status->color . '"' : '' !!}>
+                        <span style="color: {{ $status->color ? $status->color : 'inherit' }}">
                             <i class="fa fa-user-circle"></i> <b>{{ $status->name }}</b>
                         </span>
 
@@ -50,6 +50,6 @@
             </div>
         </div>
     @else
-        {!! showError(__('statuses.empty_statuses')) !!}
+        {{ showError(__('statuses.empty_statuses')) }}
     @endif
 @stop

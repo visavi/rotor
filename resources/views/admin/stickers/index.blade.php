@@ -35,7 +35,7 @@
             </div>
         @endforeach
     @else
-        {!! showError(__('stickers.empty_categories')) !!}
+        {{ showError(__('stickers.empty_categories')) }}
     @endif
 
     <div class="section-form mb-3 shadow">

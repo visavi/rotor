@@ -40,7 +40,7 @@
                     </div>
 
                     <div class="text-right js-rating">
-                        <b>{!! formatNum($data->getCalculatedRating()) !!}</b>
+                        <b>{{ formatNum($data->getCalculatedRating()) }}</b>
                     </div>
                 </div>
 
@@ -53,7 +53,7 @@
             </div>
         @endforeach
     @else
-        {!! showError(__('loads.empty_downs')) !!}
+        {{ showError(__('loads.empty_downs')) }}
     @endif
 
     {{ $downs->links() }}

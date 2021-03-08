@@ -38,10 +38,10 @@
                     @include('app/_carousel', ['model' => $photo])
 
                     @if ($photo->text)
-                       {!! bbCode($photo->text) !!}<br>
+                       {{ bbCode($photo->text) }}<br>
                     @endif
 
-                    {{ __('main.added') }}: {!! $photo->user->getProfile() !!} ({{ dateFixed($photo->created_at) }})<br>
+                    {{ __('main.added') }}: {{ $photo->user->getProfile() }} ({{ dateFixed($photo->created_at) }})<br>
                     <a href="/photos/comments/{{ $photo->id }}">{{ __('main.comments') }}</a> ({{ $photo->count_comments }})
                 </div>
             </div>
@@ -49,7 +49,7 @@
 
         <br>{{ __('photos.total_photos') }}: <b>{{ $photos->total() }}</b><br>
     @else
-        {!! showError(__('photos.empty_photos')) !!}
+        {{ showError(__('photos.empty_photos')) }}
     @endif
 
     {{ $photos->links() }}

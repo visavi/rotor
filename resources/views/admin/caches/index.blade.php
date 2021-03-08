@@ -41,6 +41,6 @@
 
         {{ __('main.total') }}: {{ $files->total() }}<br>
     @else
-        {!! showError(__('admin.caches.empty_files')) !!}
+        {{ showError(__('admin.caches.empty_files')) }}
     @endif
 @stop

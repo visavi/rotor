@@ -38,7 +38,7 @@
             <a href="/forums">{{ __('index.forums') }}</a>
             <span class="badge badge-light">{{ statsForum() }}</span>
         </div>
-        {!! recentTopics() !!}
+        {{ recentTopics() }}
     </div>
 
     <div class="section mb-3 shadow">
@@ -47,7 +47,7 @@
             <a href="/loads">{{ __('index.loads') }}</a>
             <span class="badge badge-light">{{ statsLoad() }}</span>
         </div>
-        {!! recentDowns() !!}
+        {{ recentDowns() }}
     </div>
 
     <div class="section mb-3 shadow">
@@ -56,7 +56,7 @@
             <a href="/blogs">{{ __('index.blogs') }}</a>
             <span class="badge badge-light">{{ statsBlog() }}</span>
         </div>
-        {!! recentArticles() !!}
+        {{ recentArticles() }}
     </div>
 
     <div class="section mb-3 shadow">
@@ -65,7 +65,7 @@
             <a href="/boards">{{ __('index.boards') }}</a>
             <span class="badge badge-light">{{ statsBoard() }}</span>
         </div>
-        {!! recentBoards() !!}
+        {{ recentBoards() }}
     </div>
 
     <div class="section mb-3 shadow">
@@ -89,7 +89,7 @@
                     {{ __('index.courses') }}
                 </div>
                 <div class="section-body">
-                    {!! getCourses() !!}
+                    {{ getCourses() }}
                 </div>
             </div>
         </div>
@@ -100,7 +100,7 @@
                     {{ __('index.calendar') }}
                 </div>
                 <div class="section-body">
-                    {!! getCalendar() !!}
+                    {{ getCalendar() }}
                 </div>
             </div>
         </div>

@@ -7,7 +7,7 @@
 @section('content')
     <h1>{{ $article->title }}</h1>
 
-    {!! bbCode($article->text) !!}
+    {{ bbCode($article->text) }}
 
     <br><br>
 

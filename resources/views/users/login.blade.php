@@ -43,7 +43,7 @@
             </div>
 
             @if ($isFlood)
-                {!! view('app/_captcha') !!}
+                {{ getCaptcha() }}
             @endif
 
             <button class="btn btn-primary">{{ __('users.enter') }}</button>

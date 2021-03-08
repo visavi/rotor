@@ -34,6 +34,6 @@
 
         {{ __('admin.backup.total_backups') }}: <b>{{ count($files) }}</b><br>
     @else
-        {!! showError(__('admin.backup.empty_backups')) !!}
+        {{ showError(__('admin.backup.empty_backups')) }}
     @endif
 @stop

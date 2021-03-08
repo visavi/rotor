@@ -31,7 +31,7 @@
 
         <br>{{ __('photos.total_albums') }}: <b>{{ $albums->total() }}</b><br>
     @else
-        {!! showError(__('photos.empty_albums')) !!}
+        {{ showError(__('photos.empty_albums')) }}
     @endif
 
     {{ $albums->links() }}

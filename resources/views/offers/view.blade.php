@@ -32,16 +32,16 @@
     <div class="mb-3">
         <div class="section-content">
             <div class="section-message">
-                {!! bbCode($offer->text) !!}
+                {{ bbCode($offer->text) }}
             </div>
         </div>
 
         <div class="section-body">
-            {{ __('main.added') }}: {!! $offer->user->getProfile() !!}
+            {{ __('main.added') }}: {{ $offer->user->getProfile() }}
             <small class="section-date text-muted font-italic">{{ dateFixed($offer->created_at) }}</small>
 
             <div class="my-3">
-                {!! $offer->getStatus() !!}
+                {{ $offer->getStatus() }}
             </div>
 
             <div class="js-rating">
@@ -49,7 +49,7 @@
                 @if (getUser() && getUser('id') !== $offer->user_id)
                     <a class="post-rating-down{{ $offer->vote === '-' ? ' active' : '' }}" href="#" onclick="return changeRating(this);" data-id="{{ $offer->id }}" data-type="{{ $offer->getMorphClass() }}" data-vote="-" data-token="{{ $_SESSION['token'] }}"><i class="fa fa-thumbs-down"></i></a>
                 @endif
-                <b>{!! formatNum($offer->rating) !!}</b>
+                <b>{{ formatNum($offer->rating) }}</b>
                 @if (getUser() && getUser('id') !== $offer->user_id)
                     <a class="post-rating-up{{ $offer->vote === '+' ? ' active' : '' }}" href="#" onclick="return changeRating(this);" data-id="{{ $offer->id }}" data-type="{{ $offer->getMorphClass() }}" data-vote="+" data-token="{{ $_SESSION['token'] }}"><i class="fa fa-thumbs-up"></i></a>
                 @endif
@@ -61,8 +61,8 @@
         <div class="section mb-3 shadow">
             <h5>{{ __('offers.official_response') }}</h5>
             <div class="section-message">
-                {!! bbCode($offer->reply) !!}<br>
-                {!! $offer->replyUser->getProfile() !!}
+                {{ bbCode($offer->reply) }}<br>
+                {{ $offer->replyUser->getProfile() }}
                 <small class="section-date text-muted font-italic">{{ dateFixed($offer->updated_at) }}</small>
             </div>
         </div>
@@ -74,22 +74,22 @@
         @foreach ($offer->lastComments(5)->get() as $comment)
             <div class="section mb-3 shadow">
                 <div class="user-avatar">
-                    {!! $comment->user->getAvatar() !!}
-                    {!! $comment->user->getOnline() !!}
+                    {{ $comment->user->getAvatar() }}
+                    {{ $comment->user->getOnline() }}
                 </div>
 
                 <div class="section-user d-flex align-items-center">
                     <div class="flex-grow-1">
-                        {!! $comment->user->getProfile() !!}
+                        {{ $comment->user->getProfile() }}
 
                         <small class="section-date text-muted font-italic">{{ dateFixed($comment->created_at) }}</small><br>
-                        <small class="font-italic">{!! $comment->user->getStatus() !!}</small>
+                        <small class="font-italic">{{ $comment->user->getStatus() }}</small>
                     </div>
                 </div>
 
                 <div class="section-body border-top">
                     <div class="section-message">
-                        {!! bbCode($comment->text) !!}<br>
+                        {{ bbCode($comment->text) }}<br>
                         @if (isAdmin())
                             <div class="small text-muted font-italic mt-2">{{ $comment->brow }}, {{ $comment->ip }}</div>
                         @endif
@@ -106,7 +106,7 @@
 
     @if (! $offer->closed)
         @if ($offer->lastComments->isEmpty())
-            {!! showError(__('main.empty_comments')) !!}
+            {{ showError(__('main.empty_comments')) }}
         @endif
 
         @if (getUser())
@@ -128,9 +128,9 @@
             <a href="/stickers">{{ __('main.stickers') }}</a> /
             <a href="/tags">{{ __('main.tags') }}</a><br><br>
         @else
-            {!! showError(__('main.closed_comments')) !!}
+            {{ showError(__('main.closed_comments')) }}
         @endif
     @else
-        {!! showError(__('main.not_authorized')) !!}
+        {{ showError(__('main.not_authorized')) }}
     @endif
 @stop

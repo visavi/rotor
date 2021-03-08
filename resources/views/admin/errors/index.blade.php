@@ -45,6 +45,6 @@
             <i class="fa fa-trash-alt"></i> <a href="/admin/errors/clear?token={{ $_SESSION['token'] }}">{{ __('main.clear') }}</a><br>
         @endif
     @else
-        {!! showError(__('main.empty_records')) !!}
+        {{ showError(__('main.empty_records')) }}
     @endif
 @stop

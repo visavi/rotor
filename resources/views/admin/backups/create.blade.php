@@ -73,6 +73,6 @@
             </form>
         </div>
     @else
-        {!! showError(__('admin.backup.empty_tables')) !!}
+        {{ showError(__('admin.backup.empty_tables')) }}
     @endif
 @stop

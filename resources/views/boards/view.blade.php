@@ -60,14 +60,14 @@
             <div class="row">
                 <div class="col-md-10">
                     <div class="section-message mb-3">
-                        {!! bbCode($item->text) !!}
+                        {{ bbCode($item->text) }}
                     </div>
                     <div>
                         @if ($item->phone)
                             <span class="badge badge-pill badge-primary mb-3">{{ __('boards.phone') }}: {{ $item->phone }}</span><br>
                         @endif
 
-                        <i class="fa fa-user-circle"></i> {!! $item->user->getProfile() !!} / {{ dateFixed($item->updated_at) }}<br>
+                        <i class="fa fa-user-circle"></i> {{ $item->user->getProfile() }} / {{ dateFixed($item->updated_at) }}<br>
 
                         @if ($item->expires_at > SITETIME)
                             <i class="fas fa-clock"></i> {{ __('boards.expires_in') }} {{ formatTime($item->expires_at - SITETIME) }}

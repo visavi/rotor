@@ -62,9 +62,9 @@
                     </div>
 
                     <div class="section-body">
-                        {!! $data->getStatus() !!}<br>
-                        {!! bbCode($data->text) !!}<br>
-                        {{ __('main.added') }}: {!! $data->user->getProfile() !!} ({{ dateFixed($data->created_at) }})<br>
+                        {{ $data->getStatus() }}<br>
+                        {{ bbCode($data->text) }}<br>
+                        {{ __('main.added') }}: {{ $data->user->getProfile() }} ({{ dateFixed($data->created_at) }})<br>
                         <a href="/offers/comments/{{ $data->id }}">{{ __('main.comments') }}</a> ({{ $data->count_comments }})
                         <a href="/offers/end/{{ $data->id }}">&raquo;</a>
                     </div>
@@ -80,7 +80,7 @@
 
         {{ __('main.total') }}: <b>{{ $offers->total() }}</b><br>
     @else
-        {!! showError(__('main.empty_records')) !!}
+        {{ showError(__('main.empty_records')) }}
     @endif
 
     @if (isAdmin('boss'))

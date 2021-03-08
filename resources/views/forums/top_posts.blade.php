@@ -37,7 +37,7 @@
                 ({{ __('main.rating') }}: {{ $data->rating }})
 
                 <div class="section-message">
-                    {!! bbCode($data->text) !!}<br>
+                    {{ bbCode($data->text) }}<br>
 
                     {{ __('main.posted') }}: {{ $data->user->getName() }} <small>({{ dateFixed($data->created_at) }})</small>
 
@@ -48,7 +48,7 @@
             </div>
         @endforeach
     @else
-        {!! showError(__('forums.empty_posts')) !!}
+        {{ showError(__('forums.empty_posts')) }}
     @endif
 
     {{ $posts->links() }}

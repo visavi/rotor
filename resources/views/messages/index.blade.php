@@ -20,8 +20,8 @@
 
                 <div class="user-avatar">
                     @if ($data->author_id)
-                        {!! $data->author->getAvatar() !!}
-                        {!! $data->author->getOnline() !!}
+                        {{ $data->author->getAvatar() }}
+                        {{ $data->author->getOnline() }}
                     @else
                         <img class="avatar-default rounded-circle" src="/assets/img/images/avatar_system.png" alt="">
                         <div class="user-status bg-success" title="Онлайн"></div>
@@ -31,7 +31,7 @@
                 <div class="section-user d-flex align-items-center">
                     <div class="flex-grow-1">
                         @if ($data->author_id)
-                            {!! $data->author->getProfile() !!}
+                            {{ $data->author->getProfile() }}
                         @else
                             <b>{{ __('messages.system') }}</b>
                         @endif
@@ -53,7 +53,7 @@
                 <div class="section-body border-top">
                     <div class="section-message">
                         {{ $data->type === $data::OUT ? __('messages.you') . ': ' : '' }}
-                        {!! bbCodeTruncate($data->text) !!}
+                        {{ bbCodeTruncate($data->text) }}
                     </div>
                 </div>
             </div>
@@ -61,7 +61,7 @@
 
         {{ $messages->links() }}
     @else
-        {!! showError(__('main.empty_messages')) !!}
+        {{ showError(__('main.empty_messages')) }}
     @endif
 
     <i class="fa fa-search"></i> <a href="/searchusers">{{ __('index.user_search') }}</a><br>

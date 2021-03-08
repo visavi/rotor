@@ -29,7 +29,7 @@
             </div>
         @endforeach
     @else
-        {!! showError(__('forums.topics_not_created')) !!}
+        {{ showError(__('forums.topics_not_created')) }}
     @endif
 
     {{ $topics->links() }}

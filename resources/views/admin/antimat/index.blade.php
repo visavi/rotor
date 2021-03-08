@@ -38,7 +38,7 @@
             </div>
         </div>
     @else
-        {!! showError(__('admin.antimat.empty_words')) !!}
+        {{ showError(__('admin.antimat.empty_words')) }}
     @endif
 
     <form method="post">

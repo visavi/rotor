@@ -44,10 +44,10 @@
                     @include('app/_carousel', ['model' => $photo, 'path' => '/photos'])
 
                     @if ($photo->text)
-                        {!! bbCode($photo->text) !!}<br>
+                        {{ bbCode($photo->text) }}<br>
                     @endif
 
-                    {{ __('main.added') }}: {!! $photo->user->getProfile() !!} ({{ dateFixed($photo->created_at) }})<br>
+                    {{ __('main.added') }}: {{ $photo->user->getProfile() }} ({{ dateFixed($photo->created_at) }})<br>
                     <a href="/photos/comments/{{ $photo->id }}">{{ __('main.comments') }}</a> ({{ $photo->count_comments }})
                     <a href="/photos/end/{{ $photo->id }}">&raquo;</a>
                 </div>
@@ -62,6 +62,6 @@
             <i class="fa fa-sync"></i> <a href="/admin/photos/restatement?token={{ $_SESSION['token'] }}">{{ __('main.recount') }}</a><br>
         @endif
     @else
-        {!! showError(__('photos.empty_photos')) !!}
+        {{ showError(__('photos.empty_photos')) }}
     @endif
 @stop

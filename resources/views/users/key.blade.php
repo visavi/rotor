@@ -36,7 +36,7 @@
                     <div class="invalid-feedback">{{ textError('email') }}</div>
                 </div>
 
-                {!! view('app/_captcha') !!}
+                {{ getCaptcha() }}
                 <button class="btn btn-primary">{{ __('users.resend_code') }}</button>
             </form>
         </div>

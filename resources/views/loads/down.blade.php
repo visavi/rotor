@@ -45,7 +45,7 @@
 
     <div class="mb-3">
         <div class="section-message mb-3">
-            {!! bbCode($down->text) !!}
+            {{ bbCode($down->text) }}
         </div>
 
         @if ($down->files->isNotEmpty())
@@ -90,7 +90,7 @@
                 @endforeach
             @endif
         @else
-            {!! showError(__('main.not_uploaded')) !!}
+            {{ showError(__('main.not_uploaded')) }}
         @endif
 
         <div class="mb-3">
@@ -100,7 +100,7 @@
             {{ __('main.rating') }}: {!! ratingVote($down->getCalculatedRating()) !!}<br>
             {{ __('main.votes') }}: <b>{{ $down->rated }}</b><br>
             {{ __('main.downloads') }}: <b>{{ $down->loads }}</b><br>
-            {{ __('main.author') }}: {!! $down->user->getProfile() !!} ({{ dateFixed($down->created_at) }})
+            {{ __('main.author') }}: {{ $down->user->getProfile() }} ({{ dateFixed($down->created_at) }})
         </div>
 
         @if (getUser() && getUser('id') !== $down->user_id)

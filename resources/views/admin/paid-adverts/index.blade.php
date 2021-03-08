@@ -46,10 +46,10 @@
 
                 <div class="section-body border-top">
                     <div class="section-message">
-                        {!! bbCode($data->comment ?? __('main.empty_comment')) !!}
+                        {{ bbCode($data->comment ?? __('main.empty_comment')) }}
                     </div>
 
-                    <i class="far fa-user"></i> {!! $data->user->getProfile() !!}
+                    <i class="far fa-user"></i> {{ $data->user->getProfile() }}
                     <small class="section-date text-muted font-italic">{{ __('admin.paid_adverts.expires') }}: {{ dateFixed($data->deleted_at) }}</small>
 
                     <div class="small text-muted font-italic mt-2">
@@ -60,6 +60,6 @@
             </div>
         @endforeach
     @else
-        {!! showError(__('admin.paid_adverts.empty_links')) !!}
+        {{ showError(__('admin.paid_adverts.empty_links')) }}
     @endif
 @stop

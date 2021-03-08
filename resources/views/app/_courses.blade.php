@@ -20,5 +20,5 @@ function trend($currency)
     <b>{{ $courses['Valute']['UAH']['Nominal'] }} {{ $courses['Valute']['UAH']['CharCode'] }}</b> - {{ $courses['Valute']['UAH']['Value'] }}{!! trend($courses['Valute']['UAH']) !!}<br>
 
 @else
-    {!! showError(__('index.courses_error')) !!}
+    {{ showError(__('index.courses_error')) }}
 @endif

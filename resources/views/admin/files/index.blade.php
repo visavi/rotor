@@ -67,6 +67,6 @@
             @endforeach
         </ul>
     @else
-        {!! showError(__('admin.files.empty_objects')) !!}
+        {{ showError(__('admin.files.empty_objects')) }}
     @endif
 @stop

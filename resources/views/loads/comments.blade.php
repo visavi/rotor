@@ -32,15 +32,15 @@
         @foreach ($comments as $comment)
             <div class="section mb-3 shadow" id="comment_{{ $comment->id }}">
                 <div class="user-avatar">
-                    {!! $comment->user->getAvatar() !!}
-                    {!! $comment->user->getOnline() !!}
+                    {{ $comment->user->getAvatar() }}
+                    {{ $comment->user->getOnline() }}
                 </div>
 
                 <div class="section-user d-flex align-items-center">
                     <div class="flex-grow-1">
-                        {!! $comment->user->getProfile() !!}
+                        {{ $comment->user->getProfile() }}
                         <small class="section-date text-muted font-italic">{{ dateFixed($comment->created_at) }}</small><br>
-                        <small class="font-italic">{!! $comment->user->getStatus() !!}</small>
+                        <small class="font-italic">{{ $comment->user->getStatus() }}</small>
                     </div>
 
                     @if (getUser())
@@ -67,7 +67,7 @@
 
                 <div class="section-body border-top">
                     <div class="section-message">
-                        {!! bbCode($comment->text) !!}
+                        {{ bbCode($comment->text) }}
                     </div>
 
                     @if (isAdmin())
@@ -77,7 +77,7 @@
             </div>
         @endforeach
     @else
-        {!! showError(__('main.empty_comments')) !!}
+        {{ showError(__('main.empty_comments')) }}
     @endif
 
     {{ $comments->links() }}
@@ -101,6 +101,6 @@
         <a href="/stickers">{{ __('main.stickers') }}</a> /
         <a href="/tags">{{ __('main.tags') }}</a><br><br>
     @else
-        {!! showError(__('main.not_authorized')) !!}
+        {{ showError(__('main.not_authorized')) }}
     @endif
 @stop

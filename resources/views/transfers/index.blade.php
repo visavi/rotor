@@ -47,7 +47,6 @@
             </form>
         </div>
     @else
-       {!! showError(__('transfers.transfer_point', ['point' => plural(setting('sendmoneypoint'), setting('scorename'))])) !!}
+       {{ showError(__('transfers.transfer_point', ['point' => plural(setting('sendmoneypoint'), setting('scorename'))])) }}
     @endif
-
 @stop

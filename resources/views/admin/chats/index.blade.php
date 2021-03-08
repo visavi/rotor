@@ -20,15 +20,15 @@
         @foreach ($posts as $post)
             <div class="section mb-3 shadow">
                 <div class="user-avatar">
-                    {!! $post->user->getAvatar() !!}
-                    {!! $post->user->getOnline() !!}
+                    {{ $post->user->getAvatar() }}
+                    {{ $post->user->getOnline() }}
                 </div>
 
                 <div class="section-user d-flex align-items-center">
                     <div class="flex-grow-1">
-                        {!! $post->user->getProfile() !!}
+                        {{ $post->user->getProfile() }}
                         <small class="section-date text-muted font-italic">{{ dateFixed($post->created_at) }}</small><br>
-                        <small class="font-italic">{!! $post->user->getStatus() !!}</small>
+                        <small class="font-italic">{{ $post->user->getStatus() }}</small>
                     </div>
 
                     @if (getUser() && getUser('id') !== $post->user_id)
@@ -47,12 +47,12 @@
 
                 <div class="section-body border-top">
                     <div class="section-message">
-                        {!! bbCode($post->text) !!}
+                        {{ bbCode($post->text) }}
                     </div>
 
                     @if ($post->edit_user_id)
                         <div class="small">
-                            <i class="fa fa-exclamation-circle text-danger"></i> {{ __('main.changed') }}: {!! $post->editUser->getProfile() !!} ({{ dateFixed($post->updated_at) }})
+                            <i class="fa fa-exclamation-circle text-danger"></i> {{ __('main.changed') }}: {{ $post->editUser->getProfile() }} ({{ dateFixed($post->updated_at) }})
                         </div>
                     @endif
 
@@ -61,7 +61,7 @@
             </div>
         @endforeach
     @else
-        {!! showError(__('main.empty_messages')) !!}
+        {{ showError(__('main.empty_messages')) }}
     @endif
 
     {{ $posts->links() }}
