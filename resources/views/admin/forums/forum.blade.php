@@ -46,7 +46,7 @@
                 </div>
                 <div class="section-content">
                     @if ($topic->lastPost)
-                        {!! $topic->pagination('/admin/topics') !!}
+                        {{ $topic->pagination('/admin/topics') }}
                         {{ __('forums.post') }}: {{ $topic->lastPost->user->getName() }} ({{ dateFixed($topic->lastPost->created_at) }})
                     @endif
                 </div>

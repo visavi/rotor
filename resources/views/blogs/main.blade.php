@@ -37,7 +37,7 @@
                     <a href="/blogs/{{ $article->category->id }}"><span class="badge badge-light">{{ $article->category->name }}</span></a>
 
                     <p class="card-text">
-                        {!! $article->shortText() !!}
+                        {{ $article->shortText() }}
                     </p>
                 </div>
                 <div class="card-footer text-muted">

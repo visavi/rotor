@@ -16,6 +16,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Database\Eloquent\Relations\MorphOne;
 use Illuminate\Http\UploadedFile;
+use Illuminate\Support\HtmlString;
 
 /**
  * Class Down
@@ -161,15 +162,15 @@ class Down extends BaseModel
      * Возвращает сокращенный текст описания
      *
      * @param int $words
-     * @return string
+     * @return HtmlString
      */
-    public function shortText(int $words = 50): string
+    public function shortText(int $words = 50): HtmlString
     {
         if (strlen($this->text) > $words) {
             $this->text = bbCodeTruncate($this->text, $words);
         }
 
-        return $this->text;
+        return new HtmlString($this->text);
     }
 
     /**

@@ -85,7 +85,7 @@
             @if ($down->getImages()->isNotEmpty())
                 @foreach ($down->getImages() as $image)
                     <div class="media-file mb-3">
-                        <a href="{{ $image->hash }}" class="gallery" data-group="{{ $down->id }}">{!! resizeImage($image->hash, ['alt' => $down->title]) !!}</a>
+                        <a href="{{ $image->hash }}" class="gallery" data-group="{{ $down->id }}">{{ resizeImage($image->hash, ['alt' => $down->title]) }}</a>
                     </div>
                 @endforeach
             @endif
@@ -97,7 +97,7 @@
             <i class="fa fa-comment"></i> <a href="/downs/comments/{{ $down->id }}">{{ __('main.comments') }}</a> ({{ $down->count_comments }})
             <a href="/downs/end/{{ $down->id }}">&raquo;</a><br>
 
-            {{ __('main.rating') }}: {!! ratingVote($down->getCalculatedRating()) !!}<br>
+            {{ __('main.rating') }}: {{ ratingVote($down->getCalculatedRating()) }}<br>
             {{ __('main.votes') }}: <b>{{ $down->rated }}</b><br>
             {{ __('main.downloads') }}: <b>{{ $down->loads }}</b><br>
             {{ __('main.author') }}: {{ $down->user->getProfile() }} ({{ dateFixed($down->created_at) }})

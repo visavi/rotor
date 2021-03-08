@@ -38,7 +38,7 @@
                 </div>
 
                 <div class="section-content">
-                    {!! $article->shortText() !!}
+                    {{ $article->shortText() }}
 
                     {{ __('blogs.blog') }}: <a href="/blogs/{{ $article->category->id }}">{{ $article->category->name }}</a><br>
                     {{ __('main.author') }}: {{ $article->user->getProfile() }}

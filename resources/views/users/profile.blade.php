@@ -76,7 +76,7 @@
                         <div class="float-right">
                             @if ($user->picture && file_exists(HOME . $user->picture))
                                 <a class="gallery" href="{{ getUser('picture') }}">
-                                    {!! resizeImage(getUser('picture'), ['alt' => $user->login, 'class' => 'img-fluid rounded']) !!}
+                                    {{ resizeImage(getUser('picture'), ['alt' => $user->login, 'class' => 'img-fluid rounded']) }}
                                 </a><br>
                                 <a href="/pictures">{{ __('main.change') }}</a> / <a href="/pictures/delete?token={{ $_SESSION['token'] }}">{{ __('main.delete') }}</a>
                             @else

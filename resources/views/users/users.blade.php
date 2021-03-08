@@ -53,7 +53,7 @@
                     <div class="flex-grow-1">
                         {{ $users->firstItem() + $key }}.
                         @if ($user === $data->login)
-                            {!! $data->getProfile('#ff0000') !!}<br>
+                            {{ $data->getProfile('#ff0000') }}<br>
                         @else
                             {{ $data->getProfile() }}<br>
                         @endif

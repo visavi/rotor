@@ -25,13 +25,13 @@
                         <div class="card-body">
                             <div class="row">
                                 <div class="col-md-3">
-                                    <a href="/items/{{ $item->id }}">{!! $item->getFirstImage() !!}</a>
+                                    <a href="/items/{{ $item->id }}">{{ $item->getFirstImage() }}</a>
                                 </div>
                                 <div class="col-md-7">
                                     <h5><a href="/items/{{ $item->id }}">{{ $item->title }}</a></h5>
                                     <small><i class="fas fa-angle-right"></i> <a href="/boards/{{ $item->category->id }}">{{ $item->category->name }}</a></small>
                                     <div class="section-message mb-3">
-                                        {!! $item->shortText() !!}
+                                        {{ $item->shortText() }}
                                     </div>
                                     <div>
                                         <i class="fa fa-user-circle"></i> {{ $item->user->getProfile() }}

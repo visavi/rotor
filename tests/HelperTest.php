@@ -198,9 +198,9 @@ class HelperTest extends TestCase
      */
     public function testRatingVote(): void
     {
-        self::assertSame('<div class="star-rating fa-lg text-danger"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="far fa-star"></i>( 4 )</div>', ratingVote(4.2));
+        self::assertSame('<div class="star-rating fa-lg text-danger"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="far fa-star"></i>( 4 )</div>', ratingVote(4.2)->toHtml());
 
-        self::assertSame('<div class="star-rating fa-lg text-danger"><i class="fas fa-star"></i><i class="fas fa-star-half-alt"></i><i class="far fa-star"></i><i class="far fa-star"></i><i class="far fa-star"></i>( 1.5 )</div>', ratingVote(1.5));
+        self::assertSame('<div class="star-rating fa-lg text-danger"><i class="fas fa-star"></i><i class="fas fa-star-half-alt"></i><i class="far fa-star"></i><i class="far fa-star"></i><i class="far fa-star"></i>( 1.5 )</div>', ratingVote(1.5)->toHtml());
     }
 
     /**
@@ -208,8 +208,8 @@ class HelperTest extends TestCase
      */
     public function testBbCode(): void
     {
-        self::assertSame('<strong>Hello</strong> <img src="/uploads/stickers/D.gif" alt="D"> &lt;br&gt; <u>world</u>', bbCode('[b]Hello[/b] :D <br> [u]world[/u]'));
+        self::assertSame('<strong>Hello</strong> <img src="/uploads/stickers/D.gif" alt="D"> &lt;br&gt; <u>world</u>', bbCode('[b]Hello[/b] :D <br> [u]world[/u]')->toHtml());
 
-        self::assertSame('Hello :D world', bbCode('[b]Hello[/b] :D [u]world[/u]', false));
+        self::assertSame('Hello :D world', bbCode('[b]Hello[/b] :D [u]world[/u]', false)->toHtml());
     }
 }

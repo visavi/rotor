@@ -33,7 +33,7 @@
                 @else
                     <?php $ext = getExtension($document->getName()) ?>
 
-                    {!! icons($ext) !!}
+                    {{ icons($ext) }}
 
                     @if (in_array($ext, $viewExt, true))
                         <a href="/downs/zip/{{ $file->id }}/{{ $key }}">{{ $document->getName() }}</a>

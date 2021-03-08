@@ -58,7 +58,7 @@
                     </div>
 
                     <div class="section-message">
-                        {!! $topic->pagination() !!}
+                        {{ $topic->pagination() }}
                         {{ __('forums.forum') }}: <a href="/topics/{{ $topic->forum->id }}">{{ $topic->forum->title }}</a><br>
                         {{ __('forums.post') }}: {{ $topic->lastPost->user->getName() }}
                         <small class="section-date text-muted font-italic">{{ dateFixed($topic->lastPost->created_at) }}</small>

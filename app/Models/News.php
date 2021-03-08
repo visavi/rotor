@@ -7,6 +7,7 @@ namespace App\Models;
 use App\Traits\UploadTrait;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Database\Eloquent\Relations\MorphOne;
+use Illuminate\Support\HtmlString;
 
 /**
  * Class News
@@ -90,9 +91,9 @@ class News extends BaseModel
     /**
      * Возвращает сокращенный текст новости
      *
-     * @return string
+     * @return HtmlString
      */
-    public function shortText(): string
+    public function shortText(): HtmlString
     {
         $more = null;
 
@@ -101,6 +102,6 @@ class News extends BaseModel
             $more = view('app/_more', ['link' => '/news/'. $this->id]);
         }
 
-        return bbCode($this->text) . $more;
+        return new HtmlString(bbCode($this->text) . $more);
     }
 }

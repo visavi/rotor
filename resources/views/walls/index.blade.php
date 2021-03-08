@@ -1,6 +1,6 @@
 @extends('layout')
 
-@section('title', __('index.wall_posts') . ' ' . $user->getName())
+@section('title', __('index.wall_posts_login', ['login' => $user->getName()]))
 
 @section('breadcrumb')
     <nav>

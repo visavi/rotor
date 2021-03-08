@@ -7,7 +7,7 @@ $click = $cond ? 'return pasteImage(this);' : false;
     @if ($files->isNotEmpty())
         @foreach ($files as $file)
             <span class="js-image">
-                {!! resizeImage($file->hash, ['width' => 100, 'onclick' => $click]) !!}
+                {{ resizeImage($file->hash, ['width' => 100, 'onclick' => $click]) }}
                 @if (! $file->relate_id)
                     <a href="#" onclick="return deleteImage(this);" data-id="{{ $file->id }}" data-type="{{ $type }}" data-token="{{ $_SESSION['token'] }}"><i class="fas fa-times"></i></a>
                 @endif

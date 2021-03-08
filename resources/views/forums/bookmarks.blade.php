@@ -24,7 +24,7 @@
                     <b><a href="/topics/{{ $topic->id }}">{{ $topic->title }}</a></b>
                     ({{ $topic->count_posts }}{!! ($topic->count_posts > $topic->bookmark_posts) ? '/<span style="color:#00cc00">+' . ($topic->count_posts - $topic->bookmark_posts) . '</span>' : '' !!})
 
-                    {!! $topic->topic->pagination() !!}
+                    {{ $topic->topic->pagination() }}
                     {{ __('main.author') }}: {{ $topic->topic->user->getName() }} /
                     {{ __('forums.latest') }}: {{ $topic->topic->lastPost->user->getName() }}
                     ({{ dateFixed($topic->topic->lastPost->created_at) }})

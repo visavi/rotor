@@ -11,6 +11,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Database\Eloquent\Relations\MorphOne;
+use Illuminate\Support\HtmlString;
 
 /**
  * Class Article
@@ -125,9 +126,9 @@ class Article extends BaseModel
     /**
      * Возвращает путь к первому файлу
      *
-     * @return mixed код изображения
+     * @return HtmlString|null код изображения
      */
-    public function getFirstImage()
+    public function getFirstImage(): ?HtmlString
     {
         $image = $this->files->first();
 
@@ -135,7 +136,7 @@ class Article extends BaseModel
             return null;
         }
 
-        return '<img src="' . $image->hash . '" atl="' . $this->title . '" class="card-img-top">';
+        return new HtmlString('<img src="' . $image->hash . '" atl="' . $this->title . '" class="card-img-top">');
     }
 
     /**
@@ -143,9 +144,9 @@ class Article extends BaseModel
      *
      * @param int $words
      *
-     * @return string
+     * @return HtmlString
      */
-    public function shortText(int $words = 100): string
+    public function shortText(int $words = 100): HtmlString
     {
         $more = view('app/_more', ['link' => '/articles/'. $this->id]);
 
@@ -155,7 +156,7 @@ class Article extends BaseModel
             $this->text = bbCodeTruncate($this->text, $words);
         }
 
-        return $this->text . $more;
+        return new HtmlString($this->text . $more);
     }
 
     /**

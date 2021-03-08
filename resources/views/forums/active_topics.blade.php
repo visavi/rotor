@@ -24,7 +24,7 @@
                 <i class="fa {{ $data->getIcon() }} text-muted"></i>
                 <b><a href="/topics/{{ $data->id }}">{{ $data->title }}</a></b> ({{ $data->count_posts }})
 
-                {!! $data->pagination() !!}
+                {{ $data->pagination() }}
                 {{ __('forums.forum') }}: <a href="/forums/{{ $data->forum->id }}">{{ $data->forum->title }}</a><br>
                 {{ __('main.author') }}: {{ $data->user->getName() }} / {{ __('forums.latest') }}.: {{ $data->lastPost->user->getName() }} ({{ dateFixed($data->lastPost->created_at) }})
             </div>

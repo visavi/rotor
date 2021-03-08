@@ -50,7 +50,7 @@
     <hr>
 
     <div class="mb-3">
-        {!! $article->text !!}
+        {{ $article->text }}
         {{ __('main.author') }}: {{ $article->user->getProfile() }} ({{ dateFixed($article->created_at) }})<br>
 
         <div class="my-3 font-italic">

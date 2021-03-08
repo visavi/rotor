@@ -38,7 +38,7 @@
                 </div>
 
                 <div class="section-content">
-                    {!! $data->shortText() !!}<br>
+                    {{ $data->shortText() }}<br>
 
                     {{ __('loads.load') }}: <a href="/loads/{{ $data->category->id }}">{{ $data->category->name }}</a><br>
                     {{ __('main.rating') }}: {{ $data->getCalculatedRating() }}<br>

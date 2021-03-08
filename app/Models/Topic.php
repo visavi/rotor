@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Support\HtmlString;
 
 /**
  * Class Topic
@@ -131,9 +132,9 @@ class Topic extends BaseModel
      * Генерирует постраничную навигация для форума
      *
      * @param  string $url
-     * @return string сформированный блок
+     * @return HtmlString|null сформированный блок
      */
-    public function pagination(string $url = '/topics'): ?string
+    public function pagination(string $url = '/topics'): ?HtmlString
     {
         if (! $this->count_posts) {
             return null;
@@ -169,7 +170,7 @@ class Topic extends BaseModel
             ];
         }
 
-        return view('forums/_pagination', compact('pages', 'link'));
+        return new HtmlString(view('forums/_pagination', compact('pages', 'link')));
     }
 
     /**

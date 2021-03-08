@@ -82,7 +82,7 @@
 
                 @if ($topic->lastPost)
                     <div class="section-content">
-                        {!! $topic->pagination() !!}
+                        {{ $topic->pagination() }}
                         {{ __('forums.post') }}: {{ $topic->lastPost->user->getName() }} ({{ dateFixed($topic->lastPost->created_at) }})
                     </div>
                 @endif

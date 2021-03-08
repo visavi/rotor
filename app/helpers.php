@@ -318,9 +318,9 @@ function antimat(string $str): string
  *
  * @param int|float $rating рейтинг
  *
- * @return string преобразованный рейтинг
+ * @return HtmlString преобразованный рейтинг
  */
-function ratingVote($rating): string
+function ratingVote($rating): HtmlString
 {
     $rating = round($rating / 0.5) * 0.5;
 
@@ -334,7 +334,7 @@ function ratingVote($rating): string
     $output .= str_repeat('<i class="far fa-star"></i>', $empty_stars);
     $output .= '( ' . $rating .' )</div>';
 
-    return $output;
+    return new HtmlString($output);
 }
 
 /**
@@ -825,9 +825,9 @@ function statsNewsDate()
 /**
  * Возвращает последние новости
  *
- * @return string новость
+ * @return HtmlString новость
  */
-function lastNews(): string
+function lastNews(): HtmlString
 {
     $news = null;
 
@@ -841,7 +841,7 @@ function lastNews(): string
         });
     }
 
-    return view('widgets/_news', compact('news'));
+    return new HtmlString(view('widgets/_news', compact('news')));
 }
 
 /**
@@ -849,9 +849,9 @@ function lastNews(): string
  *
  * @param string $ext расширение файла
  *
- * @return string иконка
+ * @return HtmlString иконка
  */
-function icons(string $ext): string
+function icons(string $ext): HtmlString
 {
     switch ($ext) {
         case 'php':
@@ -908,7 +908,7 @@ function icons(string $ext): string
         default:
             $ico = 'file';
     }
-    return '<i class="far fa-' . $ico . '"></i>';
+    return new HtmlString('<i class="far fa-' . $ico . '"></i>');
 }
 
 /**
@@ -975,6 +975,7 @@ function closeTags(string $html): string
 function bbCodeTruncate(string $value, int $words = 20, string $end = '...'): string
 {
     $value = Str::words($value, $words, $end);
+
     $value = bbCode(closeTags($value));
 
     return preg_replace('/\[(.*?)\]/', '', $value);
@@ -1395,9 +1396,9 @@ function resizeProcess(?string $path, array $params = []): array
  * @param string|null $path   путь к изображению
  * @param array       $params параметры изображения
  *
- * @return string уменьшенное изображение
+ * @return HtmlString уменьшенное изображение
  */
-function resizeImage(?string $path, array $params = []): string
+function resizeImage(?string $path, array $params = []): HtmlString
 {
     $image = resizeProcess($path, $params);
 
@@ -1408,7 +1409,7 @@ function resizeImage(?string $path, array $params = []): string
 
     $strParams = implode(' ', $strParams);
 
-    return '<img src="' . $image['path'] . '" data-source="' . $image['source'] . '" ' . $strParams . '>';
+    return new HtmlString('<img src="' . $image['path'] . '" data-source="' . $image['source'] . '" ' . $strParams . '>');
 }
 
 /**
@@ -2119,9 +2120,9 @@ function paginate(array $items, int $perPage, array $appends = []): LengthAwareP
  * @param string $path   путь к картинке
  * @param array  $params параметры
  *
- * @return string сформированный код
+ * @return HtmlString сформированный код
  */
-function imageBase64(string $path, array $params = []): string
+function imageBase64(string $path, array $params = []): HtmlString
 {
     $type = getExtension($path);
     $data = file_get_contents($path);
@@ -2141,7 +2142,7 @@ function imageBase64(string $path, array $params = []): string
 
     $strParams = implode(' ', $strParams);
 
-    return '<img src="data:image/' . $type . ';base64,' . base64_encode($data) . '"' . $strParams . '>';
+    return new HtmlString('<img src="data:image/' . $type . ';base64,' . base64_encode($data) . '"' . $strParams . '>');
 }
 
 /**
@@ -2150,15 +2151,15 @@ function imageBase64(string $path, array $params = []): string
  * @param int                   $percent
  * @param int|float|string|null $title
  *
- * @return string
+ * @return HtmlString
  */
-function progressBar(int $percent, $title = null): string
+function progressBar(int $percent, $title = null): HtmlString
 {
     if (! $title) {
         $title = $percent . '%';
     }
 
-    return view('app/_progressbar', compact('percent', 'title'));
+    return new HtmlString(view('app/_progressbar', compact('percent', 'title')));
 }
 
 /**

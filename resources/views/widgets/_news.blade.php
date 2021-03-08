@@ -6,7 +6,7 @@
         <i class="fas fa-angle-down news-title cursor-pointer"></i><br>
 
         <div class="news-text" style="display: none;">
-            {!! $data->shortText() !!}
+            {{ $data->shortText() }}
             <div>
                 <a href="/news/comments/{{ $data->id }}">Комментарии</a>
                 <a href="/news/end/{{ $data->id }}">&raquo;</a>

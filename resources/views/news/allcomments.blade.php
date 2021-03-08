@@ -26,7 +26,7 @@
 
                 <div class="section-body border-top">
                     <div class="section-message">
-                        {!! $data->text !!}
+                        {{ $data->text }}
                     </div>
 
                     {{ __('main.posted') }}: {{ $data->user->getProfile() }}

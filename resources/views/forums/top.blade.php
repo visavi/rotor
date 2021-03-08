@@ -19,7 +19,7 @@
                 <i class="fa {{ $data->getIcon() }} text-muted"></i>
                 <b><a href="/topics/{{ $data->id }}">{{ $data->title }}</a></b> ({{ $data->count_posts }})
 
-                {!! $data->pagination() !!}
+                {{ $data->pagination() }}
                 {{ __('main.author') }}: {{ $data->user->getName() }}<br>
                 {{ __('forums.post') }}: {{ $data->lastPost->user->getName() }} ({{ dateFixed($data->lastPost->created_at) }})
             </div>

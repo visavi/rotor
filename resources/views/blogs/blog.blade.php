@@ -57,7 +57,7 @@
                 </div>
 
                 <div class="section-content">
-                    {!! $article->shortText() !!}
+                    {{ $article->shortText() }}
                     {{ __('main.author') }}: {{ $article->user->getProfile() }} ({{ dateFixed($article->created_at) }})<br>
                     {{ __('main.views') }}: {{ $article->visits }}<br>
                     <a href="/articles/comments/{{ $article->id }}">{{ __('main.comments') }}</a> ({{ $article->count_comments }})

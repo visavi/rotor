@@ -78,7 +78,7 @@
                     @endphp
 
                     <b>{{ $key }}</b> ({{ __('forums.votes') }}: {{ $data }})<br>
-                    {!! progressBar($maxproc, $proc . '%') !!}
+                    {{ progressBar($maxproc, $proc . '%') }}
                 @endforeach
             @else
                 <form class="mb-3" action="/topics/votes/{{ $topic->id }}?page={{ $posts->currentPage() }}" method="post">
@@ -152,10 +152,10 @@
                                 @foreach ($data->files as $file)
                                     <?php $ext = getExtension($file->hash); ?>
 
-                                    {!! icons($ext) !!}
+                                    {{ icons($ext) }}
                                     <a href="{{ $file->hash }}">{{ $file->name }}</a> ({{ formatSize($file->size) }})<br>
                                     @if (in_array($ext, ['jpg', 'jpeg', 'gif', 'png']))
-                                        <a href="{{ $file->hash }}" class="gallery" data-group="{{ $data->id }}">{!! resizeImage($file->hash, ['alt' => $file->name]) !!}</a><br>
+                                        <a href="{{ $file->hash }}" class="gallery" data-group="{{ $data->id }}">{{ resizeImage($file->hash, ['alt' => $file->name]) }}</a><br>
                                     @endif
                                 @endforeach
                             </div>

@@ -93,7 +93,7 @@
 
             @if ($down->getImages()->isNotEmpty())
                 @foreach ($down->getImages() as $image)
-                    {!! resizeImage($image->hash) !!}<br>
+                    {{ resizeImage($image->hash) }}<br>
                     <i class="fa fa-image"></i> <b><a href="{{ $image->hash }}">{{ $image->name }}</a></b> ({{ formatSize($image->size ) }}) (<a href="/admin/downs/delete/{{ $down->id }}/{{ $image->id }}" onclick="return confirm('{{ __('loads.confirm_delete_screen') }}')">{{ __('main.delete') }}</a>)<br><br>
                 @endforeach
             @endif

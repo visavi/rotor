@@ -16,7 +16,7 @@
             <a href="/news" class="">{{ __('index.news') }}</a>
             <span class="badge badge-light">{{ statsNewsDate() }}</span>
         </div>
-        {!! lastNews() !!}
+        {{ lastNews() }}
     </div>
 
     <div class="section mb-3 shadow">

@@ -20,7 +20,7 @@
         <?php $maxproc = round(($data * 100) / $info['max']); ?>
 
         <b>{{ $key }}</b> ({{ __('main.votes') }}: {{ $data }})<br>
-        {!! progressBar($maxproc, $proc . '%') !!}
+        {{ progressBar($maxproc, $proc . '%') }}
     @endforeach
     </div>
 

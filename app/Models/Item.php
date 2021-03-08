@@ -9,6 +9,7 @@ use Exception;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
+use Illuminate\Support\HtmlString;
 
 /**
  * Class Item
@@ -81,13 +82,14 @@ class Item extends BaseModel
     /**
      * Возвращает путь к первому файлу
      *
-     * @return mixed имя файла
+     * @return HtmlString|null имя файла
      */
-    public function getFirstImage()
+    public function getFirstImage(): ?HtmlString
     {
         $image = $this->files->first();
 
-        $path = $image ? $image->hash : null;
+        $path = $image->hash ?? null;
+
         return resizeImage($path, ['alt' => $this->title, 'class' => 'img-fluid']);
     }
 
@@ -95,15 +97,15 @@ class Item extends BaseModel
      * Возвращает сокращенный текст объявления
      *
      * @param int $words
-     * @return string
+     * @return HtmlString
      */
-    public function shortText(int $words = 50): string
+    public function shortText(int $words = 50): HtmlString
     {
         if (strlen($this->text) > $words) {
             $this->text = bbCodeTruncate($this->text, $words);
         }
 
-        return $this->text;
+        return new HtmlString($this->text);
     }
 
     /**
