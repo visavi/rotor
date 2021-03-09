@@ -178,12 +178,12 @@ class User extends BaseModel
     /**
      * Возвращает имя или логин пользователя
      *
-     * @return HtmlString|string
+     * @return string
      */
-    public function getName()
+    public function getName(): string
     {
         if ($this->id) {
-            return new HtmlString(check($this->name ?: $this->login));
+            return $this->name ?: $this->login;
         }
 
         return setting('deleted_user');
@@ -200,7 +200,7 @@ class User extends BaseModel
     {
         if ($this->id) {
             $admin = null;
-            $name  = $this->getName();
+            $name  = check($this->getName());
 
             if ($color) {
                 $name = '<span style="color:' . $color . '">' . $name . '</span>';
