@@ -50,13 +50,15 @@
     <hr>
 
     <div class="mb-3">
-        {{ $article->text }}
+        <div class="section-message">
+            {{ bbCode($article->text) }}
+        </div>
+
         {{ __('main.author') }}: {{ $article->user->getProfile() }} ({{ dateFixed($article->created_at) }})<br>
 
         <div class="my-3 font-italic">
             <i class="fa fa-tag"></i> {!! $tags !!}
         </div>
-
 
         <div class="js-rating">{{ __('main.rating') }}:
             @if (getUser() && getUser('id') !== $article->user_id)

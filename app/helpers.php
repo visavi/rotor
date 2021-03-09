@@ -970,27 +970,26 @@ function closeTags(string $html): string
  * @param int    $words
  * @param string $end
  *
- * @return string
+ * @return HtmlString
  */
-function bbCodeTruncate(string $value, int $words = 20, string $end = '...'): string
+function bbCodeTruncate(string $value, int $words = 20, string $end = '...'): HtmlString
 {
-    $value = Str::words($value, $words, $end);
+    $value  = Str::words($value, $words, $end);
+    $bbText = bbCode(closeTags($value));
 
-    $value = bbCode(closeTags($value));
-
-    return preg_replace('/\[(.*?)\]/', '', $value);
+    return new HtmlString(preg_replace('/\[(.*?)\]/', '', $bbText));
 }
 
 /**
  * Возвращает обрезанную до заданного количества букв строке
  *
- * @param string $value Исходная строка
- * @param int    $limit Максимальное количество символов в результате
- * @param string $end
+ * @param HtmlString|string $value Исходная строка
+ * @param int               $limit Максимальное количество символов в результате
+ * @param string            $end
  *
  * @return string Обрезанная строка
  */
-function truncateString(string $value, int $limit = 100, string $end = '...'): string
+function truncateString($value, int $limit = 100, string $end = '...'): string
 {
     $value = strip_tags($value);
 
@@ -1011,13 +1010,13 @@ function truncateString(string $value, int $limit = 100, string $end = '...'): s
 /**
  * Возвращает обрезанную до заданного количества слов строке
  *
- * @param string $value Исходная строка
- * @param int    $words Максимальное количество слов в результате
- * @param string $end
+ * @param HtmlString|string $value Исходная строка
+ * @param int               $words Максимальное количество слов в результате
+ * @param string            $end
  *
  * @return string Обрезанная строка
  */
-function truncateWord(string $value, int $words = 20, string $end = '...'): string
+function truncateWord($value, int $words = 20, string $end = '...'): string
 {
     $value = strip_tags($value);
 
@@ -1028,8 +1027,8 @@ function truncateWord(string $value, int $words = 20, string $end = '...'): stri
  * Возвращает обрезанную строку с удалением перевода строки
  *
  * @param HtmlString|string $value
- * @param int    $words
- * @param string $end
+ * @param int               $words
+ * @param string            $end
  *
  * @return string
  */

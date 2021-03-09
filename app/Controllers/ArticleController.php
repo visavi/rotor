@@ -94,14 +94,13 @@ class ArticleController extends BaseController
 
         Reader::countingStat($article);
 
-        $article->text = bbCode($article->text) . '<br>';
         $tagsList = preg_split('/[\s]*[,][\s]*/', $article->tags);
 
-        $tags = '';
-        foreach ($tagsList as $key => $value) {
-            $comma = empty($key) ? '' : ', ';
-            $tags .= $comma . '<a href="/blogs/tags/' . urlencode($value) . '">' . $value . '</a>';
+        $tags = [];
+        foreach ($tagsList as $value) {
+            $tags[] = '<a href="/blogs/tags/' . check(urlencode($value)) . '">' . check($value) . '</a>';
         }
+        $tags = implode(', ', $tags);
 
         return view('blogs/view', compact('article', 'tags'));
     }
