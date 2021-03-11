@@ -1,11 +1,11 @@
 @if (isset($_SESSION['flash']))
     @foreach ($_SESSION['flash'] as $status => $messages)
-        @if (is_array($messages))
-            <?php $messages = implode('</div><div>', array_unique($messages)); ?>
-        @endif
-        <div class="alert alert-{{ $status }} alert-block">
+        <?php $messages = array_unique((array) $messages); ?>
+        <div class="alert alert-{{ $status }}" role="alert">
             <button type="button" class="close" data-dismiss="alert">&times;</button>
-            <div>{{ $messages }}</div>
+            @foreach ($messages as $message)
+                <div>{{ $message }}</div>
+            @endforeach
         </div>
     @endforeach
     <?php unset($_SESSION['flash']); ?>

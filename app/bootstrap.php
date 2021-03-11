@@ -54,6 +54,8 @@ if (config('APP_DEBUG')) {
     }
 }
 
+date_default_timezone_set(config('TIMEZONE'));
+
 $db = new DB();
 $db->addConnection([
     'driver'    => config('DB_DRIVER'),

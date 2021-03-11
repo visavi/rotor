@@ -162,7 +162,7 @@
         </form>
     </div>
 
-    <div class="alert alert-info">
+    <div class="bg-info text-white p-1 my-1">
         <b>{{ __('users.additional_info') }}</b>
     </div>
 

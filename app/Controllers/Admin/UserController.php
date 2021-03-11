@@ -121,7 +121,7 @@ class UserController extends AdminController
 
             if ($validator->isValid()) {
                 if ($password) {
-                    $text     = '<br>' . __('users.user_new_password', ['password' => $password]);
+                    $text     = __('users.user_new_password', ['password' => $password]);
                     $password = password_hash($password, PASSWORD_BCRYPT);
                 } else {
                     $text     = null;
@@ -155,7 +155,7 @@ class UserController extends AdminController
                 ]);
 
                 clearCache('status');
-                setFlash('success', __('users.user_success_changed') . $text);
+                setFlash('success', [__('users.user_success_changed'), $text]);
                 redirect('/admin/users/edit?user=' . $user->login);
             } else {
                 setInput($request->all());

@@ -1721,11 +1721,7 @@ function setFlash(string $status, $message)
  */
 function showError($errors): HtmlString
 {
-    $errors = check($errors);
-
-    if (is_array($errors)) {
-        $errors = implode('<br><i class="fa fa-exclamation-circle fa-lg text-danger"></i> ', $errors);
-    }
+    $errors = (array) $errors;
 
     return new HtmlString(view('app/_error', compact('errors')));
 }
