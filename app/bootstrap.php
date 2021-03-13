@@ -34,7 +34,7 @@ define('RESOURCES', BASEDIR . '/resources');
 define('STORAGE', BASEDIR . '/storage');
 define('MODULES', BASEDIR . '/modules');
 define('SITETIME', time());
-define('VERSION', '9.1');
+define('VERSION', '9.2');
 
 require_once BASEDIR . '/vendor/autoload.php';
 
@@ -53,8 +53,6 @@ if (config('APP_DEBUG')) {
         ini_set('display_startup_errors', '1');
     }
 }
-
-date_default_timezone_set(config('TIMEZONE'));
 
 $db = new DB();
 $db->addConnection([

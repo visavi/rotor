@@ -12,16 +12,15 @@
         <div class="carousel-inner">
             @foreach ($model->files as $file)
                 <div class="carousel-item{{ $loop->first ? ' active' : '' }}">
-
                     @php
                         $image = resizeImage($file->hash, ['alt' => $model->title]);
-
-                        if (isset($path)) {
-                            $image = '<a href="' . $path . '/' . $model->id . '">' . $image . '</a>';
-                        }
                     @endphp
 
-                    {!! $image !!}
+                    @if (isset($path))
+                        <a href="{{ $path }}/{{ $model->id }}">{{ $image }}</a>
+                    @else
+                        {{ $image }}
+                    @endif
                 </div>
             @endforeach
         </div>

@@ -1403,7 +1403,7 @@ function resizeImage(?string $path, array $params = []): HtmlString
 
     $strParams = [];
     foreach ($image['params'] as $key => $param) {
-        $strParams[] = $key . '="' . $param . '"';
+        $strParams[] = $key . '="' . check($param) . '"';
     }
 
     $strParams = implode(' ', $strParams);

@@ -31,7 +31,7 @@
 
                 <div class="section-body border-top">
                     Referer: {{ $data->referer ?: __('main.undefined') }}<br>
-                    {{ __('main.user') }}: {!! $data->user->exists ? $data->user->getProfile() : setting('guestsuser') !!}
+                    {{ __('main.user') }}: {{ $data->user->exists ? $data->user->getProfile() : setting('guestsuser') }}
                     <div class="small text-muted font-italic mt-2">{{ $data->brow }}, {{ $data->ip }}</div>
                 </div>
             </div>
