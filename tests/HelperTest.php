@@ -24,7 +24,7 @@ class HelperTest extends TestCase
      */
     public function testDateFixed(): void
     {
-        $timestamp = 1117627200;
+        $timestamp = 1117612800;
 
         self::assertSame('01.06.2005 / 12:00', dateFixed($timestamp));
         self::assertSame('2005-06-01', dateFixed($timestamp, 'Y-m-d'));
