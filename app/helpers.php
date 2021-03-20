@@ -2437,7 +2437,7 @@ function config(string $key, $default = null)
  * @return string
  * @throws Exception
  */
-function mixa(string $path, string $manifestDirectory = ''): string
+function mix(string $path, string $manifestDirectory = ''): string
 {
     return (new Mix())(...func_get_args());
 }
