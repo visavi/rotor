@@ -2412,7 +2412,7 @@ function config(string $key, $default = null)
             $config = require $configPath;
         } else {
             $loader = new Loader(BASEDIR . '/.env');
-            $params = $loader->parse()->toArray();
+            $params = $loader->parse()->toEnv()->toArray();
             $getenv = array_intersect_key(getenv(), $params);
             $config = array_replace($params, $getenv);
 
@@ -2437,7 +2437,7 @@ function config(string $key, $default = null)
  * @return string
  * @throws Exception
  */
-function mix(string $path, string $manifestDirectory = ''): string
+function mixa(string $path, string $manifestDirectory = ''): string
 {
     return (new Mix())(...func_get_args());
 }

@@ -46,6 +46,9 @@ if (config('APP_DEBUG')) {
 
         $whoops = new Run();
         $whoops->prependHandler($handler);
+        $whoops->pushHandler(static function () {
+            $_ENV = [];
+        });
         $whoops->register();
     } else {
         error_reporting(E_ALL);
@@ -53,6 +56,8 @@ if (config('APP_DEBUG')) {
         ini_set('display_startup_errors', '1');
     }
 }
+
+date_default_timezone_set(config('TIMEZONE'));
 
 $db = new DB();
 $db->addConnection([
@@ -161,7 +166,6 @@ $app->singleton('config', static function () {
                 ],
             ],
         ],
-
         'logging.default' => 'monolog',
         'logging.channels.monolog' => [
             'path' => STORAGE . '/logs/rotor.log',

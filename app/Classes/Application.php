@@ -23,7 +23,6 @@ class Application
         }
 
         session_start();
-        date_default_timezone_set(defaultSetting('timezone'));
 
         $this->cookieAuth();
         $this->setSetting();
