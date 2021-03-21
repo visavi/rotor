@@ -40,12 +40,6 @@
         <div class="invalid-feedback">{{ textError('sets[doslimit]') }}</div>
     </div>
 
-    <div class="form-group{{ hasError('sets[timezone]') }}">
-        <label for="timezone">{{ __('settings.timezone') }}:</label>
-        <input type="text" class="form-control" id="timezone" name="sets[timezone]" maxlength="50" value="{{ getInput('sets.timezone', $settings['timezone']) }}" required>
-        <div class="invalid-feedback">{{ textError('sets[timezone]') }}</div>
-    </div>
-
     <div class="form-group{{ hasError('sets[currency]') }}">
         <label for="currency">{{ __('settings.currency') }}:</label>
         <input type="text" class="form-control" id="currency" name="sets[currency]" maxlength="10" value="{{ getInput('sets.currency', $settings['currency']) }}" required>

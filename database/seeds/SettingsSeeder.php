@@ -121,7 +121,6 @@ class SettingsSeeder extends AbstractSeed
             ['name'  => 'statusdef', 'value' => 'Дух'],
             ['name'  => 'themes', 'value' => 'default'],
             ['name'  => 'timeonline', 'value' => 600],
-            ['name'  => 'timezone', 'value' => 'Europe/Moscow'],
             ['name'  => 'title', 'value' => 'Rotor'],
             ['name'  => 'userlist', 'value' => 10],
             ['name'  => 'usersearch', 'value' => 30],

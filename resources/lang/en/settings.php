@@ -80,7 +80,6 @@ return [
     'logotype'                 => 'Logo Address',
     'antiflood'                => 'Anti-flood time (sec)',
     'request_limit'            => 'Limit of requests with IP (0 - Off)',
-    'timezone'                 => 'Time Zone',
     'currency'                 => 'Site Currency',
     'language'                 => 'Language',
     'fallback_language'        => 'Reserve language',

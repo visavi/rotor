@@ -80,7 +80,6 @@ return [
     'logotype'                 => 'Адрес логотипа',
     'antiflood'                => 'Время антифлуда (сек)',
     'request_limit'            => 'Лимит запросов с IP (0 - Выкл)',
-    'timezone'                 => 'Временная зона',
     'currency'                 => 'Валюта сайта',
     'language'                 => 'Язык',
     'fallback_language'        => 'Резервный язык',
