@@ -104,23 +104,23 @@
         </div>
 
         @if (getUser() && getUser('id') !== $down->user_id)
-            <form action="/downs/votes/{{ $down->id }}" method="post">
+            <form action="/downs/votes/{{ $down->id }}" method="post" class="row col-4">
                 @csrf
                 <label for="score">{{ __('main.your_vote') }}:</label>
-                <div class="form-inline">
-                    <div class="form-group mb-2{{ hasError('score') }}">
-                        <select class="form-control" id="score" name="score">
-                            <option value="0">{{ __('main.select_vote') }}</option>
-                            <option value="1" {{ $down->vote === '1' ? ' selected' : '' }}>{{ __('main.sucks') }}</option>
-                            <option value="2" {{ $down->vote === '2' ? ' selected' : '' }}>{{ __('main.bad') }}</option>
-                            <option value="3" {{ $down->vote === '3' ? ' selected' : '' }}>{{ __('main.normal') }}</option>
-                            <option value="4" {{ $down->vote === '4' ? ' selected' : '' }}>{{ __('main.good') }}</option>
-                            <option value="5" {{ $down->vote === '5' ? ' selected' : '' }}>{{ __('main.excellent') }}</option>
-                        </select>
-                        <div class="invalid-feedback">{{ textError('protect') }}</div>
+                <div class="input-group{{ hasError('score') }}">
+                    <select class="form-control" id="score" name="score">
+                        <option value="0">{{ __('main.select_vote') }}</option>
+                        <option value="1" {{ $down->vote === '1' ? ' selected' : '' }}>{{ __('main.sucks') }}</option>
+                        <option value="2" {{ $down->vote === '2' ? ' selected' : '' }}>{{ __('main.bad') }}</option>
+                        <option value="3" {{ $down->vote === '3' ? ' selected' : '' }}>{{ __('main.normal') }}</option>
+                        <option value="4" {{ $down->vote === '4' ? ' selected' : '' }}>{{ __('main.good') }}</option>
+                        <option value="5" {{ $down->vote === '5' ? ' selected' : '' }}>{{ __('main.excellent') }}</option>
+                    </select>
+                    <div class="input-group-append">
+                        <button class="btn btn-primary">{{ __('main.rate') }}</button>
                     </div>
-                    <button class="btn btn-primary mb-2">{{ __('main.rate') }}</button>
                 </div>
+                <div class="invalid-feedback">{{ textError('protect') }}</div>
             </form>
         @endif
     </div>

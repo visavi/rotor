@@ -68,12 +68,11 @@
         <div class="section-form my-3 shadow">
             <form action="/admin/blogs/create" method="post">
                 @csrf
-                <div class="form-inline">
-                    <div class="form-group{{ hasError('name') }}">
-                        <input type="text" class="form-control" id="name" name="name" maxlength="50" value="{{ getInput('name') }}" placeholder="{{ __('blogs.blog') }}" required>
+                <div class="input-group{{ hasError('name') }}">
+                    <input type="text" class="form-control" id="name" name="name" maxlength="50" value="{{ getInput('name') }}" placeholder="{{ __('blogs.blog') }}" required>
+                    <div class="input-group-append">
+                        <button class="btn btn-primary">{{ __('main.create') }}</button>
                     </div>
-
-                    <button class="btn btn-primary">{{ __('main.create') }}</button>
                 </div>
                 <div class="invalid-feedback">{{ textError('name') }}</div>
             </form>

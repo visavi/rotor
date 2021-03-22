@@ -53,12 +53,11 @@
     <div class="section-form mb-3 shadow">
         <form action="/admin/blacklists?type={{ $type }}" method="post">
             @csrf
-            <div class="form-inline">
-                <div class="form-group{{ hasError('value') }}">
-                    <input type="text" class="form-control" id="value" name="value" maxlength="100" value="{{ getInput('value') }}" placeholder="{{ __('main.record') }}" required>
+            <div class="input-group{{ hasError('value') }}">
+                <input type="text" class="form-control" id="value" name="value" maxlength="100" value="{{ getInput('value') }}" placeholder="{{ __('main.record') }}" required>
+                <div class="input-group-append">
+                    <button class="btn btn-primary">{{ __('main.add') }}</button>
                 </div>
-
-                <button class="btn btn-primary">{{ __('main.add') }}</button>
             </div>
             <div class="invalid-feedback">{{ textError('value') }}</div>
         </form>

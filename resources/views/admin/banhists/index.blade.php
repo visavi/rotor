@@ -59,13 +59,12 @@
 
     <div class="section-form mb-3 shadow">
         <form action="/admin/banhists/view" method="get">
-            <b>{{ __('admin.banhists.search_user') }}:</b><br>
-            <div class="form-inline">
-                <div class="form-group{{ hasError('user') }}">
-                    <input type="text" class="form-control" id="user" name="user" maxlength="20" value="{{ getInput('user') }}" placeholder="{{ __('main.user_login') }}" required>
+            <label for="user">{{ __('admin.banhists.search_user') }}:</label>
+            <div class="input-group{{ hasError('user') }}">
+                <input type="text" class="form-control" id="user" name="user" maxlength="20" value="{{ getInput('user') }}" placeholder="{{ __('main.user_login') }}" required>
+                <div class="input-group-append">
+                    <button class="btn btn-primary">{{ __('main.search') }}</button>
                 </div>
-
-                <button class="btn btn-primary">{{ __('main.search') }}</button>
             </div>
             <div class="invalid-feedback">{{ textError('user') }}</div>
         </form>

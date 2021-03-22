@@ -59,7 +59,8 @@ class BlacklistController extends AdminController
             }
 
             if ($type === 'login') {
-                $validator->regex($value, '|^[a-z0-9\-]+$|', ['value' => __('admin.blacklists.invalid_login')]);
+                $validator->regex($value, '|^[a-z0-9\-]+$|', ['value' => __('admin.blacklists.invalid_login')])
+                ->length($value, 3, 20, ['value' => __('validator.text')]);
             }
 
             if ($type === 'domain') {

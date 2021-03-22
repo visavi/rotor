@@ -16,12 +16,11 @@
     <label for="user">{{ __('main.user_login') }}:</label><br>
     <div class="section-form mb-3 shadow">
         <form method="get" action="/admin/bans/edit">
-            <div class="form-inline">
-                <div class="form-group{{ hasError('user') }}">
-                    <input type="text" class="form-control" id="user" name="user" maxlength="20" value="{{ getInput('user') }}" placeholder="{{ __('main.user_login') }}" required>
+            <div class="input-group{{ hasError('user') }}">
+                <input type="text" class="form-control" id="user" name="user" maxlength="20" value="{{ getInput('user') }}" placeholder="{{ __('main.user_login') }}" required>
+                <div class="input-group-append">
+                    <button class="btn btn-primary">{{ __('main.edit') }}</button>
                 </div>
-
-                <button class="btn btn-primary">{{ __('main.edit') }}</button>
             </div>
             <div class="invalid-feedback">{{ textError('user') }}</div>
         </form>

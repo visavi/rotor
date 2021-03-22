@@ -44,12 +44,11 @@
             <form method="post" action="/accounts/editstatus">
                 @csrf
                 <label for="status">{{ __('users.personal_status') }}:</label>
-                <div class="form-inline">
-                    <div class="form-group{{ hasError('status') }}">
-                        <input type="text" class="form-control" id="status" name="status" maxlength="20" value="{{ getInput('status', $user->status) }}">
+                <div class="input-group{{ hasError('status') }}">
+                    <input type="text" class="form-control" id="status" name="status" maxlength="20" value="{{ getInput('status', $user->status) }}">
+                    <div class="input-group-append">
+                        <button class="btn btn-primary">{{ __('main.change') }}</button>
                     </div>
-
-                    <button class="btn btn-primary">{{ __('main.change') }}</button>
                 </div>
                 <div class="invalid-feedback">{{ textError('status') }}</div>
             </form>

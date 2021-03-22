@@ -79,16 +79,18 @@ $keys = [
     <div class="row">
         <div class="col-12 mb-3">
     <?php if (! $request->has('act')): ?>
-        <form method="get">
+        <form method="get" class="row col-3">
             <label for="language">Выберите язык - Select language:</label>
-            <div class="form-inline mb-3">
+            <div class="input-group mb-3">
                 <select class="form-control" name="lang" id="language">
                     <?php foreach ($languages as $language): ?>
-                    <?php $selected = ($language === $lang) ? ' selected' : ''; ?>
-                    <option value="<?= $language ?>"<?= $selected ?>><?= $language ?></option>
+                        <?php $selected = ($language === $lang) ? ' selected' : ''; ?>
+                        <option value="<?= $language ?>"<?= $selected ?>><?= $language ?></option>
                     <?php endforeach; ?>
                 </select>
-                <button class="btn btn-primary"><?= __('main.select') ?></button>
+                <div class="input-group-append">
+                    <button class="btn btn-primary"><?= __('main.select') ?></button>
+                </div>
             </div>
         </form>
 
