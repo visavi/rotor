@@ -277,7 +277,7 @@ class LoadController extends AdminController
             $category = Load::query()->find($category);
 
             $validator->equal($request->input('token'), $_SESSION['token'], __('validator.token'))
-                ->length($title, 5, 50, ['title' => __('validator.text')])
+                ->length($title, 3, 50, ['title' => __('validator.text')])
                 ->length($text, 50, 5000, ['text' => __('validator.text')])
                 ->notEmpty($category, ['category' => __('loads.load_not_exist')]);
 

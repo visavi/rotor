@@ -242,7 +242,7 @@ class ArticleController extends AdminController
 
             $validator
                 ->equal($request->input('token'), $_SESSION['token'], __('validator.token'))
-                ->length($title, 5, 50, ['title' => __('validator.text')])
+                ->length($title, 3, 50, ['title' => __('validator.text')])
                 ->length($text, 100, setting('maxblogpost'), ['text' => __('validator.text')])
                 ->length($tags, 2, 50, ['tags' => __('blogs.article_error_tags')]);
 

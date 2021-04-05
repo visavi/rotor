@@ -142,7 +142,7 @@ class ArticleController extends BaseController
 
             $validator
                 ->equal($request->input('token'), $_SESSION['token'], __('validator.token'))
-                ->length($title, 5, 50, ['title' => __('validator.text')])
+                ->length($title, 3, 50, ['title' => __('validator.text')])
                 ->length($text, 100, setting('maxblogpost'), ['text' => __('validator.text')])
                 ->length($tags, 2, 50, ['tags' => __('blogs.article_error_tags')])
                 ->notEmpty($category, ['cid' => __('blogs.category_not_exist')]);
@@ -242,7 +242,7 @@ class ArticleController extends BaseController
 
             $validator
                 ->equal($request->input('token'), $_SESSION['token'], __('validator.token'))
-                ->length($title, 5, 50, ['title' => __('validator.text')])
+                ->length($title, 3, 50, ['title' => __('validator.text')])
                 ->length($text, 100, setting('maxblogpost'), ['text' => __('validator.text')])
                 ->length($tags, 2, 50, ['tags' => __('blogs.article_error_tags')])
                 ->false($flood->isFlood(), ['msg' => __('validator.flood', ['sec' => $flood->getPeriod()])])

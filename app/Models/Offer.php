@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Database\Eloquent\Relations\MorphOne;
+use Illuminate\Support\HtmlString;
 
 /**
  * Class Offer
@@ -123,9 +124,9 @@ class Offer extends BaseModel
     /**
      * Возвращает статус записи
      *
-     * @return string
+     * @return HtmlString
      */
-    public function getStatus(): string
+    public function getStatus(): HtmlString
     {
         switch ($this->status) {
             case 'process':
@@ -141,6 +142,6 @@ class Offer extends BaseModel
                 $status = '<span class="font-weight-bold text-warning"><i class="fa fa-question-circle"></i> ' . __('offers.wait') . '</span>';
         }
 
-        return $status;
+        return new HtmlString($status);
     }
 }

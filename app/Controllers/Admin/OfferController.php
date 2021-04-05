@@ -108,7 +108,7 @@ class OfferController extends AdminController
             $closed = empty($request->input('closed')) ? 0 : 1;
 
             $validator->equal($request->input('token'), $_SESSION['token'], __('validator.token'))
-                ->length($title, 5, 50, ['title' => __('validator.text')])
+                ->length($title, 3, 50, ['title' => __('validator.text')])
                 ->length($text, 5, 1000, ['text' => __('validator.text')])
                 ->in($type, Offer::TYPES, ['type' => __('offers.type_invalid')]);
 

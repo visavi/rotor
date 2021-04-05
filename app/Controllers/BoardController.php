@@ -114,7 +114,7 @@ class BoardController extends BaseController
 
             $validator
                 ->equal($request->input('token'), $_SESSION['token'], __('validator.token'))
-                ->length($title, 5, 50, ['title' => __('validator.text')])
+                ->length($title, 3, 50, ['title' => __('validator.text')])
                 ->length($text, 50, 5000, ['text' => __('validator.text')])
                 ->phone($phone, ['phone' => __('validator.phone')], false)
                 ->false($flood->isFlood(), ['msg' => __('validator.flood', ['sec' => $flood->getPeriod()])])
@@ -200,7 +200,7 @@ class BoardController extends BaseController
 
             $validator
                 ->equal($request->input('token'), $_SESSION['token'], __('validator.token'))
-                ->length($title, 5, 50, ['title' => __('validator.text')])
+                ->length($title, 3, 50, ['title' => __('validator.text')])
                 ->length($text, 50, 5000, ['text' => __('validator.text')])
                 ->phone($phone, ['phone' => __('validator.phone')], false)
                 ->notEmpty($board, ['category' => __('boards.category_not_exist')])

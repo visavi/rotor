@@ -1201,7 +1201,6 @@ function recentBoards(int $show = 5): HtmlString
     return new HtmlString(view('widgets/_boards', compact('items')));
 }
 
-
 /**
  * Возвращает количество предложений и проблем
  *
@@ -2007,11 +2006,11 @@ function checkAuth()
 /**
  * Возвращает является ли пользователь администратором
  *
- * @param string $level уровень доступа
+ * @param string|null $level уровень доступа
  *
  * @return bool является ли пользователь администратором
  */
-function isAdmin($level = User::EDITOR): bool
+function isAdmin(?string $level = User::EDITOR): bool
 {
     return access($level);
 }
@@ -2209,7 +2208,7 @@ function ipBan($clear = false): array
  * @param string|null $key     ключ массива
  * @param string|null $default значение по умолчанию
  *
- * @return array|string|null данные
+ * @return array|int|string|null данные
  */
 function setting($key = null, $default = null)
 {

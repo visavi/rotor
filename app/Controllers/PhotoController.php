@@ -84,7 +84,7 @@ class PhotoController extends BaseController
             $closed = empty($request->input('closed')) ? 0 : 1;
 
             $validator->equal($request->input('token'), $_SESSION['token'], __('validator.token'))
-                ->length($title, 5, 50, ['title' => __('validator.text')])
+                ->length($title, 3, 50, ['title' => __('validator.text')])
                 ->length($text, 0, 1000, ['text' => __('validator.text_long')])
                 ->false($flood->isFlood(), ['msg' => __('validator.flood', ['sec' => $flood->getPeriod()])]);
 
@@ -154,7 +154,7 @@ class PhotoController extends BaseController
             $closed = empty($request->input('closed')) ? 0 : 1;
 
             $validator->equal($request->input('token'), $_SESSION['token'], __('validator.token'))
-                ->length($title, 5, 50, ['title' => __('validator.text')])
+                ->length($title, 3, 50, ['title' => __('validator.text')])
                 ->length($text, 0, 1000, ['text' => __('validator.text_long')]);
 
             if ($validator->isValid()) {

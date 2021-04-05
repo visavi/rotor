@@ -78,7 +78,7 @@ class VoteController extends AdminController
 
             $validator->equal($request->input('token'), $_SESSION['token'], __('validator.token'));
 
-            $validator->length($title, 5, 100, ['title' => __('validator.text')]);
+            $validator->length($title, 3, 100, ['title' => __('validator.text')]);
             $answers = array_unique(array_diff($answers, ['']));
 
             foreach ($answers as $answer) {

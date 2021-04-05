@@ -48,7 +48,7 @@ class ForumController extends AdminController
         $title = $request->input('title');
 
         $validator->equal($request->input('token'), $_SESSION['token'], __('validator.token'))
-            ->length($title, 5, 50, ['title' => __('validator.text')]);
+            ->length($title, 3, 50, ['title' => __('validator.text')]);
 
         if ($validator->isValid()) {
             $max = Forum::query()->max('sort') + 1;
@@ -104,7 +104,7 @@ class ForumController extends AdminController
             $closed      = empty($request->input('closed')) ? 0 : 1;
 
             $validator->equal($request->input('token'), $_SESSION['token'], __('validator.token'))
-                ->length($title, 5, 50, ['title' => __('validator.text')])
+                ->length($title, 3, 50, ['title' => __('validator.text')])
                 ->length($description, 0, 100, ['description' => __('validator.text')])
                 ->notEqual($parent, $forum->id, ['parent' => __('forums.forum_invalid')]);
 
@@ -248,7 +248,7 @@ class ForumController extends AdminController
             $closed     = empty($request->input('closed')) ? 0 : 1;
 
             $validator->equal($request->input('token'), $_SESSION['token'], __('validator.token'))
-                ->length($title, 5, 50, ['title' => __('validator.text')])
+                ->length($title, 3, 50, ['title' => __('validator.text')])
                 ->length($note, 0, 250, ['note' => __('validator.text_long')]);
 
             if ($validator->isValid()) {
