@@ -186,7 +186,7 @@ class BBCode
             if (strpos($match[1], $_SERVER['SERVER_NAME']) === false) {
                 $target = ' target="_blank" rel="nofollow"';
             } else {
-                $match[1] = '//' . ltrim($match[1], $match[2]);
+                $match[1] = '//' . str_replace($match[2], '', $match[1]);
             }
         }
 
