@@ -41,7 +41,7 @@
 
 
             <div class="form-group{{ hasError('name') }}">
-                <label for="name">{{ __('loads.loads_name') }}:</label>
+                <label for="name">{{ __('main.title') }}:</label>
                 <input class="form-control" name="name" id="name" maxlength="50" value="{{ getInput('name', $load->name) }}" required>
                 <div class="invalid-feedback">{{ textError('name') }}</div>
             </div>

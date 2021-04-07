@@ -73,7 +73,7 @@ return [
 
     'did_not_find_answer' => '
     <b>Didn’t find the answer to your question?</b><br>
-     Write to <a href="/mails">the administrator</a>, <a href="/administrators">senior site</a> about this via internal mail or create a forum topic where we will discuss the issue together, share experiences and knowledge<br>',
+     Write to <a href="/mails">the administrator</a>, about this via internal mail or create a forum topic where we will discuss the issue together, share experiences and knowledge<br>',
 
     'online'       => 'Who’s Online',
     'total_online' => 'Total on site',

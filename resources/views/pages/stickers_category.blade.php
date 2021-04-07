@@ -18,7 +18,7 @@
             <div class="row">
                 @foreach ($stickers as $sticker)
                     <div class="col-md-3 col-sm-6">
-                        <img src="{{ $sticker['name'] }}" alt="{{ $sticker['code'] }}"><br>
+                        <img src="{{ $sticker['name'] }}" alt="{{ $sticker['code'] }}" class="img-fluid"><br>
                         <b>{{ $sticker['code'] }}</b>
                     </div>
                 @endforeach

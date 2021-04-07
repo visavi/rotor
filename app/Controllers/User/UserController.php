@@ -69,12 +69,12 @@ class UserController extends BaseController
             if ($validator->isValid()) {
                 $user->note()->updateOrCreate([], [
                     'text'         => $notice,
-                    'edit_user_id' => $user->id,
+                    'edit_user_id' => getUser('id'),
                     'updated_at'   => SITETIME,
                 ]);
 
                 setFlash('success', __('users.note_saved_success'));
-                redirect('/users/'.$user->login);
+                redirect('/users/' . $user->login);
             } else {
                 setInput($request->all());
                 setFlash('danger', $validator->getErrors());
