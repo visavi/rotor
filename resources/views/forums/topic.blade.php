@@ -90,11 +90,11 @@
 
         <div class="mb-3">
             @if ($vote->poll || $vote->closed || ! getUser())
-                @foreach ($vote->voted as $key => $data)
-                    <?php $proc = round(($data * 100) / $vote->sum, 1); ?>
-                    <?php $maxproc = round(($data * 100) / $vote->max); ?>
+                @foreach ($vote->voted as $key => $value)
+                    <?php $proc = round(($value * 100) / $vote->sum, 1); ?>
+                    <?php $maxproc = round(($value * 100) / $vote->max); ?>
 
-                    <b>{{ $key }}</b> ({{ __('forums.votes') }}: {{ $data }})<br>
+                    <b>{{ $key }}</b> ({{ __('forums.votes') }}: {{ $value }})<br>
                     {{ progressBar($maxproc, $proc . '%') }}
                 @endforeach
             @else
@@ -117,45 +117,45 @@
     @endif
 
     @if ($posts->isNotEmpty())
-        @foreach ($posts as $data)
-            <div class="section mb-3 shadow" id="post_{{ $data->id }}">
+        @foreach ($posts as $post)
+            <div class="section mb-3 shadow" id="post_{{ $post->id }}">
                 <div class="user-avatar">
-                    {{ $data->user->getAvatar() }}
-                    {{ $data->user->getOnline() }}
+                    {{ $post->user->getAvatar() }}
+                    {{ $post->user->getOnline() }}
                 </div>
 
                 <div class="section-user d-flex align-items-center">
                     <div class="flex-grow-1">
-                        {{ $data->user->getProfile() }}
-                        <small class="section-date text-muted font-italic">{{ dateFixed($data->created_at) }}</small><br>
-                        <small class="font-italic">{{ $data->user->getStatus() }}</small>
+                        {{ $post->user->getProfile() }}
+                        <small class="section-date text-muted font-italic">{{ dateFixed($post->created_at) }}</small><br>
+                        <small class="font-italic">{{ $post->user->getStatus() }}</small>
                     </div>
 
                     <div class="text-right">
                         @if (getUser())
-                            @if (getUser('id') !== $data->user_id)
+                            @if (getUser('id') !== $post->user_id)
                                 <a href="#" onclick="return postReply(this)" title="{{ __('main.reply') }}"><i class="fa fa-reply text-muted"></i></a>
 
                                 <a href="#" onclick="return postQuote(this)" title="{{ __('main.quote') }}"><i class="fa fa-quote-right text-muted"></i></a>
 
-                                <a href="#" onclick="return sendComplaint(this)" data-type="{{ $data->getMorphClass() }}" data-id="{{ $data->id }}" data-token="{{ $_SESSION['token'] }}" data-page="{{ $posts->currentPage() }}" rel="nofollow" title="{{ __('main.complain') }}"><i class="fa fa-bell text-muted"></i></a>
+                                <a href="#" onclick="return sendComplaint(this)" data-type="{{ $post->getMorphClass() }}" data-id="{{ $post->id }}" data-token="{{ $_SESSION['token'] }}" data-page="{{ $posts->currentPage() }}" rel="nofollow" title="{{ __('main.complain') }}"><i class="fa fa-bell text-muted"></i></a>
                             @endif
 
-                            @if ($topic->isModer || (getUser('id') === $data->user_id && $data->created_at + 600 > SITETIME))
-                                <a href="/posts/edit/{{ $data->id }}?page={{ $posts->currentPage() }}" title="{{ __('main.edit') }}"><i class="fa fa-pencil-alt text-muted"></i></a>
+                            @if ($topic->isModer || (getUser('id') === $post->user_id && $post->created_at + 600 > SITETIME))
+                                <a href="/posts/edit/{{ $post->id }}?page={{ $posts->currentPage() }}" title="{{ __('main.edit') }}"><i class="fa fa-pencil-alt text-muted"></i></a>
                                 @if ($topic->isModer)
-                                    <input type="checkbox" name="del[]" value="{{ $data->id }}">
+                                    <input type="checkbox" name="del[]" value="{{ $post->id }}">
                                 @endif
                             @endif
                         @endif
 
                         <div class="js-rating">
-                            @if (getUser() && getUser('id') !== $data->user_id)
-                                <a class="post-rating-down{{ $data->vote === '-' ? ' active' : '' }}" href="#" onclick="return changeRating(this);" data-id="{{ $data->id }}" data-type="{{ $data->getMorphClass() }}" data-vote="-" data-token="{{ $_SESSION['token'] }}"><i class="fas fa-arrow-down"></i></a>
+                            @if (getUser() && getUser('id') !== $post->user_id)
+                                <a class="post-rating-down{{ $post->vote === '-' ? ' active' : '' }}" href="#" onclick="return changeRating(this);" data-id="{{ $post->id }}" data-type="{{ $post->getMorphClass() }}" data-vote="-" data-token="{{ $_SESSION['token'] }}"><i class="fas fa-arrow-down"></i></a>
                             @endif
-                            <b>{{ formatNum($data->rating) }}</b>
-                            @if (getUser() && getUser('id') !== $data->user_id)
-                                <a class="post-rating-up{{ $data->vote === '+' ? ' active' : '' }}" href="#" onclick="return changeRating(this);" data-id="{{ $data->id }}" data-type="{{ $data->getMorphClass() }}" data-vote="+" data-token="{{ $_SESSION['token'] }}"><i class="fas fa-arrow-up"></i></a>
+                            <b>{{ formatNum($post->rating) }}</b>
+                            @if (getUser() && getUser('id') !== $post->user_id)
+                                <a class="post-rating-up{{ $post->vote === '+' ? ' active' : '' }}" href="#" onclick="return changeRating(this);" data-id="{{ $post->id }}" data-type="{{ $post->getMorphClass() }}" data-vote="+" data-token="{{ $_SESSION['token'] }}"><i class="fas fa-arrow-up"></i></a>
                             @endif
                         </div>
                     </div>
@@ -163,33 +163,33 @@
 
                 <div class="section-body border-top">
                     <div class="section-message">
-                        {{ bbCode($data->text) }}
+                        {{ bbCode($post->text) }}
                     </div>
 
-                    @if ($data->files->isNotEmpty())
+                    @if ($post->files->isNotEmpty())
                         <div class="section-media">
                             <i class="fa fa-paperclip"></i> <b>{{ __('main.attached_files') }}:</b><br>
-                            @foreach ($data->files as $file)
+                            @foreach ($post->files as $file)
                                 <?php $ext = getExtension($file->hash); ?>
                                 <div class="media-file">
                                     {{ icons($ext) }}
                                     <a href="{{ $file->hash }}">{{ $file->name }}</a> ({{ formatSize($file->size) }})<br>
                                     @if (in_array($ext, ['jpg', 'jpeg', 'gif', 'png']))
-                                        <a href="{{ $file->hash }}" class="gallery" data-group="{{ $data->id }}">{{ resizeImage($file->hash, ['alt' => $file->name]) }}</a>
+                                        <a href="{{ $file->hash }}" class="gallery" data-group="{{ $post->id }}">{{ resizeImage($file->hash, ['alt' => $file->name]) }}</a>
                                 </div>
                                 @endif
                             @endforeach
                         </div>
                     @endif
 
-                    @if ($data->edit_user_id)
+                    @if ($post->edit_user_id)
                         <div class="small">
-                            <i class="fa fa-exclamation-circle text-danger"></i> {{ __('main.changed') }}: {{ $data->editUser->getName() }} ({{ dateFixed($data->updated_at) }})
+                            <i class="fa fa-exclamation-circle text-danger"></i> {{ __('main.changed') }}: {{ $post->editUser->getName() }} ({{ dateFixed($post->updated_at) }})
                         </div>
                     @endif
 
                     @if (isAdmin())
-                        <div class="small text-muted font-italic mt-2">{{ $data->brow }}, {{ $data->ip }}</div>
+                        <div class="small text-muted font-italic mt-2">{{ $post->brow }}, {{ $post->ip }}</div>
                     @endif
                 </div>
             </div>

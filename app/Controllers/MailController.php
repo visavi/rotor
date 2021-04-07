@@ -26,9 +26,6 @@ class MailController extends BaseController
             $name    = $request->input('name');
             $email   = $request->input('email');
 
-            $message = bbCode($message);
-            $message = str_replace('/uploads/stickers', siteUrl().'/uploads/stickers', $message);
-
             if ($user = getUser()) {
                 $name  = $user->login;
                 $email = $user->email;
@@ -40,6 +37,12 @@ class MailController extends BaseController
                 ->email($email, ['email' => __('validator.email')]);
 
             if ($validator->isValid()) {
+                $message = str_replace(
+                    '/uploads/stickers',
+                    siteUrl() . '/uploads/stickers',
+                    bbCode($message)->toHtml()
+                );
+
                 $message .= '<br><br>IP: ' . getIp() . '<br>Browser: ' . getBrowser() . '<br>' . __('main.sent_out', [], defaultSetting('language')) . ': ' . dateFixed(SITETIME, 'd.m.y / H:i');
 
                 $subject = __('mails.email_from_site', ['sitename' => setting('title')], defaultSetting('language'));

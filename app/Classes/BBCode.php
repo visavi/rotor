@@ -183,10 +183,10 @@ class BBCode
 
         $target = '';
         if ($match[2] !== '/') {
-            if (strpos($match[1], $_SERVER['SERVER_NAME']) === false) {
-                $target = ' target="_blank" rel="nofollow"';
-            } else {
+            if (strpos($match[1], $_SERVER['SERVER_NAME']) !== false) {
                 $match[1] = '//' . str_replace($match[2], '', $match[1]);
+            } else {
+                $target = ' target="_blank" rel="nofollow"';
             }
         }
 
