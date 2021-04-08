@@ -88,6 +88,13 @@ class PhotoController extends BaseController
                 ->length($text, 0, 1000, ['text' => __('validator.text_long')])
                 ->false($flood->isFlood(), ['msg' => __('validator.flood', ['sec' => $flood->getPeriod()])]);
 
+            $existFiles = File::query()
+                ->where('relate_type', Photo::$morphName)
+                ->where('relate_id', 0)
+                ->where('user_id', $user->id)
+                ->exists();
+            $validator->true($existFiles, ['files' => __('validator.image_upload_failed')]);
+
             if ($validator->isValid()) {
                 /** @var Photo $photo */
                 $photo = Photo::query()->create([

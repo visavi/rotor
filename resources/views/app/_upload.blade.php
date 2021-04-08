@@ -23,10 +23,13 @@ $click = $cond ? 'return pasteImage(this);' : false;
     </span>
 </div>
 
-<label class="btn btn-sm btn-secondary" for="image">
-    <input id="image" type="file" name="image" accept="image/*" onchange="return submitImage(this, {{ $cond }});" data-id="{{ $id ?? 0 }}" data-type="{{ $type }}" data-token="{{ $_SESSION['token'] }}" hidden>
-    {{ __('main.attach_image') }}&hellip;
-</label><br>
+<div class="mb-3{{ hasError('files') }}">
+    <label class="btn btn-sm btn-secondary mb-1" for="image">
+        <input id="image" type="file" name="image" accept="image/*" onchange="return submitImage(this, {{ $cond }});" data-id="{{ $id ?? 0 }}" data-type="{{ $type }}" data-token="{{ $_SESSION['token'] }}" hidden>
+        {{ __('main.attach_image') }}&hellip;
+    </label>
+    <div class="invalid-feedback">{{ textError('files') }}</div>
+</div>
 
 <p class="text-muted font-italic">
     {{ __('main.max_file_upload') }}: {{ setting('maxfiles') }}<br>
