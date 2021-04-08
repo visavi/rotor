@@ -76,6 +76,12 @@
                 <div class="invalid-feedback">{{ textError('city') }}</div>
             </div>
 
+            <div class="form-group{{ hasError('phone') }}">
+                <label for="phone">{{ __('users.phone') }}:</label>
+                <input class="phone form-control" id="phone" name="phone" placeholder="8 ___ ___-__-__" maxlength="18" value="{{ getInput('phone', $user->phone) }}">
+                <div class="invalid-feedback">{{ textError('phone') }}</div>
+            </div>
+
             <div class="form-group{{ hasError('site') }}">
                 <label for="site">{{ __('users.site') }}:</label>
                 <input type="text" class="form-control" id="site" name="site" maxlength="50" value="{{ getInput('site', $user->site) }}">

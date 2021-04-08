@@ -40,7 +40,7 @@
 
                         <div class="form-group{{ hasError('phone') }}">
                             <label for="inputPhone">{{ __('users.phone') }}:</label>
-                            <input class="phone form-control" id="inputPhone" name="phone" placeholder="8 ___ ___-__-__" maxlength="15" value="{{ getInput('phone', $user->phone) }}">
+                            <input class="phone form-control" id="inputPhone" name="phone" placeholder="8 ___ ___-__-__" maxlength="18" value="{{ getInput('phone', $user->phone) }}">
                             <div class="invalid-feedback">{{ textError('phone') }}</div>
                         </div>
 

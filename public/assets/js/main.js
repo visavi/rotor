@@ -84,7 +84,7 @@ $(function () {
         interval: false
     });
 
-    $('.phone').mask('0 000 000-00-00');
+    $('.phone').mask('0 000 000-00-00-00');
     $('.birthday').mask('00.00.0000');
 
     // Scroll up

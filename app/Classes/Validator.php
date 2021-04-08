@@ -403,7 +403,7 @@ class Validator
             return $this;
         }
 
-        if (! preg_match('#^\d{11}$#', $input)) {
+        if (! preg_match('#^\d{8,13}$#', $input)) {
             $this->addError($label);
         }
 

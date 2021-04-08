@@ -96,6 +96,7 @@ class UserController extends AdminController
             $name      = $request->input('name');
             $country   = $request->input('country');
             $city      = $request->input('city');
+            $phone    = preg_replace('/\D/', '', $request->input('phone'));
             $site      = $request->input('site');
             $birthday  = $request->input('birthday');
             $point     = int($request->input('point'));
@@ -112,7 +113,8 @@ class UserController extends AdminController
                 ->in($level, User::ALL_GROUPS, ['level' => __('users.user_level_invalid')])
                 ->length($password, 6, 20, __('users.password_length_requirements'), false)
                 ->email($email, ['email' => __('validator.email')])
-                ->regex($site, '#^https?://([а-яa-z0-9_\-\.])+(\.([а-яa-z0-9\/])+)+$#u', ['site' => __('validator.url')], false)
+                ->phone($phone, ['phone' => __('validator.phone')], false)
+                ->url($site, ['site' => __('validator.url')], false)
                 ->regex($birthday, '#^[0-9]{2}+\.[0-9]{2}+\.[0-9]{4}$#', ['birthday' => __('validator.date')], false)
                 ->regex($created, '#^[0-9]{2}+\.[0-9]{2}+\.[0-9]{4}$#', ['created' => __('validator.date')], false)
                 ->length($status, 3, 20, ['status' => __('users.status_short_or_long')], false)
@@ -140,6 +142,7 @@ class UserController extends AdminController
                     'name'       => $name,
                     'country'    => $country,
                     'city'       => $city,
+                    'phone'      => $phone,
                     'site'       => $site,
                     'birthday'   => $birthday,
                     'point'      => $point,
