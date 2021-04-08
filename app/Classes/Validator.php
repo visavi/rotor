@@ -33,13 +33,13 @@ class Validator
      */
     public function length($input, int $min, int $max, $label, bool $required = true): Validator
     {
-        if (! $required && blank($input)) {
+        if (! $required && $this->isBlank($input)) {
             return $this;
         }
 
         if (mb_strlen(trim($input), 'utf-8') < $min) {
             $this->addError($label, __('validator.length_min', ['length' => $min]));
-        } elseif (mb_strlen(trim($input), 'utf-8') > $max) {
+        } elseif (mb_strlen($input, 'utf-8') > $max) {
             $this->addError($label, __('validator.length_max', ['length' => $max]));
         }
 
@@ -289,7 +289,7 @@ class Validator
      */
     public function regex($input, string $pattern, $label, bool $required = true): Validator
     {
-        if (! $required && blank($input)) {
+        if (! $required && $this->isBlank($input)) {
             return $this;
         }
 
@@ -311,7 +311,7 @@ class Validator
      */
     public function float($input, $label, bool $required = true): Validator
     {
-        if (! $required && blank($input)) {
+        if (! $required && $this->isBlank($input)) {
             return $this;
         }
 
@@ -333,7 +333,7 @@ class Validator
      */
     public function url($input, $label, bool $required = true): Validator
     {
-        if (! $required && blank($input)) {
+        if (! $required && $this->isBlank($input)) {
             return $this;
         }
 
@@ -355,7 +355,7 @@ class Validator
      */
     public function email($input, $label, bool $required = true): Validator
     {
-        if (! $required && blank($input)) {
+        if (! $required && $this->isBlank($input)) {
             return $this;
         }
 
@@ -377,7 +377,7 @@ class Validator
      */
     public function ip($input, $label, bool $required = true): Validator
     {
-        if (! $required && blank($input)) {
+        if (! $required && $this->isBlank($input)) {
             return $this;
         }
 
@@ -399,7 +399,7 @@ class Validator
      */
     public function phone($input, $label, bool $required = true): Validator
     {
-        if (! $required && blank($input)) {
+        if (! $required && $this->isBlank($input)) {
             return $this;
         }
 
@@ -422,7 +422,7 @@ class Validator
      */
     public function file(?UploadedFile $input, array $rules, $label, bool $required = true): Validator
     {
-        if (! $required && blank($input)) {
+        if (! $required && $this->isBlank($input)) {
             return $this;
         }
 
@@ -525,5 +525,29 @@ class Validator
     public function isValid(): bool
     {
         return empty($this->errors);
+    }
+
+    /**
+     * Is blank
+     *
+     * @param mixed $value
+     *
+     * @return bool
+     */
+    private function isBlank($value): bool
+    {
+        if (is_null($value)) {
+            return true;
+        }
+
+        if (is_string($value)) {
+            return $value === '';
+        }
+
+        if (is_numeric($value) || is_bool($value)) {
+            return false;
+        }
+
+        return empty($value);
     }
 }
