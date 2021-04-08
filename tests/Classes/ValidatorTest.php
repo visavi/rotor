@@ -406,7 +406,10 @@ class ValidatorTest extends \Tests\TestCase
         $this->validator->phone(null, 'error', false);
         self::assertTrue($this->validator->isValid());
 
-        $this->validator->phone('890012345678', 'error');
+        $this->validator->phone('8900123456789', 'error');
+        self::assertTrue($this->validator->isValid());
+
+        $this->validator->phone('89001234567890', 'error');
         self::assertFalse($this->validator->isValid());
 
         $this->validator->phone('+79001234567', 'error');
