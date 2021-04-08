@@ -38,12 +38,14 @@ use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Lang;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\HtmlString;
 use Illuminate\Support\Str;
 use Intervention\Image\Constraint;
 use Intervention\Image\ImageManagerStatic as Image;
 use josegonzalez\Dotenv\Loader;
+use PHPMailer\PHPMailer\PHPMailer;
 use ReCaptcha\ReCaptcha;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\ArrayInput;
@@ -1807,39 +1809,48 @@ function textError(string $field): ?string
  */
 function sendMail(string $to, string $subject, string $body, array $params = []): bool
 {
-    if (empty($params['from'])) {
-        $params['from'] = [config('SITE_EMAIL') => config('SITE_ADMIN')];
+    if (! $params['from']) {
+        $params['from'] = [config('SITE_EMAIL'), config('SITE_ADMIN')];
     }
 
-    $message = (new Swift_Message())
-        ->setTo($to)
-        ->setSubject($subject)
-        ->setBody($body, 'text/html')
-        ->setFrom($params['from'])
-        ->setReturnPath(config('SITE_EMAIL'));
+    [$fromEmail, $fromName] = $params['from'];
 
-    if (config('MAIL_DRIVER') === 'smtp') {
-        $transport = (new Swift_SmtpTransport())
-            ->setHost(config('MAIL_HOST'))
-            ->setPort(config('MAIL_PORT'))
-            ->setEncryption(config('MAIL_ENCRYPTION'))
-            ->setUsername(config('MAIL_USERNAME'))
-            ->setPassword(config('MAIL_PASSWORD'));
-    } else {
-        $transport = new Swift_SendmailTransport();
-
-        if (config('MAIL_PATH')) {
-            $transport->setCommand(config('MAIL_PATH'));
-        }
-    }
-
-    $mailer = new Swift_Mailer($transport);
-
+    $mail = new PHPMailer(true);
     try {
-        return $mailer->send($message);
+        if (config('MAIL_DRIVER') === 'smtp') {
+            $mail->isSMTP();
+            $mail->Host       = config('MAIL_HOST');
+            $mail->Port       = config('MAIL_PORT');
+            $mail->SMTPAuth   = true;
+            $mail->Username   = config('MAIL_USERNAME');
+            $mail->Password   = config('MAIL_PASSWORD');
+            $mail->SMTPSecure = config('MAIL_ENCRYPTION');
+        }
+
+        if (config('MAIL_DRIVER') === 'sendmail') {
+            $mail->isSendmail();
+            if (config('MAIL_PATH')) {
+                $mail->Sendmail = config('MAIL_PATH');
+            }
+        }
+
+        if (config('MAIL_DRIVER') === 'mail') {
+            $mail->isMail();
+        }
+
+        $mail->Sender  = config('SITE_EMAIL');
+        $mail->CharSet = PHPMailer::CHARSET_UTF8;
+        $mail->Subject = $subject;
+        $mail->setFrom($fromEmail, $fromName);
+        $mail->addAddress($to);
+        $mail->msgHTML($body);
+
+        return $mail->send();
     } catch (Exception $e) {
-        return false;
+        Log::error('PHPMailer error: ' . $e);
     }
+
+    return false;
 }
 
 /**
