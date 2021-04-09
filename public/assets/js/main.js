@@ -545,6 +545,12 @@ getNewMessages = function () {
         dataType: 'json',
         type: 'get',
         url: '/messages/new',
+        beforeSend: function () {
+            $('.js-messages').append('<li class="js-message-spin text-center"><i class="fas fa-spinner fa-spin fa-2x my-2"></i></li>');
+        },
+        complete: function () {
+            $('.js-message-spin').remove();
+        },
         success: function (data) {
             if (data.status === 'error') {
                 return false;

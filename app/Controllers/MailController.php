@@ -43,7 +43,7 @@ class MailController extends BaseController
                     bbCode($message)->toHtml()
                 );
 
-                $message .= '<br><br>IP: ' . getIp() . '<br>Browser: ' . getBrowser() . '<br>' . __('main.sent_out', [], defaultSetting('language')) . ': ' . dateFixed(SITETIME, 'd.m.y / H:i');
+                $message .= '<br><br>Email: ' . $name . ' &lt;' . $email . '&gt;<br>IP: ' . getIp() . '<br>Browser: ' . getBrowser() . '<br>' . __('main.sent_out', [], defaultSetting('language')) . ': ' . dateFixed(SITETIME, 'd.m.y / H:i');
 
                 $subject = __('mails.email_from_site', ['sitename' => setting('title')], defaultSetting('language'));
                 $body = view('mailer.default', compact('subject', 'message'));

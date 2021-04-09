@@ -1809,12 +1809,6 @@ function textError(string $field): ?string
  */
 function sendMail(string $to, string $subject, string $body, array $params = []): bool
 {
-    if (! $params['from']) {
-        $params['from'] = [config('SITE_EMAIL'), config('SITE_ADMIN')];
-    }
-
-    [$fromEmail, $fromName] = $params['from'];
-
     $mail = new PHPMailer(true);
     try {
         if (config('MAIL_DRIVER') === 'smtp') {
@@ -1838,10 +1832,15 @@ function sendMail(string $to, string $subject, string $body, array $params = [])
             $mail->isMail();
         }
 
+        if (isset($params['from'])) {
+            [$fromEmail, $fromName] = $params['from'];
+            $mail->addReplyTo($fromEmail, $fromName);
+        }
+
         $mail->Sender  = config('SITE_EMAIL');
         $mail->CharSet = PHPMailer::CHARSET_UTF8;
         $mail->Subject = $subject;
-        $mail->setFrom($fromEmail, $fromName);
+        $mail->setFrom(config('SITE_EMAIL'), config('SITE_ADMIN'));
         $mail->addAddress($to);
         $mail->msgHTML($body);
 
