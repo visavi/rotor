@@ -12,6 +12,7 @@ use Illuminate\Filesystem\Filesystem;
 use Illuminate\Log\LogManager;
 use Illuminate\Pagination\PaginationServiceProvider;
 use Illuminate\Redis\RedisManager;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Facade;
 use Illuminate\Translation\FileLoader;
 use Illuminate\Translation\Translator;
@@ -48,7 +49,8 @@ if (config('app.debug')) {
         $whoops = new Run();
         $whoops->prependHandler($handler);
         $whoops->pushHandler(static function () {
-            $_ENV = [];
+            $_SERVER = Arr::except($_SERVER, array_keys($_ENV));
+            $_ENV    = [];
         });
         $whoops->register();
     } else {

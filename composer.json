@@ -46,7 +46,8 @@
         "phpmailer/phpmailer": "^6.4",
         "robmorgan/phinx": "^0.12",
         "visavi/cleanup": "^1.5",
-        "visavi/crontask": "^1.2"
+        "visavi/crontask": "^1.2",
+        "vlucas/phpdotenv": "^5.3"
     },
     "require-dev": {
         "deployer/deployer": "^6.8",
