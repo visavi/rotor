@@ -251,7 +251,7 @@
 .markItUp .bb-sticker .col5-5 a {
     background-image:url('/uploads/stickers/moder.gif');
 }
-.markItUp .bb-cutpage a	{;
+.markItUp .bb-cutpage a {
     display: none;
 }
 .cut .bb-cutpage a {
@@ -259,11 +259,15 @@
 }
 
 @media (max-width: 768px) {
-    .markItUpContainer ul {
+    .markItUpHeader ul {
         display: flex;
         flex-wrap: nowrap;
         overflow-y: hidden;
         white-space: nowrap;
         padding-bottom: 3px;
+    }
+
+    .markItUpDropMenu ul {
+        display: none !important;
     }
 }
