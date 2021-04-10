@@ -2,11 +2,13 @@
 
 declare(strict_types = 1);
 
-if (config('APP_NEW') === false) {
+if (config('app.env') === false) {
     $migrations = BASEDIR . '/database/upgrades';
 } else {
     $migrations = BASEDIR . '/database/' . (setting('app_installed') ? 'upgrades' : 'migrations');
 }
+
+$database = config('database.connections.' . config('database.default'));
 
 return [
     'paths' => [
@@ -17,15 +19,15 @@ return [
         'default_migration_table' => 'migrations',
         'default_database'        => 'default',
         'default' => [
-            'adapter'      => config('DB_DRIVER'),
-            'charset'      => config('DB_CHARSET'),
-            'collation'    => config('DB_COLLATION'),
-            'port'         => config('DB_PORT'),
-            'host'         => config('DB_HOST'),
-            'name'         => config('DB_DATABASE'),
-            'user'         => config('DB_USERNAME'),
-            'pass'         => config('DB_PASSWORD'),
-            'table_prefix' => config('DB_PREFIX'),
+            'adapter'      => $database['driver'],
+            'charset'      => $database['charset'],
+            'collation'    => $database['collation'],
+            'port'         => $database['port'],
+            'host'         => $database['host'],
+            'name'         => $database['database'],
+            'user'         => $database['username'],
+            'pass'         => $database['password'],
+            'table_prefix' => $database['prefix'],
         ]
     ]
 ];

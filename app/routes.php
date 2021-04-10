@@ -530,5 +530,5 @@ return FastRoute\cachedDispatcher(static function (RouteCollector $r) {
     }
 }, [
     'cacheFile'     => STORAGE . '/caches/routes.php',
-    'cacheDisabled' => config('APP_ENV') !== 'production',
+    'cacheDisabled' => config('app.env') !== 'production',
 ]);

@@ -208,12 +208,12 @@ class Down extends BaseModel
         $isVideo = strpos($file['mime'], 'video/') !== false;
 
         // Обработка видео
-        if ($isVideo && config('FFMPEG_ENABLED')) {
+        if ($isVideo && config('ffmpeg.enabled')) {
             $ffconfig = [
-                'ffmpeg.binaries'  => config('FFMPEG_PATH'),
-                'ffprobe.binaries' => config('FFPROBE_PATH'),
-                'timeout'          => config('FFMPEG_TIMEOUT'),
-                'ffmpeg.threads'   => config('FFMPEG_THREADS'),
+                'ffmpeg.binaries'  => config('ffmpeg.path'),
+                'ffprobe.binaries' => config('ffmpeg.ffprobe.path'),
+                'ffmpeg.threads'   => config('ffmpeg.threads'),
+                'timeout'          => config('ffmpeg.timeout'),
             ];
 
             $ffmpeg = FFMpeg::create($ffconfig);

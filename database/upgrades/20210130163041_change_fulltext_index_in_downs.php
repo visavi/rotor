@@ -11,7 +11,7 @@ final class ChangeFulltextIndexInDowns extends Migration
      */
     public function up(): void
     {
-        if (config('DB_DRIVER') === 'mysql') {
+        if (config('database.default') === 'mysql') {
             $this->db->getConnection()->statement('ALTER TABLE downs DROP INDEX title;');
             $this->db->getConnection()->statement('ALTER TABLE downs DROP INDEX text;');
 
@@ -24,7 +24,7 @@ final class ChangeFulltextIndexInDowns extends Migration
      */
     public function down(): void
     {
-        if (config('DB_DRIVER') === 'mysql') {
+        if (config('database.default') === 'mysql') {
             $this->db->getConnection()->statement('ALTER TABLE downs DROP INDEX downs_title_text_fulltext;');
 
             $this->db->getConnection()->statement('CREATE FULLTEXT INDEX title ON downs(title);');

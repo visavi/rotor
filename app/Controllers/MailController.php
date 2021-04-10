@@ -47,7 +47,7 @@ class MailController extends BaseController
 
                 $subject = __('mails.email_from_site', ['sitename' => setting('title')], defaultSetting('language'));
                 $body = view('mailer.default', compact('subject', 'message'));
-                sendMail(config('SITE_EMAIL'), $subject, $body, ['from' => [$email, $name]]);
+                sendMail(config('app.site_email'), $subject, $body, ['from' => [$email, $name]]);
 
                 setFlash('success', __('mails.success_sent'));
                 redirect('/');

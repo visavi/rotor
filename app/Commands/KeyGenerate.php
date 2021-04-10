@@ -65,7 +65,7 @@ class KeyGenerate extends AbstractCommand
      */
     protected function keyReplacementPattern(): string
     {
-        $escaped = preg_quote('=' . config('APP_KEY'), '/');
+        $escaped = preg_quote('=' . config('app.key'), '/');
         return "/^APP_KEY{$escaped}/m";
     }
 }

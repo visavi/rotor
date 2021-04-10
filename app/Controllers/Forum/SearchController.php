@@ -31,7 +31,7 @@ class SearchController extends BaseController
 
             $validator->length($find, 3, 64, ['find' => __('main.request_length')]);
             if ($validator->isValid()) {
-                if (config('DB_DRIVER') === 'mysql') {
+                if (config('database.default') === 'mysql') {
                     [$sql, $bindings] = ['MATCH (' . $type . ') AGAINST (? IN BOOLEAN MODE)', [$find . '*']];
                 } else {
                     [$sql, $bindings] = [$type . ' ILIKE ?', ['%' . $find . '%']];

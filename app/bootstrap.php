@@ -4,6 +4,7 @@ declare(strict_types = 1);
 
 use Illuminate\Cache\CacheManager;
 use Illuminate\Cache\MemcachedConnector;
+use Illuminate\Config\Repository;
 use Illuminate\Container\Container;
 use Illuminate\Database\Capsule\Manager as DB;
 use Illuminate\Events\Dispatcher;
@@ -27,18 +28,18 @@ use Whoops\Util\Misc;
 
 define('STARTTIME', microtime(true));
 define('BASEDIR', dirname(__DIR__));
-define('APP', BASEDIR . '/app');
-define('HOME', BASEDIR . '/public');
-define('UPLOADS', HOME . '/uploads');
-define('RESOURCES', BASEDIR . '/resources');
-define('STORAGE', BASEDIR . '/storage');
-define('MODULES', BASEDIR . '/modules');
 define('SITETIME', time());
-define('VERSION', '9.2');
+const APP = BASEDIR . '/app';
+const HOME = BASEDIR . '/public';
+const UPLOADS = HOME . '/uploads';
+const RESOURCES = BASEDIR . '/resources';
+const STORAGE = BASEDIR . '/storage';
+const MODULES = BASEDIR . '/modules';
+const VERSION = '9.2';
 
 require_once BASEDIR . '/vendor/autoload.php';
 
-if (config('APP_DEBUG')) {
+if (config('app.debug')) {
     if (class_exists(Run::class)) {
         $handler = Misc::isCommandLine() ?
             new PlainTextHandler() :
@@ -57,29 +58,16 @@ if (config('APP_DEBUG')) {
     }
 }
 
-date_default_timezone_set(config('TIMEZONE'));
-
-$db = new DB();
-$db->addConnection([
-    'driver'    => config('DB_DRIVER'),
-    'port'      => config('DB_PORT'),
-    'host'      => config('DB_HOST'),
-    'database'  => config('DB_DATABASE'),
-    'username'  => config('DB_USERNAME'),
-    'password'  => config('DB_PASSWORD'),
-    'charset'   => config('DB_CHARSET'),
-    'collation' => config('DB_COLLATION'),
-    'prefix'    => config('DB_PREFIX'),
-]);
-
-$db->setAsGlobal();
-$db->bootEloquent();
-$db::connection()->enableQueryLog();
+date_default_timezone_set(config('app.timezone'));
 
 /**
  * Setup a new app instance container
  */
 $app = new Container();
+
+$app->singleton('config', static function () {
+    return new Repository(config());
+});
 
 $app->singleton('files', static function () {
     return new Filesystem();
@@ -135,57 +123,17 @@ $app->singleton('view', static function ($app) {
     return new Factory($resolver, $finder, $app['events']);
 });
 
-$app->singleton('config', static function () {
-    return [
-        'cache.default' => config('CACHE_DRIVER', 'file'),
-        'cache.prefix' => '',
-        'cache.stores.file' => [
-            'driver'     => 'file',
-            'path'       => STORAGE . '/caches',
-        ],
-        'cache.stores.redis' => [
-            'driver'     => 'redis',
-            'connection' => 'default'
-        ],
-        'database.redis' => [
-            'cluster' => false,
-            'default' => [
-                'host'     => config('REDIS_HOST', '127.0.0.1'),
-                'password' => config('REDIS_PASSWORD'),
-                'port'     => config('REDIS_PORT', 6379),
-                'database' => 0,
-            ],
-        ],
-        'cache.stores.memcached' => [
-            'driver' => 'memcached',
-            'servers' => [
-                [
-                    'host'   => config('MEMCACHED_HOST', '127.0.0.1'),
-                    'port'   => config('MEMCACHED_PORT', 11211),
-                    'weight' => 100,
-                ],
-            ],
-        ],
-        'logging.default' => 'monolog',
-        'logging.channels.monolog' => [
-            'path' => STORAGE . '/logs/rotor.log',
-            'driver' => 'daily',
-            'level' => 'debug',
-        ],
-    ];
-});
-
 $app->singleton('log', static function ($app) {
     return new LogManager($app);
 });
 
-if (config('CACHE_DRIVER') === 'redis') {
+if (config('cache.default') === 'redis') {
     $app->bind('redis', static function () use ($app) {
-        return new RedisManager($app, 'phpredis', $app['config']['database.redis']);
+        return new RedisManager($app, 'phpredis', config('database.redis'));
     });
 }
 
-if (config('CACHE_DRIVER') === 'memcached') {
+if (config('cache.default') === 'memcached') {
     $app->bind('memcached.connector', static function () {
         return new MemcachedConnector();
     });
@@ -196,6 +144,12 @@ $app->instance('cache', $cacheManager);
 
 $pagination = new PaginationServiceProvider($app);
 $pagination->register();
+
+$db = new DB();
+$db->addConnection(config('database.connections.' . config('database.default')));
+$db->setAsGlobal();
+$db->bootEloquent();
+$db::connection()->enableQueryLog();
 
 /**
  * Set $app as FacadeApplication handler

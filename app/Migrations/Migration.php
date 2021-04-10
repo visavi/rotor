@@ -20,21 +20,14 @@ class Migration extends AbstractMigration
     public function init(): void
     {
         $this->db = new DB();
-        $this->db->addConnection([
-            'driver'    => config('DB_DRIVER'),
-            'port'      => config('DB_PORT'),
-            'host'      => config('DB_HOST'),
-            'database'  => config('DB_DATABASE'),
-            'username'  => config('DB_USERNAME'),
-            'password'  => config('DB_PASSWORD'),
-            'charset'   => config('DB_CHARSET'),
-            'collation' => config('DB_COLLATION'),
-            'prefix'    => config('DB_PREFIX'),
-            'engine'    => config('DB_ENGINE'),
-            'options' => [
-                PDO::ATTR_PERSISTENT => true
+        $this->db->addConnection(array_merge(
+            config('database.connections.' . config('database.default')),
+            [
+                'options' => [
+                    PDO::ATTR_PERSISTENT => true
+                ],
             ]
-        ]);
+        ));
 
         $this->db->setAsGlobal();
         $this->db->bootEloquent();

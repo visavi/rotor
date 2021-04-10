@@ -742,7 +742,7 @@ class ArticleController extends BaseController
 
             $validator->length($find, 3, 64, ['find' => __('main.request_length')]);
             if ($validator->isValid()) {
-                if (config('DB_DRIVER') === 'mysql') {
+                if (config('database.default') === 'mysql') {
                     [$sql, $bindings] = ['MATCH (title, text) AGAINST (? IN BOOLEAN MODE)', [$find . '*']];
                 } else {
                     [$sql, $bindings] = ['title ILIKE ? OR text ILIKE ?', ['%' . $find . '%', '%' . $find . '%']];

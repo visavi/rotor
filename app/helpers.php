@@ -44,7 +44,6 @@ use Illuminate\Support\HtmlString;
 use Illuminate\Support\Str;
 use Intervention\Image\Constraint;
 use Intervention\Image\ImageManagerStatic as Image;
-use josegonzalez\Dotenv\Loader;
 use PHPMailer\PHPMailer\PHPMailer;
 use ReCaptcha\ReCaptcha;
 use Symfony\Component\Console\Command\Command;
@@ -1811,24 +1810,24 @@ function sendMail(string $to, string $subject, string $body, array $params = [])
 {
     $mail = new PHPMailer(true);
     try {
-        if (config('MAIL_DRIVER') === 'smtp') {
+        if (config('mail.driver') === 'smtp') {
             $mail->isSMTP();
-            $mail->Host       = config('MAIL_HOST');
-            $mail->Port       = config('MAIL_PORT');
+            $mail->Host       = config('mail.host');
+            $mail->Port       = config('mail.port');
             $mail->SMTPAuth   = true;
-            $mail->Username   = config('MAIL_USERNAME');
-            $mail->Password   = config('MAIL_PASSWORD');
-            $mail->SMTPSecure = config('MAIL_ENCRYPTION');
+            $mail->Username   = config('mail.username');
+            $mail->Password   = config('mail.password');
+            $mail->SMTPSecure = config('mail.encryption');
         }
 
-        if (config('MAIL_DRIVER') === 'sendmail') {
+        if (config('mail.driver') === 'sendmail') {
             $mail->isSendmail();
-            if (config('MAIL_PATH')) {
-                $mail->Sendmail = config('MAIL_PATH');
+            if (config('mail.path')) {
+                $mail->Sendmail = config('mail.path');
             }
         }
 
-        if (config('MAIL_DRIVER') === 'mail') {
+        if (config('mail.driver') === 'mail') {
             $mail->isMail();
         }
 
@@ -1837,10 +1836,10 @@ function sendMail(string $to, string $subject, string $body, array $params = [])
             $mail->addReplyTo($fromEmail, $fromName);
         }
 
-        $mail->Sender  = config('SITE_EMAIL');
+        $mail->Sender  = config('app.site_email');
         $mail->CharSet = PHPMailer::CHARSET_UTF8;
         $mail->Subject = $subject;
-        $mail->setFrom(config('SITE_EMAIL'), config('SITE_ADMIN'));
+        $mail->setFrom(config('app.site_email'), config('app.site_admin'));
         $mail->addAddress($to);
         $mail->msgHTML($body);
 
@@ -2005,7 +2004,7 @@ function checkAuth()
     if (isset($_SESSION['id'], $_SESSION['password'])) {
         $user = getUserById($_SESSION['id']);
 
-        if ($user && $_SESSION['password'] === md5(config('APP_KEY') . $user->password)) {
+        if ($user && $_SESSION['password'] === md5(config('app.key') . $user->password)) {
             return $user;
         }
     }
@@ -2216,9 +2215,9 @@ function ipBan($clear = false): array
  * Возвращает пользовательские настройки сайта по ключу
  *
  * @param string|null $key     ключ массива
- * @param string|null $default значение по умолчанию
+ * @param mixed       $default значение по умолчанию
  *
- * @return array|int|string|null данные
+ * @return mixed данные
  */
 function setting($key = null, $default = null)
 {
@@ -2259,7 +2258,7 @@ function defaultSetting($key = null, $default = null)
  */
 function siteUrl(bool $parse = false): string
 {
-    $url = config('SITE_URL');
+    $url = config('app.site_url');
 
     if ($parse) {
         $url = Str::startsWith($url, '//') ? 'http:' . $url : $url;
@@ -2405,12 +2404,12 @@ function csrf_field(): string
 /**
  * Return config
  *
- * @param string $key
- * @param mixed $default
+ * @param string|null $key
+ * @param mixed       $default
  *
  * @return mixed
  */
-function config(string $key, $default = null)
+function config($key = null, $default = null)
 {
     static $config;
 
@@ -2420,12 +2419,17 @@ function config(string $key, $default = null)
         if (file_exists($configPath)) {
             $config = require $configPath;
         } else {
-            $loader = new Loader(BASEDIR . '/.env');
-            $params = $loader->parse()->toEnv()->toArray();
-            $getenv = array_intersect_key(getenv(), $params);
-            $config = array_replace($params, $getenv);
+            $dotenv = Dotenv\Dotenv::createImmutable(BASEDIR);
+            $dotenv->load();
 
-            if (config('APP_ENV') === 'production') {
+            $configFiles = glob(BASEDIR . '/config/*.php');
+
+            $config = [];
+            foreach ($configFiles as $configFile) {
+                $config[getBodyName($configFile)] = require $configFile;
+            }
+
+            if (config('app.env') === 'production') {
                 file_put_contents(
                     $configPath,
                     '<?php return ' . var_export($config, true) . ';'
@@ -2434,7 +2438,7 @@ function config(string $key, $default = null)
         }
     }
 
-    return $config[$key] ?? $default;
+    return $key ? Arr::get($config, $key, $default) : $config;
 }
 
 /**

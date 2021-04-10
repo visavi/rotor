@@ -31,7 +31,7 @@ final class CreateDownsTable extends Migration
                 $table->index('created_at');
             });
 
-            if (config('DB_DRIVER') === 'mysql') {
+            if (config('database.default') === 'mysql') {
                 $this->db->getConnection()->statement('CREATE FULLTEXT INDEX downs_title_text_fulltext ON downs(title, text);');
             }
         }

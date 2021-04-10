@@ -92,9 +92,9 @@ class Application
 
             $user = getUserByLogin($login);
 
-            if ($user && $login === $user->login && $password === md5($user->password . config('APP_KEY'))) {
+            if ($user && $login === $user->login && $password === md5($user->password . config('app.key'))) {
                 $_SESSION['id']       = $user->id;
-                $_SESSION['password'] = md5(config('APP_KEY') . $user->password);
+                $_SESSION['password'] = md5(config('app.key') . $user->password);
                 $_SESSION['online']   = null;
 
                 $user->saveVisit(Login::COOKIE);

@@ -34,7 +34,7 @@ final class CreateTopicsTable extends Migration
                 $table->index('updated_at');
             });
 
-            if (config('DB_DRIVER') === 'mysql') {
+            if (config('database.default') === 'mysql') {
                 $this->db->getConnection()->statement('CREATE FULLTEXT INDEX text ON topics(title);');
             }
         }

@@ -31,7 +31,7 @@ final class CreatePostsTable extends Migration
                 $table->index('created_at');
             });
 
-            if (config('DB_DRIVER') === 'mysql') {
+            if (config('database.default') === 'mysql') {
                 $this->db->getConnection()->statement('CREATE FULLTEXT INDEX text ON posts(text);');
             }
         }

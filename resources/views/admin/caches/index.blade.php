@@ -18,7 +18,7 @@
     <hr>
 
     <div class="mb-3">
-        Cache driver: <span class="badge badge-pill badge-primary">{{ config('CACHE_DRIVER') }}</span>
+        Cache driver: <span class="badge badge-pill badge-primary">{{ config('cache.default') }}</span>
     </div>
 
     @if ($files->isNotEmpty())

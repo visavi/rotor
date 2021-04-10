@@ -11,7 +11,7 @@ final class AddFulltextIndexToArticles extends Migration
      */
     public function up(): void
     {
-        if (config('DB_DRIVER') === 'mysql') {
+        if (config('database.default') === 'mysql') {
             $this->db->getConnection()->statement('CREATE FULLTEXT INDEX articles_title_text_fulltext ON articles(title, text);');
         }
     }
@@ -21,7 +21,7 @@ final class AddFulltextIndexToArticles extends Migration
      */
     public function down(): void
     {
-        if (config('DB_DRIVER') === 'mysql') {
+        if (config('database.default') === 'mysql') {
             $this->db->getConnection()->statement('ALTER TABLE articles DROP INDEX articles_title_text_fulltext;');
         }
     }

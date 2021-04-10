@@ -758,11 +758,11 @@ class User extends BaseModel
             ];
 
             setcookie('login', $user->login, $options);
-            setcookie('password', md5($user->password . config('APP_KEY')), $options);
+            setcookie('password', md5($user->password . config('app.key')), $options);
         }
 
         $_SESSION['id']       = $user->id;
-        $_SESSION['password'] = md5(config('APP_KEY') . $user->password);
+        $_SESSION['password'] = md5(config('app.key') . $user->password);
         $_SESSION['online']   = null;
     }
 }
