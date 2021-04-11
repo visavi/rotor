@@ -2,13 +2,8 @@
 
 declare(strict_types = 1);
 
-if (config('app.env') === false) {
-    $migrations = BASEDIR . '/database/upgrades';
-} else {
-    $migrations = BASEDIR . '/database/' . (setting('app_installed') ? 'upgrades' : 'migrations');
-}
-
-$database = config('database.connections.' . config('database.default'));
+$database   = config('database.connections.' . config('database.default'));
+$migrations = BASEDIR . '/database/' . (setting('app_installed') ? 'upgrades' : 'migrations');
 
 return [
     'paths' => [

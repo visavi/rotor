@@ -1,10 +1,10 @@
 <?php
 
 return [
-    'env'      => env('APP_ENV'),
-    'debug'    => env('APP_DEBUG'),
-    'key'      => env('APP_KEY'),
-    'timezone' => env('TIMEZONE'),
+    'env'      => env('APP_ENV', 'dev'),
+    'debug'    => env('APP_DEBUG', true),
+    'key'      => env('APP_KEY', 'SomeRandomString'),
+    'timezone' => env('TIMEZONE', 'Europe/Moscow'),
     'admin'    => env('SITE_ADMIN'),
     'email'    => env('SITE_EMAIL'),
     'url'      => env('SITE_URL'),
