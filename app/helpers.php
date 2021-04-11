@@ -2200,7 +2200,7 @@ function getQueryLog(): array
  *
  * @return array массив IP
  */
-function ipBan($clear = false): array
+function ipBan(bool $clear = false): array
 {
     if ($clear) {
         clearCache('ipBan');
@@ -2277,10 +2277,9 @@ function siteUrl(bool $parse = false): string
 function siteDomain(string $url): string
 {
     $url = strtolower($url);
-    $url = str_replace(['http://www.', 'http://', 'https://', '//'], '', $url);
-    $url = strtok($url, '/?');
+    $url = str_replace(['https://www.', 'http://www.', 'https://', 'http://', '//'], '', $url);
 
-    return $url;
+    return strtok($url, '/?');
 }
 
 /**
