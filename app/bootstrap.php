@@ -36,7 +36,7 @@ const UPLOADS = HOME . '/uploads';
 const RESOURCES = BASEDIR . '/resources';
 const STORAGE = BASEDIR . '/storage';
 const MODULES = BASEDIR . '/modules';
-const VERSION = '9.2';
+const VERSION = '9.3';
 
 require_once BASEDIR . '/vendor/autoload.php';
 
