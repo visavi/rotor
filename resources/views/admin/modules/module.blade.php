@@ -24,7 +24,16 @@
 @stop
 
 @section('content')
-    {{ $moduleConfig['description'] }}<br>
+    <div class="mb-3">
+        {{ $moduleConfig['description'] }}
+    </div>
+
+    @if (isset($moduleConfig['info']))
+        <div class="mb-3">
+            {{ bbCode($moduleConfig['info']) }}<br>
+        </div>
+    @endif
+
     {{ __('main.version') }}: {{ $moduleConfig['version'] }}<br>
     {{ __('main.author') }}: {{ $moduleConfig['author'] }} <a href="{{ $moduleConfig['homepage'] }}">{{ $moduleConfig['homepage'] }}</a><br>
 
