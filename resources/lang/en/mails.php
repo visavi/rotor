@@ -21,6 +21,7 @@ return [
     'email_from_site'        => 'Email from site :sitename',
     'name_short_or_long'     => 'Too short or long name!',
     'success_sent'           => 'Email sent successfully!',
+    'failed_sent'            => 'Failed to send email!',
     'password_recovery_time' => 'You can recover your password no more than once per hour!',
     'recovery_instructions'  => 'Password recovery instructions sent to :email',
     'password_not_recovery'  => 'This user did not reset the password!',
