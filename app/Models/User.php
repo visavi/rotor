@@ -358,15 +358,13 @@ class User extends BaseModel
     }
 
     /**
-     * Возвращает онлайн-статус пользователя
+     * Is user online
      *
-     * @return HtmlString онлайн-статус
+     * @return bool
      */
-    public function getOnline(): HtmlString
+    public function isOnline(): bool
     {
         static $visits;
-
-        $online = '';
 
         if (! $visits) {
             $visits = Cache::remember('visit', 10, static function () {
@@ -377,11 +375,39 @@ class User extends BaseModel
             });
         }
 
-        if (isset($visits[$this->id])) {
-            $online = '<div class="user-status bg-success" title="Онлайн"></div>';
+        return isset($visits[$this->id]);
+    }
+
+    /**
+     * User online status
+     *
+     * @return HtmlString онлайн-статус
+     */
+    public function getOnline(): HtmlString
+    {
+        $online = '';
+
+        if ($this->isOnline()) {
+            $online = '<div class="user-status bg-success" title="' . __('main.online') . '"></div>';
         }
 
         return new HtmlString($online);
+    }
+
+    /**
+     * Get last visit
+     *
+     * @return string
+     */
+    public function getVisit(): string
+    {
+        if ($this->isOnline()) {
+            $visit = __('main.online');
+        } else {
+            $visit = dateFixed($this->updated_at);
+        }
+
+        return $visit;
     }
 
     /**
@@ -736,7 +762,6 @@ class User extends BaseModel
         }
 
         $this->increment('visits');
-        $this->update(['updated_at' => SITETIME]);
     }
 
     /**

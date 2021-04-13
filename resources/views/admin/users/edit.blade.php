@@ -192,7 +192,7 @@
         </div>
     @endif
 
-    {{ __('users.last_visit') }}: {{ dateFixed($user->updated_at, 'j F Y / H:i') }}<br><br>
+    {{ __('users.last_visit') }}: {{ $user->getVisit() }}<br><br>
 
     @if (! in_array($user->level, $adminGroups, true))
         <i class="fa fa-times"></i> <a href="/admin/users/delete?user={{ $user->login }}">{{ __('main.delete') }}</a><br>

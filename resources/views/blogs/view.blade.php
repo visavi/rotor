@@ -50,11 +50,12 @@
     <hr>
 
     <div class="mb-3">
-        <div class="section-message">
+        <div class="section-message mb-3">
             {{ bbCode($article->text) }}
         </div>
 
-        {{ __('main.author') }}: {{ $article->user->getProfile() }} ({{ dateFixed($article->created_at) }})<br>
+        {{ __('main.added') }}: {{ $article->user->getProfile() }}
+        <small class="section-date text-muted font-italic">{{ dateFixed($article->created_at) }}</small><br>
 
         <div class="my-3 font-italic">
             <i class="fa fa-tag"></i> {!! $tags !!}

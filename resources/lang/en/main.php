@@ -245,4 +245,6 @@ return [
     'action_not_selected'      => 'No action selected!',
     'directory_not_writable'   => 'The directory is not writable!',
     'closed_comments'          => 'Commenting is closed!',
+
+    'online' => 'Online',
 ];

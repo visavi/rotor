@@ -94,7 +94,7 @@
                     {{ __('users.invitation') }}: {{ $invite->user->getProfile() }}<br>
                 @endif
 
-                {{ __('users.last_visit') }}: {{ dateFixed($user->updated_at) }}<br>
+                {{ __('users.last_visit') }}: {{ $user->getVisit() }}<br>
 
                 @if (getUser())
                     <a href="/ratings/{{ $user->login }}">{{ __('main.reputation') }}: <b>{{ formatNum($user->rating) }}</b> (+{{  $user->posrating }}/-{{  $user->negrating }})</a><br>

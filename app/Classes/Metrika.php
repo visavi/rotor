@@ -68,10 +68,14 @@ class Metrika
 
         Online::query()->where('updated_at', '<', SITETIME - setting('timeonline'))->delete();
 
+        $user   = getUser();
         $ip     = getIp();
         $brow   = getBrowser();
-        $userId = getUser('id');
         $uid    = md5($ip . $brow);
+
+        if ($user) {
+            $user->update(['updated_at' => SITETIME]);
+        }
 
         try {
             $online = Online::query()
@@ -81,7 +85,7 @@ class Metrika
                     'ip'         => $ip,
                     'brow'       => $brow,
                     'updated_at' => SITETIME,
-                    'user_id'    => $userId,
+                    'user_id'    => $user->id ?? null,
                 ]);
             $newHost = $online->wasRecentlyCreated;
         } catch (PDOException $e) {
