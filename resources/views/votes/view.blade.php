@@ -15,7 +15,31 @@
 @section('content')
     @if ($vote->topic->id)
         <div class="mb-3">
-            {{ __('forums.topic') }}: <a href="/topics/{{ $vote->topic->id }}">{{ $vote->topic->title }}</a>
+            <h5>{{ __('forums.topic') }}: <a href="/topics/{{ $vote->topic->id }}">{{ $vote->topic->title }}</a></h5>
+            @php
+                $firstPost = $vote->topic->posts()->orderBy('created_at')->first();
+            @endphp
+
+            @if ($firstPost)
+                <div class="section mb-3 shadow">
+                    <div class="user-avatar">
+                        {{ $firstPost->user->getAvatar() }}
+                        {{ $firstPost->user->getOnline() }}
+                    </div>
+
+                    <div class="section-user d-flex align-items-center">
+                        <div class="flex-grow-1">
+                            {{ $firstPost->user->getProfile() }}
+                            <small class="section-date text-muted font-italic">{{ dateFixed($firstPost->created_at) }}</small><br>
+                            <small class="font-italic">{{ $firstPost->user->getStatus() }}</small>
+                        </div>
+                    </div>
+
+                    <div class="section-body border-top">
+                        {{ bbCode($firstPost->text) }}
+                    </div>
+                </div>
+            @endif
         </div>
     @endif
 
