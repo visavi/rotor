@@ -15,7 +15,8 @@
 
 @section('content')
     <p>
-        <i class="fa fa-pencil-alt"></i> <b>{{ $post->user->getName() }}</b> <small>({{ dateFixed($post->created_at) }})</small>
+        <i class="fa fa-pencil-alt"></i> <b>{{ $post->user->getName() }}</b>
+        <small class="section-date text-muted font-italic">{{ dateFixed($post->created_at) }}</small>
     </p>
 
     <div class="section-form mb-3 shadow">

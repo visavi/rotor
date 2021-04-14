@@ -21,7 +21,9 @@
     @if ($voters->isNotEmpty())
         <div class="section mb-3 shadow">
         @foreach ($voters as $voter)
-            {{ $voter->user->getGender() }} {{ $voter->user->getProfile() }} ({{ dateFixed($voter->created_at) }})
+            {{ $voter->user->getGender() }} {{ $voter->user->getProfile() }}
+            <small class="section-date text-muted font-italic">{{ dateFixed($voter->created_at) }}</small><br>
+            {{ __('main.vote') }}: {{ $voter->vote }}
         </div>
         @endforeach
     @else

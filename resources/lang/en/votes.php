@@ -7,7 +7,7 @@ return [
     'voted'          => 'Voted',
     'results'        => 'Results',
     'options'        => 'Options',
-    'empty_voted'    => 'No one participated in the vote!',
+    'empty_voted'    => 'Voters not found!',
     'create_vote'    => 'Create Voting',
     'question'       => 'Question',
     'answer'         => 'Answer',

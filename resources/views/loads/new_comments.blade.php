@@ -35,7 +35,7 @@
                     {{ bbCode($data->text) }}<br>
 
                     {{ __('main.posted') }}: {{ $data->user->getProfile() }}
-                    <small>({{ dateFixed($data->created_at) }})</small><br>
+                    <small class="section-date text-muted font-italic">{{ dateFixed($data->created_at) }}</small><br>
                     @if (isAdmin())
                         <div class="small text-muted font-italic mt-2">
                             {{ $data->brow }}, {{ $data->ip }}

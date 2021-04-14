@@ -44,6 +44,7 @@ return [
     'message'           => 'Message',
     'messages'          => 'Messages',
     'rating'            => 'Rating',
+    'vote'              => 'Vote',
     'votes'             => 'Votes',
     'views'             => 'Views',
     'date'              => 'Date',

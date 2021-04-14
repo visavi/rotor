@@ -39,7 +39,8 @@
                 <div class="section-message">
                     {{ bbCode($data->text) }}<br>
 
-                    {{ __('main.posted') }}: {{ $data->user->getName() }} <small>({{ dateFixed($data->created_at) }})</small>
+                    {{ __('main.posted') }}: {{ $data->user->getName() }}
+                    <small class="section-date text-muted font-italic">{{ dateFixed($data->created_at) }}</small>
 
                     @if (isAdmin())
                         <div class="small text-muted font-italic mt-2">({{ $data->brow }}, {{ $data->ip }})</div>
