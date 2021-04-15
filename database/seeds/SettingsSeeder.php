@@ -40,7 +40,7 @@ class SettingsSeeder extends AbstractSeed
             ['name'  => 'comments_per_page', 'value' => 10],
             ['name'  => 'comment_length', 'value' => 1000],
             ['name'  => 'contactlist', 'value' => 10],
-            ['name'  => 'copy', 'value' => '© Rotor'],
+            ['name'  => 'copy', 'value' => '© Copyright Visavi.net'],
             ['name'  => 'copyfoto', 'value' => 1],
             ['name'  => 'currency', 'value' => __('seeds.settings.currency')],
             ['name'  => 'deleted_user', 'value' => __('seeds.settings.deleted_user')],

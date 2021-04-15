@@ -7,7 +7,7 @@
         <a target="_blank" href="https://www.facebook.com/groups/visavinet"><i class="fab fa-facebook-square fa-2x" style="color: #3b5998"></i></a>
     </div>
 
-    <div>&copy; Copyright 2005-2020 Visavi.net</div>
+    <div>{{ setting('copy') }}</div>
 
     @yield('performance')
 </footer>
