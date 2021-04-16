@@ -97,7 +97,6 @@ mySettings = {
 // ----------------------------------------------------------------------------
 myHtmlSettings = {
     onCtrlEnter: {keepDefault: false, replaceWith: '<br />\r'},
-    onShiftEnter: {keepDefault: false, replaceWith: '<hr />\r'},
     onTab: {keepDefault: false, openWith: '    '},
     markupSet: [
         {title: 'Div', name: '<i class="fa fa-list-alt"></i>', className: 'bb-div', openWith: '<div(!( class="[![Class]!]")!)>', closeWith: '</div>\n'},

@@ -14,6 +14,7 @@
             @endif
 
             <li class="breadcrumb-item"><a href="/admin/forums/{{ $topic->forum->id }}">{{ $topic->forum->title }}</a></li>
+            <li class="breadcrumb-item"><a href="/admin/topics/{{ $topic->id }}">{{ $topic->title }}</a></li>
             <li class="breadcrumb-item active">{{ __('forums.title_edit_topic') }}</li>
         </ol>
     </nav>
@@ -36,8 +37,9 @@
             </div>
 
             <div class="form-group{{ hasError('moderators') }}">
-                <label for="moderators">{{ __('forums.topic_curators') }} {{ __('forums.curators_note') }}:</label>
+                <label for="moderators">{{ __('forums.topic_curators') }}:</label>
                 <input class="form-control" name="moderators" id="moderators" maxlength="100" value="{{ getInput('moderators', $topic->moderators) }}">
+                <p class="text-muted font-italic">{{ __('forums.curators_note') }}</p>
                 <div class="invalid-feedback">{{ textError('moderators') }}</div>
             </div>
 

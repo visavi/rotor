@@ -42,7 +42,7 @@ return [
     'title_move_topic'     => 'Topic Transfer',
     'delete_files'         => 'Delete files',
     'topic_curators'       => 'Topic Curators',
-    'curators_note'        => '(User ID separated by commas)',
+    'curators_note'        => 'User login separated by commas',
     'topic_closed'         => 'This topic is closed for discussion',
     'confirm_delete_forum' => 'Are you sure you want to delete this section?',
     'confirm_delete_topic' => 'Are you sure you want to delete this topic?',

@@ -75,7 +75,7 @@ class TopicController extends BaseController
 
         // Curators
         if ($topic->moderators) {
-            $topic->curators = User::query()->whereIn('id', explode(',', $topic->moderators))->get();
+            $topic->curators = User::query()->whereIn('login', explode(',', $topic->moderators))->get();
             $topic->isModer = $topic->curators->where('id', $user->id ?? null)->isNotEmpty();
         }
 
@@ -251,7 +251,7 @@ class TopicController extends BaseController
             abort(404, __('forums.topic_not_exist'));
         }
 
-        $isModer = in_array($user->id, array_map('intval', explode(',', (string) $topic->moderators)), true);
+        $isModer = in_array($user->login, explode(',', $topic->moderators), true);
 
         $validator->equal($request->input('token'), $_SESSION['token'], __('validator.token'))
             ->notEmpty($del, __('validator.deletion'))
@@ -483,7 +483,7 @@ class TopicController extends BaseController
             abort('default', __('forums.topic_closed'));
         }
 
-        $isModer = in_array($user->id, array_map('intval', explode(',', (string) $post->moderators)), true);
+        $isModer = in_array($user->login, explode(',', $post->moderators), true);
 
         if (! $isModer && $post->user_id !== $user->id) {
             abort('default', __('forums.posts_edited_curators'));

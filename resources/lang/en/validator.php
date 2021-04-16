@@ -2,6 +2,7 @@
 
 return [
     'user'         => 'User is not found!',
+    'user_login'   => 'User :login not found!',
     'token'        => 'Invalid session id, retry action!',
     'flood'        => 'Anti-flood! Please wait :sec seconds before sending again!',
     'text'         => 'Post text is too long or short!',
@@ -9,8 +10,8 @@ return [
     'comment_long' => 'Comment too long!',
     'phone'        => 'Invalid phone format. Example: 8 900 123-45-67',
     'captcha'      => 'Could not pass the captcha test!',
-    'site'         => 'Invalid site address! Example: http://site.domain',
-    'url'          => 'Invalid URL! The characters [a-z0-9_-.?=#/] are allowed. Example: http://site.domain',
+    'site'         => 'Invalid site address! Example: https://site.domain',
+    'url'          => 'Invalid URL! The characters [a-z0-9_-.?=#/] are allowed. Example: https://site.domain',
     'url_text'     => 'URL is too long or short!',
     'color'        => 'Invalid color format! Example: #ff0000',
     'date'         => 'Invalid date of birth! Example: dd.mm.yyyy',

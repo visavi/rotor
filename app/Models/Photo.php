@@ -62,7 +62,7 @@ class Photo extends BaseModel
      */
     public function comments(): MorphMany
     {
-        return $this->morphMany(Comment::class, 'relate')->with('relate');;
+        return $this->morphMany(Comment::class, 'relate')->with('relate');
     }
 
     /**

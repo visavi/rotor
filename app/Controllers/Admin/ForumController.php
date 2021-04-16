@@ -251,13 +251,20 @@ class ForumController extends AdminController
                 ->length($title, 3, 50, ['title' => __('validator.text')])
                 ->length($note, 0, 250, ['note' => __('validator.text_long')]);
 
-            if ($validator->isValid()) {
-                $moderators = implode(',', preg_split('/[\s]*[,][\s]*/', $moderators));
+            $moderators = preg_split('/[\s]*[,][\s]*/', trim($moderators, ','));
 
+            foreach ($moderators as $moderator) {
+                if (! getUserByLogin($moderator)) {
+                    $validator->addError(['moderator' => __('validator.user_login', ['login' => $moderator])]);
+                    break;
+                }
+            }
+
+            if ($validator->isValid()) {
                 $topic->update([
                     'title'      => $title,
                     'note'       => $note,
-                    'moderators' => $moderators,
+                    'moderators' => implode(',', $moderators),
                     'locked'     => $locked,
                     'closed'     => $closed,
                 ]);
@@ -483,7 +490,7 @@ class ForumController extends AdminController
 
         // Кураторы
         if ($topic->moderators) {
-            $topic->curators = User::query()->whereIn('id', explode(',', $topic->moderators))->get();
+            $topic->curators = User::query()->whereIn('login', explode(',', $topic->moderators))->get();
         }
 
         // Голосование
