@@ -14,7 +14,8 @@ return [
     'confirm_delete' => 'Do you really want to delete the vote?',
     'confirm_close'  => 'Do you really want to close the vote?',
     'edit_vote'      => 'Editing a vote',
-    'hint_text'      => 'Fields marked in green are required!',
+    'hint_text'      => 'Created answer choices cannot be deleted!',
+    'hint_answers'   => 'Allowed from 2 to 10 answer options',
 
     'answer_wrong_length'       => 'The length of the answer options should not exceed 50 characters!',
     'answer_not_enough'         => 'Not enough answer options!',

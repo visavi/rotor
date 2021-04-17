@@ -63,16 +63,7 @@
                     <div class="invalid-feedback">{{ textError('question') }}</div>
                 </div>
 
-                <div class="form-group{{ hasError('answers') }}">
-
-                    <?php $answers = array_values(array_diff((array) getInput('answers'), [''])) ?>
-
-                    @for ($i = 0; $i < 10; $i++)
-                        <label for="inputAnswers{{ $i }}">{{ __('forums.answer') }} {{ $i + 1 }}</label>
-                        <input type="text" name="answers[]" class="form-control" id="inputAnswers{{ $i }}" value="{{ $answers[$i] ?? '' }}" maxlength="50">
-                    @endfor
-                    <div class="invalid-feedback">{{ textError('answers') }}</div>
-                </div>
+                @include('votes/_answers')
             </div>
             <button class="btn btn-primary">{{ __('forums.create_topic') }}</button>
         </form>

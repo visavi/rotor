@@ -201,13 +201,16 @@ class VoteController extends BaseController
     public function create(Request $request, Validator $validator): string
     {
         if ($request->isMethod('post')) {
-            $question = $request->input('question');
-            $answers  = $request->input('answer');
-
-            $validator->equal($request->input('token'), $_SESSION['token'], __('validator.token'))
-                ->length($question, 5, 100, ['question' => __('validator.text')]);
+            $question    = $request->input('question');
+            $description = $request->input('description');
+            $answers     = (array) $request->input('answers');
 
             $answers = array_unique(array_diff($answers, ['']));
+
+            $validator->equal($request->input('token'), $_SESSION['token'], __('validator.token'))
+                ->length($question, 5, 100, ['question' => __('validator.text')])
+                ->length($description, 5, 1000, ['description' => __('validator.text')], false)
+                ->between(count($answers), 2, 10, ['answer' => __('votes.answer_not_enough')]);
 
             foreach ($answers as $answer) {
                 if (utfStrlen($answer) > 50) {
@@ -216,13 +219,12 @@ class VoteController extends BaseController
                 }
             }
 
-            $validator->between(count($answers), 2, 10, ['answer' => __('votes.answer_not_enough')]);
-
             if ($validator->isValid()) {
                 /** @var Vote $vote */
                 $vote = Vote::query()->create([
-                    'title'      => $question,
-                    'created_at' => SITETIME,
+                    'title'       => $question,
+                    'description' => $description,
+                    'created_at'  => SITETIME,
                 ]);
 
                 $prepareAnswers = [];

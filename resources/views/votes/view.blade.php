@@ -43,6 +43,12 @@
         </div>
     @endif
 
+    @if ($vote->description)
+        <div class="section-body border-bottom mb-3">
+            {{ bbCode($vote->description) }}
+        </div>
+    @endif
+
     @if (empty($show) && (empty($vote->poll) && getUser()))
         <div class="section-form mb-3 shadow">
             <form action="/votes/{{ $vote->id }}" method="post">

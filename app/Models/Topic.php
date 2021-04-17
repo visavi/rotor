@@ -22,7 +22,7 @@ use Illuminate\Support\HtmlString;
  * @property int count_posts
  * @property int visits
  * @property int updated_at
- * @property string moderators
+ * @property string|null moderators
  * @property string note
  * @property int last_post_id
  * @property int created_at

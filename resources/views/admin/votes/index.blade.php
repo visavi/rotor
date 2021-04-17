@@ -6,6 +6,7 @@
     @if (getUser())
         <div class="float-right">
             <a class="btn btn-success" href="/votes/create">{{ __('main.create') }}</a>
+            <a class="btn btn-light" href="/votes?page={{ $votes->currentPage() }}"><i class="fas fa-wrench"></i></a>
         </div>
     @endif
 
@@ -39,6 +40,13 @@
                         @endif
                     </div>
                 </div>
+
+                @if ($vote->description)
+                    <div class="section-body border-bottom mb-3">
+                        {{ bbCode($vote->description) }}
+                    </div>
+                @endif
+
                 <div class="section-body">
                     @if ($vote->topic->id)
                         {{ __('forums.topic') }}: <a href="/topics/{{ $vote->topic->id }}">{{ $vote->topic->title }}</a><br>

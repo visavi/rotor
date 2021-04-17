@@ -3,11 +3,15 @@
 @section('title', __('index.votes') . ' (' . __('main.page_num', ['page' => $votes->currentPage()]) . ')')
 
 @section('header')
-    @if (getUser())
-        <div class="float-right">
-            <a class="btn btn-success" href="/votes/create">{{ __('main.create') }}</a><br>
-        </div>
-    @endif
+    <div class="float-right">
+        @if (getUser())
+            <a class="btn btn-success" href="/votes/create">{{ __('main.create') }}</a>
+        @endif
+
+        @if (isAdmin('moder'))
+            <a class="btn btn-light" href="/admin/votes?page={{ $votes->currentPage() }}"><i class="fas fa-wrench"></i></a>
+        @endif
+    </div>
 
     <h1>{{ __('index.votes') }}</h1>
 @stop
@@ -29,6 +33,13 @@
                     <i class="fa fa-chart-bar"></i>
                     <a href="/votes/{{ $vote['id'] }}">{{ $vote->title }}</a>
                 </div>
+
+                @if ($vote->description)
+                    <div class="section-body border-bottom mb-3">
+                        {{ bbCode($vote->description) }}
+                    </div>
+                @endif
+
                 <div class="section-body">
                     @if ($vote->topic->id)
                         {{ __('forums.topic') }}: <a href="/topics/{{ $vote->topic->id }}">{{ $vote->topic->title }}</a><br>

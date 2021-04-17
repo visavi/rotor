@@ -14,6 +14,7 @@ use App\Models\Vote;
 use App\Models\VoteAnswer;
 use Illuminate\Database\Capsule\Manager as DB;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
 
 class ForumController extends BaseController
@@ -202,7 +203,7 @@ class ForumController extends BaseController
             }
         }
 
-        return view('forums/forum_create', compact('forums', 'fid'));
+        return view('forums/topic_create', compact('forums', 'fid'));
     }
 
     /**

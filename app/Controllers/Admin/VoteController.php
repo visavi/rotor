@@ -73,13 +73,16 @@ class VoteController extends AdminController
         }
 
         if ($request->isMethod('post')) {
-            $title   = $request->input('title');
-            $answers = (array) $request->input('answers');
+            $question    = $request->input('question');
+            $description = $request->input('description');
+            $answers     = (array) $request->input('answers');
 
-            $validator->equal($request->input('token'), $_SESSION['token'], __('validator.token'));
-
-            $validator->length($title, 3, 100, ['title' => __('validator.text')]);
             $answers = array_unique(array_diff($answers, ['']));
+
+            $validator->equal($request->input('token'), $_SESSION['token'], __('validator.token'))
+                ->length($question, 3, 100, ['question' => __('validator.text')])
+                ->length($description, 5, 1000, ['description' => __('validator.text')], false)
+                ->between(count($answers), 2, 10, ['answer' => __('votes.answer_not_enough')]);
 
             foreach ($answers as $answer) {
                 if (utfStrlen($answer) > 50) {
@@ -88,11 +91,10 @@ class VoteController extends AdminController
                 }
             }
 
-            $validator->between(count($answers), 2, 10, ['answer' => __('votes.answer_not_enough')]);
-
             if ($validator->isValid()) {
                 $vote->update([
-                    'title' => $title,
+                    'title'       => $question,
+                    'description' => $description,
                 ]);
 
                 $countAnswers = $vote->answers()->count();

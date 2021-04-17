@@ -14,6 +14,7 @@ use Illuminate\Database\Eloquent\Relations\MorphMany;
  *
  * @property int id
  * @property string title
+ * @property string description
  * @property int count
  * @property int closed
  * @property int created_at

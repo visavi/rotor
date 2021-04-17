@@ -44,28 +44,13 @@
 
             @if ($vote)
                 <div class="form-group{{ hasError('question') }}">
-                    <label for="question"><span class="text-success">{{ __('forums.question') }}:</span></label>
+                    <label for="question">{{ __('forums.question') }}:</label>
                     <input class="form-control" name="question" id="question" maxlength="100" value="{{ getInput('question', $vote->title) }}" required>
                     <div class="invalid-feedback">{{ textError('question') }}</div>
                 </div>
 
                 @if (! $vote->count)
-                    <div class="form-group{{ hasError('answers') }}">
-                        <?php $answers = getInput('answers', $vote->getAnswers); ?>
-                        <?php $answers = array_slice($answers + array_fill(0, 10, ''), 0, 10, true); ?>
-
-                        @foreach ($answers as $key => $answer)
-                            <label for="inputAnswers{{ $key }}">
-                                @if (isset($vote->getAnswers[$key]))
-                                    <span class="text-success">{{ __('forums.answer') }} {{ $loop->iteration }}:</span>
-                                @else
-                                    {{ __('forums.answer') }} {{ $loop->iteration }}:
-                                @endif
-                            </label>
-                            <input type="text" name="answers[{{ $key }}]" class="form-control" id="inputAnswers{{ $key }}" value="{{ $answer }}" maxlength="50">
-                        @endforeach
-                        <div class="invalid-feedback">{{ textError('answers') }}</div>
-                    </div>
+                    @include('votes/_answers')
                 @endif
             @endif
 

@@ -490,7 +490,7 @@ class ForumController extends AdminController
 
         // Кураторы
         if ($topic->moderators) {
-            $topic->curators = User::query()->whereIn('login', explode(',', $topic->moderators))->get();
+            $topic->curators = User::query()->whereIn('login', explode(',', (string) $topic->moderators))->get();
         }
 
         // Голосование
