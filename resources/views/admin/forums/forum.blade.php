@@ -35,7 +35,7 @@
                     <div class="flex-grow-1">
                         <div class="section-title">
                             <i class="fa {{ $topic->getIcon() }} text-muted"></i>
-                            <a href="/admin/topics/{{ $topic->id }}">{{ $topic->title }}</a> ({{ $topic->count_posts }})
+                            <a href="/admin/topics/{{ $topic->id }}">{{ $topic->title }}</a> ({{ $topic->getCountPosts() }})
                         </div>
                     </div>
                     <div class="text-right">

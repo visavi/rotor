@@ -17,6 +17,7 @@ use App\Models\Flood;
 use App\Classes\Validator;
 use App\Models\VoteAnswer;
 use Illuminate\Database\Capsule\Manager as DB;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Query\JoinClause;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
@@ -35,11 +36,13 @@ class TopicController extends BaseController
         $user = getUser();
 
         $topic = Topic::query()
-            ->select('topics.*', 'bookmarks.count_posts as bookmark_posts')
             ->where('topics.id', $id)
-            ->leftJoin('bookmarks', static function (JoinClause $join) use ($user) {
-                $join->on('topics.id', 'bookmarks.topic_id')
-                    ->where('bookmarks.user_id', $user->id ?? null);
+            ->when($user, static function (Builder $query) use ($user) {
+                $query->select('topics.*', 'bookmarks.count_posts as bookmark_posts')
+                    ->leftJoin('bookmarks', static function (JoinClause $join) use ($user) {
+                        $join->on('topics.id', 'bookmarks.topic_id')
+                            ->where('bookmarks.user_id', $user->id);
+                    });
             })
             ->with('forum.parent')
             ->first();
@@ -49,12 +52,14 @@ class TopicController extends BaseController
         }
 
         $posts = Post::query()
-            ->select('posts.*', 'pollings.vote')
             ->where('topic_id', $topic->id)
-            ->leftJoin('pollings', static function (JoinClause $join) use ($user) {
-                $join->on('posts.id', 'pollings.relate_id')
-                    ->where('pollings.relate_type', Post::$morphName)
-                    ->where('pollings.user_id', $user->id ?? null);
+            ->when($user, static function (Builder $query) use ($user) {
+                $query->select('posts.*', 'pollings.vote')
+                ->leftJoin('pollings', static function (JoinClause $join) use ($user) {
+                    $join->on('posts.id', 'pollings.relate_id')
+                        ->where('pollings.relate_type', Post::$morphName)
+                        ->where('pollings.user_id', $user->id);
+                });
             })
             ->with('files', 'user', 'editUser')
             ->orderBy('created_at')
@@ -66,7 +71,7 @@ class TopicController extends BaseController
             $firstPost = Post::query()->where('topic_id', $topic->id)->orderBy('created_at')->first();
         }
 
-        if ($user && $topic->bookmark_posts && $topic->count_posts > $topic->bookmark_posts) {
+        if (isset($topic->bookmark_posts) && $topic->count_posts > $topic->bookmark_posts) {
             Bookmark::query()
                 ->where('topic_id', $topic->id)
                 ->where('user_id', $user->id)
@@ -76,7 +81,7 @@ class TopicController extends BaseController
         // Curators
         if ($topic->moderators) {
             $topic->curators = User::query()->whereIn('login', explode(',', (string) $topic->moderators))->get();
-            $topic->isModer = $topic->curators->where('id', $user->id ?? null)->isNotEmpty();
+            $topic->isModer = $user ? $topic->curators->where('id', $user->id)->isNotEmpty() : false;
         }
 
         // Visits

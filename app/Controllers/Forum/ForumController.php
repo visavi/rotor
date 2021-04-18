@@ -14,7 +14,7 @@ use App\Models\Vote;
 use App\Models\VoteAnswer;
 use Illuminate\Database\Capsule\Manager as DB;
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Query\JoinClause;
 use Illuminate\Http\Request;
 
 class ForumController extends BaseController
@@ -56,8 +56,17 @@ class ForumController extends BaseController
             abort(404, __('forums.forum_not_exist'));
         }
 
+        $user = getUser();
+
         $topics = Topic::query()
             ->where('forum_id', $forum->id)
+            ->when($user, static function (Builder $query) use ($user) {
+                $query->select('topics.*', 'bookmarks.count_posts as bookmark_posts')
+                ->leftJoin('bookmarks', static function (JoinClause $join) use ($user) {
+                    $join->on('topics.id', 'bookmarks.topic_id')
+                        ->where('bookmarks.user_id', $user->id);
+                });
+            })
             ->orderByDesc('locked')
             ->orderByDesc('updated_at')
             ->with('lastPost.user')

@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace App\Controllers\Admin;
 
 use App\Classes\Validator;
-use App\Models\File;
 use App\Models\Forum;
 use App\Models\Post;
 use App\Models\Topic;
@@ -213,7 +212,12 @@ class ForumController extends AdminController
         }
 
         $topics = Topic::query()
+            ->select('topics.*', 'bookmarks.count_posts as bookmark_posts')
             ->where('forum_id', $forum->id)
+            ->leftJoin('bookmarks', static function (JoinClause $join) {
+                $join->on('topics.id', 'bookmarks.topic_id')
+                    ->where('bookmarks.user_id', getUser('id'));
+            })
             ->orderByDesc('locked')
             ->orderByDesc('updated_at')
             ->with('lastPost.user')

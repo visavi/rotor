@@ -76,7 +76,7 @@
                         </div>
                     </div>
                     <div class="text-right">
-                        <b>{{ $topic->count_posts }}</b>
+                        <b>{{ $topic->getCountPosts() }}</b>
                     </div>
                 </div>
 
