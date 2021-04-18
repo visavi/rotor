@@ -21,7 +21,6 @@ class AddSubscribers extends Task
             ->where('newprivat', '>', 0)
             ->where('updated_at', '<', strtotime('-' . setting('sendprivatmailday') . ' days', SITETIME))
             ->whereNotNull('subscribe')
-            ->groupBy('users.id')
             ->limit(100)
             ->get();
 

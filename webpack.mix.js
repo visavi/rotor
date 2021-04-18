@@ -43,5 +43,8 @@ mix.options({
         discardComments: {
             removeAll: true,
         },
+    },
+    terser: {
+        extractComments: false,
     }
 });
