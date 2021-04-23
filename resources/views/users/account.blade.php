@@ -62,9 +62,40 @@
         {{ showError(__('users.status_change_condition', ['point' => plural(setting('editstatuspoint'), setting('scorename'))])) }}
     @endif
 
+    <h3>{{ __('users.color_change') }}</h3>
+
+    @if ($user->point >= setting('editcolorpoint'))
+        <div class="section-form mb-3 shadow">
+            <form method="post" action="/accounts/editcolor">
+                @csrf
+                <div class="form-group{{ hasError('color') }}">
+                    <label for="color">{{ __('users.personal_color') }}:</label>
+
+                    <div class="input-group colorpick">
+                        <input class="form-control col-sm-4" id="color" name="color" type="text" maxlength="7" value="{{ getInput('color', $user->color) }}">
+                        <span class="input-group-append">
+                            <span class="input-group-text colorpicker-input-addon"><i></i></span>
+                        </span>
+                    </div>
+
+                    <div class="invalid-feedback">{{ textError('color') }}</div>
+                </div>
+
+                <button class="btn btn-primary">{{ __('main.change') }}</button>
+            </form>
+
+            @if (setting('editcolormoney'))
+                <span class="text-muted font-italic">{{ __('main.cost') }}: {{ plural(setting('editcolormoney'), setting('moneyname')) }}</span>
+            @endif
+
+        </div>
+    @else
+        {{ showError(__('users.color_change_condition', ['point' => plural(setting('editcolorpoint'), setting('scorename'))])) }}
+    @endif
+
     <h3>{{ __('users.change_password') }}</h3>
 
-    <div class="section-form mb-3">
+    <div class="section-form mb-3 shadow">
         <form method="post" action="/accounts/editpassword">
             @csrf
             <div class="form-group{{ hasError('newpass') }}">
@@ -91,7 +122,7 @@
 
     <h3>{{ __('users.your_token') }}</h3>
 
-    <div class="section-form mb-3">
+    <div class="section-form mb-3 shadow">
         <form method="post" action="/accounts/apikey">
             @csrf
             @if ($user->apikey)

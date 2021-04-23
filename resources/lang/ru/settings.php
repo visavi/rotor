@@ -136,6 +136,8 @@ return [
     'points_advert_hide'  => 'Актива для скрытия рекламы',
     'points_status_edit'  => 'Актива для изменения статуса',
     'moneys_status_edit'  => 'Стоимость изменения статуса',
+    'points_color_edit'   => 'Актива для изменения цвета',
+    'moneys_color_edit'   => 'Стоимость изменения цвета',
     'moneys_bonus'        => 'Ежедневный бонус',
     'moneys_registration' => 'Денег за регистрацию',
 

@@ -133,6 +133,7 @@ return [
     'valid_file_extensions' => 'Допустимые расширения файлов',
     'attached_files'        => 'Прикрепленные файлы',
     'attach_files'          => 'Прикрепить файлы',
+    'attach_file'           => 'Прикрепить файл',
     'attach_image'          => 'Прикрепить картинку',
     'deleting_files'        => 'Удаление файлов',
     'files'                 => 'Файлы',

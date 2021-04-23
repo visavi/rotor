@@ -651,13 +651,14 @@ class UserController extends BaseController
         }
 
         $status = $request->input('status');
+        $status = ! empty($status) ? $status : null;
         $cost   = $status ? setting('editstatusmoney') : 0;
 
         $validator->equal($request->input('token'), $_SESSION['token'], __('validator.token'))
             ->empty($user->ban, ['status' => __('users.status_changed_not_ban')])
             ->notEqual($status, $user->status, ['status' => __('users.status_different')])
             ->gte($user->point, setting('editstatuspoint'), ['status' => __('users.status_points')])
-            ->gte($user->money, setting('editstatusmoney'), ['status' => __('users.status_moneys')])
+            ->gte($user->money, $cost, ['status' => __('users.status_moneys')])
             ->length($status, 3, 20, ['status' => __('users.status_short_or_long')], false);
 
         if ($validator->isValid()) {
@@ -668,6 +669,45 @@ class UserController extends BaseController
 
             clearCache('status');
             setFlash('success', __('users.status_success_changed'));
+        } else {
+            setInput($request->all());
+            setFlash('danger', $validator->getErrors());
+        }
+
+        redirect('/accounts');
+    }
+
+    /**
+     * Color change
+     *
+     * @param Request   $request
+     * @param Validator $validator
+     *
+     * @return void
+     */
+    public function editColor(Request $request, Validator $validator): void
+    {
+        if (! $user = getUser()) {
+            abort(403, __('main.not_authorized'));
+        }
+
+        $color = $request->input('color');
+        $color = ! empty($color) ? $color : null;
+        $cost  = $color ? setting('editcolormoney') : 0;
+
+        $validator->equal($request->input('token'), $_SESSION['token'], __('validator.token'))
+            ->notEqual($color, $user->color, ['color' => __('users.color_different')])
+            ->gte($user->point, setting('editcolorpoint'), ['color' => __('users.color_points')])
+            ->gte($user->money, $cost, ['color' => __('users.color_moneys')])
+            ->regex($color, '|^#+[A-f0-9]{6}$|', ['color' => __('validator.color')], false);
+
+        if ($validator->isValid()) {
+            $user->update([
+                'color' => $color,
+                'money' => DB::connection()->raw('money - ' . $cost),
+            ]);
+
+            setFlash('success', __('users.color_success_changed'));
         } else {
             setInput($request->all());
             setFlash('danger', $validator->getErrors());

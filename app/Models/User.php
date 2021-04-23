@@ -43,6 +43,7 @@ use Illuminate\Support\HtmlString;
  * @property int point
  * @property int money
  * @property string status
+ * @property string color
  * @property string avatar
  * @property string picture
  * @property int rating
@@ -192,18 +193,16 @@ class User extends BaseModel
     /**
      * Возвращает ссылку на профиль пользователя
      *
-     * @param string|null $color цвет логина
-     *
      * @return HtmlString путь к профилю
      */
-    public function getProfile($color = null): HtmlString
+    public function getProfile(): HtmlString
     {
         if ($this->id) {
             $admin = null;
             $name  = check($this->getName());
 
-            if ($color) {
-                $name = '<span style="color:' . $color . '">' . $name . '</span>';
+            if ($this->color) {
+                $name = '<span style="color:' . $this->color . '">' . $name . '</span>';
             }
 
             if (in_array($this->level, self::ADMIN_GROUPS, true)) {

@@ -136,6 +136,8 @@ return [
     'points_advert_hide'  => 'Asset to hide advertising',
     'points_status_edit'  => 'Asset to change status',
     'moneys_status_edit'  => 'Cost of status change',
+    'points_color_edit'   => 'Asset to change color',
+    'moneys_color_edit'   => 'Cost of color change',
     'moneys_bonus'        => 'Daily bonus',
     'moneys_registration' => 'Money for registration',
 

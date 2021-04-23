@@ -43,7 +43,7 @@
         <hr>
 
         @foreach ($users as $key => $data)
-            <div class="section mb-3 shadow">
+            <div class="section mb-3 shadow{{ $user === $data->login ? ' bg-warning' : ''}}">
                 <div class="user-avatar">
                     {{ $data->getAvatar() }}
                     {{ $data->getOnline() }}
@@ -52,12 +52,7 @@
                 <div class="section-user d-flex align-items-center">
                     <div class="flex-grow-1">
                         {{ $users->firstItem() + $key }}.
-                        @if ($user === $data->login)
-                            {{ $data->getProfile('#ff0000') }}<br>
-                        @else
-                            {{ $data->getProfile() }}<br>
-                        @endif
-
+                        {{ $data->getProfile() }}<br>
                         <small class="font-italic">{{ $data->getStatus() }}</small>
                     </div>
                 </div>

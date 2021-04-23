@@ -133,6 +133,7 @@ return [
     'valid_file_extensions' => 'Valid file extensions',
     'attached_files'        => 'Attached files',
     'attach_files'          => 'Attach files',
+    'attach_file'           => 'Attach file',
     'attach_image'          => 'Attach image',
     'deleting_files'        => 'Deleting files',
     'files'                 => 'Files',

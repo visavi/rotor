@@ -52,6 +52,8 @@ class SettingsSeeder extends AbstractSeed
             ['name'  => 'editratingpoint', 'value' => 100],
             ['name'  => 'editstatusmoney', 'value' => 3000],
             ['name'  => 'editstatuspoint', 'value' => 1000],
+            ['name'  => 'editcolormoney', 'value' => 5000],
+            ['name'  => 'editcolorpoint', 'value' => 500],
             ['name'  => 'errorlog', 'value' => 1],
             ['name'  => 'filesize', 'value' => 5242880],
             ['name'  => 'fileupload', 'value' => 10485760],

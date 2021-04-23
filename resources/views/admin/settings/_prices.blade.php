@@ -40,6 +40,18 @@
         <div class="invalid-feedback">{{ textError('sets[editstatusmoney]') }}</div>
     </div>
 
+    <div class="form-group{{ hasError('sets[editcolorpoint]') }}">
+        <label for="editcolorpoint">{{ __('settings.points_color_edit') }}:</label>
+        <input type="number" class="form-control" id="editcolorpoint" name="sets[editcolorpoint]" maxlength="4" value="{{ getInput('sets.editcolorpoint', $settings['editcolorpoint']) }}" required>
+        <div class="invalid-feedback">{{ textError('sets[editcolorpoint]') }}</div>
+    </div>
+
+    <div class="form-group{{ hasError('sets[editcolormoney]') }}">
+        <label for="editcolormoney">{{ __('settings.moneys_color_edit') }}:</label>
+        <input type="number" class="form-control" id="editcolormoney" name="sets[editcolormoney]" maxlength="10" value="{{ getInput('sets.editcolormoney', $settings['editcolormoney']) }}" required>
+        <div class="invalid-feedback">{{ textError('sets[editcolormoney]') }}</div>
+    </div>
+
     <div class="form-group{{ hasError('sets[bonusmoney]') }}">
         <label for="bonusmoney">{{ __('settings.moneys_bonus') }}:</label>
         <input type="number" class="form-control" id="bonusmoney" name="sets[bonusmoney]" maxlength="10" value="{{ getInput('sets.bonusmoney', $settings['bonusmoney']) }}" required>

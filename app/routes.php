@@ -184,6 +184,8 @@ return FastRoute\cachedDispatcher(static function (RouteCollector $r) {
         $r->post('/rating', [App\Controllers\AjaxController::class, 'rating']);
         $r->post('/vote', [App\Controllers\AjaxController::class, 'vote']);
         $r->post('/complaint', [App\Controllers\AjaxController::class, 'complaint']);
+        #$r->post('/file/upload', [App\Controllers\AjaxController::class, 'uploadFile']);
+        #$r->post('/file/delete', [App\Controllers\AjaxController::class, 'deleteFile']);
         $r->post('/image/upload', [App\Controllers\AjaxController::class, 'uploadImage']);
         $r->post('/image/delete', [App\Controllers\AjaxController::class, 'deleteImage']);
     });
@@ -204,6 +206,7 @@ return FastRoute\cachedDispatcher(static function (RouteCollector $r) {
         $r->get('/editmail', [App\Controllers\User\UserController::class, 'editMail']);
         $r->post('/changemail', [App\Controllers\User\UserController::class, 'changeMail']);
         $r->post('/editstatus', [App\Controllers\User\UserController::class, 'editStatus']);
+        $r->post('/editcolor', [App\Controllers\User\UserController::class, 'editColor']);
         $r->post('/editpassword', [App\Controllers\User\UserController::class, 'editPassword']);
         $r->post('/apikey', [App\Controllers\User\UserController::class, 'apikey']);
     });
