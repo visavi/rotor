@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Controllers;
 
 use App\Classes\Validator;
+use App\Models\File;
 use App\Models\Flood;
 use App\Models\Ignore;
 use App\Models\Message;
@@ -110,9 +111,15 @@ class MessageController extends BaseController
             ->where('author_id', $user->id)
             ->update(['reading' => 1]);
 
+        $files = File::query()
+            ->where('relate_type', Message::$morphName)
+            ->where('relate_id', 0)
+            ->where('user_id', $this->user->id)
+            ->get();
+
         $view = $user->id ? 'messages/talk' : 'messages/talk_system';
 
-        return view($view, compact('messages', 'user'));
+        return view($view, compact('messages', 'user', 'files'));
     }
 
     /**
@@ -156,13 +163,15 @@ class MessageController extends BaseController
             $msg = antimat($msg);
             $user->increment('newprivat');
 
-            Message::query()->create([
+            $message = Message::query()->create([
                 'user_id'    => $user->id,
                 'author_id'  => $this->user->id,
                 'text'       => $msg,
                 'type'       => Message::IN,
                 'created_at' => SITETIME,
-            ])->create([
+            ]);
+
+            Message::query()->create([
                 'user_id'    => $this->user->id,
                 'author_id'  => $user->id,
                 'text'       => $msg,
@@ -170,6 +179,15 @@ class MessageController extends BaseController
                 'reading'    => 1,
                 'created_at' => SITETIME,
             ]);
+
+            File::query()
+                ->where('relate_type', Message::$morphName)
+                ->where('relate_id', 0)
+                ->where('user_id', $this->user->id)
+                ->update([
+                    'relate_id' => $message->id,
+                    'user_id'   => $user->id,
+                ]);
 
             $flood->saveState();
 

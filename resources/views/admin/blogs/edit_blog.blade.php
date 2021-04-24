@@ -47,7 +47,7 @@
                     @foreach ($article->files as $file)
                         <span class="js-image">
                             {{ resizeImage($file->hash, ['width' => 100, 'onclick' => 'return pasteImage(this);']) }}
-                            <a href="#" onclick="return deleteImage(this);" data-id="{{ $file->id }}" data-type="{{ $article->getMorphClass() }}"  data-token="{{ $_SESSION['token'] }}"><i class="fas fa-times"></i></a>
+                            <a href="#" onclick="return deleteFile(this);" data-id="{{ $file->id }}" data-type="{{ $article->getMorphClass() }}"  data-token="{{ $_SESSION['token'] }}"><i class="fas fa-times"></i></a>
                         </span>
                     @endforeach
                 @endif

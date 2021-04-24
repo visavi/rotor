@@ -17,9 +17,9 @@ trait UploadTrait
      * @param  UploadedFile $file   объект изображения
      * @param  bool         $record
      *
-     * @return array                путь загруженного файла
+     * @return array путь загруженного файла
      */
-    public function uploadFile(UploadedFile $file, $record = true): array
+    public function uploadFile(UploadedFile $file, bool $record = true): array
     {
         $mime      = $file->getClientMimeType();
         $extension = strtolower($file->getClientOriginalExtension());
@@ -28,8 +28,9 @@ trait UploadTrait
         $filename  = uniqueName($extension);
         $fullPath  = $this->uploadPath . '/' . $filename;
         $path      = str_replace(HOME, '', $fullPath);
+        $isImage   = in_array($extension, ['jpg', 'jpeg', 'gif', 'png'], true);
 
-        if (in_array($extension, ['jpg', 'jpeg', 'gif', 'png'], true)) {
+        if ($isImage) {
             $img = Image::make($file);
 
             if ($img->getWidth() <= 100 && $img->getHeight() <= 100) {
@@ -50,13 +51,15 @@ trait UploadTrait
             $file->move($this->uploadPath, $filename);
         }
 
+        $filesize  = filesize($fullPath);
+
         if ($record) {
             $upload = File::query()->create([
                 'relate_id'   => $this->id ?? 0,
                 'relate_type' => $this->getMorphClass(),
                 'hash'        => $path,
                 'name'        => $basename,
-                'size'        => filesize($fullPath),
+                'size'        => $filesize,
                 'user_id'     => getUser('id'),
                 'created_at'  => SITETIME,
             ]);
@@ -65,8 +68,11 @@ trait UploadTrait
         return [
             'id'        => $upload->id ?? 0,
             'path'      => $path,
+            'name'      => $basename,
             'extension' => $extension,
             'mime'      => $mime,
+            'size'      => formatSize($filesize),
+            'is_image'  => $isImage,
         ];
     }
 }

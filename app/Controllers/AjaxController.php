@@ -244,24 +244,29 @@ class AjaxController extends BaseController
      *
      * @return string
      */
-    public function uploadImage(Request $request, Validator $validator): string
+    public function uploadFile(Request $request, Validator $validator): string
     {
-        $types = [
+        $imageTypes = [
             Article::$morphName,
             Item::$morphName,
             Photo::$morphName,
+        ];
+
+        $fileTypes = [
+            Message::$morphName,
         ];
 
         $id    = int($request->input('id'));
         $image = $request->file('image');
         $type  = $request->input('type');
 
-        if (! in_array($type, $types, true)) {
+        if (! in_array($type, array_merge($imageTypes, $fileTypes), true)) {
             return json_encode(['status' => 'error', 'message' => 'Type invalid']);
         }
 
         /** @var BaseModel $class */
         $class = Relation::getMorphedModel($type);
+        $isImageType = in_array($type, $imageTypes, true);
 
         if ($id) {
             $model = $class::query()->where('user_id', getUser('id'))->find($id);
@@ -276,7 +281,9 @@ class AjaxController extends BaseController
             $model = new $class();
         }
 
-        $countFiles = $model->files()
+        $countFiles = File::query()
+            ->where('relate_type', $type)
+            ->where('relate_id', $id)
             ->where('user_id', getUser('id'))
             ->count();
 
@@ -285,24 +292,48 @@ class AjaxController extends BaseController
             ->lt($countFiles, setting('maxfiles'), __('validator.files_max', ['max' => setting('maxfiles')]));
 
         if ($validator->isValid()) {
-            $rules = [
-                'maxsize'   => setting('filesize'),
-                'minweight' => 100,
-            ];
+            if ($isImageType) {
+                $rules = [
+                    'minweight'  => 100,
+                    'maxsize'    => setting('filesize'),
+                    'extensions' => ['jpg', 'jpeg', 'gif', 'png'],
+                ];
+            } else {
+                $rules = [
+                    'minweight'  => 100,
+                    'maxsize'    => setting('forumloadsize'),
+                    'extensions' => explode(',', setting('forumextload')),
+                ];
+            }
 
-            $validator->file($image, $rules, ['files' => __('validator.image_upload_failed')]);
+            $validator->file($image, $rules, ['files' => __('validator.file_upload_failed')]);
         }
 
         if ($validator->isValid()) {
-            $file  = $model->uploadFile($image);
-            $image = resizeProcess($file['path'], ['size' => 100]);
+            $file = $model->uploadFile($image);
+            $type = $file['is_image'] ? 'image' : 'file';
 
-            return json_encode([
-                'status' => 'success',
-                'id'     => $file['id'],
-                'path'   => $image['path'],
-                'source' => $image['source'],
-            ]);
+            if ($isImageType) {
+                $image = resizeProcess($file['path'], ['size' => 100]);
+                $data = [
+                    'status' => 'success',
+                    'id'     => $file['id'],
+                    'path'   => $image['path'],
+                    'source' => $image['source'],
+                    'type'   => $type,
+                ];
+            } else {
+                $data = [
+                    'status' => 'success',
+                    'id'     => $file['id'],
+                    'path'   => $file['path'],
+                    'name'   => $file['name'],
+                    'size'   => $file['size'],
+                    'type'   => $type,
+                ];
+            }
+
+            return json_encode($data);
         }
 
         return json_encode([
@@ -320,12 +351,13 @@ class AjaxController extends BaseController
      * @return string
      * @throws Exception
      */
-    public function deleteImage(Request $request, Validator $validator): string
+    public function deleteFile(Request $request, Validator $validator): string
     {
         $types = [
             Article::$morphName,
             Item::$morphName,
             Photo::$morphName,
+            Message::$morphName,
         ];
 
         $id   = int($request->input('id'));

@@ -9,7 +9,7 @@ $click = $cond ? 'return pasteImage(this);' : false;
             <span class="js-image">
                 {{ resizeImage($file->hash, ['width' => 100, 'onclick' => $click]) }}
                 @if (! $file->relate_id)
-                    <a href="#" onclick="return deleteImage(this);" data-id="{{ $file->id }}" data-type="{{ $type }}" data-token="{{ $_SESSION['token'] }}"><i class="fas fa-times"></i></a>
+                    <a href="#" onclick="return deleteFile(this);" data-id="{{ $file->id }}" data-type="{{ $type }}" data-token="{{ $_SESSION['token'] }}"><i class="fas fa-times"></i></a>
                 @endif
             </span>
         @endforeach
@@ -19,7 +19,7 @@ $click = $cond ? 'return pasteImage(this);' : false;
 <div class="js-image-template d-none">
     <span class="js-image">
         <img src="#" width="100" onclick="{{ $click }}" alt="" class="img-fluid">
-        <a href="#" onclick="return deleteImage(this);" data-type="{{ $type }}" data-token="{{ $_SESSION['token'] }}"><i class="fas fa-times"></i></a>
+        <a href="#" onclick="return deleteFile(this);" data-type="{{ $type }}" data-token="{{ $_SESSION['token'] }}"><i class="fas fa-times"></i></a>
     </span>
 </div>
 
