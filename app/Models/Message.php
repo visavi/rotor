@@ -50,4 +50,44 @@ class Message extends BaseModel
     {
         return $this->belongsTo(User::class, 'author_id')->withDefault();
     }
+
+    /**
+     * Create dialogue
+     *
+     * @param User      $user
+     * @param User|null $author
+     * @param string    $text
+     */
+    public function createDialogue(User $user, ?User $author, string $text): void
+    {
+        $authorId = $author->id ?? 0;
+
+        $message = self::query()->create([
+            'user_id'    => $user->id,
+            'author_id'  => $authorId,
+            'text'       => $text,
+            'created_at' => SITETIME,
+        ]);
+
+        Dialogue::query()->create([
+            'message_id' => $message->id,
+            'user_id'    => $user->id,
+            'author_id'  => $authorId,
+            'type'       => self::IN,
+            'created_at' => SITETIME,
+        ]);
+
+        if ($authorId) {
+            Dialogue::query()->create([
+                'message_id' => $message->id,
+                'user_id'    => $authorId,
+                'author_id'  => $user->id,
+                'type'       => self::OUT,
+                'reading'    => 1,
+                'created_at' => SITETIME,
+            ]);
+        }
+
+        $user->increment('newprivat');
+    }
 }

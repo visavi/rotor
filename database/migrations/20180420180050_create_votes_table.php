@@ -16,6 +16,7 @@ final class CreateVotesTable extends Migration
             $this->schema->create('votes', function (Blueprint $table) {
                 $table->increments('id');
                 $table->string('title', 100);
+                $table->text('description')->nullable();
                 $table->integer('count')->default(0);
                 $table->boolean('closed')->default(false);
                 $table->integer('created_at');

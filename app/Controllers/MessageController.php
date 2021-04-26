@@ -65,32 +65,6 @@ class MessageController extends BaseController
             ->with('author')
             ->paginate(setting('privatpost'));
 
-
-/*        $lastMessage = Message3::query()
-            ->select(
-                'author_id',
-                DB::connection()->raw('max(created_at) as last_created_at'),
-                DB::connection()->raw('min(case when reading then 1 else 0 end) as all_reading')
-            )
-            ->where('user_id', $this->user->id)
-            ->groupBy('author_id');
-
-        $messages = Message3::query()
-            ->select('m1.*', 'm2.last_created_at', 'm2.all_reading', 'm3.reading as recipient_read')
-            ->from('messages_old as m1')
-            ->joinSub($lastMessage, 'm2', static function (JoinClause $join) {
-                $join->on('m1.created_at', 'm2.last_created_at')
-                ->whereRaw('m1.author_id = m2.author_id');
-            })
-            ->leftJoin('messages_old as m3', static function (JoinClause $join) {
-                $join->on('m1.user_id', 'm3.author_id')
-                    ->whereRaw('m1.created_at = m3.created_at');
-            })
-            ->where('m1.user_id', $this->user->id)
-            ->orderByDesc('m1.created_at')
-            ->with('author')
-            ->paginate(setting('privatpost'));*/
-
         return view('messages/index', compact('messages'));
     }
 
@@ -117,13 +91,6 @@ class MessageController extends BaseController
         if ($user->id === $this->user->id) {
             abort('default', __('messages.empty_dialogue'));
         }
-        /**
-         * select  messages2.text, dialogues.*, dialogues2.reading as recipient_read from messages2
-        inner join dialogues on dialogues.message_id = messages2.id
-        left join dialogues as dialogues2 on dialogues.user_id = dialogues2.author_id and dialogues.message_id = dialogues2.message_id
-        where dialogues.user_id = 1 and dialogues.author_id = 15465
-        order by dialogues.created_at desc;
-         */
 
         $messages = Message::query()
             ->select('d.*', 'm.text', 'd2.reading as recipient_read')
@@ -144,26 +111,6 @@ class MessageController extends BaseController
             ->where('author_id', $user->id)
             ->where('reading', 0)
             ->update(['reading' => 1]);
-
-/*        $messages = Message::query()
-            ->select('m1.*', 'm2.reading as recipient_read')
-            ->from('messages as m1')
-            ->leftJoin('messages as m2', static function (JoinClause $join) {
-                $join->on('m1.user_id', 'm2.author_id')
-                    ->whereRaw('m1.created_at = m2.created_at');
-            })
-            ->where('m1.user_id', $this->user->id)
-            ->where('m1.author_id', $user->id)
-            ->orderByDesc('m1.created_at')
-            ->with('user', 'author')
-            ->paginate(setting('privatpost'));*/
-
-        // Прочитано
-/*        Message::query()
-            ->where('user_id', $this->user->id)
-            ->where('author_id', $user->id)
-            ->where('reading', 0)
-            ->update(['reading' => 1]);*/
 
         $view = $user->id ? 'messages/talk' : 'messages/talk_system';
 
@@ -209,33 +156,7 @@ class MessageController extends BaseController
 
         if ($validator->isValid()) {
             $msg = antimat($msg);
-            $user->increment('newprivat');
-
-            // TODO вынести в отдельный метод createDialogue
-            $message = Message::query()->create([
-                'user_id'    => $user->id,
-                'author_id'  => $this->user->id,
-                'text'       => $msg,
-                'created_at' => SITETIME,
-            ]);
-
-            Dialogue::query()->create([
-                'message_id' => $message->id,
-                'user_id'    => $user->id,
-                'author_id'  => $this->user->id,
-                'type'       => Message::IN,
-                'created_at' => SITETIME,
-            ]);
-
-            Dialogue::query()->create([
-                'message_id' => $message->id,
-                'user_id'    => $this->user->id,
-                'author_id'  => $user->id,
-                'type'       => Message::OUT,
-                'reading'    => 1,
-                'created_at' => SITETIME,
-            ]);
-
+            (new Message())->createDialogue($user, $this->user, $msg);
             $flood->saveState();
 
             setFlash('success', __('messages.success_sent'));

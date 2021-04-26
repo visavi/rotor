@@ -9,6 +9,7 @@ use Exception;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\GuzzleException;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Query\JoinClause;
@@ -582,24 +583,7 @@ class User extends BaseModel
      */
     public function sendMessage(?User $author, string $text): bool
     {
-        $authorId = $author->id ?? 0;
-
-        $message = Message::query()->create([
-            'user_id'    => $this->id,
-            'author_id'  => $authorId,
-            'text'       => $text,
-            'created_at' => SITETIME,
-        ]);
-
-        Dialogue::query()->create([
-            'message_id' => $message->id,
-            'user_id'    => $this->id,
-            'author_id'  => $authorId,
-            'created_at' => SITETIME,
-            'type'       => Message::IN,
-        ]);
-
-        $this->increment('newprivat');
+        (new Message())->createDialogue($this, $author, $text);
 
         return true;
     }

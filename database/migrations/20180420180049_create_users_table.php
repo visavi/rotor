@@ -41,6 +41,7 @@ final class CreateUsersTable extends Migration
                 $table->integer('money')->default(0);
                 $table->integer('timeban')->nullable();
                 $table->string('status', 50)->nullable();
+                $table->string('color', 10)->nullable();
                 $table->string('avatar', 100)->nullable();
                 $table->string('picture', 100)->nullable();
                 $table->integer('rating')->default(0);

@@ -18,7 +18,7 @@ final class CreatePollingsTable extends Migration
                 $table->string('relate_type', 10);
                 $table->integer('relate_id');
                 $table->integer('user_id');
-                $table->string('vote', 1);
+                $table->string('vote');
                 $table->integer('created_at');
 
                 $table->index(['relate_type', 'relate_id', 'user_id']);

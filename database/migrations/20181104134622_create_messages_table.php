@@ -19,12 +19,7 @@ final class CreateMessagesTable extends Migration
                 $table->integer('user_id');
                 $table->integer('author_id');
                 $table->text('text');
-                $table->enum('type', [Message::IN, Message::OUT]);
-                $table->boolean('reading')->default(false);
                 $table->integer('created_at');
-
-                $table->index(['user_id', 'author_id']);
-                $table->index('created_at');
             });
         }
     }
