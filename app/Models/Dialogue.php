@@ -7,15 +7,17 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
- * Class Inbox
+ * Class Dialogue
  *
  * @property int id
+ * @property int message_id
  * @property int user_id
  * @property int author_id
- * @property string text
+ * @property string type
+ * @property int reading
  * @property int created_at
  */
-class Message extends BaseModel
+class Dialogue extends BaseModel
 {
     public const IN   = 'in';   // Принятые
     public const OUT  = 'out';  // Отправленные
@@ -33,13 +35,6 @@ class Message extends BaseModel
      * @var array
      */
     protected $guarded = [];
-
-    /**
-     * Morph name
-     *
-     * @var string
-     */
-    public static $morphName = 'messages';
 
     /**
      * Возвращает связь пользователей

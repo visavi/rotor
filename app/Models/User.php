@@ -582,10 +582,19 @@ class User extends BaseModel
      */
     public function sendMessage(?User $author, string $text): bool
     {
-        Message::query()->create([
+        $authorId = $author->id ?? 0;
+
+        $message = Message::query()->create([
             'user_id'    => $this->id,
-            'author_id'  => $author->id ?? 0,
+            'author_id'  => $authorId,
             'text'       => $text,
+            'created_at' => SITETIME,
+        ]);
+
+        Dialogue::query()->create([
+            'message_id' => $message->id,
+            'user_id'    => $this->id,
+            'author_id'  => $authorId,
             'created_at' => SITETIME,
             'type'       => Message::IN,
         ]);
@@ -602,7 +611,7 @@ class User extends BaseModel
      */
     public function getCountMessages(): int
     {
-        return Message::query()->where('user_id', $this->id)->count();
+        return Dialogue::query()->where('user_id', $this->id)->count();
     }
 
     /**
@@ -687,14 +696,14 @@ class User extends BaseModel
     public function updatePrivate(): void
     {
         if ($this->newprivat) {
-            $countMessages = Message::query()
+            $countDialogues = Dialogue::query()
                 ->where('user_id', $this->id)
                 ->where('reading', 0)
                 ->count();
 
-            if ($countMessages !== $this->newprivat) {
+            if ($countDialogues !== $this->newprivat) {
                 $this->update([
-                    'newprivat'      => $countMessages,
+                    'newprivat'      => $countDialogues,
                     'sendprivatmail' => 0,
                 ]);
             }

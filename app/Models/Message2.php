@@ -15,10 +15,17 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property string text
  * @property int created_at
  */
-class Message extends BaseModel
+class Message2 extends BaseModel
 {
     public const IN   = 'in';   // Принятые
     public const OUT  = 'out';  // Отправленные
+
+    /**
+     * The table associated with the model.
+     *
+     * @var string
+     */
+    protected $table = 'messages2';
 
     /**
      * Indicates if the model should be timestamped.

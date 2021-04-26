@@ -557,7 +557,7 @@ getNewMessages = function () {
             }
 
             if (data.status === 'success') {
-                $('.js-messages-block').find('.js-messages').empty().append(data.messages);
+                $('.js-messages-block').find('.js-messages').empty().append(data.dialogues);
             }
         }
     });

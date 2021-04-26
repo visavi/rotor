@@ -1,18 +1,18 @@
-@foreach ($messages as $message)
+@foreach ($dialogues as $dialogue)
     <?php
-        $author = $message->author_id ? $message->author->getName() : __('messages.system');
-        $login = $message->author->exists ? $message->author->login : $message->author_id;
+        $author = $dialogue->author_id ? $dialogue->author->getName() : __('messages.system');
+        $login = $dialogue->author->exists ? $dialogue->author->login : $dialogue->author_id;
     ?>
     <li>
         <a class="app-notification__item" href="/messages/talk/{{ $login }}">
-            <span class="app-notification__icon avatar-mini">{{ $message->author->getAvatarImage() }}</span>
+            <span class="app-notification__icon avatar-mini">{{ $dialogue->author->getAvatarImage() }}</span>
             <div>
                 <p class="app-notification__author">{{ $author }}</p>
-                <p class="app-notification__meta">{{ dateFixed($message->last_created_at) }}</p>
+                <p class="app-notification__meta">{{ dateFixed($dialogue->last_created_at) }}</p>
             </div>
 
             <div class="app-notification__cnt">
-                <span class="badge badge-info">{{ $message->cnt }}</span>
+                <span class="badge badge-info">{{ $dialogue->cnt }}</span>
             </div>
         </a>
     </li>
