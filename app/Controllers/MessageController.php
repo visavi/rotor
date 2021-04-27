@@ -117,6 +117,7 @@ class MessageController extends BaseController
             ->where('relate_type', Message::$morphName)
             ->where('relate_id', 0)
             ->where('user_id', $this->user->id)
+            ->orderBy('created_at')
             ->get();
 
         $view = $user->id ? 'messages/talk' : 'messages/talk_system';
@@ -164,7 +165,7 @@ class MessageController extends BaseController
         if ($validator->isValid()) {
             $msg = antimat($msg);
 
-            $message =(new Message())->createDialogue($user, $this->user, $msg);
+            $message = (new Message())->createDialogue($user, $this->user, $msg);
 
             File::query()
                 ->where('relate_type', Message::$morphName)

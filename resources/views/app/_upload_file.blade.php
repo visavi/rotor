@@ -1,26 +1,18 @@
 <div class="js-files mb-3">
     @if ($files->isNotEmpty())
         @foreach ($files as $file)
-            @if ($file->isImage())
-                <div class="js-file d-inline-block">
+            <span class="js-file">
+                @if ($file->isImage())
                     {{ resizeImage($file->hash, ['width' => 100]) }}
-                </div>
-            @else
-                <div class="js-file d-inline-block" style="
-                     font-weight: bold;
-                     background: #eee;
-                     border: 1px solid #ccc;
-                     padding:10px 3px;
-                     width:100px;
-                ">
+                @else
                     <a href="{{ $file->hash }}">{{ $file->name }}</a>
                     {{ icons($file->extension) }} {{ $file->extension }} {{ formatSize($file->size) }}
-                </div>
-            @endif
+                @endif
 
-            @if (! $file->relate_id)
-                <a href="#" onclick="return deleteFile(this);" data-id="{{ $file->id }}" data-type="{{ $type }}" data-token="{{ $_SESSION['token'] }}" class="js-file-delete"><i class="fas fa-times"></i></a>
-            @endif
+                @if (! $file->relate_id)
+                    <a href="#" onclick="return deleteFile(this);" data-id="{{ $file->id }}" data-type="{{ $type }}" data-token="{{ $_SESSION['token'] }}" class="js-file-delete"><i class="fas fa-times"></i></a>
+                @endif
+            </span>
         @endforeach
     @endif
 </div>
