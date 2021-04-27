@@ -54,6 +54,20 @@
                     <div class="section-message">
                         {{ bbCode($data->text) }}
                     </div>
+                    @if ($data->files->isNotEmpty())
+                        <div class="section-media">
+                            <i class="fa fa-paperclip"></i> <b>{{ __('main.attached_files') }}:</b><br>
+                            @foreach ($data->files as $file)
+                                <div class="media-file">
+                                    {{ icons($file->extension) }}
+                                    <a href="{{ $file->hash }}">{{ $file->name }}</a> ({{ formatSize($file->size) }})<br>
+                                    @if ($file->isImage())
+                                        <a href="{{ $file->hash }}" class="gallery" data-group="{{ $data->id }}">{{ resizeImage($file->hash, ['alt' => $file->name]) }}</a>
+                                    @endif
+                                </div>
+                            @endforeach
+                        </div>
+                    @endif
                 </div>
             </div>
         @endforeach
@@ -73,6 +87,8 @@
                     <div class="invalid-feedback">{{ textError('msg') }}</div>
                     <span class="js-textarea-counter"></span>
                 </div>
+
+                @include('app/_upload_file', ['files' => $files, 'type' => App\Models\Message::$morphName])
 
                 @if (getUser('point') < setting('privatprotect'))
                     {{ getCaptcha() }}

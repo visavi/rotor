@@ -170,14 +170,13 @@
                         <div class="section-media">
                             <i class="fa fa-paperclip"></i> <b>{{ __('main.attached_files') }}:</b><br>
                             @foreach ($post->files as $file)
-                                <?php $ext = getExtension($file->hash); ?>
                                 <div class="media-file">
-                                    {{ icons($ext) }}
+                                    {{ icons($file->extension) }}
                                     <a href="{{ $file->hash }}">{{ $file->name }}</a> ({{ formatSize($file->size) }})<br>
-                                    @if (in_array($ext, ['jpg', 'jpeg', 'gif', 'png']))
+                                    @if ($file->isImage())
                                         <a href="{{ $file->hash }}" class="gallery" data-group="{{ $post->id }}">{{ resizeImage($file->hash, ['alt' => $file->name]) }}</a>
+                                    @endif
                                 </div>
-                                @endif
                             @endforeach
                         </div>
                     @endif

@@ -442,9 +442,9 @@ copyToClipboard = function (el) {
 };
 
 /* Загрузка изображения */
-submitImage = function (el, paste) {
+submitFile = function (el) {
     var form = new FormData();
-    form.append('image', el.files[0]);
+    form.append('file', el.files[0]);
     form.append('id', $(el).data('id'));
     form.append('type', $(el).data('type'));
     form.append('token', $(el).data('token'));
@@ -455,15 +455,68 @@ submitImage = function (el, paste) {
         contentType: false,
         processData: false,
         dataType: 'json',
-        url: '/ajax/image/upload',
+        url: '/ajax/file/upload',
         beforeSend: function () {
-            $('.js-images').append('<i class="fas fa-spinner fa-spin fa-3x mx-3"></i>');
+            $('.js-files').append('<i class="fas fa-spinner fa-spin fa-3x mx-3"></i>');
         },
         complete: function () {
             $('.fa-spinner').remove();
         },
         success: function (data) {
+            if (data.status === 'error') {
+                notification('error', data.message);
+                return false;
+            }
 
+            if (data.status === 'success') {
+                if (data.type === 'image') {
+                    var template = $('.js-image-template').clone();
+
+                    template.find('img').attr({
+                        'src'         : data.path,
+                        'data-source' : data.source
+                    });
+                } else {
+                    var template = $('.js-file-template').clone();
+
+                    template.find('.js-file-link').attr({
+                        'href' : data.path
+                    }).text(data.name);
+
+                    template.find('.js-file-size').text(data.size);
+                }
+
+                template.find('.js-file-delete').attr('data-id', data.id);
+                $('.js-files').append(template.html());
+            }
+        }
+    });
+
+    return false;
+};
+
+/* Загрузка изображения */
+submitImage = function (el, paste) {
+    var form = new FormData();
+    form.append('file', el.files[0]);
+    form.append('id', $(el).data('id'));
+    form.append('type', $(el).data('type'));
+    form.append('token', $(el).data('token'));
+
+    $.ajax({
+        data: form,
+        type: 'post',
+        contentType: false,
+        processData: false,
+        dataType: 'json',
+        url: '/ajax/file/upload',
+        beforeSend: function () {
+            $('.js-files').append('<i class="fas fa-spinner fa-spin fa-3x mx-3"></i>');
+        },
+        complete: function () {
+            $('.fa-spinner').remove();
+        },
+        success: function (data) {
             if (data.status === 'error') {
                 notification('error', data.message);
                 return false;
@@ -479,7 +532,7 @@ submitImage = function (el, paste) {
 
                 template.find('a').attr('data-id', data.id);
 
-                $('.js-images').append(template.html());
+                $('.js-files').append(template.html());
 
                 if (paste) {
                     pasteImage(template.find('img'));
@@ -500,8 +553,8 @@ pasteImage = function (el) {
     field.focus().val(text.substring(0, caretPos) + paste + text.substring(caretPos));
 };
 
-/* Удаление изображения */
-deleteImage = function (el) {
+/* Удаление файла */
+deleteFile = function (el) {
     $.ajax({
         data: {
             id: $(el).data('id'),
@@ -510,7 +563,7 @@ deleteImage = function (el) {
         },
         dataType: 'json',
         type: 'post',
-        url: '/ajax/image/delete',
+        url: '/ajax/file/delete',
         success: function (data) {
             if (data.status === 'error') {
                 notification('error', data.message);
@@ -518,7 +571,7 @@ deleteImage = function (el) {
             }
 
             if (data.status === 'success') {
-                $(el).closest('.js-image').hide('fast');
+                $(el).closest('.js-file').hide('fast');
             }
         }
     });

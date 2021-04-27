@@ -4,7 +4,11 @@ declare(strict_types=1);
 
 namespace App\Models;
 
+use App\Traits\UploadTrait;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\MorphMany;
 
 /**
  * Class Inbox
@@ -17,6 +21,8 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  */
 class Message extends BaseModel
 {
+    use UploadTrait;
+
     public const IN   = 'in';   // Принятые
     public const OUT  = 'out';  // Отправленные
 
@@ -42,6 +48,13 @@ class Message extends BaseModel
     public static $morphName = 'messages';
 
     /**
+     * Директория загрузки файлов
+     *
+     * @var string
+     */
+    public $uploadPath = UPLOADS . '/messages';
+
+    /**
      * Возвращает связь пользователей
      *
      * @return BelongsTo
@@ -52,13 +65,25 @@ class Message extends BaseModel
     }
 
     /**
+     * Возвращает загруженные файлы
+     *
+     * @return MorphMany
+     */
+    public function files(): MorphMany
+    {
+        return $this->morphMany(File::class, 'relate');
+    }
+
+    /**
      * Create dialogue
      *
      * @param User      $user
      * @param User|null $author
      * @param string    $text
+     *
+     * @return Builder|Model
      */
-    public function createDialogue(User $user, ?User $author, string $text): void
+    public function createDialogue(User $user, ?User $author, string $text)
     {
         $authorId = $author->id ?? 0;
 
@@ -89,5 +114,7 @@ class Message extends BaseModel
         }
 
         $user->increment('newprivat');
+
+        return $message;
     }
 }

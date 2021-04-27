@@ -6,6 +6,7 @@ namespace App\Controllers;
 
 use App\Classes\Validator;
 use App\Models\Dialogue;
+use App\Models\File;
 use App\Models\Flood;
 use App\Models\Ignore;
 use App\Models\Message;
@@ -93,7 +94,7 @@ class MessageController extends BaseController
         }
 
         $messages = Message::query()
-            ->select('d.*', 'm.text', 'd2.reading as recipient_read')
+            ->select('d.*', 'm.id', 'm.text', 'd2.reading as recipient_read')
             ->from('messages as m')
             ->join('dialogues as d', 'd.message_id', 'm.id')
             ->leftJoin('dialogues as d2', function ($join) {
@@ -112,9 +113,15 @@ class MessageController extends BaseController
             ->where('reading', 0)
             ->update(['reading' => 1]);
 
+        $files = File::query()
+            ->where('relate_type', Message::$morphName)
+            ->where('relate_id', 0)
+            ->where('user_id', $this->user->id)
+            ->get();
+
         $view = $user->id ? 'messages/talk' : 'messages/talk_system';
 
-        return view($view, compact('messages', 'user'));
+        return view($view, compact('messages', 'user', 'files'));
     }
 
     /**
@@ -156,7 +163,15 @@ class MessageController extends BaseController
 
         if ($validator->isValid()) {
             $msg = antimat($msg);
-            (new Message())->createDialogue($user, $this->user, $msg);
+
+            $message =(new Message())->createDialogue($user, $this->user, $msg);
+
+            File::query()
+                ->where('relate_type', Message::$morphName)
+                ->where('relate_id', 0)
+                ->where('user_id', $this->user->id)
+                ->update(['relate_id' => $message->id]);
+
             $flood->saveState();
 
             setFlash('success', __('messages.success_sent'));
