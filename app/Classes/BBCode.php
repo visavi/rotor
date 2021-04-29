@@ -295,14 +295,17 @@ class BBCode
             $listUsers = Cache::remember('users', 3600, static function () {
                 return User::query()
                     ->select('login', 'name')
-                    ->where('name', '<>', '')
                     ->get()
                     ->pluck('name', 'login')
                     ->toArray();
             });
         }
 
-        $name = $listUsers[$match[1]] ?? $match[1];
+        if (! array_key_exists($match[1], $listUsers)) {
+            return $match[0];
+        }
+
+        $name = $listUsers[$match[1]] ?: $match[1];
 
         return '<a href="/users/' . $match[1] . '">' . check($name) . '</a>';
     }
@@ -320,19 +323,15 @@ class BBCode
 
         if (empty($listStickers)) {
             $listStickers = Cache::rememberForever('stickers', static function () {
-                $stickers = Sticker::query()
+                return Sticker::query()
                     ->select('code', 'name')
                     ->orderByDesc(DB::connection()->raw('CHAR_LENGTH(code)'))
                     ->get()
                     ->pluck('name', 'code')
+                    ->map(function ($item, $key) {
+                        return '<img src="' . $item . '" alt="' . getBodyName($item) . '">';
+                    })
                     ->toArray();
-
-                return array_map(
-                    static function ($sticker) {
-                        return '<img src="' . $sticker . '" alt="' . getBodyName($sticker) . '">';
-                    },
-                    $stickers
-                );
             });
         }
 
