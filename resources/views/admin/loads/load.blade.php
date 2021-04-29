@@ -30,7 +30,7 @@
 @stop
 
 @section('content')
-    Сортировать:
+    {{ __('main.sort') }}:
 
     <?php $active = ($order === 'created_at') ? 'success' : 'light'; ?>
     <a href="/admin/loads/{{ $category->id }}?sort=time" class="badge badge-{{ $active }}">{{ __('main.date') }}</a>
