@@ -229,22 +229,33 @@ class MessageController extends BaseController
             redirect('/');
         }
 
-        $dialogues = Dialogue::query()
-            ->select(
-                'author_id',
-                DB::connection()->raw('max(created_at) as last_created_at')
-            )
-            ->selectRaw('count(*) as cnt')
+        $countMessages = Dialogue::query()
             ->where('user_id', $this->user->id)
             ->where('reading', 0)
-            ->groupBy('author_id')
-            ->limit(3)
-            ->get();
+            ->count();
 
-        if ($dialogues->isNotEmpty()) {
-            $view = view('messages/_new', compact('dialogues'));
+        if ($countMessages) {
+            $dialogues = Dialogue::query()
+                ->select(
+                    'author_id',
+                    DB::connection()->raw('max(created_at) as last_created_at')
+                )
+                ->selectRaw('count(*) as cnt')
+                ->where('user_id', $this->user->id)
+                ->where('reading', 0)
+                ->groupBy('author_id')
+                ->limit(3)
+                ->get();
 
-            return json_encode(['status' => 'success', 'dialogues' => $view]);
+            if ($dialogues->isNotEmpty()) {
+                $view = view('messages/_new', compact('dialogues'));
+
+                return json_encode([
+                    'status'        => 'success',
+                    'dialogues'     => $view,
+                    'countMessages' => $countMessages,
+                ]);
+            }
         }
 
         return json_encode(['status'  => 'error']);
