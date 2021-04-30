@@ -4,6 +4,8 @@ $(document).ready(function () {
     // Toggle Sidebar
     $('[data-toggle="sidebar"]').click(function () {
         $('.app').toggleClass('sidenav-toggled');
+
+        return false;
     });
 
     // Activate sidebar treeview toggle
@@ -12,5 +14,7 @@ $(document).ready(function () {
             treeviewMenu.find('[data-toggle="treeview"]').parent().removeClass('is-expanded');
         }
         $(this).parent().toggleClass('is-expanded');
+
+        return false;
     });
 });
