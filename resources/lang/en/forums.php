@@ -44,6 +44,7 @@ return [
     'topic_curators'       => 'Topic Curators',
     'curators_note'        => 'User login separated by commas',
     'topic_closed'         => 'This topic is closed for discussion',
+    'topic_closed_user'    => '{0} This topic is closed for discussion|[1,*] This topic is closed user :login',
     'confirm_delete_forum' => 'Are you sure you want to delete this section?',
     'confirm_delete_topic' => 'Are you sure you want to delete this topic?',
     'confirm_close_topic'  => 'Do you really want to close this topic?',
@@ -70,6 +71,8 @@ return [
     'posts_edited_curators'    => 'Only the author or the curators of the topic can edit posts!',
     'topic_edited_points'      => 'To change and close the topic you need :point!',
     'topic_not_author'         => 'You are not the author of this topic!',
+    'topic_already_open'       => 'This topic is already open!',
+    'topic_opened_author'      => 'The topic can only be opened by the user who closed it!',
 
     'bookmark_success_deleted'   => 'Topic successfully deleted from bookmarks!',
     'bookmark_success_added'     => 'Topic successfully bookmarked!',

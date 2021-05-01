@@ -114,7 +114,7 @@ class TopicController extends BaseController
     }
 
     /**
-     * Message Creation
+     * Message creation
      *
      * @param int       $id
      * @param Request   $request
@@ -314,17 +314,59 @@ class TopicController extends BaseController
             ->empty($topic->closed, __('forums.topic_closed'));
 
         if ($validator->isValid()) {
-            $topic->update(['closed' => 1]);
+            $topic->update([
+                'closed'        => 1,
+                'close_user_id' => getUser('id'),
+            ]);
 
-            $vote = Vote::query()->where('topic_id', $topic->id)->first();
-            if ($vote) {
-                $vote->closed = 1;
-                $vote->save();
-
-                $vote->pollings()->delete();
+            if ($topic->vote) {
+                $topic->vote->update(['closed' => 1]);
+                $topic->vote->pollings()->delete();
             }
 
             setFlash('success', __('forums.topic_success_closed'));
+        } else {
+            setFlash('danger', $validator->getErrors());
+        }
+
+        redirect('/topics/' . $topic->id);
+    }
+
+    /**
+     * Open topic
+     *
+     * @param int       $id
+     * @param Request   $request
+     * @param Validator $validator
+     *
+     * @return void
+     */
+    public function open(int $id, Request $request, Validator $validator): void
+    {
+        if (! $user = getUser()) {
+            abort(403, __('main.not_authorized'));
+        }
+
+        /** @var Topic $topic */
+        $topic = Topic::query()->find($id);
+
+        $validator->equal($request->input('token'), $_SESSION['token'], __('validator.token'))
+            ->notEmpty($topic, __('forums.topic_not_exist'))
+            ->equal($topic->user_id, $user->id, __('forums.topic_not_author'))
+            ->equal($topic->close_user_id, $user->id, __('forums.topic_opened_author'))
+            ->notEmpty($topic->closed, __('forums.topic_already_open'));
+
+        if ($validator->isValid()) {
+            $topic->update([
+                'closed'        => 0,
+                'close_user_id' => null,
+            ]);
+
+            if ($topic->vote) {
+                $topic->vote->update(['closed' => 0]);
+            }
+
+            setFlash('success', __('forums.topic_success_opened'));
         } else {
             setFlash('danger', $validator->getErrors());
         }

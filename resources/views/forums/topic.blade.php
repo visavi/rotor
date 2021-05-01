@@ -60,6 +60,10 @@
             <i class="fas fa-pencil-alt"></i> <a class="mr-3" href="/topics/edit/{{ $topic->id }}">{{ __('main.edit') }}</a>
         @endif
 
+        @if ($topic->closed && getUser('id') === $topic->closeUser->id)
+            <i class="fas fa-unlock"></i> <a class="mr-3" href="/topics/open/{{ $topic->id }}?token={{ $_SESSION['token'] }}">{{ __('main.open') }}</a>
+        @endif
+
         <?php $bookmark = $topic->bookmark_posts ? __('forums.from_bookmarks') : __('forums.to_bookmarks'); ?>
         <i class="fas fa-bookmark"></i> <a class="mr-3" href="#" onclick="return bookmark(this)" data-tid="{{ $topic->id }}" data-token="{{ $_SESSION['token'] }}" data-from="{{ __('forums.from_bookmarks') }}"  data-to="{{ __('forums.to_bookmarks') }}">{{ $bookmark }}</a>
     @endif
@@ -245,7 +249,7 @@
                 </form>
             </div>
         @else
-            {{ showError(__('forums.topic_closed')) }}
+            {{ showError(choice('forums.topic_closed_user', $topic->closeUser->id, ['login' => $topic->closeUser->getName()])) }}
         @endif
     @else
         {{ showError(__('main.not_authorized')) }}

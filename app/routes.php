@@ -121,6 +121,7 @@ return FastRoute\cachedDispatcher(static function (RouteCollector $r) {
         $r->get('/{id:\d+}/{pid:\d+}', [App\Controllers\Forum\TopicController::class, 'viewpost']);
         $r->post('/votes/{id:\d+}', [App\Controllers\Forum\TopicController::class, 'vote']);
         $r->get('/end/{id:\d+}', [App\Controllers\Forum\TopicController::class, 'end']);
+        $r->get('/open/{id:\d+}', [App\Controllers\Forum\TopicController::class, 'open']);
         $r->get('/close/{id:\d+}', [App\Controllers\Forum\TopicController::class, 'close']);
         $r->post('/create/{id:\d+}', [App\Controllers\Forum\TopicController::class, 'create']);
         $r->post('/delete/{id:\d+}', [App\Controllers\Forum\TopicController::class, 'delete']);

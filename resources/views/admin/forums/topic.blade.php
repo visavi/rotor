@@ -225,7 +225,7 @@
             </div>
 
         @else
-            {{ showError(__('forums.topic_closed')) }}
+            {{ showError(choice('forums.topic_closed_user', $topic->closeUser->id, ['login' => $topic->closeUser->getName()])) }}
         @endif
     @else
         {{ showError(__('main.not_authorized')) }}

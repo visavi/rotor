@@ -25,6 +25,7 @@ use Illuminate\Support\HtmlString;
  * @property string|null moderators
  * @property string note
  * @property int last_post_id
+ * @property int close_user_id
  * @property int created_at
  * @property Forum forum
  * @property Collection posts
@@ -108,6 +109,16 @@ class Topic extends BaseModel
     public function forum(): BelongsTo
     {
         return $this->belongsTo(Forum::class, 'forum_id')->withDefault();
+    }
+
+    /**
+     * Возвращает связь пользователей
+     *
+     * @return BelongsTo
+     */
+    public function closeUser(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'close_user_id')->withDefault();
     }
 
     /**

@@ -245,11 +245,12 @@ class ForumController extends AdminController
         }
 
         if ($request->isMethod('post')) {
-            $title      = $request->input('title');
-            $note       = $request->input('note');
-            $moderators = $request->input('moderators');
-            $locked     = empty($request->input('locked')) ? 0 : 1;
-            $closed     = empty($request->input('closed')) ? 0 : 1;
+            $title       = $request->input('title');
+            $note        = $request->input('note');
+            $moderators  = $request->input('moderators');
+            $locked      = empty($request->input('locked')) ? 0 : 1;
+            $closed      = empty($request->input('closed')) ? 0 : 1;
+            $closeUserId = $closed ? getUser('id') : null;
 
             $validator->equal($request->input('token'), $_SESSION['token'], __('validator.token'))
                 ->length($title, 3, 50, ['title' => __('validator.text')])
@@ -266,11 +267,12 @@ class ForumController extends AdminController
 
             if ($validator->isValid()) {
                 $topic->update([
-                    'title'      => $title,
-                    'note'       => $note,
-                    'moderators' => implode(',', $moderators),
-                    'locked'     => $locked,
-                    'closed'     => $closed,
+                    'title'         => $title,
+                    'note'          => $note,
+                    'moderators'    => implode(',', $moderators),
+                    'locked'        => $locked,
+                    'closed'        => $closed,
+                    'close_user_id' => $closeUserId,
                 ]);
 
                 clearCache(['statForums', 'recentTopics']);
@@ -367,23 +369,27 @@ class ForumController extends AdminController
         if ($request->input('token') === $_SESSION['token']) {
             switch ($request->input('type')) :
                 case 'closed':
-                    $topic->update(['closed' => 1]);
+                    $topic->update([
+                        'closed'        => 1,
+                        'close_user_id' => getUser('id'),
+                    ]);
 
-                    $vote = Vote::query()->where('topic_id', $topic->id)->first();
-                    if ($vote) {
-                        $vote->update(['closed' => 1]);
-                        $vote->pollings()->delete();
+                    if ($topic->vote) {
+                        $topic->vote->update(['closed' => 1]);
+                        $topic->vote->pollings()->delete();
                     }
 
                     setFlash('success', __('forums.topic_success_closed'));
                     break;
 
                 case 'open':
-                    $topic->update(['closed' => 0]);
+                    $topic->update([
+                        'closed' => 0,
+                        'close_user_id' => null,
+                    ]);
 
-                    $vote = Vote::query()->where('topic_id', $topic->id)->first();
-                    if ($vote) {
-                        $vote->update(['closed' => 0]);
+                    if ($topic->vote) {
+                        $topic->vote->update(['closed' => 0]);
                     }
 
                     setFlash('success', __('forums.topic_success_opened'));
