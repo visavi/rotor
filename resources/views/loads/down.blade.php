@@ -44,28 +44,35 @@
     <hr>
 
     <div class="mb-3">
-        <div class="section-message mb-3">
-            {{ bbCode($down->text) }}
-        </div>
-
         @if ($down->files->isNotEmpty())
+            @if ($down->getImages()->isNotEmpty())
+                @foreach ($down->getImages() as $image)
+                    <div class="media-file mb-3">
+                        <a href="{{ $image->hash }}" class="gallery" data-group="{{ $down->id }}">{{ resizeImage($image->hash, ['alt' => $down->title]) }}</a>
+                    </div>
+                @endforeach
+            @endif
+
             @if ($down->getFiles()->isNotEmpty())
-                <div class="media-file mb-3">
-                    @foreach ($down->getFiles() as $file)
+                @foreach ($down->getFiles() as $file)
+                    <div class="media-file mb-3">
                         @if ($file->hash && file_exists(HOME . $file->hash))
 
                             @if ($file->extension === 'mp3')
-                                <audio preload="none" controls style="max-width:100%;">
-                                    <source src="{{ $file->hash }}" type="audio/mp3">
-                                </audio>
+                                <div>
+                                    <audio preload="none" controls style="max-width:100%;">
+                                        <source src="{{ $file->hash }}" type="audio/mp3">
+                                    </audio>
+                                </div>
                             @endif
 
                             @if ($file->extension === 'mp4')
                                 <?php $poster = file_exists(HOME . $file->hash . '.jpg') ? $file->hash . '.jpg' : null; ?>
-
-                                <video width="640" height="360" style="max-width:100%;" poster="{{ $poster }}" preload="none" controls playsinline>
-                                    <source src="{{ $file->hash }}" type="video/mp4">
-                                </video>
+                                <div>
+                                    <video style="max-width:100%;" poster="{{ $poster }}" preload="none" controls playsinline>
+                                        <source src="{{ $file->hash }}" type="video/mp4">
+                                    </video>
+                                </div>
                             @endif
 
                             <b>{{ $file->name }}</b> ({{ formatSize($file->size) }})<br>
@@ -77,21 +84,16 @@
                         @else
                             <i class="fa fa-download"></i> {{ __('main.file_not_found') }}
                         @endif
-                        <br>
-                    @endforeach
-                </div>
-            @endif
-
-            @if ($down->getImages()->isNotEmpty())
-                @foreach ($down->getImages() as $image)
-                    <div class="media-file mb-3">
-                        <a href="{{ $image->hash }}" class="gallery" data-group="{{ $down->id }}">{{ resizeImage($image->hash, ['alt' => $down->title]) }}</a>
                     </div>
                 @endforeach
             @endif
         @else
             {{ showError(__('main.not_uploaded')) }}
         @endif
+
+        <div class="section-message mb-3">
+            {{ bbCode($down->text) }}
+        </div>
 
         <div class="mb-3">
             <i class="fa fa-comment"></i> <a href="/downs/comments/{{ $down->id }}">{{ __('main.comments') }}</a> ({{ $down->count_comments }})
