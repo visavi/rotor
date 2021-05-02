@@ -25,6 +25,7 @@ final class CreateTopicsTable extends Migration
                 $table->integer('count_posts');
                 $table->integer('visits')->default(0);
                 $table->integer('last_post_id')->nullable();
+                $table->integer('close_user_id')->nullable();
                 $table->integer('updated_at')->nullable();
                 $table->integer('created_at');
 

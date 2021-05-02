@@ -27,11 +27,13 @@ return [
     'faq_active_text1'   => 'Adding Sponsored Links',
     'faq_active_text2'   => 'Disable captcha for some actions',
     'faq_active_text3'   => 'Creating topics in "Suggestions and Problems"',
+    'faq_active_text4'   => 'Ability to set name color',
     'faq_active_text5'   => 'Transfer of game money',
     'faq_active_text6'   => 'Changing the reputation of users',
     'faq_active_text7'   => 'Modifying and closing your forum topics',
     'faq_active_text8'   => 'All advertising on the main page of the site disappears',
     'faq_active_text9'   => 'Also, the more points the less the time of anti-flood',
+    'faq_active_text10'  => 'The ability to set a personal status',
 
     'why_register' => '
     <b>Why sign up</b><br>

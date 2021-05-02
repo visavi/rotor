@@ -43,6 +43,15 @@
     @if (setting('advertpoint'))
         <b>{{ plural(setting('advertpoint'), setting('scorename')) }}</b> - {{ __('pages.faq_active_text8') }}<br>
     @endif
+
+    @if (setting('editcolorpoint'))
+        <b>{{ plural(setting('editcolorpoint'), setting('scorename')) }}</b> - {{ __('pages.faq_active_text4') }}<br>
+    @endif
+
+    @if (setting('editstatuspoint'))
+        <b>{{ plural(setting('editstatuspoint'), setting('scorename')) }}</b> - {{ __('pages.faq_active_text10') }}<br>
+    @endif
+
     {{ __('pages.faq_active_text9') }}<br><br>
 
     {!! __('pages.how_is_registration') !!}<br>
