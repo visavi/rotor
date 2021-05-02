@@ -2,7 +2,7 @@
     <h1>{{ __('settings.adverts') }}</h1>
 @stop
 
-<form action="/admin/settings?act=adverts" method="post">
+<form method="post">
     @csrf
     <div class="form-group{{ hasError('sets[rekusershow]') }}">
         <label for="rekusershow">{{ __('settings.adverts_count_links') }}:</label>

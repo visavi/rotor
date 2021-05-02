@@ -29,7 +29,6 @@ return [
     'weight_min'          => 'Minimum image size :weight px!',
     'weight_empty'        => 'Image size is too small!',
     'files_max'           => 'Allowed to upload no more than :max files!',
-    'active_upload'       => 'Not enough asset to upload files!',
     'file_upload_failed'  => 'Failed to load file!',
     'file_upload_one'     => 'You must upload at least 1 file!',
     'image_upload_failed' => 'Failed to load image!',

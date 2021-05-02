@@ -150,13 +150,13 @@
                             <div class="section-media">
                                 <i class="fa fa-paperclip"></i> <b>{{ __('main.attached_files') }}:</b><br>
                                 @foreach ($data->files as $file)
-                                    <?php $ext = getExtension($file->hash); ?>
-
-                                    {{ icons($ext) }}
-                                    <a href="{{ $file->hash }}">{{ $file->name }}</a> ({{ formatSize($file->size) }})<br>
-                                    @if (in_array($ext, ['jpg', 'jpeg', 'gif', 'png']))
-                                        <a href="{{ $file->hash }}" class="gallery" data-group="{{ $data->id }}">{{ resizeImage($file->hash, ['alt' => $file->name]) }}</a><br>
-                                    @endif
+                                    <div class="media-file">
+                                        {{ icons($file->extension) }}
+                                        <a href="{{ $file->hash }}">{{ $file->name }}</a> ({{ formatSize($file->size) }})<br>
+                                        @if ($file->isImage())
+                                            <a href="{{ $file->hash }}" class="gallery" data-group="{{ $data->id }}">{{ resizeImage($file->hash, ['alt' => $file->name]) }}</a>
+                                        @endif
+                                    </div>
                                 @endforeach
                             </div>
                         @endif
@@ -178,9 +178,9 @@
             {{ showError(__('forums.empty_posts')) }}
         @endif
 
-        <span class="float-right">
+        <div class="float-right">
             <button class="btn btn-sm btn-danger">{{ __('main.delete_selected') }}</button>
-        </span>
+        </div>
     </form>
 
     {{ $posts->links() }}
@@ -197,28 +197,26 @@
                         <span class="js-textarea-counter"></span>
                     </div>
 
-                    @if (getUser('point') >= setting('forumloadpoints'))
-                        <div class="js-attach-form" style="display: none;">
-                            <div class="custom-file{{ hasError('files') }}">
-                                <label class="btn btn-sm btn-secondary" for="files">
-                                    <input type="file" id="files" name="files[]" onchange="$('#upload-file-info').html((this.files.length > 1) ? '{{ __('main.files') }}: ' + this.files.length : this.files[0].name);" hidden multiple>
-                                    {{ __('main.attach_files') }}&hellip;
-                                </label>
-                                <span class="badge badge-info" id="upload-file-info"></span>
-                                <div class="invalid-feedback">{{ textError('files') }}</div>
-                            </div>
-
-                            <p class="text-muted font-italic">
-                                {{ __('main.max_file_upload') }}: {{ setting('maxfiles') }}<br>
-                                {{ __('main.max_file_weight') }}: {{ formatSize(setting('forumloadsize')) }}<br>
-                                {{ __('main.valid_file_extensions') }}: {{ str_replace(',', ', ', setting('forumextload')) }}
-                            </p>
+                    <div class="js-attach-form" style="display: none;">
+                        <div class="custom-file{{ hasError('files') }}">
+                            <label class="btn btn-sm btn-secondary" for="files">
+                                <input type="file" id="files" name="files[]" onchange="$('#upload-file-info').html((this.files.length > 1) ? '{{ __('main.files') }}: ' + this.files.length : this.files[0].name);" hidden multiple>
+                                {{ __('main.attach_files') }}&hellip;
+                            </label>
+                            <span class="badge badge-info" id="upload-file-info"></span>
+                            <div class="invalid-feedback">{{ textError('files') }}</div>
                         </div>
 
-                        <span class="float-right js-attach-button">
-                            <a href="#" onclick="return showAttachForm();">{{ __('main.attach_files') }}</a>
-                        </span>
-                    @endif
+                        <p class="text-muted font-italic">
+                            {{ __('main.max_file_upload') }}: {{ setting('maxfiles') }}<br>
+                            {{ __('main.max_file_weight') }}: {{ formatSize(setting('filesize')) }}<br>
+                            {{ __('main.valid_file_extensions') }}: {{ str_replace(',', ', ', setting('file_extensions')) }}
+                        </p>
+                    </div>
+
+                    <span class="float-right js-attach-button">
+                        <a href="#" onclick="return showAttachForm();">{{ __('main.attach_files') }}</a>
+                    </span>
 
                     <button class="btn btn-primary">{{ __('main.write') }}</button>
                 </form>

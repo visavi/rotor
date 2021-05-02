@@ -2,7 +2,7 @@
     <h1>{{ __('settings.prices') }}</h1>
 @stop
 
-<form action="/admin/settings?act=prices" method="post">
+<form method="post">
     @csrf
     <div class="form-group{{ hasError('sets[sendmoneypoint]') }}">
         <label for="sendmoneypoint">{{ __('settings.points_transfer') }}:</label>

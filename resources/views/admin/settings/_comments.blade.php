@@ -2,7 +2,7 @@
     <h1>{{ __('settings.comments') }}</h1>
 @stop
 
-<form action="/admin/settings?act=comments" method="post">
+<form method="post">
     @csrf
     <div class="form-group{{ hasError('sets[comment_length]') }}">
         <label for="comment_length">{{ __('settings.comments_symbols') }}:</label>

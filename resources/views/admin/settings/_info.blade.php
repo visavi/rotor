@@ -2,7 +2,7 @@
     <h1>{{ __('settings.info') }}</h1>
 @stop
 
-<form action="/admin/settings?act=info" method="post">
+<form method="post">
     @csrf
     <?php $inputCounter = (int) getInput('sets.incount', $settings['incount']); ?>
     <div class="form-group{{ hasError('sets[incount]') }}">

@@ -1,8 +1,8 @@
 @section('header')
-    <h1>{{ __('settings.images') }}</h1>
+    <h1>{{ __('settings.files') }}</h1>
 @stop
 
-<form action="/admin/settings?act=images" method="post">
+<form method="post">
     @csrf
     <div class="form-group{{ hasError('sets[filesize]') }}">
         <label for="filesize">{{ __('main.max_file_weight') }} (Mb):</label>
@@ -11,6 +11,18 @@
 
         <input type="hidden" value="1048576" name="mods[filesize]">
         <span class="text-muted font-italic">{{ __('main.server_limit') }}: {{ ini_get('upload_max_filesize') }}</span>
+    </div>
+
+    <div class="form-group{{ hasError('sets[maxfiles]') }}">
+        <label for="maxfiles">{{ __('settings.loads_max_files') }}:</label>
+        <input type="number" class="form-control" id="maxfiles" name="sets[maxfiles]" maxlength="2" value="{{ getInput('sets.maxfiles', $settings['maxfiles']) }}" required>
+        <div class="invalid-feedback">{{ textError('sets[maxfiles]') }}</div>
+    </div>
+
+    <div class="form-group{{ hasError('sets[file_extensions]') }}">
+        <label for="file_extensions">{{ __('main.valid_file_extensions') }}:</label>
+        <textarea class="form-control" id="file_extensions" name="sets[file_extensions]" required>{{ getInput('sets.file_extensions', $settings['file_extensions']) }}</textarea>
+        <div class="invalid-feedback">{{ textError('sets[file_extensions]') }}</div>
     </div>
 
     <div class="form-group{{ hasError('sets[screensize]') }}">

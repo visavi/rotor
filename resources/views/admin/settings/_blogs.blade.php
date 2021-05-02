@@ -2,7 +2,7 @@
     <h1>{{ __('settings.blogs') }}</h1>
 @stop
 
-<form action="/admin/settings?act=blogs" method="post">
+<form method="post">
     @csrf
     <div class="form-group{{ hasError('sets[blogpost]') }}">
         <label for="blogpost">{{ __('settings.blogs_per_page') }}:</label>

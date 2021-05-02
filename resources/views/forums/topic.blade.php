@@ -222,28 +222,26 @@
                         <span class="js-textarea-counter"></span>
                     </div>
 
-                    @if (getUser('point') >= setting('forumloadpoints'))
-                        <div class="js-attach-form" style="display: none;">
-                            <div class="custom-file{{ hasError('files') }}">
-                                <label class="btn btn-sm btn-secondary" for="files">
-                                    <input type="file" id="files" name="files[]" onchange="$('#upload-file-info').html((this.files.length > 1) ? '{{ __('main.files') }}: ' + this.files.length : this.files[0].name);" hidden multiple>
-                                    {{ __('main.attach_files') }}&hellip;
-                                </label>
-                                <span class="badge badge-info" id="upload-file-info"></span>
-                                <div class="invalid-feedback">{{ textError('files') }}</div>
-                            </div>
-
-                            <p class="text-muted font-italic">
-                                {{ __('main.max_file_upload') }}: {{ setting('maxfiles') }}<br>
-                                {{ __('main.max_file_weight') }}: {{ formatSize(setting('forumloadsize')) }}<br>
-                                {{ __('main.valid_file_extensions') }}: {{ str_replace(',', ', ', setting('forumextload')) }}
-                            </p>
+                    <div class="js-attach-form" style="display: none;">
+                        <div class="custom-file{{ hasError('files') }}">
+                            <label class="btn btn-sm btn-secondary" for="files">
+                                <input type="file" id="files" name="files[]" onchange="$('#upload-file-info').html((this.files.length > 1) ? '{{ __('main.files') }}: ' + this.files.length : this.files[0].name);" hidden multiple>
+                                {{ __('main.attach_files') }}&hellip;
+                            </label>
+                            <span class="badge badge-info" id="upload-file-info"></span>
+                            <div class="invalid-feedback">{{ textError('files') }}</div>
                         </div>
 
-                        <span class="float-right js-attach-button">
-                            <a href="#" onclick="return showAttachForm();">{{ __('main.attach_files') }}</a>
-                        </span>
-                    @endif
+                        <p class="text-muted font-italic">
+                            {{ __('main.max_file_upload') }}: {{ setting('maxfiles') }}<br>
+                            {{ __('main.max_file_weight') }}: {{ formatSize(setting('filesize')) }}<br>
+                            {{ __('main.valid_file_extensions') }}: {{ str_replace(',', ', ', setting('file_extensions')) }}
+                        </p>
+                    </div>
+
+                    <span class="float-right js-attach-button">
+                        <a href="#" onclick="return showAttachForm();">{{ __('main.attach_files') }}</a>
+                    </span>
 
                     <button class="btn btn-primary">{{ __('main.write') }}</button>
                 </form>

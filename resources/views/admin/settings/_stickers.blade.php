@@ -2,7 +2,7 @@
     <h1>{{ __('settings.stickers') }}</h1>
 @stop
 
-<form action="/admin/settings?act=stickers" method="post">
+<form method="post">
     @csrf
     <div class="form-group{{ hasError('sets[stickermaxsize]') }}">
         <label for="stickermaxsize">{{ __('settings.stickers_size') }} (kb):</label>

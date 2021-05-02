@@ -27,7 +27,6 @@ return [
     'faq_active_text1'   => 'Adding Sponsored Links',
     'faq_active_text2'   => 'Disable captcha for some actions',
     'faq_active_text3'   => 'Creating topics in "Suggestions and Problems"',
-    'faq_active_text4'   => 'Attaching files in the forum',
     'faq_active_text5'   => 'Transfer of game money',
     'faq_active_text6'   => 'Changing the reputation of users',
     'faq_active_text7'   => 'Modifying and closing your forum topics',

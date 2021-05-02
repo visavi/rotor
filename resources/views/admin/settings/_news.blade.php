@@ -2,7 +2,7 @@
     <h1>{{ __('settings.news') }}</h1>
 @stop
 
-<form action="/admin/settings?act=news" method="post">
+<form method="post">
     @csrf
     <div class="form-group{{ hasError('sets[sendprivatmailday]') }}">
         <label for="lastnews">{{ __('settings.news_main') }}:</label>

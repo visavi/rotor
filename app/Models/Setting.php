@@ -61,7 +61,7 @@ class Setting extends BaseModel
             'protects',
             'prices',
             'adverts',
-            'images',
+            'files',
             'stickers',
             'offers',
         ];

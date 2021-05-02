@@ -28,10 +28,6 @@
         <b>{{ plural(setting('addofferspoint'), setting('scorename')) }}</b> - {{ __('pages.faq_active_text3') }}<br>
     @endif
 
-    @if (setting('forumloadpoints'))
-        <b>{{ plural(setting('forumloadpoints'), setting('scorename')) }}</b> - {{ __('pages.faq_active_text4') }}<br>
-    @endif
-
     @if (setting('sendmoneypoint'))
         <b>{{ plural(setting('sendmoneypoint'), setting('scorename')) }}</b> - {{ __('pages.faq_active_text5') }}<br>
     @endif

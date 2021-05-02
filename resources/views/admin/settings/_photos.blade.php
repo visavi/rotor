@@ -2,7 +2,7 @@
     <h1>{{ __('settings.photos') }}</h1>
 @stop
 
-<form action="/admin/settings?act=photos" method="post">
+<form method="post">
     @csrf
     <div class="form-group{{ hasError('sets[fotolist]') }}">
         <label for="fotolist">{{ __('settings.photos_per_page') }}:</label>

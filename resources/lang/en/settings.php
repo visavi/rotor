@@ -18,7 +18,7 @@ return [
     'protects'   => 'Protection and security',
     'prices'     => 'Cost and prices',
     'adverts'    => 'Advertising on the website',
-    'images'     => 'Image upload',
+    'files'      => 'File upload',
     'stickers'   => 'Stickers',
     'offers'     => 'Suggestions and problems',
 

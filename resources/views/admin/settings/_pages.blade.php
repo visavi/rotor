@@ -2,7 +2,7 @@
     <h1>{{ __('settings.pages') }}</h1>
 @stop
 
-<form action="/admin/settings?act=pages" method="post">
+<form method="post">
     @csrf
     <div class="form-group{{ hasError('sets[userlist]') }}">
         <label for="userlist">{{ __('settings.users_per_page') }}:</label>

@@ -154,12 +154,11 @@ class TopicController extends BaseController
 
         if ($files && $validator->isValid()) {
             $validator
-                ->lte(count($files), setting('maxfiles'), ['files' => __('validator.files_max', ['max' => setting('maxfiles')])])
-                ->gte($user->point, setting('forumloadpoints'), __('validator.active_upload'));
+                ->lte(count($files), setting('maxfiles'), ['files' => __('validator.files_max', ['max' => setting('maxfiles')])]);
 
             $rules = [
-                'maxsize'    => setting('forumloadsize'),
-                'extensions' => explode(',', setting('forumextload')),
+                'maxsize'    => setting('filesize'),
+                'extensions' => explode(',', setting('file_extensions')),
             ];
 
             foreach ($files as $file) {

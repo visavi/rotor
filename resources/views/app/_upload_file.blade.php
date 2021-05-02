@@ -40,6 +40,6 @@
 
 <p class="text-muted font-italic">
     {{ __('main.max_file_upload') }}: {{ setting('maxfiles') }}<br>
-    {{ __('main.max_file_weight') }}: {{ formatSize(setting('forumloadsize')) }}<br>
-    {{ __('main.valid_file_extensions') }}: {{ setting('forumextload') }}<br>
+    {{ __('main.max_file_weight') }}: {{ formatSize(setting('filesize')) }}<br>
+    {{ __('main.valid_file_extensions') }}: {{ setting('file_extensions') }}<br>
 </p>

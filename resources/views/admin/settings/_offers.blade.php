@@ -2,7 +2,7 @@
     <h1>{{ __('settings.offers') }}</h1>
 @stop
 
-<form action="/admin/settings?act=offers" method="post">
+<form method="post">
     @csrf
     <div class="form-group{{ hasError('sets[postoffers]') }}">
         <label for="postoffers">{{ __('settings.offers_per_page') }}:</label>

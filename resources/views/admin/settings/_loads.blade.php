@@ -2,15 +2,8 @@
     <h1>{{ __('settings.loads') }}</h1>
 @stop
 
-<form action="/admin/settings?act=loads" method="post">
+<form method="post">
     @csrf
-    <div class="form-group{{ hasError('sets[maxfiles]') }}">
-        <label for="maxfiles">{{ __('settings.loads_max_files') }}:</label>
-        <input type="number" class="form-control" id="maxfiles" name="sets[maxfiles]" maxlength="2" value="{{ getInput('sets.maxfiles', $settings['maxfiles']) }}" required>
-        <div class="invalid-feedback">{{ textError('sets[maxfiles]') }}</div>
-    </div>
-
-
     <div class="form-group{{ hasError('sets[downlist]') }}">
         <label for="downlist">{{ __('settings.loads_per_page') }}:</label>
         <input type="number" class="form-control" id="downlist" name="sets[downlist]" maxlength="2" value="{{ getInput('sets.downlist', $settings['downlist']) }}" required>

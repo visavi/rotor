@@ -2,7 +2,7 @@
     <h1>{{ __('settings.protects') }}</h1>
 @stop
 
-<form action="/admin/settings?act=protects" method="post">
+<form method="post">
     @csrf
     <div class="form-group{{ hasError('sets[captcha_symbols]') }}">
         <label for="captcha_symbols">{{ __('settings.captcha_valid_symbols') }} [a-z0-9]:</label>

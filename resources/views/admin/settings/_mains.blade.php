@@ -2,7 +2,7 @@
     <h1>{{ __('settings.mains') }}</h1>
 @stop
 
-<form action="/admin/settings" method="post">
+<form method="post">
     @csrf
     <div class="form-group{{ hasError('sets[title]') }}">
         <label for="title">{{ __('settings.page_title') }}:</label>

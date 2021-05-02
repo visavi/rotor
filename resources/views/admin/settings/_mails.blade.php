@@ -2,7 +2,7 @@
     <h1>{{ __('settings.mails') }}</h1>
 @stop
 
-<form action="/admin/settings?act=mails" method="post">
+<form method="post">
     @csrf
     <div class="form-group{{ hasError('sets[sendprivatmailday]') }}">
         <label for="sendprivatmailday">{{ __('settings.mails_count_days') }}:</label>

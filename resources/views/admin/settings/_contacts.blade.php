@@ -2,7 +2,7 @@
     <h1>{{ __('settings.contacts') }}</h1>
 @stop
 
-<form action="/admin/settings?act=contacts" method="post">
+<form method="post">
     @csrf
     <div class="form-group{{ hasError('sets[contactlist]') }}">
         <label for="contactlist">{{ __('settings.contacts_per_page') }}:</label>

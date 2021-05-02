@@ -34,7 +34,7 @@
                     <a class="nav-link" href="/admin/settings?act=protects" id="protects">{{ __('settings.protects') }}</a>
                     <a class="nav-link" href="/admin/settings?act=prices" id="prices">{{ __('settings.prices') }}</a>
                     <a class="nav-link" href="/admin/settings?act=adverts" id="adverts">{{ __('settings.adverts') }}</a>
-                    <a class="nav-link" href="/admin/settings?act=images" id="images">{{ __('settings.images') }}</a>
+                    <a class="nav-link" href="/admin/settings?act=files" id="images">{{ __('settings.files') }}</a>
                     <a class="nav-link" href="/admin/settings?act=stickers" id="stickers">{{ __('settings.stickers') }}</a>
                     <a class="nav-link" href="/admin/settings?act=offers" id="offers">{{ __('settings.offers') }}</a>
                 </div>

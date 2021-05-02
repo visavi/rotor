@@ -292,19 +292,11 @@ class AjaxController extends BaseController
             ->lt($countFiles, setting('maxfiles'), __('validator.files_max', ['max' => setting('maxfiles')]));
 
         if ($validator->isValid()) {
-            if ($isImageType) {
-                $rules = [
-                    'minweight'  => 100,
-                    'maxsize'    => setting('filesize'),
-                    'extensions' => ['jpg', 'jpeg', 'gif', 'png'],
-                ];
-            } else {
-                $rules = [
-                    'minweight'  => 100,
-                    'maxsize'    => setting('forumloadsize'),
-                    'extensions' => explode(',', setting('forumextload')),
-                ];
-            }
+            $rules = [
+                'minweight'  => 100,
+                'maxsize'    => setting('filesize'),
+                'extensions' => explode(',', setting('file_extensions')),
+            ];
 
             $validator->file($file, $rules, ['files' => __('validator.file_upload_failed')]);
         }

@@ -2,7 +2,7 @@
     <h1>{{ __('settings.messages') }}</h1>
 @stop
 
-<form action="/admin/settings?act=messages" method="post">
+<form method="post">
     @csrf
     <div class="form-group{{ hasError('sets[privatpost]') }}">
         <label for="privatpost">{{ __('settings.messages_per_page') }}:</label>

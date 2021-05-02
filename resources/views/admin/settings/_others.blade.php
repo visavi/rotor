@@ -2,7 +2,7 @@
     <h1>{{ __('settings.others') }}</h1>
 @stop
 
-<form action="/admin/settings?act=others" method="post">
+<form method="post">
     @csrf
     <div class="custom-control custom-checkbox">
         <input type="hidden" value="0" name="sets[errorlog]">
