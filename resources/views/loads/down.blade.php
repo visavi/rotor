@@ -60,18 +60,13 @@
 
                             @if ($file->extension === 'mp3')
                                 <div>
-                                    <audio preload="none" controls style="max-width:100%;">
-                                        <source src="{{ $file->hash }}" type="audio/mp3">
-                                    </audio>
+                                    <audio src="{{ $file->hash }}" style="max-width:100%;" preload="metadata" controls controlsList="{{ $allowDownload ? null : 'nodownload' }}"></audio>
                                 </div>
                             @endif
 
                             @if ($file->extension === 'mp4')
-                                <?php $poster = file_exists(HOME . $file->hash . '.jpg') ? $file->hash . '.jpg' : null; ?>
                                 <div>
-                                    <video style="max-width:100%;" poster="{{ $poster }}" preload="none" controls playsinline>
-                                        <source src="{{ $file->hash }}" type="video/mp4">
-                                    </video>
+                                    <video src="{{ $file->hash }}" style="max-width:100%;" preload="metadata" controls playsinline controlsList="{{ $allowDownload ? null : 'nodownload' }}"></video>
                                 </div>
                             @endif
 
@@ -80,12 +75,18 @@
                                 <a href="/downs/zip/{{ $file->id }}">{{ __('loads.view_archive') }}</a><br>
                             @endif
 
-                            <a class="btn btn-success" href="/downs/download/{{ $file->id }}"><i class="fa fa-download"></i> {{ __('main.download') }}</a><br>
+                            @if ($allowDownload)
+                                <a class="btn btn-success" href="/downs/download/{{ $file->id }}"><i class="fa fa-download"></i> {{ __('main.download') }}</a><br>
+                            @endif
                         @else
                             <i class="fa fa-download"></i> {{ __('main.file_not_found') }}
                         @endif
                     </div>
                 @endforeach
+            @endif
+
+            @if (! $allowDownload)
+                {{ showError(__('loads.download_authorized')) }}
             @endif
         @else
             {{ showError(__('main.not_uploaded')) }}

@@ -44,5 +44,11 @@
         <label class="custom-control-label" for="downupload">{{ __('settings.loads_files_allow') }}</label>
     </div>
 
+    <div class="custom-control custom-checkbox">
+        <input type="hidden" value="0" name="sets[down_guest_download]">
+        <input type="checkbox" class="custom-control-input" value="1" name="sets[down_guest_download]" id="down_guest_download"{{ getInput('sets.down_guest_download', $settings['down_guest_download']) ? ' checked' : '' }}>
+        <label class="custom-control-label" for="down_guest_download">{{ __('settings.loads_guests_download_allow') }}</label>
+    </div>
+
     <button class="btn btn-primary">{{ __('main.save') }}</button>
 </form>

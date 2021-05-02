@@ -66,10 +66,11 @@ return [
     'online_time'        => 'Online counting time (minutes)',
     'online_time_hint'   => 'For how many minutes to remember the users IP',
 
-    'loads_max_files'   => 'Maximum load count. files',
-    'loads_per_page'    => 'Files in downloads on page',
-    'loads_archives'    => 'View archives on page',
-    'loads_files_allow' => 'Allow users to upload files',
+    'loads_max_files'             => 'Maximum load count. files',
+    'loads_per_page'              => 'Files in downloads on page',
+    'loads_archives'              => 'View archives on page',
+    'loads_files_allow'           => 'Allow users to upload files',
+    'loads_guests_download_allow' => 'Allow guests to download files',
 
     'mails_count_days'  => 'Qty. days before sending a private notification by email ',
     'mails_send_emails' => 'Sending emails in one operation',

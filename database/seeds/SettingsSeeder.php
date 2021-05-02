@@ -48,6 +48,7 @@ class SettingsSeeder extends AbstractSeed
             ['name'  => 'doslimit', 'value' => 0],
             ['name'  => 'downlist', 'value' => 10],
             ['name'  => 'downupload', 'value' => 1],
+            ['name'  => 'down_guest_download', 'value' => 1],
             ['name'  => 'editforumpoint', 'value' => 300],
             ['name'  => 'editratingpoint', 'value' => 100],
             ['name'  => 'editstatusmoney', 'value' => 3000],

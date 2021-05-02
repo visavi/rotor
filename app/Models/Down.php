@@ -6,8 +6,6 @@ namespace App\Models;
 
 use App\Traits\UploadTrait;
 use Exception;
-use FFMpeg\Coordinate\TimeCode;
-use FFMpeg\FFMpeg;
 use FFMpeg\FFProbe;
 use FFMpeg\Format\Video\X264;
 use Illuminate\Database\Eloquent\Collection;
@@ -216,10 +214,10 @@ class Down extends BaseModel
                 'timeout'          => config('ffmpeg.timeout'),
             ];
 
-            $ffmpeg = FFMpeg::create($ffconfig);
+            // Сохраняем скрин с 5 секунды
+            /*$ffmpeg = FFMpeg::create($ffconfig);
             $video = $ffmpeg->open(HOME . $file['path']);
 
-            // Сохраняем скрин с 5 секунды
             $frame = $video->frame(TimeCode::fromSeconds(5));
             $frame->save(HOME . $file['path'] . '.jpg');
 
@@ -229,7 +227,7 @@ class Down extends BaseModel
                 'size'       => filesize(HOME . $file['path'] . '.jpg'),
                 'user_id'    => getUser('id'),
                 'created_at' => SITETIME,
-            ]);
+            ]);*/
 
             // Перекодируем видео в h264
             $ffprobe = FFProbe::create($ffconfig);

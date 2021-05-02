@@ -48,7 +48,9 @@ class DownController extends BaseController
             abort('default', __('loads.down_not_verified'));
         }
 
-        return view('loads/down', compact('down'));
+        $allowDownload = getUser() || setting('down_guest_download');
+
+        return view('loads/down', compact('down', 'allowDownload'));
     }
 
     /**
