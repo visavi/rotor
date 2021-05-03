@@ -41,11 +41,9 @@ class PaidAdvertController extends AdminController
 
         $advertTotal = PaidAdvert::query()
             ->selectRaw('place, count(*) as total')
-            ->where('deleted_at', '>', SITETIME)
             ->groupBy('place')
             ->pluck('total', 'place')
             ->all();
-
 
         $totals = [];
         $places = PaidAdvert::PLACES;
@@ -54,7 +52,6 @@ class PaidAdvertController extends AdminController
         }
 
         $adverts = PaidAdvert::query()
-            ->where('deleted_at', '>', SITETIME)
             ->where('place', $place)
             ->orderBy('created_at')
             ->with('user')
@@ -102,8 +99,6 @@ class PaidAdvertController extends AdminController
             }
 
             if ($validator->isValid()) {
-                PaidAdvert::query()->where('deleted_at', '<', SITETIME)->delete();
-
                 PaidAdvert::query()->create([
                     'user_id'    => getUser('id'),
                     'place'      => $place,
@@ -174,8 +169,6 @@ class PaidAdvertController extends AdminController
             }
 
             if ($validator->isValid()) {
-                PaidAdvert::query()->where('deleted_at', '<', SITETIME)->delete();
-
                 $advert->update([
                     'place'      => $place,
                     'site'       => $site,

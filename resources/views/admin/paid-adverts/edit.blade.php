@@ -14,6 +14,18 @@
 @stop
 
 @section('content')
+    @if ($advert->id)
+        @if ($advert->deleted_at > SITETIME)
+            <div class="alert alert-success">
+                {{ __('admin.paid_adverts.expires') }}: {{ dateFixed($advert->deleted_at) }}
+            </div>
+        @else
+            <div class="alert alert-danger">
+                {{ __('admin.paid_adverts.expired') }}: {{ dateFixed($advert->deleted_at) }}
+            </div>
+        @endif
+    @endif
+
     <div class="section-form mb-3 shadow">
         @include('admin/paid-adverts/_form')
     </div>

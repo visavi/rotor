@@ -268,6 +268,7 @@ return [
         'create_advert'         => 'Ad advert',
         'edit_advert'           => 'Editing ads',
         'expires'               => 'Expires',
+        'expired'               => 'Expired',
         'color'                 => 'Color',
         'bold'                  => 'Bold text',
         'place'                 => 'Place',

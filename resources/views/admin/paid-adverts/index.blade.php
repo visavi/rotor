@@ -38,6 +38,9 @@
                         <span class="badge badge-info">{{ count($data->names) }}</span>
                     @endif
 
+                    @if ($data->deleted_at < SITETIME)
+                        <span class="badge badge-danger">{{ __('admin.paid_adverts.expired') }}</span>
+                    @endif
                     <div class="float-right">
                         <a href="/admin/paid-adverts/edit/{{ $data->id }}"><i class="fas fa-pencil-alt text-muted"></i></a>
                         <a href="/admin/paid-adverts/delete/{{ $data->id }}?token={{ $_SESSION['token'] }}" onclick="return confirm('{{ __('admin.paid_adverts.confirm_delete_advert') }}')"><i class="fa fa-times text-muted"></i></a>

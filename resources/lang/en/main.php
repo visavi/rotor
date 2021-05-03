@@ -103,8 +103,6 @@ return [
     'last_month'           => 'Last month',
     'last_year'            => 'Last year',
     'request_type'         => 'Request type',
-    'and'                  => 'And',
-    'or'                   => 'Or',
     'full'                 => 'Full',
     'search_request'       => 'Search request',
     'total_found'          => 'Found matches',
@@ -248,5 +246,10 @@ return [
     'directory_not_writable'   => 'The directory is not writable!',
     'closed_comments'          => 'Commenting is closed!',
 
-    'online' => 'Online',
+    'online'        => 'Online',
+    'who_online'    => 'Who is on the site',
+    'guests_online' => 'There are :count guests on the site',
+
+    'and' => 'and',
+    'or'  => 'or',
 ];

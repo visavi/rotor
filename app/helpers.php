@@ -360,13 +360,20 @@ function getCalendar(int $time = SITETIME): HtmlString
 function statsOnline(): array
 {
     return Cache::remember('online', 60, static function () {
-        $users  = Online::query()->distinct('user_id')->whereNotNull('user_id')->count();
-        $guests = Online::query()->whereNull('user_id')->count();
+        $users = Online::query()
+            ->select('user_id')
+            ->distinct('user_id')
+            ->whereNotNull('user_id')
+            ->get();
+
+        $usersCount  = $users->count();
+        $guestsCount = Online::query()->whereNull('user_id')->count();
+        $total       = $usersCount + $guestsCount;
 
         $metrika = new Metrika();
-        $metrika->getCounter($users + $guests);
+        $metrika->getCounter($usersCount + $guestsCount);
 
-        return [$users, $guests];
+        return [$usersCount, $guestsCount, $total, $users];
     });
 }
 
@@ -377,13 +384,25 @@ function statsOnline(): array
  */
 function showOnline(): ?HtmlString
 {
-    $online = statsOnline();
-
     if (setting('onlines')) {
+        $online = statsOnline();
+
         return new HtmlString(view('app/_online', compact('online')));
     }
 
     return null;
+}
+
+/**
+ * Get online widget
+ *
+ * @return mixed
+ */
+function onlineWidget(): HtmlString
+{
+    $online = statsOnline();
+
+    return new HtmlString(view('widgets/_online', compact('online')));
 }
 
 /**

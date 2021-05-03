@@ -16,26 +16,29 @@
     @if ($diff)
         <h5>{{ __('admin.checkers.new_files') }}:</h5>
 
-        @if ($diff['left'])
-            @foreach ($diff['left'] as $file)
-                <i class="fa fa-plus-circle text-success"></i> {{ $file }}<br>
-            @endforeach
-            <br>
-        @else
-            {{ showError(__('admin.checkers.empty_changes')) }}
-        @endif
+        <div class="section-message">
+            @if ($diff['left'])
+                @foreach ($diff['left'] as $file)
+                    <i class="fa fa-plus-circle text-success"></i> {{ $file }}<br>
+                @endforeach
+                <br>
+            @else
+                {{ showError(__('admin.checkers.empty_changes')) }}
+            @endif
+        </div>
 
         <h5>{{ __('admin.checkers.old_files') }}:</h5>
 
-        @if ($diff['right'])
-            @foreach ($diff['right'] as $file)
-                <i class="fa fa-minus-circle text-danger"></i> {{ $file }}<br>
-            @endforeach
-            <br>
-        @else
-            {{ showError(__('admin.checkers.empty_changes')) }}
-        @endif
-
+        <div class="section-message">
+            @if ($diff['right'])
+                @foreach ($diff['right'] as $file)
+                    <i class="fa fa-minus-circle text-danger"></i> {{ $file }}<br>
+                @endforeach
+                <br>
+            @else
+                {{ showError(__('admin.checkers.empty_changes')) }}
+            @endif
+        </div>
     @else
         {{ showError(__('admin.checkers.initial_scan')) }}
     @endif

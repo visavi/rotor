@@ -103,8 +103,6 @@ return [
     'last_month'           => 'Месяц',
     'last_year'            => 'Год',
     'request_type'         => 'Тип запроса',
-    'and'                  => 'И',
-    'or'                   => 'Или',
     'full'                 => 'Полный',
     'search_request'       => 'Поиск запроса',
     'total_found'          => 'Найдено совпадений',
@@ -248,5 +246,10 @@ return [
     'directory_not_writable'   => 'Директория недоступна для записи!',
     'closed_comments'          => 'Комментирование закрыто!',
 
-    'online' => 'Онлайн',
+    'online'        => 'Онлайн',
+    'who_online'    => 'Кто на сайте',
+    'guests_online' => 'На сайте :count гостей',
+
+    'and' => 'и',
+    'or'  => 'или',
 ];
