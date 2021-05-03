@@ -12,5 +12,4 @@ require('js/markitup-set');
 require('js/prettify');
 require('js/main');
 
-require('./messages');
 require('./sidebar');

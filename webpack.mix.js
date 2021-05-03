@@ -15,6 +15,7 @@ mix.setPublicPath('./public');
 
 mix
     .js('public/themes/default/src/js/app.js', 'public/themes/default/dist')
+    .js('public/themes/default/src/js/messages.js', 'public/themes/default/dist')
     .sass('public/themes/default/src/sass/app.scss', 'public/themes/default/dist')
 
     .js('public/themes/mobile/src/js/app.js', 'public/themes/mobile/dist')
