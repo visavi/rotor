@@ -74,6 +74,8 @@ class BackupController extends AdminController
 
                 foreach ($selectTables as $table) {
                     $show = DB::connection()->selectOne("SHOW CREATE TABLE `{$table->Name}`");
+                    $columnsFields = DB::connection()->select("SHOW COLUMNS FROM `{$table->Name}`");
+                    $columns = '(' .implode(',', array_column($columnsFields, 'Field')) . ')';
 
                     $this->fwrite($fp, "--\n-- Structure table `{$table->Name}`\n--\n\n", $method);
                     $this->fwrite($fp, "DROP TABLE IF EXISTS `{$table->Name}`;\n{$show->{'Create Table'}};\n\n", $method);
@@ -85,7 +87,7 @@ class BackupController extends AdminController
                     }
 
                     $this->fwrite($fp, "--\n-- Dump table `{$table->Name}`\n--\n\n", $method);
-                    $this->fwrite($fp, "INSERT INTO `{$table->Name}` VALUES ", $method);
+                    $this->fwrite($fp, "INSERT INTO `{$table->Name}` {$columns} VALUES ", $method);
 
                     for ($i = 0; $i < $total; $i += $limit) {
                         $cols = DB::connection()->table($table->Name)->lockForUpdate()->limit($limit)->offset($i)->get();
@@ -95,8 +97,8 @@ class BackupController extends AdminController
                             $columns = [];
 
                             foreach ($records as $record) {
-                                $record = is_int($record) ? $record : '"' . str_replace('"', '&quot;', $record) . '"';
-                                $columns[] = $record ?: 'NULL';
+                                $record = is_int($record) || is_null($record) ? $record : "'" . str_replace("'", "''", $record) . "'";
+                                $columns[] = $record ?? 'null';
                             }
 
                             $this->fwrite($fp, ($key || $i ? ',' : '') . '(' . implode(',', $columns) . ')', $method);

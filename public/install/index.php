@@ -21,6 +21,7 @@ try {
 $request      = request();
 $phpVersion   = '7.3.0';
 $mysqlVersion = '5.7.8';
+$mariaVersion = '10.2.7';
 $postgresVersion = '9.2';
 
 $app  = new Phinx\Console\PhinxApplication();
@@ -106,8 +107,8 @@ $keys = [
                     <div class="card-body">
                         <h5 class="card-title"><?= __('install.env') ?></h5>
                         <p class="card-text">
-                            <?php foreach ($keys as $key): ?>
-                                <?= $key ?> - <?= trim(var_export(config($key), true), "'") ?><br>
+                            <?php foreach ($keys as $key) : ?>
+                                <?= $key ?> - <?= trim(var_export(env($key), true), "'") ?><br>
                             <?php endforeach; ?>
                         </p>
                         <span class="text-danger font-italic"><?= __('install.app_key') ?></span>
@@ -116,7 +117,7 @@ $keys = [
             </div>
         </div>
 
-        <div class="mb-3"><?= __('install.requirements', ['php' => $phpVersion, 'mysql' => $mysqlVersion, 'pgsql' => $postgresVersion]) ?></div>
+        <div class="mb-3"><?= __('install.requirements', ['php' => $phpVersion, 'mysql' => $mysqlVersion, 'maria' => $mariaVersion, 'pgsql' => $postgresVersion]) ?></div>
 
         <div class="row mb-3">
             <div class="col-sm-6">

@@ -283,4 +283,11 @@ return [
         'term_invalid'          => 'The placement period must be longer than the current time!',
         'names_count'           => 'You must specify at least 1 name!',
     ],
+
+    'not_exists_boss' => '
+        Attention! Boss profile missing<br>
+        No user with boss privileges found in the database',
+    'exists_install' => '
+        Attention! You need to remove the install directory<br>
+        The presence of this directory can compromise the security of the site. Remove it now!',
 ];

@@ -98,17 +98,13 @@
 
     @if (! $existBoss)
         <div class="alert alert-danger">
-            <i class="fas fa-exclamation-triangle"></i>
-            Внимание! Отсутствует профиль суперадмина<br>
-            В базе данных не найден пользователь с правами boss
+            <i class="fas fa-exclamation-triangle"></i> {!! __('admin.not_exists_boss') !!}
         </div>
     @endif
 
     @if (file_exists(HOME . '/install'))
         <div class="alert alert-danger">
-            <i class="fas fa-exclamation-triangle"></i>
-            Внимание! Необходимо удалить директорию install<br>
-            Наличие этой директории может нарушить безопасность сайта. Удалите ее прямо сейчас!
+            <i class="fas fa-exclamation-triangle"></i> {!! __('admin.exists_install') !!}
         </div>
     @endif
 @stop
