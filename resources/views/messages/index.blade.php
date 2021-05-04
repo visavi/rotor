@@ -45,7 +45,7 @@
                         {{  dateFixed($data->created_at) }}
 
                         @if ($data->type === $data::OUT)
-                            <i class="fas fa-xs {{ $data->recipient_read ? 'fa-check-double' : 'fa-check' }} text-success"></i>
+                            <i class="fas fa-xs {{ $data->recipient_read === 0 ? 'fa-check' : 'fa-check-double' }} text-success"></i>
                         @endif
                     </div>
                 </div>

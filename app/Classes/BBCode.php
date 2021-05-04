@@ -295,6 +295,7 @@ class BBCode
             $listUsers = Cache::remember('users', 3600, static function () {
                 return User::query()
                     ->select('login', 'name')
+                    ->where('point', '>', 0)
                     ->get()
                     ->pluck('name', 'login')
                     ->toArray();

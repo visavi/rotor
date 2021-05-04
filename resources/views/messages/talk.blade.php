@@ -45,7 +45,7 @@
                         @if ($data->type === $data::IN)
                             <a href="#" onclick="return sendComplaint(this)" data-type="{{ $data->getMorphClass() }}" data-id="{{ $data->id }}" data-token="{{ $_SESSION['token'] }}" rel="nofollow" title="{{ __('main.complain') }}"><i class="fa fa-bell text-muted"></i></a>
                         @else
-                            <i class="fas {{ $data->recipient_read ? 'fa-check-double' : 'fa-check' }} text-success"></i>
+                            <i class="fas {{ $data->recipient_read === 0 ? 'fa-check' : 'fa-check-double' }} text-success"></i>
                         @endif
                     </div>
                 </div>
