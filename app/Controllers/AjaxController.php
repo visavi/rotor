@@ -5,7 +5,20 @@ declare(strict_types=1);
 namespace App\Controllers;
 
 use App\Classes\Validator;
-use App\Models\{BaseModel, Article, Comment, Down, File, Guestbook, Message, Item, News, Offer, Photo, Post, Spam, Wall};
+use App\Models\Article;
+use App\Models\BaseModel;
+use App\Models\Comment;
+use App\Models\Down;
+use App\Models\File;
+use App\Models\Guestbook;
+use App\Models\Item;
+use App\Models\Message;
+use App\Models\News;
+use App\Models\Offer;
+use App\Models\Photo;
+use App\Models\Post;
+use App\Models\Spam;
+use App\Models\Wall;
 use Exception;
 use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Http\Request;
@@ -372,14 +385,15 @@ class AjaxController extends BaseController
         }
 
         $validator->equal($request->input('token'), $_SESSION['token'], __('validator.token'))
-            ->true(getUser('id') === $file->user_id || isAdmin(), __('ajax.image_not_author'))
-            ->true(! $file->relate_id || isAdmin(), __('ajax.image_delete_attached'));
+            ->true(getUser('id') === $file->user_id || isAdmin(), __('ajax.file_not_author'));
+            //->true(! $file->relate_id || isAdmin(), __('ajax.file_delete_attached'));
 
         if ($validator->isValid()) {
             $file->delete();
 
             return json_encode([
                 'status' => 'success',
+                'path'   => $file->hash,
             ]);
         }
 

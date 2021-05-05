@@ -81,7 +81,7 @@
                 <div class="invalid-feedback">{{ textError('phone') }}</div>
             </div>
 
-            @include('app/_upload', ['id' => $item->id, 'files' => $item->files, 'type' => $item->getMorphClass()])
+            @include('app/_upload_image', ['id' => $item->id, 'files' => $item->files, 'type' => $item->getMorphClass()])
 
             <button class="btn btn-primary">{{ __('main.change') }}</button>
         </form>

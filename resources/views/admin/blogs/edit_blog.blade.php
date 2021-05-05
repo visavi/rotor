@@ -42,16 +42,7 @@
                 <div class="invalid-feedback">{{ textError('tags') }}</div>
             </div>
 
-            <div class="js-images mb-3">
-                @if ($article->files->isNotEmpty())
-                    @foreach ($article->files as $file)
-                        <span class="js-image">
-                            {{ resizeImage($file->hash, ['width' => 100, 'onclick' => 'return pasteImage(this);']) }}
-                            <a href="#" onclick="return deleteFile(this);" data-id="{{ $file->id }}" data-type="{{ $article->getMorphClass() }}"  data-token="{{ $_SESSION['token'] }}"><i class="fas fa-times"></i></a>
-                        </span>
-                    @endforeach
-                @endif
-            </div>
+            @include('app/_upload_image', ['id' => $article->id, 'files' => $article->files, 'type' => $article->getMorphClass(), 'paste' => true])
 
             <button class="btn btn-primary">{{ __('main.change') }}</button>
         </form>

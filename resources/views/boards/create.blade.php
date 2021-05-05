@@ -58,7 +58,7 @@
             <div class="invalid-feedback">{{ textError('phone') }}</div>
         </div>
 
-        @include('app/_upload', ['files' => $files, 'type' => App\Models\Item::$morphName])
+        @include('app/_upload_image', ['files' => $files, 'type' => App\Models\Item::$morphName])
 
         <button class="btn btn-primary">{{ __('main.add') }}</button>
     </form>

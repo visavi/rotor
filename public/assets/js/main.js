@@ -535,7 +535,7 @@ submitImage = function (el, paste) {
                 $('.js-files').append(template.html());
 
                 if (paste) {
-                    pasteImage(template.find('img'));
+                    pasteImage(data.source);
                 }
             }
         }
@@ -544,13 +544,23 @@ submitImage = function (el, paste) {
     return false;
 };
 
-/* Вставка изображения в поле */
-pasteImage = function (el) {
+/* Вставка изображения в форму */
+pasteImage = function (path) {
     var field    = $('.markItUpEditor');
     var caretPos = field[0].selectionStart;
     var text     = field.val();
-    var paste    = '[img]' + $(el).data('source') + '[/img]';
+    var paste    = '[img]' + path + '[/img]';
+
     field.focus().val(text.substring(0, caretPos) + paste + text.substring(caretPos));
+};
+
+/* Удаление изображения из формы */
+cutImage = function (path) {
+    var field = $('.markItUpEditor');
+    var text  = field.val();
+    var cut   = '[img]' + path + '[/img]';
+
+    field.val(text.replace(cut, ''));
 };
 
 /* Удаление файла */
@@ -571,6 +581,7 @@ deleteFile = function (el) {
             }
 
             if (data.status === 'success') {
+                cutImage(data.path);
                 $(el).closest('.js-file').hide('fast');
             }
         }

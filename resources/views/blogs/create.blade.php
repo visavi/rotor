@@ -55,7 +55,7 @@
                 <div class="invalid-feedback">{{ textError('tags') }}</div>
             </div>
 
-            @include('app/_upload', ['files' => $files, 'type' => App\Models\Article::$morphName, 'paste' => true])
+            @include('app/_upload_image', ['files' => $files, 'type' => App\Models\Article::$morphName, 'paste' => true])
 
             <button class="btn btn-primary">{{ __('blogs.add') }}</button>
         </form>

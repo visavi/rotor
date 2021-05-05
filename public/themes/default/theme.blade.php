@@ -42,9 +42,9 @@
 <script src="{{ mix('/assets/js/dist/vendor.js') }}"></script>
 <script src="{{ mix('/assets/js/dist/lang.js') }}"></script>
 <script src="{{ mix('/themes/default/dist/app.js') }}"></script>
-@if (getUser())
+{{--@if (getUser())
 <script src="{{ mix('/themes/default/dist/messages.js') }}"></script>
-@endif
+@endif--}}
 @stack('scripts')
 <div class="scrollup"></div>
 </body>

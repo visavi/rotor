@@ -62,7 +62,7 @@
                 <div class="invalid-feedback">{{ textError('tags') }}</div>
             </div>
 
-            @include('app/_upload', ['id' => $article->id, 'files' => $article->files, 'type' => $article->getMorphClass(), 'paste' => true])
+            @include('app/_upload_image', ['id' => $article->id, 'files' => $article->files, 'type' => $article->getMorphClass(), 'paste' => true])
 
             <button class="btn btn-primary">{{ __('main.change') }}</button>
         </form>

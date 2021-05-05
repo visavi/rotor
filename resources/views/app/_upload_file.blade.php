@@ -9,9 +9,7 @@
                     {{ icons($file->extension) }} {{ $file->extension }} {{ formatSize($file->size) }}
                 @endif
 
-                @if (! $file->relate_id)
-                    <a href="#" onclick="return deleteFile(this);" data-id="{{ $file->id }}" data-type="{{ $type }}" data-token="{{ $_SESSION['token'] }}" class="js-file-delete"><i class="fas fa-times"></i></a>
-                @endif
+                <a href="#" onclick="return deleteFile(this);" data-id="{{ $file->id }}" data-type="{{ $type }}" data-token="{{ $_SESSION['token'] }}" class="js-file-delete"><i class="fas fa-times"></i></a>
             </span>
         @endforeach
     @endif
