@@ -76,10 +76,11 @@ return [
     'caches' => [
         'files'           => 'Files',
         'images'          => 'Images',
+        'views'           => 'Views',
         'clear'           => 'Clear cache',
         'empty_files'     => 'No files yet!',
-        'empty_images'    => 'There are no images yet!',
         'success_cleared' => 'Cache successfully cleared!',
+        'only_file_cache' => 'Only the file cache is displayed',
     ],
 
     'chat' => [

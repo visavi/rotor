@@ -13,13 +13,23 @@
 @stop
 
 @section('content')
-    <a href="/admin/caches" class="badge badge-success">{{ __('admin.caches.files') }}</a>
-    <a href="/admin/caches?type=image" class="badge badge-light">{{ __('admin.caches.images') }}</a>
-    <hr>
 
     <div class="mb-3">
-        Cache driver: <span class="badge badge-pill badge-primary">{{ config('cache.default') }}</span>
+        <?php $active = ($type === 'files') ? 'primary' : 'light'; ?>
+        <a class="btn btn-{{ $active }} btn-sm" href="/admin/caches?type=files">{{ __('admin.caches.files') }}</a>
+
+        <?php $active = ($type === 'images') ? 'primary' : 'light'; ?>
+        <a class="btn btn-{{ $active }} btn-sm" href="/admin/caches?type=images">{{ __('admin.caches.images') }}</a>
+
+        <?php $active = ($type === 'views') ? 'primary' : 'light'; ?>
+        <a class="btn btn-{{ $active }} btn-sm" href="/admin/caches?type=views">{{ __('admin.caches.views') }}</a>
     </div>
+
+    <div class="mb-3">
+        <span class="badge badge-success">App env: {{ config('app.env') }}</span>
+        <span class="badge badge-success">Cache driver: {{ config('cache.default') }}</span>
+    </div>
+    <hr>
 
     @if ($files->isNotEmpty())
         <div class="mb-3">
@@ -30,17 +40,21 @@
             @endforeach
         </div>
 
-        <div class="float-right">
-            <form action="/admin/caches/clear" method="post">
-                @csrf
-                <button class="btn btn-sm btn-danger"><i class="fa fa-trash-alt"></i> {{ __('admin.caches.clear') }}</button>
-            </form>
-        </div>
-
         {{ $files->links() }}
 
         {{ __('main.total') }}: {{ $files->total() }}<br>
+    @elseif ($type === 'files' && config('cache.default') !== 'file')
+        <div class="alert alert-info">
+            {{ __('admin.caches.only_file_cache') }}
+        </div>
     @else
         {{ showError(__('admin.caches.empty_files')) }}
     @endif
+
+    <div class="float-right">
+        <form action="/admin/caches/clear?type={{ $type }}" method="post">
+            @csrf
+            <button class="btn btn-sm btn-danger"><i class="fa fa-trash-alt"></i> {{ __('admin.caches.clear') }}</button>
+        </form>
+    </div>
 @stop

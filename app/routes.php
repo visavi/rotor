@@ -361,6 +361,7 @@ return FastRoute\cachedDispatcher(static function (RouteCollector $r) {
         $r->get('/phpinfo', [App\Controllers\Admin\AdminController::class, 'phpinfo']);
 
         $r->addRoute(['GET', 'POST'], '/settings', [App\Controllers\Admin\SettingController::class, 'index']);
+
         $r->get('/caches', [App\Controllers\Admin\CacheController::class, 'index']);
         $r->post('/caches/clear', [App\Controllers\Admin\CacheController::class, 'clear']);
 

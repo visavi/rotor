@@ -28,7 +28,7 @@
                 <span class="js-textarea-counter"></span>
             </div>
 
-            <button class="btn btn-success">{{ __('main.edit') }}</button>
+            <button class="btn btn-primary">{{ __('main.edit') }}</button>
         </form>
     </div>
 @stop

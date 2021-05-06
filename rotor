@@ -29,7 +29,9 @@ $app->addCommands([
     new \App\Commands\CacheClear(),
     new \App\Commands\RouteClear(),
     new \App\Commands\ConfigClear(),
+    new \App\Commands\ImageClear(),
     new \App\Commands\LangCompare(),
+    new \App\Commands\Optimize(),
 ]);
 
 $dispatcher = new EventDispatcher();
