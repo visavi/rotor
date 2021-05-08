@@ -13,7 +13,7 @@
 @stop
 
 @section('content')
-    <div class="mb-3 font-weight-bold">
+    <div class="mb-3 fw-bold">
         <i class="fa fa-exclamation-circle"></i>
 
         @if (setting('regkeys'))
@@ -38,7 +38,7 @@
                         <div class="flex-grow-1">
                             {{ $user->getProfile() }}
                         </div>
-                        <div class="text-right">
+                        <div class="text-end">
                             <input type="checkbox" name="choice[]" value="{{ $user->id }}">
                         </div>
                     </div>
@@ -52,7 +52,7 @@
 
             <?php $inputAction = getInput('action'); ?>
             <div class="input-group{{ hasError('action') }}">
-                <select class="form-control" name="action">
+                <select class="form-select" name="action">
                     <option>{{ __('main.action') }}</option>
                     <option value="yes"{{ $inputAction === 'yes' ? ' selected' : '' }}>{{ __('main.allow') }}</option>
                     <option value="no"{{ $inputAction === 'no' ? ' selected' : '' }}>{{ __('main.disallow') }}</option>

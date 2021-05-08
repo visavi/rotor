@@ -260,7 +260,7 @@ class BBCodeTest extends \Tests\TestCase
         $parseText = $this->bbCode->parse($text);
         $parseText = trim(preg_replace('/\s\s+/', '', $parseText));
 
-        self::assertSame('<div class="hidden-text"><span class="font-weight-bold">' . __('main.hidden_content') . ':</span> ' . __('main.not_authorized') . '</div>', $parseText);
+        self::assertSame('<div class="hidden-text"><span class="fw-bold">' . __('main.hidden_content') . ':</span> ' . __('main.not_authorized') . '</div>', $parseText);
     }
 
     /**

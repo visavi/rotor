@@ -27,9 +27,9 @@
     <div class="section-form mb-3 shadow">
         <form action="/admin/topics/move/{{ $topic->id }}" method="post">
             @csrf
-            <div class="form-group{{ hasError('fid') }}">
-                <label for="fid">{{ __('forums.forum') }}:</label>
-                <select class="form-control" id="fid" name="fid">
+            <div class="mb-3{{ hasError('fid') }}">
+                <label for="fid" class="form-label">{{ __('forums.forum') }}:</label>
+                <select class="form-select" id="fid" name="fid">
 
                     @foreach ($forums as $data)
                         <option value="{{ $data->id }}"{{ $data->closed || $topic->forum_id === $data->id ? ' disabled' : '' }}>{{ $data->title }}</option>

@@ -3,7 +3,7 @@
 @section('title', __('index.news'))
 
 @section('header')
-    <div class="float-right">
+    <div class="float-end">
         <a class="btn btn-success" href="/admin/news/create">{{ __('main.create') }}</a>
         <a class="btn btn-light" href="/news"><i class="fas fa-wrench"></i></a>
     </div>
@@ -32,12 +32,12 @@
                         <small class="section-date text-muted font-italic">{{ dateFixed($data->created_at) }})</small>
                     </div>
 
-                    <div class="text-right">
+                    <div class="text-end">
                         @if ($data->top)
                             <span class="text-danger">{{ __('news.on_homepage') }}</span><br>
                         @endif
-                        <a href="/admin/news/edit/{{ $data->id }}?page={{ $news->currentPage() }}" data-toggle="tooltip" title="{{ __('main.edit') }}"><i class="fas fa-pencil-alt text-muted"></i></a>
-                        <a href="/admin/news/delete/{{ $data->id }}?token={{ $_SESSION['token'] }}" data-toggle="tooltip" title="{{ __('main.delete') }}" onclick="return confirm('{{ __('news.confirm_delete') }}')"><i class="fas fa-times text-muted"></i></a>
+                        <a href="/admin/news/edit/{{ $data->id }}?page={{ $news->currentPage() }}" data-bs-toggle="tooltip" title="{{ __('main.edit') }}"><i class="fas fa-pencil-alt text-muted"></i></a>
+                        <a href="/admin/news/delete/{{ $data->id }}?token={{ $_SESSION['token'] }}" data-bs-toggle="tooltip" title="{{ __('main.delete') }}" onclick="return confirm('{{ __('news.confirm_delete') }}')"><i class="fas fa-times text-muted"></i></a>
                     </div>
                 </div>
 

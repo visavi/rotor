@@ -3,7 +3,7 @@
 @section('title', __('loads.edit_down') . ' ' . $down->title)
 
 @section('header')
-    <div class="float-right">
+    <div class="float-end">
         <a class="btn btn-light" href="/downs/{{ $down->id }}"><i class="fas fa-wrench"></i></a>
     </div>
 
@@ -37,26 +37,26 @@
     @if (isAdmin('boss'))
         @if ($down->active)
             <i class="fa fa-pencil-alt"></i>
-            <a class="mr-3" href="/admin/downs/publish/{{ $down->id }}?token={{ $_SESSION['token'] }}" onclick="return confirm('{{ __('loads.confirm_unpublish_down') }}')">{{ __('main.unpublish') }}</a>
+            <a class="me-3" href="/admin/downs/publish/{{ $down->id }}?token={{ $_SESSION['token'] }}" onclick="return confirm('{{ __('loads.confirm_unpublish_down') }}')">{{ __('main.unpublish') }}</a>
         @else
             <i class="fa fa-pencil-alt"></i>
-            <a class="mr-3" href="/admin/downs/publish/{{ $down->id }}?token={{ $_SESSION['token'] }}" onclick="return confirm('{{ __('loads.confirm_publish_down') }}')">{{ __('main.publish') }}</a>
+            <a class="me-3" href="/admin/downs/publish/{{ $down->id }}?token={{ $_SESSION['token'] }}" onclick="return confirm('{{ __('loads.confirm_publish_down') }}')">{{ __('main.publish') }}</a>
         @endif
 
-        <i class="fas fa-times"></i> <a class="mr-3" href="/admin/downs/delete/{{ $down->id }}?token={{ $_SESSION['token'] }}" onclick="return confirm('{{ __('loads.confirm_delete_down') }}')">{{ __('main.delete') }}</a>
+        <i class="fas fa-times"></i> <a class="me-3" href="/admin/downs/delete/{{ $down->id }}?token={{ $_SESSION['token'] }}" onclick="return confirm('{{ __('loads.confirm_delete_down') }}')">{{ __('main.delete') }}</a>
         <hr>
     @endif
 
     <div class="section-form mb-3 shadow">
         <form action="/admin/downs/edit/{{ $down->id }}" method="post" enctype="multipart/form-data">
             @csrf
-            <div class="form-group{{ hasError('category') }}">
+            <div class="mb-3{{ hasError('category') }}">
                 {{ __('main.author') }}: {{ $down->user->getProfile() }} ({{ dateFixed($down->created_at) }})<br><br>
 
-                <label for="inputCategory">{{ __('loads.load') }}:</label>
+                <label for="inputCategory" class="form-label">{{ __('loads.load') }}:</label>
 
                 <?php $inputCategory = (int) getInput('category', $down->category_id); ?>
-                <select class="form-control" id="inputCategory" name="category">
+                <select class="form-select" id="inputCategory" name="category">
                     @foreach ($categories as $category)
 
                         <option value="{{ $category->id }}"{{ ($inputCategory === $category->id && ! $category->closed) ? ' selected' : '' }}{{ $category->closed ? ' disabled' : '' }}>{{ $category->name }}</option>
@@ -72,14 +72,14 @@
                 <div class="invalid-feedback">{{ textError('category') }}</div>
             </div>
 
-            <div class="form-group{{ hasError('title') }}">
-                <label for="title">{{ __('loads.down_title') }}:</label>
+            <div class="mb-3{{ hasError('title') }}">
+                <label for="title" class="form-label">{{ __('loads.down_title') }}:</label>
                 <input class="form-control" name="title" id="title" maxlength="50" value="{{ getInput('title', $down->title) }}" required>
                 <div class="invalid-feedback">{{ textError('title') }}</div>
             </div>
 
-            <div class="form-group{{ hasError('text') }}">
-                <label for="text">{{ __('loads.down_text') }}:</label>
+            <div class="mb-3{{ hasError('text') }}">
+                <label for="text" class="form-label">{{ __('loads.down_text') }}:</label>
                 <textarea class="form-control markItUp" id="text" name="text" rows="5">{{ getInput('text', $down->text) }}</textarea>
                 <div class="invalid-feedback">{{ textError('text') }}</div>
             </div>
@@ -100,11 +100,11 @@
 
             @if ($down->files->count() < setting('maxfiles'))
                 <div class="custom-file{{ hasError('files') }}">
-                    <label class="btn btn-sm btn-secondary" for="files">
+                    <label for="files" class="btn btn-sm btn-secondary form-label">
                         <input type="file" id="files" name="files[]" onchange="$('#upload-file-info').html((this.files.length > 1) ? '{{ __('main.files') }}: ' + this.files.length : this.files[0].name);" hidden multiple>
                         {{ __('main.attach_files') }}&hellip;
                     </label>
-                    <span class="badge badge-info" id="upload-file-info"></span>
+                    <span class="badge bg-info" id="upload-file-info"></span>
                     <div class="invalid-feedback">{{ textError('files') }}</div>
                 </div>
             @endif

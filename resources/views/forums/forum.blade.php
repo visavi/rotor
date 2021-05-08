@@ -3,7 +3,7 @@
 @section('title', $forum->title, ' (' . __('main.page_num', ['page' => $topics->currentPage()]) . ')')
 
 @section('header')
-    <div class="float-right">
+    <div class="float-end">
         @if (getUser())
             @if (! $forum->closed)
                 <a class="btn btn-success" href="/forums/create?fid={{ $forum->id }}">{{ __('forums.create_topic') }}</a>
@@ -36,7 +36,7 @@
 @section('content')
     @if ($topics->onFirstPage() && $forum->children->isNotEmpty())
         @foreach ($forum->children as $child)
-            <div class="section mb-3 shadow border-left border-info">
+            <div class="section mb-3 shadow border-start border-info">
                 <div class="section-header d-flex align-items-center">
                     <div class="flex-grow-1">
                         <div class="section-title">
@@ -45,7 +45,7 @@
                         </div>
                     </div>
 
-                    <div class="text-right">
+                    <div class="text-end">
                         <b>{{ $child->count_topics }}/{{ $child->count_posts }}</b>
                     </div>
                 </div>
@@ -75,7 +75,7 @@
                             <a href="/topics/{{ $topic->id }}">{{ $topic->title }}</a>
                         </div>
                     </div>
-                    <div class="text-right">
+                    <div class="text-end">
                         <b>{{ $topic->getCountPosts() }}</b>
                     </div>
                 </div>

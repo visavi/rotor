@@ -20,13 +20,13 @@
     {{ __('main.sort') }}:
 
     <?php $active = ($order === 'visits') ? 'success' : 'light'; ?>
-    <a href="/blogs/top?sort=visits" class="badge badge-{{ $active }}">{{ __('main.views') }}</a>
+    <a href="/blogs/top?sort=visits" class="badge bg-{{ $active }}">{{ __('main.views') }}</a>
 
     <?php $active = ($order === 'rating') ? 'success' : 'light'; ?>
-    <a href="/blogs/top?sort=rated" class="badge badge-{{ $active }}">{{ __('main.rating') }}</a>
+    <a href="/blogs/top?sort=rated" class="badge bg-{{ $active }}">{{ __('main.rating') }}</a>
 
     <?php $active = ($order === 'count_comments') ? 'success' : 'light'; ?>
-    <a href="/blogs/top?sort=comments" class="badge badge-{{ $active }}">{{ __('main.comments') }}</a>
+    <a href="/blogs/top?sort=comments" class="badge bg-{{ $active }}">{{ __('main.comments') }}</a>
     <hr>
 
     @if ($articles->isNotEmpty())

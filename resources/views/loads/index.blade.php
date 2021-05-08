@@ -3,7 +3,7 @@
 @section('title', __('index.loads'))
 
 @section('header')
-    <div class="float-right">
+    <div class="float-end">
         @if (getUser())
             <a class="btn btn-success" href="/downs/create">{{ __('main.add') }}</a>
 

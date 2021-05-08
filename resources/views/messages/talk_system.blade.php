@@ -27,7 +27,7 @@
                         <b>{{ __('messages.system') }}</b>
 
                         @unless ($data->reading)
-                            <span class="badge badge-info">{{ __('messages.new') }}</span>
+                            <span class="badge bg-info">{{ __('messages.new') }}</span>
                         @endunless
                     </div>
 

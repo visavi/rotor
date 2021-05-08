@@ -15,7 +15,7 @@
     @if (isset($_SESSION['social']))
         <div class="bg-success text-light p-1">
             <img class="rounded-circle border" alt="photo" src="{{ $_SESSION['social']->photo }}" style="width: 48px; height: 48px;">
-            <span class="badge badge-primary">{{ $_SESSION['social']->network }}</span> {{ $_SESSION['social']->first_name }} {{ $_SESSION['social']->last_name }} {{ isset($_SESSION['social']->nickname) ? '('.$_SESSION['social']->nickname.')' : '' }}
+            <span class="badge bg-primary">{{ $_SESSION['social']->network }}</span> {{ $_SESSION['social']->first_name }} {{ $_SESSION['social']->last_name }} {{ isset($_SESSION['social']->nickname) ? '('.$_SESSION['social']->nickname.')' : '' }}
         </div>
         <div class="bg-info text-light p-1 mb-3">
             {!! __('users.social_auth_text') !!}
@@ -29,17 +29,17 @@
     <div class="section-form mb-3 shadow">
         <form method="post">
 
-            <div class="form-group">
-                <label for="inputLogin">{{ __('users.login_or_email') }}:</label>
+            <div class="mb-3">
+                <label for="inputLogin" class="form-label">{{ __('users.login_or_email') }}:</label>
                 <input class="form-control" name="login" id="inputLogin" maxlength="50" value="{{ getInput('login') }}" required>
 
-                <label for="inputPassword">{{ __('users.password') }}:</label>
+                <label for="inputPassword" class="form-label">{{ __('users.password') }}:</label>
                 <input class="form-control" name="pass" type="password" id="inputPassword" maxlength="20" required>
             </div>
 
-            <div class="custom-control custom-checkbox">
-                <input type="checkbox" class="custom-control-input" value="1" name="remember" id="remember" checked>
-                <label class="custom-control-label" for="remember">{{ __('users.remember_me') }}</label>
+            <div class="form-check">
+                <input type="checkbox" class="form-check-input" value="1" name="remember" id="remember" checked>
+                <label class="form-check-label" for="remember">{{ __('users.remember_me') }}</label>
             </div>
 
             @if ($isFlood)

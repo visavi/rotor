@@ -14,9 +14,9 @@
 
 @section('content')
     @if (! setting('invite'))
-        <div class="mb-3 font-weight-bold">
+        <div class="mb-3 fw-bold">
             <i class="fa fa-exclamation-circle"></i>
-            <span class="text-danger font-weight-bold">{{ __('admin.invitations.hint') }}</span>
+            <span class="text-danger fw-bold">{{ __('admin.invitations.hint') }}</span>
         </div>
     @endif
 
@@ -38,7 +38,7 @@
                     <div class="section-title">
                         {{ $invite->hash }}
 
-                        <div class="float-right">
+                        <div class="float-end">
                             <input type="checkbox" name="del[]" value="{{ $invite->id }}">
                         </div>
                     </div>
@@ -55,7 +55,7 @@
                 </div>
             @endforeach
 
-            <div class="float-right">
+            <div class="float-end">
                 <button class="btn btn-sm btn-danger">{{ __('main.delete_selected') }}</button>
             </div>
         </form>

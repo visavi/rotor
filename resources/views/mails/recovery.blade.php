@@ -15,8 +15,8 @@
     <div class="section-form mb-3 shadow">
         <form method="post" action="/recovery">
 
-            <div class="form-group{{ hasError('user') }}">
-                <label for="inputUser">{{ __('users.login_or_email') }}:</label>
+            <div class="mb-3{{ hasError('user') }}">
+                <label for="inputUser" class="form-label">{{ __('users.login_or_email') }}:</label>
                 <input class="form-control" name="user" id="inputUser" value="{{ getInput('user', $cookieLogin) }}" maxlength="50" required>
                 <div class="invalid-feedback">{{ textError('user') }}</div>
             </div>

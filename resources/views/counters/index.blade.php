@@ -32,14 +32,14 @@
     </div>
 
     <h3>{{ __('counters.dynamics_day') }}</h3>
-    <span class="badge badge-pill badge-primary">{{ __('counters.hosts') }}</span>
-    <span class="badge badge-pill badge-warning">{{ __('counters.hits') }}</span>
+    <span class="badge rounded-pill bg-primary">{{ __('counters.hosts') }}</span>
+    <span class="badge rounded-pill bg-warning">{{ __('counters.hits') }}</span>
 
     <div class="ct-chart24 ct-perfect-fourth"></div>
 
     <h3>{{ __('counters.dynamics_month') }}</h3>
-    <span class="badge badge-pill badge-primary">{{ __('counters.hosts') }}</span>
-    <span class="badge badge-pill badge-warning">{{ __('counters.hits') }}</span>
+    <span class="badge rounded-pill bg-primary">{{ __('counters.hosts') }}</span>
+    <span class="badge rounded-pill bg-warning">{{ __('counters.hits') }}</span>
     <div class="ct-chart31 ct-perfect-fourth"></div>
 @stop
 

@@ -4,14 +4,14 @@
 
 @section('header')
     @if (getUser())
-        <div class="float-right">
+        <div class="float-end">
             @if (getUser('id') === $item->user->id)
                 <a class="btn btn-success" href="/items/edit/{{ $item->id }}">{{ __('main.change') }}</a>
             @endif
 
             @if (isAdmin())
                 <div class="btn-group">
-                    <button type="button" class="btn btn-light dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <button type="button" class="btn btn-light dropdown-toggle" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         <i class="fas fa-wrench"></i>
                     </button>
                     <div class="dropdown-menu">
@@ -64,7 +64,7 @@
                     </div>
                     <div>
                         @if ($item->phone)
-                            <span class="badge badge-pill badge-primary mb-3">{{ __('boards.phone') }}: {{ $item->phone }}</span><br>
+                            <span class="badge rounded-pill bg-primary mb-3">{{ __('boards.phone') }}: {{ $item->phone }}</span><br>
                         @endif
 
                         <i class="fa fa-user-circle"></i> {{ $item->user->getProfile() }} / {{ dateFixed($item->updated_at) }}<br>

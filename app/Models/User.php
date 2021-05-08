@@ -210,12 +210,12 @@ class User extends BaseModel
                 $admin = ' <i class="fas fa-xs fa-star text-info" title="' . $this->getLevel() . '"></i>';
             }
 
-            $html = '<a class="section-author font-weight-bold" href="/users/' . $this->login . '" data-login="@' . $this->login . '">' . $name . '</a>';
+            $html = '<a class="section-author fw-bold" href="/users/' . $this->login . '" data-login="@' . $this->login . '">' . $name . '</a>';
 
             return new HtmlString($html . $admin);
         }
 
-        $html = '<span class="section-author font-weight-bold" data-login="' . setting('deleted_user') . '">' . setting('deleted_user') . '</span>';
+        $html = '<span class="section-author fw-bold" data-login="' . setting('deleted_user') . '">' . setting('deleted_user') . '</span>';
 
         return new HtmlString($html);
     }

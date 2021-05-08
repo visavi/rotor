@@ -19,9 +19,9 @@
         <div class="section-form mb-3 shadow">
             <form action="/admin/delusers" method="post">
 
-                <div class="form-group">
-                    <label for="period">{{ __('main.period') }}:</label>
-                    <select class="form-control" id="period" name="period">
+                <div class="mb-3">
+                    <label for="period" class="form-label">{{ __('main.period') }}:</label>
+                    <select class="form-select" id="period" name="period">
                         <option value="1825">{{ formatTime(1825 * 86400) }}</option>
                         <option value="1460">{{ formatTime(1460 * 86400) }}</option>
                         <option value="1095">{{ formatTime(1095 * 86400) }}</option>
@@ -31,8 +31,8 @@
                     </select>
                 </div>
 
-                <div class="form-group">
-                    <label for="point">{{ __('admin.delusers.minimum_asset') }}:</label>
+                <div class="mb-3">
+                    <label for="point" class="form-label">{{ __('admin.delusers.minimum_asset') }}:</label>
                     <input type="text" class="form-control" id="point" name="point"  value="0" required>
                 </div>
 

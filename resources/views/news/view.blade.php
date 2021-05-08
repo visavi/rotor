@@ -16,9 +16,9 @@
 
 @section('header')
     @if (isAdmin())
-        <div class="float-right">
+        <div class="float-end">
             <div class="btn-group">
-                <button type="button" class="btn btn-light dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <button type="button" class="btn btn-light dropdown-toggle" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                     <i class="fas fa-wrench"></i>
                 </button>
                 <div class="dropdown-menu">
@@ -110,8 +110,8 @@
             <div class="section-form mb-3 shadow">
                 <form action="/news/comments/{{ $news->id }}?read=1" method="post">
                     @csrf
-                    <div class="form-group{{ hasError('msg') }}">
-                        <label for="msg">{{ __('main.message') }}:</label>
+                    <div class="mb-3{{ hasError('msg') }}">
+                        <label for="msg" class="form-label">{{ __('main.message') }}:</label>
                         <textarea class="form-control markItUp" id="msg" rows="5" maxlength="{{ setting('comment_length') }}" name="msg" placeholder="{{ __('main.message') }}" required>{{ getInput('msg') }}</textarea>
                         <div class="invalid-feedback">{{ textError('msg') }}</div>
                         <span class="js-textarea-counter"></span>

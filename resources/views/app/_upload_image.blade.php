@@ -22,7 +22,7 @@ $click = $cond ? 'return pasteImage(this);' : false;
 </div>
 
 <div class="mb-3">
-    <label class="btn btn-sm btn-secondary mb-1" for="file">
+    <label for="file" class="btn btn-sm btn-secondary mb-1 form-label">
         <input id="file" type="file" name="file" accept="image/*" onchange="return submitImage(this, {{ $cond }});" data-id="{{ $id ?? 0 }}" data-type="{{ $type }}" data-token="{{ $_SESSION['token'] }}" hidden>
         {{ __('main.attach_image') }}&hellip;
     </label>

@@ -3,7 +3,7 @@
 @section('title', __('index.boards'))
 
 @section('header')
-    <div class="float-right">
+    <div class="float-end">
         @if (getUser())
             <a class="btn btn-success" href="/items/create?bid={{ $board->id ?? 0 }}">{{ __('main.add') }}</a>
         @endif

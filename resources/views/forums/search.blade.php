@@ -22,9 +22,9 @@
             </div>
         </div>
 
-        <div class="custom-control custom-checkbox my-1">
-            <input type="checkbox" class="custom-control-input" value="title" name="type" id="type"{{ $type === 'title' ? ' checked' : '' }}>
-            <label class="custom-control-label" for="type">Искать в названиях тем</label>
+        <div class="form-check my-1">
+            <input type="checkbox" class="form-check-input" value="title" name="type" id="type"{{ $type === 'title' ? ' checked' : '' }}>
+            <label class="form-check-label" for="type">Искать в названиях тем</label>
         </div>
         <div class="invalid-feedback">{{ textError('find') }}</div>
         <span class="text-muted font-italic"><?= __('main.request_requirements') ?></span>

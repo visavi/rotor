@@ -20,7 +20,7 @@
         <div class="section-form mb-3 shadow">
             <form action="/admin/backups/create" method="post">
                 @csrf
-                <input type="checkbox" id="all" onchange="var o=this.form.elements;for(var i=0;i&lt;o.length;i++)o[i].checked=this.checked"> <b><label for="all">{{ __('main.select_all') }}</label></b>
+                <input type="checkbox" id="all" onchange="var o=this.form.elements;for(var i=0;i&lt;o.length;i++)o[i].checked=this.checked"> <b><label for="all" class="form-label">{{ __('main.select_all') }}</label></b>
 
                 <?php $sheets = getInput('sheets', []); ?>
                 @foreach ($tables as $data)
@@ -37,9 +37,9 @@
                 <?php $inputMethod = getInput('method', 'gzip'); ?>
 
                 <br>
-                <div class="form-group{{ hasError('method') }}">
-                    <label for="method">{{ __('admin.backup.compress_method') }}:</label>
-                    <select class="form-control" id="method" name="method">
+                <div class="mb-3{{ hasError('method') }}">
+                    <label for="method" class="form-label">{{ __('admin.backup.compress_method') }}:</label>
+                    <select class="form-select" id="method" name="method">
 
                         <option value="none">{{ __('admin.backup.not_compress') }}</option>
 
@@ -58,9 +58,9 @@
 
                 <?php $inputLevel = (int) getInput('level', 7); ?>
 
-                <div class="form-group">
-                    <label for="level">{{ __('admin.backup.compress_ratio') }}:</label>
-                    <select class="form-control" id="level" name="level">
+                <div class="mb-3">
+                    <label for="level" class="form-label">{{ __('admin.backup.compress_ratio') }}:</label>
+                    <select class="form-select" id="level" name="level">
                         @foreach ($levels as $key => $level)
                             <?php $selected = ($key === $inputLevel) ? ' selected' : ''; ?>
                             <option value="{{ $key }}"{{ $selected }}>{{ $level }}</option>

@@ -1,4 +1,3 @@
-window.Popper = require('popper.js');
 window.$ = window.jQuery = require('jquery');
 window.bootbox = require('bootbox');
 window.toastr = require('toastr');

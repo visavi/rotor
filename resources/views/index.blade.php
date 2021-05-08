@@ -14,7 +14,7 @@
         <div class="section-title">
             <i class="far fa-circle fa-lg text-muted"></i>
             <a href="/news" class="">{{ __('index.news') }}</a>
-            <span class="badge badge-light">{{ statsNewsDate() }}</span>
+            <span class="badge bg-light text-dark">{{ statsNewsDate() }}</span>
         </div>
         {{ lastNews() }}
     </div>
@@ -36,7 +36,7 @@
         <div class="section-title">
             <i class="fab fa-forumbee fa-lg text-muted"></i>
             <a href="/forums">{{ __('index.forums') }}</a>
-            <span class="badge badge-light">{{ statsForum() }}</span>
+            <span class="badge bg-light text-dark">{{ statsForum() }}</span>
         </div>
         {{ recentTopics() }}
     </div>
@@ -45,7 +45,7 @@
         <div class="section-title">
             <i class="fa fa-download fa-lg text-muted"></i>
             <a href="/loads">{{ __('index.loads') }}</a>
-            <span class="badge badge-light">{{ statsLoad() }}</span>
+            <span class="badge bg-light text-dark">{{ statsLoad() }}</span>
         </div>
         {{ recentDowns() }}
     </div>
@@ -54,7 +54,7 @@
         <div class="section-title">
             <i class="fa fa-globe fa-lg text-muted"></i>
             <a href="/blogs">{{ __('index.blogs') }}</a>
-            <span class="badge badge-light">{{ statsBlog() }}</span>
+            <span class="badge bg-light text-dark">{{ statsBlog() }}</span>
         </div>
         {{ recentArticles() }}
     </div>
@@ -63,7 +63,7 @@
         <div class="section-title">
             <i class="fa fa-list-alt fa-lg text-muted"></i>
             <a href="/boards">{{ __('index.boards') }}</a>
-            <span class="badge badge-light">{{ statsBoard() }}</span>
+            <span class="badge bg-light text-dark">{{ statsBoard() }}</span>
         </div>
         {{ recentBoards() }}
     </div>

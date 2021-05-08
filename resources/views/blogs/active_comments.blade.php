@@ -24,9 +24,9 @@
                     <i class="fa fa-comment"></i>
                     <a href="/articles/comment/{{ $comment->relate_id}}/{{ $comment->id}}">{{ $comment->title }}</a> ({{ $comment->count_comments }})
 
-                    <div class="float-right">
+                    <div class="float-end">
                         @if (isAdmin())
-                            <a href="#" onclick="return deleteComment(this)" data-rid="{{ $comment->relate_id }}" data-id="{{ $comment->id }}" data-type="{{ $comment->relate->getMorphClass() }}" data-token="{{ $_SESSION['token'] }}" data-toggle="tooltip" title="{{ __('main.delete') }}"><i class="fa fa-times text-muted"></i></a>
+                            <a href="#" onclick="return deleteComment(this)" data-rid="{{ $comment->relate_id }}" data-id="{{ $comment->id }}" data-type="{{ $comment->relate->getMorphClass() }}" data-token="{{ $_SESSION['token'] }}" data-bs-toggle="tooltip" title="{{ __('main.delete') }}"><i class="fa fa-times text-muted"></i></a>
                         @endif
                     </div>
                 </div>

@@ -3,7 +3,7 @@
 @section('title', __('index.advertising'))
 
 @section('header')
-    <div class="float-right">
+    <div class="float-end">
         @if (getUser())
             <a class="btn btn-success" href="/adverts/create">{{ __('adverts.create_advert') }}</a>
         @endif

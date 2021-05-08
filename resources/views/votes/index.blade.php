@@ -3,7 +3,7 @@
 @section('title', __('index.votes') . ' (' . __('main.page_num', ['page' => $votes->currentPage()]) . ')')
 
 @section('header')
-    <div class="float-right">
+    <div class="float-end">
         @if (getUser())
             <a class="btn btn-success" href="/votes/create">{{ __('main.create') }}</a>
         @endif

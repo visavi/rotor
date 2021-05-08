@@ -3,7 +3,7 @@
 @section('title', $category->name . ' (' . __('main.page_num', ['page' => $downs->currentPage()]) . ')')
 
 @section('header')
-    <div class="float-right">
+    <div class="float-end">
         @if (! $category->closed)
             <a class="btn btn-success" href="/downs/create?cid={{ $category->id }}">{{ __('main.add') }}</a>
         @endif
@@ -33,21 +33,21 @@
     {{ __('main.sort') }}:
 
     <?php $active = ($order === 'created_at') ? 'success' : 'light'; ?>
-    <a href="/admin/loads/{{ $category->id }}?sort=time" class="badge badge-{{ $active }}">{{ __('main.date') }}</a>
+    <a href="/admin/loads/{{ $category->id }}?sort=time" class="badge bg-{{ $active }}">{{ __('main.date') }}</a>
 
     <?php $active = ($order === 'loads') ? 'success' : 'light'; ?>
-    <a href="/admin/loads/{{ $category->id }}?sort=loads" class="badge badge-{{ $active }}">{{ __('main.downloads') }}</a>
+    <a href="/admin/loads/{{ $category->id }}?sort=loads" class="badge bg-{{ $active }}">{{ __('main.downloads') }}</a>
 
     <?php $active = ($order === 'rated') ? 'success' : 'light'; ?>
-    <a href="/admin/loads/{{ $category->id }}?sort=rated" class="badge badge-{{ $active }}">{{ __('main.rating') }}</a>
+    <a href="/admin/loads/{{ $category->id }}?sort=rated" class="badge bg-{{ $active }}">{{ __('main.rating') }}</a>
 
     <?php $active = ($order === 'count_comments') ? 'success' : 'light'; ?>
-    <a href="/admin/loads/{{ $category->id }}?sort=comments" class="badge badge-{{ $active }}">{{ __('main.comments') }}</a>
+    <a href="/admin/loads/{{ $category->id }}?sort=comments" class="badge bg-{{ $active }}">{{ __('main.comments') }}</a>
     <hr>
 
     @if ($downs->onFirstPage() && $category->children->isNotEmpty())
         @foreach ($category->children as $child)
-            <div class="section mb-3 shadow border-left border-info">
+            <div class="section mb-3 shadow border-start border-info">
                 <div class="section-title">
                     <i class="fa fa-folder-open"></i>
                     <a href="/admin/loads/{{ $child->id }}">{{ $child->name }}</a> ({{ $child->count_downs }})
@@ -68,7 +68,7 @@
                         </div>
                     </div>
 
-                    <div class="text-right">
+                    <div class="text-end">
                         <a href="/admin/downs/edit/{{ $data->id }}" title="{{ __('main.edit') }}"><i class="fa fa-pencil-alt"></i></a>
 
                         @if (isAdmin('boss'))

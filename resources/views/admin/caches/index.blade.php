@@ -26,8 +26,8 @@
     </div>
 
     <div class="mb-3">
-        <span class="badge badge-success">App env: {{ config('app.env') }}</span>
-        <span class="badge badge-success">Cache driver: {{ config('cache.default') }}</span>
+        <span class="badge bg-success">App env: {{ config('app.env') }}</span>
+        <span class="badge bg-success">Cache driver: {{ config('cache.default') }}</span>
     </div>
     <hr>
 
@@ -51,7 +51,7 @@
         {{ showError(__('admin.caches.empty_files')) }}
     @endif
 
-    <div class="float-right">
+    <div class="float-end">
         <form action="/admin/caches/clear?type={{ $type }}" method="post">
             @csrf
             <button class="btn btn-sm btn-danger"><i class="fa fa-trash-alt"></i> {{ __('admin.caches.clear') }}</button>

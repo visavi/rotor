@@ -20,7 +20,7 @@
             @csrf
             @foreach ($logs as $log)
                 <div class="section mb-3 shadow">
-                    <div class="float-right">
+                    <div class="float-end">
                         <input type="checkbox" name="del[]" value="{{ $log->id }}">
                     </div>
 
@@ -41,7 +41,7 @@
                 </div>
             @endforeach
 
-            <div class="float-right">
+            <div class="float-end">
                 <button class="btn btn-sm btn-danger">{{ __('main.delete_selected') }}</button>
             </div>
         </form>

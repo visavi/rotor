@@ -4,7 +4,7 @@
 
 @section('header')
     @if (getUser())
-        <div class="float-right">
+        <div class="float-end">
             @if (! $category->closed)
                 <a class="btn btn-success" href="/blogs/create?cid={{ $category->id }}">{{ __('blogs.add') }}</a>
             @endif
@@ -45,7 +45,7 @@
                         </div>
                     </div>
 
-                    <div class="text-right js-rating">
+                    <div class="text-end js-rating">
                         @if (getUser() && getUser('id') !== $article->user_id)
                             <a class="post-rating-down<?= $article->vote === '-' ? ' active' : '' ?>" href="#" onclick="return changeRating(this);" data-id="{{ $article->id }}" data-type="{{ $article->getMorphClass() }}" data-vote="-" data-token="{{ $_SESSION['token'] }}"><i class="fa fa-thumbs-down"></i></a>
                         @endif

@@ -15,10 +15,10 @@
 @section('content')
     <form action="/downs/create" method="post" enctype="multipart/form-data">
         @csrf
-        <div class="form-group{{ hasError('category') }}">
-            <label for="inputCategory">{{ __('loads.load') }}:</label>
+        <div class="mb-3{{ hasError('category') }}">
+            <label for="inputCategory" class="form-label">{{ __('loads.load') }}:</label>
 
-            <select class="form-control" id="inputCategory" name="cid">
+            <select class="form-select" id="inputCategory" name="cid">
                 @foreach ($loads as $data)
 
                     <option value="{{ $data->id }}"{{ ($cid === $data->id && ! $data->closed) ? ' selected' : '' }}{{ $data->closed ? ' disabled' : '' }}>{{ $data->name }}</option>
@@ -34,14 +34,14 @@
             <div class="invalid-feedback">{{ textError('category') }}</div>
         </div>
 
-        <div class="form-group{{ hasError('title') }}">
-            <label for="inputTitle">{{ __('loads.down_title') }}:</label>
+        <div class="mb-3{{ hasError('title') }}">
+            <label for="inputTitle" class="form-label">{{ __('loads.down_title') }}:</label>
             <input class="form-control" id="inputTitle" name="title" value="{{ getInput('title') }}" maxlength="50" required>
             <div class="invalid-feedback">{{ textError('title') }}</div>
         </div>
 
-        <div class="form-group{{ hasError('text') }}">
-            <label for="text">{{ __('loads.down_text') }}:</label>
+        <div class="mb-3{{ hasError('text') }}">
+            <label for="text" class="form-label">{{ __('loads.down_text') }}:</label>
             <textarea class="form-control markItUp" id="text" rows="10" name="text" maxlength="5000" required>{{ getInput('text') }}</textarea>
             <div class="invalid-feedback">{{ textError('text') }}</div>
             <span class="js-textarea-counter"></span>
@@ -52,7 +52,7 @@
                 <input type="file" id="files" name="files[]" onchange="$('#upload-file-info').html((this.files.length > 1) ? '{{ __('main.files') }}: ' + this.files.length : this.files[0].name);" hidden multiple>
                 {{ __('main.attach_files') }}&hellip;
             </label>
-            <span class="badge badge-info" id="upload-file-info"></span>
+            <span class="badge bg-info" id="upload-file-info"></span>
             <div class="invalid-feedback">{{ textError('files') }}</div>
         </div>
 

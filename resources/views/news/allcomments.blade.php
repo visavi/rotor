@@ -20,7 +20,7 @@
                     <div class="flex-grow-1">
                         <i class="fa fa-comment fa-lg text-muted"></i>
                         <b><a href="/news/comment/{{ $data->relate_id }}/{{ $data->id }}">{{ $data->title }}</a></b>
-                        <span class="badge badge-light">{{ $data->count_comments }}</span>
+                        <span class="badge bg-light text-dark">{{ $data->count_comments }}</span>
                     </div>
                 </div>
 

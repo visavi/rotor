@@ -17,10 +17,10 @@
 
         {{ __('main.sort') }}:
         <?php $active = ($order === 'rating') ? 'success' : 'light'; ?>
-        <a href="/photos/top?sort=rating" class="badge badge-{{ $active }}">{{ __('main.rating') }}</a>
+        <a href="/photos/top?sort=rating" class="badge bg-{{ $active }}">{{ __('main.rating') }}</a>
 
         <?php $active = ($order === 'count_comments') ? 'success' : 'light'; ?>
-        <a href="/photos/top?sort=comments" class="badge badge-{{ $active }}">{{ __('main.comments') }}</a>
+        <a href="/photos/top?sort=comments" class="badge bg-{{ $active }}">{{ __('main.comments') }}</a>
         <hr>
 
         @foreach ($photos as $photo)

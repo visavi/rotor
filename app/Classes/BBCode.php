@@ -275,7 +275,7 @@ class BBCode
     public function hiddenText(array $match): string
     {
         return '<div class="hidden-text">
-                <span class="font-weight-bold">' . __('main.hidden_content') . ':</span> ' .
+                <span class="fw-bold">' . __('main.hidden_content') . ':</span> ' .
                 (getUser() ? $match[1] : __('main.not_authorized')) .
             '</div>';
     }

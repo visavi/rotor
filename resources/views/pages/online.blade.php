@@ -39,7 +39,7 @@
                             <small class="font-italic">{{ $data->user->getStatus() }}</small>
                         @else
 
-                            <span class="section-author font-weight-bold" data-login="{{ setting('guestsuser') }}">{{ setting('guestsuser') }}</span>
+                            <span class="section-author fw-bold" data-login="{{ setting('guestsuser') }}">{{ setting('guestsuser') }}</span>
 
                             <small class="section-date text-muted font-italic">{{ dateFixed($data->updated_at, 'H:i:s') }}</small>
                         @endif

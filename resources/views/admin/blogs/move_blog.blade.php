@@ -24,11 +24,11 @@
     <div class="section-form mb-3 shadow cut">
         <form action="/admin/articles/move/{{ $article->id }}" method="post">
             @csrf
-            <div class="form-group{{ hasError('cid') }}">
-                <label for="inputCategory">{{ __('blogs.blog') }}</label>
+            <div class="mb-3{{ hasError('cid') }}">
+                <label for="inputCategory" class="form-label">{{ __('blogs.blog') }}</label>
 
                 <?php $inputCategory = (int) getInput('cid', $article->category_id); ?>
-                <select class="form-control" id="inputCategory" name="cid">
+                <select class="form-select" id="inputCategory" name="cid">
 
                     @foreach ($categories as $category)
                         <option value="{{ $category->id }}"{{ ($inputCategory === $category->id && ! $category->closed) ? ' selected' : '' }}{{ $category->closed ? ' disabled' : '' }}>{{ $category->name }}</option>

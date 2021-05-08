@@ -4,7 +4,7 @@
 
 @section('header')
     @if (getUser())
-        <div class="float-right">
+        <div class="float-end">
             <a class="btn btn-success" href="/admin/files/create?path={{ $path }}">{{ __('main.create') }}</a><br>
         </div>
     @endif
@@ -42,7 +42,7 @@
                 <?php $fileName = $path ? '/' . $file : $file; ?>
                 @if (is_dir(RESOURCES . '/views/' . $path . $fileName))
                     <li class="list-group-item">
-                        <div class="float-right">
+                        <div class="float-end">
                             <a href="/admin/files/delete?path={{ $path }}&amp;dirname={{ $file }}&amp;token={{ $_SESSION['token'] }}" onclick="return confirm('{{ __('admin.files.confirm_delete_dir') }}')"><i class="fa fa-times"></i></a>
                         </div>
 
@@ -54,7 +54,7 @@
                     <?php $string = count(file(RESOURCES . '/views/' . $path . $fileName)); ?>
 
                     <li class="list-group-item">
-                        <div class="float-right">
+                        <div class="float-end">
                             <a href="/admin/files/delete?path={{ $path }}&amp;filename={{ basename($file, '.blade.php') }}&amp;token={{ $_SESSION['token'] }}" onclick="return confirm('{{ __('admin.files.confirm_delete_file') }}')"><i class="fa fa-times"></i></a>
                         </div>
 

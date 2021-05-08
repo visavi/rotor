@@ -18,14 +18,14 @@
     <div class="section-form mb-3 shadow">
         <form method="post" action="/accounts/changemail">
             @csrf
-            <div class="form-group{{ hasError('email') }}">
-                <label for="email">{{ __('users.email') }}:</label>
+            <div class="mb-3{{ hasError('email') }}">
+                <label for="email" class="form-label">{{ __('users.email') }}:</label>
                 <input class="form-control" id="email" name="email" maxlength="50" value="{{ getInput('email', $user->email) }}">
                 <div class="invalid-feedback">{{ textError('email') }}</div>
             </div>
 
-            <div class="form-group{{ hasError('password') }}">
-                <label for="password">{{ __('users.current_password') }}:</label>
+            <div class="mb-3{{ hasError('password') }}">
+                <label for="password" class="form-label">{{ __('users.current_password') }}:</label>
                 <input class="form-control" type="password" id="password" name="password" maxlength="20">
                 <div class="invalid-feedback">{{ textError('password') }}</div>
             </div>
@@ -43,7 +43,7 @@
         <div class="section-form mb-3 shadow">
             <form method="post" action="/accounts/editstatus">
                 @csrf
-                <label for="status">{{ __('users.personal_status') }}:</label>
+                <label for="status" class="form-label">{{ __('users.personal_status') }}:</label>
                 <div class="input-group{{ hasError('status') }}">
                     <input type="text" class="form-control" id="status" name="status" maxlength="20" value="{{ getInput('status', $user->status) }}">
                     <div class="input-group-append">
@@ -68,8 +68,8 @@
         <div class="section-form mb-3 shadow">
             <form method="post" action="/accounts/editcolor">
                 @csrf
-                <div class="form-group{{ hasError('color') }}">
-                    <label for="color">{{ __('users.personal_color') }}:</label>
+                <div class="mb-3{{ hasError('color') }}">
+                    <label for="color" class="form-label">{{ __('users.personal_color') }}:</label>
 
                     <div class="input-group colorpick">
                         <input class="form-control col-sm-4" id="color" name="color" type="text" maxlength="7" value="{{ getInput('color', $user->color) }}">
@@ -98,20 +98,20 @@
     <div class="section-form mb-3 shadow">
         <form method="post" action="/accounts/editpassword">
             @csrf
-            <div class="form-group{{ hasError('newpass') }}">
-                <label for="newpass">{{ __('users.new_password') }}:</label>
+            <div class="mb-3{{ hasError('newpass') }}">
+                <label for="newpass" class="form-label">{{ __('users.new_password') }}:</label>
                 <input class="form-control" id="newpass" name="newpass" maxlength="20" value="{{ getInput('newpass') }}">
                 <div class="invalid-feedback">{{ textError('newpass') }}</div>
             </div>
 
-            <div class="form-group{{ hasError('newpass2') }}">
-                <label for="newpass2">{{ __('users.confirm_password') }}:</label>
+            <div class="mb-3{{ hasError('newpass2') }}">
+                <label for="newpass2" class="form-label">{{ __('users.confirm_password') }}:</label>
                 <input class="form-control" id="newpass2" name="newpass2" maxlength="20" value="{{ getInput('newpass2') }}">
                 <div class="invalid-feedback">{{ textError('newpass2') }}</div>
             </div>
 
-            <div class="form-group{{ hasError('oldpass') }}">
-                <label for="oldpass">{{ __('users.current_password') }}:</label>
+            <div class="mb-3{{ hasError('oldpass') }}">
+                <label for="oldpass" class="form-label">{{ __('users.current_password') }}:</label>
                 <input class="form-control" type="password" id="oldpass" name="oldpass" maxlength="20">
                 <div class="invalid-feedback">{{ textError('oldpass') }}</div>
             </div>
@@ -126,11 +126,11 @@
         <form method="post" action="/accounts/apikey">
             @csrf
             @if ($user->apikey)
-                <div class="form-group">
-                    <label for="apikey">{{ __('users.token') }}:</label>
+                <div class="mb-3">
+                    <label for="apikey" class="form-label">{{ __('users.token') }}:</label>
                     <div class="input-group">
                         <input class="form-control col-sm-4" type="text" id="apikey" name="apikey" value="{{ $user->apikey }}">
-                        <div class="input-group-append" onclick="return copyToClipboard(this)" data-toggle="tooltip" title="{{ __('main.copy') }}">
+                        <div class="input-group-append" onclick="return copyToClipboard(this)" data-bs-toggle="tooltip" title="{{ __('main.copy') }}">
                             <span class="input-group-text"><i class="far fa-clipboard"></i></span>
                         </div>
                     </div>

@@ -3,7 +3,7 @@
 @section('title', __('index.offers'))
 
 @section('header')
-    <div class="float-right">
+    <div class="float-end">
         <a class="btn btn-success" href="/offers/create?type={{ $type }}">{{ __('main.add') }}</a>
         <a class="btn btn-light" href="/offers/{{ $type }}?page={{ $offers->currentPage() }}"><i class="fas fa-wrench"></i></a>
     </div>
@@ -24,27 +24,27 @@
 @section('content')
     <div class="mb-3">
         @if ($type === 'offer')
-            <a class="btn btn-primary btn-sm" href="/admin/offers/offer">{{ __('offers.offers') }} <span class="badge badge-light">{{ $offers->total() }}</span></a>
-            <a class="btn btn-light btn-sm" href="/admin/offers/issue">{{ __('offers.problems') }} <span class="badge badge-light">{{ $otherCount }}</span></a>
+            <a class="btn btn-primary btn-sm" href="/admin/offers/offer">{{ __('offers.offers') }} <span class="badge bg-light text-dark">{{ $offers->total() }}</span></a>
+            <a class="btn btn-light btn-sm" href="/admin/offers/issue">{{ __('offers.problems') }} <span class="badge bg-light text-dark">{{ $otherCount }}</span></a>
         @else
-            <a class="btn btn-light btn-sm" href="/admin/offers/offer">{{ __('offers.offers') }} <span class="badge badge-light">{{ $otherCount }}</span></a>
-            <a class="btn btn-primary btn-sm" href="/admin/offers/issue">{{ __('offers.problems') }} <span class="badge badge-light">{{ $offers->total() }}</span></a>
+            <a class="btn btn-light btn-sm" href="/admin/offers/offer">{{ __('offers.offers') }} <span class="badge bg-light text-dark">{{ $otherCount }}</span></a>
+            <a class="btn btn-primary btn-sm" href="/admin/offers/issue">{{ __('offers.problems') }} <span class="badge bg-light text-dark">{{ $offers->total() }}</span></a>
         @endif
     </div>
 
     @if ($offers->isNotEmpty())
         {{ __('main.sort') }}:
         <?php $active = ($order === 'rating') ? 'success' : 'light'; ?>
-        <a href="/admin/offers/{{ $type }}?sort=rating" class="badge badge-{{ $active }}">{{ __('main.votes') }}</a>
+        <a href="/admin/offers/{{ $type }}?sort=rating" class="badge bg-{{ $active }}">{{ __('main.votes') }}</a>
 
         <?php $active = ($order === 'created_at') ? 'success' : 'light'; ?>
-        <a href="/admin/offers/{{ $type }}?sort=time" class="badge badge-{{ $active }}">{{ __('main.date') }}</a>
+        <a href="/admin/offers/{{ $type }}?sort=time" class="badge bg-{{ $active }}">{{ __('main.date') }}</a>
 
         <?php $active = ($order === 'status') ? 'success' : 'light'; ?>
-        <a href="/admin/offers/{{ $type }}?sort=status" class="badge badge-{{ $active }}">{{ __('main.status') }}</a>
+        <a href="/admin/offers/{{ $type }}?sort=status" class="badge bg-{{ $active }}">{{ __('main.status') }}</a>
 
         <?php $active = ($order === 'count_comments') ? 'success' : 'light'; ?>
-        <a href="/admin/offers/{{ $type }}?sort=comments" class="badge badge-{{ $active }}">{{ __('main.comments') }}</a>
+        <a href="/admin/offers/{{ $type }}?sort=comments" class="badge bg-{{ $active }}">{{ __('main.comments') }}</a>
         <hr>
 
         <form action="/admin/offers/delete?type={{ $type }}&amp;page={{ $offers->currentPage() }}" method="post">
@@ -54,9 +54,9 @@
                     <div class="section-title">
                         <i class="fa fa-file"></i>
                         <a href="/admin/offers/{{ $data->id }}">{{ $data->title }}</a> ({{ __('main.votes') }}: {{ $data->rating }})
-                        <div class="float-right">
-                            <a href="/admin/offers/reply/{{ $data->id }}" data-toggle="tooltip" title="{{ __('main.reply') }}"><i class="fas fa-reply text-muted"></i></a>
-                            <a href="/admin/offers/edit/{{ $data->id }}" data-toggle="tooltip" title="{{ __('main.edit') }}"><i class="fas fa-pencil-alt text-muted"></i></a>
+                        <div class="float-end">
+                            <a href="/admin/offers/reply/{{ $data->id }}" data-bs-toggle="tooltip" title="{{ __('main.reply') }}"><i class="fas fa-reply text-muted"></i></a>
+                            <a href="/admin/offers/edit/{{ $data->id }}" data-bs-toggle="tooltip" title="{{ __('main.edit') }}"><i class="fas fa-pencil-alt text-muted"></i></a>
                             <input type="checkbox" name="del[]" value="{{ $data->id }}">
                         </div>
                     </div>
@@ -71,7 +71,7 @@
                 </div>
             @endforeach
 
-            <div class="float-right">
+            <div class="float-end">
                 <button class="btn btn-sm btn-danger">{{ __('main.delete_selected') }}</button>
             </div>
         </form>

@@ -20,11 +20,11 @@
     <div class="section-form mb-3 shadow">
         <form action="/admin/stickers/sticker/edit/{{ $sticker->id }}?page={{ $page }}" method="post">
             @csrf
-            <div class="form-group{{ hasError('category') }}">
-                <label for="inputCategory">{{ __('stickers.category') }}</label>
+            <div class="mb-3{{ hasError('category') }}">
+                <label for="inputCategory" class="form-label">{{ __('stickers.category') }}</label>
 
                 <?php $inputCategory = (int) getInput('cid', $sticker->category->id); ?>
-                <select class="form-control" id="inputCategory" name="cid">
+                <select class="form-select" id="inputCategory" name="cid">
                     @foreach ($categories as $category)
                         <option value="{{ $category->id }}"{{ ($inputCategory === $category->id) ? ' selected' : '' }}>{{ $category->name }}</option>
                     @endforeach
@@ -32,8 +32,8 @@
                 <div class="invalid-feedback">{{ textError('category') }}</div>
             </div>
 
-            <div class="form-group{{ hasError('code') }}">
-                <label for="code">{{ __('stickers.sticker_code') }}:</label>
+            <div class="mb-3{{ hasError('code') }}">
+                <label for="code" class="form-label">{{ __('stickers.sticker_code') }}:</label>
                 <input type="text" class="form-control" id="code" name="code" maxlength="20" value="{{ getInput('code', $sticker->code) }}" required>
                 <div class="invalid-feedback">{{ textError('code') }}</div>
             </div>

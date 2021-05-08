@@ -3,7 +3,7 @@
 @section('title', __('index.loads'))
 
 @section('header')
-    <div class="float-right">
+    <div class="float-end">
         <a class="btn btn-light" href="/loads"><i class="fas fa-wrench"></i></a>
     </div>
 
@@ -34,7 +34,7 @@
                     @endif
 
                     @if (isAdmin('boss'))
-                        <div class="float-right">
+                        <div class="float-end">
                             <a href="/admin/loads/edit/{{ $category->id }}"><i class="fa fa-pencil-alt"></i></a>
                             <a href="/admin/loads/delete/{{ $category->id }}?token={{ $_SESSION['token'] }}" onclick="return confirm('{{ __('loads.confirm_delete_load') }}')"><i class="fa fa-times"></i></a>
                         </div>

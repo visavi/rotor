@@ -13,7 +13,7 @@
 @stop
 
 @section('header')
-    <div class="float-right">
+    <div class="float-end">
         <a class="btn btn-light" href="/guestbook?page={{ $posts->currentPage() }}"><i class="fas fa-wrench"></i></a>
     </div>
 
@@ -43,15 +43,15 @@
                                 <small class="font-italic">{{ $post->user->getStatus() }}</small>
                             @else
                                 @if ($post->guest_name)
-                                    <span class="section-author font-weight-bold" data-login="{{ $post->guest_name }}">{{ $post->guest_name }}</span>
+                                    <span class="section-author fw-bold" data-login="{{ $post->guest_name }}">{{ $post->guest_name }}</span>
                                 @else
-                                    <span class="section-author font-weight-bold" data-login="{{ setting('guestsuser') }}">{{ setting('guestsuser') }}</span>
+                                    <span class="section-author fw-bold" data-login="{{ setting('guestsuser') }}">{{ setting('guestsuser') }}</span>
                                 @endif
                                 <small class="section-date text-muted font-italic">{{ dateFixed($post->created_at) }}</small>
                             @endif
                         </div>
 
-                        <div class="text-right">
+                        <div class="text-end">
                             <a href="/admin/guestbook/reply/{{ $post->id }}?page={{ $posts->currentPage() }}"><i class="fa fa-reply text-muted"></i></a>
                             <a href="/admin/guestbook/edit/{{ $post->id }}?page={{ $posts->currentPage() }}"><i class="fas fa-pencil-alt text-muted"></i></a>
                             <input type="checkbox" name="del[]" value="{{ $post->id }}">
@@ -78,7 +78,7 @@
                 </div>
             @endforeach
 
-            <div class="float-right">
+            <div class="float-end">
                 <button class="btn btn-sm btn-danger">{{ __('main.delete_selected') }}</button>
             </div>
         </form>

@@ -4,14 +4,14 @@
 
 <form method="post">
     @csrf
-    <div class="form-group{{ hasError('sets[fotolist]') }}">
-        <label for="fotolist">{{ __('settings.photos_per_page') }}:</label>
+    <div class="mb-3{{ hasError('sets[fotolist]') }}">
+        <label for="fotolist" class="form-label">{{ __('settings.photos_per_page') }}:</label>
         <input type="number" class="form-control" id="fotolist" name="sets[fotolist]" maxlength="2" value="{{ getInput('sets.fotolist', $settings['fotolist']) }}" required>
         <div class="invalid-feedback">{{ textError('sets[fotolist]') }}</div>
     </div>
 
-    <div class="form-group{{ hasError('sets[photogroup]') }}">
-        <label for="photogroup">{{ __('settings.photos_groups') }}:</label>
+    <div class="mb-3{{ hasError('sets[photogroup]') }}">
+        <label for="photogroup" class="form-label">{{ __('settings.photos_groups') }}:</label>
         <input type="number" class="form-control" id="photogroup" name="sets[photogroup]" maxlength="2" value="{{ getInput('sets.photogroup', $settings['photogroup']) }}" required>
         <div class="invalid-feedback">{{ textError('sets[photogroup]') }}</div>
     </div>

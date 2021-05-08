@@ -29,9 +29,9 @@
                             <small class="section-date text-muted font-italic">{{ dateFixed($data->created_at) }}</small>
                         </div>
 
-                        <div class="text-right">
-                            <a href="/admin/bans/change?user={{ $data->user->login }}" data-toggle="tooltip" title="{{ __('main.change') }}"><i class="fa fa-pencil-alt"></i></a>
-                            <a href="/admin/banhists/view?user={{ $data->user->login }}" data-toggle="tooltip" title="{{ __('admin.banhists.history') }}"><i class="fa fa-history"></i></a>
+                        <div class="text-end">
+                            <a href="/admin/bans/change?user={{ $data->user->login }}" data-bs-toggle="tooltip" title="{{ __('main.change') }}"><i class="fa fa-pencil-alt"></i></a>
+                            <a href="/admin/banhists/view?user={{ $data->user->login }}" data-bs-toggle="tooltip" title="{{ __('admin.banhists.history') }}"><i class="fa fa-history"></i></a>
                             <input type="checkbox" name="del[]" value="{{ $data->id }}">
                         </div>
                     </div>
@@ -47,7 +47,7 @@
                 </div>
             @endforeach
 
-            <div class="float-right">
+            <div class="float-end">
                 <button class="btn btn-sm btn-danger">{{ __('main.delete_selected') }}</button>
             </div>
         </form>
@@ -59,7 +59,7 @@
 
     <div class="section-form mb-3 shadow">
         <form action="/admin/banhists/view" method="get">
-            <label for="user">{{ __('admin.banhists.search_user') }}:</label>
+            <label for="user" class="form-label">{{ __('admin.banhists.search_user') }}:</label>
             <div class="input-group{{ hasError('user') }}">
                 <input type="text" class="form-control" id="user" name="user" maxlength="20" value="{{ getInput('user') }}" placeholder="{{ __('main.user_login') }}" required>
                 <div class="input-group-append">

@@ -6,8 +6,8 @@
 
 @section('header')
     @if (isAdmin())
-        <div class="btn-group float-right">
-            <button type="button" class="btn btn-light dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        <div class="btn-group float-end">
+            <button type="button" class="btn btn-light dropdown-toggle" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                 <i class="fas fa-wrench"></i>
             </button>
             <div class="dropdown-menu">
@@ -51,30 +51,30 @@
 @stop
 
 @section('content')
-    <i class="fas fa-print"></i> <a class="mr-3" href="/topics/print/{{ $topic->id }}">{{ __('main.print') }}</a>
-    <i class="fas fa-rss"></i> <a class="mr-3" href="/topics/rss/{{ $topic->id }}">{{ __('main.rss') }}</a>
+    <i class="fas fa-print"></i> <a class="me-3" href="/topics/print/{{ $topic->id }}">{{ __('main.print') }}</a>
+    <i class="fas fa-rss"></i> <a class="me-3" href="/topics/rss/{{ $topic->id }}">{{ __('main.rss') }}</a>
 
     @if (getUser())
         @if (! $topic->closed && getUser('id') === $topic->user->id && getUser('point') >= setting('editforumpoint'))
-            <i class="fas fa-lock"></i> <a class="mr-3" href="/topics/close/{{ $topic->id }}?token={{ $_SESSION['token'] }}" onclick="return confirm('{{ __('forums.confirm_close_topic') }}')">{{ __('main.close') }}</a>
-            <i class="fas fa-pencil-alt"></i> <a class="mr-3" href="/topics/edit/{{ $topic->id }}">{{ __('main.edit') }}</a>
+            <i class="fas fa-lock"></i> <a class="me-3" href="/topics/close/{{ $topic->id }}?token={{ $_SESSION['token'] }}" onclick="return confirm('{{ __('forums.confirm_close_topic') }}')">{{ __('main.close') }}</a>
+            <i class="fas fa-pencil-alt"></i> <a class="me-3" href="/topics/edit/{{ $topic->id }}">{{ __('main.edit') }}</a>
         @endif
 
         @if ($topic->closed && getUser('id') === $topic->closeUser->id)
-            <i class="fas fa-unlock"></i> <a class="mr-3" href="/topics/open/{{ $topic->id }}?token={{ $_SESSION['token'] }}">{{ __('main.open') }}</a>
+            <i class="fas fa-unlock"></i> <a class="me-3" href="/topics/open/{{ $topic->id }}?token={{ $_SESSION['token'] }}">{{ __('main.open') }}</a>
         @endif
 
         <?php $bookmark = $topic->bookmark_posts ? __('forums.from_bookmarks') : __('forums.to_bookmarks'); ?>
-        <i class="fas fa-bookmark"></i> <a class="mr-3" href="#" onclick="return bookmark(this)" data-tid="{{ $topic->id }}" data-token="{{ $_SESSION['token'] }}" data-from="{{ __('forums.from_bookmarks') }}"  data-to="{{ __('forums.to_bookmarks') }}">{{ $bookmark }}</a>
+        <i class="fas fa-bookmark"></i> <a class="me-3" href="#" onclick="return bookmark(this)" data-tid="{{ $topic->id }}" data-token="{{ $_SESSION['token'] }}" data-from="{{ __('forums.from_bookmarks') }}"  data-to="{{ __('forums.to_bookmarks') }}">{{ $bookmark }}</a>
     @endif
 
-    <div class="float-right" data-toggle="tooltip" title="{{ __('main.views') }}">
+    <div class="float-end" data-bs-toggle="tooltip" title="{{ __('main.views') }}">
         <i class="far fa-eye"></i> {{ $topic->visits }}
     </div>
 
     @if ($topic->curators)
        <div>
-            <span class="badge badge-warning">
+            <span class="badge bg-warning">
                 <i class="fa fa-wrench"></i> {{ __('forums.topic_curators') }}:
                 @foreach ($topic->curators as $key => $curator)
                     <?php $comma = (empty($key)) ? '' : ', '; ?>
@@ -135,7 +135,7 @@
                         <small class="font-italic">{{ $post->user->getStatus() }}</small>
                     </div>
 
-                    <div class="text-right">
+                    <div class="text-end">
                         @if (getUser())
                             @if (getUser('id') !== $post->user_id)
                                 <a href="#" onclick="return postReply(this)" title="{{ __('main.reply') }}"><i class="fa fa-reply text-muted"></i></a>
@@ -202,7 +202,7 @@
     @endif
 
     @if ($topic->isModer)
-            <span class="float-right">
+            <span class="float-end">
                 <button class="btn btn-sm btn-danger">{{ __('main.delete_selected') }}</button>
             </span>
         </form>
@@ -215,8 +215,8 @@
             <div class="section-form mb-3 shadow">
                 <form action="/topics/create/{{ $topic->id }}" method="post" enctype="multipart/form-data">
                     @csrf
-                    <div class="form-group{{ hasError('msg') }}">
-                        <label for="msg">{{ __('forums.post') }}:</label>
+                    <div class="mb-3{{ hasError('msg') }}">
+                        <label for="msg" class="form-label">{{ __('forums.post') }}:</label>
                         <textarea class="form-control markItUp" maxlength="{{ setting('forumtextlength') }}" id="msg" rows="5" name="msg" placeholder="{{ __('forums.post') }}" required>{{ getInput('msg') }}</textarea>
                         <div class="invalid-feedback">{{ textError('msg') }}</div>
                         <span class="js-textarea-counter"></span>
@@ -224,11 +224,11 @@
 
                     <div class="js-attach-form" style="display: none;">
                         <div class="custom-file{{ hasError('files') }}">
-                            <label class="btn btn-sm btn-secondary" for="files">
+                            <label for="files" class="btn btn-sm btn-secondary form-label">
                                 <input type="file" id="files" name="files[]" onchange="$('#upload-file-info').html((this.files.length > 1) ? '{{ __('main.files') }}: ' + this.files.length : this.files[0].name);" hidden multiple>
                                 {{ __('main.attach_files') }}&hellip;
                             </label>
-                            <span class="badge badge-info" id="upload-file-info"></span>
+                            <span class="badge bg-info" id="upload-file-info"></span>
                             <div class="invalid-feedback">{{ textError('files') }}</div>
                         </div>
 
@@ -239,7 +239,7 @@
                         </p>
                     </div>
 
-                    <span class="float-right js-attach-button">
+                    <span class="float-end js-attach-button">
                         <a href="#" onclick="return showAttachForm();">{{ __('main.attach_files') }}</a>
                     </span>
 

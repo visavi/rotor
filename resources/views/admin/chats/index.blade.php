@@ -32,15 +32,15 @@
                     </div>
 
                     @if (getUser() && getUser('id') !== $post->user_id)
-                        <div class="text-right">
-                            <a href="#" onclick="return postReply(this)" data-toggle="tooltip" title="{{ __('main.reply') }}"><i class="fa fa-reply text-muted"></i></a>
-                            <a href="#" onclick="return postQuote(this)" data-toggle="tooltip" title="{{ __('main.quote') }}"><i class="fa fa-quote-right text-muted"></i></a>
+                        <div class="text-end">
+                            <a href="#" onclick="return postReply(this)" data-bs-toggle="tooltip" title="{{ __('main.reply') }}"><i class="fa fa-reply text-muted"></i></a>
+                            <a href="#" onclick="return postQuote(this)" data-bs-toggle="tooltip" title="{{ __('main.quote') }}"><i class="fa fa-quote-right text-muted"></i></a>
                         </div>
                     @endif
 
                     @if ($post->created_at + 600 > SITETIME && getUser() && getUser('id') === $post->user_id)
-                        <div class="text-right">
-                            <a href="/admin/chats/edit/{{ $post->id }}?page={{ $posts->currentPage() }}" data-toggle="tooltip" title="{{ __('main.edit') }}"><i class="fas fa-pencil-alt text-muted"></i></a>
+                        <div class="text-end">
+                            <a href="/admin/chats/edit/{{ $post->id }}?page={{ $posts->currentPage() }}" data-bs-toggle="tooltip" title="{{ __('main.edit') }}"><i class="fas fa-pencil-alt text-muted"></i></a>
                         </div>
                     @endif
                 </div>
@@ -69,8 +69,8 @@
     <div class="section-form mb-3 shadow">
         <form action="/admin/chats" method="post">
             @csrf
-            <div class="form-group{{ hasError('msg') }}">
-                <label for="msg">{{ __('main.message') }}:</label>
+            <div class="mb-3{{ hasError('msg') }}">
+                <label for="msg" class="form-label">{{ __('main.message') }}:</label>
                 <textarea class="form-control markItUp" id="msg" rows="5" name="msg" placeholder="{{ __('main.message') }}" required>{{ getInput('msg') }}</textarea>
                 <div class="invalid-feedback">{{ textError('msg') }}</div>
             </div>

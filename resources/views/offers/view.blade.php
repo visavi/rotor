@@ -3,7 +3,7 @@
 @section('title', $offer->title)
 
 @section('header')
-    <div class="float-right">
+    <div class="float-end">
         @if (getUser())
             @if (in_array($offer->status, ['wait', 'process']) && getUser('id') === $offer->user_id)
                 <a class="btn btn-success" title="{{ __('main.edit') }}" href="/offers/edit/{{ $offer->id }}">{{ __('main.change') }}</a>
@@ -113,8 +113,8 @@
             <div class="section-form mb-3 shadow">
                 <form action="/offers/comments/{{ $offer->id }}" method="post">
                     @csrf
-                    <div class="form-group{{ hasError('msg') }}">
-                        <label for="msg">{{ __('main.message') }}:</label>
+                    <div class="mb-3{{ hasError('msg') }}">
+                        <label for="msg" class="form-label">{{ __('main.message') }}:</label>
                         <textarea class="form-control markItUp" maxlength="{{ setting('comment_length') }}" id="msg" rows="5" name="msg" required>{{ getInput('msg') }}</textarea>
                         <div class="invalid-feedback">{{ textError('msg') }}</div>
                         <span class="js-textarea-counter"></span>

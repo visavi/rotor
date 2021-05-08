@@ -31,7 +31,7 @@
                 {{ __('admin.antimat.total_words') }}: <b>{{ $words->count() }}</b>
 
                 @if (isAdmin('boss'))
-                    <span class="float-right">
+                    <span class="float-end">
                         <i class="fa fa-trash-alt"></i> <a href="/admin/antimat/clear?token={{ $_SESSION['token'] }}" onclick="return confirm('{{ __('admin.antimat.confirm_clear') }}')">{{ __('main.clear') }}</a>
                     </span>
                 @endif

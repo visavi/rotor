@@ -18,8 +18,8 @@
     <div class="section-form mb-3 shadow">
         <form action="/admin/stickers/edit/{{ $category->id }}" method="post">
             @csrf
-            <div class="form-group{{ hasError('name') }}">
-                <label for="name">{{ __('stickers.category') }}:</label>
+            <div class="mb-3{{ hasError('name') }}">
+                <label for="name" class="form-label">{{ __('stickers.category') }}:</label>
                 <input class="form-control" name="name" id="name" maxlength="50" value="{{ getInput('name', $category->name) }}" required>
                 <div class="invalid-feedback">{{ textError('name') }}</div>
             </div>

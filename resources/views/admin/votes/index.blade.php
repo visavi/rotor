@@ -4,7 +4,7 @@
 
 @section('header')
     @if (getUser())
-        <div class="float-right">
+        <div class="float-end">
             <a class="btn btn-success" href="/votes/create">{{ __('main.create') }}</a>
             <a class="btn btn-light" href="/votes?page={{ $votes->currentPage() }}"><i class="fas fa-wrench"></i></a>
         </div>
@@ -31,12 +31,12 @@
                     <i class="fa fa-chart-bar"></i>
                     <a href="/votes/{{ $vote['id'] }}">{{ $vote->title }}</a>
 
-                    <div class="float-right">
-                        <a href="/admin/votes/edit/{{ $vote->id }}" data-toggle="tooltip" title="{{ __('main.edit') }}"><i class="fa fa-pencil-alt text-muted"></i></a>
-                        <a href="/admin/votes/close/{{ $vote->id }}?token={{ $_SESSION['token'] }}" onclick="return confirm('{{ __('votes.confirm_close') }}')" data-toggle="tooltip" title="{{ __('main.close') }}"><i class="fa fa-lock text-muted"></i></a>
+                    <div class="float-end">
+                        <a href="/admin/votes/edit/{{ $vote->id }}" data-bs-toggle="tooltip" title="{{ __('main.edit') }}"><i class="fa fa-pencil-alt text-muted"></i></a>
+                        <a href="/admin/votes/close/{{ $vote->id }}?token={{ $_SESSION['token'] }}" onclick="return confirm('{{ __('votes.confirm_close') }}')" data-bs-toggle="tooltip" title="{{ __('main.close') }}"><i class="fa fa-lock text-muted"></i></a>
 
                         @if (isAdmin('boss'))
-                            <a href="/admin/votes/delete/{{ $vote->id }}?token={{ $_SESSION['token'] }}" onclick="return confirm('{{ __('votes.confirm_delete') }}')" data-toggle="tooltip" title="{{ __('main.delete') }}"><i class="fa fa-times text-muted"></i></a>
+                            <a href="/admin/votes/delete/{{ $vote->id }}?token={{ $_SESSION['token'] }}" onclick="return confirm('{{ __('votes.confirm_delete') }}')" data-bs-toggle="tooltip" title="{{ __('main.delete') }}"><i class="fa fa-times text-muted"></i></a>
                         @endif
                     </div>
                 </div>

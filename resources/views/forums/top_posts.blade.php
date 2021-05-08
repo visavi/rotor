@@ -15,19 +15,19 @@
 @section('content')
     {{ __('main.period') }}:
     <?php $active = ($period === 1) ? 'success' : 'light'; ?>
-    <a href="/forums/top/posts?period=1" class="badge badge-{{ $active }}">{{ __('main.last_day') }}</a>
+    <a href="/forums/top/posts?period=1" class="badge bg-{{ $active }}">{{ __('main.last_day') }}</a>
 
     <?php $active = ($period === 7) ? 'success' : 'light'; ?>
-    <a href="/forums/top/posts?period=7" class="badge badge-{{ $active }}">{{ __('main.last_week') }}</a>
+    <a href="/forums/top/posts?period=7" class="badge bg-{{ $active }}">{{ __('main.last_week') }}</a>
 
     <?php $active = ($period === 30) ? 'success' : 'light'; ?>
-    <a href="/forums/top/posts?period=30" class="badge badge-{{ $active }}">{{ __('main.last_month') }}</a>
+    <a href="/forums/top/posts?period=30" class="badge bg-{{ $active }}">{{ __('main.last_month') }}</a>
 
     <?php $active = ($period === 365) ? 'success' : 'light'; ?>
-    <a href="/forums/top/posts?period=365" class="badge badge-{{ $active }}">{{ __('main.last_year') }}</a>
+    <a href="/forums/top/posts?period=365" class="badge bg-{{ $active }}">{{ __('main.last_year') }}</a>
 
     <?php $active = (empty($period)) ? 'success' : 'light'; ?>
-    <a href="/forums/top/posts" class="badge badge-{{ $active }}">{{ __('main.all_time') }}</a>
+    <a href="/forums/top/posts" class="badge bg-{{ $active }}">{{ __('main.all_time') }}</a>
     <hr>
 
     @if ($posts->isNotEmpty())

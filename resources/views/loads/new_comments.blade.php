@@ -25,8 +25,8 @@
                     <a href="/downs/comment/{{ $data->relate_id }}/{{ $data->id }}">{{ $data->title }}</a> ({{ $data->count_comments }})
 
                     @if (isAdmin())
-                        <div class="float-right">
-                            <a href="#" onclick="return deleteComment(this)" data-rid="{{ $data->relate_id }}" data-id="{{ $data->id }}" data-type="{{ $data->relate->getMorphClass() }}" data-token="{{ $_SESSION['token'] }}" data-toggle="tooltip" title="{{ __('main.delete') }}"><i class="fa fa-times text-muted"></i></a>
+                        <div class="float-end">
+                            <a href="#" onclick="return deleteComment(this)" data-rid="{{ $data->relate_id }}" data-id="{{ $data->id }}" data-type="{{ $data->relate->getMorphClass() }}" data-token="{{ $_SESSION['token'] }}" data-bs-toggle="tooltip" title="{{ __('main.delete') }}"><i class="fa fa-times text-muted"></i></a>
                         </div>
                     @endif
                 </div>

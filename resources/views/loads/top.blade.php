@@ -19,13 +19,13 @@
 @section('content')
     {{ __('main.sort') }}:
     <?php $active = ($order === 'loads') ? 'success' : 'light'; ?>
-    <a href="/loads/top?sort=loads" class="badge badge-{{ $active }}">{{ __('main.downloads') }}</a>
+    <a href="/loads/top?sort=loads" class="badge bg-{{ $active }}">{{ __('main.downloads') }}</a>
 
     <?php $active = ($order === 'rated') ? 'success' : 'light'; ?>
-    <a href="/loads/top?sort=rated" class="badge badge-{{ $active }}">{{ __('main.rating') }}</a>
+    <a href="/loads/top?sort=rated" class="badge bg-{{ $active }}">{{ __('main.rating') }}</a>
 
     <?php $active = ($order === 'count_comments') ? 'success' : 'light'; ?>
-    <a href="/loads/top?sort=comments" class="badge badge-{{ $active }}">{{ __('main.comments') }}</a>
+    <a href="/loads/top?sort=comments" class="badge bg-{{ $active }}">{{ __('main.comments') }}</a>
     <hr>
 
     @if ($downs->isNotEmpty())
@@ -39,7 +39,7 @@
                         </div>
                     </div>
 
-                    <div class="text-right js-rating">
+                    <div class="text-end js-rating">
                         <b>{{ formatNum($data->getCalculatedRating()) }}</b>
                     </div>
                 </div>

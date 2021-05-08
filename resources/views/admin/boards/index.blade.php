@@ -3,7 +3,7 @@
 @section('title', __('index.boards'))
 
 @section('header')
-    <div class="float-right">
+    <div class="float-end">
         <a class="btn btn-light" href="/boards?page={{ $items->currentPage() }}"><i class="fas fa-wrench"></i></a>
     </div>
 
@@ -63,9 +63,9 @@
                                 </div>
                                 <div class="col-md-7">
 
-                                    <div class="float-right">
-                                        <a href="/admin/items/edit/{{ $item->id }}" data-toggle="tooltip" title="{{ __('main.edit') }}"><i class="fa fa-pencil-alt"></i></a>
-                                        <a href="/admin/items/delete/{{ $item->id }}?token={{ $_SESSION['token'] }}" onclick="return confirm('{{ __('boards.confirm_delete') }}')" data-toggle="tooltip" title="{{ __('main.delete') }}"><i class="fa fa-times"></i></a>
+                                    <div class="float-end">
+                                        <a href="/admin/items/edit/{{ $item->id }}" data-bs-toggle="tooltip" title="{{ __('main.edit') }}"><i class="fa fa-pencil-alt"></i></a>
+                                        <a href="/admin/items/delete/{{ $item->id }}?token={{ $_SESSION['token'] }}" onclick="return confirm('{{ __('boards.confirm_delete') }}')" data-bs-toggle="tooltip" title="{{ __('main.delete') }}"><i class="fa fa-times"></i></a>
                                     </div>
 
                                     <h5><a href="/items/{{ $item->id }}">{{ $item->title }}</a></h5>

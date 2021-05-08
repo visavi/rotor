@@ -24,7 +24,7 @@
             <div class="section-form mb-3 shadow">
                 <i class="fas fa-chevron-circle-right"></i> <b>{{ $social->network }}</b> ({{ __('main.added') }}: {{ dateFixed($social->created_at) }})
 
-                <div class="float-right">
+                <div class="float-end">
                     <a href="/socials/delete/{{ $social->id }}?token={{ $_SESSION['token'] }}" onclick="return confirm('{{ __('socials.text_confirm') }}')"><i class="fas fa-times"></i></a>
                 </div>
             </div>

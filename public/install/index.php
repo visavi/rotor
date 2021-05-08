@@ -70,7 +70,7 @@ $keys = [
     <link rel="stylesheet" type="text/css" href="/themes/default/dist/app.css">
 </head>
 
-<body class="bg-light">
+<body class="bg-light text-dark">
 <div class="container border bg-white px-5">
     <div class="py-5 text-center">
         <a href="/"><img class="d-block mx-auto mb-3" src="/assets/img/images/logo_big.png" alt=""></a>
@@ -81,9 +81,9 @@ $keys = [
         <div class="col-12 mb-3">
     <?php if (! $request->has('act')): ?>
         <form method="get" class="row col-3">
-            <label for="language">Выберите язык - Select language:</label>
+            <label for="language" class="form-label">Выберите язык - Select language:</label>
             <div class="input-group mb-3">
-                <select class="form-control" name="lang" id="language">
+                <select class="form-select" name="lang" id="language">
                     <?php foreach ($languages as $language): ?>
                         <?php $selected = ($language === $lang) ? ' selected' : ''; ?>
                         <option value="<?= $language ?>"<?= $selected ?>><?= $language ?></option>
@@ -103,7 +103,7 @@ $keys = [
 
         <div class="row mb-3">
             <div class="col-12">
-                <div class="card bg-light">
+                <div class="card bg-light text-dark">
                     <div class="card-body">
                         <h5 class="card-title"><?= __('install.env') ?></h5>
                         <p class="card-text">
@@ -121,7 +121,7 @@ $keys = [
 
         <div class="row mb-3">
             <div class="col-sm-6">
-                <div class="card bg-light">
+                <div class="card bg-light text-dark">
                     <div class="card-body">
                         <h5 class="card-title"><?= __('install.check_requirements') ?></h5>
                         <p class="card-text">
@@ -174,7 +174,7 @@ $keys = [
                 </div>
             </div>
             <div class="col-sm-6">
-                <div class="card bg-light">
+                <div class="card bg-light text-dark">
                     <div class="card-body">
                         <h5 class="card-title"><?= __('install.chmod_rights') ?></h5>
                         <p class="card-text">
@@ -220,7 +220,7 @@ $keys = [
             <?php endif; ?>
 
             <a class="btn btn-primary" style="font-size: 18px" href="?act=status&amp;lang=<?= $lang ?>"><?= __('install.check_status') ?></a>
-            <span class="text-info font-weight-bold"><?= setting('app_installed') ? __('install.update') : __('install.install') ?></span>
+            <span class="text-info fw-bold"><?= setting('app_installed') ? __('install.update') : __('install.install') ?></span>
         <?php else: ?>
             <div class="alert alert-danger">
                 <?= __('install.requirements_failed') ?><br>
@@ -377,21 +377,21 @@ $keys = [
 
         <div class="section-form mb-3 shadow">
             <form method="post" action="?act=account&amp;lang=<?= $lang ?>">
-                <div class="form-group">
-                    <label for="login"><?= __('users.login') ?> (max20):</label>
+                <div class="mb-3">
+                    <label for="login" class="form-label"><?= __('users.login') ?> (max20):</label>
                     <input type="text" class="form-control" name="login" id="login" maxlength="20" value="<?= $login ?>">
                     <span class="text-muted font-italic"><?= __('users.login_requirements') ?></span>
                 </div>
-                <div class="form-group">
-                    <label for="password"><?= __('users.password') ?> (max20):</label>
+                <div class="mb-3">
+                    <label for="password" class="form-label"><?= __('users.password') ?> (max20):</label>
                     <input class="form-control" name="password" id="password" type="password" maxlength="50">
                 </div>
-                <div class="form-group">
-                    <label for="password2"><?= __('users.confirm_password') ?>:</label>
+                <div class="mb-3">
+                    <label for="password2" class="form-label"><?= __('users.confirm_password') ?>:</label>
                     <input class="form-control" name="password2" id="password2" type="password" maxlength="50">
                 </div>
-                <div class="form-group">
-                    <label for="email"><?= __('users.email') ?>:</label>
+                <div class="mb-3">
+                    <label for="email" class="form-label"><?= __('users.email') ?>:</label>
                     <input class="form-control" name="email" id="email" maxlength="50" value="<?= $email ?>">
                 </div>
 

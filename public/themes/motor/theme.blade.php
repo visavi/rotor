@@ -27,7 +27,7 @@
                     <!-- <a href="/"><span class="logotype">{{ setting('title') }}</span></a> -->
                     <a href="/"><img src="/assets/img/images/logo.png" alt="{{ setting('title') }}"></a>
 
-                    <div class="float-right m-3">
+                    <div class="float-end m-3">
                         <a href="/language/ru{{ returnUrl() }}">RU</a> /
                         <a href="/language/en{{ returnUrl() }}">EN</a>
                     </div>

@@ -3,7 +3,7 @@
 @section('title', $offer->title)
 
 @section('header')
-    <div class="float-right">
+    <div class="float-end">
         <a class="btn btn-light" href="/offers/{{ $offer->id }}"><i class="fas fa-wrench"></i></a>
     </div>
 
@@ -24,10 +24,10 @@
 @section('content')
     <div class="mb-3">
         <div class="section-content">
-            <div class="float-right">
-                <a href="/admin/offers/reply/{{ $offer->id }}" data-toggle="tooltip" title="{{ __('main.reply') }}"><i class="fas fa-reply text-muted"></i></a>
-                <a href="/admin/offers/edit/{{ $offer->id }}" data-toggle="tooltip" title="{{ __('main.edit') }}"><i class="fas fa-pencil-alt text-muted"></i></a>
-                <a href="/admin/offers/delete?del={{ $offer->id }}&amp;token={{ $_SESSION['token'] }}" onclick="return confirm('{{ __('offers.confirm_delete') }}')" data-toggle="tooltip" title="{{ __('main.delete') }}"><i class="fas fa-times text-muted"></i></a>
+            <div class="float-end">
+                <a href="/admin/offers/reply/{{ $offer->id }}" data-bs-toggle="tooltip" title="{{ __('main.reply') }}"><i class="fas fa-reply text-muted"></i></a>
+                <a href="/admin/offers/edit/{{ $offer->id }}" data-bs-toggle="tooltip" title="{{ __('main.edit') }}"><i class="fas fa-pencil-alt text-muted"></i></a>
+                <a href="/admin/offers/delete?del={{ $offer->id }}&amp;token={{ $_SESSION['token'] }}" onclick="return confirm('{{ __('offers.confirm_delete') }}')" data-bs-toggle="tooltip" title="{{ __('main.delete') }}"><i class="fas fa-times text-muted"></i></a>
             </div>
 
             <div class="section-message">

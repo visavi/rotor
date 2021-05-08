@@ -20,19 +20,19 @@
         </div>
     @endif
 
-    <span class="badge badge-info">{{ __('main.type') }}: {{ $notice->type }}</span><br>
+    <span class="badge bg-info">{{ __('main.type') }}: {{ $notice->type }}</span><br>
 
     <div class="section-form mb-3 shadow">
         <form action="/admin/notices/edit/{{ $notice->id }}" method="post">
             @csrf
-            <div class="form-group{{ hasError('name') }}">
-                <label for="name">{{ __('main.title') }}:</label>
+            <div class="mb-3{{ hasError('name') }}">
+                <label for="name" class="form-label">{{ __('main.title') }}:</label>
                 <input type="text" class="form-control" id="name" name="name" maxlength="100" value="{{ getInput('name', $notice->name) }}" required>
                 <div class="invalid-feedback">{{ textError('name') }}</div>
             </div>
 
-            <div class="form-group{{ hasError('text') }}">
-                <label for="text">{{ __('main.text') }}:</label>
+            <div class="mb-3{{ hasError('text') }}">
+                <label for="text" class="form-label">{{ __('main.text') }}:</label>
                 <textarea class="form-control markItUp" id="text" rows="15" name="text" required>{{ getInput('text', $notice->text) }}</textarea>
                 <div class="invalid-feedback">{{ textError('text') }}</div>
             </div>

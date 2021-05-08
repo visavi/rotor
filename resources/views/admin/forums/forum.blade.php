@@ -3,7 +3,7 @@
 @section('title', $forum->title . ' (' . __('main.page_num', ['page' => $topics->currentPage()]) . ')')
 
 @section('header')
-    <div class="float-right">
+    <div class="float-end">
         <a class="btn btn-success" href="/forums/create?fid={{ $forum->id }}">{{ __('forums.create_topic') }}</a>
         <a class="btn btn-light" href="/forums/{{ $forum->id  }}?page={{ $topics->currentPage() }}"><i class="fas fa-wrench"></i></a>
     </div>
@@ -38,7 +38,7 @@
                             <a href="/admin/topics/{{ $topic->id }}">{{ $topic->title }}</a> ({{ $topic->getCountPosts() }})
                         </div>
                     </div>
-                    <div class="text-right">
+                    <div class="text-end">
                         <a href="/admin/topics/edit/{{ $topic->id }}" title="{{ __('main.edit') }}"><i class="fa fa-pencil-alt text-muted"></i></a>
                         <a href="/admin/topics/move/{{ $topic->id }}" title="{{ __('main.move') }}"><i class="fa fa-arrows-alt text-muted"></i></a>
                         <a href="/admin/topics/delete/{{ $topic->id }}?page={{ $topics->currentPage() }}&amp;token={{ $_SESSION['token'] }}" onclick="return confirm('{{ __('forums.confirm_delete_topic') }}')" title="{{ __('main.delete') }}"><i class="fa fa-times text-muted"></i></a>

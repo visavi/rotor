@@ -22,7 +22,7 @@
             <div class="section mb-3 shadow">
                 <div class="section-header">
                     @if ($moder)
-                        <div class="float-right">
+                        <div class="float-end">
                             <a href="/photos/edit/{{ $photo->id }}?page={{ $photos->currentPage() }}"><i class="fa fa-pencil-alt text-muted"></i></a>
                             <a href="/photos/delete/{{ $photo->id }}?page={{ $photos->currentPage() }}&amp;token={{ $_SESSION['token'] }}" onclick="return confirm('{{ __('photos.confirm_delete_photo') }}')"><i class="fa fa-times text-muted"></i></a>
                         </div>

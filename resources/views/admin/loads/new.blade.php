@@ -29,7 +29,7 @@
                         </div>
                     </div>
 
-                    <div class="text-right">
+                    <div class="text-end">
                         <a href="/admin/downs/edit/{{ $data->id }}" title="{{ __('main.edit') }}"><i class="fa fa-pencil-alt"></i></a>
 
                         @if (isAdmin('boss'))

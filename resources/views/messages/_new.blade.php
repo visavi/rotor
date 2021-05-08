@@ -12,7 +12,7 @@
             </div>
 
             <div class="app-notification__cnt">
-                <span class="badge badge-info">{{ $dialogue->cnt }}</span>
+                <span class="badge bg-info">{{ $dialogue->cnt }}</span>
             </div>
         </a>
     </li>

@@ -23,8 +23,8 @@
                 <div class="section-form mb-3 shadow">
                     <form action="/admin/files/create?path={{ $path }}" method="post">
                         @csrf
-                        <div class="form-group{{ hasError('dirname') }}">
-                            <label for="dirname">{{ __('admin.files.directory_name') }}:</label>
+                        <div class="mb-3{{ hasError('dirname') }}">
+                            <label for="dirname" class="form-label">{{ __('admin.files.directory_name') }}:</label>
                             <input type="text" class="form-control" id="dirname" name="dirname" maxlength="30" value="{{ getInput('dirname') }}" required>
                             <div class="invalid-feedback">{{ textError('dirname') }}</div>
                         </div>
@@ -38,8 +38,8 @@
                 <div class="section-form mb-3 shadow">
                     <form action="/admin/files/create?path={{ $path }}" method="post">
                         @csrf
-                        <div class="form-group{{ hasError('filename') }}">
-                            <label for="filename">{{ __('admin.files.file_name') }}:</label>
+                        <div class="mb-3{{ hasError('filename') }}">
+                            <label for="filename" class="form-label">{{ __('admin.files.file_name') }}:</label>
                             <input type="text" class="form-control" id="filename" name="filename" maxlength="30" value="{{ getInput('filename') }}" required>
                             <div class="invalid-feedback">{{ textError('filename') }}</div>
                         </div>

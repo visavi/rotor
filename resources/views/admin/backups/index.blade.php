@@ -3,7 +3,7 @@
 @section('title', __('index.backup'))
 
 @section('header')
-    <div class="float-right">
+    <div class="float-end">
         <a class="btn btn-success" href="/admin/backups/create">{{ __('admin.backup.create_backup') }}</a><br>
     </div>
 
@@ -26,7 +26,7 @@
             <div class="section mb-3 shadow">
                 <i class="fa fa-archive"></i> <b>{{ basename($file) }}</b> ({{ formatFileSize($file) }})
 
-                <div class="float-right">
+                <div class="float-end">
                     <a href="/admin/backups/delete?file={{ basename($file) }}&amp;token={{ $_SESSION['token'] }}"><i class="fas fa-times"></i></a>
                 </div>
             </div>

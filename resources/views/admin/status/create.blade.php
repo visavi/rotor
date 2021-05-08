@@ -17,22 +17,22 @@
     <div class="section-form mb-3 shadow">
         <form method="post">
             @csrf
-            <div class="form-group">
-                <label for="inputFrom">{{ __('main.from') }}:</label>
+            <div class="mb-3">
+                <label for="inputFrom" class="form-label">{{ __('main.from') }}:</label>
                 <input type="text" pattern="\d*" maxlength="10" class="form-control" id="inputFrom" name="topoint" placeholder="От" value="{{ getInput('topoint') }}">
 
-                <label for="inputTo">{{ __('main.to') }}:</label>
+                <label for="inputTo" class="form-label">{{ __('main.to') }}:</label>
                 <input type="text" pattern="\d*" maxlength="10" class="form-control" id="inputTo" name="point" placeholder="До" value="{{ getInput('point') }}">
             </div>
 
-            <div class="form-group{{ hasError('name') }}">
-                <label for="inputName">{{ __('main.status') }}:</label>
+            <div class="mb-3{{ hasError('name') }}">
+                <label for="inputName" class="form-label">{{ __('main.status') }}:</label>
                 <input type="text" maxlength="30" class="form-control" id="inputName" name="name" placeholder="Статус" value="{{ getInput('name') }}" required>
                 <div class="invalid-feedback">{{ textError('name') }}</div>
             </div>
 
-            <div class="form-group{{ hasError('color') }}">
-                <label for="color">{{ __('main.color') }}:</label>
+            <div class="mb-3{{ hasError('color') }}">
+                <label for="color" class="form-label">{{ __('main.color') }}:</label>
 
                 <div class="input-group colorpick">
                     <input class="form-control col-sm-4" id="color" name="color" type="text" maxlength="7" value="{{ getInput('color') }}">

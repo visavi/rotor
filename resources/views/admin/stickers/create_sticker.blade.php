@@ -17,10 +17,10 @@
     <div class="section-form mb-3 shadow">
         <form action="/admin/stickers/sticker/create" method="post" enctype="multipart/form-data">
             @csrf
-            <div class="form-group{{ hasError('category') }}">
-                <label for="inputCategory">{{ __('stickers.category') }}</label>
+            <div class="mb-3{{ hasError('category') }}">
+                <label for="inputCategory" class="form-label">{{ __('stickers.category') }}</label>
 
-                <select class="form-control" id="inputCategory" name="cid">
+                <select class="form-select" id="inputCategory" name="cid">
                     @foreach ($categories as $category)
                         <option value="{{ $category->id }}"{{ ($cid === $category->id) ? ' selected' : '' }}>{{ $category->name }}</option>
                     @endforeach
@@ -28,8 +28,8 @@
                 <div class="invalid-feedback">{{ textError('category') }}</div>
             </div>
 
-            <div class="form-group{{ hasError('code') }}">
-                <label for="code">{{ __('stickers.sticker_code') }}:</label>
+            <div class="mb-3{{ hasError('code') }}">
+                <label for="code" class="form-label">{{ __('stickers.sticker_code') }}:</label>
                 <input type="text" class="form-control" id="code" name="code" maxlength="20" value="{{ getInput('code') }}" required>
                 <div class="invalid-feedback">{{ textError('code') }}</div>
             </div>
@@ -39,7 +39,7 @@
                     <input id="sticker" type="file" name="sticker" onchange="$('#upload-file-info').html(this.files[0].name);" hidden>
                     {{ __('main.attach_image') }}&hellip;
                 </label>
-                <span class="badge badge-info" id="upload-file-info"></span>
+                <span class="badge bg-info" id="upload-file-info"></span>
                 <div class="invalid-feedback">{{ textError('sticker') }}</div>
             </div>
 

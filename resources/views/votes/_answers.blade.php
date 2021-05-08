@@ -1,12 +1,12 @@
-<div class="form-group{{ hasError('answers') }}">
+<div class="mb-3{{ hasError('answers') }}">
     <div class="js-answer-list">
         @php
             $answers = array_diff((array) getInput('answers', $vote->getAnswers ?? []), ['']);
             $answers = array_pad(array_unique($answers), 2, '');
         @endphp
 
-        <label for="answers0">{{ __('votes.options') }}:</label>
-        <a class="js-answer-add" href="#" data-toggle="tooltip" title="{{ __('main.add') }}"><i class="fas fa-plus-square"></i></a>
+        <label for="answers0" class="form-label">{{ __('votes.options') }}:</label>
+        <a class="js-answer-add" href="#" data-bs-toggle="tooltip" title="{{ __('main.add') }}"><i class="fas fa-plus-square"></i></a>
 
         @foreach ($answers as $key => $answer)
             @if ($loop->index < max(2, count($vote->getAnswers ?? [])))

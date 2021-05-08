@@ -27,15 +27,15 @@
     <div class="section-form mb-3 shadow">
         <form action="/topics/edit/{{ $topic->id }}" method="post">
             @csrf
-            <div class="form-group{{ hasError('title') }}">
-                <label for="inputTitle">{{ __('forums.topic') }}:</label>
+            <div class="mb-3{{ hasError('title') }}">
+                <label for="inputTitle" class="form-label">{{ __('forums.topic') }}:</label>
                 <input name="title" type="text" class="form-control" id="inputTitle"  maxlength="50" placeholder="{{ __('forums.topic') }}" value="{{ getInput('title', $topic->title) }}" required>
                 <div class="invalid-feedback">{{ textError('title') }}</div>
             </div>
 
             @if ($post)
-                <div class="form-group{{ hasError('msg') }}">
-                    <label for="msg">{{ __('forums.post') }}:</label>
+                <div class="mb-3{{ hasError('msg') }}">
+                    <label for="msg" class="form-label">{{ __('forums.post') }}:</label>
                     <textarea class="form-control markItUp" maxlength="{{ setting('forumtextlength') }}" id="msg" rows="5" name="msg" required>{{ getInput('msg', $post->text) }}</textarea>
                     <div class="invalid-feedback">{{ textError('msg') }}</div>
                     <span class="js-textarea-counter"></span>
@@ -43,8 +43,8 @@
             @endif
 
             @if ($vote)
-                <div class="form-group{{ hasError('question') }}">
-                    <label for="question">{{ __('forums.question') }}:</label>
+                <div class="mb-3{{ hasError('question') }}">
+                    <label for="question" class="form-label">{{ __('forums.question') }}:</label>
                     <input class="form-control" name="question" id="question" maxlength="100" value="{{ getInput('question', $vote->title) }}" required>
                     <div class="invalid-feedback">{{ textError('question') }}</div>
                 </div>

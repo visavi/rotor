@@ -4,7 +4,7 @@
 
 @section('header')
     @if (getUser())
-        <div class="float-right">
+        <div class="float-end">
             <a class="btn btn-success" href="/blogs/create">{{ __('blogs.add') }}</a>
 
             @if (isAdmin())

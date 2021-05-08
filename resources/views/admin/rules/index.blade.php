@@ -3,7 +3,7 @@
 @section('title', __('index.site_rules'))
 
 @section('header')
-    <div class="float-right">
+    <div class="float-end">
         <a class="btn btn-success" href="/admin/rules/edit">Редактировать</a>
     </div>
 

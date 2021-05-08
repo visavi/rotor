@@ -14,14 +14,14 @@
 
 @section('content')
     <div class="mb-3">
-        <span class="badge badge-success">PHP {{ parseVersion(PHP_VERSION) }}</span>
+        <span class="badge bg-success">PHP {{ parseVersion(PHP_VERSION) }}</span>
 
         @if (zend_version())
-            <span class="badge badge-success">Zend {{ parseVersion(zend_version()) }}</span>
+            <span class="badge bg-success">Zend {{ parseVersion(zend_version()) }}</span>
         @endif
 
         @if ($gdInfo)
-            <span class="badge badge-success">GD {{ $gdInfo }}</span>
+            <span class="badge bg-success">GD {{ $gdInfo }}</span>
         @endif
     </div>
 

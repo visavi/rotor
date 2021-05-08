@@ -3,7 +3,7 @@
 @section('title', __('index.paid_adverts'))
 
 @section('header')
-    <div class="float-right">
+    <div class="float-end">
         <a class="btn btn-success" href="/admin/paid-adverts/create">{{ __('main.create') }}</a>
     </div>
 
@@ -24,7 +24,7 @@
     <div class="mb-3">
         @foreach ($places as $placeName)
             <?php $active = ($place === $placeName) ? 'primary' : 'light'; ?>
-            <a class="btn btn-{{ $active }} btn-sm" href="/admin/paid-adverts?place={{ $placeName }}">{{ __('admin.paid_adverts.' . $placeName) }} <span class="badge badge-light">{{ $totals[$placeName] }}</span></a>
+            <a class="btn btn-{{ $active }} btn-sm" href="/admin/paid-adverts?place={{ $placeName }}">{{ __('admin.paid_adverts.' . $placeName) }} <span class="badge bg-light text-dark">{{ $totals[$placeName] }}</span></a>
         @endforeach
     </div>
 
@@ -35,13 +35,13 @@
                     <i class="fas fa-globe-americas"></i>
                     <a href="{{ $data->site }}">{{ $data->names[0] }}</a>
                     @if (count($data->names) > 1)
-                        <span class="badge badge-info">{{ count($data->names) }}</span>
+                        <span class="badge bg-info">{{ count($data->names) }}</span>
                     @endif
 
                     @if ($data->deleted_at < SITETIME)
-                        <span class="badge badge-danger">{{ __('admin.paid_adverts.expired') }}</span>
+                        <span class="badge bg-danger">{{ __('admin.paid_adverts.expired') }}</span>
                     @endif
-                    <div class="float-right">
+                    <div class="float-end">
                         <a href="/admin/paid-adverts/edit/{{ $data->id }}"><i class="fas fa-pencil-alt text-muted"></i></a>
                         <a href="/admin/paid-adverts/delete/{{ $data->id }}?token={{ $_SESSION['token'] }}" onclick="return confirm('{{ __('admin.paid_adverts.confirm_delete_advert') }}')"><i class="fa fa-times text-muted"></i></a>
                     </div>

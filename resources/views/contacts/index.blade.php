@@ -31,10 +31,10 @@
                             <small class="font-italic">{{ $contact->contactor->getStatus() }}</small>
                         </div>
 
-                        <div class="text-right">
-                            <a href="/messages/talk/{{ $contact->contactor->login }}" data-toggle="tooltip" title="{{ __('main.write') }}"><i class="fa fa-reply text-muted"></i></a>
-                            <a href="/contacts/note/{{ $contact->id }}" data-toggle="tooltip" title="{{ __('main.note') }}"><i class="fa fa-sticky-note text-muted"></i></a>
-                            <a href="/transfers?user={{ $contact->contactor->login }}" data-toggle="tooltip" title="{{ __('contacts.transfer') }}"><i class="fas fa-coins text-muted"></i></a>
+                        <div class="text-end">
+                            <a href="/messages/talk/{{ $contact->contactor->login }}" data-bs-toggle="tooltip" title="{{ __('main.write') }}"><i class="fa fa-reply text-muted"></i></a>
+                            <a href="/contacts/note/{{ $contact->id }}" data-bs-toggle="tooltip" title="{{ __('main.note') }}"><i class="fa fa-sticky-note text-muted"></i></a>
+                            <a href="/transfers?user={{ $contact->contactor->login }}" data-bs-toggle="tooltip" title="{{ __('contacts.transfer') }}"><i class="fas fa-coins text-muted"></i></a>
                             <input type="checkbox" name="del[]" value="{{ $contact->id }}">
                         </div>
                     </div>
@@ -50,7 +50,7 @@
                 </div>
             @endforeach
 
-            <div class="float-right">
+            <div class="float-end">
                 <button class="btn btn-sm btn-danger">{{ __('main.delete_selected') }}</button>
             </div>
         </form>

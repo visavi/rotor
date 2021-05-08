@@ -37,37 +37,37 @@
         <div class="section-form mb-3 shadow">
             <form method="post" action="/admin/bans/edit?user={{ $user->login }}">
                 @csrf
-                <div class="form-group{{ hasError('time') }}">
-                    <label for="time">{{ __('admin.bans.time_ban') }}:</label>
+                <div class="mb-3{{ hasError('time') }}">
+                    <label for="time" class="form-label">{{ __('admin.bans.time_ban') }}:</label>
                     <input class="form-control" name="time" id="time" value="{{ getInput('time') }}" required>
                     <div class="invalid-feedback">{{ textError('time') }}</div>
                 </div>
 
                 <?php $inputType = getInput('type'); ?>
-                <div class="form-group{{ hasError('type') }}">
-                    <div class="custom-control custom-radio">
-                        <input class="custom-control-input" type="radio" id="inputTypeMinutes" name="type" value="minutes"{{ $inputType === 'minutes' ? ' checked' : '' }}>
-                        <label class="custom-control-label" for="inputTypeMinutes">{{ __('main.minutes') }}</label>
+                <div class="mb-3{{ hasError('type') }}">
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" id="inputTypeMinutes" name="type" value="minutes"{{ $inputType === 'minutes' ? ' checked' : '' }}>
+                        <label class="form-check-label" for="inputTypeMinutes">{{ __('main.minutes') }}</label>
                     </div>
-                    <div class="custom-control custom-radio">
-                        <input class="custom-control-input" type="radio" id="inputTypeHours" name="type" value="hours"{{ $inputType === 'hours' ? ' checked' : '' }}>
-                        <label class="custom-control-label" for="inputTypeHours">{{ __('main.hours') }}</label>
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" id="inputTypeHours" name="type" value="hours"{{ $inputType === 'hours' ? ' checked' : '' }}>
+                        <label class="form-check-label" for="inputTypeHours">{{ __('main.hours') }}</label>
                     </div>
-                    <div class="custom-control custom-radio">
-                        <input class="custom-control-input" type="radio" id="inputTypeDays" name="type" value="days"{{ $inputType === 'days' ? ' checked' : '' }}>
-                        <label class="custom-control-label" for="inputTypeDays">{{ __('main.days') }}</label>
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" id="inputTypeDays" name="type" value="days"{{ $inputType === 'days' ? ' checked' : '' }}>
+                        <label class="form-check-label" for="inputTypeDays">{{ __('main.days') }}</label>
                     </div>
                     <div class="invalid-feedback">{{ textError('type') }}</div>
                 </div>
 
-                <div class="form-group{{ hasError('reason') }}">
-                    <label for="reason">{{ __('users.reason_ban') }}:</label>
+                <div class="mb-3{{ hasError('reason') }}">
+                    <label for="reason" class="form-label">{{ __('users.reason_ban') }}:</label>
                     <textarea class="form-control markItUp" id="reason" rows="5" name="reason" required>{{ getInput('reason') }}</textarea>
                     <div class="invalid-feedback">{{ textError('reason') }}</div>
                 </div>
 
-                <div class="form-group{{ hasError('note') }}">
-                    <label for="notice">{{ __('main.note') }}:</label>
+                <div class="mb-3{{ hasError('note') }}">
+                    <label for="notice" class="form-label">{{ __('main.note') }}:</label>
                     <textarea class="form-control markItUp" id="notice" rows="5" name="notice">{{ getInput('notice', $user->note->text) }}</textarea>
                     <div class="invalid-feedback">{{ textError('notice') }}</div>
                 </div>

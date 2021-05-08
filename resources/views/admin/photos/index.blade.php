@@ -3,7 +3,7 @@
 @section('title', __('index.photos'))
 
 @section('header')
-    <div class="float-right">
+    <div class="float-end">
         <a class="btn btn-success" href="/photos/create">{{ __('main.add') }}</a>
         <a class="btn btn-light" href="/photos?page={{ $photos->currentPage() }}"><i class="fas fa-wrench"></i></a>
     </div>
@@ -34,9 +34,9 @@
                         </div>
                     </div>
 
-                    <div class="text-right">
-                        <a href="/admin/photos/edit/{{ $photo->id }}?page={{ $photos->currentPage() }}" data-toggle="tooltip" title="{{ __('main.edit') }}"><i class="fas fa-pencil-alt text-muted"></i></a>
-                        <a href="/admin/photos/delete/{{ $photo->id }}?page={{ $photos->currentPage() }}&amp;token={{ $_SESSION['token'] }}" onclick="return confirm('{{ __('photos.confirm_delete_photo') }}')" data-toggle="tooltip" title="{{ __('main.delete') }}"><i class="fas fa-times text-muted"></i></a>
+                    <div class="text-end">
+                        <a href="/admin/photos/edit/{{ $photo->id }}?page={{ $photos->currentPage() }}" data-bs-toggle="tooltip" title="{{ __('main.edit') }}"><i class="fas fa-pencil-alt text-muted"></i></a>
+                        <a href="/admin/photos/delete/{{ $photo->id }}?page={{ $photos->currentPage() }}&amp;token={{ $_SESSION['token'] }}" onclick="return confirm('{{ __('photos.confirm_delete_photo') }}')" data-bs-toggle="tooltip" title="{{ __('main.delete') }}"><i class="fas fa-times text-muted"></i></a>
                     </div>
                 </div>
 

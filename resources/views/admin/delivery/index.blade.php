@@ -16,8 +16,8 @@
     <div class="section-form mb-3 shadow">
         <form action="/admin/delivery" method="post">
             @csrf
-            <div class="form-group{{ hasError('msg') }}">
-                <label for="msg">{{ __('main.message') }}:</label>
+            <div class="mb-3{{ hasError('msg') }}">
+                <label for="msg" class="form-label">{{ __('main.message') }}:</label>
                 <textarea rows="5" class="form-control markItUp" id="msg" name="msg" required>{{ getInput('msg') }}</textarea>
                 <div class="invalid-feedback">{{ textError('msg') }}</div>
             </div>
@@ -25,21 +25,21 @@
             {{ __('main.send') }}:<br>
             <?php $inputType = (int) getInput('type', 1); ?>
 
-            <div class="custom-control custom-radio">
-                <input class="custom-control-input" type="radio" id="inputType1" name="type" value="1"{{ $inputType === 1 ? ' checked' : '' }}>
-                <label class="custom-control-label" for="inputType1">{{ __('admin.delivery.online') }}</label>
+            <div class="form-check">
+                <input class="form-check-input" type="radio" id="inputType1" name="type" value="1"{{ $inputType === 1 ? ' checked' : '' }}>
+                <label class="form-check-label" for="inputType1">{{ __('admin.delivery.online') }}</label>
             </div>
-            <div class="custom-control custom-radio">
-                <input class="custom-control-input" type="radio" id="inputType2" name="type" value="2"{{ $inputType === 2 ? ' checked' : '' }}>
-                <label class="custom-control-label" for="inputType2">{{ __('admin.delivery.active') }}</label>
+            <div class="form-check">
+                <input class="form-check-input" type="radio" id="inputType2" name="type" value="2"{{ $inputType === 2 ? ' checked' : '' }}>
+                <label class="form-check-label" for="inputType2">{{ __('admin.delivery.active') }}</label>
             </div>
-            <div class="custom-control custom-radio">
-                <input class="custom-control-input" type="radio" id="inputType3" name="type" value="3"{{ $inputType === 3 ? ' checked' : '' }}>
-                <label class="custom-control-label" for="inputType3">{{ __('admin.delivery.admins') }}</label>
+            <div class="form-check">
+                <input class="form-check-input" type="radio" id="inputType3" name="type" value="3"{{ $inputType === 3 ? ' checked' : '' }}>
+                <label class="form-check-label" for="inputType3">{{ __('admin.delivery.admins') }}</label>
             </div>
-            <div class="custom-control custom-radio">
-                <input class="custom-control-input" type="radio" id="inputType4" name="type" value="4"{{ $inputType === 4 ? ' checked' : '' }}>
-                <label class="custom-control-label" for="inputType4">{{ __('admin.delivery.users') }}</label>
+            <div class="form-check">
+                <input class="form-check-input" type="radio" id="inputType4" name="type" value="4"{{ $inputType === 4 ? ' checked' : '' }}>
+                <label class="form-check-label" for="inputType4">{{ __('admin.delivery.users') }}</label>
             </div>
 
             <button class="btn btn-primary">{{ __('main.send') }}</button>

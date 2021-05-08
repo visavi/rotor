@@ -28,7 +28,7 @@
                         <small class="font-italic">{{ $data->user->getStatus() }}</small>
                     </div>
 
-                    <div class="text-right">
+                    <div class="text-end">
                         <a href="/admin/transfers/view?user={{ $data->user->login }}">{{ __('transfers.all_transfers') }}</a>
                     </div>
                 </div>

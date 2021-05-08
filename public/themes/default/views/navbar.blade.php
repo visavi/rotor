@@ -3,7 +3,7 @@
     <a class="app-header__logo" href="/">{{ setting('title') }}</a>
 
     <!-- Sidebar toggle button-->
-    <a class="app-icon icon-toggle" href="#" data-toggle="sidebar" aria-label="Show Sidebar"></a>
+    <a class="app-icon icon-toggle" href="#" data-bs-toggle="sidebar" aria-label="Show Sidebar"></a>
     @if (! getUser())
         <a class="app-icon icon-login" href="/login" aria-label="{{ __('index.login') }}"></a>
     @endif
@@ -23,14 +23,14 @@
                 @if (statsSpam())
                     <a class="app-nav__item" href="/admin/spam" aria-label="{{ __('index.complains') }}">
                         <i class="far fa-bell fa-lg"></i>
-                        <span class="badge badge-notify">{{ statsSpam() }}</span>
+                        <span class="badge bg-notify">{{ statsSpam() }}</span>
                     </a>
                 @endif
 
                 @if ($user->newchat < statsNewChat())
                     <a class="app-nav__item" href="/admin/chats" aria-label="{{ __('index.chat') }}">
                         <i class="far fa-bell fa-lg"></i>
-                        <span class="badge badge-notify">!</span>
+                        <span class="badge bg-notify">!</span>
                     </a>
                 @endif
             @endif
@@ -38,18 +38,18 @@
             @if ($user->newwall)
                 <a class="app-nav__item" href="/walls/{{ $user->login }}" aria-label="{{ __('index.wall_post') }}">
                     <i class="far fa-comments fa-lg"></i>
-                    <span class="badge badge-notify">{{ $user->newwall }}</span>
+                    <span class="badge bg-notify">{{ $user->newwall }}</span>
                 </a>
             @endif
 
             <li class="dropdown js-messages-block">
-                <a class="app-nav__item" href="#" data-toggle="dropdown" aria-label="Show notifications">
+                <a class="app-nav__item" href="#" data-bs-toggle="dropdown" aria-label="Show notifications">
                     <i class="far fa-envelope fa-lg"></i>
                     @if ($user->newprivat)
-                        <span class="badge badge-notify">{{ $user->newprivat }}</span>
+                        <span class="badge bg-notify">{{ $user->newprivat }}</span>
                     @endif
                 </a>
-                <ul class="app-notification dropdown-menu dropdown-menu-right">
+                <ul class="app-notification dropdown-menu dropdown-menu-end">
                     <li class="app-notification__title">{{ __('messages.new_messages') }}: {{ $user->newprivat }}</li>
                     <div class="app-notification__content js-messages"></div>
                     <li class="app-notification__footer"><a href="/messages">{{ __('messages.all_messages') }}</a></li>
@@ -57,10 +57,10 @@
             </li>
             <!-- User Menu-->
             <li class="dropdown">
-                <a class="app-nav__item" href="#" data-toggle="dropdown" aria-label="Open Profile Menu">
+                <a class="app-nav__item" href="#" data-bs-toggle="dropdown" aria-label="Open Profile Menu">
                     <i class="far fa-user fa-lg"></i>
                 </a>
-                <ul class="app-notification dropdown-menu dropdown-menu-right">
+                <ul class="app-notification dropdown-menu dropdown-menu-end">
                     <li><a class="dropdown-item" href="/users/{{ getUser('login') }}"><i class="fas fa-user fa-lg"></i> {{ __('index.my_account') }}</a></li>
                     <li><a class="dropdown-item" href="/profile"><i class="fas fa-user-edit fa-lg"></i> {{ __('index.my_profile') }}</a></li>
                     <li><a class="dropdown-item" href="/accounts"><i class="fas fa-user-cog fa-lg"></i> {{ __('index.my_details') }}</a></li>

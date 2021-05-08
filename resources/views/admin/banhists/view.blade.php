@@ -29,7 +29,7 @@
                             {{ $data->user->getProfile() }}
                             <small class="section-date text-muted font-italic">{{ dateFixed($data->created_at) }}</small>
                         </div>
-                        <div class="text-right">
+                        <div class="text-end">
                             <input type="checkbox" name="del[]" value="{{ $data->id }}">
                         </div>
                     </div>
@@ -45,7 +45,7 @@
                 </div>
             @endforeach
 
-            <div class="float-right">
+            <div class="float-end">
                 <button class="btn btn-sm btn-danger">{{ __('main.delete_selected') }}</button>
             </div>
         </form>

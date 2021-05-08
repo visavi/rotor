@@ -3,7 +3,7 @@
 @section('title', __('index.offers'))
 
 @section('header')
-    <div class="float-right">
+    <div class="float-end">
         @if (getUser())
             <a class="btn btn-success" href="/offers/create?type={{ $type }}">{{ __('main.add') }}</a>
 
@@ -28,25 +28,25 @@
 @section('content')
     <div class="mb-3">
         <?php $active = ($type === 'offer') ? 'primary' : 'light'; ?>
-        <a class="btn btn-{{ $active }} btn-sm" href="/offers/offer?sort={{ $sort }}">{{ __('offers.offers') }} <span class="badge badge-light">{{ $offerCount }}</span></a>
+        <a class="btn btn-{{ $active }} btn-sm" href="/offers/offer?sort={{ $sort }}">{{ __('offers.offers') }} <span class="badge bg-light text-dark">{{ $offerCount }}</span></a>
 
         <?php $active = ($type === 'issue') ? 'primary' : 'light'; ?>
-        <a class="btn btn-{{ $active }} btn-sm" href="/offers/issue?sort={{ $sort }}">{{ __('offers.problems') }} <span class="badge badge-light">{{ $issueCount }}</span></a>
+        <a class="btn btn-{{ $active }} btn-sm" href="/offers/issue?sort={{ $sort }}">{{ __('offers.problems') }} <span class="badge bg-light text-dark">{{ $issueCount }}</span></a>
     </div>
 
     @if ($offers->isNotEmpty())
         {{ __('main.sort') }}:
         <?php $active = ($order === 'rating') ? 'success' : 'light'; ?>
-        <a href="/offers/{{ $type }}?sort=rating" class="badge badge-{{ $active }}">{{ __('main.votes') }}</a>
+        <a href="/offers/{{ $type }}?sort=rating" class="badge bg-{{ $active }}">{{ __('main.votes') }}</a>
 
         <?php $active = ($order === 'created_at') ? 'success' : 'light'; ?>
-        <a href="/offers/{{ $type }}?sort=time" class="badge badge-{{ $active }}">{{ __('main.date') }}</a>
+        <a href="/offers/{{ $type }}?sort=time" class="badge bg-{{ $active }}">{{ __('main.date') }}</a>
 
         <?php $active = ($order === 'status') ? 'success' : 'light'; ?>
-        <a href="/offers/{{ $type }}?sort=status" class="badge badge-{{ $active }}">{{ __('main.status') }}</a>
+        <a href="/offers/{{ $type }}?sort=status" class="badge bg-{{ $active }}">{{ __('main.status') }}</a>
 
         <?php $active = ($order === 'count_comments') ? 'success' : 'light'; ?>
-        <a href="/offers/{{ $type }}?sort=comments" class="badge badge-{{ $active }}">{{ __('main.comments') }}</a>
+        <a href="/offers/{{ $type }}?sort=comments" class="badge bg-{{ $active }}">{{ __('main.comments') }}</a>
         <hr>
 
         @foreach ($offers as $data)

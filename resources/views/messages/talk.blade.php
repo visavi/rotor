@@ -35,7 +35,7 @@
                         {{ $author->getProfile() }}
 
                         @unless ($data->reading)
-                            <span class="badge badge-info">{{ __('messages.new') }}</span>
+                            <span class="badge bg-info">{{ __('messages.new') }}</span>
                         @endunless
                     </div>
 
@@ -81,8 +81,8 @@
         <div class="section-form mb-3 shadow">
             <form action="/messages/send?user={{ $user->login }}" method="post">
                 @csrf
-                <div class="form-group{{ hasError('msg') }}">
-                    <label for="msg">{{ __('main.message') }}:</label>
+                <div class="mb-3{{ hasError('msg') }}">
+                    <label for="msg" class="form-label">{{ __('main.message') }}:</label>
                     <textarea class="form-control markItUp" maxlength="{{ setting('comment_length') }}" id="msg" rows="5" name="msg" placeholder="{{ __('main.message') }}" required>{{ getInput('msg') }}</textarea>
                     <div class="invalid-feedback">{{ textError('msg') }}</div>
                     <span class="js-textarea-counter"></span>

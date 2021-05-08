@@ -26,7 +26,7 @@
                     <input id="inputPhoto" type="file" name="photo" onchange="$('#upload-file-info').html(this.files[0].name);" hidden>
                     {{ __('main.attach_image') }}&hellip;
                 </label>
-                <span class="badge badge-info" id="upload-file-info"></span>
+                <span class="badge bg-info" id="upload-file-info"></span>
                 <div class="invalid-feedback">{{ textError('photo') }}</div>
             </div>
             <button class="btn btn-primary">{{ __('main.add') }}</button>

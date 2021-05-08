@@ -18,23 +18,23 @@
             <div class="section mb-3 shadow">
                 <div class="section-title">
 
-                    <i class="fas fa-plug"></i> <a class="font-weight-bold" href="/admin/modules/module?module={{ $name }}">{{ $moduleConfig['name'] }}</a> ({{ $name }})
+                    <i class="fas fa-plug"></i> <a class="fw-bold" href="/admin/modules/module?module={{ $name }}">{{ $moduleConfig['name'] }}</a> ({{ $name }})
                 </div>
 
                 <div class="section-content">
                     @if (isset($moduleInstall[$name]))
-                        <span class="badge badge-success">{{ __('main.installed') }}</span>
+                        <span class="badge bg-success">{{ __('main.installed') }}</span>
 
                         @if ($moduleInstall[$name]->disabled)
-                            <span class="badge badge-warning">{{ __('main.disabled') }}</span>
+                            <span class="badge bg-warning">{{ __('main.disabled') }}</span>
                         @endif
 
                         @if (version_compare($moduleConfig['version'], $moduleInstall[$name]->version, '>'))
-                            <span class="badge badge-info">{{ __('main.update_available') }} (v.{{ $moduleConfig['version'] }})</span>
+                            <span class="badge bg-info">{{ __('main.update_available') }} (v.{{ $moduleConfig['version'] }})</span>
                         @endif
                         <br>
                     @else
-                        <span class="badge badge-danger">{{ __('main.not_installed') }}</span><br>
+                        <span class="badge bg-danger">{{ __('main.not_installed') }}</span><br>
                     @endif
                     {{ $moduleConfig['description'] }}<br>
                     {{ __('main.version') }}: {{ $moduleConfig['version'] }}<br>

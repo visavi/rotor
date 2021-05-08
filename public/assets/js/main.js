@@ -33,15 +33,15 @@ $(function () {
 
     $('.markItUpHtml').markItUp(myHtmlSettings);
 
-    $('[data-toggle="tooltip"]').tooltip();
-    $('[data-toggle="popover"]').popover();
+    $('[data-bs-toggle="tooltip"]').tooltip();
+    $('[data-bs-toggle="popover"]').popover();
 
     // Hide popover poppers anywhere
     $('body').on('click', function (e) {
         //did not click a popover toggle or popover
-        if ($(e.target).data('toggle') !== 'popover'
+        if ($(e.target).data('bs-toggle') !== 'popover'
             && $(e.target).parents('.popover.in').length === 0) {
-            $('[data-toggle="popover"]').popover('hide');
+            $('[data-bs-toggle="popover"]').popover('hide');
         }
     });
 
@@ -632,7 +632,7 @@ getNewMessages = function () {
 var checkTimeout;
 /* Проверка логина */
 checkLogin = function (el) {
-    var message = $(el).closest('.form-group').find('.invalid-feedback');
+    var message = $(el).closest('.mb-3').find('.invalid-feedback');
 
     if ($(el).val().length < 3) {
         $(el).removeClass('is-valid is-invalid');

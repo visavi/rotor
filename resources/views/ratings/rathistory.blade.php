@@ -19,8 +19,8 @@
 
 @section('content')
     <div class="mb-3">
-        <a href="/ratings/{{ $user->login }}/received" class="badge badge-success">{{ __('ratings.votes_received') }}</a>
-        <a href="/ratings/{{ $user->login }}/gave" class="badge badge-light">{{ __('ratings.votes_gave') }}</a>
+        <a href="/ratings/{{ $user->login }}/received" class="badge bg-success">{{ __('ratings.votes_received') }}</a>
+        <a href="/ratings/{{ $user->login }}/gave" class="badge bg-light text-dark">{{ __('ratings.votes_gave') }}</a>
     </div>
 
     @if ($ratings->isNotEmpty())
@@ -38,9 +38,9 @@
                         {{ dateFixed($data->created_at) }}
                     </small>
 
-                    <div class="float-right">
+                    <div class="float-end">
                         @if (isAdmin())
-                            <a href="#" onclick="return deleteRating(this)" data-id="{{ $data->id }}" data-token="{{ $_SESSION['token'] }}" data-toggle="tooltip" title="{{ __('main.delete') }}"><i class="fa fa-times"></i></a>
+                            <a href="#" onclick="return deleteRating(this)" data-id="{{ $data->id }}" data-token="{{ $_SESSION['token'] }}" data-bs-toggle="tooltip" title="{{ __('main.delete') }}"><i class="fa fa-times"></i></a>
                         @endif
                     </div>
                 </div>

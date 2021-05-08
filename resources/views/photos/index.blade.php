@@ -3,7 +3,7 @@
 @section('title', __('index.photos') . ' (' . __('main.page_num', ['page' => $photos->currentPage()]) .')')
 
 @section('header')
-    <div class="float-right">
+    <div class="float-end">
         @if (getUser())
             <a class="btn btn-success" href="/photos/create">{{ __('main.add') }}</a>
 
@@ -49,7 +49,7 @@
                         </div>
                     </div>
 
-                    <div class="text-right js-rating">
+                    <div class="text-end js-rating">
                         @if (getUser() && getUser('id') !== $photo->user_id)
                             <a class="post-rating-down<?= $photo->vote === '-' ? ' active' : '' ?>" href="#" onclick="return changeRating(this);" data-id="{{ $photo->id }}" data-type="{{ $photo->getMorphClass() }}" data-vote="-" data-token="{{ $_SESSION['token'] }}"><i class="fa fa-thumbs-down"></i></a>
                         @endif

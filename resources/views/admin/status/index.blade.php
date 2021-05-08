@@ -3,7 +3,7 @@
 @section('title', __('index.user_statuses'))
 
 @section('header')
-    <div class="float-right">
+    <div class="float-end">
         <a class="btn btn-success" href="/admin/status/create">{{ __('main.create') }}</a>
     </div>
 
@@ -37,9 +37,9 @@
 
                         <small>({{ $status->topoint }} - {{ $status->point }})</small>
 
-                        <div class="float-right">
-                            <a data-toggle="tooltip" title="{{ __('main.edit') }}" href="/admin/status/edit?id={{ $status->id }}"><i class="fa fa-pencil-alt text-muted"></i></a>
-                            <a data-toggle="tooltip" title="{{ __('main.delete') }}" href="/admin/status/delete?id={{ $status->id }}&amp;token={{ $_SESSION['token'] }}" onclick="return confirm('{{ __('statuses.confirm_delete') }}')"><i class="fa fa-trash-alt text-muted"></i></a>
+                        <div class="float-end">
+                            <a data-bs-toggle="tooltip" title="{{ __('main.edit') }}" href="/admin/status/edit?id={{ $status->id }}"><i class="fa fa-pencil-alt text-muted"></i></a>
+                            <a data-bs-toggle="tooltip" title="{{ __('main.delete') }}" href="/admin/status/delete?id={{ $status->id }}&amp;token={{ $_SESSION['token'] }}" onclick="return confirm('{{ __('statuses.confirm_delete') }}')"><i class="fa fa-trash-alt text-muted"></i></a>
                         </div>
                     </li>
                 @endforeach

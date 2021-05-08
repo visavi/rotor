@@ -6,7 +6,7 @@
 
 @section('header')
     @if (isAdmin('admin'))
-        <div class="float-right">
+        <div class="float-end">
             <a class="btn btn-light" href="/admin/downs/edit/{{ $down->id }}"><i class="fas fa-wrench"></i></a>
         </div>
     @endif
@@ -40,7 +40,7 @@
         </div>
     @endif
 
-    <i class="fas fa-rss"></i> <a class="mr-3" href="/downs/rss/{{ $down->id }}">{{ __('main.rss') }}</a>
+    <i class="fas fa-rss"></i> <a class="me-3" href="/downs/rss/{{ $down->id }}">{{ __('main.rss') }}</a>
     <hr>
 
     <div class="mb-3">
@@ -109,9 +109,9 @@
         @if (getUser() && getUser('id') !== $down->user_id)
             <form action="/downs/votes/{{ $down->id }}" method="post" class="row col-4">
                 @csrf
-                <label for="score">{{ __('main.your_vote') }}:</label>
+                <label for="score" class="form-label">{{ __('main.your_vote') }}:</label>
                 <div class="input-group{{ hasError('score') }}">
-                    <select class="form-control" id="score" name="score">
+                    <select class="form-select" id="score" name="score">
                         <option value="0">{{ __('main.select_vote') }}</option>
                         <option value="1" {{ $down->vote === '1' ? ' selected' : '' }}>{{ __('main.sucks') }}</option>
                         <option value="2" {{ $down->vote === '2' ? ' selected' : '' }}>{{ __('main.bad') }}</option>

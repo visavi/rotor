@@ -3,7 +3,7 @@
 @section('title', __('index.stickers'))
 
 @section('header')
-    <div class="float-right">
+    <div class="float-end">
         <a class="btn btn-success" href="/admin/stickers/sticker/create">{{ __('main.upload') }}</a>
     </div>
 
@@ -27,9 +27,9 @@
                 <div class="section-title">
                     <i class="far fa-smile"></i>  <b><a href="/admin/stickers/{{ $category->id }}">{{ $category->name }}</a></b> ({{ $category->cnt }})
 
-                    <div class="float-right">
-                        <a href="/admin/stickers/edit/{{ $category->id }}" data-toggle="tooltip" title="{{ __('main.edit') }}"><i class="fa fa-pencil-alt"></i></a>
-                        <a href="/admin/stickers/delete/{{ $category->id }}?token={{ $_SESSION['token'] }}" data-toggle="tooltip" title="{{ __('main.delete') }}" onclick="return confirm('{{ __('stickers.confirm_delete_category') }}')"><i class="fa fa-times"></i></a>
+                    <div class="float-end">
+                        <a href="/admin/stickers/edit/{{ $category->id }}" data-bs-toggle="tooltip" title="{{ __('main.edit') }}"><i class="fa fa-pencil-alt"></i></a>
+                        <a href="/admin/stickers/delete/{{ $category->id }}?token={{ $_SESSION['token'] }}" data-bs-toggle="tooltip" title="{{ __('main.delete') }}" onclick="return confirm('{{ __('stickers.confirm_delete_category') }}')"><i class="fa fa-times"></i></a>
                     </div>
                 </div>
             </div>

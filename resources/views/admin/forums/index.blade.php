@@ -13,7 +13,7 @@
 @stop
 
 @section('header')
-    <div class="float-right">
+    <div class="float-end">
         <a class="btn btn-light" href="/forums"><i class="fas fa-wrench"></i></a>
     </div>
 
@@ -30,7 +30,7 @@
                     ({{ $forum->count_topics }}/{{ $forum->count_posts }})
 
                     @if (isAdmin('boss'))
-                        <div class="float-right">
+                        <div class="float-end">
                             <a href="/admin/forums/edit/{{ $forum->id }}"><i class="fa fa-pencil-alt"></i></a>
                             <a href="/admin/forums/delete/{{ $forum->id }}?token={{ $_SESSION['token'] }}" onclick="return confirm('{{ __('forums.confirm_delete_forum') }}')"><i class="fa fa-times"></i></a>
                         </div>

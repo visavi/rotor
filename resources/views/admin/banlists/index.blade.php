@@ -30,7 +30,7 @@
                         @endif
                     </div>
 
-                    <div class="text-right">
+                    <div class="text-end">
                          <a href="/admin/bans/edit?user={{ $user->login }}"><i class="fa fa-pencil-alt"></i></a>
                     </div>
                 </div>

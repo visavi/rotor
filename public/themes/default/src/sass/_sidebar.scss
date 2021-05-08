@@ -104,7 +104,7 @@
 
 .treeview {
   &.is-expanded {
-    [data-toggle='treeview'] {
+    [data-bs-toggle='treeview'] {
       border-left-color: $primary-color;
       background: darken($sidebar-color, 10);
     }

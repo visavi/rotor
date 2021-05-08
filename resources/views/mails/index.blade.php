@@ -16,23 +16,23 @@
         <form method="post" action="/mails">
 
             @if (! getUser())
-                <div class="form-group{{ hasError('name') }}">
-                    <label for="inputName">{{ __('mails.name') }}:</label>
+                <div class="mb-3{{ hasError('name') }}">
+                    <label for="inputName" class="form-label">{{ __('mails.name') }}:</label>
                     <input type="text" class="form-control" id="inputName" name="name" maxlength="100" value="{{ getInput('name') }}" required>
                     <div class="invalid-feedback">{{ textError('name') }}</div>
                 </div>
             @endif
 
             @if (empty(getUser('email')))
-                <div class="form-group{{ hasError('email') }}">
-                    <label for="inputEmail">{{ __('mails.email') }}:</label>
+                <div class="mb-3{{ hasError('email') }}">
+                    <label for="inputEmail" class="form-label">{{ __('mails.email') }}:</label>
                     <input type="text" class="form-control" id="inputEmail" name="email" maxlength="50" value="{{ getInput('email') }}" required>
                     <div class="invalid-feedback">{{ textError('email') }}</div>
                 </div>
             @endif
 
-            <div class="form-group{{ hasError('message') }}">
-                <label for="message">{{ __('mails.message') }}:</label>
+            <div class="mb-3{{ hasError('message') }}">
+                <label for="message" class="form-label">{{ __('mails.message') }}:</label>
                 <textarea class="form-control markItUp" id="message" rows="5" name="message" required>{{ getInput('message') }}</textarea>
                 <div class="invalid-feedback">{{ textError('message') }}</div>
             </div>

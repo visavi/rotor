@@ -6,14 +6,14 @@
 
 @section('header')
     @if (getUser())
-        <div class="float-right">
+        <div class="float-end">
             @if (getUser('id') === $article->user->id)
                 <a class="btn btn-success" href="/articles/edit/{{ $article->id }}">{{ __('main.change') }}</a>
             @endif
 
             @if (isAdmin())
                 <div class="btn-group">
-                    <button type="button" class="btn btn-light dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <button type="button" class="btn btn-light dropdown-toggle" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         <i class="fas fa-wrench"></i>
                     </button>
                     <div class="dropdown-menu">
@@ -45,7 +45,7 @@
 @stop
 
 @section('content')
-    <i class="fas fa-print"></i> <a class="mr-3" href="/articles/print/{{ $article->id }}">{{ __('main.print') }}</a>
+    <i class="fas fa-print"></i> <a class="me-3" href="/articles/print/{{ $article->id }}">{{ __('main.print') }}</a>
     <i class="fas fa-rss"></i> <a href="/articles/rss/{{ $article->id }}">{{ __('main.rss') }}</a>
     <hr>
 

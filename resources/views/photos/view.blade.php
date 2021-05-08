@@ -16,8 +16,8 @@
 @section('header')
     @if (getUser())
         @if (isAdmin())
-            <div class="btn-group float-right">
-                <button type="button" class="btn btn-light dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            <div class="btn-group float-end">
+                <button type="button" class="btn btn-light dropdown-toggle" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                     <i class="fas fa-wrench"></i>
                 </button>
                 <div class="dropdown-menu">
@@ -26,8 +26,8 @@
                 </div>
             </div>
         @elseif (getUser('id') === $photo->user->id)
-            <div class="btn-group float-right">
-                <button type="button" class="btn btn-light dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            <div class="btn-group float-end">
+                <button type="button" class="btn btn-light dropdown-toggle" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                     <i class="fas fa-wrench"></i>
                 </button>
                 <div class="dropdown-menu">
@@ -72,7 +72,7 @@
     <?php $nav = photoNavigation($photo->id); ?>
 
     @if (isset($nav['next']) || isset($nav['prev']))
-        <div class="section mb-3 shadow text-center font-weight-bold">
+        <div class="section mb-3 shadow text-center fw-bold">
             @if ($nav['next'])
                 <a href="/photos/{{ $nav['next'] }}">&laquo; {{ __('main.previous') }}</a> &nbsp;
             @endif

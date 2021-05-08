@@ -23,21 +23,21 @@
                     <i class="fas fa-coins"></i> {{ __('transfers.transfer_for') }} <b>{{ $user->getName() }}</b>:<br><br>
                     <input type="hidden" name="user" value="{{ $user->login }}">
                 @else
-                    <div class="form-group{{ hasError('user') }}">
-                        <label for="inputUser">{{ __('main.user_login') }}:</label>
+                    <div class="mb-3{{ hasError('user') }}">
+                        <label for="inputUser" class="form-label">{{ __('main.user_login') }}:</label>
                         <input name="user" class="form-control" id="inputUser" maxlength="20" placeholder="{{ __('main.user_login') }}" value="{{ getInput('user') }}" required>
                         <div class="invalid-feedback">{{ textError('user') }}</div>
                     </div>
                 @endif
 
-                <div class="form-group{{ hasError('money') }}">
-                    <label for="inputMoney">{{ __('main.amount') }}:</label>
+                <div class="mb-3{{ hasError('money') }}">
+                    <label for="inputMoney" class="form-label">{{ __('main.amount') }}:</label>
                     <input name="money" class="form-control" id="inputMoney" placeholder="{{ __('main.amount') }}" value="{{ getInput('money') }}" required>
                     <div class="invalid-feedback">{{ textError('money') }}</div>
                 </div>
 
-                <div class="form-group{{ hasError('msg') }}">
-                    <label for="msg">{{ __('main.comment') }}:</label>
+                <div class="mb-3{{ hasError('msg') }}">
+                    <label for="msg" class="form-label">{{ __('main.comment') }}:</label>
                     <textarea class="form-control markItUp" maxlength="{{ setting('comment_length') }}" id="msg" rows="5" name="msg" placeholder="{{ __('main.comment') }}">{{ getInput('msg') }}</textarea>
                     <div class="invalid-feedback">{{ textError('msg') }}</div>
                     <span class="js-textarea-counter"></span>

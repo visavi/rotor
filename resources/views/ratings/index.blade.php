@@ -16,16 +16,16 @@
     <div class="section-form mb-3 shadow">
         <form method="post">
             @csrf
-            <label for="inputRating">{{ __('main.rating') }}</label>
-            <select class="form-control" id="inputRating" name="vote">
+            <label for="inputRating" class="form-label">{{ __('main.rating') }}</label>
+            <select class="form-select" id="inputRating" name="vote">
                 <?php $selected = ($vote === 'plus') ? ' selected' : ''; ?>
                 <option value="plus"{{ $selected }}>{{ __('main.plus') }}</option>
                 <?php $selected = ($vote === 'minus') ? ' selected' : ''; ?>
                 <option value="minus"{{ $selected }}>{{ __('main.minus') }}</option>
             </select>
 
-            <div class="form-group{{ hasError('text') }}">
-                <label for="text">{{ __('main.comment') }}:</label>
+            <div class="mb-3{{ hasError('text') }}">
+                <label for="text" class="form-label">{{ __('main.comment') }}:</label>
                 <textarea class="form-control markItUp" id="text" cols="25" rows="5" name="text">{{ getInput('text') }}</textarea>
                 <div class="invalid-feedback">{{ textError('text') }}</div>
             </div>

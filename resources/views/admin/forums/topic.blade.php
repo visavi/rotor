@@ -3,8 +3,8 @@
 @section('title', $topic->title . ' (' . __('main.page_num', ['page' => $posts->currentPage()]) . ')')
 
 @section('header')
-    <div class="btn-group float-right">
-        <button type="button" class="btn btn-light dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+    <div class="btn-group float-end">
+        <button type="button" class="btn btn-light dropdown-toggle" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
             <i class="fas fa-wrench"></i>
         </button>
         <div class="dropdown-menu">
@@ -50,7 +50,7 @@
 @section('content')
     @if ($topic->curators)
        <div>
-            <span class="badge badge-warning">
+            <span class="badge bg-warning">
                 <i class="fa fa-wrench"></i> {{ __('forums.topic_curators') }}:
                 @foreach ($topic->curators as $key => $curator)
                     @php
@@ -97,8 +97,8 @@
     <form action="/admin/posts/delete?tid={{ $topic->id }}&amp;page={{ $posts->currentPage() }}" method="post">
         @csrf
 
-        <div class="bg-light p-1 my-1 text-right">
-            <label for="all">{{ __('main.select_all') }}</label>
+        <div class="bg-light text-dark p-1 my-1 text-end">
+            <label for="all" class="form-label">{{ __('main.select_all') }}</label>
             <input type="checkbox" id="all" onchange="var o=this.form.elements;for(var i=0;i&lt;o.length;i++)o[i].checked=this.checked">
         </div>
 
@@ -117,7 +117,7 @@
                             <small class="font-italic">{{ $data->user->getStatus() }}</small>
                         </div>
 
-                        <div class="text-right">
+                        <div class="text-end">
                             @if (getUser())
                                 @if (getUser('id') !== $data->user_id)
                                     <a href="#" onclick="return postReply(this)" title="{{ __('main.reply') }}"><i class="fa fa-reply text-muted"></i></a>
@@ -178,7 +178,7 @@
             {{ showError(__('forums.empty_posts')) }}
         @endif
 
-        <div class="float-right">
+        <div class="float-end">
             <button class="btn btn-sm btn-danger">{{ __('main.delete_selected') }}</button>
         </div>
     </form>
@@ -190,8 +190,8 @@
             <div class="section-form mb-3 shadow">
                 <form action="/topics/create/{{ $topic->id }}" method="post" enctype="multipart/form-data">
                     @csrf
-                    <div class="form-group{{ hasError('msg') }}">
-                        <label for="msg">{{ __('forums.post') }}:</label>
+                    <div class="mb-3{{ hasError('msg') }}">
+                        <label for="msg" class="form-label">{{ __('forums.post') }}:</label>
                         <textarea class="form-control markItUp" maxlength="{{ setting('forumtextlength') }}" id="msg" rows="5" name="msg" placeholder="{{ __('forums.post') }}" required>{{ getInput('msg') }}</textarea>
                         <div class="invalid-feedback">{{ textError('msg') }}</div>
                         <span class="js-textarea-counter"></span>
@@ -203,7 +203,7 @@
                                 <input type="file" id="files" name="files[]" onchange="$('#upload-file-info').html((this.files.length > 1) ? '{{ __('main.files') }}: ' + this.files.length : this.files[0].name);" hidden multiple>
                                 {{ __('main.attach_files') }}&hellip;
                             </label>
-                            <span class="badge badge-info" id="upload-file-info"></span>
+                            <span class="badge bg-info" id="upload-file-info"></span>
                             <div class="invalid-feedback">{{ textError('files') }}</div>
                         </div>
 
@@ -214,7 +214,7 @@
                         </p>
                     </div>
 
-                    <span class="float-right js-attach-button">
+                    <span class="float-end js-attach-button">
                         <a href="#" onclick="return showAttachForm();">{{ __('main.attach_files') }}</a>
                     </span>
 

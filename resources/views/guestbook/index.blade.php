@@ -4,7 +4,7 @@
 
 @section('header')
     @if (getUser() || setting('bookadds'))
-        <div class="float-right">
+        <div class="float-end">
             <a class="btn btn-success" href="#" onclick="return postJump()">{{ __('main.write') }}</a>
 
             @if (isAdmin())
@@ -46,9 +46,9 @@
                             <small class="font-italic">{{ $post->user->getStatus() }}</small>
                         @else
                             @if ($post->guest_name)
-                                <span class="section-author font-weight-bold" data-login="{{ $post->guest_name }}">{{ $post->guest_name }}</span>
+                                <span class="section-author fw-bold" data-login="{{ $post->guest_name }}">{{ $post->guest_name }}</span>
                             @else
-                                <span class="section-author font-weight-bold" data-login="{{ setting('guestsuser') }}">{{ setting('guestsuser') }}</span>
+                                <span class="section-author fw-bold" data-login="{{ setting('guestsuser') }}">{{ setting('guestsuser') }}</span>
                             @endif
                             <small class="section-date text-muted font-italic">{{ dateFixed($post->created_at) }}</small><br>
                             <small class="font-italic">{{ setting('guestsuser') }}</small>
@@ -56,17 +56,17 @@
                     </div>
 
                     @if (getUser() && getUser('id') !== $post->user_id)
-                        <div class="text-right">
-                            <a href="#" onclick="return postReply(this)" data-toggle="tooltip" title="{{ __('main.reply') }}"><i class="fa fa-reply text-muted"></i></a>
-                            <a href="#" onclick="return postQuote(this)" data-toggle="tooltip" title="{{ __('main.quote') }}"><i class="fa fa-quote-right text-muted"></i></a>
+                        <div class="text-end">
+                            <a href="#" onclick="return postReply(this)" data-bs-toggle="tooltip" title="{{ __('main.reply') }}"><i class="fa fa-reply text-muted"></i></a>
+                            <a href="#" onclick="return postQuote(this)" data-bs-toggle="tooltip" title="{{ __('main.quote') }}"><i class="fa fa-quote-right text-muted"></i></a>
 
-                            <a href="#" onclick="return sendComplaint(this)" data-type="{{ $post->getMorphClass() }}" data-id="{{ $post->id }}" data-token="{{ $_SESSION['token'] }}" data-page="{{ $posts->currentPage() }}" rel="nofollow" data-toggle="tooltip" title="{{ __('main.complain') }}"><i class="fa fa-bell text-muted"></i></a>
+                            <a href="#" onclick="return sendComplaint(this)" data-type="{{ $post->getMorphClass() }}" data-id="{{ $post->id }}" data-token="{{ $_SESSION['token'] }}" data-page="{{ $posts->currentPage() }}" rel="nofollow" data-bs-toggle="tooltip" title="{{ __('main.complain') }}"><i class="fa fa-bell text-muted"></i></a>
                         </div>
                     @endif
 
                     @if ($post->created_at + 600 > SITETIME && getUser() && getUser('id') === $post->user_id)
-                        <div class="text-right">
-                            <a href="/guestbook/edit/{{ $post->id }}" data-toggle="tooltip" title="{{ __('main.edit') }}"><i class="fa fa-pencil-alt text-muted"></i></a>
+                        <div class="text-end">
+                            <a href="/guestbook/edit/{{ $post->id }}" data-bs-toggle="tooltip" title="{{ __('main.edit') }}"><i class="fa fa-pencil-alt text-muted"></i></a>
                         </div>
                     @endif
                 </div>
@@ -102,8 +102,8 @@
         <div class="section-form mb-3 shadow">
             <form action="/guestbook/add" method="post">
                 @csrf
-                <div class="form-group{{ hasError('msg') }}">
-                    <label for="msg">{{ __('main.message') }}:</label>
+                <div class="mb-3{{ hasError('msg') }}">
+                    <label for="msg" class="form-label">{{ __('main.message') }}:</label>
                     <textarea class="form-control markItUp" maxlength="{{ setting('guesttextlength') }}" id="msg" rows="5" name="msg" placeholder="{{ __('main.message') }}" required>{{ getInput('msg') }}</textarea>
                     <div class="invalid-feedback">{{ textError('msg') }}</div>
                     <span class="js-textarea-counter"></span>
@@ -117,14 +117,14 @@
         <div class="section-form mb-3 shadow">
             <form action="/guestbook/add" method="post">
                 @csrf
-                <div class="form-group{{ hasError('guest_name') }}">
-                    <label for="inputName">{{ __('users.name') }}:</label>
+                <div class="mb-3{{ hasError('guest_name') }}">
+                    <label for="inputName" class="form-label">{{ __('users.name') }}:</label>
                     <input class="form-control" id="inputName" name="guest_name" maxlength="20" value="{{ getInput('guest_name') }}">
                     <div class="invalid-feedback">{{ textError('guest_name') }}</div>
                 </div>
 
-                <div class="form-group{{ hasError('msg') }}">
-                    <label for="msg">{{ __('main.message') }}:</label>
+                <div class="mb-3{{ hasError('msg') }}">
+                    <label for="msg" class="form-label">{{ __('main.message') }}:</label>
                     <textarea class="form-control" id="msg" rows="5" maxlength="{{ setting('guesttextlength') }}" name="msg" placeholder="{{ __('main.message') }}" required>{{ getInput('msg') }}</textarea>
                     <div class="invalid-feedback">{{ textError('msg') }}</div>
                 </div>

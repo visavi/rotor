@@ -15,7 +15,7 @@
 
 @section('header')
     @if ($module && ! $module['disabled'] && isset($moduleConfig['panel']))
-        <div class="float-right">
+        <div class="float-end">
             <a class="btn btn-success" href="{{ $moduleConfig['panel'] }}">{{ __('main.management') }}</a>
         </div>
     @endif
@@ -70,14 +70,14 @@
     @endif
 
     @if (isset($moduleConfig['migrations']))
-        <div class="mt-2 font-weight-bold">{{ __('admin.modules.migrations') }}</div>
+        <div class="mt-2 fw-bold">{{ __('admin.modules.migrations') }}</div>
         @foreach ($moduleConfig['migrations'] as $migration)
             <i class="fas fa-database"></i> {{ $migration }}<br>
         @endforeach
     @endif
 
     @if (isset($moduleConfig['symlink']))
-        <div class="mt-2 font-weight-bold">{{ __('admin.modules.symlink') }}</div>
+        <div class="mt-2 fw-bold">{{ __('admin.modules.symlink') }}</div>
         <i class="fas fa-external-link-alt"></i> {{ $moduleConfig['symlink'] }}<br>
     @endif
 

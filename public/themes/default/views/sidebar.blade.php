@@ -1,10 +1,10 @@
 <!-- Sidebar menu-->
-<div class="app-sidebar__overlay" data-toggle="sidebar"></div>
+<div class="app-sidebar__overlay" data-bs-toggle="sidebar"></div>
 <aside class="app-sidebar">
     <ul class="app-menu user-menu">
         <li class="treeview">
         @if ($user = getUser())
-            <div class="app-menu__item" data-toggle="treeview">
+            <div class="app-menu__item" data-bs-toggle="treeview">
                 <div class="app-sidebar__user-avatar">
                     {{ $user->getAvatarImage() }}
                 </div>
@@ -32,7 +32,7 @@
                 </li>
             </ul>
         @else
-            <div class="app-menu__item" data-toggle="treeview">
+            <div class="app-menu__item" data-bs-toggle="treeview">
                 <div class="app-sidebar__user-avatar">
                     <img class="avatar-default rounded-circle" src="/assets/img/images/avatar_guest.png" alt="">
                 </div>
@@ -64,7 +64,7 @@
             <a class="app-menu__item{{ request()->is('forums*', 'topics*') ? ' active' : '' }}" href="/forums">
                 <i class="app-menu__icon far fa-comment-alt"></i>
                 <span class="app-menu__label">{{ __('index.forums') }}</span>
-                <span class="badge badge-light">{{ statsForum() }}</span>
+                <span class="badge bg-light text-dark">{{ statsForum() }}</span>
             </a>
         </li>
 
@@ -72,7 +72,7 @@
             <a class="app-menu__item{{ request()->is('guestbook*') ? ' active' : '' }}" href="/guestbook">
                 <i class="app-menu__icon far fa-comment"></i>
                 <span class="app-menu__label">{{ __('index.guestbook') }}</span>
-                <span class="badge badge-light">{{ statsGuestbook() }}</span>
+                <span class="badge bg-light text-dark">{{ statsGuestbook() }}</span>
             </a>
         </li>
 
@@ -80,12 +80,12 @@
             <a class="app-menu__item{{ request()->is('news*') ? ' active' : '' }}" href="/news">
                 <i class="app-menu__icon far fa-newspaper"></i>
                 <span class="app-menu__label">{{ __('index.news') }}</span>
-                <span class="badge badge-light">{{ statsNews() }}</span>
+                <span class="badge bg-light text-dark">{{ statsNews() }}</span>
             </a>
         </li>
 
         <li class="treeview{{ request()->is('blogs*', 'articles*') ? ' is-expanded' : '' }}">
-            <a class="app-menu__item" href="#" data-toggle="treeview">
+            <a class="app-menu__item" href="#" data-bs-toggle="treeview">
                 <i class="app-menu__icon far fa-sticky-note"></i>
                 <span class="app-menu__label">{{ __('index.blogs') }}</span>
                 <i class="treeview-indicator fa fa-angle-down"></i>
@@ -100,7 +100,7 @@
         </li>
 
         <li class="treeview{{ request()->is('loads*', 'downs*') ? ' is-expanded' : '' }}">
-            <a class="app-menu__item" href="#" data-toggle="treeview">
+            <a class="app-menu__item" href="#" data-bs-toggle="treeview">
                 <i class="app-menu__icon fas fa-download"></i>
                 <span class="app-menu__label">{{ __('index.loads') }}</span>
                 <i class="treeview-indicator fa fa-angle-down"></i>
@@ -123,7 +123,7 @@
         </li>
 
         <li>
-            <span class="float-right">
+            <span class="float-end">
                 @yield('online')
             </span>
 

@@ -17,8 +17,8 @@
     <div class="section-form mb-3 shadow">
         <form action="/admin/rules/edit" method="post">
             @csrf
-            <div class="form-group{{ hasError('msg') }}">
-                <label for="msg">{{ __('main.text') }}:</label>
+            <div class="mb-3{{ hasError('msg') }}">
+                <label for="msg" class="form-label">{{ __('main.text') }}:</label>
                 <textarea class="form-control markItUp" id="msg" rows="25" name="msg" required>{{ getInput('msg', $rules->text) }}</textarea>
                 <div class="invalid-feedback">{{ textError('msg') }}</div>
             </div>

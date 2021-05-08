@@ -28,7 +28,7 @@
                         </div>
                     </div>
 
-                    <div class="text-right js-rating">
+                    <div class="text-end js-rating">
                         <b>{{ formatNum($down->getCalculatedRating()) }}</b>
                     </div>
                 </div>

@@ -3,7 +3,7 @@
 @section('title', __('index.forums'))
 
 @section('header')
-    <div class="float-right">
+    <div class="float-end">
         @if (getUser())
             <a class="btn btn-success" href="/forums/create">{{ __('forums.create_topic') }}</a>
 
@@ -43,7 +43,7 @@
                     <div class="flex-grow-1">
                         <i class="fa fa-file-alt fa-lg text-muted"></i>
                         <a href="/forums/{{ $forum->id }}" class="section-title position-relative">{{ $forum->title }}</a>
-                        <span class="badge badge-light">{{ formatShortNum($forum->count_topics + $forum->children->sum('count_topics')) }}/{{ formatShortNum($forum->count_posts + $forum->children->sum('count_posts')) }}</span>
+                        <span class="badge bg-light text-dark">{{ formatShortNum($forum->count_topics + $forum->children->sum('count_topics')) }}/{{ formatShortNum($forum->count_posts + $forum->children->sum('count_posts')) }}</span>
 
                         @if ($forum->description)
                             <div class="section-description text-muted small">{{ $forum->description }}</div>
@@ -52,7 +52,7 @@
 
                     @if ($forum->children->isNotEmpty())
                         <div>
-                            <a data-toggle="collapse" class="stretched-link" href="#section_{{ $forum->id }}">
+                            <a data-bs-toggle="collapse" class="stretched-link" href="#section_{{ $forum->id }}">
                                 <i class="treeview-indicator fas fa-angle-down"></i>
                             </a>
                         </div>
@@ -65,7 +65,7 @@
                                 @foreach ($forum->children as $child)
                                     <div>
                                         <i class="fas fa-angle-right"></i> <a href="/forums/{{ $child->id }}">{{ $child->title }}</a>
-                                        <span class="badge badge-pill badge-light">{{ $child->count_topics }}/{{ $child->count_posts }}</span>
+                                        <span class="badge rounded-pill bg-light text-dark">{{ $child->count_topics }}/{{ $child->count_posts }}</span>
                                     </div>
                                 @endforeach
                             </div>

@@ -16,9 +16,9 @@
     <div class="section-form mb-3 shadow">
         <form action="/forums/create" method="post">
             @csrf
-            <div class="form-group{{ hasError('fid') }}">
-                <label for="inputForum">{{ __('forums.forum') }}:</label>
-                <select class="form-control" id="inputForum" name="fid">
+            <div class="mb-3{{ hasError('fid') }}">
+                <label for="inputForum" class="form-label">{{ __('forums.forum') }}:</label>
+                <select class="form-select" id="inputForum" name="fid">
 
                     @foreach ($forums as $data)
                         <option value="{{ $data->id }}"{{ $fid === $data->id  && ! $data->closed ? ' selected' : '' }}{{ $data->closed ? ' disabled' : '' }}>{{ $data->title }}</option>
@@ -34,14 +34,14 @@
                 <div class="invalid-feedback">{{ textError('fid') }}</div>
             </div>
 
-            <div class="form-group{{ hasError('title') }}">
-                <label for="inputTitle">{{ __('forums.topic') }}:</label>
+            <div class="mb-3{{ hasError('title') }}">
+                <label for="inputTitle" class="form-label">{{ __('forums.topic') }}:</label>
                 <input name="title" class="form-control" id="inputTitle" maxlength="50" placeholder="{{ __('forums.topic') }}" value="{{ getInput('title') }}" required>
                 <div class="invalid-feedback">{{ textError('title') }}</div>
             </div>
 
-            <div class="form-group{{ hasError('msg') }}">
-                <label for="msg">{{ __('forums.post') }}:</label>
+            <div class="mb-3{{ hasError('msg') }}">
+                <label for="msg" class="form-label">{{ __('forums.post') }}:</label>
                 <textarea class="form-control markItUp" maxlength="{{ setting('forumtextlength') }}" id="msg" rows="5" name="msg" required>{{ getInput('msg') }}</textarea>
                 <div class="invalid-feedback">{{ textError('msg') }}</div>
                 <span class="js-textarea-counter"></span>
@@ -56,9 +56,9 @@
             </label><br>
 
             <div class="js-vote-form"{!! $display !!}>
-                <div class="form-group{{ hasError('question') }}">
+                <div class="mb-3{{ hasError('question') }}">
 
-                    <label for="inputQuestion">{{ __('forums.question') }}:</label>
+                    <label for="inputQuestion" class="form-label">{{ __('forums.question') }}:</label>
                     <input type="text" name="question" class="form-control" id="inputQuestion" value="{{ getInput('question') }}" maxlength="100">
                     <div class="invalid-feedback">{{ textError('question') }}</div>
                 </div>

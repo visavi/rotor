@@ -3,7 +3,7 @@
 @section('title', __('index.blogs'))
 
 @section('header')
-    <div class="float-right">
+    <div class="float-end">
         <a class="btn btn-light" href="/blogs"><i class="fas fa-wrench"></i></a>
     </div>
 
@@ -34,7 +34,7 @@
                 @endif
 
                 @if (isAdmin('boss'))
-                    <div class="float-right">
+                    <div class="float-end">
                         <a href="/admin/blogs/edit/{{ $category->id }}"><i class="fa fa-pencil-alt"></i></a>
                         <a href="/admin/blogs/delete/{{ $category->id }}?token={{ $_SESSION['token'] }}" onclick="return confirm('{{ __('blogs.confirm_delete_blog') }}')"><i class="fa fa-times"></i></a>
                     </div>

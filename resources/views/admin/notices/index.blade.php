@@ -3,7 +3,7 @@
 @section('title', __('index.email_templates'))
 
 @section('header')
-    <div class="float-right">
+    <div class="float-end">
         <a class="btn btn-success" href="/admin/notices/create">{{ __('main.add') }}</a>
     </div>
 
@@ -28,7 +28,7 @@
                     <i class="fa fa-envelope"></i>
                         <a href="/admin/notices/edit/{{ $notice->id }}">{{ $notice->name }}</a>
 
-                    <div class="float-right">
+                    <div class="float-end">
                         @if ($notice->protect)
                             <i class="fa fa-lock"></i>
                         @else
@@ -38,7 +38,7 @@
                 </div>
 
                 <div class="section-content">
-                    <span class="badge badge-info">{{ __('main.type') }}: {{ $notice->type }}</span><br>
+                    <span class="badge bg-info">{{ __('main.type') }}: {{ $notice->type }}</span><br>
                     {{ __('main.changed') }}: {{ $notice->user->getProfile() }}
                     <small class="section-date text-muted font-italic">{{ dateFixed($notice->updated_at) }}</small>
                 </div>

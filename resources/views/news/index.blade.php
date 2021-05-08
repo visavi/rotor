@@ -4,7 +4,7 @@
 
 @section('header')
     @if (isAdmin('moder'))
-        <div class="float-right">
+        <div class="float-end">
             <a class="btn btn-light" href="/admin/news"><i class="fas fa-wrench"></i></a>
         </div>
     @endif

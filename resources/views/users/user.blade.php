@@ -110,9 +110,9 @@
             <div class="col-md-6">
                 @if (!empty($user->picture) && file_exists(HOME . '/' . $user->picture))
                     <a class="gallery" href="{{ $user->picture }}">
-                        {{ resizeImage($user->picture, ['alt' => $user->getName(), 'class' => 'float-right img-fluid rounded']) }}</a>
+                        {{ resizeImage($user->picture, ['alt' => $user->getName(), 'class' => 'float-end img-fluid rounded']) }}</a>
                 @else
-                    <img src="/assets/img/images/photo.png" alt="Photo" class="float-right img-fluid rounded">
+                    <img src="/assets/img/images/photo.png" alt="Photo" class="float-end img-fluid rounded">
                 @endif
             </div>
             <div class="col-md-12 mt-3">

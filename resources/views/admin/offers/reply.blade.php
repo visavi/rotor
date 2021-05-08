@@ -18,17 +18,17 @@
     <div class="section-form mb-3 shadow">
         <form action="/admin/offers/reply/{{ $offer->id }}" method="post">
             @csrf
-            <div class="form-group{{ hasError('reply') }}">
-                <label for="reply">{{ __('offers.answer') }}:</label>
+            <div class="mb-3{{ hasError('reply') }}">
+                <label for="reply" class="form-label">{{ __('offers.answer') }}:</label>
                 <textarea class="form-control markItUp" id="reply" rows="5" name="reply" required>{{ getInput('reply', $offer->reply) }}</textarea>
                 <div class="invalid-feedback">{{ textError('reply') }}</div>
             </div>
 
-            <div class="form-group{{ hasError('status') }}">
-                <label for="status">{{ __('offers.status') }}:</label>
+            <div class="mb-3{{ hasError('status') }}">
+                <label for="status" class="form-label">{{ __('offers.status') }}:</label>
 
                 <?php $inputStatus = getInput('status', $offer->status); ?>
-                <select class="form-control" name="status" id="status">
+                <select class="form-select" name="status" id="status">
                     @foreach ($statuses as $status)
                         <?php $selected = ($status === $inputStatus) ? ' selected' : ''; ?>
                         <option value="{{ $status }}"{{ $selected }}>{{ __('offers.' . $status) }}</option>
@@ -38,10 +38,10 @@
                 <div class="invalid-feedback">{{ textError('status') }}</div>
             </div>
 
-            <div class="custom-control custom-checkbox">
+            <div class="form-check">
                 <input type="hidden" value="0" name="closed">
-                <input type="checkbox" class="custom-control-input" value="1" name="closed" id="closed"{{ getInput('closed', $offer->closed) ? ' checked' : '' }}>
-                <label class="custom-control-label" for="closed">{{ __('main.close_comments') }}</label>
+                <input type="checkbox" class="form-check-input" value="1" name="closed" id="closed"{{ getInput('closed', $offer->closed) ? ' checked' : '' }}>
+                <label class="form-check-label" for="closed">{{ __('main.close_comments') }}</label>
             </div>
 
             <button class="btn btn-primary">{{ __('main.reply') }}</button>

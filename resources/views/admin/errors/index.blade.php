@@ -19,7 +19,7 @@
 
     <div class="mb-3">
         @foreach ($lists as $key => $value)
-            <a class="badge badge-{{ $key === $code ? 'success' : 'light' }}" href="/admin/errors?code={{ $key }}">{{ $value }}</a>
+            <a class="badge bg-{{ $key === $code ? 'success' : 'light' }}" href="/admin/errors?code={{ $key }}">{{ $value }}</a>
         @endforeach
     </div>
 

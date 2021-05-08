@@ -16,7 +16,7 @@
 
     <div class="mb-3">
         @foreach ($types as $key => $value)
-            <a class="badge badge-{{ $key === $type ? 'success' : 'light' }}" href="/admin/spam?type={{ $key }}">{{ $value }} {{ $total[$key] }}</a>
+            <a class="badge bg-{{ $key === $type ? 'success' : 'light' }}" href="/admin/spam?type={{ $key }}">{{ $value }} {{ $total[$key] }}</a>
         @endforeach
     </div>
 
@@ -49,9 +49,9 @@
                         @endif
                     </div>
 
-                    <div class="text-right">
+                    <div class="text-end">
                         @if (isAdmin())
-                            <a href="#" onclick="return deleteSpam(this)" data-id="{{ $record->id }}" data-token="{{ $_SESSION['token'] }}" data-toggle="tooltip" title="{{ __('main.delete') }}"><i class="fa fa-times"></i></a>
+                            <a href="#" onclick="return deleteSpam(this)" data-id="{{ $record->id }}" data-token="{{ $_SESSION['token'] }}" data-bs-toggle="tooltip" title="{{ __('main.delete') }}"><i class="fa fa-times"></i></a>
                         @endif
                     </div>
                 </div>

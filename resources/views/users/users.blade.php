@@ -18,10 +18,10 @@
 @section('content')
     <div class="mb-3">
         <?php $active = ($type === 'users') ? 'primary' : 'light'; ?>
-        <a class="btn btn-{{ $active }} btn-sm" href="/users?type=users&amp;sort={{ $sort }}">{{ __('main.users') }} <span class="badge badge-light">{{ statsUsers() }}</span></a>
+        <a class="btn btn-{{ $active }} btn-sm" href="/users?type=users&amp;sort={{ $sort }}">{{ __('main.users') }} <span class="badge bg-light text-dark">{{ statsUsers() }}</span></a>
 
         <?php $active = ($type === 'admins') ? 'primary' : 'light'; ?>
-        <a class="btn btn-{{ $active }} btn-sm" href="/users?type=admins&amp;sort={{ $sort }}">{{ __('main.admins') }} <span class="badge badge-light">{{ statsAdmins() }}</span></a>
+        <a class="btn btn-{{ $active }} btn-sm" href="/users?type=admins&amp;sort={{ $sort }}">{{ __('main.admins') }} <span class="badge bg-light text-dark">{{ statsAdmins() }}</span></a>
 
         <?php $active = ($type === 'birthdays') ? 'primary' : 'light'; ?>
         <a class="btn btn-{{ $active }} btn-sm" href="/users?type=birthdays&amp;sort={{ $sort }}">{{ __('main.birthdays') }}</a>
@@ -30,16 +30,16 @@
     @if ($users->isNotEmpty())
         {{ __('main.sort') }}:
         <?php $active = ($sort === 'point') ? 'success' : 'light'; ?>
-        <a href="/users?type={{ $type }}&amp;sort=point" class="badge badge-{{ $active }}">{{ __('users.assets') }}</a>
+        <a href="/users?type={{ $type }}&amp;sort=point" class="badge bg-{{ $active }}">{{ __('users.assets') }}</a>
 
         <?php $active = ($sort === 'rating') ? 'success' : 'light'; ?>
-        <a href="/users?type={{ $type }}&amp;sort=rating" class="badge badge-{{ $active }}">{{ __('users.reputation') }}</a>
+        <a href="/users?type={{ $type }}&amp;sort=rating" class="badge bg-{{ $active }}">{{ __('users.reputation') }}</a>
 
         <?php $active = ($sort === 'money') ? 'success' : 'light'; ?>
-        <a href="/users?type={{ $type }}&amp;sort=money" class="badge badge-{{ $active }}">{{ __('users.moneys') }}</a>
+        <a href="/users?type={{ $type }}&amp;sort=money" class="badge bg-{{ $active }}">{{ __('users.moneys') }}</a>
 
         <?php $active = ($sort === 'time') ? 'success' : 'light'; ?>
-        <a href="/users?type={{ $type }}&amp;sort=time" class="badge badge-{{ $active }}">{{ __('main.date') }}</a>
+        <a href="/users?type={{ $type }}&amp;sort=time" class="badge bg-{{ $active }}">{{ __('main.date') }}</a>
         <hr>
 
         @foreach ($users as $key => $data)

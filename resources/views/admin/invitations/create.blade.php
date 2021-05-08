@@ -19,9 +19,9 @@
         <form action="/admin/invitations/create" method="post">
             @csrf
             <?php $inputKeys = (int) getInput('keys'); ?>
-            <div class="form-group{{ hasError('keys') }}">
-                <label for="keys">{{ __('main.total') }}:</label>
-                <select class="form-control" name="keys" id="keys">
+            <div class="mb-3{{ hasError('keys') }}">
+                <label for="keys" class="form-label">{{ __('main.total') }}:</label>
+                <select class="form-select" name="keys" id="keys">
                     @foreach ($listKeys as $key)
                         <?php $selected = ($key === $inputKeys) ? ' selected' : ''; ?>
                         <option value="{{ $key }}"{{ $selected }}>{{ $key }}</option>
@@ -39,17 +39,17 @@
     <div class="section-form mb-3 shadow">
         <form action="/admin/invitations/send" method="post">
             @csrf
-            <div class="form-group{{ hasError('user') }}">
-                <label for="user">{{ __('main.user_login') }}:</label>
+            <div class="mb-3{{ hasError('user') }}">
+                <label for="user" class="form-label">{{ __('main.user_login') }}:</label>
                 <input type="text" class="form-control" id="user" name="user" maxlength="20" value="{{ getInput('user') }}" required>
                 <div class="invalid-feedback">{{ textError('user') }}</div>
             </div>
 
             <?php $inputKeys = (int) getInput('userkeys'); ?>
-            <div class="form-group{{ hasError('userkeys') }}">
-                <label for="userkeys">{{ __('main.total') }}:</label>
+            <div class="mb-3{{ hasError('userkeys') }}">
+                <label for="userkeys" class="form-label">{{ __('main.total') }}:</label>
 
-                <select class="form-control" name="userkeys" id="userkeys">
+                <select class="form-select" name="userkeys" id="userkeys">
 
                     @foreach ($listKeys as $key)
                         <?php $selected = ($key === $inputKeys) ? ' selected' : ''; ?>

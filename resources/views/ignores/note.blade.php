@@ -17,8 +17,8 @@
     <div class="section-form mb-3 shadow">
         <form method="post" action="/ignores/note/{{ $ignore->id }}">
             @csrf
-            <div class="form-group{{ hasError('msg') }}">
-                <label for="msg">{{ __('main.note') }}:</label>
+            <div class="mb-3{{ hasError('msg') }}">
+                <label for="msg" class="form-label">{{ __('main.note') }}:</label>
                 <textarea class="form-control markItUp" id="msg" rows="5" name="msg" placeholder="{{ __('main.note') }}">{{ getInput('msg', $ignore->text) }}</textarea>
                 <div class="invalid-feedback">{{ textError('msg') }}</div>
             </div>

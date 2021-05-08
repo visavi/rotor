@@ -12,7 +12,7 @@ $(document).ready(function () {
                     if (notify_badge.length > 0) {
                         notify_badge.html(data.countMessages);
                     } else {
-                        notify_item.append('<span class="badge badge-notify">' + data.countMessages + '</span>');
+                        notify_item.append('<span class="badge bg-notify">' + data.countMessages + '</span>');
                     }
                 } else if (data.status === 'error') {
                     if (notify_badge.length > 0) {

@@ -3,7 +3,7 @@
 @section('title', __('index.advertising'))
 
 @section('header')
-    <div class="float-right">
+    <div class="float-end">
         <a class="btn btn-success" href="/adverts/create">{{ __('adverts.create_advert') }}</a>
         <a class="btn btn-light" href="/adverts"><i class="fas fa-wrench"></i></a>
     </div>
@@ -31,7 +31,7 @@
                         <i class="fas fa-globe-americas"></i>
                         <a href="{{ $data->site }}">{{ $data->name }}</a>
 
-                        <div class="float-right">
+                        <div class="float-end">
                             <a href="/admin/adverts/edit/{{ $data->id }}?page={{ $records->currentPage() }}"><i class="fas fa-pencil-alt text-muted"></i></a>
                             <input type="checkbox" name="del[]" value="{{ $data->id }}">
                         </div>
@@ -49,7 +49,7 @@
                 </div>
             @endforeach
 
-            <div class="float-right">
+            <div class="float-end">
                 <button class="btn btn-sm btn-danger">{{ __('main.delete_selected') }}</button>
             </div>
         </form>

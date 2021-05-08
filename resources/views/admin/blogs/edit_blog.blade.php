@@ -24,20 +24,20 @@
     <div class="section-form mb-3 shadow cut">
         <form action="/admin/articles/edit/{{ $article->id }}" method="post">
             @csrf
-            <div class="form-group{{ hasError('title') }}">
-                <label for="inputTitle">{{ __('blogs.name') }}:</label>
+            <div class="mb-3{{ hasError('title') }}">
+                <label for="inputTitle" class="form-label">{{ __('blogs.name') }}:</label>
                 <input type="text" class="form-control" id="inputTitle" name="title" maxlength="50" value="{{ getInput('title', $article->title) }}" required>
                 <div class="invalid-feedback">{{ textError('title') }}</div>
             </div>
 
-            <div class="form-group{{ hasError('text') }}">
-                <label for="text">{{ __('blogs.article') }}:</label>
+            <div class="mb-3{{ hasError('text') }}">
+                <label for="text" class="form-label">{{ __('blogs.article') }}:</label>
                 <textarea class="form-control markItUp" id="text" rows="5" name="text" required>{{ getInput('text', $article->text) }}</textarea>
                 <div class="invalid-feedback">{{ textError('text') }}</div>
             </div>
 
-            <div class="form-group{{ hasError('tags') }}">
-                <label for="inputTags">{{ __('blogs.tags') }}:</label>
+            <div class="mb-3{{ hasError('tags') }}">
+                <label for="inputTags" class="form-label">{{ __('blogs.tags') }}:</label>
                 <input type="text" class="form-control" id="inputTags" name="tags" maxlength="100" value="{{ getInput('tags', $article->tags) }}" required>
                 <div class="invalid-feedback">{{ textError('tags') }}</div>
             </div>

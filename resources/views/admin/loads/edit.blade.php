@@ -18,12 +18,12 @@
     <div class="section-form mb-3 shadow">
         <form action="/admin/loads/edit/{{ $load->id }}" method="post">
             @csrf
-            <div class="form-group{{ hasError('parent') }}">
-                <label for="parent">{{ __('loads.parent_load') }}</label>
+            <div class="mb-3{{ hasError('parent') }}">
+                <label for="parent" class="form-label">{{ __('loads.parent_load') }}</label>
 
                 <?php $inputParent = (int) getInput('parent', $load->parent_id); ?>
 
-                <select class="form-control" id="parent" name="parent">
+                <select class="form-select" id="parent" name="parent">
                     <option value="0">---</option>
 
                     @foreach ($loads as $data)
@@ -40,22 +40,22 @@
             </div>
 
 
-            <div class="form-group{{ hasError('name') }}">
-                <label for="name">{{ __('main.title') }}:</label>
+            <div class="mb-3{{ hasError('name') }}">
+                <label for="name" class="form-label">{{ __('main.title') }}:</label>
                 <input class="form-control" name="name" id="name" maxlength="50" value="{{ getInput('name', $load->name) }}" required>
                 <div class="invalid-feedback">{{ textError('name') }}</div>
             </div>
 
-            <div class="form-group{{ hasError('sort') }}">
-                <label for="sort">{{ __('main.position') }}:</label>
+            <div class="mb-3{{ hasError('sort') }}">
+                <label for="sort" class="form-label">{{ __('main.position') }}:</label>
                 <input type="number" class="form-control" name="sort" id="sort" maxlength="2" value="{{ getInput('sort', $load->sort) }}" required>
                 <div class="invalid-feedback">{{ textError('sort') }}</div>
             </div>
 
-            <div class="custom-control custom-checkbox">
+            <div class="form-check">
                 <input type="hidden" value="0" name="closed">
-                <input type="checkbox" class="custom-control-input" value="1" name="closed" id="closed"{{ getInput('closed', $load->closed) ? ' checked' : '' }}>
-                <label class="custom-control-label" for="closed">{{ __('main.close') }}</label>
+                <input type="checkbox" class="form-check-input" value="1" name="closed" id="closed"{{ getInput('closed', $load->closed) ? ' checked' : '' }}>
+                <label for="closed" class="form-check-label">{{ __('main.close') }}</label>
             </div>
 
             <button class="btn btn-primary">{{ __('main.change') }}</button>

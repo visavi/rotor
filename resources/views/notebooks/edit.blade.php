@@ -17,8 +17,8 @@
     <div class="section-form mb-3 shadow">
         <form action="/notebooks/edit" method="post">
             @csrf
-            <div class="form-group{{ hasError('msg') }}">
-                <label for="msg">{{ __('main.note') }}:</label>
+            <div class="mb-3{{ hasError('msg') }}">
+                <label for="msg" class="form-label">{{ __('main.note') }}:</label>
                 <textarea class="form-control markItUp" id="msg" rows="5" name="msg">{{ getInput('msg', $note->text) }}</textarea>
                 <div class="invalid-feedback">{{ textError('msg') }}</div>
             </div>

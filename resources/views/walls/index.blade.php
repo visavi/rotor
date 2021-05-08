@@ -14,7 +14,7 @@
 
 @section('content')
     @if ($newWall)
-        <div class="font-weight-bold text-danger text-center my-3">
+        <div class="fw-bold text-danger text-center my-3">
             {{ __('walls.new') }}: {{ $newWall }}
         </div>
     @endif
@@ -35,7 +35,7 @@
                     </div>
 
                     @if (getUser())
-                        <div class="text-right">
+                        <div class="text-end">
                             @if (getUser('id') !== $data->author_id)
                                 <a href="#" onclick="return postReply(this)" title="{{ __('main.reply') }}"><i class="fa fa-reply text-muted"></i></a>
                                 <a href="#" onclick="return postQuote(this)" title="{{ __('main.quote') }}"><i class="fa fa-quote-right text-muted"></i></a>
@@ -44,7 +44,7 @@
                             @endif
 
                             @if (isAdmin() || getUser('id') === $user->id)
-                                <a href="#" onclick="return deleteWall(this)" data-id="{{ $data->id }}" data-login="{{ $data->user->login }}" data-token="{{ $_SESSION['token'] }}" data-toggle="tooltip" title="{{ __('main.delete') }}"><i class="fa fa-times text-muted"></i></a>
+                                <a href="#" onclick="return deleteWall(this)" data-id="{{ $data->id }}" data-login="{{ $data->user->login }}" data-token="{{ $_SESSION['token'] }}" data-bs-toggle="tooltip" title="{{ __('main.delete') }}"><i class="fa fa-times text-muted"></i></a>
                             @endif
                         </div>
                     @endif
@@ -69,8 +69,8 @@
         <div class="section-form mb-3 shadow">
             <form action="/walls/{{ $user->login }}/create" method="post">
                 @csrf
-                <div class="form-group{{ hasError('msg') }}">
-                    <label for="msg">{{ __('main.message') }}:</label>
+                <div class="mb-3{{ hasError('msg') }}">
+                    <label for="msg" class="form-label">{{ __('main.message') }}:</label>
                     <textarea class="form-control markItUp" id="msg" rows="5" name="msg" placeholder="{{ __('main.message') }}" required>{{ getInput('msg') }}</textarea>
                     <div class="invalid-feedback">{{ textError('msg') }}</div>
                 </div>

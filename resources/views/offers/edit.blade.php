@@ -16,11 +16,11 @@
     <div class="section-form mb-3 shadow">
         <form action="/offers/edit/{{ $offer->id }}" method="post">
             @csrf
-            <div class="form-group{{ hasError('type') }}">
-                <label for="types">{{ __('offers.i_want_to') }}</label>
+            <div class="mb-3{{ hasError('type') }}">
+                <label for="types" class="form-label">{{ __('offers.i_want_to') }}</label>
 
                 <?php $inputType = getInput('type', $offer->type); ?>
-                <select class="form-control" name="type" id="type">
+                <select class="form-select" name="type" id="type">
                     <option value="offer"{{ $inputType === 'offer' ? ' selected' : '' }}>{{ __('offers.suggest_idea') }}</option>
                     <option value="issue"{{ $inputType === 'issue' ? ' selected' : '' }}>{{ __('offers.report_problem') }}</option>
                 </select>
@@ -28,14 +28,14 @@
                 <div class="invalid-feedback">{{ textError('type') }}</div>
             </div>
 
-            <div class="form-group{{ hasError('title') }}">
-                <label for="inputTitle">{{ __('main.title') }}:</label>
+            <div class="mb-3{{ hasError('title') }}">
+                <label for="inputTitle" class="form-label">{{ __('main.title') }}:</label>
                 <input type="text" class="form-control" id="inputTitle" name="title" maxlength="50" value="{{ getInput('title', $offer->title) }}" required>
                 <div class="invalid-feedback">{{ textError('title') }}</div>
             </div>
 
-            <div class="form-group{{ hasError('text') }}">
-                <label for="text">{{ __('main.text') }}:</label>
+            <div class="mb-3{{ hasError('text') }}">
+                <label for="text" class="form-label">{{ __('main.text') }}:</label>
                 <textarea class="form-control markItUp" id="text" rows="5" name="text" required>{{ getInput('text', $offer->text) }}</textarea>
                 <div class="invalid-feedback">{{ textError('text') }}</div>
             </div>

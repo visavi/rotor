@@ -23,11 +23,11 @@
     <div class="section-form mb-3 shadow cut">
         <form action="/articles/edit/{{ $article->id }}" method="post">
             @csrf
-            <div class="form-group{{ hasError('cid') }}">
-                <label for="inputCategory">{{ __('blogs.blog') }}</label>
+            <div class="mb-3{{ hasError('cid') }}">
+                <label for="inputCategory" class="form-label">{{ __('blogs.blog') }}</label>
 
                 <?php $inputCategory = (int) getInput('cid', $article->category_id); ?>
-                <select class="form-control" id="inputCategory" name="cid">
+                <select class="form-select" id="inputCategory" name="cid">
 
                     @foreach ($categories as $category)
                         <option value="{{ $category->id }}"{{ ($inputCategory === $category->id && ! $category->closed) ? ' selected' : '' }}{{ $category->closed ? ' disabled' : '' }}>{{ $category->name }}</option>
@@ -43,21 +43,21 @@
                 <div class="invalid-feedback">{{ textError('cid') }}</div>
             </div>
 
-            <div class="form-group{{ hasError('title') }}">
-                <label for="inputTitle">{{ __('blogs.name') }}:</label>
+            <div class="mb-3{{ hasError('title') }}">
+                <label for="inputTitle" class="form-label">{{ __('blogs.name') }}:</label>
                 <input type="text" class="form-control" id="inputTitle" name="title" maxlength="50" value="{{ getInput('title', $article->title) }}" required>
                 <div class="invalid-feedback">{{ textError('title') }}</div>
             </div>
 
-            <div class="form-group{{ hasError('text') }}">
-                <label for="text">{{ __('blogs.article') }}:</label>
+            <div class="mb-3{{ hasError('text') }}">
+                <label for="text" class="form-label">{{ __('blogs.article') }}:</label>
                 <textarea class="form-control markItUp" maxlength="{{ setting('maxblogpost') }}" id="text" rows="5" name="text" required>{{ getInput('text', $article->text) }}</textarea>
                 <div class="invalid-feedback">{{ textError('text') }}</div>
                 <span class="js-textarea-counter"></span>
             </div>
 
-            <div class="form-group{{ hasError('tags') }}">
-                <label for="inputTags">{{ __('blogs.tags') }}:</label>
+            <div class="mb-3{{ hasError('tags') }}">
+                <label for="inputTags" class="form-label">{{ __('blogs.tags') }}:</label>
                 <input type="text" class="form-control" id="inputTags" name="tags" maxlength="100" value="{{ getInput('tags', $article->tags) }}" required>
                 <div class="invalid-feedback">{{ textError('tags') }}</div>
             </div>

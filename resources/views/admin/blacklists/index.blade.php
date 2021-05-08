@@ -14,11 +14,11 @@
 
 @section('content')
     <?php $active = ($type === 'email') ? 'success' : 'light'; ?>
-    <a href="/admin/blacklists?type=email" class="badge badge-{{ $active }}">{{ __('admin.blacklists.email') }}</a>
+    <a href="/admin/blacklists?type=email" class="badge bg-{{ $active }}">{{ __('admin.blacklists.email') }}</a>
     <?php $active = ($type === 'login') ? 'success' : 'light'; ?>
-    <a href="/admin/blacklists?type=login" class="badge badge-{{ $active }}">{{ __('admin.blacklists.logins') }}</a>
+    <a href="/admin/blacklists?type=login" class="badge bg-{{ $active }}">{{ __('admin.blacklists.logins') }}</a>
     <?php $active = ($type === 'domain') ? 'success' : 'light'; ?>
-    <a href="/admin/blacklists?type=domain" class="badge badge-{{ $active }}">{{ __('admin.blacklists.domains') }}</a>
+    <a href="/admin/blacklists?type=domain" class="badge bg-{{ $active }}">{{ __('admin.blacklists.domains') }}</a>
     <hr>
 
     @if ($lists->isNotEmpty())
@@ -29,7 +29,7 @@
                     <div class="section-title">
                         <i class="fa fa-pencil-alt"></i> {{ $list->value }}
 
-                        <div class="float-right">
+                        <div class="float-end">
                             <input type="checkbox" name="del[]" value="{{ $list->id }}">
                         </div>
                     </div>
@@ -40,7 +40,7 @@
                 </div>
             @endforeach
 
-            <div class="float-right">
+            <div class="float-end">
                 <button class="btn btn-sm btn-danger">{{ __('main.delete_selected') }}</button>
             </div>
         </form>

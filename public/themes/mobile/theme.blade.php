@@ -23,7 +23,7 @@
 <div class="menu">
     @include('menu')
 
-    <div class="float-right">
+    <div class="float-end">
         <a href="/language/ru{{ returnUrl() }}">RU</a> /
         <a href="/language/en{{ returnUrl() }}">EN</a>
     </div>

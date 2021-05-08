@@ -17,7 +17,7 @@
     @if ($keys->isNotEmpty())
         {{ __('main.total') }}: {{ $keys->count() }}<br>
 
-        <div class="form-group mb-3">
+        <div class="mb-3 mb-3">
             <textarea class="form-control" rows="10">{{ $keys->implode('hash', ',') }}</textarea>
         </div>
     @else

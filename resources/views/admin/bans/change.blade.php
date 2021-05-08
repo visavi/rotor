@@ -28,14 +28,14 @@
     <div class="section-form mb-3 shadow">
         <form method="post" action="/admin/bans/change?user={{ $user->login }}">
             @csrf
-            <div class="form-group{{ hasError('timeban') }}">
-                <label for="timeban">{{ __('admin.bans.time_ban') }}:</label>
+            <div class="mb-3{{ hasError('timeban') }}">
+                <label for="timeban" class="form-label">{{ __('admin.bans.time_ban') }}:</label>
                 <input class="form-control" type="datetime-local" name="timeban" id="timeban" value="{{ getInput('timeban', dateFixed($user->timeban, 'Y-m-d\TH:i')) }}" required>
                 <div class="invalid-feedback">{{ textError('timeban') }}</div>
             </div>
 
-            <div class="form-group{{ hasError('reason') }}">
-                <label for="reason">{{ __('users.reason_ban') }}:</label>
+            <div class="mb-3{{ hasError('reason') }}">
+                <label for="reason" class="form-label">{{ __('users.reason_ban') }}:</label>
                 <textarea class="form-control markItUp" id="reason" rows="5" name="reason" required>{{ getInput('reason', $user->lastBan->reason) }}</textarea>
                 <div class="invalid-feedback">{{ textError('reason') }}</div>
             </div>

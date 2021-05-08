@@ -13,7 +13,7 @@
 @stop
 
 @section('content')
-    <label for="user">{{ __('main.user_login') }}:</label><br>
+    <label for="user" class="form-label">{{ __('main.user_login') }}:</label><br>
     <div class="section-form mb-3 shadow">
         <form method="get" action="/admin/bans/edit">
             <div class="input-group{{ hasError('user') }}">

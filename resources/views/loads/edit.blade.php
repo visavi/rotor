@@ -28,14 +28,14 @@
     <div class="section-form mb-3 shadow">
         <form action="/downs/edit/{{ $down->id }}" method="post" enctype="multipart/form-data">
             @csrf
-            <div class="form-group{{ hasError('title') }}">
-                <label for="title">{{ __('loads.down_title') }}:</label>
+            <div class="mb-3{{ hasError('title') }}">
+                <label for="title" class="form-label">{{ __('loads.down_title') }}:</label>
                 <input class="form-control" name="title" id="title" maxlength="50" value="{{ getInput('title', $down->title) }}" required>
                 <div class="invalid-feedback">{{ textError('title') }}</div>
             </div>
 
-            <div class="form-group{{ hasError('text') }}">
-                <label for="text">{{ __('loads.down_text') }}:</label>
+            <div class="mb-3{{ hasError('text') }}">
+                <label for="text" class="form-label">{{ __('loads.down_text') }}:</label>
                 <textarea class="form-control markItUp" id="text" name="text" rows="5">{{ getInput('text', $down->text) }}</textarea>
                 <div class="invalid-feedback">{{ textError('text') }}</div>
             </div>
@@ -60,7 +60,7 @@
                         <input type="file" id="files" name="files[]" onchange="$('#upload-file-info').html((this.files.length > 1) ? '{{ __('main.files') }}: ' + this.files.length : this.files[0].name);" hidden multiple>
                         {{ __('main.attach_files') }}&hellip;
                     </label>
-                    <span class="badge badge-info" id="upload-file-info"></span>
+                    <span class="badge bg-info" id="upload-file-info"></span>
                     <div class="invalid-feedback">{{ textError('files') }}</div>
                 </div>
             @endif

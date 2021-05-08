@@ -19,10 +19,10 @@
 @section('content')
     @if (getUser() && getUser('id') === $user->id)
         <?php $type = ($active === 1) ? 'success' : 'light'; ?>
-        <a href="/downs/active/files?active=1" class="badge badge-{{ $type }}">{{ __('loads.verified') }}</a>
+        <a href="/downs/active/files?active=1" class="badge bg-{{ $type }}">{{ __('loads.verified') }}</a>
 
         <?php $type = ($active === 0) ? 'success' : 'light'; ?>
-        <a href="/downs/active/files?active=0" class="badge badge-{{ $type }}">{{ __('loads.pending') }}</a>
+        <a href="/downs/active/files?active=0" class="badge bg-{{ $type }}">{{ __('loads.pending') }}</a>
         <hr>
     @endif
 
@@ -37,7 +37,7 @@
                         </div>
                     </div>
 
-                    <div class="text-right js-rating">
+                    <div class="text-end js-rating">
                         <b>{{ formatNum($down->getCalculatedRating()) }}</b>
                     </div>
                 </div>

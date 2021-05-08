@@ -16,7 +16,7 @@
     {{ __('users.confirm_enter_code') }}<br><br>
 
     <div class="section-form mb-3 shadow">
-        <label for="code">{{ __('users.confirm_code') }}:</label>
+        <label for="code" class="form-label">{{ __('users.confirm_code') }}:</label>
         <form method="get" action="/key">
             <input class="form-control" name="code" id="code" maxlength="30" required>
             <button class="btn btn-primary">{{ __('main.confirm') }}</button>
@@ -30,8 +30,8 @@
         <div class="section-form my-3 shadow">
             <form method="post" action="/key">
                 @csrf
-                <div class="form-group{{ hasError('email') }}">
-                    <label for="email">{{ __('users.email') }}:</label>
+                <div class="mb-3{{ hasError('email') }}">
+                    <label for="email" class="form-label">{{ __('users.email') }}:</label>
                     <input class="form-control" name="email" id="email" maxlength="50" value="{{ getInput('email', $user->email) }}" required>
                     <div class="invalid-feedback">{{ textError('email') }}</div>
                 </div>
