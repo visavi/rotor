@@ -27,8 +27,8 @@
                 <div class="section-user d-flex align-items-center">
                     <div class="flex-grow-1">
                         {{ $post->user->getProfile() }}
-                        <small class="section-date text-muted font-italic">{{ dateFixed($post->created_at) }}</small><br>
-                        <small class="font-italic">{{ $post->user->getStatus() }}</small>
+                        <small class="section-date text-muted fst-italic">{{ dateFixed($post->created_at) }}</small><br>
+                        <small class="fst-italic">{{ $post->user->getStatus() }}</small>
                     </div>
 
                     @if (getUser() && getUser('id') !== $post->user_id)
@@ -56,7 +56,7 @@
                         </div>
                     @endif
 
-                    <div class="small text-muted font-italic mt-2">{{ $post->brow }}, {{ $post->ip }}</div>
+                    <div class="small text-muted fst-italic mt-2">{{ $post->brow }}, {{ $post->ip }}</div>
                 </div>
             </div>
         @endforeach

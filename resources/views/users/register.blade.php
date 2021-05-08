@@ -49,14 +49,14 @@
                 <label for="inputLogin" class="form-label">{{ __('users.login') }}:</label>
                 <input onkeyup="return checkLogin(this);" class="form-control" name="login" id="inputLogin" maxlength="20" value="{{ getInput('login') }}" required>
                 <div class="invalid-feedback">{{ textError('login') }}</div>
-                <span class="text-muted font-italic">{{ __('users.login_requirements') }}</span>
+                <span class="text-muted fst-italic">{{ __('users.login_requirements') }}</span>
             </div>
 
             <div class="mb-3{{ hasError('password') }}">
                 <label for="inputPassword" class="form-label">{{ __('users.password') }}:</label>
                 <input class="form-control" name="password" type="password" id="inputPassword" maxlength="20" required>
                 <div class="invalid-feedback">{{ textError('password') }}</div>
-                <span class="text-muted font-italic">{{ __('users.password_requirements') }}</span>
+                <span class="text-muted fst-italic">{{ __('users.password_requirements') }}</span>
             </div>
 
             <div class="mb-3{{ hasError('password2') }}">

@@ -30,7 +30,7 @@
                         <i class="fa fa-file-alt fa-lg text-muted"></i>
                         <a class="section-title" href="/news/{{ $data->id }}">{{ $data->title }}</a>
 
-                        <small class="section-date text-muted font-italic">
+                        <small class="section-date text-muted fst-italic">
                             {{ dateFixed($data->created_at) }}
                         </small>
                     </div>

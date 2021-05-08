@@ -31,7 +31,7 @@
                             @endif
 
                             <br>
-                            <small class="font-italic">{{ $user->getStatus() }}</small>
+                            <small class="fst-italic">{{ $user->getStatus() }}</small>
                         </div>
                     </div>
 

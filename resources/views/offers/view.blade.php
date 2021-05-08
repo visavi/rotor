@@ -38,7 +38,7 @@
 
         <div class="section-body">
             {{ __('main.added') }}: {{ $offer->user->getProfile() }}
-            <small class="section-date text-muted font-italic">{{ dateFixed($offer->created_at) }}</small>
+            <small class="section-date text-muted fst-italic">{{ dateFixed($offer->created_at) }}</small>
 
             <div class="my-3">
                 {{ $offer->getStatus() }}
@@ -63,7 +63,7 @@
             <div class="section-message">
                 {{ bbCode($offer->reply) }}<br>
                 {{ $offer->replyUser->getProfile() }}
-                <small class="section-date text-muted font-italic">{{ dateFixed($offer->updated_at) }}</small>
+                <small class="section-date text-muted fst-italic">{{ dateFixed($offer->updated_at) }}</small>
             </div>
         </div>
     @endif
@@ -82,8 +82,8 @@
                     <div class="flex-grow-1">
                         {{ $comment->user->getProfile() }}
 
-                        <small class="section-date text-muted font-italic">{{ dateFixed($comment->created_at) }}</small><br>
-                        <small class="font-italic">{{ $comment->user->getStatus() }}</small>
+                        <small class="section-date text-muted fst-italic">{{ dateFixed($comment->created_at) }}</small><br>
+                        <small class="fst-italic">{{ $comment->user->getStatus() }}</small>
                     </div>
                 </div>
 
@@ -91,7 +91,7 @@
                     <div class="section-message">
                         {{ bbCode($comment->text) }}<br>
                         @if (isAdmin())
-                            <div class="small text-muted font-italic mt-2">{{ $comment->brow }}, {{ $comment->ip }}</div>
+                            <div class="small text-muted fst-italic mt-2">{{ $comment->brow }}, {{ $comment->ip }}</div>
                         @endif
                     </div>
                 </div>

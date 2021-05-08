@@ -27,7 +27,7 @@
         </form>
     </div>
 
-    <p class="text-muted font-italic">
+    <p class="text-muted fst-italic">
         {{ __('notebooks.info_edit') }}
     </p>
 @stop

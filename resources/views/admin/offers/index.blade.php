@@ -34,16 +34,16 @@
 
     @if ($offers->isNotEmpty())
         {{ __('main.sort') }}:
-        <?php $active = ($order === 'rating') ? 'success' : 'light'; ?>
+        <?php $active = ($order === 'rating') ? 'success' : 'light text-dark'; ?>
         <a href="/admin/offers/{{ $type }}?sort=rating" class="badge bg-{{ $active }}">{{ __('main.votes') }}</a>
 
-        <?php $active = ($order === 'created_at') ? 'success' : 'light'; ?>
+        <?php $active = ($order === 'created_at') ? 'success' : 'light text-dark'; ?>
         <a href="/admin/offers/{{ $type }}?sort=time" class="badge bg-{{ $active }}">{{ __('main.date') }}</a>
 
-        <?php $active = ($order === 'status') ? 'success' : 'light'; ?>
+        <?php $active = ($order === 'status') ? 'success' : 'light text-dark'; ?>
         <a href="/admin/offers/{{ $type }}?sort=status" class="badge bg-{{ $active }}">{{ __('main.status') }}</a>
 
-        <?php $active = ($order === 'count_comments') ? 'success' : 'light'; ?>
+        <?php $active = ($order === 'count_comments') ? 'success' : 'light text-dark'; ?>
         <a href="/admin/offers/{{ $type }}?sort=comments" class="badge bg-{{ $active }}">{{ __('main.comments') }}</a>
         <hr>
 

@@ -22,7 +22,7 @@
 
 @section('content')
     <i class="fa fa-pencil-alt"></i> <b>{{ $post->user->getName() }}</b>
-    <small class="section-date text-muted font-italic">{{ dateFixed($post->created_at) }}</small><br>
+    <small class="section-date text-muted fst-italic">{{ dateFixed($post->created_at) }}</small><br>
 
     <div class="section-form mb-3 shadow">
         <form action="/posts/edit/{{ $post->id }}?page={{ $page }}" method="post">

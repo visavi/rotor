@@ -32,16 +32,16 @@
 @section('content')
     {{ __('main.sort') }}:
 
-    <?php $active = ($order === 'created_at') ? 'success' : 'light'; ?>
+    <?php $active = ($order === 'created_at') ? 'success' : 'light text-dark'; ?>
     <a href="/admin/loads/{{ $category->id }}?sort=time" class="badge bg-{{ $active }}">{{ __('main.date') }}</a>
 
-    <?php $active = ($order === 'loads') ? 'success' : 'light'; ?>
+    <?php $active = ($order === 'loads') ? 'success' : 'light text-dark'; ?>
     <a href="/admin/loads/{{ $category->id }}?sort=loads" class="badge bg-{{ $active }}">{{ __('main.downloads') }}</a>
 
-    <?php $active = ($order === 'rated') ? 'success' : 'light'; ?>
+    <?php $active = ($order === 'rated') ? 'success' : 'light text-dark'; ?>
     <a href="/admin/loads/{{ $category->id }}?sort=rated" class="badge bg-{{ $active }}">{{ __('main.rating') }}</a>
 
-    <?php $active = ($order === 'count_comments') ? 'success' : 'light'; ?>
+    <?php $active = ($order === 'count_comments') ? 'success' : 'light text-dark'; ?>
     <a href="/admin/loads/{{ $category->id }}?sort=comments" class="badge bg-{{ $active }}">{{ __('main.comments') }}</a>
     <hr>
 

@@ -39,7 +39,7 @@
                         @endunless
                     </div>
 
-                    <div class="section-date text-muted font-italic small">
+                    <div class="section-date text-muted fst-italic small">
                         {{  dateFixed($data->created_at) }}
 
                         @if ($data->type === $data::IN)

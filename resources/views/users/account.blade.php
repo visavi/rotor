@@ -33,7 +33,7 @@
             <button class="btn btn-primary">{{ __('main.change') }}</button>
         </form>
 
-        <span class="text-muted font-italic">{{ __('users.email_confirm_condition') }}</span>
+        <span class="text-muted fst-italic">{{ __('users.email_confirm_condition') }}</span>
     </div>
 
 
@@ -46,15 +46,13 @@
                 <label for="status" class="form-label">{{ __('users.personal_status') }}:</label>
                 <div class="input-group{{ hasError('status') }}">
                     <input type="text" class="form-control" id="status" name="status" maxlength="20" value="{{ getInput('status', $user->status) }}">
-                    <div class="input-group-append">
-                        <button class="btn btn-primary">{{ __('main.change') }}</button>
-                    </div>
+                    <button class="btn btn-primary">{{ __('main.change') }}</button>
                 </div>
                 <div class="invalid-feedback">{{ textError('status') }}</div>
             </form>
 
             @if (setting('editstatusmoney'))
-                <span class="text-muted font-italic">{{ __('main.cost') }}: {{ plural(setting('editstatusmoney'), setting('moneyname')) }}</span>
+                <span class="text-muted fst-italic">{{ __('main.cost') }}: {{ plural(setting('editstatusmoney'), setting('moneyname')) }}</span>
             @endif
 
         </div>
@@ -73,9 +71,7 @@
 
                     <div class="input-group colorpick">
                         <input class="form-control col-sm-4" id="color" name="color" type="text" maxlength="7" value="{{ getInput('color', $user->color) }}">
-                        <span class="input-group-append">
-                            <span class="input-group-text colorpicker-input-addon"><i></i></span>
-                        </span>
+                        <span class="input-group-text colorpicker-input-addon"><i></i></span>
                     </div>
 
                     <div class="invalid-feedback">{{ textError('color') }}</div>
@@ -85,7 +81,7 @@
             </form>
 
             @if (setting('editcolormoney'))
-                <span class="text-muted font-italic">{{ __('main.cost') }}: {{ plural(setting('editcolormoney'), setting('moneyname')) }}</span>
+                <span class="text-muted fst-italic">{{ __('main.cost') }}: {{ plural(setting('editcolormoney'), setting('moneyname')) }}</span>
             @endif
 
         </div>
@@ -143,7 +139,7 @@
             @endif
         </form>
 
-        <span class="text-muted font-italic">
+        <span class="text-muted fst-italic">
             {{ __('users.token_required') }} <a href="/api">{{ __('users.api_interface') }}</a>
         </span>
     </div>

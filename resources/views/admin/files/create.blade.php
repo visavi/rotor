@@ -50,6 +50,6 @@
             </div>
         </div>
 
-        <p class="text-muted font-italic">{{ __('admin.files.create_hint') }}</p>
+        <p class="text-muted fst-italic">{{ __('admin.files.create_hint') }}</p>
     </div>
 @stop

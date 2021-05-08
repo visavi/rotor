@@ -37,5 +37,5 @@
         </form>
     </div>
 
-    <p class="text-muted font-italic">{{ __('admin.files.edit_hint') }}</p>
+    <p class="text-muted fst-italic">{{ __('admin.files.edit_hint') }}</p>
 @stop

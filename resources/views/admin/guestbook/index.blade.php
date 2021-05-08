@@ -39,15 +39,15 @@
                         <div class="flex-grow-1">
                             @if ($post->user_id)
                                 {{ $post->user->getProfile() }}
-                                <small class="section-date text-muted font-italic">{{ dateFixed($post->created_at) }}</small><br>
-                                <small class="font-italic">{{ $post->user->getStatus() }}</small>
+                                <small class="section-date text-muted fst-italic">{{ dateFixed($post->created_at) }}</small><br>
+                                <small class="fst-italic">{{ $post->user->getStatus() }}</small>
                             @else
                                 @if ($post->guest_name)
                                     <span class="section-author fw-bold" data-login="{{ $post->guest_name }}">{{ $post->guest_name }}</span>
                                 @else
                                     <span class="section-author fw-bold" data-login="{{ setting('guestsuser') }}">{{ setting('guestsuser') }}</span>
                                 @endif
-                                <small class="section-date text-muted font-italic">{{ dateFixed($post->created_at) }}</small>
+                                <small class="section-date text-muted fst-italic">{{ dateFixed($post->created_at) }}</small>
                             @endif
                         </div>
 
@@ -71,7 +71,7 @@
                             <div class="text-danger">{{ __('guestbook.answer') }}: {{ bbCode($post->reply) }}</div>
                         @endif
 
-                        <div class="small text-muted font-italic mt-2">
+                        <div class="small text-muted fst-italic mt-2">
                             {{ $post->brow }}, {{ $post->ip }}
                         </div>
                     </div>

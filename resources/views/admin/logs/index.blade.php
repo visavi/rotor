@@ -24,14 +24,14 @@
                 <div class="section-user d-flex align-items-center">
                     <div class="flex-grow-1">
                         {{ $log->user->getProfile() }}
-                        <small class="section-date text-muted font-italic">{{  dateFixed($log->created_at) }}</small>
+                        <small class="section-date text-muted fst-italic">{{  dateFixed($log->created_at) }}</small>
                     </div>
                 </div>
 
                 <div class="section-body border-top">
                     {{ __('admin.logs.page') }}: {{ $log->request }}<br>
                     {{ __('admin.logs.referer') }}: {{ $log->referer }}<br>
-                    <div class="small text-muted font-italic mt-2">
+                    <div class="small text-muted fst-italic mt-2">
                         {{ $log->brow }}, {{ $log->ip }}
                     </div>
                 </div>

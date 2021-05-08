@@ -117,9 +117,7 @@
                         <option value="4" {{ $down->vote === '4' ? ' selected' : '' }}>{{ __('main.good') }}</option>
                         <option value="5" {{ $down->vote === '5' ? ' selected' : '' }}>{{ __('main.excellent') }}</option>
                     </select>
-                    <div class="input-group-append">
-                        <button class="btn btn-primary">{{ __('main.rate') }}</button>
-                    </div>
+                    <button class="btn btn-primary">{{ __('main.rate') }}</button>
                 </div>
                 <div class="invalid-feedback">{{ textError('protect') }}</div>
             </form>

@@ -27,7 +27,7 @@
                     <div class="section-user d-flex align-items-center">
                         <div class="flex-grow-1">
                             {{ $data->user->getProfile() }}
-                            <small class="section-date text-muted font-italic">{{ dateFixed($data->created_at) }}</small>
+                            <small class="section-date text-muted fst-italic">{{ dateFixed($data->created_at) }}</small>
                         </div>
                         <div class="text-end">
                             <input type="checkbox" name="del[]" value="{{ $data->id }}">

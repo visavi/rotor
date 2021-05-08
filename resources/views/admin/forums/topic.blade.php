@@ -113,8 +113,8 @@
                     <div class="section-user d-flex align-items-center">
                         <div class="flex-grow-1">
                             {{ $data->user->getProfile() }}
-                            <small class="section-date text-muted font-italic">({{ dateFixed($data->created_at) }})</small><br>
-                            <small class="font-italic">{{ $data->user->getStatus() }}</small>
+                            <small class="section-date text-muted fst-italic">({{ dateFixed($data->created_at) }})</small><br>
+                            <small class="fst-italic">{{ $data->user->getStatus() }}</small>
                         </div>
 
                         <div class="text-end">
@@ -167,7 +167,7 @@
                             </div>
                         @endif
 
-                        <div class="small text-muted font-italic mt-2">
+                        <div class="small text-muted fst-italic mt-2">
                             {{ $data->brow }}, {{ $data->ip }}
                         </div>
                     </div>
@@ -207,7 +207,7 @@
                             <div class="invalid-feedback">{{ textError('files') }}</div>
                         </div>
 
-                        <p class="text-muted font-italic">
+                        <p class="text-muted fst-italic">
                             {{ __('main.max_file_upload') }}: {{ setting('maxfiles') }}<br>
                             {{ __('main.max_file_weight') }}: {{ formatSize(setting('filesize')) }}<br>
                             {{ __('main.valid_file_extensions') }}: {{ str_replace(',', ', ', setting('file_extensions')) }}

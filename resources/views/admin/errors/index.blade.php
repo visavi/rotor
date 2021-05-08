@@ -19,7 +19,7 @@
 
     <div class="mb-3">
         @foreach ($lists as $key => $value)
-            <a class="badge bg-{{ $key === $code ? 'success' : 'light' }}" href="/admin/errors?code={{ $key }}">{{ $value }}</a>
+            <a class="badge bg-{{ $key === $code ? 'success' : 'light text-dark' }}" href="/admin/errors?code={{ $key }}">{{ $value }}</a>
         @endforeach
     </div>
 
@@ -27,12 +27,12 @@
         @foreach ($logs as $data)
             <div class="section mb-3 shadow">
                 <span class="section-title">{{ $data->request }}</span>
-                <small class="section-date text-muted font-italic">{{ dateFixed($data->created_at) }}</small>
+                <small class="section-date text-muted fst-italic">{{ dateFixed($data->created_at) }}</small>
 
                 <div class="section-body border-top">
                     Referer: {{ $data->referer ?: __('main.undefined') }}<br>
                     {{ __('main.user') }}: {{ $data->user->exists ? $data->user->getProfile() : setting('guestsuser') }}
-                    <div class="small text-muted font-italic mt-2">{{ $data->brow }}, {{ $data->ip }}</div>
+                    <div class="small text-muted fst-italic mt-2">{{ $data->brow }}, {{ $data->ip }}</div>
                 </div>
             </div>
         @endforeach

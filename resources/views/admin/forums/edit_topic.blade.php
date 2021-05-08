@@ -39,7 +39,7 @@
             <div class="mb-3{{ hasError('moderators') }}">
                 <label for="moderators" class="form-label">{{ __('forums.topic_curators') }}:</label>
                 <input class="form-control" name="moderators" id="moderators" maxlength="100" value="{{ getInput('moderators', $topic->moderators) }}">
-                <span class="text-muted font-italic">{{ __('forums.curators_note') }}</span>
+                <span class="text-muted fst-italic">{{ __('forums.curators_note') }}</span>
                 <div class="invalid-feedback">{{ textError('moderators') }}</div>
             </div>
 

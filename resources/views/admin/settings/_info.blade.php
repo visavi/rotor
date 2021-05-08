@@ -38,7 +38,7 @@
         <input type="hidden" value="60" name="mods[timeonline]">
     </div>
 
-    <p class="text-muted font-italic">
+    <p class="text-muted fst-italic">
         {{ __('settings.online_time_hint') }}
     </p>
 

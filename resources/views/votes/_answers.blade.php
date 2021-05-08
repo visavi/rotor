@@ -16,23 +16,20 @@
             @else
                 <div class="input-group mt-1 js-answer-append">
                     <input class="form-control" name="answers[{{ $key }}]" type="text" value="{{ $answer }}" maxlength="50" placeholder="{{ __('votes.answer') }}">
-                    <span class="input-group-append">
-                        <span class="input-group-text">
-                            <a class="js-answer-remove" href="#"><i class="fa fa-times"></i></a>
-                        </span>
+                    <span class="input-group-text">
+                        <a class="js-answer-remove" href="#"><i class="fa fa-times"></i></a>
                     </span>
                 </div>
             @endif
         @endforeach
     </div>
-    <span class="text-muted font-italic">{{ __('votes.hint_answers') }}</span>
+    <span class="text-muted fst-italic">{{ __('votes.hint_answers') }}</span>
     <div class="invalid-feedback">{{ textError('answers') }}</div>
 </div>
 
 @push('scripts')
     <script>
         $(".js-answer-add").click(function () {
-            console.log($(".js-answer-list input").length);
             if ($(".js-answer-list input").length >= 10) {
                 notification('error', "{{ __('votes.hint_answers') }}");
 
@@ -41,10 +38,8 @@
 
             $('.js-answer-list').append('<div class="input-group mt-1 js-answer-append">' +
                 '<input class="form-control" id="name" name="answers[]" type="text" value="" maxlength="50" placeholder="<?= __('votes.answer') ?>">' +
-                '<span class="input-group-append">' +
                 '<span class="input-group-text">' +
                 '<a class="js-answer-remove" href="#"><i class="fa fa-times"></i></a>' +
-                '</span>' +
                 '</span>' +
                 '</div>');
 

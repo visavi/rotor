@@ -17,5 +17,5 @@
 @section('content')
     @include('votes/_form')
 
-    <p class="text-muted font-italic">{{ __('votes.hint_text') }}</p>
+    <p class="text-muted fst-italic">{{ __('votes.hint_text') }}</p>
 @stop

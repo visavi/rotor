@@ -17,13 +17,10 @@
         <form method="get">
             <div class="input-group{{ hasError('find') }}">
                 <input name="find" class="form-control" id="inputFind" minlength="3" maxlength="64" placeholder="{{ __('main.request') }}" value="{{ getInput('find', $find) }}" required>
-
-                <div class="input-group-append">
-                    <button class="btn btn-primary">{{ __('main.search') }}</button>
-                </div>
+                <button class="btn btn-primary">{{ __('main.search') }}</button>
             </div>
             <div class="invalid-feedback">{{ textError('find') }}</div>
-            <span class="text-muted font-italic"><?= __('main.request_requirements') ?></span>
+            <span class="text-muted fst-italic"><?= __('main.request_requirements') ?></span>
         </form>
     </div>
 
@@ -43,7 +40,7 @@
                     {{ __('loads.load') }}: <a href="/loads/{{ $data->category->id }}">{{ $data->category->name }}</a><br>
                     {{ __('main.rating') }}: {{ $data->getCalculatedRating() }}<br>
                     {{ __('main.author') }}: {{ $data->user->getProfile() }}
-                    <small class="section-date text-muted font-italic">{{ dateFixed($data->created_at) }}</small>
+                    <small class="section-date text-muted fst-italic">{{ dateFixed($data->created_at) }}</small>
                 </div>
             </div>
         @endforeach

@@ -89,9 +89,7 @@ $keys = [
                         <option value="<?= $language ?>"<?= $selected ?>><?= $language ?></option>
                     <?php endforeach; ?>
                 </select>
-                <div class="input-group-append">
-                    <button class="btn btn-primary"><?= __('main.select') ?></button>
-                </div>
+                <button class="btn btn-primary"><?= __('main.select') ?></button>
             </div>
         </form>
 
@@ -111,7 +109,7 @@ $keys = [
                                 <?= $key ?> - <?= trim(var_export(env($key), true), "'") ?><br>
                             <?php endforeach; ?>
                         </p>
-                        <span class="text-danger font-italic"><?= __('install.app_key') ?></span>
+                        <span class="text-danger fst-italic"><?= __('install.app_key') ?></span>
                     </div>
                 </div>
             </div>
@@ -166,7 +164,7 @@ $keys = [
                             <?php $errors['simple']['curl'] = extension_loaded('curl') ?>
                             <?php $version = getModuleSetting('curl', ['Curl Information', 'cURL Information']); ?>
                             <span class="<?= $errors['simple']['curl'] ? 'text-success' : 'text-danger' ?>">Curl: <?= $version ?></span><br>
-                            <span class="font-italic my-3">
+                            <span class="fst-italic my-3">
                                 <?= __('install.ffmpeg') ?>
                             </span>
                         </p>
@@ -380,7 +378,7 @@ $keys = [
                 <div class="mb-3">
                     <label for="login" class="form-label"><?= __('users.login') ?> (max20):</label>
                     <input type="text" class="form-control" name="login" id="login" maxlength="20" value="<?= $login ?>">
-                    <span class="text-muted font-italic"><?= __('users.login_requirements') ?></span>
+                    <span class="text-muted fst-italic"><?= __('users.login_requirements') ?></span>
                 </div>
                 <div class="mb-3">
                     <label for="password" class="form-label"><?= __('users.password') ?> (max20):</label>

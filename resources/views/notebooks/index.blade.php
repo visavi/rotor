@@ -23,7 +23,7 @@
             {{ bbCode($note->text) }}
         </div>
 
-        <p class="text-muted font-italic">
+        <p class="text-muted fst-italic">
             {{ __('notebooks.last_edited') }}: {{ dateFixed($note->created_at) }}
         </p>
     @else

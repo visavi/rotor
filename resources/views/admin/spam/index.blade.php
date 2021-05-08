@@ -16,7 +16,7 @@
 
     <div class="mb-3">
         @foreach ($types as $key => $value)
-            <a class="badge bg-{{ $key === $type ? 'success' : 'light' }}" href="/admin/spam?type={{ $key }}">{{ $value }} {{ $total[$key] }}</a>
+            <a class="badge bg-{{ $key === $type ? 'success' : 'light text-dark' }}" href="/admin/spam?type={{ $key }}">{{ $value }} {{ $total[$key] }}</a>
         @endforeach
     </div>
 
@@ -41,7 +41,7 @@
                                 <b>{{ setting('guestsuser') }}</b>
                             @endif
 
-                            <small class="section-date text-muted font-italic">
+                            <small class="section-date text-muted fst-italic">
                                 {{ dateFixed($record->relate->created_at, 'd.m.Y / H:i:s') }}
                             </small>
                         @else
@@ -71,7 +71,7 @@
 
                     <div>
                         {{ __('main.sent') }}: {{ $record->user->getProfile() }}
-                        <small class="section-date text-muted font-italic">
+                        <small class="section-date text-muted fst-italic">
                             {{ dateFixed($record->created_at) }}
                         </small>
                     </div>

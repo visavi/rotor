@@ -27,7 +27,7 @@
         </form>
     </div>
 
-    <p class="text-muted font-italic">
+    <p class="text-muted fst-italic">
         {{ __('mails.recovery_text1') }}
         <a href="/mails">{{ __('index.mails') }}</a>
     </p>

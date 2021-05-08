@@ -29,16 +29,16 @@
 
     @if ($users->isNotEmpty())
         {{ __('main.sort') }}:
-        <?php $active = ($sort === 'point') ? 'success' : 'light'; ?>
+        <?php $active = ($sort === 'point') ? 'success' : 'light text-dark'; ?>
         <a href="/users?type={{ $type }}&amp;sort=point" class="badge bg-{{ $active }}">{{ __('users.assets') }}</a>
 
-        <?php $active = ($sort === 'rating') ? 'success' : 'light'; ?>
+        <?php $active = ($sort === 'rating') ? 'success' : 'light text-dark'; ?>
         <a href="/users?type={{ $type }}&amp;sort=rating" class="badge bg-{{ $active }}">{{ __('users.reputation') }}</a>
 
-        <?php $active = ($sort === 'money') ? 'success' : 'light'; ?>
+        <?php $active = ($sort === 'money') ? 'success' : 'light text-dark'; ?>
         <a href="/users?type={{ $type }}&amp;sort=money" class="badge bg-{{ $active }}">{{ __('users.moneys') }}</a>
 
-        <?php $active = ($sort === 'time') ? 'success' : 'light'; ?>
+        <?php $active = ($sort === 'time') ? 'success' : 'light text-dark'; ?>
         <a href="/users?type={{ $type }}&amp;sort=time" class="badge bg-{{ $active }}">{{ __('main.date') }}</a>
         <hr>
 
@@ -53,7 +53,7 @@
                     <div class="flex-grow-1">
                         {{ $users->firstItem() + $key }}.
                         {{ $data->getProfile() }}<br>
-                        <small class="font-italic">{{ $data->getStatus() }}</small>
+                        <small class="fst-italic">{{ $data->getStatus() }}</small>
                     </div>
                 </div>
 
@@ -70,9 +70,7 @@
             <form action="/users?type={{ $type }}&amp;sort={{ $sort }}" method="post">
                 <div class="input-group{{ hasError('user') }}">
                     <input type="text" class="form-control" id="user" name="user" maxlength="20" value="{{ getInput('user', $user) }}" placeholder="{{ __('main.user_login') }}" required>
-                    <div class="input-group-append">
-                        <button class="btn btn-primary">{{ __('main.search') }}</button>
-                    </div>
+                    <button class="btn btn-primary">{{ __('main.search') }}</button>
                 </div>
                 <div class="invalid-feedback">{{ textError('user') }}</div>
             </form>

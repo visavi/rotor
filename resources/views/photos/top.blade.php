@@ -16,10 +16,10 @@
     @if ($photos->isNotEmpty())
 
         {{ __('main.sort') }}:
-        <?php $active = ($order === 'rating') ? 'success' : 'light'; ?>
+        <?php $active = ($order === 'rating') ? 'success' : 'light text-dark'; ?>
         <a href="/photos/top?sort=rating" class="badge bg-{{ $active }}">{{ __('main.rating') }}</a>
 
-        <?php $active = ($order === 'count_comments') ? 'success' : 'light'; ?>
+        <?php $active = ($order === 'count_comments') ? 'success' : 'light text-dark'; ?>
         <a href="/photos/top?sort=comments" class="badge bg-{{ $active }}">{{ __('main.comments') }}</a>
         <hr>
 

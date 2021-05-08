@@ -80,7 +80,7 @@
                                     </div>
                                     <div>
                                         <i class="fa fa-user-circle"></i> {{ $item->user->getProfile() }}
-                                        <small class="section-date text-muted font-italic">
+                                        <small class="section-date text-muted fst-italic">
                                             {{ dateFixed($item->created_at) }}
                                         </small>
                                     </div>

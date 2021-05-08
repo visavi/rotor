@@ -37,7 +37,7 @@
 
         <div class="section-body">
             {{ __('main.added') }}: {{ $offer->user->getProfile() }}
-            <small class="section-date text-muted font-italic">{{ dateFixed($offer->created_at) }}</small>
+            <small class="section-date text-muted fst-italic">{{ dateFixed($offer->created_at) }}</small>
 
             <div class="my-3">
                 {{ $offer->getStatus() }}
@@ -63,7 +63,7 @@
             <div class="section-message">
                 {{ bbCode($offer->reply) }}<br>
                 {{ $offer->replyUser->getProfile() }}
-                <small class="section-date text-muted font-italic">{{ dateFixed($offer->updated_at) }}</small>
+                <small class="section-date text-muted fst-italic">{{ dateFixed($offer->updated_at) }}</small>
             </div>
         </div>
     @endif

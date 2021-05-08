@@ -35,19 +35,19 @@
                     <div class="flex-grow-1">
                         @if ($data->user_id)
                             {{ $data->user->getProfile() }}
-                            <small class="section-date text-muted font-italic">{{ dateFixed($data->updated_at, 'H:i:s') }}</small><br>
-                            <small class="font-italic">{{ $data->user->getStatus() }}</small>
+                            <small class="section-date text-muted fst-italic">{{ dateFixed($data->updated_at, 'H:i:s') }}</small><br>
+                            <small class="fst-italic">{{ $data->user->getStatus() }}</small>
                         @else
 
                             <span class="section-author fw-bold" data-login="{{ setting('guestsuser') }}">{{ setting('guestsuser') }}</span>
 
-                            <small class="section-date text-muted font-italic">{{ dateFixed($data->updated_at, 'H:i:s') }}</small>
+                            <small class="section-date text-muted fst-italic">{{ dateFixed($data->updated_at, 'H:i:s') }}</small>
                         @endif
                     </div>
                 </div>
 
                 <div class="section-body border-top">
-                    <div class="small text-muted font-italic mt-2">
+                    <div class="small text-muted fst-italic mt-2">
                         {{ $data->brow }}{{ isAdmin() ? ', ' . $data->ip : '' }}
                     </div>
                 </div>

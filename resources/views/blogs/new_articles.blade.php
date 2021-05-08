@@ -29,7 +29,7 @@
                     {{ __('blogs.blog') }}: <a href="/blogs/{{ $article->category_id }}">{{ $article->category->name }}</a><br>
                     {{ __('main.views') }}: {{ $article->visits }}<br>
                     {{ __('main.author') }}: {{ $article->user->getProfile() }}
-                    <small class="section-date text-muted font-italic">{{  dateFixed($article->created_at) }}</small>
+                    <small class="section-date text-muted fst-italic">{{  dateFixed($article->created_at) }}</small>
                 </div>
             </div>
         @endforeach

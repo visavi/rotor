@@ -18,10 +18,10 @@
 
 @section('content')
     @if (getUser() && getUser('id') === $user->id)
-        <?php $type = ($active === 1) ? 'success' : 'light'; ?>
+        <?php $type = ($active === 1) ? 'success' : 'light text-dark'; ?>
         <a href="/downs/active/files?active=1" class="badge bg-{{ $type }}">{{ __('loads.verified') }}</a>
 
-        <?php $type = ($active === 0) ? 'success' : 'light'; ?>
+        <?php $type = ($active === 0) ? 'success' : 'light text-dark'; ?>
         <a href="/downs/active/files?active=0" class="badge bg-{{ $type }}">{{ __('loads.pending') }}</a>
         <hr>
     @endif
@@ -46,7 +46,7 @@
                     {{ __('loads.load') }}: <a href="/loads/{{ $down->category->id }}">{{ $down->category->name }}</a><br>
                     {{ __('main.downloads') }}: {{ $down->loads }}<br>
                     {{ __('main.author') }}: {{ $down->user->getProfile() }}
-                    <small class="section-date text-muted font-italic">{{ dateFixed($down->created_at) }}</small>
+                    <small class="section-date text-muted fst-italic">{{ dateFixed($down->created_at) }}</small>
                 </div>
             </div>
         @endforeach

@@ -77,7 +77,7 @@
         <div class="invalid-feedback">{{ textError('sets[language_fallback]') }}</div>
     </div>
 
-    <p class="text-muted font-italic">
+    <p class="text-muted fst-italic">
         {{ __('settings.fallback_language_hint') }}
     </p>
 
@@ -130,7 +130,7 @@
         <label class="form-check-label" for="invite">{{ __('settings.registration_invite') }}</label>
     </div>
 
-    <p class="text-muted font-italic">
+    <p class="text-muted fst-italic">
         {{ __('settings.registration_invite_hint') }}
     </p>
 

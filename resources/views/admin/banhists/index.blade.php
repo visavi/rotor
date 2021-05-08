@@ -26,7 +26,7 @@
                     <div class="section-user d-flex align-items-center">
                         <div class="flex-grow-1">
                             {{ $data->user->getProfile() }}
-                            <small class="section-date text-muted font-italic">{{ dateFixed($data->created_at) }}</small>
+                            <small class="section-date text-muted fst-italic">{{ dateFixed($data->created_at) }}</small>
                         </div>
 
                         <div class="text-end">
@@ -62,9 +62,7 @@
             <label for="user" class="form-label">{{ __('admin.banhists.search_user') }}:</label>
             <div class="input-group{{ hasError('user') }}">
                 <input type="text" class="form-control" id="user" name="user" maxlength="20" value="{{ getInput('user') }}" placeholder="{{ __('main.user_login') }}" required>
-                <div class="input-group-append">
-                    <button class="btn btn-primary">{{ __('main.search') }}</button>
-                </div>
+                <button class="btn btn-primary">{{ __('main.search') }}</button>
             </div>
             <div class="invalid-feedback">{{ textError('user') }}</div>
         </form>

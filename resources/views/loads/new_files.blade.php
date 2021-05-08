@@ -37,7 +37,7 @@
                     {{ __('loads.load') }}: <a href="/loads/{{ $down->category->id }}">{{ $down->category->name }}</a><br>
                     {{ __('main.downloads') }}: {{ $down->loads }}<br>
                     {{ __('main.author') }}: {{ $down->user->getProfile() }}
-                    <small class="section-date text-muted font-italic">{{ dateFixed($down->created_at) }}</small>
+                    <small class="section-date text-muted fst-italic">{{ dateFixed($down->created_at) }}</small>
                 </div>
             </div>
         @endforeach

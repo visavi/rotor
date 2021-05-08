@@ -36,7 +36,7 @@
                             {{ __('main.automatically') }}
                         @endif
 
-                        <small class="section-date text-muted font-italic">{{ dateFixed($log->created_at) }}</small>
+                        <small class="section-date text-muted fst-italic">{{ dateFixed($log->created_at) }}</small>
                     </div>
                 </div>
             @endforeach
@@ -58,9 +58,7 @@
             @csrf
             <div class="input-group{{ hasError('ip') }}">
                 <input type="text" class="form-control" id="ip" name="ip" maxlength="39" value="{{ getInput('ip') }}" placeholder="IP-address" required>
-                <div class="input-group-append">
-                    <button class="btn btn-primary">{{ __('main.add') }}</button>
-                </div>
+                <button class="btn btn-primary">{{ __('main.add') }}</button>
             </div>
             <div class="invalid-feedback">{{ textError('ip') }}</div>
         </form>

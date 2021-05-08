@@ -109,14 +109,6 @@
   cursor: pointer;
 }
 
-.badge {
-  border: 1px solid transparent;
-}
-
-.bg-light text-dark {
-  border: 1px solid #ebebeb;
-}
-
 textarea.form-control {
   resize: vertical;
 }
@@ -143,6 +135,10 @@ textarea.form-control {
   background:#f7f7f9;
   border-left: 5px solid #ddd;
   font-style:italic;
+}
+
+.blockquote-footer {
+  margin: 0;
 }
 
 .is-invalid .form-control {

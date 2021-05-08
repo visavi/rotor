@@ -37,7 +37,7 @@
                     @endif
 
                     @if ($forum->description)
-                        <div class="small font-italic">{{ $forum->description }}</div>
+                        <div class="small fst-italic">{{ $forum->description }}</div>
                     @endif
                 </div>
 

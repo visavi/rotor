@@ -61,7 +61,7 @@
         </form>
     </div>
 
-    <p class="text-muted font-italic">{{ __('blogs.text_create1') }}</p>
+    <p class="text-muted fst-italic">{{ __('blogs.text_create1') }}</p>
 
     <a href="/rules">{{ __('main.rules') }}</a> /
     <a href="/stickers">{{ __('main.stickers') }}</a> /

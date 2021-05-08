@@ -57,9 +57,7 @@
                     <option value="yes"{{ $inputAction === 'yes' ? ' selected' : '' }}>{{ __('main.allow') }}</option>
                     <option value="no"{{ $inputAction === 'no' ? ' selected' : '' }}>{{ __('main.disallow') }}</option>
                 </select>
-                <div class="input-group-append">
-                    <button class="btn btn-primary">{{ __('main.execute') }}</button>
-                </div>
+                <button class="btn btn-primary">{{ __('main.execute') }}</button>
             </div>
             <div class="invalid-feedback">{{ textError('action') }}</div>
         </form>

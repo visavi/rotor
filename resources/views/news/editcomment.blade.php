@@ -16,7 +16,7 @@
 
 @section('content')
     <i class="fa fa-pencil-alt"></i> <b>{{ $comment->user->getName() }}</b>
-    <small class="section-date text-muted font-italic">{{ dateFixed($comment->created_at) }}</small><br>
+    <small class="section-date text-muted fst-italic">{{ dateFixed($comment->created_at) }}</small><br>
 
     <div class="section-form mb-3 shadow">
         <form method="post">

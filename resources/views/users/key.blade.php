@@ -41,7 +41,7 @@
             </form>
         </div>
 
-        <p class="text-muted font-italic">
+        <p class="text-muted fst-italic">
             {{ __('users.old_code_invalid') }}
         </p>
     </div>
@@ -52,7 +52,7 @@
         </div>
     @endif
 
-    <p class="text-muted font-italic">
+    <p class="text-muted fst-italic">
         {!! __('users.confirm_text') !!}
     </p>
 

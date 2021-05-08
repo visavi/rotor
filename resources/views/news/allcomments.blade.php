@@ -30,10 +30,10 @@
                     </div>
 
                     {{ __('main.posted') }}: {{ $data->user->getProfile() }}
-                    <small class="section-date text-muted font-italic">{{ dateFixed($data->created_at) }}</small>
+                    <small class="section-date text-muted fst-italic">{{ dateFixed($data->created_at) }}</small>
 
                     @if (isAdmin())
-                        <div class="small text-muted font-italic mt-2">{{ $data->brow }}, {{ $data->ip }}</div>
+                        <div class="small text-muted fst-italic mt-2">{{ $data->brow }}, {{ $data->ip }}</div>
                     @endif
                 </div>
             </div>

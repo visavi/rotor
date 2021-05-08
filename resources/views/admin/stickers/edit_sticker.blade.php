@@ -38,7 +38,7 @@
                 <div class="invalid-feedback">{{ textError('code') }}</div>
             </div>
 
-            <p class="text-muted font-italic">
+            <p class="text-muted fst-italic">
                 {{ __('stickers.valid_sticker_code') }}
             </p>
             <button class="btn btn-primary">{{ __('main.change') }}</button>

@@ -53,9 +53,9 @@
                     </div>
 
                     <i class="far fa-user"></i> {{ $data->user->getProfile() }}
-                    <small class="section-date text-muted font-italic">{{ __('admin.paid_adverts.expires') }}: {{ dateFixed($data->deleted_at) }}</small>
+                    <small class="section-date text-muted fst-italic">{{ __('admin.paid_adverts.expires') }}: {{ dateFixed($data->deleted_at) }}</small>
 
-                    <div class="small text-muted font-italic mt-2">
+                    <div class="small text-muted fst-italic mt-2">
                         {{ __('admin.paid_adverts.color') }}: {!! $data->color ? '<span style="color:' . $data->color .'">'. $data->color .'</span>' : '<i class="fas fa-times text-danger"></i>' !!},
                         {{ __('admin.paid_adverts.bold') }}: {!! $data->bold ? '<i class="fas fa-check text-success"></i>' : '<i class="fas fa-times text-danger"></i>' !!}
                     </div>

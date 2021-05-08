@@ -27,8 +27,8 @@
                         <div class="flex-grow-1">
                             {{ $contact->contactor->getProfile() }}
 
-                            <small class="section-date text-muted font-italic">{{ dateFixed($contact->created_at) }}</small><br>
-                            <small class="font-italic">{{ $contact->contactor->getStatus() }}</small>
+                            <small class="section-date text-muted fst-italic">{{ dateFixed($contact->created_at) }}</small><br>
+                            <small class="fst-italic">{{ $contact->contactor->getStatus() }}</small>
                         </div>
 
                         <div class="text-end">
@@ -66,15 +66,9 @@
         <form method="post">
             @csrf
             <div class="input-group{{ hasError('user') }}">
-                <div class="input-group-prepend">
-                    <span class="input-group-text"><i class="fa fa-pencil-alt"></i></span>
-                </div>
-
+                <span class="input-group-text"><i class="fa fa-pencil-alt"></i></span>
                 <input type="text" class="form-control" id="user" name="user" maxlength="20" value="{{ getInput('user', $login) }}" placeholder="{{ __('main.user_login') }}" required>
-
-                <div class="input-group-append">
-                    <button class="btn btn-primary">{{ __('main.add') }}</button>
-                </div>
+                <button class="btn btn-primary">{{ __('main.add') }}</button>
             </div>
             <div class="invalid-feedback">{{ textError('user') }}</div>
         </form>

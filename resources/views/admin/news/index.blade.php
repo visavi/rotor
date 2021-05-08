@@ -29,7 +29,7 @@
                     <div class="flex-grow-1">
                         <i class="fa {{ $data->getIcon() }} text-muted"></i>
                         <a class="section-title" href="/news/{{ $data->id }}">{{ $data->title }}</a>
-                        <small class="section-date text-muted font-italic">{{ dateFixed($data->created_at) }})</small>
+                        <small class="section-date text-muted fst-italic">{{ dateFixed($data->created_at) }})</small>
                     </div>
 
                     <div class="text-end">

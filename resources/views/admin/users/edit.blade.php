@@ -48,7 +48,7 @@
                 <label for="password" class="form-label">{{ __('users.new_password') }}:</label>
                 <input type="text" class="form-control" id="password" name="password" maxlength="50" value="{{ getInput('password') }}">
                 <div class="invalid-feedback">{{ textError('password') }}</div>
-                <span class="text-muted font-italic">{{ __('users.password_hint') }}</span>
+                <span class="text-muted fst-italic">{{ __('users.password_hint') }}</span>
             </div>
 
             <div class="mb-3{{ hasError('email') }}">

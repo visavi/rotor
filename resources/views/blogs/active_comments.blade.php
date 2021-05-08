@@ -36,7 +36,7 @@
 
                     {{ __('main.posted') }}: {{ $comment->user->getProfile() }} <small>({{ dateFixed($comment->created_at) }})</small><br>
                     @if (isAdmin())
-                        <div class="small text-muted font-italic mt-2">
+                        <div class="small text-muted fst-italic mt-2">
                             {{ $comment->brow }}, {{ $comment->ip }}
                         </div>
                     @endif

@@ -26,7 +26,7 @@
                         {{ $user->getGender() }} {{ $user->getProfile() }}
 
                         @if ($user->lastBan->created_at)
-                            <small class="section-date text-muted font-italic">{{ dateFixed($user->lastBan->created_at) }}</small>
+                            <small class="section-date text-muted fst-italic">{{ dateFixed($user->lastBan->created_at) }}</small>
                         @endif
                     </div>
 

@@ -47,7 +47,7 @@
         </form>
     </div>
 
-    <p class="text-muted font-italic">
+    <p class="text-muted fst-italic">
         {{ __('stickers.valid_sticker_code') }}<br>
         {{ __('main.valid_file_extensions') }}: jpg, jpeg, gif, png<br>
         {{ __('main.max_file_weight') }}: {{ formatSize(setting('stickermaxsize')) }}<br>

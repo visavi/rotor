@@ -40,7 +40,7 @@
                 <div class="section-content">
                     <span class="badge bg-info">{{ __('main.type') }}: {{ $notice->type }}</span><br>
                     {{ __('main.changed') }}: {{ $notice->user->getProfile() }}
-                    <small class="section-date text-muted font-italic">{{ dateFixed($notice->updated_at) }}</small>
+                    <small class="section-date text-muted fst-italic">{{ dateFixed($notice->updated_at) }}</small>
                 </div>
             </div>
         @endforeach

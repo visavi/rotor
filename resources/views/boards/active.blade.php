@@ -35,7 +35,7 @@
                                     </div>
                                     <div>
                                         <i class="fa fa-user-circle"></i> {{ $item->user->getProfile() }}
-                                        <small class="section-date text-muted font-italic">{{ dateFixed($item->created_at) }}</small>
+                                        <small class="section-date text-muted fst-italic">{{ dateFixed($item->created_at) }}</small>
                                         <br>
 
                                         @if ($item->expires_at > SITETIME)

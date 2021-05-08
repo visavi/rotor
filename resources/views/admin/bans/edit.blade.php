@@ -76,6 +76,6 @@
             </form>
         </div>
 
-        <p class="text-muted font-italic">{{ __('admin.bans.ban_hint') }}</p>
+        <p class="text-muted fst-italic">{{ __('admin.bans.ban_hint') }}</p>
     @endif
 @stop

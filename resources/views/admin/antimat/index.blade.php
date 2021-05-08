@@ -44,15 +44,9 @@
     <form method="post">
         @csrf
         <div class="input-group">
-            <div class="input-group-prepend">
-                <span class="input-group-text"><i class="fa fa-pencil-alt"></i></span>
-            </div>
-
+            <span class="input-group-text"><i class="fa fa-pencil-alt"></i></span>
             <input type="text" class="form-control" name="word" placeholder="{{ __('admin.antimat.enter_word') }}" required>
-
-            <div class="input-group-append">
-                <button class="btn btn-primary">{{ __('main.add') }}</button>
-            </div>
+            <button class="btn btn-primary">{{ __('main.add') }}</button>
         </div>
     </form>
 @stop

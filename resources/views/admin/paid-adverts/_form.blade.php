@@ -33,10 +33,8 @@
                 @else
                     <div class="input-group mt-1 js-advert-append">
                         <input class="form-control" name="names[]" type="text" value="{{ $names[$i] ?? '' }}" maxlength="35" placeholder="{{ __('admin.paid_adverts.name') }}">
-                        <span class="input-group-append">
-                            <span class="input-group-text">
-                                <a class="js-advert-remove" href="#"><i class="fa fa-times"></i></a>
-                            </span>
+                        <span class="input-group-text">
+                            <a class="js-advert-remove" href="#"><i class="fa fa-times"></i></a>
                         </span>
                     </div>
                 @endif
@@ -50,9 +48,7 @@
 
         <div class="input-group colorpick">
             <input class="form-control col-sm-4 js-color" id="color" name="color" type="text" maxlength="7" placeholder="{{ __('admin.paid_adverts.color') }}" value="{{ getInput('color', $advert->color) }}">
-            <span class="input-group-append">
-                <span class="input-group-text colorpicker-input-addon"><i></i></span>
-            </span>
+            <span class="input-group-text colorpicker-input-addon"><i></i></span>
         </div>
 
         <div class="invalid-feedback">{{ textError('color') }}</div>
@@ -84,11 +80,9 @@
         $(".js-advert-add").click(function () {
             $('.js-advert-list').append('<div class="input-group mt-1 js-advert-append">' +
                 '<input class="form-control" id="name" name="names[]" type="text" value="" maxlength="35" placeholder="<?= __('admin.paid_adverts.name') ?>">' +
-                    '<span class="input-group-append">' +
-                        '<span class="input-group-text">' +
-                            '<a class="js-advert-remove" href="#"><i class="fa fa-times"></i></a>' +
-                        '</span>' +
-                    '</span>' +
+                '<span class="input-group-text">' +
+                    '<a class="js-advert-remove" href="#"><i class="fa fa-times"></i></a>' +
+                '</span>' +
             '</div>');
 
             return false;

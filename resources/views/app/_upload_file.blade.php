@@ -36,7 +36,7 @@
     </label>
 </div>
 
-<p class="text-muted font-italic">
+<p class="text-muted fst-italic">
     {{ __('main.max_file_upload') }}: {{ setting('maxfiles') }}<br>
     {{ __('main.max_file_weight') }}: {{ formatSize(setting('filesize')) }}<br>
     {{ __('main.valid_file_extensions') }}: {{ setting('file_extensions') }}<br>

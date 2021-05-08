@@ -55,9 +55,9 @@
         </div>
 
         {{ __('main.added') }}: {{ $article->user->getProfile() }}
-        <small class="section-date text-muted font-italic">{{ dateFixed($article->created_at) }}</small><br>
+        <small class="section-date text-muted fst-italic">{{ dateFixed($article->created_at) }}</small><br>
 
-        <div class="my-3 font-italic">
+        <div class="my-3 fst-italic">
             <i class="fa fa-tag"></i> {!! $tags !!}
         </div>
 

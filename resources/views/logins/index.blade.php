@@ -18,11 +18,11 @@
             <div class="section mb-3 shadow">
                 <h5>
                     <i class="fa fa-sign-in-alt"></i> {{ $data->getType() }}
-                    <small class="section-date text-muted font-italic">{{ dateFixed($data->created_at) }}</small>
+                    <small class="section-date text-muted fst-italic">{{ dateFixed($data->created_at) }}</small>
                 </h5>
 
                 <div class="section-body border-top">
-                    <div class="small text-muted font-italic mt-2">
+                    <div class="small text-muted fst-italic mt-2">
                         Browser: {{ $data->brow }} /
                         IP: {{ $data->ip }}
                     </div>

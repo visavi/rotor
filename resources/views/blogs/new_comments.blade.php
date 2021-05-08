@@ -34,9 +34,9 @@
                     {{ bbCode($comment->text) }}<br>
 
                     {{ __('main.posted') }}: {{ $comment->user->getProfile() }}
-                    <small class="section-date text-muted font-italic">{{ dateFixed($comment->created_at) }}</small><br>
+                    <small class="section-date text-muted fst-italic">{{ dateFixed($comment->created_at) }}</small><br>
                     @if (isAdmin())
-                        <div class="small text-muted font-italic mt-2">
+                        <div class="small text-muted fst-italic mt-2">
                             {{ $comment->brow }}, {{ $comment->ip }}
                         </div>
                     @endif

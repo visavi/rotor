@@ -131,8 +131,8 @@
                 <div class="section-user d-flex align-items-center">
                     <div class="flex-grow-1">
                         {{ $post->user->getProfile() }}
-                        <small class="section-date text-muted font-italic">{{ dateFixed($post->created_at) }}</small><br>
-                        <small class="font-italic">{{ $post->user->getStatus() }}</small>
+                        <small class="section-date text-muted fst-italic">{{ dateFixed($post->created_at) }}</small><br>
+                        <small class="fst-italic">{{ $post->user->getStatus() }}</small>
                     </div>
 
                     <div class="text-end">
@@ -192,7 +192,7 @@
                     @endif
 
                     @if (isAdmin())
-                        <div class="small text-muted font-italic mt-2">{{ $post->brow }}, {{ $post->ip }}</div>
+                        <div class="small text-muted fst-italic mt-2">{{ $post->brow }}, {{ $post->ip }}</div>
                     @endif
                 </div>
             </div>
@@ -232,7 +232,7 @@
                             <div class="invalid-feedback">{{ textError('files') }}</div>
                         </div>
 
-                        <p class="text-muted font-italic">
+                        <p class="text-muted fst-italic">
                             {{ __('main.max_file_upload') }}: {{ setting('maxfiles') }}<br>
                             {{ __('main.max_file_weight') }}: {{ formatSize(setting('filesize')) }}<br>
                             {{ __('main.valid_file_extensions') }}: {{ str_replace(',', ', ', setting('file_extensions')) }}
@@ -257,6 +257,6 @@
     <a href="/tags">{{ __('main.tags') }}</a>  /
     <a href="/rules">{{ __('main.rules') }}</a> /
     <a href="/forums/top/topics">{{ __('forums.top_topics') }}</a> /
-    <a href="/forums/top/posts">{{ __('forums.top_topics') }}</a> /
+    <a href="/forums/top/posts">{{ __('forums.top_posts') }}</a> /
     <a href="/forums/search?fid={{ $topic->forum_id }}">{{ __('main.search') }}</a><br>
 @stop

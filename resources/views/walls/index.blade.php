@@ -30,8 +30,8 @@
                 <div class="section-user d-flex align-items-center">
                     <div class="flex-grow-1">
                         {{ $data->author->getProfile() }}
-                        <small class="section-date text-muted font-italic">{{ dateFixed($data->created_at) }}</small><br>
-                        <small class="font-italic">{{ $data->author->getStatus() }}</small>
+                        <small class="section-date text-muted fst-italic">{{ dateFixed($data->created_at) }}</small><br>
+                        <small class="fst-italic">{{ $data->author->getStatus() }}</small>
                     </div>
 
                     @if (getUser())

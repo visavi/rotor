@@ -16,10 +16,7 @@
     <form method="get">
         <div class="input-group{{ hasError('find') }}">
             <input name="find" class="form-control" id="inputFind" minlength="3" maxlength="64" placeholder="{{ __('main.request') }}" value="{{ getInput('find', $find) }}" required>
-
-            <div class="input-group-append">
-                <button class="btn btn-primary">{{ __('main.search') }}</button>
-            </div>
+            <button class="btn btn-primary">{{ __('main.search') }}</button>
         </div>
 
         <div class="form-check my-1">
@@ -27,7 +24,7 @@
             <label class="form-check-label" for="type">Искать в названиях тем</label>
         </div>
         <div class="invalid-feedback">{{ textError('find') }}</div>
-        <span class="text-muted font-italic"><?= __('main.request_requirements') ?></span>
+        <span class="text-muted fst-italic"><?= __('main.request_requirements') ?></span>
     </form>
 
     @if ($data->isNotEmpty())
@@ -45,7 +42,7 @@
                         {{ bbCode($post->text) }}<br>
                         {{ __('forums.forum') }}: <a href="/topics/{{ $post->topic->forum->id }}">{{ $post->topic->forum->title }}</a><br>
                         {{ __('main.posted') }}: {{ $post->user->getProfile() }}
-                        <small class="section-date text-muted font-italic">{{ dateFixed($post->created_at) }}</small>
+                        <small class="section-date text-muted fst-italic">{{ dateFixed($post->created_at) }}</small>
                     </div>
                 </div>
             @endforeach
@@ -61,7 +58,7 @@
                         {{ $topic->pagination() }}
                         {{ __('forums.forum') }}: <a href="/topics/{{ $topic->forum->id }}">{{ $topic->forum->title }}</a><br>
                         {{ __('forums.post') }}: {{ $topic->lastPost->user->getName() }}
-                        <small class="section-date text-muted font-italic">{{ dateFixed($topic->lastPost->created_at) }}</small>
+                        <small class="section-date text-muted fst-italic">{{ dateFixed($topic->lastPost->created_at) }}</small>
                     </div>
                 </div>
             @endforeach

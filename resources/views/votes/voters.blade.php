@@ -22,7 +22,7 @@
         @foreach ($voters as $voter)
             <div class="section mb-3 shadow">
                 {{ $voter->user->getGender() }} {{ $voter->user->getProfile() }}
-                <small class="section-date text-muted font-italic">{{ dateFixed($voter->created_at) }}</small><br>
+                <small class="section-date text-muted fst-italic">{{ dateFixed($voter->created_at) }}</small><br>
                 {{ __('main.vote') }}: {{ $voter->vote }}
             </div>
         @endforeach

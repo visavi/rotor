@@ -18,13 +18,13 @@
 
 @section('content')
     {{ __('main.sort') }}:
-    <?php $active = ($order === 'loads') ? 'success' : 'light'; ?>
+    <?php $active = ($order === 'loads') ? 'success' : 'light text-dark'; ?>
     <a href="/loads/top?sort=loads" class="badge bg-{{ $active }}">{{ __('main.downloads') }}</a>
 
-    <?php $active = ($order === 'rated') ? 'success' : 'light'; ?>
+    <?php $active = ($order === 'rated') ? 'success' : 'light text-dark'; ?>
     <a href="/loads/top?sort=rated" class="badge bg-{{ $active }}">{{ __('main.rating') }}</a>
 
-    <?php $active = ($order === 'count_comments') ? 'success' : 'light'; ?>
+    <?php $active = ($order === 'count_comments') ? 'success' : 'light text-dark'; ?>
     <a href="/loads/top?sort=comments" class="badge bg-{{ $active }}">{{ __('main.comments') }}</a>
     <hr>
 

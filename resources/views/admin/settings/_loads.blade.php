@@ -22,7 +22,7 @@
         <div class="invalid-feedback">{{ textError('sets[fileupload]') }}</div>
 
         <input type="hidden" value="1048576" name="mods[fileupload]">
-        <span class="text-muted font-italic">{{ __('main.server_limit') }}: {{ ini_get('upload_max_filesize') }}</span>
+        <span class="text-muted fst-italic">{{ __('main.server_limit') }}: {{ ini_get('upload_max_filesize') }}</span>
     </div>
 
     <div class="mb-3{{ hasError('sets[allowextload]') }}">

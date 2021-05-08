@@ -43,7 +43,7 @@
         {{ showError(__('admin.checkers.initial_scan')) }}
     @endif
 
-    <p class="text-muted font-italic">
+    <p class="text-muted fst-italic">
         {{ __('admin.checkers.information_scan') }}<br>
         {{ __('admin.checkers.invalid_extensions') }}: {{ setting('nocheck') }}
     </p>

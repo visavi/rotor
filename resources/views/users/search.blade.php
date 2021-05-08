@@ -54,7 +54,7 @@
     <a class="badge rounded-pill bg-success" href="/searchusers/z">Z</a>
     <br><br>
 
-    <p class="text-muted font-italic">
+    <p class="text-muted fst-italic">
         {!! __('users.search_text') !!}
     </p>
 @stop

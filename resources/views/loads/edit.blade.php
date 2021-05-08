@@ -65,7 +65,7 @@
                 </div>
             @endif
 
-            <p class="text-muted font-italic">
+            <p class="text-muted fst-italic">
                 {{ __('main.max_file_upload') }}: {{ setting('maxfiles') }}<br>
                 {{ __('main.max_file_weight') }}: {{ formatSize(setting('fileupload')) }}<br>
                 {{ __('main.valid_file_extensions') }}: {{ str_replace(',', ', ', setting('allowextload')) }}<br>

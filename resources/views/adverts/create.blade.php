@@ -36,9 +36,7 @@
 
                 <div class="input-group colorpick">
                     <input class="form-control col-sm-4 js-color" id="color" name="color" type="text" maxlength="7" placeholder="{{ __('adverts.color') }}" value="{{ getInput('color') }}">
-                    <span class="input-group-append">
-                        <span class="input-group-text colorpicker-input-addon"><i></i></span>
-                    </span>
+                    <span class="input-group-text colorpicker-input-addon"><i></i></span>
                 </div>
 
                 <div class="invalid-feedback">{{ textError('color') }}</div>
@@ -56,7 +54,7 @@
         </form>
     </div>
 
-    <div class="text-muted font-italic">
+    <div class="text-muted fst-italic">
         {!! __('adverts.rules_text', ['price' =>  plural(setting('rekuserprice'), setting('moneyname')), 'time' => setting('rekusertime'), 'optprice' => plural(setting('rekuseroptprice'), setting('moneyname'))]) !!}
     </div>
 @stop

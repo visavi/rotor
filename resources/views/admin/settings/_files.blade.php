@@ -10,7 +10,7 @@
         <div class="invalid-feedback">{{ textError('sets[filesize]') }}</div>
 
         <input type="hidden" value="1048576" name="mods[filesize]">
-        <span class="text-muted font-italic">{{ __('main.server_limit') }}: {{ ini_get('upload_max_filesize') }}</span>
+        <span class="text-muted fst-italic">{{ __('main.server_limit') }}: {{ ini_get('upload_max_filesize') }}</span>
     </div>
 
     <div class="mb-3{{ hasError('sets[maxfiles]') }}">
@@ -45,7 +45,7 @@
 
     <img src="/assets/img/images/watermark.png" alt="watermark" title="{{ siteUrl() }}/assets/img/images/watermark.png"><br>
 
-    <p class="text-muted font-italic">
+    <p class="text-muted fst-italic">
         {{ __('settings.images_hint') }}
     </p>
 

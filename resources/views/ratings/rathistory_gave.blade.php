@@ -34,7 +34,7 @@
                     @endif
 
                     {{ $data->recipient->getProfile() }}
-                    <small class="section-date text-muted font-italic">
+                    <small class="section-date text-muted fst-italic">
                         {{ dateFixed($data->created_at) }}
                     </small>
                 </div>
