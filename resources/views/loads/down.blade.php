@@ -44,46 +44,48 @@
     <hr>
 
     <div class="mb-3">
-        @if ($down->files->isNotEmpty())
-            @if ($down->getImages()->isNotEmpty())
-                @foreach ($down->getImages() as $image)
-                    <div class="media-file mb-3">
-                        <a href="{{ $image->hash }}" class="gallery" data-group="{{ $down->id }}">{{ resizeImage($image->hash, ['alt' => $down->title]) }}</a>
-                    </div>
-                @endforeach
-            @endif
+        @if ($down->getImages()->isNotEmpty())
+            @foreach ($down->getImages() as $image)
+                <div class="media-file mb-3">
+                    <a href="{{ $image->hash }}" class="gallery" data-group="{{ $down->id }}">{{ resizeImage($image->hash, ['alt' => $down->title]) }}</a>
+                </div>
+            @endforeach
+        @endif
 
-            @if ($down->getFiles()->isNotEmpty())
-                @foreach ($down->getFiles() as $file)
-                    <div class="media-file mb-3">
-                        @if ($file->hash && file_exists(HOME . $file->hash))
+        <div class="section-message mb-3">
+            {{ bbCode($down->text) }}
+        </div>
 
-                            @if ($file->extension === 'mp3')
-                                <div>
-                                    <audio src="{{ $file->hash }}" style="max-width:100%;" preload="metadata" controls controlsList="{{ $allowDownload ? null : 'nodownload' }}"></audio>
-                                </div>
-                            @endif
+        @if ($down->getFiles()->isNotEmpty())
+            @foreach ($down->getFiles() as $file)
+                <div class="media-file mb-3">
+                    @if ($file->hash && file_exists(HOME . $file->hash))
 
-                            @if ($file->extension === 'mp4')
-                                <div>
-                                    <video src="{{ $file->hash }}" style="max-width:100%;" preload="metadata" controls playsinline controlsList="{{ $allowDownload ? null : 'nodownload' }}"></video>
-                                </div>
-                            @endif
-
-                            <b>{{ $file->name }}</b> ({{ formatSize($file->size) }})<br>
-                            @if ($file->extension === 'zip')
-                                <a href="/downs/zip/{{ $file->id }}">{{ __('loads.view_archive') }}</a><br>
-                            @endif
-
-                            @if ($allowDownload)
-                                <a class="btn btn-success" href="/downs/download/{{ $file->id }}"><i class="fa fa-download"></i> {{ __('main.download') }}</a><br>
-                            @endif
-                        @else
-                            <i class="fa fa-download"></i> {{ __('main.file_not_found') }}
+                        @if ($file->extension === 'mp3')
+                            <div>
+                                <audio src="{{ $file->hash }}" style="max-width:100%;" preload="metadata" controls controlsList="{{ $allowDownload ? null : 'nodownload' }}"></audio>
+                            </div>
                         @endif
-                    </div>
-                @endforeach
-            @endif
+
+                        @if ($file->extension === 'mp4')
+                            <div>
+                                <video src="{{ $file->hash }}" style="max-width:100%;" preload="metadata" controls playsinline controlsList="{{ $allowDownload ? null : 'nodownload' }}"></video>
+                            </div>
+                        @endif
+
+                        <b>{{ $file->name }}</b> ({{ formatSize($file->size) }})<br>
+                        @if ($file->extension === 'zip')
+                            <a href="/downs/zip/{{ $file->id }}">{{ __('loads.view_archive') }}</a><br>
+                        @endif
+
+                        @if ($allowDownload)
+                            <a class="btn btn-success" href="/downs/download/{{ $file->id }}"><i class="fa fa-download"></i> {{ __('main.download') }}</a><br>
+                        @endif
+                    @else
+                        <i class="fa fa-download"></i> {{ __('main.file_not_found') }}
+                    @endif
+                </div>
+            @endforeach
 
             @if (! $allowDownload)
                 {{ showError(__('loads.download_authorized')) }}
@@ -91,10 +93,6 @@
         @else
             {{ showError(__('main.not_uploaded')) }}
         @endif
-
-        <div class="section-message mb-3">
-            {{ bbCode($down->text) }}
-        </div>
 
         <div class="mb-3">
             <i class="fa fa-comment"></i> <a href="/downs/comments/{{ $down->id }}">{{ __('main.comments') }}</a> ({{ $down->count_comments }})
