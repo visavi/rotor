@@ -43,12 +43,13 @@
         <div class="invalid-feedback">{{ textError('names') }}</div>
     </div>
 
-    <div class="mb-3{{ hasError('color') }}">
+    <div class="col-sm-4 mb-3{{ hasError('color') }}">
         <label for="color" class="form-label">{{ __('admin.paid_adverts.color') }}:</label>
 
-        <div class="input-group colorpick">
-            <input class="form-control col-sm-4 js-color" id="color" name="color" type="text" maxlength="7" placeholder="{{ __('admin.paid_adverts.color') }}" value="{{ getInput('color', $advert->color) }}">
-            <span class="input-group-text colorpicker-input-addon"><i></i></span>
+        <?php $color = getInput('color', $advert->color); ?>
+        <div class="input-group">
+            <input class="form-control colorpicker-addon" id="color" type="text" maxlength="7" value="{{ $color }}">
+            <div class="input-group-text"><input type="color" name="color" class="colorpicker" value="{{ $color }}"></div>
         </div>
 
         <div class="invalid-feedback">{{ textError('color') }}</div>

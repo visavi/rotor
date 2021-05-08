@@ -66,17 +66,17 @@
         <div class="section-form mb-3 shadow">
             <form method="post" action="/accounts/editcolor">
                 @csrf
-                <div class="mb-3{{ hasError('color') }}">
+                <div class="col-sm-4 mb-3{{ hasError('color') }}">
                     <label for="color" class="form-label">{{ __('users.personal_color') }}:</label>
 
-                    <div class="input-group colorpick">
-                        <input class="form-control col-sm-4" id="color" name="color" type="text" maxlength="7" value="{{ getInput('color', $user->color) }}">
-                        <span class="input-group-text colorpicker-input-addon"><i></i></span>
+                    <?php $color = getInput('color', $user->color); ?>
+                    <div class="input-group">
+                        <input class="form-control colorpicker-addon" id="color" type="text" maxlength="7" value="{{ $color }}">
+                        <div class="input-group-text"><input type="color" name="color" class="colorpicker" value="{{ $color }}"></div>
                     </div>
 
                     <div class="invalid-feedback">{{ textError('color') }}</div>
                 </div>
-
                 <button class="btn btn-primary">{{ __('main.change') }}</button>
             </form>
 
@@ -122,13 +122,11 @@
         <form method="post" action="/accounts/apikey">
             @csrf
             @if ($user->apikey)
-                <div class="mb-3">
+                <div class="col-sm-4 mb-3">
                     <label for="apikey" class="form-label">{{ __('users.token') }}:</label>
                     <div class="input-group">
-                        <input class="form-control col-sm-4" type="text" id="apikey" name="apikey" value="{{ $user->apikey }}">
-                        <div class="input-group-append" onclick="return copyToClipboard(this)" data-bs-toggle="tooltip" title="{{ __('main.copy') }}">
-                            <span class="input-group-text"><i class="far fa-clipboard"></i></span>
-                        </div>
+                        <input class="form-control" type="text" id="apikey" name="apikey" value="{{ $user->apikey }}">
+                        <span class="input-group-text" onclick="return copyToClipboard(this)" data-bs-toggle="tooltip" title="{{ __('main.copy') }}"><i class="far fa-clipboard"></i></span>
                     </div>
                 </div>
 

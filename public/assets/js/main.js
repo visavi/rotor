@@ -75,10 +75,17 @@ $(function () {
         $.colorbox.resize();
     });
 
-    $('.colorpick').colorpicker({
+    $('.colorpicker').on('input', function () {
+        $('.colorpicker-addon').val(this.value);
+    });
+    $('.colorpicker-addon').on('input', function () {
+        $('.colorpicker').val(this.value);
+    });
+
+/*    $('.colorpick').colorpicker({
         useAlpha: false,
         format: 'hex'
-    });
+    });*/
 
     $('.carousel').carousel({
         interval: false
@@ -431,8 +438,8 @@ copyToClipboard = function (el) {
     var form = $(el).closest('.input-group');
     form.find('input').select();
 
-    form.find('.input-group-append')
-        .attr('data-original-title', translate.copied)
+    form.find('.input-group-text')
+        .attr('data-bs-original-title', translate.copied)
         .tooltip('update')
         .tooltip('show');
 

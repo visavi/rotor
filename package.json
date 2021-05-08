@@ -16,7 +16,6 @@
     "@fortawesome/fontawesome-free": "^5.15.3",
     "bootbox": "^5.5.2",
     "bootstrap": "^5.0.0",
-    "bootstrap-colorpicker": "^3.3.0",
     "jquery": "^3.6.0",
     "jquery-colorbox": "^1.6.4",
     "jquery-mask-plugin": "^1.14.16",
