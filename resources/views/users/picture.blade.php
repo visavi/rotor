@@ -21,7 +21,7 @@
 
         <form action="/pictures" method="post" enctype="multipart/form-data">
             @csrf
-            <div class="custom-file{{ hasError('photo') }}">
+            <div class="mb-3{{ hasError('photo') }}">
                 <label class="btn btn-sm btn-secondary" for="inputPhoto">
                     <input id="inputPhoto" type="file" name="photo" onchange="$('#upload-file-info').html(this.files[0].name);" hidden>
                     {{ __('main.attach_image') }}&hellip;

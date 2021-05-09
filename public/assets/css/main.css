@@ -324,3 +324,8 @@ textarea.form-control {
   height: 15px;
   margin-bottom: 10px;
 }
+
+.pre-scrollable {
+  max-height: 340px;
+  overflow-y: scroll;
+}

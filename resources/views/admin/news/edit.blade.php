@@ -36,7 +36,7 @@
                 <b>{{ basename($news->image) }}</b> ({{ formatFileSize(HOME . $news->image) }})<br><br>
             @endif
 
-            <div class="custom-file{{ hasError('image') }}">
+            <div class="mb-3{{ hasError('image') }}">
                 <label for="image" class="btn btn-sm btn-secondary form-label">
                     <input id="image" type="file" name="image" onchange="$('#upload-file-info').html(this.files[0].name);" hidden>
                     {{ __('main.attach_image') }}&hellip;

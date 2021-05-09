@@ -105,7 +105,7 @@ class BBCode
         ],
         'youtube' => [
             'pattern' => '/\[youtube\](.*youtu(?:\.be\/|be\.com\/.*(?:vi?\/?=?|embed\/)))([\w-]{11}).*\[\/youtube\]/U',
-            'replace' => '<div class="media-file embed-responsive embed-responsive-16by9"><iframe class="embed-responsive-item" src="//www.youtube.com/embed/$2" allowfullscreen></iframe></div>',
+            'replace' => '<div class="media-file ratio ratio-16x9"><iframe src="//www.youtube.com/embed/$2" allowfullscreen></iframe></div>',
         ],
         'username' => [
             'pattern'  => '/(?<=^|\s)@([\w\-]{3,20}+)(?=(\s|,))/',
@@ -152,7 +152,6 @@ class BBCode
             '</div><br>'           => '</div>',
             '</pre><br>'           => '</pre>',
             '</blockquote><br>'    => '</blockquote>',
-            'pre-scrollable"><br>' => 'pre-scrollable">',
         ];
 
         return strtr($source, $tags);
@@ -242,7 +241,7 @@ class BBCode
     public function highlightCode(array $match): string
     {
         //Чтобы bb-код, стикеры и логины не работали внутри тега [code]
-        $match[1] = strtr($match[1], [':' => '&#58;', '[' => '&#91;', '@' => '&#64;']);
+        $match[1] = strtr($match[1], [':' => '&#58;', '[' => '&#91;', '@' => '&#64;', '<br>' => '']);
 
         return '<pre class="prettyprint linenums pre-scrollable">' . $match[1] . '</pre>';
     }

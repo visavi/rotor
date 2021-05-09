@@ -47,7 +47,7 @@
             <span class="js-textarea-counter"></span>
         </div>
 
-        <div class="custom-file{{ hasError('files') }}">
+        <div class="mb-3{{ hasError('files') }}">
             <label class="btn btn-sm btn-secondary" for="files">
                 <input type="file" id="files" name="files[]" onchange="$('#upload-file-info').html((this.files.length > 1) ? '{{ __('main.files') }}: ' + this.files.length : this.files[0].name);" hidden multiple>
                 {{ __('main.attach_files') }}&hellip;

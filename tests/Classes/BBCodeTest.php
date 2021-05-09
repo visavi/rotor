@@ -26,7 +26,7 @@ class BBCodeTest extends \Tests\TestCase
         $text      = '[code]<?php var_dump([1,2,4]);[/code]';
         $parseText = $this->bbCode->parse($text);
 
-        self::assertSame('<pre class="prettyprint linenums pre-scrollable"><?php var_dump(&#91;1,2,4]);</pre>', $parseText);
+        self::assertSame('<pre class="prettyprint linenums"><?php var_dump(&#91;1,2,4]);</pre>', $parseText);
     }
 
     /**
@@ -271,7 +271,7 @@ class BBCodeTest extends \Tests\TestCase
         $text      = '[youtube]https://www.youtube.com/watch?v=85bkCmaOh4o[/youtube]';
         $parseText = $this->bbCode->parse($text);
 
-        self::assertSame('<div class="media-file embed-responsive embed-responsive-16by9"><iframe class="embed-responsive-item" src="//www.youtube.com/embed/85bkCmaOh4o" allowfullscreen></iframe></div>', $parseText);
+        self::assertSame('<div class="media-file ratio ratio-16x9"><iframe src="//www.youtube.com/embed/85bkCmaOh4o" allowfullscreen></iframe></div>', $parseText);
     }
 
     /**

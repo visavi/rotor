@@ -43,15 +43,13 @@
         <div class="invalid-feedback">{{ textError('names') }}</div>
     </div>
 
+    <?php $color = getInput('color', $advert->color); ?>
     <div class="col-sm-4 mb-3{{ hasError('color') }}">
         <label for="color" class="form-label">{{ __('admin.paid_adverts.color') }}:</label>
-
-        <?php $color = getInput('color', $advert->color); ?>
         <div class="input-group">
-            <input class="form-control colorpicker-addon" id="color" type="text" maxlength="7" value="{{ $color }}">
-            <div class="input-group-text"><input type="color" name="color" class="colorpicker" value="{{ $color }}"></div>
+            <input type="text" name="color" class="form-control colorpicker" id="color" maxlength="7" value="{{ $color }}">
+            <input type="color" class="form-control form-control-color colorpicker-addon" value="{{ $color }}">
         </div>
-
         <div class="invalid-feedback">{{ textError('color') }}</div>
     </div>
 
@@ -61,7 +59,7 @@
         <label class="form-check-label" for="bold">{{ __('admin.paid_adverts.bold') }}</label>
     </div>
 
-    <div class="mb-3{{ hasError('term') }}">
+    <div class="col-sm-4 mb-3{{ hasError('term') }}">
         <label for="term" class="form-label">{{ __('admin.paid_adverts.term') }}:</label>
         <input class="form-control" type="datetime-local" name="term" id="term" value="{{ getInput('term', dateFixed($advert->deleted_at, 'Y-m-d\TH:i')) }}" required>
         <div class="invalid-feedback">{{ textError('term') }}</div>

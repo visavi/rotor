@@ -31,15 +31,13 @@
                 <div class="invalid-feedback">{{ textError('name') }}</div>
             </div>
 
+            <?php $color = getInput('color', $status->color); ?>
             <div class="col-sm-4 mb-3{{ hasError('color') }}">
                 <label for="color" class="form-label">{{ __('main.color') }}:</label>
-
-                <?php $color = getInput('color', $status->color); ?>
                 <div class="input-group">
-                    <input class="form-control colorpicker-addon" id="color" type="text" maxlength="7" value="{{ $color }}">
-                    <div class="input-group-text"><input type="color" name="color" class="colorpicker" value="{{ $color }}"></div>
+                    <input type="text" name="color" class="form-control colorpicker" id="color" maxlength="7" value="{{ $color }}">
+                    <input type="color" class="form-control form-control-color colorpicker-addon" value="{{ $color }}">
                 </div>
-
                 <div class="invalid-feedback">{{ textError('color') }}</div>
             </div>
 

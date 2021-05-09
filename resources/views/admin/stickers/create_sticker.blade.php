@@ -34,7 +34,7 @@
                 <div class="invalid-feedback">{{ textError('code') }}</div>
             </div>
 
-            <div class="custom-file{{ hasError('sticker') }}">
+            <div class="mb-3{{ hasError('sticker') }}">
                 <label class="btn btn-sm btn-secondary" for="sticker">
                     <input id="sticker" type="file" name="sticker" onchange="$('#upload-file-info').html(this.files[0].name);" hidden>
                     {{ __('main.attach_image') }}&hellip;

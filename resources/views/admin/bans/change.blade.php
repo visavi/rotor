@@ -28,7 +28,7 @@
     <div class="section-form mb-3 shadow">
         <form method="post" action="/admin/bans/change?user={{ $user->login }}">
             @csrf
-            <div class="mb-3{{ hasError('timeban') }}">
+            <div class="col-sm-4 mb-3{{ hasError('timeban') }}">
                 <label for="timeban" class="form-label">{{ __('admin.bans.time_ban') }}:</label>
                 <input class="form-control" type="datetime-local" name="timeban" id="timeban" value="{{ getInput('timeban', dateFixed($user->timeban, 'Y-m-d\TH:i')) }}" required>
                 <div class="invalid-feedback">{{ textError('timeban') }}</div>
