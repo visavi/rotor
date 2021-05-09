@@ -146,7 +146,7 @@ return [
         'create_file'               => 'Create file',
         'create_hint'               => 'Latin characters and numbers are allowed, as well as hyphens and underscores',
         'file_editing'              => 'Editing a file',
-        'edit_hint'                 => 'Press Ctrl + Enter to translate a line, Shift + Enter to insert a line',
+        'edit_hint'                 => 'Press Ctrl + Enter to translate a line',
         'writable'                  => 'Attention! The file is not writable! ',
         'file_not_exist'            => 'This file does not exist!',
         'directory_not_exist'       => 'This directory does not exist!',
