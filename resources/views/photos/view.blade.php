@@ -20,7 +20,7 @@
                 <button type="button" class="btn btn-light dropdown-toggle" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                     <i class="fas fa-wrench"></i>
                 </button>
-                <div class="dropdown-menu">
+                <div class="dropdown-menu dropdown-menu-end">
                     <a class="dropdown-item" href="/admin/photos/edit/{{ $photo->id }}">{{ __('main.edit') }}</a>
                     <a class="dropdown-item" href="/admin/photos/delete/{{ $photo->id }}?token={{ $_SESSION['token'] }}" onclick="return confirm('{{ __('photos.confirm_delete_photo') }}')">{{ __('main.delete') }}</a>
                 </div>
@@ -30,7 +30,7 @@
                 <button type="button" class="btn btn-light dropdown-toggle" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                     <i class="fas fa-wrench"></i>
                 </button>
-                <div class="dropdown-menu">
+                <div class="dropdown-menu dropdown-menu-end">
                     <a class="dropdown-item" href="/photos/edit/{{ $photo->id }}">{{ __('main.edit') }}</a>
                     <a class="dropdown-item" href="/photos/delete/{{ $photo->id }}?token={{ $_SESSION['token'] }}" onclick="return confirm('{{ __('photos.confirm_delete_photo') }}')">{{ __('main.delete') }}</a>
                 </div>

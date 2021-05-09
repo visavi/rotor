@@ -16,7 +16,7 @@
                     <button type="button" class="btn btn-light dropdown-toggle" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         <i class="fas fa-wrench"></i>
                     </button>
-                    <div class="dropdown-menu">
+                    <div class="dropdown-menu dropdown-menu-end">
                         <a class="dropdown-item" href="/admin/articles/edit/{{ $article->id }}">{{ __('main.edit') }}</a>
                         <a class="dropdown-item" href="/admin/articles/move/{{ $article->id }}">{{ __('main.move') }}</a>
                         <a class="dropdown-item" href="/admin/articles/delete/{{ $article->id }}?token={{ $_SESSION['token'] }}" onclick="return confirm('{{ __('blogs.confirm_delete_article') }}')">{{ __('main.delete') }}</a>
