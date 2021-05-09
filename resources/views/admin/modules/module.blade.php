@@ -39,32 +39,32 @@
 
     @if (isset($moduleConfig['screenshots']))
         <?php $countScreens = count($moduleConfig['screenshots']); ?>
-        <div id="myCarousel" class="carousel slide media-file my-3" data-ride="carousel">
+        <div id="myCarousel" class="carousel slide media-file my-3" data-bs-ride="carousel">
             @if ($countScreens > 1)
-                <ol class="carousel-indicators">
+                <div class="carousel-indicators">
                     @for ($i = 0; $i < $countScreens; $i++)
-                        <li data-target="#myCarousel" data-slide-to="{{ $i }}"{!! empty($i) ? ' class="active"' : '' !!}></li>
+                        <button type="button" data-bs-target="#myCarousel" data-bs-slide-to="{{ $i }}"{!! empty($i) ? ' class="active"' : '' !!}></button>
                     @endfor
-                </ol>
+                </div>
             @endif
 
             <div class="carousel-inner">
-                @foreach ($moduleConfig['screenshots'] as $key => $screenshot)
-                    <div class="carousel-item{{ empty($key) ? ' active' : '' }}">
-                        {{ imageBase64($screenshot) }}
+                @foreach ($moduleConfig['screenshots'] as $screenshot)
+                    <div class="carousel-item{{ $loop->first ? ' active' : '' }}">
+                        {{ imageBase64($screenshot, ['class' => 'w-100']) }}
                     </div>
                 @endforeach
             </div>
 
             @if ($countScreens > 1)
-                <a class="carousel-control-prev" href="#myCarousel" role="button" data-slide="prev">
+                <button class="carousel-control-prev" type="button" data-bs-target="#myCarousel" data-bs-slide="prev">
                     <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                    <span class="sr-only">Previous</span>
-                </a>
-                <a class="carousel-control-next" href="#myCarousel" role="button" data-slide="next">
+                    <span class="visually-hidden">Previous</span>
+                </button>
+                <button class="carousel-control-next" type="button" data-bs-target="#myCarousel" data-bs-slide="next">
                     <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                    <span class="sr-only">Next</span>
-                </a>
+                    <span class="visually-hidden">Next</span>
+                </button>
             @endif
         </div>
     @endif
