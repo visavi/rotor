@@ -26,7 +26,7 @@ class BBCodeTest extends \Tests\TestCase
         $text      = '[code]<?php var_dump([1,2,4]);[/code]';
         $parseText = $this->bbCode->parse($text);
 
-        self::assertSame('<pre class="prettyprint linenums"><?php var_dump(&#91;1,2,4]);</pre>', $parseText);
+        self::assertSame('<pre class="prettyprint linenums pre-scrollable"><?php var_dump(&#91;1,2,4]);</pre>', $parseText);
     }
 
     /**
