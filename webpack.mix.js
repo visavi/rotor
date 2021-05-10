@@ -25,11 +25,8 @@ mix
     .sass('public/themes/motor/src/sass/app.scss', 'public/themes/motor/dist')
 
     .js('resources/lang/*/main.js', 'public/assets/js/dist/lang.js')
-    .extract();
-
-if (mix.inProduction()) {
-    mix.version();
-}
+    .extract()
+    .version();
 
 mix.copy('node_modules/@fortawesome/fontawesome-free/webfonts/*', 'public/assets/fonts/');
 

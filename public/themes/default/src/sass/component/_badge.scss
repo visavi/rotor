@@ -1,17 +1,9 @@
-.badge {
-  border: 1px solid transparent;
-}
-
 .badge.bg-light {
-  border: 1px solid #ebebeb;
+  box-shadow: 0 0 1px #999;
 }
 
 a.badge:hover, a.badge:focus {
   text-decoration: none;
-}
-
-.badge:empty {
-  display: none;
 }
 
 a.badge.bg-primary:hover, a.badge.bg-primary:focus {

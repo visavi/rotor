@@ -4,6 +4,7 @@
   position: fixed;
   top: 0;
   width: 100%;
+  height: 50px;
   max-width: inherit;
   display: flex;
   background-color: $navbar-color;
@@ -146,7 +147,12 @@
   pointer-events: none;
 }
 
-.app-notification { min-width: 270px; }
+.app-notification {
+  min-width: 270px;
+  &.dropdown-menu {
+    margin-top: -2px !important;
+  }
+}
 .app-notification__title {
   padding: 8px 20px;
   text-align: center;
