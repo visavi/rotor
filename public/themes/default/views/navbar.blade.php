@@ -21,25 +21,31 @@
         @if ($user = getUser())
             @if (isAdmin())
                 @if (statsSpam())
-                    <a class="app-nav__item" href="/admin/spam" aria-label="{{ __('index.complains') }}">
-                        <i class="far fa-bell fa-lg"></i>
-                        <span class="badge bg-notify">{{ statsSpam() }}</span>
-                    </a>
+                    <li>
+                        <a class="app-nav__item" href="/admin/spam" aria-label="{{ __('index.complains') }}">
+                            <i class="far fa-bell fa-lg"></i>
+                            <span class="badge bg-notify">{{ statsSpam() }}</span>
+                        </a>
+                    </li>
                 @endif
 
                 @if ($user->newchat < statsNewChat())
-                    <a class="app-nav__item" href="/admin/chats" aria-label="{{ __('index.chat') }}">
-                        <i class="far fa-bell fa-lg"></i>
-                        <span class="badge bg-notify">!</span>
-                    </a>
+                    <li>
+                        <a class="app-nav__item" href="/admin/chats" aria-label="{{ __('index.chat') }}">
+                            <i class="far fa-bell fa-lg"></i>
+                            <span class="badge bg-notify">!</span>
+                        </a>
+                    </li>
                 @endif
             @endif
 
             @if ($user->newwall)
-                <a class="app-nav__item" href="/walls/{{ $user->login }}" aria-label="{{ __('index.wall_post') }}">
-                    <i class="far fa-comments fa-lg"></i>
-                    <span class="badge bg-notify">{{ $user->newwall }}</span>
-                </a>
+                <li>
+                    <a class="app-nav__item" href="/walls/{{ $user->login }}" aria-label="{{ __('index.wall_post') }}">
+                        <i class="far fa-comments fa-lg"></i>
+                        <span class="badge bg-notify">{{ $user->newwall }}</span>
+                    </a>
+                </li>
             @endif
 
             <li class="dropdown js-messages-block">
