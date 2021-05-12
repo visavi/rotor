@@ -39,7 +39,9 @@
 
         {{ $logs->links() }}
 
-        {{ __('main.total') }}: <b>{{ $logs->total() }}</b><br>
+        <div class="mb-3">
+            {{ __('main.total') }}: <b>{{ $logs->total() }}</b>
+        </div>
 
         @if (isAdmin('boss'))
             <i class="fa fa-trash-alt"></i> <a href="/admin/errors/clear?token={{ $_SESSION['token'] }}">{{ __('main.clear') }}</a><br>

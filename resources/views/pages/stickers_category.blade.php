@@ -24,11 +24,13 @@
                 @endforeach
             </div>
 
-            {{ __('stickers.total_stickers') }}: <b>{{ $stickers->total() }}</b><br>
+            {{ $stickers->links() }}
+
+            <div class="mb-3">
+                {{ __('stickers.total_stickers') }}: <b>{{ $stickers->total() }}</b>
+            </div>
         @else
             {{ showError(__('stickers.empty_stickers')) }}
         @endif
     </div>
-
-    {{ $stickers->links() }}
 @stop

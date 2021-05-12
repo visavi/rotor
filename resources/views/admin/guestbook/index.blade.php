@@ -85,7 +85,9 @@
 
         {{ $posts->links() }}
 
-        {{ __('guestbook.total_messages') }}: <b>{{ $posts->total() }}</b><br><br>
+        <div class="mb-3">
+            {{ __('guestbook.total_messages') }}: <b>{{ $posts->total() }}</b>
+        </div>
 
         @if (isAdmin('boss'))
             <i class="fa fa-times"></i> <a href="/admin/guestbook/clear?token={{ $_SESSION['token'] }}" onclick="return confirm('{{ __('guestbook.confirm_delete') }}')">{{ __('main.clear') }}</a><br>

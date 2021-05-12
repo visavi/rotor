@@ -47,10 +47,12 @@
             </div>
         @endforeach
 
-        {{ __('adverts.total_links') }}: <b>{{ $adverts->total() }}</b><br>
+        {{ $adverts->links() }}
+
+        <div class="mb-3">
+            {{ __('adverts.total_links') }}: <b>{{ $adverts->total() }}</b>
+        </div>
     @else
         {{ showError(__('adverts.empty_links')) }}
     @endif
-
-    {{ $adverts->links() }}
 @stop

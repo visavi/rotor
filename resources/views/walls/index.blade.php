@@ -58,12 +58,14 @@
             </div>
         @endforeach
 
-        {{ __('main.total') }}: <b>{{ $messages->total() }}</b><br>
+        {{ $messages->links() }}
+
+        <div class="mb-3">
+            {{ __('main.total') }}: <b>{{ $messages->total() }}</b>
+        </div>
     @else
         {{ showError(__('walls.empty_messages')) }}
     @endif
-
-    {{ $messages->links() }}
 
     @if (getUser())
         <div class="section-form mb-3 shadow">

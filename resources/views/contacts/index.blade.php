@@ -57,7 +57,9 @@
 
         {{ $contacts->links() }}
 
-        {{ __('main.total') }}: <b>{{ $contacts->total() }}</b><br>
+        <div class="mb-3">
+            {{ __('main.total') }}: <b>{{ $contacts->total() }}</b>
+        </div>
     @else
         {{ showError(__('contacts.empty_list')) }}
     @endif

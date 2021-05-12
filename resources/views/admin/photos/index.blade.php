@@ -56,7 +56,9 @@
 
         {{ $photos->links() }}
 
-        {{ __('photos.total_photos') }}: <b>{{ $photos->total() }}</b><br>
+        <div class="mb-3">
+            {{ __('photos.total_photos') }}: <b>{{ $photos->total() }}</b>
+        </div>
 
         @if (isAdmin('boss'))
             <i class="fa fa-sync"></i> <a href="/admin/photos/restatement?token={{ $_SESSION['token'] }}">{{ __('main.recount') }}</a><br>

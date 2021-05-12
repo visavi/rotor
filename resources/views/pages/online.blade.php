@@ -14,9 +14,9 @@
 @section('content')
     <div class="mb-3">
         @if ($guests)
-            {{ __('pages.total_online') }}: <b>{{ $online->total() }}</b><br>
+            {{ __('pages.total_online') }}: <b>{{ $online->total() }}</b>
         @else
-            {{ __('pages.authorized') }}: <b>{{ $online->total() }}</b><br>
+            {{ __('pages.authorized') }}: <b>{{ $online->total() }}</b>
         @endif
     </div>
 

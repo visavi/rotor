@@ -48,7 +48,9 @@
 
         {{ $logs->links() }}
 
-        {{ __('main.total') }}: <b>{{ $logs->total() }}</b><br>
+        <div class="mb-3">
+            {{ __('main.total') }}: <b>{{ $logs->total() }}</b>
+        </div>
     @else
         {{ showError(__('admin.ipbans.empty_ip')) }}
     @endif

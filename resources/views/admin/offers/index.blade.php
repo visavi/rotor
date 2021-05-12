@@ -78,7 +78,9 @@
 
         {{ $offers->links() }}
 
-        {{ __('main.total') }}: <b>{{ $offers->total() }}</b><br>
+        <div class="mb-3">
+            {{ __('main.total') }}: <b>{{ $offers->total() }}</b>
+        </div>
     @else
         {{ showError(__('main.empty_records')) }}
     @endif

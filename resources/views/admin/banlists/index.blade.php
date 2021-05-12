@@ -46,11 +46,12 @@
             </div>
         @endforeach
 
-        <br>{{ __('main.total_users') }}: <b>{{ $users->total() }}</b><br>
+        {{ $users->links() }}
 
+        <div class="mb-3">
+            {{ __('main.total_users') }}: <b>{{ $users->total() }}</b>
+        </div>
     @else
         {{ showError(__('main.empty_users')) }}
     @endif
-
-    {{ $users->links() }}
 @stop

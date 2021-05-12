@@ -56,7 +56,9 @@
 
         {{ $ignores->links() }}
 
-        {{ __('main.total') }}: <b>{{ $ignores->total() }}</b><br>
+        <div class="mb-3">
+            {{ __('main.total') }}: <b>{{ $ignores->total() }}</b>
+        </div>
     @else
         {{ showError(__('ignores.empty_list')) }}
     @endif

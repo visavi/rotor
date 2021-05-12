@@ -42,7 +42,9 @@
 
         {{ $files->links() }}
 
-        {{ __('main.total') }}: {{ $files->total() }}<br>
+        <div class="mb-3">
+            {{ __('main.total') }}: {{ $files->total() }}
+        </div>
     @elseif ($type === 'files' && config('cache.default') !== 'file')
         <div class="alert alert-info">
             {{ __('admin.caches.only_file_cache') }}

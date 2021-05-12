@@ -29,7 +29,9 @@
             </div>
         @endforeach
 
-        <br>{{ __('photos.total_albums') }}: <b>{{ $albums->total() }}</b><br>
+        <div class="mb-3">
+            {{ __('photos.total_albums') }}: <b>{{ $albums->total() }}</b>
+        </div>
     @else
         {{ showError(__('photos.empty_albums')) }}
     @endif

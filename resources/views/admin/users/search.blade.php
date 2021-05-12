@@ -34,7 +34,9 @@
 
         {{ $users->links() }}
 
-        {{ __('main.total_found') }}: {{ $users->total() }}<br><br>
+        <div class="mb-3">
+            {{ __('main.total_found') }}: {{ $users->total() }}
+        </div>
     @else
         {{ showError(__('main.empty_found')) }}
     @endif

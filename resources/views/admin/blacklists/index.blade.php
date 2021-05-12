@@ -13,13 +13,14 @@
 @stop
 
 @section('content')
-    <?php $active = ($type === 'email') ? 'success' : 'light text-dark'; ?>
-    <a href="/admin/blacklists?type=email" class="badge bg-{{ $active }}">{{ __('admin.blacklists.email') }}</a>
-    <?php $active = ($type === 'login') ? 'success' : 'light text-dark'; ?>
-    <a href="/admin/blacklists?type=login" class="badge bg-{{ $active }}">{{ __('admin.blacklists.logins') }}</a>
-    <?php $active = ($type === 'domain') ? 'success' : 'light text-dark'; ?>
-    <a href="/admin/blacklists?type=domain" class="badge bg-{{ $active }}">{{ __('admin.blacklists.domains') }}</a>
-    <hr>
+    <div class="mb-3">
+        <?php $active = ($type === 'email') ? 'primary' : 'light'; ?>
+        <a class="btn btn-{{ $active }} btn-sm" href="/admin/blacklists?type=email">{{ __('admin.blacklists.email') }}</a>
+        <?php $active = ($type === 'login') ? 'primary' : 'light'; ?>
+        <a class="btn btn-{{ $active }} btn-sm" href="/admin/blacklists?type=login">{{ __('admin.blacklists.logins') }}</a>
+        <?php $active = ($type === 'domain') ? 'primary' : 'light'; ?>
+        <a class="btn btn-{{ $active }} btn-sm" href="/admin/blacklists?type=domain">{{ __('admin.blacklists.domains') }}</a>
+    </div>
 
     @if ($lists->isNotEmpty())
         <form action="/admin/blacklists/delete?type={{ $type }}&amp;page={{ $lists->currentPage() }}" method="post">
@@ -44,11 +45,15 @@
                 <button class="btn btn-sm btn-danger">{{ __('main.delete_selected') }}</button>
             </div>
         </form>
+
+        {{ $lists->links() }}
+
+        <div class="mb-3">
+            {{ __('main.total') }}: <b>{{ $lists->total() }}</b>
+        </div>
     @else
         {{ showError( __('admin.blacklists.empty_list')) }}
     @endif
-
-    {{ $lists->links() }}
 
     <div class="section-form mb-3 shadow">
         <form action="/admin/blacklists?type={{ $type }}" method="post">
@@ -60,6 +65,4 @@
             <div class="invalid-feedback">{{ textError('value') }}</div>
         </form>
     </div>
-
-    {{ __('main.total') }}: <b>{{ $lists->total() }}</b><br>
 @stop

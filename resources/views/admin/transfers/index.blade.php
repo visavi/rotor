@@ -53,7 +53,9 @@
             </form>
         </div>
 
-        {{ __('main.total') }}: <b>{{ $transfers->total() }}</b><br>
+        <div class="mb-3">
+            {{ __('main.total') }}: <b>{{ $transfers->total() }}</b>
+        </div>
     @else
         {{ showError(__('transfers.empty_transfers')) }}
     @endif

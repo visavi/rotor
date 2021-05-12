@@ -54,10 +54,12 @@
             </div>
         </form>
 
-        {{ __('adverts.total_links') }}: <b>{{ $records->total() }}</b><br>
+        {{ $records->links() }}
+
+        <div class="mb-3">
+            {{ __('adverts.total_links') }}: <b>{{ $records->total() }}</b>
+        </div>
     @else
         {{ showError(__('adverts.empty_links')) }}
     @endif
-
-    {{ $records->links() }}
 @stop

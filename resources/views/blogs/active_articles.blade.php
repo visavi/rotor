@@ -33,10 +33,14 @@
             </div>
         @endforeach
 
-        {{ __('blogs.total_articles') }}: <b>{{ $articles->total() }}</b><br>
+        {{ $articles->links() }}
+
+        <div class="mb-3">
+            {{ __('blogs.total_articles') }}: <b>{{ $articles->total() }}</b>
+        </div>
     @else
         {{ showError(__('blogs.empty_articles')) }}
     @endif
 
-    {{ $articles->links() }}
+
 @stop

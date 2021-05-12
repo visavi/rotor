@@ -47,10 +47,12 @@
             </div>
         @endforeach
 
-        <br>{{ __('photos.total_photos') }}: <b>{{ $photos->total() }}</b><br>
+        {{ $photos->links() }}
+
+        <div class="mb-3">
+            {{ __('photos.total_photos') }}: <b>{{ $photos->total() }}</b>
+        </div>
     @else
         {{ showError(__('photos.empty_photos')) }}
     @endif
-
-    {{ $photos->links() }}
 @stop

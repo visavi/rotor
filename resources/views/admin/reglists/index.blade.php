@@ -62,10 +62,12 @@
             <div class="invalid-feedback">{{ textError('action') }}</div>
         </form>
 
-        <br>{{ __('main.total') }}: <b>{{ $users->total() }}</b><br>
+        {{ $users->links() }}
+
+        <div class="mb-3">
+            {{ __('main.total') }}: <b>{{ $users->total() }}</b>
+        </div>
     @else
         {{ showError(__('admin.reglists.empty_users')) }}
     @endif
-
-    {{ $users->links() }}
 @stop
