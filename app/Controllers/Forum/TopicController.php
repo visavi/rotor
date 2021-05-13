@@ -592,48 +592,45 @@ class TopicController extends BaseController
             abort(403, __('main.not_authorized'));
         }
 
+        /** @var Vote $vote */
         $vote = Vote::query()->where('topic_id', $id)->first();
 
         if (! $vote) {
             abort(404, __('votes.voting_not_found'));
         }
 
-        $poll  = int($request->input('poll'));
-        $page  = int($request->input('page'));
+        $poll = int($request->input('poll'));
+        $page = int($request->input('page'));
 
-        $validator->equal($request->input('token'), $_SESSION['token'], __('validator.token'));
+        $validator->equal($request->input('token'), $_SESSION['token'], __('validator.token'))
+            ->notEmpty($poll, __('votes.answer_not_chosen'))
+            ->empty($vote->closed, __('votes.voting_closed'));
 
-        if ($vote->closed) {
-            $validator->addError(__('votes.voting_closed'));
+        if ($validator->isValid()) {
+            $polling = $vote->pollings()
+                ->where('user_id', $user->id)
+                ->first();
+            $validator->empty($polling, __('votes.voting_passed'));
         }
 
-        $polling = $vote->pollings()
-            ->where('user_id', $user->id)
-            ->first();
-
-        if ($polling) {
-            $validator->addError(__('votes.voting_passed'));
-        }
-
-        /** @var VoteAnswer $voteAnswer */
-        $voteAnswer = $vote->answers()
-            ->where('id', $poll)
-            ->where('vote_id', $vote->id)
-            ->first();
-
-        if (! $voteAnswer) {
-            $validator->addError(__('votes.answer_not_chosen'));
+        if ($validator->isValid()) {
+            /** @var VoteAnswer $answer */
+            $answer = $vote->answers()
+                ->where('id', $poll)
+                ->where('vote_id', $vote->id)
+                ->first();
+            $validator->notEmpty($answer, __('votes.answer_not_found'));
         }
 
         if ($validator->isValid()) {
             $vote->increment('count');
-            $voteAnswer->increment('result');
+            $answer->increment('result');
 
             Polling::query()->create([
                 'relate_type' => Vote::$morphName,
                 'relate_id'   => $vote->id,
                 'user_id'     => $user->id,
-                'vote'        => '+',
+                'vote'        => $answer->answer,
                 'created_at'  => SITETIME,
             ]);
 

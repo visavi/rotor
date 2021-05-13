@@ -36,7 +36,7 @@
 @section('content')
     @if ($topics->onFirstPage() && $forum->children->isNotEmpty())
         @foreach ($forum->children as $child)
-            <div class="section mb-3 shadow border-start border-info">
+            <div class="section mb-3 shadow border-start border-info border-5">
                 <div class="section-header d-flex align-items-center">
                     <div class="flex-grow-1">
                         <div class="section-title">

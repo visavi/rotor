@@ -47,7 +47,7 @@
 
     @if ($downs->onFirstPage() && $category->children->isNotEmpty())
         @foreach ($category->children as $child)
-            <div class="section mb-3 shadow border-start border-info">
+            <div class="section mb-3 shadow border-start border-info border-5">
                 <div class="section-title">
                     <i class="fa fa-folder-open"></i>
                     <a href="/admin/loads/{{ $child->id }}">{{ $child->name }}</a> ({{ $child->count_downs }})

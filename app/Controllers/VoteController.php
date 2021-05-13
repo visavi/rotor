@@ -74,7 +74,10 @@ class VoteController extends BaseController
                 ->notEmpty($poll, __('votes.answer_not_chosen'));
 
             if ($validator->isValid()) {
-                $answer = VoteAnswer::query()->where('id', $poll)->where('vote_id', $vote->id)->first();
+                $answer = $vote->answers()
+                    ->where('id', $poll)
+                    ->where('vote_id', $vote->id)
+                    ->first();
                 $validator->notEmpty($answer, __('votes.answer_not_found'));
             }
 
