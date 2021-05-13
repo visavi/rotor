@@ -16,6 +16,7 @@ class AddBirthdays extends Task
     public function run()
     {
         $deliveryUsers = User::query()
+            ->where('point', '>', 0)
             ->whereIn('level', User::USER_GROUPS)
             ->whereRaw('substr(birthday, 1, 5) = ?', date('d.m', SITETIME))
             ->get();
