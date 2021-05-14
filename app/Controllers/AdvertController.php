@@ -6,16 +6,26 @@ namespace App\Controllers;
 
 use App\Classes\Validator;
 use App\Models\Advert;
+use App\Models\User;
 use Illuminate\Http\Request;
 
 class AdvertController extends BaseController
 {
+    /**
+     * @var User
+     */
+    public $user;
+
     /**
      * Конструктор
      */
     public function __construct()
     {
         parent::__construct();
+
+        if (! $this->user = getUser()) {
+            abort(403, __('main.not_authorized'));
+        }
 
         if (! setting('rekusershow')) {
             abort('default', __('adverts.advert_closed'));
@@ -48,11 +58,7 @@ class AdvertController extends BaseController
      */
     public function create(Request $request, Validator $validator): string
     {
-        if (! $user = getUser()) {
-            abort(403, __('main.not_authorized'));
-        }
-
-        if ($user->point < setting('rekuserpoint')) {
+        if ($this->user->point < setting('rekuserpoint')) {
             abort('default', __('adverts.advert_point', ['point' => plural(50, setting('scorename'))]));
         }
 
@@ -62,7 +68,7 @@ class AdvertController extends BaseController
         }
 
         $advert = Advert::query()
-            ->where('user_id', $user->id)
+            ->where('user_id', $this->user->id)
             ->where('deleted_at', '>', SITETIME)
             ->first();
 
@@ -87,13 +93,13 @@ class AdvertController extends BaseController
             }
 
             $validator->equal($request->input('token'), $_SESSION['token'], __('validator.token'))
-                ->gte($user->point, setting('rekuserpoint'), __('adverts.advert_point', ['point' => plural(50, setting('scorename'))]))
+                ->gte($this->user->point, setting('rekuserpoint'), __('adverts.advert_point', ['point' => plural(50, setting('scorename'))]))
                 ->true(captchaVerify(), ['protect' => __('validator.captcha')])
                 ->regex($site, '|^https?://([а-яa-z0-9_\-\.])+(\.([а-яa-z0-9\/\-?_=#])+)+$|iu', ['site' => __('validator.url')])
                 ->length($site, 5, 100, ['site' => __('validator.url_text')])
                 ->length($name, 5, 35, ['name' => __('validator.text')])
                 ->regex($color, '|^#+[A-f0-9]{6}$|', ['color' => __('validator.color')], false)
-                ->gte($user->money, $price, __('adverts.advert_not_money'));
+                ->gte($this->user->money, $price, __('adverts.advert_not_money'));
 
             if ($validator->isValid()) {
                 Advert::query()->where('deleted_at', '<', SITETIME)->delete();
@@ -103,12 +109,12 @@ class AdvertController extends BaseController
                     'name'       => $name,
                     'color'      => $color,
                     'bold'       => $bold,
-                    'user_id'    => $user->id,
+                    'user_id'    => $this->user->id,
                     'created_at' => SITETIME,
                     'deleted_at' => strtotime('+' . setting('rekusertime') . ' hours', SITETIME),
                 ]);
 
-                $user->decrement('money', $price);
+                $this->user->decrement('money', $price);
 
                 clearCache('adverts');
                 setFlash('success', __('adverts.advert_success_posted'));
