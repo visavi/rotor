@@ -20,12 +20,10 @@
 
     <script>
         pasteSticker = function (el) {
-            var field    = $('.markItUpEditor');
-            var caretPos = field[0].selectionStart;
-            var text     = field.val();
-            var paste    = ' ' + $(el).find('img').attr('alt') + ' ';
+            var field = $('.markItUpEditor');
+            var paste = $(el).find('img').attr('alt');
 
-            field.val(text.substring(0, caretPos) + paste + text.substring(caretPos));
+            field.caret(paste).caret(-paste.length);
 
             return false;
         };

@@ -553,12 +553,11 @@ submitImage = function (el, paste) {
 
 /* Вставка изображения в форму */
 pasteImage = function (el) {
-    var field    = $('.markItUpEditor');
-    var caretPos = field[0].selectionStart;
-    var text     = field.val();
-    var paste    = '[img]' + $(el).find('img').data('source') + '[/img]';
+    var field = $('.markItUpEditor');
+    var paste = '[img]' + $(el).find('img').data('source') + '[/img]';
 
-    field.focus().val(text.substring(0, caretPos) + paste + text.substring(caretPos));
+    field.focus().caret(paste);
+
 };
 
 /* Удаление изображения из формы */
