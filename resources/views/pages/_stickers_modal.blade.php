@@ -22,7 +22,9 @@
             var field = $('.markItUpEditor');
             var paste = $(el).find('img').attr('alt') + ' ';
 
-            field.caret(paste).caret(-paste.length);
+            $('#stickersModal').modal('hide');
+
+            field.focus().caret(paste);
 
             return false;
         };

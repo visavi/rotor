@@ -557,7 +557,6 @@ pasteImage = function (el) {
     var paste = '[img]' + $(el).find('img').data('source') + '[/img]';
 
     field.focus().caret(paste);
-
 };
 
 /* Удаление изображения из формы */
