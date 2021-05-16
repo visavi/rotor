@@ -59,34 +59,23 @@ mySettings = {
 
         {separator: '---------------'},
         {title: translate.editor.clean, name: '<i class="fa fa-eraser"></i>', className: 'bb-clean', replaceWith:function(markitup) { return markitup.selection.replace(/\[(.*?)\]/g, "") } },
-        {title: translate.editor.sticker, name: '<i class="fa fa-smile"></i>', className: 'bb-sticker', openWith: ' :) ',
-        dropMenu: [
-            {name: ':)', openWith: ' :) ', className: 'col1-1'},
-            {name: ':(', openWith: ' :( ', className: 'col1-2'},
-            {name: ':E', openWith: ' :E ', className: 'col1-3'},
-            {name: ':D', openWith: ' :D ', className: 'col1-4'},
-            {name: ':no', openWith: ' :no ', className: 'col1-5'},
-            {name: ':hello', openWith: ' :hello ', className: 'col2-1'},
-            {name: ':cry', openWith: ' :cry ', className: 'col2-2'},
-            {name: ':obana', openWith: ' :obana ', className: 'col2-3'},
-            {name: ':hi', openWith: ' :hi ', className: 'col2-4'},
-            {name: ':oy', openWith: ' :oy ', className: 'col2-5'},
-            {name: ':infat', openWith: ' :infat ', className: 'col3-1'},
-            {name: ':klass', openWith: ' :klass ', className: 'col3-2'},
-            {name: ':krut', openWith: ' :krut ', className: 'col3-3'},
-            {name: ':aaa', openWith: ' :aaa ', className: 'col3-4'},
-            {name: ':zlo', openWith: ' :zlo ', className: 'col3-5'},
-            {name: ':blum', openWith: ' :blum ', className: 'col4-1'},
-            {name: ':baby', openWith: ' :baby ', className: 'col4-2'},
-            {name: ':read', openWith: ' :read ', className: 'col4-3'},
-            {name: ':blin', openWith: ' :blin ', className: 'col4-4'},
-            {name: ':nyam', openWith: ' :nyam ', className: 'col4-5'},
-            {name: ':puls', openWith: ' :puls ', className: 'col5-1'},
-            {name: ':xaxa', openWith: ' :xaxa ', className: 'col5-2'},
-            {name: ':4moks', openWith: ' :4moks ', className: 'col5-3'},
-            {name: ':heart', openWith: ' :heart ', className: 'col5-4'},
-            {name: ':moder', openWith: ' :moder ', className: 'col5-5'}
-        ]},
+        {
+            title: translate.editor.sticker,
+            name: '<i class="fa fa-smile"></i>',
+            className: 'bb-sticker',
+            beforeInsert: function () {
+                $.ajax({
+                    dataType: 'json', type: 'get', url: '/ajax/getstickers',
+                    success: function (data) {
+                        if (data.status === 'success') {
+                            $('body').append(data.stickers);
+                        }
+
+                        $('#stickersModal').modal('show')
+                    }
+                });
+            }
+        },
         {title: translate.editor.cutpage, name: '<i class="fa fa-cut"></i>', className: 'bb-cutpage', openWith: '[cut]'},
         {title: translate.editor.preview, name: '<i class="fa fa-check-square"></i>', classname: 'bb-preview',  call: 'preview'}
     ]

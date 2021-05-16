@@ -5,6 +5,7 @@ window.toastr = require('toastr');
 require('bootstrap');
 require('jquery-mask-plugin');
 require('jquery-colorbox');
+require('js/jquery.caret.min');
 require('js/markitup');
 require('js/markitup-set');
 require('js/prettify');

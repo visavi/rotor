@@ -18,8 +18,10 @@ use App\Models\Offer;
 use App\Models\Photo;
 use App\Models\Post;
 use App\Models\Spam;
+use App\Models\Sticker;
 use App\Models\Wall;
 use Exception;
+use Illuminate\Database\Capsule\Manager as DB;
 use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Http\Request;
 
@@ -399,6 +401,28 @@ class AjaxController extends BaseController
         return json_encode([
             'status'  => 'error',
             'message' => current($validator->getErrors())
+        ]);
+    }
+
+    /**
+     * Вставляет стикер
+     *
+     * @return string
+     * @throws Exception
+     */
+    public function getStickers(): string
+    {
+        $stickers = Sticker::query()
+            //->where('category_id', $id)
+            ->orderBy(DB::connection()->raw('CHAR_LENGTH(code)'))
+            ->orderBy('name')
+            ->get();
+
+        $view = view('pages/_stickers_modal', compact('stickers'));
+
+        return json_encode([
+            'status' => 'success',
+            'stickers' => $view,
         ]);
     }
 

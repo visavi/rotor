@@ -180,6 +180,7 @@ return FastRoute\cachedDispatcher(static function (RouteCollector $r) {
 
     /* Ajax */
     $r->addGroup('/ajax', static function (RouteCollector $r) {
+        $r->get('/getstickers', [App\Controllers\AjaxController::class, 'getStickers']);
         $r->post('/bbcode', [App\Controllers\AjaxController::class, 'bbCode']);
         $r->post('/delcomment', [App\Controllers\AjaxController::class, 'delComment']);
         $r->post('/rating', [App\Controllers\AjaxController::class, 'rating']);
