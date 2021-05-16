@@ -28,10 +28,6 @@
 
             return false;
         };
-
-        $('#stickersModal').on('hidden.bs.modal', function () {
-            $(this).remove();
-        })
     </script>
 </div>
 

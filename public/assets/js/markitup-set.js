@@ -64,6 +64,14 @@ mySettings = {
             name: '<i class="fa fa-smile"></i>',
             className: 'bb-sticker',
             beforeInsert: function () {
+                const stikerModal = $('#stickersModal');
+
+                if (stikerModal.length) {
+                    stikerModal.modal('show');
+
+                    return false;
+                }
+
                 $.ajax({
                     dataType: 'json', type: 'get', url: '/ajax/getstickers',
                     success: function (data) {
