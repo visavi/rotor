@@ -29,7 +29,7 @@
 
                     <div class="float-end">
                         <a href="/admin/stickers/edit/{{ $category->id }}" data-bs-toggle="tooltip" title="{{ __('main.edit') }}"><i class="fa fa-pencil-alt"></i></a>
-                        <a href="/admin/stickers/delete/{{ $category->id }}?token={{ $_SESSION['token'] }}" data-bs-toggle="tooltip" title="{{ __('main.delete') }}" onclick="return confirm('{{ __('stickers.confirm_delete_category') }}')"><i class="fa fa-times"></i></a>
+                        <a href="/admin/stickers/delete/{{ $category->id }}?token={{ csrf_token() }}" data-bs-toggle="tooltip" title="{{ __('main.delete') }}" onclick="return confirm('{{ __('stickers.confirm_delete_category') }}')"><i class="fa fa-times"></i></a>
                     </div>
                 </div>
             </div>

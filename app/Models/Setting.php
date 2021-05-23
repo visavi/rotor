@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace App\Models;
 
 use Exception;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Support\Facades\Cache;
 
 /**
@@ -13,8 +15,10 @@ use Illuminate\Support\Facades\Cache;
  * @property string name
  * @property string value
  */
-class Setting extends BaseModel
+class Setting extends Model
 {
+    use HasFactory;
+
     /**
      * Indicates if the model should be timestamped.
      *

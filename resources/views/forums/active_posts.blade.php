@@ -23,7 +23,7 @@
                 <i class="fa fa-file-alt"></i> <b><a href="/topics/{{ $data->topic_id }}/{{ $data->id }}">{{ $data->topic->title }}</a></b>
 
                 @if (isAdmin())
-                    <a href="#" class="float-end" onclick="return deletePost(this)" data-tid="{{ $data->id }}" data-token="{{ $_SESSION['token'] }}" data-bs-toggle="tooltip" title="{{ __('main.delete') }}"><i class="fa fa-times"></i></a>
+                    <a href="#" class="float-end" onclick="return deletePost(this)" data-tid="{{ $data->id }}" data-token="{{ csrf_token() }}" data-bs-toggle="tooltip" title="{{ __('main.delete') }}"><i class="fa fa-times"></i></a>
                 @endif
 
                 <div class="section-message">

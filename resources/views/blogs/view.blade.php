@@ -19,7 +19,7 @@
                     <div class="dropdown-menu dropdown-menu-end">
                         <a class="dropdown-item" href="/admin/articles/edit/{{ $article->id }}">{{ __('main.edit') }}</a>
                         <a class="dropdown-item" href="/admin/articles/move/{{ $article->id }}">{{ __('main.move') }}</a>
-                        <a class="dropdown-item" href="/admin/articles/delete/{{ $article->id }}?token={{ $_SESSION['token'] }}" onclick="return confirm('{{ __('blogs.confirm_delete_article') }}')">{{ __('main.delete') }}</a>
+                        <a class="dropdown-item" href="/admin/articles/delete/{{ $article->id }}?token={{ csrf_token() }}" onclick="return confirm('{{ __('blogs.confirm_delete_article') }}')">{{ __('main.delete') }}</a>
                     </div>
                 </div>
             @endif
@@ -63,11 +63,11 @@
 
         <div class="js-rating">{{ __('main.rating') }}:
             @if (getUser() && getUser('id') !== $article->user_id)
-                <a class="post-rating-down<?= $article->vote === '-' ? ' active' : '' ?>" href="#" onclick="return changeRating(this);" data-id="{{ $article->id }}" data-type="{{ $article->getMorphClass() }}" data-vote="-" data-token="{{ $_SESSION['token'] }}"><i class="fa fa-thumbs-down"></i></a>
+                <a class="post-rating-down<?= $article->vote === '-' ? ' active' : '' ?>" href="#" onclick="return changeRating(this);" data-id="{{ $article->id }}" data-type="{{ $article->getMorphClass() }}" data-vote="-" data-token="{{ csrf_token() }}"><i class="fa fa-thumbs-down"></i></a>
             @endif
             <b>{{ formatNum($article->rating) }}</b>
             @if (getUser() && getUser('id') !== $article->user_id)
-                <a class="post-rating-up<?= $article->vote === '+' ? ' active' : '' ?>" href="#" onclick="return changeRating(this);" data-id="{{ $article->id }}" data-type="{{ $article->getMorphClass() }}" data-vote="+" data-token="{{ $_SESSION['token'] }}"><i class="fa fa-thumbs-up"></i></a>
+                <a class="post-rating-up<?= $article->vote === '+' ? ' active' : '' ?>" href="#" onclick="return changeRating(this);" data-id="{{ $article->id }}" data-type="{{ $article->getMorphClass() }}" data-vote="+" data-token="{{ csrf_token() }}"><i class="fa fa-thumbs-up"></i></a>
             @endif
         </div>
 

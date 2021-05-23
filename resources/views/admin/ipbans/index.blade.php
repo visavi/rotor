@@ -67,6 +67,6 @@
     </div>
 
     @if ($logs->isNotEmpty() && isAdmin('boss'))
-        <i class="fa fa-times"></i> <a href="/admin/ipbans/clear?token={{ $_SESSION['token'] }}" onclick="return confirm('{{ __('admin.ipbans.confirm_clear') }}')">{{ __('main.clear') }}</a><br>
+        <i class="fa fa-times"></i> <a href="/admin/ipbans/clear?token={{ csrf_token() }}" onclick="return confirm('{{ __('admin.ipbans.confirm_clear') }}')">{{ __('main.clear') }}</a><br>
     @endif
 @stop

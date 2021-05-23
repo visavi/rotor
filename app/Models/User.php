@@ -8,11 +8,20 @@ use App\Traits\UploadTrait;
 use Exception;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\GuzzleException;
+use Illuminate\Auth\Authenticatable;
+use Illuminate\Auth\MustVerifyEmail;
+use Illuminate\Auth\Passwords\CanResetPassword;
+use Illuminate\Contracts\Auth\Access\Authorizable as AuthorizableContract;
+use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
+use Illuminate\Contracts\Auth\CanResetPassword as CanResetPasswordContract;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Query\JoinClause;
+use Illuminate\Foundation\Auth\Access\Authorizable;
+use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\HtmlString;
 
@@ -63,9 +72,13 @@ use Illuminate\Support\HtmlString;
  * @property int updated_at
  * @property int created_at
  */
-class User extends BaseModel
+class User extends BaseModel implements
+    AuthenticatableContract,
+    AuthorizableContract,
+    CanResetPasswordContract
 {
-    use UploadTrait;
+    use Authenticatable, Authorizable, CanResetPassword, MustVerifyEmail;
+    use HasFactory, Notifiable, UploadTrait;
 
     public const BOSS   = 'boss';   // Владелец
     public const ADMIN  = 'admin';  // Админ
@@ -115,7 +128,6 @@ class User extends BaseModel
     public const MALE   = 'male';
     public const FEMALE = 'female';
 
-
     /**
      * Indicates if the model should be timestamped.
      *
@@ -129,6 +141,25 @@ class User extends BaseModel
      * @var array
      */
     protected $guarded = [];
+
+    /**
+     * The attributes that should be hidden for arrays.
+     *
+     * @var array
+     */
+    protected $hidden = [
+        'password',
+        'remember_token',
+    ];
+
+    /**
+     * The attributes that should be cast to native types.
+     *
+     * @var array
+     */
+    protected $casts = [
+        'email_verified_at' => 'datetime',
+    ];
 
     /**
      * Директория загрузки файлов

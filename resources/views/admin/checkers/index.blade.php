@@ -48,5 +48,5 @@
         {{ __('admin.checkers.invalid_extensions') }}: {{ setting('nocheck') }}
     </p>
 
-    <p><a class="btn btn-primary" href="/admin/checkers/scan?token={{ $_SESSION['token'] }}"><i class="fa fa-sync"></i> {{ __('admin.checkers.scan') }}</a></p>
+    <p><a class="btn btn-primary" href="/admin/checkers/scan?token={{ csrf_token() }}"><i class="fa fa-sync"></i> {{ __('admin.checkers.scan') }}</a></p>
 @stop

@@ -6,8 +6,8 @@ namespace App\Classes;
 
 use App\Models\Sticker;
 use App\Models\User;
-use Illuminate\Database\Capsule\Manager as DB;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\DB;
 
 /**
  * Класс обработки BB-кодов
@@ -325,7 +325,7 @@ class BBCode
             $listStickers = Cache::rememberForever('stickers', static function () {
                 return Sticker::query()
                     ->select('code', 'name')
-                    ->orderByDesc(DB::connection()->raw('CHAR_LENGTH(code)'))
+                    ->orderByDesc(DB::raw('CHAR_LENGTH(code)'))
                     ->get()
                     ->pluck('name', 'code')
                     ->map(function ($item, $key) {

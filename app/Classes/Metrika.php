@@ -8,7 +8,7 @@ use App\Models\Counter;
 use App\Models\Counter24;
 use App\Models\Counter31;
 use App\Models\Online;
-use Illuminate\Database\Capsule\Manager as DB;
+use Illuminate\Support\Facades\DB;
 use PDOException;
 
 class Metrika
@@ -129,18 +129,18 @@ class Metrika
         $hostsUpdate = [];
         if ($newHost) {
             $hostsUpdate = [
-                'allhosts' => DB::connection()->raw('allhosts + 1'),
-                'dayhosts' => DB::connection()->raw('dayhosts + 1'),
-                'hosts24'  => DB::connection()->raw('hosts24 + 1'),
+                'allhosts' => DB::raw('allhosts + 1'),
+                'dayhosts' => DB::raw('dayhosts + 1'),
+                'hosts24'  => DB::raw('hosts24 + 1'),
             ];
         }
 
         $hits = $_SESSION['hits'];
 
         $hitsUpdate = [
-            'allhits' => DB::connection()->raw('allhits + ' . $hits),
-            'dayhits' => DB::connection()->raw('dayhits + ' . $hits),
-            'hits24'  => DB::connection()->raw('hits24 + ' . $hits),
+            'allhits' => DB::raw('allhits + ' . $hits),
+            'dayhits' => DB::raw('dayhits + ' . $hits),
+            'hits24'  => DB::raw('hits24 + ' . $hits),
         ];
 
         $counter->update(array_merge($hostsUpdate, $hitsUpdate));

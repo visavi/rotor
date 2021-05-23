@@ -25,7 +25,7 @@
                 <i class="fas fa-chevron-circle-right"></i> <b>{{ $social->network }}</b> ({{ __('main.added') }}: {{ dateFixed($social->created_at) }})
 
                 <div class="float-end">
-                    <a href="/socials/delete/{{ $social->id }}?token={{ $_SESSION['token'] }}" onclick="return confirm('{{ __('socials.text_confirm') }}')"><i class="fas fa-times"></i></a>
+                    <a href="/socials/delete/{{ $social->id }}?token={{ csrf_token() }}" onclick="return confirm('{{ __('socials.text_confirm') }}')"><i class="fas fa-times"></i></a>
                 </div>
             </div>
         @endforeach

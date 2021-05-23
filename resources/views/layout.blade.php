@@ -1,4 +1,4 @@
-@extends(setting('themes') . '/theme')
+@extends('theme')
 
 @section('header')
     <h1>@yield('title')</h1>

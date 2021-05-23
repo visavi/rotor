@@ -15,7 +15,7 @@
 @section('content')
     <div class="section-form mb-3 shadow">
         <form action="/photos/create" method="post" enctype="multipart/form-data">
-            <input type="hidden" name="token" value="{{  $_SESSION['token'] }}">
+            <input type="hidden" name="token" value="{{ csrf_token() }}">
 
             <div class="mb-3{{ hasError('title') }}">
                 <label for="inputTitle" class="form-label">{{ __('photos.name') }}:</label>

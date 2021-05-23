@@ -40,7 +40,7 @@
 
         {{ $logs->links() }}
 
-        <i class="fa fa-times"></i> <a href="/admin/logs/clear?token={{ $_SESSION['token'] }}" onclick="return confirm('{{ __('admin.logs.confirm_clear') }}')">{{ __('main.clear') }}</a><br>
+        <i class="fa fa-times"></i> <a href="/admin/logs/clear?token={{ csrf_token() }}" onclick="return confirm('{{ __('admin.logs.confirm_clear') }}')">{{ __('main.clear') }}</a><br>
     @else
         {{ showError(__('admin.logs.empty_logs')) }}
     @endif

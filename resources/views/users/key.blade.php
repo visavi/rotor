@@ -56,5 +56,5 @@
         {!! __('users.confirm_text') !!}
     </p>
 
-    <i class="fa fa-times"></i> <a href="/logout?token={{ $_SESSION['token'] }}">{{ __('users.logout') }}</a><br>
+    <i class="fa fa-times"></i> <a href="/logout?token={{ csrf_token() }}">{{ __('users.logout') }}</a><br>
 @stop

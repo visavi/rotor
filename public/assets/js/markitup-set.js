@@ -47,18 +47,6 @@ mySettings = {
 
         {title: translate.editor.center, name: '<i class="fa fa-align-center"></i>', className: 'bb-center', openWith: '[center]', closeWith: '[/center]'},
         {title: translate.editor.spoiler, name: '<i class="fa fa-plus-square"></i>', className: 'bb-spoiler', openWith: '[spoiler=[![' + translate.editor.spoiler_title + ']!]]', closeWith: '[/spoiler]', placeHolder: translate.editor.spoiler_text},
-
-        {separator: '---------------'},
-        {title: translate.editor.hide, name: '<i class="fa fa-eye-slash"></i>', className: 'bb-hide', openWith: '[hide]', closeWith: '[/hide]'},
-        {title: translate.editor.quote, name: '<i class="fa fa-quote-right"></i>', className: 'bb-quote', openWith: '[quote]', closeWith: '[/quote]'},
-        {title: translate.editor.code, name: '<i class="fa fa-code"></i>', className: 'bb-code', openWith: '[code]', closeWith: '[/code]'},
-
-        {separator: '---------------'},
-        {title: translate.editor.unorderedlist, name: '<i class="fa fa-list-ul"></i>', className: 'bb-unorderedlist', multiline:true, openBlockWith: '[list]\n', closeBlockWith: '\n[/list]', placeHolder: translate.editor.list_text},
-        {title: translate.editor.orderedlist, name: '<i class="fa fa-list-ol"></i>', className: 'bb-orderedlist', multiline:true, openBlockWith: '[list=1]\n', closeBlockWith: '\n[/list]', placeHolder: translate.editor.list_text},
-
-        {separator: '---------------'},
-        {title: translate.editor.clean, name: '<i class="fa fa-eraser"></i>', className: 'bb-clean', replaceWith:function(markitup) { return markitup.selection.replace(/\[(.*?)\]/g, "") } },
         {
             title: translate.editor.sticker,
             name: '<i class="fa fa-smile"></i>',
@@ -84,6 +72,18 @@ mySettings = {
                 });
             }
         },
+
+        {separator: '---------------'},
+        {title: translate.editor.hide, name: '<i class="fa fa-eye-slash"></i>', className: 'bb-hide', openWith: '[hide]', closeWith: '[/hide]'},
+        {title: translate.editor.quote, name: '<i class="fa fa-quote-right"></i>', className: 'bb-quote', openWith: '[quote]', closeWith: '[/quote]'},
+        {title: translate.editor.code, name: '<i class="fa fa-code"></i>', className: 'bb-code', openWith: '[code]', closeWith: '[/code]'},
+
+        {separator: '---------------'},
+        {title: translate.editor.unorderedlist, name: '<i class="fa fa-list-ul"></i>', className: 'bb-unorderedlist', multiline:true, openBlockWith: '[list]\n', closeBlockWith: '\n[/list]', placeHolder: translate.editor.list_text},
+        {title: translate.editor.orderedlist, name: '<i class="fa fa-list-ol"></i>', className: 'bb-orderedlist', multiline:true, openBlockWith: '[list=1]\n', closeBlockWith: '\n[/list]', placeHolder: translate.editor.list_text},
+
+        {separator: '---------------'},
+        {title: translate.editor.clean, name: '<i class="fa fa-eraser"></i>', className: 'bb-clean', replaceWith:function(markitup) { return markitup.selection.replace(/\[(.*?)\]/g, "") } },
         {title: translate.editor.cutpage, name: '<i class="fa fa-cut"></i>', className: 'bb-cutpage', openWith: '[cut]'},
         {title: translate.editor.preview, name: '<i class="fa fa-check-square"></i>', classname: 'bb-preview',  call: 'preview'}
     ]

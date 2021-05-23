@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Models;
 
-use Illuminate\Database\Capsule\Manager as DB;
+use Illuminate\Support\Facades\DB;
 
 /**
  * Class Antimat
@@ -44,7 +44,7 @@ class Antimat extends BaseModel
     public static function replace($str): string
     {
         $words = self::query()
-            ->orderByDesc(DB::connection()->raw('CHAR_LENGTH(string)'))
+            ->orderByDesc(DB::raw('CHAR_LENGTH(string)'))
             ->pluck('string')
             ->all();
 

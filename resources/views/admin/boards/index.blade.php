@@ -65,7 +65,7 @@
 
                                     <div class="float-end">
                                         <a href="/admin/items/edit/{{ $item->id }}" data-bs-toggle="tooltip" title="{{ __('main.edit') }}"><i class="fa fa-pencil-alt"></i></a>
-                                        <a href="/admin/items/delete/{{ $item->id }}?token={{ $_SESSION['token'] }}" onclick="return confirm('{{ __('boards.confirm_delete') }}')" data-bs-toggle="tooltip" title="{{ __('main.delete') }}"><i class="fa fa-times"></i></a>
+                                        <a href="/admin/items/delete/{{ $item->id }}?token={{ csrf_token() }}" onclick="return confirm('{{ __('boards.confirm_delete') }}')" data-bs-toggle="tooltip" title="{{ __('main.delete') }}"><i class="fa fa-times"></i></a>
                                     </div>
 
                                     <h5><a href="/items/{{ $item->id }}">{{ $item->title }}</a></h5>
@@ -100,6 +100,6 @@
 
     @if (isAdmin('boss'))
         <i class="far fa-list-alt"></i> <a href="/admin/boards/categories">{{ __('boards.categories') }}</a><br>
-        <i class="fa fa-sync"></i> <a href="/admin/boards/restatement?token={{ $_SESSION['token'] }}">{{ __('main.recount') }}</a><br>
+        <i class="fa fa-sync"></i> <a href="/admin/boards/restatement?token={{ csrf_token() }}">{{ __('main.recount') }}</a><br>
     @endif
 @stop

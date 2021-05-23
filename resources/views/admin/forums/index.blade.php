@@ -32,7 +32,7 @@
                     @if (isAdmin('boss'))
                         <div class="float-end">
                             <a href="/admin/forums/edit/{{ $forum->id }}"><i class="fa fa-pencil-alt"></i></a>
-                            <a href="/admin/forums/delete/{{ $forum->id }}?token={{ $_SESSION['token'] }}" onclick="return confirm('{{ __('forums.confirm_delete_forum') }}')"><i class="fa fa-times"></i></a>
+                            <a href="/admin/forums/delete/{{ $forum->id }}?token={{ csrf_token() }}" onclick="return confirm('{{ __('forums.confirm_delete_forum') }}')"><i class="fa fa-times"></i></a>
                         </div>
                     @endif
 
@@ -49,7 +49,7 @@
 
                             @if (isAdmin('boss'))
                                 <a href="/admin/forums/edit/{{ $child->id }}"><i class="fa fa-pencil-alt"></i></a>
-                                <a href="/admin/forums/delete/{{ $child->id }}?token={{ $_SESSION['token'] }}" onclick="return confirm('{{ __('forums.confirm_delete_forum') }}')"><i class="fa fa-times"></i></a>
+                                <a href="/admin/forums/delete/{{ $child->id }}?token={{ csrf_token() }}" onclick="return confirm('{{ __('forums.confirm_delete_forum') }}')"><i class="fa fa-times"></i></a>
                             @endif
                             <br>
                         @endforeach
@@ -83,6 +83,6 @@
             </form>
         </div>
 
-        <i class="fa fa-sync"></i> <a href="/admin/forums/restatement?token={{ $_SESSION['token'] }}">{{ __('main.recount') }}</a><br>
+        <i class="fa fa-sync"></i> <a href="/admin/forums/restatement?token={{ csrf_token() }}">{{ __('main.recount') }}</a><br>
     @endif
 @stop

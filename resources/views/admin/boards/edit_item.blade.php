@@ -26,7 +26,7 @@
         <div class="alert alert-danger">{{ __('boards.item_not_active') }}</div>
     @endif
 
-    <i class="fas fa-times"></i> <a class="me-3" href="/admin/items/delete/{{ $item->id }}?token={{ $_SESSION['token'] }}" onclick="return confirm('{{ __('boards.confirm_delete') }}')">{{ __('main.delete') }}</a>
+    <i class="fas fa-times"></i> <a class="me-3" href="/admin/items/delete/{{ $item->id }}?token={{ csrf_token() }}" onclick="return confirm('{{ __('boards.confirm_delete') }}')">{{ __('main.delete') }}</a>
     <hr>
 
     <div class="section-form mb-3 shadow">
@@ -81,7 +81,7 @@
                     @foreach ($item->files as $file)
                         <span class="js-image">
                             {{ resizeImage($file->hash, ['width' => 100]) }}
-                            <a href="#" onclick="return deleteFile(this);" data-id="{{ $file->id }}" data-type="{{ $item->getMorphClass() }}" data-token="{{ $_SESSION['token'] }}"><i class="fas fa-times"></i></a>
+                            <a href="#" onclick="return deleteFile(this);" data-id="{{ $file->id }}" data-type="{{ $item->getMorphClass() }}" data-token="{{ csrf_token() }}"><i class="fas fa-times"></i></a>
                         </span>
                     @endforeach
                 @endif

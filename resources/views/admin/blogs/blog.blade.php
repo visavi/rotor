@@ -45,7 +45,7 @@
                     <div class="text-end">
                         <a href="/admin/articles/edit/{{ $article->id }}" title="{{ __('main.edit') }}"><i class="fa fa-pencil-alt text-muted"></i></a>
                         <a href="/admin/articles/move/{{ $article->id }}" title="{{ __('main.move') }}"><i class="fa fa-arrows-alt text-muted"></i></a>
-                        <a href="/admin/articles/delete/{{ $article->id }}?page={{ $articles->currentPage() }}&amp;token={{ $_SESSION['token'] }}" onclick="return confirm('{{ __('blogs.confirm_delete_article') }}')" title="{{ __('main.delete') }}"><i class="fa fa-times text-muted"></i></a>
+                        <a href="/admin/articles/delete/{{ $article->id }}?page={{ $articles->currentPage() }}&amp;token={{ csrf_token() }}" onclick="return confirm('{{ __('blogs.confirm_delete_article') }}')" title="{{ __('main.delete') }}"><i class="fa fa-times text-muted"></i></a>
                     </div>
                 </div>
 

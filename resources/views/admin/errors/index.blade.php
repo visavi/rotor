@@ -44,7 +44,7 @@
         </div>
 
         @if (isAdmin('boss'))
-            <i class="fa fa-trash-alt"></i> <a href="/admin/errors/clear?token={{ $_SESSION['token'] }}">{{ __('main.clear') }}</a><br>
+            <i class="fa fa-trash-alt"></i> <a href="/admin/errors/clear?token={{ csrf_token() }}">{{ __('main.clear') }}</a><br>
         @endif
     @else
         {{ showError(__('main.empty_records')) }}

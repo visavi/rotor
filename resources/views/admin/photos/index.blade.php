@@ -36,7 +36,7 @@
 
                     <div class="text-end">
                         <a href="/admin/photos/edit/{{ $photo->id }}?page={{ $photos->currentPage() }}" data-bs-toggle="tooltip" title="{{ __('main.edit') }}"><i class="fas fa-pencil-alt text-muted"></i></a>
-                        <a href="/admin/photos/delete/{{ $photo->id }}?page={{ $photos->currentPage() }}&amp;token={{ $_SESSION['token'] }}" onclick="return confirm('{{ __('photos.confirm_delete_photo') }}')" data-bs-toggle="tooltip" title="{{ __('main.delete') }}"><i class="fas fa-times text-muted"></i></a>
+                        <a href="/admin/photos/delete/{{ $photo->id }}?page={{ $photos->currentPage() }}&amp;token={{ csrf_token() }}" onclick="return confirm('{{ __('photos.confirm_delete_photo') }}')" data-bs-toggle="tooltip" title="{{ __('main.delete') }}"><i class="fas fa-times text-muted"></i></a>
                     </div>
                 </div>
 
@@ -61,7 +61,7 @@
         </div>
 
         @if (isAdmin('boss'))
-            <i class="fa fa-sync"></i> <a href="/admin/photos/restatement?token={{ $_SESSION['token'] }}">{{ __('main.recount') }}</a><br>
+            <i class="fa fa-sync"></i> <a href="/admin/photos/restatement?token={{ csrf_token() }}">{{ __('main.recount') }}</a><br>
         @endif
     @else
         {{ showError(__('photos.empty_photos')) }}

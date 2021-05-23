@@ -30,7 +30,7 @@ use App\Models\Topic;
 use App\Models\User;
 use App\Models\Vote;
 use GuzzleHttp\Client;
-use Illuminate\Database\Capsule\Manager as DB;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
@@ -49,6 +49,18 @@ use ReCaptcha\ReCaptcha;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Output\NullOutput;
+
+
+define('STARTTIME', microtime(true));
+define('BASEDIR', dirname(__DIR__));
+define('SITETIME', time());
+const APP = BASEDIR . '/app';
+const HOME = BASEDIR . '/public';
+const UPLOADS = HOME . '/uploads';
+const RESOURCES = BASEDIR . '/resources';
+const STORAGE = BASEDIR . '/storage';
+const MODULES = BASEDIR . '/modules';
+const VERSION = '9.5';
 
 /**
  * Форматирует вывод времени из секунд
@@ -426,6 +438,8 @@ function statsCounter(): array
  */
 function showCounter(): ?HtmlString
 {
+    return new HtmlString('');
+
     $metrika = new Metrika();
     $metrika->saveStatistic();
 
@@ -1068,6 +1082,8 @@ function truncateDescription($value, int $words = 20, string $end = ''): string
  */
 function getAdvertPaid(string $place): ?HtmlString
 {
+    return new HtmlString('');
+
     $adverts = PaidAdvert::statAdverts();
 
     if (isset($adverts[$place])) {
@@ -1089,6 +1105,8 @@ function getAdvertPaid(string $place): ?HtmlString
  */
 function getAdvertAdmin(): ?HtmlString
 {
+    return new HtmlString('');
+
     $adverts = AdminAdvert::statAdverts();
 
     if ($adverts) {
@@ -1107,6 +1125,8 @@ function getAdvertAdmin(): ?HtmlString
  */
 function getAdvertUser(): ?HtmlString
 {
+    return new HtmlString('');
+
     $adverts = Advert::statAdverts();
 
     if ($adverts) {
@@ -1599,10 +1619,10 @@ function returnUrl(?string $url = null): ?string
  *
  * @return string сформированный код
  */
-function view(string $view, array $params = [], array $mergeData = []): string
+/*function view(string $view, array $params = [], array $mergeData = []): string
 {
     return View::make($view, $params, $mergeData)->render();
-}
+}*/
 
 /**
  * Translate the given message.
@@ -1613,10 +1633,10 @@ function view(string $view, array $params = [], array $mergeData = []): string
  *
  * @return string
  */
-function __(string $key, array $replace = [], $locale = null): string
+/*function __(string $key, array $replace = [], $locale = null): string
 {
     return Lang::get($key, $replace, $locale);
-}
+}*/
 
 /**
  * Translates the given message based on a count.
@@ -1641,7 +1661,7 @@ function choice(string $key, $number, array $replace = [], $locale = null): stri
  *
  * @return string сформированная страница с ошибкой
  */
-function abort($code, $message = null): string
+/*function abort($code, $message = null): string
 {
     $protocol = server('SERVER_PROTOCOL');
     $referer  = server('HTTP_REFERER');
@@ -1672,7 +1692,7 @@ function abort($code, $message = null): string
     }
 
     exit(view('errors/' . $code, compact('message', 'referer')));
-}
+}*/
 
 /**
  * Saves error logs
@@ -1704,7 +1724,7 @@ function saveErrorLog($code)
  *
  * @return void
  */
-function redirect(string $url, bool $permanent = false)
+/*function redirect(string $url, bool $permanent = false)
 {
     if (isset($_SESSION['captcha'])) {
         $_SESSION['captcha'] = null;
@@ -1716,7 +1736,7 @@ function redirect(string $url, bool $permanent = false)
 
     header('Location: ' . $url);
     exit();
-}
+}*/
 
 /**
  * Сохраняет flash уведомления
@@ -1728,7 +1748,8 @@ function redirect(string $url, bool $permanent = false)
  */
 function setFlash(string $status, $message)
 {
-    $_SESSION['flash'][$status] = $message;
+    session(['flash.' . $status => $message]);
+   // $_SESSION['flash'][$status] = $message;
 }
 
 /**
@@ -1760,7 +1781,8 @@ function getCaptcha(): HtmlString
  */
 function setInput(array $data)
 {
-    $_SESSION['input'] = json_encode($data);
+    session(['input' => json_encode($data)]);
+    //$_SESSION['input'] = json_encode($data);
 }
 
 /**
@@ -1773,17 +1795,19 @@ function setInput(array $data)
  */
 function getInput(string $name, $default = null)
 {
-    if (empty($_SESSION['input'])) {
+    //if (empty($_SESSION['input'])) {
+    if (session()->missing('input')) {
         return $default;
     }
 
-    $session = json_decode($_SESSION['input'], true);
+    $session = json_decode(session('input'), true);
     $input   = Arr::get($session, $name);
 
     if ($input !== null) {
         Arr::forget($session, $name);
 
-        $_SESSION['input'] = json_encode($session);
+        //$_SESSION['input'] = json_encode($session);
+        session(['input' => json_encode($session)]);
     }
 
     return $input ?? $default;
@@ -1798,9 +1822,11 @@ function getInput(string $name, $default = null)
  */
 function hasError(string $field): string
 {
-    $isValid = isset($_SESSION['flash']['danger']) ? ' is-valid' : '';
+    //$isValid = isset($_SESSION['flash']['danger']) ? ' is-valid' : '';
+    $isValid = session()->has('flash.danger') ? ' is-valid' : '';
 
-    return isset($_SESSION['flash']['danger'][$field]) ? ' is-invalid' : $isValid;
+    //return isset($_SESSION['flash']['danger'][$field]) ? ' is-invalid' : $isValid;
+    return session()->has('flash.danger.' . $field) ? ' is-invalid' : $isValid;
 }
 
 /**
@@ -1812,7 +1838,8 @@ function hasError(string $field): string
  */
 function textError(string $field): ?string
 {
-    return $_SESSION['flash']['danger'][$field] ?? null;
+    //return $_SESSION['flash']['danger'][$field] ?? null;
+    return session('flash.danger.' . $field);
 }
 
 /**
@@ -1982,22 +2009,6 @@ function getBrowser($userAgent = null): string
     $browser = $version === Browser::VERSION_UNKNOWN ? $brow : $brow . ' ' . $version;
 
     return mb_substr($browser, 0, 25, 'utf-8');
-}
-
-/**
- * Возращает объект Request
- *
- * @return Request
- */
-function request(): Request
-{
-    static $request;
-
-    if (! $request) {
-        $request = Request::capture();
-    }
-
-    return $request;
 }
 
 /**
@@ -2344,7 +2355,7 @@ function captchaVerify(): bool
     }
 
     if (setting('captcha_type') === 'graphical') {
-        return strtolower($request->input('protect')) === $_SESSION['protect'];
+        return strtolower($request->input('protect')) === $request->session()->get('protect');
     }
 
     return false;
@@ -2407,68 +2418,4 @@ function runCommand(Command $command, array $arguments = [])
     } catch (Exception $e) {
         return;
     }
-}
-
-/**
- * Returns csrf token field
- *
- * @return string
- */
-function csrf_field(): string
-{
-    return '<input type="hidden" name="token" value="' . $_SESSION['token'] . '">';
-}
-
-/**
- * Return config
- *
- * @param string|null $key
- * @param mixed       $default
- *
- * @return mixed
- */
-function config($key = null, $default = null)
-{
-    static $config;
-
-    if (! $config) {
-        $configPath = STORAGE . '/caches/config.php';
-
-        if (file_exists($configPath)) {
-            $config = require $configPath;
-        } else {
-            $dotenv = Dotenv\Dotenv::createImmutable(BASEDIR);
-            $dotenv->load();
-
-            $configFiles = glob(BASEDIR . '/config/*.php');
-
-            $config = [];
-            foreach ($configFiles as $configFile) {
-                $config[getBodyName($configFile)] = require $configFile;
-            }
-
-            if (config('app.env') === 'production') {
-                file_put_contents(
-                    $configPath,
-                    '<?php return ' . var_export($config, true) . ';'
-                );
-            }
-        }
-    }
-
-    return $key ? Arr::get($config, $key, $default) : $config;
-}
-
-/**
- * Get the path to a versioned Mix file.
- *
- * @param  string  $path
- * @param  string  $manifestDirectory
- *
- * @return string
- * @throws Exception
- */
-function mix(string $path, string $manifestDirectory = ''): string
-{
-    return (new Mix())(...func_get_args());
 }

@@ -23,7 +23,7 @@
                 <i class="fa fa-file-alt"></i> <b><a href="/photos/comment/{{ $comment->relate_id }}/{{ $comment->id }}">{{ $comment->title }}</a></b>
 
                 @if (isAdmin())
-                    <a href="#" class="float-end" onclick="return deleteComment(this)" data-rid="{{ $comment->relate_id }}" data-id="{{ $comment->id }}" data-type="{{ $comment->relate->getMorphClass() }}" data-token="{{ $_SESSION['token'] }}" data-bs-toggle="tooltip" title="{{ __('main.delete') }}"><i class="fa fa-times"></i></a>
+                    <a href="#" class="float-end" onclick="return deleteComment(this)" data-rid="{{ $comment->relate_id }}" data-id="{{ $comment->id }}" data-type="{{ $comment->relate->getMorphClass() }}" data-token="{{ csrf_token() }}" data-bs-toggle="tooltip" title="{{ __('main.delete') }}"><i class="fa fa-times"></i></a>
                 @endif
 
                 <div class="section-message">

@@ -50,7 +50,7 @@
             {{ __('main.total') }}: <b>{{ $messages->total() }}</b>
         </div>
 
-        <i class="fa fa-times"></i> <a href="/messages/delete/0?token={{ $_SESSION['token'] }}">{{ __('messages.delete_talk') }}</a><br>
+        <i class="fa fa-times"></i> <a href="/messages/delete/0?token={{ csrf_token() }}">{{ __('messages.delete_talk') }}</a><br>
     @else
         {{ showError(__('messages.empty_notifications')) }}
     @endif

@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Classes;
 
 use App\Models\News;
+use Illuminate\View\View;
 
 class Calendar
 {
@@ -13,9 +14,9 @@ class Calendar
      *
      * @param int $time
      *
-     * @return string календарь
+     * @return View
      */
-    public function getCalendar(int $time = SITETIME): string
+    public function getCalendar(int $time = SITETIME): View
     {
         [$date['day'], $date['month'], $date['year']] = explode('.', dateFixed($time, 'j.n.Y', true));
         $date       = array_map('intval', $date);
