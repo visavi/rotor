@@ -27,6 +27,7 @@
 mix-manifest.json
 composer.phar
 .env
+.idea/
 
 .env.backup
 .phpunit.result.cache

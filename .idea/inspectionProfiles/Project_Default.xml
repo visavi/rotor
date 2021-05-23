@@ -71,7 +71,6 @@
     <inspection_tool class="PhpCSValidationInspection" enabled="true" level="WEAK WARNING" enabled_by_default="true">
       <option name="CODING_STANDARD" value="Custom" />
       <option name="CUSTOM_RULESET_PATH" value="$PROJECT_DIR$/phpcs.xml" />
-      <option name="EXTENSIONS" value="php,js,css,inc" />
     </inspection_tool>
     <inspection_tool class="PhpStanGlobal" enabled="true" level="WEAK WARNING" enabled_by_default="true">
       <option name="config" value="$PROJECT_DIR$/phpstan.neon" />
