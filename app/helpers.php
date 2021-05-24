@@ -1879,10 +1879,10 @@ function sendMail(string $to, string $subject, string $body, array $params = [])
             $mail->addReplyTo($fromEmail, $fromName);
         }
 
-        $mail->Sender  = config('app.site_email');
+        $mail->Sender  = config('app.email');
         $mail->CharSet = PHPMailer::CHARSET_UTF8;
         $mail->Subject = $subject;
-        $mail->setFrom(config('app.site_email'), config('app.site_admin'));
+        $mail->setFrom(config('app.email'), config('app.admin'));
         $mail->addAddress($to);
         $mail->msgHTML($body);
 
@@ -2285,7 +2285,7 @@ function defaultSetting($key = null, $default = null)
  */
 function siteUrl(bool $parse = false): string
 {
-    $url = config('app.site_url');
+    $url = config('app.url');
 
     if ($parse) {
         $url = Str::startsWith($url, '//') ? 'http:' . $url : $url;

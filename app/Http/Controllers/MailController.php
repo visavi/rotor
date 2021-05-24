@@ -48,7 +48,7 @@ class MailController extends Controller
 
                 $subject = __('mails.email_from_site', ['sitename' => setting('title')], defaultSetting('language'));
                 $body = view('mailer.default', compact('subject', 'message'));
-                $send = sendMail(config('app.site_email'), $subject, $body, ['from' => [$email, $name]]);
+                $send = sendMail(config('app.email'), $subject, $body, ['from' => [$email, $name]]);
 
                 if ($send) {
                     setFlash('success', __('mails.success_sent'));

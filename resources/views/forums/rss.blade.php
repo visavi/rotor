@@ -3,7 +3,6 @@
 @section('title', __('forums.title_rss'))
 
 @section('content')
-
     @foreach ($topics as $topic)
         @if ($topic->lastPost->text)
             <?php $postText = bbCode($topic->lastPost->text); ?>

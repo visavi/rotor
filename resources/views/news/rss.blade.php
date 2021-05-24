@@ -3,7 +3,7 @@
 @section('title', __('news.rss_title'))
 
 @section('content')
-    @foreach ($newses as $news):
+    @foreach ($newses as $news)
         <?php $news->text = bbCode($news->text); ?>
         <?php $news->text = str_replace(['/uploads/stickers'], [siteUrl() . '/uploads/stickers'], $news->text); ?>
         <item>
