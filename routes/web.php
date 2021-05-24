@@ -89,7 +89,7 @@ Route::group(['prefix' => 'news'], function () {
     Route::get('/end/{id}', [\App\Http\Controllers\NewsController::class, 'end']);
     Route::get('/rss', [\App\Http\Controllers\NewsController::class, 'rss']);
     Route::get('/allcomments', [\App\Http\Controllers\NewsController::class, 'allComments']);
-    Route::get('/comment/{id}/{cid}', [\App\Http\Controllers\NewsController::class, 'viewComment'])->where('cid', '\d+');
+    Route::get('/comment/{id}/{cid}', [\App\Http\Controllers\NewsController::class, 'viewComment'])->whereNumber('cid');
     Route::match(['get', 'post'], '/comments/{id}', [\App\Http\Controllers\NewsController::class, 'comments']);
     Route::match(['get', 'post'], '/edit/{id}/{cid}', [\App\Http\Controllers\NewsController::class, 'editComment'])->whereNumber('cid');
 });
@@ -104,7 +104,7 @@ Route::group(['prefix' => 'photos'], function () {
     Route::get('/albums/{login}', [\App\Http\Controllers\PhotoController::class, 'album']);
     Route::get('/comments', [\App\Http\Controllers\PhotoController::class, 'allComments']);
     Route::get('/comments/active/{login}', [\App\Http\Controllers\PhotoController::class, 'userComments']);
-    Route::get('/comment/{id}/{cid:\d+}', [\App\Http\Controllers\PhotoController::class, 'viewComment']);
+    Route::get('/comment/{id}/{cid}', [\App\Http\Controllers\PhotoController::class, 'viewComment'])->whereNumber('cid');
     Route::match(['get', 'post'], '/comments/{id}', [\App\Http\Controllers\PhotoController::class, 'comments']);
     Route::match(['get', 'post'], '/create', [\App\Http\Controllers\PhotoController::class, 'create']);
     Route::match(['get', 'post'], '/edit/{id}', [\App\Http\Controllers\PhotoController::class, 'edit']);
@@ -117,13 +117,15 @@ Route::group(['prefix' => 'forums'], function () {
     Route::get('/', [\App\Http\Controllers\Forum\ForumController::class, 'index']);
     Route::get('/{id}', [\App\Http\Controllers\Forum\ForumController::class, 'forum']);
     Route::get('/search', [\App\Http\Controllers\Forum\SearchController::class, 'index']);
-    Route::get('/active/{action:posts|topics}', [\App\Http\Controllers\Forum\ActiveController::class]);
+    Route::get('/active/posts', [\App\Http\Controllers\Forum\ActiveController::class, 'posts']);
+    Route::get('/active/topics', [\App\Http\Controllers\Forum\ActiveController::class, 'topics']);
     Route::post('/active/delete', [\App\Http\Controllers\Forum\ActiveController::class, 'delete']);
     Route::get('/top/posts', [\App\Http\Controllers\Forum\ForumController::class, 'topPosts']);
     Route::get('/top/topics', [\App\Http\Controllers\Forum\ForumController::class, 'topTopics']);
     Route::get('/rss', [\App\Http\Controllers\Forum\ForumController::class, 'rss']);
     Route::get('/bookmarks', [\App\Http\Controllers\Forum\BookmarkController::class, 'index']);
-    Route::post('/bookmarks/{action:delete|perform}', [\App\Http\Controllers\Forum\BookmarkController::class]);
+    Route::post('/bookmarks/delete', [\App\Http\Controllers\Forum\BookmarkController::class, 'delete']);
+    Route::post('/bookmarks/perform', [\App\Http\Controllers\Forum\BookmarkController::class, 'perform']);
     Route::match(['get', 'post'], '/create', [\App\Http\Controllers\Forum\ForumController::class, 'create']);
 });
 
@@ -131,7 +133,7 @@ Route::group(['prefix' => 'forums'], function () {
 Route::group(['prefix' => 'topics'], function () {
     Route::get('/', [\App\Http\Controllers\Forum\NewController::class, 'topics']);
     Route::get('/{id}', [\App\Http\Controllers\Forum\TopicController::class, 'index']);
-    Route::get('/{id}/{pid:\d+}', [\App\Http\Controllers\Forum\TopicController::class, 'viewpost']);
+    Route::get('/{id}/{pid}', [\App\Http\Controllers\Forum\TopicController::class, 'viewpost'])->whereNumber('pid');
     Route::post('/votes/{id}', [\App\Http\Controllers\Forum\TopicController::class, 'vote']);
     Route::get('/end/{id}', [\App\Http\Controllers\Forum\TopicController::class, 'end']);
     Route::get('/open/{id}', [\App\Http\Controllers\Forum\TopicController::class, 'open']);
@@ -181,7 +183,7 @@ Route::group(['prefix' => 'downs'], function () {
 
 /* Предложения и проблемы */
 Route::group(['prefix' => 'offers'], function () {
-    Route::get('[/{type:offer|issue}]', [\App\Http\Controllers\OfferController::class, 'index']);
+    Route::get('/{type?}', [\App\Http\Controllers\OfferController::class, 'index'])->where('type', 'offer|issue');
     Route::get('/{id}', [\App\Http\Controllers\OfferController::class, 'view']);
     Route::get('/end/{id}', [\App\Http\Controllers\OfferController::class, 'end']);
     Route::get('/comment/{id}/{cid}', [\App\Http\Controllers\OfferController::class, 'viewComment'])->whereNumber('cid');
@@ -226,45 +228,45 @@ Route::group(['prefix' => 'accounts'], function () {
 
 /* Фото профиля */
 Route::group(['prefix' => 'pictures'], function () {
-        Route::match(['get', 'post'], '', [\App\Http\Controllers\User\PictureController::class, 'index']);
-        Route::get('/delete', [\App\Http\Controllers\User\PictureController::class, 'delete']);
-    });
+    Route::match(['get', 'post'], '', [\App\Http\Controllers\User\PictureController::class, 'index']);
+    Route::get('/delete', [\App\Http\Controllers\User\PictureController::class, 'delete']);
+});
 
 /* Социальные сети */
 Route::group(['prefix' => 'socials'], function () {
-        Route::match(['get', 'post'], '', [\App\Http\Controllers\SocialController::class, 'index']);
-        Route::get('/delete/{id}', [\App\Http\Controllers\SocialController::class, 'delete']);
-    });
+    Route::match(['get', 'post'], '', [\App\Http\Controllers\SocialController::class, 'index']);
+    Route::get('/delete/{id}', [\App\Http\Controllers\SocialController::class, 'delete']);
+});
 
 /* Поиск пользователя */
 Route::group(['prefix' => 'searchusers'], function () {
-        Route::get('/', [\App\Http\Controllers\User\SearchController::class, 'index']);
-        Route::get('/{letter}', [\App\Http\Controllers\User\SearchController::class, 'sort'])->where('letter', '[0-9a-z]+');
-        Route::match(['get', 'post'], '/search', [\App\Http\Controllers\User\SearchController::class, 'search']);
-    });
+    Route::get('/', [\App\Http\Controllers\User\SearchController::class, 'index']);
+    Route::get('/{letter}', [\App\Http\Controllers\User\SearchController::class, 'sort'])->where('letter', '[0-9a-z]+');
+    Route::match(['get', 'post'], '/search', [\App\Http\Controllers\User\SearchController::class, 'search']);
+});
 
 /* Стена сообщений */
 Route::group(['prefix' => 'walls'], function () {
-        Route::get('/{login}', [\App\Http\Controllers\WallController::class, 'index']);
-        Route::post('/{login}/create', [\App\Http\Controllers\WallController::class, 'create']);
-        Route::post('/{login}/delete', [\App\Http\Controllers\WallController::class, 'delete']);
-    });
+    Route::get('/{login}', [\App\Http\Controllers\WallController::class, 'index']);
+    Route::post('/{login}/create', [\App\Http\Controllers\WallController::class, 'create']);
+    Route::post('/{login}/delete', [\App\Http\Controllers\WallController::class, 'delete']);
+});
 
 /* Личные сообщения */
 Route::group(['prefix' => 'messages'], function () {
-        Route::get('/', [\App\Http\Controllers\MessageController::class, 'index']);
-        Route::get('/new', [\App\Http\Controllers\MessageController::class, 'newMessages']);
-        Route::get('/talk/{login}', [\App\Http\Controllers\MessageController::class, 'talk']);
-        Route::get('/delete/{uid}', [\App\Http\Controllers\MessageController::class, 'delete'])->whereNumber('uid');
-        Route::match(['get', 'post'], '/send', [\App\Http\Controllers\MessageController::class, 'send']);
-    });
+    Route::get('/', [\App\Http\Controllers\MessageController::class, 'index']);
+    Route::get('/new', [\App\Http\Controllers\MessageController::class, 'newMessages']);
+    Route::get('/talk/{login}', [\App\Http\Controllers\MessageController::class, 'talk']);
+    Route::get('/delete/{uid}', [\App\Http\Controllers\MessageController::class, 'delete'])->whereNumber('uid');
+    Route::match(['get', 'post'], '/send', [\App\Http\Controllers\MessageController::class, 'send']);
+});
 
 /* Игнор-лист */
 Route::group(['prefix' => 'ignores'], function () {
-        Route::post('/delete', [\App\Http\Controllers\IgnoreController::class, 'delete']);
-        Route::match(['get', 'post'], '', [\App\Http\Controllers\IgnoreController::class, 'index']);
-        Route::match(['get', 'post'], '/note/{id}', [\App\Http\Controllers\IgnoreController::class, 'note']);
-    });
+    Route::post('/delete', [\App\Http\Controllers\IgnoreController::class, 'delete']);
+    Route::match(['get', 'post'], '', [\App\Http\Controllers\IgnoreController::class, 'index']);
+    Route::match(['get', 'post'], '/note/{id}', [\App\Http\Controllers\IgnoreController::class, 'note']);
+});
 
 /* Контакт-лист */
 Route::group(['prefix' => 'contacts'], function () {
@@ -293,7 +295,8 @@ Route::group(['prefix' => 'adverts'], function () {
 
 /* Репутация пользователя */
 Route::group(['prefix' => 'ratings'], function () {
-    Route::get('/{login}/{action?}', [\App\Http\Controllers\RatingController::class, 'received'])->where('cid', '[received|gave]');
+    Route::get('/{login}/{received?}', [\App\Http\Controllers\RatingController::class, 'received']);
+    Route::get('/{login}/gave', [\App\Http\Controllers\RatingController::class, 'gave']);
     Route::post('/delete', [\App\Http\Controllers\RatingController::class, 'delete']);
 });
 
@@ -357,9 +360,11 @@ Route::group(['prefix' => 'admin'], function () {
     Route::get('/errors', [\App\Http\Controllers\Admin\ErrorController::class, 'index']);
     Route::get('/errors/clear', [\App\Http\Controllers\Admin\ErrorController::class, 'clear']);
     Route::match(['get', 'post'], '/antimat', [\App\Http\Controllers\Admin\AntimatController::class, 'index']);
-    Route::get('/antimat/{action:delete|clear}', [\App\Http\Controllers\Admin\AntimatController::class]);
+    Route::get('/antimat/delete', [\App\Http\Controllers\Admin\AntimatController::class, 'delete']);
+    Route::get('/antimat/clear', [\App\Http\Controllers\Admin\AntimatController::class, 'clear']);
     Route::get('/status', [\App\Http\Controllers\Admin\StatusController::class, 'index']);
-    Route::match(['get', 'post'], '/status/{action:create|edit}', [\App\Http\Controllers\Admin\StatusController::class]);
+    Route::match(['get', 'post'], '/status/create', [\App\Http\Controllers\Admin\StatusController::class, 'create']);
+    Route::match(['get', 'post'], '/status/edit', [\App\Http\Controllers\Admin\StatusController::class, 'edit']);
     Route::get('/status/delete', [\App\Http\Controllers\Admin\StatusController::class, 'delete']);
     Route::get('/rules', [\App\Http\Controllers\Admin\RuleController::class, 'index']);
     Route::match(['get', 'post'], '/rules/edit', [\App\Http\Controllers\Admin\RuleController::class, 'edit']);
@@ -439,7 +444,7 @@ Route::group(['prefix' => 'admin'], function () {
     Route::get('/votes/close/{id}', [\App\Http\Controllers\Admin\VoteController::class, 'close']);
     Route::get('/votes/delete/{id}', [\App\Http\Controllers\Admin\VoteController::class, 'delete']);
     Route::get('/votes/restatement', [\App\Http\Controllers\Admin\VoteController::class, 'restatement']);
-    Route::get('/offers[/{type:offer|issue}]', [\App\Http\Controllers\Admin\OfferController::class, 'index']);
+    Route::get('/offers/{type?}', [\App\Http\Controllers\Admin\OfferController::class, 'index'])->where('type', 'offer|issue');
     Route::get('/offers/{id}', [\App\Http\Controllers\Admin\OfferController::class, 'view']);
     Route::match(['get', 'post'], '/offers/edit/{id}', [\App\Http\Controllers\Admin\OfferController::class, 'edit']);
     Route::match(['get', 'post'], '/offers/reply/{id}', [\App\Http\Controllers\Admin\OfferController::class, 'reply']);
