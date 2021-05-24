@@ -1,7 +1,3 @@
-/storage/backups
-/storage/caches
-/storage/logs
-/storage/views
 /public/assets/modules
 /public/uploads/articles
 /public/uploads/avatars

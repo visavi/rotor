@@ -6,5 +6,5 @@ parameters:
     paths:
         - app
     bootstrapFiles:
-        - app/bootstrap.php
+        - bootstrap/app.php
     reportUnmatchedIgnoredErrors: false
