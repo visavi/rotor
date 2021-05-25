@@ -6,7 +6,6 @@
 @section('description', __('errors.error') . ' 403')
 
 @section('content')
-
     <?php $images = glob(HOME.'/assets/img/errors/*.png'); ?>
 
     <div class="row">
@@ -16,17 +15,11 @@
         <div class="col-12 text-center">
             <h1>{{ __('errors.error') }} 403!</h1>
 
-            @if ($message)
-                <div class="lead">{{ $message }}</div>
-            @else
-                <div class="lead">{{ __('errors.forbidden') }}</div>
-            @endif
+            <div class="lead">{{ $exception->getMessage() ?: __('errors.forbidden') }}</div>
 
-            @if ($referer)
-                <div class="my-3">
-                    <a class="btn btn-primary" href="{{ $referer }}"><i class="fa fa-arrow-circle-left"></i> {{ __('errors.return') }}</a>
-                </div>
-            @endif
+            <div class="my-3">
+                <a class="btn btn-primary" href="{{ url()->previous() }}"><i class="fa fa-arrow-circle-left"></i> {{ __('errors.return') }}</a>
+            </div>
         </div>
     </div>
 @stop

@@ -1,9 +1,9 @@
 @extends('layout')
 
-@section('title', __('errors.error'))
+@section('title', __('errors.error') . ' 401')
 
 @section('header', '')
-@section('description', __('errors.error'))
+@section('description', __('errors.error') . ' 401')
 
 @section('content')
 
@@ -11,12 +11,12 @@
 
     <div class="row">
         <div class="col-12 text-center">
-            <img src="/assets/img/errors/{{ basename($images[array_rand($images)]) }}" alt="error">
+            <img src="/assets/img/errors/{{ basename($images[array_rand($images)]) }}" alt="error 401">
         </div>
         <div class="col-12 text-center">
-            <h1>{{ __('errors.error') }}!</h1>
+            <h1>{{ __('errors.error') }} 401!</h1>
 
-            <div class="lead">{{ $exception->getMessage() }}</div>
+            <div class="lead">{{ __('errors.unauthorized') }}</div>
 
             <div class="my-3">
                 <a class="btn btn-primary" href="{{ url()->previous() }}"><i class="fa fa-arrow-circle-left"></i> {{ __('errors.return') }}</a>

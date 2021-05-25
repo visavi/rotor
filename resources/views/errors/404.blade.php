@@ -16,17 +16,11 @@
         <div class="col-12 text-center">
             <h1>{{ __('errors.error') }} 404!</h1>
 
-            @if ($message)
-                <div class="lead">{{ $message }}</div>
-            @else
-                <div class="lead">{{ __('errors.not_found') }}</div>
-            @endif
+            <div class="lead">{{ $exception->getMessage() ?: __('errors.not_found') }}</div>
 
-            @if ($referer)
-                <div class="my-3">
-                    <a class="btn btn-primary" href="{{ $referer }}"><i class="fa fa-arrow-circle-left"></i> {{ __('errors.return') }}</a>
-                </div>
-            @endif
+            <div class="my-3">
+                <a class="btn btn-primary" href="{{ url()->previous() }}"><i class="fa fa-arrow-circle-left"></i> {{ __('errors.return') }}</a>
+            </div>
         </div>
     </div>
 @stop

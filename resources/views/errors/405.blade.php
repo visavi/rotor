@@ -18,11 +18,9 @@
 
             <div class="lead">{{ __('errors.method_not_allowed') }}</div>
 
-            @if ($referer)
-                <div class="my-3">
-                    <a class="btn btn-primary" href="{{ $referer }}"><i class="fa fa-arrow-circle-left"></i> {{ __('errors.return') }}</a>
-                </div>
-            @endif
+            <div class="my-3">
+                <a class="btn btn-primary" href="{{ url()->previous() }}"><i class="fa fa-arrow-circle-left"></i> {{ __('errors.return') }}</a>
+            </div>
         </div>
     </div>
 @stop

@@ -3,7 +3,7 @@
 namespace App\Exceptions;
 
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
-use Throwable;
+use Symfony\Component\HttpKernel\Exception\HttpExceptionInterface;
 
 class Handler extends ExceptionHandler
 {
@@ -32,10 +32,15 @@ class Handler extends ExceptionHandler
      *
      * @return void
      */
-    public function register()
+    public function register(): void
     {
-        $this->reportable(function (Throwable $e) {
-            //
+        $this->renderable(function (HttpExceptionInterface $exception) {
+
+            if (! view()->exists('errors.' . $exception->getStatusCode())) {
+                return response()->view('errors.default', compact('exception'));
+            }
+
+            return parent::renderHttpException($exception);
         });
     }
 }

@@ -10,7 +10,6 @@ use App\Models\User;
 use Illuminate\View\View;
 use Phinx\Console\PhinxApplication;
 use Phinx\Wrapper\TextWrapper;
-use Illuminate\Support\Facades\DB;
 
 class AdminController extends Controller
 {
