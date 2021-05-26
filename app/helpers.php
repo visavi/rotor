@@ -1745,8 +1745,7 @@ function saveErrorLog($code)
  */
 function setFlash(string $status, $message)
 {
-    session(['flash.' . $status => $message]);
-   // $_SESSION['flash'][$status] = $message;
+    session()->put('flash.' . $status, $message);
 }
 
 /**
@@ -1778,8 +1777,7 @@ function getCaptcha(): HtmlString
  */
 function setInput(array $data)
 {
-    session(['input' => json_encode($data)]);
-    //$_SESSION['input'] = json_encode($data);
+    session()->put('input', json_encode($data));
 }
 
 /**
@@ -1792,19 +1790,15 @@ function setInput(array $data)
  */
 function getInput(string $name, $default = null)
 {
-    //if (empty($_SESSION['input'])) {
     if (session()->missing('input')) {
         return $default;
     }
 
-    $session = json_decode(session('input'), true);
-    $input   = Arr::get($session, $name);
+    $session = json_decode(session()->get('input'), true);
+    $input   = Arr::pull($session, $name);
 
     if ($input !== null) {
-        Arr::forget($session, $name);
-
-        //$_SESSION['input'] = json_encode($session);
-        session(['input' => json_encode($session)]);
+        session()->put('input', json_encode($session));
     }
 
     return $input ?? $default;
@@ -1819,10 +1813,8 @@ function getInput(string $name, $default = null)
  */
 function hasError(string $field): string
 {
-    //$isValid = isset($_SESSION['flash']['danger']) ? ' is-valid' : '';
     $isValid = session()->has('flash.danger') ? ' is-valid' : '';
 
-    //return isset($_SESSION['flash']['danger'][$field]) ? ' is-invalid' : $isValid;
     return session()->has('flash.danger.' . $field) ? ' is-invalid' : $isValid;
 }
 
@@ -1835,8 +1827,7 @@ function hasError(string $field): string
  */
 function textError(string $field): ?string
 {
-    //return $_SESSION['flash']['danger'][$field] ?? null;
-    return session('flash.danger.' . $field);
+    return session()->get('flash.danger.' . $field);
 }
 
 /**

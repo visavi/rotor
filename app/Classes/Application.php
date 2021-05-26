@@ -135,14 +135,6 @@ class Application
         }
 
         /* Установка сессионных переменных */
-        if (empty($_SESSION['token'])) {
-            $_SESSION['token'] = Str::random(8);
-        }
-
-        if (empty($_SESSION['protect'])) {
-            $_SESSION['protect'] = mt_rand(10000, 99999);
-        }
-
         if (empty($_SESSION['hits'])) {
             $_SESSION['hits'] = 0;
         }

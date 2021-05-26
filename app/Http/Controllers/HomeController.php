@@ -8,6 +8,7 @@ use App\Models\Ban;
 use Exception;
 use Gregwar\Captcha\PhraseBuilder;
 use Gregwar\Captcha\CaptchaBuilder;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
 
@@ -88,9 +89,11 @@ class HomeController extends Controller
     /**
      * Защитная картинка
      *
+     * @param Request $request
+     *
      * @return void
      */
-    public function captcha(): void
+    public function captcha(Request $request): void
     {
         header('Content-type: image/jpeg');
         $phrase = new PhraseBuilder();
@@ -104,16 +107,18 @@ class HomeController extends Controller
         $builder->setInterpolation(setting('captcha_interpolation'));
         $builder->build()->output();
 
-        $_SESSION['protect'] = $builder->getPhrase();
+        $request->session()->put('protect', $builder->getPhrase());
     }
 
     /**
      * Быстрое изменение языка
      *
-     * @param string $lang
+     * @param string  $lang
      * @param Request $request
+     *
+     * @return RedirectResponse
      */
-    public function language(string $lang, Request $request): void
+    public function language(string $lang, Request $request): RedirectResponse
     {
         $return    = $request->input('return');
         $languages = array_map('basename', glob(RESOURCES . '/lang/*', GLOB_ONLYDIR));
@@ -124,10 +129,10 @@ class HomeController extends Controller
                     'language' => $lang,
                 ]);
             } else {
-                $_SESSION['language'] = $lang;
+                $request->session()->put('language', $lang);
             }
         }
 
-        redirect($return ?? '/');
+        return redirect($return ?? '/');
     }
 }
