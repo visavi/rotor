@@ -1645,10 +1645,10 @@ function returnUrl(?string $url = null): ?string
  *
  * @return string
  */
-function choice(string $key, $number, array $replace = [], $locale = null): string
+/*function choice(string $key, $number, array $replace = [], $locale = null): string
 {
     return Lang::choice($key, $number, $replace, $locale);
-}
+}*/
 
 /**
  * Сохраняет страницы с ошибками
@@ -2397,7 +2397,7 @@ function getCourses(): ?HtmlString
  *
  * @return void
  */
-function runCommand(Command $command, array $arguments = [])
+/*function runCommand(Command $command, array $arguments = [])
 {
     $input  = new ArrayInput($arguments);
     $output = new NullOutput();
@@ -2407,4 +2407,4 @@ function runCommand(Command $command, array $arguments = [])
     } catch (Exception $e) {
         return;
     }
-}
+}*/
