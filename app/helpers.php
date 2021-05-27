@@ -2019,10 +2019,11 @@ function server($key = null, $default = null)
  */
 function checkAuth()
 {
-    if (isset($_SESSION['id'], $_SESSION['password'])) {
-        $user = getUserById($_SESSION['id']);
+    //if (isset($_SESSION['id'], $_SESSION['password'])) {
+    if (session()->has(['id', 'password'])) {
+        $user = getUserById(session()->get('id'));
 
-        if ($user && $_SESSION['password'] === md5(config('app.key') . $user->password)) {
+        if ($user && session()->get('password') === md5(config('app.key') . $user->password)) {
             return $user;
         }
     }

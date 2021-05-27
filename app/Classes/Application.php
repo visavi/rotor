@@ -6,10 +6,6 @@ namespace App\Classes;
 
 use App\Models\Login;
 use App\Models\Setting;
-use DI\Container;
-use FastRoute\Dispatcher;
-use Illuminate\Http\Request;
-use Illuminate\Support\Str;
 
 class Application
 {
@@ -28,56 +24,9 @@ class Application
         $this->setSetting();
     }
 
-    /**
-     * Запускает приложение
-     */
-    public function run(): void
-    {
-        $router = $this->getRouter();
 
-        switch ($router[0]) {
-            case Dispatcher::FOUND:
-                echo $this->call($router);
-                break;
-            case Dispatcher::METHOD_NOT_ALLOWED:
-                abort(405);
-                break;
-            default:
-                abort(404);
-        }
-    }
 
-    /**
-     * Вызывает контроллер
-     *
-     * @param array $router
-     * @return mixed
-     */
-    private function call(array $router)
-    {
-        [, $controller, $params] = $router;
 
-        if (isset($params['action'])) {
-            $controller[1] = $params['action'];
-        }
-
-        $container = new Container();
-        $container->set(Request::class, request());
-
-        return $container->call($controller, $params);
-    }
-
-    /**
-     * Возвращает роутеры
-     *
-     * @return array
-     */
-    private function getRouter(): array
-    {
-        $dispatcher = require APP . '/routes.php';
-
-        return $dispatcher->dispatch(request()->getMethod(), request()->getPathInfo());
-    }
 
     /**
      * Авторизует по кукам

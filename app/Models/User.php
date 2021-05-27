@@ -282,7 +282,8 @@ class User extends BaseModel implements
                 (new self())->rememberUser($user, $remember);
 
                 // Сохранение привязки к соц. сетям
-                if (! empty($_SESSION['social'])) {
+                //if (! empty($_SESSION['social'])) {
+                if (session()->has('social')) {
                     Social::query()->create([
                         'user_id'    => $user->id,
                         'network'    => $_SESSION['social']->network,
@@ -809,8 +810,11 @@ class User extends BaseModel implements
             setcookie('password', md5($user->password . config('app.key')), $options);
         }
 
-        $_SESSION['id']       = $user->id;
-        $_SESSION['password'] = md5(config('app.key') . $user->password);
-        $_SESSION['online']   = null;
+        session()->put('id', $user->id);
+        session()->put('password', md5(config('app.key') . $user->password));
+
+        //$_SESSION['id']       = $user->id;
+        //$_SESSION['password'] = md5(config('app.key') . $user->password);
+        //$_SESSION['online']   = null;
     }
 }

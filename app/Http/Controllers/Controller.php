@@ -17,10 +17,8 @@ class Controller extends BaseController
 {
     use AuthorizesRequests, DispatchesJobs, ValidatesRequests;
 
-    public function __construct()
+    public function __construct(Request $request)
     {
-        $request = request();
-
         if (! $this->isBanned($request)) {
             $this->frequencyLimit();
 

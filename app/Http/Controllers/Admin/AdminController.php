@@ -7,33 +7,11 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Log;
 use App\Models\User;
+use Illuminate\Http\Request;
 use Illuminate\View\View;
-use Phinx\Console\PhinxApplication;
-use Phinx\Wrapper\TextWrapper;
 
 class AdminController extends Controller
 {
-    /**
-     * AdminController constructor.
-     */
-    public function __construct()
-    {
-        parent::__construct();
-
-        if (! isAdmin()) {
-            abort(403, __('errors.forbidden'));
-        }
-
-        Log::query()->create([
-            'user_id'    => getUser('id'),
-            'request'    => request()->getRequestUri(),
-            'referer'    => server('HTTP_REFERER'),
-            'ip'         => getIp(),
-            'brow'       => getBrowser(),
-            'created_at' => SITETIME,
-        ]);
-    }
-
     /**
      * Главная страница
      *

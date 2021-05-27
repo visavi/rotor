@@ -250,7 +250,8 @@ class UserController extends Controller
             redirect('/');
         }
 
-        $cooklog = $_COOKIE['login'] ?? '';
+        //$cooklog = $_COOKIE['login'] ?? '';
+        $cooklog = $request->cookie('login');
         $isFlood = $flood->isFlood(1);
 
         if ($request->isMethod('post')) {
@@ -756,7 +757,8 @@ class UserController extends Controller
             $body = view('mailer.default', compact('subject', 'message'));
             sendMail($user->email, $subject, $body);
 
-            unset($_SESSION['id'], $_SESSION['password']);
+            //unset($_SESSION['id'], $_SESSION['password']);
+            $request->session()->forget(['id', 'password']);
 
             setFlash('success', __('users.password_success_changed'));
             redirect('/login');

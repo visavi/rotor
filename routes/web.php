@@ -342,7 +342,7 @@ Route::get('/counters', [\App\Http\Controllers\CounterController::class, 'index'
 Route::get('/files[/{page:.+}]', [\App\Http\Controllers\FileController::class, 'index']);
 
 /* Админ-панель */
-Route::group(['prefix' => 'admin'], function () {
+Route::group(['prefix' => 'admin', 'middleware' => 'check.admin'], function () {
     Route::get('/', [\App\Http\Controllers\Admin\AdminController::class, 'main']);
     Route::get('/loads', [\App\Http\Controllers\Admin\LoadController::class, 'index']);
     Route::post('/loads/create', [\App\Http\Controllers\Admin\LoadController::class, 'create']);
