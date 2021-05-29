@@ -52,6 +52,6 @@
         <i class="fa fa-sign-out-alt fa-lg text-muted"></i> {{ __('index.logout') }}
     </div>
     <div class="section-body">
-        <i class="far fa-circle fa-lg text-muted"></i> <a href="/logout?token={{ csrf_token() }}">{{ __('index.logout') }}</a><br>
+        <i class="far fa-circle fa-lg text-muted"></i> <a href="/logout?_token={{ csrf_token() }}">{{ __('index.logout') }}</a><br>
     </div>
 </div>

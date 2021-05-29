@@ -57,9 +57,9 @@ class Metrika
      */
     public function saveStatistic(): void
     {
-        $_SESSION['hits']++;
+        session()->increment('hits');
 
-        if (isset($_SESSION['online']) && $_SESSION['online'] > SITETIME) {
+        if (session()->has('online') && session()->get('online') > SITETIME) {
             return;
         }
 
@@ -135,7 +135,7 @@ class Metrika
             ];
         }
 
-        $hits = $_SESSION['hits'];
+        $hits = session()->get('hits');
 
         $hitsUpdate = [
             'allhits' => DB::raw('allhits + ' . $hits),
@@ -145,16 +145,16 @@ class Metrika
 
         $counter->update(array_merge($hostsUpdate, $hitsUpdate));
 
-        $_SESSION['hits']   = 0;
-        $_SESSION['online'] = strtotime('+30 seconds', SITETIME);
+        session()->put('hits', 0);
+        session()->put('online', strtotime('+30 seconds', SITETIME));
     }
 
     /**
      * Returns counter result
      *
-     * @return Counter|object|null
+     * @return object|null
      */
-    private function getResultCounter()
+    private function getResultCounter(): ?object
     {
         return Counter::query()->first();
     }

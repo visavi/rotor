@@ -12,20 +12,20 @@
             </button>
             <div class="dropdown-menu dropdown-menu-end">
                 @if ($topic->closed)
-                    <a class="dropdown-item" href="/admin/topics/action/{{ $topic->id }}?type=open&amp;page={{ $posts->currentPage() }}&amp;token={{ csrf_token() }}">{{ __('main.open') }}</a>
+                    <a class="dropdown-item" href="/admin/topics/action/{{ $topic->id }}?type=open&amp;page={{ $posts->currentPage() }}&amp;_token={{ csrf_token() }}">{{ __('main.open') }}</a>
                 @else
-                    <a class="dropdown-item" href="/admin/topics/action/{{ $topic->id }}?type=closed&amp;page={{ $posts->currentPage() }}&amp;token={{ csrf_token() }}">{{ __('main.close') }}</a>
+                    <a class="dropdown-item" href="/admin/topics/action/{{ $topic->id }}?type=closed&amp;page={{ $posts->currentPage() }}&amp;_token={{ csrf_token() }}">{{ __('main.close') }}</a>
                 @endif
 
                 @if ($topic->locked)
-                    <a class="dropdown-item" href="/admin/topics/action/{{ $topic->id }}?type=unlocked&amp;page={{ $posts->currentPage() }}&amp;token={{ csrf_token() }}">{{ __('main.unlock') }}</a>
+                    <a class="dropdown-item" href="/admin/topics/action/{{ $topic->id }}?type=unlocked&amp;page={{ $posts->currentPage() }}&amp;_token={{ csrf_token() }}">{{ __('main.unlock') }}</a>
                 @else
-                    <a class="dropdown-item" href="/admin/topics/action/{{ $topic->id }}?type=locked&amp;page={{ $posts->currentPage() }}&amp;token={{ csrf_token() }}">{{ __('main.lock') }}</a>
+                    <a class="dropdown-item" href="/admin/topics/action/{{ $topic->id }}?type=locked&amp;page={{ $posts->currentPage() }}&amp;_token={{ csrf_token() }}">{{ __('main.lock') }}</a>
                 @endif
 
                 <a class="dropdown-item" href="/admin/topics/edit/{{ $topic->id }}">{{ __('main.change') }}</a>
                 <a class="dropdown-item" href="/admin/topics/move/{{ $topic->id }}">{{ __('main.move') }}</a>
-                <a class="dropdown-item" href="/admin/topics/delete/{{ $topic->id }}?token={{ csrf_token() }}" onclick="return confirm('{{ __('forums.confirm_delete_topic') }}')">{{ __('main.delete') }}</a>
+                <a class="dropdown-item" href="/admin/topics/delete/{{ $topic->id }}?_token={{ csrf_token() }}" onclick="return confirm('{{ __('forums.confirm_delete_topic') }}')">{{ __('main.delete') }}</a>
                 <a class="dropdown-item" href="/admin/topics/{{ $topic->id }}?page={{ $posts->currentPage() }}">{{ __('main.management') }}</a>
             </div>
         </div>
@@ -56,12 +56,12 @@
 
     @if (getUser())
         @if (! $topic->closed && getUser('id') === $topic->user->id && getUser('point') >= setting('editforumpoint'))
-            <i class="fas fa-lock"></i> <a class="me-3" href="/topics/close/{{ $topic->id }}?token={{ csrf_token() }}" onclick="return confirm('{{ __('forums.confirm_close_topic') }}')">{{ __('main.close') }}</a>
+            <i class="fas fa-lock"></i> <a class="me-3" href="/topics/close/{{ $topic->id }}?_token={{ csrf_token() }}" onclick="return confirm('{{ __('forums.confirm_close_topic') }}')">{{ __('main.close') }}</a>
             <i class="fas fa-pencil-alt"></i> <a class="me-3" href="/topics/edit/{{ $topic->id }}">{{ __('main.edit') }}</a>
         @endif
 
         @if ($topic->closed && getUser('id') === $topic->closeUser->id)
-            <i class="fas fa-unlock"></i> <a class="me-3" href="/topics/open/{{ $topic->id }}?token={{ csrf_token() }}">{{ __('main.open') }}</a>
+            <i class="fas fa-unlock"></i> <a class="me-3" href="/topics/open/{{ $topic->id }}?_token={{ csrf_token() }}">{{ __('main.open') }}</a>
         @endif
 
         <?php $bookmark = $topic->bookmark_posts ? __('forums.from_bookmarks') : __('forums.to_bookmarks'); ?>

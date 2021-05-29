@@ -86,6 +86,6 @@
     @endif
 
     @if (isAdmin('boss'))
-        <i class="fa fa-sync"></i> <a href="/admin/offers/restatement?token={{ csrf_token() }}">{{ __('main.recount') }}</a><br>
+        <i class="fa fa-sync"></i> <a href="/admin/offers/restatement?_token={{ csrf_token() }}">{{ __('main.recount') }}</a><br>
     @endif
 @stop

@@ -78,7 +78,7 @@
                                 <a class="gallery" href="{{ getUser('picture') }}">
                                     {{ resizeImage(getUser('picture'), ['alt' => $user->login, 'class' => 'img-fluid rounded']) }}
                                 </a><br>
-                                <a href="/pictures">{{ __('main.change') }}</a> / <a href="/pictures/delete?token={{ csrf_token() }}">{{ __('main.delete') }}</a>
+                                <a href="/pictures">{{ __('main.change') }}</a> / <a href="/pictures/delete?_token={{ csrf_token() }}">{{ __('main.delete') }}</a>
                             @else
                                 <img class="img-fluid rounded" src="/assets/img/images/photo.png" alt="Photo"><br>
                                 <a href="/pictures">{{ __('main.upload') }}</a>

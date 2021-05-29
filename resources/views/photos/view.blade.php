@@ -22,7 +22,7 @@
                 </button>
                 <div class="dropdown-menu dropdown-menu-end">
                     <a class="dropdown-item" href="/admin/photos/edit/{{ $photo->id }}">{{ __('main.edit') }}</a>
-                    <a class="dropdown-item" href="/admin/photos/delete/{{ $photo->id }}?token={{ csrf_token() }}" onclick="return confirm('{{ __('photos.confirm_delete_photo') }}')">{{ __('main.delete') }}</a>
+                    <a class="dropdown-item" href="/admin/photos/delete/{{ $photo->id }}?_token={{ csrf_token() }}" onclick="return confirm('{{ __('photos.confirm_delete_photo') }}')">{{ __('main.delete') }}</a>
                 </div>
             </div>
         @elseif (getUser('id') === $photo->user->id)
@@ -32,7 +32,7 @@
                 </button>
                 <div class="dropdown-menu dropdown-menu-end">
                     <a class="dropdown-item" href="/photos/edit/{{ $photo->id }}">{{ __('main.edit') }}</a>
-                    <a class="dropdown-item" href="/photos/delete/{{ $photo->id }}?token={{ csrf_token() }}" onclick="return confirm('{{ __('photos.confirm_delete_photo') }}')">{{ __('main.delete') }}</a>
+                    <a class="dropdown-item" href="/photos/delete/{{ $photo->id }}?_token={{ csrf_token() }}" onclick="return confirm('{{ __('photos.confirm_delete_photo') }}')">{{ __('main.delete') }}</a>
                 </div>
             </div>
         @endif

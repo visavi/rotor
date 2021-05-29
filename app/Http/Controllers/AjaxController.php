@@ -197,7 +197,7 @@ class AjaxController extends Controller
         $type = $request->input('type');
         $vote = $request->input('vote');
 
-        if ($request->input('token') !== $_SESSION['token']) {
+        if ($request->input('_token') !== csrf_token()) {
             return json_encode(['status' => 'error', 'message' => 'Invalid token']);
         }
 

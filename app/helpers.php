@@ -435,8 +435,6 @@ function statsCounter(): array
  */
 function showCounter(): ?HtmlString
 {
-    return new HtmlString('');
-
     $metrika = new Metrika();
     $metrika->saveStatistic();
 
@@ -1079,8 +1077,6 @@ function truncateDescription($value, int $words = 20, string $end = ''): string
  */
 function getAdvertPaid(string $place): ?HtmlString
 {
-    return new HtmlString('');
-
     $adverts = PaidAdvert::statAdverts();
 
     if (isset($adverts[$place])) {
@@ -1102,8 +1098,6 @@ function getAdvertPaid(string $place): ?HtmlString
  */
 function getAdvertAdmin(): ?HtmlString
 {
-    return new HtmlString('');
-
     $adverts = AdminAdvert::statAdverts();
 
     if ($adverts) {
@@ -1122,8 +1116,6 @@ function getAdvertAdmin(): ?HtmlString
  */
 function getAdvertUser(): ?HtmlString
 {
-    return new HtmlString('');
-
     $adverts = Advert::statAdverts();
 
     if ($adverts) {
@@ -1714,28 +1706,6 @@ function saveErrorLog($code)
 }
 
 /**
- * Переадресовывает пользователя
- *
- * @param string $url       адрес переадресации
- * @param bool   $permanent постоянное перенаправление
- *
- * @return void
- */
-/*function redirect(string $url, bool $permanent = false)
-{
-    if (isset($_SESSION['captcha'])) {
-        $_SESSION['captcha'] = null;
-    }
-
-    if ($permanent) {
-        header($_SERVER['SERVER_PROTOCOL'] . ' 301 Moved Permanently');
-    }
-
-    header('Location: ' . $url);
-    exit();
-}*/
-
-/**
  * Сохраняет flash уведомления
  *
  * @param string $status статус уведомления
@@ -2019,7 +1989,6 @@ function server($key = null, $default = null)
  */
 function checkAuth()
 {
-    //if (isset($_SESSION['id'], $_SESSION['password'])) {
     if (session()->has(['id', 'password'])) {
         $user = getUserById(session()->get('id'));
 

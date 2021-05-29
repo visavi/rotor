@@ -23,7 +23,7 @@
                 </button>
                 <div class="dropdown-menu dropdown-menu-end">
                     <a class="dropdown-item" href="/admin/news/edit/{{ $news->id }}">{{ __('main.edit') }}</a>
-                    <a class="dropdown-item" href="/admin/news/delete/{{ $news->id }}?token={{ csrf_token() }}" onclick="return confirm('{{ __('news.confirm_delete') }}')">{{ __('main.delete') }}</a>
+                    <a class="dropdown-item" href="/admin/news/delete/{{ $news->id }}?_token={{ csrf_token() }}" onclick="return confirm('{{ __('news.confirm_delete') }}')">{{ __('main.delete') }}</a>
                 </div>
             </div>
         </div>

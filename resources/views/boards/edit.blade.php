@@ -27,12 +27,12 @@
     @endif
 
     @if ($item->expires_at > SITETIME)
-        <a href="/items/close/{{ $item->id }}?token={{ csrf_token() }}" onclick="return confirm('{{ __('boards.confirm_unpublish_item') }}')">{{ __('main.unpublish') }}</a> /
+        <a href="/items/close/{{ $item->id }}?_token={{ csrf_token() }}" onclick="return confirm('{{ __('boards.confirm_unpublish_item') }}')">{{ __('main.unpublish') }}</a> /
     @else
-        <a href="/items/close/{{ $item->id }}?token={{ csrf_token() }}">{{ __('main.publish') }}</a> /
+        <a href="/items/close/{{ $item->id }}?_token={{ csrf_token() }}">{{ __('main.publish') }}</a> /
     @endif
 
-    <a href="/items/delete/{{ $item->id }}?token={{ csrf_token() }}" onclick="return confirm('{{ __('boards.confirm_delete_item') }}')">{{ __('main.delete') }}</a>
+    <a href="/items/delete/{{ $item->id }}?_token={{ csrf_token() }}" onclick="return confirm('{{ __('boards.confirm_delete_item') }}')">{{ __('main.delete') }}</a>
 
     <div class="section-form mb-3 shadow">
         <form action="/items/edit/{{ $item->id }}" method="post">

@@ -90,7 +90,7 @@
         </div>
 
         @if (isAdmin('boss'))
-            <i class="fa fa-times"></i> <a href="/admin/guestbook/clear?token={{ csrf_token() }}" onclick="return confirm('{{ __('guestbook.confirm_delete') }}')">{{ __('main.clear') }}</a><br>
+            <i class="fa fa-times"></i> <a href="/admin/guestbook/clear?_token={{ csrf_token() }}" onclick="return confirm('{{ __('guestbook.confirm_delete') }}')">{{ __('main.clear') }}</a><br>
         @endif
     @else
         {{ showError(__('main.empty_messages')) }}

@@ -106,7 +106,7 @@ class UserController extends Controller
         }
 
         if ($request->isMethod('post')) {
-            if ($request->has('login') && $request->has('password')) {
+            if ($request->has(['login', 'password'])) {
                 $login        = $request->input('login');
                 $password     = trim($request->input('password'));
                 $password2    = trim($request->input('password2'));
@@ -229,7 +229,11 @@ class UserController extends Controller
             }
 
             if ($request->has('token')) {
-                User::socialAuth($request->input('token'));
+                if ($user = User::socialAuth($request->input('token'))) {
+                    setFlash('success', __('users.welcome', ['login' => $user->getName()]));
+
+                    return redirect($request->input('return', '/'));
+                }
             }
         }
 
@@ -257,7 +261,7 @@ class UserController extends Controller
         $isFlood = $flood->isFlood();
 
         if ($request->isMethod('post')) {
-            if ($request->has('login') && $request->has('pass')) {
+            if ($request->has(['login', 'pass'])) {
                 if ($isFlood) {
                     $validator->true(captchaVerify(), ['protect' => __('validator.captcha')]);
                 }
@@ -286,7 +290,11 @@ class UserController extends Controller
             }
 
             if ($request->has('token')) {
-                User::socialAuth($request->input('token'));
+                if ($user = User::socialAuth($request->input('token'))) {
+                    setFlash('success', __('users.welcome', ['login' => $user->getName()]));
+
+                    return redirect($request->input('return', '/'));
+                }
             }
         }
 
@@ -302,7 +310,7 @@ class UserController extends Controller
      */
     public function logout(Request $request): RedirectResponse
     {
-        if ($request->input('token') === csrf_token()) {
+        if ($request->input('_token') === csrf_token()) {
             $request->session()->flush();
             cookie()->queue(cookie()->forget('password'));
         } else {

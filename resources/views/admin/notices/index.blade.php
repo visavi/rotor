@@ -32,7 +32,7 @@
                         @if ($notice->protect)
                             <i class="fa fa-lock"></i>
                         @else
-                            <a href="/admin/notices/delete/{{ $notice->id }}?token={{ csrf_token() }}" onclick="return confirm('{{ __('admin.notices.confirm_delete') }}')"><i class="fa fa-trash-alt"></i></a>
+                            <a href="/admin/notices/delete/{{ $notice->id }}?_token={{ csrf_token() }}" onclick="return confirm('{{ __('admin.notices.confirm_delete') }}')"><i class="fa fa-trash-alt"></i></a>
                         @endif
                     </div>
                 </div>

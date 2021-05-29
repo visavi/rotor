@@ -57,7 +57,7 @@ Route::group(['prefix' => 'blogs'], function () {
     Route::get('/', [\App\Http\Controllers\ArticleController::class, 'index']);
     Route::get('/{id}', [\App\Http\Controllers\ArticleController::class, 'blog']);
     Route::get('/tags', [\App\Http\Controllers\ArticleController::class, 'tags']);
-    Route::get('/tags/{tag}', [\App\Http\Controllers\ArticleController::class, 'searchTag']);
+    Route::get('/tags/{tag}', [\App\Http\Controllers\ArticleController::class, 'searchTag'])->where('tag', '.+');
     Route::get('/authors', [\App\Http\Controllers\ArticleController::class, 'authors']);
     Route::get('/active/articles', [\App\Http\Controllers\ArticleController::class, 'userArticles']);
     Route::get('/active/comments', [\App\Http\Controllers\ArticleController::class, 'userComments']);
@@ -337,9 +337,10 @@ Route::get('/tags', [\App\Http\Controllers\PageController::class, 'tags']);
 Route::get('/rules', [\App\Http\Controllers\PageController::class, 'rules']);
 Route::get('/stickers', [\App\Http\Controllers\PageController::class, 'stickers']);
 Route::get('/stickers/{id}', [\App\Http\Controllers\PageController::class, 'stickersCategory']);
-Route::get('/online[/{action:all}]', [\App\Http\Controllers\OnlineController::class, 'index']);
+Route::get('/online', [\App\Http\Controllers\OnlineController::class, 'index']);
+Route::get('/online/all', [\App\Http\Controllers\OnlineController::class, 'all']);
 Route::get('/counters', [\App\Http\Controllers\CounterController::class, 'index']);
-Route::get('/files[/{page:.+}]', [\App\Http\Controllers\FileController::class, 'index']);
+Route::get('/files/{page?}', [\App\Http\Controllers\FileController::class, 'index'])->where('page', '.+');
 
 /* Админ-панель */
 Route::group(['prefix' => 'admin', 'middleware' => 'check.admin'], function () {
@@ -487,7 +488,7 @@ Route::group(['prefix' => 'admin', 'middleware' => 'check.admin'], function () {
     Route::get('/articles/delete/{id}', [\App\Http\Controllers\Admin\ArticleController::class, 'deleteArticle']);
 
     /* Доска объявлений */
-    Route::get('/boards[/{id}]', [\App\Http\Controllers\Admin\BoardController::class, 'index']);
+    Route::get('/boards/{id?}', [\App\Http\Controllers\Admin\BoardController::class, 'index']);
     Route::get('/boards/restatement', [\App\Http\Controllers\Admin\BoardController::class, 'restatement']);
     Route::match(['get', 'post'], '/items/edit/{id}', [\App\Http\Controllers\Admin\BoardController::class, 'editItem']);
     Route::get('/items/delete/{id}', [\App\Http\Controllers\Admin\BoardController::class, 'deleteItem']);
@@ -503,11 +504,9 @@ Route::group(['prefix' => 'admin', 'middleware' => 'check.admin'], function () {
     Route::get('/modules/uninstall', [\App\Http\Controllers\Admin\ModuleController::class, 'uninstall']);
 });
 
-
-/*    $modules = Module::query()->where('disabled', 0)->get();
-    foreach ($modules as $module) {
-        if (file_exists(MODULES . '/' . $module->name . '/routes.php')) {
-            include_once MODULES . '/' . $module->name . '/routes.php';
-        }
+$modules = \App\Models\Module::query()->where('disabled', 0)->get();
+foreach ($modules as $module) {
+    if (file_exists(MODULES . '/' . $module->name . '/routes.php')) {
+        include_once MODULES . '/' . $module->name . '/routes.php';
     }
-}, ['cacheFile' => STORAGE . '/caches/routes.php', 'cacheDisabled' => config('app.env') !== 'production',]);*/
+}

@@ -27,7 +27,7 @@
                 <i class="fa fa-archive"></i> <b>{{ basename($file) }}</b> ({{ formatFileSize($file) }})
 
                 <div class="float-end">
-                    <a href="/admin/backups/delete?file={{ basename($file) }}&amp;token={{ csrf_token() }}"><i class="fas fa-times"></i></a>
+                    <a href="/admin/backups/delete?file={{ basename($file) }}&amp;_token={{ csrf_token() }}"><i class="fas fa-times"></i></a>
                 </div>
             </div>
         @endforeach

@@ -37,7 +37,7 @@
                             <span class="text-danger">{{ __('news.on_homepage') }}</span><br>
                         @endif
                         <a href="/admin/news/edit/{{ $data->id }}?page={{ $news->currentPage() }}" data-bs-toggle="tooltip" title="{{ __('main.edit') }}"><i class="fas fa-pencil-alt text-muted"></i></a>
-                        <a href="/admin/news/delete/{{ $data->id }}?token={{ csrf_token() }}" data-bs-toggle="tooltip" title="{{ __('main.delete') }}" onclick="return confirm('{{ __('news.confirm_delete') }}')"><i class="fas fa-times text-muted"></i></a>
+                        <a href="/admin/news/delete/{{ $data->id }}?_token={{ csrf_token() }}" data-bs-toggle="tooltip" title="{{ __('main.delete') }}" onclick="return confirm('{{ __('news.confirm_delete') }}')"><i class="fas fa-times text-muted"></i></a>
                     </div>
                 </div>
 
@@ -71,6 +71,6 @@
     {{ $news->links() }}
 
     @if (isAdmin('boss'))
-        <i class="fa fa-sync"></i> <a href="/admin/news/restatement?token={{ csrf_token() }}">{{ __('main.recount') }}</a><br>
+        <i class="fa fa-sync"></i> <a href="/admin/news/restatement?_token={{ csrf_token() }}">{{ __('main.recount') }}</a><br>
     @endif
 @stop

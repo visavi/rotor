@@ -20,7 +20,7 @@
     <br>{{ __('api.text_description') }}<br><br>
 
     {{ __('api.text_example') }}
-<pre class="prettyprint linenums">/api/users?token=key</pre>
+<pre class="prettyprint linenums">/api/users?_token=key</pre>
 
     {{ __('api.text_return') }}
 <pre class="prettyprint linenums">

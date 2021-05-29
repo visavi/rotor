@@ -543,11 +543,12 @@ class ArticleController extends Controller
     /**
      * Поиск по тегам
      *
-     * @param string $tag
+     * @param string  $tag
+     * @param Request $request
      *
      * @return View|RedirectResponse
      */
-    public function searchTag(string $tag)
+    public function searchTag(string $tag, Request $request)
     {
         $tag = urldecode($tag);
 
@@ -561,9 +562,8 @@ class ArticleController extends Controller
             return redirect('blogs/tags');
         }
 
-        if (empty($_SESSION['findresult'])
-            || empty($_SESSION['blogfind'])
-            || $tag !== $_SESSION['blogfind']
+        if ($request->session()->missing(['findresult', 'blogfind']) ||
+            $tag !== $request->session()->get('blogfind')
         ) {
             $result = Article::query()
                 ->select('id')
@@ -572,13 +572,13 @@ class ArticleController extends Controller
                 ->pluck('id')
                 ->all();
 
-            $_SESSION['blogfind'] = $tag;
-            $_SESSION['findresult'] = $result;
+            $request->session()->put('blogfind', $tag);
+            $request->session()->put('findresult', $result);
         }
 
         $articles = Article::query()
             ->select('articles.*', 'blogs.name')
-            ->whereIn('articles.id', $_SESSION['findresult'])
+            ->whereIn('articles.id', $request->session()->get('findresult'))
             ->join('blogs', 'articles.category_id', 'blogs.id')
             ->orderByDesc('created_at')
             ->with('user')

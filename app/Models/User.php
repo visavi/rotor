@@ -21,6 +21,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Query\JoinClause;
 use Illuminate\Foundation\Auth\Access\Authorizable;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\HtmlString;
@@ -271,7 +272,8 @@ class User extends BaseModel implements
      * @param  string $login    Логин
      * @param  string $password Пароль пользователя
      * @param  bool   $remember Запомнить пароль
-     * @return Builder|User|bool
+     *
+     * @return User|bool
      */
     public static function auth(string $login, string $password, bool $remember = true)
     {
@@ -282,12 +284,11 @@ class User extends BaseModel implements
                 (new self())->rememberUser($user, $remember);
 
                 // Сохранение привязки к соц. сетям
-                //if (! empty($_SESSION['social'])) {
                 if (session()->has('social')) {
                     Social::query()->create([
                         'user_id'    => $user->id,
-                        'network'    => $_SESSION['social']->network,
-                        'uid'        => $_SESSION['social']->uid,
+                        'network'    => session()->get('social')->network,
+                        'uid'        => session()->get('social')->uid,
                         'created_at' => SITETIME,
                     ]);
                 }
@@ -306,7 +307,7 @@ class User extends BaseModel implements
      *
      * @param string $token идентификатор Ulogin
      *
-     * @return void
+     * @return User|bool
      * @throws GuzzleException
      */
     public static function socialAuth(string $token)
@@ -323,7 +324,7 @@ class User extends BaseModel implements
         if ($response->getStatusCode() === 200) {
             $network = json_decode($response->getBody()->getContents());
 
-            $_SESSION['social'] = $network;
+            session()->put('social', $network);
 
             /** @var Social $social */
             $social = Social::query()
@@ -336,10 +337,11 @@ class User extends BaseModel implements
 
                 $user->saveVisit(Login::SOCIAL);
 
-                setFlash('success', __('users.welcome', ['login' => $user->getName()]));
-                return redirect('/');
+                return $user;
             }
         }
+
+        return false;
     }
 
     /**

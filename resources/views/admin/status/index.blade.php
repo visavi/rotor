@@ -39,7 +39,7 @@
 
                         <div class="float-end">
                             <a data-bs-toggle="tooltip" title="{{ __('main.edit') }}" href="/admin/status/edit?id={{ $status->id }}"><i class="fa fa-pencil-alt text-muted"></i></a>
-                            <a data-bs-toggle="tooltip" title="{{ __('main.delete') }}" href="/admin/status/delete?id={{ $status->id }}&amp;token={{ csrf_token() }}" onclick="return confirm('{{ __('statuses.confirm_delete') }}')"><i class="fa fa-trash-alt text-muted"></i></a>
+                            <a data-bs-toggle="tooltip" title="{{ __('main.delete') }}" href="/admin/status/delete?id={{ $status->id }}&amp;_token={{ csrf_token() }}" onclick="return confirm('{{ __('statuses.confirm_delete') }}')"><i class="fa fa-trash-alt text-muted"></i></a>
                         </div>
                     </li>
                 @endforeach

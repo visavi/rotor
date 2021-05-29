@@ -43,7 +43,7 @@
                 @if (is_dir(RESOURCES . '/views/' . $path . $fileName))
                     <li class="list-group-item">
                         <div class="float-end">
-                            <a href="/admin/files/delete?path={{ $path }}&amp;dirname={{ $file }}&amp;token={{ csrf_token() }}" onclick="return confirm('{{ __('admin.files.confirm_delete_dir') }}')"><i class="fa fa-times"></i></a>
+                            <a href="/admin/files/delete?path={{ $path }}&amp;dirname={{ $file }}&amp;_token={{ csrf_token() }}" onclick="return confirm('{{ __('admin.files.confirm_delete_dir') }}')"><i class="fa fa-times"></i></a>
                         </div>
 
                         <i class="fa fa-folder"></i> <b><a href="/admin/files?path={{ $path . $fileName }}">{{ $file }}</a></b><br>
@@ -55,7 +55,7 @@
 
                     <li class="list-group-item">
                         <div class="float-end">
-                            <a href="/admin/files/delete?path={{ $path }}&amp;filename={{ basename($file, '.blade.php') }}&amp;token={{ csrf_token() }}" onclick="return confirm('{{ __('admin.files.confirm_delete_file') }}')"><i class="fa fa-times"></i></a>
+                            <a href="/admin/files/delete?path={{ $path }}&amp;filename={{ basename($file, '.blade.php') }}&amp;_token={{ csrf_token() }}" onclick="return confirm('{{ __('admin.files.confirm_delete_file') }}')"><i class="fa fa-times"></i></a>
                         </div>
 
                         <i class="fa fa-file"></i>

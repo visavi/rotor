@@ -36,7 +36,7 @@
                 @if (isAdmin('boss'))
                     <div class="float-end">
                         <a href="/admin/blogs/edit/{{ $category->id }}"><i class="fa fa-pencil-alt"></i></a>
-                        <a href="/admin/blogs/delete/{{ $category->id }}?token={{ csrf_token() }}" onclick="return confirm('{{ __('blogs.confirm_delete_blog') }}')"><i class="fa fa-times"></i></a>
+                        <a href="/admin/blogs/delete/{{ $category->id }}?_token={{ csrf_token() }}" onclick="return confirm('{{ __('blogs.confirm_delete_blog') }}')"><i class="fa fa-times"></i></a>
                     </div>
                 @endif
             </div>
@@ -55,7 +55,7 @@
 
                         @if (isAdmin('boss'))
                             <a href="/admin/blogs/edit/{{ $child->id }}"><i class="fa fa-pencil-alt"></i></a>
-                            <a href="/admin/blogs/delete/{{ $child->id }}?token={{ csrf_token() }}" onclick="return confirm('{{ __('blogs.confirm_delete_blog') }}')"><i class="fa fa-times"></i></a>
+                            <a href="/admin/blogs/delete/{{ $child->id }}?_token={{ csrf_token() }}" onclick="return confirm('{{ __('blogs.confirm_delete_blog') }}')"><i class="fa fa-times"></i></a>
                         @endif
                         <br>
                     @endforeach
@@ -76,6 +76,6 @@
             </form>
         </div>
 
-        <i class="fa fa-sync"></i> <a href="/admin/blogs/restatement?token={{ csrf_token() }}">{{ __('main.recount') }}</a><br>
+        <i class="fa fa-sync"></i> <a href="/admin/blogs/restatement?_token={{ csrf_token() }}">{{ __('main.recount') }}</a><br>
     @endif
 @stop

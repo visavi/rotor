@@ -12,10 +12,10 @@
 @stop
 
 @section('content')
-    @if (isset($_SESSION['social']))
+    @if (session()->has('social'))
         <div class="bg-success text-light p-1">
-            <img class="rounded-circle border" alt="photo" src="{{ $_SESSION['social']->photo }}" style="width: 48px; height: 48px;">
-            <span class="badge bg-primary">{{ $_SESSION['social']->network }}</span> {{ $_SESSION['social']->first_name }} {{ $_SESSION['social']->last_name }} {{ isset($_SESSION['social']->nickname) ? '('.$_SESSION['social']->nickname.')' : '' }}
+            <img class="rounded-circle border" alt="photo" src="{{ session()->get('social')->photo }}" style="width: 48px; height: 48px;">
+            <span class="badge bg-primary">{{ session()->get('social')->network }}</span> {{ session()->get('social')->first_name }} {{ session()->get('social')->last_name }} {{ isset(session()->get('social')->nickname) ? '('.session()->get('social')->nickname.')' : '' }}
         </div>
         <div class="bg-info text-light p-1 mb-3">
             {!! __('users.social_auth_text') !!}

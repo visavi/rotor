@@ -104,7 +104,7 @@
     </div>
 
     @if ($messages->isNotEmpty())
-        <i class="fa fa-times"></i> <a href="/messages/delete/{{ $user->id }}?token={{ csrf_token() }}" onclick="return confirm('{{ __('messages.delete_confirm') }}')">{{ __('messages.delete_talk') }}</a><br>
+        <i class="fa fa-times"></i> <a href="/messages/delete/{{ $user->id }}?_token={{ csrf_token() }}" onclick="return confirm('{{ __('messages.delete_confirm') }}')">{{ __('messages.delete_talk') }}</a><br>
     @endif
 
     <i class="fa fa-search"></i> <a href="/searchusers">{{ __('index.user_search') }}</a><br>

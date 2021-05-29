@@ -41,7 +41,7 @@
                     <div class="text-end">
                         <a href="/admin/topics/edit/{{ $topic->id }}" title="{{ __('main.edit') }}"><i class="fa fa-pencil-alt text-muted"></i></a>
                         <a href="/admin/topics/move/{{ $topic->id }}" title="{{ __('main.move') }}"><i class="fa fa-arrows-alt text-muted"></i></a>
-                        <a href="/admin/topics/delete/{{ $topic->id }}?page={{ $topics->currentPage() }}&amp;token={{ csrf_token() }}" onclick="return confirm('{{ __('forums.confirm_delete_topic') }}')" title="{{ __('main.delete') }}"><i class="fa fa-times text-muted"></i></a>
+                        <a href="/admin/topics/delete/{{ $topic->id }}?page={{ $topics->currentPage() }}&amp;_token={{ csrf_token() }}" onclick="return confirm('{{ __('forums.confirm_delete_topic') }}')" title="{{ __('main.delete') }}"><i class="fa fa-times text-muted"></i></a>
                     </div>
                 </div>
                 <div class="section-content">

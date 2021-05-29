@@ -162,7 +162,7 @@
 
                 @if (isAdmin('moder'))
                     @if (setting('invite'))
-                        <i class="fa fa-ban"></i> <a href="/admin/invitations/send?user={{ $user->login }}&amp;token={{ csrf_token() }}">{{ __('users.send_invite') }}</a><br>
+                        <i class="fa fa-ban"></i> <a href="/admin/invitations/send?user={{ $user->login }}&amp;_token={{ csrf_token() }}">{{ __('users.send_invite') }}</a><br>
                     @endif
                 <i class="fa fa-ban"></i> <a href="/admin/bans/edit?user={{ $user->login }}">{{ __('index.ban_unban') }}</a><br>
                 <i class="fa fa-history"></i> <a href="/admin/banhists/view?user={{ $user->login }}">{{ __('index.ban_history') }}</a><br>

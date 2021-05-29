@@ -16,6 +16,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Database\Query\JoinClause;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
+use Symfony\Component\HttpFoundation\Response;
 
 class MessageController extends Controller
 {
@@ -29,11 +30,14 @@ class MessageController extends Controller
      */
     public function __construct()
     {
-        parent::__construct();
+        $this->middleware(function ($request, $next) {
 
-        if (! $this->user = getUser()) {
-            abort(403, __('main.not_authorized'));
-        }
+            if (! $this->user = getUser()) {
+                abort(403, __('main.not_authorized'));
+            }
+
+            return $next($request);
+        });
     }
 
     /**
@@ -225,11 +229,13 @@ class MessageController extends Controller
     /**
      * New messages
      *
-     * @return TODO |RedirectResponse
+     * @param Request $request
+     *
+     * @return Response
      */
-    public function newMessages()
+    public function newMessages(Request $request): Response
     {
-        if (! request()->ajax()) {
+        if (! $request->ajax()) {
             return redirect('/');
         }
 
@@ -252,9 +258,9 @@ class MessageController extends Controller
                 ->get();
 
             if ($dialogues->isNotEmpty()) {
-                $view = view('messages/_new', compact('dialogues'));
+                $view = view('messages/_new', compact('dialogues'))->render();
 
-                return json_encode([
+                return response()->json([
                     'status'        => 'success',
                     'dialogues'     => $view,
                     'countMessages' => $countMessages,
@@ -262,6 +268,6 @@ class MessageController extends Controller
             }
         }
 
-        return json_encode(['status'  => 'error']);
+        return response()->json(['status' => 'error']);
     }
 }

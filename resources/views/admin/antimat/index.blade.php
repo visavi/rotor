@@ -23,7 +23,7 @@
 
             <div class="card-body">
                 @foreach ($words as $data)
-                    <a href="/admin/antimat/delete?id={{ $data->id }}&amp;token={{ csrf_token() }}">{{ $data->string }}</a>{{ $loop->last ? '' : ', ' }}
+                    <a href="/admin/antimat/delete?id={{ $data->id }}&amp;_token={{ csrf_token() }}">{{ $data->string }}</a>{{ $loop->last ? '' : ', ' }}
                 @endforeach
             </div>
 
@@ -32,7 +32,7 @@
 
                 @if (isAdmin('boss'))
                     <span class="float-end">
-                        <i class="fa fa-trash-alt"></i> <a href="/admin/antimat/clear?token={{ csrf_token() }}" onclick="return confirm('{{ __('admin.antimat.confirm_clear') }}')">{{ __('main.clear') }}</a>
+                        <i class="fa fa-trash-alt"></i> <a href="/admin/antimat/clear?_token={{ csrf_token() }}" onclick="return confirm('{{ __('admin.antimat.confirm_clear') }}')">{{ __('main.clear') }}</a>
                     </span>
                 @endif
             </div>
