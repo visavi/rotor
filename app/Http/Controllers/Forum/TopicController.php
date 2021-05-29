@@ -16,6 +16,7 @@ use App\Models\Vote;
 use App\Models\Flood;
 use App\Classes\Validator;
 use App\Models\VoteAnswer;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Query\JoinClause;
@@ -122,9 +123,9 @@ class TopicController extends Controller
      * @param Validator $validator
      * @param Flood     $flood
      *
-     * @return void
+     * @return RedirectResponse
      */
-    public function create(int $id, Request $request, Validator $validator, Flood $flood): void
+    public function create(int $id, Request $request, Validator $validator, Flood $flood): RedirectResponse
     {
         $msg   = $request->input('msg');
         $files = (array) $request->file('files');
@@ -228,7 +229,7 @@ class TopicController extends Controller
             setFlash('danger', $validator->getErrors());
         }
 
-        redirect('/topics/end/' . $topic->id);
+        return redirect('topics/end/' . $topic->id);
     }
 
     /**
@@ -238,9 +239,9 @@ class TopicController extends Controller
      * @param Request   $request
      * @param Validator $validator
      *
-     * @return void
+     * @return RedirectResponse
      */
-    public function delete(int $id, Request $request, Validator $validator): void
+    public function delete(int $id, Request $request, Validator $validator): RedirectResponse
     {
         $del   = intar($request->input('del'));
         $page  = int($request->input('page'));
@@ -286,7 +287,7 @@ class TopicController extends Controller
             setFlash('danger', $validator->getErrors());
         }
 
-        redirect('/topics/' . $topic->id . '?page=' . $page);
+        return redirect('topics/' . $topic->id . '?page=' . $page);
     }
 
     /**
@@ -296,9 +297,9 @@ class TopicController extends Controller
      * @param Request   $request
      * @param Validator $validator
      *
-     * @return void
+     * @return RedirectResponse
      */
-    public function close(int $id, Request $request, Validator $validator): void
+    public function close(int $id, Request $request, Validator $validator): RedirectResponse
     {
         if (! $user = getUser()) {
             abort(403, __('main.not_authorized'));
@@ -329,7 +330,7 @@ class TopicController extends Controller
             setFlash('danger', $validator->getErrors());
         }
 
-        redirect('/topics/' . $topic->id);
+        return redirect('topics/' . $topic->id);
     }
 
     /**
@@ -339,9 +340,9 @@ class TopicController extends Controller
      * @param Request   $request
      * @param Validator $validator
      *
-     * @return void
+     * @return RedirectResponse
      */
-    public function open(int $id, Request $request, Validator $validator): void
+    public function open(int $id, Request $request, Validator $validator): RedirectResponse
     {
         if (! $user = getUser()) {
             abort(403, __('main.not_authorized'));
@@ -371,7 +372,7 @@ class TopicController extends Controller
             setFlash('danger', $validator->getErrors());
         }
 
-        redirect('/topics/' . $topic->id);
+        return redirect('topics/' . $topic->id);
     }
 
     /**
@@ -381,16 +382,16 @@ class TopicController extends Controller
      * @param Request   $request
      * @param Validator $validator
      *
-     * @return View
+     * @return View|RedirectResponse
      */
-    public function edit(int $id, Request $request, Validator $validator): View
+    public function edit(int $id, Request $request, Validator $validator)
     {
         if (! $user = getUser()) {
             abort(403, __('main.not_authorized'));
         }
 
         if ($user->point < setting('editforumpoint')) {
-            abort('default', __('forums.topic_edited_points', ['point' => plural(setting('editforumpoint'), setting('scorename'))]));
+            abort(200, __('forums.topic_edited_points', ['point' => plural(setting('editforumpoint'), setting('scorename'))]));
         }
 
         /** @var Topic $topic */
@@ -401,11 +402,11 @@ class TopicController extends Controller
         }
 
         if ($topic->user_id !== $user->id) {
-            abort('default', __('forums.topic_not_author'));
+            abort(200, __('forums.topic_not_author'));
         }
 
         if ($topic->closed) {
-            abort('default', __('forums.topic_closed'));
+            abort(200, __('forums.topic_closed'));
         }
 
         $post = Post::query()->where('topic_id', $topic->id)
@@ -484,11 +485,12 @@ class TopicController extends Controller
                 }
 
                 setFlash('success', __('forums.topic_success_changed'));
-                redirect('/topics/' . $topic->id);
-            } else {
-                setInput($request->all());
-                setFlash('danger', $validator->getErrors());
+
+                return redirect('topics/' . $topic->id);
             }
+
+            setInput($request->all());
+            setFlash('danger', $validator->getErrors());
         }
 
         if ($vote) {
@@ -505,9 +507,9 @@ class TopicController extends Controller
      * @param Request   $request
      * @param Validator $validator
      *
-     * @return View
+     * @return View|RedirectResponse
      */
-    public function editPost(int $id, Request $request, Validator $validator): View
+    public function editPost(int $id, Request $request, Validator $validator)
     {
         $page = int($request->input('page'));
 
@@ -527,17 +529,17 @@ class TopicController extends Controller
         }
 
         if ($post->closed) {
-            abort('default', __('forums.topic_closed'));
+            abort(200, __('forums.topic_closed'));
         }
 
         $isModer = in_array($user->login, explode(',', (string) $post->moderators), true);
 
         if (! $isModer && $post->user_id !== $user->id) {
-            abort('default', __('forums.posts_edited_curators'));
+            abort(200, __('forums.posts_edited_curators'));
         }
 
         if (! $isModer && $post->created_at + 600 < SITETIME) {
-            abort('default', __('main.editing_impossible'));
+            abort(200, __('main.editing_impossible'));
         }
 
         if ($request->isMethod('post')) {
@@ -568,11 +570,12 @@ class TopicController extends Controller
                 }
 
                 setFlash('success', __('main.message_edited_success'));
-                redirect('/topics/' . $post->topic_id . '?page=' . $page);
-            } else {
-                setInput($request->all());
-                setFlash('danger', $validator->getErrors());
+
+                return redirect('topics/' . $post->topic_id . '?page=' . $page);
             }
+
+            setInput($request->all());
+            setFlash('danger', $validator->getErrors());
         }
 
         return view('forums/topic_edit_post', compact('post', 'page'));
@@ -585,9 +588,9 @@ class TopicController extends Controller
      * @param Request   $request
      * @param Validator $validator
      *
-     * @return void
+     * @return RedirectResponse
      */
-    public function vote(int $id, Request $request, Validator $validator): void
+    public function vote(int $id, Request $request, Validator $validator): RedirectResponse
     {
         if (! $user = getUser()) {
             abort(403, __('main.not_authorized'));
@@ -640,7 +643,7 @@ class TopicController extends Controller
             setFlash('danger', $validator->getErrors());
         }
 
-        redirect('/topics/' . $vote->topic_id . '?page=' . $page);
+        return redirect('topics/' . $vote->topic_id . '?page=' . $page);
     }
 
     /**
@@ -676,9 +679,9 @@ class TopicController extends Controller
      * @param int $id
      * @param int $pid
      *
-     * @return void
+     * @return RedirectResponse
      */
-    public function viewpost(int $id, int $pid): void
+    public function viewpost(int $id, int $pid): RedirectResponse
     {
         $countTopics = Post::query()
             ->where('id', '<=', $pid)
@@ -690,7 +693,8 @@ class TopicController extends Controller
         }
 
         $end = ceil($countTopics / setting('forumpost'));
-        redirect('/topics/' . $id . '?page=' . $end . '#post_' . $pid);
+
+        return redirect('topics/' . $id . '?page=' . $end . '#post_' . $pid);
     }
 
     /**
@@ -698,9 +702,9 @@ class TopicController extends Controller
      *
      * @param int $id
      *
-     * @return void
+     * @return RedirectResponse
      */
-    public function end(int $id): void
+    public function end(int $id): RedirectResponse
     {
         /** @var Topic $topic */
         $topic = Topic::query()->find($id);
@@ -710,6 +714,7 @@ class TopicController extends Controller
         }
 
         $end = ceil($topic->count_posts / setting('forumpost'));
-        redirect('/topics/' . $topic->id . '?page=' . $end);
+
+        return redirect('topics/' . $topic->id . '?page=' . $end);
     }
 }

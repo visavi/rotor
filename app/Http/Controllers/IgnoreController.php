@@ -7,6 +7,7 @@ namespace App\Http\Controllers;
 use App\Classes\Validator;
 use App\Models\Ignore;
 use App\Models\User;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
 
@@ -30,9 +31,9 @@ class IgnoreController extends Controller
      * @param Request   $request
      * @param Validator $validator
      *
-     * @return View
+     * @return View|RedirectResponse
      */
-    public function index(Request $request, Validator $validator): View
+    public function index(Request $request, Validator $validator)
     {
         $login = $request->input('user');
 
@@ -67,11 +68,12 @@ class IgnoreController extends Controller
                 }
 
                 setFlash('success', __('ignores.success_added'));
-                redirect('/ignores?page=' . $page);
-            } else {
-                setInput($request->all());
-                setFlash('danger', $validator->getErrors());
+
+                return redirect('ignores?page=' . $page);
             }
+
+            setInput($request->all());
+            setFlash('danger', $validator->getErrors());
         }
 
         $ignores = Ignore::query()
@@ -90,9 +92,9 @@ class IgnoreController extends Controller
      * @param Request   $request
      * @param Validator $validator
      *
-     * @return View
+     * @return View|RedirectResponse
      */
-    public function note(int $id, Request $request, Validator $validator): View
+    public function note(int $id, Request $request, Validator $validator)
     {
         $ignore = Ignore::query()
             ->where('user_id', getUser('id'))
@@ -115,11 +117,12 @@ class IgnoreController extends Controller
                 ]);
 
                 setFlash('success', __('users.note_saved_success'));
-                redirect('/ignores');
-            } else {
-                setInput($request->all());
-                setFlash('danger', $validator->getErrors());
+
+                return redirect('ignores');
             }
+
+            setInput($request->all());
+            setFlash('danger', $validator->getErrors());
         }
 
         return view('ignores/note', compact('ignore'));
@@ -130,8 +133,10 @@ class IgnoreController extends Controller
      *
      * @param Request   $request
      * @param Validator $validator
+     *
+     * @return RedirectResponse
      */
-    public function delete(Request $request, Validator $validator): void
+    public function delete(Request $request, Validator $validator): RedirectResponse
     {
         $page = int($request->input('page', 1));
         $del  = intar($request->input('del'));
@@ -150,6 +155,6 @@ class IgnoreController extends Controller
             setFlash('danger', $validator->getErrors());
         }
 
-        redirect('/ignores?page=' . $page);
+        return redirect('ignores?page=' . $page);
     }
 }

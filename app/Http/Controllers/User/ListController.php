@@ -7,6 +7,7 @@ namespace App\Http\Controllers\User;
 use App\Http\Controllers\Controller;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
 
@@ -17,9 +18,9 @@ class ListController extends Controller
      *
      * @param Request $request
      *
-     * @return View
+     * @return View|RedirectResponse
      */
-    public function userlist(Request $request): View
+    public function userlist(Request $request)
     {
         $type = check($request->input('type', 'users'));
         $sort = check($request->input('sort', 'point'));
@@ -68,11 +69,13 @@ class ListController extends Controller
                 ++$position;
                 $end = ceil($position / setting('userlist'));
 
+
                 setFlash('success', __('users.rating_position', ['position' => $position]));
-                redirect('/users?page=' . $end . '&user=' . $user . '&type=' . $type. '&sort=' . $sort);
-            } else {
-                setFlash('danger', __('validator.user'));
+
+                return redirect('users?page=' . $end . '&user=' . $user . '&type=' . $type. '&sort=' . $sort);
             }
+
+            setFlash('danger', __('validator.user'));
         }
 
         return view('users/users', compact('users', 'user', 'type', 'sort'));

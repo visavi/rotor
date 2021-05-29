@@ -6,6 +6,7 @@ namespace App\Http\Controllers;
 
 use App\Classes\Validator;
 use App\Models\Contact;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
 
@@ -29,9 +30,9 @@ class ContactController extends Controller
      * @param Request   $request
      * @param Validator $validator
      *
-     * @return View
+     * @return View|RedirectResponse
      */
-    public function index(Request $request, Validator $validator): View
+    public function index(Request $request, Validator $validator)
     {
         $login = $request->input('user');
 
@@ -65,11 +66,12 @@ class ContactController extends Controller
                 }
 
                 setFlash('success', __('contacts.success_added'));
-                redirect('/contacts?page='.$page);
-            } else {
-                setInput($request->all());
-                setFlash('danger', $validator->getErrors());
+
+                return redirect('contacts?page='.$page);
             }
+
+            setInput($request->all());
+            setFlash('danger', $validator->getErrors());
         }
 
         $contacts = Contact::query()
@@ -88,9 +90,9 @@ class ContactController extends Controller
      * @param Request   $request
      * @param Validator $validator
      *
-     * @return View
+     * @return View|RedirectResponse
      */
-    public function note(int $id, Request $request, Validator $validator): View
+    public function note(int $id, Request $request, Validator $validator)
     {
         $contact = Contact::query()
             ->where('user_id', getUser('id'))
@@ -113,11 +115,12 @@ class ContactController extends Controller
                 ]);
 
                 setFlash('success', __('users.note_saved_success'));
-                redirect('/contacts');
-            } else {
-                setInput($request->all());
-                setFlash('danger', $validator->getErrors());
+
+                return redirect('contacts');
             }
+
+            setInput($request->all());
+            setFlash('danger', $validator->getErrors());
         }
 
         return view('contacts/note', compact('contact'));
@@ -129,9 +132,9 @@ class ContactController extends Controller
      * @param Request   $request
      * @param Validator $validator
      *
-     * @return void
+     * @return RedirectResponse
      */
-    public function delete(Request $request, Validator $validator): void
+    public function delete(Request $request, Validator $validator): RedirectResponse
     {
         $page = int($request->input('page', 1));
         $del  = intar($request->input('del'));
@@ -150,6 +153,6 @@ class ContactController extends Controller
             setFlash('danger', $validator->getErrors());
         }
 
-        redirect('/contacts?page='.$page);
+        return redirect('contacts?page='.$page);
     }
 }

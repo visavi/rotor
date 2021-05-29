@@ -9,6 +9,7 @@ use App\Models\Sticker;
 use App\Models\StickersCategory;
 use App\Models\Status;
 use App\Models\Surprise;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\DB;
 use Illuminate\View\View;
 
@@ -119,9 +120,9 @@ class PageController extends Controller
     /**
      * Ежегодный сюрприз
      *
-     * @return void
+     * @return RedirectResponse
      */
-    public function surprise(): void
+    public function surprise(): RedirectResponse
     {
         $surprise['requiredDate']  = '10.01';
 
@@ -135,7 +136,7 @@ class PageController extends Controller
         }
 
         if (strtotime(date('d.m.Y')) > strtotime($surprise['requiredDate'].'.'.date('Y'))) {
-            abort('default', __('pages.surprise_date_receipt'));
+            abort(200, __('pages.surprise_date_receipt'));
         }
 
         $existSurprise = Surprise::query()
@@ -144,7 +145,7 @@ class PageController extends Controller
             ->first();
 
         if ($existSurprise) {
-            abort('default', __('pages.surprise_already_received'));
+            abort(200, __('pages.surprise_already_received'));
         }
 
         if ($user->point >= 50) {
@@ -167,7 +168,7 @@ class PageController extends Controller
         ]);
 
         setFlash('success', __('pages.surprise_success_received'));
-        redirect('/');
+        return redirect('/');
     }
 
     /**

@@ -7,6 +7,7 @@ namespace App\Http\Controllers\Admin;
 use App\Classes\Validator;
 use App\Models\Banhist;
 use App\Models\User;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
 
@@ -37,9 +38,9 @@ class BanController extends AdminController
      * @param Request   $request
      * @param Validator $validator
      *
-     * @return View
+     * @return View|RedirectResponse
      */
-    public function edit(Request $request, Validator $validator): View
+    public function edit(Request $request, Validator $validator)
     {
         $user = User::query()->where('login', $request->input('user'))->with('lastBan')->first();
 
@@ -48,7 +49,7 @@ class BanController extends AdminController
         }
 
         if (in_array($user->level, User::ADMIN_GROUPS, true)) {
-            abort('default', __('admin.bans.forbidden_ban'));
+            abort(200, __('admin.bans.forbidden_ban'));
         }
 
         if ($request->isMethod('post')) {
@@ -94,11 +95,12 @@ class BanController extends AdminController
                 ]);
 
                 setFlash('success', __('admin.bans.success_banned'));
-                redirect('/admin/bans/edit?user=' . $user->login);
-            } else {
-                setInput($request->all());
-                setFlash('danger', $validator->getErrors());
+
+                return redirect('admin/bans/edit?user=' . $user->login);
             }
+
+            setInput($request->all());
+            setFlash('danger', $validator->getErrors());
         }
 
         return view('admin/bans/edit', compact('user'));
@@ -110,9 +112,9 @@ class BanController extends AdminController
      * @param Request   $request
      * @param Validator $validator
      *
-     * @return View
+     * @return View|RedirectResponse
      */
-    public function change(Request $request, Validator $validator): View
+    public function change(Request $request, Validator $validator)
     {
         $user = User::query()->where('login', $request->input('user'))->with('lastBan')->first();
 
@@ -121,7 +123,7 @@ class BanController extends AdminController
         }
 
         if ($user->level !== User::BANNED || $user->timeban < SITETIME) {
-            abort('default', __('admin.bans.user_not_banned'));
+            abort(200, __('admin.bans.user_not_banned'));
         }
 
         if ($request->isMethod('post')) {
@@ -151,11 +153,12 @@ class BanController extends AdminController
                 ]);
 
                 setFlash('success', __('main.record_changed_success'));
-                redirect('/admin/bans/edit?user=' . $user->login);
-            } else {
-                setInput($request->all());
-                setFlash('danger', $validator->getErrors());
+
+                return redirect('admin/bans/edit?user=' . $user->login);
             }
+
+            setInput($request->all());
+            setFlash('danger', $validator->getErrors());
         }
 
         return view('admin/bans/change', compact('user'));
@@ -167,9 +170,9 @@ class BanController extends AdminController
      * @param Request   $request
      * @param Validator $validator
      *
-     * @return void
+     * @return RedirectResponse
      */
-    public function unban(Request $request, Validator $validator): void
+    public function unban(Request $request, Validator $validator): RedirectResponse
     {
         $user = User::query()->where('login', $request->input('user'))->with('lastBan')->first();
 
@@ -178,7 +181,7 @@ class BanController extends AdminController
         }
 
         if ($user->level !== User::BANNED || $user->timeban < SITETIME) {
-            abort('default', __('admin.bans.user_not_banned'));
+            abort(200, __('admin.bans.user_not_banned'));
         }
 
         $validator->equal($request->input('_token'), csrf_token(), __('validator.token'));
@@ -201,6 +204,6 @@ class BanController extends AdminController
             setFlash('danger', $validator->getErrors());
         }
 
-        redirect('/admin/bans/edit?user=' . $user->login);
+        return redirect('admin/bans/edit?user=' . $user->login);
     }
 }

@@ -7,6 +7,7 @@ namespace App\Http\Controllers;
 use App\Classes\Validator;
 use App\Models\Advert;
 use App\Models\User;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
 
@@ -29,7 +30,7 @@ class AdvertController extends Controller
         }
 
         if (! setting('rekusershow')) {
-            abort('default', __('adverts.advert_closed'));
+            abort(200, __('adverts.advert_closed'));
         }
     }
 
@@ -55,17 +56,17 @@ class AdvertController extends Controller
      * @param Request   $request
      * @param Validator $validator
      *
-     * @return View
+     * @return View|RedirectResponse
      */
-    public function create(Request $request, Validator $validator): View
+    public function create(Request $request, Validator $validator)
     {
         if ($this->user->point < setting('rekuserpoint')) {
-            abort('default', __('adverts.advert_point', ['point' => plural(50, setting('scorename'))]));
+            abort(200, __('adverts.advert_point', ['point' => plural(50, setting('scorename'))]));
         }
 
         $total = Advert::query()->where('deleted_at', '>', SITETIME)->count();
         if ($total >= setting('rekusertotal')) {
-            abort('default', __('adverts.advert_not_seats'));
+            abort(200, __('adverts.advert_not_seats'));
         }
 
         $advert = Advert::query()
@@ -74,7 +75,7 @@ class AdvertController extends Controller
             ->first();
 
         if ($advert) {
-            abort('default', __('adverts.advert_already_posted'));
+            abort(200, __('adverts.advert_already_posted'));
         }
 
         if ($request->isMethod('post')) {
@@ -119,11 +120,12 @@ class AdvertController extends Controller
 
                 clearCache('adverts');
                 setFlash('success', __('adverts.advert_success_posted'));
-                redirect('/adverts');
-            } else {
-                setInput($request->all());
-                setFlash('danger', $validator->getErrors());
+
+                return redirect('adverts');
             }
+
+            setInput($request->all());
+            setFlash('danger', $validator->getErrors());
         }
 
         return view('adverts/create');

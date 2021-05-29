@@ -28,12 +28,12 @@ class Main
             // Сайт закрыт для гостей
             if (setting('closedsite') === 1 && ! getUser() && ! $request->is('register', 'login', 'recovery', 'captcha')) {
                 setFlash('danger', __('main.not_authorized'));
-                redirect('/login');
+                return redirect('login');
             }
 
             // Сайт закрыт для всех
             if (setting('closedsite') === 2 && ! isAdmin() && ! $request->is('closed', 'login')) {
-                redirect('/closed');
+                return redirect('closed');
             }
 
             Paginator::$defaultView = 'app/_paginator';
@@ -63,7 +63,7 @@ class Main
                 return true;
             }
 
-            redirect('/ipban');
+            return redirect('ipban');
         }
 
         return false;

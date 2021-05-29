@@ -7,6 +7,7 @@ namespace App\Http\Controllers\Admin;
 use App\Classes\Validator;
 use App\Models\Setting;
 use App\Models\User;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\View\View;
@@ -31,9 +32,9 @@ class SettingController extends AdminController
      * @param Request   $request
      * @param Validator $validator
      *
-     * @return View
+     * @return View|RedirectResponse
      */
-    public function index(Request $request, Validator $validator): View
+    public function index(Request $request, Validator $validator)
     {
         $act = $request->input('act', 'mains');
 
@@ -50,7 +51,7 @@ class SettingController extends AdminController
                 ->notEmpty($sets, ['sets' => __('settings.settings_empty')]);
 
             foreach ($sets as $name => $value) {
-                if (empty($opt[$name]) || ! empty($sets[$name])) {
+                if (empty($opt[$name]) || ! empty($value)) {
                     $validator->length($sets[$name], 1, 255, ['sets[' . $name . ']' => __('settings.field_required', ['field' => $name])]);
                 }
             }
@@ -66,11 +67,12 @@ class SettingController extends AdminController
 
                 clearCache('settings');
                 setFlash('success', __('settings.settings_success_saved'));
-                redirect('/admin/settings?act=' . $act);
-            } else {
-                setInput($request->all());
-                setFlash('danger', $validator->getErrors());
+
+                return redirect('admin/settings?act=' . $act);
             }
+
+            setInput($request->all());
+            setFlash('danger', $validator->getErrors());
         }
 
         $counters = [

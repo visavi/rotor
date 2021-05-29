@@ -36,6 +36,17 @@ class Handler extends ExceptionHandler
     {
         $this->renderable(function (HttpExceptionInterface $exception) {
 
+/*            if (request()->ajax()) {
+                header($protocol . ' 200 OK');
+
+                exit(json_encode([
+                    'status' => 'error',
+                    'message' => $message,
+                ]));
+            }*/
+
+            saveErrorLog($exception->getStatusCode());
+
             if (! view()->exists('errors.' . $exception->getStatusCode())) {
                 return response()->view('errors.default', compact('exception'));
             }

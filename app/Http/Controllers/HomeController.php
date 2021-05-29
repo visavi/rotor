@@ -27,12 +27,12 @@ class HomeController extends Controller
     /**
      * Закрытие сайта
      *
-     * @return View
+     * @return View|RedirectResponse
      */
-    public function closed(): View
+    public function closed()
     {
         if (setting('closedsite') !== 2) {
-            redirect('/');
+            return redirect('/');
         }
 
         header($_SERVER['SERVER_PROTOCOL'] . ' 503 Service Unavailable');
@@ -55,10 +55,9 @@ class HomeController extends Controller
      *
      * @param Request $request
      *
-     * @return View
-     * @throws Exception
+     * @return View|RedirectResponse
      */
-    public function ipban(Request $request): View
+    public function ipban(Request $request)
     {
         $ban = Ban::query()
             ->where('ip', getIp())
@@ -66,7 +65,8 @@ class HomeController extends Controller
 
         if (! $ban) {
             ipBan(true);
-            redirect('/');
+
+            return redirect('/');
         }
 
         if (! $ban->user_id
@@ -78,7 +78,8 @@ class HomeController extends Controller
             ipBan(true);
 
             setFlash('success', __('pages.ip_success_unbanned'));
-            redirect('/');
+
+            return redirect('/');
         }
 
         header($_SERVER['SERVER_PROTOCOL'] . ' 429 Too Many Requests');

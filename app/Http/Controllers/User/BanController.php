@@ -8,6 +8,7 @@ use App\Classes\Validator;
 use App\Http\Controllers\Controller;
 use App\Models\Banhist;
 use App\Models\User;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
 
@@ -19,16 +20,16 @@ class BanController extends Controller
      * @param Request   $request
      * @param Validator $validator
      *
-     * @return View
+     * @return View|RedirectResponse
      */
-    public function ban(Request $request, Validator $validator): View
+    public function ban(Request $request, Validator $validator)
     {
         if (! $user = getUser()) {
             abort(403, __('main.not_authorized'));
         }
 
         if ($user->level !== User::BANNED) {
-            abort('default', __('users.not_banned'));
+            abort(200, __('users.not_banned'));
         }
 
         if ($user->timeban <= SITETIME) {
@@ -38,7 +39,8 @@ class BanController extends Controller
             ]);
 
             setFlash('success', __('users.ban_expired'));
-            redirect('/');
+
+            return redirect('/');
         }
 
         $banhist = Banhist::query()
@@ -70,11 +72,12 @@ class BanController extends Controller
                 ]);
 
                 setFlash('success', __('users.explain_sent_success'));
-                redirect('/ban');
-            } else {
-                setInput($request->all());
-                setFlash('danger', $validator->getErrors());
+
+                return redirect('ban');
             }
+
+            setInput($request->all());
+            setFlash('danger', $validator->getErrors());
         }
 
         return view('users/bans', compact('user', 'banhist'));

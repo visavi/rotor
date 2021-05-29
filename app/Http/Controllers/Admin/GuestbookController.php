@@ -7,6 +7,7 @@ namespace App\Http\Controllers\Admin;
 use App\Classes\Validator;
 use App\Models\Guestbook;
 use App\Models\User;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
 
@@ -32,9 +33,9 @@ class GuestbookController extends AdminController
      * @param Request   $request
      * @param Validator $validator
      *
-     * @return View
+     * @return View|RedirectResponse
      */
-    public function edit(int $id, Request $request, Validator $validator): View
+    public function edit(int $id, Request $request, Validator $validator)
     {
         $page = int($request->input('page'));
         $post = Guestbook::with('user')->find($id);
@@ -59,11 +60,12 @@ class GuestbookController extends AdminController
                 ]);
 
                 setFlash('success', __('main.message_edited_success'));
-                redirect('/admin/guestbook?page=' . $page);
-            } else {
-                setInput($request->all());
-                setFlash('danger', $validator->getErrors());
+
+                return redirect('admin/guestbook?page=' . $page);
             }
+
+            setInput($request->all());
+            setFlash('danger', $validator->getErrors());
         }
 
         return view('admin/guestbook/edit', compact('post', 'page'));
@@ -76,9 +78,9 @@ class GuestbookController extends AdminController
      * @param Request   $request
      * @param Validator $validator
      *
-     * @return View
+     * @return View|RedirectResponse
      */
-    public function reply(int $id, Request $request, Validator $validator): View
+    public function reply(int $id, Request $request, Validator $validator)
     {
         $page = int($request->input('page'));
         $post = Guestbook::with('user')->find($id);
@@ -99,11 +101,12 @@ class GuestbookController extends AdminController
                 ]);
 
                 setFlash('success', __('guestbook.answer_success_added'));
-                redirect('/admin/guestbook?page=' . $page);
-            } else {
-                setInput($request->all());
-                setFlash('danger', $validator->getErrors());
+
+                return redirect('admin/guestbook?page=' . $page);
             }
+
+            setInput($request->all());
+            setFlash('danger', $validator->getErrors());
         }
 
         return view('admin/guestbook/reply', compact('post', 'page'));
@@ -115,9 +118,9 @@ class GuestbookController extends AdminController
      * @param Request   $request
      * @param Validator $validator
      *
-     * @return void
+     * @return RedirectResponse
      */
-    public function delete(Request $request, Validator $validator): void
+    public function delete(Request $request, Validator $validator): RedirectResponse
     {
         $page = int($request->input('page', 1));
         $del  = intar($request->input('del'));
@@ -134,7 +137,7 @@ class GuestbookController extends AdminController
             setFlash('danger', $validator->getErrors());
         }
 
-        redirect('/admin/guestbook?page=' . $page);
+        return redirect('admin/guestbook?page=' . $page);
     }
 
     /**
@@ -143,9 +146,9 @@ class GuestbookController extends AdminController
      * @param Request   $request
      * @param Validator $validator
      *
-     * @return void
+     * @return RedirectResponse
      */
-    public function clear(Request $request, Validator $validator): void
+    public function clear(Request $request, Validator $validator): RedirectResponse
     {
         $validator
             ->equal($request->input('_token'), csrf_token(), __('validator.token'))
@@ -160,6 +163,6 @@ class GuestbookController extends AdminController
             setFlash('danger', $validator->getErrors());
         }
 
-        redirect('/admin/guestbook');
+        return redirect('admin/guestbook');
     }
 }

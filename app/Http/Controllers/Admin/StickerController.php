@@ -9,6 +9,7 @@ use App\Models\Sticker;
 use App\Models\StickersCategory;
 use App\Models\User;
 use Exception;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
@@ -76,9 +77,9 @@ class StickerController extends AdminController
      * @param Request   $request
      * @param Validator $validator
      *
-     * @return void
+     * @return RedirectResponse
      */
-    public function create(Request $request, Validator $validator): void
+    public function create(Request $request, Validator $validator): RedirectResponse
     {
 
         $name = $request->input('name');
@@ -94,13 +95,14 @@ class StickerController extends AdminController
             ]);
 
             setFlash('success', __('stickers.category_success_created'));
-            redirect('/admin/stickers/' . $category->id);
-        } else {
-            setInput($request->all());
-            setFlash('danger', $validator->getErrors());
+
+            return redirect('admin/stickers/' . $category->id);
         }
 
-        redirect('/admin/stickers');
+        setInput($request->all());
+        setFlash('danger', $validator->getErrors());
+
+        return redirect('admin/stickers');
     }
 
     /**
@@ -110,9 +112,9 @@ class StickerController extends AdminController
      * @param Request   $request
      * @param Validator $validator
      *
-     * @return View
+     * @return View|RedirectResponse
      */
-    public function edit(int $id, Request $request, Validator $validator): View
+    public function edit(int $id, Request $request, Validator $validator)
     {
         $category = StickersCategory::query()->find($id);
 
@@ -133,11 +135,12 @@ class StickerController extends AdminController
                 ]);
 
                 setFlash('success', __('stickers.category_success_changed'));
-                redirect('/admin/stickers');
-            } else {
-                setInput($request->all());
-                setFlash('danger', $validator->getErrors());
+
+                return redirect('admin/stickers');
             }
+
+            setInput($request->all());
+            setFlash('danger', $validator->getErrors());
         }
 
         return view('admin/stickers/edit_category', compact('category'));
@@ -150,9 +153,9 @@ class StickerController extends AdminController
      * @param Request   $request
      * @param Validator $validator
      *
-     * @throws Exception
+     * @return RedirectResponse
      */
-    public function delete(int $id, Request $request, Validator $validator): void
+    public function delete(int $id, Request $request, Validator $validator): RedirectResponse
     {
         /** @var StickersCategory $category */
         $category = StickersCategory::query()->find($id);
@@ -176,7 +179,7 @@ class StickerController extends AdminController
             setFlash('danger', $validator->getErrors());
         }
 
-        redirect('/admin/stickers');
+        return redirect('admin/stickers');
     }
 
     /**
@@ -185,20 +188,20 @@ class StickerController extends AdminController
      * @param Request   $request
      * @param Validator $validator
      *
-     * @return View
+     * @return View|RedirectResponse
      */
-    public function createSticker(Request $request, Validator $validator): View
+    public function createSticker(Request $request, Validator $validator)
     {
         $cid = int($request->input('cid'));
 
         $categories = StickersCategory::query()->get();
 
         if ($categories->isEmpty()) {
-            abort('default', __('stickers.empty_categories'));
+            abort(200, __('stickers.empty_categories'));
         }
 
         if (! is_writable(UPLOADS . '/stickers')) {
-            abort('default', __('main.directory_not_writable'));
+            abort(200, __('main.directory_not_writable'));
         }
 
         if ($request->isMethod('post')) {
@@ -236,11 +239,12 @@ class StickerController extends AdminController
 
                 clearCache('stickers');
                 setFlash('success', __('stickers.sticker_success_created'));
-                redirect('/admin/stickers/' . $cid);
-            } else {
-                setInput($request->all());
-                setFlash('danger', $validator->getErrors());
+
+                return redirect('admin/stickers/' . $cid);
             }
+
+            setInput($request->all());
+            setFlash('danger', $validator->getErrors());
         }
 
         return view('admin/stickers/create_sticker', compact('categories', 'cid'));
@@ -253,9 +257,9 @@ class StickerController extends AdminController
      * @param Request   $request
      * @param Validator $validator
      *
-     * @return View
+     * @return View|RedirectResponse
      */
-    public function editSticker(int $id, Request $request, Validator $validator): View
+    public function editSticker(int $id, Request $request, Validator $validator)
     {
         /** @var Sticker $sticker */
         $sticker = Sticker::query()->find($id);
@@ -287,11 +291,12 @@ class StickerController extends AdminController
 
                 clearCache('stickers');
                 setFlash('success', __('stickers.sticker_success_changed'));
-                redirect('/admin/stickers/' . $cid . '?page=' . $page);
-            } else {
-                setInput($request->all());
-                setFlash('danger', $validator->getErrors());
+
+                return redirect('admin/stickers/' . $cid . '?page=' . $page);
             }
+
+            setInput($request->all());
+            setFlash('danger', $validator->getErrors());
         }
 
         $categories = StickersCategory::query()->get();
@@ -306,13 +311,12 @@ class StickerController extends AdminController
      * @param Request   $request
      * @param Validator $validator
      *
-     * @return void
-     * @throws Exception
-     */
-    public function deleteSticker(int $id, Request $request, Validator $validator): void
+     * @return RedirectResponse
+     s*/
+    public function deleteSticker(int $id, Request $request, Validator $validator): RedirectResponse
     {
         if (! is_writable(UPLOADS . '/stickers')) {
-            abort('default', __('main.directory_not_writable'));
+            abort(200, __('main.directory_not_writable'));
         }
 
         $sticker = Sticker::query()->where('id', $id)->first();
@@ -336,6 +340,6 @@ class StickerController extends AdminController
             setFlash('danger', $validator->getErrors());
         }
 
-        redirect('/admin/stickers/' . $category . '?page=' . $page);
+        return redirect('admin/stickers/' . $category . '?page=' . $page);
     }
 }

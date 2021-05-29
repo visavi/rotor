@@ -7,6 +7,7 @@ namespace App\Http\Controllers\Admin;
 use App\Classes\Validator;
 use App\Models\BlackList;
 use App\Models\User;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
 
@@ -43,9 +44,9 @@ class BlacklistController extends AdminController
      * @param Request   $request
      * @param Validator $validator
      *
-     * @return View
+     * @return View|RedirectResponse
      */
-    public function index(Request $request, Validator $validator): View
+    public function index(Request $request, Validator $validator)
     {
         $type = $this->type;
 
@@ -81,11 +82,12 @@ class BlacklistController extends AdminController
                 ]);
 
                 setFlash('success', __('main.record_added_success'));
-                redirect('/admin/blacklists?type=' . $type);
-            } else {
-                setInput($request->all());
-                setFlash('danger', $validator->getErrors());
+
+                return redirect('admin/blacklists?type=' . $type);
             }
+
+            setInput($request->all());
+            setFlash('danger', $validator->getErrors());
         }
 
         $lists = BlackList::query()
@@ -104,9 +106,9 @@ class BlacklistController extends AdminController
      * @param Request   $request
      * @param Validator $validator
      *
-     * @return void
+     * @return RedirectResponse
      */
-    public function delete(Request $request, Validator $validator): void
+    public function delete(Request $request, Validator $validator): RedirectResponse
     {
         $page = int($request->input('page', 1));
         $del  = intar($request->input('del'));
@@ -123,6 +125,6 @@ class BlacklistController extends AdminController
             setFlash('danger', $validator->getErrors());
         }
 
-        redirect('/admin/blacklists?type=' . $type . '&page=' . $page);
+        return redirect('admin/blacklists?type=' . $type . '&page=' . $page);
     }
 }

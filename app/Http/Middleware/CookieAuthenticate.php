@@ -21,7 +21,7 @@ class CookieAuthenticate
     public function handle(Request $request, Closure $next)
     {
         /*if (empty(defaultSetting('app_installed')) && file_exists(HOME . '/install/')) {
-            redirect('/install/index.php');
+            return redirect('install/index.php');
         }*/
 
         $this->cookieAuth($request);
@@ -39,25 +39,19 @@ class CookieAuthenticate
      */
     private function cookieAuth(Request $request): void
     {
-        //if (empty($_SESSION['id']) && isset($_COOKIE['login'], $_COOKIE['password'])) {
         if ($request->hasCookie('login') &&
             $request->hasCookie('password') &&
             $request->session()->missing('id')
         ) {
-            //$login    = $_COOKIE['login'];
             $login    = $request->cookie('login');
-           // $password = $_COOKIE['password'];
             $password = $request->cookie('password');
 
             $user = getUserByLogin($login);
 
             if ($user && $login === $user->login && $password === md5($user->password . config('app.key'))) {
-                //$_SESSION['id']       = $user->id;
-                //$_SESSION['password'] = md5(config('app.key') . $user->password);
-                //$_SESSION['online']   = null;
-
-                session()->put('id', $user->id);
-                session()->put('password', md5(config('app.key') . $user->password));
+                $request->session()->put('id', $user->id);
+                $request->session()->put('password', md5(config('app.key') . $user->password));
+                $request->session()->put('online');
 
                 $user->saveVisit(Login::COOKIE);
             }
@@ -100,11 +94,9 @@ class CookieAuthenticate
             $user->gettingBonus();
         }
 
-        //dd($request->session()->all());
-
         /* Установка сессионных переменных */
-        /*if (empty($_SESSION['hits'])) {
-            $_SESSION['hits'] = 0;
-        }*/
+        if ($request->session()->missing('hits')) {
+            $request->session()->put('hits', 0);
+        }
     }
 }

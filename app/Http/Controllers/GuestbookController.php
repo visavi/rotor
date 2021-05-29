@@ -7,10 +7,8 @@ namespace App\Http\Controllers;
 use App\Classes\Validator;
 use App\Models\Flood;
 use App\Models\Guestbook;
-use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\Routing\Redirector;
 use Illuminate\View\View;
 
 class GuestbookController extends Controller
@@ -99,9 +97,9 @@ class GuestbookController extends Controller
      * @param Request   $request
      * @param Validator $validator
      *
-     * @return View
+     * @return View|RedirectResponse
      */
-    public function edit(int $id, Request $request, Validator $validator): View
+    public function edit(int $id, Request $request, Validator $validator)
     {
         if (! $user = getUser()) {
             abort(403);
@@ -113,11 +111,11 @@ class GuestbookController extends Controller
         $post = Guestbook::query()->where('user_id', $user->id)->find($id);
 
         if (! $post) {
-            abort('default', __('main.message_not_found'));
+            abort(404, __('main.message_not_found'));
         }
 
         if ($post->created_at + 600 < SITETIME) {
-            abort('default', __('main.editing_impossible'));
+            abort(200, __('main.editing_impossible'));
         }
 
         if ($request->isMethod('post')) {
@@ -132,11 +130,12 @@ class GuestbookController extends Controller
                 ]);
 
                 setFlash('success', __('main.message_edited_success'));
-                redirect('/guestbook');
-            } else {
-                setInput($request->all());
-                setFlash('danger', $validator->getErrors());
+
+                return redirect('guestbook');
             }
+
+            setInput($request->all());
+            setFlash('danger', $validator->getErrors());
         }
 
         return view('guestbook/edit', compact('post'));

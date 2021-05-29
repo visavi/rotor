@@ -6,6 +6,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Classes\Validator;
 use App\Models\Advert;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
 
@@ -34,9 +35,9 @@ class AdvertController extends AdminController
      * @param Request   $request
      * @param Validator $validator
      *
-     * @return View
+     * @return View|RedirectResponse
      */
-    public function edit(int $id, Request $request, Validator $validator): View
+    public function edit(int $id, Request $request, Validator $validator)
     {
         $page = int($request->input('page', 1));
         $link = Advert::query()->find($id);
@@ -67,11 +68,12 @@ class AdvertController extends AdminController
 
                 clearCache('adverts');
                 setFlash('success', __('main.record_changed_success'));
-                redirect('/admin/adverts?page=' . $page);
-            } else {
-                setInput($request->all());
-                setFlash('danger', $validator->getErrors());
+
+                return redirect('admin/adverts?page=' . $page);
             }
+
+            setInput($request->all());
+            setFlash('danger', $validator->getErrors());
         }
 
         return view('admin/adverts/edit', compact('link', 'page'));
@@ -83,9 +85,9 @@ class AdvertController extends AdminController
      * @param Request   $request
      * @param Validator $validator
      *
-     * @return void
+     * @return RedirectResponse
      */
-    public function delete(Request $request, Validator $validator): void
+    public function delete(Request $request, Validator $validator): RedirectResponse
     {
         $page = int($request->input('page', 1));
         $del  = intar($request->input('del'));
@@ -102,6 +104,6 @@ class AdvertController extends AdminController
             setFlash('danger', $validator->getErrors());
         }
 
-        redirect('/admin/adverts?page=' . $page);
+        return redirect('admin/adverts?page=' . $page);
     }
 }

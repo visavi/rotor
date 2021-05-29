@@ -7,6 +7,7 @@ namespace App\Http\Controllers\Admin;
 use App\Classes\Validator;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
 
@@ -30,9 +31,9 @@ class DeliveryController extends AdminController
      * @param Request   $request
      * @param Validator $validator
      *
-     * @return View
+     * @return View|RedirectResponse
      */
-    public function index(Request $request, Validator $validator): View
+    public function index(Request $request, Validator $validator)
     {
         if ($request->isMethod('post')) {
             $msg   = $request->input('msg');
@@ -78,11 +79,12 @@ class DeliveryController extends AdminController
                 }
 
                 setFlash('success', __('admin.delivery.success_sent'));
-                redirect('/admin/delivery');
-            } else {
-                setInput($request->all());
-                setFlash('danger', $validator->getErrors());
+
+                return redirect('admin/delivery');
             }
+
+            setInput($request->all());
+            setFlash('danger', $validator->getErrors());
         }
 
         return view('admin/delivery/index');

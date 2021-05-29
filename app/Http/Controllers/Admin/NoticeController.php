@@ -8,6 +8,7 @@ use App\Classes\Validator;
 use App\Models\Notice;
 use App\Models\User;
 use Exception;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
 
@@ -46,9 +47,9 @@ class NoticeController extends AdminController
      * @param Request   $request
      * @param Validator $validator
      *
-     * @return View
+     * @return View|RedirectResponse
      */
-    public function create(Request $request, Validator $validator): View
+    public function create(Request $request, Validator $validator)
     {
         if ($request->isMethod('post')) {
             $type    = $request->input('type');
@@ -78,11 +79,12 @@ class NoticeController extends AdminController
                 ]);
 
                 setFlash('success', __('admin.notices.notice_success_saved'));
-                redirect('/admin/notices/edit/' . $notice->id);
-            } else {
-                setInput($request->all());
-                setFlash('danger', $validator->getErrors());
+
+                return redirect('admin/notices/edit/' . $notice->id);
             }
+
+            setInput($request->all());
+            setFlash('danger', $validator->getErrors());
         }
 
         return view('admin/notices/create');
@@ -95,9 +97,9 @@ class NoticeController extends AdminController
      * @param Request   $request
      * @param Validator $validator
      *
-     * @return View
+     * @return View|RedirectResponse
      */
-    public function edit(int $id, Request $request, Validator $validator): View
+    public function edit(int $id, Request $request, Validator $validator)
     {
         /** @var Notice $notice */
         $notice = Notice::query()->find($id);
@@ -125,11 +127,12 @@ class NoticeController extends AdminController
                 ]);
 
                 setFlash('success', __('admin.notices.notice_success_saved'));
-                redirect('/admin/notices/edit/' . $notice->id);
-            } else {
-                setInput($request->all());
-                setFlash('danger', $validator->getErrors());
+
+                return redirect('admin/notices/edit/' . $notice->id);
             }
+
+            setInput($request->all());
+            setFlash('danger', $validator->getErrors());
         }
 
         return view('admin/notices/edit', compact('notice'));
@@ -142,10 +145,9 @@ class NoticeController extends AdminController
      * @param Request   $request
      * @param Validator $validator
      *
-     * @return void
-     * @throws Exception
+     * @return RedirectResponse
      */
-    public function delete(int $id, Request $request, Validator $validator): void
+    public function delete(int $id, Request $request, Validator $validator): RedirectResponse
     {
         /** @var Notice $notice */
         $notice = Notice::query()->find($id);
@@ -162,6 +164,6 @@ class NoticeController extends AdminController
             setFlash('danger', $validator->getErrors());
         }
 
-        redirect('/admin/notices');
+        return redirect('admin/notices');
     }
 }

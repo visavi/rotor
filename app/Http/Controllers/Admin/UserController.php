@@ -13,6 +13,7 @@ use App\Models\Post;
 use App\Models\Topic;
 use App\Models\User;
 use Exception;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
 
@@ -72,9 +73,9 @@ class UserController extends AdminController
      * @param Request   $request
      * @param Validator $validator
      *
-     * @return View
+     * @return View|RedirectResponse
      */
-    public function edit(Request $request, Validator $validator): View
+    public function edit(Request $request, Validator $validator)
     {
         $user = getUserByLogin($request->input('user'));
 
@@ -160,11 +161,12 @@ class UserController extends AdminController
 
                 clearCache('status');
                 setFlash('success', [__('users.user_success_changed'), $text]);
-                redirect('/admin/users/edit?user=' . $user->login);
-            } else {
-                setInput($request->all());
-                setFlash('danger', $validator->getErrors());
+
+                return redirect('admin/users/edit?user=' . $user->login);
             }
+
+            setInput($request->all());
+            setFlash('danger', $validator->getErrors());
         }
 
         $banhist = Banhist::query()
@@ -182,10 +184,10 @@ class UserController extends AdminController
      * @param Request   $request
      * @param Validator $validator
      *
-     * @return View
+     * @return View|RedirectResponse
      * @throws Exception
      */
-    public function delete(Request $request, Validator $validator): View
+    public function delete(Request $request, Validator $validator)
     {
         $user = getUserByLogin($request->input('user'));
 
@@ -298,11 +300,12 @@ class UserController extends AdminController
                 $user->delete();
 
                 setFlash('success', __('users.user_success_deleted'));
-                redirect('/admin/users');
-            } else {
-                setInput($request->all());
-                setFlash('danger', $validator->getErrors());
+
+                return redirect('admin/users');
             }
+
+            setInput($request->all());
+            setFlash('danger', $validator->getErrors());
         }
 
         return view('admin/users/delete', compact('user'));

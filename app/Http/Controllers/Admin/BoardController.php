@@ -10,6 +10,7 @@ use App\Models\Item;
 use App\Models\User;
 use Exception;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
 
@@ -77,9 +78,9 @@ class BoardController extends AdminController
      * @param Request   $request
      * @param Validator $validator
      *
-     * @return void
+     * @return RedirectResponse
      */
-    public function create(Request $request, Validator $validator): void
+    public function create(Request $request, Validator $validator): RedirectResponse
     {
         if (! isAdmin(User::BOSS)) {
             abort(403, __('errors.forbidden'));
@@ -100,13 +101,14 @@ class BoardController extends AdminController
             ]);
 
             setFlash('success', __('boards.category_success_created'));
-            redirect('/admin/boards/edit/' . $board->id);
-        } else {
-            setInput($request->all());
-            setFlash('danger', $validator->getErrors());
+
+            return redirect('admin/boards/edit/' . $board->id);
         }
 
-        redirect('/admin/boards/categories');
+        setInput($request->all());
+        setFlash('danger', $validator->getErrors());
+
+        return redirect('admin/boards/categories');
     }
 
     /**
@@ -116,9 +118,9 @@ class BoardController extends AdminController
      * @param Request   $request
      * @param Validator $validator
      *
-     * @return View
+     * @return View|RedirectResponse
      */
-    public function edit(int $id, Request $request, Validator $validator): View
+    public function edit(int $id, Request $request, Validator $validator)
     {
         if (! isAdmin(User::BOSS)) {
             abort(403, __('errors.forbidden'));
@@ -159,11 +161,12 @@ class BoardController extends AdminController
                 ]);
 
                 setFlash('success', __('boards.category_success_edited'));
-                redirect('/admin/boards/categories');
-            } else {
-                setInput($request->all());
-                setFlash('danger', $validator->getErrors());
+
+                return redirect('admin/boards/categories');
             }
+
+            setInput($request->all());
+            setFlash('danger', $validator->getErrors());
         }
 
         return view('admin/boards/edit', compact('boards', 'board'));
@@ -176,9 +179,9 @@ class BoardController extends AdminController
      * @param Request   $request
      * @param Validator $validator
      *
-     * @throws Exception
+     * @return RedirectResponse
      */
-    public function delete(int $id, Request $request, Validator $validator): void
+    public function delete(int $id, Request $request, Validator $validator): RedirectResponse
     {
         if (! isAdmin(User::BOSS)) {
             abort(403, __('errors.forbidden'));
@@ -207,7 +210,7 @@ class BoardController extends AdminController
             setFlash('danger', $validator->getErrors());
         }
 
-        redirect('/admin/boards/categories');
+        return redirect('admin/boards/categories');
     }
 
     /**
@@ -217,9 +220,9 @@ class BoardController extends AdminController
      * @param Request   $request
      * @param Validator $validator
      *
-     * @return View
+     * @return View|RedirectResponse
      */
-    public function editItem(int $id, Request $request, Validator $validator): View
+    public function editItem(int $id, Request $request, Validator $validator)
     {
         /** @var Item $item */
         $item = Item::query()->find($id);
@@ -266,11 +269,12 @@ class BoardController extends AdminController
 
                 clearCache(['statBoards', 'recentBoards']);
                 setFlash('success', __('boards.item_success_edited'));
-                redirect('/admin/items/edit/' . $item->id);
-            } else {
-                setInput($request->all());
-                setFlash('danger', $validator->getErrors());
+
+                return redirect('admin/items/edit/' . $item->id);
             }
+
+            setInput($request->all());
+            setFlash('danger', $validator->getErrors());
         }
 
         $boards = Board::query()
@@ -289,9 +293,10 @@ class BoardController extends AdminController
      * @param Request   $request
      * @param Validator $validator
      *
+     * @return RedirectResponse
      * @throws Exception
      */
-    public function deleteItem(int $id, Request $request, Validator $validator): void
+    public function deleteItem(int $id, Request $request, Validator $validator): RedirectResponse
     {
         /** @var Item $item */
         $item = Item::query()->find($id);
@@ -312,7 +317,7 @@ class BoardController extends AdminController
             setFlash('danger', $validator->getErrors());
         }
 
-        redirect('/admin/boards/' . $item->board_id);
+        return redirect('admin/boards/' . $item->board_id);
     }
 
     /**
@@ -320,9 +325,9 @@ class BoardController extends AdminController
      *
      * @param Request $request
      *
-     * @return void
+     * @return RedirectResponse
      */
-    public function restatement(Request $request): void
+    public function restatement(Request $request): RedirectResponse
     {
         if (! isAdmin(User::BOSS)) {
             abort(403, __('errors.forbidden'));
@@ -336,6 +341,6 @@ class BoardController extends AdminController
             setFlash('danger', __('validator.token'));
         }
 
-        redirect('/admin/boards');
+        return redirect('admin/boards');
     }
 }

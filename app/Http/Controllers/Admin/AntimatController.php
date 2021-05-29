@@ -8,6 +8,7 @@ use App\Classes\Validator;
 use App\Models\Antimat;
 use App\Models\User;
 use Exception;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
 
@@ -31,9 +32,9 @@ class AntimatController extends AdminController
      * @param Request   $request
      * @param Validator $validator
      *
-     * @return View
+     * @return View|RedirectResponse
      */
-    public function index(Request $request, Validator $validator): View
+    public function index(Request $request, Validator $validator)
     {
         if ($request->isMethod('post')) {
             $word = utfLower($request->input('word'));
@@ -51,11 +52,12 @@ class AntimatController extends AdminController
                 ]);
 
                 setFlash('success', __('main.record_added_success'));
-                redirect('/admin/antimat');
-            } else {
-                setInput($request->all());
-                setFlash('danger', $validator->getErrors());
+
+                return redirect('admin/antimat');
             }
+
+            setInput($request->all());
+            setFlash('danger', $validator->getErrors());
         }
 
         $words = Antimat::query()->get();
@@ -69,10 +71,10 @@ class AntimatController extends AdminController
      * @param Request   $request
      * @param Validator $validator
      *
-     * @return void
+     * @return RedirectResponse
      * @throws Exception
      */
-    public function delete(Request $request, Validator $validator): void
+    public function delete(Request $request, Validator $validator): RedirectResponse
     {
         $id = int($request->input('id'));
 
@@ -89,7 +91,7 @@ class AntimatController extends AdminController
             setFlash('danger', $validator->getErrors());
         }
 
-        redirect('/admin/antimat');
+        return redirect('admin/antimat');
     }
 
     /**
@@ -98,9 +100,9 @@ class AntimatController extends AdminController
      * @param Request   $request
      * @param Validator $validator
      *
-     * @return void
+     * @return RedirectResponse
      */
-    public function clear(Request $request, Validator $validator): void
+    public function clear(Request $request, Validator $validator): RedirectResponse
     {
         $validator
             ->equal($request->input('_token'), csrf_token(), __('validator.token'))
@@ -114,6 +116,6 @@ class AntimatController extends AdminController
             setFlash('danger', $validator->getErrors());
         }
 
-        redirect('/admin/antimat');
+        return redirect('admin/antimat');
     }
 }

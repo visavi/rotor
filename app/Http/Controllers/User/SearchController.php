@@ -6,6 +6,7 @@ namespace App\Http\Controllers\User;
 
 use App\Http\Controllers\Controller;
 use App\Models\User;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
 
@@ -26,9 +27,9 @@ class SearchController extends Controller
      *
      * @param Request $request
      *
-     * @return View
+     * @return View|RedirectResponse
      */
-    public function search(Request $request): View
+    public function search(Request $request)
     {
         $find   = $request->input('find');
         $strlen = utfStrlen($find);
@@ -36,7 +37,8 @@ class SearchController extends Controller
         if ($strlen < 2 || $strlen > 20) {
             setInput($request->all());
             setFlash('danger', ['find' => __('users.request_requirements')]);
-            redirect('/searchusers');
+
+            return redirect('searchusers');
         }
 
         $users = User::query()

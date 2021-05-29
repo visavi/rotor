@@ -7,6 +7,7 @@ namespace App\Http\Controllers\Load;
 use App\Classes\Validator;
 use App\Http\Controllers\Controller;
 use App\Models\Down;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
 
@@ -18,9 +19,9 @@ class SearchController extends Controller
      * @param Request   $request
      * @param Validator $validator
      *
-     * @return View
+     * @return View|RedirectResponse
      */
-    public function index(Request $request, Validator $validator): View
+    public function index(Request $request, Validator $validator)
     {
         $find  = $request->input('find');
         $downs = collect();
@@ -46,7 +47,8 @@ class SearchController extends Controller
                 if ($downs->isEmpty()) {
                     setInput($request->all());
                     setFlash('danger', __('main.empty_found'));
-                    redirect('/loads/search');
+
+                    return redirect('loads/search');
                 }
             } else {
                 setInput($request->all());

@@ -8,6 +8,7 @@ use App\Classes\Validator;
 use App\Models\User;
 use App\Models\Vote;
 use App\Models\VoteAnswer;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
@@ -63,9 +64,9 @@ class VoteController extends AdminController
      * @param Request   $request
      * @param Validator $validator
      *
-     * @return View
+     * @return View|RedirectResponse
      */
-    public function edit(int $id, Request $request, Validator $validator): View
+    public function edit(int $id, Request $request, Validator $validator)
     {
         $vote = Vote::query()->where('id', $id)->first();
 
@@ -113,11 +114,12 @@ class VoteController extends AdminController
                 }
 
                 setFlash('success', __('votes.voting_success_changed'));
-                redirect('/admin/votes/edit/'.$vote->id);
-            } else {
-                setInput($request->all());
-                setFlash('danger', $validator->getErrors());
+
+                return redirect('admin/votes/edit/'.$vote->id);
             }
+
+            setInput($request->all());
+            setFlash('danger', $validator->getErrors());
         }
 
         $vote->getAnswers = $vote->answers->pluck('answer', 'id')->all();
@@ -131,10 +133,10 @@ class VoteController extends AdminController
      * @param int     $id
      * @param Request $request
      *
-     * @return void
+     * @return RedirectResponse
      * @throws Throwable
      */
-    public function delete(int $id, Request $request): void
+    public function delete(int $id, Request $request): RedirectResponse
     {
         $vote = Vote::query()->where('id', $id)->first();
 
@@ -158,7 +160,7 @@ class VoteController extends AdminController
             setFlash('danger', __('validator.token'));
         }
 
-        redirect('/admin/votes');
+        return redirect('admin/votes');
     }
 
     /**
@@ -167,9 +169,9 @@ class VoteController extends AdminController
      * @param int     $id
      * @param Request $request
      *
-     * @return void
+     * @return RedirectResponse
      */
-    public function close(int $id, Request $request): void
+    public function close(int $id, Request $request): RedirectResponse
     {
         $vote = Vote::query()->where('id', $id)->first();
 
@@ -196,10 +198,10 @@ class VoteController extends AdminController
         }
 
         if (empty($closed)) {
-            redirect('/admin/votes');
-        } else {
-            redirect('/admin/votes/history');
+            return redirect('admin/votes');
         }
+
+        return redirect('admin/votes/history');
     }
 
     /**
@@ -207,9 +209,9 @@ class VoteController extends AdminController
      *
      * @param Request $request
      *
-     * @return void
+     * @return RedirectResponse
      */
-    public function restatement(Request $request): void
+    public function restatement(Request $request): RedirectResponse
     {
         if (! isAdmin(User::BOSS)) {
             abort(403, __('errors.forbidden'));
@@ -223,6 +225,6 @@ class VoteController extends AdminController
             setFlash('danger', __('validator.token'));
         }
 
-        redirect('/admin/votes');
+        return redirect('admin/votes');
     }
 }

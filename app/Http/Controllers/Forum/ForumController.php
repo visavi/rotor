@@ -12,6 +12,7 @@ use App\Models\Post;
 use App\Models\Topic;
 use App\Models\Vote;
 use App\Models\VoteAnswer;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Query\JoinClause;
@@ -35,7 +36,7 @@ class ForumController extends Controller
             ->get();
 
         if ($forums->isEmpty()) {
-            abort('default', __('forums.empty_forums'));
+            abort(200, __('forums.empty_forums'));
         }
 
         return view('forums/index', compact('forums'));
@@ -83,9 +84,9 @@ class ForumController extends Controller
      * @param Validator $validator
      * @param Flood     $flood
      *
-     * @return View
+     * @return View|RedirectResponse
      */
-    public function create(Request $request, Validator $validator, Flood $flood): View
+    public function create(Request $request, Validator $validator, Flood $flood)
     {
         $fid = int($request->input('fid'));
 
@@ -96,7 +97,7 @@ class ForumController extends Controller
             ->get();
 
         if ($forums->isEmpty()) {
-            abort('default', __('forums.empty_forums'));
+            abort(200, __('forums.empty_forums'));
         }
 
         if (! $user = getUser()) {
@@ -206,11 +207,12 @@ class ForumController extends Controller
                 $flood->saveState();
 
                 setFlash('success', __('forums.topic_success_created'));
-                redirect('/topics/'.$topic->id);
-            } else {
-                setInput($request->all());
-                setFlash('danger', $validator->getErrors());
+
+                return redirect('topics/'.$topic->id);
             }
+
+            setInput($request->all());
+            setFlash('danger', $validator->getErrors());
         }
 
         return view('forums/topic_create', compact('forums', 'fid'));
@@ -231,7 +233,7 @@ class ForumController extends Controller
             ->get();
 
         if ($topics->isEmpty()) {
-            abort('default', __('forums.topics_not_created'));
+            abort(200, __('forums.topics_not_created'));
         }
 
         return view('forums/rss', compact('topics'));

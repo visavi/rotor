@@ -11,6 +11,7 @@ use App\Models\Flood;
 use App\Models\Ignore;
 use App\Models\Message;
 use App\Models\User;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Database\Query\JoinClause;
 use Illuminate\Http\Request;
@@ -91,7 +92,7 @@ class MessageController extends Controller
         }
 
         if ($user->id === $this->user->id) {
-            abort('default', __('messages.empty_dialogue'));
+            abort(200, __('messages.empty_dialogue'));
         }
 
         $messages = Message::query()
@@ -133,9 +134,9 @@ class MessageController extends Controller
      * @param Validator $validator
      * @param Flood     $flood
      *
-     * @return void
+     * @return RedirectResponse
      */
-    public function send(Request $request, Validator $validator, Flood $flood): void
+    public function send(Request $request, Validator $validator, Flood $flood): RedirectResponse
     {
         $login = $request->input('user');
         $msg   = $request->input('msg');
@@ -182,7 +183,7 @@ class MessageController extends Controller
             setFlash('danger', $validator->getErrors());
         }
 
-        redirect('/messages/talk/' . $user->login);
+        return redirect('messages/talk/' . $user->login);
     }
 
     /**
@@ -191,8 +192,10 @@ class MessageController extends Controller
      * @param int       $uid
      * @param Request   $request
      * @param Validator $validator
+     *
+     * @return RedirectResponse
      */
-    public function delete(int $uid, Request $request, Validator $validator): void
+    public function delete(int $uid, Request $request, Validator $validator): RedirectResponse
     {
         $page = int($request->input('page', 1));
 
@@ -216,18 +219,18 @@ class MessageController extends Controller
             setFlash('danger', $validator->getErrors());
         }
 
-        redirect('/messages?page=' . $page);
+        return redirect('messages?page=' . $page);
     }
 
     /**
      * New messages
      *
-     * @return string
+     * @return TODO |RedirectResponse
      */
-    public function newMessages(): string
+    public function newMessages()
     {
         if (! request()->ajax()) {
-            redirect('/');
+            return redirect('/');
         }
 
         $countMessages = Dialogue::query()

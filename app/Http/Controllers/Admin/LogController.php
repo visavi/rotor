@@ -6,6 +6,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Models\Log;
 use App\Models\User;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
 
@@ -43,9 +44,9 @@ class LogController extends AdminController
      *
      * @param Request $request
      *
-     * @return void
+     * @return RedirectResponse
      */
-    public function clear(Request $request): void
+    public function clear(Request $request): RedirectResponse
     {
         if ($request->input('_token') === csrf_token()) {
             Log::query()->truncate();
@@ -55,6 +56,6 @@ class LogController extends AdminController
             setFlash('danger', __('validator.token'));
         }
 
-        redirect('/admin/logs');
+        return redirect('admin/logs');
     }
 }

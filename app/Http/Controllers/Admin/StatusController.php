@@ -8,6 +8,7 @@ use App\Classes\Validator;
 use App\Models\Status;
 use App\Models\User;
 use Exception;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
 
@@ -43,9 +44,9 @@ class StatusController extends AdminController
      * @param Request   $request
      * @param Validator $validator
      *
-     * @return View
+     * @return View|RedirectResponse
      */
-    public function create(Request $request, Validator $validator): View
+    public function create(Request $request, Validator $validator)
     {
         if ($request->isMethod('post')) {
             $topoint = int($request->input('topoint'));
@@ -67,11 +68,12 @@ class StatusController extends AdminController
                 ]);
 
                 setFlash('success', __('statuses.status_success_added'));
-                redirect('/admin/status');
-            } else {
-                setInput($request->all());
-                setFlash('danger', $validator->getErrors());
+
+                return redirect('admin/status');
             }
+
+            setInput($request->all());
+            setFlash('danger', $validator->getErrors());
         }
 
         return view('admin/status/create');
@@ -83,9 +85,9 @@ class StatusController extends AdminController
      * @param Request   $request
      * @param Validator $validator
      *
-     * @return View
+     * @return View|RedirectResponse
      */
-    public function edit(Request $request, Validator $validator): View
+    public function edit(Request $request, Validator $validator)
     {
         $id = int($request->input('id'));
 
@@ -115,11 +117,12 @@ class StatusController extends AdminController
                 ]);
 
                 setFlash('success', __('statuses.status_success_edited'));
-                redirect('/admin/status');
-            } else {
-                setInput($request->all());
-                setFlash('danger', $validator->getErrors());
+
+                return redirect('admin/status');
             }
+
+            setInput($request->all());
+            setFlash('danger', $validator->getErrors());
         }
 
         return view('admin/status/edit', compact('status'));
@@ -131,10 +134,9 @@ class StatusController extends AdminController
      * @param Request   $request
      * @param Validator $validator
      *
-     * @return void
-     * @throws Exception
+     * @return RedirectResponse
      */
-    public function delete(Request $request, Validator $validator): void
+    public function delete(Request $request, Validator $validator): RedirectResponse
     {
         $id = int($request->input('id'));
 
@@ -151,6 +153,6 @@ class StatusController extends AdminController
             setFlash('danger', $validator->getErrors());
         }
 
-        redirect('/admin/status');
+        return redirect('admin/status');
     }
 }

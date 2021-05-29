@@ -7,6 +7,7 @@ namespace App\Http\Controllers\User;
 use App\Classes\Validator;
 use App\Http\Controllers\Controller;
 use App\Models\User;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
 use Intervention\Image\ImageManagerStatic as Image;
@@ -36,9 +37,9 @@ class PictureController extends Controller
      * @param Request   $request
      * @param Validator $validator
      *
-     * @return View
+     * @return View|RedirectResponse
      */
-    public function index(Request $request, Validator $validator): View
+    public function index(Request $request, Validator $validator)
     {
         if ($request->isMethod('post')) {
             $photo = $request->file('photo');
@@ -75,7 +76,8 @@ class PictureController extends Controller
                 $this->user->save();
 
                 setFlash('success', __('users.photo_success_uploaded'));
-                redirect('/profile');
+
+                return redirect('profile');
             }
 
             setInput($request->all());
@@ -83,6 +85,7 @@ class PictureController extends Controller
         }
 
         $user = $this->user;
+
         return view('users/picture', compact('user'));
     }
 
@@ -91,8 +94,10 @@ class PictureController extends Controller
      *
      * @param Request   $request
      * @param Validator $validator
+     *
+     * @return RedirectResponse
      */
-    public function delete(Request $request, Validator $validator): void
+    public function delete(Request $request, Validator $validator): RedirectResponse
     {
         $validator->equal($request->input('_token'), csrf_token(), ['photo' => __('validator.token')]);
 
@@ -113,6 +118,6 @@ class PictureController extends Controller
             setFlash('danger', $validator->getErrors());
         }
 
-        redirect('/profile');
+        return redirect('profile');
     }
 }

@@ -12,6 +12,7 @@ use App\Models\User;
 use App\Models\Vote;
 use Exception;
 use Illuminate\Database\Query\JoinClause;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
 use Illuminate\View\View;
@@ -38,8 +39,10 @@ class ForumController extends AdminController
      *
      * @param Request   $request
      * @param Validator $validator
+     *
+     * @return RedirectResponse
      */
-    public function create(Request $request, Validator $validator): void
+    public function create(Request $request, Validator $validator): RedirectResponse
     {
         if (! isAdmin(User::BOSS)) {
             abort(403, __('errors.forbidden'));
@@ -60,13 +63,14 @@ class ForumController extends AdminController
             ]);
 
             setFlash('success', __('forums.forum_success_created'));
-            redirect('/admin/forums/edit/' . $forum->id);
-        } else {
-            setInput($request->all());
-            setFlash('danger', $validator->getErrors());
+
+            return redirect('admin/forums/edit/' . $forum->id);
         }
 
-        redirect('/admin/forums');
+        setInput($request->all());
+        setFlash('danger', $validator->getErrors());
+
+        return redirect('admin/forums');
     }
 
     /**
@@ -76,9 +80,9 @@ class ForumController extends AdminController
      * @param Request   $request
      * @param Validator $validator
      *
-     * @return View
+     * @return View|RedirectResponse
      */
-    public function edit(int $id, Request $request, Validator $validator): View
+    public function edit(int $id, Request $request, Validator $validator)
     {
         if (! isAdmin(User::BOSS)) {
             abort(403, __('errors.forbidden'));
@@ -122,11 +126,12 @@ class ForumController extends AdminController
                 ]);
 
                 setFlash('success', __('forums.forum_success_edited'));
-                redirect('/admin/forums');
-            } else {
-                setInput($request->all());
-                setFlash('danger', $validator->getErrors());
+
+                return redirect('admin/forums');
             }
+
+            setInput($request->all());
+            setFlash('danger', $validator->getErrors());
         }
 
         return view('admin/forums/edit', compact('forums', 'forum'));
@@ -139,10 +144,9 @@ class ForumController extends AdminController
      * @param Request   $request
      * @param Validator $validator
      *
-     * @return void
-     * @throws Exception
+     * @return RedirectResponse
      */
-    public function delete(int $id, Request $request, Validator $validator): void
+    public function delete(int $id, Request $request, Validator $validator): RedirectResponse
     {
         if (! isAdmin(User::BOSS)) {
             abort(403, __('errors.forbidden'));
@@ -171,15 +175,17 @@ class ForumController extends AdminController
             setFlash('danger', $validator->getErrors());
         }
 
-        redirect('/admin/forums');
+        return redirect('admin/forums');
     }
 
     /**
      * Пересчет данных
      *
      * @param Request $request
+     *
+     * @return RedirectResponse
      */
-    public function restatement(Request $request): void
+    public function restatement(Request $request): RedirectResponse
     {
         if (! isAdmin(User::BOSS)) {
             abort(403, __('errors.forbidden'));
@@ -193,7 +199,7 @@ class ForumController extends AdminController
             setFlash('danger', __('validator.token'));
         }
 
-        redirect('/admin/forums');
+        return redirect('admin/forums');
     }
 
     /**
@@ -234,9 +240,9 @@ class ForumController extends AdminController
      * @param Request   $request
      * @param Validator $validator
      *
-     * @return View
+     * @return View|RedirectResponse
      */
-    public function editTopic(int $id, Request $request, Validator $validator): View
+    public function editTopic(int $id, Request $request, Validator $validator)
     {
         /** @var Topic $topic */
         $topic = Topic::query()->find($id);
@@ -278,11 +284,12 @@ class ForumController extends AdminController
 
                 clearCache(['statForums', 'recentTopics']);
                 setFlash('success', __('forums.topic_success_edited'));
-                redirect('/admin/forums/' . $topic->forum_id);
-            } else {
-                setInput($request->all());
-                setFlash('danger', $validator->getErrors());
+
+                return redirect('admin/forums/' . $topic->forum_id);
             }
+
+            setInput($request->all());
+            setFlash('danger', $validator->getErrors());
         }
 
         return view('admin/forums/edit_topic', compact('topic'));
@@ -295,9 +302,9 @@ class ForumController extends AdminController
      * @param Request   $request
      * @param Validator $validator
      *
-     * @return View
+     * @return View|RedirectResponse
      */
-    public function moveTopic(int $id, Request $request, Validator $validator): View
+    public function moveTopic(int $id, Request $request, Validator $validator)
     {
         /** @var Topic $topic */
         $topic = Topic::query()->find($id);
@@ -332,11 +339,12 @@ class ForumController extends AdminController
                 $oldTopic->forum->restatement();
 
                 setFlash('success', __('forums.topic_success_moved'));
-                redirect('/admin/forums/' . $topic->forum_id);
-            } else {
-                setInput($request->all());
-                setFlash('danger', $validator->getErrors());
+
+                return redirect('admin/forums/' . $topic->forum_id);
             }
+
+            setInput($request->all());
+            setFlash('danger', $validator->getErrors());
         }
 
         $forums = Forum::query()
@@ -354,9 +362,9 @@ class ForumController extends AdminController
      * @param int     $id
      * @param Request $request
      *
-     * @return void
+     * @return RedirectResponse
      */
-    public function actionTopic(int $id, Request $request): void
+    public function actionTopic(int $id, Request $request): RedirectResponse
     {
         $page = int($request->input('page', 1));
 
@@ -413,7 +421,7 @@ class ForumController extends AdminController
             setFlash('danger', __('validator.token'));
         }
 
-        redirect('/admin/topics/' . $topic->id . '?page=' . $page);
+        return redirect('admin/topics/' . $topic->id . '?page=' . $page);
     }
 
     /**
@@ -423,10 +431,10 @@ class ForumController extends AdminController
      * @param Request   $request
      * @param Validator $validator
      *
-     * @return void
+     * @return RedirectResponse
      * @throws Exception
      */
-    public function deleteTopic(int $id, Request $request, Validator $validator): void
+    public function deleteTopic(int $id, Request $request, Validator $validator): RedirectResponse
     {
         $page = int($request->input('page', 1));
 
@@ -469,7 +477,7 @@ class ForumController extends AdminController
             setFlash('danger', $validator->getErrors());
         }
 
-        redirect('/admin/forums/' . $topic->forum->id . '?page=' . $page);
+        return redirect('admin/forums/' . $topic->forum->id . '?page=' . $page);
     }
 
     /**
@@ -535,9 +543,9 @@ class ForumController extends AdminController
      * @param Request   $request
      * @param Validator $validator
      *
-     * @return View
+     * @return View|RedirectResponse
      */
-    public function editPost(int $id, Request $request, Validator $validator): View
+    public function editPost(int $id, Request $request, Validator $validator)
     {
         $page = int($request->input('page', 1));
 
@@ -578,11 +586,12 @@ class ForumController extends AdminController
                 }
 
                 setFlash('success', __('main.message_edited_success'));
-                redirect('/admin/topics/' . $post->topic_id . '?page=' . $page);
-            } else {
-                setInput($request->all());
-                setFlash('danger', $validator->getErrors());
+
+                return redirect('admin/topics/' . $post->topic_id . '?page=' . $page);
             }
+
+            setInput($request->all());
+            setFlash('danger', $validator->getErrors());
         }
 
         return view('admin/forums/edit_post', compact('post', 'page'));
@@ -594,9 +603,10 @@ class ForumController extends AdminController
      * @param Request   $request
      * @param Validator $validator
      *
-     * @return void
+     * @return RedirectResponse
+     * @throws Exception
      */
-    public function deletePosts(Request $request, Validator $validator): void
+    public function deletePosts(Request $request, Validator $validator): RedirectResponse
     {
         $tid  = int($request->input('tid'));
         $page = int($request->input('page', 1));
@@ -628,7 +638,7 @@ class ForumController extends AdminController
             setFlash('danger', $validator->getErrors());
         }
 
-        redirect('/admin/topics/' . $topic->id . '?page=' . $page);
+        return redirect('admin/topics/' . $topic->id . '?page=' . $page);
     }
 
     /**
@@ -636,9 +646,9 @@ class ForumController extends AdminController
      *
      * @param int $id
      *
-     * @return void
+     * @return RedirectResponse
      */
-    public function end(int $id): void
+    public function end(int $id): RedirectResponse
     {
         /** @var Topic $topic */
         $topic = Topic::query()->find($id);
@@ -648,6 +658,7 @@ class ForumController extends AdminController
         }
 
         $end = ceil($topic->count_posts / setting('forumpost'));
-        redirect('/admin/topics/' . $topic->id . '?page=' . $end);
+
+        return redirect('admin/topics/' . $topic->id . '?page=' . $end);
     }
 }

@@ -7,6 +7,7 @@ namespace App\Http\Controllers\Admin;
 use App\Classes\Validator;
 use App\Models\Error;
 use App\Models\User;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
 
@@ -72,9 +73,9 @@ class ErrorController extends AdminController
      * @param Request   $request
      * @param Validator $validator
      *
-     * @return void
+     * @return RedirectResponse
      */
-    public function clear(Request $request, Validator $validator): void
+    public function clear(Request $request, Validator $validator): RedirectResponse
     {
         $validator
             ->equal($request->input('_token'), csrf_token(), __('validator.token'))
@@ -88,6 +89,6 @@ class ErrorController extends AdminController
             setFlash('danger', $validator->getErrors());
         }
 
-        redirect('/admin/errors');
+        return redirect('admin/errors');
     }
 }

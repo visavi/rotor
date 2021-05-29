@@ -7,6 +7,7 @@ namespace App\Http\Controllers\Admin;
 use App\Classes\Validator;
 use App\Models\Chat;
 use App\Models\User;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
 
@@ -18,9 +19,9 @@ class ChatController extends AdminController
      * @param Request   $request
      * @param Validator $validator
      *
-     * @return View
+     * @return View|RedirectResponse
      */
-    public function index(Request $request, Validator $validator): View
+    public function index(Request $request, Validator $validator)
     {
         $user = getUser();
 
@@ -64,11 +65,12 @@ class ChatController extends AdminController
                 sendNotify($msg, '/admin/chats', __('index.admin_chat'));
 
                 setFlash('success', __('main.message_added_success'));
-                redirect('/admin/chats');
-            } else {
-                setInput($request->all());
-                setFlash('danger', $validator->getErrors());
+
+                return redirect('admin/chats');
             }
+
+            setInput($request->all());
+            setFlash('danger', $validator->getErrors());
         }
 
         $posts = Chat::query()
@@ -86,9 +88,9 @@ class ChatController extends AdminController
      * @param Request   $request
      * @param Validator $validator
      *
-     * @return View
+     * @return View|RedirectResponse
      */
-    public function edit(int $id, Request $request, Validator $validator): View
+    public function edit(int $id, Request $request, Validator $validator)
     {
         $page = int($request->input('page', 1));
 
@@ -100,11 +102,11 @@ class ChatController extends AdminController
         $post = Chat::query()->where('user_id', $user->id)->find($id);
 
         if (! $post) {
-            abort('default', __('main.message_deleted'));
+            abort(200, __('main.message_deleted'));
         }
 
         if ($post->created_at + 600 < SITETIME) {
-            abort('default', __('main.editing_impossible'));
+            abort(200, __('main.editing_impossible'));
         }
 
         if ($request->isMethod('post')) {
@@ -121,11 +123,12 @@ class ChatController extends AdminController
                 ]);
 
                 setFlash('success', __('main.message_edited_success'));
-                redirect('/admin/chats?page=' . $page);
-            } else {
-                setInput($request->all());
-                setFlash('danger', $validator->getErrors());
+
+                return redirect('admin/chats?page=' . $page);
             }
+
+            setInput($request->all());
+            setFlash('danger', $validator->getErrors());
         }
 
         return view('admin/chats/edit', compact('post', 'page'));
@@ -137,9 +140,9 @@ class ChatController extends AdminController
      * @param Request   $request
      * @param Validator $validator
      *
-     * @return void
+     * @return RedirectResponse
      */
-    public function clear(Request $request, Validator $validator): void
+    public function clear(Request $request, Validator $validator): RedirectResponse
     {
         $validator
             ->equal($request->input('_token'), csrf_token(), __('validator.token'))
@@ -153,6 +156,6 @@ class ChatController extends AdminController
             setFlash('danger', $validator->getErrors());
         }
 
-        redirect('/admin/chats');
+        return redirect('admin/chats');
     }
 }

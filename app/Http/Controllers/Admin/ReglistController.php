@@ -6,6 +6,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Classes\Validator;
 use App\Models\User;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
 
@@ -26,9 +27,9 @@ class ReglistController extends AdminController
      * @param Request   $request
      * @param Validator $validator
      *
-     * @return View
+     * @return View|RedirectResponse
      */
-    public function index(Request $request, Validator $validator): View
+    public function index(Request $request, Validator $validator)
     {
         if ($request->isMethod('post')) {
             $page   = int($request->input('page', 1));
@@ -60,11 +61,11 @@ class ReglistController extends AdminController
                     setFlash('success', __('admin.reglists.users_success_deleted'));
                 }
 
-                redirect('/admin/reglists?page=' . $page);
-            } else {
-                setInput($request->all());
-                setFlash('danger', $validator->getErrors());
+                return redirect('admin/reglists?page=' . $page);
             }
+
+            setInput($request->all());
+            setFlash('danger', $validator->getErrors());
         }
 
         $users = User::query()

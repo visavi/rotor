@@ -7,6 +7,7 @@ namespace App\Http\Controllers\Admin;
 use App\Classes\Validator;
 use App\Models\Rule;
 use App\Models\User;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
 
@@ -50,9 +51,9 @@ class RuleController extends AdminController
      * @param Request   $request
      * @param Validator $validator
      *
-     * @return View
+     * @return View|RedirectResponse
      */
-    public function edit(Request $request, Validator $validator): View
+    public function edit(Request $request, Validator $validator)
     {
         $rules = Rule::query()->firstOrNew([]);
 
@@ -70,11 +71,12 @@ class RuleController extends AdminController
                 ])->save();
 
                 setFlash('success', __('admin.rules.rules_success_saved'));
-                redirect('/admin/rules');
-            } else {
-                setInput($request->all());
-                setFlash('danger', $validator->getErrors());
+
+                return redirect('admin/rules');
             }
+
+            setInput($request->all());
+            setFlash('danger', $validator->getErrors());
         }
 
         return view('admin/rules/edit', compact('rules'));

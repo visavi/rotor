@@ -12,6 +12,7 @@ use App\Models\File;
 use App\Models\Flood;
 use App\Models\Reader;
 use Illuminate\Database\Query\JoinClause;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\View\View;
@@ -32,7 +33,7 @@ class ArticleController extends Controller
             ->get();
 
         if ($categories->isEmpty()) {
-            abort('default', __('blogs.categories_not_created'));
+            abort(200, __('blogs.categories_not_created'));
         }
 
         return view('blogs/index', compact('categories'));
@@ -113,9 +114,9 @@ class ArticleController extends Controller
      * @param Request   $request
      * @param Validator $validator
      *
-     * @return View
+     * @return View|RedirectResponse
      */
-    public function edit(int $id, Request $request, Validator $validator): View
+    public function edit(int $id, Request $request, Validator $validator)
     {
         if (! $user = getUser()) {
             abort(403, __('main.not_authorized'));
@@ -129,7 +130,7 @@ class ArticleController extends Controller
         }
 
         if ($user->id !== $article->user_id) {
-            abort('default', __('main.article_not_author'));
+            abort(200, __('main.article_not_author'));
         }
 
         if ($request->isMethod('post')) {
@@ -168,11 +169,12 @@ class ArticleController extends Controller
 
                 clearCache(['statArticles', 'recentArticles']);
                 setFlash('success', __('blogs.article_success_edited'));
-                redirect('/articles/' . $article->id);
-            } else {
-                setInput($request->all());
-                setFlash('danger', $validator->getErrors());
+
+                return redirect('articles/' . $article->id);
             }
+
+            setInput($request->all());
+            setFlash('danger', $validator->getErrors());
         }
 
         $categories = Blog::query()
@@ -209,14 +211,14 @@ class ArticleController extends Controller
      * @param Validator $validator
      * @param Flood     $flood
      *
-     * @return View
+     * @return View|RedirectResponse
      */
-    public function create(Request $request, Validator $validator, Flood $flood): View
+    public function create(Request $request, Validator $validator, Flood $flood)
     {
         $cid = int($request->input('cid'));
 
         if (! isAdmin() && ! setting('blog_create')) {
-            abort('default', __('main.articles_closed'));
+            abort(200, __('main.articles_closed'));
         }
 
         if (! $user = getUser()) {
@@ -281,11 +283,12 @@ class ArticleController extends Controller
                 $flood->saveState();
 
                 setFlash('success', __('blogs.article_success_created'));
-                redirect('/articles/' . $article->id);
-            } else {
-                setInput($request->all());
-                setFlash('danger', $validator->getErrors());
+
+                return redirect('articles/' . $article->id);
             }
+
+            setInput($request->all());
+            setFlash('danger', $validator->getErrors());
         }
 
         $files = File::query()
@@ -305,9 +308,9 @@ class ArticleController extends Controller
      * @param Validator $validator
      * @param Flood     $flood
      *
-     * @return View
+     * @return View|RedirectResponse
      */
-    public function comments(int $id, Request $request, Validator $validator, Flood $flood): View
+    public function comments(int $id, Request $request, Validator $validator, Flood $flood)
     {
         /** @var Article $article */
         $article = Article::query()->find($id);
@@ -346,11 +349,12 @@ class ArticleController extends Controller
                 sendNotify($msg, '/articles/comment/' . $article->id . '/' . $comment->id, $article->title);
 
                 setFlash('success', __('main.comment_added_success'));
-                redirect('/articles/end/' . $article->id);
-            } else {
-                setInput($request->all());
-                setFlash('danger', $validator->getErrors());
+
+                return redirect('articles/end/' . $article->id);
             }
+
+            setInput($request->all());
+            setFlash('danger', $validator->getErrors());
         }
 
         $comments = $article->comments()
@@ -369,9 +373,9 @@ class ArticleController extends Controller
      * @param Request   $request
      * @param Validator $validator
      *
-     * @return View
+     * @return View|RedirectResponse
      */
-    public function editComment(int $id, int $cid, Request $request, Validator $validator): View
+    public function editComment(int $id, int $cid, Request $request, Validator $validator)
     {
         $page = int($request->input('page', 1));
 
@@ -392,11 +396,11 @@ class ArticleController extends Controller
             ->first();
 
         if (! $comment) {
-            abort('default', __('main.comment_deleted'));
+            abort(200, __('main.comment_deleted'));
         }
 
         if ($comment->created_at + 600 < SITETIME) {
-            abort('default', __('main.editing_impossible'));
+            abort(200, __('main.editing_impossible'));
         }
 
         if ($request->isMethod('post')) {
@@ -415,11 +419,12 @@ class ArticleController extends Controller
                 ]);
 
                 setFlash('success', __('main.comment_edited_success'));
-                redirect('/articles/comments/' . $article->id . '?page=' . $page);
-            } else {
-                setInput($request->all());
-                setFlash('danger', $validator->getErrors());
+
+                return redirect('articles/comments/' . $article->id . '?page=' . $page);
             }
+
+            setInput($request->all());
+            setFlash('danger', $validator->getErrors());
         }
 
         return view('blogs/editcomment', compact('article', 'comment', 'page'));
@@ -430,9 +435,9 @@ class ArticleController extends Controller
      *
      * @param int $id
      *
-     * @return void
+     * @return RedirectResponse
      */
-    public function end(int $id): void
+    public function end(int $id): RedirectResponse
     {
         /** @var Article $article */
         $article = Article::query()->find($id);
@@ -444,7 +449,8 @@ class ArticleController extends Controller
         $total = $article->comments()->count();
 
         $end = ceil($total / setting('comments_per_page'));
-        redirect('/articles/comments/' . $id . '?page=' . $end);
+
+        return redirect('articles/comments/' . $id . '?page=' . $end);
     }
 
     /**
@@ -480,7 +486,7 @@ class ArticleController extends Controller
             ->get();
 
         if ($articles->isEmpty()) {
-            abort('default', __('blogs.article_not_exist'));
+            abort(200, __('blogs.article_not_exist'));
         }
 
         return view('blogs/rss', compact('articles'));
@@ -539,9 +545,9 @@ class ArticleController extends Controller
      *
      * @param string $tag
      *
-     * @return View
+     * @return View|RedirectResponse
      */
-    public function searchTag(string $tag): View
+    public function searchTag(string $tag)
     {
         $tag = urldecode($tag);
 
@@ -551,7 +557,8 @@ class ArticleController extends Controller
 
         if (utfStrlen($tag) < 2) {
             setFlash('danger', __('blogs.tag_search_rule'));
-            redirect('/blogs/tags');
+
+            return redirect('blogs/tags');
         }
 
         if (empty($_SESSION['findresult'])
@@ -673,9 +680,9 @@ class ArticleController extends Controller
      * @param int $id
      * @param int $cid
      *
-     * @return void
+     * @return RedirectResponse
      */
-    public function viewComment(int $id, int $cid): void
+    public function viewComment(int $id, int $cid): RedirectResponse
     {
         /** @var Article $article */
         $article = Article::query()->find($id);
@@ -691,7 +698,7 @@ class ArticleController extends Controller
 
         $end = ceil($total / setting('comments_per_page'));
 
-        redirect('/articles/comments/' . $article->id . '?page=' . $end . '#comment_' . $cid);
+        return redirect('articles/comments/' . $article->id . '?page=' . $end . '#comment_' . $cid);
     }
 
     /**
@@ -733,9 +740,9 @@ class ArticleController extends Controller
      * @param Request   $request
      * @param Validator $validator
      *
-     * @return View|void
+     * @return View|RedirectResponse
      */
-    public function search(Request $request, Validator $validator): ?View
+    public function search(Request $request, Validator $validator)
     {
         $find     = check($request->input('find'));
         $articles = collect();
@@ -760,7 +767,8 @@ class ArticleController extends Controller
                 if ($articles->isEmpty()) {
                     setInput($request->all());
                     setFlash('danger', __('main.empty_found'));
-                    redirect('/loads/search');
+
+                    return redirect('loads/search');
                 }
             } else {
                 setInput($request->all());

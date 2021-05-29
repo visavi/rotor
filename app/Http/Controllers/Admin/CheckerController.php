@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Http\Controllers\Admin;
 
 use App\Models\User;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
 use Symfony\Component\Finder\Finder;
@@ -49,9 +50,9 @@ class CheckerController extends AdminController
      *
      * @param Request $request
      *
-     * @return void
+     * @return RedirectResponse
      */
-    public function scan(Request $request): void
+    public function scan(Request $request): RedirectResponse
     {
         if ($request->input('_token') === csrf_token()) {
             $files = $this->scanFiles(BASEDIR);
@@ -63,7 +64,7 @@ class CheckerController extends AdminController
             setFlash('danger', __('validator.token'));
         }
 
-        redirect('/admin/checkers');
+        return redirect('admin/checkers');
     }
 
     /**

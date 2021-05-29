@@ -8,6 +8,7 @@ use App\Classes\Validator;
 use App\Models\Photo;
 use App\Models\User;
 use Exception;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
 
@@ -35,9 +36,9 @@ class PhotoController extends AdminController
      * @param Request   $request
      * @param Validator $validator
      *
-     * @return View
+     * @return View|RedirectResponse
      */
-    public function edit(int $id, Request $request, Validator $validator): View
+    public function edit(int $id, Request $request, Validator $validator)
     {
         $page  = int($request->input('page', 1));
         $photo = Photo::query()->find($id);
@@ -66,11 +67,12 @@ class PhotoController extends AdminController
 
                 clearCache(['statPhotos', 'recentPhotos']);
                 setFlash('success', __('photos.photo_success_edited'));
-                redirect('/admin/photos?page=' . $page);
-            } else {
-                setInput($request->all());
-                setFlash('danger', $validator->getErrors());
+
+                return redirect('admin/photos?page=' . $page);
             }
+
+            setInput($request->all());
+            setFlash('danger', $validator->getErrors());
         }
 
         return view('admin/photos/edit', compact('photo', 'page'));
@@ -83,13 +85,13 @@ class PhotoController extends AdminController
      * @param Request   $request
      * @param Validator $validator
      *
-     * @return void
+     * @return RedirectResponse
      * @throws Exception
      */
-    public function delete(int $id, Request $request, Validator $validator): void
+    public function delete(int $id, Request $request, Validator $validator): RedirectResponse
     {
         if (! is_writable(UPLOADS . '/photos')) {
-            abort('default', __('main.directory_not_writable'));
+            abort(200, __('main.directory_not_writable'));
         }
 
         $page = int($request->input('page', 1));
@@ -113,7 +115,7 @@ class PhotoController extends AdminController
             setFlash('danger', $validator->getErrors());
         }
 
-        redirect('/admin/photos?page=' . $page);
+        return redirect('admin/photos?page=' . $page);
     }
 
     /**
@@ -121,21 +123,22 @@ class PhotoController extends AdminController
      *
      * @param Request $request
      *
-     * @return void
+     * @return RedirectResponse
      */
-    public function restatement(Request $request): void
+    public function restatement(Request $request): RedirectResponse
     {
-        if (isAdmin(User::BOSS)) {
-            if ($request->input('_token') === csrf_token()) {
-                restatement('photos');
-
-                setFlash('success', __('main.success_recounted'));
-                redirect('/admin/photos');
-            } else {
-                abort('default', __('validator.token'));
-            }
-        } else {
-            abort('default', __('main.page_only_owner'));
+        if (! isAdmin(User::BOSS)) {
+            abort(200, __('main.page_only_owner'));
         }
+
+        if ($request->input('_token') === csrf_token()) {
+            restatement('photos');
+
+            setFlash('success', __('main.success_recounted'));
+        } else {
+            setFlash('danger', __('validator.token'));
+        }
+
+        return redirect('admin/photos');
     }
 }

@@ -8,6 +8,7 @@ use App\Classes\Validator;
 use App\Models\PaidAdvert;
 use App\Models\User;
 use Exception;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
 
@@ -67,9 +68,9 @@ class PaidAdvertController extends AdminController
      * @param Request   $request
      * @param Validator $validator
      *
-     * @return View
+     * @return View|RedirectResponse
      */
-    public function create(Request $request, Validator $validator): View
+    public function create(Request $request, Validator $validator)
     {
         $places = PaidAdvert::PLACES;
         $advert = new PaidAdvert();
@@ -114,11 +115,12 @@ class PaidAdvertController extends AdminController
 
                 clearCache('paidAdverts');
                 setFlash('success', __('main.record_added_success'));
-                redirect('/admin/paid-adverts?place=' . $place);
-            } else {
-                setInput($request->all());
-                setFlash('danger', $validator->getErrors());
+
+                return redirect('admin/paid-adverts?place=' . $place);
             }
+
+            setInput($request->all());
+            setFlash('danger', $validator->getErrors());
         }
 
         return view('admin/paid-adverts/create', compact('advert', 'places'));
@@ -131,9 +133,9 @@ class PaidAdvertController extends AdminController
      * @param Request   $request
      * @param Validator $validator
      *
-     * @return View
+     * @return View|RedirectResponse
      */
-    public function edit(int $id, Request $request, Validator $validator): View
+    public function edit(int $id, Request $request, Validator $validator)
     {
         $places = PaidAdvert::PLACES;
 
@@ -182,11 +184,12 @@ class PaidAdvertController extends AdminController
 
                 clearCache('paidAdverts');
                 setFlash('success', __('main.record_saved_success'));
-                redirect('/admin/paid-adverts?place=' . $place);
-            } else {
-                setInput($request->all());
-                setFlash('danger', $validator->getErrors());
+
+                return redirect('admin/paid-adverts?place=' . $place);
             }
+
+            setInput($request->all());
+            setFlash('danger', $validator->getErrors());
         }
 
         return view('admin/paid-adverts/edit', compact('advert', 'places'));
@@ -199,9 +202,9 @@ class PaidAdvertController extends AdminController
      * @param Request   $request
      * @param Validator $validator
      *
-     * @throws Exception
+     * @return RedirectResponse
      */
-    public function delete(int $id, Request $request, Validator $validator): void
+    public function delete(int $id, Request $request, Validator $validator): RedirectResponse
     {
         /** @var PaidAdvert $advert */
         $advert = PaidAdvert::query()->find($id);
@@ -221,6 +224,6 @@ class PaidAdvertController extends AdminController
             setFlash('danger', $validator->getErrors());
         }
 
-        redirect('/admin/paid-adverts?place=' . $advert->place);
+        return redirect('admin/paid-adverts?place=' . $advert->place);
     }
 }

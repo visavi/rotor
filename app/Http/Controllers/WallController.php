@@ -8,6 +8,7 @@ use App\Classes\Validator;
 use App\Models\Flood;
 use App\Models\Ignore;
 use App\Models\Wall;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
 
@@ -53,9 +54,9 @@ class WallController extends Controller
      * @param Validator $validator
      * @param Flood     $flood
      *
-     * @return void
+     * @return RedirectResponse
      */
-    public function create($login, Request $request, Validator $validator, Flood $flood): void
+    public function create(string $login, Request $request, Validator $validator, Flood $flood): RedirectResponse
     {
         if (! getUser()) {
             abort(403, __('main.not_authorized'));
@@ -102,7 +103,7 @@ class WallController extends Controller
                 setFlash('danger', $validator->getErrors());
             }
 
-            redirect('/walls/' . $user->login);
+            return redirect('walls/' . $user->login);
         }
     }
 
@@ -113,9 +114,9 @@ class WallController extends Controller
      * @param Request   $request
      * @param Validator $validator
      *
-     * @return void
+     * @return TODO |RedirectResponse
      */
-    public function delete(string $login, Request $request, Validator $validator): void
+    public function delete(string $login, Request $request, Validator $validator)
     {
         $id   = int($request->input('id'));
         $user = getUserByLogin($login);

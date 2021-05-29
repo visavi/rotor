@@ -6,6 +6,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Classes\Validator;
 use App\Models\User;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use Illuminate\View\View;
@@ -74,9 +75,9 @@ class FileController extends AdminController
      * @param Request   $request
      * @param Validator $validator
      *
-     * @return View
+     * @return View|RedirectResponse
      */
-    public function edit(Request $request, Validator $validator): View
+    public function edit(Request $request, Validator $validator)
     {
         $path     = $this->path;
         $file     = $path ? '/' . $this->file : $this->file;
@@ -102,11 +103,12 @@ class FileController extends AdminController
                 file_put_contents(RESOURCES . '/views/' . $this->path . $file . '.blade.php', $msg);
 
                 setFlash('success', __('admin.files.file_success_saved'));
-                redirect('/admin/files/edit?path=' . $this->path . '&file=' . $this->file);
-            } else {
-                setInput($request->all());
-                setFlash('danger', $validator->getErrors());
+
+                return redirect('admin/files/edit?path=' . $this->path . '&file=' . $this->file);
             }
+
+            setInput($request->all());
+            setFlash('danger', $validator->getErrors());
         }
 
         $contest = file_get_contents(RESOURCES . '/views/' . $path . $file . '.blade.php');
@@ -120,12 +122,12 @@ class FileController extends AdminController
      * @param Request   $request
      * @param Validator $validator
      *
-     * @return View
+     * @return View|RedirectResponse
      */
-    public function create(Request $request, Validator $validator): View
+    public function create(Request $request, Validator $validator)
     {
         if (! is_writable(RESOURCES . '/views/' . $this->path)) {
-            abort('default', __('admin.files.directory_not_writable', ['dir' => $this->path]));
+            abort(200, __('admin.files.directory_not_writable', ['dir' => $this->path]));
         }
 
         if ($request->isMethod('post')) {
@@ -153,19 +155,20 @@ class FileController extends AdminController
                     chmod(RESOURCES.'/views/' . $this->path . $fileName . '.blade.php', 0666);
 
                     setFlash('success', __('admin.files.file_success_created'));
-                    redirect('/admin/files/edit?path=' . $this->path . '&file=' . $filename);
-                } else {
-                    $old = umask(0);
-                    mkdir(RESOURCES . '/views/' . $this->path . $dirName, 0777, true);
-                    umask($old);
 
-                    setFlash('success', __('admin.files.directory_success_created'));
-                    redirect('/admin/files?path=' . $this->path . $dirName);
+                    return redirect('admin/files/edit?path=' . $this->path . '&file=' . $filename);
                 }
-            } else {
-                setInput($request->all());
-                setFlash('danger', $validator->getErrors());
+
+                $old = umask(0);
+                mkdir(RESOURCES . '/views/' . $this->path . $dirName, 0777, true);
+                umask($old);
+                setFlash('success', __('admin.files.directory_success_created'));
+
+                return redirect('admin/files?path=' . $this->path . $dirName);
             }
+
+            setInput($request->all());
+            setFlash('danger', $validator->getErrors());
         }
 
         return view('admin/files/create', ['path' => $this->path]);
@@ -177,12 +180,12 @@ class FileController extends AdminController
      * @param Request   $request
      * @param Validator $validator
      *
-     * @return void
+     * @return RedirectResponse
      */
-    public function delete(Request $request, Validator $validator): void
+    public function delete(Request $request, Validator $validator): RedirectResponse
     {
         if (! is_writable(RESOURCES . '/views/' . $this->path)) {
-            abort('default', __('admin.files.directory_not_writable', ['dir' => $this->path]));
+            abort(200, __('admin.files.directory_not_writable', ['dir' => $this->path]));
         }
 
         $filename = check($request->input('filename'));
@@ -213,6 +216,6 @@ class FileController extends AdminController
             setFlash('danger', $validator->getErrors());
         }
 
-        redirect('/admin/files?path=' . $this->path);
+        return redirect('admin/files?path=' . $this->path);
     }
 }

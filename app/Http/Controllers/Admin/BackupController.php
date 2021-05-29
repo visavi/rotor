@@ -6,6 +6,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Classes\Validator;
 use App\Models\User;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
@@ -51,9 +52,9 @@ class BackupController extends AdminController
      * @param Request   $request
      * @param Validator $validator
      *
-     * @return View
+     * @return View|RedirectResponse
      */
-    public function create(Request $request, Validator $validator): View
+    public function create(Request $request, Validator $validator)
     {
         if ($request->isMethod('post')) {
             $sheets = check($request->input('sheets'));
@@ -114,17 +115,18 @@ class BackupController extends AdminController
                 $this->fclose($fp, $method);
 
                 setFlash('success', __('admin.backup.database_success_saved'));
-                redirect('/admin/backups');
-            } else {
-                setInput($request->all());
-                setFlash('danger', $validator->getErrors());
+
+                return redirect('admin/backups');
             }
+
+            setInput($request->all());
+            setFlash('danger', $validator->getErrors());
         }
 
         $tables = DB::connection()->select('SHOW TABLE STATUS');
 
-        $bzopen = function_exists('bzopen') ? true : false;
-        $gzopen = function_exists('gzopen') ? true : false;
+        $bzopen = function_exists('bzopen');
+        $gzopen = function_exists('gzopen');
 
         $levels = range(0, 9);
 
@@ -137,9 +139,9 @@ class BackupController extends AdminController
      * @param Request   $request
      * @param Validator $validator
      *
-     * @return void
+     * @return RedirectResponse
      */
-    public function delete(Request $request, Validator $validator): void
+    public function delete(Request $request, Validator $validator): RedirectResponse
     {
         $file = $request->input('file');
 
@@ -156,7 +158,7 @@ class BackupController extends AdminController
             setFlash('danger', $validator->getErrors());
         }
 
-        redirect('/admin/backups');
+        return redirect('admin/backups');
     }
 
     /**
@@ -165,11 +167,11 @@ class BackupController extends AdminController
      * @param string $name
      * @param string $mode
      * @param string $method
-     * @param int $level
+     * @param int    $level
      *
      * @return bool|resource
      */
-    private function fopen($name, $mode, $method, $level)
+    private function fopen(string $name, string $mode, string $method, int $level)
     {
         if ($method === 'bzip') {
             return bzopen($name . '.bz2', $mode);
@@ -186,10 +188,10 @@ class BackupController extends AdminController
      * Записывает данные в поток
      *
      * @param resource $fp
-     * @param string $str
-     * @param string $method
+     * @param string   $str
+     * @param string   $method
      */
-    private function fwrite($fp, $str, $method): void
+    private function fwrite($fp, string $str, string $method): void
     {
         if ($method === 'bzip') {
             bzwrite($fp, $str);
@@ -204,9 +206,9 @@ class BackupController extends AdminController
      * Закрывает поток
      *
      * @param resource $fp
-     * @param string $method
+     * @param string   $method
      */
-    private function fclose($fp, $method): void
+    private function fclose($fp, string $method): void
     {
         if ($method === 'bzip') {
             bzclose($fp);

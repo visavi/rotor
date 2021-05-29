@@ -7,6 +7,7 @@ namespace App\Http\Controllers\Admin;
 use App\Classes\Validator;
 use App\Models\Ban;
 use App\Models\User;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
 
@@ -30,9 +31,9 @@ class IpBanController extends AdminController
      * @param Request   $request
      * @param Validator $validator
      *
-     * @return View
+     * @return View|RedirectResponse
      */
-    public function index(Request $request, Validator $validator): View
+    public function index(Request $request, Validator $validator)
     {
         if ($request->isMethod('post')) {
             $ip = $request->input('ip');
@@ -53,11 +54,12 @@ class IpBanController extends AdminController
                 ipBan(true);
 
                 setFlash('success', __('admin.ipbans.ip_success_added'));
-                redirect('/admin/ipbans');
-            } else {
-                setInput($request->all());
-                setFlash('danger', $validator->getErrors());
+
+                return redirect('admin/ipbans');
             }
+
+            setInput($request->all());
+            setFlash('danger', $validator->getErrors());
         }
 
         $logs = Ban::query()
@@ -74,9 +76,9 @@ class IpBanController extends AdminController
      * @param Request   $request
      * @param Validator $validator
      *
-     * @return void
+     * @return RedirectResponse
      */
-    public function delete(Request $request, Validator $validator): void
+    public function delete(Request $request, Validator $validator): RedirectResponse
     {
         $page = int($request->input('page', 1));
         $del  = intar($request->input('del'));
@@ -93,7 +95,7 @@ class IpBanController extends AdminController
             setFlash('danger', $validator->getErrors());
         }
 
-        redirect('/admin/ipbans?page=' . $page);
+        return redirect('admin/ipbans?page=' . $page);
     }
 
     /**
@@ -102,9 +104,9 @@ class IpBanController extends AdminController
      * @param Request   $request
      * @param Validator $validator
      *
-     * @return void
+     * @return RedirectResponse
      */
-    public function clear(Request $request, Validator $validator): void
+    public function clear(Request $request, Validator $validator): RedirectResponse
     {
         $validator
             ->equal($request->input('_token'), csrf_token(), __('validator.token'))
@@ -119,6 +121,6 @@ class IpBanController extends AdminController
             setFlash('danger', $validator->getErrors());
         }
 
-        redirect('/admin/ipbans');
+        return redirect('admin/ipbans');
     }
 }

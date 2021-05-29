@@ -8,6 +8,7 @@ use App\Classes\Validator;
 use App\Models\Polling;
 use App\Models\Vote;
 use App\Models\VoteAnswer;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
 use Illuminate\View\View;
@@ -37,9 +38,9 @@ class VoteController extends Controller
      * @param Request   $request
      * @param Validator $validator
      *
-     * @return View
+     * @return View|RedirectResponse
      */
-    public function view(int $id, Request $request, Validator $validator): View
+    public function view(int $id, Request $request, Validator $validator)
     {
         $show = $request->input('show');
 
@@ -51,7 +52,7 @@ class VoteController extends Controller
         }
 
         if ($vote->closed) {
-            abort('default', __('votes.voting_closed'));
+            abort(200, __('votes.voting_closed'));
         }
 
         $vote->answers = VoteAnswer::query()
@@ -60,7 +61,7 @@ class VoteController extends Controller
             ->get();
 
         if ($vote->answers->isEmpty()) {
-            abort('default', __('votes.voting_not_answers'));
+            abort(200, __('votes.voting_not_answers'));
         }
 
         $vote->poll = $vote->pollings()
@@ -95,11 +96,12 @@ class VoteController extends Controller
                 ]);
 
                 setFlash('success', __('votes.voting_success'));
-                redirect('/votes/'.$vote->id);
-            } else {
-                setInput($request->all());
-                setFlash('danger', $validator->getErrors());
+
+                return redirect('votes/'.$vote->id);
             }
+
+            setInput($request->all());
+            setFlash('danger', $validator->getErrors());
         }
 
         $voted = Arr::pluck($vote->answers, 'result', 'answer');
@@ -171,7 +173,7 @@ class VoteController extends Controller
         }
 
         if (! $vote->closed) {
-            abort('default', __('votes.voting_not_archive'));
+            abort(200, __('votes.voting_not_archive'));
         }
 
         $vote->answers = VoteAnswer::query()
@@ -180,7 +182,7 @@ class VoteController extends Controller
             ->get();
 
         if ($vote->answers->isEmpty()) {
-            abort('default', __('votes.voting_not_answers'));
+            abort(200, __('votes.voting_not_answers'));
         }
 
         $voted = Arr::pluck($vote->answers, 'result', 'answer');
@@ -201,9 +203,9 @@ class VoteController extends Controller
      * @param Request   $request
      * @param Validator $validator
      *
-     * @return View
+     * @return View|RedirectResponse
      */
-    public function create(Request $request, Validator $validator): View
+    public function create(Request $request, Validator $validator)
     {
         if ($request->isMethod('post')) {
             $question    = $request->input('question');
@@ -243,11 +245,12 @@ class VoteController extends Controller
                 VoteAnswer::query()->insert($prepareAnswers);
 
                 setFlash('success', __('votes.voting_success_created'));
-                redirect('/votes/' . $vote->id);
-            } else {
-                setInput($request->all());
-                setFlash('danger', $validator->getErrors());
+
+                return redirect('votes/' . $vote->id);
             }
+
+            setInput($request->all());
+            setFlash('danger', $validator->getErrors());
         }
 
         return view('votes/create');

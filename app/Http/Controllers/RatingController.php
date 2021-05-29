@@ -8,6 +8,7 @@ use App\Classes\Validator;
 use App\Models\Rating;
 use App\Models\User;
 use Exception;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
 
@@ -37,9 +38,9 @@ class RatingController extends Controller
      * @param Request   $request
      * @param Validator $validator
      *
-     * @return View
+     * @return View|RedirectResponse
      */
-    public function index(string $login, Request $request, Validator $validator): View
+    public function index(string $login, Request $request, Validator $validator)
     {
         $vote = $request->input('vote');
         $user = getUserByLogin($login);
@@ -49,11 +50,11 @@ class RatingController extends Controller
         }
 
         if ($this->user->id === $user->id) {
-            abort('default', __('ratings.reputation_yourself'));
+            abort(200, __('ratings.reputation_yourself'));
         }
 
         if ($this->user->point < setting('editratingpoint')) {
-            abort('default', __('ratings.reputation_point', ['point' => plural(setting('editratingpoint'), setting('scorename'))]));
+            abort(200, __('ratings.reputation_point', ['point' => plural(setting('editratingpoint'), setting('scorename'))]));
         }
 
         // Голосовать за того же пользователя можно через 90 дней
@@ -64,7 +65,7 @@ class RatingController extends Controller
             ->first();
 
         if ($getRating) {
-            abort('default', __('ratings.reputation_already_changed'));
+            abort(200, __('ratings.reputation_already_changed'));
         }
 
         if ($request->isMethod('post')) {
@@ -100,11 +101,12 @@ class RatingController extends Controller
                 $user->sendMessage(null, $message);
 
                 setFlash('success', __('ratings.reputation_success_changed'));
-                redirect('/users/'.$user->login);
-            } else {
-                setInput($request->all());
-                setFlash('danger', $validator->getErrors());
+
+                return redirect('users/'.$user->login);
             }
+
+            setInput($request->all());
+            setFlash('danger', $validator->getErrors());
         }
 
         return view('ratings/index', compact('user', 'vote'));

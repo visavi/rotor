@@ -10,6 +10,7 @@ use App\Models\Post;
 use App\Models\Topic;
 use App\Models\User;
 use Exception;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
 
@@ -81,13 +82,13 @@ class ActiveController extends Controller
      * @param Request   $request
      * @param Validator $validator
      *
-     * @return string
+     * @return TODO json |RedirectResponse
      * @throws Exception
      */
-    public function delete(Request $request, Validator $validator): string
+    public function delete(Request $request, Validator $validator)
     {
         if (! $request->ajax()) {
-            redirect('/');
+            return redirect('/');
         }
 
         if (! isAdmin()) {

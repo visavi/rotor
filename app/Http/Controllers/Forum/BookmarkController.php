@@ -9,6 +9,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Bookmark;
 use App\Models\Topic;
 use Exception;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
 
@@ -50,13 +51,13 @@ class BookmarkController extends Controller
      * @param Request   $request
      * @param Validator $validator
      *
-     * @return string
+     * @return TODO json |RedirectResponse
      * @throws Exception
      */
-    public function perform(Request $request, Validator $validator): string
+    public function perform(Request $request, Validator $validator)
     {
         if (! $request->ajax()) {
-            redirect('/');
+            return redirect('/');
         }
 
         $tid = int($request->input('tid'));
@@ -95,9 +96,9 @@ class BookmarkController extends Controller
      * @param Request   $request
      * @param Validator $validator
      *
-     * @return void
+     * @return RedirectResponse
      */
-    public function delete(Request $request, Validator $validator): void
+    public function delete(Request $request, Validator $validator): RedirectResponse
     {
         $topicIds = intar($request->input('del'));
 
@@ -115,6 +116,6 @@ class BookmarkController extends Controller
             setFlash('danger', $validator->getErrors());
         }
 
-        redirect('/forums/bookmarks?page=' . int($request->input('page')));
+        return redirect('forums/bookmarks?page=' . int($request->input('page')));
     }
 }

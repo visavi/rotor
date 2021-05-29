@@ -26,7 +26,7 @@ class LoadController extends Controller
             ->get();
 
         if ($categories->isEmpty()) {
-            abort('default', __('loads.empty_loads'));
+            abort(200, __('loads.empty_loads'));
         }
 
         return view('loads/index', compact('categories'));
@@ -88,7 +88,7 @@ class LoadController extends Controller
             ->get();
 
         if ($downs->isEmpty()) {
-            abort('default', __('loads.downs_not_found'));
+            abort(200, __('loads.downs_not_found'));
         }
 
         return view('loads/rss', compact('downs'));

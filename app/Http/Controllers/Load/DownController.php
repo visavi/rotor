@@ -15,6 +15,7 @@ use App\Models\Down;
 use App\Models\Flood;
 use App\Models\Reader;
 use Illuminate\Database\Query\JoinClause;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
 use PhpZip\ZipFile;
@@ -46,7 +47,7 @@ class DownController extends Controller
         }
 
         if (! isAdmin(User::ADMIN) && (! $down->active && getUser() && getUser('id') !== $down->user_id)) {
-            abort('default', __('loads.down_not_verified'));
+            abort(200, __('loads.down_not_verified'));
         }
 
         $allowDownload = getUser() || setting('down_guest_download');
@@ -61,9 +62,9 @@ class DownController extends Controller
      * @param Request   $request
      * @param Validator $validator
      *
-     * @return View
+     * @return View|RedirectResponse
      */
-    public function edit(int $id, Request $request, Validator $validator): View
+    public function edit(int $id, Request $request, Validator $validator)
     {
         /** @var Down $down */
         $down = Down::query()->where('user_id', getUser('id'))->find($id);
@@ -73,7 +74,7 @@ class DownController extends Controller
         }
 
         if ($down->active) {
-            abort('default', __('loads.down_verified'));
+            abort(200, __('loads.down_verified'));
         }
 
         if ($request->isMethod('post')) {
@@ -116,11 +117,12 @@ class DownController extends Controller
 
                 clearCache(['statLoads', 'recentDowns']);
                 setFlash('success', __('loads.down_edited_success'));
-                redirect('/downs/' . $down->id);
-            } else {
-                setInput($request->all());
-                setFlash('danger', $validator->getErrors());
+
+                return redirect('downs/' . $down->id);
             }
+
+            setInput($request->all());
+            setFlash('danger', $validator->getErrors());
         }
 
         return view('loads/edit', compact('down'));
@@ -132,9 +134,10 @@ class DownController extends Controller
      * @param int $id
      * @param int $fid
      *
+     * @return RedirectResponse
      * @throws Exception
      */
-    public function deleteFile(int $id, int $fid): void
+    public function deleteFile(int $id, int $fid): RedirectResponse
     {
         /** @var Down $down */
         $down = Down::query()->where('user_id', getUser('id'))->find($id);
@@ -155,7 +158,7 @@ class DownController extends Controller
         setFlash('success', __('loads.file_deleted_success'));
         $file->delete();
 
-        redirect('/downs/edit/' . $down->id);
+        return redirect('downs/edit/' . $down->id);
     }
 
     /**
@@ -165,14 +168,14 @@ class DownController extends Controller
      * @param Validator $validator
      * @param Flood     $flood
      *
-     * @return View
+     * @return View|RedirectResponse
      */
-    public function create(Request $request, Validator $validator, Flood $flood): View
+    public function create(Request $request, Validator $validator, Flood $flood)
     {
         $cid = int($request->input('cid'));
 
         if (! isAdmin() && ! setting('downupload')) {
-            abort('default', __('loads.down_closed'));
+            abort(200, __('loads.down_closed'));
         }
 
         if (! $user = getUser()) {
@@ -186,7 +189,7 @@ class DownController extends Controller
             ->get();
 
         if ($loads->isEmpty()) {
-            abort('default', __('loads.empty_loads'));
+            abort(200, __('loads.empty_loads'));
         }
 
         if ($request->isMethod('post')) {
@@ -259,11 +262,12 @@ class DownController extends Controller
                 $flood->saveState();
 
                 setFlash('success', __('loads.file_uploaded_success'));
-                redirect('/downs/' . $down->id);
-            } else {
-                setInput($request->all());
-                setFlash('danger', $validator->getErrors());
+
+                return redirect('downs/' . $down->id);
             }
+
+            setInput($request->all());
+            setFlash('danger', $validator->getErrors());
         }
 
         return view('loads/create', compact('loads', 'cid'));
@@ -276,9 +280,9 @@ class DownController extends Controller
      * @param Request   $request
      * @param Validator $validator
      *
-     * @return void
+     * @return RedirectResponse
      */
-    public function vote(int $id, Request $request, Validator $validator): void
+    public function vote(int $id, Request $request, Validator $validator): RedirectResponse
     {
         $score = int($request->input('score'));
 
@@ -321,7 +325,7 @@ class DownController extends Controller
             setFlash('danger', $validator->getErrors());
         }
 
-        redirect('/downs/' . $down->id);
+        return redirect('downs/' . $down->id);
     }
 
     /**
@@ -330,9 +334,9 @@ class DownController extends Controller
      * @param int       $id
      * @param Validator $validator
      *
-     * @return void
+     * @return TODO | RedirectResponse
      */
-    public function download(int $id, Validator $validator): void
+    public function download(int $id, Validator $validator)
     {
         /** @var File $file */
         $file = File::query()->where('relate_type', Down::$morphName)->find($id);
@@ -342,17 +346,19 @@ class DownController extends Controller
         }
 
         if (! $file->relate->active && ! isAdmin(User::ADMIN)) {
-            abort('default', __('loads.down_not_verified'));
+            abort(200, __('loads.down_not_verified'));
         }
 
         $validator->true(file_exists(HOME . $file->hash), __('loads.down_not_exist'));
 
         if ($validator->isValid()) {
             Reader::countingStat($file->relate);
+            // TODO
             $file->download();
         } else {
             setFlash('danger', $validator->getErrors());
-            redirect('/downs/' . $file->relate->id);
+
+            return redirect('downs/' . $file->relate->id);
         }
     }
 
@@ -364,9 +370,9 @@ class DownController extends Controller
      * @param Validator $validator
      * @param Flood     $flood
      *
-     * @return View
+     * @return View|RedirectResponse
      */
-    public function comments(int $id, Request $request, Validator $validator, Flood $flood): View
+    public function comments(int $id, Request $request, Validator $validator, Flood $flood)
     {
         /** @var Down $down */
         $down = Down::query()->find($id);
@@ -376,7 +382,7 @@ class DownController extends Controller
         }
 
         if (! $down->active) {
-            abort('default', __('loads.down_not_verified'));
+            abort(200, __('loads.down_not_verified'));
         }
 
         if ($request->isMethod('post')) {
@@ -409,11 +415,12 @@ class DownController extends Controller
                 sendNotify($msg, '/downs/comment/' . $down->id . '/' . $comment->id, $down->title);
 
                 setFlash('success', __('main.comment_added_success'));
-                redirect('/downs/end/' . $down->id);
-            } else {
-                setInput($request->all());
-                setFlash('danger', $validator->getErrors());
+
+                return redirect('downs/end/' . $down->id);
             }
+
+            setInput($request->all());
+            setFlash('danger', $validator->getErrors());
         }
 
         $comments = $down->comments()
@@ -432,9 +439,9 @@ class DownController extends Controller
      * @param Request   $request
      * @param Validator $validator
      *
-     * @return View
+     * @return View|RedirectResponse
      */
-    public function editComment(int $id, int $cid, Request $request, Validator $validator): View
+    public function editComment(int $id, int $cid, Request $request, Validator $validator)
     {
         $down = Down::query()->find($id);
 
@@ -454,11 +461,11 @@ class DownController extends Controller
             ->first();
 
         if (! $comment) {
-            abort('default', __('main.comment_deleted'));
+            abort(200, __('main.comment_deleted'));
         }
 
         if ($comment->created_at + 600 < SITETIME) {
-            abort('default', __('main.editing_impossible'));
+            abort(200, __('main.editing_impossible'));
         }
 
         if ($request->isMethod('post')) {
@@ -477,11 +484,12 @@ class DownController extends Controller
                 ]);
 
                 setFlash('success', __('main.comment_edited_success'));
-                redirect('/downs/comments/' . $id . '?page=' . $page);
-            } else {
-                setInput($request->all());
-                setFlash('danger', $validator->getErrors());
+
+                return redirect('downs/comments/' . $id . '?page=' . $page);
             }
+
+            setInput($request->all());
+            setFlash('danger', $validator->getErrors());
         }
 
         return view('loads/editcomment', compact('down', 'comment', 'page'));
@@ -492,9 +500,9 @@ class DownController extends Controller
      *
      * @param int $id
      *
-     * @return void
+     * @return RedirectResponse
      */
-    public function end(int $id): void
+    public function end(int $id): RedirectResponse
     {
         /** @var Down $down */
         $down = Down::query()->find($id);
@@ -506,7 +514,8 @@ class DownController extends Controller
         $total = $down->comments()->count();
 
         $end = ceil($total / setting('comments_per_page'));
-        redirect('/downs/comments/' . $down->id . '?page=' . $end);
+
+        return redirect('downs/comments/' . $down->id . '?page=' . $end);
     }
 
     /**
@@ -526,11 +535,11 @@ class DownController extends Controller
         }
 
         if (! $file->relate->active && ! isAdmin(User::ADMIN)) {
-            abort('default', __('loads.down_not_verified'));
+            abort(200, __('loads.down_not_verified'));
         }
 
         if ($file->extension !== 'zip') {
-            abort('default', __('loads.archive_only_zip'));
+            abort(200, __('loads.archive_only_zip'));
         }
 
         try {
@@ -543,7 +552,7 @@ class DownController extends Controller
 
             $documents = paginate($getDocuments, setting('ziplist'));
         } catch (Exception $e) {
-            abort('default', __('loads.archive_not_open'));
+            abort(200, __('loads.archive_not_open'));
         }
 
         return view('loads/zip', compact('down', 'file', 'documents', 'viewExt'));
@@ -567,11 +576,11 @@ class DownController extends Controller
         }
 
         if (! $file->relate->active && ! isAdmin(User::ADMIN)) {
-            abort('default', __('loads.down_not_verified'));
+            abort(200, __('loads.down_not_verified'));
         }
 
         if ($file->extension !== 'zip') {
-            abort('default', __('loads.archive_only_zip'));
+            abort(200, __('loads.archive_only_zip'));
         }
 
         try {
@@ -597,7 +606,7 @@ class DownController extends Controller
 
             $down = $file->relate;
         } catch (Exception $e) {
-            abort('default', __('loads.file_not_read'));
+            abort(200, __('loads.file_not_read'));
         }
 
         return view('loads/zip_view', compact('down', 'file', 'document', 'content'));
@@ -627,9 +636,9 @@ class DownController extends Controller
      * @param int $id
      * @param int $cid
      *
-     * @return void
+     * @return RedirectResponse
      */
-    public function viewComment(int $id, int $cid): void
+    public function viewComment(int $id, int $cid): RedirectResponse
     {
         /** @var Down $down */
         $down = Down::query()->find($id);
@@ -644,6 +653,7 @@ class DownController extends Controller
             ->count();
 
         $end = ceil($total / setting('comments_per_page'));
-        redirect('/downs/comments/' . $down->id . '?page=' . $end . '#comment_' . $cid);
+
+        return redirect('downs/comments/' . $down->id . '?page=' . $end . '#comment_' . $cid);
     }
 }

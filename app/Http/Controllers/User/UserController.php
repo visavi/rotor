@@ -10,10 +10,10 @@ use App\Models\BlackList;
 use App\Models\ChangeMail;
 use App\Models\Flood;
 use App\Models\Invite;
-use App\Models\Online;
 use App\Models\User;
 use Exception;
 use GuzzleHttp\Exception\GuzzleException;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
@@ -49,9 +49,9 @@ class UserController extends Controller
      * @param Request   $request
      * @param Validator $validator
      *
-     * @return View
+     * @return View|RedirectResponse
      */
-    public function note(string $login, Request $request, Validator $validator): View
+    public function note(string $login, Request $request, Validator $validator)
     {
         if (! isAdmin()) {
             abort(403, __('main.page_only_admins'));
@@ -75,11 +75,12 @@ class UserController extends Controller
                 ]);
 
                 setFlash('success', __('users.note_saved_success'));
-                redirect('/users/' . $user->login);
-            } else {
-                setInput($request->all());
-                setFlash('danger', $validator->getErrors());
+
+                return redirect('users/' . $user->login);
             }
+
+            setInput($request->all());
+            setFlash('danger', $validator->getErrors());
         }
 
         return view('users/note', compact('user'));
@@ -91,16 +92,17 @@ class UserController extends Controller
      * @param Request   $request
      * @param Validator $validator
      *
-     * @return View
+     * @return View|RedirectResponse
+     * @throws GuzzleException
      */
-    public function register(Request $request, Validator $validator): View
+    public function register(Request $request, Validator $validator)
     {
         if (getUser()) {
             abort(403, __('users.already_registered'));
         }
 
         if (! setting('openreg')) {
-            abort('default', __('users.registration_suspended'));
+            abort(200, __('users.registration_suspended'));
         }
 
         if ($request->isMethod('post')) {
@@ -218,11 +220,12 @@ class UserController extends Controller
                     User::auth($login, $password);
 
                     setFlash('success', __('users.welcome', ['login' => $login]));
-                    redirect('/');
-                } else {
-                    setInput($request->all());
-                    setFlash('danger', $validator->getErrors());
+
+                    return redirect('/');
                 }
+
+                setInput($request->all());
+                setFlash('danger', $validator->getErrors());
             }
 
             if ($request->has('token')) {
@@ -240,19 +243,18 @@ class UserController extends Controller
      * @param Validator $validator
      * @param Flood     $flood
      *
-     * @return View
+     * @return View|RedirectResponse
      * @throws GuzzleException
      */
-    public function login(Request $request, Validator $validator, Flood $flood): View
+    public function login(Request $request, Validator $validator, Flood $flood)
     {
         if (getUser()) {
             setFlash('danger', __('main.already_authorized'));
-            redirect('/');
+            return redirect('/');
         }
 
-        //$cooklog = $_COOKIE['login'] ?? '';
         $cooklog = $request->cookie('login');
-        $isFlood = $flood->isFlood(1);
+        $isFlood = $flood->isFlood();
 
         if ($request->isMethod('post')) {
             if ($request->has('login') && $request->has('pass')) {
@@ -268,7 +270,8 @@ class UserController extends Controller
                     /** @var User $user */
                     if ($user = User::auth($login, $pass, $remember)) {
                         setFlash('success', __('users.welcome', ['login' => $user->getName()]));
-                        redirect($request->input('return') ?? '/');
+
+                        return redirect($request->input('return', '/'));
                     }
 
                     $flood->saveState(300);
@@ -279,7 +282,7 @@ class UserController extends Controller
                     setFlash('danger', $validator->getErrors());
                 }
 
-                redirect('/login');
+                return redirect('login');
             }
 
             if ($request->has('token')) {
@@ -295,29 +298,18 @@ class UserController extends Controller
      *
      * @param Request $request
      *
-     * @return void
+     * @return RedirectResponse
      */
-    public function logout(Request $request): void
+    public function logout(Request $request): RedirectResponse
     {
-        if ($request->input('_token') === csrf_token()) {
-            $options = [
-                'expires' => strtotime('-1 hour', SITETIME),
-                'path' => '/',
-                'domain' => siteDomain(siteUrl()),
-                'secure' => false,
-                'httponly' => true,
-                'samesite' => 'Lax',
-            ];
-
-            $_SESSION = [];
-            setcookie('password', '', $options);
-            setcookie(session_name(), '', strtotime('-1 hour', SITETIME), '/', '');
-            session_destroy();
+        if ($request->input('token') === csrf_token()) {
+            $request->session()->flush();
+            cookie()->queue(cookie()->forget('password'));
         } else {
             setFlash('danger', __('validator.token'));
         }
 
-        redirect('/');
+        return redirect('/');
     }
 
     /**
@@ -326,9 +318,9 @@ class UserController extends Controller
      * @param Request   $request
      * @param Validator $validator
      *
-     * @return View
+     * @return View|RedirectResponse
      */
-    public function profile(Request $request, Validator $validator): View
+    public function profile(Request $request, Validator $validator)
     {
         if (! $user = getUser()) {
             abort(403, __('main.not_authorized'));
@@ -367,11 +359,12 @@ class UserController extends Controller
                 ]);
 
                 setFlash('success', __('users.profile_success_changed'));
-                redirect('/profile');
-            } else {
-                setInput($request->all());
-                setFlash('danger', $validator->getErrors());
+
+                return redirect('profile');
             }
+
+            setInput($request->all());
+            setFlash('danger', $validator->getErrors());
         }
 
         return view('users/profile', compact('user'));
@@ -383,9 +376,9 @@ class UserController extends Controller
      * @param Request   $request
      * @param Validator $validator
      *
-     * @return View
+     * @return View|RedirectResponse
      */
-    public function key(Request $request, Validator $validator): View
+    public function key(Request $request, Validator $validator)
     {
         /* @var User $user */
         if (! $user = getUser()) {
@@ -393,7 +386,7 @@ class UserController extends Controller
         }
 
         if (! setting('regkeys')) {
-            abort('default', __('users.confirm_registration_disabled'));
+            abort(200, __('users.confirm_registration_disabled'));
         }
 
         if ($user->level !== User::PENDED) {
@@ -436,11 +429,12 @@ class UserController extends Controller
                 sendMail($email, $subject, $body);
 
                 setFlash('success', __('users.confirm_code_success_sent'));
-                redirect('/');
-            } else {
-                setInput($request->all());
-                setFlash('danger', $validator->getErrors());
+
+                return redirect('/');
             }
+
+            setInput($request->all());
+            setFlash('danger', $validator->getErrors());
         }
 
         /* Подтверждение кода */
@@ -454,10 +448,11 @@ class UserController extends Controller
                 ]);
 
                 setFlash('success', __('users.account_success_activated'));
-                redirect('/');
-            } else {
-                setFlash('danger', __('users.confirm_code_invalid'));
+
+                return redirect('/');
             }
+
+            setFlash('danger', __('users.confirm_code_invalid'));
         }
 
         return view('users/key', compact('user'));
@@ -469,9 +464,9 @@ class UserController extends Controller
      * @param Request   $request
      * @param Validator $validator
      *
-     * @return View
+     * @return View|RedirectResponse
      */
-    public function setting(Request $request, Validator $validator): View
+    public function setting(Request $request, Validator $validator)
     {
         if (! $user = getUser()) {
             abort(403, __('main.not_authorized'));
@@ -505,11 +500,12 @@ class UserController extends Controller
                 ]);
 
                 setFlash('success', __('users.settings_success_changed'));
-                redirect('/settings');
-            } else {
-                setInput($request->all());
-                setFlash('danger', $validator->getErrors());
+
+                return redirect('settings');
             }
+
+            setInput($request->all());
+            setFlash('danger', $validator->getErrors());
         }
 
         return view('users/settings', compact('user', 'setting'));
@@ -535,9 +531,9 @@ class UserController extends Controller
      * @param Request   $request
      * @param Validator $validator
      *
-     * @return void
+     * @return RedirectResponse
      */
-    public function changeMail(Request $request, Validator $validator): void
+    public function changeMail(Request $request, Validator $validator): RedirectResponse
     {
         if (! $user = getUser()) {
             abort(403, __('main.not_authorized'));
@@ -585,7 +581,7 @@ class UserController extends Controller
             setFlash('danger', $validator->getErrors());
         }
 
-        redirect('/accounts');
+        return redirect('accounts');
     }
 
     /**
@@ -594,10 +590,10 @@ class UserController extends Controller
      * @param Request   $request
      * @param Validator $validator
      *
-     * @return void
+     * @return RedirectResponse
      * @throws Exception
      */
-    public function editMail(Request $request, Validator $validator): void
+    public function editMail(Request $request, Validator $validator): RedirectResponse
     {
         if (! $user = getUser()) {
             abort(403, __('main.not_authorized'));
@@ -635,7 +631,7 @@ class UserController extends Controller
             setFlash('danger', $validator->getErrors());
         }
 
-        redirect('/accounts');
+        return redirect('accounts');
     }
 
     /**
@@ -644,9 +640,9 @@ class UserController extends Controller
      * @param Request   $request
      * @param Validator $validator
      *
-     * @return void
+     * @return RedirectResponse
      */
-    public function editStatus(Request $request, Validator $validator): void
+    public function editStatus(Request $request, Validator $validator): RedirectResponse
     {
         if (! $user = getUser()) {
             abort(403, __('main.not_authorized'));
@@ -676,7 +672,7 @@ class UserController extends Controller
             setFlash('danger', $validator->getErrors());
         }
 
-        redirect('/accounts');
+        return redirect('accounts');
     }
 
     /**
@@ -685,9 +681,9 @@ class UserController extends Controller
      * @param Request   $request
      * @param Validator $validator
      *
-     * @return void
+     * @return RedirectResponse
      */
-    public function editColor(Request $request, Validator $validator): void
+    public function editColor(Request $request, Validator $validator): RedirectResponse
     {
         if (! $user = getUser()) {
             abort(403, __('main.not_authorized'));
@@ -715,7 +711,7 @@ class UserController extends Controller
             setFlash('danger', $validator->getErrors());
         }
 
-        redirect('/accounts');
+        return redirect('accounts');
     }
 
     /**
@@ -724,9 +720,9 @@ class UserController extends Controller
      * @param Request   $request
      * @param Validator $validator
      *
-     * @return void
+     * @return RedirectResponse
      */
-    public function editPassword(Request $request, Validator $validator): void
+    public function editPassword(Request $request, Validator $validator): RedirectResponse
     {
         if (! $user = getUser()) {
             abort(403, __('main.not_authorized'));
@@ -757,16 +753,17 @@ class UserController extends Controller
             $body = view('mailer.default', compact('subject', 'message'));
             sendMail($user->email, $subject, $body);
 
-            //unset($_SESSION['id'], $_SESSION['password']);
             $request->session()->forget(['id', 'password']);
 
             setFlash('success', __('users.password_success_changed'));
-            redirect('/login');
-        } else {
-            setInput($request->all());
-            setFlash('danger', $validator->getErrors());
-            redirect('/accounts');
+
+            return redirect('login');
         }
+
+        setInput($request->all());
+        setFlash('danger', $validator->getErrors());
+
+        return redirect('accounts');
     }
 
     /**
@@ -774,9 +771,9 @@ class UserController extends Controller
      *
      * @param Request $request
      *
-     * @return void
+     * @return RedirectResponse
      */
-    public function apikey(Request $request): void
+    public function apikey(Request $request): RedirectResponse
     {
         if (! $user = getUser()) {
             abort(403, __('main.not_authorized'));
@@ -804,7 +801,7 @@ class UserController extends Controller
             setFlash('danger', __('validator.token'));
         }
 
-        redirect('/accounts');
+        return redirect('accounts');
     }
 
     /**

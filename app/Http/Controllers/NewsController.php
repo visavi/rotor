@@ -9,6 +9,7 @@ use App\Models\Comment;
 use App\Models\Flood;
 use App\Models\News;
 use Illuminate\Database\Query\JoinClause;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
 
@@ -76,9 +77,9 @@ class NewsController extends Controller
      * @param Validator $validator
      * @param Flood     $flood
      *
-     * @return View
+     * @return View|RedirectResponse
      */
-    public function comments(int $id, Request $request, Validator $validator, Flood $flood): View
+    public function comments(int $id, Request $request, Validator $validator, Flood $flood)
     {
         /** @var News $news */
         $news = News::query()->find($id);
@@ -121,14 +122,14 @@ class NewsController extends Controller
                 setFlash('success', __('main.comment_added_success'));
 
                 if ($request->has('read')) {
-                    redirect('/news/' . $news->id);
+                    return redirect('news/' . $news->id);
                 }
 
-                redirect('/news/end/' . $news->id . '');
-            } else {
-                setInput($request->all());
-                setFlash('danger', $validator->getErrors());
+                return redirect('news/end/' . $news->id . '');
             }
+
+            setInput($request->all());
+            setFlash('danger', $validator->getErrors());
         }
 
         $comments = $news->comments()
@@ -147,9 +148,9 @@ class NewsController extends Controller
      * @param Request   $request
      * @param Validator $validator
      *
-     * @return View
+     * @return View|RedirectResponse
      */
-    public function editComment(int $id, int $cid, Request $request, Validator $validator): View
+    public function editComment(int $id, int $cid, Request $request, Validator $validator)
     {
         $page = int($request->input('page', 1));
 
@@ -171,11 +172,11 @@ class NewsController extends Controller
             ->first();
 
         if (! $comment) {
-            abort('default', __('main.comment_deleted'));
+            abort(200, __('main.comment_deleted'));
         }
 
         if ($comment->created_at + 600 < SITETIME) {
-            abort('default', __('main.editing_impossible'));
+            abort(200, __('main.editing_impossible'));
         }
 
         if ($request->isMethod('post')) {
@@ -193,11 +194,12 @@ class NewsController extends Controller
                 ]);
 
                 setFlash('success', __('main.comment_edited_success'));
-                redirect('/news/comments/' . $news->id . '?page=' . $page);
-            } else {
-                setInput($request->all());
-                setFlash('danger', $validator->getErrors());
+
+                return redirect('news/comments/' . $news->id . '?page=' . $page);
             }
+
+            setInput($request->all());
+            setFlash('danger', $validator->getErrors());
         }
         return view('news/editcomment', compact('news', 'comment', 'page'));
     }
@@ -206,8 +208,10 @@ class NewsController extends Controller
      * Переадресация на последнюю страницу
      *
      * @param int $id
+     *
+     * @return RedirectResponse
      */
-    public function end(int $id): void
+    public function end(int $id): RedirectResponse
     {
         /** @var News $news */
         $news = News::query()->find($id);
@@ -217,7 +221,8 @@ class NewsController extends Controller
         }
 
         $end = ceil($news->count_comments / setting('comments_per_page'));
-        redirect('/news/comments/' . $id . '?page=' . $end);
+
+        return redirect('news/comments/' . $id . '?page=' . $end);
     }
 
     /**
@@ -230,7 +235,7 @@ class NewsController extends Controller
         $newses = News::query()->orderByDesc('created_at')->limit(15)->get();
 
         if ($newses->isEmpty()) {
-            abort('default', __('news.empty_news'));
+            abort(200, __('news.empty_news'));
         }
 
         return view('news/rss', compact('newses'));
@@ -259,8 +264,10 @@ class NewsController extends Controller
      *
      * @param int $id
      * @param int $cid
+     *
+     * @return RedirectResponse
      */
-    public function viewComment(int $id, int $cid): void
+    public function viewComment(int $id, int $cid): RedirectResponse
     {
         /** @var News $news */
         $news = News::query()->find($id);
@@ -275,6 +282,7 @@ class NewsController extends Controller
             ->count();
 
         $end = ceil($total / setting('comments_per_page'));
-        redirect('/news/comments/' . $news->id . '?page=' . $end . '#comment_' . $cid);
+
+        return redirect('news/comments/' . $news->id . '?page=' . $end . '#comment_' . $cid);
     }
 }

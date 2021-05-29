@@ -309,7 +309,7 @@ class User extends BaseModel implements
      * @return void
      * @throws GuzzleException
      */
-    public static function socialAuth(string $token): void
+    public static function socialAuth(string $token)
     {
         $client = new Client(['timeout' => 30.0]);
 
@@ -337,7 +337,7 @@ class User extends BaseModel implements
                 $user->saveVisit(Login::SOCIAL);
 
                 setFlash('success', __('users.welcome', ['login' => $user->getName()]));
-                redirect('/');
+                return redirect('/');
             }
         }
     }
@@ -731,18 +731,18 @@ class User extends BaseModel implements
      *
      * return void
      */
-    public function checkAccess(): void
+    public function checkAccess()
     {
         $request = request();
 
         // Banned
         if ($this->level === self::BANNED && ! $request->is('ban', 'rules', 'logout')) {
-            redirect('/ban?user=' . $this->login);
+            return redirect('ban?user=' . $this->login);
         }
 
         // Confirm registration
         if ($this->level === self::PENDED && setting('regkeys') && ! $request->is('key', 'ban', 'login', 'logout', 'captcha')) {
-            redirect('/key?user=' . $this->login);
+            return redirect('key?user=' . $this->login);
         }
     }
 
@@ -751,7 +751,7 @@ class User extends BaseModel implements
      *
      * return void
      */
-    public function gettingBonus(): void
+    public function gettingBonus()
     {
         if ($this->timebonus < strtotime('-23 hours', SITETIME)) {
             $this->increment('money', setting('bonusmoney'));
@@ -797,24 +797,12 @@ class User extends BaseModel implements
     private function rememberUser(User $user, bool $remember = false): void
     {
         if ($remember) {
-            $options = [
-                'expires' => strtotime('+1 year', SITETIME),
-                'path' => '/',
-                'domain' => siteDomain(siteUrl()),
-                'secure' => false,
-                'httponly' => true,
-                'samesite' => 'Lax',
-            ];
-
-            setcookie('login', $user->login, $options);
-            setcookie('password', md5($user->password . config('app.key')), $options);
+            cookie()->queue(cookie()->forever('login', $user->login));
+            cookie()->queue(cookie()->forever('password', md5($user->password . config('app.key'))));
         }
 
         session()->put('id', $user->id);
         session()->put('password', md5(config('app.key') . $user->password));
-
-        //$_SESSION['id']       = $user->id;
-        //$_SESSION['password'] = md5(config('app.key') . $user->password);
-        //$_SESSION['online']   = null;
+        session()->put('online');
     }
 }

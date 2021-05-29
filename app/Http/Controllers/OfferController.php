@@ -9,6 +9,7 @@ use App\Models\Comment;
 use App\Models\Flood;
 use App\Models\Offer;
 use Illuminate\Database\Query\JoinClause;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
 
@@ -86,9 +87,9 @@ class OfferController extends Controller
      * @param Validator $validator
      * @param Flood     $flood
      *
-     * @return View
+     * @return View|RedirectResponse
      */
-    public function create(Request $request, Validator $validator, Flood $flood): View
+    public function create(Request $request, Validator $validator, Flood $flood)
     {
         if (! $user = getUser()) {
             abort(403, __('main.not_authorized'));
@@ -125,11 +126,12 @@ class OfferController extends Controller
                 $flood->saveState();
 
                 setFlash('success', __('main.record_added_success'));
-                redirect('/offers/' . $offer->id);
-            } else {
-                setInput($request->all());
-                setFlash('danger', $validator->getErrors());
+
+                return redirect('offers/' . $offer->id);
             }
+
+            setInput($request->all());
+            setFlash('danger', $validator->getErrors());
         }
 
         return view('offers/create', compact('type'));
@@ -142,9 +144,9 @@ class OfferController extends Controller
      * @param Request   $request
      * @param Validator $validator
      *
-     * @return View
+     * @return View|RedirectResponse
      */
-    public function edit(int $id, Request $request, Validator $validator): View
+    public function edit(int $id, Request $request, Validator $validator)
     {
         if (! $user = getUser()) {
             abort(403, __('main.not_authorized'));
@@ -160,7 +162,7 @@ class OfferController extends Controller
         }
 
         if (! in_array($offer->status, ['wait', 'process'])) {
-            abort('default', __('offers.already_resolved'));
+            abort(200, __('offers.already_resolved'));
         }
 
         if ($request->isMethod('post')) {
@@ -185,11 +187,12 @@ class OfferController extends Controller
                 ]);
 
                 setFlash('success', __('main.record_changed_success'));
-                redirect('/offers/' . $offer->id);
-            } else {
-                setInput($request->all());
-                setFlash('danger', $validator->getErrors());
+
+                return redirect('offers/' . $offer->id);
             }
+
+            setInput($request->all());
+            setFlash('danger', $validator->getErrors());
         }
 
         return view('offers/edit', compact('offer'));
@@ -203,9 +206,9 @@ class OfferController extends Controller
      * @param Validator $validator
      * @param Flood     $flood
      *
-     * @return View
+     * @return View|RedirectResponse
      */
-    public function comments(int $id, Request $request, Validator $validator, Flood $flood): View
+    public function comments(int $id, Request $request, Validator $validator, Flood $flood)
     {
         /** @var Offer $offer */
         $offer = Offer::query()->find($id);
@@ -247,11 +250,12 @@ class OfferController extends Controller
                 sendNotify($msg, '/offers/comment/' . $offer->id . '/' . $comment->id, $offer->title);
 
                 setFlash('success', __('main.comment_added_success'));
-                redirect('/offers/end/' . $offer->id);
-            } else {
-                setInput($request->all());
-                setFlash('danger', $validator->getErrors());
+
+                return redirect('offers/end/' . $offer->id);
             }
+
+            setInput($request->all());
+            setFlash('danger', $validator->getErrors());
         }
 
         $comments = $offer->comments()
@@ -269,9 +273,9 @@ class OfferController extends Controller
      * @param Request   $request
      * @param Validator $validator
      *
-     * @return View
+     * @return View|RedirectResponse
      */
-    public function editComment(int $id, int $cid, Request $request, Validator $validator): View
+    public function editComment(int $id, int $cid, Request $request, Validator $validator)
     {
         $page = int($request->input('page', 1));
 
@@ -292,11 +296,11 @@ class OfferController extends Controller
             ->first();
 
         if (! $comment) {
-            abort('default', __('main.comment_deleted'));
+            abort(200, __('main.comment_deleted'));
         }
 
         if ($comment->created_at + 600 < SITETIME) {
-            abort('default', __('main.editing_impossible'));
+            abort(200, __('main.editing_impossible'));
         }
 
         if ($request->isMethod('post')) {
@@ -315,11 +319,12 @@ class OfferController extends Controller
                 ]);
 
                 setFlash('success', __('main.comment_edited_success'));
-                redirect('/offers/comments/' . $offer->id . '?page=' . $page);
-            } else {
-                setInput($request->all());
-                setFlash('danger', $validator->getErrors());
+
+                return redirect('offers/comments/' . $offer->id . '?page=' . $page);
             }
+
+            setInput($request->all());
+            setFlash('danger', $validator->getErrors());
         }
 
         return view('offers/editcomment', compact('offer', 'comment', 'page'));
@@ -329,8 +334,10 @@ class OfferController extends Controller
      * Переадресация на последнюю страницу
      *
      * @param int $id
+     *
+     * @return RedirectResponse
      */
-    public function end(int $id): void
+    public function end(int $id): RedirectResponse
     {
         /** @var Offer $offer */
         $offer = Offer::query()->find($id);
@@ -342,7 +349,8 @@ class OfferController extends Controller
         $total = $offer->comments()->count();
 
         $end = ceil($total / setting('comments_per_page'));
-        redirect('/offers/comments/' . $offer->id . '?page=' . $end);
+
+        return redirect('offers/comments/' . $offer->id . '?page=' . $end);
     }
 
     /**
@@ -350,8 +358,10 @@ class OfferController extends Controller
      *
      * @param int $id
      * @param int $cid
+     *
+     * @return RedirectResponse
      */
-    public function viewComment(int $id, int $cid): void
+    public function viewComment(int $id, int $cid): RedirectResponse
     {
         /** @var Offer $offer */
         $offer = Offer::query()->find($id);
@@ -366,6 +376,7 @@ class OfferController extends Controller
             ->count();
 
         $end = ceil($total / setting('comments_per_page'));
-        redirect('/offers/comments/' . $offer->id . '?page=' . $end . '#comment_' . $cid);
+
+        return redirect('offers/comments/' . $offer->id . '?page=' . $end . '#comment_' . $cid);
     }
 }

@@ -6,6 +6,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Classes\Validator;
 use App\Models\User;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
 
@@ -38,7 +39,7 @@ class DelUserController extends AdminController
 
         if ($request->isMethod('post')) {
             if ($period < 180) {
-                abort('default', __('admin.delusers.invalid_period'));
+                abort(200, __('admin.delusers.invalid_period'));
             }
 
             $users = User::query()
@@ -47,7 +48,7 @@ class DelUserController extends AdminController
                 ->get();
 
             if ($users->isEmpty()) {
-                abort('default', __('admin.delusers.users_not_found'));
+                abort(200, __('admin.delusers.users_not_found'));
             }
         }
 
@@ -62,9 +63,9 @@ class DelUserController extends AdminController
      * @param Request   $request
      * @param Validator $validator
      *
-     * @return void
+     * @return RedirectResponse
      */
-    public function clear(Request $request, Validator $validator): void
+    public function clear(Request $request, Validator $validator): RedirectResponse
     {
         $period = int($request->input('period'));
         $point  = int($request->input('point'));
@@ -91,6 +92,6 @@ class DelUserController extends AdminController
             setFlash('danger', $validator->getErrors());
         }
 
-        redirect('/admin/delusers');
+        return redirect('admin/delusers');
     }
 }

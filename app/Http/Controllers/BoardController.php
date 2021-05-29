@@ -11,6 +11,7 @@ use App\Models\Flood;
 use App\Models\Item;
 use Exception;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
 
@@ -19,7 +20,7 @@ class BoardController extends Controller
     /**
      * Главная страница
      *
-     * @param int $id
+     * @param int|null $id
      *
      * @return View
      */
@@ -71,7 +72,7 @@ class BoardController extends Controller
         }
 
         if ($item->expires_at <= SITETIME && getUser() && getUser('id') !== $item->user_id) {
-            abort('default', __('boards.item_not_active'));
+            abort(200, __('boards.item_not_active'));
         }
 
         return view('boards/view', compact('item'));
@@ -84,9 +85,9 @@ class BoardController extends Controller
      * @param Validator $validator
      * @param Flood     $flood
      *
-     * @return View
+     * @return View|RedirectResponse
      */
-    public function create(Request $request, Validator $validator, Flood $flood): View
+    public function create(Request $request, Validator $validator, Flood $flood)
     {
         $bid = int($request->input('bid'));
 
@@ -101,7 +102,7 @@ class BoardController extends Controller
             ->get();
 
         if ($boards->isEmpty()) {
-            abort('default', __('boards.categories_not_created'));
+            abort(200, __('boards.categories_not_created'));
         }
 
         if ($request->isMethod('post')) {
@@ -151,11 +152,12 @@ class BoardController extends Controller
                 $flood->saveState();
 
                 setFlash('success', __('boards.item_success_added'));
-                redirect('/items/' . $item->id);
-            } else {
-                setInput($request->all());
-                setFlash('danger', $validator->getErrors());
+
+                return redirect('items/' . $item->id);
             }
+
+            setInput($request->all());
+            setFlash('danger', $validator->getErrors());
         }
 
         $files = File::query()
@@ -174,9 +176,9 @@ class BoardController extends Controller
      * @param Request   $request
      * @param Validator $validator
      *
-     * @return View
+     * @return View|RedirectResponse
      */
-    public function edit(int $id, Request $request, Validator $validator): View
+    public function edit(int $id, Request $request, Validator $validator)
     {
         if (! $user = getUser()) {
             abort(403, __('main.not_authorized'));
@@ -228,11 +230,12 @@ class BoardController extends Controller
 
                 clearCache(['statBoards', 'recentBoards']);
                 setFlash('success', __('boards.item_success_edited'));
-                redirect('/items/' . $item->id);
-            } else {
-                setInput($request->all());
-                setFlash('danger', $validator->getErrors());
+
+                return redirect('items/' . $item->id);
             }
+
+            setInput($request->all());
+            setFlash('danger', $validator->getErrors());
         }
 
         $boards = Board::query()
@@ -250,8 +253,10 @@ class BoardController extends Controller
      * @param int       $id
      * @param Request   $request
      * @param Validator $validator
+     *
+     * @return RedirectResponse
      */
-    public function close(int $id, Request $request, Validator $validator): void
+    public function close(int $id, Request $request, Validator $validator): RedirectResponse
     {
         if (! $user = getUser()) {
             abort(403, __('main.not_authorized'));
@@ -292,7 +297,7 @@ class BoardController extends Controller
             setFlash('danger', $validator->getErrors());
         }
 
-        redirect('/items/edit/' . $item->id);
+        return redirect('items/edit/' . $item->id);
     }
 
     /**
@@ -302,9 +307,10 @@ class BoardController extends Controller
      * @param Request   $request
      * @param Validator $validator
      *
+     * @return RedirectResponse
      * @throws Exception
      */
-    public function delete(int $id, Request $request, Validator $validator): void
+    public function delete(int $id, Request $request, Validator $validator): RedirectResponse
     {
         if (! $user = getUser()) {
             abort(403, __('main.not_authorized'));
@@ -331,7 +337,7 @@ class BoardController extends Controller
             setFlash('danger', $validator->getErrors());
         }
 
-        redirect('/boards/' . $item->board_id);
+        return redirect('boards/' . $item->board_id);
     }
 
     /**

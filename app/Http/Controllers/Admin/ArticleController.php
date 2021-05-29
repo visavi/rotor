@@ -9,6 +9,7 @@ use App\Models\Article;
 use App\Models\Blog;
 use App\Models\User;
 use Exception;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
 
@@ -36,9 +37,9 @@ class ArticleController extends AdminController
      * @param Request   $request
      * @param Validator $validator
      *
-     * @return void
+     * @return RedirectResponse
      */
-    public function create(Request $request, Validator $validator): void
+    public function create(Request $request, Validator $validator): RedirectResponse
     {
         if (! isAdmin(User::BOSS)) {
             abort(403, __('errors.forbidden'));
@@ -59,13 +60,14 @@ class ArticleController extends AdminController
             ]);
 
             setFlash('success', __('blogs.category_success_created'));
-            redirect('/admin/blogs/edit/' . $category->id);
-        } else {
-            setInput($request->all());
-            setFlash('danger', $validator->getErrors());
+
+            return redirect('admin/blogs/edit/' . $category->id);
         }
 
-        redirect('/admin/blogs');
+        setInput($request->all());
+        setFlash('danger', $validator->getErrors());
+
+        return redirect('admin/blogs');
     }
 
     /**
@@ -75,9 +77,9 @@ class ArticleController extends AdminController
      * @param Request   $request
      * @param Validator $validator
      *
-     * @return View
+     * @return View|RedirectResponse
      */
-    public function edit(int $id, Request $request, Validator $validator): View
+    public function edit(int $id, Request $request, Validator $validator)
     {
         if (! isAdmin(User::BOSS)) {
             abort(403, __('errors.forbidden'));
@@ -118,11 +120,12 @@ class ArticleController extends AdminController
                 ]);
 
                 setFlash('success', __('blogs.category_success_edited'));
-                redirect('/admin/blogs');
-            } else {
-                setInput($request->all());
-                setFlash('danger', $validator->getErrors());
+
+                return redirect('admin/blogs');
             }
+
+            setInput($request->all());
+            setFlash('danger', $validator->getErrors());
         }
 
         return view('admin/blogs/edit', compact('categories', 'category'));
@@ -135,10 +138,10 @@ class ArticleController extends AdminController
      * @param Request   $request
      * @param Validator $validator
      *
-     * @return void
+     * @return RedirectResponse
      * @throws Exception
      */
-    public function delete(int $id, Request $request, Validator $validator): void
+    public function delete(int $id, Request $request, Validator $validator): RedirectResponse
     {
         if (! isAdmin(User::BOSS)) {
             abort(403, __('errors.forbidden'));
@@ -167,7 +170,7 @@ class ArticleController extends AdminController
             setFlash('danger', $validator->getErrors());
         }
 
-        redirect('/admin/blogs');
+        return redirect('admin/blogs');
     }
 
     /**
@@ -175,9 +178,9 @@ class ArticleController extends AdminController
      *
      * @param Request $request
      *
-     * @return void
+     * @return RedirectResponse
      */
-    public function restatement(Request $request): void
+    public function restatement(Request $request): RedirectResponse
     {
         if (! isAdmin(User::BOSS)) {
             abort(403, __('errors.forbidden'));
@@ -191,7 +194,7 @@ class ArticleController extends AdminController
             setFlash('danger', __('validator.token'));
         }
 
-        redirect('/admin/blogs');
+        return redirect('admin/blogs');
     }
 
     /**
@@ -225,9 +228,9 @@ class ArticleController extends AdminController
      * @param Request   $request
      * @param Validator $validator
      *
-     * @return View
+     * @return View|RedirectResponse
      */
-    public function editArticle(int $id, Request $request, Validator $validator): View
+    public function editArticle(int $id, Request $request, Validator $validator)
     {
         /** @var Article $article */
         $article = Article::query()->find($id);
@@ -256,11 +259,12 @@ class ArticleController extends AdminController
 
                 clearCache(['statArticles', 'recentArticles']);
                 setFlash('success', __('blogs.article_success_edited'));
-                redirect('/articles/' . $article->id);
-            } else {
-                setInput($request->all());
-                setFlash('danger', $validator->getErrors());
+
+                return redirect('articles/' . $article->id);
             }
+
+            setInput($request->all());
+            setFlash('danger', $validator->getErrors());
         }
 
         return view('admin/blogs/edit_blog', compact('article'));
@@ -273,9 +277,9 @@ class ArticleController extends AdminController
      * @param Request   $request
      * @param Validator $validator
      *
-     * @return View
+     * @return View|RedirectResponse
      */
-    public function moveArticle(int $id, Request $request, Validator $validator): View
+    public function moveArticle(int $id, Request $request, Validator $validator)
     {
         /** @var Article $article */
         $article = Article::query()->find($id);
@@ -309,11 +313,12 @@ class ArticleController extends AdminController
                 ]);
 
                 setFlash('success', __('blogs.article_success_moved'));
-                redirect('/articles/' . $article->id);
-            } else {
-                setInput($request->all());
-                setFlash('danger', $validator->getErrors());
+
+                return redirect('articles/' . $article->id);
             }
+
+            setInput($request->all());
+            setFlash('danger', $validator->getErrors());
         }
 
         $categories = Blog::query()
@@ -332,10 +337,10 @@ class ArticleController extends AdminController
      * @param Request   $request
      * @param Validator $validator
      *
-     * @return void
+     * @return RedirectResponse
      * @throws Exception
      */
-    public function deleteArticle(int $id, Request $request, Validator $validator): void
+    public function deleteArticle(int $id, Request $request, Validator $validator): RedirectResponse
     {
         $page = int($request->input('page', 1));
 
@@ -360,6 +365,6 @@ class ArticleController extends AdminController
             setFlash('danger', $validator->getErrors());
         }
 
-        redirect('/admin/blogs/' . $article->category_id . '?page=' . $page);
+        return redirect('admin/blogs/' . $article->category_id . '?page=' . $page);
     }
 }

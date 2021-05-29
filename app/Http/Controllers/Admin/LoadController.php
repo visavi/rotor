@@ -10,6 +10,7 @@ use App\Models\File;
 use App\Models\Load;
 use App\Models\User;
 use Exception;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
 
@@ -49,9 +50,9 @@ class LoadController extends AdminController
      * @param Request   $request
      * @param Validator $validator
      *
-     * @return void
+     * @return RedirectResponse
      */
-    public function create(Request $request, Validator $validator): void
+    public function create(Request $request, Validator $validator): RedirectResponse
     {
         if (! isAdmin(User::BOSS)) {
             abort(403, __('errors.forbidden'));
@@ -72,13 +73,14 @@ class LoadController extends AdminController
             ]);
 
             setFlash('success', __('loads.load_success_created'));
-            redirect('/admin/loads/edit/' . $load->id);
-        } else {
-            setInput($request->all());
-            setFlash('danger', $validator->getErrors());
+
+            return redirect('admin/loads/edit/' . $load->id);
         }
 
-        redirect('/admin/loads');
+        setInput($request->all());
+        setFlash('danger', $validator->getErrors());
+
+        return redirect('admin/loads');
     }
 
     /**
@@ -88,9 +90,9 @@ class LoadController extends AdminController
      * @param Request   $request
      * @param Validator $validator
      *
-     * @return View
+     * @return View|RedirectResponse
      */
-    public function edit(int $id, Request $request, Validator $validator): View
+    public function edit(int $id, Request $request, Validator $validator)
     {
         if (! isAdmin(User::BOSS)) {
             abort(403, __('errors.forbidden'));
@@ -131,11 +133,12 @@ class LoadController extends AdminController
                 ]);
 
                 setFlash('success', __('loads.load_success_edited'));
-                redirect('/admin/loads');
-            } else {
-                setInput($request->all());
-                setFlash('danger', $validator->getErrors());
+
+                return redirect('admin/loads');
             }
+
+            setInput($request->all());
+            setFlash('danger', $validator->getErrors());
         }
 
         return view('admin/loads/edit', compact('loads', 'load'));
@@ -148,10 +151,10 @@ class LoadController extends AdminController
      * @param Request   $request
      * @param Validator $validator
      *
-     * @return void
+     * @return RedirectResponse
      * @throws Exception
      */
-    public function delete(int $id, Request $request, Validator $validator): void
+    public function delete(int $id, Request $request, Validator $validator): RedirectResponse
     {
         if (! isAdmin(User::BOSS)) {
             abort(403, __('errors.forbidden'));
@@ -180,7 +183,7 @@ class LoadController extends AdminController
             setFlash('danger', $validator->getErrors());
         }
 
-        redirect('/admin/loads');
+        return redirect('admin/loads');
     }
 
     /**
@@ -188,9 +191,9 @@ class LoadController extends AdminController
      *
      * @param Request $request
      *
-     * @return void
+     * @return RedirectResponse
      */
-    public function restatement(Request $request): void
+    public function restatement(Request $request): RedirectResponse
     {
         if (! isAdmin(User::BOSS)) {
             abort(403, __('errors.forbidden'));
@@ -204,7 +207,7 @@ class LoadController extends AdminController
             setFlash('danger', __('validator.token'));
         }
 
-        redirect('/admin/loads');
+        return redirect('admin/loads');
     }
 
     /**
@@ -257,9 +260,9 @@ class LoadController extends AdminController
      * @param Request   $request
      * @param Validator $validator
      *
-     * @return View
+     * @return View|RedirectResponse
      */
-    public function editDown(int $id, Request $request, Validator $validator): View
+    public function editDown(int $id, Request $request, Validator $validator)
     {
         /** @var Down $down */
         $down = Down::query()->find($id);
@@ -325,11 +328,12 @@ class LoadController extends AdminController
 
                 clearCache(['statLoads', 'recentDowns']);
                 setFlash('success', __('loads.down_edited_success'));
-                redirect('/admin/downs/edit/' . $down->id);
-            } else {
-                setInput($request->all());
-                setFlash('danger', $validator->getErrors());
+
+                return redirect('admin/downs/edit/' . $down->id);
             }
+
+            setInput($request->all());
+            setFlash('danger', $validator->getErrors());
         }
 
         $categories = Load::query()
@@ -347,10 +351,10 @@ class LoadController extends AdminController
      * @param int     $id
      * @param Request $request
      *
-     * @return void
+     * @return RedirectResponse
      * @throws Exception
      */
-    public function deleteDown(int $id, Request $request): void
+    public function deleteDown(int $id, Request $request): RedirectResponse
     {
         /** @var Down $down */
         $down  = Down::query()->find($id);
@@ -377,7 +381,7 @@ class LoadController extends AdminController
             setFlash('danger', __('validator.token'));
         }
 
-        redirect('/admin/loads/' . $down->category_id);
+        return redirect('admin/loads/' . $down->category_id);
     }
 
     /**
@@ -386,10 +390,10 @@ class LoadController extends AdminController
      * @param int $id
      * @param int $fid
      *
-     * @return void
+     * @return RedirectResponse
      * @throws Exception
      */
-    public function deleteFile(int $id, int $fid): void
+    public function deleteFile(int $id, int $fid): RedirectResponse
     {
         /** @var Down $down */
         $down = Down::query()->find($id);
@@ -410,7 +414,7 @@ class LoadController extends AdminController
         setFlash('success', __('loads.file_deleted_success'));
         $file->delete();
 
-        redirect('/admin/downs/edit/' . $down->id);
+        return redirect('admin/downs/edit/' . $down->id);
     }
 
     /**
@@ -435,9 +439,9 @@ class LoadController extends AdminController
      * @param int     $id
      * @param Request $request
      *
-     * @return void
+     * @return RedirectResponse
      */
-    public function publish(int $id, Request $request): void
+    public function publish(int $id, Request $request): RedirectResponse
     {
         /** @var Down $down */
         $down  = Down::query()->find($id);
@@ -458,16 +462,14 @@ class LoadController extends AdminController
             if ($active) {
                 $status = __('loads.down_success_published');
                 $down->category->increment('count_downs');
-
                 $text = textNotice('down_publish', ['url' => '/downs/' . $down->id, 'title' => $down->title]);
-                $down->user->sendMessage(null, $text);
             } else {
                 $status = __('loads.down_success_unpublished');
                 $down->category->decrement('count_downs');
-
                 $text = textNotice('down_unpublish', ['url' => '/downs/' . $down->id, 'title' => $down->title]);
-                $down->user->sendMessage(null, $text);
             }
+
+            $down->user->sendMessage(null, $text);
 
             clearCache(['statLoads', 'recentDowns']);
             setFlash('success', $status);
@@ -475,6 +477,6 @@ class LoadController extends AdminController
             setFlash('danger', __('validator.token'));
         }
 
-        redirect('/admin/downs/edit/' . $down->id);
+        return redirect('admin/downs/edit/' . $down->id);
     }
 }

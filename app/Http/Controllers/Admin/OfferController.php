@@ -9,6 +9,7 @@ use App\Models\Comment;
 use App\Models\Offer;
 use App\Models\Polling;
 use App\Models\User;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
 
@@ -92,9 +93,9 @@ class OfferController extends AdminController
      * @param Request   $request
      * @param Validator $validator
      *
-     * @return View
+     * @return View|RedirectResponse
      */
-    public function edit(int $id, Request $request, Validator $validator): View
+    public function edit(int $id, Request $request, Validator $validator)
     {
         $offer = Offer::query()->where('id', $id)->first();
 
@@ -126,11 +127,12 @@ class OfferController extends AdminController
                 ]);
 
                 setFlash('success', __('main.record_changed_success'));
-                redirect('/admin/offers/' . $offer->id);
-            } else {
-                setInput($request->all());
-                setFlash('danger', $validator->getErrors());
+
+                return redirect('admin/offers/' . $offer->id);
             }
+
+            setInput($request->all());
+            setFlash('danger', $validator->getErrors());
         }
 
         return view('admin/offers/edit', compact('offer'));
@@ -143,9 +145,9 @@ class OfferController extends AdminController
      * @param Request   $request
      * @param Validator $validator
      *
-     * @return View
+     * @return View|RedirectResponse
      */
-    public function reply(int $id, Request $request, Validator $validator): View
+    public function reply(int $id, Request $request, Validator $validator)
     {
         $offer = Offer::query()->where('id', $id)->first();
 
@@ -174,11 +176,12 @@ class OfferController extends AdminController
                 ]);
 
                 setFlash('success', __('offers.answer_success_added'));
-                redirect('/admin/offers/' . $offer->id);
-            } else {
-                setInput($request->all());
-                setFlash('danger', $validator->getErrors());
+
+                return redirect('admin/offers/' . $offer->id);
             }
+
+            setInput($request->all());
+            setFlash('danger', $validator->getErrors());
         }
 
         $statuses = Offer::STATUSES;
@@ -191,9 +194,9 @@ class OfferController extends AdminController
      *
      * @param Request $request
      *
-     * @return void
+     * @return RedirectResponse
      */
-    public function restatement(Request $request): void
+    public function restatement(Request $request): RedirectResponse
     {
         if (! isAdmin(User::BOSS)) {
             abort(403, __('errors.forbidden'));
@@ -207,7 +210,7 @@ class OfferController extends AdminController
             setFlash('danger', __('validator.token'));
         }
 
-        redirect('/admin/offers');
+        return redirect('admin/offers');
     }
 
     /**
@@ -216,9 +219,9 @@ class OfferController extends AdminController
      * @param Request   $request
      * @param Validator $validator
      *
-     * @return void
+     * @return RedirectResponse
      */
-    public function delete(Request $request, Validator $validator): void
+    public function delete(Request $request, Validator $validator): RedirectResponse
     {
         $page = int($request->input('page', 1));
         $del  = intar($request->input('del'));
@@ -245,6 +248,6 @@ class OfferController extends AdminController
             setFlash('danger', $validator->getErrors());
         }
 
-        redirect('/admin/offers/' . $type . '?page=' . $page);
+        return redirect('admin/offers/' . $type . '?page=' . $page);
     }
 }

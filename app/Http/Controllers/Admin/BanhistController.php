@@ -7,6 +7,7 @@ namespace App\Http\Controllers\Admin;
 use App\Classes\Validator;
 use App\Models\Banhist;
 use App\Models\User;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
 
@@ -67,9 +68,9 @@ class BanhistController extends AdminController
      * @param Request   $request
      * @param Validator $validator
      *
-     * @return void
+     * @return RedirectResponse
      */
-    public function delete(Request $request, Validator $validator): void
+    public function delete(Request $request, Validator $validator): RedirectResponse
     {
         $page  = int($request->input('page', 1));
         $del   = intar($request->input('del'));
@@ -87,9 +88,9 @@ class BanhistController extends AdminController
         }
 
         if ($login) {
-            redirect('/admin/banhists/view?user=' . $login . '&page=' . $page);
-        } else {
-            redirect('/admin/banhists?page=' . $page);
+            return redirect('admin/banhists/view?user=' . $login . '&page=' . $page);
         }
+
+        return redirect('admin/banhists?page=' . $page);
     }
 }

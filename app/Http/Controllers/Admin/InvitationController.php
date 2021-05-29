@@ -7,6 +7,7 @@ namespace App\Http\Controllers\Admin;
 use App\Classes\Validator;
 use App\Models\Invite;
 use App\Models\User;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use Illuminate\View\View;
@@ -68,9 +69,9 @@ class InvitationController extends AdminController
      * @param Request   $request
      * @param Validator $validator
      *
-     * @return View
+     * @return View|RedirectResponse
      */
-    public function create(Request $request, Validator $validator): View
+    public function create(Request $request, Validator $validator)
     {
         if ($request->isMethod('post')) {
             $keys = int($request->input('keys'));
@@ -92,11 +93,12 @@ class InvitationController extends AdminController
                 Invite::query()->insert($newKeys);
 
                 setFlash('success', __('admin.invitations.keys_success_created'));
-                redirect('/admin/invitations');
-            } else {
-                setInput($request->all());
-                setFlash('danger', $validator->getErrors());
+
+                return redirect('admin/invitations');
             }
+
+            setInput($request->all());
+            setFlash('danger', $validator->getErrors());
         }
 
         $listKeys = [1, 2, 3, 4, 5, 10, 15, 20, 30, 40, 50];
@@ -110,9 +112,9 @@ class InvitationController extends AdminController
      * @param Request   $request
      * @param Validator $validator
      *
-     * @return void
+     * @return RedirectResponse
      */
-    public function send(Request $request, Validator $validator): void
+    public function send(Request $request, Validator $validator): RedirectResponse
     {
         $userkeys = int($request->input('userkeys'));
 
@@ -145,12 +147,14 @@ class InvitationController extends AdminController
             $user->sendMessage(null, $text);
 
             setFlash('success', __('admin.invitations.keys_success_sent'));
-            redirect('/admin/invitations');
-        } else {
-            setInput($request->all());
-            setFlash('danger', $validator->getErrors());
-            redirect('/admin/invitations/create');
+
+            return redirect('admin/invitations');
         }
+
+        setInput($request->all());
+        setFlash('danger', $validator->getErrors());
+
+        return redirect('admin/invitations/create');
     }
 
     /**
@@ -159,9 +163,9 @@ class InvitationController extends AdminController
      * @param Request   $request
      * @param Validator $validator
      *
-     * @return void
+     * @return RedirectResponse
      */
-    public function mail(Request $request, Validator $validator): void
+    public function mail(Request $request, Validator $validator): RedirectResponse
     {
         $validator->equal($request->input('_token'), csrf_token(), __('validator.token'))
             ->true(isAdmin(User::BOSS), __('main.page_only_owner'));
@@ -190,12 +194,14 @@ class InvitationController extends AdminController
             }
 
             setFlash('success', __('admin.invitations.keys_success_sent') . ' (' . $users->count() . ')');
-            redirect('/admin/invitations');
-        } else {
-            setInput($request->all());
-            setFlash('danger', $validator->getErrors());
-            redirect('/admin/invitations/create');
+
+            return redirect('admin/invitations');
         }
+
+        setInput($request->all());
+        setFlash('danger', $validator->getErrors());
+
+        return redirect('admin/invitations/create');
     }
 
     /**
@@ -204,9 +210,9 @@ class InvitationController extends AdminController
      * @param Request   $request
      * @param Validator $validator
      *
-     * @return void
+     * @return RedirectResponse
      */
-    public function delete(Request $request, Validator $validator): void
+    public function delete(Request $request, Validator $validator): RedirectResponse
     {
         $page  = int($request->input('page', 1));
         $del   = intar($request->input('del'));
@@ -223,6 +229,6 @@ class InvitationController extends AdminController
             setFlash('danger', $validator->getErrors());
         }
 
-        redirect('/admin/invitations?used=' . $used . '&page=' . $page);
+        return redirect('admin/invitations?used=' . $used . '&page=' . $page);
     }
 }

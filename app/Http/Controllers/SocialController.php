@@ -10,6 +10,7 @@ use App\Models\User;
 use Exception;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\GuzzleException;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
 
@@ -37,10 +38,10 @@ class SocialController extends Controller
      *
      * @param Request $request
      *
-     * @return View
+     * @return View|RedirectResponse
      * @throws GuzzleException
      */
-    public function index(Request $request): View
+    public function index(Request $request)
     {
         if ($request->isMethod('post')) {
             $client = new Client(['timeout' => 30.0]);
@@ -73,7 +74,7 @@ class SocialController extends Controller
                     setFlash('danger', __('socials.already_binding'));
                 }
 
-                redirect('/socials');
+                return redirect('socials');
             }
 
             setFlash('danger', __('socials.failed_binding'));
@@ -93,9 +94,9 @@ class SocialController extends Controller
      * @param Request   $request
      * @param Validator $validator
      *
-     * @throws Exception
+     * @return RedirectResponse
      */
-    public function delete(int $id, Request $request, Validator $validator): void
+    public function delete(int $id, Request $request, Validator $validator): RedirectResponse
     {
         $social = Social::query()->where('user_id', $this->user->id)->find($id);
 
@@ -110,6 +111,6 @@ class SocialController extends Controller
             setFlash('danger', $validator->getErrors());
         }
 
-        redirect('/socials');
+        return redirect('socials');
     }
 }

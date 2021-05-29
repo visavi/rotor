@@ -10,6 +10,7 @@ use App\Commands\ImageClear;
 use App\Commands\RouteClear;
 use App\Commands\ViewClear;
 use App\Models\User;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
 
@@ -57,9 +58,9 @@ class CacheController extends AdminController
      *
      * @param Request $request
      *
-     * @return void
+     * @return RedirectResponse
      */
-    public function clear(Request $request): void
+    public function clear(Request $request): RedirectResponse
     {
         $type = $request->input('type');
 
@@ -82,6 +83,6 @@ class CacheController extends AdminController
             setFlash('danger', __('validator.token'));
         }
 
-        redirect('/admin/caches?type=' . $type);
+        return redirect('admin/caches?type=' . $type);
     }
 }

@@ -8,6 +8,7 @@ use App\Commands\RouteClear;
 use App\Models\Module;
 use App\Models\User;
 use Exception;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
 
@@ -62,7 +63,7 @@ class ModuleController extends AdminController
         $modulePath = MODULES . '/' . $moduleName;
 
         if (! preg_match('|^[A-Z][\w\-]+$|', $moduleName) || ! file_exists($modulePath)) {
-            abort('default', __('admin.modules.module_not_found'));
+            abort(200, __('admin.modules.module_not_found'));
         }
 
         $moduleConfig = include $modulePath . '/module.php';
@@ -89,9 +90,9 @@ class ModuleController extends AdminController
      *
      * @param Request $request
      *
-     * @return void
+     * @return RedirectResponse
      */
-    public function install(Request $request): void
+    public function install(Request $request): RedirectResponse
     {
         $moduleName = $request->input('module');
         $enable     = int($request->input('enable'));
@@ -99,7 +100,7 @@ class ModuleController extends AdminController
         $modulePath = MODULES . '/' . $moduleName;
 
         if (! preg_match('|^[A-Z][\w\-]+$|', $moduleName) || ! file_exists($modulePath)) {
-            abort('default', __('admin.modules.module_not_found'));
+            abort(200, __('admin.modules.module_not_found'));
         }
 
         /** @var Module $module */
@@ -138,7 +139,8 @@ class ModuleController extends AdminController
         }
 
         setFlash('success', $result);
-        redirect('/admin/modules/module?module=' . $moduleName);
+
+        return redirect('admin/modules/module?module=' . $moduleName);
     }
 
     /**
@@ -146,23 +148,22 @@ class ModuleController extends AdminController
      *
      * @param Request $request
      *
-     * @return void
-     * @throws Exception
+     * @return RedirectResponse
      */
-    public function uninstall(Request $request): void
+    public function uninstall(Request $request): RedirectResponse
     {
         $moduleName = $request->input('module');
         $disable    = int($request->input('disable'));
         $modulePath = MODULES . '/' . $moduleName;
 
         if (! preg_match('|^[A-Z][\w\-]+$|', $moduleName) || ! file_exists($modulePath)) {
-            abort('default', __('admin.modules.module_not_found'));
+            abort(200, __('admin.modules.module_not_found'));
         }
 
         /** @var Module $module */
         $module = Module::query()->where('name', $moduleName)->first();
         if (! $module) {
-            abort('default', __('admin.modules.module_not_found'));
+            abort(200, __('admin.modules.module_not_found'));
         }
 
         $module->deleteSymlink($modulePath);
@@ -182,6 +183,7 @@ class ModuleController extends AdminController
         }
 
         setFlash('success', $result);
-        redirect('/admin/modules/module?module=' . $moduleName);
+
+        return redirect('admin/modules/module?module=' . $moduleName);
     }
 }

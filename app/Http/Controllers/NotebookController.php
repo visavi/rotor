@@ -6,6 +6,7 @@ namespace App\Http\Controllers;
 
 use App\Classes\Validator;
 use App\Models\Notebook;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
 
@@ -45,9 +46,9 @@ class NotebookController extends Controller
      * @param Request   $request
      * @param Validator $validator
      *
-     * @return View
+     * @return View|RedirectResponse
      */
-    public function edit(Request $request, Validator $validator): View
+    public function edit(Request $request, Validator $validator)
     {
         if ($request->isMethod('post')) {
             $msg = $request->input('msg');
@@ -68,7 +69,7 @@ class NotebookController extends Controller
                 setFlash('danger', $validator->getErrors());
             }
 
-            redirect('/notebooks');
+            return redirect('notebooks');
         }
 
         return view('notebooks/edit', ['note' => $this->note]);

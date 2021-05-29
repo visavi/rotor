@@ -11,6 +11,7 @@ use App\Models\Flood;
 use App\Models\Photo;
 use Exception;
 use Illuminate\Database\Query\JoinClause;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
 
@@ -71,9 +72,9 @@ class PhotoController extends Controller
      * @param Validator $validator
      * @param Flood     $flood
      *
-     * @return View
+     * @return View|RedirectResponse
      */
-    public function create(Request $request, Validator $validator, Flood $flood): View
+    public function create(Request $request, Validator $validator, Flood $flood)
     {
         if (! $user = getUser()) {
             abort(403, __('main.not_authorized'));
@@ -116,11 +117,12 @@ class PhotoController extends Controller
                 $flood->saveState();
 
                 setFlash('success', __('photos.photo_success_uploaded'));
-                redirect('/photos/' . $photo->id);
-            } else {
-                setInput($request->all());
-                setFlash('danger', $validator->getErrors());
+
+                return redirect('photos/' . $photo->id);
             }
+
+            setInput($request->all());
+            setFlash('danger', $validator->getErrors());
         }
 
         $files = File::query()
@@ -139,9 +141,9 @@ class PhotoController extends Controller
      * @param Request   $request
      * @param Validator $validator
      *
-     * @return View
+     * @return View|RedirectResponse
      */
-    public function edit(int $id, Request $request, Validator $validator): View
+    public function edit(int $id, Request $request, Validator $validator)
     {
         $page = int($request->input('page', 1));
 
@@ -175,11 +177,11 @@ class PhotoController extends Controller
                 ]);
 
                 setFlash('success', __('photos.photo_success_edited'));
-                redirect('/photos/albums/' . $user->login . '?page=' . $page);
-            } else {
-                setInput($request->all());
-                setFlash('danger', $validator->getErrors());
+                return redirect('photos/albums/' . $user->login . '?page=' . $page);
             }
+
+            setInput($request->all());
+            setFlash('danger', $validator->getErrors());
         }
 
         $checked = $photo->closed ? ' checked' : '';
@@ -195,9 +197,9 @@ class PhotoController extends Controller
      * @param Validator $validator
      * @param Flood     $flood
      *
-     * @return View
+     * @return View|RedirectResponse
      */
-    public function comments(int $id, Request $request, Validator $validator, Flood $flood): View
+    public function comments(int $id, Request $request, Validator $validator, Flood $flood)
     {
         /** @var Photo $photo */
         $photo = Photo::query()->find($id);
@@ -239,11 +241,12 @@ class PhotoController extends Controller
                 sendNotify($msg, '/photos/comment/' . $photo->id . '/' . $comment->id, $photo->title);
 
                 setFlash('success', __('main.comment_added_success'));
-                redirect('/photos/end/' . $photo->id);
-            } else {
-                setInput($request->all());
-                setFlash('danger', $validator->getErrors());
+
+                return redirect('photos/end/' . $photo->id);
             }
+
+            setInput($request->all());
+            setFlash('danger', $validator->getErrors());
         }
 
         $comments = $photo->comments()
@@ -262,9 +265,9 @@ class PhotoController extends Controller
      * @param Request   $request
      * @param Validator $validator
      *
-     * @return View
+     * @return View|RedirectResponse
      */
-    public function editComment(int $id, int $cid, Request $request, Validator $validator): View
+    public function editComment(int $id, int $cid, Request $request, Validator $validator)
     {
         $page = int($request->input('page', 1));
 
@@ -285,11 +288,11 @@ class PhotoController extends Controller
             ->first();
 
         if (! $comment) {
-            abort('default', __('main.comment_deleted'));
+            abort(200, __('main.comment_deleted'));
         }
 
         if ($comment->created_at + 600 < SITETIME) {
-            abort('default', __('main.editing_impossible'));
+            abort(200, __('main.editing_impossible'));
         }
 
         if ($request->isMethod('post')) {
@@ -308,11 +311,12 @@ class PhotoController extends Controller
                 ]);
 
                 setFlash('success', __('main.comment_edited_success'));
-                redirect('/photos/comments/' . $photo->id . '?page=' . $page);
-            } else {
-                setInput($request->all());
-                setFlash('danger', $validator->getErrors());
+
+                return redirect('photos/comments/' . $photo->id . '?page=' . $page);
             }
+
+            setInput($request->all());
+            setFlash('danger', $validator->getErrors());
         }
         return view('photos/editcomment', compact('photo', 'comment', 'page'));
     }
@@ -324,9 +328,10 @@ class PhotoController extends Controller
      * @param Request   $request
      * @param Validator $validator
      *
+     * @return RedirectResponse
      * @throws Exception
      */
-    public function delete(int $id, Request $request, Validator $validator): void
+    public function delete(int $id, Request $request, Validator $validator): RedirectResponse
     {
         $page = int($request->input('page', 1));
 
@@ -354,15 +359,17 @@ class PhotoController extends Controller
             setFlash('danger', $validator->getErrors());
         }
 
-        redirect('/photos/albums/' . $user->login . '?page=' . $page);
+        return redirect('photos/albums/' . $user->login . '?page=' . $page);
     }
 
     /**
      * Переадресация на последнюю страницу
      *
      * @param int $id
+     *
+     * @return RedirectResponse
      */
-    public function end(int $id): void
+    public function end(int $id): RedirectResponse
     {
         /** @var Photo $photo */
         $photo = Photo::query()->find($id);
@@ -374,7 +381,7 @@ class PhotoController extends Controller
         $total = $photo->comments()->count();
 
         $end = ceil($total / setting('comments_per_page'));
-        redirect('/photos/comments/' . $photo->id . '?page=' . $end);
+        return redirect('photos/comments/' . $photo->id . '?page=' . $end);
     }
 
     /**
@@ -497,8 +504,10 @@ class PhotoController extends Controller
      *
      * @param int $id
      * @param int $cid
+     *
+     * @return RedirectResponse
      */
-    public function viewComment(int $id, int $cid): void
+    public function viewComment(int $id, int $cid): RedirectResponse
     {
         /** @var Photo $photo */
         $photo = Photo::query()->find($id);
@@ -513,6 +522,7 @@ class PhotoController extends Controller
             ->count();
 
         $end = ceil($total / setting('comments_per_page'));
-        redirect('/photos/comments/' . $photo->id . '?page=' . $end . '#comment_' . $cid);
+
+        return redirect('photos/comments/' . $photo->id . '?page=' . $end . '#comment_' . $cid);
     }
 }

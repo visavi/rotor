@@ -7,6 +7,7 @@ namespace App\Http\Controllers;
 use App\Classes\Validator;
 use App\Models\Transfer;
 use App\Models\User;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
@@ -51,10 +52,10 @@ class TransferController extends Controller
      * @param Request   $request
      * @param Validator $validator
      *
-     * @return void
+     * @return RedirectResponse
      * @throws Throwable
      */
-    public function send(Request $request, Validator $validator): void
+    public function send(Request $request, Validator $validator): RedirectResponse
     {
         $money = int($request->input('money'));
         $msg   = $request->input('msg');
@@ -98,6 +99,6 @@ class TransferController extends Controller
             setFlash('danger', $validator->getErrors());
         }
 
-        redirect('/transfers');
+        return redirect('transfers');
     }
 }

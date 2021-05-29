@@ -9,6 +9,7 @@ use App\Models\News;
 use App\Models\Setting;
 use App\Models\User;
 use Exception;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
 
@@ -48,9 +49,9 @@ class NewsController extends AdminController
      * @param Request   $request
      * @param Validator $validator
      *
-     * @return View
+     * @return View|RedirectResponse
      */
-    public function edit(int $id, Request $request, Validator $validator): View
+    public function edit(int $id, Request $request, Validator $validator)
     {
         /** @var News $news */
         $news = News::query()->find($id);
@@ -95,11 +96,12 @@ class NewsController extends AdminController
 
                 clearCache(['statNews', 'lastNews']);
                 setFlash('success', __('news.news_success_edited'));
-                redirect('/admin/news/edit/' . $news->id . '?page=' . $page);
-            } else {
-                setInput($request->all());
-                setFlash('danger', $validator->getErrors());
+
+                return redirect('admin/news/edit/' . $news->id . '?page=' . $page);
             }
+
+            setInput($request->all());
+            setFlash('danger', $validator->getErrors());
         }
 
         return view('admin/news/edit', compact('news', 'page'));
@@ -111,9 +113,9 @@ class NewsController extends AdminController
      * @param Request   $request
      * @param Validator $validator
      *
-     * @return View
+     * @return View|RedirectResponse
      */
-    public function create(Request $request, Validator $validator): View
+    public function create(Request $request, Validator $validator)
     {
         if ($request->isMethod('post')) {
             $title  = $request->input('title');
@@ -157,11 +159,12 @@ class NewsController extends AdminController
 
                 clearCache(['statNews', 'lastNews']);
                 setFlash('success', __('news.news_success_added'));
-                redirect('/admin/news/edit/' . $news->id);
-            } else {
-                setInput($request->all());
-                setFlash('danger', $validator->getErrors());
+
+                return redirect('admin/news/edit/' . $news->id);
             }
+
+            setInput($request->all());
+            setFlash('danger', $validator->getErrors());
         }
 
         return view('admin/news/create');
@@ -172,9 +175,9 @@ class NewsController extends AdminController
      *
      * @param Request $request
      *
-     * @return void
+     * @return RedirectResponse
      */
-    public function restatement(Request $request): void
+    public function restatement(Request $request): RedirectResponse
     {
         if (! isAdmin(User::BOSS)) {
             abort(403, __('errors.forbidden'));
@@ -188,7 +191,7 @@ class NewsController extends AdminController
             setFlash('danger', __('validator.token'));
         }
 
-        redirect('/admin/news');
+        return redirect('admin/news');
     }
 
     /**
@@ -198,10 +201,9 @@ class NewsController extends AdminController
      * @param Request   $request
      * @param Validator $validator
      *
-     * @return void
-     * @throws Exception
+     * @return RedirectResponse
      */
-    public function delete(int $id, Request $request, Validator $validator): void
+    public function delete(int $id, Request $request, Validator $validator): RedirectResponse
     {
         $page = int($request->input('page', 1));
 
@@ -225,6 +227,6 @@ class NewsController extends AdminController
             setFlash('danger', $validator->getErrors());
         }
 
-        redirect('/admin/news?page=' . $page);
+        return redirect('admin/news?page=' . $page);
     }
 }

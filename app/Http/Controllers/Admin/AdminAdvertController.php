@@ -6,6 +6,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Classes\Validator;
 use App\Models\AdminAdvert;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
 
@@ -17,9 +18,9 @@ class AdminAdvertController extends AdminController
      * @param Request   $request
      * @param Validator $validator
      *
-     * @return View
+     * @return View|RedirectResponse
      */
-    public function index(Request $request, Validator $validator): View
+    public function index(Request $request, Validator $validator)
     {
         $advert = AdminAdvert::query()
             ->where('user_id', getUser('id'))
@@ -38,7 +39,7 @@ class AdminAdvertController extends AdminController
                 ->regex($color, '|^#+[A-f0-9]{6}$|', ['color' => __('validator.color')], false);
 
             if ($validator->isValid()) {
-                $advert = AdminAdvert::query()
+                AdminAdvert::query()
                     ->updateOrCreate([], [
                         'site'  => $site,
                         'name'  => $name,
@@ -51,11 +52,12 @@ class AdminAdvertController extends AdminController
 
                 clearCache('adminAdverts');
                 setFlash('success', __('main.record_saved_success'));
-                redirect('/admin/admin-adverts');
-            } else {
-                setInput($request->all());
-                setFlash('danger', $validator->getErrors());
+
+                return redirect('admin/admin-adverts');
             }
+
+            setInput($request->all());
+            setFlash('danger', $validator->getErrors());
         }
 
         return view('admin/admin-adverts/index', compact('advert'));

@@ -6,6 +6,7 @@ namespace App\Http\Controllers;
 
 use App\Classes\Validator;
 use App\Models\User;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use Illuminate\View\View;
@@ -18,9 +19,9 @@ class MailController extends Controller
      * @param Request   $request
      * @param Validator $validator
      *
-     * @return View
+     * @return View|RedirectResponse
      */
-    public function index(Request $request, Validator $validator): View
+    public function index(Request $request, Validator $validator)
     {
         if ($request->isMethod('post')) {
             $message = $request->input('message');
@@ -55,11 +56,12 @@ class MailController extends Controller
                 } else {
                     setFlash('danger', __('mails.failed_sent'));
                 }
-                redirect('/');
-            } else {
-                setInput($request->all());
-                setFlash('danger', $validator->getErrors());
+
+                return redirect('/');
             }
+
+            setInput($request->all());
+            setFlash('danger', $validator->getErrors());
         }
 
         return view('mails/index');
@@ -71,13 +73,14 @@ class MailController extends Controller
      * @param Request   $request
      * @param Validator $validator
      *
-     * @return View
+     * @return View|RedirectResponse
      */
-    public function recovery(Request $request, Validator $validator): View
+    public function recovery(Request $request, Validator $validator)
     {
         if (getUser()) {
             setFlash('danger', __('main.already_authorized'));
-            redirect('/');
+
+            return redirect('/');
         }
 
         $cookieLogin = $_COOKIE['login'] ?? '';
@@ -85,7 +88,7 @@ class MailController extends Controller
         if ($request->isMethod('post')) {
             $user = getUserByLoginOrEmail($request->input('user'));
             if (! $user) {
-                abort('default', __('validator.user'));
+                abort(200, __('validator.user'));
             }
 
             $validator->true(captchaVerify(), ['protect' => __('validator.captcha')])
@@ -108,11 +111,12 @@ class MailController extends Controller
                 sendMail($user->email, $subject, $body);
 
                 setFlash('success', __('mails.recovery_instructions', ['email' => hideMail($user->email)]));
-                redirect('/login');
-            } else {
-                setInput($request->all());
-                setFlash('danger', $validator->getErrors());
+
+                return redirect('login');
             }
+
+            setInput($request->all());
+            setFlash('danger', $validator->getErrors());
         }
 
         return view('mails/recovery', compact('cookieLogin'));
@@ -124,13 +128,14 @@ class MailController extends Controller
      * @param Request   $request
      * @param Validator $validator
      *
-     * @return View|void
+     * @return View|RedirectResponse
      */
-    public function restore(Request $request, Validator $validator): ?View
+    public function restore(Request $request, Validator $validator)
     {
         if (getUser()) {
             setFlash('danger', __('main.already_authorized'));
-            redirect('/');
+
+            return redirect('/');
         }
 
         $key = $request->input('key');
@@ -138,7 +143,7 @@ class MailController extends Controller
         /** @var User $user */
         $user = User::query()->where('keypasswd', $key)->first();
         if (! $user) {
-            abort('default', __('mails.secret_key_invalid'));
+            abort(200, __('mails.secret_key_invalid'));
         }
 
         $validator->notEmpty($key, __('mails.secret_key_missing'))
@@ -166,32 +171,35 @@ class MailController extends Controller
         }
 
         setFlash('danger', current($validator->getErrors()));
-        redirect('/');
+
+        return redirect('/');
     }
 
     /**
      * Отписка от рассылки
      *
      * @param Request $request
+     *
+     * @return RedirectResponse
      */
-    public function unsubscribe(Request $request): void
+    public function unsubscribe(Request $request): RedirectResponse
     {
         $key = $request->input('key');
 
         if (! $key) {
-            abort('default', __('mails.secret_key_missing'));
+            abort(200, __('mails.secret_key_missing'));
         }
 
         $user = User::query()->where('subscribe', $key)->first();
 
         if (! $user) {
-            abort('default', __('mails.secret_key_expired'));
+            abort(200, __('mails.secret_key_expired'));
         }
 
         $user->subscribe = null;
         $user->save();
 
         setFlash('success', __('mails.success_unsubscribed'));
-        redirect('/');
+        return redirect('/');
     }
 }
