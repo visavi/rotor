@@ -28,12 +28,6 @@ class ErrorController extends AdminController
      */
     public function __construct()
     {
-        parent::__construct();
-
-        if (! isAdmin(User::ADMIN)) {
-            abort(403, __('errors.forbidden'));
-        }
-
         $this->code  = int(request()->input('code', 404));
         $this->lists = [
             403 => __('admin.errors.errors', ['code' => 403]),

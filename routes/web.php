@@ -344,125 +344,23 @@ Route::get('/files/{page?}', [\App\Http\Controllers\FileController::class, 'inde
 
 /* Админ-панель */
 Route::group(['prefix' => 'admin', 'middleware' => 'check.admin'], function () {
+
     Route::get('/', [\App\Http\Controllers\Admin\AdminController::class, 'main']);
-    Route::get('/loads', [\App\Http\Controllers\Admin\LoadController::class, 'index']);
-    Route::post('/loads/create', [\App\Http\Controllers\Admin\LoadController::class, 'create']);
-    Route::match(['get', 'post'], '/loads/edit/{id}', [\App\Http\Controllers\Admin\LoadController::class, 'edit']);
-    Route::get('/loads/delete/{id}', [\App\Http\Controllers\Admin\LoadController::class, 'delete']);
-    Route::get('/loads/restatement', [\App\Http\Controllers\Admin\LoadController::class, 'restatement']);
-    Route::get('/loads/{id}', [\App\Http\Controllers\Admin\LoadController::class, 'load']);
-    Route::match(['get', 'post'], '/downs/edit/{id}', [\App\Http\Controllers\Admin\LoadController::class, 'editDown']);
-    Route::match(['get', 'post'], '/downs/delete/{id}', [\App\Http\Controllers\Admin\LoadController::class, 'deleteDown']);
-    Route::get('/downs/delete/{id}/{fid}', [\App\Http\Controllers\Admin\LoadController::class, 'deleteFile'])->whereNumber('fid');
-    Route::get('/downs/new', [\App\Http\Controllers\Admin\LoadController::class, 'new']);
-    Route::get('/downs/publish/{id}', [\App\Http\Controllers\Admin\LoadController::class, 'publish']);
-    Route::get('/spam', [\App\Http\Controllers\Admin\SpamController::class, 'index']);
-    Route::post('/spam/delete', [\App\Http\Controllers\Admin\SpamController::class, 'delete']);
-    Route::get('/errors', [\App\Http\Controllers\Admin\ErrorController::class, 'index']);
-    Route::get('/errors/clear', [\App\Http\Controllers\Admin\ErrorController::class, 'clear']);
-    Route::match(['get', 'post'], '/antimat', [\App\Http\Controllers\Admin\AntimatController::class, 'index']);
-    Route::get('/antimat/delete', [\App\Http\Controllers\Admin\AntimatController::class, 'delete']);
-    Route::get('/antimat/clear', [\App\Http\Controllers\Admin\AntimatController::class, 'clear']);
-    Route::get('/status', [\App\Http\Controllers\Admin\StatusController::class, 'index']);
-    Route::match(['get', 'post'], '/status/create', [\App\Http\Controllers\Admin\StatusController::class, 'create']);
-    Route::match(['get', 'post'], '/status/edit', [\App\Http\Controllers\Admin\StatusController::class, 'edit']);
-    Route::get('/status/delete', [\App\Http\Controllers\Admin\StatusController::class, 'delete']);
-    Route::get('/rules', [\App\Http\Controllers\Admin\RuleController::class, 'index']);
-    Route::match(['get', 'post'], '/rules/edit', [\App\Http\Controllers\Admin\RuleController::class, 'edit']);
     Route::get('/upgrade', [\App\Http\Controllers\Admin\AdminController::class, 'upgrade']);
-    Route::get('/phpinfo', [\App\Http\Controllers\Admin\AdminController::class, 'phpinfo']);
-    Route::match(['get', 'post'], '/settings', [\App\Http\Controllers\Admin\SettingController::class, 'index']);
-    Route::get('/caches', [\App\Http\Controllers\Admin\CacheController::class, 'index']);
-    Route::post('/caches/clear', [\App\Http\Controllers\Admin\CacheController::class, 'clear']);
-    Route::get('/backups', [\App\Http\Controllers\Admin\BackupController::class, 'index']);
-    Route::match(['get', 'post'], '/backups/create', [\App\Http\Controllers\Admin\BackupController::class, 'create']);
-    Route::get('/backups/delete', [\App\Http\Controllers\Admin\BackupController::class, 'delete']);
-    Route::match(['get', 'post'], '/checkers', [\App\Http\Controllers\Admin\CheckerController::class, 'index']);
-    Route::match(['get', 'post'], '/checkers/scan', [\App\Http\Controllers\Admin\CheckerController::class, 'scan']);
-    Route::match(['get', 'post'], '/delivery', [\App\Http\Controllers\Admin\DeliveryController::class, 'index']);
-    Route::get('/logs', [\App\Http\Controllers\Admin\LogController::class, 'index']);
-    Route::get('/logs/clear', [\App\Http\Controllers\Admin\LogController::class, 'clear']);
-    Route::get('/notices', [\App\Http\Controllers\Admin\NoticeController::class, 'index']);
-    Route::match(['get', 'post'], '/notices/create', [\App\Http\Controllers\Admin\NoticeController::class, 'create']);
-    Route::match(['get', 'post'], '/notices/edit/{id}', [\App\Http\Controllers\Admin\NoticeController::class, 'edit']);
-    Route::get('/notices/delete/{id}', [\App\Http\Controllers\Admin\NoticeController::class, 'delete']);
-    Route::match(['get', 'post'], '/delusers', [\App\Http\Controllers\Admin\DelUserController::class, 'index']);
-    Route::post('/delusers/clear', [\App\Http\Controllers\Admin\DelUserController::class, 'clear']);
-    Route::get('/files', [\App\Http\Controllers\Admin\FileController::class, 'index']);
-    Route::match(['get', 'post'], '/files/edit', [\App\Http\Controllers\Admin\FileController::class, 'edit']);
-    Route::match(['get', 'post'], '/files/create', [\App\Http\Controllers\Admin\FileController::class, 'create']);
-    Route::get('/files/delete', [\App\Http\Controllers\Admin\FileController::class, 'delete']);
-    Route::get('/stickers', [\App\Http\Controllers\Admin\StickerController::class, 'index']);
-    Route::get('/stickers/{id}', [\App\Http\Controllers\Admin\StickerController::class, 'category']);
-    Route::post('/stickers/create', [\App\Http\Controllers\Admin\StickerController::class, 'create']);
-    Route::match(['get', 'post'], '/stickers/edit/{id}', [\App\Http\Controllers\Admin\StickerController::class, 'edit']);
-    Route::get('/stickers/delete/{id}', [\App\Http\Controllers\Admin\StickerController::class, 'delete']);
-    Route::match(['get', 'post'], '/stickers/sticker/create', [\App\Http\Controllers\Admin\StickerController::class, 'createSticker']);
-    Route::match(['get', 'post'], '/stickers/sticker/edit/{id}', [\App\Http\Controllers\Admin\StickerController::class, 'editSticker']);
-    Route::get('/stickers/sticker/delete/{id}', [\App\Http\Controllers\Admin\StickerController::class, 'deleteSticker']);
-    Route::match(['get', 'post'], '/ipbans', [\App\Http\Controllers\Admin\IpBanController::class, 'index']);
-    Route::post('/ipbans/delete', [\App\Http\Controllers\Admin\IpBanController::class, 'delete']);
-    Route::get('/ipbans/clear', [\App\Http\Controllers\Admin\IpBanController::class, 'clear']);
-    Route::match(['get', 'post'], '/blacklists', [\App\Http\Controllers\Admin\BlacklistController::class, 'index']);
-    Route::post('/blacklists/delete', [\App\Http\Controllers\Admin\BlacklistController::class, 'delete']);
-    Route::get('/news', [\App\Http\Controllers\Admin\NewsController::class, 'index']);
-    Route::match(['get', 'post'], '/news/edit/{id}', [\App\Http\Controllers\Admin\NewsController::class, 'edit']);
-    Route::match(['get', 'post'], '/news/create', [\App\Http\Controllers\Admin\NewsController::class, 'create']);
-    Route::get('/news/restatement', [\App\Http\Controllers\Admin\NewsController::class, 'restatement']);
-    Route::get('/news/delete/{id}', [\App\Http\Controllers\Admin\NewsController::class, 'delete']);
+
+    /* Админ-чат */
+    Route::match(['get', 'post'], '/chats', [\App\Http\Controllers\Admin\ChatController::class, 'index']);
+    Route::match(['get', 'post'], '/chats/edit/{id}', [\App\Http\Controllers\Admin\ChatController::class, 'edit']);
+    Route::get('/chats/clear', [\App\Http\Controllers\Admin\ChatController::class, 'clear']);
+
+    /* Гостевая */
     Route::get('/guestbook', [\App\Http\Controllers\Admin\GuestbookController::class, 'index']);
     Route::match(['get', 'post'], '/guestbook/edit/{id}', [\App\Http\Controllers\Admin\GuestbookController::class, 'edit']);
     Route::match(['get', 'post'], '/guestbook/reply/{id}', [\App\Http\Controllers\Admin\GuestbookController::class, 'reply']);
     Route::post('/guestbook/delete', [\App\Http\Controllers\Admin\GuestbookController::class, 'delete']);
     Route::get('/guestbook/clear', [\App\Http\Controllers\Admin\GuestbookController::class, 'clear']);
-    Route::get('/transfers', [\App\Http\Controllers\Admin\TransferController::class, 'index']);
-    Route::get('/transfers/view', [\App\Http\Controllers\Admin\TransferController::class, 'view']);
-    Route::get('/users', [\App\Http\Controllers\Admin\UserController::class, 'index']);
-    Route::get('/users/search', [\App\Http\Controllers\Admin\UserController::class, 'search']);
-    Route::match(['get', 'post'], '/users/edit', [\App\Http\Controllers\Admin\UserController::class, 'edit']);
-    Route::match(['get', 'post'], '/users/delete', [\App\Http\Controllers\Admin\UserController::class, 'delete']);
-    Route::get('/invitations', [\App\Http\Controllers\Admin\InvitationController::class, 'index']);
-    Route::match(['get', 'post'], '/invitations/create', [\App\Http\Controllers\Admin\InvitationController::class, 'create']);
-    Route::get('/invitations/keys', [\App\Http\Controllers\Admin\InvitationController::class, 'keys']);
-    Route::post('/invitations/send', [\App\Http\Controllers\Admin\InvitationController::class, 'send']);
-    Route::post('/invitations/mail', [\App\Http\Controllers\Admin\InvitationController::class, 'mail']);
-    Route::post('/invitations/delete', [\App\Http\Controllers\Admin\InvitationController::class, 'delete']);
-    Route::match(['get', 'post'], '/reglists', [\App\Http\Controllers\Admin\ReglistController::class, 'index']);
-    Route::match(['get', 'post'], '/chats', [\App\Http\Controllers\Admin\ChatController::class, 'index']);
-    Route::match(['get', 'post'], '/chats/edit/{id}', [\App\Http\Controllers\Admin\ChatController::class, 'edit']);
-    Route::get('/chats/clear', [\App\Http\Controllers\Admin\ChatController::class, 'clear']);
-    Route::get('/banlists', [\App\Http\Controllers\Admin\BanlistController::class, 'index']);
-    Route::get('/bans', [\App\Http\Controllers\Admin\BanController::class, 'index']);
-    Route::match(['get', 'post'], '/bans/edit', [\App\Http\Controllers\Admin\BanController::class, 'edit']);
-    Route::match(['get', 'post'], '/bans/change', [\App\Http\Controllers\Admin\BanController::class, 'change']);
-    Route::get('/bans/unban', [\App\Http\Controllers\Admin\BanController::class, 'unban']);
-    Route::get('/banhists', [\App\Http\Controllers\Admin\BanhistController::class, 'index']);
-    Route::get('/banhists/view', [\App\Http\Controllers\Admin\BanhistController::class, 'view']);
-    Route::post('/banhists/delete', [\App\Http\Controllers\Admin\BanhistController::class, 'delete']);
-    Route::get('/votes', [\App\Http\Controllers\Admin\VoteController::class, 'index']);
-    Route::get('/votes/history', [\App\Http\Controllers\Admin\VoteController::class, 'history']);
-    Route::match(['get', 'post'], '/votes/edit/{id}', [\App\Http\Controllers\Admin\VoteController::class, 'edit']);
-    Route::get('/votes/close/{id}', [\App\Http\Controllers\Admin\VoteController::class, 'close']);
-    Route::get('/votes/delete/{id}', [\App\Http\Controllers\Admin\VoteController::class, 'delete']);
-    Route::get('/votes/restatement', [\App\Http\Controllers\Admin\VoteController::class, 'restatement']);
-    Route::get('/offers/{type?}', [\App\Http\Controllers\Admin\OfferController::class, 'index'])->where('type', 'offer|issue');
-    Route::get('/offers/{id}', [\App\Http\Controllers\Admin\OfferController::class, 'view']);
-    Route::match(['get', 'post'], '/offers/edit/{id}', [\App\Http\Controllers\Admin\OfferController::class, 'edit']);
-    Route::match(['get', 'post'], '/offers/reply/{id}', [\App\Http\Controllers\Admin\OfferController::class, 'reply']);
-    Route::get('/offers/restatement', [\App\Http\Controllers\Admin\OfferController::class, 'restatement']);
-    Route::match(['get', 'post'], '/offers/delete', [\App\Http\Controllers\Admin\OfferController::class, 'delete']);
-    Route::get('/photos', [\App\Http\Controllers\Admin\PhotoController::class, 'index']);
-    Route::match(['get', 'post'], '/photos/edit/{id}', [\App\Http\Controllers\Admin\PhotoController::class, 'edit']);
-    Route::get('/photos/restatement', [\App\Http\Controllers\Admin\PhotoController::class, 'restatement']);
-    Route::get('/photos/delete/{id}', [\App\Http\Controllers\Admin\PhotoController::class, 'delete']);
-    Route::match(['get', 'post'], '/admin-adverts', [\App\Http\Controllers\Admin\AdminAdvertController::class, 'index']);
-    Route::get('/adverts', [\App\Http\Controllers\Admin\AdvertController::class, 'index']);
-    Route::match(['get', 'post'], '/adverts/edit/{id}', [\App\Http\Controllers\Admin\AdvertController::class, 'edit']);
-    Route::post('/adverts/delete', [\App\Http\Controllers\Admin\AdvertController::class, 'delete']);
-    Route::get('/paid-adverts', [\App\Http\Controllers\Admin\PaidAdvertController::class, 'index']);
-    Route::match(['get', 'post'], '/paid-adverts/create', [\App\Http\Controllers\Admin\PaidAdvertController::class, 'create']);
-    Route::match(['get', 'post'], '/paid-adverts/edit/{id}', [\App\Http\Controllers\Admin\PaidAdvertController::class, 'edit']);
-    Route::get('/paid-adverts/delete/{id}', [\App\Http\Controllers\Admin\PaidAdvertController::class, 'delete']);
+
+    /* Форум */
     Route::get('/forums', [\App\Http\Controllers\Admin\ForumController::class, 'index']);
     Route::post('/forums/create', [\App\Http\Controllers\Admin\ForumController::class, 'create']);
     Route::match(['get', 'post'], '/forums/edit/{id}', [\App\Http\Controllers\Admin\ForumController::class, 'edit']);
@@ -477,6 +375,14 @@ Route::group(['prefix' => 'admin', 'middleware' => 'check.admin'], function () {
     Route::match(['get', 'post'], '/posts/edit/{id}', [\App\Http\Controllers\Admin\ForumController::class, 'editPost']);
     Route::post('/posts/delete', [\App\Http\Controllers\Admin\ForumController::class, 'deletePosts']);
     Route::get('/topics/end/{id}', [\App\Http\Controllers\Admin\ForumController::class, 'end']);
+
+    /* Галерея */
+    Route::get('/photos', [\App\Http\Controllers\Admin\PhotoController::class, 'index']);
+    Route::match(['get', 'post'], '/photos/edit/{id}', [\App\Http\Controllers\Admin\PhotoController::class, 'edit']);
+    Route::get('/photos/restatement', [\App\Http\Controllers\Admin\PhotoController::class, 'restatement']);
+    Route::get('/photos/delete/{id}', [\App\Http\Controllers\Admin\PhotoController::class, 'delete']);
+
+    /* Блоги */
     Route::get('/blogs', [\App\Http\Controllers\Admin\ArticleController::class, 'index']);
     Route::post('/blogs/create', [\App\Http\Controllers\Admin\ArticleController::class, 'create']);
     Route::get('/blogs/restatement', [\App\Http\Controllers\Admin\ArticleController::class, 'restatement']);
@@ -497,11 +403,186 @@ Route::group(['prefix' => 'admin', 'middleware' => 'check.admin'], function () {
     Route::match(['get', 'post'], '/boards/edit/{id}', [\App\Http\Controllers\Admin\BoardController::class, 'edit']);
     Route::get('/boards/delete/{id}', [\App\Http\Controllers\Admin\BoardController::class, 'delete']);
 
-    /* Модули */
-    Route::get('/modules', [\App\Http\Controllers\Admin\ModuleController::class, 'index']);
-    Route::get('/modules/module', [\App\Http\Controllers\Admin\ModuleController::class, 'module']);
-    Route::get('/modules/install', [\App\Http\Controllers\Admin\ModuleController::class, 'install']);
-    Route::get('/modules/uninstall', [\App\Http\Controllers\Admin\ModuleController::class, 'uninstall']);
+    /* Модер */
+    Route::group(['middleware' => 'check.admin:moder'], function () {
+        /* Жалобы */
+        Route::get('/spam', [\App\Http\Controllers\Admin\SpamController::class, 'index']);
+        Route::post('/spam/delete', [\App\Http\Controllers\Admin\SpamController::class, 'delete']);
+
+        /* Бан / разбан */
+        Route::get('/bans', [\App\Http\Controllers\Admin\BanController::class, 'index']);
+        Route::match(['get', 'post'], '/bans/edit', [\App\Http\Controllers\Admin\BanController::class, 'edit']);
+        Route::match(['get', 'post'], '/bans/change', [\App\Http\Controllers\Admin\BanController::class, 'change']);
+        Route::get('/bans/unban', [\App\Http\Controllers\Admin\BanController::class, 'unban']);
+
+        /* Забаненные */
+        Route::get('/banlists', [\App\Http\Controllers\Admin\BanlistController::class, 'index']);
+
+        /* Ожидающие */
+        Route::match(['get', 'post'], '/reglists', [\App\Http\Controllers\Admin\ReglistController::class, 'index']);
+
+        /* Голосования */
+        Route::get('/votes', [\App\Http\Controllers\Admin\VoteController::class, 'index']);
+        Route::get('/votes/history', [\App\Http\Controllers\Admin\VoteController::class, 'history']);
+        Route::match(['get', 'post'], '/votes/edit/{id}', [\App\Http\Controllers\Admin\VoteController::class, 'edit']);
+        Route::get('/votes/close/{id}', [\App\Http\Controllers\Admin\VoteController::class, 'close']);
+        Route::get('/votes/delete/{id}', [\App\Http\Controllers\Admin\VoteController::class, 'delete']);
+        Route::get('/votes/restatement', [\App\Http\Controllers\Admin\VoteController::class, 'restatement']);
+
+        /* Антимат */
+        Route::match(['get', 'post'], '/antimat', [\App\Http\Controllers\Admin\AntimatController::class, 'index']);
+        Route::get('/antimat/delete', [\App\Http\Controllers\Admin\AntimatController::class, 'delete']);
+        Route::get('/antimat/clear', [\App\Http\Controllers\Admin\AntimatController::class, 'clear']);
+
+        /* История банов */
+        Route::get('/banhists', [\App\Http\Controllers\Admin\BanhistController::class, 'index']);
+        Route::get('/banhists/view', [\App\Http\Controllers\Admin\BanhistController::class, 'view']);
+        Route::post('/banhists/delete', [\App\Http\Controllers\Admin\BanhistController::class, 'delete']);
+
+        /* Приглашения */
+        Route::get('/invitations', [\App\Http\Controllers\Admin\InvitationController::class, 'index']);
+        Route::match(['get', 'post'], '/invitations/create', [\App\Http\Controllers\Admin\InvitationController::class, 'create']);
+        Route::get('/invitations/keys', [\App\Http\Controllers\Admin\InvitationController::class, 'keys']);
+        Route::post('/invitations/send', [\App\Http\Controllers\Admin\InvitationController::class, 'send']);
+        Route::post('/invitations/mail', [\App\Http\Controllers\Admin\InvitationController::class, 'mail']);
+        Route::post('/invitations/delete', [\App\Http\Controllers\Admin\InvitationController::class, 'delete']);
+
+        /* Денежный переводы*/
+        Route::get('/transfers', [\App\Http\Controllers\Admin\TransferController::class, 'index']);
+        Route::get('/transfers/view', [\App\Http\Controllers\Admin\TransferController::class, 'view']);
+    });
+
+    /* Админ */
+    Route::group(['middleware' => 'check.admin:admin'], function () {
+        /* Правила */
+        Route::get('/rules', [\App\Http\Controllers\Admin\RuleController::class, 'index']);
+        Route::match(['get', 'post'], '/rules/edit', [\App\Http\Controllers\Admin\RuleController::class, 'edit']);
+
+        /* Новости */
+        Route::get('/news', [\App\Http\Controllers\Admin\NewsController::class, 'index']);
+        Route::match(['get', 'post'], '/news/edit/{id}', [\App\Http\Controllers\Admin\NewsController::class, 'edit']);
+        Route::match(['get', 'post'], '/news/create', [\App\Http\Controllers\Admin\NewsController::class, 'create']);
+        Route::get('/news/restatement', [\App\Http\Controllers\Admin\NewsController::class, 'restatement']);
+        Route::get('/news/delete/{id}', [\App\Http\Controllers\Admin\NewsController::class, 'delete']);
+
+
+        /* IP-бан */
+        Route::match(['get', 'post'], '/ipbans', [\App\Http\Controllers\Admin\IpBanController::class, 'index']);
+        Route::post('/ipbans/delete', [\App\Http\Controllers\Admin\IpBanController::class, 'delete']);
+        Route::get('/ipbans/clear', [\App\Http\Controllers\Admin\IpBanController::class, 'clear']);
+
+        /* PHP-info */
+        Route::get('/phpinfo', [\App\Http\Controllers\Admin\AdminController::class, 'phpinfo']);
+
+        /* Загрузки */
+        Route::get('/loads', [\App\Http\Controllers\Admin\LoadController::class, 'index']);
+        Route::post('/loads/create', [\App\Http\Controllers\Admin\LoadController::class, 'create']);
+        Route::match(['get', 'post'], '/loads/edit/{id}', [\App\Http\Controllers\Admin\LoadController::class, 'edit']);
+        Route::get('/loads/delete/{id}', [\App\Http\Controllers\Admin\LoadController::class, 'delete']);
+        Route::get('/loads/restatement', [\App\Http\Controllers\Admin\LoadController::class, 'restatement']);
+        Route::get('/loads/{id}', [\App\Http\Controllers\Admin\LoadController::class, 'load']);
+        Route::match(['get', 'post'], '/downs/edit/{id}', [\App\Http\Controllers\Admin\LoadController::class, 'editDown']);
+        Route::match(['get', 'post'], '/downs/delete/{id}', [\App\Http\Controllers\Admin\LoadController::class, 'deleteDown']);
+        Route::get('/downs/delete/{id}/{fid}', [\App\Http\Controllers\Admin\LoadController::class, 'deleteFile'])->whereNumber('fid');
+        Route::get('/downs/new', [\App\Http\Controllers\Admin\LoadController::class, 'new']);
+        Route::get('/downs/publish/{id}', [\App\Http\Controllers\Admin\LoadController::class, 'publish']);
+
+        /* Ошибки */
+        Route::get('/errors', [\App\Http\Controllers\Admin\ErrorController::class, 'index']);
+        Route::get('/errors/clear', [\App\Http\Controllers\Admin\ErrorController::class, 'clear']);
+
+        /* Черный список */
+        Route::match(['get', 'post'], '/blacklists', [\App\Http\Controllers\Admin\BlacklistController::class, 'index']);
+        Route::post('/blacklists/delete', [\App\Http\Controllers\Admin\BlacklistController::class, 'delete']);
+
+        /* Предложения / проблемы */
+        Route::get('/offers/{type?}', [\App\Http\Controllers\Admin\OfferController::class, 'index'])->where('type', 'offer|issue');
+        Route::get('/offers/{id}', [\App\Http\Controllers\Admin\OfferController::class, 'view']);
+        Route::match(['get', 'post'], '/offers/edit/{id}', [\App\Http\Controllers\Admin\OfferController::class, 'edit']);
+        Route::match(['get', 'post'], '/offers/reply/{id}', [\App\Http\Controllers\Admin\OfferController::class, 'reply']);
+        Route::get('/offers/restatement', [\App\Http\Controllers\Admin\OfferController::class, 'restatement']);
+        Route::match(['get', 'post'], '/offers/delete', [\App\Http\Controllers\Admin\OfferController::class, 'delete']);
+
+        /* Стикеры */
+        Route::get('/stickers', [\App\Http\Controllers\Admin\StickerController::class, 'index']);
+        Route::get('/stickers/{id}', [\App\Http\Controllers\Admin\StickerController::class, 'category']);
+        Route::post('/stickers/create', [\App\Http\Controllers\Admin\StickerController::class, 'create']);
+        Route::match(['get', 'post'], '/stickers/edit/{id}', [\App\Http\Controllers\Admin\StickerController::class, 'edit']);
+        Route::get('/stickers/delete/{id}', [\App\Http\Controllers\Admin\StickerController::class, 'delete']);
+        Route::match(['get', 'post'], '/stickers/sticker/create', [\App\Http\Controllers\Admin\StickerController::class, 'createSticker']);
+        Route::match(['get', 'post'], '/stickers/sticker/edit/{id}', [\App\Http\Controllers\Admin\StickerController::class, 'editSticker']);
+        Route::get('/stickers/sticker/delete/{id}', [\App\Http\Controllers\Admin\StickerController::class, 'deleteSticker']);
+
+        /* Статусы */
+        Route::get('/status', [\App\Http\Controllers\Admin\StatusController::class, 'index']);
+        Route::match(['get', 'post'], '/status/create', [\App\Http\Controllers\Admin\StatusController::class, 'create']);
+        Route::match(['get', 'post'], '/status/edit', [\App\Http\Controllers\Admin\StatusController::class, 'edit']);
+        Route::get('/status/delete', [\App\Http\Controllers\Admin\StatusController::class, 'delete']);
+    });
+
+    /* Босс */
+    Route::group(['middleware' => 'check.admin:boss'], function () {
+        /* Настройки */
+        Route::match(['get', 'post'], '/settings', [\App\Http\Controllers\Admin\SettingController::class, 'index']);
+
+        /* Пользователи */
+        Route::get('/users', [\App\Http\Controllers\Admin\UserController::class, 'index']);
+        Route::get('/users/search', [\App\Http\Controllers\Admin\UserController::class, 'search']);
+        Route::match(['get', 'post'], '/users/edit', [\App\Http\Controllers\Admin\UserController::class, 'edit']);
+        Route::match(['get', 'post'], '/users/delete', [\App\Http\Controllers\Admin\UserController::class, 'delete']);
+
+        /* Очистка кеша */
+        Route::get('/caches', [\App\Http\Controllers\Admin\CacheController::class, 'index']);
+        Route::post('/caches/clear', [\App\Http\Controllers\Admin\CacheController::class, 'clear']);
+
+        /* Бэкап */
+        Route::get('/backups', [\App\Http\Controllers\Admin\BackupController::class, 'index']);
+        Route::match(['get', 'post'], '/backups/create', [\App\Http\Controllers\Admin\BackupController::class, 'create']);
+        Route::get('/backups/delete', [\App\Http\Controllers\Admin\BackupController::class, 'delete']);
+
+        /* Сканирование */
+        Route::match(['get', 'post'], '/checkers', [\App\Http\Controllers\Admin\CheckerController::class, 'index']);
+        Route::match(['get', 'post'], '/checkers/scan', [\App\Http\Controllers\Admin\CheckerController::class, 'scan']);
+
+        /* Приват рассылка */
+        Route::match(['get', 'post'], '/delivery', [\App\Http\Controllers\Admin\DeliveryController::class, 'index']);
+
+        /* Логи */
+        Route::get('/logs', [\App\Http\Controllers\Admin\LogController::class, 'index']);
+        Route::get('/logs/clear', [\App\Http\Controllers\Admin\LogController::class, 'clear']);
+
+        /* Шаблоны писем */
+        Route::get('/notices', [\App\Http\Controllers\Admin\NoticeController::class, 'index']);
+        Route::match(['get', 'post'], '/notices/create', [\App\Http\Controllers\Admin\NoticeController::class, 'create']);
+        Route::match(['get', 'post'], '/notices/edit/{id}', [\App\Http\Controllers\Admin\NoticeController::class, 'edit']);
+        Route::get('/notices/delete/{id}', [\App\Http\Controllers\Admin\NoticeController::class, 'delete']);
+
+        /* Редактор */
+        Route::get('/files', [\App\Http\Controllers\Admin\FileController::class, 'index']);
+        Route::match(['get', 'post'], '/files/edit', [\App\Http\Controllers\Admin\FileController::class, 'edit']);
+        Route::match(['get', 'post'], '/files/create', [\App\Http\Controllers\Admin\FileController::class, 'create']);
+        Route::get('/files/delete', [\App\Http\Controllers\Admin\FileController::class, 'delete']);
+
+        /* Платная реклама */
+        Route::match(['get', 'post'], '/admin-adverts', [\App\Http\Controllers\Admin\AdminAdvertController::class, 'index']);
+        Route::get('/adverts', [\App\Http\Controllers\Admin\AdvertController::class, 'index']);
+        Route::match(['get', 'post'], '/adverts/edit/{id}', [\App\Http\Controllers\Admin\AdvertController::class, 'edit']);
+        Route::post('/adverts/delete', [\App\Http\Controllers\Admin\AdvertController::class, 'delete']);
+        Route::get('/paid-adverts', [\App\Http\Controllers\Admin\PaidAdvertController::class, 'index']);
+        Route::match(['get', 'post'], '/paid-adverts/create', [\App\Http\Controllers\Admin\PaidAdvertController::class, 'create']);
+        Route::match(['get', 'post'], '/paid-adverts/edit/{id}', [\App\Http\Controllers\Admin\PaidAdvertController::class, 'edit']);
+        Route::get('/paid-adverts/delete/{id}', [\App\Http\Controllers\Admin\PaidAdvertController::class, 'delete']);
+
+        /* Чистка пользователей */
+        Route::match(['get', 'post'], '/delusers', [\App\Http\Controllers\Admin\DelUserController::class, 'index']);
+        Route::post('/delusers/clear', [\App\Http\Controllers\Admin\DelUserController::class, 'clear']);
+
+        /* Модули */
+        Route::get('/modules', [\App\Http\Controllers\Admin\ModuleController::class, 'index']);
+        Route::get('/modules/module', [\App\Http\Controllers\Admin\ModuleController::class, 'module']);
+        Route::get('/modules/install', [\App\Http\Controllers\Admin\ModuleController::class, 'install']);
+        Route::get('/modules/uninstall', [\App\Http\Controllers\Admin\ModuleController::class, 'uninstall']);
+    });
 });
 
 $modules = \App\Models\Module::query()->where('disabled', 0)->get();

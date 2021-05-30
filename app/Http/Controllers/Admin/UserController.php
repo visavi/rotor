@@ -20,18 +20,6 @@ use Illuminate\View\View;
 class UserController extends AdminController
 {
     /**
-     * Конструктор
-     */
-    public function __construct()
-    {
-        parent::__construct();
-
-        if (! isAdmin(User::BOSS)) {
-            abort(403, __('errors.forbidden'));
-        }
-    }
-
-    /**
      * Главная страница
      *
      * @return View

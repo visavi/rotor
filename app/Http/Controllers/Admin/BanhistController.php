@@ -13,15 +13,6 @@ use Illuminate\View\View;
 
 class BanhistController extends AdminController
 {
-    public function __construct()
-    {
-        parent::__construct();
-
-        if (! isAdmin(User::MODER)) {
-            abort(403, __('errors.forbidden'));
-        }
-    }
-
     /**
      * Главная страница
      *

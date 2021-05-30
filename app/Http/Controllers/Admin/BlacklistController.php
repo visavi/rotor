@@ -23,12 +23,6 @@ class BlacklistController extends AdminController
      */
     public function __construct()
     {
-        parent::__construct();
-
-        if (! isAdmin(User::ADMIN)) {
-            abort(403, __('errors.forbidden'));
-        }
-
         $types = ['email', 'login', 'domain'];
 
         $this->type = request()->input('type', 'email');

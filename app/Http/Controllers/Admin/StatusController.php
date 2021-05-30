@@ -15,18 +15,6 @@ use Illuminate\View\View;
 class StatusController extends AdminController
 {
     /**
-     * Конструктор
-     */
-    public function __construct()
-    {
-        parent::__construct();
-
-        if (! isAdmin(User::ADMIN)) {
-            abort(403, __('errors.forbidden'));
-        }
-    }
-
-    /**
      * Главная страница
      *
      * @return View

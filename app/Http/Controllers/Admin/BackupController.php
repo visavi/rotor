@@ -20,12 +20,6 @@ class BackupController extends AdminController
      */
     public function __construct()
     {
-        parent::__construct();
-
-        if (! isAdmin(User::BOSS)) {
-            abort(403, __('errors.forbidden'));
-        }
-
         if (function_exists('set_time_limit')) {
             set_time_limit(600);
         }

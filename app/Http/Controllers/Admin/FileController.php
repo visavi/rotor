@@ -21,12 +21,6 @@ class FileController extends AdminController
      */
     public function __construct()
     {
-        parent::__construct();
-
-        if (! isAdmin(User::BOSS)) {
-            abort(403, __('errors.forbidden'));
-        }
-
         $request    = request();
         $this->file = ltrim(check($request->input('file')), '/');
         $this->path = rtrim(check($request->input('path')), '/');

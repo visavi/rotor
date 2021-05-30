@@ -14,11 +14,7 @@ class LoginController extends Controller
      */
     public function __construct()
     {
-        parent::__construct();
-
-        if (! getUser()) {
-            abort(403, __('main.not_authorized'));
-        }
+        $this->middleware('check.user');
     }
 
     /**

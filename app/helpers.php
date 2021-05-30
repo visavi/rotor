@@ -1993,9 +1993,9 @@ function checkAuth()
  *
  * @return bool является ли пользователь администратором
  */
-function isAdmin(?string $level = User::EDITOR): bool
+function isAdmin(?string $level = null): bool
 {
-    return access($level);
+    return access($level ?? User::EDITOR);
 }
 
 /**

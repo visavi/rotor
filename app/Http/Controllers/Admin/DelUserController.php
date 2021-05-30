@@ -13,18 +13,6 @@ use Illuminate\View\View;
 class DelUserController extends AdminController
 {
     /**
-     * Конструктор
-     */
-    public function __construct()
-    {
-        parent::__construct();
-
-        if (! isAdmin(User::BOSS)) {
-            abort(403, __('errors.forbidden'));
-        }
-    }
-
-    /**
      * Главная страница
      *
      * @param Request $request

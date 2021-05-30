@@ -11,14 +11,15 @@ class CheckAdmin
     /**
      * Handle an incoming request.
      *
-     * @param Request $request
-     * @param Closure $next
+     * @param Request     $request
+     * @param Closure     $next
+     * @param string|null $level
      *
      * @return mixed
      */
-    public function handle(Request $request, Closure $next)
+    public function handle(Request $request, Closure $next, ?string $level = null)
     {
-        if (! isAdmin()) {
+        if (! isAdmin($level)) {
             abort(403, __('errors.forbidden'));
         }
 

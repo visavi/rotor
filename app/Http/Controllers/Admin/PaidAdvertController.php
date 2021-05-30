@@ -15,18 +15,6 @@ use Illuminate\View\View;
 class PaidAdvertController extends AdminController
 {
     /**
-     * Construct
-     */
-    public function __construct()
-    {
-        parent::__construct();
-
-        if (! isAdmin(User::BOSS)) {
-            abort(403, __('errors.forbidden'));
-        }
-    }
-
-    /**
      * List adverts
      *
      * @param Request $request

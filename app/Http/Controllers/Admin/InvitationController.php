@@ -15,18 +15,6 @@ use Illuminate\View\View;
 class InvitationController extends AdminController
 {
     /**
-     * Конструктор
-     */
-    public function __construct()
-    {
-        parent::__construct();
-
-        if (! isAdmin(User::MODER)) {
-            abort(403, __('errors.forbidden'));
-        }
-    }
-
-    /**
      * Главная страница
      *
      * @param Request $request

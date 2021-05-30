@@ -35,12 +35,6 @@ class SpamController extends AdminController
 
     public function __construct()
     {
-        parent::__construct();
-
-        if (! isAdmin(User::MODER)) {
-            abort(403, __('errors.forbidden'));
-        }
-
         $this->types = [
             'posts'     => __('index.forums'),
             'guestbook' => __('index.guestbook'),

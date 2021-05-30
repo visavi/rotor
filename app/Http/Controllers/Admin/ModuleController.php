@@ -15,18 +15,6 @@ use Illuminate\View\View;
 class ModuleController extends AdminController
 {
     /**
-     * ModuleController constructor.
-     */
-    public function __construct()
-    {
-        parent::__construct();
-
-        if (! isAdmin(User::BOSS)) {
-            abort(403, __('errors.forbidden'));
-        }
-    }
-
-    /**
      * Главная страница
      *
      * @return View
