@@ -26,15 +26,15 @@ trait UploadTrait
         $basename  = getBodyName($file->getClientOriginalName());
         $basename  = utfSubstr($basename, 0, 50) . '.' . $extension;
         $filename  = uniqueName($extension);
-        $fullPath  = $this->uploadPath . '/' . $filename;
-        $path      = str_replace(HOME, '', $fullPath);
+        $fullPath  = public_path($this->uploadPath . '/' . $filename);
+        $path      = str_replace(public_path(), '', $fullPath);
         $isImage   = in_array($extension, ['jpg', 'jpeg', 'gif', 'png'], true);
 
         if ($isImage) {
             $img = Image::make($file);
 
             if ($img->getWidth() <= 100 && $img->getHeight() <= 100) {
-                $file->move($this->uploadPath, $filename);
+                $file->move(public_path($this->uploadPath), $filename);
             } else {
                 $img->resize(setting('screensize'), setting('screensize'), static function (Constraint $constraint) {
                     $constraint->aspectRatio();
@@ -42,13 +42,13 @@ trait UploadTrait
                 });
 
                 if (setting('copyfoto')) {
-                    $img->insert(HOME . '/assets/img/images/watermark.png', 'bottom-right', 10, 10);
+                    $img->insert(public_path('assets/img/images/watermark.png'), 'bottom-right', 10, 10);
                 }
 
                 $img->save($fullPath);
             }
         } else {
-            $file->move($this->uploadPath, $filename);
+            $file->move(public_path($this->uploadPath), $filename);
         }
 
         $filesize  = filesize($fullPath);

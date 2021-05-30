@@ -37,17 +37,17 @@ class LangCompare extends AbstractCommand
         $lang1 = $input->getArgument('lang1');
         $lang2 = $input->getArgument('lang2');
 
-        if (!file_exists(RESOURCES . '/lang/' . $lang1)) {
+        if (!file_exists(resource_path('lang/' . $lang1))) {
             $output->writeln('<error>Lang "' . $lang1 . '" not found</error>');
             return 1;
         }
 
-        if (!file_exists(RESOURCES . '/lang/' . $lang2)) {
+        if (!file_exists(resource_path('lang/' . $lang2))) {
             $output->writeln('<error>Lang "' . $lang2 . '" not found</error>');
             return 1;
         }
 
-        $langFiles = glob(RESOURCES . '/lang/' . $lang1 . '/*.php');
+        $langFiles = glob(resource_path('lang/' . $lang1 . '/*.php'));
 
         foreach ($langFiles as $file) {
             $array1 = require($file);

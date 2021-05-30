@@ -154,27 +154,18 @@ class User extends BaseModel implements
     ];
 
     /**
-     * The attributes that should be cast to native types.
-     *
-     * @var array
-     */
-    protected $casts = [
-        'email_verified_at' => 'datetime',
-    ];
-
-    /**
      * Директория загрузки файлов
      *
      * @var string
      */
-    public $uploadPath = UPLOADS . '/pictures';
+    public $uploadPath = 'uploads/pictures';
 
     /**
      * Директория загрузки аватаров
      *
      * @var string
      */
-    public $uploadAvatarPath = UPLOADS . '/avatars';
+    public $uploadAvatarPath = 'uploads/avatars';
 
     /**
      * Связь с таблицей online
@@ -479,7 +470,7 @@ class User extends BaseModel implements
             return new HtmlString($this->getAvatarGuest());
         }
 
-        if ($this->avatar && file_exists(HOME . '/' . $this->avatar)) {
+        if ($this->avatar && file_exists(public_path($this->avatar))) {
             $avatar = $this->getAvatarImage();
         } else {
             $avatar = $this->getAvatarDefault();
@@ -499,7 +490,7 @@ class User extends BaseModel implements
             return $this->getAvatarGuest();
         }
 
-        if ($this->avatar && file_exists(HOME . '/' . $this->avatar)) {
+        if ($this->avatar && file_exists(public_path($this->avatar))) {
             return new HtmlString('<img class="avatar-default rounded-circle" src="' . $this->avatar . '" alt="">');
         }
 
@@ -687,8 +678,8 @@ class User extends BaseModel implements
      */
     public function delete(): ?bool
     {
-        deleteFile(HOME . $this->picture);
-        deleteFile(HOME . $this->avatar);
+        deleteFile(public_path($this->picture));
+        deleteFile(public_path($this->avatar));
 
         Message::query()->where('user_id', $this->id)->delete();
         Contact::query()->where('user_id', $this->id)->delete();

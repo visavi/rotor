@@ -46,7 +46,7 @@ class Photo extends BaseModel
      *
      * @var string
      */
-    public $uploadPath = UPLOADS . '/photos';
+    public $uploadPath = 'uploads/photos';
 
     /**
      * Morph name

@@ -14,7 +14,7 @@
 @section('content')
 
     <div class="mb-3">
-        <i class="fa fa-key fa-lg"></i> <b><a href="/admin/upgrade">{{ __('main.version') }} {{ VERSION }}</a></b>
+        <i class="fa fa-key fa-lg"></i> <b><a href="/admin/upgrade">{{ __('main.version') }} {{ ROTOR_VERSION }}</a></b>
     </div>
 
     <div class="section mb-3 shadow">
@@ -102,7 +102,7 @@
         </div>
     @endif
 
-    @if (file_exists(HOME . '/install'))
+    @if (file_exists(public_path('install')))
         <div class="alert alert-danger">
             <i class="fas fa-exclamation-triangle"></i> {!! __('admin.exists_install') !!}
         </div>

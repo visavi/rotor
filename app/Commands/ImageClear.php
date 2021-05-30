@@ -31,7 +31,7 @@ class ImageClear extends AbstractCommand
      */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        $images = glob(UPLOADS . '/thumbnails/*.{gif,png,jpg,jpeg}', GLOB_BRACE);
+        $images = glob(public_path('uploads/thumbnails/*.{gif,png,jpg,jpeg}'), GLOB_BRACE);
 
         if ($images) {
             foreach ($images as $image) {

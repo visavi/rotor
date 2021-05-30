@@ -52,7 +52,7 @@ class Article extends BaseModel
      *
      * @var string
      */
-    public $uploadPath = UPLOADS . '/articles';
+    public $uploadPath = 'uploads/articles';
 
     /**
      * Counting field

@@ -78,7 +78,7 @@ class File extends BaseModel
         header('Content-Disposition: attachment; filename="' . $this->name . '"');
         header('Content-Transfer-Encoding: binary');
         header('Content-Length: ' . $this->size);
-        readfile(HOME . $this->hash);
+        readfile(public_path($this->hash));
         exit;
     }
 
@@ -90,7 +90,7 @@ class File extends BaseModel
      */
     public function delete(): ?bool
     {
-        deleteFile(HOME . $this->hash);
+        deleteFile(public_path($this->hash));
 
         return parent::delete();
     }

@@ -11,7 +11,7 @@
             <li class="list-inline-item" data-bs-toggle="tooltip" title="{{ __('index.cpu_load') }}"><i class="fas fa-tachometer-alt"></i> {{ round($cpu[0], 2) }}</li>
         <?php endif; ?>
 
-        <li class="list-inline-item" data-bs-toggle="tooltip" title="{{ __('index.loading_speed') }}"><i class="fas fa-rocket"></i> {{ round(microtime(true) - STARTTIME, 3) }} {{ __('index.seconds') }}</li>
+        <li class="list-inline-item" data-bs-toggle="tooltip" title="{{ __('index.loading_speed') }}"><i class="fas fa-rocket"></i> {{ round(microtime(true) - LARAVEL_START, 3) }} {{ __('index.seconds') }}</li>
     </ul>
 
 @if (config('app.debug'))

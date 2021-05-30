@@ -10,7 +10,7 @@
     @stack('styles')
     <link rel="alternate" href="/news/rss" title="RSS News" type="application/rss+xml">
     <meta name="description" content="@yield('description', setting('description'))">
-    <meta name="generator" content="Rotor {{ VERSION }}">
+    <meta name="generator" content="Rotor {{ ROTOR_VERSION }}">
 </head>
 <body>
 <!--Design by Vantuz (https://visavi.net)-->

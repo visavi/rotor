@@ -122,7 +122,7 @@ class HomeController extends Controller
     public function language(string $lang, Request $request): RedirectResponse
     {
         $return    = $request->input('return');
-        $languages = array_map('basename', glob(RESOURCES . '/lang/*', GLOB_ONLYDIR));
+        $languages = array_map('basename', glob(resource_path('lang/*'), GLOB_ONLYDIR));
 
         if (preg_match('/^[a-z]+$/', $lang) && in_array($lang, $languages, true)) {
             if ($user = getUser()) {

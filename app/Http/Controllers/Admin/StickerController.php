@@ -200,7 +200,7 @@ class StickerController extends AdminController
             abort(200, __('stickers.empty_categories'));
         }
 
-        if (! is_writable(UPLOADS . '/stickers')) {
+        if (! is_writable(public_path('uploads/stickers'))) {
             abort(200, __('main.directory_not_writable'));
         }
 
@@ -228,12 +228,12 @@ class StickerController extends AdminController
 
             if ($validator->isValid()) {
                 $newName = uniqueName($sticker->getClientOriginalExtension());
-                $path    = (new Sticker())->uploadPath . '/' . $newName;
-                $sticker->move((new Sticker())->uploadPath, $newName);
+                $path    = public_path((new Sticker())->uploadPath . '/' . $newName);
+                $sticker->move(public_path((new Sticker())->uploadPath), $newName);
 
                 Sticker::query()->create([
                     'category_id' => $cid,
-                    'name'        => str_replace(HOME, '', $path),
+                    'name'        => str_replace(public_path(), '', $path),
                     'code'        => $code,
                 ]);
 
@@ -315,7 +315,7 @@ class StickerController extends AdminController
      s*/
     public function deleteSticker(int $id, Request $request, Validator $validator): RedirectResponse
     {
-        if (! is_writable(UPLOADS . '/stickers')) {
+        if (! is_writable(public_path('uploads/stickers'))) {
             abort(200, __('main.directory_not_writable'));
         }
 
@@ -331,7 +331,7 @@ class StickerController extends AdminController
         $validator->equal($request->input('_token'), csrf_token(), __('validator.token'));
 
         if ($validator->isValid()) {
-            deleteFile(HOME . $sticker->name);
+            deleteFile(public_path($sticker->name));
             $sticker->delete();
 
             clearCache('stickers');

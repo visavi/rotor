@@ -13,7 +13,7 @@
 
 @section('content')
     <div class="section-form mb-3 shadow">
-        @if (!empty($user->picture) && file_exists(HOME . '/' . $user->picture))
+        @if (!empty($user->picture) && file_exists(public_path($user->picture)))
             {{ resizeImage($user->picture, ['alt' => $user->getName(), 'class' => 'img-fluid rounded']) }}
         @else
             <img class="img-fluid rounded" src="/assets/img/images/photo.png" alt="Photo">

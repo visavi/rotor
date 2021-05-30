@@ -26,7 +26,7 @@ class PageController extends Controller
     {
         if ($page === 'menu'  ||
             ! preg_match('|^[a-z0-9_\-]+$|i', $page) ||
-            ! file_exists(RESOURCES . '/views/main/' . $page . '.blade.php')
+            ! file_exists(resource_path('views/main/' . $page . '.blade.php'))
         ) {
             abort(404);
         }

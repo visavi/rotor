@@ -31,9 +31,9 @@
                 <span class="js-textarea-counter"></span>
             </div>
 
-            @if ($news->image && file_exists(HOME . $news->image))
+            @if ($news->image && file_exists(public_path($news->image)))
                 <a href="{{ $news->image }}">{{ resizeImage($news->image, ['width' => 100, 'alt' => $news->title]) }}</a><br>
-                <b>{{ basename($news->image) }}</b> ({{ formatFileSize(HOME . $news->image) }})<br><br>
+                <b>{{ basename($news->image) }}</b> ({{ formatFileSize(public_path($news->image)) }})<br><br>
             @endif
 
             <div class="mb-3{{ hasError('image') }}">

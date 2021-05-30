@@ -49,7 +49,7 @@ class Post extends BaseModel
      *
      * @var string
      */
-    public $uploadPath = UPLOADS . '/forums';
+    public $uploadPath = 'uploads/forums';
 
     /**
      * Morph name

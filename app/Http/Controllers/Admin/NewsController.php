@@ -82,7 +82,7 @@ class NewsController extends AdminController
             if ($validator->isValid()) {
                 // Удаление старой картинки
                 if ($image) {
-                    deleteFile(HOME . $news->image);
+                    deleteFile(public_path($news->image));
                     $file = $news->uploadFile($image, false);
                 }
 
@@ -217,7 +217,7 @@ class NewsController extends AdminController
         $validator->equal($request->input('_token'), csrf_token(), __('validator.token'));
 
         if ($validator->isValid()) {
-            deleteFile(HOME . $news->image);
+            deleteFile(public_path($news->image));
 
             $news->comments()->delete();
             $news->delete();

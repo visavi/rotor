@@ -46,7 +46,7 @@
         <div class="invalid-feedback">{{ textError('sets[currency]') }}</div>
     </div>
 
-    <?php $languages = array_map('basename', glob(RESOURCES . '/lang/*', GLOB_ONLYDIR)); ?>
+    <?php $languages = array_map('basename', glob(resource_path('lang/*'), GLOB_ONLYDIR)); ?>
     <?php $inputLang = getInput('language', $settings['language']); ?>
 
     <div class="mb-3{{ hasError('sets[language]') }}">
@@ -81,7 +81,7 @@
         {{ __('settings.fallback_language_hint') }}
     </p>
 
-    <?php $themes = array_map('basename', glob(HOME . '/themes/*', GLOB_ONLYDIR)); ?>
+    <?php $themes = array_map('basename', glob(public_path('/themes/*'), GLOB_ONLYDIR)); ?>
     <?php $inputThemes = getInput('sets.themes', $settings['themes']); ?>
 
     <div class="mb-3{{ hasError('sets[themes]') }}">

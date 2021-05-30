@@ -32,8 +32,8 @@ class FileController extends AdminController
         $this->path = rtrim(check($request->input('path')), '/');
 
         if (empty($this->path) ||
-            ! file_exists(RESOURCES . '/views/' . $this->path) ||
-            ! is_dir(RESOURCES . '/views/' . $this->path) ||
+            ! file_exists(resource_path('views/' . $this->path)) ||
+            ! is_dir(resource_path('views/' . $this->path)) ||
             Str::contains($this->path, '.') ||
             Str::startsWith($this->path, '/')
         ) {
@@ -49,13 +49,13 @@ class FileController extends AdminController
     public function index(): View
     {
         $path  = $this->path;
-        $elements = preg_grep('/^([^.])/', scandir(RESOURCES . '/views/' . $path . $this->file, SCANDIR_SORT_ASCENDING));
+        $elements = preg_grep('/^([^.])/', scandir(resource_path('views/' . $path . $this->file), SCANDIR_SORT_ASCENDING));
 
         $folders = [];
         $files   = [];
 
         foreach ($elements as $element) {
-            if (is_dir(RESOURCES . '/views/' . $path . '/' . $element)) {
+            if (is_dir(resource_path('views/' . $path . '/' . $element))) {
                 $folders[] = $element;
             } else {
                 $files[] = $element;
@@ -81,7 +81,7 @@ class FileController extends AdminController
     {
         $path     = $this->path;
         $file     = $path ? '/' . $this->file : $this->file;
-        $writable = is_writable(RESOURCES . '/views/' . $path . $file . '.blade.php');
+        $writable = is_writable(resource_path('views/' . $path . $file . '.blade.php'));
 
         if (($this->path && ! preg_match('#^([a-z0-9_\-/]+|)$#', $this->path))
             || ! preg_match('#^[a-z0-9_\-/]+$#', $this->file)
@@ -89,7 +89,7 @@ class FileController extends AdminController
             abort(404, __('admin.files.file_invalid'));
         }
 
-        if (! file_exists(RESOURCES . '/views/' . $this->path . $file . '.blade.php')) {
+        if (! file_exists(resource_path('views/' . $this->path . $file . '.blade.php'))) {
             abort(404, __('admin.files.file_not_exist'));
         }
 
@@ -100,7 +100,7 @@ class FileController extends AdminController
                 ->true($writable, ['msg' => __('admin.files.writable')]);
 
             if ($validator->isValid()) {
-                file_put_contents(RESOURCES . '/views/' . $this->path . $file . '.blade.php', $msg);
+                file_put_contents(resource_path('views/' . $this->path . $file . '.blade.php'), $msg);
 
                 setFlash('success', __('admin.files.file_success_saved'));
 
@@ -111,7 +111,7 @@ class FileController extends AdminController
             setFlash('danger', $validator->getErrors());
         }
 
-        $contest = file_get_contents(RESOURCES . '/views/' . $path . $file . '.blade.php');
+        $contest = file_get_contents(resource_path('views/' . $path . $file . '.blade.php'));
 
         return view('admin/files/edit', compact('contest', 'path', 'file', 'writable'));
     }
@@ -126,7 +126,7 @@ class FileController extends AdminController
      */
     public function create(Request $request, Validator $validator)
     {
-        if (! is_writable(RESOURCES . '/views/' . $this->path)) {
+        if (! is_writable(resource_path('views/' . $this->path))) {
             abort(200, __('admin.files.directory_not_writable', ['dir' => $this->path]));
         }
 
@@ -141,18 +141,18 @@ class FileController extends AdminController
 
             if ($filename) {
                 $validator->length($filename, 1, 30, ['filename' => __('admin.files.file_required')]);
-                $validator->false(file_exists(RESOURCES . '/views/' . $this->path . $fileName . '.blade.php'), ['filename' => __('admin.files.file_exist')]);
+                $validator->false(file_exists(resource_path('views/' . $this->path . $fileName . '.blade.php')), ['filename' => __('admin.files.file_exist')]);
                 $validator->regex($filename, '|^[a-z0-9_\-]+$|', ['filename' => __('admin.files.file_invalid')]);
             } else {
                 $validator->length($dirname, 1, 30, ['dirname' => __('admin.files.directory_required')]);
-                $validator->false(file_exists(RESOURCES . '/views/' . $this->path . $dirName), ['dirname' => __('admin.files.directory_exist')]);
+                $validator->false(file_exists(resource_path('views/' . $this->path . $dirName)), ['dirname' => __('admin.files.directory_exist')]);
                 $validator->regex($dirname, '|^[a-z0-9_\-]+$|', ['dirname' => __('admin.files.directory_invalid')]);
             }
 
             if ($validator->isValid()) {
                 if ($filename) {
-                    file_put_contents(RESOURCES . '/views/' . $this->path . $fileName . '.blade.php', '');
-                    chmod(RESOURCES.'/views/' . $this->path . $fileName . '.blade.php', 0666);
+                    file_put_contents(resource_path('views/' . $this->path . $fileName . '.blade.php'), '');
+                    chmod(resource_path('views/' . $this->path . $fileName . '.blade.php'), 0666);
 
                     setFlash('success', __('admin.files.file_success_created'));
 
@@ -160,7 +160,7 @@ class FileController extends AdminController
                 }
 
                 $old = umask(0);
-                mkdir(RESOURCES . '/views/' . $this->path . $dirName, 0777, true);
+                mkdir(resource_path('views/' . $this->path . $dirName), 0777, true);
                 umask($old);
                 setFlash('success', __('admin.files.directory_success_created'));
 
@@ -184,7 +184,7 @@ class FileController extends AdminController
      */
     public function delete(Request $request, Validator $validator): RedirectResponse
     {
-        if (! is_writable(RESOURCES . '/views/' . $this->path)) {
+        if (! is_writable(resource_path('views/' . $this->path))) {
             abort(200, __('admin.files.directory_not_writable', ['dir' => $this->path]));
         }
 
@@ -197,19 +197,19 @@ class FileController extends AdminController
         $validator->equal($request->input('_token'), csrf_token(), __('validator.token'));
 
         if ($filename) {
-            $validator->true(file_exists(RESOURCES . '/views/' . $this->path . $fileName . '.blade.php'), __('admin.files.file_not_exist'));
+            $validator->true(file_exists(resource_path('views/' . $this->path . $fileName . '.blade.php')), __('admin.files.file_not_exist'));
             $validator->regex($filename, '|^[a-z0-9_\-]+$|', __('admin.files.file_invalid'));
         } else {
-            $validator->true(file_exists(RESOURCES . '/views/' . $this->path . $dirName), __('admin.files.directory_not_exist'));
+            $validator->true(file_exists(resource_path('views/' . $this->path . $dirName)), __('admin.files.directory_not_exist'));
             $validator->regex($dirname, '|^[a-z0-9_\-]+$|', __('admin.files.directory_invalid'));
         }
 
         if ($validator->isValid()) {
             if ($filename) {
-                unlink(RESOURCES . '/views/' . $this->path . $fileName . '.blade.php');
+                unlink(resource_path('views/' . $this->path . $fileName . '.blade.php'));
                 setFlash('success', __('admin.files.file_success_deleted'));
             } else {
-                deleteDir(RESOURCES . '/views/' . $this->path . $dirName);
+                deleteDir(resource_path('views/' . $this->path . $dirName));
                 setFlash('success', __('admin.files.directory_success_deleted'));
             }
         } else {

@@ -45,7 +45,7 @@ class News extends BaseModel
      *
      * @var string
      */
-    public $uploadPath = UPLOADS . '/news';
+    public $uploadPath = 'uploads/news';
 
     /**
      * Morph name

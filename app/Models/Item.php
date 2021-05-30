@@ -52,7 +52,7 @@ class Item extends BaseModel
      *
      * @var string
      */
-    public $uploadPath = UPLOADS . '/boards';
+    public $uploadPath = 'uploads/boards';
 
     /**
      * Morph name

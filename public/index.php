@@ -1,5 +1,15 @@
 <?php
 
+/*
+| Rotor - Mobile content management system
+|
+| @package   Rotor
+| @author    Vantuz <admin@visavi.net>
+| @link      https://visavi.net
+| @copyright 2005-2021
+|
+*/
+
 use Illuminate\Contracts\Http\Kernel;
 use Illuminate\Http\Request;
 

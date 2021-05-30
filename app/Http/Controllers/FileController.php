@@ -28,7 +28,7 @@ class FileController extends Controller
 
         $page = Str::contains($page, '/') ? $page : $page . '/index';
 
-        if (! file_exists(RESOURCES . '/views/files/' . $page . '.blade.php')) {
+        if (! file_exists(resource_path('views/files/' . $page . '.blade.php'))) {
             abort(404);
         }
 

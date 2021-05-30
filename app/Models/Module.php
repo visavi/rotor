@@ -40,7 +40,7 @@ class Module extends BaseModel
     /**
      * Assets modules path
      */
-    public $assetsPath = HOME . '/assets/modules/';
+    public $assetsPath = '/assets/modules/';
 
     /**
      * Выполняет применение миграции
@@ -58,7 +58,7 @@ class Module extends BaseModel
             /** @var Migrate $command */
             $command = $app->find('migrate');
 
-            $config = require APP . '/migration.php';
+            $config = require app_path('migration.php');
             $config['paths']['migrations'] = $migrationPath;
 
             $command->setConfig(new Config($config));
@@ -84,7 +84,7 @@ class Module extends BaseModel
             /** @var Migrate $command */
             $command = $app->find('rollback');
 
-            $config = require APP . '/migration.php';
+            $config = require app_path('migration.php');
             $config['paths']['migrations'] = $migrationPath;
 
             $command->setConfig(new Config($config));
@@ -137,6 +137,6 @@ class Module extends BaseModel
      */
     public function getLinkName(string $modulePath): string
     {
-        return $this->assetsPath . Str::plural(strtolower(basename($modulePath)));
+        return public_path($this->assetsPath . Str::plural(strtolower(basename($modulePath))));
     }
 }

@@ -90,7 +90,7 @@ class PhotoController extends AdminController
      */
     public function delete(int $id, Request $request, Validator $validator): RedirectResponse
     {
-        if (! is_writable(UPLOADS . '/photos')) {
+        if (! is_writable(public_path('uploads/photos'))) {
             abort(200, __('main.directory_not_writable'));
         }
 

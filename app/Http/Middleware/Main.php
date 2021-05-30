@@ -41,8 +41,8 @@ class Main
             [$path, $name] = explode('\\', static::class);
 
             if ($path === 'Modules') {
-                View::addNamespace($name, MODULES . '/' . $name . '/resources/views');
-                Lang::addNamespace($name, MODULES . '/' . $name . '/resources/lang');
+                View::addNamespace($name, base_path('modules/' . $name . '/resources/views'));
+                Lang::addNamespace($name, base_path('modules/' . $name . '/resources/lang'));
             }
         }
 

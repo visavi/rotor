@@ -28,9 +28,9 @@ $app  = new Phinx\Console\PhinxApplication();
 $wrap = new Phinx\Wrapper\TextWrapper($app);
 
 $app->setName('Rotor by Vantuz - https://visavi.net');
-$app->setVersion(VERSION);
+$app->setVersion(ROTOR_VERSION);
 
-$wrap->setOption('configuration', APP . '/migration.php');
+$wrap->setOption('configuration', app_path('migration.php'));
 $wrap->setOption('parser', 'php');
 $wrap->setOption('environment', 'default');
 
@@ -39,7 +39,7 @@ $lang = check($request->input('lang', 'ru'));
 Lang::setLocale($lang);
 
 $errors    = [];
-$languages = array_map('basename', glob(RESOURCES . '/lang/*', GLOB_ONLYDIR));
+$languages = array_map('basename', glob(resource_path('lang/*'), GLOB_ONLYDIR));
 
 $keys = [
     'APP_ENV',
@@ -179,9 +179,9 @@ $keys = [
                             <?php
                             runCommand(new AppPermission());
 
-                            $storage = glob(STORAGE . '/*', GLOB_ONLYDIR);
-                            $uploads = glob(UPLOADS . '/*', GLOB_ONLYDIR);
-                            $modules = [HOME . '/assets/modules'];
+                            $storage = glob(storage_path('/*'), GLOB_ONLYDIR);
+                            $uploads = glob(public_path('uploads/*'), GLOB_ONLYDIR);
+                            $modules = [public_path('assets/modules')];
 
                             $dirs = array_merge($storage, $uploads, $modules);
                             ?>

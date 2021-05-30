@@ -153,7 +153,7 @@ class DownController extends Controller
             abort(404, __('loads.down_not_exist'));
         }
 
-        deleteFile(HOME . $file->hash);
+        deleteFile(public_path($file->hash));
 
         setFlash('success', __('loads.file_deleted_success'));
         $file->delete();
@@ -349,7 +349,7 @@ class DownController extends Controller
             abort(200, __('loads.down_not_verified'));
         }
 
-        $validator->true(file_exists(HOME . $file->hash), __('loads.down_not_exist'));
+        $validator->true(file_exists(public_path($file->hash)), __('loads.down_not_exist'));
 
         if ($validator->isValid()) {
             Reader::countingStat($file->relate);
@@ -544,7 +544,7 @@ class DownController extends Controller
 
         try {
             $archive = new ZipFile();
-            $archive->openFile(HOME . $file->hash);
+            $archive->openFile(public_path($file->hash));
 
             $down         = $file->relate;
             $getDocuments = array_values($archive->getAllInfo());
@@ -585,7 +585,7 @@ class DownController extends Controller
 
         try {
             $archive = new ZipFile();
-            $archive->openFile(HOME . $file->hash);
+            $archive->openFile(public_path($file->hash));
             $getDocuments = array_values($archive->getAllInfo());
             $document     = $getDocuments[$fid] ?? null;
 

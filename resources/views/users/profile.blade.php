@@ -74,7 +74,7 @@
 
                     <div class="col-md-6">
                         <div class="float-end">
-                            @if ($user->picture && file_exists(HOME . $user->picture))
+                            @if ($user->picture && file_exists(public_path($user->picture)))
                                 <a class="gallery" href="{{ getUser('picture') }}">
                                     {{ resizeImage(getUser('picture'), ['alt' => $user->login, 'class' => 'img-fluid rounded']) }}
                                 </a><br>

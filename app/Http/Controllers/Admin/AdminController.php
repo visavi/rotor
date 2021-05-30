@@ -36,9 +36,9 @@ class AdminController extends Controller
         $wrap = new TextWrapper($app);
 
         $app->setName('Rotor by Vantuz - https://visavi.net');
-        $app->setVersion(VERSION);
+        $app->setVersion(ROTOR_VERSION);
 
-        $wrap->setOption('configuration', BASEDIR.'/app/migration.php');
+        $wrap->setOption('configuration', base_path('app/migration.php'));
         $wrap->setOption('parser', 'php');
         $wrap->setOption('environment', 'default');
 

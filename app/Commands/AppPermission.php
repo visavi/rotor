@@ -32,9 +32,9 @@ class AppPermission extends AbstractCommand
      */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        $storage = glob(STORAGE . '/*', GLOB_ONLYDIR);
-        $uploads = glob(UPLOADS . '/*', GLOB_ONLYDIR);
-        $modules = [HOME . '/assets/modules'];
+        $storage = glob(storage_path('/*'), GLOB_ONLYDIR);
+        $uploads = glob(public_path('uploads/*'), GLOB_ONLYDIR);
+        $modules = [public_path('assets/modules')];
 
         $dirs = array_merge($storage, $uploads, $modules);
 

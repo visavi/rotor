@@ -40,7 +40,7 @@ class BackupController extends AdminController
      */
     public function index(): View
     {
-        $files = glob(STORAGE . '/backups/*.{zip,gz,bz2,sql}', GLOB_BRACE);
+        $files = glob(storage_path('backups/*.{zip,gz,bz2,sql}'), GLOB_BRACE);
         arsort($files);
 
         return view('admin/backups/index', compact('files'));
@@ -72,7 +72,7 @@ class BackupController extends AdminController
                 $limit    = 3000;
                 $filename = 'backup_'.$this->date.'.sql';
 
-                $fp = $this->fopen(STORAGE.'/backups/'.$filename, 'w', $method, $level);
+                $fp = $this->fopen(storage_path('backups/'.$filename), 'w', $method, $level);
 
                 foreach ($selectTables as $table) {
                     $show = DB::connection()->selectOne("SHOW CREATE TABLE `{$table->Name}`");
@@ -148,10 +148,10 @@ class BackupController extends AdminController
         $validator->equal($request->input('_token'), csrf_token(), __('validator.token'))
             ->notEmpty($file, __('admin.backup.backup_not_indicated'))
             ->regex($file, '|^[\w\.\-]+$|i', __('admin.backup.invalid_backup_name'))
-            ->true(file_exists(STORAGE.'/backups/'.$file), __('admin.backup.backup_not_exist'));
+            ->true(file_exists(storage_path('backups/' . $file)), __('admin.backup.backup_not_exist'));
 
         if ($validator->isValid()) {
-            unlink(STORAGE.'/backups/'.$file);
+            unlink(storage_path('backups/' . $file));
 
             setFlash('success', __('admin.backup.backup_success_deleted'));
         } else {

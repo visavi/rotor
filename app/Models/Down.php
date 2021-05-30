@@ -58,7 +58,7 @@ class Down extends BaseModel
      *
      * @var string
      */
-    public $uploadPath = UPLOADS . '/files';
+    public $uploadPath = 'uploads/files';
 
     /**
      * Counting field
@@ -216,15 +216,15 @@ class Down extends BaseModel
 
             // Сохраняем скрин с 5 секунды
             /*$ffmpeg = FFMpeg::create($ffconfig);
-            $video = $ffmpeg->open(HOME . $file['path']);
+            $video = $ffmpeg->open(public_path($file['path']));
 
             $frame = $video->frame(TimeCode::fromSeconds(5));
-            $frame->save(HOME . $file['path'] . '.jpg');
+            $frame->save(public_path($file['path'] . '.jpg'));
 
             $this->files()->create([
                 'hash'       => $file['path'] . '.jpg',
                 'name'       => 'screenshot.jpg',
-                'size'       => filesize(HOME . $file['path'] . '.jpg'),
+                'size'       => filesize(public_path($file['path'] . '.jpg')),
                 'user_id'    => getUser('id'),
                 'created_at' => SITETIME,
             ]);*/
@@ -232,15 +232,15 @@ class Down extends BaseModel
             // Перекодируем видео в h264
             $ffprobe = FFProbe::create($ffconfig);
             $video = $ffprobe
-                ->streams(HOME . $file['path'])
+                ->streams(public_path($file['path']))
                 ->videos()
                 ->first();
 
             if ($video && $file['extension'] === 'mp4' && $video->get('codec_name') !== 'h264') {
                 $format = new X264('libmp3lame', 'libx264');
-                $video->save($format, HOME . $file['path'] . '.convert');
+                $video->save($format, public_path($file['path'] . '.convert'));
 
-                rename(HOME . $file['path'] . '.convert', HOME . $file['path']);
+                rename(public_path($file['path'] . '.convert'), public_path($file['path']));
             }
         }
     }

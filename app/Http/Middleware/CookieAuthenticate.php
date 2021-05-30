@@ -20,7 +20,7 @@ class CookieAuthenticate
      */
     public function handle(Request $request, Closure $next)
     {
-        /*if (empty(defaultSetting('app_installed')) && file_exists(HOME . '/install/')) {
+        /*if (empty(defaultSetting('app_installed')) && file_exists(public_path('install'))) {
             return redirect('install/index.php');
         }*/
 
@@ -76,11 +76,11 @@ class CookieAuthenticate
             $userSets['language'] = $request->session()->get('language');
         }
 
-        if (! file_exists(RESOURCES . '/lang/' . $userSets['language'])) {
+        if (! file_exists(resource_path('lang/' . $userSets['language']))) {
             $userSets['language'] = defaultSetting('language');
         }
 
-        if (! file_exists(HOME . '/themes/' . $userSets['themes'])) {
+        if (! file_exists(public_path('themes/' . $userSets['themes']))) {
             $userSets['themes'] = defaultSetting('themes');
         }
 

@@ -36,7 +36,6 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Cache;
-use Illuminate\Support\Facades\Lang;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\HtmlString;
 use Illuminate\Support\Str;
@@ -45,19 +44,6 @@ use Intervention\Image\ImageManagerStatic as Image;
 use PHPMailer\PHPMailer\PHPMailer;
 use ReCaptcha\ReCaptcha;
 use Symfony\Component\Console\Command\Command;
-use Symfony\Component\Console\Input\ArrayInput;
-use Symfony\Component\Console\Output\NullOutput;
-
-define('STARTTIME', microtime(true));
-define('BASEDIR', dirname(__DIR__));
-define('SITETIME', time());
-const APP = BASEDIR . '/app';
-const HOME = BASEDIR . '/public';
-const UPLOADS = HOME . '/uploads';
-const RESOURCES = BASEDIR . '/resources';
-const STORAGE = BASEDIR . '/storage';
-const MODULES = BASEDIR . '/modules';
-const VERSION = '9.5';
 
 /**
  * Форматирует вывод времени из секунд
@@ -263,9 +249,9 @@ function formatSize(int $bytes, int $precision = 2): string
  *
  * @param string $file путь к файлу
  *
- * @return int|string размер в читаемом формате
+ * @return string размер в читаемом формате
  */
-function formatFileSize(string $file)
+function formatFileSize(string $file): string
 {
     if (file_exists($file) && is_file($file)) {
         return formatSize(filesize($file));
@@ -611,8 +597,8 @@ function statsStickers(): int
  */
 function statsChecker()
 {
-    if (file_exists(STORAGE . '/caches/checker.php')) {
-        return dateFixed(filemtime(STORAGE . '/caches/checker.php'), 'd.m.Y');
+    if (file_exists(storage_path('caches/checker.php'))) {
+        return dateFixed(filemtime(storage_path('caches/checker.php')), 'd.m.Y');
     }
 
     return 0;
@@ -1380,7 +1366,7 @@ function resizeProcess(?string $path, array $params = []): array
         $params['class'] = 'img-fluid';
     }
 
-    if (! file_exists(HOME . $path) || ! is_file(HOME . $path)) {
+    if (! file_exists(public_path($path)) || ! is_file(public_path($path))) {
         return [
             'path'   => '/assets/img/images/photo.png',
             'source' => false,
@@ -1388,7 +1374,7 @@ function resizeProcess(?string $path, array $params = []): array
         ];
     }
 
-    [$width, $height] = getimagesize(HOME . $path);
+    [$width, $height] = getimagesize(public_path($path));
 
     if ($width <= setting('previewsize') && $height <= setting('previewsize')) {
         return [
@@ -1400,14 +1386,14 @@ function resizeProcess(?string $path, array $params = []): array
 
     $thumb = ltrim(str_replace('/', '_', $path), '_');
 
-    if (! file_exists(UPLOADS . '/thumbnails/' . $thumb)) {
-        $img = Image::make(HOME . $path);
+    if (! file_exists(public_path('uploads/thumbnails/' . $thumb))) {
+        $img = Image::make(public_path($path));
         $img->resize(setting('previewsize'), setting('previewsize'), static function (Constraint $constraint) {
             $constraint->aspectRatio();
             $constraint->upsize();
         });
 
-        $img->save(UPLOADS . '/thumbnails/' . $thumb);
+        $img->save(public_path('uploads/thumbnails/' . $thumb));
     }
 
     return [
@@ -1472,8 +1458,8 @@ function deleteFile(string $path): bool
     }
 
     if (in_array(getExtension($path), ['jpg', 'jpeg', 'gif', 'png'], true)) {
-        $thumb = ltrim(str_replace([HOME, '/'], ['', '_'], $path), '_');
-        $thumb = UPLOADS . '/thumbnails/' . $thumb;
+        $thumb = ltrim(str_replace([public_path(), '/'], ['', '_'], $path), '_');
+        $thumb = public_path('uploads/thumbnails/' . $thumb);
 
         if (file_exists($thumb) && is_file($thumb)) {
             unlink($thumb);

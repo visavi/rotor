@@ -40,18 +40,18 @@
         <ul class="list-group">
             @foreach ($files as $file)
                 <?php $fileName = $path ? '/' . $file : $file; ?>
-                @if (is_dir(RESOURCES . '/views/' . $path . $fileName))
+                @if (is_dir(resource_path('views/' . $path . $fileName)))
                     <li class="list-group-item">
                         <div class="float-end">
                             <a href="/admin/files/delete?path={{ $path }}&amp;dirname={{ $file }}&amp;_token={{ csrf_token() }}" onclick="return confirm('{{ __('admin.files.confirm_delete_dir') }}')"><i class="fa fa-times"></i></a>
                         </div>
 
                         <i class="fa fa-folder"></i> <b><a href="/admin/files?path={{ $path . $fileName }}">{{ $file }}</a></b><br>
-                        {{ __('admin.files.objects') }}: {{ count(array_diff(scandir(RESOURCES . '/views/' . $path . $fileName), ['.', '..'])) }}
+                        {{ __('admin.files.objects') }}: {{ count(array_diff(scandir(resource_path('views/' . $path . $fileName)), ['.', '..'])) }}
                     </li>
                 @else
-                    <?php $size = formatSize(filesize(RESOURCES . '/views/' . $path . $fileName)); ?>
-                    <?php $string = count(file(RESOURCES . '/views/' . $path . $fileName)); ?>
+                    <?php $size = formatSize(filesize(resource_path('views/' . $path . $fileName))); ?>
+                    <?php $string = count(file(resource_path('views/' . $path . $fileName))); ?>
 
                     <li class="list-group-item">
                         <div class="float-end">
@@ -61,7 +61,7 @@
                         <i class="fa fa-file"></i>
                         <b><a href="/admin/files/edit?path={{ $path }}&amp;file={{ basename($file, '.blade.php') }}">{{ $file }}</a></b> ({{ $size }})<br>
                         {{ __('admin.files.lines') }}: {{ $string }} /
-                        {{ __('admin.files.changed') }}: {{ dateFixed(filemtime(RESOURCES . '/views/' . $path . $fileName)) }}
+                        {{ __('admin.files.changed') }}: {{ dateFixed(filemtime(resource_path('views/' . $path . $fileName))) }}
                     </li>
                 @endif
             @endforeach

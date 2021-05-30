@@ -409,7 +409,7 @@ class LoadController extends AdminController
             abort(404, __('loads.down_not_exist'));
         }
 
-        deleteFile(HOME . $file->hash);
+        deleteFile(public_path($file->hash));
 
         setFlash('success', __('loads.file_deleted_success'));
         $file->delete();

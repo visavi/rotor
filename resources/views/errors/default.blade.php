@@ -7,7 +7,7 @@
 
 @section('content')
 
-    <?php $images = glob(HOME.'/assets/img/errors/*.png'); ?>
+    <?php $images = glob(public_path('assets/img/errors/*.png')); ?>
 
     <div class="row">
         <div class="col-12 text-center">

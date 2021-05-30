@@ -34,9 +34,9 @@ class CheckerController extends AdminController
     {
         $diff = [];
 
-        if (file_exists(STORAGE . '/caches/checker.php')) {
-            $files = $this->scanFiles(BASEDIR);
-            $filesScan = json_decode(file_get_contents(STORAGE . '/caches/checker.php'), true);
+        if (file_exists(storage_path('caches/checker.php'))) {
+            $files = $this->scanFiles(base_path());
+            $filesScan = json_decode(file_get_contents(storage_path('caches/checker.php')), true);
 
             $diff['left']  = array_diff($files, $filesScan);
             $diff['right'] = array_diff($filesScan, $files);
@@ -55,9 +55,9 @@ class CheckerController extends AdminController
     public function scan(Request $request): RedirectResponse
     {
         if ($request->input('_token') === csrf_token()) {
-            $files = $this->scanFiles(BASEDIR);
+            $files = $this->scanFiles(base_path());
 
-            file_put_contents(STORAGE . '/caches/checker.php', json_encode($files));
+            file_put_contents(storage_path('caches/checker.php'), json_encode($files));
 
             setFlash('success', __('admin.checkers.success_crawled'));
         } else {
@@ -84,7 +84,7 @@ class CheckerController extends AdminController
             ->files()
             ->notName($excludeFiles);
 
-        if (file_exists(BASEDIR . '/.gitignore')) {
+        if (file_exists(base_path('.gitignore'))) {
             $files->ignoreVCSIgnored(true);
         }
 

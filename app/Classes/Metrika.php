@@ -29,7 +29,7 @@ class Metrika
         }
 
         // ----------------------------------------------------------------------//
-        $img   = imagecreatefrompng(HOME . '/assets/img/images/counter.png');
+        $img   = imagecreatefrompng(public_path('assets/img/images/counter.png'));
         $color = imagecolorallocate($img, 62, 62, 62);
 
         $pos = 66;
@@ -40,14 +40,14 @@ class Metrika
             $pos = 42;
         }
 
-        imagettftext($img, 6, 0, 14, 7, $color, HOME . '/assets/fonts/font.ttf', (string) formatShortNum($counter->dayhosts));
-        imagettftext($img, 6, 0, 14, 13, $color, HOME . '/assets/fonts/font.ttf', (string) formatShortNum($counter->dayhits));
-        imagettftext($img, 12, 0, $pos, 13, $color, HOME . '/assets/fonts/font.ttf', (string) $online);
+        imagettftext($img, 6, 0, 14, 7, $color, public_path('assets/fonts/font.ttf'), (string) formatShortNum($counter->dayhosts));
+        imagettftext($img, 6, 0, 14, 13, $color, public_path('assets/fonts/font.ttf'), (string) formatShortNum($counter->dayhits));
+        imagettftext($img, 12, 0, $pos, 13, $color, public_path('assets/fonts/font.ttf'), (string) $online);
 
-        imagepng($img, UPLOADS . '/counters/counter_new.png');
+        imagepng($img, public_path('uploads/counters/counter_new.png'));
         imagedestroy($img);
 
-        rename(UPLOADS . '/counters/counter_new.png', UPLOADS . '/counters/counter.png');
+        rename(public_path('uploads/counters/counter_new.png'), public_path('uploads/counters/counter.png'));
     }
 
     /**

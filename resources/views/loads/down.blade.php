@@ -59,7 +59,7 @@
         @if ($down->getFiles()->isNotEmpty())
             @foreach ($down->getFiles() as $file)
                 <div class="media-file mb-3">
-                    @if ($file->hash && file_exists(HOME . $file->hash))
+                    @if ($file->hash && file_exists(public_path($file->hash)))
 
                         @if ($file->extension === 'mp3')
                             <div>

@@ -26,6 +26,6 @@
 <b>Примеры использования</b><br>
 <?php
 echo bbCode(check('[code]<?php
-chmode(STORAGE.\'/forum\');
+chmode(storage_path(\'forum\'));
 ?>[/code]'));
 ?>

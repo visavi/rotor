@@ -44,7 +44,7 @@ class Board extends BaseModel
      *
      * @var string
      */
-    public $uploadPath = UPLOADS . '/boards';
+    public $uploadPath = 'uploads/boards';
 
     /**
      * Возвращает связь родительской категории

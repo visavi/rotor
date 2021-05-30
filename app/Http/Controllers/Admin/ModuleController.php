@@ -40,7 +40,7 @@ class ModuleController extends AdminController
         }
 
         $moduleNames = [];
-        $modulesLoaded = glob(MODULES . '/*', GLOB_ONLYDIR);
+        $modulesLoaded = glob(base_path('modules/*'), GLOB_ONLYDIR);
         foreach ($modulesLoaded as $module) {
             if (file_exists($module . '/module.php')) {
                 $moduleNames[basename($module)] = include $module . '/module.php';
@@ -60,7 +60,7 @@ class ModuleController extends AdminController
     public function module(Request $request): View
     {
         $moduleName = $request->input('module');
-        $modulePath = MODULES . '/' . $moduleName;
+        $modulePath = base_path('modules/' . $moduleName);
 
         if (! preg_match('|^[A-Z][\w\-]+$|', $moduleName) || ! file_exists($modulePath)) {
             abort(200, __('admin.modules.module_not_found'));
@@ -77,7 +77,7 @@ class ModuleController extends AdminController
         }
 
         if (file_exists($modulePath . '/resources/assets')) {
-            $moduleConfig['symlink'] = str_replace(HOME, '', (new Module())->getLinkName($modulePath));
+            $moduleConfig['symlink'] = str_replace(public_path(), '', (new Module())->getLinkName($modulePath));
         }
 
         $module = Module::query()->where('name', $moduleName)->first();
@@ -97,7 +97,7 @@ class ModuleController extends AdminController
         $moduleName = $request->input('module');
         $enable     = int($request->input('enable'));
         $update     = int($request->input('update'));
-        $modulePath = MODULES . '/' . $moduleName;
+        $modulePath = base_path('modules/' . $moduleName);
 
         if (! preg_match('|^[A-Z][\w\-]+$|', $moduleName) || ! file_exists($modulePath)) {
             abort(200, __('admin.modules.module_not_found'));
@@ -154,7 +154,7 @@ class ModuleController extends AdminController
     {
         $moduleName = $request->input('module');
         $disable    = int($request->input('disable'));
-        $modulePath = MODULES . '/' . $moduleName;
+        $modulePath = base_path('modules/' . $moduleName);
 
         if (! preg_match('|^[A-Z][\w\-]+$|', $moduleName) || ! file_exists($modulePath)) {
             abort(200, __('admin.modules.module_not_found'));
