@@ -19,15 +19,17 @@ class NotebookController extends Controller
      */
     public function __construct()
     {
-        parent::__construct();
+        $this->middleware('check.user');
 
-        if (! $user = getUser()) {
-            abort(403, __('main.not_authorized'));
-        }
+        $this->middleware(function ($request, $next) {
+            $user = getUser();
 
-        $this->note = Notebook::query()
-            ->where('user_id', $user->id)
-            ->firstOrNew(['user_id' => $user->id]);
+            $this->note = Notebook::query()
+                ->where('user_id', $user->id)
+                ->firstOrNew(['user_id' => $user->id]);
+
+            return $next($request);
+        });
     }
 
     /**

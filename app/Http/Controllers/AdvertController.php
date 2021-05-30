@@ -23,11 +23,13 @@ class AdvertController extends Controller
      */
     public function __construct()
     {
-        parent::__construct();
+        $this->middleware('check.user');
 
-        if (! $this->user = getUser()) {
-            abort(403, __('main.not_authorized'));
-        }
+        $this->middleware(function ($request, $next) {
+            $this->user = getUser();
+
+            return $next($request);
+        });
 
         if (! setting('rekusershow')) {
             abort(200, __('adverts.advert_closed'));

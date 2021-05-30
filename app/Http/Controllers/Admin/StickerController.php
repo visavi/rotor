@@ -7,8 +7,6 @@ namespace App\Http\Controllers\Admin;
 use App\Classes\Validator;
 use App\Models\Sticker;
 use App\Models\StickersCategory;
-use App\Models\User;
-use Exception;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;

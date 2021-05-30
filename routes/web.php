@@ -253,7 +253,7 @@ Route::group(['prefix' => 'walls'], function () {
 });
 
 /* Личные сообщения */
-Route::group(['prefix' => 'messages'], function () {
+Route::group(['prefix' => 'messages', 'middleware' => 'check.user'], function () {
     Route::get('/', [\App\Http\Controllers\MessageController::class, 'index']);
     Route::get('/new', [\App\Http\Controllers\MessageController::class, 'newMessages']);
     Route::get('/talk/{login}', [\App\Http\Controllers\MessageController::class, 'talk']);
@@ -344,7 +344,6 @@ Route::get('/files/{page?}', [\App\Http\Controllers\FileController::class, 'inde
 
 /* Админ-панель */
 Route::group(['prefix' => 'admin', 'middleware' => 'check.admin'], function () {
-
     Route::get('/', [\App\Http\Controllers\Admin\AdminController::class, 'main']);
     Route::get('/upgrade', [\App\Http\Controllers\Admin\AdminController::class, 'upgrade']);
 
@@ -402,6 +401,12 @@ Route::group(['prefix' => 'admin', 'middleware' => 'check.admin'], function () {
     Route::post('/boards/create', [\App\Http\Controllers\Admin\BoardController::class, 'create']);
     Route::match(['get', 'post'], '/boards/edit/{id}', [\App\Http\Controllers\Admin\BoardController::class, 'edit']);
     Route::get('/boards/delete/{id}', [\App\Http\Controllers\Admin\BoardController::class, 'delete']);
+
+    /* Админская реклама */
+    Route::match(['get', 'post'], '/admin-adverts', [\App\Http\Controllers\Admin\AdminAdvertController::class, 'index']);
+
+    /* Пользовательская реклама */
+    Route::get('/adverts', [\App\Http\Controllers\Admin\AdvertController::class, 'index']);
 
     /* Модер */
     Route::group(['middleware' => 'check.admin:moder'], function () {
@@ -564,8 +569,6 @@ Route::group(['prefix' => 'admin', 'middleware' => 'check.admin'], function () {
         Route::get('/files/delete', [\App\Http\Controllers\Admin\FileController::class, 'delete']);
 
         /* Платная реклама */
-        Route::match(['get', 'post'], '/admin-adverts', [\App\Http\Controllers\Admin\AdminAdvertController::class, 'index']);
-        Route::get('/adverts', [\App\Http\Controllers\Admin\AdvertController::class, 'index']);
         Route::match(['get', 'post'], '/adverts/edit/{id}', [\App\Http\Controllers\Admin\AdvertController::class, 'edit']);
         Route::post('/adverts/delete', [\App\Http\Controllers\Admin\AdvertController::class, 'delete']);
         Route::get('/paid-adverts', [\App\Http\Controllers\Admin\PaidAdvertController::class, 'index']);

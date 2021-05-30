@@ -6,10 +6,8 @@ namespace App\Http\Controllers\Admin;
 
 use App\Classes\Validator;
 use App\Models\Setting;
-use App\Models\User;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Cache;
 use Illuminate\View\View;
 
 class SettingController extends AdminController

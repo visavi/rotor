@@ -6,7 +6,6 @@ namespace App\Http\Controllers\Admin;
 
 use App\Classes\Validator;
 use App\Models\BlackList;
-use App\Models\User;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
@@ -20,12 +19,14 @@ class BlacklistController extends AdminController
 
     /**
      * Конструктор
+     *
+     * @param Request $request
      */
-    public function __construct()
+    public function __construct(Request $request)
     {
         $types = ['email', 'login', 'domain'];
 
-        $this->type = request()->input('type', 'email');
+        $this->type = $request->input('type', 'email');
 
         if (! in_array($this->type, $types, true)) {
             abort(404, __('admin.blacklists.type_not_found'));

@@ -5,13 +5,7 @@ declare(strict_types=1);
 namespace App\Http\Controllers\Admin;
 
 use App\Classes\Validator;
-use App\Models\Comment;
-use App\Models\Guestbook;
-use App\Models\Message;
-use App\Models\Post;
 use App\Models\Spam;
-use App\Models\User;
-use App\Models\Wall;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
@@ -33,7 +27,12 @@ class SpamController extends AdminController
      */
     private $total = [];
 
-    public function __construct()
+    /**
+     * SpamController constructor.
+     *
+     * @param Request $request
+     */
+    public function __construct(Request $request)
     {
         $this->types = [
             'posts'     => __('index.forums'),
@@ -43,7 +42,7 @@ class SpamController extends AdminController
             'comments'  => __('main.comments'),
         ];
 
-        $type = request()->input('type');
+        $type = $request->input('type');
         $this->type = isset($this->types[$type]) ? $type : 'posts';
 
         $spam = Spam::query()

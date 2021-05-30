@@ -6,7 +6,6 @@ namespace App\Http\Controllers\Admin;
 
 use App\Classes\Validator;
 use App\Models\Banhist;
-use App\Models\User;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;

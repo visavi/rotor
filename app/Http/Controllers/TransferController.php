@@ -22,18 +22,17 @@ class TransferController extends Controller
 
     /**
      * Конструктор
-     *
-     * @param Request $request
      */
-    public function __construct(Request $request)
+    public function __construct()
     {
-        parent::__construct();
+        $this->middleware('check.user');
 
-        if (! getUser()) {
-            abort(403, __('main.not_authorized'));
-        }
+        $this->middleware(function ($request, $next) {
+            $login      = $request->input('user');
+            $this->user = getUserByLogin($login);
 
-        $this->user = getUserByLogin($request->input('user'));
+            return $next($request);
+        });
     }
 
     /**

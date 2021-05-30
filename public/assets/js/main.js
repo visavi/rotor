@@ -203,7 +203,7 @@ sendComplaint = function (el) {
                     id: $(el).data('id'),
                     type: $(el).data('type'),
                     page: $(el).data('page'),
-                    token: $(el).data('token')
+                    _token: $(el).data('token')
                 },
                 dataType: 'json', type: 'post', url: '/ajax/complaint',
                 success: function (data) {
@@ -231,7 +231,7 @@ bookmark = function (el) {
     $.ajax({
         data: {
             tid: $(el).data('tid'),
-            token: $(el).data('token')
+            _token: $(el).data('token')
         },
         dataType: 'json', type: 'post', url: '/forums/bookmarks/perform',
         success: function (data) {
@@ -259,7 +259,7 @@ bookmark = function (el) {
 /* Удаление сообщения в форуме */
 deletePost = function (el) {
     $.ajax({
-        data: {tid: $(el).data('tid'), token: $(el).data('token')},
+        data: {tid: $(el).data('tid'), _token: $(el).data('token')},
         dataType: 'json', type: 'post', url: '/forums/active/delete',
         success: function (data) {
 
@@ -287,7 +287,7 @@ deleteComment = function (el) {
                     id: $(el).data('id'),
                     rid: $(el).data('rid'),
                     type: $(el).data('type'),
-                    token: $(el).data('token')
+                    _token: $(el).data('token')
                 },
                 dataType: 'json', type: 'post', url: '/ajax/delcomment',
                 success: function (data) {
@@ -316,7 +316,7 @@ changeRating = function (el) {
             id: $(el).data('id'),
             type: $(el).data('type'),
             vote: $(el).data('vote'),
-            token: $(el).data('token')
+            _token: $(el).data('token')
         },
         dataType: 'json',
         type: 'post',
@@ -352,7 +352,7 @@ deleteRating = function (el) {
             $.ajax({
                 data: {
                     id: $(el).data('id'),
-                    token: $(el).data('token')
+                    _token: $(el).data('token')
                 },
                 dataType: 'json', type: 'post', url: '/ratings/delete',
                 success: function (data) {
@@ -379,7 +379,7 @@ deleteRating = function (el) {
  */
 deleteSpam = function (el) {
     $.ajax({
-        data: {id: $(el).data('id'), token: $(el).data('token')},
+        data: {id: $(el).data('id'), _token: $(el).data('token')},
         dataType: 'json', type: 'post', url: '/admin/spam/delete',
         success: function (data) {
 
@@ -405,7 +405,7 @@ deleteWall = function (el) {
     bootbox.confirm(translate.confirm_message_delete, function (result) {
         if (result) {
             $.ajax({
-                data: {id: $(el).data('id'), login: $(el).data('login'), token: $(el).data('token')},
+                data: {id: $(el).data('id'), login: $(el).data('login'), _token: $(el).data('token')},
                 dataType: 'json', type: 'post', url: '/walls/' + $(el).data('login') + '/delete',
                 success: function (data) {
 
@@ -454,7 +454,7 @@ submitFile = function (el) {
     form.append('file', el.files[0]);
     form.append('id', $(el).data('id'));
     form.append('type', $(el).data('type'));
-    form.append('token', $(el).data('token'));
+    form.append('_token', $(el).data('token'));
 
     $.ajax({
         data: form,
@@ -508,7 +508,7 @@ submitImage = function (el, paste) {
     form.append('file', el.files[0]);
     form.append('id', $(el).data('id'));
     form.append('type', $(el).data('type'));
-    form.append('token', $(el).data('token'));
+    form.append('_token', $(el).data('token'));
 
     $.ajax({
         data: form,
@@ -574,7 +574,7 @@ deleteFile = function (el) {
         data: {
             id: $(el).data('id'),
             type: $(el).data('type'),
-            token: $(el).data('token')
+            _token: $(el).data('token')
         },
         dataType: 'json',
         type: 'post',

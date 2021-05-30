@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace App\Http\Controllers\Admin;
 
 use App\Classes\Validator;
-use App\Models\User;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
@@ -18,18 +17,19 @@ class FileController extends AdminController
 
     /**
      * Конструктор
+     *
+     * @param Request $request
      */
-    public function __construct()
+    public function __construct(Request $request)
     {
-        $request    = request();
         $this->file = ltrim(check($request->input('file')), '/');
         $this->path = rtrim(check($request->input('path')), '/');
 
         if (empty($this->path) ||
-            ! file_exists(resource_path('views/' . $this->path)) ||
-            ! is_dir(resource_path('views/' . $this->path)) ||
             Str::contains($this->path, '.') ||
-            Str::startsWith($this->path, '/')
+            Str::startsWith($this->path, '/') ||
+            ! file_exists(resource_path('views/' . $this->path)) ||
+            ! is_dir(resource_path('views/' . $this->path))
         ) {
             $this->path = null;
         }

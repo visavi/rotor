@@ -25,10 +25,12 @@ class ErrorController extends AdminController
 
     /**
      * Конструктор
+     *
+     * @param Request $request
      */
-    public function __construct()
+    public function __construct(Request $request)
     {
-        $this->code  = int(request()->input('code', 404));
+        $this->code  = int($request->input('code', 404));
         $this->lists = [
             403 => __('admin.errors.errors', ['code' => 403]),
             404 => __('admin.errors.errors', ['code' => 404]),

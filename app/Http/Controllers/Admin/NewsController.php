@@ -8,7 +8,6 @@ use App\Classes\Validator;
 use App\Models\News;
 use App\Models\Setting;
 use App\Models\User;
-use Exception;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;

@@ -20,19 +20,19 @@ class ActiveController extends Controller
 
     /**
      * Конструктор
-     *
-     * @param Request $request
      */
-    public function __construct(Request $request)
+    public function __construct()
     {
-        parent::__construct();
+        $this->middleware(function ($request, $next) {
+            $login      = $request->input('user', getUser('login'));
+            $this->user = getUserByLogin($login);
 
-        $login      = $request->input('user', getUser('login'));
-        $this->user = getUserByLogin($login);
+            if (! $this->user) {
+                abort(404, __('validator.user'));
+            }
 
-        if (! $this->user) {
-            abort(404, __('validator.user'));
-        }
+            return $next($request);
+        });
     }
 
     /**

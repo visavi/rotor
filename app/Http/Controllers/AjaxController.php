@@ -21,6 +21,7 @@ use App\Models\Spam;
 use App\Models\Sticker;
 use App\Models\Wall;
 use Exception;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Http\Request;
@@ -35,7 +36,6 @@ class AjaxController extends Controller
      */
     public function __construct(Request $request)
     {
-        parent::__construct();
         $this->checkAjax($request);
         $this->checkAuthorize();
     }
@@ -60,9 +60,9 @@ class AjaxController extends Controller
      * @param Request   $request
      * @param Validator $validator
      *
-     * @return string
+     * @return JsonResponse
      */
-    public function complaint(Request $request, Validator $validator): string
+    public function complaint(Request $request, Validator $validator): JsonResponse
     {
         $path  = null;
         $model = false;
@@ -117,10 +117,10 @@ class AjaxController extends Controller
                 'created_at'  => SITETIME,
             ]);
 
-            return json_encode(['status' => 'success']);
+            return response()->json(['status' => 'success']);
         }
 
-        return json_encode([
+        return response()->json([
             'status'  => 'error',
             'message' => current($validator->getErrors()),
         ]);
@@ -132,12 +132,12 @@ class AjaxController extends Controller
      * @param Request   $request
      * @param Validator $validator
      *
-     * @return string
+     * @return JsonResponse
      */
-    public function delComment(Request $request, Validator $validator): string
+    public function delComment(Request $request, Validator $validator): JsonResponse
     {
         if (! isAdmin()) {
-            return json_encode([
+            return response()->json([
                 'status'  => 'error',
                 'message' => __('main.not_authorized'),
             ]);
@@ -166,10 +166,10 @@ class AjaxController extends Controller
                 }
             }
 
-            return json_encode(['status' => 'success']);
+            return response()->json(['status' => 'success']);
         }
 
-        return json_encode([
+        return response()->json([
             'status'  => 'error',
             'message' => current($validator->getErrors())
         ]);
@@ -180,10 +180,10 @@ class AjaxController extends Controller
      *
      * @param Request $request
      *
-     * @return string
+     * @return JsonResponse
      * @throws Exception
      */
-    public function rating(Request $request): string
+    public function rating(Request $request): JsonResponse
     {
         $types = [
             Post::$morphName,
@@ -198,15 +198,15 @@ class AjaxController extends Controller
         $vote = $request->input('vote');
 
         if ($request->input('_token') !== csrf_token()) {
-            return json_encode(['status' => 'error', 'message' => 'Invalid token']);
+            return response()->json(['status' => 'error', 'message' => 'Invalid token']);
         }
 
         if (! in_array($vote, ['+', '-'], true)) {
-            return json_encode(['status' => 'error', 'message' => 'Invalid rating']);
+            return response()->json(['status' => 'error', 'message' => 'Invalid rating']);
         }
 
         if (! in_array($type, $types, true)) {
-            return json_encode(['status' => 'error', 'message' => 'Type invalid']);
+            return response()->json(['status' => 'error', 'message' => 'Type invalid']);
         }
 
         /** @var BaseModel $model */
@@ -218,7 +218,7 @@ class AjaxController extends Controller
             ->first();
 
         if (! $post) {
-            return json_encode(['status' => 'error', 'message' => 'Record not found']);
+            return response()->json(['status' => 'error', 'message' => 'Record not found']);
         }
 
         $polling = $post->polling()->first();
@@ -226,7 +226,7 @@ class AjaxController extends Controller
 
         if ($polling) {
             if ($polling->vote === $vote) {
-                return json_encode(['status' => 'error']);
+                return response()->json(['status' => 'error']);
             }
 
             $polling->delete();
@@ -245,7 +245,7 @@ class AjaxController extends Controller
             $post->decrement('rating');
         }
 
-        return json_encode([
+        return response()->json([
             'status' => 'success',
             'cancel' => $cancel,
             'rating' => formatNum($post['rating'])->toHtml(),
@@ -258,9 +258,9 @@ class AjaxController extends Controller
      * @param Request   $request
      * @param Validator $validator
      *
-     * @return string
+     * @return JsonResponse
      */
-    public function uploadFile(Request $request, Validator $validator): string
+    public function uploadFile(Request $request, Validator $validator): JsonResponse
     {
         $imageTypes = [
             Article::$morphName,
@@ -277,7 +277,7 @@ class AjaxController extends Controller
         $type = $request->input('type');
 
         if (! in_array($type, array_merge($imageTypes, $fileTypes), true)) {
-            return json_encode(['status' => 'error', 'message' => 'Type invalid']);
+            return response()->json(['status' => 'error', 'message' => 'Type invalid']);
         }
 
         /** @var BaseModel $class */
@@ -288,7 +288,7 @@ class AjaxController extends Controller
             $model = $class::query()->where('user_id', getUser('id'))->find($id);
 
             if (! $model) {
-                return json_encode([
+                return response()->json([
                     'status'  => 'error',
                     'message' => 'Service not found'
                 ]);
@@ -341,10 +341,10 @@ class AjaxController extends Controller
                 ];
             }
 
-            return json_encode($data);
+            return response()->json($data);
         }
 
-        return json_encode([
+        return response()->json([
             'status'  => 'error',
             'message' => current($validator->getErrors())
         ]);
@@ -356,10 +356,10 @@ class AjaxController extends Controller
      * @param Request   $request
      * @param Validator $validator
      *
-     * @return string
+     * @return JsonResponse
      * @throws Exception
      */
-    public function deleteFile(Request $request, Validator $validator): string
+    public function deleteFile(Request $request, Validator $validator): JsonResponse
     {
         $types = [
             Article::$morphName,
@@ -372,7 +372,7 @@ class AjaxController extends Controller
         $type = $request->input('type');
 
         if (! in_array($type, $types, true)) {
-            return json_encode(['status' => 'error', 'message' => 'Type invalid']);
+            return response()->json(['status' => 'error', 'message' => 'Type invalid']);
         }
 
         /** @var File $file */
@@ -381,7 +381,7 @@ class AjaxController extends Controller
             ->find($id);
 
         if (! $file) {
-            return json_encode([
+            return response()->json([
                 'status'  => 'error',
                 'message' => 'File not found'
             ]);
@@ -393,13 +393,13 @@ class AjaxController extends Controller
         if ($validator->isValid()) {
             $file->delete();
 
-            return json_encode([
+            return response()->json([
                 'status' => 'success',
                 'path'   => $file->hash,
             ]);
         }
 
-        return json_encode([
+        return response()->json([
             'status'  => 'error',
             'message' => current($validator->getErrors())
         ]);
@@ -408,10 +408,10 @@ class AjaxController extends Controller
     /**
      * Вставляет стикер
      *
-     * @return string
+     * @return JsonResponse
      * @throws Exception
      */
-    public function getStickers(): string
+    public function getStickers(): JsonResponse
     {
         $stickers = Sticker::query()
             //->where('category_id', $id)
@@ -421,7 +421,7 @@ class AjaxController extends Controller
 
         $view = view('pages/_stickers_modal', compact('stickers'));
 
-        return json_encode([
+        return response()->json([
             'status' => 'success',
             'stickers' => $view,
         ]);
@@ -432,15 +432,12 @@ class AjaxController extends Controller
      *
      * @param Request $request
      *
-     * @return mixed
+     * @return JsonResponse|bool
      */
     private function checkAjax(Request $request)
     {
         if (! $request->ajax()) {
-            exit(json_encode([
-                'status'  => 'error',
-                'message' => __('validator.not_ajax')
-            ]));
+            return response()->json(['status' => 'error', 'message' => __('validator.not_ajax')]);
         }
 
         return true;
@@ -449,15 +446,12 @@ class AjaxController extends Controller
     /**
      * Возвращает авторизован ли пользователь
      *
-     * @return mixed
+     * @return JsonResponse|bool
      */
     private function checkAuthorize()
     {
         if (! getUser()) {
-            exit(json_encode([
-                'status'  => 'error',
-                'message' => __('main.not_authorized')
-            ]));
+            return response()->json(['status' => 'error', 'message' => __('main.not_authorized')]);
         }
 
         return true;

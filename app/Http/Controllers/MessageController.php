@@ -31,10 +31,7 @@ class MessageController extends Controller
     public function __construct()
     {
         $this->middleware(function ($request, $next) {
-
-            if (! $this->user = getUser()) {
-                abort(403, __('main.not_authorized'));
-            }
+            $this->user = getUser();
 
             return $next($request);
         });

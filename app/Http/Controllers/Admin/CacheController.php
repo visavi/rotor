@@ -4,12 +4,6 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers\Admin;
 
-use App\Commands\CacheClear;
-use App\Commands\ConfigClear;
-use App\Commands\ImageClear;
-use App\Commands\RouteClear;
-use App\Commands\ViewClear;
-use App\Models\User;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
