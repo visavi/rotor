@@ -1242,39 +1242,39 @@ function restatement(string $mode)
 {
     switch ($mode) {
         case 'forums':
-            DB::connection()->update('update topics set count_posts = (select count(*) from posts where topics.id = posts.topic_id)');
-            DB::connection()->update('update forums set count_topics = (select count(*) from topics where forums.id = topics.forum_id)');
-            DB::connection()->update('update forums set count_posts = (select coalesce(sum(count_posts), 0) from topics where forums.id = topics.forum_id)');
+            DB::update('update topics set count_posts = (select count(*) from posts where topics.id = posts.topic_id)');
+            DB::update('update forums set count_topics = (select count(*) from topics where forums.id = topics.forum_id)');
+            DB::update('update forums set count_posts = (select coalesce(sum(count_posts), 0) from topics where forums.id = topics.forum_id)');
             break;
 
         case 'blogs':
-            DB::connection()->update('update blogs set count_articles = (select count(*) from articles where blogs.id = articles.category_id)');
-            DB::connection()->update('update articles set count_comments = (select count(*) from comments where relate_type = "' . Article::$morphName . '" and articles.id = comments.relate_id)');
+            DB::update('update blogs set count_articles = (select count(*) from articles where blogs.id = articles.category_id)');
+            DB::update('update articles set count_comments = (select count(*) from comments where relate_type = "' . Article::$morphName . '" and articles.id = comments.relate_id)');
             break;
 
         case 'loads':
-            DB::connection()->update('update loads set count_downs = (select count(*) from downs where loads.id = downs.category_id and active = ?)', [1]);
-            DB::connection()->update('update downs set count_comments = (select count(*) from comments where relate_type = "' . Down::$morphName . '" and downs.id = comments.relate_id)');
+            DB::update('update loads set count_downs = (select count(*) from downs where loads.id = downs.category_id and active = ?)', [1]);
+            DB::update('update downs set count_comments = (select count(*) from comments where relate_type = "' . Down::$morphName . '" and downs.id = comments.relate_id)');
             break;
 
         case 'news':
-            DB::connection()->update('update news set count_comments = (select count(*) from comments where relate_type = "' . News::$morphName . '" and news.id = comments.relate_id)');
+            DB::update('update news set count_comments = (select count(*) from comments where relate_type = "' . News::$morphName . '" and news.id = comments.relate_id)');
             break;
 
         case 'photos':
-            DB::connection()->update('update photos set count_comments = (select count(*) from comments where relate_type = "' . Photo::$morphName . '" and photos.id = comments.relate_id)');
+            DB::update('update photos set count_comments = (select count(*) from comments where relate_type = "' . Photo::$morphName . '" and photos.id = comments.relate_id)');
             break;
 
         case 'offers':
-            DB::connection()->update('update offers set count_comments = (select count(*) from comments where relate_type = "' . Offer::$morphName . '" and offers.id = comments.relate_id)');
+            DB::update('update offers set count_comments = (select count(*) from comments where relate_type = "' . Offer::$morphName . '" and offers.id = comments.relate_id)');
             break;
 
         case 'boards':
-            DB::connection()->update('update boards set count_items = (select count(*) from items where boards.id = items.board_id and items.expires_at > ' . SITETIME . ');');
+            DB::update('update boards set count_items = (select count(*) from items where boards.id = items.board_id and items.expires_at > ' . SITETIME . ');');
             break;
 
         case 'votes':
-            DB::connection()->update('update votes set count = (select coalesce(sum(result), 0) from voteanswer where votes.id = voteanswer.vote_id)');
+            DB::update('update votes set count = (select coalesce(sum(result), 0) from voteanswer where votes.id = voteanswer.vote_id)');
             break;
     }
 }
@@ -1586,90 +1586,6 @@ function returnUrl(?string $url = null): ?string
 }
 
 /**
- * Возвращает подключенный шаблон
- *
- * @param string $view   имя шаблона
- * @param array  $params массив параметров
- * @param array  $mergeData
- *
- * @return string сформированный код
- */
-/*function view(string $view, array $params = [], array $mergeData = []): string
-{
-    return View::make($view, $params, $mergeData)->render();
-}*/
-
-/**
- * Translate the given message.
- *
- * @param string      $key
- * @param array       $replace
- * @param string|null $locale
- *
- * @return string
- */
-/*function __(string $key, array $replace = [], $locale = null): string
-{
-    return Lang::get($key, $replace, $locale);
-}*/
-
-/**
- * Translates the given message based on a count.
- *
- * @param string              $key
- * @param int|array|Countable $number
- * @param array               $replace
- * @param string|null         $locale
- *
- * @return string
- */
-/*function choice(string $key, $number, array $replace = [], $locale = null): string
-{
-    return Lang::choice($key, $number, $replace, $locale);
-}*/
-
-/**
- * Сохраняет страницы с ошибками
- *
- * @param int|string  $code    код ошибки
- * @param string|null $message текст ошибки
- *
- * @return string сформированная страница с ошибкой
- */
-/*function abort($code, $message = null): string
-{
-    $protocol = server('SERVER_PROTOCOL');
-    $referer  = server('HTTP_REFERER');
-
-    switch ($code) {
-        case 403:
-            header($protocol . ' 403 Forbidden');
-            break;
-        case 404:
-            header($protocol . ' 404 Not Found');
-            break;
-        case 405:
-            header($protocol . ' 405 Method Not Allowed');
-            break;
-        default:
-            header($protocol . ' 400 Bad Request');
-    }
-
-    saveErrorLog($code);
-
-    if (request()->ajax()) {
-        header($protocol . ' 200 OK');
-
-        exit(json_encode([
-            'status' => 'error',
-            'message' => $message,
-        ]));
-    }
-
-    exit(view('errors/' . $code, compact('message', 'referer')));
-}*/
-
-/**
  * Saves error logs
  *
  * @param mixed $code
@@ -1963,7 +1879,7 @@ function getBrowser($userAgent = null): string
  *
  * @return mixed данные
  */
-function server($key = null, $default = null)
+function server(?string $key = null, ?string $default = null)
 {
     return request()->server($key, $default);
 }
@@ -2146,7 +2062,8 @@ function progressBar(int $percent, $title = null): HtmlString
  */
 function getQueryLog(): array
 {
-    $queries = DB::connection()->getQueryLog();
+    $queries = DB::getQueryLog();
+
     $formattedQueries = [];
 
     foreach ($queries as $query) {
@@ -2193,7 +2110,7 @@ function ipBan(bool $clear = false): array
  *
  * @return mixed данные
  */
-function setting($key = null, $default = null)
+function setting(?string $key = null, $default = null)
 {
     static $settings;
 
@@ -2212,7 +2129,7 @@ function setting($key = null, $default = null)
  *
  * @return array|string|null данные
  */
-function defaultSetting($key = null, $default = null)
+function defaultSetting(?string $key = null, ?string $default = null)
 {
     static $settings;
 
@@ -2343,23 +2260,3 @@ function getCourses(): ?HtmlString
 
     return new HtmlString(view('app/_courses', compact('courses')));
 }
-
-/**
- * Runs the console command
- *
- * @param Command $command
- * @param array   $arguments
- *
- * @return void
- */
-/*function runCommand(Command $command, array $arguments = [])
-{
-    $input  = new ArrayInput($arguments);
-    $output = new NullOutput();
-
-    try {
-        $command->run($input, $output);
-    } catch (Exception $e) {
-        return;
-    }
-}*/

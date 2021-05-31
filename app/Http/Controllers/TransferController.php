@@ -74,7 +74,7 @@ class TransferController extends Controller
         }
 
         if ($validator->isValid()) {
-            DB::connection()->transaction(function () use ($money, $msg) {
+            DB::transaction(function () use ($money, $msg) {
                 getUser()->decrement('money', $money);
                 $this->user->increment('money', $money);
 

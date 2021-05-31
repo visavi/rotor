@@ -140,7 +140,7 @@ class VoteController extends AdminController
         }
 
         if ($request->input('_token') === csrf_token()) {
-            DB::connection()->transaction(static function () use ($vote) {
+            DB::transaction(static function () use ($vote) {
                 $vote->delete();
                 $vote->answers()->delete();
                 $vote->pollings()->delete();

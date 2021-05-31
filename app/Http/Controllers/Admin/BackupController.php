@@ -60,7 +60,7 @@ class BackupController extends AdminController
                 ->between($level, 0, 9, ['level' => __('admin.backup.wrong_compression_ratio')]);
 
             if ($validator->isValid()) {
-                $selectTables = DB::connection()->select('SHOW TABLE STATUS where name IN("' . implode('","', $sheets) . '")');
+                $selectTables = DB::select('SHOW TABLE STATUS where name IN("' . implode('","', $sheets) . '")');
 
                 $limit    = 3000;
                 $filename = 'backup_'.$this->date.'.sql';
@@ -68,14 +68,14 @@ class BackupController extends AdminController
                 $fp = $this->fopen(storage_path('backups/'.$filename), 'w', $method, $level);
 
                 foreach ($selectTables as $table) {
-                    $show = DB::connection()->selectOne("SHOW CREATE TABLE `{$table->Name}`");
-                    $columnsFields = DB::connection()->select("SHOW COLUMNS FROM `{$table->Name}`");
+                    $show = DB::selectOne("SHOW CREATE TABLE `{$table->Name}`");
+                    $columnsFields = DB::select("SHOW COLUMNS FROM `{$table->Name}`");
                     $columns = '(' .implode(',', array_column($columnsFields, 'Field')) . ')';
 
                     $this->fwrite($fp, "--\n-- Structure table `{$table->Name}`\n--\n\n", $method);
                     $this->fwrite($fp, "DROP TABLE IF EXISTS `{$table->Name}`;\n{$show->{'Create Table'}};\n\n", $method);
 
-                    $total = DB::connection()->table($table->Name)->count();
+                    $total = DB::table($table->Name)->count();
 
                     if (! $total) {
                         continue;
@@ -85,7 +85,7 @@ class BackupController extends AdminController
                     $this->fwrite($fp, "INSERT INTO `{$table->Name}` {$columns} VALUES ", $method);
 
                     for ($i = 0; $i < $total; $i += $limit) {
-                        $cols = DB::connection()->table($table->Name)->lockForUpdate()->limit($limit)->offset($i)->get();
+                        $cols = DB::table($table->Name)->lockForUpdate()->limit($limit)->offset($i)->get();
 
                         foreach ($cols as $key => $col) {
                             $records = get_object_vars($col);
@@ -116,7 +116,7 @@ class BackupController extends AdminController
             setFlash('danger', $validator->getErrors());
         }
 
-        $tables = DB::connection()->select('SHOW TABLE STATUS');
+        $tables = DB::select('SHOW TABLE STATUS');
 
         $bzopen = function_exists('bzopen');
         $gzopen = function_exists('gzopen');
