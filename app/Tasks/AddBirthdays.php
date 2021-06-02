@@ -25,16 +25,13 @@ class AddBirthdays extends Task
             foreach ($deliveryUsers as $user) {
                 $subject = 'С днем рождения от ' . setting('title');
 
-                $message = 'Здравствуйте ' . $user->getName() . '!<br>Поздравляем Вас с Днём рождения и желаем счастья, здоровья, новых идей, творческого настроения и побольше радости и смеха!<br><br>Администрация сайта ' . setting('title');
-
-                $body = view('mailer.default', compact('subject', 'message'));
-                $body = $this->minifyHtml($body);
+                $text = 'Здравствуйте ' . e($user->getName()) . '!<br>Поздравляем Вас с Днём рождения и желаем счастья, здоровья, новых идей, творческого настроения и побольше радости и смеха!<br><br>Администрация сайта ' . setting('title');
 
                 Mailing::query()->create([
                     'user_id'    => $user->id,
                     'type'       => 'birthdays',
                     'subject'    => $subject,
-                    'text'       => $body,
+                    'text'       => $text,
                     'created_at' => SITETIME,
                 ]);
             }

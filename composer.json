@@ -35,7 +35,6 @@
         "laravel/tinker": "^2.5",
         "nelexa/zip": "^3.3",
         "php-ffmpeg/php-ffmpeg": "~0.18",
-        "phpmailer/phpmailer": "^6.4",
         "visavi/cleanup": "^1.5"
     },
     "require-dev": {

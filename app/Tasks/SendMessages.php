@@ -12,7 +12,7 @@ class SendMessages extends Task
     /**
      * Рассылает письма
      */
-    public function run()
+    public function run(): void
     {
         $queues = Mailing::query()
             ->where('sent', 0)
@@ -24,7 +24,13 @@ class SendMessages extends Task
                 $user = getUserById($queue->user_id);
 
                 if ($user) {
-                    sendMail($user->email, $queue->subject, $queue->text);
+                    $data = [
+                        'to'      => $user->email,
+                        'subject' => $queue->subject,
+                        'text'    => $queue->text,
+                    ];
+
+                    sendMail('mailer.default', $data);
                 }
 
                 $queue->update([

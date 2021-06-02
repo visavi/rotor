@@ -28,16 +28,13 @@ class AddSubscribers extends Task
             foreach ($deliveryUsers as $user) {
                 $subject = $user->newprivat . ' непрочитанных сообщений на ' . setting('title');
 
-                $message = 'Здравствуйте ' . $user->getName() . '!<br>У вас имеются непрочитанные сообщения (' . $user->newprivat . ' шт.) на сайте ' . setting('title') . '<br>Прочитать свои сообщения вы можете по адресу <a href="' . siteUrl(true) . '/messages">' . siteUrl(true) . '/messages</a><br><br><small>Если вы не хотите получать эти email, пожалуйста, <a href="'.siteUrl(true).'/unsubscribe?key='.$user->subscribe.'">откажитесь от подписки</a></small>';
-
-                $body = view('mailer.default', compact('subject', 'message'));
-                $body = $this->minifyHtml($body);
+                $text = 'Здравствуйте ' . e($user->getName()) . '!<br>У вас имеются непрочитанные сообщения (' . $user->newprivat . ' шт.) на сайте ' . setting('title') . '<br>Прочитать свои сообщения вы можете по адресу <a href="' . siteUrl(true) . '/messages">' . siteUrl(true) . '/messages</a><br><br><small>Если вы не хотите получать эти email, пожалуйста, <a href="'.siteUrl(true).'/unsubscribe?key='.$user->subscribe.'">откажитесь от подписки</a></small>';
 
                 Mailing::query()->create([
                     'user_id'    => $user->id,
                     'type'       => 'messages',
                     'subject'    => $subject,
-                    'text'       => $body,
+                    'text'       => $text,
                     'created_at' => SITETIME,
                 ]);
 

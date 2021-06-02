@@ -1,8 +1,9 @@
 <?php
 
+use App\Mail\Sendmail;
 use App\Models\AdminAdvert;
 use App\Models\PaidAdvert;
-use App\Classes\{BBCode, Calendar, Metrika, CloudFlare, Mix};
+use App\Classes\{BBCode, Calendar, Metrika, CloudFlare};
 use App\Models\Antimat;
 use App\Models\Ban;
 use App\Models\Banhist;
@@ -30,6 +31,7 @@ use App\Models\Topic;
 use App\Models\User;
 use App\Models\Vote;
 use GuzzleHttp\Client;
+use Illuminate\Mail\Message;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
@@ -37,13 +39,13 @@ use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\HtmlString;
 use Illuminate\Support\Str;
+use Illuminate\View\View;
 use Intervention\Image\Constraint;
 use Intervention\Image\ImageManagerStatic as Image;
-use PHPMailer\PHPMailer\PHPMailer;
 use ReCaptcha\ReCaptcha;
-use Symfony\Component\Console\Command\Command;
 
 /**
  * Форматирует вывод времени из секунд
@@ -1705,56 +1707,25 @@ function textError(string $field): ?string
 /**
  * Отправляет уведомления на email
  *
- * @param string $to      Получатель
- * @param string $subject Тема письма
- * @param string $body    Текст сообщения
- * @param array  $params  Дополнительные параметры
+ * @param string $view
+ * @param array  $data
  *
  * @return bool Результат отправки
  */
-function sendMail(string $to, string $subject, string $body, array $params = []): bool
+function sendMail(string $view, array $data): bool
 {
-    $mail = new PHPMailer(true);
-    try {
-        if (config('mail.driver') === 'smtp') {
-            $mail->isSMTP();
-            $mail->Host       = config('mail.host');
-            $mail->Port       = config('mail.port');
-            $mail->SMTPAuth   = true;
-            $mail->Username   = config('mail.username');
-            $mail->Password   = config('mail.password');
-            $mail->SMTPSecure = config('mail.encryption');
+    Mail::send($view, $data, function (Message $message) use ($data) {
+        $message->to($data['to'])->subject($data['subject']);
+
+        if (isset($data['from'])) {
+            [$fromEmail, $fromName] = $data['from'];
+            $message->from($fromEmail, $fromName);
+        } else {
+            $message->from(config('app.email'), config('app.admin'));
         }
+    });
 
-        if (config('mail.driver') === 'sendmail') {
-            $mail->isSendmail();
-            if (config('mail.path')) {
-                $mail->Sendmail = config('mail.path');
-            }
-        }
-
-        if (config('mail.driver') === 'mail') {
-            $mail->isMail();
-        }
-
-        if (isset($params['from'])) {
-            [$fromEmail, $fromName] = $params['from'];
-            $mail->addReplyTo($fromEmail, $fromName);
-        }
-
-        $mail->Sender  = config('app.email');
-        $mail->CharSet = PHPMailer::CHARSET_UTF8;
-        $mail->Subject = $subject;
-        $mail->setFrom(config('app.email'), config('app.admin'));
-        $mail->addAddress($to);
-        $mail->msgHTML($body);
-
-        return $mail->send();
-    } catch (Exception $e) {
-        Log::error('PHPMailer error: ' . $e);
-    }
-
-    return false;
+    return ! Mail::failures();
 }
 
 /**

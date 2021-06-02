@@ -39,6 +39,8 @@ class MailController extends Controller
                 ->email($email, ['email' => __('validator.email')]);
 
             if ($validator->isValid()) {
+                $subject = __('mails.email_from_site', ['sitename' => setting('title')], defaultSetting('language'));
+
                 $message = str_replace(
                     '/uploads/stickers',
                     siteUrl() . '/uploads/stickers',
@@ -46,10 +48,14 @@ class MailController extends Controller
                 );
 
                 $message .= '<br><br>Email: ' . $name . ' &lt;' . $email . '&gt;<br>IP: ' . getIp() . '<br>Browser: ' . getBrowser() . '<br>' . __('main.sent_out', [], defaultSetting('language')) . ': ' . dateFixed(SITETIME, 'd.m.y / H:i');
+                $data = [
+                    'to'      => config('app.email'),
+                    'subject' => $subject,
+                    'text'    => $message,
+                    'from'    => [$email, $name],
+                ];
 
-                $subject = __('mails.email_from_site', ['sitename' => setting('title')], defaultSetting('language'));
-                $body = view('mailer.default', compact('subject', 'message'));
-                $send = sendMail(config('app.email'), $subject, $body, ['from' => [$email, $name]]);
+                $send = sendMail('mailer.default', $data);
 
                 if ($send) {
                     setFlash('success', __('mails.success_sent'));
@@ -107,9 +113,14 @@ class MailController extends Controller
                 $subject = 'Восстановление пароля на ' . setting('title');
                 $message = 'Здравствуйте, ' . $user->getName() . '<br>Вами была произведена операция по восстановлению пароля на сайте <a href="' . siteUrl(true) . '">' . setting('title') . '</a><br><br>Данные отправителя:<br>Ip: ' . getIp() . '<br>Браузер: ' . getBrowser() . '<br>Отправлено: ' . date('j.m.Y / H:i', SITETIME) . '<br><br>Для того чтобы восстановить пароль, вам необходимо нажать на кнопку восстановления<br>Если это письмо попало к вам по ошибке или вы не собираетесь восстанавливать пароль, то просто проигнорируйте его';
 
-                $body = view('mailer.recovery', compact('subject', 'message', 'resetLink'));
-                sendMail($user->email, $subject, $body);
+                $data = [
+                    'to'        => $user->email,
+                    'subject'   => $subject,
+                    'text'      => $message,
+                    'resetLink' => $resetLink,
+                ];
 
+                sendMail('mailer.recovery', $data);
                 setFlash('success', __('mails.recovery_instructions', ['email' => hideMail($user->email)]));
 
                 return redirect('login');
@@ -164,8 +175,13 @@ class MailController extends Controller
             $subject = 'Восстановление пароля на ' . setting('title');
             $message = 'Здравствуйте, ' . $user->getName() . '<br>Ваши новые данные для входа на на сайт <a href="' . siteUrl(true) . '">' . setting('title') . '</a><br><b>Логин: ' . $user->login . '</b><br><b>Пароль: ' . $newpass . '</b><br><br>Запомните и постарайтесь больше не забывать данные <br>Пароль вы сможете поменять в своем профиле<br>Всего наилучшего!';
 
-            $body = view('mailer.default', compact('subject', 'message'));
-            sendMail($user->email, $subject, $body);
+            $data = [
+                'to'      => $user->email,
+                'subject' => $subject,
+                'text'    => $message,
+            ];
+
+            sendMail('mailer.default', $data);
 
             return view('mails/restore', ['login' => $user->login, 'password' => $newpass]);
         }

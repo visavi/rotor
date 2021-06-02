@@ -211,11 +211,18 @@ class UserController extends Controller
                     $user->sendMessage(null, $textNotice);
 
                     // --- Уведомление о регистрации на email ---//
+                    $subject = 'Регистрация на ' . setting('title');
                     $message = 'Добро пожаловать, ' . $login . '<br>Теперь вы зарегистрированный пользователь сайта <a href="' . siteUrl(true) . '">' . setting('title') . '</a> , сохраните ваш логин и пароль в надежном месте, они вам еще пригодятся. <br>Ваши данные для входа на сайт <br><b>Логин: ' . $login . '</b><br><b>Пароль: ' . $password . '</b>';
 
-                    $subject = 'Регистрация на ' . setting('title');
-                    $body = view('mailer.register', compact('subject', 'message', 'activateKey', 'activateLink'));
-                    sendMail($email, $subject, $body);
+                    $data = [
+                        'to'           => $email,
+                        'subject'      => $subject,
+                        'text'         => $message,
+                        'activateKey'  => $activateKey,
+                        'activateLink' => $activateLink,
+                    ];
+
+                    sendMail('mailer.register', $data);
 
                     User::auth($login, $password);
 
@@ -429,13 +436,18 @@ class UserController extends Controller
                 ]);
 
                 /* Уведомление о регистрации на email */
-                $message = 'Добро пожаловать, ' . $user->getName() . '<br>Теперь вы зарегистрированный пользователь сайта <a href="' . siteUrl(true) . '">' . setting('title') . '</a> , сохраните ваш логин и пароль в надежном месте, они вам еще пригодятся.';
-
                 $subject = 'Регистрация на ' . setting('title');
-                $body = view('mailer.register', compact('subject', 'message', 'activateKey', 'activateLink'));
+                $message = 'Добро пожаловать, ' . e($user->getName()) . '<br>Теперь вы зарегистрированный пользователь сайта <a href="' . siteUrl(true) . '">' . setting('title') . '</a> , сохраните ваш логин и пароль в надежном месте, они вам еще пригодятся.';
 
-                sendMail($email, $subject, $body);
+                $data = [
+                    'to'           => $email,
+                    'subject'      => $subject,
+                    'text'         => $message,
+                    'activateKey'  => $activateKey,
+                    'activateLink' => $activateLink,
+                ];
 
+                sendMail('mailer.register', $data);
                 setFlash('success', __('users.confirm_code_success_sent'));
 
                 return redirect('/');
@@ -571,16 +583,21 @@ class UserController extends Controller
             $genkey = Str::random();
 
             $subject = 'Изменение email на '.setting('title');
-            $message = 'Здравствуйте, ' . $user->getName() . '<br>Вами была произведена операция по изменению адреса электронной почты<br><br>Для того, чтобы изменить email, необходимо подтвердить новый адрес почты<br>Перейдите по данной ссылке:<br><br><a href="' . siteUrl(true) . '/accounts/editmail?key=' . $genkey . '">' . siteUrl(true) . '/accounts/editmail?key=' . $genkey . '</a><br><br>Ссылка будет дейстительной в течение суток до ' . date('j.m.y / H:i', strtotime('+1 day', SITETIME)) . '<br>Для изменения адреса необходимо быть авторизованным на сайте<br>Если это сообщение попало к вам по ошибке или вы не собираетесь менять email, то просто проигнорируйте данное письмо';
+            $message = 'Здравствуйте, ' . e($user->getName()) . '<br>Вами была произведена операция по изменению адреса электронной почты<br><br>Для того, чтобы изменить email, необходимо подтвердить новый адрес почты<br>Перейдите по данной ссылке:<br><br><a href="' . siteUrl(true) . '/accounts/editmail?key=' . $genkey . '">' . siteUrl(true) . '/accounts/editmail?key=' . $genkey . '</a><br><br>Ссылка будет дейстительной в течение суток до ' . date('j.m.y / H:i', strtotime('+1 day', SITETIME)) . '<br>Для изменения адреса необходимо быть авторизованным на сайте<br>Если это сообщение попало к вам по ошибке или вы не собираетесь менять email, то просто проигнорируйте данное письмо';
 
-            $body = view('mailer.default', compact('subject', 'message'));
-            sendMail($email, $subject, $body);
+            $data = [
+                'to'      => $email,
+                'subject' => $subject,
+                'text'    => $message,
+            ];
+
+            sendMail('mailer.default', $data);
 
             changeMail::query()->create([
                 'user_id'    => $user->id,
                 'mail'       => $email,
                 'hash'       => $genkey,
-                'created_at' => strtotime('+1 day', SITETIME),
+                'created_at' => strtotime('+1 hour', SITETIME),
             ]);
 
             setFlash('success', __('users.confirm_success_sent'));
@@ -756,10 +773,15 @@ class UserController extends Controller
             ]);
 
             $subject = 'Изменение пароля на ' . setting('title');
-            $message = 'Здравствуйте, ' . $user->getName() . '<br>Вами была произведена операция по изменению пароля<br><br><b>Ваш новый пароль: ' . $newpass . '</b><br>Сохраните его в надежном месте<br><br>Данные инициализации:<br>IP: ' . getIp() . '<br>Браузер: ' . getBrowser() . '<br>Время: ' . date('j.m.y / H:i', SITETIME);
+            $message = 'Здравствуйте, ' . e($user->getName()) . '<br>Вами была произведена операция по изменению пароля<br><br><b>Ваш новый пароль: ' . $newpass . '</b><br>Сохраните его в надежном месте<br><br>Данные инициализации:<br>IP: ' . getIp() . '<br>Браузер: ' . getBrowser() . '<br>Время: ' . date('j.m.y / H:i', SITETIME);
 
-            $body = view('mailer.default', compact('subject', 'message'));
-            sendMail($user->email, $subject, $body);
+            $data = [
+                'to'        => $user->email,
+                'subject'   => $subject,
+                'text'      => $message,
+            ];
+
+            sendMail('mailer.default', $data);
 
             $request->session()->forget(['id', 'password']);
 
