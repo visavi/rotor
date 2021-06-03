@@ -25,5 +25,9 @@ class AppServiceProvider extends ServiceProvider
     public function boot()
     {
         DB::connection()->enableQueryLog();
+
+        if (setting('app_installed')) {
+            $this->loadMigrationsFrom([database_path('upgrades')]);
+        }
     }
 }

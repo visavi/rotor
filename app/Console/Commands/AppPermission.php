@@ -22,20 +22,13 @@ class AppPermission extends Command
     protected $description = 'Set file permissions';
 
     /**
-     * @var Filesystem
-     */
-    private $filesystem;
-
-    /**
      * Create a new command instance.
      *
      * @return void
      */
-    public function __construct(Filesystem $filesystem)
+    public function __construct()
     {
         parent::__construct();
-
-        $this->filesystem = $filesystem;
     }
 
     /**
@@ -43,7 +36,7 @@ class AppPermission extends Command
      *
      * @return int
      */
-    public function handle()
+    public function handle(Filesystem $filesystem)
     {
         $storage = glob(storage_path('/*'), GLOB_ONLYDIR);
         $uploads = glob(public_path('uploads/*'), GLOB_ONLYDIR);
@@ -51,7 +44,7 @@ class AppPermission extends Command
 
         $dirs = array_merge($storage, $uploads, $modules);
 
-        $this->filesystem->chmod($dirs, 0777);
+        $filesystem->chmod($dirs, 0777);
 
         $this->info('Permissions set successfully.');
 

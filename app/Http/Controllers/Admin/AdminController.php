@@ -6,6 +6,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\User;
+use Illuminate\Support\Facades\Artisan;
 use Illuminate\View\View;
 
 class AdminController extends Controller
@@ -27,22 +28,16 @@ class AdminController extends Controller
     /**
      * Проверка обновлений
      *
-     * @param PhinxApplication $app
-     *
      * @return View
      */
-    public function upgrade(PhinxApplication $app): View
+    public function upgrade(): View
     {
-        $wrap = new TextWrapper($app);
 
-        $app->setName('Rotor by Vantuz - https://visavi.net');
-        $app->setVersion(ROTOR_VERSION);
+        Artisan::call('migrate');
 
-        $wrap->setOption('configuration', base_path('app/migration.php'));
-        $wrap->setOption('parser', 'php');
-        $wrap->setOption('environment', 'default');
+        $output = Artisan::output();
 
-        return view('admin/upgrade', compact('wrap'));
+        return view('admin/upgrade', compact('output'));
     }
 
     /**
@@ -57,7 +52,6 @@ class AdminController extends Controller
         }
 
         $iniInfo = null;
-        $gdInfo  = null;
 
         if (function_exists('ini_get_all')) {
             $iniInfo = ini_get_all();

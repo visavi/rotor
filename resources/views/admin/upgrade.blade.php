@@ -14,7 +14,9 @@
 
 @section('content')
     <div class="section mb-3 shadow">
-        {!! nl2br($wrap->getMigrate()) !!}
+        <div class="fw-bold">Rotor by Vantuz - https://visavi.net v{{ ROTOR_VERSION }}</div>
+
+        {!! nl2br($output) !!}
     </div>
 
     <div class="alert alert-success">

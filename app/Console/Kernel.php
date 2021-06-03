@@ -19,12 +19,21 @@ class Kernel extends ConsoleKernel
     /**
      * Define the application's command schedule.
      *
-     * @param  \Illuminate\Console\Scheduling\Schedule  $schedule
+     * @param Schedule $schedule
      * @return void
      */
     protected function schedule(Schedule $schedule)
     {
-        // $schedule->command('inspire')->hourly();
+        $schedule->command('board:restatement')->hourly();
+        $schedule->command('delete:files')->daily();
+        $schedule->command('delete:logins')->daily();
+        $schedule->command('delete:logs')->daily();
+        $schedule->command('delete:pending')->daily();
+        $schedule->command('delete:pooling')->weekly();
+        $schedule->command('delete:readers')->weekly();
+        $schedule->command('add:subscribers')->hourly();
+        $schedule->command('add:birthdays')->dailyAt('07:00');
+        $schedule->command('message:send')->everyMinute();
     }
 
     /**
