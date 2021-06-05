@@ -4,11 +4,9 @@ declare(strict_types=1);
 
 namespace App\Models;
 
+use Illuminate\Support\Facades\Artisan;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
-use Phinx\Config\Config;
-use Phinx\Console\Command\Migrate;
-use Phinx\Console\PhinxApplication;
-use Phinx\Wrapper\TextWrapper;
 use Symfony\Component\Filesystem\Filesystem;
 
 /**
@@ -52,19 +50,7 @@ class Module extends BaseModel
         $migrationPath = $modulePath . '/migrations';
 
         if (file_exists($migrationPath)) {
-            $app = new PhinxApplication();
-            $app->add(new Migrate());
-
-            /** @var Migrate $command */
-            $command = $app->find('migrate');
-
-            $config = require app_path('migration.php');
-            $config['paths']['migrations'] = $migrationPath;
-
-            $command->setConfig(new Config($config));
-
-            $wrap = new TextWrapper($app);
-            $wrap->getMigrate();
+            Artisan::call('migrate --realpath --path=' . $migrationPath);
         }
     }
 
@@ -78,21 +64,18 @@ class Module extends BaseModel
         $migrationPath = $modulePath . '/migrations';
 
         if (file_exists($migrationPath)) {
-            $app = new PhinxApplication();
-            $app->add(new Migrate());
+            $migrator = app('migrator');
+            $nextBatchNumber = $migrator->getRepository()->getNextBatchNumber();
+            $migrationNames = array_keys($migrator->getMigrationFiles($migrationPath));
 
-            /** @var Migrate $command */
-            $command = $app->find('rollback');
+            DB::table(config('database.migrations'))
+                ->whereIn('migration', $migrationNames)
+                ->update(['batch' => $nextBatchNumber]);
 
-            $config = require app_path('migration.php');
-            $config['paths']['migrations'] = $migrationPath;
-
-            $command->setConfig(new Config($config));
-
-            $wrap = new TextWrapper($app);
-            $wrap->getRollback(null, 0);
+            Artisan::call('migrate:rollback --realpath --path=' . $migrationPath);
         }
     }
+
 
     /**
      * Создает симлинки модулей

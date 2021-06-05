@@ -32,7 +32,6 @@ class AdminController extends Controller
      */
     public function upgrade(): View
     {
-
         Artisan::call('migrate');
 
         $output = Artisan::output();

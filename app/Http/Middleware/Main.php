@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Lang;
+use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\View;
 
 class Main
@@ -26,7 +27,10 @@ class Main
             $this->frequencyLimit();
 
             // Сайт закрыт для гостей
-            if (setting('closedsite') === 1 && ! getUser() && ! $request->is('register', 'login', 'recovery', 'captcha')) {
+            if (setting('closedsite') === 1 &&
+                ! getUser() &&
+                ! $request->is('register', 'login', 'recovery', 'captcha')
+            ) {
                 setFlash('danger', __('main.not_authorized'));
                 return redirect('login');
             }
@@ -38,7 +42,8 @@ class Main
 
             Paginator::$defaultView = 'app/_paginator';
 
-            [$path, $name] = explode('\\', static::class);
+            $route = Route::getRoutes()->match($request);
+            [$path, $name] = explode('\\', $route->getActionName());
 
             if ($path === 'Modules') {
                 View::addNamespace($name, base_path('modules/' . $name . '/resources/views'));

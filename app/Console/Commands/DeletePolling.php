@@ -19,7 +19,7 @@ class DeletePolling extends Command
      *
      * @var string
      */
-    protected $description = 'Delete pending user';
+    protected $description = 'Delete polling';
 
     /**
      * Create a new command instance.

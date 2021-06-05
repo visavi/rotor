@@ -19,6 +19,8 @@ use Illuminate\Support\Facades\Route;
 Route::pattern('id', '\d+');
 Route::pattern('login', '[\w\-]+');
 
+//Route::get('/install', [\App\Http\Controllers\InstallController::class, 'index'])->withoutMiddleware('web');
+
 Route::get('/', [\App\Http\Controllers\HomeController::class, 'index']);
 Route::get('/closed', [\App\Http\Controllers\HomeController::class, 'closed']);
 Route::get('/search', [\App\Http\Controllers\HomeController::class, 'search']);

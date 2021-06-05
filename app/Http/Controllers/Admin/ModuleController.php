@@ -7,6 +7,7 @@ namespace App\Http\Controllers\Admin;
 use App\Models\Module;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Artisan;
 use Illuminate\View\View;
 
 class ModuleController extends AdminController
@@ -95,8 +96,7 @@ class ModuleController extends AdminController
         $module->createSymlink($modulePath);
         $module->migrate($modulePath);
 
-        runCommand(new RouteClear());
-
+        Artisan::call('route:clear');
         $result = __('admin.modules.module_success_installed');
 
         if ($module->exists) {
@@ -152,8 +152,7 @@ class ModuleController extends AdminController
         }
 
         $module->deleteSymlink($modulePath);
-
-        runCommand(new RouteClear());
+        Artisan::call('route:clear');
 
         if ($disable) {
             $module->update([
