@@ -2086,7 +2086,7 @@ function setting(?string $key = null, $default = null)
     static $settings;
 
     if (! $settings) {
-        $settings = array_replace(Setting::getSettings(), Setting::getUserSettings());
+        $settings = Setting::getSettings();
     }
 
     return $key ? ($settings[$key] ?? $default) : $settings;

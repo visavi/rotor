@@ -18,6 +18,12 @@ mix
     .js('public/themes/default/src/js/messages.js', 'public/themes/default/dist')
     .sass('public/themes/default/src/sass/app.scss', 'public/themes/default/dist')
 
+    .js('public/themes/mobile/src/js/app.js', 'public/themes/mobile/dist')
+    .sass('public/themes/mobile/src/sass/app.scss', 'public/themes/mobile/dist')
+
+    .js('public/themes/motor/src/js/app.js', 'public/themes/motor/dist')
+    .sass('public/themes/motor/src/sass/app.scss', 'public/themes/motor/dist')
+
     .js('resources/lang/*/main.js', 'public/assets/js/dist/lang.js')
     .extract()
     .version();

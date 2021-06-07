@@ -3,10 +3,10 @@
 namespace App\Http\Middleware;
 
 use App\Models\Login;
-use App\Models\Setting;
 use Closure;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\App;
+use Illuminate\Support\Facades\View;
 
 class CookieAuthenticate
 {
@@ -69,24 +69,23 @@ class CookieAuthenticate
     {
         $user = getUser();
 
-        $userSets['language'] = $user->language ?? defaultSetting('language');
-        $userSets['themes'] = $user->themes ?? defaultSetting('themes');
+        $language = $user->language ?? defaultSetting('language');
+        $theme = $user->themes ?? defaultSetting('themes');
 
         if ($request->session()->has('language')) {
-            $userSets['language'] = $request->session()->get('language');
+            $language = $request->session()->get('language');
         }
 
-        if (! file_exists(resource_path('lang/' . $userSets['language']))) {
-            $userSets['language'] = defaultSetting('language');
+        if (! file_exists(resource_path('lang/' . $language))) {
+            $language = defaultSetting('language');
         }
 
-        if (! file_exists(public_path('themes/' . $userSets['themes']))) {
-            $userSets['themes'] = defaultSetting('themes');
+        if (! file_exists(public_path('themes/' . $theme))) {
+            $theme = defaultSetting('themes');
         }
 
-        Setting::setUserSettings($userSets);
-
-        App::setLocale($userSets['language']);
+        App::setLocale($language);
+        View::addLocation(public_path('themes/' . $theme . '/views'));
 
         if ($user) {
             $user->checkAccess();

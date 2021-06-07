@@ -99,24 +99,4 @@ class Setting extends Model
 
         return $settings;
     }
-
-    /**
-     * Sets user settings
-     *
-     * @param array $settings
-     */
-    public static function setUserSettings(array $settings): void
-    {
-        self::$settings = $settings;
-    }
-
-    /**
-     * Returns user settings
-     *
-     * @return array
-     */
-    public static function getUserSettings(): array
-    {
-        return self::$settings;
-    }
 }

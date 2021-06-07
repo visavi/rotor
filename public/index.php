@@ -13,6 +13,8 @@
 use Illuminate\Contracts\Http\Kernel;
 use Illuminate\Http\Request;
 
+const ROTOR_VERSION = '10.0';
+define('SITETIME', time());
 define('LARAVEL_START', microtime(true));
 
 /*

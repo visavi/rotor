@@ -15,8 +15,6 @@ return [
 
     'paths' => [
         resource_path('views'),
-        base_path('public/themes/default'),
-        base_path('public/themes/default/views'),
     ],
 
     /*
