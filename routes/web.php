@@ -590,9 +590,9 @@ Route::group(['prefix' => 'admin', 'middleware' => 'check.admin'], function () {
     });
 });
 
-$modules = \App\Models\Module::query()->where('disabled', 0)->get();
+$modules = \App\Models\Module::getEnabledModules();
 foreach ($modules as $module) {
-    if (file_exists(base_path('modules/' . $module->name . '/routes.php'))) {
-        include_once base_path('modules/' . $module->name . '/routes.php');
+    if (file_exists(base_path('modules/' . $module . '/routes.php'))) {
+        include_once base_path('modules/' . $module . '/routes.php');
     }
 }

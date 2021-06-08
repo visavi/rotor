@@ -6,6 +6,7 @@ namespace App\Models;
 
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Str;
 use Symfony\Component\Filesystem\Filesystem;
 
@@ -121,5 +122,20 @@ class Module extends BaseModel
     public function getLinkName(string $modulePath): string
     {
         return public_path($this->assetsPath . Str::plural(strtolower(basename($modulePath))));
+    }
+
+    /**
+     * Get enabled modules
+     *
+     * @return array
+     */
+    public static function getEnabledModules(): array
+    {
+        $modules = [];
+        if (Schema::hasTable('modules')) {
+            $modules = self::query()->where('disabled', 0)->pluck('name')->all();
+        }
+
+        return $modules;
     }
 }

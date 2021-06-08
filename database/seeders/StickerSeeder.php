@@ -1,27 +1,28 @@
 <?php
 
-use Phinx\Seed\AbstractSeed;
+namespace Database\Seeders;
 
-class StickersSeeder extends AbstractSeed
+use App\Models\Sticker;
+use App\Models\StickersCategory;
+use Illuminate\Database\Seeder;
+
+class StickerSeeder extends Seeder
 {
     /**
-     * Run Method.
+     * Run the database seeds.
+     *
+     * @return void
      */
-    public function run(): void
+    public function run()
     {
-        $this->execute('TRUNCATE stickers_categories');
-        $table = $this->table('stickers_categories');
-
         $data = [
             'id'         => 1,
             'name'       => 'Смайлы',
             'created_at' => SITETIME,
         ];
 
-        $table->insert($data)->save();
-
-        $this->execute('TRUNCATE stickers');
-        $table = $this->table('stickers');
+        StickersCategory::query()->truncate();
+        StickersCategory::query()->insert($data);
 
         $data = [
             ['category_id' => 1, 'name' => '/uploads/stickers/smile.gif', 'code' => ':)'],
@@ -159,6 +160,7 @@ class StickersSeeder extends AbstractSeed
             ['category_id' => 1, 'name' => '/uploads/stickers/boss.gif', 'code' => ':boss'],
         ];
 
-        $table->insert($data)->save();
+        Sticker::query()->truncate();
+        Sticker::query()->insert($data);
     }
 }

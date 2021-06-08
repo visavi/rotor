@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 
 final class CreateTopicsTable extends Migration
@@ -37,7 +38,7 @@ final class CreateTopicsTable extends Migration
             });
 
             if (config('database.default') === 'mysql') {
-                $this->db->getConnection()->statement('CREATE FULLTEXT INDEX text ON topics(title);');
+                DB::statement('CREATE FULLTEXT INDEX text ON topics(title);');
             }
         }
     }

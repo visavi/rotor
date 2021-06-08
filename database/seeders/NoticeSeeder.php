@@ -1,18 +1,19 @@
 <?php
 
-use Phinx\Seed\AbstractSeed;
+namespace Database\Seeders;
 
-class NoticesSeeder extends AbstractSeed
+use App\Models\Notice;
+use Illuminate\Database\Seeder;
+
+class NoticeSeeder extends Seeder
 {
     /**
-     * Run Method.
+     * Run the database seeds.
+     *
+     * @return void
      */
-    public function run(): void
+    public function run()
     {
-        $this->execute('TRUNCATE notices');
-
-        $table = $this->table('notices');
-
         $data = [
             [
                 'type'      => 'register',
@@ -133,6 +134,7 @@ class NoticesSeeder extends AbstractSeed
             ]
         ];
 
-        $table->insert($data)->save();
+        Notice::query()->truncate();
+        Notice::query()->insert($data);
     }
 }

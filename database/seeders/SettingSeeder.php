@@ -1,13 +1,18 @@
 <?php
 
-use Phinx\Seed\AbstractSeed;
+namespace Database\Seeders;
 
-class SettingsSeeder extends AbstractSeed
+use App\Models\Setting;
+use Illuminate\Database\Seeder;
+
+class SettingSeeder extends Seeder
 {
     /**
-     * Run Method.
+     * Run the database seeds.
+     *
+     * @return void
      */
-    public function run(): void
+    public function run()
     {
         $data = [
             ['name'  => 'app_installed', 'value' => 1],
@@ -129,10 +134,8 @@ class SettingsSeeder extends AbstractSeed
             ['name'  => 'ziplist', 'value' => 20],
         ];
 
-        $this->execute('TRUNCATE settings');
-
-        $table = $this->table('settings');
-        $table->insert($data)->save();
+        Setting::query()->truncate();
+        Setting::query()->insert($data);
 
         clearCache('settings');
     }
