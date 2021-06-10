@@ -1,7 +1,6 @@
 #!/usr/bin/env php
 <?php
 
-define('SITETIME', time());
 define('LARAVEL_START', microtime(true));
 
 /*
@@ -35,7 +34,7 @@ $kernel = $app->make(Illuminate\Contracts\Console\Kernel::class);
 
 $input = new Symfony\Component\Console\Input\ArgvInput;
 $output = new Symfony\Component\Console\Output\ConsoleOutput();
-$output->writeln('Rotor by Vantuz - https://visavi.net');
+$output->writeln('Rotor by Vantuz - https://visavi.net <info>v' . ROTOR_VERSION . '</info>');
 
 $status = $kernel->handle(
     $input,

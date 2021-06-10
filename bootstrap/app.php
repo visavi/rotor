@@ -1,5 +1,8 @@
 <?php
 
+const ROTOR_VERSION = '10.0';
+define('SITETIME', time());
+
 /*
 |--------------------------------------------------------------------------
 | Create The Application
@@ -10,7 +13,6 @@
 | the IoC container for the system binding all of the various parts.
 |
 */
-
 $app = new Illuminate\Foundation\Application(
     $_ENV['APP_BASE_PATH'] ?? dirname(__DIR__)
 );
