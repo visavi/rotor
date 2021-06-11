@@ -8,7 +8,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\View;
 
-class CookieAuthenticate
+class AuthenticateCookie
 {
     /**
      * Handle an incoming request.

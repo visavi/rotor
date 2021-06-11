@@ -1,6 +1,5 @@
 <?php
 
-use App\Mail\Sendmail;
 use App\Models\AdminAdvert;
 use App\Models\PaidAdvert;
 use App\Classes\{BBCode, Calendar, Metrika, CloudFlare};
@@ -38,11 +37,9 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Cache;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\HtmlString;
 use Illuminate\Support\Str;
-use Illuminate\View\View;
 use Intervention\Image\Constraint;
 use Intervention\Image\ImageManagerStatic as Image;
 use ReCaptcha\ReCaptcha;
@@ -139,7 +136,7 @@ function utfLower(string $str): string
  *
  * @return string обрезанная строка
  */
-function utfSubstr($str, int $start, $length = null): string
+function utfSubstr($str, int $start, ?int $length = null): string
 {
     if (! $length) {
         $length = utfStrlen($str);
@@ -330,7 +327,7 @@ function ratingVote($rating): HtmlString
     $output .= str_repeat('<i class="fas fa-star"></i>', $full_stars);
     $output .= str_repeat('<i class="fas fa-star-half-alt"></i>', $half_stars);
     $output .= str_repeat('<i class="far fa-star"></i>', $empty_stars);
-    $output .= '( ' . $rating .' )</div>';
+    $output .= '( ' . $rating . ' )</div>';
 
     return new HtmlString($output);
 }
@@ -1858,7 +1855,7 @@ function server(?string $key = null, ?string $default = null)
 /**
  * Возвращает является ли пользователь авторизованным
  *
- * @return mixed
+ * @return User|bool
  */
 function checkAuth()
 {

@@ -5,11 +5,16 @@
     <arg name="colors"/>
     <arg name="encoding" value="utf-8"/>
     <config name="installed_paths" value="../../slevomat/coding-standard"/>
+    <config name="php_version" value="7.3"/>
 
     <!-- Стандартный набор правил PSR2  -->
     <rule ref="PSR2">
         <exclude name="PSR2.Namespaces.UseDeclaration.MultipleDeclarations"/><!-- Разрешаем групповые USE  -->
+        <exclude name="PSR2.ControlStructures.ControlStructureSpacing.SpacingAfterOpenBrace"/><!-- Разрешаем многострочный if -->
     </rule>
+
+    <!-- Our base rule: set to PSR12-->
+    <rule ref="PSR12"/>
 
     <!-- Проверка декларации declare(strict_types=1)  -->
     <rule ref="SlevomatCodingStandard.TypeHints.DeclareStrictTypes">
