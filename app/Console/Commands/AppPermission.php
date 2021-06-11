@@ -38,11 +38,11 @@ class AppPermission extends Command
      */
     public function handle(Filesystem $filesystem)
     {
-        $storage = glob(storage_path('/*'), GLOB_ONLYDIR);
+        $storage = glob(storage_path('{*,*/*,*/*/*}'), GLOB_BRACE | GLOB_ONLYDIR);
         $uploads = glob(public_path('uploads/*'), GLOB_ONLYDIR);
-        $modules = [public_path('assets/modules')];
+        $dirs    = [public_path('assets/modules'), base_path('bootstrap/cache')];
 
-        $dirs = array_merge($storage, $uploads, $modules);
+        $dirs = array_merge($storage, $uploads, $dirs);
 
         $filesystem->chmod($dirs, 0777);
 

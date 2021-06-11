@@ -29,7 +29,7 @@ Rotor - mobile cms
 
 3. Настройте конфигурационный файл .env, окружение, данные для доступа к БД, логин и email администратора и данные для отправки писем, sendmail или smtp.
     
-4. Установите при необходимости права на запись всем директориям внутри `public/uploads` и `storage`
+4. Установите права на запись всем директориям внутри `public/uploads`, `public/assets/modules`, `bootstrap/cache` и `storage`
    
 5. Перейдите на главную страницу сайта, вас автоматически перекинет на установщик
 
@@ -43,7 +43,7 @@ Rotor - mobile cms
    
 3. Настройте конфигурационный файл .env, окружение, данные для доступа к БД, логин и email администратора и данные для отправки писем, sendmail или smtp. Если устанавливаете CMS вручную, то переименуйте конфигурационный файл .env.example в .env
 
-4. Установите права на запись всем директориям внутри `public/uploads` и `storage` или выполните команду `php rotor app:permission`
+4. Установите права на запись всем директориям внутри `public/uploads`, `public/assets/modules`, `bootstrap/cache` и `storage` или выполните команду `php artisan app:permission`
    
 5. Установите и настройте менеджер зависимостей [Composer](https://getcomposer.org).
    или можно скачать готовый пакет 
@@ -56,9 +56,9 @@ Rotor - mobile cms
 7. Создайте базу данных с кодировкой utf8mb4 и пользователя для нее из панели управления на вашем сервере, во время установки скрипта необходимо будет вписать эти данные для соединения в файл .env
 `CREATE DATABASE rotor CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;`  
    
-8. Выполните миграции с помощью консольной команды `php rotor migrate`
+8. Выполните миграции с помощью консольной команды `php artisan migrate`
 
-9. Выполните заполнение БД с помощью команды `php rotor seed:run`
+9. Выполните заполнение БД с помощью команды `php artisan db:seed`
 
 ### Установка одной командой
 Для установки стабильной версии перейдите в консоли в директорию с сайтом и выполните команду 
@@ -77,17 +77,17 @@ composer create-project --stability=dev visavi/rotor .
 
 ### Миграции и заполнение БД
 
-Текущий статус миграции `php rotor status`
+Текущий статус миграции `php artisan migrate:status`
 
-Создание миграций `php rotor create CreateTestTable`
+Создание миграций `php artisan make:migration CreateTestTable`
 
-Выполнение миграций `php rotor migrate` или `php rotor migrate -t 20110103081132` для выполнения до определенной миграции
+Выполнение миграций `php artisan migrate` или `php artisan migrate --path=/database/migrations/CreateTestTable.php` для выполнения до определенной миграции
 
-Откат последней миграции `php rotor rollback` или `php rotor rollback -t 20120103083322` для отката до определенной миграции
+Откат последней миграции `php artisan migrate:rollback` или `php artisan migrate:rollback --step=1` для отката до определенной миграции
 
-Создание сида `php rotor seed:create UsersSeeder`
+Создание сида `php artisan make:seeder UsersSeeder`
 
-Выполнение сида `php rotor seed:run` или `php rotor seed:run -s UsersSeeder` для отдельного сида
+Выполнение сида `php artisan db:seed` или `php artisan db:seed --class=UserSeeder` для отдельного сида
 
 ### Кеширование настроек
 

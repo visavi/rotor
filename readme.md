@@ -29,7 +29,7 @@ The main feature of Rotor is low load on system resources and high speed, even w
 
 3. Set up the .env configuration file, environment, data for accessing the database, administrator login and email, and data for sending emails, sendmail or smtp.
 
-4. Set, if necessary, write permissions to all directories inside `public/uploads` and `storage`
+4. Set write permissions to all directories inside `public/uploads`, `public/assets/modules`, `bootstrap/cache` and `storage`
 
 5. Go to the main page of the site, you will be automatically transferred to the installer
 
@@ -43,7 +43,7 @@ The main feature of Rotor is low load on system resources and high speed, even w
 
 3. Configure the .env configuration file, the environment, the data for accessing the database, the administrator's login and email, and the data for sending mail, sendmail or smtp. If you install CMS manually, then rename the configuration file .env.example to .env
 
-4. Set write permissions to all directories inside `public/uploads` and `storage` or execute the command `php rotor app:permission`
+4. Set write permissions to all directories inside `public/uploads`, `public/assets/modules`, `bootstrap/cache` and `storage` or execute the command `php artisan app: permission`
 
 5. Install and configure the dependency manager [Composer](https://getcomposer.org).
    or you can download the finished package
@@ -56,9 +56,9 @@ The main feature of Rotor is low load on system resources and high speed, even w
 7. Create a database with utf8mb4 encoding and a user for it from the control panel on your server, during the installation of the script, you will need to enter this data to be connected to the .env file
 `CREATE DATABASE rotor CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;`  
    
-8. Migrate using the console command `php rotor migrate`
+8. Migrate using the console command `php artisan migrate`
 
-9. Fill out the database using the command `php rotor seed:run`
+9. Fill out the database using the command `php artisan db:seed`
 
 ### Installation by one command
 To install the stable version, go to the site directory in the console and execute the command
@@ -77,17 +77,17 @@ Minimal PHP version required for PHP 7.3.0, MySQL 5.7.8 or Postgres 9.2
 
 ### Migrations and database seeder
 
-Current migration status `php rotor status`
+Current migration status `php artisan migrate:status`
 
-Create migrations `php rotor create CreateTestTable`
+Create migrations `php artisan make:migration CreateTestTable`
 
-Performing migrations `php rotor migrate` or `php rotor migrate -t 20110103081132` to migrate to a specific version
+Performing migrations `php artisan migrate` or `php artisan migrate --path=/database/migrations/CreateTestTable.php` to migrate to a specific version
 
-Rollback last migration `php rotor rollback` or `php rotor rollback -t 20120103083322` to rollback all migrations to a specific version
+Rollback last migration `php artisan migrate:rollback` or `php artisan migrate:rollback --step=1` to rollback all migrations to a specific version
 
-Create seeder `php rotor seed:create UsersSeeder`
+Create seeder `php artisan make:seeder UsersSeeder`
 
-Performing seeder `php rotor seed:run` or `php rotor seed:run -s UsersSeeder` for a specific seed
+Performing seeder `php artisan db:seed` or `php artisan db:seed --class=UserSeeder` for a specific seed
 
 ### Caching Settings
 
