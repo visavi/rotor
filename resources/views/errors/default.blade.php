@@ -6,7 +6,6 @@
 @section('description', __('errors.error'))
 
 @section('content')
-
     <?php $images = glob(public_path('assets/img/errors/*.png')); ?>
 
     <div class="row">

@@ -20,10 +20,6 @@ class CookieAuthenticate
      */
     public function handle(Request $request, Closure $next)
     {
-        /*if (empty(defaultSetting('app_installed')) && file_exists(public_path('install'))) {
-            return redirect('install/index.php');
-        }*/
-
         $this->cookieAuth($request);
         $this->setSetting($request);
 

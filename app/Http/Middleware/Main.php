@@ -5,7 +5,6 @@ namespace App\Http\Middleware;
 use App\Models\Ban;
 use Closure;
 use Illuminate\Http\Request;
-use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Lang;
 use Illuminate\Support\Facades\Route;
@@ -36,11 +35,12 @@ class Main
             }
 
             // Сайт закрыт для всех
-            if (setting('closedsite') === 2 && ! isAdmin() && ! $request->is('closed', 'login')) {
-                return redirect('closed');
+            if (setting('closedsite') === 2 &&
+                ! isAdmin() &&
+                ! $request->is('login')
+            ) {
+                return response()->view('pages/closed');
             }
-
-            Paginator::$defaultView = 'app/_paginator';
 
             $route = Route::getRoutes()->match($request);
             [$path, $name] = explode('\\', $route->getActionName());
