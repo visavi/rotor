@@ -25,7 +25,7 @@ before_script:
 
 script:
   - mkdir -p build/logs
-  - vendor/bin/phpunit --coverage-clover build/logs/clover.xml --stderr
+  - XDEBUG_MODE=coverage vendor/bin/phpunit --coverage-clover build/logs/clover.xml --stderr tests/Unit
 
 env:
   global:

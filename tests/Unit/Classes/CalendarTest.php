@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Classes;
+namespace Tests\Unit\Classes;
 
 use App\Classes\Calendar;
 

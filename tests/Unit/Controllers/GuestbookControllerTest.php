@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Controllers;
+namespace Tests\Unit\Controllers;
 
 use App\Models\Guestbook;
 

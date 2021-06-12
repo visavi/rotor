@@ -182,7 +182,7 @@ class BBCode
 
         $target = '';
         if ($match[2] !== '/') {
-            if (strpos($match[1], $_SERVER['SERVER_NAME']) !== false) {
+            if (strpos($match[1], request()->getHttpHost()) !== false) {
                 $match[1] = '//' . str_replace($match[2], '', $match[1]);
             } else {
                 $target = ' target="_blank" rel="nofollow"';

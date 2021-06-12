@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Classes;
+namespace Tests\Unit\Classes;
 
 use App\Classes\BBCode;
 
@@ -13,7 +13,6 @@ class BBCodeTest extends \Tests\TestCase
 
     public function setUp(): void
     {
-
         parent::setUp();
         $this->bbCode = new BBCode();
     }

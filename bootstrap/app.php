@@ -1,8 +1,5 @@
 <?php
 
-const ROTOR_VERSION = '10.0';
-define('SITETIME', time());
-
 /*
 |--------------------------------------------------------------------------
 | Create The Application
