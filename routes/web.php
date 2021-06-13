@@ -305,9 +305,6 @@ Route::group(['prefix' => 'ratings'], function () {
 /* API */
 Route::group(['prefix' => 'api'], function () {
     Route::get('/', [\App\Http\Controllers\ApiController::class, 'index']);
-    Route::get('/users', [\App\Http\Controllers\ApiController::class, 'users']);
-    Route::get('/forums', [\App\Http\Controllers\ApiController::class, 'forums']);
-    Route::get('/messages', [\App\Http\Controllers\ApiController::class, 'messages']);
 });
 
 Route::group(['prefix' => 'users'], function () {

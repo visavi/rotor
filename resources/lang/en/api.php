@@ -2,9 +2,12 @@
 
 return [
     'page_main'        => 'Interface description home page',
-    'page_users'       => 'Returns user data. GET: Options: token, Answer: array of data from user profile',
-    'page_messages'    => 'Returns user private messages - GET: Options: token, count = 10, Answer: total - count posts, messages - array of private messages',
-    'page_forums'      => 'Returns posts from a forum topic - GET: Options: token, id, Answer: id - id темы, author - topic author, title - topic title, messages - array of posts',
+    'page_user'        => 'Returns the data of the current user. GET, Response: array of data from user profile ',
+    'page_users'       => 'Returns the data of the selected user. GET, Parameters: login - User login, Reply: array of data from the user profile',
+    'page_dialogues'   => 'Returns dialogues with users - GET, Parameters: page - page number, Response: dialogues - array of dialogues',
+    'page_messages'    => 'Returns private messages of the user - GET, Parameters: login - username, page - page number, Reply: messages - array of private messages',
+    'page_forums'      => 'Returns messages from the topic in the forum - GET, Parameters: id, page - page number, Reply: id - topic id, author - topic author, title - topic title, topics - array of forum topics',
+    'page_topics'      => 'Returns posts from the topic in the forum - GET, Parameters: id, page - page number, Reply: id - topic id, author - topic author, title - topic title, posts - array of posts',
     'text_description' => 'To access the data you need an API key, which can be obtained on the My Data page',
     'text_example'     => 'Usage example',
     'text_return'      => 'Returns json',

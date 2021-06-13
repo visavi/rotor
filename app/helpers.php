@@ -1926,6 +1926,18 @@ function getUserById(?int $id): ?User
 }
 
 /**
+ * Возвращает объект пользователя по токену
+ *
+ * @param string $token логин пользователя
+ *
+ * @return Builder|Model|null
+ */
+function getUserByToken(string $token): ?User
+{
+    return User::query()->where('apikey', $token)->first();
+}
+
+/**
  * Возвращает объект пользователя по логину или email
  *
  * @param string|null $login логин или email пользователя

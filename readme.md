@@ -43,7 +43,7 @@ The main feature of Rotor is low load on system resources and high speed, even w
 
 3. Configure the .env configuration file, the environment, the data for accessing the database, the administrator's login and email, and the data for sending mail, sendmail or smtp. If you install CMS manually, then rename the configuration file .env.example to .env
 
-4. Set write permissions to all directories inside `public/uploads`, `public/assets/modules`, `bootstrap/cache` and `storage` or execute the command `php artisan app: permission`
+4. Set write permissions to all directories inside `public/uploads`, `public/assets/modules`, `bootstrap/cache` and `storage` or execute the command `php artisan app:permission`
 
 5. Install and configure the dependency manager [Composer](https://getcomposer.org).
    or you can download the finished package
@@ -85,7 +85,8 @@ Performing migrations `php artisan migrate` or `php artisan migrate --path=/data
 
 Rollback last migration `php artisan migrate:rollback` or `php artisan migrate:rollback --step=1` to rollback all migrations to a specific version
 
-Create seeder `php artisan make:seeder UsersSeeder`
+Create seeder `php 
+artisan make:seeder UsersSeeder`
 
 Performing seeder `php artisan db:seed` or `php artisan db:seed --class=UserSeeder` for a specific seed
 
@@ -96,7 +97,7 @@ If you set `APP_ENV = production`, then routes and project configuration setting
 ### Cron settings
 
 ```
-* * * * * php /path-to-site/app/cron.php 2>&1
+* * * * * php /path-to-site/artisan schedule:run >>/dev/null 2>&1
 ```
 
 ### Nginx settings
@@ -133,7 +134,7 @@ try_files $uri $uri/ /index.php?$query_string;
 If there is no Nginx server on the local machine, it is sufficient to use the built-in PHP server through the console. To raise the server and access the system you need:
 
 1. While in the console, go to the public folder
-2. Run the command in the console `php -S localhost:8000`
+2. Run the command in the console `php -S localhost:8000` or `php artisan serve`
 3. Enter the browser link localhost:8000
 
 If, when the server starts, the console displays information that port 8000 is busy, try port 8080

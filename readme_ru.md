@@ -96,7 +96,7 @@ composer create-project --stability=dev visavi/rotor .
 ### Настройки cron
 
 ```
-* * * * * php /path-to-site/app/cron.php 2>&1
+* * * * * php /path-to-site/artisan schedule:run >>/dev/null 2>&1
 ```
 
 ### Настройки nginx
@@ -133,7 +133,7 @@ try_files $uri $uri/ /index.php?$query_string;
 В случае отсутствия сервера Nginx на локальной машине достаточно использовать встроенный сервер PHP через консоль. Для поднятия сервера и доступа к системе нужно:
 
 1. Находясь в консоли, перейти в папку public
-2. Выполнить в консоли команду `php -S localhost:8000`
+2. Выполнить в консоли команду `php -S localhost:8000` или `php artisan serve`
 3. Зайти в браузере по ссылке localhost:8000
 
 Если при запуске сервера консоль выводит информацию о том, что порт 8000 занят, попробуйте порт 8080

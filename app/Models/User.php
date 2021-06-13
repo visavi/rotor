@@ -78,8 +78,13 @@ class User extends BaseModel implements
     AuthorizableContract,
     CanResetPasswordContract
 {
-    use Authenticatable, Authorizable, CanResetPassword, MustVerifyEmail;
-    use HasFactory, Notifiable, UploadTrait;
+    use Authenticatable;
+    use Authorizable;
+    use CanResetPassword;
+    use MustVerifyEmail;
+    use HasFactory;
+    use Notifiable;
+    use UploadTrait;
 
     public const BOSS   = 'boss';   // Владелец
     public const ADMIN  = 'admin';  // Админ

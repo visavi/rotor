@@ -48,11 +48,11 @@ class CheckAccessSite
         }
 
         $route = Route::getRoutes()->match($request);
-        [$path, $name] = explode('\\', $route->getActionName());
+        $action = explode('\\', $route->getActionName());
 
-        if ($path === 'Modules') {
-            View::addNamespace($name, base_path('modules/' . $name . '/resources/views'));
-            Lang::addNamespace($name, base_path('modules/' . $name . '/resources/lang'));
+        if ($action[0] === 'Modules') {
+            View::addNamespace($action[1], base_path('modules/' . $action[1] . '/resources/views'));
+            Lang::addNamespace($action[1], base_path('modules/' . $action[1] . '/resources/lang'));
         }
 
         return $next($request);
