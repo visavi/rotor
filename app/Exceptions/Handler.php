@@ -3,6 +3,7 @@
 namespace App\Exceptions;
 
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
+use Illuminate\Http\Request;
 use Symfony\Component\HttpKernel\Exception\HttpExceptionInterface;
 
 class Handler extends ExceptionHandler
@@ -34,18 +35,16 @@ class Handler extends ExceptionHandler
      */
     public function register(): void
     {
-        $this->renderable(function (HttpExceptionInterface $exception) {
-
-/*            if (request()->ajax()) {
-                header($protocol . ' 200 OK');
-
-                exit(json_encode([
-                    'status' => 'error',
-                    'message' => $message,
-                ]));
-            }*/
+        $this->renderable(function (HttpExceptionInterface $exception, Request $request) {
 
             saveErrorLog($exception->getStatusCode());
+
+            if ($request->isJson()) {
+                return response()->json([
+                    'success' => false,
+                    'error'   => $exception->getMessage(),
+                ], $exception->getStatusCode());
+            }
 
             if (! view()->exists('errors.' . $exception->getStatusCode())) {
                 return response()->view('errors.default', compact('exception'));

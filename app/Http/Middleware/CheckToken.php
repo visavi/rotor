@@ -21,15 +21,15 @@ class CheckToken
         $token = $request->input('token');
 
         if (! $token) {
-            return response()->json(['error' => 'Api token missing!'], 401);
+            abort(400, 'Api token missing');
         }
 
         if (! $user = getUserByToken($token)) {
-            return response()->json(['error' => 'Unauthorized.'], 401);
+            abort(401, 'Unauthorized');
         }
 
         if ($user->level === User::BANNED) {
-            return response()->json(['error' => 'User banned'], 401);
+            abort(403, 'User banned');
         }
 
         $request->attributes->set('user', $user);

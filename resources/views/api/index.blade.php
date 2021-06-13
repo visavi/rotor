@@ -37,25 +37,28 @@ GET https://visavi.net/api/forums/1
     {{ __('api.text_return') }}
 <pre class="prettyprint linenums">
 {
-  "login": "admin",
-  "email": "my@domain.com",
-  "name": "Alex",
-  "country": "Russia",
-  "city": "Moscow",
-  "site": "https://visavi.net",
-  "gender": "male",
-  "birthday": "11.12.1981",
-  "newwall": 0,
-  "point": 8134,
-  "money": 110675,
-  "ban": 0,
-  "allprivat": 1,
-  "newprivat": 0,
-  "status": "<span style=\"color:#ff0000\">Status</span>",
-  "avatar": "",
-  "picture": "",
-  "rating": 567,
-  "lastlogin": 1502102146
+  "success": true,
+  "data": {
+    "login": "admin",
+    "email": "my@domain.com",
+    "name": "Alex",
+    "country": "Russia",
+    "city": "Moscow",
+    "site": "https://visavi.net",
+    "gender": "male",
+    "birthday": "11.12.1981",
+    "newwall": 0,
+    "point": 8134,
+    "money": 110675,
+    "ban": 0,
+    "allprivat": 1,
+    "newprivat": 0,
+    "status": "<span style=\"color:#ff0000\">Status</span>",
+    "avatar": "",
+    "picture": "",
+    "rating": 567,
+    "lastlogin": 1502102146
+  }
 }
 </pre>
 @stop

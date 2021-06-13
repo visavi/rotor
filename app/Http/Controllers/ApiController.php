@@ -41,35 +41,38 @@ class ApiController extends Controller
         $user = $request->attributes->get('user');
 
         return response()->json([
-            'login'       => $user->login,
-            'email'       => $user->email,
-            'name'        => $user->name,
-            'level'       => $user->level,
-            'country'     => $user->country,
-            'city'        => $user->city,
-            'language'    => $user->language,
-            'info'        => $user->info,
-            'site'        => $user->site,
-            'phone'       => $user->phone,
-            'gender'      => $user->gender,
-            'birthday'    => $user->birthday,
-            'visits'      => $user->visits,
-            'allprivat'   => $user->getCountMessages(),
-            'newprivat'   => $user->newprivat,
-            'newwall'     => $user->newwall,
-            'allforum'    => $user->allforum,
-            'allguest'    => $user->allguest,
-            'allcomments' => $user->allcomments,
-            'themes'      => $user->themes,
-            'timezone'    => $user->timezone,
-            'point'       => $user->point,
-            'money'       => $user->money,
-            'status'      => $user->getStatus()->toHtml(),
-            'color'       => $user->color,
-            'avatar'      => $user->avatar ? siteUrl(true) . $user->avatar : null,
-            'picture'     => $user->picture ? siteUrl(true) . $user->picture : null,
-            'rating'      => $user->rating,
-            'lastlogin'   => $user->updated_at,
+            'success' => true,
+            'data'    => [
+                'login'       => $user->login,
+                'email'       => $user->email,
+                'name'        => $user->name,
+                'level'       => $user->level,
+                'country'     => $user->country,
+                'city'        => $user->city,
+                'language'    => $user->language,
+                'info'        => $user->info,
+                'site'        => $user->site,
+                'phone'       => $user->phone,
+                'gender'      => $user->gender,
+                'birthday'    => $user->birthday,
+                'visits'      => $user->visits,
+                'allprivat'   => $user->getCountMessages(),
+                'newprivat'   => $user->newprivat,
+                'newwall'     => $user->newwall,
+                'allforum'    => $user->allforum,
+                'allguest'    => $user->allguest,
+                'allcomments' => $user->allcomments,
+                'themes'      => $user->themes,
+                'timezone'    => $user->timezone,
+                'point'       => $user->point,
+                'money'       => $user->money,
+                'status'      => $user->getStatus()->toHtml(),
+                'color'       => $user->color,
+                'avatar'      => $user->avatar ? siteUrl(true) . $user->avatar : null,
+                'picture'     => $user->picture ? siteUrl(true) . $user->picture : null,
+                'rating'      => $user->rating,
+                'lastlogin'   => $user->updated_at,
+            ],
         ]);
     }
 
@@ -89,28 +92,31 @@ class ApiController extends Controller
         }
 
         return response()->json([
-            'login'       => $user->login,
-            'name'        => $user->name,
-            'level'       => $user->level,
-            'country'     => $user->country,
-            'city'        => $user->city,
-            'info'        => $user->info,
-            'site'        => $user->site,
-            'gender'      => $user->gender,
-            'birthday'    => $user->birthday,
-            'visits'      => $user->visits,
-            'allforum'    => $user->allforum,
-            'allguest'    => $user->allguest,
-            'allcomments' => $user->allcomments,
-            'themes'      => $user->themes,
-            'point'       => $user->point,
-            'money'       => $user->money,
-            'status'      => $user->getStatus()->toHtml(),
-            'color'       => $user->color,
-            'avatar'      => $user->avatar ? siteUrl(true) . $user->avatar : null,
-            'picture'     => $user->picture ? siteUrl(true) . $user->picture : null,
-            'rating'      => $user->rating,
-            'lastlogin'   => $user->updated_at,
+            'success' => true,
+            'data'    => [
+                'login'       => $user->login,
+                'name'        => $user->name,
+                'level'       => $user->level,
+                'country'     => $user->country,
+                'city'        => $user->city,
+                'info'        => $user->info,
+                'site'        => $user->site,
+                'gender'      => $user->gender,
+                'birthday'    => $user->birthday,
+                'visits'      => $user->visits,
+                'allforum'    => $user->allforum,
+                'allguest'    => $user->allguest,
+                'allcomments' => $user->allcomments,
+                'themes'      => $user->themes,
+                'point'       => $user->point,
+                'money'       => $user->money,
+                'status'      => $user->getStatus()->toHtml(),
+                'color'       => $user->color,
+                'avatar'      => $user->avatar ? siteUrl(true) . $user->avatar : null,
+                'picture'     => $user->picture ? siteUrl(true) . $user->picture : null,
+                'rating'      => $user->rating,
+                'lastlogin'   => $user->updated_at,
+            ],
         ]);
     }
 
@@ -158,11 +164,19 @@ class ApiController extends Controller
         }
 
         return response()->json([
-            'currentPage'     => $dialogues->currentPage(),
-            'lastPage'        => $dialogues->lastPage(),
-            'nextPageUrl'     => $dialogues->nextPageUrl(),
-            'previousPageUrl' => $dialogues->previousPageUrl(),
-            'dialogues'       => $messages,
+            'success' => true,
+            'data'    => $messages,
+            'links'   => [
+                'next' => $dialogues->nextPageUrl(),
+                'prev' => $dialogues->previousPageUrl(),
+            ],
+            'meta'    => [
+                'current_page' => $dialogues->currentPage(),
+                'last_page'    => $dialogues->lastPage(),
+                'path'         => $dialogues->path(),
+                'per_page'     => $dialogues->perPage(),
+                'total'        => $dialogues->total(),
+            ],
         ]);
     }
 
@@ -226,11 +240,19 @@ class ApiController extends Controller
         }
 
         return response()->json([
-            'currentPage'     => $messages->currentPage(),
-            'lastPage'        => $messages->lastPage(),
-            'nextPageUrl'     => $messages->nextPageUrl(),
-            'previousPageUrl' => $messages->previousPageUrl(),
-            'messages'        => $msg,
+            'success' => true,
+            'data'    => $msg,
+            'links'   => [
+                'next' => $messages->nextPageUrl(),
+                'prev' => $messages->previousPageUrl(),
+            ],
+            'meta'    => [
+                'current_page' => $messages->currentPage(),
+                'last_page'    => $messages->lastPage(),
+                'path'         => $messages->path(),
+                'per_page'     => $messages->perPage(),
+                'total'        => $messages->total(),
+            ],
         ]);
     }
 
@@ -276,19 +298,19 @@ class ApiController extends Controller
         }
 
         return response()->json([
-            'id'              => $forum->id,
-            'sort'            => $forum->sort,
-            'patent_id'       => $forum->parent_id,
-            'title'           => $forum->title,
-            'description'     => $forum->description,
-            'count_topics'    => $forum->count_topics,
-            'count_posts'     => $forum->count_posts,
-            'closed'          => $forum->closed,
-            'currentPage'     => $topics->currentPage(),
-            'lastPage'        => $topics->lastPage(),
-            'nextPageUrl'     => $topics->nextPageUrl(),
-            'previousPageUrl' => $topics->previousPageUrl(),
-            'topics'          => $data,
+            'success' => true,
+            'data'    => $data,
+            'links'   => [
+                'next' => $topics->nextPageUrl(),
+                'prev' => $topics->previousPageUrl(),
+            ],
+            'meta'    => [
+                'current_page' => $topics->currentPage(),
+                'last_page'    => $topics->lastPage(),
+                'path'         => $topics->path(),
+                'per_page'     => $topics->perPage(),
+                'total'        => $topics->total(),
+            ],
         ]);
     }
 
@@ -328,21 +350,19 @@ class ApiController extends Controller
         }
 
         return response()->json([
-            'id'              => $topic->id,
-            'forum_id'        => $topic->forum_id,
-            'login'           => $topic->user->login,
-            'title'           => $topic->title,
-            'closed'          => $topic->closed,
-            'locked'          => $topic->locked,
-            'note'            => $topic->note,
-            'moderators'      => $topic->moderators,
-            'updated_at'      => $topic->updated_at,
-            'created_at'      => $topic->created_at,
-            'currentPage'     => $posts->currentPage(),
-            'lastPage'        => $posts->lastPage(),
-            'nextPageUrl'     => $posts->nextPageUrl(),
-            'previousPageUrl' => $posts->previousPageUrl(),
-            'posts'           => $data,
+            'success' => true,
+            'data'    => $data,
+            'links'   => [
+                'next' => $posts->nextPageUrl(),
+                'prev' => $posts->previousPageUrl(),
+            ],
+            'meta'    => [
+                'current_page' => $posts->currentPage(),
+                'last_page'    => $posts->lastPage(),
+                'path'         => $posts->path(),
+                'per_page'     => $posts->perPage(),
+                'total'        => $posts->total(),
+            ],
         ]);
     }
 }
