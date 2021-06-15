@@ -34,7 +34,7 @@ return [
     'create_admin'          => 'Create Admin',
     'create_admin_info'     => 'Before you go to administer your site, you must create an administrator account.',
     'create_admin_errors'   => 'Before clicking the Create button, make sure that there are no error notifications on the previous page, otherwise the process cannot be completed successfully',
-    'delete_install'        => 'After the installation is complete, you must delete the install directory with all the contents, you can change the password and other data in your profile',
+    'delete_install'        => 'After the installation is complete, you must delete the app/Http/Controllers/InstallController.php file, you can change the password and other data in your profile',
     'welcome'               => 'Welcome!',
     'text_message'          => 'Hello :login! Congratulations on the successful installation of our Rotor engine.
     New versions, upgrades, as well as many other add-ons can be found on our website. [url=https://visavi.net]visavi.net[/url]',

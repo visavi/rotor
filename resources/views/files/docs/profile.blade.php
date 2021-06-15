@@ -12,7 +12,7 @@
 
 Выводит ссылку на профиль пользователя (Доступно с версии 3.0.0)<br><br>
 
-<pre class="d">
+<pre class="prettyprint linenums">
 <b>profile</b>(
     string login,
     string color = &#39;&#39;

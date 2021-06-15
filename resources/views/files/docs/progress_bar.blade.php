@@ -12,7 +12,7 @@
 
 Функция выводит прогресс-бар, на основе введенных данных (Доступно с версии 3.0.2)<br><br>
 
-<pre class="d">
+<pre class="prettyprint linenums">
 <b>progress_bar</b>(
     int percent,
     string title = ''

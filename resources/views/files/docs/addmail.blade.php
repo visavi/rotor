@@ -12,7 +12,7 @@
 
 Функция для отправки писем на email, отсылает письма через стандартную функцию <a href="http://ru.php.net/manual/ru/function.mail.php">mail()</a>, данные отправляются в кодировке UTF-8<br><br>
 
-<pre class="d">
+<pre class="prettyprint linenums">
 <b>addmail</b>(
     string mail,
     string subject,

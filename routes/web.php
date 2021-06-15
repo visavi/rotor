@@ -19,8 +19,6 @@ use Illuminate\Support\Facades\Route;
 Route::pattern('id', '\d+');
 Route::pattern('login', '[\w\-]+');
 
-//Route::get('/install', [\App\Http\Controllers\InstallController::class, 'index'])->withoutMiddleware('web');
-
 Route::get('/', [\App\Http\Controllers\HomeController::class, 'index']);
 Route::get('/closed', [\App\Http\Controllers\HomeController::class, 'closed']);
 Route::get('/search', [\App\Http\Controllers\HomeController::class, 'search']);
@@ -586,6 +584,20 @@ Route::group(['prefix' => 'admin', 'middleware' => 'check.admin'], function () {
         Route::get('/modules/uninstall', [\App\Http\Controllers\Admin\ModuleController::class, 'uninstall']);
     });
 });
+
+if (file_exists(app_path('Http/Controllers/InstallController.php'))) {
+    Route::group(['prefix' => 'install'], function () {
+        Route::get('/', [\App\Http\Controllers\InstallController::class, 'index'])
+            ->withoutMiddleware('web')
+            ->name('install');
+
+        Route::get('/status', [\App\Http\Controllers\InstallController::class, 'status'])->withoutMiddleware('web');
+        Route::get('/migrate', [\App\Http\Controllers\InstallController::class, 'migrate'])->withoutMiddleware('web');
+        Route::get('/seed', [\App\Http\Controllers\InstallController::class, 'seed']);
+        Route::match(['get', 'post'], '/account', [\App\Http\Controllers\InstallController::class, 'account']);
+        Route::get('/finish', [\App\Http\Controllers\InstallController::class, 'finish']);
+    });
+}
 
 $modules = \App\Models\Module::getEnabledModules();
 foreach ($modules as $module) {

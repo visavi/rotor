@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="{{ setting('language') }}">
+<html lang="{{ setting('language', 'ru') }}">
 <head>
     <meta charset="utf-8">
     <meta name="description" content="@yield('description', setting('description'))">
@@ -11,6 +11,7 @@
 </head>
 <body>
     <div class="container-fluid">
+        @include('app/_flash')
         @yield('content')
     </div>
 

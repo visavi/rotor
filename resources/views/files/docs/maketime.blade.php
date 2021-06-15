@@ -12,7 +12,7 @@
 
 Функция переводит количество секунд в удобный формат времени, при количестве секунд более чем 86400 (Сутки), рекомендуется использовать функцию <a href="/files/docs/makestime">makestime</a><br><br>
 
-<pre class="d">
+<pre class="prettyprint linenums">
 <b>maketime</b>(
     int time
 );

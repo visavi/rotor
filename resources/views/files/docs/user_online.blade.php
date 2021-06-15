@@ -12,7 +12,7 @@
 
 Определяет по указанному логину его статус на сайте. Online или Offline. По умолчанию данные кэшируются на 10 секунд<br>
 
-<pre class="d">
+<pre class="prettyprint linenums">
 <b>user_online</b>(
     string login
 );

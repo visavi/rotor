@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="{{ setting('language') }}">
+<html lang="{{ setting('language', 'ru') }}">
 <head>
     <title>@yield('title') - {{ setting('title') }}</title>
     <meta charset="utf-8">

@@ -14,7 +14,7 @@
 При выполнении функции вызывается вспомогательная функция <a href="/files/docs/delete_album">delete_album</a>
 <br><br>
 
-<pre class="d">
+<pre class="prettyprint linenums">
 <b>delete_users</b>(
     string user
 );

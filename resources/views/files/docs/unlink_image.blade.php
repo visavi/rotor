@@ -12,7 +12,7 @@
 
 Удаляет картинку, а также кэшированное изображение сохраненное в директории uploads/thumbnails, с проверкой имеется ли картинка в данных директориях (Доступно с версии 2.6.0)<br><br>
 
-<pre class="d">
+<pre class="prettyprint linenums">
 <b>unlink_image</b>(
     string dir,
     string image

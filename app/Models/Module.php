@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace App\Models;
 
+use Exception;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Str;
 use Symfony\Component\Filesystem\Filesystem;
 
@@ -131,9 +131,10 @@ class Module extends BaseModel
      */
     public static function getEnabledModules(): array
     {
-        $modules = [];
-        if (Schema::hasTable('modules')) {
+        try {
             $modules = self::query()->where('disabled', 0)->pluck('name')->all();
+        } catch (Exception $e) {
+            $modules = [];
         }
 
         return $modules;

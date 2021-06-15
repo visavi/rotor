@@ -13,7 +13,7 @@
 Функция автоустановки прав доступа<br>
 Сканирует папку и выставляет на файлы доступ - 0777<br>
 
-<pre class="d">
+<pre class="prettyprint linenums">
 <b>chmode</b>(
     string path
 );

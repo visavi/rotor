@@ -15,7 +15,7 @@
 По умолчанию кэширует на 3 часа
 <br><br>
 
-<pre class="d">
+<pre class="prettyprint linenums">
 <b>cache_admin_links</b>(
   int cache
 );

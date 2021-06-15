@@ -13,7 +13,7 @@
 Функция постраничной навигации, выводит ссылки Назад и Далее (<span style="color:#ff0000">Удалено с версии 3.0.0</span>)<br>
 Данная функция заменена на более расширенную <a href="/files/docs/page_strnavigation">page_strnavigation</a>, которая выводит эти ссылки а также номера страниц<br><br>
 
-<pre class="d">
+<pre class="prettyprint linenums">
 <b>page_jumpnavigation</b>(
     string link,
     int posts,

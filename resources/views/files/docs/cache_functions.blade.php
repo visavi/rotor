@@ -15,7 +15,7 @@
 Это системная функция вызывается автоматически в файле includes/functions.php
 <br><br>
 
-<pre class="d">
+<pre class="prettyprint linenums">
 <b>cache_functions</b>(
     int cache
 );

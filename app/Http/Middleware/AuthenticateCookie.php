@@ -6,6 +6,7 @@ use App\Models\Login;
 use Closure;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\App;
+use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\View;
 
 class AuthenticateCookie
@@ -20,6 +21,10 @@ class AuthenticateCookie
      */
     public function handle(Request $request, Closure $next)
     {
+        if (Route::has('install') && $request->is('install*')) {
+            return $next($request);
+        }
+
         $this->cookieAuth($request);
         $this->setSetting($request);
 
@@ -35,7 +40,8 @@ class AuthenticateCookie
      */
     private function cookieAuth(Request $request): void
     {
-        if ($request->hasCookie('login') &&
+        if (
+            $request->hasCookie('login') &&
             $request->hasCookie('password') &&
             $request->session()->missing('id')
         ) {

@@ -15,7 +15,7 @@
 а если выводится 10 сообщений на страницу, то номер 4
 <br><br>
 
-<pre class="d">
+<pre class="prettyprint linenums">
 <b>last_page</b>(
   int total
   int posts

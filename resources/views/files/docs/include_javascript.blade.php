@@ -15,7 +15,7 @@
 Функция прописана в шаблонах тем
 <br><br>
 
-<pre class="d">
+<pre class="prettyprint linenums">
 <b>includeScript();</b>
 </pre><br>
 

@@ -12,7 +12,7 @@
 
 Форматирует число и устанавливает цвет текста (Доступно с версии 3.0.0)<br><br>
 
-<pre class="d">
+<pre class="prettyprint linenums">
 <b>format_num</b>(
     int num = 0
 );

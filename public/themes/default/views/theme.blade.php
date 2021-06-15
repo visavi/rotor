@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="{{ setting('language') }}">
+<html lang="{{ setting('language', 'ru') }}">
 <head>
     <meta charset="utf-8">
     <meta name="theme-color" content="#2e8cc2">

@@ -12,4 +12,4 @@
     <br><br>
 
     URL: <a href="{{ siteUrl() }}/articles/{{ $article->id }}">{{ siteUrl(true) }}/articles/{{ $article->id }}</a>
-@stop
+@stop>

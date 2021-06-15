@@ -14,7 +14,7 @@
 Является основной для функции кэширования ссылок <a href="/files/docs/cache_admin_links">cache_admin_links</a>
 <br><br>
 
-<pre class="d">
+<pre class="prettyprint linenums">
 <b>show_admin_links</b>(
   int level = 0
 );

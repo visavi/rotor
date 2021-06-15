@@ -12,7 +12,7 @@
 
 Перенаправляет пользователя на другую страницу, при обработке функции автоматически вызывается функция exit (Доступно с версии 2.6.5)<br><br>
 
-<pre class="d">
+<pre class="prettyprint linenums">
 <b>redirect</b>(
     string url,
     boolean permanent = false

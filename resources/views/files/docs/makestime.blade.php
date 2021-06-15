@@ -12,7 +12,7 @@
 
 Функция переводит количество секунд в удобный формат времени, для вывода времени до 1 дня можно использовать функцию <a href="/files/docs/maketime">maketime</a><br><br>
 
-<pre class="d">
+<pre class="prettyprint linenums">
 <b>makestime</b>(
     int time
 );

@@ -14,7 +14,7 @@
 Является вспомогательной для функции <a href="/files/docs/delete_users">delete_users</a>
 <br><br>
 
-<pre class="d">
+<pre class="prettyprint linenums">
 <b>delete_album</b>(
     string user
 );
