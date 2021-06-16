@@ -50,9 +50,9 @@ class AuthenticateCookie
 
             $user = getUserByLogin($login);
 
-            if ($user && $login === $user->login && $password === md5($user->password . config('app.key'))) {
+            if ($user && $login === $user->login && $password === $user->password) {
                 $request->session()->put('id', $user->id);
-                $request->session()->put('password', md5(config('app.key') . $user->password));
+                $request->session()->put('password', $user->password);
                 $request->session()->put('online');
 
                 $user->saveVisit(Login::COOKIE);

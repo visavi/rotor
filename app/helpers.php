@@ -1865,7 +1865,7 @@ function checkAuth()
     if (session()->has(['id', 'password'])) {
         $user = getUserById(session()->get('id'));
 
-        if ($user && session()->get('password') === md5(config('app.key') . $user->password)) {
+        if ($user && session()->get('password') === $user->password) {
             return $user;
         }
     }

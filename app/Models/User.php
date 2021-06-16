@@ -796,11 +796,11 @@ class User extends BaseModel implements
     {
         if ($remember) {
             cookie()->queue(cookie()->forever('login', $user->login));
-            cookie()->queue(cookie()->forever('password', md5($user->password . config('app.key'))));
+            cookie()->queue(cookie()->forever('password', $user->password));
         }
 
         session()->put('id', $user->id);
-        session()->put('password', md5(config('app.key') . $user->password));
+        session()->put('password', $user->password);
         session()->put('online');
     }
 }
