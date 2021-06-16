@@ -154,10 +154,11 @@ class BBCodeTest extends \Tests\TestCase
      */
     public function testHttpNotTarget(): void
     {
-        $text      = 'http://rotor.ll';
-        $parseText = $this->bbCode->parse($text);
+        $url    = config('app.url');
+        $cutUrl = str_replace(['http:', 'https:'], '', $url);
+        $parseText = $this->bbCode->parse($url);
 
-        self::assertSame('<a href="//rotor.ll">http://rotor.ll</a>', $parseText);
+        self::assertSame('<a href="' . $cutUrl . '">' . $url . '</a>', $parseText);
     }
 
     /**
@@ -165,10 +166,11 @@ class BBCodeTest extends \Tests\TestCase
      */
     public function testHttpsComplex(): void
     {
-        $text      = 'https://rotor.ll/dir/index.php?name=name&name2=name2#anchor';
-        $parseText = $this->bbCode->parse($text);
+        $url    = config('app.url') . '/dir/index.php?name=name&name2=name2#anchor';
+        $cutUrl = str_replace(['http:', 'https:'], '', $url);
+        $parseText = $this->bbCode->parse($url);
 
-        self::assertSame('<a href="//rotor.ll/dir/index.php?name=name&name2=name2#anchor">https://rotor.ll/dir/index.php?name=name&name2=name2#anchor</a>', $parseText);
+        self::assertSame('<a href="' . $cutUrl . '">' . $url . '</a>', $parseText);
     }
 
     /**
@@ -176,10 +178,10 @@ class BBCodeTest extends \Tests\TestCase
      */
     public function testLink(): void
     {
-        $text      = '[url]https://rotor.ll[/url]';
+        $text      = '[url]https://visavi.net[/url]';
         $parseText = $this->bbCode->parse($text);
 
-        self::assertSame('<a href="//rotor.ll">https://rotor.ll</a>', $parseText);
+        self::assertSame('<a href="https://visavi.net" target="_blank" rel="nofollow">https://visavi.net</a>', $parseText);
     }
 
     /**
@@ -187,10 +189,10 @@ class BBCodeTest extends \Tests\TestCase
      */
     public function testNamedLink(): void
     {
-        $text      = '[url=http://rotor.ll/dir/index.php?name=name&name2=name2#anchor]Сайт[/url] [url=https://site.com/http://site.net:80/]Sitename[/url]';
+        $text      = '[url=https://visavi.net/dir/index.php?name=name&name2=name2#anchor]Сайт[/url] [url=https://site.com/http://site.net:80/]Sitename[/url]';
         $parseText = $this->bbCode->parse($text);
 
-        self::assertSame('<a href="//rotor.ll/dir/index.php?name=name&name2=name2#anchor">Сайт</a> <a href="https://site.com/http://site.net:80/" target="_blank" rel="nofollow">Sitename</a>', $parseText);
+        self::assertSame('<a href="https://visavi.net/dir/index.php?name=name&name2=name2#anchor" target="_blank" rel="nofollow">Сайт</a> <a href="https://site.com/http://site.net:80/" target="_blank" rel="nofollow">Sitename</a>', $parseText);
     }
 
     /**
@@ -198,10 +200,10 @@ class BBCodeTest extends \Tests\TestCase
      */
     public function testImage(): void
     {
-        $text      = '[img]http://rotor.ll/assets/images/img/logo.png[/img]';
+        $text      = '[img]https://visavi.net/assets/images/img/logo.png[/img]';
         $parseText = $this->bbCode->parse($text);
 
-        self::assertSame('<div class="media-file"><img src="http://rotor.ll/assets/images/img/logo.png" class="img-fluid" alt="image"></div>', $parseText);
+        self::assertSame('<div class="media-file"><img src="https://visavi.net/assets/images/img/logo.png" class="img-fluid" alt="image"></div>', $parseText);
     }
 
     /**
@@ -209,7 +211,7 @@ class BBCodeTest extends \Tests\TestCase
      */
     public function testOrderedList(): void
     {
-        $text      = '[list=1]Список'.PHP_EOL.'список2[/list]';
+        $text      = '[list=1]Список' . PHP_EOL . 'список2[/list]';
         $parseText = $this->bbCode->parse($text);
 
         self::assertSame('<ol><li>Список</li><li>список2</li></ol>', $parseText);

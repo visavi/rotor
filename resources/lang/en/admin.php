@@ -289,6 +289,6 @@ return [
         Attention! Boss profile missing<br>
         No user with boss privileges found in the database',
     'exists_install' => '
-        Attention! You need to remove the install directory<br>
-        The presence of this directory can compromise the security of the site. Remove it now!',
+        Attention! It is necessary to delete the file app/Http/Controllers/InstallController.php<br>
+        The presence of this file may compromise the security of the site. Remove it now!',
 ];
