@@ -43,7 +43,7 @@ class MailController extends Controller
 
                 $message = str_replace(
                     '/uploads/stickers',
-                    siteUrl() . '/uploads/stickers',
+                    config('app.url') . '/uploads/stickers',
                     bbCode($message)->toHtml()
                 );
 
@@ -102,7 +102,7 @@ class MailController extends Controller
 
             if ($validator->isValid()) {
                 $resetKey  = Str::random();
-                $resetLink = siteUrl(true) . '/restore?key=' . $resetKey;
+                $resetLink = config('app.url') . '/restore?key=' . $resetKey;
 
                 $user->update([
                     'keypasswd'  => $resetKey,
@@ -111,7 +111,7 @@ class MailController extends Controller
 
                 //Инструкция по восстановлению пароля на email
                 $subject = 'Восстановление пароля на ' . setting('title');
-                $message = 'Здравствуйте, ' . $user->getName() . '<br>Вами была произведена операция по восстановлению пароля на сайте <a href="' . siteUrl(true) . '">' . setting('title') . '</a><br><br>Данные отправителя:<br>Ip: ' . getIp() . '<br>Браузер: ' . getBrowser() . '<br>Отправлено: ' . date('j.m.Y / H:i', SITETIME) . '<br><br>Для того чтобы восстановить пароль, вам необходимо нажать на кнопку восстановления<br>Если это письмо попало к вам по ошибке или вы не собираетесь восстанавливать пароль, то просто проигнорируйте его';
+                $message = 'Здравствуйте, ' . $user->getName() . '<br>Вами была произведена операция по восстановлению пароля на сайте <a href="' . config('app.url') . '">' . setting('title') . '</a><br><br>Данные отправителя:<br>Ip: ' . getIp() . '<br>Браузер: ' . getBrowser() . '<br>Отправлено: ' . date('j.m.Y / H:i', SITETIME) . '<br><br>Для того чтобы восстановить пароль, вам необходимо нажать на кнопку восстановления<br>Если это письмо попало к вам по ошибке или вы не собираетесь восстанавливать пароль, то просто проигнорируйте его';
 
                 $data = [
                     'to'        => $user->email,
@@ -173,7 +173,7 @@ class MailController extends Controller
 
             // Восстановление пароля на email
             $subject = 'Восстановление пароля на ' . setting('title');
-            $message = 'Здравствуйте, ' . $user->getName() . '<br>Ваши новые данные для входа на на сайт <a href="' . siteUrl(true) . '">' . setting('title') . '</a><br><b>Логин: ' . $user->login . '</b><br><b>Пароль: ' . $newpass . '</b><br><br>Запомните и постарайтесь больше не забывать данные <br>Пароль вы сможете поменять в своем профиле<br>Всего наилучшего!';
+            $message = 'Здравствуйте, ' . $user->getName() . '<br>Ваши новые данные для входа на на сайт <a href="' . config('app.url') . '">' . setting('title') . '</a><br><b>Логин: ' . $user->login . '</b><br><b>Пароль: ' . $newpass . '</b><br><br>Запомните и постарайтесь больше не забывать данные <br>Пароль вы сможете поменять в своем профиле<br>Всего наилучшего!';
 
             $data = [
                 'to'      => $user->email,

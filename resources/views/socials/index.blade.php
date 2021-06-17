@@ -16,7 +16,7 @@
     {{ __('socials.text_choice') }}
 
     <script src="//ulogin.ru/js/ulogin.js" async defer></script>
-    <div class="mb-3" id="uLogin" data-ulogin="display=panel;providers=vkontakte,odnoklassniki,mailru,facebook,google,yandex,instagram;redirect_uri={{ siteUrl() }}/socials;mobilebuttons=0;">
+    <div class="mb-3" id="uLogin" data-ulogin="display=panel;providers=vkontakte,odnoklassniki,mailru,facebook,google,yandex,instagram;redirect_uri={{ config('app.url') }}/socials;mobilebuttons=0;">
     </div>
 
     @if ($socials->isNotEmpty())

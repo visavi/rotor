@@ -177,7 +177,7 @@ class UserController extends Controller
                 if ($validator->isValid()) {
                     if (setting('regkeys')) {
                         $activateKey  = Str::random();
-                        $activateLink = siteUrl(true) . '/key?code=' . $activateKey;
+                        $activateLink = config('app.url') . '/key?code=' . $activateKey;
                         $level        = User::PENDED;
                     }
 
@@ -212,7 +212,7 @@ class UserController extends Controller
 
                     // --- Уведомление о регистрации на email ---//
                     $subject = 'Регистрация на ' . setting('title');
-                    $message = 'Добро пожаловать, ' . $login . '<br>Теперь вы зарегистрированный пользователь сайта <a href="' . siteUrl(true) . '">' . setting('title') . '</a> , сохраните ваш логин и пароль в надежном месте, они вам еще пригодятся. <br>Ваши данные для входа на сайт <br><b>Логин: ' . $login . '</b><br><b>Пароль: ' . $password . '</b>';
+                    $message = 'Добро пожаловать, ' . $login . '<br>Теперь вы зарегистрированный пользователь сайта <a href="' . config('app.url') . '">' . setting('title') . '</a> , сохраните ваш логин и пароль в надежном месте, они вам еще пригодятся. <br>Ваши данные для входа на сайт <br><b>Логин: ' . $login . '</b><br><b>Пароль: ' . $password . '</b>';
 
                     $data = [
                         'to'           => $email,
@@ -428,7 +428,7 @@ class UserController extends Controller
 
             if ($validator->isValid()) {
                 $activateKey  = Str::random();
-                $activateLink = siteUrl(true).'/key?code=' . $activateKey;
+                $activateLink = config('app.url').'/key?code=' . $activateKey;
 
                 $user->update([
                     'email'         => $email,
@@ -437,7 +437,7 @@ class UserController extends Controller
 
                 /* Уведомление о регистрации на email */
                 $subject = 'Регистрация на ' . setting('title');
-                $message = 'Добро пожаловать, ' . e($user->getName()) . '<br>Теперь вы зарегистрированный пользователь сайта <a href="' . siteUrl(true) . '">' . setting('title') . '</a> , сохраните ваш логин и пароль в надежном месте, они вам еще пригодятся.';
+                $message = 'Добро пожаловать, ' . e($user->getName()) . '<br>Теперь вы зарегистрированный пользователь сайта <a href="' . config('app.url') . '">' . setting('title') . '</a> , сохраните ваш логин и пароль в надежном месте, они вам еще пригодятся.';
 
                 $data = [
                     'to'           => $email,
@@ -583,7 +583,7 @@ class UserController extends Controller
             $genkey = Str::random();
 
             $subject = 'Изменение email на '.setting('title');
-            $message = 'Здравствуйте, ' . e($user->getName()) . '<br>Вами была произведена операция по изменению адреса электронной почты<br><br>Для того, чтобы изменить email, необходимо подтвердить новый адрес почты<br>Перейдите по данной ссылке:<br><br><a href="' . siteUrl(true) . '/accounts/editmail?key=' . $genkey . '">' . siteUrl(true) . '/accounts/editmail?key=' . $genkey . '</a><br><br>Ссылка будет дейстительной в течение суток до ' . date('j.m.y / H:i', strtotime('+1 day', SITETIME)) . '<br>Для изменения адреса необходимо быть авторизованным на сайте<br>Если это сообщение попало к вам по ошибке или вы не собираетесь менять email, то просто проигнорируйте данное письмо';
+            $message = 'Здравствуйте, ' . e($user->getName()) . '<br>Вами была произведена операция по изменению адреса электронной почты<br><br>Для того, чтобы изменить email, необходимо подтвердить новый адрес почты<br>Перейдите по данной ссылке:<br><br><a href="' . config('app.url') . '/accounts/editmail?key=' . $genkey . '">' . config('app.url') . '/accounts/editmail?key=' . $genkey . '</a><br><br>Ссылка будет дейстительной в течение суток до ' . date('j.m.y / H:i', strtotime('+1 day', SITETIME)) . '<br>Для изменения адреса необходимо быть авторизованным на сайте<br>Если это сообщение попало к вам по ошибке или вы не собираетесь менять email, то просто проигнорируйте данное письмо';
 
             $data = [
                 'to'      => $email,

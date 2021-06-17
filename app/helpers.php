@@ -2124,24 +2124,6 @@ function defaultSetting(?string $key = null, ?string $default = null)
 }
 
 /**
- * Возвращает путь к сайту
- *
- * @param bool $parse выводить протокол
- *
- * @return string адрес сайта
- */
-function siteUrl(bool $parse = false): string
-{
-    $url = config('app.url');
-
-    if ($parse) {
-        $url = Str::startsWith($url, '//') ? 'http:' . $url : $url;
-    }
-
-    return $url;
-}
-
-/**
  * Возвращает имя сайта из ссылки
  *
  * @param string $url ссылка на сайт
@@ -2150,10 +2132,7 @@ function siteUrl(bool $parse = false): string
  */
 function siteDomain(string $url): string
 {
-    $url = strtolower($url);
-    $url = str_replace(['https://www.', 'http://www.', 'https://', 'http://', '//'], '', $url);
-
-    return strtok($url, '/?');
+    return parse_url(strtolower($url), PHP_URL_HOST);
 }
 
 /**

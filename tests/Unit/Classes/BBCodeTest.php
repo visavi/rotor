@@ -178,10 +178,10 @@ class BBCodeTest extends \Tests\TestCase
      */
     public function testLink(): void
     {
-        $text      = '[url]https://visavi.net[/url]';
+        $text      = '[url]https://site.ru[/url]';
         $parseText = $this->bbCode->parse($text);
 
-        self::assertSame('<a href="https://visavi.net" target="_blank" rel="nofollow">https://visavi.net</a>', $parseText);
+        self::assertSame('<a href="https://site.ru" target="_blank" rel="nofollow">https://site.ru</a>', $parseText);
     }
 
     /**
@@ -189,10 +189,10 @@ class BBCodeTest extends \Tests\TestCase
      */
     public function testNamedLink(): void
     {
-        $text      = '[url=https://visavi.net/dir/index.php?name=name&name2=name2#anchor]Сайт[/url] [url=https://site.com/http://site.net:80/]Sitename[/url]';
+        $text      = '[url=https://site.ru/dir/index.php?name=name&name2=name2#anchor]Сайт[/url] [url=https://site.com/http://site.net:80/]Sitename[/url]';
         $parseText = $this->bbCode->parse($text);
 
-        self::assertSame('<a href="https://visavi.net/dir/index.php?name=name&name2=name2#anchor" target="_blank" rel="nofollow">Сайт</a> <a href="https://site.com/http://site.net:80/" target="_blank" rel="nofollow">Sitename</a>', $parseText);
+        self::assertSame('<a href="https://site.ru/dir/index.php?name=name&name2=name2#anchor" target="_blank" rel="nofollow">Сайт</a> <a href="https://site.com/http://site.net:80/" target="_blank" rel="nofollow">Sitename</a>', $parseText);
     }
 
     /**

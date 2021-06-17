@@ -52,7 +52,7 @@ class AddSubscribers extends Command
             foreach ($deliveryUsers as $user) {
                 $subject = $user->newprivat . ' непрочитанных сообщений на ' . setting('title');
 
-                $text = 'Здравствуйте ' . e($user->getName()) . '!<br>У вас имеются непрочитанные сообщения (' . $user->newprivat . ' шт.) на сайте ' . setting('title') . '<br>Прочитать свои сообщения вы можете по адресу <a href="' . siteUrl(true) . '/messages">' . siteUrl(true) . '/messages</a><br><br><small>Если вы не хотите получать эти email, пожалуйста, <a href="'.siteUrl(true).'/unsubscribe?key='.$user->subscribe.'">откажитесь от подписки</a></small>';
+                $text = 'Здравствуйте ' . e($user->getName()) . '!<br>У вас имеются непрочитанные сообщения (' . $user->newprivat . ' шт.) на сайте ' . setting('title') . '<br>Прочитать свои сообщения вы можете по адресу <a href="' . config('app.url') . '/messages">' . config('app.url') . '/messages</a><br><br><small>Если вы не хотите получать эти email, пожалуйста, <a href="'.config('app.url').'/unsubscribe?key='.$user->subscribe.'">откажитесь от подписки</a></small>';
 
                 Mailing::query()->create([
                     'user_id'    => $user->id,

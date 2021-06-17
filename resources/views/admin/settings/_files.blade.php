@@ -43,7 +43,7 @@
         <label class="form-check-label" for="copyfoto">{{ __('settings.images_copyright') }}</label>
     </div>
 
-    <img src="/assets/img/images/watermark.png" alt="watermark" title="{{ siteUrl() }}/assets/img/images/watermark.png"><br>
+    <img src="/assets/img/images/watermark.png" alt="watermark" title="{{ config('app.url') }}/assets/img/images/watermark.png"><br>
 
     <p class="text-muted fst-italic">
         {{ __('settings.images_hint') }}

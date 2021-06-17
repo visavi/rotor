@@ -11,5 +11,5 @@
 
     <br><br>
 
-    URL: <a href="{{ siteUrl() }}/articles/{{ $article->id }}">{{ siteUrl(true) }}/articles/{{ $article->id }}</a>
+    URL: <a href="{{ config('app.url') }}/articles/{{ $article->id }}">{{ config('app.url') }}/articles/{{ $article->id }}</a>
 @stop>

@@ -34,7 +34,7 @@ class SitemapController extends Controller
 
         foreach ($this->pages as $page) {
             $locs[] = [
-                'loc'     => siteUrl(true) . '/sitemap/' . $page . '.xml',
+                'loc'     => config('app.url') . '/sitemap/' . $page . '.xml',
                 'lastmod' => date('c', SITETIME),
             ];
         }
@@ -84,7 +84,7 @@ class SitemapController extends Controller
             $new = SITETIME < strtotime('+1 month', $changeTime);
 
             $locs[] = [
-                'loc'        => siteUrl(true) . '/articles/' . $article->id,
+                'loc'        => config('app.url') . '/articles/' . $article->id,
                 'lastmod'    => date('c', $changeTime),
                 'changefreq' => $new ? 'weekly' : 'monthly',
                 'priority'   => $new ? '1.0' : '0.5',
@@ -120,7 +120,7 @@ class SitemapController extends Controller
             $new = SITETIME < strtotime('+1 month', $changeTime);
 
             $locs[] = [
-                'loc'        => siteUrl(true) . '/news/' . $news->id,
+                'loc'        => config('app.url') . '/news/' . $news->id,
                 'lastmod'    => date('c', $changeTime),
                 'changefreq' => $new ? 'weekly' : 'monthly',
                 'priority'   => $new ? '1.0' : '0.5',
@@ -146,7 +146,7 @@ class SitemapController extends Controller
             $new = SITETIME < strtotime('+1 month', $topic->updated_at);
 
             $locs[] = [
-                'loc'        => siteUrl(true) . '/topics/' . $topic->id,
+                'loc'        => config('app.url') . '/topics/' . $topic->id,
                 'lastmod'    => date('c', $topic->updated_at),
                 'changefreq' => $new ? 'weekly' : 'monthly',
                 'priority'   => $new ? '1.0' : '0.5',
@@ -180,7 +180,7 @@ class SitemapController extends Controller
             $new = SITETIME < strtotime('+1 month', $changeTime);
 
             $locs[] = [
-                'loc'        => siteUrl(true) . '/downs/' . $down->id,
+                'loc'        => config('app.url') . '/downs/' . $down->id,
                 'lastmod'    => date('c', $changeTime),
                 'changefreq' => $new ? 'weekly' : 'monthly',
                 'priority'   => $new ? '1.0' : '0.5',
