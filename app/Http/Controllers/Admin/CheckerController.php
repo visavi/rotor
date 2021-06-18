@@ -21,9 +21,9 @@ class CheckerController extends AdminController
     {
         $diff = [];
 
-        if (file_exists(storage_path('caches/checker.php'))) {
+        if (file_exists(storage_path('framework/cache/checker.php'))) {
             $files = $this->scanFiles(base_path());
-            $filesScan = json_decode(file_get_contents(storage_path('caches/checker.php')), true);
+            $filesScan = json_decode(file_get_contents(storage_path('framework/cache/checker.php')), true);
 
             $diff['left']  = array_diff($files, $filesScan);
             $diff['right'] = array_diff($filesScan, $files);
@@ -44,7 +44,7 @@ class CheckerController extends AdminController
         if ($request->input('_token') === csrf_token()) {
             $files = $this->scanFiles(base_path());
 
-            file_put_contents(storage_path('caches/checker.php'), json_encode($files));
+            file_put_contents(storage_path('framework/cache/checker.php'), json_encode($files));
 
             setFlash('success', __('admin.checkers.success_crawled'));
         } else {
@@ -69,6 +69,7 @@ class CheckerController extends AdminController
         $finder = new Finder();
         $files  = $finder->in($dir)
             ->files()
+            ->exclude(basename(storage_path()))
             ->notName($excludeFiles);
 
         if (file_exists(base_path('.gitignore'))) {

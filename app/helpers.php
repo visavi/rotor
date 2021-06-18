@@ -599,8 +599,8 @@ function statsStickers(): int
  */
 function statsChecker()
 {
-    if (file_exists(storage_path('caches/checker.php'))) {
-        return dateFixed(filemtime(storage_path('caches/checker.php')), 'd.m.Y');
+    if (file_exists(storage_path('framework/cache/checker.php'))) {
+        return dateFixed(filemtime(storage_path('framework/cache/checker.php')), 'd.m.Y');
     }
 
     return 0;

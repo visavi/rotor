@@ -6,6 +6,7 @@ namespace App\Http\Controllers\Admin;
 
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Artisan;
 use Illuminate\View\View;
 
 class CacheController extends AdminController
@@ -25,10 +26,10 @@ class CacheController extends AdminController
             $files = glob(public_path('uploads/thumbnails/*.{gif,png,jpg,jpeg}'), GLOB_BRACE);
             $files = paginate($files, 20, compact('type'));
         } elseif ($type === 'views') {
-            $files = glob(storage_path('views/*.php'), GLOB_BRACE);
+            $files = glob(storage_path('framework/views/*.php'), GLOB_BRACE);
             $files = paginate($files, 20, compact('type'));
         } else {
-            $files = glob(storage_path('caches/{*/*/*,*.php}'), GLOB_BRACE);
+            $files = glob(storage_path('framework/cache/data/*/*/*'));
             $files = paginate($files, 20, compact('type'));
         }
 
@@ -49,15 +50,15 @@ class CacheController extends AdminController
         if ($request->input('_token') === csrf_token()) {
             switch ($type) {
                 case 'images':
-                    runCommand(new ImageClear());
+                    Artisan::call('image:clear');
                     break;
                 case 'views':
-                    runCommand(new ViewClear());
+                    Artisan::call('view:clear');
                     break;
                 default:
-                    runCommand(new ConfigClear());
-                    runCommand(new RouteClear());
-                    runCommand(new CacheClear());
+                    Artisan::call('cache:clear');
+                    Artisan::call('route:clear');
+                    Artisan::call('config:clear');
             }
 
             setFlash('success', __('admin.caches.success_cleared'));
