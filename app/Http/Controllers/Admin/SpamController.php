@@ -7,6 +7,7 @@ namespace App\Http\Controllers\Admin;
 use App\Classes\Validator;
 use App\Models\Spam;
 use Exception;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
 
@@ -91,10 +92,10 @@ class SpamController extends AdminController
      * @param Request   $request
      * @param Validator $validator
      *
-     * @return void
+     * @return JsonResponse
      * @throws Exception
      */
-    public function delete(Request $request, Validator $validator): void
+    public function delete(Request $request, Validator $validator): JsonResponse
     {
         $id = int($request->input('id'));
 
@@ -110,12 +111,12 @@ class SpamController extends AdminController
                 $spam->delete();
             }
 
-            echo json_encode(['status' => 'success']);
-        } else {
-            echo json_encode([
-                'status' => 'error',
-                'message' => current($validator->getErrors())
-            ]);
+            return response()->json(['success' => true]);
         }
+
+        return response()->json([
+            'success' => false,
+            'message' => current($validator->getErrors()),
+        ]);
     }
 }

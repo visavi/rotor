@@ -117,11 +117,11 @@ class AjaxController extends Controller
                 'created_at'  => SITETIME,
             ]);
 
-            return response()->json(['status' => 'success']);
+            return response()->json(['success' => true]);
         }
 
         return response()->json([
-            'status'  => 'error',
+            'success' => false,
             'message' => current($validator->getErrors()),
         ]);
     }
@@ -138,7 +138,7 @@ class AjaxController extends Controller
     {
         if (! isAdmin()) {
             return response()->json([
-                'status'  => 'error',
+                'success' => false,
                 'message' => __('main.not_authorized'),
             ]);
         }
@@ -166,12 +166,12 @@ class AjaxController extends Controller
                 }
             }
 
-            return response()->json(['status' => 'success']);
+            return response()->json(['success' => true]);
         }
 
         return response()->json([
-            'status'  => 'error',
-            'message' => current($validator->getErrors())
+            'success' => 'false',
+            'message' => current($validator->getErrors()),
         ]);
     }
 
@@ -198,15 +198,24 @@ class AjaxController extends Controller
         $vote = $request->input('vote');
 
         if ($request->input('_token') !== csrf_token()) {
-            return response()->json(['status' => 'error', 'message' => 'Invalid token']);
+            return response()->json([
+                'success' => false,
+                'message' => 'Invalid token',
+            ]);
         }
 
         if (! in_array($vote, ['+', '-'], true)) {
-            return response()->json(['status' => 'error', 'message' => 'Invalid rating']);
+            return response()->json([
+                'success' => false,
+                'message' => 'Invalid rating',
+            ]);
         }
 
         if (! in_array($type, $types, true)) {
-            return response()->json(['status' => 'error', 'message' => 'Type invalid']);
+            return response()->json([
+                'success' => false,
+                'message' => 'Type invalid',
+            ]);
         }
 
         /** @var BaseModel $model */
@@ -218,7 +227,10 @@ class AjaxController extends Controller
             ->first();
 
         if (! $post) {
-            return response()->json(['status' => 'error', 'message' => 'Record not found']);
+            return response()->json([
+                'success' => false,
+                'message' => 'Record not found',
+            ]);
         }
 
         $polling = $post->polling()->first();
@@ -226,7 +238,7 @@ class AjaxController extends Controller
 
         if ($polling) {
             if ($polling->vote === $vote) {
-                return response()->json(['status' => 'error']);
+                return response()->json(['success' => false]);
             }
 
             $polling->delete();
@@ -246,9 +258,9 @@ class AjaxController extends Controller
         }
 
         return response()->json([
-            'status' => 'success',
-            'cancel' => $cancel,
-            'rating' => formatNum($post['rating'])->toHtml(),
+            'success' => true,
+            'cancel'  => $cancel,
+            'rating'  => formatNum($post['rating'])->toHtml(),
         ]);
     }
 
@@ -277,7 +289,10 @@ class AjaxController extends Controller
         $type = $request->input('type');
 
         if (! in_array($type, array_merge($imageTypes, $fileTypes), true)) {
-            return response()->json(['status' => 'error', 'message' => 'Type invalid']);
+            return response()->json([
+                'success' => false,
+                'message' => 'Type invalid',
+            ]);
         }
 
         /** @var BaseModel $class */
@@ -289,8 +304,8 @@ class AjaxController extends Controller
 
             if (! $model) {
                 return response()->json([
-                    'status'  => 'error',
-                    'message' => 'Service not found'
+                    'success' => false,
+                    'message' => 'Service not found',
                 ]);
             }
         } else {
@@ -324,20 +339,20 @@ class AjaxController extends Controller
             if ($isImageType) {
                 $imageData = resizeProcess($fileData['path'], ['size' => 100]);
                 $data = [
-                    'status' => 'success',
-                    'id'     => $fileData['id'],
-                    'path'   => $imageData['path'],
-                    'source' => $imageData['source'],
-                    'type'   => $fileType,
+                    'success' => true,
+                    'id'      => $fileData['id'],
+                    'path'    => $imageData['path'],
+                    'source'  => $imageData['source'],
+                    'type'    => $fileType,
                 ];
             } else {
                 $data = [
-                    'status' => 'success',
-                    'id'     => $fileData['id'],
-                    'path'   => $fileData['path'],
-                    'name'   => $fileData['name'],
-                    'size'   => $fileData['size'],
-                    'type'   => $fileType,
+                    'success' => true,
+                    'id'      => $fileData['id'],
+                    'path'    => $fileData['path'],
+                    'name'    => $fileData['name'],
+                    'size'    => $fileData['size'],
+                    'type'    => $fileType,
                 ];
             }
 
@@ -345,8 +360,8 @@ class AjaxController extends Controller
         }
 
         return response()->json([
-            'status'  => 'error',
-            'message' => current($validator->getErrors())
+            'success' => false,
+            'message' => current($validator->getErrors()),
         ]);
     }
 
@@ -372,7 +387,10 @@ class AjaxController extends Controller
         $type = $request->input('type');
 
         if (! in_array($type, $types, true)) {
-            return response()->json(['status' => 'error', 'message' => 'Type invalid']);
+            return response()->json([
+                'success' => false,
+                'message' => 'Type invalid',
+            ]);
         }
 
         /** @var File $file */
@@ -382,8 +400,8 @@ class AjaxController extends Controller
 
         if (! $file) {
             return response()->json([
-                'status'  => 'error',
-                'message' => 'File not found'
+                'success'  => false,
+                'message'  => 'File not found'
             ]);
         }
 
@@ -394,14 +412,14 @@ class AjaxController extends Controller
             $file->delete();
 
             return response()->json([
-                'status' => 'success',
-                'path'   => $file->hash,
+                'success' => true,
+                'path'    => $file->hash,
             ]);
         }
 
         return response()->json([
-            'status'  => 'error',
-            'message' => current($validator->getErrors())
+            'success' => false,
+            'message' => current($validator->getErrors()),
         ]);
     }
 
@@ -419,10 +437,10 @@ class AjaxController extends Controller
             ->orderBy('name')
             ->get();
 
-        $view = view('pages/_stickers_modal', compact('stickers'));
+        $view = view('pages/_stickers_modal', compact('stickers'))->render();
 
         return response()->json([
-            'status' => 'success',
+            'success'  => true,
             'stickers' => $view,
         ]);
     }
@@ -437,7 +455,10 @@ class AjaxController extends Controller
     private function checkAjax(Request $request)
     {
         if (! $request->ajax()) {
-            return response()->json(['status' => 'error', 'message' => __('validator.not_ajax')]);
+            return response()->json([
+                'success' => false,
+                'message' => __('validator.not_ajax'),
+            ]);
         }
 
         return true;
@@ -451,7 +472,10 @@ class AjaxController extends Controller
     private function checkAuthorize()
     {
         if (! getUser()) {
-            return response()->json(['status' => 'error', 'message' => __('main.not_authorized')]);
+            return response()->json([
+                'success' => false,
+                'message' => __('main.not_authorized'),
+            ]);
         }
 
         return true;

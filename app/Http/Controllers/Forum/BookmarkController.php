@@ -12,6 +12,7 @@ use Exception;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
+use Symfony\Component\HttpFoundation\Response;
 
 class BookmarkController extends Controller
 {
@@ -47,10 +48,10 @@ class BookmarkController extends Controller
      * @param Request   $request
      * @param Validator $validator
      *
-     * @return TODO json |RedirectResponse
+     * @return Response
      * @throws Exception
      */
-    public function perform(Request $request, Validator $validator)
+    public function perform(Request $request, Validator $validator): Response
     {
         if (! $request->ajax()) {
             return redirect('/');
@@ -72,7 +73,12 @@ class BookmarkController extends Controller
 
             if ($bookmark) {
                 $bookmark->delete();
-                return json_encode(['status' => 'deleted', 'message' => __('forums.bookmark_success_deleted')]);
+
+                return response()->json([
+                    'success' => true,
+                    'type'    => 'deleted',
+                    'message' => __('forums.bookmark_success_deleted'),
+                ]);
             }
 
             Bookmark::query()->create([
@@ -80,10 +86,18 @@ class BookmarkController extends Controller
                 'topic_id'    => $tid,
                 'count_posts' => $topic->count_posts,
             ]);
-            return json_encode(['status' => 'added', 'message' => __('forums.bookmark_success_added')]);
+
+            return response()->json([
+                'success' => true,
+                'type'    => 'added',
+                'message' => __('forums.bookmark_success_added'),
+            ]);
         }
 
-        return json_encode(['status' => 'error', 'message' => current($validator->getErrors())]);
+        return response()->json([
+            'success' => false,
+            'message' => current($validator->getErrors()),
+        ]);
     }
 
     /**

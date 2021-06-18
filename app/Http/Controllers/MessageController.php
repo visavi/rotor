@@ -258,13 +258,13 @@ class MessageController extends Controller
                 $view = view('messages/_new', compact('dialogues'))->render();
 
                 return response()->json([
-                    'status'        => 'success',
+                    'success'       => true,
                     'dialogues'     => $view,
                     'countMessages' => $countMessages,
                 ]);
             }
         }
 
-        return response()->json(['status' => 'error']);
+        return response()->json(['success' => false]);
     }
 }

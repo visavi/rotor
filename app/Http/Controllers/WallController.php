@@ -8,6 +8,7 @@ use App\Classes\Validator;
 use App\Models\Flood;
 use App\Models\Ignore;
 use App\Models\Wall;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
@@ -114,9 +115,9 @@ class WallController extends Controller
      * @param Request   $request
      * @param Validator $validator
      *
-     * @return TODO |RedirectResponse
+     * @return JsonResponse
      */
-    public function delete(string $login, Request $request, Validator $validator)
+    public function delete(string $login, Request $request, Validator $validator): JsonResponse
     {
         $id   = int($request->input('id'));
         $user = getUserByLogin($login);
@@ -138,12 +139,12 @@ class WallController extends Controller
                 ->where('user_id', $user->id)
                 ->delete();
 
-            echo json_encode(['status' => 'success']);
-        } else {
-            echo json_encode([
-                'status' => 'error',
-                'message' => current($validator->getErrors())
-            ]);
+            return response()->json(['success' => true]);
         }
+
+        return response()->json([
+            'success' => false,
+            'message' => current($validator->getErrors()),
+        ]);
     }
 }

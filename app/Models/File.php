@@ -19,7 +19,7 @@ use Illuminate\Database\Eloquent\Relations\MorphTo;
  * @property int user_id
  * @property int created_at
  * @property string extension
- * @property object relate
+ * @property BaseModel relate
  */
 class File extends BaseModel
 {
@@ -65,21 +65,6 @@ class File extends BaseModel
     public function isImage(): bool
     {
         return in_array($this->extension, ['jpg', 'jpeg', 'gif', 'png'], true);
-    }
-
-    /**
-     * Скачивает файл
-     *
-     * @return void
-     */
-    public function download(): void
-    {
-        header('Content-Type: application/octet-stream');
-        header('Content-Disposition: attachment; filename="' . $this->name . '"');
-        header('Content-Transfer-Encoding: binary');
-        header('Content-Length: ' . $this->size);
-        readfile(public_path($this->hash));
-        exit;
     }
 
     /**

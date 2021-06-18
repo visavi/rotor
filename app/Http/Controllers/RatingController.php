@@ -8,6 +8,7 @@ use App\Classes\Validator;
 use App\Models\Rating;
 use App\Models\User;
 use Exception;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
@@ -168,10 +169,10 @@ class RatingController extends Controller
      * @param Request   $request
      * @param Validator $validator
      *
-     * @return void
+     * @return JsonResponse
      * @throws Exception
      */
-    public function delete(Request $request, Validator $validator): void
+    public function delete(Request $request, Validator $validator): JsonResponse
     {
         $id = int($request->input('id'));
 
@@ -188,12 +189,12 @@ class RatingController extends Controller
                 $rating->delete();
             }
 
-            echo json_encode(['status' => 'success']);
-        } else {
-            echo json_encode([
-                'status' => 'error',
-                'message' => current($validator->getErrors())
-            ]);
+            return response()->json(['success' => true]);
         }
+
+        return response()->json([
+            'success' => false,
+            'message' => current($validator->getErrors()),
+        ]);
     }
 }

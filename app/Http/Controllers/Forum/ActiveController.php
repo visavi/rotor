@@ -12,6 +12,7 @@ use App\Models\User;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
+use Symfony\Component\HttpFoundation\Response;
 
 class ActiveController extends Controller
 {
@@ -81,10 +82,10 @@ class ActiveController extends Controller
      * @param Request   $request
      * @param Validator $validator
      *
-     * @return TODO json |RedirectResponse
+     * @return Response
      * @throws Exception
      */
-    public function delete(Request $request, Validator $validator)
+    public function delete(Request $request, Validator $validator): Response
     {
         if (! $request->ajax()) {
             return redirect('/');
@@ -108,9 +109,12 @@ class ActiveController extends Controller
             $post->topic->decrement('count_posts');
             $post->topic->forum->decrement('count_posts');
 
-            return json_encode(['status' => 'success']);
+            return response()->json(['success' => true]);
         }
 
-        return json_encode(['status' => 'error', 'message' => current($validator->getErrors())]);
+        return response()->json([
+            'success' => false,
+            'message' => current($validator->getErrors()),
+        ]);
     }
 }

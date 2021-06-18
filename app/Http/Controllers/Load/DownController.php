@@ -19,6 +19,7 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
 use PhpZip\ZipFile;
+use Symfony\Component\HttpFoundation\Response;
 
 class DownController extends Controller
 {
@@ -334,9 +335,9 @@ class DownController extends Controller
      * @param int       $id
      * @param Validator $validator
      *
-     * @return TODO | RedirectResponse
+     * @return Response
      */
-    public function download(int $id, Validator $validator)
+    public function download(int $id, Validator $validator): Response
     {
         /** @var File $file */
         $file = File::query()->where('relate_type', Down::$morphName)->find($id);
@@ -353,13 +354,13 @@ class DownController extends Controller
 
         if ($validator->isValid()) {
             Reader::countingStat($file->relate);
-            // TODO
-            $file->download();
-        } else {
-            setFlash('danger', $validator->getErrors());
 
-            return redirect('downs/' . $file->relate->id);
+            return response()->download(public_path($file->hash), $file->name);
         }
+
+        setFlash('danger', $validator->getErrors());
+
+        return redirect('downs/' . $file->relate->id);
     }
 
     /**

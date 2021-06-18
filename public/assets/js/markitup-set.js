@@ -63,7 +63,7 @@ mySettings = {
                 $.ajax({
                     dataType: 'json', type: 'get', url: '/ajax/getstickers',
                     success: function (data) {
-                        if (data.status === 'success') {
+                        if (data.success === true) {
                             $('body').append(data.stickers);
                         }
 

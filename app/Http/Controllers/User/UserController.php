@@ -13,6 +13,7 @@ use App\Models\Invite;
 use App\Models\User;
 use Exception;
 use GuzzleHttp\Exception\GuzzleException;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
@@ -840,10 +841,10 @@ class UserController extends Controller
      * @param Request   $request
      * @param Validator $validator
      *
-     * @return string
+     * @return JsonResponse
      * @throws Exception
      */
-    public function checkLogin(Request $request, Validator $validator): string
+    public function checkLogin(Request $request, Validator $validator): JsonResponse
     {
         $login = $request->input('login');
 
@@ -871,9 +872,12 @@ class UserController extends Controller
         }
 
         if ($validator->isValid()) {
-            return json_encode(['status' => 'success']);
+            return response()->json(['success' => true]);
         }
 
-        return json_encode(['status' => 'error', 'message' => current($validator->getErrors())]);
+        return response()->json([
+            'success' => false,
+            'message' => current($validator->getErrors()),
+        ]);
     }
 }
