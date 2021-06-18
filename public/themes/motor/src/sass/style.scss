@@ -1,13 +1,14 @@
 body {
     margin-top : 0;
-    font-size : 13px;
+    font-size : 14px;
     color : #5c5c5c;
     background: #f0f0f0 url(/themes/motor/src/img/back.gif) repeat-x scroll;
     line-height: 1.3;
 }
 
 h1 {
-  font-size: 28px;
+    font-size: 24px;
+    margin-bottom: 20px;
 }
 
 h1 small {
@@ -29,13 +30,20 @@ p {
     margin-top : 5px;
     margin-bottom : 20px;
 }
+
 img {
     border : 0;
 }
+
 form {
     margin : 0;
     padding : 0;
 }
+
+a {
+    text-decoration: none;
+}
+
 #wrapper {
     margin-top : 0;
 }
@@ -84,6 +92,7 @@ form {
     color : #5c5c5c;
     padding : 0 3px;
     font-weight : bold;
+    font-size: 13px;
 }
 .menu a:hover {
     text-decoration : underline;
