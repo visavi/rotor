@@ -106,7 +106,7 @@ $(function () {
     $('.scrollup').click(function () {
         $("html, body").animate({
             scrollTop: 0
-        }, 600);
+        }, 100);
         return false;
     });
 
@@ -139,7 +139,7 @@ showAttachForm = function () {
 postJump = function () {
     $('html, body').animate({
         scrollTop: ($('.section-form').offset().top)
-    }, 500);
+    }, 100);
 };
 
 /* Ответ на сообщение */

@@ -35,12 +35,10 @@ set('writable_dirs', [
 ]);
 set('allow_anonymous_stats', false);
 
-set('composer_options',
-    '{{composer_action}} --verbose --prefer-dist --no-progress --no-interaction --no-dev --optimize-autoloader --classmap-authoritative'
-);
+set('composer_options', '{{composer_action}} --verbose --prefer-dist --no-progress --no-interaction --no-dev --optimize-autoloader --classmap-authoritative');
 
-set('rotor', static function () {
-    return parse('{{bin/php}} {{release_path}}/rotor');
+set('artisan', static function () {
+    return parse('{{bin/php}} {{release_path}}/artisan');
 });
 
 set('bin/npm', function () {
@@ -61,7 +59,7 @@ host('hostname')
 // Tasks
 desc('PHP reload');
 task('reload:php-fpm', static function () {
-    run('sudo /usr/sbin/service php7.4-fpm reload');
+    run('sudo /usr/sbin/service php8.0-fpm reload');
 })->onRoles('php');
 
 desc('Env copy');
@@ -71,7 +69,7 @@ task('deploy:env:copy', static function () {
 
 desc('Migrate database');
 task('database:migrate', static function () {
-    run('{{rotor}} migrate');
+    run('{{artisan}} migrate');
 })->onRoles('php')->once();
 
 desc('Npm install');

@@ -2,6 +2,7 @@
     RewriteEngine On
 
     RedirectMatch 403 ^/app/?$
+    RedirectMatch 403 ^/bootstrap/?$
     RedirectMatch 403 ^/resources/?$
     RedirectMatch 403 ^/storage/?$
     RedirectMatch 403 ^/vendor/?$
@@ -15,7 +16,7 @@
     RewriteRule ^(.*)$ public/$1 [L]
 </IfModule>
 
-<Files ~ ".env|rotor">
+<Files ~ ".env|artisan">
     Order allow,deny
     Deny from all
 </Files>
