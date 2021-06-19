@@ -32,7 +32,7 @@ class InstallController extends Controller
      *
      * @return View
      */
-    public function index(Request $request): View
+    public function index(): View
     {
         $keys = [
             'APP_ENV',
@@ -90,10 +90,6 @@ class InstallController extends Controller
     {
         Artisan::call('migrate');
         $output = Artisan::output();
-
-        if (! setting('app_installed')) {
-            Artisan::call('key:generate');
-        }
 
         return view('install/migrate', compact('output'));
     }
