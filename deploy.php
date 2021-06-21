@@ -78,6 +78,13 @@ task('deploy:npm', static function () {
     run('cd {{release_path}} && {{bin/npm}} run prod');
 })->onStage('production')->once();
 
+desc('Cache data');
+task('cache:data', static function () {
+    run('{{artisan}} config:cache');
+    run('{{artisan}} route:cache');
+    run('{{artisan}} view:cache');
+})->onStage('production')->once();
+
 desc('Deploy your project');
 task('deploy', [
     'deploy:info',
@@ -101,6 +108,9 @@ after('deploy:update_code', 'deploy:npm');
 
 // [Optional] If deploy fails automatically unlock.
 after('deploy:failed', 'deploy:unlock');
+
+// Cache
+before('success', 'cache:data');
 
 // Reload php-fpm
 before('success', 'reload:php-fpm');

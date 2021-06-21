@@ -210,12 +210,12 @@ sendComplaint = function (el) {
 
                     $(el).replaceWith('<i class="fa fa-bell-slash text-muted"></i>');
 
-                    if (data.success === false) {
+                    if (! data.success) {
                         notification('error', data.message);
                         return false;
                     }
 
-                    if (data.success === true) {
+                    if (data.success) {
                         notification('success', translate.complain_submitted);
                     }
                 }
@@ -236,12 +236,12 @@ bookmark = function (el) {
         dataType: 'json', type: 'post', url: '/forums/bookmarks/perform',
         success: function (data) {
 
-            if (data.success === false) {
+            if (! data.success) {
                 notification('error', data.message);
                 return false;
             }
 
-            if (data.success === true) {
+            if (data.success) {
                 if (data.type === 'added') {
                     notification('success', data.message);
                     $(el).text($(el).data('from'));
@@ -265,12 +265,12 @@ deletePost = function (el) {
         dataType: 'json', type: 'post', url: '/forums/active/delete',
         success: function (data) {
 
-            if (data.success === false) {
+            if (! data.success) {
                 notification('error', data.message);
                 return false;
             }
 
-            if (data.success === true) {
+            if (data.success) {
                 notification('success', translate.message_deleted);
                 $(el).closest('.section').hide('slow');
             }
@@ -294,12 +294,12 @@ deleteComment = function (el) {
                 dataType: 'json', type: 'post', url: '/ajax/delcomment',
                 success: function (data) {
 
-                    if (data.success === false) {
+                    if (! data.success) {
                         notification('error', data.message);
                         return false;
                     }
 
-                    if (data.success === true) {
+                    if (data.success) {
                         notification('success', translate.message_deleted);
                         $(el).closest('.section').hide('slow');
                     }
@@ -324,12 +324,15 @@ changeRating = function (el) {
         type: 'post',
         url: '/ajax/rating',
         success: function (data) {
-            if (data.success === false) {
+            if (! data.success) {
+                if (data.message) {
+                    notification('error', data.message);
+                }
                 return false;
             }
 
-            if (data.success === true) {
-                rating = $(el).closest('.js-rating').find('b');
+            if (data.success) {
+                const rating = $(el).closest('.js-rating').find('b');
 
                 $(el).closest('.js-rating').find('a').removeClass('active');
 
@@ -359,12 +362,12 @@ deleteRating = function (el) {
                 dataType: 'json', type: 'post', url: '/ratings/delete',
                 success: function (data) {
 
-                    if (data.success === false) {
+                    if (! data.success) {
                         notification('error', data.message);
                         return false;
                     }
 
-                    if (data.success === true) {
+                    if (data.success) {
                         notification('success', translate.record_deleted);
                         $(el).closest('.section').hide('slow');
                     }
@@ -385,12 +388,12 @@ deleteSpam = function (el) {
         dataType: 'json', type: 'post', url: '/admin/spam/delete',
         success: function (data) {
 
-            if (data.success === false) {
+            if (! data.success) {
                 notification('error', data.message);
                 return false;
             }
 
-            if (data.success === true) {
+            if (data.success) {
                 notification('success', translate.record_deleted);
                 $(el).closest('.section').hide('slow');
             }
@@ -411,12 +414,12 @@ deleteWall = function (el) {
                 dataType: 'json', type: 'post', url: '/walls/' + $(el).data('login') + '/delete',
                 success: function (data) {
 
-                    if (data.success === false) {
+                    if (! data.success) {
                         notification('error', data.message);
                         return false;
                     }
 
-                    if (data.success === true) {
+                    if (data.success) {
                         notification('success', translate.record_deleted);
                         $(el).closest('.section').hide('slow');
                     }
@@ -472,12 +475,12 @@ submitFile = function (el) {
             $('.fa-spinner').remove();
         },
         success: function (data) {
-            if (data.success === false) {
+            if (! data.success) {
                 notification('error', data.message);
                 return false;
             }
 
-            if (data.success === true) {
+            if (data.success) {
                 if (data.type === 'image') {
                     var template = $('.js-image-template').clone();
 
@@ -526,12 +529,12 @@ submitImage = function (el, paste) {
             $('.fa-spinner').remove();
         },
         success: function (data) {
-            if (data.success === false) {
+            if (! data.success) {
                 notification('error', data.message);
                 return false;
             }
 
-            if (data.success === true) {
+            if (data.success) {
                 var template = $('.js-image-template').clone();
 
                 template.find('img').attr({
@@ -582,12 +585,12 @@ deleteFile = function (el) {
         type: 'post',
         url: '/ajax/file/delete',
         success: function (data) {
-            if (data.success === false) {
+            if (! data.success) {
                 notification('error', data.message);
                 return false;
             }
 
-            if (data.success === true) {
+            if (data.success) {
                 cutImage(data.path);
                 $(el).closest('.js-file').hide('fast');
             }
@@ -623,11 +626,11 @@ getNewMessages = function () {
             $('.js-message-spin').remove();
         },
         success: function (data) {
-            if (data.success === false) {
+            if (! data.success) {
                 return false;
             }
 
-            if (data.success === true) {
+            if (data.success) {
                 $('.js-messages-block').find('.js-messages').empty().append(data.dialogues);
             }
         }
@@ -659,14 +662,14 @@ checkLogin = function (el) {
             type: 'post',
             url: '/check-login',
             success: function (data) {
-                if (data.success === true) {
-                    $(el).removeClass('is-invalid').addClass('is-valid');
-                    message.empty();
-                }
-
-                if (data.success === false) {
+                if (! data.success) {
                     $(el).removeClass('is-valid').addClass('is-invalid');
                     message.text(data.message)
+                }
+
+                if (data.success) {
+                    $(el).removeClass('is-invalid').addClass('is-valid');
+                    message.empty();
                 }
             }
         });

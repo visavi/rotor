@@ -8,13 +8,13 @@ $(document).ready(function () {
                 const notify_badge = notify_item.find('.badge');
                 const data = JSON.parse(res);
 
-                if (data.success === true) {
+                if (data.success) {
                     if (notify_badge.length > 0) {
                         notify_badge.html(data.countMessages);
                     } else {
                         notify_item.append('<span class="badge bg-notify">' + data.countMessages + '</span>');
                     }
-                } else if (data.success === false) {
+                } else if (! data.success) {
                     if (notify_badge.length > 0) {
                         notify_badge.remove();
                     }

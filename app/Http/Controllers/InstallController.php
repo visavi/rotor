@@ -28,8 +28,6 @@ class InstallController extends Controller
     /**
      * Главная страница
      *
-     * @param Request $request
-     *
      * @return View
      */
     public function index(): View
