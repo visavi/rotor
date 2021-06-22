@@ -1,3 +1,3 @@
 <div class="text-center">
-    {{--{{ getAdvertPaid('top_all') }}--}}
+    {{ getAdvertPaid('top_all') }}
 </div>
