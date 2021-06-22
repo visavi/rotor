@@ -15,7 +15,7 @@
         <div class="col-12 text-center">
             <h1>{{ __('errors.error') }} 503!</h1>
 
-            <div class="lead">{{ __('errors.service_unavailable') }}</div>
+            <div class="lead">{{ $exception->getMessage() ?: __('errors.service_unavailable') }}</div>
 
             <div class="my-3">
                 <a class="btn btn-primary" href="{{ url()->previous() }}"><i class="fa fa-arrow-circle-left"></i> {{ __('errors.return') }}</a>

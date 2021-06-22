@@ -1,4 +1,5 @@
 <?php
+
 namespace Deployer;
 
 require 'recipe/common.php';
@@ -26,10 +27,20 @@ set('shared_dirs', [
 ]);
 set('writable_mode', 'chmod');
 set('writable_chmod_mode', '0777');
+set('log_files', 'storage/logs/*.log');
 
 // Writable dirs by web server
 set('writable_dirs', [
-    'storage/*',
+    'bootstrap/cache',
+    'storage',
+    'storage/app',
+    'storage/app/public',
+    'storage/backups',
+    'storage/framework',
+    'storage/framework/cache',
+    'storage/framework/sessions',
+    'storage/framework/views',
+    'storage/logs',
     'public/uploads/*',
     'public/assets/modules',
 ]);
@@ -69,7 +80,7 @@ task('deploy:env:copy', static function () {
 
 desc('Migrate database');
 task('database:migrate', static function () {
-    run('{{artisan}} migrate');
+    run('{{artisan}} migrate --force');
 })->onRoles('php')->once();
 
 desc('Npm install');

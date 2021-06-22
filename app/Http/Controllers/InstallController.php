@@ -86,7 +86,7 @@ class InstallController extends Controller
      */
     public function migrate(): View
     {
-        Artisan::call('migrate');
+        Artisan::call('migrate', ['--force' => true]);
         $output = Artisan::output();
 
         return view('install/migrate', compact('output'));
@@ -99,7 +99,7 @@ class InstallController extends Controller
      */
     public function seed(): View
     {
-        Artisan::call('db:seed');
+        Artisan::call('db:seed', ['--force' => true]);
         $output = Artisan::output();
 
         Artisan::call('cache:clear');
