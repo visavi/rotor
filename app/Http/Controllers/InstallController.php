@@ -179,7 +179,7 @@ class InstallController extends Controller
                     'created_at' => SITETIME,
                 ]);
 
-                clearCache(['statNews', 'lastNews']);
+                clearCache(['statNews', 'lastNews', 'statNewsDate']);
 
                 return redirect('/install/finish');
             }

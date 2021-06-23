@@ -31,7 +31,7 @@
 
             <div class="mb-3">
                 <label for="inputLogin" class="form-label">{{ __('users.login_or_email') }}:</label>
-                <input class="form-control" name="login" id="inputLogin" maxlength="50" value="{{ getInput('login', $cooklog) }}" required>
+                <input class="form-control" name="login" id="inputLogin" maxlength="50" value="{{ getInput('login', $cookieLogin) }}" required>
 
                 <label for="inputPassword" class="form-label">{{ __('users.password') }}:</label>
                 <input class="form-control" name="pass" type="password" id="inputPassword" maxlength="20" required>

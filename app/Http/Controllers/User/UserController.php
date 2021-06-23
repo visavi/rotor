@@ -265,8 +265,8 @@ class UserController extends Controller
             return redirect('/');
         }
 
-        $cooklog = $request->cookie('login');
-        $isFlood = $flood->isFlood();
+        $cookieLogin = $request->cookie('login');
+        $isFlood     = $flood->isFlood();
 
         if ($request->isMethod('post')) {
             if ($request->has(['login', 'pass'])) {
@@ -306,7 +306,7 @@ class UserController extends Controller
             }
         }
 
-        return view('users/login', compact('cooklog', 'isFlood'));
+        return view('users/login', compact('cookieLogin', 'isFlood'));
     }
 
     /**

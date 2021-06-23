@@ -47,9 +47,9 @@ class SitemapController extends Controller
      *
      * @param string $page
      *
-     * @return string
+     * @return View
      */
-    public function page(string $page): string
+    public function page(string $page): View
     {
         if (! in_array($page, $this->pages, true)) {
             abort(404);

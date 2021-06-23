@@ -89,7 +89,7 @@ class MailController extends Controller
             return redirect('/');
         }
 
-        $cookieLogin = $_COOKIE['login'] ?? '';
+        $cookieLogin = $request->cookie('login');
 
         if ($request->isMethod('post')) {
             $user = getUserByLoginOrEmail($request->input('user'));

@@ -144,7 +144,7 @@ class NewsController extends AdminController
                     clearCache('settings');
                 }
 
-                clearCache(['statNews', 'lastNews']);
+                clearCache(['statNews', 'lastNews', 'statNewsDate']);
                 setFlash('success', __('news.news_success_added'));
 
                 return redirect('admin/news/edit/' . $news->id);
