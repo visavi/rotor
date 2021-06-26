@@ -1596,7 +1596,9 @@ function returnUrl(?string $url = null): ?string
  */
 function saveErrorLog($code)
 {
-    if (setting('errorlog') && in_array($code, [403, 404, 405, 666], true)) {
+    $errorCodes = [401, 403, 404, 405, 419, 429, 500, 503, 666];
+
+    if (setting('errorlog') && in_array($code, $errorCodes, true)) {
         Error::query()->create([
             'code'       => $code,
             'request'    => utfSubstr(request()->getRequestUri(), 0, 200),

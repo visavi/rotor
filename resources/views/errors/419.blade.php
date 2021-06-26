@@ -15,7 +15,7 @@
         <div class="col-12 text-center">
             <h1>{{ __('errors.error') }} 419!</h1>
 
-            <div class="lead">{{ $exception->getMessage() ?: __('errors.page_expired') }}</div>
+            <div class="lead">{{ __('errors.page_expired') }}</div>
 
             <div class="my-3">
                 <a class="btn btn-primary" href="{{ url()->previous() }}"><i class="fa fa-arrow-circle-left"></i> {{ __('errors.return') }}</a>

@@ -126,7 +126,7 @@ return [
 
     'errors' => [
         'hint'            => 'Attention! Logging is turned off in the settings! ',
-        'errors'          => 'Errors :code',
+        'errors'          => 'Errors',
         'autobans'        => 'Autobahns',
         'logs_not_exist'  => 'The specified logs do not exist!',
         'success_cleared' => 'Logs successfully cleared!',

@@ -32,9 +32,14 @@ class ErrorController extends AdminController
     {
         $this->code  = int($request->input('code', 404));
         $this->lists = [
-            403 => __('admin.errors.errors', ['code' => 403]),
-            404 => __('admin.errors.errors', ['code' => 404]),
-            405 => __('admin.errors.errors', ['code' => 405]),
+            401 => 401,
+            403 => 403,
+            404 => 404,
+            405 => 405,
+            419 => 419,
+            429 => 429,
+            500 => 500,
+            503 => 503,
             666 => __('admin.errors.autobans'),
         ];
 

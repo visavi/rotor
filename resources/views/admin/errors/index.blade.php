@@ -18,6 +18,7 @@
     @endif
 
     <div class="mb-3">
+        {{ __('admin.errors.errors') }}:
         @foreach ($lists as $key => $value)
             <a class="badge bg-{{ $key === $code ? 'success' : 'light text-dark' }}" href="/admin/errors?code={{ $key }}">{{ $value }}</a>
         @endforeach
