@@ -347,7 +347,7 @@ class UserController extends Controller
             $name     = $request->input('name');
             $country  = $request->input('country');
             $city     = $request->input('city');
-            $phone    = preg_replace('/\D/', '', $request->input('phone'));
+            $phone    = preg_replace('/\D/', '', $request->input('phone') ?? '');
             $site     = $request->input('site');
             $birthday = $request->input('birthday');
             $gender   = $request->input('gender') === 'male' ? 'male' : 'female';

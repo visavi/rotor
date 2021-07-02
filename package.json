@@ -15,7 +15,7 @@
     "dependencies": {
         "@fortawesome/fontawesome-free": "^5.15.3",
         "bootbox": "^5.5.2",
-        "bootstrap": "^5.0.1",
+        "bootstrap": "^5.0.2",
         "jquery": "^3.6.0",
         "jquery-colorbox": "^1.6.4",
         "jquery-mask-plugin": "^1.14.16",
@@ -23,13 +23,13 @@
     },
     "devDependencies": {
         "axios": "^0.21",
-        "laravel-mix": "^6.0.24",
+        "laravel-mix": "^6.0.25",
         "lodash": "^4.17.21",
         "postcss": "^8.3.5",
         "resolve-url-loader": "^4.0.0",
         "sass": "^1.35.1",
         "sass-loader": "^12.1.0",
-        "webpack": "^5.40.0"
+        "webpack": "^5.42.0"
     },
     "repository": {
         "type": "git",

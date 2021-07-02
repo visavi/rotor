@@ -49,7 +49,7 @@ class GuestbookController extends Controller
         /* Проверка для гостей */
         if (! $user && setting('bookadds')) {
             $validator->true(captchaVerify(), ['protect' => __('validator.captcha')]);
-            $validator->false(strpos($msg, '//'), ['msg' => __('guestbook.without_links')]);
+            $validator->true(strpos($msg ?? '', '//') === false, ['msg' => __('guestbook.without_links')]);
             $validator->length($request->input('guest_name'), 3, 20, ['guest_name' => __('users.name_short_or_long')], false);
         } else {
             $validator->true($user, ['msg' => __('main.not_authorized')]);

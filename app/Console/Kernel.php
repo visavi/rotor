@@ -29,7 +29,7 @@ class Kernel extends ConsoleKernel
         $schedule->command('delete:logins')->daily();
         $schedule->command('delete:logs')->daily();
         $schedule->command('delete:pending')->daily();
-        $schedule->command('delete:pooling')->weekly();
+        $schedule->command('delete:polling')->weekly();
         $schedule->command('delete:readers')->weekly();
         $schedule->command('add:subscribers')->hourly();
         $schedule->command('add:birthdays')->dailyAt('07:00');
