@@ -1717,13 +1717,13 @@ function textError(string $field): ?string
 function sendMail(string $view, array $data): bool
 {
     Mail::send($view, $data, function (Message $message) use ($data) {
-        $message->to($data['to'])->subject($data['subject']);
+        $message->subject($data['subject'])
+            ->to($data['to'])
+            ->from(config('app.email'), config('app.admin'));
 
         if (isset($data['from'])) {
             [$fromEmail, $fromName] = $data['from'];
-            $message->from($fromEmail, $fromName);
-        } else {
-            $message->from(config('app.email'), config('app.admin'));
+            $message->replyTo($fromEmail, $fromName);
         }
     });
 
