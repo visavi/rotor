@@ -14,14 +14,11 @@ use Illuminate\Auth\Passwords\CanResetPassword;
 use Illuminate\Contracts\Auth\Access\Authorizable as AuthorizableContract;
 use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
 use Illuminate\Contracts\Auth\CanResetPassword as CanResetPasswordContract;
-use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Query\JoinClause;
 use Illuminate\Foundation\Auth\Access\Authorizable;
-use Illuminate\Http\RedirectResponse;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\HtmlString;
@@ -687,6 +684,7 @@ class User extends BaseModel implements
         deleteFile(public_path($this->avatar));
 
         Message::query()->where('user_id', $this->id)->delete();
+        Dialogue::query()->where('user_id', $this->id)->delete();
         Contact::query()->where('user_id', $this->id)->delete();
         Ignore::query()->where('user_id', $this->id)->delete();
         Rating::query()->where('user_id', $this->id)->delete();
@@ -705,7 +703,7 @@ class User extends BaseModel implements
     /**
      * Updates count messages
      *
-     * return void
+     * @return void
      */
     public function updatePrivate(): void
     {
@@ -725,31 +723,31 @@ class User extends BaseModel implements
     }
 
     /**
-     * Check Access
+     * Check user banned
      *
-     * return void
+     * @return bool
      */
-    public function checkAccess()
+    public function isBanned(): bool
     {
-        $request = request();
+        return $this->level === self::BANNED;
+    }
 
-        // Banned
-        if ($this->level === self::BANNED && ! $request->is('ban', 'rules', 'logout')) {
-            return redirect('ban?user=' . $this->login);
-        }
-
-        // Confirm registration
-        if ($this->level === self::PENDED && setting('regkeys') && ! $request->is('key', 'ban', 'login', 'logout', 'captcha')) {
-            return redirect('key?user=' . $this->login);
-        }
+    /**
+     * Check user pended
+     *
+     * @return bool
+     */
+    public function isPended(): bool
+    {
+        return setting('regkeys') && $this->level === self::PENDED;
     }
 
     /**
      * Getting daily bonus
      *
-     * return void
+     * @return void
      */
-    public function gettingBonus()
+    public function gettingBonus(): void
     {
         if ($this->timebonus < strtotime('-23 hours', SITETIME)) {
             $this->increment('money', setting('bonusmoney'));

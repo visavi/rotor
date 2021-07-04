@@ -3,6 +3,7 @@
 namespace App\Http\Middleware;
 
 use App\Models\Login;
+use App\Models\User;
 use Closure;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\App;
@@ -26,7 +27,21 @@ class AuthenticateCookie
         }
 
         $this->cookieAuth($request);
-        $this->setSetting($request);
+
+        if ($user = getUser()) {
+            if ($user->isBanned() && ! $request->is('ban', 'rules', 'logout')) {
+                return redirect('ban?user=' . $user->login);
+            }
+
+            if ($user->isPended() && ! $request->is('key', 'ban', 'logout', 'captcha')) {
+                return redirect('key?user=' . $user->login);
+            }
+
+            $user->updatePrivate();
+            $user->gettingBonus();
+        }
+
+        $this->setSetting($user, $request);
 
         return $next($request);
     }
@@ -63,14 +78,13 @@ class AuthenticateCookie
     /**
      * Устанавливает настройки
      *
-     * @param Request $request
+     * @param User|false $user
+     * @param Request   $request
      *
      * @return void
      */
-    private function setSetting(Request $request): void
+    private function setSetting($user, Request $request): void
     {
-        $user = getUser();
-
         $language = $user->language ?? defaultSetting('language');
         $theme = $user->themes ?? defaultSetting('themes');
 
@@ -88,12 +102,6 @@ class AuthenticateCookie
 
         App::setLocale($language);
         View::addLocation(public_path('themes/' . $theme . '/views'));
-
-        if ($user) {
-            $user->checkAccess();
-            $user->updatePrivate();
-            $user->gettingBonus();
-        }
 
         /* Установка сессионных переменных */
         if ($request->session()->missing('hits')) {
