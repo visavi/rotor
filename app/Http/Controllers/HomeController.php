@@ -11,6 +11,7 @@ use Gregwar\Captcha\CaptchaBuilder;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
+use Symfony\Component\HttpFoundation\Response;
 
 class HomeController extends Controller
 {
@@ -27,7 +28,7 @@ class HomeController extends Controller
     /**
      * Закрытие сайта
      *
-     * @return View|RedirectResponse
+     * @return Response
      */
     public function closed()
     {
@@ -35,9 +36,7 @@ class HomeController extends Controller
             return redirect('/');
         }
 
-        header($_SERVER['SERVER_PROTOCOL'] . ' 503 Service Unavailable');
-
-        return view('pages/closed');
+        return response()->view('pages/closed', [], 503);
     }
 
     /**
@@ -55,9 +54,9 @@ class HomeController extends Controller
      *
      * @param Request $request
      *
-     * @return View|RedirectResponse
+     * @return Response
      */
-    public function ipban(Request $request)
+    public function ipban(Request $request): Response
     {
         $ban = Ban::query()
             ->where('ip', getIp())
@@ -69,7 +68,8 @@ class HomeController extends Controller
             return redirect('/');
         }
 
-        if (! $ban->user_id
+        if (
+            ! $ban->user_id
             && $ban->created_at < strtotime('-1 minute', SITETIME)
             && $request->isMethod('post')
             && captchaVerify()
@@ -82,9 +82,7 @@ class HomeController extends Controller
             return redirect('/');
         }
 
-        header($_SERVER['SERVER_PROTOCOL'] . ' 429 Too Many Requests');
-
-        return view('pages/ipban', compact('ban'));
+        return response()->view('pages/ipban', compact('ban'), 429);
     }
 
     /**

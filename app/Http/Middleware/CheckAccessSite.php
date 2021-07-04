@@ -32,9 +32,10 @@ class CheckAccessSite
         if (
             setting('closedsite') === 1 &&
             ! getUser() &&
-            ! $request->is('register', 'login', 'recovery', 'captcha')
+            ! $request->is('login', 'register', 'recovery', 'captcha')
         ) {
             setFlash('danger', __('main.not_authorized'));
+
             return redirect('login');
         }
 
@@ -42,7 +43,7 @@ class CheckAccessSite
         if (
             setting('closedsite') === 2 &&
             ! isAdmin() &&
-            ! $request->is('login', 'closed')
+            ! $request->is('login', 'captcha', 'closed')
         ) {
             return redirect('closed');
         }
