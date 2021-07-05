@@ -99,7 +99,7 @@ class News extends BaseModel
 
         if (strpos($this->text, '[cut]') !== false) {
             $this->text = current(explode('[cut]', $this->text));
-            $more = view('app/_more', ['link' => '/news/'. $this->id]);
+            $more = view('app/_more', ['link' => '/news/' . $this->id]);
         }
 
         return new HtmlString(bbCode($this->text) . $more);

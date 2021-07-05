@@ -180,12 +180,14 @@ class InstallController extends Controller
                     'created_at' => SITETIME,
                 ]);
 
-                clearCache(['statNews', 'lastNews', 'statNewsDate']);
-
                 // -------------- Установка -------------//
-                Setting::query()->update([
-                    'app_installed' => 1,
-                ]);
+                Setting::query()
+                    ->where('name', 'app_installed')
+                    ->update([
+                        'value' => 1,
+                    ]);
+
+                clearCache(['statNews', 'lastNews', 'statNewsDate', 'settings']);
 
                 return redirect('/install/finish');
             }
