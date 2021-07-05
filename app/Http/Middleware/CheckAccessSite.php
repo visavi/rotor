@@ -80,7 +80,7 @@ class CheckAccessSite
      */
     private function frequencyLimit(): void
     {
-        if (setting('doslimit') === 0) {
+        if (empty(setting('doslimit'))) {
             return;
         }
 

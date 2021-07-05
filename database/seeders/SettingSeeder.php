@@ -15,7 +15,7 @@ class SettingSeeder extends Seeder
     public function run()
     {
         $data = [
-            ['name'  => 'app_installed', 'value' => 1],
+            ['name'  => 'app_installed', 'value' => 0],
             ['name'  => 'addbansend', 'value' => 1],
             ['name'  => 'addofferspoint', 'value' => 50],
             ['name'  => 'advertpoint', 'value' => 1000],

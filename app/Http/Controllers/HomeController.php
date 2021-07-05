@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace App\Http\Controllers;
 
 use App\Models\Ban;
-use Exception;
 use Gregwar\Captcha\PhraseBuilder;
 use Gregwar\Captcha\CaptchaBuilder;
 use Illuminate\Http\RedirectResponse;
@@ -69,10 +68,10 @@ class HomeController extends Controller
         }
 
         if (
-            ! $ban->user_id
-            && $ban->created_at < strtotime('-1 minute', SITETIME)
-            && $request->isMethod('post')
-            && captchaVerify()
+            ! $ban->user_id &&
+            $ban->created_at < strtotime('-1 minute', SITETIME) &&
+            $request->isMethod('post') &&
+            captchaVerify()
         ) {
             $ban->delete();
             ipBan(true);

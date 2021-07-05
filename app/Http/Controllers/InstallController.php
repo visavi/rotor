@@ -6,6 +6,7 @@ namespace App\Http\Controllers;
 
 use App\Classes\Validator;
 use App\Models\News;
+use App\Models\Setting;
 use App\Models\User;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -180,6 +181,11 @@ class InstallController extends Controller
                 ]);
 
                 clearCache(['statNews', 'lastNews', 'statNewsDate']);
+
+                // -------------- Установка -------------//
+                Setting::query()->update([
+                    'app_installed' => 1,
+                ]);
 
                 return redirect('/install/finish');
             }
