@@ -1719,7 +1719,7 @@ function sendMail(string $view, array $data): bool
     Mail::send($view, $data, function (Message $message) use ($data) {
         $message->subject($data['subject'])
             ->to($data['to'])
-            ->from(config('app.email'), config('app.admin'));
+            ->from(config('mail.from.address'), config('mail.from.name'));
 
         if (isset($data['from'])) {
             [$fromEmail, $fromName] = $data['from'];

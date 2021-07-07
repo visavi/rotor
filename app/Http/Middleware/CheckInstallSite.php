@@ -18,14 +18,8 @@ class CheckInstallSite
      */
     public function handle(Request $request, Closure $next)
     {
-        if (! setting('app_installed')) {
-            if (! config('app.key')) {
-                Artisan::call('key:generate');
-            }
-
-            if (! $request->is('install*')) {
-                return redirect('install');
-            }
+        if (! setting('app_installed') && ! $request->is('install*')) {
+            return redirect('install');
         }
 
         return $next($request);
