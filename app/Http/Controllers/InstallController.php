@@ -91,7 +91,7 @@ class InstallController extends Controller
         $output = Artisan::output();
 
         if (! setting('app_installed')) {
-            Artisan::call('key:generate');
+            Artisan::call('key:generate', ['--force' => true]);
         }
 
         return view('install/migrate', compact('output'));
