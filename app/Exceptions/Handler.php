@@ -39,7 +39,7 @@ class Handler extends ExceptionHandler
         $this->reportable(function (Throwable $exception) {
             $statusCode = $this->isHttpException($exception) ? $exception->getStatusCode() : 500;
 
-            saveErrorLog($statusCode);
+            saveErrorLog($statusCode, $exception->getMessage());
         });
 
         $this->renderable(function (HttpExceptionInterface $exception, Request $request) {

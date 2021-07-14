@@ -31,6 +31,12 @@
                 <small class="section-date text-muted fst-italic">{{ dateFixed($data->created_at) }}</small>
 
                 <div class="section-body border-top">
+                    @if ($data->message)
+                        <div class="mb-1 text-danger">
+                            {{ $data->message }}
+                        </div>
+                    @endif
+
                     Referer: {{ $data->referer ?: __('main.undefined') }}<br>
                     {{ __('main.user') }}: {{ $data->user->exists ? $data->user->getProfile() : setting('guestsuser') }}
                     <div class="small text-muted fst-italic mt-2">{{ $data->brow }}, {{ $data->ip }}</div>

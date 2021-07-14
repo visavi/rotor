@@ -12,6 +12,7 @@ namespace App\Models;
  * @property string request
  * @property string referer
  * @property int user_id
+ * @property string message
  * @property string ip
  * @property string brow
  * @property int created_at

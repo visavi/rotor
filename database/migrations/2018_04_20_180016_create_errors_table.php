@@ -20,6 +20,7 @@ final class CreateErrorsTable extends Migration
                 $table->string('request')->nullable();
                 $table->string('referer')->nullable();
                 $table->integer('user_id')->nullable();
+                $table->string('message')->nullable();
                 $table->ipAddress('ip');
                 $table->string('brow', 25);
                 $table->integer('created_at');

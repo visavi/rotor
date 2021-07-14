@@ -749,7 +749,7 @@ class User extends BaseModel implements
      */
     public function gettingBonus(): void
     {
-        if ($this->timebonus < strtotime('-23 hours', SITETIME)) {
+        if (in_array($this->level, self::USER_GROUPS, true) && $this->timebonus < strtotime('-23 hours', SITETIME)) {
             $this->increment('money', setting('bonusmoney'));
             $this->update(['timebonus' => SITETIME]);
 

@@ -109,8 +109,8 @@ class UserController extends Controller
         if ($request->isMethod('post')) {
             if ($request->has(['login', 'password'])) {
                 $login        = $request->input('login');
-                $password     = trim($request->input('password'));
-                $password2    = trim($request->input('password2'));
+                $password     = $request->input('password');
+                $password2    = $request->input('password2');
                 $invite       = setting('invite') ? $request->input('invite') : '';
                 $email        = strtolower($request->input('email'));
                 $domain       = utfSubstr(strrchr($email, '@'), 1);
@@ -262,6 +262,7 @@ class UserController extends Controller
     {
         if (getUser()) {
             setFlash('danger', __('main.already_authorized'));
+
             return redirect('/');
         }
 
@@ -276,7 +277,7 @@ class UserController extends Controller
 
                 if ($validator->isValid()) {
                     $login    = utfLower($request->input('login'));
-                    $pass     = trim($request->input('pass'));
+                    $pass     = $request->input('pass');
                     $remember = $request->boolean('remember');
 
                     /** @var User $user */
@@ -460,7 +461,7 @@ class UserController extends Controller
 
         /* Подтверждение кода */
         if ($request->has('code')) {
-            $code = trim($request->input('code'));
+            $code = $request->input('code');
 
             if ($code === $user->confirmregkey) {
                 $user->update([

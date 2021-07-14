@@ -1590,20 +1590,22 @@ function returnUrl(?string $url = null): ?string
 /**
  * Saves error logs
  *
- * @param mixed $code
+ * @param int         $code
+ * @param string|null $message
  *
  * @return void
  */
-function saveErrorLog($code)
+function saveErrorLog(int $code, ?string $message = null)
 {
     $errorCodes = [401, 403, 404, 405, 419, 429, 500, 503, 666];
 
     if (setting('errorlog') && in_array($code, $errorCodes, true)) {
         Error::query()->create([
             'code'       => $code,
-            'request'    => utfSubstr(request()->getRequestUri(), 0, 200),
-            'referer'    => utfSubstr(server('HTTP_REFERER'), 0, 200),
+            'request'    => utfSubstr(request()->getRequestUri(), 0, 250),
+            'referer'    => utfSubstr(request()->header('referer'), 0, 250),
             'user_id'    => getUser('id'),
+            'message'    => utfSubstr($message, 0, 250),
             'ip'         => getIp(),
             'brow'       => getBrowser(),
             'created_at' => SITETIME,
@@ -1842,19 +1844,6 @@ function getBrowser($userAgent = null): string
     $browser = $version === Browser::VERSION_UNKNOWN ? $brow : $brow . ' ' . $version;
 
     return mb_substr($browser, 0, 25, 'utf-8');
-}
-
-/**
- * Возвращает серверные переменные
- *
- * @param string|null $key     ключ массива
- * @param string|null $default значение по умолчанию
- *
- * @return mixed данные
- */
-function server(?string $key = null, ?string $default = null)
-{
-    return request()->server($key, $default);
 }
 
 /**

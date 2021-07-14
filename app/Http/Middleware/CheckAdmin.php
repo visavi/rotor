@@ -25,8 +25,8 @@ class CheckAdmin
 
         Log::query()->create([
             'user_id'    => getUser('id'),
-            'request'    => $request->getRequestUri(),
-            'referer'    => server('HTTP_REFERER'),
+            'request'    => utfSubstr($request->getRequestUri(), 0, 250),
+            'referer'    => utfSubstr($request->header('referer'), 0, 250),
             'ip'         => getIp(),
             'brow'       => getBrowser(),
             'created_at' => SITETIME,
