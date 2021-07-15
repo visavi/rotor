@@ -14,7 +14,9 @@ use Illuminate\Auth\Passwords\CanResetPassword;
 use Illuminate\Contracts\Auth\Access\Authorizable as AuthorizableContract;
 use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
 use Illuminate\Contracts\Auth\CanResetPassword as CanResetPasswordContract;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Query\JoinClause;
@@ -604,15 +606,15 @@ class User extends BaseModel implements
     /**
      * Отправляет приватное сообщение
      *
-     * @param  User|null $author Отправитель
-     * @param  string    $text   текст сообщения
-     * @return bool              результат отправки
+     * @param User|null $author     Отправитель
+     * @param string    $text       Текст сообщения
+     * @param bool      $withAuthor Создавать диалог для автора
+     *
+     * @return Builder|Model
      */
-    public function sendMessage(?User $author, string $text): bool
+    public function sendMessage(?User $author, string $text, bool $withAuthor = true)
     {
-        (new Message())->createDialogue($this, $author, $text);
-
-        return true;
+        return (new Message())->createDialogue($this, $author, $text, $withAuthor);
     }
 
     /**
@@ -743,13 +745,23 @@ class User extends BaseModel implements
     }
 
     /**
+     * Check user active
+     *
+     * @return bool
+     */
+    public function isActive(): bool
+    {
+        return in_array($this->level, self::USER_GROUPS, true);
+    }
+
+    /**
      * Getting daily bonus
      *
      * @return void
      */
     public function gettingBonus(): void
     {
-        if (in_array($this->level, self::USER_GROUPS, true) && $this->timebonus < strtotime('-23 hours', SITETIME)) {
+        if ($this->isActive() && $this->timebonus < strtotime('-23 hours', SITETIME)) {
             $this->increment('money', setting('bonusmoney'));
             $this->update(['timebonus' => SITETIME]);
 

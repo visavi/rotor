@@ -63,7 +63,7 @@ class ContactController extends Controller
 
                 setFlash('success', __('contacts.success_added'));
 
-                return redirect('contacts?page='.$page);
+                return redirect('contacts?page=' . $page);
             }
 
             setInput($request->all());

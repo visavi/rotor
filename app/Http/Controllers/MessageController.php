@@ -167,8 +167,7 @@ class MessageController extends Controller
 
         if ($validator->isValid()) {
             $msg = antimat($msg);
-
-            $message = (new Message())->createDialogue($user, $this->user, $msg);
+            $message = $user->sendMessage($this->user, $msg);
 
             File::query()
                 ->where('relate_type', Message::$morphName)

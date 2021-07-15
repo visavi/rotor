@@ -63,12 +63,13 @@ class BanController extends Controller
             if ($validator->isValid()) {
                 $text = textNotice('explain', ['message' => antimat($msg)]);
 
+                /** @var User $admin */
                 foreach ($admins as $admin) {
-                    $admin->sendMessage($user, $text);
+                    $admin->sendMessage($user, $text, false);
                 }
 
                 $banhist->update([
-                    'explain' => 1
+                    'explain' => 1,
                 ]);
 
                 setFlash('success', __('users.explain_sent_success'));

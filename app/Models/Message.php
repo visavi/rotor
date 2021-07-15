@@ -80,10 +80,11 @@ class Message extends BaseModel
      * @param User      $user
      * @param User|null $author
      * @param string    $text
+     * @param bool      $withAuthor
      *
      * @return Builder|Model
      */
-    public function createDialogue(User $user, ?User $author, string $text)
+    public function createDialogue(User $user, ?User $author, string $text, bool $withAuthor)
     {
         $authorId = $author->id ?? 0;
 
@@ -102,7 +103,7 @@ class Message extends BaseModel
             'created_at' => SITETIME,
         ]);
 
-        if ($authorId) {
+        if ($authorId && $withAuthor) {
             Dialogue::query()->create([
                 'message_id' => $message->id,
                 'user_id'    => $authorId,
