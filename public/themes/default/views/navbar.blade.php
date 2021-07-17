@@ -57,7 +57,7 @@
                         @endif
                     </a>
                     <ul class="app-notification dropdown-menu dropdown-menu-end">
-                        <li class="app-notification__title">{{ __('messages.new_messages') }}: {{ $user->newprivat }}</li>
+                        <li class="app-notification__title">{{ __('messages.new_messages') }}: <span>{{ $user->newprivat }}</span></li>
                         <div class="app-notification__content js-messages"></div>
                         <li class="app-notification__footer"><a href="/messages">{{ __('messages.all_messages') }}</a></li>
                     </ul>

@@ -615,6 +615,10 @@ showQueries = function () {
 
 /* Get new messages */
 getNewMessages = function () {
+    const notify_item = $('.js-messages-block .app-nav__item');
+    const notify_badge = notify_item.find('.badge');
+    const notify_span = $('.app-notification__title span');
+
     $.ajax({
         dataType: 'json',
         type: 'get',
@@ -626,12 +630,21 @@ getNewMessages = function () {
             $('.js-message-spin').remove();
         },
         success: function (data) {
-            if (! data.success) {
-                return false;
-            }
-
             if (data.success) {
+                if (notify_badge.length > 0) {
+                    notify_badge.html(data.countMessages);
+                } else {
+                    notify_item.append('<span class="badge bg-notify">' + data.countMessages + '</span>');
+                }
+                notify_span.html(data.countMessages);
                 $('.js-messages-block').find('.js-messages').empty().append(data.dialogues);
+            } else {
+                if (notify_badge.length > 0) {
+                    notify_span.html(0);
+                    notify_badge.remove();
+                }
+
+                return false;
             }
         }
     });

@@ -1,4 +1,7 @@
 <div class="text-center">
     {!! $result !!}
-    <small><a href="/adverts" rel="nofollow">[+]</a></small>
+
+    @if (getUser())
+        <small><a href="/adverts" rel="nofollow">[+]</a></small>
+    @endif
 </div>
