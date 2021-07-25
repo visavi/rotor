@@ -847,7 +847,7 @@ class UserController extends Controller
      */
     public function checkLogin(Request $request, Validator $validator): JsonResponse
     {
-        $login = $request->input('login');
+        $login = (string) $request->input('login');
 
         $validator
             ->true($request->ajax(), __('validator.not_ajax'))
