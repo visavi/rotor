@@ -655,10 +655,11 @@ getNewMessages = function () {
 var checkTimeout;
 /* Проверка логина */
 checkLogin = function (el) {
-    var message = $(el).closest('.mb-3').find('.invalid-feedback');
+    const block = $(el).closest('.mb-3');
+    const message = block.find('.invalid-feedback');
 
     if ($(el).val().length < 3) {
-        $(el).removeClass('is-valid is-invalid');
+        block.removeClass('is-valid is-invalid');
         message.empty();
 
         return false;
@@ -675,14 +676,12 @@ checkLogin = function (el) {
             type: 'post',
             url: '/check-login',
             success: function (data) {
-                if (! data.success) {
-                    $(el).removeClass('is-valid').addClass('is-invalid');
-                    message.text(data.message)
-                }
-
                 if (data.success) {
-                    $(el).removeClass('is-invalid').addClass('is-valid');
+                    block.removeClass('is-invalid').addClass('is-valid');
                     message.empty();
+                } else {
+                    block.removeClass('is-valid').addClass('is-invalid');
+                    message.text(data.message)
                 }
             }
         });
