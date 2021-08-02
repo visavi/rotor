@@ -23,13 +23,13 @@
     },
     "devDependencies": {
         "axios": "^0.21",
-        "laravel-mix": "^6.0.25",
+        "laravel-mix": "^6.0.27",
         "lodash": "^4.17.21",
-        "postcss": "^8.3.5",
+        "postcss": "^8.3.6",
         "resolve-url-loader": "^4.0.0",
-        "sass": "^1.35.2",
+        "sass": "^1.36.0",
         "sass-loader": "^12.1.0",
-        "webpack": "^5.42.1"
+        "webpack": "^5.47.0"
     },
     "repository": {
         "type": "git",

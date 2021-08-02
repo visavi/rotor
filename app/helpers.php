@@ -64,11 +64,11 @@ function makeTime(int $time): string
 /**
  * Форматирует время с учетом часовых поясов
  *
- * @param int|null $timestamp секунды
- * @param string   $format    формат времени
- * @param bool     $original  формат без изменения
+ * @param int|null $timestamp Секунды
+ * @param string   $format    Формат времени
+ * @param bool     $original  Формат без изменения
  *
- * @return string форматированный вывод
+ * @return string Форматированный вывод
  */
 function dateFixed(?int $timestamp, string $format = 'd.m.Y / H:i', bool $original = false): string
 {
@@ -111,7 +111,7 @@ function dateFixed(?int $timestamp, string $format = 'd.m.Y / H:i', bool $origin
  *
  * @param string $str строка
  *
- * @return string конвертированная строка
+ * @return string Конвертированная строка
  */
 function winToUtf(string $str): string
 {
@@ -123,7 +123,7 @@ function winToUtf(string $str): string
  *
  * @param string $str строка
  *
- * @return string преобразованная строка
+ * @return string Преобразованная строка
  */
 function utfLower(string $str): string
 {
@@ -133,11 +133,11 @@ function utfLower(string $str): string
 /**
  * Обрезает строку
  *
- * @param mixed    $str    строка
- * @param int      $start  начало позиции
- * @param int|null $length конец позиции
+ * @param mixed    $str    Строка
+ * @param int      $start  Начало позиции
+ * @param int|null $length Конец позиции
  *
- * @return string обрезанная строка
+ * @return string Обрезанная строка
  */
 function utfSubstr($str, int $start, ?int $length = null): string
 {
@@ -153,7 +153,7 @@ function utfSubstr($str, int $start, ?int $length = null): string
  *
  * @param mixed $str строка
  *
- * @return int длина строка
+ * @return int Длина строка
  */
 function utfStrlen($str): int
 {
@@ -161,7 +161,7 @@ function utfStrlen($str): int
 }
 
 /**
- * Определяет является ли кодировка utf-8
+ * Является ли кодировка utf-8
  *
  * @param string $str строка
  *
@@ -175,10 +175,10 @@ function isUtf(string $str): bool
 /**
  * Преобразует специальные символы в HTML-сущности
  *
- * @param mixed $string       строка или массив строк
- * @param bool  $doubleEncode преобразовывать существующие html-сущности
+ * @param mixed $string       Строка или массив строк
+ * @param bool  $doubleEncode Преобразовывать существующие html-сущности
  *
- * @return array|string обработанные данные
+ * @return array|string Обработанные данные
  */
 function check($string, bool $doubleEncode = true)
 {
@@ -200,7 +200,7 @@ function check($string, bool $doubleEncode = true)
  *
  * @param int|string $num число
  *
- * @return int обработанные данные
+ * @return int Обработанные данные
  */
 function int($num): int
 {
@@ -212,7 +212,7 @@ function int($num): int
  *
  * @param array|int|string $numbers массив или число
  *
- * @return array|null обработанные данные
+ * @return array|null Обработанные данные
  */
 function intar($numbers): ?array
 {
@@ -228,12 +228,12 @@ function intar($numbers): ?array
 }
 
 /**
- * Возвращает размер в человекочитаемом формате
+ * Возвращает размер в человеко читаемом формате
  *
  * @param int $bytes     размер в байтах
  * @param int $precision кол. символов после запятой
  *
- * @return string форматированный вывод размера
+ * @return string Форматированный вывод размера
  */
 function formatSize(int $bytes, int $precision = 2): string
 {
@@ -247,11 +247,11 @@ function formatSize(int $bytes, int $precision = 2): string
 }
 
 /**
- * Возвращает размер файла человекочитаемом формате
+ * Возвращает размер файла человеко-читаемом формате
  *
- * @param string $file путь к файлу
+ * @param string $file Путь к файлу
  *
- * @return string размер в читаемом формате
+ * @return string Размер в читаемом формате
  */
 function formatFileSize(string $file): string
 {
@@ -263,12 +263,12 @@ function formatFileSize(string $file): string
 }
 
 /**
- * Возвращает время в человекочитаемом формате
+ * Возвращает время в человеко-читаемом формате
  *
- * @param int $time   кол. секунд timestamp
- * @param int $crumbs кол. элементов
+ * @param int $time   Кол. секунд timestamp
+ * @param int $crumbs Кол. элементов
  *
- * @return string время в читаемом формате
+ * @return string Время в читаемом формате
  */
 function formatTime(int $time, int $crumbs = 2): string
 {
@@ -304,7 +304,7 @@ function formatTime(int $time, int $crumbs = 2): string
  *
  * @param string $str строка
  *
- * @return string обработанная строка
+ * @return string Обработанная строка
  */
 function antimat(string $str): string
 {
@@ -316,7 +316,7 @@ function antimat(string $str): string
  *
  * @param int|float $rating рейтинг
  *
- * @return HtmlString преобразованный рейтинг
+ * @return HtmlString Преобразованный рейтинг
  */
 function ratingVote($rating): HtmlString
 {
@@ -352,7 +352,7 @@ function getCalendar(int $time = SITETIME): HtmlString
 /**
  * Возвращает количество пользователей онлайн по типам
  *
- * @return array массив данных
+ * @return array Массив данных
  */
 function statsOnline(): array
 {
@@ -438,7 +438,7 @@ function showCounter(): ?HtmlString
 /**
  * Возвращает количество пользователей
  *
- * @return string количество пользователей
+ * @return string Количество пользователей
  */
 function statsUsers(): string
 {
@@ -459,7 +459,7 @@ function statsUsers(): string
 /**
  * Возвращает количество администраторов
  *
- * @return int количество администраторов
+ * @return int Количество администраторов
  */
 function statsAdmins(): int
 {
@@ -471,7 +471,7 @@ function statsAdmins(): int
 /**
  * Возвращает количество жалоб
  *
- * @return int количество жалоб
+ * @return int Количество жалоб
  */
 function statsSpam(): int
 {
@@ -481,7 +481,7 @@ function statsSpam(): int
 /**
  * Возвращает количество забанненых пользователей
  *
- * @return int количество забаненных
+ * @return int Количество забаненных
  */
 function statsBanned(): int
 {
@@ -494,7 +494,7 @@ function statsBanned(): int
 /**
  * Возвращает количество записей в истории банов
  *
- * @return int количество записей
+ * @return int Количество записей
  */
 function statsBanHist(): int
 {
@@ -504,7 +504,7 @@ function statsBanHist(): int
 /**
  * Возвращает количество ожидающих подтверждения регистрации
  *
- * @return int количество ожидающих
+ * @return int Количество ожидающих
  */
 function statsRegList(): int
 {
@@ -514,7 +514,7 @@ function statsRegList(): int
 /**
  * Возвращает количество забаненных по IP
  *
- * @return int количество забаненных
+ * @return int Количество забаненных
  */
 function statsIpBanned(): int
 {
@@ -524,7 +524,7 @@ function statsIpBanned(): int
 /**
  * Возвращает количество фотографий в галерее
  *
- * @return string количество фотографий
+ * @return string Количество фотографий
  */
 function statsPhotos(): string
 {
@@ -539,7 +539,7 @@ function statsPhotos(): string
 /**
  * Возвращает количество новостей
  *
- * @return string количество новостей
+ * @return string Количество новостей
  */
 function statsNews(): string
 {
@@ -557,7 +557,7 @@ function statsNews(): string
 /**
  * Возвращает количество записей в черном списке
  *
- * @return string количество записей
+ * @return string Количество записей
  */
 function statsBlacklist(): string
 {
@@ -575,7 +575,7 @@ function statsBlacklist(): string
 /**
  * Возвращает количество записей в антимате
  *
- * @return int количество записей
+ * @return int Количество записей
  */
 function statsAntimat(): int
 {
@@ -585,7 +585,7 @@ function statsAntimat(): int
 /**
  * Возвращает количество стикеров
  *
- * @return int количество стикеров
+ * @return int Количество стикеров
  */
 function statsStickers(): int
 {
@@ -595,7 +595,7 @@ function statsStickers(): int
 /**
  * Возвращает дату последнего сканирования сайта
  *
- * @return int|string дата последнего сканирования
+ * @return int|string Дата последнего сканирования
  */
 function statsChecker()
 {
@@ -609,7 +609,7 @@ function statsChecker()
 /**
  * Возвращает количество приглашений на регистрацию
  *
- * @return string количество приглашений
+ * @return string Количество приглашений
  */
 function statsInvite(): string
 {
@@ -624,7 +624,7 @@ function statsInvite(): string
  *
  * @param int $id Id фотографий
  *
- * @return array|null массив данных
+ * @return array|null Массив данных
  */
 function photoNavigation(int $id): ?array
 {
@@ -650,7 +650,7 @@ function photoNavigation(int $id): ?array
 /**
  * Возвращает количество статей в блогах
  *
- * @return string количество статей
+ * @return string Количество статей
  */
 function statsBlog(): string
 {
@@ -665,7 +665,7 @@ function statsBlog(): string
 /**
  * Возвращает количество тем и сообщений в форуме
  *
- * @return string количество тем и сообщений
+ * @return string Количество тем и сообщений
  */
 function statsForum(): string
 {
@@ -684,7 +684,7 @@ function statsForum(): string
 /**
  * Возвращает количество сообщений в гостевой книге
  *
- * @return string количество сообщений
+ * @return string Количество сообщений
  */
 function statsGuestbook(): string
 {
@@ -702,7 +702,7 @@ function statsGuestbook(): string
 /**
  * Возвращает количество сообщений в админ-чате
  *
- * @return string количество сообщений
+ * @return string Количество сообщений
  */
 function statsChat(): string
 {
@@ -720,7 +720,7 @@ function statsChat(): string
 /**
  * Возвращает время последнего сообщения в админ-чате
  *
- * @return int время сообщения
+ * @return int Время сообщения
  */
 function statsNewChat(): int
 {
@@ -730,7 +730,7 @@ function statsNewChat(): int
 /**
  * Возвращает количество файлов в загруз-центре
  *
- * @return string количество файлов
+ * @return string Количество файлов
  */
 function statsLoad(): string
 {
@@ -748,7 +748,7 @@ function statsLoad(): string
 /**
  * Возвращает количество новых файлов
  *
- * @return int количество файлов
+ * @return int Количество файлов
  */
 function statsNewLoad(): int
 {
@@ -758,7 +758,7 @@ function statsNewLoad(): int
 /**
  * Возвращает количество объявлений
  *
- * @return string количество статей
+ * @return string Количество статей
  */
 function statsBoard(): string
 {
@@ -775,7 +775,7 @@ function statsBoard(): string
  *
  * @param string $email email
  *
- * @return string обфусцированный email
+ * @return string Обфусцированный email
  */
 function cryptMail(string $email): string
 {
@@ -842,7 +842,7 @@ function statsNewsDate()
 /**
  * Возвращает последние новости
  *
- * @return HtmlString новость
+ * @return HtmlString Новость
  */
 function lastNews(): HtmlString
 {
@@ -864,9 +864,9 @@ function lastNews(): HtmlString
 /**
  * Возвращает иконку расширения
  *
- * @param string $ext расширение файла
+ * @param string $ext Расширение файла
  *
- * @return HtmlString иконка
+ * @return HtmlString Иконка
  */
 function icons(string $ext): HtmlString
 {
@@ -935,7 +935,7 @@ function icons(string $ext): HtmlString
  *
  * @return bool Флаг успешного выполнения операции
  */
-function shuffleAssoc(array &$array)
+function shuffleAssoc(array &$array): bool
 {
     $keys = array_keys($array);
 
@@ -973,8 +973,8 @@ function closeTags(string $html): string
     $diff = array_diff_assoc($openTags, $closedTags);
     $tags = array_reverse($diff);
 
-    foreach ($tags as $key => $value) {
-        $html .= '[/'. $value .']';
+    foreach ($tags as $value) {
+        $html .= '[/' . $value . ']';
     }
 
     return $html;
@@ -1221,7 +1221,7 @@ function recentBoards(int $show = 5): HtmlString
 /**
  * Возвращает количество предложений и проблем
  *
- * @return string количество предложений и проблем
+ * @return string Количество предложений и проблем
  */
 function statsOffers(): string
 {
@@ -1284,11 +1284,11 @@ function restatement(string $mode)
 /**
  * Возвращает количество строк в файле
  *
- * @param string $file путь к файлу
+ * @param string $file Путь к файлу
  *
- * @return int количество строк
+ * @return int Количество строк
  */
-function counterString(string $file)
+function counterString(string $file): int
 {
     $countLines = 0;
     if (file_exists($file)) {
@@ -1303,7 +1303,7 @@ function counterString(string $file)
  *
  * @param int|float $num число
  *
- * @return HtmlString форматированное число
+ * @return HtmlString Форматированное число
  */
 function formatNum($num): HtmlString
 {
@@ -1353,10 +1353,10 @@ function formatShortNum(int $num)
 /**
  * Обрабатывает и уменьшает изображение
  *
- * @param string|null $path   путь к изображению
- * @param array  $params параметры изображения
+ * @param string|null $path   Путь к изображению
+ * @param array       $params Параметры изображения
  *
- * @return array обработанные параметры
+ * @return array Обработанные параметры
  */
 function resizeProcess(?string $path, array $params = []): array
 {
@@ -1408,10 +1408,10 @@ function resizeProcess(?string $path, array $params = []): array
 /**
  * Возвращает уменьшенное изображение
  *
- * @param string|null $path   путь к изображению
- * @param array       $params параметры изображения
+ * @param string|null $path   Путь к изображению
+ * @param array       $params Параметры изображения
  *
- * @return HtmlString уменьшенное изображение
+ * @return HtmlString Уменьшенное изображение
  */
 function resizeImage(?string $path, array $params = []): HtmlString
 {
@@ -1449,7 +1449,7 @@ function deleteDir(string $dir)
 /**
  * Удаляет файл
  *
- * @param string $path путь к файлу
+ * @param string $path Путь к файлу
  *
  * @return bool
  */
@@ -1474,9 +1474,9 @@ function deleteFile(string $path): bool
 /**
  * Отправляет уведомление об упоминании в приват
  *
- * @param string $text  текст сообщения
- * @param string $url   путь к странице
- * @param string $title название страницу
+ * @param string $text  Текст сообщения
+ * @param string $url   Путь к странице
+ * @param string $title Название страницу
  *
  * @return void
  */
@@ -1503,10 +1503,10 @@ function sendNotify(string $text, string $url, string $title)
 /**
  * Возвращает приватное сообщение
  *
- * @param string $type    тип сообщения
- * @param array  $replace массив заменяемых параметров
+ * @param string $type    Тип сообщения
+ * @param array  $replace Массив заменяемых параметров
  *
- * @return string сформированный текст
+ * @return string Сформированный текст
  */
 function textNotice(string $type, array $replace = []): string
 {
@@ -1527,7 +1527,7 @@ function textNotice(string $type, array $replace = []): string
 /**
  * Возвращает блок статистики производительности
  *
- * @return HtmlString|null статистика производительности
+ * @return HtmlString|null Статистика производительности
  */
 function performance(): ?HtmlString
 {
@@ -1546,7 +1546,7 @@ function performance(): ?HtmlString
  *
  * @param string|array|null $keys
  *
- * @return bool результат выполнения
+ * @return bool Результат выполнения
  */
 function clearCache($keys = null): bool
 {
@@ -1572,7 +1572,7 @@ function clearCache($keys = null): bool
  *
  * @param string|null $url
  *
- * @return string|null текущая страница
+ * @return string|null Текущая страница
  */
 function returnUrl(?string $url = null): ?string
 {
@@ -1616,8 +1616,8 @@ function saveErrorLog(int $code, ?string $message = null)
 /**
  * Сохраняет flash уведомления
  *
- * @param string $status статус уведомления
- * @param mixed  $message массив или текст с уведомлениями
+ * @param string $status  Статус уведомления
+ * @param mixed  $message Массив или текст с уведомлениями
  *
  * @return void
  */
@@ -1631,7 +1631,7 @@ function setFlash(string $status, $message)
  *
  * @param string|array $errors ошибки
  *
- * @return HtmlString сформированный блок с ошибкой
+ * @return HtmlString Сформированный блок с ошибкой
  */
 function showError($errors): HtmlString
 {
@@ -1661,10 +1661,10 @@ function setInput(array $data)
 /**
  * Возвращает значение из POST данных
  *
- * @param string $name имя поля
+ * @param string $name Имя поля
  * @param mixed  $default
  *
- * @return mixed сохраненное значение
+ * @return mixed Сохраненное значение
  */
 function getInput(string $name, $default = null)
 {
@@ -1685,7 +1685,7 @@ function getInput(string $name, $default = null)
 /**
  * Подсвечивает блок с полем для ввода сообщения
  *
- * @param string $field имя поля
+ * @param string $field Имя поля
  *
  * @return string CSS класс ошибки
  */
@@ -1699,9 +1699,9 @@ function hasError(string $field): string
 /**
  * Возвращает блок с текстом ошибки
  *
- * @param string $field имя поля
+ * @param string $field Имя поля
  *
- * @return string|null блоки ошибки
+ * @return string|null Блоки ошибки
  */
 function textError(string $field): ?string
 {
@@ -1735,7 +1735,7 @@ function sendMail(string $view, array $data): bool
 /**
  * Возвращает расширение файла
  *
- * @param string $filename имя файла
+ * @param string $filename Имя файла
  *
  * @return string расширение
  */
@@ -1747,9 +1747,9 @@ function getExtension(string $filename): string
 /**
  * Возвращает имя файла без расширения
  *
- * @param string $filename имя файла
+ * @param string $filename Имя файла
  *
- * @return string имя без расширения
+ * @return string Имя без расширения
  */
 function getBodyName(string $filename): string
 {
@@ -1759,10 +1759,10 @@ function getBodyName(string $filename): string
 /**
  * Склоняет числа
  *
- * @param int   $num   число
- * @param mixed $forms массив склоняемых слов (один, два, много)
+ * @param int   $num   Число
+ * @param mixed $forms Массив склоняемых слов (один, два, много)
  *
- * @return string форматированная строка
+ * @return string Форматированная строка
  */
 function plural(int $num, $forms): string
 {
@@ -1829,9 +1829,9 @@ function getIp(): string
  *
  * @param string|null $userAgent
  *
- * @return string браузер и версия браузера
+ * @return string|null Браузер и версия браузера
  */
-function getBrowser($userAgent = null): string
+function getBrowser(string $userAgent = null): string
 {
     $browser = new Browser();
     if ($userAgent) {
@@ -1847,7 +1847,7 @@ function getBrowser($userAgent = null): string
 }
 
 /**
- * Возвращает является ли пользователь авторизованным
+ * Является ли пользователь авторизованным
  *
  * @return User|bool
  */
@@ -1865,11 +1865,11 @@ function checkAuth()
 }
 
 /**
- * Возвращает является ли пользователь администратором
+ * Является ли пользователь администратором
  *
- * @param string|null $level уровень доступа
+ * @param string|null $level Уровень доступа
  *
- * @return bool является ли пользователь администратором
+ * @return bool Является ли пользователь администратором
  */
 function isAdmin(?string $level = null): bool
 {
@@ -1877,11 +1877,11 @@ function isAdmin(?string $level = null): bool
 }
 
 /**
- * Возвращает имеет ли пользователь доступ по уровню
+ * Имеет ли пользователь доступ по уровню
  *
- * @param string $level уровень доступа
+ * @param string $level Уровень доступа
  *
- * @return bool разрешен ли доступ
+ * @return bool Разрешен ли доступ
  */
 function access(string $level): bool
 {
@@ -1895,7 +1895,7 @@ function access(string $level): bool
 /**
  * Возвращает объект пользователя по логину
  *
- * @param string|null $login логин пользователя
+ * @param string|null $login Логин пользователя
  *
  * @return Builder|Model|null
  */
@@ -1919,7 +1919,7 @@ function getUserById(?int $id): ?User
 /**
  * Возвращает объект пользователя по токену
  *
- * @param string $token логин пользователя
+ * @param string $token Логин пользователя
  *
  * @return Builder|Model|null
  */
@@ -1931,7 +1931,7 @@ function getUserByToken(string $token): ?User
 /**
  * Возвращает объект пользователя по логину или email
  *
- * @param string|null $login логин или email пользователя
+ * @param string|null $login Логин или email пользователя
  *
  * @return Builder|Model|null
  */
@@ -1945,7 +1945,7 @@ function getUserByLoginOrEmail(?string $login): ?User
 /**
  * Возвращает данные пользователя по ключу
  *
- * @param string|null $key ключ массива
+ * @param string|null $key Ключ массива
  *
  * @return User|mixed
  */
@@ -1984,10 +1984,10 @@ function paginate(array $items, int $perPage, array $appends = []): LengthAwareP
 /**
  * Возвращает сформированный код base64 картинки
  *
- * @param string $path   путь к картинке
- * @param array  $params параметры
+ * @param string $path   Путь к картинке
+ * @param array  $params Параметры
  *
- * @return HtmlString сформированный код
+ * @return HtmlString Сформированный код
  */
 function imageBase64(string $path, array $params = []): HtmlString
 {
@@ -2061,9 +2061,9 @@ function getQueryLog(): array
 /**
  * Выводит список забаненных ip
  *
- * @param bool $clear нужно ли сбросить кеш
+ * @param bool $clear Нужно ли сбросить кеш
  *
- * @return array массив IP
+ * @return array Массив IP
  */
 function ipBan(bool $clear = false): array
 {
@@ -2079,10 +2079,10 @@ function ipBan(bool $clear = false): array
 /**
  * Возвращает пользовательские настройки сайта по ключу
  *
- * @param string|null $key     ключ массива
- * @param mixed       $default значение по умолчанию
+ * @param string|null $key     Ключ массива
+ * @param mixed       $default Значение по умолчанию
  *
- * @return mixed данные
+ * @return mixed Данные
  */
 function setting(?string $key = null, $default = null)
 {
@@ -2098,10 +2098,10 @@ function setting(?string $key = null, $default = null)
 /**
  * Возвращает дефолтные настройки сайта по ключу
  *
- * @param string|null $key     ключ массива
- * @param string|null $default значение по умолчанию
+ * @param string|null $key     Ключ массива
+ * @param string|null $default Значение по умолчанию
  *
- * @return array|string|null данные
+ * @return array|string|null Данные
  */
 function defaultSetting(?string $key = null, ?string $default = null)
 {
@@ -2117,9 +2117,9 @@ function defaultSetting(?string $key = null, ?string $default = null)
 /**
  * Возвращает имя сайта из ссылки
  *
- * @param string $url ссылка на сайт
+ * @param string $url Ссылка на сайт
  *
- * @return string имя сайта
+ * @return string Имя сайта
  */
 function siteDomain(string $url): string
 {

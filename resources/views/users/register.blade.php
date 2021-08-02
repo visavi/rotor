@@ -74,7 +74,7 @@
             @if (setting('invite'))
                 <div class="mb-3{{ hasError('invite') }}">
                     <label for="inputInvite" class="form-label">{{ __('users.invitation_key') }}:</label>
-                    <input class="form-control" name="invite" id="inputInvite" maxlength="32" value="{{ getInput('invite') }}" required>
+                    <input class="form-control" name="invite" id="inputInvite" maxlength="16" value="{{ getInput('invite') }}" required>
                     <div class="invalid-feedback">{{ textError('invite') }}</div>
                 </div>
             @endif

@@ -124,7 +124,7 @@ class UserController extends Controller
                     ->regex($login, '|^[a-z0-9\-]+$|i', ['login' => __('validator.login')])
                     ->regex(utfSubstr($login, 0, 1), '|^[a-z0-9]+$|i', ['login' => __('users.login_begin_requirements')])
                     ->email($email, ['email' => __('validator.email')])
-                    ->length($invite, 12, 15, ['invite' => __('users.invite_length_requirements')], (bool) setting('invite'))
+                    ->length($invite, 12, 16, ['invite' => __('users.invite_length_requirements')], (bool) setting('invite'))
                     ->length($login, 3, 20, ['login' => __('users.login_length_requirements')])
                     ->length($password, 6, 20, ['password' => __('users.password_length_requirements')])
                     ->equal($password, $password2, ['password2' => __('users.passwords_different')])
