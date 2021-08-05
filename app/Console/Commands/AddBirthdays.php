@@ -43,13 +43,14 @@ class AddBirthdays extends Command
             ->where('point', '>', 0)
             ->whereIn('level', User::USER_GROUPS)
             ->whereRaw('substr(birthday, 1, 5) = ?', date('d.m', SITETIME))
+            ->whereNotNull('subscribe')
             ->get();
 
         if ($deliveryUsers->isNotEmpty()) {
             foreach ($deliveryUsers as $user) {
                 $subject = 'С днем рождения от ' . setting('title');
 
-                $text = 'Здравствуйте ' . e($user->getName()) . '!<br>Поздравляем Вас с Днём рождения и желаем счастья, здоровья, новых идей, творческого настроения и побольше радости и смеха!<br><br>Администрация сайта ' . setting('title');
+                $text = 'Здравствуйте ' . e($user->getName()) . '!<br>Поздравляем Вас с Днём рождения и желаем счастья, здоровья, новых идей, творческого настроения и побольше радости и смеха!<br><br>Администрация сайта ' . setting('title') . '<br><br><small>Если вы не хотите получать эти email, пожалуйста, <a href="' . config('app.url') . '/unsubscribe?key=' . $user->subscribe . '">откажитесь от подписки</a></small>';
 
                 Mailing::query()->create([
                     'user_id'    => $user->id,

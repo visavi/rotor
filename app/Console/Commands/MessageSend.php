@@ -49,9 +49,10 @@ class MessageSend extends Command
 
                 if ($user) {
                     $data = [
-                        'to'      => $user->email,
-                        'subject' => $queue->subject,
-                        'text'    => $queue->text,
+                        'to'          => $user->email,
+                        'subject'     => $queue->subject,
+                        'text'        => $queue->text,
+                        'unsubscribe' => $user->subscribe,
                     ];
 
                     sendMail('mailer.default', $data);

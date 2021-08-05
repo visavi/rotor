@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace App\Classes;
 
+use Egulias\EmailValidator\EmailValidator;
+use Egulias\EmailValidator\Validation\RFCValidation;
 use Illuminate\Http\UploadedFile;
 
 /**
@@ -361,7 +363,10 @@ class Validator
             return $this;
         }
 
-        if (filter_var($input, FILTER_VALIDATE_EMAIL) === false) {
+        $validator = new EmailValidator();
+        $checkEmail = $validator->isValid($input, new RFCValidation());
+
+        if (! $checkEmail || filter_var($input, FILTER_VALIDATE_EMAIL) === false) {
             $this->addError($label);
         }
 

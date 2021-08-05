@@ -8,6 +8,7 @@ use App\Models\Counter;
 use App\Models\Counter24;
 use App\Models\Counter31;
 use App\Models\Online;
+use ErrorException;
 use Illuminate\Support\Facades\DB;
 use PDOException;
 
@@ -47,7 +48,14 @@ class Metrika
         imagepng($img, public_path('uploads/counters/counter_new.png'));
         imagedestroy($img);
 
-        rename(public_path('uploads/counters/counter_new.png'), public_path('uploads/counters/counter.png'));
+        try {
+            rename(
+                public_path('uploads/counters/counter_new.png'),
+                public_path('uploads/counters/counter.png')
+            );
+        } catch (ErrorException $e) {
+            //
+        }
     }
 
     /**

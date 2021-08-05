@@ -1727,6 +1727,11 @@ function sendMail(string $view, array $data): bool
             [$fromEmail, $fromName] = $data['from'];
             $message->replyTo($fromEmail, $fromName);
         }
+
+        if (isset($data['unsubscribe'])) {
+            $headers = $message->getHeaders();
+            $headers->addTextHeader('List-Unsubscribe', '<'. config('app.url') . '/unsubscribe?key=' . $data['unsubscribe'] .'>');
+        }
     });
 
     return ! Mail::failures();
