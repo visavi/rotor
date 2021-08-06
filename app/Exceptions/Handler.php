@@ -43,10 +43,12 @@ class Handler extends ExceptionHandler
         });
 
         $this->renderable(function (HttpExceptionInterface $exception, Request $request) {
-            if ($request->isJson()) {
+            saveErrorLog($exception->getStatusCode(), $exception->getMessage());
+
+            if ($request->wantsJson()) {
                 return response()->json([
                     'success' => false,
-                    'error'   => $exception->getMessage(),
+                    'error'   => $exception->getMessage() ?: __('errors.error'),
                 ], $exception->getStatusCode());
             }
 
