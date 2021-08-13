@@ -48,7 +48,7 @@
         <label for="color" class="form-label">{{ __('admin.paid_adverts.color') }}:</label>
         <div class="input-group">
             <input type="text" name="color" class="form-control colorpicker" id="color" maxlength="7" value="{{ $color }}">
-            <input  class="form-control form-control-color colorpicker-addon" id="color-picker" value="{{ $color }}">
+            <input type="color" class="form-control form-control-color colorpicker-addon" id="color-picker" value="{{ $color }}">
 
         </div>
         <div class="invalid-feedback">{{ textError('color') }}</div>

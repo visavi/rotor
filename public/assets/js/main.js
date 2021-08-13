@@ -361,15 +361,12 @@ deleteRating = function (el) {
                 },
                 dataType: 'json', type: 'post', url: '/ratings/delete',
                 success: function (data) {
-
-                    if (! data.success) {
-                        notification('error', data.message);
-                        return false;
-                    }
-
                     if (data.success) {
                         notification('success', translate.record_deleted);
                         $(el).closest('.section').hide('slow');
+                    } else {
+                        notification('error', data.message);
+                        return false;
                     }
                 }
             });

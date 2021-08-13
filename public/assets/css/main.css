@@ -331,3 +331,8 @@ textarea.form-control {
     font-size: 30px;
     background-color: transparent;
 }
+
+/* Fix input width in form-group */
+.form-control-color {
+    max-width: 3rem;
+}

@@ -295,8 +295,8 @@ Route::group(['prefix' => 'adverts'], function () {
 
 /* Репутация пользователя */
 Route::group(['prefix' => 'ratings'], function () {
-    Route::get('/{login}/{received?}', [\App\Http\Controllers\RatingController::class, 'received']);
     Route::get('/{login}/gave', [\App\Http\Controllers\RatingController::class, 'gave']);
+    Route::get('/{login}/{received?}', [\App\Http\Controllers\RatingController::class, 'received']);
     Route::post('/delete', [\App\Http\Controllers\RatingController::class, 'delete']);
 });
 

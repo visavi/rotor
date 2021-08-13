@@ -25,7 +25,7 @@
 
     @if ($ratings->isNotEmpty())
         @foreach ($ratings as $data)
-            <div class="section-form mb-3 shadow">
+            <div class="section mb-3 shadow">
                 <div class="section-content">
                     @if ($data->vote === '-')
                         <i class="fa fa-thumbs-down text-danger"></i>
