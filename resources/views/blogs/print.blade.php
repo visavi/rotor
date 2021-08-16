@@ -12,4 +12,4 @@
     <br><br>
 
     URL: <a href="{{ config('app.url') }}/articles/{{ $article->id }}">{{ config('app.url') }}/articles/{{ $article->id }}</a>
-@stop>
+@stop

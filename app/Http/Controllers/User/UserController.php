@@ -36,7 +36,7 @@ class UserController extends Controller
         }
 
         $invite  = Invite::query()->where('invite_user_id', $user->id)->first();
-        $user->load('lastBan');
+        $user->load('lastBan', 'data.field');
 
         $adminGroups = User::ADMIN_GROUPS;
 
@@ -114,7 +114,7 @@ class UserController extends Controller
                 $invite       = setting('invite') ? $request->input('invite') : '';
                 $email        = strtolower($request->input('email'));
                 $domain       = utfSubstr(strrchr($email, '@'), 1);
-                $gender       = $request->input('gender') === 'male' ? 'male' : 'female';
+                $gender       = $request->input('gender') === User::MALE ? User::MALE : User::FEMALE;
                 $level        = User::USER;
                 $activateLink = null;
                 $activateKey  = null;
@@ -351,7 +351,7 @@ class UserController extends Controller
             $phone    = preg_replace('/\D/', '', $request->input('phone') ?? '');
             $site     = $request->input('site');
             $birthday = $request->input('birthday');
-            $gender   = $request->input('gender') === 'male' ? 'male' : 'female';
+            $gender   = $request->input('gender') === User::MALE ? User::MALE : User::FEMALE;
 
             $validator->equal($request->input('_token'), csrf_token(), __('validator.token'))
                 ->url($site, ['site' => __('validator.site')], false)
@@ -430,7 +430,7 @@ class UserController extends Controller
 
             if ($validator->isValid()) {
                 $activateKey  = Str::random();
-                $activateLink = config('app.url').'/key?code=' . $activateKey;
+                $activateLink = config('app.url') . '/key?code=' . $activateKey;
 
                 $user->update([
                     'email'         => $email,
@@ -584,7 +584,7 @@ class UserController extends Controller
         if ($validator->isValid()) {
             $genkey = Str::random();
 
-            $subject = 'Изменение email на '.setting('title');
+            $subject = 'Изменение email на ' . setting('title');
             $message = 'Здравствуйте, ' . e($user->getName()) . '<br>Вами была произведена операция по изменению адреса электронной почты<br><br>Для того, чтобы изменить email, необходимо подтвердить новый адрес почты<br>Перейдите по данной ссылке:<br><br><a href="' . config('app.url') . '/accounts/editmail?key=' . $genkey . '">' . config('app.url') . '/accounts/editmail?key=' . $genkey . '</a><br><br>Ссылка будет дейстительной в течение суток до ' . date('j.m.y / H:i', strtotime('+1 day', SITETIME)) . '<br>Для изменения адреса необходимо быть авторизованным на сайте<br>Если это сообщение попало к вам по ошибке или вы не собираетесь менять email, то просто проигнорируйте данное письмо';
 
             $data = [

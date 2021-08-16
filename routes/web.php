@@ -573,6 +573,12 @@ Route::group(['prefix' => 'admin', 'middleware' => 'check.admin'], function () {
         Route::match(['get', 'post'], '/paid-adverts/edit/{id}', [\App\Http\Controllers\Admin\PaidAdvertController::class, 'edit']);
         Route::get('/paid-adverts/delete/{id}', [\App\Http\Controllers\Admin\PaidAdvertController::class, 'delete']);
 
+        /* Пользовательские поля */
+        Route::get('/user-fields', [\App\Http\Controllers\Admin\UserFieldController::class, 'index']);
+        Route::match(['get', 'post'], '/user-fields/create', [\App\Http\Controllers\Admin\UserFieldController::class, 'create']);
+        Route::match(['get', 'post'], '/user-fields/edit/{id}', [\App\Http\Controllers\Admin\UserFieldController::class, 'edit']);
+        Route::get('/user-fields/delete/{id}', [\App\Http\Controllers\Admin\UserFieldController::class, 'delete']);
+
         /* Чистка пользователей */
         Route::match(['get', 'post'], '/delusers', [\App\Http\Controllers\Admin\DelUserController::class, 'index']);
         Route::post('/delusers/clear', [\App\Http\Controllers\Admin\DelUserController::class, 'clear']);

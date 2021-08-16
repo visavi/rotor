@@ -71,7 +71,7 @@
   position: relative;
   border-radius: 50%;
   z-index: 1;
-  border: 1px solid #fff;
+  border: 2px solid #fff;
   left: 44px;
   bottom: 18px;
 }

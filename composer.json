@@ -31,7 +31,7 @@
         "gregwar/captcha": "^1.1",
         "guzzlehttp/guzzle": "^7.3",
         "intervention/image": "^2.6",
-        "laravel/framework": "^8.52",
+        "laravel/framework": "^8.54",
         "laravel/tinker": "^2.6",
         "nelexa/zip": "^3.3",
         "php-ffmpeg/php-ffmpeg": "~0.18",

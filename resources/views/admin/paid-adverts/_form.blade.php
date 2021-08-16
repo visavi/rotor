@@ -3,17 +3,15 @@
     <div class="mb-3{{ hasError('place') }}">
         <label for="place" class="form-label">{{ __('admin.paid_adverts.place') }}:</label>
 
-        <?php $inputStatus = getInput('place', $advert->place); ?>
+        <?php $inputPlace = getInput('place', $advert->place); ?>
         <select class="form-select" name="place" id="place">
             @foreach ($places as $place)
-                <?php $selected = ($place === $inputStatus) ? ' selected' : ''; ?>
+                <?php $selected = ($place === $inputPlace) ? ' selected' : ''; ?>
                 <option value="{{ $place }}"{{ $selected }}>{{ __('admin.paid_adverts.' . $place) }}</option>
             @endforeach
         </select>
-
-        <div class="invalid-feedback">{{ textError('status') }}</div>
+        <div class="invalid-feedback">{{ textError('place') }}</div>
     </div>
-
 
     <div class="mb-3{{ hasError('site') }}">
         <label for="site" class="form-label">{{ __('admin.paid_adverts.link') }}:</label>
@@ -49,10 +47,8 @@
         <div class="input-group">
             <input type="text" name="color" class="form-control colorpicker" id="color" maxlength="7" value="{{ $color }}">
             <input type="color" class="form-control form-control-color colorpicker-addon" id="color-picker" value="{{ $color }}">
-
         </div>
         <div class="invalid-feedback">{{ textError('color') }}</div>
-        <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/spectrum-colorpicker2/dist/spectrum.min.css">
     </div>
 
     <div class="form-check">

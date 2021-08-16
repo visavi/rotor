@@ -95,7 +95,7 @@ class UserController extends AdminController
             $posrating = int($request->input('posrating'));
             $negrating = int($request->input('negrating'));
             $themes    = $request->input('themes');
-            $gender    = $request->input('gender') === 'male' ? 'male' : 'female';
+            $gender    = $request->input('gender') === User::MALE ? User::MALE : User::FEMALE;
             $info      = $request->input('info');
             $created   = $request->input('created');
 

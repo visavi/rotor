@@ -96,6 +96,16 @@
 
                 {{ __('users.last_visit') }}: {{ $user->getVisit() }}<br>
 
+                @foreach($user->data as $data)
+                    {{ $data->field->name }}:
+                    @if ($data->field->type === 'textarea')
+                        {{ bbCode($data->value) }}
+                    @else
+                        {{ $data->value }}
+                    @endif
+                    <br>
+                @endforeach
+
                 @if (getUser())
                     <a href="/ratings/{{ $user->login }}">{{ __('main.reputation') }}: <b>{{ formatNum($user->rating) }}</b> (+{{  $user->posrating }}/-{{  $user->negrating }})</a><br>
                     @if (getUser('login') !== $user->login)

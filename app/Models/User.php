@@ -15,9 +15,11 @@ use Illuminate\Contracts\Auth\Access\Authorizable as AuthorizableContract;
 use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
 use Illuminate\Contracts\Auth\CanResetPassword as CanResetPasswordContract;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Query\JoinClause;
 use Illuminate\Foundation\Auth\Access\Authorizable;
@@ -71,6 +73,8 @@ use Illuminate\Support\HtmlString;
  * @property int timeban
  * @property int updated_at
  * @property int created_at
+ *
+ * @property Collection data
  */
 class User extends BaseModel implements
     AuthenticatableContract,
@@ -205,6 +209,16 @@ class User extends BaseModel implements
     }
 
     /**
+     * Возвращает дополнительные поля
+     *
+     * @return HasMany
+     */
+    public function data(): HasMany
+    {
+        return $this->hasMany(UserData::class, 'user_id');
+    }
+
+    /**
      * Возвращает имя или логин пользователя
      *
      * @return string
@@ -221,7 +235,7 @@ class User extends BaseModel implements
     /**
      * Возвращает ссылку на профиль пользователя
      *
-     * @return HtmlString путь к профилю
+     * @return HtmlString Путь к профилю
      */
     public function getProfile(): HtmlString
     {
