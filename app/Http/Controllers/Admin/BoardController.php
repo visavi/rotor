@@ -236,7 +236,7 @@ class BoardController extends AdminController
             $title = $request->input('title');
             $text  = $request->input('text');
             $price = int($request->input('price'));
-            $phone = preg_replace('/\D/', '', $request->input('phone'));
+            $phone = preg_replace('/\D/', '', $request->input('phone') ?? '');
 
             /** @var Board $board */
             $board = Board::query()->find($bid);

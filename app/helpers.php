@@ -302,13 +302,13 @@ function formatTime(int $time, int $crumbs = 2): string
 /**
  * Очищает строку от мата по базе слов
  *
- * @param string $str строка
+ * @param string|null $str строка
  *
  * @return string Обработанная строка
  */
-function antimat(string $str): string
+function antimat(?string $str): string
 {
-    return Antimat::replace($str);
+    return Antimat::replace((string) $str);
 }
 
 /**

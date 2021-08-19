@@ -38,10 +38,10 @@ class Antimat extends BaseModel
     /**
      * Очищает строку от мата по базе слов
      *
-     * @param  string $str строка
-     * @return string      обработанная строка
+     * @param  string $str Строка
+     * @return string      Обработанная строка
      */
-    public static function replace($str): string
+    public static function replace(string $str): string
     {
         $words = self::query()
             ->orderByDesc(DB::raw('CHAR_LENGTH(string)'))
