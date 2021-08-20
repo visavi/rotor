@@ -32,7 +32,7 @@
                         <div class="text-end">
                             <a href="/admin/bans/change?user={{ $data->user->login }}" data-bs-toggle="tooltip" title="{{ __('main.change') }}"><i class="fa fa-pencil-alt"></i></a>
                             <a href="/admin/banhists/view?user={{ $data->user->login }}" data-bs-toggle="tooltip" title="{{ __('admin.banhists.history') }}"><i class="fa fa-history"></i></a>
-                            <input type="checkbox" name="del[]" value="{{ $data->id }}">
+                            <input type="checkbox" class="form-check-input" name="del[]" value="{{ $data->id }}">
                         </div>
                     </div>
 

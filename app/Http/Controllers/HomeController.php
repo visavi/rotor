@@ -89,23 +89,22 @@ class HomeController extends Controller
      *
      * @param Request $request
      *
-     * @return void
+     * @return Response
      */
-    public function captcha(Request $request): void
+    public function captcha(Request $request): Response
     {
-        header('Content-type: image/jpeg');
         $phrase = new PhraseBuilder();
         $phrase = $phrase->build(setting('captcha_maxlength'), setting('captcha_symbols'));
 
         $builder = new CaptchaBuilder($phrase);
-        $builder->setBackgroundColor(mt_rand(200, 255), mt_rand(200, 255), mt_rand(200, 255));
         $builder->setMaxOffset(setting('captcha_offset'));
         $builder->setMaxAngle(setting('captcha_angle'));
         $builder->setDistortion(setting('captcha_distortion'));
         $builder->setInterpolation(setting('captcha_interpolation'));
-        $builder->build()->output();
 
         $request->session()->put('protect', $builder->getPhrase());
+
+        return response($builder->build()->get())->header('Content-Type', 'image/jpeg');
     }
 
     /**

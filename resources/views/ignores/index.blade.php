@@ -34,7 +34,7 @@
                         <div class="text-end">
                             <a href="/messages/talk/{{ $ignore->ignoring->login }}" data-bs-toggle="tooltip" title="{{ __('main.write') }}"><i class="fa fa-reply text-muted"></i></a>
                             <a href="/ignores/note/{{ $ignore->id }}" data-bs-toggle="tooltip" title="{{ __('main.note') }}"><i class="fa fa-sticky-note text-muted"></i></a>
-                            <input type="checkbox" name="del[]" value="{{ $ignore->id }}">
+                            <input type="checkbox" class="form-check-input" name="del[]" value="{{ $ignore->id }}">
                         </div>
                     </div>
                     <div class="section-body border-top">

@@ -21,7 +21,7 @@
             @foreach ($logs as $log)
                 <div class="section mb-3 shadow">
                     <div class="float-end">
-                        <input type="checkbox" name="del[]" value="{{ $log->id }}">
+                        <input type="checkbox" class="form-check-input" name="del[]" value="{{ $log->id }}">
                     </div>
 
                     <div class="section-header">

@@ -152,7 +152,7 @@
                             @if ($topic->isModer || (getUser('id') === $post->user_id && $post->created_at + 600 > SITETIME))
                                 <a href="/posts/edit/{{ $post->id }}?page={{ $posts->currentPage() }}" title="{{ __('main.edit') }}"><i class="fa fa-pencil-alt text-muted"></i></a>
                                 @if ($topic->isModer)
-                                    <input type="checkbox" name="del[]" value="{{ $post->id }}">
+                                    <input type="checkbox" class="form-check-input" name="del[]" value="{{ $post->id }}">
                                 @endif
                             @endif
                         @endif

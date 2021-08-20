@@ -99,7 +99,7 @@
 
         <div class="bg-light text-dark p-1 my-1 text-end">
             <label for="all" class="form-label">{{ __('main.select_all') }}</label>
-            <input type="checkbox" id="all" onchange="var o=this.form.elements;for(var i=0;i&lt;o.length;i++)o[i].checked=this.checked">
+            <input type="checkbox" class="form-check-input" id="all" onchange="var o=this.form.elements;for(var i=0;i&lt;o.length;i++)o[i].checked=this.checked">
         </div>
 
         @if ($posts->isNotEmpty())
@@ -127,7 +127,7 @@
 
                                 <a href="/admin/posts/edit/{{ $data->id }}?page={{ $posts->currentPage() }}" title="{{ __('main.edit') }}"><i class="fa fa-pencil-alt text-muted"></i></a>
 
-                                <input type="checkbox" name="del[]" value="{{ $data->id }}">
+                                <input type="checkbox" class="form-check-input" name="del[]" value="{{ $data->id }}">
                             @endif
 
                             <div class="js-rating">

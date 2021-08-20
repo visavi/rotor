@@ -35,7 +35,7 @@
                             <a href="/messages/talk/{{ $contact->contactor->login }}" data-bs-toggle="tooltip" title="{{ __('main.write') }}"><i class="fa fa-reply text-muted"></i></a>
                             <a href="/contacts/note/{{ $contact->id }}" data-bs-toggle="tooltip" title="{{ __('main.note') }}"><i class="fa fa-sticky-note text-muted"></i></a>
                             <a href="/transfers?user={{ $contact->contactor->login }}" data-bs-toggle="tooltip" title="{{ __('contacts.transfer') }}"><i class="fas fa-coins text-muted"></i></a>
-                            <input type="checkbox" name="del[]" value="{{ $contact->id }}">
+                            <input type="checkbox" class="form-check-input" name="del[]" value="{{ $contact->id }}">
                         </div>
                     </div>
                     <div class="section-body border-top">

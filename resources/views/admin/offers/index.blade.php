@@ -57,7 +57,7 @@
                         <div class="float-end">
                             <a href="/admin/offers/reply/{{ $data->id }}" data-bs-toggle="tooltip" title="{{ __('main.reply') }}"><i class="fas fa-reply text-muted"></i></a>
                             <a href="/admin/offers/edit/{{ $data->id }}" data-bs-toggle="tooltip" title="{{ __('main.edit') }}"><i class="fas fa-pencil-alt text-muted"></i></a>
-                            <input type="checkbox" name="del[]" value="{{ $data->id }}">
+                            <input type="checkbox" class="form-check-input" name="del[]" value="{{ $data->id }}">
                         </div>
                     </div>
 

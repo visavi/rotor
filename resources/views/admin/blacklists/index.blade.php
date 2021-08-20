@@ -31,7 +31,7 @@
                         <i class="fa fa-pencil-alt"></i> {{ $list->value }}
 
                         <div class="float-end">
-                            <input type="checkbox" name="del[]" value="{{ $list->id }}">
+                            <input type="checkbox" class="form-check-input" name="del[]" value="{{ $list->id }}">
                         </div>
                     </div>
 

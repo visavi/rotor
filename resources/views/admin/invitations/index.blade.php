@@ -39,7 +39,7 @@
                         {{ $invite->hash }}
 
                         <div class="float-end">
-                            <input type="checkbox" name="del[]" value="{{ $invite->id }}">
+                            <input type="checkbox" class="form-check-input" name="del[]" value="{{ $invite->id }}">
                         </div>
                     </div>
 

@@ -30,7 +30,7 @@
                             <small class="section-date text-muted fst-italic">{{ dateFixed($data->created_at) }}</small>
                         </div>
                         <div class="text-end">
-                            <input type="checkbox" name="del[]" value="{{ $data->id }}">
+                            <input type="checkbox" class="form-check-input" name="del[]" value="{{ $data->id }}">
                         </div>
                     </div>
 

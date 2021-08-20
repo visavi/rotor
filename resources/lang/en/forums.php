@@ -33,6 +33,7 @@ return [
     'title_new_topics'     => 'New Topics',
     'title_rss'            => 'Forum Topics',
     'title_search'         => 'Search the forum',
+    'search_in_topics'     => 'Search in topics',
     'title_top_topics'     => 'Top Popular Themes',
     'title_top_posts'      => 'Top Popular Posts',
     'rating'               => 'Rating',

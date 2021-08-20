@@ -18,7 +18,7 @@
             @csrf
             @foreach ($topics as $topic)
                 <div class="section mb-3 shadow">
-                    <input type="checkbox" name="del[]" value="{{ $topic->id }}">
+                    <input type="checkbox" class="form-check-input" name="del[]" value="{{ $topic->id }}">
 
                     <i class="fa {{ $topic->topic->getIcon() }} text-muted"></i>
                     <b><a href="/topics/{{ $topic->id }}">{{ $topic->title }}</a></b>

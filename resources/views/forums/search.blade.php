@@ -21,7 +21,7 @@
 
         <div class="form-check my-1">
             <input type="checkbox" class="form-check-input" value="title" name="type" id="type"{{ $type === 'title' ? ' checked' : '' }}>
-            <label class="form-check-label" for="type">Искать в названиях тем</label>
+            <label class="form-check-label" for="type">{{ __('forums.search_in_topics') }}</label>
         </div>
         <div class="invalid-feedback">{{ textError('find') }}</div>
         <span class="text-muted fst-italic"><?= __('main.request_requirements') ?></span>

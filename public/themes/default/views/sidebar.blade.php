@@ -64,7 +64,7 @@
             <a class="app-menu__item{{ request()->is('forums*', 'topics*') ? ' active' : '' }}" href="/forums">
                 <i class="app-menu__icon far fa-comment-alt"></i>
                 <span class="app-menu__label">{{ __('index.forums') }}</span>
-                <span class="badge bg-light text-dark">{{ statsForum() }}</span>
+                <span class="badge bg-dark bg-gradient">{{ statsForum() }}</span>
             </a>
         </li>
 
@@ -72,7 +72,7 @@
             <a class="app-menu__item{{ request()->is('guestbook*') ? ' active' : '' }}" href="/guestbook">
                 <i class="app-menu__icon far fa-comment"></i>
                 <span class="app-menu__label">{{ __('index.guestbook') }}</span>
-                <span class="badge bg-light text-dark">{{ statsGuestbook() }}</span>
+                <span class="badge bg-dark bg-gradient">{{ statsGuestbook() }}</span>
             </a>
         </li>
 
@@ -80,7 +80,7 @@
             <a class="app-menu__item{{ request()->is('news*') ? ' active' : '' }}" href="/news">
                 <i class="app-menu__icon far fa-newspaper"></i>
                 <span class="app-menu__label">{{ __('index.news') }}</span>
-                <span class="badge bg-light text-dark">{{ statsNews() }}</span>
+                <span class="badge bg-dark bg-gradient">{{ statsNews() }}</span>
             </a>
         </li>
 

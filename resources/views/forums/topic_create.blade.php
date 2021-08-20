@@ -52,7 +52,7 @@
             <?php $display = $checkVote ? '' : ' style="display: none"'; ?>
 
             <label>
-                <input name="vote" onchange="return showVoteForm();" type="checkbox"{!! $checked !!}> {{ __('forums.create_vote') }}
+                <input type="checkbox" class="form-check-input" name="vote" onchange="return showVoteForm();"{!! $checked !!}> {{ __('forums.create_vote') }}
             </label><br>
 
             <div class="js-vote-form"{!! $display !!}>

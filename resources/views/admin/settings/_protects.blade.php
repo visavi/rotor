@@ -17,8 +17,8 @@
     </div>
 
     <div class="mb-3{{ hasError('sets[captcha_angle]') }}">
-        <label for="captcha_angle" class="form-label">{{ __('settings.captcha_rotate') }} [0-30]:</label>
-        <input type="number" min="0" max="30" class="form-control" id="captcha_angle" name="sets[captcha_angle]" maxlength="2" value="{{ getInput('sets.captcha_angle', $settings['captcha_angle']) }}" required>
+        <label for="captcha_angle" class="form-label">{{ __('settings.captcha_rotate') }} [0-50]:</label>
+        <input type="number" min="0" max="50" class="form-control" id="captcha_angle" name="sets[captcha_angle]" maxlength="2" value="{{ getInput('sets.captcha_angle', $settings['captcha_angle']) }}" required>
         <div class="invalid-feedback">{{ textError('sets[captcha_angle]') }}</div>
     </div>
 

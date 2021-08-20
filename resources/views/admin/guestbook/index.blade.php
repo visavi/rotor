@@ -54,7 +54,7 @@
                         <div class="text-end">
                             <a href="/admin/guestbook/reply/{{ $post->id }}?page={{ $posts->currentPage() }}"><i class="fa fa-reply text-muted"></i></a>
                             <a href="/admin/guestbook/edit/{{ $post->id }}?page={{ $posts->currentPage() }}"><i class="fas fa-pencil-alt text-muted"></i></a>
-                            <input type="checkbox" name="del[]" value="{{ $post->id }}">
+                            <input type="checkbox" class="form-check-input" name="del[]" value="{{ $post->id }}">
                         </div>
                     </div>
 

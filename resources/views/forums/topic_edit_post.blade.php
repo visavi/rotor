@@ -37,7 +37,7 @@
             @if ($post->files->isNotEmpty())
                 <i class="fa fa-paperclip"></i> <b>{{ __('forums.delete_files') }}:</b><br>
                 @foreach ($post->files as $file)
-                    <input type="checkbox" name="delfile[]" value="{{ $file->id }}">
+                    <input type="checkbox" class="form-check-input" name="delfile[]" value="{{ $file->id }}">
                     <a href="{{ $file->hash }}" target="_blank">{{ $file->name }}</a> ({{ formatSize($file->size) }})<br>
                 @endforeach
                 <br>

@@ -39,7 +39,7 @@
                             {{ $user->getProfile() }}
                         </div>
                         <div class="text-end">
-                            <input type="checkbox" name="choice[]" value="{{ $user->id }}">
+                            <input type="checkbox" class="form-check-input" name="choice[]" value="{{ $user->id }}">
                         </div>
                     </div>
 

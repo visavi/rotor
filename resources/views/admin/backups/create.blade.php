@@ -20,7 +20,7 @@
         <div class="section-form mb-3 shadow">
             <form action="/admin/backups/create" method="post">
                 @csrf
-                <input type="checkbox" id="all" onchange="var o=this.form.elements;for(var i=0;i&lt;o.length;i++)o[i].checked=this.checked"> <b><label for="all" class="form-label">{{ __('main.select_all') }}</label></b>
+                <input type="checkbox" class="form-check-input" id="all" onchange="var o=this.form.elements;for(var i=0;i&lt;o.length;i++)o[i].checked=this.checked"> <b><label for="all" class="form-label">{{ __('main.select_all') }}</label></b>
 
                 <?php $sheets = getInput('sheets', []); ?>
                 @foreach ($tables as $data)
