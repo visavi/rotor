@@ -28,13 +28,17 @@
                     <i class="far fa-list-alt"></i>
                     {{ $field->name }}
                     <div class="float-end">
-                        <a href="/admin/user-fields/edit/{{ $field->id }}"><i class="fas fa-pencil-alt text-muted"></i></a>
-                        <a href="/admin/user-fields/delete/{{ $field->id }}?_token={{ csrf_token() }}" onclick="return confirm('{{ __('admin.user_fields.confirm_delete_field') }}')"><i class="fa fa-times text-muted"></i></a>
+                        <a href="/admin/user-fields/{{ $field->id }}/edit"><i class="fas fa-pencil-alt text-muted"></i></a>
+                        <a href="/admin/user-fields/{{ $field->id }}?_token={{ csrf_token() }}" onclick="return confirm('{{ __('admin.user_fields.confirm_delete_field') }}')"><i class="fa fa-times text-muted"></i></a>
+
+                        <a href="/admin/user-fields/{{ $field->id }}" onclick="return deleteRecord(this)" data-token="{{ csrf_token() }}" data-confirm="{{ __('admin.user_fields.confirm_delete_field') }}"><i class="fa fa-times text-muted"></i></a>
                     </div>
                 </div>
 
                 <div class="section-content">
-                    <span class="badge {{ $field->type === 'input' ? 'bg-success' : 'bg-primary' }}">{{ $field->type }}</span>
+                    <span class="badge {{ $field->type === 'input' ? 'bg-success' : 'bg-primary' }}">Тип:  {{ $field->type }}</span><br>
+                    Размер: {{ $field->length }}<br>
+                    Обязательное: {{ $field->required }}
                 </div>
             </div>
         @endforeach

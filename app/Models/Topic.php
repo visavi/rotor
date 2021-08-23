@@ -160,7 +160,7 @@ class Topic extends BaseModel
             if ($i <= $pg_cnt) {
                 $pages[] = [
                     'page' => $i,
-                    'title' => $i.' страница',
+                    'title' => $i . ' страница',
                     'name' => $i,
                 ];
             }
@@ -176,7 +176,7 @@ class Topic extends BaseModel
 
             $pages[] = [
                 'page' => $pg_cnt,
-                'title' => $pg_cnt.' страница',
+                'title' => $pg_cnt . ' страница',
                 'name' => $pg_cnt,
             ];
         }

@@ -40,6 +40,7 @@ use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\HtmlString;
 use Illuminate\Support\Str;
+use Illuminate\Support\ViewErrorBag;
 use Intervention\Image\Constraint;
 use Intervention\Image\ImageManagerStatic as Image;
 use ReCaptcha\ReCaptcha;
@@ -1614,19 +1615,6 @@ function saveErrorLog(int $code, ?string $message = null)
 }
 
 /**
- * Сохраняет flash уведомления
- *
- * @param string $status  Статус уведомления
- * @param mixed  $message Массив или текст с уведомлениями
- *
- * @return void
- */
-function setFlash(string $status, $message)
-{
-    session()->put('flash.' . $status, $message);
-}
-
-/**
  * Возвращает ошибку
  *
  * @param string|array $errors ошибки
@@ -1649,9 +1637,26 @@ function getCaptcha(): HtmlString
 }
 
 /**
+ * Сохраняет flash уведомления
+ *
+ * @param string $status  Статус уведомления
+ * @param mixed  $message Массив или текст с уведомлениями
+ *
+ * @return void
+ *
+ * @deprecated since 10.1 - Use redirect->with('success', 'Message') or session()->flash()
+ */
+function setFlash(string $status, $message)
+{
+    session()->put('flash.' . $status, $message);
+}
+
+/**
  * Сохраняет POST данные введенных пользователем
  *
- * @param array $data массив полей
+ * @param array $data Массив полей
+ *
+ * @deprecated since 10.1
  */
 function setInput(array $data)
 {
@@ -1665,6 +1670,8 @@ function setInput(array $data)
  * @param mixed  $default
  *
  * @return mixed Сохраненное значение
+ *
+ * @deprecated since 10.1 - Use old('field', 'default;)
  */
 function getInput(string $name, $default = null)
 {
@@ -1691,6 +1698,14 @@ function getInput(string $name, $default = null)
  */
 function hasError(string $field): string
 {
+    // Новая валидация
+    if (session()->has('errors')) {
+        /** @var ViewErrorBag $errors */
+        $errors = session()->get('errors');
+
+        return $errors->has($field) ? ' is-invalid' : ' is-valid';
+    }
+
     $isValid = session()->has('flash.danger') ? ' is-valid' : '';
 
     return session()->has('flash.danger.' . $field) ? ' is-invalid' : $isValid;
@@ -1705,6 +1720,14 @@ function hasError(string $field): string
  */
 function textError(string $field): ?string
 {
+    // Новая валидация
+    if (session()->has('errors')) {
+        /** @var ViewErrorBag $errors */
+        $errors = session()->get('errors');
+
+        return $errors->first($field);
+    }
+
     return session()->get('flash.danger.' . $field);
 }
 
@@ -1730,7 +1753,7 @@ function sendMail(string $view, array $data): bool
 
         if (isset($data['unsubscribe'])) {
             $headers = $message->getHeaders();
-            $headers->addTextHeader('List-Unsubscribe', '<'. config('app.url') . '/unsubscribe?key=' . $data['unsubscribe'] .'>');
+            $headers->addTextHeader('List-Unsubscribe', '<' . config('app.url') . '/unsubscribe?key=' . $data['unsubscribe'] . '>');
         }
     });
 

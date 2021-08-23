@@ -66,6 +66,7 @@
             </div>
         @endforeach
 
+        {{ $users->links() }}
         <div class="section-form mb-3 shadow">
             <form action="/users?type={{ $type }}&amp;sort={{ $sort }}" method="post">
                 <div class="input-group{{ hasError('user') }}">
@@ -75,8 +76,6 @@
                 <div class="invalid-feedback">{{ textError('user') }}</div>
             </form>
         </div>
-
-        {{ $users->links() }}
 
         <div class="mb-3">
             {{ __('main.total_users') }}: <b>{{ $users->total() }}</b>

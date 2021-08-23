@@ -258,6 +258,19 @@ bookmark = function (el) {
     return false;
 };
 
+/* Удаление записей */
+deleteRecord = function (el) {
+    $.post({
+        type: 'delete',
+        url: $(el).attr('href'),
+        _token: $(el).data('token'),
+    }).done(function (data) {
+        notification('success', translate.message_deleted);
+    });
+
+    return false;
+}
+
 /* Удаление сообщения в форуме */
 deletePost = function (el) {
     $.ajax({

@@ -18,7 +18,11 @@
             <div class="lead">{{ __('errors.page_expired') }}</div>
 
             <div class="my-3">
-                <a class="btn btn-primary" href="{{ url()->previous() }}"><i class="fa fa-arrow-circle-left"></i> {{ __('errors.return') }}</a>
+                @if (url()->previous() === url()->current())
+                    <a class="btn btn-primary" href="/"><i class="fa fa-arrow-circle-left"></i> {{ __('errors.to_main') }}</a>
+                @else
+                    <a class="btn btn-primary" href="{{ url()->previous() }}"><i class="fa fa-arrow-circle-left"></i> {{ __('errors.return') }}</a>
+                @endif
             </div>
         </div>
     </div>

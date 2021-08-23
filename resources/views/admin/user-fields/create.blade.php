@@ -1,6 +1,6 @@
 @extends('layout')
 
-@section('title', __('admin.paid_adverts.create_advert'))
+@section('title', __('admin.user_fields.create_field'))
 
 @section('breadcrumb')
     <nav>
@@ -15,6 +15,9 @@
 
 @section('content')
     <div class="section-form mb-3 shadow">
-        @include('admin/user-fields/_form')
+        <form action="/admin/user-fields" method="post">
+            @csrf
+            @include('admin/user-fields/_form')
+        </form>
     </div>
 @stop

@@ -141,11 +141,13 @@ textarea.form-control {
   margin: 0;
 }
 
-.is-invalid .form-control {
+.is-invalid .form-control,
+.is-invalid .form-select {
   border-color: #dc3545;
 }
 
-.is-invalid .form-control:focus {
+.is-invalid .form-control:focus,
+.is-invalid .form-select:focus {
   border-color: #dc3545;
   box-shadow: 0 0 0 0.2rem rgba(220, 53, 69, 0.25);
 }
@@ -154,11 +156,13 @@ textarea.form-control {
   display: block;
 }
 
-.is-valid .form-control {
+.is-valid .form-control,
+.is-valid .form-select {
   border-color: #28a745;
 }
 
-.is-valid .form-control:focus {
+.is-valid .form-control:focus,
+.is-valid .form-select:focus {
   border-color: #28a745;
   box-shadow: 0 0 0 0.2rem rgba(40, 167, 69, 0.25);
 }

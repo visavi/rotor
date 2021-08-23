@@ -4,20 +4,15 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers\Admin;
 
-use App\Classes\Validator;
-use App\Models\PaidAdvert;
-use App\Models\User;
+use App\Http\Requests\StoreUserFieldRequest;
 use App\Models\UserField;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Http\Request;
 use Illuminate\View\View;
 
 class UserFieldController extends AdminController
 {
     /**
      * List user fields
-     *
-     * @param Request $request
      *
      * @return View
      */
@@ -33,61 +28,38 @@ class UserFieldController extends AdminController
     /**
      * Create advert
      *
-     * @param Request   $request
-     * @param Validator $validator
-     *
-     * @return View|RedirectResponse
+     * @return View
      */
-    public function create(Request $request, Validator $validator)
+    public function create(): View
     {
         $types = UserField::TYPES;
         $field = new UserField();
-
-        if ($request->isMethod('post')) {
-            $type = $request->input('type');
-            $sort = int($request->input('sort'));
-            $name = $request->input('name');
-            $rule = $request->input('rule');
-
-            $validator->equal($request->input('_token'), csrf_token(), __('validator.token'))
-                /*->in($place, $places, ['place' => __('admin.paid_adverts.place_invalid')])
-                ->url($site, ['site' => __('validator.url')])
-                ->length($site, 5, 100, ['site' => __('validator.url_text')])
-                ->regex($color, '|^#+[A-f0-9]{6}$|', ['color' => __('validator.color')], false)
-                ->gt($term, SITETIME, ['term' => __('admin.paid_adverts.term_invalid')])
-                ->length($comment, 0, 255, ['comment' => __('validator.text_long')])
-                ->gte(count($names), 1, ['names' => __('admin.paid_adverts.names_count')])*/;
-
-            if ($validator->isValid()) {
-                UserField::query()->create([
-                    'type'  => $type,
-                    'sort'  => $sort,
-                    'name'  => $name,
-                    'rule'  => $rule,
-                ]);
-
-                setFlash('success', __('main.record_added_success'));
-
-                return redirect('admin/user-fields');
-            }
-
-            setInput($request->all());
-            setFlash('danger', $validator->getErrors());
-        }
 
         return view('admin/user-fields/create', compact('field', 'types'));
     }
 
     /**
+     *
+     *
+     * @param StoreUserFieldRequest $request
+     *
+     * @return RedirectResponse
+     */
+    public function store(StoreUserFieldRequest $request): RedirectResponse
+    {
+        UserField::query()->create($request->all());
+
+        return redirect('admin/user-fields')->with('success', __('main.record_added_success'));
+    }
+
+    /**
      * Change advert
      *
-     * @param int       $id
-     * @param Request   $request
-     * @param Validator $validator
+     * @param int $id
      *
-     * @return View|RedirectResponse
+     * @return View
      */
-    public function edit(int $id, Request $request, Validator $validator)
+    public function edit(int $id): View
     {
         $types = UserField::TYPES;
 
@@ -98,51 +70,36 @@ class UserFieldController extends AdminController
             abort(404, __('admin.user_fields.not_found'));
         }
 
-        if ($request->isMethod('post')) {
-            $type = $request->input('type');
-            $sort = int($request->input('sort'));
-            $name = $request->input('name');
-            $rule = $request->input('rule');
+        return view('admin/user-fields/edit', compact('field', 'types'));
+    }
 
-            $validator->equal($request->input('_token'), csrf_token(), __('validator.token'))
-                /*->in($place, $places, ['place' => __('admin.paid_adverts.place_invalid')])
-                ->url($site, ['site' => __('validator.url')])
-                ->length($site, 5, 100, ['site' => __('validator.url_text')])
-                ->regex($color, '|^#+[A-f0-9]{6}$|', ['color' => __('validator.color')], false)
-                ->gt($term, SITETIME, ['term' => __('admin.paid_adverts.term_invalid')])
-                ->length($comment, 0, 255, ['comment' => __('validator.text_long')])
-                ->gte(count($names), 1, ['names' => __('admin.paid_adverts.names_count')])*/;
+    /**
+     * @param int                   $id
+     * @param StoreUserFieldRequest $request
+     *
+     * @return RedirectResponse
+     */
+    public function update(int $id, StoreUserFieldRequest $request): RedirectResponse
+    {
+        $field = UserField::query()->find($id);
 
-            if ($validator->isValid()) {
-                $field->update([
-                    'type'  => $type,
-                    'sort'  => $sort,
-                    'name'  => $name,
-                    'rule'  => $rule,
-                ]);
-
-                setFlash('success', __('main.record_saved_success'));
-
-                return redirect('admin/user-fields');
-            }
-
-            setInput($request->all());
-            setFlash('danger', $validator->getErrors());
+        if (! $field) {
+            abort(404, __('admin.user_fields.not_found'));
         }
 
-        return view('admin/user-fields/edit', compact('field', 'types'));
+        $field->update($request->all());
+
+        return redirect('admin/user-fields')->with('success', __('main.record_saved_success'));
     }
 
     /**
      * Delete field
      *
-     * @param int       $id
-     * @param Request   $request
-     * @param Validator $validator
+     * @param int $id
      *
-     * @return RedirectResponse
+     * @return bool
      */
-    public function delete(int $id, Request $request, Validator $validator): RedirectResponse
+    public function destroy(int $id): bool
     {
         /** @var UserField $field */
         $field = UserField::query()->find($id);
@@ -151,16 +108,14 @@ class UserFieldController extends AdminController
             abort(404, __('admin.user_field.not_found'));
         }
 
-        $validator->equal($request->input('_token'), csrf_token(), __('validator.token'));
+        $field->data()->delete();
+        $field->delete();
 
-        if ($validator->isValid()) {
-            $field->delete();
-
-            setFlash('success', __('main.record_deleted_success'));
+/*            setFlash('success', __('main.record_deleted_success'));
         } else {
             setFlash('danger', $validator->getErrors());
-        }
+        }*/
 
-        return redirect('admin/user-fields');
+        return true;
     }
 }

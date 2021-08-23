@@ -15,6 +15,10 @@
 
 @section('content')
     <div class="section-form mb-3 shadow">
-        @include('admin/user-fields/_form')
+        <form action="/admin/user-fields/{{ $field->id }}" method="post">
+            @csrf
+            @method('put')
+            @include('admin/user-fields/_form')
+        </form>
     </div>
 @stop

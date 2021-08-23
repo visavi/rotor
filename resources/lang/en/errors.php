@@ -3,6 +3,7 @@
 return [
     'error'               => 'Error',
     'return'              => 'Return',
+    'to_main'             => 'To main',
     'unauthorized'        => 'Unauthorized!',
     'forbidden'           => 'Access denied!',
     'not_found'           => 'This page does not exist!',

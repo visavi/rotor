@@ -4,13 +4,20 @@ declare(strict_types=1);
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Support\Collection;
+
 /**
  * Class User
  *
  * @property int id
- * @property int user_id
- * @property int field_id
- * @property string value
+ * @property int sort
+ * @property string type
+ * @property string name
+ * @property int length
+ * @property bool required
+ *
+ * @property Collection<UserData> data
  */
 class UserField extends BaseModel
 {
@@ -40,5 +47,23 @@ class UserField extends BaseModel
      *
      * @var array
      */
-    protected $guarded = [];
+/*    protected $guarded = [];*/
+
+    protected $fillable = [
+        'sort',
+        'type',
+        'name',
+        'length',
+        'required',
+    ];
+
+    /**
+     * Возвращает данные
+     *
+     * @return HasMany
+     */
+    public function data(): HasMany
+    {
+        return $this->hasMany(UserData::class, 'field_id');
+    }
 }

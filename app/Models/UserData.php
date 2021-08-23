@@ -5,13 +5,17 @@ declare(strict_types=1);
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Support\Collection;
 
 /**
  * Class User
  *
  * @property int id
- * @property string name
+ * @property int user_id
+ * @property int field_id
  * @property string value
+ *
+ * @property Collection<UserField> field
  */
 class UserData extends BaseModel
 {
