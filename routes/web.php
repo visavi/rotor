@@ -119,7 +119,7 @@ Route::group(['prefix' => 'forums'], function () {
     Route::get('/search', [\App\Http\Controllers\Forum\SearchController::class, 'index']);
     Route::get('/active/posts', [\App\Http\Controllers\Forum\ActiveController::class, 'posts']);
     Route::get('/active/topics', [\App\Http\Controllers\Forum\ActiveController::class, 'topics']);
-    Route::post('/active/delete', [\App\Http\Controllers\Forum\ActiveController::class, 'delete']);
+    Route::delete('/active/delete/{id}', [\App\Http\Controllers\Forum\ActiveController::class, 'destroy']);
     Route::get('/top/posts', [\App\Http\Controllers\Forum\ForumController::class, 'topPosts']);
     Route::get('/top/topics', [\App\Http\Controllers\Forum\ForumController::class, 'topTopics']);
     Route::get('/rss', [\App\Http\Controllers\Forum\ForumController::class, 'rss']);

@@ -4,15 +4,13 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers\Forum;
 
-use App\Classes\Validator;
 use App\Http\Controllers\Controller;
 use App\Models\Post;
 use App\Models\Topic;
 use App\Models\User;
 use Exception;
-use Illuminate\Http\Request;
+use Illuminate\Http\JsonResponse;
 use Illuminate\View\View;
-use Symfony\Component\HttpFoundation\Response;
 
 class ActiveController extends Controller
 {
@@ -58,7 +56,7 @@ class ActiveController extends Controller
     }
 
     /**
-     * Вывод сообшений
+     * Вывод сообщений
      *
      * @return View
      */
@@ -79,42 +77,39 @@ class ActiveController extends Controller
     /**
      * Удаление сообщений
      *
-     * @param Request   $request
-     * @param Validator $validator
+     * @param int $id
      *
-     * @return Response
+     * @return JsonResponse
      * @throws Exception
      */
-    public function delete(Request $request, Validator $validator): Response
+    public function destroy(int $id): JsonResponse
     {
-        if (! $request->ajax()) {
-            return redirect('/');
-        }
-
         if (! isAdmin()) {
-            abort(403, __('forums.posts_deleted_moderators'));
+            return response()->json([
+                'success' => false,
+                'message' => __('forums.posts_deleted_moderators'),
+            ]);
         }
-
-        $validator->equal($request->input('_token'), csrf_token(), __('validator.token'));
 
         $post = Post::query()
-            ->where('id', int($request->input('tid')))
+            ->where('id', $id)
             ->with('topic.forum')
             ->first();
 
-        $validator->true($post, __('forums.post_not_exist'));
-
-        if ($validator->isValid()) {
-            $post->delete();
-            $post->topic->decrement('count_posts');
-            $post->topic->forum->decrement('count_posts');
-
-            return response()->json(['success' => true]);
+        if (! $post) {
+            return response()->json([
+                'success' => false,
+                'message' => __('forums.post_not_exist'),
+            ]);
         }
 
+        $post->delete();
+        $post->topic->decrement('count_posts');
+        $post->topic->forum->decrement('count_posts');
+
         return response()->json([
-            'success' => false,
-            'message' => current($validator->getErrors()),
+            'success' => true,
+            'message' => __('main.record_deleted_success'),
         ]);
     }
 }

@@ -1671,7 +1671,7 @@ function setInput(array $data)
  *
  * @return mixed Сохраненное значение
  *
- * @deprecated since 10.1 - Use old('field', 'default;)
+ * @deprecated since 10.1 - Use old('field', 'default');
  */
 function getInput(string $name, $default = null)
 {

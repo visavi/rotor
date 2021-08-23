@@ -6,6 +6,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Requests\StoreUserFieldRequest;
 use App\Models\UserField;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\View\View;
 
@@ -97,25 +98,26 @@ class UserFieldController extends AdminController
      *
      * @param int $id
      *
-     * @return bool
+     * @return JsonResponse
      */
-    public function destroy(int $id): bool
+    public function destroy(int $id): JsonResponse
     {
         /** @var UserField $field */
         $field = UserField::query()->find($id);
 
         if (! $field) {
-            abort(404, __('admin.user_field.not_found'));
+            return response()->json([
+                'success' => false,
+                'message' => __('admin.user_field.not_found'),
+            ]);
         }
 
         $field->data()->delete();
         $field->delete();
 
-/*            setFlash('success', __('main.record_deleted_success'));
-        } else {
-            setFlash('danger', $validator->getErrors());
-        }*/
-
-        return true;
+        return response()->json([
+            'success' => true,
+            'message' => __('main.record_deleted_success'),
+        ]);
     }
 }

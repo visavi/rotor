@@ -259,39 +259,26 @@ bookmark = function (el) {
 };
 
 /* Удаление записей */
-deleteRecord = function (el) {
-    $.post({
-        type: 'delete',
-        url: $(el).attr('href'),
-        _token: $(el).data('token'),
-    }).done(function (data) {
-        notification('success', translate.message_deleted);
-    });
-
-    return false;
-}
-
-/* Удаление сообщения в форуме */
 deletePost = function (el) {
-    $.ajax({
-        data: {tid: $(el).data('tid'), _token: $(el).data('token')},
-        dataType: 'json', type: 'post', url: '/forums/active/delete',
-        success: function (data) {
-
-            if (! data.success) {
-                notification('error', data.message);
-                return false;
-            }
-
-            if (data.success) {
-                notification('success', translate.message_deleted);
-                $(el).closest('.section').hide('slow');
-            }
+    bootbox.confirm(translate.confirm_message_delete, function (result) {
+        if (result) {
+            $.ajax({
+                data: {_token: $(el).data('token'),},
+                dataType: 'json', type: 'delete', url: $(el).attr('href'),
+                success: function (data) {
+                    if (data.success) {
+                        notification('success', data.message);
+                        $(el).closest('.section').hide('slow');
+                    } else {
+                        notification('error', data.message);
+                    }
+                }
+            });
         }
     });
 
     return false;
-};
+}
 
 /* Удаление комментариев */
 deleteComment = function (el) {
@@ -306,15 +293,12 @@ deleteComment = function (el) {
                 },
                 dataType: 'json', type: 'post', url: '/ajax/delcomment',
                 success: function (data) {
-
-                    if (! data.success) {
-                        notification('error', data.message);
-                        return false;
-                    }
-
                     if (data.success) {
                         notification('success', translate.message_deleted);
                         $(el).closest('.section').hide('slow');
+                    } else {
+                        notification('error', data.message);
+                        return false;
                     }
                 }
             });
@@ -337,13 +321,6 @@ changeRating = function (el) {
         type: 'post',
         url: '/ajax/rating',
         success: function (data) {
-            if (! data.success) {
-                if (data.message) {
-                    notification('error', data.message);
-                }
-                return false;
-            }
-
             if (data.success) {
                 const rating = $(el).closest('.js-rating').find('b');
 
@@ -354,6 +331,11 @@ changeRating = function (el) {
                 }
 
                 rating.html($(data.rating));
+            } else {
+                if (data.message) {
+                    notification('error', data.message);
+                }
+                return false;
             }
         }
     });
@@ -397,15 +379,12 @@ deleteSpam = function (el) {
         data: {id: $(el).data('id'), _token: $(el).data('token')},
         dataType: 'json', type: 'post', url: '/admin/spam/delete',
         success: function (data) {
-
-            if (! data.success) {
-                notification('error', data.message);
-                return false;
-            }
-
             if (data.success) {
                 notification('success', translate.record_deleted);
                 $(el).closest('.section').hide('slow');
+            } else {
+                notification('error', data.message);
+                return false;
             }
         }
     });
@@ -423,15 +402,12 @@ deleteWall = function (el) {
                 data: {id: $(el).data('id'), login: $(el).data('login'), _token: $(el).data('token')},
                 dataType: 'json', type: 'post', url: '/walls/' + $(el).data('login') + '/delete',
                 success: function (data) {
-
-                    if (! data.success) {
-                        notification('error', data.message);
-                        return false;
-                    }
-
                     if (data.success) {
                         notification('success', translate.record_deleted);
                         $(el).closest('.section').hide('slow');
+                    } else {
+                        notification('error', data.message);
+                        return false;
                     }
                 }
             });
