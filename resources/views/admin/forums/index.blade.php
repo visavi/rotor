@@ -75,9 +75,7 @@
                 @csrf
                 <div class="input-group{{ hasError('title') }}">
                     <input type="text" class="form-control" id="title" name="title" maxlength="50" value="{{ getInput('title') }}" placeholder="{{ __('forums.forum') }}" required>
-                    <div class="input-group-append">
-                        <button class="btn btn-primary">{{ __('forums.create_forum') }}</button>
-                    </div>
+                    <button class="btn btn-primary">{{ __('forums.create_forum') }}</button>
                 </div>
                 <div class="invalid-feedback">{{ textError('title') }}</div>
             </form>

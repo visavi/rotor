@@ -2,17 +2,6 @@
     max-width: none;
 }
 
-.prettyprint, .js-queries {
-    background-color: #1D1F23;
-    color: #B7B8B9;
-}
-
-.prettyprint ol.linenums {
-    margin: 0;
-    padding: 0.5rem 3rem;
-    box-shadow: inset 40px 0 0 #21252B, inset 41px 0 0 #262638;
-}
-
 .section, .app-content, .app-title, .app-footer, .section-form, .app-notification {
     background-color: #282C34;
     color: #B7B8B9;
@@ -20,7 +9,6 @@
 
 .dropdown-item {
     color: #B7B8B9;
-    border-radius: 0 !important;
 }
 
 .app-notification__title {
@@ -44,19 +32,8 @@
     background-color: #333842;
 }
 
-.performance {
-    background-color: #1D1F23;
-    color: #B7B8B9;
-    border: 1px solid #1D1F23;
-    box-shadow: 0 1px 8px #1D1F23;
-}
-
 .section-body {
     border-top: 1px solid #1D1F23 !important;
-}
-
-.aleft {
-    border-radius: 5px;
 }
 
 .alert-danger {
@@ -90,12 +67,14 @@
     border-bottom: 1px solid #1D1F23;
 }
 
-textarea, .form-control {
-    border-radius: 0 !important;
+.form-control, .form-select {
     background-color: #1D1F23 !important;
-    border: 1px solid #3E4452 !important;
+    border: 2px solid #35373f !important;
     color: #B7B8B9 !important;
-    z-index: 0;
+}
+
+.form-control:focus, .form-select.focus {
+    border-color: #3E4452 !important;
 }
 
 .app-header {
@@ -124,7 +103,7 @@ textarea, .form-control {
 }
 
 .page-item.active .page-link {
-    background-color: #1D1F23 !important;
+    background-color: #172330 !important;
 }
 
 .page-link:hover, .dropdown-item:hover, .dropdown-item:focus {
@@ -209,8 +188,7 @@ textarea, .form-control {
     border-radius: 3px;
 }
 
-.input-group-append .input-group-text, .popover-body {
-    border-radius: 0 !important;
+.input-group-text, .popover-body {
     background-color: #1D1F23 !important;
     border: 1px solid #3E4452 !important;
     color: #B7B8B9 !important;
@@ -221,7 +199,6 @@ textarea, .form-control {
 }
 
 .dropdown-menu {
-    border-radius: 0 !important;
     background-color: #1D1F23 !important;
     border: 1px solid #3E4452 !important;
     color: #B7B8B9 !important;
@@ -317,4 +294,22 @@ textarea, .form-control {
 
 .media-file {
     background-color: #1D1F23 !important;
+}
+
+.performance {
+    background-color: #1D1F23;
+    color: #B7B8B9;
+    border: 1px solid #1D1F23;
+    box-shadow: 0 1px 8px #1D1F23;
+}
+
+.prettyprint, .js-queries {
+    background-color: #1D1F23;
+    color: #B7B8B9;
+}
+
+.prettyprint ol.linenums {
+    margin: 0;
+    padding: 0.5rem 3rem;
+    box-shadow: inset 40px 0 0 #21252B, inset 41px 0 0 #262638;
 }

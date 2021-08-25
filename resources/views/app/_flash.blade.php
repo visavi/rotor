@@ -40,7 +40,7 @@
     </div>
 @endif
 
-@if ($errors->any())
+@if ($errors = session()->get('errors'))
     <div class="alert alert-danger alert-dismissible fade show" role="alert">
         @foreach ($errors->all() as $error)
             <div>{{ $error }}</div>
