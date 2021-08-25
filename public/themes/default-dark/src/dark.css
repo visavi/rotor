@@ -1,0 +1,337 @@
+.app {
+    max-width: none;
+}
+
+.prettyprint, .js-queries {
+    background-color: #1D1F23;
+    color: #B7B8B9;
+}
+
+.prettyprint ol.linenums {
+    margin: 0;
+    padding: 0.5rem 3rem;
+    box-shadow: inset 40px 0 0 #21252B, inset 41px 0 0 #262638;
+}
+
+.section, .app-content, .app-title, .app-footer, .section-form, .app-notification {
+    background-color: #282C34;
+    color: #B7B8B9;
+}
+
+.dropdown-item {
+    color: #B7B8B9;
+    border-radius: 0 !important;
+}
+
+.app-notification__title {
+    background-color: #2e8cc2;
+}
+
+.app-notification__footer {
+    background-color: #1D1F23;
+}
+
+.app-notification i, .app-notification {
+    color: #B7B8B9 !important;
+}
+
+.app-notification__item {
+    border-bottom: 0;
+}
+
+.app-notification__item:hover,
+.app-notification__item:focus {
+    background-color: #333842;
+}
+
+.performance {
+    background-color: #1D1F23;
+    color: #B7B8B9;
+    border: 1px solid #1D1F23;
+    box-shadow: 0 1px 8px #1D1F23;
+}
+
+.section-body {
+    border-top: 1px solid #1D1F23 !important;
+}
+
+.aleft {
+    border-radius: 5px;
+}
+
+.alert-danger {
+    background: linear-gradient(to right, #4A2245, #252243 15%);
+    border: 0;
+    color: #FF0045 !important;
+}
+
+.alert-success {
+    background: linear-gradient(to right, #15424D, #252243 15%);
+    color: #01DC6B !important;
+    border: 0;
+}
+
+.alert-success button, .alert-danger button {
+    color: tomato;
+}
+
+.alert-success button:hover, .alert-danger button:hover {
+    color: red;
+}
+
+.markItUpContainer i {
+    color: #B7B8B9 !important;
+    z-index: 1;
+}
+
+.section-media {
+    border-top: 1px solid #1D1F23;
+    border-right: 1px solid #1D1F23;
+    border-bottom: 1px solid #1D1F23;
+}
+
+textarea, .form-control {
+    border-radius: 0 !important;
+    background-color: #1D1F23 !important;
+    border: 1px solid #3E4452 !important;
+    color: #B7B8B9 !important;
+    z-index: 0;
+}
+
+.app-header {
+    box-shadow: 0 0 3px black;
+}
+
+.app-nav, .app-header__logo, .app-header {
+    background-color: #21252B;
+}
+
+.alert-info {
+    background-color: #16191d;
+    border: 1px solid #21252B;
+    color: dodgerblue;
+}
+
+.alert-warning {
+    background-color: #16191d;
+    border: 1px solid #21252B;
+    color: darkorange;
+}
+
+.app-sidebar, .page-link {
+    background-color: #181A1F !important;
+    border: 1px solid #3E4452 !important;
+}
+
+.page-item.active .page-link {
+    background-color: #1D1F23 !important;
+}
+
+.page-link:hover, .dropdown-item:hover, .dropdown-item:focus {
+    background-color: #3E4452;
+    color: white;
+}
+
+.badge-light {
+    background-color: #282C34;
+    border: 0;
+    color: #2e8cc2;
+}
+
+.app-menu__item.active, .app-menu__item:hover, .treeview.is-expanded {
+    background-color: #282C34 !important;
+}
+
+.section:hover, .section.bg-warning {
+    background-color: #333842 !important;
+}
+
+.blockquote {
+    background-color: #181A1F;
+    border-left: 5px solid #0d0e11;
+}
+
+.dropdown-item i {
+    width: 32px;
+}
+
+.card {
+    background-color: #282C34;
+    color: #B7B8B9;
+    border: 1px solid #2e8cc2;
+}
+
+.bb-sticker ul {
+    background-color: #1D1F23 !important;
+    border: 1px solid #35373f !important;
+    z-index: 1;
+}
+
+.bb-color ul, .bb-size ul {
+    background-color: #1D1F23 !important;
+    border: 1px solid #35373f !important;
+    z-index: 1;
+}
+
+.bb-color ul li {
+    border: 2px solid #181A1F !important;
+}
+
+.bb-size ul li {
+    border-bottom: 1px solid #35373f !important;
+}
+
+.bb-size ul a {
+    color: gray !important;
+}
+
+.bb-size ul a:hover {
+    color: darkgray !important;
+}
+
+.post-rating-up.active {
+    color: #1D1F23;
+}
+
+.badge-warning .section-author {
+    color: dodgerblue;
+    background-color: #282C34;
+    padding: 0 5px;
+    box-shadow: 0 0 3px black inset;
+    border-radius: 3px;
+}
+
+.input-group-append .input-group-text, .popover-body {
+    border-radius: 0 !important;
+    background-color: #1D1F23 !important;
+    border: 1px solid #3E4452 !important;
+    color: #B7B8B9 !important;
+}
+
+.btn.btn-light:hover, .btn-light:active, .btn-light:focus {
+    color: darkgray !important;
+}
+
+.dropdown-menu {
+    border-radius: 0 !important;
+    background-color: #1D1F23 !important;
+    border: 1px solid #3E4452 !important;
+    color: #B7B8B9 !important;
+}
+
+.img-thumbnail {
+    border: 0;
+    box-shadow: 0 0 3px black;
+    padding: 0;
+}
+
+.dropdown-menu.show {
+    margin-left: -104px;
+}
+
+.btn-light {
+    background-color: #1D1F23 !important;
+    color: darkgray;
+    border: 1px solid #35373f !important;
+}
+
+.list-group-item {
+    background-color: #282C34;
+    color: #B7B8B9;
+}
+
+img.rounded {
+    width: 150px;
+    height: 150px;
+    object-fit: cover;
+    text-align: center;
+}
+
+img.rounded1 {
+    width: 100px;
+    height: 100px;
+}
+
+.forum_topic {
+    display: block;
+}
+
+.flex {
+    display: flex;
+}
+
+.forum_topic a:first-child {
+    flex: 1;
+    padding: 5px
+}
+
+.forum_topic a:first-child:hover {
+    background-color: #282c34;
+    text-decoration: none;
+}
+
+.forum_topic a:last-child {
+    max-width: 80px;
+    width: 80px;
+    text-align: center;
+    padding: 5px;
+}
+
+.forum_topic a:last-child:hover {
+    background-color: #282c34;
+    text-decoration: none;
+}
+
+.border-top {
+    border-top: 1px solid #21252B !important;
+}
+
+.border-bottom {
+    border-bottom: 1px solid #21252B !important;
+}
+
+.hidden-text {
+    background-color: #1D1F23 !important;
+}
+
+.modal-content {
+    background-color: #282C34 !important;
+    color: #B7B8B9;
+}
+
+.modal-body button {
+    color: white;
+}
+
+.modal-footer {
+    border-top: 1px solid #3E4452 !important;;
+}
+
+.spoiler-text {
+    background-color: #1D1F23 !important;
+}
+
+.badge.bg-info {
+    color: #1D1F23 !important;
+}
+
+.scrollup {
+    color: #FFF;
+}
+
+.card {
+    box-shadow: 0 1px 3px 0 rgba(0, 0, 0, .1), 0 1px 2px 0 rgba(0, 0, 0, .06);
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+    word-wrap: break-word;
+    background-clip: border-box;
+    border: 0 solid rgba(0, 0, 0, .125);
+    border-radius: .25rem;
+    background-color: #1D1F23 !important;
+}
+
+.media-file {
+    background-color: #1D1F23 !important;
+}
