@@ -156,9 +156,17 @@ textarea, .form-control {
 }
 
 .card {
-    background-color: #282C34;
     color: #B7B8B9;
-    border: 1px solid #2e8cc2;
+    box-shadow: 0 1px 3px 0 rgba(0, 0, 0, .1), 0 1px 2px 0 rgba(0, 0, 0, .06);
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+    word-wrap: break-word;
+    background-clip: border-box;
+    border: 0 solid rgba(0, 0, 0, .125);
+    border-radius: .25rem;
+    background-color: #1D1F23 !important;
 }
 
 .bb-sticker ul {
@@ -240,18 +248,6 @@ textarea, .form-control {
     color: #B7B8B9;
 }
 
-img.rounded {
-    width: 150px;
-    height: 150px;
-    object-fit: cover;
-    text-align: center;
-}
-
-img.rounded1 {
-    width: 100px;
-    height: 100px;
-}
-
 .forum_topic {
     display: block;
 }
@@ -317,19 +313,6 @@ img.rounded1 {
 
 .scrollup {
     color: #FFF;
-}
-
-.card {
-    box-shadow: 0 1px 3px 0 rgba(0, 0, 0, .1), 0 1px 2px 0 rgba(0, 0, 0, .06);
-    position: relative;
-    display: flex;
-    flex-direction: column;
-    min-width: 0;
-    word-wrap: break-word;
-    background-clip: border-box;
-    border: 0 solid rgba(0, 0, 0, .125);
-    border-radius: .25rem;
-    background-color: #1D1F23 !important;
 }
 
 .media-file {
