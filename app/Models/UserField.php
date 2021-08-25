@@ -14,7 +14,8 @@ use Illuminate\Support\Collection;
  * @property int sort
  * @property string type
  * @property string name
- * @property int length
+ * @property int min
+ * @property int max
  * @property bool required
  *
  * @property Collection<UserData> data
@@ -36,6 +37,15 @@ class UserField extends BaseModel
     ];
 
     /**
+     * The attributes that should be cast to native types.
+     *
+     * @var string[]
+     */
+    protected $casts = [
+        'required' => 'bool',
+    ];
+
+    /**
      * Indicates if the model should be timestamped.
      *
      * @var bool
@@ -43,17 +53,16 @@ class UserField extends BaseModel
     public $timestamps = false;
 
     /**
-     * The attributes that aren't mass assignable.
+     * The attributes that are mass assignable.
      *
-     * @var array
+     * @var string[]
      */
-/*    protected $guarded = [];*/
-
     protected $fillable = [
         'sort',
         'type',
         'name',
-        'length',
+        'min',
+        'max',
         'required',
     ];
 

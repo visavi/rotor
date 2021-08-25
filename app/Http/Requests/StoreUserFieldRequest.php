@@ -17,16 +17,10 @@ class StoreUserFieldRequest extends FormRequest
         return [
             '_token'   => 'in:' . csrf_token(),
             'type'     => 'in:' . implode(',', UserField::TYPES),
-            'name'     => 'required',
-            'length'   => 'required',
+            'name'     => 'required|max:50',
+            'min'      => 'required',
+            'max'      => 'required',
             'required' => 'boolean'
         ];
     }
-
-/*    public function messages()
-    {
-        return [
-            'name.required' => 'Название обязательно',
-        ];
-    }*/
 }

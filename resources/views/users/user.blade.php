@@ -96,12 +96,12 @@
 
                 {{ __('users.last_visit') }}: {{ $user->getVisit() }}<br>
 
-                @foreach($user->data as $data)
-                    {{ $data->field->name }}:
-                    @if ($data->field->type === 'textarea')
-                        {{ bbCode($data->value) }}
+                @foreach($fields as $field)
+                    {{ $field->name }}:
+                    @if ($field->type === 'textarea')
+                        {{ bbCode($field->value) }}
                     @else
-                        {{ $data->value }}
+                        {{ $field->value }}
                     @endif
                     <br>
                 @endforeach

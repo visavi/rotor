@@ -39,7 +39,7 @@ class MailController extends Controller
                 ->email($email, ['email' => __('validator.email')]);
 
             if ($validator->isValid()) {
-                $subject = __('mails.email_from_site', ['sitename' => setting('title')], defaultSetting('language'));
+                $subject = __('mails.email_from_site', ['sitename' => setting('title')], setting('language'));
 
                 $message = str_replace(
                     '/uploads/stickers',
@@ -47,7 +47,7 @@ class MailController extends Controller
                     bbCode($message)->toHtml()
                 );
 
-                $message .= '<br><br>Email: ' . $name . ' &lt;' . $email . '&gt;<br>IP: ' . getIp() . '<br>Browser: ' . getBrowser() . '<br>' . __('main.sent_out', [], defaultSetting('language')) . ': ' . dateFixed(SITETIME, 'd.m.y / H:i');
+                $message .= '<br><br>Email: ' . $name . ' &lt;' . $email . '&gt;<br>IP: ' . getIp() . '<br>Browser: ' . getBrowser() . '<br>' . __('main.sent_out', [], setting('language')) . ': ' . dateFixed(SITETIME, 'd.m.y / H:i');
                 $data = [
                     'to'      => config('app.email'),
                     'subject' => $subject,

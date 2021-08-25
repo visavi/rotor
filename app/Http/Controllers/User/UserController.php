@@ -11,8 +11,10 @@ use App\Models\ChangeMail;
 use App\Models\Flood;
 use App\Models\Invite;
 use App\Models\User;
+use App\Models\UserField;
 use Exception;
 use GuzzleHttp\Exception\GuzzleException;
+use Illuminate\Database\Query\JoinClause;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\DB;
@@ -35,12 +37,22 @@ class UserController extends Controller
             abort(404, __('validator.user'));
         }
 
-        $invite  = Invite::query()->where('invite_user_id', $user->id)->first();
-        $user->load('lastBan', 'data.field');
-
+        $user->load('lastBan');
         $adminGroups = User::ADMIN_GROUPS;
+        $invite = Invite::query()->where('invite_user_id', $user->id)->first();
 
-        return view('users/user', compact('user', 'invite', 'adminGroups'));
+        $fields = UserField::query()
+            ->select('uf.*', 'ud.value')
+            ->from('user_fields as uf')
+            ->leftJoin('user_data as ud', static function (JoinClause $join) use ($user) {
+                $join->on('uf.id', 'ud.field_id')
+                    ->where('ud.user_id', $user->id);
+            })
+            ->whereNotNull('ud.value')
+            ->orderBy('uf.sort')
+            ->get();
+
+        return view('users/user', compact('user', 'invite', 'adminGroups', 'fields'));
     }
 
     /**
@@ -343,6 +355,16 @@ class UserController extends Controller
             abort(403, __('main.not_authorized'));
         }
 
+        $fields = UserField::query()
+            ->select('uf.*', 'ud.value')
+            ->from('user_fields as uf')
+            ->leftJoin('user_data as ud', static function (JoinClause $join) use ($user) {
+                $join->on('uf.id', 'ud.field_id')
+                    ->where('ud.user_id', $user->id);
+            })
+            ->orderBy('uf.sort')
+            ->get();
+
         if ($request->isMethod('post')) {
             $info     = $request->input('info');
             $name     = $request->input('name');
@@ -360,6 +382,16 @@ class UserController extends Controller
                 ->length($info, 0, 1000, ['info' => __('users.info_yourself_long')])
                 ->length($name, 3, 20, ['name' => __('users.name_short_or_long')], false);
 
+            foreach ($fields as $field) {
+                $validator->length(
+                    $request->input('field' . $field->id),
+                    $field->min,
+                    $field->max,
+                    ['field' . $field->id => 'Ошибка'],
+                    $field->required
+                );
+            }
+
             if ($validator->isValid()) {
                 $country = utfSubstr($country, 0, 30);
                 $city    = utfSubstr($city, 0, 50);
@@ -375,6 +407,15 @@ class UserController extends Controller
                     'info'     => $info,
                 ]);
 
+                foreach ($fields as $field) {
+                    $user->data()
+                        ->updateOrCreate([
+                            'field_id' => $field->id,
+                        ], [
+                            'value' => $request->input('field' . $field->id),
+                        ]);
+                }
+
                 setFlash('success', __('users.profile_success_changed'));
 
                 return redirect('profile');
@@ -384,7 +425,7 @@ class UserController extends Controller
             setFlash('danger', $validator->getErrors());
         }
 
-        return view('users/profile', compact('user'));
+        return view('users/profile', compact('user', 'fields'));
     }
 
     /**

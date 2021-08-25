@@ -19,7 +19,6 @@
             <div class="container-fluid">
                 <div class="row">
                     <div class="col-md-6">
-
                         <div class="mb-3{{ hasError('name') }}">
                             <label for="inputName" class="form-label">{{ __('users.name') }}:</label>
                             <input class="form-control" id="inputName" name="name" maxlength="20" value="{{ getInput('name', $user->name) }}">
@@ -85,13 +84,25 @@
                             @endif
                         </div>
                     </div>
-
                     <div class="col-md-12">
                         <div class="mb-3{{ hasError('info') }}">
                             <label for="info" class="form-label">{{ __('users.about') }}:</label>
                             <textarea class="form-control markItUp" id="info" cols="25" rows="5" name="info">{{ getInput('info', $user->info) }}</textarea>
                             <div class="invalid-feedback">{{ textError('info') }}</div>
                         </div>
+
+                        @foreach($fields as $field)
+                            <div class="mb-3{{ $field->required ? ' form-required' : null }}{{ hasError('field' . $field->id) }}">
+                                <label for="{{ 'field' . $field->id }}" class="form-label">{{ $field->name }}:</label>
+                                @if ($field->type === 'textarea')
+                                    <textarea class="form-control markItUp" id="{{ 'field' . $field->id }}" cols="25" rows="5" name="{{ 'field' . $field->id }}">{{ getInput('field' . $field->id, $field->value) }}</textarea>
+                                @else
+                                    <input class="form-control" id="{{ 'field' . $field->id }}" name="{{ 'field' . $field->id }}" maxlength="{{ $field->length }}" value="{{ getInput('field' . $field->id, $field->value) }}">
+                                @endif
+                                <div class="invalid-feedback">{{ textError('field' . $field->id) }}</div>
+                            </div>
+                        @endforeach
+
                         <button class="btn btn-primary">{{ __('main.change') }}</button>
                     </div>
                 </div>

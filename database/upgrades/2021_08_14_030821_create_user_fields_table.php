@@ -20,7 +20,8 @@ final class CreateUserFieldsTable extends Migration
                 $table->integer('sort');
                 $table->enum('type', [UserField::INPUT, UserField::TEXTAREA]);
                 $table->string('name', 50);
-                $table->integer('length');
+                $table->integer('min');
+                $table->integer('max');
                 $table->boolean('required')->default(false);
             });
         }

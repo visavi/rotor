@@ -218,6 +218,15 @@ return [
     'from' => 'From',
     'to'   => 'To',
 
+    'yes' => 'Yes',
+    'no'  => 'No',
+
+    'and' => 'and',
+    'or'  => 'or',
+
+    'min' => 'Min',
+    'max' => 'Max',
+
     'text_missing'             => 'Missing message text!',
     'message_added_success'    => 'Message successfully added!',
     'message_edited_success'   => 'Post successfully edited!',
@@ -249,7 +258,4 @@ return [
     'online'        => 'Online',
     'who_online'    => 'Who is on the site',
     'guests_online' => 'There are :count guests on the site',
-
-    'and' => 'and',
-    'or'  => 'or',
 ];

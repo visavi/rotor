@@ -8,7 +8,7 @@
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
             <li class="breadcrumb-item"><a href="/admin">{{ __('index.panel') }}</a></li>
             <li class="breadcrumb-item active"><a href="/admin/user-fields">{{ __('index.user_fields') }}</a></li>
-            <li class="breadcrumb-item active">{{ __('admin.user_fields.create') }}</li>
+            <li class="breadcrumb-item active">{{ __('admin.user_fields.create_field') }}</li>
         </ol>
     </nav>
 @stop

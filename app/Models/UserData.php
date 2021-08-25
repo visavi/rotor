@@ -27,11 +27,14 @@ class UserData extends BaseModel
     public $timestamps = false;
 
     /**
-     * The attributes that aren't mass assignable.
+     * The attributes that are mass assignable.
      *
-     * @var array
+     * @var string[]
      */
-    protected $guarded = [];
+    protected $fillable = [
+        'value',
+        'field_id',
+    ];
 
     /**
      * Return field

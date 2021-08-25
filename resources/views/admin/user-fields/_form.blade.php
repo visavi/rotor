@@ -1,11 +1,11 @@
 <div class="mb-3">
-    <label for="type" class="form-label">{{ __('admin.user_fields.type') }}:</label>
+    <label for="type" class="form-label">{{ __('main.type') }}:</label>
 
     <?php $inputType = old('type', $field->type); ?>
     <select class="form-select{{ hasError('type') }}" name="type" id="type">
         @foreach ($types as $type)
             <?php $selected = ($type === $inputType) ? ' selected' : ''; ?>
-            <option value="{{ $type }}"{{ $selected }}>{{ __('admin.paid_adverts.' . $type) }}</option>
+            <option value="{{ $type }}"{{ $selected }}>{{ __('admin.user_fields.' . $type) }}</option>
         @endforeach
     </select>
 
@@ -13,8 +13,8 @@
 </div>
 
 <div class="mb-3">
-    <label for="name" class="form-label">{{ __('admin.user_fields.name') }}:</label>
-    <input type="text" name="name" class="form-control{{ hasError('name') }}" id="name" maxlength="50" value="{{ old('name', $field->name) }}">
+    <label for="name" class="form-label">{{ __('main.title') }}:</label>
+    <input type="text" name="name" class="form-control{{ hasError('name') }}" id="name" maxlength="50" value="{{ old('name', $field->name) }}" required>
     <div class="invalid-feedback">{{ textError('name') }}</div>
 </div>
 
@@ -25,9 +25,15 @@
 </div>
 
 <div class="mb-3">
-    <label for="length" class="form-label">{{ __('admin.user_fields.length') }}:</label>
-    <input type="number" name="length" class="form-control{{ hasError('length') }}" id="length" value="{{ old('length', $field->length) }}">
-    <div class="invalid-feedback">{{ textError('length') }}</div>
+    <label for="min" class="form-label">{{ __('main.min') }}:</label>
+    <input type="number" name="min" class="form-control{{ hasError('min') }}" id="min" value="{{ old('min', $field->min) }}" required>
+    <div class="invalid-feedback">{{ textError('min') }}</div>
+</div>
+
+<div class="mb-3">
+    <label for="max" class="form-label">{{ __('main.max') }}:</label>
+    <input type="number" name="max" class="form-control{{ hasError('max') }}" id="max" value="{{ old('max', $field->max) }}" required>
+    <div class="invalid-feedback">{{ textError('max') }}</div>
 </div>
 
 <div class="form-check">
@@ -37,4 +43,3 @@
 </div>
 
 <button class="btn btn-primary">{{ __('main.save') }}</button>
-

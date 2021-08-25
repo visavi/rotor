@@ -1,11 +1,11 @@
 @if (setting('captcha_type') === 'recaptcha_v2')
-    <script src="//www.google.com/recaptcha/api.js?hl={{ setting('language') }}" async defer></script>
+    <script src="//www.google.com/recaptcha/api.js?hl={{ app()->getLocale() }}" async defer></script>
     <div class="g-recaptcha" data-sitekey="{{ setting('recaptcha_public') }}"></div>
     <div class="invalid-feedback">{{ textError('protect') }}</div>
 @endif
 
 @if (setting('captcha_type') === 'recaptcha_v3')
-    <script src="//www.google.com/recaptcha/api.js?onload=recaptchaCallback&amp;render={{ setting('recaptcha_public') }}&amp;hl={{ setting('language') }}" async defer></script>
+    <script src="//www.google.com/recaptcha/api.js?onload=recaptchaCallback&amp;render={{ setting('recaptcha_public') }}&amp;hl={{ app()->getLocale() }}" async defer></script>
     <script>
         function recaptchaCallback() {
             grecaptcha.ready(function () {

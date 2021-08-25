@@ -110,5 +110,6 @@ return [
     'page_editor'       => 'Page editor',
     'user_cleaning'     => 'User cleaning',
     'paid_adverts'      => 'Paid adverts',
+    'user_fields'       => 'User fields',
     'modules'           => 'Modules',
 ];

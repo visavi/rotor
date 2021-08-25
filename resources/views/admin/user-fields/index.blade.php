@@ -34,9 +34,10 @@
                 </div>
 
                 <div class="section-content">
-                    <span class="badge {{ $field->type === 'input' ? 'bg-success' : 'bg-primary' }}">Тип:  {{ $field->type }}</span><br>
-                    Размер: {{ $field->length }}<br>
-                    Обязательное: {{ $field->required }}
+                    <span class="badge {{ $field->type === 'input' ? 'bg-success' : 'bg-primary' }}">{{ __('main.type') }}: {{ __('admin.user_fields.' . $field->type) }}</span><br>
+                    {{ __('main.min') }}: {{ $field->min }},
+                    {{ __('main.max') }}: {{ $field->max }}<br>
+                    {{ __('admin.user_fields.required') }}: {{ $field->required ? __('main.yes') : __('main.no') }}
                 </div>
             </div>
         @endforeach

@@ -74,7 +74,7 @@ use Illuminate\Support\HtmlString;
  * @property int updated_at
  * @property int created_at
  *
- * @property Collection data
+ * @property Collection<UserData> data
  */
 class User extends BaseModel implements
     AuthenticatableContract,

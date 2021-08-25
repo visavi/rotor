@@ -39,6 +39,11 @@ class AuthenticateCookie
 
             $user->updatePrivate();
             $user->gettingBonus();
+
+            /* Установка сессионных переменных */
+            if ($request->session()->missing('hits')) {
+                $request->session()->put('hits', 0);
+            }
         }
 
         $this->setSetting($user, $request);
@@ -85,27 +90,22 @@ class AuthenticateCookie
      */
     private function setSetting($user, Request $request): void
     {
-        $language = $user->language ?? defaultSetting('language');
-        $theme = $user->themes ?? defaultSetting('themes');
+        $language = $user->language ?? setting('language');
+        $theme = $user->themes ?? setting('themes');
 
         if ($request->session()->has('language')) {
             $language = $request->session()->get('language');
         }
 
         if (! file_exists(resource_path('lang/' . $language))) {
-            $language = defaultSetting('language');
+            $language = setting('language');
         }
 
         if (! file_exists(public_path('themes/' . $theme))) {
-            $theme = defaultSetting('themes');
+            $theme = setting('themes');
         }
 
         App::setLocale($language);
         View::addLocation(public_path('themes/' . $theme . '/views'));
-
-        /* Установка сессионных переменных */
-        if ($request->session()->missing('hits')) {
-            $request->session()->put('hits', 0);
-        }
     }
 }

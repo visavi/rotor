@@ -18,9 +18,9 @@ final class CreateUserDataTable extends Migration
                 $table->increments('id');
                 $table->integer('user_id');
                 $table->integer('field_id');
-                $table->text('value');
+                $table->text('value')->nullable();
 
-                $table->index(['user_id', 'field_id']);
+                $table->unique(['user_id', 'field_id']);
             });
         }
     }

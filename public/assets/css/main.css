@@ -326,6 +326,11 @@ textarea.form-control {
   max-height: 340px;
 }
 
+.form-required .form-label:after {
+    content:"*";
+    color:red;
+}
+
 /* Fix close button bootbox 5.5.2 */
 .bootbox-close-button {
     margin: -0.8rem -0.5rem -0.5rem auto;

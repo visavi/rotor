@@ -1660,33 +1660,28 @@ function setFlash(string $status, $message)
  */
 function setInput(array $data)
 {
-    session()->put('input', json_encode($data));
+    session()->flash('input', json_encode($data));
 }
 
 /**
  * Возвращает значение из POST данных
  *
- * @param string $name Имя поля
+ * @param string $key     Имя поля
  * @param mixed  $default
  *
  * @return mixed Сохраненное значение
  *
  * @deprecated since 10.1 - Use old('field', 'default');
  */
-function getInput(string $name, $default = null)
+function getInput(string $key, $default = null)
 {
     if (session()->missing('input')) {
         return $default;
     }
 
-    $session = json_decode(session()->get('input'), true);
-    $input   = Arr::pull($session, $name);
+    $input = json_decode(session()->get('input', []), true);
 
-    if ($input !== null) {
-        session()->put('input', json_encode($session));
-    }
-
-    return $input ?? $default;
+    return Arr::get($input, $key, $default);
 }
 
 /**
@@ -2105,7 +2100,7 @@ function ipBan(bool $clear = false): array
 }
 
 /**
- * Возвращает пользовательские настройки сайта по ключу
+ * Возвращает настройки сайта по ключу
  *
  * @param string|null $key     Ключ массива
  * @param mixed       $default Значение по умолчанию
@@ -2113,25 +2108,6 @@ function ipBan(bool $clear = false): array
  * @return mixed Данные
  */
 function setting(?string $key = null, $default = null)
-{
-    static $settings;
-
-    if (! $settings) {
-        $settings = Setting::getSettings();
-    }
-
-    return $key ? ($settings[$key] ?? $default) : $settings;
-}
-
-/**
- * Возвращает дефолтные настройки сайта по ключу
- *
- * @param string|null $key     Ключ массива
- * @param string|null $default Значение по умолчанию
- *
- * @return array|string|null Данные
- */
-function defaultSetting(?string $key = null, ?string $default = null)
 {
     static $settings;
 

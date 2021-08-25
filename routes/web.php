@@ -578,13 +578,6 @@ Route::group(['prefix' => 'admin', 'middleware' => 'check.admin'], function () {
             ->parameters(['user-fields' => 'id'])
             ->except('show');
 
-        /*  Route::get('/user-fields', [\App\Http\Controllers\Admin\UserFieldController::class, 'index']);
-            Route::post('/user-fields', [\App\Http\Controllers\Admin\UserFieldController::class, 'store']);
-            Route::get('/user-fields/create', [\App\Http\Controllers\Admin\UserFieldController::class, 'create']);
-            Route::get('/user-fields/{id}/edit', [\App\Http\Controllers\Admin\UserFieldController::class, 'edit']);
-            Route::put('/user-fields/{id}', [\App\Http\Controllers\Admin\UserFieldController::class, 'update']);
-            Route::delete('/user-fields/{id}', [\App\Http\Controllers\Admin\UserFieldController::class, 'destroy']);*/
-
         /* Чистка пользователей */
         Route::match(['get', 'post'], '/delusers', [\App\Http\Controllers\Admin\DelUserController::class, 'index']);
         Route::post('/delusers/clear', [\App\Http\Controllers\Admin\DelUserController::class, 'clear']);
