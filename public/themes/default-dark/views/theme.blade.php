@@ -16,9 +16,10 @@
     @stack('styles')
 </head>
 <body class="app">
+<?php view()->addNamespace('Default', public_path('themes/default/views')); ?>
 
-@include('navbar')
-@include('sidebar')
+@include('Default::navbar')
+@include('Default::sidebar')
 
 <main class="app-content">
     <div class="app-title">
@@ -38,7 +39,7 @@
     @yield('advertBottom')
 </main>
 
-@include('footer')
+@include('Default::footer')
 <script src="{{ mix('/assets/js/dist/manifest.js') }}"></script>
 <script src="{{ mix('/assets/js/dist/vendor.js') }}"></script>
 <script src="{{ mix('/assets/js/dist/lang.js') }}"></script>

@@ -10,6 +10,7 @@ const path = require('path');
  | file for the application as well as bundling up all the JS files.
  |
  */
+mix.setPublicPath('./public');
 
 mix
     /* default */
@@ -33,8 +34,6 @@ mix
 
     .extract()
     .version();
-
-mix.setPublicPath('./public');
 
 mix.copy('node_modules/@fortawesome/fontawesome-free/webfonts/*', 'public/assets/fonts/');
 
