@@ -34,7 +34,7 @@
                 <input class="form-control" name="login" id="inputLogin" maxlength="50" value="{{ getInput('login', $cookieLogin) }}" required>
 
                 <label for="inputPassword" class="form-label">{{ __('users.password') }}:</label>
-                <input class="form-control" name="pass" type="password" id="inputPassword" maxlength="20" required>
+                <input class="form-control" name="password" type="password" id="inputPassword" maxlength="20" value="{{ getInput('password') }}" required>
             </div>
 
             <div class="form-check">

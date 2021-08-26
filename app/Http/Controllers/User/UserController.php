@@ -282,18 +282,18 @@ class UserController extends Controller
         $isFlood     = $flood->isFlood();
 
         if ($request->isMethod('post')) {
-            if ($request->has(['login', 'pass'])) {
+            if ($request->has(['login', 'password'])) {
                 if ($isFlood) {
                     $validator->true(captchaVerify(), ['protect' => __('validator.captcha')]);
                 }
 
                 if ($validator->isValid()) {
                     $login    = utfLower($request->input('login'));
-                    $pass     = $request->input('pass');
+                    $password = $request->input('password');
                     $remember = $request->boolean('remember');
 
                     /** @var User $user */
-                    if ($user = User::auth($login, $pass, $remember)) {
+                    if ($user = User::auth($login, $password, $remember)) {
                         setFlash('success', __('users.welcome', ['login' => $user->getName()]));
 
                         return redirect($request->input('return', '/'));

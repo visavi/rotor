@@ -54,14 +54,14 @@
 
             <div class="mb-3{{ hasError('password') }}">
                 <label for="inputPassword" class="form-label">{{ __('users.password') }}:</label>
-                <input class="form-control" name="password" type="password" id="inputPassword" maxlength="20" required>
+                <input class="form-control" name="password" type="password" id="inputPassword" maxlength="20" value="{{ getInput('password') }}" required>
                 <div class="invalid-feedback">{{ textError('password') }}</div>
                 <span class="text-muted fst-italic">{{ __('users.password_requirements') }}</span>
             </div>
 
             <div class="mb-3{{ hasError('password2') }}">
                 <label for="inputPassword2" class="form-label">{{ __('users.confirm_password') }}:</label>
-                <input class="form-control" name="password2" type="password" id="inputPassword2" maxlength="20" required>
+                <input class="form-control" name="password2" type="password" id="inputPassword2" maxlength="20" value="{{ getInput('password2') }}" required>
                 <div class="invalid-feedback">{{ textError('password2') }}</div>
             </div>
 
