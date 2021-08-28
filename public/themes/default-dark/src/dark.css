@@ -147,6 +147,11 @@
     background-color: #1D1F23 !important;
 }
 
+.table, .table-striped tr  {
+    color: #B7B8B9 !important;
+    border-color: #3E4452 !important;
+}
+
 .bb-sticker ul {
     background-color: #1D1F23 !important;
     border: 1px solid #35373f !important;
@@ -282,10 +287,6 @@
 
 .scrollup {
     color: #FFF;
-}
-
-.media-file {
-    background-color: #1D1F23 !important;
 }
 
 .performance {
