@@ -94,6 +94,10 @@ class InstallController extends Controller
             Artisan::call('key:generate', ['--force' => true]);
         }
 
+        Artisan::call('cache:clear');
+        Artisan::call('route:clear');
+        Artisan::call('config:clear');
+
         return view('install/migrate', compact('output'));
     }
 
