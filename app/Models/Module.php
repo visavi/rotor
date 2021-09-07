@@ -51,7 +51,11 @@ class Module extends BaseModel
         $migrationPath = $modulePath . '/migrations';
 
         if (file_exists($migrationPath)) {
-            Artisan::call('migrate --realpath --path=' . $migrationPath);
+            Artisan::call('migrate', [
+                '--force'    => true,
+                '--realpath' => true,
+                '--path'     => $migrationPath,
+            ]);
         }
     }
 
@@ -73,7 +77,11 @@ class Module extends BaseModel
                 ->whereIn('migration', $migrationNames)
                 ->update(['batch' => $nextBatchNumber]);
 
-            Artisan::call('migrate:rollback --realpath --path=' . $migrationPath);
+            Artisan::call('migrate:rollback', [
+                '--force'    => true,
+                '--realpath' => true,
+                '--path'     => $migrationPath,
+            ]);
         }
     }
 
@@ -93,7 +101,11 @@ class Module extends BaseModel
             return;
         }
 
-        $filesystem->symlink($modulesPath, $originPath, true);
+        if (function_exists('symlink')) {
+            $filesystem->symlink($modulesPath, $originPath, true);
+        } else {
+            $filesystem->mirror($modulesPath, $originPath, null, ['override' => true, 'delete' => true]);
+        }
     }
 
     /**
