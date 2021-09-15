@@ -100,15 +100,7 @@ class HomeController extends Controller
             $phrase = $phrase->getPhrase(setting('captcha_maxlength'), setting('captcha_symbols'));
 
             $captcha = new AnimatedCaptchaBuilder();
-            $captcha->setPhrase($phrase)
-                ->setWidth(150)
-                ->setHeight(50)
-                //->setTextColor(0, 0, 0)
-                //->setBackgroundColor(255, 255, 255)
-                //->setFont('/path')
-                ->setWindowWidth(60)
-                ->setPixelPerFrame(15)
-                ->setDelayBetweenFrames(20);
+            $captcha->setPhrase($phrase);
 
             $captcha = $captcha->render();
         } else {
