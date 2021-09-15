@@ -46,6 +46,12 @@ class GuestbookController extends Controller
             ->length($msg, 5, setting('guesttextlength'), ['msg' => __('validator.text')])
             ->false($flood->isFlood(), ['msg' => __('validator.flood', ['sec' => $flood->getPeriod()])]);
 
+        if (! $user) {
+            \Illuminate\Support\Facades\Log::info('BOT DETECT: code:'. $request->session()->get('protect') . PHP_EOL. 'ip:'. getIP() . PHP_EOL . print_r($request->all(), true));
+        }
+
+
+
         /* Проверка для гостей */
         if (! $user && setting('bookadds')) {
             $validator->true(captchaVerify(), ['protect' => __('validator.captcha')]);

@@ -18,11 +18,11 @@
     <input type="hidden" name="protect" id="recaptchaResponse">
 @endif
 
-@if (setting('captcha_type') === 'graphical')
+@if (in_array(setting('captcha_type'), ['graphical', 'animated'], true))
     <div class="mb-3{{ hasError('protect') }}">
         <label for="protect" class="form-label">{{ __('main.verification_code') }}:</label><br>
         <img src="/captcha" onclick="this.src='/captcha?'+Math.random()" class="rounded cursor-pointer" alt="Captcha"><br>
-        <input class="form-control" name="protect" id="protect" maxlength="6" required>
+        <input class="form-control" name="protect" id="protect" maxlength="8" required>
         <div class="invalid-feedback">{{ textError('protect') }}</div>
     </div>
 @endif

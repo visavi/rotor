@@ -444,10 +444,8 @@ function showCounter(): ?HtmlString
 function statsUsers(): string
 {
     return Cache::remember('statUsers', 1800, static function () {
-        $startDay = mktime(0, 0, 0, dateFixed(SITETIME, 'n', true));
-
         $stat = User::query()->count();
-        $new  = User::query()->where('created_at', '>', $startDay)->count();
+        $new  = User::query()->where('created_at', '>', strtotime('-1 day', SITETIME))->count();
 
         if ($new) {
             $stat .= '/+' . $new;
@@ -2172,7 +2170,7 @@ function captchaVerify(): bool
         return $response->isSuccess();
     }
 
-    if (setting('captcha_type') === 'graphical') {
+    if (in_array(setting('captcha_type'), ['graphical', 'animated'], true)) {
         return strtolower($request->input('protect')) === $request->session()->get('protect');
     }
 

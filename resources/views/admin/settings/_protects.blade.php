@@ -4,6 +4,21 @@
 
 <form method="post">
     @csrf
+    <?php $inputCaptcha = getInput('sets.captcha_type', $settings['captcha_type']); ?>
+
+    <div class="mb-3{{ hasError('sets[captcha_type]') }}">
+        <label for="captcha_type" class="form-label">{{ __('main.type') }}:</label>
+        <select class="form-select" id="captcha_type" name="sets[captcha_type]">
+
+            @foreach ($protects as $key => $captcha)
+                <?php $selected = ($key === $inputCaptcha) ? ' selected' : ''; ?>
+                <option value="{{ $key }}"{{ $selected }}>{{ $captcha }}</option>
+            @endforeach
+
+        </select>
+        <div class="invalid-feedback">{{ textError('sets[captcha_type]') }}</div>
+    </div>
+
     <div class="mb-3{{ hasError('sets[captcha_symbols]') }}">
         <label for="captcha_symbols" class="form-label">{{ __('settings.captcha_valid_symbols') }} [a-z0-9]:</label>
         <input pattern="[a-z0-9]+" type="text" class="form-control" id="captcha_symbols" name="sets[captcha_symbols]" maxlength="36" value="{{ getInput('sets.captcha_symbols', $settings['captcha_symbols']) }}" required>
@@ -11,8 +26,8 @@
     </div>
 
     <div class="mb-3{{ hasError('sets[captcha_maxlength]') }}">
-        <label for="captcha_maxlength" class="form-label">{{ __('settings.captcha_symbols') }} [4-6]:</label>
-        <input type="number" min="4" max="6" class="form-control" id="captcha_maxlength" name="sets[captcha_maxlength]" maxlength="1" value="{{ getInput('sets.captcha_maxlength', $settings['captcha_maxlength']) }}" required>
+        <label for="captcha_maxlength" class="form-label">{{ __('settings.captcha_symbols') }} [4-8]:</label>
+        <input type="number" min="4" max="8" class="form-control" id="captcha_maxlength" name="sets[captcha_maxlength]" maxlength="1" value="{{ getInput('sets.captcha_maxlength', $settings['captcha_maxlength']) }}" required>
         <div class="invalid-feedback">{{ textError('sets[captcha_maxlength]') }}</div>
     </div>
 
@@ -41,21 +56,6 @@
     </div>
 
     <h3 class="mt-3">reCaptcha</h3>
-
-    <?php $inputCaptcha = getInput('sets.captcha_type', $settings['captcha_type']); ?>
-
-    <div class="mb-3{{ hasError('sets[captcha_type]') }}">
-        <label for="captcha_type" class="form-label">{{ __('main.type') }}:</label>
-        <select class="form-select" id="captcha_type" name="sets[captcha_type]">
-
-            @foreach ($protects as $key => $captcha)
-                <?php $selected = ($key === $inputCaptcha) ? ' selected' : ''; ?>
-                <option value="{{ $key }}"{{ $selected }}>{{ $captcha }}</option>
-            @endforeach
-
-        </select>
-        <div class="invalid-feedback">{{ textError('sets[captcha_type]') }}</div>
-    </div>
 
     <div class="mb-3{{ hasError('sets[recaptcha_public]') }}">
         <label for="recaptcha_public" class="form-label">{{ __('settings.captcha_public') }}:</label>

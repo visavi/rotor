@@ -166,6 +166,7 @@ return [
     'hits_hosts'         => 'Хиты | Хосты',
     'hits_all_hosts_all' => 'Хиты всего | Хосты всего',
     'graphical'          => 'Графический',
+    'animated'           => 'Анимированный',
 
     'site_open'         => 'Сайт открыт',
     'site_closed_guest' => 'Закрыто для гостей',

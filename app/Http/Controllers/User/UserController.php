@@ -387,7 +387,7 @@ class UserController extends Controller
                     $request->input('field' . $field->id),
                     $field->min,
                     $field->max,
-                    ['field' . $field->id => 'Ошибка'],
+                    ['field' . $field->id => __('validator.text')],
                     $field->required
                 );
             }
@@ -602,13 +602,13 @@ class UserController extends Controller
             abort(403, __('main.not_authorized'));
         }
 
-        $email    = strtolower($request->input('email'));
+        $email    = strtolower((string) $request->input('email'));
         $password = $request->input('password');
 
         $validator->equal($request->input('_token'), csrf_token(), __('validator.token'))
             ->notEqual($email, $user->email, ['email' => __('users.email_different')])
             ->email($email, ['email' => __('validator.email')])
-            ->true(password_verify($password, $user->password), ['password' => __('users.password_different')]);
+            ->true(password_verify((string) $password, $user->password), ['password' => __('users.password_different')]);
 
         $regMail = User::query()->where('email', $email)->first();
         $validator->empty($regMail, ['email' => __('users.email_already_exists')]);
@@ -801,7 +801,7 @@ class UserController extends Controller
         $oldpass  = $request->input('oldpass');
 
         $validator->equal($request->input('_token'), csrf_token(), __('validator.token'))
-            ->true(password_verify($oldpass, $user->password), ['oldpass' => __('users.password_different')])
+            ->true(password_verify((string) $oldpass, $user->password), ['oldpass' => __('users.password_different')])
             ->length($newpass, 6, 20, ['newpass' => __('users.password_length_requirements')])
             ->notEqual($user->login, $newpass, ['newpass' => __('users.login_different')])
             ->equal($newpass, $newpass2, ['newpass2' => __('users.passwords_different')]);

@@ -166,6 +166,7 @@ return [
     'hits_hosts'         => 'Hits | Hosts',
     'hits_all_hosts_all' => 'Hits total | Hosts total',
     'graphical'          => 'Graphical',
+    'animated'           => 'Animated',
 
     'site_open'         => 'The site is open',
     'site_closed_guest' => 'Closed to guests',

@@ -11,6 +11,8 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
 use Symfony\Component\HttpFoundation\Response;
+use Visavi\Captcha\PhraseBuilder as AnimatedPhraseBuilder;
+use Visavi\Captcha\CaptchaBuilder as AnimatedCaptchaBuilder;
 
 class HomeController extends Controller
 {
@@ -68,10 +70,10 @@ class HomeController extends Controller
         }
 
         if (
-            ! $ban->user_id &&
-            $ban->created_at < strtotime('-1 minute', SITETIME) &&
-            $request->isMethod('post') &&
-            captchaVerify()
+            ! $ban->user_id
+            && $ban->created_at < strtotime('-1 minute', SITETIME)
+            && $request->isMethod('post')
+            && captchaVerify()
         ) {
             $ban->delete();
             ipBan(true);
@@ -93,18 +95,40 @@ class HomeController extends Controller
      */
     public function captcha(Request $request): Response
     {
-        $phrase = new PhraseBuilder();
-        $phrase = $phrase->build(setting('captcha_maxlength'), setting('captcha_symbols'));
+        if (setting('captcha_type') === 'animated') {
+            $phrase = new AnimatedPhraseBuilder();
+            $phrase = $phrase->getPhrase(setting('captcha_maxlength'), setting('captcha_symbols'));
 
-        $builder = new CaptchaBuilder($phrase);
-        $builder->setMaxOffset(setting('captcha_offset'));
-        $builder->setMaxAngle(setting('captcha_angle'));
-        $builder->setDistortion(setting('captcha_distortion'));
-        $builder->setInterpolation(setting('captcha_interpolation'));
+            $captcha = new AnimatedCaptchaBuilder();
+            $captcha->setPhrase($phrase)
+                ->setWidth(150)
+                ->setHeight(50)
+                //->setTextColor(0, 0, 0)
+                //->setBackgroundColor(255, 255, 255)
+                //->setFont('/path')
+                ->setWindowWidth(60)
+                ->setPixelPerFrame(15)
+                ->setDelayBetweenFrames(20);
 
-        $request->session()->put('protect', $builder->getPhrase());
+            $captcha = $captcha->render();
+        } else {
+            $phrase = new PhraseBuilder();
+            $phrase = $phrase->build(setting('captcha_maxlength'), setting('captcha_symbols'));
 
-        return response($builder->build()->get())->header('Content-Type', 'image/jpeg');
+            $captcha = new CaptchaBuilder($phrase);
+            $captcha->setMaxOffset(setting('captcha_offset'))
+                ->setMaxAngle(setting('captcha_angle'))
+                ->setDistortion(setting('captcha_distortion'))
+                ->setInterpolation(setting('captcha_interpolation'))
+                ->build();
+
+            $captcha = $captcha->get();
+        }
+
+        $request->session()->put('protect', $phrase);
+
+        return response($captcha)
+            ->header('Content-Type', setting('captcha_type') === 'animated' ? 'image/gif' : 'image/jpeg');
     }
 
     /**
