@@ -174,13 +174,12 @@
                 </div>
             @endforeach
 
+            <div class="clearfix mb-3">
+                <button class="btn btn-sm btn-danger float-end">{{ __('main.delete_selected') }}</button>
+            </div>
         @else
             {{ showError(__('forums.empty_posts')) }}
         @endif
-
-        <div class="float-end">
-            <button class="btn btn-sm btn-danger">{{ __('main.delete_selected') }}</button>
-        </div>
     </form>
 
     {{ $posts->links() }}

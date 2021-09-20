@@ -15,7 +15,13 @@
 
 @section('content')
     <div class="alert alert-info">
-        <i class="fa fa-pencil-alt"></i> <b>{{ $post->user->getName() }}</b>
+        <i class="fa fa-pencil-alt"></i>
+        @if ($post->user_id)
+            <b>{{ $post->user->getName() }}</b>
+        @else
+            <b>{{ $post->guest_name ?: setting('guestsuser') }}</b>
+        @endif
+
         <small class="section-date text-muted fst-italic">{{ dateFixed($post->created_at) }}</small><br>
         <div>{{ __('main.message') }}: {{ bbCode($post->text) }}</div>
     </div>

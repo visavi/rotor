@@ -124,7 +124,7 @@ class UserController extends Controller
                 $password     = $request->input('password');
                 $password2    = $request->input('password2');
                 $invite       = setting('invite') ? $request->input('invite') : '';
-                $email        = strtolower($request->input('email'));
+                $email        = strtolower((string) $request->input('email'));
                 $domain       = utfSubstr(strrchr($email, '@'), 1);
                 $gender       = $request->input('gender') === User::MALE ? User::MALE : User::FEMALE;
                 $level        = User::USER;
@@ -453,7 +453,7 @@ class UserController extends Controller
 
         /* Повторная отправка */
         if ($request->has('email') && $request->isMethod('post')) {
-            $email  = strtolower($request->input('email'));
+            $email  = strtolower((string) $request->input('email'));
             $domain = utfSubstr(strrchr($email, '@'), 1);
 
             $validator->equal($request->input('_token'), csrf_token(), __('validator.token'))

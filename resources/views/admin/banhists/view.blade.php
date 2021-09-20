@@ -45,8 +45,8 @@
                 </div>
             @endforeach
 
-            <div class="float-end">
-                <button class="btn btn-sm btn-danger">{{ __('main.delete_selected') }}</button>
+            <div class="clearfix mb-3">
+                <button class="btn btn-sm btn-danger float-end">{{ __('main.delete_selected') }}</button>
             </div>
         </form>
     @else

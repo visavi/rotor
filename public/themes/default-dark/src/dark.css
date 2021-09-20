@@ -276,12 +276,12 @@
     background-color: #1D1F23 !important;
 }
 
-.badge.bg-light {
+.bg-light {
     background-color: #282C34 !important;
     color: #B7B8B9 !important;
 }
 
-.badge.bg-info {
+.bg-info {
     color: #1D1F23 !important;
 }
 

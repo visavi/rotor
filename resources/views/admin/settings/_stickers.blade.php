@@ -12,16 +12,16 @@
         <input type="hidden" value="1024" name="mods[stickermaxsize]">
     </div>
 
-    <div class="mb-3{{ hasError('sets[stickermaxweight]') }}">
-        <label for="stickermaxweight" class="form-label">{{ __('settings.stickers_max_weight') }} (px):</label>
-        <input type="number" class="form-control" id="stickermaxweight" name="sets[stickermaxweight]" maxlength="3" value="{{ getInput('sets.stickermaxweight', $settings['stickermaxweight']) }}" required>
-        <div class="invalid-feedback">{{ textError('sets[stickermaxweight]') }}</div>
-    </div>
-
     <div class="mb-3{{ hasError('sets[stickerminweight]') }}">
         <label for="stickerminweight" class="form-label">{{ __('settings.stickers_min_weight') }} (px):</label>
         <input type="number" class="form-control" id="stickerminweight" name="sets[stickerminweight]" maxlength="3" value="{{ getInput('sets.stickerminweight', $settings['stickerminweight']) }}" required>
         <div class="invalid-feedback">{{ textError('sets[stickerminweight]') }}</div>
+    </div>
+
+    <div class="mb-3{{ hasError('sets[stickermaxweight]') }}">
+        <label for="stickermaxweight" class="form-label">{{ __('settings.stickers_max_weight') }} (px):</label>
+        <input type="number" class="form-control" id="stickermaxweight" name="sets[stickermaxweight]" maxlength="3" value="{{ getInput('sets.stickermaxweight', $settings['stickermaxweight']) }}" required>
+        <div class="invalid-feedback">{{ textError('sets[stickermaxweight]') }}</div>
     </div>
 
     <div class="mb-3{{ hasError('sets[stickerlist]') }}">

@@ -15,7 +15,12 @@
 
 @section('content')
     <p>
-        <i class="fa fa-pencil-alt"></i> <b>{{ $post->user->getName() }}</b>
+        <i class="fa fa-pencil-alt"></i>
+        @if ($post->user_id)
+             <b>{{ $post->user->getName() }}</b>
+        @else
+            <b>{{ $post->guest_name ?: setting('guestsuser') }}</b>
+        @endif
         <small class="section-date text-muted fst-italic">{{ dateFixed($post->created_at) }}</small>
     </p>
 

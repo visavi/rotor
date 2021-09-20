@@ -132,7 +132,7 @@ class InstallController extends Controller
         $login     = $request->input('login');
         $password  = $request->input('password');
         $password2 = $request->input('password2');
-        $email     = $request->input('email');
+        $email     = strtolower((string) $request->input('email'));
 
         if ($request->isMethod('post')) {
             $validator->regex($login, '|^[a-z0-9\-]+$|i', ['login' => __('validator.login')])
@@ -160,7 +160,7 @@ class InstallController extends Controller
                 $user = User::query()->create([
                     'login'      => $login,
                     'password'   => password_hash($password, PASSWORD_BCRYPT),
-                    'email'      => strtolower($email),
+                    'email'      => $email,
                     'level'      => User::BOSS,
                     'gender'     => User::MALE,
                     'themes'     => 'default',
