@@ -49,7 +49,7 @@ class AjaxController extends Controller
      */
     public function bbCode(Request $request): View
     {
-        $message = $request->input('data');
+        $message = (string) $request->input('data');
 
         return view('app/_bbcode', compact('message'));
     }
@@ -73,12 +73,12 @@ class AjaxController extends Controller
         switch ($type) :
             case Guestbook::$morphName:
                 $model = Guestbook::query()->find($id);
-                $path = '/guestbook?page='.$page;
+                $path = '/guestbook?page=' . $page;
                 break;
 
             case Post::$morphName:
                 $model = Post::query()->find($id);
-                $path = '/topics/' . $model->topic_id . '?page='.$page;
+                $path = '/topics/' . $model->topic_id . '?page=' . $page;
                 break;
 
             case Message::$morphName:
@@ -87,7 +87,7 @@ class AjaxController extends Controller
 
             case Wall::$morphName:
                 $model = Wall::query()->find($id);
-                $path = '/walls/' . $model->user->login . '?page='.$page;
+                $path = '/walls/' . $model->user->login . '?page=' . $page;
                 break;
 
             case News::$morphName:
@@ -96,7 +96,7 @@ class AjaxController extends Controller
             case Offer::$morphName:
             case Down::$morphName:
                 $model = Comment::query()->find($id);
-                $path = '/' . $model->relate_type . '/comments/' . $model->relate_id . '?page='.$page;
+                $path = '/' . $model->relate_type . '/comments/' . $model->relate_id . '?page=' . $page;
                 $type = 'comments';
                 break;
         endswitch;
@@ -446,7 +446,7 @@ class AjaxController extends Controller
     }
 
     /**
-     * Возвращает является ли запрос ajax
+     * Является ли запрос ajax
      *
      * @param Request $request
      *

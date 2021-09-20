@@ -99,9 +99,7 @@ class HomeController extends Controller
             $phrase = new AnimatedPhraseBuilder();
             $phrase = $phrase->getPhrase(setting('captcha_maxlength'), setting('captcha_symbols'));
 
-            $captcha = new AnimatedCaptchaBuilder();
-            $captcha->setPhrase($phrase);
-
+            $captcha = new AnimatedCaptchaBuilder($phrase);
             $captcha = $captcha->render();
         } else {
             $phrase = new PhraseBuilder();
