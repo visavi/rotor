@@ -15,8 +15,7 @@
 @section('content')
     <div class="section-form mb-3 shadow">
         <form action="/photos/create" method="post" enctype="multipart/form-data">
-            <input type="hidden" name="token" value="{{ csrf_token() }}">
-
+            @csrf
             <div class="mb-3{{ hasError('title') }}">
                 <label for="inputTitle" class="form-label">{{ __('photos.name') }}:</label>
                 <input type="text" class="form-control" id="inputTitle" name="title" maxlength="50" value="{{ getInput('title') }}" required>

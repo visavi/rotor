@@ -26,18 +26,24 @@
     </div>
 
     @if ($iniInfo)
-        <table class="table table-sm table-striped table-bordered">
-            <thead>
+        <div class="table-responsive">
+            <table class="table table-sm table-striped table-bordered">
+                <thead>
                 <tr>
                     <th class="w-40">Directive</th>
                     <th class="w-60">Local Value</th>
                 </tr>
-            </thead>
+                </thead>
 
-            @foreach ($iniInfo as $inikey => $inivalue)
-                <tr><td>{{ $inikey }}</td><td>{{ truncateString(trim(var_export($inivalue['local_value'], true), "'"), 50) }}</td></tr>
-            @endforeach
-        </table>
+                @foreach ($iniInfo as $inikey => $inivalue)
+                    <tr>
+                        <td>{{ $inikey }}</td>
+                        <td>{{ truncateString(trim(var_export($inivalue['local_value'], true), "'"), 50) }}</td>
+                    </tr>
+                @endforeach
+            </table>
+        </div>
+
     @else
         {{ showError('Функция ini_get_all запрещена в php.ini') }}
     @endif
