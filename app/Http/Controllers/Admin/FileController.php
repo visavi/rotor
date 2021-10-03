@@ -25,11 +25,12 @@ class FileController extends AdminController
         $this->file = ltrim(check($request->input('file')), '/');
         $this->path = rtrim(check($request->input('path')), '/');
 
-        if (empty($this->path) ||
-            Str::contains($this->path, '.') ||
-            Str::startsWith($this->path, '/') ||
-            ! file_exists(resource_path('views/' . $this->path)) ||
-            ! is_dir(resource_path('views/' . $this->path))
+        if (
+            empty($this->path)
+            || Str::contains($this->path, '.')
+            || Str::startsWith($this->path, '/')
+            || ! file_exists(resource_path('views/' . $this->path))
+            || ! is_dir(resource_path('views/' . $this->path))
         ) {
             $this->path = null;
         }
@@ -77,7 +78,8 @@ class FileController extends AdminController
         $file     = $path ? '/' . $this->file : $this->file;
         $writable = is_writable(resource_path('views/' . $path . $file . '.blade.php'));
 
-        if (($this->path && ! preg_match('#^([a-z0-9_\-/]+|)$#', $this->path))
+        if (
+            ($this->path && ! preg_match('#^([a-z0-9_\-/]+|)$#', $this->path))
             || ! preg_match('#^[a-z0-9_\-/]+$#', $this->file)
         ) {
             abort(404, __('admin.files.file_invalid'));

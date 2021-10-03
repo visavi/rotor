@@ -87,7 +87,7 @@ class GuestbookController extends Controller
             setFlash('danger', $validator->getErrors());
         }
 
-        return redirect()->back()->withInput();
+        return redirect('/guestbook');
     }
 
     /**

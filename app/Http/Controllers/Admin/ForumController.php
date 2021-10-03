@@ -254,7 +254,7 @@ class ForumController extends AdminController
         if ($request->isMethod('post')) {
             $title       = $request->input('title');
             $note        = $request->input('note');
-            $moderators  = $request->input('moderators');
+            $moderators  = (string) $request->input('moderators');
             $locked      = empty($request->input('locked')) ? 0 : 1;
             $closed      = empty($request->input('closed')) ? 0 : 1;
             $closeUserId = $closed ? getUser('id') : null;
@@ -263,7 +263,7 @@ class ForumController extends AdminController
                 ->length($title, 3, 50, ['title' => __('validator.text')])
                 ->length($note, 0, 250, ['note' => __('validator.text_long')]);
 
-            $moderators = preg_split('/[\s]*[,][\s]*/', trim($moderators, ','));
+            $moderators = preg_split('/[\s]*[,][\s]*/', trim($moderators, ','), -1, PREG_SPLIT_NO_EMPTY);
 
             foreach ($moderators as $moderator) {
                 if (! getUserByLogin($moderator)) {

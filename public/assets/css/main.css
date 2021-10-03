@@ -122,7 +122,7 @@ textarea.form-control {
   content: "\f10d";
   line-height: 1.0em;
   font-size: 130%;
-  font-family: "Font Awesome 5 Free";
+  font-family: "Font Awesome 6 Free";
   font-weight: 900;
   float: left;
   margin-right: 10px;
@@ -173,7 +173,7 @@ textarea.form-control {
 
 .spoiler:before {
   content: "\f0da";
-  font-family: "Font Awesome 5 Free";
+  font-family: "Font Awesome 6 Free";
   font-weight: 900;
   font-size: 17px;
   color: #bbb;
@@ -182,7 +182,7 @@ textarea.form-control {
 
 .spoiler.spoiler-open:before {
   content: "\f0d7";
-  font-family: "Font Awesome 5 Free";
+  font-family: "Font Awesome 6 Free";
   font-weight: 900;
   font-size: 17px;
   color: #bbb;
@@ -227,7 +227,7 @@ textarea.form-control {
 .carousel-control-prev-icon,
 .carousel-control-next-icon {
   background-image: none;
-  font-family: "Font Awesome 5 Free";
+  font-family: "Font Awesome 6 Free";
   font-weight: 900;
   font-size: 25px;
   height: 35px;
@@ -258,7 +258,7 @@ textarea.form-control {
 
 .scrollup:before {
   content: "\f139";
-  font-family: "Font Awesome 5 Free";
+  font-family: "Font Awesome 6 Free";
   font-weight: 900;
   font-size: 30px;
 }
