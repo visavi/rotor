@@ -40,7 +40,7 @@
                                         {{ $key }} - {{ trim(var_export(env($key), true), "'") }}<br>
                                     @endforeach
                                 </p>
-                                <span class="text-danger fst-italic">{{ __('install.app_key') }}</span>
+                                <span class="text-success fst-italic">{{ __('install.app_key') }}</span>
                             </div>
                         </div>
                     </div>
@@ -57,7 +57,7 @@
 
                 <div class="row mb-3">
                     <div class="col-sm-6">
-                        <div class="card bg-light text-dark">
+                        <div class="card bg-light text-dark mb-3">
                             <div class="card-body">
                                 <h5 class="card-title">{{ __('install.check_requirements') }}</h5>
                                 <p class="card-text">
@@ -108,6 +108,12 @@
                                 </p>
                             </div>
                         </div>
+
+                        @if (env('APP_URL') !== url('/'))
+                            <div class="alert alert-danger">
+                                {{ __('install.requirements_url', ['env_url' => env('APP_URL'), 'current_url' => url('/')]) }}
+                            </div>
+                        @endif
                     </div>
                     <div class="col-sm-6">
                         <div class="card bg-light text-dark">
@@ -139,7 +145,8 @@
                     @if (! in_array(false, $errors['simple'], true))
                         {{ __('install.requirements_pass') }}<br><br>
                     @else
-                        <div class="alert alert-warning">{{ __('install.requirements_warning') }}<br>
+                        <div class="alert alert-warning">
+                            {{ __('install.requirements_warning') }}<br>
                             {{ __('install.requirements_not_pass') }}<br>
                             {{ __('install.continue_restrict') }}
                         </div>

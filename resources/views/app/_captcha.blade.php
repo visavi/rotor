@@ -22,7 +22,7 @@
     <div class="mb-3{{ hasError('protect') }}">
         <label for="protect" class="form-label">{{ __('main.verification_code') }}:</label><br>
         <img src="/captcha" onclick="this.src='/captcha?'+Math.random()" class="rounded cursor-pointer" alt="Captcha"><br>
-        <input class="form-control" name="protect" id="protect" maxlength="8" required>
+        <input class="form-control" name="protect" id="protect" maxlength="8" autocomplete="off" required>
         <div class="invalid-feedback">{{ textError('protect') }}</div>
     </div>
 @endif

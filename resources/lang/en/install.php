@@ -28,6 +28,7 @@ return [
     'check_status'          => 'Check database status',
     'requirements_warning'  => 'You have warnings!',
     'requirements_failed'   => 'There are critical errors!',
+    'requirements_url'      => 'The site address in the env file ":env_url" is different from the actual ":current_url"!',
     'resolve_errors'        => 'You won’t be able to proceed with the installation until you resolve the critical errors',
     'migrations'            => 'Perform migrations',
     'seeds'                 => 'Fill in the database',

@@ -9,6 +9,25 @@ html {
   height: 100%;
 }
 
+h2 {
+    font-size: 20px;
+    font-weight: 400;
+}
+
+h3 {
+    font-size: 18px;
+    font-weight: 400;
+}
+
+.post-title {
+   color: inherit;
+}
+
+.post-title:hover, .post-title:focus {
+    text-decoration: none;
+    color: inherit;
+}
+
 .app {
   // On large devices make sidebar visible by default
   // adding sidenav-toggled class will close sidebar
