@@ -179,11 +179,17 @@
                             <i class="fa fa-paperclip"></i> <b>{{ __('main.attached_files') }}:</b><br>
                             @foreach ($post->files as $file)
                                 <div class="media-file">
-                                    {{ icons($file->extension) }}
-                                    <a href="{{ $file->hash }}">{{ $file->name }}</a> ({{ formatSize($file->size) }})<br>
                                     @if ($file->isImage())
-                                        <a href="{{ $file->hash }}" class="gallery" data-group="{{ $post->id }}">{{ resizeImage($file->hash, ['alt' => $file->name]) }}</a>
+                                        <a href="{{ $file->hash }}" class="gallery" data-group="{{ $post->id }}">{{ resizeImage($file->hash, ['alt' => $file->name]) }}</a><br>
                                     @endif
+
+                                    @if ($file->isAudio())
+                                        <div>
+                                            <audio src="{{ $file->hash }}" style="max-width:100%;" preload="metadata" controls></audio>
+                                        </div>
+                                    @endif
+                                    {{ icons($file->extension) }}
+                                    <a href="{{ $file->hash }}">{{ $file->name }}</a> ({{ formatSize($file->size) }})
                                 </div>
                             @endforeach
                         </div>

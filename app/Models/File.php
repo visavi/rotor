@@ -58,13 +58,23 @@ class File extends BaseModel
     }
 
     /**
-     * Возвращает является ли файл картинкой
+     * Является ли файл картинкой
      *
      * @return bool
      */
     public function isImage(): bool
     {
         return in_array($this->extension, ['jpg', 'jpeg', 'gif', 'png'], true);
+    }
+
+    /**
+     * Является ли файл аудио
+     *
+     * @return bool
+     */
+    public function isAudio(): bool
+    {
+        return $this->extension === 'mp3';
     }
 
     /**

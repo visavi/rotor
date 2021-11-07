@@ -1,4 +1,5 @@
-<div class="performance" onclick="return showQueries();">
+<?php $cursor = config('app.debug') ? 'pointer' : 'default'; ?>
+<div class="performance" onclick="return showQueries();" style="cursor: {{ $cursor }}">
     <ul class="list-inline">
         <li class="list-inline-item" data-bs-toggle="tooltip" title="{{ __('index.db_queries') }}"><i class="fas fa-database"></i> {{ count($queries) }}</li>
 
