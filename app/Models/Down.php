@@ -58,7 +58,7 @@ class Down extends BaseModel
      *
      * @var string
      */
-    public $uploadPath = 'uploads/files';
+    public $uploadPath = '/uploads/files';
 
     /**
      * Counting field

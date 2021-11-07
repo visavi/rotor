@@ -845,7 +845,7 @@ function statsNewsDate()
  */
 function lastNews(): HtmlString
 {
-    $news = null;
+    $news = collect();
 
     if (setting('lastnews') > 0) {
         $news = Cache::remember('lastNews', 1800, static function () {

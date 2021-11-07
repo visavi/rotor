@@ -52,7 +52,7 @@ class Message extends BaseModel
      *
      * @var string
      */
-    public $uploadPath = 'uploads/messages';
+    public $uploadPath = '/uploads/messages';
 
     /**
      * Возвращает связь пользователей

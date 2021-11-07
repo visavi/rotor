@@ -35,7 +35,7 @@ class Sticker extends BaseModel
      *
      * @var string
      */
-    public $uploadPath = 'uploads/stickers';
+    public $uploadPath = '/uploads/stickers';
 
     /**
      * Возвращает связь категории стикеров

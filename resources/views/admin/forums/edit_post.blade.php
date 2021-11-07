@@ -23,7 +23,7 @@
 @section('content')
     <p>
         <i class="fa fa-pencil-alt"></i> <b>{{ $post->user->getName() }}</b>
-        <small class="section-date text-muted fst-italic">{ dateFixed($post->created_at) }}</small>
+        <small class="section-date text-muted fst-italic">{{ dateFixed($post->created_at) }}</small>
     </p>
 
     <div class="section-form mb-3 shadow">

@@ -334,7 +334,6 @@ class AjaxController extends Controller
 
         if ($validator->isValid()) {
             $fileData = $model->uploadFile($file);
-            $fileType = $fileData['is_image'] ? 'image' : 'file';
 
             if ($isImageType) {
                 $imageData = resizeProcess($fileData['path'], ['size' => 100]);
@@ -343,7 +342,7 @@ class AjaxController extends Controller
                     'id'      => $fileData['id'],
                     'path'    => $imageData['path'],
                     'source'  => $imageData['source'],
-                    'type'    => $fileType,
+                    'type'    => $fileData['type'],
                 ];
             } else {
                 $data = [
@@ -352,7 +351,7 @@ class AjaxController extends Controller
                     'path'    => $fileData['path'],
                     'name'    => $fileData['name'],
                     'size'    => $fileData['size'],
-                    'type'    => $fileType,
+                    'type'    => $fileData['type'],
                 ];
             }
 

@@ -214,12 +214,12 @@ class StickerController extends AdminController
 
             if ($validator->isValid()) {
                 $newName = uniqueName($sticker->getClientOriginalExtension());
-                $path    = public_path((new Sticker())->uploadPath . '/' . $newName);
+                $path    = (new Sticker())->uploadPath . '/' . $newName;
                 $sticker->move(public_path((new Sticker())->uploadPath), $newName);
 
                 Sticker::query()->create([
                     'category_id' => $cid,
-                    'name'        => str_replace(public_path(), '', $path),
+                    'name'        => $path,
                     'code'        => $code,
                 ]);
 

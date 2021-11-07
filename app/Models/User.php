@@ -166,14 +166,14 @@ class User extends BaseModel implements
      *
      * @var string
      */
-    public $uploadPath = 'uploads/pictures';
+    public $uploadPath = '/uploads/pictures';
 
     /**
      * Директория загрузки аватаров
      *
      * @var string
      */
-    public $uploadAvatarPath = 'uploads/avatars';
+    public $uploadAvatarPath = '/uploads/avatars';
 
     /**
      * Связь с таблицей online

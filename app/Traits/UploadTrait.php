@@ -26,8 +26,8 @@ trait UploadTrait
         $basename  = getBodyName($file->getClientOriginalName());
         $basename  = utfSubstr($basename, 0, 50) . '.' . $extension;
         $filename  = uniqueName($extension);
-        $fullPath  = public_path($this->uploadPath . '/' . $filename);
-        $path      = str_replace(public_path(), '', $fullPath);
+        $path      = $this->uploadPath . '/' . $filename;
+        $fullPath  = public_path($path);
         $isImage   = in_array($extension, ['jpg', 'jpeg', 'gif', 'png'], true);
 
         if ($isImage) {
@@ -72,7 +72,7 @@ trait UploadTrait
             'extension' => $extension,
             'mime'      => $mime,
             'size'      => formatSize($filesize),
-            'is_image'  => $isImage,
+            'type'      => $isImage ? 'image' : 'file',
         ];
     }
 }
