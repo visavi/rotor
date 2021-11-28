@@ -112,6 +112,22 @@
                 <li><a class="treeview-item{{ request()->is('loads/top') ? ' active' : '' }}" href="/loads/top"><i class="icon fas fa-circle fa-xs"></i> {{ __('loads.top_downs') }}</a></li>
             </ul>
         </li>
+
+        <li>
+            <a class="app-menu__item{{ request()->is('photos*') ? ' active' : '' }}" href="/photos">
+                <i class="app-menu__icon far fa-image"></i>
+                <span class="app-menu__label">{{ __('index.photos') }}</span>
+                <span class="badge bg-dark bg-gradient">{{ statsPhotos() }}</span>
+            </a>
+        </li>
+
+        <li>
+            <a class="app-menu__item{{ request()->is('votes*') ? ' active' : '' }}" href="/votes">
+                <i class="app-menu__icon fas fa-square-poll-horizontal"></i>
+                <span class="app-menu__label">{{ __('index.votes') }}</span>
+                <span class="badge bg-dark bg-gradient">{{ statVotes() }}</span>
+            </a>
+        </li>
     </ul>
 
     <ul class="app-menu app-sidebar__footer">

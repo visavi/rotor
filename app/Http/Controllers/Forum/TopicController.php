@@ -213,7 +213,7 @@ class TopicController extends Controller
                 }
             }
 
-            clearCache(['statForums', 'recentTopics']);
+            clearCache(['statForums', 'recentTopics', 'statWidget']);
             $flood->saveState();
             sendNotify($msg, '/topics/' . $topic->id . '/' . $post->id, $topic->title);
 

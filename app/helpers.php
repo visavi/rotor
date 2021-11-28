@@ -680,6 +680,63 @@ function statsForum(): string
     });
 }
 
+function widget()
+{
+    $posts = Cache::remember('statWidget', 600, static function () {
+        $topics = Topic::query()
+            ->select('topics.*', 'updated_at as created_at')
+            ->orderByDesc('updated_at')
+            ->with('lastPost.user', 'lastPost.files')
+            ->limit(10)
+            ->get();
+
+        $downs = Down::query()
+            ->where('active', 1)
+            ->orderByDesc('created_at')
+            ->limit(10)
+            ->with('user', 'files', 'category')
+            ->get();
+
+        $photos = Photo::query()
+            ->orderByDesc('created_at')
+            ->limit(10)
+            ->with('user', 'files')
+            ->get();
+
+        $articles = Article::query()
+            ->orderByDesc('created_at')
+            ->limit(10)
+            ->with('user', 'files')
+            ->get();
+
+        $items = Item::query()
+            ->where('expires_at', '>', SITETIME)
+            ->orderByDesc('created_at')
+            ->limit(10)
+            ->with('user', 'files')
+            ->get();
+
+        $news = News::query()
+            ->orderByDesc('created_at')
+            ->limit(10)
+            ->with('user')
+            ->get();
+
+        return $topics
+            ->merge($downs)
+            ->merge($photos)
+            ->merge($articles)
+            ->merge($items)
+            ->merge($news)
+            ->sortByDesc('created_at')
+            ->take(20);
+    });
+
+    $allowDownload = getUser() || setting('down_guest_download');
+
+    return new HtmlString(view('widgets/_feeds', compact('posts', 'allowDownload')));
+}
+
 /**
  * Возвращает количество сообщений в гостевой книге
  *

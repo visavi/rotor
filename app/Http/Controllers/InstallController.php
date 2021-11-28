@@ -195,7 +195,7 @@ class InstallController extends Controller
                         'value' => 1,
                     ]);
 
-                clearCache(['statNews', 'lastNews', 'statNewsDate', 'settings']);
+                clearCache(['statNews', 'lastNews', 'statNewsDate', 'settings', 'statWidget']);
 
                 return redirect('/install/finish');
             }

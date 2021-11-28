@@ -1,4 +1,7 @@
-<?php $countFiles = $model->files->count(); ?>
+<?php
+$files = $files ?? $model->files;
+$countFiles = $files->count();
+?>
 <div class="media-file">
     <div id="myCarousel{{ $model->id }}" class="carousel slide" data-bs-ride="carousel">
         @if ($countFiles > 1)
@@ -10,7 +13,7 @@
         @endif
 
         <div class="carousel-inner">
-            @foreach ($model->files as $file)
+            @foreach ($files as $file)
                 <div class="carousel-item{{ $loop->first ? ' active' : '' }}">
                     @php
                         $image = resizeImage($file->hash, ['alt' => $model->title, 'class' => 'w-100']);

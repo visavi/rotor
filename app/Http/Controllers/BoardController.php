@@ -148,7 +148,7 @@ class BoardController extends Controller
                     ->where('user_id', $user->id)
                     ->update(['relate_id' => $item->id]);
 
-                clearCache(['statBoards', 'recentBoards']);
+                clearCache(['statBoards', 'recentBoards', 'statWidget']);
                 $flood->saveState();
 
                 setFlash('success', __('boards.item_success_added'));
@@ -228,7 +228,7 @@ class BoardController extends Controller
                     'phone'    => $phone,
                 ]);
 
-                clearCache(['statBoards', 'recentBoards']);
+                clearCache(['statBoards', 'recentBoards', 'statWidget']);
                 setFlash('success', __('boards.item_success_edited'));
 
                 return redirect('items/' . $item->id);
@@ -331,7 +331,7 @@ class BoardController extends Controller
 
             $item->category->decrement('count_items');
 
-            clearCache(['statBoards', 'recentBoards']);
+            clearCache(['statBoards', 'recentBoards', 'statWidget']);
             setFlash('success', __('boards.item_success_deleted'));
         } else {
             setFlash('danger', $validator->getErrors());

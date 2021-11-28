@@ -4,7 +4,7 @@ return [
     'news'           => 'News',
     'communication'  => 'Communication',
     'guestbook'      => 'Guest book',
-    'photos'         => 'Photo gallery',
+    'photos'         => 'Gallery',
     'votes'          => 'Voting',
     'offers'         => 'Suggestions / Problems',
     'forums'         => 'Forum',

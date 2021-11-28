@@ -81,7 +81,7 @@ class NewsController extends AdminController
                     'image'  => $file['path'] ?? $news->image,
                  ]);
 
-                clearCache(['statNews', 'lastNews']);
+                clearCache(['statNews', 'lastNews', 'statWidget']);
                 setFlash('success', __('news.news_success_edited'));
 
                 return redirect('admin/news/edit/' . $news->id . '?page=' . $page);
@@ -144,7 +144,7 @@ class NewsController extends AdminController
                     clearCache('settings');
                 }
 
-                clearCache(['statNews', 'lastNews', 'statNewsDate']);
+                clearCache(['statNews', 'lastNews', 'statNewsDate', 'statWidget']);
                 setFlash('success', __('news.news_success_added'));
 
                 return redirect('admin/news/edit/' . $news->id);

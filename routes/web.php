@@ -94,7 +94,7 @@ Route::group(['prefix' => 'news'], function () {
     Route::match(['get', 'post'], '/edit/{id}/{cid}', [\App\Http\Controllers\NewsController::class, 'editComment'])->whereNumber('cid');
 });
 
-/* Фотогалерея */
+/* Галерея */
 Route::group(['prefix' => 'photos'], function () {
     Route::get('/', [\App\Http\Controllers\PhotoController::class, 'index']);
     Route::get('/{id}', [\App\Http\Controllers\PhotoController::class, 'view']);
