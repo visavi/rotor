@@ -314,7 +314,7 @@ class LoadController extends AdminController
                     $down->user->sendMessage(null, $text);
                 }
 
-                clearCache(['statLoads', 'recentDowns', 'statWidget']);
+                clearCache(['statLoads', 'recentDowns']);
                 setFlash('success', __('loads.down_edited_success'));
 
                 return redirect('admin/downs/edit/' . $down->id);
@@ -363,7 +363,7 @@ class LoadController extends AdminController
             $down->comments()->delete();
             $down->delete();
 
-            clearCache(['statLoads', 'recentDowns', 'statWidget']);
+            clearCache(['statLoads', 'recentDowns']);
             setFlash('success', __('loads.down_success_deleted'));
         } else {
             setFlash('danger', __('validator.token'));
@@ -459,7 +459,7 @@ class LoadController extends AdminController
 
             $down->user->sendMessage(null, $text);
 
-            clearCache(['statLoads', 'recentDowns', 'statWidget']);
+            clearCache(['statLoads', 'recentDowns']);
             setFlash('success', $status);
         } else {
             setFlash('danger', __('validator.token'));

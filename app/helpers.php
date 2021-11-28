@@ -30,6 +30,7 @@ use App\Models\Topic;
 use App\Models\User;
 use App\Models\Vote;
 use GuzzleHttp\Client;
+use Illuminate\Database\Query\JoinClause;
 use Illuminate\Mail\Message;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Database\Eloquent\Builder;
@@ -406,7 +407,7 @@ function onlineWidget(): HtmlString
 /**
  * Возвращает статистику посещений
  *
- * @return array статистика посещений
+ * @return array Статистика посещений
  */
 function statsCounter(): array
 {
@@ -680,61 +681,102 @@ function statsForum(): string
     });
 }
 
-function widget()
+/**
+ * Get feed
+ *
+ * @param int $show
+ *
+ * @return HtmlString
+ */
+function getFeed(int $show = 20): HtmlString
 {
-    $posts = Cache::remember('statWidget', 600, static function () {
+    $user = getUser();
+
+    $posts = Cache::remember('statFeed' . ($user->id ?? 0), 300, static function () use ($show, $user) {
         $topics = Topic::query()
             ->select('topics.*', 'updated_at as created_at')
+            ->when($user, static function (Builder $query) use ($user) {
+                $query->select('topics.*', 'updated_at as created_at', 'pollings.vote')
+                    ->leftJoin('pollings', static function (JoinClause $join) use ($user) {
+                        $join->on('topics.last_post_id', 'pollings.relate_id')
+                            ->where('pollings.relate_type', Post::$morphName)
+                            ->where('pollings.user_id', $user->id);
+                    });
+            })
             ->orderByDesc('updated_at')
             ->with('lastPost.user', 'lastPost.files')
-            ->limit(10)
+            ->limit(20)
+            ->get();
+
+        $photos = Photo::query()
+            ->when($user, static function (Builder $query) use ($user) {
+                $query->select('photos.*', 'pollings.vote')
+                    ->leftJoin('pollings', static function (JoinClause $join) use ($user) {
+                        $join->on('photos.id', 'pollings.relate_id')
+                            ->where('pollings.relate_type', Photo::$morphName)
+                            ->where('pollings.user_id', $user->id);
+                    });
+            })
+            ->orderByDesc('created_at')
+            ->limit(20)
+            ->with('user', 'files')
+            ->get();
+
+        $articles = Article::query()
+            ->when($user, static function (Builder $query) use ($user) {
+                $query->select('articles.*', 'pollings.vote')
+                    ->leftJoin('pollings', static function (JoinClause $join) use ($user) {
+                        $join->on('articles.id', 'pollings.relate_id')
+                            ->where('pollings.relate_type', Article::$morphName)
+                            ->where('pollings.user_id', $user->id);
+                    });
+            })
+            ->orderByDesc('created_at')
+            ->limit(20)
+            ->with('user', 'files')
+            ->get();
+
+        $news = News::query()
+            ->when($user, static function (Builder $query) use ($user) {
+                $query->select('news.*', 'pollings.vote')
+                    ->leftJoin('pollings', static function (JoinClause $join) use ($user) {
+                        $join->on('news.id', 'pollings.relate_id')
+                            ->where('pollings.relate_type', News::$morphName)
+                            ->where('pollings.user_id', $user->id);
+                    });
+            })
+            ->orderByDesc('created_at')
+            ->limit(20)
+            ->with('user')
             ->get();
 
         $downs = Down::query()
             ->where('active', 1)
             ->orderByDesc('created_at')
-            ->limit(10)
+            ->limit(20)
             ->with('user', 'files', 'category')
-            ->get();
-
-        $photos = Photo::query()
-            ->orderByDesc('created_at')
-            ->limit(10)
-            ->with('user', 'files')
-            ->get();
-
-        $articles = Article::query()
-            ->orderByDesc('created_at')
-            ->limit(10)
-            ->with('user', 'files')
             ->get();
 
         $items = Item::query()
             ->where('expires_at', '>', SITETIME)
             ->orderByDesc('created_at')
-            ->limit(10)
+            ->limit(20)
             ->with('user', 'files')
             ->get();
 
-        $news = News::query()
-            ->orderByDesc('created_at')
-            ->limit(10)
-            ->with('user')
-            ->get();
-
         return $topics
-            ->merge($downs)
+            ->merge($news)
             ->merge($photos)
             ->merge($articles)
+            ->merge($downs)
             ->merge($items)
-            ->merge($news)
             ->sortByDesc('created_at')
-            ->take(20);
+            ->take($show);
     });
 
-    $allowDownload = getUser() || setting('down_guest_download');
+    $allowDownload = $user || setting('down_guest_download');
 
-    return new HtmlString(view('widgets/_feeds', compact('posts', 'allowDownload')));
+    return new HtmlString(view('widgets/_feed', compact('posts', 'user', 'allowDownload')));
 }
 
 /**

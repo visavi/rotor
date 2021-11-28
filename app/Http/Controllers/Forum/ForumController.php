@@ -203,7 +203,7 @@ class ForumController extends Controller
                     VoteAnswer::query()->insert($prepareAnswers);
                 }
 
-                clearCache(['statForums', 'recentTopics', 'statWidget']);
+                clearCache(['statForums', 'recentTopics']);
                 $flood->saveState();
 
                 setFlash('success', __('forums.topic_success_created'));

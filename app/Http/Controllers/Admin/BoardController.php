@@ -267,7 +267,7 @@ class BoardController extends AdminController
                     'phone'    => $phone,
                 ]);
 
-                clearCache(['statBoards', 'recentBoards', 'statWidget']);
+                clearCache(['statBoards', 'recentBoards']);
                 setFlash('success', __('boards.item_success_edited'));
 
                 return redirect('admin/items/edit/' . $item->id);
@@ -311,7 +311,7 @@ class BoardController extends AdminController
             $item->delete();
             $item->category->decrement('count_items');
 
-            clearCache(['statBoards', 'recentBoards', 'statWidget']);
+            clearCache(['statBoards', 'recentBoards']);
             setFlash('success', __('boards.item_success_deleted'));
         } else {
             setFlash('danger', $validator->getErrors());

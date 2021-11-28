@@ -4,7 +4,23 @@
         {{-- Новости --}}
         @if ($post instanceof \App\Models\News)
             <div class="section mb-3 shadow">
-                <h3><a class="post-title" href="/news/{{ $post->id }}">{{ $post->title }}</a></h3>
+                <div class="section-header d-flex align-items-center">
+                    <div class="flex-grow-1">
+                        <div class="section-title">
+                            <h3><a class="post-title" href="/news/{{ $post->id }}">{{ $post->title }}</a></h3>
+                        </div>
+                    </div>
+
+                    <div class="js-rating text-end">
+                        @if ($user && $user->id !== $post->user_id)
+                            <a class="post-rating-down{{ $post->vote === '-' ? ' active' : '' }}" href="#" onclick="return changeRating(this);" data-id="{{ $post->id }}" data-type="{{ $post->getMorphClass() }}" data-vote="-" data-token="{{ csrf_token() }}"><i class="fas fa-arrow-down"></i></a>
+                        @endif
+                        <b>{{ formatNum($post->rating) }}</b>
+                        @if ($user && $user->id !== $post->user_id)
+                            <a class="post-rating-up{{ $post->vote === '+' ? ' active' : '' }}" href="#" onclick="return changeRating(this);" data-id="{{ $post->id }}" data-type="{{ $post->getMorphClass() }}" data-vote="+" data-token="{{ csrf_token() }}"><i class="fas fa-arrow-up"></i></a>
+                        @endif
+                    </div>
+                </div>
 
                 <div class="section-content">
                     <div class="section-message row mb-3">
@@ -22,17 +38,6 @@
 
                 <div class="section-body">
                     {{ __('main.added') }}: {{ $post->user->getProfile() }} <small class="section-date text-muted fst-italic">{{ dateFixed($post->created_at) }}</small>
-
-                    <div class="js-rating">
-                        {{ __('main.rating') }}:
-                        @if (getUser() && getUser('id') !== $post->user_id)
-                            <a class="post-rating-down<?= $post->vote === '-' ? ' active' : '' ?>" href="#" onclick="return changeRating(this);" data-id="{{ $post->id }}" data-type="{{ $post->getMorphClass() }}" data-vote="-" data-token="{{ csrf_token() }}"><i class="fa fa-thumbs-down"></i></a>
-                        @endif
-                        <b>{{ formatNum($post->rating) }}</b>
-                        @if (getUser() && getUser('id') !== $post->user_id)
-                            <a class="post-rating-up<?= $post->vote === '+' ? ' active' : '' ?>" href="#" onclick="return changeRating(this);" data-id="{{ $post->id }}" data-type="{{ $post->getMorphClass() }}" data-vote="+" data-token="{{ csrf_token() }}"><i class="fa fa-thumbs-up"></i></a>
-                        @endif
-                    </div>
                 </div>
             </div>
         @endif
@@ -57,12 +62,12 @@
 
                     <div class="text-end">
                         <div class="js-rating">
-                            @if (getUser() && getUser('id') !== $post->user_id)
-                                <a class="post-rating-down{{ $post->vote === '-' ? ' active' : '' }}" href="#" onclick="return changeRating(this);" data-id="{{ $post->id }}" data-type="{{ $post->lastPost->getMorphClass() }}" data-vote="-" data-token="{{ csrf_token() }}"><i class="fas fa-arrow-down"></i></a>
+                            @if ($user && $user->id !== $post->lastPost->user_id)
+                                <a class="post-rating-down{{ $post->vote === '-' ? ' active' : '' }}" href="#" onclick="return changeRating(this);" data-id="{{ $post->lastPost->id }}" data-type="{{ $post->lastPost->getMorphClass() }}" data-vote="-" data-token="{{ csrf_token() }}"><i class="fas fa-arrow-down"></i></a>
                             @endif
-                            <b>{{ formatNum($post->rating) }}</b>
-                            @if (getUser() && getUser('id') !== $post->user_id)
-                                <a class="post-rating-up{{ $post->vote === '+' ? ' active' : '' }}" href="#" onclick="return changeRating(this);" data-id="{{ $post->id }}" data-type="{{ $post->lastPost->getMorphClass() }}" data-vote="+" data-token="{{ csrf_token() }}"><i class="fas fa-arrow-up"></i></a>
+                            <b>{{ formatNum($post->lastPost->rating) }}</b>
+                            @if ($user && $user->id !== $post->lastPost->user_id)
+                                <a class="post-rating-up{{ $post->vote === '+' ? ' active' : '' }}" href="#" onclick="return changeRating(this);" data-id="{{ $post->lastPost->id }}" data-type="{{ $post->lastPost->getMorphClass() }}" data-vote="+" data-token="{{ csrf_token() }}"><i class="fas fa-arrow-up"></i></a>
                             @endif
                         </div>
                     </div>
@@ -79,7 +84,7 @@
                             @foreach ($post->lastPost->files as $file)
                                 <div class="media-file">
                                     @if ($file->isImage())
-                                        <a href="{{ $file->hash }}" class="gallery" data-group="{{ $post->id }}">{{ resizeImage($file->hash, ['alt' => $file->name]) }}</a><br>
+                                        <a href="{{ $file->hash }}" class="gallery" data-group="{{ $post->lastPost->id }}">{{ resizeImage($file->hash, ['alt' => $file->name]) }}</a><br>
                                     @endif
 
                                     @if ($file->isAudio())
@@ -92,16 +97,6 @@
                                 </div>
                             @endforeach
                         </div>
-                    @endif
-
-                    @if ($post->edit_user_id)
-                        <div class="small">
-                            <i class="fa fa-exclamation-circle text-danger"></i> {{ __('main.changed') }}: {{ $post->editUser->getName() }} ({{ dateFixed($post->updated_at) }})
-                        </div>
-                    @endif
-
-                    @if (isAdmin())
-                        <div class="small text-muted fst-italic mt-2">{{ $post->brow }}, {{ $post->ip }}</div>
                     @endif
                 </div>
             </div>
@@ -118,12 +113,12 @@
                     </div>
 
                     <div class="text-end js-rating">
-                        @if (getUser() && getUser('id') !== $post->user_id)
-                            <a class="post-rating-down<?= $post->vote === '-' ? ' active' : '' ?>" href="#" onclick="return changeRating(this);" data-id="{{ $post->id }}" data-type="{{ $post->getMorphClass() }}" data-vote="-" data-token="{{ csrf_token() }}"><i class="fa fa-thumbs-down"></i></a>
+                        @if ($user && $user->id !== $post->user_id)
+                            <a class="post-rating-down{{ $post->vote === '-' ? ' active' : '' }}" href="#" onclick="return changeRating(this);" data-id="{{ $post->id }}" data-type="{{ $post->getMorphClass() }}" data-vote="-" data-token="{{ csrf_token() }}"><i class="fas fa-arrow-down"></i></a>
                         @endif
                         <b>{{ formatNum($post->rating) }}</b>
-                        @if (getUser() && getUser('id') !== $post->user_id)
-                            <a class="post-rating-up<?= $post->vote === '+' ? ' active' : '' ?>" href="#" onclick="return changeRating(this);" data-id="{{ $post->id }}" data-type="{{ $post->getMorphClass() }}" data-vote="+" data-token="{{ csrf_token() }}"><i class="fa fa-thumbs-up"></i></a>
+                        @if ($user && $user->id !== $post->user_id)
+                            <a class="post-rating-up{{ $post->vote === '+' ? ' active' : '' }}" href="#" onclick="return changeRating(this);" data-id="{{ $post->id }}" data-type="{{ $post->getMorphClass() }}" data-vote="+" data-token="{{ csrf_token() }}"><i class="fas fa-arrow-up"></i></a>
                         @endif
                     </div>
                 </div>
@@ -144,65 +139,65 @@
 
         {{-- Загрузки --}}
         @if ($post instanceof \App\Models\Down)
-        <div class="section mb-3 shadow">
-            <h3><a class="post-title" href="/downs/{{ $post->id }}">{{ $post->title }}</a></h3>
+            <div class="section mb-3 shadow">
+                <h3><a class="post-title" href="/downs/{{ $post->id }}">{{ $post->title }}</a></h3>
 
-            @if ($post->getImages()->isNotEmpty())
-                @include('app/_carousel', ['model' => $post, 'files' => $post->getImages(), 'path' => '/downs'])
-            @endif
-
-            <div class="section-message mb-3">
-                {{ bbCode($post->text) }}
-            </div>
-
-            @if ($post->getFiles()->isNotEmpty())
-                @foreach ($post->getFiles() as $file)
-                    <div class="media-file mb-3">
-                        @if ($file->hash && file_exists(public_path($file->hash)))
-
-                            @if ($file->extension === 'mp3')
-                                <div>
-                                    <audio src="{{ $file->hash }}" style="max-width:100%;" preload="metadata" controls controlsList="{{ $allowDownload ? null : 'nodownload' }}"></audio>
-                                </div>
-                            @endif
-
-                            @if ($file->extension === 'mp4')
-                                <div>
-                                    <video src="{{ $file->hash }}" style="max-width:100%;" preload="metadata" controls playsinline controlsList="{{ $allowDownload ? null : 'nodownload' }}"></video>
-                                </div>
-                            @endif
-
-                            <b>{{ $file->name }}</b> ({{ formatSize($file->size) }})<br>
-                            @if ($file->extension === 'zip')
-                                <a href="/downs/zip/{{ $file->id }}">{{ __('loads.view_archive') }}</a><br>
-                            @endif
-
-                            @if ($allowDownload)
-                                <a class="btn btn-success" href="/downs/download/{{ $file->id }}"><i class="fa fa-download"></i> {{ __('main.download') }}</a><br>
-                            @endif
-                        @else
-                            <i class="fa fa-download"></i> {{ __('main.file_not_found') }}
-                        @endif
-                    </div>
-                @endforeach
-
-                @if (! $allowDownload)
-                    {{ showError(__('loads.download_authorized')) }}
+                @if ($post->getImages()->isNotEmpty())
+                    @include('app/_carousel', ['model' => $post, 'files' => $post->getImages(), 'path' => '/downs'])
                 @endif
-            @else
-                {{ showError(__('main.not_uploaded')) }}
-            @endif
 
-            <div class="mb-3">
-                <i class="fa fa-comment"></i> <a href="/downs/comments/{{ $post->id }}">{{ __('main.comments') }}</a> ({{ $post->count_comments }})
-                <a href="/downs/end/{{ $post->id }}">&raquo;</a><br>
+                <div class="section-message mb-3">
+                    {{ bbCode($post->text) }}
+                </div>
 
-                {{ __('main.rating') }}: {{ ratingVote($post->getCalculatedRating()) }}<br>
-                {{ __('main.votes') }}: <b>{{ $post->rated }}</b><br>
-                {{ __('main.downloads') }}: <b>{{ $post->loads }}</b><br>
-                {{ __('main.author') }}: {{ $post->user->getProfile() }} ({{ dateFixed($post->created_at) }})
+                @if ($post->getFiles()->isNotEmpty())
+                    @foreach ($post->getFiles() as $file)
+                        <div class="media-file mb-3">
+                            @if ($file->hash && file_exists(public_path($file->hash)))
+
+                                @if ($file->extension === 'mp3')
+                                    <div>
+                                        <audio src="{{ $file->hash }}" style="max-width:100%;" preload="metadata" controls controlsList="{{ $allowDownload ? null : 'nodownload' }}"></audio>
+                                    </div>
+                                @endif
+
+                                @if ($file->extension === 'mp4')
+                                    <div>
+                                        <video src="{{ $file->hash }}" style="max-width:100%;" preload="metadata" controls playsinline controlsList="{{ $allowDownload ? null : 'nodownload' }}"></video>
+                                    </div>
+                                @endif
+
+                                <b>{{ $file->name }}</b> ({{ formatSize($file->size) }})<br>
+                                @if ($file->extension === 'zip')
+                                    <a href="/downs/zip/{{ $file->id }}">{{ __('loads.view_archive') }}</a><br>
+                                @endif
+
+                                @if ($allowDownload)
+                                    <a class="btn btn-success" href="/downs/download/{{ $file->id }}"><i class="fa fa-download"></i> {{ __('main.download') }}</a><br>
+                                @endif
+                            @else
+                                <i class="fa fa-download"></i> {{ __('main.file_not_found') }}
+                            @endif
+                        </div>
+                    @endforeach
+
+                    @if (! $allowDownload)
+                        {{ showError(__('loads.download_authorized')) }}
+                    @endif
+                @else
+                    {{ showError(__('main.not_uploaded')) }}
+                @endif
+
+                <div class="mb-3">
+                    <i class="fa fa-comment"></i> <a href="/downs/comments/{{ $post->id }}">{{ __('main.comments') }}</a> ({{ $post->count_comments }})
+                    <a href="/downs/end/{{ $post->id }}">&raquo;</a><br>
+
+                    {{ __('main.rating') }}: {{ ratingVote($post->getCalculatedRating()) }}<br>
+                    {{ __('main.votes') }}: <b>{{ $post->rated }}</b><br>
+                    {{ __('main.downloads') }}: <b>{{ $post->loads }}</b><br>
+                    {{ __('main.author') }}: {{ $post->user->getProfile() }} ({{ dateFixed($post->created_at) }})
+                </div>
             </div>
-        </div>
         @endif
 
         {{-- Статьи --}}
@@ -216,12 +211,12 @@
                     </div>
 
                     <div class="text-end js-rating">
-                        @if (getUser() && getUser('id') !== $post->user_id)
-                            <a class="post-rating-down<?= $post->vote === '-' ? ' active' : '' ?>" href="#" onclick="return changeRating(this);" data-id="{{ $post->id }}" data-type="{{ $post->getMorphClass() }}" data-vote="-" data-token="{{ csrf_token() }}"><i class="fa fa-thumbs-down"></i></a>
+                        @if ($user && $user->id !== $post->user_id)
+                            <a class="post-rating-down{{ $post->vote === '-' ? ' active' : '' }}" href="#" onclick="return changeRating(this);" data-id="{{ $post->id }}" data-type="{{ $post->getMorphClass() }}" data-vote="-" data-token="{{ csrf_token() }}"><i class="fas fa-arrow-down"></i></a>
                         @endif
                         <b>{{ formatNum($post->rating) }}</b>
-                        @if (getUser() && getUser('id') !== $post->user_id)
-                            <a class="post-rating-up<?= $post->vote === '+' ? ' active' : '' ?>" href="#" onclick="return changeRating(this);" data-id="{{ $post->id }}" data-type="{{ $post->getMorphClass() }}" data-vote="+" data-token="{{ csrf_token() }}"><i class="fa fa-thumbs-up"></i></a>
+                        @if ($user && $user->id !== $post->user_id)
+                            <a class="post-rating-up{{ $post->vote === '+' ? ' active' : '' }}" href="#" onclick="return changeRating(this);" data-id="{{ $post->id }}" data-type="{{ $post->getMorphClass() }}" data-vote="+" data-token="{{ csrf_token() }}"><i class="fas fa-arrow-up"></i></a>
                         @endif
                     </div>
                 </div>

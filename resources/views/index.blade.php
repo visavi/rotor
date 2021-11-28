@@ -10,7 +10,7 @@
 @section('content')
     @include('ads/_top')
 
-    {{ widget() }}
+    {{ getFeed() }}
 
     @include('ads/_bottom')
 @stop
