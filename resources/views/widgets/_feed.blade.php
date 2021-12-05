@@ -4,7 +4,7 @@
         {{-- Новости --}}
         @if ($post instanceof \App\Models\News)
             <div class="section mb-3 shadow">
-                <ol class="breadcrumb">
+                <ol class="breadcrumb mb-1">
                     <li class="breadcrumb-item">
                         <i class="fa-solid fa-newspaper"></i> <a href="/news" class="text-muted"> {{ __('index.news') }}</a>
                     </li>
@@ -45,7 +45,7 @@
                     <small class="section-date text-muted fst-italic">{{ dateFixed($post->created_at) }}</small>
                 </div>
 
-                <a href="/news/comments/{{ $post->id }}">{{ __('main.comments') }}</a> ({{ $post->count_comments }})
+                <i class="fa-regular fa-comment"></i> <a href="/news/comments/{{ $post->id }}">{{ __('main.comments') }}</a> ({{ $post->count_comments }})
                 <a href="/news/end/{{ $post->id }}">&raquo;</a>
             </div>
         @endif
@@ -53,7 +53,7 @@
         {{-- Посты --}}
         @if ($post instanceof \App\Models\Topic)
             <div class="section mb-3 shadow">
-                <ol class="breadcrumb">
+                <ol class="breadcrumb mb-1">
                     <li class="breadcrumb-item">
                         <i class="fa-regular fa-message"></i> <a href="/forums" class="text-muted"> {{ __('index.forums') }}</a>
                     </li>
@@ -115,7 +115,7 @@
                     <small class="section-date text-muted fst-italic">{{ dateFixed($post->lastPost->created_at) }}</small>
                 </div>
 
-                <a href="/topics/{{ $post->id }}">{{ __('main.messages') }}</a> ({{ $post->count_posts }})
+                <i class="fa-regular fa-comment"></i> <a href="/topics/{{ $post->id }}">{{ __('main.messages') }}</a> ({{ $post->count_posts }})
                 <a href="/topics/end/{{ $post->id }}">&raquo;</a>
             </div>
         @endif
@@ -123,7 +123,7 @@
         {{-- Фото --}}
         @if ($post instanceof \App\Models\Photo)
             <div class="section mb-3 shadow">
-                <ol class="breadcrumb">
+                <ol class="breadcrumb mb-1">
                     <li class="breadcrumb-item">
                         <i class="fa-regular fa-image"></i> <a href="/photos" class="text-muted">{{ __('index.photos') }}</a>
                     </li>
@@ -160,7 +160,7 @@
                     <small class="section-date text-muted fst-italic">{{ dateFixed($post->created_at) }}</small>
                 </div>
 
-                <a href="/photos/comments/{{ $post->id }}">{{ __('main.comments') }}</a> ({{ $post->count_comments }})
+                <i class="fa-regular fa-comment"></i> <a href="/photos/comments/{{ $post->id }}">{{ __('main.comments') }}</a> ({{ $post->count_comments }})
                 <a href="/photos/end/{{ $post->id }}">&raquo;</a>
             </div>
         @endif
@@ -168,7 +168,7 @@
         {{-- Загрузки --}}
         @if ($post instanceof \App\Models\Down)
             <div class="section mb-3 shadow">
-                <ol class="breadcrumb">
+                <ol class="breadcrumb mb-1">
                     <li class="breadcrumb-item">
                         <i class="fa-solid fa-download"></i> <a href="/loads" class="text-muted">{{ __('index.loads') }}</a>
                     </li>
@@ -253,7 +253,7 @@
                     <small class="section-date text-muted fst-italic">{{ dateFixed($post->created_at) }}</small>
                 </div>
 
-                <i class="fa fa-comment"></i> <a href="/downs/comments/{{ $post->id }}">{{ __('main.comments') }}</a> ({{ $post->count_comments }})
+                <i class="fa-regular fa-comment"></i> <a href="/downs/comments/{{ $post->id }}">{{ __('main.comments') }}</a> ({{ $post->count_comments }})
                 <a href="/downs/end/{{ $post->id }}">&raquo;</a>
             </div>
         @endif
@@ -261,7 +261,7 @@
         {{-- Статьи --}}
         @if ($post instanceof \App\Models\Article)
             <div class="section mb-3 shadow">
-                <ol class="breadcrumb">
+                <ol class="breadcrumb mb-1">
                     <li class="breadcrumb-item">
                         <i class="fa-regular fa-note-sticky"></i> <a href="/blogs" class="text-muted">{{ __('index.blogs') }}</a>
                     </li>
@@ -305,7 +305,7 @@
                     <small class="section-date text-muted fst-italic">{{ dateFixed($post->created_at) }}</small>
                 </div>
 
-                <a href="/articles/comments/{{ $post->id }}">{{ __('main.comments') }}</a> ({{ $post->count_comments }})
+                <i class="fa-regular fa-comment"></i> <a href="/articles/comments/{{ $post->id }}">{{ __('main.comments') }}</a> ({{ $post->count_comments }})
                 <a href="/articles/end/{{ $post->id }}">&raquo;</a>
             </div>
         @endif
@@ -313,7 +313,7 @@
         {{-- Объявления --}}
         @if ($post instanceof \App\Models\Item)
             <div class="section mb-3 shadow">
-                <ol class="breadcrumb">
+                <ol class="breadcrumb mb-1">
                     <li class="breadcrumb-item">
                         <i class="fa-solid fa-rectangle-list"></i> <a href="/boards" class="text-muted">{{ __('index.boards') }}</a>
                     </li>

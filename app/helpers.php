@@ -677,7 +677,10 @@ function getFeed(int $show = 20): HtmlString
     $posts = Cache::remember('statFeed' . ($user->id ?? 0), 300, static function () use ($show, $user) {
         $topics = Topic::query()
             ->select('topics.*', 'posts.created_at')
-            ->join('posts', 'last_post_id', 'posts.id')
+            ->join('posts', function ($join) {
+                $join->on('last_post_id', 'posts.id')
+                    ->where('posts.rating', '>', -3);
+            })
             ->when($user, static function (Builder $query) use ($user) {
                 $query->select('topics.*', 'posts.created_at', 'pollings.vote')
                     ->leftJoin('pollings', static function (JoinClause $join) use ($user) {
