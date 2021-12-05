@@ -194,16 +194,6 @@ class HelperTest extends \Tests\TestCase
     }
 
     /**
-     * Testing ratingVote
-     */
-    public function testRatingVote(): void
-    {
-        self::assertSame('<div class="star-rating fa-lg text-danger"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="far fa-star"></i>( 4 )</div>', ratingVote(4.2)->toHtml());
-
-        self::assertSame('<div class="star-rating fa-lg text-danger"><i class="fas fa-star"></i><i class="fas fa-star-half-alt"></i><i class="far fa-star"></i><i class="far fa-star"></i><i class="far fa-star"></i>( 1.5 )</div>', ratingVote(1.5)->toHtml());
-    }
-
-    /**
      * Testing bbCode
      */
     public function testBbCode(): void

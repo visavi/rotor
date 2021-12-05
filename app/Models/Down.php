@@ -27,7 +27,6 @@ use Illuminate\Support\HtmlString;
  * @property int created_at
  * @property int count_comments
  * @property int rating
- * @property int rated
  * @property int loads
  * @property int active
  * @property int updated_at
@@ -258,15 +257,5 @@ class Down extends BaseModel
         });
 
         return parent::delete();
-    }
-
-    /**
-     * Get calculated Rating
-     *
-     * @return float|int
-     */
-    public function getCalculatedRating()
-    {
-        return $this->rated ? round($this->rating / $this->rated, 1) : 0;
     }
 }

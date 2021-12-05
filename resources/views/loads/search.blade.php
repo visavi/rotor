@@ -38,7 +38,7 @@
                     {{ $data->shortText() }}<br>
 
                     {{ __('loads.load') }}: <a href="/loads/{{ $data->category->id }}">{{ $data->category->name }}</a><br>
-                    {{ __('main.rating') }}: {{ $data->getCalculatedRating() }}<br>
+                    {{ __('main.rating') }}: {{ formatNum($data->rating) }}<br>
                     {{ __('main.author') }}: {{ $data->user->getProfile() }}
                     <small class="section-date text-muted fst-italic">{{ dateFixed($data->created_at) }}</small>
                 </div>

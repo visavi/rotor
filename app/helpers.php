@@ -46,7 +46,7 @@ use Intervention\Image\Constraint;
 use Intervention\Image\ImageManagerStatic as Image;
 use ReCaptcha\ReCaptcha;
 
-const ROTOR_VERSION = '10.1';
+const ROTOR_VERSION = '10.2';
 define('SITETIME', time());
 
 /**
@@ -311,30 +311,6 @@ function formatTime(int $time, int $crumbs = 2): string
 function antimat(?string $str): string
 {
     return Antimat::replace((string) $str);
-}
-
-/**
- * Возвращает рейтинг в виде звезд
- *
- * @param int|float $rating рейтинг
- *
- * @return HtmlString Преобразованный рейтинг
- */
-function ratingVote($rating): HtmlString
-{
-    $rating = round($rating / 0.5) * 0.5;
-
-    $full_stars = floor($rating);
-    $half_stars = ceil($rating - $full_stars);
-    $empty_stars = 5 - $full_stars - $half_stars;
-
-    $output = '<div class="star-rating fa-lg text-danger">';
-    $output .= str_repeat('<i class="fas fa-star"></i>', $full_stars);
-    $output .= str_repeat('<i class="fas fa-star-half-alt"></i>', $half_stars);
-    $output .= str_repeat('<i class="far fa-star"></i>', $empty_stars);
-    $output .= '( ' . $rating . ' )</div>';
-
-    return new HtmlString($output);
 }
 
 /**
@@ -681,6 +657,12 @@ function statsForum(): string
     });
 }
 
+function getFeed2(int $show = 20)
+{
+
+}
+
+
 /**
  * Get feed
  *
@@ -694,16 +676,17 @@ function getFeed(int $show = 20): HtmlString
 
     $posts = Cache::remember('statFeed' . ($user->id ?? 0), 300, static function () use ($show, $user) {
         $topics = Topic::query()
-            ->select('topics.*', 'updated_at as created_at')
+            ->select('topics.*', 'posts.created_at')
+            ->join('posts', 'last_post_id', 'posts.id')
             ->when($user, static function (Builder $query) use ($user) {
-                $query->select('topics.*', 'updated_at as created_at', 'pollings.vote')
+                $query->select('topics.*', 'posts.created_at', 'pollings.vote')
                     ->leftJoin('pollings', static function (JoinClause $join) use ($user) {
                         $join->on('topics.last_post_id', 'pollings.relate_id')
                             ->where('pollings.relate_type', Post::$morphName)
                             ->where('pollings.user_id', $user->id);
                     });
             })
-            ->orderByDesc('updated_at')
+            ->orderByDesc('topics.updated_at')
             ->with('lastPost.user', 'lastPost.files')
             ->limit(20)
             ->get();
@@ -751,6 +734,14 @@ function getFeed(int $show = 20): HtmlString
             ->get();
 
         $downs = Down::query()
+            ->when($user, static function (Builder $query) use ($user) {
+                $query->select('downs.*', 'pollings.vote')
+                    ->leftJoin('pollings', static function (JoinClause $join) use ($user) {
+                        $join->on('downs.id', 'pollings.relate_id')
+                            ->where('pollings.relate_type', Down::$morphName)
+                            ->where('pollings.user_id', $user->id);
+                    });
+            })
             ->where('active', 1)
             ->orderByDesc('created_at')
             ->limit(20)

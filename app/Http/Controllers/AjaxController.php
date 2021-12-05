@@ -191,6 +191,7 @@ class AjaxController extends Controller
             Photo::$morphName,
             Offer::$morphName,
             News::$morphName,
+            Down::$morphName,
         ];
 
         $id   = int($request->input('id'));

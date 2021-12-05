@@ -713,7 +713,7 @@ class ArticleController extends Controller
         $sort = check($request->input('sort', 'visits'));
 
         switch ($sort) {
-            case 'rated':
+            case 'rating':
                 $order = 'rating';
                 break;
             case 'comments':

@@ -38,7 +38,7 @@
                     </div>
 
                     <div class="text-end js-rating">
-                        <b>{{ formatNum($down->getCalculatedRating()) }}</b>
+                        <b>{{ formatNum($down->rating) }}</b>
                     </div>
                 </div>
 

@@ -38,8 +38,8 @@
     <?php $active = ($order === 'loads') ? 'success' : 'light text-dark'; ?>
     <a href="/admin/loads/{{ $category->id }}?sort=loads" class="badge bg-{{ $active }}">{{ __('main.downloads') }}</a>
 
-    <?php $active = ($order === 'rated') ? 'success' : 'light text-dark'; ?>
-    <a href="/admin/loads/{{ $category->id }}?sort=rated" class="badge bg-{{ $active }}">{{ __('main.rating') }}</a>
+    <?php $active = ($order === 'rating') ? 'success' : 'light text-dark'; ?>
+    <a href="/admin/loads/{{ $category->id }}?sort=rating" class="badge bg-{{ $active }}">{{ __('main.rating') }}</a>
 
     <?php $active = ($order === 'count_comments') ? 'success' : 'light text-dark'; ?>
     <a href="/admin/loads/{{ $category->id }}?sort=comments" class="badge bg-{{ $active }}">{{ __('main.comments') }}</a>
@@ -78,7 +78,7 @@
                 </div>
 
                 <div class="section-content">
-                    {{ __('main.rating') }}: {{ $data->getCalculatedRating() }}<br>
+                    {{ __('main.rating') }}: {{ formatNum($data->rating) }}<br>
                     {{ __('main.downloads') }}: {{ $data->loads }}<br>
                     <a href="/downs/comments/{{ $data->id }}">{{ __('main.comments') }}</a> ({{ $data->count_comments }})
                     <a href="/downs/end/{{ $data->id }}">&raquo;</a>

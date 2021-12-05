@@ -254,8 +254,9 @@ class DownController extends Controller
                     if ($admins->isNotEmpty()) {
                         $text = textNotice('down_upload', ['url' => '/admin/downs/edit/' . $down->id, 'title' => $down->title]);
 
+                        /** @var User $admin */
                         foreach ($admins as $admin) {
-                            $admin->sendMessage($user, $text);
+                            $admin->sendMessage($user, $text, false);
                         }
                     }
                 }
@@ -272,61 +273,6 @@ class DownController extends Controller
         }
 
         return view('loads/create', compact('loads', 'cid'));
-    }
-
-    /**
-     * Голосование
-     *
-     * @param int       $id
-     * @param Request   $request
-     * @param Validator $validator
-     *
-     * @return RedirectResponse
-     */
-    public function vote(int $id, Request $request, Validator $validator): RedirectResponse
-    {
-        $score = int($request->input('score'));
-
-        /** @var Down $down */
-        $down = Down::query()->find($id);
-
-        if (! $down) {
-            abort(404, __('loads.down_not_exist'));
-        }
-
-        $validator
-            ->equal($request->input('_token'), csrf_token(), ['score' => __('validator.token')])
-            ->true(getUser(), ['score' => __('main.not_authorized')])
-            ->between($score, 1, 5, ['score' => __('loads.down_voted_required')])
-            ->notEmpty($down->active, ['score' => __('loads.down_not_verified')])
-            ->notEqual($down->user_id, getUser('id'), ['score' => __('loads.down_voted_forbidden')]);
-
-        if ($validator->isValid()) {
-            $polling = $down->polling()->first();
-            if ($polling) {
-                $down->increment('rating', $score - $polling->vote);
-
-                $polling->update([
-                    'vote'       => $score,
-                    'created_at' => SITETIME
-                ]);
-            } else {
-                $down->polling()->create([
-                    'user_id'     => getUser('id'),
-                    'vote'        => $score,
-                    'created_at'  => SITETIME,
-                ]);
-
-                $down->increment('rating', $score);
-                $down->increment('rated');
-            }
-
-            setFlash('success', __('loads.down_voted_success'));
-        } else {
-            setFlash('danger', $validator->getErrors());
-        }
-
-        return redirect('downs/' . $down->id);
     }
 
     /**

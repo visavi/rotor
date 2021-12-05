@@ -23,8 +23,8 @@ class TopController extends Controller
         $sort = check($request->input('sort'));
 
         switch ($sort) {
-            case 'rated':
-                $order = 'rated';
+            case 'rating':
+                $order = 'rating';
                 break;
             case 'comments':
                 $order = 'count_comments';

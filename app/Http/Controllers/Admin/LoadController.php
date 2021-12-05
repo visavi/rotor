@@ -218,8 +218,8 @@ class LoadController extends AdminController
         $sort = check($request->input('sort', 'time'));
 
         switch ($sort) {
-            case 'rated':
-                $order = 'rated';
+            case 'rating':
+                $order = 'rating';
                 break;
             case 'comments':
                 $order = 'count_comments';

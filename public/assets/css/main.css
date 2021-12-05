@@ -58,6 +58,12 @@
   font-size: 21px;
 }
 
+.avatar-micro > .avatar-default {
+    height: 20px;
+    width: 20px;
+    font-size: 14px;
+}
+
 .user-avatar {
   width: 64px;
   height: 64px;

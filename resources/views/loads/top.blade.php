@@ -21,8 +21,8 @@
     <?php $active = ($order === 'loads') ? 'success' : 'light text-dark'; ?>
     <a href="/loads/top?sort=loads" class="badge bg-{{ $active }}">{{ __('main.downloads') }}</a>
 
-    <?php $active = ($order === 'rated') ? 'success' : 'light text-dark'; ?>
-    <a href="/loads/top?sort=rated" class="badge bg-{{ $active }}">{{ __('main.rating') }}</a>
+    <?php $active = ($order === 'rating') ? 'success' : 'light text-dark'; ?>
+    <a href="/loads/top?sort=rating" class="badge bg-{{ $active }}">{{ __('main.rating') }}</a>
 
     <?php $active = ($order === 'count_comments') ? 'success' : 'light text-dark'; ?>
     <a href="/loads/top?sort=comments" class="badge bg-{{ $active }}">{{ __('main.comments') }}</a>
@@ -40,7 +40,7 @@
                     </div>
 
                     <div class="text-end js-rating">
-                        <b>{{ formatNum($data->getCalculatedRating()) }}</b>
+                        <b>{{ formatNum($data->rating) }}</b>
                     </div>
                 </div>
 

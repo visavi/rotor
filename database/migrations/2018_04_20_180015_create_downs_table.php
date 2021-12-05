@@ -23,7 +23,6 @@ final class CreateDownsTable extends Migration
                 $table->integer('user_id');
                 $table->integer('count_comments')->default(0);
                 $table->integer('rating')->default(0);
-                $table->integer('rated')->default(0);
                 $table->integer('loads')->default(0);
                 $table->boolean('active')->default(false);
                 $table->integer('updated_at')->nullable();
