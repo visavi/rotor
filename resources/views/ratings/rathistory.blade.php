@@ -28,9 +28,9 @@
             <div class="section mb-3 shadow">
                 <div class="section-content">
                     @if ($data->vote === '-')
-                        <i class="fa fa-thumbs-down text-danger"></i>
+                        <i class="fa fa-arrow-down text-danger"></i>
                     @else
-                        <i class="fa fa-thumbs-up text-success"></i>
+                        <i class="fa fa-arrow-up text-success"></i>
                     @endif
 
                     {{ $data->user->getProfile() }}

@@ -4,7 +4,7 @@
         <div class="col-sm">
             <h5>{{ __('index.pages') }}</h5>
             <ul class="nav flex-column">
-                <li class="nav-item mb-2"> <a href="/pages">{{ __('index.pages') }}</a></li>
+                <li class="nav-item mb-2"><a href="/pages">{{ __('index.pages') }}</a></li>
                 <li class="nav-item mb-2"><a href="/files/docs">{{ __('index.docs') }}</a></li>
             </ul>
         </div>

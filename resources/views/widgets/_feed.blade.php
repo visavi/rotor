@@ -4,6 +4,12 @@
         {{-- Новости --}}
         @if ($post instanceof \App\Models\News)
             <div class="section mb-3 shadow">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item">
+                        <i class="fa-solid fa-newspaper"></i> <a href="/news" class="text-muted"> {{ __('index.news') }}</a>
+                    </li>
+                </ol>
+
                 <div class="section-header d-flex align-items-center">
                     <div class="flex-grow-1">
                         <div class="section-title">
@@ -47,6 +53,21 @@
         {{-- Посты --}}
         @if ($post instanceof \App\Models\Topic)
             <div class="section mb-3 shadow">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item">
+                        <i class="fa-regular fa-message"></i> <a href="/forums" class="text-muted"> {{ __('index.forums') }}</a>
+                    </li>
+                    @if ($post->forum->parent->id)
+                        <li class="breadcrumb-item">
+                            <a href="/forums/{{ $post->forum->parent->id }}" class="text-muted">{{ $post->forum->parent->title }}</a>
+                        </li>
+                    @endif
+
+                    <li class="breadcrumb-item">
+                        <a href="/forums/{{ $post->forum->id }}" class="text-muted">{{ $post->forum->title }}</a>
+                    </li>
+                </ol>
+
                 <div class="section-header d-flex align-items-center">
                     <div class="flex-grow-1">
                         <div class="section-title">
@@ -102,6 +123,12 @@
         {{-- Фото --}}
         @if ($post instanceof \App\Models\Photo)
             <div class="section mb-3 shadow">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item">
+                        <i class="fa-regular fa-image"></i> <a href="/photos" class="text-muted">{{ __('index.photos') }}</a>
+                    </li>
+                </ol>
+
                 <div class="section-header d-flex align-items-center">
                     <div class="flex-grow-1">
                         <div class="section-title">
@@ -141,6 +168,22 @@
         {{-- Загрузки --}}
         @if ($post instanceof \App\Models\Down)
             <div class="section mb-3 shadow">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item">
+                        <i class="fa-solid fa-download"></i> <a href="/loads" class="text-muted">{{ __('index.loads') }}</a>
+                    </li>
+
+                    @if ($post->category->parent->id)
+                        <li class="breadcrumb-item">
+                            <a href="/loads/{{ $post->category->parent->id }}" class="text-muted">{{ $post->category->parent->name }}</a>
+                        </li>
+                    @endif
+
+                    <li class="breadcrumb-item">
+                        <a href="/loads/{{ $post->category_id }}" class="text-muted">{{ $post->category->name }}</a>
+                    </li>
+                </ol>
+
                 <div class="section-header d-flex align-items-center">
                     <div class="flex-grow-1">
                         <div class="section-title">
@@ -150,11 +193,11 @@
 
                     <div class="text-end js-rating">
                         @if (getUser() && getUser('id') !== $post->user_id)
-                            <a class="post-rating-down<?= $post->vote === '-' ? ' active' : '' ?>" href="#" onclick="return changeRating(this);" data-id="{{ $post->id }}" data-type="{{ $post->getMorphClass() }}" data-vote="-" data-token="{{ csrf_token() }}"><i class="fa fa-thumbs-down"></i></a>
+                            <a class="post-rating-down<?= $post->vote === '-' ? ' active' : '' ?>" href="#" onclick="return changeRating(this);" data-id="{{ $post->id }}" data-type="{{ $post->getMorphClass() }}" data-vote="-" data-token="{{ csrf_token() }}"><i class="fa fa-arrow-down"></i></a>
                         @endif
                         <b>{{ formatNum($post->rating) }}</b>
                         @if (getUser() && getUser('id') !== $post->user_id)
-                            <a class="post-rating-up<?= $post->vote === '+' ? ' active' : '' ?>" href="#" onclick="return changeRating(this);" data-id="{{ $post->id }}" data-type="{{ $post->getMorphClass() }}" data-vote="+" data-token="{{ csrf_token() }}"><i class="fa fa-thumbs-up"></i></a>
+                            <a class="post-rating-up<?= $post->vote === '+' ? ' active' : '' ?>" href="#" onclick="return changeRating(this);" data-id="{{ $post->id }}" data-type="{{ $post->getMorphClass() }}" data-vote="+" data-token="{{ csrf_token() }}"><i class="fa fa-arrow-up"></i></a>
                         @endif
                     </div>
                 </div>
@@ -190,7 +233,7 @@
                                 @endif
 
                                 @if ($allowDownload)
-                                    <a class="btn btn-success" href="/downs/download/{{ $file->id }}"><i class="fa fa-download"></i> {{ __('main.download') }}</a><br>
+                                    <a class="btn btn-sm btn-success" href="/downs/download/{{ $file->id }}"><i class="fa fa-download"></i> {{ __('main.download') }}</a><br>
                                 @endif
                             @else
                                 <i class="fa fa-download"></i> {{ __('main.file_not_found') }}
@@ -218,6 +261,23 @@
         {{-- Статьи --}}
         @if ($post instanceof \App\Models\Article)
             <div class="section mb-3 shadow">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item">
+                        <i class="fa-regular fa-note-sticky"></i> <a href="/blogs" class="text-muted">{{ __('index.blogs') }}</a>
+                    </li>
+
+                    @if ($post->category->parent->id)
+                        <li class="breadcrumb-item">
+                            <a href="/blogs/{{ $post->category->parent->id }}" class="text-muted">{{ $post->category->parent->name }}</a>
+                        </li>
+                    @endif
+
+                    <li class="breadcrumb-item">
+                        <a href="/blogs/{{ $post->category->id }}" class="text-muted">{{ $post->category->name }}</a>
+                    </li>
+                </ol>
+
+
                 <div class="section-header d-flex align-items-center">
                     <div class="flex-grow-1">
                         <div class="section-title">
@@ -253,6 +313,22 @@
         {{-- Объявления --}}
         @if ($post instanceof \App\Models\Item)
             <div class="section mb-3 shadow">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item">
+                        <i class="fa-solid fa-rectangle-list"></i> <a href="/boards" class="text-muted">{{ __('index.boards') }}</a>
+                    </li>
+
+                    @if ($post->category->parent->id)
+                        <li class="breadcrumb-item">
+                            <a href="/boards/{{ $post->category->parent->id }}" class="text-muted">{{ $post->category->parent->name }}</a>
+                        </li>
+                    @endif
+
+                    <li class="breadcrumb-item">
+                        <a href="/boards/{{ $post->category->id }}" class="text-muted">{{ $post->category->name }}</a>
+                    </li>
+                </ol>
+
                 <h3><a class="post-title" href="/items/{{ $post->id }}">{{ $post->title }}</a></h3>
 
                 <div class="col-md-12">
@@ -281,7 +357,7 @@
 
                         <div class="col-md-2">
                             @if ($post->price)
-                                <button type="button" class="btn btn-info">{{ $post->price }} {{ setting('currency') }}</button>
+                                <button type="button" class="btn btn-sm btn-light">{{ $post->price }} {{ setting('currency') }}</button>
                             @endif
                         </div>
                     </div>

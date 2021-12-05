@@ -687,7 +687,7 @@ function getFeed(int $show = 20): HtmlString
                     });
             })
             ->orderByDesc('topics.updated_at')
-            ->with('lastPost.user', 'lastPost.files')
+            ->with('lastPost.user', 'lastPost.files', 'forum.parent')
             ->limit(20)
             ->get();
 
@@ -716,7 +716,7 @@ function getFeed(int $show = 20): HtmlString
             })
             ->orderByDesc('created_at')
             ->limit(20)
-            ->with('user', 'files')
+            ->with('user', 'files', 'category.parent')
             ->get();
 
         $news = News::query()
@@ -745,14 +745,14 @@ function getFeed(int $show = 20): HtmlString
             ->where('active', 1)
             ->orderByDesc('created_at')
             ->limit(20)
-            ->with('user', 'files', 'category')
+            ->with('user', 'files', 'category.parent')
             ->get();
 
         $items = Item::query()
             ->where('expires_at', '>', SITETIME)
             ->orderByDesc('created_at')
             ->limit(20)
-            ->with('user', 'files')
+            ->with('user', 'files', 'category.parent')
             ->get();
 
         return $topics
