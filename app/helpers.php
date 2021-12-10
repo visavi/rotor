@@ -32,10 +32,12 @@ use App\Models\Vote;
 use GuzzleHttp\Client;
 use Illuminate\Database\Query\JoinClause;
 use Illuminate\Mail\Message;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Pagination\LengthAwarePaginator;
+use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Mail;
@@ -54,7 +56,7 @@ define('SITETIME', time());
  *
  * @param int $time секунды
  *
- * @return string форматированный вывод
+ * @return string Форматированный вывод
  */
 function makeTime(int $time): string
 {
@@ -657,12 +659,6 @@ function statsForum(): string
     });
 }
 
-function getFeed2(int $show = 20)
-{
-
-}
-
-
 /**
  * Get feed
  *
@@ -674,7 +670,7 @@ function getFeed(int $show = 20): HtmlString
 {
     $user = getUser();
 
-    $posts = Cache::remember('statFeed' . ($user->id ?? 0), 300, static function () use ($show, $user) {
+    $posts = Cache::remember('statFeed' . ($user->id ?? 0), 300, static function () use ($user) {
         $topics = Topic::query()
             ->select('topics.*', 'posts.created_at')
             ->join('posts', function ($join) {
@@ -765,9 +761,10 @@ function getFeed(int $show = 20): HtmlString
             ->merge($downs)
             ->merge($items)
             ->sortByDesc('created_at')
-            ->take($show);
+            ->take(100);
     });
 
+    $posts = simplePaginate($posts, $show);
     $allowDownload = $user || setting('down_guest_download');
 
     return new HtmlString(view('widgets/_feed', compact('posts', 'user', 'allowDownload')));
@@ -2075,20 +2072,53 @@ function getUser(?string $key = null)
 }
 
 /**
- * Разбивает массив по страницам
+ * Разбивает данные по страницам
  *
- * @param array $items
- * @param int   $perPage
- * @param array $appends
+ * @param array|Collection $items
+ * @param int              $perPage
+ * @param array            $appends
  *
  * @return LengthAwarePaginator
  */
-function paginate(array $items, int $perPage, array $appends = []): LengthAwarePaginator
+function paginate($items, int $perPage, array $appends = []): LengthAwarePaginator
 {
-    $currentPage = LengthAwarePaginator::resolveCurrentPage();
-    $slice       = array_slice($items, $perPage * ($currentPage - 1), $perPage, true);
+    $data = $items instanceof Collection ? $items : Collection::make($items);
 
-    $collection = new LengthAwarePaginator($slice, count($items), $perPage);
+    $currentPage = LengthAwarePaginator::resolveCurrentPage();
+
+    $collection = new LengthAwarePaginator(
+        $data->forPage($currentPage, $perPage),
+        $data->count(),
+        $perPage,
+        $currentPage
+    );
+
+    $collection->setPath(request()->url());
+    $collection->appends($appends);
+
+    return $collection;
+}
+
+/**
+ * Разбивает данные по страницам
+ *
+ * @param array|Collection $items
+ * @param int              $perPage
+ * @param array            $appends
+ *
+ * @return Paginator
+ */
+function simplePaginate($items, int $perPage, array $appends = []): Paginator
+{
+    $data = $items instanceof Collection ? $items : Collection::make($items);
+
+    $currentPage = Paginator::resolveCurrentPage();
+
+    $collection = new Paginator(
+        $data->slice(max(0, ($currentPage - 1) * $perPage)),
+        $perPage
+    );
+
     $collection->setPath(request()->url());
     $collection->appends($appends);
 

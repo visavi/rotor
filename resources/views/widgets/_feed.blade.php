@@ -187,7 +187,7 @@
                 <div class="section-header d-flex align-items-center">
                     <div class="flex-grow-1">
                         <div class="section-title">
-                            <h3><a class="post-title" href="/photos/{{ $post->id }}">{{ $post->title }}</a></h3>
+                            <h3><a class="post-title" href="/downs/{{ $post->id }}">{{ $post->title }}</a></h3>
                         </div>
                     </div>
 
@@ -365,4 +365,8 @@
             </div>
         @endif
     @endforeach
+
+    <div class="d-flex justify-content-center">
+        {{ $posts->links() }}
+    </div>
 @endif

@@ -28,6 +28,7 @@ class AppServiceProvider extends ServiceProvider
         DB::connection()->enableQueryLog();
 
         Paginator::$defaultView = 'app/_paginator';
+        Paginator::$defaultSimpleView = 'app/_simple_paginator';
 
         if (setting('app_installed')) {
             $this->loadMigrationsFrom([database_path('upgrades')]);
