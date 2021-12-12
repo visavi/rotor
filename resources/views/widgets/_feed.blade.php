@@ -71,7 +71,7 @@
                 <div class="section-header d-flex align-items-center">
                     <div class="flex-grow-1">
                         <div class="section-title">
-                            <h3><a class="post-title" href="/topics/{{ $post->id }}">{{ $post->title }}</a></h3>
+                            <h3><a class="post-title" href="/topics/{{ $post->id }}/{{ $post->lastPost->id }}">{{ $post->title }}</a></h3>
                         </div>
                     </div>
 
@@ -120,7 +120,7 @@
             </div>
         @endif
 
-        {{-- Фото --}}
+        {{-- Галерея --}}
         @if ($post instanceof \App\Models\Photo)
             <div class="section mb-3 shadow">
                 <ol class="breadcrumb mb-1">
@@ -148,7 +148,7 @@
                 </div>
 
                 <div class="section-content">
-                    @include('app/_carousel', ['model' => $post, 'path' => '/photos'])
+                    @include('app/_carousel', ['model' => $post])
 
                     @if ($post->text)
                         {{ bbCode($post->text) }}<br>
@@ -203,7 +203,7 @@
                 </div>
 
                 @if ($post->getImages()->isNotEmpty())
-                    @include('app/_carousel', ['model' => $post, 'files' => $post->getImages(), 'path' => '/downs'])
+                    @include('app/_carousel', ['model' => $post, 'files' => $post->getImages()])
                 @endif
 
                 <div class="section-message mb-3">

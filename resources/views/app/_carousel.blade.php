@@ -18,12 +18,7 @@ $countFiles = $files->count();
                     @php
                         $image = resizeImage($file->hash, ['alt' => $model->title, 'class' => 'w-100']);
                     @endphp
-
-                    @if (isset($path))
-                        <a href="{{ $path }}/{{ $model->id }}">{{ $image }}</a>
-                    @else
-                        {{ $image }}
-                    @endif
+                    <a href="{{ $file->hash }}" class="gallery" data-group="{{ $model->id }}">{{ $image }}</a>
                 </div>
             @endforeach
         </div>

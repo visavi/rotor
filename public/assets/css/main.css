@@ -230,29 +230,6 @@ textarea.form-control {
   border-radius: 3px;
 }
 
-.carousel-control-prev-icon,
-.carousel-control-next-icon {
-  background-image: none;
-  font-family: "Font Awesome 6 Free";
-  font-weight: 900;
-  font-size: 25px;
-  height: 35px;
-  width: 35px;
-  background-color: rgba(0, 0, 0, 0.5);
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.carousel-control-next-icon:after {
-  content: "\f138";
-}
-
-.carousel-control-prev-icon:after {
-  content: "\f137";
-}
-
 .scrollup {
   position: fixed;
   bottom: 20px;

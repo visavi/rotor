@@ -61,7 +61,7 @@
                 </div>
 
                 <div class="section-content">
-                    @include('app/_carousel', ['model' => $photo, 'path' => '/photos'])
+                    @include('app/_carousel', ['model' => $photo])
 
                     @if ($photo->text)
                         {{ bbCode($photo->text) }}<br>
