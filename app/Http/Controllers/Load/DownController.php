@@ -292,6 +292,10 @@ class DownController extends Controller
             abort(404, __('loads.down_not_exist'));
         }
 
+        if (! (getUser() || setting('down_guest_download'))) {
+            abort(403, __('loads.download_authorized'));
+        }
+
         if (! $file->relate->active && ! isAdmin(User::ADMIN)) {
             abort(200, __('loads.down_not_verified'));
         }
