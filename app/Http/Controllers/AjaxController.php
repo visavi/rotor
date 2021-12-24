@@ -301,7 +301,7 @@ class AjaxController extends Controller
         $isImageType = in_array($type, $imageTypes, true);
 
         if ($id) {
-            $model = $class::query()->where('user_id', getUser('id'))->find($id);
+            $model = $class::query()->find($id);
 
             if (! $model) {
                 return response()->json([
@@ -322,6 +322,10 @@ class AjaxController extends Controller
         $validator
             ->equal($request->input('_token'), csrf_token(), __('validator.token'))
             ->lt($countFiles, setting('maxfiles'), __('validator.files_max', ['max' => setting('maxfiles')]));
+
+        if ($model->id) {
+            $validator->true($model->user_id === getUser('id') || isAdmin(), __('ajax.record_not_author'));
+        }
 
         if ($validator->isValid()) {
             $rules = [
@@ -406,7 +410,7 @@ class AjaxController extends Controller
         }
 
         $validator->equal($request->input('_token'), csrf_token(), __('validator.token'))
-            ->true(getUser('id') === $file->user_id || isAdmin(), __('ajax.file_not_author'));
+            ->true($file->user_id === getUser('id') || isAdmin(), __('ajax.record_not_author'));
 
         if ($validator->isValid()) {
             $file->delete();

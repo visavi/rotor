@@ -3,7 +3,7 @@
 // This files are essential for the theme
 @import 'variables';
 @import 'customize-bootstrap';
-@import '~bootstrap/scss/bootstrap';
+@import 'bootstrap/scss/bootstrap';
 
 // This styles are essential for theme
 @import 'main';
@@ -20,10 +20,10 @@
 @import 'component/app-title';
 @import 'component/widgets';
 
-@import '~@fortawesome/fontawesome-free/scss/brands';
-@import '~@fortawesome/fontawesome-free/scss/regular';
-@import '~@fortawesome/fontawesome-free/scss/solid';
-@import "~@fortawesome/fontawesome-free/scss/fontawesome";
+@import '@fortawesome/fontawesome-free/scss/brands';
+@import '@fortawesome/fontawesome-free/scss/regular';
+@import '@fortawesome/fontawesome-free/scss/solid';
+@import "@fortawesome/fontawesome-free/scss/fontawesome";
 @import 'css/colorbox/colorbox';
 @import 'css/markitup/markitup';
 @import 'css/toastr';

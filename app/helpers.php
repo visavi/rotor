@@ -30,7 +30,6 @@ use App\Models\Topic;
 use App\Models\User;
 use App\Models\Vote;
 use GuzzleHttp\Client;
-use Illuminate\Database\Query\JoinClause;
 use Illuminate\Mail\Message;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
@@ -657,117 +656,6 @@ function statsForum(): string
 
         return formatShortNum($topics) . '/' . formatShortNum($posts) . ($totalNew  ? '/+' . $totalNew : '');
     });
-}
-
-/**
- * Get feed
- *
- * @param int $show
- *
- * @return HtmlString
- */
-function getFeed(int $show = 20): HtmlString
-{
-    $user = getUser();
-
-    $posts = Cache::remember('statFeed' . ($user->id ?? 0), 300, static function () use ($user) {
-        $topics = Topic::query()
-            ->select('topics.*', 'posts.created_at')
-            ->join('posts', function ($join) {
-                $join->on('last_post_id', 'posts.id')
-                    ->where('posts.rating', '>', -3);
-            })
-            ->when($user, static function (Builder $query) use ($user) {
-                $query->select('topics.*', 'posts.created_at', 'pollings.vote')
-                    ->leftJoin('pollings', static function (JoinClause $join) use ($user) {
-                        $join->on('topics.last_post_id', 'pollings.relate_id')
-                            ->where('pollings.relate_type', Post::$morphName)
-                            ->where('pollings.user_id', $user->id);
-                    });
-            })
-            ->orderByDesc('topics.updated_at')
-            ->with('lastPost.user', 'lastPost.files', 'forum.parent')
-            ->limit(20)
-            ->get();
-
-        $photos = Photo::query()
-            ->when($user, static function (Builder $query) use ($user) {
-                $query->select('photos.*', 'pollings.vote')
-                    ->leftJoin('pollings', static function (JoinClause $join) use ($user) {
-                        $join->on('photos.id', 'pollings.relate_id')
-                            ->where('pollings.relate_type', Photo::$morphName)
-                            ->where('pollings.user_id', $user->id);
-                    });
-            })
-            ->orderByDesc('created_at')
-            ->limit(20)
-            ->with('user', 'files')
-            ->get();
-
-        $articles = Article::query()
-            ->when($user, static function (Builder $query) use ($user) {
-                $query->select('articles.*', 'pollings.vote')
-                    ->leftJoin('pollings', static function (JoinClause $join) use ($user) {
-                        $join->on('articles.id', 'pollings.relate_id')
-                            ->where('pollings.relate_type', Article::$morphName)
-                            ->where('pollings.user_id', $user->id);
-                    });
-            })
-            ->orderByDesc('created_at')
-            ->limit(20)
-            ->with('user', 'files', 'category.parent')
-            ->get();
-
-        $news = News::query()
-            ->when($user, static function (Builder $query) use ($user) {
-                $query->select('news.*', 'pollings.vote')
-                    ->leftJoin('pollings', static function (JoinClause $join) use ($user) {
-                        $join->on('news.id', 'pollings.relate_id')
-                            ->where('pollings.relate_type', News::$morphName)
-                            ->where('pollings.user_id', $user->id);
-                    });
-            })
-            ->orderByDesc('created_at')
-            ->limit(20)
-            ->with('user')
-            ->get();
-
-        $downs = Down::query()
-            ->when($user, static function (Builder $query) use ($user) {
-                $query->select('downs.*', 'pollings.vote')
-                    ->leftJoin('pollings', static function (JoinClause $join) use ($user) {
-                        $join->on('downs.id', 'pollings.relate_id')
-                            ->where('pollings.relate_type', Down::$morphName)
-                            ->where('pollings.user_id', $user->id);
-                    });
-            })
-            ->where('active', 1)
-            ->orderByDesc('created_at')
-            ->limit(20)
-            ->with('user', 'files', 'category.parent')
-            ->get();
-
-        $items = Item::query()
-            ->where('expires_at', '>', SITETIME)
-            ->orderByDesc('created_at')
-            ->limit(20)
-            ->with('user', 'files', 'category.parent')
-            ->get();
-
-        return $topics
-            ->merge($news)
-            ->merge($photos)
-            ->merge($articles)
-            ->merge($downs)
-            ->merge($items)
-            ->sortByDesc('created_at')
-            ->take(100);
-    });
-
-    $posts = simplePaginate($posts, $show);
-    $allowDownload = $user || setting('down_guest_download');
-
-    return new HtmlString(view('widgets/_feed', compact('posts', 'user', 'allowDownload')));
 }
 
 /**

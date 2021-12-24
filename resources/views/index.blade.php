@@ -10,7 +10,11 @@
 @section('content')
     @include('ads/_top')
 
-    {{ getFeed() }}
+    @if (1 === 2)
+        @include('widgets._classic');
+    @else
+        {{ (new \App\Classes\Feed())->getFeed() }}
+    @endif
 
     @include('ads/_bottom')
 @stop
