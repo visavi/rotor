@@ -24,9 +24,10 @@ class PageController extends Controller
      */
     public function index(string $page = 'index'): View
     {
-        if ($page === 'menu'  ||
-            ! preg_match('|^[a-z0-9_\-]+$|i', $page) ||
-            ! file_exists(resource_path('views/main/' . $page . '.blade.php'))
+        if (
+            $page === 'menu'
+            || ! preg_match('|^[a-z0-9_\-]+$|i', $page)
+            || ! file_exists(resource_path('views/main/' . $page . '.blade.php'))
         ) {
             abort(404);
         }

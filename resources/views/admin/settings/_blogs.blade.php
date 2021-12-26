@@ -28,7 +28,7 @@
         <div class="invalid-feedback">{{ textError('sets[blogvotepoint]') }}</div>
     </div>
 
-    <div class="form-check">
+    <div class="form-check mb-3">
         <input type="hidden" value="0" name="sets[blog_create]">
         <input type="checkbox" class="form-check-input" value="1" name="sets[blog_create]" id="blog_create"{{ getInput('sets.blog_create', $settings['blog_create']) ? ' checked' : '' }}>
         <label class="form-check-label" for="blog_create">{{ __('settings.blogs_publish') }}</label>

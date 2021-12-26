@@ -32,78 +32,73 @@ class Feed
     /**
      * Get feed
      *
-     * @param int $show
-     *
      * @return HtmlString
      */
-    public function getFeed(int $show = 20): HtmlString
+    public function getFeed(): HtmlString
     {
-        $topicsEnable = true;
-        $newsEnable = true;
-        $photosEnable = true;
-        $articlesEnable = true;
-        $downsEnable = true;
-        $itemsEnable = true;
-
         $polls = [];
         $collect = new Collection();
 
-
-        if ($topicsEnable) {
+        if (setting('feed_topics_show')) {
             $topics = $this->getTopics();
             $collect = $collect->merge($topics);
 
             if ($this->user) {
-                $polls[Post::$morphName] = $this->getPolling($topics->pluck('last_post_id')->all(), Post::$morphName);
+                $ids = $topics->pluck('last_post_id')->all();
+                $polls[Post::$morphName] = $this->getPolling($ids, Post::$morphName);
             }
         }
 
-        if ($newsEnable) {
+        if (setting('feed_news_show')) {
             $news = $this->getNews();
             $collect = $collect->merge($news);
 
             if ($this->user) {
-                $polls[News::$morphName] = $this->getPolling($news->pluck('id')->all(), News::$morphName);
+                $ids = $news->pluck('id')->all();
+                $polls[News::$morphName] = $this->getPolling($ids, News::$morphName);
             }
         }
 
-        if ($photosEnable) {
+        if (setting('feed_photos_show')) {
             $photos = $this->getPhotos();
             $collect = $collect->merge($photos);
 
             if ($this->user) {
-                $polls[Photo::$morphName] = $this->getPolling($photos->pluck('id')->all(), Photo::$morphName);
+                $ids = $photos->pluck('id')->all();
+                $polls[Photo::$morphName] = $this->getPolling($ids, Photo::$morphName);
             }
         }
 
-        if ($articlesEnable) {
+        if (setting('feed_articles_show')) {
             $articles = $this->getArticles();
             $collect = $collect->merge($articles);
 
             if ($this->user) {
-                $polls[Article::$morphName] = $this->getPolling($articles->pluck('id')->all(), Article::$morphName);
+                $ids = $articles->pluck('id')->all();
+                $polls[Article::$morphName] = $this->getPolling($ids, Article::$morphName);
             }
         }
 
-        if ($downsEnable) {
+        if (setting('feed_downs_show')) {
             $downs = $this->getDowns();
             $collect = $collect->merge($downs);
 
             if ($this->user) {
-                $polls[Down::$morphName] = $this->getPolling($downs->pluck('id')->all(), Down::$morphName);
+                $ids = $downs->pluck('id')->all();
+                $polls[Down::$morphName] = $this->getPolling($ids, Down::$morphName);
             }
         }
 
-        if ($itemsEnable) {
+        if (setting('feed_items_show')) {
             $collect = $collect->merge($this->getItems());
         }
 
         $posts = $collect
-                ->sortByDesc('created_at')
-                ->take(100);
+            ->sortByDesc('created_at')
+            ->take(setting('feed_total'));
 
         $user  = $this->user;
-        $posts = simplePaginate($posts, $show);
+        $posts = simplePaginate($posts, setting('feed_per_page'));
         $allowDownload = $user || setting('down_guest_download');
 
         return new HtmlString(view('widgets/_feed', compact('posts', 'polls', 'user', 'allowDownload')));
@@ -139,11 +134,11 @@ class Feed
                 ->select('topics.*', 'posts.created_at')
                 ->join('posts', function ($join) {
                     $join->on('last_post_id', 'posts.id')
-                        ->where('posts.rating', '>', -3);
+                        ->where('posts.rating', '>', setting('feed_topics_rating'));
                 })
                 ->orderByDesc('topics.updated_at')
                 ->with('lastPost.user', 'lastPost.files', 'forum.parent')
-                ->limit(20)
+                ->limit(setting('feed_last_record'))
                 ->get();
         });
     }
@@ -157,9 +152,9 @@ class Feed
     {
         return Cache::remember('NewsFeed', 600, static function () {
             return News::query()
-                ->where('rating', '>', -3)
+                ->where('rating', '>', setting('feed_news_rating'))
                 ->orderByDesc('created_at')
-                ->limit(20)
+                ->limit(setting('feed_last_record'))
                 ->with('user')
                 ->get();
         });
@@ -174,9 +169,9 @@ class Feed
     {
         return Cache::remember('PhotoFeed', 600, static function () {
             return Photo::query()
-                ->where('rating', '>', -3)
+                ->where('rating', '>', setting('feed_photos_rating'))
                 ->orderByDesc('created_at')
-                ->limit(20)
+                ->limit(setting('feed_last_record'))
                 ->with('user', 'files')
                 ->get();
         });
@@ -191,8 +186,9 @@ class Feed
     {
         return Cache::remember('ArticleFeed', 600, static function () {
             return Article::query()
+                ->where('rating', '>', setting('feed_downs_rating'))
                 ->orderByDesc('created_at')
-                ->limit(20)
+                ->limit(setting('feed_last_record'))
                 ->with('user', 'files', 'category.parent')
                 ->get();
         });
@@ -208,9 +204,9 @@ class Feed
         return Cache::remember('DownFeed', 600, static function () {
             return Down::query()
                 ->where('active', 1)
-                ->where('rating', '>', -3)
+                ->where('rating', '>', setting('feed_downs_rating'))
                 ->orderByDesc('created_at')
-                ->limit(20)
+                ->limit(setting('feed_last_record'))
                 ->with('user', 'files', 'category.parent')
                 ->get();
         });
@@ -227,7 +223,7 @@ class Feed
             return Item::query()
                 ->where('expires_at', '>', SITETIME)
                 ->orderByDesc('created_at')
-                ->limit(20)
+                ->limit(setting('feed_last_record'))
                 ->with('user', 'files', 'category.parent')
                 ->get();
         });

@@ -171,7 +171,8 @@ class TopicController extends Controller
         if ($validator->isValid()) {
             $msg = antimat($msg);
 
-            if ($post
+            if (
+                $post
                 && $post->created_at + 600 > SITETIME
                 && $user->id === $post->user_id
                 && (utfStrlen($msg) + utfStrlen($post->text) <= setting('forumtextlength'))

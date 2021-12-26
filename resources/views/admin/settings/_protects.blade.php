@@ -43,13 +43,13 @@
         <div class="invalid-feedback">{{ textError('sets[captcha_offset]') }}</div>
     </div>
 
-    <div class="form-check">
+    <div class="form-check mb-3">
         <input type="hidden" value="0" name="sets[captcha_distortion]">
         <input type="checkbox" class="form-check-input" value="1" name="sets[captcha_distortion]" id="captcha_distortion"{{ getInput('sets.captcha_distortion', $settings['captcha_distortion']) ? ' checked' : '' }}>
         <label for="captcha_distortion" class="form-check-label">{{ __('settings.captcha_distortion') }}</label>
     </div>
 
-    <div class="form-check">
+    <div class="form-check mb-3">
         <input type="hidden" value="0" name="sets[captcha_interpolation]">
         <input type="checkbox" class="form-check-input" value="1" name="sets[captcha_interpolation]" id="captcha_interpolation"{{ getInput('sets.captcha_interpolation', $settings['captcha_interpolation']) ? ' checked' : '' }}>
         <label for="captcha_interpolation" class="form-check-label">{{ __('settings.captcha_blur') }}</label>

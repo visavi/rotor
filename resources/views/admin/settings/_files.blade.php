@@ -37,7 +37,7 @@
         <div class="invalid-feedback">{{ textError('sets[previewsize]') }}</div>
     </div>
 
-    <div class="form-check">
+    <div class="form-check mb-3">
         <input type="hidden" value="0" name="sets[copyfoto]">
         <input type="checkbox" class="form-check-input" value="1" name="sets[copyfoto]" id="copyfoto"{{ getInput('sets.copyfoto', $settings['copyfoto']) ? ' checked' : '' }}>
         <label class="form-check-label" for="copyfoto">{{ __('settings.images_copyright') }}</label>

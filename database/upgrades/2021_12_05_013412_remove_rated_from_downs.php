@@ -82,7 +82,7 @@ final class RemoveRatedFromDowns extends Migration
      */
     public function down(): void
     {
-        Schema::table('errors', function (Blueprint $table) {
+        Schema::table('downs', function (Blueprint $table) {
             $table->integer('rated')->default(0)->after('rating');
         });
     }

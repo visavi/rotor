@@ -68,6 +68,7 @@ class Setting extends Model
             'files',
             'stickers',
             'offers',
+            'feeds',
         ];
     }
 

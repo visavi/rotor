@@ -30,9 +30,9 @@ class CheckAccessSite
 
         // Сайт закрыт для гостей
         if (
-            setting('closedsite') === 1 &&
-            ! getUser() &&
-            ! $request->is('login', 'register', 'recovery', 'captcha')
+            setting('closedsite') === 1
+            && ! getUser()
+            && ! $request->is('login', 'register', 'recovery', 'captcha')
         ) {
             setFlash('danger', __('main.not_authorized'));
 
@@ -41,9 +41,9 @@ class CheckAccessSite
 
         // Сайт закрыт для всех
         if (
-            setting('closedsite') === 2 &&
-            ! isAdmin() &&
-            ! $request->is('login', 'captcha', 'closed')
+            setting('closedsite') === 2
+            && ! isAdmin()
+            && ! $request->is('login', 'captcha', 'closed')
         ) {
             return redirect('closed');
         }

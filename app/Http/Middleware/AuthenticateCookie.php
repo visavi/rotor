@@ -61,9 +61,9 @@ class AuthenticateCookie
     private function cookieAuth(Request $request): void
     {
         if (
-            $request->hasCookie('login') &&
-            $request->hasCookie('password') &&
-            $request->session()->missing('id')
+            $request->hasCookie('login')
+            && $request->hasCookie('password')
+            && $request->session()->missing('id')
         ) {
             $login    = $request->cookie('login');
             $password = $request->cookie('password');

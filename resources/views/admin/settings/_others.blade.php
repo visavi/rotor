@@ -4,7 +4,7 @@
 
 <form method="post">
     @csrf
-    <div class="form-check">
+    <div class="form-check mb-3">
         <input type="hidden" value="0" name="sets[errorlog]">
         <input type="checkbox" class="form-check-input" value="1" name="sets[errorlog]" id="errorlog"{{ getInput('sets.errorlog', $settings['errorlog']) ? ' checked' : '' }}>
         <label for="errorlog" class="form-check-label">{{ __('settings.log_enable') }}</label>
@@ -52,7 +52,7 @@
         <div class="invalid-feedback">{{ textError('sets[deleted_user]') }}</div>
     </div>
 
-    <div class="form-check">
+    <div class="form-check mb-3">
         <input type="hidden" value="0" name="sets[addbansend]">
         <input type="checkbox" class="form-check-input" value="1" name="sets[addbansend]" id="addbansend"{{ getInput('sets.addbansend', $settings['addbansend']) ? ' checked' : '' }}>
         <label for="addbansend" class="form-check-label">{{ __('settings.ban_explanation') }}</label>

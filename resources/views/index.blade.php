@@ -10,10 +10,10 @@
 @section('content')
     @include('ads/_top')
 
-    @if (1 === 2)
-        @include('widgets._classic');
-    @else
+    @if (setting('homepage_view') === 'feed')
         {{ (new \App\Classes\Feed())->getFeed() }}
+    @else
+        @include('widgets._classic');
     @endif
 
     @include('ads/_bottom')

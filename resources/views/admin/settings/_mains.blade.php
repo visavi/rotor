@@ -52,7 +52,6 @@
     <div class="mb-3{{ hasError('sets[language]') }}">
         <label for="language" class="form-label">{{ __('settings.language') }}:</label>
         <select class="form-select" id="language" name="sets[language]">
-
             @foreach ($languages as $language)
                 <?php $selected = ($language === $inputLang) ? ' selected' : ''; ?>
                 <option value="{{ $language }}"{{ $selected }}>{{ $language }}</option>
@@ -67,7 +66,6 @@
     <div class="mb-3{{ hasError('sets[language_fallback]') }}">
         <label for="language_fallback" class="form-label">{{ __('settings.fallback_language') }}:</label>
         <select class="form-select" id="language_fallback" name="sets[language_fallback]">
-
             @foreach ($languages as $language)
                 <?php $selected = ($language === $inputLangFallback) ? ' selected' : ''; ?>
                 <option value="{{ $language }}"{{ $selected }}>{{ $language }}</option>
@@ -87,12 +85,10 @@
     <div class="mb-3{{ hasError('sets[themes]') }}">
         <label for="themes" class="form-label">{{ __('settings.theme') }}:</label>
         <select class="form-select" id="themes" name="sets[themes]">
-
             @foreach ($themes as $theme)
                 <?php $selected = ($inputThemes === $theme) ? ' selected' : ''; ?>
                 <option value="{{ $theme }}"{{ $selected }}>{{ $theme }}</option>
             @endforeach
-
         </select>
         <div class="invalid-feedback">{{ textError('sets[themes]') }}</div>
     </div>
@@ -102,23 +98,21 @@
     <div class="mb-3{{ hasError('sets[closedsite]') }}">
         <label for="closedsite" class="form-label">{{ __('settings.access_site') }}:</label>
         <select class="form-select" id="closedsite" name="sets[closedsite]">
-
             @foreach ($statsite as $key => $stat)
                 <?php $selected = ($key === (int) $settings['closedsite']) ? ' selected' : ''; ?>
                 <option value="{{ $key }}"{{ $selected }}>{{ $stat }}</option>
             @endforeach
-
         </select>
         <div class="invalid-feedback">{{ textError('sets[closedsite]') }}</div>
     </div>
 
-    <div class="form-check">
+    <div class="form-check mb-3">
         <input type="hidden" value="0" name="sets[openreg]">
         <input type="checkbox" class="form-check-input" value="1" name="sets[openreg]" id="openreg"{{ getInput('sets.openreg', $settings['openreg']) ? ' checked' : '' }}>
         <label class="form-check-label" for="openreg">{{ __('settings.registration_allow') }}</label>
     </div>
 
-    <div class="form-check">
+    <div class="form-check mb-3">
         <input type="hidden" value="0" name="sets[regkeys]">
         <input type="checkbox" class="form-check-input" value="1" name="sets[regkeys]" id="regkeys"{{ getInput('sets.regkeys', $settings['regkeys']) ? ' checked' : '' }}>
         <label class="form-check-label" for="regkeys">{{ __('settings.registration_confirm') }}</label>
@@ -128,11 +122,10 @@
         <input type="hidden" value="0" name="sets[invite]">
         <input type="checkbox" class="form-check-input" value="1" name="sets[invite]" id="invite"{{ getInput('sets.invite', $settings['invite']) ? ' checked' : '' }}>
         <label class="form-check-label" for="invite">{{ __('settings.registration_invite') }}</label>
+        <p class="text-muted fst-italic">
+            {{ __('settings.registration_invite_hint') }}
+        </p>
     </div>
-
-    <p class="text-muted fst-italic">
-        {{ __('settings.registration_invite_hint') }}
-    </p>
 
     <button class="btn btn-primary">{{ __('main.save') }}</button>
 </form>

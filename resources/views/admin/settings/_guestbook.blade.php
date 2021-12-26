@@ -4,13 +4,13 @@
 
 <form method="post">
     @csrf
-    <div class="form-check">
+    <div class="form-check mb-3">
         <input type="hidden" value="0" name="sets[bookadds]">
         <input type="checkbox" class="form-check-input" value="1" name="sets[bookadds]" id="bookadds"{{ getInput('sets.bookadds', $settings['bookadds']) ? ' checked' : '' }}>
         <label class="form-check-label" for="bookadds">{{ __('settings.guestbook_guests_allow') }}</label>
     </div>
 
-    <div class="form-check">
+    <div class="form-check mb-3">
         <input type="hidden" value="0" name="sets[bookscores]">
         <input type="checkbox" class="form-check-input" value="1" name="sets[bookscores]" id="bookscores"{{ getInput('sets.bookscores', $settings['bookscores']) ? ' checked' : '' }}>
         <label class="form-check-label" for="bookscores">{{ __('settings.guestbook_points_add') }}</label>

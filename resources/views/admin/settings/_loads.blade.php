@@ -31,13 +31,13 @@
         <div class="invalid-feedback">{{ textError('sets[allowextload]') }}</div>
     </div>
 
-    <div class="form-check">
+    <div class="form-check mb-3">
         <input type="hidden" value="0" name="sets[downupload]">
         <input type="checkbox" class="form-check-input" value="1" name="sets[downupload]" id="downupload"{{ getInput('sets.downupload', $settings['downupload']) ? ' checked' : '' }}>
         <label for="downupload" class="form-check-label">{{ __('settings.loads_files_allow') }}</label>
     </div>
 
-    <div class="form-check">
+    <div class="form-check mb-3">
         <input type="hidden" value="0" name="sets[down_guest_download]">
         <input type="checkbox" class="form-check-input" value="1" name="sets[down_guest_download]" id="down_guest_download"{{ getInput('sets.down_guest_download', $settings['down_guest_download']) ? ' checked' : '' }}>
         <label for="down_guest_download" class="form-check-label">{{ __('settings.loads_guests_download_allow') }}</label>
