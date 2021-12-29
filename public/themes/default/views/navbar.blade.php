@@ -49,6 +49,17 @@
             @endif
 
             @if ($user->isActive())
+                @if (strtotime(date('d.m.Y')) < strtotime(date('10.01.Y', strtotime('+3 days', SITETIME))))
+                    <li>
+                        <div class="surprise-container" title="{{ __('pages.surprise') }}">
+                            <img alt="" src="/assets/img/images/snow.png" class="surprise-background">
+                            <a href="/surprise">
+                                <img src="/assets/img/images/ded.png" class="surprise-ded" alt="">
+                            </a>
+                            <img alt="" src="/assets/img/images/glass.png" class="surprise-glasses">
+                        </div>
+                    </li>
+                @endif
                 <li class="dropdown js-messages-block">
                     <a class="app-nav__item" href="#" data-bs-toggle="dropdown" aria-label="Show notifications">
                         <i class="far fa-envelope fa-lg"></i>

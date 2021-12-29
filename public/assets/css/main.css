@@ -313,6 +313,55 @@ textarea.form-control {
     color:red;
 }
 
+/* Surprise */
+.surprise-container {
+    width: 50px;
+    height: 50px;
+    position: relative;
+    cursor: pointer;
+    -webkit-flex: none;
+    flex: none;
+}
+
+.surprise-ded {
+    position: absolute;
+    top: -3px;
+    left: 0;
+    z-index: 2;
+}
+
+.surprise-glasses {
+    position: absolute;
+    top: 24px;
+    left: 9px;
+    z-index: 3;
+    -webkit-transform: translate(0, 0) rotate(
+        5deg);
+    transform: translate(0, 0) rotate(
+        5deg);
+    transition: 0.3s transform ease-out, 0.3s -webkit-transform ease-out;
+}
+
+.surprise-background {
+    position: absolute;
+    top: -15px;
+    left: -15px;
+    z-index: 1;
+    opacity: 0;
+    transition: 0.3s opacity ease-out;
+}
+
+.surprise-container:hover .surprise-background {
+    opacity: 1;
+}
+
+.surprise-container:hover .surprise-glasses {
+    -webkit-transform: translate(-2px, -5px) rotate(
+        -10deg);
+    transform: translate(-2px, -5px) rotate(
+        -10deg);
+}
+
 /* Fix close button bootbox 5.5.2 */
 .bootbox-close-button {
     margin: -0.8rem -0.5rem -0.5rem auto;

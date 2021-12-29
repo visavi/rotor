@@ -264,7 +264,6 @@
                 @foreach ($post->getFiles() as $file)
                     <div class="media-file mb-3">
                         @if ($file->hash && file_exists(public_path($file->hash)))
-
                             @if ($file->extension === 'mp3')
                                 <div>
                                     <audio src="{{ $file->hash }}" style="max-width:100%;" preload="metadata" controls controlsList="{{ $allowDownload ? null : 'nodownload' }}"></audio>

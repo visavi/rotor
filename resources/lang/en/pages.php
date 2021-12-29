@@ -117,6 +117,7 @@ return [
     'sticker'        => 'Insert sticker from ready-made kit',
     'preview'        => 'Preview processed text',
 
+    'surprise'                  => 'New years surprise',
     'surprise_date_receipt'     => 'The deadline for receiving a surprise has not yet begun or is already over!',
     'surprise_already_received' => 'This year a surprise has already been received!',
     'surprise_success_received' => 'Surprise received successfully!',

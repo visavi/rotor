@@ -125,18 +125,16 @@ class PageController extends Controller
      */
     public function surprise(): RedirectResponse
     {
-        $surprise['requiredDate']  = '10.01';
-
         $money  = mt_rand(10000, 50000);
         $point  = mt_rand(150, 250);
         $rating = mt_rand(3, 10);
-        $year   = date('Y');
+        $year   = date('Y', strtotime('+3 days', SITETIME));
 
         if (! $user = getUser()) {
             abort(403, __('main.not_authorized'));
         }
 
-        if (strtotime(date('d.m.Y')) > strtotime($surprise['requiredDate'].'.'.date('Y'))) {
+        if (strtotime(date('d.m.Y')) > strtotime('10.01' . '.' . $year)) {
             abort(200, __('pages.surprise_date_receipt'));
         }
 
@@ -159,7 +157,12 @@ class PageController extends Controller
         $user->increment('posrating', $rating);
         $user->update(['rating' => $user->posrating - $user->negrating]);
 
-        $text = textNotice('surprise', ['year' => $year, 'point' => plural($point, setting('scorename')), 'money' => plural($money, setting('moneyname')), 'rating' => $rating]);
+        $text = textNotice('surprise', [
+            'year' => $year,
+            'point' => plural($point, setting('scorename')),
+            'money' => plural($money, setting('moneyname')),
+            'rating' => $rating,
+        ]);
         $user->sendMessage(null, $text);
 
         Surprise::query()->create([
@@ -169,6 +172,7 @@ class PageController extends Controller
         ]);
 
         setFlash('success', __('pages.surprise_success_received'));
+
         return redirect('/');
     }
 
