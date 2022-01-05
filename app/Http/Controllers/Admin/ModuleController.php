@@ -63,7 +63,7 @@ class ModuleController extends AdminController
         }
 
         if (file_exists($modulePath . '/resources/assets')) {
-            $moduleConfig['symlink'] = str_replace(public_path(), '', (new Module())->getLinkName($modulePath));
+            $moduleConfig['symlink'] = (new Module())->getLinkName($modulePath);
         }
 
         $module = Module::query()->where('name', $moduleName)->first();

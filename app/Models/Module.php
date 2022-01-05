@@ -94,7 +94,7 @@ class Module extends BaseModel
     public function createSymlink(string $modulePath): void
     {
         $filesystem  = new Filesystem();
-        $originPath  = $this->getLinkName($modulePath);
+        $originPath  = public_path($this->getLinkName($modulePath));
         $modulesPath = $modulePath . '/resources/assets';
 
         if (! file_exists($modulesPath)) {
@@ -115,7 +115,7 @@ class Module extends BaseModel
      */
     public function deleteSymlink(string $modulePath): void
     {
-        $originPath = $this->getLinkName($modulePath);
+        $originPath = public_path($this->getLinkName($modulePath));
 
         if (! file_exists($originPath)) {
             return;
@@ -133,7 +133,7 @@ class Module extends BaseModel
      */
     public function getLinkName(string $modulePath): string
     {
-        return public_path($this->assetsPath . Str::plural(strtolower(basename($modulePath))));
+        return $this->assetsPath . Str::plural(strtolower(basename($modulePath)));
     }
 
     /**
