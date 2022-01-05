@@ -49,7 +49,7 @@
             @endif
 
             @if ($user->isActive())
-                @if (strtotime(date('d.m.Y')) < strtotime(date('10.01.Y', strtotime('+3 days', SITETIME))))
+                @if (strtotime(date('d.m.Y')) <= strtotime(date('10.01.Y', strtotime('+3 days', SITETIME))))
                     <li>
                         <div class="surprise-container" title="{{ __('pages.surprise') }}">
                             <img alt="" src="/assets/img/images/snow.png" class="surprise-background">

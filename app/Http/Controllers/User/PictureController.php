@@ -55,7 +55,7 @@ class PictureController extends Controller
             $validator->file($photo, $rules, ['photo' => __('validator.image_upload_failed')]);
 
             if ($validator->isValid()) {
-                //-------- Удаляем старую фотку и аватар ----------//
+                //-------- Удаляем старое фото и аватар ----------//
                 if ($this->user->picture) {
                     deleteFile(public_path($this->user->picture));
                     deleteFile(public_path($this->user->avatar));
@@ -65,16 +65,17 @@ class PictureController extends Controller
                     $this->user->save();
                 }
 
-                //-------- Генерируем аватар ----------//
-                $avatar = public_path($this->user->uploadAvatarPath . '/' . uniqueName('png'));
-                $img = Image::make($photo);
-                $img->fit(64);
-                $img->save($avatar);
-
+                //-------- Загружаем фото ----------//
                 $file = $this->user->uploadFile($photo, false);
 
+                //-------- Генерируем аватар -------//
+                $avatar = $this->user->uploadAvatarPath . '/' . uniqueName('png');
+                $img = Image::make($photo);
+                $img->fit(64);
+                $img->save(public_path($avatar));
+
                 $this->user->picture = $file['path'];
-                $this->user->avatar  = str_replace(public_path(), '', $avatar);
+                $this->user->avatar  = $avatar;
                 $this->user->save();
 
                 setFlash('success', __('users.photo_success_uploaded'));
