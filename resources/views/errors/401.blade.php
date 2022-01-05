@@ -6,7 +6,7 @@
 @section('description', __('errors.error') . ' 401')
 
 @section('content')
-    <?php $images = glob(public_path('assets/img/errors/*.png')); ?>
+    <?php $images = glob(public_path('assets/img/errors/*.{gif,png,jpg,jpeg}'), GLOB_BRACE); ?>
 
     <div class="row">
         <div class="col-12 text-center">
