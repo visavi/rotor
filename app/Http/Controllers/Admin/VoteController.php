@@ -12,7 +12,6 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
-use Throwable;
 
 class VoteController extends AdminController
 {
@@ -106,7 +105,7 @@ class VoteController extends AdminController
 
                 setFlash('success', __('votes.voting_success_changed'));
 
-                return redirect('admin/votes/edit/'.$vote->id);
+                return redirect('admin/votes/edit/' . $vote->id);
             }
 
             setInput($request->all());
@@ -125,7 +124,6 @@ class VoteController extends AdminController
      * @param Request $request
      *
      * @return RedirectResponse
-     * @throws Throwable
      */
     public function delete(int $id, Request $request): RedirectResponse
     {

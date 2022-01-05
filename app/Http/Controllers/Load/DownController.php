@@ -136,7 +136,6 @@ class DownController extends Controller
      * @param int $fid
      *
      * @return RedirectResponse
-     * @throws Exception
      */
     public function deleteFile(int $id, int $fid): RedirectResponse
     {

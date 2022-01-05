@@ -7,7 +7,6 @@ namespace App\Http\Controllers\Admin;
 use App\Classes\Validator;
 use App\Models\Antimat;
 use App\Models\User;
-use Exception;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
@@ -60,7 +59,6 @@ class AntimatController extends AdminController
      * @param Validator $validator
      *
      * @return RedirectResponse
-     * @throws Exception
      */
     public function delete(Request $request, Validator $validator): RedirectResponse
     {

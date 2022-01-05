@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace App\Models;
 
-use Exception;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
 
 /**
@@ -81,7 +80,6 @@ class File extends BaseModel
      * Удаление записи и загруженных файлов
      *
      * @return bool|null
-     * @throws Exception
      */
     public function delete(): ?bool
     {

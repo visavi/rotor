@@ -7,7 +7,6 @@ namespace App\Http\Controllers;
 use App\Classes\Validator;
 use App\Models\Rating;
 use App\Models\User;
-use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -170,7 +169,6 @@ class RatingController extends Controller
      * @param Validator $validator
      *
      * @return JsonResponse
-     * @throws Exception
      */
     public function delete(Request $request, Validator $validator): JsonResponse
     {

@@ -8,7 +8,6 @@ use App\Classes\Validator;
 use App\Models\Board;
 use App\Models\Item;
 use App\Models\User;
-use Exception;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -294,7 +293,6 @@ class BoardController extends AdminController
      * @param Validator $validator
      *
      * @return RedirectResponse
-     * @throws Exception
      */
     public function deleteItem(int $id, Request $request, Validator $validator): RedirectResponse
     {

@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace App\Models;
 
 use App\Traits\UploadTrait;
-use Exception;
 use FFMpeg\FFProbe;
 use FFMpeg\Format\Video\X264;
 use Illuminate\Database\Eloquent\Collection;
@@ -248,7 +247,6 @@ class Down extends BaseModel
      * Удаление загрузки и загруженных файлов
      *
      * @return bool|null
-     * @throws Exception
      */
     public function delete(): ?bool
     {

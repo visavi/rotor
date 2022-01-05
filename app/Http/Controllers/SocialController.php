@@ -7,7 +7,6 @@ namespace App\Http\Controllers;
 use App\Classes\Validator;
 use App\Models\Social;
 use App\Models\User;
-use Exception;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\GuzzleException;
 use Illuminate\Http\RedirectResponse;

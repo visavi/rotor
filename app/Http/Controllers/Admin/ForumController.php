@@ -10,7 +10,6 @@ use App\Models\Post;
 use App\Models\Topic;
 use App\Models\User;
 use App\Models\Vote;
-use Exception;
 use Illuminate\Database\Query\JoinClause;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -432,7 +431,6 @@ class ForumController extends AdminController
      * @param Validator $validator
      *
      * @return RedirectResponse
-     * @throws Exception
      */
     public function deleteTopic(int $id, Request $request, Validator $validator): RedirectResponse
     {
@@ -604,7 +602,6 @@ class ForumController extends AdminController
      * @param Validator $validator
      *
      * @return RedirectResponse
-     * @throws Exception
      */
     public function deletePosts(Request $request, Validator $validator): RedirectResponse
     {

@@ -12,7 +12,6 @@ use App\Models\Flood;
 use App\Models\Invite;
 use App\Models\User;
 use App\Models\UserField;
-use Exception;
 use GuzzleHttp\Exception\GuzzleException;
 use Illuminate\Database\Query\JoinClause;
 use Illuminate\Http\JsonResponse;
@@ -659,7 +658,6 @@ class UserController extends Controller
      * @param Validator $validator
      *
      * @return RedirectResponse
-     * @throws Exception
      */
     public function editMail(Request $request, Validator $validator): RedirectResponse
     {
@@ -884,7 +882,6 @@ class UserController extends Controller
      * @param Validator $validator
      *
      * @return JsonResponse
-     * @throws Exception
      */
     public function checkLogin(Request $request, Validator $validator): JsonResponse
     {

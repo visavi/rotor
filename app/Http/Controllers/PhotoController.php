@@ -9,7 +9,6 @@ use App\Models\Comment;
 use App\Models\File;
 use App\Models\Flood;
 use App\Models\Photo;
-use Exception;
 use Illuminate\Database\Query\JoinClause;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -329,7 +328,6 @@ class PhotoController extends Controller
      * @param Validator $validator
      *
      * @return RedirectResponse
-     * @throws Exception
      */
     public function delete(int $id, Request $request, Validator $validator): RedirectResponse
     {

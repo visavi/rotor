@@ -11,7 +11,6 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
-use Throwable;
 
 class TransferController extends Controller
 {
@@ -52,7 +51,6 @@ class TransferController extends Controller
      * @param Validator $validator
      *
      * @return RedirectResponse
-     * @throws Throwable
      */
     public function send(Request $request, Validator $validator): RedirectResponse
     {

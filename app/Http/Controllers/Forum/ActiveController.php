@@ -8,7 +8,6 @@ use App\Http\Controllers\Controller;
 use App\Models\Post;
 use App\Models\Topic;
 use App\Models\User;
-use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\View\View;
 
@@ -80,7 +79,6 @@ class ActiveController extends Controller
      * @param int $id
      *
      * @return JsonResponse
-     * @throws Exception
      */
     public function destroy(int $id): JsonResponse
     {

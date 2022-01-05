@@ -8,7 +8,6 @@ use App\Classes\Validator;
 use App\Models\Article;
 use App\Models\Blog;
 use App\Models\User;
-use Exception;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
@@ -139,7 +138,6 @@ class ArticleController extends AdminController
      * @param Validator $validator
      *
      * @return RedirectResponse
-     * @throws Exception
      */
     public function delete(int $id, Request $request, Validator $validator): RedirectResponse
     {
@@ -338,7 +336,6 @@ class ArticleController extends AdminController
      * @param Validator $validator
      *
      * @return RedirectResponse
-     * @throws Exception
      */
     public function deleteArticle(int $id, Request $request, Validator $validator): RedirectResponse
     {

@@ -12,7 +12,6 @@ use App\Models\File;
 use App\Models\Post;
 use App\Models\Topic;
 use App\Models\User;
-use Exception;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
@@ -173,7 +172,6 @@ class UserController extends AdminController
      * @param Validator $validator
      *
      * @return View|RedirectResponse
-     * @throws Exception
      */
     public function delete(Request $request, Validator $validator)
     {

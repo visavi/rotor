@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace App\Models;
 
 use App\Traits\UploadTrait;
-use Exception;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\GuzzleException;
 use Illuminate\Auth\Authenticatable;
@@ -691,8 +690,7 @@ class User extends BaseModel implements
     /**
      * Удаляет записи пользователя из всех таблиц
      *
-     * @return bool|null  результат удаления
-     * @throws Exception
+     * @return bool|null  Результат удаления
      */
     public function delete(): ?bool
     {

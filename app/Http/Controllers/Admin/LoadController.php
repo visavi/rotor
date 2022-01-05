@@ -9,7 +9,6 @@ use App\Models\Down;
 use App\Models\File;
 use App\Models\Load;
 use App\Models\User;
-use Exception;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
@@ -140,7 +139,6 @@ class LoadController extends AdminController
      * @param Validator $validator
      *
      * @return RedirectResponse
-     * @throws Exception
      */
     public function delete(int $id, Request $request, Validator $validator): RedirectResponse
     {
@@ -340,7 +338,6 @@ class LoadController extends AdminController
      * @param Request $request
      *
      * @return RedirectResponse
-     * @throws Exception
      */
     public function deleteDown(int $id, Request $request): RedirectResponse
     {
@@ -379,7 +376,6 @@ class LoadController extends AdminController
      * @param int $fid
      *
      * @return RedirectResponse
-     * @throws Exception
      */
     public function deleteFile(int $id, int $fid): RedirectResponse
     {

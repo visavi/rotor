@@ -7,7 +7,6 @@ namespace App\Http\Controllers\Admin;
 use App\Classes\Validator;
 use App\Models\Photo;
 use App\Models\User;
-use Exception;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
@@ -86,7 +85,6 @@ class PhotoController extends AdminController
      * @param Validator $validator
      *
      * @return RedirectResponse
-     * @throws Exception
      */
     public function delete(int $id, Request $request, Validator $validator): RedirectResponse
     {

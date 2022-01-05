@@ -20,7 +20,6 @@ use App\Models\Post;
 use App\Models\Spam;
 use App\Models\Sticker;
 use App\Models\Wall;
-use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Database\Eloquent\Relations\Relation;
@@ -181,7 +180,6 @@ class AjaxController extends Controller
      * @param Request $request
      *
      * @return JsonResponse
-     * @throws Exception
      */
     public function rating(Request $request): JsonResponse
     {
@@ -376,7 +374,6 @@ class AjaxController extends Controller
      * @param Validator $validator
      *
      * @return JsonResponse
-     * @throws Exception
      */
     public function deleteFile(Request $request, Validator $validator): JsonResponse
     {
@@ -431,7 +428,6 @@ class AjaxController extends Controller
      * Вставляет стикер
      *
      * @return JsonResponse
-     * @throws Exception
      */
     public function getStickers(): JsonResponse
     {
