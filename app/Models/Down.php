@@ -264,8 +264,8 @@ class Down extends BaseModel
         if (
             $file['extension'] === 'zip'
             && setting('archive_file_path')
+            && ! str_contains(setting('archive_file_path'), '..')
             && file_exists(public_path(setting('archive_file_path')))
-            && strpos(setting('archive_file_path'), '..') === false
         ) {
             $archive = new ZipFile();
             try {

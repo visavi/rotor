@@ -58,20 +58,22 @@ set('bin/npm', function () {
 
 // Hosts
 host('hostname')
-    ->roles('php')
-    ->stage('production')
-    ->configFile('~/.ssh/config')
-    ->identityFile('~/.ssh/id_rsa')
-    ->forwardAgent(true)
-    ->multiplexing(true)
-    ->addSshOption('UserKnownHostsFile', '/dev/null')
-    ->addSshOption('StrictHostKeyChecking', 'no');
+    ->set('labels', ['stage' => 'production', 'role' => 'php'])
+    ->setConfigFile('~/.ssh/config')
+    ->setIdentityFile('~/.ssh/id_rsa')
+    ->setForwardAgent(true)
+    ->setSshMultiplexing(true)
+    ->setSshArguments([
+        '-o UserKnownHostsFile=/dev/null',
+        '-o StrictHostKeyChecking=no',
+    ]);
 
 // Tasks
 desc('PHP reload');
 task('reload:php-fpm', static function () {
     run('sudo /usr/sbin/service php8.0-fpm reload');
-})->onRoles('php');
+})
+    ->select('role=php');
 
 desc('Env copy');
 task('deploy:env:copy', static function () {
@@ -81,20 +83,26 @@ task('deploy:env:copy', static function () {
 desc('Migrate database');
 task('database:migrate', static function () {
     run('{{artisan}} migrate --force');
-})->onRoles('php')->once();
+})
+    ->select('role=php')
+    ->once();
 
 desc('Npm install');
 task('deploy:npm', static function () {
     run("cd {{release_path}} && {{bin/npm}} ci");
     run('cd {{release_path}} && {{bin/npm}} run prod');
-})->onStage('production')->once();
+})
+    ->select('stage=production')
+    ->once();
 
 desc('Cache data');
 task('cache:data', static function () {
     run('{{artisan}} config:cache');
     run('{{artisan}} route:cache');
     run('{{artisan}} view:cache');
-})->onStage('production')->once();
+})
+    ->select('stage=production')
+    ->once();
 
 desc('Deploy your project');
 task('deploy', [
@@ -110,8 +118,8 @@ task('deploy', [
     'deploy:clear_paths',
     'deploy:symlink',
     'deploy:unlock',
-    'cleanup',
-    'success'
+    'deploy:cleanup',
+    'deploy:success'
 ]);
 
 // Npm ci and run
@@ -121,10 +129,10 @@ after('deploy:update_code', 'deploy:npm');
 after('deploy:failed', 'deploy:unlock');
 
 // Cache
-before('success', 'cache:data');
+before('deploy:success', 'cache:data');
 
 // Reload php-fpm
-before('success', 'reload:php-fpm');
+before('deploy:success', 'reload:php-fpm');
 
 // Migrate database before symlink new release.
 before('deploy:symlink', 'database:migrate');
