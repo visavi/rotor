@@ -723,7 +723,7 @@ class UserController extends Controller
             ->notEqual($status, $user->status, ['status' => __('users.status_different')])
             ->gte($user->point, setting('editstatuspoint'), ['status' => __('users.status_points')])
             ->gte($user->money, $cost, ['status' => __('users.status_moneys')])
-            ->length($status, 3, 20, ['status' => __('users.status_short_or_long')], false);
+            ->length($status, 3, 25, ['status' => __('users.status_short_or_long')], false);
 
         if ($validator->isValid()) {
             $user->update([

@@ -134,7 +134,7 @@ class PageController extends Controller
             abort(403, __('main.not_authorized'));
         }
 
-        if (strtotime(date('d.m.Y')) > strtotime('10.01' . '.' . $year)) {
+        if (strtotime(date('d.m.Y')) > strtotime('03.01' . '.' . $year)) {
             abort(200, __('pages.surprise_date_receipt'));
         }
 

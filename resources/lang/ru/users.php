@@ -1,6 +1,9 @@
 <?php
 
 return [
+    'basic_fields'            => 'Основные поля',
+    'custom_fields'           => 'Пользовательские поля',
+
     'change_email'            => 'Изменение email',
     'email'                   => 'Е-mail',
     'current_password'        => 'Текущий пароль',

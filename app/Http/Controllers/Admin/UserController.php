@@ -12,6 +12,8 @@ use App\Models\File;
 use App\Models\Post;
 use App\Models\Topic;
 use App\Models\User;
+use App\Models\UserField;
+use Illuminate\Database\Query\JoinClause;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
@@ -62,7 +64,7 @@ class UserController extends AdminController
      *
      * @return View|RedirectResponse
      */
-    public function edit(Request $request, Validator $validator)
+    public function edit(Request $request, Validator $validator): View|RedirectResponse
     {
         $user = getUserByLogin($request->input('user'));
 
@@ -77,6 +79,16 @@ class UserController extends AdminController
         foreach (User::ALL_GROUPS as $level) {
             $allGroups[$level] = User::getLevelByKey($level);
         }
+
+        $fields = UserField::query()
+            ->select('uf.*', 'ud.value')
+            ->from('user_fields as uf')
+            ->leftJoin('user_data as ud', static function (JoinClause $join) use ($user) {
+                $join->on('uf.id', 'ud.field_id')
+                    ->where('ud.user_id', $user->id);
+            })
+            ->orderBy('uf.sort')
+            ->get();
 
         if ($request->isMethod('post')) {
             $level     = $request->input('level');
@@ -106,9 +118,19 @@ class UserController extends AdminController
                 ->url($site, ['site' => __('validator.url')], false)
                 ->regex($birthday, '#^[0-9]{2}+\.[0-9]{2}+\.[0-9]{4}$#', ['birthday' => __('validator.date')], false)
                 ->regex($created, '#^[0-9]{2}+\.[0-9]{2}+\.[0-9]{4}$#', ['created' => __('validator.date')], false)
-                ->length($status, 3, 20, ['status' => __('users.status_short_or_long')], false)
+                ->length($status, 3, 25, ['status' => __('users.status_short_or_long')], false)
                 ->true(in_array($themes, $allThemes, true) || empty($themes), ['themes' => __('users.theme_not_installed')])
                 ->length($info, 0, 1000, ['info' => __('users.info_yourself_long')]);
+
+            foreach ($fields as $field) {
+                $validator->length(
+                    $request->input('field' . $field->id),
+                    $field->min,
+                    $field->max,
+                    ['field' . $field->id => __('validator.text')],
+                    false // Для админа поля не обязательны
+                );
+            }
 
             if ($validator->isValid()) {
                 if ($password) {
@@ -146,6 +168,15 @@ class UserController extends AdminController
                     'created_at' => strtotime($created),
                 ]);
 
+                foreach ($fields as $field) {
+                    $user->data()
+                        ->updateOrCreate([
+                            'field_id' => $field->id,
+                        ], [
+                            'value' => $request->input('field' . $field->id),
+                        ]);
+                }
+
                 clearCache('status');
                 setFlash('success', [__('users.user_success_changed'), $text]);
 
@@ -162,7 +193,7 @@ class UserController extends AdminController
             ->orderByDesc('created_at')
             ->first();
 
-        return view('admin/users/edit', compact('user', 'banhist', 'allThemes', 'allGroups', 'adminGroups'));
+        return view('admin/users/edit', compact('user', 'banhist', 'allThemes', 'allGroups', 'adminGroups', 'fields'));
     }
 
     /**
@@ -173,7 +204,7 @@ class UserController extends AdminController
      *
      * @return View|RedirectResponse
      */
-    public function delete(Request $request, Validator $validator)
+    public function delete(Request $request, Validator $validator): View|RedirectResponse
     {
         $user = getUserByLogin($request->input('user'));
 

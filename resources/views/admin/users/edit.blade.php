@@ -30,8 +30,20 @@
     @endif
 
     <div class="section-form mb-3 shadow">
+
+        <nav>
+            <div class="nav nav-tabs" id="nav-tab" role="tablist">
+                <button class="nav-link active" id="nav-home-tab" data-bs-toggle="tab" data-bs-target="#nav-home" type="button" role="tab">{{ __('users.basic_fields') }}</button>
+                <button class="nav-link" id="nav-profile-tab" data-bs-toggle="tab" data-bs-target="#nav-profile" type="button" role="tab">{{ __('users.custom_fields') }}</button>
+            </div>
+        </nav>
+
         <form method="post" action="/admin/users/edit?user={{ $user->login }}">
             @csrf
+
+        <div class="tab-content" id="nav-tabContent">
+            <div class="tab-pane fade show active py-3" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab">
+
             <?php $inputLevel = getInput('level', $user->level); ?>
             <div class="mb-3">
                 <label for="level" class="form-label">{{ __('users.position') }}:</label>
@@ -163,6 +175,22 @@
                 <textarea class="form-control markItUp" id="info" rows="5" name="info">{{ getInput('info', $user->info) }}</textarea>
                 <div class="invalid-feedback">{{ textError('info') }}</div>
             </div>
+
+             </div>
+            <div class="tab-pane fade py-3" id="nav-profile" role="tabpanel" aria-labelledby="nav-profile-tab">
+                @foreach($fields as $field)
+                    <div class="mb-3{{ $field->required ? ' form-required' : null }}{{ hasError('field' . $field->id) }}">
+                        <label for="{{ 'field' . $field->id }}" class="form-label">{{ $field->name }}:</label>
+                        @if ($field->type === 'textarea')
+                            <textarea class="form-control markItUp" id="{{ 'field' . $field->id }}" cols="25" rows="5" name="{{ 'field' . $field->id }}">{{ getInput('field' . $field->id, $field->value) }}</textarea>
+                        @else
+                            <input class="form-control" id="{{ 'field' . $field->id }}" name="{{ 'field' . $field->id }}" maxlength="{{ $field->length }}" value="{{ getInput('field' . $field->id, $field->value) }}">
+                        @endif
+                        <div class="invalid-feedback">{{ textError('field' . $field->id) }}</div>
+                    </div>
+                @endforeach
+            </div>
+        </div>
 
             <button class="btn btn-primary">{{ __('main.change') }}</button>
         </form>
