@@ -8,7 +8,6 @@ use App\Http\Controllers\Controller;
 use App\Models\File;
 use App\Models\Load;
 use App\Models\User;
-use Exception;
 use App\Classes\Validator;
 use App\Models\Comment;
 use App\Models\Down;
@@ -18,6 +17,7 @@ use Illuminate\Database\Query\JoinClause;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
+use PhpZip\Exception\ZipException;
 use PhpZip\ZipFile;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -65,7 +65,7 @@ class DownController extends Controller
      *
      * @return View|RedirectResponse
      */
-    public function edit(int $id, Request $request, Validator $validator)
+    public function edit(int $id, Request $request, Validator $validator): View|RedirectResponse
     {
         /** @var Down $down */
         $down = Down::query()->where('user_id', getUser('id'))->find($id);
@@ -170,7 +170,7 @@ class DownController extends Controller
      *
      * @return View|RedirectResponse
      */
-    public function create(Request $request, Validator $validator, Flood $flood)
+    public function create(Request $request, Validator $validator, Flood $flood): View|RedirectResponse
     {
         $cid = int($request->input('cid'));
 
@@ -322,7 +322,7 @@ class DownController extends Controller
      *
      * @return View|RedirectResponse
      */
-    public function comments(int $id, Request $request, Validator $validator, Flood $flood)
+    public function comments(int $id, Request $request, Validator $validator, Flood $flood): View|RedirectResponse
     {
         /** @var Down $down */
         $down = Down::query()->find($id);
@@ -391,7 +391,7 @@ class DownController extends Controller
      *
      * @return View|RedirectResponse
      */
-    public function editComment(int $id, int $cid, Request $request, Validator $validator)
+    public function editComment(int $id, int $cid, Request $request, Validator $validator): View|RedirectResponse
     {
         $down = Down::query()->find($id);
 
@@ -495,13 +495,14 @@ class DownController extends Controller
         try {
             $archive = new ZipFile();
             $archive->openFile(public_path($file->hash));
+            $entries = array_values($archive->getEntries());
 
-            $down         = $file->relate;
-            $getDocuments = array_values($archive->getAllInfo());
-            $viewExt      = Down::getViewExt();
+            $down      = $file->relate;
+            $viewExt   = Down::getViewExt();
+            $documents = paginate($entries, setting('ziplist'));
 
-            $documents = paginate($getDocuments, setting('ziplist'));
-        } catch (Exception $e) {
+            $archive->close();
+        } catch (ZipException) {
             abort(200, __('loads.archive_not_open'));
         }
 
@@ -534,14 +535,25 @@ class DownController extends Controller
         }
 
         try {
+            $viewExt = Down::getViewExt();
+
             $archive = new ZipFile();
             $archive->openFile(public_path($file->hash));
-            $getDocuments = array_values($archive->getAllInfo());
-            $document     = $getDocuments[$fid] ?? null;
+            $entries = array_values($archive->getEntries());
 
-            $content = $archive[$document->getName()];
+            $document = $entries[$fid] ?? null;
+            $ext      = getExtension($document->getName());
+            $content  = $archive[$document->getName()];
+            $archive->close();
 
-            if ($document->getSize() > 0 && preg_match("/\.(gif|png|bmp|jpg|jpeg)$/", $document->getName())) {
+            if (! in_array($ext, $viewExt, true)) {
+                abort(200, __('loads.file_not_read'));
+            }
+
+            if (
+                $document->getUncompressedSize() > 0
+                && preg_match("/\.(gif|png|bmp|jpg|jpeg)$/", $document->getName())
+            ) {
                 $ext = getExtension($document->getName());
 
                 header('Content-type: image/' . $ext);
@@ -555,7 +567,7 @@ class DownController extends Controller
             }
 
             $down = $file->relate;
-        } catch (Exception $e) {
+        } catch (ZipException) {
             abort(200, __('loads.file_not_read'));
         }
 

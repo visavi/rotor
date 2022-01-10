@@ -70,7 +70,7 @@ class UserController extends AdminController
             abort(404, __('validator.user'));
         }
 
-        $allThemes   = array_map('basename', glob(public_path('/themes/*'), GLOB_ONLYDIR));
+        $allThemes   = array_map('basename', glob(public_path('themes/*'), GLOB_ONLYDIR));
         $adminGroups = User::ADMIN_GROUPS;
 
         $allGroups   = [];

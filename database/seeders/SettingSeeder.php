@@ -19,6 +19,7 @@ class SettingSeeder extends Seeder
             ['name'  => 'addbansend', 'value' => 1],
             ['name'  => 'addofferspoint', 'value' => 50],
             ['name'  => 'advertpoint', 'value' => 1000],
+            ['name'  => 'archive_file_path', 'value' => ''],
             ['name'  => 'allowextload', 'value' => 'zip,rar,txt,jpg,jpeg,gif,png,mp3,mp4,pdf'],
             ['name'  => 'allvotes', 'value' => 10],
             ['name'  => 'avtorlist', 'value' => 10],

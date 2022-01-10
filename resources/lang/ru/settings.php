@@ -56,10 +56,12 @@ return [
     'guestbook_per_page'     => 'Сообщений в гостевой на стр',
     'guestbook_symbols'      => 'Символов в сообщении гостевой',
 
-    'images_reduction_size' => 'Уменьшение фото при загрузке',
-    'images_preview_size'   => 'Размер превью',
-    'images_copyright'      => 'Наложение копирайта',
-    'images_hint'           => 'При изменении размера превью, необходимо очистить кэш изображений',
+    'images_reduction_size'  => 'Уменьшение фото при загрузке',
+    'images_preview_size'    => 'Размер превью',
+    'images_copyright'       => 'Наложение копирайта',
+    'images_hint'            => 'При изменении размера превью, необходимо очистить кэш изображений',
+    'archive_file_path'      => 'Путь к файлу добавляемого в архив',
+    'archive_file_path_hint' => 'Файл должен находиться в директории public (Пример: /test.txt)',
 
     'counters_enable'    => 'Отображение счетчика',
     'performance_enable' => 'Производительность',

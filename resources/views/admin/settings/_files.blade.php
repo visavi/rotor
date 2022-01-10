@@ -49,5 +49,15 @@
         {{ __('settings.images_hint') }}
     </p>
 
+    <div class="mb-3{{ hasError('sets[archive_file_path]') }}">
+        <label for="archive_file_path" class="form-label">{{ __('settings.archive_file_path') }}:</label>
+        <input type="hidden" name="opt[archive_file_path]" value="1">
+        <input type="text" class="form-control" id="archive_file_path" name="sets[archive_file_path]" value="{{ getInput('sets.archive_file_path', $settings['archive_file_path']) }}">
+        <div class="invalid-feedback">{{ textError('sets[archive_file_path]') }}</div>
+        <p class="text-muted fst-italic">
+            {{ __('settings.archive_file_path_hint') }}
+        </p>
+    </div>
+
     <button class="btn btn-primary">{{ __('main.save') }}</button>
 </form>

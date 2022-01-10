@@ -1968,7 +1968,7 @@ function getUser(?string $key = null)
  *
  * @return LengthAwarePaginator
  */
-function paginate($items, int $perPage, array $appends = []): LengthAwarePaginator
+function paginate(array|Collection $items, int $perPage, array $appends = []): LengthAwarePaginator
 {
     $data = $items instanceof Collection ? $items : Collection::make($items);
 
@@ -1996,7 +1996,7 @@ function paginate($items, int $perPage, array $appends = []): LengthAwarePaginat
  *
  * @return Paginator
  */
-function simplePaginate($items, int $perPage, array $appends = []): Paginator
+function simplePaginate(array|Collection $items, int $perPage, array $appends = []): Paginator
 {
     $data = $items instanceof Collection ? $items : Collection::make($items);
 

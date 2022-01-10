@@ -56,10 +56,12 @@ return [
     'guestbook_per_page'     => 'Guest posts on page',
     'guestbook_symbols'      => 'Characters in guest message',
 
-    'images_reduction_size' => 'Reducing photos when uploading',
-    'images_preview_size'   => 'Size preview',
-    'images_copyright'      => 'Copyright overlay',
-    'images_hint'           => 'When resizing previews, you need to clear the image cache',
+    'images_reduction_size'  => 'Reducing photos when uploading',
+    'images_preview_size'    => 'Size preview',
+    'images_copyright'       => 'Copyright overlay',
+    'images_hint'            => 'When resizing previews, you need to clear the image cache',
+    'archive_file_path'      => 'The path to the file to add to the archive',
+    'archive_file_path_hint' => 'The file must be in the public directory (Example: /test.txt)',
 
     'counters_enable'    => 'Counter display',
     'performance_enable' => 'Performance',

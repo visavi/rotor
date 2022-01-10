@@ -21,7 +21,7 @@
 @stop
 
 @section('content')
-    {{ __('loads.file_size') }}: {{ formatSize($document->getSize()) }}
+    {{ __('loads.file_size') }}: {{ formatSize($document->getUncompressedSize()) }}
     <hr>
 
     @if ($content)

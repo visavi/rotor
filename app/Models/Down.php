@@ -14,6 +14,8 @@ use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Database\Eloquent\Relations\MorphOne;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\HtmlString;
+use PhpZip\Exception\ZipException;
+use PhpZip\ZipFile;
 
 /**
  * Class Down
@@ -53,17 +55,13 @@ class Down extends BaseModel
 
     /**
      * Директория загрузки файлов
-     *
-     * @var string
      */
-    public $uploadPath = '/uploads/files';
+    public string $uploadPath = '/uploads/files';
 
     /**
      * Counting field
-     *
-     * @var string
      */
-    public $countingField = 'loads';
+    public string $countingField = 'loads';
 
     /**
      * Список расширений доступных для просмотра в архиве
@@ -189,6 +187,7 @@ class Down extends BaseModel
     {
         $uploadFile = $this->uploadFile($file);
         $this->convertVideo($uploadFile);
+        $this->addFileToArchive($uploadFile);
 
         return $uploadFile;
     }
@@ -199,9 +198,9 @@ class Down extends BaseModel
      * @param array $file
      * @return void
      */
-    public function convertVideo(array $file): void
+    private function convertVideo(array $file): void
     {
-        $isVideo = strpos($file['mime'], 'video/') !== false;
+        $isVideo = str_contains($file['mime'], 'video/');
 
         // Обработка видео
         if ($isVideo && config('ffmpeg.enabled')) {
@@ -255,5 +254,28 @@ class Down extends BaseModel
         });
 
         return parent::delete();
+    }
+
+    /**
+     * Add file to archive
+     */
+    private function addFileToArchive(array $file): void
+    {
+        if (
+            $file['extension'] === 'zip'
+            && setting('archive_file_path')
+            && file_exists(public_path(setting('archive_file_path')))
+            && strpos(setting('archive_file_path'), '..') === false
+        ) {
+            $archive = new ZipFile();
+            try {
+                $archive->openFile(public_path($file['path']));
+                $archive->addFile(public_path(setting('archive_file_path')));
+                $archive->saveAsFile(public_path($file['path']));
+                $archive->close();
+            } catch (ZipException) {
+                // nothing
+            }
+        }
     }
 }

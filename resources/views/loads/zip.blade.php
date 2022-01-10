@@ -26,14 +26,13 @@
     @if ($documents->isNotEmpty())
         <div class="mb-3">
             @foreach ($documents as $key => $document)
-
-                @if ($document->isFolder())
-                    <i class="fa fa-folder-open"></i>
+                @if ($document->isDirectory())
+                    <i class="far fa-folder-open"></i>
                     <b>{{ __('loads.directory') }} {{ rtrim($document->getName(), '/') }}</b><br>
                 @else
-                    <?php $ext = getExtension($document->getName()) ?>
+                    @php $ext = getExtension($document->getName()) @endphp
 
-                    {{ icons($ext) }}
+                    └─ {{ icons($ext) }}
 
                     @if (in_array($ext, $viewExt, true))
                         <a href="/downs/zip/{{ $file->id }}/{{ $key }}">{{ $document->getName() }}</a>
@@ -41,7 +40,7 @@
                         {{ $document->getName() }}
                     @endif
 
-                    ({{ formatSize($document->getSize()) }})<br>
+                    ({{ formatSize($document->getUncompressedSize()) }})<br>
                 @endif
             @endforeach
         </div>

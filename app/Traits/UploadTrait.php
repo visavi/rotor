@@ -14,10 +14,10 @@ trait UploadTrait
     /**
      * Загружает изображение
      *
-     * @param  UploadedFile $file   объект изображения
+     * @param  UploadedFile $file   Объект изображения
      * @param  bool         $record
      *
-     * @return array путь загруженного файла
+     * @return array
      */
     public function uploadFile(UploadedFile $file, bool $record = true): array
     {
@@ -51,7 +51,7 @@ trait UploadTrait
             $file->move(public_path($this->uploadPath), $filename);
         }
 
-        $filesize  = filesize($fullPath);
+        $filesize = filesize($fullPath);
 
         if ($record) {
             $upload = File::query()->create([
