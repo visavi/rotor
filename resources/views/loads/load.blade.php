@@ -6,7 +6,7 @@
     <div class="float-end">
         @if (getUser())
             @if (! $category->closed)
-                    <a class="btn btn-success" href="/downs/create?cid={{ $category->id }}">{{ __('main.add') }}</a>
+                    <a class="btn btn-success" href="/downs/create?category={{ $category->id }}">{{ __('main.add') }}</a>
 
             @endif
 
@@ -96,5 +96,5 @@
     {{ $downs->links() }}
 
     <a href="/loads/top">{{ __('loads.top_downs') }}</a> /
-    <a href="/loads/search?cid={{ $category->id }}">{{ __('main.search') }}</a>
+    <a href="/loads/search">{{ __('main.search') }}</a>
 @stop

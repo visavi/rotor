@@ -67,7 +67,7 @@ class DownController extends Controller
      */
     public function create(Request $request, Validator $validator, Flood $flood): View|RedirectResponse
     {
-        $cid = int($request->input('cid'));
+        $cid = int($request->input('category'));
 
         if (! isAdmin() && ! setting('downupload')) {
             abort(200, __('loads.down_closed'));
@@ -196,6 +196,8 @@ class DownController extends Controller
      */
     public function edit(int $id, Request $request, Validator $validator): View|RedirectResponse
     {
+        $cid = int($request->input('category'));
+
         /** @var Down $down */
         $down = Down::query()->where('user_id', getUser('id'))->find($id);
 
@@ -208,16 +210,15 @@ class DownController extends Controller
         }
 
         if ($request->isMethod('post')) {
-            $category = int($request->input('category'));
-            $title    = $request->input('title');
-            $text     = $request->input('text');
-            $files    = (array) $request->file('files');
-            $links    = (array) $request->input('links');
+            $title = $request->input('title');
+            $text  = $request->input('text');
+            $files = (array) $request->file('files');
+            $links = (array) $request->input('links');
 
             $links = array_unique(array_diff($links, ['']));
 
             /** @var Load $category */
-            $category = Load::query()->find($category);
+            $category = Load::query()->find($cid);
 
             $validator->equal($request->input('_token'), csrf_token(), __('validator.token'))
                 ->length($title, 3, 50, ['title' => __('validator.text')])
@@ -256,11 +257,13 @@ class DownController extends Controller
             }
 
             if ($validator->isValid()) {
+                $links = setting('down_allow_links') ? array_values($links) : null;
+
                 $down->update([
                     'category_id' => $category->id,
                     'title'       => $title,
                     'text'        => $text,
-                    'links'       => $links ? array_values($links) : null,
+                    'links'       => $links,
                 ]);
 
                 foreach ($files as $file) {
@@ -277,7 +280,6 @@ class DownController extends Controller
             setFlash('danger', $validator->getErrors());
         }
 
-        $cid = 0;
         $categories = Load::query()
             ->where('parent_id', 0)
             ->with('children')

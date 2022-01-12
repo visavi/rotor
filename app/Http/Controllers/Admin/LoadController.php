@@ -250,6 +250,8 @@ class LoadController extends AdminController
      */
     public function editDown(int $id, Request $request, Validator $validator)
     {
+        $cid = int($request->input('category'));
+
         /** @var Down $down */
         $down = Down::query()->find($id);
 
@@ -258,16 +260,15 @@ class LoadController extends AdminController
         }
 
         if ($request->isMethod('post')) {
-            $category = int($request->input('category'));
-            $title    = $request->input('title');
-            $text     = $request->input('text');
-            $files    = (array) $request->file('files');
-            $links    = (array) $request->input('links');
+            $title = $request->input('title');
+            $text  = $request->input('text');
+            $files = (array) $request->file('files');
+            $links = (array) $request->input('links');
 
             $links = array_unique(array_diff($links, ['']));
 
             /** @var Load $category */
-            $category = Load::query()->find($category);
+            $category = Load::query()->find($cid);
 
             $validator->equal($request->input('_token'), csrf_token(), __('validator.token'))
                 ->length($title, 3, 50, ['title' => __('validator.text')])
@@ -306,12 +307,13 @@ class LoadController extends AdminController
 
             if ($validator->isValid()) {
                 $oldDown = $down->replicate();
+                $links = setting('down_allow_links') ? array_values($links) : null;
 
                 $down->update([
                     'category_id' => $category->id,
                     'title'       => $title,
                     'text'        => $text,
-                    'links'       => $links ? array_values($links) : null,
+                    'links'       => $links,
                 ]);
 
                 if ($down->category->id !== $oldDown->category->id && $down->active) {
@@ -338,7 +340,6 @@ class LoadController extends AdminController
             setFlash('danger', $validator->getErrors());
         }
 
-        $cid = 0;
         $categories = Load::query()
             ->where('parent_id', 0)
             ->with('children', 'new', 'children.new')
