@@ -74,6 +74,7 @@ return [
     'loads_archives'              => 'View archives on page',
     'loads_files_allow'           => 'Allow users to upload files',
     'loads_guests_download_allow' => 'Allow guests to download files',
+    'down_allow_links'            => 'Allow adding links to files',
 
     'mails_count_days'  => 'Qty. days before sending a private notification by email ',
     'mails_send_emails' => 'Sending emails in one operation',

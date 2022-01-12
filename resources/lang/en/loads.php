@@ -38,6 +38,7 @@ return [
     'new_publications'       => 'New publications',
     'files_images'           => 'Files / Images',
     'search'                 => 'Search by file',
+    'add_link'               => 'Add link',
 
     'pending_down1' => 'Attention! This download is pending moderator! ',
     'pending_down2' => 'After checking, you cannot edit the description and upload a file or a screenshot',
@@ -50,8 +51,8 @@ return [
     'down_verified'         => 'This file has already been checked by the moderator!',
     'down_name_exists'      => 'A download with the same name already exists!',
     'down_edited_success'   => 'Download edited successfully!',
+    'down_added_success'    => 'Upload successfully added!',
     'file_deleted_success'  => 'File deleted successfully!',
-    'file_uploaded_success' => 'File uploaded successfully!',
     'load_closed'           => 'It is forbidden to publish files in this section!',
     'archive_only_zip'      => 'You can only view ZIP archives!',
     'archive_not_open'      => 'Failed to open the archive!',

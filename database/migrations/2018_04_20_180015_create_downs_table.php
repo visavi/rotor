@@ -25,6 +25,7 @@ final class CreateDownsTable extends Migration
                 $table->integer('rating')->default(0);
                 $table->integer('loads')->default(0);
                 $table->boolean('active')->default(false);
+                $table->json('links')->nullable();
                 $table->integer('updated_at')->nullable();
                 $table->integer('created_at');
 

@@ -56,11 +56,10 @@
             {{ bbCode($down->text) }}
         </div>
 
-        @if ($down->getFiles()->isNotEmpty())
+        @if ($down->links || $down->files->isNotEmpty())
             @foreach ($down->getFiles() as $file)
                 <div class="media-file mb-3">
                     @if ($file->hash && file_exists(public_path($file->hash)))
-
                         @if ($file->extension === 'mp3')
                             <div>
                                 <audio src="{{ $file->hash }}" style="max-width:100%;" preload="metadata" controls controlsList="{{ $allowDownload ? null : 'nodownload' }}"></audio>
@@ -86,6 +85,15 @@
                     @endif
                 </div>
             @endforeach
+
+            @if ($down->links && $allowDownload)
+                @foreach ($down->links as $link)
+                    <div class="media-file mb-3">
+                        <b>{{ basename($link) }}</b><br>
+                        <a class="btn btn-success" href="{{ $link }}"><i class="fa fa-download"></i> {{ __('main.download') }}</a>
+                    </div>
+                @endforeach
+            @endif
 
             @if (! $allowDownload)
                 {{ showError(__('loads.download_authorized')) }}

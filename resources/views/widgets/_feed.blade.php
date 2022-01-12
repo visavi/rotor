@@ -260,7 +260,7 @@
                 {{ bbCode($post->text) }}
             </div>
 
-            @if ($post->getFiles()->isNotEmpty())
+            @if ($post->files->isNotEmpty())
                 @foreach ($post->getFiles() as $file)
                     <div class="media-file mb-3">
                         @if ($file->hash && file_exists(public_path($file->hash)))
@@ -277,9 +277,6 @@
                             @endif
 
                             <b>{{ $file->name }}</b> ({{ formatSize($file->size) }})<br>
-                            @if ($file->extension === 'zip')
-                                <a href="/downs/zip/{{ $file->id }}">{{ __('loads.view_archive') }}</a><br>
-                            @endif
 
                             @if ($allowDownload)
                                 <a class="btn btn-sm btn-success" href="/downs/download/{{ $file->id }}"><i class="fa fa-download"></i> {{ __('main.download') }}</a><br>
@@ -289,6 +286,15 @@
                         @endif
                     </div>
                 @endforeach
+
+                @if ($post->links && $allowDownload)
+                    @foreach ($post->links as $link)
+                        <div class="media-file mb-3">
+                            <b>{{ basename($link) }}</b><br>
+                            <a class="btn btn-sm btn-success" href="{{ $link }}"><i class="fa fa-download"></i> {{ __('main.download') }}</a>
+                        </div>
+                    @endforeach
+                @endif
 
                 @if (! $allowDownload)
                     {{ showError(__('loads.download_authorized')) }}

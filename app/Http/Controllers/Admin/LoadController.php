@@ -262,6 +262,9 @@ class LoadController extends AdminController
             $title    = $request->input('title');
             $text     = $request->input('text');
             $files    = (array) $request->file('files');
+            $links    = (array) $request->input('links');
+
+            $links = array_unique(array_diff($links, ['']));
 
             /** @var Load $category */
             $category = Load::query()->find($category);
@@ -275,17 +278,29 @@ class LoadController extends AdminController
             $validator->empty($duplicate, ['title' => __('loads.down_name_exists')]);
 
             $existFiles = $down->files ? $down->files->count() : 0;
-            $validator->lte(count($files) + $existFiles, setting('maxfiles'), ['files' => __('validator.files_max', ['max' => setting('maxfiles')])]);
+            $validator->notEmpty(count($files) + count($links) + $existFiles , ['files' => __('validator.file_upload_one')]);
+            $validator->lte(count($files) + count($links) + $existFiles, setting('maxfiles'), ['files' => __('validator.files_max', ['max' => setting('maxfiles')])]);
 
             if ($validator->isValid()) {
+                $allowExtension = explode(',', setting('allowextload'));
+
                 $rules = [
                     'maxsize'    => setting('fileupload'),
-                    'extensions' => explode(',', setting('allowextload')),
+                    'extensions' => $allowExtension,
                     'minweight'  => 100,
                 ];
 
                 foreach ($files as $file) {
                     $validator->file($file, $rules, ['files' => __('validator.file_upload_failed')]);
+                }
+
+                foreach ($links as $link) {
+                    $validator->length($link, 5, 100, ['links' => __('validator.text')])
+                        ->url($link, ['links' => __('validator.url')]);
+
+                    if (! in_array(getExtension($link), $allowExtension, true)) {
+                        $validator->addError(['links' => __('validator.extension')]);
+                    }
                 }
             }
 
@@ -296,6 +311,7 @@ class LoadController extends AdminController
                     'category_id' => $category->id,
                     'title'       => $title,
                     'text'        => $text,
+                    'links'       => $links ? array_values($links) : null,
                 ]);
 
                 if ($down->category->id !== $oldDown->category->id && $down->active) {
@@ -322,13 +338,14 @@ class LoadController extends AdminController
             setFlash('danger', $validator->getErrors());
         }
 
+        $cid = 0;
         $categories = Load::query()
             ->where('parent_id', 0)
             ->with('children', 'new', 'children.new')
             ->orderBy('sort')
             ->get();
 
-        return view('admin/loads/edit_down', compact('categories', 'down'));
+        return view('admin/loads/edit_down', compact('categories', 'down', 'cid'));
     }
 
     /**

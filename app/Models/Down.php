@@ -30,6 +30,7 @@ use PhpZip\ZipFile;
  * @property int rating
  * @property int loads
  * @property int active
+ * @property array links
  * @property int updated_at
  * @property Collection files
  * @property Collection comments
@@ -38,6 +39,15 @@ use PhpZip\ZipFile;
 class Down extends BaseModel
 {
     use UploadTrait;
+
+    /**
+     * The attributes that should be cast to native types.
+     *
+     * @var array
+     */
+    protected $casts = [
+        'links' => 'array',
+    ];
 
     /**
      * Indicates if the model should be timestamped.

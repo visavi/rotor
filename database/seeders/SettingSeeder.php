@@ -54,6 +54,7 @@ class SettingSeeder extends Seeder
             ['name'  => 'doslimit', 'value' => 0],
             ['name'  => 'downlist', 'value' => 10],
             ['name'  => 'downupload', 'value' => 1],
+            ['name'  => 'down_allow_links', 'value' => 0],
             ['name'  => 'down_guest_download', 'value' => 1],
             ['name'  => 'editforumpoint', 'value' => 300],
             ['name'  => 'editratingpoint', 'value' => 100],

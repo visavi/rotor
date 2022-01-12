@@ -30,19 +30,18 @@
     @endif
 
     <div class="section-form mb-3 shadow">
-
         <nav>
-            <div class="nav nav-tabs" id="nav-tab" role="tablist">
-                <button class="nav-link active" id="nav-home-tab" data-bs-toggle="tab" data-bs-target="#nav-home" type="button" role="tab">{{ __('users.basic_fields') }}</button>
-                <button class="nav-link" id="nav-profile-tab" data-bs-toggle="tab" data-bs-target="#nav-profile" type="button" role="tab">{{ __('users.custom_fields') }}</button>
+            <div class="nav nav-tabs">
+                <button class="nav-link active" data-bs-toggle="tab" data-bs-target="#nav-basic-fields" type="button">{{ __('users.basic_fields') }}</button>
+                <button class="nav-link" data-bs-toggle="tab" data-bs-target="#nav-custom-fields" type="button">{{ __('users.custom_fields') }}</button>
             </div>
         </nav>
 
         <form method="post" action="/admin/users/edit?user={{ $user->login }}">
             @csrf
 
-        <div class="tab-content" id="nav-tabContent">
-            <div class="tab-pane fade show active py-3" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab">
+        <div class="tab-content">
+            <div class="tab-pane fade show active py-3" id="nav-basic-fields">
 
             <?php $inputLevel = getInput('level', $user->level); ?>
             <div class="mb-3">
@@ -177,7 +176,7 @@
             </div>
 
              </div>
-            <div class="tab-pane fade py-3" id="nav-profile" role="tabpanel" aria-labelledby="nav-profile-tab">
+            <div class="tab-pane fade py-3" id="nav-custom-fields">
                 @foreach($fields as $field)
                     <div class="mb-3{{ $field->required ? ' form-required' : null }}{{ hasError('field' . $field->id) }}">
                         <label for="{{ 'field' . $field->id }}" class="form-label">{{ $field->name }}:</label>

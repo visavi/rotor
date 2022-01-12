@@ -13,7 +13,7 @@ use Illuminate\Support\Facades\Cache;
  * @property int id
  * @property string place
  * @property string site
- * @property string name
+ * @property array names
  * @property string color
  * @property int bold
  * @property int user_id

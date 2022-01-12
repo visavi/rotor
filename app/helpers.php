@@ -757,7 +757,7 @@ function statsBoard(): string
 function cryptMail(string $email): string
 {
     $output  = '';
-    $symbols = str_split($email);
+    $symbols = mb_str_split($email);
 
     foreach ($symbols as $symbol) {
         $output  .= '&#' . ord($symbol) . ';';

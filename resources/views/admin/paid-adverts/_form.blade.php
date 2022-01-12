@@ -76,7 +76,7 @@
     <script>
         $(".js-advert-add").click(function () {
             $('.js-advert-list').append('<div class="input-group mt-1 js-advert-append">' +
-                '<input class="form-control" id="name" name="names[]" type="text" value="" maxlength="35" placeholder="<?= __('admin.paid_adverts.name') ?>">' +
+                '<input class="form-control" name="names[]" type="text" value="" maxlength="35" placeholder="<?= __('admin.paid_adverts.name') ?>">' +
                 '<span class="input-group-text">' +
                     '<a class="js-advert-remove" href="#"><i class="fa fa-times"></i></a>' +
                 '</span>' +

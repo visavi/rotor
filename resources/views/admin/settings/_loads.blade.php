@@ -43,5 +43,11 @@
         <label for="down_guest_download" class="form-check-label">{{ __('settings.loads_guests_download_allow') }}</label>
     </div>
 
+    <div class="form-check mb-3">
+        <input type="hidden" value="0" name="sets[down_allow_links]">
+        <input type="checkbox" class="form-check-input" value="1" name="sets[down_allow_links]" id="down_allow_links"{{ getInput('sets.down_allow_links', $settings['down_allow_links']) ? ' checked' : '' }}>
+        <label for="down_allow_links" class="form-check-label">{{ __('settings.down_allow_links') }}</label>
+    </div>
+
     <button class="btn btn-primary">{{ __('main.save') }}</button>
 </form>

@@ -56,7 +56,7 @@ class PaidAdvertController extends AdminController
      *
      * @return View|RedirectResponse
      */
-    public function create(Request $request, Validator $validator)
+    public function create(Request $request, Validator $validator): View|RedirectResponse
     {
         $places = PaidAdvert::PLACES;
         $advert = new PaidAdvert();
@@ -121,7 +121,7 @@ class PaidAdvertController extends AdminController
      *
      * @return View|RedirectResponse
      */
-    public function edit(int $id, Request $request, Validator $validator)
+    public function edit(int $id, Request $request, Validator $validator): View|RedirectResponse
     {
         $places = PaidAdvert::PLACES;
 
