@@ -15,8 +15,8 @@ class StoreUserFieldRequest extends FormRequest
     public function rules()
     {
         return [
-            '_token'   => 'in:' . csrf_token(),
-            'type'     => 'in:' . implode(',', UserField::TYPES),
+            '_token'   => 'required|in:' . csrf_token(),
+            'type'     => 'required|in:' . implode(',', UserField::TYPES),
             'name'     => 'required|max:50',
             'min'      => 'required',
             'max'      => 'required',
