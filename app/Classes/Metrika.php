@@ -8,7 +8,7 @@ use App\Models\Counter;
 use App\Models\Counter24;
 use App\Models\Counter31;
 use App\Models\Online;
-use ErrorException;
+use Exception;
 use Illuminate\Support\Facades\DB;
 use PDOException;
 
@@ -53,8 +53,8 @@ class Metrika
                 public_path('uploads/counters/counter_new.png'),
                 public_path('uploads/counters/counter.png')
             );
-        } catch (ErrorException $e) {
-            //
+        } catch (Exception) {
+            // nothing
         }
     }
 
@@ -67,7 +67,7 @@ class Metrika
     {
         session()->increment('hits');
 
-        if (session()->has('online') && session()->get('online') > SITETIME) {
+        if (session('online') > SITETIME) {
             return;
         }
 
@@ -96,7 +96,7 @@ class Metrika
                     'user_id'    => $user->id ?? null,
                 ]);
             $newHost = $online->wasRecentlyCreated;
-        } catch (PDOException $e) {
+        } catch (PDOException) {
             $newHost = false;
         }
 
@@ -143,7 +143,7 @@ class Metrika
             ];
         }
 
-        $hits = session()->get('hits');
+        $hits = session('hits', 1);
 
         $hitsUpdate = [
             'allhits' => DB::raw('allhits + ' . $hits),
@@ -153,8 +153,8 @@ class Metrika
 
         $counter->update(array_merge($hostsUpdate, $hitsUpdate));
 
-        session()->put('hits', 0);
-        session()->put('online', strtotime('+30 seconds', SITETIME));
+        session(['hits' => 0]);
+        session(['online' => strtotime('+30 seconds', SITETIME)]);
     }
 
     /**

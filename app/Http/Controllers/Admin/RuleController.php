@@ -42,7 +42,7 @@ class RuleController extends AdminController
      */
     public function edit(Request $request, Validator $validator)
     {
-        $rules = Rule::query()->firstOrNew([]);
+        $rules = Rule::query()->firstOrNew();
 
         if ($request->isMethod('post')) {
             $msg = $request->input('msg');

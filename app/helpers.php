@@ -1624,7 +1624,7 @@ function getCaptcha(): HtmlString
  */
 function setFlash(string $status, $message)
 {
-    session()->put('flash.' . $status, $message);
+    session(['flash.' . $status => $message]);
 }
 
 /**
@@ -1655,7 +1655,7 @@ function getInput(string $key, $default = null)
         return $default;
     }
 
-    $input = json_decode(session()->get('input', []), true);
+    $input = json_decode(session('input', []), true);
 
     return Arr::get($input, $key, $default);
 }
@@ -1670,16 +1670,16 @@ function getInput(string $key, $default = null)
 function hasError(string $field): string
 {
     // Новая валидация
-    if (session()->has('errors')) {
+    if (session('errors')) {
         /** @var ViewErrorBag $errors */
-        $errors = session()->get('errors');
+        $errors = session('errors');
 
         return $errors->has($field) ? ' is-invalid' : ' is-valid';
     }
 
-    $isValid = session()->has('flash.danger') ? ' is-valid' : '';
+    $isValid = session('flash.danger') ? ' is-valid' : '';
 
-    return session()->has('flash.danger.' . $field) ? ' is-invalid' : $isValid;
+    return session('flash.danger.' . $field) ? ' is-invalid' : $isValid;
 }
 
 /**
@@ -1692,14 +1692,14 @@ function hasError(string $field): string
 function textError(string $field): ?string
 {
     // Новая валидация
-    if (session()->has('errors')) {
+    if (session('errors')) {
         /** @var ViewErrorBag $errors */
-        $errors = session()->get('errors');
+        $errors = session('errors');
 
         return $errors->first($field);
     }
 
-    return session()->get('flash.danger.' . $field);
+    return session('flash.danger.' . $field);
 }
 
 /**
@@ -1712,7 +1712,7 @@ function textError(string $field): ?string
  */
 function sendMail(string $view, array $data): bool
 {
-    Mail::send($view, $data, function (Message $message) use ($data) {
+    Mail::send($view, $data, static function (Message $message) use ($data) {
         $message->subject($data['subject'])
             ->to($data['to'])
             ->from(config('mail.from.address'), config('mail.from.name'));
@@ -1724,11 +1724,14 @@ function sendMail(string $view, array $data): bool
 
         if (isset($data['unsubscribe'])) {
             $headers = $message->getHeaders();
-            $headers->addTextHeader('List-Unsubscribe', '<' . config('app.url') . '/unsubscribe?key=' . $data['unsubscribe'] . '>');
+            $headers->addTextHeader(
+                'List-Unsubscribe',
+                '<' . config('app.url') . '/unsubscribe?key=' . $data['unsubscribe'] . '>'
+            );
         }
     });
 
-    return ! Mail::failures();
+    return true;
 }
 
 /**
@@ -1853,9 +1856,9 @@ function getBrowser(string $userAgent = null): string
 function checkAuth()
 {
     if (session()->has(['id', 'password'])) {
-        $user = getUserById(session()->get('id'));
+        $user = getUserById(session('id'));
 
-        if ($user && session()->get('password') === $user->password) {
+        if ($user && session('password') === $user->password) {
             return $user;
         }
     }

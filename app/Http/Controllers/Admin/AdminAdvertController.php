@@ -24,7 +24,7 @@ class AdminAdvertController extends AdminController
     {
         $advert = AdminAdvert::query()
             ->where('user_id', getUser('id'))
-            ->firstOrNew([]);
+            ->firstOrNew();
 
         if ($request->isMethod('post')) {
             $site  = $request->input('site');

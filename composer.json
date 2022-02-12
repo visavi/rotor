@@ -17,7 +17,7 @@
         }
     ],
     "require": {
-        "php": "^8.0",
+        "php": "^8.0.2",
         "ext-curl": "*",
         "ext-fileinfo": "*",
         "ext-gd": "*",
@@ -25,26 +25,24 @@
         "ext-mbstring": "*",
         "ext-pdo": "*",
         "cbschuld/browser.php": "~1.9",
-        "fideloper/proxy": "^4.4",
         "fruitcake/laravel-cors": "^2.0",
         "google/recaptcha": "~1.2",
         "gregwar/captcha": "^1.1",
         "guzzlehttp/guzzle": "^7.3",
         "intervention/image": "^2.6",
-        "laravel/framework": "^8.61",
-        "laravel/tinker": "^2.6",
+        "laravel/framework": "^9.0",
+        "laravel/tinker": "^2.7",
         "nelexa/zip": "^4.0",
-        "php-ffmpeg/php-ffmpeg": "~0.18",
+        "php-ffmpeg/php-ffmpeg": "^1.0",
         "visavi/captcha": "^2.0",
         "visavi/cleanup": "^1.5"
     },
     "require-dev": {
-        "facade/ignition": "^2.13",
-        "fakerphp/faker": "^1.16",
+        "spatie/laravel-ignition": "^1.0",
+        "fakerphp/faker": "^1.19",
         "laravel/sail": "^1.10",
         "mockery/mockery": "^1.4",
-        "nunomaduro/collision": "^5.9",
-        "deployer/deployer": "^7.0",
+        "nunomaduro/collision": "^6.0",
         "phpunit/phpunit": "^9.5",
         "phpstan/phpstan": "^0.12",
         "php-coveralls/php-coveralls": "^2.4",
@@ -92,7 +90,7 @@
     },
     "config": {
         "platform": {
-            "php": "8.0.0"
+            "php": "8.0.2"
         },
         "optimize-autoloader": true,
         "preferred-install": "dist",
