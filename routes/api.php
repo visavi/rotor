@@ -1,6 +1,6 @@
 <?php
 
-use Illuminate\Http\Request;
+use App\Http\Controllers\ApiController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -20,11 +20,13 @@ use Illuminate\Support\Facades\Route;
 Route::pattern('id', '\d+');
 Route::pattern('login', '[\w\-]+');
 
-Route::group(['middleware' => 'check.token'], function () {
-    Route::get('/user', [\App\Http\Controllers\ApiController::class, 'user']);
-    Route::get('/users/{login}', [\App\Http\Controllers\ApiController::class, 'users']);
-    Route::get('/dialogues', [\App\Http\Controllers\ApiController::class, 'dialogues']);
-    Route::get('/talk/{login}', [\App\Http\Controllers\ApiController::class, 'talk']);
-    Route::get('/forums/{id}', [\App\Http\Controllers\ApiController::class, 'forums']);
-    Route::get('/topics/{id}', [\App\Http\Controllers\ApiController::class, 'topics']);
-});
+Route::controller(ApiController::class)
+    ->middleware('check.token')
+    ->group(function () {
+        Route::get('/user', 'user');
+        Route::get('/users/{login}', 'users');
+        Route::get('/dialogues', 'dialogues');
+        Route::get('/talk/{login}', 'talk');
+        Route::get('/forums/{id}', 'forums');
+        Route::get('/topics/{id}', 'topics');
+    });

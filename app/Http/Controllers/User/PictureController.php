@@ -14,10 +14,7 @@ use Intervention\Image\ImageManagerStatic as Image;
 
 class PictureController extends Controller
 {
-    /**
-     * @var User
-     */
-    public $user;
+    public ?User $user;
 
     /**
      * Конструктор

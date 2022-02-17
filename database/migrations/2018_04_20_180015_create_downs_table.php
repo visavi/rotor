@@ -31,11 +31,8 @@ final class CreateDownsTable extends Migration
 
                 $table->index('category_id');
                 $table->index('created_at');
+                $table->fullText(['title', 'text']);
             });
-
-            if (config('database.default') === 'mysql') {
-                DB::statement('CREATE FULLTEXT INDEX downs_title_text_fulltext ON downs(title, text);');
-            }
         }
     }
 

@@ -13,10 +13,7 @@ use Illuminate\View\View;
 
 class AdvertController extends Controller
 {
-    /**
-     * @var User
-     */
-    public $user;
+    public ?User $user;
 
     /**
      * Конструктор

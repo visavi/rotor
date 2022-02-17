@@ -34,7 +34,6 @@ use Illuminate\Mail\Message;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Arr;
@@ -1300,9 +1299,9 @@ function formatNum($num): HtmlString
  *
  * @param int $num
  *
- * @return string
+ * @return float|int|string
  */
-function formatShortNum(int $num)
+function formatShortNum(int $num): float|int|string
 {
     if (! is_numeric($num)) {
         return '0b';
@@ -1521,11 +1520,11 @@ function performance(): ?HtmlString
 /**
  * Очистка кеш-файлов
  *
- * @param string|array|null $keys
+ * @param array|string|null $keys
  *
  * @return bool Результат выполнения
  */
-function clearCache($keys = null): bool
+function clearCache(array|string $keys = null): bool
 {
     if ($keys) {
         if (!is_array($keys)) {
@@ -1597,7 +1596,7 @@ function saveErrorLog(int $code, ?string $message = null)
  *
  * @return HtmlString Сформированный блок с ошибкой
  */
-function showError($errors): HtmlString
+function showError(string|array $errors): HtmlString
 {
     $errors = (array) $errors;
 
@@ -1649,7 +1648,7 @@ function setInput(array $data)
  *
  * @deprecated since 10.1 - Use old('field', 'default');
  */
-function getInput(string $key, $default = null)
+function getInput(string $key, $default = null): mixed
 {
     if (session()->missing('input')) {
         return $default;
@@ -1766,11 +1765,11 @@ function getBodyName(string $filename): string
  * Склоняет числа
  *
  * @param int   $num   Число
- * @param mixed $forms Массив склоняемых слов (один, два, много)
+ * @param mixed $forms Склоняемые слова (один, два, много)
  *
  * @return string Форматированная строка
  */
-function plural(int $num, $forms): string
+function plural(int $num, mixed $forms): string
 {
     if (! is_array($forms)) {
         $forms = explode(',', $forms);
@@ -1825,9 +1824,7 @@ function bbCode(string $text, bool $parse = true): HtmlString
  */
 function getIp(): string
 {
-    $cf = new CloudFlare(request());
-
-    return $cf->ip();
+    return (new CloudFlare(request()))->ip();
 }
 
 /**
@@ -1835,7 +1832,7 @@ function getIp(): string
  *
  * @param string|null $userAgent
  *
- * @return string|null Браузер и версия браузера
+ * @return string Браузер и версия браузера
  */
 function getBrowser(string $userAgent = null): string
 {
@@ -1850,24 +1847,6 @@ function getBrowser(string $userAgent = null): string
     $browser = $version === Browser::VERSION_UNKNOWN ? $brow : $brow . ' ' . $version;
 
     return mb_substr($browser, 0, 25, 'utf-8');
-}
-
-/**
- * Является ли пользователь авторизованным
- *
- * @return User|bool
- */
-function checkAuth()
-{
-    if (session()->has(['id', 'password'])) {
-        $user = getUserById(session('id'));
-
-        if ($user && session('password') === $user->password) {
-            return $user;
-        }
-    }
-
-    return false;
 }
 
 /**
@@ -1899,13 +1878,31 @@ function access(string $level): bool
 }
 
 /**
+ * Возвращает текущего пользователя
+ *
+ * @return User|null
+ */
+function getUserFromSession(): ?User
+{
+    if (session()->has(['id', 'password'])) {
+        $user = getUserById(session('id'));
+
+        if ($user && session('password') === $user->password) {
+            return $user;
+        }
+    }
+
+    return null;
+}
+
+/**
  * Возвращает объект пользователя по логину
  *
  * @param string|null $login Логин пользователя
  *
- * @return Builder|Model|null
+ * @return Builder|User|null
  */
-function getUserByLogin(?string $login): ?User
+function getUserByLogin(?string $login): Builder|User|null
 {
     return User::query()->where('login', $login)->first();
 }
@@ -1915,9 +1912,9 @@ function getUserByLogin(?string $login): ?User
  *
  * @param int|null $id ID пользователя
  *
- * @return Builder|Model|null
+ * @return Builder|User|null
  */
-function getUserById(?int $id): ?User
+function getUserById(?int $id): Builder|User|null
 {
     return User::query()->find($id);
 }
@@ -1927,9 +1924,9 @@ function getUserById(?int $id): ?User
  *
  * @param string $token Логин пользователя
  *
- * @return Builder|Model|null
+ * @return Builder|User|null
  */
-function getUserByToken(string $token): ?User
+function getUserByToken(string $token): Builder|User|null
 {
     return User::query()->where('apikey', $token)->first();
 }
@@ -1939,9 +1936,9 @@ function getUserByToken(string $token): ?User
  *
  * @param string|null $login Логин или email пользователя
  *
- * @return Builder|Model|null
+ * @return Builder|User|null
  */
-function getUserByLoginOrEmail(?string $login): ?User
+function getUserByLoginOrEmail(?string $login): Builder|User|null
 {
     $field = strpos($login, '@') ? 'email' : 'login';
 
@@ -1953,17 +1950,17 @@ function getUserByLoginOrEmail(?string $login): ?User
  *
  * @param string|null $key Ключ массива
  *
- * @return User|mixed
+ * @return User|null|mixed
  */
-function getUser(?string $key = null)
+function getUser(?string $key = null): mixed
 {
     static $user;
 
     if (! $user) {
-        $user = checkAuth();
+        $user = getUserFromSession();
     }
 
-    return $key ? ($user[$key] ?? null) : $user;
+    return $key ? ($user->$key ?? null) : $user;
 }
 
 /**
@@ -2055,11 +2052,11 @@ function imageBase64(string $path, array $params = []): HtmlString
  * Выводит прогресс-бар
  *
  * @param int                   $percent
- * @param int|float|string|null $title
+ * @param float|int|string|null $title
  *
  * @return HtmlString
  */
-function progressBar(int $percent, $title = null): HtmlString
+function progressBar(int $percent, float|int|string $title = null): HtmlString
 {
     if (! $title) {
         $title = $percent . '%';
@@ -2119,11 +2116,11 @@ function ipBan(bool $clear = false): array
  * Возвращает настройки сайта по ключу
  *
  * @param string|null $key     Ключ массива
- * @param mixed       $default Значение по умолчанию
+ * @param mixed|null  $default Значение по умолчанию
  *
  * @return mixed Данные
  */
-function setting(?string $key = null, $default = null)
+function setting(?string $key = null, mixed $default = null)
 {
     static $settings;
 
@@ -2214,7 +2211,7 @@ function uniqueName(string $extension = null): string
 /**
  * Возвращает курсы валют
  *
- * @return HtmlString
+ * @return HtmlString|null
  */
 function getCourses(): ?HtmlString
 {
@@ -2224,7 +2221,7 @@ function getCourses(): ?HtmlString
             $response = $client->get('//www.cbr-xml-daily.ru/daily_json.js');
 
             $content = json_decode($response->getBody()->getContents(), true);
-        } catch (Exception $e) {
+        } catch (Exception) {
             $content = null;
         }
 

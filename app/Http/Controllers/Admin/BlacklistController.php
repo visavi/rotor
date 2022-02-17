@@ -12,10 +12,7 @@ use Illuminate\View\View;
 
 class BlacklistController extends AdminController
 {
-    /**
-     * @var string
-     */
-    private $type;
+    private string $type;
 
     /**
      * Конструктор

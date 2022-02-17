@@ -12,8 +12,8 @@ use Illuminate\View\View;
 
 class FileController extends AdminController
 {
-    private $file;
-    private $path;
+    private string $file;
+    private ?string $path;
 
     /**
      * Конструктор

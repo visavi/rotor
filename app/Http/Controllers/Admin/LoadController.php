@@ -214,20 +214,12 @@ class LoadController extends AdminController
         }
 
         $sort = check($request->input('sort', 'time'));
-
-        switch ($sort) {
-            case 'rating':
-                $order = 'rating';
-                break;
-            case 'comments':
-                $order = 'count_comments';
-                break;
-            case 'loads':
-                $order = 'loads';
-                break;
-            default:
-                $order = 'created_at';
-        }
+        $order = match ($sort) {
+            'rating'   => 'rating',
+            'comments' => 'count_comments',
+            'loads'    => 'loads',
+            default    => 'created_at',
+        };
 
         $downs = Down::query()
             ->where('category_id', $category->id)

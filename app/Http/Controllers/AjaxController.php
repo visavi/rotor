@@ -29,17 +29,6 @@ use Illuminate\View\View;
 class AjaxController extends Controller
 {
     /**
-     * Конструктор
-     *
-     * @param Request $request
-     */
-    public function __construct(Request $request)
-    {
-        $this->checkAjax($request);
-        $this->checkAuthorize();
-    }
-
-    /**
      * Возвращает bbCode для предпросмотра
      *
      * @param Request $request
@@ -443,41 +432,5 @@ class AjaxController extends Controller
             'success'  => true,
             'stickers' => $view,
         ]);
-    }
-
-    /**
-     * Является ли запрос ajax
-     *
-     * @param Request $request
-     *
-     * @return JsonResponse|bool
-     */
-    private function checkAjax(Request $request)
-    {
-        if (! $request->ajax()) {
-            return response()->json([
-                'success' => false,
-                'message' => __('validator.not_ajax'),
-            ]);
-        }
-
-        return true;
-    }
-
-    /**
-     * Возвращает авторизован ли пользователь
-     *
-     * @return JsonResponse|bool
-     */
-    private function checkAuthorize()
-    {
-        if (! getUser()) {
-            return response()->json([
-                'success' => false,
-                'message' => __('main.not_authorized'),
-            ]);
-        }
-
-        return true;
     }
 }

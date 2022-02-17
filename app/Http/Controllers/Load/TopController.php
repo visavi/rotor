@@ -21,17 +21,11 @@ class TopController extends Controller
     public function index(Request $request): View
     {
         $sort = check($request->input('sort'));
-
-        switch ($sort) {
-            case 'rating':
-                $order = 'rating';
-                break;
-            case 'comments':
-                $order = 'count_comments';
-                break;
-            default:
-                $order = 'loads';
-        }
+        $order = match ($sort) {
+            'rating'   => 'rating',
+            'comments' => 'count_comments',
+            default    => 'loads',
+        };
 
         $downs = Down::query()
             ->where('active', 1)

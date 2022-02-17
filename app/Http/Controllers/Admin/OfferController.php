@@ -29,20 +29,12 @@ class OfferController extends AdminController
         $otherCount = Offer::query()->where('type', $otherType)->count();
 
         $sort = check($request->input('sort', 'rating'));
-
-        switch ($sort) {
-            case 'time':
-                $order = 'created_at';
-                break;
-            case 'status':
-                $order = 'status';
-                break;
-            case 'comments':
-                $order = 'count_comments';
-                break;
-            default:
-                $order = 'rating';
-        }
+        $order = match ($sort) {
+            'time'     => 'created_at',
+            'status'   => 'status',
+            'comments' => 'count_comments',
+            default    => 'rating',
+        };
 
         $offers = Offer::query()
             ->where('type', $type)

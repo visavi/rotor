@@ -35,11 +35,8 @@ final class CreateTopicsTable extends Migration
                 $table->index(['user_id', 'updated_at']);
                 $table->index(['forum_id', 'locked', 'updated_at']);
                 $table->index('updated_at');
+                $table->fullText('title');
             });
-
-            if (config('database.default') === 'mysql') {
-                DB::statement('CREATE FULLTEXT INDEX text ON topics(title);');
-            }
         }
     }
 

@@ -711,17 +711,11 @@ class ArticleController extends Controller
     public function top(Request $request): View
     {
         $sort = check($request->input('sort', 'visits'));
-
-        switch ($sort) {
-            case 'rating':
-                $order = 'rating';
-                break;
-            case 'comments':
-                $order = 'count_comments';
-                break;
-            default:
-                $order = 'visits';
-        }
+        $order = match ($sort) {
+            'rating'   => 'rating',
+            'comments' => 'count_comments',
+            default    => 'visits',
+        };
 
         $articles = Article::query()
             ->select('articles.*', 'blogs.name')
@@ -752,14 +746,8 @@ class ArticleController extends Controller
 
             $validator->length($find, 3, 64, ['find' => __('main.request_length')]);
             if ($validator->isValid()) {
-                if (config('database.default') === 'mysql') {
-                    [$sql, $bindings] = ['MATCH (title, text) AGAINST (? IN BOOLEAN MODE)', [$find . '*']];
-                } else {
-                    [$sql, $bindings] = ['title ILIKE ? OR text ILIKE ?', ['%' . $find . '%', '%' . $find . '%']];
-                }
-
                 $articles = Article::query()
-                    ->whereRaw($sql, $bindings)
+                    ->whereFullText(['title', 'text'], $find . '*', ['mode' => 'boolean'])
                     ->with('user', 'category')
                     ->paginate(setting('blogpost'))
                     ->appends(compact('find'));

@@ -12,20 +12,9 @@ use Illuminate\View\View;
 
 class SpamController extends AdminController
 {
-    /**
-     * @var array
-     */
-    private $types;
-
-    /**
-     * @var string
-     */
-    private $type;
-
-    /**
-     * @var array
-     */
-    private $total = [];
+    private array $types;
+    private string $type;
+    private array $total = [];
 
     /**
      * SpamController constructor.

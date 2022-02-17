@@ -13,10 +13,7 @@ use Illuminate\View\View;
 
 class SitemapController extends Controller
 {
-    /**
-     * @var array
-     */
-    public $pages = [
+    public array $pages = [
         'news',
         'articles',
         'topics',

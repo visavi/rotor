@@ -12,7 +12,6 @@
 @stop
 
 @section('content')
-
     <div class="mb-3">
         <i class="fa fa-key fa-lg"></i> <b><a href="/admin/upgrade">{{ __('main.version') }} {{ ROTOR_VERSION }}</a></b>
     </div>
@@ -103,7 +102,7 @@
         </div>
     @endif
 
-    @if (file_exists(app_path('Http/Controllers/InstallController.php')))
+    @if (class_exists(\App\Http\Controllers\InstallController::class))
         <div class="alert alert-danger">
             <i class="fas fa-exclamation-triangle"></i> {!! __('admin.exists_install') !!}
         </div>

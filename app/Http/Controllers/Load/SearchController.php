@@ -31,15 +31,9 @@ class SearchController extends Controller
 
             $validator->length($find, 3, 64, ['find' => __('main.request_length')]);
             if ($validator->isValid()) {
-                if (config('database.default') === 'mysql') {
-                    [$sql, $bindings] = ['MATCH (title, text) AGAINST (? IN BOOLEAN MODE)', [$find . '*']];
-                } else {
-                    [$sql, $bindings] = ['title ILIKE ? OR text ILIKE ?', ['%' . $find . '%', '%' . $find . '%']];
-                }
-
                 $downs = Down::query()
                     ->where('active', 1)
-                    ->whereRaw($sql, $bindings)
+                    ->whereFullText(['title', 'text'], $find . '*', ['mode' => 'boolean'])
                     ->with('user', 'category')
                     ->paginate(setting('downlist'))
                     ->appends(compact('find'));

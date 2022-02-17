@@ -94,7 +94,7 @@ class Setting extends Model
                     return $value;
                 }, $settings);
             });
-        } catch (Exception $e) {
+        } catch (Exception) {
             $settings = [];
         }
 

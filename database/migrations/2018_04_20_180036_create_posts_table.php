@@ -31,11 +31,8 @@ final class CreatePostsTable extends Migration
                 $table->index(['user_id', 'created_at']);
                 $table->index(['rating', 'created_at']);
                 $table->index('created_at');
+                $table->fullText('text');
             });
-
-            if (config('database.default') === 'mysql') {
-                DB::statement('CREATE FULLTEXT INDEX text ON posts(text);');
-            }
         }
     }
 

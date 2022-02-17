@@ -20,10 +20,7 @@ use Symfony\Component\HttpFoundation\Response;
 
 class MessageController extends Controller
 {
-    /**
-     * @var User
-     */
-    public $user;
+    public ?User $user;
 
     /**
      * Конструктор

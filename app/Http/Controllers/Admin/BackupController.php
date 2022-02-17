@@ -12,7 +12,7 @@ use Illuminate\View\View;
 
 class BackupController extends AdminController
 {
-    public $date;
+    public string $date;
 
     /**
      * Конструктор

@@ -33,21 +33,15 @@ class SearchController extends Controller
 
             $validator->length($find, 3, 64, ['find' => __('main.request_length')]);
             if ($validator->isValid()) {
-                if (config('database.default') === 'mysql') {
-                    [$sql, $bindings] = ['MATCH (' . $type . ') AGAINST (? IN BOOLEAN MODE)', [$find . '*']];
-                } else {
-                    [$sql, $bindings] = [$type . ' ILIKE ?', ['%' . $find . '%']];
-                }
-
                 if ($type === 'title') {
                     $data = Topic::query()
-                        ->whereRaw($sql, $bindings)
+                        ->whereFullText($type, $find . '*', ['mode' => 'boolean'])
                         ->with('forum', 'lastPost.user')
                         ->paginate(setting('forumtem'))
                         ->appends(compact('find', 'type'));
                 } else {
                     $data = Post::query()
-                        ->whereRaw($sql, $bindings)
+                        ->whereFullText($type, $find . '*', ['mode' => 'boolean'])
                         ->with('user', 'topic.forum')
                         ->paginate(setting('forumpost'))
                         ->appends(compact('find', 'type'));

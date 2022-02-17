@@ -145,7 +145,7 @@ class Module extends BaseModel
     {
         try {
             $modules = self::query()->where('disabled', 0)->pluck('name')->all();
-        } catch (Exception $e) {
+        } catch (Exception) {
             $modules = [];
         }
 

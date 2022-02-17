@@ -17,6 +17,9 @@ use Illuminate\View\View;
 
 class InstallController extends Controller
 {
+    /**
+     * Конструктор
+     */
     public function __construct(Request $request)
     {
         $lang = $request->input('lang', 'ru');
@@ -188,14 +191,7 @@ class InstallController extends Controller
                     'created_at' => SITETIME,
                 ]);
 
-                // -------------- Установка -------------//
-                Setting::query()
-                    ->where('name', 'app_installed')
-                    ->update([
-                        'value' => 1,
-                    ]);
-
-                clearCache(['statNews', 'lastNews', 'statNewsDate', 'settings']);
+                clearCache(['statNews', 'lastNews', 'statNewsDate']);
 
                 return redirect('/install/finish');
             }
@@ -214,6 +210,15 @@ class InstallController extends Controller
      */
     public function finish(): View
     {
+        // -------------- Установка -------------//
+        Setting::query()
+            ->where('name', 'app_installed')
+            ->update([
+                'value' => 1,
+            ]);
+
+        clearCache('settings');
+
         return view('install/finish');
     }
 

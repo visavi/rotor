@@ -128,19 +128,12 @@ class Offer extends BaseModel
      */
     public function getStatus(): HtmlString
     {
-        switch ($this->status) {
-            case 'process':
-                $status = '<span class="fw-bold text-primary"><i class="fa fa-spinner"></i> ' . __('offers.process') . '</span>';
-                break;
-            case 'done':
-                $status = '<span class="fw-bold text-success"><i class="fa fa-check-circle"></i> ' . __('offers.done') . '</span>';
-                break;
-            case 'cancel':
-                $status = '<span class="fw-bold text-danger"><i class="fa fa-times-circle"></i> ' . __('offers.cancel') . '</span>';
-                break;
-            default:
-                $status = '<span class="fw-bold text-warning"><i class="fa fa-question-circle"></i> ' . __('offers.wait') . '</span>';
-        }
+        $status = match ($this->status) {
+            'process' => '<span class="fw-bold text-primary"><i class="fa fa-spinner"></i> ' . __('offers.process') . '</span>',
+            'done'    => '<span class="fw-bold text-success"><i class="fa fa-check-circle"></i> ' . __('offers.done') . '</span>',
+            'cancel'  => '<span class="fw-bold text-danger"><i class="fa fa-times-circle"></i> ' . __('offers.cancel') . '</span>',
+            default   => '<span class="fw-bold text-warning"><i class="fa fa-question-circle"></i> ' . __('offers.wait') . '</span>',
+        };
 
         return new HtmlString($status);
     }

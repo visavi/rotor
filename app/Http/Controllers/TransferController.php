@@ -14,10 +14,7 @@ use Illuminate\View\View;
 
 class TransferController extends Controller
 {
-    /**
-     * @var User
-     */
-    public $user;
+    public ?User $user;
 
     /**
      * Конструктор

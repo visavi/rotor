@@ -25,20 +25,12 @@ class ListController extends Controller
         $type = check($request->input('type', 'users'));
         $sort = check($request->input('sort', 'point'));
         $user = $request->input('user', getUser('login'));
-
-        switch ($sort) {
-            case 'time':
-                $order = 'created_at';
-                break;
-            case 'rating':
-                $order = 'rating';
-                break;
-            case 'money':
-                $order = 'money';
-                break;
-            default:
-                $order = 'point';
-        }
+        $order = match ($sort) {
+            'time'   => 'created_at',
+            'rating' => 'rating',
+            'money'  => 'money',
+            default  => 'point',
+        };
 
         $users = User::query()
             ->when($type === 'admins', static function (Builder $query) {

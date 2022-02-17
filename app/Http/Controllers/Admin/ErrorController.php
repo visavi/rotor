@@ -13,15 +13,8 @@ use Illuminate\View\View;
 
 class ErrorController extends AdminController
 {
-    /**
-     * @var array
-     */
-    private $lists;
-
-    /**
-     * @var int
-     */
-    private $code;
+    private array $lists;
+    private int $code;
 
     /**
      * Конструктор

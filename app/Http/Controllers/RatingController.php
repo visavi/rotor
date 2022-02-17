@@ -14,10 +14,7 @@ use Illuminate\View\View;
 
 class RatingController extends Controller
 {
-    /**
-     * @var User
-     */
-    public $user;
+    public ?User $user;
 
     /**
      * Конструктор
